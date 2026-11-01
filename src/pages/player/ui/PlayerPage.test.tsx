@@ -47,8 +47,8 @@ describe('Player', () => {
       sizedAs(query)
       await renderApp('/play/bz5')
       await screen.findByRole('button', { name: 'Setup' })
-      // Close, then the mode's pop-up, as the editor's bar has them; the title is on the sheet. The
-      // View is the tools row's, under the bar (ADR 0108).
+      // Close, then the tools and Edit at the end, as the editor's bar has Done; the title is on the
+      // sheet. The View is the tools row's, under the bar (ADR 0108).
       const controls = [
         ...document.querySelectorAll(
           ':is([data-area="lead"], [data-area="actions"]) :is(button, a)',
@@ -56,22 +56,17 @@ describe('Player', () => {
       ]
       expect(controls.map((control) => control.getAttribute('aria-label'))).toEqual([
         'Close',
-        'Practise or edit',
         'MIDI keyboard',
         'Setup',
         'More',
+        'Edit',
       ])
-      // The mode's pop-up shows the mode chosen; every other control is its icon alone.
-      for (const control of controls.filter(
-        (each) => each.getAttribute('aria-label') !== 'Practise or edit',
-      )) {
+      // Every control is its icon alone.
+      for (const control of controls) {
         const name = control.getAttribute('aria-label') ?? ''
         expect(shownText(control), name).toBe('')
         expect(control.getAttribute('title'), name).toMatch(new RegExp(`^${name}`))
       }
-      expect(screen.getByRole('combobox', { name: 'Practise or edit' })).toHaveTextContent(
-        'Practise',
-      )
     },
   )
 
@@ -502,15 +497,13 @@ describe('Player', () => {
     expect(dock).not.toHaveAttribute('data-hidden')
   })
 
-  it('turns to Edit at its cursor’s bar from the mode’s pop-up, after Close (ADR 0115)', async () => {
+  it('turns to Edit at its cursor’s bar from the pencil at the bar’s end (ADR 0115, round 26)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5?bar=3')
-    const modes = await screen.findByRole('combobox', { name: 'Practise or edit' })
-    expect(modes).toHaveTextContent('Practise')
+    const edit = await screen.findByRole('button', { name: 'Edit' })
     // The bar it opened on is read once: the URL forgets it, the cursor stands there.
     await waitFor(() => expect(router.state.location.search).not.toHaveProperty('bar'))
-    await user.click(modes)
-    await user.click(await screen.findByRole('option', { name: 'Edit' }))
+    await user.click(edit)
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/bz5'))
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/Bar 3, beat 1/))
   })

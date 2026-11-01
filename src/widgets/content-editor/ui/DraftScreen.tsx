@@ -57,7 +57,7 @@ export function DraftScreen<T>({
   unreadable: string
   /** The language the document is written in: chosen in the draft's menu, ticked there. */
   language?: { value: Locale; onChange: (locale: Locale) => void }
-  /** The item's Read · Edit switch (`ReadEditSwitch`): the page in Edit, not another page. */
+  /** The item's Done (`EditToggle`), at the bar's end: the page in Edit, not another page. */
   modes?: ReactNode
   children: (initial: T) => ReactNode
 }) {
@@ -80,7 +80,6 @@ export function DraftScreen<T>({
           open ? (
             <>
               <DraftStatus draft={draft} className="me-1" />
-              {modes}
               <DraftActions
                 draft={draft}
                 title={title}
@@ -88,6 +87,7 @@ export function DraftScreen<T>({
                 onReset={draft.reopen}
                 more={language ? languageActions(language.value, language.onChange, words) : []}
               />
+              {modes}
             </>
           ) : (
             modes

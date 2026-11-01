@@ -90,7 +90,7 @@ export function PlayerLayout({
   setup: ReactNode
   /** The tools row's after the View: a piece's Transpose and Simplify (ADR 0105); none for a walk. */
   tools?: ReactNode
-  /** Practise · Edit (ADR 0115), after Close: a piece's own, none for a walk. */
+  /** Edit (ADR 0115, round 26), at the bar's end: a piece's own, none for a walk. */
   modes?: ReactNode
   /** The music's own in More, before Print: a piece's Song information and Sections (ADR 0107). */
   more?: readonly MenuAction[] | undefined
@@ -147,12 +147,7 @@ export function PlayerLayout({
           MIDI, Setup and More; the View and the music's tools. The loop is the transport's (ADR
           0108). */}
       <ScoreBar
-        lead={
-          <>
-            <PlayerClose onClose={onClose} />
-            {modes}
-          </>
-        }
+        lead={<PlayerClose onClose={onClose} />}
         actions={
           <>
             <MidiButton variant="tool" />
@@ -166,6 +161,7 @@ export function PlayerLayout({
               share={share}
               onPrint={() => setPrinting(true)}
             />
+            {modes}
           </>
         }
         tools={

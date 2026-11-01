@@ -1,4 +1,4 @@
-import { ReadEditSwitch } from '@/widgets/mode-switch'
+import { EditToggle } from '@/widgets/mode-switch'
 import { Link, useParams, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { lessonById, lessonPlace, nextLessonId, previousLessonId } from '@/entities/lesson'
@@ -33,16 +33,16 @@ export function LessonPage() {
       lesson={lesson}
       step={lessonStepId(lesson.id)}
       modes={
-        <ReadEditSwitch
-          mode="read"
-          read={() =>
+        <EditToggle
+          editing={false}
+          onDone={() =>
             void navigate({
               to: '/lessons/$lessonId',
               params: { lessonId: lesson.id },
               replace: true,
             })
           }
-          edit={() =>
+          onEdit={() =>
             void navigate({
               to: '/lessons/$lessonId/edit',
               params: { lessonId: lesson.id },

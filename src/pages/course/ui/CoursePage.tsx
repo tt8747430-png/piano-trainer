@@ -9,7 +9,7 @@ import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, FabLink, FloatingActions, PAINT, ScreenHeader } from '@/shared/ui'
-import { ReadEditSwitch } from '@/widgets/mode-switch'
+import { EditToggle } from '@/widgets/mode-switch'
 import {
   CourseFacts,
   courseProgress,
@@ -85,10 +85,10 @@ export function CoursePage() {
         back={<BackButton fallback={{ to: '/', search: { view: 'courses', journey: '' } }} />}
         actions={
           editsContent(account) ? (
-            <ReadEditSwitch
-              mode="read"
-              read={() => undefined}
-              edit={() =>
+            <EditToggle
+              editing={false}
+              onDone={() => undefined}
+              onEdit={() =>
                 void navigate({
                   to: '/courses/$courseId/edit',
                   params: { courseId },

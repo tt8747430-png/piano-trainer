@@ -40,14 +40,13 @@ async function publish(user: ReturnType<typeof userEvent.setup>) {
 }
 
 describe('the course editor (ADR 0116, round 12)', () => {
-  it('puts the course into Edit from its bar’s Read · Edit, its name over it', async () => {
+  it('puts the course into Edit from the pencil in its bar, its name over it', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp(`/courses/${COURSE.id}`, {
       auth: await signedInAs('editor'),
       contentEditing: editing(),
     })
-    await user.click(await screen.findByRole('combobox', { name: 'Read or edit' }))
-    await user.click(await screen.findByRole('option', { name: 'Edit' }))
+    await user.click(await screen.findByRole('button', { name: 'Edit' }))
     await waitFor(() => expect(router.state.location.pathname).toBe(`/courses/${COURSE.id}/edit`))
     expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent(COURSE.title.en)
   })
@@ -55,7 +54,7 @@ describe('the course editor (ADR 0116, round 12)', () => {
   it('is not on a learner’s', async () => {
     await renderApp(`/courses/${COURSE.id}`, { auth: await signedInAs('learner') })
     await screen.findByRole('heading', { level: 1 })
-    expect(screen.queryByRole('combobox', { name: 'Read or edit' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Edit' })).not.toBeInTheDocument()
   })
 
   it('saves the title and summary to the draft, then publishes the course with them', async () => {

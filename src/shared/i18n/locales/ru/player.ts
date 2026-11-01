@@ -16,9 +16,6 @@ export const player: LocaleResources['player'] = {
   },
   print: 'Печать',
   mode: {
-    label: 'Играть или править',
-    practise: 'Играть',
-    edit: 'Править',
     original: 'Править оригинал',
   },
   views: {

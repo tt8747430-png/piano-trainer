@@ -33,23 +33,21 @@ async function writeChord(user: ReturnType<typeof userEvent.setup>, symbol: stri
 }
 
 describe('an editor’s draft of a built-in song’s original (ADR 0116)', () => {
-  it('is a mode of the one editor, an editor’s alone: Edit or Edit the original', async () => {
+  it('opens from the Player’s More, an editor’s alone', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp(`/edit/${SONG.id}`, { auth: await signedInAs('editor') })
-    const mode = await screen.findByRole('combobox', { name: 'Practise or edit' })
-    expect(mode).toHaveTextContent('Edit')
-    await user.click(mode)
-    await user.click(await screen.findByRole('option', { name: 'Edit the original' }))
-    await waitFor(() => expect(router.state.location.search).toMatchObject({ original: true }))
+    const { router } = await renderApp(`/play/${SONG.id}`, { auth: await signedInAs('editor') })
+    await user.click(await screen.findByRole('button', { name: 'More' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Edit the original' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe(`/edit/${SONG.id}`))
+    expect(router.state.location.search).toMatchObject({ original: true })
   })
 
-  it('is no mode of a learner’s editor', async () => {
+  it('is not in a learner’s More', async () => {
     const user = userEvent.setup()
-    await renderApp(`/edit/${SONG.id}`, { auth: await signedInAs('learner') })
-    await screen.findByRole('button', { name: /^Bar 1(:|$)/ })
-    await user.click(screen.getByRole('combobox', { name: 'Practise or edit' }))
-    expect(await screen.findByRole('option', { name: 'Edit' })).toBeInTheDocument()
-    expect(screen.queryByRole('option', { name: 'Edit the original' })).not.toBeInTheDocument()
+    await renderApp(`/play/${SONG.id}`, { auth: await signedInAs('learner') })
+    await user.click(await screen.findByRole('button', { name: 'More' }))
+    await screen.findByRole('menu', { name: 'More' })
+    expect(screen.queryByRole('menuitem', { name: 'Edit the original' })).not.toBeInTheDocument()
   })
 
   it('is an editor’s alone: a learner is told so, with the way back to the song', async () => {

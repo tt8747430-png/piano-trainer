@@ -111,7 +111,6 @@ export const learn = {
   },
   // An editor's lesson editor (ADR 0116): every text the lesson shows, English and Russian side by side.
   // A lesson's or a course's two modes, an editor's (round 25).
-  mode: { label: 'Read or edit', read: 'Read', edit: 'Edit' },
   edit: {
     doc: {
       label: 'The lesson',

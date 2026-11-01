@@ -109,7 +109,7 @@ const shownText = (control: Element) => {
 const namesIn = (toolbar: HTMLElement) =>
   within(toolbar)
     .getAllByRole('button')
-    .map((button) => button.getAttribute('aria-label'))
+    .map((button) => button.getAttribute('aria-label') ?? button.textContent)
 
 describe('the score editor', () => {
   it('opens on the upper staff of a song with no tune, Alt with the arrows choosing the row it writes', async () => {
@@ -1202,11 +1202,10 @@ describe('the score editor', () => {
           .getByRole('toolbar', { name: 'Play, move and record' })
           .querySelectorAll('button:not([aria-label^="Tempo"])'),
       ]
-      // Close, the mode's pop-up (showing the mode), MIDI, Undo, Redo.
+      // Close, MIDI, Undo, Redo, then Done, the one in words (iOS's).
       expect(bar).toHaveLength(5)
-      for (const control of [...bar, ...dock].filter(
-        (each) => each.getAttribute('aria-label') !== 'Practise or edit',
-      )) {
+      expect(bar.at(-1)).toHaveTextContent('Done')
+      for (const control of [...bar.slice(0, -1), ...dock]) {
         const name = control.getAttribute('aria-label') ?? ''
         expect(shownText(control), name).toBe('')
         // Its name in a tooltip: the browser's (`title`), or the edit row's own, which adds what
@@ -1821,16 +1820,13 @@ describe('the score editor', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/my-1'))
   })
 
-  it('opens at the bar its URL names, and turns to Practise at its caret’s bar (ADR 0115)', async () => {
+  it('opens at the bar its URL names, and its Done turns to the Player at its caret’s bar (ADR 0115)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/edit/my-1?bar=3', { storage: withSong() })
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/Bar 3, beat 1/))
     await waitFor(() => expect(router.state.location.search).not.toHaveProperty('bar'))
-    const modes = screen.getByRole('combobox', { name: 'Practise or edit' })
-    expect(modes).toHaveTextContent('Edit')
     await user.keyboard('{Alt>}{ArrowRight}{/Alt}')
-    await user.click(modes)
-    await user.click(await screen.findByRole('option', { name: 'Practise' }))
+    await user.click(screen.getByRole('button', { name: 'Done' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/play/my-1'))
   })
 
@@ -1889,7 +1885,7 @@ describe('the score editor', () => {
     await renderApp('/edit/my-1', { storage: withSong() })
     const midiButton = await screen.findByRole('button', { name: 'MIDI keyboard' })
     const end = midiButton.closest('[data-area="actions"]')
-    expect(namesIn(end as HTMLElement)).toEqual(['MIDI keyboard', 'Undo', 'Redo'])
+    expect(namesIn(end as HTMLElement)).toEqual(['MIDI keyboard', 'Undo', 'Redo', 'Done'])
     const lead = document.querySelector<HTMLElement>('[data-area="lead"]')
     expect(namesIn(lead as HTMLElement)).toEqual(['Close'])
   })

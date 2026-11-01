@@ -68,20 +68,18 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
       auth: await signedInAs('editor'),
       contentEditing: editing(),
     })
-    await user.click(await screen.findByRole('combobox', { name: 'Read or edit' }))
-    await user.click(await screen.findByRole('option', { name: 'Edit' }))
+    await user.click(await screen.findByRole('button', { name: 'Edit' }))
     await waitFor(() => expect(router.state.location.pathname).toBe(`/lessons/${LESSON.id}/edit`))
     // The lesson's own title over it, as it reads.
     expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent(LESSON.title.en)
-    await user.click(await screen.findByRole('combobox', { name: 'Read or edit' }))
-    await user.click(await screen.findByRole('option', { name: 'Read' }))
+    await user.click(await screen.findByRole('button', { name: 'Done' }))
     await waitFor(() => expect(router.state.location.pathname).toBe(`/lessons/${LESSON.id}`))
   })
 
   it('is not in a learner’s', async () => {
     await renderApp(`/lessons/${LESSON.id}`, { auth: await signedInAs('learner') })
     await screen.findByRole('heading', { level: 1 })
-    expect(screen.queryByRole('combobox', { name: 'Read or edit' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Edit' })).not.toBeInTheDocument()
   })
 
   it('opens the lesson as one document, its status and Publish in the bar', async () => {

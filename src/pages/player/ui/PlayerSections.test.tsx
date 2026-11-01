@@ -33,8 +33,7 @@ describe('the Player’s Sections (ADR 0107)', () => {
       expect(screen.queryByRole('dialog', { name: 'Sections' })).not.toBeInTheDocument(),
     )
     // The cursor at the chorus's first bar: the editor opens there from it (ADR 0115).
-    await user.click(screen.getByRole('combobox', { name: 'Practise or edit' }))
-    await user.click(await screen.findByRole('option', { name: 'Edit' }))
+    await user.click(screen.getByRole('button', { name: 'Edit' }))
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/Bar 9, beat 1/))
   })
 

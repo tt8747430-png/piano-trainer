@@ -4,6 +4,7 @@ export const common: LocaleResources['common'] = {
   appName: 'Тренажёр фортепиано',
   skipToContent: 'К содержимому',
   back: 'Назад',
+  editMode: { edit: 'Изменить', done: 'Готово' },
   nav: {
     label: 'Основная навигация',
     songs: 'Песни',

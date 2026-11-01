@@ -66,3 +66,4 @@ own Play melody switch: it plays the tune under a take, not the Player's melody.
   one row; Delete · Copy · Cut · Paste a selection capsule floating over the transport while notes are chosen,
   the chord row is written or the clip holds some (Apple's layers: navigation, content tools, the edit menu by
   the selection) (2026-10-30).
+- r26 — Practise · Edit is no longer a pop-up: the Player's pencil at the bar's end opens the editor, the editor's Done in the same place returns; Edit the original is the Player's More's, an editor's (2026-11-01).

@@ -19,9 +19,6 @@ export const player = {
   print: 'Print',
   /** A piece's score in its two modes, the Player and the score editor (ADR 0115). */
   mode: {
-    label: 'Practise or edit',
-    practise: 'Practise',
-    edit: 'Edit',
     original: 'Edit the original',
   },
   // The Player's views of the music (ADR 0108), the View's tiles; each names its own part of the

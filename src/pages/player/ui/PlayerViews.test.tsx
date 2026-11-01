@@ -180,8 +180,7 @@ describe('the Grid (ADR 0108)', () => {
     expect(down.length).toBeGreaterThan(0)
     expect(down.every((name) => /^[GBD]\d$/.test(name))).toBe(true)
     // Edit opens at the bar gone to (ADR 0115).
-    await user.click(screen.getByRole('combobox', { name: 'Practise or edit' }))
-    await user.click(await screen.findByRole('option', { name: 'Edit' }))
+    await user.click(screen.getByRole('button', { name: 'Edit' }))
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/Bar 3, beat 1/))
   })
 

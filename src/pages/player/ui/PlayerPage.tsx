@@ -1,9 +1,10 @@
-import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { Info, ListTree } from 'lucide-react'
+import { Link, useNavigate, useParams, useSearch } from '@tanstack/react-router'
+import { BookLock, Info, ListTree } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   entryTitles,
+  hasEditableOriginal,
   isDegreePiece,
   isLeadSheet,
   isOwnSongId,
@@ -19,9 +20,10 @@ import { ShareSaid, useShareSong, type SongToShare } from '@/features/share-song
 import { useSongExport } from '@/features/song-files'
 import { useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
+import { editsContent, useAccount } from '@/shared/lib/account'
 import { isCompound, noteParam } from '@/shared/lib/music'
 import { ButtonLink, NotFound, type MenuAction } from '@/shared/ui'
-import { ModeSwitch } from '@/widgets/mode-switch'
+import { ScoreEditToggle } from '@/widgets/mode-switch'
 import { useClose } from '../model/use-close'
 import type { PlayerSearch } from '../model/player-search'
 import { sectionAt, sectionStarts } from '../model/section-starts'
@@ -79,6 +81,8 @@ function PiecePlayer({ piece }: { piece: Piece }) {
     : isDegreePiece(piece)
       ? null
       : { kind: 'own', song: { title, music: musicOf(piece) } }
+  const navigate = useNavigate()
+  const { account } = useAccount()
   const more: MenuAction[] = [
     {
       key: 'info',
@@ -94,6 +98,23 @@ function PiecePlayer({ piece }: { piece: Piece }) {
       disabled: starts.length < 2,
       reason: t(`player:sections.one.${piece.kind}`),
     },
+    // An editor's way to the song's original, for everyone (ADR 0116).
+    ...(editsContent(account) && hasEditableOriginal(piece.id)
+      ? [
+          {
+            key: 'original',
+            label: t('player:mode.original'),
+            icon: BookLock,
+            onSelect: () =>
+              void navigate({
+                to: '/edit/$pieceId',
+                params: { pieceId: piece.id },
+                search: { original: true },
+                replace: true,
+              }),
+          },
+        ]
+      : []),
   ]
   // Its link, a way out in Export… as on its page (ADR 0107).
   const share = sharing
@@ -125,7 +146,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
           staves={isDegreePiece(piece) ? undefined : piece.staves}
           recording={piece.recording}
           // Every piece is edited: one written in degrees as its chart in its key (ADR 0115).
-          modes={<ModeSwitch pieceId={piece.id} mode="practise" bar={bar + 1} />}
+          modes={<ScoreEditToggle pieceId={piece.id} editing={false} bar={bar + 1} />}
           setup={
             <PieceSetup
               piece={piece}
