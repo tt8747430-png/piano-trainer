@@ -51,8 +51,10 @@ export function useSongFiles(): (piece: Piece) => SongFiles {
     const chart = chartOf(piece)
     const title = entryTitles(piece, locale).primary
     const staffNames = staffNamesOf(chart.staves ?? [], locale)
-    const composer = creditNames(chart.credits, ['music', 'words-and-music', 'authors'])
-    const lyricist = creditNames(chart.credits, ['words', 'russian-text'])
+    // The score's own credits first (its Settings, round 28), else the catalog's.
+    const composer =
+      chart.header?.composer ?? creditNames(chart.credits, ['music', 'words-and-music', 'authors'])
+    const lyricist = chart.header?.lyricist ?? creditNames(chart.credits, ['words', 'russian-text'])
     return {
       musicXml: () =>
         exportMusicXml(musicOf(chart), {
