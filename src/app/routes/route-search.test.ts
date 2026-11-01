@@ -47,11 +47,6 @@ describe('search params', () => {
     expect(await searchAt('/edit/bz5?takes=yes&record=1')).toEqual(EDIT_DEFAULTS)
   })
 
-  it('open a song’s original in the score editor only when the URL says so (ADR 0116)', async () => {
-    expect(await searchAt('/edit/bz5?original=true')).toEqual({ ...EDIT_DEFAULTS, original: true })
-    expect(await searchAt('/edit/bz5?original=yes')).toEqual(EDIT_DEFAULTS)
-  })
-
   it('simplify a piece’s chords only where the URL says so, and nothing a walk plays (ADR 0105)', async () => {
     expect(PLAYER_DEFAULTS).toMatchObject({ simple: false })
     expect(await searchAt('/play/bz5?simple=true')).toEqual({ ...PLAYER_DEFAULTS, simple: true })

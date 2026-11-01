@@ -31,8 +31,7 @@ function Editing({ id }: { id: string }) {
   const gone = usePieces(
     (state) => target?.kind === 'song' && selectOwnSong(state, target.id) === undefined,
   )
-  if (!target) return null
-  if (gone)
+  if (!target || gone)
     return (
       <NotFound>
         <ButtonLink render={<Link to="/songs" />}>{t('notFound.toSongs')}</ButtonLink>
@@ -106,35 +105,21 @@ function MadeOriginal({ id }: { id: string }) {
 }
 
 /**
- * The original of the route's piece, where it has one an editor changes: a built-in song or study
- * written as a chart, or a song an editor made and has not published yet.
- */
-function OriginalOf({ id }: { id: string }) {
-  const { t } = useTranslation('editor')
-  const { account } = useAccount()
-  const entry = entryById(id)
-  const piece = entry && isPiece(entry) && !isDegreePiece(entry) ? entry : undefined
-  if (!editsContent(account) || (entry && !piece))
-    return (
-      <NotOpen line={t('original.editorsOnly')}>
-        <ButtonLink render={<Link to="/songs/$pieceId" params={{ pieceId: id }} />}>
-          {t('original.toSong')}
-        </ButtonLink>
-      </NotOpen>
-    )
-  return piece ? <EditingOriginal piece={piece} /> : <MadeOriginal id={id} />
-}
-
-/**
- * The score editor over the route's piece: a catalog song's, study's or listing's version, or an own
- * song; or, an editor's, a built-in song's original.
+ * The score editor over the route's piece. An editor edits the song everyone sees (ADR 0116): a
+ * built-in song or study written as a chart, or a song an editor made and has not published yet,
+ * its draft the server's. Anyone else edits their own song, or their version of a catalog song,
+ * study or listing.
  */
 export function ScoreEditorPage() {
   const { pieceId } = useParams({ from: '/full-screen/edit/$pieceId' })
-  const { original } = useSearch({ from: '/full-screen/edit/$pieceId' })
-  return original ? (
-    <OriginalOf key={pieceId} id={pieceId} />
-  ) : (
-    <Editing key={pieceId} id={pieceId} />
-  )
+  const { account } = useAccount()
+  const pieces = usePiecesStoreApi()
+  if (editsContent(account)) {
+    const entry = entryById(pieceId)
+    if (entry && isPiece(entry) && !isDegreePiece(entry))
+      return <EditingOriginal key={pieceId} piece={entry} />
+    if (!entry && !selectOwnSong(pieces.getState(), pieceId))
+      return <MadeOriginal key={pieceId} id={pieceId} />
+  }
+  return <Editing key={pieceId} id={pieceId} />
 }

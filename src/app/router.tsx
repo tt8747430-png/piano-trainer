@@ -677,13 +677,11 @@ const editRoute = createRoute({
   path: '/edit/$pieceId',
   notFoundComponent: notFoundIn('songs'),
   ...editSearch,
-  beforeLoad: async ({ params, context, search }) => {
+  beforeLoad: async ({ params, context }) => {
     const { editableIn } = await playerScreens()
-    if (!editableIn(context.pieces.getState(), params.pieceId)) {
-      // An editor's original may be a song made and not yet published: its draft is the server's.
-      if (search.original) return
-      throw notFound()
-    }
+    // A song not on this device may be an editor's made and not yet published, its draft the
+    // server's: the page opens it, or says it is not there.
+    if (!editableIn(context.pieces.getState(), params.pieceId)) return
     await ensureContent(context.content, 'piece', params.pieceId)
   },
   component: lazyRouteComponent(playerScreens, 'ScoreEditorPage'),

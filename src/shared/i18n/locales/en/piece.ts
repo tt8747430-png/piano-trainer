@@ -130,9 +130,7 @@ export const piece = {
     published: 'Published',
     changed: 'Changed since',
     notPublished: 'Not published',
-    original: 'The original',
-    editOriginal: 'Edit the original',
-    draft: 'Draft',
+    changes: 'Unpublished changes',
     danger: 'Remove',
   },
 } as const
