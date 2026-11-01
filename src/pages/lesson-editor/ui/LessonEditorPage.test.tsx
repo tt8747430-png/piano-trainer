@@ -143,7 +143,7 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
       contentEditing: content,
     })
     await lessonDoc()
-    await user.click(screen.getByRole('button', { name: 'The draft’s menu' }))
+    await user.click(screen.getByRole('button', { name: 'Publishing' }))
     await user.click(await screen.findByRole('menuitemcheckbox', { name: 'Русский' }))
     const { doc, editor } = await lessonDoc()
     expect(line(doc, 'p[data-lesson-title]')).toHaveTextContent(LESSON.title.ru)

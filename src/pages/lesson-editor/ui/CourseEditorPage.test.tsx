@@ -68,7 +68,7 @@ describe('the course editor (ADR 0116, round 12)', () => {
     expect(title).toHaveValue(COURSE.title.en)
     await user.clear(title)
     await user.type(title, 'A new course title')
-    await user.click(screen.getByRole('button', { name: 'The draft’s menu' }))
+    await user.click(screen.getByRole('button', { name: 'Publishing' }))
     await user.click(await screen.findByRole('menuitemcheckbox', { name: 'Русский' }))
     expect(await field('Title')).toHaveValue(COURSE.title.ru)
     await user.type(await field('Summary'), '!')

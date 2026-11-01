@@ -47,7 +47,7 @@ describe('a new song in a collection’s folder (content as data, round 26: one 
     expect(content.body('piece', 'abide-with-me')).toBeUndefined()
     expect(piecesStore.getState().songs).toEqual([])
     expect(
-      await screen.findByRole('button', { name: 'The draft’s menu' }, { timeout: 5000 }),
+      await screen.findByRole('button', { name: 'Publishing' }, { timeout: 5000 }),
     ).toBeInTheDocument()
   })
 
