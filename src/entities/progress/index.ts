@@ -13,6 +13,7 @@ export {
   withHold,
   withLearned,
   withLesson,
+  withoutSteps,
   withRun,
   withSectionRead,
   withTempo,

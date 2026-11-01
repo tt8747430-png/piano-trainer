@@ -1,10 +1,27 @@
 import { NodeViewWrapper, type ReactNodeViewProps } from '@tiptap/react'
-import { ChevronRight, CircleHelp, FilePen, Piano, SlidersHorizontal } from 'lucide-react'
-import { Component, use, useId, useState, type FocusEvent, type ReactNode } from 'react'
+import {
+  ChevronRight,
+  CircleHelp,
+  Copy,
+  FilePen,
+  Piano,
+  SlidersHorizontal,
+  Trash2,
+} from 'lucide-react'
+import {
+  Component,
+  use,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type FocusEvent,
+  type ReactNode,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import type { LessonBlock, LessonExample } from '@/entities/lesson'
 import { i18n, type LocalText } from '@/shared/i18n'
-import { cn, useMediaQuery } from '@/shared/lib'
+import { cn } from '@/shared/lib'
 import {
   C_MAJOR,
   CHORD_QUALITIES,
@@ -15,21 +32,10 @@ import {
   noteParam,
   SCALE_KINDS,
 } from '@/shared/lib/music'
-import {
-  Dropdown,
-  InfoTip,
-  KeyChoice,
-  NoteChoice,
-  Segmented,
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  TileMark,
-} from '@/shared/ui'
+import { Dropdown, InfoTip, KeyChoice, NoteChoice, Segmented, TileMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Textarea } from '@/shared/ui/primitives/textarea'
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { LessonBlock as Shown, linkTile } from '@/widgets/lesson-view'
 import {
   blockExampleProblem,
@@ -40,6 +46,7 @@ import {
 import { blockName } from './block-names'
 import { LinkFields, PatternFields, VoicingsFields } from './ExampleFields'
 import { DocLocale } from './doc-locale'
+import { blockActions } from './menus'
 import { OpenScore } from './open-score'
 
 const nothing = () => undefined
@@ -63,10 +70,13 @@ class Drawn extends Component<{ children: ReactNode; fallback: ReactNode }, { fa
 function ExampleLine({
   block,
   example,
+  named,
   onChange,
 }: {
   block: LessonBlock
   example: LessonExample
+  /** Its name shown over it: where the block has more than one line (notes and the left hand). */
+  named: boolean
   onChange: (block: LessonBlock) => void
 }) {
   const { t } = useTranslation('learn')
@@ -77,26 +87,30 @@ function ExampleLine({
   const label = t(`edit.example.${example.kind}`)
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex items-center gap-1">
+      {named ? (
         <label htmlFor={id} className="text-sm font-medium">
           {label}
         </label>
+      ) : null}
+      <div className="flex items-center gap-1">
+        <Input
+          id={id}
+          aria-label={named ? undefined : label}
+          value={typed}
+          spellCheck={false}
+          autoCapitalize="off"
+          autoCorrect="off"
+          aria-invalid={problem !== null || undefined}
+          aria-describedby={problem === null ? undefined : `${id}-problem`}
+          className="font-mono"
+          onChange={(event) => {
+            setTyped(event.target.value)
+            onChange(withBlockExample(block, example, event.target.value))
+          }}
+        />
+        {/* How it is written, behind its ⓘ at the field's end. */}
         <InfoTip name={label}>{t(`edit.example.${example.kind}Info`)}</InfoTip>
       </div>
-      <Input
-        id={id}
-        value={typed}
-        spellCheck={false}
-        autoCapitalize="off"
-        autoCorrect="off"
-        aria-invalid={problem !== null || undefined}
-        aria-describedby={problem === null ? undefined : `${id}-problem`}
-        className="font-mono"
-        onChange={(event) => {
-          setTyped(event.target.value)
-          onChange(withBlockExample(block, example, event.target.value))
-        }}
-      />
       {problem === null ? null : (
         <p id={`${id}-problem`} className="text-xs text-destructive">
           {problem === '' ? t('edit.example.empty') : t('edit.example.unread', { word: problem })}
@@ -247,36 +261,6 @@ const HAS_FIELDS = new Set<LessonBlock['kind']>([
   'link',
 ])
 
-/** An example's fields, opened from its button: a popover on a laptop, a bottom sheet on a phone. */
-function FieldsPanel({ name, children }: { name: string; children: ReactNode }) {
-  const { t } = useTranslation('learn')
-  const wide = useMediaQuery('(min-width: 48rem)')
-  const title = t('edit.doc.fields', { name })
-  const trigger = (
-    <Button variant="ghost" size="icon" className="ms-auto" aria-label={title} title={title} />
-  )
-  const body = <div className="flex flex-col gap-4">{children}</div>
-  if (wide)
-    return (
-      <Popover>
-        <PopoverTrigger render={trigger}>
-          <SlidersHorizontal aria-hidden />
-        </PopoverTrigger>
-        <PopoverContent aria-label={title} align="end" className="w-96 p-4">
-          {body}
-        </PopoverContent>
-      </Popover>
-    )
-  return (
-    <Sheet>
-      <SheetTrigger render={trigger}>
-        <SlidersHorizontal aria-hidden />
-      </SheetTrigger>
-      <SheetContent title={title}>{body}</SheetContent>
-    </Sheet>
-  )
-}
-
 /** How many examples of notes stand before `pos` in the document: an example's place among them. */
 function notesBefore(doc: ReactNodeViewProps['editor']['state']['doc'], pos: number | undefined) {
   let count = 0
@@ -289,10 +273,41 @@ function notesBefore(doc: ReactNodeViewProps['editor']['state']['doc'], pos: num
   return count
 }
 
+/** One of an example's tools: a 44px button on a phone, its name its tooltip. */
+function Tool({
+  label,
+  onClick,
+  pressed,
+  destructive,
+  children,
+}: {
+  label: string
+  onClick: () => void
+  pressed?: boolean
+  destructive?: boolean
+  children: ReactNode
+}) {
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      aria-label={label}
+      title={label}
+      aria-pressed={pressed}
+      className={cn('size-11 md:size-9', destructive && 'text-destructive hover:text-destructive')}
+      onClick={onClick}
+    >
+      {children}
+    </Button>
+  )
+}
+
 /**
- * An example of the lesson in the document (round 21): its name, drawn live as the lesson shows it,
- * its line of text typed in place under it with what does not read, its words in the document's
- * language, and its other fields behind its button (a popover, or a sheet on a phone).
+ * An example of the lesson in the document (round 21, round 28 as Notion's and Craft's atoms): drawn
+ * as the lesson shows it, its question's or link's words typed where they print. Chosen, it is
+ * outlined with its small toolbar floating over its top edge: Edit (its fields in a panel opened in
+ * place under it, the same on a phone and a laptop: the page never covered), Edit music for notes,
+ * Duplicate, Delete. Its kind is not written over it: the example says what it is.
  */
 export function ExampleView({
   node,
@@ -307,54 +322,86 @@ export function ExampleView({
   // As it reads until it is worked on (round 25): chosen, or a field of it focused.
   const [focused, setFocused] = useState(false)
   const block = node.attrs['block'] as LessonBlock | null
-  if (!block) return <NodeViewWrapper />
+  // Its fields open: at once for one that does not read yet (one just put in).
+  const [opened, setOpened] = useState(() => block !== null && !blockReads(block))
+  const panelId = useId()
   const working = selected || focused
+  // Its fields close once it is let go: chosen again, it reads until its Edit.
+  const was = useRef(working)
+  useEffect(() => {
+    if (was.current && !working) setOpened(false)
+    was.current = working
+  }, [working])
+  if (!block) return <NodeViewWrapper />
+  const open = opened && working
   const words = i18n.getFixedT(locale, 'learn')
   const change = (next: LessonBlock) => updateAttributes({ block: next })
   const name = t(`edit.blocks.${blockName(block)}`)
   const examples = blockExamples(block)
   // Variants hold whole examples of their own: kept as written, moved, copied or deleted whole.
   const asWritten = block.kind === 'variants'
+  const editable = !asWritten && (HAS_FIELDS.has(block.kind) || examples.length > 0)
+  const pos = getPos()
+  const index = pos === undefined ? null : editor.state.doc.resolve(pos).index(0)
+  const actions = index === null ? [] : blockActions(editor, index, t)
   return (
     <NodeViewWrapper
       data-example={block.kind}
       data-working={working ? '' : undefined}
-      // A tap takes it, as a block of the document: its fields open.
+      // A tap takes it, as a block of the document: its toolbar shows.
       tabIndex={-1}
       onFocus={() => setFocused(true)}
       onBlur={(event: FocusEvent<HTMLElement>) => {
         if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false)
       }}
       className={cn(
-        'my-5 flex cursor-pointer flex-col gap-3 rounded-3xl outline-offset-8 transition-[outline-color] duration-200 ease-out',
+        'relative my-5 flex cursor-pointer flex-col gap-3 rounded-3xl outline-offset-6 transition-[outline-color] duration-200 ease-out',
         working ? 'outline-2 outline-ring' : 'outline-2 outline-transparent hover:outline-border',
       )}
     >
-      {/* What the example is and its fields: shown while it is worked on, the page reading as the
-          lesson otherwise. */}
-      <div className={cn('flex min-h-11 items-center gap-2', !working && 'hidden')}>
-        <span className="text-sm font-semibold text-muted-foreground">{name}</span>
-        {asWritten ? (
-          <InfoTip name={name}>{t('edit.doc.asWritten')}</InfoTip>
-        ) : HAS_FIELDS.has(block.kind) ? (
-          <FieldsPanel name={name}>
-            <KindFields block={block} onChange={change} />
-          </FieldsPanel>
-        ) : null}
-        {block.kind === 'notes' && openScore ? (
-          // Its music on its own score, the score editor's (round 27): its place among the
-          // lesson's examples of notes names it there.
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label={t('edit.doc.editMusic')}
-            title={t('edit.doc.editMusic')}
-            onClick={() => openScore(notesBefore(editor.state.doc, getPos()))}
-          >
-            <FilePen aria-hidden />
-          </Button>
-        ) : null}
-      </div>
+      {working ? (
+        <div
+          role="toolbar"
+          aria-label={name}
+          className="absolute -top-7 right-3 z-10 flex items-center gap-0.5 rounded-xl border border-border bg-raised p-0.5 elevation-2"
+        >
+          {editable ? (
+            <Button
+              variant={open ? 'secondary' : 'ghost'}
+              className="h-11 gap-1.5 px-3 md:h-9"
+              aria-expanded={open}
+              aria-controls={open ? panelId : undefined}
+              onClick={() => setOpened(!open)}
+            >
+              <SlidersHorizontal data-icon="inline-start" aria-hidden />
+              {t('edit.doc.editExample')}
+            </Button>
+          ) : null}
+          {asWritten ? <InfoTip name={name}>{t('edit.doc.asWritten')}</InfoTip> : null}
+          {block.kind === 'notes' && openScore ? (
+            // Its music on its own score, the score editor's (round 27): its place among the
+            // lesson's examples of notes names it there.
+            <Tool
+              label={t('edit.doc.editMusic')}
+              onClick={() => openScore(notesBefore(editor.state.doc, getPos()))}
+            >
+              <FilePen aria-hidden />
+            </Tool>
+          ) : null}
+          {actions
+            .filter((action) => action.key === 'duplicate' || action.key === 'remove')
+            .map((action) => (
+              <Tool
+                key={action.key}
+                label={action.label}
+                destructive={action.destructive}
+                onClick={action.onSelect}
+              >
+                {action.key === 'duplicate' ? <Copy aria-hidden /> : <Trash2 aria-hidden />}
+              </Tool>
+            ))}
+        </div>
+      ) : null}
       {block.kind === 'question' ? (
         // The question's card as the lesson shows it, its words typed where they print.
         <div className="flex flex-col gap-3 card p-4 text-base">
@@ -397,8 +444,7 @@ export function ExampleView({
             <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
           </div>
         </div>
-      ) : null}
-      {block.kind === 'question' || block.kind === 'link' ? null : blockReads(block) ? (
+      ) : blockReads(block) ? (
         <Drawn
           key={JSON.stringify(block)}
           fallback={<p className="text-sm text-muted-foreground">{t('edit.doc.notShown')}</p>}
@@ -410,11 +456,27 @@ export function ExampleView({
           {t('edit.doc.notShown')}
         </p>
       )}
-      {working
-        ? examples.map((example) => (
-            <ExampleLine key={example.key} block={block} example={example} onChange={change} />
-          ))
-        : null}
+      {open ? (
+        // Its fields in place under it, as Obsidian's embeds open their source: nothing covers the
+        // page, the example drawn anew over them as they change.
+        <div
+          id={panelId}
+          role="group"
+          aria-label={t('edit.doc.fields', { name })}
+          className="flex cursor-auto flex-col gap-4 rounded-2xl border border-border bg-raised p-4"
+        >
+          {examples.map((example) => (
+            <ExampleLine
+              key={example.key}
+              block={block}
+              example={example}
+              named={examples.length > 1}
+              onChange={change}
+            />
+          ))}
+          <KindFields block={block} onChange={change} />
+        </div>
+      ) : null}
     </NodeViewWrapper>
   )
 }

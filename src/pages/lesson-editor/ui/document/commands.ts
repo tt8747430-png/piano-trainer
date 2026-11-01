@@ -7,9 +7,12 @@ import {
   blockStart,
   duplicateBlock,
   FIXED_BLOCKS,
+  lineAfter,
   moveBlock,
   removeBlock,
   selectedBlock,
+  turnBlockInto,
+  type TurnInto,
 } from '../../model/doc-blocks'
 import { blockNode, DOC, type DocNode } from '../../model/lesson-doc'
 
@@ -66,29 +69,19 @@ export function insertBlock(editor: Editor, kind: Insertable, locale: Locale): v
   editor.view.focus()
 }
 
-/** A paragraph the caret is in made a note of its words, or a note made a paragraph again. */
-export function toggleNote(editor: Editor): void {
-  const { state } = editor
-  const index = selectedBlock(state)
-  const node = state.doc.maybeChild(index)
-  if (index < FIXED_BLOCKS || !node) return
-  const at = blockStart(state.doc, index)
-  const words = node.textContent
-  const json: DocNode =
-    node.type.name === DOC.note
-      ? { type: DOC.paragraph, content: words ? [{ type: 'text', text: words }] : [] }
-      : node.type.name === DOC.paragraph || node.type.name === DOC.heading
-        ? {
-            type: DOC.note,
-            content: [
-              { type: DOC.noteText, content: words ? [{ type: 'text', text: words }] : [] },
-            ],
-          }
-        : { type: '' }
-  if (json.type === '') return
-  const tr = state.tr.replaceWith(at, at + node.nodeSize, state.schema.nodeFromJSON(json))
-  tr.setSelection(TextSelection.near(tr.doc.resolve(at + 1)))
-  editor.view.dispatch(tr)
+/** Block `index` of words turned into `into` (its menu's Turn into), the caret in it. */
+export function turnInto(editor: Editor, index: number, into: TurnInto): void {
+  const tr = turnBlockInto(editor.state, index, into)
+  if (!tr) return
+  editor.view.dispatch(closeHistory(tr))
+  editor.view.focus()
+}
+
+/** An empty line under block `index` with `/` typed: what can go there, in the `/` menu. */
+export function addLineAfter(editor: Editor, index: number): void {
+  const tr = lineAfter(editor.state, index)
+  if (!tr) return
+  editor.view.dispatch(closeHistory(tr))
   editor.view.focus()
 }
 

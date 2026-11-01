@@ -27,7 +27,6 @@ import {
   DEFAULT_SIDEBAR,
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
-  DEFAULT_FLOATING,
   DEVICE_NAME_MAX,
   FOLDED_MAX,
   SECTION_ID_MAX,
@@ -36,7 +35,6 @@ import {
   SOUND_PARTS,
   defaultKeyboard,
   detectLocale,
-  isFloatingPlace,
   isKeyDock,
   isKeyLength,
   isDiagramsMode,
@@ -65,13 +63,12 @@ import {
   type ScoreViewSettings,
   type SettingsState,
   type SoundSettings,
-  type FloatingSettings,
   type TrainerSettings,
 } from './types'
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 16
+export const SETTINGS_VERSION = 17
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -93,7 +90,6 @@ export function createSettingsStore({
         practice: DEFAULT_PRACTICE,
         sound: DEFAULT_SOUND,
         trainer: DEFAULT_TRAINER,
-        floating: DEFAULT_FLOATING,
         keyboard: defaultKeyboard(finePointer),
         recorder: DEFAULT_RECORDER,
         editing: DEFAULT_EDITING,
@@ -141,15 +137,6 @@ function soundSettings(value: unknown): SoundSettings {
       return [part, isVolume(kept) ? kept : DEFAULT_SOUND[part]]
     }),
   ) as Record<keyof SoundSettings, number>
-}
-
-/** Where the floating actions stand and whether they say their names, each as saved where valid. */
-function floatingSettings(value: unknown): FloatingSettings {
-  const saved = savedObject<FloatingSettings>(value)
-  return {
-    place: isFloatingPlace(saved.place) ? saved.place : DEFAULT_FLOATING.place,
-    labels: typeof saved.labels === 'boolean' ? saved.labels : DEFAULT_FLOATING.labels,
-  }
 }
 
 /** Each place's fold as saved where it is a boolean; a place never chosen stays unset. */
@@ -324,7 +311,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     practice: practiceToggles(saved.practice),
     sound: soundSettings(saved.sound),
     trainer: trainerSettings(saved.trainer),
-    floating: floatingSettings(saved.floating),
     keyboard: keyboardSettings(saved.keyboard, current.keyboard),
     recorder: recorderSettings(saved.recorder),
     editing: editingSettings(saved.editing),

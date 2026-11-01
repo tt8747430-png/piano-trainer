@@ -21,8 +21,8 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
 - **A row that chooses is never a row that leaves.** `RowLink` is only a link; `RowButton` opens a sheet over its
   page.
 - **One action at the thumb.** A screen's job floats in the thumb's reach (`FloatingActions` in the shell's one
-  `FloatingHost`): its main action a 56px round `Fab`, the rest in a `SpeedDial`, all in one row along the foot, at
-  its left, middle or right as `floating.place` says, each its icon alone unless `floating.labels` asks for names. A
+  `FloatingHost`): its main action a 56px round `Fab`, the rest in a `SpeedDial`, all in one row in the middle of the
+  foot, each its icon with its name as its tooltip (no setting: round 28). A
   tap on the page's free room folds them away until the next. The full-screen routes (the Player, the editor, the
   Check) have no host: their bars stand in flow (ADR 0115).
 - **Explanations in a popover.** No line of explanation stands under a control. Its name carries an ⓘ (`InfoTip`)
@@ -81,3 +81,4 @@ A new option has one obvious form by this rule. A test reaches a folded action b
   whole mechanism (2026-10-28).
 - r26 — Menus, sheets, pop-ups and pages told apart; real menus; Edit ⇄ Done; the keyboard's bars on its top edge as
   iOS pans the page (2026-11-01).
+- r28 — The floating buttons' place and names are no longer settings (a developer's words in General): they stand in the middle, icons named by their tooltips; the settings store's version 17 (2026-11-01).

@@ -13,30 +13,21 @@ import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { ButtonLink } from './ButtonLink'
-import { FloatingContext, useFloatingLabels, type FloatingPlace } from './floating-context'
+import { FloatingContext } from './floating-context'
 import { Button } from './primitives/button'
 
 /**
- * The actions stand in a row along the foot, so none climbs over the page; beside the page (`aside`:
- * keys docked at the foot of a phone on its side or of a laptop) in a column at its left, or at its
- * right for the middle, over the keys.
+ * The actions stand in a row along the foot, in its middle, so none climbs over the page; beside the
+ * page (`aside`: keys docked at the foot of a phone on its side or of a laptop) in a column at its
+ * right, over the keys.
  */
-const ALIGN: Readonly<Record<FloatingPlace, string>> = {
-  left: 'flex-row items-center aside:flex-col',
-  center: 'flex-row items-center aside:flex-col',
-  right: 'flex-row items-center aside:flex-col',
-}
+const ALIGN = 'flex-row items-center aside:flex-col'
 /**
- * A dial opens as a card over its button at the foot, growing from it: at the left its left edge
- * on the button's, in the middle centred on it, at the right its right edge on the button's. Beside
- * the page, where the height is short, it opens beside its button towards the page, from its top down.
+ * A dial opens as a card over its button at the foot, growing from it, centred on it. Beside the
+ * page, where the height is short, it opens beside its button towards the page, from its top down.
  */
-const DIAL_ALIGN: Readonly<Record<FloatingPlace, string>> = {
-  left: 'left-0 origin-bottom-left aside:left-full aside:ml-3 aside:origin-top-left',
-  center:
-    'left-1/2 -translate-x-1/2 origin-bottom aside:right-full aside:left-auto aside:mr-3 aside:translate-x-0 aside:origin-top-right',
-  right: 'right-0 origin-bottom-right aside:right-full aside:mr-3 aside:origin-top-right',
-}
+const DIAL_ALIGN =
+  'left-1/2 -translate-x-1/2 origin-bottom aside:right-full aside:left-auto aside:mr-3 aside:translate-x-0 aside:origin-top-right'
 const DIAL_ASIDE = 'aside:top-0 aside:bottom-auto aside:mb-0'
 /** The page keeps this far clear of the actions: their row's margin over the foot. */
 const FLOATING_GAP_PX = 12
@@ -49,8 +40,8 @@ const CONTROLS =
 
 /**
  * The one row every screen's floating actions stand in, at the foot of the screen over the tab bar
- * and the keys docked there, the width of the screen beside a rail or a sidebar: at its left, its
- * middle or its right, as the learner chose, each action with its name or its icon alone. Where keys
+ * and the keys docked there, the width of the screen beside a rail or a sidebar, in its middle, each
+ * action its icon with its name as its tooltip (ADR 0061). Where keys
  * are docked on a screen wide for its height (`aside`), they stand in a column at its side instead,
  * so the little height left stays the page's. The page pads clear of them by the room they take,
  * which the host measures (`--floating-block`, `--floating-inline`; `theme.css` says which counts).
@@ -58,13 +49,9 @@ const CONTROLS =
  * next brings them back; a new `screen` brings them back too.
  */
 export function FloatingHost({
-  place,
-  labels,
   screen,
   children,
 }: {
-  place: FloatingPlace
-  labels: boolean
   /** The screen shown: its actions show whenever it changes. */
   screen: string
   children: ReactNode
@@ -106,28 +93,21 @@ export function FloatingHost({
     }
   }, [column])
   return (
-    <FloatingContext.Provider value={{ column, place, labels }}>
+    <FloatingContext.Provider value={{ column }}>
       {children}
       <div
         data-slot="floating-host"
-        data-place={place}
         data-hidden={hidden || undefined}
         className={cn(
           'pointer-events-none fixed inset-x-0 bottom-docked z-20 mb-3 flex px-gutter transition-[translate,opacity] duration-200 ease-out print:hidden data-hidden:translate-y-4 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:left-rail landscape-phone:pr-gutter-safe landscape-phone:mb-safe-4 lg:left-sidebar lg:mb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
-          place === 'left' && 'justify-start',
-          place === 'center' && 'justify-center aside:justify-end',
-          place === 'right' && 'justify-end',
+          'justify-center aside:justify-end',
         )}
       >
         <div
           ref={setColumn}
           data-slot="floating-actions"
           inert={hidden}
-          className={cn(
-            'vt-floating flex gap-3',
-            !hidden && '[&>*]:pointer-events-auto',
-            ALIGN[place],
-          )}
+          className={cn('vt-floating flex gap-3', !hidden && '[&>*]:pointer-events-auto', ALIGN)}
         />
       </div>
     </FloatingContext.Provider>
@@ -154,12 +134,10 @@ export function FloatingActions({
   className?: string
   children: ReactNode
 }) {
-  const { column, place } = useContext(FloatingContext)
+  const { column } = useContext(FloatingContext)
   if (!column) return null
   return createPortal(
-    <div className={cn('flex gap-3', ALIGN[place], last && 'order-last', className)}>
-      {children}
-    </div>,
+    <div className={cn('flex gap-3', ALIGN, last && 'order-last', className)}>{children}</div>,
     column,
   )
 }
@@ -177,7 +155,6 @@ const FAB_EXTENDED = `h-14 gap-2 rounded-full px-5 pl-4 elevation-2 hover:elevat
 /** A second action: 48px, the raised paper with its soft line, a lower shade. */
 export const MINI_FAB = `size-12 rounded-full border-border bg-raised elevation-1 hover:bg-muted hover:elevation-2 [&_svg:not([class*=size-])]:size-5 ${PRESS}`
 /** A second action with its words: a 48px pill of the same paper. */
-const MINI_PILL = `h-12 gap-2 rounded-full border-border bg-raised px-4 elevation-1 hover:bg-muted hover:elevation-2 ${PRESS}`
 
 /**
  * The screen's main action, a large round button named by its label: Play, New song. `extended`, its
@@ -258,8 +235,8 @@ export function PlayFab({
 }
 
 /**
- * A second action beside the main one, always in sight: its words and its icon on a floating pill,
- * or its icon alone on a round button where the floating actions say no names.
+ * A second action beside the main one, always in sight: its icon on a round button, its name its
+ * tooltip.
  */
 export function FabPill({
   label,
@@ -270,24 +247,16 @@ export function FabPill({
   ComponentProps<typeof Button>,
   'children' | 'size' | 'variant'
 >) {
-  const labels = useFloatingLabels()
-  if (!labels)
-    return (
-      <Button
-        variant="surface"
-        size="icon"
-        aria-label={label}
-        title={label}
-        className={cn(MINI_FAB, className)}
-        {...props}
-      >
-        <Icon aria-hidden />
-      </Button>
-    )
   return (
-    <Button variant="surface" size="lg" className={cn(MINI_PILL, className)} {...props}>
-      {label}
-      <Icon data-icon="inline-end" aria-hidden />
+    <Button
+      variant="surface"
+      size="icon"
+      aria-label={label}
+      title={label}
+      className={cn(MINI_FAB, className)}
+      {...props}
+    >
+      <Icon aria-hidden />
     </Button>
   )
 }
@@ -318,7 +287,6 @@ export function SpeedDial({
   children: ReactNode
 }) {
   const { t } = useTranslation('common')
-  const { place } = useContext(FloatingContext)
   const [shown, setShown] = useState<'open' | 'closing' | 'closed'>('closed')
   const open = shown === 'open'
   const close = () => setShown((was) => (was === 'open' ? 'closing' : was))
@@ -376,7 +344,7 @@ export function SpeedDial({
             className={cn(
               'dial-card absolute bottom-full mb-3 flex w-max max-w-[calc(100vw-2*var(--gutter))] flex-col rounded-3xl border border-border bg-raised p-1.5 elevation-3',
               DIAL_ASIDE,
-              DIAL_ALIGN[place],
+              DIAL_ALIGN,
             )}
           >
             {children}

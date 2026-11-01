@@ -96,6 +96,32 @@ describe('a field focused over the phone’s keyboard', () => {
     expect(document.documentElement.scrollTop).toBe(150 - 24 - 100)
   })
 
+  it('lifts the line the caret is in of a long editable text, never its top (round 28)', () => {
+    stop = phone()
+    document.body.innerHTML =
+      '<div contenteditable="true"><p>First</p><p>Second</p><p id="tapped">Tapped</p></div>'
+    const text = document.querySelector<HTMLElement>('[contenteditable]')!
+    Object.defineProperty(text, 'isContentEditable', { value: true })
+    // A lesson read far down: its top well above the screen, the tapped line under the keyboard.
+    stubBox(text, { top: -1500, width: 358, height: 3000 })
+    const line = document.querySelector('#tapped')!
+    stubBox(line, { top: 600, width: 358, height: 30 })
+    document.getSelection()!.collapse(line.firstChild, 2)
+    text.focus()
+    expect(document.documentElement.scrollTop).toBe(630 + 24 - 504)
+  })
+
+  it('moves nothing for editable text whose caret is elsewhere', () => {
+    stop = phone()
+    document.body.innerHTML = '<div contenteditable="true"><p>Words</p></div><p>Outside</p>'
+    const text = document.querySelector<HTMLElement>('[contenteditable]')!
+    Object.defineProperty(text, 'isContentEditable', { value: true })
+    stubBox(text, { top: -1500, width: 358, height: 3000 })
+    document.getSelection()!.collapse(document.body.lastChild!.firstChild, 1)
+    text.focus()
+    expect(document.documentElement.scrollTop).toBe(0)
+  })
+
   it('leaves a field in a sheet or a popover to it: it stands on the keyboard itself', () => {
     stop = phone()
     document.body.innerHTML = '<div role="dialog"><input /></div>'

@@ -65,18 +65,6 @@ export interface TrainerSettings {
 }
 
 /** How every lesson shows its examples. */
-/** Where a screen's floating actions stand along its foot (ADR 0061). */
-export const FLOATING_PLACES = ['left', 'center', 'right'] as const
-export type FloatingPlace = (typeof FLOATING_PLACES)[number]
-export const isFloatingPlace = (value: unknown): value is FloatingPlace =>
-  FLOATING_PLACES.includes(value as FloatingPlace)
-
-/** A screen's floating actions: where they stand, and whether each says its name beside its icon. */
-export interface FloatingSettings {
-  readonly place: FloatingPlace
-  readonly labels: boolean
-}
-
 /** The keyboard settings: the same on every screen, set in Settings or from the keys' rail. */
 export interface KeyboardSettings {
   readonly keySize: KeySize
@@ -264,7 +252,6 @@ export interface SettingsState {
   practice: PracticeToggles
   sound: SoundSettings
   trainer: TrainerSettings
-  floating: FloatingSettings
   keyboard: KeyboardSettings
   recorder: RecorderSettings
   /** How the score editor writes (round 28). */
@@ -327,8 +314,6 @@ export const DEFAULT_SOUND: SoundSettings = {
 export const DEFAULT_TRAINER: TrainerSettings = { autoNext: false }
 
 /** In the thumbs' middle, icons alone: a name is the button's tooltip and its screen reader's. */
-export const DEFAULT_FLOATING: FloatingSettings = { place: 'center', labels: false }
-
 export const DEFAULT_RECORDER: RecorderSettings = { click: true, tune: false }
 
 /** A note heard as it is edited, as notation software does by default. */

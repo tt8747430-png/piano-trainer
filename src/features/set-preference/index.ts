@@ -1,6 +1,5 @@
 export { setAutoNext } from './set-auto-next'
 export { rememberChords, setChordFinder } from './set-chord-finder'
-export { setFloating } from './set-floating'
 export { setKeyboard } from './set-keyboard'
 export { setLocale } from './set-locale'
 export { setMelody } from './set-melody'

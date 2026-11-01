@@ -14,7 +14,6 @@ import type {
   Sidebar,
   SoundSettings,
   Theme,
-  FloatingSettings,
   TrainerSettings,
   LessonReading,
 } from './types'
@@ -24,7 +23,6 @@ export const selectLocale = (state: SettingsState): Locale => state.locale
 export const selectPractice = (state: SettingsState): PracticeToggles => state.practice
 export const selectSound = (state: SettingsState): SoundSettings => state.sound
 export const selectTrainer = (state: SettingsState): TrainerSettings => state.trainer
-export const selectFloating = (state: SettingsState): FloatingSettings => state.floating
 export const selectKeyboard = (state: SettingsState): KeyboardSettings => state.keyboard
 export const selectRecorder = (state: SettingsState): RecorderSettings => state.recorder
 export const selectEditing = (state: SettingsState): EditingSettings => state.editing

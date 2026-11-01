@@ -380,6 +380,15 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Sections read** (`read`): which of a lesson's sections were shown or scrolled to; they fill its ring. _Avoid:_
   progress (that is learned steps).
 - **Page** (a lesson on a phone): one section a screen, turned by Next and Done. _Avoid:_ slide, card.
+- **A lesson's Settings · a course's Settings** («Настройки»; round 28): their own page from the gear in their bar:
+  how lessons read, Share link, Reset progress; an editor's place, Read first, languages and changes. _Avoid:_
+  options, lesson options.
+- **Reset progress** («Сбросить прогресс»; `resetSteps`): a lesson's or a course's steps marked not learned and their
+  sections unread, nothing else. _Avoid:_ clear, restart.
+- **Turn into** («Превратить в»; `turnBlockInto`): the lesson editor's change of a text's kind (text, section
+  heading, numbered steps, note, in short), from the menu of its ⋮⋮. _Avoid:_ convert, block type (in the UI).
+- **Changes** («Изменения»): an editor's unpublished edits of a lesson or a course, on its Settings with Publish.
+  _Avoid:_ draft (in Learn's rows), block, node.
 - **S A T B**: a four-voice voicing's soprano, alto, tenor and bass, named beside its first chord and on the keys;
   the key a voice left keeps its letter faint (a **ghost**). _Avoid:_ parts.
 - **Step** (`StepId`): one thing learned and marked: a lesson, a piece, a chord family or a scale kind. _Avoid:_
@@ -521,7 +530,7 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Screen bar** (`ScreenHeader`): a screen's title, Back and actions. _Avoid:_ navbar.
 - **Shortcut**: a computer key a screen binds; `?` lists them. _Avoid:_ hotkey, keybinding.
 - **Pop-up button** (`Dropdown`): shows its value and opens a list. _Avoid:_ select.
-- **Floating buttons**: a screen's actions floating in reach. _Avoid:_ FAB (in the UI).
+- **Floating buttons**: a screen's actions floating in reach (a word of the code; the app never names them). _Avoid:_ FAB (in the UI).
 
 ## The backend (ADR 0116)
 
@@ -554,9 +563,9 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Published by**: on a song saved from the Public library, who published it (an own song's `author`).
 - **Kept safe**: what this device keeps of the app, which the browser has agreed not to clear when space runs
   short (Settings › Sync and data › On this device). _Avoid:_ persistent storage (the API's name).
-- **Original**: a built-in song as every learner gets it, an editor's to change (**Edit the original**), in place
-  of a learner's own **version**. _Avoid:_ master, source.
-- **Draft**: an editor's unpublished change to a built-in item, kept on the server until it is **published**
+- **Original**: a built-in song as every learner gets it, an editor's to change (their **Edit** edits it), in
+  place of a learner's own **version**. Not a word the app shows. _Avoid:_ master, source.
+- **Draft**: an editor's unpublished change to a built-in item (the app says **Unpublished changes**), kept on the server until it is **published**
   (every learner gets it as a content update) or **discarded**. Each version published is kept, to **restore**.
   _Avoid:_ revision, staging.
 - **Course record** (`CourseRecord`): a course as the database keeps it: its title, summary and its lessons' ids

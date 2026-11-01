@@ -40,6 +40,6 @@ describe('a lesson’s example of notes on its own score (round 27)', () => {
 
   it('is an editor’s alone', async () => {
     await renderApp(`/lessons/${LESSON.id}/example?n=${AT}`, { auth: await signedInAs('learner') })
-    expect(await screen.findByText('Only an editor edits a song’s original.')).toBeInTheDocument()
+    expect(await screen.findByText('Only an editor edits this.')).toBeInTheDocument()
   })
 })

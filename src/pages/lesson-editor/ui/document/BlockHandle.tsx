@@ -2,7 +2,7 @@ import type { Editor } from '@tiptap/core'
 import { closeHistory } from '@tiptap/pm/history'
 import { NodeSelection } from '@tiptap/pm/state'
 import { useEditorState } from '@tiptap/react'
-import { GripVertical } from 'lucide-react'
+import { GripVertical, Plus } from 'lucide-react'
 import {
   useEffect,
   useRef,
@@ -16,6 +16,7 @@ import { ActionMenu } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { blockStart, FIXED_BLOCKS, moveBlockTo, selectedBlock } from '../../model/doc-blocks'
 import { nodeName } from './block-names'
+import { addLineAfter } from './commands'
 import { blockActions } from './menus'
 
 /** The block of the document under the pointer's height, by its index; null over none of them. */
@@ -25,6 +26,8 @@ function blockAtY(editor: Editor, y: number): number | null {
     const dom = editor.view.nodeDOM(blockStart(doc, index))
     if (!(dom instanceof HTMLElement)) continue
     const box = dom.getBoundingClientRect()
+    // A block not laid out (hidden, or a page not drawn) is under no pointer.
+    if (box.height === 0) continue
     if (y >= box.top - 8 && y <= box.bottom + 8) return index
   }
   return null
@@ -64,10 +67,11 @@ function dropTop(editor: Editor, frame: HTMLElement, index: number): number {
 const DRAG_SLOP_PX = 8
 
 /**
- * A block's handle in the document's margin (round 21), beside the block under the pointer or the
- * one the caret is in: dragged, it moves the block where it is dropped (the drop cursor shows
- * where), by mouse or by finger (a line shows where it goes); tapped, its menu moves, copies or
- * deletes it. Beside the block the caret is in on a phone, at the text's right.
+ * A block's gutter in the document's margin (round 21, round 28 as Notion's and BlockNote's), beside
+ * the block under the pointer or the one the caret is in: ＋ puts a line under it with the `/` menu
+ * open; ⋮⋮ dragged moves the block where it is dropped (the drop cursor shows where), by mouse or by
+ * finger (a line shows where it goes); tapped, its menu turns it into another kind, copies or deletes
+ * it. Left of the text on a laptop; at its right on a phone, ＋ over ⋮⋮, beside the caret's block.
  */
 export function BlockHandle({
   editor,
@@ -79,7 +83,8 @@ export function BlockHandle({
 }) {
   const { t } = useTranslation('learn')
   const [hovered, setHovered] = useState<number | null>(null)
-  const [menuOpen, setMenuOpen] = useState(false)
+  // The block whose menu is open: what it acts on, wherever the pointer goes meanwhile.
+  const [menuFor, setMenuFor] = useState<number | null>(null)
   const handle = useRef<HTMLDivElement>(null)
   // A finger's drag: where it started, whether it has moved off a tap, where the block would land.
   const touch = useRef<{ y: number; moving: boolean } | null>(null)
@@ -107,7 +112,9 @@ export function BlockHandle({
       element.removeEventListener('pointerleave', leave)
     }
   }, [editor, frame])
-  const index = hovered ?? (caret.focused || menuOpen ? caret.index : null)
+  // The menu's block, chosen whole as it opened: let go once the caret is in another.
+  const pinned = menuFor === caret.index ? menuFor : null
+  const index = pinned ?? hovered ?? (caret.focused ? caret.index : null)
   const node =
     index === null || index < FIXED_BLOCKS ? null : (editor.state.doc.maybeChild(index) ?? null)
   // Beside its block, wherever the block now stands.
@@ -116,7 +123,8 @@ export function BlockHandle({
     const box = frame.current
     if (!element || !box || index === null || !node) return
     const dom = editor.view.nodeDOM(blockStart(editor.state.doc, index))
-    element.style.top = `${dom instanceof HTMLElement ? dom.getBoundingClientRect().top - box.getBoundingClientRect().top : 0}px`
+    // At its first line: a section's heading starts under its rule's padding.
+    element.style.top = `${dom instanceof HTMLElement ? dom.getBoundingClientRect().top - box.getBoundingClientRect().top + (parseFloat(getComputedStyle(dom).paddingTop) || 0) : 0}px`
   }, [editor, frame, index, node, caret.blocks])
   if (index === null || !node) return null
   const label = t('edit.doc.blockMenu', { name: nodeName(node, t) })
@@ -153,7 +161,22 @@ export function BlockHandle({
           style={{ top: dropAt.top }}
         />
       ) : null}
-      <div ref={handle} className="absolute right-0 md:right-auto md:left-0">
+      <div
+        ref={handle}
+        className="absolute right-0 flex flex-col text-muted-foreground md:right-auto md:left-0 md:flex-row"
+      >
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-11 text-muted-foreground md:size-9"
+          aria-label={t('edit.doc.addBelow')}
+          title={t('edit.doc.addBelow')}
+          // The caret stays in the document until the new line takes it.
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={() => addLineAfter(editor, index)}
+        >
+          <Plus aria-hidden />
+        </Button>
         <ActionMenu
           label={label}
           trigger={<GripVertical aria-hidden />}
@@ -164,11 +187,11 @@ export function BlockHandle({
               draggable
               aria-label={label}
               title={label}
-              className="size-11 cursor-grab touch-none text-muted-foreground active:cursor-grabbing"
+              className="size-11 cursor-grab touch-none text-muted-foreground active:cursor-grabbing md:size-9"
               // The block its menu acts on stays selected, the handle beside it, while the menu is open.
               onPointerDown={(event) => {
                 selectBlock(editor, index)
-                setMenuOpen(true)
+                setMenuFor(index)
                 fingerDown(event)
               }}
               onPointerMove={fingerMove}
@@ -192,7 +215,7 @@ export function BlockHandle({
             ...action,
             onSelect: () => {
               action.onSelect()
-              setMenuOpen(false)
+              setMenuFor(null)
             },
           }))}
         />

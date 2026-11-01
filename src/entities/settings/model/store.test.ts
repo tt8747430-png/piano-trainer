@@ -13,7 +13,6 @@ import {
   DEFAULT_SIDEBAR,
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
-  DEFAULT_FLOATING,
   defaultKeyboard,
   TEXT_SIZES,
 } from './types'
@@ -33,7 +32,6 @@ const DEFAULTS = {
   practice: DEFAULT_PRACTICE,
   sound: DEFAULT_SOUND,
   trainer: DEFAULT_TRAINER,
-  floating: DEFAULT_FLOATING,
   keyboard: defaultKeyboard(false),
   recorder: DEFAULT_RECORDER,
   editing: DEFAULT_EDITING,
@@ -110,7 +108,6 @@ describe('createSettingsStore', () => {
       melody: 'none',
       sound: { rh: 100, lh: 35, staves: 0, recording: 60, click: 5 },
       trainer: { autoNext: true },
-      floating: { place: 'right', labels: true },
       keyboard: {
         keySize: 'large',
         swipe: 'glissando',
@@ -266,9 +263,9 @@ describe('createSettingsStore', () => {
     expect(restored({ scoreView: { pinned: 'no' } }).scoreView.pinned).toBe(true)
   })
 
-  it('starts afresh over a save of the version before, which had a title size', () => {
-    expect(SETTINGS_VERSION).toBe(16)
-    expect(restored({ theme: 'dark', titles: 'small' }, 15)).toEqual(
+  it('starts afresh over a save of the version before, which had floating buttons placed', () => {
+    expect(SETTINGS_VERSION).toBe(17)
+    expect(restored({ theme: 'dark', floating: { place: 'left', labels: true } }, 16)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })
@@ -435,17 +432,6 @@ describe('createSettingsStore', () => {
 
   it('turns an auto-next that is not a boolean off', () => {
     expect(restored({ trainer: { autoNext: 'yes' } }).trainer).toEqual(DEFAULT_TRAINER)
-  })
-
-  it('keeps the floating actions where saved, in the middle and wordless where not valid', () => {
-    expect(restored({ floating: { place: 'top', labels: 'yes' } }).floating).toEqual({
-      place: 'center',
-      labels: false,
-    })
-    expect(restored({ floating: { place: 'left', labels: true } }).floating).toEqual({
-      place: 'left',
-      labels: true,
-    })
   })
 
   it('gives a setting never saved its default, keeping the rest', () => {

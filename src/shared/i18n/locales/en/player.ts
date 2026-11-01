@@ -17,10 +17,6 @@ export const player = {
     one: { song: 'This song has one section.', study: 'This study has one section.' },
   },
   print: 'Print',
-  /** A piece's score in its two modes, the Player and the score editor (ADR 0115). */
-  mode: {
-    original: 'Edit the original',
-  },
   // The Player's views of the music (ADR 0108), the View's tiles; each names its own part of the
   // screen.
   views: {

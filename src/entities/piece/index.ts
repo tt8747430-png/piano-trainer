@@ -58,8 +58,10 @@ export {
   PIECE_TEMPO,
   songTitle,
   TITLE_MAX,
+  type OwnSong,
   type OwnSongId,
 } from './model/own'
+export { songFacts, withSongFacts, type SongFacts } from './model/song-facts'
 export {
   createPiecesStore,
   PIECES_STORAGE_KEY,
@@ -98,6 +100,7 @@ export {
 export { shelfOf } from './model/shelf'
 export {
   originalMusic,
+  originalPiece,
   originalWith,
   pieceRecordBody,
   pieceRecordMeta,

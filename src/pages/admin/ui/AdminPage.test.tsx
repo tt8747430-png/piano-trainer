@@ -192,10 +192,7 @@ describe('the Admin area', () => {
     })
     const course = await screen.findByRole('link', { name: /Jazz voicings/ })
     expect(course).toHaveTextContent(/Course · Not published yet/)
-    expect(screen.getByRole('link', { name: /Abide/ })).toHaveAttribute(
-      'href',
-      '/edit/abide?original=true',
-    )
+    expect(screen.getByRole('link', { name: /Abide/ })).toHaveAttribute('href', '/edit/abide')
     await user.click(course)
     await waitFor(() => expect(router.state.location.pathname).toBe('/courses/jazz/edit'))
   })

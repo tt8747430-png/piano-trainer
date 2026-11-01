@@ -86,7 +86,8 @@
   display: block;
   margin-top: -1.625em;
 }
-.lesson-doc .ProseMirror-selectednode:not([data-node-view-wrapper]):not(:has(> [data-node-view-wrapper])) {
+.lesson-doc
+  .ProseMirror-selectednode:not([data-node-view-wrapper]):not(:has(> [data-node-view-wrapper])) {
   outline: 2px solid var(--ring);
   outline-offset: 4px;
   border-radius: 0.75rem;
@@ -94,15 +95,4 @@
 .doc-drop-cursor {
   background: var(--ring);
   border-radius: 2px;
-}
-
-/* The lesson's properties, under its title and summary as a page's are: not typed into. */
-.lesson-doc-properties {
-  margin-block: 1rem 0;
-  user-select: none;
-}
-
-/* The document's own rule under the summary closes them: theirs would double it. */
-.lesson-doc-properties > dl {
-  border-bottom-width: 0;
 }

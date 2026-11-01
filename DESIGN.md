@@ -527,9 +527,9 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
   Transpose) a floating capsule centred under it on a phone held upright, in the bar's row where it is one
   row; what acts on the notes chosen (Delete, Copy, Cut, Paste) a capsule over the transport, there only while
   something is chosen. Floating parts take no room: the music scrolls under them.
-- **Modes are a pop-up** (`Dropdown`, its face the mode's icon and name): Practise · Edit · Edit the original in
+- **Modes are a pop-up** (`Dropdown`, its face the mode's icon and name): Practise · Edit in
   the Player's and the editor's bars, Replace · Insert · Chord in the editor's Notes. An action with several
-  targets (a song's Edit: your version, the original) is a pull-down (`ActionMenu`) from one bar button.
+  targets  is a pull-down (`ActionMenu`) from one bar button.
 
 ### The keyboard
 

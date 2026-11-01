@@ -6,13 +6,6 @@ export const settings = {
   midi: 'MIDI keyboard',
   // How a take is recorded in the score editor (ADR 0028), as its recording strip's settings say too.
   recording: 'Recording',
-  // A screen's floating actions (ADR 0061): where they stand, and whether they say their names.
-  floating: {
-    place: 'Floating buttons',
-    places: { left: 'Left', center: 'Middle', right: 'Right' },
-    labels: 'Name the floating buttons',
-    labelsNote: 'Otherwise each shows its icon only, and its name appears when you point at it',
-  },
   progress: {
     label: 'Progress',
     reset: 'Reset progress',

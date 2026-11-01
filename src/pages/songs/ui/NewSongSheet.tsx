@@ -166,7 +166,6 @@ export function NewSongSheet({
     await navigate({
       to: '/edit/$pieceId',
       params: { pieceId: made.value },
-      search: { original: true },
     })
   }
   /** Makes the song and opens it in the score editor, Record pressed where it was made to record. */

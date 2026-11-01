@@ -36,9 +36,19 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
 - **A lesson's page** is one column in the middle under one floating bar (‹ the section before, the count opening its
   contents and what it is part of, › the next). Its end is the lesson before and the way on; going on learns it.
   It reads as **one page of its sections** for everyone, on every screen. A learner who wants it **a section at a
-  time** chooses so (the lesson's ⋯, Reading: One page · A section at a time; or Settings › General, `pt-settings`
-  `lessonReading`): then the bar holds ‹, the pages' dots (opening the contents) and Next, Done on the last page,
+  time** chooses so (the lesson's Settings, Lessons read as: One page · A section at a time; or Settings › General,
+  `pt-settings` `lessonReading`): then the bar holds ‹, the pages' dots (opening the contents) and Next, Done on the last page,
   which goes on and learns it.
+- **A lesson's and a course's Settings** (`/lessons/$lessonId/settings`, `/courses/$courseId/settings`,
+  `/courses/$courseId/$lessonId/settings`; `pages/lesson`, `pages/course`) open from a gear in its bar, as a song's
+  do, and are the same kind of page: one list of grouped rows from the settings kit. A learner's lesson: how lessons
+  read, Share link (the share sheet, else copied), and apart its progress reset after asking (`resetSteps`: not
+  learned, no section read; nothing else). A course: Share link and its lessons' and guided songs' progress reset.
+  An editor's also say where it stands (a level and chapter, leading to Manage lessons; or its course), choose the
+  lessons to read first (here only, not in the document: the document holds what the lesson shows), name the
+  languages it is written in full, and hold its changes with Publish, Versions and Discard; a course's shelf leads
+  to Manage courses. What a course is (its title, summary, level, length) is written on the course itself, in Edit.
+  The lesson's ⋯ is gone: it held only the reading choice, a setting, not a command.
 - **What a lesson shows of harmony:** a progression's row has a chip per chord, its numeral over its function
   (tonic, subdominant, dominant: T S D, the Riemann letters every lesson and the Russian theory use), or over its
   root's move (`show: 'motion'`, with the legend and Play the chain); the chip sounding follows the row, a tap plays
@@ -88,3 +98,5 @@ course.
 - r26 — A lesson one page by default everywhere, a section at a time the learner's choice (the lesson's ⋯ and
   Settings); the Profile's figures are days in a row, songs played and steps learned, with **Activity** a page of its
   own (`/profile/activity`: the run, the best run, the days practised, this month's calendar), as Noji's (2026-11-01).
+- r28 — A lesson's and a course's Settings pages, from a gear in their bar: reading, Share link, Reset progress;
+  an editor's place, Read first, languages and changes. The lesson's ⋯ removed (2026-11-01).

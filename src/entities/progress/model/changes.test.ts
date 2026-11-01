@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { qualitiesIn, type SkillId } from '@/shared/lib/music'
-import { withAnswer, withHold, withLearned, withRun, withSectionRead } from './changes'
+import {
+  withAnswer,
+  withHold,
+  withLearned,
+  withoutSteps,
+  withRun,
+  withSectionRead,
+} from './changes'
 import { CHORD_HOLDS } from './lessons'
 import { EMPTY_PROGRESS, type ProgressState } from './types'
 
@@ -116,5 +123,23 @@ describe('withHold', () => {
   it('changes nothing for a chord learned already', () => {
     const learned = { ...EMPTY_PROGRESS, lessons: { 'bz5:chord:G': MONDAY } }
     expect(withHold(learned, 'bz5:chord:G', FRIDAY)).toBe(learned)
+  })
+})
+
+describe('withoutSteps (round 28: a lesson’s or a course’s Reset progress)', () => {
+  it('forgets that these steps were learned and which of their sections were read, only theirs', () => {
+    let state = withLearned(EMPTY_PROGRESS, 'lesson:a', MONDAY)
+    state = withLearned(state, 'lesson:b', MONDAY)
+    state = withSectionRead(state, 'lesson:a', 0)
+    state = withSectionRead(state, 'lesson:b', 1)
+    const reset = withoutSteps(state, ['lesson:a'])
+    expect(reset.learned).toEqual({ 'lesson:b': MONDAY })
+    expect(reset.read).toEqual({ 'lesson:b': [1] })
+    expect(reset.days).toEqual(state.days)
+  })
+
+  it('leaves the progress as it was where none of them has any', () => {
+    const state = withLearned(EMPTY_PROGRESS, 'lesson:b', MONDAY)
+    expect(withoutSteps(state, ['lesson:a'])).toBe(state)
   })
 })

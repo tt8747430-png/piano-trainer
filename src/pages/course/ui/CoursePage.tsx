@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { ArrowRight, Check, Play, RotateCcw } from 'lucide-react'
+import { ArrowRight, Check, Play, RotateCcw, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { courseById, CourseIcon, courseStepIds, type Course } from '@/entities/course'
 import { PieceLink, pieceById } from '@/entities/piece'
@@ -8,7 +8,7 @@ import { STAGE_PAINT, stepOf } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { BackButton, FabLink, FloatingActions, PAINT, ScreenHeader } from '@/shared/ui'
+import { BackButton, FabLink, FloatingActions, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
 import { EditToggle } from '@/widgets/mode-switch'
 import {
   CourseFacts,
@@ -84,19 +84,26 @@ export function CoursePage() {
         large
         back={<BackButton fallback={{ to: '/', search: { view: 'courses', journey: '' } }} />}
         actions={
-          editsContent(account) ? (
-            <EditToggle
-              editing={false}
-              onDone={() => undefined}
-              onEdit={() =>
-                void navigate({
-                  to: '/courses/$courseId/edit',
-                  params: { courseId },
-                  replace: true,
-                })
-              }
+          <>
+            <RoundLink
+              label={t('settings.open')}
+              icon={Settings}
+              render={<Link to="/courses/$courseId/settings" params={{ courseId }} />}
             />
-          ) : undefined
+            {editsContent(account) ? (
+              <EditToggle
+                editing={false}
+                onDone={() => undefined}
+                onEdit={() =>
+                  void navigate({
+                    to: '/courses/$courseId/edit',
+                    params: { courseId },
+                    replace: true,
+                  })
+                }
+              />
+            ) : null}
+          </>
         }
       />
       {/* One card: what it is, its facts and progress, and its one way in along its foot. */}

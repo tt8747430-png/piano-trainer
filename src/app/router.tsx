@@ -544,6 +544,39 @@ const courseLessonRoute = createRoute({
   },
   component: lazyRouteComponent(learnScreens, 'CourseLessonPage'),
 })
+// A lesson's and a course's Settings (round 28), pages of their own under theirs, as a song's.
+const lessonSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/lessons/$lessonId/settings',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params, context }) => {
+    const { lessonById, lessonPlace } = await learnScreens()
+    if (!lessonById(params.lessonId) || !lessonPlace(params.lessonId)) throw notFound()
+    await ensureContent(context.content, 'lesson', params.lessonId)
+  },
+  component: lazyRouteComponent(learnScreens, 'LessonSettingsPage'),
+})
+const courseSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/courses/$courseId/settings',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params }) => {
+    const { courseById } = await learnScreens()
+    if (!courseById(params.courseId)) throw notFound()
+  },
+  component: lazyRouteComponent(learnScreens, 'CourseSettingsPage'),
+})
+const courseLessonSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/courses/$courseId/$lessonId/settings',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params, context }) => {
+    const { courseLesson } = await learnScreens()
+    if (!courseLesson(params.courseId, params.lessonId)) throw notFound()
+    await ensureContent(context.content, 'lesson', `${params.courseId}/${params.lessonId}`)
+  },
+  component: lazyRouteComponent(learnScreens, 'CourseLessonSettingsPage'),
+})
 
 // An editor's lesson editor (ADR 0116): every text of a journey's or a course's lesson; a course's
 // own title and summary in the course editor.
@@ -678,13 +711,11 @@ const editRoute = createRoute({
   path: '/edit/$pieceId',
   notFoundComponent: notFoundIn('songs'),
   ...editSearch,
-  beforeLoad: async ({ params, context, search }) => {
+  beforeLoad: async ({ params, context }) => {
     const { editableIn } = await playerScreens()
-    if (!editableIn(context.pieces.getState(), params.pieceId)) {
-      // An editor's original may be a song made and not yet published: its draft is the server's.
-      if (search.original) return
-      throw notFound()
-    }
+    // A song not on this device may be an editor's made and not yet published, its draft the
+    // server's: the page opens it, or says it is not there.
+    if (!editableIn(context.pieces.getState(), params.pieceId)) return
     await ensureContent(context.content, 'piece', params.pieceId)
   },
   component: lazyRouteComponent(playerScreens, 'ScoreEditorPage'),
@@ -771,6 +802,9 @@ const routeTree = rootRoute.addChildren([
     publishPatternRoute,
     lessonRoute,
     courseLessonRoute,
+    lessonSettingsRoute,
+    courseSettingsRoute,
+    courseLessonSettingsRoute,
     lessonEditRoute,
     courseLessonEditRoute,
     courseEditRoute,
