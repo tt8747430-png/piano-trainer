@@ -75,10 +75,13 @@ export function insertActions(
     group: t(`edit.doc.groups.${GROUP_OF[kind]}`),
     label: insertableName(kind, t),
     icon: INSERT_ICONS[kind],
-    onSelect: () => {
-      before?.()
-      insertBlock(editor, kind, locale)
-    },
+    // Once the menu has closed and given the focus back to its button: the caret then goes into
+    // the new block.
+    onSelect: () =>
+      void setTimeout(() => {
+        before?.()
+        insertBlock(editor, kind, locale)
+      }),
   }))
 }
 

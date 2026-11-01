@@ -9,7 +9,7 @@ describe('The pattern editor', () => {
     const user = userEvent.setup()
     const { router, patternsStore } = await renderApp('/practice/accompaniment/patterns/M1')
     await user.click(await screen.findByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('button', { name: 'Make your own from it' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Make your own from it' }))
     const name = await screen.findByRole('textbox', { name: 'Name' })
     expect(name).toHaveValue('1 · Bass + chords (mine)')
     await user.click(screen.getByRole('combobox', { name: 'Right hand' }))
@@ -94,7 +94,7 @@ describe('The pattern editor', () => {
     await user.type(await screen.findByRole('textbox', { name: 'Name' }), 'Monday')
     await user.click(screen.getByRole('button', { name: 'Save' }))
     await user.click(await screen.findByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('button', { name: 'Edit' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Edit' }))
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Edit pattern' }),
     ).toBeInTheDocument()
@@ -120,7 +120,7 @@ describe('The pattern editor', () => {
     await user.type(await screen.findByRole('textbox', { name: 'Name' }), 'Monday')
     await user.click(screen.getByRole('button', { name: 'Save' }))
     await user.click(await screen.findByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('button', { name: 'Edit' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Edit' }))
     await screen.findByRole('heading', { level: 1, name: 'Edit pattern' })
     act(() => patternsStore.setState({ own: [] }))
     await user.click(screen.getByRole('button', { name: 'Save' }))

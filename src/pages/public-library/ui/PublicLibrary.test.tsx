@@ -205,7 +205,7 @@ describe('publishing an own song', () => {
     await renderApp('/songs/my-1', { storage: ownSong(), publicLibrary, auth: await signedIn() })
     await user.click(await screen.findByRole('button', { name: 'More' }))
     await user.click(
-      within(await screen.findByRole('dialog', { name: 'More' })).getByRole('button', {
+      within(await screen.findByRole('menu', { name: 'More' })).getByRole('menuitem', {
         name: 'Publish to the Public library',
       }),
     )
@@ -267,7 +267,7 @@ describe('publishing an own song', () => {
     await renderApp('/songs/my-1', { storage: ownSong() })
     await user.click(await screen.findByRole('button', { name: 'More' }))
     await user.click(
-      within(await screen.findByRole('dialog', { name: 'More' })).getByRole('button', {
+      within(await screen.findByRole('menu', { name: 'More' })).getByRole('menuitem', {
         name: 'Publish to the Public library',
       }),
     )

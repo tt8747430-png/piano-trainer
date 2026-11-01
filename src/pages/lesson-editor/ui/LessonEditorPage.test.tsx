@@ -146,7 +146,7 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     })
     await lessonDoc()
     await user.click(screen.getByRole('button', { name: 'The draft’s menu' }))
-    await user.click(await screen.findByRole('button', { name: 'Русский' }))
+    await user.click(await screen.findByRole('menuitemcheckbox', { name: 'Русский' }))
     const { doc, editor } = await lessonDoc()
     expect(line(doc, 'p[data-lesson-title]')).toHaveTextContent(LESSON.title.ru)
     await caretAtEnd(editor, line(doc, 'h2'))
@@ -302,7 +302,7 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     await caretAtEnd(editor, line(doc, 'h2'))
     const toolbar = screen.getByRole('toolbar', { name: 'Formatting' })
     await user.click(within(toolbar).getByRole('button', { name: 'Insert' }))
-    await user.click(await screen.findByRole('button', { name: 'Rule' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Rule' }))
     await user.keyboard('Play it slowly')
     await waitFor(
       async () =>
@@ -388,7 +388,7 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     )
     await user.keyboard('{Alt>}{ArrowDown}{/Alt}')
     await user.click(screen.getByRole('button', { name: 'Block' }))
-    await user.click(await screen.findByRole('button', { name: 'Delete' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Delete' }))
     expect(await screen.findByText('Deleted: Text')).toBeVisible()
     expect(doc.querySelector('h2 + p')).not.toBe(paragraph)
     const toolbar = screen.getByRole('toolbar', { name: 'Formatting' })

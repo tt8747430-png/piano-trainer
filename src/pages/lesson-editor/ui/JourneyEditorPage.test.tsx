@@ -67,7 +67,7 @@ describe('Manage lessons, a level’s editor (content as data)', () => {
     expect(within(first).getByRole('button', { name: /^Move: / })).toBeInTheDocument()
     await user.click(within(first).getByRole('button', { name: /^More: / }))
     expect(screen.queryByRole('button', { name: /^Move (up|down|to)/ })).not.toBeInTheDocument()
-    await user.click(await screen.findByRole('button', { name: 'Remove' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Remove' }))
     await publish(user)
     const body = content.body('journey', JOURNEY.id) as Journey
     expect(body.chapters[0]?.steps).toEqual(FIRST.steps.slice(1))
@@ -81,7 +81,7 @@ describe('Manage lessons, a level’s editor (content as data)', () => {
       contentEditing: content,
     })
     await user.click(await screen.findByRole('button', { name: 'The draft’s menu' }))
-    await user.click(await screen.findByRole('button', { name: 'Русский' }))
+    await user.click(await screen.findByRole('menuitemcheckbox', { name: 'Русский' }))
     const name = within(screen.getByRole('region', { name: FIRST.title.en })).getByRole('textbox', {
       name: 'Chapter name',
     })

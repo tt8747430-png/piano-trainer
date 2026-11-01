@@ -35,10 +35,10 @@ type User = ReturnType<typeof userEvent.setup>
 /** Opens the bar's More and reads its actions, in order. */
 async function moreActions(user: User) {
   await user.click(await screen.findByRole('button', { name: 'More' }))
-  const menu = await screen.findByRole('dialog', { name: 'More' })
+  const menu = await screen.findByRole('menu', { name: 'More' })
   // Each by its name, the reason a greyed one gives left out.
   return within(menu)
-    .getAllByRole('button')
+    .getAllByRole('menuitem')
     .map((action) =>
       [...action.childNodes]
         .filter((part) => !(part instanceof HTMLElement && part.hidden))
@@ -60,7 +60,7 @@ async function exportAs(user: User, row: string) {
 /** Opens More and chooses one of its actions. */
 async function chooseMore(user: User, action: string) {
   await user.click(await screen.findByRole('button', { name: 'More' }))
-  await user.click(await screen.findByRole('button', { name: action }))
+  await user.click(await screen.findByRole('menuitem', { name: action }))
 }
 
 /** The files the browser is handed to save, as a download hands them: each one's name and bytes. */
@@ -422,7 +422,7 @@ describe('the Player’s More (ADR 0108)', () => {
     await renderApp('/play/silent', { locale: 'ru' })
     const saved = catchDownloads()
     await user.click(await screen.findByRole('button', { name: 'Ещё' }))
-    await user.click(await screen.findByRole('button', { name: 'Экспорт…' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Экспорт…' }))
     const sheet = await screen.findByRole('dialog', { name: 'Экспорт' })
     const midi = within(sheet).getByText('MIDI', { exact: true }).closest('button')
     if (!midi) throw new Error('MIDI is a row of Export')
@@ -439,9 +439,9 @@ describe('the Player’s More (ADR 0108)', () => {
     const user = userEvent.setup()
     await renderApp('/play/my-1', { storage: withSong(), locale: 'ru' })
     await user.click(await screen.findByRole('button', { name: 'Ещё' }))
-    await screen.findByRole('dialog', { name: 'Ещё' })
+    await screen.findByRole('menu', { name: 'Ещё' })
     expect(untranslated(document.body)).toEqual([])
-    await user.click(screen.getByRole('button', { name: 'О песне' }))
+    await user.click(screen.getByRole('menuitem', { name: 'О песне' }))
     await screen.findByRole('dialog', { name: 'О песне' })
     expect(untranslated(document.body)).toEqual([])
   })

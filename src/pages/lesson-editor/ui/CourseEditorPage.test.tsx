@@ -26,7 +26,7 @@ const field = (name: 'Title' | 'Summary') => screen.findByRole('textbox', { name
 /** A lesson row's menu, opened, and one of its actions chosen. */
 async function rowAction(user: ReturnType<typeof userEvent.setup>, title: string, action: string) {
   await user.click(screen.getByRole('button', { name: `More: ${title}` }))
-  await user.click(await screen.findByRole('button', { name: action }))
+  await user.click(await screen.findByRole('menuitem', { name: action }))
 }
 
 /** Publishes the draft once it is saved: the bar's Publish, then the dialog's. */
@@ -70,7 +70,7 @@ describe('the course editor (ADR 0116, round 12)', () => {
     await user.clear(title)
     await user.type(title, 'A new course title')
     await user.click(screen.getByRole('button', { name: 'The draft’s menu' }))
-    await user.click(await screen.findByRole('button', { name: 'Русский' }))
+    await user.click(await screen.findByRole('menuitemcheckbox', { name: 'Русский' }))
     expect(await field('Title')).toHaveValue(COURSE.title.ru)
     await user.type(await field('Summary'), '!')
     await publish(user)
@@ -123,7 +123,7 @@ describe('the course editor (ADR 0116, round 12)', () => {
       expect(screen.getByRole('button', { name: `Move: ${lesson.title.en}` })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: `More: ${third.title.en}` }))
     expect(screen.queryByRole('button', { name: /^Move (up|down)/ })).not.toBeInTheDocument()
-    await user.click(await screen.findByRole('button', { name: 'Remove' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Remove' }))
     await publish(user)
     await screen.findByText('Published. Learners get it the next time the app starts.')
     expect((content.body('course', COURSE.id) as { lessons: string[] }).lessons).toEqual(

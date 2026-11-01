@@ -169,7 +169,7 @@ describe('the score editor', () => {
       user.click(await screen.findByRole('button', { name: staff }, { timeout: 4000 }))
     const menu = async (staff: string, action: string) => {
       await open(staff)
-      await user.click(await screen.findByRole('button', { name: action }))
+      await user.click(await screen.findByRole('menuitem', { name: action }))
     }
     const staves = () => songOf(piecesStore.getState())?.staves
     // With a single staff, the piano may be hidden: a lead sheet, its music kept.
@@ -178,10 +178,10 @@ describe('the score editor', () => {
     expect(songOf(piecesStore.getState())).toMatchObject({ hands: SILENT_HANDS })
     // The only staff in sight stays, saying why.
     await open('Staff 1')
-    const remove = await screen.findByRole('button', { name: 'Remove' })
-    expect(remove).toBeDisabled()
+    const remove = await screen.findByRole('menuitem', { name: 'Remove' })
+    expect(remove).toHaveAttribute('aria-disabled', 'true')
     expect(remove).toHaveAccessibleDescription('A score keeps a staff in sight.')
-    await user.click(screen.getByRole('button', { name: 'Show the piano' }))
+    await user.click(screen.getByRole('menuitem', { name: 'Show the piano' }))
     await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('leadSheet'))
     // Renamed where its name is printed.
     await menu('Staff 1', 'Rename')
@@ -813,15 +813,15 @@ describe('the score editor', () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: /Verse/ }))
-    const menu = await screen.findByRole('dialog', { name: 'Section' })
+    const menu = await screen.findByRole('menu', { name: 'Section' })
     expect(
       within(menu)
-        .getAllByRole('button')
+        .getAllByRole('menuitemcheckbox')
         .map((item) => item.textContent),
     ).toEqual(['Intro', 'Verse', 'Chorus', 'Bridge', 'Ending'])
     // Its own part ticked, as every choice menu ticks its own.
-    expect(within(menu).getByRole('button', { name: 'Verse' })).toHaveAttribute(
-      'aria-pressed',
+    expect(within(menu).getByRole('menuitemcheckbox', { name: 'Verse' })).toHaveAttribute(
+      'aria-checked',
       'true',
     )
   })
@@ -841,8 +841,8 @@ describe('the score editor', () => {
     expect(chorus.closest('[data-slot="bar-label"]')).toHaveTextContent(/^5 · Chorus$/)
     expect(screen.queryByRole('heading', { name: /Chorus/ })).not.toBeInTheDocument()
     await user.click(chorus)
-    const menu = await screen.findByRole('dialog', { name: 'Section' })
-    await user.click(within(menu).getByRole('button', { name: 'Join with the section before' }))
+    const menu = await screen.findByRole('menu', { name: 'Section' })
+    await user.click(within(menu).getByRole('menuitem', { name: 'Join with the section before' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         sections: [{ kind: 'verse', lines: ['G G G G', 'C C C C'] }],
@@ -2034,8 +2034,8 @@ describe('the score editor’s takes', () => {
     name: string,
   ) {
     await user.click(within(row).getByRole('button', { name: 'Take actions' }))
-    const menu = await screen.findByRole('dialog', { name: 'Take actions' })
-    await user.click(within(menu).getByRole('button', { name }))
+    const menu = await screen.findByRole('menu', { name: 'Take actions' })
+    await user.click(within(menu).getByRole('menuitem', { name }))
   }
 
   /** Plays a G major arpeggio over a held G2, a beat a note, from the downbeat. */
@@ -2433,7 +2433,7 @@ describe('the words under the tune (ADR 0097)', () => {
     await user.type(screen.getByRole('textbox', { name: 'Syllable' }), 'men{Escape}')
     await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- men']))
     await user.click(await screen.findByRole('button', { name: 'Piano staves' }))
-    await user.click(await screen.findByRole('button', { name: 'Add a staff over the piano' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Add a staff over the piano' }))
     await waitFor(() => expect(songOf(piecesStore.getState())).toHaveProperty('staves'))
     expect(songOf(piecesStore.getState())).toMatchObject({
       lyrics: ['A- men'],

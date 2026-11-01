@@ -82,7 +82,7 @@ function rowOf(check: string) {
 /** Opens a row's More (⋯) by what it is the More of, and chooses an action. */
 async function rowAction(user: ReturnType<typeof userEvent.setup>, name: string, action: string) {
   await user.click(await screen.findByRole('button', { name: `More for ${name}` }))
-  await user.click(await screen.findByRole('button', { name: action }))
+  await user.click(await screen.findByRole('menuitem', { name: action }))
 }
 
 describe('Songs: the library’s Home and its folders (ADR 0106)', () => {
@@ -466,7 +466,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
       }),
     })
     await user.click(await screen.findByRole('button', { name: 'More for Sunday' }))
-    await user.click(await screen.findByRole('button', { name: 'Delete folder' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Delete folder' }))
     const ask = await screen.findByRole('alertdialog', { name: 'Delete “Sunday”?' })
     expect(ask).toHaveTextContent(
       'The folder is deleted for good. Your own songs in it are deleted for good, with their takes: 1. The app’s songs in it go to the archive: 1.',

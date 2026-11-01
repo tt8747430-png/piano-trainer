@@ -68,7 +68,7 @@ describe('A pattern’s page', () => {
     expect(star).toHaveAttribute('aria-pressed', 'true')
     expect(patternsStore.getState().favourites).toEqual(['ballad'])
     await user.click(screen.getByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('button', { name: 'Hide from the Player' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Hide from the Player' }))
     expect(patternsStore.getState().hidden).toEqual(['ballad'])
     expect(
       screen.getByText(
@@ -76,7 +76,7 @@ describe('A pattern’s page', () => {
       ),
     ).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('button', { name: 'Show in the Player' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Show in the Player' }))
     expect(patternsStore.getState().hidden).toEqual([])
   })
 
@@ -96,13 +96,13 @@ describe('A pattern’s page', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Sunday' })).toBeInTheDocument()
     expect(screen.getByText('Charleston · Walking the triad 1–3–5–3')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'More' }))
-    const more = await screen.findByRole('dialog', { name: 'More' })
+    const more = await screen.findByRole('menu', { name: 'More' })
     expect(
       within(more)
-        .getAllByRole('button')
+        .getAllByRole('menuitem')
         .map((action) => action.textContent),
     ).toEqual(['Edit', 'Publish to the Public library', 'Delete'])
-    await user.click(within(more).getByRole('button', { name: 'Delete' }))
+    await user.click(within(more).getByRole('menuitem', { name: 'Delete' }))
     await user.click(await screen.findByRole('button', { name: 'Delete' }))
     await waitFor(() =>
       expect(router.state.location.href).toBe('/practice/accompaniment?show=yours'),
@@ -170,7 +170,7 @@ describe('a pattern of the learner’s own in the Public library (ADR 0116)', ()
       publicLibrary,
     })
     await user.click(await screen.findByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('button', { name: 'Publish to the Public library' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Publish to the Public library' }))
     const sheet = await screen.findByRole('dialog', { name: 'Publish to the Public library' })
     await user.type(
       within(sheet).getByRole('textbox', { name: 'Description' }),
@@ -190,7 +190,9 @@ describe('a pattern of the learner’s own in the Public library (ADR 0116)', ()
       ],
     })
     await user.click(screen.getByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('button', { name: 'Remove from the Public library' }))
+    await user.click(
+      await screen.findByRole('menuitem', { name: 'Remove from the Public library' }),
+    )
     await waitFor(async () =>
       expect(await publicLibrary.browse({ kind: 'pattern', sort: 'new', query: '' })).toEqual({
         ok: true,

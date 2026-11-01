@@ -26,7 +26,7 @@ describe('a new built-in song (content as data)', () => {
       contentEditing: content,
     })
     await openMore(user)
-    await user.click(await screen.findByRole('button', { name: 'New built-in song' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'New built-in song' }))
     const sheet = await screen.findByRole('dialog', { name: 'New built-in song' })
     await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), 'Abide with me')
     await user.click(within(sheet).getByRole('button', { name: 'Create song' }))
@@ -50,7 +50,7 @@ describe('a new built-in song (content as data)', () => {
     const user = userEvent.setup()
     await renderApp('/songs/folders/hymns', { auth: await signedInAs('learner') })
     await openMore(user)
-    await screen.findByRole('button', { name: 'New song here' })
+    await screen.findByRole('menuitem', { name: 'New song here' })
     expect(screen.queryByRole('button', { name: 'New built-in song' })).not.toBeInTheDocument()
   })
 })

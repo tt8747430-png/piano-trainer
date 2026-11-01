@@ -555,7 +555,7 @@ describe('Diagrams (ADR 0108)', () => {
     const view = screen.getByRole('region', { name: 'Diagrams' })
     // Its sheet from Song information's chords: a diagram of the view is the music's to go to.
     await user.click(screen.getByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('button', { name: 'Song information' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Song information' }))
     const info = await screen.findByRole('dialog', { name: 'Song information' })
     await user.click(within(info).getByRole('button', { name: 'G: G B D' }))
     const sheet = await screen.findByRole('dialog', { name: 'G chord' })

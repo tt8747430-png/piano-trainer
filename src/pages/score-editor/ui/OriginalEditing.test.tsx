@@ -101,7 +101,7 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
 
     await user.click(within(strip).getByRole('button', { name: 'The draft’s menu' }))
     // On a narrow screen the menu is a sheet of buttons.
-    await user.click(await screen.findByRole('button', { name: 'Discard the draft' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Discard the draft' }))
     const asked = await screen.findByRole('alertdialog')
     await user.click(within(asked).getByRole('button', { name: 'Discard the draft' }))
     expect(await screen.findByText('Draft discarded')).toBeInTheDocument()
@@ -126,7 +126,7 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
     await screen.findByRole('button', { name: 'The draft’s menu' })
     const strip = document.body
     await user.click(within(strip).getByRole('button', { name: 'The draft’s menu' }))
-    await user.click(await screen.findByRole('button', { name: 'Versions' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Versions' }))
     const versions = await screen.findByRole('alertdialog')
     expect(within(versions).getByText('Newest')).toBeInTheDocument()
     await user.click(within(versions).getByRole('button', { name: 'Restore' }))

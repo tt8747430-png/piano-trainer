@@ -23,7 +23,7 @@ async function printed(user: User, path: string, music: MusicView, locale?: 'ru'
   act(() => setScoreView(settingsStore, { music }))
   const more = locale ? 'Ещё' : 'More'
   await user.click(await screen.findByRole('button', { name: more }))
-  await user.click(await screen.findByRole('button', { name: locale ? 'Печать' : 'Print' }))
+  await user.click(await screen.findByRole('menuitem', { name: locale ? 'Печать' : 'Print' }))
   await waitFor(() => expect(print).toHaveBeenCalledTimes(1), { timeout: 10_000 })
   const render = document.querySelector<HTMLElement>('[data-slot="song-print"]')
   if (!render) throw new Error('no print render')

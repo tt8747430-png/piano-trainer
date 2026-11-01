@@ -11,7 +11,7 @@ type User = ReturnType<typeof userEvent.setup>
 /** Opens More and finds its Sections. */
 async function sectionsAction(user: User, more = 'More', name = 'Sections') {
   await user.click(await screen.findByRole('button', { name: more }))
-  return within(await screen.findByRole('dialog', { name: more })).getByRole('button', { name })
+  return within(await screen.findByRole('menu', { name: more })).getByRole('menuitem', { name })
 }
 
 /** The sheet's sections, each its name and where it starts. */
@@ -77,7 +77,7 @@ describe('the Player’s Sections (ADR 0107)', () => {
     )
     await renderApp('/play/my-1', { storage })
     const sections = await sectionsAction(user)
-    expect(sections).toBeDisabled()
+    expect(sections).toHaveAttribute('aria-disabled', 'true')
     expect(sections).toHaveAccessibleDescription('This song has one section.')
   })
 

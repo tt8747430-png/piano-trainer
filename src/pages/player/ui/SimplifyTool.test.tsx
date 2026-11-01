@@ -67,7 +67,7 @@ describe('Simplify (ADR 0105)', () => {
     await renderApp('/play/my-1?simple=true', { storage: withSong('Cmaj7 G7/B') })
     expect(await screen.findByRole('button', { name: 'Bar 2: G' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('button', { name: 'Song information' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Song information' }))
     const info = await screen.findByRole('dialog', { name: 'Song information' })
     const chords = within(within(info).getByRole('list', { name: 'Chords' })).getAllByRole('button')
     expect(chords.map((chord) => chord.textContent)).toEqual(['C', 'G'])

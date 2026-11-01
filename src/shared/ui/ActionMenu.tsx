@@ -1,10 +1,19 @@
-import { Check, type LucideIcon } from 'lucide-react'
-import { Fragment, useId, useState, type ReactElement, type ReactNode, type Ref } from 'react'
+import type { LucideIcon } from 'lucide-react'
+import { Fragment, useId, type ReactElement, type ReactNode, type Ref } from 'react'
 import { cn } from '@/shared/lib'
 import { Button } from './primitives/button'
-import { Popover, PopoverContent, PopoverTrigger } from './primitives/popover'
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './primitives/dropdown-menu'
 
-/** One action of a pull-down: a row that acts and closes it. */
+/** One command of a menu: an item that acts and closes it. */
 export interface MenuAction {
   readonly key: string
   readonly label: string
@@ -14,19 +23,25 @@ export interface MenuAction {
   readonly reason?: string | undefined
   /** Its picture, before its name. */
   readonly icon?: LucideIcon
-  /** An action that destroys (Delete): its row in the warning colour. */
+  /** A command that destroys (Delete): its item in the warning colour, after a separator, last. */
   readonly destructive?: boolean
   /** The group it is in, named small over the first of it (Insert's Text · Music · Ask and link). */
   readonly group?: string
-  /** One of a choice (the language written in): pressed, with a check at its end, when it is the one. */
+  /** One of a choice (the language written in): a checked item, ticked when it is the one. */
   readonly checked?: boolean
 }
 
+/** A menu's item: 44px tall, its icon, its name; a greyed one keeps the pointer so its reason shows. */
+const ITEM =
+  'min-h-11 gap-3 rounded-lg px-3 text-base [&_svg:not([class*=size-])]:size-5 data-disabled:pointer-events-auto'
+
 /**
- * A pull-down button (Apple's): a button that opens a popover of actions, each a 44px row, a greyed
- * one saying why (`reason`); what it holds besides (a length to choose, tools) is its children. Its
- * button is an outline one holding `trigger`, or `render` in its place (a round icon named for a
- * screen reader); `ref` is that button.
+ * A pull-down button (Apple's), a real menu (Base UI's Menu, memory-palaces' `FlyoutMenu`): a button
+ * that opens commands, moved through with the arrow keys and typed to; each a 44px item, a greyed one
+ * saying why (`reason`); groups named small with a separator between, a checked item ticked, the
+ * destructive ones last in the warning colour. Commands only: a setting is a row on a page, a choice
+ * a pop-up (`Dropdown`). Its button is an outline one holding `trigger`, or `render` in its place (a
+ * round icon named for a screen reader); `ref` is that button.
  */
 export function ActionMenu({
   label,
@@ -35,75 +50,99 @@ export function ActionMenu({
   align = 'start',
   actions = [],
   ref,
-  children,
 }: {
   label: string
   trigger: ReactNode
   render?: ReactElement
-  /** Which edge of its button the popover lines up with: the end for a button at a row's end. */
+  /** Which edge of its button the menu lines up with: the end for a button at a row's end. */
   align?: 'start' | 'end'
   actions?: readonly MenuAction[]
   ref?: Ref<HTMLButtonElement>
-  children?: ReactNode
 }) {
   const id = useId()
-  const [open, setOpen] = useState(false)
+  // The destructive commands last, set apart.
+  const kept = actions.filter((action) => !action.destructive)
+  const destructive = actions.filter((action) => action.destructive)
+  const item = (action: MenuAction) => {
+    const why = action.disabled ? action.reason : undefined
+    const whyId = `${id}-${action.key}-why`
+    const face = (
+      <>
+        {action.icon ? <action.icon aria-hidden /> : null}
+        <span className="min-w-0 flex-1 truncate">{action.label}</span>
+        {why ? (
+          <span id={whyId} hidden>
+            {why}
+          </span>
+        ) : null}
+      </>
+    )
+    const common = {
+      disabled: action.disabled ?? false,
+      title: why,
+      'aria-describedby': why ? whyId : undefined,
+    }
+    return action.checked === undefined ? (
+      <DropdownMenuItem
+        key={action.key}
+        {...common}
+        variant={action.destructive ? 'destructive' : 'default'}
+        className={ITEM}
+        onClick={action.onSelect}
+      >
+        {face}
+      </DropdownMenuItem>
+    ) : (
+      <DropdownMenuCheckboxItem
+        key={action.key}
+        {...common}
+        checked={action.checked}
+        className={cn(ITEM, 'pr-10')}
+        onClick={action.onSelect}
+      >
+        {face}
+      </DropdownMenuCheckboxItem>
+    )
+  }
+  // The commands in their groups, in the order given.
+  const groups: { name: string | undefined; actions: MenuAction[] }[] = []
+  for (const action of kept) {
+    const last = groups.at(-1)
+    if (last && last.name === action.group) last.actions.push(action)
+    else groups.push({ name: action.group, actions: [action] })
+  }
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger ref={ref} render={render}>
+    <DropdownMenu
+      // Not modal (memory-palaces' `FlyoutMenu`): the page is not locked behind it.
+      modal={false}
+    >
+      <DropdownMenuTrigger ref={ref} render={render}>
         {trigger}
-      </PopoverTrigger>
-      {/* As tall as the room it has, scrolling past it: a phone on its side holds few rows. */}
-      <PopoverContent
+      </DropdownMenuTrigger>
+      {/* As tall as the room it has, scrolling past it: a phone on its side holds few items. */}
+      <DropdownMenuContent
         aria-label={label}
         align={align}
-        className="max-h-(--available-height) w-72 gap-1 overflow-y-auto overscroll-contain p-2"
+        className="w-auto max-w-[min(20rem,calc(100vw-2rem))] min-w-56 overscroll-contain rounded-2xl p-1.5"
       >
-        {actions.map((action, index) => {
-          const why = action.disabled ? action.reason : undefined
-          const whyId = `${id}-${action.key}-why`
-          const heads = action.group !== undefined && action.group !== actions[index - 1]?.group
-          return (
-            <Fragment key={action.key}>
-              {heads ? (
-                <p
-                  aria-hidden
-                  className="px-3 pt-2 pb-0.5 text-xs font-semibold text-muted-foreground first:pt-0.5"
-                >
-                  {action.group}
-                </p>
+        {groups.map((group, at) => (
+          <Fragment key={`${group.name ?? ''}-${at}`}>
+            {at > 0 ? <DropdownMenuSeparator /> : null}
+            <DropdownMenuGroup>
+              {group.name ? (
+                <DropdownMenuLabel className="px-3 pt-1.5 pb-0.5">{group.name}</DropdownMenuLabel>
               ) : null}
-              <Button
-                variant="ghost"
-                disabled={action.disabled}
-                aria-pressed={action.checked}
-                title={why}
-                aria-describedby={why ? whyId : undefined}
-                className={cn(
-                  'w-full justify-start',
-                  action.destructive && 'text-destructive',
-                  // Greyed with a reason, the pointer kept on it so the tooltip says it.
-                  why && 'disabled:pointer-events-auto disabled:hover:bg-transparent',
-                )}
-                onClick={() => {
-                  action.onSelect()
-                  setOpen(false)
-                }}
-              >
-                {action.icon ? <action.icon data-icon="inline-start" aria-hidden /> : null}
-                {action.label}
-                {action.checked ? <Check aria-hidden className="ml-auto" /> : null}
-                {why ? (
-                  <span id={whyId} hidden>
-                    {why}
-                  </span>
-                ) : null}
-              </Button>
-            </Fragment>
-          )
-        })}
-        {children}
-      </PopoverContent>
-    </Popover>
+              {group.actions.map(item)}
+            </DropdownMenuGroup>
+          </Fragment>
+        ))}
+        {destructive.length > 0 ? (
+          <>
+            {kept.length > 0 ? <DropdownMenuSeparator /> : null}
+            <DropdownMenuGroup>{destructive.map(item)}</DropdownMenuGroup>
+          </>
+        ) : null}
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
