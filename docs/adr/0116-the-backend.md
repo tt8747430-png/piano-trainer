@@ -76,8 +76,8 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
     its fields in a panel opened in place under it, the same on a phone and a laptop, nothing covering the page;
     open at once for an example that does not read yet), Edit music for notes, Duplicate, Delete;
   - the lessons to read first are the lesson's Settings', not a property in the document (ADR 0053).
-  A field focused on a phone is lifted clear of the keyboard by the line the caret is in, never by the whole
-  document's box, which jumped a tap far down a lesson to its start.
+    A field focused on a phone is lifted clear of the keyboard by the line the caret is in, never by the whole
+    document's box, which jumped a tap far down a lesson to its start.
 - **The seams the app is built on:**
   - a song's music and a lesson come through one port (`ContentPort`: `has`, `ensure`); a route that shows one
     ensures it in `beforeLoad`, so the route's pending, not-found and error screens are its loading, missing and
