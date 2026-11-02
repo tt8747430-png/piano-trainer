@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { readCredits, readNote, songFacts, withSongFacts } from './song-facts'
+import { readNote, shownCredits, songFacts, withSongFacts } from './song-facts'
 import type { Credit } from './types'
 
 type FactsOf = Parameters<typeof withSongFacts>[0]
@@ -35,31 +35,36 @@ describe('songFacts', () => {
 })
 
 describe('withSongFacts', () => {
-  it('writes the facts over the piece, keeping the credits not edited here', () => {
+  it('writes who wrote it as its score’s composer and lyricist, its credits as they were', () => {
     const next = withSongFacts(
-      piece,
+      piece as FactsOf,
       { title: ' Abide ', music: 'Monk', words: '', about: 'Evening hymn' },
       'en',
     )
     expect(next.title).toBe('Abide')
-    expect(next.credits).toEqual([
-      { role: 'harmony', names: 'A. Bobrova' },
-      { role: 'music', names: 'Monk' },
-    ])
+    expect(next.header).toEqual({ composer: 'Monk' })
+    expect(next.credits).toEqual(piece.credits)
     expect(next.note).toEqual({ en: 'Evening hymn', ru: 'Гимн' })
   })
 
-  it('writes the same names for both as words and music, and drops an empty about', () => {
+  it('reads its score’s names first, then the content’s credits', () => {
+    expect(songFacts({ ...piece, header: { lyricist: 'Me' } } as FactsOf, 'en')).toMatchObject({
+      music: 'W. H. Monk',
+      words: 'Me',
+    })
+  })
+
+  it('keeps the score’s other lines, and drops an empty about', () => {
     const next = withSongFacts(
-      { title: 'T' } as FactsOf,
-      { title: 'T', music: 'X', words: 'X', about: ' ' },
+      { title: 'T', header: { subtitle: 'Op. 1', composer: 'X' } } as FactsOf,
+      { title: 'T', music: '', words: 'Y', about: ' ' },
       'ru',
     )
-    expect(next.credits).toEqual([{ role: 'words-and-music', names: 'X' }])
+    expect(next.header).toEqual({ subtitle: 'Op. 1', lyricist: 'Y' })
     expect(next.note).toBeUndefined()
   })
 
-  it('writes a first about in both languages', () => {
+  it('writes a first about in both languages, and the same in both for a song of one language', () => {
     expect(
       withSongFacts(
         { title: 'T' } as FactsOf,
@@ -67,9 +72,6 @@ describe('withSongFacts', () => {
         'ru',
       ).note,
     ).toEqual({ en: 'Hi', ru: 'Hi' })
-  })
-
-  it('writes the same about in both languages for a song of one language', () => {
     const next = withSongFacts(piece, { ...songFacts(piece, 'en'), about: 'Mine' }, 'en', true)
     expect(next.note).toEqual({ en: 'Mine', ru: 'Mine' })
   })
@@ -82,17 +84,6 @@ describe('withSongFacts', () => {
     expect(next).toMatchObject({ title: 'Мир, душа', titleEn: 'Be still' })
   })
 
-  it('keeps authors as they are, apart from who wrote the music and the words', () => {
-    const authored = { title: 'T', credits: [{ role: 'authors', names: 'A, B' }] as Credit[] }
-    expect(songFacts(authored, 'en').music).toBe('')
-    expect(
-      withSongFacts(authored, { ...songFacts(authored, 'en'), music: 'C' }, 'en').credits,
-    ).toEqual([
-      { role: 'authors', names: 'A, B' },
-      { role: 'music', names: 'C' },
-    ])
-  })
-
   it('keeps the title it had where the one written is empty', () => {
     expect(withSongFacts(piece, { ...songFacts(piece, 'en'), title: '  ' }, 'en').title).toBe(
       'Abide with me',
@@ -100,19 +91,22 @@ describe('withSongFacts', () => {
   })
 })
 
-describe('reading saved facts', () => {
-  it('keeps only credits that read as a role and names', () => {
-    expect(
-      readCredits([
-        { role: 'music', names: 'X' },
-        { role: 'boss', names: 'Y' },
-        3,
-        { role: 'unknown' },
-      ]),
-    ).toEqual([{ role: 'music', names: 'X' }, { role: 'unknown' }])
-    expect(readCredits('x')).toBeUndefined()
+describe('shownCredits', () => {
+  it('names who wrote it as its score names them, in place of the music and words credits', () => {
+    expect(shownCredits(piece)).toEqual(piece.credits)
+    expect(shownCredits({ ...piece, header: { composer: 'X', lyricist: 'X' } } as FactsOf)).toEqual(
+      [
+        { role: 'harmony', names: 'A. Bobrova' },
+        { role: 'words-and-music', names: 'X' },
+      ],
+    )
+    expect(shownCredits({ title: 'T', header: { composer: 'C', subtitle: 'S' } })).toEqual([
+      { role: 'music', names: 'C' },
+    ])
   })
+})
 
+describe('reading saved facts', () => {
   it('keeps a note with both languages written', () => {
     expect(readNote({ en: 'a', ru: 'б' })).toEqual({ en: 'a', ru: 'б' })
     expect(readNote({ en: 'a' })).toBeUndefined()

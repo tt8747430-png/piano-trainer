@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Credits, pieceKey, SourceLine, type Entry } from '@/entities/piece'
+import { Credits, pieceKey, SourceLine, type Entry, shownCredits } from '@/entities/piece'
 import { localText, useLocale, useScaleName } from '@/shared/i18n'
 import { keyScale, noteParam } from '@/shared/lib/music'
 import { ButtonLink, InfoTip } from '@/shared/ui'
@@ -11,7 +11,7 @@ export function PieceCredits({ entry }: { entry: Entry }) {
   if (!entry.credits && !entry.source) return null
   return (
     <div className="-mt-3 flex flex-col gap-1 text-muted-foreground">
-      {entry.credits ? <Credits credits={entry.credits} /> : null}
+      {shownCredits(entry).length > 0 ? <Credits credits={shownCredits(entry)} /> : null}
       {entry.source ? <SourceLine source={entry.source} /> : null}
     </div>
   )

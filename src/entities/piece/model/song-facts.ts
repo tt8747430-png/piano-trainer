@@ -1,5 +1,6 @@
 import type { Locale, LocalText } from '@/shared/i18n'
-import { CREDIT_ROLES, type Credit } from './types'
+import { withHeaderLine, type ScoreHeader } from './score-header'
+import type { Credit } from './types'
 
 /** What a song's page says of it, written in place in Edit (round 28): Flat's score credits. */
 export interface SongFacts {
@@ -19,9 +20,11 @@ interface FactsOf {
   readonly titleRu?: string
   readonly credits?: readonly Credit[]
   readonly note?: LocalText
+  /** What its score prints under its title: its composer and lyricist are who wrote it (round 28). */
+  readonly header?: ScoreHeader
 }
 
-/** The roles the facts write; every other credit (its authors, its harmony…) is kept as it is. */
+/** The roles who wrote it are named in: the score's names stand in their place where it has them. */
 const WRITTEN = new Set<Credit['role']>(['music', 'words', 'words-and-music'])
 
 /** The title the page shows in this language: its translation where it has one, else as printed. */
@@ -40,17 +43,18 @@ const namesOf = (credits: readonly Credit[] | undefined, roles: readonly Credit[
 export function songFacts(piece: FactsOf, locale: Locale): SongFacts {
   return {
     title: piece[titleField(piece, locale)] ?? piece.title,
-    music: namesOf(piece.credits, ['music', 'words-and-music']) ?? '',
-    words: namesOf(piece.credits, ['words', 'words-and-music']) ?? '',
+    music: piece.header?.composer ?? namesOf(piece.credits, ['music', 'words-and-music']) ?? '',
+    words: piece.header?.lyricist ?? namesOf(piece.credits, ['words', 'words-and-music']) ?? '',
     about: piece.note?.[locale] ?? '',
   }
 }
 
 /**
- * The piece with these facts: its title in this language where one is written, who wrote the music and the words
- * (one credit where they are the same names), the credits not written here kept first, and what is
- * said about it in the language written (both, for a first one or a song of one language,
- * `oneLanguage`: a learner's own; none where it is empty).
+ * The piece with these facts: its title in this language where one is written, who wrote its music
+ * and words as its score's composer and lyricist (one place for them, printed under its title and
+ * said on its page), and what is said about it in the language written (both, for a first one or a
+ * song of one language, `oneLanguage`: a learner's own; none where it is empty). Its credits as the
+ * app's content prints them are left as they are.
  */
 export function withSongFacts<T extends FactsOf>(
   piece: T,
@@ -58,21 +62,17 @@ export function withSongFacts<T extends FactsOf>(
   locale: Locale,
   oneLanguage = false,
 ): T {
-  const [music, words, about] = [facts.music.trim(), facts.words.trim(), facts.about.trim()]
-  const kept = (piece.credits ?? []).filter((credit) => !WRITTEN.has(credit.role))
-  const written: Credit[] =
-    music && music === words
-      ? [{ role: 'words-and-music', names: music }]
-      : [
-          ...(words ? [{ role: 'words', names: words } as const] : []),
-          ...(music ? [{ role: 'music', names: music } as const] : []),
-        ]
-  const credits = [...kept, ...written]
-  const { credits: _credits, note: _note, ...rest } = piece
+  const about = facts.about.trim()
+  const header = withHeaderLine(
+    withHeaderLine(piece.header ?? {}, 'composer', facts.music),
+    'lyricist',
+    facts.words,
+  )
+  const { note: _note, header: _header, ...rest } = piece
   return {
     ...rest,
     [titleField(piece, locale)]: facts.title.trim() || piece[titleField(piece, locale)],
-    ...(credits.length > 0 ? { credits } : {}),
+    ...(Object.keys(header).length > 0 ? { header } : {}),
     ...(about
       ? {
           note:
@@ -84,23 +84,27 @@ export function withSongFacts<T extends FactsOf>(
   } as T
 }
 
+/**
+ * The credits a song's page and its information show: who wrote it as its score names them, where
+ * it names them, in place of the content's music and words credits; every other credit as it is.
+ */
+export function shownCredits(piece: FactsOf): readonly Credit[] {
+  const { composer, lyricist } = piece.header ?? {}
+  if (composer === undefined && lyricist === undefined) return piece.credits ?? []
+  const kept = (piece.credits ?? []).filter((credit) => !WRITTEN.has(credit.role))
+  const named: Credit[] =
+    composer !== undefined && composer === lyricist
+      ? [{ role: 'words-and-music', names: composer }]
+      : [
+          ...(lyricist === undefined ? [] : [{ role: 'words', names: lyricist } as const]),
+          ...(composer === undefined ? [] : [{ role: 'music', names: composer } as const]),
+        ]
+  return [...kept, ...named]
+}
+
 const isText = (value: unknown): value is string => typeof value === 'string'
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null
-
-/** Saved credits, kept where each reads as a role and its names; none where none do. */
-export function readCredits(value: unknown): readonly Credit[] | undefined {
-  if (!Array.isArray(value)) return undefined
-  const credits = value.flatMap((credit): Credit[] => {
-    if (!isRecord(credit)) return []
-    if (credit.role === 'unknown') return [{ role: 'unknown' }]
-    const role = CREDIT_ROLES.find((known) => known === credit.role)
-    return role && isText(credit.names) && credit.names.trim()
-      ? [{ role, names: credit.names.trim().slice(0, 200) }]
-      : []
-  })
-  return credits.length > 0 ? credits : undefined
-}
 
 /** A saved note, kept where it is written in both languages. */
 export function readNote(value: unknown): LocalText | undefined {

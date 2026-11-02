@@ -61,7 +61,7 @@ export {
   type OwnSong,
   type OwnSongId,
 } from './model/own'
-export { songFacts, withSongFacts, type SongFacts } from './model/song-facts'
+export { shownCredits, songFacts, withSongFacts, type SongFacts } from './model/song-facts'
 export {
   createPiecesStore,
   PIECES_STORAGE_KEY,

@@ -55,7 +55,8 @@ describe('a song’s page in Edit (round 28)', () => {
     await user.type(screen.getByRole('textbox', { name: 'About the song' }), 'A lullaby')
     expect(piecesStore.getState().songs[0]).toMatchObject({
       title: 'Evening',
-      credits: [{ role: 'music', names: 'Ana' }],
+      // Who wrote it is its score's composer: one place, printed under its title too.
+      header: { composer: 'Ana' },
       note: { en: 'A lullaby', ru: 'A lullaby' },
     })
     expect(screen.getByRole('link', { name: /Edit the music/ })).toHaveAttribute(
@@ -91,7 +92,7 @@ describe('a song’s page in Edit (round 28)', () => {
       async () => {
         const draft = await content.draft('piece', SONG.id)
         expect(draft.ok && draft.value?.body).toMatchObject({
-          credits: expect.arrayContaining([{ role: 'words', names: 'Someone' }]),
+          header: expect.objectContaining({ lyricist: 'Someone' }),
         })
       },
       { timeout: 4000 },
