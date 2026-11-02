@@ -689,29 +689,32 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       works**. So:
       - **Remove the switch** from beside the chord strip. The chord chips show only the chord
         and its numeral, as everywhere else.
-      - **A section of its own under the music, "Why it works"** (folded open the first time,
-        its state remembered), with three parts:
-        - **A sentence first**, written from the chords, in plain words with the terms in bold:
-          "I–V–vi–IV starts at **home** (I), moves to **tension** (V), steps to the **relative
-          minor** (vi) and moves **away** (IV) before coming home again." Generated in the
-          kernel from the numerals and their functions, in en and ru, tested on the library's
-          progressions.
-        - **The roles, drawn:** the chords in a row, each with its role under it in a word and a
-          colour (home · away · tension; the term behind its ⓘ: tonic, subdominant, dominant),
-          and a legend; the same colours as Scales' Harmony and the circle.
-        - **The moves, drawn:** between each pair of chords an arrow with how the bass moves
-          ("down a 5th · strongest pull", "down a 3rd · two notes shared", "up a step · fresh"),
-          the strong moves bolder; a tap plays the two chords.
-      - The chips play as they do now; the section changes nothing in the sound; Play in the
-        section plays the progression slowly with each role lit as it sounds.
-      - The Quiz's "Chord roles" drill links here, and here links to it ("Test yourself").
-      - Done: a learner reading only the section can say what each chord does (the en and ru
+      - **Chosen layout (B): the explanation on the chords themselves, always shown,** no switch
+        and no separate section:
+        ```
+          C ──↓5──▶ G ──↑2──▶ Am ──↓3──▶ F
+         home     tension    sad       away
+        ```
+        - under each chord its role in one word and a colour (home · away · tension, with the
+          minor chords' colour word: sad, soft; the terms tonic, subdominant, dominant, relative
+          minor behind the word's ⓘ), the same colours as Scales' Harmony and the circle, with a
+          one-line legend;
+        - between each pair of chords an arrow with the bass's move (↓5, ↓3, ↑2…), the strong
+          moves bolder, its meaning ("strongest pull", "two notes shared", "fresh") behind its
+          ⓘ; a tap on an arrow plays the two chords;
+        - the words and roles generated in the kernel from the numerals and the key, in en and
+          ru, tested on every progression in the library;
+        - the same row wherever a progression is shown (the Library's rows, Scales' Harmony, a
+          song's progressions), one component.
+      - The chips play as they do now; nothing here changes the sound.
+      - The Quiz's "Chord roles" drill links from the legend ("Test yourself").
+      - Done: a learner reading only the row can say what each chord does (the en and ru
         texts checked with the clarify skill against the theory books in `piano-data/books`).
     - **The page's structure,** tabs like Scales and keys': **Progression · Library · Passing
       chords**:
       - **Progression:** the chords (typed as numerals or chord symbols, or tapped in from the
         key's chords), the key picker (Part A 5), Play and the transport, the staff and the
-        piano, the analysis above, then "Practise in every key" (today's "Through the keys"
+        piano, the roles row above, then "Practise in every key" (today's "Through the keys"
         walks) and "Songs with this progression" (hidden when empty);
       - **Library:** the progressions as a list with genre chips (above), a row opening it in
         Progression;
