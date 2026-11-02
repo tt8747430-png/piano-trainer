@@ -229,6 +229,13 @@ The references show what to add as well as what to improve: build what we don't 
     - **The floating transport** is one capsule (rule 5), not three separate circles.
     - **Nothing clipped at the top:** a sticky header (the chord's staff) is never cut by the page
       scrolling under it.
+    - **One title per screen:** the app bar's title, or a large page title, never both.
+    - **Different things, different icons:** six exercises with one identical icon tell nothing
+      apart (rule 21).
+    - **Long lists are cut:** more than about eight rows show the first ones and "Show all n"; a
+      long page's sections fold. Titles in a row wrap to two lines before they truncate.
+    - **The same thing is offered once:** a chord card that opens the chord needs no second row of
+      "Open in Chords" chips beside it.
 
 ## Decided (do not re-ask)
 1. **Explore in Songs.** The Public library is the second half of Songs: a switch in the Songs app
@@ -522,6 +529,38 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       Voicing a combobox with a picture of each voicing (rule 21).
     - Done: screenshots of every explorer at 390 and 1280 before and after, and a contact sheet of
       the families in each state.
+21. **Scales and keys, all three tabs** (screenshots in `scratchpad/r29/scales/`). Known:
+    - **Selected styles:** the Scale · Chords · Key tabs are underlined, the Root strip a white
+      bordered chip, Octaves and Fingering white bordered segments, the on-screen piano's toolbar
+      dark filled chips, "In the key only" a bordered toggle. Five looks for "chosen" (rule 15).
+    - **Strips with arrows:** Root (B is off the edge on a laptop), Scale (the last name cut to
+      "M"; "Harm…" on a phone), Start on, Melody note. Each becomes a picker that shows the whole
+      choice (Part A 5).
+    - **Controls group:** Octaves, Start on, Fingering, Rhythm and Tempo are four kinds of control
+      in two uneven columns, Tempo alone in its row. One settings-style group: label left, control
+      right (rule 20), or one row of compact controls.
+    - **The Play button** floats at the right edge beside the Root strip here, while Chords puts
+      three circles at the bottom. One transport capsule, one place, on every explorer.
+    - **The score** takes half the width and its fingering collides at the bar line ("2 4"). It
+      fills the column, and fingering never overlaps.
+    - **Headings:** "Fingering by hand", "Scale degrees", "Borrowed chords", "Harmonise a melody
+      note" are large serif; "Practise in the Player", "Progressions in this key" small sans;
+      "Triads", "Major 7ths" a third size. One style per level.
+    - **Two titles:** "Scales and keys" in the app bar and "C major" as a huge page title.
+    - **Facts:** Formula, Structure, Relative and the Key tab's facts are a loose table; Relative,
+      the circle neighbours and the modes are bare blue words, while chords are bordered buttons.
+      One facts layout, and one way to link to another scale or key.
+    - **Cards:** the seven scale chords (4 + 3, an orphan), the borrowed chords, the harmonise
+      results ("as 3 · in the key") and the songs are four card sizes and styles; scale degrees sit
+      in a bare table with no card. One card family, grids that end evenly (rule 28).
+    - **Duplicates:** the chord cards and the "Open in Chords" chips open the same seven chords.
+    - **Practise in the Player:** six exercises share one icon; their descriptions are cut
+      mid-sentence; "Walk the chords" is a lone row in a full-width card.
+    - **The Key tab on a phone** is about 6,000px long: all 24 songs, every harmonisation group.
+      Sections fold, lists show "Show all n", lesson titles aren't cut ("Lesson 3: C – Dm – G – C
+      – F…").
+    - **Note names on the on-screen piano:** the computer-key letters (A S D …), the degree, the
+      finger and the note stacked in four rows on every key: show only what this tab needs.
 
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
@@ -673,11 +712,11 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   - no layout that can break the page.
 
 ## Rounds
-1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–20: one component each, the app bar,
+1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–21: one component each, the app bar,
    action placement, page/sheet/menu, controls, words, navigation (Back as up, the Search palette, the
    sidebar's selected look), shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout and two panes, pictures and icons, page names, account and
-   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings.
+   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys.
 2. **Profile** (Part B 1).
 3. **Copy and the rights checkbox** (Part B 2).
 4. **Explore in Songs and the built-in folders' rules** (Part B 3, Decided 8 and 10).
