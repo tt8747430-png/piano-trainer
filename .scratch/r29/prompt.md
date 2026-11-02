@@ -831,6 +831,45 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       `src/shared/lib/musicxml/fixtures/`, each read without loss the importer can avoid.
     - **Compare with Flat and MuseScore:** import the same files into them and into ours, and list
       what they keep that we lose; each one becomes a row in the audit.
+30. **Fingering, one way everywhere.** Today it is drawn four ways that don't agree:
+    - under the on-screen piano, a row of numbered circles (`FingerRow`), a crossing filled blue;
+    - on the keys themselves (Scales), a stack of the computer-key letter, the degree and the note,
+      so two rows of numbers (degrees 1–7 on the keys, fingers 1–5 under them) sit one above the
+      other and read alike;
+    - on hand pictures (`HandDiagram`, Chords and Scales), a crossing underlined;
+    - on the score, the numbers Verovio prints, a crossing in blue, and collisions at bar lines
+      ("2 4", Part A 21).
+
+    One rule, written in DESIGN.md and checked against Ultimate Piano (the finger on the key above
+    its note name, `piano-data/reference-apps/ultimate-piano/19-*.png`), the printed method books
+    in `piano-data/method-books` and Gould's *Behind Bars*:
+    - **On the on-screen piano:** the finger on the key, in one circle style, the right hand's
+      above and the left hand's below the note name (or in two hand colours named in a legend);
+      degrees only where the page is about degrees, never two rows of numbers.
+    - **A thumb crossing or a finger change** marked one way in all four places (a small arc, or the
+      number in the accent colour), never fill in one place and underline in another.
+    - **On the score:** fingering above the notes for the right hand, below for the left, at the
+      engraving size, never colliding with stems, beams or bar lines.
+    - **Hand pictures:** kept where they teach (Chords, Scales), the same numbers and crossing mark.
+    - **One switch** ("Fingering" on the Player's and the explorers' Settings pages) shows or hides
+      it in all of them at once.
+    - Done: the same scale (C major, two octaves, both hands) shown on the piano, the score and the
+      hand cards, screenshots side by side, every number agreeing.
+31. **Nothing flickers, nothing jumps.**
+    - The shared button animates every property (`transition-all` in
+      `shared/ui/primitives/button.tsx`) and drops a pixel when pressed (`active:translate-y-px`),
+      so a chip's colour, border and size animate as it is chosen and a row of buttons twitches.
+      Buttons and chips animate colour only; pressing doesn't move them.
+    - Rows that appear and disappear as a choice changes (Added tones, Alterations, Hands) shift
+      every control under them: they stay, with options hidden inside (Part A 20).
+    - A score re-engraved after a change goes blank before it draws again: the old drawing stays
+      until the new one is ready.
+    - The app bar slides away on scroll (`ScreenHeader`'s `data-hidden`) and takes the controls
+      under it with it on short pages: it hides only on pages taller than two screens, and never
+      while a field or menu is open.
+    - Find every other case: record each place at 390 and 1280 (Playwright video) while changing
+      each choice; any frame where something blanks, jumps or moves that wasn't touched is a row in
+      the audit. Done: the recordings, before and after.
 
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
@@ -968,6 +1007,25 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       - A swipe that archives or deletes still asks first (rule 17).
     - **Done:** tests for add, remove, reorder, the limits, Reset, and the bar on screen matching the
       page tile for tile.
+11. **Tools, as a group of their own.** Today the Metronome sits under Practice's "Training", the
+    Chord finder under "Playing", the circle of fifths inside Scales' Key tab, and nothing is
+    reachable from inside a song or a lesson. The references (notes in
+    `scratchpad/r29/tools-fingering-refs.md`) do it this way: Ultimate Piano keeps the metronome,
+    the key and record in a bar that works over every screen and opens the circle of fifths as a
+    picker; the journey app keeps Key Explorer, Circle of Fifths, Chord Builder and Progression Lab
+    as tool pages of one layout; piano.org groups its tools on one page.
+    - **A Tools group on Practice**, first: Metronome, Chord finder, Circle of fifths, Tap tempo,
+      Recorder (My recordings), and a Drone (a held note or chord to play scales over). Each tool
+      page has one layout: the readout or picture in the middle, the controls under it, the gear
+      to its Settings page (Part A 24).
+    - **Over any screen:** a Tools button in the app bar of the Player, the editor, a lesson and the
+      explorers opens a sheet with the metronome (start, stop, tempo), the recorder and the tuner
+      of the reference's Tools sheet (Part B 8), without leaving the page. The metronome follows
+      the song's tempo where there is one.
+    - **The circle of fifths** becomes a tool page and the key picker (Part A 5) at once.
+    - **One tool, one implementation:** the Metronome page, the Player's count-in and click, and the
+      quick metronome are one engine and one set of settings.
+    - Done: every tool opened from Practice and from inside a song, at 390 and 1280.
 
 ## Constraints
 - **Completeness:** one implementation per thing. Every string in en and ru. Loading, empty, error
@@ -982,11 +1040,11 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   - no layout that can break the page.
 
 ## Rounds
-1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–29: one component each, the app bar,
+1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–31: one component each, the app bar,
    action placement, page/sheet/menu, controls, words, navigation (Back as up, the Search palette, the
    sidebar's selected look), shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout and two panes, pictures and icons, page names, account and
-   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal, an own song's page, imports and exports.
+   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal, an own song's page, imports and exports, fingering, nothing flickering or jumping.
 2. **Profile** (Part B 1).
 3. **Copy and the rights checkbox** (Part B 2).
 4. **Explore in Songs and the built-in folders' rules** (Part B 3, Decided 8 and 10).
@@ -996,7 +1054,8 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
 8. **Player and editor settings** (Part B 7).
 9. **The Player's practice flow** (Part B 8).
 10. **Customisable bars** (Part B 10).
-11. **Customisable pages and cards** (Part B 9).
+11. **Tools** (Part B 11).
+12. **Customisable pages and cards** (Part B 9).
 
 ## Each round, before calling it done
 Run impeccable (`audit`, then `polish` or `adapt` where it finds problems) on the screens the round
