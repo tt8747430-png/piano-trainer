@@ -30,7 +30,7 @@ trust:
 - **R1–R30, standing rules:** apply to every screen in every round. Cite as "R17".
 - **D1–D14, decided:** settled; don't re-open them. Cite as "D8".
 - **Step 0:** carry-overs from earlier rounds, checked first.
-- **A1–A42, the audit:** each a known problem, where it is, and the fix. Cite as "A23".
+- **A1–A43, the audit:** each a known problem, where it is, and the fix. Cite as "A23".
 - **B1–B11, features:** new things to build. Cite as "B8".
 - **Rounds:** the order of work. **References**, **Constraints**, **Reporting** at the end.
 In the text, "Part A n" means An, "Part B n" means Bn, and "rule n" or "Standing rule n" means Rn.
@@ -414,6 +414,7 @@ doesn't name, judge it by them:
   - 56–59: half-empty laptop screens (Practice, Songs, Settings, Search);
   - 60: the Chords page: the arrowed strips, three kinds of chip, two heading styles, the inset
     Chromatic walk row in an empty card, three transport circles, the staff cut at the top.
+  - 72: B♭ minor's Key tab (overlaps, degrees, borrowed chords, A43);
   - 61: the Fantaisie-Impromptu's page (no Learned, wrong key); 63–64: the editor's palette and
     Daisy fields' clef; 65: the Player's Setup sheet; 66: the editor's padding; 67: Amazing
     Grace's page head; 68: Progressions folded; 69: New song's instruments step; 70: Flat's tempo
@@ -1578,6 +1579,71 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       song, drill) in which it does nothing or moves you away; hide or narrow each; a test per
       page that every control shown changes what's shown, and that no choice changes the tab.
 
+43. **The Key tab's content, and theory written on the music** (`owner/72`, B♭ minor).
+    - **Overlaps and clipping:** the harmonise cards' second line ("as ♭3 · in the key") runs out of
+      its card into the next one; the cards in one grid have three widths; the Melody note strip
+      hides the chosen note (D♭) half under its ‹ arrow and cuts its last; the floating piano button
+      sits over the cards. Cards of one grid share one width, their lines wrap or shorten ("♭3 · in
+      key"), nothing floats over content (R5), and the strip becomes the key picker (A5).
+    - **"Scale degrees" is a table no one can read:** four unlabelled columns (numeral, a name,
+      a note, a chord), the chord column repeating the note with or without "m". Give it its
+      headings or draw it as A21's seven-degree spine: degree number and numeral, the note, the
+      chord (with its numeral's case and °), the function name behind an ⓘ.
+    - **It ignores the scale chosen,** and minor keys read wrongly: in B♭ minor it shows v (Fm) as
+      the dominant and VII (A♭) as the subtonic, from the natural minor only, whatever the picker
+      says. Theory books write a minor key's chords with the harmonic minor's **V (F) and vii°
+      (A°)** as the usual dominant chords, and the natural minor's v and VII as the alternatives.
+      Show the minor key that way (both, the usual first), and make the table follow the scale
+      kind where the Notes tab shows a scale (harmonic, melodic) rather than a key.
+    - **Borrowed chords in a minor key:** I (the Picardy third), ♭II, IV, V. Two problems: ♭II of
+      B♭ minor is written "B" (`borrowedChords` names it "plainly", `scale-chord.ts`): the
+      Neapolitan is **C♭** (written as the books write it, with its sound named once: "C♭, sounds
+      as B"); and V and IV in minor aren't borrowed, they are the harmonic and melodic minor's own:
+      list them with the key's chords (above), and keep "borrowed" for chords from the parallel
+      mode (Picardy I, ♭II from the Phrygian, iv in major, ♭VI, ♭VII…), each named (Neapolitan,
+      Picardy third, minor plagal).
+    - **Harmonise a melody note:** "A, as 3" for D♭ is spelled as the sound, not the letter (A's
+      third is C♯): write the note as the chord spells it ("A, as 3: C♯ = D♭") or leave out chords
+      that need a respelling unless "Include enharmonic" is on (its Settings).
+    - **The facts column** (signature, notes, relative, parallel, neighbours on the circle, modes)
+      lists things the staff and the circle can show better. Keep the facts that orient (the key
+      signature named, its relative and parallel key as links, its neighbours), drop or fold the
+      rest, and put the rest **on the music** (below).
+    - **Theory written on the music, across the explorers.** The staff a page already shows is
+      the best place to explain: annotations drawn on the notes, each a layer the learner turns on
+      from the page's Settings (A24), with sensible defaults per page:
+      - **Scales (Notes):** degree numbers under the notes; W and H (whole and half steps) between
+        them, the half steps marked (a ∧ as method books draw it); the tonic and the leading note
+        named; fingering (A30); in minor, the raised 6th and 7th of the melodic and harmonic forms
+        marked; tetrachords bracketed for beginners.
+      - **Key:** the key signature with its sharps or flats numbered in their order (F C G D A E B)
+        and "the last sharp is the leading note" written by it; tonic, subdominant and dominant
+        notes and chords labelled on the staff; relative and parallel keys as a second staff on
+        request.
+      - **Harmony:** Roman numerals under the chords as harmony books print them, the function
+        colours (A23, D14), each chord's tones labelled R 3 5 7 on request.
+      - **Chords:** chord tones labelled R 3 5 7 9…, the intervals from the root, the colour notes
+        (A33) in their colour, the inversion's bass named (C/E, "1st inversion").
+      - **Intervals:** both notes on the staff with the interval's name between them, the
+        semitones counted, its inversion beside it (m3 ↔ M6) and consonant or dissonant marked.
+      - **Progressions:** numerals and functions under the chords, the voice leading drawn as
+        lines between held and moving notes, the roles row (D14) aligned with the staff.
+      - **Chord finder:** the chord played named on the staff with its tones labelled, and the
+        keys it belongs to as numerals ("ii in C, iii in B♭…").
+      - **Accompaniment:** the pattern's beats numbered, the hands named, the chord symbols over
+        the bars.
+      Annotations are drawn by the engraver (Verovio's text and harm elements, or an SVG layer
+      aligned to its notes), printed the same in the Player and the editor where they apply,
+      named in en and ru, and never cover the music.
+    - **What each Practice page could add** (to check against the references and the books,
+      then build what earns its place): Scales: compare two scales (major and its parallel minor)
+      on one staff; Key: a key's common progressions and its songs (A21); Chords: "Hear it in
+      context" (the chord in a I–IV–V in its key); Intervals: songs that start with the interval
+      (a "first two notes" list, as ear-training books do); Progressions: transpose to the key of
+      a song in the library; every page: a "Test yourself" link to its Quiz drill (A41).
+    - Done: B♭ minor's Key tab with the harmonic V and vii°, C♭ spelled, nothing overlapping, at
+      390 and 1280; a screenshot of each page's staff with its annotations on.
+
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
    1. **Hero.**
@@ -1759,9 +1825,9 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
    and the Search palette, shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout, pictures and icons, page names, account and storage,
    arrows, destructive rows, laptop layouts, nothing jumping, focus, the pencil's one meaning, only what works here).
-2. **Practice:** Part A 20–25, 30, 32, 33, 39, 41 (the explorers' buttons and headings, Scales and keys,
+2. **Practice:** Part A 20–25, 30, 32, 33, 39, 41, 43 (the explorers' buttons and headings, Scales and keys,
    Intervals, Progressions, every Practice page's settings, Accompaniment, Chord finder,
-   Metronome, Exercises and Quiz, fingering, the theory pages' owners, colour notes, the Metronome against metronome apps, the drills and exercises inside).
+   Metronome, Exercises and Quiz, fingering, the theory pages' owners, colour notes, the Metronome against metronome apps, the drills and exercises inside, the Key tab and theory on the music).
 3. **Piano and sound:** Part A 26–27 (the on-screen piano, the piano sound and the pedal).
 4. **Songs, the editor and the Player:** Part A 28, 29, 34, 35, 37, 40 and B7 (an own song's page, imports
    and exports, the score editor against Flat, the Player's staves and metronome, the chord
