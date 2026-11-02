@@ -2,10 +2,16 @@ import { useTranslation } from 'react-i18next'
 import { useFold } from '@/features/fold-section'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { intervalRoot, useShownKeys, writesInterval } from '@/features/play-example'
-import { INTERVAL_GROUP_IDS, noteFromParam, type IntervalGroup } from '@/shared/lib/music'
+import {
+  INTERVAL_GROUP_IDS,
+  noteFromParam,
+  noteParam,
+  pitchClassOf,
+  type IntervalGroup,
+} from '@/shared/lib/music'
 import type { IntervalWay } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { FoldGroup, Labelled, NoteChoice, Segmented, type ShownKeys } from '@/shared/ui'
+import { FoldGroup, Labelled, PitchPicker, Segmented, usualName, type ShownKeys } from '@/shared/ui'
 import { INTERVAL_ROWS, type RowInterval } from '../model/interval-rows'
 import { INTERVAL_PLAY_WAYS, type IntervalView } from '../model/interval-view'
 import { IntervalRow } from './IntervalRow'
@@ -33,7 +39,11 @@ export function IntervalExplorer({
       <PinnedKeyboard shown={shown} />
       <div className="grid-fields gap-x-10 gap-y-5">
         <div className="col-span-full">
-          <NoteChoice label={t('root')} value={view.root} onChange={(root) => onChange({ root })} />
+          <PitchPicker
+            label={t('root')}
+            value={pitchClassOf(noteFromParam(view.root))}
+            onChange={(pc) => onChange({ root: noteParam(usualName(pc)) })}
+          />
         </div>
         <Labelled label={t('intervals.way.label')}>
           <Segmented

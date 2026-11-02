@@ -4,15 +4,8 @@ import { lessonById, lessonIds, type LessonBlock, type LessonLink } from '@/enti
 import { BUILT_IN_PATTERNS, PATTERN_IDS, type PatternId } from '@/entities/pattern'
 import { entryTitles, piecesPlaying } from '@/entities/piece'
 import { localText, useLocale } from '@/shared/i18n'
-import {
-  C_MAJOR,
-  keyFromParam,
-  keyParam,
-  noteFromParam,
-  noteParam,
-  SCALE_KINDS,
-} from '@/shared/lib/music'
-import { Dropdown, InfoTip, KeyChoice, NoteChoice, SwitchRow } from '@/shared/ui'
+import { C_MAJOR, SCALE_KINDS } from '@/shared/lib/music'
+import { Dropdown, InfoTip, KeyPicker, NotePicker, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 
@@ -41,10 +34,7 @@ export function VoicingsFields({
   const { satb: _satb, ...unnamed } = block
   return (
     <>
-      <KeyChoice
-        value={keyParam(block.key ?? C_MAJOR)}
-        onChange={(key) => onChange({ ...block, key: keyFromParam(key) })}
-      />
+      <KeyPicker value={block.key ?? C_MAJOR} onChange={(key) => onChange({ ...block, key })} />
       <SwitchRow
         label={t('edit.doc.satb')}
         checked={block.satb === true}
@@ -213,10 +203,10 @@ export function LinkFields({
         />
       ) : target.opens === 'scales' ? (
         <>
-          <NoteChoice
+          <NotePicker
             label={t('learn:edit.doc.root')}
-            value={noteParam(target.root)}
-            onChange={(root) => go({ ...target, root: noteFromParam(root) })}
+            value={target.root}
+            onChange={(root) => go({ ...target, root })}
           />
           <Dropdown
             label={t('learn:edit.doc.scale')}
@@ -229,15 +219,12 @@ export function LinkFields({
           />
         </>
       ) : target.opens === 'key' ? (
-        <KeyChoice
-          value={keyParam(target.key)}
-          onChange={(key) => go({ ...target, key: keyFromParam(key) })}
-        />
+        <KeyPicker value={target.key} onChange={(key) => go({ ...target, key })} />
       ) : target.opens === 'intervals' ? (
-        <NoteChoice
+        <NotePicker
           label={t('learn:edit.doc.root')}
-          value={noteParam(target.root ?? C_MAJOR.tonic)}
-          onChange={(root) => go({ ...target, root: noteFromParam(root) })}
+          value={target.root ?? C_MAJOR.tonic}
+          onChange={(root) => go({ ...target, root })}
         />
       ) : target.opens === 'progressions' ? (
         <>
@@ -249,10 +236,7 @@ export function LinkFields({
             className="font-display"
             onChange={(event) => go({ ...target, numerals: event.target.value })}
           />
-          <KeyChoice
-            value={keyParam(target.key)}
-            onChange={(key) => go({ ...target, key: keyFromParam(key) })}
-          />
+          <KeyPicker value={target.key} onChange={(key) => go({ ...target, key })} />
         </>
       ) : null}
     </>

@@ -7,7 +7,7 @@ import {
   qualitiesIn,
   qualitySuffix,
 } from '@/shared/lib/music'
-import { MultiDropdown, NoteChoice, Segmented } from '@/shared/ui'
+import { MultiDropdown, NotePicker, Segmented } from '@/shared/ui'
 import { PatternCard, PlayerSetup } from '@/widgets/player-setup'
 import { PlayingSection } from '@/widgets/practice-player'
 import type { ChromaticChange } from '../model/chromatic-search'
@@ -48,10 +48,11 @@ export function ChromaticSetup({
           if (checked) onChange({ chords: [checked, ...others] })
         }}
       />
-      <NoteChoice
+      <NotePicker
         label={t('player:root')}
-        value={noteParam(choice.root)}
-        onChange={(root) => onChange({ root })}
+        value={choice.root}
+        onChange={(root) => onChange({ root: noteParam(root) })}
+        className="self-start"
       />
       <Segmented
         label={t('player:direction')}

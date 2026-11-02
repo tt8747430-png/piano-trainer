@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import type { PatternFit } from '@/entities/pattern'
 import type { ProgressionChoice } from '@/features/practice'
 import { keyParam } from '@/shared/lib/music'
-import { ChordSizeField, Labelled, KeyChoice } from '@/shared/ui'
+import { ChordSizeField, Labelled, KeyPicker } from '@/shared/ui'
 import { PatternCard, KeyWalkField, PlayerSetup } from '@/widgets/player-setup'
 import { PlayingSection } from '@/widgets/practice-player'
 import type { ProgressionChange } from '../model/progression-search'
@@ -26,7 +26,11 @@ export function ProgressionSetup({
   const { t } = useTranslation(['player', 'music'])
   return (
     <PlayerSetup figures={choice} fit={fit} onFigures={onChange}>
-      <KeyChoice value={keyParam(choice.key)} onChange={(key) => onChange({ key })} />
+      <KeyPicker
+        value={choice.key}
+        onChange={(key) => onChange({ key: keyParam(key) })}
+        className="self-start"
+      />
       <KeyWalkField value={choice.walk} onChange={(walk) => onChange({ walk })} />
       <Labelled label={t('music:chordSize.label')}>
         <ChordSizeField

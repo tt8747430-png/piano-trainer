@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { setScoreView } from '@/features/set-preference'
+import { pickIn } from '@/shared/test/pickers'
 
 describe('Walk the chords in the Player', () => {
   it('walks a scale’s chords as sheet music, titled by its scale', async () => {
@@ -51,9 +52,7 @@ describe('Walk the chords in the Player', () => {
     expect(
       await screen.findByRole('button', { name: 'Bar 1: Dm7', hidden: true }),
     ).toBeInTheDocument()
-    await user.click(
-      within(screen.getByRole('group', { name: 'Root' })).getByRole('radio', { name: 'E' }),
-    )
+    await pickIn(user, 'Root', 'E')
     expect(router.state.location.search).toMatchObject({ root: 'E', kind: 'dorian' })
   })
 

@@ -117,7 +117,7 @@ export function OctaveGrid({
                   'flex min-w-0 flex-1 items-center justify-center font-semibold whitespace-nowrap transition-colors duration-150 outline-none select-none focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring',
                   spellings.length > 1 ? 'text-sm' : 'text-base',
                   on
-                    ? 'bg-chosen text-foreground shadow-[inset_0_0_0_1px_var(--color-input)]'
+                    ? 'bg-selected text-selected-foreground'
                     : black
                       ? 'hover:bg-on-key-black/15'
                       : 'hover:bg-muted',

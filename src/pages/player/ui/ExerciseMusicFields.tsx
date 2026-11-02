@@ -7,8 +7,6 @@ import {
 } from '@/entities/exercise'
 import {
   chordFamily,
-  noteFromParam,
-  noteParam,
   printedSymbol,
   qualitySuffix,
   SCALE_FAMILIES,
@@ -16,7 +14,7 @@ import {
   spellScale,
   printedNote,
 } from '@/shared/lib/music'
-import { Dropdown, NamedSegmented, NoteChoice } from '@/shared/ui'
+import { Dropdown, NamedSegmented, NotePicker } from '@/shared/ui'
 import type { ExerciseChange } from '../model/exercise-search'
 
 /** The arpeggio types by feel's families: triads, then 7ths. */
@@ -39,10 +37,11 @@ export function ExerciseMusicFields({
   const { fields } = exercise
   return (
     <>
-      <NoteChoice
+      <NotePicker
         label={fields.root === 'key' ? t('player:key') : t('player:root')}
-        value={noteParam(choice.root)}
-        onChange={(root) => onChange({ root: noteFromParam(root) })}
+        value={choice.root}
+        onChange={(root) => onChange({ root })}
+        className="self-start"
       />
       {fields.kind || fields.quality || fields.start ? (
         <div className="flex flex-wrap gap-2">

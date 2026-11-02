@@ -33,6 +33,8 @@ export const practice: LocaleResources['practice'] = {
   chords: {
     written: 'Другие обозначения',
     builder: {
+      // The row of pickers over a chord: its root, quality and voicing.
+      chord: 'Аккорд',
       quality: 'Вид',
       suspension: 'Задержание',
       none: 'Нет',
@@ -128,6 +130,8 @@ export const practice: LocaleResources['practice'] = {
   scales: {
     show: { scale: 'Гамма', chords: 'Аккорды', key: 'Тональность' },
     label: 'Гамма',
+    // The row of pickers over a scale: its root and its kind.
+    which: 'Какая гамма',
     octaves: 'Октавы',
     startOn: 'Начать с',
     openInChords: 'Открыть в Аккордах',

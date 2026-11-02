@@ -13,7 +13,7 @@ import {
 } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { NoteChoice, type ShownKeys } from '@/shared/ui'
+import { PitchPicker, type ShownKeys } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Toggle } from '@/shared/ui/primitives/toggle'
 import { underMelody } from '../model/holding-keys'
@@ -55,10 +55,11 @@ export function KeyHarmonise({
         </h3>
       </div>
       <div className="grid-fields gap-x-10 gap-y-5">
-        <NoteChoice
+        <PitchPicker
           label={t('reharmonise.note')}
-          value={noteParam(note)}
-          onChange={(next) => onChange({ melody: next })}
+          value={pitchClassOf(note)}
+          onChange={(pc) => onChange({ melody: noteParam(spellInKey(pc, musicKey)) })}
+          className="self-end justify-self-start"
         />
         <Toggle
           className="self-end justify-self-start"

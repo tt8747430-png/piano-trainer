@@ -6,6 +6,7 @@ import { setKeyboard, setMidi } from '@/features/set-preference'
 import { createMemoryStorage, SHORTEST_PRESS_MS } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
+import { menuOptions, pickIn, pickMenu, pickerValue } from '@/shared/test/pickers'
 
 describe('Practice → Chords', () => {
   it('keeps the scroll when a choice changes the chord', async () => {
@@ -37,12 +38,10 @@ describe('Practice → Chords', () => {
     await renderApp('/practice/chords')
     expect(await screen.findByRole('heading', { level: 2, name: 'C' })).toBeInTheDocument()
     expect(screen.getByText('Major triad')).toBeInTheDocument()
-    const triads = screen.getByRole('radiogroup', { name: 'Quality' })
-    expect(within(triads).getByRole('radio', { name: 'Major' })).toBeChecked()
+    expect(pickerValue('Quality')).toBe('Major')
     const sizes = screen.getByRole('radiogroup', { name: 'Chord size' })
     expect(within(sizes).getByRole('radio', { name: 'Triad' })).toBeChecked()
-    const root = screen.getByRole('group', { name: 'Root' })
-    expect(within(root).getByRole('radio', { name: 'C' })).toBeChecked()
+    expect(pickerValue('Root')).toBe('C')
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveTextContent('3')
   })
@@ -51,11 +50,7 @@ describe('Practice → Chords', () => {
     const user = userEvent.setup()
     const { router, audio } = await renderApp('/practice/chords?root=G&size=7')
     expect(await screen.findByRole('heading', { level: 2, name: 'G7' })).toBeInTheDocument()
-    await user.click(
-      within(screen.getByRole('radiogroup', { name: 'Quality' })).getByRole('radio', {
-        name: 'Minor',
-      }),
-    )
+    await pickMenu(user, 'Quality', 'Minor')
     expect(router.state.location.search).toMatchObject({ root: 'G', triad: 'min', size: 7 })
     expect(await screen.findByRole('heading', { level: 2, name: 'Gm7' })).toBeInTheDocument()
     await user.click(screen.getByRole('radio', { name: '11th · Eleventh chord' }))
@@ -67,11 +62,7 @@ describe('Practice → Chords', () => {
     const user = userEvent.setup()
     const { audio, settingsStore } = await renderApp('/practice/chords')
     act(() => setKeyboard(settingsStore, { autoplay: false }))
-    await user.click(
-      within(await screen.findByRole('radiogroup', { name: 'Quality' })).getByRole('radio', {
-        name: 'Minor',
-      }),
-    )
+    await pickMenu(user, 'Quality', 'Minor')
     expect(await screen.findByRole('heading', { level: 2, name: 'Cm' })).toBeInTheDocument()
     expect(audio.played).toHaveLength(0)
   })
@@ -158,8 +149,7 @@ describe('Practice → Chords', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/chords?triad=sus4&size=13')
     expect(await screen.findByRole('heading', { level: 2, name: 'C13sus4' })).toBeInTheDocument()
-    const quality = screen.getByRole('radiogroup', { name: 'Quality' })
-    expect(within(quality).getByRole('radio', { name: 'Major' })).toBeChecked()
+    expect(pickerValue('Quality')).toBe('Major')
     const suspension = screen.getByRole('radiogroup', { name: 'Suspension' })
     expect(
       within(suspension)
@@ -273,8 +263,7 @@ describe('Practice → Chords', () => {
   it('chooses the root among the twelve notes', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/chords?triad=min')
-    const roots = await screen.findByRole('group', { name: 'Root' })
-    await user.click(within(roots).getByRole('radio', { name: 'E' }))
+    await pickIn(user, 'Root', 'E')
     expect(router.state.location.search).toMatchObject({ root: 'E', triad: 'min' })
     expect(await screen.findByRole('heading', { level: 2, name: 'Em' })).toBeInTheDocument()
   })
@@ -312,18 +301,16 @@ describe('Practice → Chords', () => {
   it('names every choice on screen, in the order a chord is built', async () => {
     await renderApp('/practice/chords?size=7')
     await screen.findByRole('heading', { level: 2, name: 'C7' })
+    // Its root, quality and voicing in one row of pickers, the rest as fields under it.
+    const row = screen.getByRole('group', { name: 'Chord' })
+    expect(
+      within(row)
+        .getAllByRole('button', { name: /: / })
+        .map((button) => button.getAttribute('aria-label')),
+    ).toEqual(['Root: C', 'Quality: Major', 'Voicing: Close'])
     expect(
       screen.getAllByRole('radiogroup').map((group) => group.getAttribute('aria-label')),
-    ).toEqual([
-      'Root',
-      'Quality',
-      'Chord size',
-      '7th',
-      'Suspension',
-      'Voicing',
-      'Inversion',
-      'Hands',
-    ])
+    ).toEqual(['Chord size', '7th', 'Suspension', 'Inversion', 'Hands'])
   })
 
   it('walks a chord the table names chromatically in the Player, from its root', async () => {
@@ -352,14 +339,13 @@ describe('Practice → Chords', () => {
     expect(screen.queryByRole('link', { name: /^Chromatic walk/ })).not.toBeInTheDocument()
   })
 
-  it('lays a chord out in the voicing chosen, its fingering under the keys, and greys the rest with why', async () => {
+  it('lays a chord out in the voicing chosen, its fingering under the keys, offering only what it takes', async () => {
+    const user = userEvent.setup()
     await renderApp('/practice/chords?size=7&seventh=major')
     await screen.findByRole('heading', { level: 2, name: 'CMaj7' })
-    const voicing = screen.getByRole('radiogroup', { name: 'Voicing' })
-    expect(within(voicing).getByRole('radio', { name: 'So What' })).toHaveAccessibleDescription(
-      /minor or suspended/,
-    )
-    await userEvent.click(within(voicing).getByRole('radio', { name: 'Drop 2' }))
+    // So What is a minor or suspended chord's: a major 7th is not offered it.
+    expect(await menuOptions(user, 'Voicing')).not.toContain('So What')
+    await pickMenu(user, 'Voicing', 'Drop 2')
     const fingering = await screen.findByRole('region', { name: 'Fingering' })
     expect(within(fingering).getByRole('table', { name: 'Left hand' })).toHaveTextContent('G1')
     expect(within(fingering).getByRole('table', { name: 'Right hand' })).toHaveTextContent('C1E2B5')
@@ -414,11 +400,7 @@ describe('Practice → Chords, a 7th chord’s tensions', () => {
     const user = userEvent.setup()
     await renderApp('/practice/chords?size=7')
     await user.click(await screen.findByRole('button', { name: '9 D' }))
-    await user.click(
-      within(screen.getByRole('radiogroup', { name: 'Quality' })).getByRole('radio', {
-        name: 'Minor',
-      }),
-    )
+    await pickMenu(user, 'Quality', 'Minor')
     expect(chips('Strong')).toEqual(['♭3 E♭', '♭7 B♭'])
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'D5' })).not.toHaveTextContent('9')

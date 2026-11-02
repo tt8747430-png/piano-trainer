@@ -38,6 +38,8 @@ export const practice = {
     written: 'Also written',
     // Chords builds a chord part by part.
     builder: {
+      // The row of pickers over a chord: its root, quality and voicing.
+      chord: 'Chord',
       quality: 'Quality',
       suspension: 'Suspension',
       none: 'None',
@@ -133,6 +135,8 @@ export const practice = {
   scales: {
     show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
     label: 'Scale',
+    // The row of pickers over a scale: its root and its kind.
+    which: 'Which scale',
     octaves: 'Octaves',
     startOn: 'Start on',
     openInChords: 'Open in Chords',

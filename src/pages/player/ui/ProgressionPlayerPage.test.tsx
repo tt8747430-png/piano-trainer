@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { PATTERNS_STORAGE_KEY } from '@/entities/pattern'
 import { createMemoryStorage } from '@/shared/lib'
+import { pickKey } from '@/shared/test/pickers'
 
 describe('A progression in the Player', () => {
   it('plays numerals in a key as sheet music, titled by them', async () => {
@@ -22,10 +23,9 @@ describe('A progression in the Player', () => {
     expect(
       await screen.findByRole('button', { name: 'Bar 1: Cm7', hidden: true }),
     ).toBeInTheDocument()
-    const key = screen.getByRole('group', { name: 'Key' })
-    await user.click(within(key).getByRole('radio', { name: 'G♭' }))
+    await pickKey(user, 'G♭ major')
     expect(router.state.location.search).toMatchObject({ key: 'Gb', p: 'ii-V-I' })
-    await user.click(within(key).getByRole('radio', { name: 'G' }))
+    await pickKey(user, 'G major')
     expect(router.state.location.search).toMatchObject({ key: 'G', p: 'ii-V-I' })
   })
 

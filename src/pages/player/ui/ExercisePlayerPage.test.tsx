@@ -2,6 +2,7 @@ import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { menuOptions, pickMenu, pickerValue } from '@/shared/test/pickers'
 
 describe('An exercise in the Player', () => {
   it('plays its rule as sheet music, titled by the exercise and what it is played on', async () => {
@@ -68,20 +69,16 @@ describe('An exercise in the Player', () => {
     const { router } = await renderApp('/play/exercise/scale')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
     const sheet = await screen.findByRole('dialog', { name: 'Setup' })
-    const right = within(sheet).getByRole('radiogroup', { name: 'Right hand starts on' })
-    expect(within(right).getByRole('radio', { name: 'C4' })).toBeChecked()
-    // Two octaves from C7 run past the top C: greyed, saying why.
-    const top = within(right).getByRole('radio', { name: 'C7' })
-    expect(top).toHaveAttribute('data-disabled')
-    expect(top).toHaveAccessibleDescription('Its run would go past the top of the keyboard')
-    await user.click(within(right).getByRole('radio', { name: 'C5' }))
+    expect(pickerValue('Right hand starts on')).toBe('C4')
+    // Two octaves from C7 run past the top C: not offered.
+    expect(await menuOptions(user, 'Right hand starts on')).not.toContain('C7')
+    await pickMenu(user, 'Right hand starts on', 'C5')
     expect(router.state.location.search).toMatchObject({ rhOctave: 5 })
-    const left = within(sheet).getByRole('radiogroup', { name: 'Left hand starts on' })
-    expect(within(left).getByRole('radio', { name: 'C2' })).toBeChecked()
+    expect(pickerValue('Left hand starts on')).toBe('C2')
     await user.click(within(sheet).getByRole('radio', { name: 'Right' }))
     expect(router.state.location.search).toMatchObject({ hands: 'rh' })
     expect(
-      within(sheet).queryByRole('radiogroup', { name: 'Left hand starts on' }),
+      within(sheet).queryByRole('button', { name: /^Left hand starts on/ }),
     ).not.toBeInTheDocument()
     const rest = within(sheet).getByRole('radiogroup', { name: 'Ticks between loops' })
     await user.click(within(rest).getByRole('radio', { name: '2' }))

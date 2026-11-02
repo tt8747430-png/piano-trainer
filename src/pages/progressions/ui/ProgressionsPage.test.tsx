@@ -4,6 +4,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import type { Sound } from '@/shared/lib/schedule'
 import { loadScoreView } from '@/shared/ui'
+import { pickKey } from '@/shared/test/pickers'
 
 /** The row's own Play, floating at the screen's foot. */
 const playButton = () =>
@@ -129,9 +130,7 @@ describe('Practice → Progressions', () => {
     const field = await screen.findByRole('textbox', { name: 'Numerals or chords' })
     await user.clear(field)
     await user.type(field, 'Am F C G')
-    await user.click(
-      within(screen.getByRole('group', { name: 'Key' })).getByRole('radio', { name: 'G' }),
-    )
+    await pickKey(user, 'G major')
     await rowIs(['Emvi', 'CIV', 'GI', 'DV'])
     expect(field).toHaveValue('vi IV I V')
   })
@@ -192,10 +191,9 @@ describe('Practice → Progressions', () => {
   it('re-spells every card in the key and mode chosen above them', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/progressions')
-    const key = await screen.findByRole('group', { name: 'Key' })
-    await user.click(within(key).getByRole('radio', { name: 'G' }))
+    await pickKey(user, 'G major')
     await waitFor(() => expect(chips(card('Axis of Awesome'))).toEqual(['IG', 'VD', 'viEm', 'IVC']))
-    await user.click(within(key).getByRole('radio', { name: 'Minor' }))
+    await pickKey(user, 'G minor')
     await waitFor(() =>
       expect(chips(card('Axis of Awesome'))).toEqual(['iGm', 'VIE♭', 'IIIB♭', 'VIIF']),
     )
@@ -222,10 +220,9 @@ describe('Practice → Progressions', () => {
     await waitFor(() =>
       expect(screen.getByRole('heading', { level: 2, name: '12-bar blues' })).toBeInTheDocument(),
     )
-    const mode = within(screen.getByRole('radiogroup', { name: 'Major or minor' }))
-    await user.click(mode.getByRole('radio', { name: 'Minor' }))
+    await pickKey(user, 'C minor')
     await waitFor(() => expect(router.state.location.search).toMatchObject({ key: 'Cm' }))
-    await user.click(mode.getByRole('radio', { name: 'Major' }))
+    await pickKey(user, 'C major')
     await waitFor(() => expect(router.state.location.search).not.toHaveProperty('key'))
     expect(router.state.location.search).toMatchObject({
       p: expect.stringMatching(/^I7-I7-I7-I7-IV7/),
@@ -271,8 +268,7 @@ describe('Practice → Progressions', () => {
   it('shows the jazz cadence’s minor line when the key turns minor, and back', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions?p=ii-V-I&size=sevenths')
-    const mode = within(await screen.findByRole('radiogroup', { name: 'Major or minor' }))
-    await user.click(mode.getByRole('radio', { name: 'Minor' }))
+    await pickKey(user, 'C minor')
     await waitFor(() =>
       expect(router.state.location.search).toEqual({
         key: 'Cm',
@@ -282,7 +278,7 @@ describe('Practice → Progressions', () => {
     )
     expect(screen.getByRole('heading', { level: 2, name: 'Jazz cadence' })).toBeInTheDocument()
     await rowIs(['Dm7♭5ii°', 'G7V', 'Cm7i'])
-    await user.click(mode.getByRole('radio', { name: 'Major' }))
+    await pickKey(user, 'C major')
     await waitFor(() =>
       expect(router.state.location.search).toEqual({ p: 'ii-V-I', size: 'sevenths' }),
     )
