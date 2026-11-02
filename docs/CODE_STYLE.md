@@ -69,7 +69,9 @@ before writing a control: a segmented choice, a dropdown, a row, a sheet, a tool
 shadcn primitives come from the CLI (`shadcn` skill), never by hand; the CLI's sizes under 44px are removed.
 
 **Choosing a control** (Apple's HIG): five or fewer short nouns are a `Segmented`; more, or longer, a `Dropdown`; on
-or off a `SwitchRow`; a note a `NoteChoice`, a key a `KeyChoice`, an inversion its drawn stack (`InversionChoice`);
+or off a `SwitchRow`; a pitch a `PitchPicker`, a note as written a `NotePicker`, a key a `KeyPicker`, several keys a
+`KeysChecklist`, an explorer's list of words a `MenuPicker` in its `PickerRow`; an inversion its drawn stack
+(`InversionChoice`);
 several on-or-offs on a sheet `ToggleTile`s; quick choices whose effect shows at once a popover by their button;
 settings changed less often a `Sheet`.
 

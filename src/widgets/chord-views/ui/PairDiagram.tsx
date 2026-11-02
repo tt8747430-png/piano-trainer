@@ -50,7 +50,7 @@ export function PairDiagram({
       aria-hidden={coming || gone || undefined}
       inert={coming || gone}
       onClick={onGo}
-      // One past an edge shows as it is drawn in: at rest it is out of sight, even in the gutters' fade.
+      // One past an edge shows as it is drawn in: at rest it is out of sight, even in the gutters.
       style={
         {
           '--slot': slot,

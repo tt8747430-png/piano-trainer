@@ -62,9 +62,7 @@ export {
   parseNoteName,
   pitchClassOf,
   plainSpelling,
-  ROOT_ACCIDENTALS,
   rootSpelling,
-  type RootAccidental,
   sameNote,
   writtenName,
   writtenOctave,
@@ -99,7 +97,6 @@ export {
   TRANSPOSITION_RANGE,
   writtenKey,
   isWrittenKey,
-  writtenKeyAccidentals,
   type Key,
   type KeyParam,
 } from './key'

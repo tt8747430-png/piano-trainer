@@ -11,13 +11,38 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
 
 ## Decision
 
-- **The Choosing Rule.** Five or fewer short choices are a segmented control. More, or longer names, are a pop-up
-  button that shows its label and its value (`Dropdown`); several of many, a pop-up that checks several
-  (`MultiDropdown`); a few, all in sight, `ToggleChips`. On or off is a switch, or a `ToggleTile` where several sit
-  together. A choice that has a picture is a tile wearing it (`PictureTiles`): a layout, a view, a swing feel, a
-  sign. A note is chosen as written (`NoteChoice`), a key by its tonic then Major · Minor (`KeyChoice`), an inversion
-  as its noteheads. Settings changed less often are a sheet on a phone and a popover on a laptop. Views of one thing
-  are tabs that are links (`NavTabs`).
+- **The Choosing Rule** (round 29, A5; Flat's, the reference apps' and Apple's):
+
+  | The choice                                                               | The control                                                                                |
+  | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+  | One of many (12 keys, chord qualities, scales, voicings, a tempo's rung) | a menu: the value with ⌃⌄ (`Dropdown` in a settings row, `MenuPicker` in a row of pickers) |
+  | Two to five, every one in sight                                          | a segmented control on the row (`Segmented`)                                               |
+  | On or off                                                                | a switch (`SwitchRow`), or a `ToggleTile` where several sit together                       |
+  | A number                                                                 | a stepper (`Stepper`)                                                                      |
+  | Several of many                                                          | a pop-up that checks several (`MultiDropdown`), or a checklist sheet                       |
+  | A few filters                                                            | chips (`ToggleChips`), and only there                                                      |
+
+  No strip that hides its options behind ‹ ›, and no scrolling strip fades at its edges. A choice that has a picture
+  is a tile wearing it (`PictureTiles`): a layout, a view, a swing feel, a sign; an inversion is its noteheads.
+  Settings changed less often are a sheet on a phone and a popover on a laptop. Views of one thing are tabs that are
+  links (`NavTabs`).
+
+- **Four pickers for notes and keys** (`shared/ui/pickers`), one look: a value with ⌃⌄ opening a popover, a bottom
+  sheet below 30rem.
+  - `PitchPicker`: a pitch alone (Intervals' root, the melody note): an octave of twelve cells drawn as the piano's
+    keys, each by its usual name (C D♭ D E♭ E F F♯ G A♭ A B♭ B, as MuseScore's and Flat's key lists name them).
+  - `NotePicker`: a root as written (Chords', a scale's, a walk's, an exercise's): the same octave, a black key's cell
+    split "C♯ | D♭", a tap on a half choosing that spelling; no E♯, F♭, B♯ or C♭.
+  - `KeyPicker`: a key (a progression's, an example's, the Chord finder's): the circle of fifths, majors outside and
+    relative minors inside, each wedge its name over its signature's count, the keys written two ways split (B / C♭,
+    F♯ / G♭, C♯ / D♭ and G♯m / A♭m, D♯m / E♭m, A♯m / B♭m), a wedge taken then "Select: D♭ major". Scales and keys'
+    Key view shows the same circle (`KeyCircle`) in place, a tap choosing at once. The score editor's key signature
+    stays its grid of signs (`KeySignaturePicker`, ADR 0114).
+  - `KeysChecklist`: several keys (a drill's Custom): the 15 signatures as rows "C major / A minor", Select all ·
+    Clear all, Apply.
+  - An explorer's choices stand in one row of them (`PickerRow`): `Root C ⌃⌄ · Quality Major ⌃⌄ · Voicing Close ⌃⌄`,
+    wrapping on a narrow phone. A list of words in that row is a `MenuPicker`; an option the thing cannot take is
+    left out of it.
 - **A row that chooses is never a row that leaves.** `RowLink` is only a link; `RowButton` opens a sheet over its
   page.
 - **One action at the thumb.** A screen's job floats in the thumb's reach (`FloatingActions` in the shell's one
@@ -82,4 +107,4 @@ A new option has one obvious form by this rule. A test reaches a folded action b
 - r26 — Menus, sheets, pop-ups and pages told apart; real menus; Edit ⇄ Done; the keyboard's bars on its top edge as
   iOS pans the page (2026-11-01).
 - r28 — The floating buttons' place and names are no longer settings (a developer's words in General): they stand in the middle, icons named by their tooltips; the settings store's version 17 (2026-11-01).
-- r29 — The Choosing Rule's table (menu, segmented, switch, stepper, chips for filters) and four shared pickers: pitch, spelled note, key (the circle of fifths), keys checklist; the step strips go (decided 2026-11-02, being built in round 29; spec `.scratch/r29/key-picker/spec.md`).
+- r29 — The Choosing Rule's table (menu, segmented, switch, stepper, chips for filters) and four shared pickers: pitch, spelled note, key (the circle of fifths), keys checklist; the step strips go (decided 2026-11-02, built in round 29; spec `.scratch/r29/key-picker/spec.md`).

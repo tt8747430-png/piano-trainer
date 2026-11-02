@@ -39,7 +39,7 @@ export function PublicShelf({
       </div>
       <ul
         aria-labelledby={id}
-        className="fade-scroll-x relative -mx-4 flex snap-x scroll-px-4 gap-2 overflow-x-auto overscroll-x-contain px-4 pb-1 scrollbar-none"
+        className="relative -mx-4 flex snap-x scroll-px-4 gap-2 overflow-x-auto overscroll-x-contain px-4 pb-1 scrollbar-none"
       >
         {entries.slice(0, SHELF).map((entry) => (
           <ShelfCard key={entry.id} entry={entry} />

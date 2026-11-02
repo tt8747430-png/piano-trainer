@@ -17,8 +17,8 @@ const REST = '\u{1D13D}'
  * rest where the music turns to none (`stripNames`), the beat sounding filled with the ink, the
  * loop's beats on its band. While Listen plays it slides with its clock frame by frame
  * (`stripShift`), the beat sounding's middle a third of the way in as it starts; taken to a beat (a
- * tap, a step) it slides there; under reduced motion it stands still at each beat. Its frame fades
- * at both edges, so a name running past one is never cut hard, and it scrolls nothing: it is moved.
+ * tap, a step) it slides there; under reduced motion it stands still at each beat. Its edges are
+ * plain, never faded (R13), and it scrolls nothing: it is moved.
  * Dragged sideways (a finger, a mouse, a trackpad), it scrubs through the music and glides on after
  * a flick, settling on a beat at its mark, where the cursor goes (`useStripMotion`); up and down is
  * the page's. A beat tapped takes the cursor there (`onBeat`, the tick it is played at). It is a picture of where
@@ -70,10 +70,7 @@ export function BeatStrip({
       aria-hidden
       data-slot="beat-strip"
       {...taps}
-      className={cn(
-        'touch-pan-y overflow-hidden overscroll-x-none select-none [mask-image:linear-gradient(to_right,transparent,#000_1.5rem,#000_calc(100%-1.5rem),transparent)]',
-        className,
-      )}
+      className={cn('touch-pan-y overflow-hidden overscroll-x-none select-none', className)}
     >
       <div ref={row} className="relative flex w-max will-change-transform">
         {bars.map(({ played, cells }, index) => {

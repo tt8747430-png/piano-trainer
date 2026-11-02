@@ -419,8 +419,16 @@ every piece is shown in the Admin area's Components):
 
 ### Choices
 
-Five or fewer short nouns are a segmented control; more, or longer, a pop-up button; on or off a switch; a picture
-where it says it faster. A setting is never hidden behind a pop-up when it fits in sight.
+**The control for each choice** (A5, from Flat, the reference apps and Apple's HIG; ADR 0061):
+
+- one choice among many (12 keys, chord qualities, scales, voicings) → a menu: the value with ⌃⌄;
+- two to five, every one in sight → a segmented control on the row;
+- on or off → a switch;
+- a number → a stepper;
+- chips → only for a few filters.
+
+Never a strip that hides options behind ‹ ›, and no scrolling strip fades or blurs at its edges. A picture where it
+says it faster. A setting is never hidden behind a pop-up when it fits in sight.
 
 - **Segmented** (`Segmented`): a sand track, 4px inset; unchosen segments soft ink, the chosen a card-paper thumb in
   the control line. Two that could be mistaken for each other name themselves on screen (`NamedSegmented`).
@@ -429,19 +437,27 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
   a hairline. `MultiDropdown` checks several. Under a field's printed name it is `bare`, its value alone.
 - **Toggle chips** (`ToggleChips`): several of a few, all in sight; on is ink on sand in an ink line.
 - **Toggle tiles** (`ToggleTile`, `PictureTiles`): an icon or a drawing over its name; on, the learned wash.
-- **Strip** (`StepStrip`): one of many in a row that scrolls inside a sand track, ‹ and › at its ends, the chosen a
-  card-paper thumb kept in the middle, the edges fading; a greyed option stays in the row. A chord's quality, its
-  voicing and a scale's kind are strips.
-- **Note, key and inversion choices** (`NoteChoice`, `KeyChoice`, `InversionChoice`): a strip of spellings, C C♯ D♭
-  D … B, both names of a black key side by side; the tonic's strip, only keys a signature writes, then Major ·
-  Minor; an inversion as its stack of noteheads.
+- **Pickers** (`shared/ui/pickers`): the pop-up button's look, its label in soft ink, its value in ink, ⌃⌄; it opens
+  a popover, or a bottom sheet below 30rem. An explorer's pickers stand in one row at its top (`PickerRow`), wrapping
+  at 320.
+  - **Menu** (`MenuPicker`): a plain list, the chosen checked; a quality, a voicing, a scale's kind.
+  - **Pitch** (`PitchPicker`) and **note** (`NotePicker`): an octave of twelve cells in three rows of four, white keys
+    on key-white paper and black keys on key-black, the chosen in the chosen fill. A pitch's cell is its usual name
+    (C D♭ D E♭ E F F♯ G A♭ A B♭ B); a note's black key is split "C♯ | D♭", a half for each spelling.
+  - **Key** (`KeyPicker`): the circle of fifths, majors outside and minors inside, each wedge its name over its
+    signature's count, the keys written two ways split in halves; the key taken wears the tonic's colour, and
+    "Select: D♭ major" confirms it. The Key view draws the same circle in place (`KeyCircle`), its key's chords on
+    their places in the scale's colour.
+  - **Keys** (`KeysChecklist`): a row opening a sheet of the 15 signatures, "C major / A minor", each checked, Select
+    all · Clear all, Apply at the foot.
+- **Inversion** (`InversionChoice`): its stack of noteheads.
 - **Switch:** a sand track in the control line; on, grass.
 - **Only what applies is offered.** A choice the thing cannot take is left out. A greyed choice says why in its
   tooltip.
 - **Chord names in text** (`ChordText`): the root in soft ink, the quality strong, its numbers raised (`C maj⁷`), a
   bass after a slash soft again: a library card's chips, the key's chords linked to Chords.
 - **Tabs** (`tab-strip`, `tab`): the views of one thing under the screen's title, 48px, the chosen in ink over an ink
-  underline, scrolling sideways with faded edges.
+  underline, scrolling sideways, its edges never faded.
 
 ### Rows, cards and sheets
 
