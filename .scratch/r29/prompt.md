@@ -1100,6 +1100,19 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - **What Chordify has that we lack or do differently:** go through Chordify's views and
       controls (chord diagrams' size, the timeline, loop by dragging a range, transpose, simplify, the chord summary, the count-in, the tempo, MIDI follow) and list
       each, then build or fix it; the strip's edge fade goes (rule 13).
+    - **The Diagrams view's summary:** it lists each chord once, in the order it first sounds
+      (`SummaryGrid`), so it is neither the song's order nor a learning list, and a card tapped
+      sends the cursor to that chord's next place after the cursor, else back to its first
+      (`chordNear` in `chord-views/model/chords-from.ts`): the Player leaps to the end or back to
+      the start. Make it two things, each clear:
+      - **Chords in this song** (Chordify's summary): each chord once, with how often it sounds
+        and where (its bars as small marks under the card), a tap plays and shows the chord
+        without moving the music; a long press or its ⋯ lists its places, each one a jump;
+      - **The song's chords in order**, as played (the repeats taken), one card per change in a
+        wrapping grid with bar numbers and section names, the one sounding marked and followed
+        (the autoscroll rule above), a tap moving the cursor there: the order the learner plays.
+      - Tests: tapping a card in "Chords in this song" never moves the cursor; the order view
+        matches the beat strip's changes one for one.
     - **Edit in every view:** the editor edits only the sheet music. The chord views are the same
       song: an editor (or the learner, in their version) can edit them where they are shown, as
       Chordify's chord editing does:
