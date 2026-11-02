@@ -626,8 +626,8 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       - **Sections in one order and style on every tab:** what it is (the header), see and hear it
         (piano, staff), play it (fingering), use it (chords, progressions, songs), with one heading
         style (rule 29) and one card family.
-      - **Tab names say what's in them:** "Notes · Chords · Key" (or "Scale · Chords in it · The
-        key"), checked with the clarify skill.
+      - **Tab names say what's in them:** "Notes · Harmony · Key" (Part A 32), checked with the
+        clarify skill.
       - Done: the three tabs side by side at 390 and 1280, the same header and the seven columns
         lining up across them.
 22. **Intervals** (`scratchpad/r29/scales/intervals-*`). Known:
@@ -922,6 +922,57 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - Find every other case: record each place at 390 and 1280 (Playwright video) while changing
       each choice; any frame where something blanks, jumps or moves that wasn't touched is a row in
       the audit. Done: the recordings, before and after.
+32. **The theory pages: one owner per idea, no copies.** Scales and keys has a tab called
+    "Chords", the same name as the Chords page, so "Chords" means two places. Today the same idea
+    and the same control live on several pages:
+
+    | Idea or control | Where it is today |
+    |---|---|
+    | Root / key picker | Chords, Scales, Intervals, Progressions (four pickers, three designs) |
+    | Chord size (triads, 7ths, 9ths) | Chords, Scales' Chords tab, Progressions |
+    | Inversion | Chords ("Right hand from"), Scales' Chords tab, Progressions ("Starting position"), Exercises |
+    | Voicing | Chords (Rootless, Locked hands…), Progressions (Voice-led · Block) |
+    | Hands | Chords, Scales, Accompaniment |
+    | Tempo | Scales (a slider), Metronome, the Player |
+    | A key's seven chords | Scales' Chords tab (cards), Key tab (degrees table), Progressions (function strip), the circle |
+    | Relative key | Scale tab and Key tab |
+    | "Which chords hold this note" | Key tab (Harmonise a melody note), Chord finder (keys it is in) |
+    | Progressions of a key | Scales' Chords tab, Progressions' Library |
+    | Walks | Chromatic walk (Chords), Walk the chords (Scales), Through the keys (Progressions) |
+
+    The rule: each idea has one page that owns it in full; anywhere else it is a link that opens
+    that page already set to it, never a second copy of its controls.
+    - **Chords** owns one chord: build it, its voicing, inversion, hands, fingering, sound.
+    - **Scales and keys** owns a scale and a key: tabs **Notes · Harmony · Key** ("Harmony" replaces
+      the clashing "Chords"). Notes: the run, its fingering, how it plays. Harmony: the key's
+      chords on the seven-degree spine (Part A 21), their functions, borrowed chords, harmonise a
+      melody note; a chord tapped opens Chords set to it (the "Open in Chords" chips go). Key: the
+      circle, signature, relative, parallel, neighbours, modes, and the songs and studies in it.
+      The Key tab's degrees table moves into Harmony; the relative key appears once.
+    - **Progressions** owns a sequence of chords in a key: its library, voicing and walks; Scales'
+      Harmony shows "Progressions in this key" as at most four rows and "Show all n", opening
+      Progressions in that key.
+    - **Intervals** owns two notes; **Chord finder** owns naming what you play (a Tool, Part B 11),
+      and "keys it is in" opens Scales' Key tab.
+    - **Walks** are one exercise kind in the Player ("Walk: chromatic · through the scale's chords ·
+      through the keys"), offered from each page with the direction chosen there.
+    - **The shared controls are one component each** (the key picker, chord size, inversion,
+      voicing, hands, tempo), so where two pages do need the same control, it is the same one.
+
+    **Settings for the theory pages** (Part A 24, from the registry):
+    - **In Settings, app-wide ("Notation and names"),** because every page shows them: note names
+      (C D E · До Ре Ми · German H), chord symbols (Cmaj7 · CΔ7 · CM7, m · −), numerals (I ii iii ·
+      I II III with qualities), sharps or flats for the black keys by default, the function colours
+      on or off, and degrees on the keys on or off.
+    - **On each page's Settings page,** only its own defaults: Chords (voicing, hands, inversion,
+      how a chord plays, staff clefs); Scales and keys (octaves, rhythm, tempo, hands, fingering
+      rule, which scale families are listed, the chord size the Harmony tab shows); Intervals (how
+      they play, compound intervals); Progressions (written as, voicing, chord size, lead-ins,
+      move smoothly); Chord finder (remember, over the bass, keys it is in, scale on the keys).
+    - Nothing that is a page's current choice (this chord, this key) is a setting; nothing that is
+      a setting is a control on the page as well (rule 18).
+    - Done: the table above re-checked, each row with one owner; a test that no two pages render
+      the same setting (the registry's test, Part A 10).
 
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
@@ -1092,11 +1143,11 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   - no layout that can break the page.
 
 ## Rounds
-1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–31: one component each, the app bar,
+1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–32: one component each, the app bar,
    action placement, page/sheet/menu, controls, words, navigation (Back as up, the Search palette, the
    sidebar's selected look), shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout and two panes, pictures and icons, page names, account and
-   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal, an own song's page, imports and exports, fingering, nothing flickering or jumping.
+   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal, an own song's page, imports and exports, fingering, nothing flickering or jumping, the theory pages' owners and settings.
 2. **Profile** (Part B 1).
 3. **Copy and the rights checkbox** (Part B 2).
 4. **Explore in Songs and the built-in folders' rules** (Part B 3, Decided 8 and 10).
