@@ -1221,35 +1221,6 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - **The Player's settings page** (Part B 7) is Flat's Playback options plus the reference's
       Display: Audio playback (staves, volumes, the recording), Metronome, Playback speed,
       Display (clef, countdown, cursor, scroll, keyboard, fingering), each a row to its page.
-39. **The Metronome, against the metronome apps players use** (Soundbrenner, Pro Metronome,
-    Tempo; Flat's and the Player's own). Read in `shared/lib/schedule/metronome.ts` and
-    `shared/api/audio/web-audio.ts`:
-    - **Time:** only six meters (4/4, 3/4, 2/4, 2/2, 6/8, 1/4); 6/8 counts six eighths at the
-      tempo set, so 6/8 at 120 clicks eighths at 120, where players set the dotted quarter.
-      Any signature from the shared time control (Part A 34), the tempo in the meter's beat
-      (dotted quarter in 6/8, 9/8, 12/8; half in 2/2), and odd meters grouped (5/8 as 3+2 or 2+3,
-      7/8 as 2+2+3) with the accent on each group.
-    - **Beats you set:** tap a beat square to cycle it accented · normal · silent, as Soundbrenner
-      does; today only the first beat is accented and the squares only show.
-    - **Subdivision:** none today. Quarter · 8ths · triplets · 16ths · swing 8ths, each with its own
-      softer sound.
-    - **Sounds:** Click, Beep and Drums, all synthesised (a falling sine for the kick, white noise
-      for the snare and hat), so the drums sound like a toy. Recorded samples (woodblock, clave,
-      click, cowbell, a spoken count "one two three") with the synthesised voices as fallback,
-      each sampled at the accent and normal levels; the Drums pattern per meter checked against
-      real grooves (4/4: kick 1 and 3, snare 2 and 4, hat on 8ths; 3/4: kick 1, snare 2 and 3;
-      6/8: kick 1, snare 4, hat on every 8th), the hat on the subdivision, not every beat.
-    - **Volume and visual:** its own volume, a full-screen flash on the beat (optional), and the
-      beat squares following the sound exactly (scheduled on the audio clock, the light drawn
-      from the same clock).
-    - **Practice modes:** the bar trainer (play n bars, mute m) exists; add the speed trainer
-      (from one tempo to another by n BPM every m bars) and a tempo list (saved tempos, a
-      song's tempo from the library).
-    - **Look:** one stepper, one menu style (Part A 25), the tempo large with its word, Tap tempo.
-    - **One engine** for the Metronome page, the Player's click and count-in and the quick
-      metronome (Part B 11); its settings are one set (Part A 24).
-    - Tests: each meter's beats, groups and accents; subdivisions; the drum pattern per meter;
-      the flash and the sound on the same clock; a recording of each sound, before and after.
 36. **Focus and keyboard walking.** Tab through every screen: the focus ring is drawn several
     ways (the note toolbar's rounded bracket in `owner/64`, outlines, rings, fills) and some
     controls get none. One focus style (DESIGN.md), on every control, never clipped by its
@@ -1321,6 +1292,36 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - Done: a recording of Diagrams, Grid and Chords over lyrics playing, scrolled by hand and
       returning to the playhead; an edit in each view kept after reload; tests for scroll-only
       browsing and tap-to-choose.
+
+39. **The Metronome, against the metronome apps players use** (Soundbrenner, Pro Metronome,
+    Tempo; Flat's and the Player's own). Read in `shared/lib/schedule/metronome.ts` and
+    `shared/api/audio/web-audio.ts`:
+    - **Time:** only six meters (4/4, 3/4, 2/4, 2/2, 6/8, 1/4); 6/8 counts six eighths at the
+      tempo set, so 6/8 at 120 clicks eighths at 120, where players set the dotted quarter.
+      Any signature from the shared time control (Part A 34), the tempo in the meter's beat
+      (dotted quarter in 6/8, 9/8, 12/8; half in 2/2), and odd meters grouped (5/8 as 3+2 or 2+3,
+      7/8 as 2+2+3) with the accent on each group.
+    - **Beats you set:** tap a beat square to cycle it accented · normal · silent, as Soundbrenner
+      does; today only the first beat is accented and the squares only show.
+    - **Subdivision:** none today. Quarter · 8ths · triplets · 16ths · swing 8ths, each with its own
+      softer sound.
+    - **Sounds:** Click, Beep and Drums, all synthesised (a falling sine for the kick, white noise
+      for the snare and hat), so the drums sound like a toy. Recorded samples (woodblock, clave,
+      click, cowbell, a spoken count "one two three") with the synthesised voices as fallback,
+      each sampled at the accent and normal levels; the Drums pattern per meter checked against
+      real grooves (4/4: kick 1 and 3, snare 2 and 4, hat on 8ths; 3/4: kick 1, snare 2 and 3;
+      6/8: kick 1, snare 4, hat on every 8th), the hat on the subdivision, not every beat.
+    - **Volume and visual:** its own volume, a full-screen flash on the beat (optional), and the
+      beat squares following the sound exactly (scheduled on the audio clock, the light drawn
+      from the same clock).
+    - **Practice modes:** the bar trainer (play n bars, mute m) exists; add the speed trainer
+      (from one tempo to another by n BPM every m bars) and a tempo list (saved tempos, a
+      song's tempo from the library).
+    - **Look:** one stepper, one menu style (Part A 25), the tempo large with its word, Tap tempo.
+    - **One engine** for the Metronome page, the Player's click and count-in and the quick
+      metronome (Part B 11); its settings are one set (Part A 24).
+    - Tests: each meter's beats, groups and accents; subdivisions; the drum pattern per meter;
+      the flash and the sound on the same clock; a recording of each sound, before and after.
 
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
