@@ -659,8 +659,39 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       One settings-style group (rule 20), the rarely changed ones (Written as, Voicing, Mode)
       behind a "Options" fold or the Player's settings page (rule 18).
     - **Function · Root motion** is a segmented control that only changes the chord strip under
-      it; the strip's colours (green T, purple D, peach S) are a colour code used nowhere else
-      and not explained: a legend, or the same colours the Chords page uses.
+      it, and neither word says what it is. They are two analyses of the same chords:
+      - **Harmonic function:** each chord's role in the key: tonic (T, home, at rest),
+        subdominant (S, moving away), dominant (D, tension that pulls home). Today shown as
+        coloured chips (green T, purple D, peach S) with no legend, a colour code used nowhere
+        else;
+      - **Root movement:** how the root moves from one chord to the next (down a 5th, the
+        strongest pull; down a 3rd, two shared notes; up a 2nd, none shared), today shown only
+        when chosen, with a legend under it.
+
+      Show both at once, not behind a toggle: under the chords, a row of function labels (T S D,
+      in the function colours of Part A 21 and 32, with a legend "Tonic · Subdominant ·
+      Dominant") and between each pair of chords the movement as a small labelled arrow (↓5,
+      ↓3, ↑2), each name with one plain ⓘ (`music.harmony` in the locales holds today's words;
+      rewrite them with the clarify skill against the theory books).
+    - **The page's structure,** tabs like Scales and keys': **Progression · Library · Connect two
+      chords**:
+      - **Progression:** the chords (typed as numerals or chord symbols, or tapped in from the
+        key's chords), the key picker (Part A 5), Play and the transport, the staff and the
+        piano, the analysis above, then "Practise in every key" (today's "Through the keys"
+        walks) and "Songs with this progression" (hidden when empty);
+      - **Library:** the progressions as a list with genre chips (above), a row opening it in
+        Progression;
+      - **Connect two chords:** today's "Between two chords" (secondary dominants, tritone
+        substitutes, ii–V, chromatic approaches, borrowed chords), from a chord to a chord with
+        two chord pickers.
+    - **Its options, named as musicians name them** (on the page only what changes the music
+      shown; the rest on its Settings page, Part A 24):
+      - on the page: **Chord size** (triads · 7ths · 9ths), **Approach chords** (none · secondary
+        dominants · ii–V; today "Lead into each chord: No · By its V · By its ii–V");
+      - on Settings: **Written as** (chord symbols · Roman numerals · Nashville numbers),
+        **Voicing** (block · voice-led; today's "Move smoothly" is voice leading, Part A 35),
+        **First chord's inversion** (today "Starting position"), **Mode** (major or minor, today
+        "Major or minor" in a menu with an ⓘ).
     - **The Play button** floats on the right of the chord strip, a third place for it.
     - **Two titles:** "Progressions" in the app bar and "Axis of Awesome" with a subtitle.
     - **Headings:** "Library" (serif with ⌄), "Pop" (serif, no fold), "Through the keys" (small
