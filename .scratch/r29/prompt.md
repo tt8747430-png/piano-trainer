@@ -392,11 +392,33 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
      spellings today (C, C♯, D♭, D, D♯, E♭ … B♭, B): the same black key twice. One shared key
      picker shows the 12 keys of an octave, drawn as an octave of piano keys or a 12-cell grid,
      each with its usual name (C, D♭, D, E♭, E, F, F♯, G, A♭, A, B♭, B; for minor keys C♯m, E♭m,
-     F♯m, G♯m, B♭m as key signatures name them). Where the spelling changes the theory (a chord's
-     or scale's notes, a key signature), a small ♯ · ♭ switch under the picker respells the black
-     keys; the choice is remembered. Check the usual names against Flat, MuseScore and the circle
-     of fifths before building, and use the same picker on every page (Chords, Scales and keys,
-     Intervals, Progressions, Accompaniment, the Quiz setup, the editor's key and Transpose).
+     F♯m, G♯m, B♭m as key signatures name them). Check the usual names against Flat, MuseScore and
+     the circle of fifths before building. Built as the references in `piano-data/reference-apps`
+     do it:
+     - **One compact row of pickers** at the top of an explorer, each a value with ⌃⌄ that opens a
+       menu (Chord Trainer's and the journey app's "C ⌃⌄ · Natural ⌃⌄ · Major ⌃⌄"; Ultimate
+       Piano's toolbar "Root C · Type Maj · Inversion Root · Hand RH · Octave − 4 +"). It replaces
+       the stacked strips and segmented rows; the rarely changed ones go in a fold.
+     - **The key menu is an octave of 12 cells.** A white key shows its letter. A black key's
+       cell is split in two, "C♯ | D♭", as Ultimate Piano's circle writes "C♯ / D♭": a tap on a
+       half chooses that spelling, so the spelling is visible and chosen in one tap, with no
+       separate ♯/♭ control and no impossible names (E♯, F♭). Where only the pitch matters
+       (Intervals' root, the Melody note, Start on) the cell isn't split.
+     - **Keys (Scales and keys' Key tab, the editor's key, Transpose):** the circle of fifths is
+       the picker, as Ultimate Piano's: majors outside, relative minors inside, each wedge with
+       its key signature, the enharmonic wedges split (B / C♭, F♯ / G♭, C♯ / D♭), and a "Select:
+       C" button. We already draw the circle on the Key tab: make it choose.
+     - **Choosing several keys (Quiz and Exercises setup):** Chord Trainer's Keys sheet: the 15
+       key signatures as "C major / A minor" rows with checkboxes, Select all · Clear all, and
+       Apply; no row of 17 chips.
+     - **Feedback at once, on the same screen**, as the references show it: the moment a key is
+       chosen, its facts appear as chips ("C major · No sharps or flats", "D major · 2 sharps:
+       F♯ C♯"), its notes as note chips (C5 E5 G5 in Chord Trainer), the staff with the key
+       signature, the keys lit on the on-screen piano and its diatonic chords as coloured chips
+       (Ultimate Piano), each chip playing its sound when tapped.
+     - Used on every page (Chords, Scales and keys, Intervals, Progressions, Accompaniment, the
+       Quiz and Exercises setup, the editor's key and Transpose) from one component in
+       `shared/ui`.
    - Remove the edge blur: `tab-strip` and `fade-scroll-x` in `src/styles/theme.css`, `StepStrip`,
      `BeatStrip`, `ChordPair`.
 6. **Words.** Check every string in en and ru against `docs/UBIQUITOUS_LANGUAGE.md`: wrong terms,
