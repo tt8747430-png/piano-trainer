@@ -397,6 +397,15 @@ every piece is shown in the Admin area's Components):
 - **Every New … is one sheet** (`NewSheet`, round 25, after Flat's new score): the name first, then its few
   properties as soft parts (`SheetPart`: a name, a line, the choice: drawn tiles, chips, a `Stepper`, the key
   signature grid), one Create button pinned at the foot named for the act. Never a bare text field or a page.
+- **Page, sheet or menu (A4), as Apple's guidelines, Noji and Flat draw the line:** a *page* for settings and
+  anything with many fields (an item's Settings, a kind's settings, Publish); a *sheet* for creating one thing or
+  one focused choice (every New …, Export…, a picker on a phone); a *menu* for one-tap commands (⋯, a row's
+  long-press). A sheet never holds a second sheet's worth of settings; a menu never holds a setting.
+- **An act on an item is a button, never a switch (R19)**, as Apple Music, Spotify, Noji and Quizlet place them:
+  Favourite is the ♡ on the item's card and in the Player's ⋯; "Add to favourites" / "Remove from favourites" in
+  a row's ⋯ and long-press menus; a swipe on a row; Favourite in Select's bar. Learned the same: its button on
+  the card, its command in the menus. An item's Settings page holds what the item *is*, not what the learner
+  does with it.
 - **One accent per screen:** the honey fill is the primary action alone; the selection and states have their own
   colours.
 - **Feedback for every act:** pressed states, a toast that says what happened, skeletons while loading, an empty

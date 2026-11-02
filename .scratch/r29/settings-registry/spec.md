@@ -60,3 +60,17 @@ Settings and in Settings) and nothing stops a third. Practice pages have no Sett
 ## ADR
 0038 (saved stores): settings are declared once in the registry; 0061 (controls): the five row kinds and the
 picture rule. `pt-settings` version bumps if a field moves or is renamed.
+
+## As built in round 1 (amends the above)
+- `entities/settings/model/registry.ts`: `SETTINGS_PAGES` (the homes that exist now: general,
+  keyboard-and-recording, midi, score-editor, player, metronome, chord-finder, trainers; the Practice pages'
+  own ids join in round 2 with A24), `NOT_PREFERENCES` (screen state kept in the store), and `SETTING_HOMES`
+  typed over every field of `SettingsState`, so a new field doesn't compile until it has a home.
+- Lesson reading's home is Settings › General (R18's own example: one row needs no page); a lesson's Settings
+  shows "Reading: One page ›" linking there.
+- The editor's Sound popover drops its copy of Recording's switches for a row to Settings › Keyboard and
+  recording.
+- The no-duplicate test is `src/app/settings-homes.test.ts`: every file that calls a preference command must
+  sit in its setting's home page's folders; the exceptions list (each with the round that removes it) may only
+  shrink, and a stale exception fails. Rendering every page and collecting `data-setting` keys (the spec's
+  first idea) is left for the two-pane Settings rebuild (R20), when the pages are drawn from the registry.

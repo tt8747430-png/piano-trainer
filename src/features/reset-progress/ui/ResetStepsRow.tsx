@@ -2,17 +2,7 @@ import { RotateCcw } from 'lucide-react'
 import { useState } from 'react'
 import { useProgressStoreApi } from '@/entities/progress'
 import type { StepId } from '@/entities/step'
-import { RowButton, say } from '@/shared/ui'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/shared/ui/primitives/alert-dialog'
+import { ConfirmDialog, RowButton, say } from '@/shared/ui'
 import { resetSteps } from '../reset-steps'
 
 /**
@@ -45,27 +35,18 @@ export function ResetStepsRow({
         destructive
         onClick={() => setAsking(true)}
       />
-      <AlertDialog open={asking} onOpenChange={setAsking}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{words.title}</AlertDialogTitle>
-            <AlertDialogDescription>{words.body}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{words.cancel}</AlertDialogCancel>
-            <AlertDialogAction
-              variant="destructive"
-              onClick={() => {
-                resetSteps(store, steps)
-                setAsking(false)
-                say(words.done)
-              }}
-            >
-              {words.confirm}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmDialog
+        open={asking}
+        onOpenChange={setAsking}
+        title={words.title}
+        body={words.body}
+        action={words.confirm}
+        cancel={words.cancel}
+        onConfirm={() => {
+          resetSteps(store, steps)
+          say(words.done)
+        }}
+      />
     </>
   )
 }

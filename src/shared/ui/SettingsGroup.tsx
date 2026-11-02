@@ -6,11 +6,13 @@ import { InfoTip } from './InfoTip'
  * A group of settings, as an app's settings read (iOS's grouped list, memory-palaces' `SettingsSection`):
  * its name small over one card, what the group is for in the ⓘ beside it where its name does not say
  * (ADR 0096), its rows in the card. `flush` rows (a `RowLink`, a `ChoiceRow`, a `SwitchRow`) run to the
- * card's edges; fields sit inset. Untitled, it is a page's first card (the account).
+ * card's edges; fields sit inset. Untitled, it is a page's first card (the account). A `footnote` is
+ * the one line a group may have under its card (R20), as iOS's.
  */
 export function SettingsGroup({
   title,
   info,
+  footnote,
   flush = false,
   bare = false,
   children,
@@ -18,6 +20,7 @@ export function SettingsGroup({
 }: {
   title?: string
   info?: ReactNode
+  footnote?: string
   flush?: boolean
   /** Its own cards under its name (a list of instruments' families), no card round them. */
   bare?: boolean
@@ -45,6 +48,7 @@ export function SettingsGroup({
           {children}
         </div>
       )}
+      {footnote ? <p className="px-3 text-sm text-muted-foreground">{footnote}</p> : null}
     </section>
   )
 }

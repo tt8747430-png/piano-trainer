@@ -1237,7 +1237,11 @@ describe('the score editor', () => {
     )
     await user.click(within(dock).getByRole('button', { name: 'Sound' }))
     const settings = await screen.findByRole('dialog', { name: 'Sound' })
-    expect(within(settings).getByRole('switch', { name: 'Metronome' })).toBeInTheDocument()
+    // Recording's switches have one home, Settings (R18): the popover leads there.
+    expect(within(settings).getByRole('link', { name: 'Recording' })).toHaveAttribute(
+      'href',
+      '/settings/playing',
+    )
     await user.keyboard('{Escape}')
     // No MIDI keyboard yet: Record's popover says what it needs (ADR 0096).
     await user.click(within(dock).getByRole('button', { name: 'Record' }))
@@ -2023,12 +2027,6 @@ describe('the score editor’s takes', () => {
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Count-in'))
   }
 
-  /** The recording strip's settings, opened from its button while a take records. */
-  async function recordingSettings(user: ReturnType<typeof userEvent.setup>) {
-    await user.click(screen.getByRole('button', { name: 'Sound' }))
-    return screen.findByRole('dialog', { name: 'Sound' })
-  }
-
   /** One of a take's actions, from its row's menu. */
   async function takeAction(
     user: ReturnType<typeof userEvent.setup>,
@@ -2139,7 +2137,7 @@ describe('the score editor’s takes', () => {
     expect(within(record).queryByRole('button')).toBeNull()
   })
 
-  it('keeps the metronome and the tune in the recording strip’s settings, changed as it records', async () => {
+  it('follows the metronome and the tune changed in Settings while it records', async () => {
     const user = userEvent.setup()
     const {
       audio,
@@ -2149,31 +2147,15 @@ describe('the score editor’s takes', () => {
       storage: withSong({ staves: [{ notes: 'B4/4 | D5/4 | G4/4 | G4/4' }] }),
     })
     await startTake(user, keyboard)
-    const settings = await recordingSettings(user)
-    // Settings › Recording's own switches, each saying what it does in its ⓘ, no line under it.
-    expect(
-      within(settings)
-        .getAllByRole('switch')
-        .map((each) => each.getAttribute('aria-checked')),
-    ).toEqual(['true', 'false'])
     act(() => audio.setNow(0.5))
-    await user.click(within(settings).getByRole('switch', { name: 'Metronome' }))
-    expect(settingsStore.getState().recorder.click).toBe(false)
+    act(() =>
+      settingsStore.setState((state) => ({ recorder: { ...state.recorder, click: false } })),
+    )
     // The rest of the count-in still counts; nothing clicks after it.
     expect(audio.played.at(-1)?.sounds.map((sound) => sound.at)).toEqual([BEAT, 2 * BEAT, 3 * BEAT])
-    await user.click(within(settings).getByRole('switch', { name: 'Play melody' }))
-    expect(settingsStore.getState().recorder.tune).toBe(true)
+    act(() => settingsStore.setState((state) => ({ recorder: { ...state.recorder, tune: true } })))
     // The tune comes in under the take from its downbeat.
     expect(audio.played.at(-1)?.at).toBeCloseTo(DOWNBEAT)
-  })
-
-  it('offers no tune in the strip’s settings for a song without one', async () => {
-    const user = userEvent.setup()
-    const { midi: keyboard } = await renderApp('/edit/my-1', { storage: withSong() })
-    await startTake(user, keyboard)
-    const settings = await recordingSettings(user)
-    expect(within(settings).getByRole('switch', { name: 'Metronome' })).toBeInTheDocument()
-    expect(within(settings).queryByRole('switch', { name: 'Play melody' })).not.toBeInTheDocument()
   })
 
   it('keeps nothing from a take stopped in its count-in, and says when nothing was played', async () => {

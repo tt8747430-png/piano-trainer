@@ -6,7 +6,6 @@ import {
   Download,
   FolderInput,
   Globe,
-  Heart,
   Link2,
   PencilLine,
   RotateCcw,
@@ -16,11 +15,8 @@ import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   placeIn,
-  selectIsFavourite,
   useFolderName,
-  useLibrary,
   useLibraryLayout,
-  useLibraryStoreApi,
 } from '@/entities/library'
 import {
   hasEditableOriginal,
@@ -34,7 +30,7 @@ import {
 } from '@/entities/piece'
 import { selectView } from '@/entities/views'
 import { DraftActions, DraftStatus, useOriginalDraft } from '@/features/edit-original'
-import { toggleFavourite, useSongActions } from '@/features/manage-library'
+import { useSongActions } from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { SongExportSheet } from '@/features/song-files'
 import { editsContent, useAccount } from '@/shared/lib/account'
@@ -46,7 +42,6 @@ import {
   RowLink,
   ScreenHeader,
   SettingsGroup,
-  SwitchRow,
   TileMark,
 } from '@/shared/ui'
 import { useSongPublish } from '../model/use-song-publish'
@@ -82,8 +77,6 @@ function SongSettings({ piece }: { piece: Piece }) {
   const { item, title, publishing } = useSongPublish(piece)
   const shared = useShareSong()
   const router = useRouter()
-  const libraryStore = useLibraryStoreApi()
-  const favourite = useLibrary(selectIsFavourite(piece.id))
   const layout = useLibraryLayout()
   const folderName = useFolderName()
   const library = useSongActions(piece)
@@ -138,13 +131,6 @@ function SongSettings({ piece }: { piece: Piece }) {
         </SettingsGroup>
         {inLibrary ? (
           <SettingsGroup flush title={t('settings.library')}>
-            <SwitchRow
-              icon={<TileMark icon={Heart} paint="sand" />}
-              label={t('settings.favourite')}
-              checked={favourite}
-              onCheckedChange={() => toggleFavourite(libraryStore, piece.id)}
-              className="gap-3 border-0 pr-3 pl-2 font-semibold"
-            />
             {archived ? null : (
               <RowButton
                 title={t('settings.folder')}

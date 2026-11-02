@@ -20,23 +20,16 @@ import {
   withAfter,
   type Lesson,
 } from '@/entities/lesson'
-import {
-  LESSON_READINGS,
-  selectLessonReading,
-  useSettings,
-  useSettingsStoreApi,
-} from '@/entities/settings'
+import { selectLessonReading, useSettings } from '@/entities/settings'
 import { courseLessonStepId, lessonStepId, type StepId } from '@/entities/step'
 import { RemoveGroup, useLessonDraft } from '@/features/edit-original'
 import { ResetStepsRow } from '@/features/reset-progress'
-import { setLessonReading } from '@/features/set-preference'
 import { localText, useLocale } from '@/shared/i18n'
 import { shareLink } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   BackButton,
   ChoiceRow,
-  Dropdown,
   MultiDropdown,
   RowButton,
   RowLink,
@@ -142,7 +135,6 @@ function LessonSettings({
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const { account } = useAccount()
-  const settings = useSettingsStoreApi()
   const reading = useSettings(selectLessonReading)
   const title = localText(lesson.title, locale)
   const share = async () => {
@@ -156,16 +148,13 @@ function LessonSettings({
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <p className="px-1 font-display text-2xl font-semibold text-balance">{title}</p>
         <SettingsGroup flush title={t('settings.reading')}>
-          <ChoiceRow title={t('reading.title')} icon={BookOpenText} paint="lilac">
-            <Dropdown
-              label={t('reading.title')}
-              bare
-              align="end"
-              value={reading}
-              options={LESSON_READINGS.map((value) => ({ value, label: t(`reading.${value}`) }))}
-              onChange={(value) => setLessonReading(settings, value)}
-            />
-          </ChoiceRow>
+          <RowLink
+            title={t('reading.title')}
+            icon={BookOpenText}
+            paint="lilac"
+            value={t(`reading.${reading}`)}
+            render={<Link to="/settings" />}
+          />
         </SettingsGroup>
         <SettingsGroup flush title={t('settings.share')}>
           <RowButton

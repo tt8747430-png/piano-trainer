@@ -30,6 +30,8 @@ export const common = {
     toExercises: 'Go to Exercises',
     toTakes: 'Go to the takes',
   },
+  // The one confirm dialog (R17): Cancel is the default; a typed confirmation names what to type.
+  confirm: { cancel: 'Cancel', type: 'Type “{{expect}}” to confirm' },
   update: { available: 'A new version is ready', update: 'Update', later: 'Later' },
   // A save the device had no room for.
   storageFull: {

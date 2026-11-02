@@ -17,20 +17,20 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A2 | One app bar | 1 | open | | |
 | A3 | One rule for actions | 1 | open | | |
 | A4 | Page, sheet or menu | 1 | open | | |
-| A5 | The right control for each choice | 1 | open | | |
+| A5 | The right control for each choice | 1 | in progress | | worktree agent: the four pickers (key-picker spec) |
 | A6 | Words | 1 | open | | |
 | A7 | Navigation bugs | 1 | open | | |
 | A8 | Shapes and selected states | 1 | open | | |
 | A9 | Every action that loses or hides work | 1 | open | | |
-| A10 | Settings map | 1 | open | | |
-| A11 | Favourite and other item acts | 1 | open | | |
+| A10 | Settings map | 1 | in progress | | map in `settings-map.md`; registry `entities/settings/model/registry.ts`; one-home test `app/settings-homes.test.ts`; lesson reading and recording de-duplicated; pages from the registry with A12 |
+| A11 | Favourite and other item acts | 1 | in progress | | the song Settings' Favourite switch removed (♡ on the card, row menus, swipe, Select stay); sweep found no other act as a switch; DESIGN.md pattern left |
 | A12 | Settings layout | 1 | open | | |
 | A13 | Pictures and icons in settings | 1 | open | | |
 | A14 | Name the settings pages after what the learner sees | 1 | open | | |
 | A15 | Account, sync and this device's data | 1 | open | | |
 | A16 | Arrows and chevrons | 1 | open | | |
 | A17 | Destructive and command rows | 1 | open | | |
-| A18 | Navigation audit | 1 | open | | |
+| A18 | Navigation audit | 1 | in progress | | worktree agent: parents table, useUp, replace, Search palette (back-as-up spec) |
 | A19 | Laptop layout audit | 1 | open | | |
 | A20 | Buttons, rows and headings on every explorer | 2 | open | | |
 | A21 | Scales and keys, all three tabs | 2 | open | | |

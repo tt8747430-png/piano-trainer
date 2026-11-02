@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
+import { useAppUpdate } from '@/shared/lib/app-update'
 import { checkOnReturn } from './check-on-return'
 import { UpdateBanner } from './UpdateBanner'
 
@@ -19,25 +20,47 @@ export function UpdatePrompt({
   reload?: () => void
 }) {
   const [reloadDue, setReloadDue] = useState(false)
+  // Later hides the banner until the app next comes back to the screen; the version still waits,
+  // and Settings' Version row still offers it.
+  const [later, setLater] = useState(false)
+  const { status, update } = useAppUpdate()
   const {
-    needRefresh: [needRefresh, setNeedRefresh],
+    needRefresh: [needRefresh],
     updateServiceWorker,
   } = useRegisterSW({
     immediate: false,
     onRegisteredSW: (_url, registration) => {
-      if (registration) checkOnReturn(registration)
+      if (!registration) return
+      checkOnReturn(registration)
+      update.connect({
+        look: async () => {
+          await registration.update()
+          return registration.waiting !== null || registration.installing !== null
+        },
+        install: () => void updateServiceWorker(true),
+      })
     },
     onNeedReload: () => setReloadDue(true),
   })
 
   useEffect(() => {
+    if (needRefresh) update.found()
+  }, [needRefresh, update])
+
+  useEffect(() => {
+    if (!later) return
+    const back = () => {
+      if (document.visibilityState === 'visible') setLater(false)
+    }
+    document.addEventListener('visibilitychange', back)
+    return () => document.removeEventListener('visibilitychange', back)
+  }, [later])
+
+  useEffect(() => {
     if (reloadDue && offer) reload()
   }, [reloadDue, offer, reload])
 
-  return needRefresh && offer ? (
-    <UpdateBanner
-      onUpdate={() => void updateServiceWorker(true)}
-      onLater={() => setNeedRefresh(false)}
-    />
+  return status === 'ready' && offer && !later ? (
+    <UpdateBanner onUpdate={() => update.install()} onLater={() => setLater(true)} />
   ) : null
 }

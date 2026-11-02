@@ -72,6 +72,15 @@ export const settings = {
   about: {
     version: 'Version',
     madeWith: 'Verovio for the scores, Noto fonts, and Supabase for accounts and sync',
+    // Software Update, as iOS's: where the next version stands, a tap looks for it.
+    update: {
+      current: 'Up to date',
+      checking: 'Checking…',
+      ready: 'New version ready',
+      offline: "Can't check while offline",
+      failed: "Couldn't check. Try again",
+      install: 'Install and restart',
+    },
   },
   // The account's own page (round 3): its name, password, signing out, deleting it.
   accountPage: {

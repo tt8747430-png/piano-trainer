@@ -57,3 +57,11 @@ export {
   selectTrainer,
 } from './model/selectors'
 export { SettingsStoreProvider, useSettings, useSettingsStoreApi } from './model/context'
+export {
+  NOT_PREFERENCES,
+  SETTING_HOMES,
+  SETTINGS_PAGES,
+  type SettingKey,
+  type SettingsField,
+  type SettingsPageId,
+} from './model/registry'

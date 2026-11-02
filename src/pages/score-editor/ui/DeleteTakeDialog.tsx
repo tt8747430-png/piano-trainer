@@ -1,15 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { Take } from '@/entities/take'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/shared/ui/primitives/alert-dialog'
+import { ConfirmDialog } from '@/shared/ui'
 import { TakeName } from './TakeName'
 
 /**
@@ -29,21 +20,14 @@ export function DeleteTakeDialog({
 }) {
   const { t } = useTranslation('editor')
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{t('recorder.deleting.title')}</AlertDialogTitle>
-          <AlertDialogDescription render={<div />}>
-            <TakeName take={take} />
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>{t('recorder.deleting.cancel')}</AlertDialogCancel>
-          <AlertDialogAction variant="destructive" onClick={onDelete}>
-            {t('recorder.deleting.confirm')}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <ConfirmDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title={t('recorder.deleting.title')}
+      body={<TakeName take={take} />}
+      action={t('recorder.deleting.confirm')}
+      cancel={t('recorder.deleting.cancel')}
+      onConfirm={onDelete}
+    />
   )
 }

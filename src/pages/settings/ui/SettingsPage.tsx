@@ -3,7 +3,6 @@ import {
   Cable,
   CloudUpload,
   BookOpenText,
-  Info,
   Languages,
   LifeBuoy,
   Piano,
@@ -24,7 +23,6 @@ import {
 } from '@/entities/settings'
 import { useMidiSummary } from '@/features/connect-midi'
 import { setLessonReading, setLocale, setTheme } from '@/features/set-preference'
-import { APP_BUILD } from '@/shared/config'
 import { LOCALES } from '@/shared/i18n'
 import { useAccount, useSync } from '@/shared/lib/account'
 import {
@@ -32,11 +30,11 @@ import {
   BackButton,
   ChoiceRow,
   Dropdown,
-  RowFace,
   RowLink,
   ScreenHeader,
   SettingsGroup,
 } from '@/shared/ui'
+import { UpdateRows } from './UpdateRows'
 
 /**
  * Settings, one grouped list as an app's settings read (memory-palaces', iOS's): the account card
@@ -107,7 +105,7 @@ export function SettingsPage() {
             render={<Link to="/settings/playing" />}
           />
         </SettingsGroup>
-        <SettingsGroup flush title={t('groups.help.label')}>
+        <SettingsGroup flush title={t('groups.help.label')} footnote={t('about.madeWith')}>
           <RowLink
             title={t('help.howToUse')}
             icon={LifeBuoy}
@@ -126,12 +124,7 @@ export function SettingsPage() {
             paint="sand"
             render={<Link to="/legal/terms" />}
           />
-          <div
-            className="flex min-h-16 items-center gap-3 py-2 pr-3 pl-2"
-            title={t('about.madeWith')}
-          >
-            <RowFace title={t('about.version')} icon={Info} paint="lilac" value={APP_BUILD} />
-          </div>
+          <UpdateRows />
         </SettingsGroup>
         {account?.role === 'admin' ? (
           <SettingsGroup flush>

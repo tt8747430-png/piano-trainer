@@ -7,16 +7,7 @@ import {
 } from '@/entities/library'
 import { isOwnSongId, usePiecesStoreApi, useRepertoire } from '@/entities/piece'
 import { useTakesStoreApi } from '@/entities/take'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/shared/ui/primitives/alert-dialog'
+import { ConfirmDialog } from '@/shared/ui'
 import { deleteFolder } from '../delete-folder'
 
 /**
@@ -50,28 +41,18 @@ export function DeleteFolderAsk({
       ].filter((line) => line !== null)
     : []
   return (
-    <AlertDialog open={folder !== null} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            {t('folder.deleting.title', { name: folder ? nameOf(folder) : '' })}
-          </AlertDialogTitle>
-          <AlertDialogDescription>{says.join(' ')}</AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>{t('folder.deleting.cancel')}</AlertDialogCancel>
-          <AlertDialogAction
-            variant="destructive"
-            onClick={() => {
-              if (!folder) return
-              onDeleted?.()
-              deleteFolder({ library, pieces, takes }, libraryCatalog(repertoire), folder.id)
-            }}
-          >
-            {t('folder.deleting.confirm')}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <ConfirmDialog
+      open={folder !== null}
+      onOpenChange={onOpenChange}
+      title={t('folder.deleting.title', { name: folder ? nameOf(folder) : '' })}
+      body={says.join(' ')}
+      action={t('folder.deleting.confirm')}
+      cancel={t('folder.deleting.cancel')}
+      onConfirm={() => {
+        if (!folder) return
+        onDeleted?.()
+        deleteFolder({ library, pieces, takes }, libraryCatalog(repertoire), folder.id)
+      }}
+    />
   )
 }

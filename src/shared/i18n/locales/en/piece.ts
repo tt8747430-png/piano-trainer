@@ -132,7 +132,6 @@ export const piece = {
     music: 'Music',
     editScore: 'Edit the score',
     library: 'In your library',
-    favourite: 'Favourite',
     folder: 'Folder',
     home: 'Songs',
     archived: 'Archived',

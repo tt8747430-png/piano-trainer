@@ -23,18 +23,21 @@ describe('A lesson', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'Naming any chord' })).toBeInTheDocument()
   })
 
-  it('reads as one page, or a section at a time as its Settings say, remembered', async () => {
+  it('reads as one page, or a section at a time as Settings say, remembered', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/lessons/reading-chord-symbols')
+    const { settingsStore, router } = await renderApp('/lessons/reading-chord-symbols')
     await screen.findByRole('heading', { level: 1, name: 'How to read chord symbols' })
     expect(screen.getAllByRole('heading', { level: 2 }).length).toBeGreaterThan(1)
     expect(screen.queryByRole('link', { name: 'Next' })).toBeNull()
     await openSettings(user)
+    // The lesson's Settings show how lessons read and lead to its one home (R18).
+    await user.click(await screen.findByRole('link', { name: /Lessons read as\s*One page/ }))
     const reading = await screen.findByRole('combobox', { name: 'Lessons read as' })
-    expect(reading).toHaveTextContent('One page')
     await user.click(reading)
     await user.click(await screen.findByRole('option', { name: 'A section at a time' }))
-    await user.click(screen.getByRole('button', { name: 'Back' }))
+    await act(() =>
+      router.navigate({ to: '/lessons/$lessonId', params: { lessonId: 'reading-chord-symbols' } }),
+    )
     expect(await screen.findByRole('link', { name: 'Next' })).toBeVisible()
     expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(1)
     expect(settingsStore.getState().lessonReading).toBe('sections')

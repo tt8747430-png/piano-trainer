@@ -53,4 +53,15 @@ describe('UpdatePrompt', () => {
     expect(screen.queryByRole('status')).not.toBeInTheDocument()
     expect(updateServiceWorker).not.toHaveBeenCalled()
   })
+
+  it('comes back after Later once the app returns to the screen, the version still waiting', async () => {
+    stubServiceWorker({ waiting: true })
+    const user = userEvent.setup()
+    render(<UpdatePrompt offer />)
+    await user.click(screen.getByRole('button', { name: 'Later' }))
+    expect(screen.queryByRole('status')).not.toBeInTheDocument()
+    vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('visible')
+    act(() => void document.dispatchEvent(new Event('visibilitychange')))
+    expect(screen.getByRole('status')).toHaveTextContent('A new version is ready')
+  })
 })

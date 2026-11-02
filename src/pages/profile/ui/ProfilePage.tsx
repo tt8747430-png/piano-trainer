@@ -23,6 +23,7 @@ import {
 import { cn } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { Avatar, ButtonLink, RoundLink, RowLink, ScreenHeader, SettingsGroup } from '@/shared/ui'
+import { useAppUpdate } from '@/shared/lib/app-update'
 import { useToday } from '@/widgets/practice-days'
 
 /**
@@ -32,8 +33,9 @@ import { useToday } from '@/widgets/practice-days'
  * its own); the rest of their record; their badges. Each thing opens one way.
  */
 export function ProfilePage() {
-  const { t } = useTranslation(['account', 'common'])
+  const { t } = useTranslation(['account', 'common', 'settings'])
   const { account } = useAccount()
+  const updateReady = useAppUpdate().status === 'ready'
   return (
     <div className="flex flex-col gap-2">
       <ScreenHeader
@@ -41,12 +43,23 @@ export function ProfilePage() {
         large
         actions={
           // The laptop's sidebar has Settings at its foot: the bar's would be a second way.
-          <span className="lg:hidden">
+          <span className="relative lg:hidden">
             <RoundLink
-              label={t('common:nav.settings')}
+              label={
+                updateReady
+                  ? `${t('common:nav.settings')}, ${t('settings:about.update.ready')}`
+                  : t('common:nav.settings')
+              }
               icon={Settings}
               render={<Link to="/settings" />}
             />
+            {/* A version waits (cleared by installing it, not by Later), as iOS's Settings badge. */}
+            {updateReady ? (
+              <span
+                aria-hidden
+                className="pointer-events-none absolute top-1 right-1 size-2.5 rounded-full bg-destructive ring-2 ring-background"
+              />
+            ) : null}
           </span>
         }
       />

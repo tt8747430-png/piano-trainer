@@ -196,7 +196,8 @@ describe('Piece', () => {
     expect(
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
     ).toEqual(['Music', 'In your library', 'Share'])
-    expect(screen.getByRole('switch', { name: 'Favourite' })).not.toBeChecked()
+    // Favourite is an act on the song (its ♡, its menus), never a switch here (R19).
+    expect(screen.queryByRole('switch', { name: 'Favourite' })).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: /^Folder/ })).toHaveTextContent('«Боже, спасибо»')
     for (const name of ['Archive', 'Export…'])
       expect(screen.getByRole('button', { name })).toBeInTheDocument()
@@ -471,16 +472,13 @@ describe('Piece: the learner’s library (ADR 0106)', () => {
   const placeOf = (state: Parameters<typeof arrangeLibrary>[0], id: string) =>
     placeIn(arrangeLibrary(state, libraryCatalog({ ownSongs: [] })), id)
 
-  it('keeps a song among the favourites from its ♡, named by what a tap does now, and its Settings’ switch', async () => {
+  it('keeps a song among the favourites from its ♡, named by what a tap does now', async () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs/bz5')
     await user.click(await screen.findByRole('button', { name: 'Add to favourites' }))
     expect(libraryStore.getState().favourites).toEqual(['bz5'])
     await user.click(screen.getByRole('button', { name: 'Remove from favourites' }))
     expect(libraryStore.getState().favourites).toEqual([])
-    await openSettings(user)
-    await user.click(screen.getByRole('switch', { name: 'Favourite' }))
-    expect(libraryStore.getState().favourites).toEqual(['bz5'])
   })
 
   it('moves the song to another folder from its Settings’ Folder, saying so with Undo', async () => {

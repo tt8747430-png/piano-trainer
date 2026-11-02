@@ -4,16 +4,7 @@ import { entryTitles, usePiecesStoreApi, useRepertoire, type PieceId } from '@/e
 import { useTakesStoreApi } from '@/entities/take'
 import { deleteOwnSongs } from '@/features/manage-library'
 import { useLocale } from '@/shared/i18n'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/shared/ui/primitives/alert-dialog'
+import { ConfirmDialog } from '@/shared/ui'
 
 /** An archived song of the learner's own deleted for good, asked first: its takes go with it. */
 export function DeleteSongAsk({
@@ -31,27 +22,16 @@ export function DeleteSongAsk({
   const repertoire = useRepertoire()
   const entry = song ? repertoire.entry(song) : undefined
   return (
-    <AlertDialog open={song !== null} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            {t('deleting.one', { title: entry ? entryTitles(entry, locale).primary : '' })}
-          </AlertDialogTitle>
-          <AlertDialogDescription>{t('deleting.songs', { count: 1 })}</AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>{t('deleting.cancel')}</AlertDialogCancel>
-          <AlertDialogAction
-            variant="destructive"
-            onClick={() => {
-              if (song)
-                deleteOwnSongs({ library, pieces, takes }, libraryCatalog(repertoire), [song])
-            }}
-          >
-            {t('deleting.confirm')}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <ConfirmDialog
+      open={song !== null}
+      onOpenChange={onOpenChange}
+      title={t('deleting.one', { title: entry ? entryTitles(entry, locale).primary : '' })}
+      body={t('deleting.songs', { count: 1 })}
+      action={t('deleting.confirm')}
+      cancel={t('deleting.cancel')}
+      onConfirm={() => {
+        if (song) deleteOwnSongs({ library, pieces, takes }, libraryCatalog(repertoire), [song])
+      }}
+    />
   )
 }

@@ -3,16 +3,7 @@ import { libraryCatalog, useLibraryStoreApi } from '@/entities/library'
 import { usePiecesStoreApi } from '@/entities/piece'
 import { useTakesStoreApi } from '@/entities/take'
 import { deleteFolder, deleteOwnSongs } from '@/features/manage-library'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/shared/ui/primitives/alert-dialog'
+import { ConfirmDialog } from '@/shared/ui'
 import type { LibraryPage } from '../model/use-library-page'
 
 /**
@@ -43,30 +34,22 @@ export function DeleteAsk({ page }: { page: LibraryPage }) {
     folders.length > 0 ? t('deleting.folders', { count: folders.length }) : null,
   ].filter((line) => line !== null)
   return (
-    <AlertDialog open={open} onOpenChange={(next) => (next ? undefined : page.close())}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{says.join(' ')}</AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>{t('deleting.cancel')}</AlertDialogCancel>
-          <AlertDialogAction
-            variant="destructive"
-            onClick={() => {
-              const stores = { library, pieces, takes }
-              // Read again before each: a folder deleted takes its own songs with it.
-              const catalog = () => libraryCatalog({ ownSongs: pieces.getState().songs })
-              for (const folder of folders) deleteFolder(stores, catalog(), folder.id)
-              deleteOwnSongs(stores, catalog(), songs)
-              if (pending?.kind === 'delete-chosen') select.exit()
-              page.close()
-            }}
-          >
-            {t('deleting.confirm')}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <ConfirmDialog
+      open={open}
+      onOpenChange={(next) => (next ? undefined : page.close())}
+      title={title}
+      body={says.join(' ')}
+      action={t('deleting.confirm')}
+      cancel={t('deleting.cancel')}
+      onConfirm={() => {
+        const stores = { library, pieces, takes }
+        // Read again before each: a folder deleted takes its own songs with it.
+        const catalog = () => libraryCatalog({ ownSongs: pieces.getState().songs })
+        for (const folder of folders) deleteFolder(stores, catalog(), folder.id)
+        deleteOwnSongs(stores, catalog(), songs)
+        if (pending?.kind === 'delete-chosen') select.exit()
+        page.close()
+      }}
+    />
   )
 }

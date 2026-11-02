@@ -1,8 +1,9 @@
 import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
+import { stubServiceWorker } from '@/shared/test/pwa-register'
 
 describe('Settings', () => {
   it('goes back to the Profile it was opened from', async () => {
@@ -201,5 +202,30 @@ describe('Settings', () => {
     await user.click(await screen.findByRole('button', { name: 'Reset' }))
     expect(progressStore.getState().learned).toEqual({})
     await waitFor(() => expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument())
+  })
+
+  it('says the version is up to date, and that it cannot look offline', async () => {
+    const user = userEvent.setup()
+    await renderApp('/settings')
+    const version = await screen.findByRole('button', { name: /^Version/ })
+    expect(version).toHaveTextContent('Up to date')
+    vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+    await user.click(version)
+    expect(version).toHaveTextContent("Can't check while offline")
+  })
+
+  it('installs a waiting version from Settings, and marks the Profile’s way there', async () => {
+    const { updateServiceWorker } = stubServiceWorker({ waiting: true })
+    const user = userEvent.setup()
+    const { router } = await renderApp('/profile')
+    expect(
+      await screen.findByRole('link', { name: 'Settings, New version ready' }),
+    ).toBeInTheDocument()
+    await act(() => router.navigate({ to: '/settings' }))
+    expect(await screen.findByRole('button', { name: /^Version/ })).toHaveTextContent(
+      'New version ready',
+    )
+    await user.click(screen.getByRole('button', { name: 'Install and restart' }))
+    expect(updateServiceWorker).toHaveBeenCalledExactlyOnceWith(true)
   })
 })

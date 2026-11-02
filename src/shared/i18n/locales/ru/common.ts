@@ -36,6 +36,7 @@ export const common: LocaleResources['common'] = {
     help: 'Скачайте резервную копию в настройках и удалите ненужные дубли.',
     settings: 'Настройки',
   },
+  confirm: { cancel: 'Отмена', type: 'Введите «{{expect}}», чтобы подтвердить' },
   update: { available: 'Готова новая версия', update: 'Обновить', later: 'Позже' },
   close: 'Закрыть',
   step: { previous: 'Назад: {{what}}', next: 'Вперёд: {{what}}' },

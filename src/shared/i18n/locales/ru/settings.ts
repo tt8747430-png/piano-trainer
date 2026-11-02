@@ -72,6 +72,14 @@ export const settings: LocaleResources['settings'] = {
   about: {
     version: 'Версия',
     madeWith: 'Verovio для нот, шрифты Noto и Supabase для аккаунтов и синхронизации',
+    update: {
+      current: 'Последняя версия',
+      checking: 'Проверка…',
+      ready: 'Готова новая версия',
+      offline: 'Без сети проверить нельзя',
+      failed: 'Не удалось проверить. Попробуйте ещё раз',
+      install: 'Установить и перезапустить',
+    },
   },
   accountPage: {
     title: 'Аккаунт',

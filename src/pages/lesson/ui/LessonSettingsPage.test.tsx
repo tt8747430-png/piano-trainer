@@ -33,7 +33,10 @@ describe('a lesson’s Settings (round 28)', () => {
       expect(router.state.location.pathname).toBe(`/lessons/${LESSON.id}/settings`),
     )
     expect(await screen.findByText(LESSON.title.en)).toBeInTheDocument()
-    expect(screen.getByRole('combobox', { name: 'Lessons read as' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Lessons read as\s*One page/ })).toHaveAttribute(
+      'href',
+      '/settings',
+    )
     expect(screen.getByRole('button', { name: 'Share link' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Reset progress' })).toBeInTheDocument()
     // An editor's rows are an editor's alone.

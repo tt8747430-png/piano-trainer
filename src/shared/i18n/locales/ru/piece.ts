@@ -130,7 +130,6 @@ export const piece: LocaleResources['piece'] = {
     music: 'Музыка',
     editScore: 'Править ноты',
     library: 'В вашей библиотеке',
-    favourite: 'Избранное',
     folder: 'Папка',
     home: 'Песни',
     archived: 'В архиве',
