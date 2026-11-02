@@ -1,4 +1,10 @@
-import { arrangeLibrary, libraryCatalog, type LibraryState } from '@/entities/library'
+import {
+  arrangeLibrary,
+  libraryCatalog,
+  placeIn,
+  type FolderId,
+  type LibraryState,
+} from '@/entities/library'
 import { repertoire, shelfOf, type PiecesState } from '@/entities/piece'
 import { sectionIndex } from '@/pages/piece'
 
@@ -26,6 +32,12 @@ export function sectionIn(
 export function folderIn(pieces: PiecesState, library: LibraryState, id: string): boolean {
   const { folders } = arrangeLibrary(library, libraryCatalog({ ownSongs: pieces.songs }))
   return folders.some((folder) => folder.id === id)
+}
+/** The folder the library keeps a song in, or null at its top, archived or not there (rule 26). */
+export function folderOf(pieces: PiecesState, library: LibraryState, id: string): FolderId | null {
+  const layout = arrangeLibrary(library, libraryCatalog({ ownSongs: pieces.songs }))
+  const place = placeIn(layout, id)
+  return place && place !== 'archived' ? place.folder : null
 }
 export { PiecePage, PublishPage, SectionPage, SongSettingsPage } from '@/pages/piece'
 export { ArchivePage } from '@/pages/song-archive'
