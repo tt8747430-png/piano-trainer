@@ -698,6 +698,9 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       - The empty state is a card in the middle of an empty screen with a blank staff; the staff
         and the chord's name should fill the space the page has, and the chords remembered show
         as a history list below.
+      - The empty staff is drawn shrunk (a small grey staff inside the card, its clefs faint and
+        tiny) and changes size once a chord is played. The staff has one size, empty or not, as
+        wide as its column at the page's staff size, so nothing jumps when the first chord lands.
     - **Metronome:**
       - −10 −1 +1 +10 are circles, Tap tempo a pill, Clicks and 4/4 pill menus, the bar trainer's
         menus greyed until a switch: four button shapes on one screen (rule 14). One stepper
