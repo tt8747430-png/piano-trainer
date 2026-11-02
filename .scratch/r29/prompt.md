@@ -1098,8 +1098,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       (Part A 31: smooth, not jumping). One autoscroll rule and one "Follow the music" setting
       for all views.
     - **What Chordify has that we lack or do differently:** go through Chordify's views and
-      controls (chord diagrams' size, the timeline, loop by dragging a range, transpose, capo-free
-      key choice, simplify, the chord summary, the count-in, the tempo, MIDI follow) and list
+      controls (chord diagrams' size, the timeline, loop by dragging a range, transpose, simplify, the chord summary, the count-in, the tempo, MIDI follow) and list
       each, then build or fix it; the strip's edge fade goes (rule 13).
     - **Edit in every view:** the editor edits only the sheet music. The chord views are the same
       song: an editor (or the learner, in their version) can edit them where they are shown, as
