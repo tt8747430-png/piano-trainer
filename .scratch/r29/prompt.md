@@ -1331,8 +1331,8 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       the flash and the sound on the same clock; a recording of each sound, before and after.
 
 40. **The score editor's panels, against Flat's** (`piano-data/Screenshot 2026-11-02 at
-    19.07.09–19.09.23.png`, Flat on the Fantaisie-Impromptu; `piano-data/flat-*.webarchive` is the
-    same score saved). Flat's left panel has three tabs, **Notation · Instruments · Layout**, each
+    19.07.09–19.09.23.png`, Flat on the Fantaisie-Impromptu; `piano-data/Fantaisie-Impromptu in C♯ Minor - Flat.webarchive`
+    is the same page saved). Flat's left panel has three tabs, **Notation · Instruments · Layout**, each
     a column of folding groups. Compare ours group by group and build what is missing, in our look:
     - **Recording from a MIDI keyboard** (19.07.09–19.07.38): a MIDI popover in the bar (MIDI
       input, MIDI output, "Write while playing", Record live MIDI); a recording bar under the
