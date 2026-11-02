@@ -388,6 +388,15 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
    - List every picker in the app against it: keys, roots, qualities, scales, inversions, tempo,
      time, clef, instruments, levels.
    - Replace the ones that break it with one shared control each; add missing ones.
+   - **Twelve keys, not seventeen names.** Root, Start on, Melody note and Key pickers list 17
+     spellings today (C, C♯, D♭, D, D♯, E♭ … B♭, B): the same black key twice. One shared key
+     picker shows the 12 keys of an octave, drawn as an octave of piano keys or a 12-cell grid,
+     each with its usual name (C, D♭, D, E♭, E, F, F♯, G, A♭, A, B♭, B; for minor keys C♯m, E♭m,
+     F♯m, G♯m, B♭m as key signatures name them). Where the spelling changes the theory (a chord's
+     or scale's notes, a key signature), a small ♯ · ♭ switch under the picker respells the black
+     keys; the choice is remembered. Check the usual names against Flat, MuseScore and the circle
+     of fifths before building, and use the same picker on every page (Chords, Scales and keys,
+     Intervals, Progressions, Accompaniment, the Quiz setup, the editor's key and Transpose).
    - Remove the edge blur: `tab-strip` and `fade-scroll-x` in `src/styles/theme.css`, `StepStrip`,
      `BeatStrip`, `ChordPair`.
 6. **Words.** Check every string in en and ru against `docs/UBIQUITOUS_LANGUAGE.md`: wrong terms,
