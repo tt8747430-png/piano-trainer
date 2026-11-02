@@ -1029,8 +1029,8 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       Notation, Pitch and representation, articulations, ornaments, dynamics, text, clefs,
       barlines, repeats, layout) and Dorico's and list every option we lack or implement
       differently; build each (Part B 8's rule: add what we don't have). Known: enharmonic
-      respell (♭⇄♯) state, cross-staff notes, grace-note types, tremolos, arpeggio, ossia-free
-      but complete octave lines (8va, 8vb, 15ma), tuplets beyond 3.
+      respell (♭⇄♯) state, cross-staff notes, grace-note types, tremolos, arpeggio, every
+      octave line (8va, 8vb, 15ma, 15mb), tuplets beyond 3.
     - **The upper staff in a bass clef with the octave sign** (`owner/63`, Daisy fields): every
       chord sits on four ledger lines. Check whether the song's file asks for it or the editor
       put it there; a piano part's upper staff opens in treble unless the music says otherwise,
@@ -1063,8 +1063,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       lesson example, progression, exercise); a control that changes nothing for that kind is
       hidden for it. Known: Starting position and Move smoothly on a written score.
     - **Words:** "Move smoothly" is voice leading, "Starting position" the first chord's
-      inversion, "Pulsing chords (8ths)" repeated chords in 8ths, "Root on beats 1 and 3" root on
-      1 and 3; Part A 6's sweep checks every label and ⓘ against the terms of the theory books,
+      inversion, "Pulsing chords (8ths)" repeated chords in 8ths; Part A 6's sweep checks every label and ⓘ against the terms of the theory books,
       Flat and Dorico, in English and Russian, with the clarify skill.
     - **One hand only:** choosing Left or Right greys the other hand's notes and nothing else. Add
       "The other hand: Show · Dim · Hide" (Hide leaves only the chosen hand's staff), and "Play the
