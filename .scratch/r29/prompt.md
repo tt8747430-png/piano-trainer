@@ -690,6 +690,23 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       - **Library:** the progressions as a list with genre chips (above), a row opening it in
         Progression;
       - **Passing chords:** today's "Between two chords" (below).
+    - **Folded sections that look like links** (`owner/68`): with the Library folded, the page is a
+      column of loose headings, each with a › that reads as "opens a page": "Library ›" (large
+      serif), "Practise in the Player ›" and "Through the keys ›" (small sans), "Between two
+      chords ›" (large serif again), and an open "Songs with this progression" between them. A
+      folded section says nothing about what is inside it. The tabs above remove most folds; where
+      a section still folds anywhere in the app: one heading style per level (rule 29), the fold
+      mark ⌄ turning to ⌃ (rule 23, never ›), and a one-line summary on the closed heading ("38
+      progressions · 9 genres", "9 ways through the keys") so it isn't a dead word.
+    - **The walks' names** (`player.ts`, `practice.ts`): "Practise in the Player", "Through the
+      keys", "Up by semitones", "Up and down by semitones", "Down the circle of fifths: C F B♭",
+      "Walk the chords", "Chromatic walk". Name them as teachers name practising in all keys:
+      the section **"Practise in all 12 keys"**, each way a **sequence**: "Chromatically, rising",
+      "Chromatically, falling", "Chromatically, up and back", "In whole steps, rising", "Around the
+      circle of fifths (C F B♭ …)", "Around the circle of fourths", "In minor thirds", "In major
+      thirds"; "Walk the chords" → "Through the key's chords, in scale order"; "Chromatic walk" →
+      "A chord in all 12 keys, chromatically". The same names in the Player's title and its More
+      menu, and in Russian (секвенция, хроматически вверх, по квинтовому кругу).
     - **Its options, named as musicians name them** (on the page only what changes the music
       shown; the rest on its Settings page, Part A 24):
       - on the page: **Chord size** (triads · 7ths · 9ths), **Approach chords** (none · secondary
