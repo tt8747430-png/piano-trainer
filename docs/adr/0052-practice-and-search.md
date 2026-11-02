@@ -112,3 +112,4 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
   place current at a time, Settings the laptop sidebar's own (2026-10-30).
 - r29 — Back goes up a parents table (`app/routes/parents.ts`), not back through history; Search a palette over the screen; one metronome engine; the Profile's badges, milestones, notifications and Streak pages (decided 2026-11-02, being built in round 29; spec `.scratch/r29/back-as-up/spec.md`).
 - r29 — Roots, qualities, voicings and scale kinds a row of pickers; the step strips gone (round 29, ADR 0061).
+- r29 — Built: Back goes up the parents table (`useUp`), views and modes replace their entry, Search a palette over the screen (2026-11-02).

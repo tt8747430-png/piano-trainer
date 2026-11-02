@@ -130,7 +130,7 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
   `features/record-take` and `manage-takes`; an editor's Edit of a built-in song edits the song everyone sees (`features/edit-original`: its draft on the server, the song whole, Publish, Versions, Discard; anyone else's Edit their version); an editor's New song in a collection's folder (`useCreateBuiltInSong`), opened there unpublished; its Unpublished changes (status, Publish, Versions, Discard) in the bar by Done and on the song's Settings, only while there are some.
 - **The Profile** (`/profile`, `pages/profile`) — the learner's initial, three figures, a row to Activity (`/profile/activity`:
   the run, the best run, the days practised, the month's calendar), the record and badges.
-- **Elsewhere** — Search (`/search`); Settings (`/settings`, opened from the Profile on a phone: one grouped list, the account card, General's choices in place,
+- **Elsewhere** — Search, a palette over the screen (`widgets/search-palette`: ⌘K, the sidebar's Search, a place's search; `/search?q=` a link that opens it); Settings (`/settings`, opened from the Profile on a phone: one grouped list, the account card, General's choices in place,
   then rows to Keyboard and recording, Sync and data, the Account, How to use and the MIDI keyboard with its log;
   `pages/settings`, `SettingsList`, `ChoiceRow`); the account pages (`/account/sign-in`, `create`, `forgot`, `new-password`, and `/auth/callback` where the
   server's links return; `pages/account`); Privacy and Terms (`/legal/privacy`, `/legal/terms`, `pages/legal`, linked from Help and Create an account); the Admin area (`/admin`,
@@ -138,6 +138,10 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
   `useFeature`, `shared/lib/features`); a shared song
   (`/songs/shared`). The welcome (`widgets/welcome`, once, `pt-settings.welcomed`) and the deletion gate
   (`app/deletion-gate`) sit in `RootLayout`.
+
+**Back goes up, not back** (R26): each route names its parent in `app/routes/parents.ts` (a test fails a route without one); Back, a screen's close and Done call `useUp()`; a view, tab, filter, mode or a step of a flow written into the URL replaces the entry (`useSetSearch`), never pushes.
+
+**Settings:** every preference has one home page (`entities/settings/model/registry.ts`, `SETTING_HOMES`); elsewhere a link row to it, never a second control (`src/app/settings-homes.test.ts`). The app's update state is one store (`shared/lib/app-update`): the banner, Settings' Version row and the Profile's mark read it. An act that loses or hides work asks through `ConfirmDialog` (`shared/ui`); a root, a key or a choice among many is one of `shared/ui/pickers` (pitch, spelled note, the circle of fifths, a keys checklist, `MenuPicker` in a `PickerRow`).
 
 **State:** what you look at → URL search params. What must be remembered → a saved entity store; a screen's last
 view → `pt-views`. Everything else → component state.

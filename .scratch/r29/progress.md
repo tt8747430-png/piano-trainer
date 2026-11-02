@@ -19,7 +19,7 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A4 | Page, sheet or menu | 1 | open | | |
 | A5 | The right control for each choice | 1 | done | 9a33ae70, aa176aa9, d421ec25, d52e781f, 0bce757a (merged 03b5bfc4) | PitchPicker, NotePicker, KeyPicker (circle), KeysChecklist, MenuPicker, PickerRow; strips and edge fades gone. Decided: the Key tab's circle chooses on tap (no Select button: it is the page's own control, not a popover); wedges show the signature as a count; options that don't apply are left out (R30); Quiz/Exercises keys map to each signature's major tonic (D♯/G♯/A♯ roots go, C♭ comes in); Start on is a menu of the scale's notes; the score editor's key keeps its sign grid (ADR 0114) |
 | A6 | Words | 1 | open | | |
-| A7 | Navigation bugs | 1 | open | | |
+| A7 | Navigation bugs | 1 | in progress | | Back retracing history and modes fixed by A18; the rest of A7 to check |
 | A8 | Shapes and selected states | 1 | open | | |
 | A9 | Every action that loses or hides work | 1 | open | | |
 | A10 | Settings map | 1 | in progress | | map in `settings-map.md`; registry `entities/settings/model/registry.ts`; one-home test `app/settings-homes.test.ts`; lesson reading and recording de-duplicated; pages from the registry with A12 |
@@ -30,7 +30,7 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A15 | Account, sync and this device's data | 1 | open | | |
 | A16 | Arrows and chevrons | 1 | open | | |
 | A17 | Destructive and command rows | 1 | open | | |
-| A18 | Navigation audit | 1 | in progress | | worktree agent: parents table, useUp, replace, Search palette (back-as-up spec) |
+| A18 | Navigation audit | 1 | done | dcaa63b6, b24068b9, 66fd1593, d9d5883e, 4ecda26d (merged ed9a4e1d) | parents table + test, `useUp` (history.back when the entry before is the parent, so it isn't doubled), `useSetSearch` (46 sites in `back-as-up/navigates.md`), a Back test per place, the Search palette. The Dialog primitive was taken from `shadcn add --view` by hand (the CLI would run npm install) |
 | A19 | Laptop layout audit | 1 | open | | |
 | A20 | Buttons, rows and headings on every explorer | 2 | open | | |
 | A21 | Scales and keys, all three tabs | 2 | open | | |

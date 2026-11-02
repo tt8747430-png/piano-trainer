@@ -530,6 +530,11 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Remembered view** (`pt-views`): a screen's last view. _Avoid:_ saved state.
 - **Screen bar** (`ScreenHeader`): a screen's title, Back and actions. _Avoid:_ navbar.
 - **Shortcut**: a computer key a screen binds; `?` lists them. _Avoid:_ hotkey, keybinding.
+- **Parent** (`app/routes/parents.ts`): the screen a screen sits under; Back goes there. _Avoid:_ previous page, history.
+- **Search palette** («Поиск»): Search opened over the current screen. _Avoid:_ search page.
+- **Key picker** (`KeyPicker`): the circle of fifths that chooses a key; **note picker** a root by its spelling; **pitch picker** a pitch alone. _Avoid:_ strip, chips (for a key).
+- **Confirm dialog** (`ConfirmDialog`): asks before an act that loses or hides work, the act named on its button. _Avoid:_ OK dialog, alert.
+- **Home** (of a setting): the one page where a preference is set; elsewhere a link row. _Avoid:_ copy, shortcut setting.
 - **Pop-up button** (`Dropdown`): shows its value and opens a list. _Avoid:_ select.
 - **Floating buttons**: a screen's actions floating in reach (a word of the code; the app never names them). _Avoid:_ FAB (in the UI).
 
