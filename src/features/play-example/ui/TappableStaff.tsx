@@ -43,6 +43,8 @@ export function TappableStaff({
   firstBar = 1,
   tempo,
   follow = null,
+  playhead = null,
+  continues = false,
   barShown,
   captions,
   voices,
@@ -64,6 +66,10 @@ export function TappableStaff({
   tempo: number
   /** The whole music played from its first tick at `tempo` by a Play beside it: its notes marked as they sound. */
   follow?: PlayHandle | null
+  /** The tick of it marked as sounding, where something beside it plays it (a row of a longer line). */
+  playhead?: Tick | null
+  /** A later row of a line: its time is the row before's, so it is not printed again. */
+  continues?: boolean
   /**
    * A word after each bar's chord on its band, by its place: the chord's numeral in its key, printed
    * as its symbol is.
@@ -126,10 +132,11 @@ export function TappableStaff({
     playingBar?.from,
   )
   const inLine = useStaffPlayhead(follow, music, tempo)
-  const marked = playingTick ?? inBar ?? inLine
+  const marked = playingTick ?? inBar ?? playhead ?? inLine
   return (
     <LazyScoreView
       score={score}
+      {...(continues && score.measures[0]?.time ? { timeBefore: score.measures[0].time } : {})}
       staff={staff}
       muted={muted}
       names={names}
