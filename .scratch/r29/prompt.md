@@ -710,7 +710,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       motion, and nearly every card is tagged "Chromatic", so the tag tells nothing (the
       reference does the same, and also misspells: A♯7 for B♭7, G♯ as IV of E♭, C♯7 for D♭7:
       check our spellings against the key, never copy them). Rebuild it from the theory books in
-      `piano-data/books` (Bobrova and Gorshkov teach passing chords for church accompaniment) and
+      `piano-data/books` (check what Bobrova's and Gorshkov's courses call them and how they use them in church accompaniment) and
       standard jazz and classical harmony, with their names:
       - **What it is:** a *passing chord* fills the gap between two chords on a weak beat; an
         *approach chord* leads into the target from a step, a half step or a fifth away. The
