@@ -106,6 +106,23 @@ describe('editing the built-in content', () => {
     })
   })
 
+  it('unpublishes an item made in the app, kept as its draft, then deletes it whole', async () => {
+    const { port, set } = editing()
+    const body = { id: 'arpeggios', v: 1 }
+    await port.create('lesson', 'arpeggios', { body, meta: { title: 'A' } })
+    await port.publish('lesson', 'arpeggios')
+    expect(await port.unpublish('lesson', 'arpeggios')).toEqual({ ok: true, value: undefined })
+    // Learners read it no more; the editor finds it where they left it, as a draft.
+    expect(port.body('lesson', 'arpeggios')).toBeUndefined()
+    expect(await port.draft('lesson', 'arpeggios')).toMatchObject({ ok: true, value: { body } })
+    expect(await port.remove('lesson', 'arpeggios')).toEqual({ ok: true, value: undefined })
+    expect(await port.draft('lesson', 'arpeggios')).toEqual({ ok: true, value: null })
+    expect(await port.versions('lesson', 'arpeggios')).toEqual({ ok: true, value: [] })
+    set({ editor: false })
+    expect(await port.remove('lesson', 'scales')).toMatchObject({ ok: false, reason: 'refused' })
+    expect(await port.unpublish('lesson', 'scales')).toMatchObject({ ok: false, reason: 'refused' })
+  })
+
   it('lists the drafts, the newest first, each with its name and whether it was ever published', async () => {
     const { port, set } = editing()
     await port.saveDraft('lesson', 'scales', { body: { id: 'scales', v: 2 }, meta: { title: 'S' } })

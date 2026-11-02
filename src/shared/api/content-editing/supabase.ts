@@ -170,5 +170,40 @@ export function createSupabaseContentEditing(
           }),
         )
       }),
+    unpublish: (kind, id) =>
+      ask(async (client) => {
+        const {
+          data: item,
+          error,
+          status,
+        } = await client
+          .from('content_items')
+          .select('body, meta')
+          .eq('kind', kind)
+          .eq('id', id)
+          .single()
+        if (error) throw thrown(error, status)
+        // Its body kept as its draft where it has none: the editor goes on from what learners had.
+        check(
+          await client
+            .from('content_drafts')
+            .upsert(
+              { kind, id, body: item.body, meta: item.meta },
+              { onConflict: 'kind,id', ignoreDuplicates: true },
+            ),
+        )
+        check(
+          await client
+            .from('content_items')
+            .update({ status: 'draft' })
+            .eq('kind', kind)
+            .eq('id', id),
+        )
+      }),
+    // Its draft and kept versions go with it (their foreign keys cascade).
+    remove: (kind, id) =>
+      ask(async (client) => {
+        check(await client.from('content_items').delete().eq('kind', kind).eq('id', id))
+      }),
   }
 }

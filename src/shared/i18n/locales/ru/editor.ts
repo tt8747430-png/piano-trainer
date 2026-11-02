@@ -587,6 +587,20 @@ export const editor: LocaleResources['editor'] = {
         'Пример пишется в 2/4, 3/4, 4/4, 6/8 или 12/8, в одном размере и тональности: это изменение не сохранено.',
     },
   },
+  // An item made in the app, given up on its Settings page (round 28).
+  remove: {
+    title: 'Удаление',
+    unpublish: 'Снять с публикации',
+    unpublishTitle: 'Снять «{{title}}» с публикации?',
+    unpublishBody:
+      'Ученики больше его не получат. Он останется здесь неопубликованным: его можно изменить и опубликовать снова.',
+    unpublished: 'Снято с публикации',
+    delete: 'Удалить',
+    deleteTitle: 'Удалить «{{title}}»?',
+    deleteBody:
+      'Он удалится навсегда вместе с неопубликованными изменениями и всеми сохранёнными версиями.',
+    deleted: 'Удалено',
+  },
   original: {
     draft: 'Публикация',
     opening: 'Открываем…',

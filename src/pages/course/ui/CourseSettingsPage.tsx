@@ -1,8 +1,8 @@
-import { Link, useParams } from '@tanstack/react-router'
+import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { Link2, Library } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { courseById, courseStepIds, type Course } from '@/entities/course'
-import { useCourseDraft } from '@/features/edit-original'
+import { COURSES, courseById, courseStepIds, type Course } from '@/entities/course'
+import { RemoveGroup, useCourseDraft } from '@/features/edit-original'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { shareLink } from '@/shared/lib'
@@ -69,6 +69,7 @@ export function CourseSettingsPage() {
 function EditorRows({ course, title }: { course: Course; title: string }) {
   const { t } = useTranslation('learn')
   const draft = useCourseDraft(course)
+  const navigate = useNavigate()
   const shelf =
     draft.load.state === 'ready' ? (draft.load.value.shelf ?? course.shelf) : course.shelf
   return (
@@ -83,6 +84,15 @@ function EditorRows({ course, title }: { course: Course; title: string }) {
         />
       </SettingsGroup>
       <ChangesGroup draft={draft} title={title} unreadable={t('edit.course.unreadable')} />
+      {/* One made in the app, not one the app ships with: Unpublish and Delete (round 28). */}
+      {COURSES.some((each) => each.id === course.id) ? null : (
+        <RemoveGroup
+          kind="course"
+          id={course.id}
+          title={title}
+          onDeleted={() => void navigate({ to: '/', search: { view: 'courses' } })}
+        />
+      )}
     </>
   )
 }

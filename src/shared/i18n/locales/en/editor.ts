@@ -651,6 +651,20 @@ export const editor = {
         'An example is in 2/4, 3/4, 4/4, 6/8 or 12/8, one time and key: this change is not kept.',
     },
   },
+  // An item made in the app, given up on its Settings page (round 28).
+  remove: {
+    title: 'Remove',
+    unpublish: 'Unpublish',
+    unpublishTitle: 'Unpublish {{title}}?',
+    unpublishBody:
+      'Learners no longer get it. It stays here unpublished, to change and publish again.',
+    unpublished: 'Unpublished',
+    delete: 'Delete',
+    deleteTitle: 'Delete {{title}}?',
+    deleteBody:
+      'It is deleted for good, with its unpublished changes and every version kept of it.',
+    deleted: 'Deleted',
+  },
   original: {
     draft: 'Publishing',
     opening: 'Opening…',

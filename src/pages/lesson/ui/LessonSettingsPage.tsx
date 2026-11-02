@@ -1,4 +1,4 @@
-import { Link, useParams } from '@tanstack/react-router'
+import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import {
   Bookmark,
   BookOpenText,
@@ -12,6 +12,7 @@ import { useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { courseLesson } from '@/entities/course'
 import {
+  LESSONS,
   lessonById,
   lessonIds,
   lessonLanguages,
@@ -26,7 +27,7 @@ import {
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { courseLessonStepId, lessonStepId, type StepId } from '@/entities/step'
-import { useLessonDraft } from '@/features/edit-original'
+import { RemoveGroup, useLessonDraft } from '@/features/edit-original'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { setLessonReading } from '@/features/set-preference'
 import { localText, useLocale } from '@/shared/i18n'
@@ -228,6 +229,7 @@ function EditorRows({
   const { t } = useTranslation(['learn', 'settings'])
   const locale = useLocale()
   const draft = useLessonDraft(lesson, id)
+  const navigate = useNavigate()
   // What was chosen since it opened: the draft's own until then.
   const [chosen, setChosen] = useState<Lesson | null>(null)
   const written = chosen ?? (draft.load.state === 'ready' ? draft.load.value : null)
@@ -289,6 +291,16 @@ function EditorRows({
         />
       </SettingsGroup>
       <ChangesGroup draft={draft} title={title} unreadable={t('edit.unreadable')} />
+      {/* A level's lesson made in the app, not one the app ships with (a course's is its course's):
+          Unpublish and Delete (round 28). */}
+      {where.kind !== 'level' || LESSONS.some((each) => each.id === lesson.id) ? null : (
+        <RemoveGroup
+          kind="lesson"
+          id={id}
+          title={title}
+          onDeleted={() => void navigate({ to: '/', search: { view: 'lessons' } })}
+        />
+      )}
     </>
   )
 }
