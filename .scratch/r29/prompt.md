@@ -1888,6 +1888,22 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   the home indicator. Nothing clipped, nothing jumps.
 - **App Store screenshots** (Phase 3, when the app is packaged): portrait 1206×2622 and 1179×2556,
   landscape 2622×1206 and 2556×1179, taken from the same pages at 3×.
+- **Offline and updates (the PWA; what exists stays, these are the gaps):** the app already has
+  the update prompt (`registerType: 'prompt'`, `app/update-prompt`), `storage.persist()` and
+  `estimate()` (`shared/api/device-storage`), quota handling (`safe-storage`) and `useOnline`.
+  Add:
+  - **the samples' cache:** a runtime **CacheFirst** route of its own for `/samples/` (not the
+    precache, which stays the app shell), keeping 200 responses only, never evicted by an
+    expiration plugin, with `rangeRequests` if a file is ever streamed; deleted by the "Download
+    for offline" row's Remove, and counted on Storage and backup;
+  - **a stale chunk after a deploy:** a lazy screen whose hashed chunk is gone reloads once
+    (`vite:preloadError`, guarded so it can't loop) instead of showing the route error;
+  - **iPhone storage:** Safari deletes a site's storage after seven days without a visit unless
+    the app is on the Home Screen, so the Add to Home Screen hint (where it exists) says that
+    offline songs and samples last only when installed, and signed-in learners' saves stay synced;
+  - **offline is a state, not an error:** a control that needs the network says so ("Available
+    when online") and is disabled, never silently does nothing; nothing offline is painted red.
+  Native-only frameworks (Apple's Foundation Models, Core AI) don't reach a PWA: out of scope.
 - **Schema changes:** a migration without `drop`, applied, its access tests run, the types
   regenerated (D17).
 - **Free styles:**
