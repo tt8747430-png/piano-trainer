@@ -381,6 +381,11 @@ doesn't name, judge it by them:
       need);
     - the synthesised voice stays only while samples load and as the offline fallback before the
       download.
+    - **a memory budget:** decoded audio is raw PCM, about ten times its compressed size, so 20 MB
+      of samples would be 200–300 MB in memory and an iPhone may reload the app. Decode one
+      velocity layer at first and the other notes and layers only when first played, free the
+      buffers a page no longer uses, and keep the piano under about 80 MB of decoded audio;
+      measure it on an iPhone (Safari's memory timeline) before calling A27 done.
 16. **The metronome's sounds (A39):** recorded one-shots, each with an accented and a normal
     stroke, **CC0 only** (Freesound's CC0 filter or a CC0 pack; the source and licence of each file
     written in `public/samples/metronome/SOURCES.md`): woodblock, clave, rimshot, cowbell, a

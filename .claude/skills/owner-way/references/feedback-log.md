@@ -24,6 +24,7 @@ The owner's feedback from every session, condensed and grouped by area. Read the
 - Profile, Settings and the Account
 - Songs: adding, exporting, publishing, the Public library
 - Process
+- Round 29: the whole app (2026-11-02)
 
 ## Score editor: layout and palette
 - It must feel like a notation app: Sibelius for iPhone, then Flat and Dorico ("we want a real editor").
@@ -115,7 +116,7 @@ The owner's feedback from every session, condensed and grouped by area. Read the
 - **Chord sizes:** a long chord (Fm, slash chords) never breaks the layout.
 
 ## Player Setup and settings
-- **Plain words:** the settings must be understandable: How it plays, swing, the first chord's position and Nearest.
+- **Plain words:** the settings must be understandable: How it plays, swing, the first chord's position and Nearest. **Round 29:** a song with written staves plays its staves (which to play, which to show); accompaniment patterns, inversion and voice leading belong to a chord chart only; "Melody" goes.
 - **Melody:** say where it comes from and let the learner choose its source. "Tune" meant nothing.
 - **Hand patterns:**
   - Make plain how a hand's figure relates to the pattern above, and what choosing one does.
@@ -156,12 +157,12 @@ The owner's feedback from every session, condensed and grouped by area. Read the
 - **From the new reference pages** (round 14): rootless voicings, locked hands, modulation, slash chords, sus/6/9, the cadences in full, a practice-method course.
 
 ## Practice pages
-- **Structure and best practices** from the reference apps and memory-palaces (round 13): grouped, each row its picture, name and one line; strips with ‹ ›; progression cards that play in place; intervals as rows; fingering drawn on a hand; autoplay on choosing.
+- **Structure and best practices** from the reference apps and memory-palaces (round 13): grouped, each row its picture, name and one line; strips with ‹ › (**superseded in round 29**: no strip hides options; a key picker and menus instead); progression cards that play in place; intervals as rows; fingering drawn on a hand; autoplay on choosing.
 - **Chords and fingerings from the new data** (round 14): every chord type, its fingering by hand and inversion, voicings to choose (drop 2, rootless, quartal …), scale fingerings as the printed books give them, more scale kinds, Hanon 1–20, a tempo ladder. "If you need more information … you can fetch the remaining pages of these websites."
 - **Quiz:** one setup and four drills for every trainer; a cadence trainer.
 
 ## Metronome
-- **Layout:** like the owner's example: the BPM large with −10 −1 +1 +10, a slider, Tap tempo, sound and meter, one Play, the beats as squares.
+- **Layout:** like the owner's example: the BPM large with −10 −1 +1 +10, a slider, Tap tempo, sound and meter, one Play, the beats as squares. **Round 29:** one stepper and one menu style, beats you set (accent, normal, silent), any time signature, subdivisions, recorded sounds; one engine for the page, the Player and the quick metronome.
 
 ## PWA and touch
 - **No browser chrome:** in the installed iPhone app, no browser bubbles, loupe or callouts. It should feel like a real app.
@@ -268,4 +269,38 @@ The owner's feedback from every session, condensed and grouped by area. Read the
   in hand unless the owner says stop.
 - **Learners' data** (2026-10-29): the owner refused a query reading the sync tables' rows. Diagnose from logs,
   aggregates and code; never read a learner's saved data.
+
+## Round 29: the whole app (2026-11-02)
+The full brief is `.scratch/r29/prompt.md`; these are the patterns behind it, to apply anywhere.
+- **The term a musician uses:** "check all the strings … use professional terms". Every label, option and ⓘ
+  checked against `piano-data/books`, method books, Flat and Dorico, in en and ru. Failed: "Move smoothly"
+  (voice leading), "Between two chords" (passing chords), "Starting position" (inversion), "Who wrote it",
+  "Words · Music" (lyricist, composer), "Through the keys" (practise in all 12 keys).
+- **Only what works here:** "only the relevant actions and ui should be shown and not ui that doesn't work".
+  No control that does nothing for what is shown, no greyed option that looks broken, and a choice never moves
+  you to another tab (Dorian on the Key tab jumped to Scale).
+- **If its effect can't be seen or heard, it is wrong:** the Function · Root motion switch changed only letters;
+  the owner chose to draw the roles and moves on the chords instead (layout B).
+- **One home per idea and per setting:** "the chords share the same title as the chords page … this is
+  misleading". The page shows what you look at; its Settings page holds how it always behaves; Settings holds
+  what every page shares. Every Practice page gets a Settings page.
+- **One component per kind of thing:** one key picker (12 keys, the black keys' spelling in the cell), one
+  selected style, one corner scale, one row, one transport capsule, one fingering rule, one metronome engine.
+- **The references show what to add, not only what to copy:** "where did you take the instruction to not
+  invent modes … didn't I add screenshots for you to add what we don't have". Compare item by item (Flat's
+  panels, Chordify's views, metronome apps, Ultimate Piano's pickers) and build what's missing.
+- **Fill the screen, calm the page:** no half-empty laptop screens, no 6,000px pages, folds with a summary,
+  "Show all n".
+- **Settings layout:** one column on a phone, two panes on a laptop; rows of five kinds; destructive actions
+  last and alone, red; pictures for visual choices ("these are very heavy to read"); never "keyboard" alone.
+- **Back means up, not history:** "why is the search perceived as a separate page". Search is a palette.
+- **The pencil means one thing for every role:** edit what the screen shows; "Edit score" is its own action.
+- **Confirm before losing or hiding work** ("actions that can be clicked easily like archive should get … are
+  you sure"), with Undo where it can be undone.
+- **Answer questions first, then the work;** when asked for best options, give a recommendation, not a
+  survey; explain with a drawing when words didn't land ("I didn't understand what you said").
+- **Latest words win:** a later instruction overrides an earlier one on the same thing; keep the brief
+  consistent when it does.
+- **Beta (2026-11-02):** database changes, every text and the packages and samples named in the brief are the
+  agent's to decide; secrets, keys, roles and outside hosting stay the owner's.
 
