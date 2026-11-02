@@ -212,6 +212,23 @@ The references show what to add as well as what to improve: build what we don't 
     - **Settings:** two panes (rule 20).
     - **Search results:** a full row of results before "Show all n".
     - Check 1280×800, 1440×900 and 1920×1080.
+29. **One button family per job, one heading style per level.**
+    - **A row that opens something** (Chromatic walk, a song, a page) is a list row: full width of
+      its card, no inset grey block, the hover reaching the card's edges. A single row never sits
+      in a card far wider than itself; a short list goes in a grid of equal cards (rule 28).
+    - **Choices** follow Part A 5: a segmented control only when every option shows at once. Never
+      a strip that hides options behind ‹ › arrows (Root, Quality, Voicing): a menu or combobox
+      instead, or a grid of keys that fits.
+    - **Toggles that combine** (Alterations ♭5 ♭9 ♯9 ♯11 ♭13) look like the segmented control's
+      options with the same selected style (rule 15), not a third kind of bordered chip.
+    - **A choice that can't be made right now** (Hands: Right on a two-hand voicing) is hidden or
+      explained by ⓘ, not a faded option that looks broken.
+    - **Section headings:** one style. "Fingering" (serif, large, ⌄) and "Practise in the Player"
+      (small, sans, ⌄) are the same level, so they look the same; a fold's chevron sits in the same
+      place on each.
+    - **The floating transport** is one capsule (rule 5), not three separate circles.
+    - **Nothing clipped at the top:** a sticky header (the chord's staff) is never cut by the page
+      scrolling under it.
 
 ## Decided (do not re-ask)
 1. **Explore in Songs.** The Public library is the second half of Songs: a switch in the Songs app
@@ -303,7 +320,9 @@ The references show what to add as well as what to improve: build what we don't 
     states);
   - 54: Keyboard and recording's two uneven columns;
   - 55: Settings' misaligned arrows;
-  - 56–59: half-empty laptop screens (Practice, Songs, Settings, Search).
+  - 56–59: half-empty laptop screens (Practice, Songs, Settings, Search);
+  - 60: the Chords page: the arrowed strips, three kinds of chip, two heading styles, the inset
+    Chromatic walk row in an empty card, three transport circles, the staff cut at the top.
 - My other screenshots in this session: Noji's live publish screen, Klangio's checkbox, our Songs
   folder menu, our editor's View and Transpose panels.
 
@@ -491,6 +510,18 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
 19. **Laptop layout audit** (rule 28). Every place and every page it opens, at 1280, 1440 and 1920:
     empty areas, columns of unequal length, orphan cards, mismatched card heights. A screenshot of
     each place in the round's report.
+20. **Buttons, rows and headings on every explorer** (rule 29). Start with the Chords page
+    (`owner/60`), then Scales and keys, Intervals, Progressions, Accompaniment, the Chord finder,
+    Exercises and the Quiz setup.
+    - List every button and chip family, every row inside a card, every section heading and every
+      floating control, with its shape, selected style and size.
+    - Bring each to one family: the list row, the segmented control, the combobox, the toggle
+      group, the section heading, the transport capsule. Each lives in `shared/ui`; a page passes
+      data, never classes.
+    - Root and Quality become pickers that show the whole choice (a 12-key grid or a combobox);
+      Voicing a combobox with a picture of each voicing (rule 21).
+    - Done: screenshots of every explorer at 390 and 1280 before and after, and a contact sheet of
+      the families in each state.
 
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
@@ -642,11 +673,11 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   - no layout that can break the page.
 
 ## Rounds
-1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–19: one component each, the app bar,
+1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–20: one component each, the app bar,
    action placement, page/sheet/menu, controls, words, navigation (Back as up, the Search palette, the
    sidebar's selected look), shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout and two panes, pictures and icons, page names, account and
-   storage, arrows, destructive rows, laptop layouts.
+   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings.
 2. **Profile** (Part B 1).
 3. **Copy and the rights checkbox** (Part B 2).
 4. **Explore in Songs and the built-in folders' rules** (Part B 3, Decided 8 and 10).
