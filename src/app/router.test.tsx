@@ -178,9 +178,10 @@ describe('the app shell', () => {
       'Songs',
       'Practice',
       'Profile',
-      'Search',
       'Settings',
     ])
+    // Search is the palette's: a button, never a place of its own (rule 27).
+    expect(within(nav).getByRole('button', { name: 'Search' })).toBeInTheDocument()
     expect(within(nav).getByRole('link', { name: 'Songs' })).toHaveAttribute('aria-current', 'page')
   })
 

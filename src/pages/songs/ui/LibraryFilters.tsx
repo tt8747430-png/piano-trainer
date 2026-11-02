@@ -1,10 +1,12 @@
-import { ArrowDownUp, X } from 'lucide-react'
+import { ArrowDownUp, Search, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LIBRARY_SORTS, type LibrarySort } from '@/entities/library'
 import { useSetSearch } from '@/shared/lib'
 import { keyFromParam } from '@/shared/lib/music'
 import { useKeyName } from '@/shared/i18n'
 import { Dropdown, SearchField } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
+import { useSearchPalette } from '@/widgets/search-palette'
 import type { SongsFilter } from '../model/songs-filter'
 import type { LibraryPage } from '../model/use-library-page'
 import { FilterSheet } from './FilterSheet'
@@ -14,7 +16,8 @@ import { FilterSheet } from './FilterSheet'
  * joined to its end, a pop-up of a word or two (Manual · Name · Recent · Key, the library's own,
  * kept); beside it the Filter button, its count on it while filters are on, opening the filters'
  * sheet (Key, Level, Favourites). Under them, while any is on, each as a chip that takes it off, in a
- * row that scrolls sideways. The filters are the URL's; the sort is the library's.
+ * row that scrolls sideways; while something is typed, Search everywhere opens the palette on it. The
+ * filters are the URL's; the sort is the library's.
  */
 export function LibraryFilters({
   page,
@@ -44,7 +47,20 @@ export function LibraryFilters({
         <FilterSheet page={page} filter={filter} />
       </div>
       <FilterChips filter={filter} />
+      {filter.q.trim() === '' ? null : <SearchEverywhere query={filter.q} />}
     </div>
+  )
+}
+
+/** The library searched first; what was typed searched everywhere in the palette (rule 27). */
+function SearchEverywhere({ query }: { query: string }) {
+  const { t } = useTranslation('search')
+  const palette = useSearchPalette()
+  return (
+    <Button variant="soft" className="self-start" onClick={() => palette.open(query)}>
+      <Search aria-hidden />
+      {t('everywhere')}
+    </Button>
   )
 }
 

@@ -391,7 +391,8 @@ describe('Piece: the learner’s own music', () => {
       '/songs/amazing',
     )
     await act(() => router.navigate({ to: '/search', search: { q: 'my grace' } }))
-    expect(await screen.findByRole('link', { name: /My grace/ })).toBeInTheDocument()
+    expect(await screen.findByRole('option', { name: /My grace/ })).toBeInTheDocument()
+    await user.keyboard('{Escape}')
     await act(() => router.navigate({ to: '/songs/$pieceId', params: { pieceId: 'amazing' } }))
     expect(await screen.findByRole('heading', { level: 1, name: 'My grace' })).toBeInTheDocument()
     await openSettings(user)

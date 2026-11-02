@@ -4,3 +4,6 @@ import type { RememberedView } from './view'
 /** A screen's last view, if it was used before. */
 export const selectView = (state: ViewsState, path: string): RememberedView | undefined =>
   state.views[path]
+
+/** What the learner searched for last, the latest first. */
+export const selectRecentSearches = (state: ViewsState): readonly string[] => state.searchRecent

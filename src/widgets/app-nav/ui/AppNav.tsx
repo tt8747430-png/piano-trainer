@@ -13,16 +13,16 @@ import type { ComponentType } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectSidebar, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setSidebar } from '@/features/set-preference'
-import { OPEN_PLAINLY, useMediaQuery } from '@/shared/lib'
+import { cn, OPEN_PLAINLY, useMediaQuery } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { keyHint, useShortcutsPlatform, useShortcuts, type Combo } from '@/shared/lib/shortcuts'
 import { Avatar } from '@/shared/ui'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
+import { useSearchPalette } from '@/widgets/search-palette'
 
 interface Place {
-  readonly to: '/' | '/songs' | '/practice' | '/profile' | '/search' | '/settings'
-  readonly label:
-    'nav.learn' | 'nav.songs' | 'nav.practice' | 'nav.profile' | 'nav.search' | 'nav.settings'
+  readonly to: '/' | '/songs' | '/practice' | '/profile' | '/settings'
+  readonly label: 'nav.learn' | 'nav.songs' | 'nav.practice' | 'nav.profile' | 'nav.settings'
   readonly icon: ComponentType<{ className?: string; 'aria-hidden'?: boolean }>
   readonly exact: boolean
   /**
@@ -92,18 +92,12 @@ const SIDEBAR_KEY: Combo = { code: 'KeyB', mod: true }
 /** Where the navigation is the sidebar (the `lg` breakpoint), with Settings at its foot. */
 const SIDEBAR_SHOWN = '(min-width: 64rem)'
 /**
- * What sits at the sidebar's foot on a laptop: Search, on the platform's modifier and K from
- * anywhere, and Settings, on the modifier and a comma (a phone has Search in a place's bar and
- * Settings in the Profile).
+ * Search, at the sidebar's foot on a laptop: the palette over the screen (rule 27), on the
+ * platform's modifier and K from anywhere (a phone has it in a place's bar).
  */
+const SEARCH_KEY: Combo = { code: 'KeyK', mod: true }
+/** What else sits at the sidebar's foot: Settings, on the modifier and a comma (a phone's is in the Profile). */
 const FOOT: readonly Place[] = [
-  {
-    to: '/search',
-    label: 'nav.search',
-    icon: Search,
-    exact: false,
-    key: { code: 'KeyK', mod: true },
-  },
   {
     to: '/settings',
     label: 'nav.settings',
@@ -178,6 +172,35 @@ function PlaceLink({
   )
 }
 
+/** Search at the sidebar's foot: it opens the palette, so it is a button, never a place of its own. */
+function SearchItem({ collapsed }: { collapsed: boolean }) {
+  const { t } = useTranslation('common')
+  const palette = useSearchPalette()
+  const mac = useShortcutsPlatform()
+  const label = t('nav.search')
+  const content = (
+    <>
+      <Search aria-hidden className="size-6 shrink-0 lg:size-5" />
+      <span className="lg:group-data-[sidebar=collapsed]/nav:sr-only">{label}</span>
+    </>
+  )
+  const props = {
+    type: 'button',
+    title: keyHint(label, SEARCH_KEY, mac),
+    onClick: () => palette.open(),
+    className: cn(PLACE_LINK, 'w-full'),
+  } as const
+  if (!collapsed) return <button {...props}>{content}</button>
+  return (
+    <Tooltip>
+      <TooltipTrigger render={<button {...props} />}>{content}</TooltipTrigger>
+      <TooltipContent side="right" className="max-lg:hidden">
+        {label}
+      </TooltipContent>
+    </Tooltip>
+  )
+}
+
 /**
  * The main navigation: a bar docked along the bottom on phones; from 1024px a sidebar that collapses
  * to its icons and remembers it, with Search at its foot. From the computer's keys, Alt
@@ -191,6 +214,7 @@ export function AppNav() {
   const collapsed = sidebar === 'collapsed'
   const ToggleIcon = collapsed ? PanelLeftOpen : PanelLeftClose
   const navigate = useNavigate()
+  const palette = useSearchPalette()
   const mac = useShortcutsPlatform()
   const toggle = () => setSidebar(store, collapsed ? 'open' : 'collapsed')
   const toggleLabel = t(collapsed ? 'nav.open' : 'nav.collapse')
@@ -202,6 +226,7 @@ export function AppNav() {
           ? [{ label: t(label), combo: key, run: () => void navigate({ to, state: OPEN_PLAINLY }) }]
           : [],
       ),
+      { label: t('nav.search'), combo: SEARCH_KEY, run: () => palette.open() },
       { label: t('shortcuts.sidebar'), combo: SIDEBAR_KEY, run: toggle },
     ],
     { scope: 'app' },
@@ -244,6 +269,9 @@ export function AppNav() {
         ))}
         <li className="hidden lg:mt-auto lg:block lg:pb-4">
           <ul className="flex flex-col gap-1">
+            <li>
+              <SearchItem collapsed={collapsed} />
+            </li>
             {FOOT.map((place) => (
               <li key={place.to}>
                 <PlaceLink place={place} collapsed={collapsed} />
