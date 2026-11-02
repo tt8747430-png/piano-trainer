@@ -32,7 +32,9 @@ trust:
 - **Step 0:** carry-overs from earlier rounds, checked first.
 - **A1–A43, the audit:** each a known problem, where it is, and the fix. Cite as "A23".
 - **B1–B11, features:** new things to build. Cite as "B8".
-- **Rounds:** the order of work. **References**, **Constraints**, **Reporting** at the end.
+- **The work, from start to end:** Phase 0 (set up), Phase 1 (specs), Phase 2 (the rounds),
+  Phase 3 (finish). **Start there**: it says what to do first and in what order.
+- **References**, **Constraints**, **Reporting** at the end.
 In the text, "Part A n" means An, "Part B n" means Bn, and "rule n" or "Standing rule n" means Rn.
 
 ### When two parts disagree
