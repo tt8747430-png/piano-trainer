@@ -561,6 +561,52 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       – F…").
     - **Note names on the on-screen piano:** the computer-key letters (A S D …), the degree, the
       finger and the note stacked in four rows on every key: show only what this tab needs.
+22. **Intervals** (`scratchpad/r29/scales/intervals-*`). Known:
+    - The Root strip again hides choices behind ‹ › (Part A 5); "Play: At once · Up · Down" is a
+      half-width segmented control with the right half empty.
+    - **Two row styles in one list:** "Within the octave" rows have ⓘ, "Past the octave" rows
+      don't; the mini keyboard is drawn at two scales. One row, one keyboard size.
+    - **ⓘ on every row** repeats what the name and the drawing already say (rule 21).
+    - **No Play on a row:** tapping a row plays it, but nothing shows that; the hovered row's grey
+      fill looks selected (rule 15). A row that plays shows a play mark; the one playing is
+      marked as playing.
+    - **"Semitones: 3"** under every name: "3 semitones", or the size as a number column.
+    - **Phone:** names wrap to two lines ("Minor / seventh") while a 120px keyboard takes the row;
+      the drawing shrinks before the name wraps.
+    - **Odd counts leave holes:** 7 rows past the octave end with a lone card (rule 28).
+    - **Missing:** sound for the whole list (play each in turn), ear training linked to the Quiz,
+      the interval on the staff (Chords and Scales show a staff; Intervals doesn't).
+23. **Progressions** (`scratchpad/r29/scales/progressions-*`). The page is about 11,500px on a
+    laptop and 18,800px on a phone. Known:
+    - **One page doing four jobs:** the progression you're building, the Library of progressions
+      (dozens of cards), "Through the keys" walks, and "Between two chords". The Library and
+      Between two chords become their own places in the page (tabs like Scales' Scale · Chords ·
+      Key, or a library list that opens a progression), not one endless scroll.
+    - **The Library is a list, not a wall of cards:** each card repeats name, description, a play
+      button and a row of chord chips; a list row (numerals, name, ▷) with the chords shown when
+      opened. Its genre headings (Pop, Rock, Jazz …) become chips, as Explore's categories.
+    - **Controls:** a text field, three segmented controls, a combobox, a picture choice (Starting
+      position) and a switch, in two uneven columns with Move smoothly alone; ⓘ on four of them.
+      One settings-style group (rule 20), the rarely changed ones (Written as, Voicing, Mode)
+      behind a "Options" fold or the Player's settings page (rule 18).
+    - **Function · Root motion** is a segmented control that only changes the chord strip under
+      it; the strip's colours (green T, purple D, peach S) are a colour code used nowhere else
+      and not explained: a legend, or the same colours the Chords page uses.
+    - **The Play button** floats on the right of the chord strip, a third place for it.
+    - **Two titles:** "Progressions" in the app bar and "Axis of Awesome" with a subtitle.
+    - **Headings:** "Library" (serif with ⌄), "Pop" (serif, no fold), "Through the keys" (small
+      sans with ⌄), "Songs with this progression" (serif), "Dominant" (serif, smaller). One style
+      per level (rule 29).
+    - **Between two chords:** each card holds a staff that renders empty until scrolled to (check
+      it draws at once in view), a tag "Chromatic" on nearly every card (so it tells nothing), a
+      play button under the text (elsewhere it sits at the right). One card family; the tag only
+      where it differs.
+    - **"In the key only"** is a bordered toggle again (rule 15), and "C → G" a combobox of pairs
+      instead of two chord pickers.
+    - **"Songs with this progression: No song uses it yet"** is an empty section shown anyway: an
+      empty state names what to do, or the section hides.
+    - **Through the keys:** nine walks with one icon and cut chord lists ("C G Am F · D♭ A♭ B♭m
+      G♭ …"); different icons by direction, the list unclipped or dropped.
 
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
@@ -712,11 +758,11 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   - no layout that can break the page.
 
 ## Rounds
-1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–21: one component each, the app bar,
+1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–23: one component each, the app bar,
    action placement, page/sheet/menu, controls, words, navigation (Back as up, the Search palette, the
    sidebar's selected look), shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout and two panes, pictures and icons, page names, account and
-   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys.
+   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions.
 2. **Profile** (Part B 1).
 3. **Copy and the rights checkbox** (Part B 2).
 4. **Explore in Songs and the built-in folders' rules** (Part B 3, Decided 8 and 10).
