@@ -237,6 +237,12 @@ The references show what to add as well as what to improve: build what we don't 
     - **The same thing is offered once:** a chord card that opens the chord needs no second row of
       "Open in Chords" chips beside it.
 
+30. **Show only what works here, and a choice never moves you.** Every control on a page or a
+    tab does something on that page or tab, for the thing shown; a control that would do nothing
+    there is not drawn (rule 16), and a choice made in a tab keeps you in that tab. If a choice
+    would leave a tab without its content, the choice isn't offered there (or offers only what
+    fits), never a silent jump to another tab.
+
 ## Decided (do not re-ask)
 1. **Explore in Songs.** The Public library is the second half of Songs: a switch in the Songs app
    bar, "My songs · Explore", the same control as Learn's "Lessons · Courses" (Apple Music's Library ·
@@ -1451,6 +1457,32 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - Done: every drill and three exercises played start to finish at 390 and 1280, screenshots
       of setup, a round, a wrong answer, the results.
 
+42. **Every theory, practice and training page against rule 30.** Known, read in the code:
+    - **Scales and keys:** the scale-kind strip (`ScaleChoice`) is the same on all three tabs, so
+      on the Key tab it offers Dorian, pentatonic, blues…; a mode isn't a key (`showsOf` gives it
+      no Key tab), so choosing Dorian on the Key tab drops the tab and sends you to Scale. On the
+      Key tab the picker offers keys only (major and minor, Part A 5's circle), the modes listed
+      under the key as links ("D Dorian: the C major scale from D", opening Notes); a scale with
+      no chords (pentatonic, blues, chromatic) keeps the Harmony tab with the chords that fit
+      each degree where there are any, or the tab isn't shown and the kind is marked "no chords"
+      in the picker. The Chords tab's run controls (Tempo, "Played as") apply only to its walk:
+      they move into the walk's own row (or the floating capsule, Part A 22's rule for play
+      choices), never above the chords.
+    - **Chords:** rows that vanish (Added tones, Alterations, Part A 20 and 33), Hands "Right"
+      greyed on a two-hand voicing, Voicing options that don't apply to the chord's size.
+    - **Progressions:** Mode (major or minor) beside a progression whose numerals already say;
+      Approach chords on a chord size they can't voice; the walks' section on a progression of
+      one chord.
+    - **Intervals:** Play's way on the past-the-octave rows (they play the same way).
+    - **The Player and editor:** Part A 35 (Setup's pattern and inversion on a written score).
+    - **Quiz setup:** Shown only on Flashcards (right); Level presets that don't match the drill
+      (an ear drill offered "on the staff" levels); Rounds ∞ with a time limit.
+    - **Exercises:** the key picker on an exercise written in one key; hands on a two-hand-only
+      exercise.
+    - Method: for each page and tab, list every control and the states (kind of scale, chord,
+      song, drill) in which it does nothing or moves you away; hide or narrow each; a test per
+      page that every control shown changes what's shown, and that no choice changes the tab.
+
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
    1. **Hero.**
@@ -1620,11 +1652,11 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   - no layout that can break the page.
 
 ## Rounds
-1. **Carry-over check and app-wide rules:** Step 0; Part A 1–19, 31, 36, 38 (one component each,
+1. **Carry-over check and app-wide rules:** Step 0; Part A 1–19, 31, 36, 38, 42 (one component each,
    the app bar, action placement, page/sheet/menu, controls and the key picker, words, navigation
    and the Search palette, shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout, pictures and icons, page names, account and storage,
-   arrows, destructive rows, laptop layouts, nothing jumping, focus, the pencil's one meaning).
+   arrows, destructive rows, laptop layouts, nothing jumping, focus, the pencil's one meaning, only what works here).
 2. **Practice:** Part A 20–25, 30, 32, 33, 39, 41 (the explorers' buttons and headings, Scales and keys,
    Intervals, Progressions, every Practice page's settings, Accompaniment, Chord finder,
    Metronome, Exercises and Quiz, fingering, the theory pages' owners, colour notes, the Metronome against metronome apps, the drills and exercises inside).
