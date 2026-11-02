@@ -58,7 +58,7 @@ These come straight from their feedback. Each has burned a round before.
 - Never ship a flaw you noticed and "report" it: fix it to the obvious right behaviour first.
 
 **Layout**
-- Phone and desktop have the same features, text and layout logic. Check an iPhone (390×844 and 320×568), a phone on its side (844×390) and a laptop (1280×800). Nothing may be clipped, overflow or wrap badly at 320px.
+- Phone and desktop have the same features, text and layout logic. Check an iPhone (402×874 and 393×852, and 320×693 with Display Zoom), a phone on its side (874×402) and a laptop (1280×800). Nothing may be clipped, overflow or wrap badly at 320px.
 - Floating things float. Palettes, the transport, the zoom controls and the tools reserve no space under them and never push the page. Auto-hide must be reliable.
 - Nothing may trap a click meant for something else. After a popover closes, the next tap must reach its target. Test overlapping layers.
 - Controls must not jump when switching modes (Player ↔ editor) or entering Select mode. Icons stay put and heights stay equal.

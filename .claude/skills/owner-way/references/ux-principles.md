@@ -62,4 +62,4 @@ principles*, SilverSky's *6 core principles*, dev.to's *UI/UX principles every d
 2. One primary action; at most two actions in the bar; the rest in More.
 3. Grouped by meaning, aligned to one grid, the same components as every other screen.
 4. Loading, empty, error and offline states; feedback for every action; undo or confirm for every loss.
-5. 390, 320, 844×390 and 1280: nothing clipped, nothing wraps badly, targets 44px, contrast passes.
+5. 402×874, 320×693, 874×402 and 1280: nothing clipped, nothing wraps badly, targets 44px, contrast passes.

@@ -205,7 +205,7 @@ The owner's feedback from every session, condensed and grouped by area. Read the
   dial opens as a card of rows (tile, name, one line). Always a gap from the bottom edge.
 - **Cards whole** (round 25): "don't you see how bad this looks with these cut borders". Rows inside a rounded
   card take its corners; nothing square pokes out.
-- **Look before reporting:** render every changed screen at 390, 320, 844×390 and 1280 and judge it as the owner
+- **Look before reporting:** render every changed screen at 402×874, 320×693, 874×402 and 1280 and judge it as the owner
   will; the owner spots cut borders, clipped titles and doubled controls at once.
 
 ## Creating things: New sheets

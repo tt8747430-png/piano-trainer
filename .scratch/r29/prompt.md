@@ -21,8 +21,8 @@ trust:
 ### Success: what I check when the round is over
 1. Every item of Step 0 and Part A is fixed or written up in `.scratch/r29/audit.md` with why not.
 2. Every Part B feature is built to its "Done" line.
-3. The standing rules hold on every screen at 390×844, 320×568, 844×390 and 1280×800 (and
-   1440/1920 wide for layout), light and dark, en and ru.
+3. The standing rules hold on every screen on the devices of Constraints (iPhone 402×874 and 393×852, Display
+   Zoom 320×693, landscape 874×402, laptop 1280×800, and 1440/1920 wide for layout), light and dark, en and ru.
 4. A screenshot per screen, before and after, in `.scratch/r29/shots/`; the gate green; `main`
    pushed.
 
@@ -90,7 +90,7 @@ doesn't name, judge it by them:
   its behaviour. "As close as possible" means layout, interaction and features. Where I say I
   described an app from memory, check it against its help pages or screenshots first.
 - **Everywhere:** a change is made everywhere it applies, never on one screen only.
-- **Before an item:** read the files it names (the brief cites them), run the app at 390 and 1280,
+- **Before an item:** read the files it names (the brief cites them), run the app at 402 and 1280,
   and take the "before" screenshots. Rows marked "to check" are hypotheses until you have.
 - **Progress file:** keep `.scratch/r29/progress.md`: each A and B item with its state (open, in
   progress, done, won't do and why), its commits, and the owner's questions. Update it with every
@@ -139,7 +139,7 @@ doesn't name, judge it by them:
    height.
 7. **Keyboard:** only the editing toolbar rides above it. No other bar or field is lifted, and a
    focused field stays in view without the page jumping.
-8. **Nothing clipped:** no cut borders, cut titles or uneven padding at 320px.
+8. **Nothing clipped:** no cut borders, cut titles or uneven padding at 320 wide.
 9. **Settings in one place:** an item's Settings page, never split across the toolbar, the app bar
    and menus.
 10. **Words:** no developer words, no explanations Flat wouldn't show. Help about a control goes
@@ -472,7 +472,7 @@ doesn't name, judge it by them:
   rest when a round needs them).
 
 ## Step 0: carry-over check (my earlier messages)
-Check each item on the running app at 390 and 1280. Mark it done or open in `.scratch/r29/audit.md`;
+Check each item on the running app at 402 and 1280. Mark it done or open in `.scratch/r29/audit.md`;
 anything open joins the rounds.
 - **Lesson content:**
   - clicking into it jumps to the top, and it doesn't look editable;
@@ -619,7 +619,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       `MidiSettingsPage`; on a laptop, the two panes.
     - Regroup the rows by what a learner looks for (Metronome under Sound, not Recording) and reword
       awkward labels ("Hide them on a phone on its side").
-    - Done: screenshots of every settings page at 390 and 1280, before and after.
+    - Done: screenshots of every settings page at 402 and 1280, before and after.
 13. **Pictures and icons in settings** (rule 21).
     - Research how iOS Settings, macOS System Settings, Flat, Dorico and the piano app in my
       screenshots show visual choices. Write the rule in DESIGN.md.
@@ -641,7 +641,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       | Theme: System · Light · Dark | three small screen previews |
       | Settings' list of pages | a coloured icon at the start of each row |
 
-    - Done: before and after screenshots of each settings page at 390 and 1280.
+    - Done: before and after screenshots of each settings page at 402 and 1280.
 14. **Name the settings pages after what the learner sees** (rule 22).
     - Replace "Keyboard and recording" and "MIDI keyboard" with:
       - **On-screen piano:** look, position, folding, swipe, names, chord names;
@@ -664,7 +664,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       Keep them safe, Save a backup, Restore from a file, Reset progress. Nothing about the account on
       it.
     - Remove the "Sync and data" page and its row.
-    - Done: screenshots signed in and signed out at 390 and 1280; tests that the card shows each sync
+    - Done: screenshots signed in and signed out at 402 and 1280; tests that the card shows each sync
       status and that Sync now sits on the Account page only.
 16. **Arrows and chevrons** (rule 23). Today there are 25 ArrowLeft against 19 ChevronLeft and 33
     ArrowRight against 35 ChevronRight across 29 files.
@@ -674,7 +674,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - Hover fills the whole row to the card's edges, not an inset block (rule 15).
     - Done: a test that no page module imports ChevronRight/ChevronLeft/ArrowLeft/ArrowRight outside
       the shared components and the movement controls. Screenshots of Settings, a song page, Practice
-      and the Profile at 390 and 1280 with the marks on one line.
+      and the Profile at 402 and 1280 with the marks on one line.
 17. **Destructive and command rows** (rules 24–25).
     - Research how iOS Settings (Apple Account, Sign Out), macOS System Settings, GitHub, Linear,
       Slack and Noji style and place sign-out, delete-account and reset actions: colour, grouping,
@@ -720,7 +720,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
         others re-flowing, and the chord's name and notes update at once (Part A 5's feedback).
       - Tests: a table of every triad × size × 7th with the added tones it offers, checked against
         the sources, and a page test that the row stays when the chord changes.
-    - Done: screenshots of every explorer at 390 and 1280 before and after, and a contact sheet of
+    - Done: screenshots of every explorer at 402 and 1280 before and after, and a contact sheet of
       the families in each state.
 21. **Scales and keys, all three tabs** (screenshots in `scratchpad/r29/scales/`). Today's tabs are
     Scale · Chords · Key; A32 renames them **Notes · Harmony · Key**, and the text below uses
@@ -777,7 +777,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
         style (rule 29) and one card family.
       - **Tab names say what's in them:** "Notes · Harmony · Key" (Part A 32), checked with the
         clarify skill.
-      - Done: the three tabs side by side at 390 and 1280, the same header and the seven columns
+      - Done: the three tabs side by side at 402 and 1280, the same header and the seven columns
         lining up across them.
 22. **Intervals** (`scratchpad/r29/scales/intervals-*`). Known:
     - **The root** (`owner/71`): the 17-name strip with ‹ › arrows (B is cut off). It becomes the
@@ -1020,7 +1020,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       - leaving the page, opening a sheet or switching tabs lets the pedal up, so no key rings on;
       - a key struck again under the pedal restrikes, not stacks a second voice;
       - the sostenuto and soft pedals from a MIDI keyboard are shown, not only heard.
-    - **Feel:** the keys at 320px are wide enough to hit (zoom, or two octaves), a swipe scrolls or
+    - **Feel:** the keys at 320 wide are wide enough to hit (zoom, or two octaves), a swipe scrolls or
       plays as set, nothing on the rail covers keys, the piano's height is the same on every page.
 27. **The Player's piano sound and its pedal** (read in the code, not yet heard; the owner
     hears it on the Fantaisie-Impromptu):
@@ -1215,7 +1215,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - The app bar slides away on scroll (`ScreenHeader`'s `data-hidden`) and takes the controls
       under it with it on short pages: it hides only on pages taller than two screens, and never
       while a field or menu is open.
-    - Find every other case: record each place at 390 and 1280 (Playwright video) while changing
+    - Find every other case: record each place at 402 and 1280 (Playwright video) while changing
       each choice; any frame where something blanks, jumps or moves that wasn't touched is a row in
       the audit. Done: the recordings, before and after.
 32. **The theory pages: one owner per idea, no copies.** Scales and keys has a tab called
@@ -1590,7 +1590,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
         per exercise and key, and the day's routine ticked off;
       - the exercise's settings on its Settings page (Part A 24), the metronome from the one
         engine (Part A 39).
-    - Done: every drill and three exercises played start to finish at 390 and 1280, screenshots
+    - Done: every drill and three exercises played start to finish at 402 and 1280, screenshots
       of setup, a round, a wrong answer, the results.
 
 42. **Every theory, practice and training page against rule 30.** Scales and keys is read in
@@ -1751,7 +1751,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
        learner reads and writes only their own profile and avatar; a public handle and avatar are
        readable once the learner makes them public, D12), per D17.
 
-   Done: side-by-side screenshots with the references at 390 and 1280.
+   Done: side-by-side screenshots with the references at 402 and 1280.
 2. **Professional copy.**
    - Research how established apps word their terms, privacy, publishing rules, empty states and
      help: App Store guidelines, Spotify, MuseScore, Flat, Klangio, Quizlet, Noji.
@@ -1820,7 +1820,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
      Feedback, Modes.
    - **Feedback:** after a take, which notes were right, wrong, early or late, from the MIDI
      keyboard.
-   - Done: side-by-side screenshots with the reference at 390 for every sheet.
+   - Done: side-by-side screenshots with the reference at 402 for every sheet.
 9. **Customisable pages and cards.**
    - Course pages, the Courses overview and the song overview get the lesson editor's block toolbar
      (Insert, `/`, drag handle, custom sections), as customisable as a lesson.
@@ -1871,7 +1871,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - **The circle of fifths** becomes a tool page and the key picker (Part A 5) at once.
     - **One tool, one implementation:** the Metronome page, the Player's count-in and click, and the
       quick metronome are one engine and one set of settings.
-    - Done: every tool opened from Practice and from inside a song, at 390 and 1280.
+    - Done: every tool opened from Practice and from inside a song, at 402 and 1280.
 
 ## Constraints
 - **Out of scope this round:** new instruments' sounds beyond the piano and voices (ADR 0097),
@@ -1879,8 +1879,15 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   to-do).
 - **Completeness:** one implementation per thing. Every string in en and ru. Loading, empty, error
   and offline states.
-- **Screenshots:** at 390×844, 320×568, 844×390 and 1280×800 (plus 1440×900 and 1920×1080 for
-  layout); nothing clipped, nothing jumps.
+- **Devices** (Apple's current sizes, in CSS points): **402×874** (iPhone 17, 16 Pro and 17 Pro:
+  1206×2622 pixels at 3×), **393×852** (iPhone 14 Pro to 16: 1179×2556), **320×693** (any of them
+  with Display Zoom, the narrowest a current iPhone gets), **874×402** (landscape), **1280×800**
+  (laptop), and 1440×900 and 1920×1080 for layout. Test at 3× for the phones. Safe areas as the
+  Dynamic Island phones have them: about 59pt at the top in portrait (status bar and Island), 34pt
+  home indicator at the bottom, about 59pt on each side in landscape; nothing under the Island or
+  the home indicator. Nothing clipped, nothing jumps.
+- **App Store screenshots** (Phase 3, when the app is packaged): portrait 1206×2622 and 1179×2556,
+  landscape 2622×1206 and 2556×1179, taken from the same pages at 3×.
 - **Schema changes:** a migration without `drop`, applied, its access tests run, the types
   regenerated (D17).
 - **Free styles:**
@@ -1896,8 +1903,8 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
    anything already red, so later failures are clearly ours.
 3. Create `.scratch/r29/progress.md` (every A and B item, state "open"), `audit.md`,
    `settings-map.md`, `copy.md` and `shots/before/`.
-4. Take the "before" screenshots: every place and every page it opens, at 390×844, 320×568,
-   844×390 and 1280×800, light and dark; the Player and the editor with Daisy fields and the
+4. Take the "before" screenshots: every place and every page it opens, on the devices of
+   Constraints (402×874, 393×852, 320×693, 874×402, 1280×800), light and dark; the Player and the editor with Daisy fields and the
    Fantaisie-Impromptu.
 5. Read the owner-way skill and its feedback log, DESIGN.md, and the ADRs the first round touches.
 

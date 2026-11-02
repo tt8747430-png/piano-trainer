@@ -123,7 +123,7 @@ When unsure, ask: would following this skill change what I do next? If not, don'
 Do:
 - read only the part of a file you need; filter long command output to its summary lines;
 - test first and watch it fail; find the root cause; prove "done" with a fresh run;
-- look at the rendered screen at 390, 320, 844×390 and 1280 before calling a UI change done;
+- look at the rendered screen at 402×874, 320×693, 874×402 and 1280 before calling a UI change done;
 - commit each finished task; push the branch often, `main` only after the full suite and the build;
 - say what you left and why, and ask the owner's decisions as direct questions.
 

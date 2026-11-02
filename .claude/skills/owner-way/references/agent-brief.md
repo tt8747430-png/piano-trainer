@@ -47,7 +47,7 @@ Then append the common part below unchanged. Launch with `isolation: "worktree"`
 - Screenshots:
   - Run a dev server with `npx vite --port <your port> --strictPort` in the background.
   - Use Playwright: `require('/opt/node-tools/node_modules/playwright-core')`, `chromium.launch({ executablePath: '/opt/pw-browsers/chromium' })`, deviceScaleFactor 2.
-  - Shoot each screen your brief lists at 390×844 and 1280×800; add 320×568 and 844×390 only where something may be clipped.
+  - Shoot each screen your brief lists at 402×874 and 1280×800; add 320×693 and 874×402 only where something may be clipped.
   - Look at every shot and fix what is cut, crowded or misaligned.
 - Background work:
   - Give every long command a limit of about twice what it needs (`timeout 1800 <command>` for a large test run), so a mistake cannot run on. Your own work has no time limit.
