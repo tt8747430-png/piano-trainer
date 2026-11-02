@@ -1,17 +1,71 @@
-# Round 29: one consistent app
+# Round 29: one consistent, professional app
 
-Audit, app bar, navigation, controls, settings, Profile, Explore in Songs, professional copy, edit in
-place, learner view, publishing, real settings, the Player's practice flow, customisable bars, pages
-and cards.
+This is the brief for round 29 of Piano Trainer. It is long because it collects every piece of my
+feedback from this session in one place. Read "Read this first" fully; the rest is reference you
+open when a round reaches it.
 
-## Goal
-Make Piano Trainer feel like one professional, finished app:
+## Read this first
+
+### Goal
+Make Piano Trainer feel like one professional, finished app that a pianist or a piano teacher would
+trust:
 - every action looks, sits and works the same everywhere;
-- plain musical language, no developer terms;
-- as close to the reference apps as our look allows (Noji, Quizlet, Flat, memory-palaces, the piano
-  player app in my screenshots).
+- every word is the term a musician, a method book or Flat uses: no developer words, no home-made
+  phrases;
+- every control on a screen does something there; nothing is shown that doesn't work;
+- each idea has one home; everywhere else links to it;
+- as close to the reference apps as our look allows (Flat, Dorico, Chordify, Noji, Quizlet,
+  memory-palaces, Ultimate Piano, the piano player app in my screenshots). The references show what
+  to add as well as what to improve: build what we don't have.
 
-The references show what to add as well as what to improve: build what we don't have.
+### Success: what I check when the round is over
+1. Every item of Step 0 and Part A is fixed or written up in `.scratch/r29/audit.md` with why not.
+2. Every Part B feature is built to its "Done" line.
+3. The standing rules hold on every screen at 390×844, 320×568, 844×390 and 1280×800 (and
+   1440/1920 wide for layout), light and dark, en and ru.
+4. A screenshot per screen, before and after, in `.scratch/r29/shots/`; the gate green; `main`
+   pushed.
+
+### How this brief is organised, and how to cite it
+- **R1–R30, standing rules:** apply to every screen in every round. Cite as "R17".
+- **D1–D14, decided:** settled; don't re-open them. Cite as "D8".
+- **Step 0:** carry-overs from earlier rounds, checked first.
+- **A1–A42, the audit:** each a known problem, where it is, and the fix. Cite as "A23".
+- **B1–B11, features:** new things to build. Cite as "B8".
+- **Rounds:** the order of work. **References**, **Constraints**, **Reporting** at the end.
+In the text, "Part A n" means An, "Part B n" means Bn, and "rule n" or "Standing rule n" means Rn.
+
+### When two parts disagree
+1. Security, secrets, roles, legal meaning, hosting and adding packages are mine to decide: ask
+   (put it in the report and carry on with the rest).
+2. CLAUDE.md and the owner-way skill.
+3. The latest of my words wins: a later item in this brief (a higher A or B number, or a
+   "Chosen"/"replaces" note) overrides an earlier one on the same thing. Where you find two that
+   still disagree, follow the later one and note it in the audit.
+4. A standing rule (R) over a single item's detail.
+5. A reference app over our current behaviour, unless a rule says otherwise.
+
+### What my feedback adds up to (apply these to anything this brief doesn't list)
+These are the patterns behind every item below. When you meet a screen or a control the brief
+doesn't name, judge it by them:
+1. **The term a musician uses.** Every label, option and ⓘ is checked against `piano-data/books`,
+   `method-books`, Flat and Dorico, in en and ru (A6). "Move smoothly", "Between two chords",
+   "Who wrote it" are the kind of words that fail.
+2. **Show what it is for, not how it is built.** If a control's effect can't be seen or heard, it
+   is in the wrong place or shouldn't exist (A23's Function switch, A35's patterns on a score).
+3. **Only what works here** (R30). No control that does nothing, no choice that moves you
+   elsewhere, no greyed-out option that looks broken.
+4. **One home per idea and per setting** (R18, A32): the page shows what you look at; its Settings
+   page holds how it always behaves; the app's Settings hold what every page shares.
+5. **One component per kind of thing** (A1): one key picker, one row, one chip, one transport,
+   one metronome engine, one fingering rule.
+6. **Compare item by item with the reference, then build what's missing** (Flat's panels, A40;
+   Chordify's views, A37; the metronome apps, A39). A loose nod to the reference fails.
+7. **Read the code before you claim**, and test what you can (A29's sample file). Where this brief
+   says "to check", "described from memory" or "not yet heard", verify first; where the check
+   disagrees with the brief, the check wins and the audit says so.
+8. **Fill the screen, calm the page:** no half-empty laptop screens (R28), no endless scrolls
+   (R29), no explanation lines where an ⓘ or a picture will do (R10, R21).
 
 ## How to work
 - **Rules:** CLAUDE.md and the owner-way skill bind every change. Read its
@@ -28,6 +82,15 @@ The references show what to add as well as what to improve: build what we don't 
   its behaviour. "As close as possible" means layout, interaction and features. Where I say I
   described an app from memory, check it against its help pages or screenshots first.
 - **Everywhere:** a change is made everywhere it applies, never on one screen only.
+- **Before an item:** read the files it names (the brief cites them), run the app at 390 and 1280,
+  and take the "before" screenshots. Rows marked "to check" are hypotheses until you have.
+- **Progress file:** keep `.scratch/r29/progress.md`: each A and B item with its state (open, in
+  progress, done, won't do and why), its commits, and the owner's questions. Update it with every
+  commit, so a new session can pick up from it alone.
+- **Per change:** `npm run typecheck && npm run lint`, then `npm run test:related -- <files>`; the
+  full `npm run test` and `npm run build` once per round before `main` (CLAUDE.md).
+- **Specs:** an item that changes a model, a store or a route gets a short spec in
+  `.scratch/r29/<item>/spec.md` and its ADR amended (owner-way's docs step), before code.
 
 ## Words used in this prompt
 - **App bar:** the bar at the top of every screen (back, title, tabs, actions). Today it reads as a
@@ -37,6 +100,16 @@ The references show what to add as well as what to improve: build what we don't 
 - **Learner view:** an admin or editor sees the app as a learner does, for this session only.
 - **Built-in folders:** the app's own folders of songs (the spec gives them their final name in the
   glossary).
+- **Place:** Learn, Songs, Practice, Profile (and, on a laptop, Search and Settings at the
+  sidebar's foot): the screens with no Back (R26).
+- **Explorer:** a Practice page that shows one thing you choose: Chords, Scales and keys,
+  Intervals, Progressions.
+- **Floating capsule:** the one floating bar of a screen's actions (R5): play, start, check, add.
+- **Kind settings page:** the Settings page for every item of one kind (the Player's, the
+  editor's, each explorer's, R18), reached from that item's gear and from Settings.
+- **The registry:** the one list of every setting (key, home, label, control) the settings pages
+  are drawn from (A10).
+- **Key picker:** the one shared control for choosing a key or a root (A5).
 
 ## Standing rules (from my feedback; every screen, every round)
 1. **App bar**
@@ -61,9 +134,10 @@ The references show what to add as well as what to improve: build what we don't 
 8. **Nothing clipped:** no cut borders, cut titles or uneven padding at 320px.
 9. **Settings in one place:** an item's Settings page, never split across the toolbar, the app bar
    and menus.
-10. **Words:** no developer words, no explanations Flat wouldn't show. Help goes behind ⓘ. The one
-    exception is a sheet where you choose by what each option does: the Player's Modes sheet keeps a
-    one-line description under each mode, as the reference does.
+10. **Words:** no developer words, no explanations Flat wouldn't show. Help about a control goes
+    behind ⓘ. Two exceptions: a sheet where you choose by what each option does (the Player's Modes
+    sheet keeps a one-line description under each mode, as the reference does), and an item's own
+    content (a song's description, A28) which is text on the page, not help.
 11. **New …:** one sheet (`NewSheet`) everywhere, like the references'.
 12. **Songs are songs:** never "built-in" vs "my song" or "original" vs "yours" in the UI. An editor
     edits the song itself; drafts show only when there are unpublished changes.
@@ -110,8 +184,9 @@ The references show what to add as well as what to improve: build what we don't 
     - **How I read or play every item of a kind**: one settings page per kind, reached from the gear
       on any item of that kind and from a row in Settings. Both open the same page, not a copy:
       - Lesson reading (a section at a time, text size);
-      - the Player (Display, Countdown, Cursor, Scroll, on-screen piano, fingerings, metronome,
-        sound);
+      - the Player (Audio playback, Playback speed, Display: clef, countdown, cursor, scroll,
+        fingering; B7 and A35), with link rows to the Metronome's settings (A39) and to the
+        On-screen piano (A14), which keep their one home;
       - the score editor (hear notes as you edit, entry, palette).
     - **The whole app** (language, theme, account, sync, connected piano, recording) → Settings.
 
@@ -221,8 +296,9 @@ The references show what to add as well as what to improve: build what we don't 
       instead, or a grid of keys that fits.
     - **Toggles that combine** (Alterations ♭5 ♭9 ♯9 ♯11 ♭13) look like the segmented control's
       options with the same selected style (rule 15), not a third kind of bordered chip.
-    - **A choice that can't be made right now** (Hands: Right on a two-hand voicing) is hidden or
-      explained by ⓘ, not a faded option that looks broken.
+    - **A choice that can't be made right now** (Hands: Right on a two-hand voicing) is hidden
+      (R30), not a faded option that looks broken; an ⓘ says why only where its absence would
+      puzzle.
     - **Section headings:** one style. "Fingering" (serif, large, ⌄) and "Practise in the Player"
       (small, sans, ⌄) are the same level, so they look the same; a fold's chevron sits in the same
       place on each.
@@ -279,7 +355,9 @@ The references show what to add as well as what to improve: build what we don't 
 12. **Profile privacy:** private by default. A switch on the Privacy page shows your name on
     published songs and your profile in Explore; until then a published song shows "Piano Trainer
     learner".
-13. **Settings on a laptop:** two panes (Standing rule 20).
+13. **Settings on a laptop:** two panes (R20).
+14. **Progressions' explanation:** the roles and moves drawn on the chords (layout B, A23), no
+    switch and no separate section.
 
 ## References (open every folder, "New folder" and "untitled" included)
 - `piano-data/reference-apps/new_app_2/` (notes in `scratchpad/r29/refs.md`):
@@ -336,8 +414,19 @@ The references show what to add as well as what to improve: build what we don't 
   - 56–59: half-empty laptop screens (Practice, Songs, Settings, Search);
   - 60: the Chords page: the arrowed strips, three kinds of chip, two heading styles, the inset
     Chromatic walk row in an empty card, three transport circles, the staff cut at the top.
+  - 61: the Fantaisie-Impromptu's page (no Learned, wrong key); 63–64: the editor's palette and
+    Daisy fields' clef; 65: the Player's Setup sheet; 66: the editor's padding; 67: Amazing
+    Grace's page head; 68: Progressions folded; 69: New song's instruments step; 70: Flat's tempo
+    popover; 71: Intervals.
 - My other screenshots in this session: Noji's live publish screen, Klangio's checkbox, our Songs
   folder menu, our editor's View and Transpose panels.
+- `piano-data/Screenshot 2026-10-27 at 20.57.*` (musicca's progression lists, A23) and
+  `piano-data/Screenshot 2026-11-02 at 19.0*` (Flat's editor panels on the Fantaisie, A40).
+- `piano-data/reference-apps/`: Chord Trainer and the journey app (pickers, A5), Ultimate Piano
+  (passing chords, circle of fifths, practice, A5/A23/A41), Chordify (A37), Flat's editor (A34),
+  Duolingo Music and Clefs (results, A41), musicca (A23); notes on tools and fingering in
+  `scratchpad/r29/tools-fingering-refs.md` (from about 25 of new-app's 125 images: look at the
+  rest when a round needs them).
 
 ## Step 0: carry-over check (my earlier messages)
 Check each item on the running app at 390 and 1280. Mark it done or open in `.scratch/r29/audit.md`;
@@ -347,7 +436,7 @@ anything open joins the rounds.
   - its sections and blocks look rough: compare Notion, Craft, Obsidian's live preview and TipTap's
     examples; the editor must look exactly like the page it makes.
 - **Music editors:** they still have bugs and weak options.
-  - Finish the editor critique (task #100) against Flat.
+  - Finish the editor critique against Flat (left open from round 25; now A34 and A40).
   - Their menus use the current options everywhere.
 - **New song** works like Flat's: name, instruments with piano and voices, fine-tune; no preset
   cards.
@@ -515,7 +604,8 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       - **On-screen piano:** look, position, folding, swipe, names, chord names;
       - **Connect a piano (Audio/MIDI):** devices, sound, log, how to connect by cable or Bluetooth;
       - **Computer keys:** typing, octave and pedal keys, shortcuts;
-      - **Sound and recording:** metronome, count-in, play melody, volumes, recording.
+      - **Sound and recording:** the piano sound (A27), volumes, count-in, recording; a link row to
+        the Metronome's settings (A39). "Play melody" goes (A35).
     - Each page gets an icon (rule 21) and is built from the registry (rule 18).
     - Quick test: from the page names alone, can someone say where "metronome", "note names on keys"
       and "my digital piano" live? Write the answers in the audit.
@@ -589,7 +679,9 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
         the sources, and a page test that the row stays when the chord changes.
     - Done: screenshots of every explorer at 390 and 1280 before and after, and a contact sheet of
       the families in each state.
-21. **Scales and keys, all three tabs** (screenshots in `scratchpad/r29/scales/`). Known:
+21. **Scales and keys, all three tabs** (screenshots in `scratchpad/r29/scales/`). Today's tabs are
+    Scale · Chords · Key; A32 renames them **Notes · Harmony · Key**, and the text below uses
+    today's names for what is there now. Known:
     - **Selected styles:** the Scale · Chords · Key tabs are underlined, the Root strip a white
       bordered chip, Octaves and Fingering white bordered segments, the on-screen piano's toolbar
       dark filled chips, "In the key only" a bordered toggle. Five looks for "chosen" (rule 15).
@@ -671,9 +763,8 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
 23. **Progressions** (`scratchpad/r29/scales/progressions-*`). The page is about 11,500px on a
     laptop and 18,800px on a phone. Known:
     - **One page doing four jobs:** the progression you're building, the Library of progressions
-      (dozens of cards), "Through the keys" walks, and "Between two chords". The Library and
-      Between two chords become their own places in the page (tabs like Scales' Scale · Chords ·
-      Key, or a library list that opens a progression), not one endless scroll.
+      (dozens of cards), "Through the keys" walks, and "Between two chords". They become tabs
+      (the page's structure, below), not one endless scroll.
     - **The Library's content and shape, as musicca lists it**
       (`piano-data/Screenshot 2026-10-27 at 20.57.40–55.png`): progressions grouped by style (Pop,
       Rock, Jazz, Blues "all 12 chords played in succession"), each a row of its chords in bar
@@ -686,8 +777,8 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       opened. Its genre headings (Pop, Rock, Jazz …) become chips, as Explore's categories.
     - **Controls:** a text field, three segmented controls, a combobox, a picture choice (Starting
       position) and a switch, in two uneven columns with Move smoothly alone; ⓘ on four of them.
-      One settings-style group (rule 20), the rarely changed ones (Written as, Voicing, Mode)
-      behind a "Options" fold or the Player's settings page (rule 18).
+      Only what changes the music shown stays on the page; the rest moves to Progressions'
+      Settings page (its options, below; R18).
     - **Function · Root motion** is a segmented control that only changes the chord strip under
       it, and neither word says what it is. They are two analyses of the same chords:
       - **Harmonic function:** each chord's role in the key: tonic (T, home, at rest),
@@ -821,10 +912,10 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
         plays (together · broken · up and down), fingering shown, the staff's clefs.
       - **Scales and keys:** octaves, rhythm, tempo, hands, fingering (from the thumb · as the
         scale), which scale families are listed.
-      - **Intervals:** how they play (at once · up · down), names (m3 · ♭3 · minor 3rd), the
-        compound intervals shown.
-      - **Progressions:** written as, voicing, chord size, lead into each chord, move smoothly,
-        mode.
+      - **Intervals:** how they play by default (harmonic · melodic rising · melodic falling, A22),
+        names (m3 · ♭3 · minor 3rd), the compound intervals shown.
+      - **Progressions:** written as, voicing (block · voice-led), first chord's inversion, mode
+        (A23's option list; chord size and approach chords stay on the page).
       - **Accompaniment:** tempo, key, hands, loop, count-in, which sources show as tabs and in
         what order.
       - **Chord finder:** remember the last chords, over the bass, keys it is in, scale on the
@@ -1118,8 +1209,9 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       Progressions in that key.
     - **Intervals** owns two notes; **Chord finder** owns naming what you play (a Tool, Part B 11),
       and "keys it is in" opens Scales' Key tab.
-    - **Walks** are one exercise kind in the Player ("Walk: chromatic · through the scale's chords ·
-      through the keys"), offered from each page with the direction chosen there.
+    - **Walks** are one exercise kind in the Player, named as A23's "Practise in all 12 keys"
+      sequences ("Chromatically, rising", "Around the circle of fifths, falling a fifth", "Through
+      the key's chords, in scale order"…), offered from each page with the sequence chosen there.
     - **The shared controls are one component each** (the key picker, chord size, inversion,
       voicing, hands, tempo), so where two pages do need the same control, it is the same one.
 
@@ -1131,8 +1223,9 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - **On each page's Settings page,** only its own defaults: Chords (voicing, hands, inversion,
       how a chord plays, staff clefs); Scales and keys (octaves, rhythm, tempo, hands, fingering
       rule, which scale families are listed, the chord size the Harmony tab shows); Intervals (how
-      they play, compound intervals); Progressions (written as, voicing, chord size, lead-ins,
-      move smoothly); Chord finder (remember, over the bass, keys it is in, scale on the keys).
+      they play, compound intervals); Progressions (written as, voicing, first chord's inversion,
+      mode); Chord finder (remember, over the bass, keys it is in, scale on the keys). A24 has the
+      full lists; where the two differ, A24's names are the ones to use.
     - Nothing that is a page's current choice (this chord, this key) is a setting; nothing that is
       a setting is a control on the page as well (rule 18).
     - Done: the table above re-checked, each row with one owner; a test that no two pages render
@@ -1162,7 +1255,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     | Colour notes (tensions, added tones, alterations) | Chords | Harmony's chords, Progressions' chords |
     | Voicings (close, open, shell, rootless A/B, drop 2, locked hands, So What) | Chords | Progressions' Voicing uses the same list and pictures |
     | Inversions | Chords | one inversion control everywhere (Part A 32) |
-    | Functions (tonic, subdominant, dominant) and their colours | Scales' Harmony | Progressions' strip, the circle |
+    | Functions (tonic, subdominant, dominant) and their colours | Scales' Harmony | Progressions' roles row (A23, D14), the circle |
     | Passing and approach chords (secondary dominants, tritone substitutes, ii–V, diminished, chromatic) | Progressions (Passing chords) | Harmony shows each chord's secondary dominant as a link |
     | Borrowed chords (modal interchange) | Scales' Harmony | Progressions' Passing chords links there |
     | Reharmonising a melody note | Scales' Harmony | the Chord finder, the editor's chord picker |
@@ -1262,9 +1355,10 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       doesn't drift from the notes. Its settings (sound, accent, subdivision, volume, count-in)
       are the Metronome's own (Part B 11, one engine), reached from the Player's Tools and its
       settings page; a quick toggle stays in the transport.
-    - **The Player's settings page** (Part B 7) is Flat's Playback options plus the reference's
-      Display: Audio playback (staves, volumes, the recording), Metronome, Playback speed,
-      Display (clef, countdown, cursor, scroll, keyboard, fingering), each a row to its page.
+    - **The Player's settings page** (B7 builds it, in this round) is Flat's Playback options plus
+      the reference's Display: Audio playback (staves, volumes, the recording), Metronome (a link
+      to its one home, A39), Playback speed, Display (clef, countdown, cursor, scroll, keyboard,
+      fingering), Pedal (A27), each a row to its page.
 36. **Focus and keyboard walking.** Tab through every screen: the focus ring is drawn several
     ways (the note toolbar's rounded bracket in `owner/64`, outlines, rings, fills) and some
     controls get none. One focus style (DESIGN.md), on every control, never clipped by its
@@ -1560,10 +1654,12 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
      items (song, pattern, lesson, course, progression).
    - Every cell uses the same component and behaves the same.
 7. **Real settings for the Player and the editor.**
-   - The "kind" pages of rule 18, built from the registry, modelled on the reference's Display, Flat
-     and Dorico.
-   - They cover playback, view, on-screen piano, metronome and editing; nothing scattered in sheets.
+   - The "kind" pages of R18, built from the registry: the Player's as A35's last bullet lists it;
+     the editor's: entry (hear notes as you edit, Replace or Insert, the palette's side), and the
+     score's own Layout (A40) reached from it.
+   - The on-screen piano and the metronome keep their one home (A14, A39); these pages link to them.
    - The lesson's and course's Settings pages keep only what belongs to that lesson or course.
+   - Built in round 4, with A35 and A40.
 8. **The Player's practice flow:** everything in the reference screenshots, in our look and words.
    Add what we don't have; improve what we have.
    - **Modes sheet:** each mode a card with a line under it (Decided 11):
@@ -1575,8 +1671,10 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
      The chosen mode opens inline to show its options.
    - **Version sheet:** our Simplify levels and the song's versions, grouped by instrumentation,
      then by level; "Change version ›" under the title on the score.
-   - **Tools sheet:** Annotations, Print, Tuner, My recordings, Voice commands, Rhythm game,
-     Audio/MIDI, Transpose, Change version, Display.
+   - **Tools sheet:** Annotations, Print, Tuner (for a voice or another instrument playing along),
+     My recordings, Voice commands, Rhythm game, Audio/MIDI, Transpose, Change version, Display.
+     Practice's "Left · Both · Right" is A35's one-hand rule (the other hand shown, dimmed or
+     hidden; heard or not), not a second control.
    - **Annotations:** typed marks placed on the score, not freehand drawing: text, fingerings,
      dynamics, breath and pause marks, circles around notes. Saved with the learner's copy; shown or
      hidden from Display.
@@ -1641,6 +1739,9 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - Done: every tool opened from Practice and from inside a song, at 390 and 1280.
 
 ## Constraints
+- **Out of scope this round:** new instruments' sounds beyond the piano and voices (ADR 0097),
+  payments, and anything that needs an account value or a key I haven't given (list it as my
+  to-do).
 - **Completeness:** one implementation per thing. Every string in en and ru. Loading, empty, error
   and offline states.
 - **Screenshots:** at 390×844, 320×568, 844×390 and 1280×800 (plus 1440×900 and 1920×1080 for
@@ -1662,7 +1763,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
    Intervals, Progressions, every Practice page's settings, Accompaniment, Chord finder,
    Metronome, Exercises and Quiz, fingering, the theory pages' owners, colour notes, the Metronome against metronome apps, the drills and exercises inside).
 3. **Piano and sound:** Part A 26–27 (the on-screen piano, the piano sound and the pedal).
-4. **Songs, the editor and the Player:** Part A 28, 29, 34, 35, 37, 40 (an own song's page, imports
+4. **Songs, the editor and the Player:** Part A 28, 29, 34, 35, 37, 40 and B7 (an own song's page, imports
    and exports, the score editor against Flat, the Player's staves and metronome, the chord
    views, Flat's recording, Instruments and Layout panels).
 5. **Profile** (Part B 1).
@@ -1671,22 +1772,23 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
 8. **Edit in place** (Part B 4).
 9. **Learner view** (Part B 5).
 10. **One publishing model** (Part B 6).
-11. **Player and editor settings** (Part B 7).
-12. **The Player's practice flow** (Part B 8).
-13. **Customisable bars** (Part B 10).
-14. **Tools** (Part B 11).
-15. **Customisable pages and cards** (Part B 9).
+11. **The Player's practice flow** (Part B 8).
+12. **Customisable bars** (Part B 10).
+13. **Tools** (Part B 11; the metronome engine already built in round 2, A39).
+14. **Customisable pages and cards** (Part B 9).
 
 ## Each round, before calling it done
 Run impeccable (`audit`, then `polish` or `adapt` where it finds problems) on the screens the round
 touched, and check every standing rule.
 
 ## Report after each round
-In my words for screens, not file names:
+Written into `.scratch/r29/progress.md` and pushed with the round; don't wait for me before the
+next round (autonomy, above). In my words for screens, not file names:
 - what changed;
 - what's left, and why;
 - my questions;
-- push state: branch, `main`, tests, build.
+- push state: branch, `main`, tests, build;
+- the before and after screenshots of the screens the round changed.
 
 ## At the end
 Add any new feedback of mine from this round to the owner-way skill (`references/feedback-log.md` and
