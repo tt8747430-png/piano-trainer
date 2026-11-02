@@ -607,6 +607,29 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       – F…").
     - **Note names on the on-screen piano:** the computer-key letters (A S D …), the degree, the
       finger and the note stacked in four rows on every key: show only what this tab needs.
+    - **The three tabs don't read as one thing.** Scale, Chords and Key each start differently and
+      share nothing but the title: Scale has a facts table, strips, the piano, a score, hand cards
+      and exercise rows; Chords has bordered chord cards, a row of "Open in Chords" chips, a lone
+      walk row and progression rows; Key has the circle, another facts list, a bare degrees table,
+      borrowed-chord cards, harmonise cards and song rows. The scale's chords appear twice (the
+      Chords tab's cards and the Key tab's degrees table) in two designs. Make them one family:
+      - **One header for all three**, kept above the tabs: the name, the key signature and the
+        notes on one staff, the notes as chips (each plays), Play, and the key picker (Part A 5).
+        A tab changes what's under it, never the header.
+      - **One spine: the seven degrees.** Every tab lines up on the same seven columns, I to VII,
+        in the same order and the same colours: the Scale tab's notes and fingers, the Chords tab's
+        chords (C Dm Em F G Am B°, each with its numeral, its diagram and play), the Key tab's
+        functions (tonic, subdominant, dominant…) and its borrowed chords under the degree they
+        stand on. The degrees table and the chord cards become this one row.
+      - **One colour per function** (tonic, subdominant, dominant), the same on the circle, the
+        degrees, the Progressions strip and the Chords page (Part A 23), with a legend.
+      - **Sections in one order and style on every tab:** what it is (the header), see and hear it
+        (piano, staff), play it (fingering), use it (chords, progressions, songs), with one heading
+        style (rule 29) and one card family.
+      - **Tab names say what's in them:** "Notes · Chords · Key" (or "Scale · Chords in it · The
+        key"), checked with the clarify skill.
+      - Done: the three tabs side by side at 390 and 1280, the same header and the seven columns
+        lining up across them.
 22. **Intervals** (`scratchpad/r29/scales/intervals-*`). Known:
     - The Root strip again hides choices behind ‹ › (Part A 5); "Play: At once · Up · Down" is a
       half-width segmented control with the right half empty.
@@ -853,6 +876,14 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - **Hand pictures:** kept where they teach (Chords, Scales), the same numbers and crossing mark.
     - **One switch** ("Fingering" on the Player's and the explorers' Settings pages) shows or hides
       it in all of them at once.
+    - **The hand pictures are shapes, not hands.** `HandDiagram` draws five rounded rectangles on a
+      palm outline. Draw real hands: a right and a left hand seen from above, palm down, in one
+      line style that fits the app (the impeccable skill's asset steps, or a CC0/CC-BY illustration
+      adapted, its licence noted), with knuckles, curved fingers and nails, the thumb where a
+      thumb sits, numbers on the fingertips. Better still where it teaches: the hand drawn over the
+      keys it plays, each fingertip on its key (a chord's shape, a scale's first five notes), as
+      method books show it. Check the drawing against `piano-data/method-books` (Called to Play,
+      Bobrova) before it ships.
     - Done: the same scale (C major, two octaves, both hands) shown on the piano, the score and the
       hand cards, screenshots side by side, every number agreeing.
 31. **Nothing flickers, nothing jumps.**
