@@ -126,7 +126,14 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/songs/$pieceId/publish': pieceHome,
   '/shell/songs/$pieceId/sections/$section': (from) =>
     up({ to: '/songs/$pieceId', params: { pieceId: param(from, 'pieceId') } }),
-  '/shell/songs/folders/$folderId': toSongs,
+  '/shell/songs/folders/$folderId': async (from) => {
+    const { folderAbove } = await songs()
+    const { pieces, library } = from.context
+    const folderId = folderAbove(pieces.getState(), library.getState(), param(from, 'folderId'))
+    return folderId
+      ? up({ to: '/songs/folders/$folderId', params: { folderId } })
+      : up({ to: '/songs' })
+  },
   '/shell/songs/archive': toSongs,
   '/shell/songs/shared': toSongs,
   '/shell/songs/public': toSongs,

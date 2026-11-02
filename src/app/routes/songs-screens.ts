@@ -33,6 +33,15 @@ export function folderIn(pieces: PiecesState, library: LibraryState, id: string)
   const { folders } = arrangeLibrary(library, libraryCatalog({ ownSongs: pieces.songs }))
   return folders.some((folder) => folder.id === id)
 }
+/** The folder a folder stands in, or null at Home (rule 26). */
+export function folderAbove(
+  pieces: PiecesState,
+  library: LibraryState,
+  id: string,
+): FolderId | null {
+  const { folders } = arrangeLibrary(library, libraryCatalog({ ownSongs: pieces.songs }))
+  return folders.find((folder) => folder.id === id)?.parent ?? null
+}
 /** The folder the library keeps a song in, or null at its top, archived or not there (rule 26). */
 export function folderOf(pieces: PiecesState, library: LibraryState, id: string): FolderId | null {
   const layout = arrangeLibrary(library, libraryCatalog({ ownSongs: pieces.songs }))
