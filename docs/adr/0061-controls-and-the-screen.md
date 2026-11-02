@@ -82,3 +82,4 @@ A new option has one obvious form by this rule. A test reaches a folded action b
 - r26 — Menus, sheets, pop-ups and pages told apart; real menus; Edit ⇄ Done; the keyboard's bars on its top edge as
   iOS pans the page (2026-11-01).
 - r28 — The floating buttons' place and names are no longer settings (a developer's words in General): they stand in the middle, icons named by their tooltips; the settings store's version 17 (2026-11-01).
+- r29 — The Choosing Rule's table (menu, segmented, switch, stepper, chips for filters) and four shared pickers: pitch, spelled note, key (the circle of fifths), keys checklist; the step strips go (decided 2026-11-02, being built in round 29; spec `.scratch/r29/key-picker/spec.md`).

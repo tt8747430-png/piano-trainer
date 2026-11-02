@@ -109,3 +109,4 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
   week strip, the six-figure grid and Recently practised gone from the Profile (2026-10-30), from memory-palaces.
 - r24 — The phone's tab bar shown on the places alone (memory-palaces'): what a place opens steps it away; one
   place current at a time, Settings the laptop sidebar's own (2026-10-30).
+- r29 — Back goes up a parents table (`app/routes/parents.ts`), not back through history; Search a palette over the screen; one metronome engine; the Profile's badges, milestones, notifications and Streak pages (decided 2026-11-02, being built in round 29; spec `.scratch/r29/back-as-up/spec.md`).

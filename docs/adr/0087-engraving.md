@@ -71,3 +71,4 @@ LilyPond's cautionary accidentals at a line's start are not written: each line i
 - r13 — The 64th, tuplets of 2 to 9 found from the timing, Flat's marks, bar repeats and multi-bar rests drawn as
   their signs, page breaks (2026-10-28).
 - r14 — An octave line written in its first measure, not the one after its last note (2026-10-28).
+- r29 — Fingering above for the right hand and below for the left, no collision at bar lines; pedal marks at their own positions (decided 2026-11-02, being built in round 29; spec `.scratch/r29/fingering-service/spec.md`).

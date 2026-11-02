@@ -226,3 +226,4 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   tap far down a lesson no longer jumps to its start; Read first moved to the lesson's Settings, whose changes row
   holds Publish (2026-11-01).
 - r28 — An item made in the app (a level's lesson, a course) has Remove on its Settings: Unpublish (status back to draft, its body kept as its draft) and Delete (its row, its draft and versions cascading); the port's `unpublish` and `remove`; no migration (the policies let an editor update and delete). The app's own items ship with it and only leave a level or shelf (2026-11-02).
+- r29 — Profiles (name, handle, bio, avatar, public) with an avatars bucket and access tests; the author of a published song from a public profile (decided 2026-11-02, being built in round 29; spec `.scratch/r29/profile/spec.md`).

@@ -100,3 +100,4 @@ Chords view should hold its big chords in two hands too.
 - r14 — The power chord, Maj11, m13, Maj13, 13sus4; block fingering by rule; eight voicings; scale and arpeggio
   fingering as the printed books, eight new scale kinds, degree names under a scale's formula, crossings marked
   (2026-10-28), from Musicca, Vita Piano, piano.org and ABRSM's books.
+- r29 — One fingering service (chord, run, arpeggio, passage, progression) and a chord's colour notes (tensions, added tones, alterations as one panel, following the chord's degree in a key) (decided 2026-11-02, being built in round 29; spec `.scratch/r29/fingering-service/spec.md`).

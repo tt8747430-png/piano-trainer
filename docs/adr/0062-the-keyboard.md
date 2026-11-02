@@ -56,3 +56,4 @@ give the keys a box (`stubBox`) and the scroller its metrics (`stubScrolling`).
 - 0055, 0056 — A page's keys dock and fold; the keys say their notes; the learner chooses the rail (2026-10-16).
 - 0059 — Keys that hold still (2026-10-16).
 - 0062 — A reading page folds its keys on a phone on its side (2026-10-20).
+- r29 — Fingering on the keys one way (one circle, right hand above the name, left below; a crossing the accent colour with an arc), never two rows of numbers (decided 2026-11-02, being built in round 29; spec `.scratch/r29/fingering-service/spec.md`).

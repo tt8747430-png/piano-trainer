@@ -63,3 +63,4 @@ The score editor's Play and its recorder's click keep their own switches. A reco
 - 0115 — A plain Setup: Starting position, Move smoothly, swing feels, the Melody's source (2026-10-27).
 - r13 — A scale run's practice: hands, each hand's start octave, tempo, metronome, ticks between loops (2026-10-28).
 - r26 — One Sound in both modes: the editor's transport ends with the Player's Sound (its icon, name and place), a take's Metronome and Play melody over each part's volume; the click is called Metronome in both; the tools row's room over the score fits the capsule (2026-11-01).
+- r29 — A score plays its staves (Play and Show per staff, the recording a track); only a chart gets an accompaniment; the other hand Show · Dim · Hide and Play; Pedal As written · Off · Automatic; the click from the one metronome engine (decided 2026-11-02, being built in round 29; spec `.scratch/r29/staves-play-show/spec.md`).

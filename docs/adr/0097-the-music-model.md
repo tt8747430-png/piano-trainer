@@ -95,3 +95,4 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
 - r27 — New song chooses its staves as Flat's instruments (piano and voices); other instruments decided for later,
   sampled and cached offline, not left out (2026-11-01).
 - r28 — The music's `header` (credits under the title) and `layout` (staff size, bars per line) (2026-11-01).
+- r29 — The sustain pedal leaves the note marks: a piece's pedal line of events at beats (down, up, change); no Melody source (decided 2026-11-02, being built in round 29; spec `.scratch/r29/pedal-events/spec.md`).

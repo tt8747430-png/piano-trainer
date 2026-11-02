@@ -75,3 +75,4 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   Free play went with the Chord finder (ADR 0052).
 - r13 — The MIDI keyboard gets its own screen: input and output switches, connected devices, Bluetooth pairing
   steps and a live MIDI log; Settings shows its state in its row (2026-10-28).
+- r29 — The sampled grand (Salamander, four layers, self-hosted, ≤ 80 MB decoded); scheduled notes decay as a piano's, one voice per key, the pedal sent to a connected piano as CC 64 (decided 2026-11-02, being built in round 29; spec `.scratch/r29/piano-sampler/spec.md`).

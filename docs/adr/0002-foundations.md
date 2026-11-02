@@ -47,3 +47,4 @@ and Russian.
 - 0002 — Content is code, one file per piece (2026-09-24).
 - The rewrite's design spec (2026-09-24) and the features roadmap (2026-09-25), deleted 2026-10-27: their stack,
   layers and scope are here and in `CLAUDE.md`.
+- r29 — The samples' own runtime cache (CacheFirst, 200 only, no expiration) outside the precache (decided 2026-11-02, being built in round 29; spec `.scratch/r29/piano-sampler/spec.md`).

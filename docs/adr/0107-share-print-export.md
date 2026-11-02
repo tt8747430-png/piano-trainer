@@ -81,3 +81,4 @@ not its music.
   plays along, Share link); its separate Export to… items and its Share are gone (2026-10-30).
 - r25 — Select's bar exports the songs chosen from the same Export… sheet, a file each (2026-10-30).
 - r26 — A song's Export…, Share link and Publish in library stand on its Settings page; Publish in library is a page of its own (2026-11-01).
+- r29 — Pedal events read from MusicXML at their own positions and offsets, a stop and a start at one place a change; written back the same way and as CC 64 (decided 2026-11-02, being built in round 29; spec `.scratch/r29/pedal-events/spec.md`).
