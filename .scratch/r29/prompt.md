@@ -788,6 +788,49 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       is an arrow link (rule 23) floating alone under the card.
     - **Half-empty on a laptop** (rule 28): a full-width Practise bar, a lone ♡ and a short list;
       the overview and the sections can sit side by side, or the page takes a reading width.
+29. **Imports and exports** (`shared/lib/musicxml`, `shared/lib/read-midi-file.ts`,
+    `shared/lib/schedule/performance-midi.ts`, `features/song-files`). Checked in the code and with
+    a small MusicXML file read by `readMusicXml`:
+    - **MusicXML import, confirmed:**
+      - A pedal change written as a stop and a start at one place keeps only the start (Part A
+        27); a stop after the last note is dropped, so the pedal never lifts at the end.
+      - A minor key without `<mode>` reads as its relative major (Part A 28).
+      - Directions (pedal, dynamics, words) attach to the next note on their staff and ignore
+        `<offset>`, so a mark between notes, over a rest or after the last note moves or is lost.
+      - Beams are not read (the engraver beams again), so a file's own beaming is lost: keep it
+        where it is written.
+      - A pickup bar reads correctly (checked).
+    - **MIDI import:**
+      - Each note's velocity is read and then dropped when the notes become the song (`spelled`
+        in `song-of-midi.ts`), so a played file loses all its dynamics: keep them as the notes'
+        loudness, or as dynamics marks where they change.
+      - A one-track piano file is split into hands at middle C (`SPLIT = 60`): a left hand that
+        rises above it or a right hand below it lands on the wrong staff. Split by hand shape
+        (the lowest and highest voices, reach and continuity, as MuseScore's and Flat's MIDI
+        import do).
+      - Only the first meter, tempo and key are kept, the rest counted as left out: changes of
+        meter, tempo and key are written into the song where they happen.
+      - A pickup is never found: bar 1 always starts at the file's start.
+      - The song gets one section ("verse") cut into lines of a fixed length: sections from the
+        file's markers where it has them, else one section with no made-up name.
+    - **What a file couldn't keep:** the Import sheet lists counts per kind ("3 marks"); it says
+      what they were and where ("a trill in bar 12"), and offers to open the song at the first one.
+    - **Import:** one file at a time (the picker and a drop take the first file): several files
+      at once, each read in turn, with one summary. A file already in the library asks: Replace,
+      Keep both, or Cancel. Where the import lands (Home, the open folder) follows rule 16.
+    - **Export:**
+      - MusicXML (uncompressed) and MIDI, the pedal written as the pedal (control change 64) and
+        the tempo marks as tempo changes: good; MIDI inherits the import's pedal bug above.
+      - Missing: compressed MusicXML (.mxl, what Flat, MuseScore and Dorico open first), PDF of
+        the score as engraved (the Tools sheet's Print, Part B 8), audio (the Player's sound as a
+        file), and a take as MIDI or audio from My recordings.
+    - **Round trip tests:** every song in the library written as MusicXML and read back gives the
+      same music (notes, marks, pedal, chords, lyrics, sections, key, meter, tempo); every song
+      written as MIDI and read back gives the same notes, hands, pedal and dynamics within the
+      grid; fixtures from MuseScore, Flat, Dorico, Finale and Sibelius exports in
+      `src/shared/lib/musicxml/fixtures/`, each read without loss the importer can avoid.
+    - **Compare with Flat and MuseScore:** import the same files into them and into ours, and list
+      what they keep that we lose; each one becomes a row in the audit.
 
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
@@ -939,11 +982,11 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   - no layout that can break the page.
 
 ## Rounds
-1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–28: one component each, the app bar,
+1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–29: one component each, the app bar,
    action placement, page/sheet/menu, controls, words, navigation (Back as up, the Search palette, the
    sidebar's selected look), shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout and two panes, pictures and icons, page names, account and
-   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal, an own song's page.
+   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal, an own song's page, imports and exports.
 2. **Profile** (Part B 1).
 3. **Copy and the rights checkbox** (Part B 2).
 4. **Explore in Songs and the built-in folders' rules** (Part B 3, Decided 8 and 10).
