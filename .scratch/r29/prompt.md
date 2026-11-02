@@ -714,6 +714,60 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - **Everywhere on Practice:** the on-screen piano's toolbar (‹ › zoom C Cm7 ⌨ ≈ Ped. ⌄) is
       dark chips with no labels, different from every other toolbar: one toolbar style, its
       choices in On-screen piano settings, labels on hover and in the More menu.
+26. **The on-screen piano itself** (`shared/ui/piano-keyboard`, `features/live-keyboard`).
+    - **Its toolbar** ("the rail": ‹ › zoom, C, Cm7, ⌨, ≈, Ped., ⌄): unlabelled dark chips; "C" and
+      "Cm7" say nothing about what they switch (note names, chord names); "Ped." is a text glyph,
+      not an icon; ⌄ hides the piano with no label. Each gets an icon with its name (rule 21), the
+      selected style of rule 15, and the same order on every page; what to keep on it is chosen in
+      On-screen piano settings (today's rail controls, from the registry).
+    - **Labels on every key:** the computer-key letter, the degree, the finger and the note are
+      stacked on each key at once (Scales); show what the page needs, the letters only while typing
+      plays the keys.
+    - **The pedal on screen:** the Ped. toggle latches (a tap holds it down until tapped again),
+      Space holds it while typing, a MIDI keyboard's foot works too. Check, and fix what fails:
+      - the pedal shows as down on the piano the same way whichever put it down (a lit pedal under
+        the keys, as the take roll's pedal lane draws it), and Space, the toggle and the foot never
+        fight (one lifts what another put down only on purpose);
+      - leaving the page, opening a sheet or switching tabs lets the pedal up, so no key rings on;
+      - a key struck again under the pedal restrikes, not stacks a second voice;
+      - the sostenuto and soft pedals from a MIDI keyboard are shown, not only heard.
+    - **Feel:** the keys at 320px are wide enough to hit (zoom, or two octaves), a swipe scrolls or
+      plays as set, nothing on the rail covers keys, the piano's height is the same on every page.
+27. **The Player's piano sound and its pedal** (checked in the code; heard on the Fantaisie-
+    Impromptu):
+    - **Pedal marks lost on import (a bug):** MusicXML's pedal marks are attached to the next note
+      on the staff by `Object.assign` (`applyDirections` in `shared/lib/musicxml/read.ts`). A change
+      written as a stop and a start at the same place (as Finale and many files write it) keeps only
+      the start, so the pedal is never let up and every note rings into the next harmony; a release
+      after the last note of a piece or before a rest is dropped or moved to the next note; a
+      direction's `<offset>` is ignored. Pedal marks become their own events at their own ticks
+      (down, up, change), never merged into a note's marks; a stop and a start at one tick are a
+      change. Tests on a fixture with each way of writing it, and on the Fantaisie-Impromptu's
+      pedalling against the score.
+    - **The sound under the pedal (a bug):** a scheduled note (`playNote` in
+      `shared/api/audio/web-audio.ts`) falls to 40% in 0.35 s and then holds that level until its
+      end, so a note held by the pedal for four bars sounds at full sustain the whole time, like an
+      organ: Chopin's left-hand arpeggios become a wash. A piano note keeps decaying while it rings
+      (the live keys' `holdNote` already does, lower keys longer); scheduled notes decay the same
+      way, and the pedal's release damps them as `damped` does.
+    - **A key struck again under the pedal** stacks a second voice on the first instead of
+      restriking the string: one voice per key, the old one damped as the new one sounds.
+    - **The voice itself** is three oscillators (a triangle and two sines): it can't sound like a
+      piano, least of all under the pedal. Propose a sampled grand piano (e.g. the Salamander Grand,
+      CC-BY, through a small sampler library), with its licence, its download size and how it is
+      cached offline, and the synthesised voice as the fallback only while samples load. Adding a
+      package or hosting the samples is my decision: put the proposal in the report.
+    - **To a connected piano:** the Player sends the pedal as longer notes, not as the pedal
+      (control change 64), so a digital piano's own pedal resonance never sounds. Send the pedal as
+      the pedal.
+    - **Show it:** the Player marks where the pedal is down (the score's Ped. marks highlighted as
+      the playhead passes, and a pedal lamp by the on-screen piano), and the keys held only by the
+      pedal look different from the keys a hand holds.
+    - **Pieces without pedal marks** (most imported MIDI and many songs): an option on the Player's
+      settings page, "Pedal: As written · Off · Automatic (change with each chord)", Automatic
+      using the chord symbols where the music has them.
+    - Done: the Fantaisie-Impromptu's opening, a hymn with written pedalling and a song without
+      any played back and recorded before and after; tests for each rule above.
 
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
@@ -865,11 +919,11 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   - no layout that can break the page.
 
 ## Rounds
-1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–25: one component each, the app bar,
+1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–27: one component each, the app bar,
    action placement, page/sheet/menu, controls, words, navigation (Back as up, the Search palette, the
    sidebar's selected look), shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout and two panes, pictures and icons, page names, account and
-   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz.
+   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal.
 2. **Profile** (Part B 1).
 3. **Copy and the rights checkbox** (Part B 2).
 4. **Explore in Songs and the built-in folders' rules** (Part B 3, Decided 8 and 10).
