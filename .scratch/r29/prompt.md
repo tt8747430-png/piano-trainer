@@ -1457,7 +1457,8 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - Done: every drill and three exercises played start to finish at 390 and 1280, screenshots
       of setup, a round, a wrong answer, the results.
 
-42. **Every theory, practice and training page against rule 30.** Known, read in the code:
+42. **Every theory, practice and training page against rule 30.** Scales and keys is read in
+    the code; the other rows are what to check first:
     - **Scales and keys:** the scale-kind strip (`ScaleChoice`) is the same on all three tabs, so
       on the Key tab it offers Dorian, pentatonic, blues…; a mode isn't a key (`showsOf` gives it
       no Key tab), so choosing Dorian on the Key tab drops the tab and sends you to Scale. On the
