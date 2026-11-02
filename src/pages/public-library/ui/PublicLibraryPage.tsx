@@ -1,7 +1,8 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
+import { useSearch } from '@tanstack/react-router'
 import { ArrowDownUp } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { PublicKind, PublicSort } from '@/shared/api/public-library'
+import { useSetSearch } from '@/shared/lib'
 import { BackButton, ChoiceChips, Dropdown, ScreenHeader, SearchField } from '@/shared/ui'
 import { PUBLIC_KINDS, PUBLIC_SORTS, type PublicView } from '../model/public-view'
 import { usePublicBrowse, type Browse } from '../model/use-public-browse'
@@ -24,14 +25,12 @@ const ALL = 'public-all'
 export function PublicLibraryPage() {
   const { t } = useTranslation('songs')
   const view = useSearch({ from: '/shell/songs/public' })
-  const navigate = useNavigate({ from: '/songs/public' })
   const searching = view.q.trim() !== ''
   const newest = usePublicBrowse({ kind: view.kind, sort: 'new', q: '' })
   const loved = usePublicBrowse({ kind: view.kind, sort: 'saved', q: '' })
   const searched = usePublicBrowse(searching ? view : null)
   const all = searching ? searched : view.sort === 'saved' ? loved : newest
-  const show = (next: Partial<PublicView>) =>
-    void navigate({ search: (was) => ({ ...was, ...next }), replace: true })
+  const show = useSetSearch<PublicView>()
   const seeAll = (sort: PublicSort) => {
     show({ sort })
     document.getElementById(ALL)?.scrollIntoView({ block: 'start' })

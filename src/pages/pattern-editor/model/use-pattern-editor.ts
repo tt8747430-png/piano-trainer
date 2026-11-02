@@ -22,7 +22,16 @@ const HEARD = ownPatternId(1)
 export function usePatternEditor(start: OwnPatternDraft, id?: OwnPatternId) {
   const store = usePatternsStoreApi()
   const navigate = useNavigate()
-  const cancel = useUp()
+  const up = useUp()
+  // Edit replaced the pattern's page: Cancel puts it back. A new pattern's Cancel goes up.
+  const cancel = id
+    ? () =>
+        void navigate({
+          to: '/practice/accompaniment/patterns/$patternRef',
+          params: { patternRef: id },
+          replace: true,
+        })
+    : up
   const [draft, setDraft] = useState(start)
   const change = (part: Partial<OwnPatternDraft>) => setDraft((was) => ({ ...was, ...part }))
   const { rh, lh } = draft

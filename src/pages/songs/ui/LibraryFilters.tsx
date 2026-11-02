@@ -1,7 +1,7 @@
 import { ArrowDownUp, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LIBRARY_SORTS, type LibrarySort } from '@/entities/library'
-import { useViewChange } from '@/shared/lib'
+import { useSetSearch } from '@/shared/lib'
 import { keyFromParam } from '@/shared/lib/music'
 import { useKeyName } from '@/shared/i18n'
 import { Dropdown, SearchField } from '@/shared/ui'
@@ -27,7 +27,7 @@ export function LibraryFilters({
   screen: string
 }) {
   const { t } = useTranslation('songs')
-  const set = useViewChange<SongsFilter>()
+  const set = useSetSearch<SongsFilter>()
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-2">
@@ -81,7 +81,7 @@ function FilterChips({ filter }: { filter: SongsFilter }) {
   const { t } = useTranslation('songs')
   const { t: common } = useTranslation('common')
   const keyName = useKeyName()
-  const set = useViewChange<SongsFilter>()
+  const set = useSetSearch<SongsFilter>()
   const chips = [
     filter.key === ''
       ? null

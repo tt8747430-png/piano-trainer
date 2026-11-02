@@ -87,7 +87,7 @@ function EditorRows({ course, title }: { course: Course; title: string }) {
           kind="course"
           id={course.id}
           title={title}
-          onDeleted={() => void navigate({ to: '/', search: { view: 'courses' } })}
+          onDeleted={() => void navigate({ to: '/', search: { view: 'courses' }, replace: true })}
         />
       )}
     </>

@@ -294,7 +294,7 @@ function EditorRows({
           kind="lesson"
           id={id}
           title={title}
-          onDeleted={() => void navigate({ to: '/', search: { view: 'lessons' } })}
+          onDeleted={() => void navigate({ to: '/', search: { view: 'lessons' }, replace: true })}
         />
       )}
     </>

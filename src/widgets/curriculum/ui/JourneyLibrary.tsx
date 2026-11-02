@@ -1,4 +1,3 @@
-import { useNavigate } from '@tanstack/react-router'
 import {
   BookOpenText,
   ChartNoAxesColumnIncreasing,
@@ -31,9 +30,10 @@ import {
   type StepId,
 } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { cn, IN_PLACE } from '@/shared/lib'
+import { cn, useSetSearch } from '@/shared/lib'
 import { ChoiceChips, PAINT, ProgressRing } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
+import type { LearnView } from '../model/learn-view'
 import { journeyProgress, lessonShare } from '../model/progress'
 import { useStepTitle } from '../model/use-step-title'
 
@@ -203,7 +203,7 @@ function ChapterGroup({
 export function JourneyLibrary({ journey }: { journey: Journey }) {
   const { t } = useTranslation(['learn', 'common'])
   const locale = useLocale()
-  const navigate = useNavigate()
+  const setSearch = useSetSearch<LearnView>()
   const learned = useProgress(selectLearned)
   const next = continueStep(learned)?.id
   const headingId = useId()
@@ -224,9 +224,7 @@ export function JourneyLibrary({ journey }: { journey: Journey }) {
           value: each.id,
           label: t(`common:stage.${each.stage}`),
         }))}
-        onChange={(id) =>
-          void navigate({ to: '/', search: { view: 'lessons', journey: id }, ...IN_PLACE })
-        }
+        onChange={(id) => setSearch({ view: 'lessons', journey: id })}
       />
       <section aria-labelledby={headingId} className="flex flex-col gap-1 px-3">
         <h2 id={headingId} className="text-2xl font-semibold text-balance">

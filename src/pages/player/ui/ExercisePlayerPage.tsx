@@ -2,7 +2,7 @@ import { useParams, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { isExerciseId, exerciseOf, type ExerciseChoice, type Exercise } from '@/entities/exercise'
 import { localText, useKeyName, useLocale, useScaleName } from '@/shared/i18n'
-import { useUp, useViewChange } from '@/shared/lib'
+import { useUp, useSetSearch } from '@/shared/lib'
 import { printedChord } from '@/shared/lib/music'
 import type { ExerciseSearch } from '../model/exercise-search'
 import { useExercisePlayer } from '../model/use-exercise-player'
@@ -39,7 +39,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
   const locale = useLocale()
   const search = useSearch({ from: '/full-screen/play/exercise/$exerciseId' })
   const close = useUp()
-  const setSearch = useViewChange<ExerciseSearch>()
+  const setSearch = useSetSearch<ExerciseSearch>()
   const { choice, performance, player, view, changeSetup } = useExercisePlayer(
     exercise,
     search,

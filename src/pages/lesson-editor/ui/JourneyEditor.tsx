@@ -285,7 +285,11 @@ export function JourneyEditor({
               label: tc(`stage.${each.stage}`),
             }))}
             onChange={(journeyId) =>
-              void navigate({ to: '/journeys/$journeyId/edit', params: { journeyId } })
+              void navigate({
+                to: '/journeys/$journeyId/edit',
+                params: { journeyId },
+                replace: true,
+              })
             }
           />
           <JourneyDocument

@@ -26,7 +26,7 @@ import {
   type EditorStore,
   type TakeInto,
 } from '@/features/score-editor'
-import { downloadFile, useViewChange } from '@/shared/lib'
+import { downloadFile, useSetSearch } from '@/shared/lib'
 import { TICKS_PER_BEAT, type Midi } from '@/shared/lib/music'
 import type { Duration } from '@/shared/lib/notation'
 import type { GridBar } from '@/shared/lib/schedule'
@@ -102,7 +102,7 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
   const search: Partial<EditSearch> = useSearch({ strict: false })
   const open = search.takes === true
   const asked = search.record === true
-  const changeView = useViewChange<EditSearch>()
+  const changeView = useSetSearch<EditSearch>()
   const [shown, setShown] = useState<TakesPage>(TAKES_PAGE)
   const [fromBar, setFromBar] = useState(1)
 

@@ -1,7 +1,7 @@
 import { useSearch } from '@tanstack/react-router'
 import { useDeferredValue, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useViewChange } from '@/shared/lib'
+import { useSetSearch } from '@/shared/lib'
 import { BackButton, RowGroup, ScreenHeader, SearchField } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
@@ -19,7 +19,7 @@ import { IndexRow } from './IndexRow'
 export function SearchPage() {
   const { t } = useTranslation('search')
   const { q } = useSearch({ from: '/shell/search' })
-  const set = useViewChange<SearchView>()
+  const set = useSetSearch<SearchView>()
   const query = useDeferredValue(q)
   const names = useIndexNames()
   const index = useIndex(names)

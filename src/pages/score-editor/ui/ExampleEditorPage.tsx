@@ -1,10 +1,11 @@
-import { useNavigate, useParams, useSearch } from '@tanstack/react-router'
+import { useParams, useSearch } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { courseLesson } from '@/entities/course'
 import { blankLesson, lessonById, type Lesson } from '@/entities/lesson'
 import { useLessonDraft } from '@/features/edit-original'
 import { localText, useLocale } from '@/shared/i18n'
+import { useUp } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { say } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -44,36 +45,19 @@ export function ExampleEditorPage() {
       lesson={lesson}
       draftId={course ? `${course}/${lessonId}` : lessonId}
       at={n}
-      course={course}
     />
   )
 }
 
-function ExampleOf({
-  lesson,
-  draftId,
-  at,
-  course,
-}: {
-  lesson: Lesson
-  draftId: string
-  at: number
-  course: string | undefined
-}) {
+function ExampleOf({ lesson, draftId, at }: { lesson: Lesson; draftId: string; at: number }) {
   const { t } = useTranslation('editor')
-  const navigate = useNavigate()
+  // Up to the lesson's editor (its course's lesson's, under a course), the draft written first.
+  const up = useUp()
   const draft = useLessonDraft(lesson, draftId)
   const { load, flush } = draft
   const back = async () => {
     await flush()
-    await navigate(
-      course
-        ? {
-            to: '/courses/$courseId/$lessonId/edit',
-            params: { courseId: course, lessonId: lesson.id },
-          }
-        : { to: '/lessons/$lessonId/edit', params: { lessonId: lesson.id } },
-    )
+    up()
   }
   if (load.state === 'loading') return <NotOpen line={t('original.opening')} />
   if (load.state === 'failed')

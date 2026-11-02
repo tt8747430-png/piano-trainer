@@ -1,9 +1,8 @@
-import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { selectChordFinder, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { useKeysDown } from '@/features/connect-midi'
 import { rememberChords, setChordFinder } from '@/features/set-preference'
-import { IN_PLACE, keyListParam, readKeyList, toggled, useWakeLock } from '@/shared/lib'
+import { keyListParam, readKeyList, toggled, useSetSearch, useWakeLock } from '@/shared/lib'
 import { keyFromParam, pitchClass, pitchClassOf, type Key, type Midi } from '@/shared/lib/music'
 import {
   EMPTY_LOG,
@@ -64,7 +63,7 @@ const lowestFirst = (keys: Iterable<Midi>): Midi[] => [...keys].sort((a, b) => a
 export function useChordFinder(view: ChordFinderView): ChordFinder {
   // The screen stays on while the finder is open: a phone on the stand does not lock mid-chord.
   useWakeLock()
-  const navigate = useNavigate({ from: '/practice/chord-finder' })
+  const setSearch = useSetSearch<ChordFinderView>()
   const held = useKeysDown()
   const store = useSettingsStoreApi()
   const settings = useSettings(selectChordFinder)
@@ -119,8 +118,7 @@ export function useChordFinder(view: ChordFinderView): ChordFinder {
     finding.kind === 'chord' ? pitchClassOf(readingAt(finding.readings, at).chord.root) : null
   const now = held.size > 0 ? [last] : tapped.length > 0 ? [tapped] : []
 
-  const write = (keysParam: string) =>
-    void navigate({ search: (prev) => ({ ...prev, keys: keysParam }), ...IN_PLACE })
+  const write = (keysParam: string) => setSearch({ keys: keysParam })
 
   return {
     keys,

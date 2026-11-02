@@ -15,7 +15,7 @@ import {
   type EditorAction,
 } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
-import { useUp, useViewChange, useWakeLock } from '@/shared/lib'
+import { useUp, useSetSearch, useWakeLock } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { audibleHands, chordSounds, schedule, type Scheduled } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
@@ -91,7 +91,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   )
   // Opened at a bar (Edit from the Player's cursor, ADR 0115): the caret goes to its start, once,
   // and the URL forgets it.
-  const setSearch = useViewChange<EditSearch>()
+  const setSearch = useSetSearch<EditSearch>()
   const openAt = useEffectEvent((printed: number) => {
     const placed = barsOf(store.getState().draft)[printed - 1]
     if (placed) store.dispatch({ type: 'place', tick: placed.start, layer: store.getState().layer })

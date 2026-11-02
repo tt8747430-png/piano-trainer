@@ -116,6 +116,9 @@ function usePatternActions(pattern: BookPattern, name: string) {
               void navigate({
                 to: '/practice/accompaniment/patterns/$patternRef/edit',
                 params: { patternRef: own },
+                // Edit is a mode of the pattern's page, not a page over it: Save and Cancel put the
+                // page back in its place.
+                replace: true,
               }),
           },
           {
