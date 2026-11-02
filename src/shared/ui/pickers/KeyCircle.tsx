@@ -53,7 +53,7 @@ const SPLIT: Readonly<Record<number, Record<CircleRing, readonly [Key, Key]>>> =
 }
 
 /** One wedge, or half of one: the key it chooses and where it is drawn. */
-interface Wedge {
+export interface CircleWedge {
   readonly key: Key
   readonly place: number
   readonly ring: CircleRing
@@ -61,8 +61,8 @@ interface Wedge {
 }
 
 /** Every wedge, the majors clockwise from C, then the minors: the order the arrows go round. */
-const WEDGES: readonly Wedge[] = RINGS.flatMap((ring) =>
-  CIRCLE_OF_FIFTHS.flatMap((place, i): Wedge[] => {
+const WEDGES: readonly CircleWedge[] = RINGS.flatMap((ring) =>
+  CIRCLE_OF_FIFTHS.flatMap((place, i): CircleWedge[] => {
     const split = SPLIT[i]?.[ring]
     return split
       ? [
@@ -77,11 +77,10 @@ const WEDGES: readonly Wedge[] = RINGS.flatMap((ring) =>
 export interface WedgeMark {
   readonly symbol: string
   readonly numeral: string
-  readonly tonic: boolean
 }
 
 /** The wedge that shows a key: its own spelling's, else its pitch's on its ring (D♯ minor's E♭ half's twin). */
-const wedgeOf = (key: Key): Wedge | undefined =>
+const wedgeOf = (key: Key): CircleWedge | undefined =>
   WEDGES.find((wedge) => sameKey(wedge.key, key)) ??
   WEDGES.find(
     (wedge) =>
@@ -106,14 +105,14 @@ export function KeyCircle({
   label: string
   value: Key
   onChoose: (key: Key) => void
-  mark?: (key: Key, place: number, ring: CircleRing) => WedgeMark | undefined
+  mark?: (wedge: CircleWedge) => WedgeMark | undefined
   /** Spread on the value chosen: where the focus lands as the panel opens. */
   start?: { readonly 'data-picker-start': string }
   className?: string
 }) {
   const name = useKeyName()
   const chosen = wedgeOf(value)
-  const onKeyDown = (event: KeyboardEvent<SVGElement>, wedge: Wedge) => {
+  const onKeyDown = (event: KeyboardEvent<SVGElement>, wedge: CircleWedge) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
       onChoose(wedge.key)
@@ -151,7 +150,7 @@ export function KeyCircle({
         className="absolute inset-0 size-full overflow-visible"
       >
         {WEDGES.map((wedge, index) => {
-          const marked = mark?.(wedge.key, wedge.place, wedge.ring)
+          const marked = mark?.(wedge)
           const on = wedge === chosen
           const { x, y } = cellCentre(wedge.place, wedge.ring, wedge.part)
           const half = wedge.part !== 0

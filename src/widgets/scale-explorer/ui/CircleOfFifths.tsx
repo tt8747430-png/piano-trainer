@@ -1,117 +1,53 @@
-import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { useKeyName } from '@/shared/i18n'
-import { cn, IN_PLACE } from '@/shared/lib'
 import {
-  CIRCLE_OF_FIFTHS,
   circleFunctions,
   keyMode,
   keyScale,
-  keySymbol,
   noteParam,
-  printedSymbol,
   sameKey,
-  type CircleRing,
+  sameNote,
   type Key,
 } from '@/shared/lib/music'
-import { cellCentre, signatureCount, wedgePath } from '@/shared/ui/pickers/circle-layout'
-
-const RINGS: readonly CircleRing[] = ['major', 'minor']
-/** A wedge's fill: the key's own place in the tonic's wash, its other chords' in the scale's, the rest plain. */
-const WEDGE = {
-  tonic: 'fill-key-tonic',
-  chord: 'fill-key-scale',
-  plain: 'fill-card',
-} as const
+import { KeyCircle, type CircleWedge } from '@/shared/ui'
+import type { ScaleView } from '../model/scale-view'
 
 /**
- * The circle of fifths as the Key view's chooser: every key a link to its scale (a minor key its
- * natural minor, or the minor already shown), its signature's count under its name; the key shown
- * and the places of its seven chords wear the keys' marks, each the chord as the key writes it over
- * its numeral (C, F, G outside and Dm, Em, Am, B° inside for C).
+ * The Key view's circle of fifths: the key picker in place, a wedge's tap choosing its key at once (a
+ * minor key its natural minor, or the minor already shown). The places of the key's seven chords wear
+ * the keys' marks, each the chord as the key writes it over its numeral (C, F, G outside and Dm, Em,
+ * Am, B° inside for C); where a place is split, the half the key spells (G♭, not F♯, in D♭).
  */
-export function CircleOfFifths({ current }: { current: Key }) {
+export function CircleOfFifths({
+  current,
+  kind,
+  onChange,
+}: {
+  current: Key
+  /** The scale shown: a key of the same mode keeps it. */
+  kind: ScaleView['kind']
+  onChange: (change: Partial<ScaleView>) => void
+}) {
   const { t } = useTranslation('practice')
   const functions = circleFunctions(current)
-  const chordAt = (place: number, ring: CircleRing) =>
-    functions.find((at) => at.place === place && at.ring === ring)
-  const name = useKeyName()
+  const mark = ({ key, place, ring, part }: CircleWedge) => {
+    const chord = functions.find((at) => at.place === place && at.ring === ring)
+    // A split place shows the chord on the half the key spells it by (G♭ in D♭), the other plain.
+    if (!chord || (part !== 0 && !sameNote(chord.root, key.tonic))) return undefined
+    return { symbol: chord.symbol, numeral: chord.numeral }
+  }
   return (
-    <nav
-      aria-label={t('scales.key.circle')}
-      className="relative mx-auto aspect-square w-full max-w-sm"
-    >
-      <svg viewBox="0 0 100 100" aria-hidden className="absolute inset-0 size-full">
-        {CIRCLE_OF_FIFTHS.flatMap((place, i) =>
-          RINGS.map((ring) => (
-            <path
-              key={`${ring} ${i}`}
-              d={wedgePath(i, ring)}
-              strokeWidth={0.3}
-              className={cn(
-                'stroke-border',
-                WEDGE[
-                  sameKey(place[ring], current) ? 'tonic' : chordAt(i, ring) ? 'chord' : 'plain'
-                ],
-              )}
-            />
-          )),
-        )}
-      </svg>
-      <p
-        aria-hidden
-        className="absolute inset-0 grid place-content-center font-display text-lg font-semibold"
-      >
-        {name(current)}
-      </p>
-      <ul>
-        {CIRCLE_OF_FIFTHS.flatMap((place, i) =>
-          RINGS.map((ring) => {
-            const key = place[ring]
-            const { x, y } = cellCentre(i, ring)
-            const chord = chordAt(i, ring)
-            return (
-              <li
-                key={`${ring} ${i}`}
-                className="absolute -translate-x-1/2 -translate-y-1/2"
-                style={{ left: `${x}%`, top: `${y}%` }}
-              >
-                <Link
-                  from="/practice/scales"
-                  to="/practice/scales"
-                  search={(prev) => ({
-                    ...prev,
-                    root: noteParam(key.tonic),
-                    kind:
-                      keyMode(prev.kind) === (key.minor ? 'minor' : 'major')
-                        ? prev.kind
-                        : keyScale(key),
-                  })}
-                  {...IN_PLACE}
-                  // Only the key shown is where the learner is: C's link names no param the URL lacks.
-                  activeOptions={{ exact: true }}
-                  aria-label={name(key)}
-                  aria-current={sameKey(key, current) ? 'page' : undefined}
-                  className={cn(
-                    'grid size-11 place-content-center gap-0.5 rounded-full text-center leading-none transition-colors duration-200 ease-out hover:bg-muted aria-[current=page]:bg-card aria-[current=page]:ring-1 aria-[current=page]:ring-input',
-                    chord ? 'text-foreground' : 'text-muted-foreground',
-                  )}
-                >
-                  {/* One of the key's chords is written as the key spells it: G♭ in D♭ major, though
-                      the place is F♯'s, and B° in C, though the place is B minor's. Each name,
-                      a chord's or a key's, is printed as the sheets print a chord. */}
-                  <span className="text-sm font-semibold">
-                    {printedSymbol(chord ? chord.symbol : keySymbol(key))}
-                  </span>
-                  <span className="text-xs tabular-nums">
-                    {chord?.numeral ?? signatureCount(key)}
-                  </span>
-                </Link>
-              </li>
-            )
-          }),
-        )}
-      </ul>
-    </nav>
+    <KeyCircle
+      label={t('scales.key.circle')}
+      value={current}
+      mark={mark}
+      onChoose={(key) =>
+        sameKey(key, current)
+          ? undefined
+          : onChange({
+              root: noteParam(key.tonic),
+              kind: keyMode(kind) === (key.minor ? 'minor' : 'major') ? kind : keyScale(key),
+            })
+      }
+    />
   )
 }

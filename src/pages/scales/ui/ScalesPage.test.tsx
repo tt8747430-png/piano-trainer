@@ -7,6 +7,7 @@ import { setKeyboard } from '@/features/set-preference'
 import type { LiveEvent } from '@/shared/api/audio'
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
+import { menuOptions, pickIn, pickMenu } from '@/shared/test/pickers'
 
 const notes = (sounds: readonly Sound[]) =>
   sounds.flatMap((sound) => (sound.kind === 'note' ? [sound.midi] : []))
@@ -19,7 +20,7 @@ describe('Practice → Scales and keys', () => {
     expect(
       await screen.findByRole('heading', { level: 2, name: 'E♭ harmonic minor' }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('radiogroup', { name: 'Start on' })).toHaveTextContent('C♭')
+    expect(await menuOptions(userEvent.setup(), 'Start on')).toContain('C♭')
     expect(screen.getByText('W H W W H W+H H')).toBeInTheDocument()
   })
 
@@ -121,14 +122,8 @@ describe('Practice → Scales and keys', () => {
   it('chooses the root among the twelve notes and the scale from a pop-up button', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales')
-    await user.click(
-      within(await screen.findByRole('group', { name: 'Root' })).getByRole('radio', { name: 'E♭' }),
-    )
-    await user.click(
-      within(screen.getByRole('radiogroup', { name: 'Scale' })).getByRole('radio', {
-        name: 'Harmonic minor',
-      }),
-    )
+    await pickIn(user, 'Root', 'E♭')
+    await pickMenu(user, 'Scale', 'Harmonic minor')
     expect(router.state.location.search).toMatchObject({ root: 'Eb', kind: 'harmonic' })
   })
 
@@ -220,24 +215,19 @@ describe('Practice → Scales and keys', () => {
   it('plays a scale up its octave as it is chosen, unless Settings turns that off', async () => {
     const user = userEvent.setup()
     const { audio, settingsStore } = await renderApp('/practice/scales')
-    const root = await screen.findByRole('group', { name: 'Root' })
-    await user.click(within(root).getByRole('radio', { name: 'D' }))
+    await pickIn(user, 'Root', 'D')
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([62, 64, 66, 67, 69, 71, 73, 74])
     act(() => setKeyboard(settingsStore, { autoplay: false }))
     const played = audio.played.length
-    await user.click(within(root).getByRole('radio', { name: 'E' }))
+    await pickIn(user, 'Root', 'E')
     expect(audio.played).toHaveLength(played)
   })
 
-  it('steps through the scales in a strip, keys, then modes, blues, the symmetric scales and the others', async () => {
+  it('lists the scales in a menu, keys, then modes, blues, the symmetric scales and the others', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?kind=mpent')
-    const strip = await screen.findByRole('radiogroup', { name: 'Scale' })
-    expect(
-      within(strip)
-        .getAllByRole('radio')
-        .map((kind) => kind.textContent),
-    ).toEqual([
+    await screen.findByRole('heading', { level: 2, name: 'C minor pentatonic' })
+    expect(await menuOptions(user, 'Scale')).toEqual([
       'Major',
       'Natural minor',
       'Harmonic minor',
@@ -260,7 +250,7 @@ describe('Practice → Scales and keys', () => {
       'Bebop major',
       'Bebop dominant',
     ])
-    await user.click(screen.getByRole('button', { name: 'Next: Scale' }))
+    await pickMenu(user, 'Scale', 'Major blues')
     expect(router.state.location.search).toMatchObject({ kind: 'majorBlues' })
   })
 
@@ -330,13 +320,9 @@ describe('Practice → Scales and keys', () => {
   it('starts the run on any note, fingered from the thumb there', async () => {
     const user = userEvent.setup()
     const { router, audio } = await renderApp('/practice/scales?fingers=rh')
-    const startOn = await screen.findByRole('radiogroup', { name: 'Start on' })
-    expect(
-      within(startOn)
-        .getAllByRole('radio')
-        .map((each) => each.textContent),
-    ).toEqual(['C', 'D', 'E', 'F', 'G', 'A', 'B'])
-    await user.click(within(startOn).getByRole('radio', { name: 'E' }))
+    await screen.findByRole('heading', { level: 2, name: 'C major' })
+    expect(await menuOptions(user, 'Start on')).toEqual(['C', 'D', 'E', 'F', 'G', 'A', 'B'])
+    await pickMenu(user, 'Start on', 'E')
     expect(router.state.location.search).toMatchObject({ start: 3 })
     const fingering = screen.getByRole('radiogroup', { name: 'Fingering' })
     expect(within(fingering).getByRole('radio', { name: 'From the thumb' })).toHaveAttribute(
@@ -459,17 +445,16 @@ describe('Practice → Scales and keys, Key view', () => {
   it('shows a key on the circle of fifths, marking its seven chords', async () => {
     await renderApp('/practice/scales?show=key')
     expect(await screen.findByRole('heading', { level: 2, name: 'C major' })).toBeInTheDocument()
-    const circle = screen.getByRole('navigation', { name: 'Circle of fifths' })
-    expect(within(circle).getByRole('link', { name: 'C major' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    )
-    expect(within(circle).getByRole('link', { name: 'F major' })).toHaveTextContent('IV')
+    const circle = screen.getByRole('radiogroup', { name: 'Circle of fifths' })
+    expect(within(circle).getByRole('radio', { name: 'C major' })).toBeChecked()
+    expect(within(circle).getByRole('radio', { name: 'F major' })).toHaveTextContent('IV')
     // Its vii° stands on B minor's place, written as the chord it is.
-    expect(within(circle).getByRole('link', { name: 'B minor' })).toHaveTextContent('B°vii°')
-    expect(within(circle).getByRole('link', { name: 'E♭ major' })).toHaveTextContent('3♭')
+    expect(within(circle).getByRole('radio', { name: 'B minor' })).toHaveTextContent('B°vii°')
+    expect(within(circle).getByRole('radio', { name: 'E♭ major' })).toHaveTextContent('3♭')
     // A key the circle names is printed as a chord is, over its signature's count and sign.
-    expect(within(circle).getByRole('link', { name: 'F♯ minor' })).toHaveTextContent('F♯m3♯')
+    expect(within(circle).getByRole('radio', { name: 'F♯ minor' })).toHaveTextContent('F♯m3♯')
+    // A key written two ways is split, each half one spelling.
+    expect(within(circle).getByRole('radio', { name: 'C♭ major' })).toHaveTextContent('C♭7♭')
   })
 
   it('names a minor scale’s key and marks the notes its signature writes', async () => {
@@ -483,10 +468,11 @@ describe('Practice → Scales and keys, Key view', () => {
 
   it('writes the key’s chords on the circle as the key spells them, and its borrowed chords plainly', async () => {
     await renderApp('/practice/scales?root=Db&show=key')
-    const circle = await screen.findByRole('navigation', { name: 'Circle of fifths' })
-    // IV and ii of D♭ major stand on the places the circle calls F# major and D# minor.
-    expect(within(circle).getByRole('link', { name: 'F♯ major' })).toHaveTextContent('G♭IV')
-    expect(within(circle).getByRole('link', { name: 'D♯ minor' })).toHaveTextContent('E♭mii')
+    const circle = await screen.findByRole('radiogroup', { name: 'Circle of fifths' })
+    // IV and ii of D♭ major stand on the split places' G♭ and E♭ minor halves, not F♯'s and D♯'s.
+    expect(within(circle).getByRole('radio', { name: 'G♭ major' })).toHaveTextContent('G♭IV')
+    expect(within(circle).getByRole('radio', { name: 'F♯ major' })).toHaveTextContent('F♯6♯')
+    expect(within(circle).getByRole('radio', { name: 'E♭ minor' })).toHaveTextContent('E♭mii')
     const borrowed = screen.getByRole('heading', { level: 3, name: 'Borrowed chords' })
     const names = within(borrowed.parentElement ?? circle)
       .getAllByRole('button')
@@ -497,8 +483,8 @@ describe('Practice → Scales and keys, Key view', () => {
   it('chooses a key on the circle, and shows its signature, notes, relative and modes', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?show=key')
-    const circle = await screen.findByRole('navigation', { name: 'Circle of fifths' })
-    await user.click(within(circle).getByRole('link', { name: 'E♭ major' }))
+    const circle = await screen.findByRole('radiogroup', { name: 'Circle of fifths' })
+    await user.click(within(circle).getByRole('radio', { name: 'E♭ major' }))
     expect(router.state.location.search).toEqual({ root: 'Eb', show: 'key' })
     expect(await screen.findByRole('heading', { level: 2, name: 'E♭ major' })).toBeInTheDocument()
     expect(screen.getByText('B♭ E♭ A♭')).toBeInTheDocument()
@@ -559,15 +545,15 @@ describe('Practice → Scales and keys, Key view', () => {
   it('goes to a minor key as its natural minor, and keeps the minor it was on', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?show=key')
-    const circle = await screen.findByRole('navigation', { name: 'Circle of fifths' })
-    await user.click(within(circle).getByRole('link', { name: 'A minor' }))
+    const circle = await screen.findByRole('radiogroup', { name: 'Circle of fifths' })
+    await user.click(within(circle).getByRole('radio', { name: 'A minor' }))
     expect(router.state.location.search).toEqual({ root: 'A', kind: 'natural', show: 'key' })
+    await pickMenu(user, 'Scale', 'Harmonic minor')
     await user.click(
-      within(screen.getByRole('radiogroup', { name: 'Scale' })).getByRole('radio', {
-        name: 'Harmonic minor',
+      within(screen.getByRole('radiogroup', { name: 'Circle of fifths' })).getByRole('radio', {
+        name: 'E minor',
       }),
     )
-    await user.click(within(circle).getByRole('link', { name: 'E minor' }))
     expect(router.state.location.search).toEqual({ root: 'E', kind: 'harmonic', show: 'key' })
   })
 
@@ -609,7 +595,7 @@ describe('Practice → Scales and keys, Key view', () => {
     expect(
       within(harmonise).getByRole('button', { name: 'Emas 5 · in the key' }),
     ).toBeInTheDocument()
-    await user.click(within(harmonise).getByRole('radio', { name: 'D' }))
+    await pickIn(user, 'Melody note', 'D')
     await waitFor(() => expect(router.state.location.search).toMatchObject({ melody: 'D' }))
   })
 
