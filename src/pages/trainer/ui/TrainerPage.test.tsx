@@ -234,7 +234,7 @@ describe('A trainer', () => {
     expect(router.state.location.search).not.toHaveProperty('intervals')
   })
 
-  it('chooses Custom’s chords and roots in sheets, the roots by natural, sharp and flat', async () => {
+  it('chooses Custom’s chords in a sheet, and its keys in the Keys sheet by their signatures', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/quiz/chords?level=custom')
     const chords = await screen.findByRole('button', { name: /^Chords/ })
@@ -243,16 +243,14 @@ describe('A trainer', () => {
     await user.click(await screen.findByRole('checkbox', { name: 'Diminished triad' }))
     expect(router.state.location.search).toMatchObject({ chords: 'maj.min.dim' })
     await user.click(screen.getByRole('button', { name: 'Close' }))
-    await user.click(screen.getByRole('button', { name: /^Roots/ }))
-    const sheet = await screen.findByRole('dialog', { name: 'Roots' })
-    expect(
-      within(sheet)
-        .getAllByRole('heading', { level: 3 })
-        .map((heading) => heading.textContent),
-    ).toEqual(['Natural', 'Sharp', 'Flat'])
-    await user.click(within(sheet).getByRole('checkbox', { name: 'F♯' }))
-    expect(router.state.location.search).toMatchObject({ roots: 'C.D.E.F.G.A.B.F#' })
-    await user.click(within(sheet).getByRole('button', { name: 'Close' }))
+    const keys = screen.getByRole('button', { name: /^Keys/ })
+    expect(keys).toHaveTextContent('7 of 15')
+    await user.click(keys)
+    const sheet = await screen.findByRole('dialog', { name: 'Keys' })
+    expect(within(sheet).getAllByRole('checkbox')).toHaveLength(15)
+    await user.click(within(sheet).getByRole('checkbox', { name: 'F♯ major / D♯ minor' }))
+    await user.click(within(sheet).getByRole('button', { name: 'Apply' }))
+    expect(router.state.location.search).toMatchObject({ roots: 'C.G.D.A.E.B.F#.F' })
     await user.click(screen.getByRole('switch', { name: 'Inversions' }))
     expect(router.state.location.search).toMatchObject({ inversions: true })
   })

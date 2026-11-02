@@ -12,7 +12,6 @@ import {
   NOTE_RANGE,
   orOwn,
   readList,
-  ROOT_GROUPS,
   ROUNDS,
   TIME_LIMITS,
   type Drill,
@@ -27,16 +26,19 @@ import {
   LETTERS,
   midiOf,
   note,
+  noteFromParam,
+  noteParam,
   PIANO,
-  printedSymbol,
   SCALE_FAMILIES,
   scaleKindsIn,
   type Midi,
+  type NoteParam,
 } from '@/shared/lib/music'
 import {
   Dropdown,
   Fab,
   FloatingActions,
+  KeysChecklist,
   Segmented,
   SettingField,
   SettingRows,
@@ -204,17 +206,18 @@ export function TrainerSetup({
           />
         ) : null}
         {fields.has('roots') ? (
-          <ListSheetRow
-            label={t(`quiz:choice.roots.${trainer.id === 'intervals' ? 'intervals' : 'chords'}`)}
-            value={listOf('roots')}
-            groups={(['natural', 'sharp', 'flat'] as const).map((group) => ({
-              label: t(`quiz:choice.rootGroups.${group}`),
-              options: ROOT_GROUPS[group].map((root) => ({
-                value: root,
-                label: printedSymbol(root),
-              })),
+          <KeysChecklist
+            label={t('quiz:choice.keys')}
+            value={listOf('roots').map((root) => ({
+              tonic: noteFromParam(root as NoteParam),
+              minor: false,
             }))}
-            onChange={(chosen) => write('roots', chosen)}
+            onChange={(keys) =>
+              write(
+                'roots',
+                keys.map((key) => noteParam(key.tonic)),
+              )
+            }
           />
         ) : null}
         {fields.has('inversions') ? (

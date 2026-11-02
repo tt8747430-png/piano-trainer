@@ -163,8 +163,7 @@ export const quiz = {
   // Custom's choices.
   choice: {
     chords: 'Chords',
-    roots: { chords: 'Roots', intervals: 'From notes' },
-    rootGroups: { natural: 'Natural', sharp: 'Sharp', flat: 'Flat' },
+    keys: 'Keys',
     inversions: 'Inversions',
     inversionsInfo: 'Each chord is asked in root position and in each of its inversions.',
     chosen: '{{count}} of {{total}}',
