@@ -639,8 +639,17 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       - Done: the three tabs side by side at 390 and 1280, the same header and the seven columns
         lining up across them.
 22. **Intervals** (`scratchpad/r29/scales/intervals-*`). Known:
-    - The Root strip again hides choices behind ‹ › (Part A 5); "Play: At once · Up · Down" is a
-      half-width segmented control with the right half empty.
+    - **The root** (`owner/71`): the 17-name strip with ‹ › arrows (B is cut off). It becomes the
+      shared key picker of Part A 5, unsplit here (only the pitch matters): one compact "Root C ⌄"
+      in the page's head, opening the 12-key octave.
+    - **"Play: At once · Up · Down"** is a half-width segmented control on its own row, its words
+      not a musician's, and it is a playing choice, not the thing looked at. Name it as theory
+      books do: **Harmonic** (both notes together) · **Melodic, rising** · **Melodic, falling**,
+      each with a small picture (two stacked notes, two notes rising, two falling; rule 21). It
+      leaves the page body: the page's floating capsule (rule 5) holds it as three icon buttons
+      with their names on hover, beside **Play all** (each interval in turn) and Stop; its default
+      lives on Intervals' Settings page (Part A 24) with the names style and the compound
+      intervals. A row still plays on tap, in the chosen way.
     - **Two row styles in one list:** "Within the octave" rows have ⓘ, "Past the octave" rows
       don't; the mini keyboard is drawn at two scales. One row, one keyboard size.
     - **ⓘ on every row** repeats what the name and the drawing already say (rule 21).
