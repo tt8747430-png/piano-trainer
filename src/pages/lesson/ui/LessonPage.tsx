@@ -52,7 +52,7 @@ export function LessonPage() {
         />
       }
       settings={<Link to="/lessons/$lessonId/settings" params={{ lessonId: lesson.id }} />}
-      back={<BackButton fallback={journey} />}
+      back={<BackButton />}
       after={(lesson.after ?? []).flatMap((id) => {
         const before = lessonById(id)
         return before

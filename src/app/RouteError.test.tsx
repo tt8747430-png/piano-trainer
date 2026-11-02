@@ -71,20 +71,11 @@ describe('RouteError', () => {
     )
   })
 
-  it('leaves a screen that throws for where the learner came from', async () => {
+  it('leaves a screen that throws up to its parent: Learn, outside the app’s parents table', async () => {
     const user = userEvent.setup()
-    const { router } = renderThrowing(['/', '/play/broken'])
-    await user.click(await screen.findByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/'))
-    expect(router.history.canGoBack()).toBe(false)
-  })
-
-  it('leaves a screen opened directly for the Path', async () => {
-    const user = userEvent.setup()
-    const { router } = renderThrowing(['/play/broken'])
+    renderThrowing(['/play/broken'])
     await user.click(await screen.findByRole('button', { name: 'Back' }))
     expect(await screen.findByRole('heading', { name: 'Path' })).toBeInTheDocument()
-    expect(router.history.canGoBack()).toBe(false)
   })
 
   it('is the router’s default error screen', () => {

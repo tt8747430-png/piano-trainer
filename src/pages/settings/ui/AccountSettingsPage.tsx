@@ -3,7 +3,7 @@ import { KeyRound, LogIn, LogOut, Mail, Trash2, UserRoundPlus } from 'lucide-rea
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
-import { useGoBack, useOnline } from '@/shared/lib'
+import { useOnline, useUp } from '@/shared/lib'
 import { authProblem, useAccount, type AuthProblem } from '@/shared/lib/account'
 import {
   Avatar,
@@ -38,10 +38,7 @@ export function AccountSettingsPage() {
   const [scheduled, setScheduled] = useState<string | null>(null)
   return (
     <div className="flex flex-col gap-2">
-      <ScreenHeader
-        title={t('accountPage.title')}
-        back={<BackButton fallback={{ to: '/profile' }} />}
-      />
+      <ScreenHeader title={t('accountPage.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         {account ? (
           <>
@@ -178,7 +175,7 @@ function NameForm({ name: saved }: { name: string }) {
 function SignOut() {
   const { t } = useTranslation('settings')
   const { auth } = useAccount()
-  const back = useGoBack({ to: '/settings' })
+  const back = useUp()
   const [open, setOpen] = useState(false)
   return (
     <>

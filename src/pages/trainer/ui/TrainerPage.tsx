@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
 import { CUSTOM, isTrainerId, type TrainerId, type TrainerView } from '@/features/trainer'
-import { useViewChange } from '@/shared/lib'
+import { useSetSearch } from '@/shared/lib'
 import { BackButton, ButtonLink, InfoTip, RoundButton, ScreenHeader } from '@/shared/ui'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import { TrainerSetup, useTrainerHow } from '@/widgets/trainer-setup'
@@ -26,7 +26,7 @@ export function TrainerPage() {
 function TrainerScreenView({ id }: { id: TrainerId }) {
   const { t } = useTranslation(['quiz', 'common'])
   const view = useSearch({ from: '/shell/practice/quiz/$trainerId' })
-  const setView = useViewChange<TrainerView>()
+  const setView = useSetSearch<TrainerView>()
   const [running, setRunning] = useState(false)
   const { trainer, level, asks, runKey, runId, record } = useTrainerScreen(id, view)
   const levelName = useLevelName()
@@ -44,7 +44,7 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
           running ? (
             <RoundButton label={t('common:close')} icon={X} onClick={close} />
           ) : (
-            <BackButton fallback={{ to: '/practice/quiz' }} />
+            <BackButton />
           )
         }
         actions={

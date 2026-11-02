@@ -14,7 +14,7 @@ import { REMEMBERED_CHORDS } from '@/entities/settings'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
 import { PinnedKeyboard, useFoldKeys } from '@/features/live-keyboard'
-import { partsParams, useViewChange } from '@/shared/lib'
+import { partsParams, useSetSearch } from '@/shared/lib'
 import { keyFromParam, keyParam, keySymbol, noteParam, printedSymbol } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
@@ -127,7 +127,7 @@ function FinderSettings({
 export function ChordFinderPage() {
   const { t } = useTranslation(['practice', 'music', 'common'])
   const view = useSearch({ from: '/shell/practice/chord-finder' })
-  const change = useViewChange<ChordFinderView>()
+  const change = useSetSearch<ChordFinderView>()
   const finder = useChordFinder(view)
   const playback = usePlayback<'chord'>()
   const { keys, finding } = finder
@@ -142,7 +142,7 @@ export function ChordFinderPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('practice:pages.chordFinder')}
-        back={<BackButton fallback={{ to: '/practice' }} />}
+        back={<BackButton />}
         actions={
           <div className="flex gap-2">
             <MidiButton />

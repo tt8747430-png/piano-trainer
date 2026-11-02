@@ -7,7 +7,6 @@ import {
   isPatternId,
   isPatternRef,
   LEFT_FIGURES,
-  partOfShelf,
   RIGHT_FIGURES,
   selectIsFavourite,
   selectIsHidden,
@@ -117,6 +116,9 @@ function usePatternActions(pattern: BookPattern, name: string) {
               void navigate({
                 to: '/practice/accompaniment/patterns/$patternRef/edit',
                 params: { patternRef: own },
+                // Edit is a mode of the pattern's page, not a page over it: Save and Cancel put the
+                // page back in its place.
+                replace: true,
               }),
           },
           {
@@ -176,22 +178,12 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
   const [shown, show] = useShownKeys(pattern.ref, sample.shown)
   const name = localText(pattern.name, locale)
   const pieces = isPatternId(pattern.ref) ? piecesPlaying(pattern.ref) : []
-  // A hidden pattern is listed under Yours alone, no longer on its book's shelf.
-  const { ref } = pattern
-  const hidden = usePatterns((state) => isPatternId(ref) && selectIsHidden(ref)(state))
   const more = usePatternActions(pattern, name)
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={name}
-        back={
-          <BackButton
-            fallback={{
-              to: '/practice/accompaniment',
-              search: { show: hidden ? 'yours' : partOfShelf(pattern.group) },
-            }}
-          />
-        }
+        back={<BackButton />}
         actions={
           <>
             <FavouriteButton pattern={pattern} />

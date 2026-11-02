@@ -2,7 +2,7 @@ import { ListFilter } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { STAGES, type Stage } from '@/entities/step'
-import { useMediaQuery, useViewChange } from '@/shared/lib'
+import { useMediaQuery, useSetSearch } from '@/shared/lib'
 import { keyFromParam, type KeyParam } from '@/shared/lib/music'
 import { useKeyName } from '@/shared/i18n'
 import { FoldGroup, Sheet, SheetContent, SwitchRow } from '@/shared/ui'
@@ -85,7 +85,7 @@ function FilterFields({ page, filter }: { page: LibraryPage; filter: SongsFilter
   const { t } = useTranslation('songs')
   const { t: common } = useTranslation('common')
   const keyName = useKeyName()
-  const set = useViewChange<SongsFilter>()
+  const set = useSetSearch<SongsFilter>()
   const { scope } = page.view
   const keys = keysIn(scope)
   const held = stagesIn(scope)
@@ -188,7 +188,7 @@ function FilterFoot({
   onShow: () => void
 }) {
   const { t } = useTranslation('songs')
-  const set = useViewChange<SongsFilter>()
+  const set = useSetSearch<SongsFilter>()
   // What Show shows: the songs the filters keep here, or all the place holds while none is on.
   const shown = page.view.filtering ? page.view.shown : page.view.scope.length
   return (

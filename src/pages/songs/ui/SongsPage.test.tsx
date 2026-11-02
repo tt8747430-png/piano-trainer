@@ -104,7 +104,7 @@ describe('Songs: the library’s Home and its folders (ADR 0106)', () => {
     // The bar's title says where the learner is; Back goes up a level.
     expect(await screen.findByRole('heading', { level: 1, name: 'Hymns' })).toBeInTheDocument()
     expect(await screen.findByRole('link', { name: /Silent Night/ })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Back to Songs' })).toHaveAttribute('href', '/songs')
+    expect(screen.getByRole('button', { name: 'Back to Songs' })).toBeInTheDocument()
   })
 
   it('names a folder’s first songs under its count', async () => {
@@ -142,9 +142,9 @@ describe('Songs: the library’s Home and its folders (ADR 0106)', () => {
     await user.click(within(folders).getByRole('link', { name: /^Advent/ }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/folders/folder-1'))
     expect(await screen.findByRole('heading', { level: 1, name: 'Advent' })).toBeInTheDocument()
-    await user.click(screen.getByRole('link', { name: 'Back to Hymns' }))
+    await user.click(screen.getByRole('button', { name: 'Back to Hymns' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/folders/hymns'))
-    await user.click(await screen.findByRole('link', { name: 'Back to Songs' }))
+    await user.click(await screen.findByRole('button', { name: 'Back to Songs' }))
     const home = await screen.findByRole('region', { name: 'Folders' })
     expect(rowNames(home)).toContain('Hymns 1 folder · 4 songs')
     expect(within(home).queryByRole('link', { name: /^Advent/ })).toBeNull()
@@ -981,7 +981,7 @@ describe('Songs: the archive’s way in (ADR 0106)', () => {
     await user.click(screen.getByRole('link', { name: /^Hymns/ }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Hymns' })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'Archive: 1' })).toBeNull()
-    await user.click(screen.getByRole('link', { name: 'Back to Songs' }))
+    await user.click(screen.getByRole('button', { name: 'Back to Songs' }))
     await user.click(await screen.findByRole('link', { name: 'Archive: 1' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/archive'))
   })

@@ -53,7 +53,7 @@ export function CourseLessonPage() {
         />
       }
       settings={<Link to="/courses/$courseId/$lessonId/settings" params={{ courseId, lessonId }} />}
-      back={<BackButton fallback={course} />}
+      back={<BackButton />}
       after={(place.lesson.after ?? []).flatMap((id) => {
         const before = place.course.lessons.find((each) => each.id === id)
         return before

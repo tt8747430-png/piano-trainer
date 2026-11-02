@@ -65,7 +65,7 @@ export function LessonSettingsPage() {
       id={lessonId}
       step={lessonStepId(lessonId)}
       path={`/lessons/${lessonId}`}
-      back={<BackButton fallback={{ to: '/lessons/$lessonId', params: { lessonId } }} />}
+      back={<BackButton />}
       readFirst
       where={{
         kind: 'level',
@@ -91,11 +91,7 @@ export function CourseLessonSettingsPage() {
       id={`${courseId}/${lessonId}`}
       step={courseLessonStepId(courseId, lessonId)}
       path={`/courses/${courseId}/${lessonId}`}
-      back={
-        <BackButton
-          fallback={{ to: '/courses/$courseId/$lessonId', params: { courseId, lessonId } }}
-        />
-      }
+      back={<BackButton />}
       where={{
         kind: 'course',
         course: localText(place.course.title, locale),
@@ -287,7 +283,7 @@ function EditorRows({
           kind="lesson"
           id={id}
           title={title}
-          onDeleted={() => void navigate({ to: '/', search: { view: 'lessons' } })}
+          onDeleted={() => void navigate({ to: '/', search: { view: 'lessons' }, replace: true })}
         />
       )}
     </>

@@ -23,10 +23,7 @@ export function ActivityPage() {
   ] as const
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader
-        title={t('profile.activity')}
-        back={<BackButton fallback={{ to: '/profile' }} />}
-      />
+      <ScreenHeader title={t('profile.activity')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <dl
           aria-label={t('profile.figures')}

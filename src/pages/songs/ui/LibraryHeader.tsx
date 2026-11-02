@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router'
 import {
   Archive,
   ArrowLeft,
@@ -12,7 +11,8 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, useLibraryLayout, type ShelvedFolder } from '@/entities/library'
-import { ActionMenu, RoundButton, RoundLink, ScreenHeader } from '@/shared/ui'
+import { useUp } from '@/shared/lib'
+import { ActionMenu, RoundButton, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { LibraryPage } from '../model/use-library-page'
 import { ArchiveButton } from './ArchiveButton'
@@ -35,6 +35,7 @@ export function LibraryHeader({
   const nameOf = useFolderName()
   const { folders } = useLibraryLayout()
   const { select } = page
+  const up = useUp()
   if (select.on)
     return (
       <ScreenHeader
@@ -62,16 +63,10 @@ export function LibraryHeader({
       large={!folder}
       back={
         folder ? (
-          <RoundLink
+          <RoundButton
             label={t('folder.up', { name: above ? nameOf(above) : t('title') })}
             icon={ArrowLeft}
-            render={
-              above ? (
-                <Link to="/songs/folders/$folderId" params={{ folderId: above.id }} />
-              ) : (
-                <Link to="/songs" />
-              )
-            }
+            onClick={up}
           />
         ) : undefined
       }

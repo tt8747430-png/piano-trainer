@@ -1,7 +1,7 @@
 import { useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useScaleName } from '@/shared/i18n'
-import { useViewChange, useGoBack } from '@/shared/lib'
+import { useUp, useSetSearch } from '@/shared/lib'
 import { useWalkPlayer } from '../model/use-walk-player'
 import type { WalkSearch } from '../model/walk-search'
 import { PlayerLayout } from './PlayerLayout'
@@ -12,11 +12,8 @@ export function WalkPlayerPage() {
   const { t } = useTranslation('player')
   const scaleName = useScaleName()
   const search = useSearch({ from: '/full-screen/play/walk' })
-  const close = useGoBack({
-    to: '/practice/scales',
-    search: { root: search.root, kind: search.kind, show: 'chords' },
-  })
-  const setSearch = useViewChange<WalkSearch>()
+  const close = useUp()
+  const setSearch = useSetSearch<WalkSearch>()
   const { choice, performance, player, changeSetup } = useWalkPlayer(search, setSearch)
   return (
     <PlayerLayout

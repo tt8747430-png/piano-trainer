@@ -2,20 +2,18 @@ import type { LocaleResources } from '../../types'
 
 export const search: LocaleResources['search'] = {
   title: 'Поиск',
+  field: 'Искать везде',
+  placeholder: 'Песни, аккорды, гаммы, уроки…',
   none: 'Ничего не найдено.',
-  showAll: 'Показать все: {{count}}',
   archived: 'В архиве',
-  kinds: {
-    pages: 'Практика',
+  recent: 'Недавние запросы',
+  suggested: 'Подсказки',
+  hint: 'Стрелки вверх и вниз — по результатам, Enter открывает, Escape закрывает.',
+  everywhere: 'Искать везде',
+  groups: {
+    practice: 'Практика',
     songs: 'Песни',
     folders: 'Папки',
     lessons: 'Уроки',
-    courses: 'Курсы',
-    chords: 'Аккорды',
-    scales: 'Гаммы',
-    progressions: 'Последовательности',
-    patterns: 'Фактуры',
-    exercises: 'Упражнения',
-    quiz: 'Тесты',
   },
 }

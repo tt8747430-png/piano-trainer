@@ -7,7 +7,7 @@ import { BackButton, ScreenHeader } from '@/shared/ui'
 export function AccountScreen({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-2">
-      <ScreenHeader title={title} back={<BackButton fallback={{ to: '/profile' }} />} />
+      <ScreenHeader title={title} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-sm flex-col gap-6">{children}</div>
     </div>
   )

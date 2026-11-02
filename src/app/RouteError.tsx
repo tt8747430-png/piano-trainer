@@ -1,7 +1,7 @@
 import { useLocation, type ErrorComponentProps } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useGoBack } from '@/shared/lib'
+import { useUp } from '@/shared/lib'
 import { useReportError } from '@/shared/lib/error-reports'
 import { usePageHeading } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -28,7 +28,7 @@ export function RouteError({ error, reload = () => window.location.reload() }: R
   useEffect(() => {
     if (error) report(error, path)
   }, [error, path, report])
-  const back = useGoBack({ to: '/' })
+  const back = useUp()
   const heading = usePageHeading<HTMLHeadingElement>(t('errors.title'))
   return (
     <Empty role="alert" className="min-h-96">

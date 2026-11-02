@@ -178,9 +178,10 @@ describe('the app shell', () => {
       'Songs',
       'Practice',
       'Profile',
-      'Search',
       'Settings',
     ])
+    // Search is the palette's: a button, never a place of its own (rule 27).
+    expect(within(nav).getByRole('button', { name: 'Search' })).toBeInTheDocument()
     expect(within(nav).getByRole('link', { name: 'Songs' })).toHaveAttribute('aria-current', 'page')
   })
 
@@ -290,13 +291,13 @@ describe('the Player', () => {
     expect(screen.queryByRole('navigation', { name: 'Main navigation' })).not.toBeInTheDocument()
   })
 
-  it('goes back to where the learner came from', async () => {
+  it('closes up to its song, wherever it was opened from (rule 26)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/')
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
     await act(() => router.navigate({ to: '/play/$pieceId', params: { pieceId: 'bz5' } }))
     await user.click(await screen.findByRole('button', { name: 'Close' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/songs/bz5'))
   })
 
   it('goes back to its song when it was opened directly', async () => {
@@ -306,30 +307,36 @@ describe('the Player', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/bz5'))
   })
 
-  it('opened directly, leaves the history as it closes, so its song goes back to Songs', async () => {
+  it('opened directly, closes to its song, whose Back goes up to its folder', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Close' }))
     await user.click(await screen.findByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/songs'))
+    await waitFor(() => expect(router.state.location.pathname).toMatch(/^\/songs\/folders\//))
   })
 })
 
 describe('a Piece', () => {
-  it('goes back to where the learner came from', async () => {
+  it('goes up to the folder it stands in, wherever it was opened from (rule 26)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/')
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
     await act(() => router.navigate({ to: '/songs/$pieceId', params: { pieceId: 'bz5' } }))
     await user.click(await screen.findByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/'))
+    await waitFor(() => expect(router.state.location.pathname).toMatch(/^\/songs\/folders\//))
   })
 
-  it('goes back to Songs when it was opened directly', async () => {
+  it('goes back to the folder it was opened from, stepping back through the history', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs/bz5')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/songs'))
+    await waitFor(() => expect(router.state.location.pathname).toMatch(/^\/songs\/folders\//))
+    const folder = router.state.location.pathname
+    await act(() => router.navigate({ to: '/songs/$pieceId', params: { pieceId: 'bz5' } }))
+    const index = router.history.location.state.__TSR_index
+    await user.click(await screen.findByRole('button', { name: 'Back' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe(folder))
+    expect(router.history.location.state.__TSR_index).toBe(index - 1)
   })
 })
 

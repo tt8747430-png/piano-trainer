@@ -15,7 +15,7 @@ import {
   type EditorAction,
 } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
-import { useGoBack, useViewChange, useWakeLock } from '@/shared/lib'
+import { useUp, useSetSearch, useWakeLock } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { audibleHands, chordSounds, schedule, type Scheduled } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
@@ -41,13 +41,10 @@ const ARROWS = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home
 /** The keys that stop a take: everything else waits until it has stopped. */
 const STOPS_A_TAKE = new Set([' ', 'Escape'])
 
-/** Close: back where the editor was opened from, or to the piece's page on its shelf. */
+/** Close: up to the piece's page on its shelf (rule 26); an example back into its lesson's draft. */
 function useCloseTo(target: EditorTarget): () => void {
-  const params = { pieceId: target.id }
-  const toSongs = useGoBack({ to: '/songs/$pieceId', params })
-  const toStudies = useGoBack({ to: '/practice/accompaniment/studies/$pieceId', params })
-  if (target.kind === 'example') return target.close
-  return target.kind !== 'song' && target.entry.kind === 'study' ? toStudies : toSongs
+  const up = useUp()
+  return target.kind === 'example' ? target.close : up
 }
 
 /**
@@ -94,7 +91,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   )
   // Opened at a bar (Edit from the Player's cursor, ADR 0115): the caret goes to its start, once,
   // and the URL forgets it.
-  const setSearch = useViewChange<EditSearch>()
+  const setSearch = useSetSearch<EditSearch>()
   const openAt = useEffectEvent((printed: number) => {
     const placed = barsOf(store.getState().draft)[printed - 1]
     if (placed) store.dispatch({ type: 'place', tick: placed.start, layer: store.getState().layer })

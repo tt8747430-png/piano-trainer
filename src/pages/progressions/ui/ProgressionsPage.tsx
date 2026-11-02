@@ -3,7 +3,7 @@ import { PencilLine, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { libraryProgression } from '@/entities/progression-library'
-import { useViewChange } from '@/shared/lib'
+import { useSetSearch } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { keyFromParam } from '@/shared/lib/music'
 import { BackButton, RoundButton, RoundLink, ScreenHeader } from '@/shared/ui'
@@ -17,7 +17,7 @@ import { ProgressionExplorer, type ProgressionsView } from '@/widgets/progressio
 export function ProgressionsPage() {
   const { t } = useTranslation('practice')
   const view = useSearch({ from: '/shell/practice/progressions' })
-  const onChange = useViewChange<ProgressionsView>()
+  const onChange = useSetSearch<ProgressionsView>()
   const { account } = useAccount()
   const [newOne, setNewOne] = useState(false)
   // The library's progression in sight, an editor's to edit.
@@ -26,7 +26,7 @@ export function ProgressionsPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('pages.progressions')}
-        back={<BackButton fallback={{ to: '/practice' }} />}
+        back={<BackButton />}
         actions={
           editsContent(account) ? (
             <>

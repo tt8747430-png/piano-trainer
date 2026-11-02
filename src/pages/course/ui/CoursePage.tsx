@@ -82,7 +82,7 @@ export function CoursePage() {
         title={localText(course.title, locale)}
         // A course's name in full over its page, as a song's: the bar echoes it once scrolled.
         large
-        back={<BackButton fallback={{ to: '/', search: { view: 'courses', journey: '' } }} />}
+        back={<BackButton />}
         actions={
           <>
             <RoundLink

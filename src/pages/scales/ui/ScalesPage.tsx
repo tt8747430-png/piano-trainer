@@ -1,7 +1,7 @@
 import { useSearch } from '@tanstack/react-router'
 import { Dices } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useViewChange } from '@/shared/lib'
+import { useSetSearch } from '@/shared/lib'
 import { keyScale, noteParam, randomKey } from '@/shared/lib/music'
 import { BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
 import { keyOfScale, ScaleExplorer, showsOf, type ScaleView } from '@/widgets/scale-explorer'
@@ -16,13 +16,13 @@ import { ScaleTabs } from './ScaleTabs'
 export function ScalesPage() {
   const { t } = useTranslation('practice')
   const { step, ...scale } = useSearch({ from: '/shell/practice/scales' })
-  const onChange = useViewChange<ScaleView>()
+  const onChange = useSetSearch<ScaleView>()
   const key = scale.show === 'key' ? keyOfScale(scale.root, scale.kind) : null
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('pages.scales')}
-        back={<BackButton fallback={{ to: '/practice' }} />}
+        back={<BackButton />}
         actions={
           key ? (
             <RoundButton

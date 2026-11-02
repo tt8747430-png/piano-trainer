@@ -15,7 +15,7 @@ export function ProgressionEditorPage() {
     <ProgressionEditor
       key={progressionId}
       progression={progressionById(progressionId) ?? blankProgression(progressionId, '')}
-      back={<BackButton fallback={{ to: '/practice/progressions' }} />}
+      back={<BackButton />}
       toProgressions={<Link to="/practice/progressions" />}
     />
   )

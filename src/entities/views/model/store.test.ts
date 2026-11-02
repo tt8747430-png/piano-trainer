@@ -17,10 +17,10 @@ describe('createViewsStore', () => {
   it('starts with no screen remembered and saves under pt-views in its version', () => {
     const storage = createMemoryStorage()
     const store = createViewsStore({ storage })
-    expect(store.getState()).toEqual({ views: {} })
+    expect(store.getState()).toEqual({ views: {}, searchRecent: [] })
     store.setState({ views: { '/practice/chords': { root: 'G' } } })
     expect(JSON.parse(storage.getItem('pt-views') ?? 'null')).toEqual({
-      state: { views: { '/practice/chords': { root: 'G' } } },
+      state: { views: { '/practice/chords': { root: 'G' } }, searchRecent: [] },
       version: VIEWS_VERSION,
     })
   })
@@ -28,13 +28,16 @@ describe('createViewsStore', () => {
   it('forgets what was saved before Practice’s pages moved (ADR 0052): a version-1 save', () => {
     const storage = createMemoryStorage()
     writeSaved(storage, { views: { '/practice/chords/find': { keys: '60-64-67' } } }, 1)
-    expect(createViewsStore({ storage }).getState()).toEqual({ views: {} })
+    expect(createViewsStore({ storage }).getState()).toEqual({ views: {}, searchRecent: [] })
   })
 
   it('keeps a screen’s params that are text, numbers or switches', () => {
     expect(
       restored({ views: { '/play/bz5': { key: 'A', tempo: 80, swing: true, inversion: 1 } } }),
-    ).toEqual({ views: { '/play/bz5': { key: 'A', tempo: 80, swing: true, inversion: 1 } } })
+    ).toEqual({
+      views: { '/play/bz5': { key: 'A', tempo: 80, swing: true, inversion: 1 } },
+      searchRecent: [],
+    })
   })
 
   it('drops what is not a view: a path not from the root, a view not an object, a param neither text, number nor switch', () => {
@@ -46,9 +49,9 @@ describe('createViewsStore', () => {
           '/practice/scales': 'G',
         },
       }),
-    ).toEqual({ views: { '/play/flow': { key: 'G' } } })
-    expect(restored('views')).toEqual({ views: {} })
-    expect(restored({ views: [] })).toEqual({ views: {} })
+    ).toEqual({ views: { '/play/flow': { key: 'G' } }, searchRecent: [] })
+    expect(restored('views')).toEqual({ views: {}, searchRecent: [] })
+    expect(restored({ views: [] })).toEqual({ views: {}, searchRecent: [] })
   })
 
   it('keeps the screens in the order they were used', () => {
@@ -78,5 +81,13 @@ describe('createViewsStore', () => {
       }),
     )
     expect(store.getState().views).toEqual({ '/practice/scales': { root: 'D' } })
+  })
+
+  it('keeps the recent searches that are text, the latest eight', () => {
+    const queries = Array.from({ length: 10 }, (_, i) => `query ${i}`)
+    expect(restored({ views: {}, searchRecent: [...queries, 3, ''] }).searchRecent).toEqual(
+      queries.slice(0, 8),
+    )
+    expect(restored({ views: {}, searchRecent: 'dorian' }).searchRecent).toEqual([])
   })
 })

@@ -14,7 +14,7 @@ export function JourneyEditorPage() {
     <JourneyEditor
       key={journeyId}
       journey={journey}
-      back={<BackButton fallback={lessons} />}
+      back={<BackButton />}
       toLessons={<Link {...lessons} />}
     />
   )

@@ -16,7 +16,7 @@ export function CourseEditorPage() {
     <CourseEditor
       key={courseId}
       course={course}
-      back={<BackButton fallback={{ to: '/courses/$courseId', params: { courseId } }} />}
+      back={<BackButton />}
       toCourse={<Link to="/courses/$courseId" params={{ courseId }} />}
       modes={
         <EditToggle

@@ -20,7 +20,7 @@ export function AccompanimentPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('pages.accompaniment')}
-        back={<BackButton fallback={{ to: '/practice' }} />}
+        back={<BackButton />}
         actions={
           <RoundLink
             label={t('patterns.new')}

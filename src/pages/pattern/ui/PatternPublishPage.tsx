@@ -30,14 +30,7 @@ function Publish({ pattern }: { pattern: BookPattern }) {
   const locale = useLocale()
   const name = localText(pattern.name, locale)
   const { item, publishing } = usePatternPublish(pattern, name)
-  const back = (
-    <BackButton
-      fallback={{
-        to: '/practice/accompaniment/patterns/$patternRef',
-        params: { patternRef: pattern.ref },
-      }}
-    />
-  )
+  const back = <BackButton />
   if (!item) return null
   return (
     <PublishScreen

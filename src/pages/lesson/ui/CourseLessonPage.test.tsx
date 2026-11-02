@@ -53,7 +53,7 @@ describe('A course’s lesson', () => {
     expect(screen.queryByRole('link', { name: /Next lesson/ })).not.toBeInTheDocument()
   })
 
-  it('opens a pattern’s piece in the Player with it, and closes back to the lesson', async () => {
+  it('opens a pattern’s piece in the Player with it, which closes up to the piece’s page', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/courses/called-to-play/five-ways')
     const card = await screen.findByRole('article', { name: '1 · Bass + chords' })
@@ -62,7 +62,7 @@ describe('A course’s lesson', () => {
     expect(router.state.location.search).toMatchObject({ pattern: 'M1' })
     await user.click(await screen.findByRole('button', { name: 'Close' }))
     await waitFor(() =>
-      expect(router.state.location.pathname).toBe('/courses/called-to-play/five-ways'),
+      expect(router.state.location.pathname).toBe('/practice/accompaniment/studies/ex3'),
     )
   })
 

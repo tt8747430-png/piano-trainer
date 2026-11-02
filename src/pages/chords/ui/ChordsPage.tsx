@@ -1,6 +1,6 @@
 import { useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { useViewChange } from '@/shared/lib'
+import { useSetSearch } from '@/shared/lib'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { ChordExplorer, type ChordView } from '@/widgets/chord-explorer'
 import { StepPanel } from '@/widgets/step-panel'
@@ -9,13 +9,10 @@ import { StepPanel } from '@/widgets/step-panel'
 export function ChordsPage() {
   const { t } = useTranslation('practice')
   const { step, ...chord } = useSearch({ from: '/shell/practice/chords' })
-  const onChange = useViewChange<ChordView>()
+  const onChange = useSetSearch<ChordView>()
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader
-        title={t('pages.chords')}
-        back={<BackButton fallback={{ to: '/practice' }} />}
-      />
+      <ScreenHeader title={t('pages.chords')} back={<BackButton />} />
       {step ? <StepPanel step={step} /> : null}
       <ChordExplorer chord={chord} onChange={onChange} />
     </div>

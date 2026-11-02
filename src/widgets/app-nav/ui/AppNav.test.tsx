@@ -8,17 +8,17 @@ import { createMemoryStorage } from '@/shared/lib'
 const nav = () => screen.findByRole('navigation', { name: 'Main navigation' })
 
 describe('AppNav', () => {
-  it('lists the four places, the Profile last, then Search and Settings', async () => {
+  it('lists the four places, the Profile last, then Search, which opens the palette, and Settings', async () => {
     await renderApp('/songs')
-    const links = within(await nav()).getAllByRole('link')
-    expect(links.map((link) => link.textContent)).toEqual([
+    const bar = within(await nav())
+    expect(bar.getAllByRole('link').map((link) => link.textContent)).toEqual([
       'Learn',
       'Songs',
       'Practice',
       'Profile',
-      'Search',
       'Settings',
     ])
+    expect(bar.getByRole('button', { name: 'Search' })).toBeInTheDocument()
   })
 
   it('marks Settings alone current on a laptop, where it is in the sidebar', async () => {

@@ -39,7 +39,7 @@ export function ArchivePage() {
     <div className="flex flex-col gap-6 pb-4">
       <ScreenHeader
         title={t('archive.title')}
-        back={<BackButton fallback={{ to: '/songs' }} />}
+        back={<BackButton />}
         actions={
           archive.length > 0 ? (
             <Button
