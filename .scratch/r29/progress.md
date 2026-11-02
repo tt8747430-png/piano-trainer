@@ -6,7 +6,7 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 
 | Step | State | Notes |
 |---|---|---|
-| Phase 0: gate on main, files, before screenshots | in progress | |
+| Phase 0: gate on main, files, before screenshots | in progress | gate green on main 2026-11-02: typecheck, lint, 6905 tests in 626 files, build |
 | Phase 1: specs | open | |
 
 ## Items

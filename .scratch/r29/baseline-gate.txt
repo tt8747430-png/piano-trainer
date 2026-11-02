@@ -1,0 +1,8 @@
+typecheck 0
+lint 0
+ Test Files  626 passed (626)
+      Tests  6905 passed (6905)
+files generated
+  dist/sw.js
+  dist/workbox-2fbc6a65.js
+build done
