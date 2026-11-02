@@ -28,7 +28,7 @@ trust:
 
 ### How this brief is organised, and how to cite it
 - **R1–R30, standing rules:** apply to every screen in every round. Cite as "R17".
-- **D1–D14, decided:** settled; don't re-open them. Cite as "D8".
+- **D1–D19, decided:** settled; don't re-open them. Cite as "D8".
 - **Step 0:** carry-overs from earlier rounds, checked first.
 - **A1–A43, the audit:** each a known problem, where it is, and the fix. Cite as "A23".
 - **B1–B11, features:** new things to build. Cite as "B8".
@@ -36,8 +36,9 @@ trust:
 In the text, "Part A n" means An, "Part B n" means Bn, and "rule n" or "Standing rule n" means Rn.
 
 ### When two parts disagree
-1. Security, secrets, roles, legal meaning, hosting and adding packages are mine to decide: ask
-   (put it in the report and carry on with the rest).
+1. Secrets, keys, account values, roles given to people and hosting outside Vercel and our
+   Supabase project are mine: put them in the report as my to-dos and carry on with the rest.
+   Everything else is decided in this brief (D1–D19) or yours to decide and log.
 2. CLAUDE.md and the owner-way skill.
 3. The latest of my words wins: a later item in this brief (a higher A or B number, or a
    "Chosen"/"replaces" note) overrides an earlier one on the same thing. Where you find two that
@@ -76,8 +77,13 @@ doesn't name, judge it by them:
 - **Commits and pushes:** audit → spec → rounds. One commit per task. Push each round after
   typecheck, lint and the related tests pass. Run the full suite and the build before `main`.
 - **Agents:** few, but use them where a part is large and separate.
-- **Never decide for me:** security, roles, legal meaning or hosting. A migration or access rule
-  waits for my review before `main`. Never break a standing rule below without asking.
+- **What you may decide (the app is in beta, D15–D19):** database changes (migrations, tables,
+  storage buckets, access rules) as the work needs them, with their access tests written and run
+  (CLAUDE.md's Backend rules: no `drop`, the `tests/*.sql` run after); every text in the app,
+  legal pages included, rewritten for clarity (a change to what a legal text *means* is listed in
+  the report); packages and samples chosen in D15–D16. Still mine: secrets and keys, account
+  values, roles given to people, and hosting outside Vercel and our Supabase project. Never break
+  a standing rule without saying why in the audit.
 - **References:** study one before building its feature: its layout on phone and laptop, its words,
   its behaviour. "As close as possible" means layout, interaction and features. Where I say I
   described an app from memory, check it against its help pages or screenshots first.
@@ -358,6 +364,35 @@ doesn't name, judge it by them:
 13. **Settings on a laptop:** two panes (R20).
 14. **Progressions' explanation:** the roles and moves drawn on the chords (layout B, A23), no
     switch and no separate section.
+15. **The piano sound (A27):** the **Salamander Grand Piano** samples (Alexander Holm, CC-BY 3.0:
+    credited on the About page), self-hosted with the app (`public/samples/piano/`, not a third
+    party's CDN), cached by the service worker so it plays offline:
+    - a note sampled every minor third from A0 to C8, the others pitch-shifted, in **AAC (.m4a)**
+      (every browser we support, Safari included), trimmed with a short fade;
+    - **four velocity layers** (from Salamander's sixteen), the softest-but-one loaded first so the
+      first note sounds within a second, the rest in the background; about 15–25 MB in all, its
+      size shown on Storage and backup (A15) with a "Download for offline" row;
+    - the player: try **smplr** (MIT, Web Audio, plays its own sample maps and takes the sustain
+      pedal as CC 64) in a spike first; keep it if it fits our scheduler and damper model
+      (`schedule/damper.ts`), else write our own small sampler in `shared/api/audio` (buffers,
+      playbackRate, velocity layers, release, the damper), not Tone.js (too large for what we
+      need);
+    - the synthesised voice stays only while samples load and as the offline fallback before the
+      download.
+16. **The metronome's sounds (A39):** recorded one-shots, each with an accented and a normal
+    stroke, **CC0 only** (Freesound's CC0 filter or a CC0 pack; the source and licence of each file
+    written in `public/samples/metronome/SOURCES.md`): woodblock, clave, rimshot, cowbell, a
+    classic click, and a drum kit (kick, snare, closed and open hi-hat, ride); all of them under
+    300 KB together, self-hosted and cached. The spoken count ("one, two…" in en and ru) waits for
+    my recording: list it as my to-do; until then it isn't offered. No CC-BY-SA samples.
+17. **Database changes are yours to make** as the work needs them (B1's profiles, avatars and
+    handles; anything Explore, publishing or Profile need), each as a migration (no `drop`), its
+    access tests in `supabase/tests/` run against the project, `database.types.ts` regenerated,
+    and an ADR line (0116's history).
+18. **Every text may be rewritten** (beta): labels, help, empty states, errors, legal pages, in en
+    and ru, to the terms of A6 and B2; the old and new wording of each legal paragraph in
+    `.scratch/r29/copy.md`, and any change of *meaning* in the report.
+19. **Scope:** all of it, in the rounds below, autonomously; no stop for review between rounds.
 
 ## References (open every folder, "New folder" and "untitled" included)
 - `piano-data/reference-apps/new_app_2/` (notes in `scratchpad/r29/refs.md`):
@@ -1000,10 +1035,8 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - **A key struck again under the pedal** stacks a second voice on the first instead of
       restriking the string: one voice per key, the old one damped as the new one sounds.
     - **The voice itself** is three oscillators (a triangle and two sines): it can't sound like a
-      piano, least of all under the pedal. Propose a sampled grand piano (e.g. the Salamander Grand,
-      CC-BY, through a small sampler library), with its licence, its download size and how it is
-      cached offline, and the synthesised voice as the fallback only while samples load. Adding a
-      package or hosting the samples is my decision: put the proposal in the report.
+      piano, least of all under the pedal. Replace it with the sampled grand of D15 (Salamander, self-hosted,
+      four velocity layers, offline), the synthesised voice only while samples load.
     - **To a connected piano:** the Player sends the pedal as longer notes, not as the pedal
       (control change 64), so a digital piano's own pedal resonance never sounds. Send the pedal as
       the pedal.
@@ -1445,8 +1478,9 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - **Subdivision:** none today. Quarter · 8ths · triplets · 16ths · swing 8ths, each with its own
       softer sound.
     - **Sounds:** Click, Beep and Drums, all synthesised (a falling sine for the kick, white noise
-      for the snare and hat), so the drums sound like a toy. Recorded samples (woodblock, clave,
-      click, cowbell, a spoken count "one two three") with the synthesised voices as fallback,
+      for the snare and hat), so the drums sound like a toy. Recorded CC0 samples (D16: woodblock, clave,
+      rimshot, cowbell, click, a drum kit; the spoken count when I've recorded it), the synthesised
+      voices as fallback,
       each sampled at the accent and normal levels; the Drums pattern per meter checked against
       real grooves (4/4: kick 1 and 3, snare 2 and 4, hat on 8ths; 3/4: kick 1, snare 2 and 3;
       6/8: kick 1, snare 4, hat on every 8th), the hat on the subdivision, not every beat.
@@ -1706,8 +1740,9 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       each section.
    10. **Data:** every figure derived from the stores we keep (`pt-progress`, the record, takes); the
        thresholds in one table in `entities/progress/model`, with tests. The avatar and handle go in
-       the account's server profile: a migration and an access test (a learner reads and writes only
-       their own profile; a public handle is readable), reviewed by me before `main`.
+       the account's server profile: a migration, an avatars storage bucket and access tests (a
+       learner reads and writes only their own profile and avatar; a public handle and avatar are
+       readable once the learner makes them public, D12), per D17.
 
    Done: side-by-side screenshots with the references at 390 and 1280.
 2. **Professional copy.**
@@ -1715,8 +1750,8 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
      help: App Store guidelines, Spotify, MuseScore, Flat, Klangio, Quizlet, Noji.
    - Rewrite every legal, policy, publishing, empty-state and ⓘ text in en and ru, with the
      writing-guidelines and humanizer skills.
-   - Done: `.scratch/r29/copy.md`, before and after for each string. Legal meaning changes only with
-     my approval.
+   - Done: `.scratch/r29/copy.md`, before and after for each string; any change of a legal text's
+     meaning listed in the report (D18).
 3. **Explore in Songs** (Decided 1; Noji 4875, Quizlet 4876).
    - The "My songs · Explore" switch in the Songs app bar.
    - On Explore: search, category chips (Patterns among them), shelves with See all.
@@ -1840,13 +1875,37 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
 - **Screenshots:** at 390×844, 320×568, 844×390 and 1280×800 (plus 1440×900 and 1920×1080 for
   layout); nothing clipped, nothing jumps.
 - **Schema changes:** a migration without `drop`, applied, its access tests run, the types
-  regenerated; reviewed by me before `main`.
+  regenerated (D17).
 - **Free styles:**
   - whitelisted properties and values only;
   - no `url()` and no script;
   - no layout that can break the page.
 
-## Rounds
+## The work, from start to end
+
+### Phase 0: set up (before any change)
+1. Fetch; the branch level with `main`; the tree clean.
+2. Run the gate on `main` as it is (`npm run typecheck`, `lint`, the full `test`, `build`) and note
+   anything already red, so later failures are clearly ours.
+3. Create `.scratch/r29/progress.md` (every A and B item, state "open"), `audit.md`,
+   `settings-map.md`, `copy.md` and `shots/before/`.
+4. Take the "before" screenshots: every place and every page it opens, at 390×844, 320×568,
+   844×390 and 1280×800, light and dark; the Player and the editor with Daisy fields and the
+   Fantaisie-Impromptu.
+5. Read the owner-way skill and its feedback log, DESIGN.md, and the ADRs the first round touches.
+
+### Phase 1: specs for what changes a model, a store or a route
+One short spec each in `.scratch/r29/<name>/spec.md`, its ADR amended, before its round starts:
+Back as up (R26, A18) · the settings registry (R18, A10) · the key picker (A5) · the pedal as
+events (A27, A29) · the piano sampler and samples (D15) · the metronome engine (A39, D16) · the
+fingering service (A30) · colour notes (A33) · the profile tables and avatars (B1, D17) · the
+staves' play and show (A35).
+
+### Phase 2: the rounds
+Each round: its items in the order listed, one commit per item, `progress.md` updated with each
+commit, the round's screenshots "after", impeccable's audit on its screens, the round's report in
+`progress.md`, push the branch; the full gate and `main` at the end of the round.
+
 1. **Carry-over check and app-wide rules:** Step 0; Part A 1–19, 31, 36, 38, 42 (one component each,
    the app bar, action placement, page/sheet/menu, controls and the key picker, words, navigation
    and the Search palette, shapes and selected states, confirmations, the settings map and
@@ -1869,6 +1928,15 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
 12. **Customisable bars** (Part B 10).
 13. **Tools** (Part B 11; the metronome engine already built in round 2, A39).
 14. **Customisable pages and cards** (Part B 9).
+
+### Phase 3: finish
+1. The whole gate on the merged branch: typecheck, lint, the full suite, the build, the e2e run.
+2. Every screen's "after" screenshots beside its "before" in `shots/`.
+3. The docs: each ADR touched amended, DESIGN.md (shapes, selected style, controls, focus,
+   annotations), `docs/UBIQUITOUS_LANGUAGE.md` (every new and renamed term with its _Avoid_
+   words), CLAUDE.md's map (renamed and moved routes, pages, settings).
+4. My to-dos listed in one place (the spoken count's recording, anything needing a key).
+5. Push the branch and `main`; the final report.
 
 ## Each round, before calling it done
 Run impeccable (`audit`, then `polish` or `adapt` where it finds problems) on the screens the round
