@@ -1635,12 +1635,39 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       Annotations are drawn by the engraver (Verovio's text and harm elements, or an SVG layer
       aligned to its notes), printed the same in the Player and the editor where they apply,
       named in en and ru, and never cover the music.
-    - **What each Practice page could add** (to check against the references and the books,
-      then build what earns its place): Scales: compare two scales (major and its parallel minor)
-      on one staff; Key: a key's common progressions and its songs (A21); Chords: "Hear it in
-      context" (the chord in a I–IV–V in its key); Intervals: songs that start with the interval
-      (a "first two notes" list, as ear-training books do); Progressions: transpose to the key of
-      a song in the library; every page: a "Test yourself" link to its Quiz drill (A41).
+    - **What to add to each Practice page** (checked against the books in `piano-data/books`:
+      Jazz Lab's *The Secret of Modes*, *Reharm Anything*, *The Chord Tensions Chart*, Eisenmann and
+      Lienhard's *Harmonic Ear Training, Level 1*; Nikolaev's and Shirinskaya's scale and arpeggio
+      tables; none of these is built today):
+      - **Scales, the modes' character** (*The Secret of Modes*): each mode shown with its
+        **characteristic note** marked on the staff and the piano and named in one line ("Dorian:
+        a natural minor with a raised 6th"), its typical vamp playable (Dorian's i–IV pendulum,
+        Mixolydian's I–♭VII), and a **drone** on the tonic to play it over (the Drone tool, B11).
+      - **Scales, compare two:** "Compare with" a second scale on one staff and one piano (the
+        major and its parallel minor; a mode and the major it comes from), the notes that differ
+        marked: the clearest way to see a mode or the three minors.
+      - **Harmony, the key's "chord family"** (the ear-training book's term for the diatonic
+        chords): the seven chords as one family on the spine (A21), each **heard in its key**: a
+        cadence (I–IV–V–I) first, then the chord, because the book's point is that a chord is heard
+        by its place in a key, and that "we only hear what we can play".
+      - **Chords, hear it in context:** the same "in its key" button on the Chords page (the chord
+        after a cadence in a key it belongs to, the key chosen from its list).
+      - **Intervals, songs that begin with it:** under each interval, the songs **in our own
+        library** whose tune starts with it (found by the kernel from the first two melody notes,
+        not a copied list), each playing its opening; a lesser-known library falls back to "No
+        song in your library starts with a minor 6th yet".
+      - **Progressions, in a song's key:** each row of "Songs with this progression" gets "Play
+        in this song's key" (the progression transposed, A5's key picker set).
+      - **Passing chords, reharmonisation** (*Reharm Anything*'s methods, starting with tonal
+        substitutes: a chord replaced by another of the same function): a second section on the
+        Passing chords tab, "Reharmonise", applied to the Progression tab's chain or a song's
+        chords with Insert and Undo.
+      - **Chords, the tensions chart** (*The Chord Tensions Chart*): the source to check A33's
+        colour-note groups against, chord by chord.
+      - **Scales and arpeggios, fingering** (Nikolaev's and Shirinskaya's tables): the source to
+        check A30's fingering rule against, key by key.
+      - **Every page: "Test yourself"**, opening its Quiz drill set to what the page shows (this
+        chord's quality, this interval, this key, this progression), and back.
     - Done: B♭ minor's Key tab with the harmonic V and vii°, C♭ spelled, nothing overlapping, at
       390 and 1280; a screenshot of each page's staff with its annotations on.
 
