@@ -54,7 +54,7 @@ export function SettingsPage() {
   const midi = useMidiSummary()
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('title')} back={<BackButton fallback={{ to: '/profile' }} />} />
+      <ScreenHeader title={t('title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <AccountCard />
         <SettingsGroup flush title={t('sections.general')}>

@@ -18,11 +18,10 @@ import { beatGroupInBar, writtenBarAt } from '@/features/practice'
 import { ShareSaid, useShareSong, type SongToShare } from '@/features/share-song'
 import { useSongExport } from '@/features/song-files'
 import { useLocale } from '@/shared/i18n'
-import { useViewChange } from '@/shared/lib'
+import { useUp, useViewChange } from '@/shared/lib'
 import { isCompound, noteParam } from '@/shared/lib/music'
 import { ButtonLink, NotFound, type MenuAction } from '@/shared/ui'
 import { ScoreEditToggle } from '@/widgets/mode-switch'
-import { useClose } from '../model/use-close'
 import type { PlayerSearch } from '../model/player-search'
 import { sectionAt, sectionStarts } from '../model/section-starts'
 import { usePlayer } from '../model/use-player'
@@ -39,7 +38,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   const navigate = useNavigate()
   const locale = useLocale()
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
-  const close = useClose(piece)
+  const close = useUp()
   const setSearch = useViewChange<PlayerSearch>()
   const { choice, performance, player, fit, headings, simplifies, changeSetup, simplify } =
     usePlayer(piece, search, setSearch)

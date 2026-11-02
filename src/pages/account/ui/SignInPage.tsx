@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useGoBack, useOnline } from '@/shared/lib'
+import { useOnline, useUp } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { FormField } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -18,7 +18,7 @@ export function SignInPage() {
   const { t } = useTranslation('account')
   const { auth } = useAccount()
   const online = useOnline()
-  const back = useGoBack({ to: '/profile' })
+  const back = useUp()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [invalid, setInvalid] = useState<'email' | 'password'>()

@@ -5,7 +5,7 @@ import { BackButton, ScreenHeader } from '@/shared/ui'
 export function SettingsScreen({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={title} back={<BackButton fallback={{ to: '/settings' }} />} />
+      <ScreenHeader title={title} back={<BackButton />} />
       <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
         {children}
       </div>

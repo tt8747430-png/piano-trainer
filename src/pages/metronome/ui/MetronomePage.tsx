@@ -80,7 +80,7 @@ export function MetronomePage() {
     <div className="flex min-h-screen-free flex-col">
       <ScreenHeader
         title={name}
-        back={<BackButton fallback={{ to: '/practice' }} />}
+        back={<BackButton />}
         actions={
           <InfoTip name={name} bar>
             {t('practice:metronome.info')}

@@ -121,10 +121,7 @@ function SongSettings({ piece }: { piece: Piece }) {
     editsContent(account) && hasEditableOriginal(piece.id) && !isDegreePiece(piece) ? piece : null
   return (
     <div className="flex flex-col gap-6 pb-8">
-      <ScreenHeader
-        title={t('settings.title')}
-        back={<BackButton fallback={{ to: '/songs/$pieceId', params: { pieceId: piece.id } }} />}
-      />
+      <ScreenHeader title={t('settings.title')} back={<BackButton />} />
       <ShareSaid said={shared.said} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <p className="px-1 font-display text-2xl font-semibold text-balance">{title}</p>

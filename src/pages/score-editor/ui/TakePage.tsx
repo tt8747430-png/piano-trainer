@@ -52,7 +52,7 @@ function TakeView({ take }: { take: Take }) {
     void navigate({ ...takes, replace: true }).then(() => deleteTake(store, take.id))
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={title} back={<BackButton fallback={takes} />} />
+      <ScreenHeader title={title} back={<BackButton />} />
       <PinnedKeyboard shown={unmarked(take.notes.map((note) => note.midi))} />
       <div className="-mt-3 flex flex-col gap-1">
         <p className="text-lg font-semibold">{song}</p>

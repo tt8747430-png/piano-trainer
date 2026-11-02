@@ -46,7 +46,7 @@ export function SharedSongPage() {
   const title = reading.kind === 'song' ? reading.song.title : t('shared.title')
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={title} back={<BackButton fallback={{ to: '/songs' }} />} />
+      <ScreenHeader title={title} back={<BackButton />} />
       {reading.kind === 'reading' ? (
         <p role="status" className="text-muted-foreground">
           {t('shared.reading')}

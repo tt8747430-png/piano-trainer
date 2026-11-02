@@ -79,7 +79,9 @@ export {
   typedKey,
   typingLetters,
 } from './typing-keys'
-export { useGoBack } from './use-go-back'
+export { useUp } from './use-up'
+export { UpProvider } from './up-provider'
+export type { FindUp, Up } from './up-context'
 export { READ_DISTANCE, useHiddenWhileReading } from './use-hidden-while-reading'
 export { useShownOnScrollUp } from './use-shown-on-scroll-up'
 export { LANDSCAPE_PHONE, useMediaQuery } from './use-media-query'

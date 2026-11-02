@@ -26,7 +26,7 @@ export function ProgressionsPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('pages.progressions')}
-        back={<BackButton fallback={{ to: '/practice' }} />}
+        back={<BackButton />}
         actions={
           editsContent(account) ? (
             <>

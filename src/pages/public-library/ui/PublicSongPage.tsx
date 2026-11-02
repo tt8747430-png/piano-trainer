@@ -113,7 +113,7 @@ export function PublicSongPage() {
     <div className="flex flex-col gap-5">
       <ScreenHeader
         title={title}
-        back={<BackButton fallback={{ to: '/songs/public' }} />}
+        back={<BackButton />}
         actions={
           reading.kind === 'song' || reading.kind === 'pattern' ? (
             <RoundButton

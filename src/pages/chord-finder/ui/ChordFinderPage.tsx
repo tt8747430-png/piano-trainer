@@ -138,7 +138,7 @@ export function ChordFinderPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('practice:pages.chordFinder')}
-        back={<BackButton fallback={{ to: '/practice' }} />}
+        back={<BackButton />}
         actions={
           <div className="flex gap-2">
             <MidiButton />

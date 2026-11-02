@@ -9,7 +9,7 @@ import {
 } from '@/entities/pattern'
 import { saveOwnPattern, type OwnPatternDraft } from '@/features/manage-patterns'
 import { useShownKeys } from '@/features/play-example'
-import { useGoBack } from '@/shared/lib'
+import { useUp } from '@/shared/lib'
 import { usePatternSample } from '@/widgets/pattern-music'
 
 /** The draft heard under an id of its own, in a book of its own: what it plays is its figures alone. */
@@ -22,7 +22,7 @@ const HEARD = ownPatternId(1)
 export function usePatternEditor(start: OwnPatternDraft, id?: OwnPatternId) {
   const store = usePatternsStoreApi()
   const navigate = useNavigate()
-  const cancel = useGoBack({ to: '/practice/accompaniment' })
+  const cancel = useUp()
   const [draft, setDraft] = useState(start)
   const change = (part: Partial<OwnPatternDraft>) => setDraft((was) => ({ ...was, ...part }))
   const { rh, lh } = draft

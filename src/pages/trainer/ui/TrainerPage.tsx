@@ -44,7 +44,7 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
           running ? (
             <RoundButton label={t('common:close')} icon={X} onClick={close} />
           ) : (
-            <BackButton fallback={{ to: '/practice/quiz' }} />
+            <BackButton />
           )
         }
         actions={

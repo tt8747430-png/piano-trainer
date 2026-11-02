@@ -10,10 +10,7 @@ export function ExercisesPage() {
   const { t } = useTranslation('practice')
   return (
     <div className="flex flex-col gap-2">
-      <ScreenHeader
-        title={t('pages.exercises')}
-        back={<BackButton fallback={{ to: '/practice' }} />}
-      />
+      <ScreenHeader title={t('pages.exercises')} back={<BackButton />} />
       <ExerciseList />
     </div>
   )

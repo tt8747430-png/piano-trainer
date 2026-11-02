@@ -1,13 +1,11 @@
 import type { RegisteredRouter, RouteIds, ValidateNavigateOptions } from '@tanstack/react-router'
+import type { Up } from '@/shared/lib'
 import type { RouterContext } from '../router'
-import { readScalesSearch } from './explorer-search'
+import { readChordsSearch, readProgressionsSearch, readScalesSearch } from './explorer-search'
 
-// Back means up (rule 26, ADR 0052): each route names its parent here, and Back goes there. A place
-// has none. The table is keyed by every route the router has, so a new route can't be added without
-// its parent (`parents.test.ts` walks the router to prove it).
-
-/** Where Back goes: a link's options, checked when the table names them. */
-export type Up = ValidateNavigateOptions
+// Back means up (rule 26, ADR 0052): each route names its parent here, and Back goes there (`useUp`).
+// A place has none. The table is keyed by every route the router has, so a new route can't be added
+// without its parent (`parents.test.ts` walks the router to prove it).
 
 /** What a route's parent is worked out from: the route's own params and search, and the learner's. */
 export interface UpFrom {
@@ -73,13 +71,20 @@ const toPattern: Parent = (from) =>
     params: { patternRef: param(from, 'patternRef') },
   })
 const toAccompaniment: Parent = () => up({ to: '/practice/accompaniment' })
+/** A pattern up to the page of Accompaniment that lists it. */
+const toPatternPart: Parent = async (from) => {
+  const { patternPart } = await import('./accompaniment-screens')
+  const show = patternPart(from.context.patterns.getState(), param(from, 'patternRef'))
+  return up({ to: '/practice/accompaniment', search: { show } })
+}
 const toStudy: Parent = (from) =>
   up({
     to: '/practice/accompaniment/studies/$pieceId',
     params: { pieceId: param(from, 'pieceId') },
   })
+/** The score editor, at the bar its Settings were opened from. */
 const toEditor: Parent = (from) =>
-  up({ to: '/edit/$pieceId', params: { pieceId: param(from, 'pieceId') } })
+  up({ to: '/edit/$pieceId', params: { pieceId: param(from, 'pieceId') }, search: true })
 
 export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   // The places: Learn, Songs, Practice, the Profile; on a laptop Settings and Search at the
@@ -144,13 +149,35 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
       search: readScalesSearch({ root: search.root, kind: search.kind, show: 'chords' }),
     }),
   '/full-screen/play/chromatic': toPractice,
-  '/full-screen/play/progression': () => up({ to: '/practice/progressions' }),
+  '/full-screen/play/progression': ({ search }) =>
+    up({
+      to: '/practice/progressions',
+      search: readProgressionsSearch({ p: search.p, key: search.key }),
+    }),
   '/full-screen/play/exercise/$exerciseId': () => up({ to: '/practice/exercises' }),
-  '/full-screen/check': toLessons,
+  // The Check: up to the explorer its step is done on, the step's panel open, where it was asked.
+  '/full-screen/check': (from) => {
+    const { search } = from
+    const of = text(search.of) ?? ''
+    if (of.startsWith('scale:')) {
+      return up({
+        to: '/practice/scales',
+        search: readScalesSearch({ kind: of.slice('scale:'.length), step: of }),
+      })
+    }
+    if (of.startsWith('chords:')) {
+      return up({ to: '/practice/chords', search: readChordsSearch({ step: of }) })
+    }
+    return toLessons(from)
+  },
 
   // Learn: a lesson up to its level, a course's lesson up to the course, the course up to the
   // Courses; Settings and Edit up to what they set or edit.
-  '/shell/lessons/$lessonId': toLessons,
+  '/shell/lessons/$lessonId': async (from) => {
+    const { lessonPlace } = await import('./learn-screens')
+    const journey = lessonPlace(param(from, 'lessonId'))?.journey.id
+    return up({ to: '/', search: { view: 'lessons', ...(journey ? { journey } : {}) } })
+  },
   '/shell/lessons/$lessonId/settings': toLesson,
   '/shell/lessons/$lessonId/edit': toLesson,
   '/full-screen/lessons/$lessonId/example': ({ params, search }) => {
@@ -184,7 +211,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/practice/exercises': toPractice,
   '/shell/practice/accompaniment': toPractice,
   '/shell/practice/accompaniment/patterns/new': toAccompaniment,
-  '/shell/practice/accompaniment/patterns/$patternRef': toAccompaniment,
+  '/shell/practice/accompaniment/patterns/$patternRef': toPatternPart,
   '/shell/practice/accompaniment/patterns/$patternRef/edit': toPattern,
   '/shell/practice/accompaniment/patterns/$patternRef/publish': toPattern,
   '/shell/practice/accompaniment/studies/$pieceId': toAccompaniment,
@@ -195,7 +222,8 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
 export interface UpMatch {
   readonly routeId: string
   readonly params: Readonly<Record<string, string>>
-  readonly search: Readonly<Record<string, unknown>>
+  /** The route's search as its validator read it. */
+  readonly search: object
 }
 
 const isScreen = (id: string): id is ScreenRouteId => id in PARENTS
@@ -209,5 +237,6 @@ export function parentOf(
   learner: Omit<UpFrom, 'params' | 'search'>,
 ): Up | null | Promise<Up | null> {
   if (!isScreen(match.routeId)) return up({ to: '/' })
-  return PARENTS[match.routeId]({ ...learner, params: match.params, search: match.search })
+  const search = match.search as Readonly<Record<string, unknown>>
+  return PARENTS[match.routeId]({ ...learner, params: match.params, search })
 }

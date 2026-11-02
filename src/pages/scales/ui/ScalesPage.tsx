@@ -22,7 +22,7 @@ export function ScalesPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('pages.scales')}
-        back={<BackButton fallback={{ to: '/practice' }} />}
+        back={<BackButton />}
         actions={
           key ? (
             <RoundButton

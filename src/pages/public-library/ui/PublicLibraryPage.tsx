@@ -40,11 +40,7 @@ export function PublicLibraryPage() {
   const savedOnes = songsOf(loved.browse).filter((entry) => entry.saves > 0)
   return (
     <div className="flex flex-col gap-4">
-      <ScreenHeader
-        title={t('public.title')}
-        large
-        back={<BackButton fallback={{ to: '/songs' }} />}
-      />
+      <ScreenHeader title={t('public.title')} large back={<BackButton />} />
       <div className="flex flex-col gap-3 lg:max-w-2xl">
         <SearchField
           value={view.q}

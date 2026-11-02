@@ -22,16 +22,6 @@ import { useSongLessons } from '../model/use-song-lessons'
 import { SectionCard } from './SectionCard'
 import { SectionLessonGroups } from './SectionLessonGroups'
 
-/** Back from a section: the way the learner came, or its piece's page on its shelf. */
-function SectionBack({ piece }: { piece: Pick<Piece, 'id' | 'kind'> }) {
-  const params = { pieceId: piece.id }
-  return piece.kind === 'study' ? (
-    <BackButton fallback={{ to: '/practice/accompaniment/studies/$pieceId', params }} />
-  ) : (
-    <BackButton fallback={{ to: '/songs/$pieceId', params }} />
-  )
-}
-
 /**
  * A section's page (ADR 0111): "Learn the Verse", its card (the song, the section's chords,
  * its lessons done), then its lessons in order, each looping its bars in the Player; Practise, floating,
@@ -49,10 +39,7 @@ function SectionView({ piece, section }: { piece: Piece; section: number }) {
   const paint = sectionPaint(heading)
   return (
     <div className="flex flex-col gap-8 pb-4">
-      <ScreenHeader
-        title={t('learnSection.title', { section: heading })}
-        back={<SectionBack piece={piece} />}
-      />
+      <ScreenHeader title={t('learnSection.title', { section: heading })} back={<BackButton />} />
       <SectionCard
         title={entryTitles(piece, locale).primary}
         lessons={lessons}

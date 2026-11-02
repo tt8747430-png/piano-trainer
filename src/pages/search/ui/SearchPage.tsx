@@ -29,7 +29,7 @@ export function SearchPage() {
   )
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('title')} back={<BackButton fallback={{ to: '/' }} />} />
+      <ScreenHeader title={t('title')} back={<BackButton />} />
       <div className="lg:max-w-xl">
         <SearchField
           value={q}

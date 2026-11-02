@@ -12,7 +12,7 @@ export function MidiLogPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('midiSettings.log.label')}
-        back={<BackButton fallback={{ to: '/settings/midi' }} />}
+        back={<BackButton />}
         actions={<InfoTip name={t('midiSettings.log.label')}>{t('midiSettings.log.info')}</InfoTip>}
       />
       <div className="mx-auto w-full max-w-3xl">

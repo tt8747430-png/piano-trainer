@@ -10,11 +10,7 @@ export function QuizPage() {
   const { t } = useTranslation('practice')
   return (
     <div className="flex flex-col gap-2">
-      <ScreenHeader
-        title={t('pages.quiz')}
-        back={<BackButton fallback={{ to: '/practice' }} />}
-        actions={<GapsLink />}
-      />
+      <ScreenHeader title={t('pages.quiz')} back={<BackButton />} actions={<GapsLink />} />
       <div className="grid items-start gap-6 lg:grid-cols-2 xl:grid-cols-3">
         {QUIZ_GROUPS.map((group) => (
           <TrainerList

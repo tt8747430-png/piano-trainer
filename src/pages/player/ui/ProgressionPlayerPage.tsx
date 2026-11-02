@@ -1,7 +1,7 @@
 import { useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useKeyName } from '@/shared/i18n'
-import { useViewChange, useGoBack } from '@/shared/lib'
+import { useUp, useViewChange } from '@/shared/lib'
 import { numeralText } from '@/shared/lib/music'
 import type { ProgressionSearch } from '../model/progression-search'
 import { useProgressionPlayer } from '../model/use-progression-player'
@@ -17,10 +17,7 @@ export function ProgressionPlayerPage() {
     search,
     setSearch,
   )
-  const close = useGoBack({
-    to: '/practice/progressions',
-    search: { p: search.p, key: search.key, size: choice.chordSize },
-  })
+  const close = useUp()
   const keyName = useKeyName()
   const named = { numerals: choice.numerals.map(numeralText).join('–'), key: keyName(choice.key) }
   return (

@@ -35,10 +35,7 @@ export function PatternEditor({
   const { draft, change, sample, shown, show, save, cancel, savable } = usePatternEditor(start, id)
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader
-        title={title}
-        back={<BackButton fallback={{ to: '/practice/accompaniment' }} />}
-      />
+      <ScreenHeader title={title} back={<BackButton />} />
       <PinnedKeyboard shown={shown} />
       <form
         className="flex max-w-prose flex-col gap-5"

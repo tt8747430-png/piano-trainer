@@ -11,10 +11,7 @@ export function IntervalsPage() {
   const onChange = useViewChange<IntervalView>()
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader
-        title={t('pages.intervals')}
-        back={<BackButton fallback={{ to: '/practice' }} />}
-      />
+      <ScreenHeader title={t('pages.intervals')} back={<BackButton />} />
       <IntervalExplorer view={view} onChange={onChange} />
     </div>
   )

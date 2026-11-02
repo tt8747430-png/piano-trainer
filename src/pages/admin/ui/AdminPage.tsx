@@ -39,7 +39,7 @@ export function AdminPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('title')}
-        back={<BackButton fallback={{ to: '/settings' }} />}
+        back={<BackButton />}
         tabs={
           account?.role === 'admin' ? (
             <NavTabs label={t('title')}>

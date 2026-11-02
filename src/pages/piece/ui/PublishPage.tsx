@@ -34,9 +34,7 @@ function Publish({ piece }: { piece: Piece }) {
     <PublishScreen
       item={{ id: item.sourceId, kind: item.kind, title: item.title, meta: item.meta }}
       publishing={publishing}
-      back={
-        <BackButton fallback={{ to: '/songs/$pieceId/settings', params: { pieceId: piece.id } }} />
-      }
+      back={<BackButton />}
     />
   )
 }

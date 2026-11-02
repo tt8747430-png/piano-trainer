@@ -1,4 +1,4 @@
-import { Link, useParams, useSearch } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import {
   Cable,
   Columns3,
@@ -109,8 +109,6 @@ function NameRow({
  */
 export function ScoreSettingsPage() {
   const { t } = useTranslation(['editor', 'songs', 'music'])
-  const { pieceId } = useParams({ from: '/full-screen/edit/$pieceId/settings' })
-  const search = useSearch({ from: '/full-screen/edit/$pieceId/settings' })
   const { actions, meta } = useScoreEditorContext()
   const locale = useLocale()
   const keyName = useKeyName()
@@ -156,10 +154,7 @@ export function ScoreSettingsPage() {
   return (
     // In the full screen's column, at its own height: it scrolls, never squeezed to the screen's.
     <div className="flex shrink-0 flex-col gap-6 pb-8">
-      <ScreenHeader
-        title={t('scoreSettings.title')}
-        back={<BackButton fallback={{ to: '/edit/$pieceId', params: { pieceId }, search }} />}
-      />
+      <ScreenHeader title={t('scoreSettings.title')} back={<BackButton />} />
       <div className="mx-auto w-full max-w-2xl space-y-7">
         <SettingsGroup flush title={t('scoreSettings.score')} info={t('scoreSettings.namesInfo')}>
           <NameRow

@@ -1,6 +1,6 @@
 import { useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { useViewChange, useGoBack } from '@/shared/lib'
+import { useUp, useViewChange } from '@/shared/lib'
 import { pitchClassOf, printedChord, qualityRootSpelling } from '@/shared/lib/music'
 import type { ChromaticSearch } from '../model/chromatic-search'
 import { useChromaticPlayer } from '../model/use-chromatic-player'
@@ -14,7 +14,7 @@ import { PlayerLayout } from './PlayerLayout'
 export function ChromaticPlayerPage() {
   const { t } = useTranslation('player')
   const search = useSearch({ from: '/full-screen/play/chromatic' })
-  const close = useGoBack({ to: '/practice' })
+  const close = useUp()
   const setSearch = useViewChange<ChromaticSearch>()
   const { choice, performance, player, changeSetup } = useChromaticPlayer(search, setSearch)
   const from = pitchClassOf(choice.root)
