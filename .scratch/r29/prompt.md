@@ -1011,6 +1011,78 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - Tests: a chord with a colour note chosen has that note in its keys, its symbol and its
       sound; the tension groups for Dm7 differ as ii of C and vi of F; every voicing name in
       Progressions is one of the Chords page's.
+34. **The score editor against Flat and the editors in `piano-data`** (`owner/63–64`; Flat's
+    screens in `piano-data/reference-apps/flat-score-editor/`, Dorico's and Sibelius's beside it).
+    - **The palette's pictures are drawn badly:** the clefs in the Clef group are different sizes
+      and heights, their 8 and 15 sit in different places, the C clefs float at three heights,
+      and rows end in empty cells. Every palette glyph comes from the music font at one size on one
+      baseline (SMuFL, the font Verovio engraves with), centred in equal cells, rows full or
+      ending cleanly. The same for key signatures, time signatures, barlines and the note toolbar.
+    - **Key signature:** a grid of 1–7 sharps and 1–7 flats with no cell for none, and a
+      "Switch to natural" link standing in for it; Major · Minor above. One grid of fifteen keys
+      named by their major and minor (C / Am first), as Flat and Dorico show it, the selected one
+      in the selected style.
+    - **Time signature:** 2/4, 3/4, 4/4, C, ¢, 6/8 and then 4/4 again in a row of its own (a
+      duplicate). Add the common ones Flat offers (3/8, 5/4, 7/8, 9/8, 12/8, 3/2, 2/2) and Other…
+      (any number over any note value).
+    - **Not yet built, or built differently from Flat:** go through Flat's palettes (note toolbar,
+      Notation, Pitch and representation, articulations, ornaments, dynamics, text, clefs,
+      barlines, repeats, layout) and Dorico's and list every option we lack or implement
+      differently; build each (Part B 8's rule: add what we don't have). Known: enharmonic
+      respell (♭⇄♯) state, cross-staff notes, grace-note types, tremolos, arpeggio, ossia-free
+      but complete octave lines (8va, 8vb, 15ma), tuplets beyond 3.
+    - **The upper staff in a bass clef with the octave sign** (`owner/63`, Daisy fields): every
+      chord sits on four ledger lines. Check whether the song's file asks for it or the editor
+      put it there; a piano part's upper staff opens in treble unless the music says otherwise,
+      and a clef change asks which bars it covers.
+    - **The strip at the bottom:** the floating transport covers the last system's notes ("F",
+      "B♭" in `owner/63`) and a bare band runs under the palette and the score at the window's
+      foot. The transport floats over margins, never over music (the score gets bottom padding
+      the transport's height), and the page has no band under it (rule 5, rule 8).
+    - **Tooltips** ("Sharp (=)") cover the app bar's words: they open below a toolbar at the top,
+      above one at the bottom, never over text.
+    - **Long scores:** while a score is engraving, re-flowing after a zoom or a width change, or
+      loading its pages, show where it stands: a skeleton of staves sized like the result with
+      the bars counting in, never a blank sheet or a frozen one; the old drawing stays until the
+      new one is ready (Part A 31). The same on the Player, lesson examples and Scales' score.
+35. **The Player: play staves, not "melody" and patterns** (`owner/65`).
+    - **Patterns don't belong to a written score.** The Player's Setup sheet offers an
+      accompaniment Pattern ("Pop 8ths", left hand, right hand), Starting position (Root · 1st ·
+      2nd · 3rd), Move smoothly, Swing and "Melody: None · Melody staff · Recording" on a song
+      whose staves are written out (Daisy fields): the accompaniment machinery of a chord chart
+      is mixed with the score. Split them:
+      - a song with written staves plays its staves. Its Setup is **"Staves: which to play,
+        which to show"**: each staff (by its name, Upper, Lower, Voice…) with Play and Show, the
+        recording as a track of its own, as Flat's Audio playback lists instruments with mute and
+        volume (`flat-score-editor/05-playback-options-sheet.png`);
+      - only a chord chart (chords, no written staves) gets an accompaniment, under its own
+        heading "Accompaniment from the chords": pattern, inversion, voice leading, swing;
+      - "Melody" leaves the Player and the editor (staves are staves, ADR 0097).
+    - **Controls that do nothing:** go through every control on the Player's Setup, View, Tools
+      and settings and the editor's, with a song of each kind (written staves, chord chart,
+      lesson example, progression, exercise); a control that changes nothing for that kind is
+      hidden for it. Known: Starting position and Move smoothly on a written score.
+    - **Words:** "Move smoothly" is voice leading, "Starting position" the first chord's
+      inversion, "Pulsing chords (8ths)" repeated chords in 8ths, "Root on beats 1 and 3" root on
+      1 and 3; Part A 6's sweep checks every label and ⓘ against the terms of the theory books,
+      Flat and Dorico, in English and Russian, with the clarify skill.
+    - **One hand only:** choosing Left or Right greys the other hand's notes and nothing else. Add
+      "The other hand: Show · Dim · Hide" (Hide leaves only the chosen hand's staff), and "Play the
+      other hand: On · Off", as the reference's Practice mode has "Hear both hands".
+    - **The metronome in the Player:** no way to set it there, and it misbehaves. Check and fix:
+      the sound (Clicks, Woodblock, Drums… the Metronome page's choice) is the one heard; it
+      clicks on the meter's beats (dotted quarters in 6/8, halves in 2/2), accents bar 1, follows
+      tempo changes and the tempo slider, counts in only when asked, stops with the music, and
+      doesn't drift from the notes. Its settings (sound, accent, subdivision, volume, count-in)
+      are the Metronome's own (Part B 11, one engine), reached from the Player's Tools and its
+      settings page; a quick toggle stays in the transport.
+    - **The Player's settings page** (Part B 7) is Flat's Playback options plus the reference's
+      Display: Audio playback (staves, volumes, the recording), Metronome, Playback speed,
+      Display (clef, countdown, cursor, scroll, keyboard, fingering), each a row to its page.
+36. **Focus and keyboard walking.** Tab through every screen: the focus ring is drawn several
+    ways (the note toolbar's rounded bracket in `owner/64`, outlines, rings, fills) and some
+    controls get none. One focus style (DESIGN.md), on every control, never clipped by its
+    container, in an order that follows the screen; Esc closes the top layer only.
 
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
@@ -1181,11 +1253,11 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   - no layout that can break the page.
 
 ## Rounds
-1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–33: one component each, the app bar,
+1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–36: one component each, the app bar,
    action placement, page/sheet/menu, controls, words, navigation (Back as up, the Search palette, the
    sidebar's selected look), shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout and two panes, pictures and icons, page names, account and
-   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal, an own song's page, imports and exports, fingering, nothing flickering or jumping, the theory pages' owners and settings, colour notes and harmony's owners.
+   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal, an own song's page, imports and exports, fingering, nothing flickering or jumping, the theory pages' owners and settings, colour notes and harmony's owners, the score editor against Flat, the Player's staves and metronome, focus.
 2. **Profile** (Part B 1).
 3. **Copy and the rights checkbox** (Part B 2).
 4. **Explore in Songs and the built-in folders' rules** (Part B 3, Decided 8 and 10).
