@@ -703,7 +703,8 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       "Walk the chords", "Chromatic walk". Name them as teachers name practising in all keys:
       the section **"Practise in all 12 keys"**, each way a **sequence**: "Chromatically, rising",
       "Chromatically, falling", "Chromatically, up and back", "In whole steps, rising", "Around the
-      circle of fifths (C F B♭ …)", "Around the circle of fourths", "In minor thirds", "In major
+      circle of fifths, falling a fifth (C F B♭ …, what jazz calls the cycle of fourths)",
+      "Around the circle of fifths, rising a fifth (C G D …)", "In minor thirds", "In major
       thirds"; "Walk the chords" → "Through the key's chords, in scale order"; "Chromatic walk" →
       "A chord in all 12 keys, chromatically". The same names in the Player's title and its More
       menu, and in Russian (секвенция, хроматически вверх, по квинтовому кругу).
