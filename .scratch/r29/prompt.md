@@ -1901,6 +1901,14 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   - **iPhone storage:** Safari deletes a site's storage after seven days without a visit unless
     the app is on the Home Screen, so the Add to Home Screen hint (where it exists) says that
     offline songs and samples last only when installed, and signed-in learners' saves stay synced;
+  - **updates by hand:** Later on the update banner hides it until the app next returns to the
+    screen, and Settings shows only the build. The Version row becomes Software Update's (iOS):
+    the version and "Up to date" / "New version ready" (from the waiting worker), tapping it
+    checks (`registration.update()`, a spinner, then the result; "Can't check while offline"
+    offline), and a ready version shows **Install and restart**, the banner's same
+    `updateServiceWorker(true)`; one shared update state (a store or context in `app/update-prompt`),
+    so the banner and the row never disagree, and a red dot on Settings' Profile row while a version
+    waits (cleared by installing, not by Later);
   - **offline is a state, not an error:** a control that needs the network says so ("Available
     when online") and is disabled, never silently does nothing; nothing offline is painted red.
   Native-only frameworks (Apple's Foundation Models, Core AI) don't reach a PWA: out of scope.
