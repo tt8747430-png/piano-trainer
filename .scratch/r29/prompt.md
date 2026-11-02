@@ -973,6 +973,44 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       a setting is a control on the page as well (rule 18).
     - Done: the table above re-checked, each row with one owner; a test that no two pages render
       the same setting (the registry's test, Part A 10).
+33. **Tensions, added tones, alterations, voicings and the rest of harmony: one model, one owner
+    each.** Three overlapping ideas sit on the Chords page with three controls that don't talk to
+    each other:
+    - **Added tones** (add2 … add13) are chips that change the chord, shown only for some chords
+      (Part A 20);
+    - **Alterations** (♭5 ♭9 ♯9 ♯11 ♭13) are chips that change the chord, shown for dominants, a
+      maj7's ♯11 and a 7sus4's ♭9 (`alterationsOf`);
+    - **Available tensions** (`ChordTensions`, `tensions.ts`) is a panel of four groups (weak,
+      strong, tensions, avoid) whose chips only play the chord with that note on top: choosing one
+      doesn't add it to the chord, and the groups depend on the chord's quality only, not on its
+      place in the key (Dm7 as ii of C takes 9 and 11; Em7 as iii avoids ♭9; the same Dm7 as vi of
+      F differs again).
+
+    Make them one thing: **the chord's colour notes.** One panel lists every note the chord can take
+    on top, grouped as now (chord tones, tensions, avoid), each chip both heard and added to the
+    chord, the added ones written into its symbol (C9, C7♯11, Cadd9), alterations among them; with a
+    key chosen (from Scales' Harmony or Progressions), the groups follow the chord's degree in that
+    key. Added tones and alterations stop being separate controls.
+
+    The other harmony ideas, each with one owner and links elsewhere (Part A 32's rule):
+    | Idea | Owner | Elsewhere, as a link |
+    |---|---|---|
+    | Colour notes (tensions, added tones, alterations) | Chords | Harmony's chords, Progressions' chords |
+    | Voicings (close, open, shell, rootless A/B, drop 2, locked hands, So What) | Chords | Progressions' Voicing uses the same list and pictures |
+    | Inversions | Chords | one inversion control everywhere (Part A 32) |
+    | Functions (tonic, subdominant, dominant) and their colours | Scales' Harmony | Progressions' strip, the circle |
+    | Secondary dominants, tritone substitutes, ii–V, approach chords ("Between two chords") | Progressions | Harmony shows each chord's secondary dominant as a link |
+    | Borrowed chords (modal interchange) | Scales' Harmony | Progressions' "Between two chords" links there |
+    | Reharmonising a melody note | Scales' Harmony | the Chord finder, the editor's chord picker |
+    | Modes | Scales (a scale kind) | Key tab lists them as links |
+    | Cadences | Progressions (their library) | the Quiz's Cadences drill opens them |
+
+    - Every name in en and ru checked with the theory books in `piano-data/books` and against
+      `docs/UBIQUITOUS_LANGUAGE.md` (tension, avoid note, alteration, added tone, voicing,
+      function), one name each, with an ⓘ that says it plainly once.
+    - Tests: a chord with a colour note chosen has that note in its keys, its symbol and its
+      sound; the tension groups for Dm7 differ as ii of C and vi of F; every voicing name in
+      Progressions is one of the Chords page's.
 
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
@@ -1143,11 +1181,11 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   - no layout that can break the page.
 
 ## Rounds
-1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–32: one component each, the app bar,
+1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–33: one component each, the app bar,
    action placement, page/sheet/menu, controls, words, navigation (Back as up, the Search palette, the
    sidebar's selected look), shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout and two panes, pictures and icons, page names, account and
-   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal, an own song's page, imports and exports, fingering, nothing flickering or jumping, the theory pages' owners and settings.
+   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal, an own song's page, imports and exports, fingering, nothing flickering or jumping, the theory pages' owners and settings, colour notes and harmony's owners.
 2. **Profile** (Part B 1).
 3. **Copy and the rights checkbox** (Part B 2).
 4. **Explore in Songs and the built-in folders' rules** (Part B 3, Decided 8 and 10).
