@@ -768,6 +768,26 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       using the chord symbols where the music has them.
     - Done: the Fantaisie-Impromptu's opening, a hymn with written pedalling and a song without
       any played back and recorded before and after; tests for each rule above.
+28. **The song page of an imported or own song** (`owner/61`, the Fantaisie-Impromptu):
+    - **No Learned:** `PieceView.tsx` hides the Learned button for every own song (`own ? null :
+      <LearnedButton …>`), so a song you imported or wrote can never be marked learned, and the row
+      under Practise holds a lone ♡ at its left edge. Songs are songs (rule 12): every song has
+      Learned and Favourite, the same buttons in the same row (or both in the app bar, Part A 11),
+      and its progress counts on the Profile like any other.
+    - **The wrong key:** "Key E" and "Scale: E major →" on a piece in C♯ minor. MusicXML's key
+      reads minor only when the file writes `<mode>minor</mode>` (`read.ts`, `signatureKey`), and
+      many exporters (Flat among them) leave it out. When the mode is missing, tell major from its
+      relative minor by the music (the first and last bass note and chord, the raised 7th, here
+      B♯), and let the song's Settings correct it; the title's own key ("in C♯ Minor") counts too.
+    - **"No chords to learn" four times:** a piece with no chord symbols lists Part A–D each with
+      that line. Its sections show what they do have (bars, length, the hands, difficulty), and
+      the chord lines appear only on songs with chords.
+    - **The tempo** reads ♩ = 80 in 2/2: in cut time the beat is a half note (𝅗𝅥 = 80, or the
+      piece's own marking); the fact chips write the beat the time signature counts.
+    - **The fact chips** (Key, Time, Tempo) are a fourth chip style (rule 15); "Scale: E major →"
+      is an arrow link (rule 23) floating alone under the card.
+    - **Half-empty on a laptop** (rule 28): a full-width Practise bar, a lone ♡ and a short list;
+      the overview and the sections can sit side by side, or the page takes a reading width.
 
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
@@ -919,11 +939,11 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   - no layout that can break the page.
 
 ## Rounds
-1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–27: one component each, the app bar,
+1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–28: one component each, the app bar,
    action placement, page/sheet/menu, controls, words, navigation (Back as up, the Search palette, the
    sidebar's selected look), shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout and two panes, pictures and icons, page names, account and
-   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal.
+   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal, an own song's page.
 2. **Profile** (Part B 1).
 3. **Copy and the rights checkbox** (Part B 2).
 4. **Explore in Songs and the built-in folders' rules** (Part B 3, Decided 8 and 10).
