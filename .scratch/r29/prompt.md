@@ -1408,6 +1408,49 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       menu, save state, Share; under it the note toolbar and, at its right, delete, undo, redo,
       copy, cut, paste, zoom, layout, print. Ours (Part A 34's alignment) the same grouping.
 
+41. **Exercises and the Quiz, inside** (screenshots in `scratchpad/r29/scales/q-*`, `d-*`, `ex-*`;
+    references: Ultimate Piano's Practice and Ear Training (`ultimate-piano/08–14`), Duolingo
+    Music's lesson and song results (`duolingo-music/06–07`), Clefs' result (`clefs/04`)).
+    - **A drill's setup** (`/practice/quiz/<id>`):
+      - **Start** is an unlabelled round ▶ floating alone at the foot: a labelled primary button
+        "Start" (rule 3), in the floating capsule (rule 5);
+      - the drills' names **Cards · Quiz · Play · By ear**: "Play" reads as the play button; name
+        them by what you do: **Flashcards · Name it · Play it · By ear**;
+      - **Level** is one menu of presets ("The main chords of C"); add **Custom**: which chord
+        qualities or intervals (a checklist), which keys (Part A 5's Keys sheet), inversions;
+      - **Rounds** 10 · 20 · ∞, **Time limit**, **Go on automatically** ("Auto-advance");
+      - the column is half the laptop's width (rule 28).
+    - **A round:**
+      - the question staff prints a 4/4 time signature for one chord or one note: no time
+        signature on a question staff, the clef and the notes only;
+      - **Next** and the answer buttons fall below the fold on a laptop (`d-quiz`): the question,
+        the staff, the piano and the answers fit one screen; Check / Next in the floating capsule;
+      - "Build C" shows only the piano: the chord's name large, its symbol and an optional hint
+        (its notes, on request);
+      - the piano's key letters and C labels show in every drill: in Note reading and Play it
+        they give the answer away; hide note names there (the on-screen piano's own setting,
+        Part A 26);
+      - the progress is a thin line and "Round 1 of 10": add right/wrong so far, the run of right
+        answers, and the time when a limit is on, as Duolingo and Clefs do;
+      - after an answer: right or wrong in words and colour, the right answer shown on the keys
+        and staff, its sound, and "Why" (one line: "F A C is a major triad on F"), then Next.
+    - **The end of a round set:** a results page (accuracy, time, the run, what to review: the
+      items missed, each a row that opens it in Chords or Intervals), "Again" and "Review the
+      missed ones", the result counted on the Profile (Part B 1) and in My gaps.
+    - **An exercise** (Hanon, scales in 3rds, the daily routine…) opens straight into the Player:
+      - no page that says what it is, how to play it, and its choices: an exercise page (or
+        sheet) first: what it trains, how (in plain words, with the fingering), and its options:
+        key (Part A 5), hands, octaves, rhythm variants (Hanon's dotted and triplet variants),
+        tempo and a target tempo, then **Start**;
+      - in the Player the score prints a chord symbol "C" over bar 1 and the staff name
+        "Piano" (an exercise has neither); the transport covers the second system (Part A 34);
+      - a "Next key" step (C → G → D …, or chromatically) after each pass, the tempo reached kept
+        per exercise and key, and the day's routine ticked off;
+      - the exercise's settings on its Settings page (Part A 24), the metronome from the one
+        engine (Part A 39).
+    - Done: every drill and three exercises played start to finish at 390 and 1280, screenshots
+      of setup, a round, a wrong answer, the results.
+
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
    1. **Hero.**
@@ -1582,9 +1625,9 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
    and the Search palette, shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout, pictures and icons, page names, account and storage,
    arrows, destructive rows, laptop layouts, nothing jumping, focus, the pencil's one meaning).
-2. **Practice:** Part A 20–25, 30, 32, 33, 39 (the explorers' buttons and headings, Scales and keys,
+2. **Practice:** Part A 20–25, 30, 32, 33, 39, 41 (the explorers' buttons and headings, Scales and keys,
    Intervals, Progressions, every Practice page's settings, Accompaniment, Chord finder,
-   Metronome, Exercises and Quiz, fingering, the theory pages' owners, colour notes, the Metronome against metronome apps).
+   Metronome, Exercises and Quiz, fingering, the theory pages' owners, colour notes, the Metronome against metronome apps, the drills and exercises inside).
 3. **Piano and sound:** Part A 26–27 (the on-screen piano, the piano sound and the pedal).
 4. **Songs, the editor and the Player:** Part A 28, 29, 34, 35, 37, 40 (an own song's page, imports
    and exports, the score editor against Flat, the Player's staves and metronome, the chord
