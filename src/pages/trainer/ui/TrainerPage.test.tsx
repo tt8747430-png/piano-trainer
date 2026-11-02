@@ -29,6 +29,7 @@ async function start(path: string) {
 
 describe('A trainer', () => {
   it('opens at its setup: the first drill and level, ten rounds, no limit, how it works', async () => {
+    const user = userEvent.setup()
     await renderApp('/practice/quiz/chords')
     expect(await screen.findByRole('heading', { level: 1, name: 'Chords' })).toBeInTheDocument()
     expect(screen.getByRole('radio', { name: 'Cards' })).toBeChecked()
@@ -37,7 +38,10 @@ describe('A trainer', () => {
     )
     expect(screen.getByRole('radio', { name: '10' })).toBeChecked()
     expect(screen.getByRole('combobox', { name: /^Time limit/ })).toHaveTextContent('Off')
-    expect(screen.getByRole('complementary', { name: 'How it works' })).toHaveTextContent(
+    // How the drill asks is in the bar's ⓘ, never a line on the setup.
+    expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'About Chords' }))
+    expect(await screen.findByRole('dialog', { name: 'Chords' })).toHaveTextContent(
       /^A chord is shown by its name, keys or staff/,
     )
     expect(screen.queryByText(/^Round 1/)).not.toBeInTheDocument()
@@ -48,6 +52,7 @@ describe('A trainer', () => {
     await start('/practice/quiz/chords')
     expect(screen.getByText('Round 1 of 10')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Reveal' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'About Chords' })).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Close' }))
     expect(screen.getByRole('button', { name: 'Start' })).toBeInTheDocument()
   })
@@ -60,7 +65,8 @@ describe('A trainer', () => {
     await user.click(screen.getByRole('radio', { name: 'By ear' }))
     expect(router.state.location.search).toMatchObject({ drill: 'ear' })
     expect(screen.queryByRole('radio', { name: 'Staff' })).not.toBeInTheDocument()
-    expect(screen.getByRole('complementary', { name: 'How it works' })).toHaveTextContent(
+    await user.click(screen.getByRole('button', { name: 'About Intervals' }))
+    expect(await screen.findByRole('dialog', { name: 'Intervals' })).toHaveTextContent(
       'An interval is played. Choose what you hear from four.',
     )
   })

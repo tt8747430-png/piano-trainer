@@ -4,6 +4,7 @@ export const common: LocaleResources['common'] = {
   appName: 'Тренажёр фортепиано',
   skipToContent: 'К содержимому',
   back: 'Назад',
+  editMode: { edit: 'Изменить', done: 'Готово' },
   nav: {
     label: 'Основная навигация',
     songs: 'Песни',
@@ -65,6 +66,7 @@ export const common: LocaleResources['common'] = {
     '11th': 'Ундецима',
     '13th': 'Терцдецима',
   },
+  more: 'Ещё',
   moreActions: 'Ещё действия',
   stop: 'Стоп',
   rail: {
@@ -201,7 +203,6 @@ export const common: LocaleResources['common'] = {
       label: 'Подключённые устройства',
       info: 'Если подключено несколько, приложение слышит только выбранное',
       any: 'Любая клавиатура',
-      anyDetail: 'Слышны все подключённые клавиатуры',
       none: 'Нет подключённых MIDI-устройств',
       inputOff: 'Включите MIDI-вход, чтобы увидеть устройства',
       away: 'Не подключена',

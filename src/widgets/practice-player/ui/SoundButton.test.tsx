@@ -32,7 +32,7 @@ describe('SoundButton (ADR 0105)', () => {
     const switches = within(popover).getAllByRole('switch')
     expect(switches.map((each) => each.getAttribute('aria-checked'))).toEqual(['false', 'true'])
     expect(switches[0]).toHaveAccessibleName('Count in')
-    expect(switches[1]).toHaveAccessibleName('Click')
+    expect(switches[1]).toHaveAccessibleName('Metronome')
     await user.click(switches[0] as HTMLElement)
     await user.click(switches[1] as HTMLElement)
     expect(settingsStore.getState().practice).toMatchObject({ countIn: true, metronome: false })
@@ -42,7 +42,7 @@ describe('SoundButton (ADR 0105)', () => {
   it('has a volume for each hand and the click, and the staves and the recording where there are any', async () => {
     const plain = await openSound()
     expect(within(plain.popover).getAllByRole('slider', { hidden: true })).toHaveLength(3)
-    for (const name of ['Right hand', 'Left hand', 'Click'])
+    for (const name of ['Right hand', 'Left hand', 'Metronome'])
       expect(volume(plain.popover, name)).toBeInTheDocument()
     expect(within(plain.popover).queryByRole('button', { name: 'Only the chords' })).toBeNull()
     plain.unmount()

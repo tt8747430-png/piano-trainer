@@ -5,6 +5,7 @@ import type { Performance } from '@/shared/lib/arrangement'
 import { useElementSize, type SheetView } from '@/shared/lib'
 import type { Tick } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
+import type { PieceLayout, ScoreHeader } from '@/entities/piece'
 import { SheetTitle } from '@/shared/ui'
 import { labelRow, ScoreView, scoreHeight, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { engravedHeight, FINGERS, fitScale, widestBar } from '../model/fit-scale'
@@ -105,12 +106,18 @@ export function SheetMusic({
   onLoopChange,
   view = ACROSS,
   title,
+  credits,
+  layout,
   piano = true,
   staffNames = NO_NAMES,
 }: {
   view?: SheetViewChoice
   /** The piece's title, printed at the sheet's head in every layout: the page's heading (ADR 0114). */
   title: string
+  /** Printed under the title in lines and on pages (ADR 0114): its subtitle, composer, lyricist, arranger. */
+  credits?: ScoreHeader | undefined
+  /** The score's staff size and the most bars a line holds, in lines and on pages (ADR 0114). */
+  layout?: PieceLayout | undefined
   /** Whether the piano's staves are written: not on a lead sheet (ADR 0114). */
   piano?: boolean
   /** Each single staff's name by its place, as printed at the first line's head (ADR 0097). */
@@ -218,6 +225,8 @@ export function SheetMusic({
         staffNames={labels}
         pages={view.layout === 'page'}
         title={title}
+        credits={credits}
+        layout={layout}
         headings={headings}
         current={current}
         clock={clock}

@@ -364,7 +364,7 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 ## Learning and progress
 
 - **Stage** («Этап»): Beginner · Intermediate · Advanced · Professional. _Avoid:_ level, difficulty.
-- **Journey**: one stage of the Lessons, in chapters. _Avoid:_ path, curriculum.
+- **Level** (the Lessons', «Уровень»): one stage of the Lessons, Beginner to Professional, in chapters; `Journey` in code. _Avoid:_ journey (in the UI), path, curriculum.
 - **Chapter**: one subject of a journey, ended by its Check. _Avoid:_ module, unit.
 - **Course**: a self-contained way through one subject, on a shelf, with its own lessons and guided songs. _Avoid:_
   module, path.
@@ -380,6 +380,15 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Sections read** (`read`): which of a lesson's sections were shown or scrolled to; they fill its ring. _Avoid:_
   progress (that is learned steps).
 - **Page** (a lesson on a phone): one section a screen, turned by Next and Done. _Avoid:_ slide, card.
+- **A lesson's Settings · a course's Settings** («Настройки»; round 28): their own page from the gear in their bar:
+  how lessons read, Share link, Reset progress; an editor's place, Read first, languages and changes. _Avoid:_
+  options, lesson options.
+- **Reset progress** («Сбросить прогресс»; `resetSteps`): a lesson's or a course's steps marked not learned and their
+  sections unread, nothing else. _Avoid:_ clear, restart.
+- **Turn into** («Превратить в»; `turnBlockInto`): the lesson editor's change of a text's kind (text, section
+  heading, numbered steps, note, in short), from the menu of its ⋮⋮. _Avoid:_ convert, block type (in the UI).
+- **Changes** («Изменения»): an editor's unpublished edits of a lesson or a course, on its Settings with Publish.
+  _Avoid:_ draft (in Learn's rows), block, node.
 - **S A T B**: a four-voice voicing's soprano, alto, tenor and bass, named beside its first chord and on the keys;
   the key a voice left keeps its letter faint (a **ghost**). _Avoid:_ parts.
 - **Step** (`StepId`): one thing learned and marked: a lesson, a piece, a chord family or a scale kind. _Avoid:_
@@ -435,7 +444,7 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   detector.
 - **Trainer**: one of the Quiz's: levels or Custom, runs of rounds, opened at its **Setup**. _Avoid:_ quiz, game.
 - **Chords**, **Intervals**, **Build scale**, **My gaps**: trainers. _Avoid:_ exercise.
-- **Setup** (a trainer's): the one template every trainer opens at: its drill, Options, Timing, how it works, Start.
+- **Setup** (a trainer's): the one template every trainer opens at: its drill, Options, Timing and Start, how it works behind the bar's ⓘ.
   _Avoid:_ settings, config.
 - **Cadences** («Каденции»): the Quiz's trainer that asks a cadence in all four drills: heard after its key's tonic,
   read on the grand staff, the chord that makes it played, or a card of its name or staff. A cadence rates no skill.
@@ -499,6 +508,16 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Take's page**: a take on its own, drawn as a **piano roll**, with **Keep bars** («Оставить такты»), which cuts
   it to whole bars. _Avoid:_ trim, crop.
 - **Write into the score** («Вписать в ноты»): a take turned into notes. _Avoid:_ quantise (in the UI), import.
+- **Score settings** («Настройки партитуры», `/edit/$pieceId/settings`): the score's own page in the editor's place:
+  its names, instruments, tempo, key, time, bars, layout and how the editor writes. _Avoid:_ song settings (the
+  song page's), properties.
+- **Credits** (`header`, UI the **Subtitle**, **Composer**, **Lyricist**, **Arranger**): what prints under the title,
+  as typed. _Avoid:_ authors (the catalog's `credits`), metadata.
+- **Staff size** («Размер нотоносца»): how large the staves are drawn, Smallest to Largest. _Avoid:_ zoom, scale.
+- **Bars per line** («Тактов в строке»): the most bars a line holds; **As written** keeps the song's own lines.
+  _Avoid:_ measures per system (Flat's), wrap.
+- **Hear notes as you edit** (`editing.hearNotes`): a note sounds when it is tapped or its pitch moved. _Avoid:_
+  preview, audition.
 
 ## App
 
@@ -511,7 +530,7 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Screen bar** (`ScreenHeader`): a screen's title, Back and actions. _Avoid:_ navbar.
 - **Shortcut**: a computer key a screen binds; `?` lists them. _Avoid:_ hotkey, keybinding.
 - **Pop-up button** (`Dropdown`): shows its value and opens a list. _Avoid:_ select.
-- **Floating buttons**: a screen's actions floating in reach. _Avoid:_ FAB (in the UI).
+- **Floating buttons**: a screen's actions floating in reach (a word of the code; the app never names them). _Avoid:_ FAB (in the UI).
 
 ## The backend (ADR 0116)
 
@@ -544,9 +563,9 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Published by**: on a song saved from the Public library, who published it (an own song's `author`).
 - **Kept safe**: what this device keeps of the app, which the browser has agreed not to clear when space runs
   short (Settings › Sync and data › On this device). _Avoid:_ persistent storage (the API's name).
-- **Original**: a built-in song as every learner gets it, an editor's to change (**Edit the original**), in place
-  of a learner's own **version**. _Avoid:_ master, source.
-- **Draft**: an editor's unpublished change to a built-in item, kept on the server until it is **published**
+- **Original**: a built-in song as every learner gets it, an editor's to change (their **Edit** edits it), in
+  place of a learner's own **version**. Not a word the app shows. _Avoid:_ master, source.
+- **Draft**: an editor's unpublished change to a built-in item (the app says **Unpublished changes**), kept on the server until it is **published**
   (every learner gets it as a content update) or **discarded**. Each version published is kept, to **restore**.
   _Avoid:_ revision, staging.
 - **Course record** (`CourseRecord`): a course as the database keeps it: its title, summary and its lessons' ids

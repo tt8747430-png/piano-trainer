@@ -1,7 +1,7 @@
 import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
-import { hasStandardFingering, noteFromParam, noteName, spellScale } from '@/shared/lib/music'
+import { hasStandardFingering, noteFromParam, spellScale, printedNote } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, runSounds } from '@/shared/lib/schedule'
 import { Dropdown, Labelled, Segmented, StepStrip } from '@/shared/ui'
 import { runShown, scaleRunOf } from '../model/scale-run'
@@ -92,7 +92,7 @@ export function RunView({
               <StepStrip
                 label={t('practice:scales.startOn')}
                 value={start}
-                options={tones.map((tone, i) => ({ value: i + 1, label: noteName(tone.note) }))}
+                options={tones.map((tone, i) => ({ value: i + 1, label: printedNote(tone.note) }))}
                 onChange={(next) => onChange({ start: next })}
               />
             </Labelled>

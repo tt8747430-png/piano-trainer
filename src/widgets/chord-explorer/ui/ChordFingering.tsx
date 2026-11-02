@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useFold } from '@/features/fold-section'
 import { cn } from '@/shared/lib'
-import { noteName, printedSymbol, type Hand } from '@/shared/lib/music'
+import { type Hand, printedNote } from '@/shared/lib/music'
 import { FoldSection, HandDiagram, INVERSION_NAMES } from '@/shared/ui'
 import type { FingeringRow } from '../model/chord-view'
 
@@ -62,7 +62,7 @@ export function ChordFingering({ rows }: { rows: readonly FingeringRow[] }) {
                       {row.hands[hand].notes.map((spelled, at) => (
                         <td key={at} className="min-w-6 align-bottom">
                           <span className="block text-sm text-muted-foreground">
-                            {printedSymbol(noteName(spelled))}
+                            {printedNote(spelled)}
                           </span>
                           <span className="block text-lg font-semibold">
                             {row.hands[hand].fingers[at]}

@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useElementSize, useFitZoom } from '@/shared/lib'
 import { keyFromParam, type KeyParam } from '@/shared/lib/music'
 import { notate, type StaffId } from '@/shared/lib/notation'
 import { noteLine, runSounds, twoHands, type NoteLineMeter } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { PlayButton, SheetOption, type ShownKeys } from '@/shared/ui'
-import { barOf, barShown } from '../model/notes-example'
+import { barOf, barShown, barsOf, rowsOf } from '../model/notes-example'
 import { useStaffPlayhead } from '../model/use-staff-playhead'
 import { TappableStaff } from './TappableStaff'
 
@@ -22,6 +23,26 @@ const handOf = (staff: StaffId): 'rh' | 'lh' => (staff === 'bass' ? 'lh' : 'rh')
  * `onFollow`, `onShow` unless given: the line moving on is not the learner's choice, so a lesson
  * keeps a question opened as it plays.
  */
+/** What the card takes of its room beside its music: its padding, and its controls at its side. */
+const CARD_ROOM = 140
+
+/** The room a note struck takes on a row, in CSS px: how many a row of the card's width holds. */
+const NOTE_ROOM = 34
+
+/** A row drawn whole within the card's width, shrunk where it is wider. */
+function FittedRow({ children }: { children: ReactNode }) {
+  const room = useRef<HTMLDivElement>(null)
+  const drawn = useRef<HTMLDivElement>(null)
+  const zoom = useFitZoom(room, drawn)
+  return (
+    <div ref={room} className="min-w-0">
+      <div ref={drawn} className="w-max" style={zoom < 1 ? { zoom } : undefined}>
+        {children}
+      </div>
+    </div>
+  )
+}
+
 export function NotesExample({
   notes,
   bass,
@@ -62,34 +83,63 @@ export function NotesExample({
     shownBar.current = bar
     onFollow(barShown(line, bar))
   }, [bar, line, onFollow])
+  // The line laid in rows as a sheet lays them (round 28), as many bars a row as fit the card: a
+  // phone shows the whole line, never its first bar alone.
+  // The room the card may take (the page's column, not the card, which is as wide as its rows):
+  // less the card's padding and, from sm up, its controls beside the music.
+  const space = useRef<HTMLDivElement>(null)
+  const width = useElementSize(space).width - CARD_ROOM
+  const rows = useMemo(() => {
+    const room = width > 0 ? Math.max(4, Math.floor(width / NOTE_ROOM)) : Number.POSITIVE_INFINITY
+    return rowsOf(line, room).map(({ from, to }) => {
+      const music = barsOf(line, from, to)
+      return {
+        from,
+        start: line.bars[from]?.startTick ?? 0,
+        end: line.bars[to]?.startTick ?? Number.POSITIVE_INFINITY,
+        music,
+        score: from === 0 && to === line.bars.length ? score : notate(music),
+      }
+    })
+  }, [line, score, width])
   return (
-    <figure className="flex w-fit max-w-full items-center gap-4 card p-3 pl-4">
-      <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain scrollbar-none">
-        <TappableStaff
-          music={line}
-          score={score}
-          {...(bass === undefined ? { staff: clef } : {})}
-          tempo={LINE_TEMPO}
-          follow={follow}
-          names={names}
-          onShow={onShow}
-        />
-      </div>
-      <SheetOption
-        glyph="C E"
-        label={t('sheet.noteNames')}
-        pressed={names}
-        onPressedChange={setNames}
-      />
-      <PlayButton
-        label={t('play')}
-        playing={playback.playing === 'line'}
-        onClick={() => {
-          shownBar.current = 0
-          onShow(barShown(line, 0))
-          playback.toggle('line', () => runSounds(line, LINE_TEMPO))
-        }}
-      />
-    </figure>
+    <div ref={space} className="w-full">
+      <figure className="flex w-full max-w-full flex-col gap-2 card p-3 pl-4 sm:w-fit sm:flex-row sm:items-center sm:gap-4">
+        <div className="flex min-w-0 flex-1 flex-col gap-1">
+          {rows.map((row) => (
+            <FittedRow key={row.from}>
+              <TappableStaff
+                music={row.music}
+                score={row.score}
+                {...(bass === undefined ? { staff: clef } : {})}
+                firstBar={row.from + 1}
+              continues={row.from > 0}
+                tempo={LINE_TEMPO}
+                playhead={at !== null && at >= row.start && at < row.end ? at - row.start : null}
+                names={names}
+                onShow={onShow}
+              />
+            </FittedRow>
+          ))}
+        </div>
+        <div className="flex items-center justify-end gap-4 sm:contents">
+          <SheetOption
+            glyph="C E"
+            label={t('sheet.noteNames')}
+            pressed={names}
+            onPressedChange={setNames}
+          />
+          <PlayButton
+            label={t('play')}
+            playing={playback.playing === 'line'}
+            onClick={() => {
+              shownBar.current = 0
+              onShow(barShown(line, 0))
+              playback.toggle('line', () => runSounds(line, LINE_TEMPO))
+            }}
+          />
+        </div>
+      </figure>
+    </div>
   )
 }

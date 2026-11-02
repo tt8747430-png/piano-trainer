@@ -17,9 +17,12 @@ describe('Settings, signed in', () => {
   it('shows the learner on the account card, leading to their account', async () => {
     await renderApp('/settings', { auth: await signedIn() })
     const card = await screen.findByRole('navigation', { name: 'Account' })
-    await waitFor(() => expect(within(card).getByRole('link')).toHaveTextContent(/Ana/))
-    expect(within(card).getByRole('link')).toHaveTextContent(/ana@example.com · Up to date/)
-    expect(within(card).getByRole('link')).toHaveAttribute('href', '/settings/account')
+    const learner = () => within(card).getAllByRole('link')[0]!
+    await waitFor(() => expect(learner()).toHaveTextContent(/Ana\s*ana@example.com/))
+    expect(learner()).toHaveAttribute('href', '/settings/account')
+    expect(within(card).getByRole('link', { name: /Sync and data/ })).toHaveTextContent(
+      'Up to date',
+    )
   })
 
   it('syncs now from Sync and data, saying where the sync stands', async () => {
@@ -33,25 +36,39 @@ describe('Settings, signed in', () => {
 })
 
 describe('Settings › Account', () => {
-  it('renames the learner', async () => {
+  it('shows the learner’s email and Change password under Sign-in', async () => {
+    await renderApp('/settings/account', { auth: await signedIn() })
+    const signIn = await screen.findByRole('region', { name: 'Sign-in' })
+    expect(signIn).toHaveTextContent(/Email\s*ana@example.com/)
+    expect(within(signIn).getByRole('link', { name: 'Change password' })).toHaveAttribute(
+      'href',
+      '/account/new-password',
+    )
+  })
+
+  it('renames the learner, Save showing only once the name is changed', async () => {
     const user = userEvent.setup()
     const auth = await signedIn()
     await renderApp('/settings/account', { auth })
     const name = await screen.findByLabelText('Your name')
     await waitFor(() => expect(name).toHaveValue('Ana'))
+    expect(screen.queryByRole('button', { name: 'Save' })).toBeNull()
     await user.clear(name)
     await user.type(name, 'Anna')
     await user.click(screen.getByRole('button', { name: 'Save' }))
     expect(await screen.findByText('Saved')).toBeVisible()
     expect(await auth.current()).toMatchObject({ name: 'Anna' })
+    expect(screen.queryByRole('button', { name: 'Save' })).toBeNull()
   })
 
-  it('signs out and goes back to Settings', async () => {
+  it('signs out once asked, saying what stays, and goes back to Settings', async () => {
     const user = userEvent.setup()
     const auth = await signedIn()
     const { router } = await renderApp('/settings/account', { auth })
-    const signOut = await screen.findByRole('region', { name: 'Sign out' })
-    await user.click(await within(signOut).findByRole('button', { name: 'Sign out' }))
+    await user.click(await screen.findByRole('button', { name: 'Sign out' }))
+    const dialog = await screen.findByRole('alertdialog', { name: 'Sign out?' })
+    expect(dialog).toHaveTextContent('Your songs and progress stay on this device.')
+    await user.click(within(dialog).getByRole('button', { name: 'Sign out' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/settings'))
     expect(await auth.current()).toBeNull()
   })
@@ -62,6 +79,7 @@ describe('Settings › Account', () => {
     await renderApp('/settings/account', { auth })
     await user.click(await screen.findByRole('button', { name: 'Delete account…' }))
     const dialog = await screen.findByRole('alertdialog', { name: 'Delete your account?' })
+    expect(dialog).toHaveTextContent('deleted in 30 days')
     const confirm = within(dialog).getByRole('button', { name: 'Delete' })
     expect(confirm).toBeDisabled()
     await user.type(within(dialog).getByLabelText('Your email'), 'ANA@example.com')
@@ -72,6 +90,18 @@ describe('Settings › Account', () => {
       ),
     ).toBeVisible()
     expect(await auth.current()).toBeNull()
+  })
+
+  it('offers a guest Sign in and Create an account', async () => {
+    await renderApp('/settings/account')
+    expect(await screen.findByRole('link', { name: 'Sign in' })).toHaveAttribute(
+      'href',
+      '/account/sign-in',
+    )
+    expect(screen.getByRole('link', { name: 'Create an account' })).toHaveAttribute(
+      'href',
+      '/account/create',
+    )
   })
 
   it('on signing in to an account to be deleted, keeps it or signs out', async () => {

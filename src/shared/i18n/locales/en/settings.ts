@@ -6,13 +6,6 @@ export const settings = {
   midi: 'MIDI keyboard',
   // How a take is recorded in the score editor (ADR 0028), as its recording strip's settings say too.
   recording: 'Recording',
-  // A screen's floating actions (ADR 0061): where they stand, and whether they say their names.
-  floating: {
-    place: 'Floating buttons',
-    places: { left: 'Left', center: 'Middle', right: 'Right' },
-    labels: 'Name the floating buttons',
-    labelsNote: 'Otherwise each shows its icon only, and its name appears when you point at it',
-  },
   progress: {
     label: 'Progress',
     reset: 'Reset progress',
@@ -59,7 +52,6 @@ export const settings = {
   },
   account: {
     signIn: 'Sign in',
-    signInLine: 'Keep your songs and progress on every device',
     label: 'Account',
   },
   sync: {
@@ -84,20 +76,24 @@ export const settings = {
   // The account's own page (round 3): its name, password, signing out, deleting it.
   accountPage: {
     title: 'Account',
+    profileGroup: 'Profile',
     profile: 'Your name',
+    signInGroup: 'Sign-in',
     email: 'Email',
     save: 'Save',
     saved: 'Saved',
     password: 'Change password',
     signOut: 'Sign out',
+    signOutTitle: 'Sign out?',
     signOutInfo: 'Your songs and progress stay on this device. Signing in again syncs them.',
+    signOutCancel: 'Cancel',
     signedOut: 'You’re not signed in.',
+    signIn: 'Sign in',
+    create: 'Create an account',
     delete: {
-      label: 'Delete account',
-      info: 'Your account and everything synced to it are deleted 30 days after you ask. Sign in before then to cancel. What is on this device stays.',
       button: 'Delete account…',
       title: 'Delete your account?',
-      body: 'Type your email to confirm. Your account is deleted in 30 days, and you’re signed out on every device now.',
+      body: 'Your account and everything synced to it are deleted in 30 days, and you’re signed out on every device now. Sign in before then to cancel. What is on this device stays. Type your email to confirm.',
       field: 'Your email',
       cancel: 'Keep my account',
       confirm: 'Delete',
@@ -135,7 +131,7 @@ export const settings = {
       view: 'View chooses how the music shows: sheet music, chords over lyrics, chord diagrams or a grid.',
       transpose: 'Transpose moves the song up or down a semitone at a time. Reset takes it back.',
       simplify: 'Simplify plays each chord as a plain major or minor triad.',
-      sound: 'Sound holds the count-in, the click and each part’s volume.',
+      sound: 'Sound holds the count-in, the metronome and each part’s volume.',
       loop: 'Loop repeats a passage. Choose it with Shift and a click, or hold a note and drag.',
       wait: 'In the tempo menu, Wait mode waits for each note you play before it goes on.',
     },

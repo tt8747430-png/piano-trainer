@@ -333,8 +333,8 @@ every screen's title smaller (`data-titles='small'`).
   20rem columns as fit (`grid-fields`); chord buttons `grid-chords`. Rows and grids stay even on wide screens.
 - **Stacks use gap:** 24px between a screen's parts, 32px between sections, 16–20px inside a group.
 - **The shell:** on a phone the places are a bar docked along the bottom; on a phone on its side a rail down the
-  left; from 1024px a 256px sidebar (72px of icons collapsed, each named in a tooltip). Learn, Songs and Practice,
-  with Search and Settings.
+  left; from 1024px a 256px sidebar (72px of icons collapsed, each named in a tooltip). Learn, Songs, Practice and
+  the Profile (its icon the learner's initial on the yellow paint, `Avatar`), with Search and Settings at the sidebar's foot; the phone's bar shown on the places alone.
 - **Full screens** (the Player, the score editor, the Check) have no navigation: the viewport's height, scrolling
   inside.
 - **A page that shows a thing on the keys** reads top to bottom: the keys pinned (top or foot, as the keyboard
@@ -385,15 +385,18 @@ Round buttons, Play, marks and pips are full circles. Keys are square at the top
 Where each thing goes, on every screen (the owner's UX principles, `.claude/skills/owner-way/references/ux-principles.md`;
 every piece is shown in the Admin area's Components):
 
-- **A detail page reads hero → primary action → facts → sections.** The title large on the page (a place's, and a song's,
-  whose names run long; the bar echoes it once scrolled), what the
-  thing is under it, its one filled action first and full width on a phone, its facts as cards or a line, then its
-  sections, each headed with a count and See all where it is cut short.
+- **A detail page reads title → facts → sections, its one primary action floating.** The title in the bar's row,
+  what the thing is under it in a line, its facts as one line of chips, then its sections, each headed with a count
+  and See all where it is cut short. The primary action (Practise, Start, Continue, Practise in the Player) is the
+  floating action, never a full-width button on the page.
 - **The bar holds Back, the title and at most two round actions**; More holds the rest, its destructive action last,
   red and alone. The primary action is never in the bar.
-- **Lists are grouped cards of rows** (`SettingsGroup`, `RowGroup`): a soft tile, the title, one detail line, then a
+- **Lists are grouped cards of rows** (`SettingsGroup`; `RowGroup` for a browsed list, one card in columns): a soft tile, the title, one detail line, then a
   value, a status pill or a chevron; a choice made in place is a `ChoiceRow`, a switch a `SwitchRow`.
-- **Creating is the + floating action**, opening a sheet of the ways to create (new, import, from the Public library).
+- **Creating is the + floating action**, opening a dial of the ways to add (New song, Record, Import, New folder).
+- **Every New … is one sheet** (`NewSheet`, round 25, after Flat's new score): the name first, then its few
+  properties as soft parts (`SheetPart`: a name, a line, the choice: drawn tiles, chips, a `Stepper`, the key
+  signature grid), one Create button pinned at the foot named for the act. Never a bare text field or a page.
 - **One accent per screen:** the honey fill is the primary action alone; the selection and states have their own
   colours.
 - **Feedback for every act:** pressed states, a toast that says what happened, skeletons while loading, an empty
@@ -407,8 +410,10 @@ every piece is shown in the Admin area's Components):
   second action); `secondary` sky mist; `ghost` no fill until hovered; `destructive` card paper with a crimson line
   and label; `link` deep sky; `tool` a toolbar's button, no frame until hovered, open or pressed.
 - **Round** (`RoundButton`, `RoundLink`): 44px circles for close, back, settings, More.
-- **Floating** (`Fab`, `SpeedDial`): the main action 56px, a second 48px, each its icon alone unless the learner asks
-  for names. A dial opens as a card of 48px rows over a page dimmed to half.
+- **Floating** (`Fab`, `FabLink`, `FabPill`, `SpeedDial`): one family across the app. A screen's main action is
+  the honey 56px circle (a dial's `main` too, its + turning to ✕ while open), a second action a raised 48px circle,
+  each its icon alone unless the learner asks for names. A dial opens as a card of rows over a page dimmed to half:
+  each row a soft tile, its name and a line of what it does, the nearest action last.
 - **Every Play becomes Stop** (a square) while it sounds; an item in a grid is pressed instead (sky mist).
 - **Focus:** one ring for every control, 3px deep sky, 2px outside, inset only where a scroller would cut it.
 
@@ -476,9 +481,10 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
 - **Drop zone** (`SongDrop`, a laptop's): while a file is dragged over the library, a panel inset 16px over the page,
   its 2px dashed honey border on the page's paper at 90%, an upload icon over one line of what dropping does.
 - **A trainer's setup** (`TrainerSetup`, at most 672px wide): the drill as a segmented control of pictures over
-  their names, then titled cards of `SettingRows` (Options, Timing): a pop-up button at a row's right, a list as a
-  row with "2 of 41 ›" opening a sheet of check rows by group, switches; a muted card with an ⓘ saying the drill in a
-  sentence; one full-width Start pill (its own width from 640px).
+  their names, then cards of `SettingRows` named small over them (Options, Timing): a pop-up button at a row's
+  right, a list as a row with "2 of 41 ›" opening a sheet of check rows by group, switches; the drill in a sentence
+  behind the bar's ⓘ (`InfoTip bar`); one full-width Start pill held at the foot of a phone's screen as the setup
+  scrolls (its own width, in place, from 640px).
 - **A round** (`TrainerBoard`): the prompt, a time limit as a thin primary bar running down with its seconds, the
   staff (a muted card with a "?" while hidden, the same size, so nothing moves on Reveal), the keys, the answers, and
   one primary pill in one place from the round's start to its Next: Reveal on a card, Check on a build, Next greyed
@@ -506,13 +512,24 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
 
 - **Places** (tab bar, rail, sidebar): a 24px icon over an Onest 500 14px label in soft ink (a 20px icon beside a
   16px label in the sidebar); the current place sand in a soft line under a semibold ink label.
-- **The screen's bar** (`ScreenHeader`): one row of one height (56px, 64px from 640px): Back, the title in Literata
-  600 on one line cut short with an ellipsis, at most two round actions (a soft sand fill, no frame) with More for
-  the rest; a page's tabs its second row; a hairline under it once the page runs beneath. A place (Learn, Songs,
-  Practice), and a song's page, stand their title large on the page under the bar, its tabs under that, the bar taking the title small
-  once it is scrolled past; on a laptop, whose sidebar names the place, the bar is only its actions, at the right
-  of the large title. It slides away while reading down and returns the moment the page turns up; what is pinned
-  under it slides with it. A place's bar holds Search and the Profile on a phone; Settings is in the Profile.
+- **The screen's bar** (`ScreenHeader`): one row (56px at least): Back, the title in Literata 600, at most two
+  round actions (a soft sand fill, no frame) with More (`MoreMenu`) for the rest; a page's tabs its second row; a
+  hairline under it once the page runs beneath. A place (Learn, Songs, Practice) and a detail page (a song, a
+  course) set their title larger in that same row, wrapping to a second line rather than being cut; there is no
+  title block under the bar, and nothing pushes the page's content below the fold. It slides away while reading
+  down and returns the moment the page turns up; what is pinned under it slides with it. A place's bar holds
+  Search on a phone; Settings opens from the Profile's bar and its first row.
+- **The learner** is their initial on the yellow paint (`Avatar`): the Profile's tab, the Profile's and the
+  Account's top, Settings' account card. An action on the account is a row (`RowButton`; a destructive one in the
+  destructive ink, `destructive`), never a button in a card under an ⓘ heading; what it does is told in its dialog.
+- **Three layers on the score's screens** (the Player, the editor): the bar, flat, for where the learner is and
+  what screen-wide (Close, the mode, MIDI, Undo · Redo or Setup · More); the tools of what is shown (View,
+  Transpose) a floating capsule centred under it on a phone held upright, in the bar's row where it is one
+  row; what acts on the notes chosen (Delete, Copy, Cut, Paste) a capsule over the transport, there only while
+  something is chosen. Floating parts take no room: the music scrolls under them.
+- **Modes are a pop-up** (`Dropdown`, its face the mode's icon and name): Practise · Edit in
+  the Player's and the editor's bars, Replace · Insert · Chord in the editor's Notes. An action with several
+  targets  is a pull-down (`ActionMenu`) from one bar button.
 
 ### The keyboard
 

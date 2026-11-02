@@ -41,3 +41,35 @@ export function PieceFactCards({
     </dl>
   )
 }
+
+/**
+ * A piece's facts in one quiet line under its title (ADR 0111, amended): its key, time and tempo, as
+ * a songbook's heading prints them. The key is the one it is played in (`played`), else its own.
+ */
+export function PieceFactLine({ piece, played }: { piece: Piece; played?: Key }) {
+  const { t } = useTranslation(['piece', 'music'])
+  const tempo = useTempoText(piece)
+  const facts = [
+    {
+      name: t('music:key.label'),
+      value: (
+        <span className="font-display">{printedSymbol(keySymbol(played ?? pieceKey(piece)))}</span>
+      ),
+    },
+    { name: t('time'), value: piece.meter },
+    { name: t('tempo'), value: tempo },
+  ]
+  return (
+    <dl className="flex flex-wrap items-center gap-2">
+      {facts.map((fact) => (
+        <div
+          key={fact.name}
+          className="flex h-8 items-center gap-1.5 rounded-full bg-muted/70 px-3 text-sm"
+        >
+          <dt className="text-muted-foreground">{fact.name}</dt>
+          <dd className="font-semibold tabular-nums">{fact.value}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}

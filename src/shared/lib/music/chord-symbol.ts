@@ -6,7 +6,7 @@ import {
   type Chord,
   type ChordQuality,
 } from './chord'
-import { parseNoteName } from './note'
+import { noteName, parseNoteName, type SpelledNote } from './note'
 
 export class ChordSymbolError extends Error {
   override readonly name = 'ChordSymbolError'
@@ -29,6 +29,9 @@ const normalise = (suffix: string): string =>
  */
 export const printedSymbol = (symbol: string): string =>
   symbol.replaceAll('#', '♯').replace(/(?<=[A-G])b|b(?=\d)/g, '♭')
+
+/** A note's name as it is printed (`printedSymbol` of `noteName`): `C♯`, `B♭`. */
+export const printedNote = (spelled: SpelledNote): string => printedSymbol(noteName(spelled))
 
 /** A chord's symbol as it is printed (`printedSymbol` of `chordSymbol`): `C♯m7`, `D/F♯`. */
 export const printedChord = (chord: Chord): string => printedSymbol(chordSymbol(chord))

@@ -49,29 +49,16 @@ describe('Learn', () => {
     )
   })
 
-  it('lists the pieces practised last, latest first, and none before the first', async () => {
+  it('leaves the days practised and the songs played last to the Profile', async () => {
     const { progressStore } = await renderApp('/')
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
+    act(() => progressStore.setState({ practised: { ode: '2026-09-27T10:00:00Z' } }))
     expect(screen.queryByRole('region', { name: 'Recently practised' })).not.toBeInTheDocument()
-    act(() =>
-      progressStore.setState({
-        practised: {
-          bz5: '2026-09-25T10:00:00Z',
-          ode: '2026-09-27T10:00:00Z',
-          'my-404': '2026-09-28T10:00:00Z',
-        },
-      }),
-    )
-    const recent = await screen.findByRole('region', { name: 'Recently practised' })
-    expect(
-      within(recent)
-        .getAllByRole('link')
-        .map((link) => link.getAttribute('href')),
-    ).toEqual(['/songs/ode', '/songs/bz5'])
+    expect(screen.queryByRole('region', { name: 'Practice' })).not.toBeInTheDocument()
   })
 
   describe('its Lessons', () => {
-    it('show the current journey’s chapters, each a run of nodes, Continue’s marked', async () => {
+    it('show the current journey’s chapters as groups of rows, Continue’s marked Next', async () => {
       await renderApp('/')
       const journey = JOURNEYS[0]!
       expect(
@@ -83,51 +70,51 @@ describe('Learn', () => {
       const first = within(chapters[0]!).getAllByRole('link')[0]
       expect(first).toHaveAttribute('href', '/lessons/finding-home')
       expect(first).toHaveAttribute('aria-current', 'step')
-    })
-
-    it('count each journey’s steps on its tab, its lessons and its checks, and say so', async () => {
-      await renderApp('/')
-      const tabs = await screen.findByRole('navigation', { name: 'Journeys' })
-      const journey = JOURNEYS[0]!
-      const steps = journey.chapters.flatMap((chapter) => chapter.steps).length
-      expect(within(tabs).getByRole('link', { name: /^Foundations/ })).toHaveTextContent(
-        `0/${steps} steps`,
+      expect(first).toHaveTextContent('Next')
+      expect(within(chapters[0]!).getAllByRole('link')).toHaveLength(
+        journey.chapters[0]!.steps.length,
       )
     })
 
-    it('say a learned node is learned', async () => {
+    it('offer the four levels as chips, the level’s steps learned under its name', async () => {
+      await renderApp('/')
+      const levels = await screen.findByRole('radiogroup', { name: 'Level' })
+      expect(
+        within(levels)
+          .getAllByRole('radio')
+          .map((chip) => chip.textContent),
+      ).toEqual(['Beginner', 'Intermediate', 'Advanced', 'Professional'])
+      expect(within(levels).getByRole('radio', { name: 'Beginner' })).toBeChecked()
+      const steps = JOURNEYS[0]!.chapters.flatMap((chapter) => chapter.steps).length
+      expect(screen.getByRole('region', { name: 'Foundations' })).toHaveTextContent(
+        `0 of ${steps} learned`,
+      )
+    })
+
+    it('say a learned step is learned', async () => {
       const { progressStore } = await renderApp('/')
       await screen.findByRole('heading', { level: 2, name: 'Foundations' })
       act(() => progressStore.setState({ learned: { 'lesson:finding-home': at } }))
+      const chapter = screen.getByRole('region', { name: /^Chapter 1:/ })
       expect(
-        screen.getByRole('link', { name: /^Finding your way on the keys.*, learned$/ }),
+        within(chapter).getByRole('link', { name: /^Finding your way on the keys.*, learned/ }),
       ).toHaveAttribute('href', '/lessons/finding-home')
       expect(
-        screen.getByRole('link', { name: /^The staff and the treble clef/ }),
+        within(chapter).getByRole('link', { name: /^The staff and the treble clef/ }),
       ).not.toHaveAccessibleName(/learned/)
     })
 
-    it('switch journeys from their tabs, and fold a chapter under its heading', async () => {
+    it('switch levels from the chips', async () => {
       const user = userEvent.setup()
-      const { router, settingsStore } = await renderApp('/')
-      const tabs = await screen.findByRole('navigation', { name: 'Journeys' })
-      expect(within(tabs).getAllByRole('link')).toHaveLength(JOURNEYS.length)
-      await user.click(within(tabs).getByRole('link', { name: /^Fluency/ }))
+      const { router } = await renderApp('/')
+      const levels = await screen.findByRole('radiogroup', { name: 'Level' })
+      await user.click(within(levels).getByRole('radio', { name: 'Intermediate' }))
       expect(await screen.findByRole('heading', { level: 2, name: 'Fluency' })).toBeInTheDocument()
       expect(router.state.location.search).toMatchObject({ journey: 'fluency' })
-      expect(within(tabs).getByRole('link', { name: /^Fluency/ })).toHaveAttribute(
-        'aria-current',
-        'page',
-      )
       const chapter = JOURNEYS[1]!.chapters[0]!
-      // Its visible words name it, its count of steps learned with them.
-      const heading = screen.getByRole('button', {
-        name: new RegExp(`^${chapter.title.en}\\s*0/${chapter.steps.length}$`),
-      })
-      expect(heading).toHaveAttribute('aria-expanded', 'true')
-      await user.click(heading)
-      expect(heading).toHaveAttribute('aria-expanded', 'false')
-      expect(settingsStore.getState().foldedSections).toContain(`journey.fluency.${chapter.id}`)
+      expect(
+        screen.getByRole('region', { name: `Chapter 1: ${chapter.title.en}` }),
+      ).toHaveTextContent(`0/${chapter.steps.length}`)
     })
   })
 

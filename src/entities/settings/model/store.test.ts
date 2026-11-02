@@ -8,11 +8,11 @@ import {
   DEFAULT_METRONOME,
   DEFAULT_MIDI,
   DEFAULT_PRACTICE,
+  DEFAULT_EDITING,
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
-  DEFAULT_FLOATING,
   defaultKeyboard,
   TEXT_SIZES,
 } from './types'
@@ -32,9 +32,9 @@ const DEFAULTS = {
   practice: DEFAULT_PRACTICE,
   sound: DEFAULT_SOUND,
   trainer: DEFAULT_TRAINER,
-  floating: DEFAULT_FLOATING,
   keyboard: defaultKeyboard(false),
   recorder: DEFAULT_RECORDER,
+  editing: DEFAULT_EDITING,
   sidebar: DEFAULT_SIDEBAR,
   paletteFolded: {},
   paletteSections: null,
@@ -45,9 +45,16 @@ const DEFAULTS = {
   metronome: DEFAULT_METRONOME,
   foldedSections: [],
   welcomed: false,
+  lessonReading: 'page',
 }
 
 describe('createSettingsStore', () => {
+  it('reads a lesson as one page, or a section at a time where that was saved (round 26)', () => {
+    expect(restored({}).lessonReading).toBe('page')
+    expect(restored({ lessonReading: 'sections' }).lessonReading).toBe('sections')
+    expect(restored({ lessonReading: 'scroll' }).lessonReading).toBe('page')
+  })
+
   it('keeps the Melody saved where it is a source, the recording otherwise (ADR 0115)', () => {
     expect(restored({ melody: 'staff' }).melody).toBe('staff')
     expect(restored({ melody: 'tune' }).melody).toBe('recording')
@@ -101,7 +108,6 @@ describe('createSettingsStore', () => {
       melody: 'none',
       sound: { rh: 100, lh: 35, staves: 0, recording: 60, click: 5 },
       trainer: { autoNext: true },
-      floating: { place: 'right', labels: true },
       keyboard: {
         keySize: 'large',
         swipe: 'glissando',
@@ -117,6 +123,7 @@ describe('createSettingsStore', () => {
         railControls: ['zoom', 'pedal'],
       },
       recorder: { click: false, tune: true },
+      editing: { hearNotes: false },
       sidebar: 'collapsed',
       paletteFolded: { panel: true, sheet: false },
       paletteSections: ['notes', 'clef'],
@@ -158,6 +165,7 @@ describe('createSettingsStore', () => {
       },
       foldedSections: ['chords.tensions'],
       welcomed: true,
+      lessonReading: 'sections',
     }
     expect(restored(saved)).toEqual(saved)
   })
@@ -224,6 +232,12 @@ describe('createSettingsStore', () => {
     expect(restored({ paletteSections: ['notes', 3] }).paletteSections).toBeNull()
   })
 
+  it('hears notes as they are edited unless the learner saved otherwise (round 28)', () => {
+    expect(DEFAULT_EDITING.hearNotes).toBe(true)
+    expect(restored({ editing: { hearNotes: 'no' } }).editing).toEqual(DEFAULT_EDITING)
+    expect(restored({ editing: { hearNotes: false } }).editing).toEqual({ hearNotes: false })
+  })
+
   it('turns a click that is not a boolean on, its default', () => {
     expect(restored({ recorder: { click: 'no' } }).recorder).toEqual(DEFAULT_RECORDER)
   })
@@ -249,9 +263,9 @@ describe('createSettingsStore', () => {
     expect(restored({ scoreView: { pinned: 'no' } }).scoreView.pinned).toBe(true)
   })
 
-  it('starts afresh over a save of the version before, which had a title size', () => {
-    expect(SETTINGS_VERSION).toBe(16)
-    expect(restored({ theme: 'dark', titles: 'small' }, 15)).toEqual(
+  it('starts afresh over a save of the version before, which had floating buttons placed', () => {
+    expect(SETTINGS_VERSION).toBe(17)
+    expect(restored({ theme: 'dark', floating: { place: 'left', labels: true } }, 16)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })
@@ -418,17 +432,6 @@ describe('createSettingsStore', () => {
 
   it('turns an auto-next that is not a boolean off', () => {
     expect(restored({ trainer: { autoNext: 'yes' } }).trainer).toEqual(DEFAULT_TRAINER)
-  })
-
-  it('keeps the floating actions where saved, in the middle and wordless where not valid', () => {
-    expect(restored({ floating: { place: 'top', labels: 'yes' } }).floating).toEqual({
-      place: 'center',
-      labels: false,
-    })
-    expect(restored({ floating: { place: 'left', labels: true } }).floating).toEqual({
-      place: 'left',
-      labels: true,
-    })
   })
 
   it('gives a setting never saved its default, keeping the rest', () => {

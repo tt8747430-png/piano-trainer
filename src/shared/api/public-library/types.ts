@@ -1,5 +1,8 @@
 import type { NetResult } from '../network'
 
+/** The longest description an author writes of what they publish. */
+export const DESCRIPTION_MAX = 500
+
 /** How the Public library is sorted: the newest first, or the most saved. */
 export type PublicSort = 'new' | 'saved'
 
@@ -14,12 +17,16 @@ export interface PublicEntry {
   readonly authorName: string
   readonly saves: number
   readonly publishedAt: string
-  /** What the list says of it besides its title: a song's key and meter, a pattern's figures. */
+  /**
+   * What the list says of it besides its title: a song's key and meter, a pattern's figures; and
+   * what its author wrote of it (`description`, at most `DESCRIPTION_MAX` long).
+   */
   readonly meta: {
     readonly key?: string
     readonly meter?: string
     readonly rh?: string
     readonly lh?: string
+    readonly description?: string
   }
 }
 

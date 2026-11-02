@@ -97,15 +97,17 @@ music, `exercise` music and arrangement, and none of them imports a package. `es
 
 ### The places and the main slices
 
-Three places: **Learn · Songs · Practice** (`app/router.tsx` has every route; `routes/*-search.ts` every URL's
+Four places: **Learn · Songs · Practice · Profile**, the phone's tab bar shown on the places alone (what a place opens has the whole height, Back the way out; it steps aside for the keyboard), the laptop's sidebar with Search and Settings at its foot (`app/router.tsx` has every route; `routes/*-search.ts` every URL's
 params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its README).
-
-- **Learn** (`/`, `?view=lessons|courses`) — the Lessons (journeys of chapters, `/lessons/$lessonId`) and the
-  Courses (`/courses/$courseId`, its lessons under it); a lesson paged a section at a time on a phone, its
-  progress and prerequisites on the contents. `pages/learn`, `pages/course`, `pages/lesson`; an editor's lesson editor (`/lessons/$lessonId/edit`, `pages/lesson-editor`, ADR 0116) and course editor (`/courses/$courseId/edit`, a course's title, summary, shelf, level, weeks and lessons in order: moved, removed, added) and New course (`/courses/new`); the journey editor (`/journeys/$journeyId/edit`: chapters and their steps in order, new lessons);
+- **Learn** (`/`, `?view=lessons|courses`) — a library: the Lessons (a level, Beginner to Professional, chosen from chips (a `Journey` in code), its chapters groups of rows, `/lessons/$lessonId`) and the
+  Courses (`/courses/$courseId`, its lessons under it); a lesson one page of its sections (a section at a time
+  the learner's choice: its Settings page, `/lessons/$lessonId/settings`, a course's `/courses/$courseId/settings`, and Settings, `pt-settings.lessonReading`), its progress and prerequisites on the contents. `pages/learn`, `pages/course`, `pages/lesson`; a lesson's or course's Edit (a pencil at its bar's end, Done to leave; `EditToggle`, `widgets/mode-switch`) opening an editor's lesson editor (`/lessons/$lessonId/edit`, `pages/lesson-editor`, ADR 0116: one continuous TipTap document, its examples drawn live, a toolbar, Insert and `/`, one language at a time, chosen in the draft's menu; a floating toolbar, Insert its accent; a level's lesson's Read first; `lessonToDoc`/`docToLesson` in its `model`; an example of notes's Edit music opening it on the score editor, `/lessons/$lessonId/example?n=`, written back into the draft, `exampleMusic`/`exampleBlock` in `pages/score-editor/model`), course editor (`/courses/$courseId/edit`, a document: title and summary in place, its facts as properties, lessons dragged into order) and New course (a sheet from Courses' +); Manage lessons (`/journeys/$journeyId/edit`: the level's chapters as cards of the learner's rows, dragged by their handles within and across them, a row's menu only Remove, + a lesson or a chapter); every New … one sheet (`shared/ui` `NewSheet`: a name, its choices, Create); Manage courses (`/courses/manage`, from Courses' bar: each shelf a card of its courses dragged into order, published as `catalog` `courses`; a course's shelf is its own property); the editors their own chunk, a draft's status and Publish in the bar (`DraftStatus`, `DraftActions`);
   `widgets/curriculum`, `widgets/lesson-view`; `entities/lesson`, `course`, `step`, `progress`.
-- **Songs** (`/songs`) — one library of folders, favourites and an archive; a song's page and its sections;
-  MusicXML and MIDI import, MusicXML and MIDI export (`features/song-files`, `shared/lib/musicxml`).
+- **Songs** (`/songs`) — one library of folders, favourites and an archive (+ adds: New song, Import, New folder; in
+  Select, rows dragged into a folder or onto the Archive, `LibraryDnd`); a song's page (Settings and Edit in its bar: the page itself in place where its words are the learner's or an editor's, its title, who wrote it, about, `pages/piece/ui/SongEdit.tsx`; else the learner's version of the score; its overview card: Practise, Learned, ♡) and its sections; its Settings page (`/songs/$pieceId/settings`, Noji's deck settings: its music, its place in the library, Export…, Share link, Publish in library, an editor's original, Delete or Reset) and Publish in library (`/songs/$pieceId/publish`); one New song, Flat's three steps (its name; its instruments, the piano and voices by family, − n +; Fine-tune: tempo, bars, key, time) (in a collection's folder an editor's is the collection's);
+  MusicXML and MIDI import, one Export… sheet (MusicXML, MIDI, Share link; the Player's More opens it too) (`features/song-files`, `shared/lib/musicxml`);
+  Publish in library a page for a song or a pattern (`PublishScreen`, Noji's: a description and a preview; once
+  published its link with Copy, View in library, its saves, Unpublish and Publish new version; why publish behind ⓘ).
   `pages/songs`, `pages/song-archive`, `pages/piece`; `widgets/song-library`; `features/manage-library`; the
   Public library (`/songs/public`, songs or patterns by `?kind=`, an item at `/songs/public/$itemId`; `pages/public-library`,
   `features/publish`, `widgets/song-preview`, `shared/api/public-library`, `shared/lib/public-library`);
@@ -114,7 +116,7 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
 - **Practice** (`/practice`) — explorers (Chords, Scales and keys, Intervals, Progressions, Accompaniment), the
   Chord finder, the Metronome, Exercises and Quiz (one setup and four drills for every trainer,
   `widgets/trainer-setup`), in three groups. Each page holds the tools that work on its thing, never a page of
-  their own. `pages/<thing>`, `widgets/*-explorer`, `widgets/practice-pages`, `features/trainer`; an editor's progression editor (`/practice/progressions/$progressionId/edit`, `/practice/progressions/new`, `pages/progression-editor`; the editors' shared parts in `widgets/content-editor`). Fingering by hand
+  their own. `pages/<thing>`, `widgets/*-explorer`, `widgets/practice-pages`, `features/trainer`; an editor's progression editor (`/practice/progressions/$progressionId/edit`, New progression a sheet from Progressions' +, `pages/progression-editor`; the editors' shared parts in `widgets/content-editor`). Fingering by hand
   (scales and arpeggios as the printed books, chords by rule) and the voicings live in the kernel (`music/fingering`,
   `chord-fingering`, `voicing`); Hanon and the daily scale routine in `shared/lib/exercise`.
 - **The Player** (`/play/$pieceId`, and walks, progressions and exercises under `/play/`) — one screen
@@ -123,15 +125,16 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
   `features/practice` (the practice machine, the arrangement of a piece, loops, beats) and `shared/lib/schedule`.
 - **The score editor** (`/edit/$pieceId`, takes under it) — Flat's palette: a docked panel and a note-entry
   toolbar from 48rem wide, a bottom sheet on a phone (`EditorPalette`, `TOOL_SHORTCUTS`); the Player's score in Edit mode, sharing its bar and
-  transport (`widgets/mode-switch`, `ScoreBar`). `pages/score-editor`, `widgets/score-sheet`;
+  transport (`widgets/mode-switch`: the Player's pencil, the editor's Done, at the bar's end; `ScoreBar`); its Settings page (`/edit/$pieceId/settings`, a gear in its bar: the score's names, instruments by `widgets/instrument-list`, tempo, key, time, bars, layout, Hear notes as you edit). `pages/score-editor`, `widgets/score-sheet`;
   `features/score-editor` (the draft, its pure edits, undo, `createEditorStore`), `features/edit-piece` (saving),
-  `features/record-take` and `manage-takes`; an editor's Edit the original (`?original=true`,
-  `features/edit-original`: the song's draft on the server, Publish, Versions, Discard); an editor's New built-in song in a collection's folder (`useCreateBuiltInSong`), opened there unpublished.
-- **Elsewhere** — Search (`/search`); Settings (`/settings`: one grouped list, the account card, General's choices in place,
+  `features/record-take` and `manage-takes`; an editor's Edit of a built-in song edits the song everyone sees (`features/edit-original`: its draft on the server, the song whole, Publish, Versions, Discard; anyone else's Edit their version); an editor's New song in a collection's folder (`useCreateBuiltInSong`), opened there unpublished; its Unpublished changes (status, Publish, Versions, Discard) in the bar by Done and on the song's Settings, only while there are some.
+- **The Profile** (`/profile`, `pages/profile`) — the learner's initial, three figures, a row to Activity (`/profile/activity`:
+  the run, the best run, the days practised, the month's calendar), the record and badges.
+- **Elsewhere** — Search (`/search`); Settings (`/settings`, opened from the Profile on a phone: one grouped list, the account card, General's choices in place,
   then rows to Keyboard and recording, Sync and data, the Account, How to use and the MIDI keyboard with its log;
   `pages/settings`, `SettingsList`, `ChoiceRow`); the account pages (`/account/sign-in`, `create`, `forgot`, `new-password`, and `/auth/callback` where the
-  server's links return; `pages/account`); the Profile (`/profile`, `pages/profile`); Privacy and Terms (`/legal/privacy`, `/legal/terms`, `pages/legal`, linked from Help and Create an account); the Admin area (`/admin`,
-  `pages/admin`, its own chunk, an admin's alone; its Drafts tab every editor's draft, unpublished ones marked; `shared/api/admin`, `shared/lib/admin`; feature switches by
+  server's links return; `pages/account`); Privacy and Terms (`/legal/privacy`, `/legal/terms`, `pages/legal`, linked from Help and Create an account); the Admin area (`/admin`,
+  `pages/admin`, its own chunk, an admin's alone, opening on an Overview of the week; its Drafts tab every editor's draft, unpublished ones marked; `shared/api/admin`, `shared/lib/admin`; feature switches by
   `useFeature`, `shared/lib/features`); a shared song
   (`/songs/shared`). The welcome (`widgets/welcome`, once, `pt-settings.welcomed`) and the deletion gate
   (`app/deletion-gate`) sit in `RootLayout`.

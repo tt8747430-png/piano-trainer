@@ -2,24 +2,19 @@ import { Link } from '@tanstack/react-router'
 import {
   Archive,
   ArrowLeft,
-  BookPlus,
   CheckCheck,
   Ellipsis,
   FolderInput,
   ListChecks,
   ListX,
-  Music,
   PencilLine,
   Trash2,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, useLibraryLayout, type ShelvedFolder } from '@/entities/library'
-import { isSongCollectionId } from '@/entities/piece'
-import { editsContent, useAccount } from '@/shared/lib/account'
 import { ActionMenu, RoundButton, RoundLink, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { LibraryPage } from '../model/use-library-page'
-import { ProfileAction } from '@/widgets/app-nav'
 import { ArchiveButton } from './ArchiveButton'
 
 /**
@@ -40,10 +35,6 @@ export function LibraryHeader({
   const nameOf = useFolderName()
   const { folders } = useLibraryLayout()
   const { select } = page
-  const { account } = useAccount()
-  // A collection's folder: where an editor makes a built-in song.
-  const collection =
-    folder && editsContent(account) && isSongCollectionId(folder.id) ? folder.id : undefined
   if (select.on)
     return (
       <ScreenHeader
@@ -92,7 +83,6 @@ export function LibraryHeader({
             onClick={() => page.select.start()}
           />
           {folder ? null : <ArchiveButton />}
-          {folder ? null : <ProfileAction />}
           {folder ? (
             <ActionMenu
               label={t('folder.more', { name })}
@@ -100,7 +90,7 @@ export function LibraryHeader({
               trigger={<Ellipsis aria-hidden />}
               render={
                 <Button
-                  variant="surface"
+                  variant="bar"
                   size="icon"
                   className="rounded-full"
                   aria-label={t('folder.more', { name })}
@@ -114,22 +104,6 @@ export function LibraryHeader({
                   icon: PencilLine,
                   onSelect: () => page.open({ kind: 'folder', target: { kind: 'edit', folder } }),
                 },
-                {
-                  key: 'new-song',
-                  label: t('folder.newSong'),
-                  icon: Music,
-                  onSelect: () => page.open({ kind: 'new-song' }),
-                },
-                ...(collection
-                  ? [
-                      {
-                        key: 'new-built-in',
-                        label: t('folder.newBuiltIn'),
-                        icon: BookPlus,
-                        onSelect: () => page.open({ kind: 'new-song', builtIn: collection }),
-                      },
-                    ]
-                  : []),
                 {
                   key: 'move',
                   label: t('library.moveTo'),

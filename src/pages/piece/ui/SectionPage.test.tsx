@@ -174,7 +174,7 @@ describe('a section’s page (ADR 0111)', () => {
     expect(router.state.location.search).toEqual({ loop: '17-18', click: true })
     await user.click(await screen.findByRole('button', { name: 'Sound' }))
     const sound = await screen.findByRole('dialog', { name: 'Sound' })
-    expect(within(sound).getByRole('switch', { name: 'Click' })).toHaveAttribute(
+    expect(within(sound).getByRole('switch', { name: 'Metronome' })).toHaveAttribute(
       'aria-checked',
       'true',
     )

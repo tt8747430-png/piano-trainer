@@ -1085,6 +1085,51 @@ describe('the editor', () => {
     expect(musicToSave(draftOf())).not.toHaveProperty('title')
   })
 
+  it('writes the lines under the title, saved with the music, an empty one taking its line away (ADR 0114)', () => {
+    const credited = run(
+      initialEditor(draftOf()),
+      { type: 'header', field: 'composer', text: '  J. S. Bach ' },
+      { type: 'header', field: 'subtitle', text: 'BWV 846' },
+    )
+    expect(credited.draft.header).toEqual({ composer: 'J. S. Bach', subtitle: 'BWV 846' })
+    const saved = musicToSave(credited.draft)
+    expect(saved?.header).toEqual({ composer: 'J. S. Bach', subtitle: 'BWV 846' })
+    expect(run(credited, { type: 'header', field: 'composer', text: 'J. S. Bach' })).toBe(credited)
+    const cleared = run(
+      credited,
+      { type: 'header', field: 'composer', text: ' ' },
+      { type: 'header', field: 'subtitle', text: '' },
+    )
+    expect(cleared.draft).not.toHaveProperty('header')
+    expect(run(cleared, { type: 'undo' }).draft.header).toEqual({ subtitle: 'BWV 846' })
+  })
+
+  it('makes the song so many bars long at its end, one bar at the least (round 28)', () => {
+    const at = initialEditor(draftOf())
+    const bars = lengths(at.draft).length
+    const longer = run(at, { type: 'barCount', count: bars + 2 })
+    expect(lengths(longer.draft)).toHaveLength(bars + 2)
+    const one = run(longer, { type: 'barCount', count: 0 })
+    expect(lengths(one.draft)).toHaveLength(1)
+    expect(one.caret).toBe(0)
+    expect(run(one, { type: 'barCount', count: 1 })).toBe(one)
+    expect(lengths(run(one, { type: 'undo' }).draft)).toHaveLength(bars + 2)
+  })
+
+  it('lays the score out at a staff size and so many bars a line at most, its own size left out (ADR 0114)', () => {
+    const laid = run(
+      initialEditor(draftOf()),
+      { type: 'layout', staffSize: 130 },
+      { type: 'layout', barsPerLine: 4 },
+    )
+    expect(laid.draft.layout).toEqual({ staffSize: 130, barsPerLine: 4 })
+    expect(musicToSave(laid.draft)?.layout).toEqual({ staffSize: 130, barsPerLine: 4 })
+    expect(run(laid, { type: 'layout', staffSize: 130 })).toBe(laid)
+    const own = run(laid, { type: 'layout', staffSize: 100 }, { type: 'layout', barsPerLine: null })
+    expect(own.draft).not.toHaveProperty('layout')
+    expect(run(laid, { type: 'layout', barsPerLine: 20 }).draft.layout).toEqual({ staffSize: 130 })
+  })
+
   it('undoes and redoes the changes with the caret, and a new change drops the redo', () => {
     const written = run(start(), key(67, 0), key(69, 500))
     const undone = run(written, { type: 'undo' })

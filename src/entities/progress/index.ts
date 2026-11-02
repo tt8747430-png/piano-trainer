@@ -13,6 +13,7 @@ export {
   withHold,
   withLearned,
   withLesson,
+  withoutSteps,
   withRun,
   withSectionRead,
   withTempo,
@@ -60,3 +61,4 @@ export {
 } from './model/selectors'
 export { ProgressStoreProvider, useProgress, useProgressStoreApi } from './model/context'
 export { practiceRecord, type PracticeRecord } from './model/record'
+export { achievementsOf, type Achievement, type AchievementId } from './model/achievements'

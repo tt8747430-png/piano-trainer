@@ -47,8 +47,8 @@ describe('Player', () => {
       sizedAs(query)
       await renderApp('/play/bz5')
       await screen.findByRole('button', { name: 'Setup' })
-      // Close, then Practise · Edit, as the editor's bar has them; the title is on the sheet. The
-      // View is the tools row's, under the bar (ADR 0108).
+      // Close, then the tools and Edit at the end, as the editor's bar has Done; the title is on the
+      // sheet. The View is the tools row's, under the bar (ADR 0108).
       const controls = [
         ...document.querySelectorAll(
           ':is([data-area="lead"], [data-area="actions"]) :is(button, a)',
@@ -56,20 +56,17 @@ describe('Player', () => {
       ]
       expect(controls.map((control) => control.getAttribute('aria-label'))).toEqual([
         'Close',
-        'Edit',
         'MIDI keyboard',
         'Setup',
         'More',
+        'Edit',
       ])
+      // Every control is its icon alone.
       for (const control of controls) {
         const name = control.getAttribute('aria-label') ?? ''
         expect(shownText(control), name).toBe('')
         expect(control.getAttribute('title'), name).toMatch(new RegExp(`^${name}`))
       }
-      // The current mode too: its icon, its name a screen reader's and its tooltip's.
-      const practise = screen.getByText('Practise').closest('[aria-current="page"]')
-      expect(practise).toHaveAttribute('title', 'Practise')
-      expect(shownText(practise as Element)).toBe('')
     },
   )
 
@@ -198,7 +195,7 @@ describe('Player', () => {
     const labels = [...sound.querySelectorAll('[data-slot="slider-label"]')].map(
       (label) => label.textContent,
     )
-    expect(labels).toEqual(['Right hand', 'Left hand', 'Recording', 'Click'])
+    expect(labels).toEqual(['Right hand', 'Left hand', 'Recording', 'Metronome'])
     await user.click(within(sound).getByRole('button', { name: 'Only the chords' }))
     expect(settingsStore.getState().sound).toMatchObject({ recording: 0, rh: 100, lh: 100 })
     await user.keyboard('{Escape}')
@@ -500,19 +497,17 @@ describe('Player', () => {
     expect(dock).not.toHaveAttribute('data-hidden')
   })
 
-  it('turns to Edit at its cursor’s bar from the Practise · Edit switch, after Close (ADR 0115)', async () => {
+  it('turns to Edit at its cursor’s bar from the pencil at the bar’s end (ADR 0115, round 26)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5?bar=3')
-    const modes = await screen.findByRole('navigation', { name: 'Practise or edit' })
-    expect(within(modes).getByText('Practise').closest('[aria-current="page"]')).not.toBeNull()
+    const edit = await screen.findByRole('button', { name: 'Edit' })
     // The bar it opened on is read once: the URL forgets it, the cursor stands there.
     await waitFor(() => expect(router.state.location.search).not.toHaveProperty('bar'))
-    const edit = within(modes).getByRole('link', { name: 'Edit' })
-    expect(edit.getAttribute('href')).toBe('/edit/bz5?bar=3')
     await user.click(edit)
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/bz5'))
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/Bar 3, beat 1/))
   })
+
   it('keeps ‹ and › pointing back and forward on a phone on its side, unlike the tempo’s ↑ ↓', async () => {
     await renderApp('/play/bz5')
     const transport = await screen.findByRole('toolbar', { name: 'Playback' })

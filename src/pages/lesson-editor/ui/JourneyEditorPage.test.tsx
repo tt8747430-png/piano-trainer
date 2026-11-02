@@ -22,8 +22,8 @@ const editing = () =>
   })
 
 async function publish(user: ReturnType<typeof userEvent.setup>) {
-  const strip = screen.getByRole('group', { name: 'Draft of the original' })
-  await within(strip).findByText('Draft · saved', {}, { timeout: 3000 })
+  const strip = document.body
+  await within(strip).findByText('Saved · not published', {}, { timeout: 3000 })
   await user.click(within(strip).getByRole('button', { name: 'Publish' }))
   await user.click(
     within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
@@ -31,12 +31,12 @@ async function publish(user: ReturnType<typeof userEvent.setup>) {
   await screen.findByText('Published. Learners get it the next time the app starts.')
 }
 
-describe('the journey editor (content as data)', () => {
+describe('Manage lessons, a level’s editor (content as data)', () => {
   if (!FIRST || !SECOND) throw new Error('a journey of two chapters at least')
 
   it('is on an editor’s Lessons, never a learner’s', async () => {
     await renderApp('/', { auth: await signedInAs('editor') })
-    expect(await screen.findByRole('link', { name: 'Edit the journey' })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: 'Manage lessons' })).toHaveAttribute(
       'href',
       `/journeys/${JOURNEY.id}/edit`,
     )
@@ -45,28 +45,51 @@ describe('the journey editor (content as data)', () => {
   it('is not on a learner’s', async () => {
     await renderApp('/', { auth: await signedInAs('learner') })
     await screen.findByRole('heading', { level: 1 })
-    expect(screen.queryByRole('link', { name: 'Edit the journey' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Manage lessons' })).not.toBeInTheDocument()
   })
 
-  it('orders the chapters and a chapter’s steps, and publishes the journey with them', async () => {
+  it('drags its chapters and their steps by handles, and removes a step from its menu', async () => {
     const user = userEvent.setup()
     const content = editing()
     await renderApp(`/journeys/${JOURNEY.id}/edit`, {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    const chapters = await screen.findByRole('list', { name: 'Chapters' })
-    await user.click(within(chapters).getByRole('button', { name: `Move down: ${FIRST.title.en}` }))
+    // Chapters and steps alike are dragged by their handles; no menu moves them.
+    for (const chapter of JOURNEY.chapters)
+      // (a chapter may share its name with a step of its own)
+      expect(
+        await screen.findAllByRole('button', { name: `Move: ${chapter.title.en}` }),
+      ).not.toHaveLength(0)
     const steps = screen.getByRole('list', { name: `Steps: ${FIRST.title.en}` })
-    const [, last] = within(steps).getAllByRole('listitem')
-    if (!last) throw new Error('a chapter of two steps at least')
-    await user.click(within(last).getByRole('button', { name: /^Move up: / }))
+    const [first] = within(steps).getAllByRole('listitem')
+    if (!first) throw new Error('a chapter of a step at least')
+    expect(within(first).getByRole('button', { name: /^Move: / })).toBeInTheDocument()
+    await user.click(within(first).getByRole('button', { name: /^More: / }))
+    expect(screen.queryByRole('button', { name: /^Move (up|down|to)/ })).not.toBeInTheDocument()
+    await user.click(await screen.findByRole('menuitem', { name: 'Remove' }))
     await publish(user)
     const body = content.body('journey', JOURNEY.id) as Journey
-    expect(body.chapters.map((chapter) => chapter.id).slice(0, 2)).toEqual([SECOND.id, FIRST.id])
-    const moved = body.chapters[1]?.steps
-    expect(moved?.[0]).toEqual(FIRST.steps[1])
-    expect(moved?.[1]).toEqual(FIRST.steps[0])
+    expect(body.chapters[0]?.steps).toEqual(FIRST.steps.slice(1))
+  })
+
+  it('renames a chapter in place, in the language the draft’s menu says', async () => {
+    const user = userEvent.setup()
+    const content = editing()
+    await renderApp(`/journeys/${JOURNEY.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    await user.click(await screen.findByRole('button', { name: 'Publishing' }))
+    await user.click(await screen.findByRole('menuitemcheckbox', { name: 'Русский' }))
+    const name = within(screen.getByRole('region', { name: FIRST.title.en })).getByRole('textbox', {
+      name: 'Chapter name',
+    })
+    expect(name).toHaveValue(FIRST.title.ru)
+    await user.type(name, '!')
+    await publish(user)
+    const body = content.body('journey', JOURNEY.id) as Journey
+    expect(body.chapters[0]?.title).toEqual({ en: FIRST.title.en, ru: `${FIRST.title.ru}!` })
   })
 
   it('adds a chapter, and a new lesson to it that opens in the lesson editor', async () => {
@@ -76,11 +99,14 @@ describe('the journey editor (content as data)', () => {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await user.type(await screen.findByRole('textbox', { name: 'New chapter' }), 'Pedalling')
-    await user.click(screen.getByRole('button', { name: 'Add chapter' }))
+    await user.click(await screen.findByRole('button', { name: 'Add chapter' }))
+    const chapterSheet = await screen.findByRole('dialog', { name: 'New chapter' })
+    await user.type(within(chapterSheet).getByRole('textbox', { name: 'Name' }), 'Pedalling{Enter}')
     const chapter = await screen.findByRole('region', { name: 'Pedalling' })
-    await user.type(within(chapter).getByRole('textbox', { name: 'New lesson' }), 'Half pedal')
     await user.click(within(chapter).getByRole('button', { name: 'Add lesson' }))
+    const lessonSheet = await screen.findByRole('dialog', { name: 'New lesson' })
+    await user.type(within(lessonSheet).getByRole('textbox', { name: 'Name' }), 'Half pedal')
+    await user.click(within(lessonSheet).getByRole('button', { name: 'Create lesson' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/lessons/half-pedal/edit'))
     const lesson = await content.draft('lesson', 'half-pedal')
     expect(lesson.ok && lesson.value?.body).toMatchObject({ title: { en: 'Half pedal' } })
@@ -91,11 +117,27 @@ describe('the journey editor (content as data)', () => {
       title: { en: 'Pedalling' },
       steps: [{ kind: 'lesson', lessonId: 'half-pedal' }],
     })
-    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Half pedal')
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Half pedal'),
+    )
+    expect(await screen.findAllByText('Half pedal')).not.toHaveLength(0)
+  })
+
+  it('opens another level from its chips', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp(`/journeys/${JOURNEY.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: editing(),
+    })
+    const levels = await screen.findByRole('radiogroup', { name: 'Level' })
+    await user.click(within(levels).getByRole('radio', { name: 'Intermediate' }))
+    await waitFor(() =>
+      expect(router.state.location.pathname).toBe(`/journeys/${JOURNEYS[1]!.id}/edit`),
+    )
   })
 
   it('tells a learner it is an editor’s', async () => {
     await renderApp(`/journeys/${JOURNEY.id}/edit`, { auth: await signedInAs('learner') })
-    expect(await screen.findByText('Only an editor edits a journey.')).toBeInTheDocument()
+    expect(await screen.findByText('Only an editor manages the lessons.')).toBeInTheDocument()
   })
 })

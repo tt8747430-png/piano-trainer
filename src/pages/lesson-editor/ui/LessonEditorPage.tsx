@@ -1,6 +1,7 @@
-import { Link, useParams } from '@tanstack/react-router'
+import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { blankLesson, lessonById } from '@/entities/lesson'
 import { BackButton } from '@/shared/ui'
+import { EditToggle } from '@/widgets/mode-switch'
 import { LessonEditor } from './LessonEditor'
 
 /**
@@ -8,6 +9,7 @@ import { LessonEditor } from './LessonEditor'
  * is a new one, not published: its draft is the server's.
  */
 export function LessonEditorPage() {
+  const navigate = useNavigate()
   const { lessonId } = useParams({ from: '/shell/lessons/$lessonId/edit' })
   const lesson = lessonById(lessonId) ?? blankLesson(lessonId)
   return (
@@ -17,6 +19,15 @@ export function LessonEditorPage() {
       id={lessonId}
       back={<BackButton fallback={{ to: '/lessons/$lessonId', params: { lessonId } }} />}
       toLesson={<Link to="/lessons/$lessonId" params={{ lessonId }} />}
+      modes={
+        <EditToggle
+          editing={true}
+          onDone={() =>
+            void navigate({ to: '/lessons/$lessonId', params: { lessonId }, replace: true })
+          }
+          onEdit={() => undefined}
+        />
+      }
     />
   )
 }

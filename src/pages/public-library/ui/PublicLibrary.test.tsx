@@ -62,12 +62,57 @@ describe('the Public library', () => {
         .getAllByRole('link')
         .map((row) => row.textContent),
     ).toEqual([
-      expect.stringMatching(/^Newer\s*by Bo · 0 saves/),
-      expect.stringMatching(/^Older\s*by Bo · 0 saves/),
+      expect.stringMatching(/^Newer\s*Bo · G · 3\/4/),
+      expect.stringMatching(/^Older\s*Bo · G · 3\/4/),
     ])
+    expect(screen.getByText('2 songs')).toBeVisible()
   })
 
-  it('searches by title, and says when nothing matches', async () => {
+  it('shelves the newest and the most saved over the list, each with See all', async () => {
+    const user = userEvent.setup()
+    const publicLibrary = withSongs('One', 'Two', 'Three', 'Four', 'Five')
+    await publicLibrary.save('public-1')
+    await publicLibrary.save('public-2')
+    const { router } = await renderApp('/songs/public', { publicLibrary })
+    await screen.findByRole('heading', { level: 1, name: 'Public library' })
+    const newest = await screen.findByRole('region', { name: 'Newest' })
+    expect(
+      within(within(newest).getByRole('list'))
+        .getAllByRole('link')
+        .map((card) => card.textContent),
+    ).toEqual([
+      expect.stringMatching(/^Five/),
+      expect.stringMatching(/^Four/),
+      expect.stringMatching(/^Three/),
+      expect.stringMatching(/^Two/),
+      expect.stringMatching(/^One/),
+    ])
+    const loved = screen.getByRole('region', { name: 'Most saved' })
+    expect(within(loved).getAllByRole('link')).toHaveLength(2)
+    await user.click(within(loved).getByRole('button', { name: 'See all' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ sort: 'saved' }))
+    // Searched, the list alone.
+    await user.type(screen.getByRole('searchbox', { name: 'Search the Public library' }), 'Two')
+    await waitFor(() => expect(screen.queryByRole('region', { name: 'Newest' })).toBeNull())
+  })
+
+  it('sorts the list by the most saved, from the pop-up at its head', async () => {
+    const user = userEvent.setup()
+    const publicLibrary = withSongs('Quiet', 'Loved')
+    await publicLibrary.save('public-1')
+    await renderApp('/songs/public', { publicLibrary })
+    const list = await screen.findByRole('list', { name: 'Public library' })
+    expect(within(list).getAllByRole('link')[0]).toHaveTextContent(/^Loved/)
+    await user.click(screen.getByRole('combobox', { name: /^Sort/ }))
+    await user.click(await screen.findByRole('option', { name: 'Most saved' }))
+    await waitFor(() =>
+      expect(
+        within(screen.getByRole('list', { name: 'Public library' })).getAllByRole('link')[0],
+      ).toHaveTextContent(/^Quiet.*1 save/),
+    )
+  })
+
+  it('searches by title, says when nothing matches, and shows all again', async () => {
     const user = userEvent.setup()
     await renderApp('/songs/public', { publicLibrary: withSongs('Morning', 'Evening') })
     await user.type(
@@ -75,6 +120,22 @@ describe('the Public library', () => {
       'zzz',
     )
     expect(await screen.findByText('No song matches “zzz”.')).toBeVisible()
+    await user.click(screen.getByRole('button', { name: 'Show all' }))
+    expect(await screen.findByRole('list', { name: 'Public library' })).toBeVisible()
+  })
+
+  it('says it is loading while the library is asked', async () => {
+    const publicLibrary = withSongs('Morning')
+    await renderApp('/songs/public', {
+      publicLibrary: { ...publicLibrary, browse: () => new Promise(() => {}) },
+    })
+    expect(await screen.findByRole('status')).toHaveTextContent('Loading the Public library…')
+  })
+
+  it('says nothing is published yet, and how to publish the first', async () => {
+    await renderApp('/songs/public', { publicLibrary: createFakePublicLibrary() })
+    expect(await screen.findByText('No songs here yet.')).toBeVisible()
+    expect(screen.getByRole('link', { name: 'Your songs' })).toHaveAttribute('href', '/songs')
   })
 
   it('says it needs a connection, offline', async () => {
@@ -95,7 +156,11 @@ describe('the Public library', () => {
       auth: await signedIn(),
     })
     expect(await screen.findByRole('heading', { level: 1, name: 'Morning' })).toBeVisible()
-    expect(screen.getByText(/by Bo · 0 saves/)).toBeVisible()
+    expect(screen.getByText('Bo')).toBeVisible()
+    expect(screen.getByText('Not saved yet')).toBeVisible()
+    // Its facts, a line of chips.
+    expect(screen.getByText('Key').nextElementSibling).toHaveTextContent('G')
+    expect(screen.getByText('Time').nextElementSibling).toHaveTextContent('3/4')
     await user.click(screen.getByRole('button', { name: 'Save to my songs' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/my-1'))
     expect(piecesStore.getState().songs).toMatchObject([
@@ -134,42 +199,86 @@ describe('the Public library', () => {
 })
 
 describe('publishing an own song', () => {
-  it('publishes it after saying what that means, then offers to take it out', async () => {
+  it('publishes it from its own page, reached from its Settings: a description long enough, its row previewed', async () => {
     const user = userEvent.setup()
     const publicLibrary = createFakePublicLibrary({ author: () => ({ id: 'ana', name: 'Ana' }) })
-    await renderApp('/songs/my-1', { storage: ownSong(), publicLibrary, auth: await signedIn() })
-    await user.click(await screen.findByRole('button', { name: 'More' }))
-    await user.click(
-      within(await screen.findByRole('dialog', { name: 'More' })).getByRole('button', {
-        name: 'Publish to the Public library',
-      }),
+    await renderApp('/songs/my-1/settings', {
+      storage: ownSong(),
+      publicLibrary,
+      auth: await signedIn(),
+    })
+    const row = await screen.findByRole('link', { name: /^Publish in library/ })
+    expect(row).toHaveTextContent('Not published')
+    await user.click(row)
+    await screen.findByRole('heading', { level: 1, name: 'Publish in library' })
+    expect(document.body).toHaveTextContent('Publish only music you wrote or may share.')
+    // Its row as others will see it: its title, by whom, its key and time.
+    expect(screen.getByRole('region', { name: 'As others will see it' })).toHaveTextContent(
+      /Morning.*Ana/,
     )
-    const dialog = await screen.findByRole('alertdialog', { name: 'Publish “Morning”?' })
-    expect(dialog).toHaveTextContent('Publish only music you wrote or may share.')
-    await user.click(within(dialog).getByRole('button', { name: 'Publish' }))
+    // Why publish, behind the bar's ⓘ, in a sheet of its own (Noji's).
+    await user.click(screen.getByRole('button', { name: 'Why publish?' }))
+    expect(await screen.findByRole('dialog', { name: 'Why publish?' })).toHaveTextContent(
+      'Found by other learners',
+    )
+    await user.keyboard('{Escape}')
+    const publish = screen.getByRole('button', { name: 'Publish' })
+    expect(publish).toBeDisabled()
+    const description = screen.getByRole('textbox', { name: 'Description' })
+    await user.type(description, 'A slow song')
+    expect(document.body).toHaveTextContent('9 more characters to go')
+    expect(publish).toBeDisabled()
+    await user.type(description, ' for the morning')
+    expect(publish).toBeEnabled()
+    await user.click(publish)
     expect(await screen.findByText('Published to the Public library.')).toBeVisible()
     const found = await publicLibrary.browse({ kind: 'song', sort: 'new', query: '' })
-    expect(found.ok && found.value.map((entry) => entry.title)).toEqual(['Morning'])
-    await user.click(screen.getByRole('button', { name: 'More' }))
-    await user.click(
-      within(await screen.findByRole('dialog', { name: 'More' })).getByRole('button', {
-        name: 'Remove from the Public library',
-      }),
+    expect(found).toMatchObject({
+      ok: true,
+      value: [{ title: 'Morning', meta: { description: 'A slow song for the morning' } }],
+    })
+    // The page says where it stands (Noji's): in the library, its link, View in library, its saves;
+    // a new version only once something changed; Unpublish.
+    expect(await screen.findByText('In the library')).toBeVisible()
+    const id = found.ok ? found.value[0]?.id : ''
+    expect(screen.getByRole('link', { name: 'View in library' })).toHaveAttribute(
+      'href',
+      `/songs/public/${id}`,
     )
+    expect(document.body).toHaveTextContent(`/songs/public/${id}`)
+    expect(screen.getByRole('button', { name: 'Copy link' })).toBeInTheDocument()
+    expect(document.body).toHaveTextContent('Not saved yet')
+    const again = screen.getByRole('button', { name: 'Publish new version' })
+    expect(again).toBeDisabled()
+    await user.type(screen.getByRole('textbox', { name: 'Description' }), ', slowly')
+    expect(again).toBeEnabled()
+    await user.click(screen.getByRole('button', { name: 'Unpublish' }))
     expect(await screen.findByText('Removed from the Public library.')).toBeVisible()
+    await waitFor(() => expect(screen.queryByText('In the library')).toBeNull())
+  })
+
+  it('shows what its author wrote of an item on its page', async () => {
+    const publicLibrary = createFakePublicLibrary({
+      items: [
+        {
+          id: 'public-3',
+          title: 'Evening',
+          authorName: 'Bo',
+          meta: { key: 'C', meter: '3/4', description: 'A waltz to end the day with.' },
+          body: { title: 'Evening', ...MUSIC },
+        },
+      ],
+    })
+    await renderApp('/songs/public/public-3', { publicLibrary })
+    const about = await screen.findByRole('region', { name: 'About' })
+    expect(about).toHaveTextContent('A waltz to end the day with.')
   })
 
   it('asks a learner signed out to sign in first', async () => {
     const user = userEvent.setup()
-    await renderApp('/songs/my-1', { storage: ownSong() })
-    await user.click(await screen.findByRole('button', { name: 'More' }))
-    await user.click(
-      within(await screen.findByRole('dialog', { name: 'More' })).getByRole('button', {
-        name: 'Publish to the Public library',
-      }),
-    )
-    const dialog = await screen.findByRole('alertdialog')
-    expect(within(dialog).getByRole('link', { name: 'Sign in' })).toHaveAttribute(
+    await renderApp('/songs/my-1/settings', { storage: ownSong() })
+    await user.click(await screen.findByRole('link', { name: /^Publish in library/ }))
+    expect(await screen.findByRole('link', { name: 'Sign in' })).toHaveAttribute(
       'href',
       '/account/sign-in',
     )
@@ -196,10 +305,11 @@ describe('patterns in the Public library', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs/public', { publicLibrary: withPattern() })
     expect(await screen.findByText('No songs here yet.')).toBeVisible()
-    await user.click(screen.getByRole('link', { name: 'Patterns' }))
+    await user.click(screen.getByRole('radio', { name: 'Patterns' }))
     await waitFor(() => expect(router.state.location.search).toMatchObject({ kind: 'pattern' }))
     const list = await screen.findByRole('list', { name: 'Public library' })
     expect(within(list).getByRole('link', { name: /Waltz of mine/ })).toBeVisible()
+    expect(screen.getByText('1 pattern')).toBeVisible()
   })
 
   it('opens a pattern by its figures, and saves it to the learner’s patterns', async () => {

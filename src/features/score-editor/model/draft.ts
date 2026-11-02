@@ -15,7 +15,9 @@ import {
   type ChartPiece,
   type HandId,
   type LyricsStaff,
+  type PieceLayout,
   type PieceMusic,
+  type ScoreHeader,
   type Section,
   type StaffName,
 } from '@/entities/piece'
@@ -110,6 +112,10 @@ export interface DraftStaff {
 export interface Draft {
   /** The learner's own title (ADR 0114): an own song's, or a version's in place of the catalog's. */
   readonly title?: string
+  /** What prints under the title (ADR 0114): a subtitle, the composer, lyricist and arranger. */
+  readonly header?: ScoreHeader
+  /** How the score is laid out (ADR 0114): its staff size, the most bars a line holds. */
+  readonly layout?: PieceLayout
   readonly key: Key
   readonly meter: Meter
   /** 4/4 printed as common time's C, 2/2 as cut time's ¢ (ADR 0114). */
@@ -212,6 +218,8 @@ export function readDraft(music: PieceMusic): Draft {
   }
   return {
     ...(music.title === undefined ? {} : { title: music.title }),
+    ...(music.header ? { header: music.header } : {}),
+    ...(music.layout ? { layout: music.layout } : {}),
     key,
     meter: music.meter,
     ...(music.timeSymbol ? { timeSymbol: true } : {}),
@@ -281,6 +289,8 @@ export function writeDraft(draft: Draft): PieceMusic {
   }))
   return {
     ...(draft.title === undefined ? {} : { title: draft.title }),
+    ...(draft.header && Object.keys(draft.header).length > 0 ? { header: draft.header } : {}),
+    ...(draft.layout && Object.keys(draft.layout).length > 0 ? { layout: draft.layout } : {}),
     key: keyText(draft.key),
     meter: draft.meter,
     ...(draft.timeSymbol ? { timeSymbol: true } : {}),

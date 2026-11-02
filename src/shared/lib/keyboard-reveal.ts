@@ -86,14 +86,27 @@ function roomIn(scroller: Element): RevealBand {
   return { top, bottom: visibleBottom() }
 }
 
+/**
+ * What of a field must stand clear: the field with its label over it and its error under it, where
+ * the label holds them; of editable text (a whole lesson's document), the line the caret is in, never
+ * the text's top (round 28: a tap far down a lesson jumped the page to its start). Null where the
+ * caret is not in it.
+ */
+function shownOf(field: HTMLElement): Element | null {
+  if (!field.isContentEditable) return field.closest('label') ?? field
+  const caret = document.getSelection()?.focusNode ?? null
+  const line = caret instanceof Element ? caret : (caret?.parentElement ?? null)
+  return line && line !== field && field.contains(line) ? line : null
+}
+
 function reveal(field: HTMLElement) {
   if (!keyboardOpen()) return
   const scroller = scrollerOf(field)
   if (!scroller) return
   const room = roomIn(scroller)
   if (room.bottom - room.top <= 2 * REVEAL_GAP) return
-  // The field with its label over it and its error under it, where the label holds them.
-  const shown = field.closest('label') ?? field
+  const shown = shownOf(field)
+  if (!shown) return
   const delta = revealOffset(room, shown.getBoundingClientRect())
   if (delta !== 0) scroller.scrollTop += delta
 }

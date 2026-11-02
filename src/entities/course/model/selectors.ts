@@ -3,6 +3,7 @@ import type { PieceId } from '@/entities/piece'
 import { courseLessonStepId, type Stage, type StepId } from '@/entities/step'
 import { updatesLesson, type Lesson } from '@/entities/lesson'
 import { COURSES } from '../content'
+import { COURSE_ORDER_ID, inCourseOrder, isCourseOrder } from './order'
 import { isWholeCourse, updatesCourse, type Course, type Shelf } from './types'
 
 let built = {
@@ -16,8 +17,8 @@ let built = {
  * title, the summary and the lessons in order; each listed lesson is the database's copy (kept by
  * `<course>/<lesson>`) where it reads as the lesson, else the app's own, and one with neither is
  * passed over (not yet published). A kept record of a course the app does not have, with its shelf,
- * stage and weeks, is a course an editor made: listed after the app's own. Built again when the kept
- * content changes.
+ * stage and weeks, is a course an editor made: listed after the app's own. The catalog's published
+ * course order, where there is one, orders them all. Built again when the kept content changes.
  */
 function catalog(): typeof built {
   const kept = keptContent()
@@ -63,7 +64,9 @@ function catalog(): typeof built {
     const lessons = lessonsOf(id, record.lessons, new Map())
     return [{ id, title, summary, shelf, stage, weeks, lessons, songs: [] }]
   })
-  const courses = [...own, ...made]
+  // In the order Manage courses gave them, where one is published.
+  const order = kept.body('catalog', COURSE_ORDER_ID)
+  const courses = inCourseOrder([...own, ...made], isCourseOrder(order) ? order : undefined)
   built = {
     revision: kept.revision,
     courses,

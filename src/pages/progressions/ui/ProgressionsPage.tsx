@@ -1,11 +1,13 @@
 import { Link, useSearch } from '@tanstack/react-router'
 import { PencilLine, Plus } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { libraryProgression } from '@/entities/progression-library'
 import { useViewChange } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { keyFromParam } from '@/shared/lib/music'
-import { BackButton, RoundLink, ScreenHeader } from '@/shared/ui'
+import { BackButton, RoundButton, RoundLink, ScreenHeader } from '@/shared/ui'
+import { NewProgressionSheet } from '@/widgets/content-editor'
 import { ProgressionExplorer, type ProgressionsView } from '@/widgets/progression-explorer'
 
 /**
@@ -17,6 +19,7 @@ export function ProgressionsPage() {
   const view = useSearch({ from: '/shell/practice/progressions' })
   const onChange = useViewChange<ProgressionsView>()
   const { account } = useAccount()
+  const [newOne, setNewOne] = useState(false)
   // The library's progression in sight, an editor's to edit.
   const shown = libraryProgression(view.p, keyFromParam(view.key).minor)
   return (
@@ -39,16 +42,19 @@ export function ProgressionsPage() {
                   }
                 />
               ) : null}
-              <RoundLink
+              <RoundButton
                 label={t('progressions.edit.new')}
                 icon={Plus}
-                render={<Link to="/practice/progressions/new" />}
+                onClick={() => setNewOne(true)}
               />
             </>
           ) : undefined
         }
       />
       <ProgressionExplorer view={view} onChange={onChange} />
+      {editsContent(account) ? (
+        <NewProgressionSheet open={newOne} onOpenChange={setNewOne} />
+      ) : null}
     </div>
   )
 }

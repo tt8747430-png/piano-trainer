@@ -1,7 +1,6 @@
 /** The Admin area: accounts, groups, feature switches, the Public library's reports, the activity log. */
 export const admin = {
   title: 'Admin',
-  line: 'Accounts, groups, feature switches and reports',
   components: {
     actions: 'Actions',
     primary: 'Practise',
@@ -29,6 +28,7 @@ export const admin = {
     empty: 'Nothing here yet',
   },
   tabs: {
+    overview: 'Overview',
     accounts: 'Accounts',
     groups: 'Groups',
     switches: 'Switches',
@@ -76,6 +76,12 @@ export const admin = {
     states: { everyone: 'Everyone', nobody: 'No one', groups: 'Groups' },
     groups: 'The groups it is on for',
     delete: 'Delete switch',
+    deleteTitle: 'Delete “{{label}}”?',
+    deleteBody: 'The feature it holds back turns off for everyone.',
+    cancel: 'Keep it',
+    confirm: 'Delete',
+    new: 'New switch',
+    noGroups: 'No groups yet: make one in Groups.',
     invalidKey: 'Lower-case letters, digits and dashes, starting with a letter.',
   },
   reports: {
@@ -85,9 +91,21 @@ export const admin = {
     hide: 'Hide',
     show: 'Show again',
     block: 'Stop them publishing',
+    blockTitle: 'Stop {{name}} publishing?',
+    blockBody: 'They can no longer publish to the Public library. What they have published stays.',
+    cancel: 'Cancel',
     dismiss: 'Dismiss',
   },
   // What went wrong on learners' devices, the latest first (ADR 0116).
+  overview: {
+    title: 'This week',
+    accounts: 'Accounts',
+    newThisWeek: 'New this week',
+    activeThisWeek: 'Signed in this week',
+    errorsThisWeek: 'Errors this week',
+    reports: 'Reports to look at',
+    unpublished: 'Drafts not published',
+  },
   drafts: {
     none: 'No drafts. An editor’s changes wait here until they are published.',
     label: 'Drafts',
@@ -97,7 +115,8 @@ export const admin = {
       piece: 'Song',
       lesson: 'Lesson',
       course: 'Course',
-      journey: 'Journey',
+      catalog: 'Course order',
+      journey: 'Level',
       progression: 'Progression',
     },
   },

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { PAGE, paginate } from '@/shared/lib'
-import { SheetPage, SheetTitle } from '@/shared/ui'
+import type { ScoreHeader } from '@/entities/piece'
+import { creditsRoom, hasCredits, SheetCredits, SheetPage, SheetTitle } from '@/shared/ui'
 import type { ScoreLine } from '../model/score-lines'
 
 /** The room between lines, at print size. */
@@ -17,18 +18,21 @@ export function SheetPages({
   lines,
   height,
   title,
+  credits,
   line,
 }: {
   lines: readonly ScoreLine[]
   /** A line's height as engraved: its labels' row, its staves and the verses under its tune. */
   height: (line: ScoreLine) => number
   title: string
+  /** Printed under the title (ADR 0114). */
+  credits?: ScoreHeader | undefined
   line: (line: ScoreLine) => ReactNode
 }) {
   const dealt = paginate(
     lines,
     (each) => height(each) + LINE_GAP,
-    PAGE.height - 2 * PAGE.margin - TITLE_ROOM,
+    PAGE.height - 2 * PAGE.margin - TITLE_ROOM - creditsRoom(credits),
     undefined,
     // A page break before a line's first bar (ADR 0097).
     (each) => each.score.measures[0]?.pageBreak === true,
@@ -44,7 +48,10 @@ export function SheetPages({
         content:
           number === 0 && at === 0 ? (
             <div className="flex flex-col" style={{ gap: LINE_GAP }}>
-              <SheetTitle title={title} place="page" />
+              <div>
+                <SheetTitle title={title} place="page" />
+                {hasCredits(credits) ? <SheetCredits credits={credits} /> : null}
+              </div>
               {line(each)}
             </div>
           ) : (

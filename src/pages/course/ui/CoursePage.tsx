@@ -1,5 +1,5 @@
-import { Link, useParams } from '@tanstack/react-router'
-import { ArrowRight, Check, PencilLine, Play, RotateCcw } from 'lucide-react'
+import { Link, useNavigate, useParams } from '@tanstack/react-router'
+import { ArrowRight, Check, Play, RotateCcw, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { courseById, CourseIcon, courseStepIds, type Course } from '@/entities/course'
 import { PieceLink, pieceById } from '@/entities/piece'
@@ -8,7 +8,8 @@ import { STAGE_PAINT, stepOf } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { BackButton, ButtonLink, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
+import { BackButton, FabLink, FloatingActions, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
+import { EditToggle } from '@/widgets/mode-switch'
 import {
   CourseFacts,
   courseProgress,
@@ -20,8 +21,8 @@ import {
 } from '@/widgets/curriculum'
 
 /**
- * The course's one honey way in: Start course, or Continue onto the step to take; Review, onto its
- * first lesson, once every one is learned.
+ * The course's one way in, its floating action: Start course, or Continue onto the step to take;
+ * Review, onto its first lesson, once every one is learned.
  */
 function CourseAction({ course }: { course: Course }) {
   const { t } = useTranslation('learn')
@@ -37,32 +38,30 @@ function CourseAction({ course }: { course: Course }) {
       : t('course.continue')
   const Icon = !open ? RotateCcw : step.kind === 'piece' ? Play : ArrowRight
   return (
-    <ButtonLink
-      size="lg"
-      variant={open ? 'default' : 'outline'}
-      className="w-full sm:w-auto sm:min-w-48"
-      render={
-        step.kind === 'piece' ? (
-          // A guided song's page, where it is played and marked learned.
-          <PieceLink entry={pieceById(step.pieceId) ?? { id: step.pieceId, kind: 'song' }} />
-        ) : (
-          <Link
-            to="/courses/$courseId/$lessonId"
-            params={{ courseId: step.courseId, lessonId: step.lessonId }}
-          />
-        )
-      }
-    >
-      {label}
-      <Icon data-icon="inline-end" aria-hidden />
-    </ButtonLink>
+    <FloatingActions>
+      <FabLink
+        label={label}
+        icon={Icon}
+        render={
+          step.kind === 'piece' ? (
+            // A guided song's page, where it is played and marked learned.
+            <PieceLink entry={pieceById(step.pieceId) ?? { id: step.pieceId, kind: 'song' }} />
+          ) : (
+            <Link
+              to="/courses/$courseId/$lessonId"
+              params={{ courseId: step.courseId, lessonId: step.lessonId }}
+            />
+          )
+        }
+      />
+    </FloatingActions>
   )
 }
 
 /**
  * A course's page (ADR 0053, 0061): one card, its icon on its level's paint beside what it teaches
- * and its facts in words, and along its foot how much is learned and its one way in; then its
- * lessons numbered as taught, the next ringed, and its guided songs.
+ * and its facts in words, and along its foot how much is learned; then its lessons numbered as
+ * taught, the next ringed, and its guided songs. Its one way in floats.
  */
 export function CoursePage() {
   const { t } = useTranslation('learn')
@@ -70,6 +69,7 @@ export function CoursePage() {
   const { courseId } = useParams({ from: '/shell/courses/$courseId' })
   const learned = useProgress(selectLearned)
   const { account } = useAccount()
+  const navigate = useNavigate()
   const course = courseById(courseId)
   // The route finds no course that is not there.
   if (!course) return null
@@ -80,15 +80,30 @@ export function CoursePage() {
     <div className="flex flex-col gap-8">
       <ScreenHeader
         title={localText(course.title, locale)}
+        // A course's name in full over its page, as a song's: the bar echoes it once scrolled.
+        large
         back={<BackButton fallback={{ to: '/', search: { view: 'courses', journey: '' } }} />}
         actions={
-          editsContent(account) ? (
+          <>
             <RoundLink
-              label={t('edit.course.open')}
-              icon={PencilLine}
-              render={<Link to="/courses/$courseId/edit" params={{ courseId }} />}
+              label={t('settings.open')}
+              icon={Settings}
+              render={<Link to="/courses/$courseId/settings" params={{ courseId }} />}
             />
-          ) : undefined
+            {editsContent(account) ? (
+              <EditToggle
+                editing={false}
+                onDone={() => undefined}
+                onEdit={() =>
+                  void navigate({
+                    to: '/courses/$courseId/edit',
+                    params: { courseId },
+                    replace: true,
+                  })
+                }
+              />
+            ) : null}
+          </>
         }
       />
       {/* One card: what it is, its facts and progress, and its one way in along its foot. */}
@@ -108,7 +123,7 @@ export function CoursePage() {
             <CourseFacts course={course} level className="text-sm" />
           </div>
         </div>
-        <div className="flex flex-col gap-4 border-t border-hairline bg-muted/40 p-5 sm:flex-row sm:items-center">
+        <div className="flex flex-col gap-4 border-t border-hairline bg-muted/40 p-5">
           {isComplete(progress) ? (
             <p className="flex flex-1 items-center gap-2 font-semibold text-learned">
               <Check aria-hidden className="size-5" strokeWidth={3} />

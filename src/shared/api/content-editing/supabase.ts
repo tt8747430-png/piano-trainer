@@ -95,15 +95,32 @@ export function createSupabaseContentEditing(
       }),
     saveDraft: (kind, id, { body, meta }) =>
       ask(async (client) => {
-        check(
-          await client.from('content_drafts').upsert({
+        const keep = () =>
+          client.from('content_drafts').upsert({
             kind,
             id,
             body: body as Json,
             meta: meta as Json,
             updated_at: new Date().toISOString(),
-          }),
+          })
+        const kept = await keep()
+        // 23503: the database has not got the item yet (a built-in one never seeded). It is made,
+        // unpublished (learners keep the copy the app has), and the draft kept on it.
+        if (kept.error?.code !== '23503') return check(kept)
+        check(
+          await client.from('content_items').upsert(
+            {
+              kind,
+              id,
+              version: 'draft',
+              status: 'draft',
+              body: body as Json,
+              meta: meta as Json,
+            },
+            { onConflict: 'kind,id', ignoreDuplicates: true },
+          ),
         )
+        check(await keep())
       }),
     discardDraft: (kind, id) =>
       ask(async (client) => {
@@ -152,6 +169,41 @@ export function createSupabaseContentEditing(
             p_from_version: version,
           }),
         )
+      }),
+    unpublish: (kind, id) =>
+      ask(async (client) => {
+        const {
+          data: item,
+          error,
+          status,
+        } = await client
+          .from('content_items')
+          .select('body, meta')
+          .eq('kind', kind)
+          .eq('id', id)
+          .single()
+        if (error) throw thrown(error, status)
+        // Its body kept as its draft where it has none: the editor goes on from what learners had.
+        check(
+          await client
+            .from('content_drafts')
+            .upsert(
+              { kind, id, body: item.body, meta: item.meta },
+              { onConflict: 'kind,id', ignoreDuplicates: true },
+            ),
+        )
+        check(
+          await client
+            .from('content_items')
+            .update({ status: 'draft' })
+            .eq('kind', kind)
+            .eq('id', id),
+        )
+      }),
+    // Its draft and kept versions go with it (their foreign keys cascade).
+    remove: (kind, id) =>
+      ask(async (client) => {
+        check(await client.from('content_items').delete().eq('kind', kind).eq('id', id))
       }),
   }
 }

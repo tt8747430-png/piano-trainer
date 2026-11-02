@@ -1,5 +1,5 @@
 import { useMemo, useState, type ReactNode } from 'react'
-import { useStaffNames, type StaffName } from '@/entities/piece'
+import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
 import { selectKeyboard, selectScoreView, useSettings } from '@/entities/settings'
 import { MidiButton } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
@@ -28,6 +28,7 @@ import { SheetMusic } from '@/widgets/sheet-music'
 import { SongPrint } from '@/widgets/song-print'
 import { useChordKeys } from '../model/use-chord-keys'
 import { PlayerMore } from './PlayerMore'
+import type { ExportShare } from '@/features/song-files'
 import { PlayerViewMenu } from './PlayerViewMenu'
 
 /** A walk or a progression: one section, named nowhere. */
@@ -49,6 +50,8 @@ const NO_STAVES: readonly { readonly name?: StaffName }[] = []
  */
 export function PlayerLayout({
   title,
+  credits,
+  layout,
   onClose,
   view,
   player,
@@ -62,6 +65,7 @@ export function PlayerLayout({
   recording,
   more,
   musicXml,
+  share,
   status,
   openView = false,
 }: {
@@ -78,6 +82,10 @@ export function PlayerLayout({
    */
   recording?: Recording | undefined
   title: string
+  /** Printed under the title on the sheet (ADR 0114): a piece's subtitle, composer, lyricist, arranger. */
+  credits?: ScoreHeader | undefined
+  /** The score's staff size and the most bars a line holds (ADR 0114): a piece's. */
+  layout?: PieceLayout | undefined
   onClose: () => void
   view: PracticeView
   player: PracticePlayer
@@ -88,12 +96,14 @@ export function PlayerLayout({
   setup: ReactNode
   /** The tools row's after the View: a piece's Transpose and Simplify (ADR 0105); none for a walk. */
   tools?: ReactNode
-  /** Practise · Edit (ADR 0115), after Close: a piece's own, none for a walk. */
+  /** Edit (ADR 0115, round 26), at the bar's end: a piece's own, none for a walk. */
   modes?: ReactNode
-  /** The music's own in More, before Print: a piece's Song information, Sections and Share (ADR 0107). */
+  /** The music's own in More, before Print: a piece's Song information and Sections (ADR 0107). */
   more?: readonly MenuAction[] | undefined
-  /** More's Export to MusicXML, after its MIDI: a piece's music as written (ADR 0107). */
+  /** Export…'s MusicXML: a piece's music as written (ADR 0107). */
   musicXml?: (() => void) | undefined
+  /** Export…'s link: a piece's, as its page shares it. */
+  share?: ExportShare | undefined
   /** What the screen says beside Wait mode's line: what a piece's Share said. */
   status?: ReactNode
   /** The View open as the screen opens: a piece's, where the learner asks each time (ADR 0108). */
@@ -143,12 +153,7 @@ export function PlayerLayout({
           MIDI, Setup and More; the View and the music's tools. The loop is the transport's (ADR
           0108). */}
       <ScoreBar
-        lead={
-          <>
-            <PlayerClose onClose={onClose} />
-            {modes}
-          </>
-        }
+        lead={<PlayerClose onClose={onClose} />}
         actions={
           <>
             <MidiButton variant="tool" />
@@ -159,8 +164,10 @@ export function PlayerLayout({
               staves={names}
               actions={more}
               musicXml={musicXml}
+              share={share}
               onPrint={() => setPrinting(true)}
             />
+            {modes}
           </>
         }
         tools={
@@ -186,6 +193,8 @@ export function PlayerLayout({
             piano={piano}
             staffNames={names}
             title={title}
+            credits={credits}
+            layout={layout}
             performance={performance}
             headings={headings}
             current={practice.state.beatGroup}

@@ -42,7 +42,7 @@ ways, with a time limit and a Next that waits for the answer.
   (`Trainer.sides`). Like a progression, a cadence rates no skill.
 - **One setup for every trainer** (`widgets/trainer-setup`): the drill and what a card shows, Options (level,
   Custom's lists each a sheet of checks that never empties, switches, rounds), Timing (time limit, Go on
-  automatically), a card saying the drill in a sentence, the record, Start. Every explanation is an ⓘ. A run takes
+  automatically), the record, Start (held in reach at a phone's foot); the drill in a sentence behind the bar's ⓘ. Every explanation is an ⓘ. A run takes
   the setup's place until its X or its results' Done.
 - **What a trainer asks is view state** (its drill, level, rounds, time limit and Custom choices in the URL,
   remembered per trainer);
@@ -83,3 +83,5 @@ a case in `arrangeExercise`, whose test writes every exercise in every root on t
 - 0025 — Chords and Intervals in four drills, one setup for every trainer, a time limit, an answer-gated Next (2026-10-28).
 - r14 — Cadences, a trainer in the four drills, its cards naming their faces; Hanon's Nos. 1 to 20, the tempo
   ladder with each exercise's last tempo kept, the daily scale routine (2026-10-28).
+- r15 — The setup's groups named small over their cards; Start held at a phone's foot; the drill's sentence moved from a
+  card under the controls to the bar's ⓘ (2026-10-30).

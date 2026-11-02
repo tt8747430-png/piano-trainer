@@ -1,4 +1,4 @@
-import { Ear, Info, KeyboardMusic, Layers, ListChecks, type LucideIcon } from 'lucide-react'
+import { Ear, KeyboardMusic, Layers, ListChecks, Play, type LucideIcon } from 'lucide-react'
 import { useId, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectTrainer, useSettings, useSettingsStoreApi } from '@/entities/settings'
@@ -33,8 +33,16 @@ import {
   scaleKindsIn,
   type Midi,
 } from '@/shared/lib/music'
-import { Dropdown, Segmented, SettingField, SettingRows, SwitchRow, ToggleChips } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import {
+  Dropdown,
+  Fab,
+  FloatingActions,
+  Segmented,
+  SettingField,
+  SettingRows,
+  SwitchRow,
+  ToggleChips,
+} from '@/shared/ui'
 import { ListSheetRow } from './ListSheetRow'
 
 type ListField = keyof typeof CUSTOM_CHOICES
@@ -60,12 +68,12 @@ const WHITE_KEYS = Array.from({ length: 9 }, (_, octave) => ({
 const whiteKeyText = (key: Midi): string =>
   WHITE_KEYS.flatMap((group) => group.keys).find((white) => white.key === key)?.text ?? ''
 
-/** A titled group of a setup's rows on a card. */
+/** A titled group of a setup's rows on a card, its name small over it as Settings' groups. */
 function SetupGroup({ title, children }: { title: string; children: ReactNode }) {
   const id = useId()
   return (
     <section aria-labelledby={id} className="flex flex-col gap-2">
-      <h2 id={id} className="px-1 text-xl">
+      <h2 id={id} className="px-3 font-sans text-sm font-semibold text-muted-foreground">
         {title}
       </h2>
       <div className="card px-4 py-3">
@@ -78,9 +86,9 @@ function SetupGroup({ title, children }: { title: string; children: ReactNode })
 /**
  * Every trainer's setup, one template (ADR 0025): the drill (Flashcards, Quiz, Play, By ear) where it
  * has them and what a card shows; its Options (the level, Custom's lists each in a sheet, its
- * switches, the rounds); its Timing (a time limit, going on by itself); a card saying the drill in a
- * sentence; and one Start. Each choice is written to the URL, its own left out; what each does is
- * in an ⓘ beside its name.
+ * switches, the rounds); its Timing (a time limit, going on by itself); and one Start. Each choice is
+ * written to the URL, its own left out; what each does is in an ⓘ beside its name, and how the
+ * drill asks (`useTrainerHow`) in the ⓘ of the screen's bar.
  */
 export function TrainerSetup({
   trainer,
@@ -119,11 +127,6 @@ export function TrainerSetup({
       readList(view[field], CUSTOM_CHOICES[field] as readonly string[]),
       CUSTOM_OWN[field] as readonly string[],
     )
-  const { id } = trainer
-  const how =
-    id === 'chords' || id === 'intervals' || id === 'cadences'
-      ? t(`quiz:how.${id}.${drill ?? 'flashcards'}`)
-      : t(`quiz:how.${id}`)
 
   return (
     <div className="flex w-full max-w-2xl flex-col gap-6">
@@ -345,19 +348,17 @@ export function TrainerSetup({
         />
       </SetupGroup>
 
-      <aside
-        aria-label={t('quiz:setup.how')}
-        className="flex items-start gap-3 rounded-3xl bg-muted px-4 py-3 text-pretty text-muted-foreground"
-      >
-        <Info aria-hidden className="mt-0.5 size-5 shrink-0" />
-        <p>{how}</p>
-      </aside>
-
       {footer}
 
-      <Button size="pill" className="w-full sm:w-auto sm:min-w-56 sm:self-start" onClick={onStart}>
-        {t('quiz:setup.start')}
-      </Button>
+      {/* The one thing to do, always in reach: the floating action. */}
+      <FloatingActions>
+        <Fab
+          label={t('quiz:setup.start')}
+          icon={Play}
+          className="[&_svg]:fill-current"
+          onClick={onStart}
+        />
+      </FloatingActions>
     </div>
   )
 }

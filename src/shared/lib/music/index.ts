@@ -156,6 +156,7 @@ export {
   readChordSymbol,
   type ChordLine,
   printedChord,
+  printedNote,
   printedSymbol,
 } from './chord-symbol'
 export { nameChords, type FoundChord, type LeftOut } from './chord-finder'

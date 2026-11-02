@@ -92,6 +92,15 @@ export function pieceById(id: string): Piece | undefined {
 }
 
 /**
+ * Whether a piece has an original an editor may change (ADR 0116): a built-in song or study written
+ * in notes, not an own song nor one written in degrees.
+ */
+export function hasEditableOriginal(id: string): boolean {
+  const piece = pieceById(id)
+  return piece !== undefined && !isDegreePiece(piece)
+}
+
+/**
  * The catalog entry a learner may have a version of: every song, study and listing, a song written in
  * degrees as its chart in its key (ADR 0115).
  */

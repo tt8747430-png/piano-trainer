@@ -4,21 +4,35 @@ import { useTranslation } from 'react-i18next'
 import type { FeatureSwitch, Group, SwitchState } from '@/shared/api/admin'
 import { useAdmin } from '@/shared/lib/admin'
 import { FormField, InfoTip, RoundButton, Segmented } from '@/shared/ui'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/shared/ui/primitives/alert-dialog'
 import { Button } from '@/shared/ui/primitives/button'
 import { Switch } from '@/shared/ui/primitives/switch'
 import { useLoaded } from '../model/use-loaded'
-import { LoadedState } from './LoadedState'
+import { useChangeProblem } from '../model/use-change-problem'
+import { FailureLine, LoadedState } from './LoadedState'
 
 const STATES = ['everyone', 'nobody', 'groups'] as const satisfies readonly SwitchState[]
 const KEY = /^[a-z][a-z0-9-]{1,40}$/
 
-/** Feature switches: each on for everyone, no one or chosen groups; added by key and label. */
+/**
+ * Feature switches: each on for everyone, no one or chosen groups; added by key and label, deleted
+ * once asked.
+ */
 export function SwitchesTab() {
   const { t } = useTranslation('admin')
   const admin = useAdmin()
   const [key, setKey] = useState('')
   const [label, setLabel] = useState('')
-  const [problem, setProblem] = useState(false)
+  const [deleting, setDeleting] = useState<FeatureSwitch | null>(null)
   const load = useCallback(async () => {
     const [switches, groups] = await Promise.all([admin.switches(), admin.groups()])
     if (!switches.ok) return switches
@@ -26,18 +40,15 @@ export function SwitchesTab() {
     return { ok: true as const, value: { switches: switches.value, groups: groups.value } }
   }, [admin])
   const { loaded, reload } = useLoaded(load)
-  const save = (feature: FeatureSwitch) =>
-    void admin.saveSwitch(feature).then((result) => {
-      setProblem(!result.ok)
-      reload()
-    })
+  const { problem, after } = useChangeProblem(reload)
+  const save = (feature: FeatureSwitch) => void admin.saveSwitch(feature).then(after)
   const keyWrong = key !== '' && !KEY.test(key)
   return (
     <div className="flex flex-col gap-4">
-      <p className="flex items-center gap-1.5 font-semibold">
-        {t('tabs.switches')}
+      <h2 className="flex items-center gap-1 px-3 font-sans text-sm font-semibold text-muted-foreground">
+        {t('switches.new')}
         <InfoTip name={t('tabs.switches')}>{t('switches.info')}</InfoTip>
-      </p>
+      </h2>
       <form
         className="flex flex-col gap-3 sm:flex-row sm:items-end"
         onSubmit={(event) => {
@@ -67,7 +78,7 @@ export function SwitchesTab() {
           {t('switches.add')}
         </Button>
       </form>
-      {problem ? <p role="alert">{t('refused')}</p> : null}
+      {problem ? <FailureLine reason={problem} /> : null}
       <LoadedState loaded={loaded} reload={reload}>
         {({ switches, groups }) =>
           switches.length === 0 ? (
@@ -86,12 +97,7 @@ export function SwitchesTab() {
                     <RoundButton
                       label={t('switches.delete')}
                       icon={Trash2}
-                      onClick={() =>
-                        void admin.deleteSwitch(feature.key).then((result) => {
-                          setProblem(!result.ok)
-                          reload()
-                        })
-                      }
+                      onClick={() => setDeleting(feature)}
                     />
                   </div>
                   <Segmented
@@ -112,6 +118,28 @@ export function SwitchesTab() {
           )
         }
       </LoadedState>
+      <AlertDialog open={deleting !== null} onOpenChange={(open) => !open && setDeleting(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {t('switches.deleteTitle', { label: deleting?.label ?? '' })}
+            </AlertDialogTitle>
+            <AlertDialogDescription>{t('switches.deleteBody')}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('switches.cancel')}</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              onClick={() => {
+                if (deleting) void admin.deleteSwitch(deleting.key).then(after)
+                setDeleting(null)
+              }}
+            >
+              {t('switches.confirm')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
@@ -130,6 +158,9 @@ function SwitchGroups({
   return (
     <fieldset className="flex flex-col">
       <legend className="text-sm text-muted-foreground">{t('switches.groups')}</legend>
+      {groups.length === 0 ? (
+        <p className="py-2 text-sm text-muted-foreground">{t('switches.noGroups')}</p>
+      ) : null}
       {groups.map((group) => (
         <label key={group.id} className="flex min-h-11 items-center gap-3">
           <span className="min-w-0 flex-1 truncate text-sm">{group.name}</span>

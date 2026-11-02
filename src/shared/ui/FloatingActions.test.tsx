@@ -11,13 +11,12 @@ import {
   SpeedDial,
   SpeedDialAction,
 } from './FloatingActions'
-import type { FloatingPlace } from './floating-context'
 
 const root = () => document.documentElement.style
 
-function page(place: FloatingPlace, path: string) {
+function page(path: string) {
   return (
-    <FloatingHost place={place} labels={false} screen={path}>
+    <FloatingHost screen={path}>
       <main>
         <p>The page</p>
         <div role="toolbar" aria-label="Its own bar">
@@ -31,8 +30,8 @@ function page(place: FloatingPlace, path: string) {
   )
 }
 
-function renderActions(place: FloatingPlace = 'center', path = '/') {
-  return render(page(place, path))
+function renderActions(path = '/') {
+  return render(page(path))
 }
 
 const host = () => document.querySelector('[data-slot=floating-host]')
@@ -46,14 +45,6 @@ describe('FloatingHost', () => {
     expect(await screen.findByRole('button', { name: 'Play' })).toBeInTheDocument()
     await waitFor(() => expect(root().getPropertyValue('--floating-block')).toBe('68px'))
     expect(root().getPropertyValue('--floating-inline')).toBe('136px')
-  })
-
-  it('says which side they stand at where they stand beside the page', () => {
-    const { container } = renderActions('left')
-    expect(container.querySelector('[data-slot=floating-host]')).toHaveAttribute(
-      'data-place',
-      'left',
-    )
   })
 
   it('takes no room once the screen has gone', async () => {
@@ -82,12 +73,12 @@ describe('FloatingHost', () => {
 
   it('comes back on another screen, and stays back on returning to the one it left', async () => {
     const user = userEvent.setup()
-    const { rerender } = renderActions('center', '/a')
+    const { rerender } = renderActions('/a')
     await user.click(screen.getByText('The page'))
     expect(host()).toHaveAttribute('data-hidden')
-    rerender(page('center', '/b'))
+    rerender(page('/b'))
     expect(host()).not.toHaveAttribute('data-hidden')
-    rerender(page('center', '/a'))
+    rerender(page('/a'))
     expect(host()).not.toHaveAttribute('data-hidden')
   })
 })
@@ -127,7 +118,7 @@ describe('SpeedDial', () => {
 
   function renderDial() {
     return render(
-      <FloatingHost place="right" labels={false} screen="/">
+      <FloatingHost screen="/">
         <FloatingActions>
           <SpeedDial>
             <SpeedDialAction label="Share" icon={Share} />

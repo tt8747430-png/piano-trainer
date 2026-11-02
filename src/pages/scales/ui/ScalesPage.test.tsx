@@ -469,12 +469,12 @@ describe('Practice → Scales and keys, Key view', () => {
     expect(within(circle).getByRole('link', { name: 'B minor' })).toHaveTextContent('B°vii°')
     expect(within(circle).getByRole('link', { name: 'E♭ major' })).toHaveTextContent('3♭')
     // A key the circle names is printed as a chord is, over its signature's count and sign.
-    expect(within(circle).getByRole('link', { name: 'F# minor' })).toHaveTextContent('F♯m3♯')
+    expect(within(circle).getByRole('link', { name: 'F♯ minor' })).toHaveTextContent('F♯m3♯')
   })
 
   it('names a minor scale’s key and marks the notes its signature writes', async () => {
     await renderApp('/practice/scales?root=F%23&kind=harmonic&show=key')
-    expect(await screen.findByRole('heading', { level: 2, name: 'F# minor' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 2, name: 'F♯ minor' })).toBeInTheDocument()
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     // F♯ minor's 7th as its signature writes it is E, not harmonic minor's raised E♯.
     expect(shownText(within(keyboard).getByRole('button', { name: 'E5' }))).toContain('♭7')
@@ -485,8 +485,8 @@ describe('Practice → Scales and keys, Key view', () => {
     await renderApp('/practice/scales?root=Db&show=key')
     const circle = await screen.findByRole('navigation', { name: 'Circle of fifths' })
     // IV and ii of D♭ major stand on the places the circle calls F# major and D# minor.
-    expect(within(circle).getByRole('link', { name: 'F# major' })).toHaveTextContent('G♭IV')
-    expect(within(circle).getByRole('link', { name: 'D# minor' })).toHaveTextContent('E♭mii')
+    expect(within(circle).getByRole('link', { name: 'F♯ major' })).toHaveTextContent('G♭IV')
+    expect(within(circle).getByRole('link', { name: 'D♯ minor' })).toHaveTextContent('E♭mii')
     const borrowed = screen.getByRole('heading', { level: 3, name: 'Borrowed chords' })
     const names = within(borrowed.parentElement ?? circle)
       .getAllByRole('button')
@@ -525,7 +525,7 @@ describe('Practice → Scales and keys, Key view', () => {
       facts('Beside it on the circle')
         .getAllByRole('link')
         .map((each) => each.textContent),
-    ).toEqual(['E major', 'F# major'])
+    ).toEqual(['E major', 'F♯ major'])
     const degrees = screen.getByRole('table', { name: 'Scale degrees' })
     expect(
       within(degrees)
@@ -628,10 +628,10 @@ describe('Practice → Scales and keys, Key view', () => {
       '/practice/scales?root=F%23&kind=natural&show=key&melody=A%23&onlyInKey=true',
     )
     const harmonise = await screen.findByRole('region', { name: 'Harmonise a melody note' })
-    expect(within(harmonise).getByText('No chord of the key holds A#.')).toBeInTheDocument()
+    expect(within(harmonise).getByText('No chord of the key holds A♯.')).toBeInTheDocument()
     await user.click(within(harmonise).getByRole('button', { name: 'Show borrowed chords too' }))
     await waitFor(() => expect(router.state.location.search).not.toHaveProperty('onlyInKey', true))
-    expect(within(harmonise).queryByText('No chord of the key holds A#.')).not.toBeInTheDocument()
+    expect(within(harmonise).queryByText('No chord of the key holds A♯.')).not.toBeInTheDocument()
   })
 
   it('takes a random key from the header, staying on the Key view', async () => {

@@ -5,17 +5,17 @@ import { selectLearned, useProgress } from '@/entities/progress'
 import { continueStep } from '../model/continue-step'
 import { CourseCard } from './CourseCard'
 
-/** A shelf: its name, and its courses as compact cards, as many across as fit. */
+/** A shelf as a group of the library: its name small over one card of its courses' rows. */
 function ShelfSection({ shelf, current }: { shelf: Shelf; current: string | undefined }) {
   const { t } = useTranslation('learn')
   const id = useId()
   const courses = coursesOn(shelf)
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-3">
-      <h2 id={id} className="text-2xl text-balance">
+    <section aria-labelledby={id} className="flex flex-col gap-2">
+      <h2 id={id} className="px-3 font-sans text-sm font-semibold text-muted-foreground">
         {t(`shelves.${shelf}`)}
       </h2>
-      <ul className="grid-cards gap-3">
+      <ul className="flex flex-col divide-y divide-hairline overflow-hidden card">
         {courses.map((course) => (
           <li key={course.id}>
             <CourseCard course={course} current={course.id === current} />
@@ -35,7 +35,7 @@ export function CourseShelves() {
   const next = continueStep(learned)
   const current = next && 'course' in next ? next.course.id : undefined
   return (
-    <div className="flex flex-col gap-8">
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
       {SHELVES.map((shelf) => (
         <ShelfSection key={shelf} shelf={shelf} current={current} />
       ))}

@@ -24,6 +24,11 @@ export function OptionItems<V extends OptionValue>({
                 value={option.value}
                 aria-label={optionName(option)}
               >
+                {option.icon ? (
+                  <span aria-hidden className="inline-flex shrink-0 [&_svg]:size-5">
+                    {option.icon}
+                  </span>
+                ) : null}
                 {option.label}
                 {option.detail ? (
                   <>

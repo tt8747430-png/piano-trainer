@@ -54,8 +54,8 @@ describe('editing the built-in content', () => {
     expect(await port.publish('lesson', 'scales')).toMatchObject({ ok: false, reason: 'refused' })
   })
 
-  it('shows anyone but an editor nothing and refuses their changes, and a draft of no item', async () => {
-    const { port, set } = editing({ editor: false })
+  it('shows anyone but an editor nothing and refuses their changes', async () => {
+    const { port } = editing({ editor: false })
     expect(await port.draft('lesson', 'scales')).toEqual({ ok: true, value: null })
     expect(await port.versions('lesson', 'scales')).toEqual({ ok: true, value: [] })
     expect(await port.saveDraft('lesson', 'scales', { body: {}, meta: {} })).toMatchObject({
@@ -66,11 +66,22 @@ describe('editing the built-in content', () => {
       ok: false,
       reason: 'refused',
     })
-    set({ editor: true })
-    expect(await port.saveDraft('lesson', 'nothing', { body: {}, meta: {} })).toMatchObject({
-      ok: false,
-      reason: 'refused',
+  })
+
+  it('makes an item the database has not got yet (a built-in one never seeded) as its draft is kept, unpublished', async () => {
+    const { port } = editing()
+    const body = { id: 'chapters', v: 1 }
+    expect(await port.saveDraft('journey', 'foundations', { body, meta: { title: 'F' } })).toEqual({
+      ok: true,
+      value: undefined,
     })
+    expect(await port.draft('journey', 'foundations')).toMatchObject({ ok: true, value: { body } })
+    expect(await port.drafts()).toMatchObject({
+      ok: true,
+      value: [{ kind: 'journey', id: 'foundations', published: false }],
+    })
+    expect(await port.publish('journey', 'foundations')).toMatchObject({ ok: true })
+    expect(port.body('journey', 'foundations')).toEqual(body)
   })
 
   it('creates a new item unpublished, with its first draft; never one that is there', async () => {
@@ -93,6 +104,23 @@ describe('editing the built-in content', () => {
       ok: false,
       reason: 'refused',
     })
+  })
+
+  it('unpublishes an item made in the app, kept as its draft, then deletes it whole', async () => {
+    const { port, set } = editing()
+    const body = { id: 'arpeggios', v: 1 }
+    await port.create('lesson', 'arpeggios', { body, meta: { title: 'A' } })
+    await port.publish('lesson', 'arpeggios')
+    expect(await port.unpublish('lesson', 'arpeggios')).toEqual({ ok: true, value: undefined })
+    // Learners read it no more; the editor finds it where they left it, as a draft.
+    expect(port.body('lesson', 'arpeggios')).toBeUndefined()
+    expect(await port.draft('lesson', 'arpeggios')).toMatchObject({ ok: true, value: { body } })
+    expect(await port.remove('lesson', 'arpeggios')).toEqual({ ok: true, value: undefined })
+    expect(await port.draft('lesson', 'arpeggios')).toEqual({ ok: true, value: null })
+    expect(await port.versions('lesson', 'arpeggios')).toEqual({ ok: true, value: [] })
+    set({ editor: false })
+    expect(await port.remove('lesson', 'scales')).toMatchObject({ ok: false, reason: 'refused' })
+    expect(await port.unpublish('lesson', 'scales')).toMatchObject({ ok: false, reason: 'refused' })
   })
 
   it('lists the drafts, the newest first, each with its name and whether it was ever published', async () => {

@@ -2,7 +2,6 @@ import type { LocaleResources } from '../../types'
 
 export const admin: LocaleResources['admin'] = {
   title: 'Администрирование',
-  line: 'Аккаунты, группы, переключатели функций и жалобы',
   components: {
     actions: 'Действия',
     primary: 'Играть',
@@ -30,6 +29,7 @@ export const admin: LocaleResources['admin'] = {
     empty: 'Здесь пока ничего нет',
   },
   tabs: {
+    overview: 'Обзор',
     accounts: 'Аккаунты',
     groups: 'Группы',
     switches: 'Переключатели',
@@ -79,6 +79,12 @@ export const admin: LocaleResources['admin'] = {
     states: { everyone: 'Для всех', nobody: 'Ни для кого', groups: 'Для групп' },
     groups: 'Группы, для которых включено',
     delete: 'Удалить переключатель',
+    deleteTitle: 'Удалить «{{label}}»?',
+    deleteBody: 'Функция, которую он придерживает, выключится для всех.',
+    cancel: 'Оставить',
+    confirm: 'Удалить',
+    new: 'Новый переключатель',
+    noGroups: 'Групп пока нет: создайте группу во вкладке «Группы».',
     invalidKey: 'Строчные латинские буквы, цифры и дефисы; первая — буква.',
   },
   reports: {
@@ -88,7 +94,20 @@ export const admin: LocaleResources['admin'] = {
     hide: 'Скрыть',
     show: 'Показать снова',
     block: 'Запретить публиковать',
+    blockTitle: 'Запретить публиковать: {{name}}?',
+    blockBody:
+      'Этот автор больше не сможет публиковать в Общей библиотеке. Уже опубликованное останется.',
+    cancel: 'Отмена',
     dismiss: 'Закрыть',
+  },
+  overview: {
+    title: 'Эта неделя',
+    accounts: 'Аккаунты',
+    newThisWeek: 'Новых за неделю',
+    activeThisWeek: 'Входили за неделю',
+    errorsThisWeek: 'Ошибок за неделю',
+    reports: 'Жалоб на рассмотрении',
+    unpublished: 'Неопубликованных черновиков',
   },
   drafts: {
     none: 'Черновиков нет. Правки редактора ждут здесь, пока их не опубликуют.',
@@ -99,8 +118,9 @@ export const admin: LocaleResources['admin'] = {
       piece: 'Песня',
       lesson: 'Урок',
       course: 'Курс',
-      journey: 'Путь',
-      progression: 'Прогрессия',
+      catalog: 'Порядок курсов',
+      journey: 'Уровень',
+      progression: 'Последовательность',
     },
   },
   errors: {

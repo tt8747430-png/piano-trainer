@@ -110,12 +110,12 @@ export function ChordsOverLyrics({
     <section
       ref={scroller}
       aria-label={t('views.lyrics')}
-      className="-mx-gutter flex h-full scroll-pb-(--float-room) flex-col gap-4 overflow-y-auto overscroll-contain px-gutter text-base *:shrink-0 sm:text-lg landscape-phone:mx-0 landscape-phone:px-0"
+      className="-mx-gutter flex h-full scroll-pt-(--tools-room) scroll-pb-(--float-room) flex-col gap-4 pt-(--tools-room) overflow-y-auto overscroll-contain px-gutter text-base *:shrink-0 sm:text-lg landscape-phone:mx-0 landscape-phone:px-0"
     >
       <SheetTitle title={title} place="lines" />
       <div
         ref={strip}
-        className="sticky top-0 z-20 -mx-gutter bg-background py-2 landscape-phone:mx-0"
+        className="sticky top-(--tools-room) z-20 -mx-gutter bg-background py-2 landscape-phone:mx-0"
       >
         <BeatStrip
           performance={performance}

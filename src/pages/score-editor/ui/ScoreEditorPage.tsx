@@ -1,24 +1,30 @@
 import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { useMemo, useState, type ReactNode } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   entryById,
   entryTitles,
   isDegreePiece,
   isPiece,
+  musicOf,
   selectOwnSong,
   usePieces,
   usePiecesStoreApi,
   type ChartPiece,
 } from '@/entities/piece'
-import { DraftStrip, useMadeSong, useOriginalDraft } from '@/features/edit-original'
+import {
+  DraftActions,
+  DraftStatus,
+  draftWithMusic,
+  useMadeSong,
+  useOriginalDraft,
+} from '@/features/edit-original'
 import { useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, NotFound } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import { editorTarget, originalTarget } from '../model/editor-target'
-import { EditWhat } from './EditWhat'
+import { NotOpen } from './NotOpen'
 import { ScoreEditor } from './ScoreEditor'
 
 function Editing({ id }: { id: string }) {
@@ -32,30 +38,13 @@ function Editing({ id }: { id: string }) {
   const gone = usePieces(
     (state) => target?.kind === 'song' && selectOwnSong(state, target.id) === undefined,
   )
-  if (!target) return null
-  if (gone)
+  if (!target || gone)
     return (
       <NotFound>
         <ButtonLink render={<Link to="/songs" />}>{t('notFound.toSongs')}</ButtonLink>
       </NotFound>
     )
-  return <ScoreEditor target={target} bar={bar} head={<EditWhat original={false} />} />
-}
-
-/** A screen in the editor's place saying why it is not open yet: its line, and what to do. */
-function NotOpen({ line, children }: { line: string; children?: ReactNode }) {
-  return (
-    <Empty className="min-h-96">
-      <EmptyHeader>
-        <EmptyTitle>
-          <p role="status" className="text-lg">
-            {line}
-          </p>
-        </EmptyTitle>
-      </EmptyHeader>
-      {children ? <EmptyContent>{children}</EmptyContent> : null}
-    </Empty>
-  )
+  return <ScoreEditor target={target} bar={bar} />
 }
 
 /** A built-in song's original, an editor's to change (ADR 0116): its draft opened, then edited. */
@@ -65,10 +54,12 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
   const { bar } = useSearch({ from: '/full-screen/edit/$pieceId' })
   const draft = useOriginalDraft(piece)
   const { load, save } = draft
-  const target = useMemo(
-    () => (load.state === 'ready' ? originalTarget(piece, load.value, save) : null),
-    [load, piece, save],
-  )
+  // The score writes the draft's music; the rest of the song (what its page says) stays the draft's.
+  const target = useMemo(() => {
+    if (load.state !== 'ready') return null
+    const opened = load.value
+    return originalTarget(piece, musicOf(opened), (music) => save(draftWithMusic(opened, music)))
+  }, [load, piece, save])
   if (load.state === 'loading') return <NotOpen line={t('original.opening')} />
   if (load.state === 'failed' || !target)
     return (
@@ -87,16 +78,20 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
       key={draft.opened}
       target={target}
       bar={bar}
-      head={
-        <div className="flex flex-col items-center gap-2">
-          <EditWhat original />
-          <DraftStrip
+      draft={
+        // Where the draft stands and its menu (Publish first), in the score's bar by Done: never
+        // over the music (round 26).
+        <>
+          <DraftStatus draft={draft} className="px-1 max-[359px]:sr-only" />
+          <DraftActions
             draft={draft}
             title={entryTitles(piece, locale).primary}
             unreadable={t('original.unreadable')}
             onReset={draft.reopen}
+            publishInMenu
+            variant="tool"
           />
-        </div>
+        </>
       }
     />
   )
@@ -119,35 +114,21 @@ function MadeOriginal({ id }: { id: string }) {
 }
 
 /**
- * The original of the route's piece, where it has one an editor changes: a built-in song or study
- * written as a chart, or a song an editor made and has not published yet.
- */
-function OriginalOf({ id }: { id: string }) {
-  const { t } = useTranslation('editor')
-  const { account } = useAccount()
-  const entry = entryById(id)
-  const piece = entry && isPiece(entry) && !isDegreePiece(entry) ? entry : undefined
-  if (!editsContent(account) || (entry && !piece))
-    return (
-      <NotOpen line={t('original.editorsOnly')}>
-        <ButtonLink render={<Link to="/songs/$pieceId" params={{ pieceId: id }} />}>
-          {t('original.toSong')}
-        </ButtonLink>
-      </NotOpen>
-    )
-  return piece ? <EditingOriginal piece={piece} /> : <MadeOriginal id={id} />
-}
-
-/**
- * The score editor over the route's piece: a catalog song's, study's or listing's version, or an own
- * song; or, an editor's, a built-in song's original.
+ * The score editor over the route's piece. An editor edits the song everyone sees (ADR 0116): a
+ * built-in song or study written as a chart, or a song an editor made and has not published yet,
+ * its draft the server's. Anyone else edits their own song, or their version of a catalog song,
+ * study or listing.
  */
 export function ScoreEditorPage() {
   const { pieceId } = useParams({ from: '/full-screen/edit/$pieceId' })
-  const { original } = useSearch({ from: '/full-screen/edit/$pieceId' })
-  return original ? (
-    <OriginalOf key={pieceId} id={pieceId} />
-  ) : (
-    <Editing key={pieceId} id={pieceId} />
-  )
+  const { account } = useAccount()
+  const pieces = usePiecesStoreApi()
+  if (editsContent(account)) {
+    const entry = entryById(pieceId)
+    if (entry && isPiece(entry) && !isDegreePiece(entry))
+      return <EditingOriginal key={pieceId} piece={entry} />
+    if (!entry && !selectOwnSong(pieces.getState(), pieceId))
+      return <MadeOriginal key={pieceId} id={pieceId} />
+  }
+  return <Editing key={pieceId} id={pieceId} />
 }

@@ -1,6 +1,21 @@
 import { describe, expect, it } from 'vitest'
-import { lessonTexts, withLessonText } from './texts'
+import { lessonLanguages, lessonTexts } from './texts'
 import type { Lesson } from './types'
+
+describe('lessonLanguages (round 28)', () => {
+  const lesson: Lesson = {
+    id: 'l',
+    title: { en: 'Triads', ru: 'Трезвучия' },
+    summary: { en: 'Three notes', ru: 'Три ноты' },
+    sections: [],
+  }
+
+  it('names each language every text has words in', () => {
+    expect(lessonLanguages(lesson)).toEqual(['en', 'ru'])
+    expect(lessonLanguages({ ...lesson, summary: { en: 'Three notes', ru: ' ' } })).toEqual(['en'])
+    expect(lessonLanguages({ ...lesson, title: { en: '', ru: '' } })).toEqual([])
+  })
+})
 
 const t = (en: string, ru = `ru ${en}`) => ({ en, ru })
 
@@ -48,24 +63,5 @@ describe('a lesson’s words', () => {
       ['linkTitle', 1, 'Open chords'],
     ])
     expect(new Set(texts.map((text) => text.key)).size).toBe(texts.length)
-  })
-
-  it('writes a text in its place, the lesson otherwise as it was', () => {
-    const step = lessonTexts(LESSON).find((text) => text.text.en === 'Third')!
-    const written = withLessonText(LESSON, step.key, t('The third', 'Терция'))
-    expect(written.sections[0]?.blocks[2]).toEqual({
-      kind: 'steps',
-      steps: [t('Root'), t('The third', 'Терция')],
-    })
-    expect(written.sections[1]).toBe(LESSON.sections[1])
-    expect(LESSON.sections[0]?.blocks[2]).toEqual({ kind: 'steps', steps: [t('Root'), t('Third')] })
-    const title = lessonTexts(LESSON)[0]!
-    expect(withLessonText(LESSON, title.key, t('Chords of three')).title).toEqual(
-      t('Chords of three'),
-    )
-  })
-
-  it('leaves the lesson as it was for a key it has no text at', () => {
-    expect(withLessonText(LESSON, 's9.heading', t('x'))).toBe(LESSON)
   })
 })

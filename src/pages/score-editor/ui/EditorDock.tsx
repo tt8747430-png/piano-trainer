@@ -38,12 +38,15 @@ export function EditorDock() {
       onPlay={actions.togglePlay}
       onBack={() => dispatch({ type: 'move', by: 'step', direction: -1 })}
       onNext={() => dispatch({ type: 'move', by: 'step', direction: 1 })}
+      // A lesson's example keeps no takes: it is no song to record over (round 27).
       end={
-        <>
-          <RecordButton className={DOCK_BUTTON} />
-          <TakesButton className={DOCK_BUTTON} />
-          <RecordingSettings className={DOCK_BUTTON} />
-        </>
+        meta.kind === 'example' ? null : (
+          <>
+            <RecordButton className={DOCK_BUTTON} />
+            <TakesButton className={DOCK_BUTTON} />
+            <RecordingSettings className={DOCK_BUTTON} />
+          </>
+        )
       }
     />
   )

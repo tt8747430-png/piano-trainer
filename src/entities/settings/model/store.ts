@@ -14,6 +14,7 @@ import type { Midi } from '@/shared/lib/music'
 import { BPM_RANGE } from '@/shared/lib/schedule'
 import {
   CHORD_KEYS_MAX,
+  isLessonReading,
   DEFAULT_CHORD_FINDER,
   DEFAULT_MELODY,
   DEFAULT_METRONOME,
@@ -21,11 +22,11 @@ import {
   DEFAULT_MIDI,
   DEFAULT_SCORE_VIEW,
   DEFAULT_PRACTICE,
+  DEFAULT_EDITING,
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
-  DEFAULT_FLOATING,
   DEVICE_NAME_MAX,
   FOLDED_MAX,
   SECTION_ID_MAX,
@@ -34,7 +35,6 @@ import {
   SOUND_PARTS,
   defaultKeyboard,
   detectLocale,
-  isFloatingPlace,
   isKeyDock,
   isKeyLength,
   isDiagramsMode,
@@ -58,17 +58,17 @@ import {
   type MidiSettings,
   type PaletteFolds,
   type PracticeToggles,
+  type EditingSettings,
   type RecorderSettings,
   type ScoreViewSettings,
   type SettingsState,
   type SoundSettings,
-  type FloatingSettings,
   type TrainerSettings,
 } from './types'
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 16
+export const SETTINGS_VERSION = 17
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -90,9 +90,9 @@ export function createSettingsStore({
         practice: DEFAULT_PRACTICE,
         sound: DEFAULT_SOUND,
         trainer: DEFAULT_TRAINER,
-        floating: DEFAULT_FLOATING,
         keyboard: defaultKeyboard(finePointer),
         recorder: DEFAULT_RECORDER,
+        editing: DEFAULT_EDITING,
         sidebar: DEFAULT_SIDEBAR,
         paletteFolded: {},
         paletteSections: null,
@@ -103,6 +103,7 @@ export function createSettingsStore({
         metronome: DEFAULT_METRONOME,
         foldedSections: [],
         welcomed: false,
+        lessonReading: 'page',
       },
       read: sanitize,
     },
@@ -138,15 +139,6 @@ function soundSettings(value: unknown): SoundSettings {
   ) as Record<keyof SoundSettings, number>
 }
 
-/** Where the floating actions stand and whether they say their names, each as saved where valid. */
-function floatingSettings(value: unknown): FloatingSettings {
-  const saved = savedObject<FloatingSettings>(value)
-  return {
-    place: isFloatingPlace(saved.place) ? saved.place : DEFAULT_FLOATING.place,
-    labels: typeof saved.labels === 'boolean' ? saved.labels : DEFAULT_FLOATING.labels,
-  }
-}
-
 /** Each place's fold as saved where it is a boolean; a place never chosen stays unset. */
 /** The panel's open sections: names, or none chosen. */
 const paletteSections = (value: unknown): readonly string[] | null =>
@@ -176,6 +168,14 @@ function recorderSettings(value: unknown): RecorderSettings {
   return {
     click: typeof saved.click === 'boolean' ? saved.click : DEFAULT_RECORDER.click,
     tune: typeof saved.tune === 'boolean' ? saved.tune : DEFAULT_RECORDER.tune,
+  }
+}
+
+/** The editor's preferences keep what was saved; one never saved, or not valid, takes its default. */
+function editingSettings(value: unknown): EditingSettings {
+  const saved = savedObject<EditingSettings>(value)
+  return {
+    hearNotes: typeof saved.hearNotes === 'boolean' ? saved.hearNotes : DEFAULT_EDITING.hearNotes,
   }
 }
 
@@ -311,9 +311,9 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     practice: practiceToggles(saved.practice),
     sound: soundSettings(saved.sound),
     trainer: trainerSettings(saved.trainer),
-    floating: floatingSettings(saved.floating),
     keyboard: keyboardSettings(saved.keyboard, current.keyboard),
     recorder: recorderSettings(saved.recorder),
+    editing: editingSettings(saved.editing),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,
     paletteFolded: paletteFolds(saved.paletteFolded),
     paletteSections: paletteSections(saved.paletteSections),
@@ -324,5 +324,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     metronome: metronomeSettings(saved.metronome),
     foldedSections: foldedSections(saved.foldedSections),
     welcomed: saved.welcomed === true,
+    lessonReading: isLessonReading(saved.lessonReading) ? saved.lessonReading : 'page',
   }
 }

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { circleFunctions, degreeNames, noteName, printedSymbol, type Key } from '@/shared/lib/music'
+import { circleFunctions, degreeNames, type Key, printedNote } from '@/shared/lib/music'
 import { ChordText } from '@/shared/ui'
 
 /**
@@ -19,7 +19,7 @@ export function KeyDegrees({ value }: { value: Key }) {
             <tr key={chord.numeral} className="border-b border-border last:border-b-0">
               <td className="w-14 py-1.5 font-semibold text-muted-foreground">{chord.numeral}</td>
               <td className="py-1.5">{t(`degree.${names[degree] ?? 'tonic'}`)}</td>
-              <td className="w-12 py-1.5 font-semibold">{printedSymbol(noteName(chord.root))}</td>
+              <td className="w-12 py-1.5 font-semibold">{printedNote(chord.root)}</td>
               <td className="w-16 py-1.5">
                 <ChordText symbol={chord.symbol} />
               </td>

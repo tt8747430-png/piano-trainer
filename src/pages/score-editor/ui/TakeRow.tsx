@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Ellipsis } from 'lucide-react'
+import { Download, Ellipsis, NotebookPen, Trash2 } from 'lucide-react'
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Take } from '@/entities/take'
@@ -64,10 +64,22 @@ export function TakeRow({
           {
             key: 'write',
             label: t('recorder.write'),
+            icon: NotebookPen,
             onSelect: () => takes.show({ kind: 'write', id: take.id }),
           },
-          { key: 'download', label: t('recorder.download'), onSelect: () => takes.download(take) },
-          { key: 'delete', label: t('recorder.delete'), onSelect: () => setDeleting(true) },
+          {
+            key: 'download',
+            label: t('recorder.download'),
+            icon: Download,
+            onSelect: () => takes.download(take),
+          },
+          {
+            key: 'delete',
+            label: t('recorder.delete'),
+            icon: Trash2,
+            destructive: true,
+            onSelect: () => setDeleting(true),
+          },
         ]}
       />
       <DeleteTakeDialog

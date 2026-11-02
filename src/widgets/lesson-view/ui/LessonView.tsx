@@ -23,7 +23,8 @@ import type { Lesson, LessonAnswer } from '@/entities/lesson'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { localText, useLocale } from '@/shared/i18n'
-import { cn, LANDSCAPE_PHONE, useMediaQuery } from '@/shared/lib'
+import { selectLessonReading, useSettings } from '@/entities/settings'
+import { cn } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { usePlay } from '@/shared/lib/services'
 import {
@@ -190,7 +191,11 @@ function LessonBar({
   )
   if (paged)
     return (
-      <FloatingBar label={t('lessonBar')} className="w-[min(24rem,calc(100vw-2rem))] gap-1 pr-1">
+      <FloatingBar
+        label={t('lessonBar')}
+        // As wide as the row leaves it beside the keys' round button: never past the screen's edge.
+        className="w-[min(22rem,calc(100vw-2*var(--gutter)-3.75rem))] gap-1 pr-1"
+      >
         {section(at - 1, t('previousSection'), arrows(ChevronLeft, ChevronUp))}
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger
@@ -261,9 +266,6 @@ function LessonBar({
   )
 }
 
-/** Where a lesson reads a page at a time: a phone, held upright or on its side. */
-const PAGED = `(max-width: 639.98px), ${LANDSCAPE_PHONE}`
-
 /** The section a page's hash names (`#section-2`), by its place; the first where it names none. */
 function sectionAt(hash: string, of: number): number {
   const n = Number(/^section-(\d+)$/.exec(hash)?.[1] ?? 1)
@@ -297,7 +299,8 @@ export function LessonView({
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const play = usePlay()
-  const paged = useMediaQuery(PAGED)
+  // One page of its sections, or a section at a time where the learner chose it (round 26).
+  const paged = useSettings(selectLessonReading) === 'sections'
   const hash = useLocation({ select: (location) => location.hash })
   const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
   const scrolled = useReadingSection(paged ? [] : lesson.sections.map((_, s) => sectionId(s)))

@@ -33,45 +33,46 @@ async function writeChord(user: ReturnType<typeof userEvent.setup>, symbol: stri
 }
 
 describe('an editor’s draft of a built-in song’s original (ADR 0116)', () => {
-  it('is a switch in the one editor, an editor’s alone: Mine or The original', async () => {
-    const user = userEvent.setup()
-    const { router } = await renderApp(`/edit/${SONG.id}`, { auth: await signedInAs('editor') })
-    const what = await screen.findByRole('navigation', { name: 'What to edit' })
-    expect(within(what).getByRole('link', { name: 'Mine' })).toHaveAttribute('aria-current', 'page')
-    await user.click(within(what).getByRole('link', { name: 'The original' }))
-    await waitFor(() => expect(router.state.location.search).toMatchObject({ original: true }))
+  it('is the song’s one Edit for an editor: Settings shows changes only while some are unpublished', async () => {
+    await renderApp(`/songs/${SONG.id}/settings`, { auth: await signedInAs('editor') })
+    await screen.findByRole('heading', { level: 1, name: 'Settings' })
+    expect(screen.queryByRole('link', { name: /Edit the original/ })).not.toBeInTheDocument()
+    expect(screen.queryByText('Unpublished changes')).not.toBeInTheDocument()
   })
 
-  it('is no switch in a learner’s editor', async () => {
+  it('is an editor’s alone: a learner edits their own version, with no draft', async () => {
     await renderApp(`/edit/${SONG.id}`, { auth: await signedInAs('learner') })
-    await screen.findByRole('button', { name: /^Bar 1(:|$)/ })
-    expect(screen.queryByRole('navigation', { name: 'What to edit' })).not.toBeInTheDocument()
-  })
-
-  it('is an editor’s alone: a learner is told so, with the way back to the song', async () => {
-    await renderApp(`/edit/${SONG.id}?original=true`, { auth: await signedInAs('learner') })
-    expect(await screen.findByText('Only an editor edits a song’s original.')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Back to the song' })).toBeInTheDocument()
+    await screen.findByRole('button', { name: 'Undo' })
+    expect(screen.queryByRole('button', { name: 'Publishing' })).not.toBeInTheDocument()
   })
 
   it('saves a change to the draft, never the learner’s version, then publishes it', async () => {
     const user = userEvent.setup()
     const content = editing()
-    const { piecesStore } = await renderApp(`/edit/${SONG.id}?original=true`, {
+    const { piecesStore } = await renderApp(`/edit/${SONG.id}`, {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    const strip = await screen.findByRole('group', { name: 'Draft of the original' })
-    expect(within(strip).getByText('Original · not changed')).toBeInTheDocument()
-    expect(within(strip).getByRole('button', { name: 'Publish' })).toBeDisabled()
+    await screen.findByRole('button', { name: 'Publishing' })
+    const strip = document.body
+    // Nothing is said of the draft while the song is as published (round 28).
+    expect(within(strip).queryByRole('status', { name: /published/i })).not.toBeInTheDocument()
+    // Publish is the draft menu's first command (round 26): greyed while nothing is changed.
+    await user.click(screen.getByRole('button', { name: 'Publishing' }))
+    expect(await screen.findByRole('menuitem', { name: 'Publish' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
+    await user.keyboard('{Escape}')
 
     await writeChord(user, 'Dm7')
-    await within(strip).findByText('Draft · saved', {}, { timeout: 3000 })
+    await within(strip).findByText('Saved · not published', {}, { timeout: 3000 })
     const draft = await content.draft('piece', SONG.id)
     expect(JSON.stringify(draft.ok && draft.value?.body)).toContain('Dm7')
     expect(piecesStore.getState().versions).toEqual({})
 
-    await user.click(within(strip).getByRole('button', { name: 'Publish' }))
+    await user.click(screen.getByRole('button', { name: 'Publishing' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Publish' }))
     const asked = await screen.findByRole('alertdialog')
     await user.click(within(asked).getByRole('button', { name: 'Publish' }))
     expect(
@@ -86,26 +87,21 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
     const content = editing()
     const changed = { ...SONG, sections: [{ kind: 'verse' as const, lines: ['Em7 Em7 Em7 Em7'] }] }
     await content.saveDraft('piece', SONG.id, { body: pieceRecordBody(changed), meta: {} })
-    await renderApp(`/edit/${SONG.id}?original=true`, {
+    await renderApp(`/edit/${SONG.id}`, {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    const strip = await screen.findByRole('group', { name: 'Draft of the original' })
-    expect(within(strip).getByText('Draft · not published')).toBeInTheDocument()
+    await screen.findByRole('button', { name: 'Publishing' })
+    const strip = document.body
+    expect(within(strip).getByText('Not published')).toBeInTheDocument()
 
-    await user.click(within(strip).getByRole('button', { name: 'The draft’s menu' }))
+    await user.click(within(strip).getByRole('button', { name: 'Publishing' }))
     // On a narrow screen the menu is a sheet of buttons.
-    await user.click(await screen.findByRole('button', { name: 'Discard the draft' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Discard changes' }))
     const asked = await screen.findByRole('alertdialog')
-    await user.click(within(asked).getByRole('button', { name: 'Discard the draft' }))
-    expect(await screen.findByText('Draft discarded')).toBeInTheDocument()
-    await waitFor(() =>
-      expect(
-        within(screen.getByRole('group', { name: 'Draft of the original' })).getByText(
-          'Original · not changed',
-        ),
-      ).toBeInTheDocument(),
-    )
+    await user.click(within(asked).getByRole('button', { name: 'Discard changes' }))
+    expect(await screen.findByText('Changes discarded')).toBeInTheDocument()
+    await waitFor(() => expect(screen.queryByText('Not published')).not.toBeInTheDocument())
     expect(await content.draft('piece', SONG.id)).toEqual({ ok: true, value: null })
   })
 
@@ -117,13 +113,14 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
       meta: {},
     })
     await content.publish('piece', SONG.id)
-    await renderApp(`/edit/${SONG.id}?original=true`, {
+    await renderApp(`/edit/${SONG.id}`, {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    const strip = await screen.findByRole('group', { name: 'Draft of the original' })
-    await user.click(within(strip).getByRole('button', { name: 'The draft’s menu' }))
-    await user.click(await screen.findByRole('button', { name: 'Versions' }))
+    await screen.findByRole('button', { name: 'Publishing' })
+    const strip = document.body
+    await user.click(within(strip).getByRole('button', { name: 'Publishing' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Versions' }))
     const versions = await screen.findByRole('alertdialog')
     expect(within(versions).getByText('Newest')).toBeInTheDocument()
     await user.click(within(versions).getByRole('button', { name: 'Restore' }))
@@ -135,12 +132,12 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
 
   it('says it is offline rather than opening on what may be old', async () => {
     const content = createFakeContentEditing({ online: () => false })
-    await renderApp(`/edit/${SONG.id}?original=true`, {
+    await renderApp(`/edit/${SONG.id}`, {
       auth: await signedInAs('admin'),
       contentEditing: content,
     })
     expect(
-      await screen.findByText('You’re offline: the draft opens once you’re back online.'),
+      await screen.findByText('You’re offline: it opens once you’re back online.'),
     ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument()
   })

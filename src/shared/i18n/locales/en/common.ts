@@ -2,6 +2,8 @@ export const common = {
   appName: 'Piano Trainer',
   skipToContent: 'Skip to content',
   back: 'Back',
+  // Edit mode (Noji's, iOS's): a pencil in the bar enters it, a check leaves it.
+  editMode: { edit: 'Edit', done: 'Done' },
   nav: {
     label: 'Main navigation',
     songs: 'Songs',
@@ -75,6 +77,7 @@ export const common = {
     '13th': '13th',
   },
   // A screen's other actions, folded into one floating button.
+  more: 'More',
   moreActions: 'More actions',
   // What a Play button says while its sound plays.
   stop: 'Stop',
@@ -213,7 +216,6 @@ export const common = {
       label: 'Connected devices',
       info: 'With more than one connected, the app hears only the one chosen',
       any: 'Any keyboard',
-      anyDetail: 'Every keyboard connected is heard',
       none: 'No MIDI devices connected',
       inputOff: 'Turn on MIDI input to see your devices',
       away: 'Not connected',

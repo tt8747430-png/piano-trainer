@@ -12,6 +12,7 @@ import {
   type TempoUnit,
 } from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
+import type { PieceLayout, ScoreHeader } from './score-header'
 
 /** A saved id may name a piece a later version removed, so it stays a plain name. */
 export type PieceId = string
@@ -69,16 +70,18 @@ export interface Source {
   readonly page?: number
 }
 
-type CreditRole =
-  | 'authors'
-  | 'words-and-music'
-  | 'words'
-  | 'music'
-  | 'russian-text'
-  | 'harmony'
-  | 'accompaniment'
+export const CREDIT_ROLES = [
+  'authors',
+  'words-and-music',
+  'words',
+  'music',
+  'russian-text',
+  'harmony',
+  'accompaniment',
   /** Who published a learner's song to the Public library, on the copy another learner saved. */
-  | 'published-by'
+  'published-by',
+] as const
+type CreditRole = (typeof CREDIT_ROLES)[number]
 /** Names stay as printed; the role is shown through an interface string in the learner's language. */
 export type Credit =
   { readonly role: CreditRole; readonly names: string } | { readonly role: 'unknown' }
@@ -161,6 +164,10 @@ export interface ChartPiece extends PieceCommon {
    * else the upper staff; written only where it is another.
    */
   readonly lyricsOn?: LyricsStaff
+  /** What it prints under its title (ADR 0114): a subtitle, its composer, lyricist and arranger. */
+  readonly header?: ScoreHeader
+  /** How its score is laid out (ADR 0114): its staff size, the most bars a line holds. */
+  readonly layout?: PieceLayout
 }
 
 /**

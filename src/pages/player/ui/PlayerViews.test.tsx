@@ -174,12 +174,14 @@ describe('the Grid (ADR 0108)', () => {
     expect(bar).toHaveAttribute('aria-current', 'step')
     expect(bar.querySelector('[data-sounding]')).toHaveAttribute('data-beat', '2')
     expect(scrolled.mock.contexts).toEqual([bar])
-    expect(screen.getByRole('link', { name: 'Edit' })).toHaveAttribute('href', '/edit/bz5?bar=3')
     // Nothing plays: the move sounds where it lands, G/B's keys going down.
     expect(audio.played).toHaveLength(1)
     const down = keysDown(audio)
     expect(down.length).toBeGreaterThan(0)
     expect(down.every((name) => /^[GBD]\d$/.test(name))).toBe(true)
+    // Edit opens at the bar gone to (ADR 0115).
+    await user.click(screen.getByRole('button', { name: 'Edit' }))
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/Bar 3, beat 1/))
   })
 
   it('shows a bar of no chord as an empty bar named by its number, which a tap goes to (ADR 0114)', async () => {
@@ -552,7 +554,7 @@ describe('Diagrams (ADR 0108)', () => {
     const view = screen.getByRole('region', { name: 'Diagrams' })
     // Its sheet from Song information's chords: a diagram of the view is the music's to go to.
     await user.click(screen.getByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('button', { name: 'Song information' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Song information' }))
     const info = await screen.findByRole('dialog', { name: 'Song information' })
     await user.click(within(info).getByRole('button', { name: 'G: G B D' }))
     const sheet = await screen.findByRole('dialog', { name: 'G chord' })

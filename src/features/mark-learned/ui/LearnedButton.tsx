@@ -8,7 +8,7 @@ import { useLearned } from './use-learned'
 /**
  * A step's or a lesson's Learned toggle: a check waiting in soft ink; pressed, it wears the learned
  * paint's wash and its check sits on the paint. `round`, it is the check alone in a screen's bar,
- * named by its tooltip.
+ * named by its tooltip, on the bar's soft round fill as every bar action.
  */
 export function LearnedButton({
   step,
@@ -29,7 +29,7 @@ export function LearnedButton({
         onPressedChange={toggle}
         aria-label={t('learned.done')}
         title={t('learned.done')}
-        className="size-11 rounded-full px-0 text-muted-foreground aria-pressed:border-transparent aria-pressed:bg-learned aria-pressed:text-learned-foreground"
+        className="size-11 rounded-full border-transparent bg-muted/70 px-0 text-foreground hover:bg-muted aria-pressed:bg-learned aria-pressed:text-learned-foreground"
       >
         <Check aria-hidden strokeWidth={2.5} />
       </Toggle>

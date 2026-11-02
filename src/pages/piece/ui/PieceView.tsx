@@ -1,234 +1,105 @@
-import { Link, useRouter } from '@tanstack/react-router'
-import {
-  Ellipsis,
-  FileCode,
-  FileMusic,
-  Globe,
-  GlobeLock,
-  PencilLine,
-  Play,
-  RotateCcw,
-  Share2,
-  Trash2,
-} from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
+import { Link } from '@tanstack/react-router'
+import { PencilLine, Play, Settings } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { pieceStepId } from '@/entities/step'
 import {
-  entryTitles,
+  hasEditableOriginal,
   isDegreePiece,
   isOwnSongId,
-  musicOf,
-  PieceFactCards,
-  selectHasVersion,
-  usePieces,
+  PieceFactLine,
   type Piece,
 } from '@/entities/piece'
-import { selectView } from '@/entities/views'
-import { FavouriteButton, useSongActions } from '@/features/manage-library'
+import { pieceStepId } from '@/entities/step'
+import { FavouriteButton } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
-import { PublishDialog, PublishSaid, usePublish, type PublishItem } from '@/features/publish'
-import { ShareSaid, useShareSong } from '@/features/share-song'
-import { useSongExport } from '@/features/song-files'
 import { OPEN_PLAINLY } from '@/shared/lib'
-import { useLocale } from '@/shared/i18n'
-import { ActionMenu, ButtonLink, RoundLink } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
-import { playedAs } from '../model/played-as'
+import { editsContent, useAccount } from '@/shared/lib/account'
+import { ButtonLink, RoundLink } from '@/shared/ui'
+import { EditToggle } from '@/widgets/mode-switch'
 import { useSongLessons } from '../model/use-song-lessons'
 import { PieceAbout } from './PieceAbout'
 import { PieceByline } from './PieceByline'
 import { PieceChords } from './PieceChords'
-import { OwnMusicAsk } from './OwnMusicAsk'
 import { PieceHeader } from './PieceHeader'
 import { PieceProgressions } from './PieceProgressions'
 import { SectionRows } from './SectionRows'
+import { OriginalSongEdit, OwnSongEdit } from './SongEdit'
 
 /**
- * A piece with a chart, in one calm column: Learn the song (ADR 0111, amended). Its bar (Back, the
- * title, then Edit, its ♡ (ADR 0106) and More: Move to… and Archive (Restore while it is archived; a
- * study is in no library, ADR 0106), Share, Export to MIDI and to MusicXML (ADR 0107), and for the
- * learner's own music its way back, asked first). Edit opens the editor, where an editor switches to
- * the original (ADR 0116). Under the title its byline (what else it is called, its stage, who wrote
- * it); then, first and largest, Practise, the Player as it was left, with Learned beside it; its key, time and tempo as cards, the way to its key's scale under them and what is
- * said of it behind an ⓘ; its chords as diagrams, once, each opening its sheet; and, where it has
- * more than one, its sections, each a row to its page of lessons. Its chart is the Player's: the page
- * shows no keys but a chord's sheet's.
+ * A song's page (round 26, Noji's and memory-palaces' deck page), in one calm column. Its bar: Back,
+ * the title, then Settings (a gear: everything else it can be set to or done with, a page of its own)
+ * and Edit at its end: the page itself in place, where what it says is the learner's to write (their
+ * own song) or an editor's (one of the app's, round 28), else the learner's version of its score. Under the title its
+ * byline; the overview card, its key, time and tempo, its way to its key's scale, Practise (the Player
+ * as it was left), Learned and Favourite; what is said of it behind an ⓘ; its chords as diagrams,
+ * each opening its sheet; and, where it has more than one, its sections, each a row to its page of
+ * lessons.
  */
 export function PieceView({ piece }: { piece: Piece }) {
-  const { t } = useTranslation(['piece', 'player', 'songs'])
-  const locale = useLocale()
-  const own = isOwnSongId(piece.id) ? piece.id : null
-  const hasVersion = usePieces((state) => selectHasVersion(state, piece.id))
-  const title = entryTitles(piece, locale).primary
+  const { t } = useTranslation(['piece', 'songs'])
+  const own = isOwnSongId(piece.id)
   const { performance, headings, sections } = useSongLessons(piece)
-  const shared = useShareSong()
-  // An own song, written as a chart, may go to the Public library (ADR 0116).
-  // Held as a save holds an own song, its title beside its music: read back by `readSharedSong`.
-  const publishable = useMemo((): PublishItem | null => {
-    if (!own || isDegreePiece(piece)) return null
-    const music = musicOf(piece)
-    return {
-      kind: 'song',
-      sourceId: own,
-      title,
-      meta: { key: music.key, meter: music.meter },
-      body: { title, ...music },
-    }
-  }, [own, piece, title])
-  const publishing = usePublish(publishable)
-  const [publishAsked, setPublishAsked] = useState(false)
-  const [asking, setAsking] = useState(false)
-  // More, which takes the focus back from a dialog it opened: the action chosen is folded away.
-  const more = useRef<HTMLDivElement>(null)
   const step = pieceStepId(piece.id)
-  const router = useRouter()
-  // A song's place in the library (ADR 0106); a study, on Practice, is in none.
-  const library = useSongActions(piece)
+  // A study, on Practice, is in no library (ADR 0106): no favourite.
   const inLibrary = piece.kind !== 'study'
-  const files = useSongExport(piece)
-  const ownMusic = own
-    ? ({ kind: 'song', id: own, title } as const)
-    : hasVersion
-      ? ({ kind: 'version', id: piece.id, title } as const)
-      : null
-  const actions = [
-    ...(inLibrary ? library.actions : []),
-    // An own song carries its music; one of the app's is a link to itself, as last played (ADR 0107).
-    ...(own && isDegreePiece(piece)
-      ? []
-      : [
-          {
-            key: 'share',
-            label: t('share'),
-            icon: Share2,
-            onSelect: () =>
-              shared.share(
-                own && !isDegreePiece(piece)
-                  ? { kind: 'own', song: { title, music: musicOf(piece) } }
-                  : {
-                      kind: 'piece',
-                      id: piece.id,
-                      title,
-                      played: playedAs(
-                        piece,
-                        selectView(router.options.context.views.getState(), `/play/${piece.id}`),
-                      ),
-                    },
-              ),
-          },
-        ]),
-    ...(publishable
-      ? [
-          ...(publishing.state === 'published' || publishing.state === 'unknown'
-            ? []
-            : [
-                {
-                  key: 'publish',
-                  label: t(
-                    publishing.state === 'changed' ? 'songs:public.update' : 'songs:public.publish',
-                  ),
-                  icon: Globe,
-                  onSelect: () =>
-                    publishing.state === 'changed'
-                      ? void publishing.publish()
-                      : setPublishAsked(true),
-                },
-              ]),
-          ...(publishing.state === 'published' || publishing.state === 'changed'
-            ? [
-                {
-                  key: 'unpublish',
-                  label: t('songs:public.unpublish'),
-                  icon: GlobeLock,
-                  onSelect: () => void publishing.unpublish(),
-                },
-              ]
-            : []),
-        ]
-      : []),
-    // Its files, as the Player's More exports them (ADR 0107).
-    { key: 'midi', label: t('player:exportMidi'), icon: FileMusic, onSelect: files.midi },
-    {
-      key: 'musicxml',
-      label: t('player:exportMusicXml'),
-      icon: FileCode,
-      onSelect: files.musicXml,
-    },
-    ...(ownMusic
-      ? [
-          {
-            key: 'back',
-            label: t(ownMusic.kind === 'song' ? 'delete' : 'reset'),
-            icon: ownMusic.kind === 'song' ? Trash2 : RotateCcw,
-            destructive: true,
-            onSelect: () => setAsking(true),
-          },
-        ]
-      : []),
-  ]
-
+  const { account } = useAccount()
+  const [editing, setEditing] = useState(false)
+  const chart = isDegreePiece(piece) ? null : piece
+  const ownId = own && chart ? chart.id : null
+  const original = editsContent(account) && hasEditableOriginal(piece.id) ? chart : null
+  const done = () => setEditing(false)
+  if (editing && chart && isOwnSongId(chart.id))
+    return <OwnSongEdit piece={chart} id={chart.id} onDone={done} />
+  if (editing && original) return <OriginalSongEdit piece={original} onDone={done} />
+  const settings = (
+    <RoundLink
+      label={t('settings.open')}
+      icon={Settings}
+      render={<Link to="/songs/$pieceId/settings" params={{ pieceId: piece.id }} />}
+    />
+  )
   return (
     <div className="flex flex-col gap-6 pb-4">
       <PieceHeader
         entry={piece}
         actions={
-          <>
-            {/* Every piece is edited: one written in degrees as its chart in its key (ADR 0115). */}
-            <RoundLink
-              label={t('edit')}
-              icon={PencilLine}
-              render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
-            />
-            {inLibrary ? <FavouriteButton piece={piece.id} /> : null}
-            <div ref={more} className="contents">
-              <ActionMenu
-                label={t('more')}
-                align="end"
-                trigger={<Ellipsis aria-hidden />}
-                render={
-                  <Button
-                    variant="bar"
-                    size="icon"
-                    className="rounded-full"
-                    aria-label={t('more')}
-                    title={t('more')}
-                  />
-                }
-                actions={actions}
+          ownId || original ? (
+            <>
+              {settings}
+              <EditToggle editing={false} onEdit={() => setEditing(true)} onDone={done} />
+            </>
+          ) : (
+            <>
+              {/* Every piece is edited: one written in degrees as its chart in its key (ADR 0115). */}
+              <RoundLink
+                label={t('edit')}
+                icon={PencilLine}
+                render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
               />
-            </div>
-          </>
+              {settings}
+            </>
+          )
         }
       />
       <PieceByline piece={piece} />
-      <ShareSaid said={shared.said} />
-      <PublishSaid said={publishing.said} />
-      <PublishDialog
-        open={publishAsked}
-        onOpenChange={setPublishAsked}
-        title={title}
-        authorName={publishing.authorName}
-        signedIn={publishing.signedIn}
-        busy={publishing.busy}
-        onPublish={() => {
-          setPublishAsked(false)
-          void publishing.publish()
-        }}
-      />
-      {/* The one thing to do first: play it (ADR 0111, amended), the Player as it was left. */}
-      <div className="flex items-center gap-3">
+      <section aria-label={t('settings.overview')} className="flex flex-col gap-4 card p-4">
+        <PieceFactLine piece={piece} />
+        {/* The one thing to do first: play it (ADR 0111, amended), the Player as it was left. */}
         <ButtonLink
           size="lg"
-          className="h-14 flex-1 rounded-2xl text-lg sm:flex-none sm:px-8"
+          className="w-full"
           render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />}
         >
           <Play data-icon="inline-start" aria-hidden className="fill-current" />
           {t('practise')}
         </ButtonLink>
-        {own ? null : <LearnedButton step={step} className="h-14 rounded-2xl px-5 text-lg" />}
-      </div>
-      <PieceFactCards piece={piece} />
+        {own && !inLibrary ? null : (
+          <div className="flex items-center gap-2">
+            {own ? null : <LearnedButton step={step} className="h-11 flex-1" />}
+            {inLibrary ? <FavouriteButton piece={piece.id} /> : null}
+          </div>
+        )}
+      </section>
       <PieceAbout entry={piece} />
       <PieceChords performance={performance}>
         <PieceProgressions piece={piece} />
@@ -237,10 +108,6 @@ export function PieceView({ piece }: { piece: Piece }) {
       {sections.length > 1 ? (
         <SectionRows piece={piece} headings={headings} sections={sections} />
       ) : null}
-      {ownMusic ? (
-        <OwnMusicAsk piece={ownMusic} open={asking} onOpenChange={setAsking} returnTo={more} />
-      ) : null}
-      {inLibrary ? library.sheet : null}
     </div>
   )
 }

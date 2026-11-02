@@ -5,13 +5,11 @@ import { PlayerTool, PlayerTools } from '@/widgets/practice-player'
 import { KeysChip, PRINTED_PARTS, ScoreViewMenu, SheetViewFields } from '@/widgets/score-view-menu'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useStaffHeads } from '../model/use-staff-heads'
-import { EditCommands } from './EditCommands'
 import { EditorTranspose } from './EditorTranspose'
 
 /**
  * The View, the tools row's first as the Player's is (ADR 0108, 0115): named Sheet music, the score
- * being all the editor shows, its icon alone on a phone held upright, where the edit row's commands
- * share the row; its menu the sheet music's part of the View, then the keys' fold.
+ * being all the editor shows; its menu the sheet music's part of the View, then the keys' fold.
  */
 function EditorView({ disabled }: { disabled: boolean }) {
   const { t } = useTranslation(['player', 'music'])
@@ -25,7 +23,6 @@ function EditorView({ disabled }: { disabled: boolean }) {
           icon={Eye}
           label={t('music:view.label')}
           name={t('views.sheet')}
-          brief
           disabled={disabled}
         >
           <ChevronDown
@@ -44,9 +41,9 @@ function EditorView({ disabled }: { disabled: boolean }) {
 }
 
 /**
- * The editor's tools row (ADR 0115), the Player's in its place and height, so the sheet stands still
- * as Practise · Edit switches: the View, Transpose, then the edit row's commands (Delete, Copy, Cut,
- * Paste). While a take records, it waits for Stop.
+ * The editor's tools (ADR 0115), the Player's in their place, so the sheet stands still as Practise ·
+ * Edit switches: the View and Transpose, what is shown and in which key. What is done to the notes
+ * chosen floats by them (`SelectionActions`). While a take records, they wait for Stop.
  */
 export function EditorToolsRow() {
   const { t } = useTranslation('editor')
@@ -56,7 +53,6 @@ export function EditorToolsRow() {
     <PlayerTools label={t('tools')}>
       <EditorView disabled={recording} />
       <EditorTranspose disabled={recording} />
-      <EditCommands />
     </PlayerTools>
   )
 }

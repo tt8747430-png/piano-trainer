@@ -205,6 +205,14 @@ describe('tieNotes', () => {
     expect(shape(tieNotes(draft, 'rh', 0).hands.rh)).toEqual(['C4@0/4', 'E4@0/2', 'G4@2/2'])
   })
 
+  it('ties every note chosen, a run of one key chosen whole becoming one note (round 28)', () => {
+    const draft = draftOf({ staves: [{ notes: 'B4/1 B4/1 B4/1 A4/1' }] })
+    expect(shape(staffNotes(tieNotes(draft, 'staff0', { from: 0, to: 2 * B })))).toEqual([
+      'B4@0/3',
+      'A4@3/1',
+    ])
+  })
+
   it('changes nothing where no same key follows', () => {
     const draft = draftOf({ staves: [{ notes: 'B4/2 A4/2' }] })
     expect(tieNotes(draft, 'staff0', 0)).toBe(draft)

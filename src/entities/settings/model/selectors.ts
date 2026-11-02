@@ -8,13 +8,14 @@ import type {
   MidiSettings,
   PracticeToggles,
   RecorderSettings,
+  EditingSettings,
   PalettePlace,
   SettingsState,
   Sidebar,
   SoundSettings,
   Theme,
-  FloatingSettings,
   TrainerSettings,
+  LessonReading,
 } from './types'
 
 export const selectTheme = (state: SettingsState): Theme => state.theme
@@ -22,9 +23,9 @@ export const selectLocale = (state: SettingsState): Locale => state.locale
 export const selectPractice = (state: SettingsState): PracticeToggles => state.practice
 export const selectSound = (state: SettingsState): SoundSettings => state.sound
 export const selectTrainer = (state: SettingsState): TrainerSettings => state.trainer
-export const selectFloating = (state: SettingsState): FloatingSettings => state.floating
 export const selectKeyboard = (state: SettingsState): KeyboardSettings => state.keyboard
 export const selectRecorder = (state: SettingsState): RecorderSettings => state.recorder
+export const selectEditing = (state: SettingsState): EditingSettings => state.editing
 export const selectSidebar = (state: SettingsState): Sidebar => state.sidebar
 /** Whether the palette is folded where it stands: as the learner left it there, else the panel shown and the sheet compact. */
 export const selectPaletteFolded =
@@ -47,3 +48,6 @@ export const selectMelody = (state: SettingsState): MelodySource => state.melody
 export const selectMetronome = (state: SettingsState): MetronomeSettings => state.metronome
 
 export const selectWelcomed = (state: SettingsState): boolean => state.welcomed
+
+/** How a lesson reads (round 26): one page, or a section at a time. */
+export const selectLessonReading = (state: SettingsState): LessonReading => state.lessonReading

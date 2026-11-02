@@ -65,18 +65,6 @@ export interface TrainerSettings {
 }
 
 /** How every lesson shows its examples. */
-/** Where a screen's floating actions stand along its foot (ADR 0061). */
-export const FLOATING_PLACES = ['left', 'center', 'right'] as const
-export type FloatingPlace = (typeof FLOATING_PLACES)[number]
-export const isFloatingPlace = (value: unknown): value is FloatingPlace =>
-  FLOATING_PLACES.includes(value as FloatingPlace)
-
-/** A screen's floating actions: where they stand, and whether each says its name beside its icon. */
-export interface FloatingSettings {
-  readonly place: FloatingPlace
-  readonly labels: boolean
-}
-
 /** The keyboard settings: the same on every screen, set in Settings or from the keys' rail. */
 export interface KeyboardSettings {
   readonly keySize: KeySize
@@ -126,6 +114,12 @@ export interface RecorderSettings {
   readonly click: boolean
   /** The song's tune plays under the take. */
   readonly tune: boolean
+}
+
+/** How the score editor writes (round 28, MuseScore's and Dorico's note input preferences). */
+export interface EditingSettings {
+  /** A note sounds as it is chosen on the score or its pitch is changed (the keys sound themselves). */
+  readonly hearNotes: boolean
 }
 
 /** The MIDI keyboard's settings. */
@@ -258,9 +252,10 @@ export interface SettingsState {
   practice: PracticeToggles
   sound: SoundSettings
   trainer: TrainerSettings
-  floating: FloatingSettings
   keyboard: KeyboardSettings
   recorder: RecorderSettings
+  /** How the score editor writes (round 28). */
+  editing: EditingSettings
   sidebar: Sidebar
   /** Whether the score editor's palette is folded to its quick row and categories, by where it stands. */
   paletteFolded: PaletteFolds
@@ -279,7 +274,15 @@ export interface SettingsState {
   foldedSections: readonly string[]
   /** Whether the welcome was seen: the app's first run shows it once. */
   welcomed: boolean
+  /** How a lesson reads (round 26): one page of its sections, or a section at a time. */
+  lessonReading: LessonReading
 }
+
+/** How a lesson reads: one page of its sections (the plain page), or a section at a time. */
+export const LESSON_READINGS = ['page', 'sections'] as const
+export type LessonReading = (typeof LESSON_READINGS)[number]
+export const isLessonReading = (value: unknown): value is LessonReading =>
+  LESSON_READINGS.some((reading) => reading === value)
 
 export const DEFAULT_PRACTICE: PracticeToggles = {
   fingerNumbers: false,
@@ -311,9 +314,10 @@ export const DEFAULT_SOUND: SoundSettings = {
 export const DEFAULT_TRAINER: TrainerSettings = { autoNext: false }
 
 /** In the thumbs' middle, icons alone: a name is the button's tooltip and its screen reader's. */
-export const DEFAULT_FLOATING: FloatingSettings = { place: 'center', labels: false }
-
 export const DEFAULT_RECORDER: RecorderSettings = { click: true, tune: false }
+
+/** A note heard as it is edited, as notation software does by default. */
+export const DEFAULT_EDITING: EditingSettings = { hearNotes: true }
 
 /** The owner's piano sounds itself: the app sounds no MIDI key until asked. */
 export const DEFAULT_MIDI: MidiSettings = {

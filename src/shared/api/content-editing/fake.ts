@@ -91,8 +91,8 @@ export function createFakeContentEditing({
     draft: (kind, id) => read(async () => drafts.get(name(kind, id)) ?? null, null),
     saveDraft: (kind, id, { body, meta }) =>
       ask(async () => {
-        if (!published.has(name(kind, id)) && !unpublished.has(name(kind, id)))
-          throw refused('no such item')
+        // An item the database has not got yet (a built-in one never seeded) is made, unpublished.
+        if (!published.has(name(kind, id))) unpublished.add(name(kind, id))
         drafts.set(name(kind, id), { body, meta, updatedAt: now() })
       }),
     discardDraft: (kind, id) =>
@@ -122,6 +122,20 @@ export function createFakeContentEditing({
         const found = kept.get(name(kind, id))?.find((each) => each.version === version)
         if (!found) throw refused('nothing to publish')
         published.set(name(kind, id), found)
+      }),
+    unpublish: (kind, id) =>
+      ask(async () => {
+        const item = published.get(name(kind, id))
+        if (!item) throw refused('no such item')
+        if (!drafts.has(name(kind, id)))
+          drafts.set(name(kind, id), { body: item.body, meta: item.meta, updatedAt: now() })
+        published.delete(name(kind, id))
+        unpublished.add(name(kind, id))
+      }),
+    remove: (kind, id) =>
+      ask(async () => {
+        for (const store of [published, drafts, kept]) store.delete(name(kind, id))
+        unpublished.delete(name(kind, id))
       }),
   }
 }

@@ -30,7 +30,7 @@ import type {
   ProgressionSearch,
   WalkSearch,
 } from '@/pages/player'
-import type { EditSearch } from '@/pages/score-editor'
+import type { EditSearch, ExampleSearch } from '@/pages/score-editor'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
 import { isInversion, keyParam, note, noteParam } from '@/shared/lib/music'
 import { SWING_FEELS, TEMPO_RANGE, type SwingFeel } from '@/shared/lib/schedule'
@@ -245,12 +245,19 @@ export const EXERCISE_KEPT: readonly (keyof ExerciseSearch & string)[] = [
 ]
 
 // The score editor: whether its takes' sheet is open, whether Record is pressed as it opens, the
-// bar its caret opens on (its layout is a setting), and whether an editor edits the song's original.
-export const EDIT_DEFAULTS: EditSearch = { takes: false, record: false, original: false }
+// bar its caret opens on (its layout is a setting).
+export const EDIT_DEFAULTS: EditSearch = { takes: false, record: false }
 const readEditSearch = (raw: Raw): EditSearch => ({
   takes: raw.takes === true,
   record: raw.record === true,
   bar: bar(raw),
-  original: raw.original === true,
 })
 export const editSearch = routeSearch(readEditSearch, EDIT_DEFAULTS)
+
+// A lesson's example of notes on the score: its place among the lesson's, and its course.
+export const EXAMPLE_DEFAULTS: ExampleSearch = { n: 0 }
+const readExampleSearch = (raw: Raw): ExampleSearch => ({
+  n: wholeIn(raw.n, 0, 999, 0),
+  ...(typeof raw.course === 'string' && raw.course !== '' ? { course: raw.course } : {}),
+})
+export const exampleSearch = routeSearch(readExampleSearch, EXAMPLE_DEFAULTS)

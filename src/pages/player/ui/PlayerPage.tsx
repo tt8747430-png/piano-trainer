@@ -1,5 +1,5 @@
-import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { Info, ListTree, Share2 } from 'lucide-react'
+import { Link, useNavigate, useParams, useSearch } from '@tanstack/react-router'
+import { Info, ListTree, Settings2 } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -21,7 +21,7 @@ import { useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
 import { isCompound, noteParam } from '@/shared/lib/music'
 import { ButtonLink, NotFound, type MenuAction } from '@/shared/ui'
-import { ModeSwitch } from '@/widgets/mode-switch'
+import { ScoreEditToggle } from '@/widgets/mode-switch'
 import { useClose } from '../model/use-close'
 import type { PlayerSearch } from '../model/player-search'
 import { sectionAt, sectionStarts } from '../model/section-starts'
@@ -35,7 +35,8 @@ import { SongInfo } from './SongInfo'
 import { TransposeTool } from './TransposeTool'
 
 function PiecePlayer({ piece }: { piece: Piece }) {
-  const { t } = useTranslation(['player', 'piece'])
+  const { t } = useTranslation(['player', 'piece', 'songs', 'editor'])
+  const navigate = useNavigate()
   const locale = useLocale()
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
   const close = useClose(piece)
@@ -59,8 +60,8 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   useEffect(() => {
     if (search.bar !== undefined) openAt(search.bar)
   }, [search.bar])
-  // More's own (ADR 0108, 0107): the piece's information and its sections as sheets, and Share, as
-  // its page shares it, saying so where the status line is.
+  // More's own (ADR 0108, 0107): the piece's information and its sections as sheets; Export…'s link
+  // shares as its page does, saying so where the status line is.
   const [showing, setShowing] = useState<'info' | 'sections' | null>(null)
   const sheetOf = (sheet: 'info' | 'sections') => ({
     open: showing === sheet,
@@ -94,17 +95,21 @@ function PiecePlayer({ piece }: { piece: Piece }) {
       disabled: starts.length < 2,
       reason: t(`player:sections.one.${piece.kind}`),
     },
-    ...(sharing
-      ? [
-          {
-            key: 'share',
-            label: t('piece:share'),
-            icon: Share2,
-            onSelect: () => shared.share(sharing),
-          },
-        ]
-      : []),
+    // The score's Settings (round 28): every piece is edited, so every piece has them.
+    {
+      key: 'settings',
+      label: t('editor:scoreSettings.open'),
+      icon: Settings2,
+      onSelect: () =>
+        void navigate({ to: '/edit/$pieceId/settings', params: { pieceId: piece.id } }),
+    },
   ]
+  // Its link, a way out in Export… as on its page (ADR 0107).
+  const share = sharing
+    ? {
+        onSelect: () => shared.share(sharing),
+      }
+    : undefined
   // Its place in the learner's library (ADR 0106), first in More; a study is in none.
   const favourite = useFavouriteAction(piece.id)
   const library = useSongActions(piece)
@@ -117,6 +122,8 @@ function PiecePlayer({ piece }: { piece: Piece }) {
       <MoreActions value={inLibrary ? [favourite, ...library.actions] : []}>
         <PlayerLayout
           title={title}
+          credits={isDegreePiece(piece) ? undefined : piece.header}
+          layout={isDegreePiece(piece) ? undefined : piece.layout}
           onClose={close}
           view={search}
           player={player}
@@ -128,7 +135,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
           staves={isDegreePiece(piece) ? undefined : piece.staves}
           recording={piece.recording}
           // Every piece is edited: one written in degrees as its chart in its key (ADR 0115).
-          modes={<ModeSwitch pieceId={piece.id} mode="practise" bar={bar + 1} />}
+          modes={<ScoreEditToggle pieceId={piece.id} editing={false} bar={bar + 1} />}
           setup={
             <PieceSetup
               piece={piece}
@@ -153,6 +160,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
           }
           more={more}
           musicXml={files.musicXml}
+          share={share}
           status={<ShareSaid said={shared.said} />}
           // Chordify's "Show this when opening a song" (ADR 0108): the View, to choose how it shows.
           openView={askView}

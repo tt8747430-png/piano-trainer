@@ -1,1 +1,2 @@
-export { ModeSwitch, type ScoreMode } from './ui/ModeSwitch'
+export { EditToggle } from './ui/EditToggle'
+export { ScoreEditToggle } from './ui/ScoreEditToggle'

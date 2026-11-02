@@ -1,7 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { CirclePlay, Layers } from 'lucide-react'
 import { readProgression, type LessonLink } from '@/entities/lesson'
-import { STEP_PAINT } from '@/entities/step'
 import { pieceById } from '@/entities/piece'
 import { isDrill } from '@/features/trainer'
 import {
@@ -13,7 +11,8 @@ import {
   parseChordSymbol,
 } from '@/shared/lib/music'
 import { qualityParams } from '@/shared/lib'
-import { PAGE_TILES, RowLink } from '@/shared/ui'
+import { RowLink } from '@/shared/ui'
+import { linkTile } from '../model/link-tile'
 import { typedSearch } from '@/widgets/progression-explorer'
 
 /**
@@ -27,7 +26,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...PAGE_TILES.chords}
+          {...linkTile(target)}
           render={
             <Link
               to="/practice/chords"
@@ -41,7 +40,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...PAGE_TILES.scales}
+          {...linkTile(target)}
           render={
             <Link
               to="/practice/scales"
@@ -58,7 +57,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...PAGE_TILES.key}
+          {...linkTile(target)}
           render={
             <Link
               to="/practice/scales"
@@ -75,7 +74,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...PAGE_TILES.intervals}
+          {...linkTile(target)}
           render={
             <Link
               to="/practice/intervals"
@@ -88,7 +87,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...PAGE_TILES.tensions}
+          {...linkTile(target)}
           render={
             <Link
               to="/practice/chords"
@@ -104,7 +103,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...PAGE_TILES.lesson}
+          {...linkTile(target)}
           render={<Link to="/lessons/$lessonId" params={{ lessonId: target.lesson }} />}
         />
       )
@@ -113,7 +112,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...PAGE_TILES.progressions}
+          {...linkTile(target)}
           render={
             <Link
               to="/practice/progressions"
@@ -131,7 +130,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...PAGE_TILES.progressions}
+          {...linkTile(target)}
           render={<Link to="/practice/progressions" search={search} />}
         />
       )
@@ -140,7 +139,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...PAGE_TILES.key}
+          {...linkTile(target)}
           render={
             <Link
               to="/practice/scales"
@@ -160,7 +159,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...PAGE_TILES.progressions}
+          {...linkTile(target)}
           render={<Link to="/practice/progressions" search={search} />}
         />
       )
@@ -170,8 +169,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          icon={CirclePlay}
-          paint={PAGE_TILES.progressions.paint}
+          {...linkTile(target)}
           render={
             <Link
               to="/play/progression"
@@ -194,8 +192,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          icon={Layers}
-          paint="sky"
+          {...linkTile(target)}
           render={
             <Link
               to="/play/exercise/$exerciseId"
@@ -213,7 +210,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          {...PAGE_TILES.quiz}
+          {...linkTile(target)}
           render={
             <Link
               to="/practice/quiz/$trainerId"
@@ -229,8 +226,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
       return (
         <RowLink
           title={title}
-          icon={CirclePlay}
-          paint={STEP_PAINT[piece.kind]}
+          {...linkTile(target)}
           render={
             <Link
               to="/play/$pieceId"

@@ -47,14 +47,7 @@ export function ProgressionBetween({
   const allInKey = (way: PassingChords) => way.chords.every((chord) => chordInKey(chord, musicKey))
   const ways = passingChords(from, to, musicKey).filter((way) => !inKey || allInKey(way))
   return (
-    <FoldSection
-      title={t('progressions.between.title')}
-      fold={fold}
-      className="gap-4"
-      detail={
-        <p className="max-w-prose text-muted-foreground">{t('progressions.between.about')}</p>
-      }
-    >
+    <FoldSection title={t('progressions.between.title')} fold={fold} className="gap-4">
       <div className="grid-fields gap-x-10 gap-y-5">
         <Labelled label={t('progressions.between.pair')}>
           <Dropdown

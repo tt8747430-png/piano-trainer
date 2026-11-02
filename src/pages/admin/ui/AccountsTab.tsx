@@ -5,7 +5,8 @@ import { useLocale } from '@/shared/i18n'
 import { useAdmin } from '@/shared/lib/admin'
 import { ChoiceChips, SearchField } from '@/shared/ui'
 import { useLoaded } from '../model/use-loaded'
-import { LoadedState } from './LoadedState'
+import { useChangeProblem } from '../model/use-change-problem'
+import { FailureLine, LoadedState } from './LoadedState'
 
 const ROLES = ['learner', 'editor', 'admin'] as const satisfies readonly AccountRole[]
 
@@ -21,15 +22,15 @@ export function AccountsTab() {
     const timer = setTimeout(() => setAsked(query), 300)
     return () => clearTimeout(timer)
   }, [query])
-  const [problem, setProblem] = useState(false)
   const load = useCallback(() => admin.accounts(asked), [admin, asked])
   const { loaded, reload } = useLoaded(load)
+  const { problem, after } = useChangeProblem(reload)
   const date = (iso: string) =>
     new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(iso))
   return (
     <div className="flex flex-col gap-4">
       <SearchField value={query} onChange={setQuery} label={t('accounts.search')} />
-      {problem ? <p role="alert">{t('refused')}</p> : null}
+      {problem ? <FailureLine reason={problem} /> : null}
       <LoadedState loaded={loaded} reload={reload}>
         {(accounts) =>
           accounts.length === 0 ? (
@@ -40,7 +41,9 @@ export function AccountsTab() {
                 <li key={account.id} className="flex flex-col gap-3 card p-4">
                   <div className="min-w-0">
                     <p className="truncate font-semibold">{account.name || account.email}</p>
-                    <p className="truncate text-sm text-muted-foreground">{account.email}</p>
+                    {account.name ? (
+                      <p className="truncate text-sm text-muted-foreground">{account.email}</p>
+                    ) : null}
                     <p className="text-sm text-muted-foreground">
                       {t('accounts.joined', { date: date(account.joinedAt) })} ·{' '}
                       {account.lastSignInAt
@@ -55,12 +58,7 @@ export function AccountsTab() {
                       value: role,
                       label: t(`accounts.roles.${role}`),
                     }))}
-                    onChange={(role) =>
-                      void admin.setRole(account.id, role).then((result) => {
-                        setProblem(!result.ok)
-                        reload()
-                      })
-                    }
+                    onChange={(role) => void admin.setRole(account.id, role).then(after)}
                   />
                 </li>
               ))}

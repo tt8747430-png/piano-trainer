@@ -24,6 +24,14 @@ describe('addStaff (ADR 0097)', () => {
     expect(addStaff(draftOf(), 0).staves).toHaveLength(1)
   })
 
+  it('adds an instrument’s staff under its name and in its clef (round 28)', () => {
+    const tenor = addStaff(draftOf(TWO), 2, {
+      name: { en: 'Tenor', ru: 'Тенор' },
+      clef: 'treble-8vb',
+    }).staves[2]
+    expect(tenor).toEqual({ name: { en: 'Tenor', ru: 'Тенор' }, clef: 'treble-8vb', notes: [] })
+  })
+
   it('keeps the words on their staff, and gives a song with none yet its top staff for them', () => {
     const sung = draftOf({ ...TWO, lyrics: ['one two'], lyricsOn: 1 })
     expect(addStaff(sung, 0).lyricsOn).toBe(2)

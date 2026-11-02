@@ -17,7 +17,8 @@ function DeviceFace({
 }: {
   icon: typeof Piano
   name: string
-  detail: string
+  /** What the device is, where the list knows: its maker and what it has. */
+  detail?: string | undefined
   away?: boolean
 }) {
   return (
@@ -30,14 +31,14 @@ function DeviceFace({
       </span>
       <span className="flex min-w-0 flex-col">
         <span className="truncate font-semibold">{name}</span>
-        <span className="truncate text-sm text-muted-foreground">{detail}</span>
+        {detail ? <span className="truncate text-sm text-muted-foreground">{detail}</span> : null}
       </span>
     </span>
   )
 }
 
 /**
- * The MIDI devices connected, as the MIDI screen lists them: Any keyboard (every one heard), then
+ * The MIDI devices connected, as the MIDI screen lists them: Any keyboard, then
  * each device by its name with its maker and what it has (keys, a speaker), the one heard checked;
  * choosing one hears it alone. A device chosen that is unplugged stays in the list, away. With none,
  * an empty state: an unplugged cable and one line.
@@ -79,13 +80,7 @@ export function MidiDeviceList() {
             {
               key: '',
               selected: chosen === null,
-              content: (
-                <DeviceFace
-                  icon={Usb}
-                  name={t('midiSettings.devices.any')}
-                  detail={t('midiSettings.devices.anyDetail')}
-                />
-              ),
+              content: <DeviceFace icon={Usb} name={t('midiSettings.devices.any')} />,
               onChoose: () => setMidi(store, { device: null }),
             },
             ...keyboards.map((device) => ({

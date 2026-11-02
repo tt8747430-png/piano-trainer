@@ -438,7 +438,9 @@
 }
 /* While the phone's keyboard is up (`keyboard-viewport`'s `data-keyboard`), what floats at the
    screen's foot steps aside rather than ride on the keyboard: the floating actions, the toasts, and
-   the phone's tab bar (Mindscape's, its ADR 0002). The page pads for them no more: its foot pads by
+   the phone's tab bar (Mindscape's, its ADR 0002). The tab bar is the places' own too: on what a place
+   opens (`data-away`) it steps away and the screen has the whole height; a bar that takes its place
+   (Select's, `data-takes-tab-bar`) stands there alone. The page pads for them no more: its foot pads by
    the keyboard's range instead (`pb-foot-*`). */
 :root[data-keyboard] {
   --floating-foot: 0px;
@@ -448,11 +450,40 @@
   display: none;
 }
 @media (orientation: portrait) and (max-width: 63.99rem) {
-  :root[data-keyboard] {
+  :root:has([data-slot='app-nav'][data-away]),
+  :root:has([data-takes-tab-bar]) {
+    /* The foot is the home indicator's then: what floats keeps its gap above it. */
+    --nav-bar: env(safe-area-inset-bottom);
+  }
+  /* The keyboard covers the foot: nothing to keep a gap above (it wins over the rule above). */
+  :root[data-keyboard],
+  :root[data-keyboard]:has([data-slot='app-nav'][data-away]),
+  :root[data-keyboard]:has([data-takes-tab-bar]) {
     --nav-bar: 0px;
   }
-  :root[data-keyboard] [data-slot='app-nav'] {
+  /* The tab bar comes and goes as memory-palaces' does: it fades and slides from the foot, never
+     cut in or out (a display swap that waits for the fade, and a start style for its return). */
+  [data-slot='app-nav'] {
+    transition:
+      opacity 180ms ease-out,
+      translate 180ms ease-out,
+      display 180ms allow-discrete;
+    @starting-style {
+      opacity: 0;
+      translate: 0 40%;
+    }
+  }
+  :root[data-keyboard] [data-slot='app-nav'],
+  [data-slot='app-nav'][data-away],
+  :root:has([data-takes-tab-bar]) [data-slot='app-nav'] {
     display: none;
+    opacity: 0;
+    translate: 0 40%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot='app-nav'] {
+      transition: none;
+    }
   }
 }
 /* A sheet over the phone's keyboard stands on it: Base UI's VirtualKeyboardProvider measures the room
@@ -707,6 +738,15 @@
   /* The music's scroll room under the transport floating over its foot: room to scroll into, never a
      row kept empty. */
   --float-room: 5.5rem;
+  /* The music's scroll room under the tools floating at its head on a phone held upright and a tablet
+     (the score bar's capsule): room to scroll from, never a row kept empty. */
+  --tools-room: 4.25rem;
+  @variant md {
+    --tools-room: 0px;
+  }
+  @variant landscape-phone {
+    --tools-room: 0px;
+  }
   /* How far the screen's top padding lies above the bar: its band reaches the screen's top edge. */
   --bar-above: calc(--spacing(2) + max(--spacing(4), env(safe-area-inset-top)));
   & > [data-area='bar'] {
@@ -784,9 +824,7 @@
   isolation: isolate;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    'lead actions'
-    'tools tools';
+  grid-template-areas: 'lead actions';
   align-items: center;
   column-gap: --spacing(2);
   padding-bottom: --spacing(1);
@@ -807,16 +845,54 @@
   & > [data-area='actions'] {
     grid-area: actions;
   }
+  /* Where the bar is one row too narrow for them (a phone held upright), the tools float under it as
+     a capsule over the music, in its middle as the transport floats in the middle of its foot (ADR
+     0115, round 27): they act on what is shown, not on where the learner is, and take no room from
+     the sheet. From a tablet up they sit in the bar, so the editor's note toolbar has the music's
+     head to itself. */
   & > [data-area='tools'] {
-    grid-area: tools;
+    position: absolute;
+    top: calc(100% + --spacing(2));
+    /* In the middle of the music, as the transport floats at its foot (round 27): never pinned left. */
+    left: 50%;
+    translate: -50% 0;
+    z-index: 20;
+    width: fit-content;
+    max-width: 100%;
+    padding: --spacing(0.5) --spacing(1.5);
+    border: 1px solid var(--color-border);
+    border-radius: 9999px;
+    background: var(--color-raised);
+    box-shadow: var(--elevation-2);
   }
   @variant max-sm {
     column-gap: --spacing(1);
   }
-  @variant lg {
+  /* A 320px phone (round 28): the editor's six (MIDI, Undo, Redo, Settings, Done) and Close fit in a
+     row with their gaps closed and each button a little narrower, still 40px to touch. */
+  @media (width < 360px) {
+    & > [data-area='actions'] {
+      gap: 0;
+    }
+    & > [data-area] > [data-slot='button'] {
+      min-width: 2.5rem;
+      width: 2.5rem;
+    }
+  }
+  @variant md {
     grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-areas: 'lead tools actions';
     column-gap: --spacing(3);
+    & > [data-area='tools'] {
+      position: static;
+      translate: none;
+      grid-area: tools;
+      width: auto;
+      padding: 0;
+      border: 0;
+      background: none;
+      box-shadow: none;
+    }
   }
   @variant landscape-phone {
     grid-template-columns: subgrid;
@@ -826,7 +902,14 @@
       grid-area: 1 / 1;
     }
     & > [data-area='tools'] {
+      position: static;
+      translate: none;
       grid-area: 1 / 2;
+      width: auto;
+      padding: 0;
+      border: 0;
+      background: none;
+      box-shadow: none;
     }
     & > [data-area='actions'] {
       grid-area: 1 / 4;

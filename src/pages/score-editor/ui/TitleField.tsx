@@ -1,9 +1,10 @@
+import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TITLE_MAX } from '@/entities/piece'
 import { cn } from '@/shared/lib'
-import { SheetTitle, type TitlePlace } from '@/shared/ui'
-import { useScoreEditorContext } from '../model/editor-context'
+import { hasCredits, SheetCredits, SheetTitle, type TitlePlace } from '@/shared/ui'
+import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /** The title: at the line's head across, else centred, its field as wide as the sheet. */
 const PLACED = { across: '', centred: 'text-center' } as const
@@ -90,6 +91,36 @@ export function TitleField({ place }: { place: TitlePlace }) {
           </button>
         )}
       </SheetTitle>
+      {place === 'across' ? null : <CreditsField />}
     </div>
+  )
+}
+
+/**
+ * What prints under the title (round 28, Flat's credits): a click opens the score's Settings at its
+ * names, as Flat's title opens its credits. A lesson's example has no Settings: printed alone.
+ */
+function CreditsField() {
+  const { t } = useTranslation('editor')
+  const { meta } = useScoreEditorContext()
+  const credits = useEditorState((state) => state.draft.header)
+  const navigate = useNavigate()
+  if (!hasCredits(credits)) return null
+  if (meta.kind === 'example') return <SheetCredits credits={credits} />
+  return (
+    <button
+      type="button"
+      title={t('scoreSettings.title')}
+      onClick={() =>
+        void navigate({
+          to: '/edit/$pieceId/settings',
+          params: { pieceId: meta.id },
+          search: (prev) => prev,
+        })
+      }
+      className="block w-full rounded-lg px-1 text-start transition-colors duration-200 ease-out hover:bg-foreground/5"
+    >
+      <SheetCredits credits={credits} />
+    </button>
   )
 }

@@ -69,11 +69,14 @@ export function linesOf(
   draft: Draft,
   fit?: { readonly room: number; readonly widths: readonly number[] },
 ): SheetLineBars[] {
+  // The most bars a line holds, the score's layout's (ADR 0114): fewer where they do not fit.
+  const most = draft.layout?.barsPerLine
   const cut = chartLines(draft).flatMap((line) => {
-    if (!fit) return [line]
+    if (!fit && most === undefined) return [line]
     const sizes = breakLine(
-      line.bars.map((placed) => fit.widths[placed.index] ?? 0),
-      fit.room,
+      line.bars.map((placed) => fit?.widths[placed.index] ?? 0),
+      fit?.room ?? Infinity,
+      most,
     )
     let at = 0
     return sizes.map((size) => {

@@ -41,7 +41,9 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   content is edited in the app (round 6), `entities/*/content` is the source: `scripts/export-content.mjs` and
   `scripts/seed-content.mjs` publish it.
 - **The Public library:** a learner's own song is private until they publish it (its More: Publish to the Public
-  library, asked first with what it means and the rights it takes; Update once it has changed; Remove). A published
+  library, a sheet as Noji's: a description of at least 20 characters, kept in `meta.description` (the item's JSON,
+  no column of its own), the row as others will see it, the rights in a line and why publish behind the ⓘ;
+  published, the page's card says so with View, Edit or Update, and Unpublish). A published
   song is a snapshot held as a save holds an own song (`public_items`, one per author and song, 200 KB at most), read
   by anyone, written by its author unless an editor has blocked them, at most 20 publishes an hour. Songs → Public
   library lists them, newest or most saved, searched by title; a song's page plays it and saves an own copy (a save
@@ -57,6 +59,25 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   and at each sign-in (`useFeature`): every build goes to everyone, a feature waits behind its switch. The Admin
   area (`/admin`, its own chunk, in Settings for admins): Accounts, Groups, Switches, Reports, Activity; every
   change is written to `admin_log`.
+- **The lesson editor** (`pages/lesson-editor`, round 21 to 28; Notion's, Craft's and BlockNote's block editors,
+  Obsidian's Live Preview) is one TipTap document that reads as the lesson and as a page being edited:
+  - each block's **gutter** shows beside the block under the pointer, or the caret's on a phone (left of the text on
+    a laptop, at its right on a phone): **＋** puts a line under it with `/` typed, the Insert menu open on it;
+    **⋮⋮** dragged moves the block, tapped opens its menu: **Turn into** (text, section heading, numbered steps,
+    note, in short; its lines kept, a step each into steps, joined for the rest; `turnBlockInto`), Duplicate,
+    Delete. Order is by dragging or Alt+↑/↓, never Move up/down in a menu (the owner's rule), so the brief's Move
+    up/down was left out;
+  - an empty line hints **"Type / to insert music, a note and more"** only where the caret is, as Notion's; the
+    title, summary, heading, note and takeaway always say what they are for;
+  - **selected words** get a bubble with the lead in bold, the one mark a lesson's text has; the floating toolbar
+    keeps Insert, Undo and Redo. Each action has one place: a block's kind is its menu's, bold the bubble's;
+  - an **example** (notes, chords, keys, a question, a link) is drawn as the lesson shows it, with no kind's label
+    over it. Chosen, it is outlined and a small toolbar floats over its top edge: **Edit** (its line of text and
+    its fields in a panel opened in place under it, the same on a phone and a laptop, nothing covering the page;
+    open at once for an example that does not read yet), Edit music for notes, Duplicate, Delete;
+  - the lessons to read first are the lesson's Settings', not a property in the document (ADR 0053).
+    A field focused on a phone is lifted clear of the keyboard by the line the caret is in, never by the whole
+    document's box, which jumped a tap far down a lesson to its start.
 - **The seams the app is built on:**
   - a song's music and a lesson come through one port (`ContentPort`: `has`, `ensure`); a route that shows one
     ensures it in `beforeLoad`, so the route's pending, not-found and error screens are its loading, missing and
@@ -99,7 +120,7 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r6 — Content edited in the app: an editor's draft of an item (`content_drafts`), published by `publish_content`
   (the draft's body becomes the item's under the hash of its body, the version kept) or a kept version restored;
   the `ContentEditingPort` (`shared/api/content-editing`). A built-in song's original is edited in the score
-  editor (`/edit/$pieceId?original=true`, `features/edit-original`): it opens on the draft, else the song as
+  editor (`/edit/$pieceId`, an editor's Edit, round 28; `features/edit-original`): it opens on the draft, else the song as
   published now; each change is saved to the draft once the editor rests; Publish checks the music reads first.
   A lesson's every text is edited on its lesson editor (`/lessons/$lessonId/edit`, a course's under its course;
   `pages/lesson-editor`), English and Russian side by side; its examples stay as authored this round
@@ -155,3 +176,53 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   `commonProgressions` replace the bundled constants. An editor's Progressions bar edits the progression in sight
   and makes a new one (`/practice/progressions/$progressionId/edit`, `/practice/progressions/new`). The editors'
   shared parts (`DraftScreen`, `TextFields`, `OrderList`) moved to `widgets/content-editor` (2026-10-29).
+- r19 — The lesson editor edits a lesson's structure: each section's blocks as cards (moved, removed), Add block
+  for a new block of a kind (text, steps, note, rule, chords, notes, progression; `blankBlock`), sections moved,
+  removed and added (`withSection*`, `withBlock*` in `entities/lesson/model/structure.ts`). A structured block
+  editor, not an inline rich-text one (TipTap): every text is English and Russian side by side, which a single
+  rich-text document does not hold; markdown shortcuts and a `/` menu stay open (2026-10-30).
+- r21 — Supersedes r19's structured cards: the owner asked for one continuous document, edited where it reads
+  (Obsidian's Live Preview), with no Edit/Preview switch and no floating publish bar. The lesson editor is a TipTap
+  3 document written in one language at a time (the bar's EN/RU), which answers r19's objection: each node
+  carries the lesson's text it shows (`lessonToDoc`/`docToLesson` in `pages/lesson-editor/model/lesson-doc.ts`,
+  tested round trip), so the other language comes back untouched. Examples are atoms drawn by `LessonView`'s
+  renderer, their line of text typed in the block and their other fields in a popover (a sheet on a phone); a
+  toolbar, Insert, a `/` menu, a drag handle and Alt+↑/↓ (`doc-blocks.ts`). The course and journey editors are
+  the same kind of page (title and summary written in place, properties, rows dragged with `@dnd-kit`, across
+  chapters too; `widgets/content-editor`'s `RowGroups`, `AddRow`, `DocText`). The draft's status sits under the
+  bar's title and Publish with its menu at the bar's end (`DraftStatus`, `DraftActions`; `DraftStrip` and
+  `OrderList` gone); the score editor's original shows them in the column's head (Edit the original is the mode pop-up's). The editors are their
+  own chunk (`lesson-editor-screens`), so a learner never downloads TipTap (2026-10-30).
+- r22 — New course, New progression and the progression editor as documents (`DocTitleField`, properties,
+  Create floating); the bars say what is edited (Edit lesson …); voicings, a pattern and a link edited in their
+  blocks (Versions kept as written); blocks dragged by finger on a phone (`moveBlockTo`), rows by dnd-kit's
+  touch sensor; lesson names in the language written; a compact EN · RU (2026-10-30).
+- r23 — A draft of an item the database has not got yet (a journey or progression never seeded) creates the item,
+  unpublished, then keeps the draft. The lesson editor's `/` opens after words too, the block going after their
+  line; Insert grouped (Text, Music, For the learner) with voicings and a link added (2026-10-30).
+- r24 — Publish as its own sheet with a description, the published card on a song's and a pattern's page, and
+  the Public library as Noji's: shelves of Newest and Most saved over the list, kinds as chips (2026-10-30).
+- r24 — Manage lessons: a level's chapters as cards of the learner's rows, dragged within and across them, a row's
+  menu moving it to another chapter, + a lesson or a chapter. The language written in chosen in the draft's
+  menu; the lesson editor's toolbar one floating capsule, Insert its accent; a level's lesson's Read first
+  (2026-10-30).
+- r25 — Every New … one sheet (`NewSheet`): New song as Flat's new score (staves as tiles, the key signature grid, time tiles), New course, New progression, Add lesson and Add chapter; /courses/new and /practice/progressions/new gone (2026-10-30).
+- r25 — A level's lesson's Read first stands under its title and summary inside the document, as a page's properties do (2026-10-30).
+- r25 — A question in Edit is the lesson's question card, its words typed where they print; a notes answer is written in order as text (F A C), rising or falling as it was (2026-10-30).
+- r25 — Manage courses: the courses' order on their shelves is content (`catalog` `courses`, a migration adds the kind), dragged within each shelf and published whole; Courses reads it, a course it does not name after the rest; a course's shelf stays its own property (2026-10-30).
+- r25 — A draft's status stands in the bar beside Publish (a cloud, its word from sm up), never a line under the bar; the language is the draft menu's alone (2026-10-30).
+- r26 — A lesson's or course's Read · Edit pop-up became Edit mode's one button (Noji's, iOS's): a pencil at the bar's end, Done in Edit (2026-11-01).
+- r26 — Editing an original, the draft's status and menu (Publish first, Versions, Discard) stand in the score's bar by Done, never over the music (2026-11-01).
+- r26 — One New song: in a collection's folder an editor's is the collection's. An original is edited from the song's Settings, its draft's status and menu there too (2026-11-01).
+- r27 — A lesson's example of notes is edited on its own score: its Edit music opens the score editor with all it
+  has (`/lessons/$lessonId/example?n=`, its place among the lesson's examples of notes; a course's with
+  `course`), the draft saved first; each change written back into the lesson's draft as the lesson writes the
+  example (`exampleMusic` / `exampleBlock`), what an example cannot hold (a mark, notes struck together, a staff
+  more, a tuplet, another time) said once and not kept; Close and Done save and go back. No takes there
+  (2026-11-01).
+- r28 — An editor's Edit on a built-in song edits the song everyone sees (no Edit the original, no `?original`); anyone else's edits their version. The draft holds the song whole: the score editor writes its music, the song's page in Edit its title, credits and note. Its status says nothing while it is as published; Settings shows Unpublished changes only while there are some. The draft's words became Publishing, Discard changes (2026-11-01).
+- r28 — The lesson editor as a block editor: a gutter (＋, ⋮⋮ with Turn into), the hint on the caret's empty line, a
+  bubble for bold, an example's floating toolbar and its fields in place under it (no sheet blurring the page); a
+  tap far down a lesson no longer jumps to its start; Read first moved to the lesson's Settings, whose changes row
+  holds Publish (2026-11-01).
+- r28 — An item made in the app (a level's lesson, a course) has Remove on its Settings: Unpublish (status back to draft, its body kept as its draft) and Delete (its row, its draft and versions cascading); the port's `unpublish` and `remove`; no migration (the policies let an editor update and delete). The app's own items ship with it and only leave a level or shelf (2026-11-02).

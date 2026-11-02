@@ -52,7 +52,7 @@ describe('ScreenHeader', () => {
     expect(within(bar).getByRole('navigation', { name: 'Chords' })).toBeInTheDocument()
   })
 
-  it('keeps a screen’s title on the bar’s one row, cut short rather than wrapped', () => {
+  it('keeps a screen’s title in the bar, a long one on two lines rather than cut', () => {
     render(
       <ScreenHeader
         title="Wonderful Grace of Jesus"
@@ -61,19 +61,15 @@ describe('ScreenHeader', () => {
     )
     const title = screen.getByRole('heading', { level: 1 })
     expect(within(screen.getByRole('banner')).getByRole('heading', { level: 1 })).toBe(title)
-    expect(title).toHaveClass('truncate')
+    expect(title).toHaveClass('line-clamp-2')
+    expect(title).not.toHaveClass('truncate')
   })
 
-  it('stands a place’s title large on the page, the bar echoing it once it is scrolled past', () => {
+  it('sets a place’s title larger in the bar’s one row, never in a block of its own', () => {
     render(<ScreenHeader title="Learn" large />)
     const heading = screen.getByRole('heading', { level: 1, name: 'Learn' })
-    const bar = screen.getByRole('banner')
-    expect(bar).not.toContainElement(heading)
-    // The echo is for the eye; the heading is the large title alone.
-    expect(within(bar).queryByRole('heading')).toBeNull()
-    expect(within(bar).getByText('Learn', { ignore: '[aria-hidden=false]' })).toHaveClass(
-      'opacity-0',
-    )
+    expect(screen.getByRole('banner')).toContainElement(heading)
+    expect(heading).toHaveClass('line-clamp-2')
   })
 
   const scrollTo = (y: number) => {
@@ -581,20 +577,20 @@ describe('NoteChoice', () => {
         .map((each) => each.textContent),
     ).toEqual([
       'C',
-      'C#',
+      'C♯',
       'D♭',
       'D',
-      'D#',
+      'D♯',
       'E♭',
       'E',
       'F',
-      'F#',
+      'F♯',
       'G♭',
       'G',
-      'G#',
+      'G♯',
       'A♭',
       'A',
-      'A#',
+      'A♯',
       'B♭',
       'B',
     ])
@@ -628,7 +624,7 @@ describe('NoteChoice', () => {
     const key = screen.getByRole('group', { name: 'Key' })
     expect(within(key).queryByRole('radio', { name: 'D♭' })).not.toBeInTheDocument()
     expect(screen.getByText('C# minor')).toBeInTheDocument()
-    await user.click(within(key).getByRole('radio', { name: 'D#' }))
+    await user.click(within(key).getByRole('radio', { name: 'D♯' }))
     expect(onChange).toHaveBeenLastCalledWith(noteParam(note('D', 1)))
   })
 })
@@ -644,7 +640,7 @@ describe('KeyChoice', () => {
     expect(screen.getByText('D♭ major')).toBeInTheDocument()
     expect(within(key).getByRole('radio', { name: 'Major' })).toBeChecked()
     expect(within(key).getByRole('radio', { name: 'D♭' })).toBeChecked()
-    expect(within(key).queryByRole('radio', { name: 'D#' })).not.toBeInTheDocument()
+    expect(within(key).queryByRole('radio', { name: 'D♯' })).not.toBeInTheDocument()
     await user.click(within(key).getByRole('radio', { name: 'E♭' }))
     expect(onChange).toHaveBeenLastCalledWith(keyParam({ tonic: note('E', -1), minor: false }))
   })

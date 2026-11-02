@@ -52,6 +52,7 @@ import {
   CHROMATIC_KEPT,
   chromaticSearch,
   editSearch,
+  exampleSearch,
   EXERCISE_KEPT,
   exerciseSearch,
   PLAYER_KEPT,
@@ -84,7 +85,9 @@ const adminScreens = () => import('./routes/admin-screens')
 const searchScreens = () => import('./routes/search-screens')
 const songsScreens = () => import('./routes/songs-screens')
 const playerScreens = () => import('./routes/player-screens')
+const scoreSettingsScreens = () => import('./routes/score-settings-screens')
 const learnScreens = () => import('./routes/learn-screens')
+const lessonEditorScreens = () => import('./routes/lesson-editor-screens')
 const explorerScreens = () => import('./routes/explorer-screens')
 const toolScreens = () => import('./routes/tool-screens')
 const accompanimentScreens = () => import('./routes/accompaniment-screens')
@@ -158,6 +161,12 @@ const profileRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/profile',
   component: lazyRouteComponent(settingsScreens, 'ProfilePage'),
+})
+// Its Activity (round 26, Noji's): the days at the piano in figures and the month's calendar.
+const activityRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/profile/activity',
+  component: lazyRouteComponent(settingsScreens, 'ActivityPage'),
 })
 // Settings' pages: the keyboard and recording, sync and data, and the account's.
 const playingRoute = createRoute({
@@ -273,6 +282,30 @@ const pieceRoute = createRoute({
     await ensureContent(context.content, 'piece', params.pieceId)
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
+})
+// A song's Settings and its Publish in library (round 26), pages of their own under its page.
+const pieceSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/$pieceId/settings',
+  notFoundComponent: notFoundIn('songs'),
+  beforeLoad: async ({ params, context }) => {
+    // A song's, or a study's (its page on Practice has the same gear).
+    const { entryIn } = await songsScreens()
+    const entry = entryIn(context.pieces.getState(), params.pieceId)
+    if (!entry || entry.kind === 'listing') throw notFound()
+    await ensureContent(context.content, 'piece', params.pieceId)
+  },
+  component: lazyRouteComponent(songsScreens, 'SongSettingsPage'),
+})
+const piecePublishRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/$pieceId/publish',
+  notFoundComponent: notFoundIn('songs'),
+  beforeLoad: async ({ params, context }) => {
+    const { entryIn } = await songsScreens()
+    if (!entryIn(context.pieces.getState(), params.pieceId)) throw notFound()
+  },
+  component: lazyRouteComponent(songsScreens, 'PublishPage'),
 })
 // A folder of the library (ADR 0106): its songs, under the filters Home has; not found where the
 // library has no such folder, or it is archived.
@@ -408,11 +441,6 @@ const progressionEditRoute = createRoute({
   path: '/practice/progressions/$progressionId/edit',
   component: lazyRouteComponent(explorerScreens, 'ProgressionEditorPage'),
 })
-const newProgressionRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/progressions/new',
-  component: lazyRouteComponent(explorerScreens, 'NewProgressionPage'),
-})
 
 // The Chord finder (ADR 0052): a tool of its own, any chord played or tapped named, spelled and written.
 const chordFinderRoute = createRoute({
@@ -469,6 +497,18 @@ const editPatternRoute = createRoute({
   },
   component: lazyRouteComponent(accompanimentScreens, 'EditPatternPage'),
 })
+// A pattern of the learner's own published to the Public library, on its own page (round 27).
+const publishPatternRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/accompaniment/patterns/$patternRef/publish',
+  notFoundComponent: notFoundIn('accompaniment'),
+  beforeLoad: ({ params, context }) => {
+    if (!isOwnPatternId(params.patternRef) || !inBook(params.patternRef, context.patterns)) {
+      throw notFound()
+    }
+  },
+  component: lazyRouteComponent(accompanimentScreens, 'PatternPublishPage'),
+})
 
 // A lesson of the Lessons' journeys; a course and its own lessons (ADR 0053).
 const lessonRoute = createRoute({
@@ -504,6 +544,39 @@ const courseLessonRoute = createRoute({
   },
   component: lazyRouteComponent(learnScreens, 'CourseLessonPage'),
 })
+// A lesson's and a course's Settings (round 28), pages of their own under theirs, as a song's.
+const lessonSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/lessons/$lessonId/settings',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params, context }) => {
+    const { lessonById, lessonPlace } = await learnScreens()
+    if (!lessonById(params.lessonId) || !lessonPlace(params.lessonId)) throw notFound()
+    await ensureContent(context.content, 'lesson', params.lessonId)
+  },
+  component: lazyRouteComponent(learnScreens, 'LessonSettingsPage'),
+})
+const courseSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/courses/$courseId/settings',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params }) => {
+    const { courseById } = await learnScreens()
+    if (!courseById(params.courseId)) throw notFound()
+  },
+  component: lazyRouteComponent(learnScreens, 'CourseSettingsPage'),
+})
+const courseLessonSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/courses/$courseId/$lessonId/settings',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params, context }) => {
+    const { courseLesson } = await learnScreens()
+    if (!courseLesson(params.courseId, params.lessonId)) throw notFound()
+    await ensureContent(context.content, 'lesson', `${params.courseId}/${params.lessonId}`)
+  },
+  component: lazyRouteComponent(learnScreens, 'CourseLessonSettingsPage'),
+})
 
 // An editor's lesson editor (ADR 0116): every text of a journey's or a course's lesson; a course's
 // own title and summary in the course editor.
@@ -512,12 +585,7 @@ const courseEditRoute = createRoute({
   path: '/courses/$courseId/edit',
   notFoundComponent: notFoundIn('learn'),
   // A course not yet published is there for its editor: the draft New course made.
-  component: lazyRouteComponent(learnScreens, 'CourseEditorPage'),
-})
-const newCourseRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/courses/new',
-  component: lazyRouteComponent(learnScreens, 'NewCoursePage'),
+  component: lazyRouteComponent(lessonEditorScreens, 'CourseEditorPage'),
 })
 const lessonEditRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -527,7 +595,7 @@ const lessonEditRoute = createRoute({
     // A lesson not yet published is there for its editor: the draft the journey editor made.
     await ensureContent(context.content, 'lesson', params.lessonId)
   },
-  component: lazyRouteComponent(learnScreens, 'LessonEditorPage'),
+  component: lazyRouteComponent(lessonEditorScreens, 'LessonEditorPage'),
 })
 const journeyEditRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -537,7 +605,13 @@ const journeyEditRoute = createRoute({
     const { journeyById } = await learnScreens()
     if (!journeyById(params.journeyId)) throw notFound()
   },
-  component: lazyRouteComponent(learnScreens, 'JourneyEditorPage'),
+  component: lazyRouteComponent(lessonEditorScreens, 'JourneyEditorPage'),
+})
+// Manage courses: the courses' order on their shelves, an editor's.
+const courseOrderEditRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/courses/manage',
+  component: lazyRouteComponent(lessonEditorScreens, 'CourseOrderEditorPage'),
 })
 const courseLessonEditRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -547,7 +621,7 @@ const courseLessonEditRoute = createRoute({
     // A lesson not yet published is there for its editor: the draft the course editor made.
     await ensureContent(context.content, 'lesson', `${params.courseId}/${params.lessonId}`)
   },
-  component: lazyRouteComponent(learnScreens, 'CourseLessonEditorPage'),
+  component: lazyRouteComponent(lessonEditorScreens, 'CourseLessonEditorPage'),
 })
 
 // Screens that take the whole screen, with their own way back.
@@ -621,21 +695,38 @@ const exerciseRoute = createRoute({
 })
 
 // The score editor: the Player's chunk carries the engraver it writes on.
+// A lesson's example of notes on its own score (round 27): the lesson's draft brought, an editor's.
+const exampleEditRoute = createRoute({
+  getParentRoute: () => fullScreenRoute,
+  path: '/lessons/$lessonId/example',
+  notFoundComponent: notFoundIn('learn'),
+  ...exampleSearch,
+  beforeLoad: async ({ params, context }) => {
+    await ensureContent(context.content, 'lesson', params.lessonId)
+  },
+  component: lazyRouteComponent(playerScreens, 'ExampleEditorPage'),
+})
 const editRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/edit/$pieceId',
   notFoundComponent: notFoundIn('songs'),
   ...editSearch,
-  beforeLoad: async ({ params, context, search }) => {
+  beforeLoad: async ({ params, context }) => {
     const { editableIn } = await playerScreens()
-    if (!editableIn(context.pieces.getState(), params.pieceId)) {
-      // An editor's original may be a song made and not yet published: its draft is the server's.
-      if (search.original) return
-      throw notFound()
-    }
+    // A song not on this device may be an editor's made and not yet published, its draft the
+    // server's: the page opens it, or says it is not there.
+    if (!editableIn(context.pieces.getState(), params.pieceId)) return
     await ensureContent(context.content, 'piece', params.pieceId)
   },
   component: lazyRouteComponent(playerScreens, 'ScoreEditorPage'),
+})
+
+// The score's Settings (round 28), in the editor's place on its draft: its credits, instruments,
+// tempo, key, time, bars, layout and the editor's preferences.
+const editSettingsRoute = createRoute({
+  getParentRoute: () => editRoute,
+  path: '/settings',
+  component: lazyRouteComponent(scoreSettingsScreens, 'ScoreSettingsPage'),
 })
 
 // A take's page, in the shell: a page to read and listen to, beside the editor that recorded it.
@@ -671,6 +762,7 @@ const routeTree = rootRoute.addChildren([
   shellRoute.addChildren([
     learnRoute,
     profileRoute,
+    activityRoute,
     adminRoute,
     settingsRoute,
     playingRoute,
@@ -692,6 +784,8 @@ const routeTree = rootRoute.addChildren([
     publicLibraryRoute,
     publicSongRoute,
     pieceRoute,
+    pieceSettingsRoute,
+    piecePublishRoute,
     folderRoute,
     archiveRoute,
     sectionRoute,
@@ -701,17 +795,20 @@ const routeTree = rootRoute.addChildren([
     intervalsRoute,
     progressionsRoute,
     progressionEditRoute,
-    newProgressionRoute,
     accompanimentRoute,
     newPatternRoute,
     patternRoute,
     editPatternRoute,
+    publishPatternRoute,
     lessonRoute,
     courseLessonRoute,
+    lessonSettingsRoute,
+    courseSettingsRoute,
+    courseLessonSettingsRoute,
     lessonEditRoute,
     courseLessonEditRoute,
     courseEditRoute,
-    newCourseRoute,
+    courseOrderEditRoute,
     journeyEditRoute,
     practiceRoute,
     quizRoute,
@@ -729,7 +826,8 @@ const routeTree = rootRoute.addChildren([
     chromaticRoute,
     progressionPlayerRoute,
     exerciseRoute,
-    editRoute,
+    editRoute.addChildren([editSettingsRoute]),
+    exampleEditRoute,
     checkRoute,
   ]),
 ])

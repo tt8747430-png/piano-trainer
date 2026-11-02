@@ -18,7 +18,7 @@ import {
   type TrainerRun,
 } from '@/features/trainer'
 import { useWakeLock } from '@/shared/lib'
-import { noteName, type Midi } from '@/shared/lib/music'
+import { type Midi, printedNote } from '@/shared/lib/music'
 import { RoundButton, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { AnsweredChoices } from './AnsweredChoices'
@@ -141,7 +141,7 @@ export function TrainerBoard({
   const marks: ReadonlyMap<Midi, KeyMark> | undefined = revealed
     ? answerMarks(question)
     : question.mode === 'build-interval'
-      ? new Map([[question.low, { tone: 'tonic', label: noteName(question.lowNote) }]])
+      ? new Map([[question.low, { tone: 'tonic', label: printedNote(question.lowNote) }]])
       : checked?.marks
   const lit =
     !revealed &&
@@ -159,7 +159,7 @@ export function TrainerBoard({
           : result.kind === 'keys' && result.wrongBass && question.mode === 'build-chord'
             ? t('quiz:wrongBass', {
                 answer: words.answer(question),
-                bass: noteName(question.tones[question.inversion ?? 0]?.note ?? question.root),
+                bass: printedNote(question.tones[question.inversion ?? 0]?.note ?? question.root),
               })
             : t('quiz:itWas', { answer: words.answer(question) })
   // A card's name, once turned over, is its prompt.

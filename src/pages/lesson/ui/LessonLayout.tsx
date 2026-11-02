@@ -1,5 +1,5 @@
 import { Link, type LinkProps } from '@tanstack/react-router'
-import { ArrowRight, ChevronsLeft, PencilLine } from 'lucide-react'
+import { ArrowRight, ChevronsLeft, Settings } from 'lucide-react'
 import { Fragment, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
@@ -32,8 +32,8 @@ export interface LessonTrack {
  * A lesson, a journey's or a course's (ADR 0053, 0061), in one column in the middle of the screen:
  * its title with Learned in its bar, where it is (`place`), the lesson under its
  * floating bar of sections, and at its end the lesson before and the way on, which learns it (on a
- * phone, read a page at a time, the bar's Done). An editor has its lesson editor in the bar (`edit`,
- * ADR 0116).
+ * phone, read a page at a time, the bar's Done). Its Settings (round 28, a song's gear) in the bar;
+ * an editor has its lesson editor there too (`modes`, ADR 0116).
  */
 export function LessonLayout({
   lesson,
@@ -41,7 +41,8 @@ export function LessonLayout({
   place,
   back,
   track,
-  edit,
+  modes,
+  settings,
   after = [],
 }: {
   lesson: Lesson
@@ -52,8 +53,10 @@ export function LessonLayout({
   /** The screen's Back (`BackButton`). */
   back: ReactNode
   track: LessonTrack
-  /** A router `Link` to its lesson editor, an editor's. */
-  edit: ReactElement
+  /** Its Edit, an editor's (`EditToggle`), at the bar's end. */
+  modes: ReactNode
+  /** A router `Link` to its Settings page. */
+  settings: ReactElement
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
@@ -67,10 +70,9 @@ export function LessonLayout({
         back={back}
         actions={
           <>
-            {editsContent(account) ? (
-              <RoundLink label={t('edit.open')} icon={PencilLine} render={edit} />
-            ) : null}
             <LearnedButton step={step} round />
+            <RoundLink label={t('settings.open')} icon={Settings} render={settings} />
+            {editsContent(account) ? modes : null}
           </>
         }
       />

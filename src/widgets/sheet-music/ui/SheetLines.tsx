@@ -4,7 +4,8 @@ import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { LANDSCAPE_PHONE, PAGE, PRINT_SCALE, useElementSize, useMediaQuery } from '@/shared/lib'
-import { PageCanvas, SheetTitle } from '@/shared/ui'
+import { staffScale, type PieceLayout, type ScoreHeader } from '@/entities/piece'
+import { hasCredits, PageCanvas, SheetCredits, SheetTitle } from '@/shared/ui'
 import {
   lineLead,
   measureWidths,
@@ -37,6 +38,8 @@ export function SheetLines({
   staffNames,
   pages,
   title,
+  credits,
+  layout,
   headings,
   current,
   clock,
@@ -63,6 +66,10 @@ export function SheetLines({
   pages: boolean
   /** Printed at the head of the first line, the page's heading. */
   title: string
+  /** Printed under the title (ADR 0114): its subtitle, composer, lyricist and arranger. */
+  credits?: ScoreHeader | undefined
+  /** The score's staff size and the most bars a line holds (ADR 0114). */
+  layout?: PieceLayout | undefined
   headings: readonly string[]
   current: number
   /** Where Listen's music is while it plays: the playhead moves with it. */
@@ -100,9 +107,9 @@ export function SheetLines({
   // Down the screen as large as the width allows; on a phone on its side, a whole system, its
   // fingers and the verses under its tune in the sheet's height. Pages as they print, on a canvas
   // that zooms them to the screen (ADR 0096).
-  const across = Math.min(1, Math.max(LEAST_SCALE, width / FULL_WIDTH))
+  const across = Math.min(1, Math.max(LEAST_SCALE, width / FULL_WIDTH)) * staffScale(layout)
   const scale = pages
-    ? PRINT_SCALE
+    ? PRINT_SCALE * staffScale(layout)
     : onSide
       ? systemFit({
           room: height - (fingers ? FINGERS : 0),
@@ -120,8 +127,8 @@ export function SheetLines({
   )
   const room = inner > 0 ? inner / scale - lineLead(score) : Infinity
   const lines = useMemo(
-    () => scoreLines(score, performance, { room, widths }),
-    [score, performance, room, widths],
+    () => scoreLines(score, performance, { room, widths, most: layout?.barsPerLine }),
+    [score, performance, room, widths, layout?.barsPerLine],
   )
 
   // A line the playhead comes onto comes into sight: the playhead brings its line (ADR 0096).
@@ -173,10 +180,13 @@ export function SheetLines({
       <section
         ref={box}
         aria-label={t('sheet.label')}
-        className="flex h-full scroll-pb-(--float-room) flex-col overflow-y-auto overscroll-contain"
+        className="flex h-full scroll-pt-(--tools-room) scroll-pb-(--float-room) flex-col overflow-y-auto overscroll-contain pt-(--tools-room)"
         style={{ gap: LINE_GAP }}
       >
-        <SheetTitle title={title} place="lines" />
+        <div>
+          <SheetTitle title={title} place="lines" />
+          {hasCredits(credits) ? <SheetCredits credits={credits} /> : null}
+        </div>
         {lines.map(line)}
         {/* Room to scroll the last line clear of what floats over the sheet's foot (`--float-room`),
             a part of the list, so the sheet's own height is all it shows. */}
@@ -192,6 +202,7 @@ export function SheetLines({
           // A line's height as engraved: its staves and the verses under its tune (ADR 0097).
           height={(each) => labels + scoreHeight(each.score, staves) * scale}
           title={title}
+          credits={credits}
           line={line}
         />
       </section>

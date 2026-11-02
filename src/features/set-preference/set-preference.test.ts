@@ -6,7 +6,6 @@ import { midi } from '@/shared/lib/music'
 import {
   rememberChords,
   setAutoNext,
-  setFloating,
   setChordFinder,
   onlyTheChords,
   setKeyboard,
@@ -135,14 +134,6 @@ describe('set-preference', () => {
     setMidi(store, { device: 'Piano' })
     setMidi(store, { touch: 'light' })
     expect(saved(storage).midi).toMatchObject({ device: 'Piano', touch: 'light', sound: false })
-  })
-
-  it('setFloating saves where the floating actions stand and keeps whether they say their names', () => {
-    const { storage, store } = setUp()
-    setFloating(store, { place: 'right' })
-    expect(saved(storage).floating).toEqual({ place: 'right', labels: false })
-    setFloating(store, { labels: true })
-    expect(store.getState().floating).toEqual({ place: 'right', labels: true })
   })
 
   it('setAutoNext saves whether a trainer moves on by itself', () => {

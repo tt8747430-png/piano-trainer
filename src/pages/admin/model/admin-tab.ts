@@ -1,5 +1,6 @@
 /** The Admin area's views, in its tabs' order. */
 export const ADMIN_TABS = [
+  'overview',
   'accounts',
   'groups',
   'switches',

@@ -1,6 +1,6 @@
 # ADR 0114 — The score editor edits a score as notation software does, on what is chosen and where it is printed
 
-- **Status:** accepted · **Date:** 2026-10-01 · consolidated 2026-10-27 · amended 2026-10-28
+- **Status:** accepted · **Date:** 2026-10-01 · consolidated 2026-10-27 · amended 2026-11-01
 
 ## Context
 
@@ -99,9 +99,39 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   - **Key:** one to seven sharps over one to seven flats, Major · Minor, Switch to natural; Change the key for the
     whole song moves the music, else the key changes from that section on and the notes stay where they are.
   - **Clef:** every clef the notation writes, a family a row.
+- **The score's Settings** (`/edit/$pieceId/settings`, Flat's score settings): a page in the editor's place,
+  on its draft (a child route of the editor's, its own lazy chunk), so each change is one Undo step back on
+  the score; while it stands there the editor's keys and MIDI write nothing. It opens from the bar's gear
+  (by Undo and Redo), from the Player's More (Settings…, every piece being edited) and from the credits
+  printed under the title (as Flat's title opens its credits). Its groups, in plain musical words:
+  - **Score:** the title, **Subtitle**, **Composer**, **Lyricist** and **Arranger**, each typed in its row
+    (`header`, saved with the music line by line). They print under the title in lines and on pages, in the
+    Player and the editor alike: the subtitle centred, the lyricist at the left, the composer over the
+    arranger at the right, nothing the learner did not write. One line across prints the title alone.
+  - **Instruments:** New song's families with − n + (`widgets/instrument-list`, one widget for both): a voice
+    is added under the last of its kind, else over the next voice down (a choir's order), named and clefed
+    as New song names it; a staff of no voice is Other's **Staff**; one fewer takes the last away with its
+    notes (Undo brings them back); the piano hides (its music kept), never the last staff in sight; eight
+    single staves at most. A staff is renamed on the score, as before.
+  - **Music:** the tempo, key and time in the editor's own pickers (the whole song's, as at its head), and
+    **Bars**, a stepper adding silent bars at the end or taking the last ones away.
+  - **Layout:** **Staff size**, five sizes from 75% to 130% (Flat's staff size, Dorico's space size), over
+    the size the screen gives; a phone on its side still fits a whole system. **Bars per line**, As written
+    or 1 to 8 at most (Flat's measures per system): fewer where they do not fit. Both are the song's
+    (`layout`), so the Player lays it out the same; one line across fits its height and keeps neither.
+  - **Editing:** **Hear notes as you edit** (`pt-settings.editing.hearNotes`, on): a note clicked on the score,
+    a note or chord stepped, shifted or given an accidental, a chord's one note stepped to, sounds, never
+    over Play (MuseScore's and Dorico's play notes when editing). Then the MIDI keyboard's and the keyboard's
+    own settings, as rows to their pages.
+  - Left out, as a piano learner rarely needs them: the copyright line (Publish in library has its own
+    description), page size and margins (we print A4), bar-number policies, instruments without their own
+    sound (ADR 0097), and turning off the caret's advance after a note.
+- **Tie acts on what is chosen:** each note chosen joins the same key's note after it, a run of one key
+  chosen whole becoming one note; with only a caret, the caret's notes.
 - **A key or a meter changes at a section, never mid-bar; a clef at a bar.**
 - **Play** plays the bars as written, at the learner's speed, never changing the song's tempo.
-- **New song** chooses Piano, A staff and piano, or A staff, and starts with four bars of no chord symbol.
+- **New song** chooses its instruments by family (the score's Settings' list) and starts with four bars of no
+  chord symbol.
 
 ## Consequences
 
@@ -128,3 +158,5 @@ reader hears the caret's place in a polite live line (`CaretLine`).
   repeats and multi-bar rests (2026-10-28).
 - r14 — Undo and redo bring back what was chosen (the notes, a chord's one note, the grace notes) (2026-10-28).
 - The research note comparing Flat and Dorico (2026-10-23) and the editor's three design specs, deleted.
+- r28 — The score's Settings: credits under the title, instruments, tempo, key, time, bars, staff size, bars per
+  line, Hear notes as you edit; Tie on what is chosen (2026-11-01).

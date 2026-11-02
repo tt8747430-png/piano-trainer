@@ -1,19 +1,18 @@
 import { useTranslation } from 'react-i18next'
 import {
-  noteName,
-  printedSymbol,
   VOICINGS,
   voicingBar,
   type PlacedChord,
   type PlacedTone,
   type Tone,
   type Voicing,
+  printedNote,
 } from '@/shared/lib/music'
 import { Labelled, StepStrip } from '@/shared/ui'
 
 /** A hand's keys as printed names, lowest first. */
 const named = (keys: readonly PlacedTone[]) =>
-  keys.map((key) => printedSymbol(noteName(key.tone.note))).join(' ')
+  keys.map((key) => printedNote(key.tone.note)).join(' ')
 
 /**
  * How the chord is laid on the keys: a strip of the eight voicings, one the chord cannot take greyed

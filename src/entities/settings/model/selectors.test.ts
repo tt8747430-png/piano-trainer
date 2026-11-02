@@ -10,7 +10,6 @@ import {
   selectSidebar,
   selectSound,
   selectTrainer,
-  selectFloating,
   selectSectionFolded,
   selectPaletteFolded,
 } from './selectors'
@@ -22,6 +21,7 @@ import {
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
   DEFAULT_SOUND,
+  DEFAULT_EDITING,
   DEFAULT_TRAINER,
   defaultKeyboard,
   type SettingsState,
@@ -35,11 +35,12 @@ describe('settings selectors', () => {
       practice: DEFAULT_PRACTICE,
       sound: DEFAULT_SOUND,
       trainer: DEFAULT_TRAINER,
-      floating: { place: 'right', labels: true },
       keyboard: defaultKeyboard(false),
       recorder: DEFAULT_RECORDER,
+      editing: DEFAULT_EDITING,
       foldedSections: ['chords.tensions'],
       welcomed: true,
+      lessonReading: 'sections',
       sidebar: 'collapsed',
       paletteFolded: {},
       paletteSections: null,
@@ -54,7 +55,6 @@ describe('settings selectors', () => {
     expect(selectMetronome(state)).toBe(DEFAULT_METRONOME)
     expect(selectMelody(state)).toBe('staff')
     expect(selectTrainer(state)).toBe(DEFAULT_TRAINER)
-    expect(selectFloating(state)).toEqual({ place: 'right', labels: true })
     expect(selectKeyboard(state)).toBe(state.keyboard)
     expect(selectRecorder(state)).toBe(DEFAULT_RECORDER)
     expect(selectSidebar(state)).toBe('collapsed')

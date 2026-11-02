@@ -329,9 +329,7 @@ describe('Practice → Chords', () => {
   it('walks a chord the table names chromatically in the Player, from its root', async () => {
     await renderApp('/practice/chords?root=G&triad=min&size=9')
     expect(await screen.findByRole('heading', { level: 2, name: 'Gm9' })).toBeInTheDocument()
-    const walk = screen.getByRole('link', {
-      name: 'Chromatic walk The chord moved a semitone at a time from its root, one bar each',
-    })
+    const walk = screen.getByRole('link', { name: 'Chromatic walk' })
     const href = walk.getAttribute('href') ?? ''
     const [path, query] = href.split('?')
     expect(path).toBe('/play/chromatic')
@@ -391,7 +389,7 @@ describe('Practice → Chords, a 7th chord’s tensions', () => {
     await screen.findByRole('region', { name: 'Available tensions' })
     expect(chips('Weak')).toEqual(['1 C', '5 G'])
     expect(chips('Strong')).toEqual(['3 E', '♭7 B♭'])
-    expect(chips('Tensions')).toEqual(['♭9 D♭', '9 D', '#9 D#', '#11 F#', '♭13 A♭', '13 A'])
+    expect(chips('Tensions')).toEqual(['♭9 D♭', '9 D', '♯9 D♯', '♯11 F♯', '♭13 A♭', '13 A'])
     expect(chips('Avoid')).toEqual(['11 F', '7 B'])
   })
 

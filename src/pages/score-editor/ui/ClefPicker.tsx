@@ -2,8 +2,8 @@ import { useTranslation } from 'react-i18next'
 import type { NoteLayer } from '@/features/score-editor'
 import { CLEF_FORMS, CLEFS, type Clef, type ClefShape } from '@/shared/lib/music'
 import { useScoreEditorContext } from '../model/editor-context'
-import { PickerCell, PickerGrid } from './PickerGrid'
-import { ClefSign } from './picker-pictures'
+import { PickerCell, PickerGrid } from '@/shared/ui/pickers/PickerGrid'
+import { ClefSign } from '@/shared/ui/pickers/picker-pictures'
 
 /** The clefs by their sign, each family a row of its own: the G clefs, the C clefs, the F clefs. */
 const FAMILIES: readonly ClefShape[] = ['G', 'C', 'F']

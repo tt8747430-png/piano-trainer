@@ -17,12 +17,6 @@ export const player = {
     one: { song: 'This song has one section.', study: 'This study has one section.' },
   },
   print: 'Print',
-  exportMidi: 'Export to MIDI',
-  exportMidiFixed: 'Export to MIDI, fixed tempo',
-  exportMidiAligned: 'Export to MIDI, time aligned',
-  exportMusicXml: 'Export to MusicXML',
-  /** A piece's score in its two modes, the Player and the score editor (ADR 0115). */
-  mode: { label: 'Practise or edit', practise: 'Practise', edit: 'Edit' },
   // The Player's views of the music (ADR 0108), the View's tiles; each names its own part of the
   // screen.
   views: {
@@ -155,7 +149,6 @@ export const player = {
   /** The picker's way to the Patterns page, where they are explained, starred, hidden and made. */
   allPatterns: 'All patterns',
   ownPattern: 'Make your own pattern',
-  ownPatternDetail: 'A left hand and a right hand of your choice',
   /** Under a pattern that plays its own shapes, the hand's position is faded. */
   inversion: { own: 'This pattern plays its own shapes.' },
   /** A progression through the keys, back home at the end. */
@@ -203,7 +196,7 @@ export const player = {
     title: 'Sound',
     countIn: 'Count in',
     countInInfo: 'A bar of clicks before the music starts, its beats counted down on the screen.',
-    click: 'Click',
+    click: 'Metronome',
     clickInfo: 'A click on every beat while the music plays.',
     volume: 'Volume',
     volumeInfo:

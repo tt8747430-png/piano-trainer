@@ -4,14 +4,13 @@ import type { NetResult } from '@/shared/api/network'
 import { useContentEditing } from '@/shared/lib/content-editing'
 import { slug } from '@/shared/lib'
 import type { Key, Meter } from '@/shared/lib/music'
-import { chartStart, type ScoreSetup } from './make-song'
+import { chartStart, type SongStart } from './make-song'
 
 /** What New built-in song asks: its title, key, meter and score, and the collection it ends. */
-export interface BuiltInSongDraft {
+export interface BuiltInSongDraft extends SongStart {
   readonly title: string
   readonly key: Key
   readonly meter: Meter
-  readonly setup?: ScoreSetup
   readonly collection: SongCollectionId
 }
 
@@ -27,8 +26,8 @@ export function useCreateBuiltInSong() {
       title,
       key,
       meter,
-      setup,
       collection,
+      ...start
     }: BuiltInSongDraft): Promise<NetResult<string>> => {
       const name = title.trim()
       // Never an own song's id (`my-1`) nor one the catalog has.
@@ -40,7 +39,7 @@ export function useCreateBuiltInSong() {
         kind: 'song',
         title: name,
         collection,
-        ...chartStart(key, meter, setup),
+        ...chartStart(key, meter, start),
       }
       const made = await editing.create('piece', id, { body: song, meta: { title: name } })
       return made.ok ? { ok: true, value: id } : made

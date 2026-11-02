@@ -82,7 +82,7 @@ export function MetronomePage() {
         title={name}
         back={<BackButton fallback={{ to: '/practice' }} />}
         actions={
-          <InfoTip name={name} className="size-11 [&_svg]:size-5">
+          <InfoTip name={name} bar>
             {t('practice:metronome.info')}
           </InfoTip>
         }

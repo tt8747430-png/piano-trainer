@@ -7,7 +7,9 @@ export const editor = {
   // The dock over the sheet's foot (ADR 0114): the tempo, ‹ Play ›, and Record.
   dock: 'Play, move and record',
   // The tools row (ADR 0115), the Player's in its place: the View, Transpose, then the edit row.
-  tools: 'Editing tools',
+  tools: 'Score tools',
+  // The floating capsule of what is done to the notes chosen: Delete, Copy, Cut, Paste.
+  selection: 'Selection',
   // The editor's Transpose (ADR 0115): its sheet writes the song in another key.
   transpose: {
     key: 'Apply to key',
@@ -69,7 +71,6 @@ export const editor = {
     },
   },
   // The edit row under the bar: what is done to what is chosen.
-  editRow: 'Edit',
   copy: 'Copy',
   cut: 'Cut',
   paste: 'Paste',
@@ -503,8 +504,6 @@ export const editor = {
   song: {
     title: 'Title',
     tempo: 'Tempo',
-    tempoWords: 'Tempo words',
-    tempoLabel: '{{word}}, {{bpm}} a minute',
     meter: 'Time signature',
   },
   // Record in the dock, the recording strip, and the takes' own sheet (ADR 0028, 0096).
@@ -516,8 +515,6 @@ export const editor = {
     needsMidi: 'Recording needs a MIDI keyboard.',
     // The takes' button beside Record, with how many there are.
     takes: 'Takes: {{count}}',
-    // The recording strip's settings: Settings › Recording's switches.
-    settings: 'Recording settings',
     // The takes' button while the song has none: greyed, its tooltip saying why.
     noTakes: 'No takes yet: Record keeps one here.',
     full: 'Your takes are full: delete one to record another.',
@@ -642,31 +639,52 @@ export const editor = {
   },
   // An editor's draft of a built-in song's original (ADR 0116): what its strip says, Publish, the
   // draft's menu (Versions, Discard), and the dialogs they open.
+  // A lesson's example of notes on its own score (round 27).
+  example: {
+    missing: 'This example is no longer in the lesson.',
+    refused: {
+      marks: 'An example has no marks: this change is not kept.',
+      chords: 'An example plays one note at a time: this change is not kept.',
+      staves: 'An example has one staff, or a tune over a bass: this change is not kept.',
+      rhythm: 'An example writes notes from whole notes to sixteenths: this change is not kept.',
+      meter:
+        'An example is in 2/4, 3/4, 4/4, 6/8 or 12/8, one time and key: this change is not kept.',
+    },
+  },
+  // An item made in the app, given up on its Settings page (round 28).
+  remove: {
+    title: 'Remove',
+    unpublish: 'Unpublish',
+    unpublishTitle: 'Unpublish {{title}}?',
+    unpublishBody:
+      'Learners no longer get it. It stays here unpublished, to change and publish again.',
+    unpublished: 'Unpublished',
+    delete: 'Delete',
+    deleteTitle: 'Delete {{title}}?',
+    deleteBody:
+      'It is deleted for good, with its unpublished changes and every version kept of it.',
+    deleted: 'Deleted',
+  },
   original: {
-    what: 'What to edit',
-    mine: 'Mine',
-    theOriginal: 'The original',
-    opening: 'Opening the draft…',
-    offline: 'You’re offline: the draft opens once you’re back online.',
-    failed: 'The draft could not be opened.',
+    draft: 'Publishing',
+    opening: 'Opening…',
+    offline: 'You’re offline: it opens once you’re back online.',
+    failed: 'It could not be opened.',
     retry: 'Try again',
-    editorsOnly: 'Only an editor edits a song’s original.',
-    toSong: 'Back to the song',
+    editorsOnly: 'Only an editor edits this.',
     toSongs: 'Back to Songs',
-    label: 'Draft of the original',
-    unchanged: 'Original · not changed',
-    drafted: 'Draft · not published',
-    saving: 'Draft · saving…',
-    saved: 'Draft · saved',
-    notSavedOffline: 'Draft · not saved: you’re offline',
-    notSaved: 'Draft · not saved',
+    drafted: 'Not published',
+    saving: 'Saving…',
+    saved: 'Saved · not published',
+    notSavedOffline: 'Offline: not saved yet',
+    notSaved: 'Not saved: it tries again with your next change',
     publish: 'Publish',
     publishTitle: 'Publish {{title}}?',
     publishBody:
       'Every learner gets this version the next time the app starts. The version it replaces is kept, to restore.',
     published: 'Published. Learners get it the next time the app starts.',
-    unreadable: 'The draft’s music doesn’t read as the song. Put it right, then publish.',
-    more: 'The draft’s menu',
+    unreadable: 'The changed music doesn’t read as the song. Put it right, then publish.',
+    more: 'Publishing',
     versions: 'Versions',
     versionsTitle: 'Versions of {{title}}',
     versionsBody:
@@ -677,12 +695,63 @@ export const editor = {
     latest: 'Newest',
     restore: 'Restore',
     restored: 'Restored. Learners get it the next time the app starts.',
-    discard: 'Discard the draft',
-    discardTitle: 'Discard the draft?',
-    discardBody: 'The song goes back to its published version, and the draft’s changes are lost.',
-    discarded: 'Draft discarded',
+    discard: 'Discard changes',
+    discardTitle: 'Discard the changes?',
+    discardBody: 'It goes back to its published version, and the changes are lost.',
+    discarded: 'Changes discarded',
     cancel: 'Cancel',
     actionOffline: 'You’re offline. Try again once you’re back online.',
     actionFailed: 'That didn’t go through. Try again.',
+  },
+  // The score's Settings (round 28, Flat's score settings): its credits, instruments, music, layout
+  // and how the editor writes.
+  scoreSettings: {
+    title: 'Score settings',
+    open: 'Settings…',
+    score: 'Score',
+    names: {
+      title: 'Title',
+      subtitle: 'Subtitle',
+      composer: 'Composer',
+      lyricist: 'Lyricist',
+      arranger: 'Arranger',
+    },
+    add: 'Add',
+    namesInfo:
+      'Printed under the title, as a printed score has them: the subtitle in the middle, the lyricist on the left, the composer and the arranger on the right.',
+    instruments: 'Instruments',
+    instrumentsInfo:
+      'Each instrument is a staff. Taking one away takes its notes with it; Undo in the editor brings them back. Rename a staff by tapping its name on the score.',
+    families: { other: 'Other' },
+    staff: 'Staff',
+    music: 'Music',
+    tempo: 'Tempo',
+    tempoValue: '{{tempo}} a minute',
+    key: 'Key signature',
+    time: 'Time signature',
+    timeOther: '{{meter}}',
+    bars: 'Bars',
+    barsInfo: 'Bars are added or taken away at the end of the song.',
+    layout: 'Layout',
+    staffSize: 'Staff size',
+    staffSizes: {
+      '75': 'Smallest',
+      '90': 'Small',
+      '100': 'Normal',
+      '115': 'Large',
+      '130': 'Largest',
+    },
+    staffSizeInfo:
+      'How large the staves are drawn, in the Player and the editor. On a phone on its side the staves still fit the screen.',
+    barsPerLine: 'Bars per line',
+    asWritten: 'As written',
+    barsPerLineInfo:
+      'The most bars a line holds. A line holds fewer where they don’t fit the width.',
+    editing: 'Editing',
+    hearNotes: 'Hear notes as you edit',
+    hearNotesInfo:
+      'A note sounds when you tap it on the score or move its pitch. Keys you play sound anyway.',
+    midi: 'MIDI keyboard',
+    keyboard: 'Keyboard and recording',
   },
 } as const

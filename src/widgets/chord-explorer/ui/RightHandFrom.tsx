@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { chordInversions, noteName, placeChord, type Tone } from '@/shared/lib/music'
+import { chordInversions, placeChord, type Tone, printedNote } from '@/shared/lib/music'
 import { Segmented } from '@/shared/ui'
 
 /**
@@ -23,7 +23,7 @@ export function RightHandFrom({
       options={chordInversions(tones).flatMap((inversion) => {
         const [start] = placeChord(tones, { inversion, bothHands: true }).rh
         return start
-          ? [{ value: inversion, label: `${start.tone.degree} ${noteName(start.tone.note)}` }]
+          ? [{ value: inversion, label: `${start.tone.degree} ${printedNote(start.tone.note)}` }]
           : []
       })}
       onChange={onChange}

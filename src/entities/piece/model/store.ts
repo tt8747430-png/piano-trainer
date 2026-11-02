@@ -12,7 +12,9 @@ import {
 } from '@/shared/lib/music'
 import { barTicksOf, chartOf, stavesOf } from './chart'
 import { ContentError } from './content-error'
+import { readNote } from './song-facts'
 import { musicOf, type PieceMusic } from './music'
+import { savedHeader, savedLayout } from './score-header'
 import {
   isOwnSongId,
   ownSongNumber,
@@ -145,6 +147,10 @@ function singsLyrics(piece: ChartPiece): boolean {
   }
 }
 
+/** A field only where it has a value. */
+const optional = <K extends string, V>(key: K, value: V | undefined) =>
+  (value === undefined ? {} : { [key]: value }) as Partial<Record<K, V>>
+
 /**
  * Saved music that reads as a piece's: its fields, its chart, single staves and hands; null
  * otherwise. Its words are kept where they read on the staff they are on (ADR 0097), its own title
@@ -176,6 +182,8 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     ...(single.length > 0 && leadSheet === true ? { leadSheet } : {}),
     ...(written ? { hands: written } : {}),
     ...(isLyricsStaff(lyricsOn, single.length) ? { lyricsOn } : {}),
+    ...optional('header', savedHeader(saved.header)),
+    ...optional('layout', savedLayout(saved.layout)),
   }
   try {
     const ends = stavesOf(piece).flatMap(({ notes }) =>
@@ -215,7 +223,15 @@ function songOf(saved: unknown): OwnSong | null {
   if (!song) return null
   // Who published it, where it came from the Public library: as long as a title, at most.
   const author = isText(saved.author) ? saved.author.trim().slice(0, TITLE_MAX) : ''
-  return { id: saved.id, title: song.title, ...song.music, ...(author ? { author } : {}) }
+  // What is said of it, written on its page (round 28).
+  const note = readNote(saved.note)
+  return {
+    id: saved.id,
+    title: song.title,
+    ...song.music,
+    ...(author ? { author } : {}),
+    ...(note ? { note } : {}),
+  }
 }
 
 /** The value already held where it has the same content: a screen's memos over it hold. */

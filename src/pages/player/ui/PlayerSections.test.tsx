@@ -11,7 +11,7 @@ type User = ReturnType<typeof userEvent.setup>
 /** Opens More and finds its Sections. */
 async function sectionsAction(user: User, more = 'More', name = 'Sections') {
   await user.click(await screen.findByRole('button', { name: more }))
-  return within(await screen.findByRole('dialog', { name: more })).getByRole('button', { name })
+  return within(await screen.findByRole('menu', { name: more })).getByRole('menuitem', { name })
 }
 
 /** The sheet's sections, each its name and where it starts. */
@@ -33,7 +33,8 @@ describe('the Player’s Sections (ADR 0107)', () => {
       expect(screen.queryByRole('dialog', { name: 'Sections' })).not.toBeInTheDocument(),
     )
     // The cursor at the chorus's first bar: the editor opens there from it (ADR 0115).
-    expect(screen.getByRole('link', { name: 'Edit' })).toHaveAttribute('href', '/edit/bz5?bar=9')
+    await user.click(screen.getByRole('button', { name: 'Edit' }))
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/Bar 9, beat 1/))
   })
 
   it('marks the section the cursor is in', async () => {
@@ -75,7 +76,7 @@ describe('the Player’s Sections (ADR 0107)', () => {
     )
     await renderApp('/play/my-1', { storage })
     const sections = await sectionsAction(user)
-    expect(sections).toBeDisabled()
+    expect(sections).toHaveAttribute('aria-disabled', 'true')
     expect(sections).toHaveAccessibleDescription('This song has one section.')
   })
 

@@ -7,6 +7,7 @@ import type { Midi } from '@/shared/lib/music'
 import type { Scheduled } from '@/shared/lib/schedule'
 import type { SheetField } from '@/widgets/score-sheet'
 import type { EditorTakes } from './use-editor-takes'
+import type { EditorTarget } from './editor-target'
 
 /** What Play plays, while it plays: its pass, and where it started on the audio clock. */
 export interface Heard {
@@ -62,7 +63,7 @@ export interface ScoreEditorValue {
     readonly title: string
     readonly playing: boolean
     /** Whose music: a catalog piece's version, an own song, or a built-in song's original (an editor's). */
-    readonly kind: 'version' | 'song' | 'original'
+    readonly kind: EditorTarget['kind']
     /**
      * Whether the last change could not be saved (an edit the song's music cannot be written with):
      * the song keeps the music last saved.

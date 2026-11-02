@@ -15,11 +15,6 @@ export const player: LocaleResources['player'] = {
     one: { song: 'В этой песне один раздел.', study: 'В этом этюде один раздел.' },
   },
   print: 'Печать',
-  exportMidi: 'Экспорт в MIDI',
-  exportMidiFixed: 'Экспорт в MIDI, ровный темп',
-  exportMidiAligned: 'Экспорт в MIDI, по записи',
-  exportMusicXml: 'Экспорт в MusicXML',
-  mode: { label: 'Играть или править', practise: 'Играть', edit: 'Править' },
   views: {
     label: 'Как показывать музыку',
     sheet: 'Ноты',
@@ -133,7 +128,6 @@ export const player: LocaleResources['player'] = {
   playing: 'Как звучит',
   allPatterns: 'Все фактуры',
   ownPattern: 'Своя фактура',
-  ownPatternDetail: 'Левая и правая рука на ваш выбор',
   inversion: { own: 'Эта фактура играет свои фигуры.' },
   keyWalk: {
     label: 'По тональностям',

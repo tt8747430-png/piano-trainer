@@ -4,12 +4,12 @@ import {
   chordsHolding,
   HOLDING_GROUPS,
   noteFromParam,
-  noteName,
   noteParam,
   pitchClassOf,
   spellInKey,
   type Key,
   type NoteParam,
+  printedNote,
 } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
@@ -53,7 +53,6 @@ export function KeyHarmonise({
         <h3 id={id} className="text-2xl">
           {t('scales.key.harmonise')}
         </h3>
-        <p className="max-w-prose text-muted-foreground">{t('scales.key.harmoniseAbout')}</p>
       </div>
       <div className="grid-fields gap-x-10 gap-y-5">
         <NoteChoice
@@ -72,7 +71,7 @@ export function KeyHarmonise({
       {groups.length === 0 ? (
         <div className="flex flex-col items-start gap-3">
           <p className="text-muted-foreground">
-            {t('reharmonise.noneInKey', { note: noteName(note) })}
+            {t('reharmonise.noneInKey', { note: printedNote(note) })}
           </p>
           <Button variant="outline" onClick={() => onChange({ onlyInKey: undefined })}>
             {t('reharmonise.showBorrowed')}

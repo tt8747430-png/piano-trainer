@@ -1,6 +1,7 @@
 import { parseKey } from '@/shared/lib/music'
 import { factsOf } from './facts'
 import { musicOf, readMusic, type PieceMusic } from './music'
+import { readNote } from './song-facts'
 import {
   isPiece,
   isSongCollectionId,
@@ -24,6 +25,8 @@ const MUSIC_FIELDS = [
   'hands',
   'lyrics',
   'lyricsOn',
+  'header',
+  'layout',
 ] as const satisfies readonly (keyof PieceMusic)[]
 
 /** Whether a body from the database reads as a newer copy of this catalog piece: its id, kind and key. */
@@ -107,5 +110,27 @@ export function originalMusic(piece: ChartPiece, body: unknown): PieceMusic | un
     return music
   } catch {
     return undefined
+  }
+}
+
+/**
+ * An editor's draft of the piece read back whole (round 28): its music as `originalMusic` reads it,
+ * and what its page says of it (its titles and note) as written there; who wrote it is its music's.
+ */
+export function originalPiece(piece: ChartPiece, body: unknown): ChartPiece | undefined {
+  const music = originalMusic(piece, body)
+  if (!music) return undefined
+  const written = body as Partial<Record<'title' | 'titleEn' | 'titleRu' | 'note', unknown>>
+  const { note: _note, ...withMusic } = originalWith(piece, music)
+  const note = readNote(written.note)
+  const text = (value: unknown) => (typeof value === 'string' && value.trim() ? value : undefined)
+  const titleEn = text(written.titleEn) ?? piece.titleEn
+  const titleRu = text(written.titleRu) ?? piece.titleRu
+  return {
+    ...withMusic,
+    title: text(written.title) ?? piece.title,
+    ...(titleEn ? { titleEn } : {}),
+    ...(titleRu ? { titleRu } : {}),
+    ...(note ? { note } : {}),
   }
 }

@@ -25,4 +25,11 @@ describe('breakLine', () => {
     expect(breakLine([100, 100, 100], Infinity)).toEqual([3])
     expect(breakLine([], 300)).toEqual([])
   })
+
+  it('holds no more bars a line than the most asked, the room known or not (Flat’s bars per line)', () => {
+    expect(breakLine([100, 100, 100, 100, 100], 1000, 2)).toEqual([2, 2, 1])
+    expect(breakLine([100, 100, 100, 100], Infinity, 2)).toEqual([2, 2])
+    expect(breakLine([100, 100, 100, 100, 100, 100], 300, 4)).toEqual([3, 3])
+    expect(breakLine([100, 100], 1000, 8)).toEqual([2])
+  })
 })

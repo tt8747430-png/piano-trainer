@@ -1,6 +1,6 @@
 import { act, cleanup, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import {
@@ -70,10 +70,19 @@ async function openFilters(user: ReturnType<typeof userEvent.setup>) {
   return screen.findByRole('dialog', { name: 'Filters' })
 }
 
+/** A row in Select by its check's name: the row, and its face, which carries it. */
+function rowOf(check: string) {
+  const box = screen.getByRole('checkbox', { name: check })
+  const row = box.closest('li')
+  const face = box.parentElement?.firstElementChild
+  if (!row || !(face instanceof HTMLElement)) throw new Error(`a row for ${check}`)
+  return { row, face }
+}
+
 /** Opens a row's More (⋯) by what it is the More of, and chooses an action. */
 async function rowAction(user: ReturnType<typeof userEvent.setup>, name: string, action: string) {
   await user.click(await screen.findByRole('button', { name: `More for ${name}` }))
-  await user.click(await screen.findByRole('button', { name: action }))
+  await user.click(await screen.findByRole('menuitem', { name: action }))
 }
 
 describe('Songs: the library’s Home and its folders (ADR 0106)', () => {
@@ -331,6 +340,37 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     expect(rowNames(folders).at(-1)).toBe('New folder Empty')
   })
 
+  it('New only adds: a song, an import, a folder; the Public library is a row of its own', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs')
+    expect(await screen.findByRole('link', { name: 'Public library' })).toHaveAttribute(
+      'href',
+      '/songs/public',
+    )
+    await user.click(await screen.findByRole('button', { name: 'New' }))
+    expect(await screen.findByRole('button', { name: /New song/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Import/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /New folder/ })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Public library/ })).not.toBeInTheDocument()
+  })
+
+  it('exports a song from its row’s More: one sheet of MusicXML, MIDI and its link', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs', { storage: saved({ pieces: { songs: [SONG], nextSong: 2 } }) })
+    await rowAction(user, 'Morning', 'Export…')
+    const sheet = await screen.findByRole('dialog', { name: 'Export' })
+    expect(
+      within(sheet)
+        .getAllByRole('button')
+        .flatMap((row) => (row.textContent ? [row.textContent] : [])),
+    ).toEqual(['MusicXML', 'MIDI', 'Share link'])
+    await user.click(within(sheet).getByRole('button', { name: /^Share link/ }))
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog', { name: 'Export' })).not.toBeInTheDocument(),
+    )
+    expect(new URL(await navigator.clipboard.readText()).pathname).toBe('/songs/shared')
+  })
+
   it('imports a MIDI file from New as the learner’s song, opening its page (ADR 0107)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/songs')
@@ -423,7 +463,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
       }),
     })
     await user.click(await screen.findByRole('button', { name: 'More for Sunday' }))
-    await user.click(await screen.findByRole('button', { name: 'Delete folder' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Delete folder' }))
     const ask = await screen.findByRole('alertdialog', { name: 'Delete “Sunday”?' })
     expect(ask).toHaveTextContent(
       'The folder is deleted for good. Your own songs in it are deleted for good, with their takes: 1. The app’s songs in it go to the archive: 1.',
@@ -532,6 +572,40 @@ describe('Songs: Select (ADR 0106)', () => {
     await waitFor(() => expect(libraryStore.getState().favourites).toEqual(['amazing']))
   })
 
+  it('exports the songs chosen, a file each, from the one Export sheet', async () => {
+    const user = userEvent.setup()
+    const names: string[] = []
+    vi.stubGlobal(
+      'URL',
+      class extends URL {
+        static override createObjectURL = () => 'blob:music'
+        static override revokeObjectURL = () => {}
+      },
+    )
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (
+      this: HTMLAnchorElement,
+    ) {
+      names.push(this.download)
+    })
+    await renderApp('/songs/folders/hymns')
+    await user.click(await screen.findByRole('button', { name: 'Select' }))
+    const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    // Nothing chosen, nothing to export.
+    expect(within(bar).getByRole('button', { name: 'Export' })).toBeDisabled()
+    await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
+    await user.click(within(bar).getByRole('button', { name: 'Export' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Export' })
+    expect(within(sheet).getByText('Selected: 2')).toBeInTheDocument()
+    const midi = within(sheet).getByText('MIDI', { exact: true }).closest('button')
+    if (!midi) throw new Error('MIDI is a row of Export')
+    await user.click(midi)
+    expect(names).toEqual([
+      expect.stringMatching(/^Silent Night.*\.mid$/),
+      expect.stringMatching(/^Amazing Grace.*\.mid$/),
+    ])
+  })
+
   it('acts only on the rows chosen that are in sight, a search hiding the rest', async () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs/folders/hymns')
@@ -564,6 +638,70 @@ describe('Songs: Select (ADR 0106)', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Selected: 5' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Done' }))
     expect(screen.getByRole('heading', { level: 1, name: 'Hymns' })).toBeInTheDocument()
+  })
+
+  it('carries a song by its face into a folder, the folder lit as the target, with Undo', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs', {
+      storage: saved({ pieces: { songs: [SONG], nextSong: 2 } }),
+    })
+    await user.click(await screen.findByRole('button', { name: 'Select' }))
+    const song = rowOf('Select Morning')
+    const folder = rowOf('Select Hymns')
+    stubBox(song.row, { top: 600, width: 360, height: 72 })
+    stubBox(folder.row, { top: 100, width: 360, height: 72 })
+    const mouse = { button: 0, buttons: 1 }
+    fireEvent.mouseDown(song.face, { ...mouse, clientX: 20, clientY: 630 })
+    fireEvent.mouseMove(document, { ...mouse, clientX: 20, clientY: 400 })
+    fireEvent.mouseMove(document, { ...mouse, clientX: 30, clientY: 130 })
+    // Carried, the bar is where it drops; the folder under the pointer is lit.
+    expect(await screen.findByRole('group', { name: 'Drop here' })).toBeInTheDocument()
+    await waitFor(() => expect(folder.row.querySelector('[data-drop]')).not.toBeNull())
+    fireEvent.mouseUp(document, { button: 0, clientX: 30, clientY: 130 })
+    await waitFor(() =>
+      expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toMatchObject({
+        folder: 'hymns',
+      }),
+    )
+    expect(await screen.findByText('“Morning” moved to Hymns')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    await waitFor(() =>
+      expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toMatchObject({ folder: null }),
+    )
+  })
+
+  it('carries every row chosen onto Archive on the bar', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs/folders/hymns')
+    await user.click(await screen.findByRole('button', { name: 'Select' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
+    const song = rowOf('Select Silent Night')
+    // The bar's places stand at the foot, as they are drawn once the rows are carried.
+    const box = HTMLElement.prototype.getBoundingClientRect
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (
+      this: HTMLElement,
+    ) {
+      return this.dataset.slot === 'drop-zone'
+        ? DOMRect.fromRect({
+            x: this.textContent === 'Archive' ? 200 : 0,
+            y: 760,
+            width: 180,
+            height: 56,
+          })
+        : box.call(this)
+    })
+    const mouse = { button: 0, buttons: 1 }
+    fireEvent.mouseDown(song.face, { ...mouse, clientX: 20, clientY: 20 })
+    fireEvent.mouseMove(document, { ...mouse, clientX: 20, clientY: 300 })
+    const zones = await screen.findByRole('group', { name: 'Drop here' })
+    expect(within(zones).getByText('Move to Home')).toBeInTheDocument()
+    fireEvent.mouseMove(document, { ...mouse, clientX: 240, clientY: 770 })
+    fireEvent.mouseMove(document, { ...mouse, clientX: 241, clientY: 780 })
+    fireEvent.mouseUp(document, { button: 0, clientX: 241, clientY: 780 })
+    await waitFor(() => expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived'))
+    expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
+    expect(await screen.findByText('Archived: 2')).toBeInTheDocument()
   })
 
   it('moves what is chosen by the Move sheet, into a new folder', async () => {
@@ -683,7 +821,7 @@ describe('Songs: the sort and the filters (ADR 0106)', () => {
   it('says which filter found nothing, by its own words', async () => {
     await renderApp('/songs/folders/hymns?key=C%23m')
     // The key as the app names keys.
-    expect(await screen.findByText('No songs here in C# minor.')).toBeInTheDocument()
+    expect(await screen.findByText('No songs here in C♯ minor.')).toBeInTheDocument()
     cleanup()
     await renderApp('/songs/folders/hymns?key=C%23m&favourites=true')
     expect(await screen.findByText('No songs here match these filters.')).toBeInTheDocument()
@@ -691,23 +829,39 @@ describe('Songs: the sort and the filters (ADR 0106)', () => {
 })
 
 describe('Songs: your own', () => {
-  it('makes a new song at Home from its title, key and meter, and opens it in the editor', async () => {
+  it('makes a new song at Home in Flat’s three steps: its name, its instruments, its setup', async () => {
     const user = userEvent.setup()
     const { router, piecesStore, libraryStore } = await renderApp('/songs')
     await user.click(await screen.findByRole('button', { name: 'New' }))
     await user.click(await screen.findByRole('button', { name: 'New song' }))
-    const make = await screen.findByRole('button', { name: 'Make' })
-    expect(make).toBeDisabled()
-    await user.type(screen.getByRole('textbox', { name: 'Title' }), 'Evening')
-    const key = screen.getByRole('group', { name: 'Key' })
-    await user.click(within(key).getByRole('radio', { name: 'E' }))
-    await user.click(within(key).getByRole('radio', { name: 'Minor' }))
-    await user.click(screen.getByRole('radio', { name: '3/4' }))
-    await user.click(make)
+    const sheet = await screen.findByRole('dialog', { name: 'New song' })
+    expect(within(sheet).getByRole('button', { name: 'Next' })).toBeDisabled()
+    await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), 'Evening')
+    await user.click(within(sheet).getByRole('button', { name: 'Next' }))
+    // The piano chosen to start, as Flat's score starts with one instrument.
+    expect(within(sheet).getByRole('heading', { name: 'Evening' })).toBeInTheDocument()
+    expect(within(sheet).getByText('1 selected')).toBeInTheDocument()
+    expect(within(sheet).getByRole('status', { name: 'Piano: 1' })).toBeInTheDocument()
+    await user.click(within(sheet).getByRole('button', { name: 'Next' }))
+    // Fine-tune: the tempo typed, more bars, the key signature, the time signature.
+    const tempo = within(sheet).getByRole('textbox', { name: 'Tempo' })
+    await user.clear(tempo)
+    await user.type(tempo, '120{Enter}')
+    await user.click(within(sheet).getByRole('button', { name: 'One bar more' }))
+    await user.click(within(sheet).getByRole('radio', { name: 'Minor' }))
+    await user.click(within(sheet).getByRole('button', { name: 'G major / E minor' }))
+    await user.click(within(sheet).getByRole('button', { name: '3/4' }))
+    await user.click(within(sheet).getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
-    expect(piecesStore.getState().songs).toMatchObject([
-      { id: 'my-1', title: 'Evening', key: 'Em', meter: '3/4' },
-    ])
+    const song = piecesStore.getState().songs[0]
+    expect(song).toMatchObject({
+      id: 'my-1',
+      title: 'Evening',
+      key: 'Em',
+      meter: '3/4',
+      tempo: 120,
+    })
+    expect(song?.sections[0]?.lines[0]?.split(' ')).toHaveLength(5)
     expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toMatchObject({ folder: null })
   })
 
@@ -716,8 +870,9 @@ describe('Songs: your own', () => {
     const { router, libraryStore } = await renderApp('/songs/folders/hymns')
     await user.click(await screen.findByRole('button', { name: 'New' }))
     await user.click(await screen.findByRole('button', { name: 'New song' }))
-    await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Doxology')
-    await user.click(screen.getByRole('button', { name: 'Make' }))
+    await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Doxology{Enter}')
+    await user.click(screen.getByRole('button', { name: 'Next' }))
+    await user.click(screen.getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
     expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toEqual({
       folder: 'hymns',
@@ -725,23 +880,32 @@ describe('Songs: your own', () => {
     })
   })
 
-  it('makes a lead sheet: a staff alone, the piano hidden (ADR 0114, 0097)', async () => {
+  it('makes a choir over the piano, or one voice alone: a lead sheet (ADR 0114, 0097)', async () => {
     const user = userEvent.setup()
     const { piecesStore, router } = await renderApp('/songs/folders/hymns')
     await user.click(await screen.findByRole('button', { name: 'New' }))
     await user.click(await screen.findByRole('button', { name: 'New song' }))
-    await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Hymn')
-    await user.click(screen.getByRole('button', { name: 'Customize' }))
-    const score = await screen.findByRole('dialog', { name: 'Score' })
-    const staves = within(score).getByRole('radiogroup', { name: 'Staves' })
-    expect(within(staves).getByRole('radio', { name: 'Piano' })).toBeChecked()
-    await user.click(within(staves).getByRole('radio', { name: 'A staff' }))
-    await user.click(within(score).getByRole('button', { name: 'Done' }))
-    await user.click(await screen.findByRole('button', { name: 'Make' }))
+    await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Hymn{Enter}')
+    // The instruments by family, found by Search.
+    await user.type(screen.getByRole('searchbox', { name: 'Search instruments' }), 'sop')
+    expect(screen.queryByRole('button', { name: 'One more Alto' })).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'One more Soprano' }))
+    await user.clear(screen.getByRole('searchbox', { name: 'Search instruments' }))
+    // No piano under two voices: one voice alone is a lead sheet.
+    expect(screen.getByRole('button', { name: 'One Piano fewer' })).toBeEnabled()
+    await user.click(screen.getByRole('button', { name: 'One more Alto' }))
+    expect(screen.getByRole('button', { name: 'One Piano fewer' })).toBeDisabled()
+    await user.click(screen.getByRole('button', { name: 'One Alto fewer' }))
+    await user.click(screen.getByRole('button', { name: 'One Piano fewer' }))
+    await user.click(screen.getByRole('button', { name: 'Next' }))
+    await user.click(screen.getByRole('button', { name: 'Common time' }))
+    await user.click(screen.getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
     expect(piecesStore.getState().songs[0]).toMatchObject({
-      staves: [{ notes: 'r/4' }],
+      staves: [{ name: { en: 'Soprano' }, notes: 'r/4' }],
       leadSheet: true,
+      meter: '4/4',
+      timeSymbol: true,
     })
   })
 

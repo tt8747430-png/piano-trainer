@@ -1,7 +1,7 @@
 import { AudioWaveform } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Credits, entryTitles, PieceFactCards, type Piece } from '@/entities/piece'
+import { Credits, entryTitles, PieceFactCards, type Piece, shownCredits } from '@/entities/piece'
 import { usePieceInversions } from '@/features/choose-diagram-inversion'
 import { chordSummary } from '@/features/practice'
 import { useLocale } from '@/shared/i18n'
@@ -58,7 +58,7 @@ export function SongInfo({
           {secondary || piece.credits ? (
             <div className="flex flex-col gap-1.5 text-muted-foreground">
               {secondary ? <p className="text-lg">{secondary}</p> : null}
-              {piece.credits ? <Credits credits={piece.credits} /> : null}
+              {shownCredits(piece).length > 0 ? <Credits credits={shownCredits(piece)} /> : null}
             </div>
           ) : null}
         </div>

@@ -6,6 +6,10 @@ import { Popover, PopoverContent, PopoverTrigger } from './primitives/popover'
 
 // Drawn 20px beside a name, a line of small text's height; its reach grows to a 44px touch target
 // round it (CODE_STYLE §5) without taking that room from the row.
+/** In a screen's bar: a round 44px button on the bar's soft fill, as every bar action (`variant="bar"`). */
+const BAR_TRIGGER =
+  'inline-grid size-11 shrink-0 place-items-center rounded-full bg-muted/70 text-foreground transition-colors duration-200 ease-out select-none hover:bg-muted data-popup-open:bg-muted [&_svg]:size-5'
+
 const TRIGGER =
   'relative inline-grid size-5 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors duration-200 ease-out select-none before:absolute before:-inset-3 before:content-[""] hover:text-foreground data-popup-open:text-foreground [&_svg]:size-4'
 
@@ -16,11 +20,14 @@ const TRIGGER =
  */
 export function InfoTip({
   name,
+  bar = false,
   className,
   children,
 }: {
   /** The name of what it explains, as printed beside it. */
   name: string
+  /** In a screen's bar, beside its other round actions, rather than beside a name. */
+  bar?: boolean
   className?: string
   /** The explanation. */
   children: ReactNode
@@ -33,7 +40,7 @@ export function InfoTip({
           <button
             type="button"
             aria-label={t('infoTip', { name })}
-            className={cn(TRIGGER, className)}
+            className={cn(bar ? BAR_TRIGGER : TRIGGER, className)}
           />
         }
       >

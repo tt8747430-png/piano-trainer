@@ -8,6 +8,7 @@ import {
   SourceLine,
   usePieces,
   type Piece,
+  shownCredits,
 } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
 
@@ -41,7 +42,7 @@ export function PieceByline({ piece }: { piece: Piece }) {
           {mark}
         </div>
       ) : null}
-      {piece.credits ? <Credits credits={piece.credits} /> : null}
+      {shownCredits(piece).length > 0 ? <Credits credits={shownCredits(piece)} /> : null}
       {piece.source || (!lead && mark) ? (
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           {lead ? null : mark}

@@ -18,12 +18,17 @@ export interface ScoreLine {
  * A score cut into the chart's lines (each section's, as it is written), each its own score of the
  * measures it holds: what the Player lays out down the screen or on pages. A chart line wider than
  * `fit.room` is cut into as few lines as hold it, as even as they come by its measures' `widths`
- * (ADR 0087).
+ * (ADR 0087), holding no more bars than `fit.most` (ADR 0114).
  */
 export function scoreLines(
   score: Score,
   performance: Performance,
-  fit?: { readonly room: number; readonly widths: readonly number[] },
+  fit?: {
+    readonly room: number
+    readonly widths: readonly number[]
+    /** The most bars a line holds, the score's layout's (ADR 0114). */
+    readonly most?: number | undefined
+  },
 ): ScoreLine[] {
   const lines: ScoreLine[] = []
   const add = (from: number, to: number) =>
@@ -40,7 +45,7 @@ export function scoreLines(
     const ends = !next || next.section !== bar?.section || next.line !== bar.line
     if (!ends) return
     const sizes = fit
-      ? breakLine(fit.widths.slice(start, index + 1), fit.room)
+      ? breakLine(fit.widths.slice(start, index + 1), fit.room, fit.most)
       : [index + 1 - start]
     for (const size of sizes) {
       add(start, start + size)

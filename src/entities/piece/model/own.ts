@@ -1,4 +1,5 @@
 import { plainText } from '@/shared/lib'
+import type { LocalText } from '@/shared/i18n'
 import type { PieceMusic } from './music'
 
 /** A song of the learner's own: its id, `my-` and its number, never given twice. */
@@ -12,6 +13,8 @@ export interface OwnSong extends PieceMusic {
   readonly id: OwnSongId
   readonly title: string
   readonly author?: string
+  /** What is said about it, written on its page. */
+  readonly note?: LocalText
 }
 
 /** The longest title an own song takes. */

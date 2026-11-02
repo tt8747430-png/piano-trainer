@@ -1,5 +1,6 @@
+import { Outlet, useChildMatches } from '@tanstack/react-router'
 import { PanelLeftOpen } from 'lucide-react'
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   selectKeyboard,
@@ -15,17 +16,19 @@ import {
   useElementSize,
   useHiddenWhileReading,
   useKeyboardHeight,
+  useKeyboardTop,
   useMediaQuery,
 } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
 import { PlayerArea, SCORE_SCREEN, ScoreBar } from '@/widgets/practice-player'
-import { ScoreEditorContext } from '../model/editor-context'
+import { ScoreEditorContext, useScoreEditorContext } from '../model/editor-context'
 import type { EditorTarget } from '../model/editor-target'
 import { useEditorShortcutList } from '../model/use-editor-shortcut-list'
 import { usePalettePanel } from '../model/use-palette-panel'
 import { useScoreEditor } from '../model/use-score-editor'
 import { CaretLine } from './CaretLine'
 import { EditorDock } from './EditorDock'
+import { SelectionActions } from './SelectionActions'
 import { EditorActions, EditorLead } from './EditorHeader'
 import { EditorToolsRow } from './EditorToolsRow'
 import { EditorKeyboard } from './EditorKeyboard'
@@ -59,20 +62,36 @@ const SHEET_EDGES = 'mx-[calc(-1*max(var(--gutter),env(safe-area-inset-left)))]'
  * keyboard. The keys dock under all of it, or under the bar, as the keyboard settings say. The
  * transport floats over the sheet's foot, the Player's in shape and place (ADR 0115), stepping aside
  * while the music is read; the sheet has room to scroll its last line above it. While a take records,
- * its strip stands where the transport was. What the music's owner says of it (an editor's draft of
- * a song's original, its strip) stands over the sheet, in the column's head (`head`).
+ * its strip stands where the transport was. An editor's draft of a song's original says where it
+ * stands, with its menu (Publish first), in the bar by Done (`draft`), never over the music.
  */
 export function ScoreEditor({
   target,
   bar,
-  head,
+  draft,
+  done,
 }: {
   target: EditorTarget
   bar?: number | undefined
-  head?: ReactNode
+  draft?: ReactNode
+  /** Done in its own place (a lesson's example's, back to its lesson). */
+  done?: ReactNode
 }) {
-  const { t } = useTranslation('editor')
   const editor = useScoreEditor(target, bar)
+  // The score's Settings (`/edit/$pieceId/settings`, round 28) in the editor's place, on the same
+  // draft: what it changes is undone in the editor as any edit.
+  const inSettings = useChildMatches().length > 0
+  return (
+    <ScoreEditorContext value={editor}>
+      {inSettings ? <Outlet /> : <EditorScreen draft={draft} done={done} />}
+    </ScoreEditorContext>
+  )
+}
+
+/** The editor's screen over its context's draft (`ScoreEditor`). */
+function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) {
+  const { t } = useTranslation('editor')
+  const editor = useScoreEditorContext()
   useEditorShortcutList()
   const onSide = useMediaQuery(LANDSCAPE_PHONE)
   const panel = usePalettePanel()
@@ -142,7 +161,7 @@ export function ScoreEditor({
         ref={sheet}
         data-area="sheet"
         style={{ scrollPaddingBottom: below + GAP }}
-        className="h-full min-h-0 overflow-y-auto overscroll-contain"
+        className="h-full min-h-0 scroll-pt-(--tools-room) overflow-y-auto overscroll-contain pt-(--tools-room)"
         {...floating.reading}
         onClickCapture={floating.show}
       >
@@ -152,11 +171,15 @@ export function ScoreEditor({
       </div>
     )
   return (
-    <ScoreEditorContext value={editor}>
+    <>
       {/* The Player's frame (ADR 0115): its bar's two groups, its tools row, the work and the keys
           in the Player's places, so the bar and the keys stand still as Practise · Edit switches. */}
       <div data-keys={dock} className={SCORE_SCREEN}>
-        <ScoreBar lead={<EditorLead />} actions={<EditorActions />} tools={<EditorToolsRow />} />
+        <ScoreBar
+          lead={<EditorLead />}
+          actions={<EditorActions draft={draft} done={done} />}
+          tools={<EditorToolsRow />}
+        />
         {/* Where the caret is, a screen reader's alone, in the Player's status line's place. */}
         <PlayerArea area="status">{idle ? <CaretLine /> : null}</PlayerArea>
         <div
@@ -203,9 +226,6 @@ export function ScoreEditor({
             />
           ) : null}
           <div className="relative flex min-h-0 flex-1 flex-col">
-            {/* What the music's owner says over it, in the column's head: the music under it, never
-                covered. */}
-            {head ? <div className="flex shrink-0 justify-center px-2 pb-2">{head}</div> : null}
             <div className="min-h-0 flex-1">{music}</div>
             {/* What floats over the music (ADR 0115): above it, only its own controls taking a touch. */}
             <div className="pointer-events-none absolute inset-0 z-30">
@@ -222,19 +242,18 @@ export function ScoreEditor({
                 // The transport at the sheet's foot where the Player's stands (ADR 0115).
                 className="absolute inset-x-0 bottom-0 flex justify-center px-1 pb-2 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:pb-1"
               >
-                <div className="pointer-events-auto shrink-0">
-                  {idle ? <EditorDock /> : <RecordingStrip />}
+                <div className="flex shrink-0 flex-col items-center gap-2">
+                  <SelectionActions />
+                  <div className="pointer-events-auto">
+                    {idle ? <EditorDock /> : <RecordingStrip />}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           {panel ? null : typing ? (
             // The field's slim bar stands over the phone's own keyboard, where the sheet was.
-            <div
-              ref={setDocked}
-              aria-hidden
-              className="pointer-events-none fixed inset-x-0 bottom-[var(--kb-inset,0px)] h-0"
-            />
+            <KeyboardAnchor ref={setDocked} />
           ) : (
             <div
               className={cn(
@@ -254,6 +273,22 @@ export function ScoreEditor({
         <OpenField anchor={typing ? docked : anchor} />
       </FieldDocked>
       <TakesSheet />
-    </ScoreEditorContext>
+    </>
+  )
+}
+
+/**
+ * Where the phone's keyboard begins (round 26): the slim bar of a field typed in stands on it,
+ * followed as iOS pans the screen under it; at the screen's foot while no keyboard is up.
+ */
+function KeyboardAnchor({ ref }: { ref: Ref<HTMLDivElement> }) {
+  const top = useKeyboardTop()
+  return (
+    <div
+      ref={ref}
+      aria-hidden
+      style={top === null ? { bottom: 0 } : { top }}
+      className="pointer-events-none fixed inset-x-0 h-0"
+    />
   )
 }

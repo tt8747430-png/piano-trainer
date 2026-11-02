@@ -3,13 +3,13 @@ import {
   LETTERS,
   note,
   noteFromParam,
-  noteName,
   noteParam,
   ROOT_ACCIDENTALS,
   type Letter,
   type NoteParam,
   type RootAccidental,
   type SpelledNote,
+  printedNote,
 } from '@/shared/lib/music'
 import { StepStrip } from './StepStrip'
 
@@ -27,7 +27,8 @@ const ROOT_SPELLINGS = (letter: Letter): readonly RootAccidental[] =>
 
 /**
  * A note as it is written, chosen from a strip of its spellings with ‹ › to step along it, as the
- * reference app does: C C♯ D♭ D … B, both spellings of a black key side by side. What is chosen is
+ * reference app does: C C♯ D♭ D … B, both spellings of a black key side by side, its name beside
+ * the label. What is chosen is
  * what is written: D♭ stays D♭. `accidentals` keeps each letter to the spellings it may take (a
  * key's); the note chosen is always in the strip.
  */
@@ -36,7 +37,7 @@ export function NoteChoice({
   value,
   onChange,
   accidentals = ROOT_SPELLINGS,
-  name = noteName,
+  name = printedNote,
   children,
 }: {
   label: string
@@ -58,7 +59,7 @@ export function NoteChoice({
   )
   return (
     <div role="group" aria-label={label} className="@container flex min-w-0 flex-col gap-2">
-      <p aria-hidden className="flex items-baseline justify-between gap-3">
+      <p aria-hidden className="flex items-baseline gap-2">
         <span className="text-sm text-muted-foreground">{label}</span>
         <span className="font-semibold">{name(chosen)}</span>
       </p>
@@ -69,7 +70,7 @@ export function NoteChoice({
             value={value}
             options={spellings.map((spelled) => ({
               value: noteParam(spelled),
-              label: noteName(spelled),
+              label: printedNote(spelled),
             }))}
             onChange={onChange}
           />

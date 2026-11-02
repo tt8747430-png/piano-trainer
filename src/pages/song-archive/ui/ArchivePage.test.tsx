@@ -102,7 +102,7 @@ describe('The archive (ADR 0106)', () => {
     )
     expect(within(rows[0] as HTMLElement).queryByRole('button', { name: 'More' })).toBeNull()
     await user.click(within(rows[1] as HTMLElement).getByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('button', { name: 'Delete' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Delete' }))
     const ask = await screen.findByRole('alertdialog', { name: 'Delete “Morning”?' })
     await user.click(within(ask).getByRole('button', { name: 'Delete' }))
     await waitFor(() => expect(piecesStore.getState().songs).toEqual([]))

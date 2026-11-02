@@ -1,6 +1,6 @@
 import { netResult, type NetOptions } from '../network'
 import type { Json, Backend, PianoClient } from '../supabase'
-import type { PublicEntry, PublicLibrary, Published } from './types'
+import { DESCRIPTION_MAX, type PublicEntry, type PublicLibrary, type Published } from './types'
 
 const ENTRY = 'id, kind, title, author_name, saves, published_at, meta'
 const LIMIT = 100
@@ -24,6 +24,7 @@ function entryOf(row: EntryRow): PublicEntry {
   const meter = text(meta.meter)
   const rh = text(meta.rh)
   const lh = text(meta.lh)
+  const description = text(meta.description)?.trim().slice(0, DESCRIPTION_MAX)
   return {
     id: row.id,
     kind: row.kind === 'pattern' ? 'pattern' : 'song',
@@ -31,7 +32,13 @@ function entryOf(row: EntryRow): PublicEntry {
     authorName: row.author_name,
     saves: row.saves,
     publishedAt: row.published_at,
-    meta: { ...(key && { key }), ...(meter && { meter }), ...(rh && { rh }), ...(lh && { lh }) },
+    meta: {
+      ...(key && { key }),
+      ...(meter && { meter }),
+      ...(rh && { rh }),
+      ...(lh && { lh }),
+      ...(description && { description }),
+    },
   }
 }
 

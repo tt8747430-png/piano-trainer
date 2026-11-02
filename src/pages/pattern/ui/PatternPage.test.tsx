@@ -1,4 +1,4 @@
-import { act, screen, waitFor } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -67,14 +67,16 @@ describe('A pattern’s page', () => {
     await user.click(star)
     expect(star).toHaveAttribute('aria-pressed', 'true')
     expect(patternsStore.getState().favourites).toEqual(['ballad'])
-    await user.click(screen.getByRole('button', { name: 'Hide from the Player' }))
+    await user.click(screen.getByRole('button', { name: 'More' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Hide from the Player' }))
     expect(patternsStore.getState().hidden).toEqual(['ballad'])
     expect(
       screen.getByText(
         'Hidden from the Player’s list and from its shelf. You can still find it under Yours.',
       ),
     ).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Show in the Player' }))
+    await user.click(screen.getByRole('button', { name: 'More' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Show in the Player' }))
     expect(patternsStore.getState().hidden).toEqual([])
   })
 
@@ -86,19 +88,21 @@ describe('A pattern’s page', () => {
     )
   })
 
-  it('shows the learner’s own, with Edit and Delete, and deletes it once asked', async () => {
+  it('shows the learner’s own, with Edit, Publish and Delete in More, and deletes it once asked', async () => {
     const user = userEvent.setup()
     const { router, patternsStore } = await renderApp('/practice/accompaniment/patterns/my-1', {
       storage: withOwn(),
     })
     expect(await screen.findByRole('heading', { level: 1, name: 'Sunday' })).toBeInTheDocument()
     expect(screen.getByText('Charleston · Walking the triad 1–3–5–3')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Edit' })).toHaveAttribute(
-      'href',
-      '/practice/accompaniment/patterns/my-1/edit',
-    )
-    expect(screen.queryByRole('button', { name: 'Hide from the Player' })).toBeNull()
-    await user.click(screen.getByRole('button', { name: 'Delete' }))
+    await user.click(screen.getByRole('button', { name: 'More' }))
+    const more = await screen.findByRole('menu', { name: 'More' })
+    expect(
+      within(more)
+        .getAllByRole('menuitem')
+        .map((action) => action.textContent),
+    ).toEqual(['Edit', 'Publish in library', 'Delete'])
+    await user.click(within(more).getByRole('menuitem', { name: 'Delete' }))
     await user.click(await screen.findByRole('button', { name: 'Delete' }))
     await waitFor(() =>
       expect(router.state.location.href).toBe('/practice/accompaniment?show=yours'),
@@ -154,26 +158,39 @@ describe('A pattern’s page', () => {
 })
 
 describe('a pattern of the learner’s own in the Public library (ADR 0116)', () => {
-  it('is published, asked first, its figures with it; then removed', async () => {
+  it('is published from its own page, as a song is, its figures with it; then unpublished', async () => {
     const user = userEvent.setup()
     const account = { email: 'ana@example.com', name: 'Ana', password: 'correct horse' }
     const auth = createFakeAuth({ accounts: [account] })
     await auth.signIn(account.email, account.password)
     const publicLibrary = createFakePublicLibrary({ author: () => ({ id: 'ana', name: 'Ana' }) })
-    await renderApp('/practice/accompaniment/patterns/my-1', {
+    const { router } = await renderApp('/practice/accompaniment/patterns/my-1', {
       storage: withOwn(),
       auth,
       publicLibrary,
     })
-    await user.click(await screen.findByRole('button', { name: 'Publish to the Public library' }))
-    await user.click(await screen.findByRole('button', { name: 'Publish' }))
+    await user.click(await screen.findByRole('button', { name: 'More' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Publish in library' }))
+    await screen.findByRole('heading', { level: 1, name: 'Publish in library' })
+    expect(router.state.location.pathname).toBe('/practice/accompaniment/patterns/my-1/publish')
+    await user.type(
+      screen.getByRole('textbox', { name: 'Description' }),
+      'A walking bass under jazz chords',
+    )
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
     expect(await screen.findByText('Published to the Public library.')).toBeInTheDocument()
     const listed = await publicLibrary.browse({ kind: 'pattern', sort: 'new', query: '' })
     expect(listed).toMatchObject({
       ok: true,
-      value: [{ kind: 'pattern', title: 'Sunday', meta: { rh: 'jaz', lh: 'walk' } }],
+      value: [
+        {
+          kind: 'pattern',
+          title: 'Sunday',
+          meta: { rh: 'jaz', lh: 'walk', description: 'A walking bass under jazz chords' },
+        },
+      ],
     })
-    await user.click(screen.getByRole('button', { name: 'Remove from the Public library' }))
+    await user.click(await screen.findByRole('button', { name: 'Unpublish' }))
     await waitFor(async () =>
       expect(await publicLibrary.browse({ kind: 'pattern', sort: 'new', query: '' })).toEqual({
         ok: true,

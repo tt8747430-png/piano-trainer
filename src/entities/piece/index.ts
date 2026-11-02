@@ -38,13 +38,30 @@ export {
 export { keyText, musicOf, readMusic, sameMusic, type PieceMusic } from './model/music'
 export { HAND_IDS, type HandId } from './model/parse-hands'
 export {
+  BARS_PER_LINE,
+  HEADER_FIELDS,
+  HEADER_MAX,
+  headerLine,
+  isBarsPerLine,
+  isStaffSize,
+  STAFF_SIZES,
+  staffScale,
+  withHeaderLine,
+  type HeaderField,
+  type PieceLayout,
+  type ScoreHeader,
+  type StaffSize,
+} from './model/score-header'
+export {
   isOwnSongId,
   ownSongId,
   PIECE_TEMPO,
   songTitle,
   TITLE_MAX,
+  type OwnSong,
   type OwnSongId,
 } from './model/own'
+export { shownCredits, songFacts, withSongFacts, type SongFacts } from './model/song-facts'
 export {
   createPiecesStore,
   PIECES_STORAGE_KEY,
@@ -70,6 +87,7 @@ export {
   choosableChordSize,
   entriesInKey,
   entryById,
+  hasEditableOriginal,
   isOwnKey,
   pieceById,
   piecesPlaying,
@@ -82,6 +100,7 @@ export {
 export { shelfOf } from './model/shelf'
 export {
   originalMusic,
+  originalPiece,
   originalWith,
   pieceRecordBody,
   pieceRecordMeta,
@@ -90,11 +109,11 @@ export {
 } from './model/content-record'
 export { entryTitles, entryWords } from './model/titles'
 export { Credits } from './ui/Credits'
-export { PieceFactCards } from './ui/PieceFactCards'
+export { PieceFactCards, PieceFactLine } from './ui/PieceFactCards'
 export { PieceLink } from './ui/PieceLink'
 export { SourceLine } from './ui/SourceLine'
-export { usePieceHeadings, useSectionHeading } from './ui/use-section-heading'
-export { useStaffNames, useStaffTitle } from './ui/use-staff-names'
+export { usePieceHeadings, usePieceHeadingsOf, useSectionHeading } from './ui/use-section-heading'
+export { staffNamesOf, useStaffNames, useStaffTitle } from './ui/use-staff-names'
 export { TempoText } from './ui/TempoText'
 export { useTempoText } from './ui/use-tempo-text'
 export { COLLECTIONS, METHOD_BOOK_PIECES, PIECES, SONG_COLLECTIONS } from './content'

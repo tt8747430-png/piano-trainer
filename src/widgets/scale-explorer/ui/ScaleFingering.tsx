@@ -2,10 +2,10 @@ import { useTranslation } from 'react-i18next'
 import { useFold } from '@/features/fold-section'
 import {
   fingerCrossings,
-  noteName,
   type Finger,
   type Hand,
   type PlacedTone,
+  printedNote,
 } from '@/shared/lib/music'
 import { FoldSection, HandDiagram } from '@/shared/ui'
 
@@ -64,7 +64,7 @@ export function ScaleFingering({ run, standard }: { run: FingeredRun; standard: 
                       </th>
                       {run.placed.map((placed, at) => (
                         <td key={at} className="min-w-4.5">
-                          {noteName(placed.tone.note)}
+                          {printedNote(placed.tone.note)}
                         </td>
                       ))}
                     </tr>

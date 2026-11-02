@@ -75,3 +75,9 @@ not its music.
 - r13 — Export to MusicXML, MIDI from the song page, and Import of MusicXML and MIDI (2026-10-28).
 - r14 — A broken .mxl says so, an import closed while reading makes nothing; a shared song's Add names the library
   (2026-10-28).
+- r24 — A song's page and its library row export from one Export… sheet: MusicXML, MIDI and Share link, each with
+  what it is for (2026-10-30).
+- r25 — The Player's More exports from the same Export… sheet (MusicXML, MIDI, MIDI time aligned where a recording
+  plays along, Share link); its separate Export to… items and its Share are gone (2026-10-30).
+- r25 — Select's bar exports the songs chosen from the same Export… sheet, a file each (2026-10-30).
+- r26 — A song's Export…, Share link and Publish in library stand on its Settings page; Publish in library is a page of its own (2026-11-01).

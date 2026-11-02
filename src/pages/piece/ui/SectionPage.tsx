@@ -7,7 +7,14 @@ import { PieceInversions } from '@/features/choose-diagram-inversion'
 import { loopParam } from '@/features/practice'
 import { useLocale } from '@/shared/i18n'
 import { OPEN_PLAINLY } from '@/shared/lib'
-import { BackButton, ButtonLink, NotFound, RoundLink, ScreenHeader } from '@/shared/ui'
+import {
+  BackButton,
+  ButtonLink,
+  FabLink,
+  FloatingActions,
+  NotFound,
+  ScreenHeader,
+} from '@/shared/ui'
 import { lessonKeys } from '../model/section-lessons'
 import { sectionPaint } from '../model/section-paint'
 import { progressOf, sectionIndex } from '../model/song-progress'
@@ -27,8 +34,8 @@ function SectionBack({ piece }: { piece: Pick<Piece, 'id' | 'kind'> }) {
 
 /**
  * A section's page (ADR 0111): "Learn the Verse", its card (the song, the section's chords,
- * its lessons done), then its lessons in order, each looping its bars in the Player; Practise in the
- * bar loops the whole section.
+ * its lessons done), then its lessons in order, each looping its bars in the Player; Practise, floating,
+ * loops the whole section.
  */
 function SectionView({ piece, section }: { piece: Piece; section: number }) {
   const { t } = useTranslation('piece')
@@ -45,20 +52,6 @@ function SectionView({ piece, section }: { piece: Piece; section: number }) {
       <ScreenHeader
         title={t('learnSection.title', { section: heading })}
         back={<SectionBack piece={piece} />}
-        actions={
-          <RoundLink
-            label={t('practise')}
-            icon={Play}
-            render={
-              <Link
-                to="/play/$pieceId"
-                params={{ pieceId: piece.id }}
-                search={{ loop: loopParam(lessons.bars) }}
-                state={OPEN_PLAINLY}
-              />
-            }
-          />
-        }
       />
       <SectionCard
         title={entryTitles(piece, locale).primary}
@@ -72,6 +65,22 @@ function SectionView({ piece, section }: { piece: Piece; section: number }) {
         lessons={lessons}
         paint={paint}
       />
+      {/* The whole section looped in the Player, the screen's floating action. */}
+      <FloatingActions>
+        <FabLink
+          label={t('practise')}
+          icon={Play}
+          className="[&_svg]:fill-current"
+          render={
+            <Link
+              to="/play/$pieceId"
+              params={{ pieceId: piece.id }}
+              search={{ loop: loopParam(lessons.bars) }}
+              state={OPEN_PLAINLY}
+            />
+          }
+        />
+      </FloatingActions>
     </div>
   )
 }

@@ -7,7 +7,7 @@ import { FormField } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { emailProblem } from '../model/fields'
 import { useAuthSubmit } from '../model/use-auth-submit'
-import { AccountScreen, OfflineLine, ProblemLine } from './AccountScreen'
+import { AccountScreen, FieldGroup, OfflineLine, ProblemLine } from './AccountScreen'
 
 /**
  * Forgotten password (ADR 0116): sends a link to choose a new one, and says so whatever the
@@ -36,15 +36,17 @@ export function ForgotPasswordPage() {
           <p className="text-muted-foreground">{t('forgot.says')}</p>
           <OfflineLine online={online} />
           <form noValidate onSubmit={(event) => void submit(event)} className="flex flex-col gap-4">
-            <FormField
-              label={t('email')}
-              type="email"
-              autoComplete="email"
-              inputMode="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              error={invalid ? t('invalid.email') : undefined}
-            />
+            <FieldGroup>
+              <FormField
+                label={t('email')}
+                type="email"
+                autoComplete="email"
+                inputMode="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                error={invalid ? t('invalid.email') : undefined}
+              />
+            </FieldGroup>
             <ProblemLine problem={problem} />
             <Button type="submit" size="lg" disabled={!online || busy}>
               {t('forgot.submit')}

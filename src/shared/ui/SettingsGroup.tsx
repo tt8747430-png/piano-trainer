@@ -12,12 +12,15 @@ export function SettingsGroup({
   title,
   info,
   flush = false,
+  bare = false,
   children,
   className,
 }: {
   title?: string
   info?: ReactNode
   flush?: boolean
+  /** Its own cards under its name (a list of instruments' families), no card round them. */
+  bare?: boolean
   children: ReactNode
   className?: string
 }) {
@@ -35,9 +38,13 @@ export function SettingsGroup({
           {info ? <InfoTip name={title}>{info}</InfoTip> : null}
         </div>
       ) : null}
-      <div className={cn('flex flex-col card', flush ? 'p-1.5' : 'gap-3 px-5 py-4')}>
-        {children}
-      </div>
+      {bare ? (
+        <div className="flex flex-col gap-3">{children}</div>
+      ) : (
+        <div className={cn('flex flex-col card', flush ? 'p-1.5' : 'gap-3 px-5 py-4')}>
+          {children}
+        </div>
+      )}
     </section>
   )
 }

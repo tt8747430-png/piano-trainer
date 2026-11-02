@@ -39,7 +39,7 @@ export function ErrorsTab() {
                 </span>
                 {latest.stack ? (
                   <details className="text-sm">
-                    <summary className="cursor-pointer text-muted-foreground">
+                    <summary className="cursor-pointer py-3 text-muted-foreground">
                       {t('errors.stack')}
                     </summary>
                     <pre className="mt-2 overflow-x-auto text-xs whitespace-pre">

@@ -61,7 +61,7 @@ describe('the Admin area', () => {
   it('changes an account’s role', async () => {
     const user = userEvent.setup()
     const admin = createFakeAdmin({ accounts: [ANA] })
-    await renderApp('/admin', { auth: await signedInAs('admin'), admin })
+    await renderApp('/admin?tab=accounts', { auth: await signedInAs('admin'), admin })
     const role = await screen.findByRole('radiogroup', { name: 'Role for Ana' })
     await user.click(within(role).getByRole('radio', { name: 'Editor' }))
     await waitFor(() =>
@@ -105,6 +105,36 @@ describe('the Admin area', () => {
     })
   })
 
+  it('deletes a feature switch only once asked', async () => {
+    const user = userEvent.setup()
+    const admin = createFakeAdmin()
+    await admin.saveSwitch({
+      key: 'new-editor',
+      label: 'The new editor',
+      state: 'nobody',
+      groups: [],
+    })
+    await renderApp('/admin?tab=switches', { auth: await signedInAs('admin'), admin })
+    await user.click(await screen.findByRole('button', { name: 'Delete switch' }))
+    const asked = await screen.findByRole('alertdialog', { name: 'Delete “The new editor”?' })
+    await user.click(within(asked).getByRole('button', { name: 'Delete' }))
+    expect(await screen.findByText('No switches yet.')).toBeVisible()
+  })
+
+  it('says a change was not made offline as offline, not as refused', async () => {
+    const user = userEvent.setup()
+    let online = true
+    const admin = createFakeAdmin({ accounts: [ANA], online: () => online })
+    await renderApp('/admin?tab=accounts', { auth: await signedInAs('admin'), admin })
+    const role = await screen.findByRole('radiogroup', { name: 'Role for Ana' })
+    online = false
+    await user.click(within(role).getByRole('radio', { name: 'Editor' }))
+    expect(
+      (await screen.findAllByText('You’re offline. The Admin area needs a connection.'))[0],
+    ).toBeVisible()
+    expect(screen.queryByText('The server turned that down.')).toBeNull()
+  })
+
   it('hides a reported song, stops its author, and dismisses the report', async () => {
     const user = userEvent.setup()
     const admin = createFakeAdmin({ reports: [REPORT] })
@@ -112,6 +142,9 @@ describe('the Admin area', () => {
     await user.click(await screen.findByRole('button', { name: 'Hide' }))
     expect(await screen.findByText('Hidden')).toBeVisible()
     await user.click(screen.getByRole('button', { name: 'Stop them publishing' }))
+    const asked = await screen.findByRole('alertdialog', { name: 'Stop Bo publishing?' })
+    expect(admin.blocked.has('bo')).toBe(false)
+    await user.click(within(asked).getByRole('button', { name: 'Stop them publishing' }))
     await waitFor(() => expect(admin.blocked.has('bo')).toBe(true))
     await user.click(screen.getByRole('button', { name: 'Dismiss' }))
     expect(await screen.findByText('No reports.')).toBeVisible()
@@ -159,13 +192,33 @@ describe('the Admin area', () => {
     })
     const course = await screen.findByRole('link', { name: /Jazz voicings/ })
     expect(course).toHaveTextContent(/Course · Not published yet/)
-    expect(screen.getByRole('link', { name: /Abide/ })).toHaveAttribute(
-      'href',
-      '/edit/abide?original=true',
-    )
+    expect(screen.getByRole('link', { name: /Abide/ })).toHaveAttribute('href', '/edit/abide')
     await user.click(course)
     await waitFor(() => expect(router.state.location.pathname).toBe('/courses/jazz/edit'))
   })
+
+  it(
+    'opens on the overview: accounts, the week’s new and active, errors, reports and drafts',
+    {
+      timeout: 15000,
+    },
+    async () => {
+      const admin = createFakeAdmin({
+        accounts: [{ ...ANA, joinedAt: new Date().toISOString(), lastSignInAt: null }],
+        reports: [REPORT],
+      })
+      await renderApp('/admin', { auth: await signedInAs('admin'), admin })
+      // Four calls answer first: under a full run's load they take a while.
+      const figures = await screen.findByRole('region', { name: 'This week' }, { timeout: 8000 })
+      expect(within(figures).getByText('Accounts').closest('div')).toHaveTextContent(/Accounts\s*1/)
+      expect(within(figures).getByText('New this week').closest('div')).toHaveTextContent(
+        /New this week\s*1/,
+      )
+      expect(within(figures).getByText('Reports to look at').closest('div')).toHaveTextContent(
+        /Reports to look at\s*1/,
+      )
+    },
+  )
 
   it('says when no error was reported', async () => {
     await renderApp('/admin?tab=errors', {
@@ -176,7 +229,7 @@ describe('the Admin area', () => {
   })
 
   it('reads in Russian', async () => {
-    await renderApp('/admin', {
+    await renderApp('/admin?tab=accounts', {
       auth: await signedInAs('admin'),
       admin: createFakeAdmin({ accounts: [ANA] }),
       locale: 'ru',

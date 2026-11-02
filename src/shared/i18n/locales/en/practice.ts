@@ -127,7 +127,6 @@ export const practice = {
       },
     },
     chromatic: 'Chromatic walk',
-    chromaticDetail: 'The chord moved a semitone at a time from its root, one bar each',
     // Chords' row to the Chord finder, which opens on the chord's own keys.
   },
   // Scales and keys: the run, the chords, the key.
@@ -189,8 +188,6 @@ export const practice = {
       studies: 'Studies in this key',
       noSongs: 'No songs are in this key.',
       harmonise: 'Harmonise a melody note',
-      harmoniseAbout:
-        'Every chord that holds the melody note, played under it: chords of the key and chords borrowed from outside it.',
     },
     // A scale's page: its key's common progressions, each opening Progressions in this key.
     keyProgressions: 'Progressions in this key',
@@ -213,9 +210,8 @@ export const practice = {
     edit: {
       open: 'Edit the progression',
       new: 'New progression',
-      newInfo:
-        'It is made unpublished: write its lines and words, then publish it for learners to see it in the library.',
-      title: 'Edit: {{title}}',
+      bar: 'Edit progression',
+      lines: 'Lines',
       heading: 'The progression',
       info: 'Its name and how it sounds in both languages, its style, and its numerals in a major key, a minor key or both.',
       name: 'Name',
@@ -272,7 +268,6 @@ export const practice = {
     },
     between: {
       title: 'Between two chords',
-      about: 'Passing chords are extra chords that lead from one chord of the row into the next.',
       pair: 'From chord to chord',
     },
     style: {

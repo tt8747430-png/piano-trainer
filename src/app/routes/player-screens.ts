@@ -11,7 +11,7 @@ export const editableIn = (state: PiecesState, id: string) => editorTarget(state
 /** Whether a take is there, and the piece's: its page is not found otherwise. */
 export const takeIn = (state: TakesState, pieceId: string, takeId: string) =>
   isTakeId(takeId) && selectTake(state, takeId)?.pieceId === pieceId
-export { ScoreEditorPage, TakePage } from '@/pages/score-editor'
+export { ExampleEditorPage, ScoreEditorPage, TakePage } from '@/pages/score-editor'
 export {
   ChromaticPlayerPage,
   ExercisePlayerPage,

@@ -58,4 +58,11 @@ export interface ContentEditingPort {
   versions(kind: ContentKind, id: string): Promise<NetResult<readonly KeptVersion[]>>
   /** Publishes a kept version again as the item's. */
   restore(kind: ContentKind, id: string, version: string): Promise<NetResult<void>>
+  /**
+   * Takes a published item back from learners (round 28): it reads as unpublished again, its body
+   * kept as its draft (where it has none) for the editor to go on with or publish again.
+   */
+  unpublish(kind: ContentKind, id: string): Promise<NetResult<void>>
+  /** Deletes an item made in the app for good: its row, its draft and the versions kept of it. */
+  remove(kind: ContentKind, id: string): Promise<NetResult<void>>
 }

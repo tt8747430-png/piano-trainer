@@ -24,6 +24,8 @@ export type RowFaceProps = {
   value?: string | undefined
   /** What it shows under its title and detail. */
   children?: ReactNode
+  /** A picture of its own in its tile's place, the tile's size (the learner's `Avatar`). */
+  mark?: ReactNode
 } & RowTile
 
 /**
@@ -42,10 +44,12 @@ export function RowFace({
   trailing,
   value,
   children,
+  mark,
   end,
 }: RowFaceProps & { end?: ReactNode }) {
   return (
     <>
+      {mark}
       {paint ? (
         Icon ? (
           <TileMark icon={Icon} paint={paint} />
@@ -53,8 +57,10 @@ export function RowFace({
           <TileMark numeral={numeral} paint={paint} />
         )
       ) : null}
-      {/* Beside a value, the title takes the room it needs (two thirds at most); the value wraps under itself, never cut short. */}
-      <span className={value ? 'max-w-[65%] min-w-0 flex-[1_0_auto]' : 'min-w-0 flex-1'}>
+      {/* Beside a value, the title takes the room it needs (two thirds at most); the value wraps
+          between its words under itself, never inside one, and a narrow row takes from the title, down
+          to its longest word (round 28: never cut inside one at 320px). */}
+      <span className={value ? 'max-w-[65%] min-w-min flex-[1_4_auto]' : 'min-w-0 flex-1'}>
         <span className="line-clamp-2 text-lg leading-snug font-semibold text-pretty">{title}</span>
         {count ? (
           <>
@@ -81,10 +87,7 @@ export function RowFace({
       {value ? (
         <>
           {' '}
-          <span
-            data-slot="row-value"
-            className="min-w-0 shrink-[9] text-end break-words text-muted-foreground"
-          >
+          <span data-slot="row-value" className="min-w-min text-end text-muted-foreground">
             {value}
           </span>
         </>

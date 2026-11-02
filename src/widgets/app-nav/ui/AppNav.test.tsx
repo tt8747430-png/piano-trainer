@@ -1,3 +1,4 @@
+import { stubMatchMedia } from '@/shared/test/match-media'
 import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
@@ -7,17 +8,26 @@ import { createMemoryStorage } from '@/shared/lib'
 const nav = () => screen.findByRole('navigation', { name: 'Main navigation' })
 
 describe('AppNav', () => {
-  it('lists the three places, then Search, the Profile and Settings', async () => {
+  it('lists the four places, the Profile last, then Search and Settings', async () => {
     await renderApp('/songs')
     const links = within(await nav()).getAllByRole('link')
     expect(links.map((link) => link.textContent)).toEqual([
       'Learn',
       'Songs',
       'Practice',
-      'Search',
       'Profile',
+      'Search',
       'Settings',
     ])
+  })
+
+  it('marks Settings alone current on a laptop, where it is in the sidebar', async () => {
+    // Every media query matches: the sidebar's among them.
+    stubMatchMedia({ dark: true })
+    await renderApp('/settings')
+    const links = within(await nav())
+    expect(links.getByRole('link', { name: /^Settings/ })).toHaveAttribute('aria-current', 'page')
+    expect(links.getByRole('link', { name: /^Profile/ })).not.toHaveAttribute('aria-current')
   })
 
   it('collapses to its icons, each place still named, and opens again', async () => {
