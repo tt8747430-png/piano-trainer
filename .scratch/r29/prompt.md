@@ -659,6 +659,13 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       (dozens of cards), "Through the keys" walks, and "Between two chords". The Library and
       Between two chords become their own places in the page (tabs like Scales' Scale · Chords ·
       Key, or a library list that opens a progression), not one endless scroll.
+    - **The Library's content and shape, as musicca lists it**
+      (`piano-data/Screenshot 2026-10-27 at 20.57.40–55.png`): progressions grouped by style (Pop,
+      Rock, Jazz, Blues "all 12 chords played in succession"), each a row of its chords in bar
+      cells, and "Songs with four chords": title, artist, chords, year. Check our library against
+      it (missing progressions, the 12-bar blues as one row of twelve bars), show each row as its
+      chords in bar cells (`| C | G | Am | F |`), and our songs that use a progression with their
+      bars, as the page already does.
     - **The Library is a list, not a wall of cards:** each card repeats name, description, a play
       button and a row of chord chips; a list row (numerals, name, ▷) with the chords shown when
       opened. Its genre headings (Pop, Rock, Jazz …) become chips, as Explore's categories.
@@ -1323,6 +1330,53 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - Tests: each meter's beats, groups and accents; subdivisions; the drum pattern per meter;
       the flash and the sound on the same clock; a recording of each sound, before and after.
 
+40. **The score editor's panels, against Flat's** (`piano-data/Screenshot 2026-11-02 at
+    19.07.09–19.09.23.png`, Flat on the Fantaisie-Impromptu; `piano-data/flat-*.webarchive` is the
+    same score saved). Flat's left panel has three tabs, **Notation · Instruments · Layout**, each
+    a column of folding groups. Compare ours group by group and build what is missing, in our look:
+    - **Recording from a MIDI keyboard** (19.07.09–19.07.38): a MIDI popover in the bar (MIDI
+      input, MIDI output, "Write while playing", Record live MIDI); a recording bar under the
+      score (Metronome with its tempo and a switch, Start countdown, the device, "Play to start
+      recording. The take starts on your first note."); then **Review your recording**: the take
+      as a piano roll under the engraved result, quantize 1/4 · 1/8 · 1/16 · 1/4t · 1/8t, Hide raw
+      notes, a draggable staff divider (where the hands split), select, split, Discard and Save to
+      score. Our Record take and Write a take (`features/record-take`, `WriteTakePage.tsx`) are to
+      reach this: one flow, these words.
+    - **Instruments** (19.08.19): an All switch; each instrument a row with drag handle, solo (S),
+      visibility (eye) and ⋯; New instrument; sorting. Ours is `widgets/instrument-list`: same
+      row, same actions (solo and show/hide are Part A 35's Play and Show per staff).
+    - **Layout** (19.08.23–19.09.23), each group with a live preview of the page beside it:
+      - **Templates** (Normal, Jazz, your own; Save template);
+      - **Pages:** orientation, page size (A4, A3, Letter), margins in cm, start page numbering;
+      - **Staves:** staff size (mm), minimum space between staves and between systems (a slider
+        with its number);
+      - **Hide non-playing instruments:** Never · After the first system · Always, each with a
+        picture;
+      - **Measures:** note spacing (compact to wide), maximum measures per line;
+      - **Measure numbers:** every measure · each system · never; count after the anacrusis;
+        start numbering at;
+      - **Note heads:** colour (default, Boomwhackers), shape (default, note names inside the
+        heads, solfège with Ti or Si, shape notes), fixed or movable Do: good for beginners, and
+        we have note names only on the keys;
+      - **Music font** (Bravura and others, with a sample);
+      - **Chord styles:** minor m or −, major maj7 · M7 · Δ7, diminished ° or dim, each a picture
+        (our symbol style setting, Part A 32's "Notation and names", is this: one setting, two
+        homes not allowed, rule 18: app-wide default in Settings, a score's own override here);
+      - **Text styles:** the score's font and each text style;
+      - Reset and Save at the panel's foot.
+
+      Ours (`/edit/$pieceId/settings`, the View menu, `ScoreSheet`'s layouts) has a few of these
+      scattered; gather them into this one Layout panel, the preview live, the same groups and
+      words, everything saved with the score and written to MusicXML's layout where it has a
+      place.
+    - **Notation's groups** (19.07.09): Modes (Editing, Duration Replace/Insert, Rest), Pitch and
+      representation (Transposition, Beaming notes, 8va…), Articulations, Ornaments, Dynamics,
+      Measures and brackets, Clef, Key signature, Time signature, Barlines and repeats, Text:
+      our palette's groups in the same order and names (Part A 34).
+    - **The bar** (19.07.09): title with a pencil, transport, metronome, loop, sound, MIDI, Edit
+      menu, save state, Share; under it the note toolbar and, at its right, delete, undo, redo,
+      copy, cut, paste, zoom, layout, print. Ours (Part A 34's alignment) the same grouping.
+
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
    1. **Hero.**
@@ -1501,9 +1555,9 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
    Intervals, Progressions, every Practice page's settings, Accompaniment, Chord finder,
    Metronome, Exercises and Quiz, fingering, the theory pages' owners, colour notes, the Metronome against metronome apps).
 3. **Piano and sound:** Part A 26–27 (the on-screen piano, the piano sound and the pedal).
-4. **Songs, the editor and the Player:** Part A 28, 29, 34, 35, 37 (an own song's page, imports
+4. **Songs, the editor and the Player:** Part A 28, 29, 34, 35, 37, 40 (an own song's page, imports
    and exports, the score editor against Flat, the Player's staves and metronome, the chord
-   views).
+   views, Flat's recording, Instruments and Layout panels).
 5. **Profile** (Part B 1).
 6. **Copy and the rights checkbox** (Part B 2).
 7. **Explore in Songs and the built-in folders' rules** (Part B 3, Decided 8 and 10).
