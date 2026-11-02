@@ -876,6 +876,27 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - **Hand pictures:** kept where they teach (Chords, Scales), the same numbers and crossing mark.
     - **One switch** ("Fingering" on the Player's and the explorers' Settings pages) shows or hides
       it in all of them at once.
+    - **Fingering wherever notes are shown, from one source.** Today it exists on the Chords page
+      (one chord), the Scales page's Scale tab (the run) and in Exercises, and nowhere else:
+      - the seven chords of a scale (Scales' Chords tab), a key's chords and borrowed chords (Key
+        tab), a progression's chords (Progressions), an interval, an accompaniment pattern, a chord
+        the Chord finder names: no fingering at all;
+      - one chord is fingered by two rules: the Chords page uses `placedFingering`/`blockFingering`
+        (`chord-fingering.ts`), the inversion drills use `handFingers` (`exercise/inversions.ts`), so
+        the same C major in 1st inversion can get different fingers on two pages;
+      - "From the thumb · As the scale" exists on Scales only; arpeggios have their own rule
+        (`arpeggioFingering`) shown nowhere outside Exercises and a lesson;
+      - a song shows only the fingering its file prints; nothing suggests fingering for a song or
+        a lesson example that has none.
+
+      Make it one service in the kernel (`music/fingering`): a chord, an inversion, a voicing, a
+      scale, an arpeggio and a passage each fingered by one rule (checked against the method books
+      and the printed scale books), and every page that shows notes shows their fingering the same
+      way (the piano, the score, the hand card, the switch of the bullet above): the Chords tab's
+      seven chords, the Key tab, Progressions (each chord of the voice-led line, the fingers that
+      move least), Intervals, Accompaniment, the Chord finder, the Player and lesson examples
+      ("Suggest fingering" where the music prints none, marked as suggested, editable in the
+      editor). Tests: the same chord, scale and arpeggio give the same fingers on every page.
     - **The hand pictures are shapes, not hands.** `HandDiagram` draws five rounded rectangles on a
       palm outline. Draw real hands: a right and a left hand seen from above, palm down, in one
       line style that fits the app (the impeccable skill's asset steps, or a CC0/CC-BY illustration
