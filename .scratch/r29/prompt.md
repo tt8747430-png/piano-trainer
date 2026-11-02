@@ -423,6 +423,14 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
      `BeatStrip`, `ChordPair`.
 6. **Words.** Check every string in en and ru against `docs/UBIQUITOUS_LANGUAGE.md`: wrong terms,
    developer words, one thing named two ways.
+   - **Professional terms everywhere:** every musical label, option and ⓘ uses the term a
+     theory book, a method book or Flat/Dorico uses, checked in `piano-data/books` and
+     `method-books` (en and ru), never a home-made phrase. Known: "Between two chords" → Passing
+     chords; "Move smoothly" → Voice leading; "Starting position" → Inversion; "Lead into each
+     chord" → Approach chords; "Root motion" → Root movement; "Function" → Harmonic function;
+     "Melody staff" → the staff's name; "Pulsing chords" → Repeated chords; "Who wrote it" →
+     Credits; "Words · Music" → Lyricist · Composer. Each lands in the glossary with its _Avoid_
+     words, and a test fails on an _Avoid_ word in a locale file.
 7. **Navigation bugs.**
    - Learn loses its selected look in the sidebar when its tabs switch: `exact` in
      `widgets/app-nav/ui/AppNav.tsx` compares the `?view=` search too. Fix with
@@ -673,7 +681,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       Dominant") and between each pair of chords the movement as a small labelled arrow (↓5,
       ↓3, ↑2), each name with one plain ⓘ (`music.harmony` in the locales holds today's words;
       rewrite them with the clarify skill against the theory books).
-    - **The page's structure,** tabs like Scales and keys': **Progression · Library · Connect two
+    - **The page's structure,** tabs like Scales and keys': **Progression · Library · Passing
       chords**:
       - **Progression:** the chords (typed as numerals or chord symbols, or tapped in from the
         key's chords), the key picker (Part A 5), Play and the transport, the staff and the
@@ -681,9 +689,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
         walks) and "Songs with this progression" (hidden when empty);
       - **Library:** the progressions as a list with genre chips (above), a row opening it in
         Progression;
-      - **Connect two chords:** today's "Between two chords" (secondary dominants, tritone
-        substitutes, ii–V, chromatic approaches, borrowed chords), from a chord to a chord with
-        two chord pickers.
+      - **Passing chords:** today's "Between two chords" (below).
     - **Its options, named as musicians name them** (on the page only what changes the music
       shown; the rest on its Settings page, Part A 24):
       - on the page: **Chord size** (triads · 7ths · 9ths), **Approach chords** (none · secondary
@@ -697,10 +703,43 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - **Headings:** "Library" (serif with ⌄), "Pop" (serif, no fold), "Through the keys" (small
       sans with ⌄), "Songs with this progression" (serif), "Dominant" (serif, smaller). One style
       per level (rule 29).
-    - **Between two chords:** each card holds a staff that renders empty until scrolled to (check
-      it draws at once in view), a tag "Chromatic" on nearly every card (so it tells nothing), a
-      play button under the text (elsewhere it sits at the right). One card family; the tag only
-      where it differs.
+    - **"Between two chords" is passing chords, and should say so.** It is a port of Ultimate
+      Piano's "Passing Chords" (`piano-data/reference-apps/ultimate-piano/04-*`, `05-*`): from one
+      chord to another, the chords that can go between. Its title means nothing, its groups
+      ("Dominant", "Functional", "Chromatic", "Diminished") mix kinds of chord with kinds of
+      motion, and nearly every card is tagged "Chromatic", so the tag tells nothing (the
+      reference does the same, and also misspells: A♯7 for B♭7, G♯ as IV of E♭, C♯7 for D♭7:
+      check our spellings against the key, never copy them). Rebuild it from the theory books in
+      `piano-data/books` (Bobrova and Gorshkov teach passing chords for church accompaniment) and
+      standard jazz and classical harmony, with their names:
+      - **What it is:** a *passing chord* fills the gap between two chords on a weak beat; an
+        *approach chord* leads into the target from a step, a half step or a fifth away. The
+        section's name: **Passing chords**, its line: "Chords that lead from one chord to the
+        next".
+      - **Groups by how they lead,** each with its symbol in the key and one plain ⓘ:
+        - *Dominant approach:* secondary dominant (V7/x), tritone substitute (♭II7/x, subV7),
+          related ii–V (ii–V/x), backdoor dominant (♭VII7/x);
+        - *Diminished passing chords:* passing diminished (♯i°7 between I and ii, rising),
+          descending diminished, common-tone diminished (the target's root held);
+        - *Chromatic approach:* from a half step below, from a half step above, double approach
+          (both), planing (the target's quality moved a half step);
+        - *Subdominant approach:* IV or borrowed iv before the target (plagal), with the
+          borrowed-chord link to Scales' Harmony (Part A 32);
+        - *Bass-line passing chords:* walk-ups and walk-downs (I – I/3 – IV, the passing ⁶₄),
+          slash chords that move the bass by step.
+      - **Each suggestion card:** the three chords in order (C → B♭7 → E♭) as chips that play,
+        its Roman numerals in the key, the voice leading drawn on a small staff (drawn at once,
+        not left empty until scrolled to), a tag only where it says something (Diatonic ·
+        Borrowed · Chromatic; style: Jazz · Gospel · Classical · Pop), and **Insert** (puts it
+        between the two chords in the progression or the song).
+      - **Where it lives:** owned by Progressions (its third tab: pick two chords, or tap the
+        gap between two chords of the Progression tab's chain); used where chords meet: a "+"
+        between two chord cells in the Grid view and the editor's chord row (Part A 37) opens the
+        same sheet, filtered to that pair and that key; Accompaniment's lessons that teach them
+        link to it; the Quiz can drill them.
+      - Spelled in the key (B♭7, not A♯7), named the same in en and ru (проходящие аккорды,
+        вторичная доминанта, тритоновая замена, проходящий уменьшённый), tests for each group's
+        chords on C → E♭, C → Am and G → C.
     - **"In the key only"** is a bordered toggle again (rule 15), and "C → G" a combobox of pairs
       instead of two chord pickers.
     - **"Songs with this progression: No song uses it yet"** is an empty section shown anyway: an
@@ -1062,8 +1101,8 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     | Voicings (close, open, shell, rootless A/B, drop 2, locked hands, So What) | Chords | Progressions' Voicing uses the same list and pictures |
     | Inversions | Chords | one inversion control everywhere (Part A 32) |
     | Functions (tonic, subdominant, dominant) and their colours | Scales' Harmony | Progressions' strip, the circle |
-    | Secondary dominants, tritone substitutes, ii–V, approach chords ("Between two chords") | Progressions | Harmony shows each chord's secondary dominant as a link |
-    | Borrowed chords (modal interchange) | Scales' Harmony | Progressions' "Between two chords" links there |
+    | Passing and approach chords (secondary dominants, tritone substitutes, ii–V, diminished, chromatic) | Progressions (Passing chords) | Harmony shows each chord's secondary dominant as a link |
+    | Borrowed chords (modal interchange) | Scales' Harmony | Progressions' Passing chords links there |
     | Reharmonising a melody note | Scales' Harmony | the Chord finder, the editor's chord picker |
     | Modes | Scales (a scale kind) | Key tab lists them as links |
     | Cadences | Progressions (their library) | the Quiz's Cadences drill opens them |
