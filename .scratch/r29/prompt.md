@@ -1039,6 +1039,13 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       "B♭" in `owner/63`) and a bare band runs under the palette and the score at the window's
       foot. The transport floats over margins, never over music (the score gets bottom padding
       the transport's height), and the page has no band under it (rule 5, rule 8).
+    - **Padding and alignment** (`owner/66`): the app bar's ✕ starts about 70px in while the Tools
+      panel starts at the edge; the note toolbar starts at the score's left, not the panel's;
+      the pinned piano keeps a margin the rest of the page doesn't; the tuplet cells (⌐2⌐ … ⌐9⌐)
+      and the Pitch group's "↑ 8ve ↓ 8ve" are drawn at different sizes and spill their cells.
+      One gutter for the app bar, the panel, the toolbar and the piano (the app bar's controls on
+      the same left and right edges as what is under them), every palette cell the same size
+      with its glyph centred.
     - **Tooltips** ("Sharp (=)") cover the app bar's words: they open below a toolbar at the top,
       above one at the bottom, never over text.
     - **Long scores:** while a score is engraving, re-flowing after a zoom or a width change, or
@@ -1113,6 +1120,26 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
         (the autoscroll rule above), a tap moving the cursor there: the order the learner plays.
       - Tests: tapping a card in "Chords in this song" never moves the cursor; the order view
         matches the beat strip's changes one for one.
+38. **One meaning for the pencil, for everyone.** On a song's page the pencil does two different
+    things by role: an editor's (and an own song's) edits the page in place (title, who wrote it,
+    about), a learner's on a built-in song opens the score editor (`PieceView.tsx`: `ownId ||
+    original` → `EditToggle`, else a link to `/edit/$pieceId`). The rule, everywhere, for every
+    role (Decided 6): **the pencil edits what the screen shows, in place.**
+    - **Song page:** the pencil edits the page (title, composer, about, sections' names) for
+      whoever may (an editor on a built-in song, anyone on their own); where they may not, there
+      is no pencil (rule 16), never a different action behind the same icon.
+    - **The score:** "Edit score" is its own labelled action: in the song page's overview card
+      beside Practise (one row: Practise · Edit score · Learned · ♡), and the Player's pencil
+      (the Player shows the score, so its pencil edits the score). A learner's edit of a built-in
+      song's score is their version (Decided 8); an editor's is the song everyone sees.
+    - **The same check for every pencil:** lessons, courses, levels, folders, progressions,
+      patterns, the Player, the editor: one action per icon whatever the role, the role deciding
+      only whether it shows. Learner view (Part B 5) proves it: an editor in Learner view sees
+      exactly the learner's actions.
+    - **No setting for this:** what an icon does is not a preference. Settings may choose what a
+      song opens to ("Open a song on: its page · the Player"), never what the pencil means.
+    - Tests: for each screen with a pencil, as a learner and as an editor, the pencil leads to the
+      same kind of editing, and "Edit score" opens the score editor for both.
     - **Edit in every view:** the editor edits only the sheet music. The chord views are the same
       song: an editor (or the learner, in their version) can edit them where they are shown, as
       Chordify's chord editing does:
@@ -1299,22 +1326,29 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   - no layout that can break the page.
 
 ## Rounds
-1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–37: one component each, the app bar,
-   action placement, page/sheet/menu, controls, words, navigation (Back as up, the Search palette, the
-   sidebar's selected look), shapes and selected states, confirmations, the settings map and
-   registry, item acts, settings layout and two panes, pictures and icons, page names, account and
-   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal, an own song's page, imports and exports, fingering, nothing flickering or jumping, the theory pages' owners and settings, colour notes and harmony's owners, the score editor against Flat, the Player's staves and metronome, focus, the chord views.
-2. **Profile** (Part B 1).
-3. **Copy and the rights checkbox** (Part B 2).
-4. **Explore in Songs and the built-in folders' rules** (Part B 3, Decided 8 and 10).
-5. **Edit in place** (Part B 4).
-6. **Learner view** (Part B 5).
-7. **One publishing model** (Part B 6).
-8. **Player and editor settings** (Part B 7).
-9. **The Player's practice flow** (Part B 8).
-10. **Customisable bars** (Part B 10).
-11. **Tools** (Part B 11).
-12. **Customisable pages and cards** (Part B 9).
+1. **Carry-over check and app-wide rules:** Step 0; Part A 1–19, 31, 36, 38 (one component each,
+   the app bar, action placement, page/sheet/menu, controls and the key picker, words, navigation
+   and the Search palette, shapes and selected states, confirmations, the settings map and
+   registry, item acts, settings layout, pictures and icons, page names, account and storage,
+   arrows, destructive rows, laptop layouts, nothing jumping, focus, the pencil's one meaning).
+2. **Practice:** Part A 20–25, 30, 32, 33 (the explorers' buttons and headings, Scales and keys,
+   Intervals, Progressions, every Practice page's settings, Accompaniment, Chord finder,
+   Metronome, Exercises and Quiz, fingering, the theory pages' owners, colour notes).
+3. **Piano and sound:** Part A 26–27 (the on-screen piano, the piano sound and the pedal).
+4. **Songs, the editor and the Player:** Part A 28, 29, 34, 35, 37 (an own song's page, imports
+   and exports, the score editor against Flat, the Player's staves and metronome, the chord
+   views).
+5. **Profile** (Part B 1).
+6. **Copy and the rights checkbox** (Part B 2).
+7. **Explore in Songs and the built-in folders' rules** (Part B 3, Decided 8 and 10).
+8. **Edit in place** (Part B 4).
+9. **Learner view** (Part B 5).
+10. **One publishing model** (Part B 6).
+11. **Player and editor settings** (Part B 7).
+12. **The Player's practice flow** (Part B 8).
+13. **Customisable bars** (Part B 10).
+14. **Tools** (Part B 11).
+15. **Customisable pages and cards** (Part B 9).
 
 ## Each round, before calling it done
 Run impeccable (`audit`, then `polish` or `adapt` where it finds problems) on the screens the round
