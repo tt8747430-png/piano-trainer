@@ -811,6 +811,32 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       is an arrow link (rule 23) floating alone under the card.
     - **Half-empty on a laptop** (rule 28): a full-width Practise bar, a lone ♡ and a short list;
       the overview and the sections can sit side by side, or the page takes a reading width.
+    - **Every song page's head** (`owner/67`, Amazing Grace): "Words: John Newton" and "Music: New
+      Britain (American folk tune)" sit as two loose lines under the title, then the difficulty
+      bars alone on a row of their own with no label. Lay it out as a score's head does: the title,
+      then one credits line ("Words by John Newton · Music: NEW BRITAIN, American folk tune") in the
+      byline style, and the level in the facts row with its name ("Level: Easy ●○○") beside Key,
+      Time and Tempo (one chip style, Part A 8). "Scale: G major →" joins the facts as a link chip
+      (rule 23); Chords and Progressions follow in the same card family.
+    - **The page's editor (the pencil, Part A 38) is unclear and plain:** its fields are "Who wrote
+      it", "Music", "Words", "Add", "About the song", "Edit the music". Make it a proper metadata
+      editor, as a publisher's or MuseScore's score properties and hymnals' credits name things:
+      - **Credits** as their real roles, each an optional row added from "Add credit": Composer,
+        Lyricist (words), Arranger, Translator, Tune name (hymns: NEW BRITAIN), Source or
+        collection, Year, Copyright; each printed where a score prints it (composer right,
+        lyricist left, arranger under the composer) on the score's title block and on the page;
+      - **Title and subtitle**, **About** (a short description, with a counter), **Level**
+        (Beginner to Advanced, the same scale as Learn's levels), **Genre or style**, **Language**
+        of the words, **Tags**;
+      - each field with a placeholder that shows an example ("e.g. John Newton"), a short ⓘ only
+        where the role is unclear (Tune name: "A hymn tune's own name, printed in capitals"),
+        and the en and ru terms checked against the glossary (композитор, автор слов,
+        аранжировка, название напева);
+      - the same fields in the score editor's Settings (its names, Part A 34) and in New song's
+        first step, one store field each (rule 18), and written to MusicXML's `<creator>`,
+        `<rights>`, `<work-title>` and read back (Part A 29);
+      - its actions named for what they do: "Edit score" (not "Edit the music"), "Add credit",
+        "Done".
 29. **Imports and exports** (`shared/lib/musicxml`, `shared/lib/read-midi-file.ts`,
     `shared/lib/schedule/performance-midi.ts`, `features/song-files`). Checked in the code and with
     a small MusicXML file read by `readMusicXml`:
