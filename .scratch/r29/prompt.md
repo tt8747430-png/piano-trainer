@@ -683,11 +683,30 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
         strongest pull; down a 3rd, two shared notes; up a 2nd, none shared), today shown only
         when chosen, with a legend under it.
 
-      Show both at once, not behind a toggle: under the chords, a row of function labels (T S D,
-      in the function colours of Part A 21 and 32, with a legend "Tonic · Subdominant ·
-      Dominant") and between each pair of chords the movement as a small labelled arrow (↓5,
-      ↓3, ↑2), each name with one plain ⓘ (`music.harmony` in the locales holds today's words;
-      rewrite them with the clarify skill against the theory books).
+      Renaming them is not enough: a learner can't tell what the switch changes (nothing they
+      hear: only the letters under the chords) or why it sits next to the music. They are not a
+      setting and not a view of the music; they are the **explanation of why the progression
+      works**. So:
+      - **Remove the switch** from beside the chord strip. The chord chips show only the chord
+        and its numeral, as everywhere else.
+      - **A section of its own under the music, "Why it works"** (folded open the first time,
+        its state remembered), with three parts:
+        - **A sentence first**, written from the chords, in plain words with the terms in bold:
+          "I–V–vi–IV starts at **home** (I), moves to **tension** (V), steps to the **relative
+          minor** (vi) and moves **away** (IV) before coming home again." Generated in the
+          kernel from the numerals and their functions, in en and ru, tested on the library's
+          progressions.
+        - **The roles, drawn:** the chords in a row, each with its role under it in a word and a
+          colour (home · away · tension; the term behind its ⓘ: tonic, subdominant, dominant),
+          and a legend; the same colours as Scales' Harmony and the circle.
+        - **The moves, drawn:** between each pair of chords an arrow with how the bass moves
+          ("down a 5th · strongest pull", "down a 3rd · two notes shared", "up a step · fresh"),
+          the strong moves bolder; a tap plays the two chords.
+      - The chips play as they do now; the section changes nothing in the sound; Play in the
+        section plays the progression slowly with each role lit as it sounds.
+      - The Quiz's "Chord roles" drill links here, and here links to it ("Test yourself").
+      - Done: a learner reading only the section can say what each chord does (the en and ru
+        texts checked with the clarify skill against the theory books in `piano-data/books`).
     - **The page's structure,** tabs like Scales and keys': **Progression · Library · Passing
       chords**:
       - **Progression:** the chords (typed as numerals or chord symbols, or tapped in from the
