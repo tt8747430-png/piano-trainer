@@ -1142,9 +1142,25 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       "Switch to natural" link standing in for it; Major · Minor above. One grid of fifteen keys
       named by their major and minor (C / Am first), as Flat and Dorico show it, the selected one
       in the selected style.
-    - **Time signature:** 2/4, 3/4, 4/4, C, ¢, 6/8 and then 4/4 again in a row of its own (a
-      duplicate). Add the common ones Flat offers (3/8, 5/4, 7/8, 9/8, 12/8, 3/2, 2/2) and Other…
-      (any number over any note value).
+    - **Time signature, as Flat sets it** (`owner/70` is Flat): the palette, New song's Fine-tune
+      step (`NewSongSheet.tsx`'s six fixed `TIMES`) and the score's Settings each offer a fixed
+      handful (2/4, 3/4, 4/4, C, ¢, 6/8; the palette shows 4/4 twice), though the model takes any
+      `n/unit` (`music/time.ts`). One shared control everywhere: the common signatures as
+      engraved tiles (2/4 3/4 4/4 C ¢ 3/8 6/8 9/8 12/8 5/4 7/8 3/2 2/2), then **two fields, beats
+      over a beat unit** (a number 1–32 over 1·2·4·8·16·32), drawn as the signature they make, a
+      pickup bar's length beside it, and where it applies (from this bar, the whole song).
+    - **Tempo, as Flat edits it** (`owner/70`): Flat opens a small popover on the tempo mark: the
+      beat's note value (a menu: ♩ ♪ 𝅗𝅥 ♩.), the number in a field you type into, − and + (hold to
+      repeat), Save, Delete, and a play button to hear it. Ours looks wrong on a laptop and reacts
+      badly (a drag that jumps or ignores small moves). Use Flat's popover on the score's tempo
+      mark, in New song and in Settings: typing, arrow keys ±1 and shift ±10, the note value
+      menu (compound meters default to the dotted quarter), an optional tempo word (Andante…)
+      printed with it, and a tempo change mid-song from the same popover.
+    - **New song's steps** (`owner/69`): the step marks are three bare dashes with no names;
+      "+" rows and a "− 1 +" stepper mix two ways of adding; the Fine-tune step's descriptions
+      read as home-made. Name the steps ("Title · Instruments · Time and key"), one way to add an
+      instrument (a + that becomes a count once added, as Flat's), and every label and hint in the
+      terms Flat and Dorico use (Part A 6).
     - **Not yet built, or built differently from Flat:** go through Flat's palettes (note toolbar,
       Notation, Pitch and representation, articulations, ornaments, dynamics, text, clefs,
       barlines, repeats, layout) and Dorico's and list every option we lack or implement
@@ -1205,6 +1221,35 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     - **The Player's settings page** (Part B 7) is Flat's Playback options plus the reference's
       Display: Audio playback (staves, volumes, the recording), Metronome, Playback speed,
       Display (clef, countdown, cursor, scroll, keyboard, fingering), each a row to its page.
+39. **The Metronome, against the metronome apps players use** (Soundbrenner, Pro Metronome,
+    Tempo; Flat's and the Player's own). Read in `shared/lib/schedule/metronome.ts` and
+    `shared/api/audio/web-audio.ts`:
+    - **Time:** only six meters (4/4, 3/4, 2/4, 2/2, 6/8, 1/4); 6/8 counts six eighths at the
+      tempo set, so 6/8 at 120 clicks eighths at 120, where players set the dotted quarter.
+      Any signature from the shared time control (Part A 34), the tempo in the meter's beat
+      (dotted quarter in 6/8, 9/8, 12/8; half in 2/2), and odd meters grouped (5/8 as 3+2 or 2+3,
+      7/8 as 2+2+3) with the accent on each group.
+    - **Beats you set:** tap a beat square to cycle it accented · normal · silent, as Soundbrenner
+      does; today only the first beat is accented and the squares only show.
+    - **Subdivision:** none today. Quarter · 8ths · triplets · 16ths · swing 8ths, each with its own
+      softer sound.
+    - **Sounds:** Click, Beep and Drums, all synthesised (a falling sine for the kick, white noise
+      for the snare and hat), so the drums sound like a toy. Recorded samples (woodblock, clave,
+      click, cowbell, a spoken count "one two three") with the synthesised voices as fallback,
+      each sampled at the accent and normal levels; the Drums pattern per meter checked against
+      real grooves (4/4: kick 1 and 3, snare 2 and 4, hat on 8ths; 3/4: kick 1, snare 2 and 3;
+      6/8: kick 1, snare 4, hat on every 8th), the hat on the subdivision, not every beat.
+    - **Volume and visual:** its own volume, a full-screen flash on the beat (optional), and the
+      beat squares following the sound exactly (scheduled on the audio clock, the light drawn
+      from the same clock).
+    - **Practice modes:** the bar trainer (play n bars, mute m) exists; add the speed trainer
+      (from one tempo to another by n BPM every m bars) and a tempo list (saved tempos, a
+      song's tempo from the library).
+    - **Look:** one stepper, one menu style (Part A 25), the tempo large with its word, Tap tempo.
+    - **One engine** for the Metronome page, the Player's click and count-in and the quick
+      metronome (Part B 11); its settings are one set (Part A 24).
+    - Tests: each meter's beats, groups and accents; subdivisions; the drum pattern per meter;
+      the flash and the sound on the same clock; a recording of each sound, before and after.
 36. **Focus and keyboard walking.** Tab through every screen: the focus ring is drawn several
     ways (the note toolbar's rounded bracket in `owner/64`, outlines, rings, fills) and some
     controls get none. One focus style (DESIGN.md), on every control, never clipped by its
@@ -1451,9 +1496,9 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
    and the Search palette, shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout, pictures and icons, page names, account and storage,
    arrows, destructive rows, laptop layouts, nothing jumping, focus, the pencil's one meaning).
-2. **Practice:** Part A 20–25, 30, 32, 33 (the explorers' buttons and headings, Scales and keys,
+2. **Practice:** Part A 20–25, 30, 32, 33, 39 (the explorers' buttons and headings, Scales and keys,
    Intervals, Progressions, every Practice page's settings, Accompaniment, Chord finder,
-   Metronome, Exercises and Quiz, fingering, the theory pages' owners, colour notes).
+   Metronome, Exercises and Quiz, fingering, the theory pages' owners, colour notes, the Metronome against metronome apps).
 3. **Piano and sound:** Part A 26–27 (the on-screen piano, the piano sound and the pedal).
 4. **Songs, the editor and the Player:** Part A 28, 29, 34, 35, 37 (an own song's page, imports
    and exports, the score editor against Flat, the Player's staves and metronome, the chord
