@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { WALK, type WalkChoice } from '@/features/practice'
 import { noteParam } from '@/shared/lib/music'
-import { ChordSizeField, Labelled, NoteChoice } from '@/shared/ui'
+import { ChordSizeField, Labelled, NotePicker } from '@/shared/ui'
 import { PatternCard, PlayerSetup } from '@/widgets/player-setup'
 import { PlayingSection } from '@/widgets/practice-player'
 import type { WalkChange } from '../model/walk-search'
@@ -22,10 +22,11 @@ export function WalkSetup({
   const { t } = useTranslation(['player', 'music'])
   return (
     <PlayerSetup figures={choice} fit={WALK.fit} onFigures={onChange}>
-      <NoteChoice
+      <NotePicker
         label={t('root')}
-        value={noteParam(choice.root)}
-        onChange={(root) => onChange({ root })}
+        value={choice.root}
+        onChange={(root) => onChange({ root: noteParam(root) })}
+        className="self-start"
       />
       <Labelled label={t('music:chordSize.label')}>
         <ChordSizeField

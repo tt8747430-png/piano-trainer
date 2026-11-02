@@ -51,6 +51,7 @@ export function SheetContent({
   footer,
   full = false,
   tall = false,
+  initialFocus,
 }: {
   title: string
   description?: string
@@ -62,10 +63,13 @@ export function SheetContent({
   full?: boolean
   /** As tall as a sheet stands, whatever it holds: a sheet that is a screen (the library's filters). */
   tall?: boolean
+  /** What takes the focus as it opens, in place of the panel: a picker's value. */
+  initialFocus?: () => HTMLElement | true
 }) {
   const { t } = useTranslation('common')
   return (
     <DrawerContent
+      {...(initialFocus ? { initialFocus } : {})}
       className={cn(
         'mx-auto w-full max-w-2xl rounded-t-4xl bg-card pb-sheet-keyboard text-base landscape-phone:max-h-[calc(100dvh-1rem)]',
         // The room anchored while no keyboard is up: the phone's keyboard never squeezes it.

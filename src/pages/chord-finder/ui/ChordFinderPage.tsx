@@ -15,14 +15,14 @@ import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
 import { PinnedKeyboard, useFoldKeys } from '@/features/live-keyboard'
 import { partsParams, useViewChange } from '@/shared/lib'
-import { keySymbol, noteParam, printedSymbol } from '@/shared/lib/music'
+import { keyFromParam, keyParam, keySymbol, noteParam, printedSymbol } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import {
   BackButton,
   Fab,
   FloatingActions,
-  KeyChoice,
+  KeyPicker,
   ScreenHeader,
   Sheet,
   SheetContent,
@@ -77,7 +77,11 @@ function FinderSettings({
       </SheetTrigger>
       <SheetContent title={t('chordFinder.settings')}>
         <div className="flex flex-col gap-5 pt-2">
-          <KeyChoice value={view.key} onChange={onKey} />
+          <KeyPicker
+            value={keyFromParam(view.key)}
+            onChange={(key) => onKey(keyParam(key))}
+            className="self-start"
+          />
           <ToggleGrid label={t('chordFinder.settings')}>
             <ToggleTile
               icon={History}

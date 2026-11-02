@@ -48,7 +48,7 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
     <div
       role="group"
       aria-label={label}
-      className="fade-scroll-x flex gap-1 overflow-x-auto overscroll-x-contain scrollbar-none"
+      className="flex gap-1 overflow-x-auto overscroll-x-contain scrollbar-none"
     >
       {children}
     </div>

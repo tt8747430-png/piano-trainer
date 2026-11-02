@@ -418,8 +418,9 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Tabs** (a page's): the views of one thing. _Avoid:_ sub-pages.
 - **Scale view** / **Chords view** / **Key view**: Scales and keys' three tabs. _Avoid:_ mode.
 - **Keys play**: in Chords view, a key plays its chord or its note. _Avoid:_ tap mode.
-- **Strip** (`StepStrip`): one choice of many in a row that scrolls, with ‹ › to step along it (a root's 17
-  spellings, a chord's quality, a scale's kind). _Avoid:_ carousel, picker wheel.
+- **Picker** (`PitchPicker`, `NotePicker`, `KeyPicker`, `MenuPicker`): a value with ⌃⌄ that opens what chooses it;
+  an explorer's stand in one **picker row**. _Avoid:_ strip, carousel, picker wheel.
+- **Usual name**: the name a pitch takes alone, as the major keys name it (C D♭ D E♭ E F F♯ G A♭ A B♭ B).
 - **On the keys** («На клавишах»): what a scale run's keys carry, Notes · Left hand · Right hand. _Avoid:_ key mode.
 - **Fingering by hand** («Аппликатура по рукам»): each hand drawn with its fingers numbered, beside the run's notes
   and that hand's fingers. _Avoid:_ fingering table.

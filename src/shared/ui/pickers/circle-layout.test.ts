@@ -8,6 +8,11 @@ describe('cellCentre', () => {
     expect(cellCentre(3, 'major')).toEqual({ x: 91.5, y: 50 })
     expect(cellCentre(6, 'minor')).toEqual({ x: 50, y: 76 })
   })
+
+  it('puts a split wedge’s halves either side of its centre, the sharps’ half anticlockwise', () => {
+    expect(cellCentre(0, 'major', -1).x).toBeLessThan(50)
+    expect(cellCentre(0, 'major', 1).x).toBeGreaterThan(50)
+  })
 })
 
 describe('wedgePath', () => {
@@ -17,6 +22,11 @@ describe('wedgePath', () => {
     expect(path).toContain('A 49 49 0 0 1')
     expect(path).toContain('A 34 34 0 0 0')
     expect(path.endsWith(' Z')).toBe(true)
+  })
+
+  it('draws a half as fifteen degrees, the halves meeting on the place’s centre line', () => {
+    expect(wedgePath(0, 'major', -1)).toContain('50 1 L 50 16')
+    expect(wedgePath(0, 'major', 1).startsWith('M 50 1 A')).toBe(true)
   })
 })
 

@@ -2,7 +2,6 @@ import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Settings } from 'lucide-react'
 import { describe, expect, it, vi } from 'vitest'
-import { keyParam, note, noteName, noteParam, writtenKeyAccidentals } from '@/shared/lib/music'
 import { ButtonLink } from './ButtonLink'
 import { ChordSizeField } from './ChordSizeField'
 import { Dropdown } from './Dropdown'
@@ -10,10 +9,8 @@ import { FactCard } from './FactCard'
 import { InversionChoice } from './InversionChoice'
 import { RankMark } from './RankMark'
 import { NamedSegmented } from './NamedSegmented'
-import { KeyChoice } from './KeyChoice'
 import { Labelled } from './Labelled'
 import { MenuSection } from './MenuSection'
-import { NoteChoice } from './NoteChoice'
 import { optionName } from './option'
 import { Pinned } from './Pinned'
 import { PlayLabel } from './PlayLabel'
@@ -562,98 +559,6 @@ describe('ToggleChips', () => {
     expect(onChange).toHaveBeenLastCalledWith(['b9', 's9'])
     await user.click(screen.getByRole('button', { name: '#9' }))
     expect(onChange).toHaveBeenLastCalledWith([])
-  })
-})
-
-describe('NoteChoice', () => {
-  it('chooses a note from a strip of its spellings, both of a black key side by side', async () => {
-    const user = userEvent.setup()
-    const onChange = vi.fn()
-    render(<NoteChoice label="Root" value={noteParam(note('D'))} onChange={onChange} />)
-    const root = screen.getByRole('group', { name: 'Root' })
-    expect(
-      within(root)
-        .getAllByRole('radio')
-        .map((each) => each.textContent),
-    ).toEqual([
-      'C',
-      'C♯',
-      'D♭',
-      'D',
-      'D♯',
-      'E♭',
-      'E',
-      'F',
-      'F♯',
-      'G♭',
-      'G',
-      'G♯',
-      'A♭',
-      'A',
-      'A♯',
-      'B♭',
-      'B',
-    ])
-    expect(within(root).getByRole('radio', { name: 'D' })).toBeChecked()
-    await user.click(within(root).getByRole('radio', { name: 'D♭' }))
-    expect(onChange).toHaveBeenLastCalledWith(noteParam(note('D', -1)))
-  })
-
-  it('steps along the strip with ‹ and ›', async () => {
-    const user = userEvent.setup()
-    const onChange = vi.fn()
-    render(<NoteChoice label="Root" value={noteParam(note('D'))} onChange={onChange} />)
-    await user.click(screen.getByRole('button', { name: 'Next: Root' }))
-    expect(onChange).toHaveBeenLastCalledWith(noteParam(note('D', 1)))
-    await user.click(screen.getByRole('button', { name: 'Previous: Root' }))
-    expect(onChange).toHaveBeenLastCalledWith(noteParam(note('D', -1)))
-  })
-
-  it('offers only the spellings a key may take', async () => {
-    const user = userEvent.setup()
-    const onChange = vi.fn()
-    render(
-      <NoteChoice
-        label="Key"
-        value={noteParam(note('C', 1))}
-        accidentals={(letter) => writtenKeyAccidentals(letter, true)}
-        name={(tonic) => `${noteName(tonic)} minor`}
-        onChange={onChange}
-      />,
-    )
-    const key = screen.getByRole('group', { name: 'Key' })
-    expect(within(key).queryByRole('radio', { name: 'D♭' })).not.toBeInTheDocument()
-    expect(screen.getByText('C# minor')).toBeInTheDocument()
-    await user.click(within(key).getByRole('radio', { name: 'D♯' }))
-    expect(onChange).toHaveBeenLastCalledWith(noteParam(note('D', 1)))
-  })
-})
-
-describe('KeyChoice', () => {
-  const D_FLAT = keyParam({ tonic: note('D', -1), minor: false })
-
-  it('chooses the tonic and the mode, writing the key as chosen', async () => {
-    const user = userEvent.setup()
-    const onChange = vi.fn()
-    render(<KeyChoice value={D_FLAT} onChange={onChange} />)
-    const key = screen.getByRole('group', { name: 'Key' })
-    expect(screen.getByText('D♭ major')).toBeInTheDocument()
-    expect(within(key).getByRole('radio', { name: 'Major' })).toBeChecked()
-    expect(within(key).getByRole('radio', { name: 'D♭' })).toBeChecked()
-    expect(within(key).queryByRole('radio', { name: 'D♯' })).not.toBeInTheDocument()
-    await user.click(within(key).getByRole('radio', { name: 'E♭' }))
-    expect(onChange).toHaveBeenLastCalledWith(keyParam({ tonic: note('E', -1), minor: false }))
-  })
-
-  it('takes the other mode on the same keys, respelled only where no signature writes it', async () => {
-    const user = userEvent.setup()
-    const onChange = vi.fn()
-    const { rerender } = render(<KeyChoice value={D_FLAT} onChange={onChange} />)
-    await user.click(screen.getByRole('radio', { name: 'Minor' }))
-    expect(onChange).toHaveBeenLastCalledWith(keyParam({ tonic: note('C', 1), minor: true }))
-    rerender(<KeyChoice value={keyParam({ tonic: note('E'), minor: false })} onChange={onChange} />)
-    await user.click(screen.getByRole('radio', { name: 'Minor' }))
-    expect(onChange).toHaveBeenLastCalledWith(keyParam({ tonic: note('E'), minor: true }))
   })
 })
 

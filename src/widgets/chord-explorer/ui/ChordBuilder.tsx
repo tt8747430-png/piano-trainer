@@ -19,12 +19,14 @@ import {
   type Triad,
 } from '@/shared/lib/music'
 import { partsFromParams, partsParams } from '@/shared/lib'
+import { noteFromParam, noteParam } from '@/shared/lib/music'
 import {
   InversionChoice,
   Labelled,
-  NoteChoice,
+  MenuPicker,
+  NotePicker,
+  PickerRow,
   Segmented,
-  StepStrip,
   ToggleChips,
 } from '@/shared/ui'
 import { isSuspended, takesTwoHands, type ChordView } from '../model/chord-view'
@@ -57,9 +59,9 @@ const SIZE_NAMES = {
 } as const satisfies Record<BuiltSize, string>
 
 /**
- * A chord's choices, every one in sight, each a labelled field in the order a chord is built, each
- * offered only what fits the fields before it: its root (letter and accidental), a row of its own; its
- * quality (major, minor, augmented, diminished), its size, its suspension (a major chord's); then its 7th, the tones it adds and its alterations as
+ * A chord's choices in the order a chord is built, each offered only what fits the fields before it:
+ * one row of pickers for its root as written, its quality (major, minor, augmented, diminished, power)
+ * and its voicing; then its size, its suspension (a major chord's); then its 7th, the tones it adds and its alterations as
  * chips, each only where the chord takes one; then how it is held: its inversion, and one hand or two.
  * A chord of five notes or more takes two hands (ADR 0046): in the inversion's place, where its right
  * hand starts, when it has more than one start.
@@ -92,23 +94,29 @@ export function ChordBuilder({
   return (
     <div className="grid-fields gap-x-10 gap-y-5">
       <div className="col-span-full">
-        <NoteChoice
-          label={t('practice:root')}
-          value={chord.root}
-          onChange={(root) => onChange({ root })}
-        />
+        <PickerRow label={t('practice:chords.builder.chord')}>
+          <NotePicker
+            label={t('practice:root')}
+            value={noteFromParam(chord.root)}
+            onChange={(root) => onChange({ root: noteParam(root) })}
+          />
+          <MenuPicker
+            label={t('practice:chords.builder.quality')}
+            value={quality}
+            options={QUALITIES.map((each) => ({
+              value: each,
+              label: t(`practice:chords.builder.triads.${each}`),
+            }))}
+            onChange={(next) => onChange({ triad: next })}
+          />
+          <VoicingField
+            tones={tones}
+            placed={placed}
+            value={chord.voicing}
+            onChange={(voicing) => onChange({ voicing })}
+          />
+        </PickerRow>
       </div>
-      <Labelled label={t('practice:chords.builder.quality')}>
-        <StepStrip
-          label={t('practice:chords.builder.quality')}
-          value={quality}
-          options={QUALITIES.map((each) => ({
-            value: each,
-            label: t(`practice:chords.builder.triads.${each}`),
-          }))}
-          onChange={(next) => onChange({ triad: next })}
-        />
-      </Labelled>
       <Labelled label={t('music:chordSize.label')}>
         <Segmented
           label={t('music:chordSize.label')}
@@ -180,12 +188,6 @@ export function ChordBuilder({
           />
         </Labelled>
       ) : null}
-      <VoicingField
-        tones={tones}
-        placed={placed}
-        value={chord.voicing}
-        onChange={(voicing) => onChange({ voicing })}
-      />
       {twoHands ? (
         chordInversions(tones).length > 1 ? (
           <Labelled label={t('practice:chords.builder.handFrom')}>

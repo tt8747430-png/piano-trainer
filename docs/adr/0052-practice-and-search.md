@@ -29,17 +29,18 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   **Playing** (Accompaniment, the Chord finder: what the hands play) and **Training** (Exercises, Quiz, Metronome).
   Each row is its tile, its name and one short line of its own, the same in Search. A page's URL sits under its
   page's.
-- **Choosing a root, a quality or a scale** is a strip (`StepStrip`) with ‹ › to step along it, the chosen option a
-  card kept in sight, one greyed never hidden: a root's strip holds its 17 spellings (C C♯ D♭ D … B), a key's the
-  keys a signature writes. Every root and key in the app (`NoteChoice`, `KeyChoice`) is that strip.
+- **Choosing a root, a quality or a scale** is one row of pickers at the top of the page (`PickerRow`, ADR 0061):
+  the root's value with ⌃⌄ opening an octave of twelve keys (`NotePicker`, a black key split "C♯ | D♭"; a pitch alone
+  `PitchPicker`), a quality, a voicing or a scale's kind a menu (`MenuPicker`), a key the circle of fifths
+  (`KeyPicker`). The step strips with ‹ › and their 17 spellings are gone (round 29).
 - **A chord or a scale chosen plays as it is chosen** (a scale up its octave), unless Settings › Keyboard › Play
   what you choose is off.
 - **A thing's page shows it on the keys, read top to bottom**: the keys docked; what it is, with its one honey Play;
   its choices as labelled fields; its sections. **It holds the tools that work on it**, never a tab or a page of their
   own:
-  - Chords: the builder (any chord from its parts, ADR 0046; its quality a strip, the power chord on it; a size or
-    inversion the chord cannot take greyed with why), its voicing (a strip of the eight, ADR 0046, `voicing=`, one
-    the chord cannot take greyed with why, the chosen one's ⓘ saying what it is with its spelling in C and on this
+  - Chords: the builder (any chord from its parts, ADR 0046; its root, quality and voicing one row of pickers, the
+    power chord among the qualities; a size or inversion the chord cannot take greyed with why), its voicing (a menu
+    of the eight, ADR 0046, `voicing=`, one the chord cannot take left out, the chosen one's ⓘ saying what it is with its spelling in C and on this
     chord; a voicing other than close sets the hands, and the inversion where it is not made from a close chord),
     its Fingering (each hand drawn as Scales draws it, beside a row an inversion of each hand's block fingering, the
     keys' own marked; a voicing or a chord of five notes one row of what each hand holds), the fingers on the keys,
@@ -110,3 +111,4 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
 - r24 — The phone's tab bar shown on the places alone (memory-palaces'): what a place opens steps it away; one
   place current at a time, Settings the laptop sidebar's own (2026-10-30).
 - r29 — Back goes up a parents table (`app/routes/parents.ts`), not back through history; Search a palette over the screen; one metronome engine; the Profile's badges, milestones, notifications and Streak pages (decided 2026-11-02, being built in round 29; spec `.scratch/r29/back-as-up/spec.md`).
+- r29 — Roots, qualities, voicings and scale kinds a row of pickers; the step strips gone (round 29, ADR 0061).

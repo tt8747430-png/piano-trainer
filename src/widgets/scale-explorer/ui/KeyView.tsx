@@ -67,7 +67,7 @@ export function KeyView({
       fields={choice}
     >
       <div className="grid-fields items-start gap-x-10 gap-y-6">
-        <CircleOfFifths current={musicKey} />
+        <CircleOfFifths current={musicKey} kind={scale.kind} onChange={onChange} />
         <div className="flex min-w-0 flex-col gap-6">
           <KeySignature value={musicKey} />
           <KeyFacts value={musicKey} />

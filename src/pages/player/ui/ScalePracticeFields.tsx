@@ -3,7 +3,7 @@ import type { ExerciseChoice } from '@/entities/exercise'
 import { type Hand, printedNote } from '@/shared/lib/music'
 import { handOctaves, ownHandOctaves } from '@/shared/lib/exercise'
 import { TEMPO_RANGE, type Hands } from '@/shared/lib/schedule'
-import { Labelled, Segmented, StepStrip, SwitchRow } from '@/shared/ui'
+import { Labelled, MenuPicker, Segmented, SwitchRow } from '@/shared/ui'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import type { PracticePlayer } from '@/widgets/practice-player'
 import type { ExerciseChange } from '../model/exercise-search'
@@ -57,7 +57,8 @@ export function ScalePracticeFields({
         const label = t(`player:scalePractice.startsOn.${hand}`)
         return (
           <Labelled key={hand} label={label}>
-            <StepStrip
+            <MenuPicker
+              bare
               label={label}
               value={asked !== undefined && fits ? asked : own[hand]}
               options={octaves.map(({ octave, out }) => ({

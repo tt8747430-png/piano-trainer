@@ -158,8 +158,7 @@ export const quiz: LocaleResources['quiz'] = {
   },
   choice: {
     chords: 'Аккорды',
-    roots: { chords: 'Основные тоны', intervals: 'От нот' },
-    rootGroups: { natural: 'Без знаков', sharp: 'С диезом', flat: 'С бемолем' },
+    keys: 'Тональности',
     inversions: 'Обращения',
     inversionsInfo: 'Каждый аккорд спрашивается в основном виде и во всех своих обращениях.',
     chosen: '{{count}} из {{total}}',

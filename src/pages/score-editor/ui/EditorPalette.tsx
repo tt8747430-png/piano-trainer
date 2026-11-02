@@ -278,7 +278,7 @@ export function NoteToolbar({
         aria-label={t('palette.toolbar')}
         {...roving}
         className={cn(
-          'fade-scroll-x flex min-w-0 items-center gap-0.5 overflow-x-auto overscroll-x-contain scrollbar-none',
+          'flex min-w-0 items-center gap-0.5 overflow-x-auto overscroll-x-contain scrollbar-none',
           pill ? 'rounded-xl bg-muted px-1' : 'flex-1',
         )}
       >
@@ -343,7 +343,7 @@ function CategoryBar({
   const bar = useRef<HTMLDivElement>(null)
   const roving = useRovingFocus(bar)
   const motionOf = useScrollMotion()
-  // The category chosen kept in sight in its bar, centred, clear of the faded edges.
+  // The category chosen kept in sight in its bar, centred.
   useEffect(() => {
     const box = bar.current
     const button = current ? box?.querySelector<HTMLElement>(`[data-for="${current}"]`) : null
@@ -358,7 +358,7 @@ function CategoryBar({
       role="toolbar"
       aria-label={t('palette.categories')}
       {...roving}
-      className="fade-scroll-x flex min-w-0 flex-1 gap-0.5 overflow-x-auto rounded-xl bg-muted p-0.5 scrollbar-none"
+      className="flex min-w-0 flex-1 gap-0.5 overflow-x-auto rounded-xl bg-muted p-0.5 scrollbar-none"
     >
       {PALETTE_CATEGORIES.map((category) => {
         const name = t(`palette.category.${category}`)

@@ -6,10 +6,8 @@ import {
   parseNoteName,
   pitchClassOf,
   plainSpelling,
-  ROOT_ACCIDENTALS,
   rootSpelling,
   type Letter,
-  type RootAccidental,
   type SpelledNote,
 } from './note'
 import { pitchClass, type PitchClass } from './pitch'
@@ -72,10 +70,6 @@ const MOST_IN_SIGNATURE = 7
 
 /** Whether a signature writes the key: one of the 15 major and 15 minor keys. */
 export const isWrittenKey = (key: Key): boolean => Math.abs(keySignature(key)) <= MOST_IN_SIGNATURE
-
-/** The accidentals that make a written key on a letter, in a chooser's order: D♭ major, never D♭ minor. */
-export const writtenKeyAccidentals = (letter: Letter, minor: boolean): RootAccidental[] =>
-  ROOT_ACCIDENTALS.filter((accidental) => isWrittenKey({ tonic: note(letter, accidental), minor }))
 
 /** A key as the learner wrote it, or, where no signature writes it, its tonic spelled by the key's rule. */
 export const writtenKey = (key: Key): Key =>

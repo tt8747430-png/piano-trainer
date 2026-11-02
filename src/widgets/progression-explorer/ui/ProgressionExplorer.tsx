@@ -24,7 +24,7 @@ import {
 } from '@/shared/lib/music'
 import {
   ChordSizeField,
-  KeyChoice,
+  KeyPicker,
   Labelled,
   NO_KEYS,
   PositionField,
@@ -114,7 +114,7 @@ export function ProgressionExplorer({
       </ChordRow>
       <div className="grid-fields gap-x-10 gap-y-5">
         <div className="col-span-full">
-          <KeyChoice value={view.key} onChange={(next) => change({ key: next })} />
+          <KeyPicker value={key} onChange={(next) => change({ key: keyParam(next) })} />
         </div>
         <ProgressionField
           progression={view.p}

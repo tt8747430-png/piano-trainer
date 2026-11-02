@@ -22,7 +22,6 @@ export {
   levelOf,
   orOwn,
   ownTrainerView,
-  ROOT_GROUPS,
   runKeyOf,
   trainerOf,
   type Trainer,

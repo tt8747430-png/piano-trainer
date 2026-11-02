@@ -52,7 +52,7 @@ export function ChordSummary({
       <ul
         ref={row}
         aria-label={t('chordSummary')}
-        className="relative flex fade-scroll-x gap-2 overflow-x-auto overscroll-x-contain scrollbar-none"
+        className="relative flex gap-2 overflow-x-auto overscroll-x-contain scrollbar-none"
       >
         {chords.map((each) => {
           const now = each.symbol === sounding

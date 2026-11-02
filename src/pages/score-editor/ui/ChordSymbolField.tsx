@@ -94,7 +94,7 @@ export function ChordSymbolField({ anchor }: { anchor: HTMLElement | null }) {
         <div
           role="group"
           aria-label={t('chord.suggested')}
-          className="fade-scroll-x flex max-w-[min(22rem,calc(100vw-2rem))] gap-1 overflow-x-auto scrollbar-none"
+          className="flex max-w-[min(22rem,calc(100vw-2rem))] gap-1 overflow-x-auto scrollbar-none"
         >
           {offered.map((chord) => {
             const symbol = chordSymbol(chord)

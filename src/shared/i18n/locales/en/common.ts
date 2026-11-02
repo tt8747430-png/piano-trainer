@@ -40,8 +40,15 @@ export const common = {
     settings: 'Settings',
   },
   close: 'Close',
-  // A strip's ‹ and ›, each naming what it steps through ("Next: Root").
-  step: { previous: 'Previous: {{what}}', next: 'Next: {{what}}' },
+  // A picker's panel: the circle's Select, and the Keys sheet's (Chord Trainer's).
+  picker: {
+    select: 'Select: {{key}}',
+    selectAll: 'Select all',
+    clearAll: 'Clear all',
+    apply: 'Apply',
+    keyPair: '{{major}} / {{minor}}',
+    chosen: '{{count}} of {{total}}',
+  },
   // Where the toasts stand, as a screen reader names the place.
   notifications: 'Notifications',
   // A notice's Close, named apart from the screen's own Close.

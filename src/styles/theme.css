@@ -313,47 +313,11 @@
   @apply rounded-3xl border border-border bg-card;
 }
 
-/* A strip of tabs on a hairline, scrolling sideways where its tabs outrun the screen; and one tab of it,
-   the chosen one (a tab pressed, or the link of the page shown) in ink over an ink underline. */
-/* A strip that scrolls sideways fades at an edge with more beyond it, where the browser can tell. */
+/* A strip of tabs on a hairline, scrolling sideways where its tabs outrun the screen, its edges never
+   faded (R13); and one tab of it, the chosen one (a tab pressed, or the link of the page shown) in ink
+   over an ink underline. */
 @utility tab-strip {
   @apply relative flex gap-1 overflow-x-auto border-b border-border scrollbar-none;
-  @supports (animation-timeline: scroll()) {
-    mask-image: linear-gradient(
-      to right,
-      transparent,
-      #000 var(--strip-fade-start),
-      #000 calc(100% - var(--strip-fade-end)),
-      transparent
-    );
-    animation: strip-fade linear both;
-    animation-timeline: scroll(self inline);
-  }
-}
-@property --strip-fade-start {
-  syntax: '<length>';
-  inherits: false;
-  initial-value: 0px;
-}
-@property --strip-fade-end {
-  syntax: '<length>';
-  inherits: false;
-  initial-value: 0px;
-}
-@keyframes strip-fade {
-  0% {
-    --strip-fade-start: 0px;
-    --strip-fade-end: 32px;
-  }
-  8%,
-  92% {
-    --strip-fade-start: 32px;
-    --strip-fade-end: 32px;
-  }
-  100% {
-    --strip-fade-start: 32px;
-    --strip-fade-end: 0px;
-  }
 }
 @utility tab {
   @apply relative inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-lg px-3 text-base font-semibold whitespace-nowrap text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground focus-visible:-outline-offset-3;
@@ -977,21 +941,6 @@
     & > [data-area='words'] {
       margin-top: --spacing(1);
     }
-  }
-}
-
-/* A row that scrolls sideways fades at an edge with more beyond it, where the browser can tell. */
-@utility fade-scroll-x {
-  @supports (animation-timeline: scroll()) {
-    mask-image: linear-gradient(
-      to right,
-      transparent,
-      #000 var(--strip-fade-start),
-      #000 calc(100% - var(--strip-fade-end)),
-      transparent
-    );
-    animation: strip-fade linear both;
-    animation-timeline: scroll(self inline);
   }
 }
 

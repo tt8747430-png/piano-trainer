@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import type { Sound } from '@/shared/lib/schedule'
+import { pickIn } from '@/shared/test/pickers'
 
 const timed = (sounds: readonly Sound[] = []) =>
   sounds.flatMap((sound) => (sound.kind === 'note' ? [[sound.midi, sound.at]] : []))
@@ -101,11 +102,7 @@ describe('Practice → Intervals', () => {
   it('chooses the root, kept in the URL', async () => {
     const user = userEvent.setup()
     const { router, audio } = await renderApp('/practice/intervals')
-    await user.click(
-      within(await screen.findByRole('group', { name: 'Root' })).getByRole('radio', {
-        name: 'D',
-      }),
-    )
+    await pickIn(user, 'Root', 'D')
     expect(router.state.location.search).toEqual({ root: 'D' })
     await user.click(row('Perfect fifth'))
     expect(timed(audio.played.at(-1)?.sounds)).toEqual([

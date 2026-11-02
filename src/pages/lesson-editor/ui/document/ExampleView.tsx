@@ -22,17 +22,8 @@ import { useTranslation } from 'react-i18next'
 import type { LessonBlock, LessonExample } from '@/entities/lesson'
 import { i18n, type LocalText } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import {
-  C_MAJOR,
-  CHORD_QUALITIES,
-  INTERVAL_GROUPS,
-  keyFromParam,
-  keyParam,
-  noteFromParam,
-  noteParam,
-  SCALE_KINDS,
-} from '@/shared/lib/music'
-import { Dropdown, InfoTip, KeyChoice, NoteChoice, Segmented, TileMark } from '@/shared/ui'
+import { C_MAJOR, CHORD_QUALITIES, INTERVAL_GROUPS, SCALE_KINDS } from '@/shared/lib/music'
+import { Dropdown, InfoTip, KeyPicker, NotePicker, Segmented, TileMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Textarea } from '@/shared/ui/primitives/textarea'
@@ -176,19 +167,11 @@ function KindFields({
             ]}
             onChange={(clef) => onChange({ ...block, clef })}
           />
-          <KeyChoice
-            value={keyParam(block.key ?? C_MAJOR)}
-            onChange={(key) => onChange({ ...block, key: keyFromParam(key) })}
-          />
+          <KeyPicker value={block.key ?? C_MAJOR} onChange={(key) => onChange({ ...block, key })} />
         </>
       )
     case 'progression':
-      return (
-        <KeyChoice
-          value={keyParam(block.key)}
-          onChange={(key) => onChange({ ...block, key: keyFromParam(key) })}
-        />
-      )
+      return <KeyPicker value={block.key} onChange={(key) => onChange({ ...block, key })} />
     case 'grid':
       return (
         <Dropdown
@@ -204,10 +187,10 @@ function KindFields({
     case 'scale':
       return (
         <>
-          <NoteChoice
+          <NotePicker
             label={t('learn:edit.doc.root')}
-            value={noteParam(block.root)}
-            onChange={(root) => onChange({ ...block, root: noteFromParam(root) })}
+            value={block.root}
+            onChange={(root) => onChange({ ...block, root })}
           />
           <Dropdown
             label={t('learn:edit.doc.scale')}
@@ -223,10 +206,10 @@ function KindFields({
     case 'interval':
       return (
         <>
-          <NoteChoice
+          <NotePicker
             label={t('learn:edit.doc.root')}
-            value={noteParam(block.root)}
-            onChange={(root) => onChange({ ...block, root: noteFromParam(root) })}
+            value={block.root}
+            onChange={(root) => onChange({ ...block, root })}
           />
           <Dropdown
             label={t('learn:edit.doc.interval')}

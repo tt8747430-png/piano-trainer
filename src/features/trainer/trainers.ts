@@ -10,6 +10,7 @@ import {
   PIANO,
   SCALE_KINDS,
   scaleSkill,
+  signatureKey,
   spellChord,
   type ChordQuality,
   type NoteParam,
@@ -84,17 +85,18 @@ export interface Trainer {
   asks(level: string, view: TrainerView, gaps: readonly SkillId[]): Asks
 }
 
-/** The roots a drill may ask from, as the URL writes them: the naturals, then the sharps, then the flats. */
-export const ROOT_GROUPS = {
-  natural: LETTERS.map((letter) => noteParam(note(letter))),
-  sharp: (['C', 'D', 'F', 'G', 'A'] as const).map((letter) => noteParam(note(letter, 1))),
-  flat: (['D', 'E', 'G', 'A', 'B'] as const).map((letter) => noteParam(note(letter, -1))),
-} as const satisfies Readonly<Record<string, readonly NoteParam[]>>
+/**
+ * The roots a drill may ask from, as the URL writes them: the tonics of the 15 major keys (A5's Keys
+ * sheet), none, then one to seven sharps, then one to seven flats.
+ */
+const KEY_ROOTS: readonly NoteParam[] = [0, 1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5, -6, -7].map(
+  (count) => noteParam(signatureKey(count, false).tonic),
+)
 
 /** What each of Custom's lists chooses from. */
 export const CUSTOM_CHOICES = {
   chords: CHORD_QUALITIES,
-  roots: [...ROOT_GROUPS.natural, ...ROOT_GROUPS.sharp, ...ROOT_GROUPS.flat],
+  roots: KEY_ROOTS,
   scales: SCALE_KINDS,
   intervals: [...INTERVAL_GROUPS.simple.slice(1), ...INTERVAL_GROUPS.compound],
   ways: INTERVAL_WAYS,
@@ -104,7 +106,7 @@ export const CUSTOM_CHOICES = {
 /** Custom's own choices: what a trainer's Custom asks before the learner changes it. */
 export const CUSTOM_OWN = {
   chords: ['maj', 'min'],
-  roots: ROOT_GROUPS.natural,
+  roots: LETTERS.map((letter) => noteParam(note(letter))),
   scales: ['major', 'natural', 'harmonic'],
   intervals: SIMPLE_INTERVALS,
   ways: ['up'],
