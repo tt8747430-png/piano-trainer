@@ -100,3 +100,4 @@ course.
   own (`/profile/activity`: the run, the best run, the days practised, this month's calendar), as Noji's (2026-11-01).
 - r28 — A lesson's and a course's Settings pages, from a gear in their bar: reading, Share link, Reset progress;
   an editor's place, Read first, languages and changes. The lesson's ⋯ removed (2026-11-01).
+- r28 — An example of notes lays out as a sheet: its bars in rows as many as fit the card (`rowsOf`, by the notes struck), each row shrunk to fit, a later row printing its clef and bar number but not its time; Play marks the note sounding on its row; the note names and Play under the music on a phone (2026-11-02).
