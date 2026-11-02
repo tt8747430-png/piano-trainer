@@ -816,8 +816,14 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       bars alone on a row of their own with no label. Lay it out as a score's head does: the title,
       then one credits line ("Words by John Newton · Music: NEW BRITAIN, American folk tune") in the
       byline style, and the level in the facts row with its name ("Level: Easy ●○○") beside Key,
-      Time and Tempo (one chip style, Part A 8). "Scale: G major →" joins the facts as a link chip
-      (rule 23); Chords and Progressions follow in the same card family.
+      Time and Tempo (one chip style, Part A 8). Chords and Progressions follow in the same card
+      family.
+    - **The arrow that points at "About"** (`PieceAbout.tsx`): "Scale: G major" ends in an arrow
+      that slides right on hover, and "About this song ⓘ" sits right after it on the same line, so
+      the arrow reads as pointing at About and the description hides behind an ⓘ. The arrow goes
+      (rule 23: no arrows for navigation); the scale becomes the Key chip's own link (tap "Key G"
+      to open G major in Scales and keys); the description shows as text under the credits, two
+      lines with "More", not behind an ⓘ (amend ADR 0111, which says no paragraph on the page).
     - **The page's editor (the pencil, Part A 38) is unclear and plain:** its fields are "Who wrote
       it", "Music", "Words", "Add", "About the song", "Edit the music". Make it a proper metadata
       editor, as a publisher's or MuseScore's score properties and hymnals' credits name things:
