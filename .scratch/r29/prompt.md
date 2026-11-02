@@ -1082,6 +1082,41 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
     ways (the note toolbar's rounded bracket in `owner/64`, outlines, rings, fills) and some
     controls get none. One focus style (DESIGN.md), on every control, never clipped by its
     container, in an order that follows the screen; Esc closes the top layer only.
+37. **The chord views (Diagrams, Grid, Chords over lyrics) as Chordify does them.** Check each
+    on Chordify's help and `piano-data/reference-apps/chordify/` before changing it.
+    - **Scrolling picks a chord (a bug to the learner):** dragging the Diagrams view's beat strip
+      scrubs the music and moves the cursor where it settles (`useStripMotion` in `BeatStrip.tsx`,
+      by design today), so looking ahead loses the place. In Chordify a scroll only looks; a tap
+      chooses. Make dragging the strip (and swiping the diagrams) browse without moving the
+      cursor or the sound; a tap on a beat or a chord moves the cursor there; while playing, a
+      manual scroll pauses the following and a "Back to the playhead" pill returns to it (also
+      after a few seconds idle, a setting).
+    - **Autoscroll in every view:** the Grid and Chords over lyrics scroll to the line playing
+      (they call `scrollIntoView`); check they keep the line playing at a steady place (a third
+      down), never jump past what is being read, stop when the learner scrolls, and resume as
+      above; the Diagrams view follows the chord sounding the same way; the sheet music the same
+      (Part A 31: smooth, not jumping). One autoscroll rule and one "Follow the music" setting
+      for all views.
+    - **What Chordify has that we lack or do differently:** go through Chordify's views and
+      controls (chord diagrams' size, the timeline, loop by dragging a range, transpose, capo-free
+      key choice, simplify, the chord summary, the count-in, the tempo, MIDI follow) and list
+      each, then build or fix it; the strip's edge fade goes (rule 13).
+    - **Edit in every view:** the editor edits only the sheet music. The chord views are the same
+      song: an editor (or the learner, in their version) can edit them where they are shown, as
+      Chordify's chord editing does:
+      - **Grid:** tap a beat cell to set or change its chord (the editor's chord picker, Part A
+        5), drag to stretch a chord over beats, add or remove bars, set a section's name and
+        repeats;
+      - **Chords over lyrics:** type and fix the words, move a chord to another syllable by
+        dragging it, add a verse;
+      - **Diagrams:** choose the voicing and inversion each chord is shown in (the Chords page's
+        controls, one component, Part A 32);
+      - one undo history and one Done for every view, the same pencil ⇄ Done (Decided 6); the
+        view picker (Sheet music · Grid · Chords over lyrics · Diagrams) in the editor's bar as in
+        the Player's, so the learner edits the view they read.
+    - Done: a recording of Diagrams, Grid and Chords over lyrics playing, scrolled by hand and
+      returning to the playhead; an edit in each view kept after reload; tests for scroll-only
+      browsing and tap-to-choose.
 
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
@@ -1252,11 +1287,11 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   - no layout that can break the page.
 
 ## Rounds
-1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–36: one component each, the app bar,
+1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–37: one component each, the app bar,
    action placement, page/sheet/menu, controls, words, navigation (Back as up, the Search palette, the
    sidebar's selected look), shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout and two panes, pictures and icons, page names, account and
-   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal, an own song's page, imports and exports, fingering, nothing flickering or jumping, the theory pages' owners and settings, colour notes and harmony's owners, the score editor against Flat, the Player's staves and metronome, focus.
+   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz, the on-screen piano, the piano sound and its pedal, an own song's page, imports and exports, fingering, nothing flickering or jumping, the theory pages' owners and settings, colour notes and harmony's owners, the score editor against Flat, the Player's staves and metronome, focus, the chord views.
 2. **Profile** (Part B 1).
 3. **Copy and the rights checkbox** (Part B 2).
 4. **Explore in Songs and the built-in folders' rules** (Part B 3, Decided 8 and 10).
