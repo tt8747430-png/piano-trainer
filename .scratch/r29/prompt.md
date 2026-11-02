@@ -714,7 +714,7 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       chords**:
       - **Progression:** the chords (typed as numerals or chord symbols, or tapped in from the
         key's chords), the key picker (Part A 5), Play and the transport, the staff and the
-        piano, the roles row above, then "Practise in every key" (today's "Through the keys"
+        piano, the roles row above, then "Practise in all 12 keys" (today's "Through the keys"
         walks) and "Songs with this progression" (hidden when empty);
       - **Library:** the progressions as a list with genre chips (above), a row opening it in
         Progression;
