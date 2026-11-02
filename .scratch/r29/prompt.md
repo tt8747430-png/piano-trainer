@@ -733,8 +733,8 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       - the sostenuto and soft pedals from a MIDI keyboard are shown, not only heard.
     - **Feel:** the keys at 320px are wide enough to hit (zoom, or two octaves), a swipe scrolls or
       plays as set, nothing on the rail covers keys, the piano's height is the same on every page.
-27. **The Player's piano sound and its pedal** (checked in the code; heard on the Fantaisie-
-    Impromptu):
+27. **The Player's piano sound and its pedal** (read in the code, not yet heard; the owner
+    hears it on the Fantaisie-Impromptu):
     - **Pedal marks lost on import (a bug):** MusicXML's pedal marks are attached to the next note
       on the staff by `Object.assign` (`applyDirections` in `shared/lib/musicxml/read.ts`). A change
       written as a stop and a start at the same place (as Finale and many files write it) keeps only
