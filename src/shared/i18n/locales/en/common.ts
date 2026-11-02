@@ -38,6 +38,15 @@ export const common = {
     settings: 'Settings',
   },
   close: 'Close',
+  // A picker's panel: the circle's Select, and the Keys sheet's (Chord Trainer's).
+  picker: {
+    select: 'Select: {{key}}',
+    selectAll: 'Select all',
+    clearAll: 'Clear all',
+    apply: 'Apply',
+    keyPair: '{{major}} / {{minor}}',
+    chosen: '{{count}} of {{total}}',
+  },
   // A strip's ‹ and ›, each naming what it steps through ("Next: Root").
   step: { previous: 'Previous: {{what}}', next: 'Next: {{what}}' },
   // Where the toasts stand, as a screen reader names the place.

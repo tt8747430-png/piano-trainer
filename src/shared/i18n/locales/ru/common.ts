@@ -37,6 +37,15 @@ export const common: LocaleResources['common'] = {
     settings: 'Настройки',
   },
   update: { available: 'Готова новая версия', update: 'Обновить', later: 'Позже' },
+  // A picker's panel: the circle's Select, and the Keys sheet's (Chord Trainer's).
+  picker: {
+    select: 'Выбрать: {{key}}',
+    selectAll: 'Выбрать все',
+    clearAll: 'Снять все',
+    apply: 'Применить',
+    keyPair: '{{major}} / {{minor}}',
+    chosen: '{{count}} из {{total}}',
+  },
   close: 'Закрыть',
   step: { previous: 'Назад: {{what}}', next: 'Вперёд: {{what}}' },
   notifications: 'Уведомления',

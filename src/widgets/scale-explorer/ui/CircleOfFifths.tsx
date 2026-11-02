@@ -14,7 +14,7 @@ import {
   type CircleRing,
   type Key,
 } from '@/shared/lib/music'
-import { cellCentre, signatureCount, wedgePath } from '../model/circle-layout'
+import { cellCentre, signatureCount, wedgePath } from '@/shared/ui/pickers/circle-layout'
 
 const RINGS: readonly CircleRing[] = ['major', 'minor']
 /** A wedge's fill: the key's own place in the tonic's wash, its other chords' in the scale's, the rest plain. */
