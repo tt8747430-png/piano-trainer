@@ -653,6 +653,64 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       empty state names what to do, or the section hides.
     - **Through the keys:** nine walks with one icon and cut chord lists ("C G Am F · D♭ A♭ B♭m
       G♭ …"); different icons by direction, the list unclipped or dropped.
+24. **A Settings page for every Practice page** (rule 18). Today no Practice page has one: the
+    Chord finder keeps its choices in a sheet of toggle tiles behind a "⚙ C" button, the Metronome
+    has only an ⓘ, and Chords, Scales and keys, Intervals and Progressions put their preferences
+    inline among the choices. Split them:
+    - **On the page:** what you are looking at: the chord, scale, key, interval, progression,
+      pattern, tempo.
+    - **On its Settings page** (a gear in the app bar, `/practice/<page>/settings`, built from the
+      registry): how it sounds and looks every time, plus link rows to On-screen piano and Connect a
+      piano. At least:
+      - **Chords:** voicing and hands by default, symbol style (Cmaj7 · CΔ7 · CM7), how a chord
+        plays (together · broken · up and down), fingering shown, the staff's clefs.
+      - **Scales and keys:** octaves, rhythm, tempo, hands, fingering (from the thumb · as the
+        scale), which scale families are listed.
+      - **Intervals:** how they play (at once · up · down), names (m3 · ♭3 · minor 3rd), the
+        compound intervals shown.
+      - **Progressions:** written as, voicing, chord size, lead into each chord, move smoothly,
+        mode.
+      - **Accompaniment:** tempo, key, hands, loop, count-in, which sources show as tabs and in
+        what order.
+      - **Chord finder:** remember the last chords, over the bass, keys it is in, scale on the
+        keys, symbol style; the sheet of toggle tiles goes.
+      - **Metronome:** sound, accent on beat 1, subdivision, volume, count-in, a visual flash, the
+        bar trainer; saved tempo presets.
+      - **Exercises and Quiz:** questions in a round, timer, answer by tapping or from the piano,
+        hints, sounds, the keys included (Part A 5's Keys sheet).
+    - The choices that leave the page leave nothing behind; the page keeps a link row ("Plays:
+      broken ›") only where the setting changes what you see.
+25. **Accompaniment, Chord finder, Metronome, Exercises and Quiz** (`scratchpad/r29/scales/acc-*`,
+    `finder-*`, `metro-*`, `exer-*`, `quiz-*`). Known:
+    - **Accompaniment:**
+      - The source tabs mix scripts in the English interface ("Called to Play", "Боброва",
+        "Горшков"): names are transliterated in English (Bobrova, Gorshkov) and written in
+        Cyrillic in Russian. Six tabs scroll on a phone: a source picker or chips instead.
+      - Pattern names mix numbering ("5.1 ·", "1 ·"), note glyphs (♪ ♫ ♩.♪) and plain names; one
+        naming rule, the rhythm drawn as a small picture (rule 21) instead of glyphs in the title.
+      - Descriptions are cut mid-sentence on every row; the Studies' titles are cut ("Lesson 3: C
+        – Dm – G – C – F …").
+      - Patterns have no icons while Exercises' rows do: one row style for every list on Practice.
+    - **Chord finder:**
+      - The app bar has a MIDI icon with a status dot and a "⚙ C" button whose "C" says nothing
+        (rule 21): the gear opens its Settings page; the piano's status shows as words in the
+        empty state ("No piano connected · Connect").
+      - The empty state is a card in the middle of an empty screen with a blank staff; the staff
+        and the chord's name should fill the space the page has, and the chords remembered show
+        as a history list below.
+    - **Metronome:**
+      - −10 −1 +1 +10 are circles, Tap tempo a pill, Clicks and 4/4 pill menus, the bar trainer's
+        menus greyed until a switch: four button shapes on one screen (rule 14). One stepper
+        (− 120 +, hold to repeat, tap the number to type), one menu style.
+      - "ALLEGRO" in capitals with an ⓘ: the tempo word in the page's text style, tapping it
+        lists the tempo words with their ranges.
+      - The big Play is a different size and colour from every other Play (rule 5).
+    - **Exercises:** groups of two leave a third of the grid empty (rule 28); descriptions cut.
+    - **Quiz:** "My gaps" is an outlined labelled button where every other app bar has round icon
+      buttons (rule 1); "Reading" is a lone card in a row of three.
+    - **Everywhere on Practice:** the on-screen piano's toolbar (‹ › zoom C Cm7 ⌨ ≈ Ped. ⌄) is
+      dark chips with no labels, different from every other toolbar: one toolbar style, its
+      choices in On-screen piano settings, labels on hover and in the More menu.
 
 ## Part B: features (each with what I'll see when it's done)
 1. **The Profile, as complete as memory-palaces'** (Quizlet 4880, memory-palaces' pages above).
@@ -804,11 +862,11 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
   - no layout that can break the page.
 
 ## Rounds
-1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–23: one component each, the app bar,
+1. **Carry-over check and the audit fixes:** Step 0 and Part A 1–25: one component each, the app bar,
    action placement, page/sheet/menu, controls, words, navigation (Back as up, the Search palette, the
    sidebar's selected look), shapes and selected states, confirmations, the settings map and
    registry, item acts, settings layout and two panes, pictures and icons, page names, account and
-   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions.
+   storage, arrows, destructive rows, laptop layouts, the explorers' buttons, rows and headings, Scales and keys, Intervals, Progressions, a Settings page for every Practice page, Accompaniment, Chord finder, Metronome, Exercises and Quiz.
 2. **Profile** (Part B 1).
 3. **Copy and the rights checkbox** (Part B 2).
 4. **Explore in Songs and the built-in folders' rules** (Part B 3, Decided 8 and 10).
