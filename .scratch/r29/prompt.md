@@ -558,6 +558,21 @@ Write `.scratch/r29/audit.md`, one row per finding: where, what's wrong, the sin
       data, never classes.
     - Root and Quality become pickers that show the whole choice (a 12-key grid or a combobox);
       Voicing a combobox with a picture of each voicing (rule 21).
+    - **Added tones (add2, add4, add6, add9, add11, add♯11, add13) on every chord** (a bug I
+      reported). Today `addedOf` (`shared/lib/music/chord-parts.ts`) gives the diminished triad and
+      the power chord none, the augmented triad only add9, a sus2 only add6, every 9th, 11th and
+      13th chord none, and the Chords page then hides the whole "Added tones" row
+      (`widgets/chord-explorer/ui/ChordBuilder.tsx`), so the controls jump as the chord changes and
+      a learner can't tell why the option went.
+      - Check every triad, size and 7th against chord dictionaries (piano-data's books, Chord
+        Trainer's Chord Builder, the chord-chart sites) and add each added tone they name that we
+        leave out: e.g. C5(add9), C°(add9), C+(add2)/(add4), Csus2(add4), Csus4(add2), a 7th
+        chord's add♯11 where it isn't its own alteration. A tone that would only rename the chord
+        (a 9th's add13 is the 13th chord) switches to that chord instead of disappearing.
+      - The row is always shown, in one place; a tone the chord can't take is hidden with the
+        others re-flowing, and the chord's name and notes update at once (Part A 5's feedback).
+      - Tests: a table of every triad × size × 7th with the added tones it offers, checked against
+        the sources, and a page test that the row stays when the chord changes.
     - Done: screenshots of every explorer at 390 and 1280 before and after, and a contact sheet of
       the families in each state.
 21. **Scales and keys, all three tabs** (screenshots in `scratchpad/r29/scales/`). Known:
