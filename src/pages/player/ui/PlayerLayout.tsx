@@ -31,18 +31,14 @@ import {
 } from '@/widgets/practice-player'
 import { SheetMusic } from '@/widgets/sheet-music'
 import { SongPrint } from '@/widgets/song-print'
-import {
-  PlayerDisplay,
-  PlayerPlayback,
-  PlayerVolumes,
-  type VolumeTrack,
-} from '@/widgets/player-settings'
+import { PlayerPlayback, PlayerVolumes, type VolumeTrack } from '@/widgets/player-settings'
+import { ViewSection } from '@/widgets/score-view-menu'
 import { SettingsExtrasContext, type SettingsExtras } from '@/widgets/player-setup'
 import { useChordKeys } from '../model/use-chord-keys'
 import { MoreActions } from './more-actions'
 import { PlayerExport } from './PlayerExport'
 import type { ExportShare } from '@/features/song-files'
-import { PlayerViewMenu } from './PlayerViewMenu'
+import { PickView } from './PickView'
 
 /** A walk or a progression: one section, named nowhere. */
 const NO_HEADINGS: readonly string[] = []
@@ -167,7 +163,7 @@ export function PlayerLayout({
         id: 'display',
         label: t('settingsPage.display'),
         icon: MonitorCog,
-        content: <PlayerDisplay />,
+        content: <ViewSection view={shown} words={needs.lyrics !== 'words'} />,
       },
     ],
     acts: [...library, ...more]
@@ -223,20 +219,14 @@ export function PlayerLayout({
         }
         actions={
           <>
-            <KeysToggle />
+            <KeysToggle shown={player.keys} onShow={player.setKeys} />
             <MidiButton variant="tool" />
             <SettingsExtrasContext value={extras}>{setup}</SettingsExtrasContext>
           </>
         }
         tools={
           <PlayerTools>
-            <PlayerViewMenu
-              shown={shown}
-              needs={needs}
-              openAtStart={openView}
-              keys={player.keys}
-              onKeys={player.setKeys}
-            />
+            <PickView shown={shown} needs={needs} openAtStart={openView} />
             {tools}
           </PlayerTools>
         }

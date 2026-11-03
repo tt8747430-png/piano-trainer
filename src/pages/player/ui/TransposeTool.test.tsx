@@ -24,7 +24,7 @@ describe('Transpose (ADR 0105)', () => {
     await renderApp('/play/lightly-row')
     const tools = within(await toolsRow()).getAllByRole('button')
     expect(tools.map((tool) => tool.getAttribute('aria-label'))).toEqual([
-      'View: Sheet music',
+      'View: Sheet',
       'Transpose: C major',
       'Simplify',
     ])

@@ -19,27 +19,21 @@ export const player = {
     one: { song: 'This song has one section.', study: 'This study has one section.' },
   },
   print: 'Print',
-  // The Player's views of the music (ADR 0108), the View's tiles; each names its own part of the
+  // The Player's views of the music (ADR 0108), Pick your view's (R29); each names its own part of the
   // screen.
   views: {
+    pick: 'Pick your view',
+    pickNote: 'How the song is shown while you play.',
+    showOnOpen: 'Show this when opening a song',
+    done: 'Done',
+    short: { sheet: 'Sheet', grid: 'Grid', diagrams: 'Diagrams', lyrics: 'Lyrics' },
     label: 'Show the music as',
     sheet: 'Sheet music',
     lyrics: 'Chords over lyrics',
     diagrams: 'Diagrams',
     grid: 'Grid',
-    // Each view in a line, the ⓘ beside Show the music as (ADR 0108).
-    about: {
-      sheet: 'the score, as printed',
-      lyrics: 'each line’s chords over its words',
-      diagrams: 'the chord sounding on the keys, the next beside it',
-      grid: 'every bar’s chords, beat by beat',
-    },
     // The tools row's View, named by the view shown (ADR 0108).
     shown: 'View: {{view}}',
-    // Chordify's "Show this when opening a song": a song's Player opens with the View open.
-    ask: 'Ask each time a song opens',
-    // What the View holds for every view of the music, after the view shown's own.
-    every: 'Every view',
     // Diagrams' own (ADR 0108, Chordify's "Diagram view mode").
     // Chords over lyrics' own (ADR 0108, Chordify's view settings).
     pinned: {

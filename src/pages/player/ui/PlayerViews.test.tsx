@@ -84,11 +84,11 @@ function keysDown(audio: { played: readonly { at: number }[]; setNow: (now: numb
 }
 
 describe('the View’s views of the music (ADR 0108)', () => {
-  it('chooses a view from its tiles, saved for every piece', async () => {
+  it('chooses a view in Pick your view, saved for every piece', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/silent')
-    await user.click(await screen.findByRole('button', { name: 'View: Sheet music' }))
-    const menu = await screen.findByRole('dialog', { name: 'View' })
+    await user.click(await screen.findByRole('button', { name: 'View: Sheet' }))
+    const menu = await screen.findByRole('dialog', { name: 'Pick your view' })
     await user.click(within(menu).getByRole('radio', { name: 'Diagrams' }))
     expect(settingsStore.getState().scoreView.music).toBe('diagrams')
     expect(within(menu).getByRole('radio', { name: 'Diagrams' })).toHaveAttribute(
@@ -100,9 +100,9 @@ describe('the View’s views of the music (ADR 0108)', () => {
     if (!music) throw new Error('the music’s area')
     expect(within(music).getByRole('region', { name: 'Diagrams' })).toBeInTheDocument()
     expect(within(music).queryByRole('region', { name: 'Sheet music' })).not.toBeInTheDocument()
-    await user.click(within(menu).getByRole('radio', { name: 'Chords over lyrics' }))
+    await user.click(within(menu).getByRole('radio', { name: 'Lyrics' }))
     expect(within(music).getByRole('region', { name: 'Chords over lyrics' })).toBeInTheDocument()
-    await user.click(within(menu).getByRole('radio', { name: 'Sheet music' }))
+    await user.click(within(menu).getByRole('radio', { name: 'Sheet' }))
     expect(settingsStore.getState().scoreView.music).toBe('sheet')
     expect(await within(music).findByRole('region', { name: 'Sheet music' })).toBeInTheDocument()
   })
@@ -584,11 +584,12 @@ describe('Diagrams (ADR 0108)', () => {
     expect(more).toEqual([])
   })
 
-  it('shows the song’s chords at once in its summary, as the View’s Mode says (ADR 0108)', async () => {
+  it('shows the song’s chords at once in its summary, as Display’s Mode says (ADR 0108)', async () => {
     const user = userEvent.setup()
     await inView('diagrams', '/play/silent')
-    await user.click(await screen.findByRole('button', { name: 'View: Diagrams' }))
-    const menu = await screen.findByRole('dialog', { name: 'View' })
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
+    await user.click(await screen.findByRole('button', { name: 'Display' }))
+    const menu = await screen.findByRole('dialog', { name: 'Display' })
     const mode = within(within(menu).getByRole('region', { name: 'Diagrams' })).getByRole(
       'radiogroup',
       { name: 'Mode' },
