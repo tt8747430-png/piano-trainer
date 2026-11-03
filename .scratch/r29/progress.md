@@ -20,7 +20,7 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A5 | The right control for each choice | 1 | done | 9a33ae70, aa176aa9, d421ec25, d52e781f, 0bce757a (merged 03b5bfc4) | PitchPicker, NotePicker, KeyPicker (circle), KeysChecklist, MenuPicker, PickerRow; strips and edge fades gone. Decided: the Key tab's circle chooses on tap (no Select button: it is the page's own control, not a popover); wedges show the signature as a count; options that don't apply are left out (R30); Quiz/Exercises keys map to each signature's major tonic (D♯/G♯/A♯ roots go, C♭ comes in); Start on is a menu of the scale's notes; the score editor's key keeps its sign grid (ADR 0114) |
 | A6 | Words | 1 | in progress | | the known renames done with their test (audit); the full en/ru sweep against the books continues in B2 (round 6) |
 | A7 | Navigation bugs | 1 | done | | Back retracing fixed by A18; the sidebar compares paths only (`includeSearch: false`), so Learn stays current on its tabs; `NavTabs` already marks its own tab; a test per tab |
-| A8 | Shapes and selected states | 1 | open | | |
+| A8 | Shapes and selected states | 1 | done | 79811d63, 4ad592ac | four corner tokens (control, card, sheet, pill) with a test against one-off corners; one chosen fill to a control's edges (sand by day, dusk line by night), with a test |
 | A9 | Every action that loses or hides work | 1 | in progress | | `ConfirmDialog` and `confirm()`; Archive asks from every trigger; deletes moved; edit-original's in round 10 (audit) |
 | A10 | Settings map | 1 | done | | map in `settings-map.md`; registry `entities/settings/model/registry.ts`; one-home test `app/settings-homes.test.ts`; lesson reading and recording de-duplicated; pages from the registry with A12 |
 | A11 | Favourite and other item acts | 1 | in progress | | the song Settings' Favourite switch removed (♡ on the card, row menus, swipe, Select stay); sweep found no other act as a switch; DESIGN.md pattern left |
@@ -43,12 +43,12 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A28 | The song page of an imported or own song | 4 | open | | |
 | A29 | Imports and exports | 4 | open | | |
 | A30 | Fingering, one way everywhere | 2 | open | | |
-| A31 | Nothing flickers, nothing jumps | 1 | open | | |
+| A31 | Nothing flickers, nothing jumps | 1 | done | 0a9069b4 | measured before paint, rows that stay, a bar that holds; a CLS about 0.01 on Chords and Scales at 1280 on a fresh load remains (audit); Chords' heading block height goes with A20 |
 | A32 | The theory pages: one owner per idea, no copies | 2 | open | | |
 | A33 | Colour notes: one model | 2 | in progress | | tensions follow the chord's degree in a key (kernel, tested); the one panel for added tones, alterations and tensions next |
 | A34 | The score editor against Flat and the editors in `piano-data` | 4 | open | | |
 | A35 | The Player: play staves, not "melody" and patterns | 4 | open | | |
-| A36 | Focus and keyboard walking | 1 | open | | |
+| A36 | Focus and keyboard walking | 1 | done | a2569823 | one 3px focus outline with a test; Practice walked by Tab in a test |
 | A37 | The chord views (Diagrams, Grid, Chords over lyrics) as Chordify does them | 4 | open | | |
 | A38 | One meaning for the pencil, for everyone | 1 | in progress | | song page done (audit); editing in the chord views (Grid, Chords over lyrics, Diagrams) goes with A37 in round 4 |
 | A39 | The Metronome, against the metronome apps players use | 2 | in progress | a61dde1c | engine model and the page (audit); samples, flash and the Player's click next |
