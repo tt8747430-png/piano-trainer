@@ -19,7 +19,7 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A4 | Page, sheet or menu | 1 | open | | |
 | A5 | The right control for each choice | 1 | done | 9a33ae70, aa176aa9, d421ec25, d52e781f, 0bce757a (merged 03b5bfc4) | PitchPicker, NotePicker, KeyPicker (circle), KeysChecklist, MenuPicker, PickerRow; strips and edge fades gone. Decided: the Key tab's circle chooses on tap (no Select button: it is the page's own control, not a popover); wedges show the signature as a count; options that don't apply are left out (R30); Quiz/Exercises keys map to each signature's major tonic (D♯/G♯/A♯ roots go, C♭ comes in); Start on is a menu of the scale's notes; the score editor's key keeps its sign grid (ADR 0114) |
 | A6 | Words | 1 | open | | |
-| A7 | Navigation bugs | 1 | in progress | | Back retracing history and modes fixed by A18; the rest of A7 to check |
+| A7 | Navigation bugs | 1 | done | | Back retracing fixed by A18; the sidebar compares paths only (`includeSearch: false`), so Learn stays current on its tabs; `NavTabs` already marks its own tab; a test per tab |
 | A8 | Shapes and selected states | 1 | open | | |
 | A9 | Every action that loses or hides work | 1 | in progress | | `ConfirmDialog` and `confirm()`; Archive asks from every trigger; deletes moved; edit-original's in round 10 (audit) |
 | A10 | Settings map | 1 | in progress | | map in `settings-map.md`; registry `entities/settings/model/registry.ts`; one-home test `app/settings-homes.test.ts`; lesson reading and recording de-duplicated; pages from the registry with A12 |

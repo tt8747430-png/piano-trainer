@@ -189,6 +189,9 @@ describe('the app shell', () => {
   })
 
   it.each([
+    // Learn's own tabs live in its search: switching them keeps Learn current (A7).
+    ['/?view=courses', 'Learn'],
+    ['/?view=lessons', 'Learn'],
     ['/practice/scales', 'Practice'],
     ['/lessons/reading-chord-symbols', 'Learn'],
     ['/courses/gorshkov', 'Learn'],

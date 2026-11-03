@@ -142,7 +142,7 @@ function PlaceLink({
     return (
       <Link
         to={to}
-        activeOptions={{ exact }}
+        activeOptions={{ exact, includeSearch: false }}
         {...current}
         state={OPEN_PLAINLY}
         className={PLACE_LINK}
@@ -156,7 +156,7 @@ function PlaceLink({
         render={
           <Link
             to={to}
-            activeOptions={{ exact }}
+            activeOptions={{ exact, includeSearch: false }}
             {...current}
             state={OPEN_PLAINLY}
             className={PLACE_LINK}
