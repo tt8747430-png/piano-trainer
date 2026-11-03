@@ -116,8 +116,8 @@ function damped(context: AudioContext, { sources, output }: Voice) {
   for (const source of sources) source.stop(at + DAMPED)
 }
 
-/** A click's loudness: the bar's first beat's higher and louder. */
-const CLICK_PEAK = { accent: 0.22, beat: 0.13 } as const
+/** A click's loudness: the bar's first beat's louder. */
+const CLICK_PEAK = { accent: 0.32, beat: 0.22 } as const
 
 /** A short tone at `hz`: up in 2 ms, `peak` loud, gone by `length` seconds. */
 function tone(
@@ -127,14 +127,17 @@ function tone(
     peak,
     length,
     type = 'sine',
-  }: { hz: number; peak: number; length: number; type?: OscillatorType },
+    drop,
+  }: { hz: number; peak: number; length: number; type?: OscillatorType; drop?: number },
   at: number,
   ended: () => void,
 ): Voice {
   const oscillator = context.createOscillator()
   const envelope = context.createGain()
   oscillator.type = type
-  oscillator.frequency.value = hz
+  oscillator.frequency.setValueAtTime(hz, at)
+  // A drum's body falls in pitch as it dies.
+  if (drop) oscillator.frequency.exponentialRampToValueAtTime(drop, at + length * 0.6)
   envelope.gain.setValueAtTime(SILENT, at)
   envelope.gain.exponentialRampToValueAtTime(Math.max(SILENT, peak), at + 0.002)
   envelope.gain.exponentialRampToValueAtTime(SILENT, at + length)
@@ -145,28 +148,7 @@ function tone(
   return { sources: [oscillator], output: envelope }
 }
 
-const playClick: Render<ClickSound> = (context, click, at, gain, ended) =>
-  tone(
-    context,
-    {
-      hz: click.accent ? 1600 : 1100,
-      peak: (click.accent ? CLICK_PEAK.accent : CLICK_PEAK.beat) * gain,
-      length: 0.05,
-    },
-    at,
-    ended,
-  )
-
-/** The Metronome's beep (ADR 0052): a round tone, the bar's first a fifth higher. */
-const playBeep: Render<ClickSound> = (context, beep, at, gain, ended) =>
-  tone(
-    context,
-    { hz: beep.accent ? 1320 : 880, peak: (beep.accent ? 0.3 : 0.2) * gain, length: 0.12 },
-    at,
-    ended,
-  )
-
-/** A second of white noise, made once for each context: the snare's and the hat's. */
+/** A second of white noise, made once for each context: the drums' rattle and the hat's. */
 const noises = new WeakMap<AudioContext, AudioBuffer>()
 function noiseOf(context: AudioContext): AudioBuffer {
   const made = noises.get(context)
@@ -178,72 +160,101 @@ function noiseOf(context: AudioContext): AudioBuffer {
   return buffer
 }
 
-/** Noise through a high-pass at `hz`, `peak` loud and gone by `length` seconds. */
+/** Noise through a filter at `hz` (a high-pass, or a band), `peak` loud and gone by `length` seconds. */
 function noise(
   context: AudioContext,
-  { hz, peak, length }: { hz: number; peak: number; length: number },
+  {
+    hz,
+    peak,
+    length,
+    type = 'highpass',
+    q,
+  }: { hz: number; peak: number; length: number; type?: BiquadFilterType; q?: number },
   at: number,
 ): Voice {
   const source = context.createBufferSource()
   source.buffer = noiseOf(context)
   const filter = context.createBiquadFilter()
-  filter.type = 'highpass'
+  filter.type = type
   filter.frequency.value = hz
+  if (q !== undefined) filter.Q.value = q
   const envelope = context.createGain()
   envelope.gain.setValueAtTime(SILENT, at)
   envelope.gain.exponentialRampToValueAtTime(Math.max(SILENT, peak), at + 0.001)
   envelope.gain.exponentialRampToValueAtTime(SILENT, at + length)
   source.connect(filter).connect(envelope).connect(context.destination)
-  source.start(at)
+  // Each strike from its own place in the noise, so no two hats are the same.
+  source.start(at, Math.random() * 0.5)
   source.stop(at + length + 0.01)
   return { sources: [source], output: envelope }
 }
 
-/** The kick: a sine falling from 150 Hz to 45 Hz as it dies away. */
+/** Voices struck together as one sound, heard as `first`'s: it ends when `first` does. */
+function together(ended: () => void, first: Voice, ...rest: readonly Voice[]): Voice {
+  const [source] = first.sources
+  if (source) source.onended = ended
+  return {
+    sources: [...first.sources, ...rest.flatMap((voice) => voice.sources)],
+    output: first.output,
+  }
+}
+
+const none = () => undefined
+
+/**
+ * The Metronome's click (ADR 0052): a woodblock's knock, a bright tone over a tick of noise; the
+ * bar's first an octave higher, as a metronome's bell is.
+ */
+const playClick: Render<ClickSound> = (context, click, at, gain, ended) => {
+  const peak = (click.accent ? CLICK_PEAK.accent : CLICK_PEAK.beat) * gain
+  const hz = click.accent ? 2000 : 1000
+  return together(
+    ended,
+    tone(context, { hz, peak, length: 0.06, type: 'triangle' }, at, none),
+    noise(context, { hz, peak: peak * 0.5, length: 0.012, type: 'bandpass', q: 3 }, at),
+  )
+}
+
+/** The Metronome's beep: a round tone, the bar's first an octave higher. */
+const playBeep: Render<ClickSound> = (context, beep, at, gain, ended) =>
+  tone(
+    context,
+    { hz: beep.accent ? 1760 : 880, peak: (beep.accent ? 0.3 : 0.22) * gain, length: 0.12 },
+    at,
+    ended,
+  )
+
+/** The kick: a sine thumping down from 120 Hz to 40 Hz, a click of its beater on top. */
 const playKick: Render<ClickSound> = (context, kick, at, gain, ended) => {
-  const oscillator = context.createOscillator()
-  const envelope = context.createGain()
-  oscillator.frequency.setValueAtTime(150, at)
-  oscillator.frequency.exponentialRampToValueAtTime(45, at + 0.12)
-  envelope.gain.setValueAtTime(SILENT, at)
-  envelope.gain.exponentialRampToValueAtTime(
-    Math.max(SILENT, (kick.accent ? 0.9 : 0.7) * gain),
-    at + 0.004,
+  const peak = (kick.accent ? 1 : 0.85) * gain
+  return together(
+    ended,
+    tone(context, { hz: 120, drop: 40, peak, length: 0.4 }, at, none),
+    noise(context, { hz: 3000, peak: peak * 0.15, length: 0.008, type: 'lowpass' }, at),
   )
-  envelope.gain.exponentialRampToValueAtTime(SILENT, at + 0.3)
-  oscillator.connect(envelope).connect(context.destination)
-  oscillator.start(at)
-  oscillator.stop(at + 0.31)
-  oscillator.onended = ended
-  return { sources: [oscillator], output: envelope }
 }
 
-/** The snare: a burst of bright noise over a short low tone, its body. */
+/** The snare: its wires' rattle, a band of noise, over the drum's short falling body. */
 const playSnare: Render<ClickSound> = (context, snare, at, gain, ended) => {
-  const peak = (snare.accent ? 0.45 : 0.35) * gain
-  const rattle = noise(context, { hz: 1500, peak, length: 0.16 }, at)
-  const body = tone(
-    context,
-    { hz: 190, peak: peak * 0.6, length: 0.08, type: 'triangle' },
-    at,
-    () => undefined,
+  const peak = (snare.accent ? 0.6 : 0.5) * gain
+  return together(
+    ended,
+    noise(context, { hz: 2500, peak, length: 0.2, type: 'bandpass', q: 0.7 }, at),
+    tone(
+      context,
+      { hz: 220, drop: 160, peak: peak * 0.7, length: 0.1, type: 'triangle' },
+      at,
+      none,
+    ),
   )
-  const [source] = rattle.sources
-  if (source) source.onended = ended
-  return { sources: [...rattle.sources, ...body.sources], output: rattle.output }
 }
 
-/** The hat: a tick of the brightest noise. */
-const playHat: Render<ClickSound> = (context, hat, at, gain, ended) => {
-  const voice = noise(
-    context,
-    { hz: 7000, peak: (hat.accent ? 0.2 : 0.12) * gain, length: 0.045 },
-    at,
+/** The closed hat: a tick of the brightest noise. */
+const playHat: Render<ClickSound> = (context, hat, at, gain, ended) =>
+  together(
+    ended,
+    noise(context, { hz: 8000, peak: (hat.accent ? 0.22 : 0.16) * gain, length: 0.05 }, at),
   )
-  const [source] = voice.sources
-  if (source) source.onended = ended
-  return voice
-}
 
 /** How each beat's sound is made: synthesised, nothing fetched, so it plays offline. */
 const CLICK_VOICES: Readonly<Record<ClickVoice, Render<ClickSound>>> = {

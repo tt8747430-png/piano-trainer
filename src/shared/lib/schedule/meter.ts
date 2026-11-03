@@ -116,13 +116,26 @@ export interface BarClick {
   readonly voices: readonly DrumVoice[]
 }
 
-/** The kick and snare of each beat: rock in 4, a waltz in 3, the backbeat in 2, odd meters by group. */
-function groove(beats: number, groups: readonly number[], beat: number): DrumVoice | null {
-  if (groups.length > 1) return beat === 0 ? 'kick' : groups.includes(beat) ? 'snare' : null
-  if (beats === 3) return beat === 0 ? 'kick' : 'snare'
-  if (beats === 4) return beat % 2 === 0 ? 'kick' : 'snare'
-  if (beats === 2) return beat === 0 ? 'kick' : 'snare'
-  return beat === 0 ? 'kick' : null
+/**
+ * What the kit strikes besides the hat at `part` of beat `beat` (0 its start, ½ its "and"): a drum
+ * groove of the meter, as drum machines and Chordify's write them. Rock in 4 (kick on 1, 3 and the
+ * "and" of 3, snare on 2 and 4); a waltz in 3 (the kick on 1, the hat alone after it); the backbeat
+ * in 2; compound time's kick on its first dotted beat, snare on the next; an odd meter's kick on the
+ * bar and snare on each group after.
+ */
+function groove(
+  beats: number,
+  groups: readonly number[],
+  beat: number,
+  part: number,
+): DrumVoice | null {
+  if (part !== 0)
+    return beats === 4 && groups.length === 1 && beat === 2 && part === 0.5 ? 'kick' : null
+  if (beat === 0) return 'kick'
+  if (groups.length > 1) return groups.includes(beat) ? 'snare' : null
+  if (beats === 3) return null
+  if (beats === 4) return beat === 2 ? 'kick' : 'snare'
+  return beat % 2 === 1 ? 'snare' : 'kick'
 }
 
 /**
@@ -152,12 +165,11 @@ export function barClicks({
   return beats.flatMap((size, beat) => {
     const level = shown[beat] ?? 'normal'
     if (level === 'silent') return []
-    const kicked = drums ? groove(beats.length, groups, beat) : null
     return partsOf(size, unit, heard).map((part, i): BarClick => {
       const at = (beat + part) * secondsPerBeat
-      if (i === 0)
-        return { at, beat, level, voices: drums ? [...(kicked ? [kicked] : []), 'hat'] : [] }
-      return { at, beat, level: 'sub', voices: drums ? ['hat'] : [] }
+      const struck = drums ? groove(beats.length, groups, beat, part) : null
+      const voices: DrumVoice[] = drums ? [...(struck ? [struck] : []), 'hat'] : []
+      return { at, beat, level: i === 0 ? level : 'sub', voices }
     })
   })
 }

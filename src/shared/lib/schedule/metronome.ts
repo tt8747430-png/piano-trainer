@@ -57,6 +57,9 @@ export interface MetronomeVoice {
   readonly subdivision: Subdivision
 }
 
+/** A drum groove's loudness: its kick and snare, its hat on the beat and off it. */
+const DRUM_GAIN = { drum: 1, hat: 0.8, offbeat: 0.55 } as const
+
 /**
  * What sounds on beat `beat` of a bar (from 0), at its offsets from the beat's start: the beat at
  * its level, its subdivisions softer; a drum groove's kick, snare and hat; nothing on a silent beat.
@@ -79,11 +82,18 @@ export function beatSounds(
     const gain = LEVEL_GAIN[click.level]
     if (sound !== 'drum')
       return [{ kind: 'click', at, accent, gain, ...(sound === 'click' ? {} : { voice: sound }) }]
+    // A groove's kick and snare keep one loudness, the backbeat as strong as the bar's first; a
+    // square's accent lifts its drum, and the hat sits under them, softer off the beat.
     return click.voices.map((voice) => ({
       kind: 'click',
       at,
       accent: voice !== 'hat' && accent,
-      gain: voice === 'hat' ? LEVEL_GAIN.sub : gain,
+      gain:
+        voice === 'hat'
+          ? click.level === 'sub'
+            ? DRUM_GAIN.offbeat
+            : DRUM_GAIN.hat
+          : DRUM_GAIN.drum,
       voice,
     }))
   })

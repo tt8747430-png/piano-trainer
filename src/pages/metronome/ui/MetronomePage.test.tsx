@@ -107,11 +107,11 @@ describe('Practice → Metronome', () => {
     )
     await user.click(screen.getByRole('button', { name: 'Start' }))
     await waitFor(() =>
-      // A waltz: the kick on 1, the snare on 2 and 3, the hat on every 8th (A39).
+      // A waltz: the kick on 1, the hat alone after it, on every 8th (A39, Chordify's).
       expect(beatsPlayed(audio.played).map(({ voices }) => voices)).toEqual([
         ['kick!', 'hat', 'hat'],
-        ['snare', 'hat', 'hat'],
-        ['snare', 'hat', 'hat'],
+        ['hat', 'hat'],
+        ['hat', 'hat'],
       ]),
     )
   })
@@ -121,11 +121,9 @@ describe('Practice → Metronome', () => {
     const { audio, storage } = await open()
     await user.click(screen.getByRole('combobox', { name: 'Time signature' }))
     await user.click(await screen.findByRole('option', { name: '2/4' }))
-    await user.click(screen.getByRole('switch', { name: 'Bar trainer' }))
-    await user.click(screen.getByRole('combobox', { name: 'Bars played' }))
-    await user.click(await screen.findByRole('option', { name: '1 bar' }))
-    await user.click(screen.getByRole('combobox', { name: 'Bars muted' }))
-    await user.click(await screen.findByRole('option', { name: '1 bar' }))
+    await user.click(screen.getByRole('switch', { name: /Silent bars/ }))
+    await user.click(screen.getByRole('button', { name: 'Play −' }))
+    await user.click(screen.getByRole('button', { name: 'Then silent for −' }))
     expect(saved(storage).trainer).toEqual({ on: true, play: 1, mute: 1 })
     await user.click(screen.getByRole('button', { name: 'Start' }))
     // At 120 in 2/4: the first bar sounds (0.1, 0.6), the second is silent (1.1, 1.6).
@@ -140,7 +138,7 @@ describe('Practice → Metronome', () => {
       expect(within(beats).getAllByRole('button')[0]).toHaveAttribute('aria-current', 'true'),
     )
     expect(beats).toHaveAttribute('data-muted', 'true')
-    expect(screen.getByText('Muted')).toBeInTheDocument()
+    expect(screen.getByText('Keep counting')).toBeInTheDocument()
   })
 
   it('starts and stops with Space, and changes the tempo with the arrows, by 10 with Shift', async () => {
@@ -203,11 +201,16 @@ describe('Practice → Metronome', () => {
     ])
   })
 
-  it('shows the speed trainer’s tempos only while it is on (R30)', async () => {
-    await open()
+  it('shows the speed trainer’s tempos only while it is on (R30), its start the tempo set', async () => {
+    const { storage } = await open()
     const user = userEvent.setup()
-    expect(screen.queryByText('From')).toBeNull()
+    expect(screen.queryByText('Start at')).toBeNull()
     await user.click(screen.getByRole('switch', { name: /Speed trainer/ }))
-    for (const name of ['From', 'To', 'Step', 'Every']) expect(screen.getByText(name)).toBeVisible()
+    for (const name of ['Start at', 'Goal', 'Speed up by', 'Every'])
+      expect(screen.getByText(name)).toBeVisible()
+    // The tempo shown is the one it starts at, and the steps set it.
+    const start = saved(storage).speed.from
+    await user.click(screen.getByRole('button', { name: 'Faster by 10' }))
+    expect(saved(storage).speed.from).toBe(start + 10)
   })
 })

@@ -496,8 +496,9 @@ Never "keyboard" alone (R22): say which one.
 - **Run**: a trainer's rounds, summed up. _Avoid:_ session, game.
 - **Metronome** («Метроном»): its own page: a beat at 30–300 BPM, **Tap tempo**, a sound and a meter. _Avoid:_ click
   track.
-- **Bar trainer** («Тренировка тактов»): the Metronome playing its bars, then silent for its muted bars, the beats
-  still shown. _Avoid:_ gap click, mute mode.
+- **Silent bars** («Тихие такты»): the Metronome playing its bars, then silent for its muted bars while the learner
+  keeps counting, the beats still shown (`trainer` in code, the bar trainer). _Avoid:_ bar trainer, gap click, mute
+  mode.
 - **Tempo word** («Обозначение темпа»): an Italian word a tempo is named by, with its range (`TEMPO_TERMS`). The ten
   of the **ladder** name a tempo (grave … prestissimo); the shades between (lento, andantino, allegretto …) only
   describe one. _Avoid:_ tempo name, BPM label.

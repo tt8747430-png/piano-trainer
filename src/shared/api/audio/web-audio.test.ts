@@ -63,7 +63,7 @@ class FakeContext {
   }
 
   createBiquadFilter() {
-    return this.node({ type: 'lowpass', frequency: this.param() })
+    return this.node({ type: 'lowpass', frequency: this.param(), Q: this.param() })
   }
 
   createBuffer(_channels: number, length: number) {
@@ -213,13 +213,14 @@ describe('createWebAudioOutput', () => {
     expect(audio.audioTimeAt(40_250)).toBeCloseTo(10.18)
   })
 
-  it('plays a click as one oscillator', () => {
+  it('plays a click as a woodblock’s knock: a tone over a tick of noise', () => {
     const { context, audio } = setUp()
     audio.play([CLICK], 0)
     expect(context.oscillators).toHaveLength(1)
+    expect(context.noises).toHaveLength(1)
   })
 
-  it('plays the Metronome’s beep as one tone, the bar’s first higher (ADR 0052)', () => {
+  it('plays the Metronome’s beep as one tone, the bar’s first an octave higher (ADR 0052)', () => {
     const { context, audio } = setUp()
     audio.play(
       [
@@ -228,10 +229,10 @@ describe('createWebAudioOutput', () => {
       ],
       0,
     )
-    expect(context.oscillators.map((oscillator) => oscillator.frequency)).toEqual([1320, 880])
+    expect(context.oscillators.map((oscillator) => oscillator.frequency)).toEqual([1760, 880])
   })
 
-  it('plays a drum beat synthesised: the kick a tone, the snare noise over a tone, the hat noise', () => {
+  it('plays a drum beat synthesised: the kick a falling tone and its beater, the snare noise over a tone, the hat noise', () => {
     const { context, audio } = setUp()
     audio.play(
       [
@@ -242,7 +243,7 @@ describe('createWebAudioOutput', () => {
       0,
     )
     expect(context.oscillators).toHaveLength(2)
-    expect(context.noises).toHaveLength(2)
+    expect(context.noises).toHaveLength(3)
     for (const noise of context.noises) expect(noise.start).toBe(0)
   })
 
@@ -255,12 +256,12 @@ describe('createWebAudioOutput', () => {
     // What sounds at once is rendered at its gain, in time: the click's peak its own, the note's its
     // velocity.
     const peaks = () => context.gains.flatMap((gain) => gain.ramps.slice(0, 1).map((r) => r.value))
-    expect(peaks()).toEqual([0.22, 0.2])
+    expect(peaks()).toEqual([0.32, 0.16, 0.2])
     // Turned down before the next note is rendered: it sounds at the new gain.
     level = 0.5
     context.currentTime = 0.8
     vi.advanceTimersByTime(25)
-    expect(peaks()).toEqual([0.22, 0.2, 0.1])
+    expect(peaks()).toEqual([0.32, 0.16, 0.2, 0.1])
     audio.stop()
     vi.useRealTimers()
   })

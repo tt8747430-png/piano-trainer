@@ -36,6 +36,9 @@ const timeOf = ({ bpm, meter, speed }: MetronomeSettings): MetronomeTime =>
   speed.on ? { bpm, meter, bpmAt: (bar) => speedAt(bar, speed) } : { bpm, meter }
 const tempoOf = (time: MetronomeTime, bar: number) => (time.bpmAt ? time.bpmAt(bar) : time.bpm)
 
+/** The tempo the learner sets: the speed trainer's start while it is on, else the Metronome's. */
+const tempoSet = ({ bpm, speed }: MetronomeSettings) => (speed.on ? speed.from : bpm)
+
 /** The bar trainer's counts while it is on. */
 const trainerOf = ({ on, play, mute }: MetronomeSettings['trainer']) => (on ? { play, mute } : null)
 
@@ -50,6 +53,8 @@ export interface Metronome extends MetronomeSettings {
   readonly playing: boolean
   /** The beat sounding (from 0), while it plays, heard or muted. */
   readonly beat: number | null
+  /** The bar playing since it started, from 1, while it plays. */
+  readonly bar: number | null
   /** Whether the bar going by is one the bar trainer mutes. */
   readonly muted: boolean
   toggle(): void
@@ -165,14 +170,20 @@ export function useMetronome(): Metronome {
     (change: Partial<MetronomeSettings>) => setMetronome(store, change),
     [store],
   )
+  // While the speed trainer is on, the tempo set is the one it starts at.
+  const setTempo = (bpm: number) => {
+    const now = store.getState().metronome
+    save(now.speed.on ? { speed: { ...now.speed, from: bpm } } : { bpm })
+  }
   return {
     ...settings,
     playing,
     beat: playing ? beat : null,
+    bar: playing && bar !== null ? bar + 1 : null,
     muted: playing && bar !== null && mutedBar(bar, trainerOf(settings.trainer)),
     toggle: () => (run.current ? stop() : void start()),
-    nudge: (step) => save({ bpm: store.getState().metronome.bpm + step }),
-    setBpm: (bpm) => save({ bpm }),
+    nudge: (step) => setTempo(tempoSet(store.getState().metronome) + step),
+    setBpm: (bpm) => setTempo(bpm),
     // A new meter starts its squares afresh.
     setMeter: (meter) => save({ meter, levels: null }),
     setSound: (sound) => save({ sound }),
@@ -188,11 +199,13 @@ export function useMetronome(): Metronome {
     setSubdivision: (subdivision) => save({ subdivision }),
     setSpeed: (change) => save({ speed: { ...store.getState().metronome.speed, ...change } }),
     tempoNow:
-      playing && bar !== null && settings.speed.on ? speedAt(bar, settings.speed) : settings.bpm,
+      playing && bar !== null && settings.speed.on
+        ? speedAt(bar, settings.speed)
+        : tempoSet(settings),
     tap() {
       const read = tapTempo(taps.current, performance.now())
       taps.current = read.taps
-      if (read.bpm !== null) save({ bpm: read.bpm })
+      if (read.bpm !== null) setTempo(read.bpm)
     },
   }
 }

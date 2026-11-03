@@ -82,14 +82,20 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   to the on-screen piano and a connected piano. The page's gear opens it (`?from=` names the page, so Back returns
   there); Settings lists the same pages under Practice. The page keeps what you look at.
 - **A key size chosen** says on the keys' rail for a moment what it shows ("Showing 36 keys (C3–B5)").
-- **The Metronome** (`/practice/metronome`), the owner's example laid out: the BPM large between −10 −1 +1 +10, a
-  slider (30–300) and Tap tempo (the average of the last five taps); the sound (Click, Beep, Drum beat) and the meter
-  side by side; one honey Play; a square a beat, the first larger, the one sounding filled. The first beat is accented.
+- **The Metronome** (`/practice/metronome`), its face in Chordify's order: the BPM large between −10 −1 +1 +10, a
+  slider and Tap tempo (the average of the last five taps), a square a beat (the first larger, the one sounding
+  filled, a tap cycling accent · beat · silent), one honey Play. Under it, beside it on a laptop, labelled rows: Sound
+  (Clicks, Beeps, Drum beat), Time signature, Between beats (the subdivision); then Practice, the two trainers, each a
+  switch whose rows read as a sentence. A click's and a beep's accent is an octave up; the drum grooves are Chordify's
+  (rock in 4 with the kick on the "and" of 3, a waltz's kick and hats, the backbeat in 2, compound and odd meters by
+  their groups), the kick and snare one loudness.
   Beats are planned on the audio clock a second and a half ahead and topped up by a timer; a change while it plays
   goes on from the beat heard. Space starts it, ↑ ↓ change the tempo; the screen stays on. Its sounds are synthesised,
   so it works offline. Its tempo is named by its Italian tempo word (`tempoWord`, the editor's dial's ladder), the
-  word's meaning and range in its ⓘ. The **bar trainer** plays N bars, then mutes N bars (1–8 each, saved with the
-  Metronome): each beat carries its bar since the start, a muted bar's beats are not queued but still shown.
+  word's meaning and range in its ⓘ. **Silent bars** (the bar trainer) play N bars, then mute N bars (1–8 each, saved with the
+  Metronome; "Keep counting" over the squares): each beat carries its bar since the start, a muted bar's beats are not
+  queued but still shown. The **speed trainer** reads Start at · Goal · Speed up by · Every; while it is on, the tempo
+  shown and set is its start.
 - **Musical terms** are one list each in the kernel: the tempo words with their ranges (`TEMPO_TERMS`, larghissimo
   to prestissimo; ten name a tempo, the shades between only describe), the editor's expression text in three groups
   (`EXPRESSION_GROUPS`: character, tempo changes, technique), each meaning in both languages.
@@ -136,3 +142,5 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
   navigation marks; five row kinds, the destructive ones last and alone (2026-11-03, A12–A17).
 - r29 — Each Practice page has a Settings page (`/settings/<page>`), its gear in the bar and a Practice group in
   Settings; the Chord finder's sheet goes (2026-11-03).
+- r29 — The Metronome as Chordify's: its face first, labelled rows, Silent bars and the speed trainer as sentences,
+  the grooves and accents as Chordify's, fuller synthesised drums (2026-11-03).
