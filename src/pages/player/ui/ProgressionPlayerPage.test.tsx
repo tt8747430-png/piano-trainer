@@ -86,8 +86,8 @@ describe('A progression in the Player', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/progression?p=ii-V-I&key=C&chordSize=sevenths')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    await user.click(screen.getByRole('combobox', { name: 'Through the keys' }))
-    await user.click(await screen.findByRole('option', { name: 'Up by semitones' }))
+    await user.click(screen.getByRole('combobox', { name: 'In all 12 keys' }))
+    await user.click(await screen.findByRole('option', { name: 'Chromatically, rising' }))
     expect(router.state.location.search).toMatchObject({ walk: 'semitones-up' })
     expect(
       await screen.findByRole('heading', {

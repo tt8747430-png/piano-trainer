@@ -52,6 +52,42 @@ export function harmonicFunction(numeral: Numeral, minor: boolean): HarmonicFunc
   }
 }
 
+/**
+ * A chord's role in its key as a learner hears it (A23), the function said plainly: home (tonic, at
+ * rest), away (subdominant, moving off), tension (dominant, pulling home).
+ */
+export const KEY_ROLES = ['home', 'away', 'tension'] as const
+export type KeyRole = (typeof KEY_ROLES)[number]
+const ROLE_OF: Readonly<Record<HarmonicFunction, KeyRole>> = {
+  tonic: 'home',
+  subdominant: 'away',
+  dominant: 'tension',
+}
+
+/**
+ * The colour a chord brings beside its role: in a major key a minor chord's, the relative minor (vi)
+ * sad and the others soft; in a minor key a major chord's, bright, but the usual dominant (V).
+ */
+export const ROLE_COLOURS = ['sad', 'soft', 'bright'] as const
+export type RoleColour = (typeof ROLE_COLOURS)[number]
+
+/** What a chord does in its key, and the colour it brings where it brings one. */
+export interface RoleOf {
+  readonly role: KeyRole
+  readonly colour?: RoleColour
+}
+
+export function chordRole(numeral: Numeral, minor: boolean): RoleOf {
+  const role = ROLE_OF[harmonicFunction(numeral, minor)]
+  const { quality, degree, of } = numeral
+  if (of) return { role }
+  const minorChord = hasSemitones(quality, 3, 7)
+  const majorChord = hasSemitones(quality, 4, 7)
+  if (!minor && minorChord) return { role, colour: degree === 5 ? 'sad' : 'soft' }
+  if (minor && majorChord && degree !== 4) return { role, colour: 'bright' }
+  return { role }
+}
+
 /** How far a root moves, by letters: a 4th up is a 5th down, a 6th up a 3rd down, a 7th up a 2nd down. */
 export const ROOT_STEPS = ['fifth', 'third', 'second'] as const
 export type RootStep = (typeof ROOT_STEPS)[number]

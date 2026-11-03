@@ -22,7 +22,6 @@ import {
   fingeringsOf,
   fitParts,
   INVERSIONS,
-  isInversion,
   keyFromParam,
   keyMode,
   keyParam,
@@ -43,6 +42,7 @@ import { PRACTICE_RHYTHM_IDS, TEMPO_RANGE } from '@/shared/lib/schedule'
 import type { ChordView } from '@/widgets/chord-explorer'
 import { INTERVAL_WAYS, type IntervalWay } from '@/shared/lib/schedule'
 import type { IntervalView } from '@/widgets/interval-explorer'
+import type { ProgressionStyle } from '@/entities/progression-library'
 import type { ProgressionsView } from '@/widgets/progression-explorer'
 import type { ScaleShow, ScaleView } from '@/widgets/scale-explorer'
 import {
@@ -198,8 +198,6 @@ export const PROGRESSIONS_DEFAULTS: ProgressionsView = {
   key: C_MAJOR_PARAM,
   p: PROGRESSION.numerals,
   size: 'triads',
-  inversion: 0,
-  nearest: true,
 }
 /** The line a key opens on with none of its own: the default progression's line in its mode. */
 const openingLine = (key: KeyParam): string =>
@@ -211,21 +209,24 @@ export function readProgressionsSearch(raw: Raw): ProgressionsView {
     key,
     p: readNumerals(raw.p, openingLine(key)),
     size: valueOr(isChordSize, raw.size, PROGRESSIONS_DEFAULTS.size),
-    inversion: valueOr(isInversion, raw.inversion, PROGRESSIONS_DEFAULTS.inversion),
-    nearest: raw.nearest !== false,
     lead: isLeadIn(raw.lead) ? raw.lead : undefined,
     between:
       typeof raw.between === 'number' && Number.isInteger(raw.between) && raw.between > 0
         ? raw.between
         : undefined,
     inKey: raw.inKey === true ? true : undefined,
-    harmony: raw.harmony === 'motion' ? 'motion' : undefined,
     mode: isChurchMode(raw.mode) ? raw.mode : undefined,
-    block: raw.block === true ? true : undefined,
-    names: raw.names === 'nashville' || raw.names === 'chords' ? raw.names : undefined,
+    tab: raw.tab === 'library' || raw.tab === 'passing' ? raw.tab : undefined,
+    style: isProgressionStyle(raw.style) ? raw.style : undefined,
   }
 }
 const isChurchMode = isOneOf(CHURCH_MODES)
+/**
+ * A library style as a word: the styles are the library's (content, not startup's), so the page
+ * shows every style for one it doesn't know.
+ */
+const isProgressionStyle = (value: unknown): value is ProgressionStyle =>
+  typeof value === 'string' && /^[a-z]{1,20}$/.test(value)
 /** Progressions' line left out of the URL only where its key opens on it. */
 const stripOpeningLine: SearchMiddleware<ProgressionsView> = (context) => {
   const search = context.next(context.search)

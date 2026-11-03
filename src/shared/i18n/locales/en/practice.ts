@@ -243,7 +243,10 @@ export const practice = {
     majorLine: 'These numerals are a major key’s.',
     minorLine: 'These numerals are a minor key’s.',
     playIn: 'Play them in {{key}}',
-    throughKeys: 'Through the keys',
+    throughKeys: 'Practise in all 12 keys',
+    // Progressions' tabs (A23).
+    tabs: { progression: 'Progression', library: 'Library', passing: 'Passing chords' },
+    allStyles: 'All',
     // How the row is read and played (ADR 0112): its mode, how its chords are named, voice-led or blocks.
     mode: {
       label: 'Mode',
@@ -273,16 +276,22 @@ export const practice = {
     chordCount_other: '{{count}} chords',
     chordsIn: 'Its chords in the key',
     /** What leads into each chord of the progression (ADR 0112). */
-    lead: { label: 'Approach chords', none: 'No', v: 'By its V', 'ii-v': 'By its ii–V' },
+    lead: {
+      label: 'Approach chords',
+      none: 'None',
+      v: 'Secondary dominants',
+      'ii-v': 'ii–V',
+    },
     // The songs a progression is heard in, each opening the Player at its bars (ADR 0112).
     songs: {
       title: 'Songs with this progression',
-      none: 'No song uses it yet',
       all_one: 'Show all {{count}} song',
       all_other: 'Show all {{count}} songs',
     },
     between: {
       title: 'Passing chords',
+      line: 'Chords that lead from one chord to the next',
+      none: 'Every chord here is the same: type or choose a progression that changes chords.',
       pair: 'From chord to chord',
     },
     style: {

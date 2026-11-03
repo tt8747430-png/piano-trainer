@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { note } from './note'
-import { harmonicFunction, isStrongMove, rootMove, rootMoveText } from './harmony'
+import { chordRole, harmonicFunction, isStrongMove, rootMove, rootMoveText } from './harmony'
 import { parseNumeral, type Numeral } from './numerals'
 
 const numeral = (text: string): Numeral => {
@@ -103,5 +103,42 @@ describe('rootMove', () => {
     expect(isStrongMove({ by: 'fifth', down: false })).toBe(false)
     expect(isStrongMove({ by: 'third', down: false })).toBe(false)
     expect(isStrongMove({ by: 'second', down: true })).toBe(false)
+  })
+})
+
+describe('chordRole (A23: the roles drawn on the chords)', () => {
+  const roles = (line: string, minorKey = false) =>
+    line.split(' ').map((text) => chordRole(numeral(text), minorKey))
+
+  it('says each chord of a major key is home, away or tension, a minor chord’s colour with it', () => {
+    expect(roles('I ii iii IV V vi vii°')).toEqual([
+      { role: 'home' },
+      { role: 'away', colour: 'soft' },
+      { role: 'home', colour: 'soft' },
+      { role: 'away' },
+      { role: 'tension' },
+      { role: 'home', colour: 'sad' },
+      { role: 'tension' },
+    ])
+  })
+
+  it('reads a minor key’s chords by their function, the major ones bright', () => {
+    expect(roles('i ii° III iv V VI VII', true)).toEqual([
+      { role: 'home' },
+      { role: 'away' },
+      { role: 'home', colour: 'bright' },
+      { role: 'away' },
+      { role: 'tension' },
+      { role: 'home', colour: 'bright' },
+      { role: 'tension', colour: 'bright' },
+    ])
+  })
+
+  it('reads a borrowed or applied chord by what it does', () => {
+    expect(roles('♭VII V/V iv')).toEqual([
+      { role: 'away' },
+      { role: 'tension' },
+      { role: 'away', colour: 'soft' },
+    ])
   })
 })

@@ -1,4 +1,4 @@
-import type { HarmonicFunction, RootStep } from '@/shared/lib/music'
+import type { KeyRole } from '@/shared/lib/music'
 
 /** The chrome's paints that name places and kinds of step (DESIGN.md, the paint set). */
 export type Paint = 'sand' | 'sky' | 'grass' | 'yellow' | 'lilac'
@@ -17,16 +17,12 @@ export const PAINT: Readonly<
   lilac: { fill: 'bg-paint-lilac', ink: 'text-on-paint-lilac', full: 'bg-paint-full-lilac' },
 }
 
-/** What each function is painted, on every chip and legend (DESIGN.md, Harmony). */
-export const FUNCTION_PAINT: Readonly<Record<HarmonicFunction, Paint>> = {
-  tonic: 'grass',
-  subdominant: 'sand',
-  dominant: 'lilac',
-}
-
-/** What each strong root move is painted: a 5th down lilac, a 3rd down sand, a 2nd up grass. */
-export const MOVE_PAINT: Readonly<Record<RootStep, Paint>> = {
-  fifth: 'lilac',
-  third: 'sand',
-  second: 'grass',
+/**
+ * What each role is painted, on every chord of a progression and its legend (A23, DESIGN.md,
+ * Harmony): home grass, away sand, tension lilac.
+ */
+export const ROLE_PAINT: Readonly<Record<KeyRole, Paint>> = {
+  home: 'grass',
+  away: 'sand',
+  tension: 'lilac',
 }

@@ -1,12 +1,13 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useFold } from '@/features/fold-section'
 import {
   libraryByStyle,
   libraryParam,
   progressionMode,
   type LibraryProgression,
+  type ProgressionStyle,
 } from '@/entities/progression-library'
+import type { ProgressionNames } from '@/entities/settings'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import {
@@ -23,70 +24,85 @@ import {
 } from '@/shared/lib/music'
 import { walkSounds } from '@/shared/lib/schedule'
 import { usePlayback, usePlayhead } from '@/shared/lib/services'
-import { ChordText, FoldSection, PlayButton } from '@/shared/ui'
-import type { ProgressionNames } from '../model/progressions-view'
+import { ChoiceChips, ChordText, PlayButton } from '@/shared/ui'
 
 type Playback = ReturnType<typeof usePlayback<string>>
 
-/** How fast a card plays its progression: a chord each two beats, as the page's row. */
-const CARD_TEMPO = 84
+/** How fast a row plays its progression: a chord each two beats, as the page's row. */
+const ROW_TEMPO = 84
 const BEATS_A_CHORD = 2
 
-/** A card's chords in the key shown: each numeral (or Nashville number) over the chord it is there. */
-interface CardChord {
-  readonly numeral: string | undefined
-  readonly symbol: string
-}
-
 /**
- * The key a progression is shown in on its card: the key chosen, or, for a progression with no line
+ * The key a progression is shown in on its row: the key chosen, or, for a progression with no line
  * in that key's mode, the key of the same tonic in the mode it has.
  */
-const cardKey = (progression: LibraryProgression, key: Key): Key => {
+const rowKey = (progression: LibraryProgression, key: Key): Key => {
   const minor = progressionMode(progression, key.minor)
   return minor === key.minor ? key : writtenKey({ tonic: key.tonic, minor })
 }
 
 /**
- * The library as cards (ADR 0112), style by style, as the reference app lists its progressions: each
- * card titled by its numerals, its name and chord count, how it sounds in a line, and a chip a chord
- * (the numeral over the chord in the key chosen), so the key and Major · Minor above re-spell every
- * card. Its Play plays it there and then, the sounding chord's chip lit; a tap anywhere else opens it
- * at the top of the page. The one shown is marked. Its chords are named as the page's row names them:
- * by numerals, Nashville numbers, or the chords alone.
+ * The library, Progressions' second tab (A23, as musicca lists it): a list, not a wall of cards, its
+ * styles as chips (All, Pop, Rock, Jazz …). Each row is the progression's line (numerals, Nashville
+ * numbers or chords, as Progressions' Settings write them), its name, and its chords in the key
+ * chosen in bar cells (`| C | G | Am | F |`); ▷ plays it in place, its sounding bar lit; a tap
+ * anywhere else opens it in the Progression tab. The one shown is marked.
  */
 export function ProgressionLibrary({
   musicKey,
   size,
   names,
+  style,
   shown,
+  onStyle,
   onChoose,
 }: {
   musicKey: Key
   size: ChordSize
   names: ProgressionNames
-  /** The library's progression the page shows, if it shows one. */
+  /** The style shown; every style where none (or one the library doesn't have) is chosen. */
+  style: ProgressionStyle | undefined
+  /** The library's progression the Progression tab shows, if it shows one. */
   shown: string | undefined
+  onStyle: (style: ProgressionStyle | undefined) => void
   onChoose: (progression: LibraryProgression) => void
 }) {
   const { t } = useTranslation('practice')
-  const fold = useFold('progressions.library')
   const playback = usePlayback<string>()
+  const styles = libraryByStyle()
+  const chosen = styles.some((group) => group.style === style) ? style : undefined
+  const listed = chosen ? styles.filter((group) => group.style === chosen) : styles
   return (
-    <FoldSection title={t('progressions.library')} fold={fold} className="flex flex-col gap-6">
-      {libraryByStyle().map(({ style, progressions }) => (
+    <div className="flex flex-col gap-5">
+      <ChoiceChips<ProgressionStyle | 'all'>
+        label={t('progressions.library')}
+        value={chosen ?? 'all'}
+        options={[
+          { value: 'all', label: t('progressions.allStyles') },
+          ...styles.map((group) => ({
+            value: group.style,
+            label: t(`progressions.style.${group.style}`),
+          })),
+        ]}
+        onChange={(next) => onStyle(next === 'all' ? undefined : next)}
+      />
+      {listed.map((group) => (
         <section
-          key={style}
-          aria-label={t(`progressions.style.${style}`)}
-          className="flex flex-col gap-3"
+          key={group.style}
+          aria-label={t(`progressions.style.${group.style}`)}
+          className="flex flex-col gap-2"
         >
-          <h3 className="text-xl">{t(`progressions.style.${style}`)}</h3>
-          <ul className="grid-cards gap-2">
-            {progressions.map((progression) => (
+          {chosen ? null : (
+            <h3 className="font-sans text-sm font-semibold text-muted-foreground">
+              {t(`progressions.style.${group.style}`)}
+            </h3>
+          )}
+          <ul className="flex flex-col card overflow-hidden divide-y divide-hairline">
+            {group.progressions.map((progression) => (
               <li key={progression.id}>
-                <ProgressionCard
+                <ProgressionRow
                   progression={progression}
-                  musicKey={cardKey(progression, musicKey)}
+                  musicKey={rowKey(progression, musicKey)}
                   size={progression.size ?? size}
                   names={names}
                   shown={progression.id === shown}
@@ -98,11 +114,11 @@ export function ProgressionLibrary({
           </ul>
         </section>
       ))}
-    </FoldSection>
+    </div>
   )
 }
 
-function ProgressionCard({
+function ProgressionRow({
   progression,
   musicKey,
   size,
@@ -129,76 +145,69 @@ function ProgressionCard({
     () => numerals.map((numeral) => numeralChord(numeral, musicKey, size)),
     [numerals, musicKey, size],
   )
-  const row: readonly CardChord[] = numerals.map((numeral, at) => {
-    const chord = chords[at]
-    return {
-      numeral:
-        names === 'numerals'
-          ? numeralText(numeral)
-          : names === 'nashville' && chord
-            ? nashvilleNumber(chord, musicKey)
-            : undefined,
-      symbol: chord ? chordSymbol(chord) : '',
-    }
-  })
+  const symbols = chords.map((chord) => chordSymbol(chord))
+  const line = numerals
+    .map((numeral, at) => {
+      const chord = chords[at]
+      if (names === 'numerals') return numeralText(numeral)
+      if (names === 'nashville' && chord) return nashvilleNumber(chord, musicKey)
+      return printedSymbol(symbols[at] ?? '')
+    })
+    .join(' – ')
   const onsets = useMemo(
-    () => chords.map((_, at) => (at * BEATS_A_CHORD * 60) / CARD_TEMPO),
+    () => chords.map((_, at) => (at * BEATS_A_CHORD * 60) / ROW_TEMPO),
     [chords],
   )
   const playing = playback.playing === progression.id
   const sounding = usePlayhead(playing ? playback.handle : null, onsets)
   const name = localText(progression.name, locale)
-  const line = row.map((chord) => chord.numeral ?? printedSymbol(chord.symbol)).join(' – ')
   return (
     <article
       aria-label={name}
       aria-current={shown || undefined}
       className={cn(
-        'card relative flex h-full flex-col gap-3 p-4 transition-colors',
-        shown && 'border-foreground/40',
-        playing && 'border-primary',
+        'relative flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted',
+        shown && 'bg-muted',
       )}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex min-w-0 flex-1 flex-col items-start gap-1.5">
         <button
           type="button"
           onClick={onChoose}
-          className="flex min-w-0 flex-1 flex-col items-start gap-0.5 text-left after:absolute after:inset-0 after:rounded-card after:content-['']"
+          className="flex min-w-0 flex-col items-start gap-0.5 text-left after:absolute after:inset-0 after:content-['']"
         >
-          <span className="text-lg font-semibold wrap-anywhere">{line}</span>
-          <span className="text-sm text-muted-foreground">
-            {[name, t('practice:progressions.chordCount', { count: row.length })].join(' · ')}
-          </span>
+          <span className="font-semibold wrap-anywhere">{line}</span>
+          <span className="text-sm text-muted-foreground">{name}</span>
         </button>
-        <PlayButton
-          label={t('music:play')}
-          playing={playing}
-          onClick={() =>
-            playback.toggle(progression.id, () =>
-              walkSounds(voiceLead(chords), { arpeggio: false, tempo: CARD_TEMPO }),
-            )
-          }
-          className="relative z-10 size-12"
-        />
+        {/* Its chords in the key, a bar each, as a chart writes them: | C | G | Am | F |. */}
+        <ol
+          aria-label={t('practice:progressions.chordsIn')}
+          className="flex max-w-full flex-wrap border-l border-border text-sm"
+        >
+          {symbols.map((symbol, at) => (
+            <li
+              key={at}
+              aria-current={sounding === at || undefined}
+              className={cn(
+                'flex min-w-10 justify-center border-r border-border px-2 transition-colors duration-150',
+                sounding === at && 'bg-selected text-selected-foreground',
+              )}
+            >
+              <ChordText symbol={symbol} />
+            </li>
+          ))}
+        </ol>
       </div>
-      <p className="text-muted-foreground">{localText(progression.character, locale)}</p>
-      <ol className="flex flex-wrap gap-1.5" aria-label={t('practice:progressions.chordsIn')}>
-        {row.map((chord, at) => (
-          <li
-            key={at}
-            aria-current={sounding === at || undefined}
-            className={cn(
-              'flex min-w-11 flex-col items-center rounded-control bg-muted px-2 py-1 leading-tight transition-colors duration-150',
-              sounding === at && 'bg-selected text-selected-foreground',
-            )}
-          >
-            {chord.numeral === undefined ? null : (
-              <span className="text-xs text-muted-foreground">{chord.numeral}</span>
-            )}
-            <ChordText symbol={chord.symbol} />
-          </li>
-        ))}
-      </ol>
+      <PlayButton
+        label={t('music:play')}
+        playing={playing}
+        onClick={() =>
+          playback.toggle(progression.id, () =>
+            walkSounds(voiceLead(chords), { arpeggio: false, tempo: ROW_TEMPO }),
+          )
+        }
+        className="relative z-10 shrink-0"
+      />
     </article>
   )
 }

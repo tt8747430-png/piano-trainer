@@ -6,7 +6,7 @@ import { heardLine, songsWith, type SongPlace } from '@/entities/progression-lib
 import { loopParam } from '@/features/practice'
 import { OPEN_PLAINLY } from '@/shared/lib'
 import { numeralText, parseNumerals, printedSymbol } from '@/shared/lib/music'
-import { FoldSection, RowGroup, RowLink } from '@/shared/ui'
+import { RowGroup, RowLink } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEntryFace } from '@/widgets/piece-list'
 
@@ -19,7 +19,7 @@ const CHORD_SPACE = ' '
 /**
  * The songs a line of numerals (as a URL holds it) is heard in (ADR 0112, Chordify's "songs using
  * it"), each in its own key, wherever it is written in a key of `minor`'s mode: the learner's own
- * songs after the catalog's. None for a line of one chord.
+ * songs after the catalog's. Nothing for a line of one chord, or one no song uses.
  */
 export function ProgressionSongs({
   line,
@@ -42,14 +42,9 @@ export function ProgressionSongs({
     return songsWith(pieces, numerals, minor)
   }, [repertoire, numerals, minor])
   const [all, setAll] = useState(false)
-  if (new Set(numerals.map(numeralText)).size < 2) return null
+  // A line of one chord, or one no song uses, has no section (A23): nothing to show.
+  if (new Set(numerals.map(numeralText)).size < 2 || songs.length === 0) return null
   const title = t('progressions.songs.title')
-  if (songs.length === 0)
-    return (
-      <FoldSection title={title} headingClassName="text-2xl">
-        <p className="text-muted-foreground">{t('progressions.songs.none')}</p>
-      </FoldSection>
-    )
   const shown = all ? songs : songs.slice(0, FIRST_ROWS)
   return (
     <RowGroup

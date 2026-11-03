@@ -162,6 +162,12 @@ export { chordsHolding, HOLDING_GROUPS, type HoldingChord, type HoldingGroup } f
 export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } from './passing-chords'
 export { voiceLead, type RowPosition } from './voice-lead'
 export {
+  chordRole,
+  KEY_ROLES,
+  ROLE_COLOURS,
+  type KeyRole,
+  type RoleColour,
+  type RoleOf,
   HARMONIC_FUNCTIONS,
   harmonicFunction,
   isStrongMove,

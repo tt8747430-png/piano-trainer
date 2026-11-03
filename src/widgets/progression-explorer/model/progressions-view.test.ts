@@ -6,6 +6,7 @@ import {
   chosenView,
   playedNumerals,
   playerSearch,
+  rowPosition,
   viewProgression,
   type ProgressionsView,
 } from './progressions-view'
@@ -18,9 +19,9 @@ const view = (key: ProgressionsView['key'], p: string, size: ChordSize): Progres
   key,
   p,
   size,
-  inversion: 0,
-  nearest: true,
 })
+/** Progressions' Settings as they start: numerals, voice-led from root position. */
+const LED = { names: 'numerals', voicing: 'led', inversion: 0 } as const
 const library = (id: string): LibraryProgression => {
   const progression = progressionById(id)
   if (!progression) throw new RangeError(`No progression ${id}`)
@@ -100,7 +101,7 @@ describe('chosenView', () => {
 
 describe('playerSearch', () => {
   it('opens the Player on what is shown, with the pattern the library’s progression is practised in', () => {
-    expect(playerSearch(view(major('C'), 'ii-V-I', 'sevenths'))).toEqual({
+    expect(playerSearch(view(major('C'), 'ii-V-I', 'sevenths'), LED)).toEqual({
       p: 'ii-V-I',
       key: major('C'),
       chordSize: 'sevenths',
@@ -111,7 +112,7 @@ describe('playerSearch', () => {
   })
 
   it('leaves out the Player’s own chord size, and a pattern a typed line has none of', () => {
-    expect(playerSearch(view(major('G'), 'I-I-IV', 'triads'))).toEqual({
+    expect(playerSearch(view(major('G'), 'I-I-IV', 'triads'), LED)).toEqual({
       p: 'I-I-IV',
       key: major('G'),
       inversion: 0,
@@ -120,21 +121,24 @@ describe('playerSearch', () => {
   })
 })
 
-describe('the hand’s position', () => {
-  it('keeps it as a progression is chosen', () => {
-    const shown = {
-      ...view(major('C'), 'I-V-vi-IV', 'triads'),
-      inversion: 2 as const,
-      nearest: false,
-    }
-    expect(chosenView(shown, library('axis'))).toMatchObject({ inversion: 2, nearest: false })
-  })
-
+describe('the hand’s position, from Progressions’ Settings (A24)', () => {
   it('takes it into the Player, named even where it is the Player’s own', () => {
     const shown = view(major('C'), 'I-V-vi-IV', 'triads')
-    expect(playerSearch(shown)).toMatchObject({ inversion: 0, nearest: true })
-    expect(playerSearch({ ...shown, inversion: 1, nearest: false })).toMatchObject({
+    expect(playerSearch(shown, LED)).toMatchObject({ inversion: 0, nearest: true })
+    expect(playerSearch(shown, { ...LED, inversion: 1 })).toMatchObject({
       inversion: 1,
+      nearest: true,
+    })
+  })
+
+  it('plays every chord in root position as blocks, the hand leaping, in the Player too', () => {
+    const shown = view(major('C'), 'I-V-vi-IV', 'triads')
+    expect(rowPosition({ ...LED, voicing: 'block', inversion: 1 })).toEqual({
+      inversion: 0,
+      nearest: false,
+    })
+    expect(playerSearch(shown, { ...LED, voicing: 'block', inversion: 1 })).toMatchObject({
+      inversion: 0,
       nearest: false,
     })
   })
@@ -152,7 +156,7 @@ describe('a lead-in', () => {
 
   it('opens the Player on the chords played, its lead-ins written out', () => {
     const shown = { ...view(major('C'), 'I-vi', 'triads'), lead: 'v' as const }
-    expect(playerSearch(shown).p).toBe('V-I-V/vi-vi')
+    expect(playerSearch(shown, LED).p).toBe('V-I-V/vi-vi')
   })
 
   it('keeps naming the library’s progression it leads into, and is kept as a progression is chosen', () => {
@@ -192,16 +196,5 @@ describe('a progression in a mode', () => {
     })
     const dorian = { ...view(minor('D'), 'i-IV', 'triads'), mode: 'dorian' as const }
     expect(chosenView(dorian, library('axis')).mode).toBeUndefined()
-  })
-})
-
-describe('block chords', () => {
-  it('plays every chord in root position, the hand leaping, in the Player too', () => {
-    const blocks = {
-      ...view(major('C'), 'I-V-vi-IV', 'triads'),
-      inversion: 1 as const,
-      block: true as const,
-    }
-    expect(playerSearch(blocks)).toMatchObject({ inversion: 0, nearest: false })
   })
 })

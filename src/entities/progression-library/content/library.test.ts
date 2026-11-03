@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import {
   C_MAJOR,
+  KEY_ROLES,
+  chordRole,
   chordSymbol,
   note,
   numeralChord,
@@ -254,5 +256,29 @@ describe('the progressions library', () => {
       'axis',
     ])
     for (const each of commonProgressions()) expect(modesOf(each), each.id).toEqual([false, true])
+  })
+})
+
+describe('the roles drawn on every progression (A23)', () => {
+  it('names a role for each chord of every line in the library, in each mode it has', () => {
+    for (const progression of PROGRESSION_LIBRARY) {
+      for (const minor of modesOf(progression)) {
+        const numerals = parseNumerals(libraryParam(progression, minor)) ?? []
+        expect(numerals.length, progression.id).toBeGreaterThan(0)
+        for (const numeral of numerals) {
+          expect(KEY_ROLES, progression.id).toContain(chordRole(numeral, minor).role)
+        }
+      }
+    }
+  })
+
+  it('reads the four-chord song as home, tension, home and sad, away', () => {
+    const numerals = parseNumerals('I V vi IV') ?? []
+    expect(numerals.map((numeral) => chordRole(numeral, false))).toEqual([
+      { role: 'home' },
+      { role: 'tension' },
+      { role: 'home', colour: 'sad' },
+      { role: 'away' },
+    ])
   })
 })

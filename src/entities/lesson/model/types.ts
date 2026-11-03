@@ -135,8 +135,8 @@ export type LessonBlock =
   /** A pattern heard over the piece its source teaches it on: a pattern is only heard on chords. */
   | { readonly kind: 'pattern'; readonly pattern: PatternId; readonly piece: PieceId }
   /**
-   * A progression's row in a key, its chips each numeral over its function; or, `show: 'motion'`,
-   * over how its root moved there, with the moves' legend and Play the chain.
+   * A progression's row in a key, each chord over its role and an arrow of each move between them
+   * (A23); `show: 'motion'`, a lesson on the moves, plays it as Play the chain.
    */
   | ({ readonly kind: 'progression'; readonly show?: 'motion' } & LessonProgression)
   /**

@@ -3,8 +3,10 @@ import {
   libraryProgression,
   progressionMode,
   type LibraryProgression,
+  type ProgressionStyle,
 } from '@/entities/progression-library'
 import type { PatternId } from '@/entities/pattern'
+import type { ProgressionsSettings } from '@/entities/settings'
 import {
   keyFromParam,
   keyParam,
@@ -23,36 +25,31 @@ import {
   type RowPosition,
 } from '@/shared/lib/music'
 
-/** How a row's chords are named: by numerals, Nashville numbers, or by the chords alone. */
-export const PROGRESSION_NAMES = ['numerals', 'nashville', 'chords'] as const
-export type ProgressionNames = (typeof PROGRESSION_NAMES)[number]
+/** Progressions' tabs (A23): the progression shown, the library, and the passing chords. */
+export const PROGRESSIONS_TABS = ['progression', 'library', 'passing'] as const
+export type ProgressionsTab = (typeof PROGRESSIONS_TABS)[number]
 
 /**
- * What Progressions shows: numerals (`I-V-vi-IV`) in a key, at a chord size, read in a church mode
- * where one is chosen; the first chord's inversion, and whether each after it moves to the nearest
- * hand or keeps that inversion, or every chord a root-position block; what leads into each chord,
- * where something does; the two chords Between looks at; how the chords are named, and what the
- * row's chips say.
+ * What Progressions shows (A23): the tab; numerals (`I-V-vi-IV`) in a key, at a chord size, read in
+ * a church mode where one is chosen; what leads into each chord, where something does; the library's
+ * style shown; and the two chords Passing chords looks at. How it is written and voiced is
+ * Progressions' Settings (A24), not the URL's.
  */
 export interface ProgressionsView {
+  /** The tab shown; the progression where left out. */
+  readonly tab?: Exclude<ProgressionsTab, 'progression'>
   readonly key: KeyParam
   readonly p: string
   /** The church mode the line is read in; the key's major or minor where left out. */
   readonly mode?: ChurchMode
-  /** Every chord in root position, the hand leaping: the row as blocks, to set against it voice-led. */
-  readonly block?: true
-  /** How the row's chords are named; by numerals where left out. */
-  readonly names?: Exclude<ProgressionNames, 'numerals'>
   readonly size: ChordSize
-  readonly inversion: Inversion
-  readonly nearest: boolean
   readonly lead?: LeadIn
-  /** Between: the chord the passing chords lead from, by its place in the row; the next one after it. */
+  /** The library's style shown; every style where left out. */
+  readonly style?: ProgressionStyle
+  /** Passing chords: the chord they lead from, by its place in the row; the next one after it. */
   readonly between?: number
-  /** Between: only the ways whose chords are all the key's. */
+  /** Passing chords: only the ways whose chords are all the key's. */
   readonly inKey?: boolean
-  /** The row's chips over how each root moves; over each chord's function where left out. */
-  readonly harmony?: 'motion'
 }
 
 /**
@@ -66,13 +63,16 @@ export function playedNumerals(view: ProgressionsView): Numeral[] {
   return view.lead ? withLeadIns(numerals, view.lead, key) : numerals
 }
 
-/** Where the row's hand stands: the view's position, or every chord a root-position block. */
-export const rowPosition = (
-  view: ProgressionsView,
-): RowPosition & { readonly inversion: Inversion } =>
-  view.block
-    ? { inversion: 0, nearest: false }
-    : { inversion: view.inversion, nearest: view.nearest }
+/**
+ * Where the row's hand stands, as Progressions' Settings say: voice-led from the first chord's
+ * inversion, each after it to the nearest position; or every chord a root-position block.
+ */
+export const rowPosition = ({
+  voicing,
+  inversion,
+}: Pick<ProgressionsSettings, 'voicing' | 'inversion'>): RowPosition & {
+  readonly inversion: Inversion
+} => (voicing === 'block' ? { inversion: 0, nearest: false } : { inversion, nearest: true })
 
 /** The library's progression a view shows; none for a line a learner typed. */
 export const viewProgression = (view: ProgressionsView): LibraryProgression | undefined =>
@@ -149,13 +149,13 @@ export interface InPlayer {
  * The Player's search for the view shown: the chords it plays, read in its mode and lead-ins written
  * out, with the pattern the library's progression is practised in, its hand where the row's stands.
  */
-export function playerSearch(view: ProgressionsView): InPlayer {
+export function playerSearch(view: ProgressionsView, settings: ProgressionsSettings): InPlayer {
   const pattern = viewProgression(view)?.pattern
   return {
     p: numeralsParam(playedNumerals(view)),
     key: view.key,
     ...(view.size === 'triads' ? {} : { chordSize: view.size }),
     ...(pattern ? { pattern } : {}),
-    ...rowPosition(view),
+    ...rowPosition(settings),
   }
 }

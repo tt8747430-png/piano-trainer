@@ -9,7 +9,11 @@ import { keyFromParam } from '@/shared/lib/music'
 import { BackButton, RoundButton, RoundLink, ScreenHeader } from '@/shared/ui'
 import { NewProgressionSheet } from '@/widgets/content-editor'
 import { SettingsGear } from '@/widgets/practice-pages'
-import { ProgressionExplorer, type ProgressionsView } from '@/widgets/progression-explorer'
+import {
+  ProgressionExplorer,
+  ProgressionsTabs,
+  type ProgressionsView,
+} from '@/widgets/progression-explorer'
 
 /**
  * Progressions: one from the library or typed, in any key, played and sent to the Player; an
@@ -54,6 +58,7 @@ export function ProgressionsPage() {
             <SettingsGear page="progressions" />
           </>
         }
+        tabs={<ProgressionsTabs current={view.tab} />}
       />
       <ProgressionExplorer view={view} onChange={onChange} />
       {editsContent(account) ? (

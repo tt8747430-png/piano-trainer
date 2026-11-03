@@ -13,17 +13,17 @@ describe('progressionRow', () => {
     expect(row.map(({ caption }) => caption)).toEqual(['ii', 'V', 'I'])
   })
 
-  it('says what each chord does in its key', () => {
+  it('says what each chord does in its key, and the colour it brings (A23)', () => {
     const row = progressionRow(
       parseNumerals('i iv V VI') ?? [],
       { tonic: note('A'), minor: true },
       'triads',
     )
-    expect(row.map((chord) => chord.function)).toEqual([
-      'tonic',
-      'subdominant',
-      'dominant',
-      'tonic',
+    expect(row.map((chord) => chord.role)).toEqual([
+      { role: 'home' },
+      { role: 'away' },
+      { role: 'tension' },
+      { role: 'home', colour: 'bright' },
     ])
   })
 })

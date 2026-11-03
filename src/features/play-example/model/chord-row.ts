@@ -1,5 +1,5 @@
 import {
-  harmonicFunction,
+  chordRole,
   nashvilleNumber,
   rootMove,
   numeralChord,
@@ -8,9 +8,9 @@ import {
   type Chord,
   type ChordSize,
   type ChurchMode,
-  type HarmonicFunction,
   type Key,
   type Numeral,
+  type RoleOf,
   type RootMove,
 } from '@/shared/lib/music'
 
@@ -22,8 +22,8 @@ export interface RowChord {
   readonly symbol?: string
   /** What is said under it where the row says no position: a chord out of the key. */
   readonly detail?: string
-  /** What it does in its key, where the row is a progression read in one. */
-  readonly function?: HarmonicFunction
+  /** What it does in its key and the colour it brings, where the row is a progression read in one. */
+  readonly role?: RoleOf
 }
 
 /** A lesson's row of chord symbols, each written as the lesson writes it. */
@@ -54,7 +54,7 @@ export const progressionRow = (
     return {
       chord,
       ...(caption === undefined ? {} : { caption }),
-      function: harmonicFunction(numeral, key.minor),
+      role: chordRole(numeral, key.minor),
     }
   })
 

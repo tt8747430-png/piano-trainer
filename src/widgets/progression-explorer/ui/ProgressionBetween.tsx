@@ -1,6 +1,5 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useFold } from '@/features/fold-section'
 import {
   chordInKey,
   PASSING_CATEGORIES,
@@ -10,15 +9,15 @@ import {
   type Key,
   type PassingChords,
 } from '@/shared/lib/music'
-import { Dropdown, FoldSection, Labelled, type ShownKeys } from '@/shared/ui'
+import { Dropdown, Labelled, type ShownKeys } from '@/shared/ui'
 import { Toggle } from '@/shared/ui/primitives/toggle'
 import { changesOf } from '../model/between'
 import { SuggestionCard } from './SuggestionCard'
 
 /**
- * Between (ADR 0052): the passing chords from one chord of the row to the next, the pair chosen from
- * the row's changes, by category, each way voice-led and played on the keys pinned above; with In the
- * key only, the ways whose chords are all the key's.
+ * Passing chords, Progressions' third tab (ADR 0052, A23): the chords that lead from one chord of
+ * the row to the next, the pair chosen from the row's changes, by category, each way voice-led and
+ * played on the keys pinned above; with In the key only, the ways whose chords are all the key's.
  */
 export function ProgressionBetween({
   chords,
@@ -38,16 +37,17 @@ export function ProgressionBetween({
 }) {
   const { t } = useTranslation('practice')
   const id = useId()
-  const fold = useFold('progressions.between')
   const changes = changesOf(chords)
   const chosen = at !== undefined && changes.includes(at) ? at : changes[0]
   const from = chosen === undefined ? undefined : chords[chosen]
   const to = chosen === undefined ? undefined : chords[chosen + 1]
-  if (chosen === undefined || !from || !to) return null
+  if (chosen === undefined || !from || !to)
+    return <p className="text-muted-foreground">{t('progressions.between.none')}</p>
   const allInKey = (way: PassingChords) => way.chords.every((chord) => chordInKey(chord, musicKey))
   const ways = passingChords(from, to, musicKey).filter((way) => !inKey || allInKey(way))
   return (
-    <FoldSection title={t('progressions.between.title')} fold={fold} className="gap-4">
+    <section aria-label={t('progressions.between.title')} className="flex flex-col gap-4">
+      <p className="text-lg text-muted-foreground">{t('progressions.between.line')}</p>
       <div className="grid-fields gap-x-10 gap-y-5">
         <Labelled label={t('progressions.between.pair')}>
           <Dropdown
@@ -98,6 +98,6 @@ export function ProgressionBetween({
           </section>
         ) : null
       })}
-    </FoldSection>
+    </section>
   )
 }

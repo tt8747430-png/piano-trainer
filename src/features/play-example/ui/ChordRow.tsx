@@ -5,7 +5,6 @@ import {
   chordSymbol,
   isStrongMove,
   printedSymbol,
-  rootMoveText,
   voiceLead,
   type Midi,
   type RowPosition,
@@ -16,10 +15,10 @@ import { usePlayback, usePlayhead } from '@/shared/lib/services'
 import { useFitZoom } from '@/shared/lib'
 import {
   FloatingActions,
-  FUNCTION_PAINT,
-  HarmonyChip,
-  HarmonyChips,
-  MOVE_PAINT,
+  MoveArrow,
+  RoleChip,
+  RoleChips,
+  RoleLegend,
   PlayFab,
   PlayButton,
   PlayLabel,
@@ -51,6 +50,8 @@ interface RowPlayback {
   playRow(): void
   /** One chord alone, as the row voices it, shown on the keys by its degrees. */
   playChord(place: number): void
+  /** The chord before `place` and the chord at it, one after the other: the move between them. */
+  playMove(place: number): void
 }
 
 const RowContext = createContext<RowPlayback | null>(null)
@@ -77,6 +78,7 @@ export function ChordRow({
   onShow: (shown: ShownKeys) => void
   children: ReactNode
 }) {
+  // A chord alone by its place; a move by the place it leads to, as a negative number.
   const playback = usePlayback<'row' | number>()
   const inversion = position?.inversion
   const nearest = position?.nearest
@@ -95,7 +97,8 @@ export function ChordRow({
     voiced,
     onShow,
     playing: playback.playing,
-    sounding: typeof playback.playing === 'number' ? playback.playing : walking,
+    sounding:
+      typeof playback.playing === 'number' && playback.playing >= 0 ? playback.playing : walking,
     playRow: () => {
       onShow(unmarked(voiced.flat()))
       playback.toggle('row', () => walkSounds(voiced, { arpeggio: false, tempo: ROW_TEMPO }))
@@ -105,6 +108,11 @@ export function ChordRow({
       const keys = voiced[place] ?? []
       onShow(chord ? voicedShown(chord, keys) : unmarked(keys))
       playback.toggle(place, () => chordSounds(keys, { arpeggio: false }))
+    },
+    playMove: (place) => {
+      const pair = [voiced[place - 1] ?? [], voiced[place] ?? []]
+      onShow(unmarked(pair.flat()))
+      playback.toggle(-place, () => walkSounds(pair, { arpeggio: false, tempo: ROW_TEMPO }))
     },
   }
   return (
@@ -177,54 +185,62 @@ export function RowStaff() {
 }
 
 /**
- * The row's chords as chips under its staff (DESIGN.md, Harmony): each numeral over what the chord
- * does in its key (`function`), or over how its root moved there (`motion`: a strong move in its
- * paint, one that steps back neutral); a row naming its chords alone, each chip its chord. The chip
- * sounding follows the row as it plays; a tap plays its chord. Only a progression's row, its chords
- * read in a key, has them.
+ * Why the row works, drawn on its chords (A23, layout B): each chord a chip, its numeral (or symbol)
+ * over its role in its key and the colour it brings, an arrow between each two with how the bass
+ * moves; under it one line saying what the words and arrows mean, and `action` beside it (Test
+ * yourself). A tap on a chip plays its chord, on an arrow the two chords it joins; the chip sounding
+ * follows the row as it plays. Only a progression's row, its chords read in a key, has it.
  */
-export function RowChips({ show }: { show: 'function' | 'motion' }) {
+export function RowRoles({ action }: { action?: ReactNode }) {
   const { t } = useTranslation('music')
-  const { chords, sounding, playChord } = useRow()
+  const { chords, sounding, playChord, playMove } = useRow()
   const moves = useMemo(() => rowMoves(chords), [chords])
-  if (chords.some((chord) => chord.function === undefined)) return null
+  const names = chords.map(
+    (chord) => chord.caption ?? printedSymbol(chord.symbol ?? chordSymbol(chord.chord)),
+  )
   return (
-    <HarmonyChips
-      label={t(show === 'function' ? 'harmony.chips' : 'harmony.moves')}
-      count={chords.length}
-    >
-      {chords.map((chord, place) => {
-        // Named by its caption, or, where the row names its chords alone, by its symbol.
-        const numeral = chord.caption ?? printedSymbol(chord.symbol ?? chordSymbol(chord.chord))
-        const said = chord.function ?? 'tonic'
-        const move = moves[place] ?? null
-        const strong = move !== null && isStrongMove(move)
-        return (
-          <HarmonyChip
-            key={place}
-            numeral={numeral}
-            {...(show === 'function'
-              ? {
-                  detail: t(`harmony.short.${said}`),
-                  paint: FUNCTION_PAINT[said],
-                  label: t('harmony.chip', { numeral, what: t(`harmony.function.${said}`) }),
-                }
-              : {
-                  detail: move ? rootMoveText(move) : undefined,
-                  paint: move && strong ? MOVE_PAINT[move.by] : undefined,
-                  label: move
-                    ? t('harmony.chip', {
-                        numeral,
-                        what: t(`harmony.move.${move.by}.${move.down ? 'down' : 'up'}`),
-                      })
-                    : numeral,
-                })}
-            sounding={sounding === place}
-            onClick={() => playChord(place)}
-          />
-        )
-      })}
-    </HarmonyChips>
+    <div className="flex flex-col gap-2">
+      <RoleChips label={t('harmony.roles')}>
+        {chords.map(({ role }, place) => {
+          if (!role) return null
+          const name = names[place] ?? ''
+          const move = moves[place] ?? null
+          const said = [
+            t(`harmony.role.${role.role}`),
+            ...(role.colour ? [t(`harmony.colour.${role.colour}`)] : []),
+          ].join(', ')
+          return (
+            <RoleChip
+              key={place}
+              name={name}
+              role={role}
+              label={t('harmony.chip', { numeral: name, what: said })}
+              sounding={sounding === place}
+              onClick={() => playChord(place)}
+              move={
+                place > 0 ? (
+                  <MoveArrow
+                    move={move}
+                    label={t('harmony.playMove', {
+                      from: names[place - 1] ?? '',
+                      to: name,
+                      move: move
+                        ? [
+                            t(`harmony.move.${move.by}.${move.down ? 'down' : 'up'}`),
+                            t(`harmony.meaning.${isStrongMove(move) ? move.by : 'back'}`),
+                          ].join(', ')
+                        : t('harmony.meaning.same'),
+                    })}
+                    onClick={() => playMove(place)}
+                  />
+                ) : undefined
+              }
+            />
+          )
+        })}
+      </RoleChips>
+      <RoleLegend action={action} />
+    </div>
   )
 }
 
