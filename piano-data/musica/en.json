@@ -1,0 +1,181 @@
+{
+  "main_controls": {
+    "add_section": {
+      "label": "Add section",
+      "limit_reached": "You can add a maximum of {max} sections."
+    },
+    "randomize_chords": "Randomize chords",
+    "undo_randomize_chords": "Undo",
+    "style": {
+      "label": "Style",
+      "preset_labels": {
+        "pop1": "Pop 1",
+        "pop2": "Pop 2",
+        "pop3": "Pop 3",
+        "pop4": "Pop 4",
+        "pop5": "Pop 5",
+        "rock1": "Rock 1",
+        "rock2": "Rock 2",
+        "melodic1": "Melodic 1",
+        "melodic2": "Melodic 2",
+        "melodic3": "Melodic 3",
+        "melodic4": "Melodic 4",
+        "hiphop1": "Hip hop 1",
+        "hiphop2": "Hip hop 2",
+        "disco1": "Disco 1",
+        "disco2": "Disco 2",
+        "funk1": "Funk 1",
+        "funk2": "Funk 2",
+        "reggae1": "Reggae 1",
+        "reggae2": "Reggae 2",
+        "jazz1": "Jazz 1",
+        "jazz2": "Jazz 2",
+        "jazz3": "Jazz 3",
+        "jazz4": "Jazz 4",
+        "blues1": "Blues 1",
+        "blues2": "Blues 2",
+        "classical1": "Classical 1",
+        "classical2": "Classical 2"
+      }
+    }
+  },
+  "settings_modal": {
+    "title": "Settings",
+    "instruments_label": "Instruments",
+    "instrument_button_tooltips": {
+      "piano": "Piano",
+      "guitar": "Guitar",
+      "bass": "Bass",
+      "drums": "Drums"
+    },
+    "count_in_label": "Count in",
+    "repeat_chords_label": "Repeat chords",
+    "transpose_chords_label": "Transpose chords",
+    "time_signature_label": "Time signature",
+    "volume_label": "Volume"
+  },
+  "chord_modal": {
+    "chord": "Chord",
+    "bass_note": "Bass note",
+    "suggested_chords": "Suggested chords",
+    "duration": "Duration",
+    "note_labels": {
+      "Cb": { "name": "C", "accidental": "flat" },
+      "C": { "name": "C" },
+      "C#": { "name": "C", "accidental": "sharp" },
+      "Db": { "name": "D", "accidental": "flat" },
+      "D": { "name": "D" },
+      "D#": { "name": "D", "accidental": "sharp" },
+      "Eb": { "name": "E", "accidental": "flat" },
+      "E": { "name": "E" },
+      "E#": { "name": "E", "accidental": "sharp" },
+      "Fb": { "name": "F", "accidental": "flat" },
+      "F": { "name": "F" },
+      "F#": { "name": "F", "accidental": "sharp" },
+      "Gb": { "name": "G", "accidental": "flat" },
+      "G": { "name": "G" },
+      "G#": { "name": "G", "accidental": "sharp" },
+      "Ab": { "name": "A", "accidental": "flat" },
+      "A": { "name": "A" },
+      "A#": { "name": "A", "accidental": "sharp" },
+      "Bb": { "name": "B", "accidental": "flat" },
+      "B": { "name": "B" },
+      "B#": { "name": "B", "accidental": "sharp" }
+    },
+    "type_labels": {
+      "major": "major",
+      "minor": "minor",
+      "diminished": "diminished",
+      "augmented": "augmented"
+    },
+    "bass_note_roles": {
+      "root": "root",
+      "third": "third",
+      "fourth": "fourth",
+      "fifth": "fifth",
+      "sixth": "sixth",
+      "seventh": "seventh",
+      "ninth": "ninth",
+      "custom": "custom"
+    },
+    "beat_count_labels": {
+      "1": "beat",
+      "2": "beats",
+      "3": "beats",
+      "4": "beats",
+      "5": "beats",
+      "6": "beats"
+    }
+  },
+  "sections": {
+    "title": {
+      "placeholder": "Section {number}",
+      "preset_labels": {
+        "intro": "Intro",
+        "verse": "Verse",
+        "pre_chorus": "Pre-chorus",
+        "chorus": "Chorus",
+        "bridge": "Bridge",
+        "solo": "Solo",
+        "outro": "Outro"
+      }
+    },
+    "variation_labels": {
+      "variation_1": "Variation",
+      "variation_2": "Variation",
+      "variation_3": "Variation",
+      "variation_4": "Variation"
+    },
+    "delete_button_label": "Delete section",
+    "reorder_tooltip": "Reorder section"
+  },
+  "project_library": {
+    "menu": {
+      "label": "File",
+      "new": "New",
+      "open": "Open",
+      "save": "Save",
+      "share": "Share"
+    },
+    "new_dialog": {
+      "title": "New file",
+      "confirmation": "Are you sure you want to reset everything?",
+      "cancel": "No",
+      "confirm": "Yes"
+    },
+    "open_dialog": {
+      "title": "Open chords",
+      "edit_name_tooltip": "Edit name"
+    },
+    "edit_dialog": {
+      "title": "Edit name",
+      "placeholder": "Name"
+    },
+    "save_dialog": {
+      "title": "Save chords",
+      "placeholder": "Name",
+      "overwrite_confirmation": "A file with this name already exists. Would you like to overwrite it?"
+    },
+    "share_dialog": {
+      "title": "Share chords",
+      "instructions": "Copy and paste the link to share your chords.",
+      "link_copied": "Link copied"
+    },
+    "auth_dialog": {
+      "save_prompt": "Create a free account or log in to save your chords.",
+      "share_prompt": "Create a free account or log in to share your chords.",
+      "login": "Log in",
+      "register": "Create account"
+    },
+    "mp3_export": {
+      "download": "Download MP3",
+      "failed_retry": "MP3 failed — Retry"
+    },
+    "errors": {
+      "generic": "Something went wrong, please try again",
+      "save_failed": "Failed to save chords, please try again",
+      "delete_failed": "Failed to delete chords, please try again",
+      "rename_failed": "Failed to rename chords, please try again"
+    }
+  }
+}
