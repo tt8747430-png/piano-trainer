@@ -468,6 +468,13 @@ doesn't name, judge it by them:
     - **Transpose:** the Player's moves what is heard and seen; the editor's rewrites the song (kept).
     - **Import tests:** from the public MusicXML test suites (the MusicXML examples, LilyPond's suite), not from the
       owner. Layout templates: Normal and Jazz, plus the learner's own.
+    - **Evening answers:** the on-screen piano's bar keeps octave, key size, pedal and hide, and shows only what fits
+      the device (computer keys on a computer, never on a phone). **Bug:** the pedal shows doubled pedal icons and
+      acts on the Fantaisie-Impromptu. Tempo, Key and Time stay in the score's Settings as well as on the score
+      (research where editors show a setting both on the score and in a settings page, and follow that). Neither
+      "D♭ / C♯ major" nor "D♭ major (C♯ major)": research how the reference apps write a key with two names. The
+      other questions need to be shown, not described: mockups of each option with examples before the owner
+      decides.
 
 ## References (open every folder, "New folder" and "untitled" included)
 - `piano-data/reference-apps/new_app_2/` (notes in `scratchpad/r29/refs.md`):
