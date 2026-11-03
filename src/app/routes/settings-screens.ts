@@ -1,6 +1,7 @@
 export {
   AccountSettingsPage,
   DataPage,
+  GeneralPage,
   PlayingPage,
   SettingsPage,
 } from '@/pages/settings'

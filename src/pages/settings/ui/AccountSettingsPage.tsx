@@ -5,16 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
 import { useOnline, useUp } from '@/shared/lib'
 import { authProblem, useAccount, type AuthProblem } from '@/shared/lib/account'
-import {
-  Avatar,
-  BackButton,
-  FormField,
-  RowButton,
-  RowFace,
-  RowLink,
-  ScreenHeader,
-  SettingsGroup as Group,
-} from '@/shared/ui'
+import { Avatar, FormField, RowButton, RowFace, RowLink, SettingsGroup as Group } from '@/shared/ui'
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -25,6 +16,7 @@ import {
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
 import { Button } from '@/shared/ui/primitives/button'
+import { SettingsScreen } from '@/widgets/settings-screen'
 
 /**
  * Settings › Account (ADR 0116), as memory-palaces' edit profile reads: the learner's picture at its
@@ -37,46 +29,43 @@ export function AccountSettingsPage() {
   const { account } = useAccount()
   const [scheduled, setScheduled] = useState<string | null>(null)
   return (
-    <div className="flex flex-col gap-2">
-      <ScreenHeader title={t('accountPage.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        {account ? (
-          <>
-            <div className="flex flex-col items-center gap-3 pt-2 text-center">
-              <Avatar name={account.name || account.email} size="hero" />
-            </div>
-            <Group title={t('accountPage.profileGroup')}>
-              <NameForm key={account.id} name={account.name} />
-            </Group>
-            <Group flush title={t('accountPage.signInGroup')}>
-              {/* The email under its name, broken anywhere a long one must be to fit a phone. */}
-              <div className="flex min-h-16 items-center gap-3 py-2 pr-3 pl-2 wrap-anywhere">
-                <RowFace
-                  title={t('accountPage.email')}
-                  icon={Mail}
-                  paint="sky"
-                  detail={account.email}
-                />
-              </div>
-              <RowLink
-                title={t('accountPage.password')}
-                icon={KeyRound}
-                paint="sand"
-                render={<Link to="/account/new-password" />}
+    <SettingsScreen title={t('accountPage.title')}>
+      {account ? (
+        <>
+          <div className="flex flex-col items-center gap-3 pt-2 text-center">
+            <Avatar name={account.name || account.email} size="hero" />
+          </div>
+          <Group title={t('accountPage.profileGroup')}>
+            <NameForm key={account.id} name={account.name} />
+          </Group>
+          <Group flush title={t('accountPage.signInGroup')}>
+            {/* The email under its name, broken anywhere a long one must be to fit a phone. */}
+            <div className="flex min-h-16 items-center gap-3 py-2 pr-3 pl-2 wrap-anywhere">
+              <RowFace
+                title={t('accountPage.email')}
+                icon={Mail}
+                paint="sky"
+                detail={account.email}
               />
-            </Group>
-            <Group flush>
-              <SignOut />
-            </Group>
-            <Group flush>
-              <DeleteAccount email={account.email} onScheduled={setScheduled} />
-            </Group>
-          </>
-        ) : (
-          <Guest scheduled={scheduled} />
-        )}
-      </div>
-    </div>
+            </div>
+            <RowLink
+              title={t('accountPage.password')}
+              icon={KeyRound}
+              paint="sand"
+              render={<Link to="/account/new-password" />}
+            />
+          </Group>
+          <Group flush>
+            <SignOut />
+          </Group>
+          <Group flush>
+            <DeleteAccount email={account.email} onScheduled={setScheduled} />
+          </Group>
+        </>
+      ) : (
+        <Guest scheduled={scheduled} />
+      )}
+    </SettingsScreen>
   )
 }
 

@@ -17,7 +17,7 @@ import {
   AlertDialogTrigger,
 } from '@/shared/ui/primitives/alert-dialog'
 import { Button } from '@/shared/ui/primitives/button'
-import { SettingsScreen } from './SettingsScreen'
+import { SettingsScreen } from '@/widgets/settings-screen'
 import { SyncFields } from './SyncFields'
 
 /**

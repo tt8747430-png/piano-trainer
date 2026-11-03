@@ -168,7 +168,12 @@ const activityRoute = createRoute({
   path: '/profile/activity',
   component: lazyRouteComponent(settingsScreens, 'ActivityPage'),
 })
-// Settings' pages: the keyboard and recording, sync and data, and the account's.
+// Settings' pages (R20): General, the keyboard and recording, sync and data, and the account's.
+const generalRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/general',
+  component: lazyRouteComponent(settingsScreens, 'GeneralPage'),
+})
 const playingRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/playing',
@@ -765,6 +770,7 @@ const routeTree = rootRoute.addChildren([
     activityRoute,
     adminRoute,
     settingsRoute,
+    generalRoute,
     playingRoute,
     dataRoute,
     privacyRoute,

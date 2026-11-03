@@ -13,9 +13,12 @@ export function ChoiceRow({
   title,
   icon,
   paint,
+  setting,
   children,
 }: {
   title: string
+  /** The preference it sets (`data-setting`): the one page drawing it is its home (R18). */
+  setting?: string
   icon: LucideIcon
   paint: Paint
   /** The choice: a `Dropdown`, `bare`. */
@@ -23,6 +26,7 @@ export function ChoiceRow({
 }) {
   return (
     <div
+      data-setting={setting}
       className={cn(
         rowClass(true),
         'hover:bg-transparent',

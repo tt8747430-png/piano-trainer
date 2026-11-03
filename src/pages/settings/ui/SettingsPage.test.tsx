@@ -3,7 +3,21 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
+import { LAPTOP } from '@/shared/lib'
 import { stubServiceWorker } from '@/shared/test/pwa-register'
+
+/** A laptop's screen, as `matchMedia` answers it. */
+const onLaptop = () =>
+  vi.stubGlobal('matchMedia', (media: string) => ({
+    media,
+    matches: media === LAPTOP,
+    onchange: null,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    addListener: () => {},
+    removeListener: () => {},
+    dispatchEvent: () => false,
+  }))
 
 describe('Settings', () => {
   it('goes back to the Profile it was opened from', async () => {
@@ -42,6 +56,7 @@ describe('Settings', () => {
         .filter((href) => href?.startsWith('/settings/') || href?.startsWith('/legal/')),
     ).toEqual([
       '/settings/data',
+      '/settings/general',
       '/settings/midi',
       '/settings/playing',
       '/settings/how-to-use',
@@ -50,10 +65,10 @@ describe('Settings', () => {
     ])
   })
 
-  it('shows the saved language and theme as chosen, each changed in place and saved', async () => {
+  it('shows the saved language and theme on General, each changed in place and saved', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings')
-    const general = await screen.findByRole('region', { name: 'General' })
+    const { settingsStore } = await renderApp('/settings/general')
+    const general = await screen.findByRole('main')
     expect(within(general).getByRole('combobox', { name: 'Language' })).toHaveTextContent('English')
     expect(within(general).getByRole('combobox', { name: 'Theme' })).toHaveTextContent('System')
     await user.click(within(general).getByRole('combobox', { name: 'Theme' }))
@@ -93,6 +108,17 @@ describe('Settings', () => {
       'Backup',
       'Progress',
     ])
+  })
+
+  it('stands in two panes on a laptop: the list beside General, neither with Back (R20)', async () => {
+    onLaptop()
+    const { router } = await renderApp('/settings')
+    await waitFor(() => expect(router.state.location.pathname).toBe('/settings/general'))
+    expect(await screen.findByRole('heading', { level: 1, name: 'General' })).toBeInTheDocument()
+    expect(screen.getByRole('navigation', { name: 'Account' })).toBeInTheDocument()
+    expect(screen.getByRole('combobox', { name: 'Language' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'General' })).toHaveAttribute('aria-current', 'page')
+    expect(screen.queryByRole('button', { name: 'Back' })).toBeNull()
   })
 
   it('says the app’s version under Help', async () => {
@@ -183,7 +209,7 @@ describe('Settings', () => {
   })
 
   it('reads in Russian, with nothing left in English', async () => {
-    for (const path of ['/settings', '/settings/playing', '/settings/data']) {
+    for (const path of ['/settings', '/settings/general', '/settings/playing', '/settings/data']) {
       const { unmount } = await renderApp(path, { locale: 'ru' })
       await screen.findByRole('heading', { level: 1 })
       expect(untranslated(document.body)).toEqual([])

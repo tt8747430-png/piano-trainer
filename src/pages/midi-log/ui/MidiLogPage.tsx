@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { MidiLog } from '@/features/connect-midi'
-import { BackButton, InfoTip, ScreenHeader } from '@/shared/ui'
+import { InfoTip } from '@/shared/ui'
+import { SettingsScreen } from '@/widgets/settings-screen'
 
 /**
  * Settings › MIDI keyboard › MIDI log (ADR 0034): what the MIDI devices send, live, to see why a key
@@ -9,15 +10,12 @@ import { BackButton, InfoTip, ScreenHeader } from '@/shared/ui'
 export function MidiLogPage() {
   const { t } = useTranslation('common')
   return (
-    <div className="flex flex-col gap-6">
-      <ScreenHeader
-        title={t('midiSettings.log.label')}
-        back={<BackButton />}
-        actions={<InfoTip name={t('midiSettings.log.label')}>{t('midiSettings.log.info')}</InfoTip>}
-      />
-      <div className="mx-auto w-full max-w-3xl">
-        <MidiLog />
-      </div>
-    </div>
+    <SettingsScreen
+      title={t('midiSettings.log.label')}
+      sub
+      actions={<InfoTip name={t('midiSettings.log.label')}>{t('midiSettings.log.info')}</InfoTip>}
+    >
+      <MidiLog />
+    </SettingsScreen>
   )
 }

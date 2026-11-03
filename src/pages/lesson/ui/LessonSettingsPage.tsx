@@ -149,7 +149,7 @@ function LessonSettings({
             icon={BookOpenText}
             paint="lilac"
             value={t(`reading.${reading}`)}
-            render={<Link to="/settings" />}
+            render={<Link to="/settings/general" />}
           />
         </SettingsGroup>
         <SettingsGroup flush title={t('settings.share')}>

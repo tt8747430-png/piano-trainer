@@ -1,4 +1,5 @@
 export { AccountSettingsPage } from './ui/AccountSettingsPage'
 export { DataPage } from './ui/DataPage'
+export { GeneralPage } from './ui/GeneralPage'
 export { PlayingPage } from './ui/PlayingPage'
 export { SettingsPage } from './ui/SettingsPage'
