@@ -10,20 +10,24 @@ export const account = {
   offline: 'You’re offline. Signing in needs a connection.',
   // The Profile: who is signed in, and what they have done.
   profile: {
-    achievements: {
+    // The badges (B1): six, each in four tiers, and the nearest one still to earn.
+    badges: {
       title: 'Badges',
-      earned: 'Earned',
-      progress: '{{have}} of {{goal}}',
       names: {
-        firstStep: 'First step',
-        week: 'A week in a row',
-        tenSteps: 'Ten steps',
-        firstSong: 'First song',
-        month: 'Thirty days',
-        fiftySteps: 'Fifty steps',
-        tenSongs: 'Ten songs',
-        tenSkills: 'Ten skills',
+        streak: 'Streak Keeper',
+        repertoire: 'Repertoire',
+        lessons: 'Lesson Finisher',
+        scales: 'Scale Master',
+        devotion: 'Daily Devotion',
+        library: 'Library Builder',
       },
+      tiers: { bronze: 'Bronze', silver: 'Silver', gold: 'Gold', platinum: 'Platinum' },
+      tier: '{{tier}}, {{earned}} of 4',
+      locked: '{{have}} of {{goal}}',
+      all: 'Every tier earned',
+      almost: 'Almost there',
+      left_one: '{{count}} more to {{tier}} {{badge}}',
+      left_other: '{{count}} more to {{tier}} {{badge}}',
     },
     title: 'Profile',
     guest: 'Playing without an account',

@@ -103,4 +103,19 @@ describe('the Profile', () => {
     await screen.findByRole('heading', { level: 1, name: 'Активность' })
     expect(untranslated(document.body)).toEqual([])
   })
+
+  it('shows six tiered badges and the nearest tier still to earn (B1)', async () => {
+    const { progressStore } = await renderApp('/profile')
+    act(() =>
+      progressStore.setState({
+        learned: { 'piece:bz5': '2026-11-01', 'piece:silent': '2026-11-02' },
+      }),
+    )
+    const badges = await screen.findByRole('region', { name: 'Badges' })
+    const items = within(badges).getAllByRole('listitem')
+    expect(items).toHaveLength(6)
+    const repertoire = items.find((item) => item.textContent?.includes('Repertoire'))
+    expect(repertoire).toHaveTextContent('Bronze, 1 of 4')
+    expect(within(badges).getByRole('status')).toHaveTextContent('Almost there')
+  })
 })
