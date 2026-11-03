@@ -156,6 +156,9 @@ export const editor = {
   // The palette's Key and Time and their popovers: a section's key or meter, or the whole song's,
   // changed there (ADR 0114, 0097).
   signature: {
+    from: 'From',
+    start: 'The start',
+    sectionAt: '{{section}}, bar {{bar}}',
     // A change of key or time from a section on, up to the next change (ADR 0114, 0097).
     fromSection: 'From {{section}} on (bar {{bar}})',
     song: 'The whole song',

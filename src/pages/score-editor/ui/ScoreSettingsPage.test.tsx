@@ -111,4 +111,31 @@ describe('the score’s Settings (round 28)', () => {
     await user.click(await screen.findByRole('switch', { name: /Click while recording/ }))
     expect(settingsStore.getState().recorder.click).toBe(false)
   })
+
+  it('changes the key from a section chosen on Key signature, the bars before keeping theirs (R29, 3.5)', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    const song = {
+      ...SONG,
+      sections: [
+        { kind: 'verse', lines: ['G G'] },
+        { kind: 'chorus', lines: ['G G'] },
+      ],
+    }
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
+    )
+    const { piecesStore } = await renderApp('/edit/my-1/settings?page=key', { storage })
+    await user.click(await screen.findByRole('combobox', { name: 'From' }))
+    await user.click(await screen.findByRole('option', { name: /^Chorus, bar 3/ }))
+    await user.click(screen.getByRole('button', { name: 'D major / B minor' }))
+    await waitFor(() =>
+      expect(piecesStore.getState().songs[0]?.sections.map((each) => each.key)).toEqual([
+        undefined,
+        'D',
+      ]),
+    )
+    expect(piecesStore.getState().songs[0]?.key).toBe('G')
+  })
 })

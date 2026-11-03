@@ -139,6 +139,9 @@ export const editor: LocaleResources['editor'] = {
     subbass: 'Ключ фа на пятой линейке',
   },
   signature: {
+    from: 'С какого места',
+    start: 'Начало',
+    sectionAt: '{{section}}, такт {{bar}}',
     fromSection: 'С раздела «{{section}}» (такт {{bar}})',
     song: 'Вся песня',
     none: 'Без ключевых знаков',

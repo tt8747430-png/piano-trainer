@@ -1,16 +1,83 @@
+import { Milestone } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BARS_PER_LINE, STAFF_SIZES, type StaffSize } from '@/entities/piece'
+import { useShallow } from 'zustand/react/shallow'
+import { BARS_PER_LINE, STAFF_SIZES, useSectionHeading, type StaffSize } from '@/entities/piece'
 import { selectEditing, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { MetronomeSwitch, TuneSwitch } from '@/features/record-take'
-import { MOST_BARS } from '@/features/score-editor'
+import { barsOf, MOST_BARS } from '@/features/score-editor'
 import { setEditing } from '@/features/set-preference'
-import { ChoiceCard, SettingRows, SettingsGroup, Stepper, SwitchRow } from '@/shared/ui'
+import {
+  ChoiceCard,
+  ChoiceRow,
+  Dropdown,
+  SettingRows,
+  SettingsGroup,
+  Stepper,
+  SwitchRow,
+} from '@/shared/ui'
 import { InstrumentList, type InstrumentFamily } from '@/widgets/instrument-list'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { KeyPicker } from './KeyPicker'
 import { TempoPicker } from './TempoPopover'
 import { TimePicker } from './TimePicker'
 import type { ScorePage } from '../model/score-pages'
+
+/**
+ * The Key signature's or Time signature's page (R29, 3.5): From — the start, or a section, by its
+ * first bar — then the picker the printed sign opens, changing it from there on.
+ */
+function SignaturePage({ sign, onDone }: { sign: 'key' | 'time'; onDone: () => void }) {
+  const { t } = useTranslation('editor')
+  const named = useSectionHeading()
+  const sections = useEditorState((state) => state.draft.sections)
+  const starts = useEditorState(
+    useShallow((state) => {
+      const firsts: number[] = []
+      for (const placed of barsOf(state.draft))
+        if (firsts[placed.section] === undefined) firsts[placed.section] = placed.index
+      return firsts
+    }),
+  )
+  const [from, setFrom] = useState(0)
+  return (
+    <>
+      {starts.length > 1 ? (
+        <SettingsGroup flush>
+          <ChoiceRow title={t('signature.from')} icon={Milestone} paint="sky">
+            <Dropdown
+              label={t('signature.from')}
+              bare
+              align="end"
+              value={String(from)}
+              options={starts.map((bar, section) => ({
+                value: String(bar),
+                label:
+                  section === 0
+                    ? t('signature.start')
+                    : t('signature.sectionAt', {
+                        section: named({
+                          ...(sections[section]?.heading ?? { kind: 'verse' }),
+                          lines: [],
+                        }),
+                        bar: bar + 1,
+                      }),
+              }))}
+              onChange={(bar) => setFrom(Number(bar))}
+            />
+          </ChoiceRow>
+        </SettingsGroup>
+      ) : null}
+      <div className="card p-4">
+        {sign === 'key' ? (
+          <KeyPicker key={from} bar={from} />
+        ) : (
+          <TimePicker key={from} bar={from} onDone={onDone} />
+        )}
+      </div>
+    </>
+  )
+}
 
 /** Bars per line offered: as the notes space them, or a few to a line (Flat's). */
 const LINE_BARS = [0, 2, 3, 4, 5, 6].filter((most) => most <= BARS_PER_LINE.max)
@@ -45,17 +112,8 @@ export function ScorePageBody({
         </SettingsGroup>
       )
     case 'key':
-      return (
-        <div className="card p-4">
-          <KeyPicker bar={0} />
-        </div>
-      )
     case 'time':
-      return (
-        <div className="card p-4">
-          <TimePicker bar={0} onDone={onDone} />
-        </div>
-      )
+      return <SignaturePage sign={page} onDone={onDone} />
     case 'tempo':
       return (
         <div className="card p-4">
