@@ -445,9 +445,9 @@ The rule, from Decided 20 and R18 (prompt 180–193, 404–420):
   - Group **"Recording"** (ru «Запись»): 3. `SwitchRow` "Click while recording" (ru «Метроном при записи»),
     default on (`recorder.click`), moves here from Sound and recording, since only the editor records (its home
     becomes `score-editor`). "Play melody" (`recorder.tune`, `TuneSwitch`) is deleted with its field (A14, A35).
-  - Group "Instruments" (S0), plus `RowLink` "Audio playback ›"? No: the volumes are the Player's; the editor's
-    Sound popover links to the Player only from a song's Player. The old links Sound and recording and Player go
-    from this group.
+  - Group "Instruments" (S0): On-screen piano ›, Connect a piano ›. Then group **"Playback"** with one
+    `RowLink` "Audio playback ›" (ru «Воспроизведение») to `/play/$pieceId/settings` (each staff's volume is
+    the Player's, R18). Today's links "Sound and recording" and "Player" (to `/settings/player`) go.
   - Removed: `/settings/score-editor`, `pages/settings/ui/ScoreEditorSettingsPage.tsx`, its SettingsList row,
     `widgets/editor-settings` (the group moves into `pages/score-editor/ui/NoteInputGroup.tsx`).
   - The lesson example editor (`/lessons/$lessonId/example`) has no Settings gear today; it gets none (its score
