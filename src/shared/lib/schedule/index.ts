@@ -10,6 +10,7 @@ export {
   type SpeedUp,
 } from './loop'
 export { passTickAt } from './playhead'
+export { autoPedal, PEDAL_PLAYS, withPedal, type PedalPlay } from './auto-pedal'
 export {
   audibleHands,
   isAudible,
