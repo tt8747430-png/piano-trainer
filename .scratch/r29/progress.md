@@ -82,3 +82,16 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 - Merged: the key pickers (A5), Back as up and the Search palette (A18), the settings registry (A10), Favourite as an act (A11), updates by hand, the shared confirm dialog (A9, four screens so far).
 - Gate on the merged branch: typecheck, lint, full suite (6952 tests, two merge-seam failures fixed: the Back test used the old strip; `router.test.tsx`'s own stub copy kept a waiting update), build.
 - Left in round 1: A1–A4, A6–A8, A9's other screens, A12–A17 (two-pane Settings, page names, account card, arrows, destructive rows), A19, A31, A36, A38, A42; screenshots after.
+
+## Musicca reference (piano-data/musica), 2026-11-03
+
+The folder is musicca.com's own site: its chord player's bundles, jQuery/Joomla, its samples as base64 text, no
+licence anywhere. Behaviour only is taken (notes: scratchpad metronome-ref/musicca-notes.md, summarised here):
+- Metronome: tempo slider, arrows, Tap tempo; beats per measure; a mute function (play N bars, mute M; 3/1, 1/1,
+  2/2, 4/4 suggested). Ours already has all of it (Silent bars, speed trainer, subdivisions, accents).
+- Piano: one sample per key (MIDI 31-91), no pitch-shifting, no velocity layers, ~3.3 s each, no pedal. Ours (D15)
+  should be better: a sampled grand with velocity layers and our pedal model.
+- Drums: 16 steps a bar per drum with a fill bar; a crash on a section's start silences the hat that step; count-in
+  one bar of hats; stop fades over two beats; a worker clock (50 ms tick, 100 ms lookahead).
+- Owner's decision (to-do): the sounds. Musicca's can't ship. Options: Salamander Grand Piano (CC-BY, a credit
+  line) for D15; a CC0 drum/click pack the owner downloads into the repo; or the owner's own recordings.
