@@ -108,6 +108,22 @@ Left, in order:
 
 ## Round reports
 
+### Build 1: the app's Settings and the card style (2026-11-03, on `main`)
+- Built from `plan/app-settings.impl.md`, inline, test first: `ChoiceCard` (shadcn radio group); the Settings list
+  holds only the app's pages (General, Storage and backup; Piano: On-screen piano, Connect a piano; Help); General's
+  Appearance and Language as cards; lessons read as chosen on a lesson's Settings; Computer keys a group of
+  On-screen piano on a computer only (the old link redirects), letters play only there; Back from a Practice page's
+  Settings goes to Practice.
+- Gate: typecheck, lint, full suite 7147/7147 (a slow Songs drag test given its own limit), build, screenshots at
+  390, 320 (Russian) and 1280; a fresh whole-branch review: 3 Important found and fixed test-first.
+- Rulings: tasks 2–3 in one commit; pictured choices stay `PictureChoice`; `midi.sound` stays a switch (on/off);
+  the rail's ⌨ toggle gone with the page.
+- Deferred minors: On-screen piano reads the pointer once (not live); the store's typing default and the section
+  read different pointer queries; the redirect route's unused lazy component; Computer keys keeps its old switch
+  label and the Shortcuts button, not the mockup's key picture row.
+- Next: `plan/player.impl.md` (the Player's bar, Pick your view, its Settings page and inner pages, hands in the
+  transport, Simplify as one button, Diagrams' strip), then the score editor, Songs, the Practice redesign.
+
 
 ### Round 1, checkpoint 1 (2026-11-03)
 - Merged: the key pickers (A5), Back as up and the Search palette (A18), the settings registry (A10), Favourite as an act (A11), updates by hand, the shared confirm dialog (A9, four screens so far).
