@@ -96,6 +96,7 @@ export function SheetMusic({
   headings,
   current,
   clock,
+  cursor = true,
   loop,
   playing = false,
   fingers,
@@ -129,6 +130,8 @@ export function SheetMusic({
   current: number
   /** Where Listen's music is while it plays, read every frame: the playhead moves with it. */
   clock?: (() => Tick | null) | null | undefined
+  /** Whether the playhead is drawn at all: the Player's settings may say none (B7). */
+  cursor?: boolean
   loop: BarRange | null
   /** Whether the music plays (or waits on the keys): the playhead is shown in a loop then. */
   playing?: boolean
@@ -215,7 +218,7 @@ export function SheetMusic({
   const loopKey = loop ? `${loop.first}-${loop.last}` : ''
   const [resting, setResting] = useState({ loop: loopKey, at: current })
   if (resting.loop !== loopKey) setResting({ loop: loopKey, at: current })
-  const playheadShown = !loop || playing || current !== resting.at
+  const playheadShown = cursor && (!loop || playing || current !== resting.at)
   if (view.layout !== 'panorama')
     return (
       <SheetLines

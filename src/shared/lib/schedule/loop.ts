@@ -20,6 +20,8 @@ export interface LoopOptions {
   readonly fromTick: Tick
   readonly speedUp?: SpeedUp | undefined
   readonly countIn?: boolean
+  /** Whether the count-in's clicks sound: a count-in seen alone counts unheard (B7). */
+  readonly countInHeard?: boolean
   readonly metronome?: boolean
   /** Whether the count-in and the metronome click: a count-in still counts without (ADR 0105). */
   readonly clicks?: boolean
@@ -97,6 +99,7 @@ function passAt(
     fromTick: first ? options.fromTick : options.range.from,
     toTick: options.range.to,
     countIn: first && options.countIn === true,
+    countInHeard: options.countInHeard !== false,
     metronome: options.metronome === true,
     clicks: options.clicks !== false,
     swing: options.swing ?? 'straight',

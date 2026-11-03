@@ -10,6 +10,8 @@ export const settings = {
     sound: 'Sound and recording',
     metronome: 'Metronome',
     storage: 'Storage and backup',
+    player: 'Player',
+    scoreEditor: 'Score editor',
   },
   // The on-screen piano's page: its groups.
   piano: { look: 'Look', place: 'Position', play: 'Playing', bar: 'Bar over the keys' },

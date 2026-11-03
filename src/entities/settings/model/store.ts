@@ -24,6 +24,7 @@ import {
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
   DEFAULT_OTHER_HAND,
+  DEFAULT_PLAYBACK,
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
   DEVICE_NAME_MAX,
@@ -38,6 +39,10 @@ import {
   isDiagramsMode,
   isTextSize,
   isOtherHandLook,
+  isCountdown,
+  isCursor,
+  isPedalPlay,
+  isSpeedStep,
   isKeySize,
   isBeatLevel,
   isMetronomeSound,
@@ -57,6 +62,7 @@ import {
   type MetronomeSettings,
   type MidiSettings,
   type OtherHandSettings,
+  type PlaybackSettings,
   type PaletteFolds,
   type PracticeToggles,
   type EditingSettings,
@@ -69,7 +75,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 19
+export const SETTINGS_VERSION = 20
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -101,6 +107,7 @@ export function createSettingsStore({
         chordFinder: DEFAULT_CHORD_FINDER,
         scoreView: DEFAULT_SCORE_VIEW,
         otherHand: DEFAULT_OTHER_HAND,
+        playback: DEFAULT_PLAYBACK,
         metronome: DEFAULT_METRONOME,
         foldedSections: [],
         welcomed: false,
@@ -139,6 +146,18 @@ function soundSettings(value: unknown): SoundSettings {
     ),
     recording: isVolume(saved.recording) ? saved.recording : DEFAULT_SOUND.recording,
     click: isVolume(saved.click) ? saved.click : DEFAULT_SOUND.click,
+  }
+}
+
+/** How the Player plays as saved, each where still valid. */
+function playbackSettings(value: unknown): PlaybackSettings {
+  const saved = savedObject<PlaybackSettings>(value)
+  const initial = DEFAULT_PLAYBACK
+  return {
+    countdown: isCountdown(saved.countdown) ? saved.countdown : initial.countdown,
+    cursor: isCursor(saved.cursor) ? saved.cursor : initial.cursor,
+    pedal: isPedalPlay(saved.pedal) ? saved.pedal : initial.pedal,
+    speedStep: isSpeedStep(saved.speedStep) ? saved.speedStep : initial.speedStep,
   }
 }
 
@@ -350,6 +369,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     chordFinder: chordFinderSettings(saved.chordFinder),
     scoreView: scoreViewSettings(saved.scoreView),
     otherHand: otherHandSettings(saved.otherHand),
+    playback: playbackSettings(saved.playback),
     metronome: metronomeSettings(saved.metronome),
     foldedSections: foldedSections(saved.foldedSections),
     welcomed: saved.welcomed === true,

@@ -61,6 +61,8 @@ describe('Settings', () => {
       '/settings/connect-piano',
       '/settings/computer-keys',
       '/settings/sound-and-recording',
+      '/settings/player',
+      '/settings/score-editor',
       '/settings/how-to-use',
       '/legal/privacy',
       '/legal/terms',
@@ -224,6 +226,8 @@ describe('Settings', () => {
       '/settings/on-screen-piano',
       '/settings/computer-keys',
       '/settings/sound-and-recording',
+      '/settings/player',
+      '/settings/score-editor',
       '/settings/storage',
     ]) {
       const { unmount } = await renderApp(path, { locale: 'ru' })

@@ -141,6 +141,51 @@ export const player = {
     showOf: 'Show {{track}}',
   },
   playing: 'How it plays',
+  // The Player's settings page (B7): how it always plays, every song's.
+  settingsPage: {
+    open: 'Player settings',
+    audio: 'Audio playback',
+    audioInfo:
+      'How loud each staff, the recording and the metronome play, for every song. Only the chords turns the recording right down and the piano up, so you hear the chords alone.',
+    metronome: 'Metronome sound and beats',
+    speed: 'Playback speed',
+    speedStepInfo:
+      'How much faster each pass plays while speed training climbs to the song’s tempo.',
+    display: 'Display',
+    countdown: {
+      label: 'Count-in',
+      info: 'Before the music starts. Audible: a bar of clicks, its beats counted down on the screen. Visual: counted down on the screen alone. None: the music starts at once.',
+      none: 'None',
+      audible: 'Audible',
+      visual: 'Visual',
+    },
+    cursor: {
+      label: 'Cursor',
+      info: 'How the line on the score follows the music. Continuous: it glides with the beat. Beats: it steps to each note as it starts. None: no line.',
+      none: 'None',
+      beats: 'Beats',
+      continuous: 'Continuous',
+    },
+    keys: 'Show the keys',
+    practice: 'One hand',
+    practiceInfo: 'When you practise one hand (Hands: Left or Right).',
+    otherHand: {
+      label: 'The other hand',
+      info: 'Show: its staff as it is. Dim: its notes greyed. Hide: only your hand’s staff is shown.',
+      show: 'Show',
+      dim: 'Dim',
+      hide: 'Hide',
+    },
+    playOther: 'Play the other hand',
+    playOtherInfo: 'In Wait mode, the app plays the hand you are not practising as you play yours.',
+    pedal: {
+      label: 'Pedal',
+      info: 'As written: the sustain pedal as the music marks it. Off: no pedal. Automatic: pressed with each chord and changed as the chord changes, for music written without pedal marks.',
+      written: 'As written',
+      off: 'Off',
+      automatic: 'Automatic',
+    },
+  },
   /** The picker's way to the Patterns page, where they are explained, starred, hidden and made. */
   allPatterns: 'All patterns',
   ownPattern: 'Make your own pattern',
@@ -224,7 +269,7 @@ export const player = {
     own: 'Original tempo',
     waitShort: 'Wait',
     speedTraining: 'Speed training',
-    speedTrainingDetail: '5% faster each pass, up to 100%',
+    speedTrainingDetail: '{{percent}} faster each pass, up to 100%',
   },
   // The Player's shortcuts, as the sheet lists them.
   shortcuts: {

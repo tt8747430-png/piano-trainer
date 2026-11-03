@@ -1,5 +1,4 @@
-import { Link } from '@tanstack/react-router'
-import { Cable, Columns3, Gauge, Hash, Mic, ListMusic, Music2, Ruler, Volume2 } from 'lucide-react'
+import { Columns3, Gauge, Hash, ListMusic, Music2, Ruler } from 'lucide-react'
 import { useId, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -11,10 +10,8 @@ import {
   type HeaderField,
   type StaffSize,
 } from '@/entities/piece'
-import { selectEditing, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { VOICE_IDS, VOICES } from '@/features/edit-piece'
 import { barsOf, MOST_BARS } from '@/features/score-editor'
-import { setEditing } from '@/features/set-preference'
 import { localText, useKeyName, useLocale } from '@/shared/i18n'
 import { beatUnit, tempoMark, unitNote } from '@/shared/lib/music'
 import {
@@ -22,14 +19,13 @@ import {
   ChoiceRow,
   Dropdown,
   InfoTip,
-  RowLink,
   RowTrigger,
   ScreenHeader,
   SettingsGroup,
   Stepper,
-  SwitchRow,
   TileMark,
 } from '@/shared/ui'
+import { EditingGroup } from '@/widgets/editor-settings'
 import { InstrumentList, type InstrumentFamily } from '@/widgets/instrument-list'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { instrumentCount, type ScoreInstrument } from '../model/instruments'
@@ -102,8 +98,6 @@ export function ScoreSettingsPage() {
   const { actions, meta } = useScoreEditorContext()
   const locale = useLocale()
   const keyName = useKeyName()
-  const settings = useSettingsStoreApi()
-  const editing = useSettings(selectEditing)
   const draft = useEditorState((state) => state.draft)
   const bars = barsOf(draft).length
   const unit = draft.tempoUnit ?? beatUnit(draft.meter)
@@ -271,28 +265,7 @@ export function ScoreSettingsPage() {
             />
           </ChoiceRow>
         </SettingsGroup>
-        <SettingsGroup flush title={t('scoreSettings.editing')}>
-          <SwitchRow
-            icon={<TileMark icon={Volume2} paint="sand" />}
-            label={t('scoreSettings.hearNotes')}
-            info={t('scoreSettings.hearNotesInfo')}
-            checked={editing.hearNotes}
-            onCheckedChange={(hearNotes) => setEditing(settings, { hearNotes })}
-            className="gap-3 border-0 pr-3 pl-2 font-semibold"
-          />
-          <RowLink
-            title={t('scoreSettings.midi')}
-            icon={Cable}
-            paint="lilac"
-            render={<Link to="/settings/connect-piano" />}
-          />
-          <RowLink
-            title={t('scoreSettings.sound')}
-            icon={Mic}
-            paint="grass"
-            render={<Link to="/settings/sound-and-recording" />}
-          />
-        </SettingsGroup>
+        <EditingGroup />
       </div>
     </div>
   )

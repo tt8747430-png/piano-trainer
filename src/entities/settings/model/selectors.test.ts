@@ -21,6 +21,7 @@ import {
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
   DEFAULT_OTHER_HAND,
+  DEFAULT_PLAYBACK,
   DEFAULT_SOUND,
   DEFAULT_EDITING,
   DEFAULT_TRAINER,
@@ -49,6 +50,7 @@ describe('settings selectors', () => {
       chordFinder: DEFAULT_CHORD_FINDER,
       scoreView: DEFAULT_SCORE_VIEW,
       otherHand: DEFAULT_OTHER_HAND,
+      playback: DEFAULT_PLAYBACK,
       metronome: DEFAULT_METRONOME,
     }
     expect(selectPractice(state)).toBe(DEFAULT_PRACTICE)

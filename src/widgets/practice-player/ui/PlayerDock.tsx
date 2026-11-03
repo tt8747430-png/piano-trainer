@@ -7,7 +7,7 @@ import { Transport } from './Transport'
 
 /**
  * The Player's transport (ADR 0061, 0108, 0105): the tempo, ‹, Play or Stop (honey), ›, the loop, the
- * Sound and the hands in the pill the score editor's shares (`Transport`, ADR 0115), floating along
+ * metronome's quick toggle (B7) and the hands in the pill the score editor's shares (`Transport`, ADR 0115), floating along
  * the sheet's foot at every size, a phone on its side too, where the sheet is too short for it
  * upright (ADR 0115).
  */
@@ -23,7 +23,7 @@ export function PlayerDock({
   tempo: ReactNode
   /** The loop's button, after ›, as Chordify's transport carries it beside its tempo. */
   loop: ReactNode
-  /** The Sound's button, after the loop (ADR 0105). */
+  /** The metronome's quick toggle, after the loop (B7). */
   sound: ReactNode
   /** The hands' button, at its end. */
   hands: ReactNode

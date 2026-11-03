@@ -86,7 +86,6 @@ describe('set-preference', () => {
       namedNotes: false,
       positions: false,
       metronome: true,
-      countIn: false,
     })
     setPracticeToggle(store, 'metronome', false)
     expect(store.getState().practice.metronome).toBe(false)

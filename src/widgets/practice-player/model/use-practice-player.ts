@@ -1,11 +1,13 @@
 import { useCallback, useMemo, useRef } from 'react'
 import {
   selectOtherHand,
+  selectPlayback,
   selectPractice,
   selectScoreView,
   selectSound,
   useSettings,
   useSettingsStoreApi,
+  type Cursor,
 } from '@/entities/settings'
 import {
   hiddenStaves,
@@ -28,6 +30,7 @@ import type { StaffId } from '@/shared/lib/notation'
 import {
   audibleHands,
   volumeGain,
+  withPedal,
   type Hands,
   type Recording,
   type SwingFeel,
@@ -73,6 +76,10 @@ export interface PracticePlayer {
   readonly positions: boolean
   /** The click while the music plays: this visit's (ADR 0111), else the learner's saved one. */
   readonly click: boolean
+  /** How the cursor follows the music (B7): none, a step a beat group, or gliding. */
+  readonly cursor: Cursor
+  /** The music as played: its pedal as the settings say (A27). */
+  readonly performance: Performance
   /** The keys out: this visit's (ADR 0111), else the View's saved ones. */
   readonly keys: boolean
   /** The click on or off: this visit's where it has its own, else the saved one. */
@@ -106,7 +113,7 @@ export interface PracticePlayer {
  * a piece's recording plays along in Listen.
  */
 export function usePracticePlayer(
-  performance: Performance,
+  written: Performance,
   view: PracticeView,
   setView: (patch: Partial<PracticeView>) => void,
   ownTempo: number,
@@ -121,6 +128,10 @@ export function usePracticePlayer(
   const click = view.click ?? toggles.metronome
   const sound = useSettings(selectSound)
   const otherHand = useSettings(selectOtherHand)
+  const playback = useSettings(selectPlayback)
+  // The pedal played as the settings say (A27): as written, none, or with each chord.
+  const played = useMemo(() => withPedal(written, playback.pedal), [written, playback.pedal])
+  const performance = played
   // Each staff as loud as its volume, none where its Play is off (A35).
   const mix = useMemo<Mix>(
     () => ({
@@ -151,7 +162,9 @@ export function usePracticePlayer(
     swing: view.swing,
     loop,
     metronome: click,
-    countIn: toggles.countIn,
+    countIn: playback.countdown !== 'none',
+    countInHeard: playback.countdown === 'audible',
+    speedStep: playback.speedStep,
     rest: view.rest ?? 0,
     recording,
     mix,
@@ -213,6 +226,8 @@ export function usePracticePlayer(
     names: toggles.namedNotes,
     positions: toggles.positions,
     click,
+    cursor: playback.cursor,
+    performance,
     keys: view.keys ?? savedKeys,
     setClick: (on) =>
       view.click === undefined

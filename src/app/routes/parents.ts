@@ -87,6 +87,8 @@ const toStudy: Parent = (from) =>
 /** The score editor, at the bar its Settings were opened from. */
 const toEditor: Parent = (from) =>
   up({ to: '/edit/$pieceId', params: { pieceId: param(from, 'pieceId') }, search: true })
+const toPlayer: Parent = (from) =>
+  up({ to: '/play/$pieceId', params: { pieceId: param(from, 'pieceId') }, search: true })
 
 export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   // The places: Learn, Songs, Practice, the Profile; on a laptop Settings and Search at the
@@ -104,6 +106,8 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/settings/on-screen-piano': settingsPage,
   '/shell/settings/computer-keys': settingsPage,
   '/shell/settings/sound-and-recording': settingsPage,
+  '/shell/settings/player': settingsPage,
+  '/shell/settings/score-editor': settingsPage,
   '/shell/settings/storage': settingsPage,
   '/shell/settings/account': settingsPage,
   '/shell/settings/how-to-use': settingsPage,
@@ -149,6 +153,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/full-screen/play/$pieceId': pieceHome,
   '/full-screen/edit/$pieceId': pieceHome,
   '/full-screen/edit/$pieceId/settings': toEditor,
+  '/full-screen/play/$pieceId/settings': toPlayer,
   '/shell/edit/$pieceId/takes/$takeId': (from) =>
     up({
       to: '/edit/$pieceId',

@@ -46,6 +46,10 @@ export interface PracticeSetup {
   readonly loop: BarRange | null
   readonly metronome: boolean
   readonly countIn: boolean
+  /** Whether the count-in's clicks sound, true unless said: one seen alone counts unheard (B7). */
+  readonly countInHeard?: boolean
+  /** Speed training's step, a share of the piece's tempo each pass; 5% unless said (B7). */
+  readonly speedStep?: number
   /** Beats of rest, each a click, before each repeat of the passage. */
   readonly rest: number
   /** The piece's recording, played along in Listen; null plays none. */
@@ -147,7 +151,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   const { rh, lh, staff } = heard
   const clicks = partGain(mix, 'click') > 0
   const recording = partGain(mix, 'recording') > 0 ? setup.recording : null
-  const up = speedTraining ? speedUp(tempo, ownTempo) : undefined
+  const up = speedTraining ? speedUp(tempo, ownTempo, setup.speedStep) : undefined
   const upStep = up?.step
   const upUntil = up?.until
   const listening = state.mode === 'listen' && state.playing
@@ -162,6 +166,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   const passFrom = useEffectEvent(() => ({
     tick: state.performance.beatGroups[state.beatGroup]?.tick,
     countIn,
+    countInHeard: setup.countInHeard !== false,
   }))
 
   // Listen: the transport runs while playing, from where the learner is, and starts again from the
@@ -189,6 +194,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
             ? undefined
             : { step: upStep, until: upUntil },
         countIn: first && from.countIn,
+        countInHeard: from.countInHeard,
         metronome,
         clicks,
         swing,

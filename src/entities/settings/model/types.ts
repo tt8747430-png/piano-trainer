@@ -23,6 +23,7 @@ import type { Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import {
   METRONOME_SOUNDS,
+  PEDAL_PLAYS,
   SUBDIVISIONS,
   TOUCHES,
   TRAINER_BARS,
@@ -30,6 +31,7 @@ import {
   type BeatLevel,
   type MetronomeMeter,
   type MetronomeSound,
+  type PedalPlay,
   type SpeedTrainer,
   type Subdivision,
   type Touch,
@@ -40,15 +42,9 @@ export type Theme = (typeof THEMES)[number]
 
 /**
  * The Player's saved switches: the View menu's chord positions, finger numbers and named notes, and
- * the count-in and the click (`metronome`, the transport's Sound's, ADR 0105).
+ * the click (`metronome`, the transport's quick toggle, ADR 0105).
  */
-export const PRACTICE_TOGGLES = [
-  'fingerNumbers',
-  'namedNotes',
-  'positions',
-  'metronome',
-  'countIn',
-] as const
+export const PRACTICE_TOGGLES = ['fingerNumbers', 'namedNotes', 'positions', 'metronome'] as const
 export type PracticeToggle = (typeof PRACTICE_TOGGLES)[number]
 export type PracticeToggles = Readonly<Record<PracticeToggle, boolean>>
 
@@ -74,8 +70,42 @@ export interface OtherHandSettings {
   readonly look: OtherHandLook
   readonly play: boolean
 }
-/** The other hand dimmed and not heard, as the Player always did. */
-export const DEFAULT_OTHER_HAND: OtherHandSettings = { look: 'dim', play: false }
+/** The other hand dimmed, and played along in Wait mode, as the Player always did. */
+export const DEFAULT_OTHER_HAND: OtherHandSettings = { look: 'dim', play: true }
+
+/**
+ * How the Player's count-in goes (B7, the reference's Countdown): none; a bar of clicks counted down
+ * on the screen; or counted down on the screen alone, unheard.
+ */
+export const COUNTDOWNS = ['none', 'audible', 'visual'] as const
+export type Countdown = (typeof COUNTDOWNS)[number]
+/**
+ * How the Player's cursor moves (B7, the reference's Cursor): none drawn; a step at each beat its
+ * notes start on; or gliding with the music (ADR 0096).
+ */
+export const CURSORS = ['none', 'beats', 'continuous'] as const
+export type Cursor = (typeof CURSORS)[number]
+/** How much faster each pass of speed training plays, a share of the piece's tempo in percent. */
+export const SPEED_STEPS = [2, 5, 10] as const
+export type SpeedStep = (typeof SPEED_STEPS)[number]
+
+/**
+ * How the Player always plays (B7, its settings page): its count-in, its cursor, the sustain pedal (as
+ * written, none, or automatic, A27), and speed training's step.
+ */
+export interface PlaybackSettings {
+  readonly countdown: Countdown
+  readonly cursor: Cursor
+  readonly pedal: PedalPlay
+  readonly speedStep: SpeedStep
+}
+/** No count-in, the cursor gliding, the pedal as written, 5% a pass: the Player as it always was. */
+export const DEFAULT_PLAYBACK: PlaybackSettings = {
+  countdown: 'none',
+  cursor: 'continuous',
+  pedal: 'written',
+  speedStep: 5,
+}
 
 /** How every trainer goes, whatever it asks. */
 export interface TrainerSettings {
@@ -298,6 +328,8 @@ export interface SettingsState {
   scoreView: ScoreViewSettings
   /** With one hand practised, how the other looks and whether it is heard (A35). */
   otherHand: OtherHandSettings
+  /** How the Player always plays: count-in, cursor, pedal, speed training's step (B7). */
+  playback: PlaybackSettings
   metronome: MetronomeSettings
   /** The sections folded away, by their ids (`chords.tensions`): the same on every visit. */
   foldedSections: readonly string[]
@@ -318,7 +350,6 @@ export const DEFAULT_PRACTICE: PracticeToggles = {
   namedNotes: false,
   positions: false,
   metronome: false,
-  countIn: false,
 }
 
 /** Every part as loud as it is. */
@@ -386,6 +417,10 @@ export const isMusicView = isOneOf(MUSIC_VIEWS)
 export const isDiagramsMode = isOneOf(DIAGRAMS_MODES)
 export const isTextSize = isOneOf(TEXT_SIZES)
 export const isOtherHandLook = isOneOf(OTHER_HAND_LOOKS)
+export const isCountdown = isOneOf(COUNTDOWNS)
+export const isCursor = isOneOf(CURSORS)
+export const isPedalPlay = isOneOf(PEDAL_PLAYS)
+export const isSpeedStep = isOneOf(SPEED_STEPS)
 export const isMetronomeSound = isOneOf(METRONOME_SOUNDS)
 export const isSubdivision = isOneOf(SUBDIVISIONS)
 const BEAT_LEVELS = ['downbeat', 'accent', 'normal', 'silent'] as const

@@ -1,4 +1,11 @@
-import { Link, useNavigate, useParams, useSearch } from '@tanstack/react-router'
+import {
+  Link,
+  Outlet,
+  useChildMatches,
+  useNavigate,
+  useParams,
+  useSearch,
+} from '@tanstack/react-router'
 import { Info, ListTree, Settings2 } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -139,6 +146,10 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   const inLibrary = piece.kind !== 'study'
   const askView = useSettings((state) => selectScoreView(state).askOnOpen)
   const files = useSongExport(piece)
+  // The Player's settings (`/play/$pieceId/settings`, B7) in the Player's place, the song held as it
+  // is played: Back returns to it.
+  const inSettings = useChildMatches().length > 0
+  if (inSettings) return <Outlet />
   return (
     // Its chords drawn in the inversions chosen for them in this piece (ADR 0108).
     <PieceInversions pieceId={piece.id}>
@@ -198,6 +209,13 @@ function PiecePlayer({ piece }: { piece: Piece }) {
           status={<ShareSaid said={shared.said} />}
           // Chordify's "Show this when opening a song" (ADR 0108): the View, to choose how it shows.
           openView={askView}
+          onSettings={() =>
+            void navigate({
+              to: '/play/$pieceId/settings',
+              params: { pieceId: piece.id },
+              search: true,
+            })
+          }
         />
         <SongInfo piece={piece} performance={performance} {...sheetOf('info')} />
         <SectionsSheet

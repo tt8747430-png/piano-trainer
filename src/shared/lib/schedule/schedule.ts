@@ -86,6 +86,8 @@ interface ScheduleOptions {
   readonly toTick?: Tick
   /** A bar counted in before the music, a click on each of its beats. */
   readonly countIn?: boolean
+  /** Whether the count-in's clicks sound, true unless said: a count-in seen alone counts unheard (B7). */
+  readonly countInHeard?: boolean
   /** A click on every beat of the music. */
   readonly metronome?: boolean
   /**
@@ -196,9 +198,10 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   const musicStart = secondsFor(place(fromTick) - place(counted[0]?.tick ?? fromTick), tempo)
   const at = (tick: Tick) => musicStart + secondsFor(place(tick) - place(fromTick), tempo)
   const clicked = options.clicks !== false
-  const countIn: Sound[] = clicked
-    ? counted.map(({ tick, accent }) => ({ kind: 'click', at: at(tick), accent }))
-    : []
+  const countIn: Sound[] =
+    clicked && options.countInHeard !== false
+      ? counted.map(({ tick, accent }) => ({ kind: 'click', at: at(tick), accent }))
+      : []
   const inPass = (tick: Tick) => tick >= fromTick && tick < toTick
 
   // A note still held where the pass starts sounds from there, for what is left of it.

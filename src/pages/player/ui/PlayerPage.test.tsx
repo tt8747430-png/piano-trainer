@@ -12,7 +12,7 @@ import {
   PIECES_VERSION,
   stavesOf,
 } from '@/entities/piece'
-import { setPracticeToggle, setScoreView } from '@/features/set-preference'
+import { setPlayback, setPracticeToggle, setScoreView } from '@/features/set-preference'
 import { createMemoryStorage, LANDSCAPE_PHONE } from '@/shared/lib'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
 import * as engine from '@/shared/ui/score/verovio/engine'
@@ -59,6 +59,7 @@ describe('Player', () => {
         'Close',
         'MIDI keyboard',
         'Setup',
+        'Player settings',
         'More',
         'Edit',
       ])
@@ -157,7 +158,7 @@ describe('Player', () => {
     expect(settingsStore.getState().scoreView).toMatchObject({ music: 'grid', keys: false })
   })
 
-  it('holds the tempo, ‹, Play, ›, the loop, the Sound and the hands in one toolbar named Playback (ADR 0108, 0105)', async () => {
+  it('holds the tempo, ‹, Play, ›, the loop, the metronome and the hands in one toolbar named Playback (ADR 0108, B7)', async () => {
     await renderApp('/play/romashki')
     const dock = await screen.findByRole('toolbar', { name: 'Playback' })
     const names = within(dock)
@@ -169,7 +170,7 @@ describe('Player', () => {
       'Play',
       'Next',
       'Loop',
-      'Sound',
+      'Metronome',
       'Hands: Both hands',
     ])
     expect(within(dock).getByRole('button', { name: 'Play' })).toHaveAttribute(
@@ -188,22 +189,26 @@ describe('Player', () => {
     expect(dock.compareDocumentPosition(top) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
   })
 
-  it('offers the recording’s volume in the Sound, and Only the chords plays the chords alone (ADR 0105)', async () => {
+  it('opens its settings from the gear, a song’s tracks named, Only the chords playing the chords alone (B7)', async () => {
     const user = userEvent.setup()
-    const { audio, settingsStore } = await renderApp('/play/romashki')
-    await user.click(await screen.findByRole('button', { name: 'Sound' }))
-    const sound = await screen.findByRole('dialog', { name: 'Sound' })
-    const labels = [...sound.querySelectorAll('[data-slot="slider-label"]')].map(
+    const { audio, router, settingsStore } = await renderApp('/play/romashki?tempo=36')
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/play/romashki/settings'))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Player' })).toBeInTheDocument()
+    const labels = [...document.querySelectorAll('[data-slot="slider-label"]')].map(
       (label) => label.textContent,
     )
     expect(labels).toEqual(['Upper staff', 'Lower staff', 'Recording', 'Metronome'])
-    await user.click(within(sound).getByRole('button', { name: 'Only the chords' }))
+    await user.click(screen.getByRole('button', { name: 'Only the chords' }))
     expect(settingsStore.getState().sound).toMatchObject({
       recording: 0,
       staves: { treble: 100, bass: 100 },
     })
-    await user.keyboard('{Escape}')
-    await user.click(screen.getByRole('button', { name: 'Play' }))
+    // Back to the song as it was played.
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/play/romashki'))
+    expect(router.state.location.search).toMatchObject({ tempo: 36 })
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
     expect(audio.recordings).toEqual([])
     expect(audio.played.length).toBeGreaterThan(0)
   })
@@ -211,7 +216,7 @@ describe('Player', () => {
   it('counts its bar in large over the music, a beat at a time, then plays (ADR 0105)', async () => {
     const user = userEvent.setup()
     const { audio, settingsStore } = await renderApp('/play/bz5')
-    act(() => setPracticeToggle(settingsStore, 'countIn', true))
+    act(() => setPlayback(settingsStore, { countdown: 'audible' }))
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     // Each click of the bar counted in sounds an accented first, the rest plain.
     const clicks = (audio.played[0]?.sounds ?? []).filter((sound) => sound.kind === 'click')
