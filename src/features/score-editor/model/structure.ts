@@ -67,6 +67,14 @@ function spliceNotes(
   })
 }
 
-/** Each single staff's and each hand's notes spliced alike. */
-export const spliceAll = (draft: Draft, at: Tick, removed: Tick, inserted: Tick): Draft =>
-  withEveryStaff(draft, (notes) => spliceNotes(notes, at, removed, inserted))
+/** Each single staff's and each hand's notes spliced alike, and the pedal's line with them (ADR 0097). */
+export const spliceAll = (draft: Draft, at: Tick, removed: Tick, inserted: Tick): Draft => ({
+  ...withEveryStaff(draft, (notes) => spliceNotes(notes, at, removed, inserted)),
+  pedal: draft.pedal.flatMap((event) =>
+    event.tick >= at + removed
+      ? [{ ...event, tick: event.tick + inserted - removed }]
+      : event.tick >= at && event.tick < at + removed
+        ? []
+        : [event],
+  ),
+})

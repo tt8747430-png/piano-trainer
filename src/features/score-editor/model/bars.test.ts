@@ -42,6 +42,22 @@ describe('insertBar', () => {
     expect(shape(inserted.hands.lh)).toEqual(['C3@8/4', 'D3@12/4'])
   })
 
+  it('moves the pedal’s events after the bar on with the notes (ADR 0097)', () => {
+    const pedalled = {
+      ...sung,
+      pedal: [
+        { tick: 0, kind: 'down' as const },
+        { tick: 4 * B, kind: 'change' as const },
+        { tick: 16 * B, kind: 'up' as const },
+      ],
+    }
+    expect(insertBar(pedalled, 0).pedal.map(({ tick }) => tick / B)).toEqual([0, 8, 20])
+    // Bars taken take their events; those after move back.
+    expect(deleteBars(pedalled, { from: 1, to: 1 }).pedal.map(({ tick }) => tick / B)).toEqual([
+      0, 12,
+    ])
+  })
+
   it('cuts a note held across where the bar goes in', () => {
     expect(shape(staffNotes(insertBar(sung, 2)))).toContain('D5@8/4')
   })

@@ -57,7 +57,7 @@ export {
 } from './model/timeline'
 export { NOTE_VALUES, takesDot, takesTuplet, valueOf, type ChosenValue } from './model/values'
 export { chosenNotes, fingeredAt, shownValue } from './model/chosen'
-export { hasMark, type MarkChoice } from './model/marks'
+export { hasMark, hasPedal, type MarkChoice } from './model/marks'
 export { singsHere, sungAt, sungFrom, sungNear, syllableAt, verseCount } from './model/lyrics'
 export { lineDrawn, type Line } from './model/lines'
 export { transpose, type TransposeApplies } from './model/settings'

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { chosenNotes, hasMark, type MarkChoice } from '@/features/score-editor'
+import { chosenNotes, hasMark, hasPedal, type MarkChoice } from '@/features/score-editor'
 import { DYNAMICS, type Pedal } from '@/shared/lib/music'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useNotesChosen } from '../model/use-notes-chosen'
@@ -49,6 +49,8 @@ const MORDENT = 'M3 15 L7 9 L10 14 L14 8 L17 13 L21 7'
 const useMarkOn = (mark: MarkChoice): boolean =>
   useEditorState((state) => {
     const notes = chosenNotes(state)
+    // The pedal is the piece's own line (ADR 0097): its event where the notes chosen start.
+    if (mark.kind === 'pedal') return hasPedal(state.draft, notes, mark.pedal)
     return notes.length > 0 && notes.every((n) => hasMark(n.marks, mark))
   })
 
@@ -256,8 +258,8 @@ const PEDALS = [
 ] as const satisfies readonly { pedal: Pedal; glyph: string; label: string }[]
 
 /**
- * The pedal (Flat's, in Dynamics): pressed under the note chosen, let up under the last of a span
- * chosen; changed; let up.
+ * The pedal (Flat's, in Dynamics), placed on the piece's pedal line (ADR 0097): pressed where the
+ * notes chosen start, let up where a span chosen ends; changed; let up.
  */
 export function PedalKeys() {
   const { t } = useTranslation('editor')
