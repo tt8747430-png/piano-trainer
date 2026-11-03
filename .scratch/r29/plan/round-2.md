@@ -251,3 +251,396 @@ string changed; files in `.scratch/r29/shots/after/r2-<item>-<screen>-<size>.png
   rising" (C4 D4), "Jingle Bells with a unison", "a chart-only song has no opening", and "every built-in song with a
   staff has an opening". `IntervalsPage.test.tsx`: "the major 2nd lists Frère Jacques and ▷ plays C D E C …";
   "the minor 6th says no song starts with it yet" (if one does, the test picks an interval none starts with).
+
+### C7: A23 the Library's bar cells and "Songs with four chords" (musicca)
+
+- **Source:** A23 (829–836: "progressions grouped by style (Pop, Rock, Jazz, Blues …), each a row of its chords in
+  bar cells, and 'Songs with four chords': title, artist, chords, year. Check our library against it (missing
+  progressions, the 12-bar blues as one row of twelve bars) …"); the screenshots `piano-data/Screenshot 2026-10-27 at
+  20.57.40–55.png`; `piano-data/musica/progressions.json`; the owner (feedback-log 2026-11-03): "Musicca's files are
+  reference only (no licence) but progressions are facts".
+- **Today:** `src/entities/progression-library/content/library.ts`: 31 entries in 9 styles (pop, rock, jazz, blues,
+  classical, soul, gospel, modal, theory), one chord per bar (`ProgressionLibrary.tsx:182` draws `| C | G | Am | F |`).
+  `progressions.json` holds 269 loops in 9 styles (pop 48, rock 40, melodic 29, hiphop 29, disco 27, reggae 25, jazz
+  33, blues 12, classical 26), all in C or A minor, some with two chords in a bar (`duration: 2`). The screenshots
+  show those lists and a table "Songs with four chords" of 23 songs (Withorwithout, Parcels, | F | Dm7 | Gsus4 | G |,
+  2018 … All Along the Watchtower, Jimi Hendrix, | Cm | B♭ | A♭ | B♭ |, 1967). We have no such list.
+- **Will build:**
+  - Bars in a line: `src/shared/lib/music/numerals.ts` `parseBars(text: string): Numeral[][] | null` — bars split by
+    `|`, chords in a bar by spaces (`I V | vi IV`); a line without `|` is a chord a bar. `parseNumerals` reads `|` as
+    a separator (flattened). `ProgressionLibrary`'s bar cells and the Progression tab's strip draw a bar with two
+    chords as one cell `| Dm7 Am7 |`; playback gives each chord its share of the bar.
+  - A check script `scripts/musicca-progressions.mjs` (not shipped; reads `piano-data/musica/progressions.json`,
+    writes nothing): each loop turned to numerals in C major or A minor, compared with the library by rotation and
+    key (a loop is the same when one rotation equals another), printing what we lack, by style. Every loop it prints
+    is added to `library.ts` as an `entry(...)` with a name and a one-line character in en and ru
+    (`characters.ts`), unless it is a rotation or a one-chord variant of an entry we have (noted in the commit).
+  - Styles: `PROGRESSION_STYLES` gains **`ballad`** (musicca's "melodic"; label "Ballad" / «Баллада»),
+    **`hiphop`** ("Hip-hop" / «Хип-хоп»), **`disco`** ("Disco" / «Диско»), **`reggae`** ("Reggae" / «Регги»),
+    each a chip in the Library tab after the existing ones. Blues: the twelve musicca 12- and 13-bar forms we lack
+    (quick change, the turnaround's V7, minor blues), each one row of twelve bar cells (four to a line on a phone,
+    one line from 1280 wide: `fourToALine` decides).
+  - **Songs with four chords:** `src/entities/progression-library/content/four-chord-songs.ts`:
+    `FOUR_CHORD_SONGS: readonly FourChordSong[]`, `interface FourChordSong { title: string; artist: string; year:
+    number; key: KeyParam; chords: string /* "Am | G | F | G" */ }`, the 23 rows of the screenshots, each with its
+    key worked out from its chords (a test checks every chord is diatonic or named borrowed in that key). Selector
+    `fourChordSongs()` and `libraryMatch(song): LibraryProgression | undefined` (the library entry whose loop equals
+    the song's numerals by rotation) in `model/selectors.ts`.
+  - The Library tab (`ProgressionLibrary.tsx`): its style chips end with **"Songs with four chords"** (ru «Песни на
+    четырёх аккордах»). Chosen, the list shows those songs: each row the title (body), "artist · year" (small, soft),
+    the chords in bar cells, ▷ plays the four bars; a tap opens the Progression tab with the line typed in the
+    song's key (`?line=…&key=…`), the numerals and roles row under it; where `libraryMatch` finds an entry, the row
+    names it ("Axis of Awesome").
+- **Not in this item:** our own songs per progression ("Songs with this progression", built).
+- **Done when:** `numerals.test.ts`: "reads bars: 'I V | vi IV' is two bars of two chords"; "a line without bars is a
+  chord a bar". `library.test.ts`: "has every musicca loop or a rotation of it" (the test reads a checked-in list of
+  musicca's loops as numerals, `content/musicca-loops.ts`, facts only, no names); "the 12-bar blues is one row of 12
+  bars". `four-chord-songs.test.ts`: "each song reads in its key"; "Zombie matches its library progression".
+  `ProgressionsPage.test.tsx`: "the Songs with four chords chip lists 23 songs, and a tap opens Zombie's line in E
+  minor". Screenshots of the Library at the Pop chip, the Blues chip and the songs chip, three sizes.
+- **Owner's question:** musicca's 269 loops minus ours may be well over 100 new entries, each needing a name and a
+  character in two languages. Default taken: add every distinct loop, named by its numerals where no common name
+  exists ("I–IV–♭VII–IV"), with an authored one-line character.
+
+### C8: A39 grooves (Decided 20: Chordify's; 884d7115 put back the old ones)
+
+- **Source:** Decided 20 (411–412: "Chordify's (4/4: kick on 1, 3 and the 'and' of 3, snare 2 and 4, hat on 8ths;
+  3/4: kick on 1, hat on 2 and 3; 6/8: kick 1, snare 4, hat on every 8th). Replaces A39's list."); feedback-log
+  2026-11-03.
+- **Today:** `src/shared/lib/schedule/meter.ts:125` `groove()` strikes only on beats (kick 1 and 3, snare 2 and 4 in
+  4/4; kick 1, snare 2 and 3 in 3/4); `barClicks` adds a hat to every click and runs the hat on the subdivision.
+  The kick on the "and" of 3 can't be written: drums strike only on a click's first part. Tests in
+  `metronome.test.ts:50–57` assert A39's old groove.
+- **Will build:**
+  - New `src/shared/lib/schedule/groove.ts`: `interface GrooveHit { readonly at: number /* in 8ths from the bar's
+    start */; readonly voices: readonly DrumVoice[] }`; `grooveOf(meter: Meter, grouping?: readonly number[]):
+    readonly GrooveHit[]` from one table:
+    - **4/4** (8 eighths): kick 0, 4, 5; snare 2, 6; hat every 8th (0–7). (Chordify.)
+    - **3/4** (6 eighths): kick 0; hat 2, 4. No snare. (Chordify.)
+    - **6/8**: kick 0; snare 3; hat 0–5. (Chordify.)
+    - Ours, by the same idea, each marked "derived" in the table's comment: **2/4** kick 0, snare 2, hat 0–3;
+      **2/2** as 4/4 over the bar; **4/4's** shape for **6/4** extended (kick 0, 4; snare 2, 6, 10; hat on 8ths);
+      **9/8** kick 0, snare 3 and 6, hat every 8th; **12/8** kick 0 and 6, snare 3 and 9, hat every 8th; **3/8** kick 0,
+      hat 1, 2; **odd meters** (5/8, 7/8, 5/4 …) kick on the bar, snare on each later group's first 8th, hat every 8th.
+  - `DrumVoice` gains `'openHat' | 'ride'` (C9's kit) though no groove uses them yet (they are sounds a groove can
+    take; the open hat closes each 4/4 bar's last 8th only if a source groove says so: none does, so unused).
+  - `barClicks({ drums: true })` takes its hits from `grooveOf` at `at × (secondsPerBeat × beatsPer8th)`; a beat
+    square set silent silences the hits inside that beat; an accented square raises its hits' gain by
+    `LEVEL_GAIN.accent / LEVEL_GAIN.normal`. With Drum kit chosen, **Subdivision** has no effect, so round 1's S7
+    Subdivision row is not drawn while the sound is Drum kit (R30), and the face shows nothing for it.
+  - `click-voice.ts` `voicedClick` for the Player's click with Drum kit uses the same `grooveOf` (one engine, A39).
+  - `meter.ts` `groove()` deleted with its comment; ADR 0052:90 and the engine spec corrected (Corrections 1–2).
+- **Done when:** `src/shared/lib/schedule/groove.test.ts`: "4/4 is Chordify's: kick 1, 3 and the and of 3, snare 2
+  and 4, hat on 8ths" (exact hit list); "3/4: kick 1, hat 2 and 3, no snare"; "6/8: kick 1, snare 4, hat every 8th";
+  one case per derived meter; "7/8 as 2+2+3 snares on 8ths 2 and 4". `metronome.test.ts:50–57` rewritten: "a 4/4
+  drum bar strikes at 0, 0.5, 1, … with the kick at beat 2.5". `MetronomePage.test.tsx`: "Drum kit hides
+  Subdivision". A recording of each groove at 100 BPM in the commit's notes (`.scratch/r29/shots/after/r2-c8-*.webm`).
+
+### C9: D16 the metronome's sound set
+
+- **Source:** D16 (389–394: "recorded one-shots, each with an accented and a normal stroke, CC0 only … source and
+  licence of each file written in `public/samples/metronome/SOURCES.md`: woodblock, clave, rimshot, cowbell, a
+  classic click, and a drum kit (kick, snare, closed and open hi-hat, ride); all of them under 300 KB together,
+  self-hosted and cached. The spoken count … isn't offered"); Decided 20 ("Spoken count: … not offered");
+  feedback-log ("CC0 (VCSL) for the metronome and kit").
+- **Today:** four WAVs in `public/sounds/` (woodblock, kick, snare, hihat; 122 KB) from VCSL, no `SOURCES.md`, the
+  accent the woodblock pitched a fifth up (`web-audio.ts:270`). Sounds offered: Clicks · Beeps · Drum beat
+  (`METRONOME_SOUNDS = ['click','beep','drum']`).
+- **Will build:**
+  - Files in `public/samples/metronome/`, each a mono 16-bit WAV at 32 kHz, trimmed with a 5 ms fade, peak −1 dBFS,
+    `<sound>-accent.wav` and `<sound>-normal.wav` (the accent a harder stroke from the source's louder dynamic layer,
+    not a pitch shift). Source per sound, from VCSL (https://github.com/sgossner/VCSL, CC0):
+    | Sound | VCSL folder | Strokes |
+    |---|---|---|
+    | Woodblock | `Idiophones/Struck Idiophones/Woodblock` | its loudest and a middle layer |
+    | Clave | `Idiophones/Struck Idiophones/Claves` | same |
+    | Cowbell | `Idiophones/Struck Idiophones/Cowbells` | same |
+    | Kick | `Membranophones/Struck Membranophones/Bass Drum 1` (or 2, whichever is shorter and drier) | same |
+    | Snare | `Membranophones/Struck Membranophones/Snare Drum Modern 1–3` (the driest, wires on) | same |
+    | Closed hi-hat | `Idiophones/Struck Idiophones/Hi-Hat Cymbal` (closed) | same |
+    | Open hi-hat | `Idiophones/Struck Idiophones/Hi-Hat Cymbal` (open) | same |
+    | Ride | **none in VCSL by that name**: `Idiophones/Struck Idiophones/Suspended Cymbal 1` or `2`, struck with a stick tip, is the nearest; used and named "Ride" only if it sounds like a ride (bell-less ping, short wash) |
+    | Rimshot | **none as its own folder**: a rim articulation inside a `Snare Drum Modern` folder if one exists; else Freesound's CC0 filter |
+    | Classic click (a mechanical metronome's tick) | **none in VCSL**: Freesound CC0 ("metronome tick", CC0 filter) |
+    Where Freesound is needed and still answers 403 (progress.md), that sound is not offered (R30) and it is the
+    owner's to-do in the report; no synthesised stand-in under a recorded name.
+  - Size: clicks ≤ 80 ms, kick/snare/closed hat ≤ 250 ms, open hat and ride ≤ 450 ms; total measured by a test,
+    under 300 KB. `public/sounds/` deleted. Service worker precache (`vite.config.ts` `globPatterns`) includes
+    `samples/metronome/*.wav`.
+  - `public/samples/metronome/SOURCES.md`: per file, the source folder and file name, the URL, "CC0 1.0", the
+    trimming done.
+  - `src/shared/api/audio/recorded-sounds.ts`: `RECORDED_SOUNDS` maps each `RecordedSound` (`woodblock`, `clave`,
+    `rimshot`, `cowbell`, `click`, `kick`, `snare`, `hat`, `openHat`, `ride`) to `{ accent: url; normal: url }`;
+    `buffer(context, sound, stroke: 'accent' | 'normal')`. Loaded lazily: the chosen sound's two files when the
+    Metronome or the Player's click first plays, the rest never until chosen (memory). `web-audio.ts`'s pitched accent
+    removed; the synthesised voice plays only until the file is loaded.
+  - `METRONOME_SOUNDS` (`schedule/metronome.ts`) becomes `['click', 'woodblock', 'clave', 'rimshot', 'cowbell',
+    'beep', 'drums']`; labels (round 1 S7's "Sound" menu): **Click** · **Woodblock** · **Clave** · **Rimshot** ·
+    **Cowbell** · **Beep** · **Drum kit** (ru «Щелчок» · «Вуд-блок» · «Клаве» · «Римшот» · «Ковбелл» · «Сигнал» ·
+    «Ударная установка»). "Beep" stays synthesised (an electronic beep is meant to be one). Default **Click**
+    (classic click; if it can't be sourced, Woodblock). The menu groups them "Single sound" and "Groove" (Drum kit).
+  - `MetronomeSettings.sound` sanitiser maps any value outside the list to the default; version bumped.
+  - Spoken count: not offered (Decided 20); listed in the round's report as not available.
+- **Done when:** `src/shared/api/audio/recorded-sounds.test.ts`: "loads only the chosen sound's two strokes";
+  "an accent uses the accent file, not a pitch change". New `scripts/check-samples.test.ts` (unit, node): "every
+  file in `public/samples/metronome` is named in SOURCES.md with CC0"; "the folder is under 300 KB"; "each sound has
+  an accent and a normal file". `MetronomePage.test.tsx`: "the Sound menu lists Click, Woodblock, Clave, Rimshot,
+  Cowbell, Beep, Drum kit" (minus any not sourced). A recording of each sound, accent then normal, in
+  `.scratch/r29/shots/after/r2-c9-sounds.webm`.
+
+---
+
+## Items
+
+### A20: Buttons, rows and headings on every explorer
+
+- **Source:** A20 (prompt 716–742), R29 (298–323), R14–R15; C1 and C2 above take its added-tones and rows parts.
+  Audit: pickers DONE; Voicing pictures PARTIAL; one family per control PARTIAL (Harmony's fields grid); contact
+  sheet missing.
+- **Today:** Chords: Root and Quality pickers in a `PickerRow` (done), `VoicingField.tsx` a `MenuPicker` of eight
+  voicings (Close, Drop 2, Drop 3, Shell, Rootless A, Rootless B, Locked hands, So What) with text and an ⓘ. Section
+  headings come in five sizes: `ScaleLayout`'s `text-5xl` name, `text-3xl`, `text-2xl` ("Borrowed chords"), `text-xl`
+  and `text-lg` ("Left hand"), and `RowGroup` titles in small sans ("Practise in the Player"). Harmony
+  (`ChordsView.tsx:92–140`) lays Chord size, Inversion, Keys play, Played as and a `TempoSlider` out as a fields grid.
+- **Will build:**
+  - **Voicing picker with pictures:** `VoicingField` stays a `MenuPicker` (combobox) whose each option shows a small
+    staff picture of that voicing on C7 (or Cmaj7 for Locked hands, Dm7 for So What): new
+    `src/shared/ui/pickers/VoicingPicture.tsx` `VoicingPicture({ voicing }: { voicing: Voicing })`, an inline SVG of
+    the notes as stacked noteheads on a five-line grand-staff fragment, drawn from `voiceChord(…)` in the kernel, not
+    by hand. The option's label stays the name (Close · Drop 2 · Drop 3 · Shell · Rootless A · Rootless B · Locked
+    hands · So What, the names in jazz books). The ⓘ goes from the field; each option's one-line meaning moves to the
+    option's second line ("Root, 3rd, 7th"). A voicing the chord can't take (`VoicingBar`) is not listed (R30), with
+    nothing greyed.
+  - **One heading per level** in `src/shared/ui/SectionHeading.tsx` (new): `SectionHeading({ level, children,
+    summary }: { level: 2 | 3; children: ReactNode; summary?: string })`: level 2 the page section (Literata 24px,
+    the old `text-2xl`), level 3 a card's heading (sans 17px semibold). Every explorer heading uses it:
+    "Fingering", "Colour notes", "Borrowed chords", "Harmonise a melody note", "Songs in this key", "Practise in all
+    12 keys", "Songs with this progression", "Passing chords"' groups, "Left hand"/"Right hand" (level 3). `RowGroup`'s
+    `title` renders a level-2 `SectionHeading`. The page name under the bar (`text-5xl`) goes (A21: one title).
+  - **One family per control** (all already in `shared/ui`): choice of 2–4 short values → `Segmented`; a list →
+    `MenuPicker`; a root → `NotePicker`; a key → `KeyPicker`; a number → `Stepper`; on/off → `Switch` only in
+    Settings; a play action → the floating capsule (`FloatingActions`). Each explorer is checked and moved:
+    Harmony's `TempoSlider` → the capsule's tempo (A42); Progressions' "In the key only" `Toggle` → a `Segmented`
+    **"All chords · In the key"** (ru «Все аккорды · В тональности»); Scales' `TempoSlider` on Notes → `Stepper`
+    "Tempo" (− 80 + BPM). `TempoSlider.tsx` deleted.
+  - **Contact sheet:** `e2e/contact-sheet.spec.ts` renders `/dev/kit` (a test-only route already used by `kit.test.tsx`
+    if present; else a Playwright page that mounts each family in each state: rest, hover, focus, chosen, open) and
+    saves `.scratch/r29/shots/after/r2-a20-families-{light,dark}.png`.
+- **Not in this item:** the header of Scales (A21), the Progressions roles row (done).
+- **Done when:** `src/shared/ui/pickers/pickers.test.tsx`: "the Voicing menu shows a picture for each voicing and
+  lists only those the chord takes". `src/app/explorer-headings.test.tsx` (new): renders every explorer page via
+  `renderApp` and asserts every `h2`/`h3` carries `data-heading-level` from `SectionHeading` (no raw heading classes
+  left). Lint: a `no-restricted-syntax` rule in `eslint.config.js` forbids `className` containing `text-[2-5]xl` on an
+  `h2`/`h3` under `src/widgets` and `src/pages`. Screenshots of every explorer before (existing) and after at the
+  three sizes; the contact sheet.
+
+### A21: Scales and keys, all three tabs
+
+- **Source:** A21 (743–799), A32 (1239–1259), A42 (1614–1626), A43 (1641–1731); C5 above. Audit: tabs named,
+  pickers, duplicates DONE; header, spine, function colours, controls group, two titles, Walk row, Key folds,
+  score width NOT DONE or PARTIAL.
+- **Today:** each tab draws its own `ScaleLayout` header (`RunView`, `ChordsView`, `KeyView`): a `text-5xl` name,
+  then the pickers; Notes adds facts (`ScaleFacts`), Key has none and no Play. Harmony has `KeyChords` (the seven
+  degrees, 9c6e182f); Notes and Key don't line up on them. Borrowed chords and "Harmonise a melody note" sit on Key.
+  `PiecesInKey` (`pages/scales/ui`) lists every song and study with no cap.
+- **Will build:**
+  - **One header** above the tabs, in `src/widgets/scale-explorer/ui/ScaleHeader.tsx` (new), replacing the three
+    `ScaleLayout` headers: `ScaleHeader({ scale, onChange }: { scale: ScaleView; onChange: … })`:
+    1. the pickers row (C5: Root + Scale on Notes and Harmony; Key on Key);
+    2. the scale on one staff: key signature and the notes up an octave (`ScoreView` of a one-bar Score from
+       `spellScale`), the staff's width the column's;
+    3. the notes as chips (`ChordButton` family, each plays its note), the tonic first;
+    4. one facts line: "Formula W W H W W W H · Relative A minor ›" (ru «Строение … · Параллельная ля минор ›»);
+       the relative key is a link (A32: shown once, here).
+    The page's Play is the floating capsule (Play · Stop, the run up and down), the same on all three tabs. The
+    title is the app bar's "Scales and keys"; the `text-5xl` name goes (the pickers say the scale).
+  - **The seven-degree spine** (`KeyChords.tsx` becomes `src/widgets/scale-explorer/ui/DegreeSpine.tsx`,
+    `DegreeSpine({ tonic, kind, row }: { …; row: 'notes' | 'chords' | 'functions' })`): seven equal columns I–VII
+    (a grid with seven tracks; on a phone the row scrolls is NOT allowed: it wraps to 4 + 3 with the same widths and
+    the last row starting at column 1, as `KeyChords` does today), each column headed by its degree number and
+    numeral in the same place on every tab:
+    - Notes: the note and its fingers (RH above, LH below) per A30;
+    - Harmony: the chord (C Dm Em F G Am B°), its numeral, its function word and colour (`ROLE_PAINT`: home ·
+      away · tension), tap opens Chords (the corner link stays); borrowed chords listed under the degree they stand
+      on (♭VI under VI, Neapolitan ♭II under II), named;
+    - Key: the degree's name (tonic, supertonic … leading note; subtonic in natural minor), with the function colour.
+    A one-line legend under the spine: "Home (tonic) · Away (subdominant) · Tension (dominant)" with ⓘ.
+  - **Sections in one order** on every tab, each a `SectionHeading` level 2: (header) → see and hear (the piano,
+    the staff) → play it → use it. Notes: piano, staff (the run), "Fingering" (hand cards, A30), "Practise in the
+    Player" (exercises). Harmony: the spine, "Borrowed chords" (moved from Key, A32), "Harmonise a melody note"
+    (moved from Key, A32), "Practise in all 12 keys" (the walk row, A42), "Progressions in this key" (≤4 rows +
+    "Show all n" opening Progressions in this key, A32). Key: the circle and the signature side by side, "Modes"
+    (links, C5), "Songs in this key", "Studies in this key".
+  - **Folds and caps:** "Songs in this key" and "Studies in this key" show 6 rows then **"Show all n"** (ru
+    «Показать все n»); "Harmonise a melody note" is a `FoldSection` closed on a phone with the summary "{{n}} chords
+    hold {{note}}"; lesson titles wrap to two lines (`line-clamp-2`), never cut on one.
+  - **Practise in the Player** (Notes): one `RowGroup` of the six exercises, each with its own icon from
+    `lucide-react` by kind (Scale run `MoveUpRight`, Thirds `Layers`, Arpeggio `Waves`, Contrary motion
+    `ArrowLeftRight`, Broken chords `Grip`, Hanon `Repeat`), descriptions on two lines, never cut. On Harmony "Walk
+    the chords" joins the "Practise in all 12 keys" group as "Through the key's chords, in scale order" (C3) beside
+    the other sequences, so it is not a lone row.
+  - **On-screen piano labels:** the tab tells `PinnedKeyboard` what to show: Notes the fingers of the hand chosen (A30)
+    and no degrees; Harmony the chord's notes; Key the scale's notes. Computer-key letters only when the On-screen
+    piano setting asks (A26, round 3).
+  - **The score fills the column** (`ScaleSheet.tsx`: width 100% of its column, not `max-w-1/2`), fingering per A30.
+  - `ScaleLayout.tsx` deleted.
+- **Not in this item:** C5's picker narrowing; the annotations on the staff (A43); fingering rules (A30).
+- **Done when:** `ScalesPage.test.tsx`: "the header (pickers, staff, note chips, facts) is the same element on all
+  three tabs" (switching tabs keeps `data-testid="scale-header"` and its text); "the spine has seven columns headed
+  I–VII on every tab"; "Borrowed chords and Harmonise are on Harmony, not Key"; "Songs in this key shows six and
+  Show all 24"; "there is no h2 with the scale's name under the bar". Screenshots: the three tabs side by side at 390
+  and 1280 for C major and B♭ minor (A21's Done line).
+
+### A22: Intervals
+
+- **Source:** A22 (800–823), A24 (979–980), A43 (1694–1696, 1715–1718); C6. Audit: root picker, way picture
+  capsule, row style DONE; staff, Settings, songs, odd counts open.
+- **Today:** `src/widgets/interval-explorer/ui/IntervalExplorer.tsx`: Root (`PitchPicker`), the floating capsule
+  (Harmonic · Melodic rising · Melodic falling as pictured buttons, Play all, Stop), two lists ("Within the octave",
+  "Past the octave") of `IntervalRow` (name, "3 semitones", mini keyboard, play mark). No staff. Songs in an ⓘ.
+- **Will build:**
+  - **The chosen interval's panel** at the top of the page (new `IntervalDetail.tsx`), for the row last tapped
+    (`?interval=m3` in the URL, replaced, default M3):
+    1. a staff (`ScoreView`) with both notes, harmonic or melodic as the capsule's way is set, the interval's name
+       printed between them, the semitones counted under ("4 semitones") (A43's layer, on by default here);
+    2. facts on one line: "Inverts to minor 6th ›" (a link choosing it), "Consonant" or "Dissonant" (perfect and
+       imperfect consonances as the books class them);
+    3. "Songs that begin with it" (C6);
+    4. **"Test yourself"** (ru «Проверь себя») opening the Quiz's Intervals drill set to this interval (A43).
+    On 1280 the panel is the left column (sticky) and the list the right; on a phone the panel sits above the list.
+  - **Rows:** tapping a row plays it in the chosen way and chooses it (the panel follows); the chosen row has the
+    one chosen style (R15); the playing one shows the playing mark. Rows unchanged otherwise.
+  - **Odd counts:** the two lists are one-column lists (rows, not cards) on every width, so no lone card is left.
+  - **Settings** (round 1 S3 has the rows): Interval names (m3 · ♭3 · Minor 3rd), Compound intervals. The way stays
+    in the capsule (S3's reasoning).
+- **Not in this item:** the Quiz drill itself (A41).
+- **Done when:** `IntervalsPage.test.tsx`: "tapping Minor 3rd plays it and shows it on the staff with its name and 3
+  semitones"; "Inverts to major 6th chooses the major 6th"; "Test yourself opens /practice/quiz/intervals with m3
+  checked"; "rows are one list with no card grid". Screenshots at the three sizes, the panel on M3 and on m6 (no
+  songs).
+
+### A23: Progressions
+
+- **Source:** A23 (824–962), D14, A33's table (Passing chords owns approach chords), A43 (1719–1723); C3, C4, C7
+  above. Audit: tabs, roles row, Library list, chips, "C → G" combobox, empty songs hidden DONE; the role row
+  elsewhere, the groups, Insert, "+" between chords, fold summaries, In the key only open.
+- **Today:** `ProgressionsTabs.tsx` (Progression · Library · Passing chords); `RoleChips.tsx` on the Progression tab
+  and passing cards. "Progressions in this key" on Harmony are plain `RowLink`s (`PractiseChords.tsx:68`); a song's
+  page doesn't show the role row. Passing chords group by `PASSING_CATEGORIES` (dominant · functional · chromatic ·
+  diminished · diatonic · cadence) in `shared/lib/music/passing-chords.ts`; 16 kinds; no Insert
+  (`SuggestionCard.tsx`). The walks section ("Practise in all 12 keys") lists nine sequences with one icon.
+- **Will build:**
+  - **The role row everywhere a progression is shown:** `RoleChips` (the chords, the function word and colour under
+    each, the bass move between) is used by (1) the Library rows when a row is opened (tap the row's chevron ⌄:
+    its role row under the bar cells), (2) Harmony's "Progressions in this key" rows (the row shows the role row
+    in place of its plain chips), (3) a song's page section "Progressions in this song" where `in-songs.ts` finds
+    one (`pages/piece`, the row under the section's chords). One component, no copies.
+  - **Passing chords regrouped** (A23 919–947): `PASSING_CATEGORIES` becomes `['dominant', 'diminished',
+    'chromatic', 'subdominant', 'bass']`, labels **Dominant approach** · **Diminished passing chords** ·
+    **Chromatic approach** · **Subdominant approach** · **Bass-line passing chords** (ru «Доминантовый подход» ·
+    «Проходящие уменьшённые» · «Хроматический подход» · «Субдоминантовый подход» · «Проходящие в басу»), each with
+    one ⓘ line. `CATEGORY_OF`: secondaryDominant, tritoneSub, secondaryTwoFive, backdoor, backdoorTwoFive →
+    dominant; diminishedApproach (passing ♯i°7), diminishedAbove (descending), commonToneDiminished → diminished;
+    approachBelow, doubleApproach, + new `approachAbove` (a half step above) and `planing` → chromatic; plagal,
+    minorPlagal → subdominant; walkUp, walkDown, gospelWalkUp, diatonicWalk (renamed `bassWalk`: the passing ⁶₄,
+    I – I/3 – IV) → bass. The "cadence" and "diatonic" categories go.
+  - Names checked against Bobrova and Gorshkov (`piano-data/books`); the en/ru names of each kind listed in the
+    commit with the book and page.
+  - **Each card** (`SuggestionCard.tsx`): the three chords as chips that play (C → B♭7 → E♭), their numerals in the
+    key, the small staff of the voice leading drawn at once (no lazy wait), tags only from **Diatonic · Borrowed ·
+    Chromatic** (computed: all in key / in the parallel key / neither) and a style tag **Jazz · Gospel ·
+    Classical · Pop** where the kind has one (a table in the kernel), and a button **Insert** (ru «Вставить»).
+  - **Insert:** on the Passing chords tab, with two chords chosen from the Progression tab's chain (the "C → G"
+    combobox lists its adjacent pairs first), Insert puts the passing chord(s) between them in the line, switches to
+    the Progression tab, and shows a toast "Inserted B♭7 · Undo". New `insertBetween(line: string, at: number,
+    chords: readonly Numeral[]): string` in `widgets/progression-explorer/model/progressions-view.ts`.
+  - **"+" between chords:** on the Progression tab's chord strip a "+" target between two chips (44px, shown on
+    hover/focus on a laptop, always on a phone) opens the Passing chords tab filtered to that pair. The Grid view and
+    the editor's chord row get the same "+" in round 4 (A37), opening a sheet of the same `PassingChordsList`
+    component; listed there, not built here.
+  - **Walks' icons** (`ProgressionPractice.tsx`): each sequence its own icon by direction (rising `TrendingUp`,
+    falling `TrendingDown`, up and back `ArrowUpDown`, circle falling `RotateCcw`, circle rising `RotateCw`, thirds
+    `Triangle`); the chord list under each shows the first three keys and "…": "C D♭ D …" (no cut mid-chord). The
+    group hides for a one-chord line (done).
+  - **Fold summaries:** `FoldSection` takes `summary` and shows it on the closed heading in small soft text: "38
+    progressions · 13 styles", "9 sequences". Used wherever a section folds.
+  - **Progressions, in a song's key** (A43 1719–1720): each row of "Songs with this progression" gets a ▷ **"Play in
+    this song's key"** (ru «Сыграть в тональности песни») that sets the key picker to the song's key.
+  - **Test yourself** (Progressions has it on the legend, done).
+- **Not in this item:** "Reharmonise" (A43, listed there); the Grid/editor "+" (round 4).
+- **Done when:** `passing-chords.test.ts`: "groups by how they lead: five groups"; the A23 cases "C → E♭", "C → Am",
+  "G → C" each list the expected kinds per group, spelled in the key (B♭7, not A♯7). `ProgressionsPage.test.tsx`:
+  "Insert puts B♭7 between C and E♭ and Undo takes it out"; "the + between C and G opens Passing chords on C → G";
+  "Harmony's progressions show their role row". `pages/piece/ui/PiecePage.test.tsx`: "a song with I V vi IV shows
+  its role row". Screenshots: Passing chords on C → E♭, a Library row opened, at the three sizes.
+
+### A24: Each Practice page's own settings (content only)
+
+- **Source:** A24 (963–992), A32 (1276–1290), Decided 20. Structure, routes and rows: round 1 S1–S8, S14.
+- **What each page's settings ARE** (as round 1 lists them, plus this file's additions):
+  - **Chords** (S1): Chord playback (Block · Broken · Rolled), Fingering (switch), Staff (Grand staff · Treble).
+  - **Scales and keys** (S2): Fingering (Standard · From the thumb), Rhythm (Even · Dotted · Reverse dotted · Long,
+    3 short · 3 short, long), Chord size on Harmony (Triads · 7th chords), Scales listed (families).
+    Add from A43: the annotation layers of A43 (Degree numbers, Whole and half steps, Tonic and leading note,
+    Tetrachords) as switches in a group **"On the staff"** (ru «На нотоносце»), defaults in A43.
+  - **Intervals** (S3): Interval names, Compound intervals; A43's "On the staff": Name between the notes (on),
+    Semitones (on), Inversion (off).
+  - **Progressions** (S4): Written as, Voicing, First chord's inversion, and **Mode of typed numerals** (C4); "On
+    the staff": Numerals under the chords (on), Voice-leading lines (off).
+  - **Accompaniment** (S5): Sources shown and their order; "On the staff": Beats numbered (on), Hands named (off).
+  - **Chord finder** (S6): Slash chords, Keys it is in, Scale on the keys, Remember chords; "On the staff": Chord
+    tones labelled (on).
+  - **Metronome** (S7): Sound (C9's list), Volume, Subdivision (hidden for Drum kit, C8), Flash on the beat (A39);
+    **Saved tempos** group (A39 below).
+  - **Exercises and Quiz** (S8): Questions, Time limit, Next question automatically; Answer with (once A41 lands).
+  - **App-wide, General › Notation and names** (S12, A32): note names, chord symbols, numerals, sharps or flats,
+    function colours, degrees on the keys. Not on any page.
+- **Will build here:** only the "On the staff" switches' effects (A43) and Saved tempos (A39); the pages, routes and
+  other rows are round 1's.
+- **Done when:** each page's test in round 1 S1–S8, plus A43's and A39's tests below.
+
+### A25: Accompaniment, Chord finder, Metronome, Exercises and Quiz
+
+- **Source:** A25 (990–1023). Audit: names in one script, the gear, Quiz's My gaps DONE; the rest open.
+- **Today:** `pages/accompaniment/ui/AccompanimentTabs.tsx` six `NavTabs` (sources) that scroll on a phone;
+  `PatternShelves.tsx` rows titled "5.1 · …", with ♪ ♫ glyphs, descriptions cut, no icon; Chord finder's bar has
+  `<MidiButton />` (`ChordFinderPage.tsx:55`); its empty staff is drawn small; Metronome: `TempoSteps.tsx` four round
+  buttons (−10 −1 +1 +10), a pill Tap tempo, `TempoWordTip` an ⓘ, a `size-24` Play; Exercises' grid leaves holes.
+- **Will build:**
+  - **Accompaniment:**
+    - The six source tabs become one `MenuPicker` **"Source"** in the page head (ru «Источник»): its options the
+      sources shown (S5's order), each with its book's short name (Called to Play · Bobrova · Gorshkov · Styles ·
+      My patterns …). The URL keeps `source`.
+    - One naming rule: a pattern's title is its name alone ("Alberti bass", "Waltz, oom-pah-pah"); the book's number
+      ("5.1") moves to the row's second line with the book ("Bobrova, 5.1"); no glyphs in titles.
+    - The rhythm drawn as a picture: new `src/entities/pattern/ui/RhythmPicture.tsx` `RhythmPicture({ pattern }:
+      { pattern: Pattern })`, a one-bar SVG of the pattern's right and left hand rhythms (noteheads and stems on two
+      lines, from the pattern's own events), 64×28, at each row's start in place of an icon.
+    - Row: `RowLink` with the picture, the name, a two-line description (`line-clamp-2`, never one cut line), ›.
+      The same `RowLink` shape as Exercises' rows. Studies' titles wrap to two lines.
+  - **Chord finder:**
+    - `<MidiButton />` leaves the bar; the bar keeps the gear only. The empty state says the piano's status in words:
+      **"No piano connected · Connect"** (link to Connect a piano) or **"{{name}} connected: play a chord"**, under the
+      staff.
+    - The staff (`ChordName` widget): one size, empty or not: the column's width at the page's staff size, an empty
+      grand staff with clefs at full ink until the first chord; the chord's name above it in the heading size.
+    - The chords remembered (when S6's Remember is on) as a history list below: rows "Cmaj7 · 2 min ago", a tap shows
+      it again; Clear history as the list's last row (`DangerRow`, confirm).
+  - **Metronome** (look; the rest is A39):
+    - One `Stepper` for the tempo: **− 120 +**, the number large (48px) between, hold to repeat (Stepper gains
+      `repeat`: after 400 ms, 10 steps a second, after 1.5 s by 5), tap the number to type (`typed`). −10/+10 buttons
+      go; Shift+↑/↓ keep ±10.
+    - The tempo word ("Allegro") in the page's text style under the number, not capitals; a tap opens a `MenuPicker`
+      of the tempo words with their ranges ("Largo 40–60" … "Presto 168–200"), choosing one sets the tempo to its
+      middle. `TempoWordTip.tsx` becomes `TempoWordPicker.tsx`.
+    - Tap tempo: the same `Button` variant as other secondary actions (soft, control corner), not a pill.
+    - Play: the floating capsule's Play (R5), the same size and colour as every Play; the 96px circle goes.
+    - Time signature: a `MenuPicker` (one menu style), until A34's shared time control lands (round 4), then that.
+  - **Exercises:** the grid is a list of `RowLink`s in groups (no card grid), so no group of two leaves a hole;
+    descriptions two lines.
+  - **Everywhere on Practice:** the on-screen piano's toolbar is round 3's (A26); nothing here.
+- **Done when:** `AccompanimentPage.test.tsx`: "Source is one menu listing the shown sources"; "no row title holds a
+  digit or a note glyph"; "each row has a rhythm picture". `ChordFinderPage.test.tsx`: "no MIDI button in the bar";
+  "says 'No piano connected' with a Connect link"; "the staff's width is the same before and after a chord"
+  (stubBox). `MetronomePage.test.tsx`: "holding + raises the tempo by repeats"; "typing 96 sets 96"; "Allegro opens
+  the tempo words and Largo sets 50"; "Play is the capsule's". Screenshots of each page at the three sizes.

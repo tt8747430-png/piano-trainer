@@ -411,7 +411,7 @@ The rule, from Decided 20 and R18 (prompt 180–193, 404–420):
     "Only the chords" stays (a command, R24 "does something" row: accent label, `RowButton`). The "Metronome"
     slider leaves (S7); a `RowLink` "Metronome ›" (value: the sound, "Click") opens `/practice/metronome/settings`.
   - Group **"Playback"** (ru «Воспроизведение»): 1. "Count-in" (ru «Отсчёт») — segmented **None** · **Audible** ·
-    **Visual**, default None (`playback.countdown`); "Countdown" → **Count-in** (the musician's word, as A24 uses).
+    **Visual**, default None (`playback.countdown`; the label already reads "Count-in", `player.ts` `countdown.label`).
     2. "Pedal" (ru «Педаль») — segmented **As written** · **Off** · **Automatic**, default As written
     (`playback.pedal`); joins this group (no group of one row). 3. "Speed training step" (ru «Шаг ускорения») —
     segmented 2 % · 5 % · 10 %, default 5 % (`playback.speedStep`).
@@ -1052,3 +1052,223 @@ The rule, from Decided 20 and R18 (prompt 180–193, 404–420):
 - **Owner's question:** New song's key moves from the sign grid (Flat's new-score sheet has a sign grid) to the
   circle, so the app has one key picker. Default: the circle.
 
+### A6: Words (the known renames left)
+
+- **Source:** A6 (prompt 679–688), R10, R22, Decided 20 ("professional terms only"); audit A6 PARTIAL. The sweep of
+  every string against the books moved to B2 (round 6) by progress.md; this item closes the named ones.
+- **Today:** `src/shared/i18n/avoid-words.test.ts` fails an _Avoid_ phrase from the glossary's "Words the app
+  says (A6)" section (`docs/UBIQUITOUS_LANGUAGE.md:624`). Left: `player.ts` `needs.tune` "Needs a melody staff";
+  `common.ts` `tune` "Play melody" (+ `tuneInfo`); `editor.ts:751` "Hear notes as you edit"; `practice.ts:273`
+  "Voice-led" (+ its ⓘ); `practice.ts:522` "Clicks · Beeps · Drum beat", `:534` "Nothing"; `quiz.ts:150` "Go on
+  automatically"; `learn.ts:155` `readFirstNone` "Nothing"; `common.ts:75` `keyboard: 'Keyboard'` (the on-screen
+  piano's accessible name, R22); the glossary's stale "**Between** … _Avoid:_ Passing chords (as a page)" entry
+  (`UBIQUITOUS_LANGUAGE.md:474`) against its own "Passing chords" entry (line ~628).
+- **Will build** (en → new en; ru):
+
+  | Key | Today | After | ru | Term from |
+  |---|---|---|---|---|
+  | `player.needs.tune` | Needs a melody staff | Needs a vocal or instrumental part | Нужна партия голоса или инструмента | "part" (Dorico, MuseScore) |
+  | `common.tune`, `tuneInfo` | Play melody | deleted (S10, A14) | — | — |
+  | `editor.…hearNotes` | Hear notes as you edit | Play notes while editing | Проигрывать ноты при вводе | Dorico "Play notes during note input" (S10) |
+  | `practice.progressions.voicing.led`, `info` | Voice-led | Voice leading | Плавное голосоведение | theory books (S4) |
+  | `practice.metronome.sounds` | Clicks · Beeps · Drum beat | Click · Beep · Drum kit | Щелчок · Сигнал · Ударные | metronome apps (S7) |
+  | `practice.metronome.…none` | Nothing | None | Нет | (S7) |
+  | `quiz.autoNext` | Go on automatically | Next question automatically | Следующий вопрос сам | (S8) |
+  | `learn.…readFirstNone` | Nothing | None | Нет | — |
+  | `common.keyboard` | Keyboard | On-screen piano | Пианино на экране | R22 |
+
+  - Glossary: the "**Between**" entry (line 474) deleted; new entries in "Words the app says (A6)": **Play notes
+    while editing** (_Avoid:_ Hear notes as you edit), **Part** (_Avoid:_ Melody staff), **Voice leading**
+    (_Avoid:_ Voice-led, Move smoothly), **Count-in** (_Avoid:_ Countdown), **Next question automatically**
+    (_Avoid:_ Go on automatically), **Drum kit** (_Avoid:_ Drum beat). Each with its ru term.
+  - Where these keys are renamed by S4, S7, S8, S10, the rename lands with that item; this item lands the rest
+    (`needs.tune`, `readFirstNone`, `common.keyboard`, the glossary) and the test.
+- **Not in this item:** the full sweep of every string against `piano-data/books` (B2, round 6).
+- **Done when:**
+  - `avoid-words.test.ts` passes with the new _Avoid_ phrases (it fails today's locale files until they change).
+  - New case in `avoid-words.test.ts`: "the on-screen piano is never named Keyboard alone" (no locale value equal
+    to "Keyboard" / «Клавиатура»).
+  - `docs/UBIQUITOUS_LANGUAGE.md` has no entry whose _Avoid_ names a term another entry uses (new test
+    "no glossary term is another entry's Avoid word").
+
+### A8: Shapes and selected states (what is left)
+
+- **Source:** A8 (prompt 670–691: Done = "one contact sheet of every control in its normal, hover, selected and
+  disabled state, light and dark"), R14, R15, A16 ("Hover fills the whole row to the card's edges"); audit A8
+  PARTIAL.
+- **Today:** tokens and the `choice` utility are built and tested (`src/styles/shapes.test.ts`,
+  `src/styles/choice.test.ts`). Left: `shared/ui/RowGroup.tsx` draws `<ul className="grid-cards gap-x-2 card
+  p-1.5">`, so a row's hover is an inset block 6px inside the card (13 users: the explorers' "Practise" groups,
+  `ExerciseList`, `PatternShelves`, the lesson editors, a song's chord lessons). No contact sheet exists.
+- **Will build:**
+  - `RowGroup`: the list becomes `<ul className="grid-cards card gap-px overflow-hidden bg-hairline">` and each
+    `li` `bg-card`: no inner padding, no column gap; the 1px gap shows the hairline between cells, rows and
+    columns alike. A row's hover and chosen fill reach its cell's edges; the card's rounded corners clip the
+    corner cells. One card, rows full-bleed, as `SettingsGroup`.
+  - **Contact sheet:** Admin › Components (`pages/admin/ui/ComponentsTab.tsx`) gets a section **"States"**
+    (`components.states`, en/ru): a table, one row per control family (Button default, soft, outline, ghost,
+    destructive; RoundButton; Segmented; Toggle chips; Picture choice; Picker cell; Dropdown; Switch; RowLink;
+    ChoiceRow; Tab/BarViews; the floating capsule's button; the sidebar item; a toolbar tool), four columns:
+    **Normal · Hover · Selected · Disabled**. The Hover column marks its cell `data-force-hover`; the
+    screenshot script forces `:hover` there.
+  - Script `scripts/contact-sheet.mjs` (Playwright, run by hand: `node scripts/contact-sheet.mjs` against
+    `npm run preview`): signs in with `ADMIN_EMAIL`/`ADMIN_PASSWORD` from `.env.local`, opens
+    `/admin?tab=components`, forces `:hover` on every `[data-force-hover]` through the Chrome DevTools Protocol
+    (`CSS.forcePseudoState`), and saves `shots/after/contact-sheet-light.png` and `-dark.png` (theme set by
+    `pt-settings`).
+- **Not in this item:** new tokens (none needed).
+- **Done when:**
+  - `src/shared/ui/RowGroup.test.tsx` (new): "draws its rows full-bleed in one card" (the `ul` has no `p-` class).
+  - `src/styles/choice.test.ts` new case: "no RowGroup or SettingsGroup list is padded inside its card".
+  - The two contact-sheet images exist and every Selected cell wears the one chosen fill, every Hover cell the
+    lighter muted fill (judged by eye; listed in the round's report).
+
+### A11: Learned as an act in every menu
+
+- **Source:** A11 (prompt 702–716: "Learned: the same treatment (a button, its menu command), never a switch"),
+  R19; audit A11 PARTIAL (no Learned command in a song row's ⋯ or long-press menu).
+- **Today:** Learned is a toggle button on a song's overview card (`pages/piece/ui/PieceView.tsx:101`,
+  `LearnedButton`, not for an own song) and in a lesson's bar. Favourite has its card button, row ⋯/long-press
+  (`pages/songs/ui/row-actions.ts` `songActions`), swipe, Select and the Player's ⋯ (`useFavouriteAction`,
+  `PlayerPage.tsx:156`). Learned has none of the menu commands.
+- **Will build:**
+  - New hook `useLearnedAction(piece: PieceId): MenuAction | null` in `src/features/mark-learned/ui/
+    use-learned-action.ts` (exported from `features/mark-learned`): over `useLearned(pieceStepId(piece))`;
+    `null` for an own song (as the card). Label "Mark as learned" / "Mark as not learned" (ru «Отметить как
+    выученную» / «Снять отметку „Выучено“»), icon `CircleCheck` / `CircleDashed`. Keys `common.learned.mark`,
+    `common.learned.unmark`.
+  - **Song row ⋯ and long-press**: `songActions(entry, page, t)` gains a `learned` action after `favourite`
+    (key `'learned'`, paint `'grass'`), from `page.learned: ReadonlySet<PieceId>` and `page.acts.toggleLearned(id:
+    PieceId): void`, added to `use-library-page.ts` (reading `selectLearned` from the progress store, keyed by `pieceStepId`;
+    writing through `markLearned`/`unmarkLearned`). Not on swipe (the swipe keeps Favourite / Move · Archive,
+    ADR 0106).
+  - **The Player's ⋯**: `PlayerPage.tsx` passes `[favourite, learned, ...library.actions]` (learned left out when
+    `null`).
+  - **Select's bar** keeps its acts (Favourite, Move, Archive); Learned is not added (a learned mark is per song,
+    not a bulk act in the references).
+  - DESIGN.md "Placement" already says "Learned the same: its button on the card, its command in the menus".
+- **Not in this item:** a lesson's Learned (already a bar button; lessons have no row menus).
+- **Done when:**
+  - `pages/songs/ui/SongsPage.test.tsx`: "marks a song learned from its row's menu, and the card shows it"
+    (row ⋯ → "Mark as learned" → the song page's Learned button is pressed); "an own song's menu has no Mark as
+    learned".
+  - `pages/player/ui/PlayerMore.test.tsx`: "More marks the song learned and then offers Mark as not learned".
+
+### A15: Account card and Storage, the missing proof
+
+- **Source:** A15 (prompt 723–738: Done = "screenshots signed in and signed out at 402 and 1280; tests that the
+  card shows each sync status and that Sync now sits on the Account page only"); audit A15 PARTIAL.
+- **Today:** built and tested (`widgets/settings-screen/ui/AccountCard.tsx` and its test, `pages/settings/ui/
+  AccountSettingsPage.tsx`, `StoragePage.tsx`). Only one state's screenshots exist (`shots/after/settings-
+  account-*`).
+- **Will build:** no code change. After S12 changes the Settings list:
+  - Screenshots `shots/after/settings-signed-out-{402x874,1280x800}.png` (a fresh profile) and
+    `settings-signed-in-{402x874,1280x800}.png` (signed in with the seed editor account, `SEED_EMAIL`), each
+    showing the account card at the top, and `account-signed-in-{402x874,1280x800}.png` (Profile → Sync → Sign out
+    → Delete account in that order).
+  - One more test in `AccountCard.test.tsx`: "says Sign in to sync your songs on every device, and Sign in,
+    while signed out" if the existing signed-out case does not assert both words (it asserts the line; add the
+    button).
+- **Done when:** the six images exist and are in the round's report; `AccountCard.test.tsx` green.
+
+### A16: Arrows and chevrons, the missing proof
+
+- **Source:** A16 (prompt 739–748: hover to the card's edges; Done = screenshots of Settings, a song page,
+  Practice and the Profile at 402 and 1280); audit A16 PARTIAL.
+- **Today:** marks only in the shared rows (`NavMarks`, `src/app/nav-marks.test.ts`). Left: the inset hover in
+  `RowGroup` (A8 fixes it) and the Profile and Practice-at-1280 screenshots.
+- **Will build:** no code beyond A8's `RowGroup` change. Screenshots after A8, R28 and S12 land:
+  `shots/after/marks-{settings,song,practice,profile}-{402x874,1280x800}.png`, each with the trailing marks on one
+  right edge, and one hovered row (forced `:hover`, as A8's script) per screen showing the fill to the card's
+  edges.
+- **Done when:** the eight images exist and are in the round's report; `nav-marks.test.ts` green.
+
+### A17: Destructive and command rows, the rest
+
+- **Source:** A17 (prompt 749–757: Done = screenshots of the Account, Storage and backup, song, lesson and course
+  Settings at 390 and 1280; tests that each destructive row is red, sits in the last group, and opens its
+  confirmation), R25; audit A17 PARTIAL.
+- **Today:** `DangerGroup` last on Account, Storage, song, lesson, course Settings. The song's Reset/Delete open
+  `pages/piece/ui/OwnMusicAsk.tsx`'s own dialog; no lesson or course Settings screenshots; widths 320/402/1280,
+  not 390.
+- **Will build:**
+  - The song's Reset/Delete through `confirm()` (A9's row; `OwnMusicAsk.tsx` deleted).
+  - The kind Settings pages (S1–S11) have no destructive row; none is added.
+  - Screenshots `shots/after/danger-{account,storage,song,lesson,course}-{390x844,1280x800}.png`.
+- **Done when:** in `pages/piece/ui/SongSettingsPage.test.tsx`, `pages/lesson/ui/LessonSettingsPage.test.tsx`,
+  `pages/course/ui/CourseSettingsPage.test.tsx`, `pages/settings/ui/StoragePage.test.tsx`,
+  `pages/settings/ui/AccountSettingsPage.test.tsx`, one test each named "its destructive rows are red, last and
+  ask first": the last `SettingsGroup` holds only `DangerRow`s (`data-variant="destructive"`), and a click on
+  each opens the `ConfirmDialog` (role `alertdialog` with the act's name on its button). The ten images exist.
+
+### A38: One meaning for the pencil (what is left in round 1)
+
+- **Source:** A38 (prompt 1456–1491), Decided 6, R21 ("never the same icon for different things"); audit A38:
+  song page DONE, chord-view editing NOT DONE, tests per screen PARTIAL. progress.md moves the chord views'
+  editing to round 4 with A37.
+- **Today:** the song page is done (9d683ceb: the bar's pencil edits the page in place for whoever may; "Edit
+  score" a labelled button on the overview card). The pencils elsewhere were checked by hand (`audit.md:23`) but
+  have no tests. The same `PencilLine` icon is drawn for "edit this page in place" (`EditToggle`), "Edit score"
+  (`PieceView.tsx:98`), "Write the chart" (`ListingView.tsx:32`) and a pattern's ⋯ Edit (`PatternPage.tsx:105`):
+  one icon, two meanings.
+- **Will build:**
+  - **One icon per meaning:** `PencilLine` stays the bar's pencil alone (`EditToggle`, `ScoreEditToggle`: "edit
+    what this screen shows"). The score's own act, "Edit score" and "Write the chart", takes `FilePenLine` with its
+    label (`PieceView.tsx`, `ListingView.tsx`). A pattern's ⋯ "Edit" (`PatternPage.tsx`) edits the pattern shown,
+    so it moves from the ⋯ to the bar's pencil (`EditToggle` in the edit slot, A3), and the ⋯ loses it (one way to
+    each action). Progressions' bar pencil (`ProgressionsPage.tsx:42`, the editor's progression editor for the
+    progression shown) stays.
+  - **"Open a song on"** (A38's "Settings may choose what a song opens to"): S11.
+  - **The pencils' table** (into `audit.md` under A38, and as the test's cases):
+
+    | Screen | Learner | Editor | Pencil leads to |
+    |---|---|---|---|
+    | A built-in song's page | no pencil | pencil | the page in place (`SongEdit`) |
+    | An own song's page | pencil | pencil | the page in place |
+    | Any song's page | "Edit score" | "Edit score" | `/edit/$pieceId` (learner: their version; editor: the song) |
+    | The Player | pencil | pencil | the score editor (`/edit/$pieceId`), the score it shows |
+    | A lesson | no pencil | pencil | `/lessons/$lessonId/edit` |
+    | A course | no pencil | pencil | `/courses/$courseId/edit` |
+    | Learn › a level | no "Manage lessons" | Manage lessons (bar) | `/journeys/$journeyId/edit` |
+    | Progressions | no pencil | pencil | `/practice/progressions/$progressionId/edit` |
+    | A built-in pattern | no pencil | pencil | the pattern's edit mode |
+    | An own pattern | pencil | pencil | the pattern's edit mode |
+    | A folder (Songs) | own folder: ⋯ Edit; built-in: none (B3) | ⋯ Edit | the folder's sheet |
+
+- **Not in this item:** editing in the chord views (Grid, Chords over lyrics, Diagrams) and the view picker in the
+  editor's bar (round 4 with A37); Learner view (B5, round 9), which reuses this test.
+- **Done when:**
+  - New `src/app/pencils.test.tsx`: `it.each` over the table's rows × `['learner', 'editor']` (`renderApp(path, {
+    auth: createFakeAuth({ accounts: [{ …, role }] }) })`, signed in): "<screen> as a <role>: the pencil is
+    <shown|absent> and leads to <destination>"; plus "Edit score opens the score editor for a learner and an
+    editor".
+  - `src/app/one-icon.test.ts` (source scan): "no ⋯ menu action and no labelled button uses PencilLine" (every
+    `PencilLine` import is in `widgets/mode-switch` or a bar `RoundLink` that opens the editor of the thing shown:
+    `ProgressionsPage.tsx`); `PieceView` test: "Edit score shows the score icon, not the pencil".
+
+
+---
+
+## Build order for round 1 (one commit per item)
+
+1. S0, S14 (frame, gear, registry, renderer, routes) → S12 (the app's Settings trimmed) → S1–S11 one per commit
+   (each moves its page and its tests) → S13 checked by `settings-pages.test.tsx`.
+2. A6 (words; the renames that belong to S4, S7, S8, S10 land with them).
+3. R5 (one capsule) → A3 (bar slots and the rule) → A2 (one height, `BarViews`).
+4. A9/R17 (the one dialog) → A17.
+5. A5 (editor and New song key on the circle, wedges' signatures, Start on, tempo steppers).
+6. A4 (audit rows; the editor's Sound removed).
+7. A8 (`RowGroup`, contact sheet) → A11 (Learned in the menus) → A38 (icons, pencils' test).
+8. R28/A19 (wide layouts) → A15, A16 screenshots last, once the screens they show have settled.
+
+## Owner's questions (defaults taken if not answered)
+
+- S1: one Play, the chord's playback chosen in Chords settings (no second "Arpeggio" button).
+- S2: Octaves and Hands stay on the Scales page (they change the run drawn).
+- S7: both trainers stay on the Metronome's face.
+- S8: the keys a drill asks stay on each drill's setup.
+- S11: Songs' Settings is built now with one row (Open a song on).
+- S12: "Sound and recording" becomes "Sound", kept only if round 3 adds the piano sound's rows.
+- R5: the transport's Play stays a round icon; every other main action carries its label.
+- A2: on a phone, Scales and keys and Progressions show their views in the bar with the title hidden.
+- A5: New song's key moves to the circle (one key picker).
