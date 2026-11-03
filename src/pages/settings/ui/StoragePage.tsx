@@ -17,10 +17,10 @@ export function StoragePage() {
   const [confirming, setConfirming] = useState(false)
   return (
     <SettingsScreen title={t('pages.storage')}>
-      <Group title={t('storage.label')} info={t('storage.info')}>
+      <Group flush title={t('storage.label')} info={t('storage.info')}>
         <KeepOnDeviceFields />
       </Group>
-      <Group title={t('backup.label')} info={t('backup.says')}>
+      <Group flush title={t('backup.label')} info={t('backup.says')}>
         <BackupFields />
       </Group>
       <DangerGroup footnote={t('progress.body')}>

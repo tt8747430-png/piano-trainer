@@ -89,7 +89,7 @@ describe('Settings', () => {
       'Look',
       'Position',
       'Playing',
-      'Buttons on the keys',
+      'Bar over the keys',
     ])
     expect(screen.queryByRole('switch', { name: /^Play from the computer keys/ })).toBeNull()
   })

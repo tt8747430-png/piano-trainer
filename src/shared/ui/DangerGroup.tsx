@@ -9,7 +9,7 @@ import { ActionRow } from './ActionRow'
 export function DangerGroup({ footnote, children }: { footnote: string; children: ReactNode }) {
   return (
     <section data-group="danger" className="mt-6 flex flex-col gap-2">
-      <div className="flex flex-col card p-1.5">{children}</div>
+      <div className="flex flex-col overflow-hidden card">{children}</div>
       <p className="px-3 text-sm text-muted-foreground">{footnote}</p>
     </section>
   )

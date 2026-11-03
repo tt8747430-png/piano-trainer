@@ -12,7 +12,7 @@ export const settings: LocaleResources['settings'] = {
     metronome: 'Метроном',
     storage: 'Хранилище и копии',
   },
-  piano: { look: 'Вид', place: 'Положение', play: 'Игра', bar: 'Кнопки над клавишами' },
+  piano: { look: 'Вид', place: 'Положение', play: 'Игра', bar: 'Панель над клавишами' },
   computerKeys: { shortcuts: 'Сочетания клавиш', typingGroup: 'Игра' },
   recording: 'Запись',
   progress: {
