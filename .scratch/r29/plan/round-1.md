@@ -609,3 +609,446 @@ The rule, from Decided 20 and R18 (prompt 180–193, 404–420):
     lines (Settings' pages list; Practice's settings); `settings-map.md` rewritten from `SETTINGS`.
 - **Done when:** typecheck, lint, the tests above, `npm run build` (routing changed); screenshots of each new
   page and of the app's Settings list at 390×844, 844×390, 1280×800 in `shots/after/`.
+
+---
+
+## R: The standing rules' open contradictions
+
+### R5: Floating actions, one centred capsule
+
+- **Source:** R5 (prompt 132–136: one style and size; clear of the tab bar, home indicator and keyboard; a centred
+  capsule, never docked to a side; never the same action twice); R16 (hidden, never greyed, re-centred); R29
+  ("The floating transport is one capsule"); A3 (primary is a labelled button); audit contradiction 1.
+- **Today:** `shared/ui/FloatingActions.tsx`: `FloatingHost` is `justify-center aside:justify-end` and `ALIGN`
+  is `aside:flex-col`, so wherever keys are docked (a laptop from 64rem, a phone on its side) the actions stand
+  as a column at the right edge. Two looks: a lone circle (`Fab`, `FabLink`, `PlayFab`, `FabPill`, `SpeedDial`:
+  Scales' Play up and down, a song section's Practise, Course's Start, Learn's New course, Songs' +) and a capsule
+  (`FloatingBar`: Chords, Intervals, the Player's transport, a lesson's ‹ n/m ›). `FloatingBar` has an `aside`
+  orientation (upright) used by `LessonView`.
+- **Will build:**
+  - **One capsule.** Everything a screen floats is one `FloatingBar` (the pill: `rounded-pill border bg-raised
+    elevation-2`, 56px high, 4px inner padding) centred at the foot. Inside it, left to right: second actions
+    (48px round icon buttons, `FloatingBarButton`, tooltip = name), then the main action last (rightmost, the
+    thumb's side). The main action is a honey pill with icon and label (`FloatingBarMain`, new, below), except a
+    transport's Play/Stop, which stays the 48px honey round `FloatingBarPlay` between ‹ and › (media controls,
+    named by tooltip; DESIGN.md says why).
+  - `src/shared/ui/FloatingActions.tsx`:
+    - `FloatingHost`: the outer div loses `aside:justify-end`; `ALIGN` becomes `'flex-row items-center'` (no
+      `aside:flex-col`); `DIAL_ALIGN`/`DIAL_ASIDE` lose their `aside:` parts (a dial always opens upward,
+      centred). `--floating-inline` is no longer set; only `--floating-block`.
+    - `FloatingActions` keeps its signature (`{ last?, className?, children }`): each part a screen floats is a
+      segment of the one capsule. Where two parts float at once (the Player's transport and its selection bar),
+      they sit in one row, `gap-3`, centred together.
+    - Removed exports: `Fab`, `FabLink`, `PlayFab`, `FabPill`, `MINI_FAB`. `SpeedDial` stays as a capsule
+      member: its trigger is a `FloatingBarButton` (`⋯`, or `+` labelled "New" as a main pill when `main`).
+  - `src/shared/ui/FloatingBar.tsx`:
+    - `ORIENTATION` keeps `along` only; `column`, `aside`, `landscape-phone` go. The Player's full-screen layout
+      (no host) places its capsule at the foot centred too.
+    - New `function FloatingBarMain({ label, icon, render, ...button }: { label: string; icon: LucideIcon;
+      render?: useRender.RenderProp } & Omit<ComponentProps<typeof Button>, 'children'>): ReactElement`: a
+      48px-high honey pill inside the capsule, `icon` then `label` (Onest 600 16px), `rounded-pill px-4`.
+    - New `function FloatingPlay({ label, playing, onClick }: { label: string; playing: boolean; onClick: () =>
+      void }): ReactElement`: a one-member capsule (`FloatingBar` + `FloatingBarMain` with `Play`/`Square`, label
+      the thing played: "Play", "Play up and down"; "Stop" while sounding). Replaces `PlayFab`.
+  - `theme.css`: the `aside` custom variant stays only for the docked keys' own layout; `--floating-left`/
+    `--floating-right` and the `:root:has([data-slot='docked'])` block that zeroes `--floating-foot` go: the page
+    pads its foot by the capsule's height above the docked keys on every screen.
+  - Call sites (each now one capsule, the main labelled):
+
+    | Screen | File | Capsule, left → right |
+    |---|---|---|
+    | Chords | `widgets/chord-explorer/ui/ChordExplorer.tsx` | main "Play" (Arpeggio button goes, S1) |
+    | Scales and keys | `widgets/scale-explorer/ui/PlayUpDown.tsx` | main "Play up and down" (`FloatingPlay`) |
+    | Intervals | `widgets/interval-explorer/ui/IntervalExplorer.tsx` | Harmonic · Melodic rising · Melodic falling, main "Play" |
+    | A song's section | `pages/piece/ui/SectionPage.tsx` | main "Practise" (link) |
+    | A listing | `pages/piece/ui/ListingView.tsx` | main "Practise" (link) |
+    | A course | `pages/course/ui/CoursePage.tsx` | main "Start" / "Continue" (link) |
+    | Learn › Courses (editor) | `pages/learn/ui/LearnPage.tsx` | main "New course" |
+    | Songs | `pages/songs/ui/NewActions.tsx` | main "+ New" opening the dial (New song, Import, New folder) |
+    | Songs › Select | `pages/songs/ui/SelectionBar.tsx` | its acts as icon buttons (already a bar) |
+    | Chord finder | `pages/chord-finder/ui/ChordFinderPage.tsx` | ⋯ dial, main "Play" |
+    | A pattern | `pages/pattern/ui/PatternPage.tsx` | main "Practise" (link) |
+    | Shared song, Public song | `pages/shared-song/…`, `pages/public-library/ui/PublicSongPage.tsx` | main "Add to my library" (A3's own example), second "Practise" |
+    | A take | `pages/score-editor/ui/TakePage.tsx` | ⋯ dial, main "Play" |
+    | A chord row | `features/play-example/ui/ChordRow.tsx` | main "Play" |
+    | Folded keys | `features/live-keyboard/ui/PinnedKeyboard.tsx` | second action (keys icon, "Show the piano") in the same capsule, `last` |
+    | A lesson | `widgets/lesson-view/ui/LessonView.tsx` | ‹ n/m › (no `aside` orientation) |
+    | The Player, the editor | `widgets/practice-player/ui/Transport.tsx`, `RecordButton`, `TakesButton`, `LoopButton`, `ClickButton` | Loop, Click, ‹, Play (round honey), ›, Record (editor) |
+
+  - Clearance (R5's second bullet, unchanged mechanism, now tested): `bottom-docked` + `mb-3` keeps 12px above
+    the tab bar, the docked keys and the home indicator (`mb-safe-4` where no tab bar); the keyboard-up rule
+    (`theme.css` 443) still steps it aside.
+  - "Never the same action twice": checked per screen in the table; the only double today is Chords' Arpeggio
+    beside Play (S1 removes it).
+- **Not in this item:** the dial's card (unchanged); which actions a built-in folder shows (R16, B3, round 7); the
+  Player's transport buttons themselves (B8).
+- **Done when:**
+  - `src/shared/ui/FloatingActions.test.tsx`: "tells the page the room its actions take … at the foot or at the
+    side" becomes "tells the page the room its actions take at the foot, keys docked or not" (no
+    `--floating-inline`); new "stands centred in one row with keys docked on a laptop" (asserts the host has
+    `justify-center` and no `flex-col`, with a `[data-slot=docked]` present and `matchMedia('(width >= 64rem)')`
+    stubbed true).
+  - `src/shared/ui/FloatingBar.test.tsx`: new "the main action is a labelled pill, last in its capsule" and
+    "FloatingPlay says Stop while it sounds".
+  - New `src/app/floating-actions.test.ts` (source scan, like `nav-marks.test.ts`): "no module outside
+    `shared/ui` imports `Fab`, `FabLink`, `PlayFab` or `FabPill`" and "no `aside:` class in `FloatingActions.tsx`
+    or `FloatingBar.tsx`".
+  - Screenshots: Chords, Scales and keys, a song's section, Songs, the Player at 390×844, 844×390, 1280×800
+    (`shots/after/floating-<screen>-<size>.png`): one capsule centred above the keys/tab bar in each.
+- **Owner's question:** the transport's Play stays a round icon (media players' mark) while every other main
+  action carries its label. Default as written.
+
+### R17: Confirm before an act that loses or hides work
+
+- **Source:** R17 (prompt 157–177); audit contradiction 6 (Remove a lesson asks nothing).
+- **Today:** the rule is half built: `confirm()` / `ConfirmDialog` (`shared/ui/confirm.ts`, `ConfirmDialog.tsx`)
+  serve Archive, the deletes, Reset progress, Sign out, Delete account, a take's Delete, Unpublish of an item made
+  in the app. Six screens keep their own `AlertDialog`; three acts ask nothing.
+- **Will build:** everything in A9 below (one table, one dialog, one test per act). R17 adds no other code.
+- **Done when:** A9's Done.
+
+### A9: Every act that loses or hides work, through the one dialog
+
+- **Source:** A9 (prompt 692–695), R17 (157–177), R25 (one-line footnote), A17 (song Reset/Delete).
+- **Today:** see the table's "Today" column. Own `AlertDialog`s: `features/edit-original/ui/DraftBar.tsx`
+  (Publish, Discard), `VersionsDialog.tsx` (Restore inside a list dialog), `pages/piece/ui/OwnMusicAsk.tsx`
+  (Reset to the original, Delete), `pages/score-editor/ui/KeepBars.tsx` (Keep bars), `features/backup-data/ui/
+  BackupFields.tsx` (Restore from a file), `pages/admin/ui/GroupsTab.tsx`, `SwitchesTab.tsx`, `ReportsTab.tsx`.
+- **Will build:**
+  - **The one dialog.** `ConfirmDialog` (`shared/ui/ConfirmDialog.tsx`) is the only `AlertDialog` user outside
+    `shared/ui/primitives`, `widgets/welcome` (not a confirmation) and `app/deletion-gate` (a blocking screen,
+    not a confirmation). Its shape is unchanged: title the question, one body line, the act's name on the button
+    (red when `destructive`), Cancel focused first and closing on Esc. Every call goes through `confirm(asking)`
+    (`shared/ui/confirm.ts`) except where the dialog needs a live field (Delete account's typed email: already
+    `typed`).
+  - **The acts** (en title / body / button; ru in the same keys). "Asks" = through `confirm()`; "Undo" = a
+    `say(…, { label: 'Undo' })` notice after.
+
+    | Act | Trigger(s) | Today | After | Title · body · button |
+    |---|---|---|---|---|
+    | Archive songs | row ⋯, swipe left, Select's bar, **Delete key in Select (new)** | asks + Undo | same; the key added | "Archive {{n}} songs?" (one: "Archive “{{title}}”?") · "You can restore them from the Archive." · Archive |
+    | Archive a folder | row ⋯, swipe | asks + Undo | same | "Archive “{{name}}”?" · "Its songs go with it. You can restore it from the Archive." · Archive |
+    | Delete forever (Archive) | row ⋯, Select | asks | same | "Delete {{n}} songs forever?" · "This can't be undone." · Delete |
+    | Delete a folder | row ⋯ | asks (`DeleteFolderAsk`) | same | unchanged |
+    | Delete an own song / Reset to the original | song Settings' danger rows | own `AlertDialog` (`OwnMusicAsk.tsx`) | `confirm()`; `OwnMusicAsk.tsx` deleted, its focus return done by `ConfirmDialog`'s `finalFocus` (the row) | "Delete “{{title}}”?" · "Its music and takes are deleted. This can't be undone." · Delete; "Reset “{{title}}”?" · "Your changes to its music are lost. This can't be undone." · Reset |
+    | Unpublish (Public library) | Publish page's Unpublish button | **asks nothing** (`PublishScreen.tsx:192`) | asks | "Unpublish “{{title}}”?" · "It leaves the Public library. Saved copies stay with those who saved them." · Unpublish |
+    | Unpublish / Delete (an item made in the app) | its Settings' danger rows | asks (`RemoveGroup.tsx`) | same | unchanged |
+    | Discard changes (a draft) | bar menu's Discard; Settings' Unpublished changes | own `AlertDialog` (`DraftBar.tsx`) | `confirm()` | "Discard the changes to “{{title}}”?" · "The published version stays. This can't be undone." · Discard |
+    | Publish a draft | bar's Publish | own `AlertDialog` | `confirm()` with `destructive: false` (not a loss, but it replaces what everyone sees) | unchanged words |
+    | Restore an older version | Versions list → a version's Restore | restores inside `VersionsDialog` | the list stays a dialog of choices; its Restore closes it and asks `confirm()` | "Restore the version of {{date}}?" · "It replaces the draft. The published version stays until you publish." · Restore |
+    | Remove a lesson from a course or level | row ⋯ Remove (`widgets/content-editor/ui/RowGroups.tsx` `remove`) | Undo only | asks + Undo | "Remove “{{title}}”?" · "It leaves this course. The lesson itself is kept." (level: "this level") · Remove |
+    | Remove a course from a shelf (Manage courses) | row ⋯ Remove | Undo only (same `RowGroups`) | asks + Undo | "Remove “{{title}}”?" · "It leaves this shelf. The course itself is kept." · Remove |
+    | Delete a take | take page ⋯ | asks (`DeleteTakeDialog.tsx`) | same | unchanged |
+    | Keep bars (cuts a take) | take page Keep | own `AlertDialog` (`KeepBars.tsx`) | `confirm()` | "Keep bars {{first}}–{{last}}?" · "The other bars of this take are deleted. This can't be undone." · Keep |
+    | Restore from a file | Storage › Restore from a file | own `AlertDialog` (`BackupFields.tsx`) | `confirm()` | unchanged words; button "Restore" |
+    | Reset progress | Storage; a lesson's / course's Settings | asks | same | unchanged |
+    | Sign out; Delete account (typed email) | Account | asks | same | unchanged |
+    | Delete a pattern | pattern page | asks | same | unchanged |
+    | Admin: delete a group, a switch, a report | Admin tabs | own `AlertDialog`s | `confirm()` | unchanged words |
+    | Apply a card style to every folder | — | not built (B9, round 14) | asks when built | — |
+    | Remove a song from a setlist | — | no setlists exist | — | — |
+
+  - **Keyboard Delete in Songs' Select** (R17 "Easy triggers"): `pages/songs/ui/LibrarySelect.tsx` adds
+    `useShortcuts(t('songs:select.shortcuts'), [{ label: t('songs:library.archive'), combo: 'Delete', run:
+    archiveSelected }, { …, combo: 'Backspace', … }], { enabled: selected > 0 })`, opening the same Archive ask
+    with the count.
+  - Words: new keys in `learn.ts` `edit.order.removeTitle`, `removeBody.course`, `removeBody.level`,
+    `removeBody.shelf`; `songs.ts` `public.unpublishTitle`, `unpublishBody`; `editor.ts` `take.keepTitle`,
+    `keepBody`; `common.ts` `original.restoreTitle`, `restoreBody`. ru for each.
+- **Not in this item:** the swipe's own look (ADR 0106); B9's card styles; a learner's "Archive" in a built-in
+  folder (B3).
+- **Done when:**
+  - One test per act, three assertions each ("asks; Cancel changes nothing; <Act> does it"), named "asks before
+    <act>":
+    `pages/songs/ui/SongsPage.test.tsx` (archive one, archive many by Select, archive by the Delete key, archive a
+    folder), `pages/song-archive/ui/SongArchivePage.test.tsx` (delete forever), `pages/piece/ui/SongSettingsPage.
+    test.tsx` (reset, delete own), `features/publish/ui/PublishScreen.test.tsx` (unpublish),
+    `features/edit-original/ui/DraftBar.test.tsx` (discard, publish, restore a version),
+    `widgets/content-editor/ui/RowGroups.test.tsx` (remove a lesson; after confirming, Undo puts it back),
+    `pages/score-editor/ui/TakePage.test.tsx` (keep bars, delete a take), `pages/settings/ui/StoragePage.test.tsx`
+    (restore from a file, reset progress), `pages/settings/ui/AccountSettingsPage.test.tsx` (sign out, delete
+    account), `pages/admin/ui/AdminPage.test.tsx` (delete a group).
+  - New `src/app/one-dialog.test.ts` (source scan): "only ConfirmDialog, the welcome and the deletion gate import
+    the alert-dialog primitive".
+  - `.scratch/r29/audit.md` gets the table above as A9's rows.
+
+### R18: Each setting lives in one place
+
+- **Source:** R18 (prompt 178–193) as changed by Decided 20 (413–419): R18's "reached from the gear … and from a
+  row in Settings" is replaced by "reached from its own gear only"; R9 (one place, not split across the toolbar,
+  bar and menus).
+- **Today:** a kind page is reached two ways (`/settings/<kind>` from Settings' rows and a gear), "Hear notes" is
+  drawn on two pages, the Player's View menu writes settings that its Settings page draws too, Lesson reading's
+  home is General.
+- **Will build:** S0–S14 above. The R18 rule as the code will hold it, written into DESIGN.md "Settings pages" and
+  `entities/settings/model/registry.ts`' doc: "A setting has one home. The app's Settings holds what every page
+  shares. A kind of page (a lesson, Songs, the Player, the score editor, each Practice page) has its own Settings
+  page at `<its path>/settings`, opened from the gear in its bar. Anywhere else, a link row."
+- **Not in this item:** an item's own Settings (a song's, a lesson's): unchanged.
+- **Done when:** S14's tests; `src/app/settings-pages.test.tsx` fails a key drawn on two pages, including the
+  View menu (`player-view`) as a page.
+
+### R28 and A19: A wide screen is filled
+
+- **Source:** R28 (prompt 279–289), A19 (708–710), audit contradiction 2; owner-way "Fill the screen, calm the
+  page".
+- **Today (from the code; A19's shots at 1280/1440/1920 do not exist):**
+  - Practice (`pages/practice/ui/PracticePage.tsx`): `grid items-start lg:grid-cols-2 xl:grid-cols-3` of three
+    groups of 4, 2 and 3 rows: unequal columns.
+  - Learn (`LearnPage.tsx:69`), Profile (`ProfilePage.tsx:64`), Activity, Public library, Course shelves: one
+    `max-w-2xl` (672px) column, centred: at 1280 with the sidebar, about half the width empty.
+  - Course (`max-w-3xl`), Chord finder, Admin (`max-w-3xl`), Metronome (`max-w-md…4xl` steps).
+  - Songs (`widgets/song-library`): `grid-cards` rows; folders and loose songs in different shapes (B3 owns the
+    folder cards).
+- **Will build:** one rule (DESIGN.md "Layout", new paragraph "Wide screens (R28)") and its application:
+  - **Rule:** from 64rem a page is (a) an even grid of same-height cards that reflows (`grid-cards`:
+    `repeat(auto-fill, minmax(min(18rem,100%),1fr))`, `grid-auto-rows: 1fr`), (b) two panes, or (c) a reading
+    column (a lesson's text, legal pages, a kind's Settings: `max-w-2xl`, centred: reading width is a type rule,
+    not empty space). Never fixed columns of unequal lists.
+  - **Practice** (`PracticePage.tsx`): the three groups become **full-width bands**, each a heading ("Theory",
+    "Playing", "Training", today's `SettingsGroup` heading style) over a `grid-cards` grid whose cells are
+    equal-height cards (`PageCard`, new in `widgets/practice-pages/ui/PageCard.tsx`: `function PageCard({ page,
+    trailing }: { page: PracticePageId; trailing?: ReactNode }): ReactElement`, the tile, name, one line, the
+    whole card a link, hover to its edges). On a phone (<48rem) the bands stay today's grouped list
+    (`PageRow` in one `SettingsGroup` card). `RowGroup`'s inset (`card p-1.5`) is not used here.
+  - **Learn**: Lessons' chapters and Courses' shelves as `grid-cards` of lesson/course cards from 64rem (the
+    column `max-w-2xl` goes from `LearnPage.tsx` and `CourseShelves.tsx`); Continue spans the first row.
+  - **Profile** (`ProfilePage.tsx`): from 64rem two panes: the hero and figures (left, 22rem), the record,
+    badges and Activity row (right). Activity: the month's calendar and the figures side by side.
+  - **Public library**: `grid-cards` of song cards from 64rem (its list becomes cards; B3 later moves it into
+    Songs' Explore).
+  - **Course**: header and facts left pane, its lessons right pane from 64rem.
+  - **Admin**: `max-w-3xl` goes; its tables take the width.
+  - **Chord finder, Metronome**: stay centred tools (a tool's face is not a list), unchanged.
+  - **Search results**: the palette is a list; `/search` is a link only. No change.
+  - **Songs**: unchanged here (B3, round 7: Explore in the bar, folders and loose songs one card, "Not in a
+    folder" heading).
+- **Not in this item:** the Player and editor (full-screen, own layout); Songs (B3).
+- **Done when:**
+  - `src/pages/practice/ui/PracticePage.test.tsx`: "lays its pages out as three bands of cards on a laptop"
+    (with `stubMatchMedia` at 1280: three `section`s each with a heading and a `grid-cards` list) and "keeps one
+    grouped list on a phone".
+  - A Playwright check in `e2e/places.spec.ts`: "no place leaves half its width empty at 1280" (for `/`,
+    `/practice`, `/profile`, `/songs/public`: the main content's width ≥ 80% of `main`'s).
+  - Screenshots of every place and its pages at 1280×800, 1440×900, 1920×1080: `shots/after/wide-<place>-
+    <width>.png` (Learn both views, a course, Songs, a song, Practice, each Practice page, Profile, Activity,
+    Settings, Admin), listed in the round's report.
+
+---
+
+## A: Part A items 2–19 and 38 (open or partial)
+
+### A2: One app bar, one height
+
+- **Source:** A2 (prompt 529–533), R1 (123–126: one row, compact, titles never cut, actions in it, nothing
+  under it); owner-way "Titles are never cut … wraps to two lines"; audit "claimed done but not".
+- **Today:** `shared/ui/ScreenHeader.tsx`: a `min-h-14` row (Back, `h1` with `line-clamp-2`, actions) and the
+  page's `tabs` as a second row (`NavTabs`, a scrolling `tab-strip`) on Learn (Lessons · Courses), Scales and
+  keys (Notes · Harmony · Key), Progressions (Progression · Library · Passing chords), Accompaniment (one tab per
+  source, up to 7), Admin (9). A two-line title makes the row taller (up to ~70px), so the height changes from
+  screen to screen.
+- **Will build:**
+  - **One height:** the bar's row is exactly 56px (`h-14`, was `min-h-14`) on every screen; nothing is drawn
+    under it (no second row). 38 screens use `ScreenHeader`; none passes a second row after this.
+  - **The title never cut, never taller:** one line at its size (place 24px `text-2xl`, other screens 20px
+    `text-xl`, Literata 600). If it does not fit one line, it sets in two lines at 16px/20px leading (40px,
+    inside the 56px row), still no ellipsis. Measured by new `useTitleLines(ref: RefObject<HTMLElement>): 1 | 2`
+    in `src/shared/ui/use-title-lines.ts` (a `ResizeObserver` comparing `scrollHeight` to one line at the large
+    size); `ScreenHeader` sets `data-lines="2"` and the two-line classes. A third line is impossible: at 16px
+    over the width left at 320 the longest title in the catalogue (a song's) fits two lines; past that it
+    breaks words (`wrap-break-word`), never clips.
+  - **Views in the bar row** (A2: "the screen's tabs or segmented switch"): new component
+    `src/shared/ui/BarViews.tsx`:
+    `function BarViews<V extends string>({ label, views, current, to }: { label: string; views: readonly {
+    value: V; label: string }[]; current: V; to: (view: V) => { to: string; search: Record<string, unknown> }
+    }): ReactElement`. Each view is a link with `replace` (R26) and `aria-current="page"` on the current one.
+    - 2–3 views: a **segmented control** (`Segmented`'s look, the one selected style R15), in the row between
+      the title and the actions. Learn: **Lessons · Courses**; Scales and keys: **Notes · Harmony · Key**;
+      Progressions: **Progression · Library · Passing chords**; Songs (B3, round 7): **My songs · Explore**.
+    - 4 or more: a **menu** (`Dropdown`, its face the current view's name with ⌃⌄, R23), same place:
+      Accompaniment's sources ("Bobrova ⌃⌄"), Admin's nine views ("Overview ⌃⌄").
+    - Phone (<40rem) where back + title + views + actions do not fit (measured as for the title): the views
+      keep their place and the title becomes visually hidden (`sr-only`, still the page's `h1`), as iOS bars
+      that carry a segmented control. Learn fits at 320 (title "Learn" + Lessons · Courses + Search), so it keeps
+      its title; Scales and keys and Progressions show the views alone on a phone held upright.
+  - `ScreenHeader` props: `tabs` is renamed `views` and is drawn in the row. `NavTabs`/`NavTab`
+    (`shared/ui/NavTabs.tsx`) and the `tab-strip` utility in `theme.css` are deleted; the five callers
+    (`LearnPage`, `ScalesPage` → `ScaleTabs`, `ProgressionsPage` → `ProgressionsTabs`, `AccompanimentPage` →
+    `AccompanimentTabs`, `AdminPage`) pass `BarViews`.
+  - The bar's slide-away on scroll (0a9069b4) and the hairline stay.
+  - DESIGN.md "Navigation and the screen's bar": "a page's tabs its second row" and "wrapping to a second line
+    rather than being cut" are replaced by the two rules above.
+- **Not in this item:** Songs' My songs · Explore (B3, round 7, uses `BarViews`); a large title collapsing on
+  scroll (A2 "may": with one fixed row there is nothing to collapse; not built).
+- **Done when:**
+  - `src/shared/ui/ScreenHeader.test.tsx` (new): "is one row, with its views in it" (the `header` has one child
+    row; `h-14`; the views' links inside it); "sets a long title in two smaller lines, never cut" (stubbed
+    `scrollHeight` → `data-lines="2"`, no `truncate`/`line-clamp-1` class); "hides the title, not the views,
+    where both do not fit on a phone" (`h1` has `sr-only`, still the heading).
+  - `src/shared/ui/BarViews.test.tsx`: "is a segmented control of links for three views, the current one
+    marked"; "is a menu for four views or more"; "switching replaces the history entry".
+  - `src/app/one-bar.test.ts` (source scan): "no module imports NavTabs" and "no ScreenHeader is given `tabs`".
+  - Screenshots: Learn, Scales and keys, Progressions, Accompaniment, a song with a long title (Fantaisie-
+    Impromptu's full name), Admin at 390×844, 844×390, 1280×800: the bar the same height in each.
+- **Owner's question:** on a phone, Scales and keys and Progressions show their three views in the bar with the
+  title hidden (the scale's name is on the page under it). The alternative is a views menu ("Notes ⌃⌄") beside
+  the visible title. Default: the segmented control, title hidden.
+
+### A3: One rule for actions
+
+- **Source:** A3 (prompt 534–537), R1 ("The screen's actions (Settings, Edit, Share) live in it"), R5, R16;
+  owner-way "A screen's own actions go in its bar … The floating + is only for creating"; audit contradiction 7.
+- **Today:** DESIGN.md "Placement": "the bar holds Back, the title and at most two round actions; More holds
+  the rest"; "Floating: … each its icon alone unless the learner asks for names". No rule for where Edit,
+  Settings and Done sit; each screen orders its own `actions` (`PieceView`: gear, pencil; `LessonLayout`:
+  Learned, gear, mode; `CoursePage`: gear, pencil).
+- **Will build:**
+  - **The rule** (DESIGN.md "Placement", replacing its bar and floating bullets; same on phone and laptop):
+
+    | What | Where | Look |
+    |---|---|---|
+    | Back | the bar's start | ‹ round (`BackButton`); none on a place |
+    | Title, views | after Back | A2 |
+    | Screen tools (Search on a place, MIDI in the Player) | the bar's end, first | round icon, tooltip |
+    | **Settings** | the bar's end, after the tools | gear, round (`SettingsGear`, S0) |
+    | **More** (⋯) | after Settings | round; commands only (R3); destructive last, red |
+    | **Edit ⇄ Done** | the bar's very end | pencil, round; in Edit the same place holds **Done**, a labelled honey button (`EditToggle`) |
+    | **Primary action** (Play, Practise, Start, New, Add to my library) | the floating capsule, centred at the foot | honey pill, icon + label (R5) |
+    | Second actions (at most two) | the same capsule, before the primary | round icons, tooltip |
+    | An act on the item (Learned, ♡) | on the item's card (a song's overview card); where a page has no card (a lesson), in the bar before Settings | toggle button (A11) |
+    | Destructive acts | never in the bar or the capsule: the item's Settings' last group, or last in ⋯ | red (R25) |
+    | Sheets | title at the top, the one act pinned at the foot ("Create"), close ✕ at the top's end | `NewSheet` |
+    | Dialogs | Cancel then the act, right-aligned (stacked on a phone, act on top) | `ConfirmDialog` |
+
+    Why (written beside it): iOS puts the screen's own commands at the bar's trailing end with Done last, and
+    the main act in the thumb's reach; Flat and Noji put Settings and Edit in the bar; the primary is never
+    an icon alone ("Add to my library" must be read).
+  - **Enforced by `ScreenHeader`**, not by each page: its `actions` prop is replaced by named slots,
+    `{ tools?: ReactNode; settings?: ReactNode; more?: ReactNode; edit?: ReactNode }`, drawn in that order. A
+    page cannot put the pencil before the gear. Item acts in the bar (a lesson's Learned) pass as `tools`.
+  - **Applied** to every `ScreenHeader` caller (38 files: `grep -rl "<ScreenHeader" src`): each `actions`
+    fragment split into the slots. Known moves: `LessonLayout` (Learned → tools, gear → settings, mode → edit);
+    `CoursePage`, `PieceView` (gear → settings, pencil → edit); the Player's bar (`PlayerLayout.tsx`, MIDI →
+    tools, gear → settings, View/Setup/More → more, the pencil → edit).
+  - **Primary labelled**: R5's capsule (`FloatingBarMain`). "Add to my library" on a public or shared song is
+    the main pill (`PublicSongPage.tsx`, `SharedSongPage.tsx`), "Practise" the second.
+- **Not in this item:** the toolbars' customisation (B10); the editor's palette (round 4).
+- **Done when:**
+  - `src/shared/ui/ScreenHeader.test.tsx`: "draws tools, Settings, More and Edit in that order, whatever order
+    they are given".
+  - `src/app/one-bar.test.ts`: "no ScreenHeader is given `actions`" (the prop no longer exists: `tsc` fails it
+    too).
+  - `pages/public-library/ui/PublicSongPage.test.tsx`: "Add to my library is a labelled button" (role button,
+    name "Add to my library", visible text).
+  - Screenshots: a song, a lesson, a course, the Player at 390×844 and 1280×800 with the same order at the bar's
+    end.
+
+### A4: Page, sheet or menu, and every place that breaks it
+
+- **Source:** A4 (prompt 538–545); audit: rule written, no audit rows.
+- **Today:** DESIGN.md "Placement" holds the rule ("a page for settings and anything with many fields; a sheet for
+  creating one thing or one focused choice; a menu for one-tap commands … a menu never holds a setting"). No
+  audit row lists the places that break it.
+- **Will build:**
+  - The rule stays as written, with one sentence added: "A popover is a sheet on a laptop: the same rule."
+  - Every sheet, popover and menu checked (34 files that open one, `grep -rl "<Sheet\b\|<Popover\b\|ActionMenu"
+    src`). Rows added to `.scratch/r29/audit.md` under A4, and the breaks fixed here:
+
+    | Where | Kind | Holds | Verdict | Fix |
+    |---|---|---|---|---|
+    | The Player's View (`widgets/score-view-menu/ui/ScoreViewMenu.tsx`, `pages/player/ui/PlayerViewMenu.tsx`) | popover | what is shown now, plus "Show this when opening a song" (a setting) | breaks: a setting in a popover of view choices | the switch moves to the Player's Settings (S9) |
+    | The editor's Sound (`pages/score-editor/ui/RecordingSettings.tsx`) | popover from the transport | two link rows to settings pages | breaks: a second way to the gear's pages (R5 "never the same action twice") | removed with its transport button; the editor's gear (S10) is the one way |
+    | The Player's and an exercise's Setup (`widgets/player-setup/ui/PlayerSetup.tsx`, `pages/player/ui/ExerciseSetup.tsx`) | sheet with pages | this music's choices (pattern, figure, tempo ladder, hands, swing): up to eight fields | borderline: many fields, but all "this play, now" | kept as a sheet; logged for B8 (round 11, the Player's practice flow) to decide |
+    | Song information (`pages/player/ui/SongInfo.tsx`) | sheet | facts, no fields | fits (Chordify's) | none |
+    | Filters (`pages/songs/ui/FilterSheet.tsx`) | sheet/popover | one focused choice (what is listed) | fits | none |
+    | Export…, Import, Move to…, New … (seven) | sheets | one act each | fit | none |
+    | Takes (`TakesSheet.tsx`) | sheet | a list of takes, each opening its page | fits | none |
+    | Shortcuts (`features/shortcuts-help`) | sheet | reference | fits | none |
+    | Tempo, Hands (`widgets/practice-player/ui/TempoButton.tsx`, `HandsButton.tsx`) | popovers | one focused choice | fit | none |
+    | Transpose (`widgets/transpose`) | popover | one focused choice | fits | round 4 rebuilds it (Decided 20) |
+    | Every ⋯ (`ActionMenu`) | menu | commands; checked items only for an item's own state (a draft's language, a section's kind) | fits | none |
+    | Publish in library (`features/publish/ui/PublishScreen.tsx`) | page | many fields | fits | none |
+    | MIDI (`features/connect-midi/ui/MidiButton.tsx`) | popover | the device's state and a link to Connect a piano | fits | none |
+
+  - Removing the editor's Sound: `RecordingSettings.tsx` deleted; its two call sites go (`pages/score-editor/ui/
+    EditorDock.tsx:47`, the dock's last button, and `RecordingStrip.tsx:34`, the recording strip's); `editor.ts`
+    keys `sound.*` that only it used go (en, ru). While a take records, the bar's gear stays reachable (the
+    strip does not cover the bar).
+- **Not in this item:** the Setup sheet's future (B8).
+- **Done when:** `audit.md` has the A4 rows above; `pages/score-editor/ui/ScoreEditorPage.test.tsx`: "the
+  transport has no Sound button" (no button named "Sound"); `PlayerViewMenu` test from S9.
+
+### A5: The right control for each choice (key pickers; Transpose excluded)
+
+- **Source:** A5 (prompt 546–678) without "Transpose" (Decided 20, prompt 409–411: no circle for Transpose; it is
+  round 4's); audit contradiction 3; owner-way "one key picker".
+- **Today:** the rule is in DESIGN.md "Choices" and ADR 0061; `PitchPicker`, `NotePicker`, `KeyPicker` (circle,
+  "Select: …"), `KeyCircle` (in place on the Key tab), `KeysChecklist`, `MenuPicker`, `PickerRow` exist
+  (`shared/ui/pickers`). Gaps: the score editor's key (`pages/score-editor/ui/KeyPicker.tsx`, used by the palette
+  `ScoreKeys.tsx`, the printed signature's `KeyPopover.tsx` and the score's Settings) and New song's key
+  (`pages/songs/ui/NewSongSheet.tsx:45`) use `KeySignaturePicker` (a grid of signs); the circle's wedges show a
+  count ("2♯"), not the signature; Start on is a `MenuPicker`; no list of every picker exists.
+- **Will build:**
+  - **The editor's key is the circle.** `pages/score-editor/ui/KeyPicker.tsx` keeps its signature `KeyPicker({
+    bar }: { bar?: number })` and its behaviour (a section after the first changes key from there; the switch
+    "Change the key for the whole song" stays), but draws `KeyCircle` with the shared `KeyPicker`'s "Select: E♭
+    major" button instead of `KeySignaturePicker`. Majors outside, relative minors inside; the song's mode decides
+    which ring is chosen. The palette's Key, the printed key signature's popover and the score's Settings › Music ›
+    Key all open it (one component). The "Switch to natural" button goes: C major / A minor is a wedge.
+  - **New song's key** (`NewSongSheet.tsx`): the same `KeyPicker` as a row "Key: C major ⌃⌄" in its Fine-tune step
+    (one key control in the app, A1).
+  - `shared/ui/pickers/KeySignaturePicker.tsx` is deleted (no user left); ADR 0114's key-picker paragraph is
+    amended (the circle, "per A5").
+  - **Wedges draw their signature.** `KeyCircle` (`shared/ui/pickers/KeyCircle.tsx`): each outer (major) wedge
+    shows its name over its signature drawn as accidental glyphs in a row (Noto Music, 9px at 320, 11px from
+    40rem: "♯♯♯" for A major, "♭♭" for B♭), not a count; the inner (minor) wedges show the name alone (they share
+    the major's signature, drawn once beside them). C / Am wedges show no sign. The split wedges (B / C♭, F♯ / G♭,
+    C♯ / D♭) draw each half's own signature. A screen reader's name stays "A major, 3 sharps".
+  - **Start on** (the Scales page's run and the exercise setup's scale run, `widgets/scale-explorer/ui/RunView.
+    tsx`, `pages/player/ui/ScalePracticeFields.tsx`): `PitchPicker` (unsplit, only the pitch matters, A5) with a
+    new optional prop `only?: readonly PitchClass[]`: the cells of the scale's notes alone, in octave order, the
+    others not drawn (R30). Signature `PitchPicker({ value, onChange, label, only }: { value: PitchClass;
+    onChange: (pitch: PitchClass) => void; label?: string; only?: readonly PitchClass[] })`.
+  - **Tempo is a stepper** where it is a number to set (DESIGN.md: "a number → a stepper"): Scales' `TempoSlider`
+    (`widgets/scale-explorer/ui/TempoSlider.tsx`) and the exercise setup's slider (`ScalePracticeFields.tsx:76`)
+    become `Stepper` "Tempo − 80 +" (♩ = 40–240, step 4, held to repeat, the value typed on tap). The Metronome
+    keeps ± with its slider (its face is the tempo). The Player's speed popover (`TempoButton.tsx`) is round 4's
+    (B8).
+  - **The list of every picker** goes into `.scratch/r29/audit.md` under A5 (and DESIGN.md "Choices" gets a
+    one-line table pointer):
+
+    | Choice | Where | Control | Verdict |
+    |---|---|---|---|
+    | Root (Chords) | `ChordBuilder.tsx` | `NotePicker` (split) | fits |
+    | Root (Scales) | `ScaleChoice.tsx` | `NotePicker` | fits |
+    | Root (Intervals) | `IntervalExplorer.tsx` | `PitchPicker` | fits |
+    | Melody note (Key tab) | `KeyHarmonise.tsx` | `PitchPicker` | fits |
+    | Start on | `RunView.tsx`, `ScalePracticeFields.tsx` | `MenuPicker` | → `PitchPicker only` (above) |
+    | Key (Progressions, Chord finder, walks, lesson examples) | `ProgressionExplorer.tsx`, `ChordFinderPage.tsx`, `ProgressionSetup.tsx`, `WalkSetup.tsx`, `ExampleFields.tsx` | `KeyPicker` | fits |
+    | Key (Key tab) | `CircleOfFifths.tsx` | `KeyCircle` in place | fits |
+    | Key (the editor, New song) | above | `KeySignaturePicker` | → `KeyPicker` (above) |
+    | Keys (Quiz, Exercises) | `KeysChecklist` | checklist sheet | fits |
+    | Quality, Voicing, Scale kind | `ChordBuilder.tsx`, `VoicingField.tsx`, `ScaleChoice.tsx` | `MenuPicker` | fits |
+    | Inversion | `InversionChoice` | segmented of stacks | fits |
+    | Tempo | Metronome; Scales; exercise setup; New song; score Settings | slider+±; slider; slider; `Stepper`; `Stepper` | Scales, exercise → `Stepper` |
+    | Time signature | `TimePicker.tsx` (wheels), New song's tiles | wheels / tiles | fits (Flat's) |
+    | Clef | `ClefPicker.tsx` | picture tiles | fits |
+    | Instruments | `widgets/instrument-list` | − n + per instrument | fits |
+    | Level (Learn) | `JourneyLibrary.tsx` `ChoiceChips` | chips | fits (a filter of the library) |
+    | Pattern's key (Accompaniment) | the pattern plays over a progression; its key is `ProgressionSetup`'s `KeyPicker` | `KeyPicker` | fits; no second key control on Accompaniment |
+
+- **Not in this item:** Transpose (round 4, Decided 20); the Key tab's content (round 2, A43); what each explorer
+  shows after a choice (round 2, A20–A22).
+- **Done when:**
+  - `src/shared/ui/pickers/pickers.test.tsx`: "the circle draws A major's three sharps in its wedge, not a
+    count" (the wedge's text holds "♯♯♯"); "PitchPicker with only shows those cells alone".
+  - `pages/score-editor/ui/ScoreEditorPage.test.tsx`: "the key opens the circle, and Select: E♭ major writes
+    three flats" (the draft's key becomes E♭ major).
+  - `pages/songs/ui/NewSongSheet` test (in `SongsPage.test.tsx`): "New song's key is chosen on the circle".
+  - `src/app/one-key-picker.test.ts` (source scan): "nothing imports KeySignaturePicker".
+  - `widgets/scale-explorer` test: "Tempo is a stepper" (role spinbutton or buttons "Slower"/"Faster" around
+    the value).
+  - Screenshots: the editor's key popover, New song's Fine-tune, Scales' Start on at 390×844 and 1280×800.
+- **Owner's question:** New song's key moves from the sign grid (Flat's new-score sheet has a sign grid) to the
+  circle, so the app has one key picker. Default: the circle.
+
