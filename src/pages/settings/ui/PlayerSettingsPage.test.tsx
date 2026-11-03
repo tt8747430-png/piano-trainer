@@ -1,4 +1,4 @@
-import { act, screen, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -75,5 +75,19 @@ describe('the Player as its settings say (B7, A27)', () => {
       sound.kind === 'click' ? [sound.voice] : [],
     )
     expect(voices.slice(0, 2)).toEqual(['kick', 'hat'])
+  })
+
+  it('shows the pedal: a lamp at the keys’ rail, lit while it is down, the Ped. mark it plays under (A27)', async () => {
+    const { settingsStore } = await renderApp('/play/bz5')
+    act(() => setPlayback(settingsStore, { pedal: 'automatic' }))
+    // The automatic pedal goes down with the first chord, where the cursor stands.
+    expect(await screen.findByRole('img', { name: 'Pedal down' })).toHaveTextContent('Ped.')
+    await waitFor(() =>
+      expect(document.querySelector('style[data-slot="pedal-marks"]')?.textContent).toContain(
+        '[id="ped-0"]',
+      ),
+    )
+    act(() => setPlayback(settingsStore, { pedal: 'off' }))
+    expect(screen.queryByRole('img', { name: /^Pedal/ })).toBeNull()
   })
 })

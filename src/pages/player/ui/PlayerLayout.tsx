@@ -16,6 +16,7 @@ import {
   CountInBeat,
   HandsButton,
   LoopButton,
+  PedalLamp,
   PlayerArea,
   PlayerScreen,
   PlayerClose,
@@ -146,6 +147,9 @@ export function PlayerLayout({
         fitInView
         marks={chordKeys?.marks ?? player.marks}
         wrong={player.wrong}
+        // Keys the pedal alone holds, ringed apart from a hand's (A27); the lamp at the rail's end.
+        outlined={chordKeys ? undefined : player.pedalKeys}
+        railEnd={player.pedal === 'none' ? undefined : <PedalLamp down={player.pedal === 'down'} />}
         onKeyPress={player.tapKey}
         // Space is Play here: the pedal is the rail's, or a MIDI keyboard's.
         spacePedal={false}
@@ -208,7 +212,8 @@ export function PlayerLayout({
             title={title}
             credits={credits}
             layout={layout}
-            performance={performance}
+            // The pedal as it plays (A27): its Ped. marks the ones heard, lit as they pass.
+            performance={player.performance}
             headings={headings}
             current={practice.state.beatGroup}
             clock={player.cursor === 'continuous' ? practice.clock : null}

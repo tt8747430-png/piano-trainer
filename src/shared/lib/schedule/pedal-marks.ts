@@ -33,3 +33,8 @@ export function pedalHeld(events: readonly PedalEvent[]): (tick: Tick) => Tick |
   const spans = pedalSpans(events)
   return (tick) => spans.find((span) => tick >= span.from && tick < span.to)?.to ?? null
 }
+
+/** The span the sustain pedal is down in at a tick (A27: the Player shows it), null where it is up. */
+export function pedalSpanAt(events: readonly PedalEvent[], tick: Tick): PedalSpan | null {
+  return pedalSpans(events).find((span) => tick >= span.from && tick < span.to) ?? null
+}

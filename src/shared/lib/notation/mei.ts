@@ -33,6 +33,9 @@ import {
 import { barStartOf, beamPlan } from './beams'
 import { ticksOf } from './values'
 
+/** A pedal mark's id in the engraving, by the tick its event stands at (A27). */
+export const pedalId = (tick: number): string => `ped-${tick}`
+
 /** What a Score is written as besides its music. */
 export interface MeiOptions {
   /** Its title, in the header (a page's). */
@@ -384,11 +387,11 @@ class Writer {
           `<harm staff="${top}" tstamp="${at(chord.tick)}">${escape(chord.symbol)}</harm>`,
         )
     // The pedal on the lowest staff (ADR 0097), each event where it stands: between notes, over a
-    // rest, after the last note.
+    // rest, after the last note; named by its tick, so the Player marks the one it plays under (A27).
     const lowest = this.number(this.staves.at(-1) ?? 'bass')
     for (const { tick, kind } of measure.pedal ?? [])
       controls.push(
-        `<pedal staff="${lowest}" tstamp="${at(tick)}" dir="${kind === 'change' ? 'bounce' : kind}"/>`,
+        `<pedal xml:id="${pedalId(tick)}" staff="${lowest}" tstamp="${at(tick)}" dir="${kind === 'change' ? 'bounce' : kind}"/>`,
       )
     if (measure.tempo !== undefined) {
       // The mark in its own unit (ADR 0114): ♪ = 180, a tempo of 90 in 4/4.

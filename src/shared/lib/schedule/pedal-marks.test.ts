@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { PedalEvent } from '@/shared/lib/music'
-import { pedalHeld, pedalSpans } from './pedal-marks'
+import { pedalHeld, pedalSpans, pedalSpanAt } from './pedal-marks'
 
 const at = (tick: number, kind: PedalEvent['kind']): PedalEvent => ({ tick, kind })
 
@@ -39,5 +39,19 @@ describe('pedalSpans', () => {
     expect(pedalSpans([at(24, 'down')])).toEqual([{ from: 24, to: Infinity }])
     expect(pedalSpans([at(24, 'change'), at(48, 'up')])).toEqual([{ from: 24, to: 48 }])
     expect(pedalSpans([])).toEqual([])
+  })
+})
+
+describe('pedalSpanAt (A27, Show it)', () => {
+  it('finds the span the pedal is down in at a tick, none where it is up', () => {
+    const line = [
+      { tick: 0, kind: 'down' as const },
+      { tick: 4, kind: 'change' as const },
+      { tick: 8, kind: 'up' as const },
+    ]
+    expect(pedalSpanAt(line, 0)).toEqual({ from: 0, to: 4 })
+    expect(pedalSpanAt(line, 5)).toEqual({ from: 4, to: 8 })
+    expect(pedalSpanAt(line, 8)).toBeNull()
+    expect(pedalSpanAt([], 2)).toBeNull()
   })
 })

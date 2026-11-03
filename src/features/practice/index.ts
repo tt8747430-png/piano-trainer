@@ -43,7 +43,7 @@ export { useBeat } from './use-beat'
 
 export { arrangePiece, ownChoice, simplifies } from './arrange-piece'
 export type { PracticeChoice } from './choice'
-export { diagramMarks, keysRange, playerRange, practiceMarks } from './marks'
+export { diagramMarks, keysRange, pedalKeys, playerRange, practiceMarks } from './marks'
 export { spellPitchClass } from './note-names'
 export { arrangeWalk, WALK, type WalkChoice } from './walk'
 export { arrangeChromatic } from './chromatic'

@@ -121,6 +121,7 @@ export const player: LocaleResources['player'] = {
   },
   changed: { lh: 'Левая рука изменена', rh: 'Правая рука изменена', both: 'Обе руки изменены' },
   playing: 'Как звучит',
+  pedalLamp: { mark: 'Ped.', down: 'Педаль нажата', up: 'Педаль отпущена' },
   settingsPage: {
     open: 'Настройки плеера',
     audio: 'Воспроизведение',

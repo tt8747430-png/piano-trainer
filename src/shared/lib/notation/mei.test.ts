@@ -174,17 +174,19 @@ describe('scoreToMei, a note’s marks and the options', () => {
         ),
       )
     const measures = pedalled().match(/<measure [^>]*>.*?<\/measure>/g) ?? []
-    expect(measures[0]).toContain('<pedal staff="2" tstamp="1" dir="down"/>')
-    expect(measures[0]).toContain('<pedal staff="2" tstamp="2.5" dir="bounce"/>')
-    expect(measures[1]).toContain('<pedal staff="2" tstamp="3" dir="up"/>')
-    expect(measures[1]).toContain('<pedal staff="2" tstamp="5" dir="down"/>')
+    expect(measures[0]).toContain('<pedal xml:id="ped-0" staff="2" tstamp="1" dir="down"/>')
+    expect(measures[0]).toContain(
+      `<pedal xml:id="ped-${1.5 * B}" staff="2" tstamp="2.5" dir="bounce"/>`,
+    )
+    expect(measures[1]).toContain(`<pedal xml:id="ped-${6 * B}" staff="2" tstamp="3" dir="up"/>`)
+    expect(measures[1]).toContain(`<pedal xml:id="ped-${8 * B}" staff="2" tstamp="5" dir="down"/>`)
     // Under a single staff over the piano, still the piano's lower staff; on a lead sheet, the lowest shown.
     const lead = pedalled({
       staves: [{ clef: 'treble' }],
       piano: false,
       notes: [{ ...n(72, note('C'), 'staff', 0, 8 * B), staff: 0 }],
     })
-    expect(lead).toContain('<pedal staff="1" tstamp="1" dir="down"/>')
+    expect(lead).toContain('<pedal xml:id="ped-0" staff="1" tstamp="1" dir="down"/>')
   })
 
   it('writes an articulation on its note, a hairpin to where it ends and an octave line over its notes', () => {

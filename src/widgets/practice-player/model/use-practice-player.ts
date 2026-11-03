@@ -13,6 +13,7 @@ import {
 import {
   hiddenStaves,
   loopParam,
+  pedalKeys,
   playerRange,
   practiceMarks,
   practisedHands,
@@ -30,6 +31,7 @@ import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import {
   audibleHands,
+  pedalSpanAt,
   volumeGain,
   withPedal,
   type Hands,
@@ -81,6 +83,10 @@ export interface PracticePlayer {
   readonly cursor: Cursor
   /** The music as played: its pedal as the settings say (A27). */
   readonly performance: Performance
+  /** The pedal at the cursor (A27, Show it): none where the music plays none, else down or up. */
+  readonly pedal: 'none' | 'down' | 'up'
+  /** The keys sounding only under the pedal at the cursor, drawn apart from a hand's (A27). */
+  readonly pedalKeys: ReadonlySet<Midi>
   /** The keys out: this visit's (ADR 0111), else the View's saved ones. */
   readonly keys: boolean
   /** The click on or off: this visit's where it has its own, else the saved one. */
@@ -208,6 +214,18 @@ export function usePracticePlayer(
     [waiting, press],
   )
   const bar = performance.beatGroups[state.beatGroup]?.bar ?? 0
+  // The pedal at the cursor, and the keys it alone holds (A27, Show it).
+  const heldByPedal = useMemo(
+    () => pedalKeys(performance, state.beatGroup),
+    [performance, state.beatGroup],
+  )
+  const groupTick = performance.beatGroups[state.beatGroup]?.tick ?? 0
+  const pedalNow =
+    performance.pedal.length === 0
+      ? 'none'
+      : pedalSpanAt(performance.pedal, groupTick)
+        ? 'down'
+        : 'up'
   // The staves out of sight: the Staves' Show, and the other hand's where it is hidden (A35).
   const other = otherHand.look === 'hide' ? MUTED[view.hands] : undefined
   const hidden = useMemo(() => {
@@ -236,6 +254,8 @@ export function usePracticePlayer(
     click,
     cursor: playback.cursor,
     performance,
+    pedal: pedalNow,
+    pedalKeys: heldByPedal,
     keys: view.keys ?? savedKeys,
     setClick: (on) =>
       view.click === undefined
