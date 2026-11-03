@@ -22,8 +22,8 @@ descriptions** (wrong lines in progress.md, specs, ADRs, DESIGN.md), quoted and 
 | Round 1: the app as a whole | [`plan/round-1.md`](plan/round-1.md) | **S0–S14, the Settings structure (D20):** each Practice page, the Player, the score editor and Songs get their own Settings page from their own gear, like a lesson's; the app's Settings keeps only app-wide pages; duplicates removed ("Play notes while editing" one home); the registry and its tests. Then R5 floating actions, R17/A9 confirmations, R18 one home, R28/A19 wide screens, A2 app bar, A3 actions, A4 page/sheet/menu, A5 key pickers (not Transpose), A6 words, A8 shapes, A11 Learned, A15–A17 proofs, A38 the pencil |
 | Round 2: Practice | [`plan/round-2.md`](plan/round-2.md) | **C1–C9, the contradictions:** added tones, rows that stay, walk names, Mode, the Key tab's picker, the interval songs, the Library as bar cells and Songs with four chords, Chordify's grooves (`grooveOf` on an 8th grid), the metronome's sound set (D16). Then A20–A25, A30 fingering, A31, A32, A33, A39 Metronome (volume, flash, tempo list), A41 Exercises and Quiz, A42, A43 |
 | Rounds 3–4: sound, Player, editor | [`plan/rounds-3-4.md`](plan/rounds-3-4.md) | A26 on-screen piano, A27 the sampled grand (Salamander, mono, ~9 MB, loaded on first use, credit in Help), **T: Transpose (D20):** why the Player's is broken (it keeps a fixed key, `?key=B`, so the editor's rewrite is undone and labelled wrongly) and the fix (one popover in both, the Player keeping an offset `transpose=`), A28 own song's page, A29 imports and exports (MIDI key changes, .mxl, PDF), A34/A40 the editor against Flat, A35 staves (Clef), A37 chord views |
-| Settings, redesigned (Decided 21) | [`plan/settings.md`](plan/settings.md) (being written) | Replaces round 1's S0–S14: what the app's Settings holds, each page's own Settings (Practice pages, Player, editor, Songs, a folder, a song), the Metronome as a tool, every duplicate and its one home, from research |
-| Practice, redesigned (Decided 21) | [`plan/practice-redesign.md`](plan/practice-redesign.md) (being written) | Replaces round 2 where Decided 21 differs: Chords (size, 7th, right hand, Play/Arpeggio, hands, the top), Scales and keys (tabs, root, octaves, settings by what they affect), Intervals' icons, Progressions (tabs, passing chords), tabs out of the bar, key pickers (no circle) and enharmonic names, one sheet everywhere, selection by the bar's beats, no overlapping cards |
+| Settings, redesigned (Decided 21) | [`plan/settings.md`](plan/settings.md) (ST0–ST20) | Replaces round 1's S0–S14: what the app's Settings holds, each page's own Settings (Practice pages, Player, editor, Songs, a folder, a song), the Metronome as a tool, every duplicate and its one home, from research |
+| Practice, redesigned (Decided 21) | [`plan/practice-redesign.md`](plan/practice-redesign.md) (P1–P16, CP1–CP6 the chord player, SND the sounds) | Replaces round 2 where Decided 21 differs: Chords (size, 7th, right hand, Play/Arpeggio, hands, the top), Scales and keys (tabs, root, octaves, settings by what they affect), Intervals' icons, Progressions (tabs, passing chords), tabs out of the bar, key pickers (no circle) and enharmonic names, one sheet everywhere, selection by the bar's beats, no overlapping cards |
 | Rounds 5–14: Part B | not written yet | B1 Profile, B2 copy, B3 Explore, B4 Edit in place, B5 Learner view, B6 publishing, B8 practice flow, B9–B11 customisation and Tools: planned after the owner has read rounds 1–4 |
 
 ## Order of building
@@ -56,4 +56,32 @@ the Practice pages redesigned (see the redesign part).
 Accompaniment); proper sound libraries for everything, the missing metronome sounds from Freesound CC0; Transpose
 as above; import tests from the public MusicXML suites; layout templates Normal and Jazz plus the learner's own.
 
-**Still open:** the questions the two redesign parts raise, added here when they're written.
+**Which part wins:** `settings.md` replaces round 1's S0–S14; `practice-redesign.md` replaces round 2 where they
+differ (its P13–P14 partly replaced by the chord player, CP). Round 1's other items and rounds 3–4 stand.
+
+**Still open** (default taken unless the owner says otherwise):
+
+Settings (`settings.md`):
+1. The on-screen piano's bar keeps only octave, key size, pedal and hide; note names, chord names, glissando,
+   computer keys and MIDI sound live on their Settings pages only? Default: yes.
+2. Songs page's Settings now, with one row ("A tap on a song opens: Song page · Player")? Default: yes.
+3. Tempo, Key and Time leave the score's Settings (they are edited on the score)? Default: yes.
+4. The View stays one menu, the same in the Player and the editor? Default: yes.
+5. "Sound and recording" goes from the app's Settings; the sampled piano's download sits in Storage and backup?
+   Default: yes.
+
+Practice (`practice-redesign.md`):
+6. A key with two names reads "D♭ / C♯ major" (default) or "D♭ major (C♯ major)"?
+7. Chords: one Type picker, size first then the chord symbols (default), or Size and Type as two menus?
+8. Scales and keys' views: Scale · Chords · Key (default) or Scale · Harmony · Key signature?
+9. Fingering shown as drawn hands over the keys (default) or finger numbers on the keys alone?
+10. "My progressions" synced to the account (default) or kept on this device?
+
+Chord player (`practice-redesign.md`, CP):
+11. Its name: Chord player (default) or Progressions?
+12. Default style: Pop 1 (default) or Hymn 1?
+13. Transpose and time signature on its Settings page (default, the key shown as a link), or the key picker kept on
+    the page?
+14. No CC0, public-domain or CC-BY bass found yet (Karoryfer's to be checked): without bass (default) or a
+    synthesised one meanwhile?
+15. Accompaniment's studies move to a Songs folder "Accompaniment studies" (default) or stay under the Chord player?
