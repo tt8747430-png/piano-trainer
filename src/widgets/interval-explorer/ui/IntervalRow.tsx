@@ -40,8 +40,8 @@ export function IntervalRow({
   return (
     <div
       className={cn(
-        // The drawing gives way before the name wraps (A22): it shrinks to 4rem on a phone.
-        'card relative grid h-full w-full grid-cols-[minmax(0,1fr)_auto_minmax(4rem,8rem)] items-center gap-3 px-4 py-2.5 transition-colors has-[>button:hover]:bg-muted',
+        // The drawing gives way before the name wraps (A22): it shrinks to 3.5rem on a phone.
+        'card relative grid h-full w-full grid-cols-[minmax(0,1fr)_auto_minmax(3.5rem,5rem)] items-center gap-2 px-3 sm:grid-cols-[minmax(0,1fr)_auto_minmax(5.5rem,8rem)] sm:gap-3 sm:px-4 py-2.5 transition-colors has-[>button:hover]:bg-muted',
         playing &&
           'border-primary bg-selected text-selected-foreground has-[>button:hover]:bg-selected',
       )}
@@ -54,7 +54,7 @@ export function IntervalRow({
           onShow(example.shown)
           onPlay(() => intervalSounds(example.low, example.high, way))
         }}
-        className="grid min-w-0 grid-cols-[1.25rem_2.25rem_minmax(0,1fr)] items-center gap-3 text-left after:absolute after:inset-0 after:rounded-[inherit] after:content-['']"
+        className="grid min-w-0 grid-cols-[1rem_2rem_minmax(0,1fr)] items-center gap-2 sm:grid-cols-[1.25rem_2.25rem_minmax(0,1fr)] sm:gap-3 text-left after:absolute after:inset-0 after:rounded-[inherit] after:content-['']"
       >
         {/* A row that plays says so, Stop while it sounds (A22). */}
         <span data-play-mark="" aria-hidden className="text-muted-foreground">
