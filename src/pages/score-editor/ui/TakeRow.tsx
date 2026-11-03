@@ -40,7 +40,7 @@ export function TakeRow({
               id={name}
               to="/edit/$pieceId/takes/$takeId"
               params={{ pieceId: take.pieceId, takeId: take.id }}
-              className="text-link underline-offset-4 transition-colors ease-out hover:underline focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              className="text-link underline-offset-4 transition-colors ease-out hover:underline "
             >
               {title}
             </Link>

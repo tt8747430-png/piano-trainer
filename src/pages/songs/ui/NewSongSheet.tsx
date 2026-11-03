@@ -376,7 +376,7 @@ export function NewSongSheet({
                           setTimeSymbol(each.symbol)
                         }}
                         className={cn(
-                          'grid min-h-14 place-items-center border-r border-border font-display text-lg leading-none font-semibold outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset',
+                          'grid min-h-14 place-items-center border-r border-border font-display text-lg leading-none font-semibold focus-visible:-outline-offset-3',
                           pressed && 'bg-chosen text-foreground',
                         )}
                       >
@@ -403,7 +403,7 @@ export function NewSongSheet({
                       setTimeSymbol(false)
                     }}
                     className={cn(
-                      'grid min-h-14 place-items-center text-muted-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset',
+                      'grid min-h-14 place-items-center text-muted-foreground focus-visible:-outline-offset-3',
                       ownTime && 'bg-chosen text-foreground',
                     )}
                   >

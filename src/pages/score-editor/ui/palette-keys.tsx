@@ -62,7 +62,7 @@ export function PaletteSection({
               type="button"
               aria-expanded={shown}
               onClick={() => toggle(category)}
-              className="flex min-h-12 w-full items-center text-left text-base leading-tight font-semibold outline-none focus-visible:underline"
+              className="flex min-h-12 w-full items-center text-left text-base leading-tight font-semibold"
             >
               {title}
             </button>
@@ -232,7 +232,7 @@ export function SignTile({
       disabled={disabled}
       {...props}
       className={cn(
-        'flex min-w-0 items-center transition-colors duration-150 ease-out outline-none focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring disabled:opacity-35 motion-reduce:transition-none',
+        'flex min-w-0 items-center transition-colors duration-150 ease-out focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring disabled:opacity-35 motion-reduce:transition-none',
         form === 'list'
           ? 'h-11 gap-2.5 rounded-control border border-hairline bg-card px-2 text-left text-sm leading-tight hover:bg-accent'
           : 'col-span-2 h-11 justify-center border-r border-b border-hairline bg-card px-1 text-foreground/80 hover:bg-accent hover:text-foreground focus-visible:z-10 landscape-phone:h-10',

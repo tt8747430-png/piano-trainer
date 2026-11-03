@@ -29,7 +29,7 @@ function Family({ title, children }: { title: string; children: ReactNode }) {
         type="button"
         aria-expanded={open}
         onClick={() => setOpen(!open)}
-        className="flex min-h-14 items-center gap-3 rounded-card px-4 text-start font-semibold outline-none focus-visible:ring-3 focus-visible:ring-ring"
+        className="flex min-h-14 items-center gap-3 rounded-card px-4 text-start font-semibold "
       >
         <span className="min-w-0 flex-1">{title}</span>
         <ChevronDown

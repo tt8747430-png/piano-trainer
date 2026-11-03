@@ -132,7 +132,7 @@ export function TakeRoll({
                 aria-label={t('roll.playFrom', { n: number })}
                 data-dimmed={isKept(bar) ? undefined : ''}
                 onClick={() => onPlayFrom(bar)}
-                className="flex size-full items-start px-1.5 pt-0.5 text-sm text-muted-foreground tabular-nums transition-colors ease-out outline-none hover:bg-foreground/5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
+                className="flex size-full items-start px-1.5 pt-0.5 text-sm text-muted-foreground tabular-nums transition-colors ease-out hover:bg-foreground/5 focus-visible:-outline-offset-3"
               >
                 {number}
               </button>

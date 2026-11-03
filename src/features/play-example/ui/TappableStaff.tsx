@@ -244,7 +244,7 @@ export function TappableStaff({
                   aria-label={t('playNotes', { notes: namesAt(music, column.tick) })}
                   aria-pressed={playback.playing === id}
                   onClick={() => play(id, column.tick, next ?? Number.POSITIVE_INFINITY)}
-                  className="absolute z-20 rounded-control transition-colors hover:bg-muted/60 focus-visible:outline-2 focus-visible:outline-ring"
+                  className="absolute z-20 rounded-control transition-colors hover:bg-muted/60 "
                   style={{
                     left: column.left,
                     width: column.width,
