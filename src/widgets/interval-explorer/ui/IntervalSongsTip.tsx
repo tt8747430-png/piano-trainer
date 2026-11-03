@@ -13,10 +13,10 @@ export function IntervalSongsTip({ name, songs }: { name: string; songs: Interva
     <InfoTip name={name}>
       <div className="flex flex-col gap-3">
         <SongList
-          label={songs.down ? t('intervals.way.up') : t('intervals.songs')}
+          label={songs.down ? t('intervals.songsUp') : t('intervals.songs')}
           titles={songs.up}
         />
-        {songs.down ? <SongList label={t('intervals.way.down')} titles={songs.down} /> : null}
+        {songs.down ? <SongList label={t('intervals.songsDown')} titles={songs.down} /> : null}
       </div>
     </InfoTip>
   )

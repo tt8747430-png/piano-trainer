@@ -199,7 +199,14 @@ export const practice = {
     simple: 'Within the octave',
     compound: 'Past the octave',
     // How a row plays its interval.
-    way: { label: 'Play', together: 'At once', up: 'Up', down: 'Down' },
+    // How a row plays its interval, as theory books name it (A22).
+    way: { together: 'Harmonic', up: 'Melodic, rising', down: 'Melodic, falling' },
+    playAll: 'Play all',
+    semitones_one: '{{count}} semitone',
+    semitones_other: '{{count}} semitones',
+    // The songs an interval opens, rising and falling.
+    songsUp: 'Up',
+    songsDown: 'Down',
     // The tritone by each of its spellings, a row each.
     tritone: {
       A4: { name: 'Augmented fourth', short: 'A4' },

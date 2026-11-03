@@ -185,7 +185,18 @@ export const practice: LocaleResources['practice'] = {
   intervals: {
     simple: 'В пределах октавы',
     compound: 'Шире октавы',
-    way: { label: 'Играть', together: 'Вместе', up: 'Вверх', down: 'Вниз' },
+    way: {
+      together: 'Гармонический',
+      up: 'Мелодический, восходящий',
+      down: 'Мелодический, нисходящий',
+    },
+    playAll: 'Сыграть все',
+    semitones_one: '{{count}} полутон',
+    semitones_few: '{{count}} полутона',
+    semitones_many: '{{count}} полутонов',
+    semitones_other: '{{count}} полутона',
+    songsUp: 'Вверх',
+    songsDown: 'Вниз',
     tritone: {
       A4: { name: 'Увеличенная кварта', short: 'ув4' },
       d5: { name: 'Уменьшённая квинта', short: 'ум5' },
