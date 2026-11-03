@@ -516,6 +516,18 @@ What stays on a Practice page and what goes to its Settings, decided once:
 > - **Bar:** Close · title · MIDI · gear · ⋯ · Edit. Tools row: View switch · Transpose · Simplify.
 > - Tests add: "the bar has no Setup"; "the View control has no options"; "every setting the Player has is on its
 >   Settings page" (walks `SETTING_HOMES` for home `player`).
+>
+> **Owner's correction, 2026-11-03 evening (wins over the block above):** Edit sits **beside the title**; **no ⋯
+> menu**; one gear, made the way Flat's menu is (`../owner/flat-menu.jpg`, `flat-advanced-settings.jpg`,
+> `flat-staves-sheet.jpg`, `flat-manage-instruments.jpg`). Proposed on the mockup page (question 4, redrawn):
+> - **Bar:** ✕ · title · ✎ Edit · (space) · MIDI · ⚙. The editor's bar the same with Done for ✎.
+> - **⚙ → the Player's Settings page:** group "This song" (Staves ›, Song information ›, Sections ›, Export… ›,
+>   Print ›), group "How the Player works" (View ›, Playback ›, Metronome ›, One hand ›), Help ›.
+> - **Staves** as Flat's sheet: All switch; each staff Solo (S), Show (eye), Volume; Only the chords.
+> - **Inner pages in Flat's "Advanced settings" style:** each setting a card with its choices all visible, a short
+>   example beside each; longer help behind ⓘ.
+> - Open for the owner: the view switch (Sheet · Grid · Diagrams · Lyrics) on the tools row (recommended) or inside
+>   the gear.
 
 - **Source:** Decided 20 (413–417), Decided 21 (425–433: "No settings scattered in the header across four menus";
   "No duplicate menus or settings anywhere: check the Player"), R9, R18 (190–193), B7 (1850–1856), B8 Display
