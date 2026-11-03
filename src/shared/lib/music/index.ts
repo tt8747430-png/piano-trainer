@@ -314,6 +314,7 @@ export {
   type SwingMark,
   type TremoloStrokes,
 } from './marks'
+export { pedalLine, type PedalEvent } from './pedal'
 export {
   BAR_REPEATS,
   BARLINES,

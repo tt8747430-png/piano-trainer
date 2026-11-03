@@ -9,6 +9,8 @@ import {
   type OctaveLine,
   type Ornament,
   type Pedal,
+  type PedalEvent,
+  pedalLine,
   type SwingMark,
   type TremoloStrokes,
 } from '@/shared/lib/music'
@@ -49,7 +51,8 @@ export function hasMark(marks: NoteMarks | undefined, mark: MarkChoice): boolean
     case 'expression':
       return marks?.expression === mark.expression
     case 'pedal':
-      return marks?.pedal === mark.pedal
+      // The pedal is the piece's own line (ADR 0097), not a note's mark: `hasPedal`.
+      return false
     case 'swing':
       return marks?.swing === mark.swing
     case 'twoNoteTremolo':
@@ -95,8 +98,6 @@ export function withMark(
       else if (next.expression === mark.expression) delete next.expression
       break
     case 'pedal':
-      if (on) next.pedal = mark.pedal
-      else if (next.pedal === mark.pedal) delete next.pedal
       break
     case 'swing':
       if (on) next.swing = mark.swing
@@ -140,6 +141,7 @@ export function markNotes(draft: Draft, layer: NoteLayer, span: Where, mark: Mar
   const notes = notesOf(draft, layer)
   const inSpan = notes.filter(isAt(span))
   if (inSpan.length === 0) return draft
+  if (mark.kind === 'pedal') return pedalOn(draft, inSpan, span, mark.pedal)
   const first = Math.min(...inSpan.map((n) => n.startTick))
   const last = Math.max(...inSpan.map((n) => n.startTick))
   // A span of notes: a note or a chord at the caret is marked as itself.
@@ -161,6 +163,38 @@ export function markNotes(draft: Draft, layer: NoteLayer, span: Where, mark: Mar
       return changed
     }),
   )
+}
+
+/** Whether the pedal's line has an event of this kind where the notes start (ADR 0097). */
+export function hasPedal(
+  draft: Pick<Draft, 'pedal'>,
+  notes: readonly Pick<DraftNote, 'startTick'>[],
+  pedal: Pedal,
+): boolean {
+  if (notes.length === 0) return false
+  const first = Math.min(...notes.map((n) => n.startTick))
+  return draft.pedal.some(({ tick, kind }) => tick === first && kind === pedal)
+}
+
+/**
+ * The pedal placed on the piece's line (ADR 0097): over a span of notes chosen, pressed at its first
+ * onset and let up where its last note ends; at the caret, its kind where the notes there start; each
+ * in place of an event already there, or taken off where it is there already.
+ */
+function pedalOn(draft: Draft, inSpan: readonly DraftNote[], span: Where, pedal: Pedal): Draft {
+  const first = Math.min(...inSpan.map((n) => n.startTick))
+  const spans = typeof span !== 'number' && 'from' in span
+  const placed: PedalEvent[] = [{ tick: first, kind: pedal }]
+  if (spans && pedal === 'down') {
+    const end = Math.max(...inSpan.map((n) => n.startTick + n.durationTicks))
+    if (end > first) placed.push({ tick: end, kind: 'up' })
+  }
+  const there = placed.every((event) =>
+    draft.pedal.some(({ tick, kind }) => tick === event.tick && kind === event.kind),
+  )
+  const ticks = new Set(placed.map(({ tick }) => tick))
+  const kept = draft.pedal.filter(({ tick }) => !ticks.has(tick))
+  return { ...draft, pedal: pedalLine(there ? kept : [...kept, ...placed]) }
 }
 
 /** What words a note's first onset in a span carries: a tempo mark, a Roman numeral, free text (ADR 0097). */

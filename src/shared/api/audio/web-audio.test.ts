@@ -150,6 +150,40 @@ describe('createWebAudioOutput', () => {
     expect(context.oscillators.map((o) => Math.round(o.frequency))).toEqual([440, 880, 1320])
   })
 
+  it('lets a scheduled note die away as a string does until its end damps it, never holding at a level', () => {
+    const { context, audio } = setUp()
+    audio.play([A4], 0)
+    const [envelope] = context.gains.filter((gain) => gain.ramps.length > 0)
+    // Up to its peak in 8 ms, then decaying from there, then damped at its end.
+    expect(envelope?.ramps).toEqual([{ value: 0.2, at: 0.058 }])
+    expect(envelope?.targets).toEqual([
+      { value: 0.0001, at: 0.058 },
+      { value: 0.0001, at: 1.05 },
+    ])
+  })
+
+  it('plays the pedal as nothing of its own: a note it holds lasts to the lift', () => {
+    const { context, audio } = setUp()
+    audio.play([{ kind: 'pedal', at: 0, down: true }], 0)
+    expect(context.oscillators).toHaveLength(0)
+    expect(context.gains).toHaveLength(0)
+  })
+
+  it('keeps one voice a key: a key struck again damps the voice still ringing on it', () => {
+    const { context, audio } = setUp()
+    audio.play(
+      [
+        { ...A4, duration: 3 },
+        { ...A4, at: 0.08 },
+      ],
+      0,
+    )
+    const [first, second] = context.gains.filter((gain) => gain.ramps.length > 0)
+    expect(first?.targets.at(-1)).toEqual({ value: 0.0001, at: 0.08 })
+    expect(second?.targets.at(-1)).toEqual({ value: 0.0001, at: 1.08 })
+    expect(context.oscillators.slice(0, 3).every((o) => o.stop === 0.33)).toBe(true)
+  })
+
   it('leaves a sound beyond the lookahead for later', () => {
     const { context, audio } = setUp()
     audio.play([A4], 1)
@@ -326,6 +360,7 @@ describe('through the piano', () => {
         noteOn: (key: number, velocity: number) => void sent.push(`on ${key} ${velocity}`),
         noteOff: (key: number) => void sent.push(`off ${key}`),
         clear: () => void sent.push('clear'),
+        sustain: (down: boolean) => void sent.push(`pedal ${down ? 'down' : 'up'}`),
       },
     }
   }
@@ -347,6 +382,15 @@ describe('through the piano', () => {
     audio.play([A4], 0, () => 0.25)
     // A quarter of 0.2 is struck at half the velocity: 52 of 104.
     expect(sent).toEqual(['on 69 52'])
+  })
+
+  it('sends the pedal to the piano as the pedal, and plays nothing of it in the browser', () => {
+    const { context, audio } = setUp()
+    const { output, sent } = pianoSpeaker()
+    audio.notesTo(output)
+    audio.play([{ kind: 'pedal', at: 0, down: true }, A4], 0)
+    expect(sent).toEqual(['pedal down', 'on 69 104'])
+    expect(context.oscillators).toHaveLength(0)
   })
 
   it('sounds the notes in the browser again once the piano is let go', () => {

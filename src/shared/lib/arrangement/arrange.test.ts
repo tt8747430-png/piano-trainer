@@ -711,6 +711,34 @@ describe('arrange', () => {
     expect(notesOf(played, 'staff').map((n) => n.startTick)).toEqual([4 * B, 12 * B])
   })
 
+  it('carries the chart’s pedal line in any key, going round with the repeats where they are played (ADR 0097)', () => {
+    const marked = chart([['C', 'F', 'G']])
+    const [line = []] = marked.sections[0]?.lines ?? []
+    const repeated: Chart = {
+      ...marked,
+      sections: [{ lines: [[line[0]!, { ...line[1]!, barline: 'repeat' }, line[2]!]] }],
+      pedal: [
+        { tick: 0, kind: 'down' },
+        { tick: 4 * B, kind: 'change' },
+        { tick: 7.5 * B, kind: 'up' },
+        { tick: 12 * B, kind: 'up' },
+      ],
+    }
+    const written = arrange(repeated, { tonic: note('D'), pattern: BLOCK })
+    expect(written.pedal).toEqual(repeated.pedal)
+    const played = arrange(repeated, { tonic: C, pattern: BLOCK, unfold: true })
+    expect(played.pedal.map(({ tick, kind }) => [tick / B, kind])).toEqual([
+      [0, 'down'],
+      [4, 'change'],
+      [7.5, 'up'],
+      [8, 'down'],
+      [12, 'change'],
+      [15.5, 'up'],
+      [20, 'up'],
+    ])
+    expect(arrange(marked, { tonic: C, pattern: BLOCK }).pedal).toEqual([])
+  })
+
   it('keeps each bar’s clef change, and the clefs as they stand where a repeat goes back', () => {
     const [line = []] = chart([['C', 'F', 'G']]).sections[0]?.lines ?? []
     const changed: Chart = {

@@ -236,6 +236,12 @@ describe('the music of a piece', () => {
     expect(musicOf(upper)).toEqual({ ...music, lyrics: ['one'], lyricsOn: 'rh' })
     expect(musicOf({ ...upper, lyricsOn: 0 })).toEqual({ ...music, lyrics: ['one'] })
     expect(sameMusic(musicOf(upper), { ...musicOf(upper), lyricsOn: undefined })).toBe(false)
+    // Its pedal line (ADR 0097), where it has one.
+    const pedalled = musicOf({ ...song, pedal: 'down@0 up@4' })
+    expect(pedalled).toEqual({ ...music, pedal: 'down@0 up@4' })
+    expect(musicOf({ ...song, pedal: '' })).toEqual(music)
+    expect(sameMusic(pedalled, music)).toBe(false)
+    expect(sameMusic(pedalled, { ...music, pedal: 'down@0 up@4' })).toBe(true)
   })
 
   it('tells a staff added, named, renamed or put in another clef apart (ADR 0097)', () => {

@@ -25,6 +25,8 @@ export interface PlayHandle {
 export interface NoteOutput {
   noteOn(midi: Midi, velocity: number, pageTime: number): void
   noteOff(midi: Midi, pageTime: number): void
+  /** The sustain pedal (control 64) pressed or let up (ADR 0034). */
+  sustain(down: boolean, pageTime: number): void
   /** Drops what is queued, where the output can. */
   clear(): void
 }

@@ -15,6 +15,7 @@ import {
   type NoteMarks,
   type Key,
   type Meter,
+  type PedalEvent,
   type Tick,
 } from '@/shared/lib/music'
 import { printedAccidentals } from './accidentals'
@@ -313,6 +314,19 @@ export function staffClefAt(music: TimedMusic, index: number, staff: StaffId): C
  * on a lead sheet, ADR 0114), voices, values, ties and accidentals. A pickup is written
  * under the meter's signature, a short first bar.
  */
+/** A measure's pedal events (ADR 0097): from its start to its end, the last's end its own too. */
+function pedalIn(
+  pedal: readonly PedalEvent[] | undefined,
+  start: Tick,
+  ticks: Tick,
+  last: boolean,
+): { pedal?: PedalEvent[] } {
+  const own = (pedal ?? []).filter(
+    ({ tick }) => tick >= start && (tick < start + ticks || (last && tick === start + ticks)),
+  )
+  return own.length > 0 ? { pedal: own } : {}
+}
+
 export function notate(music: TimedMusic): Score {
   const single = music.staves ?? []
   const written: readonly StaffId[] = [
@@ -369,6 +383,7 @@ export function notate(music: TimedMusic): Score {
             chord.startTick >= placed.startTick && chord.startTick < placed.startTick + ticks,
         )
         .map((chord) => ({ tick: chord.startTick, symbol: chord.symbol })),
+      ...pedalIn(music.pedal, placed.startTick, ticks, index === music.bars.length - 1),
     }
   })
   return {

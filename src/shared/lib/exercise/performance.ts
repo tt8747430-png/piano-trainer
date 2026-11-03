@@ -98,5 +98,6 @@ export function exercisePerformance(music: {
     chords,
     notes,
     beatGroups,
+    pedal: [],
   }
 }

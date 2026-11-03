@@ -176,6 +176,9 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   multirest, long rest.
 - **Pedal** («Педаль»): the sustain pedal; the **soft** and **sostenuto** are a MIDI keyboard's others. _Avoid:_
   damper.
+- **Pedal line** («Педаль» in a score; `pedal`, `PedalEvent`): a piece's sustain pedal as events at beats, pressed
+  (`down`), let up (`up`) or changed (`change`, an up and a down at once), apart from the notes (ADR 0097). _Avoid:_
+  pedal mark (on a note).
 - **Velocity** («Сила нажатия»): how hard a key is struck, 1–127. _Avoid:_ volume.
 
 ## Patterns

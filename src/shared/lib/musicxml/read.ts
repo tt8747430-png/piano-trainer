@@ -12,6 +12,7 @@ import {
   meterOf,
   numeralText,
   parseNumeral,
+  pedalLine,
   SWING_MARKS,
   SWING_TEXT,
   signatureKey,
@@ -33,6 +34,8 @@ import {
   type NoteMarks,
   type OctaveLine,
   type Ornament,
+  type Pedal,
+  type PedalEvent,
   type TremoloStrokes,
   type SpelledNote,
   type Syllable,
@@ -135,6 +138,11 @@ export interface ReadScore {
   readonly staves: readonly ReadStaff[]
   readonly bars: readonly ReadBar[]
   readonly notes: readonly ReadNote[]
+  /**
+   * The sustain pedal's line (ADR 0097): each pedal mark at its own place (its measure's position and
+   * its `<offset>`), a stop and a start at one place a change, a stop after the last note kept.
+   */
+  readonly pedal: readonly PedalEvent[]
   /** Each chord symbol from where it stands; null where none sounds from there on (N.C.). */
   readonly chords: readonly { readonly startTick: Tick; readonly chord: Chord | null }[]
   /** The app's own data, where the file is one the app wrote. */
@@ -333,6 +341,7 @@ export function readMusicXml(source: string): ReadScore {
   const parts: ReadPart[] = []
   const notes: Building[] = []
   const pending: Pending[] = []
+  const pedal: PedalEvent[] = []
   const chords = new Map<Tick, Chord | null>()
   const bars: { -readonly [K in keyof ReadBar]?: ReadBar[K] }[] = []
   let key: Key | undefined
@@ -499,6 +508,7 @@ export function readMusicXml(source: string): ReadScore {
             const staff = staffOf(numberAt(child, 'staff') ?? 1)
             readDirection(child, {
               mark: (marks) => pending.push({ staff, tick, marks }),
+              pedal: (kind) => pedal.push({ tick, kind }),
               octave: (line) => (line ? octave.set(staff, line) : octave.delete(staff)),
               bar: (marks) => Object.assign(bar, marks),
               rehearsal: (text) => {
@@ -659,6 +669,7 @@ export function readMusicXml(source: string): ReadScore {
       ticks,
     })),
     notes: read.sort((a, b) => a.startTick - b.startTick || a.staff - b.staff || a.midi - b.midi),
+    pedal: pedalLine(pedal),
     chords: [...chords]
       .sort(([a], [b]) => a - b)
       .map(([startTick, chord]) => ({ startTick, chord })),
@@ -729,6 +740,8 @@ function readBarline(
 
 interface DirectionReader {
   readonly mark: (marks: NoteMarks) => void
+  /** A pedal mark: an event where its direction stands, never a note's mark. */
+  readonly pedal: (kind: Pedal) => void
   readonly octave: (line: OctaveLine | undefined) => void
   readonly bar: (marks: BarMarks) => void
   readonly rehearsal: (text: string) => void
@@ -774,9 +787,9 @@ function readDirection(direction: XmlElement, read: DirectionReader) {
         }
         case 'pedal': {
           const kind = child.attrs.type
-          if (kind === 'start' || kind === 'resume') read.mark({ pedal: 'down' })
-          else if (kind === 'stop' || kind === 'discontinue') read.mark({ pedal: 'up' })
-          else if (kind === 'change') read.mark({ pedal: 'change' })
+          if (kind === 'start' || kind === 'resume') read.pedal('down')
+          else if (kind === 'stop' || kind === 'discontinue') read.pedal('up')
+          else if (kind === 'change') read.pedal('change')
           break
         }
         case 'words': {

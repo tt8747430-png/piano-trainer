@@ -11,6 +11,7 @@ function speaker() {
     noteOn: (key, velocity, at) => sent.push(`on ${key} ${velocity} @${at}`),
     noteOff: (key, at) => sent.push(`off ${key} @${at}`),
     clear: () => sent.push('clear'),
+    sustain: (down, at) => sent.push(`pedal ${down ? 'down' : 'up'} @${at}`),
   }
   return { output, sent }
 }
@@ -68,6 +69,28 @@ describe('createMidiSoundOutput', () => {
     sound.stop()
     expect(sent).toEqual(['clear', 'off 60 @1150', 'off 64 @1150', 'off 64 @1201'])
   })
+  it('sends the pedal as the pedal (control 64) at each pedal sound, a note’s off at its written end', () => {
+    const { output, sent } = speaker()
+    let now = 1000
+    const sound = createMidiSoundOutput(output, { pageTimeOf, pageNow: () => now })
+    sound.render({ kind: 'pedal', at: 0, down: true }, 0)
+    sound.render({ ...note(60, 2), held: 0.5 }, 0)
+    sound.render({ kind: 'pedal', at: 2, down: false }, 2)
+    now = 3500
+    vi.advanceTimersByTime(25)
+    expect(sent).toEqual(['pedal down @1000', 'on 60 90 @1000', 'pedal up @3000', 'off 60 @1500'])
+  })
+
+  it('lets the pedal up on Stop where it was sent down', () => {
+    const { output, sent } = speaker()
+    const now = 1000
+    const sound = createMidiSoundOutput(output, { pageTimeOf, pageNow: () => now })
+    sound.render({ kind: 'pedal', at: 0, down: true }, 0)
+    sent.length = 0
+    sound.stop()
+    expect(sent).toEqual(['clear', 'pedal up @1000'])
+  })
+
   it('lets go again on Stop of a key whose off is only queued, though it forgets keys that have ended', () => {
     const { output, sent } = speaker()
     let now = 1000

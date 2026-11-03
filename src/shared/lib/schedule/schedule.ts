@@ -10,7 +10,7 @@ import {
 } from './grid'
 import { joinedNotes } from './legato'
 import { glissandoTargets, loudness, markedSounds, rollOffsets, tremoloPartners } from './marks'
-import { pedalHeld } from './pedal-marks'
+import { pedalHeld, pedalSpans } from './pedal-marks'
 import { isSwung, swingTick, type SwingFeel } from './swing'
 import { tempoWarp } from './tempo-marks'
 
@@ -42,6 +42,11 @@ export interface NoteSound {
   readonly duration: number
   readonly velocity: number
   /**
+   * How long its key is held down, where the pedal holds its sound on past it (ADR 0097): `duration`
+   * is what is heard, this what a hand plays (a connected piano's note-off, its own pedal holding it).
+   */
+  readonly held?: number
+  /**
    * The part of a piece's music it is, its hand or a staff over the piano, which the Player's mix
    * turns up or down (ADR 0105); none for a sound of no piece's (a chord tapped, a run).
    */
@@ -61,7 +66,13 @@ export interface ClickSound {
   /** How loud, from 0 to 1, against its accent's level (a beat's square, a subdivision); full where none. */
   readonly gain?: number
 }
-export type Sound = NoteSound | ClickSound
+/** The sustain pedal pressed (`down`) or let up (ADR 0097): a change is a lift and a press at once. */
+export interface PedalSound {
+  readonly kind: 'pedal'
+  readonly at: number
+  readonly down: boolean
+}
+export type Sound = NoteSound | ClickSound | PedalSound
 
 interface ScheduleOptions {
   /** Beats per minute. */
@@ -178,7 +189,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   // A tempo mark counts against the tempo written at the music's head.
   const warp = tempoWarp(marked, performance.bars[0]?.tempo)
   const place = (tick: Tick) => warp(swung(tick))
-  const pedal = pedalHeld(marked)
+  const pedal = pedalHeld(performance.pedal)
   const counted = options.countIn ? countInBeats(performance, fromTick) : []
   const musicStart = secondsFor(place(fromTick) - place(counted[0]?.tick ?? fromTick), tempo)
   const at = (tick: Tick) => musicStart + secondsFor(place(tick) - place(fromTick), tempo)
@@ -207,13 +218,17 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
     const start = Math.max(fromTick, n.startTick)
     // Under the pedal a note sounds on until it is let up.
     const released = pedal(n.startTick) ?? 0
-    const end = Math.min(Math.max(n.startTick + n.durationTicks, released), toTick)
+    const written = Math.min(n.startTick + n.durationTicks, toTick)
+    const end = Math.min(Math.max(written, released), toTick)
     const full = at(end) - at(start)
+    const length = (seconds: number) =>
+      Math.max(SHORTEST_NOTE, seconds * (joined.has(i) ? JOINED : LEGATO))
     const sound = {
       kind: 'note' as const,
       midi: n.midi,
       at: at(start) + (rolls[i] ?? 0),
-      duration: Math.max(SHORTEST_NOTE, full * (joined.has(i) ? JOINED : LEGATO)),
+      duration: length(full),
+      ...(end > written ? { held: length(at(written) - at(start)) } : {}),
       velocity: n.velocity * (levels[i] ?? 1),
       part: n.hand,
     }
@@ -250,7 +265,12 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   )
 
   return {
-    sounds: [...countIn, ...played, ...metronome].sort((a, b) => a.at - b.at),
+    sounds: [
+      ...countIn,
+      ...oneVoiceAKey(played),
+      ...pedalSounds(performance, fromTick, toTick, at),
+      ...metronome,
+    ].sort((a, b) => a.at - b.at),
     cues,
     end: at(toTick),
     fromTick,
@@ -258,6 +278,55 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
     musicStart,
     counts: counted.map(({ tick }) => at(tick)),
   }
+}
+
+/**
+ * A piano has one string a key (ADR 0034): a key struck again ends the sound still ringing on it (a
+ * note the pedal holds on, say) where it is struck.
+ */
+function oneVoiceAKey(sounds: readonly Sound[]): Sound[] {
+  const next = new Map<NoteSound, number>()
+  const byKey = new Map<Midi, NoteSound[]>()
+  for (const sound of sounds)
+    if (sound.kind === 'note') byKey.set(sound.midi, [...(byKey.get(sound.midi) ?? []), sound])
+  for (const struck of byKey.values()) {
+    struck.sort((a, b) => a.at - b.at)
+    struck.forEach((sound, i) => {
+      const after = struck.slice(i + 1).find((later) => later.at > sound.at)
+      if (after && sound.at + sound.duration > after.at) next.set(sound, after.at)
+    })
+  }
+  return sounds.map((sound) => {
+    if (sound.kind !== 'note') return sound
+    const until = next.get(sound)
+    if (until === undefined) return sound
+    const duration = until - sound.at
+    const { held, ...rest } = sound
+    return { ...rest, duration, ...(held !== undefined && held < duration ? { held } : {}) }
+  })
+}
+
+/**
+ * The pedal through a pass (ADR 0097): pressed where it starts down, each event of its line (a
+ * change a lift and a press at once), and let up where the pass ends with it still down.
+ */
+function pedalSounds(
+  performance: Pick<Performance, 'pedal'>,
+  fromTick: Tick,
+  toTick: Tick,
+  at: (tick: Tick) => number,
+): PedalSound[] {
+  const sound = (tick: Tick, down: boolean): PedalSound => ({ kind: 'pedal', at: at(tick), down })
+  const spans = pedalSpans(performance.pedal)
+  const downAt = (tick: Tick) => spans.some((span) => tick >= span.from && tick < span.to)
+  const events = performance.pedal.filter(({ tick }) => tick > fromTick && tick < toTick)
+  return [
+    ...(downAt(fromTick) ? [sound(fromTick, true)] : []),
+    ...events.flatMap(({ tick, kind }) =>
+      kind === 'change' ? [sound(tick, false), sound(tick, true)] : [sound(tick, kind === 'down')],
+    ),
+    ...(toTick > fromTick && downAt(toTick - 1) ? [sound(toTick, false)] : []),
+  ]
 }
 
 /** One beat group's audible notes, to sound at once (Step mode, a tap on a bar). */

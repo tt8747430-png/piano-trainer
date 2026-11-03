@@ -44,16 +44,18 @@ const RICH: PieceMusic = {
     { name: 'Cello', clef: 'bass', notes: 'F2/4 C3/4' },
   ],
   lyrics: ['Hal- le- lu-_ jah', 'Sing ~ out'],
+  // Between notes, at a bar's head, over a change of time and after the last note (ADR 0097).
+  pedal: 'down@0 up@3.5 down@4 change@6 change@14.5 up@20 down@23 up@32',
   hands: {
     rh: [
       'F4^1/1[pp,(] G4/1 A4/1[)] C5/1[stacc,acc]',
       'C5+E5/2[arp,cresc] G5/1:3 A5/1:3 Bb5/1:3 C6/1[/hairpin,8va]',
       'F5/4[ferm,f,tr]',
-      'F5/2[gr:G5,mord] E5/1[dolce] D5/1[ped]',
-      'C5/4[pedup,ff]',
+      'F5/2[gr:G5,mord] E5/1[dolce] D5/1',
+      'C5/4[ff]',
       'D5/3[mf,lmord]',
       'C#5/2[turn,ten] E5/1[marc]',
-      'D5/1.5[staccatiss,pedch] E5/.5 F#5/1',
+      'D5/1.5[staccatiss] E5/.5 F#5/1',
       'D5/3[trem3,rit]',
     ].join(' | '),
     lh: [
@@ -73,6 +75,11 @@ const RICH: PieceMusic = {
 describe('a song’s MusicXML, exported then imported', () => {
   it('keeps every mark, barline, change, staff and word a song holds', () => {
     const xml = musicXmlOf(RICH, { ...NAMES, staffNames: ['Flute', 'Cello'] })
+    // The pedal as directions on the lowest staff, by an offset where it is between notes.
+    expect(xml).toContain('<pedal type="change" line="yes"/>')
+    expect(xml).toMatch(
+      /<pedal type="stop" line="yes"\/><\/direction-type><offset>\d+<\/offset><staff>2<\/staff>/,
+    )
     const back = songOfMusicXml(xml, 'x.musicxml')
     expect(back.leftOut).toEqual({})
     expect(back.song.music).toEqual(written(RICH))

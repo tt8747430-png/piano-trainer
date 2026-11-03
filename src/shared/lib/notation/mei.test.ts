@@ -146,18 +146,45 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(pair(1.5 * B, 1)).not.toContain('fTrem')
   })
 
-  it('writes a slur from its note to the one it ends on, a dynamic, the pedal and an expression', () => {
+  it('writes a slur from its note to the one it ends on, a dynamic and an expression', () => {
     const written = scoreToMei(
       plain([
-        c(0, { slurStart: true, dynamic: 'mf', pedal: 'down', expression: 'dolce' }),
-        c(B, { slurEnd: true, pedal: 'up' }),
+        c(0, { slurStart: true, dynamic: 'mf', expression: 'dolce' }),
+        c(B, { slurEnd: true }),
       ]),
     )
     expect(written).toContain('<slur staff="1" startid="#n-treble-0-0" endid="#n-treble-5040-0"/>')
     expect(written).toMatch(/<dynam staff="1" startid="#n-treble-0-0"[^>]*>mf<\/dynam>/)
-    expect(written).toContain('<pedal staff="1" startid="#n-treble-0-0" dir="down"/>')
-    expect(written).toContain('<pedal staff="1" startid="#n-treble-5040-0" dir="up"/>')
     expect(written).toMatch(/<rend fontstyle="italic">dolce<\/rend>/)
+  })
+
+  it('writes each pedal event where it stands on the lowest staff of its bar, a change a bounce, a lift after the last note in the last bar (ADR 0097)', () => {
+    const pedalled = (extra: Partial<TimedMusic> = {}) =>
+      scoreToMei(
+        notate(
+          music([n(72, note('C'), 'rh', 0, 8 * B), n(48, note('C'), 'lh', 0, 8 * B)], {
+            pedal: [
+              { tick: 0, kind: 'down' },
+              { tick: 1.5 * B, kind: 'change' },
+              { tick: 6 * B, kind: 'up' },
+              { tick: 8 * B, kind: 'down' },
+            ],
+            ...extra,
+          }),
+        ),
+      )
+    const measures = pedalled().match(/<measure [^>]*>.*?<\/measure>/g) ?? []
+    expect(measures[0]).toContain('<pedal staff="2" tstamp="1" dir="down"/>')
+    expect(measures[0]).toContain('<pedal staff="2" tstamp="2.5" dir="bounce"/>')
+    expect(measures[1]).toContain('<pedal staff="2" tstamp="3" dir="up"/>')
+    expect(measures[1]).toContain('<pedal staff="2" tstamp="5" dir="down"/>')
+    // Under a single staff over the piano, still the piano's lower staff; on a lead sheet, the lowest shown.
+    const lead = pedalled({
+      staves: [{ clef: 'treble' }],
+      piano: false,
+      notes: [{ ...n(72, note('C'), 'staff', 0, 8 * B), staff: 0 }],
+    })
+    expect(lead).toContain('<pedal staff="1" tstamp="1" dir="down"/>')
   })
 
   it('writes an articulation on its note, a hairpin to where it ends and an octave line over its notes', () => {

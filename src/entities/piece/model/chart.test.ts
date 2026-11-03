@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { chordSymbol } from '@/shared/lib/music'
+import { chordSymbol, TICKS_PER_BEAT } from '@/shared/lib/music'
+import { ContentError } from './content-error'
 import { testProgression, testSong } from '../testing/test-pieces'
 import { chartOf, hasChartPlan, patternsOfPiece, pieceFit, sectionCount, stavesOf } from './chart'
 import { lyricsStaff } from './types'
@@ -25,6 +26,22 @@ describe('chartOf', () => {
       chordSize: { default: 'triads', choosable: false },
     })
     expect(firstSymbol(fixed, 'ninths')).toBe('Dm')
+  })
+})
+
+describe('chartOf’s pedal (ADR 0097)', () => {
+  it('reads the piece’s pedal line into its chart, none where it has none', () => {
+    const B = TICKS_PER_BEAT
+    expect(chartOf(testSong(['C G'], { pedal: 'down@0 change@2 up@3.5' })).pedal).toEqual([
+      { tick: 0, kind: 'down' },
+      { tick: 2 * B, kind: 'change' },
+      { tick: 3.5 * B, kind: 'up' },
+    ])
+    expect(chartOf(testSong(['C G']))).not.toHaveProperty('pedal')
+  })
+
+  it('throws a ContentError for an event it cannot read', () => {
+    expect(() => chartOf(testSong(['C'], { pedal: 'down@0 lift@2' }))).toThrow(ContentError)
   })
 })
 

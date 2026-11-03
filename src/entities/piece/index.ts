@@ -37,6 +37,7 @@ export {
 } from './model/chart'
 export { keyText, musicOf, readMusic, sameMusic, type PieceMusic } from './model/music'
 export { HAND_IDS, type HandId } from './model/parse-hands'
+export { readPedalLine, writePedalLine } from './model/pedal-line'
 export {
   BARS_PER_LINE,
   HEADER_FIELDS,

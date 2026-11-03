@@ -23,6 +23,13 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   sounds from its press until its release, on while the sustain is down or the sostenuto caught it, two thirds as loud
   under the soft pedal. A hand (a tap, a typed key, a key that stands for a chord) plays through `useLiveVoice`, never
   through `play()`. `stop()` stops the scheduled music only. One loudness for a velocity (`velocityGain`).
+- **Scheduled notes sound as a piano's under the pedal.** Every scheduled note decays as a string does for as long
+  as it sounds, a hand's or the pedal's (`stringDecay`, the live voice's curve: 1.5 s at the top key to 6 s at the
+  bottom), and its damper falls at its end; none holds at a level. A key has one voice: struck again, the voice still
+  ringing on it is damped there (in the schedule, `oneVoiceAKey`, and in the adapter). The schedule holds a note struck
+  under the pedal to the lift and emits `pedal` sounds at each event of the piece's pedal line (ADR 0097); in the
+  browser they are the notes' lengths, and to a connected piano they go as the pedal, control change 64, each note's
+  off at its written end (`held`), so the instrument's own pedal holds it on. A Stop lets the pedal up.
 - **A gain asked as each sound renders.** `play` takes a gain, so a volume moved while music plays is heard from the
   next sound (the Player's mix, ADR 0105).
 - **The MIDI keyboard is set up once, on its own screen** (Settings › MIDI keyboard, `/settings/midi`;
@@ -75,4 +82,6 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   Free play went with the Chord finder (ADR 0052).
 - r13 — The MIDI keyboard gets its own screen: input and output switches, connected devices, Bluetooth pairing
   steps and a live MIDI log; Settings shows its state in its row (2026-10-28).
+- r29 — Scheduled notes decay as a string does and are damped at their end, one voice a key, the pedal sent to a
+  connected piano as control 64 at each pedal sound, notes off at their written ends (2026-11-03).
 - r29 — The sampled grand (Salamander, four layers, self-hosted, ≤ 80 MB decoded); scheduled notes decay as a piano's, one voice per key, the pedal sent to a connected piano as CC 64 (decided 2026-11-02, being built in round 29; spec `.scratch/r29/piano-sampler/spec.md`).

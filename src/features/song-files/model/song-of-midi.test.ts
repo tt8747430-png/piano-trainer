@@ -69,6 +69,28 @@ describe('songOfMidi', () => {
     expect(songOfMidi(bytes, 'one.mid').song.music.hands).toEqual({ rh: 'C4+E4/4', lh: 'G2/4' })
   })
 
+  it('reads the sustain pedal (control 64) as the song’s pedal line: a lift and a press together a change, a lift after the last note kept, at the music’s end at the latest', () => {
+    const piano = track('Piano', [
+      [60, 0, Q * 2],
+      [64, Q * 2, Q * 4],
+    ])
+    const pedal = (tick: number, value: number) =>
+      ({ tick, kind: 'control', channel: 0, controller: 64, value }) as const
+    const bytes = standardMidiFile([
+      {
+        events: [
+          ...piano.events,
+          pedal(0, 127),
+          pedal(Q * 2 - 1, 0),
+          pedal(Q * 2, 127),
+          pedal(Q * 5 + 5, 0),
+        ],
+        end: Q * 6,
+      },
+    ])
+    expect(songOfMidi(bytes, 'pedal.mid').song.music.pedal).toBe('down@0 change@2 up@4')
+  })
+
   it('finds a key from the notes where the file names none', () => {
     const minor = [57, 60, 64, 57, 62, 65, 56, 59, 64, 57].map((key) => ({ key, length: 1 }))
     expect(keyOfNotes(minor)).toEqual({ tonic: note('A'), minor: true })

@@ -80,10 +80,10 @@ describe('readMarks', () => {
     expect(readMarks('ppp,fff')).toBeNull()
   })
 
-  it('reads an expression written over the note, and the pedal pressed, let up or changed there', () => {
-    expect(readMarks('dolce,ped')).toEqual({ expression: 'dolce', pedal: 'down' })
-    expect(readMarks('rit,pedup')).toEqual({ expression: 'rit', pedal: 'up' })
-    expect(readMarks('atempo,pedch')).toEqual({ expression: 'a-tempo', pedal: 'change' })
+  it('reads an expression written over the note, and no pedal: the pedal is the piece’s own line (ADR 0097)', () => {
+    expect(readMarks('dolce')).toEqual({ expression: 'dolce' })
+    expect(readMarks('rit,ped')).toBeNull()
+    expect(readMarks('atempo,pedch')).toBeNull()
     expect(readMarks('dolce,legato')).toBeNull()
     expect(readMarks('ped,pedup')).toBeNull()
   })
@@ -121,8 +121,8 @@ describe('writeMarks', () => {
   })
 
   it('writes every kind in one order, which reads back as it was', () => {
-    const marks = readMarks('cresc,8va,gr:D5,),tr,acc,stacc,(,p,arp,ped,espress')
-    expect(marks && writeMarks(marks)).toBe('acc,stacc,tr,arp,(,),8va,p,cresc,espress,ped,gr:D5')
+    const marks = readMarks('cresc,8va,gr:D5,),tr,acc,stacc,(,p,arp,espress')
+    expect(marks && writeMarks(marks)).toBe('acc,stacc,tr,arp,(,),8va,p,cresc,espress,gr:D5')
     expect(readMarks(marks ? writeMarks(marks) : '')).toEqual(marks)
   })
 })

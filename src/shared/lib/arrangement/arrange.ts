@@ -13,6 +13,7 @@ import {
   groupTicks,
   isCompound,
   midi,
+  pedalLine,
   PIANO,
   pitchClass,
   pitchClassOf,
@@ -740,9 +741,16 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     }
   })
 
-  // The tempo and the pedal as every staff marks them, whichever the learner hears (ADR 0097).
+  // The tempo as every staff marks it, whichever the learner hears (ADR 0097).
   const timing = notes.flatMap(({ startTick, marks }) =>
-    marks?.expression !== undefined || marks?.pedal !== undefined ? [{ startTick, marks }] : [],
+    marks?.expression !== undefined ? [{ startTick, marks }] : [],
+  )
+  // The pedal's line, going round with the bars where the repeats are played.
+  const written = (chart.pedal ?? []).map(({ tick, kind }) => ({ startTick: tick, kind }))
+  const pedal = pedalLine(
+    (options.unfold ? unrolled(written, chart, layout.bars) : written).map(
+      ({ startTick, kind }) => ({ tick: startTick, kind }),
+    ),
   )
   return {
     key,
@@ -752,6 +760,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     totalTicks: layout.totalTicks,
     ...(staves.length > 0 ? { staves: (options.staves ?? []).map(({ clef }) => ({ clef })) } : {}),
     ...(timing.length > 0 ? { timing } : {}),
+    pedal,
     bars: layout.bars.map((bar, index) => {
       const own = sectionKeys[bar.section]
       const keyed = own ? { ...bar, key: own } : bar

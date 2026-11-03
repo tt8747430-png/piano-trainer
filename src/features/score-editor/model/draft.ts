@@ -11,6 +11,7 @@ import {
   writeBar,
   writeHand,
   writeLyrics,
+  writePedalLine,
   writeStaff,
   type ChartPiece,
   type HandId,
@@ -41,6 +42,7 @@ import {
   type Midi,
   type NoteLyrics,
   type NoteMarks,
+  type PedalEvent,
   type SpelledNote,
   type Tick,
 } from '@/shared/lib/music'
@@ -140,6 +142,8 @@ export interface Draft {
   readonly lyricsOn: LyricsStaff
   /** Each hand's notes, in every bar. */
   readonly hands: Readonly<Record<HandId, readonly DraftNote[]>>
+  /** The sustain pedal's line (ADR 0097): its events in order on the piece's timeline. */
+  readonly pedal: readonly PedalEvent[]
 }
 
 /** A hand's note as the Player plays it, on the piece's timeline, cut at `end` (its bar's). */
@@ -236,6 +240,7 @@ export function readDraft(music: PieceMusic): Draft {
     leadSheet: music.leadSheet === true && (music.staves?.length ?? 0) > 0,
     lyricsOn: lyricsStaff(music),
     hands: { rh: inOrder(hands.rh), lh: inOrder(hands.lh) },
+    pedal: [...(chart.pedal ?? [])],
   }
 }
 
@@ -315,6 +320,7 @@ export function writeDraft(draft: Draft): PieceMusic {
       rh: writeHand(handBars(draft.hands.rh, placed), ticks, clefs('rh')),
       lh: writeHand(handBars(draft.hands.lh, placed), ticks, clefs('lh')),
     },
+    ...(draft.pedal.length > 0 ? { pedal: writePedalLine(draft.pedal) } : {}),
   }
 }
 

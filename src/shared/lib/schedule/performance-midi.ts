@@ -115,7 +115,7 @@ function writtenTime(beats: number, meter: Meter) {
  * time signature wherever a bar's length or meter changes (a pickup, a short bar, a section's
  * meter); then a track for each part on a channel of its own, top down as the score prints them,
  * each note struck and let go as written, as loud as its dynamics and accents play it, and the
- * sustain pedal as its marks hold it on the hands' tracks. Notes written silent are written too: the
+ * sustain pedal as its line holds it (control 64 at each event) on the hands' tracks. Notes written silent are written too: the
  * file is the whole score, and a DAW mutes nothing.
  */
 export function performanceMidi(
@@ -125,7 +125,7 @@ export function performanceMidi(
   const tempo = checkedTempo(options.tempo)
   // A compound meter's beat, its click, is a dotted quarter.
   const click = isCompound(performance.meter) ? 1.5 : 1
-  // The tempo and the pedal as every part marks them, whichever the learner hears (ADR 0097).
+  // The tempo as every part marks it, whichever the learner hears (ADR 0097).
   const marked = performance.timing ?? performance.notes
   const steps = tempoSteps(marked, performance.bars[0]?.tempo)
   // The silence before bar 1, in the file's ticks at the music's first tempo.
@@ -190,7 +190,7 @@ export function performanceMidi(
     return [...struck.values()]
   }
   const pedal = (channel: number): TimedMidiEvent[] =>
-    pedalSpans(marked).flatMap(({ from, to }): TimedMidiEvent[] => [
+    pedalSpans(performance.pedal).flatMap(({ from, to }): TimedMidiEvent[] => [
       { tick: fileTick(from), kind: 'control', channel, controller: SUSTAIN, value: 127 },
       // A pedal never let up comes up where the music ends.
       {

@@ -6,10 +6,12 @@ import { parseLyrics, tuneLength, withHandLyrics, withStaffLyrics } from './lyri
 import { parseChart } from './parse-chart'
 import { parseProgression } from './parse-progression'
 import { parseStaff } from './parse-staff'
+import { readPedalLine } from './pedal-line'
 import { isDegreePiece, lyricsStaff, type ChartPiece, type Piece } from './types'
 
 /**
- * A piece's chart; one written in degrees at the chosen chord size when it lets the learner choose.
+ * A piece's chart, its pedal line with it (ADR 0097); one written in degrees at the chosen chord size
+ * when it lets the learner choose.
  * Lyrics on the upper staff (`lyricsStaff`) are sung on the right hand's notes (ADR 0097).
  */
 export function chartOf(piece: Piece, chordSize?: ChordSize): Chart {
@@ -17,7 +19,8 @@ export function chartOf(piece: Piece, chordSize?: ChordSize): Chart {
     const { choosable, default: fixed } = piece.chordSize
     return parseProgression(piece, choosable ? (chordSize ?? fixed) : fixed)
   }
-  const chart = parseChart(piece)
+  const pedal = readPedalLine(piece.pedal, piece.id)
+  const chart = { ...parseChart(piece), ...(pedal.length > 0 ? { pedal } : {}) }
   if (piece.lyrics === undefined || lyricsStaff(piece) !== 'rh') return chart
   return withHandLyrics(chart, parseLyrics(piece, tuneLength(chart, undefined)) ?? [])
 }

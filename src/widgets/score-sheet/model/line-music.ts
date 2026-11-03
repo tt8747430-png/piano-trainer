@@ -10,6 +10,7 @@ import {
   type Layer,
   type NoteLayer,
   type PlacedBar,
+  totalTicks,
 } from '@/features/score-editor'
 import { breakLine } from '@/shared/lib'
 import { barLabels, type BarLabel, type LabelledBar, type ScoreLayout } from '@/shared/ui/score'
@@ -22,6 +23,8 @@ import {
   chordSymbol,
   TICKS_PER_BEAT,
   timeSignature,
+  type PedalEvent,
+  type Tick,
   type TimeSignature,
 } from '@/shared/lib/music'
 import {
@@ -181,6 +184,18 @@ export function staffOfLayer(
  * 0097). A staff with nothing in a bar is left blank there, a row hidden is not written at all: no
  * piano on a lead sheet.
  */
+/**
+ * The pedal's events on a line (ADR 0097), from its start: those from its first bar to its end, the
+ * music's last line keeping a lift at its very end.
+ */
+function linePedal(draft: Draft, from: Tick, to: Tick): { pedal?: PedalEvent[] } {
+  const last = to >= totalTicks(draft)
+  const pedal = draft.pedal
+    .filter(({ tick }) => tick >= from && (tick < to || (last && tick === to)))
+    .map(({ tick, kind }) => ({ tick: tick - from, kind }))
+  return pedal.length > 0 ? { pedal } : {}
+}
+
 export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): TimedMusic {
   const from = line.start
   const to = endOf(line)
@@ -250,6 +265,7 @@ export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): Tim
     chords,
     ...(draft.staves.length > 0 ? { staves: draft.staves.map(({ clef }) => ({ clef })) } : {}),
     ...(piano ? {} : { piano: false }),
+    ...linePedal(draft, from, to),
     // A later line goes on from the bars before it: its first bar, short, is no pickup.
     ...(from > 0 ? { continued: true } : {}),
   }

@@ -239,6 +239,23 @@ describe('createPiecesStore', () => {
     expect(read.bz2).toEqual({ ...MUSIC, layout: { barsPerLine: 4 } })
   })
 
+  it('keeps a pedal line that reads, in order, and reads one that does not as none (ADR 0097)', () => {
+    const versions = {
+      bz1: { ...MUSIC, pedal: 'up@3.5 down@0 down@2 up@2' },
+      bz2: { ...MUSIC, pedal: 'down@0 lift@2' },
+      bz3: { ...MUSIC, pedal: '' },
+    }
+    const read = restored({ versions }).versions
+    expect(read.bz1).toEqual({ ...MUSIC, pedal: 'down@0 change@2 up@3.5' })
+    expect(read.bz2).toEqual(MUSIC)
+    expect(read.bz3).toEqual(MUSIC)
+  })
+
+  it('reads nothing of a save from before the pedal was a line of its own', () => {
+    const saved = { versions: { bz1: MUSIC }, songs: [SONG], nextSong: 2 }
+    expect(restored(saved, 8)).toEqual({ versions: {}, songs: [], nextSong: 1 })
+  })
+
   it('drops a single staff longer than its chart', () => {
     const versions = { bz1: { ...MUSIC, staves: [{ notes: 'B4/4' }, { notes: 'B4/16 B4/1' }] } }
     expect(restored({ versions }).versions).toEqual({})

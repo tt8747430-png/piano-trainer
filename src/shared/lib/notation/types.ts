@@ -10,6 +10,7 @@ import type {
   Midi,
   NoteLyrics,
   NoteMarks,
+  PedalEvent,
   SpelledNote,
   Tick,
   TimeSignature,
@@ -78,6 +79,8 @@ export interface TimedMusic {
   })[]
   readonly notes: readonly TimedNote[]
   readonly chords: readonly { readonly startTick: Tick; readonly symbol: string }[]
+  /** The sustain pedal's line (ADR 0097): its events in order. None by default. */
+  readonly pedal?: readonly PedalEvent[]
   /** The single staves over the grand staff, top down (ADR 0097): each one's clef. None by default. */
   readonly staves?: readonly { readonly clef: Clef }[]
   /** Whether the piano's grand staff is written: not on a lead sheet (ADR 0114). Written by default. */
@@ -190,6 +193,11 @@ export interface Measure extends BarMarks {
   /** One or two voices on each of the score's staves; none on a piano's staff it does not write. */
   readonly staves: StaffVoices
   readonly chords: readonly ChordMark[]
+  /**
+   * The pedal's events in it (ADR 0097), on the music's timeline: from its start to its end, the
+   * score's last measure keeping one at its very end (a lift after the last note).
+   */
+  readonly pedal?: readonly PedalEvent[]
   /**
    * How it is drawn where not as its notes (`drawnAs`, ADR 0087): in a bar repeat's sign, one bar's
    * or a two-bar pair's, or in a multi-bar rest begun at it (`rest`) or before it (`restOn`).

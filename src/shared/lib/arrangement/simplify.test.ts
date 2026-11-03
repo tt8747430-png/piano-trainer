@@ -68,6 +68,12 @@ describe('simplifyChart', () => {
     expect(symbols(simplifyChart(methods))).toEqual([['A A']])
   })
 
+  it('keeps the pedal line as written (ADR 0097)', () => {
+    const pedal = [{ tick: 0, kind: 'down' as const }]
+    const written = { ...chart(lines([bar(chord('Cmaj7', 4))])), pedal }
+    expect(simplifyChart(written).pedal).toEqual(pedal)
+  })
+
   it('keeps every chord’s length and method, each bar’s hands and barlines, each section’s key and meter', () => {
     const hands = { rh: [], lh: [] }
     const section: ChartSection = {
