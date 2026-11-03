@@ -74,6 +74,30 @@ rounds 2–5 were built: the prompt's order was not kept. From here the order is
 | B10 | Customisable bars, as memory-palaces does | 12 | open | | |
 | B11 | Tools, as a group of their own | 13 | open | | |
 
+## Where we are (2026-11-03, late evening)
+
+Design by mockups with the owner's feedback per screen (claude.ai pages, copies in `mockups/`; feedback in
+`owner/feedback-*.md`; research in `research/chords-scales.md`; answers in prompt Decided 22–23).
+
+Left, in order:
+1. **Owner:** feedback on the redrawn Chords and Scales page (`mockups/chords-and-scales.html`) and a last look at
+   the song, Player and editor page (`mockups/song-player-editor.html`).
+2. **Mockups still to draw:** 2.15 Lyrics (research first); polish 1.9 Changes, 3.8 Layout, 3.9 Note input; the
+   app's Settings pages (General, Storage and backup, On-screen piano with Computer keys, Connect a piano); Songs
+   and a folder's Settings; the other Practice pages (Intervals, Progressions, the Chord player CP1–CP6,
+   Metronome, Exercises and Quiz, Chord finder); New song.
+3. **Fold the approved mockups into the plan:** `plan/settings.md` (ST), `plan/practice-redesign.md` (P, CP),
+   `plan/rounds-3-4.md` (Transpose); ADR and glossary lines.
+4. **`writing-plans` implementation plans** per subsystem (`plan/<subsystem>.impl.md`), Settings first; the owner
+   reads each before code.
+5. **Build:** round 1 (Settings, confirmations, one selected style, …), round 2 (Practice redesign, Chordify's
+   grooves `grooveOf`, the metronome's sounds), rounds 3–4 (Transpose fix, the sampled grand, the editor against
+   Flat, imports/exports), then Part B (planned after).
+6. **Bugs known:** the pedal's doubled icons on the Fantaisie-Impromptu.
+7. **`main`:** two code commits are on this branch only (118a0f4f recorded metronome sounds, 884d7115 drum
+   grooves; the owner later chose Chordify's grooves, to replace them in round 2). They reach `main` with round 1's
+   full gate. Docs and mockups reach `main` with them.
+
 ## Owner's to-dos
 
 - Spoken metronome count (D16): left out. Owner chose free recordings; only an English CC0 set exists (OpenGameArt "numbers one million"), no Russian one. Owner may record or approve a TTS voice later.
