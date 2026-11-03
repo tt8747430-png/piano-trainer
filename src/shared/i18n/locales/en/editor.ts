@@ -653,7 +653,6 @@ export const editor = {
   },
   // An item made in the app, given up on its Settings page (round 28).
   remove: {
-    title: 'Remove',
     unpublish: 'Unpublish',
     unpublishTitle: 'Unpublish {{title}}?',
     unpublishBody:
@@ -664,6 +663,7 @@ export const editor = {
     deleteBody:
       'It is deleted for good, with its unpublished changes and every version kept of it.',
     deleted: 'Deleted',
+    footnote: 'Unpublishing takes it from learners; deleting it can’t be undone.',
   },
   original: {
     draft: 'Publishing',

@@ -16,6 +16,7 @@ import { COLLECTIONS, pieceById, PIECES_STORAGE_KEY, PIECES_VERSION } from '@/en
 import { arrangePiece, ownChoice } from '@/features/practice'
 import { createMemoryStorage } from '@/shared/lib'
 import { lessonKeys, sectionLessons } from '../model/section-lessons'
+import { expectLastAndAlone } from '@/shared/test/danger'
 
 const DAY = '2026-10-25T10:00:00.000Z'
 
@@ -330,7 +331,8 @@ describe('Piece: the learner’s own music', () => {
     await openSettings(user)
     expect(
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
-    ).toEqual(['Music', 'In your library', 'Share', 'Remove'])
+    ).toEqual(['Music', 'In your library', 'Share'])
+    expectLastAndAlone(screen.getByRole('button', { name: 'Delete' }))
     expect(screen.getByRole('link', { name: /^Publish in library/ })).toHaveAttribute(
       'href',
       '/songs/my-1/publish',
@@ -374,6 +376,7 @@ describe('Piece: the learner’s own music', () => {
     expect((await screen.findByText('Your version')).closest('dl')).not.toBeNull()
     expect(screen.getByText('96 BPM')).toBeInTheDocument()
     await openSettings(user)
+    expectLastAndAlone(await screen.findByRole('button', { name: 'Reset to the original' }))
     await user.click(await screen.findByRole('button', { name: 'Reset to the original' }))
     await user.click(await screen.findByRole('button', { name: 'Reset' }))
     expect(piecesStore.getState().versions).toEqual({})

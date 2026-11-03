@@ -589,7 +589,6 @@ export const editor: LocaleResources['editor'] = {
   },
   // An item made in the app, given up on its Settings page (round 28).
   remove: {
-    title: 'Удаление',
     unpublish: 'Снять с публикации',
     unpublishTitle: 'Снять «{{title}}» с публикации?',
     unpublishBody:
@@ -600,6 +599,7 @@ export const editor: LocaleResources['editor'] = {
     deleteBody:
       'Он удалится навсегда вместе с неопубликованными изменениями и всеми сохранёнными версиями.',
     deleted: 'Удалено',
+    footnote: 'Снятие с публикации убирает его у учеников; удаление нельзя отменить.',
   },
   original: {
     draft: 'Публикация',

@@ -131,6 +131,7 @@ function LessonSettings({
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const { account } = useAccount()
+  const navigate = useNavigate()
   const reading = useSettings(selectLessonReading)
   const title = localText(lesson.title, locale)
   const share = async () => {
@@ -163,19 +164,29 @@ function LessonSettings({
         {editsContent(account) ? (
           <EditorRows lesson={lesson} id={id} title={title} where={where} readFirst={readFirst} />
         ) : null}
-        <SettingsGroup flush title={t('settings.progress')}>
-          <ResetStepsRow
-            steps={[step]}
-            words={{
-              row: t('settings.reset'),
-              title: t('settings.resetLesson'),
-              body: t('settings.resetLessonBody'),
-              cancel: t('settings.cancel'),
-              confirm: t('settings.confirm'),
-              done: t('settings.resetDone'),
-            }}
+        <ResetStepsRow
+          steps={[step]}
+          words={{
+            row: t('settings.reset'),
+            title: t('settings.resetLesson'),
+            body: t('settings.resetLessonBody'),
+            cancel: t('settings.cancel'),
+            confirm: t('settings.confirm'),
+            done: t('settings.resetDone'),
+          }}
+        />
+        {editsContent(account) &&
+        where.kind === 'level' &&
+        !LESSONS.some((each) => each.id === lesson.id) ? (
+          // A level's lesson made in the app, not one the app ships with (a course's is its
+          // course's): Unpublish and Delete (round 28), last of all (R25).
+          <RemoveGroup
+            kind="lesson"
+            id={id}
+            title={title}
+            onDeleted={() => void navigate({ to: '/', search: { view: 'lessons' }, replace: true })}
           />
-        </SettingsGroup>
+        ) : null}
       </div>
     </div>
   )
@@ -214,7 +225,6 @@ function EditorRows({
   const { t } = useTranslation(['learn', 'settings'])
   const locale = useLocale()
   const draft = useLessonDraft(lesson, id)
-  const navigate = useNavigate()
   // What was chosen since it opened: the draft's own until then.
   const [chosen, setChosen] = useState<Lesson | null>(null)
   const written = chosen ?? (draft.load.state === 'ready' ? draft.load.value : null)
@@ -276,16 +286,6 @@ function EditorRows({
         />
       </SettingsGroup>
       <ChangesGroup draft={draft} title={title} unreadable={t('edit.unreadable')} />
-      {/* A level's lesson made in the app, not one the app ships with (a course's is its course's):
-          Unpublish and Delete (round 28). */}
-      {where.kind !== 'level' || LESSONS.some((each) => each.id === lesson.id) ? null : (
-        <RemoveGroup
-          kind="lesson"
-          id={id}
-          title={title}
-          onDeleted={() => void navigate({ to: '/', search: { view: 'lessons' }, replace: true })}
-        />
-      )}
     </>
   )
 }

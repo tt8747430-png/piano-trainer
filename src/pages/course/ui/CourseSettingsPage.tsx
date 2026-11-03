@@ -20,6 +20,7 @@ export function CourseSettingsPage() {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const { account } = useAccount()
+  const navigate = useNavigate()
   const { courseId } = useParams({ from: '/shell/courses/$courseId/settings' })
   const course = courseById(courseId)
   // The route finds no course that is not there.
@@ -44,19 +45,27 @@ export function CourseSettingsPage() {
           />
         </SettingsGroup>
         {editsContent(account) ? <EditorRows course={course} title={title} /> : null}
-        <SettingsGroup flush title={t('settings.progress')}>
-          <ResetStepsRow
-            steps={courseStepIds(course)}
-            words={{
-              row: t('settings.reset'),
-              title: t('settings.resetCourse'),
-              body: t('settings.resetCourseBody'),
-              cancel: t('settings.cancel'),
-              confirm: t('settings.confirm'),
-              done: t('settings.resetDone'),
-            }}
+        <ResetStepsRow
+          steps={courseStepIds(course)}
+          words={{
+            row: t('settings.reset'),
+            title: t('settings.resetCourse'),
+            body: t('settings.resetCourseBody'),
+            cancel: t('settings.cancel'),
+            confirm: t('settings.confirm'),
+            done: t('settings.resetDone'),
+          }}
+        />
+        {editsContent(account) && !COURSES.some((each) => each.id === course.id) ? (
+          // One made in the app, not one the app ships with: Unpublish and Delete (round 28), last
+          // of all (R25).
+          <RemoveGroup
+            kind="course"
+            id={course.id}
+            title={title}
+            onDeleted={() => void navigate({ to: '/', search: { view: 'courses' }, replace: true })}
           />
-        </SettingsGroup>
+        ) : null}
       </div>
     </div>
   )
@@ -66,7 +75,6 @@ export function CourseSettingsPage() {
 function EditorRows({ course, title }: { course: Course; title: string }) {
   const { t } = useTranslation('learn')
   const draft = useCourseDraft(course)
-  const navigate = useNavigate()
   const shelf =
     draft.load.state === 'ready' ? (draft.load.value.shelf ?? course.shelf) : course.shelf
   return (
@@ -81,15 +89,6 @@ function EditorRows({ course, title }: { course: Course; title: string }) {
         />
       </SettingsGroup>
       <ChangesGroup draft={draft} title={title} unreadable={t('edit.course.unreadable')} />
-      {/* One made in the app, not one the app ships with: Unpublish and Delete (round 28). */}
-      {COURSES.some((each) => each.id === course.id) ? null : (
-        <RemoveGroup
-          kind="course"
-          id={course.id}
-          title={title}
-          onDeleted={() => void navigate({ to: '/', search: { view: 'courses' }, replace: true })}
-        />
-      )}
     </>
   )
 }

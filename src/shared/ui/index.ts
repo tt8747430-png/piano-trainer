@@ -40,6 +40,7 @@ export {
 } from './FloatingActions'
 export { ActionMenu, type MenuAction } from './ActionMenu'
 export { ActionRow } from './ActionRow'
+export { DangerGroup, DangerRow } from './DangerGroup'
 export { MoreMenu } from './MoreMenu'
 export { FloatingBar, FloatingBarButton, FloatingBarPlay } from './FloatingBar'
 export { RankMark } from './RankMark'

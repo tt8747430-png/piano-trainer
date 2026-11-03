@@ -1,20 +1,21 @@
 import { Link } from '@tanstack/react-router'
-import { KeyRound, LogIn, LogOut, Mail, Trash2, UserRoundPlus } from 'lucide-react'
+import { KeyRound, LogIn, Mail, UserRoundPlus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
 import { useOnline, useUp } from '@/shared/lib'
 import { authProblem, useAccount, type AuthProblem } from '@/shared/lib/account'
-import { Avatar, FormField, RowButton, RowFace, RowLink, SettingsGroup as Group } from '@/shared/ui'
 import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/shared/ui/primitives/alert-dialog'
+  Avatar,
+  ConfirmDialog,
+  DangerGroup,
+  DangerRow,
+  FormField,
+  RowFace,
+  RowLink,
+  say,
+  SettingsGroup as Group,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { SettingsScreen } from '@/widgets/settings-screen'
 import { SyncGroup } from './SyncGroup'
@@ -22,9 +23,9 @@ import { SyncGroup } from './SyncGroup'
 /**
  * Settings › Account (ADR 0116, A15), as memory-palaces' edit profile reads: the learner's picture at
  * its top; Profile, their name, saved once changed, their email and Change password; Sync, its one
- * home (where it stands, Sync now, what syncs); Sign out,
- * a row asking first (on this device, always); and Delete account…, a red row asking for their email,
- * its 30 days' grace told in the asking. A guest is offered Sign in and Create an account.
+ * home (where it stands, Sync now, what syncs); then, each red and alone (R25), Sign out (on this
+ * device, asked first) and Delete account… last, the email typed to confirm, its 30 days' grace in
+ * its footnote. A guest is offered Sign in and Create an account.
  */
 export function AccountSettingsPage() {
   const { t } = useTranslation('settings')
@@ -58,12 +59,8 @@ export function AccountSettingsPage() {
             />
           </Group>
           <SyncGroup />
-          <Group flush>
-            <SignOut />
-          </Group>
-          <Group flush>
-            <DeleteAccount email={account.email} onScheduled={setScheduled} />
-          </Group>
+          <SignOut />
+          <DeleteAccount email={account.email} onScheduled={setScheduled} />
         </>
       ) : (
         <Guest scheduled={scheduled} />
@@ -163,44 +160,32 @@ function NameForm({ name: saved }: { name: string }) {
   )
 }
 
-/** Sign out, on this device: a row, asking first and saying what stays. */
+/** Sign out, on this device (R25): a red row in a group of its own, asking first, what stays said. */
 function SignOut() {
   const { t } = useTranslation('settings')
   const { auth } = useAccount()
   const back = useUp()
   const [open, setOpen] = useState(false)
   return (
-    <>
-      <RowButton
-        title={t('accountPage.signOut')}
-        icon={LogOut}
-        paint="sand"
-        onClick={() => setOpen(true)}
+    <DangerGroup footnote={t('accountPage.signOutInfo')}>
+      <DangerRow title={t('accountPage.signOut')} onClick={() => setOpen(true)} />
+      <ConfirmDialog
+        open={open}
+        onOpenChange={setOpen}
+        title={t('accountPage.signOutTitle')}
+        body={t('accountPage.signOutInfo')}
+        action={t('accountPage.signOut')}
+        cancel={t('accountPage.signOutCancel')}
+        onConfirm={() => void auth.signOut().then(back)}
       />
-      <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t('accountPage.signOutTitle')}</AlertDialogTitle>
-            <AlertDialogDescription>{t('accountPage.signOutInfo')}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t('accountPage.signOutCancel')}</AlertDialogCancel>
-            <Button
-              onClick={() => {
-                setOpen(false)
-                void auth.signOut().then(back)
-              }}
-            >
-              {t('accountPage.signOut')}
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
+    </DangerGroup>
   )
 }
 
-/** Delete account…: a red row; the learner types their email to confirm; the deletion is scheduled. */
+/**
+ * Delete account… (R25): the page's last group, a red row, its 30 days' grace in the footnote; the
+ * learner types their email to confirm (R17), and the deletion is scheduled.
+ */
 function DeleteAccount({
   email,
   onScheduled,
@@ -212,67 +197,29 @@ function DeleteAccount({
   const { auth } = useAccount()
   const online = useOnline()
   const [open, setOpen] = useState(false)
-  const [typed, setTyped] = useState('')
-  const [busy, setBusy] = useState(false)
-  const [problem, setProblem] = useState<AuthProblem | null>(null)
-  const matches = typed.trim().toLowerCase() === email.toLowerCase()
   const remove = async () => {
-    setBusy(true)
-    setProblem(null)
     const result = await auth.requestDeletion()
-    setBusy(false)
-    if (!result.ok) return setProblem(authProblem(result))
-    setOpen(false)
+    if (!result.ok) return say(t(`account:problem.${authProblem(result)}`))
     onScheduled(result.value.purgeAfter)
   }
   return (
-    <>
-      <RowButton
+    <DangerGroup footnote={t('accountPage.delete.footnote')}>
+      <DangerRow
         title={t('accountPage.delete.button')}
-        icon={Trash2}
-        paint="sand"
-        destructive
         disabled={!online}
         reason={t('account:problem.offline')}
         onClick={() => setOpen(true)}
       />
-      <AlertDialog
+      <ConfirmDialog
         open={open}
-        onOpenChange={(next) => {
-          setOpen(next)
-          setTyped('')
-          setProblem(null)
-        }}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t('accountPage.delete.title')}</AlertDialogTitle>
-            <AlertDialogDescription>{t('accountPage.delete.body')}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <FormField
-            label={t('accountPage.delete.field')}
-            type="email"
-            autoComplete="off"
-            value={typed}
-            onChange={(event) => setTyped(event.target.value)}
-          />
-          {problem === null ? null : (
-            <p role="alert" className="text-sm text-destructive">
-              {t(`account:problem.${problem}`)}
-            </p>
-          )}
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t('accountPage.delete.cancel')}</AlertDialogCancel>
-            <Button
-              variant="destructive"
-              disabled={!matches || busy || !online}
-              onClick={() => void remove()}
-            >
-              {t('accountPage.delete.confirm')}
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
+        onOpenChange={setOpen}
+        title={t('accountPage.delete.title')}
+        body={t('accountPage.delete.body')}
+        action={t('accountPage.delete.confirm')}
+        cancel={t('accountPage.delete.cancel')}
+        typed={email}
+        onConfirm={() => void remove()}
+      />
+    </DangerGroup>
   )
 }

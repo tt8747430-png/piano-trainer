@@ -17,7 +17,6 @@ export const settings = {
   // How a take is recorded in the score editor (ADR 0028), as its recording strip's settings say too.
   recording: 'Recording',
   progress: {
-    label: 'Progress',
     reset: 'Reset progress',
     title: 'Reset progress?',
     body: 'Learned steps, practised songs and quiz answers on this device will be cleared.',
@@ -120,11 +119,11 @@ export const settings = {
     delete: {
       button: 'Delete account…',
       title: 'Delete your account?',
-      body: 'Your account and everything synced to it are deleted in 30 days, and you’re signed out on every device now. Sign in before then to cancel. What is on this device stays. Type your email to confirm.',
-      field: 'Your email',
+      body: 'Your account and everything synced to it are deleted in 30 days, and you’re signed out on every device now. Sign in before then to cancel. What is on this device stays.',
       cancel: 'Keep my account',
       confirm: 'Delete',
       scheduled: 'Your account will be deleted on {{date}}. Sign in before then to keep it.',
+      footnote: 'Your account and synced data are deleted after 30 days.',
     },
   },
   // Signing in to an account that is to be deleted.

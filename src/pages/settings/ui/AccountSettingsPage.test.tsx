@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { createFakeAuth } from '@/shared/api/auth'
+import { expectLastAndAlone } from '@/shared/test/danger'
 
 const ANA = { email: 'ana@example.com', name: 'Ana', password: 'correct horse' }
 
@@ -61,6 +62,18 @@ describe('Settings › Account', () => {
     expect(screen.queryByRole('button', { name: 'Save' })).toBeNull()
   })
 
+  it('puts Sign out and Delete account last, each red and alone with its footnote (R25)', async () => {
+    await renderApp('/settings/account', { auth: await signedIn() })
+    const signOut = await screen.findByRole('button', { name: 'Sign out' })
+    const remove = screen.getByRole('button', { name: 'Delete account…' })
+    expectLastAndAlone(signOut)
+    expectLastAndAlone(remove)
+    expect(signOut.closest('section')).not.toBe(remove.closest('section'))
+    expect(remove.closest('section')).toHaveTextContent(
+      'Your account and synced data are deleted after 30 days.',
+    )
+  })
+
   it('signs out once asked, saying what stays, and goes back to Settings', async () => {
     const user = userEvent.setup()
     const auth = await signedIn()
@@ -82,7 +95,10 @@ describe('Settings › Account', () => {
     expect(dialog).toHaveTextContent('deleted in 30 days')
     const confirm = within(dialog).getByRole('button', { name: 'Delete' })
     expect(confirm).toBeDisabled()
-    await user.type(within(dialog).getByLabelText('Your email'), 'ANA@example.com')
+    await user.type(
+      within(dialog).getByLabelText('Type “ana@example.com” to confirm'),
+      'ana@example.com',
+    )
     await user.click(confirm)
     expect(
       await screen.findByText(

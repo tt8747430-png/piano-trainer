@@ -1,20 +1,9 @@
-import { EyeOff, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ContentKind } from '@/shared/api/content'
 import type { NetResult } from '@/shared/api/network'
 import { useContentEditing } from '@/shared/lib/content-editing'
-import { RowButton, say, SettingsGroup } from '@/shared/ui'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/shared/ui/primitives/alert-dialog'
+import { ConfirmDialog, DangerGroup, DangerRow, say } from '@/shared/ui'
 
 type Asked = 'unpublish' | 'delete' | null
 
@@ -41,7 +30,6 @@ export function RemoveGroup({
   const editing = useContentEditing()
   const [published, setPublished] = useState(false)
   const [asked, setAsked] = useState<Asked>(null)
-  const [busy, setBusy] = useState(false)
   useEffect(() => {
     let current = true
     void editing.published(kind, id).then((result) => {
@@ -52,9 +40,7 @@ export function RemoveGroup({
     }
   }, [editing, kind, id])
   const run = async (act: () => Promise<NetResult<void>>, done: string, then: () => void) => {
-    setBusy(true)
     const result = await act()
-    setBusy(false)
     setAsked(null)
     if (!result.ok)
       return say(
@@ -64,52 +50,30 @@ export function RemoveGroup({
     then()
   }
   return (
-    <SettingsGroup flush title={t('remove.title')}>
+    <DangerGroup footnote={t('remove.footnote')}>
       {published ? (
-        <RowButton
-          title={t('remove.unpublish')}
-          icon={EyeOff}
-          paint="sand"
-          onClick={() => setAsked('unpublish')}
-        />
+        <DangerRow title={t('remove.unpublish')} onClick={() => setAsked('unpublish')} />
       ) : null}
-      <RowButton
-        title={t('remove.delete')}
-        icon={Trash2}
-        paint="sand"
-        destructive
-        onClick={() => setAsked('delete')}
+      <DangerRow title={t('remove.delete')} onClick={() => setAsked('delete')} />
+      <ConfirmDialog
+        open={asked !== null}
+        onOpenChange={(open) => (open ? null : setAsked(null))}
+        title={t(asked === 'unpublish' ? 'remove.unpublishTitle' : 'remove.deleteTitle', { title })}
+        body={t(asked === 'unpublish' ? 'remove.unpublishBody' : 'remove.deleteBody')}
+        action={t(asked === 'unpublish' ? 'remove.unpublish' : 'remove.delete')}
+        cancel={t('original.cancel')}
+        // Deleting what learners have is typed first (R17).
+        typed={asked === 'delete' && published ? title : undefined}
+        onConfirm={() =>
+          void (asked === 'unpublish'
+            ? run(
+                () => editing.unpublish(kind, id),
+                t('remove.unpublished'),
+                () => setPublished(false),
+              )
+            : run(() => editing.remove(kind, id), t('remove.deleted'), onDeleted))
+        }
       />
-      <AlertDialog open={asked !== null} onOpenChange={(open) => (open ? null : setAsked(null))}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {t(asked === 'unpublish' ? 'remove.unpublishTitle' : 'remove.deleteTitle', { title })}
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              {t(asked === 'unpublish' ? 'remove.unpublishBody' : 'remove.deleteBody')}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t('original.cancel')}</AlertDialogCancel>
-            <AlertDialogAction
-              variant="destructive"
-              disabled={busy}
-              onClick={() =>
-                void (asked === 'unpublish'
-                  ? run(
-                      () => editing.unpublish(kind, id),
-                      t('remove.unpublished'),
-                      () => setPublished(false),
-                    )
-                  : run(() => editing.remove(kind, id), t('remove.deleted'), onDeleted))
-              }
-            >
-              {t(asked === 'unpublish' ? 'remove.unpublish' : 'remove.delete')}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </SettingsGroup>
+    </DangerGroup>
   )
 }

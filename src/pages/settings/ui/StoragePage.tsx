@@ -4,19 +4,7 @@ import { useProgressStoreApi } from '@/entities/progress'
 import { BackupFields } from '@/features/backup-data'
 import { KeepOnDeviceFields } from '@/features/keep-on-device'
 import { resetProgress } from '@/features/reset-progress'
-import { SettingsGroup as Group } from '@/shared/ui'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/shared/ui/primitives/alert-dialog'
-import { Button } from '@/shared/ui/primitives/button'
+import { ConfirmDialog, DangerGroup, DangerRow, SettingsGroup as Group } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
 /**
@@ -27,10 +15,6 @@ export function StoragePage() {
   const { t } = useTranslation('settings')
   const progress = useProgressStoreApi()
   const [confirming, setConfirming] = useState(false)
-  const reset = () => {
-    resetProgress(progress)
-    setConfirming(false)
-  }
   return (
     <SettingsScreen title={t('pages.storage')}>
       <Group title={t('storage.label')} info={t('storage.info')}>
@@ -39,25 +23,18 @@ export function StoragePage() {
       <Group title={t('backup.label')} info={t('backup.says')}>
         <BackupFields />
       </Group>
-      <Group title={t('progress.label')}>
-        <AlertDialog open={confirming} onOpenChange={setConfirming}>
-          <AlertDialogTrigger render={<Button variant="destructive" className="self-start" />}>
-            {t('progress.reset')}
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>{t('progress.title')}</AlertDialogTitle>
-              <AlertDialogDescription>{t('progress.body')}</AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>{t('progress.cancel')}</AlertDialogCancel>
-              <AlertDialogAction variant="destructive" onClick={reset}>
-                {t('progress.confirm')}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </Group>
+      <DangerGroup footnote={t('progress.body')}>
+        <DangerRow title={t('progress.reset')} onClick={() => setConfirming(true)} />
+        <ConfirmDialog
+          open={confirming}
+          onOpenChange={setConfirming}
+          title={t('progress.title')}
+          body={t('progress.body')}
+          action={t('progress.confirm')}
+          cancel={t('progress.cancel')}
+          onConfirm={() => resetProgress(progress)}
+        />
+      </DangerGroup>
     </SettingsScreen>
   )
 }

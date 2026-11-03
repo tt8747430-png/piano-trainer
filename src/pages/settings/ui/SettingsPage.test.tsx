@@ -5,6 +5,7 @@ import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { LAPTOP } from '@/shared/lib'
 import { stubServiceWorker } from '@/shared/test/pwa-register'
+import { expectLastAndAlone } from '@/shared/test/danger'
 
 /** A laptop's screen, as `matchMedia` answers it. */
 const onLaptop = () =>
@@ -100,7 +101,6 @@ describe('Settings', () => {
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
       'On this device',
       'Backup',
-      'Progress',
     ])
   })
 
@@ -237,6 +237,7 @@ describe('Settings', () => {
     const user = userEvent.setup()
     const { progressStore } = await renderApp('/settings/storage')
     act(() => progressStore.setState({ learned: { 'chords:tri': '2026-09-25T10:00:00Z' } }))
+    expectLastAndAlone(await screen.findByRole('button', { name: 'Reset progress' }))
     await user.click(await screen.findByRole('button', { name: 'Reset progress' }))
     await user.click(screen.getByRole('button', { name: 'Keep it' }))
     expect(progressStore.getState().learned['chords:tri']).toBeDefined()

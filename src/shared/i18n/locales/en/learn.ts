@@ -122,7 +122,6 @@ export const learn = {
     shareLink: 'Share link',
     shared: 'Link copied',
     shareFailed: 'The link could not be shared',
-    progress: 'Your progress',
     reset: 'Reset progress',
     resetLesson: 'Reset this lesson’s progress?',
     resetLessonBody: 'It is marked not learned and its sections unread. Nothing else changes.',
