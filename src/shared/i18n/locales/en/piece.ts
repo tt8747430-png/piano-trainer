@@ -49,7 +49,7 @@ export const piece = {
   progressions: 'Progressions',
   more: 'More',
   practise: 'Practise',
-  edit: 'Edit the score',
+  editScore: 'Edit score',
   writeChart: 'Write the chart',
   // A songbook entry whose chords are not written yet.
   noChart: {
@@ -129,8 +129,6 @@ export const piece = {
     overview: 'The song',
     title: 'Settings',
     open: 'Settings',
-    music: 'Music',
-    editScore: 'Edit the score',
     library: 'In your library',
     folder: 'Folder',
     home: 'Songs',

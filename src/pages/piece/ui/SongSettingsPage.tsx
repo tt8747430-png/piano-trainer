@@ -7,17 +7,12 @@ import {
   FolderInput,
   Globe,
   Link2,
-  PencilLine,
   RotateCcw,
   Trash2,
 } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  placeIn,
-  useFolderName,
-  useLibraryLayout,
-} from '@/entities/library'
+import { placeIn, useFolderName, useLibraryLayout } from '@/entities/library'
 import {
   hasEditableOriginal,
   isDegreePiece,
@@ -118,14 +113,6 @@ function SongSettings({ piece }: { piece: Piece }) {
       <ShareSaid said={shared.said} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <p className="px-1 font-display text-2xl font-semibold text-balance">{title}</p>
-        <SettingsGroup flush title={t('settings.music')}>
-          <RowLink
-            title={t('settings.editScore')}
-            icon={PencilLine}
-            paint="sky"
-            render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
-          />
-        </SettingsGroup>
         {inLibrary ? (
           <SettingsGroup flush title={t('settings.library')}>
             {archived ? null : (

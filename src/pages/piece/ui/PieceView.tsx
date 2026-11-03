@@ -63,21 +63,14 @@ export function PieceView({ piece }: { piece: Piece }) {
       <PieceHeader
         entry={piece}
         actions={
+          // The pencil edits what the page shows, in place (A38), for whoever may; else no pencil.
           ownId || original ? (
             <>
               {settings}
               <EditToggle editing={false} onEdit={() => setEditing(true)} onDone={done} />
             </>
           ) : (
-            <>
-              {/* Every piece is edited: one written in degrees as its chart in its key (ADR 0115). */}
-              <RoundLink
-                label={t('edit')}
-                icon={PencilLine}
-                render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
-              />
-              {settings}
-            </>
+            settings
           )
         }
       />
@@ -93,12 +86,21 @@ export function PieceView({ piece }: { piece: Piece }) {
           <Play data-icon="inline-start" aria-hidden className="fill-current" />
           {t('practise')}
         </ButtonLink>
-        {own && !inLibrary ? null : (
-          <div className="flex items-center gap-2">
-            {own ? null : <LearnedButton step={step} className="h-11 flex-1" />}
-            {inLibrary ? <FavouriteButton piece={piece.id} /> : null}
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          {/* The score is edited by its own labelled act, for everyone (A38): a learner's edit of
+              a built-in song is their version, an editor's the song everyone sees. Every piece is
+              edited: one written in degrees as its chart in its key (ADR 0115). */}
+          <ButtonLink
+            variant="outline"
+            className="h-11 flex-1"
+            render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
+          >
+            <PencilLine data-icon="inline-start" aria-hidden />
+            {t('editScore')}
+          </ButtonLink>
+          {own ? null : <LearnedButton step={step} className="h-11 flex-1" />}
+          {inLibrary ? <FavouriteButton piece={piece.id} /> : null}
+        </div>
       </section>
       <PieceAbout entry={piece} />
       <PieceChords performance={performance}>

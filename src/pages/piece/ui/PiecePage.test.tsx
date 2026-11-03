@@ -196,7 +196,7 @@ describe('Piece', () => {
     await openSettings(userEvent.setup())
     expect(
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
-    ).toEqual(['Music', 'In your library', 'Share'])
+    ).toEqual(['In your library', 'Share'])
     // Favourite is an act on the song (its ♡, its menus), never a switch here (R19).
     expect(screen.queryByRole('switch', { name: 'Favourite' })).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: /^Folder/ })).toHaveTextContent('«Боже, спасибо»')
@@ -222,7 +222,7 @@ describe('Piece', () => {
     expect(`${link.pathname}${link.search}`).toBe('/play/bz5?key=A&simple=true')
   })
 
-  it('keeps Edit and Settings in its bar, Practise, Learned and ♡ on its overview card (round 26)', async () => {
+  it('keeps Settings in its bar; Practise, Edit score, Learned and ♡ on its overview card (A38)', async () => {
     await renderApp('/songs/bz5')
     const card = await screen.findByRole('region', { name: 'The song' })
     expect(within(card).getByRole('link', { name: 'Practise' })).toHaveAttribute(
@@ -231,11 +231,14 @@ describe('Piece', () => {
     )
     for (const name of ['Learned', 'Add to favourites'])
       expect(within(card).getByRole('button', { name })).toBeInTheDocument()
-    const bar = document.querySelector('[data-slot="screen-bar"]') as HTMLElement
-    expect(within(bar).getByRole('link', { name: 'Edit the score' })).toHaveAttribute(
+    expect(within(card).getByRole('link', { name: 'Edit score' })).toHaveAttribute(
       'href',
       '/edit/bz5',
     )
+    // A learner may not edit this page: no pencil, never another act behind it (A38).
+    const bar = document.querySelector('[data-slot="screen-bar"]') as HTMLElement
+    expect(within(bar).queryByRole('button', { name: 'Edit' })).toBeNull()
+    expect(within(bar).queryByRole('link', { name: 'Edit score' })).toBeNull()
     expect(within(bar).getByRole('link', { name: 'Settings' })).toHaveAttribute(
       'href',
       '/songs/bz5/settings',
@@ -331,7 +334,7 @@ describe('Piece: the learner’s own music', () => {
     await openSettings(user)
     expect(
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
-    ).toEqual(['Music', 'In your library', 'Share', 'Remove'])
+    ).toEqual(['In your library', 'Share', 'Remove'])
     expect(screen.getByRole('link', { name: /^Publish in library/ })).toHaveAttribute(
       'href',
       '/songs/my-1/publish',
@@ -361,7 +364,7 @@ describe('Piece: the learner’s own music', () => {
 
   it('edits a song in the score editor', async () => {
     await renderApp('/songs/amazing')
-    expect(await screen.findByRole('link', { name: 'Edit the score' })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: 'Edit score' })).toHaveAttribute(
       'href',
       '/edit/amazing',
     )

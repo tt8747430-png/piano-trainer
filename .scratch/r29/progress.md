@@ -49,7 +49,7 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A35 | The Player: play staves, not "melody" and patterns | 4 | open | | |
 | A36 | Focus and keyboard walking | 1 | open | | |
 | A37 | The chord views (Diagrams, Grid, Chords over lyrics) as Chordify does them | 4 | open | | |
-| A38 | One meaning for the pencil, for everyone | 1 | open | | |
+| A38 | One meaning for the pencil, for everyone | 1 | in progress | | song page done (audit); editing in the chord views (Grid, Chords over lyrics, Diagrams) goes with A37 in round 4 |
 | A39 | The Metronome, against the metronome apps players use | 2 | open | | |
 | A40 | The score editor's panels, against Flat's | 4 | open | | |
 | A41 | Exercises and the Quiz, inside | 2 | open | | |

@@ -50,7 +50,7 @@ export const piece: LocaleResources['piece'] = {
   progressions: 'Последовательности',
   more: 'Ещё',
   practise: 'Играть',
-  edit: 'Редактировать ноты',
+  editScore: 'Редактировать ноты',
   writeChart: 'Записать аккорды',
   noChart: {
     title: 'Аккордов пока нет',
@@ -127,8 +127,6 @@ export const piece: LocaleResources['piece'] = {
     overview: 'Песня',
     title: 'Настройки',
     open: 'Настройки',
-    music: 'Музыка',
-    editScore: 'Править ноты',
     library: 'В вашей библиотеке',
     folder: 'Папка',
     home: 'Песни',

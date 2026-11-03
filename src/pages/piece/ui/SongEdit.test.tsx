@@ -67,9 +67,9 @@ describe('a song’s page in Edit (round 28)', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Evening' })).toBeInTheDocument()
   })
 
-  it('keeps a learner’s pencil on one of the app’s songs the way to their version of its score', async () => {
+  it('gives a learner Edit score on one of the app’s songs, their version of its score', async () => {
     await renderApp(`/songs/${SONG.id}`, { auth: await signedInAs('learner') })
-    expect(await screen.findByRole('link', { name: 'Edit the score' })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: 'Edit score' })).toHaveAttribute(
       'href',
       `/edit/${SONG.id}`,
     )
