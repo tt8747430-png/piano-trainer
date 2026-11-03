@@ -70,7 +70,7 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 
 ## Owner's to-dos
 
-- Record the spoken metronome count, one to eight, in English and Russian (D16).
+- Spoken metronome count (D16): left out. Owner chose free recordings; only an English CC0 set exists (OpenGameArt "numbers one million"), no Russian one. Owner may record or approve a TTS voice later.
 - The Metronome's recorded sounds (D16): Freesound answers 403 from the cloud container, so no CC0 one-shots could be fetched. Either drop the CC0 files (woodblock, clave, rimshot, cowbell, click, kick, snare, closed and open hat, ride; an accent and a normal stroke each) into `public/samples/metronome/` with their sources, or let the environment reach freesound.org. Until then the synthesised voices play.
 - Add the Fantaisie-Impromptu's MusicXML to `src/shared/lib/musicxml/fixtures/` (or say where it is) so its pedalling can be checked against the score (A27).
 - Reseed the built-in content (`node scripts/export-content.mjs` then `scripts/seed-content.mjs` with an editor's `SEED_EMAIL`/`SEED_PASSWORD`): two lessons' wording changed with A6 (Approach chords, Root movement).
