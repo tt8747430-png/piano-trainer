@@ -38,12 +38,7 @@ describe('the keyboard’s rail', () => {
     for (const name of ['Smaller keys', 'Larger keys', 'Pedal']) {
       expect(screen.getByRole('button', { name })).toBeInTheDocument()
     }
-    for (const name of [
-      /^Note names/,
-      'Chord names',
-      'Play from the computer keys',
-      'Glissando',
-    ]) {
+    for (const name of [/^Note names/, 'Chord names', 'Play from the computer keys', 'Glissando']) {
       expect(screen.queryByRole('button', { name })).not.toBeInTheDocument()
     }
   })
@@ -77,16 +72,6 @@ describe('the keyboard’s rail', () => {
     expect(names()).toHaveAttribute('aria-pressed', 'false')
     await user.click(names())
     expect(settingsStore.getState().keyboard.namedKeys).toBe('c')
-  })
-
-  it('turns playing from the computer keyboard on and off, saved', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = setUp()
-    const typing = screen.getByRole('button', { name: 'Play from the computer keys' })
-    expect(typing).toHaveAttribute('aria-pressed', 'false')
-    await user.click(typing)
-    expect(typing).toHaveAttribute('aria-pressed', 'true')
-    expect(settingsStore.getState().keyboard.typing).toBe(true)
   })
 
   it('offers Sound the MIDI keyboard only while one is connected, and saves it', async () => {

@@ -15,7 +15,6 @@ export const settings = {
   },
   // The on-screen piano's page: its groups.
   piano: { look: 'Look', place: 'Position', play: 'Playing', bar: 'Bar over the keys' },
-  computerKeys: { shortcuts: 'Shortcuts', typingGroup: 'Playing' },
   // How a take is recorded in the score editor (ADR 0028), as its recording strip's settings say too.
   recording: 'Recording',
   progress: {

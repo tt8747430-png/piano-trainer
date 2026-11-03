@@ -157,7 +157,6 @@ export const common: LocaleResources['common'] = {
     zoom: { label: 'Размер клавиш', detail: 'Мельче или крупнее' },
     noteNames: { label: 'Названия нот', detail: 'Каждое C, все или нет' },
     chordNames: { label: 'Названия аккордов', detail: 'Называет аккорд в руке' },
-    typing: { label: 'Клавиши компьютера', detail: 'Буквы играют на рояле' },
     midiSound: { label: 'Звук MIDI', detail: 'Слышать MIDI-клавиатуру здесь' },
     glissando: { label: 'Глиссандо', detail: 'Проведение играет клавиши' },
     pedal: { label: 'Педаль', detail: 'Держит ноты' },

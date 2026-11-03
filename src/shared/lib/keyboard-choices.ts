@@ -41,7 +41,6 @@ export const RAIL_CONTROLS = [
   'zoom',
   'noteNames',
   'chordNames',
-  'typing',
   'midiSound',
   'glissando',
   'pedal',

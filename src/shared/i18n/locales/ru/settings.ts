@@ -15,7 +15,6 @@ export const settings: LocaleResources['settings'] = {
     scoreEditor: 'Нотный редактор',
   },
   piano: { look: 'Вид', place: 'Положение', play: 'Игра', bar: 'Панель над клавишами' },
-  computerKeys: { shortcuts: 'Сочетания клавиш', typingGroup: 'Игра' },
   recording: 'Запись',
   progress: {
     reset: 'Сбросить прогресс',

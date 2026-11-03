@@ -1,10 +1,11 @@
 import { act, createEvent, fireEvent, renderHook, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { shownText } from '@/shared/test/shown-text'
 import { setKeyboard } from '@/features/set-preference'
 import { SHORTEST_PRESS_MS } from '@/shared/lib'
 import { stubScrolling } from '@/shared/test/layout'
+import { stubMatchMedia } from '@/shared/test/match-media'
 import { renderLiveKeyboard as setUp } from '../testing/render-live-keyboard'
 import { useTyping } from './use-typing'
 
@@ -17,6 +18,8 @@ function typingKeyboard(onKeyPress = vi.fn()) {
 afterEach(() => vi.useRealTimers())
 
 describe('typing on the computer keyboard', () => {
+  // A computer: letters play only where there are letters to type.
+  beforeEach(() => void stubMatchMedia({ dark: false, pointer: 'fine' }))
   it('plays the key a letter stands for, as a tap does, and letters the keys it plays', async () => {
     const user = userEvent.setup()
     const { audio, onKeyPress } = typingKeyboard()

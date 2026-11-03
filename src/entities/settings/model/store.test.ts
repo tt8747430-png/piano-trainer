@@ -389,15 +389,7 @@ describe('createSettingsStore', () => {
       folded: false,
       foldedLandscape: true,
       keyLength: 'long',
-      railControls: [
-        'zoom',
-        'noteNames',
-        'chordNames',
-        'typing',
-        'midiSound',
-        'glissando',
-        'pedal',
-      ],
+      railControls: ['zoom', 'noteNames', 'chordNames', 'midiSound', 'glissando', 'pedal'],
     })
     expect(keyboard(false).typing).toBe(false)
   })

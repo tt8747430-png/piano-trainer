@@ -1,6 +1,5 @@
 export { AccountSettingsPage } from './ui/AccountSettingsPage'
 export { GeneralPage } from './ui/GeneralPage'
-export { ComputerKeysPage } from './ui/ComputerKeysPage'
 export { OnScreenPianoPage } from './ui/OnScreenPianoPage'
 export { PlayerSettingsPage } from './ui/PlayerSettingsPage'
 export { ScoreEditorSettingsPage } from './ui/ScoreEditorSettingsPage'

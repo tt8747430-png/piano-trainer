@@ -1,6 +1,7 @@
 import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
+import { stubMatchMedia } from '@/shared/test/match-media'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { LAPTOP } from '@/shared/lib'
@@ -162,6 +163,7 @@ describe('Settings', () => {
   })
 
   it('sets up the keyboard, and saves each change', async () => {
+    stubMatchMedia({ dark: false, pointer: 'fine' })
     const user = userEvent.setup()
     const { settingsStore, router } = await renderApp('/settings/on-screen-piano')
     const keys = await screen.findByRole('radiogroup', { name: 'Key size' })
@@ -214,7 +216,6 @@ describe('Settings', () => {
       'zoom',
       'noteNames',
       'chordNames',
-      'typing',
       'midiSound',
       'glissando',
       'pedal',

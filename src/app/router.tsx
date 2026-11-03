@@ -185,10 +185,13 @@ const onScreenPianoRoute = createRoute({
   path: '/settings/on-screen-piano',
   component: lazyRouteComponent(settingsScreens, 'OnScreenPianoPage'),
 })
+/** Computer keys is a part of On-screen piano (R29): its old link opens there. */
 const computerKeysRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/computer-keys',
-  component: lazyRouteComponent(settingsScreens, 'ComputerKeysPage'),
+  beforeLoad: () => {
+    throw redirect({ to: '/settings/on-screen-piano', replace: true })
+  },
 })
 const soundRoute = createRoute({
   getParentRoute: () => shellRoute,

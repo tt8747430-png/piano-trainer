@@ -1,17 +1,24 @@
 import { vi } from 'vitest'
 
 /**
- * A controllable `prefers-color-scheme` for jsdom, which has no matchMedia. Every query answers
- * with the same dark flag; `setDark` flips it and notifies listeners, like an OS theme switch.
+ * A controllable `prefers-color-scheme` for jsdom, which has no matchMedia. A pointer query answers
+ * by `pointer` (a phone's `coarse` unless told a computer's `fine`); every other query with
+ * the dark flag; `setDark` flips it and notifies listeners, like an OS theme switch.
  */
-export function stubMatchMedia({ dark }: { dark: boolean }) {
+export function stubMatchMedia({
+  dark,
+  pointer = 'coarse',
+}: {
+  dark: boolean
+  pointer?: 'fine' | 'coarse'
+}) {
   const state = { dark }
   const listeners = new Set<() => void>()
   // A plain function, not a mock: a worker keeps every mock made in it, and this is made per test.
   const matchMedia = (media: string) => ({
     media,
     get matches() {
-      return state.dark
+      return media.includes('pointer') ? pointer === 'fine' : state.dark
     },
     onchange: null,
     addEventListener: (_type: 'change', listener: () => void) => void listeners.add(listener),

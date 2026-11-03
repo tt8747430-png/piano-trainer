@@ -1,7 +1,6 @@
 export {
   AccountSettingsPage,
   GeneralPage,
-  ComputerKeysPage,
   OnScreenPianoPage,
   PlayerSettingsPage,
   ScoreEditorSettingsPage,

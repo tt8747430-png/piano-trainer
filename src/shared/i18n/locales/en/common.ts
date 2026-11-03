@@ -167,7 +167,6 @@ export const common = {
     zoom: { label: 'Key size', detail: 'Smaller or larger keys' },
     noteNames: { label: 'Note names', detail: 'Every C, every key or none' },
     chordNames: { label: 'Chord names', detail: 'Names the chord you hold' },
-    typing: { label: 'Computer keys', detail: 'Letters play the piano' },
     midiSound: { label: 'MIDI sound', detail: 'Hear a MIDI keyboard here' },
     glissando: { label: 'Glissando', detail: 'A swipe plays the keys' },
     pedal: { label: 'Pedal', detail: 'Holds the notes on' },

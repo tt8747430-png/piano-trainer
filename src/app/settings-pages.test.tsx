@@ -9,7 +9,6 @@ const PAGES: readonly (readonly [SettingsPageId, string])[] = [
   ['general', '/settings/general'],
   ['on-screen-piano', '/settings/on-screen-piano'],
   ['connect-piano', '/settings/connect-piano'],
-  ['computer-keys', '/settings/computer-keys'],
   ['sound-and-recording', '/settings/sound-and-recording'],
   ['player', '/settings/player'],
   ['score-editor', '/settings/score-editor'],

@@ -1,11 +1,12 @@
 import { act, fireEvent, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { setKeyboard } from '@/features/set-preference'
 import { SHORTEST_PRESS_MS } from '@/shared/lib'
 import { midi, type Midi } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import type { KeyMark } from '@/shared/ui'
+import { stubMatchMedia } from '@/shared/test/match-media'
 import { renderLiveKeyboard as setUp } from '../testing/render-live-keyboard'
 
 const C_MAJOR = new Map<Midi, KeyMark>(
@@ -13,6 +14,8 @@ const C_MAJOR = new Map<Midi, KeyMark>(
 )
 
 afterEach(() => vi.useRealTimers())
+// A computer: the letters can play (a phone's case is its own test).
+beforeEach(() => void stubMatchMedia({ dark: false, pointer: 'fine' }))
 
 describe('LiveKeyboard', () => {
   it('sounds a tapped key on top of what plays, then does what the screen asks', async () => {
@@ -51,6 +54,14 @@ describe('LiveKeyboard', () => {
     act(() => setKeyboard(settingsStore, { typing: true }))
     fireEvent.keyDown(document.body, { code: 'Space', key: ' ' })
     expect(audio.pedals().sustain).toBe(true)
+  })
+
+  it('a phone ignores a saved typing setting: letters play nothing', () => {
+    stubMatchMedia({ dark: false, pointer: 'coarse' })
+    const { audio, settingsStore } = setUp()
+    act(() => setKeyboard(settingsStore, { typing: true }))
+    fireEvent.keyDown(window, { code: 'KeyA', key: 'a' })
+    expect(audio.voice).toEqual([])
   })
 
   it('sounds a typed key until it comes up', () => {
