@@ -67,6 +67,10 @@ describe('the score’s Settings (round 28)', () => {
       await screen.findByRole('heading', { level: 1, name: 'Score settings' }),
     ).toBeInTheDocument()
     expect(router.state.location.search).not.toHaveProperty('page')
+    // Up again to the editor, no Settings page's step carried there.
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
+    expect(router.state.location.search).not.toHaveProperty('page')
   })
 
   it('adds an instrument’s staff on Staves and makes the song longer on Bars, each saved', async () => {
