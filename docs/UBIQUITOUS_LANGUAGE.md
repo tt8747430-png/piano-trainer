@@ -42,8 +42,17 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   _Avoid:_ chart.
 - **Tune**: the top staff, as the Player knows it. In the interface it is called by the staff's name. _Avoid:_ Tune
   (in the UI).
-- **Melody** («Мелодия»; `melody`): the Setup's choice of what plays the tune along with the hands: None, the top
-  staff by name, or the Recording. _Avoid:_ Play melody, tune switch.
+- **Staves (the Setup's)** («Нотоносцы»; `staves=`, `PlayerStaves`): each staff, and a song's recording as a track,
+  with Play and Show. _Avoid:_ Melody, melody source.
+- **Score / chart** (`hasWrittenStaves`): a score's piano staves are written out in every bar and play as written; a
+  chart's piano plays its chords by a pattern. _Avoid:_ sheet (for the kind).
+- **Accompaniment from the chords** («Аккомпанемент по аккордам»): a chart's pattern, inversion, voice leading and
+  swing in the Setup. _Avoid:_ Accompaniment (alone, on a score).
+- **The other hand** («Другая рука»; `otherHand`): with one hand practised, the other's staff Show · Dim · Hide, and
+  Play the other hand (Wait mode's accompaniment). _Avoid:_ Hear both hands.
+- **Count-in** («Отсчёт»; `playback.countdown`): None · Audible · Visual. _Avoid:_ countdown (in the UI).
+- **Pedal** («Педаль»; `playback.pedal`): As written · Off · Automatic. _Avoid:_ sustain mode.
+- **Ped. lamp** (`PedalLamp`): the pedal's light at the end of the keys' rail.
 - **Lyrics** («Текст»; `lyrics`, `lyricsOn`): a piece's words, verses of syllables on the notes of one staff.
   _Avoid:_ words, text (in code).
 - **Verse** («Куплет 1»): one line of lyrics, one syllable a note. A Section is a verse of the music, not of the

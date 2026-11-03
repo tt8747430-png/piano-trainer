@@ -18,13 +18,20 @@ what they changed.
   piece's, in 5% steps, beside its presets.
 - **Keys** (`PLAYER_KEYS`): Space Play, the arrows, R the loop, Home; Shift with ← → Home End the loop's far end;
   Escape lets go of the loop, then closes.
+- **Two kinds of song** (`hasWrittenStaves`): a **score**, whose piano staves are written out in every bar, plays its
+  staves as written; a **chord chart** (the piano played from its chords by a pattern, a tune staff over it or not)
+  gets an accompaniment. `controlsFor(kind)` (`widgets/practice-player/model/controls.ts`) holds which controls each
+  kind is offered (score, chart, lesson example, progression, exercise); a control that changes nothing for a kind is
+  not shown (R30).
 - **The Setup** (`PieceSetup`) holds how a piece is arranged and how it plays, plainly:
-  - **Accompaniment:** the pattern over its two hands, each hand's figure drawn as a small piano roll. Changing a
-    hand makes the pattern the learner's mix, with Back to the pattern. Then **Starting position** and **Move
-    smoothly** (ADR 0047), each explained in its ⓘ.
-  - **How it plays:** **Swing**, four feels as tiles drawing a beat's two 8ths; **Melody**, the source the tune
-    plays from: None, the top single staff by its name, or the Recording. A source the song lacks is greyed with why;
-    a lead sheet always plays its staff.
+  - **Staves**, first: each staff by its name and clef (the single staves top down, the Upper and Lower staff),
+    then a song's **recording** as a track of its own; each with **Play** and **Show** (the recording Play alone),
+    all on until switched off, in the URL (`staves=u1s0,l0s1`, kept per piece). The last staff in sight keeps Show;
+    the recording's Play is greyed, with why, in another key. Melody is gone: staves are staves (ADR 0097).
+  - **Accompaniment from the chords**, a chart's alone: the pattern over its two hands, each hand's figure drawn as
+    a small piano roll (changing a hand makes it the learner's mix, with Back to the pattern), the first chord's
+    **Inversion** and **Voice leading** (ADR 0047), and **Swing**, four feels as tiles. A score's Swing stands alone
+    under How it plays (the schedule swings its written 8ths too).
   - The song's key is not in the Setup: it is Transpose.
   - **A scale run's practice** (the Scale exercise, `ScalePracticeFields`), as the reference app's Practice Scale
     sheet: Hands; the octave each hand playing starts on (C1–C7 as a strip, `rhOctave=`/`lhOctave=`; one whose run
@@ -39,11 +46,23 @@ what they changed.
   export follow; the song's page and its lessons read the piece as written. It is greyed where nothing would change.
   Both are kept per piece (`key`, `simple`). A progression's, a walk's or an exercise's key stays in its own Setup:
   there it chooses what is practised.
-- **Sound**, in the transport: **Count in** (the bar's beats counted down large over the music as each click
-  sounds), **Click**, a **volume** for each part (the right hand, the left hand, the staves over the piano, the
-  recording, the click), and **Only the chords** where there is a recording. A volume is a gain of its share squared,
-  asked as each sound renders, so a slider moved while the music plays is heard at once and nothing starts again. A
-  part at 0 is not scheduled. The mix is saved (`sound`).
+- **The metronome** in the transport is a quick toggle (pressed while the click sounds). The click and the count-in
+  are the Metronome's engine (A39): its sound (click, beep, the drums' kick, snare and hat) at its levels, its beat
+  squares where they were set for the music's meter, on the meter's counted beats (the dotted beat in 6/8) at the
+  tempo the music keeps there (`ClickVoicing`, `voicedClick`).
+- **The Player's settings page** (B7; `/settings/player` in Settings, and a song's gear in the bar opening the same
+  page in the Player's place, `/play/$pieceId/settings`, Back to the song as played): **Audio playback**, a volume
+  for each staff (by place, saved for every song, `sound.staves`), the recording and the metronome, and Only the
+  chords; a row to the **Metronome's** sound and beats; **Playback speed** (speed training's step, 2 · 5 · 10%);
+  **Display** (Count-in None · Audible · Visual, Cursor None · Beats · Continuous, the layout, the keys, finger
+  numbers); **One hand** (the other hand Show · Dim · Hide, and Play the other hand, Wait mode's accompaniment);
+  **Pedal** As written · Off · Automatic (`withPedal`, A27). A volume is a gain of its share squared, asked as each
+  sound renders; a staff's Play off is a gain of 0. The View's chips for the layout, the keys and finger numbers stay
+  as quick toggles over the music, as the transport keeps the metronome's. Clef (the reference's "Original or
+  chosen") is not offered yet: the notation has no re-clefing of a staff.
+- **The pedal shown** (A27): the sheet draws the pedal as it plays; the Ped. mark the music plays under is lit in
+  the playhead's ink while its pedal is down; a Ped. lamp at the end of the keys' rail; keys sounding only under the
+  pedal ringed, apart from a hand's.
 - **More:** the library's acts (ADR 0106), Song information (the chord summary, the key as played, time, tempo and
   tuning as fact cards), Sections (each by name and its first bar, a tap taking the cursor there), Share, Print and
   Export to MIDI (ADR 0107).
@@ -63,4 +82,4 @@ The score editor's Play and its recorder's click keep their own switches. A reco
 - 0115 — A plain Setup: Starting position, Move smoothly, swing feels, the Melody's source (2026-10-27).
 - r13 — A scale run's practice: hands, each hand's start octave, tempo, metronome, ticks between loops (2026-10-28).
 - r26 — One Sound in both modes: the editor's transport ends with the Player's Sound (its icon, name and place), a take's Metronome and Play melody over each part's volume; the click is called Metronome in both; the tools row's room over the score fits the capsule (2026-11-01).
-- r29 — A score plays its staves (Play and Show per staff, the recording a track); only a chart gets an accompaniment; the other hand Show · Dim · Hide and Play; Pedal As written · Off · Automatic; the click from the one metronome engine (decided 2026-11-02, being built in round 29; spec `.scratch/r29/staves-play-show/spec.md`).
+- r29 — A score plays its staves (Play and Show per staff, the recording a track); only a chart gets an accompaniment; Melody gone; the Player's settings page; the click from the one metronome engine; the pedal shown (2026-11-03).
