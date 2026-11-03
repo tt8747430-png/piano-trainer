@@ -96,7 +96,7 @@ describe('the fake’s live voice', () => {
 describe('the fake’s piano', () => {
   it('keeps the speaker the notes are sent to', () => {
     const audio = createFakeAudio()
-    const output = { noteOn() {}, noteOff() {}, clear() {} }
+    const output = { noteOn() {}, noteOff() {}, clear() {}, sustain() {} }
     audio.notesTo(output)
     expect(audio.notesOut).toBe(output)
     audio.notesTo(null)

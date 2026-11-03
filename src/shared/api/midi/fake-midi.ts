@@ -35,6 +35,7 @@ export interface FakeMidi extends MidiPort {
 export type SentNote =
   | { readonly kind: 'on'; readonly midi: Midi; readonly velocity: number; readonly at: number }
   | { readonly kind: 'off'; readonly midi: Midi; readonly at: number }
+  | { readonly kind: 'pedal'; readonly down: boolean; readonly at: number }
   | { readonly kind: 'clear' }
 
 /** The devices a status names, each one sending keys, with a speaker where the fake has one. */
@@ -65,6 +66,7 @@ export function createFakeMidi(
   const speaker: NoteOutput = {
     noteOn: (key, velocity, at) => void sent.push({ kind: 'on', midi: key, velocity, at }),
     noteOff: (key, at) => void sent.push({ kind: 'off', midi: key, at }),
+    sustain: (down, at) => void sent.push({ kind: 'pedal', down, at }),
     clear: () => void sent.push({ kind: 'clear' }),
   }
   const connected = () => current?.state === 'connected'

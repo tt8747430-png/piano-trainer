@@ -20,9 +20,13 @@ export const heardIn = (hands: Audible, mix: Mix): Audible => ({
 
 /**
  * How loud the mix plays a sound, asked as it sounds: its part's gain, a click's the click's; a
- * sound of no part (no piece's) as it is.
+ * sound of no part (no piece's, the pedal) as it is.
  */
 export const mixGain =
   (mix: () => Mix): SoundGain =>
   (sound) =>
-    sound.kind === 'click' ? mix().click : sound.part ? mix()[sound.part] : 1
+    sound.kind === 'click'
+      ? mix().click
+      : sound.kind === 'note' && sound.part
+        ? mix()[sound.part]
+        : 1

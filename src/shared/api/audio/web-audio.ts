@@ -5,6 +5,7 @@ import { createLookahead } from './lookahead'
 import { createMidiSoundOutput, type MidiSoundOutput } from './midi-sound-output'
 import { createRecordingPlayer, type Media } from './recording-player'
 import { createSoundingKeys, NOTHING_PLAYED } from './sounding'
+import { stringDecay } from './string-decay'
 import { PLAY_DELAY, type AudioOutput } from './types'
 
 /** The piano voice: a triangle with two sine partials, through a closing low-pass filter. */
@@ -46,24 +47,42 @@ function partials(context: AudioContext, frequency: number, filter: AudioNode, a
   })
 }
 
+/** How fast a damper silences a string: the level's time constant, in seconds. */
+const DAMPING = 0.04
+/** How long after its damper falls a voice's oscillators stop. */
+const DAMPED = 0.25
+
+/**
+ * A scheduled note (ADR 0034): it rises in 8 ms, then dies away as a string does (`stringDecay`, a
+ * lower key longer) for as long as it sounds, held by a hand or by the pedal, and its damper falls
+ * at its end (the pedal's lift, where the pedal holds it).
+ */
 const playNote: Render<NoteSound> = (context, note, at, gain, ended) => {
   const frequency = frequencyOf(note.midi)
-  const release = at + note.duration + 0.2
+  const decay = stringDecay(note.midi)
+  const end = at + note.duration
   const filter = context.createBiquadFilter()
   filter.type = 'lowpass'
   filter.frequency.setValueAtTime(Math.min(7000, frequency * 9), at)
-  filter.frequency.exponentialRampToValueAtTime(Math.max(300, frequency * 2), release)
+  filter.frequency.setTargetAtTime(Math.max(300, frequency * 2), at, decay)
   const envelope = context.createGain()
   const peak = Math.max(SILENT, note.velocity * gain)
   envelope.gain.setValueAtTime(SILENT, at)
   envelope.gain.exponentialRampToValueAtTime(peak, at + 0.008)
-  envelope.gain.exponentialRampToValueAtTime(peak * 0.4, at + Math.min(0.35, note.duration * 0.5))
-  envelope.gain.exponentialRampToValueAtTime(SILENT, release)
+  envelope.gain.setTargetAtTime(SILENT, at + 0.008, decay)
+  envelope.gain.setTargetAtTime(SILENT, end, DAMPING)
   const sources = partials(context, frequency, filter, at)
-  for (const source of sources) source.stop(at + note.duration + 0.25)
+  for (const source of sources) source.stop(end + DAMPED)
   if (sources[0]) sources[0].onended = ended
   filter.connect(envelope).connect(context.destination)
   return { sources, output: envelope }
+}
+
+/** A scheduled voice's damper falls at `at`, where its key is struck again (one voice a key). */
+function dampedAt({ sources, output }: Voice, at: number) {
+  output.gain.cancelScheduledValues(at)
+  output.gain.setTargetAtTime(SILENT, at, DAMPING)
+  for (const source of sources) source.stop(at + DAMPED)
 }
 
 /**
@@ -73,7 +92,7 @@ const playNote: Render<NoteSound> = (context, note, at, gain, ended) => {
 function holdNote(context: AudioContext, key: Midi, gain: number): Voice {
   const at = context.currentTime
   const frequency = frequencyOf(key)
-  const decay = 1.5 + (4.5 * (108 - key)) / 87
+  const decay = stringDecay(key)
   const filter = context.createBiquadFilter()
   filter.type = 'lowpass'
   filter.frequency.setValueAtTime(Math.min(7000, frequency * 9), at)
@@ -93,8 +112,8 @@ function damped(context: AudioContext, { sources, output }: Voice) {
   const level = output.gain.value
   output.gain.cancelScheduledValues(at)
   output.gain.setValueAtTime(level, at)
-  output.gain.setTargetAtTime(SILENT, at, 0.04)
-  for (const source of sources) source.stop(at + 0.25)
+  output.gain.setTargetAtTime(SILENT, at, DAMPING)
+  for (const source of sources) source.stop(at + DAMPED)
 }
 
 /** A click's loudness: the bar's first beat's higher and louder. */
@@ -288,6 +307,8 @@ export function createWebAudioOutput({
 } = {}): AudioOutput {
   let context: AudioContext | null | undefined
   const voices = new Set<Voice>()
+  /** Each key's scheduled voice, and where it ends: a key struck again damps it (ADR 0034). */
+  const strings = new Map<Midi, { readonly voice: Voice; readonly end: number }>()
   /** The keys the live voice holds sounding: apart from `voices`, so stop() never reaches them. */
   const held = new Map<Midi, Voice>()
   /** The keyboard's speaker the notes go to, while they go through the piano. */
@@ -302,17 +323,26 @@ export function createWebAudioOutput({
   const render = (sound: Sound, at: number, gain: number) => {
     // A sound turned right down is not played at all.
     if (gain <= 0) return
-    // A note goes to the keyboard's speaker where one is chosen, struck as hard as its gain leaves it.
+    // A note goes to the keyboard's speaker where one is chosen, struck as hard as its gain leaves it;
+    // the pedal goes there as the pedal.
+    if (sound.kind === 'pedal') {
+      // In the browser the pedal is in the notes' lengths: each it holds sounds to its lift.
+      piano?.render(sound, at)
+      return
+    }
     if (sound.kind === 'note' && piano) {
       piano.render({ ...sound, velocity: sound.velocity * gain }, at)
       return
     }
     if (!context) return
     const ended = () => voices.delete(voice)
-    const voice =
-      sound.kind === 'note'
-        ? playNote(context, sound, at, gain, ended)
-        : CLICK_VOICES[sound.voice ?? 'click'](context, sound, at, gain, ended)
+    let voice: Voice
+    if (sound.kind === 'note') {
+      const ringing = strings.get(sound.midi)
+      if (ringing && ringing.end > at && voices.has(ringing.voice)) dampedAt(ringing.voice, at)
+      voice = playNote(context, sound, at, gain, ended)
+      strings.set(sound.midi, { voice, end: at + sound.duration })
+    } else voice = CLICK_VOICES[sound.voice ?? 'click'](context, sound, at, gain, ended)
     voices.add(voice)
   }
 
@@ -386,6 +416,7 @@ export function createWebAudioOutput({
         for (const source of sources) source.stop(context.currentTime)
       }
       voices.clear()
+      strings.clear()
     },
     press: voice.press,
     release: voice.release,

@@ -23,6 +23,7 @@ export {
   type ClickVoice,
   type Hands,
   type NoteSound,
+  type PedalSound,
   type Scheduled,
   type Sound,
 } from './schedule'

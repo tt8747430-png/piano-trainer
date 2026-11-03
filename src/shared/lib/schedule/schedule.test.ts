@@ -177,6 +177,48 @@ describe('schedule', () => {
     expect(end(marked)).toBeGreaterThan(end(plain))
   })
 
+  it('sounds the pedal where its line says: a change a lift and a press at once, a pedal still down let up where the pass ends (ADR 0097)', () => {
+    const pedalled: Performance = {
+      ...perform('C', 'C'),
+      pedal: [
+        { tick: 0, kind: 'down' },
+        { tick: 4 * B, kind: 'change' },
+      ],
+    }
+    const pedals = schedule(pedalled, { tempo: 60, hands: ALL }).sounds.filter(
+      (sound) => sound.kind === 'pedal',
+    )
+    expect(pedals).toEqual([
+      { kind: 'pedal', at: 0, down: true },
+      { kind: 'pedal', at: 4, down: false },
+      { kind: 'pedal', at: 4, down: true },
+      { kind: 'pedal', at: 8, down: false },
+    ])
+    // From the middle of a span: pressed where the pass starts.
+    const later = schedule(pedalled, { tempo: 60, hands: ALL, fromTick: 6 * B }).sounds
+    expect(later.filter((sound) => sound.kind === 'pedal')).toEqual([
+      { kind: 'pedal', at: 0, down: true },
+      { kind: 'pedal', at: 2, down: false },
+    ])
+  })
+
+  it('ends a key’s sound where it is struck again: one voice a key, the key held as written', () => {
+    const pedalled: Performance = { ...perform('C', 'C'), pedal: [{ tick: 0, kind: 'down' }] }
+    const sounds = notes(schedule(pedalled, { tempo: 60, hands: ALL }).sounds)
+    const first = sounds.filter((s) => s.at === 0 && s.midi < 72)
+    expect(first.length).toBeGreaterThan(0)
+    for (const sound of first) {
+      expect(sound.duration).toBeCloseTo(4)
+      expect(sound.held).toBeCloseTo(3.8)
+    }
+    // Struck the last time, it rings under the pedal to the end.
+    const last = sounds.filter((s) => s.at === 4)
+    for (const sound of last) expect(sound.duration).toBeCloseTo(3.8)
+    expect(notes(schedule(perform('C'), { tempo: 60, hands: ALL }).sounds)[0]).not.toHaveProperty(
+      'held',
+    )
+  })
+
   it('times a bar in seconds at 60 bpm', () => {
     const { sounds, end } = schedule(perform('C'), { tempo: 60, hands: ALL })
     expect(notes(sounds).map((sound) => sound.at)).toEqual([0, 0, 0, 0, 0])

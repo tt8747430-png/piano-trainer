@@ -52,6 +52,9 @@ function devicesOf(access: MIDIAccess): MidiDevice[] {
 
 const NOTE_ON = 0x90
 const NOTE_OFF = 0x80
+/** A controller change on channel 1, and the sustain pedal's controller. */
+const CONTROL_CHANGE = 0xb0
+const SUSTAIN_CONTROLLER = 64
 /** The velocity a note-off carries. */
 const RELEASE_VELOCITY = 64
 
@@ -60,6 +63,8 @@ function speakerOf(output: MIDIOutput): NoteOutput {
   return {
     noteOn: (key, velocity, pageTime) => output.send([NOTE_ON, key, velocity], pageTime),
     noteOff: (key, pageTime) => output.send([NOTE_OFF, key, RELEASE_VELOCITY], pageTime),
+    sustain: (down, pageTime) =>
+      output.send([CONTROL_CHANGE, SUSTAIN_CONTROLLER, down ? 127 : 0], pageTime),
     // Web MIDI's clear() is not in every browser yet: where it is not, what is queued plays out.
     clear: () => {
       if ('clear' in output && typeof output.clear === 'function') output.clear()

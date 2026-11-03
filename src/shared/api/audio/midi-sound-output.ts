@@ -1,5 +1,5 @@
 import type { Midi } from '@/shared/lib/music'
-import { gainVelocity, type NoteSound } from '@/shared/lib/schedule'
+import { gainVelocity, type NoteSound, type PedalSound } from '@/shared/lib/schedule'
 import type { NoteOutput } from './types'
 
 /** A note's off after its on, where both fall in the same millisecond. */
@@ -7,8 +7,8 @@ const AFTER_MS = 1
 
 /** The app's notes sent to a keyboard's speaker: what a Stop must let go of. */
 export interface MidiSoundOutput {
-  /** Sends a note to sound from `at` on the audio clock. */
-  render(note: NoteSound, at: number): void
+  /** Sends a note to sound from `at` on the audio clock, or the pedal pressed or let up there. */
+  render(sound: NoteSound | PedalSound, at: number): void
   /** Drops what is queued and lets go of every key sent: none rings on, none starts after. */
   stop(): void
 }
@@ -23,8 +23,10 @@ const OFF_EVERY_MS = 25
  * clock (`pageTimeOf` a moment of the audio clock), at the velocity its gain was struck at; its off
  * held until shortly before it is due. A key has one voice on a keyboard, so a note struck again
  * before the last one on its key ends ends that one just before it, and the last one's off goes:
- * it would cut the new note short. A Stop clears the queue where the output can, lets go now of each
- * key still to end, and again just after a note still to start, for an output that cannot clear.
+ * it would cut the new note short. A note's off is at its written end (`held`), the pedal sent as the
+ * pedal (control 64) so the keyboard's own pedal holds it on. A Stop clears the queue where the output can, lets go now of each
+ * key still to end, and again just after a note still to start, for an output that cannot clear, and
+ * lets the pedal up.
  */
 export function createMidiSoundOutput(
   output: NoteOutput,
@@ -35,6 +37,8 @@ export function createMidiSoundOutput(
   /** Each key's off not sent yet (page clock). */
   const held = new Map<Midi, number>()
   let timer: ReturnType<typeof setInterval> | null = null
+  /** Whether the pedal was last sent down. */
+  let pedalled = false
   const sendDue = () => {
     const now = pageNow()
     const until = now + OFF_AHEAD_MS
@@ -54,7 +58,12 @@ export function createMidiSoundOutput(
   return {
     render(note, at) {
       const on = pageTimeOf(at)
-      const off = Math.max(pageTimeOf(at + note.duration), on + AFTER_MS)
+      if (note.kind === 'pedal') {
+        output.sustain(note.down, on)
+        pedalled = note.down
+        return
+      }
+      const off = Math.max(pageTimeOf(at + (note.held ?? note.duration)), on + AFTER_MS)
       const last = held.get(note.midi)
       // The note before on this key: ended just before this one where it would ring into it.
       if (last !== undefined) output.noteOff(note.midi, Math.min(last, Math.max(on - AFTER_MS, 0)))
@@ -80,6 +89,8 @@ export function createMidiSoundOutput(
         if (on >= now) output.noteOff(key, on + AFTER_MS)
       }
       sent.clear()
+      if (pedalled) output.sustain(false, now)
+      pedalled = false
     },
   }
 }
