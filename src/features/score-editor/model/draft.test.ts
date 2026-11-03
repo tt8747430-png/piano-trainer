@@ -163,6 +163,19 @@ describe('the draft', () => {
     expect(writeDraft(draft).sections[0]).not.toHaveProperty('pattern')
   })
 
+  it('reads and writes back the pedal line, on the timeline (ADR 0097)', () => {
+    const pedalled = { ...WRITTEN, pedal: 'down@0 change@2 up@3.5' }
+    const draft = readDraft(pedalled)
+    expect(draft.pedal).toEqual([
+      { tick: 0, kind: 'down' },
+      { tick: 2 * B, kind: 'change' },
+      { tick: 3.5 * B, kind: 'up' },
+    ])
+    expect(writeDraft(draft).pedal).toBe('down@0 change@2 up@3.5')
+    expect(readDraft(WRITTEN).pedal).toEqual([])
+    expect(writeDraft(readDraft(WRITTEN))).not.toHaveProperty('pedal')
+  })
+
   it('saves only music that reads back', () => {
     const draft = readDraft(WRITTEN)
     expect(musicToSave(draft)).toEqual(writeDraft(draft))

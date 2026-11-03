@@ -128,7 +128,7 @@ describe('readMusicXml', () => {
       marks: { articulations: ['staccato', 'portato'] },
     })
     expect(at(5 * B)[0]?.marks?.grace).toEqual([{ midi: 76, spelled: note('E') }])
-    expect(at(0, 1)[0]).toMatchObject({ midi: 41, marks: { pedal: 'down' } })
+    expect(at(0, 1)[0]).toMatchObject({ midi: 41 })
     // Written an octave under where it sounds: the pitch read is the one heard.
     expect(at(8 * B)[0]).toMatchObject({ midi: 86, marks: { octave: '8va' } })
     expect(at(8 * B, 1)[0]).toMatchObject({ midi: 66, spelled: note('F', 1) })

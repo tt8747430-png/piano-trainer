@@ -677,17 +677,6 @@ class PartWriter {
           staffXml(number),
         ),
       )
-    if (marks.pedal)
-      out.push(
-        direction(
-          'below',
-          tag('pedal', {
-            type: marks.pedal === 'down' ? 'start' : marks.pedal === 'up' ? 'stop' : 'change',
-            line: 'yes',
-          }),
-          staffXml(number),
-        ),
-      )
     return out
   }
 

@@ -146,17 +146,15 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(pair(1.5 * B, 1)).not.toContain('fTrem')
   })
 
-  it('writes a slur from its note to the one it ends on, a dynamic, the pedal and an expression', () => {
+  it('writes a slur from its note to the one it ends on, a dynamic and an expression', () => {
     const written = scoreToMei(
       plain([
-        c(0, { slurStart: true, dynamic: 'mf', pedal: 'down', expression: 'dolce' }),
-        c(B, { slurEnd: true, pedal: 'up' }),
+        c(0, { slurStart: true, dynamic: 'mf', expression: 'dolce' }),
+        c(B, { slurEnd: true }),
       ]),
     )
     expect(written).toContain('<slur staff="1" startid="#n-treble-0-0" endid="#n-treble-5040-0"/>')
     expect(written).toMatch(/<dynam staff="1" startid="#n-treble-0-0"[^>]*>mf<\/dynam>/)
-    expect(written).toContain('<pedal staff="1" startid="#n-treble-0-0" dir="down"/>')
-    expect(written).toContain('<pedal staff="1" startid="#n-treble-5040-0" dir="up"/>')
     expect(written).toMatch(/<rend fontstyle="italic">dolce<\/rend>/)
   })
 

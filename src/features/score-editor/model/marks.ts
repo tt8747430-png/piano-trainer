@@ -49,7 +49,8 @@ export function hasMark(marks: NoteMarks | undefined, mark: MarkChoice): boolean
     case 'expression':
       return marks?.expression === mark.expression
     case 'pedal':
-      return marks?.pedal === mark.pedal
+      // The pedal is the piece's own line (ADR 0097), not a note's mark.
+      return false
     case 'swing':
       return marks?.swing === mark.swing
     case 'twoNoteTremolo':
@@ -95,8 +96,6 @@ export function withMark(
       else if (next.expression === mark.expression) delete next.expression
       break
     case 'pedal':
-      if (on) next.pedal = mark.pedal
-      else if (next.pedal === mark.pedal) delete next.pedal
       break
     case 'swing':
       if (on) next.swing = mark.swing

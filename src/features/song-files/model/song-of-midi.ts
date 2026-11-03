@@ -7,6 +7,7 @@ import {
   isCompound,
   meterOf,
   pitchClass,
+  pedalLine,
   pitchClassOf,
   signatureKey,
   spellInKey,
@@ -14,7 +15,7 @@ import {
   type Key,
   type Meter,
   type Midi,
-  type Pedal,
+  type PedalEvent,
   type Tick,
 } from '@/shared/lib/music'
 import { ticksOf } from '@/shared/lib/notation'
@@ -162,7 +163,7 @@ function placeParts(parts: readonly MidiPart[]): {
  * A Standard MIDI File as a song (ADR 0107): its first meter, tempo and key signature (else the key
  * its notes are most likely in); its notes snapped to the meter's grid by the takes' quantise; the
  * piano's tracks its two hands (two of them by pitch, one split at middle C), each other track a
- * single staff, a lead sheet where none is the piano's; the sustain pedal as pedal marks. Counts
+ * single staff, a lead sheet where none is the piano's; the sustain pedal as its pedal line. Counts
  * what it leaves out: drums, notes off the piano, later tempos and meters.
  */
 export function songOfMidi(bytes: Uint8Array, fileName: string): ReadSong {
@@ -225,7 +226,6 @@ export function songOfMidi(bytes: Uint8Array, fileName: string): ReadSong {
     durationTicks: n.durationTicks,
   })
   const handNotes = { rh: hands.rh.map(spelled), lh: hands.lh.map(spelled) }
-  withPedals(handNotes, [...rh, ...lh, ...split], msPerTick, beats, meter)
 
   const end = [...hands.rh, ...hands.lh, ...single.flatMap((each) => each.notes)].reduce(
     (latest, n) => Math.max(latest, n.startTick + n.durationTicks),
@@ -260,6 +260,7 @@ export function songOfMidi(bytes: Uint8Array, fileName: string): ReadSong {
     leadSheet: rh.length + lh.length + split.length === 0 && single.length > 0,
     lyricsOn: 'rh',
     hands: handNotes,
+    pedal: pedalOf([...rh, ...lh, ...split], msPerTick, beats, meter, count * bar),
   }
   let song: SharedSong | null
   try {
@@ -271,32 +272,29 @@ export function songOfMidi(bytes: Uint8Array, fileName: string): ReadSong {
   return { song, leftOut }
 }
 
-/** The piano's sustain pedal as marks on the hands' notes: pressed and let up at the notes nearest after. */
-function withPedals(
-  hands: { rh: DraftNote[]; lh: DraftNote[] },
+/**
+ * The piano's sustain pedal (control 64) as the song's pedal line (ADR 0097): each press and lift on
+ * the meter's 16ths, a lift and a press there together a change, none past the music's end.
+ */
+function pedalOf(
   parts: readonly MidiPart[],
   msPerTick: number,
   beats: number,
   meter: Meter,
-) {
+  end: Tick,
+): PedalEvent[] {
   const step = ticksOf({ value: 16, dots: 0 }, meter)
   const toTick = (fileTick: number) =>
-    Math.round((((fileTick * msPerTick) / 60_000) * beats * TICKS_PER_BEAT) / step) * step
-  const notes = [...hands.lh, ...hands.rh].sort((a, b) => a.startTick - b.startTick)
-  const marks = new Map<DraftNote, Pedal>()
-  const mark = (tick: Tick, pedal: Pedal) => {
-    const n = notes.find((each) => each.startTick >= tick)
-    if (!n) return
-    const held = marks.get(n)
-    marks.set(n, held && held !== pedal ? 'change' : pedal)
-  }
-  for (const press of parts.flatMap((part) => part.pedals)) {
-    mark(toTick(press.down), 'down')
-    mark(toTick(press.up), 'up')
-  }
-  for (const hand of ['rh', 'lh'] as const)
-    hands[hand] = hands[hand].map((n) => {
-      const pedal = marks.get(n)
-      return pedal ? { ...n, marks: { ...n.marks, pedal } } : n
-    })
+    Math.min(
+      end,
+      Math.round((((fileTick * msPerTick) / 60_000) * beats * TICKS_PER_BEAT) / step) * step,
+    )
+  return pedalLine(
+    parts
+      .flatMap((part) => part.pedals)
+      .flatMap((press): PedalEvent[] => [
+        { tick: toTick(press.down), kind: 'down' },
+        { tick: toTick(press.up), kind: 'up' },
+      ]),
+  )
 }

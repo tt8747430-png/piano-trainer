@@ -10,6 +10,7 @@ import type {
   Midi,
   NoteLyrics,
   NoteMarks,
+  PedalEvent,
   SpelledNote,
   Tick,
   Tone,
@@ -62,6 +63,8 @@ export interface Chart {
   /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
   readonly tempoUnit?: TempoUnit
   readonly sections: readonly ChartSection[]
+  /** Its sustain pedal (ADR 0097): one line of events on the written bars, from the music's start. */
+  readonly pedal?: readonly PedalEvent[]
 }
 
 /** A note of a single staff over the piano's grand staff (ADR 0097). */
@@ -243,8 +246,13 @@ export interface Performance {
   readonly notes: readonly PerformanceNote[]
   readonly beatGroups: readonly BeatGroup[]
   /**
-   * Every part's tempo and pedal marks (ADR 0097), whether the learner hears that part or not: the
-   * time and the pedal the whole piece keeps.
+   * The sustain pedal (ADR 0097), its line of events in order on the bars as played: the pedal the
+   * whole piece keeps, whichever part the learner hears.
+   */
+  readonly pedal: readonly PedalEvent[]
+  /**
+   * Every part's tempo marks (ADR 0097), whether the learner hears that part or not: the time the
+   * whole piece keeps.
    */
   readonly timing?: readonly { readonly startTick: Tick; readonly marks: NoteMarks }[]
 }

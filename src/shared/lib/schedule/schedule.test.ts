@@ -160,12 +160,12 @@ describe('schedule', () => {
     const marked: Performance = {
       ...plain,
       notes: plain.notes.map((n) =>
-        n.startTick === 0
-          ? { ...n, marks: { pedal: 'down' as const, expression: 'rit' as const } }
-          : n.startTick === 4 * B
-            ? { ...n, marks: { pedal: 'up' as const } }
-            : n,
+        n.startTick === 0 ? { ...n, marks: { expression: 'rit' as const } } : n,
       ),
+      pedal: [
+        { tick: 0, kind: 'down' },
+        { tick: 4 * B, kind: 'up' },
+      ],
     }
     const first = (performance: Performance) =>
       notes(schedule(performance, { tempo: 60, hands: ALL }).sounds).filter((s) => s.at === 0)

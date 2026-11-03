@@ -40,8 +40,8 @@ const tuneNote = (
 
 /**
  * A beat's pickup, two bars of 4/4, then a section of 3/4 (ticks 216 and 288), under a tune not
- * heard (its notes written silent) that marks the pedal and a rit.: down at bar 2, changed at bar 3,
- * up at bar 4, where the rit. starts; a tempo at bar 5.
+ * heard (its notes written silent) that marks a rit. at bar 4; the pedal down at bar 2, changed at
+ * bar 3, up at bar 4; a tempo at bar 5.
  */
 const PICKUP_AND_THREE: Performance = arrange(
   {
@@ -50,6 +50,11 @@ const PICKUP_AND_THREE: Performance = arrange(
     sections: [
       { lines: [[bar(1, ['G', 1]), bar(4, ['C', 4]), bar(4, ['F', 2], ['G', 2])]] },
       { meter: '3/4', lines: [[bar(3, ['Am', 3]), bar(3, ['C', 3])]] },
+    ],
+    pedal: [
+      { tick: B, kind: 'down' },
+      { tick: 5 * B, kind: 'change' },
+      { tick: 9 * B, kind: 'up' },
     ],
   },
   {
@@ -60,9 +65,9 @@ const PICKUP_AND_THREE: Performance = arrange(
         clef: 'treble',
         notes: [
           tuneNote(67, 0, B),
-          tuneNote(72, B, 4 * B, { pedal: 'down' }),
-          tuneNote(69, 5 * B, 4 * B, { pedal: 'change' }),
-          tuneNote(76, 9 * B, 3 * B, { pedal: 'up', expression: 'rit' }),
+          tuneNote(72, B, 4 * B),
+          tuneNote(69, 5 * B, 4 * B),
+          tuneNote(76, 9 * B, 3 * B, { expression: 'rit' }),
           tuneNote(72, 12 * B, 3 * B, { expression: 'a-tempo' }),
         ],
       },
@@ -244,7 +249,7 @@ describe('performanceMidi', () => {
     )
   })
 
-  it('holds the sustain pedal on the hands’ tracks as the marks do, a change let up then pressed', () => {
+  it('holds the sustain pedal on the hands’ tracks as its line does, a change let up then pressed', () => {
     const pedal = (channel: number) => [
       [24 * 20, channel, 64, 127],
       [120 * 20, channel, 64, 0],

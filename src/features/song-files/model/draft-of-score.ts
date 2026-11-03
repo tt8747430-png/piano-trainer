@@ -317,6 +317,7 @@ export function draftOfScore(score: ReadScore): { draft: Draft; leftOut: LeftCou
       rh: notesOn(rhStaff).map((n) => draftNote(n, end, keeps(rhStaff ?? -1))),
       lh: notesOn(lhStaff).map((n) => draftNote(n, end, false)),
     },
+    pedal: [],
   }
   return { draft, leftOut }
 }

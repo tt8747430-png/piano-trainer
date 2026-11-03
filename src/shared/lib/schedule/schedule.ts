@@ -176,7 +176,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   // A tempo mark counts against the tempo written at the music's head.
   const warp = tempoWarp(marked, performance.bars[0]?.tempo)
   const place = (tick: Tick) => warp(swung(tick))
-  const pedal = pedalHeld(marked)
+  const pedal = pedalHeld(performance.pedal)
   const counted = options.countIn ? countInBeats(performance, fromTick) : []
   const musicStart = secondsFor(place(fromTick) - place(counted[0]?.tick ?? fromTick), tempo)
   const at = (tick: Tick) => musicStart + secondsFor(place(tick) - place(fromTick), tempo)

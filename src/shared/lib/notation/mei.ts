@@ -599,10 +599,6 @@ class Writer {
           EXPRESSION_TEXT[marks.expression],
         )}</rend></dir>`,
       )
-    if (marks.pedal)
-      controls.push(
-        `<pedal staff="${n}" ${ref} dir="${marks.pedal === 'change' ? 'bounce' : marks.pedal}"/>`,
-      )
     if (marks.articulations?.includes('fermata'))
       controls.push(`<fermata staff="${n}" ${ref} place="${above ? 'above' : 'below'}"/>`)
     // A breath mark and a caesura stand after their note, where the next would start.

@@ -149,7 +149,7 @@ export const SWING_TEXT: Readonly<Record<SwingMark, string>> = {
   straight: 'Straight',
 }
 
-/** The sustain pedal at a note: pressed, let up, or let up and pressed again. */
+/** The sustain pedal's events (ADR 0097): pressed, let up, or let up and pressed again. */
 export const PEDALS = ['down', 'up', 'change'] as const
 export type Pedal = (typeof PEDALS)[number]
 
@@ -182,7 +182,6 @@ export interface NoteMarks {
   readonly dynamic?: Dynamic
   readonly hairpin?: Hairpin
   readonly expression?: Expression
-  readonly pedal?: Pedal
   readonly grace?: readonly GraceNote[]
   /** A tempo mark from it on (ADR 0097): the song's beats a minute, printed in its tempo's unit. */
   readonly tempo?: number

@@ -9,7 +9,6 @@ import {
   type NoteMarks,
   type OctaveLine,
   type Ornament,
-  type Pedal,
   numeralText,
   parseNumeral,
   type SwingMark,
@@ -76,7 +75,6 @@ const EXPRESSION_WORDS: Readonly<Record<Expression, string>> = {
   md: 'md',
   ms: 'ms',
 }
-const PEDAL_WORDS: Readonly<Record<Pedal, string>> = { down: 'ped', up: 'pedup', change: 'pedch' }
 const OCTAVE_WORDS: readonly OctaveLine[] = OCTAVE_LINES
 const DYNAMIC_WORDS: readonly Dynamic[] = DYNAMICS
 
@@ -86,7 +84,6 @@ const ARTICULATION_BY_WORD = lookup(ARTICULATION_WORDS)
 const ORNAMENT_BY_WORD = lookup(ORNAMENT_WORDS)
 const HAIRPIN_BY_WORD = lookup(HAIRPIN_WORDS)
 const EXPRESSION_BY_WORD = lookup(EXPRESSION_WORDS)
-const PEDAL_BY_WORD = lookup(PEDAL_WORDS)
 
 const GRACE = 'gr:'
 const GLISS = 'gliss'
@@ -159,7 +156,6 @@ export function readMarks(text: string): NoteMarks | null {
     const octave = OCTAVE_WORDS.find((line) => line === word)
     const dynamic = DYNAMIC_WORDS.find((level) => level === word)
     const expression = EXPRESSION_BY_WORD.get(word)
-    const pedal = PEDAL_BY_WORD.get(word)
     let read: boolean
     if (articulation) {
       read = !articulations.includes(articulation)
@@ -169,7 +165,6 @@ export function readMarks(text: string): NoteMarks | null {
     else if (octave) read = once('octave', octave)
     else if (dynamic) read = once('dynamic', dynamic)
     else if (expression) read = once('expression', expression)
-    else if (pedal) read = once('pedal', pedal)
     else if (word === 'arp') read = once('arpeggio', true)
     else if (word === GLISS) read = once('glissando', true)
     else if (TWO_NOTE_TREMOLO.test(word))
@@ -205,7 +200,7 @@ export function readMarks(text: string): NoteMarks | null {
 
 /**
  * Marks as a token writes them, in one order: articulations, ornament, roll, slurs, octave,
- * glissando, two-note tremolo, dynamic, hairpin, expression, pedal, grace, tempo, swing, numeral, text.
+ * glissando, two-note tremolo, dynamic, hairpin, expression, grace, tempo, swing, numeral, text.
  */
 export function writeMarks(marks: NoteMarks): string {
   const graceText = (grace: readonly GraceNote[]) =>
@@ -222,7 +217,6 @@ export function writeMarks(marks: NoteMarks): string {
     marks.dynamic,
     marks.hairpin && HAIRPIN_WORDS[marks.hairpin],
     marks.expression && EXPRESSION_WORDS[marks.expression],
-    marks.pedal && PEDAL_WORDS[marks.pedal],
     marks.grace && graceText(marks.grace),
     marks.tempo !== undefined && `${TEMPO}${marks.tempo}`,
     marks.swing && SWING_WORDS[marks.swing],

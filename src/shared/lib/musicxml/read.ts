@@ -772,13 +772,6 @@ function readDirection(direction: XmlElement, read: DirectionReader) {
           else read.octave(kind === 'down' ? '8va' : '8vb')
           break
         }
-        case 'pedal': {
-          const kind = child.attrs.type
-          if (kind === 'start' || kind === 'resume') read.mark({ pedal: 'down' })
-          else if (kind === 'stop' || kind === 'discontinue') read.mark({ pedal: 'up' })
-          else if (kind === 'change') read.mark({ pedal: 'change' })
-          break
-        }
         case 'words': {
           const written = textOf(child).trim()
           const words = normalWords(written)
