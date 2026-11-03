@@ -1,5 +1,7 @@
 # Spec: the Profile's tables, badges and avatars (B1, D12, D17)
 
+> **2026-11-03:** where this spec and [`../plan.md`](../plan.md) differ, the plan is newer and wins (prompt D20). Map of round 29's files: [`../README.md`](../README.md).
+
 ## Problem
 The Profile has an initial, three figures, Activity and one list of eight badges (`achievements.ts`) that mixes
 one-time milestones with goals. A learner's name lives in Supabase Auth's `user_metadata.name`; there is no

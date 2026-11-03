@@ -1,5 +1,7 @@
 # Spec: the pedal as events (A27, A29)
 
+> **2026-11-03:** where this spec and [`../plan.md`](../plan.md) differ, the plan is newer and wins (prompt D20). Map of round 29's files: [`../README.md`](../README.md).
+
 ## Problem
 The sustain pedal is a note mark (`NoteMarks.pedal: 'down' | 'up' | 'change'`, written `ped`, `pedup`,
 `pedch` in a staff's text). MusicXML import merges a stop and a start at one place into the start

@@ -1,5 +1,7 @@
 # Spec: the settings registry (R18, R20, R21, R24, A10, A12–A14, A24)
 
+> **2026-11-03:** where this spec and [`../plan.md`](../plan.md) differ, the plan is newer and wins (prompt D20). Map of round 29's files: [`../README.md`](../README.md).
+
 ## Problem
 Settings are drawn by hand on each page (`pages/settings`, the lesson's and course's Settings, the score's
 Settings, the Player's sheets), so the same field shows in two places ("Lessons read as" on a lesson's

@@ -1,5 +1,7 @@
 # Spec: the chord's colour notes (A33)
 
+> **2026-11-03:** where this spec and [`../plan.md`](../plan.md) differ, the plan is newer and wins (prompt D20). Map of round 29's files: [`../README.md`](../README.md).
+
 ## Problem
 Added tones (add2…add13 chips), alterations (♭5 ♭9 ♯9 ♯11 ♭13 chips, `alterationsOf` in `chord-parts.ts`) and
 Available tensions (`ChordTensions` over `tensions.ts`, groups by quality only, chips that only play) are three
