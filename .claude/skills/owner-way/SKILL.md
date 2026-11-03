@@ -86,6 +86,74 @@ These come straight from their feedback. Each has burned a round before.
 - Tapping a chord moves the cursor there; it doesn't open a dialog.
 - Transitions are smooth, and there is no flash of the other layout.
 
+## The plan gate: describe, get it read, then build
+
+Every item is built from a written plan the owner has read. Generic descriptions ("improve the settings", "fix
+the metronome") produced wrong builds in round 29 and cost a full audit. The gate has three parts, in order:
+
+1. **The item's spec, which the owner reads** (`.scratch/<round>/plan/<part>.md`), one block per item:
+   - **Source:** the brief's item and bullets (line numbers), and any later owner correction that changes them.
+   - **Today:** what the app does now, with the files.
+   - **Will build:** the screen and its route, where it is reached from, each control in order with its kind and
+     its exact English label (the term Flat, Dorico, MuseScore or Sibelius uses), values and default, what
+     moves from where to where, what is removed.
+   - **Not in this item.** **Done when:** the tests and the screenshots (390×844, 844×390, 1280×800).
+   - **Owner's question**, only where the brief leaves it open, with the default.
+2. **The implementation plan, per subsystem** (`superpowers:writing-plans` / `writing-plans`, saved beside the
+   spec): Goal, Architecture, Global Constraints copied verbatim from the brief and the owner's corrections,
+   Review Focus, then tasks with files, interfaces, a failing test first, the command, the commit; the
+   self-review against the spec at the end.
+3. **The owner reads both.** Then it is built inline (owner-way 3; writing-plans' "Native" with
+   `executing-plans`), one task one commit, each commit naming its brief item ("A39: …").
+
+Before building an item, re-read its section of the brief (not memory, not the progress file) and the owner's
+latest corrections; the latest words win. Keep the brief's round order: a round is closed (items done, round
+report, impeccable audit, full gate recorded) before the next starts.
+
+| Thought | Reality |
+|---|---|
+| "The owner asked for it directly, I can just build it" | Describe it first; a direct request is still an item. |
+| "I remember what the brief says" | Re-read the section; the audit found builds against lines that were remembered wrong. |
+| "A reference app does it differently, I'll follow that" | The brief and the owner's corrections decide; a reference informs, it does not overrule (round 29's grooves). |
+| "progress.md says done" | It was wrong for 14 items; check the code. |
+| "It's only docs or a small fix" | Small fixes skip the implementation plan, not the description. |
+
+## Skills: which one, when
+
+Check for a fitting skill before acting (`using-superpowers`), read its current text, then follow it; this file
+and CLAUDE.md win where they differ.
+
+| Moment | Skill |
+|---|---|
+| Start of a session, and after every compaction | this skill, `references/practices.md`, the brief's sections in hand, `progress.md`, the plan |
+| Writing the plan | `writing-plans`; `brainstorming` only where the owner's request leaves real choices open |
+| Any screen, before shaping or editing it | `impeccable` (setup once a session: `scripts/impeccable context`; `reference/craft-floor.md` right before a UI edit; `audit` at each round's end) |
+| Building | `executing-plans` (inline), `tdd` / `test-driven-development` (test first, watch it fail) |
+| A bug or a failing test | `systematic-debugging` before any fix |
+| Before saying done, fixed or passing | `verification-before-completion`: the command run and its output |
+| End of a round | `requesting-code-review`; `receiving-code-review` for what comes back |
+| Vercel config | `vercel:knowledge-update` (or `knowledge-update`) before touching `vercel.ts` |
+| Database | `supabase`, `supabase-postgres-best-practices` |
+| Prose the app shows, docs | `humanizer`, `writing-guidelines` |
+| Editing a skill | `writing-skills` |
+
+Superpowers' skills may appear without the `superpowers:` prefix (installed as personal skills). Installing a
+skill or plugin from outside the repo is the owner's call: say what it is, its licence and source, and let them
+add it.
+
+## Agents that keep their work
+
+A planning or audit agent writes its file at once (a skeleton of every heading) and saves after each item, so an
+interruption loses nothing; its brief lives in `.scratch/<round>/briefs/`. An agent stopped by the owner cannot be
+resumed: start a new one from its saved file, never from scratch.
+
+## Sources: facts, not files
+
+A page or file with no licence is all rights reserved, not free: its code, audio and wording never ship. The facts
+in it (a progression, a groove, a behaviour) may be used in our own words and code. Samples and fonts ship only
+under a licence that allows it (CC0, or CC-BY with the credit in Settings), with each file's source and licence
+written beside it.
+
 ## How the owner wants work run
 
 1. **Before starting:** fetch and check that the branch is level with `main` (`claude/keen-gates-q9bnit` unless told otherwise).
