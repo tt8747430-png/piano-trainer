@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 import { useAppUpdate } from '@/shared/lib/app-update'
 import { checkOnReturn } from './check-on-return'
+import { installed } from './installed'
 import { UpdateBanner } from './UpdateBanner'
 
 /**
@@ -26,7 +27,6 @@ export function UpdatePrompt({
   const { status, update } = useAppUpdate()
   const {
     needRefresh: [needRefresh],
-    updateServiceWorker,
   } = useRegisterSW({
     immediate: false,
     onRegisteredSW: (_url, registration) => {
@@ -35,9 +35,22 @@ export function UpdatePrompt({
       update.connect({
         look: async () => {
           await registration.update()
-          return registration.waiting !== null || registration.installing !== null
+          return (await installed(registration)) !== null
         },
-        install: () => void updateServiceWorker(true),
+        install: () => {
+          void installed(registration).then((waiting) => {
+            // None waits: it is active already (a page no version controlled), and a reload takes it.
+            if (!waiting) return setReloadDue(true)
+            // The page reloads once the new version has taken over: when it controls the page, or,
+            // on a page no version controls yet (opened for the first time), once it is active.
+            const reload = () => setReloadDue(true)
+            navigator.serviceWorker?.addEventListener('controllerchange', reload, { once: true })
+            waiting.addEventListener('statechange', () => {
+              if (waiting.state === 'activated') reload()
+            })
+            waiting.postMessage({ type: 'SKIP_WAITING' })
+          })
+        },
       })
     },
     onNeedReload: () => setReloadDue(true),

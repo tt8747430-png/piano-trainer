@@ -270,7 +270,7 @@ describe('Settings', () => {
   })
 
   it('installs a waiting version from Settings, and marks the Profile’s way there', async () => {
-    const { updateServiceWorker } = stubServiceWorker({ waiting: true })
+    const { skipWaiting } = stubServiceWorker({ waiting: true })
     const user = userEvent.setup()
     const { router } = await renderApp('/profile')
     expect(
@@ -281,6 +281,8 @@ describe('Settings', () => {
       'New version ready',
     )
     await user.click(screen.getByRole('button', { name: 'Install and restart' }))
-    expect(updateServiceWorker).toHaveBeenCalledExactlyOnceWith(true)
+    await waitFor(() =>
+      expect(skipWaiting).toHaveBeenCalledExactlyOnceWith({ type: 'SKIP_WAITING' }),
+    )
   })
 })

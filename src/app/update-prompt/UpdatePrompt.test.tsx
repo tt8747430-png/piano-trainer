@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { stubServiceWorker } from '@/shared/test/pwa-register'
@@ -11,13 +11,15 @@ describe('UpdatePrompt', () => {
   })
 
   it('offers a waiting version and installs it only when asked', async () => {
-    const { updateServiceWorker } = stubServiceWorker({ waiting: true })
+    const { skipWaiting } = stubServiceWorker({ waiting: true })
     const user = userEvent.setup()
     render(<UpdatePrompt offer />)
     expect(screen.getByRole('status')).toHaveTextContent('A new version is ready')
-    expect(updateServiceWorker).not.toHaveBeenCalled()
+    expect(skipWaiting).not.toHaveBeenCalled()
     await user.click(screen.getByRole('button', { name: 'Update' }))
-    expect(updateServiceWorker).toHaveBeenCalledExactlyOnceWith(true)
+    await waitFor(() =>
+      expect(skipWaiting).toHaveBeenCalledExactlyOnceWith({ type: 'SKIP_WAITING' }),
+    )
   })
 
   it('reloads onto a version another tab took only once it may offer it again', () => {
@@ -46,12 +48,12 @@ describe('UpdatePrompt', () => {
   })
 
   it('goes away when put off, without updating', async () => {
-    const { updateServiceWorker } = stubServiceWorker({ waiting: true })
+    const { skipWaiting } = stubServiceWorker({ waiting: true })
     const user = userEvent.setup()
     render(<UpdatePrompt offer />)
     await user.click(screen.getByRole('button', { name: 'Later' }))
     expect(screen.queryByRole('status')).not.toBeInTheDocument()
-    expect(updateServiceWorker).not.toHaveBeenCalled()
+    expect(skipWaiting).not.toHaveBeenCalled()
   })
 
   it('comes back after Later once the app returns to the screen, the version still waiting', async () => {

@@ -5,7 +5,7 @@ import { heardUntil, untilTestEnds } from './listeners'
 /** What the app asks of `useRegisterSW`, as far as a test can see it. */
 interface RegisterOptions {
   immediate?: boolean
-  onRegisteredSW?: (url: string, registration: { update(): Promise<unknown> }) => void
+  onRegisteredSW?: (url: string, registration: ServiceWorkerRegistration) => void
   onNeedReload?: () => void
 }
 
@@ -14,10 +14,16 @@ interface RegisterOptions {
  * (vite.config.ts aliases it here): a service worker registration whose waiting version each test
  * decides with `stubServiceWorker`, and which says how it was asked to register.
  */
+const waitingWorker = { state: 'installed', postMessage: vi.fn(), addEventListener: vi.fn() }
 const registration = {
   waiting: false,
-  updateServiceWorker: vi.fn(async (_reloadPage?: boolean) => {}),
-  worker: { update: vi.fn(async () => undefined) },
+  worker: {
+    update: vi.fn(async () => undefined),
+    get waiting() {
+      return registration.waiting ? waitingWorker : null
+    },
+    installing: null,
+  },
 }
 let registeredWith: RegisterOptions = {}
 
@@ -27,12 +33,16 @@ export function useRegisterSW(options: RegisterOptions = {}) {
   // as a closed page's would: the document outlives every test of a worker.
   useState(() => {
     registeredWith = options
-    heardUntil(untilTestEnds(), () => options.onRegisteredSW?.('/sw.js', registration.worker))
+    heardUntil(untilTestEnds(), () =>
+      options.onRegisteredSW?.(
+        '/sw.js',
+        registration.worker as unknown as ServiceWorkerRegistration,
+      ),
+    )
   })
   return {
     needRefresh: useState(registration.waiting),
     offlineReady: useState(false),
-    updateServiceWorker: registration.updateServiceWorker,
   }
 }
 
@@ -42,11 +52,12 @@ export function useRegisterSW(options: RegisterOptions = {}) {
  */
 export function stubServiceWorker({ waiting }: { waiting: boolean }) {
   registration.waiting = waiting
-  registration.updateServiceWorker.mockReset()
+  waitingWorker.postMessage.mockReset()
   registration.worker.update.mockReset()
   registeredWith = {}
   return {
-    updateServiceWorker: registration.updateServiceWorker,
+    /** What the waiting version was told: `{ type: 'SKIP_WAITING' }` to take the page over. */
+    skipWaiting: waitingWorker.postMessage,
     update: registration.worker.update,
     registeredWith: () => registeredWith,
   }
