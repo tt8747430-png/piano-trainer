@@ -120,6 +120,18 @@ const LIBRARY = [
     ),
   }),
   entry('rock', 'wild-thing', { major: 'I IV V IV' }, 'Wild Thing', 'Wild Thing'),
+  entry('rock', 'blues-rock-riff', { minor: 'i III IV' }, 'Blues-rock riff', 'Блюз-роковый рифф', {
+    note: note(
+      'The minor key’s III, then a major IV: the raised 6th of the Dorian mode. Played as power chords, it is the riff of a hundred rock songs.',
+      'III минорной тональности, затем мажорная IV: повышенная 6-я ступень дорийского лада. Квинтами это рифф сотни рок-песен.',
+    ),
+  }),
+  entry('pop', 'creep', { major: 'I III IV iv' }, 'Creep', 'Creep', {
+    note: note(
+      'A major III where the key has a minor iii, then IV turning minor: the iv is borrowed from the parallel minor. In C: C, E, F, Fm.',
+      'Мажорная III там, где в тональности минорная iii, затем IV становится минорной: iv взята из одноимённого минора. В до мажоре: C, E, F, Fm.',
+    ),
+  }),
   entry(
     'rock',
     'borrowed-flat-seven',
@@ -296,6 +308,19 @@ const LIBRARY = [
     { major: 'I7 V7 IV7 IV7 I7 V7 I7 V7' },
     '8-bar blues',
     '8-тактовый блюз',
+  ),
+  entry(
+    'blues',
+    'jazz-blues',
+    { major: 'I7 IV7 I7 I7 IV7 IV7 I7 VI7 ii7 V7 I7 V7' },
+    'Jazz blues',
+    'Джазовый блюз',
+    {
+      note: note(
+        'The 12-bar with a quick change and a jazz turnaround: bar 8 moves to VI7, then ii7–V7 leads home.',
+        '12 тактов с быстрой сменой и джазовым оборотом: в 8-м такте VI7, затем ii7–V7 ведёт домой.',
+      ),
+    },
   ),
   entry(
     'classical',

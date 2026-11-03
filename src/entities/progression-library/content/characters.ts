@@ -147,6 +147,18 @@ export const CHARACTERS: Readonly<Record<ProgressionId, LocalText>> = {
     'Беспокойный с первых тактов, классический блюз',
   ),
   'minor-blues': line('Dark and smoky, the blues in minor', 'Тёмный и дымный, блюз в миноре'),
+  'jazz-blues': line(
+    'Swinging and sly, the blues dressed for a club',
+    'Свинговый и лукавый, блюз в клубном наряде',
+  ),
+  'blues-rock-riff': line(
+    'Heavy and driving, a riff to stomp to',
+    'Тяжёлый и напористый рифф, под который топают',
+  ),
+  creep: line(
+    'Bittersweet: a bright lift, then the minor iv sighs',
+    'Горьковато-сладкая: яркий подъём, потом вздыхает минорная iv',
+  ),
   'eight-bar': line(
     'Short and plain, the old folk blues',
     'Короткий и простой, старый народный блюз',
