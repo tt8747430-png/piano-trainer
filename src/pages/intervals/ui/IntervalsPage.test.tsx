@@ -128,6 +128,14 @@ describe('Practice → Intervals', () => {
     expect(row('Minor third').querySelector('[data-play-mark]')).not.toBeNull()
   })
 
+  it('links to ear training in the Quiz, which owns it (A32)', async () => {
+    await renderApp('/practice/intervals')
+    expect(await screen.findByRole('link', { name: /^Intervals by ear/ })).toHaveAttribute(
+      'href',
+      '/practice/quiz/intervals',
+    )
+  })
+
   it('chooses the root, kept in the URL', async () => {
     const user = userEvent.setup()
     const { router, audio } = await renderApp('/practice/intervals')

@@ -202,6 +202,9 @@ export const practice = {
     // How a row plays its interval, as theory books name it (A22).
     way: { together: 'Harmonic', up: 'Melodic, rising', down: 'Melodic, falling' },
     playAll: 'Play all',
+    // Ear training is the Quiz's: the page links there.
+    ear: 'Train your ear',
+    earQuiz: 'Intervals by ear',
     semitones_one: '{{count}} semitone',
     semitones_other: '{{count}} semitones',
     // The songs an interval opens, rising and falling.

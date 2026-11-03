@@ -97,9 +97,14 @@ describe('Practice → Scales and keys', () => {
     expect(dm).toHaveAttribute('aria-pressed', 'false')
   })
 
-  it('links to the relative minor', async () => {
-    await renderApp('/practice/scales?root=G&kind=major')
-    expect(await screen.findByRole('link', { name: 'E natural minor' })).toBeInTheDocument()
+  it('names the relative minor once, on the Key tab (A32)', async () => {
+    const first = await renderApp('/practice/scales?root=G&kind=major')
+    await screen.findByRole('heading', { level: 2, name: 'G major' })
+    expect(screen.queryByRole('link', { name: 'E natural minor' })).not.toBeInTheDocument()
+    first.unmount()
+    await renderApp('/practice/scales?root=G&kind=major&show=key')
+    await screen.findByRole('heading', { level: 2, name: 'G major' })
+    expect(screen.getByText('Relative', { selector: 'dt' })).toBeInTheDocument()
   })
 
   it('plays up and down, each key going down as it sounds', async () => {

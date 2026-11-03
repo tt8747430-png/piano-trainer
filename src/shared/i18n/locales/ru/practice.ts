@@ -191,6 +191,8 @@ export const practice: LocaleResources['practice'] = {
       down: 'Мелодический, нисходящий',
     },
     playAll: 'Сыграть все',
+    ear: 'Тренировка слуха',
+    earQuiz: 'Интервалы на слух',
     semitones_one: '{{count}} полутон',
     semitones_few: '{{count}} полутона',
     semitones_many: '{{count}} полутонов',
