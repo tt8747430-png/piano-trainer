@@ -45,6 +45,7 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A30 | Fingering, one way everywhere | 2 | open | | |
 | A31 | Nothing flickers, nothing jumps | 1 | open | | |
 | A32 | The theory pages: one owner per idea, no copies | 2 | open | | |
+| A33 | Colour notes: one model | 2 | in progress | | tensions follow the chord's degree in a key (kernel, tested); the one panel for added tones, alterations and tensions next |
 | A34 | The score editor against Flat and the editors in `piano-data` | 4 | open | | |
 | A35 | The Player: play staves, not "melody" and patterns | 4 | open | | |
 | A36 | Focus and keyboard walking | 1 | open | | |
@@ -70,6 +71,8 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 ## Owner's to-dos
 
 - Record the spoken metronome count, one to eight, in English and Russian (D16).
+- The Metronome's recorded sounds (D16): Freesound answers 403 from the cloud container, so no CC0 one-shots could be fetched. Either drop the CC0 files (woodblock, clave, rimshot, cowbell, click, kick, snare, closed and open hat, ride; an accent and a normal stroke each) into `public/samples/metronome/` with their sources, or let the environment reach freesound.org. Until then the synthesised voices play.
+- Reseed the built-in content (`node scripts/export-content.mjs` then `scripts/seed-content.mjs` with an editor's `SEED_EMAIL`/`SEED_PASSWORD`): two lessons' wording changed with A6 (Approach chords, Root movement).
 
 ## Round reports
 

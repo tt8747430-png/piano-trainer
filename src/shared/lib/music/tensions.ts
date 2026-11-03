@@ -1,6 +1,9 @@
 import { qualityIntervals, type ChordQuality } from './chord'
 import { INTERVALS, type IntervalName, type LabelledInterval } from './interval'
-import type { SpelledNote } from './note'
+import type { Key } from './key'
+import { pitchClassOf, type SpelledNote } from './note'
+import { pitchClass } from './pitch'
+import { spellScale } from './scale'
 import { toneAbove, type Tone } from './tone'
 
 /**
@@ -80,18 +83,73 @@ function chordToneGroup({ steps, semitones }: LabelledInterval): TensionGroup {
  * chord's own tones spelled as the chord spells them, its available tensions, and every other note
  * spelled as the degree its semitones make, to avoid.
  */
-export function tensionTones(root: SpelledNote, quality: TensionChord): TensionTone[] {
+export function tensionTones(root: SpelledNote, quality: TensionChord, key?: Key): TensionTone[] {
   const own = qualityIntervals(quality).map((interval): TensionTone => ({
     ...toneAbove(root, interval),
     group: chordToneGroup(interval),
   }))
-  const tensions = AVAILABLE[quality].map((name): TensionTone => ({
-    ...toneAbove(root, INTERVALS[name]),
-    group: 'tension',
-  }))
-  const taken = new Set([...own, ...tensions].map((tone) => tone.pitchClass))
+  const tensions = (key ? inKey(root, quality, key) : null) ?? {
+    taken: AVAILABLE[quality].map((name) => INTERVALS[name]),
+    avoided: [],
+  }
+  const coloured = [
+    ...tensions.taken.map((interval): TensionTone => ({
+      ...toneAbove(root, interval),
+      group: 'tension',
+    })),
+    ...tensions.avoided.map((interval): TensionTone => ({
+      ...toneAbove(root, interval),
+      group: 'avoid',
+    })),
+  ]
+  const taken = new Set([...own, ...coloured].map((tone) => tone.pitchClass))
   const avoid = OTHER.map((name) => toneAbove(root, INTERVALS[name]))
     .filter((tone) => !taken.has(tone.pitchClass))
     .map((tone): TensionTone => ({ ...tone, group: 'avoid' }))
-  return [...own, ...tensions, ...avoid].sort((a, b) => (a.semitones % 12) - (b.semitones % 12))
+  return [...own, ...coloured, ...avoid].sort((a, b) => (a.semitones % 12) - (b.semitones % 12))
+}
+
+/** The 9th, 11th and 13th a chord may take, each in its spellings. */
+const UPPER: readonly (readonly IntervalName[])[] = [
+  ['m9', 'M9', 'A9'],
+  ['P11', 'A11'],
+  ['m13', 'M13'],
+]
+
+/**
+ * A chord's tensions as its degree in `key` makes them (A33, chord-scale theory): the key's own 9th,
+ * 11th and 13th over its root, each avoided where it sits a half step over a chord tone (♭9 over
+ * the root, 11 over a major 3rd, ♭13 over the 5th) or, over a minor 7th chord, where its 13th makes
+ * a tritone with the 3rd. A dominant keeps its altered tensions in any key; a chord whose root is
+ * not in the key has none of the key's (null).
+ */
+function inKey(
+  root: SpelledNote,
+  quality: TensionChord,
+  key: Key,
+): { taken: LabelledInterval[]; avoided: LabelledInterval[] } | null {
+  if (quality === 'd7') return null
+  const scale = new Set(
+    spellScale(key.tonic, key.minor ? 'natural' : 'major').map((tone) => tone.pitchClass),
+  )
+  const base = pitchClassOf(root)
+  if (!scale.has(base)) return null
+  const chord = qualityIntervals(quality)
+  const third = chord.find((interval) => interval.steps === 2)?.semitones
+  const upper = UPPER.flatMap((names) =>
+    names
+      .map((name) => INTERVALS[name])
+      .filter((interval) => scale.has(pitchClass(base + interval.semitones)))
+      .slice(0, 1),
+  )
+  const avoided = (interval: LabelledInterval) =>
+    chord.some((tone) => (interval.semitones - tone.semitones + 24) % 12 === 1) ||
+    (quality === 'm7' &&
+      interval.semitones >= 20 &&
+      third !== undefined &&
+      (interval.semitones - third) % 12 === 6)
+  return {
+    taken: upper.filter((interval) => !avoided(interval)),
+    avoided: upper.filter(avoided),
+  }
 }
