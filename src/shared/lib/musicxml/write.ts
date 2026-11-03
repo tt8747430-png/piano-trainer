@@ -18,7 +18,9 @@ import {
   type SpelledNote,
   type NoteLyrics,
   type NoteMarks,
+  type Pedal,
   type TempoUnit,
+  type Tick,
   type TimeSignature,
 } from '@/shared/lib/music'
 import {
@@ -198,7 +200,9 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): st
           tag('miscellaneous-field', { name: APP_FIELD }, escapeText(options.appData)),
         ),
   )
-  const body = parts.map((part, index) => new PartWriter(score, part, index === 0, options).write())
+  const body = parts.map((part, index) =>
+    new PartWriter(score, part, index === 0, index === parts.length - 1, options).write(),
+  )
   return [
     '<?xml version="1.0" encoding="UTF-8" standalone="no"?>',
     '<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">',
@@ -246,6 +250,8 @@ class PartWriter {
     private readonly score: Score,
     private readonly part: Part,
     private readonly top: boolean,
+    /** Whether it holds the score's lowest staff: the pedal's (ADR 0097). */
+    private readonly bottom: boolean,
     private readonly options: MusicXmlOptions,
   ) {
     this.divisions = ticksOf({ value: 4, dots: 0 }, score.meter)
@@ -294,8 +300,10 @@ class PartWriter {
     const voices = staves.flatMap((staff, s) =>
       (measure.staves[staff] ?? []).map((voice, v) => ({ staff, voice, number: s * 4 + v + 1 })),
     )
+    const lowest = staves.at(-1)
     voices.forEach(({ staff, voice, number }, at) => {
-      out.push(...this.voice(voice.events, measure, staff, number, at === 0 && this.top))
+      const pedal = this.bottom && staff === lowest && number % 4 === 1
+      out.push(...this.voice(voice.events, measure, staff, number, at === 0 && this.top, pedal))
       if (at < voices.length - 1) {
         const length = voice.events.reduce(
           (sum, event) => sum + ticksOf(event.duration, this.score.meter),
@@ -460,6 +468,8 @@ class PartWriter {
     staff: StaffId,
     voice: number,
     chords: boolean,
+    /** Whether the pedal's events are written here: the lowest staff's first voice's. */
+    pedal = false,
   ): string[] {
     const { beams, tuplets } = beamPlan(
       events,
@@ -485,6 +495,16 @@ class PartWriter {
     if (chords && measure.chords.length === 0 && before && before.chords.length > 0)
       out.push(NO_CHORD_XML)
     const whole = events.length === 1 && events[0]?.kind === 'rest'
+    const pedals = pedal ? [...(measure.pedal ?? [])] : []
+    const number = this.staffNumber(staff)
+    // Each pedal event before the note it falls in, by its offset where it is not on the note.
+    const pedalsTo = (end: Tick, from: Tick) => {
+      while (pedals[0] && pedals[0].tick < end) {
+        const each = pedals.shift()
+        if (each) out.push(pedalXml(each.kind, each.tick - from, number))
+      }
+    }
+    let at = measure.startTick
     events.forEach((event, index) => {
       const length = ticksOf(event.duration, this.score.meter)
       while (harmonies[0] && harmonies[0].tick < event.tick + length) {
@@ -492,8 +512,12 @@ class PartWriter {
         if (!chord) break
         out.push(harmonyXml(parseChordSymbol(chord.symbol), Math.max(0, chord.tick - event.tick)))
       }
+      pedalsTo(event.tick + length, event.tick)
       out.push(...this.event(event, staff, voice, length, beamOf(index), tupletOf(index), whole))
+      at = event.tick + length
     })
+    // A lift after the last note: where the voice ends.
+    pedalsTo(Infinity, at)
     return out
   }
 
@@ -782,6 +806,22 @@ function direction(
   ...rest: string[]
 ): string {
   return tag('direction', { placement }, tag('direction-type', {}, type), ...rest)
+}
+
+/**
+ * A pedal event as a direction (ADR 0097, 0107): pressed, let up, or changed, by its offset from
+ * where it is written where it is not there.
+ */
+function pedalXml(kind: Pedal, offset: Tick, staff: number | undefined): string {
+  return direction(
+    'below',
+    tag('pedal', {
+      type: kind === 'down' ? 'start' : kind === 'up' ? 'stop' : 'change',
+      line: 'yes',
+    }),
+    offset === 0 ? '' : text('offset', offset),
+    staffXml(staff),
+  )
 }
 
 function pitchXml(midi: Midi, spelled: SpelledNote): string {

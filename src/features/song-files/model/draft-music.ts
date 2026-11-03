@@ -31,7 +31,7 @@ const timed = (notes: readonly DraftNote[], layer: NoteLayer, sings: boolean): T
  * The whole of a draft as timed music, as a file writes it (ADR 0107): every single staff and the
  * piano's two staves (a lead sheet's too: kept, its file says not printed), the words under the staff
  * they are on, each section's key and meter on its bars, the tempo over the first, the chord
- * symbols.
+ * symbols, the pedal's line.
  */
 export function draftMusic(draft: Draft): TimedMusic {
   const sung = lyricsLayer(draft)
@@ -68,6 +68,7 @@ export function draftMusic(draft: Draft): TimedMusic {
     bars,
     notes,
     chords,
+    ...(draft.pedal.length > 0 ? { pedal: draft.pedal } : {}),
     ...(draft.staves.length > 0 ? { staves: draft.staves.map(({ clef }) => ({ clef })) } : {}),
   }
 }

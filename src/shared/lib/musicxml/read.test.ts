@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { note, parseChordSymbol, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { NotAScoreError, readMusicXml } from './read'
@@ -129,6 +130,7 @@ describe('readMusicXml', () => {
     })
     expect(at(5 * B)[0]?.marks?.grace).toEqual([{ midi: 76, spelled: note('E') }])
     expect(at(0, 1)[0]).toMatchObject({ midi: 41 })
+    expect(at(0, 1)[0]).not.toHaveProperty('marks')
     // Written an octave under where it sounds: the pitch read is the one heard.
     expect(at(8 * B)[0]).toMatchObject({ midi: 86, marks: { octave: '8va' } })
     expect(at(8 * B, 1)[0]).toMatchObject({ midi: 66, spelled: note('F', 1) })
@@ -185,5 +187,34 @@ describe('readMusicXml', () => {
     expect(score.meter).toBe('3/4')
     expect(score.parts).toEqual([{ name: 'Flute', staves: [0] }])
     expect(score.notes).toMatchObject([{ midi: 69, startTick: 0, durationTicks: 3 * B }])
+  })
+})
+
+/** A fixture's pedal line, each event at its beat. */
+const pedalOf = (name: string) =>
+  readMusicXml(readFileSync(new URL(`./fixtures/${name}`, import.meta.url), 'utf8')).pedal.map(
+    ({ tick, kind }) => `${kind}@${tick / B}`,
+  )
+
+describe('readMusicXml’s pedal (ADR 0097, 0107)', () => {
+  it('reads each pedal mark as an event of the piece’s line, never a note’s mark', () => {
+    const score = readMusicXml(PIANO)
+    expect(score.pedal).toEqual([{ tick: 0, kind: 'down' }])
+  })
+
+  it('reads Finale’s change, a stop and a start at one place, as a change, and the stop after the last note', () => {
+    expect(pedalOf('pedal-finale.musicxml')).toEqual(['down@0', 'change@4', 'change@8', 'up@12'])
+  })
+
+  it('reads MuseScore’s change between notes where it stands', () => {
+    expect(pedalOf('pedal-musescore.musicxml')).toEqual(['down@0', 'change@2', 'up@8'])
+  })
+
+  it('lets the pedal up over a rest, not at the next note', () => {
+    expect(pedalOf('pedal-over-rest.musicxml')).toEqual(['down@0', 'up@2', 'down@4'])
+  })
+
+  it('places a pedal mark by its offset, between the notes', () => {
+    expect(pedalOf('pedal-offset.musicxml')).toEqual(['down@0', 'up@1.5', 'down@1.75', 'up@4'])
   })
 })
