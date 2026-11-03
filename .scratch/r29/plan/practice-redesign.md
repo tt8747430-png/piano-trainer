@@ -113,6 +113,12 @@ hymnals in keys like E♭, A♭ and D♭.
 
 ## P2: The key picker: a key-signature grid, enharmonic keys named twice
 
+> **Decided 22 (wins over this item):** no key is named twice. The picker is Flat's key-signature grid
+> (`../owner/flat-key-signature-grid.jpg`): two rows, sharps (♮, 1♯–7♯) and flats (1♭–7♭), each cell the signature
+> itself drawn in the music font, the chosen one tinted. D♭ (5♭) and C♯ (7♯) are separate cells; everywhere else
+> the key is written with the one name its signature gives ("D♭ major"). Used on New song, the score editor and
+> the Practice pages alike.
+
 - **Source:** Decided 21 "Keys: no circle of fifths for picking a key. Use the reference apps' controls (Flat's
   key-signature grid and the like); decide properly. C♯/D♭ are shown as the reference apps show enharmonic keys (both
   names where a key has two), not as today." A5 (577–620) where not replaced; D20 (Transpose has no circle).
@@ -180,6 +186,11 @@ hymnals in keys like E♭, A♭ and D♭.
   - Screenshots: the picker open at 390 (sheet) and 1280 (popover), Major and Minor.
 
 ## P3: Chords: the chord chosen as the references choose it
+
+> **Decided 22 (wins over this item):** **size first, then the chord.** A row of sizes (**Triad · 7th · 9th · 11th
+> · 13th**), then a short list of the chords of that size by name (at 7th: maj7, 7, m7, m(maj7), ø7, °7). Never the
+> word "Quality"; the label is **"Chord"** (ru «Аккорд»). The 7th switch goes. "Right hand from" becomes **"Top
+> note"**.
 
 - **Source:** Decided 21 "the chord size picked as the reference apps pick it (research); '7th' (♭7 · 7) and 'Right
   hand from' are not understandable: redesign them with controls that say what they do"; A20, A33; round-2 C1, C2.
@@ -268,6 +279,8 @@ hymnals in keys like E♭, A♭ and D♭.
 
 ## P5: Chords: hand drawings for fingering
 
+> **Decided 22:** confirmed: drawn hands on Chords and Scales; finger numbers on the keys in the Player.
+
 - **Source:** Decided 21 "the hand drawings are proper hands (the decision logged), not today's shapes"; A30.
 - **Today:** `src/shared/ui/HandDiagram.tsx`: a rounded blob with five bars, numbered circles on top; beside it the
   note letters and finger numbers in two rows (`ChordFingering.tsx`, `ScaleFingering.tsx`).
@@ -319,6 +332,10 @@ hymnals in keys like E♭, A♭ and D♭.
   "the head's height is the same for C and Cm(maj13)". Screenshots at the three sizes and 1440.
 
 ## P7: Scales and keys: what replaces Notes · Harmony · Key
+
+> **Decided 22 (adds to this item):** the Chords view offers **the same chord choices as the Chords page** (every
+> size, Triad to 13th, by P3's size row), not only triads and 7ths: the chords on each degree are built at the
+> chosen size. One shared control (`ChordSizeRow`) on both pages.
 
 - **Source:** Decided 21 "Notes · Harmony · Key do not say what they mean or how they relate … Redesign the page,
   not just describe it"; P1; A21, A32, A42, A43.
@@ -683,6 +700,12 @@ facts and behaviour only, and write our own words, patterns, sounds and code.
 
 ### CP1: Where it lives: one page, Progressions and Accompaniment merged
 
+> **Decided 22 (wins over this item):** **two pages, one engine.** Progressions stays the page to *learn* a
+> progression (numerals, roles, bass movement); the **Chord player** (Practice › Tools) is the page to *play along*
+> (sections, bars, a style, the band). They share the chord-sheet model, the boxes and the playback engine, and each
+> opens the other with the same chords. The studies (Savchenko's *Called to Play*) move to a built-in Songs folder
+> credited to the book.
+
 - **Source:** the owner's decision ("it overlaps Progressions and Accompaniment: one page, not two"); D14; A23; A25;
   P13, P14 above.
 - **Today:** three places do parts of it. **Progressions** (`/practice/progressions`): a typed line of numerals or
@@ -779,6 +802,10 @@ facts and behaviour only, and write our own words, patterns, sounds and code.
 
 ### CP3: Styles: presets with variations, written by us
 
+> **Decided 22:** the first style is **Pop 1**. Before writing styles, study how Musicca's chord player builds its
+> styles (which instruments, which beats, how a style varies per bar and per section, fills and endings), facts
+> only, and record the findings in `../research/musicca-styles.md`; our styles follow that structure.
+
 - **Source:** the owner's decision (style presets: pop, rock, jazz, blues, … with variations); Musicca's presets
   (notes §4, §8: Pop 1–5, Rock 1–2, Melodic 1–4, Hip hop 1–2, Disco 1–2, Funk 1–2, Reggae 1–2, Jazz 1–4, Blues 1–2,
   Classical 1–2, each up to 4 variations; a 16-step grid per bar per instrument with a main bar and a last-bar fill);
@@ -851,6 +878,8 @@ facts and behaviour only, and write our own words, patterns, sounds and code.
 
 ### CP5: My chord sheets (saving)
 
+> **Decided 22:** synced to the account (a `SYNCED_SAVES` store, like the learner's songs).
+
 - **Source:** the owner's "the learner's own allowed" (P14) and Musicca's File menu (New, Save, Share).
 - **Will build:** P14's store, widened: `pt-progressions` becomes **`pt-chord-sheets`**, version 1, `{ mine: readonly
   { id; name; sheet: ChordSheet; style: StyleId; tempo: number; settings: ChordPlayerSheetSettings }[] }`, at most
@@ -866,6 +895,8 @@ facts and behaviour only, and write our own words, patterns, sounds and code.
   saves it".
 
 ### CP6: The chord player's Settings page
+
+> **Decided 22:** Transpose (key) and the time signature live here, not on the page.
 
 - **Source:** the owner's decision ("a Settings page with instruments (piano, bass, drums…), count-in, repeat, time
   signature, transpose, volume"); Musicca `settings_modal.*`; Decided 20–21 (each page's own Settings page from its
@@ -891,6 +922,10 @@ facts and behaviour only, and write our own words, patterns, sounds and code.
   row". Screenshots at the three sizes (one column on a phone, two panes from 64rem).
 
 ## SND: Sounds: the libraries and the sample sets (piano, bass, drums, metronome)
+
+> **Decided 22 (bass):** a **real recorded bass** is required. Research further (Karoryfer's licence, other CC0,
+> public-domain and CC-BY multisamples, e.g. on Freesound, pianobook, the Versilian and Philharmonia sets); a
+> synthesised bass is used only until a licensed one is found.
 
 - **Source:** the owner's decision ("proper libraries and proper sounds for all of them (piano, bass, drums,
   metronome) … e.g. smplr, MIT, with CC0/public-domain sets such as Splendid Grand Piano and VCSL; Salamander CC-BY

@@ -263,6 +263,12 @@ The rule this gives (written into DESIGN.md "Settings" in ST20):
 
 ## ST4: Computer keys
 
+> **Decided 22 (wins over this item):** Computer keys is **not its own page**. Its two groups ("Playing the piano"
+> with the key map, "Shortcuts") become the last groups of the **On-screen piano** page (ST2), drawn only on a
+> device with a fine pointer and a keyboard; `/settings/computer-keys` goes (its route, its row in ST1, its parent),
+> and the Settings list's Piano group holds On-screen piano and Connect a piano. Test: `OnScreenPianoPage.test.tsx`
+> "shows Computer keys on a computer and not on a phone".
+
 - **Source:** A14 (710: "typing, octave and pedal keys, shortcuts"), R21 (show, don't describe).
 - **Today:** `/settings/computer-keys`: switch "Play from the computer keys" (ⓘ lists Z X and Space) and a
   Shortcuts button. The rail's ⌨ is a second switch (goes, ST2).
@@ -497,6 +503,20 @@ What stays on a Practice page and what goes to its Settings, decided once:
 
 ## ST15: The Player: its bar and its Settings page
 
+> **Decided 22 (wins over this item):** the owner rejected both the four menus and "one job per button": "why do
+> we still have four menus or four settings. I want its own settings page." So:
+> - **One place for settings:** the gear opens the Player's Settings page; **Setup goes** and its Staves (Play,
+>   Show, Volume per staff, Only the chords, a chart's pattern and swing) become that page's first group
+>   **"Staves"**. The View menu's display options (Layout, Show: chord symbols, positions, words, fingers, note
+>   names; Diagrams' mode; Lyrics' size; Keys) become its group **"Display"**, per view.
+> - **View** in the tools row is only the switch between views (Sheet · Grid · Diagrams · Lyrics), a segmented
+>   control with no options inside (a mode of the screen, not a setting).
+> - **⋯ More** holds only acts on this song (Favourite, Song information, Sections, Print); no setting, no link to
+>   one.
+> - **Bar:** Close · title · MIDI · gear · ⋯ · Edit. Tools row: View switch · Transpose · Simplify.
+> - Tests add: "the bar has no Setup"; "the View control has no options"; "every setting the Player has is on its
+>   Settings page" (walks `SETTING_HOMES` for home `player`).
+
 - **Source:** Decided 20 (413–417), Decided 21 (425–433: "No settings scattered in the header across four menus";
   "No duplicate menus or settings anywhere: check the Player"), R9, R18 (190–193), B7 (1850–1856), B8 Display
   (1866–1868, Flat/new-app references), round 1 S9 (kept where not corrected).
@@ -646,6 +666,11 @@ What stays on a Practice page and what goes to its Settings, decided once:
   - Screenshots `editor-bar-*`, `score-settings-*` at the three sizes.
 
 ## ST17: Songs: the songs page, a folder, a song's overview
+
+> **Decided 22 (wins over this item):** **no Songs settings page** (`/songs/settings`, `songs.open` and its gear do
+> not get built: a tap on a song opens its page, as today). A **folder's** and a **song's** own Settings pages are
+> built as below. The studies (Savchenko's *Called to Play* exercises) move to a built-in Songs folder credited to
+> the book (with the Chord player work, practice-redesign CP).
 
 - **Source:** Decided 21 (431–432: "Songs (the songs page, a folder, a song's overview) has its own Settings page
   from its own gear"; 459: "Songs' Settings page: maybe one row now; decide what is best"); D8, D10, R16, R17,
