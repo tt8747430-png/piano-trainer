@@ -36,7 +36,8 @@ seen on screen" with the diagrams on a last page.
   no package): each single staff a part under its name, the piano one part of two staves under its printed name;
   every bar of every staff (a lead sheet's piano kept with `staff-details print-object="no"`); values, dots,
   triplets, ties, beams, accidentals, fingers, articulations, ornaments, arpeggios, grace notes and slurs; dynamics,
-  hairpins, octave lines, the pedal, expressions and the tempo as directions; chord symbols as `<harmony>` (the
+  hairpins, octave lines, expressions and the tempo as directions; the pedal line (ADR 0097) a `<pedal>` direction
+  at each event on the lowest staff (start, stop, change), with an `<offset>` where it falls between notes; chord symbols as `<harmony>` (the
   nearest kind and its degrees, our suffix as its text); lyrics with their syllables and extenders; key, time and
   clef changes; repeats, endings, double and final barlines, the signs and jumps; each section's heading a rehearsal
   mark and each chart line a system. What only the app reads (the pattern, the sections' headings and lines, method
@@ -50,13 +51,17 @@ seen on screen" with the diagrams on a last page.
   - **MusicXML:** the first part of two staves is the piano's grand staff, every other staff a single staff (one
     line: its first voice, a chord's top note); with no piano part, a lead sheet over a silent piano. Title,
     composer, key, meter, tempo, notes, rests, ties, tuplets, chord symbols, lyrics (on the staff that sings most),
-    fingers, dynamics, articulations, slurs, repeats and endings are read as far as our model holds them. Sections
+    fingers, dynamics, articulations, slurs, repeats and endings are read as far as our model holds them. Each
+    `<pedal>` is an event of the pedal line at its measure position plus its `<offset>`, never a note's mark: a stop
+    and a start at one place (Finale's) or `type="change"` (MuseScore's) a change, a lift over a rest or after the
+    last note kept where it stands (fixtures in `shared/lib/musicxml/fixtures/`). Sections
     start at a key change, a lasting change of time and a rehearsal mark (its words naming a part where they do);
     lines are the file's systems, else four bars.
   - **MIDI:** its first meter, tempo and key signature, else the key its notes are most likely in
     (Krumhansl–Schmuckler); its notes snapped to a 16th or an eighth triplet by the takes' `quantise`; the piano's
     tracks (by name, or the only two) its hands by pitch, one track split at middle C; every other track a single
-    staff; the sustain pedal as pedal marks.
+    staff; the sustain pedal (control 64, down from 64) as the pedal line on the same grid, a lift and a press there
+    together a change, none past the music's end. Export writes control 64 at each event of the line.
   - **What it leaves out** is counted by kind and listed after the import in a sheet, with Open the song; an import
     that leaves nothing out opens the song's page at once. A file over 20 MB or 20,000 notes is too large, one that is
     no score says what Import opens, a damaged one (a .mxl garbled or cut short too) says so. Closing the sheet while
@@ -81,4 +86,5 @@ not its music.
   plays along, Share link); its separate Export to… items and its Share are gone (2026-10-30).
 - r25 — Select's bar exports the songs chosen from the same Export… sheet, a file each (2026-10-30).
 - r26 — A song's Export…, Share link and Publish in library stand on its Settings page; Publish in library is a page of its own (2026-11-01).
-- r29 — Pedal events read from MusicXML at their own positions and offsets, a stop and a start at one place a change; written back the same way and as CC 64 (decided 2026-11-02, being built in round 29; spec `.scratch/r29/pedal-events/spec.md`).
+- r29 — Pedal events read from MusicXML at their own positions and offsets, a stop and a start at one place a change;
+  written back the same way, and MIDI's control 64 read and written as the pedal line (2026-11-03).

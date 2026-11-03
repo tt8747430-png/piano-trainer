@@ -35,16 +35,26 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
 - **Marks belong to written notes** (`[acc,stacc]`): articulations (with portato, the breath mark and the
   caesura), ornaments (with the inverted turn and a tremolo of one to three strokes), octave lines (8va, 8vb, 15ma,
   15mb), the glissando, slurs, Flat's every dynamic (ppp to fff and its ten accents), hairpins, grace notes,
-  expressions, the pedal, a tempo change, a swing mark, a Roman numeral and free text. A note's pitch stays the pitch
+  expressions, a tempo change, a swing mark, a Roman numeral and free text. A note's pitch stays the pitch
   it sounds (8va changes only where it is written). The schedule hears the marks that change the sound: lengths
   (portato ¾, a caesura half, a breath a 16th off), loudness (each dynamic's level, and the accents struck at one
   level and held at another), rolls, grace notes, ornaments and tremolos played out, a glissando over the white keys
   between its notes, `rit` and `accel` and each tempo change (`tempoWarp`, and in the MIDI file's tempo map), a swing
-  mark's feel from its note on, the pedal (`pedalHeld`), notes joined under a slur or legato. A tie is a longer
+  mark's feel from its note on, notes joined under a slur or legato. A tie is a longer
   note, not a mark. A Roman numeral is the numerals kernel's of the chord and key there, not typed; free text is
   percent-encoded in the text (`txt:`). A **two-note tremolo** (`ftrem1` to `ftrem3`) is a mark on the first
   of a pair: it alternates with its part's next note, nearest in pitch, until that note's end, which sounds in it
   alone; the two are timed as played (two quarters for a half's tremolo) and engraved each as long as the pair.
+- **The sustain pedal is the piece's own line**, not a note's mark: `pedal: 'down@0 change@4 up@15.5'`, each event
+  (`PedalEvent { tick, kind }`, kinds `down`, `up`, `change`) at its beat from the music's start, in order, an up and
+  a down at one tick a `change` (`pedalLine`); read and written by `entities/piece/model/pedal-line.ts`, a malformed
+  event a ContentError. So it lifts between notes, over a rest and after the last note where the score does. One
+  sustain pedal a piece (the soft and sostenuto pedals stay live-only). The Chart and the Performance carry it
+  (`pedal`), going round with the repeats played, kept through transposing and Simplify; the schedule holds a note
+  struck under it to the lift (`pedalHeld`) and sounds it as pedal sounds; the engraver writes each event on the
+  lowest staff of its bar; the editor's pedal tool places events (down at a span's start, up at its end, a change
+  or a lift at a note). The Player may play it Off or Automatic (`schedule/auto-pedal.ts`: a change with each new
+  chord symbol, else each bar) for music written without it.
 - **Barlines, repeats, endings and jumps are bar marks** (`|: :| :|x3 || |. [1 [2 [3 [4`, Segno, Coda, Fine, To
   Coda, D.C. and D.S. with their al Fine and al Coda). They are engraved as written and played as taken
   (`playOrder`): back from a repeat's end until played its times (twice, `:|xN`'s N, or as many as its endings),
@@ -95,4 +105,5 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
 - r27 — New song chooses its staves as Flat's instruments (piano and voices); other instruments decided for later,
   sampled and cached offline, not left out (2026-11-01).
 - r28 — The music's `header` (credits under the title) and `layout` (staff size, bars per line) (2026-11-01).
-- r29 — The sustain pedal leaves the note marks: a piece's pedal line of events at beats (down, up, change); no Melody source (decided 2026-11-02, being built in round 29; spec `.scratch/r29/pedal-events/spec.md`).
+- r29 — The sustain pedal leaves the note marks: a piece's pedal line of events at beats (down, up, change), the
+  Performance's `pedal`, `pt-pieces` version 9; no Melody source (2026-11-03).
