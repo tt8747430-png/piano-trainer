@@ -166,7 +166,7 @@ function ToolbarDock({
         'landscape-phone:left-rail lg:bottom-6 lg:left-sidebar lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
       )}
     >
-      <div className="pointer-events-auto max-w-full rounded-2xl border border-border bg-raised p-1 elevation-2">
+      <div className="pointer-events-auto max-w-full rounded-control border border-border bg-raised p-1 elevation-2">
         {children}
       </div>
     </div>

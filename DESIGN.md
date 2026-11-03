@@ -118,9 +118,6 @@ typography:
 rounded:
   black-key: '6px'
   white-key: '9px'
-  md: '10px'
-  lg: '11px'
-  button: '12px'
   control: '12px'
   card: '14px'
   sheet: '20px'
@@ -136,21 +133,21 @@ components:
     backgroundColor: '{colors.honey}'
     textColor: '{colors.ink}'
     typography: '{typography.control}'
-    rounded: '{rounded.button}'
+    rounded: '{rounded.control}'
     height: '44px'
     padding: '0 16px'
   button-soft:
     backgroundColor: '{colors.paper-card}'
     textColor: '{colors.ink}'
     typography: '{typography.control}'
-    rounded: '{rounded.button}'
+    rounded: '{rounded.control}'
     height: '44px'
     padding: '0 16px'
   button-destructive:
     backgroundColor: '{colors.paper-card}'
     textColor: '{colors.crimson}'
     typography: '{typography.control}'
-    rounded: '{rounded.button}'
+    rounded: '{rounded.control}'
     height: '44px'
     padding: '0 16px'
   button-round:
@@ -179,7 +176,7 @@ components:
     backgroundColor: '{colors.paper-card}'
     textColor: '{colors.ink}'
     typography: '{typography.control}'
-    rounded: '{rounded.lg}'
+    rounded: '{rounded.control}'
     height: '44px'
   card:
     backgroundColor: '{colors.paper-card}'
@@ -373,10 +370,21 @@ black key in a lighter slope. They draw a piano and appear nowhere else.
 
 ## Shapes
 
-One 12px base (`--radius`): black keys 6px (`rounded-xs`), white keys 9px (`sm`), small parts 10–11px (`md`, `lg`; a
-segment's thumb), buttons, controls and tiles 12px (`xl`, `2xl`), cards 14px (`3xl`), sheets 20px at the top (`4xl`).
-Round buttons, Play, marks and pips are full circles. Keys are square at the top, round at the foot. Every line is
-1px; only focus rings and the keys' rings are wider.
+One scale of four corners (R14), tokens in `theme.css` and classes of their own; a corner is never written any other
+way (`src/styles/shapes.test.ts` fails a one-off):
+
+| Token              | Class             | Size  | Takes it                                                                                         |
+| ------------------ | ----------------- | ----- | ------------------------------------------------------------------------------------------------ |
+| `--radius-control` | `rounded-control` | 12px  | buttons, pop-up buttons, fields, segmented controls, tiles, toolbar items, rows' tiles, popovers |
+| `--radius-card`    | `rounded-card`    | 14px  | cards, grouped lists, a dial's card, the toast                                                   |
+| `--radius-sheet`   | `rounded-sheet`   | 20px  | sheets (their top), the editor's palette sheet                                                   |
+| `--radius-pill`    | `rounded-pill`    | round | round buttons, Play, the floating actions and capsules, chips, marks and pips                    |
+
+Something inside a shape takes the same shape as its holder, so a fill reaches its edges: an item in a capsule is a
+pill, a part of a card's edge takes the card's corner (`first:rounded-t-card`). The keys are drawings, not controls:
+a black key's foot 6px (`rounded-b-key-black`), a white key's 9px (`rounded-b-key-white`), square at the top. The
+shadcn primitives keep Tailwind's sizes in their classes; `theme.css` maps them onto the scale (`xs`–`2xl` the
+control, `3xl` the card, `4xl` the sheet). Every line is 1px; only focus rings and the keys' rings are wider.
 
 ## Components
 
@@ -397,14 +405,14 @@ every piece is shown in the Admin area's Components):
 - **Every New … is one sheet** (`NewSheet`, round 25, after Flat's new score): the name first, then its few
   properties as soft parts (`SheetPart`: a name, a line, the choice: drawn tiles, chips, a `Stepper`, the key
   signature grid), one Create button pinned at the foot named for the act. Never a bare text field or a page.
-- **Page, sheet or menu (A4), as Apple's guidelines, Noji and Flat draw the line:** a *page* for settings and
-  anything with many fields (an item's Settings, a kind's settings, Publish); a *sheet* for creating one thing or
-  one focused choice (every New …, Export…, a picker on a phone); a *menu* for one-tap commands (⋯, a row's
+- **Page, sheet or menu (A4), as Apple's guidelines, Noji and Flat draw the line:** a _page_ for settings and
+  anything with many fields (an item's Settings, a kind's settings, Publish); a _sheet_ for creating one thing or
+  one focused choice (every New …, Export…, a picker on a phone); a _menu_ for one-tap commands (⋯, a row's
   long-press). A sheet never holds a second sheet's worth of settings; a menu never holds a setting.
 - **An act on an item is a button, never a switch (R19)**, as Apple Music, Spotify, Noji and Quizlet place them:
   Favourite is the ♡ on the item's card and in the Player's ⋯; "Add to favourites" / "Remove from favourites" in
   a row's ⋯ and long-press menus; a swipe on a row; Favourite in Select's bar. Learned the same: its button on
-  the card, its command in the menus. An item's Settings page holds what the item *is*, not what the learner
+  the card, its command in the menus. An item's Settings page holds what the item _is_, not what the learner
   does with it.
 - **One accent per screen:** the honey fill is the primary action alone; the selection and states have their own
   colours.
@@ -554,7 +562,7 @@ says it faster. A setting is never hidden behind a pop-up when it fits in sight.
   something is chosen. Floating parts take no room: the music scrolls under them.
 - **Modes are a pop-up** (`Dropdown`, its face the mode's icon and name): Practise · Edit in
   the Player's and the editor's bars, Replace · Insert · Chord in the editor's Notes. An action with several
-  targets  is a pull-down (`ActionMenu`) from one bar button.
+  targets is a pull-down (`ActionMenu`) from one bar button.
 
 ### The keyboard
 

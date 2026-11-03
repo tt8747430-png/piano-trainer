@@ -24,7 +24,7 @@ export function MidiConnectionFields() {
       {unsupported || denied ? (
         <p
           role="status"
-          className="flex items-start gap-2 rounded-xl bg-muted px-3 py-2 text-pretty"
+          className="flex items-start gap-2 rounded-control bg-muted px-3 py-2 text-pretty"
         >
           <CircleAlert aria-hidden className="mt-0.5 size-5 shrink-0 text-muted-foreground" />
           <span className="min-w-0">

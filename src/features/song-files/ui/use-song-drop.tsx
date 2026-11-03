@@ -43,7 +43,7 @@ export function useSongDrop(onFile: (file: File) => void) {
   const panel = over ? (
     <div
       aria-hidden
-      className="pointer-events-none fixed inset-4 z-50 flex flex-col items-center justify-center gap-3 rounded-4xl border-2 border-dashed border-primary bg-background/90 p-6 text-center"
+      className="pointer-events-none fixed inset-4 z-50 flex flex-col items-center justify-center gap-3 rounded-sheet border-2 border-dashed border-primary bg-background/90 p-6 text-center"
     >
       <FileUp className="size-10 text-primary" />
       <p className="max-w-sm text-lg font-semibold text-pretty">{t('import.drop')}</p>

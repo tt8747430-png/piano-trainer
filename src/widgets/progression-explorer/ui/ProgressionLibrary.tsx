@@ -163,7 +163,7 @@ function ProgressionCard({
         <button
           type="button"
           onClick={onChoose}
-          className="flex min-w-0 flex-1 flex-col items-start gap-0.5 text-left after:absolute after:inset-0 after:rounded-3xl after:content-['']"
+          className="flex min-w-0 flex-1 flex-col items-start gap-0.5 text-left after:absolute after:inset-0 after:rounded-card after:content-['']"
         >
           <span className="text-lg font-semibold wrap-anywhere">{line}</span>
           <span className="text-sm text-muted-foreground">
@@ -188,7 +188,7 @@ function ProgressionCard({
             key={at}
             aria-current={sounding === at || undefined}
             className={cn(
-              'flex min-w-11 flex-col items-center rounded-xl bg-muted px-2 py-1 leading-tight transition-colors duration-150',
+              'flex min-w-11 flex-col items-center rounded-control bg-muted px-2 py-1 leading-tight transition-colors duration-150',
               sounding === at && 'bg-selected text-selected-foreground',
             )}
           >

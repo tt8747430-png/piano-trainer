@@ -89,7 +89,7 @@ describe('FabLink', () => {
     const link = screen.getByRole('link', { name: 'Practise' })
     expect(link).toHaveAttribute('href', '/play/ode')
     expect(link).toHaveAttribute('title', 'Practise')
-    expect(link).toHaveClass('size-14', 'rounded-full', 'bg-primary')
+    expect(link).toHaveClass('size-14', 'rounded-pill', 'bg-primary')
   })
 })
 
@@ -98,7 +98,7 @@ describe('Fab', () => {
     render(<Fab label="Play" icon={Play} />)
     expect(screen.getByRole('button', { name: 'Play' })).toHaveClass(
       'size-14',
-      'rounded-full',
+      'rounded-pill',
       'bg-primary',
       'elevation-2',
       'active:scale-96',
@@ -109,7 +109,7 @@ describe('Fab', () => {
     render(<Fab label="New song" icon={Plus} extended />)
     const button = screen.getByRole('button', { name: 'New song' })
     expect(button).toHaveTextContent('New song')
-    expect(button).toHaveClass('h-14', 'rounded-full')
+    expect(button).toHaveClass('h-14', 'rounded-pill')
   })
 })
 

@@ -172,7 +172,7 @@ export function Wheel<T extends string | number>({
         aria-hidden
         data-slot="wheel-band"
         className={cn(
-          'pointer-events-none absolute inset-x-0 rounded-xl',
+          'pointer-events-none absolute inset-x-0 rounded-control',
           band && 'border border-input bg-chosen',
           'group-has-[:focus-visible]/wheel:outline-3 group-has-[:focus-visible]/wheel:outline-offset-2 group-has-[:focus-visible]/wheel:outline-ring',
         )}

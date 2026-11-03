@@ -54,7 +54,7 @@ function SongFactsForm({
       value={facts[field]}
       placeholder={t('facts.add')}
       onChange={(event) => change({ [field]: event.target.value })}
-      className="w-full min-w-0 rounded-lg bg-transparent px-2 py-2 text-right text-lg caret-primary outline-none placeholder:text-muted-foreground hover:bg-muted focus-visible:bg-muted"
+      className="w-full min-w-0 rounded-control bg-transparent px-2 py-2 text-right text-lg caret-primary outline-none placeholder:text-muted-foreground hover:bg-muted focus-visible:bg-muted"
     />
   )
   return (

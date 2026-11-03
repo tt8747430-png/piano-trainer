@@ -157,7 +157,7 @@ export function BlockHandle({
       {dropAt ? (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 h-1 rounded-full bg-primary"
+          className="pointer-events-none absolute inset-x-0 h-1 rounded-pill bg-primary"
           style={{ top: dropAt.top }}
         />
       ) : null}

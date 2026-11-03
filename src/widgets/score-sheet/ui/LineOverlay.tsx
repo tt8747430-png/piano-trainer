@@ -326,7 +326,7 @@ export function LineOverlay({
           data-slot="note-grip"
           data-grip
           title={t('sheet.drag')}
-          className="absolute z-30 cursor-ns-resize touch-none rounded-md"
+          className="absolute z-30 cursor-ns-resize touch-none rounded-control"
           style={{
             left: xAtTick(layout, caret) - GRIP.before,
             width: GRIP.before + GRIP.after,

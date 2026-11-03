@@ -19,8 +19,8 @@ export const GRAB = 0.35
  * line of it, its ends rounded.
  */
 export const MARK_CLASS = {
-  band: 'rounded-xs bg-ring/15',
-  line: 'w-0.5 rounded-full bg-ring',
+  band: 'rounded-control bg-ring/15',
+  line: 'w-0.5 rounded-pill bg-ring',
 } as const
 
 export type MarkKind = keyof typeof MARK_CLASS

@@ -29,7 +29,7 @@ export function LearnedButton({
         onPressedChange={toggle}
         aria-label={t('learned.done')}
         title={t('learned.done')}
-        className="size-11 rounded-full border-transparent bg-muted/70 px-0 text-foreground hover:bg-muted aria-pressed:bg-learned aria-pressed:text-learned-foreground"
+        className="size-11 rounded-pill border-transparent bg-muted/70 px-0 text-foreground hover:bg-muted aria-pressed:bg-learned aria-pressed:text-learned-foreground"
       >
         <Check aria-hidden strokeWidth={2.5} />
       </Toggle>
@@ -45,7 +45,7 @@ export function LearnedButton({
     >
       <span
         aria-hidden
-        className="grid size-5 place-items-center rounded-full border border-current group-aria-pressed/toggle:border-transparent group-aria-pressed/toggle:bg-learned group-aria-pressed/toggle:text-learned-foreground"
+        className="grid size-5 place-items-center rounded-pill border border-current group-aria-pressed/toggle:border-transparent group-aria-pressed/toggle:bg-learned group-aria-pressed/toggle:text-learned-foreground"
       >
         <Check className="size-3.5" strokeWidth={3} />
       </span>

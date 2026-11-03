@@ -28,7 +28,7 @@ export function TypedField({
   return (
     <label className={cn('flex flex-col gap-1', className)}>
       <span className="text-sm text-muted-foreground">{label}</span>
-      <InputGroup className="h-12 rounded-2xl bg-card">
+      <InputGroup className="h-12 rounded-control bg-card">
         <InputGroupInput
           ref={ref}
           value={value}

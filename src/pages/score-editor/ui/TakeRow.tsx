@@ -40,7 +40,7 @@ export function TakeRow({
               id={name}
               to="/edit/$pieceId/takes/$takeId"
               params={{ pieceId: take.pieceId, takeId: take.id }}
-              className="text-link underline-offset-4 transition-colors ease-out hover:underline focus-visible:rounded-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              className="text-link underline-offset-4 transition-colors ease-out hover:underline focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
             >
               {title}
             </Link>
@@ -56,7 +56,7 @@ export function TakeRow({
             size="icon"
             aria-label={t('recorder.more')}
             title={t('recorder.more')}
-            className="shrink-0 rounded-full"
+            className="shrink-0 rounded-pill"
           />
         }
         trigger={<Ellipsis aria-hidden />}

@@ -87,7 +87,7 @@ function SortChoice({
           <span className="whitespace-nowrap">{t(`sort.short.${sort}`)}</span>
         </span>
       )}
-      className="h-full gap-1.5 rounded-none rounded-r-2xl border-0 border-l border-input bg-muted px-3 text-sm shadow-none hover:bg-accent focus-visible:-outline-offset-3"
+      className="h-full gap-1.5 rounded-none rounded-r-control border-0 border-l border-input bg-muted px-3 text-sm shadow-none hover:bg-accent focus-visible:-outline-offset-3"
     />
   )
 }
@@ -130,7 +130,7 @@ function FilterChips({ filter }: { filter: SongsFilter }) {
             type="button"
             aria-label={t('filters.remove', { name: chip.name })}
             onClick={chip.off}
-            className="flex h-9 items-center gap-1.5 rounded-full border border-input bg-muted py-1 pr-2 pl-3.5 text-sm font-semibold whitespace-nowrap transition-colors duration-200 ease-out hover:bg-accent"
+            className="flex h-9 items-center gap-1.5 rounded-pill border border-input bg-muted py-1 pr-2 pl-3.5 text-sm font-semibold whitespace-nowrap transition-colors duration-200 ease-out hover:bg-accent"
           >
             {chip.name}
             <X aria-hidden className="size-4 text-muted-foreground" />

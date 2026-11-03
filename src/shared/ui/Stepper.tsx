@@ -59,12 +59,12 @@ export function Stepper({
               commit()
             }
           }}
-          className="h-11 min-w-0 flex-1 rounded-xl bg-card px-4 text-base font-semibold tabular-nums"
+          className="h-11 min-w-0 flex-1 rounded-control bg-card px-4 text-base font-semibold tabular-nums"
         />
       ) : (
         <output
           aria-live="polite"
-          className="min-w-0 flex-1 rounded-xl bg-card px-4 py-2.5 font-semibold tabular-nums"
+          className="min-w-0 flex-1 rounded-control bg-card px-4 py-2.5 font-semibold tabular-nums"
         >
           {format(value)}
         </output>
@@ -73,7 +73,7 @@ export function Stepper({
         type="button"
         variant="outline"
         size="icon"
-        className="size-11 rounded-xl"
+        className="size-11 rounded-control"
         aria-label={decrease}
         title={decrease}
         disabled={value - step < min}
@@ -85,7 +85,7 @@ export function Stepper({
         type="button"
         variant="outline"
         size="icon"
-        className="size-11 rounded-xl"
+        className="size-11 rounded-control"
         aria-label={increase}
         title={increase}
         disabled={value + step > max}

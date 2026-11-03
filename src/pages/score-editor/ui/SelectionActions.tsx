@@ -99,7 +99,7 @@ export function SelectionActions() {
     <div
       role="toolbar"
       aria-label={t('selection')}
-      className="pointer-events-auto flex items-center gap-0.5 rounded-full border border-border bg-raised px-1.5 py-0.5 elevation-2 motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1"
+      className="pointer-events-auto flex items-center gap-0.5 rounded-pill border border-border bg-raised px-1.5 py-0.5 elevation-2 motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1"
     >
       <EditButton
         label={t(chords ? 'chord.delete' : 'deleteNotes')}

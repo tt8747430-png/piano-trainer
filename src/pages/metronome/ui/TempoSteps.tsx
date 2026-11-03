@@ -6,7 +6,7 @@ const STEPS = [-10, -1, 1, 10] as const
 
 /** A step's round button: 44px on the narrowest phones, 48px held upright, 56px from a tablet. */
 const STEP =
-  'size-12 rounded-full text-base tabular-nums narrow-phone:size-11 sm:size-14 sm:text-lg landscape-phone:size-11'
+  'size-12 rounded-pill text-base tabular-nums narrow-phone:size-11 sm:size-14 sm:text-lg landscape-phone:size-11'
 
 /**
  * The tempo, large in the middle, with −10 and −1 before it and +1 and +10 after it as round buttons

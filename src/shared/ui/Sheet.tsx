@@ -71,7 +71,7 @@ export function SheetContent({
     <DrawerContent
       {...(initialFocus ? { initialFocus } : {})}
       className={cn(
-        'mx-auto w-full max-w-2xl rounded-t-4xl bg-card pb-sheet-keyboard text-base landscape-phone:max-h-[calc(100dvh-1rem)]',
+        'mx-auto w-full max-w-2xl rounded-t-sheet bg-card pb-sheet-keyboard text-base landscape-phone:max-h-[calc(100dvh-1rem)]',
         // The room anchored while no keyboard is up: the phone's keyboard never squeezes it.
         tall &&
           'h-[calc(var(--app-height,100dvh)-6rem)] landscape-phone:h-[calc(var(--app-height,100dvh)-1rem)]',

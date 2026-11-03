@@ -24,7 +24,7 @@ export function PickerGrid({
     <div
       role="group"
       aria-label={label}
-      className="overflow-hidden rounded-2xl border border-hairline bg-hairline"
+      className="overflow-hidden rounded-control border border-hairline bg-hairline"
     >
       {rows.map((row) => (
         <div

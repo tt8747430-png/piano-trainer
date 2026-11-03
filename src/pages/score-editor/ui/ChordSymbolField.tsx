@@ -78,7 +78,7 @@ export function ChordSymbolField({ anchor }: { anchor: HTMLElement | null }) {
           aria-pressed={wizard}
           onPointerDown={(event) => event.preventDefault()}
           onClick={() => setWizard(!wizard)}
-          className="grid size-11 shrink-0 place-items-center rounded-xl text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground aria-pressed:bg-[color-mix(in_oklab,var(--color-link)_14%,var(--color-card))] aria-pressed:text-link"
+          className="grid size-11 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground aria-pressed:bg-[color-mix(in_oklab,var(--color-link)_14%,var(--color-card))] aria-pressed:text-link"
         >
           <WandSparkles aria-hidden className="size-5" />
         </button>
@@ -105,7 +105,7 @@ export function ChordSymbolField({ anchor }: { anchor: HTMLElement | null }) {
                 // A tap leaves the cursor in the field: a phone's own keyboard stays up.
                 onPointerDown={(event) => event.preventDefault()}
                 onClick={() => choose(chord)}
-                className="h-11 shrink-0 rounded-xl border border-border bg-card px-2.5 font-display text-lg font-semibold whitespace-nowrap text-card-foreground transition-colors duration-200 ease-out hover:bg-chosen focus-visible:-outline-offset-3"
+                className="h-11 shrink-0 rounded-control border border-border bg-card px-2.5 font-display text-lg font-semibold whitespace-nowrap text-card-foreground transition-colors duration-200 ease-out hover:bg-chosen focus-visible:-outline-offset-3"
               >
                 {printedSymbol(symbol)}
               </button>

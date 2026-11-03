@@ -41,8 +41,8 @@ export function Segmented<V extends OptionValue>({
         if (picked && picked.value !== value) onChange(picked.value)
       }}
       className={cn(
-        'flex w-full rounded-2xl bg-muted',
-        compact ? 'gap-0.5 rounded-full p-0.5' : 'gap-1 p-1',
+        'flex w-full rounded-control bg-muted',
+        compact ? 'gap-0.5 rounded-pill p-0.5' : 'gap-1 p-1',
       )}
     >
       {options.map((option, index) => {
@@ -56,11 +56,11 @@ export function Segmented<V extends OptionValue>({
             title={option.reason}
             disabled={option.reason !== undefined}
             className={cn(
-              'inline-flex min-h-11 min-w-11 flex-1 cursor-default flex-col items-center justify-center gap-1 rounded-lg border border-transparent px-2 py-1.5 text-center text-base leading-tight font-semibold hyphens-manual wrap-break-word text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground data-checked:border-input data-checked:bg-chosen data-checked:text-foreground data-disabled:opacity-50 data-disabled:hover:text-muted-foreground',
+              'inline-flex min-h-11 min-w-11 flex-1 cursor-default flex-col items-center justify-center gap-1 rounded-control border border-transparent px-2 py-1.5 text-center text-base leading-tight font-semibold hyphens-manual wrap-break-word text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground data-checked:border-input data-checked:bg-chosen data-checked:text-foreground data-disabled:opacity-50 data-disabled:hover:text-muted-foreground',
               // Crowded on a phone's width: the words a size down, to fit.
               crowded && 'max-sm:px-1 max-sm:text-sm',
               compact &&
-                'relative min-h-8 rounded-full py-0.5 text-sm before:absolute before:-inset-y-1.5 before:inset-x-0 before:content-[""]',
+                'relative min-h-8 rounded-pill py-0.5 text-sm before:absolute before:-inset-y-1.5 before:inset-x-0 before:content-[""]',
             )}
           >
             {option.icon}

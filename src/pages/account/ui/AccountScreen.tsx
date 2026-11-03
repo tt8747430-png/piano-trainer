@@ -32,7 +32,7 @@ export function ProblemLine({ problem }: { problem: AuthProblem | null }) {
 export function OfflineLine({ online }: { online: boolean }) {
   const { t } = useTranslation('account')
   return online ? null : (
-    <p role="status" className="rounded-2xl bg-muted px-4 py-3 text-sm">
+    <p role="status" className="rounded-control bg-muted px-4 py-3 text-sm">
       {t('offline')}
     </p>
   )

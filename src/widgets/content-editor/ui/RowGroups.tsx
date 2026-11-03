@@ -89,7 +89,7 @@ function Handle({
       type="button"
       aria-label={label}
       title={label}
-      className="grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-xl text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted active:cursor-grabbing"
+      className="grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-control text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted active:cursor-grabbing"
       {...attributes}
       {...listeners}
     >
@@ -148,16 +148,16 @@ function SortableRow({
       ref={setNodeRef}
       style={{ transform: CSS.Translate.toString(transform), transition }}
       data-dragging={isDragging ? '' : undefined}
-      className="group/row relative flex min-h-16 items-center gap-2 bg-card py-1 pr-1 first:rounded-t-3xl last:rounded-b-3xl data-dragging:z-10 data-dragging:rounded-xl data-dragging:shadow-lg"
+      className="group/row relative flex min-h-16 items-center gap-2 bg-card py-1 pr-1 first:rounded-t-card last:rounded-b-card data-dragging:z-10 data-dragging:rounded-control data-dragging:shadow-lg"
     >
       <Handle label={t('edit.doc.drag', { title: row.title })} handle={sortable} />
       {/* Its tile, as the learner's row: the lesson's number in its level's paint, a Check's picture. */}
       <span
         aria-hidden
         className={cn(
-          'grid size-10 shrink-0 place-items-center rounded-full font-semibold tabular-nums',
+          'grid size-10 shrink-0 place-items-center rounded-pill font-semibold tabular-nums',
           row.paint ?? 'bg-muted text-muted-foreground',
-          Icon && 'rounded-xl',
+          Icon && 'rounded-control',
         )}
       >
         {Icon ? <Icon className="size-5" strokeWidth={1.75} /> : number}
@@ -213,7 +213,7 @@ function SortableGroup({
       aria-label={group.region}
       style={{ transform: CSS.Translate.toString(transform), transition }}
       data-dragging={isDragging ? '' : undefined}
-      className="flex flex-col gap-2 rounded-2xl data-dragging:z-10 data-dragging:bg-background data-dragging:shadow-lg"
+      className="flex flex-col gap-2 rounded-control data-dragging:z-10 data-dragging:bg-background data-dragging:shadow-lg"
     >
       {children(
         sorts ? (

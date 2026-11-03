@@ -10,8 +10,8 @@ export const ROW_CARD =
 
 /** A control at its end (More) or its start (the handle, the check): a 44px target, soft until pointed at. */
 export const ROW_CONTROL =
-  'grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground focus-visible:-outline-offset-3 [&_svg]:size-5'
+  'grid size-11 shrink-0 place-items-center rounded-pill text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground focus-visible:-outline-offset-3 [&_svg]:size-5'
 
 /** The row's own part: its link to its page, or Select's toggle, holding its face. */
 export const ROW_BODY =
-  'group/row flex min-h-16 min-w-0 flex-1 items-center gap-3 self-stretch rounded-3xl py-2 pl-2 text-left focus-visible:-outline-offset-3'
+  'group/row flex min-h-16 min-w-0 flex-1 items-center gap-3 self-stretch rounded-card py-2 pl-2 text-left focus-visible:-outline-offset-3'

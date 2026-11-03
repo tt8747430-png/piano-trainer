@@ -48,7 +48,7 @@ export function ListSheetRow({
           render={
             <button
               type="button"
-              className="-mx-2 flex min-h-11 w-[calc(100%+1rem)] items-center justify-between gap-3 rounded-xl px-2 text-left transition-colors duration-200 ease-out hover:bg-muted"
+              className="-mx-2 flex min-h-11 w-[calc(100%+1rem)] items-center justify-between gap-3 rounded-control px-2 text-left transition-colors duration-200 ease-out hover:bg-muted"
             />
           }
         >

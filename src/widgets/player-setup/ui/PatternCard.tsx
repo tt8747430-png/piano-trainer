@@ -82,7 +82,7 @@ function HandButton({
         <span className="flex items-center gap-2 text-sm text-muted-foreground">
           {label}
           {changed ? (
-            <span className="rounded-full bg-muted px-2 text-xs font-semibold text-foreground">
+            <span className="rounded-pill bg-muted px-2 text-xs font-semibold text-foreground">
               {t('yourPart')}
             </span>
           ) : null}
@@ -137,7 +137,7 @@ export function PatternCard() {
               <span
                 aria-hidden
                 className={cn(
-                  'grid size-12 shrink-0 place-items-center rounded-2xl',
+                  'grid size-12 shrink-0 place-items-center rounded-control',
                   PAINT.yellow.fill,
                   PAINT.yellow.ink,
                 )}

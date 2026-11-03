@@ -57,7 +57,7 @@ export function SoundButton({
             size="icon"
             aria-label={t('player:sound.title')}
             title={t('player:sound.title')}
-            className={cn('size-12 rounded-full', DOCK_BUTTON)}
+            className={cn('size-12 rounded-pill', DOCK_BUTTON)}
           />
         }
       >
@@ -134,7 +134,7 @@ export function SoundVolumes({ staves, recording }: { staves: boolean; recording
       {recording ? (
         <Button
           variant="outline"
-          className="min-h-11 self-start rounded-full px-4 text-base"
+          className="min-h-11 self-start rounded-pill px-4 text-base"
           onClick={() => onlyTheChords(settings)}
         >
           {t('player:sound.onlyChords')}

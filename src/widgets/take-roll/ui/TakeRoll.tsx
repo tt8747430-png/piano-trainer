@@ -53,7 +53,7 @@ export function TakeRoll({
   const laneY = (key: number) => NUMBERS_PX + (highest - key) * LANE_PX
   const isKept = (bar: number) => !kept || (bar >= kept.first && bar <= kept.last)
   return (
-    <div className="max-w-full overflow-x-auto overscroll-x-contain rounded-xl border border-border bg-card scrollbar-none">
+    <div className="max-w-full overflow-x-auto overscroll-x-contain rounded-control border border-border bg-card scrollbar-none">
       <div className="relative" style={{ width, height }}>
         <svg
           role="img"

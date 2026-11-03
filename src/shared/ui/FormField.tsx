@@ -40,7 +40,7 @@ export function FormField({
         </label>
         {info === undefined ? null : <InfoTip name={label}>{info}</InfoTip>}
       </div>
-      <InputGroup className="h-12 rounded-2xl bg-card">
+      <InputGroup className="h-12 rounded-control bg-card">
         <InputGroupInput
           id={id}
           type={password && shown ? 'text' : type}

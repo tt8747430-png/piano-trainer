@@ -25,9 +25,9 @@ export function TimeLeft({ seconds, running }: { seconds: number; running: boole
   const shown = Math.ceil(left / 1000)
   return (
     <div className="flex items-center gap-3 landscape-phone:col-span-2">
-      <div aria-hidden className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
+      <div aria-hidden className="h-1.5 flex-1 overflow-hidden rounded-pill bg-muted">
         <div
-          className="h-full rounded-full bg-primary transition-[width] duration-250 ease-linear"
+          className="h-full rounded-pill bg-primary transition-[width] duration-250 ease-linear"
           style={{ width: `${(100 * left) / (seconds * 1000)}%` }}
         />
       </div>

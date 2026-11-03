@@ -111,7 +111,7 @@ export function CoursePage() {
         <div className="flex items-start gap-4 p-5">
           <span
             className={cn(
-              'grid size-16 shrink-0 place-items-center rounded-2xl',
+              'grid size-16 shrink-0 place-items-center rounded-control',
               paint.fill,
               paint.ink,
             )}

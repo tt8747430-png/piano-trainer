@@ -6,7 +6,7 @@ export function LearnedBadge({ label }: { label: string }) {
     <span
       role="img"
       aria-label={label}
-      className="grid size-5 shrink-0 place-items-center rounded-full bg-learned text-learned-foreground"
+      className="grid size-5 shrink-0 place-items-center rounded-pill bg-learned text-learned-foreground"
     >
       <Check aria-hidden className="size-3.5" strokeWidth={3} />
     </span>

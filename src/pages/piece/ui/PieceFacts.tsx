@@ -48,7 +48,7 @@ export function PieceFacts({ entry }: { entry: Entry }) {
         {hasVersion ? (
           <>
             <dt className="sr-only">{t('music')}</dt>
-            <dd className="ms-1 rounded-full bg-paint-yellow px-2.5 py-0.5 text-sm font-medium text-on-paint-yellow">
+            <dd className="ms-1 rounded-pill bg-paint-yellow px-2.5 py-0.5 text-sm font-medium text-on-paint-yellow">
               {t('yourVersion')}
             </dd>
           </>

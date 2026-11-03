@@ -9,7 +9,7 @@ export function GapsBadge({ count }: { count: number }) {
   if (count === 0) return null
   return (
     <span className="flex shrink-0 items-center gap-1.5 text-sm font-medium text-muted-foreground tabular-nums">
-      <span aria-hidden className="size-2.5 rounded-full bg-attention" />
+      <span aria-hidden className="size-2.5 rounded-pill bg-attention" />
       {t('quiz.gaps', { count })}
     </span>
   )

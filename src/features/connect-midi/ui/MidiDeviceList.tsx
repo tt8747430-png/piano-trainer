@@ -25,7 +25,7 @@ function DeviceFace({
     <span className={cn('flex min-w-0 flex-1 items-center gap-3', away && 'text-muted-foreground')}>
       <span
         aria-hidden
-        className="grid size-9 shrink-0 place-items-center rounded-xl bg-muted text-muted-foreground"
+        className="grid size-9 shrink-0 place-items-center rounded-control bg-muted text-muted-foreground"
       >
         <Icon className="size-5" />
       </span>
@@ -73,7 +73,7 @@ export function MidiDeviceList() {
   return (
     <Listbox
       label={t('midiSettings.devices.label')}
-      optionClassName="min-h-16 rounded-2xl px-2 pr-3"
+      optionClassName="min-h-16 rounded-control px-2 pr-3"
       groups={[
         {
           options: [

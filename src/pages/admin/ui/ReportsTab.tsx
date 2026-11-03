@@ -47,7 +47,7 @@ export function ReportsTab() {
                   <p className="font-semibold">
                     {report.itemTitle}
                     {report.hidden ? (
-                      <span className="ml-2 rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
+                      <span className="ml-2 rounded-pill bg-muted px-2 py-0.5 text-xs font-medium">
                         {t('reports.hidden')}
                       </span>
                     ) : null}

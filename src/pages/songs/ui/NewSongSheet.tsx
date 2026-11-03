@@ -259,7 +259,7 @@ export function NewSongSheet({
               <span
                 key={at}
                 className={cn(
-                  'h-1.5 w-6 rounded-full transition-colors duration-200',
+                  'h-1.5 w-6 rounded-pill transition-colors duration-200',
                   at <= step ? 'bg-foreground' : 'bg-border',
                 )}
               />
@@ -355,7 +355,7 @@ export function NewSongSheet({
                 <div
                   role="group"
                   aria-label={t('making.meter')}
-                  className="grid grid-cols-7 overflow-hidden rounded-xl border border-border bg-card"
+                  className="grid grid-cols-7 overflow-hidden rounded-control border border-border bg-card"
                 >
                   {TIMES.map((each) => {
                     const pressed = !ownTime && meter === each.meter && timeSymbol === each.symbol

@@ -135,7 +135,7 @@ export function PickerActions({
       <Button
         variant="ghost"
         size="icon"
-        className="size-12 rounded-full text-link shadow-md hover:text-link disabled:shadow-none [&_svg]:size-7"
+        className="size-12 rounded-pill text-link shadow-md hover:text-link disabled:shadow-none [&_svg]:size-7"
         aria-label={t('picker.apply')}
         title={t('picker.apply')}
         disabled={!changed}

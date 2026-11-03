@@ -20,7 +20,7 @@ export function GuideSection({ part }: { part: GuidePart }) {
       <ol className="flex flex-col divide-y divide-hairline">
         {part.steps.map(({ key, icon: Icon }) => (
           <li key={key} className="flex items-start gap-3 py-3 first:pt-1 last:pb-1">
-            <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-muted text-foreground">
+            <span className="grid size-9 shrink-0 place-items-center rounded-control bg-muted text-foreground">
               <Icon aria-hidden className="size-5" />
             </span>
             <span className="min-w-0 pt-1.5 text-pretty">{t(key)}</span>

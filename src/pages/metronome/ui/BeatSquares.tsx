@@ -40,8 +40,8 @@ export function BeatSquares({
             key={beat}
             aria-current={beat === sounding ? 'true' : undefined}
             className={cn(
-              'aspect-square max-w-12 flex-1 rounded-xl border border-input bg-muted transition-colors duration-75 ease-out',
-              beat === 0 && 'max-w-16 grow-2 rounded-2xl',
+              'aspect-square max-w-12 flex-1 rounded-control border border-input bg-muted transition-colors duration-75 ease-out',
+              beat === 0 && 'max-w-16 grow-2 rounded-control',
               beat === sounding &&
                 (muted ? 'border-2 border-primary' : 'border-primary bg-primary'),
             )}

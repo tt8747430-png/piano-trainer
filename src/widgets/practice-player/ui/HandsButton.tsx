@@ -32,7 +32,7 @@ export function HandsButton({
             size="icon"
             aria-label={t('player:handsOf', { hands: t(`common:hands.${hands}`) })}
             title={t('player:hands')}
-            className={cn('size-12 rounded-full', DOCK_BUTTON)}
+            className={cn('size-12 rounded-pill', DOCK_BUTTON)}
           />
         }
       >
@@ -46,7 +46,7 @@ export function HandsButton({
       >
         <Listbox
           label={t('player:hands')}
-          optionClassName="min-h-11 rounded-lg px-2 text-base"
+          optionClassName="min-h-11 rounded-control px-2 text-base"
           groups={[
             {
               options: CHOICES.map((choice) => ({

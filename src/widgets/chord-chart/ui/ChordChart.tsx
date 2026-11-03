@@ -177,7 +177,7 @@ export function ChordChart({
               <div
                 key={index}
                 className={cn(
-                  'grid overflow-hidden rounded-xs border-y border-y-border bg-card break-inside-avoid',
+                  'grid overflow-hidden rounded-control border-y border-y-border bg-card break-inside-avoid',
                   end === columns && 'border-r-2 border-r-foreground',
                 )}
                 style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}

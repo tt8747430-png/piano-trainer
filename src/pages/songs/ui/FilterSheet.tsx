@@ -33,7 +33,7 @@ export function FilterSheet({ page, filter }: { page: LibraryPage; filter: Songs
     size: 'icon',
     'aria-label': label,
     title: label,
-    className: 'relative size-12 shrink-0 rounded-2xl bg-card [&_svg]:size-5',
+    className: 'relative size-12 shrink-0 rounded-control bg-card [&_svg]:size-5',
   } as const
   const face = (
     <>
@@ -42,7 +42,7 @@ export function FilterSheet({ page, filter }: { page: LibraryPage; filter: Songs
         <span
           aria-hidden
           data-slot="filter-count"
-          className="pointer-events-none absolute -top-1 -right-1 grid h-5 min-w-5 place-items-center rounded-full bg-foreground px-1 text-xs font-semibold text-background tabular-nums"
+          className="pointer-events-none absolute -top-1 -right-1 grid h-5 min-w-5 place-items-center rounded-pill bg-foreground px-1 text-xs font-semibold text-background tabular-nums"
         >
           {count}
         </span>

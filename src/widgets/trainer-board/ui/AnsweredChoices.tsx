@@ -36,7 +36,7 @@ export function AnsweredChoices({
           <li
             key={value}
             className={cn(
-              'flex h-12 items-center justify-center gap-2 rounded-2xl border bg-card px-5 text-base font-semibold',
+              'flex h-12 items-center justify-center gap-2 rounded-control border bg-card px-5 text-base font-semibold',
               MARK[mark],
             )}
           >

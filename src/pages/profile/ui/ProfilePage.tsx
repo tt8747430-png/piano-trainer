@@ -57,7 +57,7 @@ export function ProfilePage() {
             {updateReady ? (
               <span
                 aria-hidden
-                className="pointer-events-none absolute top-1 right-1 size-2.5 rounded-full bg-destructive ring-2 ring-background"
+                className="pointer-events-none absolute top-1 right-1 size-2.5 rounded-pill bg-destructive ring-2 ring-background"
               />
             ) : null}
           </span>
@@ -210,7 +210,7 @@ function Achievements() {
               <span
                 aria-hidden
                 className={cn(
-                  'grid size-12 place-items-center rounded-full',
+                  'grid size-12 place-items-center rounded-pill',
                   earned
                     ? 'bg-paint-yellow text-on-paint-yellow'
                     : 'bg-muted text-muted-foreground',

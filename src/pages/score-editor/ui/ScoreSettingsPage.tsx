@@ -77,7 +77,7 @@ function NameRow({
     }
   }
   return (
-    <div className="flex min-h-14 items-center gap-3 rounded-2xl pr-3 pl-3 focus-within:bg-muted/60">
+    <div className="flex min-h-14 items-center gap-3 rounded-control pr-3 pl-3 focus-within:bg-muted/60">
       <label htmlFor={id} className="shrink-0 text-lg leading-snug font-semibold">
         {label}
       </label>

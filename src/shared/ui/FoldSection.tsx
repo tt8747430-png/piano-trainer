@@ -54,7 +54,7 @@ export function FoldSection({
           aria-controls={bodyId}
           onClick={fold.toggle}
           // Its reach is 44px tall, grown over the room round the heading, which stays put.
-          className="-my-2 flex min-h-11 w-full items-center gap-2 rounded-lg py-2 text-left"
+          className="-my-2 flex min-h-11 w-full items-center gap-2 rounded-control py-2 text-left"
         >
           {title}
           <ChevronDown

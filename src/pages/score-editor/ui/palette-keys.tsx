@@ -21,11 +21,11 @@ const FACES = {
     PRESSED,
   ),
   bar: cn(
-    'size-10 shrink-0 rounded-lg border-0 bg-transparent px-0 text-foreground/75 shadow-none hover:bg-accent hover:text-foreground landscape-phone:size-9',
+    'size-10 shrink-0 rounded-control border-0 bg-transparent px-0 text-foreground/75 shadow-none hover:bg-accent hover:text-foreground landscape-phone:size-9',
     PRESSED,
   ),
   list: cn(
-    'h-11 justify-start gap-2.5 rounded-xl border-hairline bg-card px-2 text-left text-sm leading-tight font-normal whitespace-normal',
+    'h-11 justify-start gap-2.5 rounded-control border-hairline bg-card px-2 text-left text-sm leading-tight font-normal whitespace-normal',
     PRESSED,
   ),
 } as const
@@ -74,7 +74,7 @@ export function PaletteSection({
             aria-hidden
             tabIndex={-1}
             onClick={() => toggle(category)}
-            className="grid size-8 shrink-0 place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground"
+            className="grid size-8 shrink-0 place-items-center rounded-control text-muted-foreground hover:bg-accent hover:text-foreground"
           >
             <ChevronDown
               className={cn(
@@ -139,7 +139,7 @@ export function KeyGrid({ label, children }: { label?: string | undefined; child
       </div>
     )
   return (
-    <div {...group} className="overflow-hidden rounded-xl border border-hairline bg-card">
+    <div {...group} className="overflow-hidden rounded-control border border-hairline bg-card">
       <div className="-mr-px -mb-px grid grid-cols-[repeat(auto-fill,minmax(2.75rem,1fr))]">
         {children}
       </div>
@@ -235,7 +235,7 @@ export function SignTile({
       className={cn(
         'flex min-w-0 items-center transition-colors duration-150 ease-out outline-none focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring disabled:opacity-35 motion-reduce:transition-none',
         form === 'list'
-          ? 'h-11 gap-2.5 rounded-xl border border-hairline bg-card px-2 text-left text-sm leading-tight hover:bg-accent'
+          ? 'h-11 gap-2.5 rounded-control border border-hairline bg-card px-2 text-left text-sm leading-tight hover:bg-accent'
           : 'col-span-2 h-11 justify-center border-r border-b border-hairline bg-card px-1 text-foreground/80 hover:bg-accent hover:text-foreground focus-visible:z-10 landscape-phone:h-10',
         PRESSED,
       )}

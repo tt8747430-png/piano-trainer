@@ -279,7 +279,7 @@ export function NoteToolbar({
         {...roving}
         className={cn(
           'flex min-w-0 items-center gap-0.5 overflow-x-auto overscroll-x-contain scrollbar-none',
-          pill ? 'rounded-xl bg-muted px-1' : 'flex-1',
+          pill ? 'rounded-control bg-muted px-1' : 'flex-1',
         )}
       >
         <Laid dock="sheet" form="bar">
@@ -304,7 +304,7 @@ export function KeysToggle({ className }: { className?: string }) {
       title={t('palette.keys')}
       aria-pressed={!keys.folded}
       className={cn(
-        'size-10 shrink-0 rounded-lg text-muted-foreground hover:text-foreground aria-pressed:bg-[color-mix(in_oklab,var(--color-link)_14%,var(--color-card))] aria-pressed:text-link',
+        'size-10 shrink-0 rounded-control text-muted-foreground hover:text-foreground aria-pressed:bg-[color-mix(in_oklab,var(--color-link)_14%,var(--color-card))] aria-pressed:text-link',
         className,
       )}
       onClick={() => keys.fold(!keys.folded)}
@@ -358,7 +358,7 @@ function CategoryBar({
       role="toolbar"
       aria-label={t('palette.categories')}
       {...roving}
-      className="flex min-w-0 flex-1 gap-0.5 overflow-x-auto rounded-xl bg-muted p-0.5 scrollbar-none"
+      className="flex min-w-0 flex-1 gap-0.5 overflow-x-auto rounded-control bg-muted p-0.5 scrollbar-none"
     >
       {PALETTE_CATEGORIES.map((category) => {
         const name = t(`palette.category.${category}`)
@@ -375,13 +375,13 @@ function CategoryBar({
             aria-current={chosen ? 'true' : undefined}
             data-off={closed ? true : undefined}
             onClick={() => onChoose(category)}
-            className="relative grid h-10 w-11 shrink-0 place-items-center rounded-[0.625rem] text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground aria-[current=true]:text-foreground data-off:opacity-40 [&_svg]:relative [&_svg]:size-6"
+            className="relative grid h-10 w-11 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground aria-[current=true]:text-foreground data-off:opacity-40 [&_svg]:relative [&_svg]:size-6"
           >
             {chosen ? (
               <motion.span
                 layoutId="palette-category-mark"
                 transition={{ duration: SLIDE, ease: EASE }}
-                className="absolute inset-0 rounded-[0.625rem] bg-card shadow-sm"
+                className="absolute inset-0 rounded-control bg-card shadow-sm"
               />
             ) : null}
             <CategoryIcon category={category} />
@@ -468,7 +468,7 @@ function Grip({ folded, onFold }: { folded: boolean; onFold: (folded: boolean) =
       }}
       className="group flex h-4 shrink-0 cursor-grab touch-none items-center justify-center select-none data-dragging:cursor-grabbing"
     >
-      <span className="h-1 w-10 rounded-full bg-muted-foreground/30 transition-colors duration-200 group-hover:bg-muted-foreground/55 group-data-dragging:bg-muted-foreground/70" />
+      <span className="h-1 w-10 rounded-pill bg-muted-foreground/30 transition-colors duration-200 group-hover:bg-muted-foreground/55 group-data-dragging:bg-muted-foreground/70" />
     </div>
   )
 }
@@ -537,12 +537,12 @@ export function PaletteSheet({
     if (shown && shown !== current) setCurrent(shown)
   }
 
-  const barButton = 'size-10 shrink-0 rounded-lg text-muted-foreground hover:text-foreground'
+  const barButton = 'size-10 shrink-0 rounded-control text-muted-foreground hover:text-foreground'
   return (
     <MotionConfig reducedMotion="user">
       <section
         aria-label={t('palette.label')}
-        className="pointer-events-auto flex min-h-0 flex-col gap-1.5 rounded-t-3xl border border-b-0 border-border bg-card px-3 pb-1 shadow-[0_-6px_20px_-8px] shadow-foreground/15"
+        className="pointer-events-auto flex min-h-0 flex-col gap-1.5 rounded-t-card border border-b-0 border-border bg-card px-3 pb-1 shadow-[0_-6px_20px_-8px] shadow-foreground/15"
       >
         <fieldset disabled={takes.stage !== 'idle'} className="contents">
           <Grip folded={!expanded} onFold={(next) => expand(!next)} />

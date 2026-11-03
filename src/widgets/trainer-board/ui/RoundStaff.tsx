@@ -121,7 +121,7 @@ export function RoundStaff({
       {hidden ? (
         <span
           aria-hidden
-          className="absolute inset-0 grid place-items-center rounded-3xl bg-muted font-display text-4xl font-semibold text-muted-foreground"
+          className="absolute inset-0 grid place-items-center rounded-card bg-muted font-display text-4xl font-semibold text-muted-foreground"
         >
           ?
         </span>

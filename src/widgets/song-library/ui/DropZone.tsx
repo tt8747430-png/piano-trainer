@@ -26,7 +26,7 @@ export function DropZone({
       data-drop={isOver ? '' : undefined}
       data-slot="drop-zone"
       className={cn(
-        'flex h-14 min-w-24 flex-1 flex-col items-center justify-center gap-0.5 rounded-2xl border border-dashed border-input px-3 text-xs transition-colors duration-200 ease-out data-drop:border-solid data-drop:border-selected data-drop:bg-selected/15',
+        'flex h-14 min-w-24 flex-1 flex-col items-center justify-center gap-0.5 rounded-control border border-dashed border-input px-3 text-xs transition-colors duration-200 ease-out data-drop:border-solid data-drop:border-selected data-drop:bg-selected/15',
         className,
       )}
     >

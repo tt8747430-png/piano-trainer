@@ -133,17 +133,17 @@ function LoadingRows({ label }: { label: string }) {
       <p role="status" className="sr-only">
         {label}
       </p>
-      <div aria-hidden className="mx-3 h-4 w-20 rounded-full bg-muted motion-safe:animate-pulse" />
+      <div aria-hidden className="mx-3 h-4 w-20 rounded-pill bg-muted motion-safe:animate-pulse" />
       <ul aria-hidden className="grid-cards gap-x-2 card p-1.5">
         {[0.7, 0.45, 0.6, 0.5, 0.65].map((width, i) => (
           <li key={i} className="flex min-h-16 items-center gap-3 py-2 pr-3 pl-2">
-            <span className="size-12 shrink-0 rounded-2xl bg-muted motion-safe:animate-pulse" />
+            <span className="size-12 shrink-0 rounded-control bg-muted motion-safe:animate-pulse" />
             <span className="flex min-w-0 flex-1 flex-col gap-2">
               <span
-                className="h-4 rounded-full bg-muted motion-safe:animate-pulse"
+                className="h-4 rounded-pill bg-muted motion-safe:animate-pulse"
                 style={{ width: `${width * 100}%` }}
               />
-              <span className="h-3 w-1/3 rounded-full bg-muted motion-safe:animate-pulse" />
+              <span className="h-3 w-1/3 rounded-pill bg-muted motion-safe:animate-pulse" />
             </span>
           </li>
         ))}

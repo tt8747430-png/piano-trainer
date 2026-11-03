@@ -94,7 +94,7 @@ function KeyButton({
       onFocus={() => onFocusKey(geometry.midi)}
       className={cn(
         'group absolute top-0 flex flex-col items-center justify-end overflow-hidden pb-2.5 transition duration-80 ease-out outline-none hover:brightness-95',
-        black ? 'z-10 rounded-b-xs' : 'rounded-b-sm border-r border-key-bed',
+        black ? 'z-10 rounded-b-key-black' : 'rounded-b-key-white border-r border-key-bed',
         (look.down ? DOWN : REST)[look.fill],
         look.down ? 'translate-y-0.5' : null,
         look.outlined ? 'ring-3 ring-ring ring-inset' : null,
@@ -121,7 +121,7 @@ function KeyButton({
       <span
         aria-hidden
         className={cn(
-          'absolute inset-x-1 bottom-2 hidden rounded-xs border-2 border-key-focus-halo ring-2 ring-key-focus group-focus-visible:block',
+          'absolute inset-x-1 bottom-2 hidden rounded-key-black border-2 border-key-focus-halo ring-2 ring-key-focus group-focus-visible:block',
           black ? 'top-1' : null,
         )}
         style={black ? undefined : { top: `calc(${BLACK_HEIGHT}% + 0.25rem)` }}

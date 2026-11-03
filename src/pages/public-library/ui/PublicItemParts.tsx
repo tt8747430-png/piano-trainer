@@ -17,7 +17,7 @@ export function Byline({ entry }: { entry: PublicEntry }) {
       <span
         aria-hidden
         className={cn(
-          'grid size-11 shrink-0 place-items-center rounded-full font-display text-lg font-semibold',
+          'grid size-11 shrink-0 place-items-center rounded-pill font-display text-lg font-semibold',
           paint.fill,
           paint.ink,
         )}
@@ -56,7 +56,7 @@ export function FactChips({ facts }: { facts: readonly { name: string; value: st
       {facts.map((fact) => (
         <div
           key={fact.name}
-          className="flex h-8 items-center gap-1.5 rounded-full bg-muted/70 px-3 text-sm"
+          className="flex h-8 items-center gap-1.5 rounded-pill bg-muted/70 px-3 text-sm"
         >
           <dt className="text-muted-foreground">{fact.name}</dt>
           <dd className="font-semibold">{fact.value}</dd>
@@ -74,22 +74,22 @@ export function ReadingItem({ label }: { label: string }) {
         {label}
       </p>
       <div aria-hidden className="-mt-2 flex items-center gap-3">
-        <span className="size-11 rounded-full bg-muted motion-safe:animate-pulse" />
+        <span className="size-11 rounded-pill bg-muted motion-safe:animate-pulse" />
         <span className="flex flex-col gap-2">
-          <span className="h-4 w-28 rounded-full bg-muted motion-safe:animate-pulse" />
-          <span className="h-3 w-20 rounded-full bg-muted motion-safe:animate-pulse" />
+          <span className="h-4 w-28 rounded-pill bg-muted motion-safe:animate-pulse" />
+          <span className="h-3 w-20 rounded-pill bg-muted motion-safe:animate-pulse" />
         </span>
       </div>
       <div aria-hidden className="flex gap-2">
         {[16, 14, 20].map((width) => (
           <span
             key={width}
-            className="h-8 rounded-full bg-muted motion-safe:animate-pulse"
+            className="h-8 rounded-pill bg-muted motion-safe:animate-pulse"
             style={{ width: `${width / 4}rem` }}
           />
         ))}
       </div>
-      <div aria-hidden className="h-48 rounded-3xl bg-muted motion-safe:animate-pulse" />
+      <div aria-hidden className="h-48 rounded-card bg-muted motion-safe:animate-pulse" />
     </div>
   )
 }

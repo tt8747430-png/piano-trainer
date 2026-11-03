@@ -45,7 +45,7 @@ export function PublishFields({
           placeholder={t(item.kind === 'pattern' ? 'public.aboutPattern' : 'public.aboutSong')}
           aria-describedby={`${id}-count`}
           onChange={(event) => onText(event.target.value)}
-          className="min-h-28 rounded-2xl bg-card px-3.5 py-3 text-base md:text-base"
+          className="min-h-28 rounded-control bg-card px-3.5 py-3 text-base md:text-base"
         />
         <p
           id={`${id}-count`}

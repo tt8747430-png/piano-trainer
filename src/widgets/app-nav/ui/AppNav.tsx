@@ -108,7 +108,7 @@ const FOOT: readonly Place[] = [
 ]
 
 const PLACE_LINK =
-  'flex h-14 flex-col items-center justify-center gap-0.5 rounded-xl border border-transparent text-sm font-medium text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted/60 hover:text-foreground focus-visible:-outline-offset-3 data-[status=active]:border-border data-[status=active]:bg-muted data-[status=active]:font-semibold data-[status=active]:text-foreground lg:h-11 lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-base lg:group-data-[sidebar=collapsed]/nav:justify-center lg:group-data-[sidebar=collapsed]/nav:px-0'
+  'flex h-14 flex-col items-center justify-center gap-0.5 rounded-control border border-transparent text-sm font-medium text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted/60 hover:text-foreground focus-visible:-outline-offset-3 data-[status=active]:border-border data-[status=active]:bg-muted data-[status=active]:font-semibold data-[status=active]:text-foreground lg:h-11 lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-base lg:group-data-[sidebar=collapsed]/nav:justify-center lg:group-data-[sidebar=collapsed]/nav:px-0'
 
 /**
  * A place in the navigation: its icon over its name in the phone's bar, beside it in the sidebar,
@@ -256,7 +256,7 @@ export function AppNav() {
           title={keyHint(toggleLabel, SIDEBAR_KEY, mac)}
           aria-expanded={!collapsed}
           onClick={toggle}
-          className="grid size-11 shrink-0 place-items-center rounded-xl text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground"
+          className="grid size-11 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground"
         >
           <ToggleIcon aria-hidden className="size-5" />
         </button>

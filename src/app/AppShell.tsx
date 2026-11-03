@@ -31,7 +31,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               event.preventDefault()
               document.getElementById('content')?.focus()
             }}
-            className="sr-only z-50 rounded-lg bg-card px-4 py-3 font-semibold focus:not-sr-only focus:fixed focus:top-[calc(env(safe-area-inset-top)+0.5rem)] focus:left-4"
+            className="sr-only z-50 rounded-control bg-card px-4 py-3 font-semibold focus:not-sr-only focus:fixed focus:top-[calc(env(safe-area-inset-top)+0.5rem)] focus:left-4"
           >
             {t('skipToContent')}
           </a>

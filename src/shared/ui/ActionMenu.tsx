@@ -33,7 +33,7 @@ export interface MenuAction {
 
 /** A menu's item: 44px tall, its icon, its name; a greyed one keeps the pointer so its reason shows. */
 const ITEM =
-  'min-h-11 gap-3 rounded-lg px-3 text-base [&_svg:not([class*=size-])]:size-5 data-disabled:pointer-events-auto'
+  'min-h-11 gap-3 rounded-control px-3 text-base [&_svg:not([class*=size-])]:size-5 data-disabled:pointer-events-auto'
 
 /**
  * A pull-down button (Apple's), a real menu (Base UI's Menu, memory-palaces' `FlyoutMenu`): a button
@@ -123,7 +123,7 @@ export function ActionMenu({
       <DropdownMenuContent
         aria-label={label}
         align={align}
-        className="w-auto max-w-[min(20rem,calc(100vw-2rem))] min-w-56 overscroll-contain rounded-2xl p-1.5"
+        className="w-auto max-w-[min(20rem,calc(100vw-2rem))] min-w-56 overscroll-contain rounded-control p-1.5"
       >
         {groups.map((group, at) => (
           <Fragment key={`${group.name ?? ''}-${at}`}>

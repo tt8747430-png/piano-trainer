@@ -27,7 +27,7 @@ export function DegreeSlots({
           <li
             key={ROMAN_NUMERALS[i]}
             className={cn(
-              'flex min-h-14 flex-col items-center justify-center rounded-lg border border-input',
+              'flex min-h-14 flex-col items-center justify-center rounded-control border border-input',
               wrong ? 'border-destructive text-destructive' : shown ? 'bg-muted' : undefined,
             )}
           >

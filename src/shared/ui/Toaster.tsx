@@ -22,7 +22,7 @@ function Toasts() {
     <Toast
       key={each.id}
       toast={each}
-      className="card rounded-3xl border-border bg-card elevation-3"
+      className="card rounded-card border-border bg-card elevation-3"
     >
       <ToastContent className="gap-2 py-2 pr-2 pl-4">
         <ToastTitle className="min-w-0 flex-1 font-sans text-base font-medium" />

@@ -28,7 +28,7 @@ export function MoreMenu({
       align="end"
       trigger={<Ellipsis aria-hidden />}
       render={
-        <Button variant="bar" size="icon" className="rounded-full" aria-label={name} title={name} />
+        <Button variant="bar" size="icon" className="rounded-pill" aria-label={name} title={name} />
       }
       actions={actions}
     />

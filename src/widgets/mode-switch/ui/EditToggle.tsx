@@ -26,7 +26,7 @@ export function EditToggle({
       <Button
         variant={variant}
         disabled={disabled}
-        className="shrink-0 rounded-full px-4 font-semibold"
+        className="shrink-0 rounded-pill px-4 font-semibold"
         onClick={onDone}
       >
         {t('editMode.done')}

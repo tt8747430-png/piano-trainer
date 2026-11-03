@@ -7,6 +7,6 @@ import { cn } from '@/shared/lib'
  */
 export const rowClass = (tiled: boolean): string =>
   cn(
-    'group/row flex h-full min-h-16 min-w-0 items-center gap-3 rounded-3xl py-2 pr-3 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
+    'group/row flex h-full min-h-16 min-w-0 items-center gap-3 rounded-card py-2 pr-3 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
     tiled ? 'pl-2' : 'pl-4',
   )

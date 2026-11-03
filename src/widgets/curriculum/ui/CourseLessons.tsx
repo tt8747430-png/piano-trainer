@@ -49,7 +49,7 @@ export function CourseLessons({ course, next }: { course: Course; next: StepId |
                   <span
                     aria-hidden
                     className={cn(
-                      'grid size-10 shrink-0 place-items-center rounded-full font-display text-lg font-semibold tabular-nums',
+                      'grid size-10 shrink-0 place-items-center rounded-pill font-display text-lg font-semibold tabular-nums',
                       done ? 'bg-learned text-learned-foreground' : cn(paint.fill, paint.ink),
                       current && 'ring-2 ring-primary ring-offset-2 ring-offset-card',
                     )}

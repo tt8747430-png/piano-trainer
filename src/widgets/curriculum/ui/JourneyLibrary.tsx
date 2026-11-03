@@ -102,7 +102,7 @@ function StepRow({
             aria-hidden
             className={cn(
               'grid size-10 shrink-0 place-items-center',
-              step.kind === 'lesson' ? 'rounded-full' : 'rounded-xl',
+              step.kind === 'lesson' ? 'rounded-pill' : 'rounded-control',
               done ? 'bg-learned text-learned-foreground' : cn(paint.fill, paint.ink),
               next && 'ring-2 ring-primary ring-offset-2 ring-offset-card',
             )}
@@ -128,7 +128,7 @@ function StepRow({
           </span>
         </span>
         {next ? (
-          <span className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-xs font-semibold text-primary-foreground">
+          <span className="shrink-0 rounded-pill bg-primary px-2.5 py-0.5 text-xs font-semibold text-primary-foreground">
             {t('upNext')}
           </span>
         ) : null}

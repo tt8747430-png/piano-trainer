@@ -45,7 +45,7 @@ export function TensionGroupCard({
               >
                 <span
                   className={cn(
-                    'grid size-9 place-items-center rounded-lg text-sm font-bold',
+                    'grid size-9 place-items-center rounded-control text-sm font-bold',
                     group === 'avoid' ? AVOID_DEGREE : cn(ROLE_BG[tone.role], 'text-on-role'),
                   )}
                 >

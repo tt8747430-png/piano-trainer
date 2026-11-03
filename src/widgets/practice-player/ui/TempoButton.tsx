@@ -18,7 +18,7 @@ const PERCENT = { style: 'unit', unit: 'percent' } as const
  * its side, so the transport fits with the gauge beside the value at every size (ADR 0114).
  */
 const TRIGGER =
-  'h-12 rounded-full px-3 small-phone:h-11 small-phone:px-2 narrow-phone:gap-1 narrow-phone:px-1 landscape-phone:h-10'
+  'h-12 rounded-pill px-3 small-phone:h-11 small-phone:px-2 narrow-phone:gap-1 narrow-phone:px-1 landscape-phone:h-10'
 
 /**
  * The tempo button and its popover: Wait mode, or a speed of the piece's tempo, its
@@ -89,7 +89,7 @@ export function TempoButton({
         <Listbox
           label={t('tempo')}
           className="gap-4"
-          optionClassName="min-h-11 rounded-lg px-2 text-base"
+          optionClassName="min-h-11 rounded-control px-2 text-base"
           groups={[
             ...(onWait
               ? [

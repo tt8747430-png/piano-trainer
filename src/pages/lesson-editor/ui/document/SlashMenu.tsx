@@ -104,7 +104,7 @@ export function SlashMenu({
       role="listbox"
       id={id}
       aria-label={t('edit.doc.slash')}
-      className="absolute z-40 flex max-h-80 w-72 flex-col gap-0.5 overflow-y-auto overscroll-contain rounded-2xl border border-hairline bg-popover p-1.5 text-popover-foreground shadow-lg"
+      className="absolute z-40 flex max-h-80 w-72 flex-col gap-0.5 overflow-y-auto overscroll-contain rounded-control border border-hairline bg-popover p-1.5 text-popover-foreground shadow-lg"
       style={{ top: caret.bottom - box.top + 6, left: Math.max(0, caret.left - box.left) }}
     >
       {actions.length === 0 ? (
@@ -119,7 +119,7 @@ export function SlashMenu({
               role="option"
               aria-selected={at === chosen}
               className={cn(
-                'flex min-h-11 items-center gap-3 rounded-xl px-3 text-left text-sm transition-colors duration-150 ease-out hover:bg-muted',
+                'flex min-h-11 items-center gap-3 rounded-control px-3 text-left text-sm transition-colors duration-150 ease-out hover:bg-muted',
                 at === chosen && 'bg-muted',
               )}
               onMouseDown={(event) => event.preventDefault()}

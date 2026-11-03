@@ -18,7 +18,7 @@ function SourceLine({ source, children }: { source: ChordSource; children?: stri
       <span
         aria-hidden
         className={cn(
-          'size-2 rounded-full',
+          'size-2 rounded-pill',
           source === 'held' ? 'bg-learned motion-safe:animate-pulse' : 'bg-muted-foreground',
         )}
       />
@@ -58,7 +58,7 @@ export function ChordName({
     case 'empty':
       return (
         <div className="flex flex-col items-center gap-3">
-          <span className="grid size-14 place-items-center rounded-full bg-muted text-muted-foreground">
+          <span className="grid size-14 place-items-center rounded-pill bg-muted text-muted-foreground">
             <Piano aria-hidden className="size-7" strokeWidth={1.5} />
           </span>
           <div className="flex flex-col gap-1">

@@ -66,7 +66,7 @@ function FinderSettings({
             variant="bar"
             aria-label={t('chordFinder.settings')}
             title={t('chordFinder.settings')}
-            className="rounded-full px-3"
+            className="rounded-pill px-3"
           />
         }
       >

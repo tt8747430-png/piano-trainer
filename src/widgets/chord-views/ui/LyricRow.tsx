@@ -47,7 +47,7 @@ export function LyricRow({
       data-line={index}
       data-looped={looped ? '' : undefined}
       className={cn(
-        'relative -mx-2 rounded-lg px-2 py-1 transition-colors duration-200 ease-out',
+        'relative -mx-2 rounded-control px-2 py-1 transition-colors duration-200 ease-out',
         looped && 'bg-ring/15',
         playing ? 'font-semibold text-foreground' : 'text-muted-foreground',
       )}
@@ -62,7 +62,7 @@ export function LyricRow({
         }
         aria-current={playing ? 'step' : undefined}
         onClick={() => onGo(line.from)}
-        className="absolute inset-0 cursor-pointer rounded-lg"
+        className="absolute inset-0 cursor-pointer rounded-control"
       />
       <LineSegments
         line={line}

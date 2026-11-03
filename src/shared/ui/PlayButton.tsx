@@ -30,7 +30,7 @@ export function PlayButton({
       aria-label={name}
       title={name}
       onClick={onClick}
-      className={cn('shrink-0 rounded-full', className)}
+      className={cn('shrink-0 rounded-pill', className)}
     >
       {playing ? (
         <Square aria-hidden className="size-4 fill-current" />

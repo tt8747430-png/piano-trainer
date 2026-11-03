@@ -54,7 +54,7 @@ function ChapterHead({
           locale={locale}
           placeholder={words('edit.doc.chapterName')}
           onChange={onRename}
-          className="rounded-lg px-3 text-xl transition-colors duration-150 ease-out hover:bg-muted/60 focus:bg-muted/60"
+          className="rounded-control px-3 text-xl transition-colors duration-150 ease-out hover:bg-muted/60 focus:bg-muted/60"
         />
       </div>
       <ActionMenu

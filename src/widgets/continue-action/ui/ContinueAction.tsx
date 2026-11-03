@@ -47,7 +47,7 @@ export function ContinueAction() {
       </span>
       <span
         aria-hidden
-        className="grid size-12 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground transition-transform duration-200 ease-out group-hover:scale-105 group-active:scale-95 [&_svg]:size-5"
+        className="grid size-12 shrink-0 place-items-center rounded-pill bg-primary text-primary-foreground transition-transform duration-200 ease-out group-hover:scale-105 group-active:scale-95 [&_svg]:size-5"
       >
         <Icon className={read ? undefined : 'fill-current'} />
       </span>

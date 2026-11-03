@@ -39,7 +39,7 @@ export function MidiButton({ variant = 'bar' }: { variant?: 'bar' | 'tool' }) {
         <span
           aria-hidden
           className={cn(
-            'absolute top-2 right-2 size-2 rounded-full',
+            'absolute top-2 right-2 size-2 rounded-pill',
             connected ? 'bg-learned' : 'bg-border',
           )}
         />

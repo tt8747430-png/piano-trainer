@@ -19,7 +19,7 @@ export function RecordingStrip() {
     <div className="flex min-h-14 items-center gap-3 card px-4 py-2">
       <span
         aria-hidden
-        className="size-3 shrink-0 rounded-full bg-foreground motion-safe:animate-pulse"
+        className="size-3 shrink-0 rounded-pill bg-foreground motion-safe:animate-pulse"
       />
       <p className="flex min-w-0 flex-1 flex-wrap gap-x-2 tabular-nums">
         <span role="status" className="font-semibold">
