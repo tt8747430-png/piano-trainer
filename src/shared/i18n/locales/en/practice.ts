@@ -30,6 +30,8 @@ export const practice = {
   root: 'Root',
   hands: 'Hands',
   arpeggio: 'Arpeggio',
+  /** The explorers' floating transport: one capsule of what plays the thing shown (R29). */
+  transport: 'Transport',
   inPlayer: 'Practise in the Player',
   checkYourself: 'Check yourself',
   // Chords: the chord built, its tensions, and its ways on.
@@ -54,11 +56,6 @@ export const practice = {
         sus4: 'Suspended 4th',
         power: 'Power (5)',
       },
-      sizeNot: {
-        stops: 'Chord dictionaries stop the {{quality}} chord before this size.',
-        power: 'A power chord has no 3rd, so nothing stacks on it.',
-      },
-      powerInversion: 'A power chord stays in root position: its 5th under the root is a 4th.',
       sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
       sizeNames: {
         triad: 'Triad',

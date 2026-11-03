@@ -17,9 +17,10 @@ import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
 import {
   ChordHeading,
-  FabPill,
   FloatingActions,
-  PlayFab,
+  FloatingBar,
+  FloatingBarButton,
+  FloatingBarPlay,
   usePlayKey,
   type ShownKeys,
 } from '@/shared/ui'
@@ -139,17 +140,20 @@ export function ChordExplorer({
         />
       ) : null}
       <FloatingActions>
-        <FabPill
-          label={playback.playing === 'arpeggio' ? t('common:stop') : t('practice:arpeggio')}
-          icon={playback.playing === 'arpeggio' ? Square : AudioLines}
-          aria-pressed={playback.playing === 'arpeggio'}
-          onClick={() => sound('arpeggio')}
-        />
-        <PlayFab
-          label={t('music:play')}
-          playing={playback.playing === 'chord'}
-          onClick={() => sound('chord')}
-        />
+        <FloatingBar label={t('practice:transport')}>
+          <FloatingBarButton
+            label={playback.playing === 'arpeggio' ? t('common:stop') : t('practice:arpeggio')}
+            aria-pressed={playback.playing === 'arpeggio'}
+            onClick={() => sound('arpeggio')}
+          >
+            {playback.playing === 'arpeggio' ? <Square aria-hidden /> : <AudioLines aria-hidden />}
+          </FloatingBarButton>
+          <FloatingBarPlay
+            label={t('music:play')}
+            playing={playback.playing === 'chord'}
+            onClick={() => sound('chord')}
+          />
+        </FloatingBar>
       </FloatingActions>
     </div>
   )

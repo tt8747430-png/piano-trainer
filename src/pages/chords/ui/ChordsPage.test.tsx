@@ -117,7 +117,7 @@ describe('Practice → Chords', () => {
     expect(await screen.findByRole('heading', { level: 2, name: 'Cadd2' })).toBeInTheDocument()
   })
 
-  it('adds to a 7th chord the tone its stack skipped, and greys the row where it skipped none', async () => {
+  it('adds to a 7th chord the tone its stack skipped, and draws no row where it skipped none', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/chords?triad=min&size=7')
     const added = await screen.findByRole('group', { name: 'Added tones' })
@@ -125,11 +125,7 @@ describe('Practice → Chords', () => {
     expect(await screen.findByRole('heading', { level: 2, name: 'Cm7(add11)' })).toBeInTheDocument()
     await user.click(screen.getByRole('radio', { name: '11th · Eleventh chord' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'Cm11' })).toBeInTheDocument()
-    // The row stays in its place, greyed, so nothing under it moves (A31).
-    for (const chip of within(screen.getByRole('group', { name: 'Added tones' })).getAllByRole(
-      'button',
-    ))
-      expect(chip).toBeDisabled()
+    expect(screen.queryByRole('group', { name: 'Added tones' })).not.toBeInTheDocument()
   })
 
   it('writes the chord on a staff', async () => {
@@ -164,19 +160,32 @@ describe('Practice → Chords', () => {
     expect(router.state.location.search).toMatchObject({ size: 11 })
     expect(router.state.location.search).not.toHaveProperty('triad')
     expect(await screen.findByRole('heading', { level: 2, name: 'C11' })).toBeInTheDocument()
-    expect(screen.getByRole('radiogroup', { name: 'Suspension' })).toHaveAttribute(
-      'aria-disabled',
-      'true',
-    )
+    expect(screen.queryByRole('radiogroup', { name: 'Suspension' })).not.toBeInTheDocument()
   })
 
-  it('offers a suspension under a major chord only, greying the row in its place under another', async () => {
+  it('offers a suspension under a major chord only, drawing no row under another (R30)', async () => {
     await renderApp('/practice/chords?triad=min')
     await screen.findByRole('heading', { level: 2, name: 'Cm' })
-    expect(screen.getByRole('radiogroup', { name: 'Suspension' })).toHaveAttribute(
-      'aria-disabled',
-      'true',
-    )
+    expect(screen.queryByRole('radiogroup', { name: 'Suspension' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('radiogroup', { name: '7th' })).not.toBeInTheDocument()
+  })
+
+  it('offers only the sizes the quality stacks to', async () => {
+    await renderApp('/practice/chords?triad=aug')
+    await screen.findByRole('heading', { level: 2, name: 'C+' })
+    const sizes = screen.getByRole('radiogroup', { name: 'Chord size' })
+    expect(
+      within(sizes)
+        .getAllByRole('radio')
+        .map((radio) => radio.textContent),
+    ).toEqual(['Triad', '7th', '9th'])
+  })
+
+  it('plays from one transport capsule', async () => {
+    await renderApp('/practice/chords')
+    const transport = await screen.findByRole('toolbar', { name: 'Transport' })
+    expect(within(transport).getByRole('button', { name: 'Arpeggio' })).toBeInTheDocument()
+    expect(within(transport).getByRole('button', { name: 'Play' })).toBeInTheDocument()
   })
 
   it('rolls an arpeggio, putting down only the key struck last, every chord tone kept', async () => {
@@ -244,9 +253,8 @@ describe('Practice → Chords', () => {
     const { router } = await renderApp('/practice/chords?size=9')
     expect(await screen.findByRole('heading', { level: 2, name: 'C9' })).toBeInTheDocument()
     // Two hands whatever was chosen: one hand cannot hold the stack.
-    const hands = within(screen.getByRole('radiogroup', { name: 'Hands' }))
-    expect(hands.getByRole('radio', { name: 'Both' })).toBeChecked()
-    expect(hands.getByRole('radio', { name: 'Right' })).toHaveAttribute('aria-disabled', 'true')
+    // A choice that cannot be made is not drawn (R30): no Hands to choose.
+    expect(screen.queryByRole('radiogroup', { name: 'Hands' })).not.toBeInTheDocument()
     expect(screen.queryByRole('radiogroup', { name: 'Inversion' })).not.toBeInTheDocument()
     const from = within(screen.getByRole('radiogroup', { name: 'Right hand from' }))
     expect(from.getAllByRole('radio').map((radio) => radio.textContent)).toEqual(['3 E', '♭7 B♭'])
