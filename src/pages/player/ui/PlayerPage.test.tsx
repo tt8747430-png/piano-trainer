@@ -236,32 +236,32 @@ describe('Player', () => {
     expect(dock.compareDocumentPosition(top) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
   })
 
-  it('opens its one Settings from the gear: the music’s choices, how the Player works and this music’s acts (R29)', async () => {
+  it('opens its one Settings from the gear: the music’s choices, While you play, This song and Share (R29)', async () => {
     const user = userEvent.setup()
     const { audio, settingsStore } = await renderApp('/play/romashki?tempo=36')
     await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     const sheet = await screen.findByRole('dialog', { name: 'Player settings' })
-    const works = within(sheet).getByRole('region', { name: 'How the Player works' })
-    expect(
-      within(works)
+    // The owner's order (2.5): While you play, This song, Share.
+    const rows = (group: string) =>
+      within(within(sheet).getByRole('region', { name: group }))
         .getAllByRole('button')
-        .map((row) => row.textContent),
-    ).toEqual(['Audio playback', 'Playback', 'Display'])
-    const acts = within(sheet).getByRole('region', { name: 'This music' })
-    expect(
-      within(acts)
-        .getAllByRole('button')
-        .map((row) => row.textContent),
-    ).toEqual([
+        .map((row) => row.textContent)
+    const works = within(sheet).getByRole('region', { name: 'While you play' })
+    expect(rows('While you play')).toEqual([
+      'Audio playback',
+      'Playback',
+      'Display',
+      'Metronome sound and beats',
+    ])
+    expect(rows('This song')).toEqual([
+      'Sections',
+      'Song information',
+      'Score settings',
       'Add to favourites',
       'Move to…',
       'Archive',
-      'Song information',
-      'Sections',
-      'Score settings',
-      'Print',
-      'Export…',
     ])
+    expect(rows('Share')).toEqual(['Export…', 'Print'])
     await user.click(within(works).getByRole('button', { name: 'Audio playback' }))
     expect(await screen.findByRole('dialog', { name: 'Audio playback' })).toBeInTheDocument()
     const labels = [...document.querySelectorAll('[data-slot="slider-label"]')].map(

@@ -14,6 +14,8 @@ export interface SettingsAct {
   readonly key: string
   readonly label: string
   readonly icon: LucideIcon
+  /** Its group: While you play (a way to more of the Player), This song, or Share (R29, 2.5). */
+  readonly group: 'play' | 'song' | 'share'
   readonly disabled?: boolean | undefined
   /** Why it is greyed, said while it is. */
   readonly reason?: string | undefined

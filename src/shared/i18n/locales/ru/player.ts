@@ -122,8 +122,9 @@ export const player: LocaleResources['player'] = {
   pedalLamp: { mark: 'Ped.', down: 'Педаль нажата', up: 'Педаль отпущена' },
   settingsPage: {
     open: 'Настройки плеера',
-    howItWorks: 'Как работает плеер',
-    thisMusic: 'Эта музыка',
+    whilePlaying: 'Во время игры',
+    songGroup: 'Эта песня',
+    shareGroup: 'Поделиться',
     audio: 'Воспроизведение',
     audioInfo:
       'Громкость каждого нотоносца, записи и метронома для всех песен. «Только аккорды» выключает запись и делает фортепиано громче, чтобы звучали одни аккорды.',

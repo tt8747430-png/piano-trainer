@@ -34,15 +34,18 @@ function withSong() {
 type User = ReturnType<typeof userEvent.setup>
 
 /** Opens the Player's Settings and reads the acts on its music, in order. */
-async function moreActions(user: User, settings = 'Player settings', group = 'This music') {
+async function moreActions(user: User, settings = 'Player settings') {
   await user.click(await screen.findByRole('button', { name: settings }))
   const sheet = await screen.findByRole('dialog', { name: settings })
-  return (
-    within(within(sheet).getByRole('region', { name: group }))
-      .getAllByRole('button')
-      // Each by its name, the reason a greyed one gives left out.
-      .map((act) => (act.textContent ?? '').replace(act.title, ''))
-  )
+  return ['This song', 'Share'].flatMap((group) => {
+    const found = within(sheet).queryByRole('region', { name: group })
+    // Each by its name, the reason a greyed one gives left out.
+    return found
+      ? within(found)
+          .getAllByRole('button')
+          .map((act) => (act.textContent ?? '').replace(act.title, ''))
+      : []
+  })
 }
 
 /** Opens More's Export… and chooses one of its rows, by its title. */
@@ -142,16 +145,16 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
     [
       'a song',
       '/play/bz5',
-      [...LIBRARY, 'Song information', 'Sections', 'Score settings', 'Print', 'Export…'],
+      ['Sections', 'Song information', 'Score settings', ...LIBRARY, 'Export…', 'Print'],
     ],
     // A study is in no library (ADR 0106).
     [
       'a study',
       '/play/ex3',
-      ['Study information', 'Sections', 'Score settings', 'Print', 'Export…'],
+      ['Sections', 'Study information', 'Score settings', 'Export…', 'Print'],
     ],
-    ['a walk', '/play/walk?root=D&kind=dorian', ['Print', 'Export…']],
-    ['an exercise', '/play/exercise/hanon', ['Print', 'Export…']],
+    ['a walk', '/play/walk?root=D&kind=dorian', ['Export…', 'Print']],
+    ['an exercise', '/play/exercise/hanon', ['Export…', 'Print']],
   ])('lists what %s has', async (_music, path, actions) => {
     const user = userEvent.setup()
     await renderApp(path)
@@ -185,14 +188,14 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
     const user = userEvent.setup()
     await renderApp('/play/my-1', { storage: withSong() })
     expect(await moreActions(user)).toEqual([
+      'Sections',
+      'Song information',
+      'Score settings',
       'Add to favourites',
       'Move to…',
       'Archive',
-      'Song information',
-      'Sections',
-      'Score settings',
-      'Print',
       'Export…',
+      'Print',
     ])
     await user.keyboard('{Escape}')
     await exportAs(user, 'Share link')

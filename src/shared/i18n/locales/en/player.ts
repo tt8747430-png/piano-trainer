@@ -142,8 +142,9 @@ export const player = {
   // The Player's settings page (B7): how it always plays, every song's.
   settingsPage: {
     open: 'Player settings',
-    howItWorks: 'How the Player works',
-    thisMusic: 'This music',
+    whilePlaying: 'While you play',
+    songGroup: 'This song',
+    shareGroup: 'Share',
     audio: 'Audio playback',
     audioInfo:
       'How loud each staff, the recording and the metronome play, for every song. Only the chords turns the recording right down and the piano up, so you hear the chords alone.',

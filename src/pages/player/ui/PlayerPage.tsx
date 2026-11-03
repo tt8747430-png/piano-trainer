@@ -105,18 +105,18 @@ function PiecePlayer({ piece }: { piece: Piece }) {
       : { kind: 'own', song: { title, music: musicOf(piece) } }
   const more: MenuAction[] = [
     {
-      key: 'info',
-      label: t(`player:info.${piece.kind}`),
-      icon: Info,
-      onSelect: () => setShowing('info'),
-    },
-    {
       key: 'sections',
       label: t('player:sections.title'),
       icon: ListTree,
       onSelect: () => setShowing('sections'),
       disabled: starts.length < 2,
       reason: t(`player:sections.one.${piece.kind}`),
+    },
+    {
+      key: 'info',
+      label: t(`player:info.${piece.kind}`),
+      icon: Info,
+      onSelect: () => setShowing('info'),
     },
     // The score's Settings (round 28): every piece is edited, so every piece has them.
     {

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { BackButton, RowButton, Sheet, SheetContent, SettingsGroup } from '@/shared/ui'
 import { SetupTrigger } from './SetupTrigger'
-import { useSettingsExtras } from './setup-extras'
+import { useSettingsExtras, type SettingsAct } from './setup-extras'
 
 /** A page the screen's own Settings open inside the sheet: its title and what it shows. */
 export interface InnerPage {
@@ -36,6 +36,22 @@ export function SettingsSheet({
   // On a laptop a panel at the right, the music in sight beside it (R29, screen 4.1).
   const laptop = useMediaQuery(LAPTOP)
   const extra = pages.find((each) => each.id === page)
+  const actsIn = (group: SettingsAct['group']) => acts.filter((each) => each.group === group)
+  const act = ({ key, label, icon, disabled, reason, onSelect }: SettingsAct) => (
+    <RowButton
+      key={key}
+      title={label}
+      icon={icon}
+      paint="sand"
+      disabled={disabled}
+      reason={reason}
+      onClick={() => {
+        setOpen(false)
+        onPage('main')
+        onSelect()
+      }}
+    />
+  )
   const title =
     page === 'main'
       ? t('settingsPage.open')
@@ -43,6 +59,7 @@ export function SettingsSheet({
   return (
     <Sheet
       swipeDirection={laptop ? 'right' : 'down'}
+      modal={!laptop}
       open={open}
       onOpenChange={(next) => {
         setOpen(next)
@@ -54,8 +71,8 @@ export function SettingsSheet({
         {page === 'main' ? (
           <div className="flex flex-col gap-5">
             {children}
-            {pages.length > 0 ? (
-              <SettingsGroup flush title={t('settingsPage.howItWorks')}>
+            {pages.length > 0 || actsIn('play').length > 0 ? (
+              <SettingsGroup flush title={t('settingsPage.whilePlaying')}>
                 {pages.map(({ id, label, icon }) => (
                   <RowButton
                     key={id}
@@ -65,27 +82,16 @@ export function SettingsSheet({
                     onClick={() => onPage(id)}
                   />
                 ))}
+                {actsIn('play').map(act)}
               </SettingsGroup>
             ) : null}
-            {acts.length > 0 ? (
-              <SettingsGroup flush title={t('settingsPage.thisMusic')}>
-                {acts.map(({ key, label, icon, disabled, reason, onSelect }) => (
-                  <RowButton
-                    key={key}
-                    title={label}
-                    icon={icon}
-                    paint="sand"
-                    disabled={disabled}
-                    reason={reason}
-                    onClick={() => {
-                      setOpen(false)
-                      onPage('main')
-                      onSelect()
-                    }}
-                  />
-                ))}
-              </SettingsGroup>
-            ) : null}
+            {(['song', 'share'] as const).map((group) =>
+              actsIn(group).length > 0 ? (
+                <SettingsGroup key={group} flush title={t(`settingsPage.${group}Group`)}>
+                  {actsIn(group).map(act)}
+                </SettingsGroup>
+              ) : null,
+            )}
           </div>
         ) : extra ? (
           <div className="flex flex-col gap-5">

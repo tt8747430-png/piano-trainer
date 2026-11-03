@@ -1,4 +1,5 @@
-import { Download, MonitorCog, Printer, SlidersHorizontal, Volume2 } from 'lucide-react'
+import { useNavigate } from '@tanstack/react-router'
+import { Download, MonitorCog, Printer, SlidersHorizontal, Timer, Volume2 } from 'lucide-react'
 import { use, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
@@ -125,6 +126,7 @@ export function PlayerLayout({
   openView?: boolean
 }) {
   const { t } = useTranslation(['player', 'songs'])
+  const navigate = useNavigate()
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const scoreView = useSettings(selectScoreView)
@@ -171,17 +173,32 @@ export function PlayerLayout({
         content: <ViewSection view={shown} words={needs.lyrics !== 'words'} />,
       },
     ],
-    acts: [...library, ...more]
-      .flatMap(({ icon, ...act }) => (icon ? [{ ...act, icon }] : []))
-      .concat([
-        { key: 'print', label: t('print'), icon: Printer, onSelect: () => setPrinting(true) },
-        {
-          key: 'export',
-          label: t('songs:export.action'),
-          icon: Download,
-          onSelect: () => setExporting(true),
-        },
-      ]),
+    acts: [
+      {
+        key: 'metronome',
+        group: 'play',
+        label: t('settingsPage.metronome'),
+        icon: Timer,
+        onSelect: () => void navigate({ to: '/practice/metronome' }),
+      },
+      ...[...more, ...library].flatMap(({ icon, ...act }) =>
+        icon ? [{ ...act, icon, group: 'song' as const }] : [],
+      ),
+      {
+        key: 'export',
+        group: 'share',
+        label: t('songs:export.action'),
+        icon: Download,
+        onSelect: () => setExporting(true),
+      },
+      {
+        key: 'print',
+        group: 'share',
+        label: t('print'),
+        icon: Printer,
+        onSelect: () => setPrinting(true),
+      },
+    ],
   }
   // A chord view's keys in Listen: the chord sounding as its diagram draws it (ADR 0108); a pattern
   // lesson's, each note as it sounds, whatever the view (ADR 0111).
