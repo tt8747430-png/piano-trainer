@@ -131,7 +131,7 @@ export const piece = {
     title: 'Settings',
     open: 'Settings',
     library: 'In your library',
-    folder: 'Folder',
+    folder: 'Move to folder…',
     home: 'Songs',
     archived: 'Archived',
     share: 'Share',

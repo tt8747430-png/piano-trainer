@@ -129,7 +129,7 @@ export const piece: LocaleResources['piece'] = {
     title: 'Настройки',
     open: 'Настройки',
     library: 'В вашей библиотеке',
-    folder: 'Папка',
+    folder: 'Переместить в папку…',
     home: 'Песни',
     archived: 'В архиве',
     share: 'Поделиться',

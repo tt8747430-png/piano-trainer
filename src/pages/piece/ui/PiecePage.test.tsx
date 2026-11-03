@@ -200,7 +200,9 @@ describe('Piece', () => {
     ).toEqual(['In your library', 'Share'])
     // Favourite is an act on the song (its ♡, its menus), never a switch here (R19).
     expect(screen.queryByRole('switch', { name: 'Favourite' })).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /^Folder/ })).toHaveTextContent('«Боже, спасибо»')
+    expect(screen.getByRole('button', { name: /^Move to folder…/ })).toHaveTextContent(
+      '«Боже, спасибо»',
+    )
     for (const name of ['Archive', 'Export…'])
       expect(screen.getByRole('button', { name })).toBeInTheDocument()
     // Nothing of the learner's own to give up, and no original for a learner.
@@ -490,7 +492,7 @@ describe('Piece: the learner’s library (ADR 0106)', () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs/bz5')
     await openSettings(user)
-    await user.click(await screen.findByRole('button', { name: /^Folder/ }))
+    await user.click(await screen.findByRole('button', { name: /^Move to folder…/ }))
     const sheet = await screen.findByRole('dialog', { name: 'Move to' })
     // Where it stands now is marked Here, no place to move it to; a tap elsewhere moves at once.
     expect(within(sheet).getByRole('button', { name: '«Боже, спасибо» Here' })).toHaveAttribute(
@@ -512,7 +514,7 @@ describe('Piece: the learner’s library (ADR 0106)', () => {
     expect(placeOf(libraryStore.getState(), 'bz5')).toBe('archived')
     expect(await screen.findByText('“Still, my soul, be still” archived')).toBeInTheDocument()
     // An archived song still opens; Restore stands in place of its Folder and Archive.
-    expect(screen.queryByRole('button', { name: /^Folder/ })).toBeNull()
+    expect(screen.queryByRole('button', { name: /^Move to folder…/ })).toBeNull()
     await user.click(await screen.findByRole('button', { name: 'Restore' }))
     expect(placeOf(libraryStore.getState(), 'bz5')).toMatchObject({ folder: 'bozhe-spasibo' })
   })
@@ -533,7 +535,7 @@ describe('Piece: the learner’s library (ADR 0106)', () => {
     expect(await screen.findByRole('button', { name: 'Убрать из избранного' })).toBeInTheDocument()
     const bar = document.querySelector('[data-slot="screen-bar"]') as HTMLElement
     await user.click(within(bar).getByRole('link', { name: 'Настройки' }))
-    await user.click(await screen.findByRole('button', { name: /^Папка/ }))
+    await user.click(await screen.findByRole('button', { name: /^Переместить в папку…/ }))
     expect(await screen.findByRole('dialog', { name: 'Переместить' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
   })
