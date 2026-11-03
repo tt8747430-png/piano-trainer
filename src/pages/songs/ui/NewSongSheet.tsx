@@ -377,7 +377,7 @@ export function NewSongSheet({
                         }}
                         className={cn(
                           'grid min-h-14 place-items-center border-r border-border font-display text-lg leading-none font-semibold outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset',
-                          pressed && 'bg-chosen text-link',
+                          pressed && 'bg-chosen text-foreground',
                         )}
                       >
                         {each.symbol ? (
@@ -404,7 +404,7 @@ export function NewSongSheet({
                     }}
                     className={cn(
                       'grid min-h-14 place-items-center text-muted-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset',
-                      ownTime && 'bg-chosen text-link',
+                      ownTime && 'bg-chosen text-foreground',
                     )}
                   >
                     <Pencil aria-hidden className="size-5" />

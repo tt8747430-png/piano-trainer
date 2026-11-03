@@ -54,7 +54,7 @@ export function PictureTiles<V extends string>({
           disabled={tile.reason !== undefined}
           aria-label={tile.label}
           title={tile.reason}
-          className="flex min-h-11 min-w-0 cursor-default flex-col items-center gap-1.5 rounded-control border border-input bg-card px-1.5 py-2.5 text-center text-sm leading-tight font-medium text-pretty text-muted-foreground transition-colors duration-200 ease-out select-none hover:bg-muted data-checked:border-foreground data-checked:bg-muted data-checked:text-foreground data-disabled:opacity-40 data-disabled:hover:bg-card"
+          className="flex min-h-11 min-w-0 cursor-default flex-col items-center gap-1.5 rounded-control border border-input bg-card px-1.5 py-2.5 text-center text-sm leading-tight font-medium text-pretty text-muted-foreground select-none choice data-disabled:opacity-40"
         >
           {tile.picture}
           <span>{tile.label}</span>

@@ -78,7 +78,7 @@ export function ChordSymbolField({ anchor }: { anchor: HTMLElement | null }) {
           aria-pressed={wizard}
           onPointerDown={(event) => event.preventDefault()}
           onClick={() => setWizard(!wizard)}
-          className="grid size-11 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground aria-pressed:bg-[color-mix(in_oklab,var(--color-link)_14%,var(--color-card))] aria-pressed:text-link"
+          className="grid size-11 shrink-0 place-items-center rounded-control text-muted-foreground choice"
         >
           <WandSparkles aria-hidden className="size-5" />
         </button>

@@ -227,15 +227,9 @@ function TempoPicker({ onDone }: { onDone: () => void }) {
               const range = markRange(each, meter)
               setMark((now) => Math.min(range.high, Math.max(range.low, now)))
             }}
-            className="relative grid size-12 place-items-center rounded-pill font-music text-2xl leading-none text-muted-foreground transition-colors duration-150 outline-none hover:text-foreground focus-visible:outline-3 focus-visible:outline-ring aria-checked:text-link aria-checked:ring-2 aria-checked:ring-border motion-reduce:transition-none"
+            className="relative grid size-12 place-items-center rounded-pill font-music text-2xl leading-none text-muted-foreground choice"
           >
             {unitNote(each)}
-            {each === unit ? (
-              <span
-                aria-hidden
-                className="absolute -bottom-0.5 size-0 border-x-4 border-b-4 border-x-transparent border-b-muted-foreground"
-              />
-            ) : null}
           </button>
         ))}
       </div>

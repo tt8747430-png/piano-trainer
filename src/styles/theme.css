@@ -325,25 +325,52 @@
   @apply rounded-card border border-border bg-card;
 }
 
+/*
+ * One selected style (R15, DESIGN.md Choices): every chosen thing (a segment, a chip, a toggle, a
+ * tab, a place, a toolbar's tool, a picker's cell) wears the one chosen fill to its own edges, in
+ * ink, its line and weight unchanged; hover is the lighter muted fill. One highlight, never two.
+ * `chosen:` styles the state where a control needs more (an icon's fill).
+ */
+@custom-variant chosen (&:is([aria-pressed='true'], [aria-checked='true'], [data-checked], [aria-current='page'], [aria-selected='true'], [data-status='active'], [data-active]));
+@utility choice {
+  transition-property: color, background-color, border-color;
+  transition-duration: 200ms;
+  transition-timing-function: var(--ease-out);
+  &:hover:not(:disabled, [data-disabled], [aria-disabled='true']) {
+    background-color: var(--color-muted);
+    color: var(--color-foreground);
+  }
+  &:is(
+    [aria-pressed='true'],
+    [aria-checked='true'],
+    [data-checked],
+    [aria-current='page'],
+    [aria-selected='true'],
+    [data-status='active'],
+    [data-active]
+  ),
+  &:is(
+      [aria-pressed='true'],
+      [aria-checked='true'],
+      [data-checked],
+      [aria-current='page'],
+      [aria-selected='true'],
+      [data-status='active'],
+      [data-active]
+    ):hover {
+    background-color: var(--color-chosen);
+    color: var(--color-foreground);
+  }
+}
+
 /* A strip of tabs on a hairline, scrolling sideways where its tabs outrun the screen, its edges never
-   faded (R13); and one tab of it, the chosen one (a tab pressed, or the link of the page shown) in ink
-   over an ink underline. */
+   faded (R13); and one tab of it, the chosen one (a tab pressed, or the link of the page shown) in
+   the one selected fill (R15), as every chosen thing. */
 @utility tab-strip {
-  @apply relative flex gap-1 overflow-x-auto border-b border-border scrollbar-none;
+  @apply relative flex gap-1 overflow-x-auto border-b border-border py-1 scrollbar-none;
 }
 @utility tab {
-  @apply relative inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-control px-3 text-base font-semibold whitespace-nowrap text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground focus-visible:-outline-offset-3;
-  &::after {
-    content: '';
-    @apply absolute inset-x-3 bottom-0 h-0.5 rounded-pill bg-foreground opacity-0 transition-opacity duration-200;
-  }
-  &[data-active],
-  &[aria-current='page'] {
-    @apply text-foreground;
-    &::after {
-      @apply opacity-100;
-    }
-  }
+  @apply relative inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-control px-3 text-base font-semibold whitespace-nowrap text-muted-foreground select-none choice focus-visible:-outline-offset-3;
 }
 
 /* A screen's gutter, and what bleeds across it to the screen's edges (a bar, a row that scrolls sideways). */
@@ -835,9 +862,14 @@
     z-index: 20;
     width: fit-content;
     max-width: 100%;
-    padding: --spacing(0.5) --spacing(1.5);
+    /* Its tools fill it to its edges, each a pill as the capsule is (R15): a chosen tool's fill meets
+       the capsule's line, never a box inside it. */
+    padding: 0;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-pill);
+    & [data-slot='button'] {
+      border-radius: var(--radius-pill);
+    }
     background: var(--color-raised);
     box-shadow: var(--elevation-2);
   }
@@ -868,6 +900,9 @@
       border: 0;
       background: none;
       box-shadow: none;
+      & [data-slot='button'] {
+        border-radius: var(--radius-control);
+      }
     }
   }
   @variant landscape-phone {

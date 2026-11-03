@@ -208,7 +208,7 @@ export function TappableStaff({
                       aria-pressed={playback.playing === id}
                       onClick={() => play(id, bar.from, bar.to, barShown?.(i))}
                       className={cn(
-                        'absolute z-20 flex items-start rounded-control px-1 transition-colors hover:bg-muted aria-pressed:bg-accent aria-pressed:text-accent-foreground focus-visible:outline-2 focus-visible:outline-ring',
+                        'absolute z-20 flex items-start rounded-control px-1 choice',
                         bar.symbol
                           ? 'font-display text-sm font-semibold text-foreground'
                           : 'text-xs font-semibold text-muted-foreground tabular-nums',

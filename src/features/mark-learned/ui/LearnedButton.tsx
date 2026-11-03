@@ -6,8 +6,8 @@ import { Toggle } from '@/shared/ui/primitives/toggle'
 import { useLearned } from './use-learned'
 
 /**
- * A step's or a lesson's Learned toggle: a check waiting in soft ink; pressed, it wears the learned
- * paint's wash and its check sits on the paint. `round`, it is the check alone in a screen's bar,
+ * A step's or a lesson's Learned toggle: a check waiting in soft ink; pressed, it wears the one
+ * chosen fill (R15) and its check sits on the learned grass. `round`, it is the check alone in a screen's bar,
  * named by its tooltip, on the bar's soft round fill as every bar action.
  */
 export function LearnedButton({
@@ -38,10 +38,7 @@ export function LearnedButton({
     <Toggle
       pressed={learned}
       onPressedChange={toggle}
-      className={cn(
-        'gap-2 text-muted-foreground aria-pressed:border-transparent aria-pressed:bg-paint-grass aria-pressed:text-on-paint-grass',
-        className,
-      )}
+      className={cn('gap-2 text-muted-foreground', className)}
     >
       <span
         aria-hidden

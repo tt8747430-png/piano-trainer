@@ -7,8 +7,7 @@ import type { Tool } from '../model/shortcuts'
 import { PanelSections, useKeyTip, usePaletteDock, usePaletteForm } from './palette-form'
 
 /** What is chosen on the music, as the pickers' cells show it (ADR 0114): a sky glyph on a sky wash. */
-const PRESSED =
-  'aria-pressed:border-hairline aria-pressed:bg-[color-mix(in_oklab,var(--color-link)_14%,var(--color-card))] aria-pressed:text-link'
+const PRESSED = 'aria-pressed:bg-chosen aria-pressed:text-foreground'
 
 /**
  * A key's face in each form (Flat's): in a section's grid a square cell of the bordered table, its

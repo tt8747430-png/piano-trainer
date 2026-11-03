@@ -58,7 +58,7 @@ function FavouriteButton({ pattern }: { pattern: BookPattern }) {
       icon={Star}
       aria-pressed={favourite}
       onClick={() => toggleFavourite(store, pattern.ref)}
-      className="aria-pressed:bg-muted aria-pressed:[&_svg]:fill-current"
+      className="aria-pressed:bg-chosen aria-pressed:[&_svg]:fill-current"
     />
   )
 }

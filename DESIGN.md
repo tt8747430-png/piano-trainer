@@ -447,13 +447,20 @@ every piece is shown in the Admin area's Components):
 Never a strip that hides options behind ‹ ›, and no scrolling strip fades or blurs at its edges. A picture where it
 says it faster. A setting is never hidden behind a pop-up when it fits in sight.
 
-- **Segmented** (`Segmented`): a sand track, 4px inset; unchosen segments soft ink, the chosen a card-paper thumb in
-  the control line. Two that could be mistaken for each other name themselves on screen (`NamedSegmented`).
+- **One selected style** (R15, the `choice` utility in `theme.css`): every chosen thing (a segment, a chip, a toggle,
+  a picture tile, a tab, a place, a toolbar's tool, a picker's cell, the editor's palette) wears the one chosen fill
+  (`--chosen`, the line's sand by day, the dusk line by night) to its own edges, in ink. Its line and its weight
+  stay as they were at rest, so nothing reflows and nothing wears two highlights; hover is the lighter muted fill and
+  never looks chosen. A capsule's tools are pills, so a chosen one's fill meets the capsule's line. The exceptions
+  carry a meaning of their own: a switch's grass, a colour swatch's ring, what sounds now (ink).
+- **Segmented** (`Segmented`): card paper in the control line, its segments parted by the same line; unchosen
+  segments soft ink, the chosen filled to the control's edges. Two that could be mistaken for each other name themselves on screen (`NamedSegmented`).
 - **Pop-up button** (`Dropdown`): 44px, card paper in the control line, its label in soft ink and its value in ink,
   an up-down chevron. Its list is a popover of 44px items, the chosen checked in umber; groups named in soft ink over
   a hairline. `MultiDropdown` checks several. Under a field's printed name it is `bare`, its value alone.
-- **Toggle chips** (`ToggleChips`): several of a few, all in sight; on is ink on sand in an ink line.
-- **Toggle tiles** (`ToggleTile`, `PictureTiles`): an icon or a drawing over its name; on, the learned wash.
+- **Toggle chips** (`ToggleChips`): several of a few, all in sight, card paper in the control line; on, the chosen
+  fill.
+- **Toggle tiles** (`ToggleTile`, `PictureTiles`): an icon or a drawing over its name; on, the chosen fill.
 - **Pickers** (`shared/ui/pickers`): the pop-up button's look, its label in soft ink, its value in ink, ⌃⌄; it opens
   a popover, or a bottom sheet below 30rem. An explorer's pickers stand in one row at its top (`PickerRow`), wrapping
   at 320.
@@ -473,8 +480,8 @@ says it faster. A setting is never hidden behind a pop-up when it fits in sight.
   tooltip.
 - **Chord names in text** (`ChordText`): the root in soft ink, the quality strong, its numbers raised (`C maj⁷`), a
   bass after a slash soft again: a library card's chips, the key's chords linked to Chords.
-- **Tabs** (`tab-strip`, `tab`): the views of one thing under the screen's title, 48px, the chosen in ink over an ink
-  underline, scrolling sideways, its edges never faded.
+- **Tabs** (`tab-strip`, `tab`): the views of one thing under the screen's title, 44px, the chosen in the chosen
+  fill, scrolling sideways, its edges never faded.
 
 ### Rows, cards and sheets
 
@@ -524,7 +531,7 @@ says it faster. A setting is never hidden behind a pop-up when it fits in sight.
   until answered. Clear and Show answer are link-ink words beside it.
 - **A lesson's cards:** a note on sand; a rule on a card (`card`), its name in Literata 600 over soft ink; a
   section's takeaway on the lilac wash, "In short" in the deep shade over one Literata 600 sentence. Variants are
-  `ChoiceChips` (one of a few, wrapping, the chosen ink on sand in an ink line), or a segmented switch for two.
+  `ChoiceChips` (one of a few, wrapping, the chosen in the chosen fill), or a segmented switch for two.
 - **A lesson on a phone** reads a page a section: the floating bar holds ‹, the pages' dots (the one read a 20px
   capsule, the rest 8px dots in the line colour; tapping them opens the contents) and Next, honey, Done on the last.
 - **Progress ring** (`ProgressRing`): an arc in the stage paint's deep shade round a lesson's node or number, over a
@@ -544,7 +551,7 @@ says it faster. A setting is never hidden behind a pop-up when it fits in sight.
 ### Navigation and the screen's bar
 
 - **Places** (tab bar, rail, sidebar): a 24px icon over an Onest 500 14px label in soft ink (a 20px icon beside a
-  16px label in the sidebar); the current place sand in a soft line under a semibold ink label.
+  16px label in the sidebar), semibold; the current place in the chosen fill, its label ink.
 - **The screen's bar** (`ScreenHeader`): one row (56px at least): Back, the title in Literata 600, at most two
   round actions (a soft sand fill, no frame) with More (`MoreMenu`) for the rest; a page's tabs its second row; a
   hairline under it once the page runs beneath. A place (Learn, Songs, Practice) and a detail page (a song, a

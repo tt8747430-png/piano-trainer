@@ -303,10 +303,7 @@ export function KeysToggle({ className }: { className?: string }) {
       aria-label={t('palette.keys')}
       title={t('palette.keys')}
       aria-pressed={!keys.folded}
-      className={cn(
-        'size-10 shrink-0 rounded-control text-muted-foreground hover:text-foreground aria-pressed:bg-[color-mix(in_oklab,var(--color-link)_14%,var(--color-card))] aria-pressed:text-link',
-        className,
-      )}
+      className={cn('size-10 shrink-0 rounded-control text-muted-foreground choice', className)}
       onClick={() => keys.fold(!keys.folded)}
     >
       <Piano aria-hidden />
@@ -358,7 +355,7 @@ function CategoryBar({
       role="toolbar"
       aria-label={t('palette.categories')}
       {...roving}
-      className="flex min-w-0 flex-1 gap-0.5 overflow-x-auto rounded-control bg-muted p-0.5 scrollbar-none"
+      className="flex min-w-0 flex-1 overflow-x-auto rounded-control border border-input bg-card scrollbar-none"
     >
       {PALETTE_CATEGORIES.map((category) => {
         const name = t(`palette.category.${category}`)
@@ -375,13 +372,13 @@ function CategoryBar({
             aria-current={chosen ? 'true' : undefined}
             data-off={closed ? true : undefined}
             onClick={() => onChoose(category)}
-            className="relative grid h-10 w-11 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground aria-[current=true]:text-foreground data-off:opacity-40 [&_svg]:relative [&_svg]:size-6"
+            className="relative grid h-10 w-11 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out select-none hover:bg-muted hover:text-foreground focus-visible:-outline-offset-3 aria-[current=true]:text-foreground data-off:opacity-40 [&_svg]:relative [&_svg]:size-6"
           >
             {chosen ? (
               <motion.span
                 layoutId="palette-category-mark"
                 transition={{ duration: SLIDE, ease: EASE }}
-                className="absolute inset-0 rounded-control bg-card shadow-sm"
+                className="absolute inset-0 rounded-control bg-chosen"
               />
             ) : null}
             <CategoryIcon category={category} />
