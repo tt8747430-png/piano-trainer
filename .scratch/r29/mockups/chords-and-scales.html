@@ -1,0 +1,498 @@
+<title>Chords and Scales</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Noto+Music&family=Onest:wght@400;500;600&display=swap">
+<style>
+.t-bad { background: var(--bad); color: var(--bad-ink) }
+.toc { position: sticky; top: 0; background: var(--paper); padding: 8px 0; z-index: 2 }
+
+.splits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px }
+.split { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 6px; display: grid; gap: 4px; font-size: 10.5px; text-align: center; min-width: 0 }
+.split.on { box-shadow: inset 0 0 0 2px var(--ink) }
+table.opt { border-collapse: collapse; font-size: 13px; min-width: 760px } table.opt th, table.opt td { border: 1px solid var(--line); padding: 7px 9px; text-align: left; vertical-align: top } table.opt tr:first-child th { background: var(--sand) } table.opt td { background: var(--card) }
+
+.fb { display: flex; gap: 6px; flex-wrap: wrap }
+.fb button { font: 500 12.5px var(--sans); border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 5px 11px; cursor: pointer }
+.fb button[aria-pressed="true"][data-v="ok"] { background: var(--grass); color: var(--grass-ink); border-color: var(--grass-ink) }
+.fb button[aria-pressed="true"][data-v="change"] { background: var(--honey); color: var(--honey-ink); border-color: var(--honey) }
+.fb button[aria-pressed="true"][data-v="remove"] { background: var(--bad); color: var(--bad-ink); border-color: var(--bad-ink) }
+.fb button:focus-visible, figure textarea:focus-visible { outline: 2px solid var(--sky-ink); outline-offset: 2px }
+figure textarea { width: 100%; min-height: 40px; font: 13px var(--sans); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 7px 9px; resize: vertical }
+figure .saved { font-size: 12px; color: var(--ink-soft); min-height: 1em }
+.cap { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--paper); border-radius: 999px; display: flex; gap: 2px; padding: 5px; box-shadow: 0 6px 18px rgba(0,0,0,.18); white-space: nowrap }
+.cap span { padding: 7px 13px; display: flex; gap: 6px; align-items: center; font: 600 12.5px var(--sans) }
+.cap span:last-child { background: var(--honey); color: var(--honey-ink); border-radius: 999px }
+
+.ebar .btn { width: 30px; height: 30px } .ebar { gap: 0 }
+
+/* Layout: a reading column of questions; each question shows full phone screens drawn in Piano Trainer's own tokens, side by side, wrapping on a phone. */
+:root {
+  --paper: #f7f3ee; --card: #fefdfb; --sand: #eee9e2; --line: #dad1c8; --ink: #332921; --ink-soft: #685e56;
+  --honey: #edc684; --honey-ink: #5a4214; --grass: #d9ebd5; --grass-ink: #44684a; --sky: #e0effa; --sky-ink: #356890;
+  --lilac: #e6dff6; --lilac-ink: #6a5988; --sandw: #f5e0cf; --sand-ink: #7d5b40; --bad: #f3d6d2; --bad-ink: #8a3a2e;
+  --scrim: rgba(51, 41, 33, .32); --key-black: #332921; --hit: #edc684;
+  --display: 'Literata', Georgia, serif; --sans: 'Onest', system-ui, sans-serif; --music: 'Noto Music', serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #191512; --card: #24201c; --sand: #2e2924; --line: #453e38; --ink: #ede9e1; --ink-soft: #b5aca1;
+  --honey: #d4b176; --honey-ink: #2a1f0a; --grass: #2c3d2c; --grass-ink: #b5d6ae; --sky: #22344a; --sky-ink: #a9cdec;
+  --lilac: #352d47; --lilac-ink: #cfc2ec; --sandw: #3d2f24; --sand-ink: #e4c4a6; --bad: #45251f; --bad-ink: #f0b9ae;
+  --scrim: rgba(0,0,0,.5); --key-black: #0f0c0a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #191512; --card: #24201c; --sand: #2e2924; --line: #453e38; --ink: #ede9e1; --ink-soft: #b5aca1;
+  --honey: #d4b176; --honey-ink: #2a1f0a; --grass: #2c3d2c; --grass-ink: #b5d6ae; --sky: #22344a; --sky-ink: #a9cdec;
+  --lilac: #352d47; --lilac-ink: #cfc2ec; --sandw: #3d2f24; --sand-ink: #e4c4a6; --bad: #45251f; --bad-ink: #f0b9ae;
+  --scrim: rgba(0,0,0,.5); --key-black: #0f0c0a; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); margin: 0 }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+h1, h2 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0 }
+h1 { font-size: 30px } h2 { font-size: 22px }
+p { margin: 0; max-width: 70ch } .soft { color: var(--ink-soft) }
+.intro { display: grid; gap: 10px; margin-bottom: 18px }
+nav.toc { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px }
+nav.toc a { font-size: 13px; color: var(--ink); text-decoration: none; background: var(--sand); border-radius: 999px; padding: 4px 10px }
+nav.toc a.done { background: var(--grass); color: var(--grass-ink) }
+section.q { border-top: 1px solid var(--line); padding-block: 28px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px }
+.qhead { display: flex; gap: 10px; align-items: baseline } .qnum { font: 600 13px var(--sans); color: var(--ink-soft) }
+.ctx { display: grid; gap: 8px }
+.screens { display: flex; flex-wrap: wrap; gap: 22px; align-items: flex-start }
+figure { margin: 0; display: grid; gap: 8px; width: 300px; max-width: 100% }
+figure.laptop { width: 640px; max-width: 100%; min-width: 0; overflow-x: auto }
+figcaption { font-size: 13.5px; color: var(--ink-soft) } figcaption b { color: var(--ink); display: block; font-size: 14px }
+.rec { background: var(--sky); color: var(--sky-ink); border-radius: 12px; padding: 10px 14px }
+.pick { display: flex; flex-wrap: wrap; gap: 8px }
+.pick button { font: 500 14px var(--sans); border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 7px 14px; cursor: pointer }
+.pick button[aria-pressed="true"] { background: var(--honey); color: var(--honey-ink); border-color: var(--honey) }
+.pick button:focus-visible, textarea:focus-visible { outline: 2px solid var(--sky-ink); outline-offset: 2px }
+textarea { width: 100%; min-height: 44px; font: 14px var(--sans); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; resize: vertical }
+.saved { font-size: 12.5px; color: var(--ink-soft) }
+
+/* ——— the app, drawn ——— */
+.dev { position: relative; width: 300px; height: 640px; background: var(--paper); border: 1px solid var(--line); border-radius: 30px; overflow: hidden; font-size: 13px; display: flex; flex-direction: column; box-shadow: 0 1px 2px rgba(0,0,0,.06) }
+.dev.short { height: 470px }
+.lap { width: 640px; height: 450px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: 150px 210px 1fr; background: var(--paper); font-size: 12.5px }
+.status { height: 26px; flex: none; display: flex; justify-content: space-between; align-items: center; padding: 0 22px; font: 600 11px var(--sans) }
+.abar { height: 48px; flex: none; display: flex; align-items: center; gap: 4px; padding: 0 8px; border-bottom: 1px solid var(--line) }
+.abar .title { font: 600 15px var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0 }
+.abar .grow { flex: 1 }
+.btn { width: 36px; height: 36px; border-radius: 999px; display: grid; place-items: center; flex: none; color: var(--ink) }
+.btn.tint { background: var(--sand) }
+svg.i { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round }
+svg.i.s { width: 15px; height: 15px }
+.tools { height: 40px; flex: none; display: flex; align-items: center; gap: 4px; padding: 0 10px; font: 600 11.5px var(--sans); letter-spacing: .05em; text-transform: uppercase }
+.tools .t { padding: 6px 9px; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px }
+.tools .t.on { background: var(--sand) }
+.content { flex: 1; overflow: hidden; position: relative; display: flex; flex-direction: column }
+.pad { padding: 12px; display: grid; gap: 12px; align-content: start }
+.dock { position: absolute; left: 12px; right: 12px; bottom: 14px; height: 54px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; display: flex; align-items: center; justify-content: space-around; box-shadow: 0 4px 14px rgba(0,0,0,.08) }
+.dock .play { width: 40px; height: 40px; border-radius: 999px; background: var(--ink); color: var(--paper); display: grid; place-items: center }
+.dock .tempo { font: 600 12px var(--sans) }
+.scrim { position: absolute; inset: 0; background: var(--scrim) }
+.panel { position: absolute; left: 0; right: 0; top: 0; background: var(--card); border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; padding: 14px; display: grid; gap: 10px; justify-items: center; text-align: center }
+.panel h3 { margin: 0; font: 600 17px var(--display) }
+.seg { display: inline-flex; background: var(--sand); border-radius: 10px; padding: 3px; gap: 2px }
+.seg span { padding: 5px 9px; border-radius: 8px; font-size: 12px; white-space: nowrap }
+.seg span.on { background: var(--card); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08) }
+.seg.full { display: flex; width: 100% } .seg.full span { flex: 1; text-align: center; padding: 5px 2px; min-width: 0 }
+.preview { width: 100%; background: var(--sky); border-radius: 14px; padding: 12px; display: grid; place-items: center }
+.cta { background: var(--ink); color: var(--paper); font: 600 13px var(--sans); border-radius: 12px; padding: 9px 22px }
+.cta.honey { background: var(--honey); color: var(--honey-ink) }
+.check { justify-self: start; display: flex; gap: 8px; align-items: center; font-size: 12.5px }
+.check i { width: 16px; height: 16px; border: 1.5px solid var(--ink-soft); border-radius: 4px; display: inline-block }
+.gl { font: 600 11px var(--sans); color: var(--ink-soft); padding: 0 6px 4px; letter-spacing: .03em }
+.list { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden }
+.row { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-top: 1px solid var(--line); min-height: 42px }
+.row:first-child { border-top: 0 }
+.row .n { flex: 1; min-width: 0 } .row .v { color: var(--ink-soft); font-size: 12px; white-space: nowrap }
+.row .chev { color: var(--ink-soft) }
+.tile { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; flex: none }
+.tile svg.i { width: 15px; height: 15px }
+.t-sky { background: var(--sky); color: var(--sky-ink) } .t-grass { background: var(--grass); color: var(--grass-ink) }
+.t-lilac { background: var(--lilac); color: var(--lilac-ink) } .t-sand { background: var(--sandw); color: var(--sand-ink) }
+.t-honey { background: var(--honey); color: var(--honey-ink) }
+.sw { width: 36px; height: 22px; border-radius: 999px; background: var(--grass-ink); position: relative; flex: none }
+.sw::after { content: ""; position: absolute; right: 2px; top: 2px; width: 18px; height: 18px; border-radius: 999px; background: var(--card) }
+.sw.off { background: var(--line) } .sw.off::after { right: auto; left: 2px }
+.cardset { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 8px }
+.cardset b { font-size: 13.5px }
+.radio { display: flex; gap: 9px; align-items: flex-start }
+.radio i { width: 17px; height: 17px; border-radius: 999px; border: 1.5px solid var(--ink-soft); flex: none; margin-top: 1px }
+.radio i.on { border: 5px solid var(--ink) }
+.radio small { display: block; color: var(--ink-soft); font-size: 11.5px }
+.solo { width: 26px; height: 26px; border-radius: 999px; border: 1.5px solid var(--line); display: grid; place-items: center; font: 600 11px var(--sans); color: var(--ink-soft) }
+.solo.on { border-color: var(--ink); color: var(--ink) }
+.slider { height: 4px; border-radius: 4px; background: var(--line); position: relative; flex: 1 }
+.slider b { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: var(--ink) }
+.slider b::after { content: ""; position: absolute; right: -8px; top: -6px; width: 16px; height: 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--line) }
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-size: 12.5px; white-space: nowrap }
+.chip.on { background: var(--ink); color: var(--paper); border-color: var(--ink) }
+.chips { display: flex; gap: 6px; flex-wrap: wrap }
+.hscroll { display: flex; gap: 6px; overflow: hidden; mask-image: linear-gradient(90deg, #000 85%, transparent) }
+.bigname { font: 600 34px var(--display); line-height: 1 }
+.lbl { font: 600 11px var(--sans); color: var(--ink-soft); letter-spacing: .04em; text-transform: uppercase }
+.btn2 { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 12px; font: 600 13px var(--sans) }
+.btn2.fill { background: var(--ink); color: var(--paper) } .btn2.out { border: 1.5px solid var(--ink) }
+.ksgrid { display: grid; grid-template-columns: repeat(8, 1fr); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--card) }
+.ksgrid div { border-left: 1px solid var(--line); border-top: 1px solid var(--line); height: 48px; display: grid; place-items: center; padding: 0 2px; overflow: hidden }
+.ksgrid div.on { background: var(--sky) }
+.ksgrid div.blank { background: var(--card) }
+.tsgrid { display: grid; grid-template-columns: repeat(6, 1fr); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--card) }
+.tsgrid div { border-left: 1px solid var(--line); height: 46px; display: grid; place-items: center; font: 24px var(--music); line-height: .8; text-align: center }
+.tsgrid div.on { background: var(--sky) }
+.sheetbox { background: var(--card); border-radius: 0; padding: 6px 0 }
+.side { background: var(--sand); padding: 10px; display: grid; gap: 4px; align-content: start }
+.side div { padding: 6px 8px; border-radius: 8px; display: flex; gap: 8px; align-items: center }
+.side div.on { background: var(--card) }
+.pane { border-left: 1px solid var(--line); padding: 10px; display: grid; gap: 8px; align-content: start; overflow: hidden }
+.dim { opacity: .4 }
+.keycap { display: inline-grid; place-items: center; min-width: 18px; height: 18px; border: 1px solid var(--line); border-radius: 4px; font: 600 10px var(--sans); background: var(--card); padding: 0 3px }
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="back" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="chev" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="up" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></symbol>
+    <symbol id="pen" viewBox="0 0 24 24"><path d="M21.17 6.81a1 1 0 0 0-3.98-3.98L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z"/></symbol>
+    <symbol id="gear" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="plug" viewBox="0 0 24 24"><path d="M12 22v-5M9 8V2M15 8V2M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></symbol>
+    <symbol id="play" viewBox="0 0 24 24"><path d="M6 3 20 12 6 21Z" fill="currentColor"/></symbol>
+    <symbol id="skip" viewBox="0 0 24 24"><path d="M19 20 9 12l10-8v16ZM5 19V5"/></symbol>
+    <symbol id="loop" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 0 1-4 4H3"/></symbol>
+    <symbol id="metro" viewBox="0 0 24 24"><path d="M8 21h8l-3-17h-2zM12 15l6-8"/></symbol>
+    <symbol id="eye" viewBox="0 0 24 24"><path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+    <symbol id="music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></symbol>
+    <symbol id="sections" viewBox="0 0 24 24"><path d="M21 15V6M12 12H3M16 6H3M12 18H3"/><circle cx="18.5" cy="15.5" r="2.5"/></symbol>
+    <symbol id="dl" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+    <symbol id="print" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="1"/></symbol>
+    <symbol id="help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></symbol>
+    <symbol id="view" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></symbol>
+    <symbol id="hand" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></symbol>
+    <symbol id="piano" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 4v9M12 4v9M17 4v9M7 13v7M12 13v7M17 13v7"/></symbol>
+    <symbol id="kbd" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/></symbol>
+    <symbol id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="box" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/></symbol>
+    <symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="arp" viewBox="0 0 24 24"><path d="M4 18c2-1 2-3 4-4s2-3 4-4 2-3 4-4 2-2 4-3"/></symbol>
+    <symbol id="vol" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5ZM16 9a5 5 0 0 1 0 6"/></symbol>
+    <symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14ZM20 17v4H6.5A2.5 2.5 0 0 1 4 19.5"/></symbol>
+  </defs>
+</svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="undo" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></symbol>
+  <symbol id="redo" viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></symbol>
+  <symbol id="takes" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h12"/></symbol>
+</defs></svg>
+<div class="wrap">
+  <header class="intro">
+    <h1>Chords, and Scales and keys</h1>
+    <p class="soft">Both Practice pages in full: every option each one offers, how it looks, and its Settings page. Nothing from today's pages is left out. What moved says where it went.</p>
+    <p class="soft" id="storeNote">Loading where your feedback is kept…</p>
+    <p><b>Under every screen:</b> tap Looks right, Change it or Not needed, and write what to change. It saves as you type.</p>
+    <div class="cardset" style="max-width:760px"><b>Two rules both pages follow</b>
+      <span class="soft" style="font-size:13.5px"><b>Floating actions:</b> one capsule, centred at the bottom. Play, the main action, is always on the <b>right</b> and filled honey. The second action (Arpeggio, the tempo) is on the left. Same order on every page.</span>
+      <span class="soft" style="font-size:13.5px"><b>Only what fits:</b> each chord shows only the choices that make sense for it, following the chord dictionaries. A triad offers added tones (add2, add9, 6…), and only a dominant 7th offers alterations (♭9, ♯11…). A choice that doesn't apply is hidden, not greyed.</span></div>
+    <nav class="toc"><a href="#chords">1. Chords</a><a href="#scales">2. Scales and keys</a><a href="#options">3. Every chord option, by chord</a></nav>
+  </header>
+  <section class="q" id="chords"><div class="qhead"><span class="qnum">1</span><h2>Chords</h2></div>
+    <div class="ctx"><p>From top to bottom:</p>
+      <ul style="margin:0;padding-left:20px;display:grid;gap:4px">
+        <li>the chord's name, big;</li>
+        <li>the choices that build it: root, size, chord, then only the extras it can take;</li>
+        <li>the chord written on a staff and on the keys, with fingers.</li>
+      </ul>
+      <p>Arpeggio and Play float at the bottom. How the chord is laid out (inversion, voicing, between the hands) has its own row.</p></div>
+    <div class="screens" id="s-chords"></div></section>
+  <section class="q" id="scales"><div class="qhead"><span class="qnum">2</span><h2>Scales and keys</h2></div>
+    <div class="ctx"><p>You choose a scale ("D major ⌄" in the bar opens the picker). The page has three tabs:</p>
+      <ul style="margin:0;padding-left:20px;display:grid;gap:4px">
+        <li><b>Scale:</b> how to play it.</li>
+        <li><b>Chords:</b> the chords made from its notes, each with a preview, fingers and its own options.</li>
+        <li><b>Key:</b> D major as a home key for a song. Its signature, the keys you'd move to, chords you can borrow, progressions and songs in it, and how to harmonise a melody note.</li>
+      </ul></div>
+    <div class="screens" id="s-scales"></div></section>
+  <section class="q" id="options"><div class="qhead"><span class="qnum">3</span><h2>Every chord option, by chord (what "only what fits" means)</h2></div>
+    <div class="ctx"><p>The rules the chord engine already follows, written out. Each row is a base chord and what it can take at each size. A blank cell means the choice isn't shown.</p></div>
+    <div id="s-options"></div></section>
+</div>
+
+<script>
+(function () {
+const I = (id, cls = '') => `<svg class="i ${cls}"><use href="#${id}"/></svg>`;
+const status = `<div class="status"><span>9:41</span><span>●●● ▮</span></div>`;
+const B = (id, tint) => `<span class="btn${tint ? ' tint' : ''}">${I(id)}</span>`;
+function bar({ left = 'back', title, after = '', right = [] }) {
+  return `<div class="abar">${left ? B(left) : '<span style="width:8px"></span>'}<span class="title">${title}</span>${after}<span class="grow"></span>${right.map(r => r.startsWith('<') ? r : B(r)).join('')}</div>`;
+}
+const chev = I('chev', 's chev');
+function row(r) {
+  const [tile, icon, label, value, end] = r;
+  const t = tile ? `<span class="tile t-${tile}">${I(icon)}</span>` : '';
+  const e = end === 'sw' ? '<span class="sw"></span>' : end === 'off' ? '<span class="sw off"></span>' : end === 'none' ? '' : end || chev;
+  return `<div class="row">${t}<span class="n">${label}</span>${value ? `<span class="v">${value}</span>` : ''}${e}</div>`;
+}
+const group = (label, rows) => `<div>${label ? `<div class="gl">${label}</div>` : ''}<div class="list">${rows.map(row).join('')}</div></div>`;
+const danger = label => `<div class="list"><div class="row" style="color:var(--bad-ink);justify-content:center;font-weight:600">${label}</div></div>`;
+function card(title, opts, info) {
+  return `<div class="cardset"><b>${title}${info ? ' ' + I('info', 's soft') : ''}</b>${opts.map(([l, sub, on]) => `<span class="radio"><i class="${on ? 'on' : ''}"></i><span>${l}${sub ? `<small>${sub}</small>` : ''}</span></span>`).join('')}</div>`;
+}
+const swcard = (title, rows) => `<div class="cardset"><b>${title}</b>${rows.map(([l, on]) => `<div style="display:flex;align-items:center;gap:8px"><span style="flex:1">${l}</span><span class="sw${on ? '' : ' off'}"></span></div>`).join('')}</div>`;
+const tools = (first, up) => `<div class="tools"><span class="t on">${first} ${I(up ? 'up' : 'down', 's')}</span><span class="t">Transpose</span><span class="t">Simplify</span></div>`;
+const dockP = `<div class="dock"><span class="tempo">♩ 90</span>${I('skip')}<span class="play">${I('play')}</span>${I('loop')}${I('metro')}</div>`;
+const dockE = `<div class="dock"><span class="tempo">♩ 90</span>${I('skip')}<span class="play">${I('play')}</span><span style="color:var(--bad-ink)">${I('rec')}</span>${I('takes')}</div>`;
+const sheet = (n = 1, key = 1, time) => `<div class="sheetbox" data-staff="grand" data-key="${key}" ${time ? `data-time="${time}"` : ''} data-notes="${n}"></div>`;
+function phone(n, title, from, html, opts = {}) {
+  return `<figure data-fb="${n}" data-title="${title.replace(/"/g, '')}"><div class="dev${opts.short ? ' short' : ''}">${status}${html}</div><figcaption><b>${n}. ${title}</b>${from}</figcaption></figure>`;
+}
+const pad = h => `<div class="content pad">${h}</div>`;
+const note = t => `<span class="soft" style="font-size:12px">${t}</span>`;
+const pBar = (t = 'Amazing Grace') => bar({ left: 'x', title: t, after: B('pen'), right: ['plug', 'gear'] });
+const eBar = (t = 'Amazing Grace') => `<div class="abar ebar"><span style="width:4px"></span><span class="title">${t}</span><span class="btn tint">${I('check')}</span><span class="grow"></span>${B('undo')}${B('redo')}${B('plug')}${B('gear')}</div>`;
+
+const cap = (left, right) => `<div class="cap"><span>${left}</span><span>${I('play', 's')}${right}</span></div>`;
+const chips = (label, list, on, extra = '') => `<div><div class="lbl" style="margin-bottom:6px">${label}${extra}</div><div class="chips">${list.map(c => `<span class="chip${on.includes(c) ? ' on' : ''}">${c}</span>`).join('')}</div></div>`;
+const seg = (list, on) => `<span class="seg full">${list.map(c => `<span class="${c === on ? 'on' : ''}">${c}</span>`).join('')}</span>`;
+const cBar = (name) => bar({ title: 'Chords', right: ['gear'] });
+const head = (name, notes) => `<div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="bigname">${name}</span><span class="soft" style="font-size:12.5px">${notes}</span></div>`;
+const SIZES = ['Triad', '7th', '9th', '11th', '13th'];
+const BASES = { Triad: ['Major', 'Minor', 'Dim', 'Aug', 'Sus2', 'Sus4', 'Power'], '7th': ['Major', 'Minor', 'Dim', 'Aug', 'Sus2', 'Sus4'], '9th': ['Major', 'Minor', 'Dim', 'Aug', 'Sus4'] };
+const rootRow = `<div style="display:flex;gap:6px;align-items:center"><span class="lbl">Root</span><span class="chip">C ${I('down', 's')}</span><span class="grow"></span><span class="chip">Root position ${I('down', 's')}</span></div>`;
+const chordsScreens = [
+  phone('C1', 'A triad: C major', 'The page as it opens. Below the size and base come only the tones a major triad can add.', cBar() + `<div class="content pad">
+    ${head('C', 'C · E · G')}${rootRow}${seg(SIZES, 'Triad')}
+    ${chips('Chord', BASES.Triad, ['Major'])}
+    ${chips('Add a tone', ['add2', 'add4', '6', 'add9', 'add11', 'add♯11'], [])}
+    <div class="sheetbox" data-staff="treble" data-key="0" data-stack="-2,0,2"></div>
+    <div data-kb="0,4,7" data-fingers="1,3,5" data-oct="2"></div>
+    ${cap(`${I('arp', 's')}Arpeggio`, 'Play')}</div>`),
+  phone('C2', 'Added tones: Cadd9 and Cadd2', 'add9 puts D above the chord. add2 puts it inside, next to C. The same notes, voiced differently, so both are offered.', cBar() + `<div class="content pad">
+    ${head('Cadd9', 'C · E · G · D')}${seg(SIZES, 'Triad')}
+    ${chips('Chord', BASES.Triad, ['Major'])}
+    ${chips('Add a tone', ['add2', 'add4', '6', 'add9', 'add11', 'add♯11'], ['add9'])}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div class="split on"><div data-kb="0,4,7,14" data-oct="2"></div><b>add9</b>D above</div><div class="split"><div data-kb="0,2,4,7" data-oct="1"></div><b>add2</b>D inside</div></div>
+    ${cap(`${I('arp', 's')}Arpeggio`, 'Play')}</div>`),
+  phone('C3', 'A sus chord: Csus4', 'Sus2 and Sus4 replace the 3rd. A sus4 can add 6 or 9 (Csus4(add9)). A sus2 can add only 6.', cBar() + `<div class="content pad">
+    ${head('Csus4', 'C · F · G')}${seg(SIZES, 'Triad')}
+    ${chips('Chord', BASES.Triad, ['Sus4'])}
+    ${chips('Add a tone', ['6', 'add9'], [])}
+    <div data-kb="0,5,7" data-fingers="1,4,5" data-oct="2"></div>
+    ${cap(`${I('arp', 's')}Arpeggio`, 'Play')}</div>`),
+  phone('C4', 'A 7th chord: C7', 'At 7th, choose which 7th. A dominant 7th (major 3rd, ♭7) is the only one that offers alterations.', cBar() + `<div class="content pad">
+    ${head('C7', 'C · E · G · B♭')}${seg(SIZES, '7th')}
+    ${chips('Chord', BASES['7th'], ['Major'])}
+    <div><div class="lbl" style="margin-bottom:6px">7th</div>${seg(['♭7 (dominant)', 'maj7'], '♭7 (dominant)')}</div>
+    ${chips('Alter', ['♭5', '♭9', '♯9', '♯11', '♭13'], [])}
+    ${chips('Add a tone', ['13'], [])}
+    <div data-kb="0,4,7,10" data-fingers="1,2,3,5" data-oct="2"></div>
+    ${cap(`${I('arp', 's')}Arpeggio`, 'Play')}</div>`),
+  phone('C5', 'A minor 7th: Cm7', 'For a minor 7th the alterations are gone and only the tones it can add stay (11, 13).', cBar() + `<div class="content pad">
+    ${head('Cm7', 'C · E♭ · G · B♭')}${seg(SIZES, '7th')}
+    ${chips('Chord', BASES['7th'], ['Minor'])}
+    <div><div class="lbl" style="margin-bottom:6px">7th</div>${seg(['♭7', 'maj7'], '♭7')}</div>
+    ${chips('Add a tone', ['11', '13'], [])}
+    <div data-kb="0,3,7,10" data-fingers="1,2,3,5" data-oct="2"></div>
+    ${cap(`${I('arp', 's')}Arpeggio`, 'Play')}</div>`),
+  phone('C6', 'A 9th chord and the hands: Cmaj9', 'Five notes don\'t fit one hand. "Left hand plays" shows each way to split them: tap a picture.', cBar() + `<div class="content pad">
+    ${head('Cmaj9', 'C · E · G · B · D')}${seg(SIZES, '9th')}
+    ${chips('Chord', BASES['9th'], ['Major'])}
+    <div><div class="lbl" style="margin-bottom:6px">7th</div>${seg(['♭7', 'maj7'], 'maj7')}</div>
+    ${chips('Alter', ['♯11'], [])}
+    <div data-kb="0,4,7,11,14" data-lh="0" data-oct="2"></div>
+    <div><div class="lbl" style="margin-bottom:6px">Left hand plays</div><div class="splits">
+      <div class="split on"><div data-kb="0,4,7,11,14" data-lh="0" data-oct="2"></div><b>C</b>the root</div>
+      <div class="split"><div data-kb="0,4,7,11,14" data-lh="0,7" data-oct="2"></div><b>C G</b>root and 5th</div>
+      <div class="split"><div data-kb="0,4,7,11,14" data-lh="0,4,7" data-oct="2"></div><b>C E G</b>the triad</div></div></div>
+    ${cap(`${I('arp', 's')}Arpeggio`, 'Play')}</div>`),
+  phone('C7', 'Inversion (the menu by Root)', 'From "Root position ⌄". Each inversion is drawn on the keys.', cBar() + `<div class="content">${'<div class="pad">' + head('C7', 'C · E · G · B♭') + '</div>'}<div class="scrim"></div><div class="panel" style="justify-items:stretch;text-align:left"><h3 style="text-align:center">Inversion</h3>
+    ${[['Root position', 'C in the bass', '0,4,7,10'], ['1st inversion', 'E in the bass', '4,7,10,12'], ['2nd inversion', 'G in the bass', '7,10,12,16'], ['3rd inversion', 'B♭ in the bass', '10,12,16,19']].map(([a, b, k], i) => `<div class="split${i ? '' : ' on'}" style="grid-template-columns:110px 1fr;text-align:left;align-items:center"><div data-kb="${k}" data-oct="2"></div><span><b>${a}</b><br>${b}</span></div>`).join('')}</div></div>`),
+  phone('C8', 'Voicing (a row lower on the page)', 'How a jazz pianist lays the chord. Each one is drawn, with ⓘ for what it\'s for.', cBar() + `<div class="content pad">${head('Cmaj7', 'voiced: Drop 2')}
+    <div class="lbl">Voicing</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">${[['Close', '0,4,7,11'], ['Drop 2', '-5,0,4,11'], ['Drop 3', '-8,0,7,11'], ['Shell', '0,4,11'], ['Rootless A', '4,7,11,14'], ['So What', '4,9,14,19']].map(([a, k], i) => `<div class="split${i === 1 ? ' on' : ''}"><div data-kb="${k.split(',').map(x => +x + 12).join(',')}" data-oct="3"></div><b>${a}</b></div>`).join('')}</div>
+    ${cap(`${I('arp', 's')}Arpeggio`, 'Play')}</div>`),
+  phone('C9', 'Chords\' Settings', 'From the gear on Chords.', bar({ title: 'Chords' }) + pad(`
+    ${swcard('On the keys', [['Finger numbers', 1], ['Note names', 0], ['Interval names (3, 5, 7)', 0]])}
+    ${card('Fingering shown as', [['Numbers on the keys', '', true], ['Drawn hands', 'A hand over the keys, fingers numbered']])}
+    ${card('Arpeggio', [['Up'], ['Up and down', '', true], ['Down']])}
+    ${card('Names', [['Cmaj7', 'Chord symbols', true], ['CΔ7', 'Jazz signs']])}`)),
+];
+const sBar = bar({ title: 'D major', after: I('down', 's'), right: ['gear'] });
+const tabs = on => seg(['Scale', 'Chords', 'Key'], on);
+const hands = `<svg viewBox="0 0 270 90" width="100%" aria-label="Right hand, fingers numbered 1 to 5"><path d="M30 80 C18 60 22 46 34 52 L48 66 L58 18 C60 8 74 8 74 18 L76 58 L90 10 C92 0 106 0 107 10 L110 58 L126 16 C128 6 142 8 141 18 L140 62 L158 36 C162 28 176 32 173 42 L160 80 Z" fill="var(--sandw)" stroke="var(--sand-ink)"/><g font-size="11" font-weight="600" text-anchor="middle" fill="var(--honey-ink)" font-family="Onest">${[[38, 56, 1], [66, 22, 2], [98, 14, 3], [133, 20, 4], [166, 42, 5]].map(([x, y, n]) => `<circle cx="${x}" cy="${y}" r="8" fill="var(--honey)"/><text x="${x}" y="${y + 4}">${n}</text>`).join('')}</g><text x="190" y="40" font-size="11" fill="currentColor" font-family="Onest">D E F♯ G A B C♯ D</text><text x="190" y="58" font-size="11" fill="currentColor" font-family="Onest">1 2 3 1 2 3 4 5</text><text x="190" y="76" font-size="10" fill="currentColor" opacity=".6" font-family="Onest">thumb under after F♯</text></svg>`;
+const degreeCard = (num, name, k, f) => `<div class="split" style="text-align:left"><div style="display:flex;justify-content:space-between"><b style="font:600 14px var(--display)">${name}</b><span class="soft">${num}</span></div><div data-kb="${k}" data-fingers="${f}" data-oct="2"></div></div>`;
+const scalesScreens = [
+  phone('S1', 'Scale: D major', 'The scale written and on the keys with fingers. The run options are right under it.', sBar + `<div class="content pad">${tabs('Scale')}
+    <div class="sheetbox" data-staff="treble" data-key="2" data-scale="-1"></div>
+    <div><div class="lbl" style="margin-bottom:6px">On the keys</div>${seg(['Notes', 'Right hand', 'Left hand'], 'Right hand')}</div>
+    <div data-kb="2,4,6,7,9,11,13,14" data-fingers="1,2,3,1,2,3,4,5" data-oct="2"></div>
+    <div class="list"><div class="row"><span class="n">Octaves</span>${seg(['1', '2', '3', '4'], '1').replace('seg full', 'seg')}</div><div class="row"><span class="n">Start on</span><span class="chip">D ${I('down', 's')}</span></div><div class="row"><span class="n">Rhythm</span><span class="chip">Even ${I('down', 's')}</span></div></div>
+    ${cap('♩ 80', 'Play')}</div>`),
+  phone('S2', 'Scale, further down', 'Scroll on: each hand drawn with its fingers, the scale\'s facts, its exercises.', sBar + `<div class="content pad">${tabs('Scale')}
+    <div class="cardset"><b>Fingering by hand</b>${hands}<span class="soft" style="font-size:11.5px">Left hand: 5 4 3 2 1 3 2 1</span></div>
+    <div class="list"><div class="row"><span class="n soft">Formula</span><span>W W H W W W H</span></div><div class="row"><span class="n soft">Relative</span><span>B minor ›</span></div><div class="row"><span class="n soft">Mode of</span><span>Ionian</span></div></div>
+    ${group('EXERCISES', [['grass', 'music', 'Hands together, 2 octaves', ''], ['grass', 'music', 'In thirds', '']])}
+    ${cap('♩ 80', 'Play')}</div>`),
+  phone('S3', 'Tempo (from ♩ 80)', 'The 80 is the speed in beats a minute. Tap it to change it. The same sheet is used on every page.', sBar + `<div class="content">${'<div class="pad">' + tabs('Scale') + '</div>'}<div class="scrim"></div><div class="panel" style="top:auto;bottom:0;border-radius:20px 20px 0 0"><h3>Tempo</h3>
+    <div style="display:flex;align-items:center;gap:14px"><span class="btn tint">−</span><span style="font:600 30px var(--display)">♩ = 80</span><span class="btn tint">+</span></div>
+    <div style="width:100%;display:flex;align-items:center;gap:10px"><span class="soft">40</span><span class="slider"><b style="width:25%"></b></span><span class="soft">200</span></div>
+    ${seg(['Up', 'Up and down', 'Down'], 'Up and down')}
+    <span class="cta">Done</span></div></div>`),
+  phone('S4', 'Chords: every chord, with previews', 'The chords made from the scale\'s notes. Each card shows its keys and fingers, and the size row is the one from Chords.', sBar + `<div class="content pad">${tabs('Chords')}${seg(['Triad', '7th', '9th', '11th', '13th'], '7th')}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">${degreeCard('I', 'Dmaj7', '2,6,9,13', '1,2,3,5')}${degreeCard('ii', 'Em7', '4,7,11,14', '1,2,3,5')}${degreeCard('iii', 'F♯m7', '6,9,13,16', '1,2,3,5')}${degreeCard('IV', 'Gmaj7', '7,11,14,18', '1,2,3,5')}</div>
+    ${cap(`${I('loop', 's')}Walk`, 'Play all')}</div>`),
+  phone('S5', 'Chords: a chord\'s own choices', 'A tap on a card opens it here: its inversion, voicing and Play. "Open in Chords" opens every option.', sBar + `<div class="content">${'<div class="pad">' + tabs('Chords') + '</div>'}<div class="scrim"></div><div class="panel" style="top:auto;bottom:0;border-radius:20px 20px 0 0;justify-items:stretch;text-align:left"><h3>Em7 · ii</h3><div data-kb="4,7,11,14" data-fingers="1,2,3,5" data-oct="2"></div>
+    <div class="list"><div class="row"><span class="n">Inversion</span><span class="chip">Root position ${I('down', 's')}</span></div><div class="row"><span class="n">Voicing</span><span class="chip">Close ${I('down', 's')}</span></div><div class="row"><span class="n">Open in Chords</span>${chev}</div></div>
+    <div style="display:flex;gap:8px;justify-content:center"><span class="chip">${I('arp', 's')} Arpeggio</span><span class="cta honey">▶ Play</span></div></div></div>`),
+  phone('S6', 'Chords: which chords hold a note', '"Keys play: Notes", then tap F♯ on the keys: the chords that contain it light up.', sBar + `<div class="content pad">${tabs('Chords')}
+    <div class="list"><div class="row"><span class="n">Keys play</span><span class="seg"><span>Chords</span><span class="on">Notes</span></span></div></div>
+    <div data-kb="6" data-oct="2"></div><div class="soft" style="font-size:12.5px">F♯ is in D, F♯m and Bm</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">${['D', 'Em', 'F♯m', 'G', 'A', 'Bm', 'C♯°'].map(c => `<div style="height:36px;border-radius:8px;display:grid;place-items:center;font:600 13px var(--display);${['D', 'F♯m', 'Bm'].includes(c) ? 'background:var(--hit);color:var(--honey-ink)' : 'background:var(--card);border:1px solid var(--line)'}">${c}</div>`).join('')}</div>
+    ${cap(`${I('loop', 's')}Walk`, 'Play all')}</div>`),
+  phone('S7', 'Walk the chords (from Walk)', 'Plays I to vii and back in rhythm, as block chords or broken.', sBar + `<div class="content">${'<div class="pad">' + tabs('Chords') + '</div>'}<div class="scrim"></div><div class="panel" style="top:auto;bottom:0;border-radius:20px 20px 0 0;justify-items:stretch;text-align:left"><h3>Walk the chords</h3>
+    ${card('Played as', [['Block', 'All the notes together', true], ['Arpeggio', 'One after another']])}
+    ${card('Order', [['Up, I to vii', '', true], ['Up and back down']])}
+    <span class="cta honey" style="justify-self:center">▶ Start</span></div></div>`),
+  phone('S8', 'Key: what D major is as a home key', 'When a song is "in D major": its signature, the keys you\'d move to, and the chords you can borrow.', sBar + `<div class="content pad">${tabs('Key')}
+    <div class="sheetbox" data-staff="grand" data-key="2" data-notes="0"></div>
+    <div class="soft" style="font-size:12.5px;text-align:center">2 sharps: F♯ and C♯ · also written: none</div>
+    ${group('KEYS YOU MOVE TO', [['', '', 'Relative minor · same signature', 'B minor'], ['', '', 'Parallel minor · same first note', 'D minor'], ['', '', 'Beside it · one sharp more / fewer', 'A · G']])}
+    <div><div class="gl">CHORDS TO BORROW (FROM D MINOR)</div><div class="chips"><span class="chip">B♭ · ♭VI</span><span class="chip">Gm · iv (minor plagal)</span><span class="chip">E♭ · Neapolitan</span></div></div></div>`),
+  phone('S9', 'Key, further down', 'Then: progressions in this key, songs and studies in it, the modes, harmonising a note.', sBar + `<div class="content pad">${tabs('Key')}
+    ${group('PROGRESSIONS IN D MAJOR', [['grass', 'music', 'I – V – vi – IV', 'D A Bm G'], ['grass', 'music', 'ii – V – I', 'Em7 A7 Dmaj7']])}
+    ${group('SONGS IN D MAJOR', [['sky', 'music', 'Be Thou My Vision', ''], ['sky', 'music', 'Canon in D', '']])}
+    ${group('', [['lilac', 'music', 'Modes of D', 'Dorian, Lydian…'], ['honey', 'music', 'Harmonise a melody note', '']])}</div>`),
+  phone('S10', 'Harmonise a melody note', 'From Key › Harmonise a melody note. Tap the note your melody is on, and you see the chords of the key that hold it.', bar({ title: 'Harmonise a note' }) + pad(`
+    <div data-kb="9" data-oct="2"></div><div class="soft" style="font-size:12.5px">Melody on A</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">${[['D', 'I', 'home'], ['F♯m', 'iii', 'soft'], ['A', 'V', 'tension']].map(([a, b, c]) => `<div class="split"><b style="font:600 16px var(--display)">${a}</b>${b} · ${c}</div>`).join('')}</div>`), { short: true }),
+  phone('S11', 'Scales and keys\' Settings', 'From the gear on Scales and keys.', bar({ title: 'Scales and keys' }) + pad(`
+    ${card('Fingering', [['As the books', 'Standard fingering for each scale', true], ['From the thumb', 'Groups from the thumb, for any scale']])}
+    ${card('Fingering shown as', [['Numbers on the keys', '', true], ['Drawn hands']])}
+    ${swcard('On the keys', [['Colour the scale\'s notes', 1], ['Note names', 0]])}`)),
+  phone('S12', 'The scale picker (from "D major ⌄")', 'The key-signature grid, then the kind of scale.', sBar + `<div class="content">${'<div class="pad">' + tabs('Scale') + '</div>'}<div class="scrim"></div><div class="panel" style="top:auto;bottom:0;border-radius:20px 20px 0 0;justify-items:stretch;text-align:left"><h3>Scale</h3>
+    <div class="ksgrid" data-ks="2"></div>
+    <div class="chips"><span class="chip on">Major</span><span class="chip">Natural minor</span><span class="chip">Harmonic minor</span><span class="chip">Melodic minor</span><span class="chip">Pentatonic</span><span class="chip">Blues</span><span class="chip">Modes ›</span></div>
+    <span class="cta" style="justify-self:center">Done</span></div></div>`),
+];
+const optRows = [
+  ['Major', 'add2 · add4 · 6 · add9 · add11 · add♯11', 'maj7 or ♭7 · ♭7 alters ♭5 ♭9 ♯9 ♯11 ♭13 · maj7 alters ♯11 · adds 13', 'maj9 · 9 (with the same alterations)', '11 · maj11', '13 · maj13'],
+  ['Minor', 'add2 · add4 · 6 · add9 · add11', 'm7 · m(maj7) · adds 11, 13', 'm9 · m(maj9) · adds 13', 'm11', 'm13'],
+  ['Diminished', '—', 'ø7 (♭7) · °7 · adds 11', 'ø9', 'ø11', '—'],
+  ['Augmented', 'add9', '+7 · +maj7 · +7 alters ♭5 ♭9 ♯9 ♯11', '+9', '—', '—'],
+  ['Sus2', '6', '7sus2 · maj7sus2', '—', '—', '—'],
+  ['Sus4', '6 · add9', '7sus4 · maj7sus4 · 7sus4 alters ♭9', '9sus4', '—', '13sus4'],
+  ['Power (5)', '—', '—', '—', '—', '—'],
+];
+document.getElementById('s-chords').innerHTML = chordsScreens.join('');
+document.getElementById('s-scales').innerHTML = scalesScreens.join('');
+document.getElementById('s-options').innerHTML = `<div class="scroll" style="overflow-x:auto"><table class="opt"><tr><th>Chord</th><th>Triad</th><th>7th</th><th>9th</th><th>11th</th><th>13th</th></tr>${optRows.map(r => `<tr>${r.map((c, i) => i ? `<td>${c}</td>` : `<th>${c}</th>`).join('')}</tr>`).join('')}</table></div>`;
+// ——— feedback on every screen ———
+(function () {
+  const figs = Array.from(document.querySelectorAll('figure[data-fb]')); const answers = {}; let db = null, local = {};
+  try { local = JSON.parse(localStorage.getItem('practice-feedback') || '{}') } catch (e) {}
+  const key = n => 's' + n.replace(/\./g, '-');
+  function render(id) { const f = document.querySelector('[data-key="' + id + '"]'); if (!f) return; const a = answers[id] || {};
+    f.querySelectorAll('.fb button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === a.verdict)));
+    const ta = f.querySelector('textarea'); if (ta && document.activeElement !== ta) ta.value = a.note || '';
+    f.classList.toggle('answered', !!(a.verdict || a.note)) }
+  async function save(id, patch) { answers[id] = Object.assign({}, answers[id], patch, { at: new Date().toISOString() }); render(id);
+    const st = document.querySelector('[data-key="' + id + '"] .saved');
+    try { local[id] = answers[id]; localStorage.setItem('practice-feedback', JSON.stringify(local)) } catch (e) {}
+    if (!db) { st.textContent = 'Kept in this browser only.'; return }
+    try { await db.doc('feedback/' + id).set(answers[id]); st.textContent = 'Saved.' } catch (e) { st.textContent = 'Could not save; kept in this browser.' } }
+  figs.forEach(f => { const id = key(f.dataset.fb); f.dataset.key = id;
+    const box = document.createElement('div'); box.className = 'fb';
+    [['ok', 'Looks right'], ['change', 'Change it'], ['remove', 'Not needed']].forEach(([v, l]) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.v = v; b.textContent = l; b.setAttribute('aria-pressed', 'false'); b.onclick = () => save(id, { verdict: v, screen: f.dataset.fb + ' ' + f.dataset.title }); box.appendChild(b) });
+    const ta = document.createElement('textarea'); ta.placeholder = 'What to change on ' + f.dataset.fb + '…'; ta.setAttribute('aria-label', 'Feedback on screen ' + f.dataset.fb);
+    let t; ta.oninput = () => { clearTimeout(t); t = setTimeout(() => save(id, { note: ta.value, screen: f.dataset.fb + ' ' + f.dataset.title }), 700) };
+    const st = document.createElement('span'); st.className = 'saved'; f.append(box, ta, st); if (local[id]) { answers[id] = local[id]; render(id) } });
+  const note = document.getElementById('storeNote');
+  const timer = setTimeout(() => { if (!db) note.textContent = 'Your feedback is kept in this browser; tell me in the chat when you are done.' }, 10000);
+  (window.claude && window.claude.use ? window.claude.use('db') : Promise.resolve(null)).then(d => { clearTimeout(timer); db = d;
+    if (!db) { note.textContent = 'Your feedback is kept in this browser; tell me in the chat when you are done.'; return }
+    note.textContent = 'Your feedback is saved with this page; I read it from here.';
+    db.collection('feedback').onSnapshot(snap => (snap.docs || snap).forEach(doc => { answers[doc.id] = doc.data ? doc.data() : doc; render(doc.id) }), () => {}) }).catch(() => {});
+})();
+
+  const NS = 'http://www.w3.org/2000/svg';
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  // a staff (treble, or grand) with clef, key signature (+sharps / -flats), optional time and a few notes
+  const SH = [8,5,9,6,3,7,4], FL = [4,7,3,6,2,5,1];
+  function staffSvg(kind, key, time, notes, scale, stack) {
+    const w = 298, s = 7, staves = kind === 'grand' ? [22, 82] : [22];
+    let g = '';
+    staves.forEach((top, i) => {
+      for (let l = 0; l < 5; l++) g += `<line x1="8" x2="${w - 6}" y1="${top + l * s}" y2="${top + l * s}" stroke="currentColor" stroke-width=".8" opacity=".55"/>`;
+      const bottom = top + 4 * s, bass = i === 1;
+      g += `<text x="10" y="${bass ? top + 2 * s - 1 : bottom + 4}" font-family="Noto Music" font-size="${bass ? 26 : 34}">${bass ? '𝄢' : '𝄞'}</text>`;
+      const pos = key > 0 ? SH : FL, n = Math.abs(key);
+      for (let k = 0; k < n; k++) { const p = pos[k] - (bass ? 2 : 0); g += `<text x="${36 + k * 7}" y="${bottom - p * s / 2 + 4}" font-family="Noto Music" font-size="18">${key > 0 ? '♯' : '♭'}</text>` }
+      let x = 40 + n * 7;
+      if (time) { const [a, b] = time.split('/'); g += `<text x="${x}" y="${top + 2 * s - 1}" font-family="Noto Music" font-size="17" font-weight="700">${a}</text><text x="${x}" y="${bottom - 1}" font-family="Noto Music" font-size="17" font-weight="700">${b}</text>`; x += 16 }
+      if (scale !== undefined && i === 0) { for (let k = 0; k < 8; k++) { const p = +scale + k, nx = x + 22 + k * ((w - x - 40) / 8), ny = bottom - p * s / 2;
+          if (p <= -2) g += `<line x1="${nx - 7}" x2="${nx + 7}" y1="${bottom + s}" y2="${bottom + s}" stroke="currentColor" stroke-width=".8"/>`;
+          g += `<ellipse cx="${nx}" cy="${ny}" rx="4.2" ry="3.1" transform="rotate(-20 ${nx} ${ny})" fill="currentColor"/><line x1="${nx + 3.8}" x2="${nx + 3.8}" y1="${ny}" y2="${ny - 22}" stroke="currentColor" stroke-width="1"/>` } }
+      if (stack && i === 0) { stack.split(',').map(Number).forEach(p => { const nx = x + 40, ny = bottom - p * s / 2;
+          if (p <= -2) g += `<line x1="${nx - 7}" x2="${nx + 7}" y1="${bottom + s}" y2="${bottom + s}" stroke="currentColor" stroke-width=".8"/>`;
+          g += `<ellipse cx="${nx}" cy="${ny}" rx="4.4" ry="3.2" transform="rotate(-20 ${nx} ${ny})" fill="currentColor"/>` }); }
+      if (notes) {
+        const line = i === 0 ? [2, 4, 6, 5, 4, 2, 3, 4, 7, 6] : [-2, 0, 1, -1, 0, 2, 1, -1, 0, 1];
+        for (let k = 0; k < 9; k++) { const nx = x + 14 + k * ((w - x - 30) / 9), ny = bottom - (line[(k + notes) % 10]) * s / 2;
+          g += `<ellipse cx="${nx}" cy="${ny}" rx="4.2" ry="3.1" transform="rotate(-20 ${nx} ${ny})" fill="currentColor"/><line x1="${nx + 3.8}" x2="${nx + 3.8}" y1="${ny}" y2="${ny - 22}" stroke="currentColor" stroke-width="1"/>`;
+          if (k % 3 === 2) g += `<line x1="${nx + 12}" x2="${nx + 12}" y1="${top}" y2="${bottom}" stroke="currentColor" stroke-width=".8" opacity=".55"/>` }
+      }
+    });
+    const h = kind === 'grand' ? 128 : 70;
+    return `<svg viewBox="0 0 ${w} ${h}" width="100%" style="display:block;color:var(--ink)" aria-hidden="true">${kind === 'grand' ? `<line x1="8" x2="8" y1="22" y2="${82 + 28}" stroke="currentColor"/>` : ''}${g}</svg>`;
+  }
+  document.querySelectorAll('[data-staff]').forEach(el => el.innerHTML = staffSvg(el.dataset.staff, +el.dataset.key, el.dataset.time, +el.dataset.notes, el.dataset.scale, el.dataset.stack));
+
+  // the key-signature grid as Flat draws it
+  function sig(n) {
+    const pos = n > 0 ? SH : FL, c = Math.abs(n), s = 4.4, bottom = 31, step = 5.6;
+    if (!c) return `<svg viewBox="0 0 14 40" height="36"><text x="3" y="${bottom - 4 * s / 2 + 6}" font-family="Noto Music" font-size="17" fill="currentColor">♮</text></svg>`;
+    let t = ''; for (let k = 0; k < c; k++) t += `<text x="${2 + k * step}" y="${bottom - pos[k] * s / 2 + 6}" font-family="Noto Music" font-size="16" fill="currentColor">${n > 0 ? '♯' : '♭'}</text>`;
+    return `<svg viewBox="0 0 ${8 + c * step} 40" height="36" style="max-width:100%">${t}</svg>`;
+  }
+  document.querySelectorAll('[data-ks]').forEach(el => {
+    const sel = el.dataset.ks === '' ? -5 : +el.dataset.ks; let h = ''; [0,1,2,3,4,5,6,7].forEach((n, i) => h += `<div class="${n === sel ? 'on' : ''}" style="${i === 0 ? 'border-left:0;' : ''}border-top:0">${sig(n)}</div>`);
+    [-1,-2,-3,-4,-5,-6,-7].forEach((n, i) => h += `<div class="${n === sel ? 'on' : ''}" style="${i === 0 ? 'border-left:0' : ''}">${sig(n)}</div>`);
+    h += '<div class="blank"></div>'; el.innerHTML = h;
+  });
+
+  // a keyboard: pitch classes to mark, finger numbers, octaves
+  function keyboard(marks, fingers, oct, lh, mini) {
+    const L = (lh || '').split(',').filter(Boolean).map(Number);
+    const W = 276, ww = W / (7 * oct), wh = 92, bw = ww * .62, bh = 56, m = marks.map(Number), f = fingers ? fingers.split(',') : [];
+    const WPC = [0, 2, 4, 5, 7, 9, 11], keys = [];
+    for (let o = 0; o < oct; o++) WPC.forEach((pc, i) => {
+      const x = (o * 7 + i) * ww; keys.push({ p: pc + o * 12, black: false, x, w: ww });
+      if ([0, 2, 5, 7, 9].includes(pc)) keys.push({ p: pc + 1 + o * 12, black: true, x: x + ww - bw / 2, w: bw });
+    });
+    const on = keys.filter(k => m.includes(k.p)).sort((a, b) => a.p - b.p); on.forEach((k, i) => k.f = f[i]);
+    const draw = k => { const hit = m.includes(k.p), h = k.black ? bh : wh;
+      let g = `<rect x="${k.x}" y="0" width="${k.w}" height="${h}" rx="${k.black ? 2 : 3}" fill="${hit && L.includes(k.p) ? 'var(--lilac-ink)' : hit ? 'var(--hit)' : k.black ? 'var(--key-black)' : 'var(--card)'}" stroke="var(--line)"/>`;
+      if (hit && k.f) g += `<circle cx="${k.x + k.w / 2}" cy="${h - 13}" r="${k.black ? 7 : 8}" fill="var(--ink)"/><text x="${k.x + k.w / 2}" y="${h - 9}" text-anchor="middle" font-size="${k.black ? 10 : 11}" font-weight="600" fill="var(--paper)" font-family="Onest">${k.f}</text>`;
+      return g };
+    return `<svg viewBox="-1 -1 ${W + 2} ${wh + 2}" width="100%" aria-hidden="true">${keys.filter(k => !k.black).map(draw).join('')}${keys.filter(k => k.black).map(draw).join('')}</svg>`;
+  }
+  document.querySelectorAll('[data-kb]').forEach(el => el.innerHTML = keyboard(el.dataset.kb.split(','), el.dataset.fingers, +el.dataset.oct || 1, el.dataset.lh, el.dataset.mini));
+
+  // a Chordify-like grid preview
+  document.querySelectorAll('[data-preview="grid"]').forEach(el => {
+    const chords = ['G','','','','C','','G','','G','','','','D','','',''];
+    let h = '<div style="display:grid;grid-template-columns:repeat(8,24px);gap:2px;background:var(--card);padding:6px;border-radius:6px">';
+    chords.forEach((c, i) => h += `<div style="height:22px;font-size:11px;display:grid;place-items:center;${i % 4 === 0 ? 'border-left:2px solid var(--ink);' : ''}${i === 0 ? 'background:var(--ink);color:var(--paper);' : 'background:var(--paper);'}">${c}</div>`);
+    el.innerHTML = h + '</div>';
+  });
+  // the chords on each degree
+  document.querySelectorAll('[data-degrees]').forEach(el => {
+    el.innerHTML = el.dataset.degrees.split(',').map(p => { const [c, d] = p.split(':'); return `<div class="row"><span style="width:34px;font:600 12px var(--sans);color:var(--ink-soft)">${d}</span><span class="n" style="font:600 15px var(--display)">${c}</span><svg class="i s soft"><use href="#play"/></svg></div>` }).join('');
+  });
+
+
+})();
+</script>

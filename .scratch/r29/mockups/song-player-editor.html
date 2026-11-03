@@ -6,6 +6,18 @@
 .t-bad { background: var(--bad); color: var(--bad-ink) }
 .toc { position: sticky; top: 0; background: var(--paper); padding: 8px 0; z-index: 2 }
 
+.fb { display: flex; gap: 6px; flex-wrap: wrap }
+.fb button { font: 500 12.5px var(--sans); border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 5px 11px; cursor: pointer }
+.fb button[aria-pressed="true"][data-v="ok"] { background: var(--grass); color: var(--grass-ink); border-color: var(--grass-ink) }
+.fb button[aria-pressed="true"][data-v="change"] { background: var(--honey); color: var(--honey-ink); border-color: var(--honey) }
+.fb button[aria-pressed="true"][data-v="remove"] { background: var(--bad); color: var(--bad-ink); border-color: var(--bad-ink) }
+.fb button:focus-visible, figure textarea:focus-visible { outline: 2px solid var(--sky-ink); outline-offset: 2px }
+figure textarea { width: 100%; min-height: 40px; font: 13px var(--sans); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 7px 9px; resize: vertical }
+figure .saved { font-size: 12px; color: var(--ink-soft); min-height: 1em }
+.cap { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--paper); border-radius: 999px; display: flex; gap: 2px; padding: 5px; box-shadow: 0 6px 18px rgba(0,0,0,.18); white-space: nowrap }
+.cap span { padding: 7px 13px; display: flex; gap: 6px; align-items: center; font: 600 12.5px var(--sans) }
+.cap span:last-child { background: var(--honey); color: var(--honey-ink); border-radius: 999px }
+
 .ebar .btn { width: 30px; height: 30px } .ebar { gap: 0 }
 
 /* Layout: a reading column of questions; each question shows full phone screens drawn in Piano Trainer's own tokens, side by side, wrapping on a phone. */
@@ -199,13 +211,15 @@ svg.i.s { width: 15px; height: 15px }
       <li>Every setting has one home.</li>
       <li>Settings pages use Flat's cards (question 2 on the other page): a choice among three or more is a card with every option in sight, and on/off is a switch.</li>
     </ul>
+    <p class="soft" id="storeNote">Loading where your feedback is kept…</p>
+    <p><b>Under every screen:</b> tap Looks right, Change it or Not needed, and write what to change. It saves as you type.</p>
     <nav class="toc"><a href="#song">1. The song's page</a><a href="#player">2. The Player</a><a href="#editor">3. The score editor</a><a href="#laptop">4. On a laptop</a><a href="#moves">5. What moves where</a></nav>
   </header>
   <section class="q" id="song"><div class="qhead"><span class="qnum">1</span><h2>The song's page and its Settings</h2></div>
     <div class="ctx"><p>The overview: what the song is, Practise, and how to learn it by sections. Edit (✎) makes the page itself editable in place, as it is today. The gear opens the song's own Settings.</p></div>
     <div class="screens" id="s-song"></div></section>
   <section class="q" id="player"><div class="qhead"><span class="qnum">2</span><h2>The Player and every page behind its gear</h2></div>
-    <div class="ctx"><p>The bar is ✕ · title · ✎ · MIDI · ⚙. The tools row is "Sheet ⌃" · Transpose · Simplify, and the transport floats at the bottom. Everything else sits behind the one gear.</p></div>
+    <div class="ctx"><p>Approved in part 2. The bar is ✕ · title · ✎ · MIDI · ⚙. The tools row is "Sheet ⌃" · Transpose · Simplify, and the transport floats at the bottom. Everything else sits behind the one gear.</p></div>
     <div class="screens" id="s-player"></div></section>
   <section class="q" id="editor"><div class="qhead"><span class="qnum">3</span><h2>The score editor and every page behind its gear</h2></div>
     <div class="ctx"><p>This is the same screen as the Player, in Edit mode. ✓ Done replaces ✎ beside the title, with Undo and Redo next to it. The palette is Flat's: on a phone a sheet at the bottom with a row of tool categories. The gear opens the score's Settings.</p></div>
@@ -243,7 +257,7 @@ const dockP = `<div class="dock"><span class="tempo">♩ 90</span>${I('skip')}<s
 const dockE = `<div class="dock"><span class="tempo">♩ 90</span>${I('skip')}<span class="play">${I('play')}</span><span style="color:var(--bad-ink)">${I('rec')}</span>${I('takes')}</div>`;
 const sheet = (n = 1, key = 1, time) => `<div class="sheetbox" data-staff="grand" data-key="${key}" ${time ? `data-time="${time}"` : ''} data-notes="${n}"></div>`;
 function phone(n, title, from, html, opts = {}) {
-  return `<figure><div class="dev${opts.short ? ' short' : ''}">${status}${html}</div><figcaption><b>${n}. ${title}</b>${from}</figcaption></figure>`;
+  return `<figure data-fb="${n}" data-title="${title.replace(/"/g, '')}"><div class="dev${opts.short ? ' short' : ''}">${status}${html}</div><figcaption><b>${n}. ${title}</b>${from}</figcaption></figure>`;
 }
 const pad = h => `<div class="content pad">${h}</div>`;
 const note = t => `<span class="soft" style="font-size:12px">${t}</span>`;
@@ -316,7 +330,7 @@ const player = [
 
 // ——— 3 EDITOR ———
 const cats = ['Notes', 'Pitch', 'Articulations', 'Ornaments', 'Dynamics', 'Bar', 'Clef', 'Key', 'Time', 'Repeats', 'Text'];
-const palette = (on = 'Notes', body) => `<div style="position:absolute;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);border-radius:18px 18px 0 0;padding:8px 10px 12px;display:grid;gap:8px"><div style="justify-self:center;width:40px;height:4px;border-radius:4px;background:var(--line)"></div>${body}<div class="hscroll">${cats.map(c => `<span class="chip${c === on ? ' on' : ''}">${c}</span>`).join('')}</div></div>`;
+const palette = (on = 'Notes', body) => `<div style="position:absolute;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);border-radius:18px 18px 0 0;padding:8px 10px 12px;display:grid;gap:8px"><div style="justify-self:center;width:40px;height:4px;border-radius:4px;background:var(--line)"></div>${body}<div class="hscroll">${cats.slice(Math.max(0, cats.indexOf(on) - 1)).map(c => `<span class="chip${c === on ? ' on' : ''}">${c}</span>`).join('')}</div></div>`;
 const noteRow = `<div style="display:flex;justify-content:space-around;font:22px var(--music)"><span>𝅝</span><span>𝅗𝅥</span><span style="background:var(--sky);border-radius:8px;padding:0 6px">𝅘𝅥</span><span>𝅘𝅥𝅮</span><span>𝅘𝅥𝅯</span><span>𝄽</span><span>.</span></div>`;
 const editor = [
   phone('3.1', 'The score editor', 'From ✎ in the Player (or on the song\'s page › Edit the music).', eBar() + `<div class="tools"><span class="t on">Sheet ${I('down', 's')}</span><span class="t">Transpose</span></div><div class="content">${sheet(1, 1, '3/4')}<div style="position:absolute;left:60px;top:40px;width:26px;height:56px;border-radius:6px;background:var(--sky);opacity:.55"></div>${palette('Notes', noteRow)}</div>`),
@@ -354,8 +368,74 @@ const editor = [
     ${note('The click\'s sound and volume are the Metronome\'s (2.9).')}`), { short: true }),
 ];
 
+// ——— more song screens ———
+song.push(
+  phone('1.6', 'A section\'s page', 'From a section on the song\'s page. Learn the song piece by piece.', bar({ title: 'Verse', right: [] }) + `<div class="content pad">
+    <div class="soft" style="font-size:12px">Amazing Grace · bars 5–20 · 2 of 3 lessons done</div>
+    ${sheet(1, 1, '3/4')}
+    ${group('LESSONS', [['grass', 'check', 'Right hand alone', 'Done', 'none'], ['grass', 'check', 'Left hand alone', 'Done', 'none'], ['sky', 'hand', 'Hands together', 'Next']])}
+    <div class="cap"><span>${I('loop', 's')}Loop</span><span>${I('play', 's')}Practise</span></div></div>`),
+  phone('1.7', 'Publish in library', 'From the song\'s Settings › Publish in library. Your own song only.', bar({ title: 'Publish in library' }) + pad(`
+    <div class="cardset"><b>Description</b><span class="soft" style="font-size:12.5px">Four-part hymn, verse and refrain, for a church accompanist.</span></div>
+    <div class="cardset"><b>Preview</b>${sheet(1)}</div>
+    <div class="cardset"><span class="check" style="align-items:flex-start"><i style="margin-top:2px"></i><span style="font-size:12px">I confirm that the title and composer are correct and that I have the rights to share this music. The <u>Terms of Use</u> apply.</span></span></div>
+    <span class="cta" style="justify-self:center;opacity:.5">Publish</span>`)),
+  phone('1.8', 'Share link', 'From the song\'s Settings › Share link.', bar({ title: 'Share link' }) + pad(`
+    <div class="cardset"><b>Anyone with the link can open this song</b><div class="list"><div class="row"><span class="n soft" style="font-size:12px">pianotrainer.app/s/7Hq2…</span><span class="chip">Copy</span></div></div></div>
+    ${card('They get', [['A copy they can play and edit', '', true], ['Play only']])}
+    <span class="cta" style="justify-self:center">Share…</span>`), { short: true }),
+  phone('1.9', 'Changes (an editor\'s built-in song)', 'From the song\'s Settings › Changes. Only for an editor, and only while there are some.', bar({ title: 'Changes' }) + pad(`
+    <div class="cardset"><b>Not published yet</b><span class="soft" style="font-size:12.5px">3 changes since Monday: bars 5–8, the chords of the Refrain, the tempo.</span><div style="display:flex;gap:8px"><span class="cta honey">Publish</span><span class="chip">Discard</span></div></div>
+    <div><div class="gl">VERSIONS</div><div class="list">${[['Today, 18:02', 'Published by you'], ['2 Nov', 'Published by Maria'], ['28 Oct', 'First version']].map(([a, b]) => `<div class="row"><span class="n">${a}<small class="soft" style="display:block;font-size:11.5px">${b}</small></span><span class="chip">Open</span></div>`).join('')}</div></div>`), { short: true }),
+  phone('1.10', 'A built-in song\'s Settings (a learner)', 'The same page for a song everyone has. Instead of Delete: Reset to the original.', bar({ title: 'Amazing Grace' }) + pad(`
+    ${group('IN YOUR LIBRARY', [['sand', 'folder', 'Folder', 'Hymns'], ['sand', 'archive', 'Archive', '', 'off']])}
+    ${group('SHARE', [['sky', 'dl', 'Export…', ''], ['sky', 'link', 'Share link', '']])}
+    ${danger('Reset to the original')}${note('Shown only after you changed the score: your version goes, the original comes back.')}`), { short: true }),
+);
+// ——— more player screens ———
+const gridView = `<div class="pad"><div class="gl">VERSE</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">${['G', 'G7', 'C', 'G', 'G', 'Em', 'D', 'D7', 'G', 'G7', 'C', 'G', 'Em', 'D', 'G', ''].map((c, i) => `<div style="height:38px;border-radius:8px;display:grid;place-items:center;font:600 15px var(--display);${i === 5 ? 'background:var(--ink);color:var(--paper)' : 'background:var(--card);border:1px solid var(--line)'}">${c}</div>`).join('')}</div><div class="gl">REFRAIN</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">${['C', 'G', 'Em', 'D'].map(c => `<div style="height:38px;border-radius:8px;display:grid;place-items:center;font:600 15px var(--display);background:var(--card);border:1px solid var(--line)">${c}</div>`).join('')}</div></div>`;
+player.push(
+  phone('2.13', 'Grid view', 'From "Sheet ⌃" › Grid. Chordify\'s grid: a box a beat, the bar in a row.', pBar() + tools('Grid') + `<div class="content">${gridView}${dockP}</div>`),
+  phone('2.14', 'Diagrams view', 'From "Sheet ⌃" › Diagrams. The chord now, big, with the next ones.', pBar() + tools('Diagrams') + `<div class="content pad"><div style="display:flex;gap:8px;align-items:end"><span class="bigname">Em</span><span class="soft">then D · G</span></div><div data-kb="4,7,11" data-fingers="1,2,4" data-oct="2"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="cardset" style="padding:6px"><b style="font-size:12px">D</b><div data-kb="2,6,9" data-oct="1"></div></div><div class="cardset" style="padding:6px"><b style="font-size:12px">G</b><div data-kb="7,11,14" data-oct="2"></div></div></div>${dockP}</div>`),
+  phone('2.15', 'Lyrics view', 'From "Sheet ⌃" › Lyrics. Chords over the words; the line now marked.', pBar() + tools('Lyrics') + `<div class="content pad" style="font-size:15px;line-height:1.3">${[['G', 'G7', 'Amazing grace, how sweet the sound'], ['G', 'D', 'That saved a wretch like me'], ['G', 'G7', 'I once was lost, but now am found'], ['Em D', 'G', 'Was blind, but now I see']].map(([a, b, t], i) => `<div style="${i === 1 ? 'background:var(--sky);border-radius:8px;padding:4px 6px' : 'padding:4px 6px'}"><div style="font:600 13px var(--sans);color:var(--sky-ink);display:flex;justify-content:space-between;max-width:220px"><span>${a}</span><span>${b}</span></div>${t}</div>`).join('')}${dockP}</div>`),
+  phone('2.16', 'A chart\'s Pattern (a progression, an exercise)', 'From the Player\'s Settings › Pattern, for music made of chords only. Was in Setup.', bar({ title: 'Pattern' }) + pad(`
+    ${card('How the chords are played', [['Block chords', 'Both hands together, once a bar', true], ['Broken chords', 'Alberti: low, high, middle, high'], ['Arpeggios', 'Up through the chord'], ['Waltz', 'Bass, chord, chord']])}
+    ${card('Swing', [['Straight', '', true], ['Swing eighths']])}
+    ${card('Chord size', [['Triads', '', true], ['7ths']])}`)),
+  phone('2.17', 'Print', 'From the Player\'s Settings › Print. Then the system\'s print sheet.', bar({ title: 'Print' }) + pad(`
+    ${card('What', [['The whole song', '', true], ['The section you\'re in', 'Verse, bars 5–20']])}
+    ${swcard('On the page', [['Chord symbols', 1], ['Finger numbers', 1], ['Lyrics', 1]])}
+    <span class="cta" style="justify-self:center">Print…</span>`), { short: true }),
+  phone('2.18', 'Help', 'From the Player\'s Settings › Help: how the Player works, with the shortcuts on a computer.', bar({ title: 'Help' }) + pad(`
+    ${group('', [['sky', 'play', 'Playing along', ''], ['grass', 'loop', 'Loops and sections', ''], ['honey', 'metro', 'Tempo and the speed trainer', ''], ['lilac', 'piano', 'With a connected piano', ''], ['sand', 'kbd', 'Keyboard shortcuts', 'computer only']])}`), { short: true }),
+);
+// ——— more editor screens ———
+const palTools = {
+  Pitch: ['♯', '♭', '♮', '𝄪', '𝄫', '8va', '↑', '↓'],
+  Articulations: ['𝅼', '>', '^', '—', '𝄐', '𝄑'],
+  Ornaments: ['𝆖', '𝆗', '𝆘', 'trill', 'grace', 'acciacc.'],
+  Dynamics: ['ppp', 'pp', 'p', 'mp', 'mf', 'f', 'ff', 'fff', 'sf', 'cresc.', 'dim.'],
+  Bar: ['Add bar', 'Insert bar', 'Delete bar', 'Split', 'Join'],
+  Clef: ['𝄞', '𝄢', '𝄡', '𝄞⁸'],
+  Repeats: ['𝄆', '𝄇', '1.', '2.', '𝄋', '𝄌', 'D.C.', 'D.S.', 'Fine', 'To Coda', '‖'],
+  Text: ['Tempo', 'Expression', 'Chord', 'Lyrics', 'Fingering', 'Ped.', '*'],
+};
+const palCat = (c, n) => phone(n, `Palette › ${c}`, c === 'Pitch' || c === 'Articulations' || c === 'Ornaments' || c === 'Dynamics' || c === 'Text' ? 'Choose notes first; until then these tools are greyed, with the reason in ⓘ.' : 'Acts on the bar the caret is in.', eBar() + `<div class="content">${sheet(1)}${palette(c === 'Repeats' ? 'Repeats' : c, `<div class="chips" style="justify-content:center">${palTools[c].map(x => `<span class="chip" style="font-family:var(--music);min-width:36px;justify-content:center">${x}</span>`).join('')}</div>`)}</div>`, { short: true });
+editor.push(
+  ...Object.keys(palTools).map((c, i) => palCat(c, `3.${11 + i}`)),
+  phone('3.19', 'Typing a chord symbol', 'From the Chord row: tap above a beat and type. Suggestions from the key.', eBar() + `<div class="content">${sheet(1)}<div style="position:absolute;left:70px;top:8px;background:var(--card);border:1.5px solid var(--sky-ink);border-radius:6px;padding:2px 8px;font:600 14px var(--display)">Em7|</div><div style="position:absolute;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:8px;display:grid;gap:6px"><div class="chips">${['Em7', 'Em', 'E7', 'Em(maj7)'].map((c, i) => `<span class="chip${i ? '' : ' on'}">${c}</span>`).join('')}</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px">${['C', 'D', 'E', 'F', 'G', 'A', 'B', '♯', '♭', 'm', '7', 'maj', 'sus', '/'].map(k => `<span class="chip" style="justify-content:center">${k}</span>`).join('')}</div></div></div>`, { short: true }),
+  phone('3.20', 'Recording', 'From ● in the dock. Count-in, then it writes what you play.', eBar() + `<div class="content">${sheet(1)}<div style="position:absolute;left:0;right:0;top:96px;text-align:center;font:600 40px var(--display);color:var(--bad-ink)">3</div><div class="dock"><span class="tempo">♩ 90</span><span style="color:var(--bad-ink);font:600 12px var(--sans)">● 0:04</span><span class="play" style="background:var(--bad-ink)">■</span>${I('takes')}</div></div>`, { short: true }),
+  phone('3.21', 'Takes', 'From the takes button in the dock: every recording, to keep or write into the score.', bar({ title: 'Takes' }) + pad(`
+    <div class="list">${[['Take 3', '0:42 · today'], ['Take 2', '0:38 · today'], ['Take 1', '0:40 · yesterday']].map(([a, b]) => `<div class="row"><span class="play" style="width:28px;height:28px;border-radius:999px;background:var(--sand);display:grid;place-items:center">${I('play', 's')}</span><span class="n">${a}<small class="soft" style="display:block;font-size:11.5px">${b}</small></span><span class="chip">Write into score</span></div>`).join('')}</div>`), { short: true }),
+  phone('3.22', 'An editor\'s built-in song', 'The bar carries the status and Publish while there are unpublished changes.', bar({ left: '', title: 'Amazing Grace', after: `<span class="btn tint">${I('check')}</span>`, right: [`<span class="chip" style="background:var(--honey);color:var(--honey-ink);border-color:var(--honey)">Publish</span>`, 'gear'] }) + `<div class="content"><div class="soft" style="font-size:11.5px;padding:4px 12px">3 unpublished changes · everyone still sees the published version</div>${sheet(1, 1, '3/4')}${palette('Notes', noteRow)}</div>`),
+  phone('3.23', 'Staff: name, instrument, clef', 'From Staves › ✎ on a staff.', bar({ title: 'Right hand' }) + pad(`
+    <div class="list"><div class="row"><span class="n">Name</span><span class="v">Right hand</span>${chev}</div><div class="row"><span class="n">Instrument</span><span class="v">Piano</span>${chev}</div></div>
+    ${card('Clef', [['Treble 𝄞', '', true], ['Bass 𝄢'], ['Alto 𝄡']])}
+    ${swcard('', [['Show on the sheet', 1]])}`), { short: true }),
+);
+
 // ——— 4 LAPTOP ———
-const lap = (title, inner) => `<figure class="laptop" style="width:900px"><div style="width:900px;height:480px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--paper);display:flex;flex-direction:column;font-size:12.5px">${inner}</div><figcaption><b>${title}</b></figcaption></figure>`;
+const lap = (title, inner) => `<figure class="laptop" data-fb="${title.split(' ')[0]}" data-title="laptop" style="width:900px"><div style="width:900px;height:480px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--paper);display:flex;flex-direction:column;font-size:12.5px">${inner}</div><figcaption><b>${title}</b></figcaption></figure>`;
 const laptop = [
   lap('4.1 The Player on a laptop: the gear opens the Settings as a panel at the right', `${pBar()}<div class="tools">${tools('Sheet').replace('<div class="tools">', '').replace('</div>', '')}</div><div style="flex:1;display:grid;grid-template-columns:1fr 300px;min-height:0"><div style="position:relative;padding:10px 40px">${sheet(1, 1, '3/4')}${sheet(2)}<div class="dock" style="left:120px;right:120px">${dockP.replace('<div class="dock">', '').replace(/<\/div>$/, '')}</div></div><div class="pad" style="border-left:1px solid var(--line);background:var(--paper)"><b style="font:600 15px var(--display)">Player</b>${group('THIS SONG', [['lilac', 'music', 'Staves', '2 playing'], ['sky', 'info', 'Song information', ''], ['grass', 'sections', 'Sections', '4']])}${group('HOW THE PLAYER WORKS', [['sky', 'view', 'Display', 'Scroll'], ['grass', 'play', 'Playback', 'Count-in'], ['honey', 'metro', 'Metronome', 'Click']])}</div></div>`),
   lap('4.2 The editor on a laptop: the palette docked at the left, every category open', `${eBar()}<div class="tools"><span class="t on">Sheet ${I('down', 's')}</span><span class="t">Transpose</span></div><div style="flex:1;display:grid;grid-template-columns:230px 1fr;min-height:0"><div class="pad" style="border-right:1px solid var(--line);background:var(--card);overflow:hidden">${['Notes', 'Pitch', 'Articulations', 'Dynamics', 'Clef', 'Key', 'Time'].map((c, i) => `<div><div class="gl">${c.toUpperCase()}</div>${i === 0 ? noteRow : i === 5 ? '<div class="ksgrid" data-ks="1"></div>' : `<div class="chips">${({1:['♯','♭','♮','8va','↑','↓'],2:['·','>','^','—','𝄐'],3:['pp','p','mp','mf','f','ff'],4:['𝄞','𝄢','𝄡'],6:['𝄴','2⁄4','3⁄4','4⁄4','𝄵','6⁄8']})[i].map(x => `<span class="chip" style="font-family:var(--music)">${x}</span>`).join('')}</div>`}</div>`).join('')}</div><div style="position:relative;padding:10px 40px">${sheet(1, 1, '3/4')}${sheet(2)}<div class="dock" style="left:120px;right:120px">${dockE.replace('<div class="dock">', '').replace(/<\/div>$/, '')}</div></div></div>`),
@@ -379,6 +459,34 @@ document.getElementById('s-player').innerHTML = player.join('');
 document.getElementById('s-editor').innerHTML = editor.join('');
 document.getElementById('s-laptop').innerHTML = laptop.join('');
 document.getElementById('s-moves').innerHTML = `<div class="list">${moves.map(([a, b, c]) => `<div class="row" style="display:grid;grid-template-columns:minmax(120px,1fr) minmax(120px,1fr) minmax(160px,1.4fr);gap:12px;align-items:start"><b style="font-size:13px">${a}</b><span class="soft" style="font-size:13px">${b}</span><span style="font-size:13px">→ ${c}</span></div>`).join('')}</div>`;
+
+// ——— feedback on every screen ———
+(function () {
+  const figs = Array.from(document.querySelectorAll('figure[data-fb]')); const answers = {}; let db = null, local = {};
+  try { local = JSON.parse(localStorage.getItem('spe-feedback') || '{}') } catch (e) {}
+  const key = n => 's' + n.replace(/\./g, '-');
+  function render(id) { const f = document.querySelector('[data-key="' + id + '"]'); if (!f) return; const a = answers[id] || {};
+    f.querySelectorAll('.fb button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === a.verdict)));
+    const ta = f.querySelector('textarea'); if (ta && document.activeElement !== ta) ta.value = a.note || '';
+    f.classList.toggle('answered', !!(a.verdict || a.note)) }
+  async function save(id, patch) { answers[id] = Object.assign({}, answers[id], patch, { at: new Date().toISOString() }); render(id);
+    const st = document.querySelector('[data-key="' + id + '"] .saved');
+    try { local[id] = answers[id]; localStorage.setItem('spe-feedback', JSON.stringify(local)) } catch (e) {}
+    if (!db) { st.textContent = 'Kept in this browser only.'; return }
+    try { await db.doc('feedback/' + id).set(answers[id]); st.textContent = 'Saved.' } catch (e) { st.textContent = 'Could not save; kept in this browser.' } }
+  figs.forEach(f => { const id = key(f.dataset.fb); f.dataset.key = id;
+    const box = document.createElement('div'); box.className = 'fb';
+    [['ok', 'Looks right'], ['change', 'Change it'], ['remove', 'Not needed']].forEach(([v, l]) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.v = v; b.textContent = l; b.setAttribute('aria-pressed', 'false'); b.onclick = () => save(id, { verdict: v, screen: f.dataset.fb + ' ' + f.dataset.title }); box.appendChild(b) });
+    const ta = document.createElement('textarea'); ta.placeholder = 'What to change on ' + f.dataset.fb + '…'; ta.setAttribute('aria-label', 'Feedback on screen ' + f.dataset.fb);
+    let t; ta.oninput = () => { clearTimeout(t); t = setTimeout(() => save(id, { note: ta.value, screen: f.dataset.fb + ' ' + f.dataset.title }), 700) };
+    const st = document.createElement('span'); st.className = 'saved'; f.append(box, ta, st); if (local[id]) { answers[id] = local[id]; render(id) } });
+  const note = document.getElementById('storeNote');
+  const timer = setTimeout(() => { if (!db) note.textContent = 'Your feedback is kept in this browser; tell me in the chat when you are done.' }, 10000);
+  (window.claude && window.claude.use ? window.claude.use('db') : Promise.resolve(null)).then(d => { clearTimeout(timer); db = d;
+    if (!db) { note.textContent = 'Your feedback is kept in this browser; tell me in the chat when you are done.'; return }
+    note.textContent = 'Your feedback is saved with this page; I read it from here.';
+    db.collection('feedback').onSnapshot(snap => (snap.docs || snap).forEach(doc => { answers[doc.id] = doc.data ? doc.data() : doc; render(doc.id) }), () => {}) }).catch(() => {});
+})();
 
   const NS = 'http://www.w3.org/2000/svg';
   const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
