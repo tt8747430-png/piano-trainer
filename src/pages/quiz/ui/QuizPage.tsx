@@ -21,7 +21,7 @@ export function QuizPage() {
           </>
         }
       />
-      <div className="grid items-start gap-6 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid items-start gap-6 lg:grid-cols-2">
         {QUIZ_GROUPS.map((group) => (
           <TrainerList
             key={group}

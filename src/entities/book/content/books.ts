@@ -1,3 +1,4 @@
+import type { LocalText } from '@/shared/i18n'
 import type { Book, BookId, MethodBookId } from '../model/types'
 
 /** The printed books a Source cites, titles and authors as printed. */
@@ -9,10 +10,13 @@ export const BOOKS: Readonly<Record<BookId, Book>> = {
   gorshkov: { title: 'Курс по аккомпанементу', author: 'Василий Горшков' },
 }
 
-/** What a method book is called for short, in either language: its title, or its author's name. */
-export const METHOD_BOOK_NAMES: Readonly<Record<MethodBookId, string>> = {
-  'called-to-play': 'Called to Play',
-  'called-to-play-2': 'Called to Play 2',
-  'seven-types': 'Боброва',
-  gorshkov: 'Горшков',
+/**
+ * What a method book is called for short: its title, or its author's name, transliterated in English
+ * and in Cyrillic in Russian (A25), never two scripts in one interface.
+ */
+export const METHOD_BOOK_NAMES: Readonly<Record<MethodBookId, LocalText>> = {
+  'called-to-play': { en: 'Called to Play', ru: 'Called to Play' },
+  'called-to-play-2': { en: 'Called to Play 2', ru: 'Called to Play 2' },
+  'seven-types': { en: 'Bobrova', ru: 'Боброва' },
+  gorshkov: { en: 'Gorshkov', ru: 'Горшков' },
 }

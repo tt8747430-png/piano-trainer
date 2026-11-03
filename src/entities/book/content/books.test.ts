@@ -17,11 +17,11 @@ describe('the books', () => {
       'seven-types',
       'gorshkov',
     ])
-    expect(METHOD_BOOK_IDS.map((id) => METHOD_BOOK_NAMES[id])).toEqual([
+    expect(METHOD_BOOK_IDS.map((id) => METHOD_BOOK_NAMES[id].en)).toEqual([
       'Called to Play',
       'Called to Play 2',
-      'Боброва',
-      'Горшков',
+      'Bobrova',
+      'Gorshkov',
     ])
     for (const id of METHOD_BOOK_IDS) expect(BOOK_IDS).toContain(id)
   })

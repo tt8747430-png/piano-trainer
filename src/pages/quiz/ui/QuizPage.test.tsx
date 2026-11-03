@@ -54,7 +54,7 @@ describe('Practice → Quiz', () => {
     const gaps = await screen.findByRole('link', { name: 'My gaps' })
     expect(gaps).toHaveAttribute('href', '/practice/quiz/gaps')
     act(() => recordAnswer(progressStore, { skill: 'chord:m7', correct: false }, new Date()))
-    expect(screen.getByRole('link', { name: 'My gaps To check: 1' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'My gaps, To check: 1' })).toBeInTheDocument()
   })
 
   it('opens from Practice, and a trainer’s Back returns to it', async () => {

@@ -146,7 +146,7 @@ describe('A progression in the Player', () => {
       for (const name of [
         'Called to Play · The five ways (lesson 3)',
         'Called to Play · Right-hand techniques',
-        'Боброва · The seven types of accompaniment',
+        'Bobrova · The seven types of accompaniment',
         'Rhythm styles',
       ]) {
         expect(within(list).getByRole('group', { name })).toBeInTheDocument()

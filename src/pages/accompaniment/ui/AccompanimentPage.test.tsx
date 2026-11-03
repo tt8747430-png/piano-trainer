@@ -38,8 +38,8 @@ describe('Practice → Accompaniment', () => {
     expect(tabs().map((tab) => [tab.textContent, tab.getAttribute('aria-current')])).toEqual([
       ['Called to Play', 'page'],
       ['Called to Play 2', null],
-      ['Боброва', null],
-      ['Горшков', null],
+      ['Bobrova', null],
+      ['Gorshkov', null],
       ['Styles', null],
       ['Yours', null],
     ])
@@ -56,10 +56,10 @@ describe('Practice → Accompaniment', () => {
     )
   })
 
-  it('lists on Боброва her seven types and the hymns they are practised on, each on Songs', async () => {
+  it('lists on Bobrova her seven types and the hymns they are practised on, each on Songs', async () => {
     await renderApp('/practice/accompaniment?show=seven-types')
     await screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
-    expect(screen.getByRole('link', { name: 'Боброва' })).toHaveAttribute('aria-current', 'page')
+    expect(screen.getByRole('link', { name: 'Bobrova' })).toHaveAttribute('aria-current', 'page')
     expect(shelves()).toEqual(['The seven types of accompaniment', 'Hymns'])
     expect(rows('The seven types of accompaniment')).toHaveLength(8)
     expect(rows('Hymns')).toEqual([
@@ -86,10 +86,10 @@ describe('Practice → Accompaniment', () => {
     expect(rows('Called to Play, level 2')[0]).toBe('/songs/molitva')
   })
 
-  it('lists on Горшков his textures and the songs his lessons play them on', async () => {
+  it('lists on Gorshkov his textures and the songs his lessons play them on', async () => {
     await renderApp('/practice/accompaniment?show=gorshkov')
     await screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
-    expect(screen.getByRole('link', { name: 'Горшков' })).toHaveAttribute('aria-current', 'page')
+    expect(screen.getByRole('link', { name: 'Gorshkov' })).toHaveAttribute('aria-current', 'page')
     expect(shelves()).toEqual(['Arranging the accompaniment', 'Gorshkov’s songs'])
     expect(rows('Arranging the accompaniment')).toEqual(
       ['g1', 'g2', 'g3', 'g4', 'g5', 'g6'].map((id) => `/practice/accompaniment/patterns/${id}`),
@@ -155,7 +155,7 @@ describe('Practice → Accompaniment', () => {
     const { router } = await renderApp('/practice/accompaniment')
     await screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
     const before = router.history.length
-    await user.click(screen.getByRole('link', { name: 'Боброва' }))
+    await user.click(screen.getByRole('link', { name: 'Bobrova' }))
     expect(await screen.findByRole('region', { name: 'Hymns' })).toBeInTheDocument()
     expect(router.state.location.href).toBe('/practice/accompaniment?show=seven-types')
     expect(router.history.length).toBe(before)
@@ -169,7 +169,7 @@ describe('Practice → Accompaniment', () => {
     await user.click(within(nav).getByRole('link', { name: 'Practice' }))
     await user.click(await screen.findByRole('link', { name: /^Accompaniment / }))
     expect(await screen.findByRole('region', { name: 'Hymns' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Боброва' })).toHaveAttribute('aria-current', 'page')
+    expect(screen.getByRole('link', { name: 'Bobrova' })).toHaveAttribute('aria-current', 'page')
   })
 
   it('marks only the page shown as the current tab', async () => {
@@ -178,8 +178,8 @@ describe('Practice → Accompaniment', () => {
     expect(tabs().map((tab) => [tab.textContent, tab.getAttribute('aria-current')])).toEqual([
       ['Called to Play', null],
       ['Called to Play 2', null],
-      ['Боброва', null],
-      ['Горшков', null],
+      ['Bobrova', null],
+      ['Gorshkov', null],
       ['Styles', 'page'],
       ['Yours', null],
     ])
