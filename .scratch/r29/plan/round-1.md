@@ -46,6 +46,22 @@ Read with: `prompt.md` (cited by line), `compliance/part-a1.md`, `compliance/sum
     segmented switch"). Correct in A2 below.
 12. **`docs/adr/0052` and the `SettingsList` comment** call Exercises and Quiz's page "Exercises and Quiz" while the
     gear's label says "Exercises settings"/"Quiz settings". One name: **Exercises and Quiz** (S8).
+13. **`src/shared/ui/FloatingActions.tsx` doc and `ALIGN`** ("beside the page … in a column at its right, over the
+    keys") and **DESIGN.md "Buttons › Floating"** ("the honey 56px circle … a second action a raised 48px circle"):
+    describe the docked column and two button shapes R5 forbids. Correct: one centred capsule at the foot on every
+    screen and orientation (R5 below).
+14. **`progress.md` row A5**: "Decided: … the score editor's key keeps its sign grid (ADR 0114)" and "wedges show
+    the signature as a count". Both contradict A5 (prompt 655–660: the editor's key is the circle; "each wedge with
+    its key signature"). ADR 0114 is older than the brief, so the brief wins. Correct in A5 below; Transpose is out
+    of A5 (Decided 20).
+15. **`progress.md` row A11**: "DESIGN.md pattern left". It is written (DESIGN.md "Placement", "An act on an item
+    is a button"). What is left is Learned's menu command (A11 below).
+16. **`progress.md` row A17**: "the song's Reset/Delete keeps its own dialog for its focus return (to move with
+    B6)". R17 says one dialog everywhere; it moves now (A9 below), not in round 10.
+17. **`progress.md` row A9**: "edit-original's in round 10 (audit)". The prompt puts A9 in round 1 (prompt 1960–
+    1966). Discard, Restore and Publish's own `AlertDialog`s move to `ConfirmDialog` now (A9).
+18. **`ScreenHeader.tsx` doc** ("one row of one height on every screen … a page's tabs its second row … allowed a
+    second line"): the height is not one; corrected by A2.
 
 ---
 
