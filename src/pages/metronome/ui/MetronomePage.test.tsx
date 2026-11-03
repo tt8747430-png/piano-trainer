@@ -69,7 +69,7 @@ describe('Practice → Metronome', () => {
   it('shows the beat sounding, the first of four lit first', async () => {
     const user = userEvent.setup()
     const { audio } = await open()
-    const beats = () => within(screen.getByRole('list', { name: 'Beats' })).getAllByRole('listitem')
+    const beats = () => within(screen.getByRole('list', { name: 'Beats' })).getAllByRole('button')
     expect(beats()).toHaveLength(4)
     await user.click(screen.getByRole('button', { name: 'Start' }))
     act(() => audio.setNow(0.2))
@@ -102,15 +102,16 @@ describe('Practice → Metronome', () => {
     await user.click(screen.getByRole('combobox', { name: 'Time signature' }))
     await user.click(await screen.findByRole('option', { name: '3/4' }))
     expect(saved(storage)).toMatchObject({ bpm: 120, meter: '3/4', sound: 'drum' })
-    expect(
-      within(screen.getByRole('list', { name: 'Beats' })).getAllByRole('listitem'),
-    ).toHaveLength(3)
+    expect(within(screen.getByRole('list', { name: 'Beats' })).getAllByRole('button')).toHaveLength(
+      3,
+    )
     await user.click(screen.getByRole('button', { name: 'Start' }))
     await waitFor(() =>
+      // A waltz: the kick on 1, the snare on 2 and 3, the hat on every 8th (A39).
       expect(beatsPlayed(audio.played).map(({ voices }) => voices)).toEqual([
-        ['hat', 'kick!'],
-        ['hat', 'snare'],
-        ['hat', 'snare'],
+        ['kick!', 'hat', 'hat'],
+        ['snare', 'hat', 'hat'],
+        ['snare', 'hat', 'hat'],
       ]),
     )
   })
@@ -136,7 +137,7 @@ describe('Practice → Metronome', () => {
     const beats = screen.getByRole('list', { name: 'Beats' })
     act(() => audio.setNow(1.2))
     await waitFor(() =>
-      expect(within(beats).getAllByRole('listitem')[0]).toHaveAttribute('aria-current', 'true'),
+      expect(within(beats).getAllByRole('button')[0]).toHaveAttribute('aria-current', 'true'),
     )
     expect(beats).toHaveAttribute('data-muted', 'true')
     expect(screen.getByText('Muted')).toBeInTheDocument()
@@ -180,8 +181,33 @@ describe('Practice → Metronome', () => {
     await open(storage)
     expect(tempo()).toBe('Tempo: 66 BPM')
     expect(screen.getByRole('combobox', { name: 'Sound' })).toHaveTextContent('Beeps')
-    expect(
-      within(screen.getByRole('list', { name: 'Beats' })).getAllByRole('listitem'),
-    ).toHaveLength(6)
+    // 6/8 is counted in two dotted beats, as players count it (A39).
+    expect(within(screen.getByRole('list', { name: 'Beats' })).getAllByRole('button')).toHaveLength(
+      2,
+    )
+  })
+
+  it('cycles a beat’s square through accent, beat and silent, and keeps it (A39)', async () => {
+    const { settingsStore } = await open()
+    const user = userEvent.setup()
+    const second = screen.getByRole('button', { name: 'Beat 2: Beat' })
+    await user.click(second)
+    expect(screen.getByRole('button', { name: 'Beat 2: Silent' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Beat 2: Silent' }))
+    expect(screen.getByRole('button', { name: 'Beat 2: Accent' })).toBeInTheDocument()
+    expect(settingsStore.getState().metronome.levels).toEqual([
+      'downbeat',
+      'accent',
+      'normal',
+      'normal',
+    ])
+  })
+
+  it('shows the speed trainer’s tempos only while it is on (R30)', async () => {
+    await open()
+    const user = userEvent.setup()
+    expect(screen.queryByText('From')).toBeNull()
+    await user.click(screen.getByRole('switch', { name: /Speed trainer/ }))
+    for (const name of ['From', 'To', 'Step', 'Every']) expect(screen.getByText(name)).toBeVisible()
   })
 })

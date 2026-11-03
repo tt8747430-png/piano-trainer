@@ -103,4 +103,7 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'metronome.meter': 'metronome',
   'metronome.sound': 'metronome',
   'metronome.trainer': 'metronome',
+  'metronome.levels': 'metronome',
+  'metronome.subdivision': 'metronome',
+  'metronome.speed': 'metronome',
 }

@@ -6,6 +6,7 @@ import {
   beatSounds,
   clampBpm,
   goOnFrom,
+  isMetronomeMeter,
   mutedBar,
   plannedBeats,
 } from './metronome'
@@ -14,11 +15,23 @@ import {
 const voices = (sounds: readonly { voice?: string; accent: boolean }[]) =>
   sounds.map(({ voice, accent }) => `${voice ?? 'click'}${accent ? '!' : ''}`)
 
+const voiced = (meter: string, sound: 'click' | 'beep' | 'drum') => ({
+  meter,
+  sound,
+  levels: null,
+  subdivision: 'none' as const,
+})
+
 describe('the Metronome’s beats', () => {
-  it('counts each meter’s beats, a beat of 6/8 an eighth, of 2/2 a half', () => {
+  it('counts each meter’s beats as players count them: 6/8 in two, 2/2 in halves (A39)', () => {
     expect(
-      ['4/4', '3/4', '2/4', '2/2', '6/8', '1/4'].map((meter) => beatsOf(meter as never)),
-    ).toEqual([4, 3, 2, 2, 6, 1])
+      ['4/4', '3/4', '2/4', '2/2', '6/8', '12/8', '7/8'].map((meter) => beatsOf(meter)),
+    ).toEqual([4, 3, 2, 2, 2, 4, 7])
+  })
+
+  it('keeps any time signature it can count, and no other', () => {
+    expect(['5/4', '9/8', '7/8'].every(isMetronomeMeter)).toBe(true)
+    expect(['4/3', '', 4].some(isMetronomeMeter)).toBe(false)
   })
 
   it('keeps a tempo within its range, in whole beats a minute', () => {
@@ -28,38 +41,30 @@ describe('the Metronome’s beats', () => {
   })
 
   it('accents the first beat of a bar, a click or a beep', () => {
-    expect(voices(beatSounds('3/4', 'click', 0))).toEqual(['click!'])
-    expect(voices(beatSounds('3/4', 'click', 1))).toEqual(['click'])
-    expect(voices(beatSounds('4/4', 'beep', 0))).toEqual(['beep!'])
-    expect(voices(beatSounds('4/4', 'beep', 3))).toEqual(['beep'])
+    expect(voices(beatSounds(voiced('3/4', 'click'), 0, 0.5))).toEqual(['click!'])
+    expect(voices(beatSounds(voiced('3/4', 'click'), 1, 0.5))).toEqual(['click'])
+    expect(voices(beatSounds(voiced('4/4', 'beep'), 0, 0.5))).toEqual(['beep!'])
+    expect(voices(beatSounds(voiced('4/4', 'beep'), 3, 0.5))).toEqual(['beep'])
   })
 
-  it('plays a drum beat: the kick on the bar’s first, the snare on the backbeat, the hat on every beat', () => {
-    const bar = (meter: '4/4' | '3/4' | '6/8') =>
-      Array.from({ length: beatsOf(meter) }, (_, beat) => voices(beatSounds(meter, 'drum', beat)))
-    expect(bar('4/4')).toEqual([
-      ['hat', 'kick!'],
-      ['hat', 'snare'],
-      ['hat', 'kick'],
-      ['hat', 'snare'],
+  it('plays a drum groove: kick, snare, the hat on 8ths at their offsets in the beat', () => {
+    const first = beatSounds(voiced('4/4', 'drum'), 0, 0.5)
+    expect(first.map((sound) => `${sound.voice}@${sound.at}`)).toEqual([
+      'kick@0',
+      'hat@0',
+      'hat@0.25',
     ])
-    expect(bar('3/4')).toEqual([
-      ['hat', 'kick!'],
-      ['hat', 'snare'],
-      ['hat', 'snare'],
-    ])
-    expect(bar('6/8')).toEqual([
-      ['hat', 'kick!'],
-      ['hat'],
-      ['hat'],
-      ['hat', 'snare'],
-      ['hat'],
-      ['hat'],
-    ])
+    expect(voices(beatSounds(voiced('4/4', 'drum'), 1, 0.5))).toEqual(['snare', 'hat', 'hat'])
   })
 
-  it('sounds every beat at its start', () => {
-    for (const sound of beatSounds('4/4', 'drum', 0)) expect(sound.at).toBe(0)
+  it('subdivides softer than the beat, and leaves a silent beat silent', () => {
+    const beat = beatSounds({ ...voiced('2/4', 'click'), subdivision: '8ths' }, 1, 0.5)
+    expect(beat.map((sound) => [sound.at, sound.gain])).toEqual([
+      [0, 0.6],
+      [0.25, 0.35],
+    ])
+    const levels = ['downbeat', 'silent'] as const
+    expect(beatSounds({ ...voiced('2/4', 'click'), levels }, 1, 0.5)).toEqual([])
   })
 })
 

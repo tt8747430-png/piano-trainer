@@ -10,7 +10,14 @@ import {
   goOnFrom,
   mutedBar,
   plannedBeats,
+  beatLevels,
+  nextLevel,
+  parseMeter,
+  speedAt,
+  type BeatLevel,
   type MetronomeBeat,
+  type Subdivision,
+  type MetronomeTime,
 } from '@/shared/lib/schedule'
 import { useServices } from '@/shared/lib/services'
 
@@ -20,6 +27,14 @@ const AHEAD = 1.5
 const TOP_UP = 250
 /** How long a beat heard is kept, in seconds, for the beat shown. */
 const KEPT = 2
+
+/** A saved meter read: 4/4 where it cannot be. */
+const meterOf = (meter: string) => parseMeter(meter) ?? { top: 4, bottom: 4 }
+
+/** The Metronome's time: its tempo, or the speed trainer's bar by bar while it is on. */
+const timeOf = ({ bpm, meter, speed }: MetronomeSettings): MetronomeTime =>
+  speed.on ? { bpm, meter, bpmAt: (bar) => speedAt(bar, speed) } : { bpm, meter }
+const tempoOf = (time: MetronomeTime, bar: number) => (time.bpmAt ? time.bpmAt(bar) : time.bpm)
 
 /** The bar trainer's counts while it is on. */
 const trainerOf = ({ on, play, mute }: MetronomeSettings['trainer']) => (on ? { play, mute } : null)
@@ -43,6 +58,15 @@ export interface Metronome extends MetronomeSettings {
   setBpm(bpm: number): void
   setMeter(meter: MetronomeSettings['meter']): void
   setSound(sound: MetronomeSettings['sound']): void
+  /** Each beat's level as its square shows it. */
+  readonly beatLevels: readonly BeatLevel[]
+  /** A square tapped: its beat on to its next level, accent · normal · silent. */
+  tapBeat(beat: number): void
+  setSubdivision(subdivision: Subdivision): void
+  /** The speed trainer turned on or off, or its tempos and steps changed. */
+  setSpeed(change: Partial<MetronomeSettings['speed']>): void
+  /** The tempo heard now: the speed trainer's bar's while it runs. */
+  readonly tempoNow: number
   /** The bar trainer turned on or off, or its counts changed. */
   setTrainer(change: Partial<MetronomeSettings['trainer']>): void
   /** A tap in time: from the second, the tempo the taps keep. */
@@ -68,12 +92,13 @@ export function useMetronome(): Metronome {
   const queue = useCallback(() => {
     const current = run.current
     if (!current) return
-    const { meter, sound, trainer } = latest.current
+    const settings = latest.current
     const now = audio.now()
-    const { beats, next } = plannedBeats(current.next, now + AHEAD, latest.current)
+    const time = timeOf(settings)
+    const { beats, next } = plannedBeats(current.next, now + AHEAD, time)
     for (const beat of beats)
-      if (!mutedBar(beat.bar, trainerOf(trainer)))
-        audio.play(beatSounds(meter, sound, beat.beat), beat.at)
+      if (!mutedBar(beat.bar, trainerOf(settings.trainer)))
+        audio.play(beatSounds(settings, beat.beat, 60 / tempoOf(time, beat.bar)), beat.at)
     current.next = next
     current.planned = [...current.planned.filter((beat) => beat.at > now - KEPT), ...beats]
   }, [audio])
@@ -111,7 +136,7 @@ export function useMetronome(): Metronome {
     current.next = goOnFrom(
       beatHeard(current.planned, now),
       now,
-      settings,
+      timeOf(settings),
       before.meter !== settings.meter,
     )
     current.planned = current.planned.filter((beat) => beat.at <= now)
@@ -135,6 +160,7 @@ export function useMetronome(): Metronome {
   const beat = useSyncExternalStore(everyFrame, () => heard()?.beat ?? null)
   const bar = useSyncExternalStore(everyFrame, () => heard()?.bar ?? null)
 
+  const levels = beatLevels(meterOf(settings.meter), settings.levels)
   const save = useCallback(
     (change: Partial<MetronomeSettings>) => setMetronome(store, change),
     [store],
@@ -147,9 +173,22 @@ export function useMetronome(): Metronome {
     toggle: () => (run.current ? stop() : void start()),
     nudge: (step) => save({ bpm: store.getState().metronome.bpm + step }),
     setBpm: (bpm) => save({ bpm }),
-    setMeter: (meter) => save({ meter }),
+    // A new meter starts its squares afresh.
+    setMeter: (meter) => save({ meter, levels: null }),
     setSound: (sound) => save({ sound }),
     setTrainer: (change) => save({ trainer: { ...store.getState().metronome.trainer, ...change } }),
+    beatLevels: levels,
+    tapBeat(beat) {
+      const now = store.getState().metronome
+      const shown = beatLevels(meterOf(now.meter), now.levels)
+      const level = shown[beat]
+      if (!level) return
+      save({ levels: shown.map((each, i) => (i === beat ? nextLevel(each) : each)) })
+    },
+    setSubdivision: (subdivision) => save({ subdivision }),
+    setSpeed: (change) => save({ speed: { ...store.getState().metronome.speed, ...change } }),
+    tempoNow:
+      playing && bar !== null && settings.speed.on ? speedAt(bar, settings.speed) : settings.bpm,
     tap() {
       const read = tapTempo(taps.current, performance.now())
       taps.current = read.taps

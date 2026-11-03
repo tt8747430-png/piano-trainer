@@ -58,6 +58,8 @@ export interface ClickSound {
   readonly accent: boolean
   /** What it sounds as: a click where none is named. */
   readonly voice?: ClickVoice
+  /** How loud, from 0 to 1, against its accent's level (a beat's square, a subdivision); full where none. */
+  readonly gain?: number
 }
 export type Sound = NoteSound | ClickSound
 

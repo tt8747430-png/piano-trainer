@@ -8,13 +8,15 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useShortcuts } from '@/shared/lib/shortcuts'
+import { cn } from '@/shared/lib'
 import {
   BPM_RANGE,
-  beatsOf,
   METRONOME_METERS,
   METRONOME_SOUNDS,
+  SUBDIVISIONS,
   type MetronomeMeter,
   type MetronomeSound,
+  type Subdivision,
 } from '@/shared/lib/schedule'
 import { BackButton, Dropdown, InfoTip, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -22,6 +24,7 @@ import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { useMetronome } from '../model/use-metronome'
 import { BarTrainerField } from './BarTrainerField'
 import { BeatSquares } from './BeatSquares'
+import { SpeedTrainerField } from './SpeedTrainerField'
 import { TempoSteps } from './TempoSteps'
 import { TempoWordTip } from './TempoWordTip'
 
@@ -131,11 +134,31 @@ export function MetronomePage() {
               className={POP_UP}
             />
           </div>
+          <Dropdown<Subdivision>
+            label={t('practice:metronome.subdivision')}
+            value={metronome.subdivision}
+            onChange={metronome.setSubdivision}
+            options={SUBDIVISIONS.map((subdivision) => ({
+              value: subdivision,
+              label: t(`practice:metronome.subdivisions.${subdivision}`),
+            }))}
+            bare
+            face={(subdivision) =>
+              face(MetronomeIcon, t(`practice:metronome.subdivisions.${subdivision}`))
+            }
+            className={cn(POP_UP, 'w-full')}
+          />
           <BarTrainerField
             trainer={metronome.trainer}
             onChange={metronome.setTrainer}
             popUp={POP_UP}
             face={face}
+          />
+          <SpeedTrainerField
+            speed={metronome.speed}
+            tempoNow={metronome.tempoNow}
+            playing={metronome.playing}
+            onChange={metronome.setSpeed}
           />
         </div>
         <div className="flex w-full flex-col items-center gap-8 narrow-phone:gap-5 landscape-phone:gap-6">
@@ -152,9 +175,10 @@ export function MetronomePage() {
             )}
           </Button>
           <BeatSquares
-            beats={beatsOf(metronome.meter)}
+            levels={metronome.beatLevels}
             sounding={metronome.beat}
             muted={metronome.muted}
+            onTap={metronome.tapBeat}
           />
         </div>
       </div>

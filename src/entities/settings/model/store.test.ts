@@ -161,7 +161,10 @@ describe('createSettingsStore', () => {
         bpm: 72,
         meter: '6/8',
         sound: 'drum',
+        levels: ['downbeat', 'silent'],
+        subdivision: 'triplets',
         trainer: { on: true, play: 4, mute: 1 },
+        speed: { on: true, from: 60, to: 90, step: 3, every: 2 },
       },
       foldedSections: ['chords.tensions'],
       welcomed: true,
@@ -263,31 +266,41 @@ describe('createSettingsStore', () => {
     expect(restored({ scoreView: { pinned: 'no' } }).scoreView.pinned).toBe(true)
   })
 
-  it('starts afresh over a save of the version before, which had floating buttons placed', () => {
-    expect(SETTINGS_VERSION).toBe(17)
-    expect(restored({ theme: 'dark', floating: { place: 'left', labels: true } }, 16)).toEqual(
+  it('starts afresh over a save of the version before, whose Metronome had six meters', () => {
+    expect(SETTINGS_VERSION).toBe(18)
+    expect(restored({ theme: 'dark', metronome: { meter: '6/8' } }, 17)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })
 
-  it('starts the Metronome at 120 in 4/4 with a click, each part saved kept where valid (ADR 0052)', () => {
+  it('starts the Metronome at 120 in 4/4 with a click, each part saved kept where valid (A39)', () => {
     const trainer = { on: false, play: 2, mute: 2 }
-    expect(DEFAULT_METRONOME).toEqual({ bpm: 120, meter: '4/4', sound: 'click', trainer })
-    expect(restored({ metronome: { bpm: 400, meter: '5/4', sound: 'beep' } }).metronome).toEqual({
+    const speed = { on: false, from: 80, to: 120, step: 5, every: 4 }
+    const plain = { levels: null, subdivision: 'none', trainer, speed }
+    expect(DEFAULT_METRONOME).toEqual({ bpm: 120, meter: '4/4', sound: 'click', ...plain })
+    // Any time signature it can count is kept; 4/3 is none.
+    expect(restored({ metronome: { bpm: 400, meter: '7/8', sound: 'beep' } }).metronome).toEqual({
+      bpm: 120,
+      meter: '7/8',
+      sound: 'beep',
+      ...plain,
+    })
+    expect(restored({ metronome: { bpm: 66.5, meter: '4/3', sound: 'bell' } }).metronome).toEqual({
       bpm: 120,
       meter: '4/4',
-      sound: 'beep',
-      trainer,
-    })
-    expect(restored({ metronome: { bpm: 66.5, meter: '2/4', sound: 'bell' } }).metronome).toEqual({
-      bpm: 120,
-      meter: '2/4',
       sound: 'click',
-      trainer,
+      ...plain,
     })
     expect(
       restored({ metronome: { trainer: { on: true, play: 3, mute: 9 } } }).metronome.trainer,
     ).toEqual({ on: true, play: 3, mute: 2 })
+    // The squares as set are kept for a meter of as many beats, else the meter's own.
+    const levels = ['downbeat', 'silent', 'accent']
+    expect(restored({ metronome: { meter: '3/4', levels } }).metronome.levels).toEqual(levels)
+    expect(restored({ metronome: { meter: '4/4', levels } }).metronome.levels).toBeNull()
+    expect(
+      restored({ metronome: { subdivision: 'triplets', speed: { on: true, step: 0 } } }).metronome,
+    ).toMatchObject({ subdivision: 'triplets', speed: { on: true, step: 5 } })
     expect(restored({ metronome: 'fast' }).metronome).toEqual(DEFAULT_METRONOME)
   })
 

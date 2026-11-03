@@ -1,10 +1,38 @@
-import type { ClickSound, ClickVoice } from './schedule'
+import {
+  barClicks,
+  LEVEL_GAIN,
+  meterBeats,
+  parseMeter,
+  type BeatLevel,
+  type Subdivision,
+} from './meter'
+import type { ClickSound } from './schedule'
 
-/** The Metronome's meters (ADR 0052, 0114): a beat of 6/8 is an eighth, each counted; of 2/2 a half. */
-export const METRONOME_METERS = ['4/4', '3/4', '2/4', '2/2', '6/8', '1/4'] as const
-export type MetronomeMeter = (typeof METRONOME_METERS)[number]
+/**
+ * The meters the Metronome offers in its menu (A39); any signature `parseMeter` reads is kept, the
+ * tempo counting the beat players count (the dotted beat in 6/8, 9/8, 12/8; the half in 2/2).
+ */
+export const METRONOME_METERS = [
+  '2/4',
+  '3/4',
+  '4/4',
+  '5/4',
+  '6/4',
+  '2/2',
+  '3/8',
+  '5/8',
+  '6/8',
+  '7/8',
+  '9/8',
+  '12/8',
+] as const
+/** A meter the Metronome keeps, as its signature's text. */
+export type MetronomeMeter = string
+/** Whether `value` is a time signature the Metronome can count. */
+export const isMetronomeMeter = (value: unknown): value is MetronomeMeter =>
+  typeof value === 'string' && parseMeter(value) !== null
 
-/** What the Metronome sounds on each beat: a click, a beep or a drum beat. */
+/** What the Metronome sounds on each beat: a click, a beep or a drum groove. */
 export const METRONOME_SOUNDS = ['click', 'beep', 'drum'] as const
 export type MetronomeSound = (typeof METRONOME_SOUNDS)[number]
 
@@ -15,48 +43,50 @@ export const BPM_RANGE = { min: 30, max: 300 } as const
 export const clampBpm = (bpm: number): number =>
   Math.min(BPM_RANGE.max, Math.max(BPM_RANGE.min, Math.round(bpm)))
 
-const BEATS: Readonly<Record<MetronomeMeter, number>> = {
-  '4/4': 4,
-  '3/4': 3,
-  '2/4': 2,
-  '2/2': 2,
-  '6/8': 6,
-  '1/4': 1,
-}
+const meterOf = (meter: MetronomeMeter) => parseMeter(meter) ?? { top: 4, bottom: 4 }
 
-/** How many beats a bar of `meter` counts. */
-export const beatsOf = (meter: MetronomeMeter): number => BEATS[meter]
+/** How many beats a bar of `meter` counts: the beats the tempo counts (two in 6/8). */
+export const beatsOf = (meter: MetronomeMeter): number => meterBeats(meterOf(meter)).beats.length
+
+/** How the Metronome sounds a bar: its levels, subdivision and sound. */
+export interface MetronomeVoice {
+  readonly meter: MetronomeMeter
+  readonly sound: MetronomeSound
+  /** Each beat's level as its square sets it; null for the meter's own. */
+  readonly levels: readonly BeatLevel[] | null
+  readonly subdivision: Subdivision
+}
 
 /**
- * A drum beat's bar under the hat on every beat: the kick on the first (and the middle of 4/4), the
- * snare on the backbeat; a waltz's boom-chick-chick, 6/8's two halves.
+ * What sounds on beat `beat` of a bar (from 0), at its offsets from the beat's start: the beat at
+ * its level, its subdivisions softer; a drum groove's kick, snare and hat; nothing on a silent beat.
  */
-const DRUMS: Readonly<Record<MetronomeMeter, readonly ('kick' | 'snare' | null)[]>> = {
-  '4/4': ['kick', 'snare', 'kick', 'snare'],
-  '3/4': ['kick', 'snare', 'snare'],
-  '2/4': ['kick', 'snare'],
-  '2/2': ['kick', 'snare'],
-  '6/8': ['kick', null, null, 'snare', null, null],
-  '1/4': ['kick'],
-}
-
-const sound = (voice: ClickVoice, accent: boolean): ClickSound => ({
-  kind: 'click',
-  at: 0,
-  accent,
-  ...(voice === 'click' ? {} : { voice }),
-})
-
-/** What sounds on beat `beat` of a bar of `meter` (from 0), at its start: the first accented. */
 export function beatSounds(
-  meter: MetronomeMeter,
-  kind: MetronomeSound,
+  { meter, sound, levels, subdivision }: MetronomeVoice,
   beat: number,
+  secondsPerBeat: number,
 ): readonly ClickSound[] {
-  const first = beat === 0
-  if (kind !== 'drum') return [sound(kind, first)]
-  const drum = DRUMS[meter][beat] ?? null
-  return [sound('hat', false), ...(drum ? [sound(drum, first)] : [])]
+  const clicks = barClicks({
+    meter: meterOf(meter),
+    levels,
+    subdivision,
+    secondsPerBeat,
+    drums: sound === 'drum',
+  }).filter((click) => click.beat === beat)
+  return clicks.flatMap((click): ClickSound[] => {
+    const at = click.at - beat * secondsPerBeat
+    const accent = click.level === 'downbeat' || click.level === 'accent'
+    const gain = LEVEL_GAIN[click.level]
+    if (sound !== 'drum')
+      return [{ kind: 'click', at, accent, gain, ...(sound === 'click' ? {} : { voice: sound }) }]
+    return click.voices.map((voice) => ({
+      kind: 'click',
+      at,
+      accent: voice !== 'hat' && accent,
+      gain: voice === 'hat' ? LEVEL_GAIN.sub : gain,
+      voice,
+    }))
+  })
 }
 
 /**
@@ -87,14 +117,17 @@ export const mutedBar = (bar: number, trainer: BarTrainer | null): boolean =>
 export interface MetronomeTime {
   readonly bpm: number
   readonly meter: MetronomeMeter
+  /** The tempo of each bar where it changes as it goes (the speed trainer); `bpm` throughout else. */
+  readonly bpmAt?: (bar: number) => number
 }
 
 const secondsPerBeat = (bpm: number) => 60 / bpm
 
 /** The beat after `beat`, at the tempo: round the bar, into the next. */
-function after(beat: MetronomeBeat, { bpm, meter }: MetronomeTime): MetronomeBeat {
+function after(beat: MetronomeBeat, { bpm, meter, bpmAt }: MetronomeTime): MetronomeBeat {
   const next = (beat.beat + 1) % beatsOf(meter)
-  return { at: beat.at + secondsPerBeat(bpm), beat: next, bar: beat.bar + (next === 0 ? 1 : 0) }
+  const tempo = bpmAt ? bpmAt(beat.bar) : bpm
+  return { at: beat.at + secondsPerBeat(tempo), beat: next, bar: beat.bar + (next === 0 ? 1 : 0) }
 }
 
 /** The beats from `next` due before `until`, and the beat after them. */

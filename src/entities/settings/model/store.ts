@@ -11,7 +11,7 @@ import {
   type SavingOptions,
 } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
-import { BPM_RANGE } from '@/shared/lib/schedule'
+import { beatsOf, BPM_RANGE, isMetronomeMeter } from '@/shared/lib/schedule'
 import {
   CHORD_KEYS_MAX,
   isLessonReading,
@@ -40,8 +40,9 @@ import {
   isDiagramsMode,
   isTextSize,
   isKeySize,
-  isMetronomeMeter,
+  isBeatLevel,
   isMetronomeSound,
+  isSubdivision,
   isTrainerBars,
   isMusicView,
   isNamedKeys,
@@ -68,7 +69,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 17
+export const SETTINGS_VERSION = 18
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -252,19 +253,38 @@ const isBpm = (value: unknown): value is number =>
   (value as number) >= BPM_RANGE.min &&
   (value as number) <= BPM_RANGE.max
 
-/** The Metronome's tempo, meter, sound and bar trainer, each as saved where still valid (ADR 0052). */
+/** The Metronome's tempo, meter, sound, beats, subdivision and trainers, each as saved where valid (A39). */
 function metronomeSettings(value: unknown): MetronomeSettings {
   const saved = savedObject<MetronomeSettings>(value)
   const trainer = savedObject<MetronomeSettings['trainer']>(saved.trainer)
-  const initial = DEFAULT_METRONOME.trainer
+  const speed = savedObject<MetronomeSettings['speed']>(saved.speed)
+  const initial = DEFAULT_METRONOME
+  const meter = isMetronomeMeter(saved.meter) ? saved.meter : initial.meter
+  const levels =
+    Array.isArray(saved.levels) && saved.levels.length > 0 && saved.levels.every(isBeatLevel)
+      ? saved.levels
+      : null
+  const tempo = (bpm: unknown, fallback: number) => (isBpm(bpm) ? bpm : fallback)
+  const count = (n: unknown, fallback: number) =>
+    typeof n === 'number' && Number.isInteger(n) && n >= 1 && n <= 32 ? n : fallback
   return {
-    bpm: isBpm(saved.bpm) ? saved.bpm : DEFAULT_METRONOME.bpm,
-    meter: isMetronomeMeter(saved.meter) ? saved.meter : DEFAULT_METRONOME.meter,
-    sound: isMetronomeSound(saved.sound) ? saved.sound : DEFAULT_METRONOME.sound,
+    bpm: tempo(saved.bpm, initial.bpm),
+    meter,
+    sound: isMetronomeSound(saved.sound) ? saved.sound : initial.sound,
+    // The squares as set, kept only for a meter of as many beats.
+    levels: levels && levels.length === beatsOf(meter) ? levels : null,
+    subdivision: isSubdivision(saved.subdivision) ? saved.subdivision : initial.subdivision,
     trainer: {
-      on: typeof trainer.on === 'boolean' ? trainer.on : initial.on,
-      play: isTrainerBars(trainer.play) ? trainer.play : initial.play,
-      mute: isTrainerBars(trainer.mute) ? trainer.mute : initial.mute,
+      on: typeof trainer.on === 'boolean' ? trainer.on : initial.trainer.on,
+      play: isTrainerBars(trainer.play) ? trainer.play : initial.trainer.play,
+      mute: isTrainerBars(trainer.mute) ? trainer.mute : initial.trainer.mute,
+    },
+    speed: {
+      on: typeof speed.on === 'boolean' ? speed.on : initial.speed.on,
+      from: tempo(speed.from, initial.speed.from),
+      to: tempo(speed.to, initial.speed.to),
+      step: count(speed.step, initial.speed.step),
+      every: count(speed.every, initial.speed.every),
     },
   }
 }

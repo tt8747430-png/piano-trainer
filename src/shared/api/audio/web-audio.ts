@@ -312,7 +312,7 @@ export function createWebAudioOutput({
     const voice =
       sound.kind === 'note'
         ? playNote(context, sound, at, gain, ended)
-        : CLICK_VOICES[sound.voice ?? 'click'](context, sound, at, gain, ended)
+        : CLICK_VOICES[sound.voice ?? 'click'](context, sound, at, gain * (sound.gain ?? 1), ended)
     voices.add(voice)
   }
 

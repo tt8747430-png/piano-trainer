@@ -22,13 +22,16 @@ import {
 import type { Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import {
-  METRONOME_METERS,
   METRONOME_SOUNDS,
+  SUBDIVISIONS,
   TOUCHES,
   TRAINER_BARS,
   type BarTrainer,
+  type BeatLevel,
   type MetronomeMeter,
   type MetronomeSound,
+  type SpeedTrainer,
+  type Subdivision,
   type Touch,
 } from '@/shared/lib/schedule'
 
@@ -230,12 +233,22 @@ export interface BarTrainerSettings extends BarTrainer {
 }
 
 /** The Metronome as the learner left it (ADR 0052): its tempo, meter, sound and bar trainer. */
+/** The speed trainer (A39): from one tempo toward another by a step every so many bars. */
+export interface SpeedTrainerSettings extends SpeedTrainer {
+  readonly on: boolean
+}
+
 export interface MetronomeSettings {
-  /** Beats a minute, whole, within `BPM_RANGE`. */
+  /** Beats a minute, whole, within `BPM_RANGE`: the beat players count (dotted in 6/8). */
   readonly bpm: number
+  /** Any time signature the Metronome counts ("7/8"). */
   readonly meter: MetronomeMeter
   readonly sound: MetronomeSound
+  /** Each beat's level as its square was set; null for the meter's own. */
+  readonly levels: readonly BeatLevel[] | null
+  readonly subdivision: Subdivision
   readonly trainer: BarTrainerSettings
+  readonly speed: SpeedTrainerSettings
 }
 
 /** 120 a minute in 4/4, a click on each beat; the bar trainer off, at two bars and two. */
@@ -243,7 +256,10 @@ export const DEFAULT_METRONOME: MetronomeSettings = {
   bpm: 120,
   meter: '4/4',
   sound: 'click',
+  levels: null,
+  subdivision: 'none',
   trainer: { on: false, play: 2, mute: 2 },
+  speed: { on: false, from: 80, to: 120, step: 5, every: 4 },
 }
 
 export interface SettingsState {
@@ -372,8 +388,10 @@ export const isPedalWay = isOneOf(PEDAL_WAYS)
 export const isMusicView = isOneOf(MUSIC_VIEWS)
 export const isDiagramsMode = isOneOf(DIAGRAMS_MODES)
 export const isTextSize = isOneOf(TEXT_SIZES)
-export const isMetronomeMeter = isOneOf(METRONOME_METERS)
 export const isMetronomeSound = isOneOf(METRONOME_SOUNDS)
+export const isSubdivision = isOneOf(SUBDIVISIONS)
+const BEAT_LEVELS = ['downbeat', 'accent', 'normal', 'silent'] as const
+export const isBeatLevel = isOneOf(BEAT_LEVELS)
 export const isTrainerBars = isOneOf(TRAINER_BARS)
 
 /** The first of the browser's preferred languages the app speaks decides; English otherwise. */
