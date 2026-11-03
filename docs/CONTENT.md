@@ -163,10 +163,15 @@ slur; `8va` writes the notes an octave lower than they sound, `8vb` higher, `15m
 slides to the next note; dynamics `ppp` to `fff` and the accents `sf` `sfz` `sffz` `fz` `rf` `rfz` `fp` `sfp`
 `sfpp` `pf` (struck on their note alone, or struck at one level and held at another); a hairpin `cresc` or `dim`,
 `/hairpin` to end it; expressions `dolce` `cantabile` `espress` `legato` `leggiero` `rit` `rall` `accel` `atempo`;
-the pedal `ped`, `pedch`, `pedup`; `gr:D5+E5` grace notes (`app:D5` an appoggiatura's); `tempo:120` a tempo
+`gr:D5+E5` grace notes (`app:D5` an appoggiatura's); `tempo:120` a tempo
 change from the note on (20 to 400 beats a minute, played and exported); `swing8`, `swing16` or `straight` a swing
 mark; `rn:V7/ii` a Roman numeral under the note; `txt:` free text above it, percent-encoded (`txt:a%20tempo`). A
 pitch is always the one heard. A rest takes no marks.
+
+**The pedal** is the piece's own line, not a note's mark (ADR 0097): `pedal: 'down@0 change@4 up@15.5'`, each
+event `down`, `up` or `change` at its beat from the music's start (beats as the staves count them, `31:3` where a
+decimal cannot write it), so it lifts over a rest or after the last note where the score does. An up and a down at
+one beat are a change. `node scripts/pedal-line.mjs` moved the old marks (`ped`, `pedch`, `pedup`) into it.
 
 ## A recording
 

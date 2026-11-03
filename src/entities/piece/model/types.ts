@@ -164,6 +164,11 @@ export interface ChartPiece extends PieceCommon {
    * else the upper staff; written only where it is another.
    */
   readonly lyricsOn?: LyricsStaff
+  /**
+   * Its sustain pedal (ADR 0097), one line for the whole piece: each event's kind and its beat from
+   * the music's start, `down@0 change@4 up@15.5`; see docs/CONTENT.md.
+   */
+  readonly pedal?: string
   /** What it prints under its title (ADR 0114): a subtitle, its composer, lyricist and arranger. */
   readonly header?: ScoreHeader
   /** How its score is laid out (ADR 0114): its staff size, the most bars a line holds. */

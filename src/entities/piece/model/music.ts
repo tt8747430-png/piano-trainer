@@ -36,6 +36,7 @@ export type PieceMusic = Pick<
   | 'hands'
   | 'lyrics'
   | 'lyricsOn'
+  | 'pedal'
   | 'header'
   | 'layout'
 > & {
@@ -65,6 +66,7 @@ export function musicOf(piece: ChartPiece): PieceMusic {
     ...(piece.hands === undefined ? {} : { hands: piece.hands }),
     ...(sung ? { lyrics: sung } : {}),
     ...(sung && on !== defaultLyricsStaff(piece) ? { lyricsOn: on } : {}),
+    ...(piece.pedal ? { pedal: piece.pedal } : {}),
     ...(piece.header ? { header: piece.header } : {}),
     ...(piece.layout ? { layout: piece.layout } : {}),
   }
@@ -103,6 +105,7 @@ export const withMusic = (piece: ChartPiece, { title, ...music }: PieceMusic): C
       hands: music.hands,
       lyrics: music.lyrics,
       lyricsOn: music.lyricsOn,
+      pedal: music.pedal,
       header: music.header,
       layout: music.layout,
     },
@@ -153,6 +156,7 @@ export const sameMusic = (a: PieceMusic, b: PieceMusic): boolean =>
   a.hands?.lh === b.hands?.lh &&
   (a.lyrics ?? []).join('\n') === (b.lyrics ?? []).join('\n') &&
   a.lyricsOn === b.lyricsOn &&
+  (a.pedal ?? '') === (b.pedal ?? '') &&
   a.sections.length === b.sections.length &&
   a.sections.every((section, i) => {
     const other = b.sections[i]

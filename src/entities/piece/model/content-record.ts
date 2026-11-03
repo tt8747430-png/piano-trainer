@@ -25,6 +25,7 @@ const MUSIC_FIELDS = [
   'hands',
   'lyrics',
   'lyricsOn',
+  'pedal',
   'header',
   'layout',
 ] as const satisfies readonly (keyof PieceMusic)[]

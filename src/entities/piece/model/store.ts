@@ -14,6 +14,7 @@ import { barTicksOf, chartOf, stavesOf } from './chart'
 import { ContentError } from './content-error'
 import { readNote } from './song-facts'
 import { musicOf, type PieceMusic } from './music'
+import { readPedalLine, writePedalLine } from './pedal-line'
 import { savedHeader, savedLayout } from './score-header'
 import {
   isOwnSongId,
@@ -37,7 +38,7 @@ import {
 } from './types'
 
 export const PIECES_STORAGE_KEY = 'pt-pieces'
-export const PIECES_VERSION = 8
+export const PIECES_VERSION = 9
 
 /** The learner's pieces. */
 export interface PiecesState {
@@ -182,6 +183,7 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     ...(single.length > 0 && leadSheet === true ? { leadSheet } : {}),
     ...(written ? { hands: written } : {}),
     ...(isLyricsStaff(lyricsOn, single.length) ? { lyricsOn } : {}),
+    ...optional('pedal', savedPedal(saved.pedal)),
     ...optional('header', savedHeader(saved.header)),
     ...optional('layout', savedLayout(saved.layout)),
   }
@@ -197,6 +199,18 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     return { ...(named === null ? {} : { title: named }), ...musicOf({ ...piece, ...sung }) }
   } catch (error) {
     if (error instanceof ContentError) return null
+    throw error
+  }
+}
+
+/** A pedal line that reads (ADR 0097), written in order; none for one that does not, or is empty. */
+function savedPedal(saved: unknown): string | undefined {
+  if (typeof saved !== 'string') return undefined
+  try {
+    const line = writePedalLine(readPedalLine(saved, 'saved'))
+    return line === '' ? undefined : line
+  } catch (error) {
+    if (error instanceof ContentError) return undefined
     throw error
   }
 }
