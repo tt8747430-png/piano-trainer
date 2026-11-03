@@ -5,6 +5,7 @@ import { LESSONS, lessonPlace } from '@/entities/lesson'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
 import { createFakeContentEditing } from '@/shared/api/content-editing'
 import { folderOf } from './routes/songs-screens'
+import { pickIn, pickMenu } from '@/shared/test/pickers'
 import { renderApp } from './testing/render-app'
 
 // Back means up (rule 26): each place walked down a path and Back pressed to its foot. A phone's:
@@ -72,14 +73,8 @@ describe('Back goes up, on every place', () => {
     const { router } = await renderApp('/practice')
     await user.click(await screen.findByRole('link', { name: /^Chords / }))
     await screen.findByRole('heading', { level: 1, name: 'Chords' })
-    await user.click(
-      within(screen.getByRole('group', { name: 'Root' })).getByRole('radio', { name: 'D' }),
-    )
-    await user.click(
-      within(screen.getByRole('radiogroup', { name: 'Quality' })).getByRole('radio', {
-        name: 'Minor',
-      }),
-    )
+    await pickIn(user, 'Root', 'D')
+    await pickMenu(user, 'Quality', 'Minor')
     await waitFor(() => expect(router.state.location.search).toMatchObject({ root: 'D' }))
     expect(at(router).entry).toBe(1)
     await back(user)

@@ -1,7 +1,7 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { act, cleanup, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { COLLECTIONS, PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from '@/entities/settings'
 import { createMemoryStorage, safeLocalStorage } from '@/shared/lib'
@@ -13,6 +13,9 @@ import { renderApp } from './testing/render-app'
 // The storage is chosen once a page, and a file before this one in its worker may have chosen it:
 // this file loads the app's modules afresh, as a page would.
 vi.hoisted(() => vi.resetModules())
+
+// Fresh modules give this file its own service-worker stub, which the setup's reset never reaches.
+beforeEach(() => void stubServiceWorker({ waiting: false }))
 
 const ROUTES = [
   ['/', '/'],

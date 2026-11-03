@@ -73,3 +73,8 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 
 ## Round reports
 
+
+### Round 1, checkpoint 1 (2026-11-03)
+- Merged: the key pickers (A5), Back as up and the Search palette (A18), the settings registry (A10), Favourite as an act (A11), updates by hand, the shared confirm dialog (A9, four screens so far).
+- Gate on the merged branch: typecheck, lint, full suite (6952 tests, two merge-seam failures fixed: the Back test used the old strip; `router.test.tsx`'s own stub copy kept a waiting update), build.
+- Left in round 1: A1–A4, A6–A8, A9's other screens, A12–A17 (two-pane Settings, page names, account card, arrows, destructive rows), A19, A31, A36, A38, A42; screenshots after.
