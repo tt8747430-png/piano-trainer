@@ -401,6 +401,24 @@ doesn't name, judge it by them:
     `.scratch/r29/copy.md`, and any change of *meaning* in the report.
 19. **Scope:** all of it, in the rounds below, autonomously; no stop for review between rounds.
 
+20. **Owner's corrections, 2026-11-03 (these win over anything above that says otherwise):**
+    - **Plan before building.** Nothing more is built until `.scratch/r29/plan.md` describes each
+      item exactly (the screen, its route, every control with its label, what moves, what goes, the
+      done check) and the owner has read it. A generic line ("improve X") is not a plan.
+    - **Transpose:** no circle of fifths for it. The Player's Transpose works as the music editor's
+      does (the same control and the same result); today the Player's is broken. (Replaces A5's
+      "circle of fifths for Transpose"; the circle stays only where A5 puts it as a key picker.)
+    - **Drum grooves:** Chordify's (4/4: kick on 1, 3 and the "and" of 3, snare 2 and 4, hat on 8ths;
+      3/4: kick on 1, hat on 2 and 3; 6/8: kick 1, snare 4, hat on every 8th). Replaces A39's list.
+    - **Settings:** each Practice page (and the Player, the score editor, Songs) has its own real
+      Settings page reached from its own gear, as a lesson's is (`/lessons/$lessonId/settings`),
+      not rows of the app's Settings. The app's Settings holds only what is app-wide. No setting on
+      two pages. The pages are refactored: proper musical names, a clear structure, the look of a
+      lesson's Settings page.
+    - **Words:** professional terms only; "Hear notes as you edit" is not one (the editors say
+      "Play notes while editing" / Dorico "Play notes during note input").
+    - **Spoken count:** free recordings only; none exists in Russian, so it is not offered.
+
 ## References (open every folder, "New folder" and "untitled" included)
 - `piano-data/reference-apps/new_app_2/` (notes in `scratchpad/r29/refs.md`):
   - Noji 4864–4875: Home's Edit mode, Activity, deck Settings, Publish in library, the Library tab.
