@@ -2,7 +2,7 @@ import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { setPlayback } from '@/features/set-preference'
+import { setMetronome, setPlayback } from '@/features/set-preference'
 
 describe('Settings › Player (B7)', () => {
   it('sets how the Player always plays: count-in, cursor, the other hand, the pedal', async () => {
@@ -64,5 +64,16 @@ describe('the Player as its settings say (B7, A27)', () => {
     expect(sounds.filter((sound) => sound.kind === 'click')).toEqual([])
     // The music waits the bar counted in.
     expect(sounds.find((sound) => sound.kind === 'note')?.at).toBeGreaterThan(0)
+  })
+
+  it('clicks in the Metronome’s sound, its squares set for the song’s meter (A35, A39)', async () => {
+    const user = userEvent.setup()
+    const { audio, settingsStore } = await renderApp('/play/bz5?click=true')
+    act(() => setMetronome(settingsStore, { sound: 'drum' }))
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    const voices = (audio.played[0]?.sounds ?? []).flatMap((sound) =>
+      sound.kind === 'click' ? [sound.voice] : [],
+    )
+    expect(voices.slice(0, 2)).toEqual(['kick', 'hat'])
   })
 })

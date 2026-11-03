@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef } from 'react'
 import {
   selectOtherHand,
+  selectMetronome,
   selectPlayback,
   selectPractice,
   selectScoreView,
@@ -129,6 +130,12 @@ export function usePracticePlayer(
   const sound = useSettings(selectSound)
   const otherHand = useSettings(selectOtherHand)
   const playback = useSettings(selectPlayback)
+  // The click and count-in in the Metronome's sound and squares (A35, A39: one engine).
+  const { sound: clickSound, meter: clickMeter, levels: clickLevels } = useSettings(selectMetronome)
+  const voicing = useMemo(
+    () => ({ sound: clickSound, meter: clickMeter, levels: clickLevels }),
+    [clickSound, clickMeter, clickLevels],
+  )
   // The pedal played as the settings say (A27): as written, none, or with each chord.
   const played = useMemo(() => withPedal(written, playback.pedal), [written, playback.pedal])
   const performance = played
@@ -165,6 +172,7 @@ export function usePracticePlayer(
     countIn: playback.countdown !== 'none',
     countInHeard: playback.countdown === 'audible',
     speedStep: playback.speedStep,
+    voicing,
     rest: view.rest ?? 0,
     recording,
     mix,

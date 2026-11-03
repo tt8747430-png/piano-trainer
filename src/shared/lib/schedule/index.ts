@@ -39,6 +39,7 @@ export {
   type PracticeRhythm,
 } from './sounds'
 export { chordBar } from './chord-bar'
+export { clickLevel, voicedClick, type ClickVoicing } from './click-voice'
 export { runSounds, scaleRun } from './run'
 export { noteLine, twoHands, type NoteLineMeter } from './note-line'
 export { voicingKeys, voicingsMusic, type VoicedKey, type WrittenVoicing } from './voicings'

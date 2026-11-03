@@ -15,6 +15,7 @@ import {
   audibleHands,
   beatGroupSounds,
   untilNextBeatGroup,
+  type ClickVoicing,
   type Hands,
   type Recording,
   type SwingFeel,
@@ -48,6 +49,8 @@ export interface PracticeSetup {
   readonly countIn: boolean
   /** Whether the count-in's clicks sound, true unless said: one seen alone counts unheard (B7). */
   readonly countInHeard?: boolean
+  /** The Metronome's sound and squares the click and count-in play in (A35, A39). */
+  readonly voicing?: ClickVoicing
   /** Speed training's step, a share of the piece's tempo each pass; 5% unless said (B7). */
   readonly speedStep?: number
   /** Beats of rest, each a click, before each repeat of the passage. */
@@ -167,6 +170,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     tick: state.performance.beatGroups[state.beatGroup]?.tick,
     countIn,
     countInHeard: setup.countInHeard !== false,
+    voicing: setup.voicing,
   }))
 
   // Listen: the transport runs while playing, from where the learner is, and starts again from the
@@ -195,6 +199,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
             : { step: upStep, until: upUntil },
         countIn: first && from.countIn,
         countInHeard: from.countInHeard,
+        voicing: from.voicing,
         metronome,
         clicks,
         swing,

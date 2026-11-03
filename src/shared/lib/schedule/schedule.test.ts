@@ -571,3 +571,38 @@ describe('schedule: a passage and swing', () => {
     )
   })
 })
+
+describe('the click in the Metronome’s voice (A35, A39)', () => {
+  const jig: Chart = {
+    key: C_MAJOR,
+    meter: '6/8',
+    sections: [{ lines: [[{ chords: [{ ...parseChordSymbol('C'), beats: 2 }], beats: 2 }]] }],
+  }
+  const played = arrange(jig, { tonic: note('C'), pattern: BLOCK })
+
+  // A compound meter counts its dotted beats: a bar of 6/8 is two, each a second at 60.
+  it('clicks the dotted beats of 6/8, two a bar, the first the downbeat, in the Metronome’s drums', () => {
+    const { sounds } = schedule(played, {
+      tempo: 60,
+      hands: ALL,
+      metronome: true,
+      voicing: { sound: 'drum', meter: '4/4', levels: null },
+    })
+    expect(
+      clicks(sounds).map((click) => (click.kind === 'click' ? `${click.at}:${click.voice}` : '')),
+    ).toEqual(['0:kick', '0:hat', '1:snare', '1:hat'])
+  })
+
+  it('leaves out a beat the Metronome’s squares silence, where they are set for the music’s meter', () => {
+    const { sounds } = schedule(perform('C'), {
+      tempo: 60,
+      hands: ALL,
+      metronome: true,
+      voicing: { sound: 'beep', meter: '4/4', levels: ['downbeat', 'silent', 'accent', 'normal'] },
+    })
+    expect(clicks(sounds).map((click) => click.at)).toEqual([0, 2, 3])
+    expect(clicks(sounds).every((click) => click.kind === 'click' && click.voice === 'beep')).toBe(
+      true,
+    )
+  })
+})

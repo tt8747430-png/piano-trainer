@@ -8,6 +8,7 @@ import {
   secondsFor,
   type BarsInMeter,
 } from './grid'
+import { clickLevel, voicedClick, type ClickVoicing } from './click-voice'
 import { joinedNotes } from './legato'
 import { glissandoTargets, loudness, markedSounds, rollOffsets, tremoloPartners } from './marks'
 import { pedalHeld, pedalSpans } from './pedal-marks'
@@ -95,6 +96,11 @@ interface ScheduleOptions {
    * turned right down (ADR 0105) a count-in still counts its bar, unheard.
    */
   readonly clicks?: boolean
+  /**
+   * The Metronome's sound and squares the count-in and the click play in (A35, A39); a plain click,
+   * the bar's first accented, unless said.
+   */
+  readonly voicing?: ClickVoicing
   /** How much the off-beat 8ths come late, long-short (ADR 0115); a compound meter never swings. */
   readonly swing?: SwingFeel
 }
@@ -198,9 +204,14 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   const musicStart = secondsFor(place(fromTick) - place(counted[0]?.tick ?? fromTick), tempo)
   const at = (tick: Tick) => musicStart + secondsFor(place(tick) - place(fromTick), tempo)
   const clicked = options.clicks !== false
+  const { voicing } = options
   const countIn: Sound[] =
     clicked && options.countInHeard !== false
-      ? counted.map(({ tick, accent }) => ({ kind: 'click', at: at(tick), accent }))
+      ? counted.flatMap(({ tick, accent }): Sound[] =>
+          voicing
+            ? voicedClick(at(tick), accent ? 'downbeat' : 'normal', voicing.sound)
+            : [{ kind: 'click', at: at(tick), accent }],
+        )
       : []
   const inPass = (tick: Tick) => tick >= fromTick && tick < toTick
 
@@ -257,13 +268,21 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
     })
   })
 
+  // The click on the meter's counted beats (the dotted beat in 6/8), each bar's in its own meter,
+  // at the tempo the music keeps there; in the Metronome's voice and squares where asked.
   const metronome: Sound[] =
     options.metronome && clicked
-      ? performance.bars.flatMap((_, index) =>
-          barClicks(performance, index).flatMap(({ tick, accent }): Sound[] =>
-            inPass(tick) ? [{ kind: 'click', at: at(tick), accent }] : [],
-          ),
-        )
+      ? performance.bars.flatMap((bar, index) => {
+          const grid = barGrid(performance, index)
+          return barClicks(performance, index).flatMap(({ tick, accent }): Sound[] => {
+            if (!inPass(tick)) return []
+            if (!voicing) return [{ kind: 'click', at: at(tick), accent }]
+            const beat = grid.beats.findIndex((each) => grid.start + each.tick === tick)
+            const meter = bar.meter ?? performance.meter
+            const level = clickLevel(beat, accent, meter, voicing)
+            return level === 'silent' ? [] : voicedClick(at(tick), level, voicing.sound)
+          })
+        })
       : []
 
   const cues = performance.beatGroups.flatMap((group, beatGroup) =>

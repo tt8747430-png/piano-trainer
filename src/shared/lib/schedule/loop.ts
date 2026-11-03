@@ -1,3 +1,4 @@
+import type { ClickVoicing } from './click-voice'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
 import { passTickAt } from './playhead'
@@ -23,6 +24,8 @@ export interface LoopOptions {
   /** Whether the count-in's clicks sound: a count-in seen alone counts unheard (B7). */
   readonly countInHeard?: boolean
   readonly metronome?: boolean
+  /** The Metronome's sound and squares the clicks play in (A35, A39). */
+  readonly voicing?: ClickVoicing | undefined
   /** Whether the count-in and the metronome click: a count-in still counts without (ADR 0105). */
   readonly clicks?: boolean
   readonly swing?: SwingFeel
@@ -101,6 +104,7 @@ function passAt(
     countIn: first && options.countIn === true,
     countInHeard: options.countInHeard !== false,
     metronome: options.metronome === true,
+    ...(options.voicing ? { voicing: options.voicing } : {}),
     clicks: options.clicks !== false,
     swing: options.swing ?? 'straight',
   })
