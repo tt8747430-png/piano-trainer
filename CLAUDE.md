@@ -161,7 +161,7 @@ text unselectable outside fields, with no callout, no overscroll and no double-t
 (`src/app/standalone-boot.test.ts`).
 
 **Backend:** `supabase/` holds the migrations (written without `drop` statements: the Supabase tool asks an unseen confirmation for them) (applied to the project `.mcp.json` names), the Edge Functions and
-`tests/access.sql`, `tests/content-access.sql`, `tests/public-access.sql` and `tests/admin-access.sql`, `tests/drafts-access.sql`, `tests/errors-access.sql` (run them, never with a `delete` in them, for the same reason after a migration: every learner reaches only their own rows; content reads by audience, writes by editors). The built-in content is published by `node scripts/export-content.mjs` then `scripts/seed-content.mjs` (an editor's `SEED_EMAIL`, `SEED_PASSWORD`). A schema change is a new
+`tests/access.sql`, `tests/content-access.sql`, `tests/public-access.sql` and `tests/admin-access.sql`, `tests/drafts-access.sql`, `tests/errors-access.sql`, `tests/profile-access.sql` (run them, never with a `delete` in them, for the same reason after a migration: every learner reaches only their own rows; content reads by audience, writes by editors). The built-in content is published by `node scripts/export-content.mjs` then `scripts/seed-content.mjs` (an editor's `SEED_EMAIL`, `SEED_PASSWORD`). A schema change is a new
 migration file, applied, then `shared/api/supabase/database.types.ts` brought level with the generated types.
 
 ## Read before you touch

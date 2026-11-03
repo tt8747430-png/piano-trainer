@@ -289,6 +289,39 @@ export type Database = {
         Update: { name?: string }
         Relationships: []
       }
+      learner_profiles: {
+        Row: {
+          avatar: string | null
+          bio: string
+          created_at: string
+          handle: string | null
+          id: string
+          name: string
+          public: boolean
+          updated_at: string
+        }
+        Insert: {
+          avatar?: string | null
+          bio?: string
+          created_at?: string
+          handle?: string | null
+          id?: string
+          name?: string
+          public?: boolean
+          updated_at?: string
+        }
+        Update: {
+          avatar?: string | null
+          bio?: string
+          created_at?: string
+          handle?: string | null
+          id?: string
+          name?: string
+          public?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       diagram_inversions: DocumentTable
       library: DocumentTable
       patterns: DocumentTable
@@ -301,6 +334,7 @@ export type Database = {
     }
     Views: { [_ in never]: never }
     Functions: {
+      handle_available: { Args: { wanted: string }; Returns: boolean }
       invoke_purge_account: { Args: never; Returns: undefined }
       hide_public_item: { Args: { p_hidden: boolean; p_item: string }; Returns: undefined }
       is_admin: { Args: never; Returns: boolean }

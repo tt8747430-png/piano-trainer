@@ -56,7 +56,7 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A41 | Exercises and the Quiz, inside | 2 | open | | |
 | A42 | Every theory, practice and training page against rule 30 | 1 | open | | |
 | A43 | The Key tab's content, and theory written on the music | 2 | open | | |
-| B1 | The Profile, as complete as memory-palaces' | 5 | open | | |
+| B1 | The Profile, as complete as memory-palaces' | 5 | in progress | | server side done: learner_profiles, handle check, public avatars, access test green on the project, types regenerated; the device side (badges, milestones, notifications, pages) next |
 | B2 | Professional copy | 6 | open | | |
 | B3 | Explore in Songs | 7 | open | | |
 | B4 | Edit in place | 8 | open | | |
