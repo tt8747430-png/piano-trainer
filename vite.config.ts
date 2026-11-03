@@ -90,7 +90,7 @@ export default defineConfig({
       },
       workbox: {
         // The pieces' recordings too, so a recording plays offline.
-        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,m4a}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,m4a,wav}'],
         // The engraver's worker is the largest file; the recordings are held to less by a test.
         maximumFileSizeToCacheInBytes: PRECACHE_ENGRAVER_LIMIT,
         // Only the fonts' subsets the app's text reaches: a browser fetches a subset when a glyph in

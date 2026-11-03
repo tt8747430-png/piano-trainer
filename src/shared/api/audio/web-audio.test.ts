@@ -2,6 +2,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
+import type { LoadSound } from './recorded-sounds'
 import { createWebAudioOutput, wholeFileMedia } from './web-audio'
 
 /** Just enough of an AudioContext to see what the adapter builds. */
@@ -10,6 +11,7 @@ class FakeContext {
   outputLatency = 0
   sampleRate = 8
   readonly noises: { start: number; stop: number }[] = []
+  readonly sources: { buffer: unknown; playbackRate: { value: number } }[] = []
   state: AudioContextState = 'suspended'
   readonly destination = {}
   readonly oscillators: { type: string; frequency: number; start: number; stop: number }[] = []
@@ -74,8 +76,9 @@ class FakeContext {
   createBufferSource() {
     const record = { start: -1, stop: -1 }
     this.noises.push(record)
-    return this.node({
+    const source = this.node({
       buffer: null as unknown,
+      playbackRate: { value: 1 },
       start: (at: number) => {
         record.start = at
       },
@@ -84,6 +87,8 @@ class FakeContext {
       },
       onended: null as (() => void) | null,
     })
+    this.sources.push(source)
+    return source
   }
 
   createOscillator() {
@@ -119,7 +124,10 @@ class FakeContext {
 const A4: Sound = { kind: 'note', midi: midi(69), at: 0.05, duration: 1, velocity: 0.2 }
 const CLICK: Sound = { kind: 'click', at: 0, accent: true }
 
-function setUp({ activated = true }: { activated?: boolean } = {}) {
+function setUp({
+  activated = true,
+  loadSound,
+}: { activated?: boolean; loadSound?: LoadSound } = {}) {
   const context = new FakeContext()
   const createContext = vi.fn(() => context as unknown as AudioContext)
   const frames: (() => void)[] = []
@@ -131,6 +139,7 @@ function setUp({ activated = true }: { activated?: boolean } = {}) {
     frame,
     pageNow: () => page.now,
     activated: () => gesture.activated,
+    ...(loadSound ? { loadSound } : {}),
   })
   return { context, createContext, frames, page, gesture, audio }
 }
@@ -245,6 +254,36 @@ describe('createWebAudioOutput', () => {
     expect(context.oscillators).toHaveLength(2)
     expect(context.noises).toHaveLength(3)
     for (const noise of context.noises) expect(noise.start).toBe(0)
+  })
+
+  it('plays the recorded woodblock and kit once they are in, the accent a fifth higher (A39)', async () => {
+    const buffer = {} as AudioBuffer
+    const loaded: string[] = []
+    const { context, audio } = setUp({
+      loadSound: async (_context, url) => {
+        loaded.push(url)
+        return buffer
+      },
+    })
+    await audio.unlock()
+    expect(loaded).toEqual([
+      '/sounds/woodblock.wav',
+      '/sounds/kick.wav',
+      '/sounds/snare.wav',
+      '/sounds/hihat.wav',
+    ])
+    audio.play(
+      [
+        { kind: 'click', at: 0, accent: true },
+        { kind: 'click', at: 0, accent: false, voice: 'kick' },
+        { kind: 'click', at: 0, accent: false, voice: 'beep' },
+      ],
+      0,
+    )
+    // The woodblock and the kick from their recordings; the beep still a tone.
+    const recorded = context.sources.filter((source) => source.buffer === buffer)
+    expect(recorded.map((source) => source.playbackRate.value)).toEqual([1.5, 1])
+    expect(context.oscillators).toHaveLength(1)
   })
 
   it('plays a note and a click as loud as their gain says as each comes to sound (ADR 0105)', () => {

@@ -7,6 +7,13 @@ import { createRecordingPlayer, type Media } from './recording-player'
 import { createSoundingKeys, NOTHING_PLAYED } from './sounding'
 import { stringDecay } from './string-decay'
 import { PLAY_DELAY, type AudioOutput } from './types'
+import {
+  createRecordedSounds,
+  fetchSound,
+  isRecordedSound,
+  type LoadSound,
+  type RecordedSound,
+} from './recorded-sounds'
 
 /** The piano voice: a triangle with two sine partials, through a closing low-pass filter. */
 const PARTIALS = [
@@ -256,7 +263,43 @@ const playHat: Render<ClickSound> = (context, hat, at, gain, ended) =>
     noise(context, { hz: 8000, peak: (hat.accent ? 0.22 : 0.16) * gain, length: 0.05 }, at),
   )
 
-/** How each beat's sound is made: synthesised, nothing fetched, so it plays offline. */
+/** How loud each recorded sound plays, on a beat and accented, and how far an accent is raised. */
+const RECORDED_PEAK: Readonly<
+  Record<RecordedSound, { readonly beat: number; readonly accent: number; readonly rate: number }>
+> = {
+  // The woodblock's accent is the same block a fifth higher, as a metronome's bell is higher.
+  click: { beat: 0.5, accent: 0.6, rate: 1.5 },
+  kick: { beat: 0.9, accent: 1, rate: 1 },
+  snare: { beat: 0.7, accent: 0.8, rate: 1 },
+  hat: { beat: 0.3, accent: 0.38, rate: 1 },
+}
+
+/** A recorded sound struck at `at`, as loud as its level and `gain` say. */
+function playRecorded(
+  context: AudioContext,
+  buffer: AudioBuffer,
+  sound: RecordedSound,
+  click: ClickSound,
+  at: number,
+  gain: number,
+  ended: () => void,
+): Voice {
+  const { beat, accent, rate } = RECORDED_PEAK[sound]
+  const source = context.createBufferSource()
+  source.buffer = buffer
+  if (click.accent) source.playbackRate.value = rate
+  const output = context.createGain()
+  output.gain.value = (click.accent ? accent : beat) * gain
+  source.connect(output).connect(context.destination)
+  source.start(at)
+  source.onended = ended
+  return { sources: [source], output }
+}
+
+/**
+ * How each beat's sound is made where its recording cannot be had (offline before the cache):
+ * synthesised, nothing fetched. The Beeps are always these.
+ */
 const CLICK_VOICES: Readonly<Record<ClickVoice, Render<ClickSound>>> = {
   click: playClick,
   beep: playBeep,
@@ -274,6 +317,18 @@ const animationFrame = (look: () => void) => void requestAnimationFrame(look)
 const browserActivated = () => navigator.userActivation?.hasBeenActive ?? true
 
 /** Audio a browser holds back until a gesture: started suspended, or interrupted (iOS, by a call). */
+/** How long a first sound waits for the recordings, in milliseconds, before it plays without them. */
+const SOUNDS_WAIT = 1500
+
+/** `promise`, or `ms` gone by: whichever comes first, the timer cleared either way. */
+function within(promise: Promise<void>, ms: number): Promise<void> {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  return Promise.race([
+    promise,
+    new Promise<void>((resolve) => (timer = setTimeout(resolve, ms))),
+  ]).finally(() => clearTimeout(timer))
+}
+
 const heldBack = (context: AudioContext) =>
   context.state === 'suspended' || context.state === 'interrupted'
 
@@ -307,6 +362,7 @@ export function createWebAudioOutput({
   createMedia = wholeFileMedia,
   pageNow = () => performance.now(),
   activated = browserActivated,
+  loadSound = fetchSound,
 }: {
   createContext?: () => AudioContext | null
   frame?: (look: () => void) => void
@@ -315,9 +371,12 @@ export function createWebAudioOutput({
   pageNow?: () => number
   /** Whether a gesture has let the page start audio. */
   activated?: () => boolean
+  /** How a recorded sound is fetched and decoded. */
+  loadSound?: LoadSound
 } = {}): AudioOutput {
   let context: AudioContext | null | undefined
   const voices = new Set<Voice>()
+  const recorded = createRecordedSounds(loadSound)
   /** Each key's scheduled voice, and where it ends: a key struck again damps it (ADR 0034). */
   const strings = new Map<Midi, { readonly voice: Voice; readonly end: number }>()
   /** The keys the live voice holds sounding: apart from `voices`, so stop() never reaches them. */
@@ -327,7 +386,10 @@ export function createWebAudioOutput({
 
   /** The AudioContext, created on first use; null where the browser has none. */
   const openContext = (): AudioContext | null => {
-    if (context === undefined) context = createContext()
+    if (context === undefined) {
+      context = createContext()
+      if (context) void recorded.ready(context)
+    }
     return context
   }
 
@@ -353,14 +415,14 @@ export function createWebAudioOutput({
       if (ringing && ringing.end > at && voices.has(ringing.voice)) dampedAt(ringing.voice, at)
       voice = playNote(context, sound, at, gain, ended)
       strings.set(sound.midi, { voice, end: at + sound.duration })
-    } else
-      voice = CLICK_VOICES[sound.voice ?? 'click'](
-        context,
-        sound,
-        at,
-        gain * (sound.gain ?? 1),
-        ended,
-      )
+    } else {
+      const name = sound.voice ?? 'click'
+      const buffer = isRecordedSound(name) ? recorded.buffer(context, name) : null
+      voice =
+        buffer && isRecordedSound(name)
+          ? playRecorded(context, buffer, name, sound, at, gain * (sound.gain ?? 1), ended)
+          : CLICK_VOICES[name](context, sound, at, gain * (sound.gain ?? 1), ended)
+    }
     voices.add(voice)
   }
 
@@ -409,6 +471,8 @@ export function createWebAudioOutput({
       const audio = openContext()
       // With no gesture behind it (a sound as a screen opens), resuming could only fail.
       if (audio && heldBack(audio) && activated()) await audio.resume()
+      // The recorded clicks and drums are in before the first beat, or given up on soon.
+      if (audio) await within(recorded.ready(audio), SOUNDS_WAIT)
     },
     play(sounds, at, gain) {
       const audio = openContext()
