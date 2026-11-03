@@ -419,6 +419,47 @@ doesn't name, judge it by them:
       "Play notes while editing" / Dorico "Play notes during note input").
     - **Spoken count:** free recordings only; none exists in Russian, so it is not offered.
 
+21. **Owner's answers and corrections, 2026-11-03, afternoon (win over everything above; screenshots: Chords
+    Cm(maj13), Scales and keys' Key tab, Progressions' Let It Be at 1280):**
+    - **One confirmation dialog** for every act that loses or hides work (the shared one; Unpublish and Remove
+      included). **One icon, one meaning:** no icon stands for two acts (the pencil today means "edit this page" and
+      "Edit score": each act gets its own).
+    - **No duplicate menus or settings anywhere:** check the Player, the editor and every Practice page for the same
+      setting or action in two places (the editor's Sound popover that only links to Settings goes).
+    - **Proper Settings pages:** research how settings are done (iOS Settings, apps the owner names) and decide.
+      - Each Practice page, the Player, the score editor, Songs (the songs page, a folder, a song's overview) has
+        its own Settings page from its own gear, like a lesson's. No settings scattered in the header across four
+        menus.
+      - **The Metronome is a tool** in a Tools group (B11), with its own page and its own Settings page.
+      - **The app's Settings holds only what is app-wide**, and is restructured: today it duplicates page settings
+        (lessons' "read as" is a lesson setting), and the playing pages (On-screen piano, Computer keys, Connect a
+        piano, Sound and recording) are not intuitively structured. Each setting goes to the page it belongs to.
+    - **The sheets everywhere are one:** every sheet follows what is played and has the same features in every place.
+    - **Page bars stay one height:** tabs in a page's bar that make it taller than other pages' bars go; switching
+      pages must not change the header's height.
+    - **Selection by the bar's time:** a selection on the sheet snaps to whole beats from the start of its bar and
+      spans the meter's beats (4/4 selects four beats, 2/4 two), across the app.
+    - **Keys:** no circle of fifths for picking a key. Use the reference apps' controls (Flat's key-signature grid
+      and the like); decide properly. C♯/D♭ are shown as the reference apps show enharmonic keys (both names where a
+      key has two), not as today.
+    - **Chords page:** the chord size picked as the reference apps pick it (research); "7th" (♭7 · 7) and "Right hand
+      from" are not understandable: redesign them with controls that say what they do; the hand drawings are proper
+      hands (the decision logged), not today's shapes; the top section (the name, the staff) is not half empty: the
+      sheet placed properly; every page adapts to its width.
+    - **Scales and keys:** Notes · Harmony · Key do not say what they mean or how they relate; "Root B" doesn't say of
+      which scale; the menus on Key are not understandable; Octaves (why only 1–2, more and customisable), Fingering,
+      Start on and Rhythm are mixed (which belongs to the sheet, which to playing); the structure and formula are
+      hardcoded and don't follow the chosen scale. Redesign the page, not just describe it.
+    - **Overlaps:** chord cards that overlap (Key tab, Harmonise a melody note) are a bug everywhere.
+    - **Intervals:** its icons and what they do are not understandable: proper icons, meanings and descriptions.
+    - **Progressions:** Passing chords are hardcoded and don't belong in Progressions as they are; the learner must be
+      able to choose their own. How the tabs relate and that one tab's choice changes another must be clear from the
+      UI itself, not from a line of description. The same for every Practice page's tabs and the lessons' tabs.
+    - **Chords' Play and Arpeggio:** together, but distinct: two buttons or clearer icons.
+    - **Songs' Settings page:** maybe one row now; decide what is best. "Sound and recording" in the app's Settings:
+      decide properly. The Player's Play: a round icon, probably.
+    - **Answers left to decide** (the owner asked for proper decisions): research and decide, then list the decision.
+
 ## References (open every folder, "New folder" and "untitled" included)
 - `piano-data/reference-apps/new_app_2/` (notes in `scratchpad/r29/refs.md`):
   - Noji 4864–4875: Home's Edit mode, Activity, deck Settings, Publish in library, the Library tab.
