@@ -18,7 +18,7 @@ figure .saved { font-size: 12px; color: var(--ink-soft); min-height: 1em }
 .cap span { padding: 7px 13px; display: flex; gap: 6px; align-items: center; font: 600 12.5px var(--sans) }
 .cap span:last-child { background: var(--honey); color: var(--honey-ink); border-radius: 999px }
 
-.ebar .btn { width: 30px; height: 30px } .ebar { gap: 0 }
+.ebar .btn, .abar .btn { width: 31px; height: 31px } .ebar, .abar { gap: 0 !important }
 
 /* Layout: a reading column of questions; each question shows full phone screens drawn in Piano Trainer's own tokens, side by side, wrapping on a phone. */
 :root {
@@ -216,10 +216,10 @@ svg.i.s { width: 15px; height: 15px }
     <nav class="toc"><a href="#song">1. The song's page</a><a href="#player">2. The Player</a><a href="#editor">3. The score editor</a><a href="#laptop">4. On a laptop</a><a href="#moves">5. What moves where</a></nav>
   </header>
   <section class="q" id="song"><div class="qhead"><span class="qnum">1</span><h2>The song's page and its Settings</h2></div>
-    <div class="ctx"><p>The overview: what the song is, Practise, and how to learn it by sections. Edit (✎) makes the page itself editable in place, as it is today. The gear opens the song's own Settings.</p></div>
+    <div class="ctx"><p>Redrawn from your feedback: one title, the facts as a labelled row, About as plain text. ✎ opens the score editor, and the gear opens the song's Settings, whose rows open drawers.</p></div>
     <div class="screens" id="s-song"></div></section>
   <section class="q" id="player"><div class="qhead"><span class="qnum">2</span><h2>The Player and every page behind its gear</h2></div>
-    <div class="ctx"><p>Approved in part 2. The bar is ✕ · title · ✎ · MIDI · ⚙. The tools row is "Sheet ⌃" · Transpose · Simplify, and the transport floats at the bottom. Everything else sits behind the one gear.</p></div>
+    <div class="ctx"><p>Redrawn from your feedback. The bar gains Flat's keys button: ✕ · title · ✎ · keys · MIDI · ⚙. Hands moved into the floating transport, Simplify is one button, and Diagrams works as Chordify's. The tools row is "Sheet ⌃" · Transpose · Simplify, and the transport floats at the bottom. Everything else sits behind the one gear.</p></div>
     <div class="screens" id="s-player"></div></section>
   <section class="q" id="editor"><div class="qhead"><span class="qnum">3</span><h2>The score editor and every page behind its gear</h2></div>
     <div class="ctx"><p>This is the same screen as the Player, in Edit mode. ✓ Done replaces ✎ beside the title, with Undo and Redo next to it. The palette is Flat's: on a phone a sheet at the bottom with a row of tool categories. The gear opens the score's Settings.</p></div>
@@ -252,8 +252,8 @@ function card(title, opts, info) {
   return `<div class="cardset"><b>${title}${info ? ' ' + I('info', 's soft') : ''}</b>${opts.map(([l, sub, on]) => `<span class="radio"><i class="${on ? 'on' : ''}"></i><span>${l}${sub ? `<small>${sub}</small>` : ''}</span></span>`).join('')}</div>`;
 }
 const swcard = (title, rows) => `<div class="cardset"><b>${title}</b>${rows.map(([l, on]) => `<div style="display:flex;align-items:center;gap:8px"><span style="flex:1">${l}</span><span class="sw${on ? '' : ' off'}"></span></div>`).join('')}</div>`;
-const tools = (first, up) => `<div class="tools"><span class="t on">${first} ${I(up ? 'up' : 'down', 's')}</span><span class="t">Transpose</span><span class="t">Simplify</span></div>`;
-const dockP = `<div class="dock"><span class="tempo">♩ 90</span>${I('skip')}<span class="play">${I('play')}</span>${I('loop')}${I('metro')}</div>`;
+const tools = (first, up, simp) => `<div class="tools"><span class="t on">${first} ${I(up ? 'up' : 'down', 's')}</span><span class="t">${I('transpose', 's')}Transpose</span><span class="t${simp ? ' on' : ''}">Simplify${simp ? ' ✓' : ''}</span></div>`;
+const dockP = `<div class="dock"><span class="tempo">♩ 90</span>${I('skip')}<span class="play">${I('play')}</span>${I('loop')}${I('metro')}<span class="tempo" title="Hands">${I('hand', 's')} Both</span></div>`;
 const dockE = `<div class="dock"><span class="tempo">♩ 90</span>${I('skip')}<span class="play">${I('play')}</span><span style="color:var(--bad-ink)">${I('rec')}</span>${I('takes')}</div>`;
 const sheet = (n = 1, key = 1, time) => `<div class="sheetbox" data-staff="grand" data-key="${key}" ${time ? `data-time="${time}"` : ''} data-notes="${n}"></div>`;
 function phone(n, title, from, html, opts = {}) {
@@ -261,34 +261,29 @@ function phone(n, title, from, html, opts = {}) {
 }
 const pad = h => `<div class="content pad">${h}</div>`;
 const note = t => `<span class="soft" style="font-size:12px">${t}</span>`;
-const pBar = (t = 'Amazing Grace') => bar({ left: 'x', title: t, after: B('pen'), right: ['plug', 'gear'] });
+const pBar = (t = 'Amazing Grace') => bar({ left: 'x', title: t, after: B('pen'), right: ['piano', 'plug', 'gear'] });
 const eBar = (t = 'Amazing Grace') => `<div class="abar ebar"><span style="width:4px"></span><span class="title">${t}</span><span class="btn tint">${I('check')}</span><span class="grow"></span>${B('undo')}${B('redo')}${B('plug')}${B('gear')}</div>`;
 
 // ——— 1 SONG ———
 const song = [
-  phone('1.1', 'The song\'s page', 'From Songs: a tap on the song.', bar({ title: 'Amazing Grace', after: B('pen'), right: ['gear'] }) + pad(`
-    <div><div style="font:600 24px var(--display)">Amazing Grace</div><div class="soft">John Newton · traditional</div><div class="soft" style="font-size:12px;margin-top:4px">G major · 3/4 · ♩ 90 · Beginner</div></div>
-    <div style="display:flex;gap:8px;align-items:center"><span class="btn2 fill">${I('play', 's')}Practise</span><span class="chip">${I('star', 's')} Learned</span><span class="chip">${I('heart', 's')}</span></div>
-    <div class="cardset"><b>About</b><span class="soft" style="font-size:12.5px">Written in 1772; sung to "New Britain". Four verses, one tune.</span></div>
-    <div><div class="gl">CHORDS</div><div class="chips"><span class="chip">G</span><span class="chip">C</span><span class="chip">D</span><span class="chip">Em</span><span class="chip">D7</span></div></div>
-    ${group('SECTIONS · LEARN IT PIECE BY PIECE', [[ 'grass', 'music', 'Verse', '8 bars · 2 of 3 lessons' ], [ 'sky', 'music', 'Refrain', '8 bars' ]])}`)),
-  phone('1.2', 'Edit (✎) on the page itself', 'The ✎ beside the title. Done (✓) in its place, Undo and Redo beside it.', bar({ title: 'Amazing Grace', after: `<span class="btn tint">${I('check')}</span>${B('undo')}${B('redo')}`, right: [] }) + pad(`
-    <div style="border:1.5px dashed var(--line);border-radius:10px;padding:8px"><div style="font:600 24px var(--display)">Amazing Grace</div><div class="soft">John Newton · traditional</div></div>
-    <div style="border:1.5px dashed var(--line);border-radius:10px;padding:8px" class="soft">Written in 1772; sung to "New Britain"…</div>
-    <div class="list"><div class="row"><span class="n">Edit the music</span>${note('opens the score editor')}${chev}</div></div>
-    ${note('Your own song or an editor\'s: the words are typed where they show. A built-in song: ✎ opens your version of the score.')}`)),
-  phone('1.3', 'The song\'s Settings', 'From the gear on the song\'s page.', bar({ title: 'Amazing Grace' }) + pad(`
-    ${group('IN YOUR LIBRARY', [['sand', 'folder', 'Folder', 'Hymns'], ['sand', 'archive', 'Archive', '', 'off']])}
-    ${group('SHARE', [['sky', 'dl', 'Export…', 'MusicXML, MIDI'], ['sky', 'link', 'Share link', ''], ['grass', 'globe', 'Publish in library', 'Not published']])}
-    ${group('UNPUBLISHED CHANGES · AN EDITOR\'S', [['honey', 'history', 'Changes', '3 since Monday']])}
+  phone('1.1', 'The song\'s page', 'From Songs. One title: the large one on the page (the bar shows it once you scroll). ✎ opens the score editor.', bar({ title: '', after: '', right: ['pen', 'gear'] }) + pad(`
+    <div><div style="font:600 26px var(--display)">Amazing Grace</div><div class="soft">John Newton · traditional</div></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center">${[['Key', 'G major'], ['Time', '3/4'], ['Tempo', '♩ 90'], ['Level', 'Beginner']].map(([a, v]) => `<div><div class="lbl">${a}</div><div style="font:600 13px var(--sans)">${v}</div></div>`).join('')}</div>
+    <div style="display:flex;gap:8px;align-items:center"><span class="chip">${I('star', 's')} Learned</span><span class="chip">${I('heart', 's')} Favourite</span></div>
+    <p style="margin:0;font-size:13px;line-height:1.5">Written in 1772 and sung to "New Britain". Four verses, one tune.</p>
+    ${group('CHORDS', [['', '', '<span class="chips"><span class="chip">G</span><span class="chip">C</span><span class="chip">D</span><span class="chip">Em</span><span class="chip">D7</span></span>', '', 'none']])}
+    ${group('SECTIONS · A TAP PLAYS FROM THERE', [['grass', 'play', 'Verse', 'bars 5–20'], ['sky', 'play', 'Refrain', 'bars 21–28']])}
+    <div class="cap"><span>${I('loop', 's')}Sections</span><span>Practise</span></div>`)),
+  phone('1.2', 'Details (from the song\'s Settings)', 'Title, credits and About are edited here, not on the page.', bar({ title: 'Details' }) + pad(`
+    <div class="list">${[['Title', 'Amazing Grace'], ['Composer', 'traditional'], ['Lyricist', 'John Newton'], ['Level', 'Beginner']].map(([a, v]) => `<div class="row"><span class="n soft">${a}</span><span>${v}</span>${chev}</div>`).join('')}</div>
+    <div class="cardset"><b>About</b><span style="font-size:12.5px">Written in 1772 and sung to "New Britain"…</span></div>`), { short: true }),
+  phone('1.3', 'The song\'s Settings', 'From the gear on the song\'s page. Each row opens a drawer, as in the reference apps; Archive is an action, not a switch.', bar({ title: 'Amazing Grace' }) + pad(`
+    ${group('', [['sky', 'text', 'Details', 'title, credits, about']])}
+    ${group('LIBRARY', [['sand', 'folder', 'Move to folder…', 'Hymns'], ['sand', 'archive', 'Move to archive', '', 'none']])}
+    ${group('SHARE', [['sky', 'dl', 'Export…', ''], ['sky', 'link', 'Share link…', ''], ['grass', 'globe', 'Publish in library', 'Not published']])}
     ${danger('Delete song')}`)),
-  phone('1.4', 'Export…', 'From the song\'s Settings, and from the Player\'s Settings.', bar({ title: 'Export' }) + pad(`
-    ${card('Format', [['MusicXML', 'For MuseScore, Flat, Dorico, Sibelius', true], ['MIDI', 'For any music program or piano'], ['PDF', 'The sheet as printed']])}
-    ${card('What', [['The whole song', '', true], ['The selection', 'Bars 5–12']])}
-    <span class="cta" style="justify-self:center">Export</span>`), { short: true }),
-  phone('1.5', 'Folder', 'From the song\'s Settings › Folder.', bar({ title: 'Folder' }) + pad(`
-    <div class="list">${['Home', 'Hymns', 'Christmas', 'Wedding'].map((f, i) => `<div class="row"><span class="tile t-sand">${I('folder')}</span><span class="n">${f}</span>${i === 1 ? I('check', 's') : ''}</div>`).join('')}</div>
-    <div class="list"><div class="row"><span class="n">New folder</span>${chev}</div></div>`), { short: true }),
+  phone('1.4', 'Export… (a drawer)', 'From Export… in the song\'s or the Player\'s Settings. A drawer over the page.', bar({ title: 'Amazing Grace' }) + `<div class="content">${'<div class="pad">' + group('SHARE', [['sky', 'dl', 'Export…', '']]) + '</div>'}<div class="scrim"></div><div style="position:absolute;left:0;right:0;bottom:0;background:var(--card);border-radius:20px 20px 0 0;padding:10px 14px 18px;display:grid;gap:10px"><div style="justify-self:center;width:40px;height:4px;border-radius:4px;background:var(--line)"></div><b style="font:600 16px var(--display)">Export</b>${['MusicXML · for MuseScore, Flat, Dorico', 'MIDI · for any music program', 'PDF · the sheet as printed'].map((x, i) => `<div class="row" style="border:1px solid var(--line);border-radius:12px"><span class="tile t-sky">${I('dl')}</span><span class="n">${x}</span>${chev}</div>`).join('')}</div></div>`),
+  phone('1.5', 'Move to folder… (a drawer)', 'From Move to folder…. A tap moves it and closes the drawer.', bar({ title: 'Amazing Grace' }) + `<div class="content">${'<div class="pad"></div>'}<div class="scrim"></div><div style="position:absolute;left:0;right:0;bottom:0;background:var(--card);border-radius:20px 20px 0 0;padding:10px 14px 18px;display:grid;gap:10px"><div style="justify-self:center;width:40px;height:4px;border-radius:4px;background:var(--line)"></div><b style="font:600 16px var(--display)">Move to</b><div class="list">${['Songs (no folder)', 'Hymns', 'Christmas', 'Wedding'].map((f, i) => `<div class="row"><span class="tile t-sand">${I('folder')}</span><span class="n">${f}</span>${i === 1 ? I('check', 's') : ''}</div>`).join('')}<div class="row"><span class="tile t-grass">+</span><span class="n">New folder</span></div></div></div></div>`)
 ];
 
 // ——— 2 PLAYER ———
@@ -296,10 +291,11 @@ const player = [
   phone('2.1', 'The Player', 'From Practise on the song\'s page.', pBar() + tools('Sheet') + `<div class="content">${sheet(1, 1, '3/4')}${sheet(2)}${dockP}</div>`),
   phone('2.2', 'Pick your view', 'From "Sheet ⌃". Done or a tap outside closes it.', pBar() + tools('Grid', true) + `<div class="content">${sheet(1)}<div class="scrim"></div><div class="panel"><h3>Pick your view</h3>${note('How the song is shown while you play.')}<span class="seg full"><span>Sheet</span><span class="on">Grid</span><span>Diagrams</span><span>Lyrics</span></span><div class="preview" data-preview="grid"></div><span class="check"><i></i>Show this when opening a song</span><span class="cta">Done</span></div></div>`),
   phone('2.3', 'Transpose', 'From Transpose. It changes what you hear and see, not the song.', pBar() + `<div class="tools"><span class="t">Sheet ${I('down', 's')}</span><span class="t on">Transpose ${I('up', 's')}</span><span class="t">Simplify</span></div><div class="content">${sheet(1)}<div class="scrim"></div><div class="panel"><h3>Transpose</h3><div style="display:flex;align-items:center;gap:14px"><span class="btn tint">−</span><span style="font:600 26px var(--display)">+2</span><span class="btn tint">+</span></div>${note('G major → A major · two semitones up')}<div class="ksgrid" data-ks="3" style="width:100%"></div><span class="cta">Done</span></div></div>`),
-  phone('2.4', 'Simplify', 'From Simplify.', pBar() + `<div class="tools"><span class="t">Sheet ${I('down', 's')}</span><span class="t">Transpose</span><span class="t on">Simplify ${I('up', 's')}</span></div><div class="content">${sheet(1)}<div class="scrim"></div><div class="panel" style="justify-items:stretch;text-align:left"><h3 style="text-align:center">Simplify</h3>${card('Chords', [['As written', 'D7/F♯', true], ['Without inversions', 'D7'], ['Triads only', 'D']])}${card('Hands', [['Both hands', '', true], ['Melody and chords']])}<span class="cta" style="justify-self:center">Done</span></div></div>`),
-  phone('2.5', 'The Player\'s Settings', 'From the gear.', bar({ title: 'Player' }) + pad(`
-    ${group('THIS SONG', [['lilac', 'music', 'Staves', '2 playing'], ['sky', 'info', 'Song information', ''], ['grass', 'sections', 'Sections', '4'], ['sand', 'dl', 'Export…', ''], ['sand', 'print', 'Print', '']])}
-    ${group('HOW THE PLAYER WORKS', [['sky', 'view', 'Display', 'Scroll'], ['grass', 'play', 'Playback', 'Count-in'], ['honey', 'metro', 'Metronome', 'Click'], ['lilac', 'hand', 'One hand', 'Dim the other']])}
+  phone('2.4', 'Simplify (Chordify\'s: one button)', 'A tap turns it on: every chord is played and shown as its basic chord (Cmaj9/E → C). Another tap turns it off. No panel.', pBar() + tools('Sheet', false, true) + `<div class="content pad">${['Cmaj9/E → C', 'D7sus4 → D', 'Em11 → Em'].map(x => `<div class="row" style="border:1px solid var(--line);border-radius:10px;background:var(--card)">${x}</div>`).join('')}${dockP}</div>`, { short: true }),
+  phone('2.5', 'The Player\'s Settings', 'From the gear. Ordered by what you change most while playing.', bar({ title: 'Player' }) + pad(`
+    ${group('WHILE YOU PLAY', [['lilac', 'music', 'Staves', '2 playing'], ['sky', 'view', 'Display', 'Scroll'], ['grass', 'play', 'Playback', 'Count-in'], ['honey', 'metro', 'Metronome', 'Click']])}
+    ${group('THIS SONG', [['grass', 'sections', 'Sections', '4'], ['sky', 'info', 'Song information', '']])}
+    ${group('SHARE', [['sand', 'dl', 'Export…', ''], ['sand', 'print', 'Print…', '']])}
     ${group('', [['sky', 'help', 'Help', '']])}`)),
   phone('2.6', 'Staves', 'From the Player\'s Settings › Staves.', bar({ title: 'Staves' }) + pad(`
     <div class="list"><div class="row"><span class="n">All staves play</span><span class="sw"></span></div></div>
@@ -310,22 +306,22 @@ const player = [
     ${card('Layout', [['Scroll', 'One long page', true], ['Pages', 'Printed pages'], ['Horizontal', 'One line, moving left']])}
     ${swcard('On the sheet', [['Chord symbols', 1], ['Finger numbers', 1], ['Note names', 0], ['Lyrics', 0]])}
     ${swcard('Under the sheet', [['The piano keys', 1]])}`)),
-  phone('2.8', 'Playback', 'From the Player\'s Settings › Playback.', bar({ title: 'Playback' }) + pad(`
-    ${card('Count-in', [['None'], ['Audible', 'One bar of clicks, then the song', true], ['Visual', '3, 2, 1 on the screen']], 1)}
-    ${card('Pedal', [['As written', '', true], ['Off'], ['Automatic', 'Held through each chord']])}
-    ${card('Cursor', [['Beats', 'Jumps beat by beat'], ['Continuous', 'Glides with the music', true]])}
-    ${card('Speed training step', [['2 %'], ['5 %', '', true], ['10 %']])}`)),
-  phone('2.9', 'Metronome', 'From the Player\'s Settings › Metronome. The Metronome\'s one Settings page, also opened from Practice › Metronome.', bar({ title: 'Metronome' }) + pad(`
+  phone('2.8', 'Playback', 'From the Player\'s Settings › Playback. The keys are shown or hidden with the piano button in the bar, as in Flat.', bar({ title: 'Playback' }) + pad(`
+    ${card('Count-in', [['None'], ['One bar of clicks', 'Before the music starts', true], ['3, 2, 1 on the screen']], 1)}
+    ${card('Sustain pedal', [['As written', 'Pedal marks in the score are played', true], ['Off', 'No pedal, even where the score has it']])}
+    ${card('Cursor', [['Beat by beat'], ['Smooth', 'Glides with the music', true]])}
+    ${card('Speed trainer step', [['2 %'], ['5 %', '', true], ['10 %']])}`)),
+  phone('2.9', 'Metronome', 'One Metronome Settings page for the Player, the editor and Practice › Metronome.', bar({ title: 'Metronome' }) + pad(`
     ${card('Sound', [['Click', 'Woodblock', true], ['Beep'], ['Drums', 'Kick, snare and hi-hat']])}
     <div class="cardset"><b>Volume</b><div style="display:flex;align-items:center;gap:10px">${I('vol', 's soft')}<span class="slider"><b style="width:70%"></b></span><span class="v">70 %</span></div></div>
-    ${swcard('Accents', [['Accent the first beat', 1], ['Flash on each beat', 0]])}`)),
-  phone('2.10', 'One hand', 'From the Player\'s Settings › One hand.', bar({ title: 'One hand' }) + pad(`
-    ${card('The other hand on the sheet', [['Show'], ['Dim', '', true], ['Hide']])}
-    ${swcard('Sound', [['Play the other hand', 1]])}`), { short: true }),
+    <div class="cardset"><div style="display:flex;align-items:center;gap:8px"><span style="flex:1"><b>Beat 1 louder</b><small class="soft" style="display:block">So you hear where each bar starts</small></span><span class="sw"></span></div><div style="display:flex;gap:10px;justify-content:center;font:600 18px var(--sans)"><span>●</span><span class="soft">•</span><span class="soft">•</span></div></div>
+    ${swcard('', [['Flash the screen on each beat', 0]])}`)),
+  phone('2.10', 'Hands (in the floating transport)', 'The hand button in the transport: Both, Right or Left. The other hand plays or stays silent from its long-press.', pBar() + tools('Sheet') + `<div class="content">${sheet(1)}<div style="position:absolute;right:14px;bottom:78px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px;display:grid;gap:2px;box-shadow:0 6px 18px rgba(0,0,0,.12)">${['Both hands', 'Right hand', 'Left hand'].map((x, i) => `<div class="row${i === 1 ? ' sel' : ''}" style="border:0;border-radius:8px;min-height:34px">${x}</div>`).join('')}<div class="row" style="border-top:1px solid var(--line);min-height:34px"><span class="n">Hear the other hand</span><span class="sw"></span></div></div>${dockP.replace('Both', 'Right')}</div>`, { short: true }),
   phone('2.11', 'Song information', 'From the Player\'s Settings › Song information.', bar({ title: 'Song information' }) + pad(`
     <div class="list">${[['Title', 'Amazing Grace'], ['Composer', 'traditional'], ['Lyricist', 'John Newton'], ['Key', 'G major'], ['Time', '3/4'], ['Tempo', '♩ 90'], ['Bars', '32'], ['Source', 'Hymnal, 1779']].map(([a, b]) => `<div class="row"><span class="n soft">${a}</span><span>${b}</span></div>`).join('')}</div>`), { short: true }),
-  phone('2.12', 'Sections', 'From the Player\'s Settings › Sections. A tap plays from there; ⟲ loops it.', bar({ title: 'Sections' }) + pad(`
-    <div class="list">${[['Intro', '1–4'], ['Verse', '5–20'], ['Refrain', '21–28'], ['Ending', '29–32']].map(([a, b]) => `<div class="row"><span class="n">${a}</span><span class="v">bars ${b}</span>${I('loop', 's soft')}</div>`).join('')}</div>`), { short: true }),
+  phone('2.12', 'Sections', 'A tap plays from there; ⟲ loops it. "Edit sections" opens the editor, where sections are made and named.', bar({ title: 'Sections' }) + pad(`
+    <div class="list">${[['Intro', '1–4'], ['Verse', '5–20'], ['Refrain', '21–28'], ['Ending', '29–32']].map(([a, b]) => `<div class="row"><span class="n">${a}</span><span class="v">bars ${b}</span>${I('loop', 's soft')}</div>`).join('')}</div>
+    <div class="list"><div class="row"><span class="tile t-sky">${I('pen')}</span><span class="n">Edit sections</span>${chev}</div></div>`), { short: true })
 ];
 
 // ——— 3 EDITOR ———
@@ -344,17 +340,17 @@ const editor = [
     <div class="list">${['Right hand · Piano', 'Left hand · Piano', 'Voice · Soprano'].map(s => `<div class="row"><span class="tile t-lilac">${I('piano')}</span><span class="n">${s}</span>${I('pen', 's soft')}${I('trash', 's soft')}</div>`).join('')}</div>
     <span class="cta honey" style="justify-self:end">Add staff</span>
     ${note('✎ names the staff and picks its instrument and clef.')}`), { short: true }),
-  phone('3.5', 'Key signature', 'From the score\'s Settings › Key signature, or a tap on the printed key.', bar({ title: 'Key signature' }) + pad(`
+  phone('3.5', 'Key signature', 'From the score\'s Settings › Key signature, a tap on a printed key, or the palette with a bar chosen.', bar({ title: 'Key signature' }) + pad(`
     <div class="ksgrid" data-ks="1"></div>${note('G major · E minor')}
-    ${card('Change', [['The whole song', 'Its notes move with the key', true], ['From the Refrain on', 'Bar 21 to the end']])}`), { short: true }),
-  phone('3.6', 'Time signature', 'From the score\'s Settings › Time signature, or a tap on the printed time.', bar({ title: 'Time signature' }) + pad(`
+    <div class="list"><div class="row"><span class="n">From bar</span><span class="seg"><span>−</span><span class="on">1 (the start)</span><span>+</span></span></div><div class="row"><span class="n">Or from a section</span><span class="chip">Refrain, bar 21 ${I('down', 's')}</span></div></div>
+    ${swcard('', [['Move the notes with the key', 1]])}`), { short: true }),
+  phone('3.6', 'Time signature (Flat\'s Customize)', 'The common ones as tiles; Customize for any other, with a pickup bar.', bar({ title: 'Time signature' }) + pad(`
     <div class="tsgrid"><div>𝄴</div><div>2<br>4</div><div class="on">3<br>4</div><div>4<br>4</div><div>𝄵</div><div>6<br>8</div></div>
-    <div class="list"><div class="row"><span class="n">Other</span><span class="v">5/4, 7/8…</span>${chev}</div></div>
-    ${card('Change', [['The whole song', '', true], ['From the Refrain on', 'Bar 21 to the end']])}`), { short: true }),
-  phone('3.7', 'Tempo', 'From the score\'s Settings › Tempo, or a tap on the printed tempo.', bar({ title: 'Tempo' }) + pad(`
+    <div class="cardset"><b>Customize</b><div class="row" style="border:0;padding:0"><span class="n">Beats in a bar</span><span class="seg"><span>−</span><span class="on">5</span><span>+</span></span></div><div class="row" style="border:0;padding:0"><span class="n">Beat unit</span><span class="seg"><span>2</span><span class="on">4</span><span>8</span><span>16</span></span></div><div class="row" style="border:0;padding:0"><span class="n">Pickup bar (anacrusis)</span><span class="sw off"></span></div></div>
+    <div class="list"><div class="row"><span class="n">From bar</span><span class="v">1 (the start)</span>${chev}</div></div>`), { short: true }),
+  phone('3.7', 'Tempo', 'Swing left this page: it is a mark in the palette\'s Text, written where it starts.', bar({ title: 'Tempo' }) + pad(`
     <div style="display:flex;align-items:center;justify-content:center;gap:14px"><span class="btn tint">−</span><span style="font:600 30px var(--display)">♩ = 90</span><span class="btn tint">+</span></div>
-    <div class="list"><div class="row"><span class="n">Text</span><span class="v">Andante</span>${chev}</div></div>
-    ${card('Swing', [['Straight', '', true], ['Swing eighths'], ['Swing sixteenths']])}`), { short: true }),
+    ${card('Tempo marking', [['Andante', 'walking, 76–108', true], ['Moderato', '108–120'], ['Allegro', '120–156'], ['None', 'the number only']])}`), { short: true }),
   phone('3.8', 'Layout', 'From the score\'s Settings › Layout.', bar({ title: 'Layout' }) + pad(`
     ${card('Staff size', [['Small'], ['Medium', '', true], ['Large']])}
     ${card('Bars per line', [['As fits', 'Spaced by the notes', true], ['4'], ['Choose…']])}`), { short: true }),
@@ -362,19 +358,14 @@ const editor = [
     ${swcard('Sound', [['Play notes while editing', 1]])}
     ${card('Entering a note', [['Replace', 'It takes the place of what is there', true], ['Insert', 'It pushes what follows to the right']])}
     ${card('Palette', [['Left'], ['Right', '', true]])}`), { short: true }),
-  phone('3.10', 'Recording', 'From the score\'s Settings › Recording.', bar({ title: 'Recording' }) + pad(`
-    ${swcard('While recording', [['Click while recording', 1]])}
-    ${group('', [['honey', 'metro', 'Metronome', 'Click, 70 %']])}
-    ${note('The click\'s sound and volume are the Metronome\'s (2.9).')}`), { short: true }),
+  phone('3.10', 'Recording', 'From the score\'s Settings › Recording. Click track and count-in are the recording terms of Logic and Flat.', bar({ title: 'Recording' }) + pad(`
+    ${swcard('Click track', [['Metronome while recording', 1]])}
+    ${card('Count-in', [['None'], ['One bar', '', true], ['Two bars']])}
+    ${group('', [['honey', 'metro', 'Metronome sound', 'Click, 70 %']])}`), { short: true })
 ];
 
 // ——— more song screens ———
 song.push(
-  phone('1.6', 'A section\'s page', 'From a section on the song\'s page. Learn the song piece by piece.', bar({ title: 'Verse', right: [] }) + `<div class="content pad">
-    <div class="soft" style="font-size:12px">Amazing Grace · bars 5–20 · 2 of 3 lessons done</div>
-    ${sheet(1, 1, '3/4')}
-    ${group('LESSONS', [['grass', 'check', 'Right hand alone', 'Done', 'none'], ['grass', 'check', 'Left hand alone', 'Done', 'none'], ['sky', 'hand', 'Hands together', 'Next']])}
-    <div class="cap"><span>${I('loop', 's')}Loop</span><span>${I('play', 's')}Practise</span></div></div>`),
   phone('1.7', 'Publish in library', 'From the song\'s Settings › Publish in library. Your own song only.', bar({ title: 'Publish in library' }) + pad(`
     <div class="cardset"><b>Description</b><span class="soft" style="font-size:12.5px">Four-part hymn, verse and refrain, for a church accompanist.</span></div>
     <div class="cardset"><b>Preview</b>${sheet(1)}</div>
@@ -396,12 +387,12 @@ song.push(
 const gridView = `<div class="pad"><div class="gl">VERSE</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">${['G', 'G7', 'C', 'G', 'G', 'Em', 'D', 'D7', 'G', 'G7', 'C', 'G', 'Em', 'D', 'G', ''].map((c, i) => `<div style="height:38px;border-radius:8px;display:grid;place-items:center;font:600 15px var(--display);${i === 5 ? 'background:var(--ink);color:var(--paper)' : 'background:var(--card);border:1px solid var(--line)'}">${c}</div>`).join('')}</div><div class="gl">REFRAIN</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">${['C', 'G', 'Em', 'D'].map(c => `<div style="height:38px;border-radius:8px;display:grid;place-items:center;font:600 15px var(--display);background:var(--card);border:1px solid var(--line)">${c}</div>`).join('')}</div></div>`;
 player.push(
   phone('2.13', 'Grid view', 'From "Sheet ⌃" › Grid. Chordify\'s grid: a box a beat, the bar in a row.', pBar() + tools('Grid') + `<div class="content">${gridView}${dockP}</div>`),
-  phone('2.14', 'Diagrams view', 'From "Sheet ⌃" › Diagrams. The chord now, big, with the next ones.', pBar() + tools('Diagrams') + `<div class="content pad"><div style="display:flex;gap:8px;align-items:end"><span class="bigname">Em</span><span class="soft">then D · G</span></div><div data-kb="4,7,11" data-fingers="1,2,4" data-oct="2"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="cardset" style="padding:6px"><b style="font-size:12px">D</b><div data-kb="2,6,9" data-oct="1"></div></div><div class="cardset" style="padding:6px"><b style="font-size:12px">G</b><div data-kb="7,11,14" data-oct="2"></div></div></div>${dockP}</div>`),
+  phone('2.14', 'Diagrams view (Chordify\'s)', 'The chord now and the next one dimmed. Under them the strip: every chord by its beats. The black box moves beat by beat; the strip stays still and turns to the next part when the box reaches its end.', pBar() + tools('Diagrams') + `<div class="content pad" style="align-content:center;gap:18px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:center"><div><div data-kb="2,6,9" data-oct="1"></div><b style="font:500 18px var(--sans)">D</b></div><div style="opacity:.45"><div data-kb="4,7,11" data-oct="1"></div><b style="font:500 18px var(--sans)">Em</b></div></div>
+    <div style="display:flex;gap:3px;overflow:hidden">${['D', '', '', '', 'Em', '', '', ''].map((c, i) => `<div style="flex:none;width:40px;height:40px;border-radius:6px;display:grid;place-items:center;font:500 17px var(--sans);${i === 2 ? 'background:var(--ink);color:var(--paper)' : 'background:var(--card)'};${i % 4 === 0 ? 'border-left:3px solid var(--ink)' : ''}">${c}</div>`).join('')}</div>${dockP}</div>`),
   phone('2.15', 'Lyrics view', 'From "Sheet ⌃" › Lyrics. Chords over the words; the line now marked.', pBar() + tools('Lyrics') + `<div class="content pad" style="font-size:15px;line-height:1.3">${[['G', 'G7', 'Amazing grace, how sweet the sound'], ['G', 'D', 'That saved a wretch like me'], ['G', 'G7', 'I once was lost, but now am found'], ['Em D', 'G', 'Was blind, but now I see']].map(([a, b, t], i) => `<div style="${i === 1 ? 'background:var(--sky);border-radius:8px;padding:4px 6px' : 'padding:4px 6px'}"><div style="font:600 13px var(--sans);color:var(--sky-ink);display:flex;justify-content:space-between;max-width:220px"><span>${a}</span><span>${b}</span></div>${t}</div>`).join('')}${dockP}</div>`),
-  phone('2.16', 'A chart\'s Pattern (a progression, an exercise)', 'From the Player\'s Settings › Pattern, for music made of chords only. Was in Setup.', bar({ title: 'Pattern' }) + pad(`
-    ${card('How the chords are played', [['Block chords', 'Both hands together, once a bar', true], ['Broken chords', 'Alberti: low, high, middle, high'], ['Arpeggios', 'Up through the chord'], ['Waltz', 'Bass, chord, chord']])}
-    ${card('Swing', [['Straight', '', true], ['Swing eighths']])}
-    ${card('Chord size', [['Triads', '', true], ['7ths']])}`)),
+  phone('2.16', 'A chart\'s style (progressions, exercises)', 'Was "Pattern". Music made only of chords is played in a style, the same styles as the Chord player: chosen from pictured cards, heard as you tap.', bar({ title: 'Style' }) + pad(`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${[['Pop 1', 'piano, bass, drums'], ['Hymn', 'four-part chords'], ['Ballad', 'broken chords'], ['Waltz', 'bass, chord, chord']].map(([a, b], i) => `<div class="split${i ? '' : ' on'}" style="text-align:left;padding:10px"><b style="font-size:13px">${a}</b><span class="soft">${b}</span></div>`).join('')}</div>`), { short: true }),
   phone('2.17', 'Print', 'From the Player\'s Settings › Print. Then the system\'s print sheet.', bar({ title: 'Print' }) + pad(`
     ${card('What', [['The whole song', '', true], ['The section you\'re in', 'Verse, bars 5–20']])}
     ${swcard('On the page', [['Chord symbols', 1], ['Finger numbers', 1], ['Lyrics', 1]])}
@@ -427,11 +418,11 @@ editor.push(
   phone('3.20', 'Recording', 'From ● in the dock. Count-in, then it writes what you play.', eBar() + `<div class="content">${sheet(1)}<div style="position:absolute;left:0;right:0;top:96px;text-align:center;font:600 40px var(--display);color:var(--bad-ink)">3</div><div class="dock"><span class="tempo">♩ 90</span><span style="color:var(--bad-ink);font:600 12px var(--sans)">● 0:04</span><span class="play" style="background:var(--bad-ink)">■</span>${I('takes')}</div></div>`, { short: true }),
   phone('3.21', 'Takes', 'From the takes button in the dock: every recording, to keep or write into the score.', bar({ title: 'Takes' }) + pad(`
     <div class="list">${[['Take 3', '0:42 · today'], ['Take 2', '0:38 · today'], ['Take 1', '0:40 · yesterday']].map(([a, b]) => `<div class="row"><span class="play" style="width:28px;height:28px;border-radius:999px;background:var(--sand);display:grid;place-items:center">${I('play', 's')}</span><span class="n">${a}<small class="soft" style="display:block;font-size:11.5px">${b}</small></span><span class="chip">Write into score</span></div>`).join('')}</div>`), { short: true }),
-  phone('3.22', 'An editor\'s built-in song', 'The bar carries the status and Publish while there are unpublished changes.', bar({ left: '', title: 'Amazing Grace', after: `<span class="btn tint">${I('check')}</span>`, right: [`<span class="chip" style="background:var(--honey);color:var(--honey-ink);border-color:var(--honey)">Publish</span>`, 'gear'] }) + `<div class="content"><div class="soft" style="font-size:11.5px;padding:4px 12px">3 unpublished changes · everyone still sees the published version</div>${sheet(1, 1, '3/4')}${palette('Notes', noteRow)}</div>`),
+  phone('3.22', 'An editor\'s built-in song', 'Built-in songs are songs in the public library that only editors may change. The editor\'s bar is a song\'s like any other; Changes and Publish are in the song\'s Settings (1.9).', eBar() + `<div class="content">${sheet(1, 1, '3/4')}${palette('Notes', noteRow)}</div>`, { short: true }),
   phone('3.23', 'Staff: name, instrument, clef', 'From Staves › ✎ on a staff.', bar({ title: 'Right hand' }) + pad(`
     <div class="list"><div class="row"><span class="n">Name</span><span class="v">Right hand</span>${chev}</div><div class="row"><span class="n">Instrument</span><span class="v">Piano</span>${chev}</div></div>
     ${card('Clef', [['Treble 𝄞', '', true], ['Bass 𝄢'], ['Alto 𝄡']])}
-    ${swcard('', [['Show on the sheet', 1]])}`), { short: true }),
+    <div class="cardset"><div style="display:flex;align-items:center;gap:8px"><span style="flex:1"><b>Hide staff</b><small class="soft" style="display:block">Not printed or shown; it still plays</small></span><span class="sw off"></span></div></div>`), { short: true })
 );
 
 // ——— 4 LAPTOP ———
@@ -492,7 +483,7 @@ document.getElementById('s-moves').innerHTML = `<div class="list">${moves.map(([
   const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
   // a staff (treble, or grand) with clef, key signature (+sharps / -flats), optional time and a few notes
   const SH = [8,5,9,6,3,7,4], FL = [4,7,3,6,2,5,1];
-  function staffSvg(kind, key, time, notes) {
+  function staffSvg(kind, key, time, notes, scale, stack) {
     const w = 298, s = 7, staves = kind === 'grand' ? [22, 82] : [22];
     let g = '';
     staves.forEach((top, i) => {
@@ -503,6 +494,12 @@ document.getElementById('s-moves').innerHTML = `<div class="list">${moves.map(([
       for (let k = 0; k < n; k++) { const p = pos[k] - (bass ? 2 : 0); g += `<text x="${36 + k * 7}" y="${bottom - p * s / 2 + 4}" font-family="Noto Music" font-size="18">${key > 0 ? '♯' : '♭'}</text>` }
       let x = 40 + n * 7;
       if (time) { const [a, b] = time.split('/'); g += `<text x="${x}" y="${top + 2 * s - 1}" font-family="Noto Music" font-size="17" font-weight="700">${a}</text><text x="${x}" y="${bottom - 1}" font-family="Noto Music" font-size="17" font-weight="700">${b}</text>`; x += 16 }
+      if (scale !== undefined && i === 0) { for (let k = 0; k < 8; k++) { const p = +scale + k, nx = x + 22 + k * ((w - x - 40) / 8), ny = bottom - p * s / 2;
+          if (p <= -2) g += `<line x1="${nx - 7}" x2="${nx + 7}" y1="${bottom + s}" y2="${bottom + s}" stroke="currentColor" stroke-width=".8"/>`;
+          g += `<ellipse cx="${nx}" cy="${ny}" rx="4.2" ry="3.1" transform="rotate(-20 ${nx} ${ny})" fill="currentColor"/><line x1="${nx + 3.8}" x2="${nx + 3.8}" y1="${ny}" y2="${ny - 22}" stroke="currentColor" stroke-width="1"/>` } }
+      if (stack && i === 0) { stack.split(',').map(Number).forEach(p => { const nx = x + 40, ny = bottom - p * s / 2;
+          if (p <= -2) g += `<line x1="${nx - 7}" x2="${nx + 7}" y1="${bottom + s}" y2="${bottom + s}" stroke="currentColor" stroke-width=".8"/>`;
+          g += `<ellipse cx="${nx}" cy="${ny}" rx="4.4" ry="3.2" transform="rotate(-20 ${nx} ${ny})" fill="currentColor"/>` }); }
       if (notes) {
         const line = i === 0 ? [2, 4, 6, 5, 4, 2, 3, 4, 7, 6] : [-2, 0, 1, -1, 0, 2, 1, -1, 0, 1];
         for (let k = 0; k < 9; k++) { const nx = x + 14 + k * ((w - x - 30) / 9), ny = bottom - (line[(k + notes) % 10]) * s / 2;
@@ -510,10 +507,10 @@ document.getElementById('s-moves').innerHTML = `<div class="list">${moves.map(([
           if (k % 3 === 2) g += `<line x1="${nx + 12}" x2="${nx + 12}" y1="${top}" y2="${bottom}" stroke="currentColor" stroke-width=".8" opacity=".55"/>` }
       }
     });
-    const h = kind === 'grand' ? 128 : 66;
+    const h = kind === 'grand' ? 128 : 70;
     return `<svg viewBox="0 0 ${w} ${h}" width="100%" style="display:block;color:var(--ink)" aria-hidden="true">${kind === 'grand' ? `<line x1="8" x2="8" y1="22" y2="${82 + 28}" stroke="currentColor"/>` : ''}${g}</svg>`;
   }
-  document.querySelectorAll('[data-staff]').forEach(el => el.innerHTML = staffSvg(el.dataset.staff, +el.dataset.key, el.dataset.time, +el.dataset.notes));
+  document.querySelectorAll('[data-staff]').forEach(el => el.innerHTML = staffSvg(el.dataset.staff, +el.dataset.key, el.dataset.time, +el.dataset.notes, el.dataset.scale, el.dataset.stack));
 
   // the key-signature grid as Flat draws it
   function sig(n) {
@@ -529,7 +526,8 @@ document.getElementById('s-moves').innerHTML = `<div class="list">${moves.map(([
   });
 
   // a keyboard: pitch classes to mark, finger numbers, octaves
-  function keyboard(marks, fingers, oct) {
+  function keyboard(marks, fingers, oct, lh, mini) {
+    const L = (lh || '').split(',').filter(Boolean).map(Number);
     const W = 276, ww = W / (7 * oct), wh = 92, bw = ww * .62, bh = 56, m = marks.map(Number), f = fingers ? fingers.split(',') : [];
     const WPC = [0, 2, 4, 5, 7, 9, 11], keys = [];
     for (let o = 0; o < oct; o++) WPC.forEach((pc, i) => {
@@ -538,12 +536,12 @@ document.getElementById('s-moves').innerHTML = `<div class="list">${moves.map(([
     });
     const on = keys.filter(k => m.includes(k.p)).sort((a, b) => a.p - b.p); on.forEach((k, i) => k.f = f[i]);
     const draw = k => { const hit = m.includes(k.p), h = k.black ? bh : wh;
-      let g = `<rect x="${k.x}" y="0" width="${k.w}" height="${h}" rx="${k.black ? 2 : 3}" fill="${hit ? 'var(--hit)' : k.black ? 'var(--key-black)' : 'var(--card)'}" stroke="var(--line)"/>`;
+      let g = `<rect x="${k.x}" y="0" width="${k.w}" height="${h}" rx="${k.black ? 2 : 3}" fill="${hit && L.includes(k.p) ? 'var(--lilac-ink)' : hit ? 'var(--hit)' : k.black ? 'var(--key-black)' : 'var(--card)'}" stroke="var(--line)"/>`;
       if (hit && k.f) g += `<circle cx="${k.x + k.w / 2}" cy="${h - 13}" r="${k.black ? 7 : 8}" fill="var(--ink)"/><text x="${k.x + k.w / 2}" y="${h - 9}" text-anchor="middle" font-size="${k.black ? 10 : 11}" font-weight="600" fill="var(--paper)" font-family="Onest">${k.f}</text>`;
       return g };
     return `<svg viewBox="-1 -1 ${W + 2} ${wh + 2}" width="100%" aria-hidden="true">${keys.filter(k => !k.black).map(draw).join('')}${keys.filter(k => k.black).map(draw).join('')}</svg>`;
   }
-  document.querySelectorAll('[data-kb]').forEach(el => el.innerHTML = keyboard(el.dataset.kb.split(','), el.dataset.fingers, +el.dataset.oct || 1));
+  document.querySelectorAll('[data-kb]').forEach(el => el.innerHTML = keyboard(el.dataset.kb.split(','), el.dataset.fingers, +el.dataset.oct || 1, el.dataset.lh, el.dataset.mini));
 
   // a Chordify-like grid preview
   document.querySelectorAll('[data-preview="grid"]').forEach(el => {
