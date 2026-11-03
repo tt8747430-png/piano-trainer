@@ -86,7 +86,6 @@ export function ChordView({
       loop={loop}
       pinned={pinned}
       textSize={textSize}
-      clock={practice.clock}
       onGo={go}
       onSymbol={goToChord}
     />

@@ -43,7 +43,6 @@ export function ChordsOverLyrics({
   loop,
   pinned,
   textSize,
-  clock,
   onGo,
   onSymbol,
 }: {
@@ -60,8 +59,6 @@ export function ChordsOverLyrics({
   pinned: boolean
   /** The words and their chords, as a percent of their own size. */
   textSize: TextSize
-  /** Listen's clock while it plays: the strip's. */
-  clock: (() => Tick | null) | null
   onGo: (at: Tick) => void
   /** A pinned diagram tapped, by its symbol: the cursor taken to it. */
   onSymbol: (symbol: string) => void
@@ -117,14 +114,7 @@ export function ChordsOverLyrics({
         ref={strip}
         className="sticky top-(--tools-room) z-20 -mx-gutter bg-background py-2 landscape-phone:mx-0"
       >
-        <BeatStrip
-          performance={performance}
-          bars={bars}
-          beat={beat}
-          loop={loop}
-          clock={clock}
-          onBeat={onGo}
-        />
+        <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} />
         {pinned ? (
           <div className="mx-auto mt-1 w-full max-w-2xl px-gutter landscape-phone:px-0">
             <ChordSummary chords={summary} sounding={sounding} onChord={onSymbol} />

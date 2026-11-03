@@ -25,7 +25,7 @@ import { SungLines } from './SungLines'
  * Diagrams (ADR 0108, Chordify's), every chord on the same keys, each in the inversion
  * its piece chose. Animated, the pair (`ChordPair`): the chord sounding and the next beside it,
  * sliding with Listen's clock and swiped to the next chord or the one before, the page itself still.
- * Under them the beat strip, dragged to scrub, and under it, with the View's Lyrics on, the line sung
+ * Under them the beat strip, a page at a time, and under it, with the View's Lyrics on, the line sung
  * (`SungLines`). On a phone on its side, the title, the strip and the words beside the chords. All of
  * it stands in the room above the transport, in the middle of it, the chords shrinking where it is
  * short (`diagrams-view`), nothing scrolling. In its summary mode, the strip and the words over the
@@ -74,14 +74,7 @@ export function ChordDiagrams({
     ? sungPlace(performance, lines, { bar: beat.bar, played: span.played }, loop)
     : null
   const strip = (
-    <BeatStrip
-      performance={performance}
-      bars={bars}
-      beat={beat}
-      loop={loop}
-      clock={clock}
-      onBeat={onGo}
-    />
+    <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} />
   )
   const sung = place ? <SungLines place={place} written={span.written} /> : null
   if (mode === 'summary') {

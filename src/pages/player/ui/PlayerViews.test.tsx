@@ -441,7 +441,9 @@ describe('Diagrams (ADR 0108)', () => {
     // A diagram takes the cursor to its chord (ADR 0108): the next sounds now, opening no sheet.
     await user.click(within(view).getByRole('button', { name: 'Next: G7' }))
     expect(within(view).getByRole('button', { name: /^G7: / })).toBeInTheDocument()
-    expect(stripNamed()[Number(stripBeat())]).toBe('G7')
+    expect(document.querySelector('[data-slot="beat-strip"] [data-sounding]')).toHaveTextContent(
+      'G7',
+    )
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
@@ -459,13 +461,13 @@ describe('Diagrams (ADR 0108)', () => {
     ).toEqual(['G: G B D', 'C: G C E'])
   })
 
-  it('names a chord on the strip once over the bars that go on with it (ADR 0108)', async () => {
+  it('names a chord on the strip once over the bars that go on with it, a line a page (ADR 0108, R29)', async () => {
+    const user = userEvent.setup()
     await inView('diagrams', '/play/silent')
-    // Bars of 3/4: C C C C, then G7 G7 C C.
-    expect(stripNamed().slice(0, 24)).toEqual([
-      ...['C', '', '', '', '', '', '', '', '', '', '', ''],
-      ...['G7', '', '', '', '', '', 'C', '', '', '', '', ''],
-    ])
+    // Bars of 3/4: C C C C, then on the next line G7 G7 C C.
+    expect(stripNamed()).toEqual(['C', '', '', '', '', '', '', '', '', '', '', ''])
+    await user.click(screen.getByRole('button', { name: 'Next: G7' }))
+    expect(stripNamed()).toEqual(['G7', '', '', '', '', '', 'C', '', '', '', '', ''])
   })
 
   it('rests on the strip where the music turns to no chord (ADR 0108)', async () => {
@@ -507,8 +509,9 @@ describe('Diagrams (ADR 0108)', () => {
     await inView('diagrams', '/play/my-1', { storage })
     const view = screen.getByRole('region', { name: 'Diagrams' })
     expect(sungLine(view)).toHaveTextContent('Good day,')
-    // The third bar's: a line of no words.
-    await user.click(stripCell(8))
+    // The third bar's, on the next line: a line of no words.
+    await user.click(within(view).getByRole('button', { name: 'Next: D' }))
+    await user.click(within(view).getByRole('button', { name: 'Next: C' }))
     expect(sungLine(view)).toBeNull()
     expect(view.querySelector('[data-slot="wait"]')).toBeInTheDocument()
     expect(comingLine(view)).toHaveTextContent('good night')

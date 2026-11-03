@@ -1,36 +1,31 @@
-import { useMemo } from 'react'
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { BarRange, CellBar, PlayedBeat } from '@/features/practice'
-import { cn, useMediaQuery } from '@/shared/lib'
+import { cn, useElementSize } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
 import { CellChords } from '@/widgets/chord-chart'
 import { firstBeats } from '../model/strip-place'
 import { stripNames } from '../model/strip-names'
-import { useStripMotion } from '../model/use-strip-motion'
+import { pageOf, stripPages } from '../model/strip-pages'
 
 /** A quarter rest in the music font: where the music turns to no chord. */
 const REST = '\u{1D13D}'
 
 /**
- * The beat strip (ADR 0108, Chordify's): every beat of the music as played in one row,
- * the repeats taken, a barline before each bar, a chord named only in the beat where it changes and a
- * rest where the music turns to none (`stripNames`), the beat sounding filled with the ink, the
- * loop's beats on its band. While Listen plays it slides with its clock frame by frame
- * (`stripShift`), the beat sounding's middle a third of the way in as it starts; taken to a beat (a
- * tap, a step) it slides there; under reduced motion it stands still at each beat. Its edges are
- * plain, never faded (R13), and it scrolls nothing: it is moved.
- * Dragged sideways (a finger, a mouse, a trackpad), it scrubs through the music and glides on after
- * a flick, settling on a beat at its mark, where the cursor goes (`useStripMotion`); up and down is
- * the page's. A beat tapped takes the cursor there (`onBeat`, the tick it is played at). It is a picture of where
- * the music is, hidden from a screen reader, its beats out of the tab order: the transport and the
- * other views' bars are the way through.
+ * The beat strip (ADR 0108, R29: Chordify's): the music's beats as played, a page at a time, the
+ * repeats taken, a barline before each bar, a chord named only in the beat where it changes and a
+ * rest where the music turns to none (`stripNames`), the beat sounding a black box, the loop's beats
+ * on its band. The strip stands still: the box moves beat by beat, and when it leaves the page the
+ * strip turns to the next (`stripPages`: each line of the chart a page, split where the room is
+ * short). A loop inside a page never turns it. A beat tapped takes the cursor there (`onBeat`, the
+ * tick it is played at). It is a picture of where the music is, hidden from a screen reader, its
+ * beats out of the tab order: the transport and the other views' bars are the way through.
  */
 export function BeatStrip({
   performance,
   bars,
   beat,
   loop,
-  clock,
   onBeat,
   className,
 }: {
@@ -39,12 +34,9 @@ export function BeatStrip({
   bars: readonly CellBar[]
   beat: PlayedBeat
   loop: BarRange | null
-  /** Listen's clock while it plays: where the music is between its beat groups. */
-  clock: (() => Tick | null) | null
   onBeat: (at: Tick) => void
   className?: string
 }) {
-  const still = useMediaQuery('(prefers-reduced-motion: reduce)')
   const firsts = useMemo(() => firstBeats(bars), [bars])
   const names = useMemo(() => stripNames(performance, bars), [performance, bars])
   const ticks = useMemo(
@@ -55,25 +47,29 @@ export function BeatStrip({
     [performance, bars],
   )
   const sounding = (firsts[beat.bar] ?? 0) + beat.beat
-  const { frame, row, ...taps } = useStripMotion({
-    performance,
-    bars,
-    sounding,
-    ticks,
-    clock,
-    still,
-    onBeat,
-  })
+  // How many beats the room holds: its width over a beat's, once both are laid out.
+  const frame = useRef<HTMLDivElement>(null)
+  const { width } = useElementSize(frame)
+  const [beatWidth, setBeatWidth] = useState(0)
+  useLayoutEffect(() => {
+    setBeatWidth(frame.current?.querySelector<HTMLElement>('[data-cell]')?.offsetWidth ?? 0)
+  }, [width])
+  const room = width > 0 && beatWidth > 0 ? Math.max(1, Math.floor(width / beatWidth)) : Infinity
+  const pages = useMemo(() => stripPages(bars, room), [bars, room])
+  const page = pages[pageOf(pages, beat.bar)] ?? []
   return (
     <div
       ref={frame}
       aria-hidden
       data-slot="beat-strip"
-      {...taps}
-      className={cn('touch-pan-y overflow-hidden overscroll-x-none select-none', className)}
+      data-page={pageOf(pages, beat.bar)}
+      className={cn('overflow-hidden select-none', className)}
     >
-      <div ref={row} className="relative flex w-max will-change-transform">
-        {bars.map(({ played, cells }, index) => {
+      <div className="flex w-max">
+        {page.map((index) => {
+          const bar = bars[index]
+          if (!bar) return null
+          const { played, cells } = bar
           const looped = loop !== null && played >= loop.first && played <= loop.last
           return (
             <div

@@ -1,14 +1,15 @@
 import { fireEvent, render, waitFor } from '@testing-library/react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
-import { arrangePiece, ownChoice, playedBeatCells } from '@/features/practice'
+import { arrangePiece, ownChoice, playedBeatCells, type PlayedBeat } from '@/features/practice'
+import { stubResizeObserver } from '@/shared/test/resize'
 import { BeatStrip } from './BeatStrip'
 
 const B = TICKS_PER_BEAT
 
-/** C, G, Am and F, a bar each of 4/4: sixteen beats along the strip. */
+/** Two lines of the chart, four bars of 4/4 each: thirty-two beats in all. */
 const piece: ChartPiece = {
   id: 'my-1',
   kind: 'song',
@@ -17,134 +18,73 @@ const piece: ChartPiece = {
   meter: '4/4',
   tempo: 90,
   pattern: 'r1',
-  sections: [{ kind: 'verse', lines: ['C G Am F'] }],
+  sections: [{ kind: 'verse', lines: ['C G Am F', 'Dm G C C'] }],
 }
 const performance = arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS, { unfold: true })
 const bars = playedBeatCells(performance)
 
-/**
- * Under reduced motion the strip settles at once, so a test reads where it came to rest. jsdom lays
- * nothing out: each beat is 50px wide, side by side, in a frame of 300px, its mark at 100px.
- */
-beforeEach(() => {
-  vi.stubGlobal('matchMedia', (media: string) => ({
-    matches: media.includes('prefers-reduced-motion'),
-    media,
-    addEventListener: () => {},
-    removeEventListener: () => {},
-    addListener: () => {},
-    removeListener: () => {},
-    onchange: null,
-    dispatchEvent: () => false,
-  }))
-  vi.spyOn(HTMLElement.prototype, 'offsetLeft', 'get').mockImplementation(function (
-    this: HTMLElement,
-  ) {
-    return Number(this.dataset.cell ?? 0) * 50
-  })
-  vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(50)
-  vi.spyOn(Element.prototype, 'clientWidth', 'get').mockReturnValue(300)
+const at = (bar: number, beat: number): PlayedBeat => ({
+  bar,
+  beat,
+  startTick: (bar * 4 + beat) * B,
 })
 
-function renderStrip() {
+function renderStrip(beat: PlayedBeat) {
   const onBeat = vi.fn()
-  const { container } = render(
-    <BeatStrip
-      performance={performance}
-      bars={bars}
-      beat={{ bar: 0, beat: 0, startTick: 0 }}
-      loop={null}
-      clock={null}
-      onBeat={onBeat}
-    />,
+  const view = render(
+    <BeatStrip performance={performance} bars={bars} beat={beat} loop={null} onBeat={onBeat} />,
   )
-  const strip = container.querySelector<HTMLElement>('[data-slot="beat-strip"]')!
-  const cell = (at: number) => strip.querySelector<HTMLElement>(`[data-cell="${at}"]`)!
-  return { onBeat, strip, cell, row: strip.firstElementChild as HTMLElement }
+  const strip = () => view.container.querySelector<HTMLElement>('[data-slot="beat-strip"]')!
+  const cells = () =>
+    [...strip().querySelectorAll<HTMLElement>('[data-cell]')].map((cell) =>
+      Number(cell.dataset.cell),
+    )
+  const rerender = (next: PlayedBeat) =>
+    view.rerender(
+      <BeatStrip performance={performance} bars={bars} beat={next} loop={null} onBeat={onBeat} />,
+    )
+  return { onBeat, strip, cells, rerender }
 }
 
-const finger = { pointerId: 1, pointerType: 'touch', isPrimary: true }
-
-/** A finger down on a beat, along by `by` px (and down by `down`), then up. */
-function drag(on: HTMLElement, by: number, { down = 0, lift = true } = {}) {
-  fireEvent.pointerDown(on, { ...finger, buttons: 1, clientX: 200, clientY: 20 })
-  fireEvent.pointerMove(on, {
-    ...finger,
-    buttons: 1,
-    clientX: 200 + by / 2,
-    clientY: 20 + down / 2,
-  })
-  fireEvent.pointerMove(on, { ...finger, buttons: 1, clientX: 200 + by, clientY: 20 + down })
-  if (lift)
-    fireEvent.pointerUp(on, { ...finger, buttons: 0, clientX: 200 + by, clientY: 20 + down })
-}
-
-describe('the beat strip dragged (ADR 0108)', () => {
-  it('stands the beat sounding a third of the way in', () => {
-    const { row } = renderStrip()
-    expect(row.style.transform).toBe('translateX(75px)')
+describe('the beat strip, a page at a time (R29, Chordify’s)', () => {
+  it('shows the line the beat is in, the beat sounding its black box', () => {
+    const { strip, cells } = renderStrip(at(1, 2))
+    expect(cells()).toEqual([...Array(16).keys()])
+    expect(strip().querySelector('[data-sounding]')).toHaveAttribute('data-cell', '6')
   })
 
-  it('moves under the finger as it is dragged', () => {
-    const { cell, row } = renderStrip()
-    drag(cell(1), -100, { lift: false })
-    // 100px less the 3px a touch moves before it is a drag.
-    expect(row.style.transform).toBe('translateX(-22px)')
+  it('moves the box a beat at a time, the strip still', () => {
+    const { strip, cells, rerender } = renderStrip(at(0, 0))
+    rerender(at(0, 1))
+    expect(strip().querySelector('[data-sounding]')).toHaveAttribute('data-cell', '1')
+    expect(cells()[0]).toBe(0)
   })
 
-  it('takes the cursor to the beat at its mark where it is let go', () => {
-    const { onBeat, cell, row } = renderStrip()
-    drag(cell(1), -100)
-    // Beat 3 of the first bar, its middle at the mark.
-    expect(onBeat).toHaveBeenCalledOnce()
-    expect(onBeat).toHaveBeenCalledWith(2 * B)
-    expect(row.style.transform).toBe('translateX(-25px)')
+  it('turns to the next line once the box reaches it', () => {
+    const { strip, cells, rerender } = renderStrip(at(3, 3))
+    expect(strip()).toHaveAttribute('data-page', '0')
+    rerender(at(4, 0))
+    expect(strip()).toHaveAttribute('data-page', '1')
+    expect(cells()).toEqual([...Array(16).keys()].map((beat) => beat + 16))
   })
 
-  it('gives like a rubber band past its first beat, and settles back on it', () => {
-    const { onBeat, cell, row } = renderStrip()
-    drag(cell(0), 120, { lift: false })
-    const drawn = Number(/-?[\d.]+/.exec(row.style.transform)?.[0])
-    expect(drawn).toBeGreaterThan(75)
-    expect(drawn).toBeLessThan(75 + 120)
-    fireEvent.pointerUp(cell(0), { ...finger, buttons: 0, clientX: 320, clientY: 20 })
-    expect(onBeat).toHaveBeenCalledWith(0)
+  it('never turns for a loop inside a page', () => {
+    const { strip, rerender } = renderStrip(at(2, 3))
+    rerender(at(1, 0))
+    expect(strip()).toHaveAttribute('data-page', '0')
   })
 
-  it('is no tap at a drag’s end, but a tap still goes to the beat tapped', () => {
-    const { onBeat, cell } = renderStrip()
-    drag(cell(1), -100)
-    fireEvent.click(cell(1))
-    expect(onBeat).toHaveBeenCalledOnce()
-    fireEvent.pointerDown(cell(5), { ...finger, buttons: 1, clientX: 200, clientY: 20 })
-    fireEvent.pointerUp(cell(5), { ...finger, buttons: 0, clientX: 200, clientY: 20 })
-    fireEvent.click(cell(5))
-    expect(onBeat).toHaveBeenLastCalledWith(4 * B + B)
+  it('splits a line into pages of whole bars where the room is short', async () => {
+    // Room for ten beats of 40px: two bars a page.
+    stubResizeObserver({ width: 400 })
+    vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(40)
+    const { cells } = renderStrip(at(2, 0))
+    await waitFor(() => expect(cells()).toEqual([8, 9, 10, 11, 12, 13, 14, 15]))
   })
 
-  it('leaves a drag up or down to the page', () => {
-    const { onBeat, cell, row } = renderStrip()
-    drag(cell(1), 4, { down: 120 })
-    expect(onBeat).not.toHaveBeenCalled()
-    expect(row.style.transform).toBe('translateX(75px)')
-  })
-
-  it('moves only sideways for the page: a pan up and down is the browser’s', () => {
-    const { strip } = renderStrip()
-    expect(strip).toHaveClass('touch-pan-y')
-  })
-
-  it('scrubs with a trackpad’s sideways scroll, the page kept still', async () => {
-    const { onBeat, strip, row } = renderStrip()
-    const scrolled = fireEvent.wheel(strip, { deltaX: 100, deltaY: 0 })
-    expect(scrolled).toBe(false)
-    expect(row.style.transform).toBe('translateX(-25px)')
-    await waitFor(() => expect(onBeat).toHaveBeenCalledWith(2 * B))
-  })
-
-  it('leaves a scroll up or down to the page', () => {
-    const { onBeat, strip } = renderStrip()
-    expect(fireEvent.wheel(strip, { deltaX: 0, deltaY: 100 })).toBe(true)
-    expect(onBeat).not.toHaveBeenCalled()
+  it('takes the cursor to a beat tapped', () => {
+    const { strip, onBeat } = renderStrip(at(0, 0))
+    fireEvent.click(strip().querySelector('[data-cell="5"]')!)
+    expect(onBeat).toHaveBeenCalledWith(5 * B)
   })
 })
