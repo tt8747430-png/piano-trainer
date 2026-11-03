@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { ArrowRight, Check, Play, RotateCcw, Settings } from 'lucide-react'
+import { BookOpenText, Check, Play, RotateCcw, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { courseById, CourseIcon, courseStepIds, type Course } from '@/entities/course'
 import { PieceLink, pieceById } from '@/entities/piece'
@@ -36,7 +36,7 @@ function CourseAction({ course }: { course: Course }) {
     : progress.done === 0
       ? t('course.start')
       : t('course.continue')
-  const Icon = !open ? RotateCcw : step.kind === 'piece' ? Play : ArrowRight
+  const Icon = !open ? RotateCcw : step.kind === 'piece' ? Play : BookOpenText
   return (
     <FloatingActions>
       <FabLink

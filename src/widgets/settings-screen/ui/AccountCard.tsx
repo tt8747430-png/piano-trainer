@@ -52,7 +52,7 @@ export function AccountCardFace({ account, line }: { account: Account | null; li
     }
   })()
   return (
-    <nav aria-label={t('account.label')} className="flex flex-col card p-1.5">
+    <nav aria-label={t('account.label')} className="flex flex-col overflow-hidden card">
       {account ? (
         <RowLink
           title={account.name || account.email}

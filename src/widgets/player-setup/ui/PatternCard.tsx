@@ -1,10 +1,10 @@
-import { AudioWaveform, ChevronRight, Hand, RotateCcw } from 'lucide-react'
+import { AudioWaveform, Hand, RotateCcw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LEFT_FIGURES, RIGHT_FIGURES, usePatternBook } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
 import type { Figure } from '@/shared/lib/arrangement'
 import { cn } from '@/shared/lib'
-import { Labelled, MenuSection, PAINT } from '@/shared/ui'
+import { Labelled, MenuSection, OpensMark, PAINT } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { FigureRoll } from './FigureRoll'
 import { InversionField } from './InversionField'
@@ -90,7 +90,7 @@ function HandButton({
         <span className="block font-semibold text-pretty">{name}</span>
       </span>
       {figure ? <FigureRoll hand={page} figure={figure} className="text-muted-foreground" /> : null}
-      <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+      <OpensMark />
     </button>
   )
 }
@@ -158,7 +158,7 @@ export function PatternCard() {
                   {about}
                 </span>
               </span>
-              <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+              <OpensMark />
             </button>
             <div className="grid divide-y divide-hairline border-t border-hairline">
               <HandFigure

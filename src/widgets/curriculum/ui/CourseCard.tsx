@@ -1,12 +1,12 @@
 import { Link } from '@tanstack/react-router'
-import { Check, ChevronRight } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { CourseIcon, type Course } from '@/entities/course'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { STAGE_PAINT } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { PAINT } from '@/shared/ui'
+import { OpensMark, PAINT } from '@/shared/ui'
 import { courseProgress, isComplete } from '../model/progress'
 import { LearnedMeter } from './LearnedMeter'
 
@@ -63,10 +63,7 @@ export function CourseCard({ course, current }: { course: Course; current: boole
           {t('upNext')}
         </span>
       ) : null}
-      <ChevronRight
-        aria-hidden
-        className="size-5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-foreground"
-      />
+      <OpensMark />
     </Link>
   )
 }

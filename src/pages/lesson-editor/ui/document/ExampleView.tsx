@@ -1,13 +1,5 @@
 import { NodeViewWrapper, type ReactNodeViewProps } from '@tiptap/react'
-import {
-  ChevronRight,
-  CircleHelp,
-  Copy,
-  FilePen,
-  Piano,
-  SlidersHorizontal,
-  Trash2,
-} from 'lucide-react'
+import { CircleHelp, Copy, FilePen, Piano, SlidersHorizontal, Trash2 } from 'lucide-react'
 import {
   Component,
   use,
@@ -23,7 +15,15 @@ import type { LessonBlock, LessonExample } from '@/entities/lesson'
 import { i18n, type LocalText } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { C_MAJOR, CHORD_QUALITIES, INTERVAL_GROUPS, SCALE_KINDS } from '@/shared/lib/music'
-import { Dropdown, InfoTip, KeyPicker, NotePicker, Segmented, TileMark } from '@/shared/ui'
+import {
+  Dropdown,
+  InfoTip,
+  KeyPicker,
+  NotePicker,
+  OpensMark,
+  Segmented,
+  TileMark,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Textarea } from '@/shared/ui/primitives/textarea'
@@ -424,7 +424,7 @@ export function ExampleView({
               className="h-auto min-h-10 flex-1 rounded-lg border-transparent bg-transparent px-1 text-lg font-semibold shadow-none md:text-lg dark:bg-transparent"
               onChange={(title) => change({ ...block, title })}
             />
-            <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+            <OpensMark />
           </div>
         </div>
       ) : blockReads(block) ? (

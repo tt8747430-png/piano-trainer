@@ -1,6 +1,5 @@
 import {
   Archive,
-  ArrowLeft,
   CheckCheck,
   Ellipsis,
   FolderInput,
@@ -12,7 +11,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useFolderName, useLibraryLayout, type ShelvedFolder } from '@/entities/library'
 import { useUp } from '@/shared/lib'
-import { ActionMenu, RoundButton, ScreenHeader } from '@/shared/ui'
+import { ActionMenu, BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { LibraryPage } from '../model/use-library-page'
 import { ArchiveButton } from './ArchiveButton'
@@ -63,9 +62,8 @@ export function LibraryHeader({
       large={!folder}
       back={
         folder ? (
-          <RoundButton
+          <BackButton
             label={t('folder.up', { name: above ? nameOf(above) : t('title') })}
-            icon={ArrowLeft}
             onClick={up}
           />
         ) : undefined

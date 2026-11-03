@@ -44,7 +44,15 @@ export function SettingsGroup({
       {bare ? (
         <div className="flex flex-col gap-3">{children}</div>
       ) : (
-        <div className={cn('flex flex-col card', flush ? 'p-1.5' : 'gap-3 px-5 py-4')}>
+        <div
+          className={cn(
+            'flex flex-col card',
+            // A row's hover fills the card to its edges (R23), square between rows.
+            flush
+              ? 'overflow-hidden [&>*]:rounded-none [&>*:first-child]:rounded-t-3xl [&>*:last-child]:rounded-b-3xl'
+              : 'gap-3 px-5 py-4',
+          )}
+        >
           {children}
         </div>
       )}

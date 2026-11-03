@@ -1,5 +1,5 @@
-import { ChevronRight } from 'lucide-react'
 import { useState } from 'react'
+import { OpensMark } from '../NavMarks'
 import { useTranslation } from 'react-i18next'
 import { useKeyName } from '@/shared/i18n'
 import { keySignature, signatureKey, type Key } from '@/shared/lib/music'
@@ -56,7 +56,7 @@ export function KeysChecklist({
           <span className="min-w-0 text-foreground">{label}</span>
           <span className="flex shrink-0 items-center gap-1 text-muted-foreground tabular-nums">
             {t('picker.chosen', { count: chosen.size, total: SIGNATURES.length })}
-            <ChevronRight aria-hidden className="size-4" />
+            <OpensMark />
           </span>
         </SheetTrigger>
         <SheetContent

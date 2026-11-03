@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Check, ChevronRight } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type Course } from '@/entities/course'
@@ -7,7 +7,7 @@ import { selectLearned, selectRead, useProgress } from '@/entities/progress'
 import { courseLessonStepId, STAGE_PAINT, type StepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { PAINT, ProgressRing } from '@/shared/ui'
+import { OpensMark, PAINT, ProgressRing } from '@/shared/ui'
 import { lessonShare } from '../model/progress'
 
 /**
@@ -75,10 +75,7 @@ export function CourseLessons({ course, next }: { course: Course; next: StepId |
                     </span>
                   ) : null}
                 </span>
-                <ChevronRight
-                  aria-hidden
-                  className="size-5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-foreground"
-                />
+                <OpensMark />
               </Link>
             </li>
           )

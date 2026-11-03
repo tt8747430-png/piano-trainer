@@ -1,5 +1,6 @@
 export { Avatar } from './Avatar'
 export { BackButton } from './BackButton'
+export { BackMark, OpensMark } from './NavMarks'
 export { ButtonLink } from './ButtonLink'
 export { ChordButton } from './ChordButton'
 export { ChoiceChips } from './ChoiceChips'

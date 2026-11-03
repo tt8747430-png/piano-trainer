@@ -1,7 +1,6 @@
-import { ChevronLeft } from 'lucide-react'
 import { useEffect, useRef, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Listbox } from '@/shared/ui'
+import { BackMark, Listbox } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /** A choice on a list page: its name, and under it what it is or why it is closed. */
@@ -49,7 +48,7 @@ export function ListPage({
       {/* Back stays at the top of the sheet however far down the list it opened. */}
       <div className="sticky top-0 z-10 -mx-5 border-b border-hairline bg-card px-5 py-1">
         <Button variant="ghost" className="-ml-3" onClick={onBack}>
-          <ChevronLeft data-icon="inline-start" />
+          <BackMark />
           {t('back')}
         </Button>
       </div>
