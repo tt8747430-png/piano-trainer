@@ -76,3 +76,4 @@ own Play melody switch: it plays the tune under a take.
 - r28 — The editor's bar ends MIDI · Undo · Redo · Settings · Done; the Player's More has Settings… (the score's
   Settings, ADR 0114); under 360px the bar's buttons are 40px with no gaps, so a 320px phone holds them
   (2026-11-01).
+- r29 (editor plan) — The editor's bar is the Player's in shape: Close · Done | Piano keys · MIDI · Undo · Redo · gear; the dock has no Sound popover. The score's Settings is a list of pages (Title and credits; Music: Staves, Key signature, Time signature, Tempo, Bars; How the editor works: Layout, Note input, Recording); Settings › Sound and recording and Settings › Score editor are gone, their switches homed here (2026-11-03).
