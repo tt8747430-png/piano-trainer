@@ -18,7 +18,7 @@ export function SheetPart({
 }) {
   const id = useId()
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-3 rounded-2xl bg-muted/50 p-4">
+    <section aria-labelledby={id} className="flex flex-col gap-3 rounded-control bg-muted/50 p-4">
       <div className="flex flex-col">
         <h3 id={id} className="font-sans font-semibold">
           {title}

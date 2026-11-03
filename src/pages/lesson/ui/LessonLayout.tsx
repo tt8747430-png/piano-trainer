@@ -111,8 +111,8 @@ function EndLink({ way, onGo, primary }: { way: WayLink; onGo?: () => void; prim
       render={way.link}
       className={
         primary
-          ? 'h-auto min-h-16 justify-between gap-3 rounded-2xl px-4 py-3 text-left whitespace-normal sm:col-start-2'
-          : 'h-auto min-h-16 justify-start gap-3 rounded-2xl px-4 py-3 text-left whitespace-normal'
+          ? 'h-auto min-h-16 justify-between gap-3 rounded-control px-4 py-3 text-left whitespace-normal sm:col-start-2'
+          : 'h-auto min-h-16 justify-start gap-3 rounded-control px-4 py-3 text-left whitespace-normal'
       }
     >
       {primary ? null : <ChevronsLeft aria-hidden className="shrink-0" />}
@@ -156,7 +156,7 @@ export function PlaceLink({ children, ...link }: LinkProps & { children: ReactNo
   return (
     <Link
       {...link}
-      className="relative rounded-sm font-semibold text-foreground underline-offset-4 after:absolute after:-inset-x-2 after:-top-1.5 after:-bottom-4.5 hover:underline"
+      className="relative rounded-control font-semibold text-foreground underline-offset-4 after:absolute after:-inset-x-2 after:-top-1.5 after:-bottom-4.5 hover:underline"
     >
       {children}
     </Link>

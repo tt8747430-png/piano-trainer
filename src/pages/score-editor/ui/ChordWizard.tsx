@@ -35,7 +35,7 @@ function Chip({
       // A tap leaves the cursor in the field: a phone's own keyboard stays up.
       onPointerDown={(event) => event.preventDefault()}
       onClick={onChoose}
-      className="h-10 min-w-10 shrink-0 rounded-lg border border-hairline bg-card px-2 font-display text-base font-semibold whitespace-nowrap text-card-foreground transition-colors duration-150 ease-out hover:bg-accent aria-pressed:border-transparent aria-pressed:bg-[color-mix(in_oklab,var(--color-link)_14%,var(--color-card))] aria-pressed:text-link focus-visible:-outline-offset-3 motion-reduce:transition-none"
+      className="h-10 min-w-10 shrink-0 rounded-control border border-hairline bg-card px-2 font-display text-base font-semibold whitespace-nowrap text-card-foreground choice focus-visible:-outline-offset-3"
     >
       {children}
     </button>
@@ -145,7 +145,7 @@ export function ChordWizard({
           type="button"
           onPointerDown={(event) => event.preventDefault()}
           onClick={onAdd}
-          className="h-10 shrink-0 rounded-lg bg-primary px-3 text-sm font-semibold text-primary-foreground transition-colors duration-150 hover:bg-primary/90"
+          className="h-10 shrink-0 rounded-control bg-primary px-3 text-sm font-semibold text-primary-foreground transition-colors duration-150 hover:bg-primary/90"
         >
           {t('chord.add')}
         </button>

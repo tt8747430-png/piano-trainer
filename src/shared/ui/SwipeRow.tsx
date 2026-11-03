@@ -292,7 +292,7 @@ function TrayButton({
     >
       <span
         className={cn(
-          'grid size-11 place-items-center rounded-full elevation-1 [&_svg]:size-5',
+          'grid size-11 place-items-center rounded-pill elevation-1 [&_svg]:size-5',
           PAINT[action.paint].fill,
           PAINT[action.paint].ink,
           // The pop that says "let go and this fires": an overshooting ease, a CSS transition per

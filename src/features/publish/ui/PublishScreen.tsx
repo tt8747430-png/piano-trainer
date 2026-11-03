@@ -26,7 +26,7 @@ function WhyPublish() {
           <Button
             variant="bar"
             size="icon"
-            className="rounded-full"
+            className="rounded-pill"
             aria-label={t('public.why')}
             title={t('public.why')}
           />
@@ -56,12 +56,12 @@ function PublicLink({ publicId }: { publicId: string }) {
   const { t } = useTranslation('songs')
   const url = `${window.location.origin}/songs/public/${publicId}`
   return (
-    <div className="flex min-h-14 items-center gap-2 rounded-2xl bg-muted pr-1.5 pl-4">
+    <div className="flex min-h-14 items-center gap-2 rounded-control bg-muted pr-1.5 pl-4">
       <span className="min-w-0 flex-1 truncate text-muted-foreground select-text">{url}</span>
       <Button
         variant="ghost"
         size="icon"
-        className="size-11 shrink-0 rounded-xl"
+        className="size-11 shrink-0 rounded-control"
         aria-label={t('public.copyLink')}
         title={t('public.copyLink')}
         onClick={() =>
@@ -151,7 +151,7 @@ function PublishForm({
             <span
               aria-hidden
               className={cn(
-                'size-2.5 rounded-full',
+                'size-2.5 rounded-pill',
                 publishing.state === 'published' ? 'bg-link' : 'bg-paint-sand',
               )}
             />

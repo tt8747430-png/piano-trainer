@@ -67,7 +67,7 @@ export function SocialButtons({
       <Button variant="outline" size="lg" disabled>
         {APPLE}
         {t('apple')}
-        <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+        <span className="rounded-pill bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
           {t('soon')}
         </span>
       </Button>

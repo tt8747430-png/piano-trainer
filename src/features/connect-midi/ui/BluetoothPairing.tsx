@@ -12,7 +12,7 @@ function Step({ number, children }: { number: number; children: ReactNode }) {
     <li className="flex items-start gap-3 py-3">
       <span
         aria-hidden
-        className="grid size-8 shrink-0 place-items-center rounded-full bg-muted font-semibold tabular-nums"
+        className="grid size-8 shrink-0 place-items-center rounded-pill bg-muted font-semibold tabular-nums"
       >
         {number}
       </span>

@@ -80,7 +80,7 @@ export function ArchivePage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="rounded-full"
+                          className="rounded-pill"
                           aria-label={t('library.more')}
                           title={t('library.more')}
                         />

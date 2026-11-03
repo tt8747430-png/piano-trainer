@@ -85,7 +85,7 @@ export function LibraryHeader({
                 <Button
                   variant="bar"
                   size="icon"
-                  className="rounded-full"
+                  className="rounded-pill"
                   aria-label={t('folder.more', { name })}
                   title={t('folder.more', { name })}
                 />

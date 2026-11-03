@@ -16,7 +16,7 @@ export function RankMark({ rank, label }: { rank: 1 | 2 | 3 | 4; label: string }
         <span
           key={pip}
           className={cn(
-            'w-1 rounded-full',
+            'w-1 rounded-pill',
             height,
             pip <= rank ? 'bg-muted-foreground' : 'bg-hairline',
           )}

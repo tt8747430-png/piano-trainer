@@ -74,11 +74,11 @@ export function ChordLearning({
             {Array.from({ length: needed }, (_, i) => (
               <span
                 key={i}
-                className="grid size-3 place-items-center rounded-full ring-2 ring-learned ring-inset"
+                className="grid size-3 place-items-center rounded-pill ring-2 ring-learned ring-inset"
               >
                 {/* Filled as it is counted, growing in. */}
                 {i < shown ? (
-                  <span className="size-3 rounded-full bg-learned animate-in duration-300 ease-out zoom-in-0 motion-reduce:animate-none" />
+                  <span className="size-3 rounded-pill bg-learned animate-in duration-300 ease-out zoom-in-0 motion-reduce:animate-none" />
                 ) : null}
               </span>
             ))}

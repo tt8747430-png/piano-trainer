@@ -13,7 +13,7 @@ export function RatingMark({ rating }: { rating: 'known' | 'gap' | 'unknown' }) 
   const { t } = useTranslation('common')
   return (
     <span className="inline-flex items-center">
-      <span aria-hidden className={cn('inline-grid place-items-center rounded-full', LOOK[rating])}>
+      <span aria-hidden className={cn('inline-grid place-items-center rounded-pill', LOOK[rating])}>
         {rating === 'known' ? <Check className="size-3" strokeWidth={3} /> : null}
       </span>
       <span className="sr-only">{t(`rating.${rating}`)}</span>

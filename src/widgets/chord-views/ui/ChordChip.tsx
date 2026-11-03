@@ -34,7 +34,7 @@ export function ChordChip({
       data-sounding={sounding ? '' : undefined}
       onClick={onGo}
       className={cn(
-        'pointer-events-auto relative min-w-[2em] rounded-md px-[0.375em] py-[0.125em] text-center font-display text-[1em] leading-tight font-semibold whitespace-nowrap transition-colors duration-200 ease-out before:absolute before:-inset-x-1.5 before:-inset-y-[0.25em]',
+        'pointer-events-auto relative min-w-[2em] rounded-control px-[0.375em] py-[0.125em] text-center font-display text-[1em] leading-tight font-semibold whitespace-nowrap transition-colors duration-200 ease-out before:absolute before:-inset-x-1.5 before:-inset-y-[0.25em]',
         // Its line's ink otherwise: the line playing's, else the others' muted one.
         sounding ? 'bg-foreground text-background' : 'bg-muted hover:bg-hairline',
       )}

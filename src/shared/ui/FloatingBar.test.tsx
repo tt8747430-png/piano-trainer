@@ -14,7 +14,7 @@ describe('FloatingBar', () => {
       </FloatingBar>,
     )
     const bar = screen.getByRole('toolbar', { name: 'Playback' })
-    expect(bar).toHaveClass('rounded-full', 'bg-raised', 'elevation-2', 'flex-row')
+    expect(bar).toHaveClass('rounded-pill', 'bg-raised', 'elevation-2', 'flex-row')
     expect(bar).toHaveAttribute('aria-orientation', 'horizontal')
   })
 
@@ -42,7 +42,7 @@ describe('FloatingBarButton', () => {
       </FloatingBarButton>,
     )
     const next = screen.getByRole('button', { name: 'Next' })
-    expect(next).toHaveClass('size-12', 'rounded-full')
+    expect(next).toHaveClass('size-12', 'rounded-pill')
     expect(next).toHaveAttribute('title', 'Next')
     await userEvent.setup().click(next)
     expect(onClick).toHaveBeenCalledOnce()
@@ -56,7 +56,7 @@ describe('FloatingBarButton', () => {
     )
     expect(screen.getByRole('link', { name: 'Next section' })).toHaveClass(
       'size-12',
-      'rounded-full',
+      'rounded-pill',
     )
   })
 
@@ -76,7 +76,7 @@ describe('FloatingBarPlay', () => {
     const { rerender } = render(<FloatingBarPlay label="Play" playing={false} onClick={onClick} />)
     const play = screen.getByRole('button', { name: 'Play' })
     expect(play).toHaveAttribute('aria-pressed', 'false')
-    expect(play).toHaveClass('size-14', 'rounded-full')
+    expect(play).toHaveClass('size-14', 'rounded-pill')
     await userEvent.setup().click(play)
     expect(onClick).toHaveBeenCalledOnce()
     rerender(<FloatingBarPlay label="Play" playing onClick={onClick} />)

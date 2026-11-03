@@ -17,7 +17,7 @@ export function SelectCheck({ checked }: { checked: boolean }) {
     <span
       aria-hidden
       className={cn(
-        'grid size-7 shrink-0 place-items-center rounded-full border transition-colors duration-200 ease-out motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-90 motion-safe:duration-200',
+        'grid size-7 shrink-0 place-items-center rounded-pill border transition-colors duration-200 ease-out motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-90 motion-safe:duration-200',
         checked ? 'border-transparent bg-selected text-selected-foreground' : 'border-input',
       )}
     >
@@ -174,7 +174,7 @@ export function RowInHand({
       {count > 1 ? (
         <span
           data-slot="carried-count"
-          className="absolute -top-2 -right-2 grid h-6 min-w-6 place-items-center rounded-full bg-selected px-1.5 text-xs font-semibold text-selected-foreground tabular-nums"
+          className="absolute -top-2 -right-2 grid h-6 min-w-6 place-items-center rounded-pill bg-selected px-1.5 text-xs font-semibold text-selected-foreground tabular-nums"
         >
           {count}
         </span>

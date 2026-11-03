@@ -22,7 +22,7 @@ import { useLibraryActs } from './use-library-acts'
 type Place = FolderId | null
 
 const ROW =
-  'flex min-h-14 min-w-0 flex-1 items-center gap-3 rounded-2xl px-2 py-1.5 text-left text-lg leading-snug font-semibold transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3'
+  'flex min-h-14 min-w-0 flex-1 items-center gap-3 rounded-control px-2 py-1.5 text-left text-lg leading-snug font-semibold transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3'
 
 /**
  * Move to… (Mindscape's `DestinationSheet` and `DestinationTree`): what moves on its own line under
@@ -147,7 +147,7 @@ function MovePicker({
             tile={
               <span
                 aria-hidden
-                className="grid size-12 shrink-0 place-items-center rounded-2xl bg-muted text-foreground [&_svg]:size-5"
+                className="grid size-12 shrink-0 place-items-center rounded-control bg-muted text-foreground [&_svg]:size-5"
               >
                 <House />
               </span>
@@ -164,7 +164,7 @@ function MovePicker({
             <button type="button" onClick={onNewFolder} className={cn(ROW, 'text-link')}>
               <span
                 aria-hidden
-                className="grid size-12 shrink-0 place-items-center rounded-2xl border border-dashed border-border [&_svg]:size-5"
+                className="grid size-12 shrink-0 place-items-center rounded-control border border-dashed border-border [&_svg]:size-5"
               >
                 <FolderPlus />
               </span>
@@ -233,7 +233,7 @@ function PlaceRow({
             name: nameOf(toggle.folder),
           })}
           onClick={toggle.onToggle}
-          className="grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground [&_svg]:size-5"
+          className="grid size-11 shrink-0 place-items-center rounded-pill text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground [&_svg]:size-5"
         >
           <ChevronDown
             aria-hidden

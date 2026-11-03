@@ -6,8 +6,8 @@ import { Toggle } from '@/shared/ui/primitives/toggle'
 import { useLearned } from './use-learned'
 
 /**
- * A step's or a lesson's Learned toggle: a check waiting in soft ink; pressed, it wears the learned
- * paint's wash and its check sits on the paint. `round`, it is the check alone in a screen's bar,
+ * A step's or a lesson's Learned toggle: a check waiting in soft ink; pressed, it wears the one
+ * chosen fill (R15) and its check sits on the learned grass. `round`, it is the check alone in a screen's bar,
  * named by its tooltip, on the bar's soft round fill as every bar action.
  */
 export function LearnedButton({
@@ -29,7 +29,7 @@ export function LearnedButton({
         onPressedChange={toggle}
         aria-label={t('learned.done')}
         title={t('learned.done')}
-        className="size-11 rounded-full border-transparent bg-muted/70 px-0 text-foreground hover:bg-muted aria-pressed:bg-learned aria-pressed:text-learned-foreground"
+        className="size-11 rounded-pill border-transparent bg-muted/70 px-0 text-foreground hover:bg-muted aria-pressed:bg-learned aria-pressed:text-learned-foreground"
       >
         <Check aria-hidden strokeWidth={2.5} />
       </Toggle>
@@ -38,14 +38,11 @@ export function LearnedButton({
     <Toggle
       pressed={learned}
       onPressedChange={toggle}
-      className={cn(
-        'gap-2 text-muted-foreground aria-pressed:border-transparent aria-pressed:bg-paint-grass aria-pressed:text-on-paint-grass',
-        className,
-      )}
+      className={cn('gap-2 text-muted-foreground', className)}
     >
       <span
         aria-hidden
-        className="grid size-5 place-items-center rounded-full border border-current group-aria-pressed/toggle:border-transparent group-aria-pressed/toggle:bg-learned group-aria-pressed/toggle:text-learned-foreground"
+        className="grid size-5 place-items-center rounded-pill border border-current group-aria-pressed/toggle:border-transparent group-aria-pressed/toggle:bg-learned group-aria-pressed/toggle:text-learned-foreground"
       >
         <Check className="size-3.5" strokeWidth={3} />
       </span>

@@ -338,7 +338,7 @@ export function ExampleView({
         if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false)
       }}
       className={cn(
-        'relative my-5 flex cursor-pointer flex-col gap-3 rounded-3xl outline-offset-6 transition-[outline-color] duration-200 ease-out',
+        'relative my-5 flex cursor-pointer flex-col gap-3 rounded-card outline-offset-6 transition-[outline-color] duration-200 ease-out',
         working ? 'outline-2 outline-ring' : 'outline-2 outline-transparent hover:outline-border',
       )}
     >
@@ -346,7 +346,7 @@ export function ExampleView({
         <div
           role="toolbar"
           aria-label={name}
-          className="absolute -top-7 right-3 z-10 flex items-center gap-0.5 rounded-xl border border-border bg-raised p-0.5 elevation-2"
+          className="absolute -top-7 right-3 z-10 flex items-center gap-0.5 rounded-control border border-border bg-raised p-0.5 elevation-2"
         >
           {editable ? (
             <Button
@@ -391,7 +391,7 @@ export function ExampleView({
           <div className="flex items-start gap-3">
             <span
               aria-hidden
-              className="grid size-10 shrink-0 place-items-center rounded-full bg-paint-lilac text-on-paint-lilac"
+              className="grid size-10 shrink-0 place-items-center rounded-pill bg-paint-lilac text-on-paint-lilac"
             >
               <CircleHelp className="size-5" />
             </span>
@@ -399,13 +399,13 @@ export function ExampleView({
               label={t('edit.doc.ask')}
               value={block.ask}
               placeholder={words('edit.doc.ask')}
-              className="h-auto min-h-10 flex-1 rounded-lg border-transparent bg-transparent px-1 font-semibold shadow-none md:text-base dark:bg-transparent"
+              className="h-auto min-h-10 flex-1 rounded-control border-transparent bg-transparent px-1 font-semibold shadow-none md:text-base dark:bg-transparent"
               onChange={(ask) => change({ ...block, ask })}
             />
           </div>
           <span
             aria-hidden
-            className="ml-13 inline-flex h-10 w-fit items-center gap-2 rounded-full border border-border px-4 text-sm font-medium"
+            className="ml-13 inline-flex h-10 w-fit items-center gap-2 rounded-pill border border-border px-4 text-sm font-medium"
           >
             <Piano className="size-4" />
             {words('question.answer')}
@@ -421,7 +421,7 @@ export function ExampleView({
               label={t('edit.doc.linkTitle')}
               value={block.title}
               placeholder={words('edit.doc.linkTitle')}
-              className="h-auto min-h-10 flex-1 rounded-lg border-transparent bg-transparent px-1 text-lg font-semibold shadow-none md:text-lg dark:bg-transparent"
+              className="h-auto min-h-10 flex-1 rounded-control border-transparent bg-transparent px-1 text-lg font-semibold shadow-none md:text-lg dark:bg-transparent"
               onChange={(title) => change({ ...block, title })}
             />
             <OpensMark />
@@ -435,7 +435,7 @@ export function ExampleView({
           <Shown block={block} onShow={nothing} />
         </Drawn>
       ) : (
-        <p className="rounded-3xl bg-muted p-4 text-sm text-muted-foreground">
+        <p className="rounded-card bg-muted p-4 text-sm text-muted-foreground">
           {t('edit.doc.notShown')}
         </p>
       )}
@@ -446,7 +446,7 @@ export function ExampleView({
           id={panelId}
           role="group"
           aria-label={t('edit.doc.fields', { name })}
-          className="flex cursor-auto flex-col gap-4 rounded-2xl border border-border bg-raised p-4"
+          className="flex cursor-auto flex-col gap-4 rounded-control border border-border bg-raised p-4"
         >
           {examples.map((example) => (
             <ExampleLine

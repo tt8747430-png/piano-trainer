@@ -15,7 +15,7 @@ function SongFace({ entry }: { entry: Entry }) {
   return (
     <PieceLink
       entry={entry}
-      className="group/row flex min-h-16 min-w-0 flex-1 items-center gap-3 rounded-3xl py-2 pl-3 focus-visible:-outline-offset-3"
+      className="group/row flex min-h-16 min-w-0 flex-1 items-center gap-3 rounded-card py-2 pl-3 focus-visible:-outline-offset-3"
     >
       <RowFace {...face} />
     </PieceLink>

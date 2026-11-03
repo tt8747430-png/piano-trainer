@@ -9,7 +9,8 @@ import { NO_BAR_SIZE, ScreenBarContext, SCREEN_BAR_VAR, type ScreenBar } from '.
  */
 export function ScreenBarProvider({ children }: { children: ReactNode }) {
   const [size, setSize] = useState(NO_BAR_SIZE)
-  const scrolledUp = useShownOnScrollUp(size.box)
+  // A page under two screens tall keeps its bar: hiding it would only take the controls along (A31).
+  const scrolledUp = useShownOnScrollUp(size.box, { tall: 2 })
   const [held, setHeld] = useState(false)
   const shown = scrolledUp || held
   const root = useRef<HTMLDivElement>(null)

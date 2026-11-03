@@ -94,7 +94,7 @@ export function Badges() {
                 aria-hidden
                 data-tier={tier ?? undefined}
                 className={cn(
-                  'grid size-12 place-items-center rounded-full',
+                  'grid size-12 place-items-center rounded-pill',
                   tier ? 'bg-paint-yellow text-on-paint-yellow' : 'bg-muted text-muted-foreground',
                 )}
               >

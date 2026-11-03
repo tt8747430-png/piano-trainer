@@ -36,8 +36,8 @@ function BarAction({
       onClick={onClick}
       className={
         destructive
-          ? 'h-14 min-w-13 flex-col gap-0.5 rounded-2xl px-1 text-xs text-destructive sm:min-w-16'
-          : 'h-14 min-w-13 flex-col gap-0.5 rounded-2xl px-1 text-xs sm:min-w-16'
+          ? 'h-14 min-w-13 flex-col gap-0.5 rounded-control px-1 text-xs text-destructive sm:min-w-16'
+          : 'h-14 min-w-13 flex-col gap-0.5 rounded-control px-1 text-xs sm:min-w-16'
       }
     >
       <Icon aria-hidden className="size-5" />
@@ -77,7 +77,7 @@ export function SelectionBar({
           role="group"
           aria-label={t('drag.zones')}
           data-takes-tab-bar=""
-          className="flex w-[min(24rem,calc(100vw-2rem))] gap-1 rounded-3xl border border-border bg-raised p-1 elevation-3"
+          className="flex w-[min(24rem,calc(100vw-2rem))] gap-1 rounded-card border border-border bg-raised p-1 elevation-3"
         >
           {folder ? (
             <DropZone
@@ -100,7 +100,7 @@ export function SelectionBar({
         aria-label={t('select.actions')}
         // Select's bar takes the phone's tab bar's place (memory-palaces'): one bar at the foot.
         data-takes-tab-bar=""
-        className="flex gap-1 rounded-3xl border border-border bg-raised p-1 elevation-3"
+        className="flex gap-1 rounded-card border border-border bg-raised p-1 elevation-3"
       >
         <BarAction
           label={t(select.allFavourite ? 'select.unfavourite' : 'select.favourite')}

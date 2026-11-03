@@ -197,7 +197,7 @@ export function PianoKeyboard({
     <div
       ref={scroller}
       data-slot="keys-scroller"
-      className="@container flex overflow-x-auto overscroll-x-contain rounded-t-sm scrollbar-none"
+      className="@container flex overflow-x-auto overscroll-x-contain rounded-t-key-white scrollbar-none"
     >
       <div
         className="flex shrink-0 flex-col"

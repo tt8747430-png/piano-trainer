@@ -23,7 +23,7 @@ export function FingerRow({ marks }: { marks: ReadonlyMap<Midi, KeyMark> | undef
           key={key.midi}
           data-crossing={crossing || undefined}
           className={cn(
-            'absolute grid size-5 -translate-x-1/2 place-items-center rounded-full text-xs font-bold tabular-nums landscape-phone:top-1 landscape-phone:bottom-auto landscape-phone:size-4',
+            'absolute grid size-5 -translate-x-1/2 place-items-center rounded-pill text-xs font-bold tabular-nums landscape-phone:top-1 landscape-phone:bottom-auto landscape-phone:size-4',
             key.black ? 'top-0' : 'bottom-0',
             crossing
               ? 'bg-link text-background'

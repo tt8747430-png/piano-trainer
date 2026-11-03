@@ -29,7 +29,7 @@ function Family({ title, children }: { title: string; children: ReactNode }) {
         type="button"
         aria-expanded={open}
         onClick={() => setOpen(!open)}
-        className="flex min-h-14 items-center gap-3 rounded-3xl px-4 text-start font-semibold outline-none focus-visible:ring-3 focus-visible:ring-ring"
+        className="flex min-h-14 items-center gap-3 rounded-card px-4 text-start font-semibold "
       >
         <span className="min-w-0 flex-1">{title}</span>
         <ChevronDown
@@ -51,7 +51,7 @@ function Row({ name, count, onFewer, onMore }: InstrumentRow) {
   return (
     <li
       className={cn(
-        'flex min-h-14 items-center gap-2 py-1 pr-2 pl-4 first:pt-1 last:rounded-b-3xl',
+        'flex min-h-14 items-center gap-2 py-1 pr-2 pl-4 first:pt-1 last:rounded-b-card',
         count > 0 && 'bg-chosen/60',
       )}
     >
@@ -62,7 +62,7 @@ function Row({ name, count, onFewer, onMore }: InstrumentRow) {
             type="button"
             variant="ghost"
             size="icon"
-            className="size-11 rounded-full"
+            className="size-11 rounded-pill"
             aria-label={t('setup.fewer', { staff: name })}
             title={t('setup.fewer', { staff: name })}
             disabled={!onFewer}
@@ -82,7 +82,7 @@ function Row({ name, count, onFewer, onMore }: InstrumentRow) {
         type="button"
         variant="ghost"
         size="icon"
-        className="size-11 rounded-full text-link"
+        className="size-11 rounded-pill text-link"
         aria-label={t('setup.more', { staff: name })}
         title={t('setup.more', { staff: name })}
         disabled={!onMore}

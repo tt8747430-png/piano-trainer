@@ -113,7 +113,7 @@ function SortChoice({
           <span className="whitespace-nowrap">{t(`public.sort.${sort}`)}</span>
         </span>
       )}
-      className="h-9 gap-1.5 rounded-full border-0 bg-transparent px-3 text-sm font-semibold text-muted-foreground shadow-none hover:bg-muted hover:text-foreground"
+      className="h-9 gap-1.5 rounded-pill border-0 bg-transparent px-3 text-sm font-semibold text-muted-foreground shadow-none hover:bg-muted hover:text-foreground"
     />
   )
 }

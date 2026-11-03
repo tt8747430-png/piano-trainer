@@ -38,7 +38,7 @@ export function FoldGroup({
           aria-controls={listId}
           onClick={onToggle}
           // Its reach is 44px tall, grown over the room round the heading, which stays put.
-          className="-my-2 flex min-h-11 w-full items-baseline justify-between gap-3 rounded-lg py-2 text-left"
+          className="-my-2 flex min-h-11 w-full items-baseline justify-between gap-3 rounded-control py-2 text-left"
         >
           <span className="flex items-center gap-2">
             <ChevronDown
@@ -59,9 +59,9 @@ export function FoldGroup({
       </h2>
       {detail ? <p className="text-muted-foreground text-pretty">{detail}</p> : null}
       {progress === undefined ? null : (
-        <div aria-hidden className="h-1 overflow-hidden rounded-full bg-muted">
+        <div aria-hidden className="h-1 overflow-hidden rounded-pill bg-muted">
           <div
-            className="h-full rounded-full bg-primary transition-[width] duration-300 ease-out"
+            className="h-full rounded-pill bg-primary transition-[width] duration-300 ease-out"
             style={{ width: `${progress * 100}%` }}
           />
         </div>

@@ -47,7 +47,7 @@ export function MenuPicker<V extends OptionValue>({
           <Listbox
             label={label}
             className="gap-0.5 [&_[role=group]>p]:px-3 [&_[role=group]>p]:pt-3 [&_[role=group]>p]:pb-1"
-            optionClassName="min-h-11 rounded-xl px-3 text-base"
+            optionClassName="min-h-11 rounded-control px-3 text-base"
             groups={groups
               .filter((group) => group.options.length > 0)
               .map((group) => ({

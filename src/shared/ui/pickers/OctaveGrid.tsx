@@ -94,7 +94,7 @@ export function OctaveGrid({
         <div
           key={pc}
           className={cn(
-            'flex min-h-13 overflow-hidden rounded-xl border',
+            'flex min-h-13 overflow-hidden rounded-control border',
             black
               ? 'divide-x divide-on-key-black/25 border-key-black bg-key-black text-on-key-black'
               : 'border-input bg-key-white text-on-key-white',

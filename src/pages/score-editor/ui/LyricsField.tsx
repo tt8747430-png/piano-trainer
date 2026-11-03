@@ -31,7 +31,7 @@ function VerseStep({
       disabled={disabled}
       onPointerDown={(event) => event.preventDefault()}
       onClick={onClick}
-      className="rounded-xl"
+      className="rounded-control"
     >
       {children}
     </Button>

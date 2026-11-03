@@ -55,7 +55,7 @@ export function SwitchRow({
       {icon ? (
         <span
           aria-hidden
-          className="grid min-h-9 min-w-9 shrink-0 place-items-center rounded-xl bg-muted text-muted-foreground [&_svg]:size-5"
+          className="grid min-h-9 min-w-9 shrink-0 place-items-center rounded-control bg-muted text-muted-foreground [&_svg]:size-5"
         >
           {icon}
         </span>

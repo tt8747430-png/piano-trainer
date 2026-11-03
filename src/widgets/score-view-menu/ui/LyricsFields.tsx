@@ -31,7 +31,7 @@ function TextSizeRow() {
     >
       <span
         aria-hidden
-        className="grid size-9 shrink-0 place-items-center rounded-xl bg-muted font-display text-base font-semibold text-muted-foreground"
+        className="grid size-9 shrink-0 place-items-center rounded-control bg-muted font-display text-base font-semibold text-muted-foreground"
       >
         Aa
       </span>

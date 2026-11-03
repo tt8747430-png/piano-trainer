@@ -96,7 +96,7 @@ function TimeColumn({
 
 /** The wheels' face in the picker: its figures large in the serif, the value on a soft round band. */
 const FIGURE_WHEEL =
-  'w-16 min-[380px]:w-20 [&_[data-value]]:text-5xl [&_[data-value]]:font-extrabold [&_[data-slot=wheel-band]]:inset-x-2 [&_[data-slot=wheel-band]]:rounded-full [&_[data-slot=wheel-band]]:border-0 [&_[data-slot=wheel-band]]:bg-foreground/7'
+  'w-16 min-[380px]:w-20 [&_[data-value]]:text-5xl [&_[data-value]]:font-extrabold [&_[data-slot=wheel-band]]:inset-x-2 [&_[data-slot=wheel-band]]:rounded-pill [&_[data-slot=wheel-band]]:border-0 [&_[data-slot=wheel-band]]:bg-foreground/7'
 
 /**
  * The time signature's picker (ADR 0114, after notation apps' wheels): Current and Pickup side by side,

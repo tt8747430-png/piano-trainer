@@ -35,7 +35,7 @@ export function StaffNames({ layout, edit }: { layout: ScoreLayout; edit: EditPr
             tabIndex={-1}
             aria-label={name}
             title={name}
-            className="absolute z-30 cursor-pointer rounded-md transition-colors duration-200 ease-out hover:bg-foreground/5"
+            className="absolute z-30 cursor-pointer rounded-control transition-colors duration-200 ease-out hover:bg-foreground/5"
             style={{
               left: Math.max(0, label.left - REACH),
               width: label.right + REACH - Math.max(0, label.left - REACH),

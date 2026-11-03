@@ -98,7 +98,7 @@ function SectionLinks({
             activeOptions={{ includeHash: true }}
             data-reading={reading === sectionId(s) || undefined}
             onClick={onGo}
-            className="flex min-h-11 items-center gap-3 rounded-xl px-2 transition-colors hover:bg-muted data-reading:bg-muted data-reading:font-semibold"
+            className="flex min-h-11 items-center gap-3 rounded-control px-2 transition-colors hover:bg-muted data-reading:bg-muted data-reading:font-semibold"
           >
             <span
               aria-hidden
@@ -120,7 +120,7 @@ function UpRow({ up, onGo }: { up: UpLink; onGo: () => void }) {
     <ButtonLink
       variant="ghost"
       onClick={onGo}
-      className="h-auto min-h-12 justify-start gap-3 rounded-xl px-2 py-2 text-left whitespace-normal"
+      className="h-auto min-h-12 justify-start gap-3 rounded-control px-2 py-2 text-left whitespace-normal"
       render={up.link}
     >
       <CornerLeftUp aria-hidden className="size-5 shrink-0 text-muted-foreground" />
@@ -204,7 +204,7 @@ function LessonBar({
                 variant="ghost"
                 aria-label={t('contentsAt', { at: at + 1, of })}
                 title={t('contents')}
-                className="h-12 min-w-0 flex-1 gap-1.5 rounded-full px-2"
+                className="h-12 min-w-0 flex-1 gap-1.5 rounded-pill px-2"
               />
             }
           >
@@ -214,7 +214,7 @@ function LessonBar({
                 key={each.heading.en}
                 aria-hidden
                 className={cn(
-                  'h-2 shrink rounded-full transition-[width,background-color] duration-200 ease-out',
+                  'h-2 shrink rounded-pill transition-[width,background-color] duration-200 ease-out',
                   s === at ? 'w-5 bg-foreground' : 'w-2 bg-border',
                 )}
               />
@@ -224,7 +224,7 @@ function LessonBar({
         </Sheet>
         {at + 1 < of ? (
           <ButtonLink
-            className="h-12 shrink-0 rounded-full px-4"
+            className="h-12 shrink-0 rounded-pill px-4"
             render={<Link to="." hash={sectionId(at + 1)} replace />}
           >
             {t('nextPage')}
@@ -232,7 +232,7 @@ function LessonBar({
           </ButtonLink>
         ) : (
           <ButtonLink
-            className="h-12 shrink-0 rounded-full px-4"
+            className="h-12 shrink-0 rounded-pill px-4"
             render={onward.link}
             onClick={onward.onGo}
           >
@@ -252,7 +252,7 @@ function LessonBar({
               variant="ghost"
               aria-label={t('contentsAt', { at: at + 1, of })}
               title={t('contents')}
-              className="h-12 rounded-full px-3 aside:h-auto aside:w-12 aside:flex-col aside:gap-0.5 aside:px-0 aside:py-2 aside:text-xs"
+              className="h-12 rounded-pill px-3 aside:h-auto aside:w-12 aside:flex-col aside:gap-0.5 aside:px-0 aside:py-2 aside:text-xs"
             />
           }
         >
@@ -383,7 +383,7 @@ export function LessonView({
               {section.takeaway ? (
                 <aside
                   aria-label={t('takeaway')}
-                  className="flex flex-col gap-1 rounded-3xl bg-paint-lilac p-4"
+                  className="flex flex-col gap-1 rounded-card bg-paint-lilac p-4"
                 >
                   <span aria-hidden className="text-sm font-semibold text-on-paint-lilac">
                     {t('takeaway')}

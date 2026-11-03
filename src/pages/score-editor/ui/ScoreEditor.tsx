@@ -152,7 +152,7 @@ function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) 
         {...floating.reading}
         onClickCapture={floating.show}
       >
-        <div className="h-full overflow-clip rounded-2xl">
+        <div className="h-full overflow-clip rounded-control">
           <EditorSheet onAnchor={setAnchor} covered={{ bottom: below + GAP }} />
         </div>
       </div>
@@ -215,7 +215,7 @@ function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) 
                     size="icon"
                     aria-label={t('palette.show')}
                     title={t('palette.show')}
-                    className="size-10 shrink-0 rounded-lg text-muted-foreground hover:text-foreground"
+                    className="size-10 shrink-0 rounded-control text-muted-foreground hover:text-foreground"
                     onClick={() => fold(false)}
                   >
                     <PanelLeftOpen aria-hidden />

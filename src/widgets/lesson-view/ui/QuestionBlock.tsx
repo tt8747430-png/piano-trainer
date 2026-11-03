@@ -58,7 +58,7 @@ export function QuestionBlock({
       <div className="flex items-start gap-3">
         <span
           aria-hidden
-          className="grid size-10 shrink-0 place-items-center rounded-full bg-paint-lilac text-on-paint-lilac"
+          className="grid size-10 shrink-0 place-items-center rounded-pill bg-paint-lilac text-on-paint-lilac"
         >
           <CircleHelp className="size-5" />
         </span>
@@ -90,8 +90,8 @@ export function QuestionBlock({
                     key={i}
                     className={
                       i < count.chosen
-                        ? 'size-2.5 rounded-full bg-primary'
-                        : 'size-2.5 rounded-full border border-input'
+                        ? 'size-2.5 rounded-pill bg-primary'
+                        : 'size-2.5 rounded-pill border border-input'
                     }
                   />
                 ))}
@@ -100,7 +100,7 @@ export function QuestionBlock({
             </>
           ) : null}
         </p>
-        <Button variant="soft" className="rounded-full" onClick={action.onClick}>
+        <Button variant="soft" className="rounded-pill" onClick={action.onClick}>
           <Icon data-icon="inline-start" aria-hidden />
           {action.label}
         </Button>

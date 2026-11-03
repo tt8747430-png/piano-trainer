@@ -19,7 +19,7 @@ export function FavouriteButton({ piece }: { piece: PieceId }) {
       icon={Heart}
       aria-pressed={favourite}
       onClick={() => toggleFavourite(store, piece)}
-      className="aria-pressed:bg-muted aria-pressed:[&_svg]:fill-current"
+      className="aria-pressed:bg-chosen aria-pressed:[&_svg]:fill-current"
     />
   )
 }

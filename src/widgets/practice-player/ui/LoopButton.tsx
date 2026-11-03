@@ -19,7 +19,7 @@ export function LoopButton({ looped, onToggle }: { looped: boolean; onToggle: ()
       title={keyHint(t('loop'), PLAYER_KEYS.loop)}
       aria-pressed={looped}
       onClick={onToggle}
-      className={cn(DOCK_BUTTON, 'aria-pressed:bg-muted')}
+      className={cn(DOCK_BUTTON, 'aria-pressed:bg-chosen')}
     >
       <Repeat aria-hidden />
     </FloatingBarButton>

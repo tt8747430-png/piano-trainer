@@ -125,7 +125,7 @@ export function LessonBlock({
           <p className="text-base text-muted-foreground">{localText(block.text, locale)}</p>
         </div>
       ) : (
-        <p className="rounded-3xl bg-muted p-4">{localText(block.text, locale)}</p>
+        <p className="rounded-card bg-muted p-4">{localText(block.text, locale)}</p>
       )
     case 'variants':
       return <VariantsBlock variants={block.variants} onShow={onShow} onFollow={onFollow} />

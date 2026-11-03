@@ -60,7 +60,7 @@ export function SearchField({
     enabled: screen !== undefined,
   })
   return (
-    <InputGroup className="h-12 rounded-2xl bg-card">
+    <InputGroup className="h-12 rounded-control bg-card">
       <InputGroupAddon>
         <Search aria-hidden className="size-5" />
       </InputGroupAddon>
@@ -78,7 +78,7 @@ export function SearchField({
         <InputGroupAddon align="inline-end">
           <InputGroupButton
             size="icon"
-            className="rounded-full"
+            className="rounded-pill"
             aria-label={t('clearSearch')}
             onClick={() => {
               type('')

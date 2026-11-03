@@ -28,7 +28,7 @@ export function RailButton({
       )}
       {...props}
     >
-      <span className="grid h-7 min-w-9 place-items-center rounded-md px-1.5 text-xs font-bold tracking-wide transition-colors duration-200 ease-out group-hover/rail:bg-on-key-rail/10 group-focus-visible/rail:outline-3 group-focus-visible/rail:-outline-offset-3 group-focus-visible/rail:outline-ring group-disabled/rail:bg-transparent group-aria-pressed/rail:bg-on-key-rail group-aria-pressed/rail:text-key-rail">
+      <span className="grid h-7 min-w-9 place-items-center rounded-control px-1.5 text-xs font-bold tracking-wide transition-colors duration-200 ease-out group-hover/rail:bg-on-key-rail/10 group-focus-visible/rail:outline-3 group-focus-visible/rail:-outline-offset-3 group-focus-visible/rail:outline-ring group-disabled/rail:bg-transparent group-aria-pressed/rail:bg-on-key-rail group-aria-pressed/rail:text-key-rail">
         {Icon ? <Icon aria-hidden className="size-5" /> : children}
       </span>
     </button>

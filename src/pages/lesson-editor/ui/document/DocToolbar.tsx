@@ -85,7 +85,7 @@ export function DocToolbar({
         }
         render={
           <Button
-            className="h-11 shrink-0 rounded-xl px-3"
+            className="h-11 shrink-0 rounded-control px-3"
             onMouseDown={(event) => event.preventDefault()}
           />
         }
@@ -129,7 +129,7 @@ export function TextBubble({ editor }: { editor: Editor }) {
         const top = state.doc.maybeChild(selectedBlock(state))?.type.name
         return top === DOC.paragraph || top === DOC.steps
       }}
-      className="z-40 flex items-center rounded-xl border border-border bg-raised p-1 elevation-2"
+      className="z-40 flex items-center rounded-control border border-border bg-raised p-1 elevation-2"
     >
       <ToolButton
         label={t('edit.doc.lead')}

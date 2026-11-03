@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from 'cn'
 
 const toggleVariants = cva(
-  "group/toggle inline-flex shrink-0 items-center justify-center border border-input bg-card text-base font-semibold whitespace-nowrap text-foreground transition-colors duration-200 ease-out select-none hover:bg-muted disabled:pointer-events-none disabled:opacity-50 aria-pressed:border-foreground aria-pressed:bg-muted [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",
+  "group/toggle inline-flex shrink-0 items-center justify-center border border-input bg-card text-base font-semibold whitespace-nowrap text-foreground select-none choice disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",
   {
     variants: {
       // Every size is at least a 44px touch target.

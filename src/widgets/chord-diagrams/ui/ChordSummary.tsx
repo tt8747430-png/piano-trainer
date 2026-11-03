@@ -65,7 +65,7 @@ export function ChordSummary({
                   onChord ? onChord(each.symbol) : setShown({ symbol: each.symbol, open: true })
                 }
                 className={cn(
-                  'flex flex-col items-center rounded-xl border border-transparent transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
+                  'flex flex-col items-center rounded-control border border-transparent transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
                   follows ? 'gap-0.5 px-1.5 py-1' : 'gap-1.5 p-2',
                   now && 'border-foreground',
                 )}

@@ -34,7 +34,7 @@ export function PieceByline({ piece }: { piece: Piece }) {
           {hasVersion ? (
             <dl>
               <dt className="sr-only">{t('music')}</dt>
-              <dd className="rounded-full bg-paint-yellow px-2.5 py-0.5 text-sm font-medium text-on-paint-yellow">
+              <dd className="rounded-pill bg-paint-yellow px-2.5 py-0.5 text-sm font-medium text-on-paint-yellow">
                 {t('yourVersion')}
               </dd>
             </dl>

@@ -63,7 +63,7 @@ export function AddRow({
     <>
       <button
         type="button"
-        className="flex min-h-12 items-center gap-1 rounded-xl pr-3 text-left font-medium text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted/60 hover:text-foreground"
+        className="flex min-h-12 items-center gap-1 rounded-control pr-3 text-left font-medium text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted/60 hover:text-foreground"
         onClick={() => setOpen(true)}
       >
         <span aria-hidden className="grid size-11 shrink-0 place-items-center">
@@ -91,7 +91,7 @@ export function AddRow({
                 <li key={item.key}>
                   <button
                     type="button"
-                    className="flex min-h-11 w-full items-center gap-2 rounded-xl px-2 text-left transition-colors duration-150 ease-out hover:bg-card"
+                    className="flex min-h-11 w-full items-center gap-2 rounded-control px-2 text-left transition-colors duration-150 ease-out hover:bg-card"
                     onClick={() => {
                       onPick?.(item.key)
                       close(false)

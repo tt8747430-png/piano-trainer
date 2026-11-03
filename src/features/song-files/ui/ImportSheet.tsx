@@ -37,8 +37,8 @@ export function ImportSheet({
           title={t('import.action')}
           description={t('import.reading', { name: state.name })}
         >
-          <div role="status" aria-busy className="h-1 overflow-hidden rounded-full bg-muted">
-            <div className="h-full w-1/3 animate-pulse rounded-full bg-primary" />
+          <div role="status" aria-busy className="h-1 overflow-hidden rounded-pill bg-muted">
+            <div className="h-full w-1/3 animate-pulse rounded-pill bg-primary" />
           </div>
         </SheetContent>
       ) : state.kind === 'done' ? (

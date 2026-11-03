@@ -3,9 +3,9 @@ import { cn } from '@/shared/lib'
 /** How much of something is done, as a thin bar in the learned paint. */
 export function ProgressBar({ done, total }: { done: number; total: number }) {
   return (
-    <span aria-hidden className="block h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
+    <span aria-hidden className="block h-1.5 flex-1 overflow-hidden rounded-pill bg-muted">
       <span
-        className="block h-full rounded-full bg-learned transition-[width] duration-300 ease-out"
+        className="block h-full rounded-pill bg-learned transition-[width] duration-300 ease-out"
         style={{ width: `${total === 0 ? 0 : (done / total) * 100}%` }}
       />
     </span>

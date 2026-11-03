@@ -9,16 +9,16 @@ import type { SungPlace } from '../model/sung-place'
 function Wait({ progress }: { progress: number }) {
   return (
     <div data-slot="wait" aria-hidden className="flex h-7 items-center justify-center">
-      <div className="relative h-1 w-16 rounded-full bg-muted">
+      <div className="relative h-1 w-16 rounded-pill bg-muted">
         <div
-          className="absolute inset-0 origin-left rounded-full bg-foreground transition-transform duration-200 ease-out motion-reduce:transition-none"
+          className="absolute inset-0 origin-left rounded-pill bg-foreground transition-transform duration-200 ease-out motion-reduce:transition-none"
           style={{ transform: `scaleX(${progress})` }}
         />
         <div
           className="absolute inset-0 transition-transform duration-200 ease-out motion-reduce:transition-none"
           style={{ transform: `translateX(${progress * 100}%)` }}
         >
-          <span className="absolute top-1/2 left-0 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground" />
+          <span className="absolute top-1/2 left-0 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-pill bg-foreground" />
         </div>
       </div>
     </div>

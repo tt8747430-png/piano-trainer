@@ -38,7 +38,7 @@
   gap: 0.25rem;
 }
 .lesson-doc div[data-note] {
-  border-radius: 1.5rem;
+  border-radius: var(--radius-card);
   background: var(--muted);
   padding: 1rem;
 }
@@ -57,7 +57,7 @@
   font-size: 1rem;
 }
 .lesson-doc aside[data-takeaway] {
-  border-radius: 1.5rem;
+  border-radius: var(--radius-card);
   background: var(--paint-lilac);
   padding: 1rem;
   font-family: var(--font-display);
@@ -90,9 +90,9 @@
   .ProseMirror-selectednode:not([data-node-view-wrapper]):not(:has(> [data-node-view-wrapper])) {
   outline: 2px solid var(--ring);
   outline-offset: 4px;
-  border-radius: 0.75rem;
+  border-radius: var(--radius-control);
 }
 .doc-drop-cursor {
   background: var(--ring);
-  border-radius: 2px;
+  border-radius: var(--radius-pill);
 }

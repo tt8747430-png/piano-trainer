@@ -67,7 +67,7 @@ export function HarmonyChip({
         aria-pressed={sounding}
         onClick={onClick}
         className={cn(
-          'flex min-h-14 min-w-0 flex-col items-center justify-center rounded-xl px-1 py-1.5 leading-tight transition-colors duration-200 ease-out focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring',
+          'flex min-h-14 min-w-0 flex-col items-center justify-center rounded-control px-1 py-1.5 leading-tight transition-colors duration-200 ease-out focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring',
           sounding
             ? look
               ? cn(look.full, 'text-on-paint-full')

@@ -208,7 +208,7 @@ export function TappableStaff({
                       aria-pressed={playback.playing === id}
                       onClick={() => play(id, bar.from, bar.to, barShown?.(i))}
                       className={cn(
-                        'absolute z-20 flex items-start rounded-sm px-1 transition-colors hover:bg-muted aria-pressed:bg-accent aria-pressed:text-accent-foreground focus-visible:outline-2 focus-visible:outline-ring',
+                        'absolute z-20 flex items-start rounded-control px-1 choice',
                         bar.symbol
                           ? 'font-display text-sm font-semibold text-foreground'
                           : 'text-xs font-semibold text-muted-foreground tabular-nums',
@@ -244,7 +244,7 @@ export function TappableStaff({
                   aria-label={t('playNotes', { notes: namesAt(music, column.tick) })}
                   aria-pressed={playback.playing === id}
                   onClick={() => play(id, column.tick, next ?? Number.POSITIVE_INFINITY)}
-                  className="absolute z-20 rounded-md transition-colors hover:bg-muted/60 focus-visible:outline-2 focus-visible:outline-ring"
+                  className="absolute z-20 rounded-control transition-colors hover:bg-muted/60 "
                   style={{
                     left: column.left,
                     width: column.width,

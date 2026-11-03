@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useLayoutEffect,
   useState,
   type ComponentProps,
   type ReactElement,
@@ -77,9 +78,13 @@ export function FloatingHost({
     document.addEventListener('click', tap)
     return () => document.removeEventListener('click', tap)
   }, [])
-  useEffect(() => {
+  // Measured before the first paint, so the page never pads for them a frame late and reflows (A31).
+  useLayoutEffect(() => {
     if (!column) return
     const root = document.documentElement.style
+    const box = column.getBoundingClientRect()
+    root.setProperty('--floating-block', room(box.height))
+    root.setProperty('--floating-inline', room(box.width))
     const observer = new ResizeObserver(([entry]) => {
       const size = entry?.borderBoxSize[0]
       root.setProperty('--floating-block', room(size?.blockSize))
@@ -147,13 +152,13 @@ export function FloatingActions({
  * a step. Reduced motion keeps the change and drops the movement (`theme.css`).
  */
 const PRESS =
-  'transition-[scale,box-shadow,background-color,filter] duration-150 ease-out active:scale-96 active:not-aria-[haspopup]:translate-y-0'
+  'transition-[scale,box-shadow,background-color,filter] duration-150 ease-out active:scale-96'
 /** The main floating action: 56px, honey, the highest shade. */
-const FAB = `size-14 rounded-full elevation-2 hover:elevation-3 active:elevation-1 [&_svg:not([class*=size-])]:size-6 ${PRESS}`
+const FAB = `size-14 rounded-pill elevation-2 hover:elevation-3 active:elevation-1 [&_svg:not([class*=size-])]:size-6 ${PRESS}`
 /** The main action with its name beside its icon (an extended FAB). */
-const FAB_EXTENDED = `h-14 gap-2 rounded-full px-5 pl-4 elevation-2 hover:elevation-3 active:elevation-1 [&_svg:not([class*=size-])]:size-6 ${PRESS}`
+const FAB_EXTENDED = `h-14 gap-2 rounded-pill px-5 pl-4 elevation-2 hover:elevation-3 active:elevation-1 [&_svg:not([class*=size-])]:size-6 ${PRESS}`
 /** A second action: 48px, the raised paper with its soft line, a lower shade. */
-export const MINI_FAB = `size-12 rounded-full border-border bg-raised elevation-1 hover:bg-muted hover:elevation-2 [&_svg:not([class*=size-])]:size-5 ${PRESS}`
+export const MINI_FAB = `size-12 rounded-pill border-border bg-raised elevation-1 hover:bg-muted hover:elevation-2 [&_svg:not([class*=size-])]:size-5 ${PRESS}`
 /** A second action with its words: a 48px pill of the same paper. */
 
 /**
@@ -342,7 +347,7 @@ export function SpeedDial({
             inert={!open}
             data-closing={!open || undefined}
             className={cn(
-              'dial-card absolute bottom-full mb-3 flex w-max max-w-[calc(100vw-2*var(--gutter))] flex-col rounded-3xl border border-border bg-raised p-1.5 elevation-3',
+              'dial-card absolute bottom-full mb-3 flex w-max max-w-[calc(100vw-2*var(--gutter))] flex-col rounded-card border border-border bg-raised p-1.5 elevation-3',
               DIAL_ASIDE,
               DIAL_ALIGN,
             )}
@@ -384,7 +389,7 @@ export function SpeedDialAction({
   // Named by its label; its line says what it does, as its description.
   const named = { 'aria-label': label, 'aria-describedby': detail ? detailId : undefined }
   const look = cn(
-    'w-full justify-start gap-3 rounded-2xl px-2 pr-5 text-left text-base font-semibold text-foreground transition-colors active:not-aria-[haspopup]:translate-y-0 active:bg-muted',
+    'w-full justify-start gap-3 rounded-control px-2 pr-5 text-left text-base font-semibold text-foreground transition-colors active:bg-muted',
     detail ? 'h-auto min-h-14 py-2' : 'h-12',
   )
   const choose = () => {
@@ -395,7 +400,7 @@ export function SpeedDialAction({
     <>
       <span
         aria-hidden
-        className="grid size-9 shrink-0 place-items-center rounded-xl bg-muted text-foreground [&_svg]:size-5"
+        className="grid size-9 shrink-0 place-items-center rounded-control bg-muted text-foreground [&_svg]:size-5"
       >
         <Icon />
       </span>

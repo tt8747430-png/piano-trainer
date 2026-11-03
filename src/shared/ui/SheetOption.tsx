@@ -23,7 +23,7 @@ export function SheetOption({
       onPressedChange={onPressedChange}
       aria-label={label}
       title={label}
-      className="size-11 rounded-full border-transparent bg-transparent px-0 text-muted-foreground hover:text-foreground aria-pressed:border-transparent aria-pressed:bg-muted aria-pressed:text-foreground"
+      className="size-11 rounded-pill border-transparent bg-transparent px-0 text-muted-foreground choice"
     >
       {Icon ? (
         <Icon aria-hidden />

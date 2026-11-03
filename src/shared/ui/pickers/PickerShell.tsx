@@ -16,7 +16,7 @@ export interface PickerPanel {
 
 /** The one look of a picker's value (A5, Apple's pop-up button): its name, the value, ⌃⌄. */
 const PICKER_TRIGGER =
-  'inline-flex h-11 min-w-0 max-w-full items-center gap-2 rounded-xl border border-input bg-card px-3 text-base whitespace-nowrap transition-colors duration-200 ease-out select-none hover:bg-muted data-popup-open:bg-muted'
+  'inline-flex h-11 min-w-0 max-w-full items-center gap-2 rounded-control border border-input bg-card px-3 text-base whitespace-nowrap transition-colors duration-200 ease-out select-none hover:bg-muted data-popup-open:bg-muted'
 
 /**
  * A picker's value with ⌃⌄ (ChevronsUpDown), opening what chooses it: a popover under the value, or

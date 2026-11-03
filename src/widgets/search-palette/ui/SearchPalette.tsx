@@ -192,7 +192,7 @@ function PaletteSection({
           onMouseMove={() => onHover(option)}
           onClick={() => onChoose(option)}
           className={cn(
-            'flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl py-1.5 pr-3 pl-2',
+            'flex min-h-14 cursor-pointer items-center gap-3 rounded-control py-1.5 pr-3 pl-2',
             option === active && 'bg-muted',
           )}
         >

@@ -260,7 +260,7 @@ export function NewSongSheet({
               <span
                 key={at}
                 className={cn(
-                  'h-1.5 w-6 rounded-full transition-colors duration-200',
+                  'h-1.5 w-6 rounded-pill transition-colors duration-200',
                   at <= step ? 'bg-foreground' : 'bg-border',
                 )}
               />
@@ -356,7 +356,7 @@ export function NewSongSheet({
                 <div
                   role="group"
                   aria-label={t('making.meter')}
-                  className="grid grid-cols-7 overflow-hidden rounded-xl border border-border bg-card"
+                  className="grid grid-cols-7 overflow-hidden rounded-control border border-border bg-card"
                 >
                   {TIMES.map((each) => {
                     const pressed = !ownTime && meter === each.meter && timeSymbol === each.symbol
@@ -377,8 +377,8 @@ export function NewSongSheet({
                           setTimeSymbol(each.symbol)
                         }}
                         className={cn(
-                          'grid min-h-14 place-items-center border-r border-border font-display text-lg leading-none font-semibold outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset',
-                          pressed && 'bg-chosen text-link',
+                          'grid min-h-14 place-items-center border-r border-border font-display text-lg leading-none font-semibold focus-visible:-outline-offset-3',
+                          pressed && 'bg-chosen text-foreground',
                         )}
                       >
                         {each.symbol ? (
@@ -404,8 +404,8 @@ export function NewSongSheet({
                       setTimeSymbol(false)
                     }}
                     className={cn(
-                      'grid min-h-14 place-items-center text-muted-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset',
-                      ownTime && 'bg-chosen text-link',
+                      'grid min-h-14 place-items-center text-muted-foreground focus-visible:-outline-offset-3',
+                      ownTime && 'bg-chosen text-foreground',
                     )}
                   >
                     <Pencil aria-hidden className="size-5" />

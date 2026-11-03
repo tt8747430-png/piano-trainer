@@ -49,7 +49,7 @@ export function SettingsGroup({
             'flex flex-col card',
             // A row's hover fills the card to its edges (R23), square between rows.
             flush
-              ? 'overflow-hidden [&>*]:rounded-none [&>*:first-child]:rounded-t-3xl [&>*:last-child]:rounded-b-3xl'
+              ? 'overflow-hidden [&>*]:rounded-none [&>*:first-child]:rounded-t-card [&>*:last-child]:rounded-b-card'
               : 'gap-3 px-5 py-4',
           )}
         >

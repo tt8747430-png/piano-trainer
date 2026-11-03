@@ -267,13 +267,13 @@ export function PageCanvas({
         data-shown={controls || undefined}
         // Out of sight, its buttons are out of reach, but a keyboard's Tab still brings them back.
         onFocus={showControls}
-        className="absolute top-2 right-2 flex items-center rounded-full bg-card/95 text-card-foreground opacity-0 shadow-md ring-1 ring-hairline transition-opacity duration-300 ease-out not-data-shown:pointer-events-none focus-within:pointer-events-auto focus-within:opacity-100 data-shown:opacity-100"
+        className="absolute top-2 right-2 flex items-center rounded-pill bg-card/95 text-card-foreground opacity-0 shadow-md ring-1 ring-hairline transition-opacity duration-300 ease-out not-data-shown:pointer-events-none focus-within:pointer-events-auto focus-within:opacity-100 data-shown:opacity-100"
         onPointerDown={showControls}
       >
         <Button
           variant="ghost"
           size="icon"
-          className="size-11 rounded-full"
+          className="size-11 rounded-pill"
           aria-label={t('sheet.canvas.zoomOut')}
           title={t('sheet.canvas.zoomOut')}
           onClick={() => zoomBy(1 / ZOOM_STEP)}
@@ -286,7 +286,7 @@ export function PageCanvas({
         <Button
           variant="ghost"
           size="icon"
-          className="size-11 rounded-full"
+          className="size-11 rounded-pill"
           aria-label={t('sheet.canvas.zoomIn')}
           title={t('sheet.canvas.zoomIn')}
           onClick={() => zoomBy(ZOOM_STEP)}
@@ -296,7 +296,7 @@ export function PageCanvas({
         <Button
           variant="ghost"
           size="icon"
-          className="size-11 rounded-full"
+          className="size-11 rounded-pill"
           aria-label={t('sheet.canvas.fit')}
           title={t('sheet.canvas.fit')}
           onClick={() => {

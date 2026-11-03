@@ -68,13 +68,13 @@ function TempoRuler({
         <span
           key={value}
           className={cn(
-            'absolute left-0 h-0.5 rounded-full bg-current',
+            'absolute left-0 h-0.5 rounded-pill bg-current',
             value % 10 === 0 ? 'w-3 opacity-60' : 'w-1.5 opacity-40',
           )}
           style={{ top: at(value) }}
         />
       ))}
-      <span className="absolute top-1/2 left-0 h-0.5 w-6 rounded-full bg-current" />
+      <span className="absolute top-1/2 left-0 h-0.5 w-6 rounded-pill bg-current" />
       {TEMPO_LADDER.filter(({ from }) => from >= low && from <= high).map(({ word, from: bpm }) => (
         <span
           key={word}
@@ -206,7 +206,7 @@ function TempoPicker({ onDone }: { onDone: () => void }) {
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
-        className="mt-2 grid size-44 cursor-ns-resize touch-none place-items-center rounded-full bg-link text-background shadow-md outline-none select-none focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-ring landscape-phone:size-36"
+        className="mt-2 grid size-44 cursor-ns-resize touch-none place-items-center rounded-pill bg-link text-background shadow-md outline-none select-none focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-ring landscape-phone:size-36"
       >
         <span className="flex flex-col items-center gap-1">
           <span className="text-6xl leading-none font-light tabular-nums">{mark}</span>
@@ -227,15 +227,9 @@ function TempoPicker({ onDone }: { onDone: () => void }) {
               const range = markRange(each, meter)
               setMark((now) => Math.min(range.high, Math.max(range.low, now)))
             }}
-            className="relative grid size-12 place-items-center rounded-full font-music text-2xl leading-none text-muted-foreground transition-colors duration-150 outline-none hover:text-foreground focus-visible:outline-3 focus-visible:outline-ring aria-checked:text-link aria-checked:ring-2 aria-checked:ring-border motion-reduce:transition-none"
+            className="relative grid size-12 place-items-center rounded-pill font-music text-2xl leading-none text-muted-foreground choice"
           >
             {unitNote(each)}
-            {each === unit ? (
-              <span
-                aria-hidden
-                className="absolute -bottom-0.5 size-0 border-x-4 border-b-4 border-x-transparent border-b-muted-foreground"
-              />
-            ) : null}
           </button>
         ))}
       </div>

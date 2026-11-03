@@ -19,7 +19,7 @@ export function ArchiveButton() {
         <span
           aria-hidden
           data-slot="archive-count"
-          className="pointer-events-none absolute -top-1 -right-1 grid h-5 min-w-5 place-items-center rounded-full bg-foreground px-1 text-xs font-semibold text-background tabular-nums"
+          className="pointer-events-none absolute -top-1 -right-1 grid h-5 min-w-5 place-items-center rounded-pill bg-foreground px-1 text-xs font-semibold text-background tabular-nums"
         >
           {count > 99 ? '99+' : count}
         </span>

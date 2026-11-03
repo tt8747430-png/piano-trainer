@@ -18,7 +18,7 @@ export function TileMark({
       data-slot="row-tile"
       aria-hidden
       className={cn(
-        'grid size-12 shrink-0 place-items-center rounded-2xl font-display text-xl font-semibold tabular-nums',
+        'grid size-12 shrink-0 place-items-center rounded-control font-display text-xl font-semibold tabular-nums',
         PAINT[paint].fill,
         PAINT[paint].ink,
       )}

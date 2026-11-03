@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useLayoutEffect, useRef, type ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 
 /**
@@ -9,10 +9,12 @@ import { cn } from '@/shared/lib'
  */
 export function Docked({ children, className }: { children: ReactNode; className?: string }) {
   const docked = useRef<HTMLDivElement>(null)
-  useEffect(() => {
+  // Measured before the first paint, so what floats over it never starts at the foot and jumps (A31).
+  useLayoutEffect(() => {
     const element = docked.current
     if (!element) return
     const root = document.documentElement
+    root.style.setProperty('--docked', `${element.getBoundingClientRect().height}px`)
     const observer = new ResizeObserver(([entry]) =>
       root.style.setProperty('--docked', `${entry?.borderBoxSize[0]?.blockSize ?? 0}px`),
     )

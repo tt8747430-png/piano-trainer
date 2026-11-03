@@ -41,7 +41,7 @@ export function PrintedSigns({
           tabIndex={-1}
           aria-label={name(printed)}
           title={name(printed)}
-          className="absolute z-30 cursor-pointer rounded-md transition-colors duration-200 ease-out hover:bg-foreground/5"
+          className="absolute z-30 cursor-pointer rounded-control transition-colors duration-200 ease-out hover:bg-foreground/5"
           style={{
             left: box.left,
             top: box.top,

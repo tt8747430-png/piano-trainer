@@ -118,9 +118,6 @@ typography:
 rounded:
   black-key: '6px'
   white-key: '9px'
-  md: '10px'
-  lg: '11px'
-  button: '12px'
   control: '12px'
   card: '14px'
   sheet: '20px'
@@ -136,21 +133,21 @@ components:
     backgroundColor: '{colors.honey}'
     textColor: '{colors.ink}'
     typography: '{typography.control}'
-    rounded: '{rounded.button}'
+    rounded: '{rounded.control}'
     height: '44px'
     padding: '0 16px'
   button-soft:
     backgroundColor: '{colors.paper-card}'
     textColor: '{colors.ink}'
     typography: '{typography.control}'
-    rounded: '{rounded.button}'
+    rounded: '{rounded.control}'
     height: '44px'
     padding: '0 16px'
   button-destructive:
     backgroundColor: '{colors.paper-card}'
     textColor: '{colors.crimson}'
     typography: '{typography.control}'
-    rounded: '{rounded.button}'
+    rounded: '{rounded.control}'
     height: '44px'
     padding: '0 16px'
   button-round:
@@ -179,7 +176,7 @@ components:
     backgroundColor: '{colors.paper-card}'
     textColor: '{colors.ink}'
     typography: '{typography.control}'
-    rounded: '{rounded.lg}'
+    rounded: '{rounded.control}'
     height: '44px'
   card:
     backgroundColor: '{colors.paper-card}'
@@ -373,10 +370,21 @@ black key in a lighter slope. They draw a piano and appear nowhere else.
 
 ## Shapes
 
-One 12px base (`--radius`): black keys 6px (`rounded-xs`), white keys 9px (`sm`), small parts 10–11px (`md`, `lg`; a
-segment's thumb), buttons, controls and tiles 12px (`xl`, `2xl`), cards 14px (`3xl`), sheets 20px at the top (`4xl`).
-Round buttons, Play, marks and pips are full circles. Keys are square at the top, round at the foot. Every line is
-1px; only focus rings and the keys' rings are wider.
+One scale of four corners (R14), tokens in `theme.css` and classes of their own; a corner is never written any other
+way (`src/styles/shapes.test.ts` fails a one-off):
+
+| Token              | Class             | Size  | Takes it                                                                                         |
+| ------------------ | ----------------- | ----- | ------------------------------------------------------------------------------------------------ |
+| `--radius-control` | `rounded-control` | 12px  | buttons, pop-up buttons, fields, segmented controls, tiles, toolbar items, rows' tiles, popovers |
+| `--radius-card`    | `rounded-card`    | 14px  | cards, grouped lists, a dial's card, the toast                                                   |
+| `--radius-sheet`   | `rounded-sheet`   | 20px  | sheets (their top), the editor's palette sheet                                                   |
+| `--radius-pill`    | `rounded-pill`    | round | round buttons, Play, the floating actions and capsules, chips, marks and pips                    |
+
+Something inside a shape takes the same shape as its holder, so a fill reaches its edges: an item in a capsule is a
+pill, a part of a card's edge takes the card's corner (`first:rounded-t-card`). The keys are drawings, not controls:
+a black key's foot 6px (`rounded-b-key-black`), a white key's 9px (`rounded-b-key-white`), square at the top. The
+shadcn primitives keep Tailwind's sizes in their classes; `theme.css` maps them onto the scale (`xs`–`2xl` the
+control, `3xl` the card, `4xl` the sheet). Every line is 1px; only focus rings and the keys' rings are wider.
 
 ## Components
 
@@ -397,14 +405,14 @@ every piece is shown in the Admin area's Components):
 - **Every New … is one sheet** (`NewSheet`, round 25, after Flat's new score): the name first, then its few
   properties as soft parts (`SheetPart`: a name, a line, the choice: drawn tiles, chips, a `Stepper`, the key
   signature grid), one Create button pinned at the foot named for the act. Never a bare text field or a page.
-- **Page, sheet or menu (A4), as Apple's guidelines, Noji and Flat draw the line:** a *page* for settings and
-  anything with many fields (an item's Settings, a kind's settings, Publish); a *sheet* for creating one thing or
-  one focused choice (every New …, Export…, a picker on a phone); a *menu* for one-tap commands (⋯, a row's
+- **Page, sheet or menu (A4), as Apple's guidelines, Noji and Flat draw the line:** a _page_ for settings and
+  anything with many fields (an item's Settings, a kind's settings, Publish); a _sheet_ for creating one thing or
+  one focused choice (every New …, Export…, a picker on a phone); a _menu_ for one-tap commands (⋯, a row's
   long-press). A sheet never holds a second sheet's worth of settings; a menu never holds a setting.
 - **An act on an item is a button, never a switch (R19)**, as Apple Music, Spotify, Noji and Quizlet place them:
   Favourite is the ♡ on the item's card and in the Player's ⋯; "Add to favourites" / "Remove from favourites" in
   a row's ⋯ and long-press menus; a swipe on a row; Favourite in Select's bar. Learned the same: its button on
-  the card, its command in the menus. An item's Settings page holds what the item *is*, not what the learner
+  the card, its command in the menus. An item's Settings page holds what the item _is_, not what the learner
   does with it.
 - **One accent per screen:** the honey fill is the primary action alone; the selection and states have their own
   colours.
@@ -424,7 +432,10 @@ every piece is shown in the Admin area's Components):
   each its icon alone unless the learner asks for names. A dial opens as a card of rows over a page dimmed to half:
   each row a soft tile, its name and a line of what it does, the nearest action last.
 - **Every Play becomes Stop** (a square) while it sounds; an item in a grid is pressed instead (sky mist).
-- **Focus:** one ring for every control, 3px deep sky, 2px outside, inset only where a scroller would cut it.
+- **Focus:** one ring for every control, the base `:focus-visible` rule's 3px deep sky outline 2px outside, inset
+  (`-outline-offset-3`) only where a scroller or a card's edge would cut it; never a box-shadow ring, an underline
+  or a fill (`src/styles/focus.test.ts`). It appears at once, never grown in. Tab walks a screen as it reads: the
+  skip link, the places, then the page top to bottom; Esc closes the top layer only.
 
 ### Choices
 
@@ -439,13 +450,20 @@ every piece is shown in the Admin area's Components):
 Never a strip that hides options behind ‹ ›, and no scrolling strip fades or blurs at its edges. A picture where it
 says it faster. A setting is never hidden behind a pop-up when it fits in sight.
 
-- **Segmented** (`Segmented`): a sand track, 4px inset; unchosen segments soft ink, the chosen a card-paper thumb in
-  the control line. Two that could be mistaken for each other name themselves on screen (`NamedSegmented`).
+- **One selected style** (R15, the `choice` utility in `theme.css`): every chosen thing (a segment, a chip, a toggle,
+  a picture tile, a tab, a place, a toolbar's tool, a picker's cell, the editor's palette) wears the one chosen fill
+  (`--chosen`, the line's sand by day, the dusk line by night) to its own edges, in ink. Its line and its weight
+  stay as they were at rest, so nothing reflows and nothing wears two highlights; hover is the lighter muted fill and
+  never looks chosen. A capsule's tools are pills, so a chosen one's fill meets the capsule's line. The exceptions
+  carry a meaning of their own: a switch's grass, a colour swatch's ring, what sounds now (ink).
+- **Segmented** (`Segmented`): card paper in the control line, its segments parted by the same line; unchosen
+  segments soft ink, the chosen filled to the control's edges. Two that could be mistaken for each other name themselves on screen (`NamedSegmented`).
 - **Pop-up button** (`Dropdown`): 44px, card paper in the control line, its label in soft ink and its value in ink,
   an up-down chevron. Its list is a popover of 44px items, the chosen checked in umber; groups named in soft ink over
   a hairline. `MultiDropdown` checks several. Under a field's printed name it is `bare`, its value alone.
-- **Toggle chips** (`ToggleChips`): several of a few, all in sight; on is ink on sand in an ink line.
-- **Toggle tiles** (`ToggleTile`, `PictureTiles`): an icon or a drawing over its name; on, the learned wash.
+- **Toggle chips** (`ToggleChips`): several of a few, all in sight, card paper in the control line; on, the chosen
+  fill.
+- **Toggle tiles** (`ToggleTile`, `PictureTiles`): an icon or a drawing over its name; on, the chosen fill.
 - **Picture choice** (`PictureChoice`, R21, as iOS's Light/Dark and macOS's Dock position): a setting that
   changes how something looks is drawn, each option a 64 × 40 line drawing in the current ink (`SettingPictures`)
   over a one- or two-word name, the chosen one outlined on the muted fill: key size (All 88 · Fit · Large), key
@@ -468,11 +486,12 @@ says it faster. A setting is never hidden behind a pop-up when it fits in sight.
 - **Inversion** (`InversionChoice`): its stack of noteheads.
 - **Switch:** a sand track in the control line; on, grass.
 - **Only what applies is offered.** A choice the thing cannot take is left out. A greyed choice says why in its
-  tooltip.
+  tooltip. A row of choices never comes and goes as another choice changes: where nothing in it applies it stays
+  in its place, greyed, so nothing under it moves (A31).
 - **Chord names in text** (`ChordText`): the root in soft ink, the quality strong, its numbers raised (`C maj⁷`), a
   bass after a slash soft again: a library card's chips, the key's chords linked to Chords.
-- **Tabs** (`tab-strip`, `tab`): the views of one thing under the screen's title, 48px, the chosen in ink over an ink
-  underline, scrolling sideways, its edges never faded.
+- **Tabs** (`tab-strip`, `tab`): the views of one thing under the screen's title, 44px, the chosen in the chosen
+  fill, scrolling sideways, its edges never faded.
 
 ### Rows, cards and sheets
 
@@ -547,7 +566,7 @@ says it faster. A setting is never hidden behind a pop-up when it fits in sight.
   until answered. Clear and Show answer are link-ink words beside it.
 - **A lesson's cards:** a note on sand; a rule on a card (`card`), its name in Literata 600 over soft ink; a
   section's takeaway on the lilac wash, "In short" in the deep shade over one Literata 600 sentence. Variants are
-  `ChoiceChips` (one of a few, wrapping, the chosen ink on sand in an ink line), or a segmented switch for two.
+  `ChoiceChips` (one of a few, wrapping, the chosen in the chosen fill), or a segmented switch for two.
 - **A lesson on a phone** reads a page a section: the floating bar holds ‹, the pages' dots (the one read a 20px
   capsule, the rest 8px dots in the line colour; tapping them opens the contents) and Next, honey, Done on the last.
 - **Progress ring** (`ProgressRing`): an arc in the stage paint's deep shade round a lesson's node or number, over a
@@ -567,7 +586,7 @@ says it faster. A setting is never hidden behind a pop-up when it fits in sight.
 ### Navigation and the screen's bar
 
 - **Places** (tab bar, rail, sidebar): a 24px icon over an Onest 500 14px label in soft ink (a 20px icon beside a
-  16px label in the sidebar); the current place sand in a soft line under a semibold ink label.
+  16px label in the sidebar), semibold; the current place in the chosen fill, its label ink.
 - **The screen's bar** (`ScreenHeader`): one row (56px at least): Back, the title in Literata 600, at most two
   round actions (a soft sand fill, no frame) with More (`MoreMenu`) for the rest; a page's tabs its second row; a
   hairline under it once the page runs beneath. A place (Learn, Songs, Practice) and a detail page (a song, a
@@ -585,7 +604,7 @@ says it faster. A setting is never hidden behind a pop-up when it fits in sight.
   something is chosen. Floating parts take no room: the music scrolls under them.
 - **Modes are a pop-up** (`Dropdown`, its face the mode's icon and name): Practise · Edit in
   the Player's and the editor's bars, Replace · Insert · Chord in the editor's Notes. An action with several
-  targets  is a pull-down (`ActionMenu`) from one bar button.
+  targets is a pull-down (`ActionMenu`) from one bar button.
 
 ### The keyboard
 
@@ -616,7 +635,13 @@ The whole piano, A0–C8, hung from a wooden **rail** and scrolling sideways wit
 - One curve, `ease-out` (`cubic-bezier(0.22, 1, 0.36, 1)`): 200ms for colour, 80ms for keys. Sheets rise on the iOS
   sheet curve (`cubic-bezier(0.32, 0.72, 0, 1)`, 450ms) and follow the finger mid-swipe.
 - The keys fold into their button and back through a view transition (`morph`, 340ms).
-- Strips and diagrams move on their own; the page does not. Only `transform` and `opacity` animate.
+- Strips and diagrams move on their own; the page does not. Only `transform` and `opacity` animate; buttons and
+  chips animate colour alone, and pressing one never moves it (no press offset, no scale), so a row of them never
+  twitches. The floating actions keep their press, a floating thing pushed into the page.
+- **Nothing jumps (A31).** What floats over the docked keys and the room the floating actions take are measured
+  before the first paint; a staff waiting for its engraving takes its row's width, not a picture's own; a score re-engraved keeps its old drawing until the new
+  one is whole; the screen's bar slides away only on a page over two screens tall, and never while a field is
+  written in or a menu is open.
 - Under reduced motion every transition is instant.
 
 ## Do and don't

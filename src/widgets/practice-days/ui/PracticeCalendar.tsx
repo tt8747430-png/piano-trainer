@@ -65,7 +65,7 @@ export function PracticeCalendar({ title }: { title: string }) {
                     {cell ? (
                       <span
                         className={cn(
-                          'mx-auto grid size-9 place-items-center rounded-full text-sm tabular-nums',
+                          'mx-auto grid size-9 place-items-center rounded-pill text-sm tabular-nums',
                           cell.practised
                             ? 'bg-learned font-semibold text-learned-foreground'
                             : 'text-foreground',

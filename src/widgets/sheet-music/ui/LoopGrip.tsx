@@ -76,13 +76,13 @@ export function LoopGrip({
         const zoom = parent.offsetWidth > 0 && box.width > 0 ? box.width / parent.offsetWidth : 1
         move(barAt(measures, (event.clientX - box.left) / zoom))
       }}
-      className="group absolute z-30 flex w-11 -translate-x-1/2 cursor-ew-resize touch-none justify-center rounded-md"
+      className="group absolute z-30 flex w-11 -translate-x-1/2 cursor-ew-resize touch-none justify-center rounded-control"
       style={{ left: x, top, height }}
     >
       {/* In the selection colour, down its band’s edge (ADR 0096). */}
       <span
         aria-hidden
-        className="h-full w-1 rounded-full bg-ring transition-transform duration-200 ease-out group-hover:scale-x-150"
+        className="h-full w-1 rounded-pill bg-ring transition-transform duration-200 ease-out group-hover:scale-x-150"
       />
     </div>
   )

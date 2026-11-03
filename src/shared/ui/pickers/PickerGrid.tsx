@@ -24,7 +24,7 @@ export function PickerGrid({
     <div
       role="group"
       aria-label={label}
-      className="overflow-hidden rounded-2xl border border-hairline bg-hairline"
+      className="overflow-hidden rounded-control border border-hairline bg-hairline"
     >
       {rows.map((row) => (
         <div
@@ -78,7 +78,7 @@ export function PickerCell({
       title={label}
       aria-pressed={pressed}
       onClick={onClick}
-      className="grid min-h-13 min-w-11 place-items-center bg-card px-0.5 text-foreground/75 transition-colors duration-150 outline-none hover:bg-accent hover:text-foreground focus-visible:z-10 focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring aria-pressed:bg-[color-mix(in_oklab,var(--color-link)_14%,var(--color-card))] aria-pressed:text-link motion-reduce:transition-none"
+      className="grid min-h-13 min-w-11 place-items-center bg-card px-0.5 text-foreground/75 choice focus-visible:z-10 focus-visible:-outline-offset-3 motion-reduce:transition-none"
     >
       {children}
     </button>

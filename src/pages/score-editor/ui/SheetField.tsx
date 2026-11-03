@@ -171,7 +171,7 @@ export function SheetField({
         className={cn(
           'gap-1.5 p-1.5 data-[side=top]:flex-col-reverse',
           docked
-            ? 'w-[calc(100vw-0.75rem)] max-w-none rounded-2xl p-2'
+            ? 'w-[calc(100vw-0.75rem)] max-w-none rounded-control p-2'
             : 'w-auto max-w-[min(24rem,calc(100vw-1rem))]',
         )}
       >
@@ -193,7 +193,7 @@ export function SheetField({
             onChange={(event) => onText(event.target.value)}
             onKeyDown={onKeyDown}
             className={cn(
-              'h-11 rounded-xl bg-card px-2 text-xl md:text-xl',
+              'h-11 rounded-control bg-card px-2 text-xl md:text-xl',
               FACES[kind],
               docked && 'min-w-0 flex-1',
             )}

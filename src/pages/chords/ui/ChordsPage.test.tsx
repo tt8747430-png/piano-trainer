@@ -117,7 +117,7 @@ describe('Practice → Chords', () => {
     expect(await screen.findByRole('heading', { level: 2, name: 'Cadd2' })).toBeInTheDocument()
   })
 
-  it('adds to a 7th chord the tone its stack skipped, and none where it skipped none', async () => {
+  it('adds to a 7th chord the tone its stack skipped, and greys the row where it skipped none', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/chords?triad=min&size=7')
     const added = await screen.findByRole('group', { name: 'Added tones' })
@@ -125,7 +125,11 @@ describe('Practice → Chords', () => {
     expect(await screen.findByRole('heading', { level: 2, name: 'Cm7(add11)' })).toBeInTheDocument()
     await user.click(screen.getByRole('radio', { name: '11th · Eleventh chord' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'Cm11' })).toBeInTheDocument()
-    expect(screen.queryByRole('group', { name: 'Added tones' })).not.toBeInTheDocument()
+    // The row stays in its place, greyed, so nothing under it moves (A31).
+    for (const chip of within(screen.getByRole('group', { name: 'Added tones' })).getAllByRole(
+      'button',
+    ))
+      expect(chip).toBeDisabled()
   })
 
   it('writes the chord on a staff', async () => {
@@ -160,13 +164,19 @@ describe('Practice → Chords', () => {
     expect(router.state.location.search).toMatchObject({ size: 11 })
     expect(router.state.location.search).not.toHaveProperty('triad')
     expect(await screen.findByRole('heading', { level: 2, name: 'C11' })).toBeInTheDocument()
-    expect(screen.queryByRole('radiogroup', { name: 'Suspension' })).not.toBeInTheDocument()
+    expect(screen.getByRole('radiogroup', { name: 'Suspension' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
   })
 
-  it('offers a suspension under a major chord only', async () => {
+  it('offers a suspension under a major chord only, greying the row in its place under another', async () => {
     await renderApp('/practice/chords?triad=min')
     await screen.findByRole('heading', { level: 2, name: 'Cm' })
-    expect(screen.queryByRole('radiogroup', { name: 'Suspension' })).not.toBeInTheDocument()
+    expect(screen.getByRole('radiogroup', { name: 'Suspension' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
   })
 
   it('rolls an arpeggio, putting down only the key struck last, every chord tone kept', async () => {

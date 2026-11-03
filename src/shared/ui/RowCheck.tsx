@@ -31,7 +31,7 @@ export function RowCheck({
             data-slot="row-check"
             aria-hidden
             className={cn(
-              'grid size-7 shrink-0 place-items-center rounded-full border transition-colors duration-200 ease-out',
+              'grid size-7 shrink-0 place-items-center rounded-pill border transition-colors duration-200 ease-out',
               checked ? 'border-transparent bg-selected text-selected-foreground' : 'border-input',
             )}
           >

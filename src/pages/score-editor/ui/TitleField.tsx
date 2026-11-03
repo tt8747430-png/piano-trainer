@@ -85,7 +85,7 @@ export function TitleField({ place }: { place: TitlePlace }) {
               settled.current = false
               setTyped(meta.title)
             }}
-            className="max-w-full cursor-text rounded-lg px-1 text-balance wrap-break-word transition-colors duration-200 ease-out hover:bg-foreground/5"
+            className="max-w-full cursor-text rounded-control px-1 text-balance wrap-break-word transition-colors duration-200 ease-out hover:bg-foreground/5"
           >
             {meta.title}
           </button>
@@ -118,7 +118,7 @@ function CreditsField() {
           search: (prev) => prev,
         })
       }
-      className="block w-full rounded-lg px-1 text-start transition-colors duration-200 ease-out hover:bg-foreground/5"
+      className="block w-full rounded-control px-1 text-start transition-colors duration-200 ease-out hover:bg-foreground/5"
     >
       <SheetCredits credits={credits} />
     </button>

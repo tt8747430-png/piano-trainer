@@ -56,8 +56,8 @@ export function BeatSquares({
               title={t('metronome.levels.tap')}
               onClick={() => onTap(beat)}
               className={cn(
-                'relative flex aspect-square w-full items-end overflow-hidden rounded-xl border border-input bg-muted transition-colors duration-75 ease-out',
-                beat === 0 && 'rounded-2xl',
+                'relative flex aspect-square w-full items-end overflow-hidden rounded-control border border-input bg-muted transition-colors duration-75 ease-out',
+                beat === 0 && 'rounded-card',
                 beat === sounding && 'border-2 border-primary',
               )}
             >

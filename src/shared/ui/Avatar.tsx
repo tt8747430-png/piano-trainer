@@ -31,7 +31,7 @@ export function Avatar({
       aria-hidden
       data-slot="avatar"
       className={cn(
-        'grid shrink-0 place-items-center rounded-full bg-paint-yellow font-display leading-none font-semibold text-on-paint-yellow',
+        'grid shrink-0 place-items-center rounded-pill bg-paint-yellow font-display leading-none font-semibold text-on-paint-yellow',
         SIZE[size],
         className,
       )}

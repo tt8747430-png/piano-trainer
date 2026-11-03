@@ -29,7 +29,7 @@ import { TempoSteps } from './TempoSteps'
 import { TempoWordTip } from './TempoWordTip'
 
 /** The two pop-up buttons, round as the steps; on the narrowest phones a size down, so their words fit. */
-const POP_UP = 'rounded-full narrow-phone:gap-1 narrow-phone:px-2.5 narrow-phone:text-sm'
+const POP_UP = 'rounded-pill narrow-phone:gap-1 narrow-phone:px-2.5 narrow-phone:text-sm'
 
 /** A pop-up button's face here: its picture, then the value. */
 const face = (Icon: LucideIcon, value: string) => (
@@ -106,7 +106,7 @@ export function MetronomePage() {
             >
               <SliderLabel className="sr-only">{t('practice:metronome.slider')}</SliderLabel>
             </Slider>
-            <Button variant="soft" onClick={metronome.tap} className="shrink-0 rounded-full">
+            <Button variant="soft" onClick={metronome.tap} className="shrink-0 rounded-pill">
               <Hand aria-hidden />
               {t('practice:metronome.tap')}
             </Button>
@@ -166,7 +166,7 @@ export function MetronomePage() {
             aria-label={toggleName}
             title={toggleName}
             onClick={metronome.toggle}
-            className="size-24 rounded-full narrow-phone:size-20 sm:size-28 landscape-phone:size-20"
+            className="size-24 rounded-pill narrow-phone:size-20 sm:size-28 landscape-phone:size-20"
           >
             {metronome.playing ? (
               <Square aria-hidden className="size-9 fill-current" />

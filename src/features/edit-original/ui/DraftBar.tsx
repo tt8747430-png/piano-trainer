@@ -127,7 +127,7 @@ export function DraftActions({
           <Button
             variant={variant}
             size="icon"
-            className="size-11 shrink-0 rounded-full"
+            className="size-11 shrink-0 rounded-pill"
             aria-label={t('original.more')}
             title={t('original.more')}
           />
@@ -164,7 +164,7 @@ export function DraftActions({
       />
       {publishInMenu ? null : (
         <Button
-          className="h-11 shrink-0 rounded-full px-4"
+          className="h-11 shrink-0 rounded-pill px-4"
           disabled={!draft.drafted || busy}
           onClick={() => setAsked('publish')}
         >

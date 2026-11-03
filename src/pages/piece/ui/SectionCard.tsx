@@ -32,7 +32,7 @@ export function SectionCard({
       <span
         aria-hidden
         className={cn(
-          'grid size-14 shrink-0 place-items-center rounded-2xl',
+          'grid size-14 shrink-0 place-items-center rounded-control',
           PAINT[paint].fill,
           PAINT[paint].ink,
         )}
