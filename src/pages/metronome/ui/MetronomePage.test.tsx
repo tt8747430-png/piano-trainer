@@ -107,11 +107,11 @@ describe('Practice → Metronome', () => {
     )
     await user.click(screen.getByRole('button', { name: 'Start' }))
     await waitFor(() =>
-      // A waltz: the kick on 1, the hat alone after it, on every 8th (A39, Chordify's).
+      // A waltz: the kick on 1, the snare on 2 and 3, the hat on every 8th (A39).
       expect(beatsPlayed(audio.played).map(({ voices }) => voices)).toEqual([
         ['kick!', 'hat', 'hat'],
-        ['hat', 'hat'],
-        ['hat', 'hat'],
+        ['snare', 'hat', 'hat'],
+        ['snare', 'hat', 'hat'],
       ]),
     )
   })

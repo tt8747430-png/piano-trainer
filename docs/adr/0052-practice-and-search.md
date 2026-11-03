@@ -86,9 +86,9 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   slider and Tap tempo (the average of the last five taps), a square a beat (the first larger, the one sounding
   filled, a tap cycling accent · beat · silent), one honey Play. Under it, beside it on a laptop, labelled rows: Sound
   (Clicks, Beeps, Drum beat), Time signature, Between beats (the subdivision); then Practice, the two trainers, each a
-  switch whose rows read as a sentence. A click's and a beep's accent is an octave up; the drum grooves are Chordify's
-  (rock in 4 with the kick on the "and" of 3, a waltz's kick and hats, the backbeat in 2, compound and odd meters by
-  their groups), the kick and snare one loudness.
+  switch whose rows read as a sentence. A click's and a beep's accent is an octave up; the drum grooves are A39's (rock in 4:
+  kick 1 and 3, snare 2 and 4; a waltz: kick 1, snare 2 and 3; 6/8: kick 1, snare 4; odd meters by their groups), the
+  hat on the subdivision, the kick and snare one loudness.
   Beats are planned on the audio clock a second and a half ahead and topped up by a timer; a change while it plays
   goes on from the beat heard. Space starts it, ↑ ↓ change the tempo; the screen stays on. Its sounds are synthesised,
   so it works offline. Its tempo is named by its Italian tempo word (`tempoWord`, the editor's dial's ladder), the

@@ -117,25 +117,16 @@ export interface BarClick {
 }
 
 /**
- * What the kit strikes besides the hat at `part` of beat `beat` (0 its start, ½ its "and"): a drum
- * groove of the meter, as drum machines and Chordify's write them. Rock in 4 (kick on 1, 3 and the
- * "and" of 3, snare on 2 and 4); a waltz in 3 (the kick on 1, the hat alone after it); the backbeat
- * in 2; compound time's kick on its first dotted beat, snare on the next; an odd meter's kick on the
- * bar and snare on each group after.
+ * What the kit strikes besides the hat on beat `beat` (A39's grooves, checked against real ones):
+ * rock in 4 (kick 1 and 3, snare 2 and 4), a waltz in 3 (kick 1, snare 2 and 3), the backbeat in
+ * 2, compound time's kick on its first dotted beat and snare on the next (6/8: 1 and 4), an odd
+ * meter's kick on the bar and snare on each group after. Between the beats, the hat alone.
  */
-function groove(
-  beats: number,
-  groups: readonly number[],
-  beat: number,
-  part: number,
-): DrumVoice | null {
-  if (part !== 0)
-    return beats === 4 && groups.length === 1 && beat === 2 && part === 0.5 ? 'kick' : null
+function groove(beats: number, groups: readonly number[], beat: number): DrumVoice | null {
   if (beat === 0) return 'kick'
   if (groups.length > 1) return groups.includes(beat) ? 'snare' : null
-  if (beats === 3) return null
   if (beats === 4) return beat === 2 ? 'kick' : 'snare'
-  return beat % 2 === 1 ? 'snare' : 'kick'
+  return 'snare'
 }
 
 /**
@@ -167,7 +158,7 @@ export function barClicks({
     if (level === 'silent') return []
     return partsOf(size, unit, heard).map((part, i): BarClick => {
       const at = (beat + part) * secondsPerBeat
-      const struck = drums ? groove(beats.length, groups, beat, part) : null
+      const struck = drums && i === 0 ? groove(beats.length, groups, beat) : null
       const voices: DrumVoice[] = drums ? [...(struck ? [struck] : []), 'hat'] : []
       return { at, beat, level: i === 0 ? level : 'sub', voices }
     })

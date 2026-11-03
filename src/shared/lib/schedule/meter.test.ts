@@ -138,21 +138,25 @@ describe('the drums', () => {
       drums: true,
     }).map((click) => `${Number(click.at.toFixed(3))}:${click.voices.join('+')}`)
 
-  it('play 4/4 as a rock beat: kick 1, 3 and the "and" of 3, snare 2 and 4, the hat on 8ths', () => {
+  it('play 4/4 as a rock beat: kick 1 and 3, snare 2 and 4, the hat on 8ths', () => {
     expect(kit('4/4')).toEqual([
       '0:kick+hat',
       '0.5:hat',
       '1:snare+hat',
       '1.5:hat',
       '2:kick+hat',
-      '2.5:kick+hat',
+      '2.5:hat',
       '3:snare+hat',
       '3.5:hat',
     ])
   })
 
-  it('play 3/4 as a waltz: the kick on 1, the hat alone after it', () => {
-    expect(kit('3/4').filter((click) => !click.endsWith(':hat'))).toEqual(['0:kick+hat'])
+  it('play 3/4 as a waltz: kick on 1, snare on 2 and 3', () => {
+    expect(kit('3/4').filter((click) => !click.endsWith(':hat'))).toEqual([
+      '0:kick+hat',
+      '1:snare+hat',
+      '2:snare+hat',
+    ])
   })
 
   it('play 2/4 as a backbeat and an odd meter by its groups', () => {
