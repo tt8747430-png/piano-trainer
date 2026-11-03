@@ -644,3 +644,116 @@ string changed; files in `.scratch/r29/shots/after/r2-<item>-<screen>-<size>.png
   "says 'No piano connected' with a Connect link"; "the staff's width is the same before and after a chord"
   (stubBox). `MetronomePage.test.tsx`: "holding + raises the tempo by repeats"; "typing 96 sets 96"; "Allegro opens
   the tempo words and Largo sets 50"; "Play is the capsule's". Screenshots of each page at the three sizes.
+
+### A30: Fingering, one way everywhere
+
+- **Source:** A30 (1171–1223); spec `.scratch/r29/fingering-service/spec.md` (kept, with the switch's home
+  corrected below). Audit: "one chord rule" DONE (both use `handFingers`); everything else NOT DONE;
+  `passage-fingering.ts` has no caller.
+- **Today:** `src/shared/lib/music/fingering.ts` (`scaleFingering`, `thumbFingering`, `arpeggioFingering`,
+  `fingerCrossings`, `runFingering`), `chord-fingering.ts` (`handFingers`, `blockFingering`, `placedFingering`),
+  `passage-fingering.ts` (`fingerPassage`). Drawn four ways: `FingerRow` under the piano (crossing filled sky),
+  numbers stacked on the keys with degrees and letters, `HandDiagram` (crossing underlined), Verovio's numbers
+  (crossing bold sky, "2 4" collision at bar lines). Fingering on Chords (one chord), Scales' Notes and Exercises only.
+- **Will build:**
+  - **Kernel** `src/shared/lib/music/fingering/` (folder; `index.ts` re-exported by `music/index.ts`), with the
+    spec's five functions and type `Fingered = { midi; hand; finger; crossing?: 'under' | 'over' | 'change' }`:
+    `fingerChord(keys, hand | 'both')`, `fingerRun(keys, hand, kind?, way?)`, `fingerArpeggio(keys, hand)`,
+    `fingerPassage(notes, hands)`, `fingerProgression(chords, hand)` (least movement). Files: `chord.ts`, `run.ts`,
+    `arpeggio.ts`, `passage.ts`, `progression.ts`, `books.test.ts`. `fingering.ts`, `chord-fingering.ts`,
+    `passage-fingering.ts` deleted; every caller moves (Chords, Scales, `exercise/inversions.ts`, `exercise/
+    arpeggio.ts`, `exercise/scales.ts`, Hanon).
+  - **One look** (DESIGN.md gets a "Fingering" section replacing lines 552–556):
+    - on the on-screen piano: the finger in one ink circle on the key, the right hand's above the note name, the
+      left hand's below; a crossing: the number in the accent colour (`--link`) with a small arc over it. No other
+      number row: `FingerRow.tsx` deleted; degrees on the keys only on a degrees page (Key tab), never with fingers.
+      `PianoKeyboard` takes `fingers?: readonly Fingered[]`.
+    - on the score: right hand above the staff, left below (`place` by the staff's hand), crossing in the accent
+      colour by a CSS class on Verovio's `<fing>` (`fing.crossing`), no collision: our notation writes
+      `fingeringPosition` and nudges a number off a bar line (checked on C major two octaves).
+    - hand pictures: `src/shared/ui/HandCard.tsx` replacing `HandDiagram.tsx`: a drawn right and left hand, palm
+      down, one line style (SVG made once with the impeccable skill's asset steps, or a CC0 drawing adapted, its
+      licence in `src/shared/ui/hand-art/SOURCES.md`), numbers on the fingertips, a crossing marked as on the piano.
+      Where it teaches (a chord's shape, a scale's first five notes) the hand drawn over the keys it plays
+      (`HandCard({ hand, fingers, keys?: readonly Midi[] })`).
+  - **Fingering wherever notes are shown, from one source:** Harmony's seven chords (each chord card: its RH
+    fingers under the chord), Key's borrowed chords (moved to Harmony, A21), Progressions (each chord of the
+    voice-led line, `fingerProgression`, under the chips on the staff), Intervals (the two notes, `fingerChord` of two
+    keys), Accompaniment patterns (`fingerPassage` over the pattern's bar), the Chord finder's chord (`fingerChord`),
+    lesson examples and the Player (a score that prints none: "Suggested fingering" drawn lighter, the Player's
+    legend says "Suggested"; in the editor a **"Keep suggested fingering"** action writes it in). Scales' "From the
+    thumb · Standard" stays a choice of the run (round 1 S2).
+  - **One switch:** **"Fingering"** shows or hides fingering everywhere at once. Its one home is app-wide,
+    Settings › General, group "Notation and names" (round 1 S12), key `notation.fingering`, default on. Round 1's
+    per-page `chords.fingering` (S1 row 2) is not built: one setting per idea (R18, Decided 20 "no setting on two
+    pages"); the Chords and Player Settings pages carry no Fingering row. (Correction to round-1 S1 and to the spec's
+    "home `player`".)
+- **Not in this item:** the On-screen piano's other labels (A26, round 3); the editor's fingering tool (round 4).
+- **Done when:** `fingering/books.test.ts`: the 12 major and 12 harmonic minor scales, two octaves, both hands, and
+  the 24 triad arpeggios, against the printed books (Nikolaev, Shirinskaya; table in the file with page refs); the
+  four inversions of C, F♯, B♭ triads each hand. `fingering/progression.test.ts`: "I–IV–V–I in C moves the fewest
+  fingers". `src/app/fingering-agrees.test.tsx`: "C major in 1st inversion has the same fingers on Chords, the
+  inversion drill and Progressions"; "C major two octaves both hands: the piano, the score and the hand card show the
+  same numbers". `fingering-switch.test.tsx`: "Fingering off hides it on Chords, Scales, the Player". A30's Done:
+  screenshots of C major two octaves on the piano, the score and the hand cards side by side at 1280.
+- **Owner's question:** the hand art: draw our own SVG (default) or adapt a CC0 illustration?
+
+### A31: Nothing flickers, nothing jumps
+
+- **Source:** A31 (1224–1238); C2 above. Audit: buttons, re-engraving, the bar DONE; rows CONTRADICTS (C2);
+  recordings NOT DONE.
+- **Today:** 0a9069b4 fixed buttons, the bar and measuring before paint; 7875ffe7 undid the rows (C2). Open in
+  `audit.md:53,55`: the floating actions' side room lands a frame late at 1280; the Chords heading block changes
+  height with the chord at 402.
+- **Will build:**
+  - C2 (rows stay).
+  - The Chords head (name, also written, staff) a fixed height per breakpoint: the staff box reserves the height of
+    a two-hand grand staff (`min-h` from the score size), the "Also written" line reserves one line even when empty.
+  - The floating actions' side room: computed in the same layout effect as `Docked`'s height
+    (`FloatingActions.tsx`), so both land in the first frame.
+  - The Chord finder's staff one size (A25).
+  - **Recordings:** `e2e/no-jumps.spec.ts`: for Chords, Scales (each tab), Intervals, Progressions, the Metronome and
+    the Chord finder, at 402 and 1280, change each choice in turn with `recordVideo` on, and compute the layout shift
+    of untouched elements (`PerformanceObserver('layout-shift')`, `hadRecentInput` ignored by our script); the spec
+    fails over 0.01 per change. Videos to `.scratch/r29/shots/after/r2-a31-*.webm`; before ones from `main` first.
+- **Done when:** the e2e spec passes; `audit.md` rows 53 and 55 closed; each new jump found a row in the audit.
+
+### A32: The theory pages: one owner per idea
+
+- **Source:** A32 (1239–1291). Audit: relative once, Intervals → Quiz, Harmony's chords → Chords, Chord finder
+  → Key DONE; "Progressions in this key" cap, walks, Notation and names, per-page defaults open.
+- **Will build (the table's rows still open):**
+  | Idea | Owner | Change |
+  |---|---|---|
+  | Root / key picker | `NotePicker` (one chord, a scale's root), `KeyPicker` (a key) | Intervals' `PitchPicker` stays (pitch only, A22); every other root is `NotePicker`, every key `KeyPicker` (C5, A21) |
+  | Chord size | `ChordSizeField` (`shared/ui`) | Chords, Progressions use it; Harmony's moves to Settings (S2) |
+  | Inversion | `InversionChoice` | Progressions' "first chord's inversion" (S4) draws `InversionChoice`'s pictures |
+  | Voicing | Chords' list (`VOICINGS`) | Progressions' Block · Voice leading is how a line moves, not a chord voicing: it stays, named "Voice leading" (S4), no second list |
+  | Hands | `Segmented` Right · Left · Both | one component `HandsChoice` (new, `shared/ui`) on Chords, Scales, Accompaniment |
+  | Tempo | `Stepper` "Tempo" | Scales (A20), Metronome (A25), the Player's (round 4) |
+  | A key's seven chords | Harmony's spine (A21) | the circle shows no chords; Progressions' strip links "See the key's chords ›" |
+  | Which chords hold a note | Harmony (Harmonise) | the Chord finder's "keys it is in" opens Key (done) |
+  | Progressions of a key | Progressions' Library | Harmony: at most 4 rows + "Show all n" opening Progressions in that key |
+  | Walks | the Player's walk kinds, named as C3 | offered from Chords, Harmony, Progressions with the sequence chosen there |
+  - `features/practice/ui/PractiseChords.tsx`: `commonProgressions()` sliced to 4, then a `RowLink` **"Show all
+    {{n}}"** to `/practice/progressions?tab=library&key=…`.
+  - App-wide "Notation and names" and each page's defaults: round 1 S12 and S1–S8.
+- **Done when:** `src/app/one-owner.test.tsx`: "no page but Chords renders a Voicing menu"; "Harmony shows at most four
+  progressions and Show all n"; "each shared control is one component" (each page's root/key/hands/tempo controls carry
+  the shared component's `data-control` name). The settings registry test (round 1 S14) proves no setting on two
+  pages.
+
+### A33: Colour notes (what is left)
+
+- **Source:** A33 (1292–1328); audit DONE except "every voicing name in Progressions is one of Chords'" (n/a) and the
+  names checked against the books.
+- **Today:** `ColourNotes.tsx`, `colour-notes.ts` done (chips heard and added, groups by the degree in a key).
+- **Will build:** only what C1 adds (more triads take tones) and:
+  - the names checked once more against `piano-data/books` (*The Chord Tensions Chart*, A43) chord by chord: the
+    AVAILABLE table in `colour-notes.ts` compared with the chart for each of the nine 7th chords, differences fixed
+    and the page cited in the table's comment;
+  - Harmony's chords and Progressions' chords link to it: a chord card's corner link opens Chords with `key=` set
+    (Harmony, done) and Progressions' chord chip menu gets **"Colour notes in Chords ›"** (opening Chords with the
+    chord and `key=`).
+- **Done when:** `colour-notes.test.ts`: "matches The Chord Tensions Chart for each 7th chord" (a table with the page);
+  `ProgressionsPage.test.tsx`: "a chord's menu opens Chords on it in the key".
