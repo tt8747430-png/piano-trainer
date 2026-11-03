@@ -5,6 +5,7 @@ import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { readSongLink } from '@/features/share-song'
+import { confirmAsked } from '@/shared/test/confirm'
 import { createMemoryStorage } from '@/shared/lib'
 
 /** The learner's own song, Morning, as they made it. */
@@ -268,6 +269,7 @@ describe('the Player’s More (ADR 0108)', () => {
       await screen.findByText('“Still, my soul, be still” moved to Sunday'),
     ).toBeInTheDocument()
     await chooseMore(user, 'Archive')
+    await confirmAsked(user, 'Archive')
     expect(libraryStore.getState().archive).toEqual([
       { kind: 'song', id: 'bz5', from: { folder: 'folder-1', index: 0 } },
     ])

@@ -192,8 +192,8 @@ describe('Practice → Metronome', () => {
     const user = userEvent.setup()
     const second = screen.getByRole('button', { name: 'Beat 2: Beat' })
     await user.click(second)
-    expect(screen.getByRole('button', { name: 'Beat 2: Silent' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Beat 2: Silent' }))
+    expect(screen.getByRole('button', { name: 'Beat 2: Silent beat' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Beat 2: Silent beat' }))
     expect(screen.getByRole('button', { name: 'Beat 2: Accent' })).toBeInTheDocument()
     expect(settingsStore.getState().metronome.levels).toEqual([
       'downbeat',

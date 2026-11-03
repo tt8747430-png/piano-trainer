@@ -498,7 +498,7 @@ export const practice = {
       downbeat: 'Downbeat',
       accent: 'Accent',
       normal: 'Beat',
-      silent: 'Silent',
+      silent: 'Silent beat',
       tap: 'Tap a square to accent it or leave it silent',
     },
     subdivision: 'Subdivision',
