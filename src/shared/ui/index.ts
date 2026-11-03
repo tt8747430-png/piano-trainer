@@ -121,6 +121,7 @@ export {
 export { Sheet, SheetContent, SheetTrigger } from './Sheet'
 export { SettingField } from './SettingField'
 export { SettingRows } from './SettingRows'
+export { ChoiceCard, type CardOption } from './ChoiceCard'
 export { SettingsGroup } from './SettingsGroup'
 export { SwitchRow } from './SwitchRow'
 export { ToggleChips } from './ToggleChips'
