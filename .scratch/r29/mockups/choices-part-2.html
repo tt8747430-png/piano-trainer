@@ -1,0 +1,512 @@
+<title>Round 29 Choices</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Noto+Music&family=Onest:wght@400;500;600&display=swap">
+<style>
+/* Layout: a reading column of questions; each question shows full phone screens drawn in Piano Trainer's own tokens, side by side, wrapping on a phone. */
+:root {
+  --paper: #f7f3ee; --card: #fefdfb; --sand: #eee9e2; --line: #dad1c8; --ink: #332921; --ink-soft: #685e56;
+  --honey: #edc684; --honey-ink: #5a4214; --grass: #d9ebd5; --grass-ink: #44684a; --sky: #e0effa; --sky-ink: #356890;
+  --lilac: #e6dff6; --lilac-ink: #6a5988; --sandw: #f5e0cf; --sand-ink: #7d5b40; --bad: #f3d6d2; --bad-ink: #8a3a2e;
+  --scrim: rgba(51, 41, 33, .32); --key-black: #332921; --hit: #edc684;
+  --display: 'Literata', Georgia, serif; --sans: 'Onest', system-ui, sans-serif; --music: 'Noto Music', serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #191512; --card: #24201c; --sand: #2e2924; --line: #453e38; --ink: #ede9e1; --ink-soft: #b5aca1;
+  --honey: #d4b176; --honey-ink: #2a1f0a; --grass: #2c3d2c; --grass-ink: #b5d6ae; --sky: #22344a; --sky-ink: #a9cdec;
+  --lilac: #352d47; --lilac-ink: #cfc2ec; --sandw: #3d2f24; --sand-ink: #e4c4a6; --bad: #45251f; --bad-ink: #f0b9ae;
+  --scrim: rgba(0,0,0,.5); --key-black: #0f0c0a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #191512; --card: #24201c; --sand: #2e2924; --line: #453e38; --ink: #ede9e1; --ink-soft: #b5aca1;
+  --honey: #d4b176; --honey-ink: #2a1f0a; --grass: #2c3d2c; --grass-ink: #b5d6ae; --sky: #22344a; --sky-ink: #a9cdec;
+  --lilac: #352d47; --lilac-ink: #cfc2ec; --sandw: #3d2f24; --sand-ink: #e4c4a6; --bad: #45251f; --bad-ink: #f0b9ae;
+  --scrim: rgba(0,0,0,.5); --key-black: #0f0c0a; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); margin: 0 }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+h1, h2 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0 }
+h1 { font-size: 30px } h2 { font-size: 22px }
+p { margin: 0; max-width: 70ch } .soft { color: var(--ink-soft) }
+.intro { display: grid; gap: 10px; margin-bottom: 18px }
+nav.toc { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px }
+nav.toc a { font-size: 13px; color: var(--ink); text-decoration: none; background: var(--sand); border-radius: 999px; padding: 4px 10px }
+nav.toc a.done { background: var(--grass); color: var(--grass-ink) }
+section.q { border-top: 1px solid var(--line); padding-block: 28px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px }
+.qhead { display: flex; gap: 10px; align-items: baseline } .qnum { font: 600 13px var(--sans); color: var(--ink-soft) }
+.ctx { display: grid; gap: 8px }
+.screens { display: flex; flex-wrap: wrap; gap: 22px; align-items: flex-start }
+figure { margin: 0; display: grid; gap: 8px; width: 300px; max-width: 100% }
+figure.laptop { width: 640px; max-width: 100%; min-width: 0; overflow-x: auto }
+figcaption { font-size: 13.5px; color: var(--ink-soft) } figcaption b { color: var(--ink); display: block; font-size: 14px }
+.rec { background: var(--sky); color: var(--sky-ink); border-radius: 12px; padding: 10px 14px }
+.pick { display: flex; flex-wrap: wrap; gap: 8px }
+.pick button { font: 500 14px var(--sans); border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 7px 14px; cursor: pointer }
+.pick button[aria-pressed="true"] { background: var(--honey); color: var(--honey-ink); border-color: var(--honey) }
+.pick button:focus-visible, textarea:focus-visible { outline: 2px solid var(--sky-ink); outline-offset: 2px }
+textarea { width: 100%; min-height: 44px; font: 14px var(--sans); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; resize: vertical }
+.saved { font-size: 12.5px; color: var(--ink-soft) }
+
+/* ——— the app, drawn ——— */
+.dev { position: relative; width: 300px; height: 640px; background: var(--paper); border: 1px solid var(--line); border-radius: 30px; overflow: hidden; font-size: 13px; display: flex; flex-direction: column; box-shadow: 0 1px 2px rgba(0,0,0,.06) }
+.dev.short { height: 470px }
+.lap { width: 640px; height: 450px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: 150px 210px 1fr; background: var(--paper); font-size: 12.5px }
+.status { height: 26px; flex: none; display: flex; justify-content: space-between; align-items: center; padding: 0 22px; font: 600 11px var(--sans) }
+.abar { height: 48px; flex: none; display: flex; align-items: center; gap: 4px; padding: 0 8px; border-bottom: 1px solid var(--line) }
+.abar .title { font: 600 15px var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0 }
+.abar .grow { flex: 1 }
+.btn { width: 36px; height: 36px; border-radius: 999px; display: grid; place-items: center; flex: none; color: var(--ink) }
+.btn.tint { background: var(--sand) }
+svg.i { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round }
+svg.i.s { width: 15px; height: 15px }
+.tools { height: 40px; flex: none; display: flex; align-items: center; gap: 4px; padding: 0 10px; font: 600 11.5px var(--sans); letter-spacing: .05em; text-transform: uppercase }
+.tools .t { padding: 6px 9px; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px }
+.tools .t.on { background: var(--sand) }
+.content { flex: 1; overflow: hidden; position: relative; display: flex; flex-direction: column }
+.pad { padding: 12px; display: grid; gap: 12px; align-content: start }
+.dock { position: absolute; left: 12px; right: 12px; bottom: 14px; height: 54px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; display: flex; align-items: center; justify-content: space-around; box-shadow: 0 4px 14px rgba(0,0,0,.08) }
+.dock .play { width: 40px; height: 40px; border-radius: 999px; background: var(--ink); color: var(--paper); display: grid; place-items: center }
+.dock .tempo { font: 600 12px var(--sans) }
+.scrim { position: absolute; inset: 0; background: var(--scrim) }
+.panel { position: absolute; left: 0; right: 0; top: 0; background: var(--card); border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; padding: 14px; display: grid; gap: 10px; justify-items: center; text-align: center }
+.panel h3 { margin: 0; font: 600 17px var(--display) }
+.seg { display: inline-flex; background: var(--sand); border-radius: 10px; padding: 3px; gap: 2px }
+.seg span { padding: 5px 9px; border-radius: 8px; font-size: 12px; white-space: nowrap }
+.seg span.on { background: var(--card); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08) }
+.seg.full { display: flex; width: 100% } .seg.full span { flex: 1; text-align: center; padding: 5px 2px; min-width: 0 }
+.preview { width: 100%; background: var(--sky); border-radius: 14px; padding: 12px; display: grid; place-items: center }
+.cta { background: var(--ink); color: var(--paper); font: 600 13px var(--sans); border-radius: 12px; padding: 9px 22px }
+.cta.honey { background: var(--honey); color: var(--honey-ink) }
+.check { justify-self: start; display: flex; gap: 8px; align-items: center; font-size: 12.5px }
+.check i { width: 16px; height: 16px; border: 1.5px solid var(--ink-soft); border-radius: 4px; display: inline-block }
+.gl { font: 600 11px var(--sans); color: var(--ink-soft); padding: 0 6px 4px; letter-spacing: .03em }
+.list { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden }
+.row { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-top: 1px solid var(--line); min-height: 42px }
+.row:first-child { border-top: 0 }
+.row .n { flex: 1; min-width: 0 } .row .v { color: var(--ink-soft); font-size: 12px; white-space: nowrap }
+.row .chev { color: var(--ink-soft) }
+.tile { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; flex: none }
+.tile svg.i { width: 15px; height: 15px }
+.t-sky { background: var(--sky); color: var(--sky-ink) } .t-grass { background: var(--grass); color: var(--grass-ink) }
+.t-lilac { background: var(--lilac); color: var(--lilac-ink) } .t-sand { background: var(--sandw); color: var(--sand-ink) }
+.t-honey { background: var(--honey); color: var(--honey-ink) }
+.sw { width: 36px; height: 22px; border-radius: 999px; background: var(--grass-ink); position: relative; flex: none }
+.sw::after { content: ""; position: absolute; right: 2px; top: 2px; width: 18px; height: 18px; border-radius: 999px; background: var(--card) }
+.sw.off { background: var(--line) } .sw.off::after { right: auto; left: 2px }
+.cardset { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 8px }
+.cardset b { font-size: 13.5px }
+.radio { display: flex; gap: 9px; align-items: flex-start }
+.radio i { width: 17px; height: 17px; border-radius: 999px; border: 1.5px solid var(--ink-soft); flex: none; margin-top: 1px }
+.radio i.on { border: 5px solid var(--ink) }
+.radio small { display: block; color: var(--ink-soft); font-size: 11.5px }
+.solo { width: 26px; height: 26px; border-radius: 999px; border: 1.5px solid var(--line); display: grid; place-items: center; font: 600 11px var(--sans); color: var(--ink-soft) }
+.solo.on { border-color: var(--ink); color: var(--ink) }
+.slider { height: 4px; border-radius: 4px; background: var(--line); position: relative; flex: 1 }
+.slider b { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: var(--ink) }
+.slider b::after { content: ""; position: absolute; right: -8px; top: -6px; width: 16px; height: 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--line) }
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-size: 12.5px; white-space: nowrap }
+.chip.on { background: var(--ink); color: var(--paper); border-color: var(--ink) }
+.chips { display: flex; gap: 6px; flex-wrap: wrap }
+.hscroll { display: flex; gap: 6px; overflow: hidden; mask-image: linear-gradient(90deg, #000 85%, transparent) }
+.bigname { font: 600 34px var(--display); line-height: 1 }
+.lbl { font: 600 11px var(--sans); color: var(--ink-soft); letter-spacing: .04em; text-transform: uppercase }
+.btn2 { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 12px; font: 600 13px var(--sans) }
+.btn2.fill { background: var(--ink); color: var(--paper) } .btn2.out { border: 1.5px solid var(--ink) }
+.ksgrid { display: grid; grid-template-columns: repeat(8, 1fr); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--card) }
+.ksgrid div { border-left: 1px solid var(--line); border-top: 1px solid var(--line); height: 48px; display: grid; place-items: center; padding: 0 2px; overflow: hidden }
+.ksgrid div.on { background: var(--sky) }
+.ksgrid div.blank { background: var(--card) }
+.tsgrid { display: grid; grid-template-columns: repeat(6, 1fr); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--card) }
+.tsgrid div { border-left: 1px solid var(--line); height: 46px; display: grid; place-items: center; font: 24px var(--music); line-height: .8; text-align: center }
+.tsgrid div.on { background: var(--sky) }
+.sheetbox { background: var(--card); border-radius: 0; padding: 6px 0 }
+.side { background: var(--sand); padding: 10px; display: grid; gap: 4px; align-content: start }
+.side div { padding: 6px 8px; border-radius: 8px; display: flex; gap: 8px; align-items: center }
+.side div.on { background: var(--card) }
+.pane { border-left: 1px solid var(--line); padding: 10px; display: grid; gap: 8px; align-content: start; overflow: hidden }
+.dim { opacity: .4 }
+.keycap { display: inline-grid; place-items: center; min-width: 18px; height: 18px; border: 1px solid var(--line); border-radius: 4px; font: 600 10px var(--sans); background: var(--card); padding: 0 3px }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="back" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="chev" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="up" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></symbol>
+    <symbol id="pen" viewBox="0 0 24 24"><path d="M21.17 6.81a1 1 0 0 0-3.98-3.98L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z"/></symbol>
+    <symbol id="gear" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="plug" viewBox="0 0 24 24"><path d="M12 22v-5M9 8V2M15 8V2M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></symbol>
+    <symbol id="play" viewBox="0 0 24 24"><path d="M6 3 20 12 6 21Z" fill="currentColor"/></symbol>
+    <symbol id="skip" viewBox="0 0 24 24"><path d="M19 20 9 12l10-8v16ZM5 19V5"/></symbol>
+    <symbol id="loop" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 0 1-4 4H3"/></symbol>
+    <symbol id="metro" viewBox="0 0 24 24"><path d="M8 21h8l-3-17h-2zM12 15l6-8"/></symbol>
+    <symbol id="eye" viewBox="0 0 24 24"><path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+    <symbol id="music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></symbol>
+    <symbol id="sections" viewBox="0 0 24 24"><path d="M21 15V6M12 12H3M16 6H3M12 18H3"/><circle cx="18.5" cy="15.5" r="2.5"/></symbol>
+    <symbol id="dl" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+    <symbol id="print" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="1"/></symbol>
+    <symbol id="help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></symbol>
+    <symbol id="view" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></symbol>
+    <symbol id="hand" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></symbol>
+    <symbol id="piano" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 4v9M12 4v9M17 4v9M7 13v7M12 13v7M17 13v7"/></symbol>
+    <symbol id="kbd" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/></symbol>
+    <symbol id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="box" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/></symbol>
+    <symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="arp" viewBox="0 0 24 24"><path d="M4 18c2-1 2-3 4-4s2-3 4-4 2-3 4-4 2-2 4-3"/></symbol>
+    <symbol id="vol" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5ZM16 9a5 5 0 0 1 0 6"/></symbol>
+    <symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14ZM20 17v4H6.5A2.5 2.5 0 0 1 4 19.5"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header class="intro">
+    <h1>Round 29 choices, part 2</h1>
+    <p class="soft">These are the questions still open, each drawn as the real screens would look on an iPhone (and a laptop where it differs), in the app's own colours, fonts, icons and music font. Tap an answer, or "Something else" with a note. Your answers save here and I read them back from this page.</p>
+    <p class="soft">Your answers on part 1 are recorded in the plan (Decided 22): folder and song Settings pages; drawn hands; Chord player as its own page with Pop 1; key and time in its Settings; synced chord sheets; a real bass; the studies as a Songs folder credited to <i>Called to Play</i>.</p>
+    <p class="soft" id="storeNote">Loading where your answers are kept…</p>
+    <nav class="toc" id="toc" aria-label="Questions"></nav>
+  </header>
+
+  <!-- 1 PLAYER -->
+  <section class="q" id="p1" data-opts="Yes, build the Player like this|Change something (note)">
+    <div class="qhead"><span class="qnum">1</span><h2>The Player: bar, view picker and its one Settings page</h2></div>
+    <div class="ctx"><p>This follows your Flat and Chordify screenshots. ✎ Edit sits beside the title, MIDI and one gear are at the end of the bar, and there's no ⋯ or Setup. The tools row reads <b>Sheet ⌃ · Transpose · Simplify</b>. The gear opens one Settings page whose rows open their own pages.</p></div>
+    <div class="screens">
+      <figure><div class="dev">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="btn"><svg class="i"><use href="#x"/></svg></span><span class="title">Amazing Grace</span><span class="btn"><svg class="i s"><use href="#pen"/></svg></span><span class="grow"></span><span class="btn"><svg class="i"><use href="#plug"/></svg></span><span class="btn"><svg class="i"><use href="#gear"/></svg></span></div>
+        <div class="tools"><span class="t on">Sheet <svg class="i s"><use href="#down"/></svg></span><span class="t">Transpose</span><span class="t">Simplify</span></div>
+        <div class="content"><div class="sheetbox" data-staff="grand" data-key="1" data-time="3/4" data-notes="1"></div><div class="sheetbox" data-staff="grand" data-key="1" data-notes="2"></div>
+          <div class="dock"><span class="tempo">♩ 90</span><svg class="i"><use href="#skip"/></svg><span class="play"><svg class="i"><use href="#play"/></svg></span><svg class="i"><use href="#loop"/></svg><svg class="i"><use href="#metro"/></svg></div></div>
+      </div><figcaption><b>The Player</b>Four things in the bar. The tools row is three words, so it fits a 320-pixel phone.</figcaption></figure>
+
+      <figure><div class="dev">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="btn"><svg class="i"><use href="#x"/></svg></span><span class="title">Amazing Grace</span><span class="btn"><svg class="i s"><use href="#pen"/></svg></span><span class="grow"></span><span class="btn"><svg class="i"><use href="#plug"/></svg></span><span class="btn"><svg class="i"><use href="#gear"/></svg></span></div>
+        <div class="tools"><span class="t on">Grid <svg class="i s"><use href="#up"/></svg></span><span class="t">Transpose</span><span class="t">Simplify</span></div>
+        <div class="content"><div class="sheetbox" data-staff="grand" data-key="1" data-notes="1"></div><div class="scrim"></div>
+          <div class="panel"><h3>Pick your view</h3><span class="soft" style="font-size:12px">How the song is shown while you play.</span>
+            <span class="seg full"><span>Sheet</span><span class="on">Grid</span><span>Diagrams</span><span>Lyrics</span></span>
+            <div class="preview" data-preview="grid"></div>
+            <span class="check"><i></i>Show this when opening a song</span>
+            <span class="cta">Done</span></div></div>
+      </div><figcaption><b>Sheet ⌃ opened</b>Chordify's "Pick your view": one row of views and a big picture of the chosen one. A view the song can't show is greyed out, with the reason.</figcaption></figure>
+
+      <figure><div class="dev">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">Player</span></div>
+        <div class="content pad">
+          <div><div class="gl">THIS SONG</div><div class="list">
+            <div class="row"><span class="tile t-lilac"><svg class="i"><use href="#music"/></svg></span><span class="n">Staves</span><span class="v">2 playing</span><svg class="i s chev"><use href="#chev"/></svg></div>
+            <div class="row"><span class="tile t-sky"><svg class="i"><use href="#info"/></svg></span><span class="n">Song information</span><svg class="i s chev"><use href="#chev"/></svg></div>
+            <div class="row"><span class="tile t-grass"><svg class="i"><use href="#sections"/></svg></span><span class="n">Sections</span><span class="v">4</span><svg class="i s chev"><use href="#chev"/></svg></div>
+            <div class="row"><span class="tile t-sand"><svg class="i"><use href="#dl"/></svg></span><span class="n">Export…</span><svg class="i s chev"><use href="#chev"/></svg></div>
+            <div class="row"><span class="tile t-sand"><svg class="i"><use href="#print"/></svg></span><span class="n">Print</span><svg class="i s chev"><use href="#chev"/></svg></div></div></div>
+          <div><div class="gl">HOW THE PLAYER WORKS</div><div class="list">
+            <div class="row"><span class="tile t-sky"><svg class="i"><use href="#view"/></svg></span><span class="n">Display</span><span class="v">Scroll</span><svg class="i s chev"><use href="#chev"/></svg></div>
+            <div class="row"><span class="tile t-grass"><svg class="i"><use href="#play"/></svg></span><span class="n">Playback</span><span class="v">Count-in</span><svg class="i s chev"><use href="#chev"/></svg></div>
+            <div class="row"><span class="tile t-honey"><svg class="i"><use href="#metro"/></svg></span><span class="n">Metronome</span><span class="v">Click</span><svg class="i s chev"><use href="#chev"/></svg></div>
+            <div class="row"><span class="tile t-lilac"><svg class="i"><use href="#hand"/></svg></span><span class="n">One hand</span><span class="v">Dim the other</span><svg class="i s chev"><use href="#chev"/></svg></div></div></div>
+          <div class="list"><div class="row"><span class="tile t-sky"><svg class="i"><use href="#help"/></svg></span><span class="n">Help</span><svg class="i s chev"><use href="#chev"/></svg></div></div>
+        </div>
+      </div><figcaption><b>⚙ The Player's Settings</b>Built like Flat's menu. First what this song has, then how the Player always works. Each row opens its own page.</figcaption></figure>
+
+      <figure><div class="dev">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">Staves</span></div>
+        <div class="content pad">
+          <div class="list"><div class="row"><span class="n">All staves play</span><span class="sw"></span></div></div>
+          <div class="list">
+            <div class="row"><span class="tile t-lilac"><svg class="i"><use href="#piano"/></svg></span><span class="n">Right hand</span><span class="solo">S</span><span class="solo on"><svg class="i s"><use href="#eye"/></svg></span></div>
+            <div class="row" style="border-top:0;padding-top:0"><svg class="i s soft"><use href="#vol"/></svg><span class="slider"><b style="width:80%"></b></span><span class="v">80 %</span></div>
+            <div class="row"><span class="tile t-lilac"><svg class="i"><use href="#piano"/></svg></span><span class="n">Left hand</span><span class="solo">S</span><span class="solo on"><svg class="i s"><use href="#eye"/></svg></span></div>
+            <div class="row" style="border-top:0;padding-top:0"><svg class="i s soft"><use href="#vol"/></svg><span class="slider"><b style="width:100%"></b></span><span class="v">100 %</span></div></div>
+          <div class="list"><div class="row"><span class="n">Only the chords</span><span class="sw off"></span></div></div>
+          <span class="soft" style="font-size:12px">S plays this staff alone; the eye shows or hides it. Changing staves is the editor's job (✎).</span>
+        </div>
+      </div><figcaption><b>Staves</b>Like Flat's instrument sheet: All, Solo and Show on each staff, plus its volume.</figcaption></figure>
+    </div>
+    <p class="rec"><b>My recommendation:</b> build it as drawn. The score editor uses the same bar, with Done in place of ✎, and its own gear.</p>
+  </section>
+
+  <!-- 2 PAGE STYLE -->
+  <section class="q" id="p2" data-opts="A: list with a page per choice|B: Flat's cards, choices in sight|C: list with switches and segments|Something else">
+    <div class="qhead"><span class="qnum">2</span><h2>How every Settings page is built</h2></div>
+    <div class="ctx"><p>You said you don't like how the Settings pages are made. Here is one page, the Player's <b>Playback</b>, built three ways. Whichever you choose, every Settings page in the app gets built that way: the app's, the Player's, the editor's, each Practice page's, a folder's and a song's.</p></div>
+    <div class="screens">
+      <figure><div class="dev short">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">Playback</span></div>
+        <div class="content pad"><div class="list">
+          <div class="row"><span class="n">Count-in</span><span class="v">One bar, audible</span><svg class="i s chev"><use href="#chev"/></svg></div>
+          <div class="row"><span class="n">Pedal</span><span class="v">As written</span><svg class="i s chev"><use href="#chev"/></svg></div>
+          <div class="row"><span class="n">Cursor</span><span class="v">Continuous</span><svg class="i s chev"><use href="#chev"/></svg></div>
+          <div class="row"><span class="n">Speed training step</span><span class="v">5 %</span><svg class="i s chev"><use href="#chev"/></svg></div></div>
+          <span class="soft" style="font-size:12px">A tap on a row opens a page with that setting's choices.</span></div>
+      </div><figcaption><b>A. A list, each row opens its choices</b>The iPhone Settings app's way. Calm, but every change takes two taps.</figcaption></figure>
+      <figure><div class="dev short">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">Playback</span></div>
+        <div class="content pad">
+          <div class="cardset"><b>Count-in <svg class="i s soft" style="vertical-align:-3px"><use href="#info"/></svg></b>
+            <span class="radio"><i></i><span>None</span></span><span class="radio"><i class="on"></i><span>Audible<small>Clicks for one bar, then the song</small></span></span><span class="radio"><i></i><span>Visual<small>3, 2, 1 on the screen</small></span></span></div>
+          <div class="cardset"><b>Pedal</b>
+            <span class="radio"><i class="on"></i><span>As written</span></span><span class="radio"><i></i><span>Off</span></span><span class="radio"><i></i><span>Automatic<small>Held through each chord</small></span></span></div>
+        </div>
+      </div><figcaption><b>B. Flat's cards, every choice in sight</b>Flat's "Advanced settings". Each setting is a card showing all its choices with a short example. One tap, but longer pages.</figcaption></figure>
+      <figure><div class="dev short">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">Playback</span></div>
+        <div class="content pad"><div class="list">
+          <div class="row" style="flex-wrap:wrap"><span class="n">Count-in</span><span class="seg"><span>None</span><span class="on">Audible</span><span>Visual</span></span></div>
+          <div class="row" style="flex-wrap:wrap"><span class="n">Pedal</span><span class="seg"><span class="on">Written</span><span>Off</span><span>Auto</span></span></div>
+          <div class="row"><span class="n">Cursor</span><span class="seg"><span>Beats</span><span class="on">Smooth</span></span></div>
+          <div class="row"><span class="n">Show the cursor</span><span class="sw"></span></div></div>
+          <span class="soft" style="font-size:12px">What the app has today: tight, but the segment words get short and crowd on a phone.</span></div>
+      </div><figcaption><b>C. Today's: rows with switches and segments</b>Compact, but on a phone the labels get cut short and crowd, which is what you disliked.</figcaption></figure>
+    </div>
+    <p class="rec"><b>My recommendation: B for choices among three or more, a plain switch row for on/off.</b> Every option is in sight with its example, as in Flat, and nothing is cut short on a phone.</p>
+  </section>
+
+  <!-- 3 APP SETTINGS -->
+  <section class="q" id="p3" data-opts="Yes, like this|Change something (note)">
+    <div class="qhead"><span class="qnum">3</span><h2>The app's Settings, with Computer keys inside On-screen piano</h2></div>
+    <div class="ctx"><p>Only what concerns the whole app. As you asked, Computer keys is now a section of the On-screen piano page, shown on a computer only. On a laptop it's two panes.</p></div>
+    <div class="screens">
+      <figure><div class="dev">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="title" style="padding-left:6px">Settings</span></div>
+        <div class="content pad">
+          <div class="list"><div class="row"><span class="tile t-honey" style="border-radius:999px">B</span><span class="n">Account<small class="soft" style="display:block;font-size:11.5px">Synced a minute ago</small></span><svg class="i s chev"><use href="#chev"/></svg></div></div>
+          <div><div class="gl">GENERAL</div><div class="list">
+            <div class="row"><span class="tile t-sky"><svg class="i"><use href="#sun"/></svg></span><span class="n">General</span><span class="v">Light, English</span><svg class="i s chev"><use href="#chev"/></svg></div>
+            <div class="row"><span class="tile t-grass"><svg class="i"><use href="#box"/></svg></span><span class="n">Storage and backup</span><svg class="i s chev"><use href="#chev"/></svg></div></div></div>
+          <div><div class="gl">PIANO</div><div class="list">
+            <div class="row"><span class="tile t-lilac"><svg class="i"><use href="#piano"/></svg></span><span class="n">On-screen piano</span><svg class="i s chev"><use href="#chev"/></svg></div>
+            <div class="row"><span class="tile t-sky"><svg class="i"><use href="#plug"/></svg></span><span class="n">Connect a piano</span><span class="v">Not connected</span><svg class="i s chev"><use href="#chev"/></svg></div></div></div>
+          <div><div class="gl">HELP</div><div class="list">
+            <div class="row"><span class="tile t-sky"><svg class="i"><use href="#help"/></svg></span><span class="n">How to use</span><svg class="i s chev"><use href="#chev"/></svg></div>
+            <div class="row"><span class="tile t-sand"><svg class="i"><use href="#book"/></svg></span><span class="n">Privacy, Terms, About</span><svg class="i s chev"><use href="#chev"/></svg></div></div></div>
+        </div>
+      </div><figcaption><b>Settings on a phone</b>Three short groups. Player, editor, Practice and Metronome settings all live behind their own gear.</figcaption></figure>
+      <figure class="laptop"><div class="lap">
+        <div class="side"><b style="font:600 14px var(--display);padding:4px 8px 8px">Piano Trainer</b><div><svg class="i s"><use href="#book"/></svg>Learn</div><div><svg class="i s"><use href="#music"/></svg>Songs</div><div><svg class="i s"><use href="#piano"/></svg>Practice</div><div><svg class="i s"><use href="#user"/></svg>Profile</div><div style="margin-top:120px"><svg class="i s"><use href="#search"/></svg>Search</div><div class="on"><svg class="i s"><use href="#gear"/></svg>Settings</div></div>
+        <div class="pane"><b style="font:600 15px var(--display)">Settings</b>
+          <div class="list"><div class="row"><span class="n">Account</span></div></div>
+          <div class="list"><div class="row"><span class="n">General</span></div><div class="row"><span class="n">Storage and backup</span></div></div>
+          <div class="list"><div class="row" style="background:var(--sand)"><span class="n"><b>On-screen piano</b></span></div><div class="row"><span class="n">Connect a piano</span></div></div>
+          <div class="list"><div class="row"><span class="n">How to use</span></div></div></div>
+        <div class="pane"><b style="font:600 15px var(--display)">On-screen piano</b>
+          <div class="cardset"><b>Key size</b><span class="radio"><i></i>Small</span><span class="radio"><i class="on"></i>Medium</span><span class="radio"><i></i>Large</span></div>
+          <div class="list"><div class="row"><span class="n">Note names on the keys</span><span class="sw"></span></div><div class="row"><span class="n">Slide to play (glissando)</span><span class="sw off"></span></div></div>
+          <div class="gl" style="padding-top:4px">COMPUTER KEYS · ON A COMPUTER ONLY</div>
+          <div class="list"><div class="row"><span class="n">Letters play the piano</span><span class="sw"></span></div>
+            <div class="row" style="gap:4px;flex-wrap:wrap"><span class="keycap">A</span><span class="keycap">W</span><span class="keycap">S</span><span class="keycap">E</span><span class="keycap">D</span><span class="keycap">F</span><span class="keycap">T</span><span class="keycap">G</span><span class="keycap">…</span><span class="v" style="margin-left:6px">C to C</span><span class="keycap">Z</span><span class="keycap">X</span><span class="v">octave</span><span class="keycap">Space</span><span class="v">pedal</span></div>
+            <div class="row"><span class="n">Keyboard shortcuts</span><svg class="i s chev"><use href="#chev"/></svg></div></div></div>
+      </div><figcaption><b>On a laptop</b>The list and the chosen page side by side. The Computer keys section sits inside On-screen piano and doesn't exist on a phone.</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 4 KEY PICKER -->
+  <section class="q" id="p4" data-opts="A: Flat's grid everywhere|B: grid in the score, keyboard in Practice|Something else">
+    <div class="qhead"><span class="qnum">4</span><h2>Picking a key: Flat's key-signature grid</h2></div>
+    <div class="ctx"><p>This is Flat's grid from your screenshot: each cell is the signature itself, drawn in the music font. D♭ (5 flats) and C♯ (7 sharps) are separate cells, so no key needs two names. Here it is in New song's last step, beside the time signatures, and on a Practice page.</p></div>
+    <div class="screens">
+      <figure><div class="dev">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">Fine-tune</span><span class="grow"></span><span class="chip on" style="margin-right:4px">Create</span></div>
+        <div class="content pad">
+          <div><div class="lbl" style="margin-bottom:6px">Key signature</div><div class="ksgrid" data-ks></div><div class="soft" style="font-size:12px;margin-top:6px">D♭ major · B♭ minor</div></div>
+          <div><div class="lbl" style="margin-bottom:6px">Time signature</div><div class="tsgrid"><div>𝄴</div><div>2<br>4</div><div>3<br>4</div><div class="on">4<br>4</div><div>𝄵</div><div>6<br>8</div></div></div>
+          <div class="list"><div class="row"><span class="n">Tempo</span><span class="v">♩ = 90</span><svg class="i s chev"><use href="#chev"/></svg></div><div class="row"><span class="n">Bars</span><span class="v">32</span><svg class="i s chev"><use href="#chev"/></svg></div></div>
+        </div>
+      </div><figcaption><b>New song and the score editor</b>Under the grid, one line names the chosen key and its relative minor, so the name always matches what's printed.</figcaption></figure>
+      <figure><div class="dev">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">Scales and keys</span><span class="grow"></span><span class="btn"><svg class="i"><use href="#gear"/></svg></span></div>
+        <div class="content"><div class="sheetbox" data-staff="treble" data-key="-5" data-notes="0"></div><div class="scrim"></div>
+          <div class="panel" style="top:auto;bottom:0;border-radius:20px 20px 0 0;justify-items:stretch;text-align:left">
+            <h3>Key</h3><div class="ksgrid" data-ks></div>
+            <div class="seg full"><span class="on">Major</span><span>Minor</span></div><span class="cta" style="justify-self:center">Done</span></div></div>
+      </div><figcaption><b>A Practice page (option A)</b>The same grid opens as a sheet from the page's name. Major or minor sits under it.</figcaption></figure>
+      <figure><div class="dev short">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">Chords</span></div>
+        <div class="content pad"><div class="lbl">Root</div><div data-kb="1" data-oct="1"></div>
+          <div class="list"><div class="row"><span class="n">Spell as</span><span class="seg"><span>C♯</span><span class="on">D♭</span></span></div></div></div>
+      </div><figcaption><b>Option B on Practice pages</b>You tap the black key, then choose its spelling. Better for a chord's root, where there's no key signature.</figcaption></figure>
+    </div>
+    <p class="rec"><b>My recommendation:</b> the grid wherever you choose a <i>key</i> (New song, the editor, Scales and keys, the Chord player's Settings). On Chords and Intervals you choose a <i>root note</i>, not a key, so that uses the keyboard with a spelling switch.</p>
+  </section>
+
+  <!-- 5 CHORDS -->
+  <section class="q" id="p5" data-opts="A: size, then the chord as chips|B: size, then the chord from a menu|Something else">
+    <div class="qhead"><span class="qnum">5</span><h2>Chords: size first, then the chord</h2></div>
+    <div class="ctx"><p>As you asked: the size first (Triad · 7th · 9th · 11th · 13th), then only the chords of that size. The word "Quality" and the 7th switch are gone. Play and Arpeggio sit together but look different. "Right hand from" is now "Top note".</p></div>
+    <div class="screens">
+      <figure><div class="dev">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">Chords</span><span class="grow"></span><span class="btn"><svg class="i"><use href="#gear"/></svg></span></div>
+        <div class="content pad">
+          <div style="display:flex;align-items:baseline;gap:8px"><span class="bigname">Cm(maj7)</span><span class="chip">Root C <svg class="i s"><use href="#down"/></svg></span></div>
+          <div><div class="lbl" style="margin-bottom:6px">Size</div><span class="seg full"><span>Triad</span><span class="on">7th</span><span>9th</span><span>11th</span><span>13th</span></span></div>
+          <div><div class="lbl" style="margin-bottom:6px">Chord</div><div class="chips"><span class="chip">maj7</span><span class="chip">7</span><span class="chip">m7</span><span class="chip on">m(maj7)</span><span class="chip">ø7</span><span class="chip">°7</span><span class="chip">7sus4</span></div></div>
+          <div data-kb="0,3,7,11" data-fingers="1,2,3,5" data-oct="2"></div>
+          <div style="display:flex;gap:8px"><span class="btn2 fill"><svg class="i s"><use href="#play"/></svg>Play</span><span class="btn2 out"><svg class="i s"><use href="#arp"/></svg>Arpeggio</span></div><div class="list"><div class="row"><span class="n">Top note</span><span class="seg"><span>G · 5th</span><span class="on">B · 7th</span></span></div></div>
+        </div>
+      </div><figcaption><b>A. The chords of that size as chips</b>At 7th you see six chords at once. At 13th the list is longer and wraps onto two lines.</figcaption></figure>
+      <figure><div class="dev short">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">Chords</span><span class="grow"></span><span class="btn"><svg class="i"><use href="#gear"/></svg></span></div>
+        <div class="content pad">
+          <div style="display:flex;align-items:baseline;gap:8px"><span class="bigname">Cm(maj7)</span></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip">Root C <svg class="i s"><use href="#down"/></svg></span><span class="chip">Size 7th <svg class="i s"><use href="#down"/></svg></span><span class="chip">Chord m(maj7) <svg class="i s"><use href="#down"/></svg></span></div>
+          <div data-kb="0,3,7,11" data-fingers="1,2,3,5" data-oct="2"></div>
+          <div style="display:flex;gap:8px"><span class="btn2 fill"><svg class="i s"><use href="#play"/></svg>Play</span><span class="btn2 out"><svg class="i s"><use href="#arp"/></svg>Arpeggio</span></div>
+        </div>
+      </div><figcaption><b>B. Three menus in a row</b>Shorter, but you only see the chords after opening the menu.</figcaption></figure>
+    </div>
+    <p class="rec"><b>My recommendation: A.</b> You see every chord of that size at once and change it with one tap. The same Size and Chord rows appear in Scales and keys' Chords view.</p>
+  </section>
+
+  <!-- 6 SCALES -->
+  <section class="q" id="p6" data-opts="A: one view chip, like the Player|B: tabs inside the page|Something else">
+    <div class="qhead"><span class="qnum">6</span><h2>Scales and keys: switching between Scale, Chords and Key</h2></div>
+    <div class="ctx"><p>The bar stays one height, and the page's name is the choice itself ("D major", tap to change). The three views need a switch. One way works like the Player's view chip, the other is a row of tabs inside the page.</p></div>
+    <div class="screens">
+      <figure><div class="dev">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">D major</span><svg class="i s"><use href="#down"/></svg><span class="grow"></span><span class="btn"><svg class="i"><use href="#gear"/></svg></span></div>
+        <div class="tools"><span class="t on">Chords <svg class="i s"><use href="#down"/></svg></span><span class="t">Play</span><span class="t">Tempo 80</span></div>
+        <div class="content pad">
+          <div><div class="lbl" style="margin-bottom:6px">Size</div><span class="seg full"><span>Triad</span><span class="on">7th</span><span>9th</span><span>11th</span><span>13th</span></span></div>
+          <div class="list" data-degrees="Dmaj7:I,Em7:ii,F♯m7:iii,Gmaj7:IV,A7:V,Bm7:vi,C♯ø7:vii"></div>
+        </div>
+      </div><figcaption><b>A. One chip, as in the Player</b>"Chords ⌄" opens Scale · Chords · Key, each with a picture. One pattern across the app.</figcaption></figure>
+      <figure><div class="dev">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">D major</span><svg class="i s"><use href="#down"/></svg><span class="grow"></span><span class="btn"><svg class="i"><use href="#gear"/></svg></span></div>
+        <div class="content pad">
+          <span class="seg full"><span>Scale<br><small class="soft">7 notes</small></span><span class="on">Chords<br><small class="soft">I – vii</small></span><span>Key<br><small class="soft">2 sharps</small></span></span>
+          <div><div class="lbl" style="margin-bottom:6px">Size</div><span class="seg full"><span>Triad</span><span class="on">7th</span><span>9th</span><span>11th</span><span>13th</span></span></div>
+          <div class="list" data-degrees="Dmaj7:I,Em7:ii,F♯m7:iii,Gmaj7:IV,A7:V,Bm7:vi,C♯ø7:vii"></div>
+        </div>
+      </div><figcaption><b>B. Three tabs at the top of the page</b>Under the bar and scrolling with the page, each with a one-line summary. Always in sight.</figcaption></figure>
+    </div>
+    <p class="rec"><b>My recommendation: B.</b> With only three views, tabs inside the page fit any phone and stay in sight. A chip suits the Player, which has four views and needs the room for the music.</p>
+  </section>
+</div>
+
+<script>
+(function () {
+  const NS = 'http://www.w3.org/2000/svg';
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  // a staff (treble, or grand) with clef, key signature (+sharps / -flats), optional time and a few notes
+  const SH = [8,5,9,6,3,7,4], FL = [4,7,3,6,2,5,1];
+  function staffSvg(kind, key, time, notes) {
+    const w = 298, s = 7, staves = kind === 'grand' ? [22, 82] : [22];
+    let g = '';
+    staves.forEach((top, i) => {
+      for (let l = 0; l < 5; l++) g += `<line x1="8" x2="${w - 6}" y1="${top + l * s}" y2="${top + l * s}" stroke="currentColor" stroke-width=".8" opacity=".55"/>`;
+      const bottom = top + 4 * s, bass = i === 1;
+      g += `<text x="10" y="${bass ? top + 2 * s - 1 : bottom + 4}" font-family="Noto Music" font-size="${bass ? 26 : 34}">${bass ? '𝄢' : '𝄞'}</text>`;
+      const pos = key > 0 ? SH : FL, n = Math.abs(key);
+      for (let k = 0; k < n; k++) { const p = pos[k] - (bass ? 2 : 0); g += `<text x="${36 + k * 7}" y="${bottom - p * s / 2 + 4}" font-family="Noto Music" font-size="18">${key > 0 ? '♯' : '♭'}</text>` }
+      let x = 40 + n * 7;
+      if (time) { const [a, b] = time.split('/'); g += `<text x="${x}" y="${top + 2 * s - 1}" font-family="Noto Music" font-size="17" font-weight="700">${a}</text><text x="${x}" y="${bottom - 1}" font-family="Noto Music" font-size="17" font-weight="700">${b}</text>`; x += 16 }
+      if (notes) {
+        const line = i === 0 ? [2, 4, 6, 5, 4, 2, 3, 4, 7, 6] : [-2, 0, 1, -1, 0, 2, 1, -1, 0, 1];
+        for (let k = 0; k < 9; k++) { const nx = x + 14 + k * ((w - x - 30) / 9), ny = bottom - (line[(k + notes) % 10]) * s / 2;
+          g += `<ellipse cx="${nx}" cy="${ny}" rx="4.2" ry="3.1" transform="rotate(-20 ${nx} ${ny})" fill="currentColor"/><line x1="${nx + 3.8}" x2="${nx + 3.8}" y1="${ny}" y2="${ny - 22}" stroke="currentColor" stroke-width="1"/>`;
+          if (k % 3 === 2) g += `<line x1="${nx + 12}" x2="${nx + 12}" y1="${top}" y2="${bottom}" stroke="currentColor" stroke-width=".8" opacity=".55"/>` }
+      }
+    });
+    const h = kind === 'grand' ? 128 : 66;
+    return `<svg viewBox="0 0 ${w} ${h}" width="100%" style="display:block;color:var(--ink)" aria-hidden="true">${kind === 'grand' ? `<line x1="8" x2="8" y1="22" y2="${82 + 28}" stroke="currentColor"/>` : ''}${g}</svg>`;
+  }
+  document.querySelectorAll('[data-staff]').forEach(el => el.innerHTML = staffSvg(el.dataset.staff, +el.dataset.key, el.dataset.time, +el.dataset.notes));
+
+  // the key-signature grid as Flat draws it
+  function sig(n) {
+    const pos = n > 0 ? SH : FL, c = Math.abs(n), s = 4.4, bottom = 31, step = 5.6;
+    if (!c) return `<svg viewBox="0 0 14 40" height="36"><text x="3" y="${bottom - 4 * s / 2 + 6}" font-family="Noto Music" font-size="17" fill="currentColor">♮</text></svg>`;
+    let t = ''; for (let k = 0; k < c; k++) t += `<text x="${2 + k * step}" y="${bottom - pos[k] * s / 2 + 6}" font-family="Noto Music" font-size="16" fill="currentColor">${n > 0 ? '♯' : '♭'}</text>`;
+    return `<svg viewBox="0 0 ${8 + c * step} 40" height="36" style="max-width:100%">${t}</svg>`;
+  }
+  document.querySelectorAll('[data-ks]').forEach(el => {
+    let h = ''; [0,1,2,3,4,5,6,7].forEach((n, i) => h += `<div style="${i === 0 ? 'border-left:0;' : ''}border-top:0">${sig(n)}</div>`);
+    [-1,-2,-3,-4,-5,-6,-7].forEach((n, i) => h += `<div class="${n === -5 ? 'on' : ''}" style="${i === 0 ? 'border-left:0' : ''}">${sig(n)}</div>`);
+    h += '<div class="blank"></div>'; el.innerHTML = h;
+  });
+
+  // a keyboard: pitch classes to mark, finger numbers, octaves
+  function keyboard(marks, fingers, oct) {
+    const W = 276, ww = W / (7 * oct), wh = 92, bw = ww * .62, bh = 56, m = marks.map(Number), f = fingers ? fingers.split(',') : [];
+    const WPC = [0, 2, 4, 5, 7, 9, 11], keys = [];
+    for (let o = 0; o < oct; o++) WPC.forEach((pc, i) => {
+      const x = (o * 7 + i) * ww; keys.push({ p: pc + o * 12, black: false, x, w: ww });
+      if ([0, 2, 5, 7, 9].includes(pc)) keys.push({ p: pc + 1 + o * 12, black: true, x: x + ww - bw / 2, w: bw });
+    });
+    const on = keys.filter(k => m.includes(k.p)).sort((a, b) => a.p - b.p); on.forEach((k, i) => k.f = f[i]);
+    const draw = k => { const hit = m.includes(k.p), h = k.black ? bh : wh;
+      let g = `<rect x="${k.x}" y="0" width="${k.w}" height="${h}" rx="${k.black ? 2 : 3}" fill="${hit ? 'var(--hit)' : k.black ? 'var(--key-black)' : 'var(--card)'}" stroke="var(--line)"/>`;
+      if (hit && k.f) g += `<circle cx="${k.x + k.w / 2}" cy="${h - 13}" r="${k.black ? 7 : 8}" fill="var(--ink)"/><text x="${k.x + k.w / 2}" y="${h - 9}" text-anchor="middle" font-size="${k.black ? 10 : 11}" font-weight="600" fill="var(--paper)" font-family="Onest">${k.f}</text>`;
+      return g };
+    return `<svg viewBox="-1 -1 ${W + 2} ${wh + 2}" width="100%" aria-hidden="true">${keys.filter(k => !k.black).map(draw).join('')}${keys.filter(k => k.black).map(draw).join('')}</svg>`;
+  }
+  document.querySelectorAll('[data-kb]').forEach(el => el.innerHTML = keyboard(el.dataset.kb.split(','), el.dataset.fingers, +el.dataset.oct || 1));
+
+  // a Chordify-like grid preview
+  document.querySelectorAll('[data-preview="grid"]').forEach(el => {
+    const chords = ['G','','','','C','','G','','G','','','','D','','',''];
+    let h = '<div style="display:grid;grid-template-columns:repeat(8,24px);gap:2px;background:var(--card);padding:6px;border-radius:6px">';
+    chords.forEach((c, i) => h += `<div style="height:22px;font-size:11px;display:grid;place-items:center;${i % 4 === 0 ? 'border-left:2px solid var(--ink);' : ''}${i === 0 ? 'background:var(--ink);color:var(--paper);' : 'background:var(--paper);'}">${c}</div>`);
+    el.innerHTML = h + '</div>';
+  });
+  // the chords on each degree
+  document.querySelectorAll('[data-degrees]').forEach(el => {
+    el.innerHTML = el.dataset.degrees.split(',').map(p => { const [c, d] = p.split(':'); return `<div class="row"><span style="width:34px;font:600 12px var(--sans);color:var(--ink-soft)">${d}</span><span class="n" style="font:600 15px var(--display)">${c}</span><svg class="i s soft"><use href="#play"/></svg></div>` }).join('');
+  });
+
+  // answers
+  const sections = Array.from(document.querySelectorAll('section.q'));
+  const toc = document.getElementById('toc'), note = document.getElementById('storeNote');
+  const answers = {}; let db = null, local = {};
+  try { local = JSON.parse(localStorage.getItem('r29-choices-2') || '{}') } catch (e) { local = {} }
+  function render(id) {
+    const s = document.getElementById(id), a = answers[id] || {};
+    s.querySelectorAll('.pick button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === a.choice)));
+    const ta = s.querySelector('textarea'); if (ta && document.activeElement !== ta) ta.value = a.note || '';
+    const l = toc.querySelector('a[href="#' + id + '"]'); if (l) l.classList.toggle('done', !!(a.choice || a.note));
+  }
+  async function save(id, patch) {
+    answers[id] = Object.assign({}, answers[id], patch, { at: new Date().toISOString() }); render(id);
+    const st = document.getElementById(id).querySelector('.saved');
+    try { local[id] = answers[id]; localStorage.setItem('r29-choices-2', JSON.stringify(local)) } catch (e) {}
+    if (!db) { st.textContent = 'Kept in this browser only.'; return }
+    try { await db.doc('answers2/' + id).set(answers[id]); st.textContent = 'Saved.' } catch (e) { st.textContent = 'Could not save here; kept in this browser.' }
+  }
+  sections.forEach(s => {
+    const id = s.id, n = s.querySelector('.qnum').textContent, title = s.querySelector('h2').textContent;
+    const a = document.createElement('a'); a.href = '#' + id; a.textContent = n + '. ' + title.split(':')[0]; toc.appendChild(a);
+    const pick = document.createElement('div'); pick.className = 'pick';
+    s.dataset.opts.split('|').forEach(v => { const b = document.createElement('button'); b.type = 'button'; b.textContent = v; b.dataset.v = v; b.setAttribute('aria-pressed', 'false'); b.addEventListener('click', () => save(id, { choice: v })); pick.appendChild(b) });
+    const ta = document.createElement('textarea'); ta.placeholder = 'A note (optional)'; ta.setAttribute('aria-label', 'Note for question ' + n);
+    let t; ta.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => save(id, { note: ta.value }), 700) });
+    const st = document.createElement('span'); st.className = 'saved'; s.append(pick, ta, st);
+    if (local[id]) { answers[id] = local[id]; render(id) }
+  });
+  const timer = setTimeout(() => { if (!db) note.textContent = 'Your answers are kept in this browser; tell me in the chat when you are done.' }, 10000);
+  const ready = window.claude && window.claude.use ? window.claude.use('db') : Promise.resolve(null);
+  ready.then(d => { clearTimeout(timer); db = d;
+    if (!db) { note.textContent = 'Your answers are kept in this browser; tell me in the chat when you are done.'; return }
+    note.textContent = 'Your answers are saved with this page; I read them from here.';
+    db.collection('answers2').onSnapshot(snap => { (snap.docs || snap).forEach(doc => { answers[doc.id] = doc.data ? doc.data() : doc; render(doc.id) }) }, () => {});
+  }).catch(() => { note.textContent = 'Your answers are kept in this browser; tell me in the chat when you are done.' });
+})();
+</script>
