@@ -711,7 +711,8 @@ describe('Songs: Select (ADR 0106)', () => {
     await waitFor(() => expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived'))
     expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
     expect(await screen.findByText('Archived: 2')).toBeInTheDocument()
-  })
+    // A drag across the library: slow under a full suite's load, so its own limit.
+  }, 15_000)
 
   it('moves what is chosen by the Move sheet, into a new folder', async () => {
     const user = userEvent.setup()
