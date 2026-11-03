@@ -196,29 +196,18 @@ svg.i.s { width: 15px; height: 15px }
     <p class="soft" id="storeNote">Loading where your feedback is kept…</p>
     <p><b>Under every screen:</b> tap Looks right, Change it or Not needed, and write what to change. It saves as you type.</p>
     <div class="cardset" style="max-width:760px"><b>Two rules both pages follow</b>
-      <span class="soft" style="font-size:13.5px"><b>Floating actions:</b> one capsule, centred at the bottom. Play, the main action, is always on the <b>right</b> and filled honey. The second action (Arpeggio, the tempo) is on the left. Same order on every page.</span>
-      <span class="soft" style="font-size:13.5px"><b>Only what fits:</b> each chord shows only the choices that make sense for it, following the chord dictionaries. A triad offers added tones (add2, add9, 6…), and only a dominant 7th offers alterations (♭9, ♯11…). A choice that doesn't apply is hidden, not greyed.</span></div>
+      <span class="soft" style="font-size:13.5px"><b>Floating actions:</b> one capsule, centred at the bottom. Play, the main action, is always on the <b>right</b> and filled honey. The second (Broken, the tempo, the order) is on the left. Same order on every page.</span>
+      <span class="soft" style="font-size:13.5px"><b>Real names:</b> every chord, option and setting uses the name textbooks and professional apps use, with a one-line ⓘ.</span></div>
     <nav class="toc"><a href="#chords">1. Chords</a><a href="#scales">2. Scales and keys</a><a href="#options">3. Every chord option, by chord</a></nav>
   </header>
   <section class="q" id="chords"><div class="qhead"><span class="qnum">1</span><h2>Chords</h2></div>
-    <div class="ctx"><p>From top to bottom:</p>
-      <ul style="margin:0;padding-left:20px;display:grid;gap:4px">
-        <li>the chord's name, big;</li>
-        <li>the choices that build it: root, size, chord, then only the extras it can take;</li>
-        <li>the chord written on a staff and on the keys, with fingers.</li>
-      </ul>
-      <p>Arpeggio and Play float at the bottom. How the chord is laid out (inversion, voicing, between the hands) has its own row.</p></div>
+    <div class="ctx"><p>Redrawn from your feedback and the research (<code>.scratch/r29/research/chords-scales.md</code>). You pick a chord <b>by its name</b> (C7, Cmaj7, Cm7…), in five families as iReal Pro and the chord dictionaries do; no "7th" or "Add a tone" to choose. How it is laid on the keys (inversion, voicing, the hands) is one row, <b>Play it as</b>, opening a sheet on a phone and a side panel on a laptop.</p></div>
     <div class="screens" id="s-chords"></div></section>
   <section class="q" id="scales"><div class="qhead"><span class="qnum">2</span><h2>Scales and keys</h2></div>
-    <div class="ctx"><p>You choose a scale ("D major ⌄" in the bar opens the picker). The page has three tabs:</p>
-      <ul style="margin:0;padding-left:20px;display:grid;gap:4px">
-        <li><b>Scale:</b> how to play it.</li>
-        <li><b>Chords:</b> the chords made from its notes, each with a preview, fingers and its own options.</li>
-        <li><b>Key:</b> D major as a home key for a song. Its signature, the keys you'd move to, chords you can borrow, progressions and songs in it, and how to harmonise a melody note.</li>
-      </ul></div>
+    <div class="ctx"><p><b>Scale or key?</b> A <b>scale</b> is a row of notes you practise: how to play D major up and down. A <b>key</b> is a home note for music: a song "in D major" uses D major's notes and is built from its seven chords. So the page has two tabs: <b>Scale</b> (to play it) and <b>Key</b> (to understand music in it: its chords, how to harmonise a melody, its neighbouring keys, its progressions). Scales with no key of their own (pentatonic, blues) have no Key tab.</p></div>
     <div class="screens" id="s-scales"></div></section>
-  <section class="q" id="options"><div class="qhead"><span class="qnum">3</span><h2>Every chord option, by chord (what "only what fits" means)</h2></div>
-    <div class="ctx"><p>The rules the chord engine already follows, written out. Each row is a base chord and what it can take at each size. A blank cell means the choice isn't shown.</p></div>
+  <section class="q" id="options"><div class="qhead"><span class="qnum">3</span><h2>The five chord families</h2></div>
+    <div class="ctx"><p>Every chord the page offers, on C. Each is a chord the app's engine already builds. Cadd2 is not listed: it is Cadd9 with D inside the chord, a voicing.</p></div>
     <div id="s-options"></div></section>
 </div>
 
@@ -256,143 +245,76 @@ const pBar = (t = 'Amazing Grace') => bar({ left: 'x', title: t, after: B('pen')
 const eBar = (t = 'Amazing Grace') => `<div class="abar ebar"><span style="width:4px"></span><span class="title">${t}</span><span class="btn tint">${I('check')}</span><span class="grow"></span>${B('undo')}${B('redo')}${B('plug')}${B('gear')}</div>`;
 
 const cap = (left, right) => `<div class="cap"><span>${left}</span><span>${I('play', 's')}${right}</span></div>`;
-const chips = (label, list, on, extra = '') => `<div><div class="lbl" style="margin-bottom:6px">${label}${extra}</div><div class="chips">${list.map(c => `<span class="chip${on.includes(c) ? ' on' : ''}">${c}</span>`).join('')}</div></div>`;
 const seg = (list, on) => `<span class="seg full">${list.map(c => `<span class="${c === on ? 'on' : ''}">${c}</span>`).join('')}</span>`;
-const cBar = (name) => bar({ title: 'Chords', right: ['gear'] });
-const head = (name, notes) => `<div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="bigname">${name}</span><span class="soft" style="font-size:12.5px">${notes}</span></div>`;
-const SIZES = ['Triad', '7th', '9th', '11th', '13th'];
-const BASES = { Triad: ['Major', 'Minor', 'Dim', 'Aug', 'Sus2', 'Sus4', 'Power'], '7th': ['Major', 'Minor', 'Dim', 'Aug', 'Sus2', 'Sus4'], '9th': ['Major', 'Minor', 'Dim', 'Aug', 'Sus4'] };
-const rootRow = `<div style="display:flex;gap:6px;align-items:center"><span class="lbl">Root</span><span class="chip">C ${I('down', 's')}</span><span class="grow"></span><span class="chip">Root position ${I('down', 's')}</span></div>`;
+const cBar = () => bar({ title: 'Chords', right: ['gear'] });
+const head = (name, full, notes) => `<div><div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="bigname">${name}</span><span class="soft" style="font-size:12.5px">${notes}</span></div><div class="soft" style="font-size:12px">${full} ${I('info', 's')}</div></div>`;
+const ROOTS = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
+const roots = on => `<div class="hscroll">${ROOTS.map(r => `<span class="chip${r === on ? ' on' : ''}" style="min-width:34px;justify-content:center">${r}</span>`).join('')}</div>`;
+const FAM = { Triads: ['C', 'Cm', 'C°', 'C+', 'Csus2', 'Csus4', 'C5'], Sevenths: ['Cmaj7', 'C7', 'Cm7', 'Cø7', 'C°7', 'Cm(maj7)', 'C7sus4', 'C+7'], 'Sixths & add': ['C6', 'Cm6', 'C6/9', 'Cadd9', 'Cm(add9)', 'Cadd4', 'Cadd♯11'], '9 · 11 · 13': ['C9', 'Cmaj9', 'Cm9', 'C11', 'Cm11', 'C13', 'Cmaj13', 'Cm13'], Altered: ['C7♭9', 'C7♯9', 'C7♯11', 'C7♭13', 'C7♭5', 'C7♯5', 'C7♭9♯11', 'C7alt'] };
+const fams = (tab, chip) => `<div style="display:grid;gap:6px">${seg(['Triads', '7ths', '6 & add', '9·11·13', 'Altered'], tab)}<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">${FAM[{ Triads: 'Triads', '7ths': 'Sevenths', '6 & add': 'Sixths & add', '9·11·13': '9 · 11 · 13', Altered: 'Altered' }[tab]].map(c => `<span class="chip${c === chip ? ' on' : ''}" style="justify-content:center;padding:6px 2px">${c}</span>`).join('')}</div></div>`;
+const playAs = v => `<div class="list"><div class="row"><span class="n"><span class="soft" style="font-size:11.5px;display:block">Play it as</span>${v}</span>${chev}</div></div>`;
+const chordScreen = (n, title, from, name, full, notes, tab, chip, kb, fingers, as, extra = '') => phone(n, title, from, cBar() + `<div class="content pad">${head(name, full, notes)}${roots('C')}${fams(tab, chip)}<div data-kb="${kb}" ${fingers ? `data-fingers="${fingers}"` : ''} data-oct="2" ${extra}></div>${playAs(as)}${cap(`${I('arp', 's')}Broken`, 'Play')}</div>`);
+const sheetPanel = (title, body) => `<div class="scrim"></div><div style="position:absolute;left:0;right:0;bottom:0;top:38%;background:var(--card);border-radius:20px 20px 0 0;padding:10px 12px;display:grid;gap:8px;align-content:start;overflow:hidden"><div style="justify-self:center;width:40px;height:4px;border-radius:4px;background:var(--line)"></div><b style="font:600 16px var(--display)">${title}</b>${body}</div>`;
+const opt = (k, label, sub, on, lh) => `<div class="split${on ? ' on' : ''}" style="grid-template-columns:118px 1fr;text-align:left;align-items:center"><div data-kb="${k}" data-oct="2" ${lh ? `data-lh="${lh}"` : ''}></div><span><b style="font-size:12px">${label}</b><br>${sub}</span></div>`;
 const chordsScreens = [
-  phone('C1', 'A triad: C major', 'The page as it opens. Below the size and base come only the tones a major triad can add.', cBar() + `<div class="content pad">
-    ${head('C', 'C · E · G')}${rootRow}${seg(SIZES, 'Triad')}
-    ${chips('Chord', BASES.Triad, ['Major'])}
-    ${chips('Add a tone', ['add2', 'add4', '6', 'add9', 'add11', 'add♯11'], [])}
-    <div class="sheetbox" data-staff="treble" data-key="0" data-stack="-2,0,2"></div>
-    <div data-kb="0,4,7" data-fingers="1,3,5" data-oct="2"></div>
-    ${cap(`${I('arp', 's')}Arpeggio`, 'Play')}</div>`),
-  phone('C2', 'Added tones: Cadd9 and Cadd2', 'add9 puts D above the chord. add2 puts it inside, next to C. The same notes, voiced differently, so both are offered.', cBar() + `<div class="content pad">
-    ${head('Cadd9', 'C · E · G · D')}${seg(SIZES, 'Triad')}
-    ${chips('Chord', BASES.Triad, ['Major'])}
-    ${chips('Add a tone', ['add2', 'add4', '6', 'add9', 'add11', 'add♯11'], ['add9'])}
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div class="split on"><div data-kb="0,4,7,14" data-oct="2"></div><b>add9</b>D above</div><div class="split"><div data-kb="0,2,4,7" data-oct="1"></div><b>add2</b>D inside</div></div>
-    ${cap(`${I('arp', 's')}Arpeggio`, 'Play')}</div>`),
-  phone('C3', 'A sus chord: Csus4', 'Sus2 and Sus4 replace the 3rd. A sus4 can add 6 or 9 (Csus4(add9)). A sus2 can add only 6.', cBar() + `<div class="content pad">
-    ${head('Csus4', 'C · F · G')}${seg(SIZES, 'Triad')}
-    ${chips('Chord', BASES.Triad, ['Sus4'])}
-    ${chips('Add a tone', ['6', 'add9'], [])}
-    <div data-kb="0,5,7" data-fingers="1,4,5" data-oct="2"></div>
-    ${cap(`${I('arp', 's')}Arpeggio`, 'Play')}</div>`),
-  phone('C4', 'A 7th chord: C7', 'At 7th, choose which 7th. A dominant 7th (major 3rd, ♭7) is the only one that offers alterations.', cBar() + `<div class="content pad">
-    ${head('C7', 'C · E · G · B♭')}${seg(SIZES, '7th')}
-    ${chips('Chord', BASES['7th'], ['Major'])}
-    <div><div class="lbl" style="margin-bottom:6px">7th</div>${seg(['♭7 (dominant)', 'maj7'], '♭7 (dominant)')}</div>
-    ${chips('Alter', ['♭5', '♭9', '♯9', '♯11', '♭13'], [])}
-    ${chips('Add a tone', ['13'], [])}
-    <div data-kb="0,4,7,10" data-fingers="1,2,3,5" data-oct="2"></div>
-    ${cap(`${I('arp', 's')}Arpeggio`, 'Play')}</div>`),
-  phone('C5', 'A minor 7th: Cm7', 'For a minor 7th the alterations are gone and only the tones it can add stay (11, 13).', cBar() + `<div class="content pad">
-    ${head('Cm7', 'C · E♭ · G · B♭')}${seg(SIZES, '7th')}
-    ${chips('Chord', BASES['7th'], ['Minor'])}
-    <div><div class="lbl" style="margin-bottom:6px">7th</div>${seg(['♭7', 'maj7'], '♭7')}</div>
-    ${chips('Add a tone', ['11', '13'], [])}
-    <div data-kb="0,3,7,10" data-fingers="1,2,3,5" data-oct="2"></div>
-    ${cap(`${I('arp', 's')}Arpeggio`, 'Play')}</div>`),
-  phone('C6', 'A 9th chord and the hands: Cmaj9', 'Five notes don\'t fit one hand. "Left hand plays" shows each way to split them: tap a picture.', cBar() + `<div class="content pad">
-    ${head('Cmaj9', 'C · E · G · B · D')}${seg(SIZES, '9th')}
-    ${chips('Chord', BASES['9th'], ['Major'])}
-    <div><div class="lbl" style="margin-bottom:6px">7th</div>${seg(['♭7', 'maj7'], 'maj7')}</div>
-    ${chips('Alter', ['♯11'], [])}
-    <div data-kb="0,4,7,11,14" data-lh="0" data-oct="2"></div>
-    <div><div class="lbl" style="margin-bottom:6px">Left hand plays</div><div class="splits">
-      <div class="split on"><div data-kb="0,4,7,11,14" data-lh="0" data-oct="2"></div><b>C</b>the root</div>
-      <div class="split"><div data-kb="0,4,7,11,14" data-lh="0,7" data-oct="2"></div><b>C G</b>root and 5th</div>
-      <div class="split"><div data-kb="0,4,7,11,14" data-lh="0,4,7" data-oct="2"></div><b>C E G</b>the triad</div></div></div>
-    ${cap(`${I('arp', 's')}Arpeggio`, 'Play')}</div>`),
-  phone('C7', 'Inversion (the menu by Root)', 'From "Root position ⌄". Each inversion is drawn on the keys.', cBar() + `<div class="content">${'<div class="pad">' + head('C7', 'C · E · G · B♭') + '</div>'}<div class="scrim"></div><div class="panel" style="justify-items:stretch;text-align:left"><h3 style="text-align:center">Inversion</h3>
-    ${[['Root position', 'C in the bass', '0,4,7,10'], ['1st inversion', 'E in the bass', '4,7,10,12'], ['2nd inversion', 'G in the bass', '7,10,12,16'], ['3rd inversion', 'B♭ in the bass', '10,12,16,19']].map(([a, b, k], i) => `<div class="split${i ? '' : ' on'}" style="grid-template-columns:110px 1fr;text-align:left;align-items:center"><div data-kb="${k}" data-oct="2"></div><span><b>${a}</b><br>${b}</span></div>`).join('')}</div></div>`),
-  phone('C8', 'Voicing (a row lower on the page)', 'How a jazz pianist lays the chord. Each one is drawn, with ⓘ for what it\'s for.', cBar() + `<div class="content pad">${head('Cmaj7', 'voiced: Drop 2')}
-    <div class="lbl">Voicing</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">${[['Close', '0,4,7,11'], ['Drop 2', '-5,0,4,11'], ['Drop 3', '-8,0,7,11'], ['Shell', '0,4,11'], ['Rootless A', '4,7,11,14'], ['So What', '4,9,14,19']].map(([a, k], i) => `<div class="split${i === 1 ? ' on' : ''}"><div data-kb="${k.split(',').map(x => +x + 12).join(',')}" data-oct="3"></div><b>${a}</b></div>`).join('')}</div>
-    ${cap(`${I('arp', 's')}Arpeggio`, 'Play')}</div>`),
-  phone('C9', 'Chords\' Settings', 'From the gear on Chords.', bar({ title: 'Chords' }) + pad(`
-    ${swcard('On the keys', [['Finger numbers', 1], ['Note names', 0], ['Interval names (3, 5, 7)', 0]])}
-    ${card('Fingering shown as', [['Numbers on the keys', '', true], ['Drawn hands', 'A hand over the keys, fingers numbered']])}
-    ${card('Arpeggio', [['Up'], ['Up and down', '', true], ['Down']])}
-    ${card('Names', [['Cmaj7', 'Chord symbols', true], ['CΔ7', 'Jazz signs']])}`)),
+  chordScreen('C1', 'Triads: C', 'The page as it opens. Root strip, then the chord by its name, in five families like iReal Pro and the chord dictionaries. No "7th" to choose: you pick C7 or Cmaj7.', 'C', 'C major triad', 'C · E · G', 'Triads', 'C', '0,4,7', '1,3,5', 'Root position · Close · One hand'),
+  chordScreen('C2', 'Sevenths: Cmaj7', 'Every 7th chord by its name: Cmaj7, C7, Cm7, Cø7 (half-diminished), C°7… ⓘ gives the full name.', 'Cmaj7', 'Major seventh', 'C · E · G · B', '7ths', 'Cmaj7', '0,4,7,11', '1,2,3,5', 'Root position · Close · One hand'),
+  chordScreen('C3', 'Sixths and added-note chords: Cadd9', '"Added-note chords" is the textbook name (was "Add a tone"). Cadd2 is the same notes with D inside the chord: a voicing of Cadd9, under Play it as.', 'Cadd9', 'Added-ninth chord', 'C · E · G · D', '6 & add', 'Cadd9', '0,4,7,14', '1,2,3,5', 'Root position · Close · One hand'),
+  chordScreen('C4', '9 · 11 · 13: Cmaj9', 'Five notes and more. "Play it as" now says Two hands: the left hand takes the root.', 'Cmaj9', 'Major ninth', 'C · E · G · B · D', '9·11·13', 'Cmaj9', '0,4,7,11,14', '', 'Root position · Close · Two hands', 'data-lh="0"'),
+  chordScreen('C5', 'Altered: C7♭9', 'Altered tensions belong to the chord\'s name, so they are chords in their own family, not a separate row.', 'C7♭9', 'Dominant seventh, flat nine', 'C · E · G · B♭ · D♭', 'Altered', 'C7♭9', '0,4,7,10,13', '', 'Root position · Close · Two hands', 'data-lh="0"'),
+  phone('C6', 'Play it as › Inversion', 'The sheet from "Play it as". Half height, so the chord stays in sight. Each option drawn and heard as you tap.', cBar() + `<div class="content">${'<div class="pad">' + head('Cmaj7', 'Major seventh', 'C · E · G · B') + '</div>'}${sheetPanel('Play it as', seg(['Inversion', 'Voicing', 'Hands'], 'Inversion') + opt('0,4,7,11', 'Root position', 'C in the bass', 1) + opt('4,7,11,12', '1st inversion', 'E in the bass') + opt('7,11,12,16', '2nd inversion', 'G in the bass') + opt('11,12,16,19', '3rd inversion', 'B in the bass'))}</div>`),
+  phone('C7', 'Play it as › Voicing', 'How a pianist spreads the notes. ⓘ on each says when it is used.', cBar() + `<div class="content">${'<div class="pad">' + head('Cmaj7', 'Major seventh', 'C · E · G · B') + '</div>'}${sheetPanel('Play it as', seg(['Inversion', 'Voicing', 'Hands'], 'Voicing') + opt('12,16,19,23', 'Close', 'Notes as close as they go', 1) + opt('7,12,16,23', 'Drop 2', 'Opened out, smoother') + opt('12,16,23', 'Shell', 'Root, 3rd, 7th: left hand') + opt('16,19,23,26', 'Rootless', 'For playing with a bassist'))}</div>`),
+  phone('C8', 'Play it as › Hands', 'Which notes each hand plays: drawn, left hand in lilac.', cBar() + `<div class="content">${'<div class="pad">' + head('Cmaj9', 'Major ninth', 'C · E · G · B · D') + '</div>'}${sheetPanel('Play it as', seg(['Inversion', 'Voicing', 'Hands'], 'Hands') + opt('0,4,7,11,14', 'One hand', 'Only up to four notes') + opt('0,4,7,11,14', 'Left hand: root', 'Right hand: E G B D', 1, '0') + opt('0,4,7,11,14', 'Left hand: root and 5th', 'Right hand: E B D', 0, '0,7') + opt('0,4,7,11,14', 'Left hand: the triad', 'Right hand: B D', 0, '0,4,7'))}</div>`),
+  phone('C9', 'Chords\' Settings', 'From the gear. Short names, each with one plain line.', bar({ title: 'Chords' }) + pad(`
+    ${card('Labels on keys', [['None'], ['Note names', 'C E G'], ['Fingers', '1 3 5', true], ['Intervals', '1 3 5 ♭7']])}
+    ${card('Fingering style', [['Numbers on keys', '', true], ['Hand drawing', 'A hand over the keys']])}
+    ${card('Chord symbols', [['Standard', 'Cmaj7 · Cm7♭5 · Cdim7', true], ['Jazz', 'CΔ7 · Cø7 · C°7']])}
+    ${card('Broken chord', [['Up'], ['Up and down', '', true]])}`)),
 ];
-const sBar = bar({ title: 'D major', after: I('down', 's'), right: ['gear'] });
-const tabs = on => seg(['Scale', 'Chords', 'Key'], on);
-const hands = `<svg viewBox="0 0 270 90" width="100%" aria-label="Right hand, fingers numbered 1 to 5"><path d="M30 80 C18 60 22 46 34 52 L48 66 L58 18 C60 8 74 8 74 18 L76 58 L90 10 C92 0 106 0 107 10 L110 58 L126 16 C128 6 142 8 141 18 L140 62 L158 36 C162 28 176 32 173 42 L160 80 Z" fill="var(--sandw)" stroke="var(--sand-ink)"/><g font-size="11" font-weight="600" text-anchor="middle" fill="var(--honey-ink)" font-family="Onest">${[[38, 56, 1], [66, 22, 2], [98, 14, 3], [133, 20, 4], [166, 42, 5]].map(([x, y, n]) => `<circle cx="${x}" cy="${y}" r="8" fill="var(--honey)"/><text x="${x}" y="${y + 4}">${n}</text>`).join('')}</g><text x="190" y="40" font-size="11" fill="currentColor" font-family="Onest">D E F♯ G A B C♯ D</text><text x="190" y="58" font-size="11" fill="currentColor" font-family="Onest">1 2 3 1 2 3 4 5</text><text x="190" y="76" font-size="10" fill="currentColor" opacity=".6" font-family="Onest">thumb under after F♯</text></svg>`;
-const degreeCard = (num, name, k, f) => `<div class="split" style="text-align:left"><div style="display:flex;justify-content:space-between"><b style="font:600 14px var(--display)">${name}</b><span class="soft">${num}</span></div><div data-kb="${k}" data-fingers="${f}" data-oct="2"></div></div>`;
+const lapChords = `<figure class="laptop" data-fb="C10" data-title="laptop" style="width:900px"><div style="width:900px;height:430px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--paper);display:flex;flex-direction:column;font-size:12.5px">${cBar()}<div style="flex:1;display:grid;grid-template-columns:1fr 280px;min-height:0"><div class="pad" style="position:relative">${head('Cmaj7', 'Major seventh', 'C · E · G · B')}${roots('C')}${fams('7ths', 'Cmaj7')}<div data-kb="0,4,7,11" data-fingers="1,2,3,5" data-oct="2" style="max-width:420px"></div>${cap(`${I('arp', 's')}Broken`, 'Play')}</div><div class="pad" style="border-left:1px solid var(--line);background:var(--card)"><b style="font:600 15px var(--display)">Play it as</b><div class="lbl">Inversion</div><div class="chips"><span class="chip on">Root</span><span class="chip">1st</span><span class="chip">2nd</span><span class="chip">3rd</span></div><div class="lbl">Voicing</div><div class="chips"><span class="chip on">Close</span><span class="chip">Drop 2</span><span class="chip">Shell</span><span class="chip">Rootless</span></div><div class="lbl">Hands</div><div class="chips"><span class="chip on">One hand</span><span class="chip">Root in LH</span></div></div></div></div><figcaption><b>C10. On a laptop: "Play it as" is a side panel</b>It stays open beside the chord, like an inspector, so the chord and its options are both on screen.</figcaption></figure>`;
+const sBar = (t = 'D major') => bar({ title: t, after: I('down', 's'), right: ['gear'] });
+const tabs = on => seg(['Scale', 'Key'], on);
+const hands = `<svg viewBox="0 0 270 90" width="100%" aria-label="Right hand, fingers numbered"><path d="M30 80 C18 60 22 46 34 52 L48 66 L58 18 C60 8 74 8 74 18 L76 58 L90 10 C92 0 106 0 107 10 L110 58 L126 16 C128 6 142 8 141 18 L140 62 L158 36 C162 28 176 32 173 42 L160 80 Z" fill="var(--sandw)" stroke="var(--sand-ink)"/><g font-size="11" font-weight="600" text-anchor="middle" fill="var(--honey-ink)" font-family="Onest">${[[38, 56, 1], [66, 22, 2], [98, 14, 3], [133, 20, 4], [166, 42, 5]].map(([x, y, n]) => `<circle cx="${x}" cy="${y}" r="8" fill="var(--honey)"/><text x="${x}" y="${y + 4}">${n}</text>`).join('')}</g><text x="190" y="40" font-size="11" fill="currentColor" font-family="Onest">D E F♯ G A B C♯ D</text><text x="190" y="58" font-size="11" fill="currentColor" font-family="Onest">1 2 3 1 2 3 4 5</text><text x="190" y="76" font-size="10" fill="currentColor" opacity=".6" font-family="Onest">thumb under after F♯</text></svg>`;
+const card7 = (num, name, fn, on) => `<div class="split${on ? ' on' : ''}" style="padding:6px 2px"><span class="soft">${num}</span><b style="font:600 14px var(--display)">${name}</b><span style="font-size:9.5px">${fn}</span></div>`;
 const scalesScreens = [
-  phone('S1', 'Scale: D major', 'The scale written and on the keys with fingers. The run options are right under it.', sBar + `<div class="content pad">${tabs('Scale')}
+  phone('S1', 'Scale: D major', 'Scale is for playing it. "How to play" opens the practice choices; the tempo is in the floating bar.', sBar() + `<div class="content pad">${tabs('Scale')}
     <div class="sheetbox" data-staff="treble" data-key="2" data-scale="-1"></div>
-    <div><div class="lbl" style="margin-bottom:6px">On the keys</div>${seg(['Notes', 'Right hand', 'Left hand'], 'Right hand')}</div>
+    <div><div class="lbl" style="margin-bottom:6px">Labels</div>${seg(['Notes', 'Fingers RH', 'Fingers LH', 'Degrees'], 'Fingers RH')}</div>
     <div data-kb="2,4,6,7,9,11,13,14" data-fingers="1,2,3,1,2,3,4,5" data-oct="2"></div>
-    <div class="list"><div class="row"><span class="n">Octaves</span>${seg(['1', '2', '3', '4'], '1').replace('seg full', 'seg')}</div><div class="row"><span class="n">Start on</span><span class="chip">D ${I('down', 's')}</span></div><div class="row"><span class="n">Rhythm</span><span class="chip">Even ${I('down', 's')}</span></div></div>
+    <div class="list"><div class="row"><span class="n"><span class="soft" style="font-size:11.5px;display:block">How to play</span>Right hand · 1 octave · Up and down</span>${chev}</div></div>
     ${cap('♩ 80', 'Play')}</div>`),
-  phone('S2', 'Scale, further down', 'Scroll on: each hand drawn with its fingers, the scale\'s facts, its exercises.', sBar + `<div class="content pad">${tabs('Scale')}
-    <div class="cardset"><b>Fingering by hand</b>${hands}<span class="soft" style="font-size:11.5px">Left hand: 5 4 3 2 1 3 2 1</span></div>
-    <div class="list"><div class="row"><span class="n soft">Formula</span><span>W W H W W W H</span></div><div class="row"><span class="n soft">Relative</span><span>B minor ›</span></div><div class="row"><span class="n soft">Mode of</span><span>Ionian</span></div></div>
-    ${group('EXERCISES', [['grass', 'music', 'Hands together, 2 octaves', ''], ['grass', 'music', 'In thirds', '']])}
-    ${cap('♩ 80', 'Play')}</div>`),
-  phone('S3', 'Tempo (from ♩ 80)', 'The 80 is the speed in beats a minute. Tap it to change it. The same sheet is used on every page.', sBar + `<div class="content">${'<div class="pad">' + tabs('Scale') + '</div>'}<div class="scrim"></div><div class="panel" style="top:auto;bottom:0;border-radius:20px 20px 0 0"><h3>Tempo</h3>
-    <div style="display:flex;align-items:center;gap:14px"><span class="btn tint">−</span><span style="font:600 30px var(--display)">♩ = 80</span><span class="btn tint">+</span></div>
-    <div style="width:100%;display:flex;align-items:center;gap:10px"><span class="soft">40</span><span class="slider"><b style="width:25%"></b></span><span class="soft">200</span></div>
-    ${seg(['Up', 'Up and down', 'Down'], 'Up and down')}
-    <span class="cta">Done</span></div></div>`),
-  phone('S4', 'Chords: every chord, with previews', 'The chords made from the scale\'s notes. Each card shows its keys and fingers, and the size row is the one from Chords.', sBar + `<div class="content pad">${tabs('Chords')}${seg(['Triad', '7th', '9th', '11th', '13th'], '7th')}
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">${degreeCard('I', 'Dmaj7', '2,6,9,13', '1,2,3,5')}${degreeCard('ii', 'Em7', '4,7,11,14', '1,2,3,5')}${degreeCard('iii', 'F♯m7', '6,9,13,16', '1,2,3,5')}${degreeCard('IV', 'Gmaj7', '7,11,14,18', '1,2,3,5')}</div>
-    ${cap(`${I('loop', 's')}Walk`, 'Play all')}</div>`),
-  phone('S5', 'Chords: a chord\'s own choices', 'A tap on a card opens it here: its inversion, voicing and Play. "Open in Chords" opens every option.', sBar + `<div class="content">${'<div class="pad">' + tabs('Chords') + '</div>'}<div class="scrim"></div><div class="panel" style="top:auto;bottom:0;border-radius:20px 20px 0 0;justify-items:stretch;text-align:left"><h3>Em7 · ii</h3><div data-kb="4,7,11,14" data-fingers="1,2,3,5" data-oct="2"></div>
-    <div class="list"><div class="row"><span class="n">Inversion</span><span class="chip">Root position ${I('down', 's')}</span></div><div class="row"><span class="n">Voicing</span><span class="chip">Close ${I('down', 's')}</span></div><div class="row"><span class="n">Open in Chords</span>${chev}</div></div>
-    <div style="display:flex;gap:8px;justify-content:center"><span class="chip">${I('arp', 's')} Arpeggio</span><span class="cta honey">▶ Play</span></div></div></div>`),
-  phone('S6', 'Chords: which chords hold a note', '"Keys play: Notes", then tap F♯ on the keys: the chords that contain it light up.', sBar + `<div class="content pad">${tabs('Chords')}
-    <div class="list"><div class="row"><span class="n">Keys play</span><span class="seg"><span>Chords</span><span class="on">Notes</span></span></div></div>
-    <div data-kb="6" data-oct="2"></div><div class="soft" style="font-size:12.5px">F♯ is in D, F♯m and Bm</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">${['D', 'Em', 'F♯m', 'G', 'A', 'Bm', 'C♯°'].map(c => `<div style="height:36px;border-radius:8px;display:grid;place-items:center;font:600 13px var(--display);${['D', 'F♯m', 'Bm'].includes(c) ? 'background:var(--hit);color:var(--honey-ink)' : 'background:var(--card);border:1px solid var(--line)'}">${c}</div>`).join('')}</div>
-    ${cap(`${I('loop', 's')}Walk`, 'Play all')}</div>`),
-  phone('S7', 'Walk the chords (from Walk)', 'Plays I to vii and back in rhythm, as block chords or broken.', sBar + `<div class="content">${'<div class="pad">' + tabs('Chords') + '</div>'}<div class="scrim"></div><div class="panel" style="top:auto;bottom:0;border-radius:20px 20px 0 0;justify-items:stretch;text-align:left"><h3>Walk the chords</h3>
-    ${card('Played as', [['Block', 'All the notes together', true], ['Arpeggio', 'One after another']])}
-    ${card('Order', [['Up, I to vii', '', true], ['Up and back down']])}
-    <span class="cta honey" style="justify-self:center">▶ Start</span></div></div>`),
-  phone('S8', 'Key: what D major is as a home key', 'When a song is "in D major": its signature, the keys you\'d move to, and the chords you can borrow.', sBar + `<div class="content pad">${tabs('Key')}
-    <div class="sheetbox" data-staff="grand" data-key="2" data-notes="0"></div>
-    <div class="soft" style="font-size:12.5px;text-align:center">2 sharps: F♯ and C♯ · also written: none</div>
-    ${group('KEYS YOU MOVE TO', [['', '', 'Relative minor · same signature', 'B minor'], ['', '', 'Parallel minor · same first note', 'D minor'], ['', '', 'Beside it · one sharp more / fewer', 'A · G']])}
-    <div><div class="gl">CHORDS TO BORROW (FROM D MINOR)</div><div class="chips"><span class="chip">B♭ · ♭VI</span><span class="chip">Gm · iv (minor plagal)</span><span class="chip">E♭ · Neapolitan</span></div></div></div>`),
-  phone('S9', 'Key, further down', 'Then: progressions in this key, songs and studies in it, the modes, harmonising a note.', sBar + `<div class="content pad">${tabs('Key')}
-    ${group('PROGRESSIONS IN D MAJOR', [['grass', 'music', 'I – V – vi – IV', 'D A Bm G'], ['grass', 'music', 'ii – V – I', 'Em7 A7 Dmaj7']])}
-    ${group('SONGS IN D MAJOR', [['sky', 'music', 'Be Thou My Vision', ''], ['sky', 'music', 'Canon in D', '']])}
-    ${group('', [['lilac', 'music', 'Modes of D', 'Dorian, Lydian…'], ['honey', 'music', 'Harmonise a melody note', '']])}</div>`),
-  phone('S10', 'Harmonise a melody note', 'From Key › Harmonise a melody note. Tap the note your melody is on, and you see the chords of the key that hold it.', bar({ title: 'Harmonise a note' }) + pad(`
-    <div data-kb="9" data-oct="2"></div><div class="soft" style="font-size:12.5px">Melody on A</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">${[['D', 'I', 'home'], ['F♯m', 'iii', 'soft'], ['A', 'V', 'tension']].map(([a, b, c]) => `<div class="split"><b style="font:600 16px var(--display)">${a}</b>${b} · ${c}</div>`).join('')}</div>`), { short: true }),
-  phone('S11', 'Scales and keys\' Settings', 'From the gear on Scales and keys.', bar({ title: 'Scales and keys' }) + pad(`
-    ${card('Fingering', [['As the books', 'Standard fingering for each scale', true], ['From the thumb', 'Groups from the thumb, for any scale']])}
-    ${card('Fingering shown as', [['Numbers on the keys', '', true], ['Drawn hands']])}
-    ${swcard('On the keys', [['Colour the scale\'s notes', 1], ['Note names', 0]])}`)),
-  phone('S12', 'The scale picker (from "D major ⌄")', 'The key-signature grid, then the kind of scale.', sBar + `<div class="content">${'<div class="pad">' + tabs('Scale') + '</div>'}<div class="scrim"></div><div class="panel" style="top:auto;bottom:0;border-radius:20px 20px 0 0;justify-items:stretch;text-align:left"><h3>Scale</h3>
-    <div class="ksgrid" data-ks="2"></div>
-    <div class="chips"><span class="chip on">Major</span><span class="chip">Natural minor</span><span class="chip">Harmonic minor</span><span class="chip">Melodic minor</span><span class="chip">Pentatonic</span><span class="chip">Blues</span><span class="chip">Modes ›</span></div>
-    <span class="cta" style="justify-self:center">Done</span></div></div>`),
+  phone('S2', 'How to play (a sheet)', 'Grouped as the exam syllabuses do: hands, motion, octaves, direction, start, rhythm. All in one place, none in the tempo.', sBar() + `<div class="content">${'<div class="pad">' + tabs('Scale') + '</div>'}${sheetPanel('How to play', `<div class="list">${[['Hands', ['Right', 'Left', 'Together'], 'Right'], ['Octaves', ['1', '2', '3', '4'], '1'], ['Direction', ['Up and down', 'Up', 'Down'], 'Up and down']].map(([a, l, o]) => `<div class="row"><span class="n">${a}</span><span class="seg">${l.map(x => `<span class="${x === o ? 'on' : ''}">${x}</span>`).join('')}</span></div>`).join('')}<div class="row"><span class="n">Start on</span><span class="chip">D, the tonic ${I('down', 's')}</span></div><div class="row"><span class="n">Rhythm</span><span class="chip">Even ${I('down', 's')}</span></div></div>${note('With Together, Motion appears: Similar · Contrary.')}`)}</div>`),
+  phone('S3', 'Tempo (from ♩ 80)', '80 is the speed in beats a minute. The sheet holds only the tempo and the count-in; the same sheet everywhere.', sBar() + `<div class="content">${'<div class="pad">' + tabs('Scale') + '</div>'}${sheetPanel('Tempo', `<div style="display:flex;align-items:center;justify-content:center;gap:14px"><span class="btn tint">−</span><span style="font:600 30px var(--display)">♩ = 80</span><span class="btn tint">+</span></div><div style="display:flex;align-items:center;gap:10px"><span class="soft">40</span><span class="slider"><b style="width:25%"></b></span><span class="soft">200</span></div>${swcard('', [['Count in one bar', 1]])}`)}</div>`),
+  phone('S4', 'Choosing a scale (from "D major ⌄")', 'The root as 12 notes in piano order (F♯ or G♭, the usual one first), then the type in groups. No key-signature grid here.', sBar() + `<div class="content">${'<div class="pad">' + tabs('Scale') + '</div>'}${sheetPanel('Scale', `<div class="lbl">Root</div>${roots('D')}<div class="lbl">Type</div><div style="display:grid;gap:6px;overflow:hidden">${[['Major and minor', ['Major', 'Natural minor', 'Harmonic minor', 'Melodic minor'], 'Major'], ['Pentatonic and blues', ['Major pentatonic', 'Minor pentatonic', 'Blues'], ''], ['Modes', ['Dorian', 'Phrygian', 'Lydian', 'Mixolydian', 'Locrian'], ''], ['Other', ['Chromatic', 'Whole-tone', 'Diminished'], '']].map(([g, l, o]) => `<div><div class="gl" style="padding:0 0 3px">${g.toUpperCase()}</div><div class="chips">${l.map(x => `<span class="chip${x === o ? ' on' : ''}">${x}</span>`).join('')}</div></div>`).join('')}</div>`)}</div>`),
+  phone('S5', 'Key: Chords in D major', 'Key is for understanding music written in D major. First: its seven chords, each with its numeral and function. A tap plays one; a long press opens it in Chords.', sBar() + `<div class="content pad">${tabs('Key')}
+    <div style="display:flex;align-items:center;gap:8px"><b style="flex:1;font:600 15px var(--display)">Chords in D major</b><span class="seg"><span class="on">Triads</span><span>Sevenths</span></span></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">${card7('I', 'D', 'Tonic', 1)}${card7('ii', 'Em', 'Supertonic')}${card7('iii', 'F♯m', 'Mediant')}${card7('IV', 'G', 'Subdominant')}${card7('V', 'A', 'Dominant')}${card7('vi', 'Bm', 'Submediant')}${card7('vii°', 'C♯°', 'Leading tone')}</div>
+    <div data-kb="2,6,9" data-fingers="1,3,5" data-oct="2"></div>
+    ${cap('Order ⌄', 'Play in order')}</div>`),
+  phone('S6', 'Play in order (from "Order ⌄")', 'Was "Walk the chords". What it plays, in which order, and how: all visible at once.', sBar() + `<div class="content">${'<div class="pad">' + tabs('Key') + '</div>'}${sheetPanel('Play in order', `${card('Order', [['I to vii', 'D Em F♯m G A Bm C♯°', true], ['I to vii and back'], ['I – IV – V – I', 'The primary chords: D G A D']])}<div class="list"><div class="row"><span class="n">Chords</span><span class="seg"><span class="on">Triads</span><span>Sevenths</span></span></div><div class="row"><span class="n">Played</span><span class="seg"><span class="on">Together</span><span>Broken</span></span></div></div>`)}</div>`),
+  phone('S7', 'Key: Harmonise a melody note', 'Pick the note your melody is on; the key\'s chords that hold it, each with what the note is in that chord. Primary chords first. A tap plays the chord with the note on top.', sBar() + `<div class="content pad">${tabs('Key')}
+    <b style="font:600 15px var(--display)">Harmonise a melody note</b>
+    <div class="chips">${[['D', '1'], ['E', '2'], ['F♯', '3'], ['G', '4'], ['A', '5'], ['B', '6'], ['C♯', '7']].map(([n, d]) => `<span class="chip${n === 'A' ? ' on' : ''}" style="flex-direction:column;gap:0;line-height:1.1;padding:4px 8px">${n}<small style="font-size:9.5px;opacity:.7">${d}</small></span>`).join('')}</div>
+    <div class="list">${[['D', 'I', 'A is its 5th'], ['A', 'V', 'A is its root'], ['F♯m', 'iii', 'A is its 3rd']].map(([c, n, r]) => `<div class="row"><b style="width:44px;font:600 15px var(--display)">${c}</b><span class="soft" style="width:26px">${n}</span><span class="n">${r}</span>${I('play', 's soft')}</div>`).join('')}</div>
+    ${note('With Sevenths on: Bm7 (A is its 7th) is added.')}</div>`),
+  phone('S8', 'Key: signature, neighbours, modes, progressions', 'Then the facts of the key. Every progression says where it comes from: your songs, or its standard name.', sBar() + `<div class="content pad">${tabs('Key')}
+    <div class="list"><div class="row"><span class="n soft">Key signature</span><span>2 sharps: F♯ C♯</span></div></div>
+    ${group('NEIGHBOURING KEYS', [['', '', 'Relative minor', 'B minor'], ['', '', 'Parallel minor', 'D minor'], ['', '', 'Dominant · Subdominant', 'A · G']])}
+    ${group('SAME NOTES, OTHER HOMES', [['', '', 'E Dorian · A Mixolydian · B minor…', '']])}
+    ${group('PROGRESSIONS IN D MAJOR', [['grass', 'music', 'I–V–vi–IV', 'in 6 of your songs'], ['grass', 'music', 'ii–V–I', 'jazz cadence'], ['grass', 'music', 'I–vi–IV–V', 'the 50s progression']])}</div>`),
+  phone('S9', 'A pentatonic scale: no Key tab', 'Pentatonic and blues scales have no key of their own, so the page is only the scale.', sBar('D major pentatonic') + `<div class="content pad"><div style="font:600 16px var(--display);text-align:center">D · E · F♯ · A · B</div><div data-kb="2,4,6,9,11,14" data-fingers="1,2,3,1,2,3" data-oct="2"></div><div class="list"><div class="row"><span class="n"><span class="soft" style="font-size:11.5px;display:block">How to play</span>Right hand · 1 octave · Up and down</span>${chev}</div></div>${cap('♩ 80', 'Play')}</div>`, { short: true }),
+  phone('S10', 'Scales and keys\' Settings', 'From the gear.', bar({ title: 'Scales and keys' }) + pad(`
+    ${card('Fingering standard', [['As the books', 'The fingering printed in scale books', true], ['From the thumb', 'For scales the books don’t cover']])}
+    ${card('Fingering style', [['Numbers on keys', '', true], ['Hand drawing']])}
+    ${card('Function names', [['Tonic, Dominant…', '', true], ['T, S, D', 'As taught in Russian schools']])}`)),
 ];
-const optRows = [
-  ['Major', 'add2 · add4 · 6 · add9 · add11 · add♯11', 'maj7 or ♭7 · ♭7 alters ♭5 ♭9 ♯9 ♯11 ♭13 · maj7 alters ♯11 · adds 13', 'maj9 · 9 (with the same alterations)', '11 · maj11', '13 · maj13'],
-  ['Minor', 'add2 · add4 · 6 · add9 · add11', 'm7 · m(maj7) · adds 11, 13', 'm9 · m(maj9) · adds 13', 'm11', 'm13'],
-  ['Diminished', '—', 'ø7 (♭7) · °7 · adds 11', 'ø9', 'ø11', '—'],
-  ['Augmented', 'add9', '+7 · +maj7 · +7 alters ♭5 ♭9 ♯9 ♯11', '+9', '—', '—'],
-  ['Sus2', '6', '7sus2 · maj7sus2', '—', '—', '—'],
-  ['Sus4', '6 · add9', '7sus4 · maj7sus4 · 7sus4 alters ♭9', '9sus4', '—', '13sus4'],
-  ['Power (5)', '—', '—', '—', '—', '—'],
-];
-document.getElementById('s-chords').innerHTML = chordsScreens.join('');
+document.getElementById('s-chords').innerHTML = chordsScreens.join('') + lapChords;
 document.getElementById('s-scales').innerHTML = scalesScreens.join('');
-document.getElementById('s-options').innerHTML = `<div class="scroll" style="overflow-x:auto"><table class="opt"><tr><th>Chord</th><th>Triad</th><th>7th</th><th>9th</th><th>11th</th><th>13th</th></tr>${optRows.map(r => `<tr>${r.map((c, i) => i ? `<td>${c}</td>` : `<th>${c}</th>`).join('')}</tr>`).join('')}</table></div>`;
+document.getElementById('s-options').innerHTML = `<div class="scroll" style="overflow-x:auto"><table class="opt"><tr><th>Family</th><th>Chords (on C)</th><th>What it is</th></tr>${[['Triads', FAM.Triads.join(' · '), 'Three notes: major, minor, diminished, augmented, suspended, power chord'], ['Sevenths', FAM.Sevenths.join(' · '), 'A triad with a 7th: major, dominant, minor, half-diminished, diminished…'], ['Sixths & add', FAM['Sixths & add'].join(' · '), 'Added-note chords: a triad with a 6th, 9th, 4th or ♯11 and no 7th'], ['9 · 11 · 13', FAM['9 · 11 · 13'].join(' · '), 'Extended chords: a 7th chord with its 9th, 11th or 13th'], ['Altered', FAM.Altered.join(' · '), 'A dominant 7th with altered tensions (♭9, ♯9, ♯11, ♭13, ♭5, ♯5)']].map(r => `<tr><th>${r[0]}</th><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</table></div>`;
 // ——— feedback on every screen ———
 (function () {
   const figs = Array.from(document.querySelectorAll('figure[data-fb]')); const answers = {}; let db = null, local = {};
-  try { local = JSON.parse(localStorage.getItem('practice-feedback') || '{}') } catch (e) {}
+  try { local = JSON.parse(localStorage.getItem('practice-feedback-2') || '{}') } catch (e) {}
   const key = n => 's' + n.replace(/\./g, '-');
   function render(id) { const f = document.querySelector('[data-key="' + id + '"]'); if (!f) return; const a = answers[id] || {};
     f.querySelectorAll('.fb button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === a.verdict)));
@@ -400,9 +322,9 @@ document.getElementById('s-options').innerHTML = `<div class="scroll" style="ove
     f.classList.toggle('answered', !!(a.verdict || a.note)) }
   async function save(id, patch) { answers[id] = Object.assign({}, answers[id], patch, { at: new Date().toISOString() }); render(id);
     const st = document.querySelector('[data-key="' + id + '"] .saved');
-    try { local[id] = answers[id]; localStorage.setItem('practice-feedback', JSON.stringify(local)) } catch (e) {}
+    try { local[id] = answers[id]; localStorage.setItem('practice-feedback-2', JSON.stringify(local)) } catch (e) {}
     if (!db) { st.textContent = 'Kept in this browser only.'; return }
-    try { await db.doc('feedback/' + id).set(answers[id]); st.textContent = 'Saved.' } catch (e) { st.textContent = 'Could not save; kept in this browser.' } }
+    try { await db.doc('feedback2/' + id).set(answers[id]); st.textContent = 'Saved.' } catch (e) { st.textContent = 'Could not save; kept in this browser.' } }
   figs.forEach(f => { const id = key(f.dataset.fb); f.dataset.key = id;
     const box = document.createElement('div'); box.className = 'fb';
     [['ok', 'Looks right'], ['change', 'Change it'], ['remove', 'Not needed']].forEach(([v, l]) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.v = v; b.textContent = l; b.setAttribute('aria-pressed', 'false'); b.onclick = () => save(id, { verdict: v, screen: f.dataset.fb + ' ' + f.dataset.title }); box.appendChild(b) });
@@ -414,7 +336,7 @@ document.getElementById('s-options').innerHTML = `<div class="scroll" style="ove
   (window.claude && window.claude.use ? window.claude.use('db') : Promise.resolve(null)).then(d => { clearTimeout(timer); db = d;
     if (!db) { note.textContent = 'Your feedback is kept in this browser; tell me in the chat when you are done.'; return }
     note.textContent = 'Your feedback is saved with this page; I read it from here.';
-    db.collection('feedback').onSnapshot(snap => (snap.docs || snap).forEach(doc => { answers[doc.id] = doc.data ? doc.data() : doc; render(doc.id) }), () => {}) }).catch(() => {});
+    db.collection('feedback2').onSnapshot(snap => (snap.docs || snap).forEach(doc => { answers[doc.id] = doc.data ? doc.data() : doc; render(doc.id) }), () => {}) }).catch(() => {});
 })();
 
   const NS = 'http://www.w3.org/2000/svg';
