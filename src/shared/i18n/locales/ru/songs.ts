@@ -53,6 +53,12 @@ export const songs: LocaleResources['songs'] = {
     },
   },
   library: {
+    archiving: {
+      one: 'Убрать «{{title}}» в архив?',
+      folder: 'Убрать папку «{{name}}» в архив?',
+      many: 'Убрать в архив: {{count}}?',
+      body: 'Их можно вернуть из архива.',
+    },
     home: 'Главная',
     favourite: 'Добавить в избранное',
     unfavourite: 'Убрать из избранного',

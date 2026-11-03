@@ -15,6 +15,7 @@ import {
 import { COLLECTIONS, pieceById, PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import { createMemoryStorage } from '@/shared/lib'
+import { confirmAsked } from '@/shared/test/confirm'
 import { lessonKeys, sectionLessons } from '../model/section-lessons'
 
 const DAY = '2026-10-25T10:00:00.000Z'
@@ -504,6 +505,7 @@ describe('Piece: the learner’s library (ADR 0106)', () => {
     const { libraryStore } = await renderApp('/songs/bz5')
     await openSettings(user)
     await user.click(await screen.findByRole('button', { name: 'Archive' }))
+    await confirmAsked(user, 'Archive')
     expect(placeOf(libraryStore.getState(), 'bz5')).toBe('archived')
     expect(await screen.findByText('“Still, my soul, be still” archived')).toBeInTheDocument()
     // An archived song still opens; Restore stands in place of its Folder and Archive.

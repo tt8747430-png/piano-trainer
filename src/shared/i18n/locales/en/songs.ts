@@ -59,6 +59,13 @@ export const songs = {
   },
   // The library (ADR 0106): a song's actions, and the toasts that say what was done.
   library: {
+    // Archive asks first (R17), then says it with Undo.
+    archiving: {
+      one: 'Archive “{{title}}”?',
+      folder: 'Archive the folder “{{name}}”?',
+      many: 'Archive {{count}} items?',
+      body: 'You can restore them from the Archive.',
+    },
     home: 'Home',
     favourite: 'Add to favourites',
     unfavourite: 'Remove from favourites',

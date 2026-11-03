@@ -12,3 +12,10 @@ One row per finding: where, what's wrong, the single fix, its state.
 | A11 | a song's Settings › In your library | Favourite as a switch (an act posing as a setting, R19) | removed; ♡ on the overview card, the row menus, swipe and Select keep it | fixed |
 | Constraints | Settings › Version | only the build; Later on the banner left no way back to an update | Version row as iOS's Software Update (status, tap to check, offline says so), Install and restart, the Profile's gear marked while a version waits; one update state (`shared/lib/app-update`) | fixed |
 | R20 | Settings › Help | credits only in a hover title | the group's footnote line | fixed |
+| A1 | Transpose | three controls named in the brief | already one widget (`widgets/transpose` `TransposeTool`), the Player's and the editor's files only wrap it with their own state | checked, no change |
+| A1 | headers | `LibraryHeader`, `PieceHeader` | both compose `ScreenHeader`; `ScoreBar` is the score's own bar in both modes (ADR 0115) | checked, no change |
+| A2 | every screen | the bar's height | one `ScreenHeader`, one row of one height; `large` sets the title larger in the same row | checked; screenshots after |
+| A9 | Archive (row ⋯, swipe, drag onto Archive, Select's bar, a folder's ⋯, a song's Settings) | archived at once, Undo only | asks first through one `confirm()` (`shared/ui/confirm.ts`, `Confirmer` beside the toasts), then says it with Undo | fixed |
+| A9 | Delete songs / folder / take / pattern, Reset progress | each its own AlertDialog | `ConfirmDialog` | fixed |
+| A9 | Publish / Discard / Unpublish / Delete (an editor's original, `features/edit-original`), Keep bars of a take, own music's Reset | own AlertDialogs, already R17's shape (question, one line, act named, red) but kept open while the server answers | move onto `ConfirmDialog` with a busy state when B6 (round 10) rebuilds publishing | open, round 10 |
+| A9 | Delete account, Sign out, Reset progress on Settings | Settings pages | the Settings rebuild agent (A17) | in progress |

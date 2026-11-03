@@ -10,7 +10,7 @@ import {
 } from '@/entities/library'
 import { entryTitles, useRepertoire, type PieceId } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
-import { say } from '@/shared/ui'
+import { confirm, say } from '@/shared/ui'
 import { archiveFolder, restoreFolder } from '../archive-folder'
 import { archiveSongs, restoreSongs } from '../archive-songs'
 import { moveTo, undoMove, type Moving } from '../move-to'
@@ -59,7 +59,19 @@ export function useLibraryActs() {
         undo(() => undoMove(store, catalog(), moves)),
       )
     },
-    archive: (ids: readonly PieceId[]) => {
+    /** Songs archived once asked (R17), said with Undo. */
+    archive: async (ids: readonly PieceId[]) => {
+      const [first] = ids
+      if (!first) return
+      const asked = await confirm({
+        title:
+          ids.length === 1
+            ? t('library.archiving.one', { title: titleOf(first) })
+            : t('library.archiving.many', { count: ids.length }),
+        body: t('library.archiving.body'),
+        action: t('library.archive'),
+      })
+      if (!asked) return
       const archived = archiveSongs(store, catalog(), ids)
       const [only] = archived
       if (!only) return
@@ -74,7 +86,22 @@ export function useLibraryActs() {
      * What Select chose, archived in one go (songs, and folders with all they hold): one toast, its
      * Undo putting every one back exactly where it stood.
      */
-    archiveChosen: (ids: readonly PieceId[], folders: readonly ShelvedFolder[]) => {
+    archiveChosen: async (ids: readonly PieceId[], folders: readonly ShelvedFolder[]) => {
+      const total = ids.length + folders.length
+      const [chosenSong] = ids
+      const [folderFirst] = folders
+      if (total === 0) return
+      const asked = await confirm({
+        title:
+          total > 1
+            ? t('library.archiving.many', { count: total })
+            : chosenSong
+              ? t('library.archiving.one', { title: titleOf(chosenSong) })
+              : t('library.archiving.folder', { name: folderFirst ? folderName(folderFirst) : '' }),
+        body: t('library.archiving.body'),
+        action: t('library.archive'),
+      })
+      if (!asked) return
       const archived = archiveSongs(store, catalog(), ids)
       for (const folder of folders) archiveFolder(store, catalog(), folder.id)
       const [song] = archived
@@ -105,7 +132,13 @@ export function useLibraryActs() {
             : t('library.restoredMany', { count: ids.length }),
         )
     },
-    archiveFolder: (folder: { id: FolderId; name?: string }) => {
+    archiveFolder: async (folder: { id: FolderId; name?: string }) => {
+      const asked = await confirm({
+        title: t('library.archiving.folder', { name: folderName(folder) }),
+        body: t('library.archiving.body'),
+        action: t('library.archive'),
+      })
+      if (!asked) return
       archiveFolder(store, catalog(), folder.id)
       say(
         t('library.folderArchived', { name: folderName(folder) }),

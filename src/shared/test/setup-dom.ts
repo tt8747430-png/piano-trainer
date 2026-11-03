@@ -3,6 +3,7 @@ import { cleanup, configure } from '@testing-library/react'
 import { afterEach, beforeEach, vi } from 'vitest'
 import { i18n } from '@/shared/i18n'
 import { safeLocalStorage } from '@/shared/lib/safe-storage'
+import { confirmQueue } from '@/shared/ui/confirm'
 import { stubIntersectionObserver } from './intersection'
 import { stubMatchMedia } from './match-media'
 import { stubServiceWorker } from './pwa-register'
@@ -53,6 +54,8 @@ export function setUpDom() {
 
   // `globals: false` means Testing Library cannot register its own cleanup.
   afterEach(async () => {
+    // A question a test left open is answered No, so it never shows in the next test.
+    confirmQueue.answer(false)
     cleanup()
     vi.restoreAllMocks()
     // A worker keeps every mock made in it (`isolate: false`): what each was called with, and on,

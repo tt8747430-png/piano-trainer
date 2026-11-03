@@ -20,7 +20,7 @@ import { PublicLibraryProvider } from '@/shared/lib/public-library'
 import { type Services, ServicesProvider } from '@/shared/lib/services'
 import type { SyncRunner } from '@/shared/lib/sync'
 import { ShortcutsProvider } from '@/shared/lib/shortcuts'
-import { Toaster } from '@/shared/ui'
+import { Confirmer, Toaster } from '@/shared/ui'
 import { AudioUnlock } from './providers/AudioUnlock'
 import { ErrorListener } from './providers/ErrorListener'
 import { LocaleSync } from './providers/LocaleSync'
@@ -77,6 +77,7 @@ export function App({
                                   <ShortcutsProvider>
                                     <RouterProvider router={router} />
                                     <Toaster />
+                                    <Confirmer />
                                   </ShortcutsProvider>
                                 </ThemeProvider>
                               </ServicesProvider>

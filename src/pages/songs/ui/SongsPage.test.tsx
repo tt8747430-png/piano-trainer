@@ -15,6 +15,7 @@ import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { markLearned } from '@/features/mark-learned/mark-learned'
 import { createMemoryStorage } from '@/shared/lib'
 import { noteEvents, standardMidiFile } from '@/shared/lib/standard-midi-file'
+import { confirmAsked } from '@/shared/test/confirm'
 import { stubBox } from '@/shared/test/layout'
 
 /** A file chosen in Import's picker. */
@@ -272,6 +273,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs/folders/hymns')
     await rowAction(user, 'Silent Night', 'Archive')
+    await confirmAsked(user, 'Archive', 'Archive “Silent Night”?')
     expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived')
     await waitFor(() =>
       expect(screen.queryByRole('link', { name: /Silent Night/ })).not.toBeInTheDocument(),
@@ -281,6 +283,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
   })
 
   it('archives a song by a swipe to the left, Favourite by a swipe to the right', async () => {
+    const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs/folders/hymns')
     /** A swipe across a song's row, from one point to another. */
     const swipe = async (song: RegExp, from: number, to: number) => {
@@ -297,6 +300,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     await swipe(/Amazing Grace/, 20, 340)
     expect(libraryStore.getState().favourites).toEqual(['amazing'])
     await swipe(/Silent Night/, 340, 20)
+    await confirmAsked(user, 'Archive')
     expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived')
   })
 
@@ -436,6 +440,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs')
     await rowAction(user, 'Hymns', 'Archive folder')
+    await confirmAsked(user, 'Archive', 'Archive the folder “Hymns”?')
     expect(libraryStore.getState().archive[0]).toMatchObject({ kind: 'folder', index: 4 })
     expect(await screen.findByText('“Hymns” archived with its songs')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Undo' }))
@@ -532,6 +537,7 @@ describe('Songs: Select (ADR 0106)', () => {
     // its slot so the bar's buttons never shift as rows are chosen.
     expect(within(bar).getByRole('button', { name: 'Delete' })).toBeDisabled()
     await user.click(within(bar).getByRole('button', { name: 'Archive' }))
+    await confirmAsked(user, 'Archive', 'Archive 2 items?')
     expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived')
     expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
     expect(await screen.findByText('Archived: 2')).toBeInTheDocument()
@@ -548,6 +554,7 @@ describe('Songs: Select (ADR 0106)', () => {
     await user.click(screen.getByRole('checkbox', { name: 'Select Morning' }))
     const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
     await user.click(within(bar).getByRole('button', { name: 'Archive' }))
+    await confirmAsked(user, 'Archive')
     expect(libraryStore.getState().archive).toHaveLength(3)
     expect(await screen.findByText('Archived: 3')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Undo' }))
@@ -621,6 +628,7 @@ describe('Songs: Select (ADR 0106)', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Selected: 1' })).toBeInTheDocument()
     const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
     await user.click(within(bar).getByRole('button', { name: 'Archive' }))
+    await confirmAsked(user, 'Archive')
     expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
     expect(placeOf(libraryStore.getState(), 'silent')).toMatchObject({ folder: 'hymns' })
   })
@@ -699,6 +707,7 @@ describe('Songs: Select (ADR 0106)', () => {
     fireEvent.mouseMove(document, { ...mouse, clientX: 240, clientY: 770 })
     fireEvent.mouseMove(document, { ...mouse, clientX: 241, clientY: 780 })
     fireEvent.mouseUp(document, { button: 0, clientX: 241, clientY: 780 })
+    await confirmAsked(user, 'Archive')
     await waitFor(() => expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived'))
     expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
     expect(await screen.findByText('Archived: 2')).toBeInTheDocument()

@@ -13,15 +13,15 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 
 | Item | What | Round | State | Commits | Notes |
 |---|---|---|---|---|---|
-| A1 | One component per thing | 1 | open | | |
-| A2 | One app bar | 1 | open | | |
+| A1 | One component per thing | 1 | done | | checked: Transpose and the headers are already one each (audit) |
+| A2 | One app bar | 1 | done | | one `ScreenHeader`; after-shots in the round's screenshots |
 | A3 | One rule for actions | 1 | open | | |
 | A4 | Page, sheet or menu | 1 | open | | |
 | A5 | The right control for each choice | 1 | done | 9a33ae70, aa176aa9, d421ec25, d52e781f, 0bce757a (merged 03b5bfc4) | PitchPicker, NotePicker, KeyPicker (circle), KeysChecklist, MenuPicker, PickerRow; strips and edge fades gone. Decided: the Key tab's circle chooses on tap (no Select button: it is the page's own control, not a popover); wedges show the signature as a count; options that don't apply are left out (R30); Quiz/Exercises keys map to each signature's major tonic (D♯/G♯/A♯ roots go, C♭ comes in); Start on is a menu of the scale's notes; the score editor's key keeps its sign grid (ADR 0114) |
 | A6 | Words | 1 | open | | |
 | A7 | Navigation bugs | 1 | in progress | | Back retracing history and modes fixed by A18; the rest of A7 to check |
 | A8 | Shapes and selected states | 1 | open | | |
-| A9 | Every action that loses or hides work | 1 | open | | |
+| A9 | Every action that loses or hides work | 1 | in progress | | `ConfirmDialog` and `confirm()`; Archive asks from every trigger; deletes moved; edit-original's in round 10 (audit) |
 | A10 | Settings map | 1 | in progress | | map in `settings-map.md`; registry `entities/settings/model/registry.ts`; one-home test `app/settings-homes.test.ts`; lesson reading and recording de-duplicated; pages from the registry with A12 |
 | A11 | Favourite and other item acts | 1 | in progress | | the song Settings' Favourite switch removed (♡ on the card, row menus, swipe, Select stay); sweep found no other act as a switch; DESIGN.md pattern left |
 | A12 | Settings layout | 1 | open | | |

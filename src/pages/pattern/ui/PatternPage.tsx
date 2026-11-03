@@ -33,17 +33,8 @@ import {
   RoundButton,
   ScreenHeader,
   type MenuAction,
+  ConfirmDialog,
 } from '@/shared/ui'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/shared/ui/primitives/alert-dialog'
 import { PatternPlay, PatternStaff, usePatternSample } from '@/widgets/pattern-music'
 import { PieceList } from '@/widgets/piece-list'
 
@@ -142,20 +133,15 @@ function usePatternActions(pattern: BookPattern, name: string) {
   const dialogs =
     own === null ? null : (
       <>
-        <AlertDialog open={deleteAsked} onOpenChange={setDeleteAsked}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>{t('patterns.deleting.title', { name })}</AlertDialogTitle>
-              <AlertDialogDescription>{t('patterns.deleting.says')}</AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>{t('patterns.deleting.cancel')}</AlertDialogCancel>
-              <AlertDialogAction variant="destructive" onClick={() => remove(own)}>
-                {t('patterns.deleting.confirm')}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <ConfirmDialog
+          open={deleteAsked}
+          onOpenChange={setDeleteAsked}
+          title={t('patterns.deleting.title', { name })}
+          body={t('patterns.deleting.says')}
+          action={t('patterns.deleting.confirm')}
+          cancel={t('patterns.deleting.cancel')}
+          onConfirm={() => remove(own)}
+        />
       </>
     )
   const said = (
