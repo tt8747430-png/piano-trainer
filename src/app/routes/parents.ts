@@ -104,7 +104,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/settings/on-screen-piano': settingsPage,
   '/shell/settings/computer-keys': settingsPage,
   '/shell/settings/sound-and-recording': settingsPage,
-  '/shell/settings/data': settingsPage,
+  '/shell/settings/storage': settingsPage,
   '/shell/settings/account': settingsPage,
   '/shell/settings/how-to-use': settingsPage,
   '/shell/settings/connect-piano': settingsPage,

@@ -17,10 +17,12 @@ import {
 } from '@/shared/ui/primitives/alert-dialog'
 import { Button } from '@/shared/ui/primitives/button'
 import { SettingsScreen } from '@/widgets/settings-screen'
+import { SyncGroup } from './SyncGroup'
 
 /**
- * Settings › Account (ADR 0116), as memory-palaces' edit profile reads: the learner's picture at its
- * top; Profile, their name, saved once changed; Sign-in, their email and Change password; Sign out,
+ * Settings › Account (ADR 0116, A15), as memory-palaces' edit profile reads: the learner's picture at
+ * its top; Profile, their name, saved once changed, their email and Change password; Sync, its one
+ * home (where it stands, Sync now, what syncs); Sign out,
  * a row asking first (on this device, always); and Delete account…, a red row asking for their email,
  * its 30 days' grace told in the asking. A guest is offered Sign in and Create an account.
  */
@@ -38,7 +40,7 @@ export function AccountSettingsPage() {
           <Group title={t('accountPage.profileGroup')}>
             <NameForm key={account.id} name={account.name} />
           </Group>
-          <Group flush title={t('accountPage.signInGroup')}>
+          <Group flush>
             {/* The email under its name, broken anywhere a long one must be to fit a phone. */}
             <div className="flex min-h-16 items-center gap-3 py-2 pr-3 pl-2 wrap-anywhere">
               <RowFace
@@ -55,6 +57,7 @@ export function AccountSettingsPage() {
               render={<Link to="/account/new-password" />}
             />
           </Group>
+          <SyncGroup />
           <Group flush>
             <SignOut />
           </Group>

@@ -37,12 +37,11 @@ describe('Settings', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/profile'))
   })
 
-  it('is one grouped list: the account card with Sync and data, General, Playing, Help', async () => {
+  it('is one grouped list: the account card, General, Playing, Help', async () => {
     await renderApp('/settings')
     const card = within(await screen.findByRole('navigation', { name: 'Account' }))
     expect(card.getAllByRole('link').map((link) => link.textContent)).toEqual([
-      'Sign in',
-      'Sync and data',
+      'Sign in Sign in to sync your songs on every device',
     ])
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
       'General',
@@ -55,8 +54,8 @@ describe('Settings', () => {
         .map((row) => row.getAttribute('href'))
         .filter((href) => href?.startsWith('/settings/') || href?.startsWith('/legal/')),
     ).toEqual([
-      '/settings/data',
       '/settings/general',
+      '/settings/storage',
       '/settings/on-screen-piano',
       '/settings/connect-piano',
       '/settings/computer-keys',
@@ -94,11 +93,11 @@ describe('Settings', () => {
     expect(screen.queryByRole('switch', { name: /^Play from the computer keys/ })).toBeNull()
   })
 
-  it('keeps the sync, what the device keeps, the backup and the progress under Sync and data', async () => {
-    await renderApp('/settings/data')
-    await screen.findByRole('region', { name: 'Sync' })
+  it('keeps what the device keeps, the backup and the progress under Storage and backup', async () => {
+    await renderApp('/settings/storage')
+    await screen.findByRole('region', { name: 'Backup' })
+    expect(screen.queryByRole('button', { name: 'Sync now' })).toBeNull()
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
-      'Sync',
       'On this device',
       'Backup',
       'Progress',
@@ -141,7 +140,7 @@ describe('Settings', () => {
 
   it('says what a backup holds beside its heading, never in a line under it', async () => {
     const user = userEvent.setup()
-    await renderApp('/settings/data')
+    await renderApp('/settings/storage')
     const backup = await screen.findByRole('region', { name: 'Backup' })
     expect(backup).not.toHaveTextContent('live on this device only')
     await user.click(within(backup).getByRole('button', { name: 'About Backup' }))
@@ -225,7 +224,7 @@ describe('Settings', () => {
       '/settings/on-screen-piano',
       '/settings/computer-keys',
       '/settings/sound-and-recording',
-      '/settings/data',
+      '/settings/storage',
     ]) {
       const { unmount } = await renderApp(path, { locale: 'ru' })
       await screen.findByRole('heading', { level: 1 })
@@ -236,7 +235,7 @@ describe('Settings', () => {
 
   it('resets progress only after confirming, then closes the dialog', async () => {
     const user = userEvent.setup()
-    const { progressStore } = await renderApp('/settings/data')
+    const { progressStore } = await renderApp('/settings/storage')
     act(() => progressStore.setState({ learned: { 'chords:tri': '2026-09-25T10:00:00Z' } }))
     await user.click(await screen.findByRole('button', { name: 'Reset progress' }))
     await user.click(screen.getByRole('button', { name: 'Keep it' }))

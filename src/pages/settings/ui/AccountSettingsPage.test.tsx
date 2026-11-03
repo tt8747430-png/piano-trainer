@@ -14,20 +14,19 @@ async function signedIn(now?: () => number) {
 }
 
 describe('Settings, signed in', () => {
-  it('shows the learner on the account card, leading to their account', async () => {
+  it('shows the learner on the account card, with where the sync stands, leading to their account', async () => {
     await renderApp('/settings', { auth: await signedIn() })
     const card = await screen.findByRole('navigation', { name: 'Account' })
-    const learner = () => within(card).getAllByRole('link')[0]!
-    await waitFor(() => expect(learner()).toHaveTextContent(/Ana\s*ana@example.com/))
+    const learner = () => within(card).getByRole('link')
+    await waitFor(() => expect(learner()).toHaveTextContent(/Ana\s*ana@example.com\s*Synced/))
     expect(learner()).toHaveAttribute('href', '/settings/account')
-    expect(within(card).getByRole('link', { name: /Sync and data/ })).toHaveTextContent(
-      'Up to date',
-    )
+    // Sync now has one home, the Account (A15).
+    expect(screen.queryByRole('button', { name: 'Sync now' })).toBeNull()
   })
 
-  it('syncs now from Sync and data, saying where the sync stands', async () => {
+  it('syncs now from the Account, saying where the sync stands', async () => {
     const user = userEvent.setup()
-    await renderApp('/settings/data', { auth: await signedIn() })
+    await renderApp('/settings/account', { auth: await signedIn() })
     const sync = await screen.findByRole('region', { name: 'Sync' })
     await user.click(await within(sync).findByRole('button', { name: 'Sync now' }))
     expect(await within(sync).findByText(/Last synced/)).toBeVisible()
@@ -36,9 +35,10 @@ describe('Settings, signed in', () => {
 })
 
 describe('Settings › Account', () => {
-  it('shows the learner’s email and Change password under Sign-in', async () => {
+  it('shows the learner’s email and Change password under their name', async () => {
     await renderApp('/settings/account', { auth: await signedIn() })
-    const signIn = await screen.findByRole('region', { name: 'Sign-in' })
+    await screen.findByLabelText('Your name')
+    const signIn = screen.getByRole('link', { name: 'Change password' }).closest('section')!
     expect(signIn).toHaveTextContent(/Email\s*ana@example.com/)
     expect(within(signIn).getByRole('link', { name: 'Change password' })).toHaveAttribute(
       'href',

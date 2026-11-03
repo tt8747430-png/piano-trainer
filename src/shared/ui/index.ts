@@ -38,6 +38,7 @@ export {
   SpeedDialAction,
 } from './FloatingActions'
 export { ActionMenu, type MenuAction } from './ActionMenu'
+export { ActionRow } from './ActionRow'
 export { MoreMenu } from './MoreMenu'
 export { FloatingBar, FloatingBarButton, FloatingBarPlay } from './FloatingBar'
 export { RankMark } from './RankMark'

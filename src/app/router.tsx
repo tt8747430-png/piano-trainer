@@ -169,7 +169,7 @@ const activityRoute = createRoute({
   component: lazyRouteComponent(settingsScreens, 'ActivityPage'),
 })
 // Settings' pages (R20, R22): General, the on-screen piano, the computer keys, sound and recording,
-// sync and data, and the account's.
+// storage and backup, and the account's.
 const generalRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/general',
@@ -190,10 +190,10 @@ const soundRoute = createRoute({
   path: '/settings/sound-and-recording',
   component: lazyRouteComponent(settingsScreens, 'SoundPage'),
 })
-const dataRoute = createRoute({
+const storageRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/settings/data',
-  component: lazyRouteComponent(settingsScreens, 'DataPage'),
+  path: '/settings/storage',
+  component: lazyRouteComponent(settingsScreens, 'StoragePage'),
 })
 // The app's Privacy and Terms (ADR 0116): read signed in or not, linked from Help and the account forms.
 const privacyRoute = createRoute({
@@ -785,7 +785,7 @@ const routeTree = rootRoute.addChildren([
     onScreenPianoRoute,
     computerKeysRoute,
     soundRoute,
-    dataRoute,
+    storageRoute,
     privacyRoute,
     termsRoute,
     accountSettingsRoute,

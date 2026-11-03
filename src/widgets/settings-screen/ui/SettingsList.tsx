@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import {
   Cable,
-  CloudUpload,
+  HardDrive,
   Keyboard,
   LifeBuoy,
   Mic,
@@ -13,13 +13,14 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useMidiSummary } from '@/features/connect-midi'
-import { useAccount, useSync } from '@/shared/lib/account'
-import { Avatar, RowLink, SettingsGroup } from '@/shared/ui'
+import { useAccount } from '@/shared/lib/account'
+import { RowLink, SettingsGroup } from '@/shared/ui'
+import { AccountCard } from './AccountCard'
 import { UpdateRows } from './UpdateRows'
 
 /**
  * Settings' list, as iOS's reads: the account card first, then a row for each page, each its icon in
- * a coloured square (R21): General; Playing (the on-screen piano, a connected piano, the computer
+ * a coloured square (R21): General (General, Storage and backup); Playing (the on-screen piano, a connected piano, the computer
  * keys, sound and recording, R22); Help (How to use, Privacy, Terms) and the app's version;
  * and for an admin, the Admin area. A phone's Settings screen is this list alone; a laptop's keeps it
  * beside the page chosen (`SettingsScreen`), the page shown marked.
@@ -37,6 +38,12 @@ export function SettingsList() {
           icon={Settings2}
           paint="sky"
           render={<Link to="/settings/general" />}
+        />
+        <RowLink
+          title={t('pages.storage')}
+          icon={HardDrive}
+          paint="grass"
+          render={<Link to="/settings/storage" />}
         />
       </SettingsGroup>
       <SettingsGroup flush title={t('groups.playing.label')}>
@@ -98,40 +105,5 @@ export function SettingsList() {
         </SettingsGroup>
       ) : null}
     </div>
-  )
-}
-
-/**
- * The account card: signed out, Sign in and why; signed in, the learner by their initial, leading
- * to their Account. Under it Sync and data, saying where the sync stands.
- */
-function AccountCard() {
-  const { t } = useTranslation('settings')
-  const { account } = useAccount()
-  const { status } = useSync()
-  return (
-    <nav aria-label={t('account.label')} className="flex flex-col card p-1.5">
-      {account ? (
-        <RowLink
-          title={account.name || account.email}
-          detail={account.email}
-          mark={<Avatar name={account.name || account.email} size="row" />}
-          render={<Link to="/settings/account" />}
-        />
-      ) : (
-        <RowLink
-          title={t('account.signIn')}
-          mark={<Avatar name={null} size="row" />}
-          render={<Link to="/account/sign-in" />}
-        />
-      )}
-      <RowLink
-        title={t('groups.data.label')}
-        icon={CloudUpload}
-        paint="grass"
-        value={account ? t(`sync.state.${status.state}`) : undefined}
-        render={<Link to="/settings/data" />}
-      />
-    </nav>
   )
 }

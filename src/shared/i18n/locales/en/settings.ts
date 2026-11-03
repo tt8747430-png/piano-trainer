@@ -9,6 +9,7 @@ export const settings = {
     computerKeys: 'Computer keys',
     sound: 'Sound and recording',
     metronome: 'Metronome',
+    storage: 'Storage and backup',
   },
   // The on-screen piano's page: its groups.
   piano: { look: 'Look', place: 'Position', play: 'Playing', bar: 'Buttons on the keys' },
@@ -56,18 +57,16 @@ export const settings = {
   sections: { general: 'General' },
   groups: {
     playing: { label: 'Playing' },
-    data: { label: 'Sync and data' },
     help: { label: 'Help' },
   },
   account: {
     signIn: 'Sign in',
     label: 'Account',
+    why: 'Sign in to sync your songs on every device',
   },
   sync: {
     label: 'Sync',
-    info: 'While you’re signed in, your songs, progress and settings sync by themselves whenever you’re online. Sync now does it at once.',
     now: 'Sync now',
-    signedOut: 'Sign in to keep your songs, progress and settings on every device.',
     state: {
       idle: 'Up to date',
       syncing: 'Syncing…',
@@ -77,6 +76,17 @@ export const settings = {
     waiting_one: '{{count}} change waiting',
     waiting_other: '{{count}} changes waiting',
     last: 'Last synced {{when}}',
+    what: 'Your songs, folders, takes, progress and settings sync while you’re signed in.',
+    // The account card's one line (A15).
+    line: {
+      synced: 'Synced {{when}}',
+      waiting_one: '{{count}} change waiting',
+      waiting_other: '{{count}} changes waiting',
+      offline: 'Offline',
+      failed: 'Last sync failed',
+      syncing: 'Syncing…',
+      idle: 'Up to date',
+    },
   },
   about: {
     version: 'Version',
@@ -96,7 +106,6 @@ export const settings = {
     title: 'Account',
     profileGroup: 'Profile',
     profile: 'Your name',
-    signInGroup: 'Sign-in',
     email: 'Email',
     save: 'Save',
     saved: 'Saved',

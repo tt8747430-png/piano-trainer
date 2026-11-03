@@ -18,13 +18,12 @@ import {
 } from '@/shared/ui/primitives/alert-dialog'
 import { Button } from '@/shared/ui/primitives/button'
 import { SettingsScreen } from '@/widgets/settings-screen'
-import { SyncFields } from './SyncFields'
 
 /**
- * Settings › Sync and data: the sync (ADR 0116), what this device keeps (and keeping it safe), Backup,
- * and resetting the progress.
+ * Settings › Storage and backup (A15): what this device keeps (and keeping it safe), Backup, and
+ * resetting the progress. Nothing of the account: its Sync is on the Account.
  */
-export function DataPage() {
+export function StoragePage() {
   const { t } = useTranslation('settings')
   const progress = useProgressStoreApi()
   const [confirming, setConfirming] = useState(false)
@@ -33,10 +32,7 @@ export function DataPage() {
     setConfirming(false)
   }
   return (
-    <SettingsScreen title={t('groups.data.label')}>
-      <Group title={t('sync.label')} info={t('sync.info')}>
-        <SyncFields />
-      </Group>
+    <SettingsScreen title={t('pages.storage')}>
       <Group title={t('storage.label')} info={t('storage.info')}>
         <KeepOnDeviceFields />
       </Group>

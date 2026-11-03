@@ -19,7 +19,7 @@ export function StorageFullNotice() {
       detail={t('storageFull.help')}
       onClose={() => setFull(false)}
     >
-      <ButtonLink render={<Link to="/settings/data" />} onClick={() => setFull(false)}>
+      <ButtonLink render={<Link to="/settings/storage" />} onClick={() => setFull(false)}>
         {t('storageFull.settings')}
       </ButtonLink>
     </Notice>

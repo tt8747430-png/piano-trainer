@@ -1,10 +1,10 @@
 export {
   AccountSettingsPage,
-  DataPage,
   GeneralPage,
   ComputerKeysPage,
   OnScreenPianoPage,
   SoundPage,
+  StoragePage,
   SettingsPage,
 } from '@/pages/settings'
 export { HowToUsePage } from '@/pages/how-to-use'
