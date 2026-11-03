@@ -67,9 +67,12 @@ const PRACTICE_PAGES: Readonly<Record<PracticeSettingsFrom, Up>> = {
   exercises: up({ to: '/practice/exercises' }),
   quiz: up({ to: '/practice/quiz' }),
 }
-/** A Practice page's Settings (A24): up to the page its gear was pressed on, else as Settings' pages. */
+/** A Practice page's Settings (A24): up to the page its gear was pressed on, else to Practice (R29:
+ * Settings no longer lists them). */
 const practiceSettings: Parent = (from) =>
-  isPracticeSettingsFrom(from.search.from) ? PRACTICE_PAGES[from.search.from] : settingsPage(from)
+  isPracticeSettingsFrom(from.search.from)
+    ? PRACTICE_PAGES[from.search.from]
+    : up({ to: '/practice' })
 const toSongs: Parent = () => up({ to: '/songs' })
 const toLessons: Parent = () => up({ to: '/', search: { view: 'lessons' } })
 const toCourses: Parent = () => up({ to: '/', search: { view: 'courses' } })

@@ -36,6 +36,14 @@ describe('Practice pages’ Settings (A24, R18)', () => {
     expect(screen.queryByRole('link', { name: 'Progressions' })).toBeNull()
   })
 
+  it('goes up to Practice from a page’s Settings opened without its page', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/settings/progressions')
+    await title('Progressions')
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/practice'))
+  })
+
   it('writes and voices every progression as chosen, its first inversion only where voice-led', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings/progressions')

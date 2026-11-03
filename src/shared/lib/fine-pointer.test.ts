@@ -9,6 +9,11 @@ describe('hasFinePointer', () => {
     expect(hasFinePointer()).toBe(true)
   })
 
+  it('is true on a touch laptop: its main pointer coarse, a trackpad beside it', () => {
+    stubMatchMedia({ dark: false, pointer: 'coarse', anyPointer: 'fine' })
+    expect(hasFinePointer()).toBe(true)
+  })
+
   it('is false on a phone', () => {
     stubMatchMedia({ dark: false, pointer: 'coarse' })
     expect(hasFinePointer()).toBe(false)

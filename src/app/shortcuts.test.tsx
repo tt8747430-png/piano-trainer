@@ -2,10 +2,12 @@ import { stubMatchMedia } from '@/shared/test/match-media'
 import { setKeyboard } from '@/features/set-preference'
 import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { renderApp } from './testing/render-app'
 
 describe('the shell’s shortcuts', () => {
+  // A computer: the letters can play (a phone's case is the keyboard's own test).
+  beforeEach(() => void stubMatchMedia({ dark: false, pointer: 'fine' }))
   it('goes to a place on Alt and its number', async () => {
     const user = userEvent.setup()
     await renderApp('/')

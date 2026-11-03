@@ -1,6 +1,7 @@
+import { stubMatchMedia } from '@/shared/test/match-media'
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import {
   isDegreePiece,
@@ -112,6 +113,8 @@ const namesIn = (toolbar: HTMLElement) =>
     .map((button) => button.getAttribute('aria-label') ?? button.textContent)
 
 describe('the score editor', () => {
+  // A computer: the letters can play (a phone's case is the keyboard's own test).
+  beforeEach(() => void stubMatchMedia({ dark: false, pointer: 'fine' }))
   it('opens on the upper staff of a song with no tune, Alt with the arrows choosing the row it writes', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong({ hands: SILENT_HANDS }) })

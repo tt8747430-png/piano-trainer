@@ -56,6 +56,14 @@ describe('LiveKeyboard', () => {
     expect(audio.pedals().sustain).toBe(true)
   })
 
+  it('a phone ignores a saved typing setting: letters play nothing', () => {
+    stubMatchMedia({ dark: false, pointer: 'coarse' })
+    const { audio, settingsStore } = setUp()
+    act(() => setKeyboard(settingsStore, { typing: true }))
+    fireEvent.keyDown(window, { code: 'KeyA', key: 'a' })
+    expect(audio.voice).toEqual([])
+  })
+
   it('sounds a typed key until it comes up', () => {
     const { audio, settingsStore } = setUp()
     act(() => setKeyboard(settingsStore, { typing: true }))

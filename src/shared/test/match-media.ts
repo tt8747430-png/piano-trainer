@@ -8,10 +8,13 @@ import { vi } from 'vitest'
 export function stubMatchMedia({
   dark,
   pointer,
+  anyPointer = pointer,
 }: {
   dark: boolean
-  /** Unset, a pointer query answers as any other (the dark flag). */
+  /** The main pointer (`pointer:`); unset, a pointer query answers as any other (the dark flag). */
   pointer?: 'fine' | 'coarse'
+  /** Any pointer (`any-pointer:`), a touch laptop's trackpad beside its screen; else as `pointer`. */
+  anyPointer?: 'fine' | 'coarse'
 }) {
   const state = { dark }
   const listeners = new Set<() => void>()
@@ -19,6 +22,7 @@ export function stubMatchMedia({
   const matchMedia = (media: string) => ({
     media,
     get matches() {
+      if (anyPointer && media.includes('any-pointer')) return anyPointer === 'fine'
       return pointer && media.includes('pointer') ? pointer === 'fine' : state.dark
     },
     onchange: null,
