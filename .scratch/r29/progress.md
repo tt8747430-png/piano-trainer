@@ -22,14 +22,14 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A7 | Navigation bugs | 1 | done | | Back retracing fixed by A18; the sidebar compares paths only (`includeSearch: false`), so Learn stays current on its tabs; `NavTabs` already marks its own tab; a test per tab |
 | A8 | Shapes and selected states | 1 | open | | |
 | A9 | Every action that loses or hides work | 1 | in progress | | `ConfirmDialog` and `confirm()`; Archive asks from every trigger; deletes moved; edit-original's in round 10 (audit) |
-| A10 | Settings map | 1 | in progress | | map in `settings-map.md`; registry `entities/settings/model/registry.ts`; one-home test `app/settings-homes.test.ts`; lesson reading and recording de-duplicated; pages from the registry with A12 |
+| A10 | Settings map | 1 | done | | map in `settings-map.md`; registry `entities/settings/model/registry.ts`; one-home test `app/settings-homes.test.ts`; lesson reading and recording de-duplicated; pages from the registry with A12 |
 | A11 | Favourite and other item acts | 1 | in progress | | the song Settings' Favourite switch removed (♡ on the card, row menus, swipe, Select stay); sweep found no other act as a switch; DESIGN.md pattern left |
-| A12 | Settings layout | 1 | open | | |
-| A13 | Pictures and icons in settings | 1 | open | | |
-| A14 | Name the settings pages after what the learner sees | 1 | open | | |
-| A15 | Account, sync and this device's data | 1 | open | | |
-| A16 | Arrows and chevrons | 1 | open | | |
-| A17 | Destructive and command rows | 1 | open | | |
+| A12 | Settings layout | 1 | done | 045617ab | two panes from 64rem, one column on a phone; wide `/settings` replaces to `/settings/general` |
+| A13 | Pictures and icons in settings | 1 | done | 7031d3d9 | picture choices for looks (key size, length, names, position, fold, swipe, theme); coloured icon rows |
+| A14 | Name the settings pages after what the learner sees | 1 | done | 51f697f0 | On-screen piano, Connect a piano, Computer keys, Sound and recording; "Piano position", "Fold the keys"; the on-screen piano's accessible name stays "Keyboard" for now (27 test files) |
+| A15 | Account, sync and this device's data | 1 | done | 144f4b56, a8e46a3a, 23b924b5 | account card with one status line; Sync on the Account; Storage and backup its own page; Sync and data gone |
+| A16 | Arrows and chevrons | 1 | done | acebab69 | marks only in the shared rows; a test fails a page importing them; prev/next lesson arrows count as movement |
+| A17 | Destructive and command rows | 1 | done | 9bc0e55a | destructive acts last and alone in red, through `ConfirmDialog`; Sign out a red row of its own; the song's Reset/Delete keeps its own dialog for its focus return (to move with B6) |
 | A18 | Navigation audit | 1 | done | dcaa63b6, b24068b9, 66fd1593, d9d5883e, 4ecda26d (merged ed9a4e1d) | parents table + test, `useUp` (history.back when the entry before is the parent, so it isn't doubled), `useSetSearch` (46 sites in `back-as-up/navigates.md`), a Back test per place, the Search palette. The Dialog primitive was taken from `shadcn add --view` by hand (the CLI would run npm install) |
 | A19 | Laptop layout audit | 1 | open | | |
 | A20 | Buttons, rows and headings on every explorer | 2 | open | | |
