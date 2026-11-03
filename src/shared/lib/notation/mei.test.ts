@@ -347,6 +347,13 @@ describe('scoreToMei, a note’s marks and the options', () => {
     ).toHaveLength(2)
   })
 
+  it('prints no time signature where the music asks, as a question’s staff (A41)', () => {
+    const question = notate(music([c(0)], { chords: [], timeHidden: true }))
+    expect(question.timeHidden).toBe(true)
+    expect(scoreToMei(question)).toMatch(/<scoreDef [^>]*meter\.visible="false"/)
+    expect(scoreToMei(plain([c(0)]))).not.toContain('meter.visible')
+  })
+
   it('prints 4/4 as common time where the music asks, and any other meter by its figures (ADR 0114)', () => {
     const common = notate(music([c(0)], { chords: [], timeSymbol: true }))
     expect(common.timeSymbol).toBe(true)

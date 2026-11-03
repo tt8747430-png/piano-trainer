@@ -103,7 +103,7 @@ export function scoreToMei(score: Score, options: MeiOptions = {}): string {
     time !== null &&
     timeBefore.count === time.count &&
     timeBefore.unit === time.unit
-  const scoreDef = `<scoreDef ${meterAttrs(time, score)}${continues ? ' meter.visible="false"' : ''} key.sig="${keySig(
+  const scoreDef = `<scoreDef ${meterAttrs(time, score)}${continues || score.timeHidden ? ' meter.visible="false"' : ''} key.sig="${keySig(
     keySignature(first?.key ?? score.key),
   )}"><staffGrp>${single.map(staffDef).join('')}${
     piano.length > 1

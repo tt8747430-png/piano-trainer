@@ -32,7 +32,7 @@ describe('A trainer', () => {
     const user = userEvent.setup()
     await renderApp('/practice/quiz/chords')
     expect(await screen.findByRole('heading', { level: 1, name: 'Chords' })).toBeInTheDocument()
-    expect(screen.getByRole('radio', { name: 'Cards' })).toBeChecked()
+    expect(screen.getByRole('radio', { name: 'Flashcards' })).toBeChecked()
     expect(screen.getByRole('combobox', { name: /^Level/ })).toHaveTextContent(
       'The main chords of C',
     )

@@ -50,8 +50,8 @@ export const quiz: LocaleResources['quiz'] = {
   drill: {
     label: 'Режим',
     flashcards: 'Карточки',
-    quiz: 'Тест',
-    entry: 'Игра',
+    quiz: 'Назови',
+    entry: 'Сыграй',
     ear: 'На слух',
   },
   show: { label: 'Видно', name: 'Название', keys: 'Клавиши', staff: 'Ноты' },

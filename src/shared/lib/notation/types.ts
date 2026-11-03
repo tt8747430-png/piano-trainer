@@ -61,6 +61,8 @@ export interface TimedMusic {
   readonly meter: Meter
   /** 4/4 printed as common time's C, 2/2 as cut time's ¢ (ADR 0114). */
   readonly timeSymbol?: true
+  /** No time signature printed: a question's staff, a chord or a note with no bar to count (A41). */
+  readonly timeHidden?: true
   /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
   readonly tempoUnit?: TempoUnit
   readonly bars: readonly (BarMarks & {
@@ -218,6 +220,8 @@ export interface Score {
   readonly meter: Meter
   /** 4/4 printed as common time's C, 2/2 as cut time's ¢ (ADR 0114). */
   readonly timeSymbol?: true
+  /** No time signature printed: a question's staff, a chord or a note with no bar to count (A41). */
+  readonly timeHidden?: true
   /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
   readonly tempoUnit?: TempoUnit
   /** The staves it writes, top down. */

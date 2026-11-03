@@ -108,7 +108,8 @@ export function RoundStaff({
   const { t } = useTranslation('music')
   const { clef, score } = useMemo(() => {
     const staff = staffOf(question)
-    return { clef: staff.clef, score: notate(staff.music) }
+    // A question is one chord or note, no bar to count: the clef and the notes alone (A41).
+    return { clef: staff.clef, score: notate({ ...staff.music, timeHidden: true }) }
   }, [question])
   return (
     <figure

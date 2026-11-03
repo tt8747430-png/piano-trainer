@@ -46,9 +46,9 @@ export const quiz = {
   // A drill: the four ways Chords and Intervals ask the same things.
   drill: {
     label: 'Drill',
-    flashcards: 'Cards',
-    quiz: 'Quiz',
-    entry: 'Play',
+    flashcards: 'Flashcards',
+    quiz: 'Name it',
+    entry: 'Play it',
     ear: 'By ear',
   },
   // What a flashcard shows; the rest is revealed.

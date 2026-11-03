@@ -34,7 +34,6 @@ import {
 } from '@/shared/lib/music'
 import {
   Dropdown,
-  Fab,
   FloatingActions,
   KeysChecklist,
   Segmented,
@@ -43,6 +42,7 @@ import {
   SwitchRow,
   ToggleChips,
 } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 import { ListSheetRow } from './ListSheetRow'
 
 type ListField = keyof typeof CUSTOM_CHOICES
@@ -345,12 +345,15 @@ export function TrainerSetup({
 
       {/* The one thing to do, always in reach: the floating action. */}
       <FloatingActions>
-        <Fab
-          label={t('quiz:setup.start')}
-          icon={Play}
-          className="[&_svg]:fill-current"
+        {/* Start in words (A41): the one thing to do, a labelled primary button, not a lone ▶. */}
+        <Button
+          size="lg"
+          className="min-h-14 rounded-pill px-7 text-base elevation-2 [&_svg]:fill-current"
           onClick={onStart}
-        />
+        >
+          <Play aria-hidden data-icon="inline-start" />
+          {t('quiz:setup.start')}
+        </Button>
       </FloatingActions>
     </div>
   )
