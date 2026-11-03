@@ -272,8 +272,7 @@ describe('the app shell', () => {
   it('relabels the app as soon as the learner switches to Russian', async () => {
     const user = userEvent.setup()
     await renderApp('/settings/general')
-    await user.click(await screen.findByRole('combobox', { name: 'Language' }))
-    await user.click(await screen.findByRole('option', { name: 'Русский' }))
+    await user.click(await screen.findByRole('radio', { name: 'Русский' }))
     const nav = await screen.findByRole('navigation', { name: 'Основная навигация' })
     expect(within(nav).getByRole('link', { name: 'Обучение' })).toBeInTheDocument()
     expect(document.documentElement.lang).toBe('ru')
