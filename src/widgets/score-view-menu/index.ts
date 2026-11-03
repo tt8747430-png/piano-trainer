@@ -1,4 +1,3 @@
-export { KeysChip } from './ui/KeysChip'
 export { PartChips } from './ui/PartChip'
 export { ScoreViewMenu } from './ui/ScoreViewMenu'
 export { SheetViewFields } from './ui/SheetViewFields'

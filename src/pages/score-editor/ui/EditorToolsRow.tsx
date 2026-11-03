@@ -1,18 +1,16 @@
 import { ChevronDown, Eye } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useFoldKeys } from '@/features/live-keyboard'
 import { PlayerTool, PlayerTools } from '@/widgets/practice-player'
-import { KeysChip, PRINTED_PARTS, ScoreViewMenu, SheetViewFields } from '@/widgets/score-view-menu'
+import { PRINTED_PARTS, ScoreViewMenu, SheetViewFields } from '@/widgets/score-view-menu'
 import { useScoreEditorContext } from '../model/editor-context'
 import { EditorTranspose } from './EditorTranspose'
 
 /**
  * The View, the tools row's first as the Player's is (ADR 0108, 0115): named Sheet music, the score
- * being all the editor shows; its menu the sheet music's part of the View, then the keys' fold.
+ * being all the editor shows; its menu the sheet music's part of the View; the keys are the bar's Piano keys.
  */
 function EditorView({ disabled }: { disabled: boolean }) {
   const { t } = useTranslation(['player', 'music'])
-  const keys = useFoldKeys()
   return (
     <ScoreViewMenu
       trigger={
@@ -30,9 +28,7 @@ function EditorView({ disabled }: { disabled: boolean }) {
       }
       from="tools"
     >
-      <SheetViewFields parts={PRINTED_PARTS}>
-        <KeysChip shown={!keys.folded} onShow={(on) => keys.fold(!on)} />
-      </SheetViewFields>
+      <SheetViewFields parts={PRINTED_PARTS} />
     </ScoreViewMenu>
   )
 }

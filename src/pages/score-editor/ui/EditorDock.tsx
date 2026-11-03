@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next'
 import { DOCK_BUTTON, speedTempo, TempoButton, Transport } from '@/widgets/practice-player'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { RecordButton } from './RecordButton'
-import { RecordingSettings } from './RecordingSettings'
 import { TakesButton } from './TakesButton'
 
 /**
@@ -44,7 +43,6 @@ export function EditorDock() {
           <>
             <RecordButton className={DOCK_BUTTON} />
             <TakesButton className={DOCK_BUTTON} />
-            <RecordingSettings className={DOCK_BUTTON} />
           </>
         )
       }

@@ -6,7 +6,8 @@ import { MidiButton } from '@/features/connect-midi'
 import { barAt } from '@/features/score-editor'
 import { Button } from '@/shared/ui/primitives/button'
 import { ScoreEditToggle } from '@/widgets/mode-switch'
-import { BarTitle } from '@/widgets/practice-player'
+import { useFoldKeys } from '@/features/live-keyboard'
+import { BarTitle, KeysToggle } from '@/widgets/practice-player'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /**
@@ -47,8 +48,10 @@ export function EditorActions({ draft }: { draft?: ReactNode }) {
   const canUndo = useEditorState((state) => state.past.length > 0)
   const canRedo = useEditorState((state) => state.future.length > 0)
   const recording = takes.stage !== 'idle'
+  const keys = useFoldKeys()
   return (
     <>
+      <KeysToggle shown={!keys.folded} onShow={(shown) => keys.fold(!shown)} />
       <MidiButton variant="tool" />
       <Button
         variant="tool"

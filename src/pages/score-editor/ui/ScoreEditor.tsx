@@ -32,7 +32,7 @@ import { SelectionActions } from './SelectionActions'
 import { EditorActions, EditorLead } from './EditorHeader'
 import { EditorToolsRow } from './EditorToolsRow'
 import { EditorKeyboard } from './EditorKeyboard'
-import { KeysToggle, NoteToolbar, PalettePanel, PaletteSheet } from './EditorPalette'
+import { NoteToolbar, PalettePanel, PaletteSheet } from './EditorPalette'
 import { EditorSheet } from './EditorSheet'
 import { FieldDocked } from './field-docked'
 import { OpenField } from './OpenField'
@@ -222,7 +222,6 @@ function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) 
                   </Button>
                 ) : null
               }
-              end={<KeysToggle />}
             />
           ) : null}
           <div className="relative flex min-h-0 flex-1 flex-col">

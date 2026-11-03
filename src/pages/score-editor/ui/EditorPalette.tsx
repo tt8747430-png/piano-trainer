@@ -1,11 +1,4 @@
-import {
-  ChevronsLeft,
-  LayoutGrid,
-  List,
-  Piano,
-  SquareChevronDown,
-  SquareChevronUp,
-} from 'lucide-react'
+import { ChevronsLeft, LayoutGrid, List, SquareChevronDown, SquareChevronUp } from 'lucide-react'
 import { MotionConfig, motion } from 'motion/react'
 import {
   useEffect,
@@ -292,25 +285,6 @@ export function NoteToolbar({
   )
 }
 
-/** The Keys' toggle (Flat's piano-keyboard key): the keys docked under the sheet shown or hidden. */
-export function KeysToggle({ className }: { className?: string }) {
-  const { t } = useTranslation('editor')
-  const keys = useFoldKeys()
-  return (
-    <Button
-      variant="ghost"
-      size="icon"
-      aria-label={t('palette.keys')}
-      title={t('palette.keys')}
-      aria-pressed={!keys.folded}
-      className={cn('size-10 shrink-0 rounded-control text-muted-foreground choice', className)}
-      onClick={() => keys.fold(!keys.folded)}
-    >
-      <Piano aria-hidden />
-    </Button>
-  )
-}
-
 /** A category's place in the sheet's scroller: its section's top. */
 const placeOf = (box: HTMLElement, category: PaletteCategory) =>
   box.querySelector<HTMLElement>(`[data-category="${category}"]`)?.offsetTop ?? null
@@ -566,9 +540,7 @@ export function PaletteSheet({
               >
                 {list ? <LayoutGrid aria-hidden /> : <List aria-hidden />}
               </Button>
-            ) : (
-              <KeysToggle />
-            )}
+            ) : null}
             <Button
               variant="ghost"
               size="icon"

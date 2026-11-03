@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/primitives/button'
 import { clockTime } from '../model/clock-time'
 import { useScoreEditorContext } from '../model/editor-context'
-import { RecordingSettings } from './RecordingSettings'
 
 /**
  * A take recording, in place of the dock: the count-in's beat, then the piece's bar and the time; its
@@ -31,7 +30,6 @@ export function RecordingStrip() {
             : `${t('recorder.bar', { n: takes.fromBar + state.bar })} · ${clockTime(state.seconds * 1000)}`}
         </span>
       </p>
-      <RecordingSettings className="shrink-0" />
       <Button onClick={takes.stop}>
         <Square data-icon="inline-start" />
         {t('recorder.stop')}

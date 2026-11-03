@@ -345,10 +345,10 @@ describe('the score editor', () => {
     expect(dynamics).toHaveAttribute('aria-expanded', 'false')
     await user.click(dynamics)
     expect(within(palette).getByRole('button', { name: 'Forte' })).toBeInTheDocument()
-    // The everyday tools stand in the note-entry toolbar over the sheet, the Keys at its end.
+    // The everyday tools stand in the note-entry toolbar over the sheet; the keys are the bar's.
     const toolbar = screen.getByRole('toolbar', { name: 'Note entry' })
     expect(within(toolbar).getByRole('button', { name: 'Quarter note' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Keys' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Piano keys' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Hide the tools' }))
     expect(settingsStore.getState().paletteFolded).toEqual({ panel: true })
     expect(screen.queryByRole('region', { name: 'Tools' })).not.toBeInTheDocument()
@@ -357,30 +357,28 @@ describe('the score editor', () => {
     expect(await screen.findByRole('region', { name: 'Tools' })).toBeInTheDocument()
   })
 
-  it('shows and hides the keys from the palette’s bar, its Keys always there', async () => {
+  it('shows and hides the keys from the bar’s Piano keys, as the Player’s (R29)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    const keys = await screen.findByRole('button', { name: 'Keys' })
+    const keys = await screen.findByRole('button', { name: 'Piano keys' })
     expect(keys).toHaveAttribute('aria-pressed', 'true')
     await user.click(keys)
     expect(settingsStore.getState().keyboard.folded).toBe(true)
-    expect(screen.getByRole('button', { name: 'Keys' })).toHaveAttribute('aria-pressed', 'false')
-    await user.click(screen.getByRole('button', { name: 'Keys' }))
+    expect(screen.getByRole('button', { name: 'Piano keys' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    )
+    await user.click(screen.getByRole('button', { name: 'Piano keys' }))
     expect(settingsStore.getState().keyboard.folded).toBe(false)
   })
 
-  it('folds its keys from their rail, and brings them back from View, as the Player does', async () => {
+  it('folds its keys from their rail, and brings them back from the bar’s Piano keys', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'Hide the keys' }))
     expect(settingsStore.getState().keyboard.folded).toBe(true)
     expect(screen.queryByRole('button', { name: 'Hide the keys' })).not.toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'View' }))
-    await user.click(
-      within(await screen.findByRole('dialog', { name: 'View' })).getByRole('button', {
-        name: 'Keys',
-      }),
-    )
+    await user.click(screen.getByRole('button', { name: 'Piano keys' }))
     expect(settingsStore.getState().keyboard.folded).toBe(false)
     expect(screen.getByRole('button', { name: 'Hide the keys' })).toBeInTheDocument()
   })
@@ -1125,12 +1123,9 @@ describe('the score editor', () => {
     const user = userEvent.setup()
     sizedAs(LANDSCAPE_PHONE)
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    await user.click(await screen.findByRole('button', { name: 'View' }))
-    await user.click(
-      within(await screen.findByRole('dialog', { name: 'View' })).getByRole('button', {
-        name: 'Keys',
-      }),
-    )
+    const keys = await screen.findByRole('button', { name: 'Piano keys' })
+    expect(keys).toHaveAttribute('aria-pressed', 'false')
+    await user.click(keys)
     expect(settingsStore.getState().keyboard.foldedLandscape).toBe(false)
     expect(settingsStore.getState().keyboard.folded).toBe(false)
     expect(screen.getByRole('button', { name: 'Hide the keys' })).toBeInTheDocument()
@@ -1149,7 +1144,7 @@ describe('the score editor', () => {
       within(view)
         .getAllByRole('button')
         .filter((button) => button.hasAttribute('aria-pressed')),
-    ).toHaveLength(4)
+    ).toHaveLength(3)
     // Beside the sheet it stands at its right: no side is kept for it.
     expect(settingsStore.getState()).not.toHaveProperty('paletteSide')
   })
@@ -1205,9 +1200,9 @@ describe('the score editor', () => {
           .getByRole('toolbar', { name: 'Play, move and record' })
           .querySelectorAll('button:not([aria-label^="Tempo"])'),
       ]
-      // Close, then Done beside the title, the one in words (iOS's; R29 Flat's); MIDI, Undo, Redo,
-      // Score settings at the end.
-      expect(bar).toHaveLength(6)
+      // Close, then Done beside the title, the one in words (iOS's; R29 Flat's); Piano keys, MIDI,
+      // Undo, Redo, Score settings at the end.
+      expect(bar).toHaveLength(7)
       expect(bar[1]).toHaveTextContent('Done')
       for (const control of [bar[0]!, ...bar.slice(2), ...dock]) {
         const name = control.getAttribute('aria-label') ?? ''
@@ -1220,7 +1215,7 @@ describe('the score editor', () => {
     },
   )
 
-  it('keeps the Player’s transport, its own three after ‹ Play ›: Record, as Dorico’s transport, the takes and the recording settings (ADR 0114, 0115)', async () => {
+  it('keeps the Player’s transport, its own two after ‹ Play ›: Record, as Dorico’s transport, and the takes; no Sound (ADR 0114, 0115, R29)', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })
     // Named for what it does: Play, the caret moved a note back or on, and a take recorded.
@@ -1232,21 +1227,12 @@ describe('the score editor', () => {
       'Next note',
       'Record',
       'Takes: 0',
-      'Sound',
     ])
     // No take yet: the takes greyed, saying why.
     expect(within(dock).getByRole('button', { name: 'Takes: 0' })).toHaveAttribute(
       'title',
       'Takes: 0 · No takes yet: Record keeps one here.',
     )
-    await user.click(within(dock).getByRole('button', { name: 'Sound' }))
-    const settings = await screen.findByRole('dialog', { name: 'Sound' })
-    // Recording's switches have one home, Settings (R18): the popover leads there.
-    expect(within(settings).getByRole('link', { name: 'Sound and recording' })).toHaveAttribute(
-      'href',
-      '/settings/sound-and-recording',
-    )
-    await user.keyboard('{Escape}')
     // No MIDI keyboard yet: Record's popover says what it needs (ADR 0096).
     await user.click(within(dock).getByRole('button', { name: 'Record' }))
     expect(await screen.findByRole('dialog', { name: 'Record' })).toBeInTheDocument()
@@ -1889,11 +1875,17 @@ describe('the score editor', () => {
     expect(piecesStore.getState().versions.bz4?.sections[0]?.lines[0]).toBe('Fm _ _ _')
   })
 
-  it('keeps the MIDI keyboard first of its bar’s end, where the Player’s is, then Undo and Redo where Setup and More are, Done beside the title, and no Song sheet (ADR 0114, 0115, R29)', async () => {
+  it('keeps Piano keys and the MIDI keyboard first of its bar’s end, where the Player’s are, then Undo, Redo and its gear, Done beside the title (ADR 0114, 0115, R29)', async () => {
     await renderApp('/edit/my-1', { storage: withSong() })
     const midiButton = await screen.findByRole('button', { name: 'MIDI keyboard' })
     const end = midiButton.closest('[data-area="actions"]')
-    expect(namesIn(end as HTMLElement)).toEqual(['MIDI keyboard', 'Undo', 'Redo', 'Score settings'])
+    expect(namesIn(end as HTMLElement)).toEqual([
+      'Piano keys',
+      'MIDI keyboard',
+      'Undo',
+      'Redo',
+      'Score settings',
+    ])
     const lead = document.querySelector<HTMLElement>('[data-area="lead"]')
     expect(namesIn(lead as HTMLElement)).toEqual(['Close', 'Done'])
   })
@@ -1928,7 +1920,6 @@ describe('the score editor', () => {
       'Chord symbols',
       'Lyrics',
       'Finger numbers',
-      'Keys',
     ])
     await user.click(within(view).getByRole('button', { name: 'Finger numbers' }))
     expect(settingsStore.getState().practice.fingerNumbers).toBe(true)
