@@ -1,11 +1,4 @@
-import {
-  Link,
-  Outlet,
-  useChildMatches,
-  useNavigate,
-  useParams,
-  useSearch,
-} from '@tanstack/react-router'
+import { Link, useNavigate, useParams, useSearch } from '@tanstack/react-router'
 import { Info, ListTree, Settings2 } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -90,7 +83,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   useEffect(() => {
     if (search.bar !== undefined) openAt(search.bar)
   }, [search.bar])
-  // More's own (ADR 0108, 0107): the piece's information and its sections as sheets; Export…'s link
+  // Its own acts in Settings (ADR 0108, 0107): the piece's information and its sections as sheets; Export…'s link
   // shares as its page does, saying so where the status line is.
   const [showing, setShowing] = useState<'info' | 'sections' | null>(null)
   const sheetOf = (sheet: 'info' | 'sections') => ({
@@ -128,7 +121,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
     // The score's Settings (round 28): every piece is edited, so every piece has them.
     {
       key: 'settings',
-      label: t('editor:scoreSettings.open'),
+      label: t('editor:scoreSettings.title'),
       icon: Settings2,
       onSelect: () =>
         void navigate({ to: '/edit/$pieceId/settings', params: { pieceId: piece.id } }),
@@ -140,16 +133,12 @@ function PiecePlayer({ piece }: { piece: Piece }) {
         onSelect: () => shared.share(sharing),
       }
     : undefined
-  // Its place in the learner's library (ADR 0106), first in More; a study is in none.
+  // Its place in the learner's library (ADR 0106), first in Settings' acts; a study is in none.
   const favourite = useFavouriteAction(piece.id)
   const library = useSongActions(piece)
   const inLibrary = piece.kind !== 'study'
   const askView = useSettings((state) => selectScoreView(state).askOnOpen)
   const files = useSongExport(piece)
-  // The Player's settings (`/play/$pieceId/settings`, B7) in the Player's place, the song held as it
-  // is played: Back returns to it.
-  const inSettings = useChildMatches().length > 0
-  if (inSettings) return <Outlet />
   return (
     // Its chords drawn in the inversions chosen for them in this piece (ADR 0108).
     <PieceInversions pieceId={piece.id}>
@@ -209,13 +198,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
           status={<ShareSaid said={shared.said} />}
           // Chordify's "Show this when opening a song" (ADR 0108): the View, to choose how it shows.
           openView={askView}
-          onSettings={() =>
-            void navigate({
-              to: '/play/$pieceId/settings',
-              params: { pieceId: piece.id },
-              search: true,
-            })
-          }
+          tracks={tracks}
         />
         <SongInfo piece={piece} performance={performance} {...sheetOf('info')} />
         <SectionsSheet

@@ -45,7 +45,7 @@ async function renderSetup(
       <PatternCard />
     </PlayerSetup>,
   )
-  await user.click(screen.getByRole('button', { name: 'Setup' }))
+  await user.click(screen.getByRole('button', { name: 'Player settings' }))
   return { user, onFigures, onStaves, ...view }
 }
 
@@ -247,7 +247,7 @@ describe('PlayerSetup', () => {
     const { user } = await renderSetup()
     await user.click(screen.getByRole('button', { name: /^Pattern/ }))
     await user.keyboard('{Escape}')
-    await user.click(screen.getByRole('button', { name: 'Setup' }))
+    await user.click(screen.getByRole('button', { name: 'Player settings' }))
     expect(screen.getByText('The music’s own choices')).toBeInTheDocument()
   })
 

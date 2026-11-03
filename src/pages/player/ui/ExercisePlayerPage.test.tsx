@@ -33,7 +33,7 @@ describe('An exercise in the Player', () => {
   it('offers only the choices its rule takes, and writes them to the URL', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/exercise/sixth-diminished-chords')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     expect(screen.queryByRole('radiogroup', { name: 'Octaves' })).not.toBeInTheDocument()
     await user.click(await screen.findByRole('radio', { name: 'Drop 2' }))
     expect(router.state.location.search).toMatchObject({ voicing: 'drop2' })
@@ -46,8 +46,8 @@ describe('An exercise in the Player', () => {
   it('names its mode on screen, and leaves no gap where it has no scale, chord or start', async () => {
     const user = userEvent.setup()
     await renderApp('/play/exercise/sixth-diminished')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    const sheet = await screen.findByRole('dialog', { name: 'Setup' })
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Player settings' })
     expect(within(sheet).getByRole('radiogroup', { name: 'Major or minor' })).toBeInTheDocument()
     expect(within(sheet).getByText('Major or minor')).toBeVisible()
     expect(within(sheet).queryByRole('combobox')).not.toBeInTheDocument()
@@ -57,7 +57,7 @@ describe('An exercise in the Player', () => {
   it('starts a scale on another note, fingered from the thumb', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/exercise/scale')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     await user.click(screen.getByRole('combobox', { name: /^Start on/ }))
     await user.click(await screen.findByRole('option', { name: /^E/ }))
     expect(router.state.location.search).toMatchObject({ start: 2 })
@@ -67,8 +67,8 @@ describe('An exercise in the Player', () => {
   it('sets up a scale’s practice: hands, each hand’s start octave, tempo, metronome and a rest between loops', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/exercise/scale')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    const sheet = await screen.findByRole('dialog', { name: 'Setup' })
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Player settings' })
     expect(pickerValue('Right hand starts on')).toBe('C4')
     // Two octaves from C7 run past the top C: not offered.
     expect(await menuOptions(user, 'Right hand starts on')).not.toContain('C7')
@@ -95,7 +95,7 @@ describe('An exercise in the Player', () => {
   it('swings an exercise that is its own swing, and leaves it out of the URL', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/exercise/two-five-one-scale')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     const swing = screen.getByRole('radiogroup', { name: 'Swing' })
     expect(within(swing).getByRole('radio', { name: 'Medium' })).toBeChecked()
     await user.click(within(swing).getByRole('radio', { name: 'Straight' }))
@@ -109,7 +109,7 @@ describe('An exercise in the Player', () => {
     const { router } = await renderApp('/practice/exercises')
     await user.click(await screen.findByRole('link', { name: /^Arpeggios from the 3rd / }))
     await screen.findByRole('heading', { name: /^Arpeggios from the 3rd: / })
-    await user.click(screen.getByRole('button', { name: 'Setup' }))
+    await user.click(screen.getByRole('button', { name: 'Player settings' }))
     await user.click(await screen.findByRole('radio', { name: 'Light' }))
     await user.keyboard('{Escape}')
     await user.click(await screen.findByRole('button', { name: 'Close' }))

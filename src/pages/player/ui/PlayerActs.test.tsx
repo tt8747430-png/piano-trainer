@@ -33,19 +33,16 @@ function withSong() {
 
 type User = ReturnType<typeof userEvent.setup>
 
-/** Opens the bar's More and reads its actions, in order. */
-async function moreActions(user: User) {
-  await user.click(await screen.findByRole('button', { name: 'More' }))
-  const menu = await screen.findByRole('menu', { name: 'More' })
-  // Each by its name, the reason a greyed one gives left out.
-  return within(menu)
-    .getAllByRole('menuitem')
-    .map((action) =>
-      [...action.childNodes]
-        .filter((part) => !(part instanceof HTMLElement && part.hidden))
-        .map((part) => part.textContent)
-        .join(''),
-    )
+/** Opens the Player's Settings and reads the acts on its music, in order. */
+async function moreActions(user: User, settings = 'Player settings', group = 'This music') {
+  await user.click(await screen.findByRole('button', { name: settings }))
+  const sheet = await screen.findByRole('dialog', { name: settings })
+  return (
+    within(within(sheet).getByRole('region', { name: group }))
+      .getAllByRole('button')
+      // Each by its name, the reason a greyed one gives left out.
+      .map((act) => (act.textContent ?? '').replace(act.title, ''))
+  )
 }
 
 /** Opens More's Export… and chooses one of its rows, by its title. */
@@ -58,10 +55,11 @@ async function exportAs(user: User, row: string) {
   await user.click(button)
 }
 
-/** Opens More and chooses one of its actions. */
-async function chooseMore(user: User, action: string) {
-  await user.click(await screen.findByRole('button', { name: 'More' }))
-  await user.click(await screen.findByRole('menuitem', { name: action }))
+/** Opens the Player's Settings and chooses one of the acts on its music. */
+async function chooseMore(user: User, action: string, settings = 'Player settings') {
+  await user.click(await screen.findByRole('button', { name: settings }))
+  const sheet = await screen.findByRole('dialog', { name: settings })
+  await user.click(within(sheet).getByRole('button', { name: action }))
 }
 
 /** The files the browser is handed to save, as a download hands them: each one's name and bytes. */
@@ -138,16 +136,20 @@ function firstNoteOn(bytes: Uint8Array): number {
   return first
 }
 
-describe('the Player’s More (ADR 0108)', () => {
+describe('the acts on the music in the Player’s Settings (R29)', () => {
   const LIBRARY = ['Add to favourites', 'Move to…', 'Archive']
   it.each([
     [
       'a song',
       '/play/bz5',
-      [...LIBRARY, 'Song information', 'Sections', 'Settings…', 'Print', 'Export…'],
+      [...LIBRARY, 'Song information', 'Sections', 'Score settings', 'Print', 'Export…'],
     ],
     // A study is in no library (ADR 0106).
-    ['a study', '/play/ex3', ['Study information', 'Sections', 'Settings…', 'Print', 'Export…']],
+    [
+      'a study',
+      '/play/ex3',
+      ['Study information', 'Sections', 'Score settings', 'Print', 'Export…'],
+    ],
     ['a walk', '/play/walk?root=D&kind=dorian', ['Print', 'Export…']],
     ['an exercise', '/play/exercise/hanon', ['Print', 'Export…']],
   ])('lists what %s has', async (_music, path, actions) => {
@@ -188,7 +190,7 @@ describe('the Player’s More (ADR 0108)', () => {
       'Archive',
       'Song information',
       'Sections',
-      'Settings…',
+      'Score settings',
       'Print',
       'Export…',
     ])
@@ -246,7 +248,7 @@ describe('the Player’s More (ADR 0108)', () => {
     expect(screen.queryByText(/^Link copied/)).not.toBeInTheDocument()
   })
 
-  it('keeps a piece among the favourites, moves it into a new folder and archives it, from More (ADR 0106)', async () => {
+  it('keeps a piece among the favourites, moves it into a new folder and archives it, from its Settings (ADR 0106)', async () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/play/bz5')
     await chooseMore(user, 'Add to favourites')
@@ -300,7 +302,7 @@ describe('the Player’s More (ADR 0108)', () => {
     ).toBeInTheDocument()
   })
 
-  it('opens a chord’s sheet from the song’s information, and goes back to More as it closes', async () => {
+  it('opens a chord’s sheet from the song’s information, and goes back to the Player as it closes', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
     await chooseMore(user, 'Song information')
@@ -318,7 +320,7 @@ describe('the Player’s More (ADR 0108)', () => {
     )
     await user.keyboard('{Escape}')
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
-    expect(screen.getByRole('button', { name: 'More' })).toHaveFocus()
+    expect(screen.getByRole('button', { name: 'Player settings' })).toHaveFocus()
   })
 
   it('says the key the Setup plays it in, its chords in that key', async () => {
@@ -428,8 +430,7 @@ describe('the Player’s More (ADR 0108)', () => {
     const user = userEvent.setup()
     await renderApp('/play/silent', { locale: 'ru' })
     const saved = catchDownloads()
-    await user.click(await screen.findByRole('button', { name: 'Ещё' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Экспорт…' }))
+    await chooseMore(user, 'Экспорт…', 'Настройки плеера')
     const sheet = await screen.findByRole('dialog', { name: 'Экспорт' })
     const midi = within(sheet).getByText('MIDI', { exact: true }).closest('button')
     if (!midi) throw new Error('MIDI is a row of Export')
@@ -442,13 +443,13 @@ describe('the Player’s More (ADR 0108)', () => {
     expect(text).not.toContain('Right hand')
   })
 
-  it('reads in Russian, its menu and the song’s information', async () => {
+  it('reads in Russian, its Settings and the song’s information', async () => {
     const user = userEvent.setup()
     await renderApp('/play/my-1', { storage: withSong(), locale: 'ru' })
-    await user.click(await screen.findByRole('button', { name: 'Ещё' }))
-    await screen.findByRole('menu', { name: 'Ещё' })
+    await user.click(await screen.findByRole('button', { name: 'Настройки плеера' }))
+    await screen.findByRole('dialog', { name: 'Настройки плеера' })
     expect(untranslated(document.body)).toEqual([])
-    await user.click(screen.getByRole('menuitem', { name: 'О песне' }))
+    await user.click(screen.getByRole('button', { name: 'О песне' }))
     await screen.findByRole('dialog', { name: 'О песне' })
     expect(untranslated(document.body)).toEqual([])
   })

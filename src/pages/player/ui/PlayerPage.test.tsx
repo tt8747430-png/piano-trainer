@@ -47,7 +47,7 @@ describe('Player', () => {
     async (_size, query) => {
       sizedAs(query)
       await renderApp('/play/bz5')
-      await screen.findByRole('button', { name: 'Setup' })
+      await screen.findByRole('button', { name: 'Player settings' })
       // Close, then the tools and Edit at the end, as the editor's bar has Done; the title is on the
       // sheet. The View is the tools row's, under the bar (ADR 0108).
       const controls = [
@@ -60,9 +60,7 @@ describe('Player', () => {
         'Edit',
         'Piano keys',
         'MIDI keyboard',
-        'Setup',
         'Player settings',
-        'More',
       ])
       // Every control is its icon alone.
       for (const control of controls) {
@@ -190,12 +188,34 @@ describe('Player', () => {
     expect(dock.compareDocumentPosition(top) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
   })
 
-  it('opens its settings from the gear, a song’s tracks named, Only the chords playing the chords alone (B7)', async () => {
+  it('opens its one Settings from the gear: the music’s choices, how the Player works and this music’s acts (R29)', async () => {
     const user = userEvent.setup()
-    const { audio, router, settingsStore } = await renderApp('/play/romashki?tempo=36')
+    const { audio, settingsStore } = await renderApp('/play/romashki?tempo=36')
     await user.click(await screen.findByRole('button', { name: 'Player settings' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/play/romashki/settings'))
-    expect(await screen.findByRole('heading', { level: 1, name: 'Player' })).toBeInTheDocument()
+    const sheet = await screen.findByRole('dialog', { name: 'Player settings' })
+    const works = within(sheet).getByRole('region', { name: 'How the Player works' })
+    expect(
+      within(works)
+        .getAllByRole('button')
+        .map((row) => row.textContent),
+    ).toEqual(['Audio playback', 'Playback', 'Display'])
+    const acts = within(sheet).getByRole('region', { name: 'This music' })
+    expect(
+      within(acts)
+        .getAllByRole('button')
+        .map((row) => row.textContent),
+    ).toEqual([
+      'Add to favourites',
+      'Move to…',
+      'Archive',
+      'Song information',
+      'Sections',
+      'Score settings',
+      'Print',
+      'Export…',
+    ])
+    await user.click(within(works).getByRole('button', { name: 'Audio playback' }))
+    expect(await screen.findByRole('dialog', { name: 'Audio playback' })).toBeInTheDocument()
     const labels = [...document.querySelectorAll('[data-slot="slider-label"]')].map(
       (label) => label.textContent,
     )
@@ -205,10 +225,11 @@ describe('Player', () => {
       recording: 0,
       staves: { treble: 100, bass: 100 },
     })
-    // Back to the song as it was played.
+    // Back to the first page, then away, the song as it was played.
     await user.click(screen.getByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/play/romashki'))
-    expect(router.state.location.search).toMatchObject({ tempo: 36 })
+    expect(await screen.findByRole('dialog', { name: 'Player settings' })).toBeInTheDocument()
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     expect(audio.recordings).toEqual([])
     expect(audio.played.length).toBeGreaterThan(0)
@@ -259,7 +280,7 @@ describe('Player', () => {
     const { audio } = await renderApp('/play/romashki?key=E')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     expect(audio.recordings).toEqual([])
-    await user.click(screen.getByRole('button', { name: 'Setup' }))
+    await user.click(screen.getByRole('button', { name: 'Player settings' }))
     const recording = await screen.findByRole('switch', { name: 'Play Recording' })
     expect(recording).not.toBeChecked()
     expect(recording).toHaveAttribute('data-disabled')
@@ -279,7 +300,7 @@ describe('Player', () => {
   it('plays no recording with its track’s Play off, written in the URL (A35)', async () => {
     const user = userEvent.setup()
     const { audio, router } = await renderApp('/play/romashki')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     const play = await screen.findByRole('switch', { name: 'Play Recording' })
     expect(play).toBeChecked()
     await user.click(play)
@@ -420,7 +441,7 @@ describe('Player', () => {
   it('changes swing in the Setup sheet, the key kept as the tools row moved it', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5?key=A')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     const swing = await screen.findByRole('radiogroup', { name: 'Swing' })
     expect(within(swing).getByRole('radio', { name: 'Straight' })).toBeChecked()
     await user.click(within(swing).getByRole('radio', { name: 'Hard' }))
@@ -430,7 +451,7 @@ describe('Player', () => {
   it('sets up a chord chart’s staves, then its accompaniment from the chords (A35)', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     const staves = await screen.findByRole('group', { name: 'Staves' })
     expect(
       within(staves)
@@ -448,7 +469,7 @@ describe('Player', () => {
     if (!score) throw new Error('no piece is a score')
     const user = userEvent.setup()
     await renderApp(`/play/${score.id}`)
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     expect(await screen.findByRole('group', { name: 'Staves' })).toBeInTheDocument()
     expect(screen.queryByRole('region', { name: 'Accompaniment from the chords' })).toBeNull()
     expect(screen.getByRole('region', { name: 'How it plays' })).toBeInTheDocument()
@@ -461,7 +482,7 @@ describe('Player', () => {
     if (!withTune) throw new Error('no piece has a tune')
     const user = userEvent.setup()
     const { router } = await renderApp(`/play/${withTune.id}`)
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     await user.click(await screen.findByRole('switch', { name: 'Show Staff 1' }))
     expect(router.state.location.search).toMatchObject({ staves: 't01s0' })
     await user.click(screen.getByRole('switch', { name: 'Play Lower staff' }))
@@ -505,7 +526,7 @@ describe('Player', () => {
   it('speaks Russian on its screen, its Setup and its pattern list', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5', { locale: 'ru' })
-    await user.click(await screen.findByRole('button', { name: 'Параметры' }))
+    await user.click(await screen.findByRole('button', { name: 'Настройки плеера' }))
     expect(untranslated(document.body)).toEqual([])
     await user.click(screen.getByRole('button', { name: /^Фактура/ }))
     expect(untranslated(document.body)).toEqual([])
@@ -514,7 +535,7 @@ describe('Player', () => {
   it('offers no walk through the keys for a song', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     expect(screen.queryByRole('combobox', { name: 'In all 12 keys' })).not.toBeInTheDocument()
   })
 
@@ -602,8 +623,8 @@ describe('Player', () => {
     await user.click(within(view).getByRole('button', { name: 'Chord positions' }))
     expect(settingsStore.getState().practice.positions).toBe(true)
     await user.keyboard('{Escape}')
-    await user.click(screen.getByRole('button', { name: 'Setup' }))
-    const setup = await screen.findByRole('dialog', { name: 'Setup' })
+    await user.click(screen.getByRole('button', { name: 'Player settings' }))
+    const setup = await screen.findByRole('dialog', { name: 'Player settings' })
     expect(within(setup).queryByRole('button', { name: 'Chord positions' })).not.toBeInTheDocument()
     // The count-in and the click are the transport's Sound's alone (ADR 0105).
     const playing = within(setup).getByRole('region', { name: 'Accompaniment from the chords' })

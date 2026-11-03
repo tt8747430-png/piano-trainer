@@ -17,7 +17,7 @@ describe('A progression in the Player', () => {
   it('changes the chord size and the key in the Setup sheet', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/progression?p=ii-V-I&key=Bb')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     await user.click(await screen.findByRole('radio', { name: '7ths' }))
     expect(router.state.location.search).toMatchObject({ chordSize: 'sevenths' })
     expect(
@@ -34,7 +34,7 @@ describe('A progression in the Player', () => {
     const { router, audio } = await renderApp(
       '/play/progression?p=ii-V-I&key=C&chordSize=sevenths&hands=rh',
     )
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     expect(screen.getByRole('radio', { name: 'Root' })).toBeChecked()
     await user.click(screen.getByRole('radio', { name: '1st' }))
     expect(router.state.location.search).toMatchObject({ inversion: 1 })
@@ -53,7 +53,7 @@ describe('A progression in the Player', () => {
     const { router, audio } = await renderApp(
       '/play/progression?p=ii-V-I&key=C&chordSize=sevenths&hands=rh&inversion=1',
     )
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     await user.click(screen.getByRole('switch', { name: /Voice leading/ }))
     expect(router.state.location.search).toMatchObject({ inversion: 1, nearest: false })
     await user.keyboard('{Escape}')
@@ -73,7 +73,7 @@ describe('A progression in the Player', () => {
   it('fades the inversion under a pattern that plays its own shapes, saying why beside it', async () => {
     const user = userEvent.setup()
     await renderApp('/play/progression?p=ii-V-I&key=C&pattern=flow')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     expect(screen.getByRole('radio', { name: '1st' })).toHaveAttribute('data-disabled')
     expect(screen.queryByText('This pattern plays its own shapes.')).toBeNull()
     await user.click(screen.getByRole('button', { name: 'About Inversion' }))
@@ -85,7 +85,7 @@ describe('A progression in the Player', () => {
   it('walks the progression through the keys chosen in the Setup, titled by the walk', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/progression?p=ii-V-I&key=C&chordSize=sevenths')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     await user.click(screen.getByRole('combobox', { name: 'In all 12 keys' }))
     await user.click(await screen.findByRole('option', { name: 'Chromatically, rising' }))
     expect(router.state.location.search).toMatchObject({ walk: 'semitones-up' })
@@ -130,7 +130,7 @@ describe('A progression in the Player', () => {
       return storage
     }
     const openPicker = async (user: ReturnType<typeof userEvent.setup>) => {
-      await user.click(await screen.findByRole('button', { name: 'Setup' }))
+      await user.click(await screen.findByRole('button', { name: 'Player settings' }))
       await user.click(screen.getByRole('button', { name: /^Pattern/ }))
       return screen.getByRole('listbox', { name: 'Pattern' })
     }
@@ -175,7 +175,7 @@ describe('A progression in the Player', () => {
     it('plays its own pattern for one of the learner’s since deleted', async () => {
       const user = userEvent.setup()
       await renderApp('/play/progression?p=ii-V-I&pattern=my-7', { storage: saved() })
-      await user.click(await screen.findByRole('button', { name: 'Setup' }))
+      await user.click(await screen.findByRole('button', { name: 'Player settings' }))
       expect(screen.getByRole('button', { name: /^Pattern.*Whole notes/ })).toBeInTheDocument()
     })
   })

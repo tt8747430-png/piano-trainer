@@ -11,6 +11,7 @@ import {
   selectPractice,
   selectScoreView,
   selectSound,
+  type SpeedStep,
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
@@ -28,8 +29,7 @@ import { formatPercent, useLocale } from '@/shared/i18n'
 import { PEDAL_PLAYS } from '@/shared/lib/schedule'
 import {
   RowLink,
-  Segmented,
-  SettingField,
+  ChoiceCard,
   SettingRows,
   SettingsGroup,
   SheetLayoutField,
@@ -91,56 +91,158 @@ function VolumeSlider({
  * Display: the count-in, the cursor, the layout, the keys and the finger numbers. Practice: the other
  * hand's look and its Wait-mode accompaniment (A35). Pedal: as written, off, or automatic (A27).
  */
-export function PlayerSettings({ tracks }: { tracks: readonly VolumeTrack[] }) {
+/** The volumes of this music's staves, its recording and the click (the Player's Settings › Volume). */
+export function PlayerVolumes({ tracks }: { tracks: readonly VolumeTrack[] }) {
+  const { t } = useTranslation(['player', 'music'])
+  const settings = useSettingsStoreApi()
+  const sound = useSettings(selectSound)
+  const recording = tracks.some((track) => track.id === 'recording')
+  return (
+    <SettingsGroup title={t('settingsPage.audio')} info={t('settingsPage.audioInfo')}>
+      <SettingRows>
+        {tracks.map(({ id, label }) =>
+          id === 'recording' ? (
+            <VolumeSlider
+              key={id}
+              label={label}
+              setting="sound.recording"
+              value={sound.recording}
+              onChange={(percent) => setSound(settings, { recording: percent })}
+            />
+          ) : (
+            <VolumeSlider
+              key={id}
+              label={label}
+              setting="sound.staves"
+              value={sound.staves[id] ?? 100}
+              onChange={(percent) => setStaffVolume(settings, id, percent)}
+            />
+          ),
+        )}
+        <VolumeSlider
+          label={t('sound.click')}
+          setting="sound.click"
+          value={sound.click}
+          onChange={(percent) => setSound(settings, { click: percent })}
+        />
+      </SettingRows>
+      {recording ? (
+        <Button
+          variant="outline"
+          className="min-h-11 self-start rounded-pill px-4 text-base"
+          onClick={() => onlyTheChords(settings)}
+        >
+          {t('sound.onlyChords')}
+        </Button>
+      ) : null}
+    </SettingsGroup>
+  )
+}
+
+/** What the sheet shows, every song (the Player's Settings › Display). */
+export function PlayerDisplay() {
+  const { t } = useTranslation(['player', 'music'])
+  const settings = useSettingsStoreApi()
+  const practice = useSettings(selectPractice)
+  const view = useSettings(selectScoreView)
+  return (
+    <>
+      <div data-setting="scoreView.layout" className="card px-5 py-4">
+        <SheetLayoutField
+          value={view.layout}
+          onChange={(layout) => setScoreView(settings, { layout })}
+        />
+      </div>
+      <SettingsGroup flush>
+        <SwitchRow
+          setting="practice.fingerNumbers"
+          label={t('music:view.parts.fingers')}
+          checked={practice.fingerNumbers}
+          onCheckedChange={(on) => setPracticeToggle(settings, 'fingerNumbers', on)}
+        />
+      </SettingsGroup>
+    </>
+  )
+}
+
+/** How the Player plays, every song (the Player's Settings › Playback): each choice a card (R29). */
+export function PlayerPlayback() {
   const { t } = useTranslation(['player', 'music'])
   const locale = useLocale()
   const settings = useSettingsStoreApi()
-  const sound = useSettings(selectSound)
   const playback = useSettings(selectPlayback)
   const otherHand = useSettings(selectOtherHand)
-  const practice = useSettings(selectPractice)
-  const view = useSettings(selectScoreView)
-  const recording = tracks.some((track) => track.id === 'recording')
   return (
     <>
-      <SettingsGroup title={t('settingsPage.audio')} info={t('settingsPage.audioInfo')}>
-        <SettingRows>
-          {tracks.map(({ id, label }) =>
-            id === 'recording' ? (
-              <VolumeSlider
-                key={id}
-                label={label}
-                setting="sound.recording"
-                value={sound.recording}
-                onChange={(percent) => setSound(settings, { recording: percent })}
-              />
-            ) : (
-              <VolumeSlider
-                key={id}
-                label={label}
-                setting="sound.staves"
-                value={sound.staves[id] ?? 100}
-                onChange={(percent) => setStaffVolume(settings, id, percent)}
-              />
-            ),
-          )}
-          <VolumeSlider
-            label={t('sound.click')}
-            setting="sound.click"
-            value={sound.click}
-            onChange={(percent) => setSound(settings, { click: percent })}
-          />
-        </SettingRows>
-        {recording ? (
-          <Button
-            variant="outline"
-            className="min-h-11 self-start rounded-pill px-4 text-base"
-            onClick={() => onlyTheChords(settings)}
-          >
-            {t('sound.onlyChords')}
-          </Button>
-        ) : null}
+      <ChoiceCard
+        title={t('settingsPage.countdown.label')}
+        info={t('settingsPage.countdown.info')}
+        setting="playback.countdown"
+        value={playback.countdown}
+        options={COUNTDOWNS.map((value) => ({
+          value,
+          label: t(`settingsPage.countdown.${value}`),
+        }))}
+        onChange={(countdown) => setPlayback(settings, { countdown })}
+      />
+      <ChoiceCard
+        title={t('settingsPage.pedal.label')}
+        info={t('settingsPage.pedal.info')}
+        setting="playback.pedal"
+        value={playback.pedal}
+        options={PEDAL_PLAYS.map((value) => ({ value, label: t(`settingsPage.pedal.${value}`) }))}
+        onChange={(pedal) => setPlayback(settings, { pedal })}
+      />
+      <ChoiceCard
+        title={t('settingsPage.cursor.label')}
+        info={t('settingsPage.cursor.info')}
+        setting="playback.cursor"
+        value={playback.cursor}
+        options={CURSORS.map((value) => ({ value, label: t(`settingsPage.cursor.${value}`) }))}
+        onChange={(cursor) => setPlayback(settings, { cursor })}
+      />
+      <ChoiceCard
+        title={t('pace.speedTraining')}
+        info={t('settingsPage.speedStepInfo')}
+        setting="playback.speedStep"
+        value={String(playback.speedStep)}
+        options={SPEED_STEPS.map((step) => ({
+          value: String(step),
+          label: formatPercent(locale, step),
+        }))}
+        onChange={(step) => setPlayback(settings, { speedStep: Number(step) as SpeedStep })}
+      />
+      <ChoiceCard
+        title={t('settingsPage.otherHand.label')}
+        info={t('settingsPage.otherHand.info')}
+        setting="otherHand.look"
+        value={otherHand.look}
+        options={OTHER_HAND_LOOKS.map((value) => ({
+          value,
+          label: t(`settingsPage.otherHand.${value}`),
+        }))}
+        onChange={(look) => setOtherHand(settings, { look })}
+      />
+      <SettingsGroup flush>
+        <SwitchRow
+          setting="otherHand.play"
+          label={t('settingsPage.playOther')}
+          info={t('settingsPage.playOtherInfo')}
+          checked={otherHand.play}
+          onCheckedChange={(play) => setOtherHand(settings, { play })}
+        />
       </SettingsGroup>
+    </>
+  )
+}
+
+/** Every page of the Player's Settings in one column, for a screen with no Player to open them from
+ * (Settings › Player, a song's /settings link). */
+export function PlayerSettings({ tracks }: { tracks: readonly VolumeTrack[] }) {
+  const { t } = useTranslation('player')
+  return (
+    <>
+      <PlayerVolumes tracks={tracks} />
       <SettingsGroup flush>
         <RowLink
           title={t('settingsPage.metronome')}
@@ -149,118 +251,8 @@ export function PlayerSettings({ tracks }: { tracks: readonly VolumeTrack[] }) {
           render={<Link to="/practice/metronome" />}
         />
       </SettingsGroup>
-      <SettingsGroup title={t('settingsPage.speed')}>
-        <SettingField
-          setting="playback.speedStep"
-          label={t('pace.speedTraining')}
-          info={t('settingsPage.speedStepInfo')}
-        >
-          <Segmented
-            label={t('pace.speedTraining')}
-            value={playback.speedStep}
-            options={SPEED_STEPS.map((step) => ({
-              value: step,
-              label: formatPercent(locale, step),
-            }))}
-            onChange={(speedStep) => setPlayback(settings, { speedStep })}
-          />
-        </SettingField>
-      </SettingsGroup>
-      <SettingsGroup title={t('settingsPage.display')}>
-        <SettingRows>
-          <SettingField
-            setting="playback.countdown"
-            label={t('settingsPage.countdown.label')}
-            info={t('settingsPage.countdown.info')}
-          >
-            <Segmented
-              label={t('settingsPage.countdown.label')}
-              value={playback.countdown}
-              options={COUNTDOWNS.map((value) => ({
-                value,
-                label: t(`settingsPage.countdown.${value}`),
-              }))}
-              onChange={(countdown) => setPlayback(settings, { countdown })}
-            />
-          </SettingField>
-          <SettingField
-            setting="playback.cursor"
-            label={t('settingsPage.cursor.label')}
-            info={t('settingsPage.cursor.info')}
-          >
-            <Segmented
-              label={t('settingsPage.cursor.label')}
-              value={playback.cursor}
-              options={CURSORS.map((value) => ({
-                value,
-                label: t(`settingsPage.cursor.${value}`),
-              }))}
-              onChange={(cursor) => setPlayback(settings, { cursor })}
-            />
-          </SettingField>
-          <div data-setting="scoreView.layout">
-            <SheetLayoutField
-              value={view.layout}
-              onChange={(layout) => setScoreView(settings, { layout })}
-            />
-          </div>
-          <SwitchRow
-            setting="scoreView.keys"
-            label={t('settingsPage.keys')}
-            checked={view.keys}
-            onCheckedChange={(keys) => setScoreView(settings, { keys })}
-          />
-          <SwitchRow
-            setting="practice.fingerNumbers"
-            label={t('music:view.parts.fingers')}
-            checked={practice.fingerNumbers}
-            onCheckedChange={(on) => setPracticeToggle(settings, 'fingerNumbers', on)}
-          />
-        </SettingRows>
-      </SettingsGroup>
-      <SettingsGroup title={t('settingsPage.practice')} info={t('settingsPage.practiceInfo')}>
-        <SettingRows>
-          <SettingField
-            setting="otherHand.look"
-            label={t('settingsPage.otherHand.label')}
-            info={t('settingsPage.otherHand.info')}
-          >
-            <Segmented
-              label={t('settingsPage.otherHand.label')}
-              value={otherHand.look}
-              options={OTHER_HAND_LOOKS.map((value) => ({
-                value,
-                label: t(`settingsPage.otherHand.${value}`),
-              }))}
-              onChange={(look) => setOtherHand(settings, { look })}
-            />
-          </SettingField>
-          <SwitchRow
-            setting="otherHand.play"
-            label={t('settingsPage.playOther')}
-            info={t('settingsPage.playOtherInfo')}
-            checked={otherHand.play}
-            onCheckedChange={(play) => setOtherHand(settings, { play })}
-          />
-        </SettingRows>
-      </SettingsGroup>
-      <SettingsGroup title={t('settingsPage.pedal.label')}>
-        <SettingField
-          setting="playback.pedal"
-          label={t('settingsPage.pedal.label')}
-          info={t('settingsPage.pedal.info')}
-        >
-          <Segmented
-            label={t('settingsPage.pedal.label')}
-            value={playback.pedal}
-            options={PEDAL_PLAYS.map((value) => ({
-              value,
-              label: t(`settingsPage.pedal.${value}`),
-            }))}
-            onChange={(pedal) => setPlayback(settings, { pedal })}
-          />
-        </SettingField>
-      </SettingsGroup>
+      <PlayerPlayback />
+      <PlayerDisplay />
     </>
   )
 }

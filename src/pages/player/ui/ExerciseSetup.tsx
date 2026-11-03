@@ -1,7 +1,6 @@
-import { useTranslation } from 'react-i18next'
+import { useState } from 'react'
 import type { ExerciseChoice, Exercise } from '@/entities/exercise'
-import { Sheet, SheetContent } from '@/shared/ui'
-import { SetupTrigger } from '@/widgets/player-setup'
+import { SettingsSheet } from '@/widgets/player-setup'
 import { PlayingSection, type PracticePlayer } from '@/widgets/practice-player'
 import type { ExerciseChange } from '../model/exercise-search'
 import { ExerciseMusicFields } from './ExerciseMusicFields'
@@ -32,26 +31,18 @@ export function ExerciseSetup({
   onChange: (change: ExerciseChange) => void
   onSwing: (feel: SwingFeel) => void
 }) {
-  const { t } = useTranslation('player')
+  const [page, setPage] = useState('main')
   return (
-    <Sheet>
-      <SetupTrigger />
-      <SheetContent title={t('setup')}>
-        <div className="flex flex-col gap-5">
-          <ExerciseMusicFields exercise={exercise} choice={choice} onChange={onChange} />
-          <ExerciseWayFields exercise={exercise} choice={choice} onChange={onChange} />
-          <TempoLadder player={player} />
-          {exercise.fields.handOctaves ? (
-            <ScalePracticeFields
-              choice={choice}
-              player={player}
-              hands={hands}
-              onChange={onChange}
-            />
-          ) : null}
-          <PlayingSection swing={swing} onSwing={onSwing} />
-        </div>
-      </SheetContent>
-    </Sheet>
+    <SettingsSheet page={page} onPage={setPage}>
+      <div className="flex flex-col gap-5">
+        <ExerciseMusicFields exercise={exercise} choice={choice} onChange={onChange} />
+        <ExerciseWayFields exercise={exercise} choice={choice} onChange={onChange} />
+        <TempoLadder player={player} />
+        {exercise.fields.handOctaves ? (
+          <ScalePracticeFields choice={choice} player={player} hands={hands} onChange={onChange} />
+        ) : null}
+        <PlayingSection swing={swing} onSwing={onSwing} />
+      </div>
+    </SettingsSheet>
   )
 }

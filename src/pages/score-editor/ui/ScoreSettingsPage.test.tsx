@@ -42,11 +42,11 @@ describe('the score’s Settings (round 28)', () => {
     await waitFor(() => expect(piecesStore.getState().songs[0]?.header).toBeUndefined())
   })
 
-  it('opens from the Player’s More', async () => {
+  it('opens from the Player’s Settings', async () => {
     const user = userEvent.setup()
     await renderApp('/play/my-1', { storage: withSong() })
-    await user.click(await screen.findByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Settings…' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
+    await user.click(await screen.findByRole('button', { name: 'Score settings' }))
     expect(await screen.findByRole('heading', { name: 'Score settings' })).toBeInTheDocument()
   })
 

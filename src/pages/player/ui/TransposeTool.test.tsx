@@ -111,10 +111,12 @@ describe('Transpose (ADR 0105)', () => {
   it('keeps the key out of the Setup', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    const setup = await screen.findByRole('dialog', { name: 'Setup' })
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
+    const setup = await screen.findByRole('dialog', { name: 'Player settings' })
     expect(within(setup).queryByRole('group', { name: 'Key' })).toBeNull()
-    expect(within(setup).getByRole('region', { name: 'Accompaniment from the chords' })).toBeInTheDocument()
+    expect(
+      within(setup).getByRole('region', { name: 'Accompaniment from the chords' }),
+    ).toBeInTheDocument()
   })
 
   it('reads in Russian: its name the key’s, its heading the verb’s', async () => {

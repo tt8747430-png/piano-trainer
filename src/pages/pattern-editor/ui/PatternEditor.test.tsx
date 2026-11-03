@@ -48,7 +48,7 @@ describe('The pattern editor', () => {
       return audio.played.at(-1)?.sounds
     }
     const builtIn = await playWith('M1')
-    await user.click(screen.getByRole('button', { name: 'Setup' }))
+    await user.click(screen.getByRole('button', { name: 'Player settings' }))
     await user.click(screen.getByRole('button', { name: /^Pattern/ }))
     const list = screen.getByRole('listbox', { name: 'Pattern' })
     await user.click(within(list).getByRole('option', { name: /^1 · Bass \+ chords \(mine\)/ }))

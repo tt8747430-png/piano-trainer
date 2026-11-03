@@ -44,7 +44,7 @@ describe('The chromatic walk in the Player', () => {
   it('checks chord types in the Setup sheet, never unchecking the last', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/chromatic?chords=m9&root=G')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     await user.click(await screen.findByRole('combobox', { name: 'Chord types' }))
     await user.click(await screen.findByRole('option', { name: '9 · Dominant 9th' }))
     expect(router.state.location.search).toMatchObject({ chords: 'm9.n9' })
@@ -61,7 +61,7 @@ describe('The chromatic walk in the Player', () => {
   it('names each chord type in the Setup sheet by its suffix as the sheets print it', async () => {
     const user = userEvent.setup()
     await renderApp('/play/chromatic?chords=m9&root=G')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     await user.click(await screen.findByRole('combobox', { name: 'Chord types' }))
     expect(await screen.findByRole('option', { name: '7♯9 · 7th sharp 9' })).toBeInTheDocument()
   })
@@ -69,7 +69,7 @@ describe('The chromatic walk in the Player', () => {
   it('changes the direction and the root in the Setup sheet', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/chromatic?chords=maj9&root=G')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     await user.click(await screen.findByRole('radio', { name: 'Up and down' }))
     expect(router.state.location.search).toMatchObject({ direction: 'both' })
     await pickIn(user, 'Root', 'A♭')
@@ -79,7 +79,7 @@ describe('The chromatic walk in the Player', () => {
   it('closes the Chord flow: a chromatic walk has no key', async () => {
     const user = userEvent.setup()
     await renderApp('/play/chromatic')
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     await user.click(await screen.findByRole('button', { name: /^Pattern/ }))
     expect(
       screen.getByRole('option', {

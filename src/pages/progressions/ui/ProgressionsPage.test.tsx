@@ -537,7 +537,7 @@ describe('Practice → Progressions', () => {
     const { router } = await renderApp(
       '/play/progression?p=I-V-vi-IV&key=C&inversion=2&nearest=false',
     )
-    await screen.findByRole('button', { name: 'Setup' })
+    await screen.findByRole('button', { name: 'Player settings' })
     await router.navigate({ to: '/practice/progressions' })
     await user.click(await screen.findByRole('link', { name: 'In C major' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/play/progression'))

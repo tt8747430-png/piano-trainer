@@ -148,6 +148,8 @@ export const player = {
   // The Player's settings page (B7): how it always plays, every song's.
   settingsPage: {
     open: 'Player settings',
+    howItWorks: 'How the Player works',
+    thisMusic: 'This music',
     audio: 'Audio playback',
     audioInfo:
       'How loud each staff, the recording and the metronome play, for every song. Only the chords turns the recording right down and the piano up, so you hear the chords alone.',
@@ -155,6 +157,7 @@ export const player = {
     speed: 'Playback speed',
     speedStepInfo:
       'How much faster each pass plays while speed training climbs to the song’s tempo.',
+    playback: 'Playback',
     display: 'Display',
     countdown: {
       label: 'Count-in',

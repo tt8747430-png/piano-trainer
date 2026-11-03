@@ -15,7 +15,6 @@ export { ExampleEditorPage, ScoreEditorPage, TakePage } from '@/pages/score-edit
 export {
   ChromaticPlayerPage,
   ExercisePlayerPage,
-  PieceSettingsPage,
   PlayerPage,
   ProgressionPlayerPage,
   WalkPlayerPage,

@@ -15,15 +15,16 @@ const catchPrint = () => {
   return print
 }
 
-/** The Player open in a view of the music, More's Print chosen; the print render once printed. */
+/** The Player open in a view of the music, its Settings' Print chosen; the print render once printed. */
 async function printed(user: User, path: string, music: MusicView, locale?: 'ru') {
   const print = catchPrint()
   const { settingsStore } = await renderApp(path, locale ? { locale } : undefined)
   await screen.findByRole('heading', { level: 1 })
   act(() => setScoreView(settingsStore, { music }))
-  const more = locale ? 'Ещё' : 'More'
-  await user.click(await screen.findByRole('button', { name: more }))
-  await user.click(await screen.findByRole('menuitem', { name: locale ? 'Печать' : 'Print' }))
+  const settings = locale ? 'Настройки плеера' : 'Player settings'
+  await user.click(await screen.findByRole('button', { name: settings }))
+  const sheet = await screen.findByRole('dialog', { name: settings })
+  await user.click(within(sheet).getByRole('button', { name: locale ? 'Печать' : 'Print' }))
   await waitFor(() => expect(print).toHaveBeenCalledTimes(1), { timeout: 10_000 })
   const render = document.querySelector<HTMLElement>('[data-slot="song-print"]')
   if (!render) throw new Error('no print render')

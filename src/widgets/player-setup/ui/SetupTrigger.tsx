@@ -1,19 +1,26 @@
-import { SlidersHorizontal } from 'lucide-react'
+import { Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
- * The Setup's button in the Player's bar, a toolbar's (ADR 0115): its sliders at every size, named
- * by its tooltip and for a screen reader (ADR 0115, 0114).
+ * The Player's Settings in its bar (R29: one gear, Flat's one menu), a toolbar's button (ADR 0115),
+ * named by its tooltip and for a screen reader.
  */
 export function SetupTrigger() {
   const { t } = useTranslation('player')
   return (
     <SheetTrigger
-      render={<Button variant="tool" size="icon" aria-label={t('setup')} title={t('setup')} />}
+      render={
+        <Button
+          variant="tool"
+          size="icon"
+          aria-label={t('settingsPage.open')}
+          title={t('settingsPage.open')}
+        />
+      }
     >
-      <SlidersHorizontal aria-hidden />
+      <Settings aria-hidden />
     </SheetTrigger>
   )
 }

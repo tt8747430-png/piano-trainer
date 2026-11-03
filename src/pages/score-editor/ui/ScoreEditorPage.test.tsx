@@ -1817,7 +1817,7 @@ describe('the score editor', () => {
       JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
     )
     await renderApp('/play/my-1', { storage })
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     expect(await screen.findByRole('switch', { name: 'Play Staff 1' })).toBeChecked()
   })
 

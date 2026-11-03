@@ -10,15 +10,14 @@ import {
   type AccompanimentChoice,
   type PatternFit,
 } from '@/entities/pattern'
-import { Sheet, SheetContent } from '@/shared/ui'
 import type { FigureChange } from '../model/setup-params'
 import { FigurePage } from './FigurePage'
 import { PatternPage } from './PatternPage'
-import { SetupTrigger } from './SetupTrigger'
+import { SettingsSheet } from './SettingsSheet'
 import { SetupContext, type SetupPage } from './setup-context'
 
 /**
- * The Player's Setup: its button, and the sheet it opens. The sheet's first page is `children`,
+ * The Player's Settings with an accompaniment (`SettingsSheet`): its first page is `children`,
  * composed by the page: the music's own choices, `PatternCard`, how it plays. The pattern and figure
  * lists open as the sheet's pages, so a sheet never opens over a sheet; each closes a pattern or
  * figure the music cannot play (`fit`).
@@ -35,7 +34,7 @@ export function PlayerSetup({
   children: ReactNode
 }) {
   const { t } = useTranslation('player')
-  const [page, setPage] = useState<SetupPage | 'main'>('main')
+  const [page, setPage] = useState<string>('main')
   const main = useRef<HTMLDivElement>(null)
   /** The list page last open: back on the first page, its row takes the focus again. */
   const [opened, setOpened] = useState<SetupPage | null>(null)
@@ -52,64 +51,74 @@ export function PlayerSetup({
     setPage('main')
   }
   const toMain = () => setPage('main')
+  const inner =
+    page === 'pattern'
+      ? {
+          title: t('pattern'),
+          content: (
+            <PatternPage
+              value={figures.pattern}
+              fit={fit}
+              onChoose={(pattern) => choose({ pattern })}
+              onBack={toMain}
+            />
+          ),
+        }
+      : page === 'rh'
+        ? {
+            title: t('rh'),
+            content: (
+              <FigurePage
+                hand="rh"
+                label={t('rh')}
+                ids={RIGHT_FIGURE_IDS}
+                sections={RIGHT_FIGURE_GROUPS.map((group) => ({
+                  label: t(`rhGroup.${group.id}`),
+                  ids: group.figures,
+                }))}
+                figures={RIGHT_FIGURES}
+                value={figures.rh}
+                fit={fit}
+                onChoose={(rh) => choose({ rh })}
+                onBack={toMain}
+              />
+            ),
+          }
+        : page === 'lh'
+          ? {
+              title: t('lh'),
+              content: (
+                <FigurePage
+                  hand="lh"
+                  label={t('lh')}
+                  ids={LEFT_FIGURE_IDS}
+                  sections={LEFT_FIGURE_GROUPS.map((group) => ({
+                    label: t(`lhGroup.${group.id}`),
+                    ids: group.figures,
+                  }))}
+                  figures={LEFT_FIGURES}
+                  value={figures.lh}
+                  fit={fit}
+                  onChoose={(lh) => choose({ lh })}
+                  onBack={toMain}
+                />
+              ),
+            }
+          : null
   return (
-    <Sheet
-      onOpenChange={(open) => {
-        if (open) return
-        setPage('main')
+    <SettingsSheet
+      page={page}
+      onPage={(next) => {
+        setPage(next)
         setOpened(null)
       }}
+      inner={inner}
     >
-      <SetupTrigger />
-      <SheetContent title={page === 'main' ? t('setup') : t(page)}>
-        {page === 'main' ? (
-          <SetupContext value={{ figures, fit, openPage, onFigures }}>
-            <div ref={main} className="flex flex-col gap-5">
-              {children}
-            </div>
-          </SetupContext>
-        ) : null}
-        {page === 'pattern' ? (
-          <PatternPage
-            value={figures.pattern}
-            fit={fit}
-            onChoose={(pattern) => choose({ pattern })}
-            onBack={toMain}
-          />
-        ) : null}
-        {page === 'rh' ? (
-          <FigurePage
-            hand="rh"
-            label={t('rh')}
-            ids={RIGHT_FIGURE_IDS}
-            sections={RIGHT_FIGURE_GROUPS.map((group) => ({
-              label: t(`rhGroup.${group.id}`),
-              ids: group.figures,
-            }))}
-            figures={RIGHT_FIGURES}
-            value={figures.rh}
-            fit={fit}
-            onChoose={(rh) => choose({ rh })}
-            onBack={toMain}
-          />
-        ) : null}
-        {page === 'lh' ? (
-          <FigurePage
-            hand="lh"
-            label={t('lh')}
-            ids={LEFT_FIGURE_IDS}
-            sections={LEFT_FIGURE_GROUPS.map((group) => ({
-              label: t(`lhGroup.${group.id}`),
-              ids: group.figures,
-            }))}
-            figures={LEFT_FIGURES}
-            value={figures.lh}
-            fit={fit}
-            onChoose={(lh) => choose({ lh })}
-            onBack={toMain}
-          />
-        ) : null}
-      </SheetContent>
-    </Sheet>
+      <SetupContext value={{ figures, fit, openPage, onFigures }}>
+        <div ref={main} className="flex flex-col gap-5">
+          {children}
+        </div>
+      </SetupContext>
+    </SettingsSheet>
   )
 }

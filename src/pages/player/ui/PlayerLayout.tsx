@@ -1,6 +1,5 @@
-import { useNavigate } from '@tanstack/react-router'
-import { Settings } from 'lucide-react'
-import { useMemo, useState, type ReactNode } from 'react'
+import { Download, MonitorCog, Printer, SlidersHorizontal, Volume2 } from 'lucide-react'
+import { use, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
 import { selectKeyboard, selectScoreView, useSettings } from '@/entities/settings'
@@ -9,7 +8,6 @@ import { LiveKeyboard } from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Recording } from '@/shared/lib/schedule'
 import type { MenuAction } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
   ClickButton,
@@ -33,8 +31,16 @@ import {
 } from '@/widgets/practice-player'
 import { SheetMusic } from '@/widgets/sheet-music'
 import { SongPrint } from '@/widgets/song-print'
+import {
+  PlayerDisplay,
+  PlayerPlayback,
+  PlayerVolumes,
+  type VolumeTrack,
+} from '@/widgets/player-settings'
+import { SettingsExtrasContext, type SettingsExtras } from '@/widgets/player-setup'
 import { useChordKeys } from '../model/use-chord-keys'
-import { PlayerMore } from './PlayerMore'
+import { MoreActions } from './more-actions'
+import { PlayerExport } from './PlayerExport'
 import type { ExportShare } from '@/features/song-files'
 import { PlayerViewMenu } from './PlayerViewMenu'
 
@@ -42,17 +48,20 @@ import { PlayerViewMenu } from './PlayerViewMenu'
 const NO_HEADINGS: readonly string[] = []
 /** A walk or a progression: the piano's staves alone. */
 const NO_STAVES: readonly { readonly name?: StaffName }[] = []
+/** A walk or a progression: no acts of its own. */
+const NO_ACTS: readonly MenuAction[] = []
 
 /**
  * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar (`ScoreBar`, ADR
- * 0115: Close, Practise · Edit, then MIDI, Setup, its settings' gear (B7) and More, ADR 0108; its tools, ADR 0108: the View,
+ * 0115, R29: Close, the title and Edit; Piano keys, MIDI and the one gear, the Player's Settings with the
+ * music's acts, Flat's one menu; its tools, ADR 0108: the View,
  * named by the view shown, then the music's own tools, a piece's Transpose and Simplify, ADR 0105);
  * the music under its title (ADR 0114) as the View
  * shows it (ADR 0108: the sheet music, Chords over lyrics, Diagrams or the Grid), Wait mode's line,
  * the transport floating under it (the tempo, ‹ ▶ ›, the loop, the metronome and the hands), the
  * count-in's beat large over it all while Listen counts in (ADR 0105), and the keys at the
  * foot, or under the tools row where the keyboard settings dock them at the top; the computer's keys
- * drive it (`usePlayerShortcuts`). More's Print puts the music as the View shows it in print
+ * drive it (`usePlayerShortcuts`). Settings' Print puts the music as the View shows it in print
  * (`SongPrint`, ADR 0107).
  */
 export function PlayerLayout({
@@ -70,15 +79,15 @@ export function PlayerLayout({
   piano = true,
   staves = NO_STAVES,
   recording,
-  more,
+  more = NO_ACTS,
   musicXml,
   share,
   status,
   openView = false,
-  onSettings,
+  tracks,
 }: {
-  /** The gear: a piece's Player settings in the Player's place; else Settings › Player (B7). */
-  onSettings?: () => void
+  /** The volumes the Settings' Audio playback lists: a piece's tracks; none for a walk. */
+  tracks?: readonly VolumeTrack[] | undefined
   /**
    * Whether the sheet writes the piano's staves: not for a song that hides them, a lead sheet (ADR
    * 0114). The keys and what plays are the same.
@@ -87,7 +96,7 @@ export function PlayerLayout({
   /** The piece's single staves, top down, each printed and switched in the View by its name (ADR 0097). */
   staves?: readonly { readonly name?: StaffName }[]
   /**
-   * The piece's recording: the Sound offers its volume (ADR 0105), More its MIDI time aligned to it
+   * The piece's recording: the Sound offers its volume (ADR 0105), Export… its MIDI time aligned to it
    * (ADR 0107).
    */
   recording?: Recording | undefined
@@ -102,13 +111,13 @@ export function PlayerLayout({
   performance: Performance
   /** Each section's name, by section: shown at its first bar; none for music with one section. */
   headings?: readonly string[]
-  /** The Setup: its button, in the toolbar, and the sheet it opens. */
+  /** The Settings: its gear, in the bar, and the sheet it opens (`SettingsSheet`). */
   setup: ReactNode
   /** The tools row's after the View: a piece's Transpose and Simplify (ADR 0105); none for a walk. */
   tools?: ReactNode
   /** Edit (ADR 0115, round 26), at the bar's end: a piece's own, none for a walk. */
   modes?: ReactNode
-  /** The music's own in More, before Print: a piece's Song information and Sections (ADR 0107). */
+  /** The music's own acts in Settings, before Print: a piece's Song information and Sections (ADR 0107). */
   more?: readonly MenuAction[] | undefined
   /** Export…'s MusicXML: a piece's music as written (ADR 0107). */
   musicXml?: (() => void) | undefined
@@ -119,8 +128,7 @@ export function PlayerLayout({
   /** The View open as the screen opens: a piece's, where the learner asks each time (ADR 0108). */
   openView?: boolean
 }) {
-  const { t } = useTranslation('player')
-  const navigate = useNavigate()
+  const { t } = useTranslation(['player', 'songs'])
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const scoreView = useSettings(selectScoreView)
@@ -131,8 +139,49 @@ export function PlayerLayout({
   const needs = useMemo(() => viewNeeds(performance), [performance])
   const shown = shownView(scoreView.music, needs)
   usePlayerShortcuts(player, view, onClose)
-  // More's Print (ADR 0107): the music printed as the View shows it, while its render stands.
+  // Print (ADR 0107): the music printed as the View shows it, while its render stands.
   const [printing, setPrinting] = useState(false)
+  const [exporting, setExporting] = useState(false)
+  // The Player's one Settings (R29, Flat's one menu): how the Player works, then the acts on this
+  // music: its place in the library (ADR 0106), its own, Print and Export….
+  const library = use(MoreActions)
+  const extras: SettingsExtras = {
+    pages: [
+      ...(tracks
+        ? [
+            {
+              id: 'audio',
+              label: t('settingsPage.audio'),
+              icon: Volume2,
+              content: <PlayerVolumes tracks={tracks} />,
+            },
+          ]
+        : []),
+      {
+        id: 'playback',
+        label: t('settingsPage.playback'),
+        icon: SlidersHorizontal,
+        content: <PlayerPlayback />,
+      },
+      {
+        id: 'display',
+        label: t('settingsPage.display'),
+        icon: MonitorCog,
+        content: <PlayerDisplay />,
+      },
+    ],
+    acts: [...library, ...more]
+      .flatMap(({ icon, ...act }) => (icon ? [{ ...act, icon }] : []))
+      .concat([
+        { key: 'print', label: t('print'), icon: Printer, onSelect: () => setPrinting(true) },
+        {
+          key: 'export',
+          label: t('songs:export.action'),
+          icon: Download,
+          onSelect: () => setExporting(true),
+        },
+      ]),
+  }
   // A chord view's keys in Listen: the chord sounding as its diagram draws it (ADR 0108); a pattern
   // lesson's, each note as it sounds, whatever the view (ADR 0111).
   const chordKeys = useChordKeys(
@@ -162,7 +211,7 @@ export function PlayerLayout({
     // While Diagrams plays, the bar and the tools row step aside (ADR 0108).
     <PlayerScreen keys={dock} aside={shown === 'diagrams' && practice.state.playing}>
       {/* The score's bar, the editor's in shape (ADR 0115): Close, then Practise · Edit;
-          MIDI, Setup and More; the View and the music's tools. The loop is the transport's (ADR
+          Piano keys, MIDI and Settings; the View and the music's tools. The loop is the transport's (ADR
           0108). */}
       <ScoreBar
         lead={
@@ -176,25 +225,7 @@ export function PlayerLayout({
           <>
             <KeysToggle />
             <MidiButton variant="tool" />
-            {setup}
-            <Button
-              variant="tool"
-              size="icon"
-              aria-label={t('settingsPage.open')}
-              title={t('settingsPage.open')}
-              onClick={onSettings ?? (() => void navigate({ to: '/settings/player' }))}
-            >
-              <Settings aria-hidden />
-            </Button>
-            <PlayerMore
-              music={{ performance, title, tempo: player.tempo }}
-              recording={recording}
-              staves={names}
-              actions={more}
-              musicXml={musicXml}
-              share={share}
-              onPrint={() => setPrinting(true)}
-            />
+            <SettingsExtrasContext value={extras}>{setup}</SettingsExtrasContext>
           </>
         }
         tools={
@@ -286,6 +317,15 @@ export function PlayerLayout({
       </PlayerArea>
       {dock === 'top' ? null : keys}
       <CountInBeat count={practice.counting} />
+      <PlayerExport
+        open={exporting}
+        onOpenChange={setExporting}
+        music={{ performance, title, tempo: player.tempo }}
+        recording={recording}
+        staves={names}
+        musicXml={musicXml}
+        share={share}
+      />
       {printing ? (
         <SongPrint
           view={shown}
