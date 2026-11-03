@@ -526,8 +526,12 @@ What stays on a Practice page and what goes to its Settings, decided once:
 > - **Staves** as Flat's sheet: All switch; each staff Solo (S), Show (eye), Volume; Only the chords.
 > - **Inner pages in Flat's "Advanced settings" style:** each setting a card with its choices all visible, a short
 >   example beside each; longer help behind ⓘ.
-> - Open for the owner: the view switch (Sheet · Grid · Diagrams · Lyrics) on the tools row (recommended) or inside
->   the gear.
+> - **The view, Chordify's way** (owner, with `../owner/chordify-pick-view-*.jpg`: "I don't like the four switches on
+>   mobile; the layout should adapt like here"): the tools row is three words, **Sheet ⌃ · Transpose · Simplify**
+>   (the chip names the current view). A tap opens the **Pick your view** panel under the bar: a segmented row of the
+>   views, a large picture of the chosen one (the Diagrams picture the piano diagram), a view the song can't show
+>   greyed with a toast saying why, the checkbox **"Show this when opening a song"** (its one home), and **Done**.
+>   The gear's View page keeps only Layout and what the sheet shows.
 
 - **Source:** Decided 20 (413–417), Decided 21 (425–433: "No settings scattered in the header across four menus";
   "No duplicate menus or settings anywhere: check the Player"), R9, R18 (190–193), B7 (1850–1856), B8 Display
