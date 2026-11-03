@@ -190,6 +190,21 @@ describe('Player', () => {
     )
   })
 
+  it.each([
+    ['a phone', 'none', 'down'],
+    ['a laptop', '(min-width: 64rem)', 'right'],
+  ])(
+    'opens its Settings on %s, a panel at the right on a laptop (R29, 4.1)',
+    async (_size, query, side) => {
+      sizedAs(query)
+      const user = userEvent.setup()
+      await renderApp('/play/bz5')
+      await user.click(await screen.findByRole('button', { name: 'Player settings' }))
+      const sheet = await screen.findByRole('dialog', { name: 'Player settings' })
+      expect(sheet.closest('[data-swipe-direction]')).toHaveAttribute('data-swipe-direction', side)
+    },
+  )
+
   it('has no hands button for music of one hand (R29)', async () => {
     const storage = createMemoryStorage()
     const song = {

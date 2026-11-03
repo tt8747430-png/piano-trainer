@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { BackButton, RowButton, Sheet, SheetContent, SettingsGroup } from '@/shared/ui'
 import { SetupTrigger } from './SetupTrigger'
 import { useSettingsExtras } from './setup-extras'
@@ -13,7 +14,7 @@ export interface InnerPage {
 /**
  * The Player's one Settings (R29, Flat's one menu): its gear and the sheet it opens. The first page
  * is `children`, the music's own choices, then the pages of how the Player works and the acts on
- * this music the screen provides (`SettingsExtrasContext`). The screen's own inner pages
+ * this music the screen provides (`SettingsExtrasContext`). On a laptop it is a panel at the right. The screen's own inner pages
  * (`inner`, by the page `page` names) open in the same sheet, so a sheet never opens over a sheet.
  */
 export function SettingsSheet({
@@ -32,6 +33,8 @@ export function SettingsSheet({
   const { t } = useTranslation('player')
   const { pages, acts } = useSettingsExtras()
   const [open, setOpen] = useState(false)
+  // On a laptop a panel at the right, the music in sight beside it (R29, screen 4.1).
+  const laptop = useMediaQuery(LAPTOP)
   const extra = pages.find((each) => each.id === page)
   const title =
     page === 'main'
@@ -39,6 +42,7 @@ export function SettingsSheet({
       : (extra?.label ?? inner?.title ?? t('settingsPage.open'))
   return (
     <Sheet
+      swipeDirection={laptop ? 'right' : 'down'}
       open={open}
       onOpenChange={(next) => {
         setOpen(next)

@@ -72,6 +72,8 @@ export function SheetContent({
       {...(initialFocus ? { initialFocus } : {})}
       className={cn(
         'mx-auto w-full max-w-2xl rounded-t-sheet bg-card pb-sheet-keyboard text-base landscape-phone:max-h-[calc(100dvh-1rem)]',
+        // From the right (a laptop's panel beside what it sets): the screen's height, its own width.
+        'data-[swipe-axis=x]:mx-0 data-[swipe-axis=x]:max-w-none data-[swipe-axis=x]:rounded-t-none data-[swipe-axis=x]:rounded-l-sheet data-[swipe-axis=x]:pb-safe',
         // The room anchored while no keyboard is up: the phone's keyboard never squeezes it.
         tall &&
           'h-[calc(var(--app-height,100dvh)-6rem)] landscape-phone:h-[calc(var(--app-height,100dvh)-1rem)]',
