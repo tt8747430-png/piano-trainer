@@ -62,6 +62,14 @@ describe('Simplify (ADR 0105)', () => {
     )
   })
 
+  it('names the simplified chords in the key the song is transposed to (R29)', async () => {
+    const { settingsStore } = await renderApp('/play/my-1?simple=true&key=A', {
+      storage: withSong('Cmaj9/E G7/B'),
+    })
+    act(() => setScoreView(settingsStore, { music: 'grid' }))
+    await waitFor(() => expect(gridBars()).toEqual(['Bar 1: D', 'Bar 2: A']))
+  })
+
   it('names the chords simply in Song information and on the sheet', async () => {
     const user = userEvent.setup()
     await renderApp('/play/my-1?simple=true', { storage: withSong('Cmaj7 G7/B') })
