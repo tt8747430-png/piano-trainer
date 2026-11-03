@@ -88,3 +88,21 @@ export {
   type TrainerBars,
 } from './metronome'
 export { isSwung, SWING_FEELS, SWING_SHARE, type SwingFeel } from './swing'
+export {
+  barClicks,
+  beatLevels,
+  defaultLevels,
+  LEVEL_GAIN,
+  meterBeats,
+  meterText,
+  nextLevel,
+  parseMeter,
+  speedAt,
+  SUBDIVISIONS,
+  type BarClick,
+  type BeatLevel,
+  type DrumVoice,
+  type Meter,
+  type SpeedTrainer,
+  type Subdivision,
+} from './meter'
