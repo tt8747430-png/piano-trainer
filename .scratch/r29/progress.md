@@ -32,9 +32,9 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A17 | Destructive and command rows | 1 | done | 9bc0e55a | destructive acts last and alone in red, through `ConfirmDialog`; Sign out a red row of its own; the song's Reset/Delete keeps its own dialog for its focus return (to move with B6) |
 | A18 | Navigation audit | 1 | done | dcaa63b6, b24068b9, 66fd1593, d9d5883e, 4ecda26d (merged ed9a4e1d) | parents table + test, `useUp` (history.back when the entry before is the parent, so it isn't doubled), `useSetSearch` (46 sites in `back-as-up/navigates.md`), a Back test per place, the Search palette. The Dialog primitive was taken from `shadcn add --view` by hand (the CLI would run npm install) |
 | A19 | Laptop layout audit | 1 | open | | |
-| A20 | Buttons, rows and headings on every explorer | 2 | open | | |
-| A21 | Scales and keys, all three tabs | 2 | open | | |
-| A22 | Intervals | 2 | open | | |
+| A20 | Buttons, rows and headings on every explorer | 2 | in progress | 7875ffe7 | Chords: a choice the chord can't take is not drawn; Arpeggio and Play one floating bar. Left: Practise in the Player's heading style; one header over Scales' tabs |
+| A21 | Scales and keys, all three tabs | 2 | in progress | 9c6e182f | Notes · Harmony · Key; Harmony's seven degrees named, each chord opening in Chords in the key. Left: a minor key's harmonic V and vii° |
+| A22 | Intervals | 2 | done | df4ad453, 6d566e1f | Harmonic · Melodic rising · falling as pictured buttons in a floating bar with Play all; a play mark and its semitones per row; one keyboard size |
 | A23 | Progressions | 2 | in progress | 1ea3aeac | three tabs (Progression · Library · Passing chords), each chord's role and bass move drawn (kernel `chordRole`, tested on every library progression), Written as and Voicing as settings, the Library a list with style chips. Left: Passing chords by groups with Insert |
 | A24 | A Settings page for every Practice page | 2 | done | e212b61d | at `/settings/<page>`, a gear in each page's bar (`?from=` for Back) and a Practice group in Settings; Chords, Scales and Intervals' pages hold only rows to the on-screen piano and a connected piano for now |
 | A25 | Accompaniment, Chord finder, Metronome, Exercises and Quiz | 2 | in progress | 52ae1faf | book names in one script, My gaps an icon button, the Quiz in two even columns. Left: Accompaniment's chips and pattern names, the Chord finder's empty state |
@@ -44,8 +44,8 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A29 | Imports and exports | 4 | in progress | 65506c2c, 96379253, 44aa68f7, afd5758d, aba6d200 | the pedal as a line of events: MusicXML read/write at its own positions and offsets (4 fixtures), MIDI CC64 both ways, MEI tstamp, the editor's pedal tool. Left: .mxl, beams kept, minor keys without mode, PDF/audio export, dragging a Ped. mark |
 | A30 | Fingering, one way everywhere | 2 | open | | |
 | A31 | Nothing flickers, nothing jumps | 1 | done | 0a9069b4 | measured before paint, rows that stay, a bar that holds; a CLS about 0.01 on Chords and Scales at 1280 on a fresh load remains (audit); Chords' heading block height goes with A20 |
-| A32 | The theory pages: one owner per idea, no copies | 2 | open | | |
-| A33 | Colour notes: one model | 2 | in progress | | tensions follow the chord's degree in a key (kernel, tested); the one panel for added tones, alterations and tensions next |
+| A32 | The theory pages: one owner per idea, no copies | 2 | done | 31080752 | the relative key on the Key tab only; Intervals links the Quiz's Intervals drill; Harmony's chords open Chords |
+| A33 | Colour notes: one model | 2 | done | 8355d0ed, b417ebf7 | one panel: Chord tones · Tensions · Avoid, a tap adds the note (C9, C7♯11, Cadd9); `colour=` in the URL; `key=` follows the chord's degree from its root. Dm7 as ii takes 13 (the spec's table), not avoided |
 | A34 | The score editor against Flat and the editors in `piano-data` | 4 | open | | |
 | A35 | The Player: play staves, not "melody" and patterns | 4 | open | | |
 | A36 | Focus and keyboard walking | 1 | done | a2569823 | one 3px focus outline with a test; Practice walked by Tab in a test |
@@ -55,7 +55,7 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A40 | The score editor's panels, against Flat's | 4 | open | | |
 | A41 | Exercises and the Quiz, inside | 2 | in progress | 41a450d5 | drills Flashcards · Name it · Play it · By ear, Start a labelled button, no time signature on a question's staff. Left: the results page, the Why line and stats, the exercise page and Next key |
 | A42 | Every theory, practice and training page against rule 30 | 1 | in progress | | part done with A23–A25; the rest open |
-| A43 | The Key tab's content, and theory written on the music | 2 | open | | |
+| A43 | The Key tab's content, and theory written on the music | 2 | in progress | 9c6e182f | the degrees table gone from Key (Harmony owns it); a minor key borrows the Picardy I and the Neapolitan (C♭ in B♭ minor). Left: theory written on the music |
 | B1 | The Profile, as complete as memory-palaces' | 5 | in progress | ef48f266, 00c8af17, 5baac640 | server: learner_profiles, handle check, public avatars (access test green). Device: tiered badges and the Almost there card on the Profile. Next, after the Settings rebuild merges (it owns the Account pages): avatar picker, Edit profile (handle, bio), Privacy, notifications, Streak merged with Activity |
 | B2 | Professional copy | 6 | open | | |
 | B3 | Explore in Songs | 7 | open | | |
