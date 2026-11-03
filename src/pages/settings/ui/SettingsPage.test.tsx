@@ -72,23 +72,24 @@ describe('Settings', () => {
     const { settingsStore } = await renderApp('/settings/general')
     const general = await screen.findByRole('main')
     expect(within(general).getByRole('combobox', { name: 'Language' })).toHaveTextContent('English')
-    expect(within(general).getByRole('combobox', { name: 'Theme' })).toHaveTextContent('System')
-    await user.click(within(general).getByRole('combobox', { name: 'Theme' }))
-    await user.click(await screen.findByRole('option', { name: 'Dark' }))
+    // The theme is three small screens (R21), the system's chosen.
+    const theme = within(general).getByRole('radiogroup', { name: 'Theme' })
+    expect(within(theme).getByRole('radio', { name: 'System' })).toBeChecked()
+    await user.click(within(theme).getByRole('radio', { name: 'Dark' }))
     expect(settingsStore.getState().theme).toBe('dark')
     await user.click(within(general).getByRole('combobox', { name: 'Language' }))
     await user.click(await screen.findByRole('option', { name: 'Русский' }))
     expect(settingsStore.getState().locale).toBe('ru')
   })
 
-  it('keeps the on-screen piano on its page, each part under its own heading', async () => {
+  it('keeps the on-screen piano on its page, each group under its own heading', async () => {
     await renderApp('/settings/on-screen-piano')
     expect(await screen.findByRole('heading', { level: 1, name: 'On-screen piano' })).toBeVisible()
-    expect(screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual([
-      'How the keys look',
-      'Where a page’s keys sit',
-      'How they play',
-      'The bar over the keys',
+    expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
+      'Look',
+      'Position',
+      'Playing',
+      'Buttons on the keys',
     ])
     expect(screen.queryByRole('switch', { name: /^Play from the computer keys/ })).toBeNull()
   })
@@ -154,9 +155,19 @@ describe('Settings', () => {
     const { settingsStore, router } = await renderApp('/settings/on-screen-piano')
     const keys = await screen.findByRole('radiogroup', { name: 'Key size' })
     await user.click(within(keys).getByRole('radio', { name: 'Large' }))
-    await user.click(screen.getByRole('switch', { name: /^Name the chords played/ }))
+    await user.click(screen.getByRole('switch', { name: /^Chord names/ }))
     const swipe = screen.getByRole('radiogroup', { name: 'A swipe on the keys' })
     await user.click(within(swipe).getByRole('radio', { name: 'Plays' }))
+    // Fold the keys: the two saved folds as one choice of three (R21).
+    const fold = screen.getByRole('radiogroup', { name: 'Fold the keys' })
+    expect(within(fold).getByRole('radio', { name: 'On its side' })).toBeChecked()
+    await user.click(within(fold).getByRole('radio', { name: 'Always' }))
+    expect(settingsStore.getState().keyboard).toMatchObject({ folded: true })
+    await user.click(within(fold).getByRole('radio', { name: 'Never' }))
+    expect(settingsStore.getState().keyboard).toMatchObject({
+      folded: false,
+      foldedLandscape: false,
+    })
     await act(() => router.navigate({ to: '/settings/computer-keys' }))
     await user.click(await screen.findByRole('switch', { name: /^Play from the computer keys/ }))
     expect(settingsStore.getState().keyboard).toMatchObject({

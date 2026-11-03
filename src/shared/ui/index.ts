@@ -102,7 +102,17 @@ export { Segmented } from './Segmented'
 export { ChordText } from './ChordText'
 export { HandDiagram } from './HandDiagram'
 export { SheetLayoutField } from './SheetLayoutField'
+export { PictureChoice } from './PictureChoice'
 export { PictureTiles } from './PictureTiles'
+export {
+  DockPicture,
+  FoldPicture,
+  KeyLengthPicture,
+  KeySizePicture,
+  NoteNamesPicture,
+  SwipePicture,
+  ThemePicture,
+} from './SettingPictures'
 export { Sheet, SheetContent, SheetTrigger } from './Sheet'
 export { SettingField } from './SettingField'
 export { SettingRows } from './SettingRows'

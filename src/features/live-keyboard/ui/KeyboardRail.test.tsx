@@ -40,7 +40,7 @@ describe('the keyboard’s rail', () => {
     }
     for (const name of [
       /^Note names/,
-      'Name the chords played',
+      'Chord names',
       'Play from the computer keys',
       'Glissando',
     ]) {
@@ -152,7 +152,7 @@ describe('the keyboard’s rail', () => {
   it('names the chords played or not, as its button says, saved', async () => {
     const user = userEvent.setup()
     const { settingsStore } = setUp()
-    const names = screen.getByRole('button', { name: 'Name the chords played' })
+    const names = screen.getByRole('button', { name: 'Chord names' })
     expect(names).toHaveAttribute('aria-pressed', 'true')
     await user.click(names)
     expect(names).toHaveAttribute('aria-pressed', 'false')

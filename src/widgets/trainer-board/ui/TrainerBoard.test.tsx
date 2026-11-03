@@ -95,7 +95,7 @@ describe('TrainerBoard', () => {
         pointerType: 'touch',
       })
     expect(screen.queryByText('Chord played:')).not.toBeInTheDocument()
-    const names = screen.getByRole('button', { name: 'Name the chords played' })
+    const names = screen.getByRole('button', { name: 'Chord names' })
     expect(names).toBeDisabled()
     expect(names).toHaveAttribute('aria-pressed', 'false')
   })

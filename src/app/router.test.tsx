@@ -279,8 +279,7 @@ describe('the app shell', () => {
   it('repaints the app as soon as the learner picks a theme', async () => {
     const user = userEvent.setup()
     await renderApp('/settings/general')
-    await user.click(await screen.findByRole('combobox', { name: 'Theme' }))
-    await user.click(await screen.findByRole('option', { name: 'Dark' }))
+    await user.click(await screen.findByRole('radio', { name: 'Dark' }))
     expect(document.documentElement.dataset.theme).toBe('dark')
   })
 })

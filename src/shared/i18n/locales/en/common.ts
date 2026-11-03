@@ -110,16 +110,12 @@ export const common = {
   },
   // The keyboard settings: in the keyboard's rail and in Settings.
   keyboardSettings: {
-    look: 'How the keys look',
-    place: 'Where a page’s keys sit',
-    play: 'How they play',
-    bar: 'The bar over the keys',
     keySize: {
       label: 'Key size',
       detail: 'Fit fills the width with the keys a page shows; the rest scroll in beside them',
       fit: 'Fit',
       large: 'Large',
-      piano: 'Whole piano',
+      piano: 'All 88',
     },
     keyLength: {
       label: 'Key length',
@@ -134,20 +130,24 @@ export const common = {
       all: 'Every key',
       none: 'None',
     },
-    markNotes: 'Name the marked notes',
+    markNotes: 'Names on marked keys',
     markNotesNote: 'A chord’s or a scale’s keys say their note under their degree',
-    chordNames: 'Name the chords played',
+    chordNames: 'Chord names',
     chordNamesNote: 'The bar over the keys names the chord your hand holds',
     dock: {
-      label: 'Keys on a page',
+      label: 'Piano position',
       detail: 'Over the tab bar, or under the page’s title',
       bottom: 'At the bottom',
       top: 'At the top',
     },
-    folded: 'Hide a page’s keys',
-    foldedNote: 'They fold into a Keys button that brings them back',
-    foldedLandscape: 'Hide them on a phone on its side',
-    foldedLandscapeNote: 'Lessons, explorers, songs and the editor; the Player keeps its own',
+    fold: {
+      label: 'Fold the keys',
+      detail:
+        'Folded keys wait in a Keys button that brings them back. On its side: on a phone turned sideways, in lessons, explorers, songs and the editor; the Player keeps its own',
+      never: 'Never',
+      side: 'On its side',
+      always: 'Always',
+    },
     swipe: {
       label: 'A swipe on the keys',
       detail: 'Scrolls the on-screen piano, or plays each key it crosses (glissando)',

@@ -23,6 +23,7 @@ export function MidiPlayingFields() {
   return (
     <SettingRows>
       <SettingField
+        setting="midi.octaveShift"
         label={t('midiSettings.octaveShift.label')}
         info={t('midiSettings.octaveShift.detail')}
       >
@@ -34,7 +35,11 @@ export function MidiPlayingFields() {
           onChange={(octaveShift) => setMidi(store, { octaveShift })}
         />
       </SettingField>
-      <SettingField label={t('midiSettings.touch.label')} info={t('midiSettings.touch.detail')}>
+      <SettingField
+        setting="midi.touch"
+        label={t('midiSettings.touch.label')}
+        info={t('midiSettings.touch.detail')}
+      >
         <Segmented
           label={t('midiSettings.touch.label')}
           value={midi.touch}
@@ -43,7 +48,11 @@ export function MidiPlayingFields() {
           onChange={(touch) => setMidi(store, { touch })}
         />
       </SettingField>
-      <SettingField label={t('midiSettings.pedal.label')} info={t('midiSettings.pedal.detail')}>
+      <SettingField
+        setting="midi.pedal"
+        label={t('midiSettings.pedal.label')}
+        info={t('midiSettings.pedal.detail')}
+      >
         <Segmented
           label={t('midiSettings.pedal.label')}
           value={midi.pedal}

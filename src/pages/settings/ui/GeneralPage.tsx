@@ -1,4 +1,4 @@
-import { BookOpenText, Languages, SunMoon } from 'lucide-react'
+import { BookOpenText, Languages } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   LESSON_READINGS,
@@ -11,10 +11,11 @@ import {
 } from '@/entities/settings'
 import { setLessonReading, setLocale, setTheme } from '@/features/set-preference'
 import { LOCALES } from '@/shared/i18n'
-import { ChoiceRow, Dropdown, SettingsGroup } from '@/shared/ui'
+import { ChoiceRow, Dropdown, PictureChoice, SettingsGroup, ThemePicture } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
-/** Settings › General: the language, the theme and how a lesson reads, each chosen in place. */
+/** Settings › General: the language and how a lesson reads, chosen in place; the theme as three
+ * small screens (R21). */
 export function GeneralPage() {
   const { t } = useTranslation(['settings', 'learn'])
   const settings = useSettingsStoreApi()
@@ -32,16 +33,6 @@ export function GeneralPage() {
             value={locale}
             options={LOCALES.map((value) => ({ value, label: t(`language.${value}`) }))}
             onChange={(value) => setLocale(settings, value)}
-          />
-        </ChoiceRow>
-        <ChoiceRow title={t('theme.label')} icon={SunMoon} paint="sand" setting="theme">
-          <Dropdown
-            label={t('theme.label')}
-            bare
-            align="end"
-            value={theme}
-            options={THEMES.map((value) => ({ value, label: t(`theme.${value}`) }))}
-            onChange={(value) => setTheme(settings, value)}
           />
         </ChoiceRow>
         <ChoiceRow
@@ -62,6 +53,19 @@ export function GeneralPage() {
             onChange={(value) => setLessonReading(settings, value)}
           />
         </ChoiceRow>
+      </SettingsGroup>
+      <SettingsGroup>
+        <PictureChoice
+          setting="theme"
+          label={t('theme.label')}
+          value={theme}
+          options={THEMES.map((value) => ({
+            value,
+            label: t(`theme.${value}`),
+            picture: <ThemePicture theme={value} />,
+          }))}
+          onChange={(value) => setTheme(settings, value)}
+        />
       </SettingsGroup>
     </SettingsScreen>
   )
