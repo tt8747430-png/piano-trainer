@@ -1,6 +1,7 @@
 import type { LocaleResources } from '../../types'
 
 export const player: LocaleResources['player'] = {
+  pianoKeys: 'Клавиатура пианино',
   setup: 'Параметры',
   more: 'Ещё',
   info: { song: 'О песне', study: 'Об этюде' },

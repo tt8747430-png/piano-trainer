@@ -6,24 +6,32 @@ import { MidiButton } from '@/features/connect-midi'
 import { barAt } from '@/features/score-editor'
 import { Button } from '@/shared/ui/primitives/button'
 import { ScoreEditToggle } from '@/widgets/mode-switch'
+import { BarTitle } from '@/widgets/practice-player'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /**
- * The editor's bar's lead, as the Player's (ADR 0115): Close.
+ * The editor's bar's lead, as the Player's (ADR 0115, R29 Flat's): Close, the score's title, and Done
+ * beside it where the Player has its pencil.
  */
-export function EditorLead() {
+export function EditorLead({ done }: { done?: ReactNode }) {
   const { t } = useTranslation('common')
-  const { actions } = useScoreEditorContext()
+  const { actions, meta, takes } = useScoreEditorContext()
+  const bar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
+  const recording = takes.stage !== 'idle'
   return (
-    <Button
-      variant="tool"
-      size="icon"
-      aria-label={t('close')}
-      title={t('close')}
-      onClick={actions.close}
-    >
-      <X aria-hidden />
-    </Button>
+    <>
+      <Button
+        variant="tool"
+        size="icon"
+        aria-label={t('close')}
+        title={t('close')}
+        onClick={actions.close}
+      >
+        <X aria-hidden />
+      </Button>
+      <BarTitle title={meta.title} />
+      {done ?? <ScoreEditToggle pieceId={meta.id} editing bar={bar} disabled={recording} />}
+    </>
   )
 }
 
@@ -33,17 +41,9 @@ export function EditorLead() {
  * where Setup and More are; an original's draft, its status and its menu (`draft`); Done at the end.
  * While a take records they wait for Stop.
  */
-export function EditorActions({
-  draft,
-  done,
-}: {
-  draft?: ReactNode
-  /** Done in its own place: a lesson's example goes back to its lesson, not to the Player. */
-  done?: ReactNode
-}) {
+export function EditorActions({ draft }: { draft?: ReactNode }) {
   const { t } = useTranslation('editor')
   const { actions, meta, takes } = useScoreEditorContext()
-  const bar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
   const canUndo = useEditorState((state) => state.past.length > 0)
   const canRedo = useEditorState((state) => state.future.length > 0)
   const recording = takes.stage !== 'idle'
@@ -72,7 +72,6 @@ export function EditorActions({
       </Button>
       {meta.kind === 'example' ? null : <SettingsButton id={meta.id} disabled={recording} />}
       {draft}
-      {done ?? <ScoreEditToggle pieceId={meta.id} editing bar={bar} disabled={recording} />}
     </>
   )
 }

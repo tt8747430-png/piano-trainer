@@ -176,8 +176,8 @@ function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) 
           in the Player's places, so the bar and the keys stand still as Practise · Edit switches. */}
       <div data-keys={dock} className={SCORE_SCREEN}>
         <ScoreBar
-          lead={<EditorLead />}
-          actions={<EditorActions draft={draft} done={done} />}
+          lead={<EditorLead done={done} />}
+          actions={<EditorActions draft={draft} />}
           tools={<EditorToolsRow />}
         />
         {/* Where the caret is, a screen reader's alone, in the Player's status line's place. */}

@@ -1205,10 +1205,11 @@ describe('the score editor', () => {
           .getByRole('toolbar', { name: 'Play, move and record' })
           .querySelectorAll('button:not([aria-label^="Tempo"])'),
       ]
-      // Close, MIDI, Undo, Redo, Score settings, then Done, the one in words (iOS's).
+      // Close, then Done beside the title, the one in words (iOS's; R29 Flat's); MIDI, Undo, Redo,
+      // Score settings at the end.
       expect(bar).toHaveLength(6)
-      expect(bar.at(-1)).toHaveTextContent('Done')
-      for (const control of [...bar.slice(0, -1), ...dock]) {
+      expect(bar[1]).toHaveTextContent('Done')
+      for (const control of [bar[0]!, ...bar.slice(2), ...dock]) {
         const name = control.getAttribute('aria-label') ?? ''
         expect(shownText(control), name).toBe('')
         // Its name in a tooltip: the browser's (`title`), or the edit row's own, which adds what
@@ -1888,19 +1889,13 @@ describe('the score editor', () => {
     expect(piecesStore.getState().versions.bz4?.sections[0]?.lines[0]).toBe('Fm _ _ _')
   })
 
-  it('keeps the MIDI keyboard first of its bar’s end, where the Player’s is, then Undo and Redo where Setup and More are, and no Song sheet (ADR 0114, 0115)', async () => {
+  it('keeps the MIDI keyboard first of its bar’s end, where the Player’s is, then Undo and Redo where Setup and More are, Done beside the title, and no Song sheet (ADR 0114, 0115, R29)', async () => {
     await renderApp('/edit/my-1', { storage: withSong() })
     const midiButton = await screen.findByRole('button', { name: 'MIDI keyboard' })
     const end = midiButton.closest('[data-area="actions"]')
-    expect(namesIn(end as HTMLElement)).toEqual([
-      'MIDI keyboard',
-      'Undo',
-      'Redo',
-      'Score settings',
-      'Done',
-    ])
+    expect(namesIn(end as HTMLElement)).toEqual(['MIDI keyboard', 'Undo', 'Redo', 'Score settings'])
     const lead = document.querySelector<HTMLElement>('[data-area="lead"]')
-    expect(namesIn(lead as HTMLElement)).toEqual(['Close'])
+    expect(namesIn(lead as HTMLElement)).toEqual(['Close', 'Done'])
   })
 
   it('shows the score through the Player’s View, one menu, but what only practice has (ADR 0115, 0114, 0108)', async () => {

@@ -19,6 +19,8 @@ import {
   PedalLamp,
   PlayerArea,
   PlayerScreen,
+  BarTitle,
+  KeysToggle,
   PlayerClose,
   PlayerDock,
   PlayerTools,
@@ -163,9 +165,16 @@ export function PlayerLayout({
           MIDI, Setup and More; the View and the music's tools. The loop is the transport's (ADR
           0108). */}
       <ScoreBar
-        lead={<PlayerClose onClose={onClose} />}
+        lead={
+          <>
+            <PlayerClose onClose={onClose} />
+            <BarTitle title={title} />
+            {modes}
+          </>
+        }
         actions={
           <>
+            <KeysToggle />
             <MidiButton variant="tool" />
             {setup}
             <Button
@@ -186,7 +195,6 @@ export function PlayerLayout({
               share={share}
               onPrint={() => setPrinting(true)}
             />
-            {modes}
           </>
         }
         tools={

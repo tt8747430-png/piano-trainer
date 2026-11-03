@@ -1,4 +1,6 @@
 export const player = {
+  // The bar's button that shows or hides the piano keys under the music (R29, Flat's).
+  pianoKeys: 'Piano keys',
   setup: 'Setup',
   // The bar's More (ADR 0108, 0107): a piece's information and its sections as sheets, Share as the
   // song page's, Print, the music as a MIDI file (with a recording, at a fixed tempo or time aligned

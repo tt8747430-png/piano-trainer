@@ -57,11 +57,12 @@ describe('Player', () => {
       ]
       expect(controls.map((control) => control.getAttribute('aria-label'))).toEqual([
         'Close',
+        'Edit',
+        'Piano keys',
         'MIDI keyboard',
         'Setup',
         'Player settings',
         'More',
-        'Edit',
       ])
       // Every control is its icon alone.
       for (const control of controls) {
@@ -527,6 +528,25 @@ describe('Player', () => {
     expect(dock).toHaveAttribute('inert')
     await user.click(screen.getByRole('heading', { level: 1 }))
     expect(dock).not.toHaveAttribute('data-hidden')
+  })
+
+  it('leads its bar with Close, the song’s title and Edit beside it (R29, Flat’s)', async () => {
+    await renderApp('/play/bz5')
+    const bar = (await screen.findByRole('button', { name: 'Edit' })).closest('header')!
+    const lead = bar.querySelector<HTMLElement>('[data-area="lead"]')!
+    expect(within(lead).getByRole('button', { name: 'Close' })).toBeInTheDocument()
+    expect(lead.querySelector('span[title]')).toHaveTextContent(/\S/)
+    expect(within(lead).getByRole('button', { name: 'Edit' })).toBeInTheDocument()
+  })
+
+  it('shows and hides the piano keys from the bar, saved (Flat’s keyboard button)', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/play/bz5')
+    const keys = await screen.findByRole('button', { name: 'Piano keys' })
+    const before = settingsStore.getState().scoreView.keys
+    expect(keys).toHaveAttribute('aria-pressed', String(before))
+    await user.click(keys)
+    expect(settingsStore.getState().scoreView.keys).toBe(!before)
   })
 
   it('turns to Edit at its cursor’s bar from the pencil at the bar’s end (ADR 0115, round 26)', async () => {
