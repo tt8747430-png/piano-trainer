@@ -75,8 +75,7 @@ describe('search params', () => {
       triad: 'min',
       size: 7,
       seventh: 'major',
-      added: '',
-      alter: '',
+      colour: '',
       voicing: 'drop2',
       inversion: 2,
       hands: 'both',
@@ -87,14 +86,21 @@ describe('search params', () => {
     // From five notes a chord is in root position or has its right hand from the 7th (ADR 0046).
     expect(await searchAt('/practice/chords?size=9&inversion=3')).toMatchObject({ inversion: 3 })
     expect(await searchAt('/practice/chords?size=9&inversion=2')).toMatchObject({ inversion: 0 })
-    expect(await searchAt('/practice/chords?size=13&alter=b9s11')).toMatchObject({
+    // The chord's colour notes round-trip as a symbol writes them (A33).
+    expect(await searchAt('/practice/chords?size=13&colour=b9,%2311')).toMatchObject({
       size: 13,
-      alter: 'b9s11',
+      colour: 'b9,#11',
     })
-    expect(await searchAt('/practice/chords?triad=min&added=add9')).toMatchObject({
+    expect(await searchAt('/practice/chords?triad=min&colour=9')).toMatchObject({
       triad: 'min',
-      added: 'add9',
+      colour: '9',
     })
+    // A key, from Harmony's or Progressions' chords: the colour notes follow the chord's degree.
+    expect(await searchAt('/practice/chords?root=D&triad=min&size=7&key=C')).toMatchObject({
+      root: 'D',
+      key: 'C',
+    })
+    expect(await searchAt('/practice/chords?key=H')).toMatchObject({ key: undefined })
     expect(
       await searchAt(
         '/play/bz5?key=A&tempo=96&hands=lh&mode=wait&speedTraining=true&swing=light&loop=2-3&pattern=chart&rh=t1&lh=o&chordSize=ninths&simple=true',
@@ -162,7 +168,7 @@ describe('search params', () => {
     expect(await searchAt('/play/bz5?loop=x&speedTraining=1')).toEqual(PLAYER_DEFAULTS)
     expect(
       await searchAt(
-        '/practice/chords?triad=maj13&size=6&seventh=7&added=6&alter=x&inversion=7&step=scale:major',
+        '/practice/chords?triad=maj13&size=6&seventh=7&colour=x&inversion=7&step=scale:major',
       ),
     ).toEqual(CHORDS_DEFAULTS)
     expect(await searchAt('/practice/chords?quality=m7')).toMatchObject(CHORDS_DEFAULTS)
@@ -201,13 +207,12 @@ describe('search params', () => {
   })
 
   it('fit a chord’s parts to one another', async () => {
-    expect(await searchAt('/practice/chords?triad=sus2&size=13&alter=b9')).toMatchObject({
+    expect(await searchAt('/practice/chords?triad=sus2&size=13&colour=b9')).toMatchObject({
       size: 7,
-      alter: '',
+      colour: '',
     })
-    expect(await searchAt('/practice/chords?size=7&added=add6&alter=b5s11')).toMatchObject({
-      added: '',
-      alter: 'b5',
+    expect(await searchAt('/practice/chords?size=7&colour=6,b5,%2311')).toMatchObject({
+      colour: 'b5',
     })
   })
 

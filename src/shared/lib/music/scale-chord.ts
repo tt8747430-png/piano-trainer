@@ -5,7 +5,7 @@ import type { Key } from './key'
 import { pitchClassOf, plainRoot, type SpelledNote } from './note'
 import { pitchClass, type PitchClass } from './pitch'
 import { keyScale, spellScale, type ScaleKind } from './scale'
-import { availableTensions } from './tensions'
+import { availableTensions } from './colour-notes'
 import { toneAbove, type Tone } from './tone'
 
 /** How many notes a chord of a scale stacks: a triad, a 7th, a 9th, an 11th, a 13th. */

@@ -20,7 +20,7 @@ import {
   SIZE_NOTES,
   type ChordSize,
 } from './scale-chord'
-import { availableTensions } from './tensions'
+import { availableTensions } from './colour-notes'
 import type { Tone } from './tone'
 
 /**

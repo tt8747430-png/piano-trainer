@@ -1,23 +1,17 @@
 import { useTranslation } from 'react-i18next'
 import {
-  addedOf,
-  ALTERATION_SIGN,
   BUILT_SIZES,
-  alterationsOf,
   chordInversions,
   SEVENTH_DEGREE,
   seventhsOf,
   sizesOf,
-  withAdded,
-  withAlterations,
   voicingTakesInversion,
-  type AddedTone,
   type BuiltSize,
   type PlacedChord,
   type Tone,
   type Triad,
 } from '@/shared/lib/music'
-import { partsFromParams, partsParams } from '@/shared/lib'
+import { partsFromParams } from '@/shared/lib'
 import { noteFromParam, noteParam } from '@/shared/lib/music'
 import {
   InversionChoice,
@@ -26,7 +20,6 @@ import {
   NotePicker,
   PickerRow,
   Segmented,
-  ToggleChips,
 } from '@/shared/ui'
 import { isSuspended, takesTwoHands, type ChordView } from '../model/chord-view'
 import { RightHandFrom } from './RightHandFrom'
@@ -36,17 +29,6 @@ import { VoicingField } from './VoicingField'
 const QUALITIES = ['maj', 'min', 'aug', 'dim', 'power'] as const satisfies readonly Triad[]
 /** The suspensions, each a major chord's 3rd taken by a 2nd or a 4th. */
 const SUSPENSIONS = ['sus2', 'sus4'] as const satisfies readonly Triad[]
-
-/** Each added tone as its chip names it: as a symbol writes it, the 6th too. */
-const ADDED_NAME: Readonly<Record<AddedTone, string>> = {
-  add2: 'add2',
-  add4: 'add4',
-  add6: 'add6',
-  add9: 'add9',
-  add11: 'add11',
-  addS11: 'add#11',
-  add13: 'add13',
-}
 
 /** Each size's name on screen. */
 const SIZE_NAMES = {
@@ -60,8 +42,8 @@ const SIZE_NAMES = {
 /**
  * A chord's choices in the order a chord is built, each offered only what fits the fields before it:
  * one row of pickers for its root as written, its quality (major, minor, augmented, diminished, power)
- * and its voicing; then its size, its suspension (a major chord's); then its 7th, the tones it adds and its alterations as
- * chips, each only where the chord takes one; then how it is held: its inversion, and one hand or two.
+ * and its voicing; then its size, its suspension (a major chord's) and its 7th; then how it is held:
+ * its inversion, and one hand or two. The tones it adds and alters are its colour notes' (A33).
  * A chord of five notes or more takes two hands (ADR 0046): in the inversion's place, where its right
  * hand starts, when it has more than one start. A choice the chord cannot take is not drawn (R30),
  * the rows after it closing up: no greyed option that looks broken.
@@ -86,8 +68,6 @@ export function ChordBuilder({
   const suspensions =
     quality === 'maj' ? SUSPENSIONS.filter((each) => sizesOf(each).includes(parts.size)) : []
   const sevenths = seventhsOf(parts.triad, parts.size)
-  const added = addedOf(parts)
-  const alterations = alterationsOf(parts)
   const close = chord.voicing === 'close'
   const twoHands = close && takesTwoHands(tones.length)
   const inverts = voicingTakesInversion(chord.voicing)
@@ -159,29 +139,6 @@ export function ChordBuilder({
               })),
             ]}
             onChange={(triad) => onChange({ triad })}
-          />
-        </Labelled>
-      ) : null}
-      {added.length > 0 ? (
-        <Labelled label={t('practice:chords.builder.added')}>
-          <ToggleChips
-            label={t('practice:chords.builder.added')}
-            value={parts.added}
-            options={added.map((tone) => ({ value: tone, label: ADDED_NAME[tone] }))}
-            onChange={(chosen) => onChange(partsParams(withAdded(parts, chosen)))}
-          />
-        </Labelled>
-      ) : null}
-      {alterations.length > 0 ? (
-        <Labelled label={t('practice:chords.builder.alterations')}>
-          <ToggleChips
-            label={t('practice:chords.builder.alterations')}
-            value={parts.alterations}
-            options={alterations.map((alteration) => ({
-              value: alteration,
-              label: ALTERATION_SIGN[alteration],
-            }))}
-            onChange={(chosen) => onChange(partsParams(withAlterations(parts, chosen)))}
           />
         </Labelled>
       ) : null}

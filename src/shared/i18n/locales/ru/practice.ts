@@ -64,8 +64,6 @@ export const practice: LocaleResources['practice'] = {
         major: 'Большая септима',
         diminished: 'Уменьшённая септима',
       },
-      added: 'Добавленные тоны',
-      alterations: 'Альтерации',
     },
     voicing: {
       label: 'Расположение',
@@ -111,14 +109,11 @@ export const practice: LocaleResources['practice'] = {
       title: 'Аппликатура',
       voiced: 'В этом расположении',
     },
-    tensions: {
-      title: 'Доступные тенсии',
-      group: {
-        weak: { title: 'Слабые', says: 'Ничего нового к звучанию не добавляют.' },
-        strong: { title: 'Сильные', says: 'Дают аккорду его название.' },
-        tension: { title: 'Тенсии', says: 'Добавляют краску.' },
-        avoid: { title: 'Избегаемые', says: 'Конфликтуют с аккордом.' },
-      },
+    colour: {
+      title: 'Краски аккорда',
+      info: 'Нажмите на тенсию, чтобы добавить её в аккорд, и ещё раз, чтобы убрать. Избегаемый звук стоит на полутон выше звука аккорда и спорит с ним.',
+      inKey: 'Как {{numeral}} в {{key}}',
+      group: { chord: 'Звуки аккорда', tension: 'Тенсии', avoid: 'Избегаемые' },
     },
     chromatic: 'По полутонам',
   },

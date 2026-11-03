@@ -66,8 +66,6 @@ export const practice = {
       },
       seventh: '7th',
       sevenths: { minor: 'Minor 7th', major: 'Major 7th', diminished: 'Diminished 7th' },
-      added: 'Added tones',
-      alterations: 'Alterations',
     },
     // How the chord is laid on the keys: the jazz pianist's voicings, each explained in its ⓘ.
     voicing: {
@@ -116,14 +114,12 @@ export const practice = {
       // A row of the table: the inversion, or the keys as the voicing lays them.
       voiced: 'As voiced',
     },
-    tensions: {
-      title: 'Available tensions',
-      group: {
-        weak: { title: 'Weak', says: 'These add nothing new to the sound.' },
-        strong: { title: 'Strong', says: 'These give the chord its name.' },
-        tension: { title: 'Tensions', says: 'These add colour.' },
-        avoid: { title: 'Avoid', says: 'These clash with the chord.' },
-      },
+    // The chord's colour notes (A33): its tones, the tensions it takes on top, the notes to avoid.
+    colour: {
+      title: 'Colour notes',
+      info: 'Tap a tension to add it to the chord, and again to take it off. An avoid note sits a half step over a chord tone and clashes with it.',
+      inKey: 'As {{numeral}} in {{key}}',
+      group: { chord: 'Chord tones', tension: 'Tensions', avoid: 'Avoid' },
     },
     chromatic: 'Chromatic walk',
     // Chords' row to the Chord finder, which opens on the chord's own keys.

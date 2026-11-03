@@ -16,7 +16,7 @@ import {
 } from './chord-parts'
 import { note, noteName } from './note'
 import { pitchClass } from './pitch'
-import { availableTensions } from './tensions'
+import { availableTensions } from './colour-notes'
 
 const TRIAD: ChordParts = {
   triad: 'maj',

@@ -261,13 +261,15 @@ export {
   type ChordSize,
 } from './scale-chord'
 export {
+  availableTensions,
+  COLOUR_GROUPS,
+  colourNotes,
   TENSION_CHORDS,
-  TENSION_GROUPS,
-  tensionTones,
+  withColour,
+  type ColourGroup,
+  type ColourNote,
   type TensionChord,
-  type TensionGroup,
-  type TensionTone,
-} from './tensions'
+} from './colour-notes'
 export { SKILLS, chordSkill, isSkillId, scaleSkill, skillOf, type SkillId } from './skill'
 export {
   CIRCLE_OF_FIFTHS,

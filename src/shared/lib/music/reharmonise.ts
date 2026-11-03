@@ -4,7 +4,7 @@ import { INTERVALS, spellBelow, type IntervalName, type LabelledInterval } from 
 import type { Key } from './key'
 import { plainRoot, type SpelledNote } from './note'
 import { tonesInKey } from './scale'
-import { availableTensions } from './tensions'
+import { availableTensions } from './colour-notes'
 
 /** The owner's table's groups, with the triads a hymn's melody note takes first. */
 export const HOLDING_GROUPS = ['triads', 'major', 'minor', 'dominant'] as const

@@ -16,39 +16,60 @@ export interface PartsParams {
   readonly triad: Triad
   readonly size: BuiltSize
   readonly seventh: Seventh
-  /** The added tones by their ids, each once, in order: `add6add9`; '' for none. */
-  readonly added: string
-  /** The alterations as a symbol writes them, each once, in order: `b9s11`; '' for none. */
-  readonly alter: string
+  /**
+   * Its colour notes over the stack (A33), as a symbol writes them, ♯ and ♭ as `#` and `b`, comma
+   * separated, alterations first: `b9,#11`, `6,9`; '' for none.
+   */
+  readonly colour: string
 }
 
-const ALTER_PARAM = /^(b5)?(b9)?(s9)?(s11)?(b13)?$/
-
-/** The alterations an `alter` param writes, or none when it writes anything else. */
-export function readAlterations(value: unknown): Alteration[] {
-  const match = typeof value === 'string' ? ALTER_PARAM.exec(value) : null
-  return match ? ALTERATIONS.filter((_, i) => match[i + 1] !== undefined) : []
+/** How the URL writes each alteration and added tone; a triad's `#11` is added, a 7th chord's altered. */
+const ALTERATION_PARAM: Readonly<Record<Alteration, string>> = {
+  b5: 'b5',
+  b9: 'b9',
+  s9: '#9',
+  s11: '#11',
+  b13: 'b13',
+}
+const ADDED_PARAM: Readonly<Record<AddedTone, string>> = {
+  add2: '2',
+  add4: '4',
+  add6: '6',
+  add9: '9',
+  add11: '11',
+  addS11: '#11',
+  add13: '13',
 }
 
-const ADDED_PARAM = new RegExp(`^${ADDED_TONES.map((tone) => `(${tone})?`).join('')}$`)
-
-/** The added tones an `added` param writes, or none when it writes anything else. */
-export function readAdded(value: unknown): AddedTone[] {
-  const match = typeof value === 'string' ? ADDED_PARAM.exec(value) : null
-  return match ? ADDED_TONES.filter((_, i) => match[i + 1] !== undefined) : []
+/** A `colour` param read at a size: its alterations (a 7th chord's) and added tones, unknown words left out. */
+export function readColour(
+  value: unknown,
+  size: BuiltSize,
+): { added: AddedTone[]; alterations: Alteration[] } {
+  // A URL reads a lone number as one: `colour=9`.
+  const text = typeof value === 'number' ? String(value) : value
+  const words = typeof text === 'string' ? text.split(',') : []
+  const alterations =
+    size === 5 ? [] : ALTERATIONS.filter((each) => words.includes(ALTERATION_PARAM[each]))
+  const added = ADDED_TONES.filter(
+    (tone) =>
+      words.includes(ADDED_PARAM[tone]) && !(tone === 'addS11' && alterations.includes('s11')),
+  )
+  return { added, alterations }
 }
 
 export const partsParams = ({ added, alterations, ...parts }: ChordParts): PartsParams => ({
   ...parts,
-  added: added.join(''),
-  alter: alterations.join(''),
+  colour: [
+    ...alterations.map((each) => ALTERATION_PARAM[each]),
+    ...added.map((tone) => ADDED_PARAM[tone]),
+  ].join(','),
 })
 
 /** The URL params that open the builder on a table quality: a skill's or a chord family's way in. */
 export const qualityParams = (quality: ChordQuality): PartsParams => partsParams(partsOf(quality))
 
-export const partsFromParams = ({ added, alter, ...params }: PartsParams): ChordParts => ({
+export const partsFromParams = ({ colour, ...params }: PartsParams): ChordParts => ({
   ...params,
-  added: readAdded(added),
-  alterations: readAlterations(alter),
+  ...readColour(colour, params.size),
 })
