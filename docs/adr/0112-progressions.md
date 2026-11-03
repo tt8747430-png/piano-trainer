@@ -16,34 +16,42 @@ use one.
   idea, named, by style, with a line of numerals in each mode it has (`major`, `minor`), its note, the pattern its
   Player opens with and its chord size. The key's Major · Minor shows that mode's line. No two lines are the same loop
   in the same key or the relative one (a test holds it). No progression is a piece.
-- **The Progressions page** (`/practice/progressions`) shows a progression in any key as a row on a staff, voiced
-  smoothly, its chords as the Player's diagrams, and the ways into the Player. It holds the tools that work on it:
+- **The Progressions page** (`/practice/progressions`) is three tabs (`?tab=`), each keeping the progression:
+  **Progression** (the row on a staff, voiced as its Settings say, why it works drawn on its chords, its chords as the
+  Player's diagrams, its key, line, chord size and approach chords, then Practise in all 12 keys and its songs),
+  **Library** and **Passing chords**. It holds the tools that work on it:
   - **a typed line**, numerals or a song's chords, read in its key (`?key=&p=`). Chords typed have their key found
     from the chords alone (`keysOfChords`); a chord out of the key is named, not refused (`V/iv`, `♭VII`); playing
     them in another key keeps their letters and basses;
-  - **Between** (`?between=&inKey=`): the passing chords between two chords of its row.
-- **The library is a list of cards** under the key's strip and Major · Minor, style by style, as the reference app
-  lists its progressions: a card's title its numerals, then its name and chord count, how it sounds in one line
-  (`character`, both languages), and a chip a chord, the numeral over the chord in the key shown, so the key
-  re-spells every card. Its Play plays it in place, the sounding chip lit; a tap elsewhere on it shows it at the
-  top of the page, named over its character. No pop-up chooses a progression.
-- **The row's chips** name each chord's harmonic function (T S D, coloured as DESIGN.md's Harmony says) or, with
-  `?harmony=motion`, how each root moves to the next (`↓5 ↓3 ↑2`, the strong moves coloured, with their legend). The
-  kernel reads both (`harmonicFunction`, `rootMove`): a chord's function by its degree in the key (borrowed and applied
-  chords as their family, a ♭VII7 and a ♭II7 dominants), a move by letters. The chip sounding follows the row as
-  it plays; a tap plays its chord. The same chips stand under a lesson's progression.
+  - **Passing chords** (`?tab=passing&between=&inKey=`): the chords that lead from one chord of its row to the next.
+- **The library is a list** (`?tab=library&style=`), as musicca lists it: its styles as chips (All, Pop, Rock …), a
+  row a progression: its line as the Settings write it, its name, and its chords in the key shown in bar cells
+  (`| C | G | Am | F |`), so the key re-spells every row. ▷ plays it in place, the sounding bar lit; a tap elsewhere
+  opens it in the Progression tab. No pop-up chooses a progression.
+- **Why it works is drawn on the chords** (layout B, Decided 14), always, no switch: each chord a chip over its
+  role in one word, **home · away · tension**, and the colour a chord brings (**sad** for the relative minor, **soft**
+  for ii and iii, **bright** for a major chord in a minor key), in DESIGN.md's Harmony paints; between each two an
+  arrow with how the bass moves (`↓5 ↓3 ↑2`, the strong moves bold, the ones that step back soft), its meaning in its
+  name, a tap playing the two chords. One legend line, the terms (tonic, subdominant, dominant, relative minor, each
+  move) behind its ⓘ, and Test yourself to the Quiz's Chord roles. The kernel reads both (`chordRole` over
+  `harmonicFunction`, `rootMove`): a chord's role by its degree in the key (borrowed and applied chords as their
+  family), a move by letters; every library line has its roles (a test). The same row stands under a lesson's
+  progression (`RowRoles`).
 - **A lead-in is a way to play any progression** (`lead`: `v` or `ii-v`): each chord after its own V or ii–V. The
   secondary dominants and the ii–V–I to every chord of a key are its lines, not the library's.
-- **A walk through the keys** is a chart transformation (`walk`): up or down by semitones or whole tones, or round the
-  circle of fifths, always back home, a section per key written in C. Each walk is a row naming the chords of its
-  first two keys, so the sheet's step 2 (each I the next key's ii) reads as written. While it walks there is no one
+- **Practise in all 12 keys**: each sequence is a chart transformation (`walk`), named as teachers name it
+  (Chromatically, rising; In whole steps, falling; Around the circle of fifths, falling a fifth …), always back
+  home, a section per key written in C. Each is a row with an icon by its direction, naming the chords of its first
+  two keys, so the sheet's step 2 (each I the next key's ii) reads as written; a line of one chord has none. While it walks there is no one
   key: no pattern plays the key's triads, no tune or recording plays.
 - **A progression is heard in a song by its numerals** (`findNumerals`), never by its symbols, so a song in any key
   is found. Each chord is read in the key it is written in (a section's own where it has one); an applied dominant is
   read both as applied and as its own degree. A song's chord stands for a numeral where it holds every tone the
   numeral writes (a triad's 7th, 6th, 9th or sus added still stands for it; the bass is never asked). A place never
   runs over a bar of no chord or a key change, and only a key of the line's mode is searched.
-- **How it is read and played**, three switches as a progression player has them, each in the URL:
+- **How it is read and played.** Mode stays with the line (`mode=`), offered only for a typed line, since a library
+  line's numerals say their mode. Written as and Voicing, with the first chord's inversion, are how every
+  progression is shown, so they live on Progressions' Settings (`pt-settings.progressions`, A24), not the URL:
   - **Mode** (`mode=`): the line read in a church mode on the key's tonic (`readInMode`): each plain degree becomes
     the mode's own chord, written against the major key of the tonic for Lydian and Mixolydian, the minor for
     Dorian, Phrygian and Locrian (I IV V in Dorian is i IV v; Mixolydian's VII is ♭VII); chromatic, applied and
@@ -51,16 +59,18 @@ use one.
     mode chosen stands the key on its major or minor; the key turned to the other leaves the mode; the mode is
     named under the line, and the typed line's major/minor hint says nothing while in one. The Player gets the
     re-read numerals in the key (it grows them by the key, not the mode).
-  - **Written as** (`names=`): Numerals · Nashville · Chords, on the row's staff, its chips and every library card.
+  - **Written as**: Numerals · Nashville · Chords, on the row's staff, its chips and every library row.
     Nashville counts from the tonic's major scale in a minor key too (`1m ♭3 4m 5`), its figures raised.
-  - **Voicing** (`block=`): Voice-led (the position chosen, moving smoothly as set) or Block (every chord in root
-    position, the hand leaping); the position greyed while blocks; the Player opens as shown.
+  - **Voicing**: Voice-led (from the first chord's inversion, each after it to the nearest position) or Block (every
+    chord in root position, the hand leaping); the inversion offered only while voice-led; the Player opens as shown.
+- **On the page only what changes the music shown** (R30): the chord size drawn only where a chord grows, Approach
+  chords None · Secondary dominants · ii–V, Songs with this progression only where a song uses it.
 - **The library's breadth** follows the common named progressions of the reference sites, checked as chords, with a
   **Modal** style of vamps that open in their mode (`mode` on an entry; its lines still written against major or
   minor). A rotation of a loop already there (vi–IV–I–V, the Aeolian shuttle, I–♭VII–IV beside I–♭VII–IV–I) stays
   out, as the loop test holds. A modal vamp is heard in a song only where it comes back to its first chord
   (`heardLine`: I–II–I, never Aura Lee's I–II⁷ on to V), on the song page and in its songs alike.
-- **Both ways:** the page lists **Songs with this progression**, each at the bars it is first heard on, opening the
+- **Both ways:** the Progression tab lists **Songs with this progression**, each at the bars it is first heard on, opening the
   Player there looped; a song's page names the library's progressions it uses as chips, each opening Progressions in
   the song's key, one heard only inside a longer one left out.
 
@@ -80,3 +90,5 @@ is saved: views remember numerals, and the Player's `bar` and `loop` open a piec
 - r13 — Function and root-motion chips under the row (2026-10-28).
 - r14 — Modes, Numerals · Nashville · Chords, voice-led or block; 17 more named progressions and a Modal style
   (2026-10-28), from Musicca's and piano.org's progression pages.
+- r29 — Three tabs; the roles and moves drawn on the chords; the library a list; Written as and Voicing on
+  Progressions' Settings (2026-11-03).

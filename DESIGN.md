@@ -255,16 +255,19 @@ shade for an icon on their wash. They mean one thing each, by where they appear:
 
 ### Harmony
 
-A progression's chips say what each chord does, in three of the chrome's paints, each its wash with its deep shade at
-rest and its full paint with ink on it while its chord sounds (`--paint-full-*`, `--on-paint-full`), as a mark's key
-does:
+A progression's row says why it works on its chords (A23, layout B), always, no switch (`RoleChips`):
 
-- **Function:** tonic grass, subdominant sand, dominant lilac; the line under the numeral `T`, `S`, `D`.
-- **Root motion:** a 5th down lilac, a 3rd down sand, a 2nd up grass (the strong moves, as the theory book colours
-  them); the moves the other way (`↑5 ↑3 ↓2`) sand-neutral. A legend card names the four.
+- **Roles:** each chord a 64px chip, its numeral over its role in one word, **home** grass, **away** sand,
+  **tension** lilac, each its wash with its deep shade at rest and its full paint with ink on it while its chord
+  sounds (`--paint-full-*`, `--on-paint-full`); under the role, the colour a chord brings (sad, soft, bright) in
+  small type.
+- **Moves:** between each two chords an arrow with the bass's move (`↓5 ↓3 ↑2`), the strong moves bold in ink, the
+  ones that step back (`↑5 ↑3 ↓2`) soft; a tap plays the two chords.
+- **Legend:** one line under the row, a dot of each role's paint, "Arrows: how the bass moves", the terms behind its
+  ⓘ, and Test yourself as an underlined link.
 
-A chip is a 56px tile in one even grid: one row, or two rows of half where one would crowd (more than six on a phone,
-more than eight wider). These paints mean a function or a move only on a progression's chips and their legend.
+The row wraps on a phone, each arrow staying with the chord it leads to. These paints mean a role only on a
+progression's row and its legend.
 
 ### The keys
 

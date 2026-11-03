@@ -62,13 +62,19 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     once, the tritone under both spellings), each language its own list of titles. The cards with a staff are the
     lessons';
   - Progressions: its typed line and Between (ADR 0112);
-  - Accompaniment: a tab for each method book, Styles and Yours; a pattern's page and the editor of the learner's own;
+  - Accompaniment: a tab for each method book (named in the interface's script: Bobrova, Боброва), Styles and Yours,
+    those hidden on its Settings left out; a pattern's page and the editor of the learner's own;
     a study's page.
 - **The Chord finder** (`/practice/chord-finder?keys=&key=`) is the one tool at the keys: the chord a MIDI keyboard
   plays (as its keys went down, read on once they are let go), else the keys tapped (kept in the URL, a link to send).
   One stage in the middle: the chord named as large as the page allows in every reading, over its grand staff, the
-  chords played logged on it in turn, then the keys that hold it. Its settings can paint the key's scale on every
-  octave of the keys, each with its note (`scale=true`).
+  chords played logged on it in turn, then the keys that hold it; the key it spells in, its picker over the stage.
+  Its Settings (remember the chords, over the bass, the keys it is in, the key's scale on every octave of the keys)
+  are its own page, not a sheet.
+- **Each Practice page has a Settings page** (A24, R18) at `/settings/<page>` (chords, scales, intervals,
+  progressions, accompaniment, chord-finder, exercises-and-quiz): how the page sounds and looks every time, then rows
+  to the on-screen piano and a connected piano. The page's gear opens it (`?from=` names the page, so Back returns
+  there); Settings lists the same pages under Practice. The page keeps what you look at.
 - **A key size chosen** says on the keys' rail for a moment what it shows ("Showing 36 keys (C3–B5)").
 - **The Metronome** (`/practice/metronome`), the owner's example laid out: the BPM large between −10 −1 +1 +10, a
   slider (30–300) and Tap tempo (the average of the last five taps); the sound (Click, Beep, Drum beat) and the meter
@@ -119,3 +125,5 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
 - r29 — Settings in two panes on a laptop; its pages named for what the learner sees (On-screen piano, Connect a
   piano, Computer keys, Sound and recording, Storage and backup); the account card; picture choices; one set of
   navigation marks; five row kinds, the destructive ones last and alone (2026-11-03, A12–A17).
+- r29 — Each Practice page has a Settings page (`/settings/<page>`), its gear in the bar and a Practice group in
+  Settings; the Chord finder's sheet goes (2026-11-03).

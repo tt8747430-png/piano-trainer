@@ -137,9 +137,17 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Written as** («Запись»): how Progressions names a row's chords: Numerals · Nashville · Chords. _Avoid:_ notation.
 - **Voice-led · Block** («Плавное · Блоками»): a row's chords moved to the nearest position, or every one in root
   position, the hand leaping. _Avoid:_ smooth/jumpy, VL on/off.
-- **Lead-in**: the chords played before each chord of a progression, its own V or ii–V. A way of playing, never a
-  library entry. _Avoid:_ approach, tonicisation.
-- **Passing chord**: a chord that leads from one chord to the next. _Avoid:_ connecting chord.
+- **Lead-in** (code; UI **Approach chords** «Подводящие аккорды»: None · Secondary dominants · ii–V): the chords
+  played before each chord of a progression, its own V or ii–V. A way of playing, never a library entry. _Avoid:_
+  tonicisation, "By its V".
+- **Passing chord** («Проходящий аккорд»): a chord that leads from one chord to the next; Progressions' third tab.
+  _Avoid:_ connecting chord, Between.
+- **Role** (a chord's in its key, «дом · уход · напряжение»): its harmonic function said plainly, **home** (tonic),
+  **away** (subdominant), **tension** (dominant), with the colour it brings (**sad** the relative minor, **soft** ii
+  and iii, **bright** a major chord in a minor key) (`chordRole`). _Avoid:_ T S D on the row.
+- **Practise in all 12 keys** («Во всех 12 тональностях»): a progression played as a **sequence** through the keys
+  and home: Chromatically, rising; In whole steps, falling; Around the circle of fifths … (`KeyWalk`). _Avoid:_
+  Through the keys, walk (in the UI).
 - **Harmonic function** («Функция»; UI Tonic, Subdominant, Dominant, T S D): what a chord does in its key: rests,
   moves away, pulls home (`harmonicFunction`). Not a song-in-degrees' Function above. _Avoid:_ predominant, PD,
   role.

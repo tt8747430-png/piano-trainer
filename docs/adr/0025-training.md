@@ -28,8 +28,8 @@ ways, with a time limit and a Next that waits for the answer.
   question and every trainer share one board, whose one primary button never moves: Reveal, Check, or Next greyed
   until the round is answered, then Next.
 - **Four drills over the same material.** **Chords** and **Intervals** are each one trainer asked four ways (`Drill`):
-  **Cards** (one of name, keys and staff shown, the rest revealed), **Quiz** (seen on the keys and staff, four
-  choices on the same root differing only in quality, so the quality is what is read), **Play** (a chord built on the
+  **Flashcards** (one of name, keys and staff shown, the rest revealed), **Name it** (seen on the keys and staff, four
+  choices on the same root differing only in quality, so the quality is what is read), **Play it** (a chord built on the
   keys or MIDI; an interval's upper note over its given lower one) and **By ear** (heard, the same four choices, the
   keys staying up while it sounds). Their ladders and Custom (chords or intervals, roots by Natural · Sharp · Flat,
   inversions, how an interval sounds by ear) are the same for every drill. Only a chord read or played rates its
@@ -41,8 +41,10 @@ ways, with a time limit and a Next that waits for the answer.
   the inversion it needs, and its Cards show its name or its staff, a trainer naming the card faces it has
   (`Trainer.sides`). Like a progression, a cadence rates no skill.
 - **One setup for every trainer** (`widgets/trainer-setup`): the drill and what a card shows, Options (level,
-  Custom's lists each a sheet of checks that never empties, switches, rounds), Timing (time limit, Go on
-  automatically), the record, Start (held in reach at a phone's foot); the drill in a sentence behind the bar's ⓘ. Every explanation is an ⓘ. A run takes
+  Custom's lists each a sheet of checks that never empties, switches, rounds), Timing (time limit), the record,
+  Start, a labelled primary button held in reach at the foot; how every drill goes (Go on automatically) is
+  Exercises and Quiz's Settings (`/settings/exercises-and-quiz`, A24). A question's staff prints the clef and the
+  notes, no time signature (`timeHidden`); the drill in a sentence behind the bar's ⓘ. Every explanation is an ⓘ. A run takes
   the setup's place until its X or its results' Done.
 - **What a trainer asks is view state** (its drill, level, rounds, time limit and Custom choices in the URL,
   remembered per trainer);
@@ -85,3 +87,5 @@ a case in `arrangeExercise`, whose test writes every exercise in every root on t
   ladder with each exercise's last tempo kept, the daily scale routine (2026-10-28).
 - r15 — The setup's groups named small over their cards; Start held at a phone's foot; the drill's sentence moved from a
   card under the controls to the bar's ⓘ (2026-10-30).
+- r29 — Drills named Flashcards · Name it · Play it · By ear, Start in words, no time signature on a question's
+  staff; Go on automatically on Exercises and Quiz's Settings (2026-11-03).
