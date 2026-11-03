@@ -17,6 +17,7 @@ import { InversionChoice, Labelled, Segmented } from '@/shared/ui'
 import { chordKeyPlays, chordMarks, chordsHolding } from '../model/scale-keys'
 import type { ScaleView } from '../model/scale-view'
 import { useHeardNote } from '../model/use-heard-note'
+import { keyOfScale } from '../model/scale-key'
 import { KeyChords } from './KeyChords'
 import { PlayUpDown } from './PlayUpDown'
 import { ScaleLayout } from './ScaleLayout'
@@ -138,6 +139,7 @@ export function ChordsView({
         listening={listening}
         note={note}
         holding={holding}
+        musicKey={keyOfScale(root, kind)}
       />
       <PractiseChords root={tonic} kind={kind} notes={notes} inversion={inversion} />
     </ScaleLayout>

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { chordsRange, ScaleChordGrid, scaleShown, useShownKeys } from '@/features/play-example'
 import {
+  borrowedName,
   fitInversion,
   keyScale,
   placeBorrowedChords,
@@ -13,7 +14,6 @@ import {
 } from '@/shared/lib/music'
 import type { ScaleView } from '../model/scale-view'
 import { CircleOfFifths } from './CircleOfFifths'
-import { KeyDegrees } from './KeyDegrees'
 import { KeyFacts } from './KeyFacts'
 import { keyThird } from '../model/holding-keys'
 import { KeyHarmonise } from './KeyHarmonise'
@@ -73,10 +73,15 @@ export function KeyView({
           <KeyFacts value={musicKey} />
         </div>
       </div>
-      <KeyDegrees value={musicKey} />
       <section className="flex flex-col gap-3">
         <h3 className="text-2xl">{t('scales.key.borrowed')}</h3>
-        <ScaleChordGrid chords={borrowed} />
+        <ScaleChordGrid
+          chords={borrowed}
+          detail={({ chord }) => {
+            const named = borrowedName(musicKey, chord.degree)
+            return named ? t(`scales.key.borrowedName.${named}`) : undefined
+          }}
+        />
       </section>
       <KeyHarmonise
         musicKey={musicKey}

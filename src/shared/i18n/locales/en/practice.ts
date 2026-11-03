@@ -126,13 +126,14 @@ export const practice = {
   },
   // Scales and keys: the run, the chords, the key.
   scales: {
-    show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
+    // The tabs say what is in them (A32): its notes, its key's harmony, the key itself.
+    show: { scale: 'Notes', chords: 'Harmony', key: 'Key' },
     label: 'Scale',
     // The row of pickers over a scale: its root and its kind.
     which: 'Which scale',
     octaves: 'Octaves',
     startOn: 'Start on',
-    openInChords: 'Open in Chords',
+    openChord: 'Open {{chord}} in Chords',
     // What the run's keys carry: its notes, or a hand's fingers.
     onKeys: { label: 'On the keys', notes: 'Notes', lh: 'Left hand', rh: 'Right hand' },
     // The run's fingering hand by hand, each hand drawn with its fingers numbered.
@@ -175,12 +176,17 @@ export const practice = {
       random: 'A random key',
       signature: 'Signature',
       noSignature: 'No sharps or flats',
-      notes: 'Notes',
       modes: 'Modes',
       parallel: 'Parallel',
       enharmonic: 'Also written',
       neighbours: 'Beside it on the circle',
       borrowed: 'Borrowed chords',
+      // The borrowed chords the harmony books name.
+      borrowedName: {
+        picardy: 'Picardy third',
+        neapolitan: 'Neapolitan',
+        minorPlagal: 'Minor plagal',
+      },
       songs: 'Songs in this key',
       studies: 'Studies in this key',
       noSongs: 'No songs are in this key.',

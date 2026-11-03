@@ -249,6 +249,7 @@ export {
   type VoicingBar,
 } from './voicing'
 export {
+  borrowedName,
   CHORD_NOTES,
   CHORD_SIZES,
   ROMAN_NUMERALS,
@@ -257,6 +258,7 @@ export {
   sizeOfNotes,
   scaleChordAt,
   scaleChordHolds,
+  type BorrowedName,
   type ChordNotes,
   type ChordSize,
 } from './scale-chord'

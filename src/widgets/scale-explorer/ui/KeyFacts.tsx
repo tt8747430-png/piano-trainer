@@ -4,7 +4,6 @@ import { useScaleName } from '@/shared/i18n'
 import { IN_PLACE } from '@/shared/lib'
 import {
   enharmonicKey,
-  keyScale,
   keySymbol,
   modesOfKey,
   neighbourKeys,
@@ -12,7 +11,6 @@ import {
   noteParam,
   relativeKey,
   signatureNotes,
-  spellScale,
   type Key,
   printedNote,
 } from '@/shared/lib/music'
@@ -31,16 +29,12 @@ export function KeyFacts({ value }: { value: Key }) {
   const signature = signatureNotes(value)
   const relative = relativeKey(value)
   const enharmonic = enharmonicKey(value)
-  const notes = spellScale(value.tonic, keyScale(value))
   return (
     <dl className="flex flex-col gap-2">
       <Fact term={t('scales.key.signature')}>
         {signature.length === 0
           ? t('scales.key.noSignature')
           : signature.map(printedNote).join(' ')}
-      </Fact>
-      <Fact term={t('scales.key.notes')}>
-        {notes.map((tone) => printedNote(tone.note)).join(' ')}
       </Fact>
       <Fact term={t('scales.facts.relative')}>
         <KeyLink value={relative} />

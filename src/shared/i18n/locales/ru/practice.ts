@@ -118,13 +118,13 @@ export const practice: LocaleResources['practice'] = {
     chromatic: 'По полутонам',
   },
   scales: {
-    show: { scale: 'Гамма', chords: 'Аккорды', key: 'Тональность' },
+    show: { scale: 'Звуки', chords: 'Гармония', key: 'Тональность' },
     label: 'Гамма',
     // The row of pickers over a scale: its root and its kind.
     which: 'Какая гамма',
     octaves: 'Октавы',
     startOn: 'Начать с',
-    openInChords: 'Открыть в Аккордах',
+    openChord: 'Открыть {{chord}} в «Аккордах»',
     onKeys: { label: 'На клавишах', notes: 'Ноты', lh: 'Левая рука', rh: 'Правая рука' },
     byHand: {
       title: 'Аппликатура по рукам',
@@ -165,12 +165,16 @@ export const practice: LocaleResources['practice'] = {
       random: 'Случайная тональность',
       signature: 'Знаки',
       noSignature: 'Без знаков',
-      notes: 'Ноты',
       modes: 'Лады',
       parallel: 'Одноимённая',
       enharmonic: 'Энгармонически',
       neighbours: 'Соседи по кругу',
       borrowed: 'Заимствованные аккорды',
+      borrowedName: {
+        picardy: 'Пикардийская терция',
+        neapolitan: 'Неаполитанский',
+        minorPlagal: 'Минорная субдоминанта',
+      },
       songs: 'Песни в этой тональности',
       studies: 'Этюды в этой тональности',
       noSongs: 'Песен в этой тональности нет.',

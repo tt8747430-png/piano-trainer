@@ -164,8 +164,8 @@ interface BorrowedChord extends ScaleChord {
 
 /**
  * The chords a key borrows most (modal mixture): a major key ♭III, iv, ♭VI and ♭VII from its parallel
- * minor; a minor key the Picardy I from major, the Neapolitan ♭II from Phrygian, IV from melodic minor
- * (Dorian's) and V from harmonic minor.
+ * minor; a minor key the Picardy I from major and the Neapolitan ♭II from Phrygian. A minor key's IV
+ * and V are its melodic and harmonic minor's own, not borrowed (A43).
  */
 const BORROWED: Readonly<
   Record<'major' | 'minor', readonly { readonly degree: number; readonly from: ScaleKind }[]>
@@ -179,9 +179,16 @@ const BORROWED: Readonly<
   minor: [
     { degree: 0, from: 'major' },
     { degree: 1, from: 'phrygian' },
-    { degree: 3, from: 'melodic' },
-    { degree: 4, from: 'harmonic' },
   ],
+}
+
+/** The borrowed chords the harmony books name: the Picardy third, the Neapolitan, the minor plagal iv. */
+export type BorrowedName = 'picardy' | 'neapolitan' | 'minorPlagal'
+
+/** A borrowed chord's own name, by the degree it stands on in its key; none for the rest. */
+export function borrowedName(key: Key, degree: number): BorrowedName | undefined {
+  if (key.minor) return degree === 0 ? 'picardy' : degree === 1 ? 'neapolitan' : undefined
+  return degree === 3 ? 'minorPlagal' : undefined
 }
 const SHIFT_SIGNS = new Map([
   [1, '#'],
@@ -191,7 +198,8 @@ const SHIFT_SIGNS = new Map([
 /**
  * A key's borrowed chords of `notes` notes, in degree order. A root the parallel scale's letters would
  * write as F♭, C♭ or with a double flat is named plainly, and its tones follow it: D♭ major borrows E,
- * A and B, never F♭, B𝄫 and C♭.
+ * A and B, never F♭, B𝄫 and C♭. The Neapolitan keeps its letter, as the books write it (C♭ in B♭
+ * minor), unless that takes a double flat.
  */
 export function borrowedChords(key: Key, notes: ChordNotes): BorrowedChord[] {
   const own = spellScale(key.tonic, keyScale(key))
@@ -200,7 +208,9 @@ export function borrowedChords(key: Key, notes: ChordNotes): BorrowedChord[] {
     const ownRoot = own[degree]
     if (!chord || !ownRoot) return []
     const shift = pitchClass(pitchClassOf(chord.root) - pitchClassOf(ownRoot.note))
-    const root = plainRoot(chord.root)
+    const neapolitan = borrowedName(key, degree) === 'neapolitan'
+    const root =
+      neapolitan && Math.abs(chord.root.accidental) < 2 ? chord.root : plainRoot(chord.root)
     return [
       {
         ...chord,
