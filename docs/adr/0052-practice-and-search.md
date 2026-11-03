@@ -42,25 +42,31 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   its choices as labelled fields; its sections. **It holds the tools that work on it**, never a tab or a page of their
   own:
   - Chords: the builder (any chord from its parts, ADR 0046; its root, quality and voicing one row of pickers, the
-    power chord among the qualities; a size or inversion the chord cannot take greyed with why), its voicing (a menu
+    power chord among the qualities; a size, 7th, suspension, inversion or hands the chord cannot take not drawn, R30),
+    its Colour notes (one panel, ADR 0046: Chord tones · Tensions · Avoid, a note the chord can take a toggle that
+    adds it to its keys, symbol and sound, `colour=b9,#11`; with `key=` from Harmony's or Progressions' chords the
+    groups follow its degree, "As ii7 in C major" under the heading), its voicing (a menu
     of the eight, ADR 0046, `voicing=`, one the chord cannot take left out, the chosen one's ⓘ saying what it is with its spelling in C and on this
     chord; a voicing other than close sets the hands, and the inversion where it is not made from a close chord),
     its Fingering (each hand drawn as Scales draws it, beside a row an inversion of each hand's block fingering, the
     keys' own marked; a voicing or a chord of five notes one row of what each hand holds), the fingers on the keys,
-    its tensions under a 7th chord, its arpeggio and chromatic walk into the Player;
-  - Scales and keys: Scale (a run from any start; what its keys carry, Notes · Left hand · Right hand, `onKeys=`;
+    its arpeggio and chromatic walk into the Player; Arpeggio and Play one floating capsule (R29);
+  - Scales and keys, its tabs saying what is in them, **Notes · Harmony · Key** (A32; the URL's `show=scale|chords|key`
+    kept): Notes (a run from any start; what its keys carry, Notes · Left hand · Right hand, `onKeys=`;
     on a staff; its fingering hand by hand, each hand drawn with its fingers numbered beside the run's notes and
-    fingers; its exercises), Chords (the scale's chords to 13ths, in an inversion, walked, each a tap to play and a
-    link to open it in Chords) and Key (the circle of fifths, its signature, facts: notes, relative and parallel
-    keys, the keys beside it on the circle, its other spelling where the circle's ends meet, modes; its degrees by
-    name with their notes and triads; borrowed chords, the songs in it, and Harmonise: the chords that hold a melody
-    note), as tabs;
-  - Intervals: a row an interval over a root, as the reference lists them: its short name, its name over its size in
-    semitones, a small keyboard with both keys; the simple ones (the tritone twice, A4 and d5) and those a chord
-    symbol names (♭9 to 13; no 12th; the augmented 9th). A tap plays it the way the switch above says, At once · Up
-    · Down (`way=`). Within the octave each row's ⓘ names songs that open with it, rising and falling (the unison
-    once, the tritone under both spellings), each language its own list of titles. The cards with a staff are the
-    lessons';
+    fingers; its exercises), Harmony (the scale's chords to 13ths on the seven-degree spine, a column a degree, each
+    its symbol, numeral and, in a key, its degree's name (the degrees table gone into them), in an inversion, walked,
+    each a tap to play and opening in Chords, in the key, from its card's corner: no second row of links) and Key
+    (the circle of fifths, its signature, facts: relative (here alone, A32) and parallel keys, the keys beside it on the circle, its
+    other spelling where the circle's ends meet, modes; borrowed chords, the books' names under them; the songs in it,
+    and Harmonise: the chords that hold a melody note);
+  - Intervals: a row an interval over a root, as the reference lists them: a play mark, its short name, its name over
+    its size ("3 semitones"), a small keyboard with both keys, every row's drawn at one size; the simple ones (the
+    tritone twice, A4 and d5) and those a chord symbol names (♭9 to 13; no 12th; the augmented 9th). A tap plays it
+    the way the floating transport says, **Harmonic · Melodic, rising · Melodic, falling** (`way=`, three pictured
+    buttons), beside **Play all** (each interval in turn) and Stop (A22). Within the octave each row's ⓘ names songs
+    that open with it, rising and falling (the unison once, the tritone under both spellings), each language its own
+    list of titles; ear training a row into the Quiz, which owns it. The cards with a staff are the lessons';
   - Progressions: its typed line and Between (ADR 0112);
   - Accompaniment: a tab for each method book, Styles and Yours; a pattern's page and the editor of the learner's own;
     a study's page.
@@ -116,6 +122,9 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
 - r29 — Back goes up a parents table (`app/routes/parents.ts`), not back through history; Search a palette over the screen; one metronome engine; the Profile's badges, milestones, notifications and Streak pages (decided 2026-11-02, being built in round 29; spec `.scratch/r29/back-as-up/spec.md`).
 - r29 — Roots, qualities, voicings and scale kinds a row of pickers; the step strips gone (round 29, ADR 0061).
 - r29 — Built: Back goes up the parents table (`useUp`), views and modes replace their entry, Search a palette over the screen (2026-11-02).
+- r29 — Chords' colour notes and only the choices a chord takes; Scales' Notes · Harmony · Key, the degrees on the
+  Harmony spine; Intervals' way named as the books name it, in the floating transport with Play all (2026-11-03,
+  A20–A22, A32, A33, A43).
 - r29 — Settings in two panes on a laptop; its pages named for what the learner sees (On-screen piano, Connect a
   piano, Computer keys, Sound and recording, Storage and backup); the account card; picture choices; one set of
   navigation marks; five row kinds, the destructive ones last and alone (2026-11-03, A12–A17).
