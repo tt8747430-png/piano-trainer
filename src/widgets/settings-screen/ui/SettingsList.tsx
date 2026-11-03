@@ -2,60 +2,30 @@ import { Link } from '@tanstack/react-router'
 import {
   Cable,
   HardDrive,
-  Keyboard,
   LifeBuoy,
-  Mic,
-  PenLine,
   Piano,
   ScrollText,
   Settings2,
-  CirclePlay,
   ShieldCheck,
   ShieldUser,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useMidiSummary } from '@/features/connect-midi'
 import { useAccount } from '@/shared/lib/account'
-import { PAGE_TILES, RowLink, SettingsGroup } from '@/shared/ui'
+import { RowLink, SettingsGroup } from '@/shared/ui'
 import { AccountCard } from './AccountCard'
 import { UpdateRows } from './UpdateRows'
 
-/** Each Practice page's Settings (A24), as Practice lists the pages. */
-const PRACTICE_SETTINGS = [
-  { to: '/settings/chords', name: 'practice:pages.chords', tile: PAGE_TILES.chords },
-  { to: '/settings/scales', name: 'practice:pages.scales', tile: PAGE_TILES.scales },
-  { to: '/settings/intervals', name: 'practice:pages.intervals', tile: PAGE_TILES.intervals },
-  {
-    to: '/settings/progressions',
-    name: 'practice:pages.progressions',
-    tile: PAGE_TILES.progressions,
-  },
-  {
-    to: '/settings/accompaniment',
-    name: 'practice:pages.accompaniment',
-    tile: PAGE_TILES.patterns,
-  },
-  {
-    to: '/settings/chord-finder',
-    name: 'practice:pages.chordFinder',
-    tile: PAGE_TILES.chordFinder,
-  },
-  {
-    to: '/settings/exercises-and-quiz',
-    name: 'practice:settings.trainers',
-    tile: PAGE_TILES.quiz,
-  },
-] as const
-
 /**
  * Settings' list, as iOS's reads: the account card first, then a row for each page, each its icon in
- * a coloured square (R21): General (General, Storage and backup); Playing (the on-screen piano, a connected piano, the computer
- * keys, sound and recording, R22, then the Player's and the score editor's kind pages, B7); Practice (each page's own Settings, A24); Help (How to use, Privacy, Terms) and the app's version;
+ * a coloured square (R21): General (General, Storage and backup); Piano (the on-screen piano, with the computer keys
+ * inside it, and a connected piano); Help. Only what concerns the whole app: the Player's, the editor's and
+ * each Practice page's settings are behind their own gear (R29 Decided 22–23); Help (How to use, Privacy, Terms) and the app's version;
  * and for an admin, the Admin area. A phone's Settings screen is this list alone; a laptop's keeps it
  * beside the page chosen (`SettingsScreen`), the page shown marked.
  */
 export function SettingsList() {
-  const { t } = useTranslation(['settings', 'admin', 'practice'])
+  const { t } = useTranslation(['settings', 'admin'])
   const { account } = useAccount()
   const midi = useMidiSummary()
   return (
@@ -75,7 +45,7 @@ export function SettingsList() {
           render={<Link to="/settings/storage" />}
         />
       </SettingsGroup>
-      <SettingsGroup flush title={t('groups.playing.label')}>
+      <SettingsGroup flush title={t('groups.piano.label')}>
         <RowLink
           title={t('pages.onScreenPiano')}
           icon={Piano}
@@ -89,35 +59,6 @@ export function SettingsList() {
           value={midi}
           render={<Link to="/settings/connect-piano" />}
         />
-        <RowLink
-          title={t('pages.computerKeys')}
-          icon={Keyboard}
-          paint="sand"
-          render={<Link to="/settings/computer-keys" />}
-        />
-        <RowLink
-          title={t('pages.sound')}
-          icon={Mic}
-          paint="grass"
-          render={<Link to="/settings/sound-and-recording" />}
-        />
-        <RowLink
-          title={t('pages.player')}
-          icon={CirclePlay}
-          paint="sky"
-          render={<Link to="/settings/player" />}
-        />
-        <RowLink
-          title={t('pages.scoreEditor')}
-          icon={PenLine}
-          paint="lilac"
-          render={<Link to="/settings/score-editor" />}
-        />
-      </SettingsGroup>
-      <SettingsGroup flush title={t('groups.practice.label')}>
-        {PRACTICE_SETTINGS.map(({ to, name, tile }) => (
-          <RowLink key={to} title={t(name)} {...tile} render={<Link to={to} />} />
-        ))}
       </SettingsGroup>
       <SettingsGroup flush title={t('groups.help.label')} footnote={t('about.madeWith')}>
         <RowLink

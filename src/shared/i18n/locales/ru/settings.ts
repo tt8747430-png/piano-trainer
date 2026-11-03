@@ -3,7 +3,7 @@ import type { LocaleResources } from '../../types'
 export const settings: LocaleResources['settings'] = {
   title: 'Настройки',
   language: { label: 'Язык', en: 'English', ru: 'Русский' },
-  theme: { label: 'Тема', system: 'Как в системе', light: 'Светлая', dark: 'Тёмная' },
+  theme: { label: 'Оформление', system: 'Как на устройстве', light: 'Светлое', dark: 'Тёмное' },
   pages: {
     onScreenPiano: 'Пианино на экране',
     connectPiano: 'Подключить пианино',
@@ -53,8 +53,7 @@ export const settings: LocaleResources['settings'] = {
   // Settings' grouped list: its sections.
   sections: { general: 'Общие' },
   groups: {
-    playing: { label: 'Игра' },
-    practice: { label: 'Практика' },
+    piano: { label: 'Фортепиано' },
     help: { label: 'Помощь' },
   },
   account: {

@@ -21,6 +21,7 @@ export const SETTINGS_PAGES = [
   'accompaniment',
   'chord-finder',
   'trainers',
+  'lessons',
 ] as const
 export type SettingsPageId = (typeof SETTINGS_PAGES)[number]
 
@@ -58,7 +59,7 @@ export type SettingKey = Exclude<SettingsField, NotPreference | `${NotPreference
 export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   theme: 'general',
   locale: 'general',
-  lessonReading: 'general',
+  lessonReading: 'lessons',
   'practice.fingerNumbers': 'player',
   'practice.namedNotes': 'player',
   'practice.positions': 'player',

@@ -7,15 +7,15 @@ import { setMidi } from '@/features/set-preference'
 import { midi as key } from '@/shared/lib/music'
 
 const midiRow = () =>
-  within(screen.getByRole('region', { name: 'Playing' })).getByRole('link', {
+  within(screen.getByRole('region', { name: 'Piano' })).getByRole('link', {
     name: /^Connect a piano/,
   })
 
 describe('Settings › Connect a piano', () => {
-  it('is a row of Settings’ Playing that shows its state at its right and opens the MIDI screen', async () => {
+  it('is a row of Settings’ Piano group that shows its state at its right and opens the MIDI screen', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/settings')
-    await screen.findByRole('region', { name: 'Playing' })
+    await screen.findByRole('region', { name: 'Piano' })
     expect(midiRow()).toHaveTextContent(/Connect a piano\s*Off/)
     await user.click(midiRow())
     expect(await screen.findByRole('heading', { level: 1, name: 'Connect a piano' })).toBeVisible()
@@ -24,7 +24,7 @@ describe('Settings › Connect a piano', () => {
 
   it('names the keyboard connected in the Settings row', async () => {
     const { midi } = await renderApp('/settings')
-    await screen.findByRole('region', { name: 'Playing' })
+    await screen.findByRole('region', { name: 'Piano' })
     await act(() => midi.connect())
     expect(midiRow()).toHaveTextContent(/Connect a piano\s*Keyboard/)
   })

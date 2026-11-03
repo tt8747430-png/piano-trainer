@@ -1,6 +1,7 @@
 import { screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { SETTING_HOMES, type SettingKey, type SettingsPageId } from '@/entities/settings'
+import { LESSONS } from '@/entities/lesson'
 import { renderApp } from './testing/render-app'
 
 /** Settings' own pages, by the page each is the home of (R18, R20). */
@@ -16,6 +17,7 @@ const PAGES: readonly (readonly [SettingsPageId, string])[] = [
   ['accompaniment', '/settings/accompaniment'],
   ['chord-finder', '/settings/chord-finder'],
   ['trainers', '/settings/exercises-and-quiz'],
+  ['lessons', `/lessons/${LESSONS[0]!.id}/settings`],
 ]
 
 const isKey = (key: string): key is SettingKey => key in SETTING_HOMES

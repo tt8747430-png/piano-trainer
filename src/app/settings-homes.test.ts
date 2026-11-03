@@ -28,6 +28,7 @@ const PAGE_PATHS: Readonly<Record<SettingsPageId, readonly string[]>> = {
   intervals: ['pages/practice-settings/ui/ExplorerSettingsPages.tsx'],
   progressions: ['pages/practice-settings/ui/ProgressionsSettingsPage.tsx'],
   accompaniment: ['pages/practice-settings/ui/AccompanimentSettingsPage.tsx'],
+  lessons: ['pages/lesson/ui/LessonSettingsPage.tsx'],
   'chord-finder': ['pages/practice-settings/ui/ChordFinderSettingsPage.tsx'],
   trainers: ['pages/practice-settings/ui/TrainersSettingsPage.tsx'],
 }

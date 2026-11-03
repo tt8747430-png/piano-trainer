@@ -24,7 +24,7 @@ export function PracticeSettingsScreen({
   return (
     <SettingsScreen title={title} sub={from !== undefined}>
       {children}
-      <SettingsGroup flush title={t('groups.playing.label')}>
+      <SettingsGroup flush title={t('groups.piano.label')}>
         <RowLink
           title={t('pages.onScreenPiano')}
           icon={Piano}

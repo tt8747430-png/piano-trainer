@@ -38,7 +38,7 @@ describe('Settings', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/profile'))
   })
 
-  it('is one grouped list: the account card, General, Playing, Practice, Help', async () => {
+  it('holds only the app’s own pages: the account card, General, Piano, Help', async () => {
     await renderApp('/settings')
     const card = within(await screen.findByRole('navigation', { name: 'Account' }))
     expect(card.getAllByRole('link').map((link) => link.textContent)).toEqual([
@@ -46,8 +46,7 @@ describe('Settings', () => {
     ])
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
       'General',
-      'Playing',
-      'Practice',
+      'Piano',
       'Help',
     ])
     expect(
@@ -60,35 +59,38 @@ describe('Settings', () => {
       '/settings/storage',
       '/settings/on-screen-piano',
       '/settings/connect-piano',
-      '/settings/computer-keys',
-      '/settings/sound-and-recording',
-      '/settings/player',
-      '/settings/score-editor',
-      '/settings/chords',
-      '/settings/scales',
-      '/settings/intervals',
-      '/settings/progressions',
-      '/settings/accompaniment',
-      '/settings/chord-finder',
-      '/settings/exercises-and-quiz',
       '/settings/how-to-use',
       '/legal/privacy',
       '/legal/terms',
     ])
   })
 
+  it('has no Player, Score editor, Sound and recording, Computer keys or Practice rows', async () => {
+    await renderApp('/settings')
+    await screen.findByRole('navigation', { name: 'Account' })
+    for (const name of [
+      'Player',
+      'Score editor',
+      'Sound and recording',
+      'Computer keys',
+      'Chords',
+    ]) {
+      expect(screen.queryByRole('link', { name: new RegExp(`^${name}`) })).toBeNull()
+    }
+  })
+
   it('shows the saved language and theme on General, each changed in place and saved', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings/general')
     const general = await screen.findByRole('main')
-    expect(within(general).getByRole('combobox', { name: 'Language' })).toHaveTextContent('English')
-    // The theme is three small screens (R21), the system's chosen.
-    const theme = within(general).getByRole('radiogroup', { name: 'Theme' })
-    expect(within(theme).getByRole('radio', { name: 'System' })).toBeChecked()
+    const language = within(general).getByRole('radiogroup', { name: 'Language' })
+    expect(within(language).getByRole('radio', { name: 'English' })).toBeChecked()
+    // The appearance a card of three (R29), the device's chosen.
+    const theme = within(general).getByRole('radiogroup', { name: 'Appearance' })
+    expect(within(theme).getByRole('radio', { name: 'Same as the device' })).toBeChecked()
     await user.click(within(theme).getByRole('radio', { name: 'Dark' }))
     expect(settingsStore.getState().theme).toBe('dark')
-    await user.click(within(general).getByRole('combobox', { name: 'Language' }))
-    await user.click(await screen.findByRole('option', { name: 'Русский' }))
+    await user.click(within(language).getByRole('radio', { name: 'Русский' }))
     expect(settingsStore.getState().locale).toBe('ru')
   })
 
@@ -120,7 +122,7 @@ describe('Settings', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/settings/general'))
     expect(await screen.findByRole('heading', { level: 1, name: 'General' })).toBeInTheDocument()
     expect(screen.getByRole('navigation', { name: 'Account' })).toBeInTheDocument()
-    expect(screen.getByRole('combobox', { name: 'Language' })).toBeInTheDocument()
+    expect(screen.getByRole('radiogroup', { name: 'Language' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'General' })).toHaveAttribute('aria-current', 'page')
     expect(screen.queryByRole('button', { name: 'Back' })).toBeNull()
   })

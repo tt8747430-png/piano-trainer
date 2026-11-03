@@ -1,13 +1,5 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import {
-  Bookmark,
-  BookOpenText,
-  Languages,
-  Link2,
-  ListChecks,
-  Map,
-  type LucideIcon,
-} from 'lucide-react'
+import { Bookmark, Languages, Link2, ListChecks, Map, type LucideIcon } from 'lucide-react'
 import { useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { courseLesson } from '@/entities/course'
@@ -20,7 +12,13 @@ import {
   withAfter,
   type Lesson,
 } from '@/entities/lesson'
-import { selectLessonReading, useSettings } from '@/entities/settings'
+import {
+  LESSON_READINGS,
+  selectLessonReading,
+  useSettings,
+  useSettingsStoreApi,
+} from '@/entities/settings'
+import { setLessonReading } from '@/features/set-preference'
 import { courseLessonStepId, lessonStepId, type StepId } from '@/entities/step'
 import { RemoveGroup, useLessonDraft } from '@/features/edit-original'
 import { ResetStepsRow } from '@/features/reset-progress'
@@ -29,6 +27,7 @@ import { shareLink } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   BackButton,
+  ChoiceCard,
   ChoiceRow,
   MultiDropdown,
   RowButton,
@@ -133,6 +132,7 @@ function LessonSettings({
   const { account } = useAccount()
   const navigate = useNavigate()
   const reading = useSettings(selectLessonReading)
+  const settings = useSettingsStoreApi()
   const title = localText(lesson.title, locale)
   const share = async () => {
     const shared = await shareLink({ title, path })
@@ -144,15 +144,13 @@ function LessonSettings({
       <ScreenHeader title={t('settings.title')} back={back} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <p className="px-1 font-display text-2xl font-semibold text-balance">{title}</p>
-        <SettingsGroup flush title={t('settings.reading')}>
-          <RowLink
-            title={t('reading.title')}
-            icon={BookOpenText}
-            paint="lilac"
-            value={t(`reading.${reading}`)}
-            render={<Link to="/settings/general" />}
-          />
-        </SettingsGroup>
+        <ChoiceCard
+          title={t('reading.title')}
+          setting="lessonReading"
+          value={reading}
+          options={LESSON_READINGS.map((value) => ({ value, label: t(`reading.${value}`) }))}
+          onChange={(value) => setLessonReading(settings, value)}
+        />
         <SettingsGroup flush title={t('settings.share')}>
           <RowButton
             title={t('settings.shareLink')}

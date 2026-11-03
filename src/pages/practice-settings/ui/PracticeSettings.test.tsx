@@ -1,4 +1,4 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -29,25 +29,11 @@ describe('Practice pages’ Settings (A24, R18)', () => {
     },
   )
 
-  it('lists every Practice page’s Settings in Settings, the same page the gear opens', async () => {
-    const user = userEvent.setup()
-    const { router } = await renderApp('/settings')
-    const practice = await screen.findByRole('region', { name: 'Practice' })
-    for (const name of [
-      'Chords',
-      'Scales and keys',
-      'Intervals',
-      'Progressions',
-      'Accompaniment',
-      'Chord finder',
-      'Exercises and Quiz',
-    ]) {
-      expect(within(practice).getByRole('link', { name })).toBeInTheDocument()
-    }
-    await user.click(within(practice).getByRole('link', { name: 'Progressions' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/settings/progressions'))
-    await user.click(screen.getByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/settings'))
+  it('keeps each Practice page’s Settings behind its page’s gear, not in Settings', async () => {
+    await renderApp('/settings')
+    await screen.findByRole('navigation', { name: 'Account' })
+    expect(screen.queryByRole('region', { name: 'Practice' })).toBeNull()
+    expect(screen.queryByRole('link', { name: 'Progressions' })).toBeNull()
   })
 
   it('writes and voices every progression as chosen, its first inversion only where voice-led', async () => {

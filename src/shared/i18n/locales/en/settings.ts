@@ -1,7 +1,7 @@
 export const settings = {
   title: 'Settings',
   language: { label: 'Language', en: 'English', ru: 'Русский' },
-  theme: { label: 'Theme', system: 'System', light: 'Light', dark: 'Dark' },
+  theme: { label: 'Appearance', system: 'Same as the device', light: 'Light', dark: 'Dark' },
   // Settings' pages, named after what the learner sees (R22): never "keyboard" alone.
   pages: {
     onScreenPiano: 'On-screen piano',
@@ -57,8 +57,7 @@ export const settings = {
   // Settings' grouped list: its sections.
   sections: { general: 'General' },
   groups: {
-    playing: { label: 'Playing' },
-    practice: { label: 'Practice' },
+    piano: { label: 'Piano' },
     help: { label: 'Help' },
   },
   account: {

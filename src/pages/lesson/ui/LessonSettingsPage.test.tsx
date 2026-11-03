@@ -34,15 +34,23 @@ describe('a lesson’s Settings (round 28)', () => {
       expect(router.state.location.pathname).toBe(`/lessons/${LESSON.id}/settings`),
     )
     expect(await screen.findByText(LESSON.title.en)).toBeInTheDocument()
-    expect(await screen.findByRole('link', { name: /Lessons read as\s*One page/ })).toHaveAttribute(
-      'href',
-      '/settings/general',
-    )
+    // How lessons read is chosen here, its one home (R29 Decided 23), not on Settings › General.
+    const reading = await screen.findByRole('radiogroup', { name: 'Lessons read as' })
+    expect(within(reading).getByRole('radio', { name: /One page/ })).toBeChecked()
+    expect(document.querySelector('[data-setting="lessonReading"]')).not.toBeNull()
     expect(screen.getByRole('button', { name: 'Share link' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Reset progress' })).toBeInTheDocument()
     // An editor's rows are an editor's alone.
     expect(screen.queryByRole('link', { name: /Level/ })).not.toBeInTheDocument()
     expect(screen.queryByText('Written in')).not.toBeInTheDocument()
+  })
+
+  it('chooses how lessons read, and saves it', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp(`/lessons/${LESSON.id}/settings`)
+    const reading = await screen.findByRole('radiogroup', { name: 'Lessons read as' })
+    await user.click(within(reading).getAllByRole('radio')[1]!)
+    expect(settingsStore.getState().lessonReading).toBe('sections')
   })
 
   it('resets the lesson’s progress once asked, and no other lesson’s', async () => {
