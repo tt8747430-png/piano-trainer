@@ -39,9 +39,9 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A24 | A Settings page for every Practice page | 2 | open | | |
 | A25 | Accompaniment, Chord finder, Metronome, Exercises and Quiz | 2 | open | | |
 | A26 | The on-screen piano itself | 3 | open | | |
-| A27 | The Player's piano sound and its pedal | 3 | open | | |
+| A27 | The Player's piano sound and its pedal | 3 | in progress | 16190d53, 5fdb368d | pedal events: one voice per key, scheduled notes decay as the live voice's, pedal-held notes end at the lift, CC64 to a connected piano with note-offs at written ends; auto-pedal as a pure function (wired with B7's Player settings page). Left: the sampled grand (D15), the pedal lamp and Ped. highlight in the Player, the Fantaisie-Impromptu check (its file is not in the repo: owner's to-do) |
 | A28 | The song page of an imported or own song | 4 | open | | |
-| A29 | Imports and exports | 4 | open | | |
+| A29 | Imports and exports | 4 | in progress | 65506c2c, 96379253, 44aa68f7, afd5758d, aba6d200 | the pedal as a line of events: MusicXML read/write at its own positions and offsets (4 fixtures), MIDI CC64 both ways, MEI tstamp, the editor's pedal tool. Left: .mxl, beams kept, minor keys without mode, PDF/audio export, dragging a Ped. mark |
 | A30 | Fingering, one way everywhere | 2 | open | | |
 | A31 | Nothing flickers, nothing jumps | 1 | done | 0a9069b4 | measured before paint, rows that stay, a bar that holds; a CLS about 0.01 on Chords and Scales at 1280 on a fresh load remains (audit); Chords' heading block height goes with A20 |
 | A32 | The theory pages: one owner per idea, no copies | 2 | open | | |
@@ -72,6 +72,7 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 
 - Record the spoken metronome count, one to eight, in English and Russian (D16).
 - The Metronome's recorded sounds (D16): Freesound answers 403 from the cloud container, so no CC0 one-shots could be fetched. Either drop the CC0 files (woodblock, clave, rimshot, cowbell, click, kick, snare, closed and open hat, ride; an accent and a normal stroke each) into `public/samples/metronome/` with their sources, or let the environment reach freesound.org. Until then the synthesised voices play.
+- Add the Fantaisie-Impromptu's MusicXML to `src/shared/lib/musicxml/fixtures/` (or say where it is) so its pedalling can be checked against the score (A27).
 - Reseed the built-in content (`node scripts/export-content.mjs` then `scripts/seed-content.mjs` with an editor's `SEED_EMAIL`/`SEED_PASSWORD`): two lessons' wording changed with A6 (Approach chords, Root movement).
 
 ## Round reports
