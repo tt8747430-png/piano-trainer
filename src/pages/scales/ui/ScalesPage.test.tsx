@@ -337,6 +337,26 @@ describe('Practice → Scales and keys', () => {
     ])
   })
 
+  it('writes a minor key with the harmonic V and vii° over the natural v and VII (A21)', async () => {
+    await renderApp('/practice/scales?root=Bb&kind=natural&show=chords')
+    const chords = await screen.findByRole('region', { name: 'Chords in this scale' })
+    expect(
+      within(chords)
+        .getAllByRole('button')
+        .map((chord) => chord.textContent),
+    ).toEqual([
+      'B♭miTonic',
+      'C°ii°Supertonic',
+      'D♭IIIMediant',
+      'E♭mivSubdominant',
+      'FVDominant',
+      'FmvDominant',
+      'G♭VISubmediant',
+      'A°vii°Leading tone',
+      'A♭VIISubtonic',
+    ])
+  })
+
   it('has no Chords view for a scale without seven notes', async () => {
     await renderApp('/practice/scales?kind=blues&show=chords')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })

@@ -21,36 +21,48 @@ export function ScaleChordGrid({
   open,
 }: {
   chords: readonly PlacedScaleChord[]
-  holds?: ReadonlySet<number>
+  /** The chords that hold the note heard, ringed. */
+  holds?: ReadonlySet<PlacedScaleChord>
   detail?: (placed: PlacedScaleChord) => string | undefined
   open?: (placed: PlacedScaleChord) => ReactNode
 }) {
   const playback = usePlayback<string>()
+  // A degree with two chords (a minor key's V over v) stacks them in its one column.
+  const columns = chords.reduce<PlacedScaleChord[][]>((all, placed) => {
+    const last = all.at(-1)
+    if (last?.[0]?.chord.degree === placed.chord.degree) last.push(placed)
+    else all.push([placed])
+    return all
+  }, [])
   return (
     <div className="grid grid-cols-4 gap-2 sm:grid-cols-7">
-      {chords.map((placed) => {
-        const link = open?.(placed)
-        return (
-          <div key={idOf(placed)} className="relative flex flex-col">
-            <ChordButton
-              symbol={placed.symbol}
-              numeral={placed.numeral}
-              detail={detail?.(placed)}
-              playing={playback.playing === idOf(placed)}
-              holds={holds?.has(placed.chord.degree) ?? false}
-              onClick={() =>
-                playback.toggle(idOf(placed), () =>
-                  chordSounds(
-                    placed.tones.map((tone) => tone.midi),
-                    { arpeggio: false },
-                  ),
-                )
-              }
-            />
-            {link ? <div className="absolute top-0.5 left-0.5">{link}</div> : null}
-          </div>
-        )
-      })}
+      {columns.map((column) => (
+        <div key={column.map(idOf).join('|')} className="flex flex-col gap-2">
+          {column.map((placed) => {
+            const link = open?.(placed)
+            return (
+              <div key={idOf(placed)} className="relative flex flex-col">
+                <ChordButton
+                  symbol={placed.symbol}
+                  numeral={placed.numeral}
+                  detail={detail?.(placed)}
+                  playing={playback.playing === idOf(placed)}
+                  holds={holds?.has(placed) ?? false}
+                  onClick={() =>
+                    playback.toggle(idOf(placed), () =>
+                      chordSounds(
+                        placed.tones.map((tone) => tone.midi),
+                        { arpeggio: false },
+                      ),
+                    )
+                  }
+                />
+                {link ? <div className="absolute top-0.5 left-0.5">{link}</div> : null}
+              </div>
+            )
+          })}
+        </div>
+      ))}
     </div>
   )
 }

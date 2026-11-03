@@ -8,6 +8,7 @@ import {
   fitInversion,
   noteFromParam,
   placeScale,
+  placeMinorKeyChords,
   placeScaleChords,
   STACK_SIZES,
   walkChords,
@@ -56,8 +57,14 @@ export function ChordsView({
     () => (listening ? undefined : chordKeyPlays(chords)),
     [listening, chords],
   )
-  const holding = note === null ? [] : chordsHolding(chords, note)
   const tonic = noteFromParam(root)
+  // A minor key's chords as the books write them: its harmonic V and vii° over its v and VII (A21).
+  const shown = useMemo(
+    () =>
+      kind === 'natural' ? placeMinorKeyChords(noteFromParam(root), notes, inversion) : chords,
+    [kind, root, notes, inversion, chords],
+  )
+  const holding = note === null ? [] : chordsHolding(shown, note)
   return (
     <ScaleLayout
       keyboard={
@@ -133,7 +140,7 @@ export function ChordsView({
       }
     >
       <KeyChords
-        chords={chords}
+        chords={shown}
         root={tonic}
         kind={kind}
         listening={listening}

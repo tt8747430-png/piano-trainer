@@ -45,7 +45,7 @@ export function KeyChords({
   const { t } = useTranslation(['practice', 'music'])
   const locale = useLocale()
   const names = musicKey ? degreeNames(musicKey.minor) : null
-  const holds = new Set(holding.map((placed) => placed.chord.degree))
+  const holds = new Set(holding)
   const said =
     note === null
       ? ''
@@ -63,7 +63,13 @@ export function KeyChords({
         chords={chords}
         holds={holds}
         detail={
-          names ? ({ chord }) => t(`music:degree.${names[chord.degree] ?? 'tonic'}`) : undefined
+          names
+            ? ({ chord }) =>
+                // The harmonic minor's vii° stands on the raised seventh: the leading note.
+                t(
+                  `music:degree.${chord.degree === 6 && chord.roman.startsWith('vii') ? 'leadingTone' : (names[chord.degree] ?? 'tonic')}`,
+                )
+            : undefined
         }
         open={({ chord, symbol }) =>
           chord.quality === undefined ? null : (

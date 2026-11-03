@@ -11,6 +11,7 @@ import {
   placeBorrowedChords,
   placeChord,
   placeScale,
+  placeMinorKeyChords,
   placeScaleChords,
   TWO_HANDS_FROM,
   walkChords,
@@ -260,5 +261,33 @@ describe('walkChords', () => {
       from: 60,
       to: 79,
     })
+  })
+})
+
+describe('placeMinorKeyChords', () => {
+  it("writes a minor key's dominants as the books do: V and vii° first, then v and VII", () => {
+    const chords = placeMinorKeyChords(note('B', -1), 3, 0)
+    expect(chords.map((placed) => placed.symbol)).toEqual([
+      'B♭m',
+      'C°',
+      'D♭',
+      'E♭m',
+      'F',
+      'Fm',
+      'G♭',
+      'A°',
+      'A♭',
+    ])
+    expect(chords.map((placed) => placed.numeral)).toEqual([
+      'i',
+      'ii°',
+      'III',
+      'iv',
+      'V',
+      'v',
+      'VI',
+      'vii°',
+      'VII',
+    ])
   })
 })

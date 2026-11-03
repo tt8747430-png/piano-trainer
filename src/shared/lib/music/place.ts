@@ -233,6 +233,27 @@ export function placeScaleChords(
   })
 }
 
+/**
+ * A minor key's chords as the harmony books write them (A21): its natural minor's, with the harmonic
+ * minor's V and vii° (the leading note raised) each before the v and VII they are usually played for.
+ */
+export function placeMinorKeyChords(
+  tonic: SpelledNote,
+  notes: ChordNotes,
+  inversion: number,
+): PlacedScaleChord[] {
+  const harmonic = placeScaleChords(tonic, 'harmonic', notes, inversion)
+  return placeScaleChords(tonic, 'natural', notes, inversion).flatMap((placed) => {
+    const usual = MINOR_DOMINANTS.includes(placed.chord.degree)
+      ? harmonic[placed.chord.degree]
+      : undefined
+    return usual ? [usual, placed] : [placed]
+  })
+}
+
+/** The degrees whose chord a minor key takes from its harmonic minor: the dominant and the leading note. */
+export const MINOR_DOMINANTS: readonly number[] = [4, 6]
+
 /** A key's borrowed chords, each on its root's key above the tonic (at or above middle C), in an inversion. */
 export function placeBorrowedChords(
   key: Key,

@@ -223,6 +223,8 @@ export {
   placeBorrowedChords,
   placeChord,
   placeScale,
+  placeMinorKeyChords,
+  MINOR_DOMINANTS,
   placeScaleChords,
   TWO_HANDS_FROM,
   walkChords,
