@@ -168,16 +168,27 @@ const activityRoute = createRoute({
   path: '/profile/activity',
   component: lazyRouteComponent(settingsScreens, 'ActivityPage'),
 })
-// Settings' pages (R20): General, the keyboard and recording, sync and data, and the account's.
+// Settings' pages (R20, R22): General, the on-screen piano, the computer keys, sound and recording,
+// sync and data, and the account's.
 const generalRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/general',
   component: lazyRouteComponent(settingsScreens, 'GeneralPage'),
 })
-const playingRoute = createRoute({
+const onScreenPianoRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/settings/playing',
-  component: lazyRouteComponent(settingsScreens, 'PlayingPage'),
+  path: '/settings/on-screen-piano',
+  component: lazyRouteComponent(settingsScreens, 'OnScreenPianoPage'),
+})
+const computerKeysRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/computer-keys',
+  component: lazyRouteComponent(settingsScreens, 'ComputerKeysPage'),
+})
+const soundRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/sound-and-recording',
+  component: lazyRouteComponent(settingsScreens, 'SoundPage'),
 })
 const dataRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -206,15 +217,15 @@ const howToUseRoute = createRoute({
   path: '/settings/how-to-use',
   component: lazyRouteComponent(settingsScreens, 'HowToUsePage'),
 })
-// The MIDI keyboard (ADR 0034): its input, output, devices and playing, and its MIDI log under it.
+// Connect a piano (ADR 0034): MIDI input, output, devices and playing, and its MIDI log under it.
 const midiSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/settings/midi',
+  path: '/settings/connect-piano',
   component: lazyRouteComponent(settingsScreens, 'MidiSettingsPage'),
 })
 const midiLogRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/settings/midi/log',
+  path: '/settings/connect-piano/log',
   component: lazyRouteComponent(settingsScreens, 'MidiLogPage'),
 })
 // The account pages (ADR 0116): signing in, a new account, a forgotten password, a new one.
@@ -771,7 +782,9 @@ const routeTree = rootRoute.addChildren([
     adminRoute,
     settingsRoute,
     generalRoute,
-    playingRoute,
+    onScreenPianoRoute,
+    computerKeysRoute,
+    soundRoute,
     dataRoute,
     privacyRoute,
     termsRoute,

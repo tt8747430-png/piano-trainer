@@ -1,5 +1,7 @@
 export { AccountSettingsPage } from './ui/AccountSettingsPage'
 export { DataPage } from './ui/DataPage'
 export { GeneralPage } from './ui/GeneralPage'
-export { PlayingPage } from './ui/PlayingPage'
+export { ComputerKeysPage } from './ui/ComputerKeysPage'
+export { OnScreenPianoPage } from './ui/OnScreenPianoPage'
+export { SoundPage } from './ui/SoundPage'
 export { SettingsPage } from './ui/SettingsPage'

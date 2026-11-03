@@ -2,7 +2,9 @@ export {
   AccountSettingsPage,
   DataPage,
   GeneralPage,
-  PlayingPage,
+  ComputerKeysPage,
+  OnScreenPianoPage,
+  SoundPage,
   SettingsPage,
 } from '@/pages/settings'
 export { HowToUsePage } from '@/pages/how-to-use'

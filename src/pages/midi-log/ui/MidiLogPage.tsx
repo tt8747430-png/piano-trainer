@@ -4,7 +4,7 @@ import { InfoTip } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
 /**
- * Settings › MIDI keyboard › MIDI log (ADR 0034): what the MIDI devices send, live, to see why a key
+ * Settings › Connect a piano › MIDI log (ADR 0034): what the MIDI devices send, live, to see why a key
  * or a pedal is not heard.
  */
 export function MidiLogPage() {

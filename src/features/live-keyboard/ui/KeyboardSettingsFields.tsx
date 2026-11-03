@@ -2,7 +2,6 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
-import { ShortcutsButton } from '@/features/shortcuts-help'
 import { KEY_DOCKS, KEY_LENGTHS, KEY_SIZES, NAMED_KEYS, SWIPES } from '@/shared/lib'
 import { Segmented, SettingField, SettingRows, SwitchRow } from '@/shared/ui'
 import { RailControlsField } from './RailControlsField'
@@ -20,10 +19,10 @@ function Part({ title, children }: { title: string; children: ReactNode }) {
 }
 
 /**
- * The keyboard settings, saved for every keyboard, as Settings lists them, each one row whose ⓘ says
+ * The on-screen piano's settings, saved for every on-screen piano, as Settings lists them, each one row whose ⓘ says
  * what it does (ADR 0096): how the keys look, where a page's keys sit, how they play, and which
- * controls the bar over the keys holds (it sets the same settings in place, as pictures). Under them,
- * the way to the shortcuts.
+ * controls the bar over the keys holds (it sets the same settings in place, as pictures). The
+ * computer keys have their own page (`TypingSwitch`).
  */
 export function KeyboardSettingsFields() {
   const { t } = useTranslation('common')
@@ -131,17 +130,6 @@ export function KeyboardSettingsFields() {
           />
         </SettingField>
         <SwitchRow
-          label={t('keyboardSettings.typing')}
-          info={
-            <>
-              <p>{t('keyboardSettings.typingNote')}</p>
-              <p>{t('keyboardSettings.typingHint')}</p>
-            </>
-          }
-          checked={keyboard.typing}
-          onCheckedChange={(typing) => setKeyboard(store, { typing })}
-        />
-        <SwitchRow
           label={t('keyboardSettings.autoplay')}
           info={t('keyboardSettings.autoplayNote')}
           checked={keyboard.autoplay}
@@ -151,7 +139,27 @@ export function KeyboardSettingsFields() {
       <Part title={t('keyboardSettings.bar')}>
         <RailControlsField />
       </Part>
-      <ShortcutsButton />
     </div>
+  )
+}
+
+/** Whether the computer keys play the on-screen piano (R22): Settings › Computer keys. */
+export function TypingSwitch() {
+  const { t } = useTranslation('common')
+  const store = useSettingsStoreApi()
+  const typing = useSettings((state) => selectKeyboard(state).typing)
+  return (
+    <SwitchRow
+      setting="keyboard.typing"
+      label={t('keyboardSettings.typing')}
+      info={
+        <>
+          <p>{t('keyboardSettings.typingNote')}</p>
+          <p>{t('keyboardSettings.typingHint')}</p>
+        </>
+      }
+      checked={typing}
+      onCheckedChange={(on) => setKeyboard(store, { typing: on })}
+    />
   )
 }

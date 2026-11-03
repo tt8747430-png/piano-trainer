@@ -8,30 +8,30 @@ import { midi as key } from '@/shared/lib/music'
 
 const midiRow = () =>
   within(screen.getByRole('region', { name: 'Playing' })).getByRole('link', {
-    name: /^MIDI keyboard/,
+    name: /^Connect a piano/,
   })
 
-describe('Settings › MIDI keyboard', () => {
+describe('Settings › Connect a piano', () => {
   it('is a row of Settings’ Playing that shows its state at its right and opens the MIDI screen', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/settings')
     await screen.findByRole('region', { name: 'Playing' })
-    expect(midiRow()).toHaveTextContent(/MIDI keyboard\s*Off/)
+    expect(midiRow()).toHaveTextContent(/Connect a piano\s*Off/)
     await user.click(midiRow())
-    expect(await screen.findByRole('heading', { level: 1, name: 'MIDI keyboard' })).toBeVisible()
-    expect(router.state.location.pathname).toBe('/settings/midi')
+    expect(await screen.findByRole('heading', { level: 1, name: 'Connect a piano' })).toBeVisible()
+    expect(router.state.location.pathname).toBe('/settings/connect-piano')
   })
 
   it('names the keyboard connected in the Settings row', async () => {
     const { midi } = await renderApp('/settings')
     await screen.findByRole('region', { name: 'Playing' })
     await act(() => midi.connect())
-    expect(midiRow()).toHaveTextContent(/MIDI keyboard\s*Keyboard/)
+    expect(midiRow()).toHaveTextContent(/Connect a piano\s*Keyboard/)
   })
 
   it('turns MIDI input on, lists the keyboard, and sets it up', async () => {
     const user = userEvent.setup()
-    const { settingsStore, midi } = await renderApp('/settings/midi')
+    const { settingsStore, midi } = await renderApp('/settings/connect-piano')
     const input = await screen.findByRole('switch', { name: 'MIDI input' })
     expect(input).not.toBeChecked()
     expect(screen.getByText('Turn on MIDI input to see your devices')).toBeInTheDocument()
@@ -46,7 +46,7 @@ describe('Settings › MIDI keyboard', () => {
     await waitFor(() => expect(input).toBeChecked())
     expect(midi.current()).toEqual({ state: 'connected', devices: ['Keyboard'] })
     const devices = screen.getByRole('listbox', { name: 'Connected devices' })
-    expect(within(devices).getByRole('option', { name: /Any keyboard/ })).toHaveAttribute(
+    expect(within(devices).getByRole('option', { name: /Any MIDI keyboard/ })).toHaveAttribute(
       'aria-selected',
       'true',
     )
@@ -73,7 +73,7 @@ describe('Settings › MIDI keyboard', () => {
 
   it('turns MIDI input off: the keyboard is no longer heard, nor reconnected as the app opens', async () => {
     const user = userEvent.setup()
-    const { settingsStore, midi } = await renderApp('/settings/midi')
+    const { settingsStore, midi } = await renderApp('/settings/connect-piano')
     await act(() => midi.connect())
     const input = await screen.findByRole('switch', { name: 'MIDI input' })
     expect(input).toBeChecked()
@@ -84,7 +84,7 @@ describe('Settings › MIDI keyboard', () => {
   })
 
   it('says no device is connected, with an empty state', async () => {
-    const { midi } = await renderApp('/settings/midi')
+    const { midi } = await renderApp('/settings/connect-piano')
     await screen.findByRole('switch', { name: 'MIDI input' })
     act(() => midi.setStatus({ state: 'no-device' }))
     expect(await screen.findByText('No MIDI devices connected')).toBeInTheDocument()
@@ -92,7 +92,7 @@ describe('Settings › MIDI keyboard', () => {
 
   it('keeps a keyboard chosen while it is away, and hears any keyboard once chosen', async () => {
     const user = userEvent.setup()
-    const { settingsStore, midi } = await renderApp('/settings/midi')
+    const { settingsStore, midi } = await renderApp('/settings/connect-piano')
     await screen.findByRole('switch', { name: 'MIDI input' })
     act(() => setMidi(settingsStore, { device: 'Piano' }))
     act(() => midi.setStatus({ state: 'away', device: 'Piano', devices: ['Keyboard'] }))
@@ -101,12 +101,12 @@ describe('Settings › MIDI keyboard', () => {
       'aria-selected',
       'true',
     )
-    await user.click(within(devices).getByRole('option', { name: /Any keyboard/ }))
+    await user.click(within(devices).getByRole('option', { name: /Any MIDI keyboard/ }))
     expect(settingsStore.getState().midi.device).toBeNull()
   })
 
   it('greys everything, saying why, where the browser has no Web MIDI', async () => {
-    await renderApp('/settings/midi', { webMidi: false })
+    await renderApp('/settings/connect-piano', { webMidi: false })
     expect(
       await screen.findByText('This browser can’t connect a MIDI keyboard.'),
     ).toBeInTheDocument()
@@ -122,7 +122,7 @@ describe('Settings › MIDI keyboard', () => {
   })
 
   it('says MIDI access was blocked, its ⓘ how to allow it', async () => {
-    const { midi } = await renderApp('/settings/midi')
+    const { midi } = await renderApp('/settings/connect-piano')
     await screen.findByRole('switch', { name: 'MIDI input' })
     act(() => midi.setStatus({ state: 'denied' }))
     expect(await screen.findByText('MIDI access was blocked.')).toBeInTheDocument()
@@ -131,7 +131,7 @@ describe('Settings › MIDI keyboard', () => {
 
   it('shows how a Bluetooth keyboard pairs', async () => {
     const user = userEvent.setup()
-    await renderApp('/settings/midi')
+    await renderApp('/settings/connect-piano')
     await user.click(
       await screen.findByRole('button', { name: 'Connect a Bluetooth MIDI keyboard' }),
     )
@@ -140,13 +140,13 @@ describe('Settings › MIDI keyboard', () => {
 
   it('logs what the keyboard sends, live, and pauses and clears the log', async () => {
     const user = userEvent.setup()
-    const { router, midi } = await renderApp('/settings/midi')
+    const { router, midi } = await renderApp('/settings/connect-piano')
     await act(() => midi.connect())
     act(() => midi.press(key(60), { velocity: 90 }))
     const row = await screen.findByRole('link', { name: /MIDI log/ })
     expect(row).toHaveTextContent('1 message')
     await user.click(row)
-    await waitFor(() => expect(router.state.location.pathname).toBe('/settings/midi/log'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/settings/connect-piano/log'))
     const log = await screen.findByRole('list', { name: 'MIDI log' })
     expect(within(log).getByRole('listitem')).toHaveTextContent(
       /Note on C4\s*Velocity 90 · Channel 1 · Keyboard/,
@@ -163,7 +163,7 @@ describe('Settings › MIDI keyboard', () => {
   })
 
   it('reads in Russian, with nothing left in English', async () => {
-    await renderApp('/settings/midi', { locale: 'ru' })
+    await renderApp('/settings/connect-piano', { locale: 'ru' })
     await screen.findByRole('radiogroup', { name: 'Сдвиг октавы' })
     expect(untranslated(document.body)).toEqual([])
   })

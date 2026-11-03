@@ -13,6 +13,7 @@ export function MetronomeSwitch() {
   const click = useSettings((state) => selectRecorder(state).click)
   return (
     <SwitchRow
+      setting="recorder.click"
       label={t('recorderSettings.click')}
       info={t('recorderSettings.clickInfo')}
       checked={click}

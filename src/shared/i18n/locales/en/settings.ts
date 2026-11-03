@@ -2,8 +2,17 @@ export const settings = {
   title: 'Settings',
   language: { label: 'Language', en: 'English', ru: 'Русский' },
   theme: { label: 'Theme', system: 'System', light: 'Light', dark: 'Dark' },
-  keyboard: 'Keyboard',
-  midi: 'MIDI keyboard',
+  // Settings' pages, named after what the learner sees (R22): never "keyboard" alone.
+  pages: {
+    onScreenPiano: 'On-screen piano',
+    connectPiano: 'Connect a piano',
+    computerKeys: 'Computer keys',
+    sound: 'Sound and recording',
+    metronome: 'Metronome',
+  },
+  // The on-screen piano's page: its groups.
+  piano: { look: 'Look', place: 'Position', play: 'Playing', bar: 'Buttons on the keys' },
+  computerKeys: { shortcuts: 'Shortcuts', typingGroup: 'Playing' },
   // How a take is recorded in the score editor (ADR 0028), as its recording strip's settings say too.
   recording: 'Recording',
   progress: {
@@ -44,7 +53,7 @@ export const settings = {
   },
   // The index (round 3): the account, then a page for each group of settings.
   // Settings' grouped list: its sections.
-  sections: { general: 'General', keyboard: 'Keyboard and recording' },
+  sections: { general: 'General' },
   groups: {
     playing: { label: 'Playing' },
     data: { label: 'Sync and data' },
@@ -162,10 +171,10 @@ export const settings = {
         'Transpose moves the whole song, its key or its chords, in one step that Undo takes back.',
     },
     midi: {
-      title: 'Play on a MIDI keyboard',
-      connect: 'Connect a keyboard by cable or Bluetooth, then choose it with the MIDI button.',
+      title: 'Play on a connected piano',
+      connect: 'Connect a piano by cable or Bluetooth, then choose it with the MIDI button.',
       settings:
-        'Settings → MIDI keyboard: MIDI input and output, whether the app sounds your keys, which keyboard it hears, an octave shift, and a MIDI log of what the keyboard sends.',
+        'Settings → Connect a piano: MIDI input and output, whether the app sounds your keys, which piano it hears, an octave shift, and a MIDI log of what the piano sends.',
       play: 'In Wait mode the Player listens for the notes you play; the Chord finder names the chord you hold.',
     },
     metronome: {

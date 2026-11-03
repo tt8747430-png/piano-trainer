@@ -12,15 +12,15 @@ import { RowLink, SettingsGroup } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
 /**
- * Settings › MIDI keyboard (ADR 0034): MIDI input, output and input plays sound; the devices
+ * Settings › Connect a piano (ADR 0034, R22): MIDI input, output and input plays sound; the devices
  * connected, the one heard chosen; how the keyboard plays (octave shift, touch, pedal); how a
  * Bluetooth keyboard pairs; and, for troubleshooting, the MIDI log. One column (R20).
  */
 export function MidiSettingsPage() {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation(['common', 'settings'])
   const { entries } = useMidiLog()
   return (
-    <SettingsScreen title={t('midi.label')}>
+    <SettingsScreen title={t('settings:pages.connectPiano')}>
       <section aria-label={t('midi.label')} className="card px-5 py-4">
         <MidiConnectionFields />
       </section>
@@ -43,7 +43,7 @@ export function MidiSettingsPage() {
           icon={ScrollText}
           paint="sand"
           value={t('midiSettings.log.count', { count: entries.length })}
-          render={<Link to="/settings/midi/log" />}
+          render={<Link to="/settings/connect-piano/log" />}
         />
       </SettingsGroup>
     </SettingsScreen>

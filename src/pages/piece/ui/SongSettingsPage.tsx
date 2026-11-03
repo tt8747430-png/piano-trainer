@@ -13,11 +13,7 @@ import {
 } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  placeIn,
-  useFolderName,
-  useLibraryLayout,
-} from '@/entities/library'
+import { placeIn, useFolderName, useLibraryLayout } from '@/entities/library'
 import {
   hasEditableOriginal,
   isDegreePiece,

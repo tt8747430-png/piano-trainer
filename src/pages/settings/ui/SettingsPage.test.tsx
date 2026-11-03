@@ -57,8 +57,10 @@ describe('Settings', () => {
     ).toEqual([
       '/settings/data',
       '/settings/general',
-      '/settings/midi',
-      '/settings/playing',
+      '/settings/on-screen-piano',
+      '/settings/connect-piano',
+      '/settings/computer-keys',
+      '/settings/sound-and-recording',
       '/settings/how-to-use',
       '/legal/privacy',
       '/legal/terms',
@@ -79,24 +81,16 @@ describe('Settings', () => {
     expect(settingsStore.getState().locale).toBe('ru')
   })
 
-  it('keeps the keyboard and recording on their page, each under its own heading', async () => {
-    await renderApp('/settings/playing')
-    await screen.findByRole('region', { name: 'Recording' })
-    expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
-      'Recording',
-      'Keyboard',
-    ])
-    // How the keys look, where a page’s keys sit, how they play, and the bar over them.
-    expect(
-      within(screen.getByRole('region', { name: 'Keyboard' }))
-        .getAllByRole('heading', { level: 3 })
-        .map((h) => h.textContent),
-    ).toEqual([
+  it('keeps the on-screen piano on its page, each part under its own heading', async () => {
+    await renderApp('/settings/on-screen-piano')
+    expect(await screen.findByRole('heading', { level: 1, name: 'On-screen piano' })).toBeVisible()
+    expect(screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual([
       'How the keys look',
       'Where a page’s keys sit',
       'How they play',
       'The bar over the keys',
     ])
+    expect(screen.queryByRole('switch', { name: /^Play from the computer keys/ })).toBeNull()
   })
 
   it('keeps the sync, what the device keeps, the backup and the progress under Sync and data', async () => {
@@ -129,11 +123,15 @@ describe('Settings', () => {
 
   it('keeps how a take is recorded under Recording: the metronome and the tune, saved', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings/playing')
+    const { settingsStore } = await renderApp('/settings/sound-and-recording')
     const recording = await screen.findByRole('region', { name: 'Recording' })
     await user.click(within(recording).getByRole('switch', { name: 'Metronome' }))
     await user.click(within(recording).getByRole('switch', { name: 'Play melody' }))
     expect(settingsStore.getState().recorder).toEqual({ click: false, tune: true })
+    expect(screen.getByRole('link', { name: 'Metronome' })).toHaveAttribute(
+      'href',
+      '/practice/metronome',
+    )
     await user.click(within(recording).getByRole('button', { name: 'About Metronome' }))
     expect(await screen.findByRole('dialog', { name: 'Metronome' })).toHaveTextContent(
       'The beat goes on after the count-in',
@@ -153,13 +151,14 @@ describe('Settings', () => {
 
   it('sets up the keyboard, and saves each change', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings/playing')
+    const { settingsStore, router } = await renderApp('/settings/on-screen-piano')
     const keys = await screen.findByRole('radiogroup', { name: 'Key size' })
     await user.click(within(keys).getByRole('radio', { name: 'Large' }))
-    await user.click(screen.getByRole('switch', { name: /^Play from the computer keyboard/ }))
     await user.click(screen.getByRole('switch', { name: /^Name the chords played/ }))
     const swipe = screen.getByRole('radiogroup', { name: 'A swipe on the keys' })
     await user.click(within(swipe).getByRole('radio', { name: 'Plays' }))
+    await act(() => router.navigate({ to: '/settings/computer-keys' }))
+    await user.click(await screen.findByRole('switch', { name: /^Play from the computer keys/ }))
     expect(settingsStore.getState().keyboard).toMatchObject({
       keySize: 'large',
       typing: true,
@@ -170,7 +169,7 @@ describe('Settings', () => {
 
   it('says what a keyboard choice does in a popover beside its name, never in a line under it', async () => {
     const user = userEvent.setup()
-    await renderApp('/settings/playing')
+    await renderApp('/settings/on-screen-piano')
     await user.click(await screen.findByRole('button', { name: 'About Key size' }))
     expect(await screen.findByRole('dialog', { name: 'Key size' })).toHaveTextContent(
       /fills the width/,
@@ -181,7 +180,7 @@ describe('Settings', () => {
 
   it('keeps on the bar over the keys only the buttons chosen, in the bar’s order', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings/playing')
+    const { settingsStore } = await renderApp('/settings/on-screen-piano')
     const bar = await screen.findByRole('group', { name: 'Buttons on the bar' })
     await user.click(within(bar).getByRole('button', { name: /^Glissando/ }))
     expect(within(bar).getByRole('button', { name: /^Glissando/ })).toHaveAttribute(
@@ -202,14 +201,21 @@ describe('Settings', () => {
     expect(settingsStore.getState().keyboard.railControls).not.toContain('noteNames')
   })
 
-  it('says on the MIDI keyboard’s row when the browser cannot connect one', async () => {
+  it('says on Connect a piano’s row when the browser cannot connect one', async () => {
     await renderApp('/settings', { webMidi: false })
-    const row = (await screen.findByText('MIDI keyboard')).closest('a') as HTMLElement
-    expect(row).toHaveTextContent(/MIDI keyboard\s*Not available/)
+    const row = (await screen.findByText('Connect a piano')).closest('a') as HTMLElement
+    expect(row).toHaveTextContent(/Connect a piano\s*Not available/)
   })
 
   it('reads in Russian, with nothing left in English', async () => {
-    for (const path of ['/settings', '/settings/general', '/settings/playing', '/settings/data']) {
+    for (const path of [
+      '/settings',
+      '/settings/general',
+      '/settings/on-screen-piano',
+      '/settings/computer-keys',
+      '/settings/sound-and-recording',
+      '/settings/data',
+    ]) {
       const { unmount } = await renderApp(path, { locale: 'ru' })
       await screen.findByRole('heading', { level: 1 })
       expect(untranslated(document.body)).toEqual([])

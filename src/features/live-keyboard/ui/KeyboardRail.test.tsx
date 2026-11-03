@@ -41,7 +41,7 @@ describe('the keyboard’s rail', () => {
     for (const name of [
       /^Note names/,
       'Name the chords played',
-      'Play from the computer keyboard',
+      'Play from the computer keys',
       'Glissando',
     ]) {
       expect(screen.queryByRole('button', { name })).not.toBeInTheDocument()
@@ -82,7 +82,7 @@ describe('the keyboard’s rail', () => {
   it('turns playing from the computer keyboard on and off, saved', async () => {
     const user = userEvent.setup()
     const { settingsStore } = setUp()
-    const typing = screen.getByRole('button', { name: 'Play from the computer keyboard' })
+    const typing = screen.getByRole('button', { name: 'Play from the computer keys' })
     expect(typing).toHaveAttribute('aria-pressed', 'false')
     await user.click(typing)
     expect(typing).toHaveAttribute('aria-pressed', 'true')

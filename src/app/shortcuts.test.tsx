@@ -41,7 +41,7 @@ describe('the shell’s shortcuts', () => {
 
   it('lists the screen’s shortcuts on ?, and from Settings', async () => {
     const user = userEvent.setup()
-    await renderApp('/settings/playing')
+    await renderApp('/settings/computer-keys')
     await user.click(await screen.findByRole('button', { name: 'Shortcuts' }))
     const sheet = await screen.findByRole('dialog', { name: 'Shortcuts' })
     expect(within(sheet).getByRole('heading', { level: 3, name: 'Anywhere' })).toBeInTheDocument()
@@ -88,7 +88,7 @@ describe('the shell’s shortcuts', () => {
   it('lists the piano’s typing keys once the computer keyboard plays them', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/chords')
-    await user.click(await screen.findByRole('button', { name: 'Play from the computer keyboard' }))
+    await user.click(await screen.findByRole('button', { name: 'Play from the computer keys' }))
     await user.keyboard('?')
     const sheet = await screen.findByRole('dialog', { name: 'Shortcuts' })
     const groups = within(sheet).getAllByRole('heading', { level: 3 })

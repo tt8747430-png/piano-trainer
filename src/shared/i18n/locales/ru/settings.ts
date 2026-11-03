@@ -4,8 +4,15 @@ export const settings: LocaleResources['settings'] = {
   title: 'Настройки',
   language: { label: 'Язык', en: 'English', ru: 'Русский' },
   theme: { label: 'Тема', system: 'Как в системе', light: 'Светлая', dark: 'Тёмная' },
-  keyboard: 'Клавиатура',
-  midi: 'MIDI-клавиатура',
+  pages: {
+    onScreenPiano: 'Пианино на экране',
+    connectPiano: 'Подключить пианино',
+    computerKeys: 'Клавиши компьютера',
+    sound: 'Звук и запись',
+    metronome: 'Метроном',
+  },
+  piano: { look: 'Вид', place: 'Положение', play: 'Игра', bar: 'Кнопки над клавишами' },
+  computerKeys: { shortcuts: 'Сочетания клавиш', typingGroup: 'Игра' },
   recording: 'Запись',
   progress: {
     label: 'Прогресс',
@@ -42,7 +49,7 @@ export const settings: LocaleResources['settings'] = {
     confirm: 'Восстановить',
   },
   // Settings' grouped list: its sections.
-  sections: { general: 'Общие', keyboard: 'Клавиатура и запись' },
+  sections: { general: 'Общие' },
   groups: {
     playing: { label: 'Игра' },
     data: { label: 'Синхронизация и данные' },
@@ -160,10 +167,10 @@ export const settings: LocaleResources['settings'] = {
         '«Транспонировать» сдвигает всю песню, её тональность или аккорды за один шаг, который отменяет «Отменить».',
     },
     midi: {
-      title: 'Играть на MIDI-клавиатуре',
-      connect: 'Подключите клавиатуру кабелем или по Bluetooth и выберите её кнопкой MIDI.',
+      title: 'Играть на подключённом пианино',
+      connect: 'Подключите пианино кабелем или по Bluetooth и выберите его кнопкой MIDI.',
       settings:
-        'Настройки → MIDI-клавиатура: MIDI-вход и выход, звучат ли ваши клавиши в приложении, какую клавиатуру оно слышит, сдвиг на октаву и журнал MIDI с тем, что шлёт клавиатура.',
+        'Настройки → Подключить пианино: MIDI-вход и выход, звучат ли ваши клавиши в приложении, какое пианино оно слышит, сдвиг на октаву и журнал MIDI с тем, что шлёт пианино.',
       play: 'В режиме ожидания плеер слушает ноты, которые вы играете; определитель аккордов называет аккорд, который вы держите.',
     },
     metronome: {

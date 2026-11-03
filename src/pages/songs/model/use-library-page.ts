@@ -13,12 +13,7 @@ import {
   type LibrarySort,
   type ShelvedFolder,
 } from '@/entities/library'
-import {
-  entryTitles,
-  isOwnSongId,
-  useRepertoire,
-  type PieceId,
-} from '@/entities/piece'
+import { entryTitles, isOwnSongId, useRepertoire, type PieceId } from '@/entities/piece'
 import { byLastOpened, selectPractised, useProgress } from '@/entities/progress'
 import {
   orderFolders,

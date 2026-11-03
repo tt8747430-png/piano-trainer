@@ -8,7 +8,7 @@ const PARTS = [
   'Play a song',
   'Learn a song',
   'Edit a song',
-  'Play on a MIDI keyboard',
+  'Play on a connected piano',
   'Keep time',
 ]
 

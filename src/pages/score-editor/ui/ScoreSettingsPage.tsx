@@ -1,15 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import {
-  Cable,
-  Columns3,
-  Gauge,
-  Hash,
-  Keyboard,
-  ListMusic,
-  Music2,
-  Ruler,
-  Volume2,
-} from 'lucide-react'
+import { Cable, Columns3, Gauge, Hash, Mic, ListMusic, Music2, Ruler, Volume2 } from 'lucide-react'
 import { useId, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -294,13 +284,13 @@ export function ScoreSettingsPage() {
             title={t('scoreSettings.midi')}
             icon={Cable}
             paint="lilac"
-            render={<Link to="/settings/midi" />}
+            render={<Link to="/settings/connect-piano" />}
           />
           <RowLink
-            title={t('scoreSettings.keyboard')}
-            icon={Keyboard}
+            title={t('scoreSettings.sound')}
+            icon={Mic}
             paint="grass"
-            render={<Link to="/settings/playing" />}
+            render={<Link to="/settings/sound-and-recording" />}
           />
         </SettingsGroup>
       </div>
