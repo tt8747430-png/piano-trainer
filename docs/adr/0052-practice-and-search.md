@@ -21,8 +21,10 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   one row of three figures (days in a row, days practised, songs played); rows to Settings and the Account; Activity
   (the month's calendar, whether today kept the run in its header); the rest of the record as a short list; badges.
 - **Settings** is one grouped list (R20): the account card (the learner's initial, name, email and one line of the
-  sync), General (General, Storage and backup), Playing (On-screen piano, Connect a piano, Computer keys, Sound and
-  recording), Help, and an admin's Admin area, each row its icon in a coloured square; one column on a phone, two
+  sync), General (General, Storage and backup), Piano (On-screen piano, with Computer keys inside it where a mouse
+  or trackpad hovers, and Connect a piano), Help; only what concerns the whole app (R29: the Player's, the editor's,
+  Sound and recording's and each Practice page's settings are behind their own gear; how lessons read is a lesson's
+  Settings'), and an admin's Admin area, each row its icon in a coloured square; one column on a phone, two
   panes from 64rem (the list beside the page, General first, neither with Back). **The Account** reads as an edit
   profile: the initial; Profile (the name, Save once changed, the email, Change password); Sync (where it stands, Sync
   now, what syncs: its one home); then Sign out and Delete account…, each red in a group of its own at the foot, a
@@ -80,7 +82,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
 - **Each Practice page has a Settings page** (A24, R18) at `/settings/<page>` (chords, scales, intervals,
   progressions, accompaniment, chord-finder, exercises-and-quiz): how the page sounds and looks every time, then rows
   to the on-screen piano and a connected piano. The page's gear opens it (`?from=` names the page, so Back returns
-  there); Settings lists the same pages under Practice. The page keeps what you look at.
+  there); Settings does not list them (R29). The page keeps what you look at.
 - **A key size chosen** says on the keys' rail for a moment what it shows ("Showing 36 keys (C3–B5)").
 - **The Metronome** (`/practice/metronome`), its face in Chordify's order: the BPM large between −10 −1 +1 +10, a
   slider and Tap tempo (the average of the last five taps), a square a beat (the first larger, the one sounding
@@ -144,3 +146,4 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
   Settings; the Chord finder's sheet goes (2026-11-03).
 - r29 — The Metronome as Chordify's: its face first, labelled rows, Silent bars and the speed trainer as sentences,
   the grooves and accents as Chordify's, fuller synthesised drums (2026-11-03).
+- r29 — Settings holds only the app's own pages (account, General, Storage and backup, On-screen piano with Computer keys inside on a computer, Connect a piano, Help); General's choices as cards; lessons read as chosen on a lesson's Settings (2026-11-03).

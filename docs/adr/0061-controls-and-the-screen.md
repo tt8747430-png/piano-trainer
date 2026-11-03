@@ -22,6 +22,11 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
   | Several of many                                                          | a pop-up that checks several (`MultiDropdown`), or a checklist sheet                       |
   | A few filters                                                            | chips (`ToggleChips`), and only there                                                      |
 
+  **On a Settings page** (R29, the owner's choice of Flat's "Advanced settings"): a choice among two or more,
+  where the choices are words, is a `ChoiceCard`: the setting's name over a card, every choice a radio with a
+  one-line example under it, longer help in its ⓘ. On or off stays a `SwitchRow`; a choice with a picture stays
+  `PictureChoice`. A row of controls on a screen (not a Settings page) keeps the table above.
+
   No strip that hides its options behind ‹ ›, and no scrolling strip fades at its edges. A choice that has a picture
   is a tile wearing it (`PictureTiles`): a layout, a view, a swing feel, a sign; an inversion is its noteheads.
   Settings changed less often are a sheet on a phone and a popover on a laptop. Views of one thing are tabs that are
@@ -108,3 +113,4 @@ A new option has one obvious form by this rule. A test reaches a folded action b
   iOS pans the page (2026-11-01).
 - r28 — The floating buttons' place and names are no longer settings (a developer's words in General): they stand in the middle, icons named by their tooltips; the settings store's version 17 (2026-11-01).
 - r29 — The Choosing Rule's table (menu, segmented, switch, stepper, chips for filters) and four shared pickers: pitch, spelled note, key (the circle of fifths), keys checklist; the step strips go (decided 2026-11-02, built in round 29; spec `.scratch/r29/key-picker/spec.md`).
+- r29 — A Settings page's choices are `ChoiceCard`s, every choice in sight with its example (the owner's answer, part 2 of the mockups, 2026-11-03).

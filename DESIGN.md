@@ -404,7 +404,9 @@ every piece is shown in the Admin area's Components):
 - **The bar holds Back, the title and at most two round actions**; More holds the rest, its destructive action last,
   red and alone. The primary action is never in the bar.
 - **Lists are grouped cards of rows** (`SettingsGroup`; `RowGroup` for a browsed list, one card in columns): a soft tile, the title, one detail line, then a
-  value, a status pill or a chevron; a choice made in place is a `ChoiceRow`, a switch a `SwitchRow`.
+  value, a status pill or a chevron; on a Settings page a choice among words is a `ChoiceCard` (the setting's name in
+  the card's semibold heading, each choice a radio row with its example in muted small text under it, the chosen
+  radio filled ink), a switch a `SwitchRow`.
 - **Creating is the + floating action**, opening a dial of the ways to add (New song, Record, Import, New folder).
 - **Every New … is one sheet** (`NewSheet`, round 25, after Flat's new score): the name first, then its few
   properties as soft parts (`SheetPart`: a name, a line, the choice: drawn tiles, chips, a `Stepper`, the key

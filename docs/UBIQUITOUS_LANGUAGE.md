@@ -560,8 +560,10 @@ Never "keyboard" alone (R22): say which one.
   keys, Sound and recording, Account), at `/settings/<id>`; on a laptop beside Settings' list. _Avoid:_ panel, tab.
 - **Account card**: Settings' first card, the learner and one line of the sync. _Avoid:_ profile header.
 - **Picture choice** (`PictureChoice`): a setting that changes a look, each option a small drawing over its name.
+- **Choice card** (`ChoiceCard`): on a Settings page, a setting chosen among words: its name over a card, every
+  choice a radio with a one-line example (Flat's settings). _Avoid:_ dropdown, select, for these.
   _Avoid:_ visual picker.
-- **Row kinds** (R24): opens a page (`RowLink`), picks a value (`ChoiceRow`, `PictureChoice`), on/off
+- **Row kinds** (R24): opens a page (`RowLink`), picks a value (`ChoiceCard`, `PictureChoice`; `ChoiceRow` off Settings pages), on/off
   (`SwitchRow`), does something (`ActionRow`), ends or destroys (`DangerRow`, in a `DangerGroup`). _Avoid:_ cell.
 
 - **Settings** («Настройки»): the app's settings page. _Avoid:_ preferences.
