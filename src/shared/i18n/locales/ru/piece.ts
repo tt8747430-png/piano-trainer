@@ -124,6 +124,7 @@ export const piece: LocaleResources['piece'] = {
     editMusic: 'Изменить ноты',
   },
   settings: {
+    details: 'Подробности',
     overview: 'Песня',
     title: 'Настройки',
     open: 'Настройки',

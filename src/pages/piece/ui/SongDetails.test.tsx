@@ -43,11 +43,11 @@ async function signedInAs(role: AccountRole) {
   return auth
 }
 
-describe('a song’s page in Edit (round 28)', () => {
-  it('writes an own song’s title, who wrote it and what is said of it, in place, saved', async () => {
+describe('a song’s Details in its Settings (R29 1.2)', () => {
+  it('writes an own song’s title, who wrote it and what is said of it on Details, saved', async () => {
     const user = userEvent.setup()
-    const { piecesStore } = await renderApp('/songs/my-1', { storage: withSong() })
-    await user.click(await screen.findByRole('button', { name: 'Edit' }))
+    const { piecesStore } = await renderApp('/songs/my-1/settings', { storage: withSong() })
+    await user.click(await screen.findByRole('button', { name: 'Details' }))
     const title = screen.getByRole('textbox', { name: 'Title' })
     await user.clear(title)
     await user.type(title, 'Evening')
@@ -59,32 +59,26 @@ describe('a song’s page in Edit (round 28)', () => {
       header: { composer: 'Ana' },
       note: { en: 'A lullaby', ru: 'A lullaby' },
     })
-    expect(screen.getByRole('link', { name: /Edit the music/ })).toHaveAttribute(
-      'href',
-      '/edit/my-1',
-    )
-    await user.click(screen.getByRole('button', { name: 'Done' }))
-    expect(await screen.findByRole('heading', { level: 1, name: 'Evening' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    expect(await screen.findByText('Evening')).toBeInTheDocument()
   })
 
-  it('gives a learner Edit score on one of the app’s songs, their version of its score', async () => {
-    await renderApp(`/songs/${SONG.id}`, { auth: await signedInAs('learner') })
-    expect(await screen.findByRole('link', { name: 'Edit score' })).toHaveAttribute(
-      'href',
-      `/edit/${SONG.id}`,
-    )
+  it('gives a learner no Details on one of the app’s songs: nothing there is theirs to write', async () => {
+    await renderApp(`/songs/${SONG.id}/settings`, { auth: await signedInAs('learner') })
+    await screen.findByRole('heading', { level: 1 })
+    expect(screen.queryByRole('button', { name: 'Details' })).not.toBeInTheDocument()
   })
 
-  it('writes an editor’s changes into the song’s draft, said unpublished in the bar', async () => {
+  it('writes an editor’s changes into the song’s draft from Details, said unpublished on Settings', async () => {
     const user = userEvent.setup()
     const content = createFakeContentEditing({
       items: [{ kind: 'piece', id: SONG.id, body: pieceRecordBody(SONG), meta: {} }],
     })
-    await renderApp(`/songs/${SONG.id}`, {
+    await renderApp(`/songs/${SONG.id}/settings`, {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await user.click(await screen.findByRole('button', { name: 'Edit' }))
+    await user.click(await screen.findByRole('button', { name: 'Details' }))
     const words = await screen.findByRole('textbox', { name: 'Lyricist' })
     await user.clear(words)
     await user.type(words, 'Someone')
@@ -97,6 +91,7 @@ describe('a song’s page in Edit (round 28)', () => {
       },
       { timeout: 4000 },
     )
-    expect(screen.getByText('Saved · not published')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    expect(await screen.findByText('Not published')).toBeInTheDocument()
   })
 })

@@ -1,6 +1,4 @@
-import { Link } from '@tanstack/react-router'
-import { FilePen } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useEffectEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   songFacts,
@@ -10,13 +8,10 @@ import {
   type OwnSongId,
   type SongFacts,
 } from '@/entities/piece'
-import { DraftActions, DraftStatus, useOriginalDraft } from '@/features/edit-original'
+import { useOriginalDraft } from '@/features/edit-original'
 import { setSongFacts } from '@/features/edit-piece'
 import { useLocale } from '@/shared/i18n'
-import { RowLink, SettingsGroup } from '@/shared/ui'
 import { DocText, Properties, PropertyRow, NotOpen } from '@/widgets/content-editor'
-import { EditToggle } from '@/widgets/mode-switch'
-import { PieceHeader } from './PieceHeader'
 
 /** The longest a title or a name is written on the page. */
 const NAME_MAX = 80
@@ -27,11 +22,9 @@ const NAME_MAX = 80
  * properties, what is said about it as a paragraph, and the way to its music on the score.
  */
 function SongFactsForm({
-  pieceId,
   initial,
   onChange,
 }: {
-  pieceId: string
   initial: SongFacts
   onChange: (facts: SongFacts) => void
 }) {
@@ -79,95 +72,49 @@ function SongFactsForm({
         onChange={(value) => change({ about: value[locale] })}
         className="aria-invalid:text-muted-foreground"
       />
-      <SettingsGroup flush>
-        <RowLink
-          title={t('facts.editMusic')}
-          icon={FilePen}
-          paint="lilac"
-          render={<Link to="/edit/$pieceId" params={{ pieceId }} />}
-        />
-      </SettingsGroup>
     </div>
   )
 }
 
-/** An own song's page in Edit: each change saved as it is written. */
-export function OwnSongEdit({
-  piece,
-  id,
-  onDone,
-}: {
-  piece: ChartPiece
-  id: OwnSongId
-  onDone: () => void
-}) {
+/** An own song's Details (Settings › Details, R29 1.2): each change saved as it is written. */
+export function OwnSongDetails({ piece, id }: { piece: ChartPiece; id: OwnSongId }) {
   const locale = useLocale()
   const store = usePiecesStoreApi()
   return (
-    <div className="flex flex-col gap-6 pb-8">
-      <PieceHeader entry={piece} actions={<EditToggle editing onEdit={onDone} onDone={onDone} />} />
-      <SongFactsForm
-        pieceId={id}
-        initial={songFacts(piece, locale)}
-        onChange={(facts) => setSongFacts(store, id, facts, locale)}
-      />
-    </div>
+    <SongFactsForm
+      initial={songFacts(piece, locale)}
+      onChange={(facts) => setSongFacts(store, id, facts, locale)}
+    />
   )
 }
 
 /**
- * A built-in song's page in Edit, an editor's (ADR 0116): what it says written into the song's draft
- * with its music, where it stands and its menu (Publish, Versions, Discard) in the bar by Done.
+ * A built-in song's Details, an editor's (ADR 0116): written into the song's draft with its music,
+ * kept as the page is left; its status and Publish are the song's Settings' Unpublished changes.
  */
-export function OriginalSongEdit({ piece, onDone }: { piece: ChartPiece; onDone: () => void }) {
+export function OriginalSongDetails({ piece }: { piece: ChartPiece }) {
   const { t } = useTranslation(['piece', 'editor'])
   const locale = useLocale()
   const draft = useOriginalDraft(piece)
   const { load, save } = draft
-  const done = () => {
-    void draft.flush()
-    onDone()
-  }
-  const toggle = <EditToggle editing onEdit={done} onDone={done} />
-  return (
-    <div className="flex flex-col gap-6 pb-8">
-      <PieceHeader
-        entry={piece}
-        actions={
-          load.state === 'ready' ? (
-            <>
-              <DraftStatus draft={draft} />
-              <DraftActions
-                draft={draft}
-                title={songFacts(piece, locale).title}
-                unreadable={t('editor:original.unreadable')}
-                onReset={draft.reopen}
-              />
-              {toggle}
-            </>
-          ) : (
-            toggle
-          )
-        }
-      />
-      {load.state === 'ready' ? (
-        <SongFactsForm
-          key={draft.opened}
-          pieceId={piece.id}
-          initial={songFacts(load.value, locale)}
-          onChange={(facts) => save(withSongFacts(load.value, facts, locale))}
-        />
-      ) : (
-        <NotOpen
-          line={t(
-            load.state === 'loading'
-              ? 'editor:original.opening'
-              : load.reason === 'offline'
-                ? 'editor:original.offline'
-                : 'editor:original.failed',
-          )}
-        />
+  // What was written is kept as the page is left.
+  const flush = useEffectEvent(() => void draft.flush())
+  useEffect(() => () => flush(), [])
+  return load.state === 'ready' ? (
+    <SongFactsForm
+      key={draft.opened}
+      initial={songFacts(load.value, locale)}
+      onChange={(facts) => save(withSongFacts(load.value, facts, locale))}
+    />
+  ) : (
+    <NotOpen
+      line={t(
+        load.state === 'loading'
+          ? 'editor:original.opening'
+          : load.reason === 'offline'
+            ? 'editor:original.offline'
+            : 'editor:original.failed',
       )}
-    </div>
+    />
   )
 }

@@ -1,5 +1,14 @@
-import { Link, useParams, useRouter } from '@tanstack/react-router'
-import { Archive, ArchiveRestore, FilePen, Download, FolderInput, Globe, Link2 } from 'lucide-react'
+import { Link, useParams, useRouter, useSearch } from '@tanstack/react-router'
+import {
+  Archive,
+  ArchiveRestore,
+  Download,
+  FilePen,
+  FileText,
+  FolderInput,
+  Globe,
+  Link2,
+} from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { placeIn, useFolderName, useLibraryLayout } from '@/entities/library'
@@ -18,6 +27,7 @@ import { DraftActions, DraftStatus, useOriginalDraft } from '@/features/edit-ori
 import { useSongActions } from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { SongExportSheet } from '@/features/song-files'
+import { useSetSearch } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   BackButton,
@@ -33,6 +43,7 @@ import {
 } from '@/shared/ui'
 import { useSongPublish } from '../model/use-song-publish'
 import { OwnMusicAsk } from './OwnMusicAsk'
+import { OriginalSongDetails, OwnSongDetails } from './SongDetails'
 
 /** The route's song, or the way back where it is gone (an own song deleted in another tab). */
 export function SongSettingsPage() {
@@ -99,12 +110,42 @@ function SongSettings({ piece }: { piece: Piece }) {
   const archived = place === 'archived'
   const original =
     editsContent(account) && hasEditableOriginal(piece.id) && !isDegreePiece(piece) ? piece : null
+  // What the song says of itself (title, who wrote it, about), where it is the learner's or an
+  // editor's to write: Settings › Details (R29 1.2), a step in the address.
+  const ownChart = own && !isDegreePiece(piece) ? piece : null
+  const details = ownChart !== null || original !== null
+  const { page } = useSearch({ strict: false }) as { page?: string }
+  const setSearch = useSetSearch<{ page: string | undefined }>()
+  if (details && page === 'details')
+    return (
+      <div className="flex flex-col gap-6 pb-8">
+        <ScreenHeader
+          title={t('settings.details')}
+          back={<BackButton onClick={() => setSearch({ page: undefined })} />}
+        />
+        {ownChart && own ? (
+          <OwnSongDetails piece={ownChart} id={own} />
+        ) : original ? (
+          <OriginalSongDetails piece={original} />
+        ) : null}
+      </div>
+    )
   return (
     <div className="flex flex-col gap-6 pb-8">
       <ScreenHeader title={t('settings.title')} back={<BackButton />} />
       <ShareSaid said={shared.said} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <p className="px-1 font-display text-2xl font-semibold text-balance">{title}</p>
+        {details ? (
+          <SettingsGroup flush>
+            <RowButton
+              title={t('settings.details')}
+              icon={FileText}
+              paint="sky"
+              onClick={() => setSearch({ page: 'details' })}
+            />
+          </SettingsGroup>
+        ) : null}
         {inLibrary ? (
           <SettingsGroup flush title={t('settings.library')}>
             {archived ? null : (

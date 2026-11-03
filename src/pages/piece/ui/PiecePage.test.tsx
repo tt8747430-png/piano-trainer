@@ -223,7 +223,8 @@ describe('Piece', () => {
     expect(`${link.pathname}${link.search}`).toBe('/play/bz5?key=A&simple=true')
   })
 
-  it('keeps Settings in its bar; Practise, Edit score, Learned and ♡ on its overview card (A38)', async () => {
+  it('keeps Settings and ✎ (the score) in its bar; Practise, Learned and ♡ on its overview card (A38, R29)', async () => {
+    const user = userEvent.setup()
     await renderApp('/songs/bz5')
     const card = await screen.findByRole('region', { name: 'The song' })
     expect(within(card).getByRole('link', { name: 'Practise' })).toHaveAttribute(
@@ -232,19 +233,16 @@ describe('Piece', () => {
     )
     for (const name of ['Learned', 'Add to favourites'])
       expect(within(card).getByRole('button', { name })).toBeInTheDocument()
-    expect(within(card).getByRole('link', { name: 'Edit score' })).toHaveAttribute(
-      'href',
-      '/edit/bz5',
-    )
-    // A learner may not edit this page: no pencil, never another act behind it (A38).
+    expect(within(card).queryByRole('link', { name: 'Edit score' })).toBeNull()
     const bar = document.querySelector('[data-slot="screen-bar"]') as HTMLElement
-    expect(within(bar).queryByRole('button', { name: 'Edit' })).toBeNull()
-    expect(within(bar).queryByRole('link', { name: 'Edit score' })).toBeNull()
     expect(within(bar).getByRole('link', { name: 'Settings' })).toHaveAttribute(
       'href',
       '/songs/bz5/settings',
     )
     expect(within(bar).queryByRole('button', { name: 'More' })).toBeNull()
+    // ✎ opens the score in the editor, the learner's version of one of the app's songs (R29 1.2).
+    await user.click(within(bar).getByRole('button', { name: 'Edit' }))
+    expect(await screen.findByRole('button', { name: 'Done' })).toBeInTheDocument()
   })
 
   it('opens the Player and marks the song learned', async () => {
@@ -364,12 +362,11 @@ describe('Piece: the learner’s own music', () => {
     ).toEqual(['Verse No chords to learn', 'Chorus No chords to learn'])
   })
 
-  it('edits a song in the score editor', async () => {
-    await renderApp('/songs/amazing')
-    expect(await screen.findByRole('link', { name: 'Edit score' })).toHaveAttribute(
-      'href',
-      '/edit/amazing',
-    )
+  it('edits a song in the score editor from ✎', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/songs/amazing')
+    await user.click(await screen.findByRole('button', { name: 'Edit' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/edit/amazing'))
   })
 
   it('shows the learner’s version, and resets it to the original once asked', async () => {

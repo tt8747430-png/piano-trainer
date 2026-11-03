@@ -1,19 +1,11 @@
-import { Link } from '@tanstack/react-router'
-import { PencilLine, Play, Settings } from 'lucide-react'
-import { useState } from 'react'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { Play, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import {
-  hasEditableOriginal,
-  isDegreePiece,
-  isOwnSongId,
-  PieceFactLine,
-  type Piece,
-} from '@/entities/piece'
+import { isOwnSongId, PieceFactLine, type Piece } from '@/entities/piece'
 import { pieceStepId } from '@/entities/step'
 import { FavouriteButton } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
 import { OPEN_PLAINLY } from '@/shared/lib'
-import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, RoundLink } from '@/shared/ui'
 import { EditToggle } from '@/widgets/mode-switch'
 import { useSongLessons } from '../model/use-song-lessons'
@@ -23,13 +15,12 @@ import { PieceChords } from './PieceChords'
 import { PieceHeader } from './PieceHeader'
 import { PieceProgressions } from './PieceProgressions'
 import { SectionRows } from './SectionRows'
-import { OriginalSongEdit, OwnSongEdit } from './SongEdit'
 
 /**
  * A song's page (round 26, Noji's and memory-palaces' deck page), in one calm column. Its bar: Back,
  * the title, then Settings (a gear: everything else it can be set to or done with, a page of its own)
- * and Edit at its end: the page itself in place, where what it says is the learner's to write (their
- * own song) or an editor's (one of the app's, round 28), else the learner's version of its score. Under the title its
+ * and ✎ at its end: its score in the editor (R29 1.2; what the song says of itself is written on its
+ * Settings › Details). Under the title its
  * byline; the overview card, its key, time and tempo, its way to its key's scale, Practise (the Player
  * as it was left), Learned and Favourite; what is said of it behind an ⓘ; its chords as diagrams,
  * each opening its sheet; and, where it has more than one, its sections, each a row to its page of
@@ -42,15 +33,7 @@ export function PieceView({ piece }: { piece: Piece }) {
   const step = pieceStepId(piece.id)
   // A study, on Practice, is in no library (ADR 0106): no favourite.
   const inLibrary = piece.kind !== 'study'
-  const { account } = useAccount()
-  const [editing, setEditing] = useState(false)
-  const chart = isDegreePiece(piece) ? null : piece
-  const ownId = own && chart ? chart.id : null
-  const original = editsContent(account) && hasEditableOriginal(piece.id) ? chart : null
-  const done = () => setEditing(false)
-  if (editing && chart && isOwnSongId(chart.id))
-    return <OwnSongEdit piece={chart} id={chart.id} onDone={done} />
-  if (editing && original) return <OriginalSongEdit piece={original} onDone={done} />
+  const navigate = useNavigate()
   const settings = (
     <RoundLink
       label={t('settings.open')}
@@ -63,15 +46,16 @@ export function PieceView({ piece }: { piece: Piece }) {
       <PieceHeader
         entry={piece}
         actions={
-          // The pencil edits what the page shows, in place (A38), for whoever may; else no pencil.
-          ownId || original ? (
-            <>
-              {settings}
-              <EditToggle editing={false} onEdit={() => setEditing(true)} onDone={done} />
-            </>
-          ) : (
-            settings
-          )
+          // The pencil opens the score in the editor (R29 1.2): a learner's edit of a built-in
+          // song is their version, an editor's the song everyone sees (A38, ADR 0115).
+          <>
+            {settings}
+            <EditToggle
+              editing={false}
+              onEdit={() => void navigate({ to: '/edit/$pieceId', params: { pieceId: piece.id } })}
+              onDone={() => undefined}
+            />
+          </>
         }
       />
       <PieceByline piece={piece} />
@@ -87,17 +71,6 @@ export function PieceView({ piece }: { piece: Piece }) {
           {t('practise')}
         </ButtonLink>
         <div className="flex items-center gap-2">
-          {/* The score is edited by its own labelled act, for everyone (A38): a learner's edit of
-              a built-in song is their version, an editor's the song everyone sees. Every piece is
-              edited: one written in degrees as its chart in its key (ADR 0115). */}
-          <ButtonLink
-            variant="outline"
-            className="h-11 flex-1"
-            render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
-          >
-            <PencilLine data-icon="inline-start" aria-hidden />
-            {t('editScore')}
-          </ButtonLink>
           {own ? null : <LearnedButton step={step} className="h-11 flex-1" />}
           {inLibrary ? <FavouriteButton piece={piece.id} /> : null}
         </div>

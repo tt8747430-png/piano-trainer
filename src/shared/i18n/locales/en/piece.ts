@@ -126,6 +126,7 @@ export const piece = {
     editMusic: 'Edit the music',
   },
   settings: {
+    details: 'Details',
     overview: 'The song',
     title: 'Settings',
     open: 'Settings',
