@@ -5,7 +5,8 @@ import { Toggle } from './primitives/toggle'
 /**
  * Several on-or-offs of a few, every one in sight: a row of chips that wraps, each pressed while it
  * is chosen. A group named by its label; the chosen come back in the options' order. `className`
- * sets the chips' face where it is not the controls' (chord symbols, in the book serif).
+ * sets the chips' face where it is not the controls' (chord symbols, in the book serif). `disabled`,
+ * the row stays in its place with its chips greyed, so what is under it never moves (A31).
  */
 export function ToggleChips<V extends OptionValue>({
   label,
@@ -13,11 +14,13 @@ export function ToggleChips<V extends OptionValue>({
   options,
   onChange,
   className,
+  disabled = false,
 }: {
   label: string
   value: readonly V[]
   options: readonly Option<V>[]
   onChange: (value: V[]) => void
+  disabled?: boolean
   className?: string
 }) {
   return (
@@ -26,7 +29,8 @@ export function ToggleChips<V extends OptionValue>({
         <Toggle
           key={String(option.value)}
           aria-label={optionName(option)}
-          pressed={value.includes(option.value)}
+          pressed={!disabled && value.includes(option.value)}
+          disabled={disabled}
           onPressedChange={(on) =>
             onChange(
               options

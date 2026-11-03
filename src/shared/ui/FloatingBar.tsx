@@ -55,10 +55,10 @@ export function FloatingBar({
 
 /** A bar's control gives under the finger as a floating button does. */
 const BAR_BUTTON =
-  'size-12 rounded-pill transition-[scale,background-color] duration-150 ease-out active:scale-96 active:not-aria-[haspopup]:translate-y-0'
+  'size-12 rounded-pill transition-[scale,background-color] duration-150 ease-out active:scale-96'
 /** The bar's honey Play: the main floating button's size, lifted a little off the pill. */
 const BAR_PLAY =
-  'size-14 rounded-pill elevation-1 hover:brightness-95 [&_svg:not([class*=size-])]:size-6 transition-[scale,filter] duration-150 ease-out active:scale-96 active:not-aria-[haspopup]:translate-y-0'
+  'size-14 rounded-pill elevation-1 hover:brightness-95 [&_svg:not([class*=size-])]:size-6 transition-[scale,filter] duration-150 ease-out active:scale-96'
 
 /**
  * One of a bar's controls: a round icon button named by its label (its `title` too, unless a hint

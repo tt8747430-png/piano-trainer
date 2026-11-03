@@ -61,7 +61,7 @@ export function ToolKey({
             title={why}
             disabled={disabled}
             className={cn(
-              'h-12 min-w-0 rounded-control landscape-phone:h-10 px-1 text-2xl leading-none font-normal duration-80 ease-out hover:bg-muted active:scale-95 motion-reduce:active:scale-100 aria-pressed:bg-chosen aria-pressed:text-foreground disabled:opacity-35 [&_svg:not([class*=size-])]:size-5',
+              'h-12 min-w-0 rounded-control landscape-phone:h-10 px-1 text-2xl leading-none font-normal duration-80 ease-out hover:bg-muted aria-pressed:bg-chosen aria-pressed:text-foreground disabled:opacity-35 [&_svg:not([class*=size-])]:size-5',
               why && 'disabled:pointer-events-auto disabled:hover:bg-card',
               SPAN[span],
               className,

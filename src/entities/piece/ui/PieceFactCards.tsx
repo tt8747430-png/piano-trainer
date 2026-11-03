@@ -64,7 +64,7 @@ export function PieceFactLine({ piece, played }: { piece: Piece; played?: Key })
       {facts.map((fact) => (
         <div
           key={fact.name}
-          className="flex h-8 items-center gap-1.5 rounded-pill bg-muted/70 px-3 text-sm"
+          className="flex h-8 items-center gap-1.5 rounded-pill border border-border bg-card px-3 text-sm"
         >
           <dt className="text-muted-foreground">{fact.name}</dt>
           <dd className="font-semibold tabular-nums">{fact.value}</dd>

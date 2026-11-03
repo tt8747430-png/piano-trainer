@@ -47,3 +47,5 @@ colour changes `tokens.css`, `theme.css` and `THEME_COLORS` together.
   screen stay.
 - 0010 — The labelled picture book (2026-09-27): paper, a line, seven paints, labelled keys.
 - 0011 — The book, printed quietly (2026-09-27): the paints faded, honey the action, Literata and Onest.
+- Round 29 (2026-11-03): one shape scale (control, card, sheet, pill), one selected fill, one focus ring, and
+  nothing that moves unless touched (DESIGN.md Shapes, Choices, Motion).

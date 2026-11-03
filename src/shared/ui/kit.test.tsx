@@ -92,6 +92,8 @@ describe('ScreenHeader', () => {
   }
 
   it('hides while the page scrolls down and comes back on the way up, the pinned keys under it', async () => {
+    // A page over two screens tall: a shorter one keeps its bar (A31).
+    vi.spyOn(document.documentElement, 'scrollHeight', 'get').mockReturnValue(4000)
     const { bar, under } = renderBar()
     await waitFor(() => expect(under()).toBe('64px'))
     expect(bar).not.toHaveAttribute('data-hidden')
@@ -101,6 +103,15 @@ describe('ScreenHeader', () => {
     scrollTo(80)
     expect(bar).not.toHaveAttribute('data-hidden')
     expect(under()).toBe('64px')
+  })
+
+  it('stays on a page under two screens tall, where hiding would take the controls under it along', async () => {
+    vi.spyOn(document.documentElement, 'scrollHeight', 'get').mockReturnValue(1200)
+    const { bar, under } = renderBar()
+    await waitFor(() => expect(under()).toBe('64px'))
+    scrollTo(120)
+    scrollTo(300)
+    expect(bar).not.toHaveAttribute('data-hidden')
   })
 
   it('stays until the page has scrolled past it', async () => {

@@ -19,8 +19,15 @@ export function StaffPlace({
 }) {
   const tops = staffTops(count)
   return (
-    <div ref={place} style={{ height: height * scale }} className="text-hairline" aria-hidden>
-      <svg width="100%" height="100%" preserveAspectRatio="none">
+    <div
+      ref={place}
+      style={{ height: height * scale }}
+      className="relative text-hairline"
+      aria-hidden
+    >
+      {/* Drawn over its place, not sized by it: a staff in a row takes the row's width, not the
+          300px a picture's own width would claim and the engraving then gives back (A31). */}
+      <svg className="absolute inset-0 size-full" preserveAspectRatio="none">
         {tops.flatMap((top) =>
           [0, 10, 20, 30, 40].map((line) => (
             <line

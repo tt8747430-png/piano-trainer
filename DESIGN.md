@@ -432,7 +432,10 @@ every piece is shown in the Admin area's Components):
   each its icon alone unless the learner asks for names. A dial opens as a card of rows over a page dimmed to half:
   each row a soft tile, its name and a line of what it does, the nearest action last.
 - **Every Play becomes Stop** (a square) while it sounds; an item in a grid is pressed instead (sky mist).
-- **Focus:** one ring for every control, 3px deep sky, 2px outside, inset only where a scroller would cut it.
+- **Focus:** one ring for every control, the base `:focus-visible` rule's 3px deep sky outline 2px outside, inset
+  (`-outline-offset-3`) only where a scroller or a card's edge would cut it; never a box-shadow ring, an underline
+  or a fill (`src/styles/focus.test.ts`). It appears at once, never grown in. Tab walks a screen as it reads: the
+  skip link, the places, then the page top to bottom; Esc closes the top layer only.
 
 ### Choices
 
@@ -477,7 +480,8 @@ says it faster. A setting is never hidden behind a pop-up when it fits in sight.
 - **Inversion** (`InversionChoice`): its stack of noteheads.
 - **Switch:** a sand track in the control line; on, grass.
 - **Only what applies is offered.** A choice the thing cannot take is left out. A greyed choice says why in its
-  tooltip.
+  tooltip. A row of choices never comes and goes as another choice changes: where nothing in it applies it stays
+  in its place, greyed, so nothing under it moves (A31).
 - **Chord names in text** (`ChordText`): the root in soft ink, the quality strong, its numbers raised (`C maj⁷`), a
   bass after a slash soft again: a library card's chips, the key's chords linked to Chords.
 - **Tabs** (`tab-strip`, `tab`): the views of one thing under the screen's title, 44px, the chosen in the chosen
@@ -600,7 +604,13 @@ The whole piano, A0–C8, hung from a wooden **rail** and scrolling sideways wit
 - One curve, `ease-out` (`cubic-bezier(0.22, 1, 0.36, 1)`): 200ms for colour, 80ms for keys. Sheets rise on the iOS
   sheet curve (`cubic-bezier(0.32, 0.72, 0, 1)`, 450ms) and follow the finger mid-swipe.
 - The keys fold into their button and back through a view transition (`morph`, 340ms).
-- Strips and diagrams move on their own; the page does not. Only `transform` and `opacity` animate.
+- Strips and diagrams move on their own; the page does not. Only `transform` and `opacity` animate; buttons and
+  chips animate colour alone, and pressing one never moves it (no press offset, no scale), so a row of them never
+  twitches. The floating actions keep their press, a floating thing pushed into the page.
+- **Nothing jumps (A31).** What floats over the docked keys and the room the floating actions take are measured
+  before the first paint; a staff waiting for its engraving takes its row's width, not a picture's own; a score re-engraved keeps its old drawing until the new
+  one is whole; the screen's bar slides away only on a page over two screens tall, and never while a field is
+  written in or a menu is open.
 - Under reduced motion every transition is instant.
 
 ## Do and don't

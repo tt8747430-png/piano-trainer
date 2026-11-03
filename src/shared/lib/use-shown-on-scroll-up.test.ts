@@ -92,4 +92,39 @@ describe('useShownOnScrollUp', () => {
       stop()
     }
   })
+
+  it('stays on a page shorter than `tall` screens: a short page scrolled moves nothing under it', () => {
+    vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(800)
+    const height = vi.spyOn(document.documentElement, 'scrollHeight', 'get').mockReturnValue(1500)
+    const { result } = renderHook(() => useShownOnScrollUp(0, { tall: 2 }))
+    scrollTo(300)
+    expect(result.current).toBe(true)
+    height.mockReturnValue(2400)
+    scrollTo(320)
+    scrollTo(400)
+    expect(result.current).toBe(false)
+  })
+
+  it('stays while a field is being written in or a menu is open', () => {
+    vi.spyOn(document.documentElement, 'scrollHeight', 'get').mockReturnValue(4000)
+    const { result } = renderHook(() => useShownOnScrollUp())
+    const field = document.body.appendChild(document.createElement('input'))
+    const menu = document.createElement('div')
+    menu.setAttribute('role', 'menu')
+    try {
+      field.focus()
+      scrollTo(300)
+      expect(result.current).toBe(true)
+      field.blur()
+      document.body.append(menu)
+      scrollTo(600)
+      expect(result.current).toBe(true)
+      menu.remove()
+      scrollTo(900)
+      expect(result.current).toBe(false)
+    } finally {
+      field.remove()
+      menu.remove()
+    }
+  })
 })

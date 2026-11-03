@@ -13,7 +13,7 @@ import { cn } from '@/shared/lib'
 import { PAINT } from '@/shared/ui'
 
 const CHOICE =
-  'grid size-12 cursor-default place-items-center rounded-control border-2 border-transparent transition-[border-color,scale] duration-200 ease-out active:scale-95 data-checked:border-foreground [&_svg]:size-5'
+  'grid size-12 cursor-default place-items-center rounded-control border-2 border-transparent transition-[border-color] duration-200 ease-out data-checked:border-foreground [&_svg]:size-5'
 
 /**
  * A folder's look, chosen (Mindscape's appearance fields): its picture among the pictures of music,
