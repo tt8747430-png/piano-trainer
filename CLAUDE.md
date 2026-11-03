@@ -105,7 +105,7 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
   `widgets/curriculum`, `widgets/lesson-view`; `entities/lesson`, `course`, `step`, `progress`.
 - **Songs** (`/songs`) — one library of folders, favourites and an archive (+ adds: New song, Import, New folder; in
   Select, rows dragged into a folder or onto the Archive, `LibraryDnd`); a song's page (Settings and Edit in its bar: the page itself in place where its words are the learner's or an editor's, its title, who wrote it, about, `pages/piece/ui/SongEdit.tsx`; else the learner's version of the score; its overview card: Practise, Learned, ♡) and its sections; its Settings page (`/songs/$pieceId/settings`, Noji's deck settings: its music, its place in the library, Export…, Share link, Publish in library, an editor's original, Delete or Reset) and Publish in library (`/songs/$pieceId/publish`); one New song, Flat's three steps (its name; its instruments, the piano and voices by family, − n +; Fine-tune: tempo, bars, key, time) (in a collection's folder an editor's is the collection's);
-  MusicXML and MIDI import, one Export… sheet (MusicXML, MIDI, Share link; the Player's More opens it too) (`features/song-files`, `shared/lib/musicxml`);
+  MusicXML and MIDI import, one Export… sheet (MusicXML, MIDI, Share link; the Player's Settings opens it too) (`features/song-files`, `shared/lib/musicxml`);
   Publish in library a page for a song or a pattern (`PublishScreen`, Noji's: a description and a preview; once
   published its link with Copy, View in library, its saves, Unpublish and Publish new version; why publish behind ⓘ).
   `pages/songs`, `pages/song-archive`, `pages/piece`; `widgets/song-library`; `features/manage-library`; the

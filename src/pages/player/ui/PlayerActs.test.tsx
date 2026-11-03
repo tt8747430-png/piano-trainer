@@ -5,7 +5,6 @@ import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { readSongLink } from '@/features/share-song'
-import { confirmAsked } from '@/shared/test/confirm'
 import { createMemoryStorage } from '@/shared/lib'
 
 /** The learner's own song, Morning, as they made it. */
@@ -140,19 +139,10 @@ function firstNoteOn(bytes: Uint8Array): number {
 }
 
 describe('the acts on the music in the Player’s Settings (R29)', () => {
-  const LIBRARY = ['Add to favourites', 'Move to…', 'Archive']
   it.each([
-    [
-      'a song',
-      '/play/bz5',
-      ['Sections', 'Song information', 'Score settings', ...LIBRARY, 'Export…', 'Print'],
-    ],
+    ['a song', '/play/bz5', ['Sections', 'Song information', 'Export…', 'Print']],
     // A study is in no library (ADR 0106).
-    [
-      'a study',
-      '/play/ex3',
-      ['Sections', 'Study information', 'Score settings', 'Export…', 'Print'],
-    ],
+    ['a study', '/play/ex3', ['Sections', 'Study information', 'Export…', 'Print']],
     ['a walk', '/play/walk?root=D&kind=dorian', ['Export…', 'Print']],
     ['an exercise', '/play/exercise/hanon', ['Export…', 'Print']],
   ])('lists what %s has', async (_music, path, actions) => {
@@ -187,16 +177,7 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
   it('shares an own song with its music, saying the link is copied where there is no share sheet', async () => {
     const user = userEvent.setup()
     await renderApp('/play/my-1', { storage: withSong() })
-    expect(await moreActions(user)).toEqual([
-      'Sections',
-      'Song information',
-      'Score settings',
-      'Add to favourites',
-      'Move to…',
-      'Archive',
-      'Export…',
-      'Print',
-    ])
+    expect(await moreActions(user)).toEqual(['Sections', 'Song information', 'Export…', 'Print'])
     await user.keyboard('{Escape}')
     await exportAs(user, 'Share link')
     await waitFor(() =>
@@ -249,35 +230,6 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
     })
     // The share sheet says what it did: the screen says nothing.
     expect(screen.queryByText(/^Link copied/)).not.toBeInTheDocument()
-  })
-
-  it('keeps a piece among the favourites, moves it into a new folder and archives it, from its Settings (ADR 0106)', async () => {
-    const user = userEvent.setup()
-    const { libraryStore } = await renderApp('/play/bz5')
-    await chooseMore(user, 'Add to favourites')
-    expect(libraryStore.getState().favourites).toEqual(['bz5'])
-    // Named by what it does now.
-    await chooseMore(user, 'Remove from favourites')
-    expect(libraryStore.getState().favourites).toEqual([])
-    await chooseMore(user, 'Move to…')
-    const sheet = await screen.findByRole('dialog', { name: 'Move to' })
-    await user.click(within(sheet).getByRole('button', { name: 'New folder' }))
-    const making = await screen.findByRole('dialog', { name: 'New folder' })
-    await user.type(within(making).getByRole('textbox', { name: 'Name' }), 'Sunday')
-    await user.click(within(making).getByRole('button', { name: 'Create folder' }))
-    await waitFor(() =>
-      expect(
-        libraryStore.getState().folders.find((folder) => folder.id === 'folder-1'),
-      ).toMatchObject({ name: 'Sunday', songs: ['bz5'] }),
-    )
-    expect(
-      await screen.findByText('“Still, my soul, be still” moved to Sunday'),
-    ).toBeInTheDocument()
-    await chooseMore(user, 'Archive')
-    await confirmAsked(user, 'Archive')
-    expect(libraryStore.getState().archive).toEqual([
-      { kind: 'song', id: 'bz5', from: { folder: 'folder-1', index: 0 } },
-    ])
   })
 
   it('shows a song’s information: its chords, its key, time and tempo, its second title and who wrote it', async () => {

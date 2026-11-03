@@ -46,6 +46,11 @@ export function PickView({
   const askOnOpen = useSettings((state) => selectScoreView(state).askOnOpen)
   const [open, setOpen] = useState(openAtStart)
   const name = t(`views.short.${shown}`)
+  // What a greyed view needs, said in the panel: a phone shows no tooltip.
+  const greyed = PICKED.flatMap((view) => {
+    const need = needs[view]
+    return need === undefined ? [] : [[view, need] as const]
+  })
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
@@ -80,6 +85,13 @@ export function PickView({
           })}
           onChange={(music) => setScoreView(settings, { music })}
         />
+        {greyed.length > 0 ? (
+          <p className="text-sm text-pretty text-muted-foreground">
+            {greyed
+              .map(([view, need]) => `${t(`views.short.${view}`)}: ${t(`needs.${need}`)}`)
+              .join(' · ')}
+          </p>
+        ) : null}
         <div
           data-view-picture={shown}
           className="grid w-full place-items-center rounded-card bg-muted p-4 [&_svg]:h-24 [&_svg]:w-40"

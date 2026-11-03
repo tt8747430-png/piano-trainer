@@ -186,6 +186,8 @@ describe('Pick your view greys a view the music cannot show (ADR 0108)', () => {
     expect(lyrics).toHaveAttribute('aria-disabled', 'true')
     expect(lyrics).toHaveAttribute('title', 'Needs words')
     expect(lyrics).toHaveAccessibleDescription('Needs words')
+    // Said in the panel too, for a phone, which shows no tooltip.
+    expect(panel).toHaveTextContent('Lyrics: Needs words')
     expect(within(panel).getByRole('radio', { name: 'Diagrams' })).toBeChecked()
     await user.click(lyrics)
     // The view saved stays, for the songs that have words.

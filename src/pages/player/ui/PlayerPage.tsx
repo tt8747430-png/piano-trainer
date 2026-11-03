@@ -1,5 +1,5 @@
-import { Link, useNavigate, useParams, useSearch } from '@tanstack/react-router'
-import { Info, ListTree, Settings2 } from 'lucide-react'
+import { Link, useParams, useSearch } from '@tanstack/react-router'
+import { Info, ListTree } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -13,7 +13,6 @@ import {
   type Piece,
 } from '@/entities/piece'
 import { selectScoreView, useSettings } from '@/entities/settings'
-import { useFavouriteAction, useSongActions } from '@/features/manage-library'
 import { PieceInversions } from '@/features/choose-diagram-inversion'
 import { beatGroupInBar, writtenBarAt } from '@/features/practice'
 import { ShareSaid, useShareSong, type SongToShare } from '@/features/share-song'
@@ -27,7 +26,6 @@ import { useScoreTracks } from '@/widgets/practice-player'
 import type { PlayerSearch } from '../model/player-search'
 import { sectionAt, sectionStarts } from '../model/section-starts'
 import { usePlayer } from '../model/use-player'
-import { MoreActions } from './more-actions'
 import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
 import { SectionsSheet } from './SectionsSheet'
@@ -37,7 +35,6 @@ import { TransposeTool } from './TransposeTool'
 
 function PiecePlayer({ piece }: { piece: Piece }) {
   const { t } = useTranslation(['player', 'piece', 'songs', 'editor'])
-  const navigate = useNavigate()
   const locale = useLocale()
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
   const close = useUp()
@@ -118,14 +115,6 @@ function PiecePlayer({ piece }: { piece: Piece }) {
       icon: Info,
       onSelect: () => setShowing('info'),
     },
-    // The score's Settings (round 28): every piece is edited, so every piece has them.
-    {
-      key: 'settings',
-      label: t('editor:scoreSettings.title'),
-      icon: Settings2,
-      onSelect: () =>
-        void navigate({ to: '/edit/$pieceId/settings', params: { pieceId: piece.id } }),
-    },
   ]
   // Its link, a way out in Export… as on its page (ADR 0107).
   const share = sharing
@@ -133,83 +122,76 @@ function PiecePlayer({ piece }: { piece: Piece }) {
         onSelect: () => shared.share(sharing),
       }
     : undefined
-  // Its place in the learner's library (ADR 0106), first in Settings' acts; a study is in none.
-  const favourite = useFavouriteAction(piece.id)
-  const library = useSongActions(piece)
-  const inLibrary = piece.kind !== 'study'
   const askView = useSettings((state) => selectScoreView(state).askOnOpen)
   const files = useSongExport(piece)
   return (
     // Its chords drawn in the inversions chosen for them in this piece (ADR 0108).
     <PieceInversions pieceId={piece.id}>
-      <MoreActions value={inLibrary ? [favourite, ...library.actions] : []}>
-        <PlayerLayout
-          title={title}
-          credits={isDegreePiece(piece) ? undefined : piece.header}
-          layout={isDegreePiece(piece) ? undefined : piece.layout}
-          onClose={close}
-          view={search}
-          player={player}
-          performance={performance}
-          headings={headings}
-          // A song that hides its piano is a lead sheet (ADR 0114).
-          piano={!isLeadSheet(piece)}
-          // A piece written in degrees has the piano's staves alone.
-          staves={isDegreePiece(piece) ? undefined : piece.staves}
-          recording={piece.recording}
-          // Every piece is edited: one written in degrees as its chart in its key (ADR 0115).
-          modes={<ScoreEditToggle pieceId={piece.id} editing={false} bar={bar + 1} />}
-          setup={
-            <PieceSetup
+      <PlayerLayout
+        title={title}
+        credits={isDegreePiece(piece) ? undefined : piece.header}
+        layout={isDegreePiece(piece) ? undefined : piece.layout}
+        onClose={close}
+        view={search}
+        player={player}
+        performance={performance}
+        headings={headings}
+        // A song that hides its piano is a lead sheet (ADR 0114).
+        piano={!isLeadSheet(piece)}
+        // A piece written in degrees has the piano's staves alone.
+        staves={isDegreePiece(piece) ? undefined : piece.staves}
+        recording={piece.recording}
+        // Every piece is edited: one written in degrees as its chart in its key (ADR 0115).
+        modes={<ScoreEditToggle pieceId={piece.id} editing={false} bar={bar + 1} />}
+        setup={
+          <PieceSetup
+            piece={piece}
+            controls={controls}
+            choice={choice}
+            fit={fit}
+            swing={isCompound(piece.meter) ? null : search.swing}
+            simple={choice.simple && simplifies}
+            tracks={tracks}
+            staves={staves}
+            recordingWhy={
+              recordingInKey
+                ? undefined
+                : t('player:recordingOnlyIn', { key: keyName(pieceKey(piece)) })
+            }
+            onChange={changeSetup}
+            onStaves={changeTrack}
+            onSwing={player.setSwing}
+          />
+        }
+        // Chordify's toolbar after the View (ADR 0105): the key the piece is played in, and Simplify.
+        tools={
+          <>
+            <TransposeTool
               piece={piece}
-              controls={controls}
-              choice={choice}
-              fit={fit}
-              swing={isCompound(piece.meter) ? null : search.swing}
-              simple={choice.simple && simplifies}
-              tracks={tracks}
-              staves={staves}
-              recordingWhy={
-                recordingInKey
-                  ? undefined
-                  : t('player:recordingOnlyIn', { key: keyName(pieceKey(piece)) })
-              }
-              onChange={changeSetup}
-              onStaves={changeTrack}
-              onSwing={player.setSwing}
+              tonic={choice.tonic}
+              onChange={(key) => changeSetup({ key })}
             />
-          }
-          // Chordify's toolbar after the View (ADR 0105): the key the piece is played in, and Simplify.
-          tools={
-            <>
-              <TransposeTool
-                piece={piece}
-                tonic={choice.tonic}
-                onChange={(key) => changeSetup({ key })}
-              />
-              {controls.has('simplify') ? (
-                <SimplifyTool on={choice.simple} simplifies={simplifies} onChange={simplify} />
-              ) : null}
-            </>
-          }
-          more={more}
-          musicXml={files.musicXml}
-          share={share}
-          status={<ShareSaid said={shared.said} />}
-          // Chordify's "Show this when opening a song" (ADR 0108): the View, to choose how it shows.
-          openView={askView}
-          tracks={tracks}
-        />
-        <SongInfo piece={piece} performance={performance} {...sheetOf('info')} />
-        <SectionsSheet
-          starts={starts}
-          headings={headings}
-          current={sectionAt(performance, player.practice.state.beatGroup)}
-          onGo={goToBar}
-          {...sheetOf('sections')}
-        />
-        {inLibrary ? library.sheet : null}
-      </MoreActions>
+            {controls.has('simplify') ? (
+              <SimplifyTool on={choice.simple} simplifies={simplifies} onChange={simplify} />
+            ) : null}
+          </>
+        }
+        more={more}
+        musicXml={files.musicXml}
+        share={share}
+        status={<ShareSaid said={shared.said} />}
+        // Chordify's "Show this when opening a song" (ADR 0108): the View, to choose how it shows.
+        openView={askView}
+        tracks={tracks}
+      />
+      <SongInfo piece={piece} performance={performance} {...sheetOf('info')} />
+      <SectionsSheet
+        starts={starts}
+        headings={headings}
+        current={sectionAt(performance, player.practice.state.beatGroup)}
+        onGo={goToBar}
+        {...sheetOf('sections')}
+      />
     </PieceInversions>
   )
 }

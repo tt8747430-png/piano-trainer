@@ -88,3 +88,4 @@ not its music.
 - r26 — A song's Export…, Share link and Publish in library stand on its Settings page; Publish in library is a page of its own (2026-11-01).
 - r29 — Pedal events read from MusicXML at their own positions and offsets, a stop and a start at one place a change;
   written back the same way, and MIDI's control 64 read and written as the pedal line (2026-11-03).
+- r29 — Print and Export… moved from the Player's More to its Settings › Share; More is gone (2026-11-03).

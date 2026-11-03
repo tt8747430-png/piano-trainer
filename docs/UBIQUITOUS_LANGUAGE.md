@@ -249,7 +249,7 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Volume**: how loud one part plays, 0–100%. _Avoid:_ gain, level.
 - **Player settings** («Настройки плеера»; ⚙, R29): the Player's one sheet: the music's own choices (Staves,
   Accompaniment, How it plays), While you play (Audio playback, Playback, Display, Metronome), This song (Sections,
-  Song information, Score settings) and Share (Export…, Print). _Avoid:_ Setup, More, options.
+  Song information) and Share (Export…, Print). _Avoid:_ Setup, More, options.
 - **Pick your view** («Выберите вид»): the panel the tools row's view chip opens: Sheet · Grid · Diagrams · Lyrics.
   _Avoid:_ View menu.
 - **Starting position** («Начальное положение») and **Move smoothly** («Плавный переход»): where a row's right hand

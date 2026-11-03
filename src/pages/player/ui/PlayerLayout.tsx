@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 import { Download, MonitorCog, Printer, SlidersHorizontal, Timer, Volume2 } from 'lucide-react'
-import { use, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
 import { selectKeyboard, selectScoreView, useSettings } from '@/entities/settings'
@@ -36,7 +36,6 @@ import { PlayerPlayback, PlayerVolumes, type VolumeTrack } from '@/widgets/playe
 import { ViewSection } from '@/widgets/score-view-menu'
 import { SettingsExtrasContext, type SettingsExtras } from '@/widgets/player-setup'
 import { useChordKeys } from '../model/use-chord-keys'
-import { MoreActions } from './more-actions'
 import { PlayerExport } from './PlayerExport'
 import type { ExportShare } from '@/features/song-files'
 import { PickView } from './PickView'
@@ -141,13 +140,18 @@ export function PlayerLayout({
     const hands = new Set(performance.notes.map((note) => note.hand))
     return hands.has('rh') && hands.has('lh')
   }, [performance])
+  // With no hands button, a hand chosen before (a song edited down to one) is forgotten: both play.
+  const { hands: chosenHands } = view
+  const { setHands } = player
+  useEffect(() => {
+    if (!twoHands && chosenHands !== 'both') setHands('both')
+  }, [twoHands, chosenHands, setHands])
   usePlayerShortcuts(player, view, onClose)
   // Print (ADR 0107): the music printed as the View shows it, while its render stands.
   const [printing, setPrinting] = useState(false)
   const [exporting, setExporting] = useState(false)
   // The Player's one Settings (R29, Flat's one menu): how the Player works, then the acts on this
-  // music: its place in the library (ADR 0106), its own, Print and Export….
-  const library = use(MoreActions)
+  // music: its own (a piece's Sections and Song information), Export… and Print.
   const extras: SettingsExtras = {
     pages: [
       ...(tracks
@@ -181,7 +185,7 @@ export function PlayerLayout({
         icon: Timer,
         onSelect: () => void navigate({ to: '/practice/metronome' }),
       },
-      ...[...more, ...library].flatMap(({ icon, ...act }) =>
+      ...more.flatMap(({ icon, ...act }) =>
         icon ? [{ ...act, icon, group: 'song' as const }] : [],
       ),
       {

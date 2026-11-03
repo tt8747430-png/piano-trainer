@@ -60,6 +60,8 @@ export function SettingsSheet({
     <Sheet
       swipeDirection={laptop ? 'right' : 'down'}
       modal={!laptop}
+      // Beside the music, it stays open as the music plays: Close, Escape and the gear close it.
+      disablePointerDismissal={laptop}
       open={open}
       onOpenChange={(next) => {
         setOpen(next)

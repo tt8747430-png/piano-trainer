@@ -205,6 +205,28 @@ describe('Player', () => {
     },
   )
 
+  it('keeps its laptop panel open as the music plays beside it (R29 review)', async () => {
+    sizedAs('(min-width: 64rem)')
+    const user = userEvent.setup()
+    await renderApp('/play/bz5')
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Player settings' })
+    await user.click(within(sheet).getByRole('button', { name: 'Audio playback' }))
+    await user.click(screen.getByRole('button', { name: 'Play' }))
+    expect(screen.getByRole('dialog', { name: 'Audio playback' })).toBeInTheDocument()
+  })
+
+  it('names each page of While you play apart in Russian (R29 review)', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/bz5', { locale: 'ru' })
+    await user.click(await screen.findByRole('button', { name: 'Настройки плеера' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Настройки плеера' })
+    const rows = within(within(sheet).getByRole('region', { name: 'Во время игры' }))
+      .getAllByRole('button')
+      .map((row) => row.textContent)
+    expect(new Set(rows).size).toBe(rows.length)
+  })
+
   it('has no hands button for music of one hand (R29)', async () => {
     const storage = createMemoryStorage()
     const song = {
@@ -224,6 +246,30 @@ describe('Player', () => {
     await renderApp('/play/my-1', { storage })
     const dock = await screen.findByRole('toolbar', { name: 'Playback' })
     expect(within(dock).queryByRole('button', { name: /^Hands/ })).not.toBeInTheDocument()
+  })
+
+  it('plays both hands of music of one hand, a hand chosen before forgotten (R29 review)', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    const song = {
+      id: 'my-1',
+      title: 'Morning',
+      key: 'G',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['_ _'] }],
+      hands: { rh: 'B4/4 | D5/4', lh: 'r/4 | r/4' },
+    }
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
+    )
+    const { audio, router } = await renderApp('/play/my-1?hands=lh', { storage })
+    await waitFor(() => expect(router.state.location.search).not.toHaveProperty('hands'))
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    const notes = (audio.played[0]?.sounds ?? []).filter((sound) => sound.kind === 'note')
+    expect(notes.length).toBeGreaterThan(0)
   })
 
   it('docks the keys at the foot, under the toolbar, unless the settings dock them at the top', async () => {
@@ -253,14 +299,7 @@ describe('Player', () => {
       'Display',
       'Metronome sound and beats',
     ])
-    expect(rows('This song')).toEqual([
-      'Sections',
-      'Song information',
-      'Score settings',
-      'Add to favourites',
-      'Move to…',
-      'Archive',
-    ])
+    expect(rows('This song')).toEqual(['Sections', 'Song information'])
     expect(rows('Share')).toEqual(['Export…', 'Print'])
     await user.click(within(works).getByRole('button', { name: 'Audio playback' }))
     expect(await screen.findByRole('dialog', { name: 'Audio playback' })).toBeInTheDocument()

@@ -8,8 +8,6 @@ import {
   SPEED_STEPS,
   selectOtherHand,
   selectPlayback,
-  selectPractice,
-  selectScoreView,
   selectSound,
   type SpeedStep,
   useSettings,
@@ -20,21 +18,12 @@ import {
   onlyTheChords,
   setOtherHand,
   setPlayback,
-  setPracticeToggle,
-  setScoreView,
   setSound,
   setStaffVolume,
 } from '@/features/set-preference'
 import { formatPercent, useLocale } from '@/shared/i18n'
 import { PEDAL_PLAYS } from '@/shared/lib/schedule'
-import {
-  RowLink,
-  ChoiceCard,
-  SettingRows,
-  SettingsGroup,
-  SheetLayoutField,
-  SwitchRow,
-} from '@/shared/ui'
+import { RowLink, ChoiceCard, SettingRows, SettingsGroup } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 
@@ -139,32 +128,6 @@ export function PlayerVolumes({ tracks }: { tracks: readonly VolumeTrack[] }) {
   )
 }
 
-/** What the sheet shows, every song (the Player's Settings › Display). */
-export function PlayerDisplay() {
-  const { t } = useTranslation(['player', 'music'])
-  const settings = useSettingsStoreApi()
-  const practice = useSettings(selectPractice)
-  const view = useSettings(selectScoreView)
-  return (
-    <>
-      <div data-setting="scoreView.layout" className="card px-5 py-4">
-        <SheetLayoutField
-          value={view.layout}
-          onChange={(layout) => setScoreView(settings, { layout })}
-        />
-      </div>
-      <SettingsGroup flush>
-        <SwitchRow
-          setting="practice.fingerNumbers"
-          label={t('music:view.parts.fingers')}
-          checked={practice.fingerNumbers}
-          onCheckedChange={(on) => setPracticeToggle(settings, 'fingerNumbers', on)}
-        />
-      </SettingsGroup>
-    </>
-  )
-}
-
 /** How the Player plays, every song (the Player's Settings › Playback): each choice a card (R29). */
 export function PlayerPlayback() {
   const { t } = useTranslation(['player', 'music'])
@@ -243,7 +206,6 @@ export function PlayerSettings({ tracks }: { tracks: readonly VolumeTrack[] }) {
         />
       </SettingsGroup>
       <PlayerPlayback />
-      <PlayerDisplay />
     </>
   )
 }
