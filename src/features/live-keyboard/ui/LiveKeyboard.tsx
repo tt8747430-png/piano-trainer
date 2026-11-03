@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings } from '@/entities/settings'
 import { MidiSoundToggle, useHeldKeys } from '@/features/connect-midi'
 import { nameChords, printedSymbol, rangeOf, type Midi } from '@/shared/lib/music'
-import { hasFinePointer, type RailControl } from '@/shared/lib'
+import type { RailControl } from '@/shared/lib'
 import { useLiveVoice, useSoundingKeys } from '@/shared/lib/services'
 import { useShortcuts } from '@/shared/lib/shortcuts'
 import { PianoKeyboard, RailGroup } from '@/shared/ui'
@@ -86,15 +86,13 @@ export function LiveKeyboard({
   const letGo = (key: Midi) => voice.up(key)
   // The keys the app sounds or MIDI holds lead the view; a tapped or typed key is where the hand already is.
   const soundingRange = useMemo(() => rangeOf([...sounding, ...held]), [sounding, held])
-  // Letters play only where there are letters to type: never on a phone, whatever was saved (R29).
-  const typingPlays = typing && hasFinePointer()
   const typed = useTyping({
-    enabled: typingPlays,
+    enabled: typing,
     onKey: play,
     onKeyUp: letGo,
     inView: inView ?? soundingRange,
   })
-  useSpacePedal({ enabled: typingPlays && spacePedal })
+  useSpacePedal({ enabled: typing && spacePedal })
   // The typing keys are heard by `useTyping` and the pedal's hook: here they are only listed.
   const { t } = useTranslation('common')
   useShortcuts(

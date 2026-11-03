@@ -30,11 +30,9 @@ describe('A lesson', () => {
     expect(screen.getAllByRole('heading', { level: 2 }).length).toBeGreaterThan(1)
     expect(screen.queryByRole('link', { name: 'Next' })).toBeNull()
     await openSettings(user)
-    // The lesson's Settings show how lessons read and lead to its one home (R18).
-    await user.click(await screen.findByRole('link', { name: /Lessons read as\s*One page/ }))
-    const reading = await screen.findByRole('combobox', { name: 'Lessons read as' })
-    await user.click(reading)
-    await user.click(await screen.findByRole('option', { name: 'A section at a time' }))
+    // How lessons read is chosen on the lesson's Settings, its one home (R29).
+    const reading = await screen.findByRole('radiogroup', { name: 'Lessons read as' })
+    await user.click(within(reading).getByRole('radio', { name: 'A section at a time' }))
     await act(() =>
       router.navigate({ to: '/lessons/$lessonId', params: { lessonId: 'reading-chord-symbols' } }),
     )

@@ -192,6 +192,7 @@ const computerKeysRoute = createRoute({
   beforeLoad: () => {
     throw redirect({ to: '/settings/on-screen-piano', replace: true })
   },
+  component: lazyRouteComponent(settingsScreens, 'OnScreenPianoPage'),
 })
 const soundRoute = createRoute({
   getParentRoute: () => shellRoute,
