@@ -475,6 +475,28 @@ doesn't name, judge it by them:
       "D♭ / C♯ major" nor "D♭ major (C♯ major)": research how the reference apps write a key with two names. The
       other questions need to be shown, not described: mockups of each option with examples before the owner
       decides.
+22. **Owner's answers on the mockup page, 2026-11-03 (claude.ai artifact "Round 29 choices"; win over
+    everything above):**
+    - **Songs:** no Settings page for the library itself; each folder and each song has its own Settings page.
+    - **The Player:** one Settings page of its own (`/play/$pieceId/settings`, like a lesson's), reached from one gear.
+      Not four menus (Setup, gear, More, View) holding settings: what plays, what shows and how it behaves are all on
+      that page, in groups. The bar keeps only acts.
+    - **The app's Settings:** the proposal stands (Account; General: General, Storage and backup; Piano; Help), but
+      **Computer keys is not its own page**: it is a group on the On-screen piano page (shown on a computer only).
+    - **Keys with two names:** neither earlier option. The key-signature grid as Flat draws it
+      (`owner/flat-key-signature-grid.jpg`): 15 cells, each the signature itself drawn in the music font (♮, 1–7♯,
+      1–7♭), so D♭ (5♭) and C♯ (7♯) are separate cells and no name with a slash is shown.
+    - **Chords:** pick the **size first** (Triad, 7th, 9th, 11th, 13th), then the chord of that size from a short
+      list; never the word "Quality". The 7th switch goes.
+    - **Scales and keys, Chords view:** the same chord choices as the Chords page (every size, not only triads and
+      7ths).
+    - **Fingering:** drawn hands on Chords and Scales, finger numbers in the Player.
+    - **Chord player:** two pages with one engine (Progressions to learn, Chord player to play along); first style
+      Pop 1, the styles built after studying how Musicca's styles are made; key and time signature in its Settings;
+      saved chord sheets synced to the account.
+    - **Bass:** a real recorded bass; research further for a free one; a synthesised bass only until one is found.
+    - **Studies:** a built-in Songs folder. (They are Savchenko's *Called to Play* exercises, not Bobrova's: the
+      folder and each study credit *Called to Play*.)
 
 ## References (open every folder, "New folder" and "untitled" included)
 - `piano-data/reference-apps/new_app_2/` (notes in `scratchpad/r29/refs.md`):

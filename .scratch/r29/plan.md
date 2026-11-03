@@ -59,29 +59,19 @@ as above; import tests from the public MusicXML suites; layout templates Normal 
 **Which part wins:** `settings.md` replaces round 1's S0–S14; `practice-redesign.md` replaces round 2 where they
 differ (its P13–P14 partly replaced by the chord player, CP). Round 1's other items and rounds 3–4 stand.
 
-**Still open** (default taken unless the owner says otherwise):
+**Answered on the mockup page (prompt Decided 22), which wins over `settings.md` and `practice-redesign.md`
+where they differ:**
+- Songs: no library Settings page; a folder's and a song's own Settings pages.
+- The Player: one Settings page (`/play/$pieceId/settings`) from one gear, replacing Setup, the gear's sheet,
+  More › Score settings and View's settings; the bar keeps acts only.
+- App Settings: as proposed, with Computer keys a group on the On-screen piano page (computer only).
+- Keys: Flat's 15-cell key-signature grid drawn in the music font (`owner/flat-key-signature-grid.jpg`).
+- Chords: size first, then the chord of that size; no "Quality", no 7th switch. Scales' Chords view: every size.
+- Fingering: drawn hands on Chords and Scales; numbers in the Player.
+- Chord player: two pages, one engine; Pop 1 first (styles modelled on how Musicca's are built); key and time in
+  its Settings; saved chord sheets synced.
+- Bass: a real recorded one (keep researching); synthesised only until found.
+- Studies (Savchenko's *Called to Play*): a Songs folder, credited to the book.
 
-Settings (`settings.md`):
-1. The on-screen piano's bar keeps only octave, key size, pedal and hide; note names, chord names, glissando,
-   computer keys and MIDI sound live on their Settings pages only? Default: yes.
-2. Songs page's Settings now, with one row ("A tap on a song opens: Song page · Player")? Default: yes.
-3. Tempo, Key and Time leave the score's Settings (they are edited on the score)? Default: yes.
-4. The View stays one menu, the same in the Player and the editor? Default: yes.
-5. "Sound and recording" goes from the app's Settings; the sampled piano's download sits in Storage and backup?
-   Default: yes.
-
-Practice (`practice-redesign.md`):
-6. A key with two names reads "D♭ / C♯ major" (default) or "D♭ major (C♯ major)"?
-7. Chords: one Type picker, size first then the chord symbols (default), or Size and Type as two menus?
-8. Scales and keys' views: Scale · Chords · Key (default) or Scale · Harmony · Key signature?
-9. Fingering shown as drawn hands over the keys (default) or finger numbers on the keys alone?
-10. "My progressions" synced to the account (default) or kept on this device?
-
-Chord player (`practice-redesign.md`, CP):
-11. Its name: Chord player (default) or Progressions?
-12. Default style: Pop 1 (default) or Hymn 1?
-13. Transpose and time signature on its Settings page (default, the key shown as a link), or the key picker kept on
-    the page?
-14. No CC0, public-domain or CC-BY bass found yet (Karoryfer's to be checked): without bass (default) or a
-    synthesised one meanwhile?
-15. Accompaniment's studies move to a Songs folder "Accompaniment studies" (default) or stay under the Chord player?
+**Next:** fold these into `plan/settings.md` (ST: Player, Songs, Computer keys) and `plan/practice-redesign.md`
+(P: Chords, Scales; CP: styles, bass), then the `writing-plans` implementation plan for Settings.
