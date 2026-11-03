@@ -304,3 +304,20 @@ The full brief is `.scratch/r29/prompt.md`; these are the patterns behind it, to
 - **Beta (2026-11-02):** database changes, every text and the packages and samples named in the brief are the
   agent's to decide; secrets, keys, roles and outside hosting stay the owner's.
 
+## 2026-11-03 (round 29)
+
+- **Plan before building, exactly.** Generic descriptions led to wrong builds. Every item is described in
+  `.scratch/r29/plan.md` (route, controls with labels, what moves, what goes, done check) and read by the owner
+  before it is built. Re-read the prompt's section before building an item and name it in the commit.
+- **Settings pages per page, like a lesson's.** Each Practice page, the Player, the score editor and Songs has its
+  own Settings page from its own gear; the app's Settings holds only what is app-wide. Rows of practice settings in
+  the app's Settings were "wrong implementations" and duplicates.
+- **Transpose:** no circle of fifths; the Player's must work exactly as the music editor's.
+- **Drum grooves:** Chordify's.
+- **Words:** professional terms only ("Hear notes as you edit" was not one).
+- **Sounds:** the best free ones; CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for
+  the piano. Musicca's files are reference only (no licence: all rights reserved), but progressions are facts.
+- **The Update button must work** (it didn't: fixed by messaging the waiting worker and reloading on its
+  activation, checked with two real builds).
+- **Imports keep everything:** tuplets, any tempo, MIDI tempo and meter changes.
+
