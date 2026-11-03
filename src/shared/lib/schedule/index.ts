@@ -96,7 +96,6 @@ export {
   defaultLevels,
   LEVEL_GAIN,
   meterBeats,
-  meterText,
   nextLevel,
   parseMeter,
   speedAt,
@@ -104,7 +103,6 @@ export {
   type BarClick,
   type BeatLevel,
   type DrumVoice,
-  type Meter,
   type SpeedTrainer,
   type Subdivision,
 } from './meter'

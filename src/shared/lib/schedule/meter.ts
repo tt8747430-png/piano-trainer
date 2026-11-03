@@ -1,3 +1,12 @@
+import {
+  beatGrouping,
+  isCompound,
+  isMeter,
+  meterGroups,
+  meterParts,
+  type Meter,
+} from '@/shared/lib/music'
+
 /**
  * The metronome's one model of time (A39, `.scratch/r29/metronome-engine/spec.md`): any time
  * signature, counted as players count it (the dotted beat in 6/8, 9/8 and 12/8; the half in 2/2; an
@@ -5,47 +14,23 @@
  * clicks with their subdivision, or the drum groove of the meter.
  */
 
-/** A time signature: beats over the note that counts them. */
-export interface Meter {
-  readonly top: number
-  readonly bottom: number
+/** Reads a time signature ("7/8"); null for what is none the app writes (ADR 0097: up to 12 over 2, 4, 8). */
+export const parseMeter = (text: string): Meter | null => {
+  const trimmed = text.trim()
+  return isMeter(trimmed) ? trimmed : null
 }
 
-/** The notes a signature may count by. */
-const BOTTOMS = [1, 2, 4, 8, 16] as const
-
-/** The most beats a bar may have. */
-const MOST_BEATS = 32
-
-/** Reads "7/8"; null for what is no time signature. */
-export function parseMeter(text: string): Meter | null {
-  const match = /^(\d{1,2})\/(\d{1,2})$/.exec(text.trim())
-  if (!match) return null
-  const top = Number(match[1])
-  const bottom = Number(match[2])
-  if (top < 1 || top > MOST_BEATS) return null
-  if (!BOTTOMS.some((each) => each === bottom)) return null
-  return { top, bottom }
-}
-
-export const meterText = ({ top, bottom }: Meter): string => `${top}/${bottom}`
-
-/** A compound meter: its beats dotted, three of its notes to each (6/8, 9/8, 12/8, 6/4). */
-const compound = ({ top, bottom }: Meter) => bottom >= 4 && top > 3 && top % 3 === 0
-
-/** An odd meter of eighths or shorter: five, seven or eleven of them, grouped in twos and threes. */
-const odd = ({ top, bottom }: Meter) => bottom >= 8 && top > 4 && top % 3 !== 0 && top % 2 !== 0
-
-/** An odd meter's usual grouping: 5 as 3+2, 7 as 2+2+3, the rest in twos closed by a three. */
-function usualGroups(top: number): readonly number[] {
-  if (top === 5) return [3, 2]
-  return [...Array.from({ length: (top - 3) / 2 }, () => 2), 3]
-}
+/** Where each group of `sizes` starts, as beat indexes: 2+2+3 → 0, 2, 4. */
+const starts = (sizes: readonly number[]) =>
+  sizes.slice(0, -1).reduce<number[]>((at, size, i) => [...at, (at[i] ?? 0) + size], [0])
 
 /**
- * How a bar of `meter` is counted: its beats (each as many of the signature's notes as it lasts),
- * the note the tempo counts, and where its groups start (beat indexes). `grouping` overrides an odd
- * meter's usual one (5/8 as 2+3) where it adds up.
+ * How the Metronome counts a bar of `meter`, on the kernel's own counting (`music/time`, ADR 0114):
+ * its beats (each as many of the signature's notes as it lasts), the note the tempo counts, and
+ * where its groups start (beat indexes). A compound meter counts its dotted beats; a meter in
+ * eighths that is not compound counts its eighths, grouped as the kernel groups them (7/8 as
+ * 2+2+3), or as `grouping` says where it adds up (5/8 as 2+3); any other its written beats, a long
+ * bar grouped (5/4 as 3+2).
  */
 export function meterBeats(
   meter: Meter,
@@ -55,22 +40,21 @@ export function meterBeats(
   readonly unit: number
   readonly groups: readonly number[]
 } {
-  if (compound(meter))
+  const { count, unit } = meterParts(meter)
+  if (isCompound(meter))
     return {
-      beats: Array.from({ length: meter.top / 3 }, () => 3),
-      unit: meter.bottom,
-      groups: [0],
+      beats: Array.from({ length: count / 3 }, () => 3),
+      unit,
+      groups: starts(meterGroups(meter)),
     }
-  const beats = Array.from({ length: meter.top }, () => 1)
-  if (!odd(meter)) return { beats, unit: meter.bottom, groups: [0] }
-  const sizes =
-    grouping && grouping.reduce((sum, size) => sum + size, 0) === meter.top
-      ? grouping
-      : usualGroups(meter.top)
-  const groups = sizes
-    .slice(0, -1)
-    .reduce<number[]>((starts, size, i) => [...starts, (starts[i] ?? 0) + size], [0])
-  return { beats, unit: meter.bottom, groups }
+  if (unit === 8) {
+    const sizes =
+      grouping && grouping.reduce((sum, size) => sum + size, 0) === count
+        ? grouping
+        : beatGrouping(meter)
+    return { beats: Array.from({ length: count }, () => 1), unit, groups: starts(sizes) }
+  }
+  return { beats: Array.from({ length: count }, () => 1), unit, groups: starts(meterGroups(meter)) }
 }
 
 /** A beat square's level: the bar's first, an accent, a beat, or silent. Tapping cycles the last three. */

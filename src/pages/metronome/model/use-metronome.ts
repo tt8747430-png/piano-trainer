@@ -29,7 +29,7 @@ const TOP_UP = 250
 const KEPT = 2
 
 /** A saved meter read: 4/4 where it cannot be. */
-const meterOf = (meter: string) => parseMeter(meter) ?? { top: 4, bottom: 4 }
+const meterOf = (meter: string) => parseMeter(meter) ?? '4/4'
 
 /** The Metronome's time: its tempo, or the speed trainer's bar by bar while it is on. */
 const timeOf = ({ bpm, meter, speed }: MetronomeSettings): MetronomeTime =>

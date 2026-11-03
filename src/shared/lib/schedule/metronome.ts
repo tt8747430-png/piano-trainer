@@ -43,7 +43,7 @@ export const BPM_RANGE = { min: 30, max: 300 } as const
 export const clampBpm = (bpm: number): number =>
   Math.min(BPM_RANGE.max, Math.max(BPM_RANGE.min, Math.round(bpm)))
 
-const meterOf = (meter: MetronomeMeter) => parseMeter(meter) ?? { top: 4, bottom: 4 }
+const meterOf = (meter: MetronomeMeter) => parseMeter(meter) ?? '4/4'
 
 /** How many beats a bar of `meter` counts: the beats the tempo counts (two in 6/8). */
 export const beatsOf = (meter: MetronomeMeter): number => meterBeats(meterOf(meter)).beats.length

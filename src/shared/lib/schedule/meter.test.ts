@@ -8,8 +8,8 @@ import {
   nextLevel,
   parseMeter,
   speedAt,
-  type Meter,
 } from './meter'
+import type { Meter } from '@/shared/lib/music'
 
 const meter = (text: string): Meter => {
   const read = parseMeter(text)
@@ -24,20 +24,21 @@ const shape = (text: string, subdivision: Parameters<typeof barClicks>[0]['subdi
   )
 
 describe('a meter', () => {
-  it('reads any time signature, and refuses what is none', () => {
-    expect(parseMeter('7/8')).toEqual({ top: 7, bottom: 8 })
-    expect(parseMeter('12/8')).toEqual({ top: 12, bottom: 8 })
-    for (const wrong of ['', '4', '0/4', '4/3', '4/0', '33/4', 'a/b'])
+  it('reads any time signature the app writes, and refuses what is none', () => {
+    expect(parseMeter('7/8')).toBe('7/8')
+    expect(parseMeter(' 12/8 ')).toBe('12/8')
+    for (const wrong of ['', '4', '0/4', '4/3', '4/0', '13/4', 'a/b'])
       expect(parseMeter(wrong)).toBeNull()
   })
 
   it('counts a simple meter in its written beat', () => {
     expect(meterBeats(meter('4/4'))).toEqual({ beats: [1, 1, 1, 1], unit: 4, groups: [0] })
     expect(meterBeats(meter('2/2'))).toEqual({ beats: [1, 1], unit: 2, groups: [0] })
-    expect(meterBeats(meter('3/8'))).toEqual({ beats: [1, 1, 1], unit: 8, groups: [0] })
+    expect(meterBeats(meter('5/4'))).toEqual({ beats: [1, 1, 1, 1, 1], unit: 4, groups: [0, 3] })
   })
 
   it('counts a compound meter in dotted beats, three to each', () => {
+    expect(meterBeats(meter('3/8'))).toEqual({ beats: [3], unit: 8, groups: [0] })
     expect(meterBeats(meter('6/8'))).toEqual({ beats: [3, 3], unit: 8, groups: [0] })
     expect(meterBeats(meter('9/8'))).toEqual({ beats: [3, 3, 3], unit: 8, groups: [0] })
     expect(meterBeats(meter('12/8'))).toEqual({ beats: [3, 3, 3, 3], unit: 8, groups: [0] })
