@@ -35,3 +35,16 @@ Read from the mockup page's feedback (claude.ai artifact). Owner's words in quot
 - 3.22 an editor's built-in song: "no Publish in the bar; built-in songs are songs in the public library only
   admins edit; publish from Settings like any song". → Bar as any song; Changes and Publish in the song's Settings.
 - 3.23 staff: "'Show on the sheet' not understandable". → "Hide staff (it still plays)".
+
+## Second pass (2026-11-03, later)
+
+- 1.3: "not Move to archive but Archive, like Export or Import". → "Archive" row like Export, a drawer to confirm.
+- 2.4 Simplify: "it simplifies the score; no overview list". → Simplify on: the chord symbols on the score become the
+  basic chords.
+- 2.12 Sections: "no strip at the bottom; edit like the other places, from the header". → ✎ in the bar, edit in place.
+- 2.16 Style: "doesn't make sense; what is this page for". → Removed (styles are the Chord player's).
+- 3.6 Time: "Flat has two input boxes, one over the other". → Customize as two stacked boxes.
+- 3.7 Tempo: "what are these tempo marking titles". → Beat (♪ ♩ ♩. 𝅗𝅥), beats a minute, optional words (Andante).
+- 3.10 Recording: "what does the metronome do here". → "Click while recording: a click on every beat, so what you
+  play lands in the right bars", and Count-in; the Metronome link removed.
+- 3.11, 3.12 ok.
