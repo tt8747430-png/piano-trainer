@@ -42,7 +42,11 @@ string changed; files in `.scratch/r29/shots/after/r2-<item>-<screen>-<size>.png
     spine on Harmony (built in 9c6e182f as `KeyChords`); the paragraph is rewritten to the spine.
 12. **`DESIGN.md:552–556`** "a crossing's finger in sky and underlined (on the keys its circle filled in sky, on the
     staff its number in bold sky)": three marks for one thing. A30 sets one (below).
-13. **`progress.md` row A22** "Harmonic · Melodic … Play all": right, but the row omits that the interval is on no
+13. **`round-1.md` S1 row 2** (`chords.fingering`, a Fingering switch on Chords' Settings) and
+    **`.scratch/r29/fingering-service/spec.md` §5** ("registry home `player`, mirrored by link rows"). A30 asks for one
+    switch for every page, and Decided 20 forbids a setting on two pages. Correct: one app-wide "Fingering" switch in
+    Settings › General › Notation and names (`notation.fingering`), no per-page row (A30 below).
+14. **`progress.md` row A22** "Harmonic · Melodic … Play all": right, but the row omits that the interval is on no
     staff and its songs are hand-copied (A22, C6 below).
 
 ---
@@ -456,8 +460,8 @@ string changed; files in `.scratch/r29/shots/after/r2-<item>-<screen>-<size>.png
     title is the app bar's "Scales and keys"; the `text-5xl` name goes (the pickers say the scale).
   - **The seven-degree spine** (`KeyChords.tsx` becomes `src/widgets/scale-explorer/ui/DegreeSpine.tsx`,
     `DegreeSpine({ tonic, kind, row }: { …; row: 'notes' | 'chords' | 'functions' })`): seven equal columns I–VII
-    (a grid with seven tracks; on a phone the row scrolls is NOT allowed: it wraps to 4 + 3 with the same widths and
-    the last row starting at column 1, as `KeyChords` does today), each column headed by its degree number and
+    (a grid with seven tracks; on a phone it never scrolls sideways: it wraps to 4 + 3 at the same column widths,
+    the second line starting at column 1, as `KeyChords` does today), each column headed by its degree number and
     numeral in the same place on every tab:
     - Notes: the note and its fingers (RH above, LH below) per A30;
     - Harmony: the chord (C Dm Em F G Am B°), its numeral, its function word and colour (`ROLE_PAINT`: home ·
@@ -757,3 +761,182 @@ string changed; files in `.scratch/r29/shots/after/r2-<item>-<screen>-<size>.png
     chord and `key=`).
 - **Done when:** `colour-notes.test.ts`: "matches The Chord Tensions Chart for each 7th chord" (a table with the page);
   `ProgressionsPage.test.tsx`: "a chord's menu opens Chords on it in the key".
+
+### A39: The Metronome
+
+- **Source:** A39 (1493–1523) under Decided 20 (grooves, spoken count) and D16 (sounds); A25's look; round 1 S7
+  (its Settings page). C8 (grooves) and C9 (sounds) above.
+- **Today:** meters any (kernel), beat squares cycle (done), subdivisions (done), speed and bar trainers (done), one
+  engine (done). No volume of its own on its page (`sound.click` drawn on the Player's Settings), no flash, no tempo
+  list, a fixed 12-meter menu.
+- **Will build:**
+  - **Grooves:** C8. **Sounds:** C9.
+  - **Volume:** S7's "Volume" row (slider 0–100 %, `sound.click`, home `metronome`). The engine scales every click
+    and hit by it (the page, the Player's click and count-in).
+  - **Flash:** S7's "Flash on the beat" switch (`metronome.flash`, default off). When on and playing, a full-screen
+    overlay (`pages/metronome/ui/BeatFlash.tsx`, `BeatFlash({ beat, level }: …)`) fills the screen behind the
+    controls with the accent colour at 35 % opacity on the downbeat and 18 % on other beats, fading in 120 ms; drawn
+    from the audio clock (`audio.now()` → the next beat's time, a `requestAnimationFrame` loop that lights the beat
+    whose time has passed), the same clock the beat squares read. `prefers-reduced-motion`: no fade, the squares
+    only, and the flash's row says "Off with reduced motion" in its ⓘ.
+  - **Tempo list ("Saved tempos"):**
+    - On the face, under Tap tempo, a `MenuPicker` button **"Saved tempos"** (bookmark icon, ru «Сохранённые
+      темпы») listing each saved tempo ("Hanon warm-up · 96 · 4/4") to choose (sets tempo and meter), then
+      **"Save this tempo…"** (a `NewSheet`: Name, Create) and **"From a song…"** (a sheet listing the library's songs
+      with their tempo and meter, search at its top; choosing one sets both).
+    - On S7's page, group **"Saved tempos"**: one row per saved tempo (name, "96 · 4/4"), dragged to reorder (R4),
+      its menu Rename · Remove (Remove confirms, R17).
+    - Store: `MetronomeSettings.saved: readonly { id: string; name: string; bpm: number; meter: MetronomeMeter }[]`,
+      at most 20; sanitiser field by field; version bumped.
+  - **Meter:** the face's Time signature stays a `MenuPicker` of `METRONOME_METERS` plus **"Other…"** (a sheet with two
+    `Stepper`s, beats 1–12 and the beat 2 · 4 · 8, and for odd meters the grouping as `Segmented` 3+2 · 2+3 /
+    2+2+3 · 2+3+2 · 3+2+2), until A34's shared time control replaces it (round 4).
+  - **Look:** A25 (stepper, tempo word, capsule Play).
+- **Done when:** `src/shared/lib/schedule/metronome.test.ts`: "volume 0.5 halves every click's gain"; "the flash's
+  beat and the click share a time" (the scheduled click time equals the flash's lit time for 8 beats on a fake
+  clock). `MetronomePage.test.tsx`: "Flash on the beat lights the overlay on each beat" (fake audio `setNow`);
+  "Save this tempo adds it to Saved tempos and choosing it sets 96 and 3/4"; "From a song sets Greensleeves' tempo";
+  "Other… sets 7/8 as 2+2+3". `MetronomeSettingsPage.test.tsx` (S7's file): "removes a saved tempo after Confirm".
+  Recordings of each sound and groove (C8, C9). Screenshots of the face (playing, flash on) at the three sizes.
+
+### A41: Exercises and the Quiz, inside
+
+- **Source:** A41 (1571–1613); round 1 S8 (Rounds, Time limit, auto-advance move to Settings). Audit: drill names,
+  Start button, Custom level, no time signature DONE; the round, Why, results review, the exercise page open.
+- **Today:** `widgets/trainer-board/ui/TrainerBoard.tsx` (question, `RoundStaff`, answers, one primary button),
+  `RunResults.tsx` (accuracy, time, streak, missed rows, Again); an exercise opens straight into
+  `/play/exercise/$exerciseId`, its score printing a chord symbol "C" over bar 1 and the staff name "Piano".
+- **Will build:**
+  - **A round fits one screen:** `TrainerBoard` lays out question, staff, piano and answers in one viewport column
+    (CSS grid with `min-h-0` rows; the staff scales down first), at 1280×800 and 390×844; **Check** / **Next** move to
+    the floating capsule (`FloatingActions`, the primary pill, R5).
+  - **"Build C":** the chord's name at 48px, its symbol under it, a **"Hint"** button (ru «Подсказка») that shows its
+    notes as chips (not shown until asked).
+  - **Note names hidden** in Note reading and Play it: the board passes `labels="none"` to `PinnedKeyboard`
+    (overriding the On-screen piano setting for this drill only, A26).
+  - **Progress line:** "Round 3 of 10 · 2 right · 1 wrong · Run 2" (ru «Раунд 3 из 10 · верно 2 · ошибок 1 · серия
+    2») and, with a time limit, the `TimeLeft` ring beside it. New `use-round-words.ts` keys.
+  - **After an answer:** "Right" or "Not quite" (ru «Верно» / «Не совсем») in words and the success/danger colour,
+    the right answer lit on the keys and the staff, played, and a **Why** line from the kernel:
+    `whyAnswer(question): LocalizedWhy` in `features/trainer/model/why.ts` (e.g. `{ key: 'triad', values: { notes:
+    'F A C', quality: 'major', root: 'F' } }` → "F A C is a major triad on F"); keys `quiz.why.*` en/ru for each
+    drill kind (chord quality, interval, key signature, scale, inversion, chord role, cadence, note).
+  - **Results** (`RunResults.tsx`): accuracy, time, best run; "What to review": each missed item a row opening it in
+    Chords (a chord), Intervals (an interval), Scales' Key (a key), Progressions (a cadence/role); buttons **Again**
+    and **Review the missed ones** (a new run of only those); the run recorded through `record-run` (Profile, B1) and
+    the missed items to My gaps (`entities/progress`, existing `gaps`).
+  - **Exercise page** before the Player: new route `/practice/exercises/$exerciseId` (`pages/exercise`, parent
+    `/practice/exercises`), Exercises' rows open it. Content top to bottom: name (app bar), **What it trains** (one
+    paragraph), **How to play it** (plain words with the fingering picture, `HandCard`), options: **Key** (`KeyPicker`,
+    not drawn for an exercise written in one key, A42), **Hands** (`HandsChoice`, not drawn for a two-hand-only
+    exercise), **Octaves** (`Segmented` 1 · 2 where the exercise has them), **Rhythm** (Hanon's variants: Even ·
+    Dotted · Triplets, where it has them), **Tempo** (`Stepper`) and **Target tempo** (`Stepper`), then **Start**
+    (the capsule's primary) opening `/play/exercise/$exerciseId?key=…`. Content from `shared/lib/exercise` (each
+    exercise gains `trains: LocalText`, `how: LocalText`, `options: ExerciseOptions`).
+  - **In the Player:** an exercise's Score has no chord symbols and no staff name (`exercise/performance.ts` writes
+    none); a **"Next key"** button in the capsule after each pass (C → G → D …, or chromatically as the page chose),
+    the tempo reached kept per exercise and key (`pt-progress` `exerciseTempos`), the day's routine row ticked
+    (`routine.ts`).
+- **Done when:** `TrainerBoard.test.tsx`: "Check is the capsule's primary"; "Hint shows C E G"; "Note reading shows no
+  note names on the keys"; "a wrong answer says Not quite, lights the right keys and says why". `RunResults.test.tsx`:
+  "Review the missed ones starts a run of the two missed"; "a missed chord opens Chords on it". `ExercisePage.test.tsx`:
+  "opens from Exercises, shows what it trains and Start opens the Player in G"; "a one-key exercise has no Key".
+  `exercise/performance.test.ts`: "an exercise's score has no chord symbol and no staff name". Screenshots at 402
+  and 1280: setup, a round, a wrong answer, results, an exercise page (A41's Done).
+
+### A42: Every Practice page against rule 30
+
+- **Source:** A42 (1614–1640); C2, C4, C5 above. Audit: Chords and Progressions DONE (C2/C4 change how), Scales' Key
+  picker and Harmony's run controls NOT DONE, per-page tests missing.
+- **Will build (per page, each control and the states where it does nothing):**
+  - **Scales:** C5 (pickers by tab). Harmony's run controls (Tempo, "Played as" Block · Arpeggio) leave the fields
+    above the chords and sit in the "Through the key's chords, in scale order" row of "Practise in all 12 keys" as the
+    row's own two compact controls (`Segmented` Block · Broken, `Stepper` tempo), since they change only that walk.
+    "Keys play: Chords · Notes" stays above the spine (it changes what a key tap does there).
+  - **Chords:** C2 (rows stay, values as text); Hands for a two-hand voicing is text (C2); a Voicing the size can't take
+    is not listed (A20).
+  - **Progressions:** Mode gone from the page (C4); Approach chords offers only None where the chord size can't voice
+    the approach (none at 9ths: offered **None · Secondary dominants · ii–V** at triads and 7ths, **None ·
+    Secondary dominants** at 9ths) and the row stays; walks hidden for one chord (done).
+  - **Intervals:** the way (capsule) applies to every row including past the octave (they play the way chosen; today
+    they do — checked by a test).
+  - **Quiz setup:** "Shown" only on Flashcards (done); Level presets filtered by drill (an ear drill lists no "on the
+    staff" level): `levelsFor(drill, kind)` in `features/trainer/model`; Rounds ∞ with a Time limit: Time limit's row
+    shows "Off with no end" text while Questions is ∞ (S8's page: the menu narrows to Off).
+  - **Exercises:** A41's exercise page draws no Key for a one-key exercise and no Hands for a two-hands-only one.
+- **Done when:** one test per page, each named "every control shown changes what's shown, and no choice changes the
+  tab": `ScalesPage.test.tsx`, `ChordsPage.test.tsx`, `ProgressionsPage.test.tsx`, `IntervalsPage.test.tsx`,
+  `QuizPage.test.tsx`/`TrainerSetup.test.tsx`, `ExercisePage.test.tsx`. Each test walks the page's states (scale kinds;
+  triad/7th/9th/two-hand chords; typed and library lines; drills), and for each control asserts that each value
+  changes the rendered output (snapshot of the main region's text differs) and that the tab in the URL is unchanged.
+
+### A43: The Key tab's content, and theory on the music
+
+- **Source:** A43 (1641–1731); C5, C6 above. Audit: degrees spine, minor V/vii°, C♭ DONE; overlaps unverified; "sounds as
+  B" missing; Harmonise spelling NOT DONE; facts trim NOT DONE; annotations NOT DONE; additions mostly NOT DONE.
+- **Will build:**
+  - **Overlaps:** the harmonise cards (`HoldingGroupCard.tsx`) in one grid of equal columns (`grid-cols-[repeat(auto-
+    fill,minmax(11rem,1fr))]`), the second line short ("♭3 · in key") and wrapping; the floating keyboard button sits
+    in the capsule, over nothing (R5).
+  - **The Neapolitan's name:** a borrowed ♭II spelled C♭ in B♭ minor shows its second line **"Neapolitan · sounds as
+    B"** (ru «Неаполитанский · звучит как си»), only where the spelling needs a double or a flat-on-a-white-key
+    respelling (`soundsAs(note)` in `music/note.ts`).
+  - **Harmonise a melody note:** each chord that holds the note writes the note as the chord spells it: "A major, as
+    3rd: C♯ (= D♭)" (ru «Ля мажор, терция: до♯ (= ре♭)»); with the key's chords only (the All chords · In the key
+    segmented, A20) respelled chords appear only under "All chords". No separate "Include enharmonic" setting.
+  - **Facts trimmed:** Key keeps, beside the circle: the key signature named ("5 flats: B♭ E♭ A♭ D♭ G♭"), Relative and
+    Parallel as links, the two neighbours on the circle as links, and Modes (C5). "Notes" and the long list go (the
+    header's staff shows the notes, A21).
+  - **Theory written on the music:** an annotation layer drawn by our notation, new `src/shared/lib/notation/
+    annotate.ts`: `annotate(score: Score, marks: readonly Annotation[]): Score` where `Annotation` is one of
+    `{ kind: 'degree' | 'step' | 'tonic' | 'leading' | 'tetrachord' | 'numeral' | 'function' | 'tone' |
+    'interval' | 'semitones' | 'beat' | 'hand' | 'symbol'; at: NoteRef | BarRef; text: string; place: 'above' |
+    'below' }`, rendered by Verovio as `<harm>`/`<dir>` text (`ui/score` maps them), so the Player and the editor
+    print them the same, never over the notes. Each page's layers are its Settings' "On the staff" switches (A24):
+    - Scales (Notes): Degree numbers (on), Whole and half steps (W/H, a ∧ over half steps) (on), Tonic and leading
+      note named (off), raised 6th and 7th in melodic/harmonic minor marked (on in those kinds), Tetrachords (off).
+    - Key: the signature's accidentals numbered in order with "the last sharp is the leading note" (on), tonic,
+      subdominant, dominant labelled (on).
+    - Harmony: Roman numerals under the chords (on), function colours (app-wide switch, S12), chord tones R 3 5 7
+      (off).
+    - Chords: chord tones R 3 5 7 9 … (on), the inversion's bass named "C/E · 1st inversion" (on).
+    - Intervals: A22's name and semitones (on), inversion beside it (off).
+    - Progressions: numerals and functions under the chords (on), voice-leading lines (off).
+    - Chord finder: tones labelled (on), "ii in C · iii in B♭ …" (on).
+    - Accompaniment: beats numbered (on), hands named (off), chord symbols over bars (on).
+  - **Additions** (checked against the named books):
+    - **Modes' character** (*The Secret of Modes*): on Notes for a mode, its characteristic note marked on the staff
+      and the piano (accent colour) and one line under the header ("Dorian: a natural minor with a raised 6th"), a ▷
+      **"Vamp"** row playing its vamp (Dorian i–IV, Mixolydian I–♭VII, Lydian I–II, Phrygian i–♭II, Aeolian
+      i–♭VI–♭VII), and **"Drone"** (the tonic held, B11's Drone tool; until B11 lands, the row isn't drawn).
+    - **Compare with** (Notes): a `MenuPicker` "Compare with" (None · its parallel minor/major · the major it comes
+      from · …) drawing the second scale on the same staff and piano, differing notes in the accent colour.
+    - **Chord family heard in its key** (Harmony): each spine chord's ▷ menu has "Hear in the key": I–IV–V–I then the
+      chord. **Chords:** the same "Hear in a key" button with the keys it belongs to as a menu.
+    - **Songs that begin with an interval:** C6.
+    - **Play in this song's key:** A23.
+    - **Reharmonise** (*Reharm Anything*): a second section on Passing chords, "Reharmonise", for the Progression tab's
+      line: each chord's tonal substitutes (same function: I ↔ iii/vi, IV ↔ ii, V ↔ vii°), each with Insert (replaces
+      the chord) and Undo. Kernel `reharmonise.ts` exists; it gains `tonalSubstitutes(numeral, key)`.
+    - **Test yourself** on every page: Chords (this quality), Scales (this key's signature), Intervals (A22),
+      Progressions (done), Accompaniment (none: no drill fits, so none drawn), opening its Quiz drill set to it.
+- **Not in this item:** the Drone tool itself (B11).
+- **Done when:** `scale-chord.test.ts`: "B♭ minor's ♭II is C♭ and sounds as B". `KeyHarmonise.test.tsx`: "D♭ in B♭
+  minor under A major reads C♯ (= D♭)". `annotate.test.ts`: "degree numbers sit under each note"; "W/H between the
+  notes of C major: W W H W W W H". A screenshot of each page's staff with its annotations on; B♭ minor's Key and
+  Harmony at 390 and 1280 with nothing overlapping (A43's Done). `ScalesPage.test.tsx`: "D Dorian marks B as its
+  characteristic note"; "Compare with C minor marks E♭ A♭ B♭".
+
+---
+
+## Open questions for the owner (defaults taken)
+
+1. C4: Mode on Progressions' Settings with a "Read in Dorian ›" link row (default), or on the page beside a typed line?
+2. C7: add every distinct musicca loop (well over 100), named by numerals where no common name exists (default), or a
+   curated subset?
+3. C9: classic click and rimshot have no VCSL source; Freesound CC0 if reachable, else not offered (default), or our
+   own rendered file?
+4. A30: one app-wide Fingering switch in General (default; drops round 1 S1's `chords.fingering`).
+5. A30: hand art drawn by us (default) or an adapted CC0 drawing?
+6. Round 1's open ones that touch these pages stay as round 1 wrote them (S1 one Play, S2 octaves on the page, S7
+   trainers on the face, S8 keys on the setup).
