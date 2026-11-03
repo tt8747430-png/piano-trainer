@@ -3,8 +3,6 @@ export {
   GeneralPage,
   OnScreenPianoPage,
   PlayerSettingsPage,
-  ScoreEditorSettingsPage,
-  SoundPage,
   StoragePage,
   SettingsPage,
 } from '@/pages/settings'

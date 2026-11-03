@@ -42,9 +42,38 @@ describe('the score’s Settings (round 28)', () => {
     await waitFor(() => expect(piecesStore.getState().songs[0]?.header).toBeUndefined())
   })
 
-  it('adds an instrument’s staff and makes the song longer, each saved', async () => {
+  it('lists Title and credits, Music and How the editor works, each row opening its page (R29, 3.3)', async () => {
     const user = userEvent.setup()
-    const { piecesStore } = await renderApp('/edit/my-1/settings', { storage: withSong() })
+    const { router } = await renderApp('/edit/my-1/settings', { storage: withSong() })
+    expect(await screen.findByRole('region', { name: 'Title and credits' })).toBeInTheDocument()
+    const rows = (group: string) =>
+      within(screen.getByRole('region', { name: group })).getAllByRole('button')
+    for (const [at, name] of [
+      'Staves',
+      'Key signature',
+      'Time signature',
+      'Tempo',
+      'Bars',
+    ].entries())
+      expect(rows('Music')[at]).toHaveTextContent(name)
+    for (const [at, name] of ['Layout', 'Note input', 'Recording'].entries())
+      expect(rows('How the editor works')[at]).toHaveTextContent(name)
+    expect(screen.queryByRole('switch')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /^Layout/ }))
+    expect(router.state.location.search).toMatchObject({ page: 'layout' })
+    expect(await screen.findByRole('heading', { level: 1, name: 'Layout' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Score settings' }),
+    ).toBeInTheDocument()
+    expect(router.state.location.search).not.toHaveProperty('page')
+  })
+
+  it('adds an instrument’s staff on Staves and makes the song longer on Bars, each saved', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1/settings?page=staves', {
+      storage: withSong(),
+    })
     await user.click(await screen.findByRole('button', { name: 'One more Tenor' }))
     await waitFor(() =>
       expect(piecesStore.getState().songs[0]?.staves).toEqual([
@@ -52,22 +81,34 @@ describe('the score’s Settings (round 28)', () => {
       ]),
     )
     expect(screen.getByRole('status', { name: 'Tenor: 1' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'One bar more' }))
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    await user.click(await screen.findByRole('button', { name: /^Bars/ }))
+    await user.click(await screen.findByRole('button', { name: 'One bar more' }))
     await waitFor(() =>
       expect(piecesStore.getState().songs[0]?.sections[0]?.lines[0]?.split(' ')).toHaveLength(5),
     )
   })
 
-  it('lays the score out and hears notes as they are edited, by the learner’s choice', async () => {
+  it('lays the score out on Layout and plays notes while editing on Note input', async () => {
     const user = userEvent.setup()
-    const { piecesStore, settingsStore } = await renderApp('/edit/my-1/settings', {
+    const { piecesStore, settingsStore } = await renderApp('/edit/my-1/settings?page=layout', {
       storage: withSong(),
     })
-    await user.click(await screen.findByRole('combobox', { name: 'Bars per line' }))
-    await user.click(await screen.findByRole('option', { name: '2' }))
+    const lines = await screen.findByRole('radiogroup', { name: 'Bars per line' })
+    await user.click(within(lines).getByRole('radio', { name: '2' }))
     await waitFor(() => expect(piecesStore.getState().songs[0]?.layout).toEqual({ barsPerLine: 2 }))
-    const editing = screen.getByRole('region', { name: 'Editing' })
-    await user.click(within(editing).getByRole('switch', { name: /Hear notes as you edit/ }))
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    await user.click(await screen.findByRole('button', { name: /^Note input/ }))
+    await user.click(await screen.findByRole('switch', { name: /Play notes while editing/ }))
     expect(settingsStore.getState().editing.hearNotes).toBe(false)
+  })
+
+  it('holds Click while recording on Recording (R29, 3.10)', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/edit/my-1/settings?page=recording', {
+      storage: withSong(),
+    })
+    await user.click(await screen.findByRole('switch', { name: /Click while recording/ }))
+    expect(settingsStore.getState().recorder.click).toBe(false)
   })
 })

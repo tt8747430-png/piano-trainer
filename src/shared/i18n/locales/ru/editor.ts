@@ -640,6 +640,18 @@ export const editor: LocaleResources['editor'] = {
     actionFailed: 'Не получилось. Повторите.',
   },
   scoreSettings: {
+    credits: 'Название и авторы',
+    howItWorks: 'Как работает редактор',
+    pages: {
+      staves: 'Нотоносцы',
+      key: 'Ключевые знаки',
+      time: 'Размер',
+      tempo: 'Темп',
+      bars: 'Такты',
+      layout: 'Вёрстка',
+      input: 'Ввод нот',
+      recording: 'Запись',
+    },
     title: 'Настройки партитуры',
     open: 'Настройки…',
     score: 'Партитура',
@@ -682,7 +694,7 @@ export const editor: LocaleResources['editor'] = {
     barsPerLineInfo:
       'Наибольшее число тактов в строке. Если такты не помещаются по ширине, в строке их меньше.',
     editing: 'Правка',
-    hearNotes: 'Слышать ноты при правке',
+    hearNotes: 'Проигрывать ноты при вводе',
     hearNotesInfo:
       'Нота звучит, когда вы нажимаете на неё в партитуре или меняете её высоту. Сыгранные клавиши звучат всегда.',
     midi: 'Подключить пианино',

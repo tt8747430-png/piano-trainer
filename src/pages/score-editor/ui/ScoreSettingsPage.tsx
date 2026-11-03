@@ -1,37 +1,19 @@
-import { Columns3, Gauge, Hash, ListMusic, Music2, Ruler } from 'lucide-react'
+import { useSearch } from '@tanstack/react-router'
+import { Columns3, Gauge, Hash, Mic, Music2, Ruler, Volume2, type LucideIcon } from 'lucide-react'
 import { useId, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  BARS_PER_LINE,
-  HEADER_FIELDS,
-  HEADER_MAX,
-  STAFF_SIZES,
-  TITLE_MAX,
-  type HeaderField,
-  type StaffSize,
-} from '@/entities/piece'
+import { HEADER_FIELDS, HEADER_MAX, TITLE_MAX, type HeaderField } from '@/entities/piece'
 import { VOICE_IDS, VOICES } from '@/features/edit-piece'
-import { barsOf, MOST_BARS } from '@/features/score-editor'
+import { barsOf } from '@/features/score-editor'
 import { localText, useKeyName, useLocale } from '@/shared/i18n'
+import { useSetSearch } from '@/shared/lib'
 import { beatUnit, tempoMark, unitNote } from '@/shared/lib/music'
-import {
-  BackButton,
-  ChoiceRow,
-  Dropdown,
-  InfoTip,
-  RowTrigger,
-  ScreenHeader,
-  SettingsGroup,
-  Stepper,
-  TileMark,
-} from '@/shared/ui'
-import { EditingGroup } from '@/widgets/editor-settings'
-import { InstrumentList, type InstrumentFamily } from '@/widgets/instrument-list'
+import { BackButton, RowButton, ScreenHeader, SettingsGroup, type Paint } from '@/shared/ui'
+import type { InstrumentFamily } from '@/widgets/instrument-list'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { instrumentCount, type ScoreInstrument } from '../model/instruments'
-import { KeyPopover } from './KeyPopover'
-import { TempoPopover } from './TempoPopover'
-import { TimePopover } from './TimePopover'
+import { SCORE_PAGES, type ScorePage } from '../model/score-pages'
+import { ScorePageBody } from './ScoreSettingsPages'
 
 /** A name typed in its row (Flat's credits): its label, the field at its end, saved as it is left. */
 function NameRow({
@@ -135,137 +117,80 @@ export function ScoreSettingsPage() {
     },
   ]
   const nameOf = (field: HeaderField) => t(`scoreSettings.names.${field}`)
+  const { page: asked } = useSearch({ strict: false }) as { page?: string }
+  const page = SCORE_PAGES.find((each) => each === asked) ?? null
+  const setSearch = useSetSearch<{ page: string | undefined }>()
+  const open = (next: ScorePage | null) => setSearch({ page: next ?? undefined })
+  const staffSize = draft.layout?.staffSize ?? 100
+  const staffCount = families
+    .flatMap((family) => family.rows)
+    .reduce((n, each) => n + each.count, 0)
+  const row = (id: ScorePage, icon: LucideIcon, paint: Paint, value?: string) => (
+    <RowButton
+      key={id}
+      title={t(`scoreSettings.pages.${id}`)}
+      icon={icon}
+      paint={paint}
+      value={value}
+      onClick={() => open(id)}
+    />
+  )
+  const inner = page ? (
+    <ScorePageBody
+      page={page}
+      families={families}
+      bars={bars}
+      onBars={(count) => actions.dispatch({ type: 'barCount', count })}
+      onDone={() => open(null)}
+    />
+  ) : null
   return (
     // In the full screen's column, at its own height: it scrolls, never squeezed to the screen's.
     <div className="flex shrink-0 flex-col gap-6 pb-8">
-      <ScreenHeader title={t('scoreSettings.title')} back={<BackButton />} />
+      <ScreenHeader
+        title={page ? t(`scoreSettings.pages.${page}`) : t('scoreSettings.title')}
+        back={page ? <BackButton onClick={() => open(null)} /> : <BackButton />}
+      />
       <div className="mx-auto w-full max-w-2xl space-y-7">
-        <SettingsGroup flush title={t('scoreSettings.score')} info={t('scoreSettings.namesInfo')}>
-          <NameRow
-            label={t('scoreSettings.names.title')}
-            value={meta.title}
-            max={TITLE_MAX}
-            placeholder={t('scoreSettings.add')}
-            onSave={(title) => actions.dispatch({ type: 'title', title })}
-          />
-          {HEADER_FIELDS.map((field) => (
-            <NameRow
-              key={field}
-              label={nameOf(field)}
-              value={draft.header?.[field] ?? ''}
-              max={HEADER_MAX}
-              placeholder={t('scoreSettings.add')}
-              onSave={(text) => actions.dispatch({ type: 'header', field, text })}
-            />
-          ))}
-        </SettingsGroup>
-        <SettingsGroup
-          bare
-          title={t('scoreSettings.instruments')}
-          info={t('scoreSettings.instrumentsInfo')}
-        >
-          <InstrumentList families={families} />
-        </SettingsGroup>
-        <SettingsGroup flush title={t('scoreSettings.music')}>
-          <TempoPopover
-            trigger={
-              <RowTrigger
-                title={t('scoreSettings.tempo')}
-                value={`${unitNote(unit)} = ${mark}`}
-                icon={Gauge}
-                paint="sand"
+        {inner ?? (
+          <>
+            <SettingsGroup
+              flush
+              title={t('scoreSettings.credits')}
+              info={t('scoreSettings.namesInfo')}
+            >
+              <NameRow
+                label={t('scoreSettings.names.title')}
+                value={meta.title}
+                max={TITLE_MAX}
+                placeholder={t('scoreSettings.add')}
+                onSave={(title) => actions.dispatch({ type: 'title', title })}
               />
-            }
-          />
-          <KeyPopover
-            bar={0}
-            trigger={
-              <RowTrigger
-                title={t('scoreSettings.key')}
-                value={keyName(draft.key)}
-                icon={Hash}
-                paint="sky"
-              />
-            }
-          />
-          <TimePopover
-            bar={0}
-            trigger={
-              <RowTrigger
-                title={t('scoreSettings.time')}
-                value={meter}
-                icon={Music2}
-                paint="grass"
-              />
-            }
-          />
-          {/* Its stepper beside it, or under it where a narrow phone has no room for both. */}
-          <div className="flex min-h-14 flex-col gap-2 py-1 pr-1 pl-2 min-[380px]:flex-row min-[380px]:items-center min-[380px]:gap-3">
-            <div className="flex items-center gap-3 min-[380px]:flex-1">
-              <TileMark icon={Columns3} paint="lilac" />
-              <span className="flex items-center gap-1 text-lg leading-snug font-semibold">
-                {t('scoreSettings.bars')}
-                <InfoTip name={t('scoreSettings.bars')}>{t('scoreSettings.barsInfo')}</InfoTip>
-              </span>
-            </div>
-            <div className="w-full min-[380px]:w-44">
-              <Stepper
-                label={t('scoreSettings.bars')}
-                typed
-                value={bars}
-                min={1}
-                max={MOST_BARS}
-                format={(value) => t('songs:setup.barsValue', { count: value })}
-                onChange={(value) => actions.dispatch({ type: 'barCount', count: value })}
-                decrease={t('songs:setup.fewerBars')}
-                increase={t('songs:setup.moreBars')}
-              />
-            </div>
-          </div>
-        </SettingsGroup>
-        <SettingsGroup
-          flush
-          title={t('scoreSettings.layout')}
-          info={`${t('scoreSettings.staffSizeInfo')} ${t('scoreSettings.barsPerLineInfo')}`}
-        >
-          <ChoiceRow title={t('scoreSettings.staffSize')} icon={Ruler} paint="sky">
-            <Dropdown
-              label={t('scoreSettings.staffSize')}
-              bare
-              align="end"
-              value={String(draft.layout?.staffSize ?? 100)}
-              options={STAFF_SIZES.map((size) => ({
-                value: String(size),
-                label: t(`scoreSettings.staffSizes.${size}`),
-              }))}
-              onChange={(size) =>
-                actions.dispatch({ type: 'layout', staffSize: Number(size) as StaffSize })
-              }
-            />
-          </ChoiceRow>
-          <ChoiceRow title={t('scoreSettings.barsPerLine')} icon={ListMusic} paint="grass">
-            <Dropdown
-              label={t('scoreSettings.barsPerLine')}
-              bare
-              align="end"
-              value={String(draft.layout?.barsPerLine ?? 0)}
-              options={[
-                { value: '0', label: t('scoreSettings.asWritten') },
-                ...Array.from({ length: BARS_PER_LINE.max }, (_, i) => ({
-                  value: String(i + 1),
-                  label: String(i + 1),
-                })),
-              ]}
-              onChange={(most) =>
-                actions.dispatch({
-                  type: 'layout',
-                  barsPerLine: most === '0' ? null : Number(most),
-                })
-              }
-            />
-          </ChoiceRow>
-        </SettingsGroup>
-        <EditingGroup />
+              {HEADER_FIELDS.map((field) => (
+                <NameRow
+                  key={field}
+                  label={nameOf(field)}
+                  value={draft.header?.[field] ?? ''}
+                  max={HEADER_MAX}
+                  placeholder={t('scoreSettings.add')}
+                  onSave={(text) => actions.dispatch({ type: 'header', field, text })}
+                />
+              ))}
+            </SettingsGroup>
+            <SettingsGroup flush title={t('scoreSettings.music')}>
+              {row('staves', Music2, 'lilac', String(staffCount))}
+              {row('key', Hash, 'sky', keyName(draft.key))}
+              {row('time', Music2, 'sky', meter)}
+              {row('tempo', Gauge, 'sky', `${unitNote(unit)} = ${mark}`)}
+              {row('bars', Columns3, 'sky', String(bars))}
+            </SettingsGroup>
+            <SettingsGroup flush title={t('scoreSettings.howItWorks')}>
+              {row('layout', Ruler, 'grass', t(`scoreSettings.staffSizes.${staffSize}`))}
+              {row('input', Volume2, 'yellow')}
+              {row('recording', Mic, 'sand')}
+            </SettingsGroup>
+          </>
+        )}
       </div>
     </div>
   )

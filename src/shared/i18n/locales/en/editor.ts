@@ -706,6 +706,18 @@ export const editor = {
   // The score's Settings (round 28, Flat's score settings): its credits, instruments, music, layout
   // and how the editor writes.
   scoreSettings: {
+    credits: 'Title and credits',
+    howItWorks: 'How the editor works',
+    pages: {
+      staves: 'Staves',
+      key: 'Key signature',
+      time: 'Time signature',
+      tempo: 'Tempo',
+      bars: 'Bars',
+      layout: 'Layout',
+      input: 'Note input',
+      recording: 'Recording',
+    },
     title: 'Score settings',
     open: 'Settings…',
     score: 'Score',
@@ -748,7 +760,7 @@ export const editor = {
     barsPerLineInfo:
       'The most bars a line holds. A line holds fewer where they don’t fit the width.',
     editing: 'Editing',
-    hearNotes: 'Hear notes as you edit',
+    hearNotes: 'Play notes while editing',
     hearNotesInfo:
       'A note sounds when you tap it on the score or move its pitch. Keys you play sound anyway.',
     midi: 'Connect a piano',

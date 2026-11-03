@@ -134,23 +134,6 @@ describe('Settings', () => {
     expect(help).toHaveTextContent(/Version\s*dev/)
   })
 
-  it('keeps how a take is recorded under Recording: the metronome and the tune, saved', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings/sound-and-recording')
-    const recording = await screen.findByRole('region', { name: 'Recording' })
-    await user.click(within(recording).getByRole('switch', { name: 'Metronome' }))
-    await user.click(within(recording).getByRole('switch', { name: 'Play melody' }))
-    expect(settingsStore.getState().recorder).toEqual({ click: false, tune: true })
-    expect(screen.getByRole('link', { name: 'Metronome' })).toHaveAttribute(
-      'href',
-      '/practice/metronome',
-    )
-    await user.click(within(recording).getByRole('button', { name: 'About Metronome' }))
-    expect(await screen.findByRole('dialog', { name: 'Metronome' })).toHaveTextContent(
-      'The beat goes on after the count-in',
-    )
-  })
-
   it('says what a backup holds beside its heading, never in a line under it', async () => {
     const user = userEvent.setup()
     await renderApp('/settings/storage')
@@ -236,9 +219,7 @@ describe('Settings', () => {
       '/settings/general',
       '/settings/on-screen-piano',
       '/settings/computer-keys',
-      '/settings/sound-and-recording',
       '/settings/player',
-      '/settings/score-editor',
       '/settings/storage',
     ]) {
       const { unmount } = await renderApp(path, { locale: 'ru' })

@@ -102,7 +102,7 @@ function TempoRuler({
  * 𝅗𝅥 𝅗𝅥. ♩ in 2/2), the one chosen ringed; another keeps the number. Nothing changes until ✓ (Enter), one
  * step Undo takes back; ✗ (Escape) leaves it.
  */
-function TempoPicker({ onDone }: { onDone: () => void }) {
+export function TempoPicker({ onDone }: { onDone: () => void }) {
   const { t } = useTranslation(['editor', 'music'])
   const { actions } = useScoreEditorContext()
   const meter = useEditorState((state) => state.draft.meter)

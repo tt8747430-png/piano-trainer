@@ -194,21 +194,11 @@ const computerKeysRoute = createRoute({
   },
   component: lazyRouteComponent(settingsScreens, 'OnScreenPianoPage'),
 })
-const soundRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/sound-and-recording',
-  component: lazyRouteComponent(settingsScreens, 'SoundPage'),
-})
-// The kind pages (B7, R18): how the Player always plays, and how the score editor always writes.
+// The Player's kind page (B7, R18): how the Player always plays.
 const playerSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/player',
   component: lazyRouteComponent(settingsScreens, 'PlayerSettingsPage'),
-})
-const scoreEditorSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/score-editor',
-  component: lazyRouteComponent(settingsScreens, 'ScoreEditorSettingsPage'),
 })
 const storageRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -848,9 +838,7 @@ const routeTree = rootRoute.addChildren([
     generalRoute,
     onScreenPianoRoute,
     computerKeysRoute,
-    soundRoute,
     playerSettingsRoute,
-    scoreEditorSettingsRoute,
     storageRoute,
     privacyRoute,
     termsRoute,

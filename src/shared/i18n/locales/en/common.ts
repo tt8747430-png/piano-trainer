@@ -200,8 +200,8 @@ export const common = {
   },
   // How a take is recorded (ADR 0028): in Settings › Recording and the recording strip's settings.
   recorderSettings: {
-    click: 'Metronome',
-    clickInfo: 'The beat goes on after the count-in',
+    click: 'Click while recording',
+    clickInfo: 'A click on every beat, so what you play lands in the right bars.',
     tune: 'Play melody',
     tuneInfo:
       'The song’s melody, its staves over the piano, plays under your take while you record. Shown where the song has one.',

@@ -11,8 +11,7 @@ const PAGE_PATHS: Readonly<Record<SettingsPageId, readonly string[]>> = {
   general: ['pages/settings/ui/GeneralPage.tsx', 'widgets/welcome/'],
   'on-screen-piano': ['pages/settings/ui/OnScreenPianoPage.tsx', 'features/live-keyboard/'],
   'connect-piano': ['pages/midi-settings/', 'features/connect-midi/', 'features/live-keyboard/'],
-  'sound-and-recording': ['pages/settings/ui/SoundPage.tsx', 'features/record-take/ui/'],
-  'score-editor': ['pages/score-editor/ui/ScoreSettingsPage.tsx', 'widgets/editor-settings/'],
+  'score-editor': ['pages/score-editor/ui/ScoreSettingsPages.tsx', 'features/record-take/ui/'],
   player: [
     'pages/player/',
     'widgets/player-settings/',
