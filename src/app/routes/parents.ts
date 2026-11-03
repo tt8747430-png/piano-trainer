@@ -2,6 +2,7 @@ import type { RegisteredRouter, RouteIds, ValidateNavigateOptions } from '@tanst
 import type { Up } from '@/shared/lib'
 import type { RouterContext } from '../router'
 import { readChordsSearch, readProgressionsSearch, readScalesSearch } from './explorer-search'
+import { isPracticeSettingsFrom, type PracticeSettingsFrom } from './practice-search'
 
 // Back means up (rule 26, ADR 0052): each route names its parent here, and Back goes there (`useUp`).
 // A place has none. The table is keyed by every route the router has, so a new route can't be added
@@ -55,6 +56,20 @@ const toPractice: Parent = () => up({ to: '/practice' })
 const toSettings: Parent = () => up({ to: '/settings' })
 /** A page of Settings: up to its list on a phone; on a laptop the list stands beside it (R20). */
 const settingsPage: Parent = ({ wide }) => (wide ? null : up({ to: '/settings' }))
+/** Each Practice page, where its gear opens its Settings from. */
+const PRACTICE_PAGES: Readonly<Record<PracticeSettingsFrom, Up>> = {
+  chords: up({ to: '/practice/chords' }),
+  scales: up({ to: '/practice/scales' }),
+  intervals: up({ to: '/practice/intervals' }),
+  progressions: up({ to: '/practice/progressions' }),
+  accompaniment: up({ to: '/practice/accompaniment' }),
+  'chord-finder': up({ to: '/practice/chord-finder' }),
+  exercises: up({ to: '/practice/exercises' }),
+  quiz: up({ to: '/practice/quiz' }),
+}
+/** A Practice page's Settings (A24): up to the page its gear was pressed on, else as Settings' pages. */
+const practiceSettings: Parent = (from) =>
+  isPracticeSettingsFrom(from.search.from) ? PRACTICE_PAGES[from.search.from] : settingsPage(from)
 const toSongs: Parent = () => up({ to: '/songs' })
 const toLessons: Parent = () => up({ to: '/', search: { view: 'lessons' } })
 const toCourses: Parent = () => up({ to: '/', search: { view: 'courses' } })
@@ -108,6 +123,13 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/settings/account': settingsPage,
   '/shell/settings/how-to-use': settingsPage,
   '/shell/settings/connect-piano': settingsPage,
+  '/shell/settings/chords': practiceSettings,
+  '/shell/settings/scales': practiceSettings,
+  '/shell/settings/intervals': practiceSettings,
+  '/shell/settings/progressions': practiceSettings,
+  '/shell/settings/accompaniment': practiceSettings,
+  '/shell/settings/chord-finder': practiceSettings,
+  '/shell/settings/exercises-and-quiz': practiceSettings,
   '/shell/settings/connect-piano/log': () => up({ to: '/settings/connect-piano' }),
   '/shell/admin': toSettings,
   '/shell/legal/privacy': () => up({ to: '/settings/how-to-use' }),

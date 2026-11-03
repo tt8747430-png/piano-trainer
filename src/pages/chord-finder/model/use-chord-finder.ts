@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { selectChordFinder, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { useKeysDown } from '@/features/connect-midi'
-import { rememberChords, setChordFinder } from '@/features/set-preference'
+import { rememberChords } from '@/features/set-preference'
 import { keyListParam, readKeyList, toggled, useSetSearch, useWakeLock } from '@/shared/lib'
 import { keyFromParam, pitchClass, pitchClassOf, type Key, type Midi } from '@/shared/lib/music'
 import {
@@ -32,13 +32,12 @@ interface ChordFinder {
   readonly staff: readonly (readonly Midi[])[]
   /** Whether the chords played are remembered, on the staff and on the device. */
   readonly remember: boolean
-  setRemember(on: boolean): void
   /** Whether the keys the chord is in are shown. */
   readonly inKeys: boolean
-  setInKeys(on: boolean): void
   /** Whether an inversion is named over its bass. */
   readonly slash: boolean
-  setSlash(on: boolean): void
+  /** Whether the key's scale is painted on the keys. */
+  readonly scale: boolean
   /** The reading chosen among the chord's names. */
   readonly reading: number
   setReading(at: number): void
@@ -128,14 +127,9 @@ export function useChordFinder(view: ChordFinderView): ChordFinder {
     finding,
     staff: remember ? log.chords : now,
     remember,
-    setRemember: (on) => {
-      if (!on) forget()
-      setChordFinder(store, { remember: on })
-    },
     inKeys: settings.inKeys,
-    setInKeys: (on) => setChordFinder(store, { inKeys: on }),
     slash: settings.slash,
-    setSlash: (on) => setChordFinder(store, { slash: on }),
+    scale: settings.scale,
     reading: at,
     setReading: (next) => setReading({ keys: shownKey, at: next }),
     tap: (key) =>

@@ -22,8 +22,13 @@ const PAGE_PATHS: Readonly<Record<SettingsPageId, readonly string[]>> = {
     'pages/score-editor/ui/EditorToolsRow.tsx',
   ],
   metronome: ['pages/metronome/'],
-  'chord-finder': ['pages/chord-finder/'],
-  trainers: ['widgets/trainer-setup/'],
+  chords: ['pages/practice-settings/ui/ExplorerSettingsPages.tsx'],
+  scales: ['pages/practice-settings/ui/ExplorerSettingsPages.tsx'],
+  intervals: ['pages/practice-settings/ui/ExplorerSettingsPages.tsx'],
+  progressions: ['pages/practice-settings/ui/ProgressionsSettingsPage.tsx'],
+  accompaniment: ['pages/practice-settings/ui/AccompanimentSettingsPage.tsx'],
+  'chord-finder': ['pages/practice-settings/ui/ChordFinderSettingsPage.tsx'],
+  trainers: ['pages/practice-settings/ui/TrainersSettingsPage.tsx'],
 }
 
 /** Each preference command and the settings it writes (`features/set-preference`). */
@@ -42,6 +47,8 @@ const COMMANDS: Readonly<Record<string, readonly (keyof typeof SETTING_HOMES)[]>
   setEditing: ['editing.hearNotes'],
   setMidi: ['midi.input'],
   setChordFinder: ['chordFinder.remember'],
+  setProgressions: ['progressions.names'],
+  setAccompaniment: ['accompaniment.hidden'],
   setMetronome: ['metronome.bpm'],
 }
 

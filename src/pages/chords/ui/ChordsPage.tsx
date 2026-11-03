@@ -4,6 +4,7 @@ import { useSetSearch } from '@/shared/lib'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { ChordExplorer, type ChordView } from '@/widgets/chord-explorer'
 import { StepPanel } from '@/widgets/step-panel'
+import { SettingsGear } from '@/widgets/practice-pages'
 
 /** Chords: any chord built on any root, with its path step's panel when opened from one. */
 export function ChordsPage() {
@@ -12,7 +13,11 @@ export function ChordsPage() {
   const onChange = useSetSearch<ChordView>()
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('pages.chords')} back={<BackButton />} />
+      <ScreenHeader
+        title={t('pages.chords')}
+        back={<BackButton />}
+        actions={<SettingsGear page="chords" />}
+      />
       {step ? <StepPanel step={step} /> : null}
       <ChordExplorer chord={chord} onChange={onChange} />
     </div>

@@ -8,6 +8,7 @@ import { editsContent, useAccount } from '@/shared/lib/account'
 import { keyFromParam } from '@/shared/lib/music'
 import { BackButton, RoundButton, RoundLink, ScreenHeader } from '@/shared/ui'
 import { NewProgressionSheet } from '@/widgets/content-editor'
+import { SettingsGear } from '@/widgets/practice-pages'
 import { ProgressionExplorer, type ProgressionsView } from '@/widgets/progression-explorer'
 
 /**
@@ -28,27 +29,30 @@ export function ProgressionsPage() {
         title={t('pages.progressions')}
         back={<BackButton />}
         actions={
-          editsContent(account) ? (
-            <>
-              {shown ? (
-                <RoundLink
-                  label={t('progressions.edit.open')}
-                  icon={PencilLine}
-                  render={
-                    <Link
-                      to="/practice/progressions/$progressionId/edit"
-                      params={{ progressionId: shown.id }}
-                    />
-                  }
+          <>
+            {editsContent(account) ? (
+              <>
+                {shown ? (
+                  <RoundLink
+                    label={t('progressions.edit.open')}
+                    icon={PencilLine}
+                    render={
+                      <Link
+                        to="/practice/progressions/$progressionId/edit"
+                        params={{ progressionId: shown.id }}
+                      />
+                    }
+                  />
+                ) : null}
+                <RoundButton
+                  label={t('progressions.edit.new')}
+                  icon={Plus}
+                  onClick={() => setNewOne(true)}
                 />
-              ) : null}
-              <RoundButton
-                label={t('progressions.edit.new')}
-                icon={Plus}
-                onClick={() => setNewOne(true)}
-              />
-            </>
-          ) : undefined
+              </>
+            ) : null}
+            <SettingsGear page="progressions" />
+          </>
         }
       />
       <ProgressionExplorer view={view} onChange={onChange} />

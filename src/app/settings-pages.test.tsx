@@ -10,6 +10,10 @@ const PAGES: readonly (readonly [SettingsPageId, string])[] = [
   ['connect-piano', '/settings/connect-piano'],
   ['computer-keys', '/settings/computer-keys'],
   ['sound-and-recording', '/settings/sound-and-recording'],
+  ['progressions', '/settings/progressions'],
+  ['accompaniment', '/settings/accompaniment'],
+  ['chord-finder', '/settings/chord-finder'],
+  ['trainers', '/settings/exercises-and-quiz'],
 ]
 
 const isKey = (key: string): key is SettingKey => key in SETTING_HOMES

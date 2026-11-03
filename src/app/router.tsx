@@ -68,7 +68,12 @@ import {
   walkSearch,
 } from './routes/player-search'
 import { LEARN_KEPT, learnSearch, readLearnSearch } from './routes/learn-search'
-import { readTrainerSearch, trainerSearch, validateCheckSearch } from './routes/practice-search'
+import {
+  readTrainerSearch,
+  trainerSearch,
+  validateCheckSearch,
+  validatePracticeSettingsSearch,
+} from './routes/practice-search'
 import { searchSearch } from './routes/search-search'
 import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
 import { publicSearch } from './routes/public-search'
@@ -222,6 +227,50 @@ const midiSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/connect-piano',
   component: lazyRouteComponent(settingsScreens, 'MidiSettingsPage'),
+})
+// Each Practice page's Settings (A24, R18): how it sounds and looks every time, reached from the
+// page's gear (`from` naming it, for Back) and from Settings.
+const chordsSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/chords',
+  validateSearch: validatePracticeSettingsSearch,
+  component: lazyRouteComponent(settingsScreens, 'ChordsSettingsPage'),
+})
+const scalesSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/scales',
+  validateSearch: validatePracticeSettingsSearch,
+  component: lazyRouteComponent(settingsScreens, 'ScalesSettingsPage'),
+})
+const intervalsSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/intervals',
+  validateSearch: validatePracticeSettingsSearch,
+  component: lazyRouteComponent(settingsScreens, 'IntervalsSettingsPage'),
+})
+const progressionsSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/progressions',
+  validateSearch: validatePracticeSettingsSearch,
+  component: lazyRouteComponent(settingsScreens, 'ProgressionsSettingsPage'),
+})
+const accompanimentSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/accompaniment',
+  validateSearch: validatePracticeSettingsSearch,
+  component: lazyRouteComponent(settingsScreens, 'AccompanimentSettingsPage'),
+})
+const chordFinderSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/chord-finder',
+  validateSearch: validatePracticeSettingsSearch,
+  component: lazyRouteComponent(settingsScreens, 'ChordFinderSettingsPage'),
+})
+const exercisesAndQuizSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/exercises-and-quiz',
+  validateSearch: validatePracticeSettingsSearch,
+  component: lazyRouteComponent(settingsScreens, 'TrainersSettingsPage'),
 })
 const midiLogRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -792,6 +841,13 @@ const routeTree = rootRoute.addChildren([
     howToUseRoute,
     midiSettingsRoute,
     midiLogRoute,
+    chordsSettingsRoute,
+    scalesSettingsRoute,
+    intervalsSettingsRoute,
+    progressionsSettingsRoute,
+    accompanimentSettingsRoute,
+    chordFinderSettingsRoute,
+    exercisesAndQuizSettingsRoute,
     signInRoute,
     signUpRoute,
     forgotPasswordRoute,

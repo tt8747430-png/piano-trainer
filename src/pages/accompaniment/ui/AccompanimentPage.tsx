@@ -1,8 +1,11 @@
-import { Link, useSearch } from '@tanstack/react-router'
+import { Link, Navigate, useSearch } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isMethodBookId } from '@/entities/book'
+import { ACCOMPANIMENT_PARTS } from '@/entities/pattern'
+import { selectAccompaniment, useSettings } from '@/entities/settings'
 import { BackButton, RoundLink, ScreenHeader } from '@/shared/ui'
+import { SettingsGear } from '@/widgets/practice-pages'
 import { AccompanimentTabs } from './AccompanimentTabs'
 import { BookPieces } from './BookPieces'
 import { PatternShelves } from './PatternShelves'
@@ -16,19 +19,29 @@ import { PatternShelves } from './PatternShelves'
 export function AccompanimentPage() {
   const { t } = useTranslation('practice')
   const { show } = useSearch({ from: '/shell/practice/accompaniment' })
+  const { hidden } = useSettings(selectAccompaniment)
+  const parts = ACCOMPANIMENT_PARTS.filter((part) => !hidden.includes(part))
+  // A source hidden on Accompaniment's Settings opens on the first one still shown.
+  const first = parts[0]
+  if (!parts.includes(show) && first) {
+    return <Navigate to="/practice/accompaniment" search={{ show: first }} replace />
+  }
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('pages.accompaniment')}
         back={<BackButton />}
         actions={
-          <RoundLink
-            label={t('patterns.new')}
-            icon={Plus}
-            render={<Link to="/practice/accompaniment/patterns/new" />}
-          />
+          <>
+            <RoundLink
+              label={t('patterns.new')}
+              icon={Plus}
+              render={<Link to="/practice/accompaniment/patterns/new" />}
+            />
+            <SettingsGear page="accompaniment" />
+          </>
         }
-        tabs={<AccompanimentTabs current={show} />}
+        tabs={<AccompanimentTabs parts={parts} current={show} />}
       />
       <div className="flex flex-col gap-8">
         <PatternShelves part={show} />

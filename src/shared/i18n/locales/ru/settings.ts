@@ -52,6 +52,7 @@ export const settings: LocaleResources['settings'] = {
   sections: { general: 'Общие' },
   groups: {
     playing: { label: 'Игра' },
+    practice: { label: 'Практика' },
     help: { label: 'Помощь' },
   },
   account: {

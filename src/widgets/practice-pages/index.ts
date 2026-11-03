@@ -6,3 +6,4 @@ export {
 } from './model/practice-pages'
 export { PageRow } from './ui/PageRow'
 export { usePageWords } from './ui/use-page-words'
+export { SettingsGear, type GearPage } from './ui/SettingsGear'

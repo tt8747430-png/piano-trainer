@@ -38,7 +38,7 @@ describe('Settings', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/profile'))
   })
 
-  it('is one grouped list: the account card, General, Playing, Help', async () => {
+  it('is one grouped list: the account card, General, Playing, Practice, Help', async () => {
     await renderApp('/settings')
     const card = within(await screen.findByRole('navigation', { name: 'Account' }))
     expect(card.getAllByRole('link').map((link) => link.textContent)).toEqual([
@@ -47,6 +47,7 @@ describe('Settings', () => {
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
       'General',
       'Playing',
+      'Practice',
       'Help',
     ])
     expect(
@@ -61,6 +62,13 @@ describe('Settings', () => {
       '/settings/connect-piano',
       '/settings/computer-keys',
       '/settings/sound-and-recording',
+      '/settings/chords',
+      '/settings/scales',
+      '/settings/intervals',
+      '/settings/progressions',
+      '/settings/accompaniment',
+      '/settings/chord-finder',
+      '/settings/exercises-and-quiz',
       '/settings/how-to-use',
       '/legal/privacy',
       '/legal/terms',

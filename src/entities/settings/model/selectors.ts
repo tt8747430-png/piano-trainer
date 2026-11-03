@@ -1,6 +1,8 @@
 import type { Locale } from '@/shared/i18n/locale'
 import type {
+  AccompanimentSettings,
   ChordFinderSettings,
+  ProgressionsSettings,
   ScoreViewSettings,
   KeyboardSettings,
   MelodySource,
@@ -51,3 +53,9 @@ export const selectWelcomed = (state: SettingsState): boolean => state.welcomed
 
 /** How a lesson reads (round 26): one page, or a section at a time. */
 export const selectLessonReading = (state: SettingsState): LessonReading => state.lessonReading
+
+/** How every progression is written and voiced (A24). */
+export const selectProgressions = (state: SettingsState): ProgressionsSettings => state.progressions
+/** Accompaniment's sources the learner hid (A24). */
+export const selectAccompaniment = (state: SettingsState): AccompanimentSettings =>
+  state.accompaniment

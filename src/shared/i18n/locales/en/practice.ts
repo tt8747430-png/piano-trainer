@@ -26,6 +26,13 @@ export const practice = {
     quiz: 'Chords, keys, ear, reading',
     metronome: 'Clicks or drums, any tempo',
   },
+  // Each Practice page's Settings (A24): its gear, and what its page holds.
+  settings: {
+    open: '{{page}} settings',
+    trainers: 'Exercises and Quiz',
+    sources: 'Sources shown',
+    lastSource: 'One source stays shown',
+  },
   // Words the explorers share.
   root: 'Root',
   hands: 'Hands',
@@ -256,6 +263,10 @@ export const practice = {
       info: 'Voice-led, each chord moves to the position nearest the one before: the notes they share are held and the rest step. Block, every chord stands in root position and the hand leaps. Switch between them to hear the difference.',
       blockReason: 'Block chords all stand in root position.',
     },
+    inversion: {
+      label: 'First chord’s inversion',
+      info: 'The position a voice-led row starts in; each chord after it moves to the nearest one. A triad has no 3rd inversion, so it starts from its 2nd.',
+    },
     // The library as cards, a card a progression (ADR 0112).
     library: 'Library',
     chordCount_one: '{{count}} chord',
@@ -346,9 +357,8 @@ export const practice = {
     played: 'Played',
     // The staff where the chords are not remembered: the chord down now, else nothing.
     staff: 'On the staff',
-    settings: 'Chord finder settings',
-    remember: 'Remember',
-    rememberDetail: 'The last {{count}}',
+    remember: 'Remember the chords',
+    rememberDetail: 'The staff keeps the last {{count}} chords played, and so does this device.',
     inKeysShown: 'Keys it is in',
     scaleShown: 'Scale on the keys',
     scaleShownDetail: 'The key’s scale on every octave of the keys, each key with its note',

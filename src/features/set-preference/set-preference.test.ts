@@ -5,8 +5,10 @@ import { createMemoryStorage } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import {
   rememberChords,
+  setAccompaniment,
   setAutoNext,
   setChordFinder,
+  setProgressions,
   onlyTheChords,
   setKeyboard,
   setLocale,
@@ -31,6 +33,26 @@ function setUp() {
 }
 
 describe('set-preference', () => {
+  it('setProgressions saves how every progression is written and voiced, the rest kept (A24)', () => {
+    const { store } = setUp()
+    setProgressions(store, { voicing: 'block' })
+    setProgressions(store, { names: 'chords' })
+    expect(store.getState().progressions).toEqual({
+      names: 'chords',
+      voicing: 'block',
+      inversion: 0,
+    })
+  })
+
+  it('setAccompaniment hides a source once and shows it again (A24)', () => {
+    const { store } = setUp()
+    setAccompaniment(store, 'styles', false)
+    setAccompaniment(store, 'styles', false)
+    expect(store.getState().accompaniment.hidden).toEqual(['styles'])
+    setAccompaniment(store, 'styles', true)
+    expect(store.getState().accompaniment.hidden).toEqual([])
+  })
+
   it('setTheme changes and saves the theme', () => {
     const { storage, store } = setUp()
     setTheme(store, 'dark')
@@ -165,6 +187,7 @@ describe('set-preference', () => {
     expect(saved(storage).chordFinder).toEqual({
       remember: true,
       inKeys: true,
+      scale: false,
       slash: true,
       chords: [C, C],
     })
@@ -176,6 +199,7 @@ describe('set-preference', () => {
     expect(saved(storage).chordFinder).toEqual({
       remember: false,
       inKeys: false,
+      scale: false,
       slash: false,
       chords: [],
     })

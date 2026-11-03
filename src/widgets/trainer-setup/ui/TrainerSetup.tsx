@@ -1,8 +1,6 @@
 import { Ear, KeyboardMusic, Layers, ListChecks, Play, type LucideIcon } from 'lucide-react'
 import { useId, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { selectTrainer, useSettings, useSettingsStoreApi } from '@/entities/settings'
-import { setAutoNext } from '@/features/set-preference'
 import {
   CUSTOM,
   CUSTOM_CHOICES,
@@ -111,8 +109,6 @@ export function TrainerSetup({
   footer?: ReactNode
 }) {
   const { t } = useTranslation(['quiz', 'music'])
-  const settings = useSettingsStoreApi()
-  const { autoNext } = useSettings(selectTrainer)
   const drill = drillOf(trainer, view)
   const fields = new Set(level === CUSTOM ? trainer.custom : [])
   const write = (field: ListField, chosen: readonly string[]) => {
@@ -343,12 +339,6 @@ export function TrainerSetup({
             onChange={(limit) => onChange({ limit: limit === 0 ? undefined : limit })}
           />
         </SettingField>
-        <SwitchRow
-          label={t('quiz:autoNext')}
-          info={t('quiz:timing.autoNextInfo')}
-          checked={autoNext}
-          onCheckedChange={(on) => setAutoNext(settings, on)}
-        />
       </SetupGroup>
 
       {footer}

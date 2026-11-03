@@ -1,4 +1,5 @@
 import { isLocale, type Locale } from '@/shared/i18n/locale'
+import type { Inversion } from '@/shared/lib/music'
 import {
   isOneOf,
   KEY_DOCKS,
@@ -149,6 +150,8 @@ export interface ChordFinderSettings {
   readonly inKeys: boolean
   /** An inversion named over its bass (`C/E`); else by its root alone (`C`), its inversion said. */
   readonly slash: boolean
+  /** The key's scale painted on the keys under the chord. */
+  readonly scale: boolean
   /** The chords remembered, oldest first, each its keys lowest first. */
   readonly chords: readonly (readonly Midi[])[]
 }
@@ -292,6 +295,10 @@ export interface SettingsState {
   welcomed: boolean
   /** How a lesson reads (round 26): one page of its sections, or a section at a time. */
   lessonReading: LessonReading
+  /** How Progressions writes and voices every progression (A24). */
+  progressions: ProgressionsSettings
+  /** What Accompaniment shows (A24). */
+  accompaniment: AccompanimentSettings
 }
 
 /** How a lesson reads: one page of its sections (the plain page), or a section at a time. */
@@ -356,8 +363,42 @@ export const DEFAULT_CHORD_FINDER: ChordFinderSettings = {
   remember: false,
   inKeys: true,
   slash: true,
+  scale: false,
   chords: [],
 }
+
+/** How Progressions writes its chords: Roman numerals, Nashville numbers, or chord symbols. */
+export const PROGRESSION_NAMES = ['numerals', 'nashville', 'chords'] as const
+export type ProgressionNames = (typeof PROGRESSION_NAMES)[number]
+export const isProgressionNames = isOneOf(PROGRESSION_NAMES)
+
+/** How a progression's chords are voiced: led to the nearest notes, or each a root-position block. */
+export const PROGRESSION_VOICINGS = ['led', 'block'] as const
+export type ProgressionVoicing = (typeof PROGRESSION_VOICINGS)[number]
+export const isProgressionVoicing = isOneOf(PROGRESSION_VOICINGS)
+
+/**
+ * How every progression is written and voiced (A24): its chords' names, voice-led or as blocks, and
+ * the first chord's inversion a voice-led row starts from.
+ */
+export interface ProgressionsSettings {
+  readonly names: ProgressionNames
+  readonly voicing: ProgressionVoicing
+  readonly inversion: Inversion
+}
+
+export const DEFAULT_PROGRESSIONS: ProgressionsSettings = {
+  names: 'numerals',
+  voicing: 'led',
+  inversion: 0,
+}
+
+/** Accompaniment's sources the learner hid from its tabs, by their ids (A24). */
+export interface AccompanimentSettings {
+  readonly hidden: readonly string[]
+}
+
+export const DEFAULT_ACCOMPANIMENT: AccompanimentSettings = { hidden: [] }
 
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({

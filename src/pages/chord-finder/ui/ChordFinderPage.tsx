@@ -1,21 +1,10 @@
 import { Link, useSearch } from '@tanstack/react-router'
-import {
-  Eraser,
-  History,
-  KeyRound,
-  Piano,
-  ListX,
-  Music2,
-  Play,
-  SlidersHorizontal,
-  Square,
-} from 'lucide-react'
-import { REMEMBERED_CHORDS } from '@/entities/settings'
+import { Eraser, ListX, Music2, Play, Square } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
 import { PinnedKeyboard, useFoldKeys } from '@/features/live-keyboard'
 import { partsParams, useSetSearch } from '@/shared/lib'
-import { keyFromParam, keyParam, keySymbol, noteParam, printedSymbol } from '@/shared/lib/music'
+import { keyFromParam, keyParam, noteParam } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import {
@@ -24,97 +13,15 @@ import {
   FloatingActions,
   KeyPicker,
   ScreenHeader,
-  Sheet,
-  SheetContent,
-  SheetTrigger,
   SpeedDial,
   SpeedDialAction,
-  ToggleGrid,
-  ToggleTile,
   usePlayKey,
 } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { SettingsGear } from '@/widgets/practice-pages'
 import { scaleOverlay } from '../model/scale-overlay'
 import { ChordKeys, ChordName, ChordTrail, readingAt, readingMarks } from '@/widgets/chord-finder'
 import type { ChordFinderView } from '../model/chord-finder-view'
 import { useChordFinder } from '../model/use-chord-finder'
-
-/**
- * The Chord finder's settings, in a sheet off its bar: the key it spells in, then its on-or-offs as
- * tiles: whether it remembers the chords played, names an inversion over its bass, shows the keys a
- * chord is in, and paints the key's scale on the keys.
- */
-function FinderSettings({
-  finder,
-  view,
-  onKey,
-  onScale,
-}: {
-  finder: ReturnType<typeof useChordFinder>
-  view: ChordFinderView
-  onKey: (key: ChordFinderView['key']) => void
-  onScale: (shown: boolean) => void
-}) {
-  const { t } = useTranslation('practice')
-  return (
-    <Sheet>
-      {/* The key it spells in, in sight on the button that opens its settings, printed as a chord
-          is. */}
-      <SheetTrigger
-        render={
-          <Button
-            variant="bar"
-            aria-label={t('chordFinder.settings')}
-            title={t('chordFinder.settings')}
-            className="rounded-pill px-3"
-          />
-        }
-      >
-        <SlidersHorizontal aria-hidden />
-        <span aria-hidden className="font-display font-semibold">
-          {printedSymbol(keySymbol(finder.musicKey))}
-        </span>
-      </SheetTrigger>
-      <SheetContent title={t('chordFinder.settings')}>
-        <div className="flex flex-col gap-5 pt-2">
-          <KeyPicker
-            value={keyFromParam(view.key)}
-            onChange={(key) => onKey(keyParam(key))}
-            className="self-start"
-          />
-          <ToggleGrid label={t('chordFinder.settings')}>
-            <ToggleTile
-              icon={History}
-              label={t('chordFinder.remember')}
-              tip={t('chordFinder.rememberDetail', { count: REMEMBERED_CHORDS })}
-              pressed={finder.remember}
-              onPressedChange={finder.setRemember}
-            />
-            <ToggleTile
-              glyph="C/E"
-              label={t('chordFinder.slash')}
-              pressed={finder.slash}
-              onPressedChange={finder.setSlash}
-            />
-            <ToggleTile
-              icon={KeyRound}
-              label={t('chordFinder.inKeysShown')}
-              pressed={finder.inKeys}
-              onPressedChange={finder.setInKeys}
-            />
-            <ToggleTile
-              icon={Piano}
-              label={t('chordFinder.scaleShown')}
-              tip={t('chordFinder.scaleShownDetail')}
-              pressed={view.scale === true}
-              onPressedChange={onScale}
-            />
-          </ToggleGrid>
-        </div>
-      </SheetContent>
-    </Sheet>
-  )
-}
 
 /**
  * The Chord finder (ADR 0052), a tool of its own: a chord played on a MIDI keyboard or tapped on the
@@ -122,7 +29,7 @@ function FinderSettings({
  * degree, in the middle of one stage over the grand staff that writes it, spelled in the key chosen,
  * and where the chords are remembered those played before it; then the keys that hold it. What the learner turns off is
  * gone. Play, floating in the thumb's reach, hears it; the dial beside it opens it in Chords or
- * clears the keys. Its settings are a sheet off its bar.
+ * clears the keys. The key it spells in is over the stage; its settings are a page off its gear (A24).
  */
 export function ChordFinderPage() {
   const { t } = useTranslation(['practice', 'music', 'common'])
@@ -146,12 +53,7 @@ export function ChordFinderPage() {
         actions={
           <div className="flex gap-2">
             <MidiButton />
-            <FinderSettings
-              finder={finder}
-              view={view}
-              onKey={(key) => change({ key })}
-              onScale={(shown) => change({ scale: shown ? true : undefined })}
-            />
+            <SettingsGear page="chord-finder" />
           </div>
         }
       />
@@ -160,12 +62,18 @@ export function ChordFinderPage() {
         shown={{
           keys,
           marks: new Map([
-            ...(view.scale ? scaleOverlay(finder.musicKey) : []),
+            ...(finder.scale ? scaleOverlay(finder.musicKey) : []),
             ...(reading ? readingMarks(reading, keys) : []),
           ]),
         }}
         selected={finder.tapped}
         onKeyPress={finder.tap}
+      />
+      {/* The key it spells in: what the page shows, so here, over the stage. */}
+      <KeyPicker
+        value={keyFromParam(view.key)}
+        onChange={(key) => change({ key: keyParam(key) })}
+        className="mx-auto"
       />
       {/* One stage, in the middle: the chord's name over the grand staff that writes it. */}
       <section

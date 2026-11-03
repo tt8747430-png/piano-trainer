@@ -14,19 +14,46 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useMidiSummary } from '@/features/connect-midi'
 import { useAccount } from '@/shared/lib/account'
-import { RowLink, SettingsGroup } from '@/shared/ui'
+import { PAGE_TILES, RowLink, SettingsGroup } from '@/shared/ui'
 import { AccountCard } from './AccountCard'
 import { UpdateRows } from './UpdateRows'
+
+/** Each Practice page's Settings (A24), as Practice lists the pages. */
+const PRACTICE_SETTINGS = [
+  { to: '/settings/chords', name: 'practice:pages.chords', tile: PAGE_TILES.chords },
+  { to: '/settings/scales', name: 'practice:pages.scales', tile: PAGE_TILES.scales },
+  { to: '/settings/intervals', name: 'practice:pages.intervals', tile: PAGE_TILES.intervals },
+  {
+    to: '/settings/progressions',
+    name: 'practice:pages.progressions',
+    tile: PAGE_TILES.progressions,
+  },
+  {
+    to: '/settings/accompaniment',
+    name: 'practice:pages.accompaniment',
+    tile: PAGE_TILES.patterns,
+  },
+  {
+    to: '/settings/chord-finder',
+    name: 'practice:pages.chordFinder',
+    tile: PAGE_TILES.chordFinder,
+  },
+  {
+    to: '/settings/exercises-and-quiz',
+    name: 'practice:settings.trainers',
+    tile: PAGE_TILES.quiz,
+  },
+] as const
 
 /**
  * Settings' list, as iOS's reads: the account card first, then a row for each page, each its icon in
  * a coloured square (R21): General (General, Storage and backup); Playing (the on-screen piano, a connected piano, the computer
- * keys, sound and recording, R22); Help (How to use, Privacy, Terms) and the app's version;
+ * keys, sound and recording, R22); Practice (each page's own Settings, A24); Help (How to use, Privacy, Terms) and the app's version;
  * and for an admin, the Admin area. A phone's Settings screen is this list alone; a laptop's keeps it
  * beside the page chosen (`SettingsScreen`), the page shown marked.
  */
 export function SettingsList() {
-  const { t } = useTranslation(['settings', 'admin'])
+  const { t } = useTranslation(['settings', 'admin', 'practice'])
   const { account } = useAccount()
   const midi = useMidiSummary()
   return (
@@ -72,6 +99,11 @@ export function SettingsList() {
           paint="grass"
           render={<Link to="/settings/sound-and-recording" />}
         />
+      </SettingsGroup>
+      <SettingsGroup flush title={t('groups.practice.label')}>
+        {PRACTICE_SETTINGS.map(({ to, name, tile }) => (
+          <RowLink key={to} title={t(name)} {...tile} render={<Link to={to} />} />
+        ))}
       </SettingsGroup>
       <SettingsGroup flush title={t('groups.help.label')} footnote={t('about.madeWith')}>
         <RowLink

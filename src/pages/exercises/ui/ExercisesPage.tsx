@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { ExerciseList } from '@/widgets/exercise-list'
+import { SettingsGear } from '@/widgets/practice-pages'
 
 /**
  * Exercises: the drills that belong to no other page, by group, each opening in the Player. A scale's
@@ -10,7 +11,11 @@ export function ExercisesPage() {
   const { t } = useTranslation('practice')
   return (
     <div className="flex flex-col gap-2">
-      <ScreenHeader title={t('pages.exercises')} back={<BackButton />} />
+      <ScreenHeader
+        title={t('pages.exercises')}
+        back={<BackButton />}
+        actions={<SettingsGear page="exercises" />}
+      />
       <ExerciseList />
     </div>
   )

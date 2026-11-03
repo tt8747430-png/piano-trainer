@@ -56,6 +56,7 @@ export const settings = {
   sections: { general: 'General' },
   groups: {
     playing: { label: 'Playing' },
+    practice: { label: 'Practice' },
     help: { label: 'Help' },
   },
   account: {

@@ -11,7 +11,7 @@ export function setChordFinder(
     readonly remember?: boolean
     readonly inKeys?: boolean
     readonly slash?: boolean
-    readonly staff?: boolean
+    readonly scale?: boolean
   },
 ): void {
   store.setState((state) => ({

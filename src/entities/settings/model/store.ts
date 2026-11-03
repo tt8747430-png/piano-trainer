@@ -10,7 +10,7 @@ import {
   savedObject,
   type SavingOptions,
 } from '@/shared/lib'
-import type { Midi } from '@/shared/lib/music'
+import { isInversion, type Midi } from '@/shared/lib/music'
 import { beatsOf, BPM_RANGE, isMetronomeMeter } from '@/shared/lib/schedule'
 import {
   CHORD_KEYS_MAX,
@@ -27,6 +27,10 @@ import {
   DEFAULT_SIDEBAR,
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
+  DEFAULT_PROGRESSIONS,
+  DEFAULT_ACCOMPANIMENT,
+  isProgressionNames,
+  isProgressionVoicing,
   DEVICE_NAME_MAX,
   FOLDED_MAX,
   SECTION_ID_MAX,
@@ -53,7 +57,9 @@ import {
   isSwipe,
   isTheme,
   isTouch,
+  type AccompanimentSettings,
   type ChordFinderSettings,
+  type ProgressionsSettings,
   type KeyboardSettings,
   type MetronomeSettings,
   type MidiSettings,
@@ -105,6 +111,8 @@ export function createSettingsStore({
         foldedSections: [],
         welcomed: false,
         lessonReading: 'page',
+        progressions: DEFAULT_PROGRESSIONS,
+        accompaniment: DEFAULT_ACCOMPANIMENT,
       },
       read: sanitize,
     },
@@ -213,12 +221,33 @@ function chordFinderSettings(value: unknown): ChordFinderSettings {
     remember: typeof saved.remember === 'boolean' ? saved.remember : DEFAULT_CHORD_FINDER.remember,
     inKeys: typeof saved.inKeys === 'boolean' ? saved.inKeys : DEFAULT_CHORD_FINDER.inKeys,
     slash: typeof saved.slash === 'boolean' ? saved.slash : DEFAULT_CHORD_FINDER.slash,
+    scale: saved.scale === true,
     chords: Array.isArray(chords)
       ? chords
           .map(rememberedChord)
           .filter((keys) => keys.length > 0)
           .slice(-REMEMBERED_CHORDS)
       : [],
+  }
+}
+
+/** Progressions' choices as saved where each is still one of its values, the default otherwise. */
+function progressionsSettings(value: unknown): ProgressionsSettings {
+  const saved = savedObject<ProgressionsSettings>(value)
+  return {
+    names: isProgressionNames(saved.names) ? saved.names : DEFAULT_PROGRESSIONS.names,
+    voicing: isProgressionVoicing(saved.voicing) ? saved.voicing : DEFAULT_PROGRESSIONS.voicing,
+    inversion: isInversion(saved.inversion) ? saved.inversion : DEFAULT_PROGRESSIONS.inversion,
+  }
+}
+
+/** Accompaniment's hidden sources: ids, each once. */
+function accompanimentSettings(value: unknown): AccompanimentSettings {
+  const hidden: unknown = savedObject<AccompanimentSettings>(value).hidden
+  return {
+    hidden: Array.isArray(hidden)
+      ? [...new Set(hidden.filter((id): id is string => typeof id === 'string'))]
+      : DEFAULT_ACCOMPANIMENT.hidden,
   }
 }
 
@@ -345,5 +374,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     foldedSections: foldedSections(saved.foldedSections),
     welcomed: saved.welcomed === true,
     lessonReading: isLessonReading(saved.lessonReading) ? saved.lessonReading : 'page',
+    progressions: progressionsSettings(saved.progressions),
+    accompaniment: accompanimentSettings(saved.accompaniment),
   }
 }

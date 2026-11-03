@@ -4,6 +4,12 @@ export {
   THEMES,
   defaultKeyboard,
   type ChordFinderSettings,
+  type AccompanimentSettings,
+  type ProgressionsSettings,
+  type ProgressionNames,
+  type ProgressionVoicing,
+  PROGRESSION_NAMES,
+  PROGRESSION_VOICINGS,
   DEFAULT_SCORE_VIEW,
   DIAGRAMS_MODES,
   MUSIC_VIEWS,
@@ -37,6 +43,8 @@ export {
 } from './model/store'
 export {
   selectChordFinder,
+  selectProgressions,
+  selectAccompaniment,
   selectScoreView,
   selectKeyboard,
   selectLocale,

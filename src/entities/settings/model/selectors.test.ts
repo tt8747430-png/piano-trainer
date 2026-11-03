@@ -23,6 +23,8 @@ import {
   DEFAULT_SOUND,
   DEFAULT_EDITING,
   DEFAULT_TRAINER,
+  DEFAULT_PROGRESSIONS,
+  DEFAULT_ACCOMPANIMENT,
   defaultKeyboard,
   type SettingsState,
 } from './types'
@@ -49,6 +51,8 @@ describe('settings selectors', () => {
       scoreView: DEFAULT_SCORE_VIEW,
       melody: 'staff',
       metronome: DEFAULT_METRONOME,
+      progressions: DEFAULT_PROGRESSIONS,
+      accompaniment: DEFAULT_ACCOMPANIMENT,
     }
     expect(selectPractice(state)).toBe(DEFAULT_PRACTICE)
     expect(selectSound(state)).toBe(DEFAULT_SOUND)

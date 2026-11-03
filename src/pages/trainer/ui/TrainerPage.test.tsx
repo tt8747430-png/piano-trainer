@@ -288,13 +288,10 @@ describe('A trainer', () => {
     expect(gaps.router.state.location.search).toEqual({ rounds: 20 })
   })
 
-  it('saves auto-next from its setup’s Timing, what it does in an ⓘ beside it', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/practice/quiz/build-scale')
-    const autoNext = await screen.findByRole('switch', { name: 'Go on automatically' })
-    await user.click(autoNext)
-    expect(settingsStore.getState().trainer.autoNext).toBe(true)
-    expect(screen.getByRole('button', { name: 'About Go on automatically' })).toBeInTheDocument()
+  it('leaves Go on automatically to Exercises and Quiz’s Settings, not its setup (A24, R18)', async () => {
+    await renderApp('/practice/quiz/build-scale')
+    await screen.findByRole('button', { name: 'Start' })
+    expect(screen.queryByRole('switch', { name: 'Go on automatically' })).not.toBeInTheDocument()
   })
 
   it('says My gaps has none yet, with a way to a trainer', async () => {

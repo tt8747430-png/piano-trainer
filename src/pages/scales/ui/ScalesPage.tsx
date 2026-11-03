@@ -5,6 +5,7 @@ import { useSetSearch } from '@/shared/lib'
 import { keyScale, noteParam, randomKey } from '@/shared/lib/music'
 import { BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
 import { keyOfScale, ScaleExplorer, showsOf, type ScaleView } from '@/widgets/scale-explorer'
+import { SettingsGear } from '@/widgets/practice-pages'
 import { StepPanel } from '@/widgets/step-panel'
 import { PiecesInKey } from './PiecesInKey'
 import { ScaleTabs } from './ScaleTabs'
@@ -24,16 +25,19 @@ export function ScalesPage() {
         title={t('pages.scales')}
         back={<BackButton />}
         actions={
-          key ? (
-            <RoundButton
-              label={t('scales.key.random')}
-              icon={Dices}
-              onClick={() => {
-                const next = randomKey(Math.random, key)
-                onChange({ root: noteParam(next.tonic), kind: keyScale(next) })
-              }}
-            />
-          ) : null
+          <>
+            {key ? (
+              <RoundButton
+                label={t('scales.key.random')}
+                icon={Dices}
+                onClick={() => {
+                  const next = randomKey(Math.random, key)
+                  onChange({ root: noteParam(next.tonic), kind: keyScale(next) })
+                }}
+              />
+            ) : null}
+            <SettingsGear page="scales" />
+          </>
         }
         tabs={<ScaleTabs shows={showsOf(scale.kind)} current={scale.show} />}
       />

@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest'
 import { shownText } from '@/shared/test/shown-text'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
+import { SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from '@/entities/settings'
+import { setChordFinder } from '@/features/set-preference'
 import { createMemoryStorage } from '@/shared/lib'
 import { keyParam, midi, note } from '@/shared/lib/music'
 
@@ -16,11 +18,14 @@ const playedNames = () =>
     .getAllByRole('listitem')
     .map((item) => item.textContent?.split(' ')[0])
 
-/** Turns on remembering the chords played, in the Chord finder's settings. */
-async function remember(user: ReturnType<typeof userEvent.setup>) {
-  await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
-  await user.click(screen.getByRole('button', { name: /^Remember/ }))
-  await user.click(screen.getByRole('button', { name: 'Close' }))
+/** A device whose Chord finder remembers the chords played, as its Settings page saves it (A24). */
+function remembering() {
+  const storage = createMemoryStorage()
+  storage.setItem(
+    SETTINGS_STORAGE_KEY,
+    JSON.stringify({ state: { chordFinder: { remember: true } }, version: SETTINGS_VERSION }),
+  )
+  return storage
 }
 
 describe('Practice → Chord finder', () => {
@@ -79,11 +84,9 @@ describe('Practice → Chord finder', () => {
   })
 
   it('remembers the chords played where asked, on the device too, and forgets them once not', async () => {
-    const user = userEvent.setup()
-    const storage = createMemoryStorage()
+    const storage = remembering()
     const first = await renderApp('/practice/chord-finder', { storage })
     await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
-    await remember(user)
     for (const chord of [[48, 52, 55], [60], [53, 57, 60]]) {
       act(() => {
         for (const each of chord) first.midi.press(midi(each))
@@ -95,12 +98,10 @@ describe('Practice → Chord finder', () => {
     }
     await waitFor(() => expect(playedNames()).toEqual(['C', 'F']))
     first.unmount()
-    await renderApp('/practice/chord-finder', { storage })
+    const second = await renderApp('/practice/chord-finder', { storage })
     await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
     expect(playedNames()).toEqual(['C', 'F'])
-    await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
-    await user.click(screen.getByRole('button', { name: /^Remember/ }))
-    await user.click(screen.getByRole('button', { name: 'Close' }))
+    act(() => setChordFinder(second.settingsStore, { remember: false }))
     expect(
       within(screen.getByRole('region', { name: 'On the staff' })).queryAllByRole('listitem'),
     ).toHaveLength(0)
@@ -109,10 +110,9 @@ describe('Practice → Chord finder', () => {
 
   it('keeps a chord tapped once, however often the page opens on it', async () => {
     const user = userEvent.setup()
-    const storage = createMemoryStorage()
+    const storage = remembering()
     const first = await renderApp('/practice/chord-finder', { storage })
     await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
-    await remember(user)
     for (const each of ['C4', 'E4', 'G4']) await user.click(key(each))
     await waitFor(() => expect(playedNames()).toEqual(['C']))
     first.unmount()
@@ -177,37 +177,27 @@ describe('Practice → Chord finder', () => {
   })
 
   it('hides the keys a chord is in, where asked', async () => {
-    const user = userEvent.setup()
-    await renderApp('/practice/chord-finder?keys=60-64-67')
+    const { settingsStore } = await renderApp('/practice/chord-finder?keys=60-64-67')
     expect(await screen.findByRole('region', { name: 'In these keys' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
-    await user.click(screen.getByRole('button', { name: 'Keys it is in' }))
-    await user.click(screen.getByRole('button', { name: 'Close' }))
+    act(() => setChordFinder(settingsStore, { inKeys: false }))
     expect(screen.queryByRole('region', { name: 'In these keys' })).not.toBeInTheDocument()
   })
 
-  it('paints the key’s scale on the keys where asked, kept in the URL, the chord’s own keys over it', async () => {
-    const user = userEvent.setup()
-    const { router } = await renderApp('/practice/chord-finder?keys=60-64-67&key=G')
+  it('paints the key’s scale on the keys where asked, the chord’s own keys over it', async () => {
+    const { settingsStore } = await renderApp('/practice/chord-finder?keys=60-64-67&key=G')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'F sharp 4' })).not.toHaveTextContent('F♯')
-    await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
-    await user.click(screen.getByRole('button', { name: /^Scale on the keys/ }))
-    await user.click(screen.getByRole('button', { name: 'Close' }))
-    expect(router.state.location.search).toMatchObject({ scale: true })
+    act(() => setChordFinder(settingsStore, { scale: true }))
     expect(within(keyboard).getByRole('button', { name: 'F sharp 4' })).toHaveTextContent('F♯')
     expect(within(keyboard).getByRole('button', { name: 'F sharp 2' })).toHaveTextContent('F♯')
     expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveTextContent('1')
   })
 
   it('says an inversion, and names it by its root alone where asked', async () => {
-    const user = userEvent.setup()
-    await renderApp('/practice/chord-finder?keys=52-60-67')
+    const { settingsStore } = await renderApp('/practice/chord-finder?keys=52-60-67')
     expect(await screen.findByRole('heading', { level: 2, name: 'C/E' })).toBeInTheDocument()
     expect(screen.getByText(/^Tapped · Major triad · 1st inversion/)).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
-    await user.click(screen.getByRole('button', { name: 'Over the bass' }))
-    await user.click(screen.getByRole('button', { name: 'Close' }))
+    act(() => setChordFinder(settingsStore, { slash: false }))
     expect(screen.getByRole('heading', { level: 2, name: 'C' })).toBeInTheDocument()
     expect(screen.getByText(/^Tapped · Major triad · 1st inversion/)).toBeInTheDocument()
   })
@@ -229,10 +219,8 @@ describe('Practice → Chord finder', () => {
   })
 
   it('names a chord held on the MIDI keyboard, and reads it on once it is let go', async () => {
-    const user = userEvent.setup()
-    const { midi: piano } = await renderApp('/practice/chord-finder')
+    const { midi: piano } = await renderApp('/practice/chord-finder', { storage: remembering() })
     await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
-    await remember(user)
     act(() => {
       for (const each of [48, 52, 55, 58]) piano.press(midi(each))
     })
@@ -254,10 +242,8 @@ describe('Practice → Chord finder', () => {
   })
 
   it('reads each chord played under the sustain pedal on its own', async () => {
-    const user = userEvent.setup()
-    const { midi: piano } = await renderApp('/practice/chord-finder')
+    const { midi: piano } = await renderApp('/practice/chord-finder', { storage: remembering() })
     await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
-    await remember(user)
     act(() => piano.pedal(true))
     for (const chord of [
       [48, 52, 55],
@@ -284,7 +270,7 @@ describe('Practice → Chord finder', () => {
         within(screen.getByRole('region', { name: 'On the staff' })).getByRole('listitem'),
       ).toHaveTextContent(/^C♯m7/),
     )
-    expect(screen.getByRole('button', { name: 'Chord finder settings' })).toHaveTextContent('C♯m')
+    expect(screen.getByRole('button', { name: /^Key/ })).toHaveTextContent('C♯')
     await user.click(screen.getByRole('button', { name: 'Read as E6/C♯' }))
     expect(screen.getByRole('heading', { level: 2, name: 'E6/C♯' })).toBeInTheDocument()
     // What the URL holds keeps its ASCII.
@@ -338,10 +324,9 @@ describe('Practice → Chord finder', () => {
 
   it('forgets the chords played, on the device too, and keeps remembering after', async () => {
     const user = userEvent.setup()
-    const storage = createMemoryStorage()
+    const storage = remembering()
     const { midi: piano } = await renderApp('/practice/chord-finder', { storage })
     await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
-    await remember(user)
     const play = async (chord: number[]) => {
       act(() => {
         for (const each of chord) piano.press(midi(each))
