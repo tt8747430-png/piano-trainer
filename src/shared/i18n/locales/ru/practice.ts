@@ -250,7 +250,7 @@ export const practice: LocaleResources['practice'] = {
     chordCount_many: '{{count}} аккордов',
     chordCount_other: '{{count}} аккорда',
     chordsIn: 'Её аккорды в тональности',
-    lead: { label: 'Подвести к каждому аккорду', none: 'Нет', v: 'Через V', 'ii-v': 'Через ii–V' },
+    lead: { label: 'Подводящие аккорды', none: 'Нет', v: 'Через V', 'ii-v': 'Через ii–V' },
     // Песни, в которых звучит последовательность, каждая открывает плеер на своих тактах (ADR 0112).
     songs: {
       title: 'Песни с этой последовательностью',
@@ -261,7 +261,7 @@ export const practice: LocaleResources['practice'] = {
       all_other: 'Показать все {{count}} песни',
     },
     between: {
-      title: 'Между двумя аккордами',
+      title: 'Проходящие аккорды',
       pair: 'От аккорда к аккорду',
     },
     style: {

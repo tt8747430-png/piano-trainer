@@ -98,7 +98,7 @@ describe('Practice → Progressions', () => {
     await renderApp('/practice/progressions?key=E')
     await screen.findAllByRole('group', { name: 'Chords' })
     await rowIs(['EI', 'BV', 'C♯mvi', 'AIV'])
-    const between = screen.getByRole('region', { name: 'Between two chords' })
+    const between = screen.getByRole('region', { name: 'Passing chords' })
     expect(
       within(between).getByRole('combobox', { name: 'From chord to chord' }),
     ).toHaveTextContent('E → B')
@@ -289,7 +289,7 @@ describe('Practice → Progressions', () => {
   it('leads into each chord by its own ii–V, kept in the URL, played and sent to the Player', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions?p=I-ii&size=sevenths')
-    const lead = within(await screen.findByRole('radiogroup', { name: 'Lead into each chord' }))
+    const lead = within(await screen.findByRole('radiogroup', { name: 'Approach chords' }))
     expect(lead.getByRole('radio', { name: 'No' })).toBeChecked()
     await user.click(lead.getByRole('radio', { name: 'By its ii–V' }))
     await waitFor(() => expect(router.state.location.search).toMatchObject({ lead: 'ii-v' }))
@@ -304,7 +304,7 @@ describe('Practice → Progressions', () => {
   it('leads into each chord of the key by its own dominant: the secondary dominants', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/progressions?p=I-ii-iii-IV-V-vi-vii°&size=sevenths')
-    const lead = within(await screen.findByRole('radiogroup', { name: 'Lead into each chord' }))
+    const lead = within(await screen.findByRole('radiogroup', { name: 'Approach chords' }))
     await user.click(lead.getByRole('radio', { name: 'By its V' }))
     expect(
       screen.getByRole('heading', { level: 2, name: 'The chords of the key' }),
@@ -402,7 +402,7 @@ describe('Practice → Progressions', () => {
       await screen.findByRole('heading', { level: 1, name: 'Progressions' }),
     ).toBeInTheDocument()
     expect(screen.queryByRole('navigation', { name: 'Progressions' })).not.toBeInTheDocument()
-    expect(screen.getByRole('region', { name: 'Between two chords' })).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Passing chords' })).toBeInTheDocument()
   })
 
   it('reads a song’s chords in the key they are in, and plays them in any (ADR 0052)', async () => {
@@ -420,7 +420,7 @@ describe('Practice → Progressions', () => {
   it('shows the passing chords between two chords of the row, the pair kept in the URL', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions?p=I-IV-V&key=G')
-    const between = await screen.findByRole('region', { name: 'Between two chords' })
+    const between = await screen.findByRole('region', { name: 'Passing chords' })
     expect(within(between).getByRole('article', { name: 'Secondary dominant' })).toHaveTextContent(
       /G7/,
     )
@@ -435,7 +435,7 @@ describe('Practice → Progressions', () => {
   it('keeps In the key only in the URL, and shows only the ways in the key', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions?p=I-IV-V&key=G')
-    const between = await screen.findByRole('region', { name: 'Between two chords' })
+    const between = await screen.findByRole('region', { name: 'Passing chords' })
     await user.click(within(between).getByRole('button', { name: 'In the key only' }))
     await waitFor(() => expect(router.state.location.search).toMatchObject({ inKey: true }))
     for (const way of within(between).getAllByRole('article'))
@@ -482,7 +482,7 @@ describe('Practice → Progressions', () => {
       })
     }
     expect((await lowestHands())[0]).toBe(7) // G: C from its 5th
-    await user.click(screen.getByRole('switch', { name: /Move smoothly/ }))
+    await user.click(screen.getByRole('switch', { name: /Voice leading/ }))
     expect(router.state.location.search).toMatchObject({ inversion: 2, nearest: false })
     expect(await lowestHands()).toEqual([7, 0, 2, 7]) // every chord from its 5th
   })
@@ -599,6 +599,6 @@ describe('Practice → Progressions, read and played other ways', () => {
     const voicing = screen.getByRole('radiogroup', { name: 'Voicing' })
     await user.click(within(voicing).getByRole('radio', { name: 'Block' }))
     expect(router.state.location.search).toEqual({ block: true })
-    expect(screen.getByRole('switch', { name: /Move smoothly/ })).toHaveAttribute('data-disabled')
+    expect(screen.getByRole('switch', { name: /Voice leading/ })).toHaveAttribute('data-disabled')
   })
 })

@@ -24,12 +24,11 @@ export const music = {
       '13th': 'From the 13th',
     },
     // The position a row's chords start in, and whether they move smoothly from it (ADR 0115).
-    first: 'Starting position',
-    startAbout:
-      'Which note of the first chord your hand plays lowest. Here is C major in each position:',
-    nearest: 'Move smoothly',
+    first: 'Inversion',
+    startAbout: 'Which note of the first chord sits lowest. Here is C major in each inversion:',
+    nearest: 'Voice leading',
     nearestInfo:
-      'On, each chord after the first takes the position nearest the one before, so your hand moves the least. Off, every chord keeps the starting position.',
+      'On, each chord after the first takes the inversion nearest the one before, so the voices move the least. Off, every chord keeps the first chord’s inversion.',
   },
   // How big a chord is: its stack of notes, triads to 13ths.
   chordSize: {
@@ -273,7 +272,7 @@ export const music = {
   // or how its root moved there; the legend of the moves; Play for the whole chain.
   harmony: {
     label: 'Show',
-    view: { function: 'Function', motion: 'Root motion' },
+    view: { function: 'Harmonic function', motion: 'Root movement' },
     chips: 'Chords by function',
     moves: 'Chords by root motion',
     function: { tonic: 'Tonic', subdominant: 'Subdominant', dominant: 'Dominant' },

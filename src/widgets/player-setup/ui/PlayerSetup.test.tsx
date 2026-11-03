@@ -119,18 +119,18 @@ describe('PlayerSetup', () => {
   it('starts the first chord in root position, moving smoothly after it, by default', async () => {
     const { user, onFigures } = await renderSetup()
     expect(screen.getByRole('radio', { name: 'Root' })).toBeChecked()
-    expect(screen.getByRole('switch', { name: /Move smoothly/ })).toBeChecked()
+    expect(screen.getByRole('switch', { name: /Voice leading/ })).toBeChecked()
     await user.click(screen.getByRole('radio', { name: '1st' }))
     expect(onFigures).toHaveBeenCalledWith({ inversion: 1 })
-    await user.click(screen.getByRole('switch', { name: /Move smoothly/ }))
+    await user.click(screen.getByRole('switch', { name: /Voice leading/ }))
     expect(onFigures).toHaveBeenCalledWith({ nearest: false })
   })
 
-  it('draws each starting position on the keys beside its name (ADR 0115)', async () => {
+  it('draws each inversion on the keys beside its name (ADR 0115)', async () => {
     const { user } = await renderSetup()
-    await user.click(screen.getByRole('button', { name: 'About Starting position' }))
-    const about = await screen.findByRole('dialog', { name: 'Starting position' })
-    expect(about).toHaveTextContent('Which note of the first chord your hand plays lowest')
+    await user.click(screen.getByRole('button', { name: 'About Inversion' }))
+    const about = await screen.findByRole('dialog', { name: 'Inversion' })
+    expect(about).toHaveTextContent('Which note of the first chord sits lowest')
     for (const name of ['Root position: C E G', '1st inversion: E G C', '2nd inversion: G C E'])
       expect(screen.getByRole('img', { name })).toBeInTheDocument()
   })
@@ -138,26 +138,26 @@ describe('PlayerSetup', () => {
   it('fades the position From the chart only where no pattern the chart plays follows it, saying why beside it', async () => {
     const fromChart = { pattern: 'chart' } as const
     const { user, unmount } = await renderSetup({ methodCodes: true, chart: ['flow'] }, fromChart)
-    expect(screen.getByRole('switch', { name: 'Move smoothly' })).toHaveAttribute(
+    expect(screen.getByRole('switch', { name: 'Voice leading' })).toHaveAttribute(
       'aria-disabled',
       'true',
     )
-    await user.click(screen.getByRole('button', { name: 'About Starting position' }))
-    expect(await screen.findByRole('dialog', { name: 'Starting position' })).toHaveTextContent(
+    await user.click(screen.getByRole('button', { name: 'About Inversion' }))
+    expect(await screen.findByRole('dialog', { name: 'Inversion' })).toHaveTextContent(
       'This pattern plays its own shapes.',
     )
     unmount()
     await renderSetup({ methodCodes: true, chart: ['flow', 'block'] }, fromChart)
-    expect(screen.getByRole('switch', { name: 'Move smoothly' })).not.toHaveAttribute(
+    expect(screen.getByRole('switch', { name: 'Voice leading' })).not.toHaveAttribute(
       'aria-disabled',
     )
   })
 
-  it('turns Move smoothly back on, the URL’s own', async () => {
+  it('turns Voice leading back on, the URL’s own', async () => {
     const { user, onFigures } = await renderSetup({}, { inversion: 2, nearest: false })
     expect(screen.getByRole('radio', { name: '2nd' })).toBeChecked()
-    expect(screen.getByRole('switch', { name: 'Move smoothly' })).not.toBeChecked()
-    await user.click(screen.getByRole('switch', { name: /Move smoothly/ }))
+    expect(screen.getByRole('switch', { name: 'Voice leading' })).not.toBeChecked()
+    await user.click(screen.getByRole('switch', { name: /Voice leading/ }))
     expect(onFigures).toHaveBeenCalledWith({ nearest: undefined })
   })
 

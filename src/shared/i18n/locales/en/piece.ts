@@ -117,9 +117,9 @@ export const piece = {
   facts: {
     title: 'Title',
     titlePlaceholder: 'The song’s title',
-    credits: 'Who wrote it',
-    music: 'Music',
-    words: 'Words',
+    credits: 'Credits',
+    music: 'Composer',
+    words: 'Lyricist',
     add: 'Add',
     about: 'About the song',
     aboutPlaceholder: 'What to know about this song',

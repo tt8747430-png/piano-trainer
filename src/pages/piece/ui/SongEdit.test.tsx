@@ -51,11 +51,11 @@ describe('a song’s page in Edit (round 28)', () => {
     const title = screen.getByRole('textbox', { name: 'Title' })
     await user.clear(title)
     await user.type(title, 'Evening')
-    await user.type(screen.getByRole('textbox', { name: 'Music' }), 'Ana')
+    await user.type(screen.getByRole('textbox', { name: 'Composer' }), 'Ana')
     await user.type(screen.getByRole('textbox', { name: 'About the song' }), 'A lullaby')
     expect(piecesStore.getState().songs[0]).toMatchObject({
       title: 'Evening',
-      // Who wrote it is its score's composer: one place, printed under its title too.
+      // Credits is its score's composer: one place, printed under its title too.
       header: { composer: 'Ana' },
       note: { en: 'A lullaby', ru: 'A lullaby' },
     })
@@ -85,7 +85,7 @@ describe('a song’s page in Edit (round 28)', () => {
       contentEditing: content,
     })
     await user.click(await screen.findByRole('button', { name: 'Edit' }))
-    const words = await screen.findByRole('textbox', { name: 'Words' })
+    const words = await screen.findByRole('textbox', { name: 'Lyricist' })
     await user.clear(words)
     await user.type(words, 'Someone')
     await waitFor(

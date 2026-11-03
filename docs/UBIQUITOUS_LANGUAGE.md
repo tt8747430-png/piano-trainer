@@ -578,3 +578,16 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   in order. A lesson an editor adds is **created** unpublished and listed once the course is published.
   _Avoid:_ course texts, syllabus.
 - **Welcome**: the app's first-run screen, shown once (`welcomed`). _Avoid:_ onboarding, intro.
+
+## Words the app says (A6)
+
+The musician's term for each idea, as the theory and method books and Flat and Dorico name it. `src/shared/i18n/avoid-words.test.ts` fails a locale file that uses an _Avoid_ phrase of this section.
+
+- **Passing chords** («Проходящие аккорды»): chords between two chords of a progression. _Avoid:_ Between two chords, Между двумя аккордами.
+- **Voice leading** («Голосоведение»): each chord taking the inversion nearest the one before. _Avoid:_ Move smoothly, Плавный переход.
+- **Inversion** («Обращение»): which chord note sits lowest; the first chord's in a row. _Avoid:_ Starting position, Начальное положение.
+- **Approach chords** («Подводящие аккорды»): a chord's own V or ii–V before it. _Avoid:_ Lead into each chord, Подвести к каждому аккорду.
+- **Root movement** («Движение основных тонов»): the interval from one chord's root to the next. _Avoid:_ Root motion.
+- **Harmonic function** («Гармонические функции»): tonic, subdominant, dominant. _Avoid:_ Function (alone, as a view's name).
+- **Repeated chords** («Повторяющиеся аккорды»): a chord struck again on each 8th. _Avoid:_ Pulsing chords.
+- **Credits** («Авторы»), **Composer** («Композитор»), **Lyricist** («Автор слов»): who wrote a song, in its page's Edit. _Avoid:_ Who wrote it.

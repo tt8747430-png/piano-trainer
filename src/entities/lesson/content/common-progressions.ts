@@ -81,7 +81,7 @@ const commonProgressions: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Root motion', ru: 'Ход основных тонов' },
+          lead: { en: 'Root movement', ru: 'Движение основных тонов' },
           text: {
             en: 'is how far each chord’s root moves to the next. A root falling a 5th pulls hardest. This chain falls by 5ths all the way home.',
             ru: '— это расстояние, на которое основной тон аккорда переходит к следующему. Сильнее всего тянет ход на квинту вниз. Эта цепочка идёт квинтами вниз до самого дома.',

@@ -630,7 +630,7 @@ describe('LessonView’s accompaniment', () => {
 
   it('links into the tools and the Player on what it names', async () => {
     await renderLesson(ACCOMPANIMENT)
-    // Between two chords, on Progressions: the pair as a line in its key.
+    // Passing chords, on Progressions: the pair as a line in its key.
     expect(screen.getByRole('link', { name: 'C to F, between' })).toHaveAttribute(
       'href',
       '/practice/progressions?key=C&p=I-IV',

@@ -492,7 +492,7 @@ const LIBRARY = [
     'Аккорды тональности',
     {
       note: note(
-        'Lead into each chord by its V to hear the secondary dominants, or by its ii–V for a ii–V–I into every chord of the key.',
+        'Set Approach chords to By its V to hear the secondary dominants, or to By its ii–V for a ii–V–I into every chord of the key.',
         'Подведите к каждому аккорду через его V, и прозвучат побочные доминанты. Через его ii–V получится ii–V–I к каждому аккорду тональности.',
       ),
     },
@@ -506,7 +506,7 @@ const LIBRARY = [
     {
       size: 'sevenths',
       note: note(
-        'Every degree of the key, each a 5th from the last, back home to I: the circle of fifths in the key’s own chords. In 7th chords, each chord’s 3rd becomes the next chord’s 7th. In minor, from iv, it is Autumn Leaves. Lead into each chord by its ii–V to go round the circle in ii–V–Is.',
+        'Every degree of the key, each a 5th from the last, back home to I: the circle of fifths in the key’s own chords. In 7th chords, each chord’s 3rd becomes the next chord’s 7th. In minor, from iv, it is Autumn Leaves. Set Approach chords to By its ii–V to go round the circle in ii–V–Is.',
         'Все ступени тональности, каждая через квинту от предыдущей, и домой к I: квинтовый круг на аккордах самой тональности. В септаккордах терция каждого аккорда становится септимой следующего. В миноре, от iv, это Autumn Leaves. Подведите к каждому аккорду через его ii–V, и круг пройдёт оборотами ii–V–I.',
       ),
     },

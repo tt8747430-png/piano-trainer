@@ -262,7 +262,7 @@ export const practice = {
     chordCount_other: '{{count}} chords',
     chordsIn: 'Its chords in the key',
     /** What leads into each chord of the progression (ADR 0112). */
-    lead: { label: 'Lead into each chord', none: 'No', v: 'By its V', 'ii-v': 'By its ii–V' },
+    lead: { label: 'Approach chords', none: 'No', v: 'By its V', 'ii-v': 'By its ii–V' },
     // The songs a progression is heard in, each opening the Player at its bars (ADR 0112).
     songs: {
       title: 'Songs with this progression',
@@ -271,7 +271,7 @@ export const practice = {
       all_other: 'Show all {{count}} songs',
     },
     between: {
-      title: 'Between two chords',
+      title: 'Passing chords',
       pair: 'From chord to chord',
     },
     style: {
