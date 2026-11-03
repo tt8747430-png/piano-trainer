@@ -35,9 +35,9 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A20 | Buttons, rows and headings on every explorer | 2 | open | | |
 | A21 | Scales and keys, all three tabs | 2 | open | | |
 | A22 | Intervals | 2 | open | | |
-| A23 | Progressions | 2 | open | | |
-| A24 | A Settings page for every Practice page | 2 | open | | |
-| A25 | Accompaniment, Chord finder, Metronome, Exercises and Quiz | 2 | open | | |
+| A23 | Progressions | 2 | in progress | 1ea3aeac | three tabs (Progression · Library · Passing chords), each chord's role and bass move drawn (kernel `chordRole`, tested on every library progression), Written as and Voicing as settings, the Library a list with style chips. Left: Passing chords by groups with Insert |
+| A24 | A Settings page for every Practice page | 2 | done | e212b61d | at `/settings/<page>`, a gear in each page's bar (`?from=` for Back) and a Practice group in Settings; Chords, Scales and Intervals' pages hold only rows to the on-screen piano and a connected piano for now |
+| A25 | Accompaniment, Chord finder, Metronome, Exercises and Quiz | 2 | in progress | 52ae1faf | book names in one script, My gaps an icon button, the Quiz in two even columns. Left: Accompaniment's chips and pattern names, the Chord finder's empty state |
 | A26 | The on-screen piano itself | 3 | open | | |
 | A27 | The Player's piano sound and its pedal | 3 | in progress | 16190d53, 5fdb368d | pedal events: one voice per key, scheduled notes decay as the live voice's, pedal-held notes end at the lift, CC64 to a connected piano with note-offs at written ends; auto-pedal as a pure function (wired with B7's Player settings page). Left: the sampled grand (D15), the pedal lamp and Ped. highlight in the Player, the Fantaisie-Impromptu check (its file is not in the repo: owner's to-do) |
 | A28 | The song page of an imported or own song | 4 | open | | |
@@ -53,8 +53,8 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A38 | One meaning for the pencil, for everyone | 1 | in progress | | song page done (audit); editing in the chord views (Grid, Chords over lyrics, Diagrams) goes with A37 in round 4 |
 | A39 | The Metronome, against the metronome apps players use | 2 | in progress | a61dde1c | engine model and the page (audit); samples, flash and the Player's click next |
 | A40 | The score editor's panels, against Flat's | 4 | open | | |
-| A41 | Exercises and the Quiz, inside | 2 | open | | |
-| A42 | Every theory, practice and training page against rule 30 | 1 | open | | |
+| A41 | Exercises and the Quiz, inside | 2 | in progress | 41a450d5 | drills Flashcards · Name it · Play it · By ear, Start a labelled button, no time signature on a question's staff. Left: the results page, the Why line and stats, the exercise page and Next key |
+| A42 | Every theory, practice and training page against rule 30 | 1 | in progress | | part done with A23–A25; the rest open |
 | A43 | The Key tab's content, and theory written on the music | 2 | open | | |
 | B1 | The Profile, as complete as memory-palaces' | 5 | in progress | ef48f266, 00c8af17, 5baac640 | server: learner_profiles, handle check, public avatars (access test green). Device: tiered badges and the Almost there card on the Profile. Next, after the Settings rebuild merges (it owns the Account pages): avatar picker, Edit profile (handle, bio), Privacy, notifications, Streak merged with Activity |
 | B2 | Professional copy | 6 | open | | |
