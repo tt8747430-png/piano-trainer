@@ -197,7 +197,7 @@ describe('the catalog', () => {
   })
 
   it('plays any piece from half its tempo to twice it, the learner’s speeds (ADR 0105)', () => {
-    expect(PIECE_TEMPO).toEqual({ min: 40, max: 160 })
+    expect(PIECE_TEMPO).toEqual({ min: 20, max: 300 })
     expect(TEMPO_RANGE.min).toBeLessThanOrEqual(PIECE_TEMPO.min / 2)
     expect(TEMPO_RANGE.max).toBeGreaterThanOrEqual(PIECE_TEMPO.max * 2)
   })

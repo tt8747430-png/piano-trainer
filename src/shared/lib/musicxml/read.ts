@@ -537,7 +537,7 @@ export function readMusicXml(source: string): ReadScore {
             break
           }
           case 'note': {
-            const read = readNote(child, (duration) => exact(duration, divisions.value))
+            const read = readNote(child, (duration) => exact(duration, divisions.value), quarter)
             if (read.kind === 'skip') {
               leave('notes')
               if (!read.chord && !read.grace) at += read.ticks
@@ -860,12 +860,55 @@ type NoteRead =
       leftOut: number
     }
 
-/** Reads one `<note>`, its duration in ticks (unrounded) by `toTicks`. */
-function readNote(note: XmlElement, toTicks: (duration: number) => number): NoteRead {
+/** Each note type's length in quarters. */
+const TYPE_QUARTERS: Readonly<Record<string, number>> = {
+  maxima: 32,
+  long: 16,
+  breve: 8,
+  whole: 4,
+  half: 2,
+  quarter: 1,
+  eighth: 1 / 2,
+  '16th': 1 / 4,
+  '32nd': 1 / 8,
+  '64th': 1 / 16,
+  '128th': 1 / 32,
+  '256th': 1 / 64,
+  '512th': 1 / 128,
+  '1024th': 1 / 256,
+}
+
+/**
+ * A note's length in ticks. A file's `<duration>` counts whole divisions, so a tuplet its divisions
+ * can't split (a septuplet in 480 a quarter) is written rounded, 68 or 69; its type, dots and
+ * time modification say it exactly, and win wherever they agree with the duration to a division.
+ */
+function noteTicks(
+  note: XmlElement,
+  toTicks: (duration: number) => number,
+  quarter: number,
+): number {
+  const given = toTicks(numberAt(note, 'duration') ?? 0)
+  const base = TYPE_QUARTERS[textAt(note, 'type') ?? '']
+  if (base === undefined) return given
+  const dots = childrenOf(note, 'dot').length
+  const modification = childOf(note, 'time-modification')
+  const actual = (modification && numberAt(modification, 'actual-notes')) || 1
+  const normal = (modification && numberAt(modification, 'normal-notes')) || 1
+  const written = base * (2 - 1 / 2 ** dots) * (normal / actual) * quarter
+  return Math.abs(written - given) <= toTicks(1) ? written : given
+}
+
+/** Reads one `<note>`, its duration in ticks (unrounded) by `toTicks`, `quarter` ticks a quarter. */
+function readNote(
+  note: XmlElement,
+  toTicks: (duration: number) => number,
+  quarter: number,
+): NoteRead {
   const chord = childOf(note, 'chord') !== undefined
   const graceElement = childOf(note, 'grace')
   const grace = graceElement !== undefined
-  const ticks = grace ? 0 : toTicks(numberAt(note, 'duration') ?? 0)
+  const ticks = grace ? 0 : noteTicks(note, toTicks, quarter)
   const staff = numberAt(note, 'staff') ?? 1
   const voice = textAt(note, 'voice') ?? '1'
   if (childOf(note, 'cue') || childOf(note, 'unpitched'))

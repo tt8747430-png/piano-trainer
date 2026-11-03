@@ -30,10 +30,10 @@ const AUDIBLE: Readonly<Record<Hands, Audible>> = {
 export const audibleHands = (hands: Hands): Audible => AUDIBLE[hands]
 
 /**
- * The tempos a learner can choose, in beats per minute: half the slowest a piece is written at (40)
- * to twice the fastest (160), the learner's speed running from 50% to 200% of a piece's (ADR 0105).
+ * The tempos a learner can choose, in beats per minute: half the slowest a piece is written at (20)
+ * to twice the fastest (300), the learner's speed running from 50% to 200% of a piece's (ADR 0105).
  */
-export const TEMPO_RANGE = { min: 20, max: 320 } as const
+export const TEMPO_RANGE = { min: 10, max: 600 } as const
 
 export interface NoteSound {
   readonly kind: 'note'

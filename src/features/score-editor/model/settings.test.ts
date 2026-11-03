@@ -38,8 +38,8 @@ describe('the song’s settings', () => {
     expect(form(minor)).toEqual(form(draft))
   })
 
-  it('sets the tempo within 40 to 160', () => {
-    expect(setTempo(draft, 200).tempo).toBe(160)
+  it('sets the tempo within 20 to 300', () => {
+    expect(setTempo(draft, 400).tempo).toBe(300)
     expect(setTempo(draft, 72).tempo).toBe(72)
   })
 
@@ -49,7 +49,7 @@ describe('the song’s settings', () => {
     const quarters = setTempoMark(eighths, 100, '4')
     expect(quarters.tempo).toBe(100)
     expect(quarters).not.toHaveProperty('tempoUnit')
-    expect(setTempoMark(draft, 400, '8').tempo).toBe(160)
+    expect(setTempoMark(draft, 700, '8').tempo).toBe(300)
     expect(setTempoMark(quarters, 100, '4')).toBe(quarters)
   })
 })

@@ -162,7 +162,7 @@ describe('search params', () => {
         '/play/bz5?key=H&tempo=999&mode=dance&pattern=waltz&rh=zz&chordSize=elevenths',
       ),
     ).toEqual(PLAYER_DEFAULTS)
-    expect(await searchAt('/play/bz5?mode=step&loop=6-3&swing=yes&tempo=10')).toEqual(
+    expect(await searchAt('/play/bz5?mode=step&loop=6-3&swing=yes&tempo=5')).toEqual(
       PLAYER_DEFAULTS,
     )
     expect(await searchAt('/play/bz5?loop=x&speedTraining=1')).toEqual(PLAYER_DEFAULTS)
@@ -174,7 +174,7 @@ describe('search params', () => {
     expect(await searchAt('/practice/chords?quality=m7')).toMatchObject(CHORDS_DEFAULTS)
     expect(await searchAt('/practice/chords?inversion=3')).toMatchObject({ inversion: 0 })
     expect(
-      await searchAt('/practice/scales?kind=ionian&tempo=10&chords=9&step=chords:tri'),
+      await searchAt('/practice/scales?kind=ionian&tempo=5&chords=9&step=chords:tri'),
     ).toEqual(SCALES_DEFAULTS)
     expect(await searchAt('/songs?favourites=yes&stage=expert&key=H')).toEqual(SONGS_DEFAULTS)
   })

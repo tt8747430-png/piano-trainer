@@ -142,6 +142,32 @@ describe('readMusicXml', () => {
     expect(readMusicXml(PIANO).leftOut).toEqual({})
   })
 
+  it('reads a tuplet its divisions cannot split by its type, nothing rounded', () => {
+    // Seven 16ths in a quarter at 480 divisions: the file writes 68s and 69s that sum to 480.
+    const lengths = [68, 69, 68, 69, 68, 69, 69]
+    const septuplet = lengths
+      .map(
+        (duration) =>
+          `<note>${pitch('C', 5)}<duration>${duration}</duration><voice>1</voice><type>16th</type>
+            <time-modification><actual-notes>7</actual-notes><normal-notes>4</normal-notes></time-modification><staff>1</staff></note>`,
+      )
+      .join('')
+    const rest = `<note><rest/><duration>1440</duration><voice>1</voice><type>half</type><dot/><staff>1</staff></note>`
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<score-partwise version="4.0">
+  <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+  <part id="P1"><measure number="1">
+    <attributes><divisions>480</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes>
+    ${septuplet}${rest}
+  </measure></part>
+</score-partwise>`
+    const read = readMusicXml(xml)
+    expect(read.leftOut).toEqual({})
+    expect(read.notes.map((n) => n.startTick)).toEqual(
+      Array.from({ length: 7 }, (_, i) => (i * B) / 7),
+    )
+  })
+
   it('reads a tempo change, a swing mark, a Roman numeral and free text onto their notes', () => {
     const words = (text: string, placement = 'above') =>
       `<direction placement="${placement}"><direction-type><words>${text}</words></direction-type><staff>1</staff></direction>`

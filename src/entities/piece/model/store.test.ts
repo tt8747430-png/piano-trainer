@@ -120,7 +120,7 @@ describe('createPiecesStore', () => {
       bz5: { ...MUSIC, hands: { rh: 'C4/4' } },
       bz6: { ...MUSIC, pattern: 'nope' },
       bz8: { ...MUSIC, meter: '5/16' },
-      bz9: { ...MUSIC, tempo: 300 },
+      bz9: { ...MUSIC, tempo: 301 },
       bz10: { ...MUSIC, key: 'H' },
       bz11: { ...MUSIC, key: 'A#' },
       bz12: { ...MUSIC, sections: [{ kind: 'bridge', lines: ['C'] }] },

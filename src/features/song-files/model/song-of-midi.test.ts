@@ -58,6 +58,33 @@ describe('songOfMidi', () => {
     expect(leftOut).toEqual({})
   })
 
+  it('keeps the tempo changes as tempo marks and a time signature change as a section in it', () => {
+    const changing: MidiTrack = {
+      events: [
+        { tick: 0, kind: 'name', text: 'Fantasia' },
+        { tick: 0, kind: 'time', count: 2, unit: 2, click: 1 },
+        { tick: 0, kind: 'tempo', quarters: 168 },
+        { tick: 4 * Q, kind: 'tempo', quarters: 80 },
+        { tick: 8 * Q, kind: 'time', count: 4, unit: 4, click: 1 },
+      ],
+      end: 0,
+    }
+    const quarters = Array.from({ length: 12 }, (_, i): [number, number, number] => [
+      72,
+      i * Q,
+      (i + 1) * Q,
+    ])
+    const { song, leftOut } = songOfMidi(
+      standardMidiFile([changing, track('Piano', quarters)]),
+      'fantasia.mid',
+    )
+    expect(leftOut).toEqual({})
+    expect(song.music).toMatchObject({ meter: '2/2', tempo: 168 })
+    expect(song.music.hands?.rh).toContain('tempo:80')
+    const music = song.music as { sections: readonly { meter?: string }[] }
+    expect(music.sections.map((section) => section.meter)).toEqual([undefined, '4/4'])
+  })
+
   it('splits one piano track between the hands at middle C', () => {
     const bytes = standardMidiFile([
       track('Piano', [

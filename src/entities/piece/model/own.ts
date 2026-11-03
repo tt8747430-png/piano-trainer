@@ -20,8 +20,11 @@ export interface OwnSong extends PieceMusic {
 /** The longest title an own song takes. */
 export const TITLE_MAX = 80
 
-/** The tempos a piece is written at (a compound meter's beat is the dotted quarter). */
-export const PIECE_TEMPO = { min: 40, max: 160 } as const
+/**
+ * The tempos a piece is written at (a compound meter's beat is the dotted quarter): from a Grave to
+ * past any Prestissimo, so an imported score keeps the tempo it was written at.
+ */
+export const PIECE_TEMPO = { min: 20, max: 300 } as const
 
 const OWN_ID = /^my-[1-9]\d*$/
 

@@ -32,7 +32,7 @@ export const LEFT_KINDS = [
   'lyrics',
   /** A piano part's third staff and more. */
   'staves',
-  /** A tempo past what a song is written at (40–160). */
+  /** A tempo past what a song is written at (20–300). */
   'tempo',
 ] as const
 export type LeftKind = (typeof LEFT_KINDS)[number]

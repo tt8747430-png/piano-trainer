@@ -187,15 +187,14 @@ export function songOfMidi(bytes: Uint8Array, fileName: string): ReadSong {
   const [time, ...times] = file.times
   const meter = (time && meterOf(time.count, time.unit)) ?? '4/4'
   if (time && !meterOf(time.count, time.unit)) leave('meters')
-  leave(
-    'meters',
-    times.filter((each) => each.count !== time?.count || each.unit !== time.unit).length,
-  )
   const [first, ...tempos] = file.tempos
   const quarters = first?.quarters ?? MIDI_TEMPO
-  leave('tempos', tempos.filter((each) => Math.abs(each.quarters - quarters) > 0.5).length)
   // The song's beat is a quarter, or a dotted quarter in compound time.
-  const beats = quarters / (isCompound(meter) ? 1.5 : 1)
+  const perBeat = isCompound(meter) ? 1.5 : 1
+  const beats = quarters / perBeat
+  /** A file tick as the song's: tempo plays no part, a quarter is a quarter. */
+  const tickOf = (fileTick: number): Tick =>
+    Math.round(((fileTick / file.division) * TICKS_PER_BEAT) / perBeat)
   const msPerTick = 60_000 / quarters / file.division
   const [signature] = file.keys
   const key =
@@ -231,9 +230,30 @@ export function songOfMidi(bytes: Uint8Array, fileName: string): ReadSong {
     (latest, n) => Math.max(latest, n.startTick + n.durationTicks),
     0,
   )
-  const bar = barTicks(meter)
-  const count = Math.max(1, Math.ceil(end / bar))
-  const bars = Array.from({ length: count }, () => ({ ticks: bar, chords: [] }))
+  const { sections, unread } = meterSections(times, tickOf, meter, end)
+  leave('meters', unread)
+  const count = sections.reduce((sum, section) => sum + section.bars, 0)
+  // Each tempo change a tempo mark on the first note it reaches (the upper staff's, else the lower's).
+  const marked = new Map<DraftNote, number>()
+  let heard = quarters
+  for (const change of tempos) {
+    if (Math.abs(change.quarters - heard) <= 0.5) continue
+    heard = change.quarters
+    const at = tickOf(change.tick)
+    const mark = Math.round(change.quarters / perBeat)
+    const reached = [handNotes.rh, handNotes.lh]
+      .map(
+        (notes) =>
+          notes.filter((n) => n.startTick >= at).sort((a, b) => a.startTick - b.startTick)[0],
+      )
+      .find((n) => n !== undefined)
+    if (reached && mark >= MARK_TEMPO.min && mark <= MARK_TEMPO.max) marked.set(reached, mark)
+    else leave('tempos')
+  }
+  const withTempo = (n: DraftNote): DraftNote => {
+    const mark = marked.get(n)
+    return mark === undefined ? n : { ...n, marks: { ...n.marks, tempo: mark } }
+  }
   const tempo = Math.min(PIECE_TEMPO.max, Math.max(PIECE_TEMPO.min, beats))
   if (tempo !== beats) leave('tempo')
   const draft: Draft = {
@@ -241,14 +261,22 @@ export function songOfMidi(bytes: Uint8Array, fileName: string): ReadSong {
     meter,
     tempo: Math.round(tempo * TICKS_PER_BEAT) / TICKS_PER_BEAT,
     pattern: 'r1',
-    sections: [
-      {
-        heading: { kind: 'verse' },
-        lines: Array.from({ length: Math.ceil(count / BARS_PER_LINE) }, (_, i) =>
+    sections: sections.map((section, i) => {
+      const bars = Array.from({ length: section.bars }, () => ({
+        ticks: barTicks(section.meter),
+        chords: [],
+      }))
+      return {
+        heading: {
+          kind: 'verse',
+          // A section's meter holds from it on: each change written where it comes.
+          ...(section.meter !== (sections[i - 1]?.meter ?? meter) ? { meter: section.meter } : {}),
+        },
+        lines: Array.from({ length: Math.ceil(section.bars / BARS_PER_LINE) }, (_, i) =>
           bars.slice(i * BARS_PER_LINE, (i + 1) * BARS_PER_LINE),
         ),
-      },
-    ],
+      }
+    }),
     staves: single.map(({ part, notes }) => ({
       ...(part.name ? { name: part.name.slice(0, 40) } : {}),
       clef:
@@ -259,8 +287,8 @@ export function songOfMidi(bytes: Uint8Array, fileName: string): ReadSong {
     })),
     leadSheet: rh.length + lh.length + split.length === 0 && single.length > 0,
     lyricsOn: 'rh',
-    hands: handNotes,
-    pedal: pedalOf([...rh, ...lh, ...split], msPerTick, beats, meter, count * bar),
+    hands: { rh: handNotes.rh.map(withTempo), lh: handNotes.lh.map(withTempo) },
+    pedal: pedalOf([...rh, ...lh, ...split], msPerTick, beats, meter, count * barTicks(meter)),
   }
   let song: SharedSong | null
   try {
@@ -270,6 +298,41 @@ export function songOfMidi(bytes: Uint8Array, fileName: string): ReadSong {
   }
   if (!song) throw new SongFileError('broken')
   return { song, leftOut }
+}
+
+/** What a tempo mark may say, as the song's marks read it. */
+const MARK_TEMPO = { min: 20, max: 400 } as const
+
+/**
+ * The file's music in sections, a new one where the time signature changes (ADR 0095: a section's
+ * meter from it on), each its bars. A change that falls inside a bar, or to a meter of the other
+ * kind (simple to compound), which the song's one beat cannot count, is left out and counted.
+ */
+function meterSections(
+  times: readonly { readonly tick: number; readonly count: number; readonly unit: number }[],
+  tickOf: (fileTick: number) => Tick,
+  meter: Meter,
+  end: Tick,
+): { sections: { meter: Meter; bars: number }[]; unread: number } {
+  const sections: { meter: Meter; bars: number }[] = []
+  let unread = 0
+  let current = meter
+  let from: Tick = 0
+  for (const time of times) {
+    const next = meterOf(time.count, time.unit)
+    if (next === current) continue
+    const at = tickOf(time.tick)
+    const bars = (at - from) / barTicks(current)
+    if (!next || isCompound(next) !== isCompound(meter) || !Number.isInteger(bars) || bars < 1) {
+      unread += 1
+      continue
+    }
+    sections.push({ meter: current, bars })
+    current = next
+    from = at
+  }
+  sections.push({ meter: current, bars: Math.max(1, Math.ceil((end - from) / barTicks(current))) })
+  return { sections, unread }
 }
 
 /**

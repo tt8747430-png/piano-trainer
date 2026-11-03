@@ -399,7 +399,7 @@ export const songs = {
       clefs: 'Clef changes on a single staff',
       lyrics: 'Lyrics on other staves',
       staves: 'A piano part’s staves past two',
-      tempo: 'A tempo outside 40–160, set to the nearest',
+      tempo: 'A tempo outside 20–300, set to the nearest',
     },
   },
 } as const
