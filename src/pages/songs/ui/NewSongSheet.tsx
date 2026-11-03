@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
-import { ChevronLeft, Mic, Pencil } from 'lucide-react'
+import { Mic, Pencil } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { libraryCatalog, useLibraryStoreApi, type FolderId } from '@/entities/library'
@@ -32,6 +32,7 @@ import {
   type TempoUnit,
 } from '@/shared/lib/music'
 import {
+  BackMark,
   Dropdown,
   NameField,
   SearchField,
@@ -192,7 +193,7 @@ export function NewSongSheet({
   const back =
     step > 1 ? (
       <Button size="lg" variant="outline" onClick={() => setStep(step === 3 ? 2 : 1)}>
-        <ChevronLeft data-icon="inline-start" aria-hidden />
+        <BackMark />
         {t('setup.back')}
       </Button>
     ) : null

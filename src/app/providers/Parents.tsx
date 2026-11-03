@@ -1,11 +1,8 @@
 import { useRouter } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
-import { UpProvider, useMediaQuery } from '@/shared/lib'
+import { LAPTOP, UpProvider, useMediaQuery } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { parentOf } from '../routes/parents'
-
-/** A laptop: the sidebar shows, with Settings at its foot a place of its own. */
-const LAPTOP = '(min-width: 64rem)'
 
 /** Back as up (rule 26): every screen's Back finds its parent in the parents table. */
 export function Parents({ children }: { children: ReactNode }) {

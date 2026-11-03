@@ -138,6 +138,5 @@ export const piece: LocaleResources['piece'] = {
     changed: 'Изменена',
     notPublished: 'Не опубликована',
     changes: 'Неопубликованные изменения',
-    danger: 'Удаление',
   },
 }

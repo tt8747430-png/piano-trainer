@@ -31,7 +31,7 @@ export const legal = {
       },
       delete: {
         heading: 'Taking it with you, and deleting it',
-        text: 'Settings › Sync and data saves a backup of everything to a file. Settings › Account deletes your account: it is removed for good after 30 days, and signing in before then lets you keep it.',
+        text: 'Settings › Storage and backup saves a backup of everything to a file. Settings › Account deletes your account: it is removed for good after 30 days, and signing in before then lets you keep it.',
       },
     },
   },

@@ -168,16 +168,32 @@ const activityRoute = createRoute({
   path: '/profile/activity',
   component: lazyRouteComponent(settingsScreens, 'ActivityPage'),
 })
-// Settings' pages: the keyboard and recording, sync and data, and the account's.
-const playingRoute = createRoute({
+// Settings' pages (R20, R22): General, the on-screen piano, the computer keys, sound and recording,
+// storage and backup, and the account's.
+const generalRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/settings/playing',
-  component: lazyRouteComponent(settingsScreens, 'PlayingPage'),
+  path: '/settings/general',
+  component: lazyRouteComponent(settingsScreens, 'GeneralPage'),
 })
-const dataRoute = createRoute({
+const onScreenPianoRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/settings/data',
-  component: lazyRouteComponent(settingsScreens, 'DataPage'),
+  path: '/settings/on-screen-piano',
+  component: lazyRouteComponent(settingsScreens, 'OnScreenPianoPage'),
+})
+const computerKeysRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/computer-keys',
+  component: lazyRouteComponent(settingsScreens, 'ComputerKeysPage'),
+})
+const soundRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/sound-and-recording',
+  component: lazyRouteComponent(settingsScreens, 'SoundPage'),
+})
+const storageRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/storage',
+  component: lazyRouteComponent(settingsScreens, 'StoragePage'),
 })
 // The app's Privacy and Terms (ADR 0116): read signed in or not, linked from Help and the account forms.
 const privacyRoute = createRoute({
@@ -201,15 +217,15 @@ const howToUseRoute = createRoute({
   path: '/settings/how-to-use',
   component: lazyRouteComponent(settingsScreens, 'HowToUsePage'),
 })
-// The MIDI keyboard (ADR 0034): its input, output, devices and playing, and its MIDI log under it.
+// Connect a piano (ADR 0034): MIDI input, output, devices and playing, and its MIDI log under it.
 const midiSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/settings/midi',
+  path: '/settings/connect-piano',
   component: lazyRouteComponent(settingsScreens, 'MidiSettingsPage'),
 })
 const midiLogRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/settings/midi/log',
+  path: '/settings/connect-piano/log',
   component: lazyRouteComponent(settingsScreens, 'MidiLogPage'),
 })
 // The account pages (ADR 0116): signing in, a new account, a forgotten password, a new one.
@@ -765,8 +781,11 @@ const routeTree = rootRoute.addChildren([
     activityRoute,
     adminRoute,
     settingsRoute,
-    playingRoute,
-    dataRoute,
+    generalRoute,
+    onScreenPianoRoute,
+    computerKeysRoute,
+    soundRoute,
+    storageRoute,
     privacyRoute,
     termsRoute,
     accountSettingsRoute,

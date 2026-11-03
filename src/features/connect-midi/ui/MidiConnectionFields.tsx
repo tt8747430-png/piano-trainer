@@ -40,6 +40,7 @@ export function MidiConnectionFields() {
       ) : null}
       <SettingRows>
         <SwitchRow
+          setting="midi.input"
           icon={<Piano />}
           label={t('midiSettings.input')}
           info={t('midiSettings.inputNote')}
@@ -48,6 +49,7 @@ export function MidiConnectionFields() {
           onCheckedChange={turn}
         />
         <SwitchRow
+          setting="midi.throughPiano"
           icon={<Speaker />}
           label={t('midiSettings.output')}
           info={t('midiSettings.outputNote')}
@@ -57,6 +59,7 @@ export function MidiConnectionFields() {
           onCheckedChange={(next) => setMidi(store, { throughPiano: next })}
         />
         <SwitchRow
+          setting="midi.sound"
           icon={<Volume2 />}
           label={t('midiSettings.sound')}
           info={t('midiSettings.soundNote')}

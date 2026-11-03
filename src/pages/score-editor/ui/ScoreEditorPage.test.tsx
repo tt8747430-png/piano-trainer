@@ -1238,9 +1238,9 @@ describe('the score editor', () => {
     await user.click(within(dock).getByRole('button', { name: 'Sound' }))
     const settings = await screen.findByRole('dialog', { name: 'Sound' })
     // Recording's switches have one home, Settings (R18): the popover leads there.
-    expect(within(settings).getByRole('link', { name: 'Recording' })).toHaveAttribute(
+    expect(within(settings).getByRole('link', { name: 'Sound and recording' })).toHaveAttribute(
       'href',
-      '/settings/playing',
+      '/settings/sound-and-recording',
     )
     await user.keyboard('{Escape}')
     // No MIDI keyboard yet: Record's popover says what it needs (ADR 0096).

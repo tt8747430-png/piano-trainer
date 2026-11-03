@@ -108,7 +108,6 @@ export const learn: LocaleResources['learn'] = {
     shareLink: 'Поделиться ссылкой',
     shared: 'Ссылка скопирована',
     shareFailed: 'Не удалось поделиться ссылкой',
-    progress: 'Ваш прогресс',
     reset: 'Сбросить прогресс',
     resetLesson: 'Сбросить прогресс урока?',
     resetLessonBody:

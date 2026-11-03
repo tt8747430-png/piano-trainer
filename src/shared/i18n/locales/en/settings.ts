@@ -2,12 +2,21 @@ export const settings = {
   title: 'Settings',
   language: { label: 'Language', en: 'English', ru: 'Русский' },
   theme: { label: 'Theme', system: 'System', light: 'Light', dark: 'Dark' },
-  keyboard: 'Keyboard',
-  midi: 'MIDI keyboard',
+  // Settings' pages, named after what the learner sees (R22): never "keyboard" alone.
+  pages: {
+    onScreenPiano: 'On-screen piano',
+    connectPiano: 'Connect a piano',
+    computerKeys: 'Computer keys',
+    sound: 'Sound and recording',
+    metronome: 'Metronome',
+    storage: 'Storage and backup',
+  },
+  // The on-screen piano's page: its groups.
+  piano: { look: 'Look', place: 'Position', play: 'Playing', bar: 'Bar over the keys' },
+  computerKeys: { shortcuts: 'Shortcuts', typingGroup: 'Playing' },
   // How a take is recorded in the score editor (ADR 0028), as its recording strip's settings say too.
   recording: 'Recording',
   progress: {
-    label: 'Progress',
     reset: 'Reset progress',
     title: 'Reset progress?',
     body: 'Learned steps, practised songs and quiz answers on this device will be cleared.',
@@ -44,21 +53,19 @@ export const settings = {
   },
   // The index (round 3): the account, then a page for each group of settings.
   // Settings' grouped list: its sections.
-  sections: { general: 'General', keyboard: 'Keyboard and recording' },
+  sections: { general: 'General' },
   groups: {
     playing: { label: 'Playing' },
-    data: { label: 'Sync and data' },
     help: { label: 'Help' },
   },
   account: {
     signIn: 'Sign in',
     label: 'Account',
+    why: 'Sign in to sync your songs on every device',
   },
   sync: {
     label: 'Sync',
-    info: 'While you’re signed in, your songs, progress and settings sync by themselves whenever you’re online. Sync now does it at once.',
     now: 'Sync now',
-    signedOut: 'Sign in to keep your songs, progress and settings on every device.',
     state: {
       idle: 'Up to date',
       syncing: 'Syncing…',
@@ -68,6 +75,17 @@ export const settings = {
     waiting_one: '{{count}} change waiting',
     waiting_other: '{{count}} changes waiting',
     last: 'Last synced {{when}}',
+    what: 'Your songs, folders, takes, progress and settings sync while you’re signed in.',
+    // The account card's one line (A15).
+    line: {
+      synced: 'Synced {{when}}',
+      waiting_one: '{{count}} change waiting',
+      waiting_other: '{{count}} changes waiting',
+      offline: 'Offline',
+      failed: 'Last sync failed',
+      syncing: 'Syncing…',
+      idle: 'Up to date',
+    },
   },
   about: {
     version: 'Version',
@@ -87,7 +105,6 @@ export const settings = {
     title: 'Account',
     profileGroup: 'Profile',
     profile: 'Your name',
-    signInGroup: 'Sign-in',
     email: 'Email',
     save: 'Save',
     saved: 'Saved',
@@ -102,11 +119,11 @@ export const settings = {
     delete: {
       button: 'Delete account…',
       title: 'Delete your account?',
-      body: 'Your account and everything synced to it are deleted in 30 days, and you’re signed out on every device now. Sign in before then to cancel. What is on this device stays. Type your email to confirm.',
-      field: 'Your email',
+      body: 'Your account and everything synced to it are deleted in 30 days, and you’re signed out on every device now. Sign in before then to cancel. What is on this device stays.',
       cancel: 'Keep my account',
       confirm: 'Delete',
       scheduled: 'Your account will be deleted on {{date}}. Sign in before then to keep it.',
+      footnote: 'Your account and synced data are deleted after 30 days.',
     },
   },
   // Signing in to an account that is to be deleted.
@@ -162,10 +179,10 @@ export const settings = {
         'Transpose moves the whole song, its key or its chords, in one step that Undo takes back.',
     },
     midi: {
-      title: 'Play on a MIDI keyboard',
-      connect: 'Connect a keyboard by cable or Bluetooth, then choose it with the MIDI button.',
+      title: 'Play on a connected piano',
+      connect: 'Connect a piano by cable or Bluetooth, then choose it with the MIDI button.',
       settings:
-        'Settings → MIDI keyboard: MIDI input and output, whether the app sounds your keys, which keyboard it hears, an octave shift, and a MIDI log of what the keyboard sends.',
+        'Settings → Connect a piano: MIDI input and output, whether the app sounds your keys, which piano it hears, an octave shift, and a MIDI log of what the piano sends.',
       play: 'In Wait mode the Player listens for the notes you play; the Chord finder names the chord you hold.',
     },
     metronome: {

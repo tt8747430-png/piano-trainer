@@ -1,6 +1,6 @@
-import { ChevronRight } from 'lucide-react'
 import type { ComponentProps } from 'react'
 import { cn } from '@/shared/lib'
+import { OpensMark } from './NavMarks'
 import { RowFace, type RowFaceProps } from './RowFace'
 import { rowClass } from './row-class'
 
@@ -41,16 +41,7 @@ export function RowTrigger({
         className,
       )}
     >
-      <RowFace
-        {...face}
-        end={
-          <ChevronRight
-            data-slot="row-chevron"
-            aria-hidden
-            className="size-5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out group-hover/row:translate-x-0.5 group-hover/row:text-foreground"
-          />
-        }
-      />
+      <RowFace {...face} end={<OpensMark />} />
     </button>
   )
 }

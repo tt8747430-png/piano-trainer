@@ -110,16 +110,12 @@ export const common = {
   },
   // The keyboard settings: in the keyboard's rail and in Settings.
   keyboardSettings: {
-    look: 'How the keys look',
-    place: 'Where a page’s keys sit',
-    play: 'How they play',
-    bar: 'The bar over the keys',
     keySize: {
       label: 'Key size',
       detail: 'Fit fills the width with the keys a page shows; the rest scroll in beside them',
       fit: 'Fit',
       large: 'Large',
-      piano: 'Whole piano',
+      piano: 'All 88',
     },
     keyLength: {
       label: 'Key length',
@@ -134,27 +130,31 @@ export const common = {
       all: 'Every key',
       none: 'None',
     },
-    markNotes: 'Name the marked notes',
+    markNotes: 'Names on marked keys',
     markNotesNote: 'A chord’s or a scale’s keys say their note under their degree',
-    chordNames: 'Name the chords played',
+    chordNames: 'Chord names',
     chordNamesNote: 'The bar over the keys names the chord your hand holds',
     dock: {
-      label: 'Keys on a page',
+      label: 'Piano position',
       detail: 'Over the tab bar, or under the page’s title',
       bottom: 'At the bottom',
       top: 'At the top',
     },
-    folded: 'Hide a page’s keys',
-    foldedNote: 'They fold into a Keys button that brings them back',
-    foldedLandscape: 'Hide them on a phone on its side',
-    foldedLandscapeNote: 'Lessons, explorers, songs and the editor; the Player keeps its own',
+    fold: {
+      label: 'Fold the keys',
+      detail:
+        'Folded keys wait in a Keys button that brings them back. On its side: on a phone turned sideways, in lessons, explorers, songs and the editor; the Player keeps its own',
+      never: 'Never',
+      side: 'On its side',
+      always: 'Always',
+    },
     swipe: {
       label: 'A swipe on the keys',
-      detail: 'Scrolls the keyboard, or plays each key it crosses (glissando)',
+      detail: 'Scrolls the on-screen piano, or plays each key it crosses (glissando)',
       scroll: 'Scrolls',
       glissando: 'Plays',
     },
-    typing: 'Play from the computer keyboard',
+    typing: 'Play from the computer keys',
     typingNote: 'The letter keys play the piano',
     typingHint: 'Z X move an octave · Space holds the pedal',
     autoplay: 'Play what you choose',
@@ -213,9 +213,9 @@ export const common = {
     inputNote:
       'The app hears the keys and pedals played on a MIDI keyboard. Off, it hears none and asks nothing as it opens.',
     output: 'MIDI output',
-    outputNote: 'Songs and examples sound from the keyboard’s own speakers',
+    outputNote: 'Songs and examples sound from the piano’s own speakers',
     sound: 'MIDI input plays sound',
-    soundNote: 'For a keyboard without speakers: the app sounds the keys you press',
+    soundNote: 'For a piano without speakers: the app sounds the keys you press',
     needsInput: 'Needs MIDI input',
     unsupportedNote:
       'Web MIDI works in Chrome, Edge, Opera and Firefox on a computer or an Android phone. Safari, and every browser on an iPhone or iPad, has none.',
@@ -224,7 +224,7 @@ export const common = {
     devices: {
       label: 'Connected devices',
       info: 'With more than one connected, the app hears only the one chosen',
-      any: 'Any keyboard',
+      any: 'Any MIDI keyboard',
       none: 'No MIDI devices connected',
       inputOff: 'Turn on MIDI input to see your devices',
       away: 'Not connected',
@@ -234,7 +234,7 @@ export const common = {
     playing: 'Playing',
     octaveShift: {
       label: 'Octave shift',
-      detail: 'Moves what the keyboard plays up or down, for a short keyboard',
+      detail: 'Moves what the piano plays up or down, for a piano with fewer keys',
     },
     touch: {
       label: 'Touch',
@@ -253,14 +253,14 @@ export const common = {
       label: 'Bluetooth',
       connect: 'Connect a Bluetooth MIDI keyboard',
       steps: 'Pair it with this device first: then it shows here',
-      power: 'Turn on the keyboard’s Bluetooth MIDI: its manual says how.',
+      power: 'Turn on the piano’s Bluetooth MIDI: its manual says how.',
       pair: 'Pair it with this device:',
       mac: 'On a Mac: Audio MIDI Setup › Window › Show MIDI Studio › the Bluetooth button › Connect.',
       windows: 'On Windows: Settings › Bluetooth & devices › Add device.',
       android:
         'On Android: pair it in a Bluetooth MIDI app; the phone’s Bluetooth settings alone do not pair MIDI.',
       ios: 'An iPhone or iPad cannot: their browsers have no Web MIDI.',
-      back: 'Come back here: the keyboard shows under Connected devices.',
+      back: 'Come back here: the piano shows under Connected devices.',
     },
     troubleshooting: 'Troubleshooting',
     log: {

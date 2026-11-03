@@ -157,7 +157,7 @@ export const editor: LocaleResources['editor'] = {
   tempo: {
     mark: 'Темп',
     markInfo:
-      'Удерживайте круг и ведите вверх или вниз, тяните мышью или крутите колесо; с клавиатуры ↑ ↓ — на удар в минуту, Page Up и Page Down — на десять, или наберите число.',
+      'Удерживайте круг и ведите вверх или вниз, тяните мышью или крутите колесо; клавишами компьютера ↑ ↓ — на удар в минуту, Page Up и Page Down — на десять, или наберите число.',
     unit: 'Какой нотой считается темп',
     units: {
       '2': 'Половинная',
@@ -589,7 +589,6 @@ export const editor: LocaleResources['editor'] = {
   },
   // An item made in the app, given up on its Settings page (round 28).
   remove: {
-    title: 'Удаление',
     unpublish: 'Снять с публикации',
     unpublishTitle: 'Снять «{{title}}» с публикации?',
     unpublishBody:
@@ -600,6 +599,7 @@ export const editor: LocaleResources['editor'] = {
     deleteBody:
       'Он удалится навсегда вместе с неопубликованными изменениями и всеми сохранёнными версиями.',
     deleted: 'Удалено',
+    footnote: 'Снятие с публикации убирает его у учеников; удаление нельзя отменить.',
   },
   original: {
     draft: 'Публикация',
@@ -685,7 +685,7 @@ export const editor: LocaleResources['editor'] = {
     hearNotes: 'Слышать ноты при правке',
     hearNotesInfo:
       'Нота звучит, когда вы нажимаете на неё в партитуре или меняете её высоту. Сыгранные клавиши звучат всегда.',
-    midi: 'MIDI-клавиатура',
-    keyboard: 'Клавиатура и запись',
+    midi: 'Подключить пианино',
+    sound: 'Звук и запись',
   },
 }

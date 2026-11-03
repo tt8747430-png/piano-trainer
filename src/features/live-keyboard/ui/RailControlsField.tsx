@@ -27,7 +27,11 @@ export function RailControlsField() {
   const store = useSettingsStoreApi()
   const kept = useSettings((state) => selectKeyboard(state).railControls)
   return (
-    <SettingField label={t('railControls.label')} info={t('railControls.detail')}>
+    <SettingField
+      setting="keyboard.railControls"
+      label={t('railControls.label')}
+      info={t('railControls.detail')}
+    >
       <ToggleGrid label={t('railControls.label')}>
         {RAIL_CONTROLS.map((control) => (
           <ToggleTile

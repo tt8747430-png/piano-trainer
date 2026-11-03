@@ -20,17 +20,20 @@ export function SettingField({
   label,
   info,
   layout = 'under',
+  setting,
   children,
 }: {
   label: string
   /** What it does, opened from the ⓘ beside the name. */
   info?: ReactNode
   layout?: keyof typeof LAYOUT
+  /** The preference it sets (`data-setting`): the one page drawing it is its home (R18). */
+  setting?: string
   children: ReactNode
 }) {
   const { head, last } = lastWord(label)
   return (
-    <div data-slot="setting-field" className={LAYOUT[layout]}>
+    <div data-slot="setting-field" data-setting={setting} className={LAYOUT[layout]}>
       {/* The ⓘ goes with the name's last word, never alone at a line's start. */}
       <span className="min-w-0 text-foreground">
         {head ? `${head} ` : null}

@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { ArrowRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Credits, pieceKey, SourceLine, type Entry, shownCredits } from '@/entities/piece'
 import { localText, useLocale, useScaleName } from '@/shared/i18n'
@@ -32,7 +31,7 @@ export function PieceAbout({ entry }: { entry: Entry }) {
     <div className="-mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 print:hidden">
       <ButtonLink
         variant="link"
-        className="group h-auto min-h-11 gap-1.5 self-start px-0 text-base"
+        className="h-auto min-h-11 self-start px-0 text-base"
         render={
           <Link
             to="/practice/scales"
@@ -41,10 +40,6 @@ export function PieceAbout({ entry }: { entry: Entry }) {
         }
       >
         {t('scaleOf', { scale: scaleName(key.tonic, scaleKind) })}
-        <ArrowRight
-          aria-hidden
-          className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-0.5"
-        />
       </ButtonLink>
       {entry.note ? (
         <span className="flex items-center gap-1 text-muted-foreground">

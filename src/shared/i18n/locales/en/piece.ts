@@ -140,6 +140,5 @@ export const piece = {
     changed: 'Changed since',
     notPublished: 'Not published',
     changes: 'Unpublished changes',
-    danger: 'Remove',
   },
 } as const

@@ -1,15 +1,5 @@
 import { Link, useParams, useRouter } from '@tanstack/react-router'
-import {
-  Archive,
-  ArchiveRestore,
-  FilePen,
-  Download,
-  FolderInput,
-  Globe,
-  Link2,
-  RotateCcw,
-  Trash2,
-} from 'lucide-react'
+import { Archive, ArchiveRestore, FilePen, Download, FolderInput, Globe, Link2 } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { placeIn, useFolderName, useLibraryLayout } from '@/entities/library'
@@ -33,6 +23,8 @@ import {
   BackButton,
   ButtonLink,
   NotFound,
+  DangerGroup,
+  DangerRow,
   RowButton,
   RowLink,
   ScreenHeader,
@@ -165,15 +157,14 @@ function SongSettings({ piece }: { piece: Piece }) {
         {original ? <UnpublishedChanges piece={original} title={title} /> : null}
         {ownMusic ? (
           <div ref={danger}>
-            <SettingsGroup flush title={t('settings.danger')}>
-              <RowButton
+            <DangerGroup
+              footnote={t(ownMusic.kind === 'song' ? 'deleting.says' : 'resetting.says')}
+            >
+              <DangerRow
                 title={t(ownMusic.kind === 'song' ? 'delete' : 'reset')}
-                icon={ownMusic.kind === 'song' ? Trash2 : RotateCcw}
-                paint="sand"
-                destructive
                 onClick={() => setAsking(true)}
               />
-            </SettingsGroup>
+            </DangerGroup>
           </div>
         ) : null}
       </div>

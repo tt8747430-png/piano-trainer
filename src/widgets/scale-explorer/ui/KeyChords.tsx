@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { ScaleChordGrid } from '@/features/play-example'
 import { useLocale } from '@/shared/i18n'
@@ -13,7 +12,7 @@ import {
   type ScaleKind,
   type SpelledNote,
 } from '@/shared/lib/music'
-import { ButtonLink, ChordText } from '@/shared/ui'
+import { ButtonLink, ChordText, OpensMark } from '@/shared/ui'
 import { heardName } from '../model/scale-keys'
 
 /**
@@ -73,7 +72,7 @@ export function KeyChords({
                       }
                     >
                       <ChordText symbol={`${noteName(chord.root)}${chord.suffix}`} />
-                      <ChevronRight aria-hidden className="size-4 text-muted-foreground" />
+                      <OpensMark />
                     </ButtonLink>
                   </li>,
                 ],

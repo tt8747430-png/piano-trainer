@@ -60,7 +60,7 @@ describe('TrainerBoard', () => {
     expect(screen.getByRole('heading', { name: 'Build C' })).toBeInTheDocument()
     const check = screen.getByRole('button', { name: 'Check' })
     expect(check).toBeDisabled()
-    expect(check).toHaveAccessibleDescription('Choose the keys on the keyboard, then Check.')
+    expect(check).toHaveAccessibleDescription('Choose the keys on the on-screen piano, then Check.')
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     await user.click(within(keyboard).getByRole('button', { name: 'C4' }))
     expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-primary')
@@ -95,7 +95,7 @@ describe('TrainerBoard', () => {
         pointerType: 'touch',
       })
     expect(screen.queryByText('Chord played:')).not.toBeInTheDocument()
-    const names = screen.getByRole('button', { name: 'Name the chords played' })
+    const names = screen.getByRole('button', { name: 'Chord names' })
     expect(names).toBeDisabled()
     expect(names).toHaveAttribute('aria-pressed', 'false')
   })

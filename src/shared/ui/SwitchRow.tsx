@@ -20,6 +20,7 @@ export function SwitchRow({
   reason,
   onCheckedChange,
   className,
+  setting,
 }: {
   /** What it turns on, drawn: an icon or a glyph on a muted square, or a row's tile (`TileMark`) as it is. */
   icon?: ReactNode
@@ -32,6 +33,8 @@ export function SwitchRow({
   reason?: string | undefined
   onCheckedChange: (on: boolean) => void
   className?: string
+  /** The preference it sets (`data-setting`): the one page drawing it is its home (R18). */
+  setting?: string
 }) {
   const id = useId()
   const { head, last } = lastWord(label)
@@ -42,6 +45,7 @@ export function SwitchRow({
   return (
     <div
       data-slot="switch-row"
+      data-setting={setting}
       title={why}
       className={cn(
         'relative isolate flex min-h-14 items-center justify-between gap-4 border-b border-border py-2 text-lg',

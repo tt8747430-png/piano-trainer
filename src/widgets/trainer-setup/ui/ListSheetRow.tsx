@@ -1,7 +1,7 @@
-import { Check, ChevronRight } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import { Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import { OpensMark, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 
 /** One choice of a list sheet: its value, its name, and its symbol where it has one. */
 export interface ListOption {
@@ -55,7 +55,7 @@ export function ListSheetRow({
           <span className="min-w-0 text-foreground">{label}</span>
           <span className="flex shrink-0 items-center gap-1 text-muted-foreground tabular-nums">
             {t('choice.chosen', { count: chosen.size, total: all.length })}
-            <ChevronRight aria-hidden className="size-4" />
+            <OpensMark />
           </span>
         </SheetTrigger>
         <SheetContent title={label}>

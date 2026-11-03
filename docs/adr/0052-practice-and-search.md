@@ -20,10 +20,13 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
 - **The Profile** is the learner at a glance: their name as its title, their initial, email (or a guest's Sign in),
   one row of three figures (days in a row, days practised, songs played); rows to Settings and the Account; Activity
   (the month's calendar, whether today kept the run in its header); the rest of the record as a short list; badges.
-- **Settings** is one grouped list: the account card (the learner by their initial, then Sync and data), General,
-  Playing, Help, and an admin's Admin area. **The Account** reads as an edit profile: the initial; Profile (the name,
-  Save once changed); Sign-in (the email, Change password); Sign out and Delete account… as rows, each asking in a
-  dialog that says what follows.
+- **Settings** is one grouped list (R20): the account card (the learner's initial, name, email and one line of the
+  sync), General (General, Storage and backup), Playing (On-screen piano, Connect a piano, Computer keys, Sound and
+  recording), Help, and an admin's Admin area, each row its icon in a coloured square; one column on a phone, two
+  panes from 64rem (the list beside the page, General first, neither with Back). **The Account** reads as an edit
+  profile: the initial; Profile (the name, Save once changed, the email, Change password); Sync (where it stands, Sync
+  now, what syncs: its one home); then Sign out and Delete account…, each red in a group of its own at the foot, a
+  footnote under it, asking through the one confirm dialog (the email typed for Delete).
 - **Practice lists its pages and remembers nothing**, in three headed groups as the reference app and memory-palaces
   list theirs: **Theory** (Chords, Scales and keys, Intervals, Progressions: the things a page shows on the keys),
   **Playing** (Accompaniment, the Chord finder: what the hands play) and **Training** (Exercises, Quiz, Metronome).
@@ -113,3 +116,6 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
 - r29 — Back goes up a parents table (`app/routes/parents.ts`), not back through history; Search a palette over the screen; one metronome engine; the Profile's badges, milestones, notifications and Streak pages (decided 2026-11-02, being built in round 29; spec `.scratch/r29/back-as-up/spec.md`).
 - r29 — Roots, qualities, voicings and scale kinds a row of pickers; the step strips gone (round 29, ADR 0061).
 - r29 — Built: Back goes up the parents table (`useUp`), views and modes replace their entry, Search a palette over the screen (2026-11-02).
+- r29 — Settings in two panes on a laptop; its pages named for what the learner sees (On-screen piano, Connect a
+  piano, Computer keys, Sound and recording, Storage and backup); the account card; picture choices; one set of
+  navigation marks; five row kinds, the destructive ones last and alone (2026-11-03, A12–A17).

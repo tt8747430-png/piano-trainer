@@ -123,7 +123,7 @@ export const quiz = {
   answers: 'Answers',
   check: 'Check',
   // Under Check while no key is chosen: what it waits for.
-  checkHint: 'Choose the keys on the keyboard, then Check.',
+  checkHint: 'Choose the keys on the on-screen piano, then Check.',
   clear: 'Clear',
   showAnswer: 'Show answer',
   reveal: 'Reveal',

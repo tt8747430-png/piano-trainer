@@ -4,6 +4,9 @@ import { useCallback, useSyncExternalStore } from 'react'
 export const LANDSCAPE_PHONE =
   '(orientation: landscape) and (max-height: 500px) and (max-width: 1023px)'
 
+/** A laptop: the sidebar shows, Settings stands in two panes (R20), Settings a place of its own. */
+export const LAPTOP = '(min-width: 64rem)'
+
 /** One MediaQueryList per query and `matchMedia`: a render asks it, it never builds one anew. */
 const lists = new WeakMap<typeof window.matchMedia, Map<string, MediaQueryList>>()
 

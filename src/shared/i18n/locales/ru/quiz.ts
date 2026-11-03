@@ -119,7 +119,7 @@ export const quiz: LocaleResources['quiz'] = {
   playAgain: 'Ещё раз',
   answers: 'Ответы',
   check: 'Проверить',
-  checkHint: 'Выберите клавиши на клавиатуре, затем нажмите «Проверить».',
+  checkHint: 'Выберите клавиши на пианино на экране, затем нажмите «Проверить».',
   clear: 'Сбросить',
   showAnswer: 'Показать ответ',
   reveal: 'Открыть',

@@ -6,6 +6,7 @@ import { COURSES } from '@/entities/course'
 import { LESSONS, lessonPlace } from '@/entities/lesson'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
 import { createFakeContentEditing } from '@/shared/api/content-editing'
+import { expectLastAndAlone } from '@/shared/test/danger'
 
 /** The screen bar's Settings (the gear), not the sidebar's. */
 async function openSettings(user: ReturnType<typeof userEvent.setup>) {
@@ -33,9 +34,9 @@ describe('a lesson’s Settings (round 28)', () => {
       expect(router.state.location.pathname).toBe(`/lessons/${LESSON.id}/settings`),
     )
     expect(await screen.findByText(LESSON.title.en)).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /Lessons read as\s*One page/ })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: /Lessons read as\s*One page/ })).toHaveAttribute(
       'href',
-      '/settings',
+      '/settings/general',
     )
     expect(screen.getByRole('button', { name: 'Share link' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Reset progress' })).toBeInTheDocument()
@@ -52,6 +53,7 @@ describe('a lesson’s Settings (round 28)', () => {
       learned: { [`lesson:${LESSON.id}`]: '2026-10-01', [`lesson:${other.id}`]: '2026-10-01' },
       read: { [`lesson:${LESSON.id}`]: [0, 1] },
     })
+    expectLastAndAlone(await screen.findByRole('button', { name: 'Reset progress' }))
     await user.click(await screen.findByRole('button', { name: 'Reset progress' }))
     const ask = await screen.findByRole('alertdialog', { name: 'Reset this lesson’s progress?' })
     await user.click(within(ask).getByRole('button', { name: 'Reset' }))

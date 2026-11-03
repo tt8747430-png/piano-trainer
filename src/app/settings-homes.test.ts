@@ -8,13 +8,11 @@ const SRC = resolve(import.meta.dirname, '..')
 
 /** Where each page's controls are drawn: its page and the parts it is made of. */
 const PAGE_PATHS: Readonly<Record<SettingsPageId, readonly string[]>> = {
-  general: ['pages/settings/ui/SettingsPage.tsx', 'widgets/welcome/'],
-  'keyboard-and-recording': [
-    'pages/settings/ui/PlayingPage.tsx',
-    'features/live-keyboard/',
-    'features/record-take/ui/',
-  ],
-  midi: ['pages/midi-settings/', 'features/connect-midi/', 'features/live-keyboard/'],
+  general: ['pages/settings/ui/GeneralPage.tsx', 'widgets/welcome/'],
+  'on-screen-piano': ['pages/settings/ui/OnScreenPianoPage.tsx', 'features/live-keyboard/'],
+  'connect-piano': ['pages/midi-settings/', 'features/connect-midi/', 'features/live-keyboard/'],
+  'computer-keys': ['pages/settings/ui/ComputerKeysPage.tsx', 'features/live-keyboard/'],
+  'sound-and-recording': ['pages/settings/ui/SoundPage.tsx', 'features/record-take/ui/'],
   'score-editor': ['pages/score-editor/ui/ScoreSettingsPage.tsx'],
   player: [
     'pages/player/',
@@ -38,7 +36,7 @@ const COMMANDS: Readonly<Record<string, readonly (keyof typeof SETTING_HOMES)[]>
   setMelody: ['melody'],
   setSound: ['sound.rh'],
   setAutoNext: ['trainer.autoNext'],
-  setKeyboard: ['keyboard.keySize'],
+  setKeyboard: ['keyboard.keySize', 'keyboard.typing'],
   setRecorderClick: ['recorder.click'],
   setRecorderTune: ['recorder.tune'],
   setEditing: ['editing.hearNotes'],

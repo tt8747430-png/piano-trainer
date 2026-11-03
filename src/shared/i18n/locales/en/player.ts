@@ -268,8 +268,8 @@ export const player = {
     hands: 'Hands',
     startsOn: { rh: 'Right hand starts on', lh: 'Left hand starts on' },
     out: {
-      above: 'Its run would go past the top of the keyboard',
-      below: 'Its run would go below the bottom of the keyboard',
+      above: 'Its run would go past the top of the piano',
+      below: 'Its run would go below the bottom of the piano',
     },
     tempo: 'Tempo',
     metronome: 'Metronome',

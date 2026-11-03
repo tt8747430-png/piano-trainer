@@ -12,7 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
-import { Button } from '@/shared/ui/primitives/button'
+import { ActionRow } from '@/shared/ui'
 import {
   backupName,
   hasOtherVersions,
@@ -92,28 +92,22 @@ export function BackupFields({
 
   return (
     <>
-      <div className="flex flex-wrap gap-2">
-        <Button variant="outline" onClick={save}>
-          {t('backup.save')}
-        </Button>
-        <Button variant="outline" onClick={() => file.current?.click()}>
-          {t('backup.restore')}
-        </Button>
-        <input
-          ref={file}
-          type="file"
-          accept="application/json,.json"
-          aria-hidden
-          className="sr-only"
-          tabIndex={-1}
-          onChange={(event) => {
-            void open(event.target.files?.[0])
-            event.target.value = ''
-          }}
-        />
-      </div>
+      <ActionRow title={t('backup.save')} onClick={save} />
+      <ActionRow title={t('backup.restore')} onClick={() => file.current?.click()} />
+      <input
+        ref={file}
+        type="file"
+        accept="application/json,.json"
+        aria-hidden
+        className="sr-only"
+        tabIndex={-1}
+        onChange={(event) => {
+          void open(event.target.files?.[0])
+          event.target.value = ''
+        }}
+      />
       {failed ? (
-        <p role="alert" className="text-destructive">
+        <p role="alert" className="px-4 pb-3 text-destructive">
           {t(`backup.${failed}`)}
         </p>
       ) : null}

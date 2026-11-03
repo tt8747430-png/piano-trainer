@@ -5,6 +5,7 @@ import { renderApp } from '@/app/testing/render-app'
 import { COURSES, courseStepIds } from '@/entities/course'
 import { createFakeAuth } from '@/shared/api/auth'
 import { createFakeContentEditing } from '@/shared/api/content-editing'
+import { expectLastAndAlone } from '@/shared/test/danger'
 
 /** The screen bar's Settings (the gear), not the sidebar's. */
 async function openSettings(user: ReturnType<typeof userEvent.setup>) {
@@ -31,6 +32,8 @@ describe('a course’s Settings (round 28)', () => {
     )
     expect(await screen.findByRole('button', { name: 'Share link' })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /Shelf/ })).not.toBeInTheDocument()
+    // Destructive, so last and alone, red, a footnote under it (R25).
+    expectLastAndAlone(screen.getByRole('button', { name: 'Reset progress' }))
     await user.click(screen.getByRole('button', { name: 'Reset progress' }))
     const ask = await screen.findByRole('alertdialog', { name: 'Reset this course’s progress?' })
     await user.click(within(ask).getByRole('button', { name: 'Reset' }))

@@ -20,7 +20,10 @@ describe('StorageFullNotice', () => {
     act(() => storage.setItem('pt-takes', '{}'))
     const alert = await screen.findByRole('alert')
     expect(alert).toHaveTextContent('This device is out of room: your last change was not saved.')
-    expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('href', '/settings/data')
+    expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute(
+      'href',
+      '/settings/storage',
+    )
     await userEvent.setup().click(screen.getByRole('button', { name: 'Close the notice' }))
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
   })

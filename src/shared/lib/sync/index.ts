@@ -13,3 +13,4 @@ export {
   type SyncRunner,
   type SyncStatus,
 } from './runner'
+export { syncLine, type Ago, type SyncLine } from './sync-line'

@@ -13,6 +13,7 @@ export function TuneSwitch() {
   const tune = useSettings((state) => selectRecorder(state).tune)
   return (
     <SwitchRow
+      setting="recorder.tune"
       label={t('recorderSettings.tune')}
       info={t('recorderSettings.tuneInfo')}
       checked={tune}

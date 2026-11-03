@@ -53,6 +53,8 @@ const accountUp: Parent = ({ signedIn }) =>
 
 const toPractice: Parent = () => up({ to: '/practice' })
 const toSettings: Parent = () => up({ to: '/settings' })
+/** A page of Settings: up to its list on a phone; on a laptop the list stands beside it (R20). */
+const settingsPage: Parent = ({ wide }) => (wide ? null : up({ to: '/settings' }))
 const toSongs: Parent = () => up({ to: '/songs' })
 const toLessons: Parent = () => up({ to: '/', search: { view: 'lessons' } })
 const toCourses: Parent = () => up({ to: '/', search: { view: 'courses' } })
@@ -98,12 +100,15 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
 
   // The Profile's and Settings' pages.
   '/shell/profile/activity': () => up({ to: '/profile' }),
-  '/shell/settings/playing': toSettings,
-  '/shell/settings/data': toSettings,
-  '/shell/settings/account': toSettings,
-  '/shell/settings/how-to-use': toSettings,
-  '/shell/settings/midi': toSettings,
-  '/shell/settings/midi/log': () => up({ to: '/settings/midi' }),
+  '/shell/settings/general': settingsPage,
+  '/shell/settings/on-screen-piano': settingsPage,
+  '/shell/settings/computer-keys': settingsPage,
+  '/shell/settings/sound-and-recording': settingsPage,
+  '/shell/settings/storage': settingsPage,
+  '/shell/settings/account': settingsPage,
+  '/shell/settings/how-to-use': settingsPage,
+  '/shell/settings/connect-piano': settingsPage,
+  '/shell/settings/connect-piano/log': () => up({ to: '/settings/connect-piano' }),
   '/shell/admin': toSettings,
   '/shell/legal/privacy': () => up({ to: '/settings/how-to-use' }),
   '/shell/legal/terms': () => up({ to: '/settings/how-to-use' }),

@@ -26,3 +26,12 @@ One row per finding: where, what's wrong, the single fix, its state.
 | A39 | the Metronome | synthesised sounds; no flash; the Player's click its own | recorded CC0 samples (D16), the full-screen flash, and the Player's click and count-in from this engine | open, round 2 (this round) |
 | A30 | Chords page and inversion drills | "one chord fingered by two rules" | checked: placedFingering and blockFingering both use handFingers, the drills' rule; one rule already | checked |
 | B1 | badges | Scale Master by "keys practised" needs a record the app does not keep | counts scales learned (a scale step marked learned), tiers 1 · 3 · 6 · 12; keys practised would need the scale routine to record keys (a later round) | decided |
+| A14 | Settings › Keyboard and recording; Settings › MIDI keyboard | pages named "keyboard" without saying which (R22) | On-screen piano · Connect a piano · Computer keys · Sound and recording, each at `/settings/<id>`; en/ru swept for "keyboard"/«клавиатура» alone | fixed |
+
+### A14 quick test: from the page names alone
+
+- **Metronome** → Sound and recording (its row leads to the Metronome, where its sounds live; a take's metronome switch is on the page itself).
+- **Note names on keys** → On-screen piano (Look: Note names).
+- **My digital piano** → Connect a piano (MIDI input, devices, how to pair by cable or Bluetooth, the MIDI log).
+
+Left: the on-screen piano's accessible name is still "Keyboard" (`common.keyboard`, 27 test files name it); it reads alone only to a screen reader, beside its own buttons.

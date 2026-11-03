@@ -1,9 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, type ShelvedFolder } from '@/entities/library'
 import { cn, useLongPress } from '@/shared/lib'
-import { SwipeRow } from '@/shared/ui'
+import { OpensMark, SwipeRow } from '@/shared/ui'
 import { menuOf, swipeOf, type RowAction } from '../model/row-actions'
 import { FolderFace, type FolderHolds } from './FolderFace'
 import { ROW_BODY, ROW_CARD } from './row-class'
@@ -48,10 +47,7 @@ export function FolderRow({
             {...press}
           >
             <FolderFace folder={folder} holds={holds} />
-            <ChevronRight
-              aria-hidden
-              className="size-5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out group-hover/row:translate-x-0.5"
-            />
+            <OpensMark />
           </Link>
           <RowMore
             label={t('library.moreOf', { name: nameOf(folder) })}

@@ -32,10 +32,10 @@ export function RecordingSettings({ className }: { className?: string }) {
       >
         <SoundVolumes staves={staves} recording={false} />
         <RowLink
-          title={t('settings:recording')}
+          title={t('settings:pages.sound')}
           icon={Mic}
           paint="lilac"
-          render={<Link to="/settings/playing" />}
+          render={<Link to="/settings/sound-and-recording" />}
         />
       </PopoverContent>
     </Popover>

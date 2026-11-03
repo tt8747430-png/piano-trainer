@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { createFakeAuth } from '@/shared/api/auth'
+import { expectLastAndAlone } from '@/shared/test/danger'
 
 const ANA = { email: 'ana@example.com', name: 'Ana', password: 'correct horse' }
 
@@ -14,20 +15,19 @@ async function signedIn(now?: () => number) {
 }
 
 describe('Settings, signed in', () => {
-  it('shows the learner on the account card, leading to their account', async () => {
+  it('shows the learner on the account card, with where the sync stands, leading to their account', async () => {
     await renderApp('/settings', { auth: await signedIn() })
     const card = await screen.findByRole('navigation', { name: 'Account' })
-    const learner = () => within(card).getAllByRole('link')[0]!
-    await waitFor(() => expect(learner()).toHaveTextContent(/Ana\s*ana@example.com/))
+    const learner = () => within(card).getByRole('link')
+    await waitFor(() => expect(learner()).toHaveTextContent(/Ana\s*ana@example.com\s*Synced/))
     expect(learner()).toHaveAttribute('href', '/settings/account')
-    expect(within(card).getByRole('link', { name: /Sync and data/ })).toHaveTextContent(
-      'Up to date',
-    )
+    // Sync now has one home, the Account (A15).
+    expect(screen.queryByRole('button', { name: 'Sync now' })).toBeNull()
   })
 
-  it('syncs now from Sync and data, saying where the sync stands', async () => {
+  it('syncs now from the Account, saying where the sync stands', async () => {
     const user = userEvent.setup()
-    await renderApp('/settings/data', { auth: await signedIn() })
+    await renderApp('/settings/account', { auth: await signedIn() })
     const sync = await screen.findByRole('region', { name: 'Sync' })
     await user.click(await within(sync).findByRole('button', { name: 'Sync now' }))
     expect(await within(sync).findByText(/Last synced/)).toBeVisible()
@@ -36,9 +36,10 @@ describe('Settings, signed in', () => {
 })
 
 describe('Settings › Account', () => {
-  it('shows the learner’s email and Change password under Sign-in', async () => {
+  it('shows the learner’s email and Change password under their name', async () => {
     await renderApp('/settings/account', { auth: await signedIn() })
-    const signIn = await screen.findByRole('region', { name: 'Sign-in' })
+    await screen.findByLabelText('Your name')
+    const signIn = screen.getByRole('link', { name: 'Change password' }).closest('section')!
     expect(signIn).toHaveTextContent(/Email\s*ana@example.com/)
     expect(within(signIn).getByRole('link', { name: 'Change password' })).toHaveAttribute(
       'href',
@@ -59,6 +60,18 @@ describe('Settings › Account', () => {
     expect(await screen.findByText('Saved')).toBeVisible()
     expect(await auth.current()).toMatchObject({ name: 'Anna' })
     expect(screen.queryByRole('button', { name: 'Save' })).toBeNull()
+  })
+
+  it('puts Sign out and Delete account last, each red and alone with its footnote (R25)', async () => {
+    await renderApp('/settings/account', { auth: await signedIn() })
+    const signOut = await screen.findByRole('button', { name: 'Sign out' })
+    const remove = screen.getByRole('button', { name: 'Delete account…' })
+    expectLastAndAlone(signOut)
+    expectLastAndAlone(remove)
+    expect(signOut.closest('section')).not.toBe(remove.closest('section'))
+    expect(remove.closest('section')).toHaveTextContent(
+      'Your account and synced data are deleted after 30 days.',
+    )
   })
 
   it('signs out once asked, saying what stays, and goes back to Settings', async () => {
@@ -82,7 +95,10 @@ describe('Settings › Account', () => {
     expect(dialog).toHaveTextContent('deleted in 30 days')
     const confirm = within(dialog).getByRole('button', { name: 'Delete' })
     expect(confirm).toBeDisabled()
-    await user.type(within(dialog).getByLabelText('Your email'), 'ANA@example.com')
+    await user.type(
+      within(dialog).getByLabelText('Type “ana@example.com” to confirm'),
+      'ana@example.com',
+    )
     await user.click(confirm)
     expect(
       await screen.findByText(

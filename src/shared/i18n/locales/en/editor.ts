@@ -179,7 +179,7 @@ export const editor = {
   tempo: {
     mark: 'Tempo',
     markInfo:
-      'Hold the circle and swipe up or down, drag it with the mouse or turn the mouse wheel; with the keyboard, ↑ ↓ a beat a minute, Page Up and Page Down ten, or type the number.',
+      'Hold the circle and swipe up or down, drag it with the mouse or turn the mouse wheel; with the computer keys, ↑ ↓ a beat a minute, Page Up and Page Down ten, or type the number.',
     unit: 'The note the tempo counts',
     units: {
       '2': 'Half note',
@@ -653,7 +653,6 @@ export const editor = {
   },
   // An item made in the app, given up on its Settings page (round 28).
   remove: {
-    title: 'Remove',
     unpublish: 'Unpublish',
     unpublishTitle: 'Unpublish {{title}}?',
     unpublishBody:
@@ -664,6 +663,7 @@ export const editor = {
     deleteBody:
       'It is deleted for good, with its unpublished changes and every version kept of it.',
     deleted: 'Deleted',
+    footnote: 'Unpublishing takes it from learners; deleting it can’t be undone.',
   },
   original: {
     draft: 'Publishing',
@@ -751,7 +751,7 @@ export const editor = {
     hearNotes: 'Hear notes as you edit',
     hearNotesInfo:
       'A note sounds when you tap it on the score or move its pitch. Keys you play sound anyway.',
-    midi: 'MIDI keyboard',
-    keyboard: 'Keyboard and recording',
+    midi: 'Connect a piano',
+    sound: 'Sound and recording',
   },
 } as const

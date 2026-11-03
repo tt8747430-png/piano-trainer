@@ -1,10 +1,4 @@
-import {
-  BookOpenText,
-  ChartNoAxesColumnIncreasing,
-  Check,
-  ChevronRight,
-  KeyboardMusic,
-} from 'lucide-react'
+import { BookOpenText, ChartNoAxesColumnIncreasing, Check, KeyboardMusic } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -31,7 +25,7 @@ import {
 } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn, useSetSearch } from '@/shared/lib'
-import { ChoiceChips, PAINT, ProgressRing } from '@/shared/ui'
+import { ChoiceChips, OpensMark, PAINT, ProgressRing } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
 import type { LearnView } from '../model/learn-view'
 import { journeyProgress, lessonShare } from '../model/progress'
@@ -132,10 +126,7 @@ function StepRow({
             {t('upNext')}
           </span>
         ) : null}
-        <ChevronRight
-          aria-hidden
-          className="size-5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-foreground"
-        />
+        <OpensMark />
       </StepLink>
     </li>
   )
