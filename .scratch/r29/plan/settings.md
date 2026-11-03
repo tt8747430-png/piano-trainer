@@ -497,16 +497,372 @@ What stays on a Practice page and what goes to its Settings, decided once:
 
 ## ST15: The Player: its bar and its Settings page
 
+- **Source:** Decided 20 (413–417), Decided 21 (425–433: "No settings scattered in the header across four menus";
+  "No duplicate menus or settings anywhere: check the Player"), R9, R18 (190–193), B7 (1850–1856), B8 Display
+  (1866–1868, Flat/new-app references), round 1 S9 (kept where not corrected).
+- **Today** (`pages/player/ui/PlayerLayout.tsx`, `PlayerPage.tsx`, `PlayerMore.tsx`, `PlayerViewMenu.tsx`,
+  `widgets/player-settings/ui/PlayerSettings.tsx`):
+  - Bar: Close · title · MIDI · **Setup** (sheet: Staves Play/Show per staff; a chart's chord size, pattern, swing)
+    · **gear** (cog; a song's → `/play/$pieceId/settings`, a walk's/progression's/exercise's → `/settings/player`)
+    · **More** (Add to favourites, Move to…, Archive, Song information, Sections, **Score settings** (icon
+    `Settings2` → `/edit/$pieceId/settings`), Print, **Export…**) · Edit.
+  - Tools row: **View** (views as tiles + "Show this when opening a song" switch; the view's own part: Layout,
+    Show chips Chord symbols/Positions/Words/Fingers/Note names; Diagrams' mode; Lyrics' pinned and text size;
+    Keys), Transpose, Simplify.
+  - Dock: tempo, ‹ ▶ ›, loop, click (metronome on/off), hands.
+  - Settings page: Audio playback (a slider per staff, the recording, the metronome; Only the chords), Metronome ›
+    (to the Metronome *page*), Playback speed (Speed training 2 · 5 · 10 %), Display (Count-in, Cursor, **Layout**,
+    **Keys**, **Finger numbers**), Practice (Other hand, Play the other hand), Pedal.
+  - Four menus in the header hold settings or settings links (Setup, gear, More › Score settings, View), and three
+    settings are drawn twice (Layout, Keys, Finger numbers).
+- **Decision and why:** each of the bar's menus gets one job, named by what it holds, and no setting sits in a menu
+  (DESIGN.md "a menu never holds a setting"; HIG: showing or hiding parts of the view belongs on the screen):
+  - **Setup** = this song's arrangement now (which staves play and show, and how loud; a chart's pattern): the
+    reference app's "Version"/Practice choices, Flat's mixer. Per song, in the URL; the staff volumes join it.
+  - **View** = what you look at now: the view and what it shows. Chordify keeps its view choices on the song
+    screen; HIG says the same.
+  - **gear** = how the Player always behaves, for every song (Flat's Playback options: count-in, speed step,
+    metronome link; the reference's Display: countdown, cursor).
+  - **More** = acts on this song while playing (Song information, Sections, Print, ♡ Favourite, R11). Library acts
+    (Move to, Archive) and Export… are the song's Settings' (ST17), Score settings is the editor's gear (ST16).
+- **Will build:**
+  - **Bar** (in order): Close · title · MIDI · Setup · `SettingsGear name="Player"` · More · Edit (A38's
+    "Edit score" icon, practice-redesign/A38). Tools row: View · Transpose · Simplify (unchanged). Dock unchanged.
+  - **More** (`PlayerMore.tsx`): **Add to Favourites / Remove from Favourites**, **Song information**,
+    **Sections**, **Print**. Removed: Move to…, Archive (from `MoreActions` value in `PlayerPage.tsx:156`),
+    Score settings (`PlayerPage.tsx:128–135`), Export… (`PlayerMore.tsx` `export`).
+  - **View** (`PlayerViewMenu.tsx`): views tiles; the view's own part (unchanged: Layout and Show chips for the
+    sheet, Diagrams' mode, Lyrics' pinned and text size, the Grid's words); Keys. The switch "Show this when
+    opening a song" leaves (a setting in a menu) → Settings row 5.
+  - **Setup › Staves** (`widgets/player-setup/ui/StavesSection.tsx`): each staff a row: its name, **Play** switch,
+    **Show** switch, and a **Volume** slider 0–100 % under it, drawn while Play is on (`sound.staves[id]`, saved by
+    staff place for every song as today); the recording's row the same (`sound.recording`); `ActionRow` **"Only
+    the chords"** under them where the song has a recording. Moved from the settings page; one row per staff
+    holds everything about that staff (Flat's mixer: mute and volume on one line).
+  - **Settings page**: routes (full-screen, each a child of its Player route, its search kept):
+    `/play/$pieceId/settings` (exists), new `/play/walk/settings`, `/play/chromatic/settings`,
+    `/play/progression/settings`, `/play/exercise/$exerciseId/settings`, all drawing `src/pages/player/ui/
+    PlayerSettingsPage.tsx` (renamed from `PieceSettingsPage`) in `PageSettingsScreen`, name "Player" (ru
+    «Плеер»). `/settings/player` goes.
+    - Group **"Playback"** (ru «Воспроизведение»):
+      1. `ChoiceRow` **"Count-in"** — segmented **None** · **Audible** · **Visual**, default None
+         (`playback.countdown`).
+      2. `ChoiceRow` **"Pedal"** — segmented **As written** · **Off** · **Automatic**, default As written
+         (`playback.pedal`).
+      3. `ChoiceRow` **"Speed training step"** — segmented 2 % · 5 % · 10 %, default 5 % (`playback.speedStep`).
+      4. `RowLink` **"Metronome"** › value its sound and volume ("Click, 100 %") → `/practice/metronome/settings`
+         (the click's one home, ST13).
+    - Group **"Display"** (ru «Отображение»):
+      5. `SwitchRow` **"Choose the view when a song opens"** (Chordify: "Show this when opening a song"), default off
+         (`scoreView.askOnOpen`).
+      6. `ChoiceRow` **"Cursor"** — segmented **None** · **Beats** · **Continuous**, default Continuous
+         (`playback.cursor`).
+      7. B8's **"Clef"** joins here when A35 engraves it (R30: not before).
+    - Group **"One hand"** (ru «Одна рука»; was "Practice"):
+      8. `ChoiceRow` **"Other hand"** — segmented **Show** · **Dim** · **Hide**, default Dim (`otherHand.look`).
+      9. `SwitchRow` **"Play the other hand"**, default on (`otherHand.play`).
+    - Group **"Piano"** (ST0).
+    - Removed from it: Audio playback (to Setup), the Metronome slider (ST13), Layout, Keys, Finger numbers (the
+      View's alone).
+  - B10's "Player toolbar" customisation (Decided 9) is the Player's own setting: it lands here as group
+    **"Toolbar"** › in round 13, not in the app's Settings.
+  - Files: `widgets/player-settings/` deleted (the page's groups in `pages/player/ui/PlayerSettingsPage.tsx`);
+    `pages/settings/ui/PlayerSettingsPage.tsx` (+ test) deleted; `PlayerLayout.tsx` `onSettings` becomes required
+    (each Player route passes its own `/settings` path); `features/set-preference` `onlyTheChords`, `setStaffVolume`
+    used by `StavesSection`.
+- **Not in this item:** Transpose (rounds 3–4 T), B8's Modes/Version/Tools sheets (round 14).
+- **Done when:**
+  - `src/pages/player/ui/PlayerSettingsPage.test.tsx`: `it.each` over `/play/fur-elise`, `/play/walk?…`,
+    `/play/progression?…`, `/play/exercise/hanon-1`: "the gear opens `<path>/settings` and Back returns to the
+    Player with its search"; "has no Layout, Keys, Finger numbers or volume row"; "Metronome › opens the Metronome's
+    settings".
+  - `PlayerMore.test.tsx` "More holds Favourite, Song information, Sections, Print only".
+  - `PlayerViewMenu.test.tsx` "has no switch".
+  - `widgets/player-setup/ui/PlayerSetup.test.tsx` "each staff has Play, Show and Volume; a muted staff hides its
+    Volume"; "Only the chords mutes the staves and keeps the recording".
+  - Screenshots `player-bar-*`, `player-settings-*`, `player-setup-staves-*` at the three sizes (a song with a
+    recording).
+
 ## ST16: The score editor: its bar and its Settings page
+
+- **Source:** Decided 20 ("Play notes while editing"; the score editor's own Settings), Decided 21 (425–428: "the
+  editor's Sound popover that only links to Settings goes"; one icon, one meaning), R18 (198), B7, round 1 S10
+  (kept, corrected by Corrections 6).
+- **Today:**
+  - Bar (`EditorHeader.tsx`): Close · title · MIDI · Undo · Redo · gear (`Settings2` → `/edit/$pieceId/settings`) ·
+    draft status and menu (an editor's) · Done. Tools row (`EditorToolsRow.tsx`): **View** (eye: Layout, Show chips
+    Chord symbols/Words/Fingers, **Keys** chip writing `keyboard.folded` through `useFoldKeys`), Transpose. Dock
+    (`EditorDock.tsx`): tempo, transport, Record, Takes, **Sound** (`RecordingSettings.tsx`: a popover of two links,
+    "Audio playback" → `/settings/player`, "Sound and recording" → `/settings/sound-and-recording`).
+  - Settings (`ScoreSettingsPage.tsx`): Score (title, subtitle, composer, lyricist, arranger), Instruments, Music
+    (**Tempo**, **Key**, **Time** popovers, Bars stepper), Layout (Staff size, Bars per line), then `EditingGroup`
+    (Hear notes as you edit; links Connect a piano, Sound and recording, Player). `/settings/score-editor` draws
+    `EditingGroup` again.
+  - Tempo, Key and Time are also edited by tapping the printed marking (`PrintedEdit.tsx`) and from the palette.
+- **Decision and why:**
+  - The score's Settings is the lesson model: this score's own facts, then how the editor always writes. Flat's,
+    MuseScore's and Dorico's score properties hold the title and credits and the layout; key, time and tempo are
+    written on the music, from the palette or by editing the marking (Flat's toolbar, MuseScore's palettes,
+    Dorico's popovers). So Tempo, Key and Time leave the Settings page: one place, on the score.
+  - The View is drawn in both modes of the one score screen (ADR 0115: the Player and the editor are one screen,
+    Practise · Edit). Its controls are one component writing one set of keys, in one place on that screen (the
+    tools row's first tool); it is not a second home. Keys: today the editor's Keys chip writes a different
+    setting (`keyboard.folded`) from the Player's (`scoreView.keys`) for the same thing; one key, `scoreView.keys`.
+  - The Sound popover only linked elsewhere (Decided 21): it goes, and the dock keeps Record and Takes.
+- **Will build:**
+  - **Bar:** Close · title · MIDI · Undo · Redo · `SettingsGear name="Score"` ("Score settings") · draft status and
+    its menu (an editor's) · Done. The `Settings2` icon goes (ST0).
+  - **Tools row:** View (eye; Layout, Show: Chord symbols · Words · Fingers, **Keys** writing `scoreView.keys`),
+    Transpose.
+  - **Dock:** tempo, transport, Record, Takes. `RecordingSettings.tsx` deleted (also from `RecordingStrip.tsx`).
+  - **Settings page** `/edit/$pieceId/settings` in `PageSettingsScreen`, name: the score's title.
+    - Group **"Title and credits"** (ru «Название и авторы»): the five text rows (unchanged).
+    - Group **"Instruments"** (unchanged, `widgets/instrument-list`).
+    - Group **"Bars"** (ru «Такты»): stepper **"Number of bars"** 1–`MOST_BARS` (unchanged control).
+    - Group **"Layout"** (ru «Вёрстка»): **"Staff size"**, **"Bars per line"** (unchanged).
+    - Group **"Note input"** (ru «Ввод нот»; MuseScore's and Dorico's section): 1. `SwitchRow` **"Play notes while
+      editing"** (ru «Проигрывать ноты при вводе»), ⓘ "A note sounds when you enter it, select it or change its
+      pitch", default on (`editing.playNotes`, renamed from `hearNotes`). Round 4 adds Input mode (Replace ·
+      Insert) and Palette side here when they exist.
+    - Group **"Recording"** (ru «Запись»): 2. `SwitchRow` **"Metronome while recording"** (Flat/Logic: "Click while
+      recording"; label **"Click while recording"**, ru «Метроном при записи»), default on (`recorder.click`, home
+      `score-editor`). Its sound and volume are the Metronome's (link row 3: `RowLink` **"Metronome"** › →
+      `/practice/metronome/settings`).
+    - Group **"Piano"** (ST0) and `RowLink` **"Player settings"** › → `/play/$pieceId/settings` (count-in and
+      the other playback rows the editor's Play also uses).
+    - Destructive rows for the score stay where they are today (an own song's Delete is on the song's Settings,
+      ST17).
+    - B10's editor toolbar customisation lands here as group **"Toolbar"** › in round 13.
+  - Removed: `/settings/score-editor`, `pages/settings/ui/ScoreEditorSettingsPage.tsx`, `widgets/editor-settings/`
+    (Note input in `pages/score-editor/ui/NoteInputGroup.tsx`), Music's Tempo/Key/Time rows, the Player's More ›
+    Score settings (ST15).
+  - The lesson example editor (`/lessons/$lessonId/example`) keeps no gear (its score is the lesson's).
+- **Done when:**
+  - `pages/score-editor/ui/ScoreSettingsPage.test.tsx`: "draws Play notes while editing once, under Note input";
+    "has no Tempo, Key or Time row"; "Click while recording is here".
+  - `ScoreEditorPage.test.tsx` "the dock has no Sound button"; "View › Keys hides the keys in the editor and in the
+    Player alike" (one key).
+  - The avoid-words test fails on "Hear notes" in either locale.
+  - Screenshots `editor-bar-*`, `score-settings-*` at the three sizes.
 
 ## ST17: Songs: the songs page, a folder, a song's overview
 
+- **Source:** Decided 21 (431–432: "Songs (the songs page, a folder, a song's overview) has its own Settings page
+  from its own gear"; 459: "Songs' Settings page: maybe one row now; decide what is best"); D8, D10, R16, R17,
+  R25; B9 (folder and song acts, appearance), B10 (swipe and Select bars).
+- **Today:** Songs' bar (`pages/songs/ui/LibraryHeader.tsx`): Select, Archive (opens `/songs/archive`). A folder's
+  bar: Select and a ⋯ menu (Edit folder, Move to…, Archive, Delete). A song's page bar: Settings gear and Edit; its
+  Settings (`SongSettingsPage.tsx`): Library (Folder, Archive), Share (Export…, Share link, Publish in library),
+  Unpublished changes (status and its menu, an editor's), Delete or Reset. Sort is beside the search
+  (`LibraryFilters.tsx`, `pt-library.sort`): a view of the list, it stays there (HIG: sorting on the screen).
+- **Decision and why:**
+  - **The songs page** has one real app-wide-for-Songs choice today: what a tap on a song opens. A church
+    accompanist with a phone on the stand wants the music at once; a learner wants the overview first. Spotify and
+    Apple Music open an item's page; Chordify and MuseScore's app open the player. Both are honest, so it is a
+    setting. B10's Swipe actions and Select bar for song rows, and B9's Card style, are this page's too (they
+    shape Songs' rows only), so the page grows into a real one; until then it has one row (R30: no empty rows).
+  - **A folder's** ⋯ menu holds the folder's facts and acts: they move to its Settings page (Noji's deck, memory-
+    palaces' deck settings), and the ⋯ goes, so the bar has one way to each act.
+  - **A song's** Settings stays as built, with the duplicates removed (ST15, ST19).
+- **Will build:**
+  - **Songs settings** `/songs/settings` (static path, wins over `/songs/$pieceId`), gear "Songs settings" in
+    Songs' bar after Archive; `src/pages/songs/ui/SongsSettingsPage.tsx`, name "Songs".
+    - Group **"Opening a song"** (ru «Открытие песни»): 1. `PictureChoice` **"A tap on a song opens"** — **Song
+      page** · **Player** (a page outline; a score with a play mark), default Song page (`songs.open:
+      'page' | 'player'` in `pt-settings`, home `songs`). Songs' and a folder's rows and Search's song results
+      follow it; a row's ⋯ keeps both "Open" and "Practise".
+    - Rounds 13–14 add group **"Rows"**: Swipe actions ›, Select bar ›, Card style › (B9, B10).
+  - **Folder settings** `/songs/folders/$folderId/settings`, gear "Folder settings" replacing the folder bar's ⋯;
+    `src/pages/songs/ui/FolderSettingsPage.tsx`, name: the folder's name.
+    - Group **"Folder"** (ru «Папка»): `RowButton` **"Name"** › value the name (opens today's name sheet);
+      **"Colour"** › value its swatch (B9 adds cover and icon as "Appearance" ›).
+    - Group **"Library"** (ru «Библиотека»): `RowButton` **"Move to"** › value the parent ("Home"); `ActionRow`
+      **"Archive folder"** (confirms, R17, with Undo).
+    - `DangerGroup`: **"Delete folder"** (confirms, R17; footnote "Its songs move to the Archive.").
+    - Built-in folders (D8): a learner sees no gear (nothing there is theirs to change, R30); an editor outside
+      Learner view sees the page, every row allowed by `entities/library`'s permission function.
+  - **A song's Settings** `/songs/$pieceId/settings` (exists), in `PageSettingsScreen`: Library (Folder ›,
+    Archive), Share (Export…, Share link, Publish in library ›), an editor's **"Unpublished changes"** `RowLink` ›
+    with its status as value, opening the editor where its menu is (ST19 row 22), then Delete or Reset last.
+  - Files: `LibraryHeader.tsx` (folder ⋯ goes, gear added), `FolderPage.tsx`, router and parents (ST20).
+- **Not in this item:** B9 Appearance, Card style; B10's pages.
+- **Done when:**
+  - `SongsSettingsPage.test.tsx` "opens from the gear, Back to Songs"; "Player makes a tap on a row open the Player".
+  - `FolderSettingsPage.test.tsx` "Rename, Move to, Archive and Delete from the page; Back to the folder"; "a learner
+    in a built-in folder sees no gear".
+  - `SongSettingsPage.test.tsx` "Unpublished changes is a link to the editor, with no menu here".
+  - `back-as-up.test.tsx` Songs → folder → folder settings → Back ×2 lands in Songs.
+  - Screenshots `songs-settings-*`, `folder-settings-*`, `song-settings-*` at the three sizes.
+
 ## ST18: Lessons and courses (reading moves in)
+
+- **Source:** Decided 21 (437–438: "lessons' 'read as' is a lesson setting"), R18 (188–195).
+- **Today:** "Lessons read as" (`lessonReading`) is a menu in Settings › General; a lesson's Settings has a link row
+  "Reading" › to General.
+- **Will build:**
+  - `lessonReading` home `lesson`. A lesson's Settings (`/lessons/$lessonId/settings`) and a course lesson's
+    (`/courses/$courseId/$lessonId/settings`) draw the control, the same `LessonSettings` component (one component,
+    one key): group **"Reading"** (ru «Чтение»), `PictureChoice` **"Read as"** (ru «Читать») — **One page** · **A
+    section at a time** (a long page outline; one card with dots), default One page.
+  - Applies to every lesson (it is how lessons read, not this lesson's), so its footnote says "For every lesson."
+  - General's row and the link row go. A course's Settings has no reading row.
+- **Done when:** `LessonSettingsPage.test.tsx` "A section at a time here makes every lesson read by sections";
+  `GeneralPage.test.tsx` "has no reading row"; `settings-pages.test.tsx` passes with `lessonReading` drawn at both
+  lesson routes (one home, one component; see ST20).
 
 ## ST19: The duplicate audit
 
+Every setting or act drawn in two places today (read in the code at `6b5d3ebe`), its one home, and what goes.
+"Context menus" (a row's ⋯, long press, swipe, Select's bar) repeat an item's acts by design and are not listed.
+
+| # | Setting or act | Drawn today on | One home after | Removed from | Item |
+|---|---|---|---|---|---|
+| 1 | Play notes while editing (`editing.hearNotes` → `playNotes`) | Settings › Score editor; score's Settings | Score settings › Note input | `/settings/score-editor` | ST16 |
+| 2 | The Player's whole set (`playback.*`, `otherHand.*`) | Settings › Player; a song's Player gear | the Player's gear page | `/settings/player` and its list row | ST15 |
+| 3 | Layout (`scoreView.layout`) | Player settings › Display; View | View | Player settings | ST15 |
+| 4 | Keys under the score (`scoreView.keys`) | Player settings › Display; Player's View; editor's View writes `keyboard.folded` instead | View, one key in both modes | Player settings; the editor's `useFoldKeys` chip | ST15, ST16 |
+| 5 | Finger numbers (`practice.fingerNumbers`) | Player settings › Display; View › Fingers | View | Player settings | ST15 |
+| 6 | Choose the view when a song opens (`scoreView.askOnOpen`) | View (a switch in a menu) | Player settings › Display | View | ST15 |
+| 7 | Metronome volume (`sound.click` → `metronome.volume`) | Player settings › Audio playback; the Metronome | Metronome settings › Volume | Player settings | ST13 |
+| 8 | Staff and recording volumes, Only the chords | Player settings › Audio playback, while Play/Show per staff are in Setup | Setup › Staves (one row per staff) | Player settings | ST15 |
+| 9 | Click while recording (`recorder.click`) | Sound and recording | Score settings › Recording | Sound and recording | ST5, ST16 |
+| 10 | Play melody (`recorder.tune`) | Sound and recording | none (deleted, A35) | everywhere | ST5 |
+| 11 | Lesson reading (`lessonReading`) | General; a link on the lesson's Settings | the lesson's Settings | General | ST18 |
+| 12 | Each Practice page's settings | `/settings/<page>` from the gear and from Settings' Practice group | `/practice/<page>/settings` | Settings' Practice group, `/settings/<page>` routes | ST7–ST14 |
+| 13 | The editor's Sound popover (two links) | editor dock, recording strip | none (links to pages that keep their homes) | `RecordingSettings.tsx` | ST16 |
+| 14 | Note names, Chord names, Glissando (`keyboard.namedKeys`, `chordNames`, `swipe`) | On-screen piano; the rail's buttons | On-screen piano page | the rail | ST2 |
+| 15 | Computer keys play (`keyboard.typing`) | Computer keys; the rail's ⌨ | Computer keys | the rail | ST2, ST4 |
+| 16 | MIDI sound (`midi.sound`) | Connect a piano; the rail's MIDI sound | Connect a piano › Sound | the rail | ST2, ST3 |
+| 17 | Key size (`keyboard.keySize`) | On-screen piano pictures; the rail's − + | the rail's − + | On-screen piano | ST2 |
+| 18 | Folding the keys (`keyboard.folded`) | On-screen piano "Fold the keys › Always"; the rail's ⌄ | the rail's ⌄ (and the Keys button back) | On-screen piano (keeps only "Hide on a phone on its side") | ST2 |
+| 19 | Which rail buttons (`keyboard.railControls`) | On-screen piano | none (the rail is fixed) | everywhere | ST2 |
+| 20 | Export… | the song's Settings; the Player's More | the song's Settings | the Player's More | ST15, ST17 |
+| 21 | Move to…, Archive (a song) | the song's Settings; the Player's More | the song's Settings | the Player's More | ST15 |
+| 22 | Unpublished changes' menu (Publish, Versions, Discard) | the editor's bar by Done; the song's Settings | the editor's bar | the song's Settings (a link row stays) | ST17 |
+| 23 | Score settings | the editor's gear; the Player's More | the editor's gear | the Player's More | ST15, ST16 |
+| 24 | Tempo, Key, Time of a score | Score settings › Music; the printed marking; the palette | the score (marking and palette) | Score settings | ST16 |
+| 25 | A folder's Edit, Move to, Archive, Delete | the folder bar's ⋯ | the folder's Settings | the ⋯ (the bar gets the gear) | ST17 |
+| 26 | Play what you choose (`keyboard.autoplay`) | On-screen piano (about Practice pages) | each explorer's "Play when chosen" | On-screen piano | ST7–ST10 |
+| 27 | Chord finder's choices | Settings › Chord finder; the "⚙ C" button's sheet | Chord finder settings (gear) | "⚙ C" | ST12 |
+| 28 | Two gear icons (cog, `Settings2`) for one act | Player, editor, practice pages | `SettingsGear` (cog) | `Settings2` gears | ST0 |
+| 29 | Rounds, Time limit | each drill's setup (per URL) | Exercises and Quiz settings | the setups | ST14 |
+| 30 | Scales' fingering method | Notes tab toggle per scale | Scales and keys settings | the tab | ST8 |
+
+Checked and kept (not duplicates): the welcome's language choice (a one-time first-run step, R11-style; General is
+its home afterwards); the transport's click toggle (`practice.metronome`, an on/off of the click for this play, its
+only control); Speed training's on/off in the tempo popover beside its step in settings (two different settings);
+Sort beside the search (one control); the MIDI button in bars (a status that opens Connect a piano).
+
 ## ST20: Registry, routes, parents and the tests that hold one home
+
+- **Source:** A10 (654–660: "Define the settings once, in a registry (key, home, label, control), and render pages
+  from it … A test fails if a setting key is rendered on more than one page"); round 1 S14 (kept, corrected).
+- **Today:** `src/entities/settings/model/registry.ts`: `SETTINGS_PAGES` (15 ids, including `sound-and-recording`,
+  `score-editor`, `player`), `SETTING_HOMES` key → page, `NOT_PREFERENCES`; no label or control, every page
+  hand-written. Tests: `registry.test.ts`, `src/app/settings-homes.test.ts` (commands written only from their
+  home's files, `NOT_YET_HOME`), `src/app/settings-pages.test.tsx` (renders pages, `data-setting` only from its
+  home), `pages/practice-settings/ui/PracticeSettings.test.tsx`.
+- **Will build:**
+  - `registry.ts`:
+    - `APP_PAGES = ['general', 'on-screen-piano', 'connect-piano', 'computer-keys'] as const` (the app's
+      Settings, ST1) and `PAGE_SETTINGS = ['lesson', 'songs', 'folder', 'player', 'score-editor', 'metronome',
+      'chords', 'scales', 'intervals', 'progressions', 'accompaniment', 'chord-finder', 'trainers'] as const`
+      (each page's own) and `SURFACES = ['score-view', 'player-setup', 'keyboard-rail'] as const` (on-screen homes:
+      the View, the Setup, the rail). `SettingsPageId = (typeof APP_PAGES)[number] | (typeof PAGE_SETTINGS)[number]
+      | (typeof SURFACES)[number]`.
+    - `interface SettingDef { readonly key: SettingKey; readonly home: SettingsPageId; readonly group: string;
+      readonly label: string; readonly info?: string; readonly control: SettingControl }`, `group`/`label`/`info`
+      i18n keys; `type SettingControl = { kind: 'switch' } | { kind: 'segmented' | 'menu' | 'picture'; options:
+      readonly (string | number)[]; option: string } | { kind: 'slider'; min: number; max: number; step: number }
+      | { kind: 'custom' }`.
+    - `export const SETTINGS: readonly SettingDef[]` in page and row order (every row named in ST2–ST18);
+      `SETTING_HOMES` derived from it, typed `Record<SettingKey, SettingsPageId>` with `satisfies`, so a new field
+      without a def fails `tsc`.
+    - `SETTING_ROUTES: Readonly<Record<(typeof APP_PAGES | typeof PAGE_SETTINGS)[number], readonly string[]>>`:
+      the route paths each page is drawn at (`player`: the five `/play/…/settings`; `lesson`: the two lesson
+      settings routes; `trainers`: the two), read by the tests.
+  - Keys after (`pt-settings` version bumped once, CLAUDE.md: no migration): new `chords { autoplay; arpeggio }`,
+    `scales { autoplay; fingering; hidden }`, `intervals { autoplay; names; compound }`, `progressions.autoplay`,
+    `songs { open }`, `metronome.volume`, `metronome.flash`, `trainer.rounds`, `trainer.limit`,
+    `accompaniment.order`, `editing.playNotes`; removed `editing.hearNotes`, `recorder.tune`, `sound.click`,
+    `keyboard.railControls`, `keyboard.autoplay`. Homes moved: `lessonReading` → `lesson`; `recorder.click` →
+    `score-editor`; `scoreView.*` and `practice.fingerNumbers|namedNotes|positions` → `score-view`;
+    `scoreView.askOnOpen` → `player`; `sound.staves`, `sound.recording` → `player-setup`; `keyboard.keySize`,
+    `keyboard.folded` → `keyboard-rail`; `practice.metronome` → `player` (the transport's toggle; drawn by the
+    dock, a part of the Player).
+  - Renderer `src/widgets/settings-page/` (new slice): `SettingsRows({ page, custom }: { page: SettingsPageId;
+    custom?: Partial<Record<SettingKey, ReactNode>> }): ReactElement` draws the page's defs grouped in
+    `SettingsGroup`s, each def through `SettingRow({ def })` → the R24 row for its control, with `data-setting`.
+    One write path `setSetting<K extends SettingKey>(store: SettingsStoreApi, key: K, value: SettingValue<K>):
+    void` in `src/features/set-preference/set-setting.ts` (+ test). Every page of ST2–ST18 draws its preference
+    rows with it; custom rows: device list, sources, staves, pictures.
+  - **Routes** (`src/app/router.tsx`): delete `/settings/player`, `/settings/score-editor`,
+    `/settings/sound-and-recording`, `/settings/{chords,scales,intervals,progressions,accompaniment,chord-finder,
+    exercises-and-quiz}`; add `/practice/{chords,scales,intervals,progressions,accompaniment,chord-finder,
+    metronome,exercises,quiz}/settings`, `/songs/settings`, `/songs/folders/$folderId/settings`,
+    `/play/{walk,chromatic,progression}/settings`, `/play/exercise/$exerciseId/settings`,
+    `/settings/connect-piano/bluetooth`. Lazy screens in each place's `*-screens.ts` (`explorer-screens.ts`,
+    `tool-screens.ts`, `practice-screens.ts`, `accompaniment-screens.ts`, `songs-screens.ts`, `player-screens.ts`),
+    never `settings-screens.ts`.
+  - **Parents** (`src/app/routes/parents.ts`): remove the ten `/shell/settings/<page>` entries and
+    `practiceSettings`; each new route's parent is the page above it with its search kept (R26); folder settings →
+    its folder; `/settings/connect-piano/bluetooth` → `/settings/connect-piano`.
+  - `src/app/routes/practice-search.ts`: `PracticeSettingsFrom`, `validatePracticeSettingsSearch` go;
+    `explorer-search.ts`: `fingering` leaves `ScalesSearch`; `practice-search.ts`: `rounds`, `limit` leave the
+    trainer's search.
+  - Deleted: `src/pages/practice-settings/` (all), `pages/settings/ui/PlayerSettingsPage.tsx` (+ test),
+    `ScoreEditorSettingsPage.tsx`, `SoundPage.tsx`, `widgets/practice-pages/ui/SettingsGear.tsx`,
+    `widgets/editor-settings/`, `widgets/player-settings/`, `pages/score-editor/ui/RecordingSettings.tsx`, the five
+    rail toggles and `RailControlsField` (ST2).
+  - **Tests that hold one home:**
+    - `src/entities/settings/model/registry.test.ts`: "every field has one def" (exists, now from `SETTINGS`);
+      "every def's group, label and options exist in en and ru"; "every app page is in Settings' list and no page
+      setting is" (against `APP_PAGES`, which `SettingsList` reads).
+    - `src/app/settings-pages.test.tsx`: renders every route in `SETTING_ROUTES`, plus the Player with View and
+      Setup open and a page with the rail; asserts each `data-setting` appears only on its home's routes or
+      surface, and that no key appears on two homes.
+    - `src/app/settings-homes.test.ts`: `PAGE_PATHS` to the new files; `NOT_YET_HOME` deleted.
+    - `src/app/page-settings.test.tsx` (new, replaces `PracticeSettings.test.tsx`): `it.each` over every page with
+      a gear: "the gear opens `<path>/settings`, its label names the page, and Back returns to `<path>` with its
+      search".
+    - `src/app/no-setting-in-menus.test.tsx` (new): opens every bar menu (Player's More, View, editor's View,
+      Songs' Select, a song row's ⋯) and asserts no `role="switch"` and no `data-setting` inside a `role="menu"`
+      (DESIGN.md "a menu never holds a setting"; the View is a popover of view choices, allowed by name).
+    - `src/app/one-icon.test.ts` (ST0).
+    - `parents.test.ts` passes (every route has a parent).
+  - **Docs:** DESIGN.md gains "Settings: where a setting lives" (the rule above, with the HIG and references
+    cited); ADR 0052, 0025, 0105, 0114, 0115 amended (Corrections 12); a new ADR "Settings: the app's, a page's,
+    the screen's" recording this plan's decisions; CLAUDE.md's Settings paragraph and "the places" lines;
+    `settings-map.md` regenerated from `SETTINGS`; UBIQUITOUS_LANGUAGE (Corrections 15).
+- **Done when:** `npm run typecheck && npm run lint`, the tests above, `npm run build` (routing changed), the full
+  `npm run test` once at the round's end; screenshots of every page in ST1–ST18 at 390×844, 844×390, 1280×800 in
+  `shots/after/`.
 
 ## Build order
 
+One commit per step, each with its tests (CLAUDE.md):
+1. ST20's registry shape (`SettingDef`, `SETTINGS`, homes as today) and `SettingsRows`, `setSetting`, with the
+   tests; no page changes yet.
+2. ST0: `PageSettingsScreen`, `SettingsGear`; the lesson, song and score Settings onto them.
+3. ST7–ST12, ST14: each Practice page's route, page and gear (one commit each), removing its `/settings/<page>`
+   route and list row as it lands; ST13 with the Tools group last of the Practice ones.
+4. ST15 (Player), then ST16 (editor), then ST17 (Songs, folder), ST18 (reading).
+5. ST2–ST6: the app's pages and the rail; ST1 the list from `APP_PAGES`.
+6. ST19's leftovers, the `pt-settings` version bump, the strict tests (`settings-pages`, `no-setting-in-menus`),
+   docs. Full gate, build, screenshots.
+
 ## Owner's questions
+
+Defaults are taken unless you say otherwise.
+1. **The rail on the on-screen piano** keeps only octave ‹ ›, key size − +, Pedal and Hide; Note names, Chord names,
+   Glissando, Computer keys and MIDI sound become rows on their pages only (no choosing which rail buttons show).
+   Or keep them as quick switches on the rail and take them off the settings pages? Default: the settings pages.
+2. **A tap on a song opens:** Song page · Player, a row of Songs' Settings (Songs' only row until B9/B10). Build it
+   now? Default: yes.
+3. **Tempo, Key and Time leave the score's Settings** (edited on the score and from the palette, as Flat, MuseScore
+   and Dorico do). Default: yes.
+4. **The View stays one menu in both modes of the score** (the Player's and the editor's View write the same keys,
+   drawn by one component in one place on one screen). Default: yes; the alternative would be the editor without
+   Layout or Keys.
+5. **Sound and recording goes**, with no Sound page; the sampled piano's size and download sit in Storage and
+   backup. Default: yes.
