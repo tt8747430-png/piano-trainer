@@ -31,7 +31,8 @@ edit, and a learner practising should not change the music by accident.
   it lands in +, how far in semitones, and Reset. The Player's moves the key it plays in at once (ADR 0105); the
   editor's adds Apply to key, Apply to chords, the first line moved as a preview, and Transpose, one Undo step.
 - **One transport** (`Transport`), one pill floating along the sheet's foot at every size: the tempo, ‹, Play, ›, then
-  the mode's three: the Player's loop, Sound and hands; the editor's Record, Takes and the recording's settings. Play
+  the mode's three: the Player's loop, metronome and hands; the editor's Record, Takes and Sound (rows to the Player's
+  settings and to Sound and recording). Play
   stands in the same spot in both modes. While a take records, its strip stands in the transport's place. Its
   controls shrink step by step so they fit a 320px phone.
 - **What floats over the music takes no room.** The transport stands over the sheet, which has room past its last
@@ -41,13 +42,15 @@ edit, and a learner practising should not change the music by accident.
   tools row, the transport and the keys stand where the Player's do and only the sheet's width or height changes as
   Practise · Edit switches.
 - **One View menu** in both modes (ADR 0108) and one layout setting (ADR 0096). The keys fold from their rail and
-  come back from the View.
+  come back from the View. Which staves show is the Player's Setup's (ADR 0105); the editor shows every staff.
+- **Each mode a kind page** (B7): the Player's settings (ADR 0105) and Settings › Score editor, whose Editing group a
+  score's own Settings shows too.
 
 ## Consequences
 
 The two screens are learned once, and a new control has one home: the sheet's look (View), how the music plays
 (Setup), the song itself (edited where it is printed, ADR 0114), the device (MIDI). The editor's recorder keeps its
-own Play melody switch: it plays the tune under a take, not the Player's melody.
+own Play melody switch: it plays the tune under a take.
 
 ## History
 
@@ -58,6 +61,7 @@ own Play melody switch: it plays the tune under a take, not the Player's melody.
 - 0110 — One bar, one tools row, one transport (2026-10-26).
 - 0115 — One band for the bar, one Transpose, a plain Setup (2026-10-27). Its Setup is ADR 0105's, its View ADR
   0108's.
+- r29 — The View hides no staff (Staves are the Setup's); each mode's settings a kind page; the transport's metronome a quick toggle (2026-11-03).
 - r13 — The editor's palette docked, not floating (ADR 0114) (2026-10-28).
 - r21 — Practise · Edit · Edit the original one pop-up (`ModeSwitch`), its face the mode's icon and name; the
   editor's Mine / The original tabs gone; the editor's Replace · Insert · Chord a pop-up too (2026-10-30).

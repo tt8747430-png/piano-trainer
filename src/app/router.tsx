@@ -195,6 +195,17 @@ const soundRoute = createRoute({
   path: '/settings/sound-and-recording',
   component: lazyRouteComponent(settingsScreens, 'SoundPage'),
 })
+// The kind pages (B7, R18): how the Player always plays, and how the score editor always writes.
+const playerSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/player',
+  component: lazyRouteComponent(settingsScreens, 'PlayerSettingsPage'),
+})
+const scoreEditorSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/score-editor',
+  component: lazyRouteComponent(settingsScreens, 'ScoreEditorSettingsPage'),
+})
 const storageRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/storage',
@@ -759,6 +770,14 @@ const exerciseRoute = createRoute({
   component: lazyRouteComponent(playerScreens, 'ExercisePlayerPage'),
 })
 
+// A song's Player settings (B7), from the gear in its bar: Settings › Player in the Player's place,
+// the song's own tracks named, Back to the song as it was played.
+const playerPieceSettingsRoute = createRoute({
+  getParentRoute: () => playerRoute,
+  path: '/settings',
+  component: lazyRouteComponent(playerScreens, 'PieceSettingsPage'),
+})
+
 // The score editor: the Player's chunk carries the engraver it writes on.
 // A lesson's example of notes on its own score (round 27): the lesson's draft brought, an editor's.
 const exampleEditRoute = createRoute({
@@ -834,6 +853,8 @@ const routeTree = rootRoute.addChildren([
     onScreenPianoRoute,
     computerKeysRoute,
     soundRoute,
+    playerSettingsRoute,
+    scoreEditorSettingsRoute,
     storageRoute,
     privacyRoute,
     termsRoute,
@@ -896,7 +917,7 @@ const routeTree = rootRoute.addChildren([
     takeRoute,
   ]),
   fullScreenRoute.addChildren([
-    playerRoute,
+    playerRoute.addChildren([playerPieceSettingsRoute]),
     walkRoute,
     chromaticRoute,
     progressionPlayerRoute,

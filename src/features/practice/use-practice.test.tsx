@@ -218,23 +218,23 @@ describe('usePractice: the count-in', () => {
 
 describe('usePractice: the mix (ADR 0105)', () => {
   it('plays each part as loud as the mix says, a change heard without starting again', () => {
-    const { result, rerender } = renderPractice(ONE_BAR, { mix: { ...FULL_MIX, rh: 0.25 } })
+    const { result, rerender } = renderPractice(ONE_BAR, { mix: { ...FULL_MIX, treble: 0.25 } })
     act(() => result.current.play())
     const pass = audio.played[0]
     const rh = notesOf(pass?.sounds ?? []).find((sound) => sound.part === 'rh')
     expect(rh && pass?.gain?.(rh)).toBe(0.25)
-    rerender({ performance: ONE_BAR, setup: { ...LISTEN, mix: { ...FULL_MIX, rh: 0.64 } } })
+    rerender({ performance: ONE_BAR, setup: { ...LISTEN, mix: { ...FULL_MIX, treble: 0.64 } } })
     expect(audio.played).toHaveLength(1)
     expect(audio.stops).toBe(0)
     expect(rh && pass?.gain?.(rh)).toBe(0.64)
   })
 
   it('plays no part turned right down, and brings one turned up again in from where it plays', () => {
-    const { result, rerender } = renderPractice(ONE_BAR, { mix: { ...FULL_MIX, lh: 0 } })
+    const { result, rerender } = renderPractice(ONE_BAR, { mix: { ...FULL_MIX, bass: 0 } })
     act(() => result.current.play())
     expect(partsOf(audio.played[0]?.sounds)).toEqual(['rh'])
     clockTo(0.1 + 2)
-    rerender({ performance: ONE_BAR, setup: { ...LISTEN, mix: { ...FULL_MIX, lh: 0.5 } } })
+    rerender({ performance: ONE_BAR, setup: { ...LISTEN, mix: { ...FULL_MIX, bass: 0.5 } } })
     expect(audio.played).toHaveLength(2)
     expect(partsOf(audio.played[1]?.sounds)).toEqual(['lh', 'rh'])
   })
@@ -266,7 +266,7 @@ describe('usePractice: the mix (ADR 0105)', () => {
   })
 
   it('sounds a beat group moved to as loud as the mix says', () => {
-    const { result } = renderPractice(ONE_BAR, { mix: { ...FULL_MIX, lh: 0.16 } })
+    const { result } = renderPractice(ONE_BAR, { mix: { ...FULL_MIX, bass: 0.16 } })
     // Beat 3: the right hand's G and the left hand's octave.
     act(() => result.current.jumpToBeatGroup(2))
     const moved = audio.played[0]
@@ -279,7 +279,7 @@ describe('usePractice: the mix (ADR 0105)', () => {
     const { result } = renderPractice(ONE_BAR, {
       mode: 'wait',
       hands: 'rh',
-      mix: { ...FULL_MIX, lh: 0.16 },
+      mix: { ...FULL_MIX, bass: 0.16 },
     })
     act(() => result.current.play())
     act(() => {
@@ -297,7 +297,7 @@ describe('usePractice: the mix (ADR 0105)', () => {
     const { result } = renderPractice(ONE_BAR, {
       mode: 'wait',
       hands: 'rh',
-      mix: { ...FULL_MIX, lh: 0 },
+      mix: { ...FULL_MIX, bass: 0 },
     })
     act(() => result.current.play())
     act(() => {

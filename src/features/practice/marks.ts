@@ -8,7 +8,7 @@ import {
   type Midi,
   type PitchClass,
 } from '@/shared/lib/music'
-import { isAudible, type Audible } from '@/shared/lib/schedule'
+import { isAudible, pedalSpanAt, type Audible } from '@/shared/lib/schedule'
 import type { KeyMark } from '@/shared/ui'
 import type { DiagramChord } from './chord-diagram'
 
@@ -72,3 +72,30 @@ export const keysRange = (keys: readonly Midi[]): KeyRange => keyboardRange(keys
 /** Every note of the piece on the keyboard, from a C to a B. */
 export const playerRange = (performance: Performance): KeyRange =>
   keysRange(performance.notes.map((n) => n.midi))
+
+/**
+ * The keys sounding only under the sustain pedal at a beat group (A27, Show it): struck under the
+ * pedal it is down for now, their notes let go before it, no hand holding them.
+ */
+export function pedalKeys(
+  performance: Pick<Performance, 'notes' | 'beatGroups' | 'pedal'>,
+  beatGroup: number,
+): ReadonlySet<Midi> {
+  const tick = performance.beatGroups[beatGroup]?.tick
+  const span = tick === undefined ? null : pedalSpanAt(performance.pedal, tick)
+  if (tick === undefined || span === null) return new Set()
+  const held = performance.notes.filter(
+    (n) => n.startTick <= tick && n.startTick + n.durationTicks > tick,
+  )
+  const keys = performance.notes
+    .filter(
+      (n) =>
+        n.silent !== true &&
+        n.startTick >= span.from &&
+        n.startTick < tick &&
+        n.startTick + n.durationTicks <= tick,
+    )
+    .map((n) => n.midi)
+    .filter((key) => !held.some((n) => n.midi === key))
+  return new Set(keys.toSorted((a, b) => a - b))
+}

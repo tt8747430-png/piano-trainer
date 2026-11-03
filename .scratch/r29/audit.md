@@ -56,3 +56,21 @@ Left: the on-screen piano's accessible name is still "Keyboard" (`common.keyboar
 | A31 | the screen's bar | slid away on short pages, taking pinned controls with it; hid while a field or menu was open | hides only on a page over two screens tall, never while a field is written in or a menu is open | fixed |
 | A31 | a score re-engraved | blank while it engraves again | already keeps the old drawing (`ScoreView`) | checked |
 | A31 | Learn, Songs, a song, Practice, Settings at 320, 402, 1280 | CLS on load 0 | after-shots `shots/after/look-*.png` | checked |
+| A35 | the Player's Setup on Daisy fields (`owner/65`) | read in the brief as a song with written staves; the code says otherwise: Daisy fields is Gorshkov's progression in degrees, its sheet the Pop 8ths pattern's notes, so its pattern, inversion and voice leading do change it | "score" is a piece whose piano's two staves are written out in every bar (`hasWrittenStaves`); Daisy fields stays a chart, its Setup Staves then Accompaniment from the chords | decided |
+| A35 | the Player's Setup | Melody (None · Melody staff · Recording) beside the pattern on every song; the View's staff chips a second home for which staves show | Staves first: each staff by name with Play and Show, the recording a track (Play), in the URL (`staves=`); a chart's Accompaniment from the chords (pattern, inversion, voice leading, swing) after it; `pt-settings.melody` and `scoreView.hidden` gone (version 19); the editor shows every staff | fixed |
+| A35 | the Player with one hand chosen | the other hand only greyed | The other hand: Show · Dim · Hide, and Play the other hand (Wait mode's accompaniment), saved for every song | fixed |
+
+### A35: controls by kind (`controlsFor`, `widgets/practice-player/model/controls.ts`)
+
+What changes each kind's music or its look; a control that changes nothing for a kind is not offered it (R30). Checked against the code: a score's notes are written (no pattern plays a bar), so no pattern figure, inversion, voice leading, chord size (degree pieces only) or Simplify (it rewrites chart chords no hand plays) changes it. Swing does: the schedule swings every 8th, a score's too, as Flat's playback swings a score; it stays, under How it plays.
+
+| Control | Score | Chart | Lesson example | Progression | Exercise |
+|---|---|---|---|---|---|
+| Setup › Staves (Play, Show) | yes | yes | yes | no (the hands are Hands') | no |
+| Setup › Accompaniment from the chords (pattern, hands, inversion, voice leading) | no | yes | yes | yes | no (its own figure) |
+| Setup › Swing | yes (How it plays) | yes | yes | yes | yes |
+| Setup › Chord size | no | yes, a song in degrees | yes, a song in degrees | yes | no |
+| Tools › Simplify | no | yes | yes | no | no |
+| Tools › Transpose, View | yes | yes | yes | Setup's key | Setup's key |
+| More › Sections, the bar's Edit | yes | yes | yes | no | no |
+| Settings › The other hand, Pedal | yes | yes | yes | yes | yes |

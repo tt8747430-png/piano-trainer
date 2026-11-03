@@ -1,6 +1,5 @@
 import { ChevronDown, Eye } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { StaffName } from '@/entities/piece'
 import {
   MUSIC_VIEWS,
   selectScoreView,
@@ -9,7 +8,6 @@ import {
   type MusicView,
 } from '@/entities/settings'
 import { setScoreView } from '@/features/set-preference'
-import type { Clef } from '@/shared/lib/music'
 import { MenuSection, SwitchRow } from '@/shared/ui'
 import { ViewTiles, type ViewNeeds } from '@/widgets/chord-views'
 import { PlayerTool } from '@/widgets/practice-player'
@@ -38,8 +36,6 @@ function ViewsAbout() {
 export function PlayerViewMenu({
   shown,
   needs,
-  staves,
-  piano,
   openAtStart,
   keys,
   onKeys,
@@ -51,8 +47,6 @@ export function PlayerViewMenu({
   shown: MusicView
   /** The views the music cannot show, with what each needs. */
   needs: ViewNeeds
-  staves: readonly { readonly name?: StaffName; readonly clef: Clef }[]
-  piano: boolean
   /** Open as the screen opens: a piece's, asked each time. */
   openAtStart: boolean
 }) {
@@ -86,7 +80,7 @@ export function PlayerViewMenu({
           className="border-b-0"
         />
       </MenuSection>
-      <ViewSection view={shown} staves={staves} piano={piano} words={needs.lyrics !== 'words'} />
+      <ViewSection view={shown} words={needs.lyrics !== 'words'} />
       <MenuSection title={t('views.every')}>
         <div className="flex flex-wrap gap-2">
           <KeysChip shown={keys} onShow={onKeys} />

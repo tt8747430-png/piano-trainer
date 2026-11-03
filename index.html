@@ -288,7 +288,7 @@
         var theme = 'system'
         try {
           var saved = JSON.parse(localStorage.getItem('pt-settings') || 'null')
-          var chosen = saved && saved.version === 18 && saved.state && saved.state.theme
+          var chosen = saved && saved.version === 20 && saved.state && saved.state.theme
           if (chosen === 'light' || chosen === 'dark') theme = chosen
         } catch (_) {}
         if (theme === 'system') {

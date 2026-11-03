@@ -1,12 +1,12 @@
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
 import { pieceById } from '@/entities/piece'
-import { noteName, pitchClass } from '@/shared/lib/music'
+import { midi, note, noteName, pitchClass, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { audibleHands } from '@/shared/lib/schedule'
 import { arrangePiece, ownChoice } from './arrange-piece'
 import { diagramChord } from './chord-diagram'
 import { TWO_BARS_UNDER_A_STAFF } from './testing/performances'
-import { diagramMarks, playerRange, practiceMarks } from './marks'
+import { diagramMarks, playerRange, practiceMarks, pedalKeys } from './marks'
 
 const bz5 = pieceById('bz5')
 if (!bz5) throw new Error('bz5')
@@ -122,5 +122,33 @@ describe('playerRange', () => {
     expect(to % 12).toBe(11)
     expect(Math.min(...keys)).toBeGreaterThanOrEqual(from)
     expect(Math.max(...keys)).toBeLessThanOrEqual(to)
+  })
+})
+
+describe('pedalKeys (A27, Show it)', () => {
+  it('names the keys sounding only under the pedal: struck before, let go, the pedal still down', () => {
+    const B = TICKS_PER_BEAT
+    const struck = (key: number, start: number, length: number) => ({
+      midi: midi(key),
+      spelled: note('C'),
+      hand: 'lh' as const,
+      startTick: start,
+      durationTicks: length,
+      velocity: 1,
+    })
+    const performance = {
+      notes: [struck(36, 0, B), struck(43, B, B), struck(48, 2 * B, B)],
+      beatGroups: [
+        { tick: 0, bar: 0, notes: [0] },
+        { tick: B, bar: 0, notes: [1] },
+        { tick: 2 * B, bar: 0, notes: [2] },
+      ],
+      pedal: [
+        { tick: 0, kind: 'down' as const },
+        { tick: 4 * B, kind: 'up' as const },
+      ],
+    }
+    expect([...pedalKeys(performance, 2)]).toEqual([midi(36), midi(43)])
+    expect([...pedalKeys({ ...performance, pedal: [] }, 2)]).toEqual([])
   })
 })

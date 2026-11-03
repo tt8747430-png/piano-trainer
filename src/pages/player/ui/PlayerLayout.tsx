@@ -1,4 +1,7 @@
+import { useNavigate } from '@tanstack/react-router'
+import { Settings } from 'lucide-react'
 import { useMemo, useState, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
 import { selectKeyboard, selectScoreView, useSettings } from '@/entities/settings'
 import { MidiButton } from '@/features/connect-midi'
@@ -6,18 +9,20 @@ import { LiveKeyboard } from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Recording } from '@/shared/lib/schedule'
 import type { MenuAction } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
+  ClickButton,
   CountInBeat,
   HandsButton,
   LoopButton,
+  PedalLamp,
   PlayerArea,
   PlayerScreen,
   PlayerClose,
   PlayerDock,
   PlayerTools,
   ScoreBar,
-  SoundButton,
   TempoButton,
   usePlayerShortcuts,
   WaitLine,
@@ -38,11 +43,11 @@ const NO_STAVES: readonly { readonly name?: StaffName }[] = []
 
 /**
  * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar (`ScoreBar`, ADR
- * 0115: Close, Practise · Edit, then MIDI, Setup and More, ADR 0108; its tools, ADR 0108: the View,
+ * 0115: Close, Practise · Edit, then MIDI, Setup, its settings' gear (B7) and More, ADR 0108; its tools, ADR 0108: the View,
  * named by the view shown, then the music's own tools, a piece's Transpose and Simplify, ADR 0105);
  * the music under its title (ADR 0114) as the View
  * shows it (ADR 0108: the sheet music, Chords over lyrics, Diagrams or the Grid), Wait mode's line,
- * the transport floating under it (the tempo, ‹ ▶ ›, the loop, the Sound and the hands), the
+ * the transport floating under it (the tempo, ‹ ▶ ›, the loop, the metronome and the hands), the
  * count-in's beat large over it all while Listen counts in (ADR 0105), and the keys at the
  * foot, or under the tools row where the keyboard settings dock them at the top; the computer's keys
  * drive it (`usePlayerShortcuts`). More's Print puts the music as the View shows it in print
@@ -68,7 +73,10 @@ export function PlayerLayout({
   share,
   status,
   openView = false,
+  onSettings,
 }: {
+  /** The gear: a piece's Player settings in the Player's place; else Settings › Player (B7). */
+  onSettings?: () => void
   /**
    * Whether the sheet writes the piano's staves: not for a song that hides them, a lead sheet (ADR
    * 0114). The keys and what plays are the same.
@@ -109,15 +117,14 @@ export function PlayerLayout({
   /** The View open as the screen opens: a piece's, where the learner asks each time (ADR 0108). */
   openView?: boolean
 }) {
+  const { t } = useTranslation('player')
+  const navigate = useNavigate()
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const scoreView = useSettings(selectScoreView)
+  const { hidden } = player
+  const sheetView = useMemo(() => ({ ...scoreView, hidden }), [scoreView, hidden])
   const names = useStaffNames(staves)
-  // The score's single staves as the View switches them: each its clef as the music reads it.
-  const viewed = (performance.staves ?? []).map(({ clef }, place) => ({
-    clef,
-    name: staves[place]?.name,
-  }))
   // The view saved, where the music can show it, else the one it falls back to (ADR 0108).
   const needs = useMemo(() => viewNeeds(performance), [performance])
   const shown = shownView(scoreView.music, needs)
@@ -140,6 +147,9 @@ export function PlayerLayout({
         fitInView
         marks={chordKeys?.marks ?? player.marks}
         wrong={player.wrong}
+        // Keys the pedal alone holds, ringed apart from a hand's (A27); the lamp at the rail's end.
+        outlined={chordKeys ? undefined : player.pedalKeys}
+        railEnd={player.pedal === 'none' ? undefined : <PedalLamp down={player.pedal === 'down'} />}
         onKeyPress={player.tapKey}
         // Space is Play here: the pedal is the rail's, or a MIDI keyboard's.
         spacePedal={false}
@@ -158,6 +168,15 @@ export function PlayerLayout({
           <>
             <MidiButton variant="tool" />
             {setup}
+            <Button
+              variant="tool"
+              size="icon"
+              aria-label={t('settingsPage.open')}
+              title={t('settingsPage.open')}
+              onClick={onSettings ?? (() => void navigate({ to: '/settings/player' }))}
+            >
+              <Settings aria-hidden />
+            </Button>
             <PlayerMore
               music={{ performance, title, tempo: player.tempo }}
               recording={recording}
@@ -175,8 +194,6 @@ export function PlayerLayout({
             <PlayerViewMenu
               shown={shown}
               needs={needs}
-              staves={viewed}
-              piano={piano}
               openAtStart={openView}
               keys={player.keys}
               onKeys={player.setKeys}
@@ -189,16 +206,18 @@ export function PlayerLayout({
       <PlayerArea area="sheet">
         {shown === 'sheet' ? (
           <SheetMusic
-            view={scoreView}
+            view={sheetView}
             piano={piano}
             staffNames={names}
             title={title}
             credits={credits}
             layout={layout}
-            performance={performance}
+            // The pedal as it plays (A27): its Ped. marks the ones heard, lit as they pass.
+            performance={player.performance}
             headings={headings}
             current={practice.state.beatGroup}
-            clock={practice.clock}
+            clock={player.cursor === 'continuous' ? practice.clock : null}
+            cursor={player.cursor !== 'none'}
             loop={player.loop}
             fingers={player.fingers}
             names={player.names}
@@ -253,14 +272,7 @@ export function PlayerLayout({
             />
           }
           loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
-          sound={
-            <SoundButton
-              staves={viewed.length > 0}
-              recording={recording !== undefined}
-              click={player.click}
-              onClick={player.setClick}
-            />
-          }
+          sound={<ClickButton on={player.click} onChange={player.setClick} />}
           hands={<HandsButton hands={view.hands} onChange={player.setHands} />}
         />
       </PlayerArea>
@@ -273,7 +285,7 @@ export function PlayerLayout({
           performance={performance}
           headings={headings}
           sheet={{
-            view: scoreView,
+            view: sheetView,
             piano,
             staffNames: names,
             fingers: player.fingers,

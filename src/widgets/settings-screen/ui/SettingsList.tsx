@@ -5,9 +5,11 @@ import {
   Keyboard,
   LifeBuoy,
   Mic,
+  PenLine,
   Piano,
   ScrollText,
   Settings2,
+  CirclePlay,
   ShieldCheck,
   ShieldUser,
 } from 'lucide-react'
@@ -48,7 +50,7 @@ const PRACTICE_SETTINGS = [
 /**
  * Settings' list, as iOS's reads: the account card first, then a row for each page, each its icon in
  * a coloured square (R21): General (General, Storage and backup); Playing (the on-screen piano, a connected piano, the computer
- * keys, sound and recording, R22); Practice (each page's own Settings, A24); Help (How to use, Privacy, Terms) and the app's version;
+ * keys, sound and recording, R22, then the Player's and the score editor's kind pages, B7); Practice (each page's own Settings, A24); Help (How to use, Privacy, Terms) and the app's version;
  * and for an admin, the Admin area. A phone's Settings screen is this list alone; a laptop's keeps it
  * beside the page chosen (`SettingsScreen`), the page shown marked.
  */
@@ -98,6 +100,18 @@ export function SettingsList() {
           icon={Mic}
           paint="grass"
           render={<Link to="/settings/sound-and-recording" />}
+        />
+        <RowLink
+          title={t('pages.player')}
+          icon={CirclePlay}
+          paint="sky"
+          render={<Link to="/settings/player" />}
+        />
+        <RowLink
+          title={t('pages.scoreEditor')}
+          icon={PenLine}
+          paint="lilac"
+          render={<Link to="/settings/score-editor" />}
         />
       </SettingsGroup>
       <SettingsGroup flush title={t('groups.practice.label')}>

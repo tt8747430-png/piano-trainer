@@ -4,6 +4,7 @@ import { beatsToTicks, isCompound, type ChordSize, type Tick } from '@/shared/li
 import { ContentError } from './content-error'
 import { parseLyrics, tuneLength, withHandLyrics, withStaffLyrics } from './lyrics'
 import { parseChart } from './parse-chart'
+import { CLEF_TOKEN } from './parse-hands'
 import { parseProgression } from './parse-progression'
 import { parseStaff } from './parse-staff'
 import { readPedalLine } from './pedal-line'
@@ -100,3 +101,24 @@ export function patternsOfPiece(piece: Piece): ReadonlySet<PatternId> {
   )
   return new Set(played)
 }
+
+/**
+ * Whether a piece is a score (A35): the piano's two staves written out in every bar, so no pattern
+ * plays any of it and the Player plays its staves as written. Else it is a chart: the piano plays its
+ * chords by a pattern, a tune staff over it or not.
+ */
+export function hasWrittenStaves(piece: Piece): boolean {
+  if (isDegreePiece(piece)) return false
+  const { rh, lh } = piece.hands ?? {}
+  return rh !== undefined && lh !== undefined && writtenThrough(rh) && writtenThrough(lh)
+}
+
+/** Every bar of a hand written, none left to the pattern (`-`, a clef change before it or not). */
+const writtenThrough = (hand: string): boolean =>
+  hand.split('|').every((bar) => {
+    const tokens = bar
+      .trim()
+      .split(/\s+/)
+      .filter((token) => !token.startsWith(CLEF_TOKEN))
+    return !(tokens.length === 1 && tokens[0] === '-')
+  })

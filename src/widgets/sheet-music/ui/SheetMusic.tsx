@@ -12,6 +12,7 @@ import { engravedHeight, FINGERS, fitScale, widestBar } from '../model/fit-scale
 import { groupOfTick } from '../model/group-of-tick'
 import { keepsLoop } from '../model/keeps-loop'
 import { SheetLines } from './SheetLines'
+import { PedalMarks } from './PedalMarks'
 import { SheetOverlay } from './SheetOverlay'
 import { useSheetScore } from './use-sheet-score'
 
@@ -96,6 +97,7 @@ export function SheetMusic({
   headings,
   current,
   clock,
+  cursor = true,
   loop,
   playing = false,
   fingers,
@@ -129,6 +131,8 @@ export function SheetMusic({
   current: number
   /** Where Listen's music is while it plays, read every frame: the playhead moves with it. */
   clock?: (() => Tick | null) | null | undefined
+  /** Whether the playhead is drawn at all: the Player's settings may say none (B7). */
+  cursor?: boolean
   loop: BarRange | null
   /** Whether the music plays (or waits on the keys): the playhead is shown in a loop then. */
   playing?: boolean
@@ -215,39 +219,44 @@ export function SheetMusic({
   const loopKey = loop ? `${loop.first}-${loop.last}` : ''
   const [resting, setResting] = useState({ loop: loopKey, at: current })
   if (resting.loop !== loopKey) setResting({ loop: loopKey, at: current })
-  const playheadShown = !loop || playing || current !== resting.at
+  const playheadShown = cursor && (!loop || playing || current !== resting.at)
+  const pedalMarks = <PedalMarks performance={performance} current={current} />
   if (view.layout !== 'panorama')
     return (
-      <SheetLines
-        score={score}
-        performance={performance}
-        staves={staves}
-        staffNames={labels}
-        pages={view.layout === 'page'}
-        title={title}
-        credits={credits}
-        layout={layout}
-        headings={headings}
-        current={current}
-        clock={clock}
-        loop={loop}
-        fingers={fingers}
-        names={names}
-        positions={positions}
-        chordNames={view.chordNames}
-        tempos={tempos}
-        muted={muted}
-        onJump={onJump}
-        onPick={onPick}
-        onLoopChange={onLoopChange}
-        onChoose={onChoose}
-        selected={selected}
-        playheadShown={playheadShown}
-      />
+      <>
+        {pedalMarks}
+        <SheetLines
+          score={score}
+          performance={performance}
+          staves={staves}
+          staffNames={labels}
+          pages={view.layout === 'page'}
+          title={title}
+          credits={credits}
+          layout={layout}
+          headings={headings}
+          current={current}
+          clock={clock}
+          loop={loop}
+          fingers={fingers}
+          names={names}
+          positions={positions}
+          chordNames={view.chordNames}
+          tempos={tempos}
+          muted={muted}
+          onJump={onJump}
+          onPick={onPick}
+          onLoopChange={onLoopChange}
+          onChoose={onChoose}
+          selected={selected}
+          playheadShown={playheadShown}
+        />
+      </>
     )
   return (
     // The title at the line's head (ADR 0114), the line scrolling sideways under it in the height left.
     <section aria-label={t('sheet.label')} className="flex h-full flex-col">
+      {pedalMarks}
       <SheetTitle title={title} place="across" />
       <div
         ref={scroller}

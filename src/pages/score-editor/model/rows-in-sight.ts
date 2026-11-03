@@ -1,8 +1,17 @@
-import type { ScoreViewSettings } from '@/entities/settings'
 import { layerStaff, shownRows, type Layer, type NoteLayer } from '@/features/score-editor'
+import type { StaffId } from '@/shared/lib/notation'
 
-/** What the View says it shows (ADR 0114, 0097): the chord symbols, the staves hidden. */
-type Shown = Pick<ScoreViewSettings, 'chordNames' | 'hidden'>
+/**
+ * What the score shows (ADR 0114, 0097): the chord symbols, the staves hidden (the editor's every
+ * staff in sight, A35).
+ */
+interface Shown {
+  readonly chordNames: boolean
+  readonly hidden: readonly StaffId[]
+}
+
+/** The editor writes every staff: none is hidden there (A35). */
+export const EVERY_STAFF: readonly StaffId[] = []
 
 /**
  * The rows the caret writes in, top down, as the View shows the score (ADR 0114, 0097): the chord

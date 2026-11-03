@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useFoldKeys } from '@/features/live-keyboard'
 import { PlayerTool, PlayerTools } from '@/widgets/practice-player'
 import { KeysChip, PRINTED_PARTS, ScoreViewMenu, SheetViewFields } from '@/widgets/score-view-menu'
-import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { useStaffHeads } from '../model/use-staff-heads'
+import { useScoreEditorContext } from '../model/editor-context'
 import { EditorTranspose } from './EditorTranspose'
 
 /**
@@ -14,8 +13,6 @@ import { EditorTranspose } from './EditorTranspose'
 function EditorView({ disabled }: { disabled: boolean }) {
   const { t } = useTranslation(['player', 'music'])
   const keys = useFoldKeys()
-  const staves = useStaffHeads()
-  const piano = useEditorState((state) => !state.draft.leadSheet)
   return (
     <ScoreViewMenu
       trigger={
@@ -33,7 +30,7 @@ function EditorView({ disabled }: { disabled: boolean }) {
       }
       from="tools"
     >
-      <SheetViewFields staves={staves} piano={piano} parts={PRINTED_PARTS}>
+      <SheetViewFields parts={PRINTED_PARTS}>
         <KeysChip shown={!keys.folded} onShow={(on) => keys.fold(!on)} />
       </SheetViewFields>
     </ScoreViewMenu>

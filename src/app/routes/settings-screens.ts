@@ -3,6 +3,8 @@ export {
   GeneralPage,
   ComputerKeysPage,
   OnScreenPianoPage,
+  PlayerSettingsPage,
+  ScoreEditorSettingsPage,
   SoundPage,
   StoragePage,
   SettingsPage,

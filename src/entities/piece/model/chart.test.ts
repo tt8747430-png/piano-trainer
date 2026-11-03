@@ -2,7 +2,15 @@ import { describe, expect, it } from 'vitest'
 import { chordSymbol, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { ContentError } from './content-error'
 import { testProgression, testSong } from '../testing/test-pieces'
-import { chartOf, hasChartPlan, patternsOfPiece, pieceFit, sectionCount, stavesOf } from './chart'
+import {
+  chartOf,
+  hasChartPlan,
+  hasWrittenStaves,
+  patternsOfPiece,
+  pieceFit,
+  sectionCount,
+  stavesOf,
+} from './chart'
 import { lyricsStaff } from './types'
 
 const firstSymbol = (...args: Parameters<typeof chartOf>) => {
@@ -158,5 +166,24 @@ describe('patternsOfPiece', () => {
 
   it('plays a section’s own pattern in its chords', () => {
     expect([...patternsOfPiece(withSectionPattern())].sort()).toEqual(['M3', 'r4'])
+  })
+})
+
+describe('hasWrittenStaves (A35)', () => {
+  const both = (rh: string, lh: string) => testSong(['C G'], { hands: { rh, lh } })
+
+  it('is a score where both hands are written in every bar', () => {
+    expect(hasWrittenStaves(both('C5/4 | D5/4', 'C3/4 | G2/4'))).toBe(true)
+  })
+
+  it('is a chart where the pattern plays a bar, or a hand is not written', () => {
+    expect(hasWrittenStaves(both('C5/4 | -', 'C3/4 | G2/4'))).toBe(false)
+    expect(hasWrittenStaves(both('clef:bass - | D5/4', 'C3/4 | G2/4'))).toBe(false)
+    expect(hasWrittenStaves(testSong(['C G'], { hands: { rh: 'C5/4 | D5/4' } }))).toBe(false)
+  })
+
+  it('is a chart for a song whose piano plays its chords, a tune staff over it or not', () => {
+    expect(hasWrittenStaves(testSong(['C G'], { staves: [{ notes: 'C5/4 D5/4' }] }))).toBe(false)
+    expect(hasWrittenStaves(testProgression('ii:min:4 V:dom:4'))).toBe(false)
   })
 })

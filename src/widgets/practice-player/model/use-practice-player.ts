@@ -1,13 +1,19 @@
 import { useCallback, useMemo, useRef } from 'react'
 import {
+  selectOtherHand,
+  selectMetronome,
+  selectPlayback,
   selectPractice,
   selectScoreView,
   selectSound,
   useSettings,
   useSettingsStoreApi,
+  type Cursor,
 } from '@/entities/settings'
 import {
+  hiddenStaves,
   loopParam,
+  pedalKeys,
   playerRange,
   practiceMarks,
   practisedHands,
@@ -15,6 +21,7 @@ import {
   usePractice,
   type BarRange,
   type Mix,
+  type PlayerStaves,
   type Practice,
   type PracticeMode,
 } from '@/features/practice'
@@ -24,7 +31,9 @@ import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import {
   audibleHands,
+  pedalSpanAt,
   volumeGain,
+  withPedal,
   type Hands,
   type Recording,
   type SwingFeel,
@@ -34,6 +43,9 @@ import type { KeyMark } from '@/shared/ui'
 import { reachLoop, type LoopReach } from './loop-reach'
 import type { PracticeView } from './practice-view'
 import { waitFeedback, type WaitFeedback } from './wait-feedback'
+
+/** No track changed: every one plays and shows. */
+const NO_CHANGE: PlayerStaves = {}
 
 /** The staff of the hand not heard or practised. */
 const MUTED: Readonly<Record<Hands, StaffId | undefined>> = {
@@ -56,7 +68,10 @@ export interface PracticePlayer {
   readonly inView: KeyRange | undefined
   readonly wrong: ReadonlySet<Midi> | undefined
   readonly feedback: WaitFeedback | null
+  /** The other hand's staff dimmed, where one hand is practised and its look is Dim (A35). */
   readonly muted: StaffId | undefined
+  /** The staves out of sight: the Staves' Show, and the other hand's where its look is Hide (A35). */
+  readonly hidden: readonly StaffId[]
   readonly fingers: boolean
   /** Each notehead carries its note's name. */
   readonly names: boolean
@@ -64,6 +79,14 @@ export interface PracticePlayer {
   readonly positions: boolean
   /** The click while the music plays: this visit's (ADR 0111), else the learner's saved one. */
   readonly click: boolean
+  /** How the cursor follows the music (B7): none, a step a beat group, or gliding. */
+  readonly cursor: Cursor
+  /** The music as played: its pedal as the settings say (A27). */
+  readonly performance: Performance
+  /** The pedal at the cursor (A27, Show it): none where the music plays none, else down or up. */
+  readonly pedal: 'none' | 'down' | 'up'
+  /** The keys sounding only under the pedal at the cursor, drawn apart from a hand's (A27). */
+  readonly pedalKeys: ReadonlySet<Midi>
   /** The keys out: this visit's (ADR 0111), else the View's saved ones. */
   readonly keys: boolean
   /** The click on or off: this visit's where it has its own, else the saved one. */
@@ -97,11 +120,12 @@ export interface PracticePlayer {
  * a piece's recording plays along in Listen.
  */
 export function usePracticePlayer(
-  performance: Performance,
+  written: Performance,
   view: PracticeView,
   setView: (patch: Partial<PracticeView>) => void,
   ownTempo: number,
   recording: Recording | null = null,
+  staves: PlayerStaves = NO_CHANGE,
 ): PracticePlayer {
   // The screen stays on while this screen is open: a phone on the stand does not lock mid-song.
   useWakeLock()
@@ -110,15 +134,32 @@ export function usePracticePlayer(
   const savedKeys = useSettings((state) => selectScoreView(state).keys)
   const click = view.click ?? toggles.metronome
   const sound = useSettings(selectSound)
+  const otherHand = useSettings(selectOtherHand)
+  const playback = useSettings(selectPlayback)
+  // The click and count-in in the Metronome's sound and squares (A35, A39: one engine).
+  const { sound: clickSound, meter: clickMeter, levels: clickLevels } = useSettings(selectMetronome)
+  const voicing = useMemo(
+    () => ({ sound: clickSound, meter: clickMeter, levels: clickLevels }),
+    [clickSound, clickMeter, clickLevels],
+  )
+  // The pedal played as the settings say (A27): as written, none, or with each chord.
+  const played = useMemo(() => withPedal(written, playback.pedal), [written, playback.pedal])
+  const performance = played
+  // Each staff as loud as its volume, none where its Play is off (A35).
   const mix = useMemo<Mix>(
     () => ({
-      rh: volumeGain(sound.rh),
-      lh: volumeGain(sound.lh),
-      staff: volumeGain(sound.staves),
+      ...Object.fromEntries(
+        Object.entries(sound.staves).map(([staff, percent]) => [staff, volumeGain(percent ?? 100)]),
+      ),
+      ...Object.fromEntries(
+        Object.entries(staves).flatMap(([track, choice]) =>
+          choice?.play === false ? [[track, 0]] : [],
+        ),
+      ),
       recording: volumeGain(sound.recording),
       click: volumeGain(sound.click),
     }),
-    [sound],
+    [sound, staves],
   )
   const tempo = view.tempo ?? ownTempo
   const loop = useMemo(
@@ -134,10 +175,14 @@ export function usePracticePlayer(
     swing: view.swing,
     loop,
     metronome: click,
-    countIn: toggles.countIn,
+    countIn: playback.countdown !== 'none',
+    countInHeard: playback.countdown === 'audible',
+    speedStep: playback.speedStep,
+    voicing,
     rest: view.rest ?? 0,
     recording,
     mix,
+    accompany: otherHand.play,
   })
   const { state, press } = practice
   const waiting = state.mode === 'wait'
@@ -169,6 +214,24 @@ export function usePracticePlayer(
     [waiting, press],
   )
   const bar = performance.beatGroups[state.beatGroup]?.bar ?? 0
+  // The pedal at the cursor, and the keys it alone holds (A27, Show it).
+  const heldByPedal = useMemo(
+    () => pedalKeys(performance, state.beatGroup),
+    [performance, state.beatGroup],
+  )
+  const groupTick = performance.beatGroups[state.beatGroup]?.tick ?? 0
+  const pedalNow =
+    performance.pedal.length === 0
+      ? 'none'
+      : pedalSpanAt(performance.pedal, groupTick)
+        ? 'down'
+        : 'up'
+  // The staves out of sight: the Staves' Show, and the other hand's where it is hidden (A35).
+  const other = otherHand.look === 'hide' ? MUTED[view.hands] : undefined
+  const hidden = useMemo(() => {
+    const off = hiddenStaves(staves)
+    return other === undefined || off.includes(other) ? off : [...off, other]
+  }, [staves, other])
   // Where the loop chosen from the keys began: its other end moves.
   const anchor = useRef<number | null>(null)
 
@@ -183,11 +246,16 @@ export function usePracticePlayer(
     inView,
     wrong,
     feedback: waitFeedback(performance, state),
-    muted: MUTED[view.hands],
+    muted: otherHand.look === 'dim' ? MUTED[view.hands] : undefined,
+    hidden,
     fingers: toggles.fingerNumbers,
     names: toggles.namedNotes,
     positions: toggles.positions,
     click,
+    cursor: playback.cursor,
+    performance,
+    pedal: pedalNow,
+    pedalKeys: heldByPedal,
     keys: view.keys ?? savedKeys,
     setClick: (on) =>
       view.click === undefined

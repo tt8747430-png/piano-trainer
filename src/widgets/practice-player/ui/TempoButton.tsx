@@ -1,6 +1,7 @@
 import { Gauge } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { selectPlayback, useSettings } from '@/entities/settings'
 import type { PracticeMode } from '@/features/practice'
 import { formatPercent, useLocale } from '@/shared/i18n'
 import { Listbox, SwitchRow } from '@/shared/ui'
@@ -55,6 +56,7 @@ export function TempoButton({
 }) {
   const { t } = useTranslation(['player', 'music'])
   const locale = useLocale()
+  const { speedStep: trainingStep } = useSettings(selectPlayback)
   const [open, setOpen] = useState(false)
   const dockSide = useDockSide()
   const side = popupSide ?? dockSide
@@ -145,7 +147,7 @@ export function TempoButton({
         {onSpeedTraining && mode === 'listen' && tempo < ownTempo ? (
           <SwitchRow
             label={t('pace.speedTraining')}
-            info={t('pace.speedTrainingDetail')}
+            info={t('pace.speedTrainingDetail', { percent: formatPercent(locale, trainingStep) })}
             checked={speedTraining}
             onCheckedChange={onSpeedTraining}
             className="min-h-11 border-b-0 py-0 text-base"

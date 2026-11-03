@@ -11,6 +11,8 @@ import {
   DEFAULT_EDITING,
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
+  DEFAULT_OTHER_HAND,
+  DEFAULT_PLAYBACK,
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
@@ -43,7 +45,8 @@ const DEFAULTS = {
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
   scoreView: DEFAULT_SCORE_VIEW,
-  melody: 'recording',
+  otherHand: DEFAULT_OTHER_HAND,
+  playback: DEFAULT_PLAYBACK,
   metronome: DEFAULT_METRONOME,
   foldedSections: [],
   welcomed: false,
@@ -59,10 +62,22 @@ describe('createSettingsStore', () => {
     expect(restored({ lessonReading: 'scroll' }).lessonReading).toBe('page')
   })
 
-  it('keeps the Melody saved where it is a source, the recording otherwise (ADR 0115)', () => {
-    expect(restored({ melody: 'staff' }).melody).toBe('staff')
-    expect(restored({ melody: 'tune' }).melody).toBe('recording')
-    expect(restored({}).practice).not.toHaveProperty('tune')
+  it('keeps how the Player plays where still valid, as it always did otherwise (B7)', () => {
+    expect(
+      restored({ playback: { countdown: 'loud', cursor: 'beats', pedal: 'down', speedStep: 3 } })
+        .playback,
+    ).toEqual({ ...DEFAULT_PLAYBACK, cursor: 'beats' })
+  })
+
+  it('keeps how the other hand looks and plays where still valid, dimmed and played otherwise (A35)', () => {
+    expect(restored({ otherHand: { look: 'hide', play: false } }).otherHand).toEqual({
+      look: 'hide',
+      play: false,
+    })
+    expect(restored({ otherHand: { look: 'grey', play: 'yes' } }).otherHand).toEqual(
+      DEFAULT_OTHER_HAND,
+    )
+    expect(restored({ melody: 'staff' })).not.toHaveProperty('melody')
   })
 
   it('starts on the system theme, the browser language, no toggles and no auto-next', () => {
@@ -73,7 +88,6 @@ describe('createSettingsStore', () => {
       namedNotes: false,
       positions: false,
       metronome: false,
-      countIn: false,
     })
     expect(DEFAULT_TRAINER).toEqual({ autoNext: false })
     expect(DEFAULT_RECORDER).toEqual({ click: true, tune: false })
@@ -107,10 +121,10 @@ describe('createSettingsStore', () => {
         namedNotes: true,
         positions: true,
         metronome: true,
-        countIn: false,
       },
-      melody: 'none',
-      sound: { rh: 100, lh: 35, staves: 0, recording: 60, click: 5 },
+      playback: { countdown: 'visual', cursor: 'beats', pedal: 'automatic', speedStep: 10 },
+      otherHand: { look: 'show', play: false },
+      sound: { staves: { bass: 35, staff0: 0 }, recording: 60, click: 5 },
       trainer: { autoNext: true },
       keyboard: {
         keySize: 'large',
@@ -159,7 +173,6 @@ describe('createSettingsStore', () => {
         lyrics: false,
         pinned: false,
         textSize: 130,
-        hidden: ['treble', 'staff0'],
         keys: false,
       },
       metronome: {
@@ -221,7 +234,7 @@ describe('createSettingsStore', () => {
     expect(kept.at(-1)).toEqual([69])
   })
 
-  it('keeps the Player’s view where still valid, each staff hidden once (ADR 0097)', () => {
+  it('keeps the Player’s view where still valid', () => {
     expect(
       restored({
         scoreView: {
@@ -230,7 +243,7 @@ describe('createSettingsStore', () => {
           diagrams: 'carousel',
           askOnOpen: 'yes',
           chordNames: false,
-          hidden: ['bass', 'x', 'bass', 'staff1', 'staff-1', 'melody'],
+          hidden: ['bass'],
         },
       }).scoreView,
     ).toEqual({
@@ -242,7 +255,6 @@ describe('createSettingsStore', () => {
       lyrics: true,
       pinned: true,
       textSize: 100,
-      hidden: ['bass', 'staff1'],
       keys: true,
     })
     expect(restored({ scoreView: { layout: 'paper' } }).scoreView).toEqual(DEFAULT_SCORE_VIEW)
@@ -297,9 +309,9 @@ describe('createSettingsStore', () => {
     expect(restored({ scoreView: { pinned: 'no' } }).scoreView.pinned).toBe(true)
   })
 
-  it('starts afresh over a save of the version before, whose Metronome had six meters', () => {
-    expect(SETTINGS_VERSION).toBe(18)
-    expect(restored({ theme: 'dark', metronome: { meter: '6/8' } }, 17)).toEqual(
+  it('starts afresh over a save of the version before, whose count-in was a switch (B7)', () => {
+    expect(SETTINGS_VERSION).toBe(20)
+    expect(restored({ theme: 'dark', practice: { countIn: true } }, 19)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })
@@ -336,16 +348,21 @@ describe('createSettingsStore', () => {
   })
 
   it('plays every part at full volume until the learner turns one down (ADR 0105)', () => {
-    expect(DEFAULT_SOUND).toEqual({ rh: 100, lh: 100, staves: 100, recording: 100, click: 100 })
+    expect(DEFAULT_SOUND).toEqual({ staves: {}, recording: 100, click: 100 })
   })
 
   it('keeps each volume saved as a whole percent from 0 to 100, at full otherwise', () => {
     expect(
       restored({
-        sound: { rh: 0, lh: 100, staves: 101, recording: -5, click: 52.5, extra: 3 },
+        sound: {
+          staves: { treble: 0, bass: 101, staff2: 40, alto: 50, staff0: '40' },
+          recording: -5,
+          click: 52.5,
+          extra: 3,
+        },
       }).sound,
-    ).toEqual({ rh: 0, lh: 100, staves: 100, recording: 100, click: 100 })
-    expect(restored({ sound: { rh: '40', lh: null } }).sound).toEqual(DEFAULT_SOUND)
+    ).toEqual({ staves: { treble: 0, staff2: 40 }, recording: 100, click: 100 })
+    expect(restored({ sound: { rh: 40, staves: 'loud' } }).sound).toEqual(DEFAULT_SOUND)
     expect(restored({ sound: 'loud' }).sound).toEqual(DEFAULT_SOUND)
   })
 
@@ -442,10 +459,11 @@ describe('createSettingsStore', () => {
   })
 
   it('turns a toggle that is not a boolean off', () => {
-    expect(restored({ practice: { metronome: 'yes', countIn: true } }).practice).toEqual({
+    expect(restored({ practice: { metronome: 'yes', positions: true } }).practice).toEqual({
       ...DEFAULT_PRACTICE,
-      countIn: true,
+      positions: true,
     })
+    expect(restored({ practice: { countIn: true } }).practice).not.toHaveProperty('countIn')
   })
 
   it('restores the MIDI keyboard’s settings, an unknown value taking its default alone', () => {

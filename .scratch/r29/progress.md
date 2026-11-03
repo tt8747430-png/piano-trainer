@@ -47,7 +47,7 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | A32 | The theory pages: one owner per idea, no copies | 2 | done | 31080752 | the relative key on the Key tab only; Intervals links the Quiz's Intervals drill; Harmony's chords open Chords |
 | A33 | Colour notes: one model | 2 | done | 8355d0ed, b417ebf7 | one panel: Chord tones · Tensions · Avoid, a tap adds the note (C9, C7♯11, Cadd9); `colour=` in the URL; `key=` follows the chord's degree from its root. Dm7 as ii takes 13 (the spec's table), not avoided |
 | A34 | The score editor against Flat and the editors in `piano-data` | 4 | open | | |
-| A35 | The Player: play staves, not "melody" and patterns | 4 | open | | |
+| A35 | The Player: play staves, not "melody" and patterns | 4 | done | 49809bdd, 093e86b9 | Staves (Play/Show, recording a track), accompaniment for charts only, Melody gone, other hand, controlsFor + audit table; click from the Metronome engine. Daisy fields is a chart (audit); Clef display not built |
 | A36 | Focus and keyboard walking | 1 | done | a2569823 | one 3px focus outline with a test; Practice walked by Tab in a test |
 | A37 | The chord views (Diagrams, Grid, Chords over lyrics) as Chordify does them | 4 | open | | |
 | A38 | One meaning for the pencil, for everyone | 1 | in progress | | song page done (audit); editing in the chord views (Grid, Chords over lyrics, Diagrams) goes with A37 in round 4 |
@@ -62,7 +62,7 @@ The state of every item of `prompt.md`. Updated with every commit; a new session
 | B4 | Edit in place | 8 | open | | |
 | B5 | Learner view | 9 | open | | |
 | B6 | One publishing model | 10 | open | | |
-| B7 | Real settings for the Player and the editor | 4 | open | | |
+| B7 | Real settings for the Player and the editor | 4 | done | 4ffa41de | /settings/player (and a song's gear, /play/$pieceId/settings), /settings/score-editor; Clef, Replace/Insert, palette side not offered (no engine for them) |
 | B8 | The Player's practice flow | 11 | open | | |
 | B9 | Customisable pages and cards | 14 | open | | |
 | B10 | Customisable bars, as memory-palaces does | 12 | open | | |

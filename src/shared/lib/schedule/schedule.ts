@@ -8,6 +8,7 @@ import {
   secondsFor,
   type BarsInMeter,
 } from './grid'
+import { clickLevel, voicedClick, type ClickVoicing } from './click-voice'
 import { joinedNotes } from './legato'
 import { glissandoTargets, loudness, markedSounds, rollOffsets, tremoloPartners } from './marks'
 import { pedalHeld, pedalSpans } from './pedal-marks'
@@ -51,6 +52,8 @@ export interface NoteSound {
    * turns up or down (ADR 0105); none for a sound of no piece's (a chord tapped, a run).
    */
   readonly part?: NoteHand
+  /** A single staff's note (A35): its staff's place, which the mix turns up or down on its own. */
+  readonly staff?: number
 }
 /**
  * A beat's sound, synthesised (ADR 0052): the Player's click, or the Metronome's beep and drums.
@@ -84,6 +87,8 @@ interface ScheduleOptions {
   readonly toTick?: Tick
   /** A bar counted in before the music, a click on each of its beats. */
   readonly countIn?: boolean
+  /** Whether the count-in's clicks sound, true unless said: a count-in seen alone counts unheard (B7). */
+  readonly countInHeard?: boolean
   /** A click on every beat of the music. */
   readonly metronome?: boolean
   /**
@@ -91,6 +96,11 @@ interface ScheduleOptions {
    * turned right down (ADR 0105) a count-in still counts its bar, unheard.
    */
   readonly clicks?: boolean
+  /**
+   * The Metronome's sound and squares the count-in and the click play in (A35, A39); a plain click,
+   * the bar's first accented, unless said.
+   */
+  readonly voicing?: ClickVoicing
   /** How much the off-beat 8ths come late, long-short (ADR 0115); a compound meter never swings. */
   readonly swing?: SwingFeel
 }
@@ -194,9 +204,15 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   const musicStart = secondsFor(place(fromTick) - place(counted[0]?.tick ?? fromTick), tempo)
   const at = (tick: Tick) => musicStart + secondsFor(place(tick) - place(fromTick), tempo)
   const clicked = options.clicks !== false
-  const countIn: Sound[] = clicked
-    ? counted.map(({ tick, accent }) => ({ kind: 'click', at: at(tick), accent }))
-    : []
+  const { voicing } = options
+  const countIn: Sound[] =
+    clicked && options.countInHeard !== false
+      ? counted.flatMap(({ tick, accent }): Sound[] =>
+          voicing
+            ? voicedClick(at(tick), accent ? 'downbeat' : 'normal', voicing.sound)
+            : [{ kind: 'click', at: at(tick), accent }],
+        )
+      : []
   const inPass = (tick: Tick) => tick >= fromTick && tick < toTick
 
   // A note still held where the pass starts sounds from there, for what is left of it.
@@ -231,6 +247,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
       ...(end > written ? { held: length(at(written) - at(start)) } : {}),
       velocity: n.velocity * (levels[i] ?? 1),
       part: n.hand,
+      ...(n.staff === undefined ? {} : { staff: n.staff }),
     }
     // A note held over from before the pass sounds plainly: its marks were where it began.
     const marks = n.startTick >= fromTick ? n.marks : undefined
@@ -251,13 +268,21 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
     })
   })
 
+  // The click on the meter's counted beats (the dotted beat in 6/8), each bar's in its own meter,
+  // at the tempo the music keeps there; in the Metronome's voice and squares where asked.
   const metronome: Sound[] =
     options.metronome && clicked
-      ? performance.bars.flatMap((_, index) =>
-          barClicks(performance, index).flatMap(({ tick, accent }): Sound[] =>
-            inPass(tick) ? [{ kind: 'click', at: at(tick), accent }] : [],
-          ),
-        )
+      ? performance.bars.flatMap((bar, index) => {
+          const grid = barGrid(performance, index)
+          return barClicks(performance, index).flatMap(({ tick, accent }): Sound[] => {
+            if (!inPass(tick)) return []
+            if (!voicing) return [{ kind: 'click', at: at(tick), accent }]
+            const beat = grid.beats.findIndex((each) => grid.start + each.tick === tick)
+            const meter = bar.meter ?? performance.meter
+            const level = clickLevel(beat, accent, meter, voicing)
+            return level === 'silent' ? [] : voicedClick(at(tick), level, voicing.sound)
+          })
+        })
       : []
 
   const cues = performance.beatGroups.flatMap((group, beatGroup) =>
@@ -349,6 +374,7 @@ export function beatGroupSounds(
         duration: Math.max(SHORTEST_ALONE, secondsFor(n.durationTicks, tempo)),
         velocity: n.velocity,
         part: n.hand,
+        ...(n.staff === undefined ? {} : { staff: n.staff }),
       },
     ]
   })

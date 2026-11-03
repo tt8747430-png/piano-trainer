@@ -11,6 +11,8 @@ export const settings: LocaleResources['settings'] = {
     sound: 'Звук и запись',
     metronome: 'Метроном',
     storage: 'Хранилище и копии',
+    player: 'Плеер',
+    scoreEditor: 'Нотный редактор',
   },
   piano: { look: 'Вид', place: 'Положение', play: 'Игра', bar: 'Панель над клавишами' },
   computerKeys: { shortcuts: 'Сочетания клавиш', typingGroup: 'Игра' },

@@ -16,15 +16,15 @@ import {
   CHORD_KEYS_MAX,
   isLessonReading,
   DEFAULT_CHORD_FINDER,
-  DEFAULT_MELODY,
   DEFAULT_METRONOME,
-  MELODY_SOURCES,
   DEFAULT_MIDI,
   DEFAULT_SCORE_VIEW,
   DEFAULT_PRACTICE,
   DEFAULT_EDITING,
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
+  DEFAULT_OTHER_HAND,
+  DEFAULT_PLAYBACK,
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
@@ -36,13 +36,17 @@ import {
   SECTION_ID_MAX,
   PRACTICE_TOGGLES,
   REMEMBERED_CHORDS,
-  SOUND_PARTS,
   defaultKeyboard,
   detectLocale,
   isKeyDock,
   isKeyLength,
   isDiagramsMode,
   isTextSize,
+  isOtherHandLook,
+  isCountdown,
+  isCursor,
+  isPedalPlay,
+  isSpeedStep,
   isKeySize,
   isBeatLevel,
   isMetronomeSound,
@@ -63,6 +67,8 @@ import {
   type KeyboardSettings,
   type MetronomeSettings,
   type MidiSettings,
+  type OtherHandSettings,
+  type PlaybackSettings,
   type PaletteFolds,
   type PracticeToggles,
   type EditingSettings,
@@ -75,7 +81,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 18
+export const SETTINGS_VERSION = 20
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -106,7 +112,8 @@ export function createSettingsStore({
         midi: DEFAULT_MIDI,
         chordFinder: DEFAULT_CHORD_FINDER,
         scoreView: DEFAULT_SCORE_VIEW,
-        melody: DEFAULT_MELODY,
+        otherHand: DEFAULT_OTHER_HAND,
+        playback: DEFAULT_PLAYBACK,
         metronome: DEFAULT_METRONOME,
         foldedSections: [],
         welcomed: false,
@@ -119,8 +126,6 @@ export function createSettingsStore({
     saving,
   )
 }
-
-const isMelodySource = isOneOf(MELODY_SOURCES)
 
 /** A toggle keeps what was saved; one never saved (a newer toggle) takes its default. */
 function practiceToggles(value: unknown): PracticeToggles {
@@ -137,15 +142,40 @@ function practiceToggles(value: unknown): PracticeToggles {
 const isVolume = (value: unknown): value is number =>
   Number.isInteger(value) && (value as number) >= 0 && (value as number) <= 100
 
-/** Each part's volume as saved where it is one, at full otherwise. */
+/** Each part's volume as saved where it is one, at full otherwise; a staff's kept by a staff's id. */
 function soundSettings(value: unknown): SoundSettings {
   const saved = savedObject<SoundSettings>(value)
-  return Object.fromEntries(
-    SOUND_PARTS.map((part) => {
-      const kept: unknown = saved[part]
-      return [part, isVolume(kept) ? kept : DEFAULT_SOUND[part]]
-    }),
-  ) as Record<keyof SoundSettings, number>
+  const staves = savedObject<Record<string, unknown>>(saved.staves)
+  return {
+    staves: Object.fromEntries(
+      Object.entries(staves).filter(
+        (entry): entry is [string, number] => isStaffId(entry[0]) && isVolume(entry[1]),
+      ),
+    ),
+    recording: isVolume(saved.recording) ? saved.recording : DEFAULT_SOUND.recording,
+    click: isVolume(saved.click) ? saved.click : DEFAULT_SOUND.click,
+  }
+}
+
+/** How the Player plays as saved, each where still valid. */
+function playbackSettings(value: unknown): PlaybackSettings {
+  const saved = savedObject<PlaybackSettings>(value)
+  const initial = DEFAULT_PLAYBACK
+  return {
+    countdown: isCountdown(saved.countdown) ? saved.countdown : initial.countdown,
+    cursor: isCursor(saved.cursor) ? saved.cursor : initial.cursor,
+    pedal: isPedalPlay(saved.pedal) ? saved.pedal : initial.pedal,
+    speedStep: isSpeedStep(saved.speedStep) ? saved.speedStep : initial.speedStep,
+  }
+}
+
+/** How the other hand looks and plays as saved, each where still valid. */
+function otherHandSettings(value: unknown): OtherHandSettings {
+  const saved = savedObject<OtherHandSettings>(value)
+  return {
+    look: isOtherHandLook(saved.look) ? saved.look : DEFAULT_OTHER_HAND.look,
+    play: typeof saved.play === 'boolean' ? saved.play : DEFAULT_OTHER_HAND.play,
+  }
 }
 
 /** Each place's fold as saved where it is a boolean; a place never chosen stays unset. */
@@ -255,13 +285,12 @@ const isSheetView = isOneOf(SHEET_VIEWS)
 
 /**
  * The Player's view: the music's view, Diagrams' mode and Chords over lyrics' text size, each switch
- * and the layout as saved where still valid, the staves hidden each once.
+ * and the layout as saved where still valid.
  */
 function scoreViewSettings(value: unknown): ScoreViewSettings {
   const saved = savedObject<ScoreViewSettings>(value)
   const switched = (key: 'askOnOpen' | 'chordNames' | 'lyrics' | 'pinned' | 'keys') =>
     typeof saved[key] === 'boolean' ? saved[key] : DEFAULT_SCORE_VIEW[key]
-  const hidden: unknown = saved.hidden
   return {
     layout: isSheetView(saved.layout) ? saved.layout : DEFAULT_SCORE_VIEW.layout,
     music: isMusicView(saved.music) ? saved.music : DEFAULT_SCORE_VIEW.music,
@@ -272,7 +301,6 @@ function scoreViewSettings(value: unknown): ScoreViewSettings {
     pinned: switched('pinned'),
     textSize: isTextSize(saved.textSize) ? saved.textSize : DEFAULT_SCORE_VIEW.textSize,
     keys: switched('keys'),
-    hidden: Array.isArray(hidden) ? [...new Set(hidden.filter(isStaffId))] : [],
   }
 }
 
@@ -369,7 +397,8 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     midi: midiSettings(saved.midi),
     chordFinder: chordFinderSettings(saved.chordFinder),
     scoreView: scoreViewSettings(saved.scoreView),
-    melody: isMelodySource(saved.melody) ? saved.melody : DEFAULT_MELODY,
+    otherHand: otherHandSettings(saved.otherHand),
+    playback: playbackSettings(saved.playback),
     metronome: metronomeSettings(saved.metronome),
     foldedSections: foldedSections(saved.foldedSections),
     welcomed: saved.welcomed === true,

@@ -34,7 +34,6 @@ function PreviewLine({ draft }: { draft: Draft }) {
         tapsOf={NO_TICKS}
         chordNames={shown.chordNames}
         lyrics={shown.lyrics}
-        hidden={shown.hidden}
         edit={shownAsPrinted}
         view="panorama"
         room={PREVIEW_ROOM}

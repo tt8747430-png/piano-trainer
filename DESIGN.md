@@ -622,6 +622,9 @@ The whole piano, A0–C8, hung from a wooden **rail** and scrolling sideways wit
 - **Down is physical:** a key drops 2px and its lip shortens in 80ms (at once under reduced motion). It sounds the
   instant it is touched, holds while held, and stays down at least 150ms so the lightest tap shows.
 - **Access:** keys are buttons named by note ("F sharp 4"), one in the tab order, the arrows walking the rest.
+- **The pedal in the Player** (A27): a **Ped.** lamp at the rail's end, in the music font, lit in the playhead's
+  ink while the sustain pedal is down and soft ink while it is up; a key sounding only under the pedal is ringed
+  (the outlined ring), apart from the filled keys a hand holds.
 
 ### The music
 
@@ -630,6 +633,7 @@ The whole piano, A0–C8, hung from a wooden **rail** and scrolling sideways wit
   section, tempo in Onest 12px soft ink; chord symbols in Literata 600).
 - **What is chosen is coloured, never boxed:** notes in the selection colour, a range or the loop a light band of
   it. The playhead and the caret are one thin line of it across the staves in sight. Empty staff chooses nothing.
+  The Ped. mark the music plays under takes the playhead's ink while its pedal is down.
 - **Chord views:** beat cells on card paper (a hairline between beats, a 2px ink barline before a bar, the beat
   sounding filled with ink); chips of a symbol on a sand wash, ink while they sound; a chord diagram (`KeyDiagram`)
   drawn on F3–B4 as the app's keys, a dot on each key held. The line playing is ink and semibold, the rest soft ink.

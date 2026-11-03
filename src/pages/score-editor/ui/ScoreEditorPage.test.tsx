@@ -1141,12 +1141,12 @@ describe('the score editor', () => {
     const view = await screen.findByRole('dialog', { name: 'View' })
     expect(within(view).queryByRole('radio', { name: 'Left' })).not.toBeInTheDocument()
     expect(within(view).queryByRole('switch', { name: 'Every tool' })).not.toBeInTheDocument()
-    // The piano's two staves, then what is shown: no chip of the palette's.
+    // What is shown: no chip of the palette's.
     expect(
       within(view)
         .getAllByRole('button')
         .filter((button) => button.hasAttribute('aria-pressed')),
-    ).toHaveLength(6)
+    ).toHaveLength(4)
     // Beside the sheet it stands at its right: no side is kept for it.
     expect(settingsStore.getState()).not.toHaveProperty('paletteSide')
   })
@@ -1804,7 +1804,7 @@ describe('the score editor', () => {
     expect(keys).not.toContain(midi(48))
   })
 
-  it('opens a song with a tune in the Player with its staff to choose as the Melody (ADR 0115)', async () => {
+  it('opens a song with a tune in the Player with its staff in the Setup’s Staves (A35)', async () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
     const song = { ...SONG, staves: [{ notes: 'B4/4 | D5/4 | G4/4 | G4/4' }] }
@@ -1814,7 +1814,7 @@ describe('the score editor', () => {
     )
     await renderApp('/play/my-1', { storage })
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    expect(await screen.findByRole('radio', { name: 'Staff 1' })).toBeEnabled()
+    expect(await screen.findByRole('switch', { name: 'Play Staff 1' })).toBeChecked()
   })
 
   it('closes to the song’s page', async () => {
@@ -1919,17 +1919,14 @@ describe('the score editor', () => {
       within(view)
         .getAllByRole('group')
         .map((group) => group.getAttribute('aria-label')),
-    ).toEqual(['Staves', 'Show'])
+    ).toEqual(['Show'])
     // Nothing in it twice: the palette folds by its own handle, and stands at the sheet's right.
     // What the sheet prints, the fingers too: the fingering field types them there (ADR 0096).
-    // A chip for each staff by its name (ADR 0097, 0115), then the piano's, then what it prints.
+    // A chip for what it prints: the editor writes every staff, none hidden (A35).
     const chips = within(view)
       .getAllByRole('button')
       .filter((button) => button.hasAttribute('aria-pressed'))
     expect(chips.map((chip) => chip.lastElementChild?.textContent)).toEqual([
-      'Voice',
-      'Upper staff',
-      'Lower staff',
       'Chord symbols',
       'Lyrics',
       'Finger numbers',
@@ -1943,7 +1940,7 @@ describe('the score editor', () => {
     expect(settingsStore.getState()).not.toHaveProperty('editorLayout')
   })
 
-  it('shows the tune’s staff and the chord symbols as the View says, the caret kept in sight (ADR 0114)', async () => {
+  it('shows every staff, and the chord symbols as the View says, the caret kept in sight (ADR 0114, A35)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', {
       storage: withSong({ staves: [{ notes: 'B4/4 | D5/4 | G4/4 | G4/4' }] }),
@@ -1965,39 +1962,14 @@ describe('the score editor', () => {
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Staff 1 · Bar 1/))
     await user.click(screen.getByRole('button', { name: 'View' }))
     const view = await screen.findByRole('dialog', { name: 'View' })
-    await user.click(within(view).getByRole('button', { name: 'Staff 1' }))
-    expect(settingsStore.getState().scoreView.hidden).toEqual(['staff0'])
-    await waitFor(() => expect(staves()).toEqual(new Set(['treble', 'bass'])))
-    // The caret leaves the staff out of sight for the one under it; its notes are kept.
-    expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff · Bar 1/)
+    expect(within(view).queryByRole('button', { name: 'Staff 1' })).toBeNull()
     await user.click(within(view).getByRole('button', { name: 'Chord symbols' }))
     expect(settingsStore.getState().scoreView.chordNames).toBe(false)
     await waitFor(() => expect(chordNames()).not.toContain(true))
     await user.keyboard('{Escape}')
     // Up from the top staff in sight there is no row to write: the caret stays.
     await user.keyboard('{Alt>}{ArrowUp}{/Alt}')
-    expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff · Bar 1/)
-  })
-
-  it('draws one piano staff alone where the View hides the other, the caret kept on the one in sight (ADR 0114)', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/edit/my-1', {
-      storage: withSong({ hands: SILENT_HANDS }),
-    })
-    const staves = () =>
-      new Set(
-        [...document.querySelectorAll('[data-slot="score"] g.staff[data-staff]')].map((staff) =>
-          staff.getAttribute('data-staff'),
-        ),
-      )
-    await waitFor(() => expect(staves()).toEqual(new Set(['treble', 'bass'])), { timeout: 4000 })
-    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff/))
-    await user.click(screen.getByRole('button', { name: 'View' }))
-    const view = await screen.findByRole('dialog', { name: 'View' })
-    await user.click(within(view).getByRole('button', { name: 'Upper staff' }))
-    expect(settingsStore.getState().scoreView.hidden).toEqual(['treble'])
-    await waitFor(() => expect(staves()).toEqual(new Set(['bass'])))
-    expect(screen.getByRole('status')).toHaveTextContent(/^Lower staff · Bar 1/)
+    expect(screen.getByRole('status')).toHaveTextContent(/^Staff 1 · Bar 1/)
   })
 
   it('opens a song written in degrees as its chart in its key, its edits a version (ADR 0115)', async () => {

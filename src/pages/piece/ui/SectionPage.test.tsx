@@ -172,10 +172,8 @@ describe('a section’s page (ADR 0111)', () => {
     await user.click(await screen.findByRole('link', { name: 'Em · C · D' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/play/bz5'))
     expect(router.state.location.search).toEqual({ loop: '17-18', click: true })
-    await user.click(await screen.findByRole('button', { name: 'Sound' }))
-    const sound = await screen.findByRole('dialog', { name: 'Sound' })
-    expect(within(sound).getByRole('switch', { name: 'Metronome' })).toHaveAttribute(
-      'aria-checked',
+    expect(await screen.findByRole('button', { name: 'Metronome' })).toHaveAttribute(
+      'aria-pressed',
       'true',
     )
     expect(settingsStore.getState().practice.metronome).toBe(false)

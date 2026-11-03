@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderRouted } from '@/app/testing/render-routed'
@@ -9,10 +9,19 @@ import {
   type AccompanimentChoice,
   type PatternFit,
 } from '@/entities/pattern'
-import { melodyOf } from '../model/melody'
-import { MelodyField } from './MelodyField'
+import { withTrack, type PlayerStaves } from '@/features/practice'
+import type { ScoreTrack } from '@/widgets/practice-player'
 import { PatternCard } from './PatternCard'
 import { PlayerSetup } from './PlayerSetup'
+import { StavesSection } from './StavesSection'
+
+/** A tune over the piano, and a recording. */
+const TRACKS: readonly ScoreTrack[] = [
+  { id: 'staff0', label: 'Voice', clef: 'treble', drawn: true },
+  { id: 'treble', label: 'Upper staff', clef: 'treble', drawn: true },
+  { id: 'bass', label: 'Lower staff', clef: 'bass', drawn: true },
+  { id: 'recording', label: 'Recording', drawn: false },
+]
 
 /** A song in 4/4 with no tune and no methods of its own. */
 const SONG: PatternFit = { methodCodes: false, tune: false, key: true, simpleTime: true }
@@ -20,9 +29,11 @@ const SONG: PatternFit = { methodCodes: false, tune: false, key: true, simpleTim
 async function renderSetup(
   fit: Partial<PatternFit> = {},
   figures: Partial<AccompanimentChoice> = {},
+  staves: PlayerStaves = {},
 ) {
   const user = userEvent.setup()
   const onFigures = vi.fn()
+  const onStaves = vi.fn()
   const view = await renderRouted(
     <PlayerSetup
       figures={{ pattern: 'block', rh: null, lh: null, inversion: null, nearest: true, ...figures }}
@@ -30,21 +41,12 @@ async function renderSetup(
       onFigures={onFigures}
     >
       <p>The music’s own choices</p>
+      <StavesSection tracks={TRACKS} staves={staves} onChange={onStaves} />
       <PatternCard />
-      <MelodyField
-        melody={melodyOf('none', {
-          staff: fit.tune ?? false,
-          recording: false,
-          inOwnKey: true,
-          leadSheet: false,
-        })}
-        staff="Melody"
-        ownKey="C major"
-      />
     </PlayerSetup>,
   )
   await user.click(screen.getByRole('button', { name: 'Setup' }))
-  return { user, onFigures, ...view }
+  return { user, onFigures, onStaves, ...view }
 }
 
 describe('PlayerSetup', () => {
@@ -186,18 +188,22 @@ describe('PlayerSetup', () => {
     expect(onFigures).toHaveBeenCalledWith({ rh: undefined })
   })
 
-  it('saves the Melody chosen in settings, the staff by its name, a source the song has not greyed', async () => {
-    const { user, settingsStore } = await renderSetup({ tune: true })
-    const melody = screen.getByRole('radiogroup', { name: 'Melody' })
-    const staff = screen.getByRole('radio', { name: 'Melody' })
-    expect(screen.getByRole('radio', { name: 'None' })).toBeChecked()
-    expect(screen.getByRole('radio', { name: 'Recording' })).toHaveAttribute(
-      'title',
-      'This song has no recording',
-    )
-    await user.click(staff)
-    expect(settingsStore.getState().melody).toBe('staff')
-    expect(melody).toBeInTheDocument()
+  it('lists each track with Play and Show, the recording with Play alone (A35)', async () => {
+    const { user, onStaves } = await renderSetup({}, {}, withTrack({}, 'bass', { play: false }))
+    const switches = within(screen.getByRole('group', { name: 'Staves' })).getAllByRole('switch')
+    expect(
+      switches.map((each) => [each.getAttribute('aria-label'), each.getAttribute('aria-checked')]),
+    ).toEqual([
+      ['Play Voice', 'true'],
+      ['Show Voice', 'true'],
+      ['Play Upper staff', 'true'],
+      ['Show Upper staff', 'true'],
+      ['Play Lower staff', 'false'],
+      ['Show Lower staff', 'true'],
+      ['Play Recording', 'true'],
+    ])
+    await user.click(screen.getByRole('switch', { name: 'Show Voice' }))
+    expect(onStaves).toHaveBeenCalledWith('staff0', { show: false })
   })
 
   it('closes what plays the key’s triads to music without a key', async () => {

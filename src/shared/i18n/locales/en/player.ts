@@ -114,8 +114,8 @@ export const player = {
   hands: 'Hands',
   handsOf: 'Hands: {{hands}}',
   pattern: 'Pattern',
-  // The Setup's section of what the hands play: the pattern and the position (ADR 0115).
-  accompaniment: 'Accompaniment',
+  // The Setup's section of what a chord chart's hands play (A35): the pattern, the position, swing.
+  accompaniment: 'Accompaniment from the chords',
   fromChart: 'From the chart',
   fromChartDescription: 'Each section and chord as the song marks it.',
   rh: 'Right hand',
@@ -130,22 +130,64 @@ export const player = {
   yourMix: '{{pattern}}, your mix',
   yourPart: 'Your choice',
   backToPattern: 'Back to the pattern',
-  // What plays the song's tune along with your hands (ADR 0115).
-  melody: {
-    label: 'Melody',
+  // The Setup's first section (A35, Flat's Audio playback): each track, played and shown or not.
+  staves: {
+    title: 'Staves',
     about:
-      'What plays the song’s tune along with your two hands. {{staff}}: the song’s top staff, as written over the piano. Recording: the song as recorded, in its own key only. None: your hands alone. A right hand that plays the tune plays it whatever you choose here.',
-    none: 'None',
-    staff: 'Melody staff',
-    recording: 'Recording',
-    why: {
-      noStaff: 'This song has no staff over the piano',
-      noRecording: 'This song has no recording',
-      ownKey: 'The recording plays only in {{key}}, its own key',
-      leadSheet: 'A lead sheet always plays its melody',
-    },
+      'Which staves play and which the score shows, each by its name, and the song’s recording as a track of its own. How loud each one plays is on the Player’s settings.',
+    play: 'Play',
+    show: 'Show',
+    playOf: 'Play {{track}}',
+    showOf: 'Show {{track}}',
   },
   playing: 'How it plays',
+  // The pedal's lamp by the keys (A27): the score's own mark, lit while the pedal is down.
+  pedalLamp: { mark: 'Ped.', down: 'Pedal down', up: 'Pedal up' },
+  // The Player's settings page (B7): how it always plays, every song's.
+  settingsPage: {
+    open: 'Player settings',
+    audio: 'Audio playback',
+    audioInfo:
+      'How loud each staff, the recording and the metronome play, for every song. Only the chords turns the recording right down and the piano up, so you hear the chords alone.',
+    metronome: 'Metronome sound and beats',
+    speed: 'Playback speed',
+    speedStepInfo:
+      'How much faster each pass plays while speed training climbs to the song’s tempo.',
+    display: 'Display',
+    countdown: {
+      label: 'Count-in',
+      info: 'Before the music starts. Audible: a bar of clicks, its beats counted down on the screen. Visual: counted down on the screen alone. None: the music starts at once.',
+      none: 'None',
+      audible: 'Audible',
+      visual: 'Visual',
+    },
+    cursor: {
+      label: 'Cursor',
+      info: 'How the line on the score follows the music. Continuous: it glides with the beat. Beats: it steps to each note as it starts. None: no line.',
+      none: 'None',
+      beats: 'Beats',
+      continuous: 'Continuous',
+    },
+    keys: 'Show the keys',
+    practice: 'One hand',
+    practiceInfo: 'When you practise one hand (Hands: Left or Right).',
+    otherHand: {
+      label: 'The other hand',
+      info: 'Show: its staff as it is. Dim: its notes greyed. Hide: only your hand’s staff is shown.',
+      show: 'Show',
+      dim: 'Dim',
+      hide: 'Hide',
+    },
+    playOther: 'Play the other hand',
+    playOtherInfo: 'In Wait mode, the app plays the hand you are not practising as you play yours.',
+    pedal: {
+      label: 'Pedal',
+      info: 'As written: the sustain pedal as the music marks it. Off: no pedal. Automatic: pressed with each chord and changed as the chord changes, for music written without pedal marks.',
+      written: 'As written',
+      off: 'Off',
+      automatic: 'Automatic',
+    },
+  },
   /** The picker's way to the Patterns page, where they are explained, starred, hidden and made. */
   allPatterns: 'All patterns',
   ownPattern: 'Make your own pattern',
@@ -229,7 +271,7 @@ export const player = {
     own: 'Original tempo',
     waitShort: 'Wait',
     speedTraining: 'Speed training',
-    speedTrainingDetail: '5% faster each pass, up to 100%',
+    speedTrainingDetail: '{{percent}} faster each pass, up to 100%',
   },
   // The Player's shortcuts, as the sheet lists them.
   shortcuts: {

@@ -15,13 +15,14 @@ import {
   audibleHands,
   beatGroupSounds,
   untilNextBeatGroup,
+  type ClickVoicing,
   type Hands,
   type Recording,
   type SwingFeel,
 } from '@/shared/lib/schedule'
 import { useServices } from '@/shared/lib/services'
 import { loopBeatGroups, loopTicks, type BarRange, type BeatGroupRange } from './loop'
-import { heardIn, mixGain, type Mix } from './mix'
+import { heardIn, mixGain, partGain, type Mix } from './mix'
 import {
   accompanyingHands,
   initialPractice,
@@ -46,12 +47,23 @@ export interface PracticeSetup {
   readonly loop: BarRange | null
   readonly metronome: boolean
   readonly countIn: boolean
+  /** Whether the count-in's clicks sound, true unless said: one seen alone counts unheard (B7). */
+  readonly countInHeard?: boolean
+  /** The Metronome's sound and squares the click and count-in play in (A35, A39). */
+  readonly voicing?: ClickVoicing
+  /** Speed training's step, a share of the piece's tempo each pass; 5% unless said (B7). */
+  readonly speedStep?: number
   /** Beats of rest, each a click, before each repeat of the passage. */
   readonly rest: number
   /** The piece's recording, played along in Listen; null plays none. */
   readonly recording: Recording | null
-  /** How loud each part plays (ADR 0105): the hands, the staves, the recording and the click. */
+  /** How loud each part plays (ADR 0105): each staff, the recording and the click. */
   readonly mix: Mix
+  /**
+   * Whether Wait mode plays the hand not practised along (A35, "Play the other hand"); true unless
+   * said. The staves over the piano play either way.
+   */
+  readonly accompany?: boolean
 }
 
 export interface Practice {
@@ -132,15 +144,17 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   // then on, and starts nothing again. Only a part turned right down, or up from nothing, does: it
   // is then left out of the music, or brought into it, from the beat group playing.
   const mixed = useRef(mix)
+  const accompanyAll = useRef(setup.accompany !== false)
   useLayoutEffect(() => {
     mixed.current = mix
+    accompanyAll.current = setup.accompany !== false
   })
   const gain = useCallback<SoundGain>((sound) => mixGain(() => mixed.current)(sound), [])
   const heard = heardIn(audibleHands(state.hands), mix)
   const { rh, lh, staff } = heard
-  const clicks = mix.click > 0
-  const recording = mix.recording > 0 ? setup.recording : null
-  const up = speedTraining ? speedUp(tempo, ownTempo) : undefined
+  const clicks = partGain(mix, 'click') > 0
+  const recording = partGain(mix, 'recording') > 0 ? setup.recording : null
+  const up = speedTraining ? speedUp(tempo, ownTempo, setup.speedStep) : undefined
   const upStep = up?.step
   const upUntil = up?.until
   const listening = state.mode === 'listen' && state.playing
@@ -155,6 +169,8 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   const passFrom = useEffectEvent(() => ({
     tick: state.performance.beatGroups[state.beatGroup]?.tick,
     countIn,
+    countInHeard: setup.countInHeard !== false,
+    voicing: setup.voicing,
   }))
 
   // Listen: the transport runs while playing, from where the learner is, and starts again from the
@@ -182,6 +198,8 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
             ? undefined
             : { step: upStep, until: upUntil },
         countIn: first && from.countIn,
+        countInHeard: from.countInHeard,
+        voicing: from.voicing,
         metronome,
         clicks,
         swing,
@@ -235,7 +253,11 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   /** Sounds the other hands of this beat group; returns how long until the app moves on. */
   const accompany = useEffectEvent((): number => {
     const at = due.current ?? audio.now() + PLAY_DELAY
-    const hands = heardIn(accompanyingHands(state.hands), mixed.current)
+    const along = accompanyingHands(state.hands)
+    const hands = heardIn(
+      accompanyAll.current ? along : { rh: false, lh: false, staff: along.staff },
+      mixed.current,
+    )
     audio.play(beatGroupSounds(state.performance, state.beatGroup, { tempo, hands }), at, gain)
     if (answered) {
       due.current = null

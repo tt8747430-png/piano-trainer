@@ -184,7 +184,7 @@ describe('the View, by view (ADR 0108)', () => {
     expect(about).toHaveTextContent('Grid: every bar’s chords, beat by beat')
   })
 
-  it('heads the sheet music’s own with its name: its Layout first, then its staves and what it shows', async () => {
+  it('heads the sheet music’s own with its name: its Layout first, then what it shows', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/silent')
     const menu = await openView(user, 'Sheet music')
@@ -195,14 +195,9 @@ describe('the View, by view (ADR 0108)', () => {
     expect(within(layout).getByRole('radio', { name: 'Vertical scroll' })).toBeChecked()
     await user.click(within(layout).getByRole('radio', { name: 'Panorama' }))
     expect(settingsStore.getState().scoreView.layout).toBe('panorama')
-    expect(within(sheet).getByRole('group', { name: 'Staves' })).toBeInTheDocument()
+    // Which staves play and show is the Setup's (A35).
+    expect(within(sheet).queryByRole('group', { name: 'Staves' })).toBeNull()
     expect(within(sheet).queryByRole('radiogroup', { name: 'Mode' })).not.toBeInTheDocument()
-    chipsAre(
-      within(sheet).getByRole('group', { name: 'Staves' }),
-      'Staff 1',
-      'Upper staff',
-      'Lower staff',
-    )
     chipsAre(
       within(sheet).getByRole('group', { name: 'Show' }),
       'Chord symbols',

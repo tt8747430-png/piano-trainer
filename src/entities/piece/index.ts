@@ -30,6 +30,7 @@ export {
 export {
   chartOf,
   hasChartPlan,
+  hasWrittenStaves,
   patternsOfPiece,
   pieceFit,
   sectionCount,

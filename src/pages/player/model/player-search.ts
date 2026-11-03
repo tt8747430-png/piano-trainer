@@ -21,7 +21,12 @@ export type PieceParams = SetupParams & { readonly simple?: boolean }
  * it (ADR 0115).
  */
 export type PlayerSearch = PracticeView &
-  SetupParams & { readonly simple: boolean; readonly bar?: number }
+  SetupParams & {
+    readonly simple: boolean
+    readonly bar?: number
+    /** Which tracks play and show (A35): `u1s0,l0s1`, all on where absent (`stavesParam`). */
+    readonly staves?: string
+  }
 
 /**
  * The Player's URL read against its piece: what the URL leaves out is the piece's own, and so is a
@@ -32,7 +37,6 @@ export type PlayerSearch = PracticeView &
 export function resolveChoice(
   piece: Piece,
   search: PieceParams,
-  tune: boolean,
   book: PatternBook,
 ): PracticeChoice {
   const own = ownChoice(piece)
@@ -48,7 +52,8 @@ export function resolveChoice(
     inversion: search.inversion ?? null,
     nearest: search.nearest !== false,
     chordSize: choosableChordSize(piece) === null ? null : (search.chordSize ?? null),
-    tune,
+    // Its staves always sound as written; the Staves' Play turns each up or down (A35).
+    tune: true,
     simple: search.simple === true,
   }
 }
