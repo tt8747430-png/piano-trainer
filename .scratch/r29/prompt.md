@@ -459,6 +459,15 @@ doesn't name, judge it by them:
     - **Songs' Settings page:** maybe one row now; decide what is best. "Sound and recording" in the app's Settings:
       decide properly. The Player's Play: a round icon, probably.
     - **Answers left to decide** (the owner asked for proper decisions): research and decide, then list the decision.
+    - **A chord player like Musicca's, with the same controls and options** (styles with variations, tempo,
+      count-in, sections with repeats, chords in bars with durations, typing, drag to reorder, Randomize, a Settings
+      page with instruments, count-in, repeat, time signature, transpose, volume): one page with Progressions and
+      Accompaniment, not a third copy.
+    - **Sounds:** proper libraries and proper sounds for everything (piano, bass, drums, metronome, the missing
+      metronome sounds from Freesound's CC0 filter), each file's source and licence written beside it.
+    - **Transpose:** the Player's moves what is heard and seen; the editor's rewrites the song (kept).
+    - **Import tests:** from the public MusicXML test suites (the MusicXML examples, LilyPond's suite), not from the
+      owner. Layout templates: Normal and Jazz, plus the learner's own.
 
 ## References (open every folder, "New folder" and "untitled" included)
 - `piano-data/reference-apps/new_app_2/` (notes in `scratchpad/r29/refs.md`):

@@ -52,13 +52,8 @@ own Settings; the app's Settings restructured); Chords' Play and Arpeggio togeth
 everywhere; no tabs that make a bar taller; no circle of fifths for picking a key; selection by the bar's beats;
 the Practice pages redesigned (see the redesign part).
 
-**Still open** (default taken unless you say otherwise):
-1. The Library: add every distinct loop of musicca's 269 (named by numerals where there's no common name) plus the
-   23 "Songs with four chords"? Default: the well-known ones only, about 30, each with a name and its feel.
-2. Classic click and rimshot have no CC0 source in VCSL, ride only as a suspended cymbal: take them from
-   Freesound's CC0 filter, or leave them out? Default: Freesound CC0, each file's source in `SOURCES.md`.
-3. The Player's Transpose moves what is heard and seen only; rewriting the song stays in Edit? Default: yes.
-4. The Fantaisie-Impromptu exported from MuseScore, Flat, Dorico, Finale and Sibelius for the import tests:
-   can you send them? Default: I make them with MuseScore and Flat.
-5. Layout templates in the editor: Normal and Jazz, plus the learner's own? Default: yes.
-6. New questions from the two redesign parts will be added here when they're written.
+**Answered too:** the Library becomes a chord player like Musicca's (one page with Progressions and
+Accompaniment); proper sound libraries for everything, the missing metronome sounds from Freesound CC0; Transpose
+as above; import tests from the public MusicXML suites; layout templates Normal and Jazz plus the learner's own.
+
+**Still open:** the questions the two redesign parts raise, added here when they're written.
