@@ -18,3 +18,5 @@ Owner's words, lightly cleaned. To be researched before redrawing (`.scratch/r29
 - S10 harmonise: "doesn't look right: with what to harmonise, what chords are the options."
 - S11 settings: "these options don't look very good."
 - S12 scale picker: "the key-signature grid is good in the editor or Player but not here; the modes and scale kinds are not done well."
+
+- Chords, later: "I like add2 or add9 but not choosing the seventh". → Chords by name in four families (Triads, 7ths, 9·11·13, Altered); an **Add** row under the chord with only what it can take (add2, add4, add9, 6, 6/9, add♯11 on a major triad; 13 on a 7th).
