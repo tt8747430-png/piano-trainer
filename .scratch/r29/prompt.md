@@ -498,6 +498,24 @@ doesn't name, judge it by them:
     - **Studies:** a built-in Songs folder. (They are Savchenko's *Called to Play* exercises, not Bobrova's: the
       folder and each study credit *Called to Play*.)
 
+23. **Owner's answers on "Round 29 choices, part 2", 2026-11-03 evening (win over everything above):**
+    - **The Player** as drawn (`mockups/song-player-editor.html`, 2.1–2.12): ✕ · title · ✎ · MIDI · ⚙; tools row
+      "Sheet ⌃" · Transpose · Simplify with Chordify's Pick your view panel; one Settings page (This song: Staves,
+      Song information, Sections, Export…, Print; How the Player works: Display, Playback, Metronome, One hand;
+      Help); Staves with All, Solo, Show and Volume.
+    - **Every Settings page is built with Flat's cards:** a choice among three or more is a card with every option
+      in sight and a short example; on/off is a switch row; longer help behind ⓘ.
+    - **The app's Settings** as drawn (Account; General; Piano: On-screen piano with Computer keys inside, computer
+      only; Connect a piano; Help). The sidebar keeps rule 15: one selected look for a sidebar item, a row, a chip
+      and a segment.
+    - **Keys:** Flat's key-signature grid wherever a *key* is chosen (New song, the editor, Scales and keys, the
+      Chord player's Settings); a chord's or an interval's *root* is a keyboard with a ♯/♭ spelling switch.
+    - **Chords:** size first, then the chord as chips. "Top note" was not understood: replaced by **"Between the
+      hands"**, shown from five notes up as small pictured keyboards of each split (left hand lilac, right hand
+      honey). Play and Arpeggio go in the **floating capsule** (rule 5), not on the page.
+    - **Scales and keys:** neither earlier drawing was understood; redrawn as three full screens (Scale, Chords,
+      Key) with tabs inside the page, Play floating: awaiting the owner's answer.
+
 ## References (open every folder, "New folder" and "untitled" included)
 - `piano-data/reference-apps/new_app_2/` (notes in `scratchpad/r29/refs.md`):
   - Noji 4864–4875: Home's Edit mode, Activity, deck Settings, Publish in library, the Library tab.

@@ -126,6 +126,14 @@ svg.i.s { width: 15px; height: 15px }
 .pane { border-left: 1px solid var(--line); padding: 10px; display: grid; gap: 8px; align-content: start; overflow: hidden }
 .dim { opacity: .4 }
 .keycap { display: inline-grid; place-items: center; min-width: 18px; height: 18px; border: 1px solid var(--line); border-radius: 4px; font: 600 10px var(--sans); background: var(--card); padding: 0 3px }
+.cap { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--paper); border-radius: 999px; display: flex; gap: 2px; padding: 5px; box-shadow: 0 6px 18px rgba(0,0,0,.18); white-space: nowrap }
+.cap span { padding: 7px 13px; display: flex; gap: 6px; align-items: center; font: 600 12.5px var(--sans); border-radius: 999px }
+.cap span + span { border-left: 1px solid rgba(255,255,255,.18); border-radius: 0 999px 999px 0 }
+.sel { background: var(--sand) !important; box-shadow: inset 0 0 0 1px var(--line); font-weight: 600 }
+.splits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px }
+.split { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 6px; display: grid; gap: 4px; font-size: 10.5px; text-align: center }
+.split.on { box-shadow: inset 0 0 0 2px var(--ink) }
+.legend { display: flex; gap: 10px; font-size: 11px; color: var(--ink-soft) } .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px }
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -276,7 +284,7 @@ svg.i.s { width: 15px; height: 15px }
   <!-- 3 APP SETTINGS -->
   <section class="q" id="p3" data-opts="Yes, like this|Change something (note)">
     <div class="qhead"><span class="qnum">3</span><h2>The app's Settings, with Computer keys inside On-screen piano</h2></div>
-    <div class="ctx"><p>Only what concerns the whole app. As you asked, Computer keys is now a section of the On-screen piano page, shown on a computer only. On a laptop it's two panes.</p></div>
+    <div class="ctx"><p>Only what concerns the whole app. As you asked, Computer keys is now a section of the On-screen piano page, shown on a computer only. On a laptop it's two panes.</p><p class="soft"><b>On your sidebar question:</b> we agreed on one look for anything chosen (rule 15): the same fill and border on a sidebar item, a list row, a chip and a segment. The first drawing broke that rule (the sidebar's "Settings" was white, the list's "On-screen piano" grey). It now uses one look for both. The sidebar itself stays as agreed: the four places at the top, Search and Settings at the foot.</p></div>
     <div class="screens">
       <figure><div class="dev">
         <div class="status"><span>9:41</span><span>●●● ▮</span></div>
@@ -295,11 +303,11 @@ svg.i.s { width: 15px; height: 15px }
         </div>
       </div><figcaption><b>Settings on a phone</b>Three short groups. Player, editor, Practice and Metronome settings all live behind their own gear.</figcaption></figure>
       <figure class="laptop"><div class="lap">
-        <div class="side"><b style="font:600 14px var(--display);padding:4px 8px 8px">Piano Trainer</b><div><svg class="i s"><use href="#book"/></svg>Learn</div><div><svg class="i s"><use href="#music"/></svg>Songs</div><div><svg class="i s"><use href="#piano"/></svg>Practice</div><div><svg class="i s"><use href="#user"/></svg>Profile</div><div style="margin-top:120px"><svg class="i s"><use href="#search"/></svg>Search</div><div class="on"><svg class="i s"><use href="#gear"/></svg>Settings</div></div>
+        <div class="side"><b style="font:600 14px var(--display);padding:4px 8px 8px">Piano Trainer</b><div><svg class="i s"><use href="#book"/></svg>Learn</div><div><svg class="i s"><use href="#music"/></svg>Songs</div><div><svg class="i s"><use href="#piano"/></svg>Practice</div><div><svg class="i s"><use href="#user"/></svg>Profile</div><div style="margin-top:120px"><svg class="i s"><use href="#search"/></svg>Search</div><div class="sel"><svg class="i s"><use href="#gear"/></svg>Settings</div></div>
         <div class="pane"><b style="font:600 15px var(--display)">Settings</b>
           <div class="list"><div class="row"><span class="n">Account</span></div></div>
           <div class="list"><div class="row"><span class="n">General</span></div><div class="row"><span class="n">Storage and backup</span></div></div>
-          <div class="list"><div class="row" style="background:var(--sand)"><span class="n"><b>On-screen piano</b></span></div><div class="row"><span class="n">Connect a piano</span></div></div>
+          <div class="list"><div class="row sel"><span class="n">On-screen piano</span></div><div class="row"><span class="n">Connect a piano</span></div></div>
           <div class="list"><div class="row"><span class="n">How to use</span></div></div></div>
         <div class="pane"><b style="font:600 15px var(--display)">On-screen piano</b>
           <div class="cardset"><b>Key size</b><span class="radio"><i></i>Small</span><span class="radio"><i class="on"></i>Medium</span><span class="radio"><i></i>Large</span></div>
@@ -345,9 +353,10 @@ svg.i.s { width: 15px; height: 15px }
   </section>
 
   <!-- 5 CHORDS -->
-  <section class="q" id="p5" data-opts="A: size, then the chord as chips|B: size, then the chord from a menu|Something else">
-    <div class="qhead"><span class="qnum">5</span><h2>Chords: size first, then the chord</h2></div>
-    <div class="ctx"><p>As you asked: the size first (Triad · 7th · 9th · 11th · 13th), then only the chords of that size. The word "Quality" and the 7th switch are gone. Play and Arpeggio sit together but look different. "Right hand from" is now "Top note".</p></div>
+  <section class="q" id="p5" data-opts="Yes, like this|Change something (note)">
+    <div class="qhead"><span class="qnum">5</span><h2>Chords, redrawn: Play floats, and the hands' split drawn</h2></div>
+    <div class="ctx"><p><b>What changed:</b> Play and Arpeggio left the page. They now sit in the floating capsule at the bottom, like every screen's actions (rule 5). "Top note" is gone too. What it stood for, the old "Right hand from", now shows as pictures.</p>
+      <p><b>What the split is.</b> From five notes up (9th, 11th, 13th), one hand can't hold the whole chord. The left hand takes the lowest notes and the right hand the rest. Each choice is drawn on the keys, left hand in lilac, right hand in honey, so you choose by seeing it. A triad or a 7th fits in one hand, so this row isn't shown for them.</p></div>
     <div class="screens">
       <figure><div class="dev">
         <div class="status"><span>9:41</span><span>●●● ▮</span></div>
@@ -357,48 +366,75 @@ svg.i.s { width: 15px; height: 15px }
           <div><div class="lbl" style="margin-bottom:6px">Size</div><span class="seg full"><span>Triad</span><span class="on">7th</span><span>9th</span><span>11th</span><span>13th</span></span></div>
           <div><div class="lbl" style="margin-bottom:6px">Chord</div><div class="chips"><span class="chip">maj7</span><span class="chip">7</span><span class="chip">m7</span><span class="chip on">m(maj7)</span><span class="chip">ø7</span><span class="chip">°7</span><span class="chip">7sus4</span></div></div>
           <div data-kb="0,3,7,11" data-fingers="1,2,3,5" data-oct="2"></div>
-          <div style="display:flex;gap:8px"><span class="btn2 fill"><svg class="i s"><use href="#play"/></svg>Play</span><span class="btn2 out"><svg class="i s"><use href="#arp"/></svg>Arpeggio</span></div><div class="list"><div class="row"><span class="n">Top note</span><span class="seg"><span>G · 5th</span><span class="on">B · 7th</span></span></div></div>
+          <div class="cap"><span><svg class="i s"><use href="#play"/></svg>Play</span><span><svg class="i s"><use href="#arp"/></svg>Arpeggio</span></div>
         </div>
-      </div><figcaption><b>A. The chords of that size as chips</b>At 7th you see six chords at once. At 13th the list is longer and wraps onto two lines.</figcaption></figure>
-      <figure><div class="dev short">
+      </div><figcaption><b>A 7th chord: one hand</b>Size, then the chord as chips. The keys show the fingers. Play and Arpeggio float at the bottom.</figcaption></figure>
+      <figure><div class="dev">
         <div class="status"><span>9:41</span><span>●●● ▮</span></div>
         <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">Chords</span><span class="grow"></span><span class="btn"><svg class="i"><use href="#gear"/></svg></span></div>
         <div class="content pad">
-          <div style="display:flex;align-items:baseline;gap:8px"><span class="bigname">Cm(maj7)</span></div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip">Root C <svg class="i s"><use href="#down"/></svg></span><span class="chip">Size 7th <svg class="i s"><use href="#down"/></svg></span><span class="chip">Chord m(maj7) <svg class="i s"><use href="#down"/></svg></span></div>
-          <div data-kb="0,3,7,11" data-fingers="1,2,3,5" data-oct="2"></div>
-          <div style="display:flex;gap:8px"><span class="btn2 fill"><svg class="i s"><use href="#play"/></svg>Play</span><span class="btn2 out"><svg class="i s"><use href="#arp"/></svg>Arpeggio</span></div>
+          <div style="display:flex;align-items:baseline;gap:8px"><span class="bigname">Cmaj9</span><span class="chip">Root C <svg class="i s"><use href="#down"/></svg></span></div>
+          <div><span class="seg full"><span>Triad</span><span>7th</span><span class="on">9th</span><span>11th</span><span>13th</span></span></div>
+          <div class="chips"><span class="chip on">maj9</span><span class="chip">9</span><span class="chip">m9</span><span class="chip">m(maj9)</span><span class="chip">7♭9</span><span class="chip">7♯9</span><span class="chip">add9</span></div>
+          <div data-kb="0,4,7,11,14" data-lh="0" data-oct="2"></div>
+          <div class="legend"><span><i style="background:var(--lilac-ink)"></i>Left hand</span><span><i style="background:var(--hit)"></i>Right hand</span></div>
+          <div><div class="lbl" style="margin-bottom:6px">Between the hands</div><div class="splits">
+            <div class="split on"><div data-kb="0,4,7,11,14" data-lh="0" data-oct="2" data-mini="1"></div>Left: C<br>Right: E G B D</div>
+            <div class="split"><div data-kb="0,4,7,11,14" data-lh="0,7" data-oct="2" data-mini="1"></div>Left: C G<br>Right: E B D</div>
+            <div class="split"><div data-kb="0,4,7,11,14" data-lh="0,4,7" data-oct="2" data-mini="1"></div>Left: C E G<br>Right: B D</div></div></div>
+          <div class="cap"><span><svg class="i s"><use href="#play"/></svg>Play</span><span><svg class="i s"><use href="#arp"/></svg>Arpeggio</span></div>
         </div>
-      </div><figcaption><b>B. Three menus in a row</b>Shorter, but you only see the chords after opening the menu.</figcaption></figure>
+      </div><figcaption><b>A 9th chord: two hands</b>"Between the hands" shows each way to split it as a small picture, and the big keyboard follows your choice. This replaces "Right hand from" and "Top note".</figcaption></figure>
     </div>
-    <p class="rec"><b>My recommendation: A.</b> You see every chord of that size at once and change it with one tap. The same Size and Chord rows appear in Scales and keys' Chords view.</p>
   </section>
 
   <!-- 6 SCALES -->
-  <section class="q" id="p6" data-opts="A: one view chip, like the Player|B: tabs inside the page|Something else">
-    <div class="qhead"><span class="qnum">6</span><h2>Scales and keys: switching between Scale, Chords and Key</h2></div>
-    <div class="ctx"><p>The bar stays one height, and the page's name is the choice itself ("D major", tap to change). The three views need a switch. One way works like the Player's view chip, the other is a row of tabs inside the page.</p></div>
+  <section class="q" id="p6b" data-opts="Yes, like this|Change something (note)">
+    <div class="qhead"><span class="qnum">6</span><h2>Scales and keys, redrawn: the page and its three views</h2></div>
+    <div class="ctx"><p><b>What the page is for.</b> You choose a key, say D major, and the page shows three things about it. You switch between them with three tabs under the bar.</p>
+      <ul style="margin:0;padding-left:20px;display:grid;gap:4px">
+        <li><b>Scale:</b> the notes written and on the keys, with fingering, to play up and down.</li>
+        <li><b>Chords:</b> the chord built on each note of the scale (I to vii), at the size you choose.</li>
+        <li><b>Key:</b> its key signature and the keys related to it.</li>
+      </ul>
+      <p>The bar stays one height. "D major ⌄" in the bar opens the key-signature grid (question 4). The tabs sit in the page, not in the bar, and Play floats at the bottom.</p></div>
     <div class="screens">
       <figure><div class="dev">
         <div class="status"><span>9:41</span><span>●●● ▮</span></div>
         <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">D major</span><svg class="i s"><use href="#down"/></svg><span class="grow"></span><span class="btn"><svg class="i"><use href="#gear"/></svg></span></div>
-        <div class="tools"><span class="t on">Chords <svg class="i s"><use href="#down"/></svg></span><span class="t">Play</span><span class="t">Tempo 80</span></div>
         <div class="content pad">
-          <div><div class="lbl" style="margin-bottom:6px">Size</div><span class="seg full"><span>Triad</span><span class="on">7th</span><span>9th</span><span>11th</span><span>13th</span></span></div>
-          <div class="list" data-degrees="Dmaj7:I,Em7:ii,F♯m7:iii,Gmaj7:IV,A7:V,Bm7:vi,C♯ø7:vii"></div>
+          <span class="seg full"><span class="on">Scale</span><span>Chords</span><span>Key</span></span>
+          <div class="sheetbox" data-staff="treble" data-key="2" data-scale="-1"></div>
+          <div data-kb="2,4,6,7,9,11,13,14" data-fingers="1,2,3,1,2,3,4,5" data-oct="2"></div>
+          <div class="list"><div class="row"><span class="n">Octaves</span><span class="seg"><span class="on">1</span><span>2</span><span>3</span><span>4</span></span></div><div class="row"><span class="n">Hand</span><span class="seg"><span class="on">Right</span><span>Left</span><span>Both</span></span></div></div>
+          <div class="cap"><span><svg class="i s"><use href="#play"/></svg>Play</span><span>♩ 80</span></div>
         </div>
-      </div><figcaption><b>A. One chip, as in the Player</b>"Chords ⌄" opens Scale · Chords · Key, each with a picture. One pattern across the app.</figcaption></figure>
+      </div><figcaption><b>Scale</b>D major written out and on the keys, right-hand fingers 1 2 3 1 2 3 4 5. Choose the octaves and the hand, then Play.</figcaption></figure>
       <figure><div class="dev">
         <div class="status"><span>9:41</span><span>●●● ▮</span></div>
         <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">D major</span><svg class="i s"><use href="#down"/></svg><span class="grow"></span><span class="btn"><svg class="i"><use href="#gear"/></svg></span></div>
         <div class="content pad">
-          <span class="seg full"><span>Scale<br><small class="soft">7 notes</small></span><span class="on">Chords<br><small class="soft">I – vii</small></span><span>Key<br><small class="soft">2 sharps</small></span></span>
-          <div><div class="lbl" style="margin-bottom:6px">Size</div><span class="seg full"><span>Triad</span><span class="on">7th</span><span>9th</span><span>11th</span><span>13th</span></span></div>
-          <div class="list" data-degrees="Dmaj7:I,Em7:ii,F♯m7:iii,Gmaj7:IV,A7:V,Bm7:vi,C♯ø7:vii"></div>
+          <span class="seg full"><span>Scale</span><span class="on">Chords</span><span>Key</span></span>
+          <span class="seg full"><span>Triad</span><span class="on">7th</span><span>9th</span><span>11th</span><span>13th</span></span>
+          <div class="list" data-degrees="Dmaj7:I,Em7:ii,F♯m7:iii,Gmaj7:IV,A7:V,Bm7:vi,C♯ø7:vii°"></div>
+          <div class="cap"><span><svg class="i s"><use href="#play"/></svg>Play all</span><span>♩ 80</span></div>
         </div>
-      </div><figcaption><b>B. Three tabs at the top of the page</b>Under the bar and scrolling with the page, each with a one-line summary. Always in sight.</figcaption></figure>
+      </div><figcaption><b>Chords</b>The chord on each note of the scale, at the size you choose (as on the Chords page). ▶ plays one chord, and a tap on its name opens it on the Chords page.</figcaption></figure>
+      <figure><div class="dev">
+        <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="abar"><span class="btn"><svg class="i"><use href="#back"/></svg></span><span class="title">D major</span><svg class="i s"><use href="#down"/></svg><span class="grow"></span><span class="btn"><svg class="i"><use href="#gear"/></svg></span></div>
+        <div class="content pad">
+          <span class="seg full"><span>Scale</span><span>Chords</span><span class="on">Key</span></span>
+          <div class="sheetbox" data-staff="grand" data-key="2" data-notes="0"></div>
+          <div class="soft" style="font-size:12.5px;text-align:center">2 sharps: F♯ and C♯</div>
+          <div><div class="gl">RELATED KEYS</div><div class="list">
+            <div class="row"><span class="n">Relative minor<small class="soft" style="display:block;font-size:11.5px">Same signature</small></span><span>B minor</span><svg class="i s chev"><use href="#chev"/></svg></div>
+            <div class="row"><span class="n">Parallel minor<small class="soft" style="display:block;font-size:11.5px">Same first note</small></span><span>D minor</span><svg class="i s chev"><use href="#chev"/></svg></div>
+            <div class="row"><span class="n">Dominant<small class="soft" style="display:block;font-size:11.5px">One sharp more</small></span><span>A major</span><svg class="i s chev"><use href="#chev"/></svg></div>
+            <div class="row"><span class="n">Subdominant<small class="soft" style="display:block;font-size:11.5px">One sharp fewer</small></span><span>G major</span><svg class="i s chev"><use href="#chev"/></svg></div></div></div>
+        </div>
+      </div><figcaption><b>Key</b>The signature on both staves and the four closest keys, each one tap away. Chords borrowed from D minor join this page later.</figcaption></figure>
     </div>
-    <p class="rec"><b>My recommendation: B.</b> With only three views, tabs inside the page fit any phone and stay in sight. A chip suits the Player, which has four views and needs the room for the music.</p>
   </section>
 </div>
 
@@ -408,7 +444,7 @@ svg.i.s { width: 15px; height: 15px }
   const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
   // a staff (treble, or grand) with clef, key signature (+sharps / -flats), optional time and a few notes
   const SH = [8,5,9,6,3,7,4], FL = [4,7,3,6,2,5,1];
-  function staffSvg(kind, key, time, notes) {
+  function staffSvg(kind, key, time, notes, scale) {
     const w = 298, s = 7, staves = kind === 'grand' ? [22, 82] : [22];
     let g = '';
     staves.forEach((top, i) => {
@@ -419,6 +455,9 @@ svg.i.s { width: 15px; height: 15px }
       for (let k = 0; k < n; k++) { const p = pos[k] - (bass ? 2 : 0); g += `<text x="${36 + k * 7}" y="${bottom - p * s / 2 + 4}" font-family="Noto Music" font-size="18">${key > 0 ? '♯' : '♭'}</text>` }
       let x = 40 + n * 7;
       if (time) { const [a, b] = time.split('/'); g += `<text x="${x}" y="${top + 2 * s - 1}" font-family="Noto Music" font-size="17" font-weight="700">${a}</text><text x="${x}" y="${bottom - 1}" font-family="Noto Music" font-size="17" font-weight="700">${b}</text>`; x += 16 }
+      if (scale !== undefined && i === 0) { for (let k = 0; k < 8; k++) { const p = +scale + k, nx = x + 22 + k * ((w - x - 40) / 8), ny = bottom - p * s / 2;
+          if (p <= -2) g += `<line x1="${nx - 7}" x2="${nx + 7}" y1="${bottom + s}" y2="${bottom + s}" stroke="currentColor" stroke-width=".8"/>`;
+          g += `<ellipse cx="${nx}" cy="${ny}" rx="4.2" ry="3.1" transform="rotate(-20 ${nx} ${ny})" fill="currentColor"/><line x1="${nx + 3.8}" x2="${nx + 3.8}" y1="${ny}" y2="${ny - 22}" stroke="currentColor" stroke-width="1"/>` } }
       if (notes) {
         const line = i === 0 ? [2, 4, 6, 5, 4, 2, 3, 4, 7, 6] : [-2, 0, 1, -1, 0, 2, 1, -1, 0, 1];
         for (let k = 0; k < 9; k++) { const nx = x + 14 + k * ((w - x - 30) / 9), ny = bottom - (line[(k + notes) % 10]) * s / 2;
@@ -426,10 +465,10 @@ svg.i.s { width: 15px; height: 15px }
           if (k % 3 === 2) g += `<line x1="${nx + 12}" x2="${nx + 12}" y1="${top}" y2="${bottom}" stroke="currentColor" stroke-width=".8" opacity=".55"/>` }
       }
     });
-    const h = kind === 'grand' ? 128 : 66;
+    const h = kind === 'grand' ? 128 : 70;
     return `<svg viewBox="0 0 ${w} ${h}" width="100%" style="display:block;color:var(--ink)" aria-hidden="true">${kind === 'grand' ? `<line x1="8" x2="8" y1="22" y2="${82 + 28}" stroke="currentColor"/>` : ''}${g}</svg>`;
   }
-  document.querySelectorAll('[data-staff]').forEach(el => el.innerHTML = staffSvg(el.dataset.staff, +el.dataset.key, el.dataset.time, +el.dataset.notes));
+  document.querySelectorAll('[data-staff]').forEach(el => el.innerHTML = staffSvg(el.dataset.staff, +el.dataset.key, el.dataset.time, +el.dataset.notes, el.dataset.scale));
 
   // the key-signature grid as Flat draws it
   function sig(n) {
@@ -445,7 +484,8 @@ svg.i.s { width: 15px; height: 15px }
   });
 
   // a keyboard: pitch classes to mark, finger numbers, octaves
-  function keyboard(marks, fingers, oct) {
+  function keyboard(marks, fingers, oct, lh, mini) {
+    const L = (lh || '').split(',').filter(Boolean).map(Number);
     const W = 276, ww = W / (7 * oct), wh = 92, bw = ww * .62, bh = 56, m = marks.map(Number), f = fingers ? fingers.split(',') : [];
     const WPC = [0, 2, 4, 5, 7, 9, 11], keys = [];
     for (let o = 0; o < oct; o++) WPC.forEach((pc, i) => {
@@ -454,12 +494,12 @@ svg.i.s { width: 15px; height: 15px }
     });
     const on = keys.filter(k => m.includes(k.p)).sort((a, b) => a.p - b.p); on.forEach((k, i) => k.f = f[i]);
     const draw = k => { const hit = m.includes(k.p), h = k.black ? bh : wh;
-      let g = `<rect x="${k.x}" y="0" width="${k.w}" height="${h}" rx="${k.black ? 2 : 3}" fill="${hit ? 'var(--hit)' : k.black ? 'var(--key-black)' : 'var(--card)'}" stroke="var(--line)"/>`;
+      let g = `<rect x="${k.x}" y="0" width="${k.w}" height="${h}" rx="${k.black ? 2 : 3}" fill="${hit && L.includes(k.p) ? 'var(--lilac-ink)' : hit ? 'var(--hit)' : k.black ? 'var(--key-black)' : 'var(--card)'}" stroke="var(--line)"/>`;
       if (hit && k.f) g += `<circle cx="${k.x + k.w / 2}" cy="${h - 13}" r="${k.black ? 7 : 8}" fill="var(--ink)"/><text x="${k.x + k.w / 2}" y="${h - 9}" text-anchor="middle" font-size="${k.black ? 10 : 11}" font-weight="600" fill="var(--paper)" font-family="Onest">${k.f}</text>`;
       return g };
     return `<svg viewBox="-1 -1 ${W + 2} ${wh + 2}" width="100%" aria-hidden="true">${keys.filter(k => !k.black).map(draw).join('')}${keys.filter(k => k.black).map(draw).join('')}</svg>`;
   }
-  document.querySelectorAll('[data-kb]').forEach(el => el.innerHTML = keyboard(el.dataset.kb.split(','), el.dataset.fingers, +el.dataset.oct || 1));
+  document.querySelectorAll('[data-kb]').forEach(el => el.innerHTML = keyboard(el.dataset.kb.split(','), el.dataset.fingers, +el.dataset.oct || 1, el.dataset.lh, el.dataset.mini));
 
   // a Chordify-like grid preview
   document.querySelectorAll('[data-preview="grid"]').forEach(el => {
