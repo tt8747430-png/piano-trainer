@@ -55,3 +55,4 @@ a progression and an exercise keep no inversion choice.
 - 0102 — The tools row's View, the menu by view (2026-10-26).
 - 0108 — The chord views made even, still and tappable (2026-10-26).
 - 0115 — The View's parts as chips, the layouts as tiles (2026-10-27).
+- r29 — Pick your view (Chordify's): the tools row's chip names the view (Sheet, Grid, Diagrams, Lyrics) and opens a panel of the four side by side, a picture of the one chosen, Show this when opening a song and Done; what each view shows is the Player's Settings › Display, the shown view's own. The keys are the bar's Piano keys. The beat strip stands still and turns a page (a line of the chart, split where the room is short) when the box leaves it; no drag to scrub (2026-11-03).

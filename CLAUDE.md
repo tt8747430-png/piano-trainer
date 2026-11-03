@@ -120,7 +120,10 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
   (scales and arpeggios as the printed books, chords by rule) and the voicings live in the kernel (`music/fingering`,
   `chord-fingering`, `voicing`); Hanon and the daily scale routine in `shared/lib/exercise`.
 - **The Player** (`/play/$pieceId`, and walks, progressions and exercises under `/play/`) — one screen
-  (`pages/player`'s `PlayerLayout`) over any Performance. `widgets/practice-player` (bar, tools row, dock,
+  (`pages/player`'s `PlayerLayout`) over any Performance: its bar Close · title · Edit | Piano keys · MIDI · its one
+  gear, the Player's Settings (`SettingsSheet`, `widgets/player-setup`: the music's choices, then pages and acts
+  the screen gives through `SettingsExtrasContext`; a panel at the right on a laptop); the tools row's view chip
+  opening Pick your view (`PickView`). `widgets/practice-player` (bar, tools row, dock,
   shortcuts), `widgets/chord-views` and `widgets/sheet-music` (the views), `widgets/player-setup`;
   `features/practice` (the practice machine, the arrangement of a piece, loops, beats) and `shared/lib/schedule`.
 - **The score editor** (`/edit/$pieceId`, takes under it) — Flat's palette: a docked panel and a note-entry

@@ -247,8 +247,11 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Count-in**: a bar of clicks before playing or recording. _Avoid:_ count-off, pre-roll.
 - **Click**: the beat while the Player plays. Not the Metronome page. _Avoid:_ metronome (in the Player).
 - **Volume**: how loud one part plays, 0–100%. _Avoid:_ gain, level.
-- **Setup** («Параметры»; ⚙): the Player's sheet: the music's own choices, Accompaniment, How it plays. Not Settings
-  («Настройки»). _Avoid:_ options, settings.
+- **Player settings** («Настройки плеера»; ⚙, R29): the Player's one sheet: the music's own choices (Staves,
+  Accompaniment, How it plays), While you play (Audio playback, Playback, Display, Metronome), This song (Sections,
+  Song information, Score settings) and Share (Export…, Print). _Avoid:_ Setup, More, options.
+- **Pick your view** («Выберите вид»): the panel the tools row's view chip opens: Sheet · Grid · Diagrams · Lyrics.
+  _Avoid:_ View menu.
 - **Starting position** («Начальное положение») and **Move smoothly** («Плавный переход»): where a row's right hand
   starts, and whether each chord then takes the nearest position. _Avoid:_ First chord, Nearest.
 - **Swing**: 8ths played long-short, in one of four feels: Straight · Light · Medium · Hard. _Avoid:_ shuffle.
