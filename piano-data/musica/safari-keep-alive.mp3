@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+    <head>
+        <meta name="viewport" content="width=device-width,user-scalable=1,initial-scale=1.0,minimum-scale=1.0">
+        <meta property="og:url" content="https://www.musicca.com/files/audio/safari-keep-alive.mp3">
+        <meta property="og:title" content="Page not found | Musicca">
+        <meta property="og:description" content="">
+        <meta property="og:site_name" content="Musicca">
+        <meta property="og:image" content="https://www.musicca.com/images/facebook-image.png">
+        <link rel="canonical" href="https://www.musicca.com/files/audio/safari-keep-alive.mp3">
+		<meta charset="utf-8">
+		<title>Page not found | Musicca</title>
+		<script type="application/json" class="joomla-script-options new">{"joomla.jtext":{"ERROR":"Error"}}</script>
+		<script src="/media/merged_joomla_script.min.js?20231024"></script>
+		<script src="/media/vendor/jquery/js/jquery.min.js?3.6.0"></script>
+
+        <style type="text/css">@font-face {font-family:'Open Sans';font-style:normal;font-weight:300;src:url(/cf-fonts/s/open-sans/5.2.7/symbols/300/normal.woff2);unicode-range:U+0001-000C,U+000E-001F,U+007F-009F,U+20DD-20E0,U+20E2-20E4,U+2150-218F,U+2190,U+2192,U+2194-2199,U+21AF,U+21E6-21F0,U+21F3,U+2218-2219,U+2299,U+22C4-22C6,U+2300-243F,U+2440-244A,U+2460-24FF,U+25A0-27BF,U+2800-28FF,U+2921-2922,U+2981,U+29BF,U+29EB,U+2B00-2BFF,U+4DC0-4DFF,U+FFF9-FFFB,U+10140-1018E,U+10190-1019C,U+101A0,U+101D0-101FD,U+102E0-102FB,U+10E60-10E7E,U+1D2C0-1D2D3,U+1D2E0-1D37F,U+1F000-1F0FF,U+1F100-1F1AD,U+1F1E6-1F1FF,U+1F30D-1F30F,U+1F315,U+1F31C,U+1F31E,U+1F320-1F32C,U+1F336,U+1F378,U+1F37D,U+1F382,U+1F393-1F39F,U+1F3A7-1F3A8,U+1F3AC-1F3AF,U+1F3C2,U+1F3C4-1F3C6,U+1F3CA-1F3CE,U+1F3D4-1F3E0,U+1F3ED,U+1F3F1-1F3F3,U+1F3F5-1F3F7,U+1F408,U+1F415,U+1F41F,U+1F426,U+1F43F,U+1F441-1F442,U+1F444,U+1F446-1F449,U+1F44C-1F44E,U+1F453,U+1F46A,U+1F47D,U+1F4A3,U+1F4B0,U+1F4B3,U+1F4B9,U+1F4BB,U+1F4BF,U+1F4C8-1F4CB,U+1F4D6,U+1F4DA,U+1F4DF,U+1F4E3-1F4E6,U+1F4EA-1F4ED,U+1F4F7,U+1F4F9-1F4FB,U+1F4FD-1F4FE,U+1F503,U+1F507-1F50B,U+1F50D,U+1F512-1F513,U+1F53E-1F54A,U+1F54F-1F5FA,U+1F610,U+1F650-1F67F,U+1F687,U+1F68D,U+1F691,U+1F694,U+1F698,U+1F6AD,U+1F6B2,U+1F6B9-1F6BA,U+1F6BC,U+1F6C6-1F6CF,U+1F6D3-1F6D7,U+1F6E0-1F6EA,U+1F6F0-1F6F3,U+1F6F7-1F6FC,U+1F700-1F7FF,U+1F800-1F80B,U+1F810-1F847,U+1F850-1F859,U+1F860-1F887,U+1F890-1F8AD,U+1F8B0-1F8BB,U+1F8C0-1F8C1,U+1F900-1F90B,U+1F93B,U+1F946,U+1F984,U+1F996,U+1F9E9,U+1FA00-1FA6F,U+1FA70-1FA7C,U+1FA80-1FA89,U+1FA8F-1FAC6,U+1FACE-1FADC,U+1FADF-1FAE9,U+1FAF0-1FAF8,U+1FB00-1FBFF;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:300;src:url(/cf-fonts/s/open-sans/5.2.7/math/300/normal.woff2);unicode-range:U+0302-0303,U+0305,U+0307-0308,U+0310,U+0312,U+0315,U+031A,U+0326-0327,U+032C,U+032F-0330,U+0332-0333,U+0338,U+033A,U+0346,U+034D,U+0391-03A1,U+03A3-03A9,U+03B1-03C9,U+03D1,U+03D5-03D6,U+03F0-03F1,U+03F4-03F5,U+2016-2017,U+2034-2038,U+203C,U+2040,U+2043,U+2047,U+2050,U+2057,U+205F,U+2070-2071,U+2074-208E,U+2090-209C,U+20D0-20DC,U+20E1,U+20E5-20EF,U+2100-2112,U+2114-2115,U+2117-2121,U+2123-214F,U+2190,U+2192,U+2194-21AE,U+21B0-21E5,U+21F1-21F2,U+21F4-2211,U+2213-2214,U+2216-22FF,U+2308-230B,U+2310,U+2319,U+231C-2321,U+2336-237A,U+237C,U+2395,U+239B-23B7,U+23D0,U+23DC-23E1,U+2474-2475,U+25AF,U+25B3,U+25B7,U+25BD,U+25C1,U+25CA,U+25CC,U+25FB,U+266D-266F,U+27C0-27FF,U+2900-2AFF,U+2B0E-2B11,U+2B30-2B4C,U+2BFE,U+3030,U+FF5B,U+FF5D,U+1D400-1D7FF,U+1EE00-1EEFF;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:300;src:url(/cf-fonts/s/open-sans/5.2.7/latin/300/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:300;src:url(/cf-fonts/s/open-sans/5.2.7/cyrillic-ext/300/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:300;src:url(/cf-fonts/s/open-sans/5.2.7/hebrew/300/normal.woff2);unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:300;src:url(/cf-fonts/s/open-sans/5.2.7/latin-ext/300/normal.woff2);unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:300;src:url(/cf-fonts/s/open-sans/5.2.7/vietnamese/300/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:300;src:url(/cf-fonts/s/open-sans/5.2.7/greek-ext/300/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:300;src:url(/cf-fonts/s/open-sans/5.2.7/cyrillic/300/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:300;src:url(/cf-fonts/s/open-sans/5.2.7/greek/300/normal.woff2);unicode-range:U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:400;src:url(/cf-fonts/s/open-sans/5.2.7/latin-ext/400/normal.woff2);unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:400;src:url(/cf-fonts/s/open-sans/5.2.7/math/400/normal.woff2);unicode-range:U+0302-0303,U+0305,U+0307-0308,U+0310,U+0312,U+0315,U+031A,U+0326-0327,U+032C,U+032F-0330,U+0332-0333,U+0338,U+033A,U+0346,U+034D,U+0391-03A1,U+03A3-03A9,U+03B1-03C9,U+03D1,U+03D5-03D6,U+03F0-03F1,U+03F4-03F5,U+2016-2017,U+2034-2038,U+203C,U+2040,U+2043,U+2047,U+2050,U+2057,U+205F,U+2070-2071,U+2074-208E,U+2090-209C,U+20D0-20DC,U+20E1,U+20E5-20EF,U+2100-2112,U+2114-2115,U+2117-2121,U+2123-214F,U+2190,U+2192,U+2194-21AE,U+21B0-21E5,U+21F1-21F2,U+21F4-2211,U+2213-2214,U+2216-22FF,U+2308-230B,U+2310,U+2319,U+231C-2321,U+2336-237A,U+237C,U+2395,U+239B-23B7,U+23D0,U+23DC-23E1,U+2474-2475,U+25AF,U+25B3,U+25B7,U+25BD,U+25C1,U+25CA,U+25CC,U+25FB,U+266D-266F,U+27C0-27FF,U+2900-2AFF,U+2B0E-2B11,U+2B30-2B4C,U+2BFE,U+3030,U+FF5B,U+FF5D,U+1D400-1D7FF,U+1EE00-1EEFF;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:400;src:url(/cf-fonts/s/open-sans/5.2.7/latin/400/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:400;src:url(/cf-fonts/s/open-sans/5.2.7/cyrillic-ext/400/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:400;src:url(/cf-fonts/s/open-sans/5.2.7/symbols/400/normal.woff2);unicode-range:U+0001-000C,U+000E-001F,U+007F-009F,U+20DD-20E0,U+20E2-20E4,U+2150-218F,U+2190,U+2192,U+2194-2199,U+21AF,U+21E6-21F0,U+21F3,U+2218-2219,U+2299,U+22C4-22C6,U+2300-243F,U+2440-244A,U+2460-24FF,U+25A0-27BF,U+2800-28FF,U+2921-2922,U+2981,U+29BF,U+29EB,U+2B00-2BFF,U+4DC0-4DFF,U+FFF9-FFFB,U+10140-1018E,U+10190-1019C,U+101A0,U+101D0-101FD,U+102E0-102FB,U+10E60-10E7E,U+1D2C0-1D2D3,U+1D2E0-1D37F,U+1F000-1F0FF,U+1F100-1F1AD,U+1F1E6-1F1FF,U+1F30D-1F30F,U+1F315,U+1F31C,U+1F31E,U+1F320-1F32C,U+1F336,U+1F378,U+1F37D,U+1F382,U+1F393-1F39F,U+1F3A7-1F3A8,U+1F3AC-1F3AF,U+1F3C2,U+1F3C4-1F3C6,U+1F3CA-1F3CE,U+1F3D4-1F3E0,U+1F3ED,U+1F3F1-1F3F3,U+1F3F5-1F3F7,U+1F408,U+1F415,U+1F41F,U+1F426,U+1F43F,U+1F441-1F442,U+1F444,U+1F446-1F449,U+1F44C-1F44E,U+1F453,U+1F46A,U+1F47D,U+1F4A3,U+1F4B0,U+1F4B3,U+1F4B9,U+1F4BB,U+1F4BF,U+1F4C8-1F4CB,U+1F4D6,U+1F4DA,U+1F4DF,U+1F4E3-1F4E6,U+1F4EA-1F4ED,U+1F4F7,U+1F4F9-1F4FB,U+1F4FD-1F4FE,U+1F503,U+1F507-1F50B,U+1F50D,U+1F512-1F513,U+1F53E-1F54A,U+1F54F-1F5FA,U+1F610,U+1F650-1F67F,U+1F687,U+1F68D,U+1F691,U+1F694,U+1F698,U+1F6AD,U+1F6B2,U+1F6B9-1F6BA,U+1F6BC,U+1F6C6-1F6CF,U+1F6D3-1F6D7,U+1F6E0-1F6EA,U+1F6F0-1F6F3,U+1F6F7-1F6FC,U+1F700-1F7FF,U+1F800-1F80B,U+1F810-1F847,U+1F850-1F859,U+1F860-1F887,U+1F890-1F8AD,U+1F8B0-1F8BB,U+1F8C0-1F8C1,U+1F900-1F90B,U+1F93B,U+1F946,U+1F984,U+1F996,U+1F9E9,U+1FA00-1FA6F,U+1FA70-1FA7C,U+1FA80-1FA89,U+1FA8F-1FAC6,U+1FACE-1FADC,U+1FADF-1FAE9,U+1FAF0-1FAF8,U+1FB00-1FBFF;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:400;src:url(/cf-fonts/s/open-sans/5.2.7/cyrillic/400/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:400;src:url(/cf-fonts/s/open-sans/5.2.7/greek-ext/400/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:400;src:url(/cf-fonts/s/open-sans/5.2.7/vietnamese/400/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:400;src:url(/cf-fonts/s/open-sans/5.2.7/hebrew/400/normal.woff2);unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:400;src:url(/cf-fonts/s/open-sans/5.2.7/greek/400/normal.woff2);unicode-range:U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:600;src:url(/cf-fonts/s/open-sans/5.2.7/latin/600/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:600;src:url(/cf-fonts/s/open-sans/5.2.7/math/600/normal.woff2);unicode-range:U+0302-0303,U+0305,U+0307-0308,U+0310,U+0312,U+0315,U+031A,U+0326-0327,U+032C,U+032F-0330,U+0332-0333,U+0338,U+033A,U+0346,U+034D,U+0391-03A1,U+03A3-03A9,U+03B1-03C9,U+03D1,U+03D5-03D6,U+03F0-03F1,U+03F4-03F5,U+2016-2017,U+2034-2038,U+203C,U+2040,U+2043,U+2047,U+2050,U+2057,U+205F,U+2070-2071,U+2074-208E,U+2090-209C,U+20D0-20DC,U+20E1,U+20E5-20EF,U+2100-2112,U+2114-2115,U+2117-2121,U+2123-214F,U+2190,U+2192,U+2194-21AE,U+21B0-21E5,U+21F1-21F2,U+21F4-2211,U+2213-2214,U+2216-22FF,U+2308-230B,U+2310,U+2319,U+231C-2321,U+2336-237A,U+237C,U+2395,U+239B-23B7,U+23D0,U+23DC-23E1,U+2474-2475,U+25AF,U+25B3,U+25B7,U+25BD,U+25C1,U+25CA,U+25CC,U+25FB,U+266D-266F,U+27C0-27FF,U+2900-2AFF,U+2B0E-2B11,U+2B30-2B4C,U+2BFE,U+3030,U+FF5B,U+FF5D,U+1D400-1D7FF,U+1EE00-1EEFF;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:600;src:url(/cf-fonts/s/open-sans/5.2.7/latin-ext/600/normal.woff2);unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:600;src:url(/cf-fonts/s/open-sans/5.2.7/hebrew/600/normal.woff2);unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:600;src:url(/cf-fonts/s/open-sans/5.2.7/cyrillic/600/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:600;src:url(/cf-fonts/s/open-sans/5.2.7/greek/600/normal.woff2);unicode-range:U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:600;src:url(/cf-fonts/s/open-sans/5.2.7/greek-ext/600/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:600;src:url(/cf-fonts/s/open-sans/5.2.7/vietnamese/600/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:600;src:url(/cf-fonts/s/open-sans/5.2.7/symbols/600/normal.woff2);unicode-range:U+0001-000C,U+000E-001F,U+007F-009F,U+20DD-20E0,U+20E2-20E4,U+2150-218F,U+2190,U+2192,U+2194-2199,U+21AF,U+21E6-21F0,U+21F3,U+2218-2219,U+2299,U+22C4-22C6,U+2300-243F,U+2440-244A,U+2460-24FF,U+25A0-27BF,U+2800-28FF,U+2921-2922,U+2981,U+29BF,U+29EB,U+2B00-2BFF,U+4DC0-4DFF,U+FFF9-FFFB,U+10140-1018E,U+10190-1019C,U+101A0,U+101D0-101FD,U+102E0-102FB,U+10E60-10E7E,U+1D2C0-1D2D3,U+1D2E0-1D37F,U+1F000-1F0FF,U+1F100-1F1AD,U+1F1E6-1F1FF,U+1F30D-1F30F,U+1F315,U+1F31C,U+1F31E,U+1F320-1F32C,U+1F336,U+1F378,U+1F37D,U+1F382,U+1F393-1F39F,U+1F3A7-1F3A8,U+1F3AC-1F3AF,U+1F3C2,U+1F3C4-1F3C6,U+1F3CA-1F3CE,U+1F3D4-1F3E0,U+1F3ED,U+1F3F1-1F3F3,U+1F3F5-1F3F7,U+1F408,U+1F415,U+1F41F,U+1F426,U+1F43F,U+1F441-1F442,U+1F444,U+1F446-1F449,U+1F44C-1F44E,U+1F453,U+1F46A,U+1F47D,U+1F4A3,U+1F4B0,U+1F4B3,U+1F4B9,U+1F4BB,U+1F4BF,U+1F4C8-1F4CB,U+1F4D6,U+1F4DA,U+1F4DF,U+1F4E3-1F4E6,U+1F4EA-1F4ED,U+1F4F7,U+1F4F9-1F4FB,U+1F4FD-1F4FE,U+1F503,U+1F507-1F50B,U+1F50D,U+1F512-1F513,U+1F53E-1F54A,U+1F54F-1F5FA,U+1F610,U+1F650-1F67F,U+1F687,U+1F68D,U+1F691,U+1F694,U+1F698,U+1F6AD,U+1F6B2,U+1F6B9-1F6BA,U+1F6BC,U+1F6C6-1F6CF,U+1F6D3-1F6D7,U+1F6E0-1F6EA,U+1F6F0-1F6F3,U+1F6F7-1F6FC,U+1F700-1F7FF,U+1F800-1F80B,U+1F810-1F847,U+1F850-1F859,U+1F860-1F887,U+1F890-1F8AD,U+1F8B0-1F8BB,U+1F8C0-1F8C1,U+1F900-1F90B,U+1F93B,U+1F946,U+1F984,U+1F996,U+1F9E9,U+1FA00-1FA6F,U+1FA70-1FA7C,U+1FA80-1FA89,U+1FA8F-1FAC6,U+1FACE-1FADC,U+1FADF-1FAE9,U+1FAF0-1FAF8,U+1FB00-1FBFF;font-display:swap;}@font-face {font-family:'Open Sans';font-style:normal;font-weight:600;src:url(/cf-fonts/s/open-sans/5.2.7/cyrillic-ext/600/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}</style>
+		<link rel="stylesheet" href="https://www.musicca.com/templates/musicca/css/screen.min.css?v=1792394868">
+        <link rel="icon" type="image/png" href="https://www.musicca.com/templates/musicca/images/favicon.png">
+        <script defer src="https://www.musicca.com/templates/musicca/js/app.min.js?v=1789143161"></script>
+		<script>Joomla.JText.load({message_sent:"Message sent",error:"Error",danger:"Error",info:' ',/* Used to hide Messages label after deleting of user account */success:"Message"});</script>		
+	    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X7KN29SRW8"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-X7KN29SRW8');</script>
+	</head>
+    <body class="morozov en-GB">
+        <div id="navigation-mobile" class="navigation__mobile">
+            <div class="navigation__top">
+                <div class="container">
+                    <div class="header-content">
+                        <div class="musikipedia__logo">
+                            <a class="musikipedia__logo__url" href="/">
+                                <img src="/images/musicca-logo.png" width="310" height="40" alt="Musicca">
+                            </a>
+                        </div>					
+                        <nav class="desktop_nav"><ul class="nav menu_main"><li class="menu__item item-30 parent"><a href="/exercises" class="top_level">Exercises</a></li><li class="menu__item item-2647 parent"><a href="/instruments" class="top_level">Instruments</a></li><li class="menu__item item-11 parent"><a href="/tools" class="top_level">Tools</a></li><li id="advDropdownMenuParent" class="menu__item adv-top-menu"><span>More</span><div id="advDropdownMenuBox" class="float-box"><div class="triangle"></div><div class="float-content"><ul class=""><li class="parent"><a href="/lessons" class="top_level">Lessons</a></li><li class="parent"><a href="/dictionary" class="top_level">Dictionary</a></li><li class="parent"><a href="/schools" class="top_level">Schools</a></li><li class="parent"><a href="/about" class="top_level">About</a></li></ul></div></div></li></ul></nav>                        <div class="mobile__tools">
+                                                        <div class="navigation__lang">
+                                <div class="lang_button">
+                                    <div class="current-lang">
+                                        <div class="sprite eng"></div>
+                                    </div>
+                                </div>
+                                <div class="lang-menu">
+                                    <div class="hiddenContent">
+                                        <ul>
+                                        	<li class="lang-item"><a href="id" data-lang="id-ID"><div class="sprite id"></div><span class="name">Bahasa Indonesia</span></a></li><li class="lang-item"><a href="bg" data-lang="bg-BG"><div class="sprite bg"></div><span class="name">Български</span></a></li><li class="lang-item"><a href="https://www.musikipedia.dk/oevelser" data-lang="da-DK"><div class="sprite da"></div><span class="name">Dansk</span></a></li><li class="lang-item"><a href="de" data-lang="de-DE"><div class="sprite de"></div><span class="name">Deutsch</span></a></li><li class="lang-item"><a href="https://www.musicca.com/eng" data-lang="en-GB"><div class="sprite eng"></div><span class="name">English</span></a></li><li class="lang-item"><a href="es" data-lang="es-ES"><div class="sprite es"></div><span class="name">Español</span></a></li><li class="lang-item"><a href="fr" data-lang="fr-FR"><div class="sprite fr"></div><span class="name">Français</span></a></li><li class="lang-item"><a href="ko" data-lang="ko-KR"><div class="sprite ko"></div><span class="name">한국어</span></a></li><li class="lang-item"><a href="hi" data-lang="hi-IN"><div class="sprite hi"></div><span class="name">हिन्दी</span></a></li><li class="lang-item"><a href="it" data-lang="it-IT"><div class="sprite it"></div><span class="name">Italiano</span></a></li><li class="lang-item"><a href="jp" data-lang="ja-JP"><div class="sprite ja"></div><span class="name">日本語</span></a></li><li class="lang-item"><a href="pl" data-lang="pl-PL"><div class="sprite pl"></div><span class="name">Polski</span></a></li><li class="lang-item"><a href="pt" data-lang="pt-PT"><div class="sprite pt"></div><span class="name">Português</span></a></li><li class="lang-item"><a href="ru" data-lang="ru-RU"><div class="sprite ru"></div><span class="name">Русский</span></a></li><li class="lang-item"><a href="sv" data-lang="sv-SE"><div class="sprite sv"></div><span class="name">Svenska</span></a></li><li class="lang-item"><a href="vi" data-lang="vi-VN"><div class="sprite vi"></div><span class="name">Tiếng Việt</span></a></li><li class="lang-item"><a href="tr" data-lang="tr-TR"><div class="sprite tr"></div><span class="name">Türkçe</span></a></li><li class="lang-item"><a href="uk" data-lang="uk-UA"><div class="sprite uk"></div><span class="name">Українська</span></a></li><li class="lang-item"><a href="zh" data-lang="zh-CN"><div class="sprite zh"></div><span class="name">简体中文</span></a></li><li class="lang-item"><a href="tw" data-lang="zh-TW"><div class="sprite tw"></div><span class="name">繁體中文</span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                                                        
+                            <div class="mobile_menu__toggle">
+                                <a class="toggle-menu-mobile" href="#menu" aria-expanded="false" aria-controls="menu">
+                                    <span class="menu_toggle__open"><span>Menu</span></span>
+                                </a>
+                            </div>
+                            <div class="desktop__accounts">
+                                <ul class="nav menu">
+									<li class="menu__item item-13"><a href="/signup" class="desktop__create ext-register">Create account</a></li><li class="menu__item item-364"><a href="/login" class="login__btn">Log in</a></li>
+								</ul>
+                            </div>
+                                                    </div>
+                    </div>
+                </div>
+            </div>
+            <nav class="mobile_nav">
+                <ul id="menu" class="nav menu mobile__menu">
+					<li class="mobile_menu__item"><a href="https://www.musicca.com/signup" class="top_level">Create account</a></li><li class="mobile_menu__item"><a href="https://www.musicca.com/login" class="top_level">Log in</a></li><li class="mobile_menu__item item-30 deeper parent"><a href="/exercises" class="top_level">Exercises</a><ul class="nav-child unstyled small"><li class="mobile_menu__item item-1187"><a href="https://www.musicca.com/exercises/notes" >Notes</a></li><li class="mobile_menu__item item-2512"><a href="https://www.musicca.com/exercises/rhythms" >Rhythms</a></li><li class="mobile_menu__item item-1188"><a href="https://www.musicca.com/exercises/intervals" >Intervals</a></li><li class="mobile_menu__item item-1189"><a href="https://www.musicca.com/exercises/chords" >Chords</a></li><li class="mobile_menu__item item-1190"><a href="https://www.musicca.com/exercises/scales" >Scales</a></li><li class="mobile_menu__item item-1191"><a href="https://www.musicca.com/exercises/key-signatures" >Key signatures</a></li><li class="mobile_menu__item item-2236"><a href="https://www.musicca.com/exercises/instruments" >Instruments</a></li><li class="mobile_menu__item item-2352"><a href="https://www.musicca.com/exercises/genres" >Genres</a></li></ul><div class="nav__icon mobile_submenu__toggle"><span class="fa fa-angle-down"></span></div></li><li class="mobile_menu__item item-2647 deeper parent"><a href="/instruments" class="top_level">Instruments</a><ul class="nav-child unstyled small"><li class="mobile_menu__item item-744"><a href="/piano" >Piano</a></li><li class="mobile_menu__item item-2757"><a href="/synthesizer" >Synthesizer</a></li><li class="mobile_menu__item item-745"><a href="/guitar" >Guitar</a></li><li class="mobile_menu__item item-1061"><a href="/bass-guitar" >Bass guitar</a></li><li class="mobile_menu__item item-2648"><a href="/ukulele" >Ukulele</a></li><li class="mobile_menu__item item-2758"><a href="/violin" >Violin</a></li><li class="mobile_menu__item item-2284"><a href="/drums" >Drum kit</a></li><li class="mobile_menu__item item-1052"><a href="/drum-machine" >Drum machine</a></li><li class="mobile_menu__item item-2650"><a href="/glockenspiel" >Glockenspiel</a></li><li class="mobile_menu__item item-2649"><a href="/xylophone" >Xylophone</a></li></ul><div class="nav__icon mobile_submenu__toggle"><span class="fa fa-angle-down"></span></div></li><li class="mobile_menu__item item-11 deeper parent"><a href="/tools" class="top_level">Tools</a><ul class="nav-child unstyled small"><li class="mobile_menu__item item-2527"><a href="/chord-player" >Chord player</a></li><li class="mobile_menu__item item-573"><a href="/metronome" >Metronome</a></li><li class="mobile_menu__item item-2353"><a href="/tuner" >Tuner</a></li><li class="mobile_menu__item item-2416"><a href="/note-finder" >Note finder</a></li><li class="mobile_menu__item item-2174"><a href="/interval-finder" >Interval finder</a></li><li class="mobile_menu__item item-2172"><a href="/chord-finder" >Chord finder</a></li><li class="mobile_menu__item item-2173"><a href="/scale-finder" >Scale finder</a></li><li class="mobile_menu__item item-2380"><a href="/circle-of-fifths" >Circle of fifths</a></li><li class="mobile_menu__item item-1205"><a href="/musical-terms" >Musical terms</a></li><li class="mobile_menu__item item-1193"><a href="/interval-song-chart" >Interval song chart</a></li><li class="mobile_menu__item item-1207"><a href="/staff-paper" >Staff paper</a></li></ul><div class="nav__icon mobile_submenu__toggle"><span class="fa fa-angle-down"></span></div></li><li class="mobile_menu__item item-2157 deeper parent"><a href="/lessons" class="top_level">Lessons</a><ul class="nav-child unstyled small"><li class="mobile_menu__item item-2158"><a href="/notes" >Notes</a></li><li class="mobile_menu__item item-2159"><a href="/the-staff" >The staff</a></li><li class="mobile_menu__item item-2160"><a href="/clefs" >Clefs</a></li><li class="mobile_menu__item item-2161"><a href="/accidentals" >Accidentals</a></li><li class="mobile_menu__item item-2238"><a href="/intervals" >Intervals</a></li><li class="mobile_menu__item item-2239"><a href="/chords" >Chords</a></li><li class="mobile_menu__item item-2240"><a href="/scales" >Scales</a></li><li class="mobile_menu__item item-2241"><a href="/keys" >Keys</a></li></ul><div class="nav__icon mobile_submenu__toggle"><span class="fa fa-angle-down"></span></div></li><li class="mobile_menu__item item-2579 deeper parent"><a href="/dictionary" class="top_level">Dictionary</a><ul class="nav-child unstyled small"><li class="mobile_menu__item "><a href="/dictionary">Search</a></li><li class="mobile_menu__item "><a href="/dictionary/english">English terms</a></li><li class="mobile_menu__item "><a href="/dictionary/italian">Italian terms</a></li><li class="mobile_menu__item "><a href="/dictionary/french">French terms</a></li><li class="mobile_menu__item "><a href="/dictionary/german">German terms</a></li><li class="mobile_menu__item "><a href="/dictionary/latin">Latin terms</a></li></ul><div class="nav__icon mobile_submenu__toggle"><span class="fa fa-angle-down"></span></div></li><li class="mobile_menu__item item-2623 deeper parent"><a href="/schools" class="top_level">Schools</a><ul class="nav-child unstyled small"><li class="mobile_menu__item "><a href="/schools/create-class">Create class</a></li><li class="mobile_menu__item "><a href="/schools/settings">Settings</a></li><li class="mobile_menu__item "><a href="/schools/introduction">Introduction</a></li><li class="mobile_menu__item "><a href="/schools/help">Help</a></li></ul><div class="nav__icon mobile_submenu__toggle"><span class="fa fa-angle-down"></span></div></li><li class="mobile_menu__item item-303 deeper parent"><a href="/about" class="top_level">About</a><ul class="nav-child unstyled small"><li class="mobile_menu__item item-586"><a href="/company" >Company</a></li><li class="mobile_menu__item item-2286"><a href="/mission" >Mission</a></li><li class="mobile_menu__item item-591"><a href="/contribute" >Contribute</a></li><li class="mobile_menu__item item-580"><a href="/press" >Press</a></li><li class="mobile_menu__item item-598"><a href="/contact" >Contact</a></li><li class="mobile_menu__item item-596"><a href="/help" >Help</a></li></ul><div class="nav__icon mobile_submenu__toggle"><span class="fa fa-angle-down"></span></div></li>
+				</ul>
+            </nav>
+        </div>    
+                <div class="fix__content">
+            <div class="wrapper">
+                <div class="content">
+                    <div class="container">
+                        <div class="row flex__row">
+                            <div id="fuldbredde" class="content__right col-9-m col-fuldbredde" style="width: 100%; background-color: transparent;">
+                                <article class="default__content item-page fuldbredde" itemscope="" itemtype="https://schema.org/Article">
+                                    <div class="fuldbredde" style="text-align:center;">
+  <h1 class="page-not-found">Page not found</h1><br /><br /><br />
+  <img src="/files/images/main/page-not-found.png" class="not-found-image" alt="Page not found" height="220px"><br /><br /><br />
+  <span style="font-size:18px;">Here is a music joke to cheer you up:</span><br /><br />
+    <div style="max-width:720px;line-height:1.5em;margin:auto">
+      <script>
+    var r_text = new Array ();
+    r_text[0] = "<i>What do you get when you drop a piano into a mine shaft? A flat minor!</i>";
+    r_text[1] = "<i>What concert costs 45 cents? 50 Cent featuring Nickelback!</i>";
+    r_text[2] = "<i>Middle C, E-flat and G walk into a bar. Sorry, the barman said. We don't serve minors!</i>";
+    r_text[3] = "<i>Why did the pirate buy a Pavarotti album? Because he loved the high Cs!</i>";
+    r_text[4] = "<i>What kind of music are balloons afraid of? Pop music!</i>";
+    r_text[5] = "<i>Want to hear a joke about a staccato? Never mind, it's too short!</i>";
+    r_text[6] = "<i>Want to hear a joke about a fermata? Never mind, it's too long!</i>";
+    r_text[7] = "<i>What's the difference between a piano and a fish? You can't tuna fish!</i>";
+    r_text[8] = "<i>What do you get when you drop a piano on an army base? A flat major!</i>";
+    r_text[9] = "<i>Why don't they know where Mozart is buried? Because he's Haydn!</i>";
+    r_text[10] = "<i>Why did Mozart not like chickens? Because they'd all say: Bach, Bach, Bach...!</i>";
+    r_text[11] = "<i>Why can't skeletons play music at a church? They have no organs!</i>";
+    var i = Math.floor(12*Math.random())
+    document.write(r_text[i]);
+  </script>
+  </div>
+  <br /><br />
+</div>
+<script> 
+    var fuldbredde = document.querySelector('.fuldbredde')
+    if(fuldbredde) {
+	  /* Full width Article fix */
+      var contentRightClass = document.querySelector('.content__right')
+      contentRightClass.style.width = "100%";
+      /* JavaScript Media Queries */
+      if (matchMedia) {
+          const mq = window.matchMedia("(min-width: 992px)");
+          mq.addListener(WidthChange);
+          WidthChange(mq);
+      }
+      // media query change
+      function WidthChange(mq) {
+          if (mq.matches) {
+			contentRightClass.style.backgroundColor = "transparent";
+          } else {
+			contentRightClass.style.backgroundColor = "#fff";
+          }
+      }
+    }
+</script>                                </article>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>	
+            <footer class="main__footer">
+                <div class="container">
+                    <ul class="nav menu footer__menu">
+									<li class="menu__item item-2"><a href="https://www.musicca.com/about" >About</a></li><li class="menu__item item-3"><a href="https://www.musicca.com/help" >Help</a></li><li class="menu__item item-2586"><a href="/terms" >Terms</a></li><li class="menu__item item-2585"><a href="/privacy" >Privacy</a></li><li class="menu__item item-6"><a href="https://www.musicca.com/contact" >Contact</a></li>
+								</ul>
+                </div>
+            </footer>
+        </div>
+        <!-- ************** -->
+		<style>
+		.error{
+			display: none !important;
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			z-index: 999;
+			background: rgba(255,255,2, 0.7);
+			padding: 10px;
+		}
+		.error p{
+			padding-top: 1em;
+		}
+		
+		.error .techinfo{
+			overflow-y: scroll;
+			height: 100px;
+			padding-top: 1em;
+		}
+		</style>
+				<div class="error">
+					<div>
+						<strong>Page not found</strong> [404]
+					</div>
+					<div class="techinfo">	</div>
+				</div>
+				<!-- ************** -->    </body>
+</html>

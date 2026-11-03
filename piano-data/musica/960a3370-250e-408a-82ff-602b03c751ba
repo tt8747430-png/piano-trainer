@@ -1,0 +1,16 @@
+
+			// the initial timeout time
+			let timeoutTime =  50.0;
+			// onmessage callback
+			self.onmessage = function(msg){
+				timeoutTime = parseInt(msg.data);
+			};
+			// the tick function which posts a message
+			// and schedules a new tick
+			function tick(){
+				setTimeout(tick, timeoutTime);
+				self.postMessage('tick');
+			}
+			// call tick initially
+			tick();
+			
