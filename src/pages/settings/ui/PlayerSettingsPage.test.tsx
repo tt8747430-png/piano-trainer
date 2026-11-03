@@ -5,7 +5,7 @@ import { renderApp } from '@/app/testing/render-app'
 import { setMetronome, setPlayback } from '@/features/set-preference'
 
 describe('Settings › Player (B7)', () => {
-  it('sets how the Player always plays: count-in, cursor, the other hand, the pedal', async () => {
+  it('sets how the Player always plays: count-in, cursor, the other hand’s look, the pedal', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings/player')
     expect(await screen.findByRole('heading', { level: 1, name: 'Player' })).toBeInTheDocument()
@@ -17,13 +17,12 @@ describe('Settings › Player (B7)', () => {
     )
     await user.click(screen.getByRole('radio', { name: 'Hide' }))
     await user.click(screen.getByRole('radio', { name: 'Automatic' }))
-    await user.click(screen.getByRole('switch', { name: 'Play the other hand' }))
     expect(settingsStore.getState().playback).toMatchObject({
       countdown: 'visual',
       cursor: 'beats',
       pedal: 'automatic',
     })
-    expect(settingsStore.getState().otherHand).toEqual({ look: 'hide', play: false })
+    expect(settingsStore.getState().otherHand).toEqual({ look: 'hide', play: true })
   })
 
   it('links to the Metronome, whose sound and beats the Player’s click plays', async () => {

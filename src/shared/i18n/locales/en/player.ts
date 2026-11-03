@@ -177,7 +177,7 @@ export const player = {
       dim: 'Dim',
       hide: 'Hide',
     },
-    playOther: 'Play the other hand',
+    playOther: 'Hear the other hand',
     playOtherInfo: 'In Wait mode, the app plays the hand you are not practising as you play yours.',
     pedal: {
       label: 'Pedal',

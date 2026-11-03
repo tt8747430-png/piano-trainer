@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import type { Hands } from '@/shared/lib/schedule'
-import { Listbox } from '@/shared/ui'
+import { selectOtherHand, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { setOtherHand } from '@/features/set-preference'
+import { Listbox, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { useDockSide } from '../model/dock-side'
@@ -12,7 +14,10 @@ import { HandsIcon } from './HandsIcon'
 /** The popover's order: one hand, the other, both. */
 const CHOICES: readonly Hands[] = ['rh', 'lh', 'both']
 
-/** The hands button and its popover: right, left or both. */
+/**
+ * The hands button in the transport and its popover (R29): right, left or both, then whether Wait
+ * mode plays the other hand as you play yours (Hear the other hand, its one home).
+ */
 export function HandsButton({
   hands,
   onChange,
@@ -23,6 +28,8 @@ export function HandsButton({
   const { t } = useTranslation(['player', 'common'])
   const [open, setOpen] = useState(false)
   const side = useDockSide()
+  const settings = useSettingsStoreApi()
+  const hearOther = useSettings((state) => selectOtherHand(state).play)
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
@@ -65,6 +72,14 @@ export function HandsButton({
               })),
             },
           ]}
+        />
+        <SwitchRow
+          setting="otherHand.play"
+          label={t('player:settingsPage.playOther')}
+          info={t('player:settingsPage.playOtherInfo')}
+          checked={hearOther}
+          onCheckedChange={(play) => setOtherHand(settings, { play })}
+          className="border-t border-hairline border-b-0 px-2"
         />
       </PopoverContent>
     </Popover>

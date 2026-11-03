@@ -190,6 +190,27 @@ describe('Player', () => {
     )
   })
 
+  it('has no hands button for music of one hand (R29)', async () => {
+    const storage = createMemoryStorage()
+    const song = {
+      id: 'my-1',
+      title: 'Morning',
+      key: 'G',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['_ _'] }],
+      hands: { rh: 'B4/4 | D5/4', lh: 'r/4 | r/4' },
+    }
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
+    )
+    await renderApp('/play/my-1', { storage })
+    const dock = await screen.findByRole('toolbar', { name: 'Playback' })
+    expect(within(dock).queryByRole('button', { name: /^Hands/ })).not.toBeInTheDocument()
+  })
+
   it('docks the keys at the foot, under the toolbar, unless the settings dock them at the top', async () => {
     const { settingsStore } = await renderApp('/play/romashki')
     const dock = await screen.findByRole('toolbar', { name: 'Playback' })

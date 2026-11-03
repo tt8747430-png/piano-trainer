@@ -157,7 +157,7 @@ export const player: LocaleResources['player'] = {
       dim: 'Приглушить',
       hide: 'Скрыть',
     },
-    playOther: 'Играть другую руку',
+    playOther: 'Слышать другую руку',
     playOtherInfo:
       'В режиме ожидания приложение играет руку, которую вы не учите, пока вы играете свою.',
     pedal: {

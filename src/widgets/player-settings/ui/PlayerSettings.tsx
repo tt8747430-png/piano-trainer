@@ -223,15 +223,6 @@ export function PlayerPlayback() {
         }))}
         onChange={(look) => setOtherHand(settings, { look })}
       />
-      <SettingsGroup flush>
-        <SwitchRow
-          setting="otherHand.play"
-          label={t('settingsPage.playOther')}
-          info={t('settingsPage.playOtherInfo')}
-          checked={otherHand.play}
-          onCheckedChange={(play) => setOtherHand(settings, { play })}
-        />
-      </SettingsGroup>
     </>
   )
 }

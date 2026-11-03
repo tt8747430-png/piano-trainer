@@ -134,6 +134,11 @@ export function PlayerLayout({
   // The view saved, where the music can show it, else the one it falls back to (ADR 0108).
   const needs = useMemo(() => viewNeeds(performance), [performance])
   const shown = shownView(scoreView.music, needs)
+  // The hands button where the music has both hands: none for a one-hand line (R29).
+  const twoHands = useMemo(() => {
+    const hands = new Set(performance.notes.map((note) => note.hand))
+    return hands.has('rh') && hands.has('lh')
+  }, [performance])
   usePlayerShortcuts(player, view, onClose)
   // Print (ADR 0107): the music printed as the View shows it, while its render stands.
   const [printing, setPrinting] = useState(false)
@@ -302,7 +307,7 @@ export function PlayerLayout({
           }
           loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
           sound={<ClickButton on={player.click} onChange={player.setClick} />}
-          hands={<HandsButton hands={view.hands} onChange={player.setHands} />}
+          hands={twoHands ? <HandsButton hands={view.hands} onChange={player.setHands} /> : null}
         />
       </PlayerArea>
       {dock === 'top' ? null : keys}
