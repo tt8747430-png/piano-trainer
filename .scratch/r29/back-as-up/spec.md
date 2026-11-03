@@ -1,5 +1,7 @@
 # Spec: Back as up, and Search as a palette (R26, R27, A7, A18)
 
+> **2026-11-03:** where this spec and [`../plan.md`](../plan.md) differ, the plan is newer and wins (prompt D20). Map of round 29's files: [`../README.md`](../README.md).
+
 ## Problem
 `useGoBack` (`shared/lib/use-go-back.ts`, 16 callers) calls `history.back()`. Back therefore retraces every
 mode switch (Edit ⇄ Done, Player ⇄ editor), every view or tab written into the URL, and Search. A learner who

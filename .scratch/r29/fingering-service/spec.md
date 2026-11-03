@@ -1,5 +1,7 @@
 # Spec: one fingering service, one way to draw it (A30)
 
+> **2026-11-03:** where this spec and [`../plan.md`](../plan.md) differ, the plan is newer and wins (prompt D20). Map of round 29's files: [`../README.md`](../README.md).
+
 ## Problem
 Fingering is computed in five places from four functions (`scaleFingering`/`runFingering`,
 `arpeggioFingering`, `blockFingering`/`placedFingering`, `handFingers`) called directly by the Chords and

@@ -1,5 +1,7 @@
 # Spec: one metronome engine (A39, D16, A35, B11)
 
+> **2026-11-03:** where this spec and [`../plan.md`](../plan.md) differ, the plan is newer and wins (prompt D20). Map of round 29's files: [`../README.md`](../README.md).
+
 ## Problem
 The Metronome page (`schedule/metronome.ts`: six meters, three synthesised sounds, accent on beat 1 only, no
 subdivision), the Player's click and count-in (`schedule.ts`'s `click` sounds) and the recorder's clicks

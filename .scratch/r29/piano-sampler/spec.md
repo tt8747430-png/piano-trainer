@@ -1,5 +1,7 @@
 # Spec: the piano sampler and its samples (D15, A27, Constraints: offline)
 
+> **2026-11-03:** where this spec and [`../plan.md`](../plan.md) differ, the plan is newer and wins (prompt D20). Map of round 29's files: [`../README.md`](../README.md).
+
 ## Problem
 Every piano note (`web-audio.ts`: `partials`, `holdNote`, `tone`) is three oscillators: it cannot sound like a
 piano, least of all under the pedal.

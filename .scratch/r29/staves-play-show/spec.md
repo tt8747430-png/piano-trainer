@@ -1,5 +1,7 @@
 # Spec: the Player plays staves; accompaniment only for a chart (A35, B7)
 
+> **2026-11-03:** where this spec and [`../plan.md`](../plan.md) differ, the plan is newer and wins (prompt D20). Map of round 29's files: [`../README.md`](../README.md).
+
 ## Problem
 The Player's Setup offers an accompaniment Pattern, Starting position, Move smoothly, Swing and
 "Melody: None · Melody staff · Recording" (`pt-settings.melody`, `widgets/player-setup`) on every song, so a

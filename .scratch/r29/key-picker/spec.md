@@ -1,5 +1,7 @@
 # Spec: the key picker (A5, R29)
 
+> **2026-11-03:** where this spec and [`../plan.md`](../plan.md) differ, the plan is newer and wins (prompt D20). Map of round 29's files: [`../README.md`](../README.md).
+
 ## Problem
 Roots and keys are chosen from `StepStrip` strips (`NoteChoice` on 10 screens, `KeyChoice` on 5): 17
 spellings with ‹ › arrows, the same black key twice, options hidden behind arrows, edges blurred. Each
