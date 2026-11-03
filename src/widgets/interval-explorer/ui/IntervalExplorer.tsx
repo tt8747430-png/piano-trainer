@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router'
+import { Ear } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFold } from '@/features/fold-section'
 import { PinnedKeyboard } from '@/features/live-keyboard'
@@ -11,18 +13,30 @@ import {
 } from '@/shared/lib/music'
 import type { IntervalWay } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { FoldGroup, Labelled, PitchPicker, Segmented, usualName, type ShownKeys } from '@/shared/ui'
-import { INTERVAL_ROWS, type RowInterval } from '../model/interval-rows'
+import {
+  FloatingActions,
+  FloatingBar,
+  FloatingBarButton,
+  FloatingBarPlay,
+  FoldGroup,
+  PitchPicker,
+  RowGroup,
+  RowLink,
+  usualName,
+  type ShownKeys,
+} from '@/shared/ui'
+import { INTERVAL_ROWS, everyInterval, type RowInterval } from '../model/interval-rows'
 import { INTERVAL_PLAY_WAYS, type IntervalView } from '../model/interval-view'
 import { IntervalRow } from './IntervalRow'
+import { WayPicture } from './WayPicture'
 
-type Playback = ReturnType<typeof usePlayback<RowInterval>>
+type Playback = ReturnType<typeof usePlayback<RowInterval | 'all'>>
 
 /**
- * Every interval over a root as the reference app lists them (ADR 0052): the root, how a row plays
- * (at once, up or down, kept in the URL), and a row an interval, within the octave and past it, each
- * group folding under its heading as the learner left it. A row tapped plays and shows on the keys
- * pinned over them.
+ * Every interval over a root as the reference app lists them (ADR 0052): the root, and a row an
+ * interval, within the octave and past it, each group folding under its heading as the learner left
+ * it. A row tapped plays and shows on the keys pinned over them. How it plays (harmonic, melodic
+ * rising or falling, kept in the URL) is the floating transport's, beside Play all (A22).
  */
 export function IntervalExplorer({
   view,
@@ -33,30 +47,39 @@ export function IntervalExplorer({
 }) {
   const { t } = useTranslation('practice')
   const [shown, show] = useShownKeys(view.root, intervalRoot(noteFromParam(view.root)))
-  const playback = usePlayback<RowInterval>()
+  const playback = usePlayback<RowInterval | 'all'>()
   return (
     <div className="flex flex-col gap-6">
       <PinnedKeyboard shown={shown} />
-      <div className="grid-fields gap-x-10 gap-y-5">
-        <div className="col-span-full">
-          <PitchPicker
-            label={t('root')}
-            value={pitchClassOf(noteFromParam(view.root))}
-            onChange={(pc) => onChange({ root: noteParam(usualName(pc)) })}
-          />
-        </div>
-        <Labelled label={t('intervals.way.label')}>
-          <Segmented
-            label={t('intervals.way.label')}
-            value={view.way}
-            options={INTERVAL_PLAY_WAYS.map((way) => ({
-              value: way,
-              label: t(`intervals.way.${way}`),
-            }))}
-            onChange={(way) => onChange({ way })}
-          />
-        </Labelled>
+      <div>
+        <PitchPicker
+          label={t('root')}
+          value={pitchClassOf(noteFromParam(view.root))}
+          onChange={(pc) => onChange({ root: noteParam(usualName(pc)) })}
+        />
       </div>
+      <FloatingActions>
+        <FloatingBar label={t('transport')}>
+          {INTERVAL_PLAY_WAYS.map((way) => (
+            <FloatingBarButton
+              key={way}
+              label={t(`intervals.way.${way}`)}
+              aria-pressed={view.way === way}
+              className="aria-pressed:bg-selected aria-pressed:text-selected-foreground"
+              onClick={() => onChange({ way })}
+            >
+              <WayPicture way={way} />
+            </FloatingBarButton>
+          ))}
+          <FloatingBarPlay
+            label={t('intervals.playAll')}
+            playing={playback.playing === 'all'}
+            onClick={() =>
+              playback.toggle('all', () => everyInterval(noteFromParam(view.root), view.way))
+            }
+          />
+        </FloatingBar>
+      </FloatingActions>
       {INTERVAL_GROUP_IDS.map((group) => (
         <IntervalGroupFold
           key={group}
@@ -66,7 +89,26 @@ export function IntervalExplorer({
           onShow={show}
         />
       ))}
+      <EarTraining />
     </div>
+  )
+}
+
+/** Ear training is the Quiz's (A32): Intervals links there, never a drill of its own. */
+function EarTraining() {
+  const { t } = useTranslation('practice')
+  const fold = useFold('intervals.ear')
+  return (
+    <RowGroup title={t('intervals.ear')} fold={fold}>
+      <li>
+        <RowLink
+          title={t('intervals.earQuiz')}
+          icon={Ear}
+          paint="lilac"
+          render={<Link to="/practice/quiz/$trainerId" params={{ trainerId: 'intervals' }} />}
+        />
+      </li>
+    </RowGroup>
   )
 }
 
@@ -100,7 +142,6 @@ function IntervalGroupFold({
             <IntervalRow
               root={view.root}
               name={name}
-              group={group}
               way={way}
               playing={playback.playing === name}
               onPlay={(sounds) => playback.toggle(name, sounds)}

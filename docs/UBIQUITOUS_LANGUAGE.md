@@ -68,9 +68,12 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Interval** (reference): two notes named and heard: short name (m3), size, consonance; the Intervals explorer's
   card. _Avoid:_ distance, step.
 - **Consonance**: perfect (unison, 4th, 5th, octave), imperfect (3rds, 6ths) or a dissonance. _Avoid:_ harmony.
-- **Available tension** (`tensions.ts`): a note over a 7th chord that colours it. With **Weak** and **Strong** chord
-  tones and **Avoid notes**, the four groups of the tension table. _Avoid:_ extension, option.
-- **Avoid note**: a note that clashes with a chord tone. _Avoid:_ wrong note.
+- **Colour notes** (`colour-notes.ts`): every note a chord can take on top, in three groups: its **Chord tones**, its
+  **Tensions** and the **Avoid notes**; added tones and alterations among them. In Russian «Краски аккорда».
+  _Avoid:_ options, extras.
+- **Tension** (`availableTensions`): a note over a chord that colours it without clashing (9, ♯11, 13), by the
+  tension table or the chord's degree in a key. _Avoid:_ extension, option.
+- **Avoid note**: a note a half step over a chord tone, which clashes with it. _Avoid:_ wrong note.
 - **Key** («Тональность»): a tonic, major or minor. _Avoid:_ tonality (in code), mode.
 - **Key change**: a section written in another key. _Avoid:_ modulation (in the UI).
 - **Transpose** («Тональность» / «Транспонировать»): move to another tonic by interval, letters kept. _Avoid:_

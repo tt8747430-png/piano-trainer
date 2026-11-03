@@ -18,6 +18,7 @@ import {
   type Voicing,
   type BuiltChord,
   type Midi,
+  type KeyParam,
   type NoteParam,
   type PlacedChord,
   type Triad,
@@ -35,6 +36,8 @@ export interface ChordView extends PartsParams {
   readonly voicing: Voicing
   readonly inversion: number
   readonly hands: 'rh' | 'both'
+  /** The key the chord was opened in (Harmony's or Progressions' chords): its colour notes follow its degree. */
+  readonly key?: KeyParam | undefined
 }
 
 /** Whether a chord of this many notes is shown in two hands only. */

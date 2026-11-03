@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { midi } from '@/shared/lib/music'
-import { INTERVAL_ROWS, rowRange } from './interval-rows'
+import { midi, note } from '@/shared/lib/music'
+import { EVERY_INTERVAL_GAP, everyInterval, INTERVAL_ROWS, rowRange } from './interval-rows'
 
 describe('the Intervals page’s rows', () => {
   it('lists the octave’s intervals a row each, the augmented 4th and the diminished 5th apart', () => {
@@ -14,16 +14,24 @@ describe('the Intervals page’s rows', () => {
     expect(INTERVAL_ROWS.compound).toEqual(['m9', 'M9', 'A9', 'P11', 'A11', 'm13', 'M13'])
   })
 
-  it('draws as many keys for every row of a group, from the C or F under the root', () => {
-    expect(rowRange(midi(62), 'simple')).toEqual({ from: 60, to: 79 })
-    expect(rowRange(midi(71), 'simple')).toEqual({ from: 65, to: 84 })
-    expect(rowRange(midi(60), 'compound')).toEqual({ from: 60, to: 87 })
+  it('draws as many keys for every row, from the C or F under the root, one size for all (A22)', () => {
+    expect(rowRange(midi(62))).toEqual({ from: 60, to: 87 })
+    expect(rowRange(midi(71))).toEqual({ from: 65, to: 92 })
   })
 
-  it('holds the widest interval of a group from any root', () => {
+  it('holds the widest interval from any root', () => {
     for (let low = 60; low < 72; low += 1) {
-      expect(rowRange(midi(low), 'simple').to).toBeGreaterThanOrEqual(low + 12)
-      expect(rowRange(midi(low), 'compound').to).toBeGreaterThanOrEqual(low + 21)
+      expect(rowRange(midi(low)).to).toBeGreaterThanOrEqual(low + 21)
     }
+  })
+
+  it('plays every interval in turn for Play all, each the way chosen', () => {
+    const sounds = everyInterval(note('C'), 'together')
+    const rows = INTERVAL_ROWS.simple.length + INTERVAL_ROWS.compound.length
+    expect(sounds).toHaveLength(rows * 2)
+    expect(sounds.slice(2, 4).map((sound) => [sound.midi, sound.at])).toEqual([
+      [60, EVERY_INTERVAL_GAP],
+      [61, EVERY_INTERVAL_GAP],
+    ])
   })
 })

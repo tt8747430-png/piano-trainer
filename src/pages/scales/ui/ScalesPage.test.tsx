@@ -97,9 +97,14 @@ describe('Practice → Scales and keys', () => {
     expect(dm).toHaveAttribute('aria-pressed', 'false')
   })
 
-  it('links to the relative minor', async () => {
-    await renderApp('/practice/scales?root=G&kind=major')
-    expect(await screen.findByRole('link', { name: 'E natural minor' })).toBeInTheDocument()
+  it('names the relative minor once, on the Key tab (A32)', async () => {
+    const first = await renderApp('/practice/scales?root=G&kind=major')
+    await screen.findByRole('heading', { level: 2, name: 'G major' })
+    expect(screen.queryByRole('link', { name: 'E natural minor' })).not.toBeInTheDocument()
+    first.unmount()
+    await renderApp('/practice/scales?root=G&kind=major&show=key')
+    await screen.findByRole('heading', { level: 2, name: 'G major' })
+    expect(screen.getByText('Relative', { selector: 'dt' })).toBeInTheDocument()
   })
 
   it('plays up and down, each key going down as it sounds', async () => {
@@ -131,7 +136,7 @@ describe('Practice → Scales and keys', () => {
     const user = userEvent.setup()
     await renderApp('/practice/scales')
     const views = await screen.findByRole('navigation', { name: 'Scales and keys' })
-    await user.click(within(views).getByRole('link', { name: 'Chords' }))
+    await user.click(within(views).getByRole('link', { name: 'Harmony' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(shownText(within(keyboard).getByRole('button', { name: 'D4' }))).toContain('iiDm')
     expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-key-tonic')
@@ -300,12 +305,36 @@ describe('Practice → Scales and keys', () => {
     expect(shownText(within(keyboard).getByRole('button', { name: 'E4' }))).toContain('3')
   })
 
-  it('opens each of the key’s chords in Chords', async () => {
+  it('opens each of the key’s chords in Chords from its card, in the key (A32, A33)', async () => {
     await renderApp('/practice/scales?show=chords')
-    const open = await screen.findByRole('navigation', { name: 'Open in Chords' })
-    const links = within(open).getAllByRole('link')
-    expect(links.map((link) => link.textContent)).toEqual(['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B°'])
-    expect(links[1]).toHaveAttribute('href', expect.stringMatching(/^\/practice\/chords\?.*root=D/))
+    await screen.findByRole('heading', { level: 2, name: 'C major' })
+    expect(screen.queryByRole('navigation', { name: 'Open in Chords' })).not.toBeInTheDocument()
+    const links = screen.getAllByRole('link', { name: /^Open .* in Chords$/ })
+    expect(links.map((link) => link.getAttribute('aria-label'))).toEqual(
+      ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B°'].map((chord) => `Open ${chord} in Chords`),
+    )
+    const href = links[1]?.getAttribute('href') ?? ''
+    expect(href).toMatch(/^\/practice\/chords\?/)
+    expect(new URLSearchParams(href.split('?')[1]).get('root')).toBe('D')
+    expect(new URLSearchParams(href.split('?')[1]).get('key')).toBe('C')
+  })
+
+  it('names each degree on the key’s chords, the seven-degree spine (A21)', async () => {
+    await renderApp('/practice/scales?root=B&show=chords')
+    const chords = await screen.findByRole('region', { name: 'Chords in this scale' })
+    expect(
+      within(chords)
+        .getAllByRole('button')
+        .map((chord) => chord.textContent),
+    ).toEqual([
+      'BITonic',
+      'C♯miiSupertonic',
+      'D♯miiiMediant',
+      'EIVSubdominant',
+      'F♯VDominant',
+      'G♯mviSubmediant',
+      'A♯°vii°Leading tone',
+    ])
   })
 
   it('has no Chords view for a scale without seven notes', async () => {
@@ -434,8 +463,8 @@ describe('Practice → Scales and keys, its tabs', () => {
         .getAllByRole('link')
         .map((tab) => [tab.textContent, tab.getAttribute('aria-current')]),
     ).toEqual([
-      ['Scale', null],
-      ['Chords', 'page'],
+      ['Notes', null],
+      ['Harmony', 'page'],
       ['Key', null],
     ])
   })
@@ -477,7 +506,17 @@ describe('Practice → Scales and keys, Key view', () => {
     const names = within(borrowed.parentElement ?? circle)
       .getAllByRole('button')
       .map((chord) => chord.textContent)
-    expect(names).toEqual(['E♭III', 'G♭miv', 'A♭VI', 'B♭VII'])
+    expect(names).toEqual(['E♭III', 'G♭mivMinor plagal', 'A♭VI', 'B♭VII'])
+  })
+
+  it('borrows into a minor key the Picardy third and the Neapolitan, written by its letter (A43)', async () => {
+    await renderApp('/practice/scales?root=Bb&kind=natural&show=key')
+    const borrowed = await screen.findByRole('heading', { level: 3, name: 'Borrowed chords' })
+    expect(
+      within(borrowed.parentElement ?? document.body)
+        .getAllByRole('button')
+        .map((chord) => chord.textContent),
+    ).toEqual(['B♭IPicardy third', 'C♭♭IINeapolitan'])
   })
 
   it('chooses a key on the circle, and shows its signature, notes, relative and modes', async () => {
@@ -497,7 +536,7 @@ describe('Practice → Scales and keys, Key view', () => {
     )
   })
 
-  it('names its parallel key, its neighbours on the circle, its other spelling and its degrees', async () => {
+  it('names its parallel key, its neighbours on the circle and its other spelling', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?root=B&show=key')
     await screen.findByRole('heading', { level: 2, name: 'B major' })
@@ -512,20 +551,6 @@ describe('Practice → Scales and keys, Key view', () => {
         .getAllByRole('link')
         .map((each) => each.textContent),
     ).toEqual(['E major', 'F♯ major'])
-    const degrees = screen.getByRole('table', { name: 'Scale degrees' })
-    expect(
-      within(degrees)
-        .getAllByRole('row')
-        .map((row) => row.textContent),
-    ).toEqual([
-      'ITonicBB',
-      'iiSupertonicC♯C♯m',
-      'iiiMediantD♯D♯m',
-      'IVSubdominantEE',
-      'VDominantF♯F♯',
-      'viSubmediantG♯G♯m',
-      'vii°Leading toneA♯A♯°',
-    ])
     await user.click(facts('Parallel').getByRole('link'))
     expect(router.state.location.search).toMatchObject({ root: 'B', kind: 'natural', show: 'key' })
   })

@@ -41,14 +41,9 @@ export function ScaleFacts({
           .map((gap) => t(`music:gap.${gap}`))
           .join(' ')}
       </Fact>
-      {related ? (
-        <Fact
-          term={t(
-            related.relation === 'parent'
-              ? 'practice:scales.facts.modeOf'
-              : 'practice:scales.facts.relative',
-          )}
-        >
+      {/* The relative key is the Key tab's (A32): a mode's parent major alone stays here. */}
+      {related && related.relation === 'parent' ? (
+        <Fact term={t('practice:scales.facts.modeOf')}>
           <ButtonLink
             variant="link"
             className="px-0"

@@ -3,23 +3,31 @@ import { AudioLines, Square } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
-import { chordShown, useShownKeys } from '@/features/play-example'
-import { isOneOf } from '@/shared/lib'
+import { chordShown, noteOnTop, useShownKeys } from '@/features/play-example'
+import { useKeyName } from '@/shared/i18n'
+import { partsFromParams, partsParams } from '@/shared/lib'
 import {
+  colourNotes,
+  keyFromParam,
+  numeralOf,
+  numeralText,
   printedSymbol,
   qualitySpellings,
-  TENSION_CHORDS,
   writtenSymbol,
   type ChordFingers,
+  type ChordQuality,
+  type ColourNote,
   type PlacedChord,
+  type Triad,
 } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
 import {
   ChordHeading,
-  FabPill,
   FloatingActions,
-  PlayFab,
+  FloatingBar,
+  FloatingBarButton,
+  FloatingBarPlay,
   usePlayKey,
   type ShownKeys,
 } from '@/shared/ui'
@@ -34,9 +42,18 @@ import { ChordFingering } from './ChordFingering'
 import { ChordBuilder } from './ChordBuilder'
 import { ChordPractice } from './ChordPractice'
 import { ChordSheet } from './ChordSheet'
-import { ChordTensions } from './ChordTensions'
+import { ColourNotes } from './ColourNotes'
 
-const takesTensions = isOneOf(TENSION_CHORDS)
+/** A triad's quality, for a chord the table does not name: what its numeral is written from. */
+const TRIAD_QUALITY: Readonly<Record<Triad, ChordQuality>> = {
+  maj: 'maj',
+  min: 'min',
+  dim: 'dim',
+  aug: 'aug',
+  sus2: 'sus2',
+  sus4: 'sus4',
+  power: 'five',
+}
 
 /** The chord's keys by role, each with the finger its hand puts on it, as Scales marks a run's. */
 function fingeredShown(placed: PlacedChord, fingers: ChordFingers): ShownKeys {
@@ -86,6 +103,33 @@ export function ChordExplorer({
     onChange(view)
     if (autoplay) play(chordSounds(chordKeys(view), { arpeggio: false }))
   }
+  const parts = partsFromParams(chord)
+  const key = chord.key ? keyFromParam(chord.key) : undefined
+  const keyName = useKeyName()
+  const notes = useMemo(() => colourNotes(built.root, parts, key), [built.root, parts, key])
+  const numeral = key
+    ? numeralOf({ root: built.root, quality: quality ?? TRIAD_QUALITY[parts.triad] }, key)
+    : null
+  const context =
+    key && numeral
+      ? t('practice:chords.colour.inKey', { numeral: numeralText(numeral), key: keyName(key) })
+      : undefined
+  const colour = (each: ColourNote) => {
+    if (each.toggled) {
+      const view = changedView(chord, partsParams(each.toggled))
+      onChange(view)
+      playback.toggle(`${at} ${each.label}`, () =>
+        chordSounds(chordKeys(view), { arpeggio: false }),
+      )
+      return
+    }
+    const over = noteOnTop(shown, each.pitchClass, {
+      tone: each.group === 'avoid' ? 'scale' : each.role,
+      label: each.label,
+    })
+    show(over)
+    playback.toggle(`${at} ${each.label}`, () => chordSounds(over.keys, { arpeggio: false }))
+  }
   const sound = (id: 'chord' | 'arpeggio') =>
     playback.toggle(id, () => chordSounds(chordKeys(chord), { arpeggio: id === 'arpeggio' }))
   usePlayKey(() => sound('chord'))
@@ -118,19 +162,7 @@ export function ChordExplorer({
       </div>
       <ChordBuilder chord={chord} tones={built.tones} placed={placed} onChange={change} />
       <ChordFingering rows={rows} />
-      {quality && takesTensions(quality) ? (
-        <ChordTensions
-          root={built.root}
-          quality={quality}
-          isPlaying={(tone) => playback.playing === `${at} ${tone.pitchClass}`}
-          onPlay={(tone, over) => {
-            show(over)
-            playback.toggle(`${at} ${tone.pitchClass}`, () =>
-              chordSounds(over.keys, { arpeggio: false }),
-            )
-          }}
-        />
-      ) : null}
+      <ColourNotes notes={notes} context={context} onToggle={colour} onPlay={colour} />
       {quality ? (
         <ChordPractice
           root={built.root}
@@ -139,17 +171,20 @@ export function ChordExplorer({
         />
       ) : null}
       <FloatingActions>
-        <FabPill
-          label={playback.playing === 'arpeggio' ? t('common:stop') : t('practice:arpeggio')}
-          icon={playback.playing === 'arpeggio' ? Square : AudioLines}
-          aria-pressed={playback.playing === 'arpeggio'}
-          onClick={() => sound('arpeggio')}
-        />
-        <PlayFab
-          label={t('music:play')}
-          playing={playback.playing === 'chord'}
-          onClick={() => sound('chord')}
-        />
+        <FloatingBar label={t('practice:transport')}>
+          <FloatingBarButton
+            label={playback.playing === 'arpeggio' ? t('common:stop') : t('practice:arpeggio')}
+            aria-pressed={playback.playing === 'arpeggio'}
+            onClick={() => sound('arpeggio')}
+          >
+            {playback.playing === 'arpeggio' ? <Square aria-hidden /> : <AudioLines aria-hidden />}
+          </FloatingBarButton>
+          <FloatingBarPlay
+            label={t('music:play')}
+            playing={playback.playing === 'chord'}
+            onClick={() => sound('chord')}
+          />
+        </FloatingBar>
       </FloatingActions>
     </div>
   )

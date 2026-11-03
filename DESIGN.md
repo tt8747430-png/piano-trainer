@@ -341,7 +341,8 @@ every screen's title smaller (`data-titles='small'`).
   settings say), what it is with its one honey Play, its choices as fields, then its titled sections. No page splits
   into two columns of unrelated things.
 - **Floating things float.** The transport, the floating buttons and the zoom buttons take no layout room; the page
-  gets scroll room under them. Over music they step aside while it is read and come back at a tap.
+  gets scroll room under them. An explorer's ways to play (Chords' Arpeggio and Play, Intervals' three ways and Play
+  all) are one transport capsule (`FloatingBar`), never separate circles (R29). Over music they step aside while it is read and come back at a tap.
 - **The editor's palette docks, as Flat's.** From 48rem across a panel at the sheet's left (card paper, a hairline at
   its right, reaching the screen's edge), its sections an accordion of 48px rows parted by hairlines, and over the
   sheet the note-entry toolbar, its keys 40px glyphs in a sand pill. On a phone held upright a sheet at the foot,

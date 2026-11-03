@@ -34,6 +34,7 @@ export const practice: LocaleResources['practice'] = {
   root: 'Основной тон',
   hands: 'Руки',
   arpeggio: 'Арпеджио',
+  transport: 'Воспроизведение',
   inPlayer: 'Играть в плеере',
   checkYourself: 'Проверить себя',
   chords: {
@@ -54,12 +55,6 @@ export const practice: LocaleResources['practice'] = {
         sus4: 'С задержанной квартой',
         power: 'Квинтовый (5)',
       },
-      sizeNot: {
-        stops: 'Аккорд «{{quality}}» в справочниках до этого размера не строят.',
-        power: 'В квинтовом аккорде нет терции, строить не на чем.',
-      },
-      powerInversion:
-        'Квинтовый аккорд берут только в основном виде: квинта под основным тоном даёт кварту.',
       // A stack named by its top interval, as a chord symbol writes it: a triad up to the 5th.
       sizes: { triad: '5', seventh: '7', ninth: '9', eleventh: '11', thirteenth: '13' },
       sizeNames: {
@@ -75,8 +70,6 @@ export const practice: LocaleResources['practice'] = {
         major: 'Большая септима',
         diminished: 'Уменьшённая септима',
       },
-      added: 'Добавленные тоны',
-      alterations: 'Альтерации',
     },
     voicing: {
       label: 'Расположение',
@@ -122,25 +115,22 @@ export const practice: LocaleResources['practice'] = {
       title: 'Аппликатура',
       voiced: 'В этом расположении',
     },
-    tensions: {
-      title: 'Доступные тенсии',
-      group: {
-        weak: { title: 'Слабые', says: 'Ничего нового к звучанию не добавляют.' },
-        strong: { title: 'Сильные', says: 'Дают аккорду его название.' },
-        tension: { title: 'Тенсии', says: 'Добавляют краску.' },
-        avoid: { title: 'Избегаемые', says: 'Конфликтуют с аккордом.' },
-      },
+    colour: {
+      title: 'Краски аккорда',
+      info: 'Нажмите на тенсию, чтобы добавить её в аккорд, и ещё раз, чтобы убрать. Избегаемый звук стоит на полутон выше звука аккорда и спорит с ним.',
+      inKey: 'Как {{numeral}} в {{key}}',
+      group: { chord: 'Звуки аккорда', tension: 'Тенсии', avoid: 'Избегаемые' },
     },
     chromatic: 'По полутонам',
   },
   scales: {
-    show: { scale: 'Гамма', chords: 'Аккорды', key: 'Тональность' },
+    show: { scale: 'Звуки', chords: 'Гармония', key: 'Тональность' },
     label: 'Гамма',
     // The row of pickers over a scale: its root and its kind.
     which: 'Какая гамма',
     octaves: 'Октавы',
     startOn: 'Начать с',
-    openInChords: 'Открыть в Аккордах',
+    openChord: 'Открыть {{chord}} в «Аккордах»',
     onKeys: { label: 'На клавишах', notes: 'Ноты', lh: 'Левая рука', rh: 'Правая рука' },
     byHand: {
       title: 'Аппликатура по рукам',
@@ -181,12 +171,16 @@ export const practice: LocaleResources['practice'] = {
       random: 'Случайная тональность',
       signature: 'Знаки',
       noSignature: 'Без знаков',
-      notes: 'Ноты',
       modes: 'Лады',
       parallel: 'Одноимённая',
       enharmonic: 'Энгармонически',
       neighbours: 'Соседи по кругу',
       borrowed: 'Заимствованные аккорды',
+      borrowedName: {
+        picardy: 'Пикардийская терция',
+        neapolitan: 'Неаполитанский',
+        minorPlagal: 'Минорная субдоминанта',
+      },
       songs: 'Песни в этой тональности',
       studies: 'Этюды в этой тональности',
       noSongs: 'Песен в этой тональности нет.',
@@ -197,7 +191,20 @@ export const practice: LocaleResources['practice'] = {
   intervals: {
     simple: 'В пределах октавы',
     compound: 'Шире октавы',
-    way: { label: 'Играть', together: 'Вместе', up: 'Вверх', down: 'Вниз' },
+    way: {
+      together: 'Гармонический',
+      up: 'Мелодический, восходящий',
+      down: 'Мелодический, нисходящий',
+    },
+    playAll: 'Сыграть все',
+    ear: 'Тренировка слуха',
+    earQuiz: 'Интервалы на слух',
+    semitones_one: '{{count}} полутон',
+    semitones_few: '{{count}} полутона',
+    semitones_many: '{{count}} полутонов',
+    semitones_other: '{{count}} полутона',
+    songsUp: 'Вверх',
+    songsDown: 'Вниз',
     tritone: {
       A4: { name: 'Увеличенная кварта', short: 'ув4' },
       d5: { name: 'Уменьшённая квинта', short: 'ум5' },

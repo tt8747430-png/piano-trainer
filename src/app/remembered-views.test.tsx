@@ -85,7 +85,7 @@ describe('Remembered views', () => {
   it('keeps a screen as it is when its own tab is tapped', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?root=D&kind=dorian')
-    await user.click(await screen.findByRole('link', { name: 'Scale' }))
+    await user.click(await screen.findByRole('link', { name: 'Notes' }))
     expect(router.state.location.search).toMatchObject({ root: 'D', kind: 'dorian' })
   })
 

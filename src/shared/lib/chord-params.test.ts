@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ChordParts } from '@/shared/lib/music'
-import { partsFromParams, partsParams, readAdded, readAlterations } from './chord-params'
+import { partsFromParams, partsParams, readColour } from './chord-params'
 
 const TRIAD: ChordParts = {
   triad: 'maj',
@@ -12,31 +12,28 @@ const TRIAD: ChordParts = {
 const parts = (change: Partial<ChordParts>): ChordParts => ({ ...TRIAD, ...change })
 
 describe('the parts’ URL params', () => {
-  it('write the alterations as a symbol does, and read back only that', () => {
+  it('write the colour notes as a symbol does, alterations first, and read them back', () => {
     const ninthSharpEleven = parts({ size: 9, alterations: ['b9', 's11'] })
     expect(partsParams(ninthSharpEleven)).toEqual({
       triad: 'maj',
       size: 9,
       seventh: 'minor',
-      added: '',
-      alter: 'b9s11',
+      colour: 'b9,#11',
     })
     expect(partsFromParams(partsParams(ninthSharpEleven))).toEqual(ninthSharpEleven)
-    expect(partsParams(TRIAD).alter).toBe('')
-    expect(readAlterations('b5b9s9')).toEqual(['b5', 'b9', 's9'])
-    expect(readAlterations('s11b9')).toEqual([])
-    expect(readAlterations('b9b9')).toEqual([])
-    expect(readAlterations(7)).toEqual([])
+    expect(partsParams(TRIAD).colour).toBe('')
   })
 
-  it('write the added tones by their ids, in order, and read back only that', () => {
+  it('write a triad’s added tones by their numbers, and read back only those it knows', () => {
     const sixNine = parts({ triad: 'min', added: ['add6', 'add9'] })
-    expect(partsParams(sixNine).added).toBe('add6add9')
+    expect(partsParams(sixNine).colour).toBe('6,9')
     expect(partsFromParams(partsParams(sixNine))).toEqual(sixNine)
-    expect(readAdded('add2add11')).toEqual(['add2', 'add11'])
-    expect(readAdded('addS11add13')).toEqual(['addS11', 'add13'])
-    expect(readAdded('add9add6')).toEqual([])
-    expect(readAdded('six')).toEqual([])
-    expect(readAdded(9)).toEqual([])
+    expect(readColour('9,six,#11', 5)).toEqual({ added: ['add9', 'addS11'], alterations: [] })
+    expect(readColour(true, 5)).toEqual({ added: [], alterations: [] })
+  })
+
+  it('read a #11 as added over a triad and altered over a 7th chord', () => {
+    expect(readColour('#11', 5)).toEqual({ added: ['addS11'], alterations: [] })
+    expect(readColour('#11,13', 7)).toEqual({ added: ['add13'], alterations: ['s11'] })
   })
 })

@@ -4,22 +4,25 @@ import { ScaleChordGrid } from '@/features/play-example'
 import { useLocale } from '@/shared/i18n'
 import { qualityParams } from '@/shared/lib'
 import {
-  noteName,
+  degreeNames,
+  keyParam,
   noteParam,
   printedSymbol,
+  type Key,
   type Midi,
   type PlacedScaleChord,
   type ScaleKind,
   type SpelledNote,
 } from '@/shared/lib/music'
-import { ButtonLink, ChordText, OpensMark } from '@/shared/ui'
+import { OpensMark } from '@/shared/ui'
 import { heardName } from '../model/scale-keys'
 
 /**
- * The key's chords: a tap plays one from its degree's key, pressed while it sounds. Listening for a
+ * The key's chords on the seven-degree spine (A21): each its symbol, its numeral and, in a key, its
+ * degree's name (tonic … leading note); a tap plays one, pressed while it sounds. Listening for a
  * note (Keys play Notes), the chords that hold it are ringed and named, as the sheets print them.
- * Under them, each chord the Chords page builds is a link that opens it there, as the reference
- * app's chord rows do.
+ * Each chord the Chords page builds opens there from its card's corner, set to it in this key (its
+ * colour notes following its degree, A33): one card, no second row of links (R29).
  */
 export function KeyChords({
   chords,
@@ -28,16 +31,20 @@ export function KeyChords({
   listening,
   note,
   holding,
+  musicKey,
 }: {
   chords: readonly PlacedScaleChord[]
+  /** The key the scale is the scale of, where it is one: its degrees named, its chords opened in it. */
+  musicKey: Key | null
   root: SpelledNote
   kind: ScaleKind
   listening: boolean
   note: Midi | null
   holding: readonly PlacedScaleChord[]
 }) {
-  const { t } = useTranslation('practice')
+  const { t } = useTranslation(['practice', 'music'])
   const locale = useLocale()
+  const names = musicKey ? degreeNames(musicKey.minor) : null
   const holds = new Set(holding.map((placed) => placed.chord.degree))
   const said =
     note === null
@@ -52,33 +59,30 @@ export function KeyChords({
           })
   return (
     <section aria-label={t('scales.chordsIn')} className="flex flex-col gap-3">
-      <ScaleChordGrid chords={chords} holds={holds} />
-      <nav aria-label={t('scales.openInChords')} className="flex flex-col gap-2">
-        <p className="text-sm text-muted-foreground">{t('scales.openInChords')}</p>
-        <ul className="flex flex-wrap gap-2">
-          {chords.flatMap(({ chord }) =>
-            chord.quality === undefined
-              ? []
-              : [
-                  <li key={chord.degree}>
-                    <ButtonLink
-                      variant="outline"
-                      className="gap-1 pr-2"
-                      render={
-                        <Link
-                          to="/practice/chords"
-                          search={{ root: noteParam(chord.root), ...qualityParams(chord.quality) }}
-                        />
-                      }
-                    >
-                      <ChordText symbol={`${noteName(chord.root)}${chord.suffix}`} />
-                      <OpensMark />
-                    </ButtonLink>
-                  </li>,
-                ],
-          )}
-        </ul>
-      </nav>
+      <ScaleChordGrid
+        chords={chords}
+        holds={holds}
+        detail={
+          names ? ({ chord }) => t(`music:degree.${names[chord.degree] ?? 'tonic'}`) : undefined
+        }
+        open={({ chord, symbol }) =>
+          chord.quality === undefined ? null : (
+            <Link
+              to="/practice/chords"
+              search={{
+                root: noteParam(chord.root),
+                ...qualityParams(chord.quality),
+                ...(musicKey ? { key: keyParam(musicKey) } : {}),
+              }}
+              aria-label={t('scales.openChord', { chord: printedSymbol(symbol) })}
+              title={t('scales.openChord', { chord: printedSymbol(symbol) })}
+              className="relative grid size-7 place-items-center rounded-pill before:absolute before:-inset-2 before:content-[''] hover:bg-muted"
+            >
+              <OpensMark className="size-4" />
+            </Link>
+          )
+        }
+      />
       {listening ? (
         <p aria-live="polite" className="min-h-7 text-lg">
           {said}

@@ -37,6 +37,8 @@ export const practice = {
   root: 'Root',
   hands: 'Hands',
   arpeggio: 'Arpeggio',
+  /** The explorers' floating transport: one capsule of what plays the thing shown (R29). */
+  transport: 'Transport',
   inPlayer: 'Practise in the Player',
   checkYourself: 'Check yourself',
   // Chords: the chord built, its tensions, and its ways on.
@@ -61,11 +63,6 @@ export const practice = {
         sus4: 'Suspended 4th',
         power: 'Power (5)',
       },
-      sizeNot: {
-        stops: 'Chord dictionaries stop the {{quality}} chord before this size.',
-        power: 'A power chord has no 3rd, so nothing stacks on it.',
-      },
-      powerInversion: 'A power chord stays in root position: its 5th under the root is a 4th.',
       sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
       sizeNames: {
         triad: 'Triad',
@@ -76,8 +73,6 @@ export const practice = {
       },
       seventh: '7th',
       sevenths: { minor: 'Minor 7th', major: 'Major 7th', diminished: 'Diminished 7th' },
-      added: 'Added tones',
-      alterations: 'Alterations',
     },
     // How the chord is laid on the keys: the jazz pianist's voicings, each explained in its ⓘ.
     voicing: {
@@ -126,27 +121,26 @@ export const practice = {
       // A row of the table: the inversion, or the keys as the voicing lays them.
       voiced: 'As voiced',
     },
-    tensions: {
-      title: 'Available tensions',
-      group: {
-        weak: { title: 'Weak', says: 'These add nothing new to the sound.' },
-        strong: { title: 'Strong', says: 'These give the chord its name.' },
-        tension: { title: 'Tensions', says: 'These add colour.' },
-        avoid: { title: 'Avoid', says: 'These clash with the chord.' },
-      },
+    // The chord's colour notes (A33): its tones, the tensions it takes on top, the notes to avoid.
+    colour: {
+      title: 'Colour notes',
+      info: 'Tap a tension to add it to the chord, and again to take it off. An avoid note sits a half step over a chord tone and clashes with it.',
+      inKey: 'As {{numeral}} in {{key}}',
+      group: { chord: 'Chord tones', tension: 'Tensions', avoid: 'Avoid' },
     },
     chromatic: 'Chromatic walk',
     // Chords' row to the Chord finder, which opens on the chord's own keys.
   },
   // Scales and keys: the run, the chords, the key.
   scales: {
-    show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
+    // The tabs say what is in them (A32): its notes, its key's harmony, the key itself.
+    show: { scale: 'Notes', chords: 'Harmony', key: 'Key' },
     label: 'Scale',
     // The row of pickers over a scale: its root and its kind.
     which: 'Which scale',
     octaves: 'Octaves',
     startOn: 'Start on',
-    openInChords: 'Open in Chords',
+    openChord: 'Open {{chord}} in Chords',
     // What the run's keys carry: its notes, or a hand's fingers.
     onKeys: { label: 'On the keys', notes: 'Notes', lh: 'Left hand', rh: 'Right hand' },
     // The run's fingering hand by hand, each hand drawn with its fingers numbered.
@@ -189,12 +183,17 @@ export const practice = {
       random: 'A random key',
       signature: 'Signature',
       noSignature: 'No sharps or flats',
-      notes: 'Notes',
       modes: 'Modes',
       parallel: 'Parallel',
       enharmonic: 'Also written',
       neighbours: 'Beside it on the circle',
       borrowed: 'Borrowed chords',
+      // The borrowed chords the harmony books name.
+      borrowedName: {
+        picardy: 'Picardy third',
+        neapolitan: 'Neapolitan',
+        minorPlagal: 'Minor plagal',
+      },
       songs: 'Songs in this key',
       studies: 'Studies in this key',
       noSongs: 'No songs are in this key.',
@@ -207,7 +206,17 @@ export const practice = {
     simple: 'Within the octave',
     compound: 'Past the octave',
     // How a row plays its interval.
-    way: { label: 'Play', together: 'At once', up: 'Up', down: 'Down' },
+    // How a row plays its interval, as theory books name it (A22).
+    way: { together: 'Harmonic', up: 'Melodic, rising', down: 'Melodic, falling' },
+    playAll: 'Play all',
+    // Ear training is the Quiz's: the page links there.
+    ear: 'Train your ear',
+    earQuiz: 'Intervals by ear',
+    semitones_one: '{{count}} semitone',
+    semitones_other: '{{count}} semitones',
+    // The songs an interval opens, rising and falling.
+    songsUp: 'Up',
+    songsDown: 'Down',
     // The tritone by each of its spellings, a row each.
     tritone: {
       A4: { name: 'Augmented fourth', short: 'A4' },

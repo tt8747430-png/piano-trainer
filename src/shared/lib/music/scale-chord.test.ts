@@ -5,6 +5,7 @@ import { pitchClass } from './pitch'
 import { SCALE_KINDS, scaleHasChords, scaleRootSpelling, spellScale } from './scale'
 import {
   borrowedChords,
+  borrowedName,
   CHORD_NOTES,
   CHORD_SIZES,
   ROMAN_NUMERALS,
@@ -202,11 +203,28 @@ describe('borrowedChords', () => {
     ])
   })
 
-  it('borrows the Picardy I, the Neapolitan ♭II, Dorian’s IV and harmonic minor’s V into a minor key', () => {
+  it('borrows the Picardy I and the Neapolitan ♭II into a minor key: its IV and V are its own (A43)', () => {
     const chords = borrowedChords({ tonic: note('A'), minor: true }, 3)
-    expect(written(chords)).toEqual(['I', '♭II', 'IV', 'V'])
-    expect(chords.map((chord) => chord.from)).toEqual(['major', 'phrygian', 'melodic', 'harmonic'])
-    expect(chords.map((chord) => writtenSymbol(chord))).toEqual(['A', 'B♭', 'D', 'E'])
+    expect(written(chords)).toEqual(['I', '♭II'])
+    expect(chords.map((chord) => chord.from)).toEqual(['major', 'phrygian'])
+    expect(chords.map((chord) => writtenSymbol(chord))).toEqual(['A', 'B♭'])
+  })
+
+  it('writes the Neapolitan by its letter, as the books do: C♭ in B♭ minor', () => {
+    const [, neapolitan] = borrowedChords({ tonic: note('B', -1), minor: true }, 3)
+    expect(neapolitan && writtenSymbol(neapolitan)).toBe('C♭')
+  })
+
+  it('names the borrowed chords the books name', () => {
+    const minor = { tonic: note('A'), minor: true }
+    const major = { tonic: note('C'), minor: false }
+    expect([0, 1].map((degree) => borrowedName(minor, degree))).toEqual(['picardy', 'neapolitan'])
+    expect([2, 3, 5, 6].map((degree) => borrowedName(major, degree))).toEqual([
+      undefined,
+      'minorPlagal',
+      undefined,
+      undefined,
+    ])
   })
 })
 

@@ -7,8 +7,7 @@ const C: ChordView = {
   triad: 'maj',
   size: 5,
   seventh: 'minor',
-  added: '',
-  alter: '',
+  colour: '',
   voicing: 'close',
   inversion: 0,
   hands: 'rh',
@@ -47,13 +46,13 @@ describe('viewChord, from five notes', () => {
 
 describe('changedView', () => {
   it('fits the parts to one another', () => {
-    const dominant = { ...C, size: 9 as const, alter: 'b9' }
+    const dominant = { ...C, size: 9 as const, colour: 'b9' }
     expect(changedView(dominant, { triad: 'min' })).toMatchObject({
       triad: 'min',
       size: 9,
-      alter: '',
+      colour: '',
     })
-    expect(changedView(dominant, { triad: 'sus2' })).toMatchObject({ size: 7, alter: '' })
+    expect(changedView(dominant, { triad: 'sus2' })).toMatchObject({ size: 7, colour: '' })
   })
 
   it('drops a suspension the size chosen cannot take, keeping the size', () => {

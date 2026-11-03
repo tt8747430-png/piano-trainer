@@ -4,8 +4,7 @@ export {
   partsFromParams,
   partsParams,
   qualityParams,
-  readAdded,
-  readAlterations,
+  readColour,
   type PartsParams,
 } from './chord-params'
 export { foldText, matchesQuery, WORD_BREAK } from './fold-text'

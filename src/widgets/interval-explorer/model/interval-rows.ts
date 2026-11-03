@@ -1,11 +1,15 @@
+import { intervalExample, writesInterval } from '@/features/play-example'
 import {
+  INTERVAL_GROUP_IDS,
   INTERVAL_GROUPS,
   midi,
   type IntervalGroup,
   type KeyRange,
   type Midi,
   type ReferenceInterval,
+  type SpelledNote,
 } from '@/shared/lib/music'
+import { intervalSounds, type IntervalWay, type NoteSound } from '@/shared/lib/schedule'
 
 /** An interval the page lists: the reference's, and the diminished 5th beside the augmented 4th. */
 export type RowInterval = ReferenceInterval | 'd5'
@@ -22,15 +26,34 @@ export const INTERVAL_ROWS: Readonly<Record<IntervalGroup, readonly RowInterval[
   compound: INTERVAL_GROUPS.compound,
 }
 
-/** How many keys a group's rows draw: enough for its widest interval from where the drawing starts. */
-const SPAN: Readonly<Record<IntervalGroup, number>> = { simple: 20, compound: 28 }
+/** How many keys every row draws, so all are drawn at one size (A22): enough for the widest interval. */
+const SPAN = 28
+
+/** The time from one interval's start to the next as Play all plays them. */
+export const EVERY_INTERVAL_GAP = 2
+
+/**
+ * Every interval over the root in turn, as the list shows them, each the way chosen: what Play all
+ * plays. An interval no letter writes over the root is left out, as its row is.
+ */
+export function everyInterval(root: SpelledNote, way: IntervalWay): NoteSound[] {
+  return INTERVAL_GROUP_IDS.flatMap((group) => INTERVAL_ROWS[group])
+    .filter((name) => writesInterval(root, name))
+    .flatMap((name, i) => {
+      const { low, high } = intervalExample(root, name)
+      return intervalSounds(low, high, way).map((sound) => ({
+        ...sound,
+        at: sound.at + i * EVERY_INTERVAL_GAP,
+      }))
+    })
+}
 
 /**
  * The keys a row draws, as many for every row of its group: from the C or the F at or under the root,
  * whichever is nearer, so the root stands near the left and the widest interval still fits.
  */
-export function rowRange(low: Midi, group: IntervalGroup): KeyRange {
+export function rowRange(low: Midi): KeyRange {
   const inOctave = low % 12
   const from = low - (inOctave < 5 ? inOctave : inOctave - 5)
-  return { from: midi(from), to: midi(from + SPAN[group] - 1) }
+  return { from: midi(from), to: midi(from + SPAN - 1) }
 }

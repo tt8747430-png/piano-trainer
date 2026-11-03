@@ -1,15 +1,7 @@
 import { type SearchMiddleware, stripSearchParams } from '@tanstack/react-router'
 import { isStepId } from '@/entities/step'
 import { PROGRESSION } from '@/features/practice'
-import {
-  isOneOf,
-  partsParams,
-  readAdded,
-  readAlterations,
-  readNote,
-  valueOr,
-  wholeIn,
-} from '@/shared/lib'
+import { isOneOf, partsParams, readColour, readNote, valueOr, wholeIn } from '@/shared/lib'
 import {
   buildChord,
   BUILT_SIZES,
@@ -69,8 +61,7 @@ export const CHORDS_DEFAULTS: ChordsSearch = {
   triad: 'maj',
   size: 5,
   seventh: 'minor',
-  added: '',
-  alter: '',
+  colour: '',
   voicing: 'close',
   inversion: 0,
   hands: 'rh',
@@ -83,13 +74,14 @@ const isVoicing = isOneOf(VOICINGS)
 const isChordsStep = (value: unknown): value is ChordsStepId =>
   isStepId(value) && value.startsWith('chords:')
 export function readChordsSearch(raw: Raw): ChordsSearch {
+  const size = valueOr(isBuiltSize, raw.size, CHORDS_DEFAULTS.size)
   const parts = fitParts({
     triad: valueOr(isTriad, raw.triad, CHORDS_DEFAULTS.triad),
-    size: valueOr(isBuiltSize, raw.size, CHORDS_DEFAULTS.size),
+    size,
     seventh: valueOr(isSeventh, raw.seventh, CHORDS_DEFAULTS.seventh),
-    added: readAdded(raw.added),
-    alterations: readAlterations(raw.alter),
+    ...readColour(raw.colour, size),
   })
+  const key = readKey(raw.key)
   const read = readNote(raw.root)
   const root = read ?? note('C')
   const asked = wholeIn(raw.inversion, 0, INVERSIONS.length - 1, CHORDS_DEFAULTS.inversion)
@@ -101,6 +93,7 @@ export function readChordsSearch(raw: Raw): ChordsSearch {
     voicing: voicingBar(tones, voicing) ? CHORDS_DEFAULTS.voicing : voicing,
     inversion: chordInversions(tones).includes(asked) ? asked : CHORDS_DEFAULTS.inversion,
     hands: valueOr(isChordHands, raw.hands, CHORDS_DEFAULTS.hands),
+    key: key ? keyParam(key) : undefined,
     step: isChordsStep(raw.step) ? raw.step : undefined,
   }
 }

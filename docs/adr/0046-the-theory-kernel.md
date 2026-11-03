@@ -43,11 +43,23 @@ something to play, and the root goes to the left hand.
   octave up (A♭ major 4 1 2 4, C minor's 1st inversion 3 1 2 3).
 - **The chord table has 46 qualities**, each a Skill (ADR 0025): every type Musicca's chord finder lists (the power
   chord `C5`, Maj11, m13, Maj13 among them) and 13sus4. Any chord is built from its parts (`buildChord`): the triad,
-  a suspension or the power chord's bare 5th (no larger size, no inversion), the size up to a 13th, the 7th, an added tone, and alterations, which are the available
-  tensions. Only what the chord takes is offered, and a change that leaves a part out of reach takes the nearest in
+  a suspension or the power chord's bare 5th (no larger size, no inversion), the size up to a 13th, the 7th, an added tone, and alterations. Only what the chord takes is offered, and a change that leaves a part out of reach takes the nearest in
   reach. A chord is named by the table where it has it, else by the stacks' rule (`stackSuffix`).
-- **Available tensions have one source** (`tensions.ts`), the owner's table its test's oracle. A scale stacks its own
-  chords to 13ths (`scaleChordAt`), playing a 9th only where it is available, so C major's iii stays Em7.
+- **A chord's colour notes are one model** (`colour-notes.ts`, A33): `colourNotes(root, parts, key?)` groups every
+  note over a chord as its **chord tones**, its **tensions** and the notes to **avoid**. Without a key a 7th chord
+  takes the owner's tension table (`availableTensions`, the one source of tensions, its test's oracle), any other
+  chord every note that is no minor 9th over a chord tone. In a key whose scale holds the chord's root, a non-dominant
+  chord's tensions are the key's notes over it that are no minor 9th over a chord tone, those that are avoided, and
+  notes outside the key are left out unless the chord has them: Dm7 as ii of C takes 9, 11 and 13, as vi of F avoids
+  its ♭13, Em7 as iii of C avoids ♭9 and ♭13; a dominant keeps the table's altered tensions in any key. Added tones and
+  alterations are colour notes: `withColour` adds or takes one off by finding the builder's chord (`CHORD_PARTS`)
+  that holds exactly those notes, so the symbol is written by the usual rule (C9, C7♯11, Cadd9); a note no such
+  chord holds is only heard. A scale stacks its own chords to 13ths (`scaleChordAt`), playing a 9th only where it is
+  available, so C major's iii stays Em7.
+- **Borrowed chords** (`borrowedChords`): a major key's ♭III, iv (the minor plagal), ♭VI and ♭VII from its parallel
+  minor; a minor key's Picardy I and Neapolitan ♭II, the Neapolitan written by its letter (C♭ in B♭ minor). A minor
+  key's IV and V are its melodic and harmonic minor's own, not borrowed (`borrowedName` names the three the books
+  name).
 - **From five notes a chord takes two hands** (`placeChord` with both hands): the root, and from six notes the 5th
   over it, in the left; the rest close inside an octave in the right; the left takes the 7th as well where the right
   would hold more than five keys. Every tone stays on the keys. The root stays in the bass, so a big chord is not
@@ -101,3 +113,6 @@ Chords view should hold its big chords in two hands too.
   fingering as the printed books, eight new scale kinds, degree names under a scale's formula, crossings marked
   (2026-10-28), from Musicca, Vita Piano, piano.org and ABRSM's books.
 - r29 — One fingering service (chord, run, arpeggio, passage, progression) and a chord's colour notes (tensions, added tones, alterations as one panel, following the chord's degree in a key) (decided 2026-11-02, being built in round 29; spec `.scratch/r29/fingering-service/spec.md`).
+- r29 — Built: the colour notes (`colour-notes.ts` replacing `tensions.ts`; a ii's 13th a tension, as the spec has it,
+  where the old in-key rule avoided it); a minor key borrows only the Picardy I and the Neapolitan (2026-11-03,
+  `.scratch/r29/colour-notes/spec.md`, A33, A43).

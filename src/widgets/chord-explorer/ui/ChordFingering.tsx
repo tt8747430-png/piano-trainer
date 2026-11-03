@@ -35,7 +35,7 @@ export function ChordFingering({ rows }: { rows: readonly FingeringRow[] }) {
               className="h-24 w-auto shrink-0"
             />
             <div className="flex min-w-0 flex-col gap-2">
-              <h3 className="text-lg">{t(`practice:scales.byHand.${hand}`)}</h3>
+              <h3 className="text-xl">{t(`practice:scales.byHand.${hand}`)}</h3>
               <table className="w-max border-separate border-spacing-x-0.5 border-spacing-y-1 text-center tabular-nums">
                 <caption className="sr-only">{t(`practice:scales.byHand.${hand}`)}</caption>
                 <tbody>
