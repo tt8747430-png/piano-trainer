@@ -19,7 +19,7 @@ export function PrintedLyrics({
 }) {
   const shown = useMemo(() => shownLines(lyricLines(performance)), [performance])
   return (
-    <div className="flex flex-col gap-3 text-lg">
+    <div data-song-text className="flex flex-col gap-3 text-lg">
       {shown.map(({ line, index, starts }) => {
         const heading = headings[line.section]
         return (

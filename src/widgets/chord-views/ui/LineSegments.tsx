@@ -11,7 +11,7 @@ const EMPTY_PLACE = String.fromCharCode(0xa0)
  */
 function Words({ words }: { words: SungWords | undefined }) {
   return (
-    <span className="flex whitespace-pre-wrap">
+    <span data-song-text className="flex whitespace-pre-wrap">
       <span>{words?.text || EMPTY_PLACE}</span>
       {words?.goesOn ? (
         <span aria-hidden className="grow px-0.5 text-center">

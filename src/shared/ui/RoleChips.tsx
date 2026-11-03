@@ -119,7 +119,7 @@ export function RoleLegend({ action }: { action?: ReactNode }) {
       <span className="flex flex-wrap items-center gap-x-3">
         {(['home', 'away', 'tension'] as const).map((role) => (
           <span key={role} className="flex items-center gap-1.5">
-            <span aria-hidden className={cn('size-3 rounded-full', PAINT[ROLE_PAINT[role]].full)} />
+            <span aria-hidden className={cn('size-3 rounded-pill', PAINT[ROLE_PAINT[role]].full)} />
             {t(`harmony.role.${role}`)}
           </span>
         ))}

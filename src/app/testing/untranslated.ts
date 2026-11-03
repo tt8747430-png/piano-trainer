@@ -34,7 +34,8 @@ export function untranslated(root: HTMLElement): string[] {
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT)
   for (let node = walker.nextNode(); node; node = walker.nextNode()) {
     const text = node.textContent?.trim()
-    if (text) texts.push(text)
+    // A song's own words (its lyrics, `data-song-text`) are in its language, not the interface's.
+    if (text && !node.parentElement?.closest('[data-song-text]')) texts.push(text)
   }
   for (const element of root.querySelectorAll('[aria-label], [title], [placeholder]')) {
     for (const name of ['aria-label', 'title', 'placeholder']) {

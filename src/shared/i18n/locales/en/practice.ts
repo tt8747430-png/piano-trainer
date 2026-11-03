@@ -255,7 +255,7 @@ export const practice = {
     throughKeys: 'Practise in all 12 keys',
     // Progressions' tabs (A23).
     tabs: { progression: 'Progression', library: 'Library', passing: 'Passing chords' },
-    allStyles: 'All',
+    allStyles: 'All styles',
     // How the row is read and played (ADR 0112): its mode, how its chords are named, voice-led or blocks.
     mode: {
       label: 'Mode',

@@ -44,6 +44,7 @@ export function LyricRow({
   const last = line.bars.at(-1) ?? first
   return (
     <div
+      data-song-text
       data-line={index}
       data-looped={looped ? '' : undefined}
       className={cn(

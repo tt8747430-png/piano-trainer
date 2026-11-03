@@ -72,6 +72,7 @@ export function BarCells({
           <span
             key={index}
             aria-hidden
+            data-song-text
             data-verse={index}
             className={cn(
               'col-span-full grid px-1 pt-0.5 text-xs leading-tight hyphens-auto break-words last-of-type:pb-1',

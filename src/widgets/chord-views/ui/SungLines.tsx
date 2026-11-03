@@ -42,6 +42,7 @@ export function SungLines({
 }) {
   return (
     <div
+      data-song-text
       data-area="words"
       className="flex flex-col gap-2 text-center text-lg sm:text-xl landscape-phone:gap-1 landscape-phone:text-base landscape-phone:leading-snug"
     >
