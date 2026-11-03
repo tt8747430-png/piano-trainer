@@ -2,9 +2,10 @@ import { Link } from '@tanstack/react-router'
 import { Mic, Volume2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { FloatingBarButton, RowLink } from '@/shared/ui'
-import { SoundVolumes } from '@/widgets/practice-player'
+import { SoundVolumes, useScoreTracks } from '@/widgets/practice-player'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { useEditorState } from '../model/editor-context'
+import { useStaffHeads } from '../model/use-staff-heads'
 
 /**
  * The editor's Sound (round 26), the Player's in icon, name and place: each part's volume as the
@@ -14,7 +15,8 @@ import { useEditorState } from '../model/editor-context'
  */
 export function RecordingSettings({ className }: { className?: string }) {
   const { t } = useTranslation(['player', 'settings'])
-  const staves = useEditorState((state) => state.draft.staves.length > 0)
+  const piano = useEditorState((state) => !state.draft.leadSheet)
+  const tracks = useScoreTracks({ staves: useStaffHeads(), piano, recording: false })
   return (
     <Popover>
       <PopoverTrigger
@@ -30,7 +32,7 @@ export function RecordingSettings({ className }: { className?: string }) {
         align="end"
         className="max-h-(--available-height) w-80 max-w-[calc(100vw-2rem)] gap-4 overflow-y-auto overscroll-contain p-4"
       >
-        <SoundVolumes staves={staves} recording={false} />
+        <SoundVolumes tracks={tracks} />
         <RowLink
           title={t('settings:pages.sound')}
           icon={Mic}

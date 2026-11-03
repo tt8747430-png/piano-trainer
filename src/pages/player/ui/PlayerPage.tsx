@@ -8,6 +8,7 @@ import {
   isLeadSheet,
   isOwnSongId,
   musicOf,
+  pieceKey,
   useRepertoire,
   type Piece,
 } from '@/entities/piece'
@@ -17,11 +18,12 @@ import { PieceInversions } from '@/features/choose-diagram-inversion'
 import { beatGroupInBar, writtenBarAt } from '@/features/practice'
 import { ShareSaid, useShareSong, type SongToShare } from '@/features/share-song'
 import { useSongExport } from '@/features/song-files'
-import { useLocale } from '@/shared/i18n'
+import { useKeyName, useLocale } from '@/shared/i18n'
 import { useUp, useSetSearch } from '@/shared/lib'
 import { isCompound, noteParam } from '@/shared/lib/music'
 import { ButtonLink, NotFound, type MenuAction } from '@/shared/ui'
 import { ScoreEditToggle } from '@/widgets/mode-switch'
+import { useScoreTracks } from '@/widgets/practice-player'
 import type { PlayerSearch } from '../model/player-search'
 import { sectionAt, sectionStarts } from '../model/section-starts'
 import { usePlayer } from '../model/use-player'
@@ -40,8 +42,30 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
   const close = useUp()
   const setSearch = useSetSearch<PlayerSearch>()
-  const { choice, performance, player, fit, headings, simplifies, changeSetup, simplify } =
-    usePlayer(piece, search, setSearch)
+  const {
+    choice,
+    performance,
+    player,
+    fit,
+    headings,
+    controls,
+    staves,
+    recordingInKey,
+    simplifies,
+    changeSetup,
+    simplify,
+    changeTrack,
+  } = usePlayer(piece, search, setSearch)
+  const keyName = useKeyName()
+  // The tracks the Setup lists: each staff by its name and clef, the piano's, the recording (A35).
+  const tracks = useScoreTracks({
+    staves: (performance.staves ?? []).map(({ clef }, place) => ({
+      clef,
+      name: isDegreePiece(piece) ? undefined : piece.staves?.[place]?.name,
+    })),
+    piano: !isLeadSheet(piece),
+    recording: piece.recording !== undefined,
+  })
   const title = entryTitles(piece, locale).primary
   // The bar as written the cursor is in, and the cursor taken to one (ADR 0115).
   const bar = writtenBarAt(performance, player.practice.state.beatGroup)
@@ -138,11 +162,20 @@ function PiecePlayer({ piece }: { piece: Piece }) {
           setup={
             <PieceSetup
               piece={piece}
+              controls={controls}
               choice={choice}
               fit={fit}
               swing={isCompound(piece.meter) ? null : search.swing}
               simple={choice.simple && simplifies}
+              tracks={tracks}
+              staves={staves}
+              recordingWhy={
+                recordingInKey
+                  ? undefined
+                  : t('player:recordingOnlyIn', { key: keyName(pieceKey(piece)) })
+              }
               onChange={changeSetup}
+              onStaves={changeTrack}
               onSwing={player.setSwing}
             />
           }
@@ -154,7 +187,9 @@ function PiecePlayer({ piece }: { piece: Piece }) {
                 tonic={choice.tonic}
                 onChange={(key) => changeSetup({ key })}
               />
-              <SimplifyTool on={choice.simple} simplifies={simplifies} onChange={simplify} />
+              {controls.has('simplify') ? (
+                <SimplifyTool on={choice.simple} simplifies={simplifies} onChange={simplify} />
+              ) : null}
             </>
           }
           more={more}

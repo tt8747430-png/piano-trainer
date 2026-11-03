@@ -7,7 +7,19 @@ export {
 } from './practice-machine'
 export { PRACTICE_MODES, type PracticeMode } from './practice-mode'
 export { usePractice, type Practice } from './use-practice'
-export { FULL_MIX, type Mix } from './mix'
+export { FULL_MIX, partGain, type Mix, type MixPart } from './mix'
+export {
+  hiddenStaves,
+  isStavesParam,
+  noteStaff,
+  readStaves,
+  stavesParam,
+  trackOf,
+  withTrack,
+  type PlayerStaves,
+  type TrackChoice,
+  type TrackId,
+} from './staves'
 export { isLoopParam, loopParam, loopTicks, readLoop, type BarRange, type LoopParam } from './loop'
 export { beatGroupInBar, firstPlayedBar, writtenBarAt, writtenBarOf } from './written-bar'
 export {

@@ -21,7 +21,7 @@ import {
 } from '@/shared/lib/schedule'
 import { useServices } from '@/shared/lib/services'
 import { loopBeatGroups, loopTicks, type BarRange, type BeatGroupRange } from './loop'
-import { heardIn, mixGain, type Mix } from './mix'
+import { heardIn, mixGain, partGain, type Mix } from './mix'
 import {
   accompanyingHands,
   initialPractice,
@@ -50,8 +50,13 @@ export interface PracticeSetup {
   readonly rest: number
   /** The piece's recording, played along in Listen; null plays none. */
   readonly recording: Recording | null
-  /** How loud each part plays (ADR 0105): the hands, the staves, the recording and the click. */
+  /** How loud each part plays (ADR 0105): each staff, the recording and the click. */
   readonly mix: Mix
+  /**
+   * Whether Wait mode plays the hand not practised along (A35, "Play the other hand"); true unless
+   * said. The staves over the piano play either way.
+   */
+  readonly accompany?: boolean
 }
 
 export interface Practice {
@@ -132,14 +137,16 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   // then on, and starts nothing again. Only a part turned right down, or up from nothing, does: it
   // is then left out of the music, or brought into it, from the beat group playing.
   const mixed = useRef(mix)
+  const accompanyAll = useRef(setup.accompany !== false)
   useLayoutEffect(() => {
     mixed.current = mix
+    accompanyAll.current = setup.accompany !== false
   })
   const gain = useCallback<SoundGain>((sound) => mixGain(() => mixed.current)(sound), [])
   const heard = heardIn(audibleHands(state.hands), mix)
   const { rh, lh, staff } = heard
-  const clicks = mix.click > 0
-  const recording = mix.recording > 0 ? setup.recording : null
+  const clicks = partGain(mix, 'click') > 0
+  const recording = partGain(mix, 'recording') > 0 ? setup.recording : null
   const up = speedTraining ? speedUp(tempo, ownTempo) : undefined
   const upStep = up?.step
   const upUntil = up?.until
@@ -235,7 +242,11 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   /** Sounds the other hands of this beat group; returns how long until the app moves on. */
   const accompany = useEffectEvent((): number => {
     const at = due.current ?? audio.now() + PLAY_DELAY
-    const hands = heardIn(accompanyingHands(state.hands), mixed.current)
+    const along = accompanyingHands(state.hands)
+    const hands = heardIn(
+      accompanyAll.current ? along : { rh: false, lh: false, staff: along.staff },
+      mixed.current,
+    )
     audio.play(beatGroupSounds(state.performance, state.beatGroup, { tempo, hands }), at, gain)
     if (answered) {
       due.current = null

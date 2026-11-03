@@ -3,7 +3,7 @@ import type {
   ChordFinderSettings,
   ScoreViewSettings,
   KeyboardSettings,
-  MelodySource,
+  OtherHandSettings,
   MetronomeSettings,
   MidiSettings,
   PracticeToggles,
@@ -43,8 +43,8 @@ export const selectSectionFolded =
     state.foldedSections.includes(id)
 export const selectChordFinder = (state: SettingsState): ChordFinderSettings => state.chordFinder
 export const selectScoreView = (state: SettingsState): ScoreViewSettings => state.scoreView
-/** What plays a song's melody along (ADR 0115). */
-export const selectMelody = (state: SettingsState): MelodySource => state.melody
+/** With one hand practised, how the other looks and whether it is heard (A35). */
+export const selectOtherHand = (state: SettingsState): OtherHandSettings => state.otherHand
 export const selectMetronome = (state: SettingsState): MetronomeSettings => state.metronome
 
 export const selectWelcomed = (state: SettingsState): boolean => state.welcomed

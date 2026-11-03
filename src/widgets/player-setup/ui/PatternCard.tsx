@@ -1,4 +1,5 @@
 import { AudioWaveform, Hand, RotateCcw } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LEFT_FIGURES, RIGHT_FIGURES, usePatternBook } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
@@ -107,7 +108,7 @@ const changedHands = ({ lh, rh }: { lh: unknown; rh: unknown }) =>
  * the pattern's row says; Back to the pattern brings its own parts back. Then the position the right
  * hand's chords start in. All of it under Accompaniment, as How it plays follows it.
  */
-export function PatternCard() {
+export function PatternCard({ children }: { children?: ReactNode }) {
   const { t } = useTranslation('player')
   const locale = useLocale()
   const { figures, openPage, onFigures } = useSetup()
@@ -192,6 +193,7 @@ export function PatternCard() {
         </Labelled>
       </section>
       <InversionField />
+      {children}
     </MenuSection>
   )
 }

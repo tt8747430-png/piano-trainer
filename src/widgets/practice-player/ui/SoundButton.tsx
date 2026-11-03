@@ -1,13 +1,12 @@
 import { Volume2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { selectPractice, selectSound, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import {
-  selectPractice,
-  selectSound,
-  useSettings,
-  useSettingsStoreApi,
-  type SoundPart,
-} from '@/entities/settings'
-import { onlyTheChords, setPracticeToggle, setSound } from '@/features/set-preference'
+  onlyTheChords,
+  setPracticeToggle,
+  setSound,
+  setStaffVolume,
+} from '@/features/set-preference'
 import { formatPercent, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { MenuSection, SwitchRow } from '@/shared/ui'
@@ -15,6 +14,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { useDockSide } from '../model/dock-side'
+import type { ScoreTrack } from '../model/score-tracks'
 import { DOCK_BUTTON } from './dock-sizes'
 
 /** A volume as a screen reader says it: its percent, as the language writes one. */
@@ -31,18 +31,15 @@ const SWITCH_ROW = 'min-h-11 border-b-0 py-0 text-base'
  * recording's where the music has them; and, with a recording, Only the chords, Chordify's tip.
  */
 export function SoundButton({
-  staves,
-  recording,
+  tracks,
   click,
   onClick,
 }: {
   /** The click while the music plays: the Player's, this visit's where a lesson set it (ADR 0111). */
   click: boolean
   onClick: (on: boolean) => void
-  /** The music has staves over the piano: their volume is offered. */
-  staves: boolean
-  /** The piece has a recording: its volume, and Only the chords, are offered. */
-  recording: boolean
+  /** The music's tracks, each its volume (A35); with a recording, Only the chords too. */
+  tracks: readonly ScoreTrack[]
 }) {
   const { t } = useTranslation(['player', 'common'])
   const side = useDockSide()
@@ -85,7 +82,7 @@ export function SoundButton({
             className={SWITCH_ROW}
           />
         </div>
-        <SoundVolumes staves={staves} recording={recording} />
+        <SoundVolumes tracks={tracks} />
       </PopoverContent>
     </Popover>
   )
@@ -96,28 +93,39 @@ export function SoundButton({
  * the recording's where the music has them, and the click; with a recording, Only the chords. The
  * Player's Sound's and the editor's (round 26): one Sound, one place, in both.
  */
-export function SoundVolumes({ staves, recording }: { staves: boolean; recording: boolean }) {
+export function SoundVolumes({ tracks }: { tracks: readonly ScoreTrack[] }) {
   const { t } = useTranslation(['player', 'common'])
   const locale = useLocale()
   const settings = useSettingsStoreApi()
   const sound = useSettings(selectSound)
-  const parts: readonly { part: SoundPart; label: string }[] = [
-    { part: 'rh', label: t('common:hands.rh') },
-    { part: 'lh', label: t('common:hands.lh') },
-    ...(staves ? [{ part: 'staves' as const, label: t('player:sound.staves') }] : []),
-    ...(recording ? [{ part: 'recording' as const, label: t('player:sound.recording') }] : []),
-    { part: 'click', label: t('player:sound.click') },
+  const recording = tracks.some((track) => track.id === 'recording')
+  const parts = [
+    ...tracks.map(({ id, label }) => ({
+      key: id,
+      label,
+      volume: id === 'recording' ? sound.recording : (sound.staves[id] ?? 100),
+      onChange: (percent: number) =>
+        id === 'recording'
+          ? setSound(settings, { recording: percent })
+          : setStaffVolume(settings, id, percent),
+    })),
+    {
+      key: 'click',
+      label: t('player:sound.click'),
+      volume: sound.click,
+      onChange: (percent: number) => setSound(settings, { click: percent }),
+    },
   ]
   return (
     <MenuSection title={t('player:sound.volume')} info={t('player:sound.volumeInfo')}>
-      {parts.map(({ part, label }) => (
+      {parts.map(({ key, label, volume, onChange }) => (
         <Slider
-          key={part}
+          key={key}
           min={0}
           max={100}
           step={VOLUME_STEP}
-          value={sound[part]}
-          onValueChange={(percent) => setSound(settings, { [part]: percent })}
+          value={volume}
+          onValueChange={onChange}
           format={PERCENT}
           locale={locale}
           // Room under the track for the thumb's 44px reach, which the popover's edge would cut.
@@ -126,7 +134,7 @@ export function SoundVolumes({ staves, recording }: { staves: boolean; recording
           <div className="flex justify-between gap-3 text-base">
             <SliderLabel>{label}</SliderLabel>
             <span className="text-muted-foreground tabular-nums">
-              {formatPercent(locale, sound[part])}
+              {formatPercent(locale, volume)}
             </span>
           </div>
         </Slider>

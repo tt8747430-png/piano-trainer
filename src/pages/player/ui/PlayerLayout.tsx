@@ -20,6 +20,7 @@ import {
   SoundButton,
   TempoButton,
   usePlayerShortcuts,
+  useScoreTracks,
   WaitLine,
   type PracticePlayer,
   type PracticeView,
@@ -112,12 +113,18 @@ export function PlayerLayout({
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const scoreView = useSettings(selectScoreView)
+  const { hidden } = player
+  const sheetView = useMemo(() => ({ ...scoreView, hidden }), [scoreView, hidden])
   const names = useStaffNames(staves)
-  // The score's single staves as the View switches them: each its clef as the music reads it.
-  const viewed = (performance.staves ?? []).map(({ clef }, place) => ({
-    clef,
-    name: staves[place]?.name,
-  }))
+  // The music's tracks, each staff its clef as the music reads it, and a piece's recording (A35).
+  const tracks = useScoreTracks({
+    staves: (performance.staves ?? []).map(({ clef }, place) => ({
+      clef,
+      name: staves[place]?.name,
+    })),
+    piano,
+    recording: recording !== undefined,
+  })
   // The view saved, where the music can show it, else the one it falls back to (ADR 0108).
   const needs = useMemo(() => viewNeeds(performance), [performance])
   const shown = shownView(scoreView.music, needs)
@@ -175,8 +182,6 @@ export function PlayerLayout({
             <PlayerViewMenu
               shown={shown}
               needs={needs}
-              staves={viewed}
-              piano={piano}
               openAtStart={openView}
               keys={player.keys}
               onKeys={player.setKeys}
@@ -189,7 +194,7 @@ export function PlayerLayout({
       <PlayerArea area="sheet">
         {shown === 'sheet' ? (
           <SheetMusic
-            view={scoreView}
+            view={sheetView}
             piano={piano}
             staffNames={names}
             title={title}
@@ -253,14 +258,7 @@ export function PlayerLayout({
             />
           }
           loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
-          sound={
-            <SoundButton
-              staves={viewed.length > 0}
-              recording={recording !== undefined}
-              click={player.click}
-              onClick={player.setClick}
-            />
-          }
+          sound={<SoundButton tracks={tracks} click={player.click} onClick={player.setClick} />}
           hands={<HandsButton hands={view.hands} onChange={player.setHands} />}
         />
       </PlayerArea>
@@ -273,7 +271,7 @@ export function PlayerLayout({
           performance={performance}
           headings={headings}
           sheet={{
-            view: scoreView,
+            view: sheetView,
             piano,
             staffNames: names,
             fingers: player.fingers,

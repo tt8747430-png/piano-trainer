@@ -114,7 +114,7 @@ describe('Transpose (ADR 0105)', () => {
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
     const setup = await screen.findByRole('dialog', { name: 'Setup' })
     expect(within(setup).queryByRole('group', { name: 'Key' })).toBeNull()
-    expect(within(setup).getByRole('region', { name: 'How it plays' })).toBeInTheDocument()
+    expect(within(setup).getByRole('region', { name: 'Accompaniment from the chords' })).toBeInTheDocument()
   })
 
   it('reads in Russian: its name the key’s, its heading the verb’s', async () => {

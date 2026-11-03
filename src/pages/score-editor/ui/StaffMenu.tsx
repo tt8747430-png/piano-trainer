@@ -1,12 +1,11 @@
 import { ArrowDownToLine, ArrowUpToLine, EyeOff, PenLine, Piano, Plus, Trash2 } from 'lucide-react'
 import { useState, type ComponentProps, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
-import { selectScoreView, useSettings } from '@/entities/settings'
 import { isSingleStaff, staffPlace } from '@/shared/lib/notation'
 import { ActionMenu } from '@/shared/ui'
 import { useLayerName, type Printed } from '@/widgets/score-sheet'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { rowsInSight } from '../model/rows-in-sight'
+import { EVERY_STAFF, rowsInSight } from '../model/rows-in-sight'
 import { useStaffHeads } from '../model/use-staff-heads'
 import { StaffNameField } from './StaffNameField'
 
@@ -29,9 +28,11 @@ export function StaffMenu({
   const heads = useStaffHeads()
   const layerName = useLayerName(heads)
   const leadSheet = useEditorState((state) => state.draft.leadSheet)
-  const hidden = useSettings((state) => selectScoreView(state).hidden)
   // The staves the View shows of the score's: the last of them stays.
-  const inSight = rowsInSight({ staves: heads, leadSheet }, { chordNames: false, hidden })
+  const inSight = rowsInSight(
+    { staves: heads, leadSheet },
+    { chordNames: false, hidden: EVERY_STAFF },
+  )
   const [anchor, setAnchor] = useState<HTMLButtonElement | null>(null)
   const [renaming, setRenaming] = useState(false)
   const { dispatch } = actions

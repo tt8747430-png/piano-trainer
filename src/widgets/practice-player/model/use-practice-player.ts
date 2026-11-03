@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef } from 'react'
 import {
+  selectOtherHand,
   selectPractice,
   selectScoreView,
   selectSound,
@@ -7,6 +8,7 @@ import {
   useSettingsStoreApi,
 } from '@/entities/settings'
 import {
+  hiddenStaves,
   loopParam,
   playerRange,
   practiceMarks,
@@ -15,6 +17,7 @@ import {
   usePractice,
   type BarRange,
   type Mix,
+  type PlayerStaves,
   type Practice,
   type PracticeMode,
 } from '@/features/practice'
@@ -34,6 +37,9 @@ import type { KeyMark } from '@/shared/ui'
 import { reachLoop, type LoopReach } from './loop-reach'
 import type { PracticeView } from './practice-view'
 import { waitFeedback, type WaitFeedback } from './wait-feedback'
+
+/** No track changed: every one plays and shows. */
+const NO_CHANGE: PlayerStaves = {}
 
 /** The staff of the hand not heard or practised. */
 const MUTED: Readonly<Record<Hands, StaffId | undefined>> = {
@@ -56,7 +62,10 @@ export interface PracticePlayer {
   readonly inView: KeyRange | undefined
   readonly wrong: ReadonlySet<Midi> | undefined
   readonly feedback: WaitFeedback | null
+  /** The other hand's staff dimmed, where one hand is practised and its look is Dim (A35). */
   readonly muted: StaffId | undefined
+  /** The staves out of sight: the Staves' Show, and the other hand's where its look is Hide (A35). */
+  readonly hidden: readonly StaffId[]
   readonly fingers: boolean
   /** Each notehead carries its note's name. */
   readonly names: boolean
@@ -102,6 +111,7 @@ export function usePracticePlayer(
   setView: (patch: Partial<PracticeView>) => void,
   ownTempo: number,
   recording: Recording | null = null,
+  staves: PlayerStaves = NO_CHANGE,
 ): PracticePlayer {
   // The screen stays on while this screen is open: a phone on the stand does not lock mid-song.
   useWakeLock()
@@ -110,15 +120,22 @@ export function usePracticePlayer(
   const savedKeys = useSettings((state) => selectScoreView(state).keys)
   const click = view.click ?? toggles.metronome
   const sound = useSettings(selectSound)
+  const otherHand = useSettings(selectOtherHand)
+  // Each staff as loud as its volume, none where its Play is off (A35).
   const mix = useMemo<Mix>(
     () => ({
-      rh: volumeGain(sound.rh),
-      lh: volumeGain(sound.lh),
-      staff: volumeGain(sound.staves),
+      ...Object.fromEntries(
+        Object.entries(sound.staves).map(([staff, percent]) => [staff, volumeGain(percent ?? 100)]),
+      ),
+      ...Object.fromEntries(
+        Object.entries(staves).flatMap(([track, choice]) =>
+          choice?.play === false ? [[track, 0]] : [],
+        ),
+      ),
       recording: volumeGain(sound.recording),
       click: volumeGain(sound.click),
     }),
-    [sound],
+    [sound, staves],
   )
   const tempo = view.tempo ?? ownTempo
   const loop = useMemo(
@@ -138,6 +155,7 @@ export function usePracticePlayer(
     rest: view.rest ?? 0,
     recording,
     mix,
+    accompany: otherHand.play,
   })
   const { state, press } = practice
   const waiting = state.mode === 'wait'
@@ -169,6 +187,12 @@ export function usePracticePlayer(
     [waiting, press],
   )
   const bar = performance.beatGroups[state.beatGroup]?.bar ?? 0
+  // The staves out of sight: the Staves' Show, and the other hand's where it is hidden (A35).
+  const other = otherHand.look === 'hide' ? MUTED[view.hands] : undefined
+  const hidden = useMemo(() => {
+    const off = hiddenStaves(staves)
+    return other === undefined || off.includes(other) ? off : [...off, other]
+  }, [staves, other])
   // Where the loop chosen from the keys began: its other end moves.
   const anchor = useRef<number | null>(null)
 
@@ -183,7 +207,8 @@ export function usePracticePlayer(
     inView,
     wrong,
     feedback: waitFeedback(performance, state),
-    muted: MUTED[view.hands],
+    muted: otherHand.look === 'dim' ? MUTED[view.hands] : undefined,
+    hidden,
     fingers: toggles.fingerNumbers,
     names: toggles.namedNotes,
     positions: toggles.positions,

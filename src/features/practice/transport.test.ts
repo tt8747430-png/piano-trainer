@@ -77,7 +77,7 @@ describe('startTransport', () => {
 
   it('plays each part and the recording as loud as the mix says as they sound (ADR 0105)', () => {
     const audio = createFakeAudio()
-    let mix: Mix = { ...FULL_MIX, lh: 0.25, recording: 0.5 }
+    let mix: Mix = { ...FULL_MIX, bass: 0.25, recording: 0.5 }
     const transport = startTransport(audio, performance, WHOLE, IGNORED, {
       recording: VOCAL,
       mix: () => mix,
@@ -91,7 +91,7 @@ describe('startTransport', () => {
     expect([gainOf('rh'), gainOf('lh')]).toEqual([1, 0.25])
     expect(audio.recordings[0]?.volume?.()).toBe(0.5)
     // Turned up as it plays: the sounds still to come and the recording follow it.
-    mix = { ...mix, lh: 0.81, recording: 0.09 }
+    mix = { ...mix, bass: 0.81, recording: 0.09 }
     expect(gainOf('lh')).toBe(0.81)
     expect(audio.recordings[0]?.volume?.()).toBe(0.09)
     transport.stop()

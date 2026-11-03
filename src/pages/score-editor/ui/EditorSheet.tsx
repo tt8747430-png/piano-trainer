@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react'
-import { selectScoreView, useSettings } from '@/entities/settings'
 import {
   barAt,
   notesAt,
@@ -57,7 +56,6 @@ export function EditorSheet({
   } = useScoreEditorContext()
   const playhead = useHeardPlayhead(heard)
   const draft = useEditorState((state) => state.draft)
-  const hidden = useSettings((state) => selectScoreView(state).hidden)
   const caret = useEditorState((state) => state.caret)
   const layer = useEditorState((state) => state.layer)
   const selection = useEditorState((state) => state.selection)
@@ -146,7 +144,6 @@ export function EditorSheet({
       fingers={view.fingers}
       lyrics={view.lyrics}
       edit={editPrinted}
-      hidden={hidden}
       view={view.layout}
       title={titleAt}
       room={room}

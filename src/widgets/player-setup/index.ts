@@ -1,7 +1,6 @@
 export type { FigureChange, SetupChange, SetupParams } from './model/setup-params'
-export { melodyOf, type Melody } from './model/melody'
 export { KeyWalkField } from './ui/KeyWalkField'
-export { MelodyField } from './ui/MelodyField'
 export { PatternCard } from './ui/PatternCard'
 export { PlayerSetup } from './ui/PlayerSetup'
 export { SetupTrigger } from './ui/SetupTrigger'
+export { StavesSection } from './ui/StavesSection'

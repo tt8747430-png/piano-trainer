@@ -114,8 +114,8 @@ export const player = {
   hands: 'Hands',
   handsOf: 'Hands: {{hands}}',
   pattern: 'Pattern',
-  // The Setup's section of what the hands play: the pattern and the position (ADR 0115).
-  accompaniment: 'Accompaniment',
+  // The Setup's section of what a chord chart's hands play (A35): the pattern, the position, swing.
+  accompaniment: 'Accompaniment from the chords',
   fromChart: 'From the chart',
   fromChartDescription: 'Each section and chord as the song marks it.',
   rh: 'Right hand',
@@ -130,20 +130,15 @@ export const player = {
   yourMix: '{{pattern}}, your mix',
   yourPart: 'Your choice',
   backToPattern: 'Back to the pattern',
-  // What plays the song's tune along with your hands (ADR 0115).
-  melody: {
-    label: 'Melody',
+  // The Setup's first section (A35, Flat's Audio playback): each track, played and shown or not.
+  staves: {
+    title: 'Staves',
     about:
-      'What plays the song’s tune along with your two hands. {{staff}}: the song’s top staff, as written over the piano. Recording: the song as recorded, in its own key only. None: your hands alone. A right hand that plays the tune plays it whatever you choose here.',
-    none: 'None',
-    staff: 'Melody staff',
-    recording: 'Recording',
-    why: {
-      noStaff: 'This song has no staff over the piano',
-      noRecording: 'This song has no recording',
-      ownKey: 'The recording plays only in {{key}}, its own key',
-      leadSheet: 'A lead sheet always plays its melody',
-    },
+      'Which staves play and which the score shows, each by its name, and the song’s recording as a track of its own. How loud each one plays is on the Player’s settings.',
+    play: 'Play',
+    show: 'Show',
+    playOf: 'Play {{track}}',
+    showOf: 'Show {{track}}',
   },
   playing: 'How it plays',
   /** The picker's way to the Patterns page, where they are explained, starred, hidden and made. */

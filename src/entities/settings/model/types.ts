@@ -53,13 +53,29 @@ export type PracticeToggle = (typeof PRACTICE_TOGGLES)[number]
 export type PracticeToggles = Readonly<Record<PracticeToggle, boolean>>
 
 /**
- * The parts the Player's Sound turns up or down (ADR 0105, Chordify's "your perfect mix"): each hand,
- * the staves over the piano, a piece's recording, and the click (the count-in's and the metronome's).
+ * How loud each part of the Player's music sounds (ADR 0105, A35, Flat's Audio playback), in whole
+ * percent, 100 its own loudness and 0 none: each staff by its place (the piano's upper and lower, a
+ * single staff's, the same for every song; one never set at full), a piece's recording, and the click
+ * (the count-in's and the metronome's).
  */
-export const SOUND_PARTS = ['rh', 'lh', 'staves', 'recording', 'click'] as const
-export type SoundPart = (typeof SOUND_PARTS)[number]
-/** How loud each part sounds, in whole percent: 100 its own loudness, 0 not played at all. */
-export type SoundSettings = Readonly<Record<SoundPart, number>>
+export interface SoundSettings {
+  readonly staves: Readonly<Partial<Record<StaffId, number>>>
+  readonly recording: number
+  readonly click: number
+}
+
+/**
+ * With one hand practised (A35, the reference's Practice mode): how the other hand's staff looks
+ * (shown as it is, dimmed, or hidden, only the chosen hand's staff left), and whether it is heard.
+ */
+export const OTHER_HAND_LOOKS = ['show', 'dim', 'hide'] as const
+export type OtherHandLook = (typeof OTHER_HAND_LOOKS)[number]
+export interface OtherHandSettings {
+  readonly look: OtherHandLook
+  readonly play: boolean
+}
+/** The other hand dimmed and not heard, as the Player always did. */
+export const DEFAULT_OTHER_HAND: OtherHandSettings = { look: 'dim', play: false }
 
 /** How every trainer goes, whatever it asks. */
 export interface TrainerSettings {
@@ -187,8 +203,8 @@ export type TextSize = (typeof TEXT_SIZES)[number]
  * How the Player and the score editor show a score (ADR 0096, Soundslice's view settings): laid out
  * as one line across, lines down the screen or A4 pages; the Player's view of it (ADR 0108: the
  * editor always shows the score), Diagrams' mode, and whether a song opens asking for it (ADR 0108);
- * the chord names; the words under the staff they are written on (ADR 0097); the staves hidden, each
- * by its place (ADR 0097); and the keys, or the score alone.
+ * the chord names; the words under the staff they are written on (ADR 0097); and the keys, or the
+ * score alone. Which staves are in sight is the Player's Staves, in its URL (A35).
  */
 export interface ScoreViewSettings {
   readonly layout: SheetView
@@ -203,16 +219,14 @@ export interface ScoreViewSettings {
   readonly pinned: boolean
   /** Chords over lyrics' words and chords, as a percent of their own size (ADR 0108). */
   readonly textSize: TextSize
-  /** The staves out of sight: a single staff by its place, the piano's upper or lower staff. */
-  readonly hidden: readonly StaffId[]
   /** The keys under the score: off, the score has the screen. */
   readonly keys: boolean
 }
 
 /**
  * Down the screen, a line at a time, as a phone held upright reads best (one line across shows a bar
- * or two there); Diagrams moving with the music; a song opening in the view last chosen; every
- * staff, the chord names, the words.
+ * or two there); Diagrams moving with the music; a song opening in the view last chosen; the chord
+ * names, the words.
  */
 export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   layout: 'vertical',
@@ -223,7 +237,6 @@ export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   lyrics: true,
   pinned: true,
   textSize: 100,
-  hidden: [],
   keys: true,
 }
 
@@ -283,8 +296,8 @@ export interface SettingsState {
   midi: MidiSettings
   chordFinder: ChordFinderSettings
   scoreView: ScoreViewSettings
-  /** What plays a song's melody along (ADR 0115). */
-  melody: MelodySource
+  /** With one hand practised, how the other looks and whether it is heard (A35). */
+  otherHand: OtherHandSettings
   metronome: MetronomeSettings
   /** The sections folded away, by their ids (`chords.tensions`): the same on every visit. */
   foldedSections: readonly string[]
@@ -308,24 +321,8 @@ export const DEFAULT_PRACTICE: PracticeToggles = {
   countIn: false,
 }
 
-/**
- * What plays a song's melody along with the hands (ADR 0115), the Setup's Melody, saved for every
- * song: none, the song's top single staff, or its recording.
- */
-export const MELODY_SOURCES = ['none', 'staff', 'recording'] as const
-export type MelodySource = (typeof MELODY_SOURCES)[number]
-
-/** A song's recording where it has one: what it was heard with before the choice was one. */
-export const DEFAULT_MELODY: MelodySource = 'recording'
-
 /** Every part as loud as it is. */
-export const DEFAULT_SOUND: SoundSettings = {
-  rh: 100,
-  lh: 100,
-  staves: 100,
-  recording: 100,
-  click: 100,
-}
+export const DEFAULT_SOUND: SoundSettings = { staves: {}, recording: 100, click: 100 }
 
 export const DEFAULT_TRAINER: TrainerSettings = { autoNext: false }
 
@@ -388,6 +385,7 @@ export const isPedalWay = isOneOf(PEDAL_WAYS)
 export const isMusicView = isOneOf(MUSIC_VIEWS)
 export const isDiagramsMode = isOneOf(DIAGRAMS_MODES)
 export const isTextSize = isOneOf(TEXT_SIZES)
+export const isOtherHandLook = isOneOf(OTHER_HAND_LOOKS)
 export const isMetronomeSound = isOneOf(METRONOME_SOUNDS)
 export const isSubdivision = isOneOf(SUBDIVISIONS)
 const BEAT_LEVELS = ['downbeat', 'accent', 'normal', 'silent'] as const

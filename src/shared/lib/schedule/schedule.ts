@@ -51,6 +51,8 @@ export interface NoteSound {
    * turns up or down (ADR 0105); none for a sound of no piece's (a chord tapped, a run).
    */
   readonly part?: NoteHand
+  /** A single staff's note (A35): its staff's place, which the mix turns up or down on its own. */
+  readonly staff?: number
 }
 /**
  * A beat's sound, synthesised (ADR 0052): the Player's click, or the Metronome's beep and drums.
@@ -231,6 +233,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
       ...(end > written ? { held: length(at(written) - at(start)) } : {}),
       velocity: n.velocity * (levels[i] ?? 1),
       part: n.hand,
+      ...(n.staff === undefined ? {} : { staff: n.staff }),
     }
     // A note held over from before the pass sounds plainly: its marks were where it began.
     const marks = n.startTick >= fromTick ? n.marks : undefined
@@ -349,6 +352,7 @@ export function beatGroupSounds(
         duration: Math.max(SHORTEST_ALONE, secondsFor(n.durationTicks, tempo)),
         velocity: n.velocity,
         part: n.hand,
+        ...(n.staff === undefined ? {} : { staff: n.staff }),
       },
     ]
   })

@@ -326,20 +326,20 @@ describe('schedule', () => {
 
   it('names each note’s part, its hand or a staff over the piano, for the mix (ADR 0105)', () => {
     const parts = (sounds: readonly Sound[]) =>
-      notes(sounds).map((sound) => `${sound.midi}:${sound.part ?? '-'}`)
+      notes(sounds).map((sound) => `${sound.midi}:${sound.part ?? '-'}${sound.staff ?? ''}`)
     expect(parts(schedule(perform('C'), { tempo: 60, hands: ALL }).sounds)).toEqual([
       '36:lh',
       '60:rh',
       '64:rh',
       '67:rh',
-      '72:staff',
+      '72:staff0',
     ])
     expect(parts(beatGroupSounds(perform('C'), 0, { tempo: 60, hands: ALL }))).toEqual([
       '36:lh',
       '60:rh',
       '64:rh',
       '67:rh',
-      '72:staff',
+      '72:staff0',
     ])
   })
 

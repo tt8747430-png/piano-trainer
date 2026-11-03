@@ -25,7 +25,7 @@ import { arrangeDraft } from './arrange-draft'
 import type { ScoreEditorValue } from './editor-context'
 import type { EditSearch } from './edit-search'
 import { savedMusic, savingTo, type EditorTarget } from './editor-target'
-import { layerInSight, rowsInSight } from './rows-in-sight'
+import { EVERY_STAFF, layerInSight, rowsInSight } from './rows-in-sight'
 import { shortcutOf } from './shortcuts'
 import { fieldOf } from './fields'
 import { heardEdit } from './heard-edit'
@@ -213,7 +213,12 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     let from = store.getState().layer
     const keepInSight = () => {
       const { layer, draft } = store.getState()
-      const to = layerInSight(shownRows(draft), rowsInSight(draft, shown), from, layer)
+      const to = layerInSight(
+        shownRows(draft),
+        rowsInSight(draft, { chordNames: shown.chordNames, hidden: EVERY_STAFF }),
+        from,
+        layer,
+      )
       from = to
       if (to !== layer) store.dispatch({ type: 'layer', layer: to })
     }

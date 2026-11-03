@@ -20,6 +20,7 @@ import {
   setPaletteSections,
   setSidebar,
   setSound,
+  setStaffVolume,
   setTheme,
 } from './index'
 
@@ -91,11 +92,16 @@ describe('set-preference', () => {
     expect(store.getState().practice.metronome).toBe(false)
   })
 
-  it('setSound turns one part up or down and saves it, the others kept (ADR 0105)', () => {
+  it('setSound and setStaffVolume turn one part up or down and save it, the others kept (A35)', () => {
     const { storage, store } = setUp()
-    setSound(store, { lh: 40 })
+    setStaffVolume(store, 'bass', 40)
+    setStaffVolume(store, 'staff0', 70)
     setSound(store, { click: 0 })
-    expect(saved(storage).sound).toEqual({ rh: 100, lh: 40, staves: 100, recording: 100, click: 0 })
+    expect(saved(storage).sound).toEqual({
+      staves: { bass: 40, staff0: 70 },
+      recording: 100,
+      click: 0,
+    })
   })
 
   it('setMetronome saves its tempo, meter or sound, a tempo held to its range (ADR 0052)', () => {
@@ -107,11 +113,17 @@ describe('set-preference', () => {
     expect(saved(storage).metronome).toMatchObject({ bpm: 30, meter: '3/4', sound: 'drum' })
   })
 
-  it('onlyTheChords silences the recording and turns both hands full up, as Chordify’s tip says', () => {
+  it('onlyTheChords silences the recording and turns the piano full up, as Chordify’s tip says', () => {
     const { storage, store } = setUp()
-    setSound(store, { rh: 20, lh: 0, staves: 70, click: 30 })
+    setStaffVolume(store, 'treble', 20)
+    setStaffVolume(store, 'staff0', 70)
+    setSound(store, { click: 30 })
     onlyTheChords(store)
-    expect(saved(storage).sound).toEqual({ rh: 100, lh: 100, staves: 70, recording: 0, click: 30 })
+    expect(saved(storage).sound).toEqual({
+      staves: { treble: 100, bass: 100, staff0: 70 },
+      recording: 0,
+      click: 30,
+    })
   })
 
   it('setRecorderClick saves whether the click goes on while a take records', () => {

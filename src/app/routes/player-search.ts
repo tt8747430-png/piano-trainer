@@ -9,6 +9,7 @@ import {
   CHROMATIC_DIRECTIONS,
   chordsParam,
   isLoopParam,
+  isStavesParam,
   PRACTICE_MODES,
   PROGRESSION,
   readChords,
@@ -107,6 +108,7 @@ export function readPlayerSearch(raw: Raw): PlayerSearch {
     chordSize: chordSize(raw),
     simple: raw.simple === true,
     bar: bar(raw),
+    staves: isStavesParam(raw.staves) ? raw.staves : undefined,
   }
 }
 export const playerSearch = routeSearch(readPlayerSearch, PLAYER_DEFAULTS)
@@ -129,6 +131,7 @@ export const PLAYER_KEPT: readonly (keyof PlayerSearch & string)[] = [
   'key',
   'chordSize',
   'simple',
+  'staves',
   ...PLAYING,
 ]
 

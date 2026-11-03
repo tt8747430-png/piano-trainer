@@ -1,4 +1,12 @@
+export {
+  controlsFor,
+  PLAYER_CONTROLS,
+  PLAYER_KINDS,
+  type PlayerControl,
+  type PlayerKind,
+} from './model/controls'
 export type { PracticeView } from './model/practice-view'
+export { useScoreTracks, type ScoreTrack } from './model/score-tracks'
 export { usePlayerShortcuts } from './model/use-player-shortcuts'
 export { usePracticePlayer, type PracticePlayer } from './model/use-practice-player'
 export { CountInBeat } from './ui/CountInBeat'
@@ -11,7 +19,7 @@ export { PlayerDock } from './ui/PlayerDock'
 export { PlayerClose } from './ui/PlayerClose'
 export { PlayerTool } from './ui/PlayerTool'
 export { PlayerTools } from './ui/PlayerTools'
-export { PlayingSection } from './ui/PlayingSection'
+export { PlayingSection, SwingField } from './ui/PlayingSection'
 export { SoundButton, SoundVolumes } from './ui/SoundButton'
 export { TempoButton } from './ui/TempoButton'
 export { Transport } from './ui/Transport'

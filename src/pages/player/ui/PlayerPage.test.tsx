@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import {
+  hasWrittenStaves,
   isLeadSheet,
   pieceById,
   PIECES,
@@ -11,7 +12,7 @@ import {
   PIECES_VERSION,
   stavesOf,
 } from '@/entities/piece'
-import { setMelody, setPracticeToggle, setScoreView } from '@/features/set-preference'
+import { setPracticeToggle, setScoreView } from '@/features/set-preference'
 import { createMemoryStorage, LANDSCAPE_PHONE } from '@/shared/lib'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
 import * as engine from '@/shared/ui/score/verovio/engine'
@@ -195,9 +196,12 @@ describe('Player', () => {
     const labels = [...sound.querySelectorAll('[data-slot="slider-label"]')].map(
       (label) => label.textContent,
     )
-    expect(labels).toEqual(['Right hand', 'Left hand', 'Recording', 'Metronome'])
+    expect(labels).toEqual(['Upper staff', 'Lower staff', 'Recording', 'Metronome'])
     await user.click(within(sound).getByRole('button', { name: 'Only the chords' }))
-    expect(settingsStore.getState().sound).toMatchObject({ recording: 0, rh: 100, lh: 100 })
+    expect(settingsStore.getState().sound).toMatchObject({
+      recording: 0,
+      staves: { treble: 100, bass: 100 },
+    })
     await user.keyboard('{Escape}')
     await user.click(screen.getByRole('button', { name: 'Play' }))
     expect(audio.recordings).toEqual([])
@@ -250,11 +254,13 @@ describe('Player', () => {
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     expect(audio.recordings).toEqual([])
     await user.click(screen.getByRole('button', { name: 'Setup' }))
-    const recording = await screen.findByRole('radio', { name: 'Recording' })
+    const recording = await screen.findByRole('switch', { name: 'Play Recording' })
     expect(recording).not.toBeChecked()
-    expect(screen.getByRole('radio', { name: 'None' })).toBeChecked()
-    // Its tooltip says why.
-    expect(recording).toHaveAttribute('title', 'The recording plays only in D minor, its own key')
+    expect(recording).toHaveAttribute('data-disabled')
+    // Its row says why.
+    expect(screen.getByRole('group', { name: 'Staves' })).toHaveTextContent(
+      'The recording plays only in D minor, its own key.',
+    )
   })
 
   it('plays no recording in Wait mode', async () => {
@@ -264,13 +270,14 @@ describe('Player', () => {
     expect(audio.recordings).toEqual([])
   })
 
-  it('plays no recording with the Melody None, and saves the choice (ADR 0115)', async () => {
+  it('plays no recording with its track’s Play off, written in the URL (A35)', async () => {
     const user = userEvent.setup()
-    const { audio, settingsStore } = await renderApp('/play/romashki')
+    const { audio, router } = await renderApp('/play/romashki')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    expect(await screen.findByRole('radio', { name: 'Recording' })).toBeChecked()
-    await user.click(screen.getByRole('radio', { name: 'None' }))
-    expect(settingsStore.getState().melody).toBe('none')
+    const play = await screen.findByRole('switch', { name: 'Play Recording' })
+    expect(play).toBeChecked()
+    await user.click(play)
+    expect(router.state.location.search).toMatchObject({ staves: 'r0s1' })
     await user.keyboard('{Escape}')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     expect(audio.recordings).toEqual([])
@@ -414,29 +421,49 @@ describe('Player', () => {
     expect(router.state.location.search).toMatchObject({ key: 'A', swing: 'hard' })
   })
 
-  it('greys the Melody’s staff for a piece with no staff over the piano, saying why (ADR 0115)', async () => {
+  it('sets up a chord chart’s staves, then its accompaniment from the chords (A35)', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    expect(await screen.findByRole('radio', { name: 'Melody staff' })).toHaveAttribute(
-      'title',
-      'This song has no staff over the piano',
-    )
+    const staves = await screen.findByRole('group', { name: 'Staves' })
+    expect(
+      within(staves)
+        .getAllByRole('switch')
+        .map((each) => each.getAttribute('aria-label')),
+    ).toEqual(['Play Upper staff', 'Show Upper staff', 'Play Lower staff', 'Show Lower staff'])
+    expect(
+      screen.getByRole('region', { name: 'Accompaniment from the chords' }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('radiogroup', { name: 'Swing' })).toBeInTheDocument()
   })
 
-  it('names the staff the Melody plays, and says in its ⓘ where the music comes from (ADR 0115)', async () => {
+  it('sets up a score’s staves and how it plays: no pattern, no Simplify (A35)', async () => {
+    const score = PIECES.find(hasWrittenStaves)
+    if (!score) throw new Error('no piece is a score')
+    const user = userEvent.setup()
+    await renderApp(`/play/${score.id}`)
+    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    expect(await screen.findByRole('group', { name: 'Staves' })).toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'Accompaniment from the chords' })).toBeNull()
+    expect(screen.getByRole('region', { name: 'How it plays' })).toBeInTheDocument()
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('button', { name: /Simplify/ })).toBeNull()
+  })
+
+  it('plays and shows each staff as its switches say, in the URL; the last in sight stays (A35)', async () => {
     const withTune = PIECES.find((piece) => stavesOf(piece).length > 0 && !isLeadSheet(piece))
     if (!withTune) throw new Error('no piece has a tune')
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp(`/play/${withTune.id}`)
+    const { router } = await renderApp(`/play/${withTune.id}`)
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    const staff = await screen.findByRole('radio', { name: 'Staff 1' })
-    await user.click(staff)
-    expect(settingsStore.getState().melody).toBe('staff')
-    await user.click(screen.getByRole('button', { name: 'About Melody' }))
-    expect(await screen.findByRole('dialog', { name: 'Melody' })).toHaveTextContent(
-      'Staff 1: the song’s top staff, as written over the piano.',
-    )
+    await user.click(await screen.findByRole('switch', { name: 'Show Staff 1' }))
+    expect(router.state.location.search).toMatchObject({ staves: 't01s0' })
+    await user.click(screen.getByRole('switch', { name: 'Play Lower staff' }))
+    expect(router.state.location.search).toMatchObject({ staves: 't01s0,l0s1' })
+    await user.click(screen.getByRole('switch', { name: 'Show Upper staff' }))
+    const lower = screen.getByRole('switch', { name: 'Show Lower staff' })
+    expect(lower).toHaveAttribute('data-disabled')
+    expect(lower).toHaveAttribute('title', 'The last staff in sight stays')
   })
 
   it('puts the fingers under the keys with Finger numbers', async () => {
@@ -536,29 +563,17 @@ describe('Player', () => {
       ['Grid', 'false'],
     ])
     const sheet = within(view).getByRole('region', { name: 'Sheet music' })
-    // Chips (ADR 0115): each single staff by its name, its place's where it has none (ADR 0097),
-    // then the piano's; then what the sheet shows.
+    // Chips (ADR 0115): what the sheet shows; which staves is the Setup's (A35).
     const chips = within(sheet)
       .getAllByRole('button')
       .filter((button) => button.hasAttribute('aria-pressed'))
     expect(chips.map((chip) => chip.lastElementChild?.textContent)).toEqual([
-      'Staff 1',
-      'Upper staff',
-      'Lower staff',
       'Chord symbols',
       'Chord positions',
       'Lyrics',
       'Finger numbers',
       'Note names',
     ])
-    await user.click(within(view).getByRole('button', { name: 'Upper staff' }))
-    expect(settingsStore.getState().scoreView.hidden).toEqual(['treble'])
-    await user.click(within(view).getByRole('button', { name: 'Staff 1' }))
-    expect(settingsStore.getState().scoreView.hidden).toEqual(['treble', 'staff0'])
-    // The last staff in sight stays, its tooltip saying so.
-    const lower = within(view).getByRole('button', { name: 'Lower staff' })
-    expect(lower).toBeDisabled()
-    expect(lower).toHaveAttribute('title', 'The last staff in sight stays')
     await user.click(within(view).getByRole('button', { name: 'Chord positions' }))
     expect(settingsStore.getState().practice.positions).toBe(true)
     await user.keyboard('{Escape}')
@@ -566,7 +581,7 @@ describe('Player', () => {
     const setup = await screen.findByRole('dialog', { name: 'Setup' })
     expect(within(setup).queryByRole('button', { name: 'Chord positions' })).not.toBeInTheDocument()
     // The count-in and the click are the transport's Sound's alone (ADR 0105).
-    const playing = within(setup).getByRole('region', { name: 'How it plays' })
+    const playing = within(setup).getByRole('region', { name: 'Accompaniment from the chords' })
     expect(
       within(playing)
         .getAllByRole('button')
@@ -579,7 +594,6 @@ describe('the words under the tune (ADR 0097)', () => {
   it('prints the verse under the tune while it plays, and hides it from the View', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/silent')
-    act(() => setMelody(settingsStore, 'staff'))
     await waitFor(() => expect(document.querySelectorAll('.syl').length).toBeGreaterThan(0))
     expect(document.querySelector('.syl')?.textContent?.trim()).toBe('Si')
     await user.click(await screen.findByRole('button', { name: 'View: Sheet music' }))

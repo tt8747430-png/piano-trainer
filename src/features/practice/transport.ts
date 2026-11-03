@@ -13,7 +13,7 @@ import {
   type Pass,
   type Recording,
 } from '@/shared/lib/schedule'
-import { mixGain, type Mix } from './mix'
+import { mixGain, partGain, type Mix } from './mix'
 
 /** How often the transport looks at the audio clock. */
 const FOLLOW_INTERVAL_MS = 25
@@ -62,7 +62,9 @@ export function startTransport(
   const play = (pass: Pass) => {
     audio.play(pass.sounds, pass.start, gain)
     if (recording)
-      audio.playRecording(recording.src, recordingPlay(recording, pass), () => mix().recording)
+      audio.playRecording(recording.src, recordingPlay(recording, pass), () =>
+        partGain(mix(), 'recording'),
+      )
   }
   let loop = startLoop(performance, options, audio.now() + PLAY_DELAY)
   loop.passes.forEach(play)

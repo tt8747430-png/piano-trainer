@@ -17,12 +17,13 @@ const twofive = piece('romashki')
 
 describe('resolveChoice', () => {
   it('plays the piece as written when the URL chooses nothing', () => {
-    expect(resolveChoice(bz5, {}, false, BUILT_IN_PATTERNS)).toEqual(ownChoice(bz5))
+    // Its staves always sound as written: their Play is the Staves' (A35).
+    expect(resolveChoice(bz5, {}, BUILT_IN_PATTERNS)).toEqual({ ...ownChoice(bz5), tune: true })
   })
 
   it('takes the key, figures and tune the learner chose', () => {
     expect(
-      resolveChoice(bz5, { key: noteParam(note('A')), rh: 't1', lh: 'o' }, true, BUILT_IN_PATTERNS),
+      resolveChoice(bz5, { key: noteParam(note('A')), rh: 't1', lh: 'o' }, BUILT_IN_PATTERNS),
     ).toMatchObject({
       tonic: note('A'),
       rh: 't1',
@@ -32,14 +33,14 @@ describe('resolveChoice', () => {
   })
 
   it('spells a key for the piece’s mode', () => {
-    expect(
-      resolveChoice(bz5, { key: noteParam(note('A', 1)) }, false, BUILT_IN_PATTERNS).tonic,
-    ).toEqual(note('B', -1))
+    expect(resolveChoice(bz5, { key: noteParam(note('A', 1)) }, BUILT_IN_PATTERNS).tonic).toEqual(
+      note('B', -1),
+    )
   })
 
   it('spells the key it moves to by its simplest signature, its own as it is written (ADR 0105)', () => {
     const tonic = (piece: Piece, key: SpelledNote) =>
-      resolveChoice(piece, { key: noteParam(key) }, false, BUILT_IN_PATTERNS).tonic
+      resolveChoice(piece, { key: noteParam(key) }, BUILT_IN_PATTERNS).tonic
     // C♯ major writes seven sharps, D♭ five flats.
     expect(tonic(bz5, note('C', 1))).toEqual(note('D', -1))
     expect(tonic(bz5, note('G', -1))).toEqual(note('F', 1))
@@ -50,14 +51,14 @@ describe('resolveChoice', () => {
   })
 
   it('simplifies the chords where the URL says so', () => {
-    expect(resolveChoice(bz5, { simple: true }, false, BUILT_IN_PATTERNS).simple).toBe(true)
-    expect(resolveChoice(bz5, {}, false, BUILT_IN_PATTERNS).simple).toBe(false)
+    expect(resolveChoice(bz5, { simple: true }, BUILT_IN_PATTERNS).simple).toBe(true)
+    expect(resolveChoice(bz5, {}, BUILT_IN_PATTERNS).simple).toBe(false)
   })
 
   it('plays the piece’s own pattern when the chart names no methods', () => {
     const plain = PIECES.find((p) => !hasChartPlan(p))
     if (!plain) throw new Error('every piece names its methods')
-    expect(resolveChoice(plain, { pattern: 'chart' }, false, BUILT_IN_PATTERNS).pattern).toBe(
+    expect(resolveChoice(plain, { pattern: 'chart' }, BUILT_IN_PATTERNS).pattern).toBe(
       plain.pattern,
     )
   })
@@ -67,9 +68,7 @@ describe('resolveChoice', () => {
     const lh = LEFT_FIGURE_IDS.find((id) => splitsTheBeat(LEFT_FIGURES[id].figure))
     if (!rh || !lh) throw new Error('figures inside the beat')
     const bz2 = piece('bz2')
-    expect(
-      resolveChoice(bz2, { pattern: 'ballad', rh, lh }, false, BUILT_IN_PATTERNS),
-    ).toMatchObject({
+    expect(resolveChoice(bz2, { pattern: 'ballad', rh, lh }, BUILT_IN_PATTERNS)).toMatchObject({
       pattern: ownChoice(bz2).pattern,
       rh: null,
       lh: null,
@@ -81,21 +80,17 @@ describe('resolveChoice', () => {
       (p) => stavesOf(p).length === 0 && !hasChartPlan(p) && !isCompound(p.meter),
     )
     if (!tuneless) throw new Error('a piece in simple time without a tune')
-    expect(
-      resolveChoice(tuneless, { pattern: 'r6', rh: 'mel' }, false, BUILT_IN_PATTERNS),
-    ).toMatchObject({
+    expect(resolveChoice(tuneless, { pattern: 'r6', rh: 'mel' }, BUILT_IN_PATTERNS)).toMatchObject({
       pattern: tuneless.pattern,
       rh: null,
     })
   })
 
   it('lets only a progression that allows it change its chord size', () => {
-    expect(
-      resolveChoice(twofive, { chordSize: 'ninths' }, false, BUILT_IN_PATTERNS).chordSize,
-    ).toBe('ninths')
-    expect(
-      resolveChoice(bz5, { chordSize: 'ninths' }, false, BUILT_IN_PATTERNS).chordSize,
-    ).toBeNull()
+    expect(resolveChoice(twofive, { chordSize: 'ninths' }, BUILT_IN_PATTERNS).chordSize).toBe(
+      'ninths',
+    )
+    expect(resolveChoice(bz5, { chordSize: 'ninths' }, BUILT_IN_PATTERNS).chordSize).toBeNull()
   })
 })
 
