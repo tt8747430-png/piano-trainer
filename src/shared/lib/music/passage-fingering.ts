@@ -54,22 +54,24 @@ const place = (key: Midi, finger: Finger) =>
  * right one mirrored: its keys read downward.
  */
 export function fingerPassage(keys: readonly Midi[], hand: Hand): Finger[] {
-  if (keys.length === 0) return []
+  const [first] = keys
+  if (first === undefined) return []
   // The left hand mirrored: its intervals turned over, so one table serves both hands.
   const seen = hand === 'rh' ? keys : keys.map((key) => -key as Midi)
   type Path = { cost: number; fingers: Finger[] }
   let paths: Path[] = FINGERS.map((finger) => ({
-    cost: place(keys[0] ?? 0, finger) + (finger === 3 ? -0.5 : 0),
+    cost: place(first, finger) + (finger === 3 ? -0.5 : 0),
     fingers: [finger],
   }))
   for (let i = 1; i < seen.length; i += 1) {
-    const from = seen[i - 1] ?? 0
-    const to = seen[i] ?? 0
-    const key = keys[i] ?? 0
+    const from = seen[i - 1]
+    const to = seen[i]
+    const key = keys[i]
+    if (from === undefined || to === undefined || key === undefined) break
     paths = FINGERS.map((b) => {
       const best = paths.reduce<Path | null>((chosen, path) => {
         const a = path.fingers.at(-1) ?? 1
-        const cost = path.cost + step(from as Midi, a, to as Midi, b) + place(key, b)
+        const cost = path.cost + step(from, a, to, b) + place(key, b)
         return chosen === null || cost < chosen.cost ? { cost, fingers: path.fingers } : chosen
       }, null)
       return { cost: best?.cost ?? Infinity, fingers: [...(best?.fingers ?? []), b] }
