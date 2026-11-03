@@ -383,6 +383,13 @@ class Writer {
         controls.push(
           `<harm staff="${top}" tstamp="${at(chord.tick)}">${escape(chord.symbol)}</harm>`,
         )
+    // The pedal on the lowest staff (ADR 0097), each event where it stands: between notes, over a
+    // rest, after the last note.
+    const lowest = this.number(this.staves.at(-1) ?? 'bass')
+    for (const { tick, kind } of measure.pedal ?? [])
+      controls.push(
+        `<pedal staff="${lowest}" tstamp="${at(tick)}" dir="${kind === 'change' ? 'bounce' : kind}"/>`,
+      )
     if (measure.tempo !== undefined) {
       // The mark in its own unit (ADR 0114): ♪ = 180, a tempo of 90 in 4/4.
       const unit = this.score.tempoUnit ?? beatUnit(this.score.meter)

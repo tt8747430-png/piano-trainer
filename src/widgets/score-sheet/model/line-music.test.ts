@@ -20,6 +20,31 @@ const draft = readDraft({
 })
 
 describe('the sheet’s lines', () => {
+  it('write the pedal’s events on the line they fall in, from its start; a lift at the music’s end on its last line (ADR 0097)', () => {
+    const pedalled = {
+      ...draft,
+      pedal: [
+        { tick: 0, kind: 'down' as const },
+        { tick: B, kind: 'change' as const },
+        { tick: 5 * B, kind: 'up' as const },
+        { tick: 9 * B, kind: 'down' as const },
+        { tick: 11 * B, kind: 'up' as const },
+      ],
+    }
+    const [first, second, third] = linesOf(pedalled)
+    if (!first || !second || !third) throw new Error('three lines')
+    expect(lineMusic(pedalled, first).pedal).toEqual([{ tick: 0, kind: 'down' }])
+    expect(lineMusic(pedalled, second).pedal).toEqual([
+      { tick: 0, kind: 'change' },
+      { tick: 4 * B, kind: 'up' },
+    ])
+    expect(lineMusic(pedalled, third).pedal).toEqual([
+      { tick: 0, kind: 'down' },
+      { tick: 2 * B, kind: 'up' },
+    ])
+    expect(lineMusic(draft, second)).not.toHaveProperty('pedal')
+  })
+
   it('are the chart’s lines, each with its section and bars', () => {
     expect(
       linesOf(draft).map((line) => [line.section, line.line, line.bars.map((b) => b.index)]),
