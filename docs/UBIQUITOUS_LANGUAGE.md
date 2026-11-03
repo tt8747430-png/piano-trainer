@@ -290,11 +290,21 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 
 ## The keyboard
 
+Never "keyboard" alone (R22): say which one.
+
+- **On-screen piano** («пианино на экране»): the keys drawn on screen, and its Settings page. _Avoid:_ keyboard
+  (alone), virtual piano.
+- **Connected piano** / **MIDI keyboard** («подключённое пианино (MIDI)»): an instrument joined by cable or Bluetooth;
+  its page is Connect a piano. _Avoid:_ keyboard (alone), device.
+- **Computer keys** («клавиши компьютера»): the computer's keyboard, playing the piano or giving shortcuts; its page
+  is Computer keys. _Avoid:_ keyboard (alone), hotkeys.
+- **Fold the keys**: Never · On its side · Always, the two saved folds (`folded`, `foldedLandscape`) as one choice.
+  _Avoid:_ hide the keyboard.
 - **Live keyboard** (`LiveKeyboard`): the keyboard every screen shows; every key sounds. _Avoid:_ static keyboard.
 - **Rail**: the strip the keys hang from, holding every keyboard setting as a picture. _Avoid:_ toolbar, header.
 - **Keyboard settings**: key size, note names, chord names, typing; saved for every keyboard. _Avoid:_ keyboard
   prefs.
-- **Key size**: Whole piano · Fit · Large; the rail's **Zoom** steps it. _Avoid:_ scale.
+- **Key size**: All 88 · Fit · Large; the rail's **Zoom** steps it. _Avoid:_ scale.
 - **Note names**: C · All · None. _Avoid:_ labels.
 - **Chord names**: the rail naming the chord a hand holds. _Avoid:_ chord detection.
 - **Typing keys**: the computer keyboard as a piano. _Avoid:_ hotkeys.
@@ -521,6 +531,14 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   preview, audition.
 
 ## App
+
+- **Settings page**: one of Settings' pages (General, Storage and backup, On-screen piano, Connect a piano, Computer
+  keys, Sound and recording, Account), at `/settings/<id>`; on a laptop beside Settings' list. _Avoid:_ panel, tab.
+- **Account card**: Settings' first card, the learner and one line of the sync. _Avoid:_ profile header.
+- **Picture choice** (`PictureChoice`): a setting that changes a look, each option a small drawing over its name.
+  _Avoid:_ visual picker.
+- **Row kinds** (R24): opens a page (`RowLink`), picks a value (`ChoiceRow`, `PictureChoice`), on/off
+  (`SwitchRow`), does something (`ActionRow`), ends or destroys (`DangerRow`, in a `DangerGroup`). _Avoid:_ cell.
 
 - **Settings** («Настройки»): the app's settings page. _Avoid:_ preferences.
 - **How to use** («Как пользоваться»): Settings' short guide. _Avoid:_ manual, onboarding.

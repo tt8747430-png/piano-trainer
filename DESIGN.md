@@ -446,6 +446,12 @@ says it faster. A setting is never hidden behind a pop-up when it fits in sight.
   a hairline. `MultiDropdown` checks several. Under a field's printed name it is `bare`, its value alone.
 - **Toggle chips** (`ToggleChips`): several of a few, all in sight; on is ink on sand in an ink line.
 - **Toggle tiles** (`ToggleTile`, `PictureTiles`): an icon or a drawing over its name; on, the learned wash.
+- **Picture choice** (`PictureChoice`, R21, as iOS's Light/Dark and macOS's Dock position): a setting that
+  changes how something looks is drawn, each option a 64 × 40 line drawing in the current ink (`SettingPictures`)
+  over a one- or two-word name, the chosen one outlined on the muted fill: key size (All 88 · Fit · Large), key
+  length, note names, piano position, Fold the keys (Never · On its side · Always), a swipe, the theme (three
+  small screens). A choice with no honest picture (language, a MIDI device, the account) stays text; an act with a
+  common icon (scroll, glissando, metronome, pedal) takes it with its label; never an icon without a label.
 - **Pickers** (`shared/ui/pickers`): the pop-up button's look, its label in soft ink, its value in ink, ⌃⌄; it opens
   a popover, or a bottom sheet below 30rem. An explorer's pickers stand in one row at its top (`PickerRow`), wrapping
   at 320.
@@ -477,6 +483,31 @@ says it faster. A setting is never hidden behind a pop-up when it fits in sight.
   (`RowButton`) has no chevron. A list of one kind goes without tiles. A row that opens a setting's own screen
   shows the setting's value at its right before the chevron (`value`, muted, cut short before the title is):
   Settings' "MIDI keyboard Off ›".
+- **Settings pages** (R20, as macOS System Settings and iOS Settings lay them out; Linear, GitHub and Flat the
+  same): on a phone one column of grouped cards, Settings' list a page of its own and each row a page with Back; from
+  64rem two panes (`SettingsScreen`): the list (20rem, sticky) beside the page chosen (44rem), the bar naming the
+  page, neither pane with Back, General open first, the row shown marked with the muted fill. Never two columns of
+  unequal groups. A row: its label left, its control right (a switch, a segmented control that fits, a value with
+  ⌃⌄); a control drops under its label only where it does not fit, as a picture choice does. Group headings one
+  style, small soft ink outside the card, sentence case; one footnote line under a card at most; ⓘ only where the
+  label cannot say it. Settings' list rows each wear their icon in a coloured square; the account card comes first
+  (the initial, name, email and one line of the sync: Synced 2 min ago · 3 changes waiting · Offline · Last sync
+  failed; signed out, why to sign in).
+- **Five row kinds** (R24), one component each, no page styling its own: *opens a page* (`RowLink`: label, value,
+  ›); *picks a value* (`ChoiceRow`: label, value ⌃⌄; or a segmented control, or a `PictureChoice`); *on/off*
+  (`SwitchRow`); *does something* (`ActionRow`: its label in link ink, no tile, no chevron, its status at its end:
+  Sync now, Save a backup); *ends or destroys* (`DangerRow`: its label red, in a `DangerGroup`).
+- **Destructive rows** (R25, as iOS's Sign Out and Delete Account, GitHub's danger zone and Linear's): last on their
+  page and alone, each group of them red with room above it and a one-line footnote saying what happens and whether
+  it can be undone; never beside ordinary rows, never on Settings' list. Account: Sign out, then Delete account in a
+  group of its own ("Your account and synced data are deleted after 30 days."); Storage and backup: Reset
+  progress; an item's Settings: Delete, Unpublish, Reset to the original, Reset progress. Each asks through
+  `ConfirmDialog`; Delete account and deleting published content are typed first.
+- **Navigation marks** (R23, `NavMarks`): ‹ only in the bar's Back (`BackButton`) and a sheet's Back (`BackMark`); ›
+  at a row's right edge (`OpensMark`); ⌃⌄ beside a picker's value; ⌄ on a fold. One size (20px), stroke and soft
+  ink, on one right edge whether a value stands before it or not; a flush card's hover fills it to its edges.
+  Arrows only for movement (an octave, the transport's bars, a lesson's previous and next); an inline link reads as
+  a link, with no arrow. `src/app/nav-marks.test.ts` fails any other file importing them.
 - **Settings group** (`SettingsGroup`): a card with its title in a muted band across the top and its ⓘ beside it;
   a list of choices or a row link inside it runs to the card's edges (`flush`). A switch greyed for a reason says it
   in a muted line under its label ("Needs MIDI input"), never hidden.
