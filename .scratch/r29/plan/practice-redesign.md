@@ -1,7 +1,9 @@
 # Practice pages' redesign, and the app-wide pieces they show (Decided 21)
 
 Scope: Chords, Scales and keys, Intervals, Progressions; the page-bar tabs pattern (every page with tabs, lessons
-included); the key picker; one sheet everywhere and its selection; the chord-card grid rule. Starting point:
+included); the key picker; one sheet everywhere and its selection; the chord-card grid rule; and, added by the owner the same
+evening, the **chord player** (CP1–CP6: Progressions and Accompaniment merged into one Musicca-like page) and the
+**sounds** for piano, bass, drums and metronome (SND). Starting point:
 `round-2.md` (A20–A23, A30, A42, A43) and `round-1.md` (A5, S1–S4); this file **supersedes them where it says so**
 (Decided 21, prompt 422–461, wins over everything). Research: the reference apps in `piano-data/reference-apps/`
 (files named in each item), Apple's HIG, and the apps named in **Sources**. No code was changed.
@@ -51,7 +53,13 @@ hymnals in keys like E♭, A♭ and D♭.
     groups and Insert stay; the tab goes; any two chords and the learner's own chord are allowed (P14).
 12. **`docs/adr/0046-the-theory-kernel.md` / `RightHandFrom.tsx`'s "Right hand from"** (ADR 0046). The idea (where a
     two-hand chord's right hand starts) stays; its control becomes **Top note**, named by the note on top (P3).
-13. **`round-2.md` A21 "Notes: … `PinnedKeyboard` … Octaves `Segmented` 1 · 2"** and `scale-view.ts`
+13. **`round-1.md` S4 (Progressions settings) and S5 (Accompaniment settings)**: the two pages merge (CP1); their
+    rows become CP6's one page (Written as, Voicing kept; Mode of typed numerals with them; Accompaniment's sources
+    list goes with its tabs, the book patterns being styles, CP3).
+14. **`rounds-3-4.md` A27 "the synthesised voice stays only while samples load"** and **`round-2.md` C9's drum-kit
+    rows (VCSL bass drum, snare, hi-hat, suspended cymbal as ride)**: SND replaces the loading fallback with the
+    public-domain Splendid piano and the kit with Virtuosity Drums.
+15. **`round-2.md` A21 "Notes: … `PinnedKeyboard` … Octaves `Segmented` 1 · 2"** and `scale-view.ts`
     `RUN_OCTAVES = [1, 2]`. Correct: 1 to 4 octaves on a stepper (P9).
 
 ---
@@ -515,6 +523,11 @@ hymnals in keys like E♭, A♭ and D♭.
 
 ## P13: Progressions: no tabs; Library and Passing chords around the one progression
 
+> **Superseded in part by CP1–CP6** (the owner's chord-player decision, written after this item): the page becomes
+> the Chord player (`/practice/chord-player`); its Key picker becomes text linking to Settings' Transpose (CP4, CP6);
+> the strip is the chord sheet (CP2). What stays from P13: no tabs, the Library opened from the name, Passing chords
+> from the gap, the deleted explanatory line.
+
 - **Source:** Decided 21 "Passing chords … don't belong in Progressions as they are … How the tabs relate and that
   one tab's choice changes another must be clear from the UI itself, not from a line of description"; D14 (roles
   on the chords); A23.
@@ -550,6 +563,9 @@ hymnals in keys like E♭, A♭ and D♭.
   explains the page". Screenshots at the three sizes; the Library sheet open at 390 and 1280.
 
 ## P14: Passing chords: computed for any two chords, the learner's own allowed
+
+> **Its store is widened by CP5** (`pt-chord-sheets` holds whole chord sheets); "Insert" inserts into a chord sheet's
+> boxes (CP2), the inserted chord taking half the beats of the chord before it.
 
 - **Source:** Decided 21 "Passing chords are hardcoded … the learner must be able to choose their own"; A23
   (groups, Insert), round-2 A23.
@@ -655,6 +671,289 @@ hymnals in keys like E♭, A♭ and D♭.
   `selection.test.ts`: "a bar's band starts at its bar line and ends at the next". `Sheet.test.tsx`: "the band over
   Am9 in Let It Be spans its bar". Screenshots: Progressions with bar 3 selected, the Player with a two-bar loop.
 
+## CP: The chord player (the owner's decision, 2026-11-03 evening)
+
+The owner asked for **a chord player like Musicca's, with the same controls and options** (style presets with
+variations, tempo, Play on Space, count-in, sections with repeats, chords as boxes in bars with a length in beats,
+typed from the keyboard, dragged to reorder, resized by their edge, Randomize with Undo, and a Settings page with
+instruments, count-in, repeat, time signature, transpose, volume). Research: Musicca's chord player as saved in
+`piano-data/musica/` (its `en.json` UI strings, `presets.json`, the bundle), summarised in
+`scratchpad/metronome-ref/notes.md` §7–8 and `musicca-notes.md` §3–5. Musicca's files carry no licence: we take
+facts and behaviour only, and write our own words, patterns, sounds and code.
+
+### CP1: Where it lives: one page, Progressions and Accompaniment merged
+
+- **Source:** the owner's decision ("it overlaps Progressions and Accompaniment: one page, not two"); D14; A23; A25;
+  P13, P14 above.
+- **Today:** three places do parts of it. **Progressions** (`/practice/progressions`): a typed line of numerals or
+  symbols, a key, chord size, the roles row, a staff, Play, the Library, Passing chords. **Accompaniment**
+  (`/practice/accompaniment`): the book patterns (Called to Play, Bobrova, Gorshkov, Styles, My patterns) as six
+  source tabs of rows, each pattern played over a chart; its studies at
+  `/practice/accompaniment/studies/$pieceId`. **Nothing** plays bass or drums with chords, and a chord's length is
+  always a bar.
+- **Decision and why:** Musicca puts the progressions it teaches on the same page as its chord player (the player on
+  top, the progressions by genre below), and its styles are what we call accompaniment patterns plus a bass and a
+  drum part. A learner wants one place to *build a chord sheet and hear it played in a style*: the progression is
+  what is played, the accompaniment is how. Two pages would hold the same chords, key and Play twice (Decided 21:
+  no duplicates). So the two pages become one: **Chord player**, Musicca's name for it and the plain description
+  of what it does (ru «Аккордовый плеер»). The theory that Progressions had (the roles row, passing chords,
+  practise in all 12 keys, songs with this progression) stays on it, drawn on the chord sheet.
+- **Will build:**
+  - Route **`/practice/chord-player`** (`pages/chord-player`, replacing `pages/progressions` and
+    `pages/accompaniment`), parent `/practice`; its Settings `/practice/chord-player/settings`; the editor's
+    progression editor moves to `/practice/chord-player/progressions/$progressionId/edit` (unchanged inside).
+    `app/routes/parents.ts`, the search validators (`chord-player-search.ts`: `sheet` (a saved sheet's id) or
+    `line` (a typed line, as today), `style`, `tempo`, `section`), the Practice grid and Search's index updated.
+    `progressions-search.ts`, `accompaniment-search.ts` and their screens deleted; no redirects (no users yet).
+  - Practice's Harmony group shows one tile **Chord player** (its icon: a chord box with a play mark) where
+    Progressions and Accompaniment were.
+  - Accompaniment's **patterns** become the piano part of the styles (CP3, group "Piano patterns"); its **studies**
+    (book pieces) move to Songs' built-in folder **"Accompaniment studies"** (ru «Этюды на аккомпанемент»), their song
+    pages as every song's (`/songs/$pieceId`), so they are not a second song page inside Practice.
+  - `widgets/progression-explorer` becomes `widgets/chord-player` (the chord sheet, the head, the sheets of
+    Library, Styles, Passing chords); `pages/accompaniment/ui/*`, `AccompanimentTabs.tsx`, `PatternShelves.tsx`,
+    `BookPieces.tsx` deleted after their content moves.
+- **Not in this item:** the score editor; the Player (a chord sheet opens in the Player through Practise, CP4).
+- **Done when:** `src/app/routes/parents.test.ts`: "/practice/chord-player's parent is /practice"; `src/app/
+  practice-grid.test.tsx`: "Practice shows Chord player and neither Progressions nor Accompaniment"; `src/pages/
+  songs/ui/SongsPage.test.tsx`: "Accompaniment studies is a built-in folder holding the Bobrova studies".
+- **Owner's question:** the page's name: **Chord player** (default, Musicca's) or keep **Progressions**?
+
+### CP2: The chord sheet: sections, bars and chord boxes
+
+- **Source:** the owner's decision (sections with repeats; chords as boxes in bars with a duration in beats, typed
+  from the keyboard, dragged to reorder, resized by their edge; Randomize with Undo); Musicca `sections.*`,
+  `chord_modal.*`, `main_controls.add_section`, `randomize_chords` (notes §8); D14 (roles on the chords); P13, P14.
+- **Today:** one line of chords, one per bar (`typed-progression.ts`, `RoleChips.tsx`); no sections, no lengths.
+- **Decision and why:** Musicca's model is the lead sheet's: sections (Intro, Verse, Chorus …), each repeated, made of
+  bars, each bar holding chords whose lengths add up to the bar's beats. It is how an accompanist reads a song
+  ("Verse ×2: | C | G | Am F | C |"), so it is ours too. Our additions are the theory D14 asked for, on the boxes.
+- **Will build (the page body, top to bottom):**
+  1. **Sections**, each a card (dragged by its handle to reorder, R4), its head: the name (`MenuPicker` **Intro ·
+     Verse · Pre-chorus · Chorus · Bridge · Solo · Outro** or typed; ru «Вступление · Куплет · Предприпев · Припев ·
+     Бридж · Соло · Кода»), **Repeat** `Stepper` ×1–×8 (ru «Повтор»), **Variation** `Segmented` 1 · 2 · 3 · 4 (only
+     the variations the style has, R30; ru «Вариант»), and a ⋯ menu: Duplicate · Delete (Delete confirms when the
+     section has chords, R17). At most 12 sections; **Add section** (ru «Добавить раздел») under the last, hidden at
+     12 with nothing greyed.
+  2. **Bars** in each section as an even grid of equal cells (four bars a row from 48rem, two on a phone; P11's
+     `CardGrid`, never squeezed), each bar divided into its beats (faint beat ticks, the meter's count, P16's grid).
+  3. **Chord boxes** inside the bars: each box spans its beats (1 to the bar's beats, and across a bar line up to 8),
+     showing the symbol large (`C`, `Am7`, `G/B`), under it its numeral in the key and its role word and colour
+     (home · away · tension, D14), and between two boxes the bass move (↓5 …) with the **+** for Passing chords (P14).
+     - **Add:** a **+** at the end of the last bar, or Enter on the last box; a new box takes the bar's remaining
+       beats (a bar's 4 in 4/4).
+     - **Type:** a focused box is a text field: typing a chord symbol (`A`, `Bbm7`, `F#dim7`, `G/B`, `C6/9`) sets it
+       on Enter or Tab (Tab moves to the next box); the computer keys don't play the piano while a box is being typed
+       in (a field has focus). Parsing reuses `parseChordSymbol` (P14). A double tap (or Enter) on a box opens the
+       **Chord** sheet: Root (`NotePicker`), Type (`ChordTypePicker`, P3), **Bass note** (`MenuPicker`: the chord's
+       root, 3rd, 5th, 7th or another note; ru «Бас»), **Length** `Stepper` 1–8 beats (ru «Длительность»), and
+       **Suggested chords** (the key's chords and the passing chords that lead to the next box, P14).
+     - **Resize:** drag a box's right edge; it snaps to whole beats (P16) and the next box gives up or takes the
+       beats; on a keyboard Shift+← / Shift+→ shortens or lengthens by a beat.
+     - **Reorder:** drag a box by itself (a held finger on a phone, R4) to another place; keyboard: Space picks up,
+       arrows move, Space drops, Esc cancels (the drag-and-drop library already used by `LibraryDnd`).
+     - **Delete:** Backspace or Delete on a focused box, or drag it out of the sheet; an Undo toast ("Deleted Am7 ·
+       Undo"), no dialog (a one-chord act, R17's "no dialog" list).
+  4. **Randomize** (a button at the sheet's foot, its icon dice and the label; ru «Случайные аккорды»): fills each
+     section with chords from the key that move by function (tonic → subdominant → dominant → tonic, the books'
+     rule), one per bar, keeping the sections' lengths; **Undo** in its toast puts the sheet back. Kernel:
+     `randomProgression(key: Key, bars: number, random: () => number): readonly Numeral[]` in
+     `shared/lib/music/progression-random.ts`, tested with a seeded `random`.
+  5. Under the sheet: the **staff** (`Sheet`, P15) of the piano part as the style plays it, folded by default on a
+     phone (summary "Piano part · 8 bars"), open on a laptop; the on-screen piano; **Practise in all 12 keys**;
+     **Songs with this progression** (hidden when empty).
+  - **Undo/redo** for every edit of the sheet (⌘Z / ⇧⌘Z, `useShortcuts`), one history per sheet in memory.
+  - Model: `src/shared/lib/arrangement/chord-sheet.ts` (pure, kernel's arrangement may import music only):
+    `interface ChordSheet { readonly sections: readonly SheetSection[]; readonly meter: Meter; readonly key: Key }`,
+    `SheetSection { kind: SectionKind; name?: string; repeats: number; variation: 1 | 2 | 3 | 4; bars:
+    readonly SheetChord[] }`, `SheetChord { chord: Chord; beats: number }`; functions `resizeChord`, `moveChord`,
+    `insertChord`, `removeChord`, `sheetToChart(sheet): Chart` (the arrangement's existing input), each pure and
+    tested. A typed line (`?line=`) reads as one section "Verse", one chord a bar.
+- **Not in this item:** the styles' sound (CP3); saving (CP5).
+- **Done when:** `chord-sheet.test.ts`: "resizing C from 4 to 2 beats gives G 2 more"; "a box can't pass 8 beats or
+  leave a bar short"; "moveChord keeps every bar's beats"; "a typed line I V vi IV reads as one Verse of four bars".
+  `progression-random.test.ts`: "a seeded random gives I IV V I in C"; "every chord is the key's". `ChordPlayerPage.
+  test.tsx`: "typing Bbm7 in a box and Enter shows B♭m7 with iv and away"; "dragging a box's edge by one beat makes
+  it 3 beats" (`stubBox`); "Backspace deletes and Undo restores"; "Randomize fills the sections and Undo restores them";
+  "Add section is hidden at 12 sections". Screenshots of a three-section sheet at the three sizes.
+
+### CP3: Styles: presets with variations, written by us
+
+- **Source:** the owner's decision (style presets: pop, rock, jazz, blues, … with variations); Musicca's presets
+  (notes §4, §8: Pop 1–5, Rock 1–2, Melodic 1–4, Hip hop 1–2, Disco 1–2, Funk 1–2, Reggae 1–2, Jazz 1–4, Blues 1–2,
+  Classical 1–2, each up to 4 variations; a 16-step grid per bar per instrument with a main bar and a last-bar fill);
+  D20 (Chordify's drum grooves for the metronome).
+- **Today:** `entities/pattern` holds piano patterns (`content/patterns.ts`, `methods.ts`, `called-to-play`) played by
+  `shared/lib/arrangement` over a chart; no bass or drum part exists anywhere.
+- **Decision and why:** a style is three parts over the chords: the piano's figure, the bass's line and the drums'
+  groove, with variations (a busier one, a half-time one, a fill). Musicca's grid model (a bar of 16 steps per
+  instrument, a main bar and the section's last bar as a fill, per-step velocity for the feel, swing as a triplet
+  grid) is a clean data model; we copy the idea and write every pattern ourselves. We add the styles our users
+  play: **Hymn** (four-part block chords, no drums), **Worship ballad**, **Gospel**, **Waltz**, and the book
+  patterns of Accompaniment as piano-only styles.
+- **Will build:**
+  - Head control **Style** (`MenuPicker` in the page head, its value "Pop 1"; ru «Стиль»), opening a sheet grouped:
+    **Pop** (Pop 1–5) · **Rock** (1–2) · **Ballad** (1–4) · **Worship and gospel** (Worship ballad 1–2, Gospel 1–2) ·
+    **Hymn** (Hymn 1 four-part, Hymn 2 with bass) · **Hip hop** (1–2) · **Disco** (1–2) · **Funk** (1–2) · **Reggae**
+    (1–2) · **Latin** (Bossa nova, Samba) · **Jazz** (Swing 1–2, Jazz ballad, Jazz waltz) · **Blues** (Shuffle, Slow
+    blues) · **Classical** (Alberti, Arpeggio, Waltz) · **Piano patterns** (Accompaniment's book patterns, by book:
+    Called to Play · Bobrova · Gorshkov · My patterns). Each row: the name and a one-bar rhythm picture
+    (`RhythmPicture`, round-2 A25) and ▷ to hear a bar of it over C. Default **Pop 1** (owner's question 7).
+  - Variation per section (CP2), 1–4 where the style has them.
+  - Data: `src/entities/pattern/content/styles/<family>.ts`, each `Style { id; family; meters: readonly Meter[];
+    swing?: boolean; variations: readonly StyleVariation[] }`, `StyleVariation { piano: PianoFigure; bass:
+    BassLine; drums: DrumGrid; fill?: { bass?: BassLine; drums?: DrumGrid }; crash?: boolean }`; `DrumGrid` a record
+    of `DrumVoice` → 16 velocities (0 = silent) per 4/4 bar, `timing` per meter; `BassLine` steps of `{ step; degree:
+    'root' | 'fifth' | 'octave' | 'third' | 'approach'; velocity; length }` (an approach note walks to the next
+    chord's root, the jazz walking line's rule). All written by us; each file's header says so.
+  - Arrangement: `shared/lib/arrangement/arrange.ts` gains `arrangeStyle(sheet: ChordSheet, style: Style, options):
+    Performance` writing three parts (the Performance gains `parts: readonly { instrument: 'piano' | 'bass' |
+    'drums'; notes }`; notation writes the piano part only; schedule plays all three). Swing: a triplet grid as
+    Musicca's (every fourth 16th dropped, the tempo kept).
+  - The Metronome's Drum kit (D20, round-2 C8) and these styles share `DrumVoice` and the drum sampler (SND); its
+    grooves stay Chordify's.
+- **Not in this item:** guitar (the owner's list has no guitar; Chordify's rule "no guitar features").
+- **Done when:** `styles.test.ts`: "every style's grids are 16 steps per 4/4 bar and the meter's length otherwise";
+  "every variation has piano, bass and drums except Hymn 1 and the piano patterns (piano only)"; "swing styles drop
+  every fourth step". `arrange-style.test.ts`: "Pop 1 over C G Am F writes the bass on each chord's root on beat 1";
+  "the section's last bar on its last repeat plays the fill"; "a 2-beat chord's bass changes on beat 3". A recording
+  of each family over Let It Be at 100 BPM in `.scratch/r29/shots/after/cp3-*.webm`.
+
+### CP4: The head and the transport
+
+- **Source:** the owner's decision (tempo, Play (Space), count-in); Musicca `main_controls`, notes §5 (worker clock,
+  100 ms look-ahead, edits applied at a boundary, a fade on Stop, a 3 s tail on the last chord); R5.
+- **Today:** Progressions' Play in a third place (A23); no count-in; edits stop or restart the sound.
+- **Will build:**
+  - **Bar:** ‹ · "Chord player" · ⋯ (**New** · **Save as my chord sheet…** · **Share link** · **Export audio…**;
+    commands only, R3) · gear. Editors keep the pencil for a built-in progression (P13).
+  - **Head card** (one row on a laptop, two on a phone): the sheet's name as a picker opening the **Library** (P13:
+    built-in progressions by style chips, then **My chord sheets**; choosing one replaces the sheet, with Undo) ·
+    **Style** (CP3) · **Tempo** `Stepper` 40–240, default the style's (e.g. 100), ru «Темп» · the key as text with
+    its twin (P2), "Key C major ›" opening Settings' Transpose (CP6).
+  - **Capsule** (R5): **Play** (▶ "Play" / ■ "Stop"; Space toggles, `useShortcuts`, not while a box is typed in) ·
+    **Loop** (plays the selection or the section chosen again and again; P16's selection) · **Practise in the
+    Player** (opens the sheet as a Performance in `/play/…`, the Player's own tools).
+  - **Following:** the playing box is lit and the sheet scrolls to keep it in view; the staff's playhead moves
+    (P15); the on-screen piano lights the piano part. The light is scheduled on the audio clock (the moment the
+    sound plays), skipped while the page is hidden.
+  - **Count-in:** one bar of clicks (the metronome's sound, its accent on beat 1), when on in Settings.
+  - **Edits while playing** are applied at the next chord start (Musicca's pending plan); a tempo change at once.
+  - **Stop** fades the sound out over 2 beats; the last chord of the sheet rings 3 s.
+  - Scheduler: the existing look-ahead (`shared/api/audio/lookahead.ts`) with its clock in a Worker when the page
+    is in the background (a Worker posting every 50 ms, 100 ms ahead), so a phone's locked screen does not stall it.
+  - **Export audio…**: renders the sheet offline (`OfflineAudioContext`, count-in included) to a WAV file named
+    after the sheet; no MP3 encoder (no licence-clean small one; WAV plays everywhere).
+- **Done when:** `ChordPlayerPage.test.tsx`: "Space plays and stops" (fake audio); "the second box lights when its time
+  comes" (`setNow`); "an edit during play lands at the next chord"; "Stop ramps the gain to 0 over 2 beats".
+  `lookahead.test.ts`: "a Worker tick schedules 100 ms ahead". `export-audio.test.ts`: "a 4-bar sheet at 120 BPM
+  renders 8 s plus the 3 s tail".
+
+### CP5: My chord sheets (saving)
+
+- **Source:** the owner's "the learner's own allowed" (P14) and Musicca's File menu (New, Save, Share).
+- **Will build:** P14's store, widened: `pt-progressions` becomes **`pt-chord-sheets`**, version 1, `{ mine: readonly
+  { id; name; sheet: ChordSheet; style: StyleId; tempo: number; settings: ChordPlayerSheetSettings }[] }`, at most
+  100, sanitiser field by field, synced (`SYNCED_SAVES`). **Save as my chord sheet…** is a `NewSheet` (Name, Create);
+  a saved sheet saves on every edit (no Save button); the Library lists **My chord sheets** first (row menu Rename ·
+  Duplicate · Delete; Delete confirms, R17). **New** clears to one empty Verse, confirming when the sheet is unsaved
+  ("Start a new chord sheet? Your changes to this one are lost." · **Start new**). **Share link** encodes the sheet in
+  the URL (`?line=` grows to the sheet's compact text, `sheetToText`/`textToSheet`, Postel's law on read). The spec
+  `.scratch/r29/chord-sheets/spec.md` is written first (a store and a route change); ADR 0112 amended.
+- **Done when:** `entities/progression-library/model/store.test.ts`: "reads a version-1 save field by field; any other
+  version starts empty"; `chord-sheet-text.test.ts`: "sheetToText and textToSheet round-trip three sections with
+  repeats and lengths"; `ChordPlayerPage.test.tsx`: "Save as my chord sheet puts it first in the Library and an edit
+  saves it".
+
+### CP6: The chord player's Settings page
+
+- **Source:** the owner's decision ("a Settings page with instruments (piano, bass, drums…), count-in, repeat, time
+  signature, transpose, volume"); Musicca `settings_modal.*`; Decided 20–21 (each page's own Settings page from its
+  own gear, like a lesson's); round-1 S4/S5 (superseded: Progressions' and Accompaniment's pages become this one).
+- **Will build:** `/practice/chord-player/settings` (`pages/chord-player-settings`, the lesson Settings page's shape,
+  R20), from the gear in the page's bar. Groups and rows, in order:
+  1. **Instruments** (ru «Инструменты»): **Piano** switch + **Level** slider 0–100 % (default 80) · **Bass** switch +
+     level (default on, 70) · **Drums** switch + level (default on, 70). At least one stays on (the last one's switch
+     can't turn off; its row says so in its ⓘ). Hymn styles draw no Drums row (R30).
+  2. **Playing** (ru «Воспроизведение»): **Count-in** switch (default off) · **Repeat** switch ("Repeat the sheet",
+     default on; ru «Повторять») · **Volume** slider 0–100 % (default 80).
+  3. **Music** (ru «Музыка»): **Time signature** (the shared time-signature control of A34; values 2/4 · 3/4 · 4/4 ·
+     6/8 · 12/8 and Other…; changing it re-lays the bars, keeping each chord's beats where they fit, with Undo) ·
+     **Transpose** (the editor's Transpose control, D20: semitones − n + and the key it lands in, "C major → D major";
+     the page's key text links here) · **Written as** (Chord symbols · Roman numerals · Nashville numbers, from S4) ·
+     **Voicing** (Block · Voice leading, S4).
+  4. Link rows: **On-screen piano ›**, **Connect a piano ›** (R18).
+  - The values belong to the sheet being played (saved with a saved sheet, CP5) except Written as and Voicing, which
+    are the page's defaults. Registry entries in `entities/settings/model/registry.ts` with home `chord-player`;
+    `settings-homes.test.ts` proves each has one home.
+- **Done when:** `ChordPlayerSettingsPage.test.tsx`: "turning Drums off silences the drums" (fake audio); "Transpose +2
+  shows D major on the page"; "Time signature 3/4 re-lays C(4) G(4) as C(3) +1 …, with Undo"; "Hymn 1 shows no Drums
+  row". Screenshots at the three sizes (one column on a phone, two panes from 64rem).
+
+## SND: Sounds: the libraries and the sample sets (piano, bass, drums, metronome)
+
+- **Source:** the owner's decision ("proper libraries and proper sounds for all of them (piano, bass, drums,
+  metronome) … e.g. smplr, MIT, with CC0/public-domain sets such as Splendid Grand Piano and VCSL; Salamander CC-BY
+  for the piano … size, loading and offline caching; every file's source and licence written beside it. No Tone.js
+  unless you show it's needed"); D15, D16; rounds-3-4 A27 (the sampled grand, planned in detail there and kept);
+  round-2 C9 (the metronome's set, kept with one change below).
+- **Today:** the piano is three oscillators (`shared/api/audio/web-audio.ts`); four VCSL WAVs in `public/sounds/`
+  with no `SOURCES.md`; no bass or drum kit beyond those; no sample library in `package.json`.
+- **Decision and why:**
+  - **Library: smplr** (MIT, danigb/smplr): plays sample buffers on the Web Audio clock at the time we pass, takes
+    velocity 0–127 and the sustain pedal as CC 64, loads only what is asked, and can keep files in the Cache API
+    (`CacheStorage`). Its instruments include a `Sampler` for our own maps and a `DrumMachine`. It is a few tens of KB
+    against Tone.js's several hundred, and we already own a scheduler (`lookahead.ts`) and a damper model
+    (`schedule/damper.ts`), which is all Tone would add here (Musicca uses Tone for its Transport, which we have).
+    **No Tone.js.** smplr is kept only if A27's spike passes its three tests (a start time we pass; our damper drives
+    release; load on first ask); otherwise A27's own small sampler, used the same way for every instrument below.
+    smplr's default sample host (GitHub Pages, rate-limited) is never used: every file is ours, under `public/samples/`.
+  - **Sample sets** (each licence checked at its source before download; CC-BY-SA and unlicensed sets excluded):
+
+    | Instrument | Set | Licence | What we keep | Size (AAC .m4a, mono) |
+    |---|---|---|---|---|
+    | Piano | **Salamander Grand Piano V3** (Alexander Holm, Yamaha C5) | CC BY 3.0, credited on About (D15) | A27: 30 roots every minor third × 4 velocity layers | ≈ 9–12 MB |
+    | Piano, while that loads and on a phone short of memory | **Splendid Grand Piano** (Akai's Steinway set, released by Akai into the public domain; SFZ by kinwie) | public domain | 1 layer (mf), 30 roots, 3 s each | ≈ 1 MB |
+    | Bass (electric) | **Karoryfer "Growlybass"** (a Squier Jazz bass, fingered) | to verify in its ZIP: CC0 or CC BY 3.0 accepted, else not used | roots every minor third E1–G3 (11) × 2 layers, 2.5 s | ≈ 0.6 MB |
+    | Bass (upright, for Jazz, Blues, Hymn 2) | **Karoryfer "Meatbass"** (a 1958 Otto Rubner double bass, pizzicato) | same check | 11 roots × 2 layers, 2.5 s | ≈ 0.6 MB |
+    | Drum kit (chord player, Metronome's Drum kit) | **Virtuosity Drums** (Versilian/Karoryfer, a jazz kit played with sticks) | CC0 | kick, snare, snare rim (cross-stick), closed hat, open hat, pedal hat, ride, ride bell, crash, high tom, mid tom, floor tom: 2 strokes each (accent, normal) | ≈ 0.5 MB |
+    | Metronome single sounds | **VCSL** (Versilian Community Sample Library) | CC0 | round-2 C9: woodblock, clave, cowbell, and click/rimshot where C9 finds them | < 300 KB (WAV, C9) |
+
+    Splendid is the fallback the owner named and costs little: the first note sounds from it at once and Salamander
+    replaces it note by note as its layers arrive (better than A27's synthesised fallback, which then goes). If the
+    Karoryfer ZIPs turn out CC-BY-SA or unlicensed, the next candidates are checked in order: VCSL's plucked
+    strings, then the smpldsnds sets smplr uses (each set's own licence file decides, never smplr's MIT). If none is
+    CC0, public domain or CC BY, the bass is not offered (R30, no synthesised stand-in under a recorded name) and the
+    owner is told (owner's question 9).
+    Round-2 C9's drum kit pieces from VCSL are **replaced** by Virtuosity Drums (a real kit recorded as one, so the
+    Metronome's Drum kit and the chord player sound alike); C9's single sounds stay VCSL.
+  - **Format:** AAC-LC in `.m4a`, mono, 44.1 kHz (A27's choice: plays in Safari and every browser we support; stereo
+    doubles memory for no gain on a phone speaker). Drum one-shots at 128 kb/s (transients), the rest 96 kb/s; the
+    metronome's clicks stay WAV (C9: tiny, decoded instantly).
+  - **Layout and provenance:** `public/samples/<instrument>/` (`piano`, `piano-light`, `bass-electric`,
+    `bass-upright`, `drums`, `metronome`), each with `manifest.json` (`{ file, midi | voice, layer, bytes }`) and
+    **`SOURCES.md`**: the set, its author, the URL, the licence and its URL, the exact source files used, the command
+    that made them (`scripts/samples/<instrument>.mjs`, ffmpeg). The source WAV/FLAC files are not committed.
+    `scripts/check-samples.test.ts` (round-2 C9's, widened): "every file under `public/samples` is in its folder's
+    manifest and SOURCES.md, with a licence of CC0, public domain or CC BY"; "each folder is under its budget".
+  - **Credits:** About's footnote lists every CC BY set ("Piano: Salamander Grand Piano by Alexander Holm (CC BY
+    3.0)"; the bass if CC BY), en and ru; CC0 and public-domain sets are thanked in `SOURCES.md` only.
+  - **Loading:** one loader for every instrument (`shared/api/audio/sample-loader.ts`, A27): fetch on first need,
+    decode on first strike, an LRU under the 80 MB decoded budget across instruments (A27). The chord player loads its
+    style's instruments when the page opens (bass and drums ≈ 1 MB, under a second on 4G); the piano follows A27's
+    order (light piano first, then Salamander's mp layer for the range in view).
+  - **Offline:** the service worker (`vite.config.ts`, Workbox) **precaches** `metronome/`, `drums/`, `bass-*/` and
+    `piano-light/` (≈ 3 MB together: the app plays offline from its first visit) and caches `piano/` at runtime
+    (CacheFirst, its own cache `samples-piano`), with Storage and backup's row **"Grand piano for offline use ·
+    12 MB · Download"** (A15, A27) fetching every Salamander file into that cache, its size shown, and **Remove**.
+  - ADR **0034** (audio) amended with the library, the sets and their licences.
+- **Not in this item:** guitar and other instruments; the spoken count (D20: not offered).
+- **Done when:** A27's and C9's tests, plus `src/shared/api/audio/instruments.test.ts`: "the chord player's bass and
+  drums play from their manifests at the scheduled time" (fake context); "a note asked before Salamander's buffer is
+  ready plays from the light piano"; `scripts/check-samples.test.ts` as above; a recording of Pop 1, Jazz Swing 1
+  and Hymn 2 over Let It Be, and of the Metronome's Drum kit, in `.scratch/r29/shots/after/snd-*.webm`; Safari's
+  memory timeline on an iPhone with the chord player and the Player open: under 80 MB of decoded audio.
+
 ## Build order
 
 1. P11 (the grid rule; a bug, small, unblocks screenshots).
@@ -664,7 +963,9 @@ hymnals in keys like E♭, A♭ and D♭.
 5. P3, P4, P5, P6 (Chords).
 6. P7, P9, P10 (Scales and keys).
 7. P12 (Intervals).
-8. P13, P14 (Progressions; P14's store spec first).
+8. SND (the A27 spike decides smplr; the sets downloaded and checked; the loader), before any CP sound.
+9. CP1 (route and merge), CP2 (the chord sheet, with P13/P14 folded in), CP5's spec then store, CP3 (styles),
+   CP4 (transport), CP6 (Settings).
 Each item one commit or a few, named "R29-P3: …"; the full suite and build once at the end of the round.
 
 ## Questions for the owner (defaults taken)
@@ -675,7 +976,14 @@ Each item one commit or a few, named "R29-P3: …"; the full suite and build onc
 3. **Scales' view names:** Scale · Chords · Key (default) or Scale · Harmony · Key signature?
 4. **Hand drawing:** our own outline drawing over the keys (default) or no hand, the fingers on the keys alone
    (Ultimate Piano's)?
-5. **My progressions** synced with the account (default) or this device only?
+5. **My chord sheets** synced with the account (default) or this device only?
+6. **The merged page's name:** Chord player (default, Musicca's) or Progressions?
+7. **Default style:** Pop 1 (default) or Hymn 1 (church accompanists)?
+8. **Transpose and time signature on the Settings page** as you listed (default, so the page shows the key as text
+   with a link), or the key picker kept on the page and Transpose dropped from Settings (no control twice)?
+9. **Bass sound:** if no CC0 / public-domain / CC BY bass set checks out, ship without bass (default) or allow a
+   synthesised bass?
+10. **Accompaniment studies** move to a built-in Songs folder (default) or stay under the Chord player?
 
 ## Sources
 
@@ -694,5 +1002,15 @@ Each item one commit or a few, named "R29-P3: …"; the full suite and build onc
 - Musical U, interval ear training (ascending, descending, harmonic):
   https://www.musical-u.com/ear-training-exercises/intervals/
 - goodEar Intervals (ascending, descending, simultaneous): https://apps.apple.com/us/app/goodear-intervals-ear-training/id588122114
+- Musicca's chord player as saved in `piano-data/musica/` (`en.json`, `presets.json`, the bundle; no licence: facts
+  only), summarised in `scratchpad/metronome-ref/notes.md` §7–8 and `musicca-notes.md` §3–5.
+- smplr (MIT): https://github.com/danigb/smplr (instruments, `baseUrl`, `CacheStorage`, time, velocity, CC 64).
+- Splendid Grand Piano (public domain, Akai's release): https://github.com/sfzinstruments/SplendidGrandPiano
+- VCSL (CC0): https://github.com/sgossner/VCSL and https://versilian-studios.com/vcsl/
+- Virtuosity Drums (CC0, Versilian/Karoryfer): https://versilian-studios.com/wp-content/uploads/2023/10/virtuositydrumsmanual.pdf
+- Karoryfer basses (licence to verify in each ZIP; one secondary source says CC BY 3.0):
+  https://www.kvraudio.com/product/growlybass-by-karoryfer , https://bedroomproducersblog.com/2014/08/25/growlybass-free-samples/
+- midi-js-soundfonts licences (FluidR3_GM CC BY 3.0; MusyngKite and FatBoy CC BY-SA 3.0, excluded):
+  https://github.com/gleitz/midi-js-soundfonts
 - MuseScore 4 key signatures palette and Dorico's Key signatures panel: from their handbooks (not fetched this
   session; to verify before P2 is built, rule 7).
