@@ -9,7 +9,7 @@ import {
   Piano,
   ScrollText,
   Settings2,
-  SlidersHorizontal,
+  CirclePlay,
   ShieldCheck,
   ShieldUser,
 } from 'lucide-react'
@@ -76,7 +76,7 @@ export function SettingsList() {
         />
         <RowLink
           title={t('pages.player')}
-          icon={SlidersHorizontal}
+          icon={CirclePlay}
           paint="sky"
           render={<Link to="/settings/player" />}
         />

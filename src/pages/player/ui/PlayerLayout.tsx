@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
-import { Settings2 } from 'lucide-react'
+import { Settings } from 'lucide-react'
 import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
@@ -175,7 +175,7 @@ export function PlayerLayout({
               title={t('settingsPage.open')}
               onClick={onSettings ?? (() => void navigate({ to: '/settings/player' }))}
             >
-              <Settings2 aria-hidden />
+              <Settings aria-hidden />
             </Button>
             <PlayerMore
               music={{ performance, title, tempo: player.tempo }}

@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Cable, Mic, SlidersHorizontal, Volume2 } from 'lucide-react'
+import { Cable, Mic, CirclePlay, Volume2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { selectEditing, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setEditing } from '@/features/set-preference'
@@ -40,7 +40,7 @@ export function EditingGroup() {
       />
       <RowLink
         title={t('settings:pages.player')}
-        icon={SlidersHorizontal}
+        icon={CirclePlay}
         paint="sky"
         render={<Link to="/settings/player" />}
       />

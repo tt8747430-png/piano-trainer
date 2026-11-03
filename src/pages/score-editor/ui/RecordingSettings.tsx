@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Mic, SlidersHorizontal, Volume2 } from 'lucide-react'
+import { Mic, CirclePlay, Volume2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { FloatingBarButton, RowLink } from '@/shared/ui'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
@@ -28,7 +28,7 @@ export function RecordingSettings({ className }: { className?: string }) {
       >
         <RowLink
           title={t('settingsPage.audio')}
-          icon={SlidersHorizontal}
+          icon={CirclePlay}
           paint="sky"
           render={<Link to="/settings/player" />}
         />
