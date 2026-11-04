@@ -4,18 +4,18 @@ import { intervalExample } from '@/features/play-example'
 import { cn } from '@/shared/lib'
 import { INTERVALS, noteFromParam, type NoteParam } from '@/shared/lib/music'
 import { intervalSounds, type IntervalWay } from '@/shared/lib/schedule'
-import { KeyDiagram, type ShownKeys } from '@/shared/ui'
+import type { ShownKeys } from '@/shared/ui'
 import { Play, Square } from 'lucide-react'
-import { rowRange, type RowInterval } from '../model/interval-rows'
+import type { RowInterval } from '../model/interval-rows'
 import { intervalSongs } from '../model/interval-songs'
 import { IntervalSongsTip } from './IntervalSongsTip'
 import { useIntervalName } from './use-interval-name'
 
 /**
- * One interval over the root as the reference app lists it: its short name in soft ink, its name over
- * its size in semitones, the songs it opens behind its ⓘ, and a small keyboard with both keys marked.
- * A tap anywhere else on the card plays it the way chosen above the list (at once, up or down) and
- * shows it on the page's keys; the row playing is lit.
+ * One interval over the root (R29-P12): its short name in soft ink, its name, what it sounds like and
+ * where it is met under it, its size in semitones, and the songs it opens behind its ⓘ. A tap on the
+ * card ("Play minor third") plays it the way Play as chose (ascending, descending or harmonic) and
+ * shows it on the page's keys; the row playing is lit. No keyboard of its own: the page's keys show it.
  */
 export function IntervalRow({
   root,
@@ -40,8 +40,7 @@ export function IntervalRow({
   return (
     <div
       className={cn(
-        // The drawing gives way before the name wraps (A22): it shrinks to 3.5rem on a phone.
-        'card relative grid h-full w-full grid-cols-[minmax(0,1fr)_auto_minmax(3.5rem,5rem)] items-center gap-2 px-3 sm:grid-cols-[minmax(0,1fr)_auto_minmax(5.5rem,8rem)] sm:gap-3 sm:px-4 py-2.5 transition-colors has-[>button:hover]:bg-muted',
+        'card relative grid h-full w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-3 py-2.5 transition-colors has-[>button:hover]:bg-muted sm:gap-3 sm:px-4',
         playing &&
           'border-primary bg-selected text-selected-foreground has-[>button:hover]:bg-selected',
       )}
@@ -49,6 +48,7 @@ export function IntervalRow({
       {/* The card is the button: its face stretched over the card, the ⓘ above it. */}
       <button
         type="button"
+        aria-label={t('practice:intervals.play', { name: title })}
         aria-pressed={playing}
         onClick={() => {
           onShow(example.shown)
@@ -63,17 +63,13 @@ export function IntervalRow({
         <span className="font-semibold text-muted-foreground">{short}</span>
         <span className="flex min-w-0 flex-col">
           <span className="font-semibold">{title}</span>
+          <span className="text-sm text-pretty">{t(`practice:intervals.meaning.${name}`)}</span>
           <span className="text-sm text-muted-foreground">
             {t('practice:intervals.semitones', { count: INTERVALS[name].semitones })}
           </span>
         </span>
       </button>
       {songs ? <IntervalSongsTip name={title} songs={songs} /> : <span />}
-      <KeyDiagram
-        keys={[example.low, example.high]}
-        range={rowRange(example.low)}
-        label={t('practice:intervals.keys', { name: title })}
-      />
     </div>
   )
 }

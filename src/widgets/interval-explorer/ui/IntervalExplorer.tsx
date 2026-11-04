@@ -16,12 +16,13 @@ import { usePlayback } from '@/shared/lib/services'
 import {
   FloatingActions,
   FloatingBar,
-  FloatingBarButton,
   FloatingBarPlay,
   FoldGroup,
+  Labelled,
   PitchPicker,
   RowGroup,
   RowLink,
+  Segmented,
   usualName,
   type ShownKeys,
 } from '@/shared/ui'
@@ -51,27 +52,32 @@ export function IntervalExplorer({
   return (
     <div className="flex flex-col gap-6">
       <PinnedKeyboard shown={shown} />
-      <div>
+      {/* The page's head: the root, and how every row plays (R29-P12): words, not icons alone. */}
+      <div className="flex flex-wrap items-end gap-x-6 gap-y-3">
         <PitchPicker
           label={t('root')}
           value={pitchClassOf(noteFromParam(view.root))}
           onChange={(pc) => onChange({ root: noteParam(usualName(pc)) })}
         />
+        <div className="min-w-0 flex-1 sm:max-w-md">
+          <Labelled label={t('intervals.playAs')}>
+            <Segmented
+              label={t('intervals.playAs')}
+              value={view.way}
+              options={INTERVAL_PLAY_WAYS.map((way) => ({
+                value: way,
+                label: t(`intervals.way.${way}`),
+                icon: <WayPicture way={way} />,
+              }))}
+              onChange={(way) => onChange({ way })}
+            />
+          </Labelled>
+        </div>
       </div>
       <FloatingActions>
         <FloatingBar label={t('transport')}>
-          {INTERVAL_PLAY_WAYS.map((way) => (
-            <FloatingBarButton
-              key={way}
-              label={t(`intervals.way.${way}`)}
-              aria-pressed={view.way === way}
-              className="aria-pressed:bg-selected aria-pressed:text-selected-foreground"
-              onClick={() => onChange({ way })}
-            >
-              <WayPicture way={way} />
-            </FloatingBarButton>
-          ))}
           <FloatingBarPlay
+            named
             label={t('intervals.playAll')}
             playing={playback.playing === 'all'}
             onClick={() =>

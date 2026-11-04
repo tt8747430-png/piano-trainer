@@ -2,10 +2,7 @@ import { intervalExample, writesInterval } from '@/features/play-example'
 import {
   INTERVAL_GROUP_IDS,
   INTERVAL_GROUPS,
-  midi,
   type IntervalGroup,
-  type KeyRange,
-  type Midi,
   type ReferenceInterval,
   type SpelledNote,
 } from '@/shared/lib/music'
@@ -26,9 +23,6 @@ export const INTERVAL_ROWS: Readonly<Record<IntervalGroup, readonly RowInterval[
   compound: INTERVAL_GROUPS.compound,
 }
 
-/** How many keys every row draws, so all are drawn at one size (A22): enough for the widest interval. */
-const SPAN = 28
-
 /** The time from one interval's start to the next as Play all plays them. */
 export const EVERY_INTERVAL_GAP = 2
 
@@ -46,14 +40,4 @@ export function everyInterval(root: SpelledNote, way: IntervalWay): NoteSound[] 
         at: sound.at + i * EVERY_INTERVAL_GAP,
       }))
     })
-}
-
-/**
- * The keys a row draws, as many for every row of its group: from the C or the F at or under the root,
- * whichever is nearer, so the root stands near the left and the widest interval still fits.
- */
-export function rowRange(low: Midi): KeyRange {
-  const inOctave = low % 12
-  const from = low - (inOctave < 5 ? inOctave : inOctave - 5)
-  return { from: midi(from), to: midi(from + SPAN - 1) }
 }

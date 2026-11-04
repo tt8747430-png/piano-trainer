@@ -17,51 +17,62 @@ describe('Practice → Intervals', () => {
   it('lists a row for every interval, the tritone as A4 and d5 apart, each group folding as the learner leaves it', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/practice/intervals')
-    const simple = await screen.findByRole('region', { name: 'Within the octave' })
+    const simple = await screen.findByRole('region', { name: 'Simple intervals' })
+    // Each row named by what it plays, its meaning under its name (R29-P12).
     expect(
       within(simple)
         .getAllByRole('button', { pressed: false })
-        .map((each) => each.textContent),
+        .map((each) => each.getAttribute('aria-label')),
     ).toEqual([
-      'P1Unison0 semitones',
-      'm2Minor second1 semitone',
-      'M2Major second2 semitones',
-      'm3Minor third3 semitones',
-      'M3Major third4 semitones',
-      'P4Perfect fourth5 semitones',
-      'A4Augmented fourth6 semitones',
-      'd5Diminished fifth6 semitones',
-      'P5Perfect fifth7 semitones',
-      'm6Minor sixth8 semitones',
-      'M6Major sixth9 semitones',
-      'm7Minor seventh10 semitones',
-      'M7Major seventh11 semitones',
-      'P8Octave12 semitones',
+      'Play Unison',
+      'Play Minor second',
+      'Play Major second',
+      'Play Minor third',
+      'Play Major third',
+      'Play Perfect fourth',
+      'Play Augmented fourth',
+      'Play Diminished fifth',
+      'Play Perfect fifth',
+      'Play Minor sixth',
+      'Play Major sixth',
+      'Play Minor seventh',
+      'Play Major seventh',
+      'Play Octave',
     ])
-    expect(screen.getByRole('img', { name: 'Minor third on the keys' })).toBeInTheDocument()
-    const compound = screen.getByRole('region', { name: 'Past the octave' })
+    expect(row('Minor third')).toHaveTextContent(
+      'm3Minor thirdThe 3rd of a minor chord: darker.3 semitones',
+    )
+    // No keyboard of its own: the page's keys show it.
+    expect(screen.queryByRole('img', { name: /on the keys$/ })).not.toBeInTheDocument()
+    const compound = screen.getByRole('region', { name: 'Compound intervals' })
     expect(
-      within(compound).getByRole('button', { name: /^A9 ?Augmented ninth/ }),
+      within(compound).getByRole('button', { name: 'Play Augmented ninth' }),
     ).toHaveTextContent('15 semitones')
     // Folded, as the other explorers' sections: saved in the settings, for every visit.
-    await user.click(within(compound).getByRole('button', { name: 'Past the octave' }))
-    expect(within(compound).getByRole('button', { name: 'Past the octave' })).toHaveAttribute(
+    await user.click(within(compound).getByRole('button', { name: 'Compound intervals' }))
+    expect(within(compound).getByRole('button', { name: 'Compound intervals' })).toHaveAttribute(
       'aria-expanded',
       'false',
     )
     expect(settingsStore.getState().foldedSections).toContain('intervals.compound')
   })
 
-  it('plays a row tapped harmonically or melodically as the transport says, kept in the URL, and shows it on the keys', async () => {
+  it('plays a row tapped as Play as says, Ascending · Descending · Harmonic, kept in the URL, and shows it on the keys (R29-P12)', async () => {
     const user = userEvent.setup()
     const { audio, router } = await renderApp('/practice/intervals')
-    // The way it plays is the floating transport's, not a control in the page (A22).
-    expect(screen.queryByRole('radiogroup', { name: 'Play' })).not.toBeInTheDocument()
-    const way = await screen.findByRole('toolbar', { name: 'Transport' })
-    expect(within(way).getByRole('button', { name: 'Harmonic' })).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    )
+    // How every row plays, in words at the page's head; the transport holds Play all alone.
+    const way = await screen.findByRole('radiogroup', { name: 'Play as' })
+    expect(
+      within(way)
+        .getAllByRole('radio')
+        .map((each) => each.textContent),
+    ).toEqual(['Ascending', 'Descending', 'Harmonic'])
+    expect(within(way).getByRole('radio', { name: 'Harmonic' })).toBeChecked()
+    expect(
+      within(screen.getByRole('toolbar', { name: 'Transport' }))
+        .getAllByRole('button')
+        .map((each) => each.textContent),
+    ).toEqual(['Play all'])
     await user.click(row('Minor third'))
     expect(timed(audio.played.at(-1)?.sounds)).toEqual([
       [60, 0],
@@ -70,7 +81,7 @@ describe('Practice → Intervals', () => {
     expect(row('Minor third')).toHaveAttribute('aria-pressed', 'true')
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'D sharp 4' })).toHaveTextContent('♭3')
-    await user.click(within(way).getByRole('button', { name: 'Melodic, rising' }))
+    await user.click(within(way).getByRole('radio', { name: 'Ascending' }))
     expect(router.state.location.search).toEqual({ way: 'up' })
     await user.click(row('Minor third'))
     await user.click(row('Minor third'))
@@ -78,7 +89,7 @@ describe('Practice → Intervals', () => {
       [60, 0],
       [63, 0.6],
     ])
-    await user.click(within(way).getByRole('button', { name: 'Melodic, falling' }))
+    await user.click(within(way).getByRole('radio', { name: 'Descending' }))
     await user.click(row('Perfect fifth'))
     expect(timed(audio.played.at(-1)?.sounds)).toEqual([
       [67, 0],
@@ -100,7 +111,7 @@ describe('Practice → Intervals', () => {
     // The ⓘ opens the songs and plays nothing.
     expect(audio.played).toEqual([])
     // Past the octave no song is known by its interval.
-    const compound = screen.getByRole('region', { name: 'Past the octave' })
+    const compound = screen.getByRole('region', { name: 'Compound intervals' })
     expect(within(compound).queryByRole('button', { name: /^About/ })).toBeNull()
   })
 
@@ -124,7 +135,7 @@ describe('Practice → Intervals', () => {
 
   it('marks each row as one that plays', async () => {
     await renderApp('/practice/intervals')
-    expect(await screen.findByText('Within the octave')).toBeInTheDocument()
+    expect(await screen.findByText('Simple intervals')).toBeInTheDocument()
     expect(row('Minor third').querySelector('[data-play-mark]')).not.toBeNull()
   })
 
@@ -151,8 +162,8 @@ describe('Practice → Intervals', () => {
   it('speaks Russian', async () => {
     await renderApp('/practice/intervals', { locale: 'ru' })
     expect(await screen.findByRole('heading', { level: 1, name: 'Интервалы' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /^м3 ?Малая терция/ })).toHaveTextContent('м3')
-    expect(screen.getByRole('button', { name: /^ум5 ?Уменьшённая квинта/ })).toHaveTextContent(
+    expect(screen.getByRole('button', { name: 'Сыграть: Малая терция' })).toHaveTextContent('м3')
+    expect(screen.getByRole('button', { name: 'Сыграть: Уменьшённая квинта' })).toHaveTextContent(
       'ум5',
     )
     await userEvent.setup().click(screen.getByRole('button', { name: 'Подробнее: Большая секста' }))

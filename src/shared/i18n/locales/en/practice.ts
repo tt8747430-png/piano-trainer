@@ -215,11 +215,37 @@ export const practice = {
     keyProgressions: 'Progressions in this key',
   },
   intervals: {
-    simple: 'Within the octave',
-    compound: 'Past the octave',
-    // How a row plays its interval.
-    // How a row plays its interval, as theory books name it (A22).
-    way: { together: 'Harmonic', up: 'Melodic, rising', down: 'Melodic, falling' },
+    simple: 'Simple intervals',
+    compound: 'Compound intervals',
+    // How every row plays its interval, as ear-training apps and exam syllabi name it (R29-P12).
+    playAs: 'Play as',
+    way: { together: 'Harmonic', up: 'Ascending', down: 'Descending' },
+    play: 'Play {{name}}',
+    // What each interval sounds like and where it is met, its row's second line (R29-P12).
+    meaning: {
+      r: 'The same note twice.',
+      m2: 'A half step: the tightest clash, the leading note to the tonic.',
+      M2: 'A whole step: one step of the scale.',
+      m3: 'The 3rd of a minor chord: darker.',
+      M3: 'The 3rd of a major chord: brighter.',
+      P4: 'Open and stable: the subdominant over the tonic.',
+      A4: 'The tritone: three whole steps, the tension in a dominant 7th.',
+      d5: 'The tritone spelled as a 5th: the 5th of a diminished chord.',
+      P5: 'The most open consonance: the root and 5th of every triad.',
+      m6: 'Soft and sad: a major 3rd turned upside down.',
+      M6: 'Warm and open: a minor 3rd turned upside down.',
+      m7: 'The 7th of a dominant chord: it wants to resolve.',
+      M7: 'A half step under the octave: the 7th of a major 7th chord.',
+      P8: 'The same note an octave higher.',
+      m9: 'A minor 2nd an octave higher: the ♭9 of a dominant chord.',
+      M9: 'A major 2nd an octave higher: the 9th of a chord.',
+      A9: 'An augmented 2nd an octave higher: the #9 of a blues dominant.',
+      P11: 'A 4th an octave higher: the 11th of a chord.',
+      A11: 'An augmented 4th an octave higher: the #11 of a Lydian chord.',
+      m13: 'A minor 6th an octave higher: the ♭13 of a dominant chord.',
+      M13: 'A major 6th an octave higher: the 13th of a chord.',
+    },
+
     playAll: 'Play all',
     // Ear training is the Quiz's: the page links there.
     ear: 'Train your ear',
@@ -234,7 +260,6 @@ export const practice = {
       A4: { name: 'Augmented fourth', short: 'A4' },
       d5: { name: 'Diminished fifth', short: 'd5' },
     },
-    keys: '{{name}} on the keys',
     // The songs an interval opens, behind its row's ⓘ (the unison's one list).
     songs: 'Songs',
   },
