@@ -74,6 +74,23 @@ rounds 2–5 were built: the prompt's order was not kept. From here the order is
 | B10 | Customisable bars, as memory-palaces does | 12 | open | | |
 | B11 | Tools, as a group of their own | 13 | open | | |
 
+## Where we are (2026-11-04, night): Chord player merged, Part B started — main c0c4566e
+
+Full suite 7355 tests (one stray mark fixed after), build green; pushed to the branch and main.
+
+- **Merged:** the Chord player (CP1–CP6, its agent's report `.scratch/r29/briefs/chord-player-report.md`);
+  migration `chord_sheets` applied to the project, access checked (own 1, other 0, changed 0, anon refused).
+- **B5 done:** Admin's bar has View as a learner (opens Learn); walk test of editor controls; a reload ends it.
+- **B7 done:** editor Note input — Input mode on opening, Palette side (pt-settings v21); Player Display — Clef
+  for a single-staff song (`?clef=`, `withClef`); the Player's Settings row to On-screen piano.
+- **B6/B2 part:** the rights checkbox (D3 words, Terms link) gates Publish; Unpublish asks first.
+- **B4 part:** `entities/library/model/permissions.ts` (`can`, D8's table, tested); not yet wired into Songs.
+- **Left of Part B:** B4 wiring, Archived (n), level/Courses Edit modes; B2 copy inventory, legal rewrite, empty
+  states and ⓘ texts; B6 one Publish page for all five kinds; B3, B1, B9 (need their migrations), B8, B10, B11,
+  B2 part 2. Rounds 3–4: A26, A28 rest, A29, A34, A40, A37, T remainder; P15, P7/P9 bits.
+- **Rulings:** Clef shown only for a lead sheet of one staff (a grand staff keeps Original, card hidden); Palette
+  side choice hidden under 48rem (the phone's palette is a sheet); the rights tick clears after each publish.
+
 ## Where we are (2026-11-04, evening): Practice redesign, ST17, T
 
 **On the branch (and main up to `1d1beb72`):** P1 (one bar height, switcher, Segmented/Source/Section menus),
