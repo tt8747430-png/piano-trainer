@@ -14,17 +14,13 @@ Fill in the brackets and paste everything below the line into a new session on `
 - Read `CLAUDE.md` and load the `owner-way` skill, then read [the ADRs and files that apply].
 - **Done so far:** [what is built and merged].
 - **In progress:** [what is started, with its commit or file, and what is checked and what is not].
-- **Tried and failed:** [what was tried and why it didn't work, so it isn't tried again].
+- **Tried and failed:** [what was tried and why it didn't work, so it you try correctly and better.].
 
 ## Task
 
 1. [The main task, concrete and checkable, with the files and components involved.]
 2. [The next one.]
 
-## Constraints
-
-- [What must not change, e.g. the phone held upright and the laptop must stay as they are.]
-- **Open decisions are the owner's:** [list them]. Don't change these without asking.
 
 ## Done means
 
@@ -34,4 +30,4 @@ Fill in the brackets and paste everything below the line into a new session on `
 
 ## Report
 
-What you did, what you left and why, and the owner's decisions.
+What you did, nothing should be left, continue and take best decissions.  

@@ -16,12 +16,12 @@ Review and improve Piano Trainer round after round, starting from the ground up,
 2. Review it for:
    - **Bugs:** verify each finding with a concrete failure scenario before fixing it.
    - **UI:**
-     - an iPhone held upright (390×844 and 320×568);
-     - an iPhone on its side (844×390), which must be as reliable and easy as the others;
-     - a laptop (1280×800).
+     - an iPhone held upright (check the real  14 Pro app sizes in PWA Mode and in Safari mode);
+     - an iPhone on its side (check the real  14 Pro app sizes in PWA Mode and in Safari mode), which must be as reliable and easy as the others;
+     - a laptop (check the real  MacBook Air M3 15 Inch  app sizes. check the real sizes and real safari sizes ).
    - **Consistency** with the rest of the app.
    - **Music theory** content in English and Russian.
-   - **AI-sounding text**, rewritten plainly.
+   - **AI-sounding text**, rewritten professionally .
 3. Fix every confirmed bug yourself, test first. Improve the area: you may refactor anything, change the UI and the architecture, and add features. Implement what is missing rather than leaving it out.
 4. Do the work yourself. Only a large, separable part that can be briefed in under a page goes to an agent (two or three at most, a cheap model for reading); see the owner-way skill's maximum principle.
 
@@ -30,7 +30,7 @@ Review and improve Piano Trainer round after round, starting from the ground up,
 - No backwards compatibility, legacy leftovers, workarounds or unfinished work. Saved user data need not survive; the built-in content must keep working.
 - Ignore Vercel deployment and CI status. CI runs only by hand.
 - Run the full test suite once a round, on the merged branch, never after each edit.
-- Keep the conversation under about 300k tokens. Size each round so it fits.
+- Keep the conversation under about 450K tokens. Size each round so it fits.
 
 ## Done means, each round
 
@@ -45,8 +45,7 @@ Review and improve Piano Trainer round after round, starting from the ground up,
 Briefly:
 
 - what you fixed;
-- what you left, and why;
-- which decisions are the owner's;
-- the running list of areas reviewed and areas left.
+- nothings should be left
+- the running list of areas reviewed and no areas should be left.
 
-If the usage limit stops you, resume when the owner says "continue".
+If the usage limit stops you, resume automatically after the usage is reseted.

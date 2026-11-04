@@ -1,7 +1,7 @@
 # Code Style
 
 How code is written here. [CLAUDE.md](../CLAUDE.md) has the layers and the change rules; [DESIGN.md](../DESIGN.md)
-has the look; [UBIQUITOUS_LANGUAGE.md](UBIQUITOUS_LANGUAGE.md) has the names. Each rule below points at code that
+has the look; Each rule below points at code that
 already follows it: match that shape. Why a rule exists is in the ADRs (`docs/adr/`, index in its README).
 
 ## 1. Components
@@ -201,12 +201,13 @@ exposed as utilities by `@theme inline` in `src/styles/theme.css`.
 - Note and chord names are the same in both languages (B, not H).
 - Keys are words, never numbers (`inversion.first`): typed keys cannot address `inversion.1`.
 - A count goes after a colon ("Chords to check: 2"): plurals cannot be typed against English.
+- Write professionally in a professional way with professional words. 
 
 ## 11. Layout and mobile
 
 - **Mobile first:** the base style is the phone; layer up with `sm:` and `lg:`. Custom variants in `theme.css`:
   `landscape-phone:` (a phone on its side), `small-phone:` (under 390px), `narrow-phone:` (under 360px).
-- **Check four sizes:** 390×844 and 320×568 upright, 844×390 on its side, 1280×800 a laptop. Same features, words and
+- **Check four sizes:** check the real  14 Pro app sizes in PWA Mode and in Safari mode, check the real  MacBook Air M3 15 Inch  app sizes. check the real sizes and real safari sizes . Same features, words and
   layout logic at each. Nothing clipped, overflowing or wrapping badly at 320px.
 - **A screen takes the width it is given.** No `max-w-*` on a screen. Its gutter is `px-gutter` (bleed with
   `-mx-gutter`); lists are `grid-cards`, fields `grid-fields`, chord buttons `grid-chords`.
@@ -224,7 +225,7 @@ exposed as utilities by `@theme inline` in `src/styles/theme.css`.
 - **Keys:** a screen's shortcut is one `useShortcuts` call beside what it drives, never a `keydown` listener of its
   own. A letter alone is the piano's (typing), so a shortcut takes a named key or a letter typing leaves free.
 - **The installed app is an app:** zoom is locked only when installed; text is unselectable outside fields; no
-  callout, no overscroll, no double-tap wait. A new text field needs nothing (`input`, `textarea` select again).
+  callout, no overscroll, no double-tap wait. A new text field needs nothing (`input`, `textarea` select again) and no magnifier in no cases..
 
 ## 12. Motion
 
