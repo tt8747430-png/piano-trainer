@@ -1,8 +1,9 @@
 import { selectKeyboard, useSettings } from '@/entities/settings'
-import { AudioLines, Square } from 'lucide-react'
+import { Square } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
+import { ArpeggioIcon } from '@/shared/ui/icons/ArpeggioIcon'
 import { chordShown, noteOnTop, useShownKeys } from '@/features/play-example'
 import { useKeyName } from '@/shared/i18n'
 import { partsFromParams, partsParams } from '@/shared/lib'
@@ -171,19 +172,27 @@ export function ChordExplorer({
         />
       ) : null}
       <FloatingActions>
-        <FloatingBar label={t('practice:transport')}>
-          <FloatingBarButton
-            label={playback.playing === 'arpeggio' ? t('common:stop') : t('practice:arpeggio')}
-            aria-pressed={playback.playing === 'arpeggio'}
-            onClick={() => sound('arpeggio')}
-          >
-            {playback.playing === 'arpeggio' ? <Square aria-hidden /> : <AudioLines aria-hidden />}
-          </FloatingBarButton>
+        {/* Two ways to hear one chord, each named (R29-P4): Play, the notes together; Arpeggio, one
+            after another from the bottom up. */}
+        <FloatingBar label={t('practice:transport')} className="gap-1.5 pr-1.5">
           <FloatingBarPlay
+            named
             label={t('music:play')}
             playing={playback.playing === 'chord'}
             onClick={() => sound('chord')}
           />
+          <FloatingBarButton
+            named
+            label={playback.playing === 'arpeggio' ? t('common:stop') : t('practice:arpeggio')}
+            aria-pressed={playback.playing === 'arpeggio'}
+            onClick={() => sound('arpeggio')}
+          >
+            {playback.playing === 'arpeggio' ? (
+              <Square aria-hidden />
+            ) : (
+              <ArpeggioIcon aria-hidden />
+            )}
+          </FloatingBarButton>
         </FloatingBar>
       </FloatingActions>
     </div>

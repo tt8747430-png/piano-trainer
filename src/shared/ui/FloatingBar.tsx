@@ -56,6 +56,8 @@ export function FloatingBar({
 /** A bar's control gives under the finger as a floating button does. */
 const BAR_BUTTON =
   'size-12 rounded-pill transition-[scale,background-color] duration-150 ease-out active:scale-96'
+/** A control that shows its name beside its icon (Chords' Play and Arpeggio, R29-P4): a pill. */
+const WITH_NAME = 'w-auto gap-2 px-4 text-base font-semibold'
 /** The bar's honey Play: the main floating button's size, lifted a little off the pill. */
 const BAR_PLAY =
   'size-14 rounded-pill elevation-1 hover:brightness-95 [&_svg:not([class*=size-])]:size-6 transition-[scale,filter] duration-150 ease-out active:scale-96'
@@ -69,12 +71,15 @@ export function FloatingBarButton({
   label,
   title,
   render,
+  named = false,
   className,
   children,
   ...props
 }: {
   label: string
   title?: string
+  /** Its name shown beside its icon, where an icon alone was not understood. */
+  named?: boolean
   /** A link in place of a button. */
   render?: useRender.RenderProp
   children: ReactNode
@@ -99,12 +104,13 @@ export function FloatingBarButton({
     <Button
       variant="ghost"
       size="icon"
-      aria-label={label}
+      aria-label={named ? undefined : label}
       title={title ?? label}
-      className={cn(BAR_BUTTON, className)}
+      className={cn(BAR_BUTTON, named && WITH_NAME, className)}
       {...props}
     >
       {children}
+      {named ? label : null}
     </Button>
   )
 }
@@ -117,6 +123,7 @@ export function FloatingBarPlay({
   label,
   title,
   playing,
+  named = false,
   disabled = false,
   className,
   onClick,
@@ -124,6 +131,8 @@ export function FloatingBarPlay({
   label: string
   title?: string
   playing: boolean
+  /** Its name ("Play", "Stop") shown beside its icon. */
+  named?: boolean
   /** Its size where a screen needs it smaller: the transport's 48px under 360px. */
   className?: string
   /** Waiting on something else first (the editor's Play while a take records). */
@@ -136,14 +145,15 @@ export function FloatingBarPlay({
   return (
     <Button
       size="icon"
-      aria-label={name}
+      aria-label={named ? undefined : name}
       title={title ?? name}
       aria-pressed={playing}
       disabled={disabled}
       onClick={onClick}
-      className={cn(BAR_PLAY, className)}
+      className={cn(BAR_PLAY, named && `${WITH_NAME} pr-5`, className)}
     >
       <Icon aria-hidden />
+      {named ? name : null}
     </Button>
   )
 }

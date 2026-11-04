@@ -114,8 +114,12 @@ describe('Practice → Chords', () => {
   it('plays from one transport capsule', async () => {
     await renderApp('/practice/chords')
     const transport = await screen.findByRole('toolbar', { name: 'Transport' })
-    expect(within(transport).getByRole('button', { name: 'Arpeggio' })).toBeInTheDocument()
-    expect(within(transport).getByRole('button', { name: 'Play' })).toBeInTheDocument()
+    // Each named in words beside its icon, Play first (R29-P4).
+    expect(
+      within(transport)
+        .getAllByRole('button')
+        .map((button) => button.textContent),
+    ).toEqual(['Play', 'Arpeggio'])
   })
 
   it('rolls an arpeggio, putting down only the key struck last, every chord tone kept', async () => {
