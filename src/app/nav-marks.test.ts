@@ -19,6 +19,8 @@ const ALLOWED = [
   'widgets/practice-player/ui/Transport.tsx',
   'widgets/lesson-view/ui/LessonView.tsx',
   'pages/lesson/ui/LessonLayout.tsx',
+  // The Streak calendar's month back and on.
+  'widgets/practice-days/ui/PracticeCalendar.tsx',
 ]
 
 function sources(dir: string): string[] {

@@ -35,7 +35,7 @@ export function PedalBar({ sustain, sostenuto, soft }: PedalsDown) {
           data-pedal={pedal}
           data-down={down[pedal]}
           className={cn(
-            'grid flex-1 place-items-center rounded-sm text-[10px] leading-none font-semibold transition-colors duration-150 motion-reduce:transition-none',
+            'grid flex-1 place-items-center rounded-control text-[10px] leading-none font-semibold transition-colors duration-150 motion-reduce:transition-none',
             down[pedal] ? 'bg-ring text-background' : 'bg-transparent text-transparent',
           )}
         >

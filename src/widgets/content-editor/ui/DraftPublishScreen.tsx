@@ -1,4 +1,4 @@
-import { ChevronRight, History } from 'lucide-react'
+import { History } from 'lucide-react'
 import { useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VersionsDialog, type ContentDraft, type Unreadable } from '@/features/edit-original'
@@ -7,7 +7,7 @@ import type { ContentKind } from '@/shared/api/content'
 import type { NetResult } from '@/shared/api/network'
 import { useAccount, editsContent } from '@/shared/lib/account'
 import { useContentEditing } from '@/shared/lib/content-editing'
-import { ButtonLink, ConfirmDialog, InfoTip, say, ScreenHeader } from '@/shared/ui'
+import { ButtonLink, ConfirmDialog, InfoTip, OpensMark, say, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useStanding } from '../model/use-standing'
 import { NotOpen } from './DraftScreen'
@@ -142,7 +142,7 @@ export function DraftPublishScreen<T>({
                     <History aria-hidden />
                     {t('publishPage.versions')}
                   </span>
-                  <ChevronRight aria-hidden />
+                  <OpensMark />
                 </Button>
               </section>
             ) : null}

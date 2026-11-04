@@ -1,7 +1,7 @@
-import { ArrowDownUp, ChevronLeft, SearchX } from 'lucide-react'
+import { ArrowDownUp, SearchX } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { PublicSort } from '@/shared/api/public-library'
-import { CardGrid, Dropdown, Said } from '@/shared/ui'
+import { BackMark, CardGrid, Dropdown, Said } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { ExploreCard } from '@/widgets/song-preview'
 import { EXPLORE_SHELVES, type SongsHome } from '../model/explore-view'
@@ -34,7 +34,7 @@ export function ExploreResults({
       <div className="flex min-h-9 items-center justify-between gap-2">
         {home.shelf && !query ? (
           <Button variant="ghost" className="-ml-3" onClick={onShelves}>
-            <ChevronLeft aria-hidden />
+            <BackMark />
             {t('explore.shelvesBack')}
           </Button>
         ) : (
