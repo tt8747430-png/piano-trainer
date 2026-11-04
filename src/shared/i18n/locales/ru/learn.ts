@@ -34,6 +34,8 @@ export const learn: LocaleResources['learn'] = {
     done: 'Сегодня вы уже занимались.',
     practised: '{{day}}: занимались',
     missed: '{{day}}: не занимались',
+    previous: 'Предыдущий месяц',
+    next: 'Следующий месяц',
   },
   kind: {
     lesson: 'Урок',

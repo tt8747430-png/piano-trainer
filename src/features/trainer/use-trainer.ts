@@ -1,7 +1,7 @@
 import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import { useProgressStoreApi, type RunKey } from '@/entities/progress'
 import { recordAnswer } from '@/features/record-answer'
-import { recordDay } from '@/features/record-practised'
+import { recordDay, usePracticeClock } from '@/features/record-practised'
 import { recordRun } from '@/features/record-run'
 import type { Midi } from '@/shared/lib/music'
 import { usePlay, usePlayback, useServices } from '@/shared/lib/services'
@@ -102,6 +102,7 @@ export function useTrainer(asks: Asks, options: TrainerOptions): TrainerRun {
     setRun(next.run)
   }
 
+  const practiceClock = usePracticeClock(false)
   const send = (event: RoundEvent) => {
     const before = current.current
     const after = roundReducer(before.round, event)
@@ -116,6 +117,8 @@ export function useTrainer(asks: Asks, options: TrainerOptions): TrainerRun {
     if (!answered) return
     const answeredAt = new Date()
     recordDay(store, answeredAt)
+    // The time practised (B1): each answer, and the thinking up to it.
+    practiceClock.touch()
     const answer = answerOf(after)
     if (answer) recordAnswer(store, answer, answeredAt)
     if (!heardFirst(after.question)) play(roundSounds(after.question))

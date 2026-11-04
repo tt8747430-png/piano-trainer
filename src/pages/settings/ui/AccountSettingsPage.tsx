@@ -1,23 +1,22 @@
 import { Link } from '@tanstack/react-router'
-import { KeyRound, LogIn, Mail, UserRoundPlus } from 'lucide-react'
-import { useState } from 'react'
+import { KeyRound, LogIn, Mail, ShieldCheck, UserRoundPlus } from 'lucide-react'
+import { useReducer, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
 import { useOnline, useUp } from '@/shared/lib'
-import { authProblem, useAccount, type AuthProblem } from '@/shared/lib/account'
+import { authProblem, useAccount, useLearnerProfile } from '@/shared/lib/account'
 import {
   Avatar,
   ConfirmDialog,
   DangerGroup,
   DangerRow,
-  FormField,
   RowFace,
   RowLink,
   say,
   SettingsGroup as Group,
 } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
 import { SettingsScreen } from '@/widgets/settings-screen'
+import { DELETE_CLOSED, deleteAccountMachine } from '../model/delete-account-machine'
 import { SyncGroup } from './SyncGroup'
 
 /**
@@ -28,19 +27,14 @@ import { SyncGroup } from './SyncGroup'
  * its footnote. A guest is offered Sign in and Create an account.
  */
 export function AccountSettingsPage() {
-  const { t } = useTranslation('settings')
+  const { t } = useTranslation(['settings', 'account'])
   const { account } = useAccount()
   const [scheduled, setScheduled] = useState<string | null>(null)
   return (
     <SettingsScreen title={t('accountPage.title')}>
       {account ? (
         <>
-          <div className="flex flex-col items-center gap-3 pt-2 text-center">
-            <Avatar name={account.name || account.email} size="hero" />
-          </div>
-          <Group title={t('accountPage.profileGroup')}>
-            <NameForm key={account.id} name={account.name} />
-          </Group>
+          <ProfileRow />
           <Group flush>
             {/* The email under its name, broken anywhere a long one must be to fit a phone. */}
             <div className="flex min-h-16 items-center gap-3 py-2 pr-3 pl-2 wrap-anywhere">
@@ -55,12 +49,18 @@ export function AccountSettingsPage() {
               title={t('accountPage.password')}
               icon={KeyRound}
               paint="sand"
-              render={<Link to="/account/new-password" />}
+              render={<Link to="/settings/account/password" />}
+            />
+            <RowLink
+              title={t('account:privacy.title')}
+              icon={ShieldCheck}
+              paint="grass"
+              render={<Link to="/settings/privacy" />}
             />
           </Group>
           <SyncGroup />
           <SignOut />
-          <DeleteAccount email={account.email} onScheduled={setScheduled} />
+          <DeleteAccount onScheduled={setScheduled} />
         </>
       ) : (
         <Guest scheduled={scheduled} />
@@ -105,58 +105,22 @@ function Guest({ scheduled }: { scheduled: string | null }) {
   )
 }
 
-/** The learner's name, saved to their account: Save beside it once it is changed. */
-function NameForm({ name: saved }: { name: string }) {
-  const { t } = useTranslation(['settings', 'account'])
-  const { auth } = useAccount()
-  const online = useOnline()
-  const [name, setName] = useState(saved)
-  const [last, setLast] = useState(saved)
-  const [state, setState] = useState<'idle' | 'busy' | 'saved' | AuthProblem>('idle')
-  const save = async () => {
-    setState('busy')
-    const result = await auth.updateName(name.trim())
-    if (result.ok) setLast(name.trim())
-    setState(result.ok ? 'saved' : authProblem(result))
-  }
-  const changed = name.trim() !== '' && name.trim() !== last
-  const problem = state !== 'idle' && state !== 'busy' && state !== 'saved' ? state : null
+/** The learner's picture and name, the page's first row: Edit profile (B1). */
+function ProfileRow() {
+  const { t } = useTranslation('account')
+  const { account } = useAccount()
+  const { state } = useLearnerProfile()
+  const profile = state.kind === 'ready' ? state.profile : null
+  const name = profile?.name || account?.name || account?.email || ''
   return (
-    <form
-      noValidate
-      className="flex flex-col gap-2"
-      onSubmit={(event) => {
-        event.preventDefault()
-        if (changed) void save()
-      }}
-    >
-      <div className="flex items-end gap-2">
-        <FormField
-          className="min-w-0 flex-1"
-          label={t('accountPage.profile')}
-          autoComplete="name"
-          value={name}
-          onChange={(event) => {
-            setName(event.target.value)
-            setState('idle')
-          }}
-          error={name.trim() === '' ? t('account:invalid.name') : undefined}
-        />
-        {changed ? (
-          <Button type="submit" size="lg" className="h-12" disabled={!online || state === 'busy'}>
-            {t('accountPage.save')}
-          </Button>
-        ) : null}
-      </div>
-      <p role="status" className="text-sm text-muted-foreground empty:hidden">
-        {state === 'saved' ? t('accountPage.saved') : ''}
-      </p>
-      {problem === null ? null : (
-        <p role="alert" className="text-sm text-destructive">
-          {t(`account:problem.${problem}`)}
-        </p>
-      )}
-    </form>
+    <Group flush>
+      <RowLink
+        mark={<Avatar name={name} picture={profile?.avatar ?? null} size="row" />}
+        title={name}
+        detail={t('editProfile.title')}
+        render={<Link to="/settings/account/profile" />}
+      />
+    </Group>
   )
 }
 
@@ -186,38 +150,38 @@ function SignOut() {
  * Delete account… (R25): the page's last group, a red row, its 30 days' grace in the footnote; the
  * learner types their email to confirm (R17), and the deletion is scheduled.
  */
-function DeleteAccount({
-  email,
-  onScheduled,
-}: {
-  email: string
-  onScheduled: (purgeAfter: string) => void
-}) {
+function DeleteAccount({ onScheduled }: { onScheduled: (purgeAfter: string) => void }) {
   const { t } = useTranslation(['settings', 'account'])
   const { auth } = useAccount()
   const online = useOnline()
-  const [open, setOpen] = useState(false)
+  const [state, send] = useReducer(deleteAccountMachine, DELETE_CLOSED)
   const remove = async () => {
+    send({ type: 'confirm', online })
+    if (!online) return say(t('account:problem.offline'))
     const result = await auth.requestDeletion()
-    if (!result.ok) return say(t(`account:problem.${authProblem(result)}`))
-    onScheduled(result.value.purgeAfter)
+    if (result.ok) {
+      send({ type: 'deleted', purgeAfter: result.value.purgeAfter })
+      return onScheduled(result.value.purgeAfter)
+    }
+    send({ type: 'refused', reason: result.reason })
+    say(t(`account:problem.${authProblem(result)}`))
   }
   return (
     <DangerGroup footnote={t('accountPage.delete.footnote')}>
       <DangerRow
         title={t('accountPage.delete.button')}
-        disabled={!online}
+        disabled={!online || state.kind === 'deleting'}
         reason={t('account:problem.offline')}
-        onClick={() => setOpen(true)}
+        onClick={() => send({ type: 'open' })}
       />
       <ConfirmDialog
-        open={open}
-        onOpenChange={setOpen}
+        open={state.kind === 'confirm'}
+        onOpenChange={(open) => send(open ? { type: 'open' } : { type: 'cancel' })}
         title={t('accountPage.delete.title')}
         body={t('accountPage.delete.body')}
         action={t('accountPage.delete.confirm')}
         cancel={t('accountPage.delete.cancel')}
-        typed={email}
+        typed={t('accountPage.delete.word')}
         onConfirm={() => void remove()}
       />
     </DangerGroup>

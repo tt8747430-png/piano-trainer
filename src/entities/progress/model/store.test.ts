@@ -40,6 +40,10 @@ describe('createProgressStore', () => {
       holds: { 'bz5:chord:G': 2 },
       read: { 'lesson:triads': [0, 2], 'course:called-to-play/five-ways': [1] },
       tempos: { 'hanon:5': 84, scale: 96 },
+      seconds: { '2026-10-10': 600, '2026-10-11': 95 },
+      keys: { G: '2026-10-10', Ebm: '2026-10-11' },
+      earned: { 'streak:1': '2026-10-11', 'first-song': '2026-10-10' },
+      firsts: { published: '2026-10-11' },
     }
     writeSaved(storage, saved)
     expect(createProgressStore({ storage }).getState()).toEqual(saved)
@@ -91,6 +95,10 @@ describe('createProgressStore', () => {
         'piece:bz5': [0],
         'lesson:': [0],
       },
+      seconds: { '2026-10-11': 120, monday: 5, '2026-10-12': -4, '2026-10-13': 99_999 },
+      keys: { G: '2026-10-11', H: '2026-10-11', Am: 'today' },
+      earned: { 'streak:2': '2026-10-11', 'streak:9': '2026-10-11', '': '2026-10-11' },
+      firsts: { midi: '2026-10-11', cake: '2026-10-11' },
       extra: true,
     })
     expect(createProgressStore({ storage }).getState()).toEqual({
@@ -108,6 +116,11 @@ describe('createProgressStore', () => {
       // A lesson's sections read, each once and in order; never a piece's.
       read: { 'lesson:triads': [0, 2] },
       tempos: {},
+      // A day's seconds, a whole day's at most; keys as written; tiers 1 to 4 and milestones.
+      seconds: { '2026-10-11': 120 },
+      keys: { G: '2026-10-11' },
+      earned: { 'streak:2': '2026-10-11' },
+      firsts: { midi: '2026-10-11' },
     })
   })
 
@@ -148,7 +161,7 @@ describe('createProgressStore', () => {
     expect(createProgressStore({ storage }).getState().tempos).toEqual({})
   })
 
-  it.each([3, 5])('does not read a version-%i save', (version) => {
+  it.each([4, 6])('does not read a version-%i save', (version) => {
     const storage = createMemoryStorage()
     writeSaved(storage, { learned: { 'piece:bz5': DAY } }, version)
     expect(createProgressStore({ storage }).getState()).toEqual(EMPTY_PROGRESS)

@@ -21,7 +21,7 @@ import {
   type TrackId,
 } from '@/features/practice'
 import { recordPass } from '@/features/record-lesson'
-import { recordPractised } from '@/features/record-practised'
+import { recordPractised, usePracticeClock } from '@/features/record-practised'
 import type { SetupChange } from '@/widgets/player-setup'
 import { controlsFor, usePracticePlayer, type PlayerControl } from '@/widgets/practice-player'
 import { resolveChoice, searchPatch, type PlayerSearch } from './player-search'
@@ -96,6 +96,8 @@ export function usePlayer(
   // A pass played through in Wait mode is a lesson done: its loop's bars, or the whole piece's
   // (ADR 0111). Read as it is counted, never a reason to record again.
   const { passes } = player.practice.state
+  // The time practised (B1): while the transport runs or waits for the learner's notes.
+  usePracticeClock(player.practice.state.playing)
   const recordFinished = useEffectEvent(() => {
     const whole = { first: 0, last: performance.bars.length - 1 }
     recordPass(progress, piece.id, player.loop ?? whole, new Date())

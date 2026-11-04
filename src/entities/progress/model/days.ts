@@ -70,10 +70,13 @@ export interface CalendarDay {
 export function monthOf(
   days: readonly string[],
   today: string,
+  /** How many months before today's (negative) or after; today's own by default. */
+  shift = 0,
 ): readonly (readonly (CalendarDay | null)[])[] {
   const practised = new Set(days)
   const first = dateOfDay(today)
   first.setDate(1)
+  first.setMonth(first.getMonth() + shift)
   const lead = (first.getDay() + 6) % 7
   const length = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate()
   const cells: (CalendarDay | null)[] = Array.from({ length: lead }, () => null)

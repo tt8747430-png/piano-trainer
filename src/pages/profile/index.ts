@@ -1,2 +1,5 @@
-export { ActivityPage } from './ui/ActivityPage'
+export { AchievementPage, AchievementsPage } from './ui/AchievementsPage'
+export { BadgePage, BadgesPage } from './ui/BadgesPage'
+export { NotificationsPage } from './ui/NotificationsPage'
 export { ProfilePage } from './ui/ProfilePage'
+export { StreakPage } from './ui/StreakPage'

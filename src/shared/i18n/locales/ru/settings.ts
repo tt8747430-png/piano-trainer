@@ -125,11 +125,7 @@ export const settings: LocaleResources['settings'] = {
   },
   accountPage: {
     title: 'Аккаунт',
-    profileGroup: 'Профиль',
-    profile: 'Ваше имя',
     email: 'Эл. почта',
-    save: 'Сохранить',
-    saved: 'Сохранено',
     password: 'Сменить пароль',
     signOut: 'Выйти',
     signOutTitle: 'Выйти из аккаунта?',
@@ -140,6 +136,7 @@ export const settings: LocaleResources['settings'] = {
     signIn: 'Войти',
     create: 'Создать аккаунт',
     delete: {
+      word: 'УДАЛИТЬ',
       button: 'Удалить аккаунт…',
       title: 'Удалить аккаунт?',
       body: 'Аккаунт и всё, что с ним синхронизировано, удалятся через 30 дней, а выход произойдёт на всех устройствах сразу. Войдите до этого срока, чтобы отменить. То, что на этом устройстве, останется.',

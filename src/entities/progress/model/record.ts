@@ -1,6 +1,7 @@
 import type { SkillId } from '@/shared/lib/music'
 import { dateOfDay, localDay } from './days'
 import { ratingOf } from './mastery'
+import { practiceSeconds } from './time'
 import type { ProgressState } from './types'
 
 /** What the learner has done, counted for their Profile. */
@@ -11,6 +12,10 @@ export interface PracticeRecord {
   readonly stepsLearned: number
   readonly lessonsDone: number
   readonly songsPlayed: number
+  /** The pieces marked Learned. */
+  readonly songsLearned: number
+  /** The seconds played, over the days kept. */
+  readonly practiceSeconds: number
   /** The skills the quiz rates Known now. */
   readonly skillsKnown: number
 }
@@ -38,6 +43,8 @@ export function practiceRecord(state: ProgressState): PracticeRecord {
     stepsLearned: count(state.learned),
     lessonsDone: count(state.lessons),
     songsPlayed: count(state.practised),
+    songsLearned: Object.keys(state.learned).filter((step) => step.startsWith('piece:')).length,
+    practiceSeconds: practiceSeconds(state),
     skillsKnown: (Object.keys(state.answers) as SkillId[]).filter(
       (skill) => ratingOf(state.answers, skill) === 'known',
     ).length,

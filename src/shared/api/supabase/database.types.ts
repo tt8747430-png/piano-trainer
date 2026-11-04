@@ -340,6 +340,7 @@ export type Database = {
         Relationships: []
       }
       chord_sheets: DocumentTable
+      notifications: DocumentTable
       diagram_inversions: DocumentTable
       library: DocumentTable
       patterns: DocumentTable

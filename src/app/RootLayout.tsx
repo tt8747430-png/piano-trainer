@@ -2,6 +2,7 @@ import { Outlet, useRouterState } from '@tanstack/react-router'
 import { useLayoutEffect, useState } from 'react'
 import { ReloadOnRestore } from '@/features/backup-data'
 import { ShortcutsHelp } from '@/features/shortcuts-help'
+import { useTrackAchievements } from '@/features/track-achievements'
 import { startKeyboardReveal, startKeyboardViewport } from '@/shared/lib'
 import { AppUpdateProvider, createAppUpdate } from '@/shared/lib/app-update'
 import { Welcome } from '@/widgets/welcome'
@@ -14,6 +15,8 @@ import { UpdatePrompt } from './update-prompt/UpdatePrompt'
 export function RootLayout() {
   // The app's one update state: the banner, Settings' Version row and the Profile's dot read it.
   const [update] = useState(() => createAppUpdate())
+  // Badges' tiers and milestones kept as they are reached, and their notifications (B1).
+  useTrackAchievements()
   // An update waits while the Player or the Check has the screen: it would cut a practice off.
   const fullScreen = useRouterState({
     select: (state) => state.matches.some((match) => match.staticData.fullScreen === true),

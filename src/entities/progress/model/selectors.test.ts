@@ -25,6 +25,10 @@ const state: ProgressState = {
   holds: { 'bz5:chord:G': 2 },
   read: { 'lesson:triads': [0] },
   tempos: { 'hanon:5': 84 },
+  seconds: {},
+  keys: {},
+  earned: {},
+  firsts: {},
 }
 
 describe('selectTempo', () => {

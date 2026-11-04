@@ -113,7 +113,7 @@ export function NotesExample({
                 score={row.score}
                 {...(bass === undefined ? { staff: clef } : {})}
                 firstBar={row.from + 1}
-              continues={row.from > 0}
+                continues={row.from > 0}
                 tempo={LINE_TEMPO}
                 playhead={at !== null && at >= row.start && at < row.end ? at - row.start : null}
                 names={names}

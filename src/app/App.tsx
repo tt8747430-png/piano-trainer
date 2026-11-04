@@ -2,6 +2,7 @@ import { RouterProvider } from '@tanstack/react-router'
 import { ChordSheetsStoreProvider } from '@/entities/chord-sheet'
 import { DiagramInversionsStoreProvider } from '@/entities/diagram-inversion'
 import { LibraryStoreProvider } from '@/entities/library'
+import { NotificationsStoreProvider } from '@/entities/notification'
 import { PatternsStoreProvider } from '@/entities/pattern'
 import { PiecesStoreProvider } from '@/entities/piece'
 import { ProgressStoreProvider } from '@/entities/progress'
@@ -11,8 +12,9 @@ import type { AdminPort, FeaturesPort } from '@/shared/api/admin'
 import type { AuthGateway } from '@/shared/api/auth'
 import type { ContentEditingPort } from '@/shared/api/content-editing'
 import type { ErrorReporter } from '@/shared/api/errors'
+import type { ProfilePort } from '@/shared/api/profile'
 import type { PublicLibrary } from '@/shared/api/public-library'
-import { AccountProvider } from '@/shared/lib/account'
+import { AccountProvider, ProfileProvider } from '@/shared/lib/account'
 import { AdminProvider } from '@/shared/lib/admin'
 import { ContentEditingProvider } from '@/shared/lib/content-editing'
 import { ErrorReportsProvider } from '@/shared/lib/error-reports'
@@ -37,6 +39,7 @@ export function App({
   auth,
   sync,
   publicLibrary,
+  profile,
   admin,
   features,
   contentEditing,
@@ -48,6 +51,7 @@ export function App({
   auth: AuthGateway
   sync: SyncRunner
   publicLibrary: PublicLibrary
+  profile: ProfilePort
   admin: AdminPort
   features: FeaturesPort
   contentEditing: ContentEditingPort
@@ -58,43 +62,47 @@ export function App({
     <ErrorReportsProvider reporter={errors}>
       <ErrorListener />
       <AccountProvider auth={auth} sync={sync}>
-        <PublicLibraryProvider library={publicLibrary}>
-          <AdminProvider admin={admin}>
-            <FeaturesProvider features={features}>
-              <ContentEditingProvider editing={contentEditing}>
-                <SettingsStoreProvider store={stores.settings}>
-                  <ProgressStoreProvider store={stores.progress}>
-                    <PatternsStoreProvider store={stores.patterns}>
-                      <PiecesStoreProvider store={stores.pieces}>
-                        <TakesStoreProvider store={stores.takes}>
-                          <LibraryStoreProvider store={stores.library}>
-                            <DiagramInversionsStoreProvider store={stores.diagramInversions}>
-                              <ChordSheetsStoreProvider store={stores.chordSheets}>
-                                <ServicesProvider services={services}>
-                                  <LocaleSync />
-                                  <AudioUnlock />
-                                  <MidiReconnect />
-                                  <MidiSync />
-                                  <ThemeProvider>
-                                    <ShortcutsProvider>
-                                      <RouterProvider router={router} />
-                                      <Toaster />
-                                      <Confirmer />
-                                    </ShortcutsProvider>
-                                  </ThemeProvider>
-                                </ServicesProvider>
-                              </ChordSheetsStoreProvider>
-                            </DiagramInversionsStoreProvider>
-                          </LibraryStoreProvider>
-                        </TakesStoreProvider>
-                      </PiecesStoreProvider>
-                    </PatternsStoreProvider>
-                  </ProgressStoreProvider>
-                </SettingsStoreProvider>
-              </ContentEditingProvider>
-            </FeaturesProvider>
-          </AdminProvider>
-        </PublicLibraryProvider>
+        <ProfileProvider port={profile}>
+          <PublicLibraryProvider library={publicLibrary}>
+            <AdminProvider admin={admin}>
+              <FeaturesProvider features={features}>
+                <ContentEditingProvider editing={contentEditing}>
+                  <SettingsStoreProvider store={stores.settings}>
+                    <ProgressStoreProvider store={stores.progress}>
+                      <PatternsStoreProvider store={stores.patterns}>
+                        <PiecesStoreProvider store={stores.pieces}>
+                          <TakesStoreProvider store={stores.takes}>
+                            <LibraryStoreProvider store={stores.library}>
+                              <DiagramInversionsStoreProvider store={stores.diagramInversions}>
+                                <ChordSheetsStoreProvider store={stores.chordSheets}>
+                                  <NotificationsStoreProvider store={stores.notifications}>
+                                    <ServicesProvider services={services}>
+                                      <LocaleSync />
+                                      <AudioUnlock />
+                                      <MidiReconnect />
+                                      <MidiSync />
+                                      <ThemeProvider>
+                                        <ShortcutsProvider>
+                                          <RouterProvider router={router} />
+                                          <Toaster />
+                                          <Confirmer />
+                                        </ShortcutsProvider>
+                                      </ThemeProvider>
+                                    </ServicesProvider>
+                                  </NotificationsStoreProvider>
+                                </ChordSheetsStoreProvider>
+                              </DiagramInversionsStoreProvider>
+                            </LibraryStoreProvider>
+                          </TakesStoreProvider>
+                        </PiecesStoreProvider>
+                      </PatternsStoreProvider>
+                    </ProgressStoreProvider>
+                  </SettingsStoreProvider>
+                </ContentEditingProvider>
+              </FeaturesProvider>
+            </AdminProvider>
+          </PublicLibraryProvider>
+        </ProfileProvider>
       </AccountProvider>
     </ErrorReportsProvider>
   )

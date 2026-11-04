@@ -8,6 +8,8 @@ import {
   type Published,
 } from '@/shared/api/public-library'
 import { contentHash, useOnline } from '@/shared/lib'
+import { useProgressStoreApi } from '@/entities/progress'
+import { recordFirst } from '@/features/record-practised'
 import { useAccount } from '@/shared/lib/account'
 import { usePublicLibrary } from '@/shared/lib/public-library'
 
@@ -62,6 +64,7 @@ export function usePublish(item: PublishItem | null) {
   const library = usePublicLibrary()
   const { account } = useAccount()
   const online = useOnline()
+  const progress = useProgressStoreApi()
   const [published, setPublished] = useState<Published | null | undefined>(undefined)
   const [said, setSaid] = useState<PublishSaid>(null)
   const [busy, setBusy] = useState(false)
@@ -132,11 +135,13 @@ export function usePublish(item: PublishItem | null) {
       })
       setBusy(false)
       if (!result.ok) return setSaid(saidOf(result))
+      // The First published song milestone (B1).
+      recordFirst(progress, 'published', new Date())
       setSaid(published ? 'updated' : 'published')
       setPublished(result.value)
       setDetails({ id: result.value.id, description: said, saves: shown?.saves ?? 0 })
     },
-    [account, authorName, library, id, item, body, version, published, shown],
+    [account, authorName, library, id, item, body, version, published, shown, progress],
   )
 
   const unpublish = useCallback(async () => {

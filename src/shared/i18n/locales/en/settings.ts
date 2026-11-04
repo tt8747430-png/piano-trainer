@@ -130,11 +130,7 @@ export const settings = {
   // The account's own page (round 3): its name, password, signing out, deleting it.
   accountPage: {
     title: 'Account',
-    profileGroup: 'Profile',
-    profile: 'Your name',
     email: 'Email',
-    save: 'Save',
-    saved: 'Saved',
     password: 'Change password',
     signOut: 'Sign out',
     signOutTitle: 'Sign out?',
@@ -144,6 +140,7 @@ export const settings = {
     signIn: 'Sign in',
     create: 'Create an account',
     delete: {
+      word: 'DELETE',
       button: 'Delete account…',
       title: 'Delete your account?',
       body: 'Your account and everything synced to it are deleted in 30 days, and you’re signed out on every device now. Sign in before then to cancel. What is on this device stays.',

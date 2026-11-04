@@ -3,7 +3,7 @@ import { isStepId, type StepId } from '@/entities/step'
 import { isSkillId, type SkillId } from '@/shared/lib/music'
 import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
-import { keptDays } from './days'
+import { DAYS_KEPT, keptDays } from './days'
 import {
   CHORD_HOLDS,
   isChordLessonKey,
@@ -16,14 +16,16 @@ import {
 import { latestEvidence } from './mastery'
 import {
   EMPTY_PROGRESS,
+  FIRSTS,
   type Answer,
+  type FirstId,
   type ProgressState,
   type RunKey,
   type TrainerRecord,
 } from './types'
 
 export const PROGRESS_STORAGE_KEY = 'pt-progress'
-export const PROGRESS_VERSION = 4
+export const PROGRESS_VERSION = 5
 
 export type ProgressStore = StoreApi<ProgressState>
 
@@ -92,6 +94,25 @@ const isTempo = (value: unknown): value is number =>
 
 const isPercent = (value: unknown): value is number => isCount(value) && value <= 100
 
+const isDayKey = (key: string): key is string => /^\d{4}-\d{2}-\d{2}$/.test(key)
+
+/** A day's seconds: a whole number, at most a day's. */
+const isDaySeconds = (value: unknown): value is number => isCount(value) && value <= 86_400
+
+/** A key as the URL writes it (`G`, `Ebm`, `F#m`). */
+const isKeyName = (key: string): key is string => /^[A-G](#|b)?m?$/.test(key)
+
+/** What an earned day is kept under: a badge's tier (`streak:2`) or a milestone's id. */
+const isEarnedKey = (key: string): key is string => /^[a-z][a-z-]*(:[1-4])?$/.test(key)
+
+const isFirst = (key: string): key is FirstId => (FIRSTS as readonly string[]).includes(key)
+
+/** Of the days kept with a value, the latest `DAYS_KEPT`. */
+function latestDays<V>(record: Partial<Record<string, V>>): Partial<Record<string, V>> {
+  const days = Object.keys(record).sort().slice(-DAYS_KEPT)
+  return Object.fromEntries(days.map((day) => [day, record[day]]))
+}
+
 /**
  * A record that cannot be read is dropped; one whose numbers contradict each other is raised, never
  * lost: the best to the last.
@@ -124,6 +145,18 @@ function sanitize(persisted: unknown): ProgressState {
         (key): key is ChordLessonKey => isChordLessonKey(key) && lessons[key] === undefined,
         (value) => (isCount(value) && value > 0 && value < CHORD_HOLDS ? value : undefined),
       ),
+    ),
+    seconds: latestDays(
+      kept(saved.seconds, isDayKey, (value) => (isDaySeconds(value) ? value : undefined)),
+    ),
+    keys: kept(saved.keys, isKeyName, (value) =>
+      typeof value === 'string' && isDayKey(value) ? value : undefined,
+    ),
+    earned: kept(saved.earned, isEarnedKey, (value) =>
+      typeof value === 'string' && isDayKey(value) ? value : undefined,
+    ),
+    firsts: kept(saved.firsts, isFirst, (value) =>
+      typeof value === 'string' && isDayKey(value) ? value : undefined,
     ),
   }
 }

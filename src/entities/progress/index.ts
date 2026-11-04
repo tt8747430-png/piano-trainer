@@ -64,6 +64,7 @@ export { practiceRecord, type PracticeRecord } from './model/record'
 export {
   BADGES,
   badgesOf,
+  isBadgeId,
   nextMilestone,
   TIERS,
   type Badge,
@@ -71,3 +72,23 @@ export {
   type BadgeId,
   type Tier,
 } from './model/badges'
+export {
+  earnedKeys,
+  isMilestoneId,
+  levelMinutes,
+  levelOf,
+  MILESTONES,
+  profileFigures,
+  withEarned,
+  type MilestoneId,
+  type ProfileFigures,
+} from './model/milestones'
+export { noticesOf } from './model/notices'
+export {
+  practiceSeconds,
+  SILENCE_COUNTED_S,
+  withFirst,
+  withKeyPractised,
+  withPracticeTime,
+} from './model/time'
+export { FIRSTS, type FirstId } from './model/types'

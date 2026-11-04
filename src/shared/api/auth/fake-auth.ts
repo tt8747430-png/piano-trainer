@@ -70,6 +70,12 @@ export function createFakeAuth({
         if (!found) throw refused('Not signed in')
         found.password = password
       }),
+    updateEmail: (email) =>
+      ask(async () => {
+        if (!current) throw refused('Not signed in')
+        // The server sends a link to the new address; the email changes once it is followed.
+        if (!/^[^@\s]+@[^@\s]+$/.test(email)) throw refused('Not an email')
+      }),
     updateName: (name) =>
       ask(async () => {
         const found = current && known.get(current.email)

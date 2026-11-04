@@ -39,6 +39,8 @@ export interface AuthGateway {
   completeRedirect(code: string): Promise<NetResult<Account>>
   requestPasswordReset(email: string): Promise<NetResult<void>>
   updatePassword(password: string): Promise<NetResult<void>>
+  /** Asks to change the account's email: a link to the new address confirms it. */
+  updateEmail(email: string): Promise<NetResult<void>>
   /** Renames the account signed in; its listeners hear the account renamed. */
   updateName(name: string): Promise<NetResult<Account>>
   /**

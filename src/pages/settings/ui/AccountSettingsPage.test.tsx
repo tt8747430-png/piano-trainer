@@ -36,30 +36,19 @@ describe('Settings, signed in', () => {
 })
 
 describe('Settings › Account', () => {
-  it('shows the learner’s email and Change password under their name', async () => {
+  it('opens Edit profile from its first row, and Change password and Privacy from theirs', async () => {
     await renderApp('/settings/account', { auth: await signedIn() })
-    await screen.findByLabelText('Your name')
-    const signIn = screen.getByRole('link', { name: 'Change password' }).closest('section')!
-    expect(signIn).toHaveTextContent(/Email\s*ana@example.com/)
-    expect(within(signIn).getByRole('link', { name: 'Change password' })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: /Edit profile/ })).toHaveAttribute(
       'href',
-      '/account/new-password',
+      '/settings/account/profile',
     )
-  })
-
-  it('renames the learner, Save showing only once the name is changed', async () => {
-    const user = userEvent.setup()
-    const auth = await signedIn()
-    await renderApp('/settings/account', { auth })
-    const name = await screen.findByLabelText('Your name')
-    await waitFor(() => expect(name).toHaveValue('Ana'))
-    expect(screen.queryByRole('button', { name: 'Save' })).toBeNull()
-    await user.clear(name)
-    await user.type(name, 'Anna')
-    await user.click(screen.getByRole('button', { name: 'Save' }))
-    expect(await screen.findByText('Saved')).toBeVisible()
-    expect(await auth.current()).toMatchObject({ name: 'Anna' })
-    expect(screen.queryByRole('button', { name: 'Save' })).toBeNull()
+    const password = screen.getByRole('link', { name: 'Change password' })
+    expect(password.closest('section')).toHaveTextContent(/Email\s*ana@example.com/)
+    expect(password).toHaveAttribute('href', '/settings/account/password')
+    expect(screen.getByRole('link', { name: 'Privacy' })).toHaveAttribute(
+      'href',
+      '/settings/privacy',
+    )
   })
 
   it('puts Sign out and Delete account last, each red and alone with its footnote (R25)', async () => {
@@ -95,10 +84,7 @@ describe('Settings › Account', () => {
     expect(dialog).toHaveTextContent('deleted in 30 days')
     const confirm = within(dialog).getByRole('button', { name: 'Delete' })
     expect(confirm).toBeDisabled()
-    await user.type(
-      within(dialog).getByLabelText('Type “ana@example.com” to confirm'),
-      'ana@example.com',
-    )
+    await user.type(within(dialog).getByLabelText('Type “DELETE” to confirm'), 'DELETE')
     await user.click(confirm)
     expect(
       await screen.findByText(

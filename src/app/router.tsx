@@ -174,11 +174,47 @@ const profileRoute = createRoute({
   path: '/profile',
   component: lazyRouteComponent(settingsScreens, 'ProfilePage'),
 })
-// Its Activity (round 26, Noji's): the days at the piano in figures and the month's calendar.
-const activityRoute = createRoute({
+// The Profile's pages (B1): Streak, the badges and one badge, the achievements and one, the
+// notifications.
+const streakRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/profile/activity',
-  component: lazyRouteComponent(settingsScreens, 'ActivityPage'),
+  path: '/profile/streak',
+  component: lazyRouteComponent(settingsScreens, 'StreakPage'),
+})
+const badgesRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/profile/badges',
+  component: lazyRouteComponent(settingsScreens, 'BadgesPage'),
+})
+const badgeRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/profile/badges/$badgeId',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params: { badgeId } }) => {
+    const { isBadgeId } = await settingsScreens()
+    if (!isBadgeId(badgeId)) throw notFound()
+  },
+  component: lazyRouteComponent(settingsScreens, 'BadgePage'),
+})
+const achievementsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/profile/achievements',
+  component: lazyRouteComponent(settingsScreens, 'AchievementsPage'),
+})
+const achievementRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/profile/achievements/$achievementId',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params: { achievementId } }) => {
+    const { isMilestoneId } = await settingsScreens()
+    if (!isMilestoneId(achievementId)) throw notFound()
+  },
+  component: lazyRouteComponent(settingsScreens, 'AchievementPage'),
+})
+const notificationsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/profile/notifications',
+  component: lazyRouteComponent(settingsScreens, 'NotificationsPage'),
 })
 // Settings' pages (R20, R22): General, the on-screen piano, the computer keys, sound and recording,
 // storage and backup, and the account's.
@@ -227,6 +263,22 @@ const accountSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/account',
   component: lazyRouteComponent(settingsScreens, 'AccountSettingsPage'),
+})
+// The account's own pages (B1): Edit profile, Change password, and Privacy.
+const editProfileRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/account/profile',
+  component: lazyRouteComponent(settingsScreens, 'EditProfilePage'),
+})
+const changePasswordRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/account/password',
+  component: lazyRouteComponent(settingsScreens, 'ChangePasswordPage'),
+})
+const profilePrivacyRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/privacy',
+  component: lazyRouteComponent(settingsScreens, 'ProfilePrivacyPage'),
 })
 // How to use (ADR 0052): a short guide, reached from Settings' Help.
 const howToUseRoute = createRoute({
@@ -860,7 +912,12 @@ const routeTree = rootRoute.addChildren([
   shellRoute.addChildren([
     learnRoute,
     profileRoute,
-    activityRoute,
+    streakRoute,
+    badgesRoute,
+    badgeRoute,
+    achievementsRoute,
+    achievementRoute,
+    notificationsRoute,
     adminRoute,
     settingsRoute,
     generalRoute,
@@ -871,6 +928,9 @@ const routeTree = rootRoute.addChildren([
     privacyRoute,
     termsRoute,
     accountSettingsRoute,
+    editProfileRoute,
+    changePasswordRoute,
+    profilePrivacyRoute,
     howToUseRoute,
     midiSettingsRoute,
     midiLogRoute,
