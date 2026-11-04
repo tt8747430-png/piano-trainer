@@ -13,7 +13,7 @@ export function PlayerFoot({ children }: { children: ReactNode }) {
       role="toolbar"
       aria-label={t('foot.label')}
       data-area="foot"
-      className="flex min-w-0 items-stretch justify-around gap-1 border-t border-hairline pt-1 pb-[max(--spacing(1),env(safe-area-inset-bottom))]"
+      className="-mx-gutter flex min-w-0 items-stretch justify-around gap-0 border-t border-hairline px-1 pt-1 pb-[max(--spacing(1),env(safe-area-inset-bottom))]"
     >
       {children}
     </div>

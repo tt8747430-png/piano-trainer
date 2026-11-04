@@ -14,8 +14,8 @@ export function VersionTool({ version, onOpen }: { version: SongVersion; onOpen:
     <PlayerTool
       icon={Layers}
       label={t('version.of', { level })}
-      name={t('version.label')}
-      value={level}
+      // The version playing is its name, shortened like the row's others where room is short.
+      name={level}
       aria-haspopup="dialog"
       onClick={onOpen}
     />

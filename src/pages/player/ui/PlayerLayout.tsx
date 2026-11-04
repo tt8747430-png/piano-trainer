@@ -579,9 +579,6 @@ export function PlayerLayout({
         >
           <div className="h-full bg-primary" style={{ width: `${progress * 100}%` }} />
         </div>
-        {!coached && !practice.state.playing && !annotating && !takes?.shown ? (
-          <CoachLine mode={view.mode} onClose={() => setCoached(true)} />
-        ) : null}
         {annotating}
         {feedback && takes?.shown ? (
           <FeedbackCard feedback={feedback} onClose={() => takes.show(null)} />
@@ -630,6 +627,9 @@ export function PlayerLayout({
         area="status"
         className="text-center landscape-phone:max-w-[45vw] landscape-phone:self-center"
       >
+        {!coached && !practice.state.playing && !annotating && !takes?.shown ? (
+          <CoachLine mode={view.mode} onClose={() => setCoached(true)} />
+        ) : null}
         {view.mode !== 'listen' ? (
           <WaitLine feedback={player.feedback} onAgain={practice.play} onLoop={player.setLoop} />
         ) : null}

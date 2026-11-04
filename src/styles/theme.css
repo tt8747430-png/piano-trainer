@@ -857,6 +857,9 @@
 @utility score-bar {
   position: relative;
   isolation: isolate;
+  /* Over the music, whose area is positioned for what floats on it (R29 B8): the tools' capsule
+     hanging under the bar on a phone held upright stays above the sheet and takes its taps. */
+  z-index: 25;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-areas: 'lead actions';
