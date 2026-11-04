@@ -2,11 +2,37 @@ import { useTranslation } from 'react-i18next'
 import { useFold } from '@/features/fold-section'
 import { cn } from '@/shared/lib'
 import { type Hand, printedNote } from '@/shared/lib/music'
-import { FoldSection, HandDiagram, INVERSION_NAMES } from '@/shared/ui'
-import type { FingeringRow } from '../model/chord-view'
+import { FoldSection, HandCard, INVERSION_NAMES } from '@/shared/ui'
+import type { FingeringRow, HandRow } from '../model/chord-view'
 
 /** The hands as the scale's fingering shows them, the left first. */
 const HANDS = ['lh', 'rh'] as const satisfies readonly Hand[]
+
+/** The row the keys show: the drawing is of it. */
+const shownRow = (rows: readonly FingeringRow[]) => rows.find((row) => row.current) ?? rows[0]
+
+/** One hand drawn over the keys of the row shown, its fingers on them (R29-P5). */
+function HandOnKeys({ hand, row }: { hand: Hand; row: HandRow | undefined }) {
+  const { t } = useTranslation(['practice', 'music'])
+  if (!row || row.keys.length === 0) return null
+  const notes = row.keys.flatMap((key, at) => {
+    const finger = row.fingers[at]
+    return finger ? [{ key, finger }] : []
+  })
+  return (
+    <HandCard
+      hand={hand}
+      notes={notes}
+      label={t('practice:chords.fingering.drawn', {
+        hand: t(`practice:scales.byHand.${hand}`),
+        notes: row.notes
+          .map((note, at) => `${printedNote(note)} ${row.fingers[at] ?? ''}`)
+          .join(', '),
+      })}
+      className="h-36 w-auto max-w-full shrink-0"
+    />
+  )
+}
 
 /**
  * The chord's fingering hand by hand, as Scales shows a scale's: each hand drawn with its fingers
@@ -26,14 +52,8 @@ export function ChordFingering({ rows }: { rows: readonly FingeringRow[] }) {
     <FoldSection title={t('practice:chords.fingering.title')} fold={fold}>
       <ul className="grid-cards gap-2">
         {hands.map((hand) => (
-          <li key={hand} className="flex flex-wrap items-center gap-x-4 gap-y-2 card p-4">
-            <HandDiagram
-              hand={hand}
-              label={t('practice:scales.byHand.drawing', {
-                hand: t(`practice:scales.byHand.${hand}`),
-              })}
-              className="h-24 w-auto shrink-0"
-            />
+          <li key={hand} className="flex flex-col items-start gap-3 card p-4">
+            <HandOnKeys hand={hand} row={shownRow(rows)?.hands[hand]} />
             <div className="flex min-w-0 flex-col gap-2">
               <h3 className="text-xl">{t(`practice:scales.byHand.${hand}`)}</h3>
               <table className="w-max border-separate border-spacing-x-0.5 border-spacing-y-1 text-center tabular-nums">

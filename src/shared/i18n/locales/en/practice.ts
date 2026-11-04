@@ -106,6 +106,8 @@ export const practice = {
       title: 'Fingering',
       // A row of the table: the inversion, or the keys as the voicing lays them.
       voiced: 'As voiced',
+      // The hand drawn over the chord's keys, to a screen reader: each note and the finger on it.
+      drawn: '{{hand}} over the keys: {{notes}}',
     },
     // The chord's colour notes (A33): its tones, the tensions it takes on top, the notes to avoid.
     colour: {

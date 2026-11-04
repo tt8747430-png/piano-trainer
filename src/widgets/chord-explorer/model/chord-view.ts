@@ -98,6 +98,8 @@ export function changedView(view: ChordView, change: Partial<ChordView>): ChordV
 /** One hand's keys in a row of the fingering table: each note's name and the finger on it. */
 export interface HandRow {
   readonly notes: readonly SpelledNote[]
+  /** The keys the notes are played on, the hand drawn over them (R29-P5). */
+  readonly keys: readonly Midi[]
   readonly fingers: readonly Finger[]
 }
 
@@ -119,20 +121,21 @@ export function fingeringRows(view: ChordView): FingeringRow[] {
   if (view.voicing !== 'close' || takesTwoHands(chord.tones.length)) {
     const hand = (side: Hand): HandRow => ({
       notes: placed[side].map((key) => key.tone.note),
+      keys: placed[side].map((key) => key.midi),
       fingers: fingers[side],
     })
     return [{ inversion: 'voiced', current: true, hands: { lh: hand('lh'), rh: hand('rh') } }]
   }
   const rows = blockFingering(chord.tones)
   return chordInversions(chord.tones).map((inversion, i) => {
-    const notes = placeChord(chord.tones, { inversion, bothHands: false }).rh.map(
-      (key) => key.tone.note,
-    )
+    const laid = placeChord(chord.tones, { inversion, bothHands: false }).rh
+    const notes = laid.map((key) => key.tone.note)
+    const keys = laid.map((key) => key.midi)
     const row = rows[i] ?? { lh: [], rh: [] }
     return {
       inversion,
       current: inversion === view.inversion,
-      hands: { lh: { notes, fingers: row.lh }, rh: { notes, fingers: row.rh } },
+      hands: { lh: { notes, keys, fingers: row.lh }, rh: { notes, keys, fingers: row.rh } },
     }
   })
 }

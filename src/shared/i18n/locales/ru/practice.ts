@@ -96,6 +96,7 @@ export const practice: LocaleResources['practice'] = {
     fingering: {
       title: 'Аппликатура',
       voiced: 'В этом расположении',
+      drawn: '{{hand}} на клавишах: {{notes}}',
     },
     colour: {
       title: 'Краски аккорда',
