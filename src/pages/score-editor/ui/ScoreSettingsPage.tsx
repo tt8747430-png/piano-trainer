@@ -85,7 +85,7 @@ export function ScoreSettingsPage() {
   const unit = draft.tempoUnit ?? beatUnit(draft.meter)
   const mark = Math.round(tempoMark(draft.tempo, unit, draft.meter))
   const meter = draft.timeSymbol
-    ? t(draft.meter === '2/2' ? 'songs:setup.cut' : 'songs:setup.common')
+    ? t(draft.meter === '2/2' ? 'music:timeField.cut' : 'music:timeField.common')
     : draft.meter
   const count = (instrument: ScoreInstrument) => {
     const { count, fewer, more } = instrumentCount(draft, instrument)
