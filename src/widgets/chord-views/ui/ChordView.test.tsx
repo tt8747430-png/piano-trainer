@@ -61,8 +61,8 @@ function renderSummary(bar: number) {
 }
 
 /** The summary's cards, by their chord's symbol, the one sounding marked `*`. */
-const cards = () =>
-  within(screen.getByRole('list', { name: 'Chords' }))
+const cards = (list = 'In this song') =>
+  within(screen.getByRole('list', { name: list }))
     .getAllByRole('button')
     .map(
       (card) =>
@@ -82,12 +82,24 @@ describe('Diagrams, its summary (ADR 0108)', () => {
     expect(cards()).toEqual(['C', 'G*', 'Am'])
   })
 
-  it('takes the cursor to a card’s chord, opening no sheet (ADR 0108)', async () => {
+  it('plays a chord tapped In this song without moving the cursor, its places each a jump (R29 A37)', async () => {
     const user = userEvent.setup()
     const { practice } = renderSummary(0)
-    await user.click(screen.getByRole('button', { name: /^Am: / }))
+    await user.click(screen.getByRole('button', { name: 'Am' }))
+    expect(practice.jumpToBeatGroup).not.toHaveBeenCalled()
+    const places = screen.getByRole('list', { name: 'Where Am is' })
+    await user.click(within(places).getByRole('button', { name: 'Bar 4' }))
     expect(practice.jumpToBeatGroup).toHaveBeenCalledWith(barGroup(3))
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('lists In order a card a change, and a card tapped takes the cursor there (R29 A37)', async () => {
+    const user = userEvent.setup()
+    const { practice } = renderSummary(0)
+    await user.click(screen.getByRole('radio', { name: 'In order' }))
+    expect(cards('In order')[0]).toMatch(/^C, Bar 1\*$/)
+    await user.click(screen.getByRole('button', { name: 'Am, Bar 4' }))
+    expect(practice.jumpToBeatGroup).toHaveBeenCalledWith(barGroup(3))
   })
 })
 

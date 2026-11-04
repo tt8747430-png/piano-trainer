@@ -138,6 +138,17 @@ export const player: LocaleResources['player'] = {
       bass: '𝄢 До первой октавы на линейке над нотоносцем',
     },
   },
+  summary: {
+    list: 'Какие аккорды показать',
+    inSong: 'В этой песне',
+    inOrder: 'По порядку',
+    times_one: '×{{count}}',
+    times_few: '×{{count}}',
+    times_many: '×{{count}}',
+    times_other: '×{{count}}',
+    places: 'Где звучит {{chord}}',
+    bar: 'Такт {{bar}}',
+  },
   settingsPage: {
     open: 'Настройки плеера',
     whilePlaying: 'Во время игры',

@@ -114,3 +114,49 @@ export function chordNear(performance: Performance, symbol: string, tick: Tick):
   const found = after >= 0 ? after : chords.findIndex((chord) => chord.symbol === symbol)
   return found < 0 ? null : found
 }
+
+/** A chord of the song, as the summary's In this song lists it (R29 A37). */
+export interface SongChord {
+  readonly symbol: string
+  /** How many times the music changes to it. */
+  readonly count: number
+  /** The bars it changes to it in, from 1, as played. */
+  readonly bars: readonly number[]
+}
+
+/** A change of chord, as the summary's In order lists it: the chord it starts with, and its bar. */
+export interface OrderCard {
+  /** Index into the performance's chords: where a tap takes the cursor. */
+  readonly chord: number
+  readonly symbol: string
+  /** Its bar, from 1, as played. */
+  readonly bar: number
+  /** Its section, by the performance's numbering. */
+  readonly section: number
+}
+
+/** Every change of chord as played (a chord held on is no change): one card each. */
+export function chordsInOrder(performance: Performance): readonly OrderCard[] {
+  return performance.chords.flatMap((chord, index) =>
+    performance.chords[index - 1]?.symbol === chord.symbol
+      ? []
+      : [
+          {
+            chord: index,
+            symbol: chord.symbol,
+            bar: chord.bar + 1,
+            section: performance.bars[chord.bar]?.section ?? 0,
+          },
+        ],
+  )
+}
+
+/** Each chord of the song once, in the order it first sounds, with its changes' count and bars. */
+export function chordsInSong(performance: Performance): readonly SongChord[] {
+  const found = new Map<string, { count: number; bars: number[] }>()
+  for (const card of chordsInOrder(performance)) {
+    const seen = found.get(card.symbol) ?? { count: 0, bars: [] }
+    found.set(card.symbol, { count: seen.count + 1, bars: [...seen.bars, card.bar] })
+  }
+  return [...found].map(([symbol, { count, bars }]) => ({ symbol, count, bars }))
+}

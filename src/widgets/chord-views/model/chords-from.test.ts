@@ -4,7 +4,14 @@ import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { chordBefore, chordNear, chordsFrom, pairSlide } from './chords-from'
+import {
+  chordBefore,
+  chordNear,
+  chordsFrom,
+  chordsInOrder,
+  chordsInSong,
+  pairSlide,
+} from './chords-from'
 
 const B = TICKS_PER_BEAT
 
@@ -144,5 +151,31 @@ describe('chordBefore', () => {
     const loop = { from: 8 * B, to: 16 * B }
     expect(before(four, beat(2, 0), loop)).toBeNull()
     expect(before(four, beat(3, 0), loop)?.symbol).toBe('Am')
+  })
+})
+
+describe('the summary’s two lists (R29 A37)', () => {
+  it('In this song: each chord once in first-sound order, how often it changes to it, and its bars', () => {
+    const performance = song('C C F C', 'G G C C')
+    expect(chordsInSong(performance)).toEqual([
+      { symbol: 'C', count: 3, bars: [1, 4, 7] },
+      { symbol: 'F', count: 1, bars: [3] },
+      { symbol: 'G', count: 1, bars: [5] },
+    ])
+  })
+
+  it('In order: one card a change, as played, matching the strip’s changes one for one', () => {
+    const performance = song('C C F C', 'G G C C')
+    expect(chordsInOrder(performance).map(({ symbol, bar }) => `${symbol}@${bar}`)).toEqual([
+      'C@1',
+      'F@3',
+      'C@4',
+      'G@5',
+      'C@7',
+    ])
+    // Each card points at the chord it starts with: a tap moves the cursor there.
+    for (const card of chordsInOrder(performance)) {
+      expect(performance.chords[card.chord]?.symbol).toBe(card.symbol)
+    }
   })
 })

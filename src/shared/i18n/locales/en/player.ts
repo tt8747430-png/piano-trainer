@@ -159,6 +159,15 @@ export const player = {
       bass: '𝄢 Middle C on a line above the staff',
     },
   },
+  summary: {
+    list: 'Chords to show',
+    inSong: 'In this song',
+    inOrder: 'In order',
+    times_one: '×{{count}}',
+    times_other: '×{{count}}',
+    places: 'Where {{chord}} is',
+    bar: 'Bar {{bar}}',
+  },
   settingsPage: {
     open: 'Player settings',
     whilePlaying: 'While you play',

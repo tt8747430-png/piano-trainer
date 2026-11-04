@@ -101,7 +101,6 @@ export function ChordView({
       mode={mode}
       clock={practice.clock}
       onGo={go}
-      onChord={goToChord}
     />
   )
 }

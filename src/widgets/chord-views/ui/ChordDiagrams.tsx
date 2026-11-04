@@ -30,7 +30,7 @@ import { SungLines } from './SungLines'
  * it stands in the room above the transport, in the middle of it, the chords shrinking where it is
  * short (`diagrams-view`), nothing scrolling. In its summary mode, the strip and the words over the
  * song's chords at once (`SummaryGrid`), the one sounding marked, scrolling down. A diagram, a card
- * or a beat tapped takes the cursor there (`onGo`, `onChord`).
+ * or a beat tapped takes the cursor there (`onGo`).
  */
 export function ChordDiagrams({
   title,
@@ -43,7 +43,6 @@ export function ChordDiagrams({
   words,
   mode,
   onGo,
-  onChord,
 }: {
   title: string
   performance: Performance
@@ -60,8 +59,6 @@ export function ChordDiagrams({
   /** The View's mode for Diagrams (ADR 0108's `scoreView.diagrams`). */
   mode: DiagramsMode
   onGo: (at: Tick) => void
-  /** A chord tapped by its symbol: the cursor taken to it. */
-  onChord: (symbol: string) => void
 }) {
   const { t } = useTranslation('player')
   const chosen = usePieceInversions()?.chosen
@@ -89,9 +86,13 @@ export function ChordDiagrams({
         </div>
         {sung}
         <SummaryGrid
+          performance={performance}
           chords={summary}
-          sounding={now === null ? null : (performance.chords[now]?.symbol ?? null)}
-          onChord={onChord}
+          now={now}
+          onGo={(chord) => {
+            const at = performance.chords[chord]?.startTick
+            if (at !== undefined) onGo(at)
+          }}
         />
       </section>
     )

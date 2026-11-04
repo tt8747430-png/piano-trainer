@@ -601,8 +601,10 @@ describe('Diagrams (ADR 0108)', () => {
     await user.keyboard('{Escape}')
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
     const view = screen.getByRole('region', { name: 'Diagrams' })
-    const cards = within(within(view).getByRole('list', { name: 'Chords' })).getAllByRole('button')
-    expect(cards.map((card) => card.textContent)).toEqual(['C', 'G7', 'F'])
+    const cards = within(within(view).getByRole('list', { name: 'In this song' })).getAllByRole(
+      'button',
+    )
+    expect(cards.map((card) => card.getAttribute('aria-label'))).toEqual(['C', 'G7', 'F'])
     expect(cards[0]).toHaveAttribute('aria-current', 'true')
     expect(within(view).queryByRole('button', { name: 'Next: G7' })).not.toBeInTheDocument()
   })
