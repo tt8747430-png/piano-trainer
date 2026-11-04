@@ -70,7 +70,7 @@ export function LessonSettingsPage() {
         kind: 'level',
         level: localText(place.journey.title, locale),
         chapter: localText(place.chapter.title, locale),
-        manage: <Link to="/journeys/$journeyId/edit" params={{ journeyId: place.journey.id }} />,
+        manage: <Link to="/" search={{ view: 'lessons', journey: place.journey.id, edit: true }} />,
       }}
     />
   )

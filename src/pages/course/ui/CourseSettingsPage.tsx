@@ -85,7 +85,7 @@ function EditorRows({ course, title }: { course: Course; title: string }) {
           value={t(`shelves.${shelf}`)}
           icon={Library}
           paint="sky"
-          render={<Link to="/courses/manage" />}
+          render={<Link to="/" search={{ view: 'courses', edit: true }} />}
         />
       </SettingsGroup>
       <ChangesGroup draft={draft} title={title} unreadable={t('edit.course.unreadable')} />

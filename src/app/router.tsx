@@ -707,22 +707,6 @@ const lessonEditRoute = createRoute({
   },
   component: lazyRouteComponent(lessonEditorScreens, 'LessonEditorPage'),
 })
-const journeyEditRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/journeys/$journeyId/edit',
-  notFoundComponent: notFoundIn('learn'),
-  beforeLoad: async ({ params }) => {
-    const { journeyById } = await learnScreens()
-    if (!journeyById(params.journeyId)) throw notFound()
-  },
-  component: lazyRouteComponent(lessonEditorScreens, 'JourneyEditorPage'),
-})
-// Manage courses: the courses' order on their shelves, an editor's.
-const courseOrderEditRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/courses/manage',
-  component: lazyRouteComponent(lessonEditorScreens, 'CourseOrderEditorPage'),
-})
 const courseLessonEditRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/courses/$courseId/$lessonId/edit',
@@ -930,8 +914,6 @@ const routeTree = rootRoute.addChildren([
     lessonEditRoute,
     courseLessonEditRoute,
     courseEditRoute,
-    courseOrderEditRoute,
-    journeyEditRoute,
     practiceRoute,
     quizRoute,
     exercisesRoute,

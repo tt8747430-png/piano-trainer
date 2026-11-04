@@ -92,7 +92,7 @@ describe('a lesson’s Settings (round 28)', () => {
     const place = lessonPlace(LESSON.id)!
     expect(
       await screen.findByRole('link', { name: new RegExp(`Level.*${place.journey.title.en}`) }),
-    ).toHaveAttribute('href', `/journeys/${place.journey.id}/edit`)
+    ).toHaveAttribute('href', `/?journey=${place.journey.id}&edit=true`)
     expect(screen.getByText(place.chapter.title.en)).toBeInTheDocument()
     expect(await screen.findByText('English, Русский')).toBeInTheDocument()
     const other = LESSONS.find((each) => each.id !== LESSON.id && !LESSON.after?.includes(each.id))!

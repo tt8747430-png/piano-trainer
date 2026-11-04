@@ -1,6 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { ChartNoAxesColumnIncreasing, Ellipsis, KeyboardMusic, Trash2 } from 'lucide-react'
-import { useRef, useState, type ReactElement, type ReactNode } from 'react'
+import { Fragment, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   allJourneys,
@@ -11,16 +11,24 @@ import {
   type JourneyStep,
 } from '@/entities/lesson'
 import { STAGE_PAINT } from '@/entities/step'
-import { useAddLesson, useJourneyDraft } from '@/features/edit-original'
+import { DraftActions, DraftStatus, useAddLesson, useJourneyDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
-import { cn, slug } from '@/shared/lib'
-import { ActionMenu, ChoiceChips, PAINT, say } from '@/shared/ui'
+import { cn, slug, useSetSearch } from '@/shared/lib'
+import { ActionMenu, ChoiceChips, confirm, PAINT, say } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { useStepTitle } from '@/widgets/curriculum'
+import {
+  AddRow,
+  DocText,
+  languageActions,
+  NotOpen,
+  RowGroups,
+  type RowOrder,
+} from '@/widgets/content-editor'
+import type { LearnView } from '../model/learn-view'
 import { rowKey, withOrder } from '../model/journey-order'
-import { AddRow, DocText, DraftScreen, RowGroups, type RowOrder } from '@/widgets/content-editor'
+import { useStepTitle } from '../model/use-step-title'
 
-/** A chapter's heading, renamed in place, and its menu: removed (with Undo). Dragged by its handle. */
+/** A chapter's heading, renamed in place, and its menu: Remove chapter, asked first. Dragged by its handle. */
 function ChapterHead({
   chapter,
   at,
@@ -73,7 +81,7 @@ function ChapterHead({
         actions={[
           {
             key: 'remove',
-            label: t('edit.order.remove'),
+            label: t('edit.journey.removeChapter'),
             icon: Trash2,
             destructive: true,
             disabled: count === 1,
@@ -86,12 +94,12 @@ function ChapterHead({
 }
 
 /**
- * The journey as one document in one language (round 21): its title as the page's heading and its
- * goal under it; each chapter an `h2` renamed in place, its steps rows dragged into order, within
- * the chapter or onto another; a new lesson added at a chapter's end, a new chapter at the journey's.
- * Each change saved to the draft as it rests.
+ * The level as one document in one language (round 21), in place on the Lessons: its title and
+ * goal written where they show; each chapter's heading renamed in place, its ⋯ Remove chapter
+ * (asked first); its steps rows dragged into order within the chapter or onto another, each row's
+ * menu Remove (with Undo); Add lesson at a chapter's end, Add chapter at the level's.
  */
-function JourneyDocument({
+function LevelDocument({
   initial,
   locale,
   onChange,
@@ -134,6 +142,14 @@ function JourneyDocument({
       link: <Link to="/lessons/$lessonId/edit" params={{ lessonId: step.lessonId }} />,
     }
   }
+  const removeChapter = async (chapter: Chapter, name: string) => {
+    const asked = await confirm({
+      title: t('edit.journey.removingChapter', { title: name }),
+      body: t('edit.journey.removingChapterBody'),
+      action: t('edit.order.remove'),
+    })
+    if (asked) chapters(journey.chapters.filter((each) => each !== chapter))
+  }
   return (
     <div className="flex flex-col gap-2">
       <DocText
@@ -170,13 +186,7 @@ function JourneyDocument({
                     journey.chapters.map((each) => (each === chapter ? { ...each, title } : each)),
                   )
                 }
-                onRemove={() => {
-                  chapters(journey.chapters.filter((each) => each !== chapter))
-                  say(t('edit.order.removed', { title: name }), {
-                    label: t('edit.order.undo'),
-                    onClick: () => change(journey),
-                  })
-                }}
+                onRemove={() => void removeChapter(chapter, name)}
               />
             ),
             rows: chapter.steps.map((step) => rowOf(chapter, step)),
@@ -207,6 +217,7 @@ function JourneyDocument({
             )
             const title = { en: '', ru: '', [locale]: name }
             chapters([...journey.chapters, { id, title, steps: [] }])
+            say(t('edit.journey.chapterAdded', { title: name }))
             return true
           }}
         />
@@ -216,35 +227,33 @@ function JourneyDocument({
 }
 
 /**
- * An editor's journey editor (content as data, ADR 0116, round 21): the journey's draft as one
- * document, one language at a time (the bar's choice): a new lesson made on the server unpublished
- * and opened in the lesson editor; the draft's status, Publish and menu in the bar.
+ * A level of the Lessons in Edit mode (R29 B4, content as data ADR 0116), in place on Learn: the
+ * level's draft as one document, one language at a time (chosen in the draft's menu); a new lesson
+ * made on the server unpublished and opened in the lesson editor. Its bar (`bar`) carries where the
+ * draft stands, Publish and the draft's menu before the page's Done; until the draft opens, why not.
  */
-export function JourneyEditor({
+export function LevelEditor({
   journey,
-  back,
-  toLessons,
+  bar,
 }: {
   journey: Journey
-  /** The screen's Back (`BackButton`). */
-  back: ReactNode
-  /** A router `Link` to the Lessons. */
-  toLessons: ReactElement
+  /** The page's bar, given the draft's status and actions for its end. */
+  bar: (actions: ReactNode) => ReactNode
 }) {
-  const { t } = useTranslation('learn')
-  const { t: tc } = useTranslation('common')
+  const { t } = useTranslation(['learn', 'editor', 'common'])
+  const { t: words } = useTranslation('learn')
   const shown = useLocale()
   const [locale, setLocale] = useState<Locale>(shown)
   const draft = useJourneyDraft(journey)
   const addLesson = useAddLesson()
   const navigate = useNavigate()
-  const written = useRef<{ opened: number; journey: Journey } | null>(null)
-  const title = localText(
-    draft.load.state === 'ready' ? draft.load.value.title : journey.title,
-    shown,
-  )
+  const show = useSetSearch<LearnView>()
+  // The last change, where the document opens again (another language): kept as it was written.
+  const [written, setWritten] = useState<{ opened: number; journey: Journey } | null>(null)
+  const { load } = draft
+  const title = localText(load.state === 'ready' ? load.value.title : journey.title, shown)
   const save = (next: Journey) => {
-    written.current = { opened: draft.opened, journey: next }
+    setWritten({ opened: draft.opened, journey: next })
     draft.save(next)
   }
   const add = async (current: Journey, chapterId: string, name: string) => {
@@ -263,44 +272,54 @@ export function JourneyEditor({
     return true
   }
   return (
-    <DraftScreen
-      draft={draft}
-      heading={t('edit.bar.journey')}
-      title={title}
-      back={back}
-      backTo={{ link: toLessons, label: t('edit.journey.back') }}
-      editorsOnly={t('edit.journey.editorsOnly')}
-      unreadable={t('edit.journey.unreadable')}
-      language={{ value: locale, onChange: setLocale }}
-    >
-      {(initial) => (
-        <>
-          {/* The four levels, each its own lessons to manage. */}
-          <ChoiceChips
-            label={t('journey.label')}
-            value={journey.id}
-            scroll
-            options={allJourneys().map((each) => ({
-              value: each.id,
-              label: tc(`stage.${each.stage}`),
-            }))}
-            onChange={(journeyId) =>
-              void navigate({
-                to: '/journeys/$journeyId/edit',
-                params: { journeyId },
-                replace: true,
-              })
-            }
-          />
-          <JourneyDocument
-            key={locale}
-            locale={locale}
-            initial={written.current?.opened === draft.opened ? written.current.journey : initial}
-            onChange={save}
-            onAddLesson={add}
-          />
-        </>
+    <>
+      {bar(
+        load.state === 'ready' ? (
+          <>
+            <DraftStatus draft={draft} className="me-1" />
+            <DraftActions
+              draft={draft}
+              title={title}
+              unreadable={t('learn:edit.journey.unreadable')}
+              onReset={draft.reopen}
+              more={languageActions(locale, setLocale, words)}
+            />
+          </>
+        ) : null,
       )}
-    </DraftScreen>
+      <div className="mx-auto mt-4 flex w-full max-w-2xl min-w-0 flex-col gap-6">
+        {/* The four levels, each its own lessons to edit. */}
+        <ChoiceChips
+          label={t('learn:journey.label')}
+          value={journey.id}
+          scroll
+          options={allJourneys().map((each) => ({
+            value: each.id,
+            label: t(`common:stage.${each.stage}`),
+          }))}
+          onChange={(id) => show({ view: 'lessons', journey: id })}
+        />
+        {load.state === 'loading' ? (
+          <NotOpen line={t('editor:original.opening')} />
+        ) : load.state === 'failed' ? (
+          <NotOpen
+            line={t(
+              load.reason === 'offline' ? 'editor:original.offline' : 'editor:original.failed',
+            )}
+          >
+            <Button onClick={draft.reopen}>{t('editor:original.retry')}</Button>
+          </NotOpen>
+        ) : (
+          <Fragment key={`${draft.opened}-${locale}`}>
+            <LevelDocument
+              locale={locale}
+              initial={written?.opened === draft.opened ? written.journey : load.value}
+              onChange={save}
+              onAddLesson={add}
+            />
+          </Fragment>
+        )}
+      </div>
+    </>
   )
 }

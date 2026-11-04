@@ -14,15 +14,18 @@ import { ChoiceChips, NewSheet, SheetPart, Stepper } from '@/shared/ui'
 export function NewCourseSheet({
   open,
   onOpenChange,
+  shelf: onShelf = 'beginner',
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
+  /** The shelf it starts on: the one whose New course opened it. */
+  shelf?: Shelf | undefined
 }) {
   const { t } = useTranslation(['learn', 'common'])
   const create = useCreateCourse()
   const navigate = useNavigate()
   const [name, setName] = useState('')
-  const [shelf, setShelf] = useState<Shelf>('beginner')
+  const [shelf, setShelf] = useState<Shelf>(onShelf)
   const [stage, setStage] = useState<Stage>('beginner')
   const [weeks, setWeeks] = useState(4)
   const [creating, setCreating] = useState(false)

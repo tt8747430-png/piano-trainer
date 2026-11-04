@@ -234,9 +234,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/courses/$courseId/$lessonId': toCourse,
   '/shell/courses/$courseId/$lessonId/settings': toCourseLesson,
   '/shell/courses/$courseId/$lessonId/edit': toCourseLesson,
-  '/shell/courses/manage': toCourses,
-  '/shell/journeys/$journeyId/edit': (from) =>
-    up({ to: '/', search: { view: 'lessons', journey: param(from, 'journeyId') } }),
 
   // Practice: each page up to Practice; a trainer up to the Quiz; a pattern up to Accompaniment,
   // its Edit and Publish up to it; a study and its sections the same.

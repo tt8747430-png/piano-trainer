@@ -50,7 +50,7 @@ describe('a course’s Settings (round 28)', () => {
     })
     expect(await screen.findByRole('link', { name: /Shelf/ })).toHaveAttribute(
       'href',
-      '/courses/manage',
+      '/?view=courses&edit=true',
     )
     // No changes, no row of them.
     expect(screen.queryByText('Unpublished changes')).not.toBeInTheDocument()

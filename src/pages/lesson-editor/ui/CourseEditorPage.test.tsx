@@ -196,14 +196,15 @@ describe('the course editor (ADR 0116, round 12)', () => {
     expect(await screen.findAllByText('Blues in C')).not.toHaveLength(0)
   })
 
-  it('makes a new course from Courses’ New sheet, unpublished, and opens it in the course editor', async () => {
+  it('makes a new course from a shelf’s New course in Edit mode, unpublished, and opens it in the course editor', async () => {
     const user = userEvent.setup()
     const content = editing()
-    const { router } = await renderApp('/?view=courses', {
+    const { router } = await renderApp('/?view=courses&edit=1', {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await user.click(await screen.findByRole('button', { name: 'New course' }))
+    const shelf = await screen.findByRole('region', { name: 'Beginner courses' })
+    await user.click(within(shelf).getByRole('button', { name: 'New course' }))
     const sheet = await screen.findByRole('dialog', { name: 'New course' })
     expect(within(sheet).getByRole('button', { name: 'Create course' })).toBeDisabled()
     await user.type(within(sheet).getByRole('textbox', { name: 'Name' }), 'Jazz voicings')
@@ -229,7 +230,7 @@ describe('the course editor (ADR 0116, round 12)', () => {
   })
 
   it('offers no new course to a learner', async () => {
-    await renderApp('/?view=courses', { auth: await signedInAs('learner') })
+    await renderApp('/?view=courses&edit=1', { auth: await signedInAs('learner') })
     await screen.findByRole('heading', { level: 1 })
     expect(screen.queryByRole('button', { name: 'New course' })).not.toBeInTheDocument()
   })
