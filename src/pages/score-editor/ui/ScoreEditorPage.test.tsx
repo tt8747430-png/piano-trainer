@@ -1203,8 +1203,8 @@ describe('the score editor', () => {
           .querySelectorAll('button:not([aria-label^="Tempo"])'),
       ]
       // Close, then Done beside the title, the one in words (iOS's; R29 Flat's); Piano keys, MIDI,
-      // Undo, Redo, Score settings at the end.
-      expect(bar).toHaveLength(7)
+      // Tools (R29 B11), Undo, Redo, Score settings at the end.
+      expect(bar).toHaveLength(8)
       expect(bar[1]).toHaveTextContent('Done')
       for (const control of [bar[0]!, ...bar.slice(2), ...dock]) {
         const name = control.getAttribute('aria-label') ?? ''
@@ -1904,6 +1904,7 @@ describe('the score editor', () => {
     expect(namesIn(end as HTMLElement)).toEqual([
       'Piano keys',
       'MIDI keyboard',
+      'Tools',
       'Undo',
       'Redo',
       'Score settings',

@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 import { Redo2, Settings2, Undo2, X } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
 import { barAt } from '@/features/score-editor'
@@ -8,6 +8,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { ScoreEditToggle } from '@/widgets/mode-switch'
 import { useFoldKeys } from '@/features/live-keyboard'
 import { BarTitle, KeysToggle } from '@/widgets/practice-player'
+import { ToolsButton } from '@/widgets/tools-sheet'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /**
@@ -49,10 +50,15 @@ export function EditorActions({ draft }: { draft?: ReactNode }) {
   const canRedo = useEditorState((state) => state.future.length > 0)
   const recording = takes.stage !== 'idle'
   const keys = useFoldKeys()
+  const tempo = useEditorState((state) => state.draft.tempo)
+  const meter = useEditorState((state) => state.draft.meter)
+  const song = useMemo(() => ({ bpm: tempo, meter }), [tempo, meter])
   return (
     <>
       <KeysToggle shown={!keys.folded} onShow={(shown) => keys.fold(!shown)} />
       <MidiButton variant="tool" />
+      {/* The Tools sheet where the Player has it (R29 B11), its metronome at the song's tempo. */}
+      <ToolsButton song={song} />
       <Button
         variant="tool"
         size="icon"
