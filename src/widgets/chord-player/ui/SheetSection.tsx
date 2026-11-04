@@ -171,12 +171,14 @@ export function SheetSection({
           />
         </div>
         {variations.length > 1 ? (
-          <Segmented
-            label={t('chordPlayer.variation')}
-            value={Math.min(section.variation, variations.length) as Variation}
-            options={variations.map((value) => ({ value, label: String(value) }))}
-            onChange={(variation) => onChange({ variation })}
-          />
+          <div className="w-44 shrink-0">
+            <Segmented
+              label={t('chordPlayer.variation')}
+              value={Math.min(section.variation, variations.length) as Variation}
+              options={variations.map((value) => ({ value, label: String(value) }))}
+              onChange={(variation) => onChange({ variation })}
+            />
+          </div>
         ) : null}
         <div className="ms-auto">
           <ActionMenu
@@ -462,7 +464,7 @@ function ChordBox({
             {boxName(chord, musicKey, names)}
           </span>
           {role ? (
-            <span className="max-w-full truncate text-xs font-semibold">
+            <span className="max-w-full text-center text-xs font-semibold text-balance break-words">
               {names === 'chords' && numeral ? `${numeralText(numeral)} · ` : ''}
               {t(`music:harmony.role.${role.role}`)}
             </span>
