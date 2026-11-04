@@ -1,7 +1,8 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { useAccount } from '@/shared/lib/account'
-import { BackButton, Dropdown, ScreenHeader } from '@/shared/ui'
+import { GraduationCap } from 'lucide-react'
+import { useAccount, useLearnerView } from '@/shared/lib/account'
+import { BackButton, Dropdown, RoundButton, ScreenHeader } from '@/shared/ui'
 import { NotOpen } from '@/widgets/content-editor'
 import { ADMIN_TABS, type AdminTab } from '../model/admin-tab'
 import { AccountsTab } from './AccountsTab'
@@ -36,9 +37,25 @@ export function AdminPage() {
   const { tab } = useSearch({ from: '/shell/admin' })
   const Tab = TABS[tab]
   const navigate = useNavigate()
+  const learner = useLearnerView()
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('title')} back={<BackButton />} />
+      <ScreenHeader
+        title={t('title')}
+        back={<BackButton />}
+        actions={
+          learner.can ? (
+            <RoundButton
+              label={t('viewAsLearner')}
+              icon={GraduationCap}
+              onClick={() => {
+                learner.set(true)
+                void navigate({ to: '/' })
+              }}
+            />
+          ) : undefined
+        }
+      />
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
         {account?.role === 'admin' ? (
           <>

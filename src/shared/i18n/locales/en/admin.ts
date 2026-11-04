@@ -44,6 +44,7 @@ export const admin = {
   failed: 'That didn’t load. Try again in a moment.',
   refused: 'The server turned that down.',
   again: 'Try again',
+  viewAsLearner: 'View as a learner',
   notAdmin: 'Only an admin can open this page.',
   accounts: {
     search: 'Search accounts',

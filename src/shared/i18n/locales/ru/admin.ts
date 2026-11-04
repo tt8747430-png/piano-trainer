@@ -45,6 +45,7 @@ export const admin: LocaleResources['admin'] = {
   failed: 'Не загрузилось. Попробуйте чуть позже.',
   refused: 'Сервер отказал.',
   again: 'Ещё раз',
+  viewAsLearner: 'Смотреть как ученик',
   notAdmin: 'Эту страницу может открыть только администратор.',
   accounts: {
     search: 'Поиск аккаунтов',
