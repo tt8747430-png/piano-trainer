@@ -119,6 +119,7 @@ export const practice: LocaleResources['practice'] = {
     chromatic: 'По полутонам',
   },
   scales: {
+    vamp: { label: 'Вамп', play: 'Сыграть вамп: {{chords}}' },
     show: { scale: 'Гамма', chords: 'Аккорды', key: 'Тональность' },
     views: {
       notes_one: '{{count}} нота',
@@ -396,6 +397,7 @@ export const practice: LocaleResources['practice'] = {
     },
   },
   scaleStaff: {
+    characteristic: 'Характерная',
     group: 'На нотоносце',
     degrees: 'Номера ступеней',
     degreesDetail: 'Место каждой ноты в гамме, под ней: 1 — тоника, ♭3 — малая терция.',

@@ -12,6 +12,7 @@ const words: RunStaffWords = {
   leading: 'Leading note',
   lower: 'Lower tetrachord',
   upper: 'Upper tetrachord',
+  characteristic: 'Characteristic',
 }
 const view = {
   root: noteParam(note('C')),
@@ -58,6 +59,15 @@ describe('runStaff', () => {
     expect(texts[4]).toBe('Upper tetrachord')
     expect(texts[6]).toBe('Leading note')
     expect(texts[7]).toBe('Tonic')
+  })
+
+  it('marks B as D Dorian’s characteristic note', () => {
+    const run = scaleRunOf({ ...view, root: noteParam(note('D')), kind: 'dorian' })
+    const off = { degrees: false, steps: false, tonic: false, tetrachords: false }
+    const notes = runStaff(run.music, 'rh', run.placed, off, words, '6').notes
+    expect(
+      notes.filter((each) => each.marks?.text === 'Characteristic').map((each) => each.spelled),
+    ).toEqual([note('B')])
   })
 
   it('leaves the music alone with every layer off', () => {

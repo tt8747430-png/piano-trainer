@@ -15,6 +15,8 @@ import {
   relatedScale,
   relativeKey,
   scaleGaps,
+  characteristicDegree,
+  modeVamp,
   scaleHasChords,
   scaleIntervals,
   scaleKey,
@@ -95,6 +97,20 @@ describe('scaleRootSpelling', () => {
     expect(
       [1, 6, 8, 3, 10].map((pc) => noteName(scaleRootSpelling(pitchClass(pc), 'blues'))),
     ).toEqual(['C#', 'F#', 'G#', 'E♭', 'B♭'])
+  })
+})
+
+describe('a mode’s character (A43)', () => {
+  it('sets D Dorian apart by its 6th, B', () => {
+    const at = characteristicDegree('dorian')
+    expect(at).toBe(5)
+    expect(spellScale(note('D'), 'dorian')[at ?? 0]?.note).toEqual(note('B'))
+  })
+
+  it('swings Mixolydian between I and ♭VII, and gives major no vamp', () => {
+    expect(modeVamp('mixolydian')).toEqual([0, 6])
+    expect(modeVamp('major')).toEqual([])
+    expect(characteristicDegree('major')).toBeUndefined()
   })
 })
 

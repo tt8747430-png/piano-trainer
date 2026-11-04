@@ -321,6 +321,32 @@ export function alteredFromMajor(kind: ScaleKind): number[] {
   )
 }
 
+/**
+ * The note that sets a mode apart (A43, *The Secret of Modes*), by its place in the scale: Dorian's
+ * raised 6th against the natural minor, Phrygian's ♭2, Lydian's ♯4, Mixolydian's ♭7, Locrian's ♭5.
+ */
+const CHARACTERISTIC: Partial<Record<ScaleKind, number>> = {
+  dorian: 5,
+  phrygian: 1,
+  lydian: 3,
+  mixolydian: 6,
+  locrian: 4,
+}
+export const characteristicDegree = (kind: ScaleKind): number | undefined => CHARACTERISTIC[kind]
+
+/**
+ * The chords a mode's vamp swings between (A43), by degree: Dorian i–IV, Mixolydian I–♭VII, Lydian
+ * I–II, Phrygian i–♭II, Aeolian i–♭VI–♭VII. Empty for a scale with no vamp of its own.
+ */
+const VAMPS: Partial<Record<ScaleKind, readonly number[]>> = {
+  dorian: [0, 3],
+  mixolydian: [0, 6],
+  lydian: [0, 1],
+  phrygian: [0, 1],
+  natural: [0, 5, 6],
+}
+export const modeVamp = (kind: ScaleKind): readonly number[] => VAMPS[kind] ?? []
+
 /** The gap between neighbouring notes of a scale: a half step, a whole step, or both (three semitones). */
 type ScaleGap = 'H' | 'W' | 'W+H'
 const GAP_BY_SEMITONES: Readonly<Record<number, ScaleGap>> = { 1: 'H', 2: 'W', 3: 'W+H' }

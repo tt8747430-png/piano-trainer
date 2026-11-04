@@ -134,6 +134,7 @@ export const practice = {
   },
   // Scales and keys: the run, the chords, the key.
   scales: {
+    vamp: { label: 'Vamp', play: 'Play the vamp: {{chords}}' },
     // The tabs say what is in them (A32): its notes, its key's harmony, the key itself.
     show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
     // Under each view's name, what it holds of the scale chosen (R29-P7): a choice visibly drives all three.
@@ -412,6 +413,7 @@ export const practice = {
   },
   // The Chord finder (ADR 0052): a chord played or tapped, named, spelled and written.
   scaleStaff: {
+    characteristic: 'Characteristic',
     group: 'On the staff',
     degrees: 'Degree numbers',
     degreesDetail: 'Each note’s place in the scale, under it: 1 for the tonic, ♭3 for a minor 3rd.',

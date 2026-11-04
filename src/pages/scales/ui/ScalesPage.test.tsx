@@ -55,6 +55,14 @@ describe('Practice → Scales and keys', () => {
     expect(screen.queryByRole('heading', { name: 'Practice' })).not.toBeInTheDocument()
   })
 
+  it('plays D Dorian’s vamp, Dm – G (A43)', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/practice/scales?root=D&kind=dorian')
+    expect(await screen.findByText('Dm – G')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Play the vamp: Dm – G' }))
+    expect(audio.played.length).toBeGreaterThan(0)
+  })
+
   it('opens the scale’s exercises in the Player, each on this scale', async () => {
     await renderApp('/practice/scales?root=D&kind=dorian')
     const practise = await screen.findByRole('region', { name: 'Practise in the Player' })

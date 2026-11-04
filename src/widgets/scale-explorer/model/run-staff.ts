@@ -12,6 +12,8 @@ export interface RunStaffWords {
   readonly leading: string
   readonly lower: string
   readonly upper: string
+  /** A mode's characteristic note (A43), named over it. */
+  readonly characteristic: string
 }
 
 /** A step between two keys named, where it is one a scale takes. */
@@ -25,7 +27,7 @@ function stepName(semitones: number, words: RunStaffWords): string | undefined {
 /**
  * The run with its theory written on one hand's staff (A43): each note's degree under it, the step to
  * the next named over the gap, the tonic and leading note named, and the tetrachords' first notes
- * named, as the learner's switches say. Degrees come from the run's keys, up and down.
+ * named, as the learner's switches say; a mode's characteristic note always named. Degrees come from the run's keys, up and down.
  */
 export function runStaff(
   music: TimedMusic,
@@ -33,8 +35,11 @@ export function runStaff(
   placed: readonly PlacedTone[],
   layers: ScaleStaffSettings,
   words: RunStaffWords,
+  /** A mode's degree that sets it apart (`characteristicDegree`), as its tone writes it: always named. */
+  characteristic?: string,
 ): TimedMusic {
-  if (!layers.degrees && !layers.steps && !layers.tonic && !layers.tetrachords) return music
+  const any = layers.degrees || layers.steps || layers.tonic || layers.tetrachords
+  if (!any && characteristic === undefined) return music
   const degrees = new Map<Midi, string>(placed.map((key) => [key.midi, key.tone.degree]))
   // Tetrachords split a seven-note scale in two: the 1st to 4th and the 5th to the octave.
   const sevens = new Set(placed.map((key) => key.tone.pitchClass)).size === 7
@@ -61,7 +66,9 @@ export function runStaff(
             ? words.upper
             : undefined
         : undefined
-    const text = [named, half].filter(Boolean).join(' · ') || undefined
+    const special =
+      characteristic !== undefined && degree === characteristic ? words.characteristic : undefined
+    const text = [special, named, half].filter(Boolean).join(' · ') || undefined
     notes[index] = {
       ...note,
       marks: {

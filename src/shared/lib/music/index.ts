@@ -205,6 +205,8 @@ export {
   relatedScale,
   relativeKey,
   alteredFromMajor,
+  characteristicDegree,
+  modeVamp,
   scaleDegreeNames,
   scaleGaps,
   scaleHasChords,
