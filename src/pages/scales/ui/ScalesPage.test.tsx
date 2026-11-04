@@ -304,11 +304,17 @@ describe('Practice → Scales and keys', () => {
     // A crossing's finger says so to a screen reader: the left hand's 3 over to A, the right thumb on F.
     expect(row('Left hand')).toEqual(['NotesCDEFGABC', 'Fingers543213 (crossing)21'])
     expect(row('Right hand')).toEqual(['NotesCDEFGABC', 'Fingers1231 (crossing)2345'])
+    // Each hand drawn over each of its positions, a new one where it crosses (R29-P5).
     expect(
-      within(byHand).getByRole('img', {
-        name: 'Right hand: fingers numbered from the thumb, 1, to the little finger, 5',
-      }),
-    ).toBeInTheDocument()
+      within(byHand)
+        .getAllByRole('img')
+        .map((each) => each.getAttribute('aria-label')),
+    ).toEqual([
+      'Left hand over the keys: C 5, D 4, E 3, F 2, G 1',
+      'Left hand over the keys: A 3, B 2, C 1',
+      'Right hand over the keys: C 1, D 2, E 3',
+      'Right hand over the keys: F 1, G 2, A 3, B 4, C 5',
+    ])
   })
 
   it('climbs two octaves where asked and up to four, kept in the URL (R29-P9)', async () => {

@@ -197,7 +197,7 @@ describe('Piece', () => {
     await openSettings(userEvent.setup())
     expect(
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
-    ).toEqual(['In your library', 'Share'])
+    ).toEqual(['Appearance', 'In your library', 'Share'])
     // Favourite is an act on the song (its ♡, its menus), never a switch here (R19).
     expect(screen.queryByRole('switch', { name: 'Favourite' })).not.toBeInTheDocument()
     // One of the app's songs stays in its folder (D8): Archive, no Move to folder….
@@ -334,7 +334,7 @@ describe('Piece: the learner’s own music', () => {
     await openSettings(user)
     expect(
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
-    ).toEqual(['In your library', 'Share'])
+    ).toEqual(['Appearance', 'In your library', 'Share'])
     expectLastAndAlone(screen.getByRole('button', { name: 'Delete' }))
     expect(screen.getByRole('link', { name: /^Publish…/ })).toHaveAttribute(
       'href',

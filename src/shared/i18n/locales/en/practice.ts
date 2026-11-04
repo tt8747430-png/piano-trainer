@@ -160,7 +160,6 @@ export const practice = {
       title: 'Fingering by hand',
       lh: 'Left hand',
       rh: 'Right hand',
-      drawing: '{{hand}}: fingers numbered from the thumb, 1, to the little finger, 5',
       notes: 'Notes',
       fingers: 'Fingers',
       crossings:

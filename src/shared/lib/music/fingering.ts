@@ -405,3 +405,25 @@ export function runFingering(
     ? scaleFingering(root, kind, hand, start, (keys.length - 1) / scaleIntervals(kind).length)
     : thumbFingering(keys, hand)
 }
+
+/**
+ * A run's hand positions (R29-P5): its keys with their fingers, split before each crossing (the thumb
+ * passing under, a finger over), so each position is one place of the hand over the keys, as a hand
+ * drawn over them shows it. A key with no finger starts no position and is left out.
+ */
+export function handPositions(
+  keys: readonly Midi[],
+  fingers: readonly (Finger | undefined)[],
+  hand: Hand,
+): { readonly key: Midi; readonly finger: Finger }[][] {
+  const crossings = fingerCrossings(keys, fingers, hand)
+  const positions: { readonly key: Midi; readonly finger: Finger }[][] = []
+  keys.forEach((key, at) => {
+    const finger = fingers[at]
+    if (finger === undefined) return
+    const last = positions.at(-1)
+    if (!last || crossings[at]) positions.push([{ key, finger }])
+    else last.push({ key, finger })
+  })
+  return positions
+}

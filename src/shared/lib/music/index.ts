@@ -238,6 +238,7 @@ export {
 export {
   arpeggioFingering,
   fingerCrossings,
+  handPositions,
   FINGERINGS,
   FINGERS,
   fingeringsOf,

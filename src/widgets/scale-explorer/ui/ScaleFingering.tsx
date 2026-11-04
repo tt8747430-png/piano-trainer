@@ -2,12 +2,13 @@ import { useTranslation } from 'react-i18next'
 import { useFold } from '@/features/fold-section'
 import {
   fingerCrossings,
+  handPositions,
   type Finger,
   type Hand,
   type PlacedTone,
   printedNote,
 } from '@/shared/lib/music'
-import { FoldSection, HandDiagram } from '@/shared/ui'
+import { FoldSection, HandCard } from '@/shared/ui'
 
 /** The run's notes going up, each hand's fingers on them. */
 interface FingeredRun {
@@ -45,14 +46,29 @@ export function ScaleFingering({ run, standard }: { run: FingeredRun; standard: 
     >
       <ul className="grid-cards gap-2">
         {HANDS.map((hand) => (
-          <li key={hand} className="flex flex-wrap items-center gap-x-4 gap-y-2 card p-4">
-            <HandDiagram
-              hand={hand}
-              label={t('scales.byHand.drawing', { hand: t(`scales.byHand.${hand}`) })}
-              className="h-24 w-auto shrink-0"
-            />
+          <li key={hand} className="flex flex-col gap-3 card p-4">
+            <h3 className="text-lg">{t(`scales.byHand.${hand}`)}</h3>
+            {/* The hand drawn over each of its positions in turn (R29-P5): a new one where it crosses. */}
+            <div className="flex gap-3 overflow-x-auto overscroll-x-contain scrollbar-none">
+              {handPositions(keys, run.fingers[hand], hand).map((position, at) => (
+                <HandCard
+                  key={at}
+                  hand={hand}
+                  notes={position}
+                  className="h-28 w-auto shrink-0"
+                  label={t('chords.fingering.drawn', {
+                    hand: t(`scales.byHand.${hand}`),
+                    notes: position
+                      .map(({ key, finger }) => {
+                        const tone = run.placed.find((placed) => placed.midi === key)?.tone
+                        return `${tone ? printedNote(tone.note) : ''} ${finger}`
+                      })
+                      .join(', '),
+                  })}
+                />
+              ))}
+            </div>
             <div className="flex max-w-full min-w-0 flex-col gap-2">
-              <h3 className="text-lg">{t(`scales.byHand.${hand}`)}</h3>
               {/* Two octaves run wider than a narrow phone: the notes scroll, the card stays put. */}
               <div className="overflow-x-auto overscroll-x-contain scrollbar-none">
                 <table className="w-max border-separate border-spacing-x-0.5 text-center tabular-nums">

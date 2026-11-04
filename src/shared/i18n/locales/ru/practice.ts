@@ -147,7 +147,6 @@ export const practice: LocaleResources['practice'] = {
       title: 'Аппликатура по рукам',
       lh: 'Левая рука',
       rh: 'Правая рука',
-      drawing: '{{hand}}: пальцы пронумерованы от большого, 1, до мизинца, 5',
       notes: 'Ноты',
       fingers: 'Пальцы',
       crossings:

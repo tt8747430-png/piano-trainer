@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   arpeggioFingering,
   fingerCrossings,
+  handPositions,
   fingeringsOf,
   hasStandardFingering,
   ownFingering,
@@ -316,5 +317,29 @@ describe('arpeggioFingering', () => {
         for (const hand of ['rh', 'lh'] as const)
           for (const finger of arpeggioFingering(arpeggio(root, steps, 3), hand))
             expect([1, 2, 3, 4, 5]).toContain(finger)
+  })
+})
+
+describe('handPositions (R29-P5)', () => {
+  it('splits C major’s right hand where the thumb passes under: 1 2 3 · 1 2 3 4 5', () => {
+    const keys = [60, 62, 64, 65, 67, 69, 71, 72].map(midi)
+    const fingers = [1, 2, 3, 1, 2, 3, 4, 5] as const
+    expect(
+      handPositions(keys, fingers, 'rh').map((position) => position.map((each) => each.finger)),
+    ).toEqual([
+      [1, 2, 3],
+      [1, 2, 3, 4, 5],
+    ])
+  })
+
+  it('splits its left hand where 3 crosses over the thumb: 5 4 3 2 1 · 3 2 1', () => {
+    const keys = [48, 50, 52, 53, 55, 57, 59, 60].map(midi)
+    const fingers = [5, 4, 3, 2, 1, 3, 2, 1] as const
+    expect(
+      handPositions(keys, fingers, 'lh').map((position) => position.map((each) => each.finger)),
+    ).toEqual([
+      [5, 4, 3, 2, 1],
+      [3, 2, 1],
+    ])
   })
 })
