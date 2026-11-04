@@ -274,15 +274,14 @@ describe('TrainerBoard', () => {
     expect(screen.getByRole('heading', { name: 'C · Major triad' })).toBeInTheDocument()
   })
 
-  it('keeps Next waiting for an answer, then lets it go on', async () => {
+  it('shows Next only once an answer is chosen, never over the answers (A41)', async () => {
     const user = userEvent.setup()
     renderBoard(onC('d7', 'quiz'))
-    const next = screen.getByRole('button', { name: 'Next' })
-    expect(next).toBeDisabled()
+    expect(screen.queryByRole('button', { name: 'Next' })).not.toBeInTheDocument()
     await user.click(
       within(screen.getByRole('group', { name: 'Answers' })).getByRole('button', { name: 'C7' }),
     )
-    expect(next).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled()
   })
 
   it('hides the keys and the staff of a chord asked by ear until it is answered', async () => {

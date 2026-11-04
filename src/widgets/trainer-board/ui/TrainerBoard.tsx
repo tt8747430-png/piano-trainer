@@ -333,18 +333,22 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
         </span>
       ) : null}
 
-      {/* The one primary action, the same from the round's start to its Next, in the capsule. */}
-      <FloatingActions>
-        <Fab
-          ref={primary}
-          extended
-          label={primaryLabel}
-          icon={primaryIcon}
-          disabled={act === null}
-          aria-describedby={choosing && selected.length === 0 ? checkHint : undefined}
-          onClick={act ?? undefined}
-        />
-      </FloatingActions>
+      {/* The one primary action, the same from the round's start to its Next, in the capsule; a
+          round answered by its buttons has none until it is answered, the buttons being its act, so
+          the capsule never stands over them. */}
+      {act === null && isChoice(question) ? null : (
+        <FloatingActions>
+          <Fab
+            ref={primary}
+            extended
+            label={primaryLabel}
+            icon={primaryIcon}
+            disabled={act === null}
+            aria-describedby={choosing && selected.length === 0 ? checkHint : undefined}
+            onClick={act ?? undefined}
+          />
+        </FloatingActions>
+      )}
     </section>
   )
 }
