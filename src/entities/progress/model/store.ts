@@ -25,7 +25,7 @@ import {
 } from './types'
 
 export const PROGRESS_STORAGE_KEY = 'pt-progress'
-export const PROGRESS_VERSION = 5
+export const PROGRESS_VERSION = 6
 
 export type ProgressStore = StoreApi<ProgressState>
 
@@ -86,8 +86,12 @@ function evidenceOrNothing(value: unknown): readonly Answer[] | undefined {
 /** A trainer and its level, as a record is kept under: `name-chord:3`. */
 const isRunKey = (key: string): key is RunKey => /^[a-z][a-z0-9-]*:[a-z0-9-]+$/.test(key)
 
-/** What an exercise's tempo is kept under: its id, and a number where it has several (`hanon:5`). */
-const isTempoKey = (key: string): key is string => /^[a-z][a-z0-9-]*(:[0-9]+)?$/.test(key)
+/**
+ * What an exercise's tempo is kept under: its id, a number where it has several, and its key
+ * (`hanon:5:G`, `five-finger:Ebm`; A41).
+ */
+const isTempoKey = (key: string): key is string =>
+  /^[a-z][a-z0-9-]*(:[0-9]+)?:[A-G](#|b)?m?$/.test(key)
 
 const isTempo = (value: unknown): value is number =>
   isCount(value) && value >= TEMPO_RANGE.min && value <= TEMPO_RANGE.max

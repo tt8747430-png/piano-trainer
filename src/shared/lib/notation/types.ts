@@ -63,6 +63,8 @@ export interface TimedMusic {
   readonly timeSymbol?: true
   /** No time signature printed: a question's staff, a chord or a note with no bar to count (A41). */
   readonly timeHidden?: true
+  /** No chord symbols and no staff names printed: an exercise's line, not a song (A41). */
+  readonly plain?: true
   /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
   readonly tempoUnit?: TempoUnit
   /** The tempo mark's words printed with it (A34): Allegro, or the writer's own. */
@@ -224,6 +226,8 @@ export interface Score {
   readonly timeSymbol?: true
   /** No time signature printed: a question's staff, a chord or a note with no bar to count (A41). */
   readonly timeHidden?: true
+  /** No chord symbols and no staff names printed: an exercise's line (A41). */
+  readonly plain?: true
   /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
   readonly tempoUnit?: TempoUnit
   /** The tempo mark's words printed with it (A34): Allegro, or the writer's own. */

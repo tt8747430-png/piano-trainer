@@ -208,7 +208,11 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
       to: '/practice/progressions',
       search: readProgressionsSearch({ p: search.p, key: search.key }),
     }),
-  '/full-screen/play/exercise/$exerciseId': () => up({ to: '/practice/exercises' }),
+  '/full-screen/play/exercise/$exerciseId': (from) =>
+    up({
+      to: '/practice/exercises/$exerciseId',
+      params: { exerciseId: param(from, 'exerciseId') },
+    }),
   // The Check: up to the explorer its step is done on, the step's panel open, where it was asked.
   '/full-screen/check': (from) => {
     const { search } = from
@@ -286,6 +290,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/practice/quiz': toPractice,
   '/shell/practice/quiz/$trainerId': () => up({ to: '/practice/quiz' }),
   '/shell/practice/exercises': toPractice,
+  '/shell/practice/exercises/$exerciseId': () => up({ to: '/practice/exercises' }),
   '/shell/practice/accompaniment': toPractice,
   '/shell/practice/accompaniment/patterns/new': toAccompaniment,
   '/shell/practice/accompaniment/patterns/$patternRef': toPatternPart,

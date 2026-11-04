@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { note } from '@/shared/lib/music'
 import { exerciseOf } from './selectors'
 import { rungAbove, rungOf, TEMPO_LADDER, tempoKey } from './ladder'
 
@@ -19,8 +20,14 @@ describe('the tempo ladder', () => {
     expect(rungAbove(132)).toBe(132)
   })
 
-  it('keeps each Hanon exercise’s tempo apart, any other exercise’s by its id', () => {
-    expect(tempoKey(exerciseOf('hanon'), { hanon: 5 })).toBe('hanon:5')
-    expect(tempoKey(exerciseOf('scale'), { hanon: 5 })).toBe('scale')
+  it('keeps each Hanon exercise’s tempo apart, any other exercise’s by its id, each key apart', () => {
+    const inG = { hanon: 5, root: note('G'), tonality: 'major' } as const
+    expect(tempoKey(exerciseOf('hanon'), inG)).toBe('hanon:5:G')
+    expect(tempoKey(exerciseOf('scale'), inG)).toBe('scale:G')
+    expect(
+      tempoKey(exerciseOf('five-finger'), { ...inG, root: note('E', -1), tonality: 'minor' }),
+    ).toBe('five-finger:Ebm')
+    // A minor tonality is the key's only where the exercise is played in minor.
+    expect(tempoKey(exerciseOf('scale'), { ...inG, tonality: 'minor' })).toBe('scale:G')
   })
 })

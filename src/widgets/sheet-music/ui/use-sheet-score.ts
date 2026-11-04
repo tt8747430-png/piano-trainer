@@ -1,6 +1,12 @@
 import { useMemo } from 'react'
 import type { Performance } from '@/shared/lib/arrangement'
-import { annotate, notate, type ScoreAnnotation, type StaffId } from '@/shared/lib/notation'
+import {
+  annotate,
+  notate,
+  type ScoreAnnotation,
+  type StaffId,
+  type StaffLabels,
+} from '@/shared/lib/notation'
 import { useStaffLabels } from '@/shared/ui/score'
 import { playedMusic } from '../model/played-music'
 
@@ -12,6 +18,8 @@ import { playedMusic } from '../model/played-music'
  */
 /** No typed marks. */
 const NO_MARKS: readonly ScoreAnnotation[] = []
+/** No staff named. */
+const NO_LABELS: StaffLabels = {}
 
 export function useSheetScore(
   performance: Performance,
@@ -37,9 +45,11 @@ export function useSheetScore(
   )
   const kept = score.staves.filter((staff) => !hidden.includes(staff))
   const staves = kept.length > 0 ? kept : score.staves
-  const labels = useStaffLabels(
+  const named = useStaffLabels(
     staves,
     staffNames.map((text) => (text === undefined ? undefined : { text })),
   )
+  // An exercise's line names no staff: it is a drill on the piano, not a part (A41).
+  const labels = score.plain ? NO_LABELS : named
   return { score, tempos, staves, labels }
 }

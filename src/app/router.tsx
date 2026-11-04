@@ -69,6 +69,7 @@ import {
 } from './routes/player-search'
 import { LEARN_KEPT, learnSearch, readLearnSearch } from './routes/learn-search'
 import {
+  exercisePageSearch,
   readTrainerSearch,
   trainerSearch,
   validateCheckSearch,
@@ -543,6 +544,18 @@ const exercisesRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/exercises',
   component: lazyRouteComponent(practiceScreens, 'ExercisesPage'),
+})
+// An exercise's page (A41): what it trains, how to play it, and what to start it at.
+const exerciseInfoRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/exercises/$exerciseId',
+  notFoundComponent: notFoundIn('exercises'),
+  ...exercisePageSearch,
+  beforeLoad: async (context) => {
+    const { isExerciseId } = await practiceScreens()
+    if (!isExerciseId(context.params.exerciseId)) throw notFound()
+  },
+  component: lazyRouteComponent(practiceScreens, 'ExercisePage'),
 })
 // A trainer: each remembers its own level, rounds and Custom, under its own path. Its levels are its
 // ladder's, which the validator cannot see: a level it does not have leaves the URL here.
@@ -1094,6 +1107,7 @@ const routeTree = rootRoute.addChildren([
     practiceRoute,
     quizRoute,
     exercisesRoute,
+    exerciseInfoRoute,
     chordFinderRoute,
     metronomeRoute,
     metronomeSettingsRoute,

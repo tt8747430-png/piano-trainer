@@ -10,6 +10,7 @@ import { createMemoryStorage } from '@/shared/lib'
 import { midi, note, pitchClass } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
 import { ShortcutsProvider } from '@/shared/lib/shortcuts'
+import { FloatingHost } from '@/shared/ui'
 import { TrainerBoard } from './TrainerBoard'
 
 function Board({ asks, autoNext, limit }: { asks: Asks; autoNext: boolean; limit?: number }) {
@@ -19,7 +20,7 @@ function Board({ asks, autoNext, limit }: { asks: Asks; autoNext: boolean; limit
     autoNext,
     ...(limit ? { limit } : {}),
   })
-  return <TrainerBoard trainer={trainer} asks={asks} limit={limit} />
+  return <TrainerBoard trainer={trainer} asks={asks} />
 }
 
 function renderBoard(
@@ -31,7 +32,9 @@ function renderBoard(
     <ProgressStoreProvider store={store}>
       <ServicesProvider services={{ audio: createFakeAudio(), midi: null }}>
         <ShortcutsProvider mac={false}>
-          <Board asks={asks} autoNext={autoNext} {...(limit ? { limit } : {})} />
+          <FloatingHost screen="trainer">
+            <Board asks={asks} autoNext={autoNext} {...(limit ? { limit } : {})} />
+          </FloatingHost>
         </ShortcutsProvider>
       </ServicesProvider>
     </ProgressStoreProvider>,
@@ -67,7 +70,7 @@ describe('TrainerBoard', () => {
     for (const name of ['E4', 'G4'])
       await user.click(within(keyboard).getByRole('button', { name }))
     await user.click(check)
-    expect(screen.getByText('Correct')).toBeInTheDocument()
+    expect(screen.getByText('Right')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Next' })).toHaveFocus()
   })
 
@@ -139,7 +142,7 @@ describe('TrainerBoard', () => {
     })
     const answers = screen.getByRole('group', { name: 'Answers' })
     await user.click(within(answers).getByRole('button', { name: 'C♯m' }))
-    expect(screen.getByText('Correct')).toBeInTheDocument()
+    expect(screen.getByText('Right')).toBeInTheDocument()
   })
 
   it('asks to name a chord from four answers', async () => {
@@ -149,7 +152,7 @@ describe('TrainerBoard', () => {
     const answers = screen.getByRole('group', { name: 'Answers' })
     expect(within(answers).getAllByRole('button')).toHaveLength(4)
     await user.click(within(answers).getByRole('button', { name: 'C7' }))
-    expect(screen.getByText('Correct')).toBeInTheDocument()
+    expect(screen.getByText('Right')).toBeInTheDocument()
   })
 
   it('keeps the answers in sight after a wrong choice: the one chosen and the answer marked', async () => {
@@ -198,9 +201,9 @@ describe('TrainerBoard', () => {
     const options = within(screen.getByRole('group', { name: 'Answers' })).getAllByRole('button')
     const place = options.findIndex((option) => option.textContent === 'C7') + 1
     await user.keyboard(String(place))
-    expect(screen.getByText('Correct')).toBeInTheDocument()
+    expect(screen.getByText('Right')).toBeInTheDocument()
     await user.keyboard('{Enter}')
-    expect(screen.queryByText('Correct')).not.toBeInTheDocument()
+    expect(screen.queryByText('Right')).not.toBeInTheDocument()
     expect(screen.getByRole('group', { name: 'Answers' })).toBeInTheDocument()
   })
 
@@ -208,10 +211,10 @@ describe('TrainerBoard', () => {
     const user = userEvent.setup()
     renderBoard(skills('chord:maj'))
     await user.keyboard('{Enter}')
-    expect(screen.queryByText('Correct')).not.toBeInTheDocument()
+    expect(screen.queryByText('Right')).not.toBeInTheDocument()
     for (const name of ['C4', 'E4', 'G4']) await user.click(screen.getByRole('button', { name }))
     await user.keyboard('{Enter}')
-    expect(screen.getByText('Correct')).toBeInTheDocument()
+    expect(screen.getByText('Right')).toBeInTheDocument()
   })
 
   it('stops and plays the round again on R', async () => {
@@ -238,7 +241,7 @@ describe('TrainerBoard', () => {
     ).toBeInTheDocument()
     const answers = screen.getByRole('group', { name: 'Answers' })
     await user.click(within(answers).getByRole('button', { name: '2 ♯' }))
-    expect(screen.getByText('Correct')).toBeInTheDocument()
+    expect(screen.getByText('Right')).toBeInTheDocument()
   })
 
   it('reads a note on its staff, a wrong key showing the note’s name', async () => {
@@ -259,7 +262,7 @@ describe('TrainerBoard', () => {
     expect(reveal).toHaveAccessibleName('Next')
     expect(reveal).toHaveFocus()
     expect(screen.getByRole('figure', { name: 'Sheet music' })).toBeInTheDocument()
-    expect(screen.queryByText('Correct')).not.toBeInTheDocument()
+    expect(screen.queryByText('Right')).not.toBeInTheDocument()
   })
 
   it('shows a card’s staff and asks its name, the name revealed', async () => {
@@ -305,7 +308,6 @@ describe('TrainerBoard', () => {
     vi.useFakeTimers()
     try {
       renderBoard(onC('d7', 'quiz'), { limit: 5 })
-      expect(screen.getByText('5 s')).toBeInTheDocument()
       act(() => void vi.advanceTimersByTime(5100))
       expect(screen.getByText(/^The answer: C7/)).toBeInTheDocument()
       expect(
@@ -329,6 +331,52 @@ describe('TrainerBoard', () => {
       screen.getByRole('heading', { name: 'Play the major third up from E' }),
     ).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'G sharp 4' }))
-    expect(screen.getByText('Correct')).toBeInTheDocument()
+    expect(screen.getByText('Right')).toBeInTheDocument()
+  })
+
+  it('Check is the capsule’s primary', () => {
+    renderBoard(skills('chord:maj'))
+    const capsule = document.querySelector<HTMLElement>('[data-slot=floating-actions]')
+    expect(capsule).not.toBeNull()
+    expect(within(capsule!).getByRole('button', { name: 'Check' })).toBeInTheDocument()
+  })
+
+  it('Hint shows C E G', async () => {
+    const user = userEvent.setup()
+    renderBoard(skills('chord:maj'))
+    expect(screen.getByRole('heading', { name: 'Build C' })).toBeInTheDocument()
+    expect(screen.getByText('Major triad')).toBeInTheDocument()
+    expect(screen.queryByRole('list', { name: 'Its notes' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Hint' }))
+    expect(
+      within(screen.getByRole('list', { name: 'Its notes' }))
+        .getAllByRole('listitem')
+        .map((chip) => chip.textContent),
+    ).toEqual(['C', 'E', 'G'])
+  })
+
+  it('Note reading shows no note names on the keys', () => {
+    renderBoard({
+      kind: 'notes',
+      notes: [{ key: midi(64), spelled: note('E'), clef: 'treble' }],
+    })
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    // Every C is named by default; a round read from the staff names none.
+    expect(within(keyboard).getByRole('button', { name: 'C4' }).textContent).toBe('')
+  })
+
+  it('a wrong answer says Not quite, lights the right keys and says why', async () => {
+    const user = userEvent.setup()
+    renderBoard(onC('maj', 'quiz'))
+    const answers = screen.getByRole('group', { name: 'Answers' })
+    const wrong = within(answers)
+      .getAllByRole('button')
+      .find((button) => button.textContent !== 'C')
+    await user.click(wrong!)
+    expect(screen.getByText(/^Not quite: it’s C · Major triad$/)).toHaveClass('text-destructive')
+    expect(screen.getByText('C E G is the major triad on C: 1 3 5')).toBeInTheDocument()
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    for (const name of ['C4', 'E4', 'G4'])
+      expect(within(keyboard).getByRole('button', { name })).toHaveAccessibleDescription(/Played/)
   })
 })

@@ -130,7 +130,7 @@ export const quiz = {
   next: 'Next',
   results: 'Results',
   done: 'Done',
-  right: 'Correct',
+  right: 'Right',
   itWas: 'Not quite: it’s {{answer}}',
   // An answer shown unanswered: its time ran out, or the learner asked.
   itIs: 'The answer: {{answer}}',
@@ -154,11 +154,20 @@ export const quiz = {
     right: 'Correct',
     averageTime: 'Average time',
     seconds: '{{seconds}} s',
-    bestStreak: 'Best streak',
+    bestStreak: 'Best run',
     missed: 'Missed',
     noneMissed: 'None missed',
     again: 'Again',
     cards: 'Cards',
+    review: 'What to review',
+    reviewMissed: 'Review the missed ones',
+    // Where a missed item opens: its row's second line.
+    opens: {
+      chords: 'Open in Chords',
+      intervals: 'Open in Intervals',
+      scales: 'Open in Scales',
+      progressions: 'Open in Progressions',
+    },
   },
   // Custom's choices.
   choice: {
@@ -280,4 +289,51 @@ export const quiz = {
   marked: '{{title}} is now marked learned.',
   openChords: 'Open in Chords',
   openScales: 'Open in Scales',
+  // A chord to build: its notes, shown once asked.
+  hint: 'Hint',
+  hintNotes: 'Its notes',
+  // How a run stands, beside its round.
+  tally: { right: '{{count}} right', wrong: '{{count}} wrong', run: 'Run {{count}}' },
+  // Why a round's answer is its answer, said once it is answered.
+  why: {
+    chord: '{{notes}} is the {{quality}} on {{root}}: {{formula}}',
+    inversion: '{{notes}} is the {{quality}} on {{root}}; in {{position}}, {{bass}} is lowest',
+    interval_one:
+      '{{interval}}: {{low}} up to {{high}} spans {{number}} letter names and {{count}} semitone',
+    interval_other:
+      '{{interval}}: {{low}} up to {{high}} spans {{number}} letter names and {{count}} semitones',
+    scale: '{{scale}}: {{notes}}, in steps {{steps}}',
+    // A scale's steps: a half step, a whole step, a step and a half, two whole steps.
+    step: { '1': 'H', '2': 'W', '3': 'W+H', '4': '2W' },
+    note: 'In the {{clef}} clef, {{note}} is written {{place}}',
+    clef: { treble: 'treble', bass: 'bass' },
+    place: {
+      line: 'on line {{n}}, counting from the bottom',
+      space: 'in space {{n}}, counting from the bottom',
+      under: 'just under the staff',
+      over: 'just over the staff',
+      ledgerBelow: 'on ledger line {{n}} below the staff',
+      byLedgerBelow: 'under ledger line {{n}} below the staff',
+      ledgerAbove: 'on ledger line {{n}} above the staff',
+      byLedgerAbove: 'over ledger line {{n}} above the staff',
+    },
+    sharps_one: '{{key}} has {{count}} sharp: {{notes}}',
+    sharps_other: '{{key}} has {{count}} sharps, written in this order: {{notes}}',
+    flats_one: '{{key}} has {{count}} flat: {{notes}}',
+    flats_other: '{{key}} has {{count}} flats, written in this order: {{notes}}',
+    noSignature: '{{key}} has no sharps or flats',
+    degrees: 'The degrees of {{key}}, I to VII: {{notes}}',
+    role: 'In {{key}}, {{numeral}} is the chord on degree {{degree}}, {{root}}: {{notes}}',
+    progression: 'In {{key}}, {{numerals}} is {{chords}}',
+    cadence: {
+      authentic: '{{numerals}}: the dominant resolves to the tonic',
+      perfect: '{{numerals}}: both chords in root position, the tonic in the top voice',
+      imperfect:
+        '{{numerals}}: the dominant is inverted and the tonic’s 3rd is on top, so it closes less firmly',
+      plagal: '{{numerals}}: the subdominant goes to the tonic, the Amen cadence',
+      half: '{{numerals}}: the phrase stops on the dominant',
+      deceptive: '{{numerals}}: the dominant moves to the submediant instead of the tonic',
+      phrygian: '{{numerals}}: iv in 1st inversion, its bass falling a half step to the dominant',
+    },
+  },
 } as const

@@ -79,9 +79,9 @@ describe('A trainer', () => {
     for (const name of MAIN_CHORDS[symbol] ?? [])
       await user.click(within(keyboard()).getByRole('button', { name }))
     await user.click(screen.getByRole('button', { name: 'Check' }))
-    expect(screen.getByText('Correct')).toBeInTheDocument()
+    expect(screen.getByText('Right')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Next' }))
-    expect(screen.getByText('Round 2 of 10')).toBeInTheDocument()
+    expect(screen.getByText('Round 2 of 10 · 1 right · 0 wrong · Run 1')).toBeInTheDocument()
   })
 
   it('reads a note from the staff, answered by the one key pressed', async () => {
@@ -93,9 +93,7 @@ describe('A trainer', () => {
     expect(screen.getByRole('figure', { name: 'Sheet music' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled()
     await user.click(within(keyboard()).getByRole('button', { name: 'C4' }))
-    expect(
-      screen.getByText(/^(Correct|Not quite: it’s F3|Not quite: it’s G4)$/),
-    ).toBeInTheDocument()
+    expect(screen.getByText(/^(Right|Not quite: it’s F3|Not quite: it’s G4)$/)).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Check' })).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled()
   })
@@ -110,7 +108,7 @@ describe('A trainer', () => {
     const key = prompt.textContent?.replace('Play the degrees of ', '') ?? ''
     for (const name of DEGREES[key] ?? [])
       await user.click(within(keyboard()).getByRole('button', { name }))
-    expect(screen.getByText('Correct')).toBeInTheDocument()
+    expect(screen.getByText('Right')).toBeInTheDocument()
     expect(
       within(screen.getByRole('list', { name: 'Degrees' })).getAllByRole('listitem'),
     ).toHaveLength(7)
@@ -140,7 +138,7 @@ describe('A trainer', () => {
     expect(await screen.findByRole('heading', { name: 'Results' })).toHaveFocus()
     expect(screen.getByText('Average time')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Again' }))
-    expect(screen.getByText('Round 1 of 10')).toBeInTheDocument()
+    expect(screen.getByText(/^Round 1 of 10 · 0 right/)).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Close' }))
     expect(screen.getByText('Runs: 1')).toBeInTheDocument()
   })
@@ -148,7 +146,7 @@ describe('A trainer', () => {
   it('ends a run when the learner stops, with the rounds answered so far', async () => {
     const user = userEvent.setup()
     await start('/practice/quiz/chord-role?rounds=0')
-    expect(await screen.findByText('Round: 1')).toBeInTheDocument()
+    expect(await screen.findByText(/^Round: 1 · 0 right/)).toBeInTheDocument()
     const answers = screen.getByRole('group', { name: 'Answers' })
     await user.click(within(answers).getAllByRole('button')[0] ?? answers)
     await user.click(screen.getByRole('button', { name: 'End the run' }))
@@ -213,8 +211,9 @@ describe('A trainer', () => {
     await user.click(await screen.findByRole('option', { name: '10 s' }))
     expect(router.state.location.search).toMatchObject({ limit: 10 })
     await user.click(screen.getByRole('button', { name: 'Start' }))
-    expect(screen.getByText('Round: 1')).toBeInTheDocument()
-    expect(screen.getByText('10 s')).toBeInTheDocument()
+    expect(screen.getByText(/^Round: 1 · 0 right/)).toBeInTheDocument()
+    // The time left, ringed beside the tally.
+    expect(screen.getByText('Time left')).toBeInTheDocument()
   })
 
   it('shows Custom’s choices when Custom is the level, each written to the URL', async () => {

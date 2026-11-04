@@ -49,3 +49,4 @@ export {
 } from './trainer-view'
 export { useTrainer, type TrainerRun } from './use-trainer'
 export { NOTE_RANGE } from './ladders/notes'
+export { whyAnswer, type LocalizedWhy, type WhyKey } from './why'

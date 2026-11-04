@@ -191,17 +191,25 @@ export function Fab({
 
 /**
  * The screen's main action where it opens a page (Practise, Write the chart): the `Fab` as a link,
- * `render` the link (a router `Link`).
+ * `render` the link (a router `Link`); `extended`, its name beside its icon (an exercise's Start).
  */
 export function FabLink({
   label,
   icon: Icon,
+  extended = false,
   className,
   ...props
-}: { label: string; icon: LucideIcon } & Omit<
+}: { label: string; icon: LucideIcon; extended?: boolean } & Omit<
   ComponentProps<typeof ButtonLink>,
   'children' | 'size' | 'aria-label'
 >) {
+  if (extended)
+    return (
+      <ButtonLink size="lg" className={cn(FAB_EXTENDED, className)} {...props}>
+        <Icon data-icon="inline-start" aria-hidden />
+        {label}
+      </ButtonLink>
+    )
   return (
     <ButtonLink
       size="icon"

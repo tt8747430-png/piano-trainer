@@ -1,5 +1,5 @@
-import { Check, Square, Volume2, X } from 'lucide-react'
-import { useId, useLayoutEffect, useRef } from 'react'
+import { Check, Eye, ListChecks, SkipForward, Square, Volume2, X } from 'lucide-react'
+import { useId, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
@@ -17,15 +17,14 @@ import {
   type Question,
   type TrainerRun,
 } from '@/features/trainer'
-import { useWakeLock } from '@/shared/lib'
-import { type Midi, printedNote } from '@/shared/lib/music'
-import { RoundButton, type KeyMark } from '@/shared/ui'
+import { cn, useWakeLock } from '@/shared/lib'
+import { type Midi, printedNote, type Tone } from '@/shared/lib/music'
+import { Fab, FloatingActions, RoundButton, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { AnsweredChoices } from './AnsweredChoices'
 import { DegreeSlots } from './DegreeSlots'
 import { RoundStaff } from './RoundStaff'
 import { showsStaff } from './staff-question'
-import { TimeLeft } from './TimeLeft'
 import { useRoundShortcuts } from './use-round-shortcuts'
 import { useRoundWords } from './use-round-words'
 
@@ -42,25 +41,42 @@ function hides(question: Question, side: 'name' | 'keys' | 'staff'): boolean {
 }
 
 /**
- * One round at a time: what it asks (its words, a staff, a sound to hear again), the keyboard, the
- * answer, and one primary button that never moves: Reveal on a card, Check on a build, and Next,
- * waiting for the answer, once answered or turned over (Results after the last). A time limit runs
- * down under the prompt. A keyboard user keeps their place: an answer moves them to the button, and
- * Next to the new round's prompt; the computer's keys answer too (`useRoundShortcuts`).
+ * A chord to build's Hint (A41): its notes as chips, kept out of sight until asked, a round at a time.
  */
-export function TrainerBoard({
-  trainer,
-  asks,
-  limit,
-}: {
-  trainer: TrainerRun
-  asks: Asks
-  /** Each round's time limit in seconds, drawn running down; none, no limit. */
-  limit?: number | undefined
-}) {
+function ChordHint({ tones }: { tones: readonly Tone[] }) {
+  const { t } = useTranslation('quiz')
+  const [shown, setShown] = useState(false)
+  return shown ? (
+    <ul aria-label={t('hintNotes')} className="flex flex-wrap gap-2">
+      {tones.map((tone) => (
+        <li
+          key={tone.degree}
+          className="rounded-pill bg-muted px-3 py-1 font-display text-lg font-semibold"
+        >
+          {printedNote(tone.note)}
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <Button variant="link" className="self-start px-2" onClick={() => setShown(true)}>
+      {t('hint')}
+    </Button>
+  )
+}
+
+/**
+ * One round at a time, in one screen: what it asks (its words, a staff, a sound to hear again), the
+ * keyboard, the answer, and its one primary action floating in the capsule: Reveal on a card, Check
+ * on a build, and Next, waiting for the answer, once answered or turned over (Results after the
+ * last). Once answered it says Right or Not quite, lights the answer and says why (`whyAnswer`). A
+ * round played on the keys hides their names, which would be its answer. A keyboard user keeps their
+ * place: an answer moves them to the button, and Next to the new round's prompt; the computer's keys
+ * answer too (`useRoundShortcuts`).
+ */
+export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Asks }) {
   // The screen stays on while a round is on the screen: a phone on the stand does not lock mid-song.
   useWakeLock()
-  const { t } = useTranslation(['quiz', 'common'])
+  const { t } = useTranslation(['quiz', 'common', 'music'])
   const words = useRoundWords()
   const { question, selected, result } = trainer.round
   const prompt = useRef<HTMLHeadingElement>(null)
@@ -101,7 +117,12 @@ export function TrainerBoard({
   const answered = useRef(result)
   useLayoutEffect(() => {
     const focused = document.activeElement
-    const ours = focused === null || focused === document.body || board.current?.contains(focused)
+    // The board's own, or its primary floating in the capsule.
+    const ours =
+      focused === null ||
+      focused === document.body ||
+      focused === primary.current ||
+      board.current?.contains(focused)
     if (shown.current !== question) {
       shown.current = question
       answered.current = result
@@ -164,22 +185,49 @@ export function TrainerBoard({
             : t('quiz:itWas', { answer: words.answer(question) })
   // A card's name, once turned over, is its prompt.
   const heading = card && result ? words.answer(question) : words.prompt(question)
+  // A chord to build is named large, its full name under it, its notes a Hint away.
+  const building = question.mode === 'build-chord' && !question.cadence ? question : null
+  const primaryLabel = result
+    ? trainer.run.over
+      ? t('quiz:results')
+      : t('quiz:next')
+    : card
+      ? t('quiz:reveal')
+      : choosesKeys(question)
+        ? t('quiz:check')
+        : t('quiz:next')
+  const primaryIcon = result
+    ? trainer.run.over
+      ? ListChecks
+      : SkipForward
+    : card
+      ? Eye
+      : choosesKeys(question)
+        ? Check
+        : SkipForward
 
   return (
-    // On a phone on its side the round's one action stands beside its question, so the keys and
-    // the action are in sight together; everything else spans the board under them.
-    <section
-      ref={board}
-      className="flex flex-col gap-5 landscape-phone:grid landscape-phone:grid-cols-[minmax(0,1fr)_auto] landscape-phone:gap-x-3 landscape-phone:gap-y-2 landscape-phone:[&>:not([data-beside])]:col-span-2"
-    >
-      <div data-beside="" className="flex items-center gap-3">
-        <h2
-          ref={prompt}
-          tabIndex={-1}
-          className="min-w-0 flex-1 text-3xl text-balance hyphens-auto wrap-break-word outline-none sm:text-4xl landscape-phone:text-2xl"
-        >
-          {heading}
-        </h2>
+    <section ref={board} className="flex min-h-0 flex-1 flex-col gap-3 landscape-phone:gap-2">
+      <div className="flex items-start gap-3">
+        <div className="flex min-w-0 flex-1 flex-col gap-1">
+          <h2
+            ref={prompt}
+            tabIndex={-1}
+            className={cn(
+              'text-balance hyphens-auto wrap-break-word outline-none',
+              building
+                ? 'text-5xl landscape-phone:text-3xl'
+                : 'text-3xl sm:text-4xl landscape-phone:text-2xl',
+            )}
+          >
+            {heading}
+          </h2>
+          {building ? (
+            <p className="text-lg text-muted-foreground">
+              {t(`music:quality.${building.quality}`)}
+            </p>
+          ) : null}
+        </div>
         {hears ? (
           <RoundButton
             label={trainer.hearing ? t('common:stop') : t('quiz:playAgain')}
@@ -189,7 +237,7 @@ export function TrainerBoard({
         ) : null}
       </div>
 
-      {limit ? <TimeLeft key={trainer.number} seconds={limit} running={!result} /> : null}
+      {building && !result ? <ChordHint key={trainer.number} tones={building.tones} /> : null}
 
       {showsStaff(question) ? (
         <RoundStaff question={question} hidden={!result && hides(question, 'staff')} />
@@ -209,23 +257,31 @@ export function TrainerBoard({
         wrong={checked?.wrong}
         onKeyPress={choosing ? trainer.toggleKey : pressing ? trainer.pressKey : undefined}
         // A round asks for a chord or its name: the rail does not say it, nor do the keys go down
-        // while a round asked by ear sounds.
+        // while a round asked by ear sounds; a round played on the keys hides their names.
         namesChords={false}
+        namesKeys={!choosesKeys(question) && !pressesKeys(question)}
         showsSound={!heard || result !== null}
       />
 
-      {card ? null : (
-        <p aria-live="polite" className="flex min-h-7 items-center gap-2 text-lg font-semibold">
-          {result && result.kind !== 'revealed' ? (
-            result.correct ? (
-              <Check aria-hidden className="size-5 text-learned" />
+      {/* Right or Not quite, in words and colour, then why. */}
+      <div aria-live="polite" className="flex min-h-7 flex-col gap-1">
+        {verdict ? (
+          <p
+            className={cn(
+              'flex items-center gap-2 text-lg font-semibold',
+              result?.correct ? 'text-learned' : 'text-destructive',
+            )}
+          >
+            {result?.correct ? (
+              <Check aria-hidden className="size-5" />
             ) : (
-              <X aria-hidden className="size-5 text-destructive" />
-            )
-          ) : null}
-          {verdict}
-        </p>
-      )}
+              <X aria-hidden className="size-5" />
+            )}
+            {verdict}
+          </p>
+        ) : null}
+        {result ? <p className="text-muted-foreground">{words.why(question)}</p> : null}
+      </div>
 
       {choices && isChoice(question) ? (
         result?.kind === 'choice' || result?.kind === 'shown' ? (
@@ -256,46 +312,39 @@ export function TrainerBoard({
         )
       ) : null}
 
-      {/* The round's actions: Clear and Show answer in plain words, then the one primary button,
-          the same button from the round's start to its Next. */}
-      <div
-        data-beside=""
-        className="flex flex-wrap items-center gap-x-3 gap-y-2 landscape-phone:col-start-2 landscape-phone:row-start-1 landscape-phone:flex-nowrap"
-      >
-        {choosing && selected.length > 0 ? (
-          <Button variant="link" className="px-2" onClick={trainer.clear}>
-            {t('quiz:clear')}
-          </Button>
-        ) : null}
-        {!result && !card && !isChoice(question) ? (
-          <Button variant="link" className="px-2" onClick={trainer.reveal}>
-            {t('quiz:showAnswer')}
-          </Button>
-        ) : null}
-        <Button
+      {/* The round's other actions, in plain words: Clear and Show answer. */}
+      {(choosing && selected.length > 0) || (!result && !card && !isChoice(question)) ? (
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          {choosing && selected.length > 0 ? (
+            <Button variant="link" className="px-2" onClick={trainer.clear}>
+              {t('quiz:clear')}
+            </Button>
+          ) : null}
+          {!result && !card && !isChoice(question) ? (
+            <Button variant="link" className="px-2" onClick={trainer.reveal}>
+              {t('quiz:showAnswer')}
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
+      {choosing && selected.length === 0 ? (
+        <span id={checkHint} className="sr-only">
+          {t('quiz:checkHint')}
+        </span>
+      ) : null}
+
+      {/* The one primary action, the same from the round's start to its Next, in the capsule. */}
+      <FloatingActions>
+        <Fab
           ref={primary}
-          size="pill"
-          className="w-full sm:ms-auto sm:w-auto sm:min-w-56 landscape-phone:w-auto landscape-phone:min-w-32"
+          extended
+          label={primaryLabel}
+          icon={primaryIcon}
           disabled={act === null}
           aria-describedby={choosing && selected.length === 0 ? checkHint : undefined}
           onClick={act ?? undefined}
-        >
-          {result
-            ? trainer.run.over
-              ? t('quiz:results')
-              : t('quiz:next')
-            : card
-              ? t('quiz:reveal')
-              : choosesKeys(question)
-                ? t('quiz:check')
-                : t('quiz:next')}
-        </Button>
-        {choosing && selected.length === 0 ? (
-          <span id={checkHint} className="sr-only">
-            {t('quiz:checkHint')}
-          </span>
-        ) : null}
-      </div>
+        />
+      </FloatingActions>
     </section>
   )
 }

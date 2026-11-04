@@ -1,3 +1,4 @@
+import { keyParam } from '@/shared/lib/music'
 import type { Exercise } from './types'
 import type { ExerciseChoice } from './choice'
 
@@ -19,8 +20,17 @@ export const rungAbove = (tempo: number): Rung => TEMPO_LADDER.find((rung) => ru
 const TOP: Rung = 132
 
 /**
- * What an exercise's last tempo is kept under: the exercise, and for Hanon the number, each of his
- * being an exercise of its own.
+ * What an exercise's last tempo is kept under, the tempo reached in each key apart (A41): the
+ * exercise, for Hanon the number (each of his an exercise of its own), then the key (`hanon:5:G`,
+ * `five-finger:Ebm`), minor only where the exercise is played in minor.
  */
-export const tempoKey = (exercise: Exercise, choice: Pick<ExerciseChoice, 'hanon'>): string =>
-  exercise.fields.hanon ? `${exercise.id}:${choice.hanon}` : exercise.id
+export function tempoKey(
+  exercise: Exercise,
+  choice: Pick<ExerciseChoice, 'hanon' | 'root' | 'tonality'>,
+): string {
+  const key = keyParam({
+    tonic: choice.root,
+    minor: exercise.fields.tonality === true && choice.tonality === 'minor',
+  })
+  return `${exercise.fields.hanon ? `${exercise.id}:${choice.hanon}` : exercise.id}:${key}`
+}

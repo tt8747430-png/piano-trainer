@@ -161,6 +161,8 @@ export function SheetMusic({
     staffNames,
     annotations,
   )
+  // An exercise's line prints no chord symbol (A41): its harmony is the chord views'.
+  const chordNames = view.chordNames && score.plain !== true
   const scroller = useRef<HTMLDivElement>(null)
   // The room under the title, the labels' row's and the engraving's to fill.
   const room = useElementSize(scroller)
@@ -184,7 +186,7 @@ export function SheetMusic({
   const natural = own.height ?? scoreHeight(score, reading) + (fingers ? FINGERS : 0)
   // The labels' row over the staff, as the editor's lines draw it: as tall as what it holds (the
   // chord symbols' or the bars'), smaller with a staff drawn smaller.
-  const rowAt = (size: number) => labelRow(view.chordNames, size)
+  const rowAt = (size: number) => labelRow(chordNames, size)
   const scale = fitScale(room, natural, own.bar, rowAt)
   // Bars chosen as the editor chooses notes (ADR 0096), the loop: from the bar held or the
   // loop's start (else the cursor's bar) to the one reached, exactly.
@@ -255,7 +257,7 @@ export function SheetMusic({
           fingers={fingers}
           names={names}
           positions={positions}
-          chordNames={view.chordNames}
+          chordNames={chordNames}
           tempos={tempos}
           muted={muted}
           onJump={onJump}
@@ -303,7 +305,7 @@ export function SheetMusic({
                   performance={performance}
                   headings={headings}
                   positions={positions}
-                  chordNames={view.chordNames}
+                  chordNames={chordNames}
                   tempos={tempos}
                   current={current}
                   clock={clock}

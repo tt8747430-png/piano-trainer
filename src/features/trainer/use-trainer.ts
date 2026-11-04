@@ -11,6 +11,7 @@ import {
   answerOf,
   roundReducer,
   startRound,
+  type Question,
   type RoundEvent,
   type RoundState,
 } from './round-machine'
@@ -48,6 +49,8 @@ export interface TrainerRun {
   stop(): void
   /** A new run of the same rounds. */
   again(): void
+  /** A new run of the rounds this one missed, alone, in their order (Review the missed ones). */
+  review(): void
   /** An ear round's "Play again": sounds it, or stops it while it sounds. */
   hear(): void
   readonly hearing: boolean
@@ -85,6 +88,8 @@ export function useTrainer(asks: Asks, options: TrainerOptions): TrainerRun {
   const [run, setRun] = useState<RunState>(() => startRun(options.rounds, now()))
   const [summed, setSummed] = useState(false)
   const current = useRef({ round, run })
+  // A review's rounds, asked in turn in place of drawing them; none while a run draws its own.
+  const reviewing = useRef<readonly Question[] | null>(null)
   const { question, result } = round
 
   // An ear round is asked by ear: it sounds when it is shown, its button Stop while it does.
@@ -140,11 +145,9 @@ export function useTrainer(asks: Asks, options: TrainerOptions): TrainerRun {
       sumUp(going)
       return
     }
-    const question = drawRound(asks, {
-      index: going.answered.length,
-      random,
-      previous: shown.question,
-    })
+    const question =
+      reviewing.current?.[going.answered.length] ??
+      drawRound(asks, { index: going.answered.length, random, previous: shown.question })
     commit({ round: startRound(question), run: runShown(going, now()) })
   }
 
@@ -186,7 +189,17 @@ export function useTrainer(asks: Asks, options: TrainerOptions): TrainerRun {
     },
     again() {
       audio.stop()
+      reviewing.current = null
       commit({ round: first(), run: startRun(options.rounds, now()) })
+      setSummed(false)
+    },
+    review() {
+      const missed = runSummary(current.current.run).missed
+      const [opening] = missed
+      if (!opening) return
+      audio.stop()
+      reviewing.current = missed
+      commit({ round: startRound(opening), run: startRun(missed.length, now()) })
       setSummed(false)
     },
     hear() {

@@ -17,11 +17,11 @@ describe('Practice → Exercises', () => {
     ).toEqual(['Finger technique', 'Barry Harris', 'Piano With Jonny'])
   })
 
-  it('marks an exercise’s stage, says what it trains and opens it in the Player', async () => {
+  it('marks an exercise’s stage, says what it trains and opens its page', async () => {
     await renderApp('/practice/exercises')
     const harris = await screen.findByRole('region', { name: 'Barry Harris' })
     const row = within(harris).getByRole('link', { name: /^Drop-2 7ths \S/ })
-    expect(row).toHaveAttribute('href', '/play/exercise/drop-two')
+    expect(row).toHaveAttribute('href', '/practice/exercises/drop-two')
     expect(within(row).getByRole('img', { name: 'Professional' })).toBeInTheDocument()
   })
 

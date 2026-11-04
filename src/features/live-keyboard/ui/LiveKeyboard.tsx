@@ -41,6 +41,7 @@ export function LiveKeyboard({
   spotlight = false,
   spacePedal = true,
   namesChords = true,
+  namesKeys = true,
   showsSound = true,
   railEnd,
   ...keyboard
@@ -65,6 +66,11 @@ export function LiveKeyboard({
   spacePedal?: boolean
   /** The rail may name the chord a hand holds: off where its name is the question (a round). */
   namesChords?: boolean
+  /**
+   * The keys carry their names as the learner chose: off where a key's name is the answer (a round
+   * played on the keys), whatever the setting.
+   */
+  namesKeys?: boolean
   /** The keys the app sounds go down: off where what sounds is the question (a round by ear). */
   showsSound?: boolean
   /** The rail's last control: a page's keys fold away from it. */
@@ -72,7 +78,13 @@ export function LiveKeyboard({
 }) {
   const { typing, chordNames, railControls, keySize, swipe, namedKeys, markNotes, keyLength } =
     useSettings(selectKeyboard)
-  const settings = { keySize, swipe, namedKeys, markNotes, keyLength }
+  const settings = {
+    keySize,
+    swipe,
+    namedKeys: namesKeys ? namedKeys : ('none' as const),
+    markNotes,
+    keyLength,
+  }
   const heard = useSoundingKeys(spotlight ? 'struck' : 'sounding')
   const sounding = showsSound ? heard : NOTHING
   const live = useSoundingKeys('live')
@@ -136,7 +148,7 @@ export function LiveKeyboard({
     kept.has(id) ? <Fragment key={id}>{element}</Fragment> : null
   const lookControls = [
     control('zoom', <KeyZoom />),
-    control('noteNames', <NamedKeysToggle />),
+    control('noteNames', <NamedKeysToggle disabled={!namesKeys} />),
     control('chordNames', <ChordNamesToggle disabled={!namesChords} />),
   ].filter(Boolean)
   const playControls = [
