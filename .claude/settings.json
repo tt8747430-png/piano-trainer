@@ -7,7 +7,7 @@
   },
   "enabledPlugins": {
     "understand-anything@understand-anything": false,
-    "superpowers@superpowers-marketplace": true
+    "superpowers@anthropic-plugin-directory": true
   },
   "extraKnownMarketplaces": {
     "superpowers-marketplace": {
