@@ -1,7 +1,7 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type HoldingChord, type HoldingGroup, noteName, writtenSymbol } from '@/shared/lib/music'
-import { ChordButton } from '@/shared/ui'
+import { CardGrid, ChordButton } from '@/shared/ui'
 
 /** One group of the chords that hold the melody: each chord, the note's degree in it, and whether the key has it. */
 export function HoldingGroupCard({
@@ -22,7 +22,7 @@ export function HoldingGroupCard({
       <h2 id={id} className="text-xl">
         {t(`reharmonise.group.${group}`)}
       </h2>
-      <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+      <CardGrid min="chord">
         {chords.map((holding, index) => (
           <li
             key={`${holding.degree} ${noteName(holding.chord.root)}${holding.chord.suffix}`}
@@ -39,7 +39,7 @@ export function HoldingGroupCard({
             />
           </li>
         ))}
-      </ul>
+      </CardGrid>
     </section>
   )
 }

@@ -27,7 +27,7 @@ export function ChordButton({
     <PlayToggle
       playing={playing}
       data-holds={holds ? '' : undefined}
-      className="h-auto min-h-16 flex-col gap-0 px-1 py-2 data-holds:ring-3 data-holds:ring-ring data-holds:ring-inset"
+      className="h-auto min-h-16 min-w-0 flex-col gap-0 px-1 py-2 whitespace-normal data-holds:ring-3 data-holds:ring-ring data-holds:ring-inset"
       onClick={onClick}
     >
       {/* A long symbol (G♭m6/B♭♭) a size or two down, so it stays in its square; it wraps at worst. */}
@@ -40,10 +40,12 @@ export function ChordButton({
         {printedSymbol(symbol)}
       </span>
       {numeral ? (
-        <span className="text-sm text-muted-foreground">{printedSymbol(numeral)}</span>
+        <span className="max-w-full text-sm text-balance text-muted-foreground">
+          {printedSymbol(numeral)}
+        </span>
       ) : null}
       {detail ? (
-        <span data-detail="" className="text-xs text-muted-foreground">
+        <span data-detail="" className="max-w-full text-xs text-balance text-muted-foreground">
           {detail}
         </span>
       ) : null}
