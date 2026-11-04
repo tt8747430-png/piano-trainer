@@ -14,7 +14,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { Link } from '@tanstack/react-router'
-import { ChevronDown, ChevronRight, Dices, Plus, Repeat, SlidersHorizontal } from 'lucide-react'
+import { ChevronDown, Dices, Plus, Repeat, SlidersHorizontal } from 'lucide-react'
 import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { styleBook, styleVariations, usePatternBook } from '@/entities/pattern'
@@ -64,6 +64,7 @@ import {
   NO_KEYS,
   say,
   Stepper,
+  OpensMark,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { SHEET_TEMPO } from '@/entities/chord-sheet'
@@ -281,7 +282,7 @@ export function ChordPlayer({
             className="flex min-h-11 items-center gap-1 rounded-control px-2 font-semibold hover:bg-muted"
           >
             {t('chordPlayer.key', { key: keyName(shown.key) })}
-            <ChevronRight aria-hidden className="size-4" />
+            <OpensMark className="size-4 text-current" />
           </Link>
         </div>
       </div>
