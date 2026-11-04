@@ -98,6 +98,8 @@ export default defineConfig({
   // The build's version, as About says it: the commit Vercel built, or `dev` here.
   define: {
     __APP_BUILD__: JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? 'dev'),
+    // The app's version, package.json's.
+    __APP_VERSION__: JSON.stringify(process.env.npm_package_version ?? '0.0.0'),
   },
   plugins: [
     requireBackendEnv(),

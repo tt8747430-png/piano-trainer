@@ -229,6 +229,12 @@ const howToUseRoute = createRoute({
   path: '/settings/how-to-use',
   component: lazyRouteComponent(settingsScreens, 'HowToUsePage'),
 })
+// About (R29 B9): the version, the build, the licence and the credits, from Settings' Help.
+const aboutRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/about',
+  component: lazyRouteComponent(settingsScreens, 'AboutPage'),
+})
 // Connect a piano (ADR 0034): MIDI input, output, devices and playing, and its MIDI log under it.
 const midiSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -901,6 +907,7 @@ const routeTree = rootRoute.addChildren([
     termsRoute,
     accountSettingsRoute,
     howToUseRoute,
+    aboutRoute,
     midiSettingsRoute,
     midiLogRoute,
     chordsSettingsRoute,

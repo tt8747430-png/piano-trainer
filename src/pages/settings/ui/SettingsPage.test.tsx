@@ -64,6 +64,7 @@ describe('Settings', () => {
       '/settings/how-to-use',
       '/legal/privacy',
       '/legal/terms',
+      '/settings/about',
     ])
   })
 

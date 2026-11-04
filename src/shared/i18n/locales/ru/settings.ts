@@ -112,10 +112,6 @@ export const settings: LocaleResources['settings'] = {
   },
   about: {
     version: 'Версия',
-    madeWith:
-      'Verovio для нот, шрифты Noto и Supabase для аккаунтов и синхронизации. Фортепиано: Salamander Grand Piano, автор Alexander Holm,',
-    licence: 'CC BY 3.0',
-    lightPiano: 'Лёгкое фортепиано: Splendid Grand Piano от AKAI (общественное достояние).',
     update: {
       current: 'Последняя версия',
       checking: 'Проверка…',
@@ -164,7 +160,27 @@ export const settings: LocaleResources['settings'] = {
     send: 'Отправить',
     sent: 'Отправлено. Спасибо.',
   },
+  aboutPage: {
+    title: 'О приложении',
+    build: 'Сборка',
+    licence: 'Лицензия',
+    allRights: 'Все права защищены',
+    credits: 'Сделано с помощью',
+    publicDomain: 'общественное достояние',
+    for: {
+      scores: 'Рисует ноты',
+      piano: 'Фортепиано',
+      lightPiano: 'Лёгкое фортепиано без сети',
+      drums: 'Ударные',
+      bassElectric: 'Бас-гитара',
+      bassUpright: 'Контрабас',
+      fonts: 'Шрифты текста и нот',
+      lessons: 'Книга, по которой идут уроки',
+      studies: 'Этюды',
+    },
+  },
   help: {
+    about: 'О приложении',
     howToUse: 'Как пользоваться',
     privacy: 'Конфиденциальность',
     terms: 'Условия',

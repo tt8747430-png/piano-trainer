@@ -7,6 +7,7 @@ export {
   SettingsPage,
 } from '@/pages/settings'
 export { HowToUsePage } from '@/pages/how-to-use'
+export { AboutPage } from '@/pages/about'
 export {
   AccompanimentSettingsPage,
   ChordFinderSettingsPage,

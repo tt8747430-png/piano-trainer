@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import {
   Cable,
   HardDrive,
+  Info,
   LifeBuoy,
   Piano,
   ScrollText,
@@ -62,24 +63,7 @@ export function SettingsList() {
           render={<Link to="/settings/connect-piano" />}
         />
       </SettingsGroup>
-      <SettingsGroup
-        flush
-        title={t('groups.help.label')}
-        footnote={
-          <>
-            {t('about.madeWith')}{' '}
-            <a
-              href="https://creativecommons.org/licenses/by/3.0/"
-              target="_blank"
-              rel="noreferrer"
-              className="text-link underline-offset-2 hover:underline"
-            >
-              {t('about.licence')}
-            </a>
-            . {t('about.lightPiano')}
-          </>
-        }
-      >
+      <SettingsGroup flush title={t('groups.help.label')}>
         <RowLink
           title={t('help.howToUse')}
           icon={LifeBuoy}
@@ -99,6 +83,12 @@ export function SettingsList() {
           render={<Link to="/legal/terms" />}
         />
         <ReportProblem />
+        <RowLink
+          title={t('help.about')}
+          icon={Info}
+          paint="sand"
+          render={<Link to="/settings/about" />}
+        />
         <UpdateRows />
       </SettingsGroup>
       {learner.can ? (

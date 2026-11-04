@@ -115,10 +115,6 @@ export const settings = {
   },
   about: {
     version: 'Version',
-    madeWith:
-      'Verovio for the scores, Noto fonts, and Supabase for accounts and sync. Piano: Salamander Grand Piano by Alexander Holm,',
-    licence: 'CC BY 3.0',
-    lightPiano: 'The light piano: Splendid Grand Piano by AKAI (public domain).',
     // Software Update, as iOS's: where the next version stands, a tap looks for it.
     update: {
       current: 'Up to date',
@@ -169,7 +165,27 @@ export const settings = {
     send: 'Send',
     sent: 'Sent. Thank you.',
   },
+  aboutPage: {
+    title: 'About',
+    build: 'Build',
+    licence: 'Licence',
+    allRights: 'All rights reserved',
+    credits: 'Made with',
+    publicDomain: 'public domain',
+    for: {
+      scores: 'Draws the scores',
+      piano: 'The piano',
+      lightPiano: 'The light piano, offline',
+      drums: 'The drums',
+      bassElectric: 'The electric bass',
+      bassUpright: 'The double bass',
+      fonts: 'The text and music fonts',
+      lessons: 'The book the lessons follow',
+      studies: 'The Studies',
+    },
+  },
   help: {
+    about: 'About',
     howToUse: 'How to use',
     privacy: 'Privacy',
     terms: 'Terms',
