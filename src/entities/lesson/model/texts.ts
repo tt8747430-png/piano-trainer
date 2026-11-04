@@ -14,6 +14,7 @@ export type LessonTextKind =
   | 'rule'
   | 'ask'
   | 'linkTitle'
+  | 'alt'
 
 /** One text a lesson shows, in both languages: where it is (`key`), what it is, in which section. */
 export interface LessonText {
@@ -45,6 +46,8 @@ function blockTexts(block: LessonBlock): (readonly [LessonTextKind, Path, LocalT
       return [['ask', ['ask'], block.ask]]
     case 'link':
       return [['linkTitle', ['title'], block.title]]
+    case 'image':
+      return [['alt', ['alt'], block.alt]]
     default:
       return []
   }

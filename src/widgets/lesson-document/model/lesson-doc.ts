@@ -1,5 +1,6 @@
-import type { Lesson, LessonBlock, LessonSection } from '@/entities/lesson'
+import type { About, Lesson, LessonBlock, LessonSection } from '@/entities/lesson'
 import type { Locale, LocalText } from '@/shared/i18n'
+import type { BlockStyle } from '@/shared/lib/style'
 
 /** A mark on a run of text: bold, a text block's lead. */
 export interface DocMark {
@@ -41,6 +42,11 @@ const run = (text: string, bold = false): DocNode[] =>
 
 /** A block of the lesson as the document's node, in `locale`, carrying the whole block. */
 export function blockNode(block: LessonBlock, locale: Locale): DocNode {
+  const node = blockNodeOf(block, locale)
+  return block.style ? { ...node, attrs: { ...node.attrs, style: block.style } } : node
+}
+
+function blockNodeOf(block: LessonBlock, locale: Locale): DocNode {
   switch (block.kind) {
     case 'text': {
       const lead = block.lead?.[locale] ?? ''
@@ -87,25 +93,43 @@ export function lessonToDoc(lesson: Lesson, locale: Locale): DocNode {
     content: [
       { type: DOC.title, content: run(lesson.title[locale]) },
       { type: DOC.summary, content: run(lesson.summary[locale]) },
-      ...lesson.sections.flatMap((section) => [
-        {
-          type: DOC.heading,
-          attrs: { level: 2, text: section.heading },
-          content: run(section.heading[locale]),
-        },
-        ...section.blocks.map((block) => blockNode(block, locale)),
-        ...(section.takeaway
-          ? [
-              {
-                type: DOC.takeaway,
-                attrs: { text: section.takeaway },
-                content: run(section.takeaway[locale]),
-              },
-            ]
-          : []),
-      ]),
+      ...sectionNodes(lesson.sections, locale),
     ],
   }
+}
+
+/** A page's About as its document in `locale` (R29 B9): the lesson's, with no title or summary. */
+export const aboutToDoc = (about: About, locale: Locale): DocNode => ({
+  type: 'doc',
+  content: sectionNodes(about, locale),
+})
+
+/** Sections as the document's nodes: each heading, its blocks and its takeaway, each with its style. */
+function sectionNodes(sections: readonly LessonSection[], locale: Locale): DocNode[] {
+  return sections.flatMap((section) => [
+    {
+      type: DOC.heading,
+      attrs: {
+        level: 2,
+        text: section.heading,
+        ...(section.style ? { style: section.style } : {}),
+      },
+      content: run(section.heading[locale]),
+    },
+    ...section.blocks.map((block) => blockNode(block, locale)),
+    ...(section.takeaway
+      ? [
+          {
+            type: DOC.takeaway,
+            attrs: {
+              text: section.takeaway,
+              ...(section.takeawayStyle ? { style: section.takeawayStyle } : {}),
+            },
+            content: run(section.takeaway[locale]),
+          },
+        ]
+      : []),
+  ])
 }
 
 /** A node's words, its runs one after the other. */
@@ -120,6 +144,19 @@ const written = (carried: unknown, locale: Locale, text: string): LocalText => (
 
 const isLocalText = (value: unknown): value is LocalText =>
   typeof value === 'object' && value !== null && 'en' in value && 'ru' in value
+
+/** The style a node carries; none where it carries none. */
+const styleOf = (node: DocNode): BlockStyle | undefined => {
+  const style = node.attrs?.['style']
+  return typeof style === 'object' && style !== null ? (style as BlockStyle) : undefined
+}
+
+/** The block in the style its node carries (set in the document, over the one it was written with). */
+function withStyle(block: LessonBlock, node: DocNode): LessonBlock {
+  const { style: _was, ...plain } = block
+  const style = styleOf(node)
+  return (style ? { ...plain, style } : plain) as LessonBlock
+}
 
 const carriedBlock = (node: DocNode): LessonBlock | null => {
   const block = node.attrs?.['block']
@@ -149,6 +186,11 @@ function paragraphBlock(node: DocNode, locale: Locale): LessonBlock | null {
 }
 
 function blockOf(node: DocNode, locale: Locale): LessonBlock | null {
+  const block = unstyledBlockOf(node, locale)
+  return block ? withStyle(block, node) : null
+}
+
+function unstyledBlockOf(node: DocNode, locale: Locale): LessonBlock | null {
   switch (node.type) {
     case DOC.paragraph:
       return paragraphBlock(node, locale)
@@ -186,7 +228,27 @@ export function docToLesson(doc: DocNode, lesson: Lesson, locale: Locale): Lesso
   const nodes = doc.content ?? []
   const title = nodes.find((node) => node.type === DOC.title)
   const summary = nodes.find((node) => node.type === DOC.summary)
-  type Writing = { heading: LocalText; blocks: LessonBlock[]; takeaway?: LocalText }
+  return {
+    ...lesson,
+    title: written(lesson.title, locale, textOf(title)),
+    summary: written(lesson.summary, locale, textOf(summary)),
+    sections: nodeSections(nodes, locale),
+  }
+}
+
+/** The About the document writes, in `locale` (R29 B9): its sections, the other language as carried. */
+export const docToAbout = (doc: DocNode, locale: Locale): About =>
+  nodeSections(doc.content ?? [], locale)
+
+/** The sections the document's nodes write: what stands before the first heading opens one with none. */
+function nodeSections(nodes: readonly DocNode[], locale: Locale): LessonSection[] {
+  type Writing = {
+    heading: LocalText
+    style?: BlockStyle
+    blocks: LessonBlock[]
+    takeaway?: LocalText
+    takeawayStyle?: BlockStyle
+  }
   const sections: Writing[] = []
   const current = (): Writing => {
     const last = sections.at(-1)
@@ -198,24 +260,29 @@ export function docToLesson(doc: DocNode, lesson: Lesson, locale: Locale): Lesso
   for (const node of nodes) {
     if (node.type === DOC.title || node.type === DOC.summary) continue
     if (node.type === DOC.heading) {
-      sections.push({ heading: written(node.attrs?.['text'], locale, textOf(node)), blocks: [] })
+      const style = styleOf(node)
+      sections.push({
+        heading: written(node.attrs?.['text'], locale, textOf(node)),
+        ...(style ? { style } : {}),
+        blocks: [],
+      })
       continue
     }
     if (node.type === DOC.takeaway) {
-      current().takeaway = written(node.attrs?.['text'], locale, textOf(node))
+      const section = current()
+      section.takeaway = written(node.attrs?.['text'], locale, textOf(node))
+      const style = styleOf(node)
+      if (style) section.takeawayStyle = style
       continue
     }
     const block = blockOf(node, locale)
     if (block) current().blocks.push(block)
   }
-  return {
-    ...lesson,
-    title: written(lesson.title, locale, textOf(title)),
-    summary: written(lesson.summary, locale, textOf(summary)),
-    sections: sections.map((section): LessonSection =>
-      section.takeaway
-        ? { heading: section.heading, blocks: section.blocks, takeaway: section.takeaway }
-        : { heading: section.heading, blocks: section.blocks },
-    ),
-  }
+  return sections.map(({ heading, style, blocks, takeaway, takeawayStyle }): LessonSection => ({
+    heading,
+    blocks,
+    ...(takeaway ? { takeaway } : {}),
+    ...(style ? { style } : {}),
+    ...(takeawayStyle ? { takeawayStyle } : {}),
+  }))
 }

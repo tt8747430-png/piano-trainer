@@ -1,8 +1,12 @@
 import type { Node } from '@tiptap/pm/model'
 import { NodeSelection, TextSelection, type EditorState, type Transaction } from '@tiptap/pm/state'
+import { DOC } from './lesson-doc'
 
-/** The document's own first nodes, the lesson's title and summary: never moved, copied or taken out. */
-export const FIXED_BLOCKS = 2
+/**
+ * How many of the document's first nodes are its own, the lesson's title and summary: never moved,
+ * copied or taken out. An About (R29 B9) has none.
+ */
+export const fixedBlocks = (doc: Node): number => (doc.firstChild?.type.name === DOC.title ? 2 : 0)
 
 /** Where the document's block `index` starts. */
 export function blockStart(doc: Node, index: number): number {
@@ -17,7 +21,8 @@ export const selectedBlock = (state: EditorState): number => state.selection.$fr
 /** Whether block `index` may move by `by`: a block of the lesson's, onto another of them. */
 export function canMoveBlock(doc: Node, index: number, by: -1 | 1): boolean {
   const to = index + by
-  return index >= FIXED_BLOCKS && to >= FIXED_BLOCKS && to < doc.childCount
+  const fixed = fixedBlocks(doc)
+  return index >= fixed && to >= fixed && to < doc.childCount
 }
 
 /**
@@ -55,8 +60,9 @@ export function moveBlock(
 export function moveBlockTo(state: EditorState, from: number, to: number): Transaction | null {
   const { doc } = state
   const last = doc.childCount - 1
-  const at = Math.min(Math.max(to, FIXED_BLOCKS), last)
-  if (from < FIXED_BLOCKS || from > last || at === from) return null
+  const fixed = fixedBlocks(doc)
+  const at = Math.min(Math.max(to, fixed), last)
+  if (from < fixed || from > last || at === from) return null
   const node = doc.child(from)
   const start = blockStart(doc, from)
   const tr = state.tr.delete(start, start + node.nodeSize)
@@ -68,14 +74,14 @@ export function moveBlockTo(state: EditorState, from: number, to: number): Trans
 
 /** The transaction putting a copy of block `index` after it; null for the title and summary. */
 export function duplicateBlock(state: EditorState, index: number): Transaction | null {
-  if (index < FIXED_BLOCKS || index >= state.doc.childCount) return null
+  if (index < fixedBlocks(state.doc) || index >= state.doc.childCount) return null
   const node = state.doc.child(index)
   return state.tr.insert(blockStart(state.doc, index) + node.nodeSize, node)
 }
 
 /** The transaction taking block `index` out; null for the title and summary. */
 export function removeBlock(state: EditorState, index: number): Transaction | null {
-  if (index < FIXED_BLOCKS || index >= state.doc.childCount) return null
+  if (index < fixedBlocks(state.doc) || index >= state.doc.childCount) return null
   const start = blockStart(state.doc, index)
   return state.tr.delete(start, start + state.doc.child(index).nodeSize)
 }
@@ -186,7 +192,7 @@ export function turnBlockInto(
   index: number,
   into: TurnInto,
 ): Transaction | null {
-  if (index < FIXED_BLOCKS || index >= state.doc.childCount) return null
+  if (index < fixedBlocks(state.doc) || index >= state.doc.childCount) return null
   const node = state.doc.child(index)
   const was = blockTurn(node)
   if (!was || was === into) return null
@@ -203,7 +209,7 @@ export function turnBlockInto(
  * it: the gutter's + opens the menu of what can go there (Notion's). Null above the lesson's blocks.
  */
 export function lineAfter(state: EditorState, index: number): Transaction | null {
-  if (index < FIXED_BLOCKS || index >= state.doc.childCount) return null
+  if (index < fixedBlocks(state.doc) || index >= state.doc.childCount) return null
   const at = blockStart(state.doc, index) + state.doc.child(index).nodeSize
   const line = state.schema.nodes['paragraph']!.create(null, state.schema.text('/'))
   const tr = state.tr.insert(at, line)

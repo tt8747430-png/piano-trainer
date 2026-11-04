@@ -6,7 +6,7 @@ import type { Locale } from '@/shared/i18n'
 import {
   blockStart,
   duplicateBlock,
-  FIXED_BLOCKS,
+  fixedBlocks,
   lineAfter,
   moveBlock,
   removeBlock,
@@ -35,7 +35,13 @@ export const INSERTABLES: readonly Insertable[] = [
   'voicings',
   'question',
   'link',
+  'image',
 ]
+
+/** What a page's About offers (R29 B9): the lesson's kinds but a question, which needs the lesson's keys. */
+export const ABOUT_INSERTABLES: readonly Insertable[] = INSERTABLES.filter(
+  (kind) => kind !== 'question',
+)
 
 const nodeOf = (kind: Insertable, locale: Locale): DocNode =>
   kind === 'section'
@@ -50,10 +56,11 @@ const nodeOf = (kind: Insertable, locale: Locale): DocNode =>
  */
 export function insertBlock(editor: Editor, kind: Insertable, locale: Locale): void {
   const { state } = editor
-  const index = Math.max(selectedBlock(state), FIXED_BLOCKS - 1)
+  const fixed = fixedBlocks(state.doc)
+  const index = Math.max(selectedBlock(state), fixed - 1)
   const here = state.doc.maybeChild(index)
   const empty =
-    index >= FIXED_BLOCKS &&
+    index >= fixed &&
     here?.type.name === DOC.paragraph &&
     here.content.size === 0 &&
     !here.attrs['block']

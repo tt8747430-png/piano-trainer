@@ -354,6 +354,15 @@
   background-color: var(--block-surface);
   color: var(--block-text);
 }
+/* A block in a style of its own (a lesson's, an About's): its card drawn in that style. */
+[data-block-style] {
+  border-radius: var(--block-radius);
+  border: var(--block-border) solid var(--border);
+  box-shadow: var(--block-shadow);
+  background-color: var(--block-surface);
+  color: var(--block-text);
+  padding: var(--block-padding);
+}
 [data-card-look][data-density='compact'] {
   --row-min: --spacing(12);
 }

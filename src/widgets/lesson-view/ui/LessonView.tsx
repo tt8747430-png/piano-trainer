@@ -35,7 +35,8 @@ import {
   questionReducer,
   type QuestionKeys,
 } from '../model/lesson-question'
-import { LessonBlock } from './LessonBlock'
+import { LessonBlock, StyledBlock } from './LessonBlock'
+import { SectionHeading, Takeaway } from './SectionParts'
 import { QuestionBlock } from './QuestionBlock'
 import { useReadingSection } from './use-reading-section'
 import {
@@ -296,8 +297,6 @@ export function LessonView({
   /** What follows the lesson's last section, told whether the lesson reads a page at a time. */
   end?: (paged: boolean) => ReactNode
 }) {
-  const { t } = useTranslation('learn')
-  const locale = useLocale()
   const play = usePlay()
   // One page of its sections, or a section at a time where the learner chose it (round 26).
   const paged = useSettings(selectLessonReading) === 'sections'
@@ -358,14 +357,14 @@ export function LessonView({
                 s > 0 && !paged && 'border-t border-border pt-8',
               )}
             >
-              <h2 className="text-2xl text-balance">{localText(section.heading, locale)}</h2>
+              <SectionHeading text={section.heading} style={section.style} />
               {section.blocks.map((block, b) => {
                 const id = `${s}.${b}`
                 if (block.kind !== 'question')
                   return <LessonBlock key={id} block={block} onShow={show} onFollow={setShown} />
                 const open = question?.id === id ? question : null
                 const answerKeys = answers.get(id) ?? { ...NO_KEYS, inOrder: false }
-                return (
+                const asked = (
                   <QuestionBlock
                     key={id}
                     ask={block.ask}
@@ -379,19 +378,16 @@ export function LessonView({
                     onRetry={() => dispatch({ type: 'retry' })}
                   />
                 )
+                return block.style ? (
+                  <StyledBlock key={id} style={block.style}>
+                    {asked}
+                  </StyledBlock>
+                ) : (
+                  asked
+                )
               })}
               {section.takeaway ? (
-                <aside
-                  aria-label={t('takeaway')}
-                  className="flex flex-col gap-1 rounded-card bg-paint-lilac p-4"
-                >
-                  <span aria-hidden className="text-sm font-semibold text-on-paint-lilac">
-                    {t('takeaway')}
-                  </span>
-                  <p className="font-display text-xl font-semibold text-balance">
-                    {localText(section.takeaway, locale)}
-                  </p>
-                </aside>
+                <Takeaway text={section.takeaway} style={section.takeawayStyle} />
               ) : null}
             </section>
           ),

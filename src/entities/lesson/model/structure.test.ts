@@ -26,7 +26,9 @@ describe('the blocks an editor inserts', () => {
       'voicings',
       'question',
       'link',
+      'image',
     ])
+    expect(blankBlock('image')).toEqual({ kind: 'image', src: '', alt: { en: '', ru: '' } })
     expect(blankBlock('rule')).toEqual({
       kind: 'note',
       rule: { en: '', ru: '' },

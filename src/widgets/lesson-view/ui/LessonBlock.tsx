@@ -1,8 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
-import { useState } from 'react'
+import { useState, type CSSProperties, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  imageSource,
   readProgression,
   type LessonBlock as Block,
   type LessonLink,
@@ -23,6 +24,7 @@ import {
 } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
 import { C_MAJOR, keyParam, noteParam, numeralsParam } from '@/shared/lib/music'
+import { styleVars, type BlockStyle } from '@/shared/lib/style'
 import { isProgressionRow } from '../model/chord-example'
 import { gridSymbols } from '../model/chord-grid'
 import { ChordExamples } from './ChordExamples'
@@ -82,6 +84,38 @@ function VariantsBlock({
   )
 }
 
+/** A block in a style of its own (R29 B9): its card drawn by the theme's `[data-block-style]`. */
+export function StyledBlock({ style, children }: { style: BlockStyle; children: ReactNode }) {
+  return (
+    <div data-block-style="" style={styleVars(style) as CSSProperties}>
+      {children}
+    </div>
+  )
+}
+
+/** A picture by its https address, its words for who cannot see it; nothing for any other address. */
+function ImageBlock({ src, alt }: { src: string; alt: string }) {
+  const shown = imageSource(src)
+  if (!shown) return null
+  return (
+    <figure>
+      <img src={shown} alt={alt} loading="lazy" className="w-full rounded-card object-cover" />
+    </figure>
+  )
+}
+
+/**
+ * One block of a lesson in its own style where it has one (R29 B9): see `BlockBody`.
+ */
+export function LessonBlock(props: {
+  block: Exclude<Block, { kind: 'question' }>
+  onShow: (shown: ShownKeys) => void
+  onFollow?: (shown: ShownKeys) => void
+}) {
+  const body = <BlockBody {...props} />
+  return props.block.style ? <StyledBlock style={props.block.style}>{body}</StyledBlock> : body
+}
+
 /**
  * One block of a lesson: prose with its bold lead, numbered steps, a note on sand, an example that
  * plays on the lesson's keys (a pattern over its piece, a progression as Progressions' row, beside a
@@ -89,7 +123,7 @@ function VariantsBlock({
  * into an explorer, a tool or the Player. A question is the view's, which keeps its state. What a
  * line of notes shows as it plays on goes to `onFollow`, `onShow` unless given.
  */
-export function LessonBlock({
+function BlockBody({
   block,
   onShow,
   onFollow = onShow,
@@ -203,5 +237,7 @@ export function LessonBlock({
     }
     case 'link':
       return <LinkCard title={localText(block.title, locale)} target={block.target} />
+    case 'image':
+      return <ImageBlock src={block.src} alt={localText(block.alt, locale)} />
   }
 }
