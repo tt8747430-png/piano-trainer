@@ -1,9 +1,13 @@
+import { readAbout, type About } from '@/entities/lesson'
+
 /**
  * The courses' own order (content as data, ADR 0116 r25): their ids as Manage courses dragged them,
  * read within each course's shelf. The database keeps it as `catalog` `courses`.
  */
 export interface CourseOrder {
   readonly courses: readonly string[]
+  /** The Courses' About (R29 B9): a document over the shelves, an editor's. */
+  readonly about?: About
 }
 
 /** The order's id among the catalog's items. */
@@ -13,7 +17,9 @@ export const isCourseOrder = (value: unknown): value is CourseOrder =>
   typeof value === 'object' &&
   value !== null &&
   Array.isArray((value as { courses?: unknown }).courses) &&
-  (value as { courses: unknown[] }).courses.every((id) => typeof id === 'string')
+  (value as { courses: unknown[] }).courses.every((id) => typeof id === 'string') &&
+  ((value as { about?: unknown }).about === undefined ||
+    readAbout((value as { about?: unknown }).about) !== undefined)
 
 /**
  * The courses in the order's sequence: the ones it names in its order, each other one after them

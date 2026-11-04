@@ -44,6 +44,8 @@ export const learn: LocaleResources['learn'] = {
     study: 'Этюд',
     song: 'Песня',
   },
+  // Документ над полками курсов (R29 B9), от редактора.
+  coursesAbout: 'О курсах',
   course: {
     start: 'Начать курс',
     continue: 'Продолжить',
@@ -63,6 +65,8 @@ export const learn: LocaleResources['learn'] = {
     songCount_many: '{{count}} песен',
     songCount_other: '{{count}} песни',
     done: 'Курс пройден',
+    // Документ курса под его шапкой (R29 B9), от редактора.
+    about: 'Описание',
     facts: 'О курсе',
   },
   place: 'Урок {{n}} из {{total}}',
@@ -157,6 +161,8 @@ export const learn: LocaleResources['learn'] = {
         takeaway: 'Коротко',
       },
       editExample: 'Изменить',
+      style: 'Оформление',
+      styleOf: 'Оформление: {{name}}',
       duplicate: 'Копировать',
       remove: 'Удалить',
       removed: 'Удалено: {{name}}',
@@ -205,6 +211,12 @@ export const learn: LocaleResources['learn'] = {
       interval: 'Интервал',
       ask: 'Вопрос',
       linkTitle: 'Текст ссылки',
+      imageSrc: 'Адрес картинки',
+      imageSrcInfo:
+        'Адрес картинки в интернете, начинается с https://. Скопируйте его со страницы картинки.',
+      imageSrcWrong: 'Адрес начинается с https://',
+      imageAlt: 'Что на картинке',
+      imageEmpty: 'Картинки пока нет: укажите её адрес в «Изменить».',
       groups: { text: 'Текст', music: 'Музыка', learner: 'Вопрос и ссылка' },
       voicing: 'Расположение {{n}}',
       symbol: 'Аккорд',
@@ -246,6 +258,7 @@ export const learn: LocaleResources['learn'] = {
       variants: 'Варианты',
       question: 'Вопрос',
       link: 'Ссылка',
+      image: 'Картинка',
     },
     back: 'К уроку',
     editorsOnly: 'Урок правит только редактор.',

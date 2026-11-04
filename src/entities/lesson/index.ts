@@ -33,4 +33,5 @@ export {
 } from './model/selectors'
 export { LESSONS } from './content'
 export { JOURNEYS } from './content/journeys'
+export { hasAbout, imageSource, readAbout, type About } from './model/about'
 export { blankBlock, INSERTABLE_BLOCKS, withAfter, type InsertableBlock } from './model/structure'

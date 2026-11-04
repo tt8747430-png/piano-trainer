@@ -1,7 +1,16 @@
 import { describe, expect, it } from 'vitest'
 import { COURSES } from '@/entities/course'
 import { LESSONS, type Lesson, type LessonBlock } from '@/entities/lesson'
-import { DOC, docToLesson, lessonToDoc, textOf, type DocNode } from './lesson-doc'
+import { BLOCK_PRESETS } from '@/shared/lib/style'
+import {
+  aboutToDoc,
+  DOC,
+  docToAbout,
+  docToLesson,
+  lessonToDoc,
+  textOf,
+  type DocNode,
+} from './lesson-doc'
 
 const ALL = [...LESSONS, ...COURSES.flatMap((course) => course.lessons)]
 
@@ -158,5 +167,63 @@ describe('a lesson as a document', () => {
     expect(docToLesson(moved, lesson(blocks), 'en').sections[0]?.blocks).toEqual(
       [...blocks].reverse(),
     )
+  })
+})
+
+describe('a block’s style in the document (R29 B9)', () => {
+  const soft = BLOCK_PRESETS.soft
+  const night = BLOCK_PRESETS.night
+
+  it('carries every block’s, heading’s and takeaway’s style and gives it back', () => {
+    const styled: Lesson = {
+      ...lesson([
+        { kind: 'text', text: { en: 'a', ru: 'а' }, style: soft },
+        { kind: 'notes', clef: 'treble', notes: 'C4', style: night },
+        { kind: 'image', src: 'https://example.com/a.webp', alt: { en: 'A', ru: 'А' } },
+      ]),
+    }
+    const withHeads: Lesson = {
+      ...styled,
+      sections: styled.sections.map((section) => ({
+        ...section,
+        style: night,
+        takeawayStyle: soft,
+      })),
+    }
+    expect(docToLesson(lessonToDoc(withHeads, 'en'), withHeads, 'en')).toEqual(withHeads)
+  })
+
+  it('takes a style set on a node over the one its block carried', () => {
+    const base = lesson([{ kind: 'notes', clef: 'treble', notes: 'C4', style: soft }], false)
+    const doc = lessonToDoc(base, 'en')
+    const restyled = {
+      ...doc,
+      content: doc.content?.map((node) =>
+        node.type === DOC.example ? { ...node, attrs: { ...node.attrs, style: night } } : node,
+      ),
+    }
+    expect(docToLesson(restyled, base, 'en').sections[0]?.blocks[0]).toMatchObject({ style: night })
+  })
+})
+
+describe('an About as a document (R29 B9)', () => {
+  const about = [
+    {
+      heading: { en: 'Why', ru: 'Зачем' },
+      blocks: [{ kind: 'text', text: { en: 'Because', ru: 'Потому' }, style: BLOCK_PRESETS.bold }],
+    },
+  ] as const
+
+  it('has no title or summary, only its sections, and comes back as it was', () => {
+    const doc = aboutToDoc(about, 'ru')
+    expect(doc.content?.map((node) => [node.type, textOf(node)])).toEqual([
+      [DOC.heading, 'Зачем'],
+      [DOC.paragraph, 'Потому'],
+    ])
+    expect(docToAbout(doc, 'ru')).toEqual(about)
+  })
+
+  it('is none from an empty document', () => {
+    expect(docToAbout({ type: 'doc', content: [{ type: DOC.paragraph }] }, 'en')).toEqual([])
   })
 })

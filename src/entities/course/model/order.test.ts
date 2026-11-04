@@ -28,4 +28,10 @@ describe('the courses’ own order', () => {
     expect(isCourseOrder({ courses: [1] })).toBe(false)
     expect(isCourseOrder(null)).toBe(false)
   })
+
+  it('carries the Courses’ About, a list of sections (R29 B9)', () => {
+    const about = [{ heading: { en: 'Start here', ru: 'Начните здесь' }, blocks: [] }]
+    expect(isCourseOrder({ courses: ['a'], about })).toBe(true)
+    expect(isCourseOrder({ courses: ['a'], about: 'flat' })).toBe(false)
+  })
 })

@@ -137,7 +137,11 @@ describe('the course editor (ADR 0116, round 12)', () => {
     await rowAction(user, first.title.en, 'Remove')
     expect(within(lessons).getAllByRole('link')[0]).toHaveTextContent(second.title.en)
     expect(await screen.findByText(`Removed: ${first.title.en}`)).toBeVisible()
-    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    // The notice's Undo: the About's formatting toolbar has its own, for its words.
+    const undo = screen
+      .getAllByRole('button', { name: 'Undo' })
+      .find((button) => !button.closest('[role="toolbar"]'))
+    await user.click(undo!)
     expect(within(lessons).getAllByRole('link')[0]).toHaveTextContent(first.title.en)
   })
 

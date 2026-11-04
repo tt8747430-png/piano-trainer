@@ -1,6 +1,7 @@
 import { Extension, Node, type AnyExtension, type NodeViewRenderer } from '@tiptap/core'
 import { StarterKit } from '@tiptap/starter-kit'
 import type { LessonBlock } from '@/entities/lesson'
+import { sanitiseStyle, styleVars } from '@/shared/lib/style'
 import { moveBlock } from './doc-blocks'
 import { DOC } from './lesson-doc'
 
@@ -13,6 +14,24 @@ const LessonDoc = Node.create({
   topNode: true,
   content: `${DOC.title} ${DOC.summary} block*`,
 })
+
+/** A page's About (R29 B9): the lesson's document with no title or summary, its blocks alone. */
+const AboutDoc = LessonDoc.extend({ content: 'block*' })
+
+/** The custom properties a style sets, as an element's `style` (only `--block-*`, from a short list). */
+export const styleCss = (style: unknown): string =>
+  Object.entries(styleVars(sanitiseStyle(style)))
+    .map(([name, value]) => `${name}: ${value}`)
+    .join('; ')
+
+/** A block's own look (R29 B9): drawn as the page draws it, its node carrying it; never split onto a new line. */
+const blockStyle = {
+  default: null,
+  keepOnSplit: false,
+  parseHTML: () => null,
+  renderHTML: (attributes: Record<string, unknown>) =>
+    attributes['style'] ? { 'data-block-style': '', style: styleCss(attributes['style']) } : {},
+}
 
 /** A line of words alone, no bold (a title, a summary, a takeaway, a note's parts). */
 const plainLine = (name: string, tag: string, data: string, group?: string) =>
@@ -84,6 +103,10 @@ const Carried = Extension.create({
   addGlobalAttributes: () => [
     { types: [DOC.paragraph, DOC.steps], attributes: { block: carried } },
     { types: [DOC.heading, DOC.step], attributes: { text: carried } },
+    {
+      types: [DOC.paragraph, DOC.steps, DOC.note, DOC.takeaway, DOC.example, DOC.heading],
+      attributes: { style: blockStyle },
+    },
   ],
 })
 
@@ -108,9 +131,12 @@ const MoveBlocks = Extension.create({
 export function docExtensions({
   exampleView = null,
   more = [],
+  about = false,
 }: {
   exampleView?: NodeViewRenderer | null
   more?: readonly AnyExtension[]
+  /** A page's About: no title or summary. */
+  about?: boolean
 } = {}): AnyExtension[] {
   return [
     StarterKit.configure({
@@ -128,7 +154,7 @@ export function docExtensions({
       heading: { levels: [2] },
       dropcursor: { width: 3, class: 'doc-drop-cursor' },
     }),
-    LessonDoc,
+    about ? AboutDoc : LessonDoc,
     LessonTitle,
     LessonSummary,
     Takeaway,

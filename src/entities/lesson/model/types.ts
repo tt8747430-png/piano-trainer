@@ -2,6 +2,7 @@ import type { ArpeggioQuality, ExerciseId } from '@/entities/exercise'
 import type { PatternId } from '@/entities/pattern'
 import type { PieceId } from '@/entities/piece'
 import type { LocalText } from '@/shared/i18n'
+import type { BlockStyle } from '@/shared/lib/style'
 import type {
   ChordQuality,
   Inversion,
@@ -88,7 +89,7 @@ export type LessonLink =
  * voicings as written, a pattern over a piece, a progression in a key); a question answered on the keys; a link into an explorer,
  * a tool or the Player.
  */
-export type LessonBlock =
+export type LessonBlock = (
   | { readonly kind: 'text'; readonly lead?: LocalText; readonly text: LocalText }
   | { readonly kind: 'steps'; readonly steps: readonly LocalText[] }
   /** A note on sand; or, given its `rule`, a rule's card: the rule's name over what it says. */
@@ -146,6 +147,12 @@ export type LessonBlock =
   | { readonly kind: 'variants'; readonly variants: readonly LessonVariant[] }
   | { readonly kind: 'question'; readonly ask: LocalText; readonly answer: LessonAnswer }
   | { readonly kind: 'link'; readonly title: LocalText; readonly target: LessonLink }
+  /** A picture by its `https://` address, with words for who cannot see it. */
+  | { readonly kind: 'image'; readonly src: string; readonly alt: LocalText }
+) & {
+  /** Its own look (R29 B9): drawn on a card of that style; the page's own look without one. */
+  readonly style?: BlockStyle
+}
 
 /** An example a variant draws: a progression's row, voicings as written, or chords. */
 export type VariantExample = Extract<LessonBlock, { kind: 'progression' | 'voicings' | 'chords' }>
@@ -166,6 +173,9 @@ export interface LessonSection {
   readonly blocks: readonly LessonBlock[]
   /** The section in one sentence, on its card at the section's end. */
   readonly takeaway?: LocalText
+  /** Its heading's own look and its takeaway's (R29 B9). */
+  readonly style?: BlockStyle
+  readonly takeawayStyle?: BlockStyle
 }
 
 /**

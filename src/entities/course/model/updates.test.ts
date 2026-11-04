@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { keepContent } from '@/shared/api/content'
+import { DEFAULT_STYLE } from '@/shared/lib/style'
 import { COURSES } from '../content'
-import { courseById, courseLesson, coursesOn } from './selectors'
+import { courseById, courseLesson, coursesAbout, coursesOn } from './selectors'
 import { courseRecord, updatesCourse } from './types'
 
 afterEach(() => keepContent([]))
@@ -100,9 +101,45 @@ describe('a course’s texts over the kept content (round 12)', () => {
     expect(courseById(course.id)?.lessons).toEqual([first])
   })
 
+  it('reads its About, each block’s style sanitised (R29 B9)', () => {
+    const about = [
+      {
+        heading: { en: 'Why', ru: 'Зачем' },
+        blocks: [{ kind: 'text', text: { en: 'Because', ru: 'Потому' }, style: { radius: 4 } }],
+      },
+    ]
+    kept({ ...texts, about })
+    expect(courseById(course.id)?.about).toEqual([
+      {
+        ...about[0],
+        blocks: [{ ...about[0]?.blocks[0], style: { ...DEFAULT_STYLE, radius: 4 } }],
+      },
+    ])
+    expect(courseRecord({ ...course, about: about as never }).about).toBe(about)
+  })
+
+  it('passes over a record whose About is not a list of sections', () => {
+    kept({ ...texts, about: 'flat' })
+    expect(courseById(course.id)).toBe(course)
+  })
+
   it('passes over a lessons list that is not a list of ids', () => {
     kept({ ...texts, lessons: [1, 2] })
     expect(courseById(course.id)).toBe(course)
+  })
+})
+
+describe('the Courses’ About (R29 B9)', () => {
+  it('is the published course order’s, each style sanitised', () => {
+    expect(coursesAbout()).toBeUndefined()
+    const about = [
+      {
+        heading: { en: 'Start here', ru: 'Начните здесь' },
+        blocks: [{ kind: 'text', text: { en: 'Hi', ru: 'Привет' }, style: { border: 3 } }],
+      },
+    ]
+    keepContent([{ kind: 'catalog', id: 'courses', version: 'v1', body: { courses: [], about } }])
+    expect(coursesAbout()?.[0]?.blocks[0]?.style).toEqual({ ...DEFAULT_STYLE, border: 3 })
   })
 })
 

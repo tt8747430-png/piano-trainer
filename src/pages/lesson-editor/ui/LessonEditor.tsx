@@ -5,8 +5,7 @@ import type { Lesson } from '@/entities/lesson'
 import { useLessonDraft } from '@/features/edit-original'
 import { localText, useLocale, type Locale } from '@/shared/i18n'
 import { DraftScreen } from '@/widgets/content-editor'
-import { LessonDocument } from './document/LessonDocument'
-import { OpenScore } from './document/open-score'
+import { LessonDocument, OpenScore } from '@/widgets/lesson-document'
 
 /**
  * An editor's lesson editor (ADR 0116, round 21): the lesson's draft opened (else the lesson as

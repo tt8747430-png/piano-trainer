@@ -4,6 +4,7 @@ import { NodeSelection } from '@tiptap/pm/state'
 import { useEditorState } from '@tiptap/react'
 import { GripVertical, Plus } from 'lucide-react'
 import {
+  use,
   useEffect,
   useRef,
   useState,
@@ -14,15 +15,16 @@ import {
 import { useTranslation } from 'react-i18next'
 import { ActionMenu } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { blockStart, FIXED_BLOCKS, moveBlockTo, selectedBlock } from '../../model/doc-blocks'
+import { blockStart, fixedBlocks, moveBlockTo, selectedBlock } from '../model/doc-blocks'
 import { nodeName } from './block-names'
 import { addLineAfter } from './commands'
 import { blockActions } from './menus'
+import { StyleBlock } from './style-block'
 
 /** The block of the document under the pointer's height, by its index; null over none of them. */
 function blockAtY(editor: Editor, y: number): number | null {
   const { doc } = editor.state
-  for (let index = FIXED_BLOCKS; index < doc.childCount; index++) {
+  for (let index = fixedBlocks(doc); index < doc.childCount; index++) {
     const dom = editor.view.nodeDOM(blockStart(doc, index))
     if (!(dom instanceof HTMLElement)) continue
     const box = dom.getBoundingClientRect()
@@ -82,6 +84,7 @@ export function BlockHandle({
   frame: RefObject<HTMLDivElement | null>
 }) {
   const { t } = useTranslation('learn')
+  const styleBlock = use(StyleBlock)
   const [hovered, setHovered] = useState<number | null>(null)
   // The block whose menu is open: what it acts on, wherever the pointer goes meanwhile.
   const [menuFor, setMenuFor] = useState<number | null>(null)
@@ -116,7 +119,9 @@ export function BlockHandle({
   const pinned = menuFor === caret.index ? menuFor : null
   const index = pinned ?? hovered ?? (caret.focused ? caret.index : null)
   const node =
-    index === null || index < FIXED_BLOCKS ? null : (editor.state.doc.maybeChild(index) ?? null)
+    index === null || index < fixedBlocks(editor.state.doc)
+      ? null
+      : (editor.state.doc.maybeChild(index) ?? null)
   // Beside its block, wherever the block now stands.
   useEffect(() => {
     const element = handle.current
@@ -211,7 +216,7 @@ export function BlockHandle({
               onDragEnd={() => endDrag(editor)}
             />
           }
-          actions={blockActions(editor, index, t).map((action) => ({
+          actions={blockActions(editor, index, t, styleBlock).map((action) => ({
             ...action,
             onSelect: () => {
               action.onSelect()

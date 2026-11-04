@@ -52,6 +52,8 @@ export const learn = {
     song: 'Song',
   },
   // A course's page: its facts, its one way in, its lessons and its guided songs.
+  // The Courses' own document over their shelves (R29 B9), an editor's.
+  coursesAbout: 'About the courses',
   course: {
     start: 'Start course',
     continue: 'Continue',
@@ -66,6 +68,8 @@ export const learn = {
     songCount_other: '{{count}} songs',
     done: 'Course complete',
     facts: 'About this course',
+    // The course's own document under its head (R29 B9), an editor's.
+    about: 'About',
   },
   // Where a lesson is: a journey's chapter, or a course.
   place: 'Lesson {{n}} of {{total}}',
@@ -170,6 +174,8 @@ export const learn = {
         takeaway: 'In short',
       },
       editExample: 'Edit',
+      style: 'Style',
+      styleOf: 'Style: {{name}}',
       duplicate: 'Duplicate',
       remove: 'Delete',
       removed: 'Deleted: {{name}}',
@@ -218,6 +224,12 @@ export const learn = {
       interval: 'Interval',
       ask: 'Question',
       linkTitle: 'Link text',
+      imageSrc: 'Picture’s address',
+      imageSrcInfo:
+        'The address of a picture on the web, starting https://. Copy it from the picture’s own page.',
+      imageSrcWrong: 'An address starts https://',
+      imageAlt: 'What the picture shows',
+      imageEmpty: 'No picture yet: give its address under Edit.',
       groups: { text: 'Text', music: 'Music', learner: 'Ask and link' },
       voicing: 'Voicing {{n}}',
       symbol: 'Chord',
@@ -259,6 +271,7 @@ export const learn = {
       variants: 'Versions',
       question: 'Question',
       link: 'Link',
+      image: 'Picture',
     },
     // The editor's bar: what is edited; the document under it names which.
     back: 'Back to the lesson',

@@ -9,16 +9,25 @@ import {
   type RefObject,
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Lesson } from '@/entities/lesson'
+import type { About, Lesson } from '@/entities/lesson'
 import { i18n, type Locale } from '@/shared/i18n'
 import { cn, useKeyboardTop } from '@/shared/lib'
-import { docExtensions } from '../../model/doc-schema'
-import { DOC, docToLesson, lessonToDoc, type DocNode } from '../../model/lesson-doc'
+import { docExtensions } from '../model/doc-schema'
+import {
+  aboutToDoc,
+  DOC,
+  docToAbout,
+  docToLesson,
+  lessonToDoc,
+  type DocNode,
+} from '../model/lesson-doc'
 import { BlockHandle } from './BlockHandle'
 import { DocToolbar, TextBubble } from './DocToolbar'
 import { DocLocale } from './doc-locale'
 import { ExampleView } from './ExampleView'
 import { SlashMenu, type SlashKeys } from './SlashMenu'
+import { StyleBlock } from './style-block'
+import { BlockStyleSheet } from './BlockStyleSheet'
 import './document.css'
 
 type Words = ReturnType<typeof i18n.getFixedT<'learn'>>
@@ -65,12 +74,72 @@ export function LessonDocument({
   onChange: (lesson: Lesson) => void
 }) {
   const { t } = useTranslation('learn')
-  const words = i18n.getFixedT(locale, 'learn')
   const base = useRef(initial)
+  return (
+    <BlocksDocument
+      content={lessonToDoc(initial, locale)}
+      locale={locale}
+      label={t('edit.doc.label')}
+      onDoc={(doc) => {
+        const next = docToLesson(doc, base.current, locale)
+        base.current = next
+        onChange(next)
+      }}
+    />
+  )
+}
+
+/**
+ * A page's About as the lesson's document (R29 B9): its sections' headings, blocks and takeaways,
+ * with no title or summary, written in place with the lesson editor's toolbar, `/` menu and handles;
+ * each block's ⋯ › Style its look. Each change goes to `onChange` as the About it writes.
+ */
+export function AboutDocument({
+  initial,
+  locale,
+  label,
+  onChange,
+}: {
+  initial: About
+  /** The language written: the document opens anew on another. */
+  locale: Locale
+  /** The document's name: "About this course". */
+  label: string
+  onChange: (about: About) => void
+}) {
+  return (
+    <BlocksDocument
+      about
+      content={aboutToDoc(initial, locale)}
+      locale={locale}
+      label={label}
+      onDoc={(doc) => onChange(docToAbout(doc, locale))}
+    />
+  )
+}
+
+/** The document itself: TipTap over `content`, its toolbar, gutter, bubble, `/` menu and Style sheet. */
+function BlocksDocument({
+  content,
+  locale,
+  label,
+  about = false,
+  onDoc,
+}: {
+  content: DocNode
+  locale: Locale
+  label: string
+  about?: boolean
+  onDoc: (doc: DocNode) => void
+}) {
+  const words = i18n.getFixedT(locale, 'learn')
   const slashKeys = useRef<SlashKeys | null>(null)
   const frame = useRef<HTMLDivElement>(null)
+  // The block whose look the Style sheet edits, by its index in the document.
+  const [styling, setStyling] = useState<number | null>(null)
   const editor = useEditor({
     extensions: docExtensions({
+      about,
       exampleView: ReactNodeViewRenderer(ExampleView),
       more: [
         Placeholder.configure({
@@ -79,40 +148,45 @@ export function LessonDocument({
           placeholder: ({ editor: each, node, pos, hasAnchor }) =>
             placeholderOf(
               node.type.name,
-              each.state.doc.resolve(pos).parent.type.name,
-              hasAnchor,
+              // Drawn for the state to come, the editor's may be shorter.
+              pos <= each.state.doc.content.size
+                ? each.state.doc.resolve(pos).parent.type.name
+                : 'doc',
+              // An empty About's one line says what to do, caret or not.
+              hasAnchor || each.state.doc.childCount === 1,
               words,
             ),
         }),
       ],
     }),
-    content: lessonToDoc(initial, locale) as JSONContent,
+    content: content as JSONContent,
     immediatelyRender: true,
     shouldRerenderOnTransaction: false,
     editorProps: {
-      attributes: { class: 'lesson-doc', 'aria-label': t('edit.doc.label'), lang: locale },
+      attributes: { class: 'lesson-doc', 'aria-label': label, lang: locale },
       handleKeyDown: (_, event) => slashKeys.current?.(event) ?? false,
     },
-    onUpdate: ({ editor: each }) => {
-      const next = docToLesson(each.getJSON() as DocNode, base.current, locale)
-      base.current = next
-      onChange(next)
-    },
+    onUpdate: ({ editor: each }) => onDoc(each.getJSON() as DocNode),
   })
   const toolbar = <DocToolbar editor={editor} locale={locale} />
   return (
     <DocLocale value={locale}>
-      <ToolbarDock editorDom={frame}>{toolbar}</ToolbarDock>
-      <div
-        ref={frame}
-        className="relative pr-11 pb-28 md:pr-0 md:pl-20"
-        style={{ '--takeaway-label': JSON.stringify(words('edit.doc.takeaway')) } as CSSProperties}
-      >
-        <EditorContent editor={editor} />
-        <BlockHandle editor={editor} frame={frame} />
-        <TextBubble editor={editor} />
-        <SlashMenu editor={editor} locale={locale} frame={frame} keysRef={slashKeys} />
-      </div>
+      <StyleBlock value={setStyling}>
+        <ToolbarDock editorDom={frame}>{toolbar}</ToolbarDock>
+        <div
+          ref={frame}
+          className="relative pr-11 pb-28 md:pr-0 md:pl-20"
+          style={
+            { '--takeaway-label': JSON.stringify(words('edit.doc.takeaway')) } as CSSProperties
+          }
+        >
+          <EditorContent editor={editor} />
+          <BlockHandle editor={editor} frame={frame} />
+          <TextBubble editor={editor} />
+          <SlashMenu editor={editor} locale={locale} frame={frame} keysRef={slashKeys} />
+        </div>
+        <BlockStyleSheet editor={editor} index={styling} onClose={() => setStyling(null)} />
+      </StyleBlock>
     </DocLocale>
   )
 }

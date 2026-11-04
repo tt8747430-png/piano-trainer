@@ -6,11 +6,13 @@ import {
   Copy,
   Grid3x3,
   Heading2,
+  Image,
   KeyboardMusic,
   Link2,
   ListMusic,
   ListOrdered,
   MoveVertical,
+  Paintbrush,
   Music,
   Music2,
   Pilcrow,
@@ -22,9 +24,16 @@ import {
 } from 'lucide-react'
 import type { Locale } from '@/shared/i18n'
 import { say, type MenuAction } from '@/shared/ui'
-import { blockTurn, FIXED_BLOCKS, TURN_INTO, type TurnInto } from '../../model/doc-blocks'
+import { blockTurn, fixedBlocks, TURN_INTO, type TurnInto } from '../model/doc-blocks'
 import { insertableName, nodeName } from './block-names'
-import { actOnBlock, insertBlock, INSERTABLES, turnInto, type Insertable } from './commands'
+import {
+  ABOUT_INSERTABLES,
+  actOnBlock,
+  insertBlock,
+  INSERTABLES,
+  turnInto,
+  type Insertable,
+} from './commands'
 
 export const INSERT_ICONS: Record<Insertable, LucideIcon> = {
   section: Heading2,
@@ -42,6 +51,7 @@ export const INSERT_ICONS: Record<Insertable, LucideIcon> = {
   voicings: KeyboardMusic,
   question: CircleHelp,
   link: Link2,
+  image: Image,
 }
 
 /** Which group of the Insert menu a kind is in: words, music, or what asks or leads on. */
@@ -61,6 +71,7 @@ const GROUP_OF: Record<Insertable, 'text' | 'music' | 'learner'> = {
   voicings: 'music',
   question: 'learner',
   link: 'learner',
+  image: 'text',
 }
 
 /** The Insert menu's and the slash menu's rows: every kind, its picture, its name and its group. */
@@ -70,7 +81,9 @@ export function insertActions(
   t: TFunction<'learn'>,
   before?: () => void,
 ): MenuAction[] {
-  return INSERTABLES.map((kind) => ({
+  // A page's About has no title or summary of its own, and no question.
+  const kinds = fixedBlocks(editor.state.doc) === 0 ? ABOUT_INSERTABLES : INSERTABLES
+  return kinds.map((kind) => ({
     key: kind,
     group: t(`edit.doc.groups.${GROUP_OF[kind]}`),
     label: insertableName(kind, t),
@@ -99,10 +112,16 @@ const TURN_ICONS: Record<TurnInto, LucideIcon> = {
  * are), copied, deleted (said, with Undo). It is moved by dragging its handle, or Alt+↑/↓: never Move
  * up/down in a menu (the owner's rule).
  */
-export function blockActions(editor: Editor, index: number, t: TFunction<'learn'>): MenuAction[] {
+export function blockActions(
+  editor: Editor,
+  index: number,
+  t: TFunction<'learn'>,
+  /** Opens the block's style (R29 B9): its Style…, where the document offers one. */
+  onStyle?: ((index: number) => void) | null,
+): MenuAction[] {
   const { doc } = editor.state
   const node = doc.maybeChild(index)
-  const fixed = index < FIXED_BLOCKS || !node
+  const fixed = index < fixedBlocks(doc) || !node
   const is = node ? blockTurn(node) : null
   return [
     ...(is === null || fixed
@@ -115,6 +134,16 @@ export function blockActions(editor: Editor, index: number, t: TFunction<'learn'
           checked: into === is,
           onSelect: () => turnInto(editor, index, into),
         }))),
+    ...(onStyle && !fixed
+      ? [
+          {
+            key: 'style',
+            label: t('edit.doc.style'),
+            icon: Paintbrush,
+            onSelect: () => onStyle(index),
+          },
+        ]
+      : []),
     {
       key: 'duplicate',
       label: t('edit.doc.duplicate'),

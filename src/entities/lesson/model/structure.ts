@@ -19,6 +19,7 @@ export const INSERTABLE_BLOCKS = [
   'voicings',
   'question',
   'link',
+  'image',
 ] as const
 export type InsertableBlock = (typeof INSERTABLE_BLOCKS)[number]
 
@@ -53,6 +54,8 @@ export function blankBlock(kind: InsertableBlock): LessonBlock {
       return { kind: 'question', ask: blank, answer: { chord: 'C' } }
     case 'link':
       return { kind: 'link', title: blank, target: { opens: 'chords', chord: 'C' } }
+    case 'image':
+      return { kind: 'image', src: '', alt: blank }
   }
 }
 

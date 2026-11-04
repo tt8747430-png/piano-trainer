@@ -1,5 +1,13 @@
 import { NodeViewWrapper, type ReactNodeViewProps } from '@tiptap/react'
-import { CircleHelp, Copy, FilePen, Piano, SlidersHorizontal, Trash2 } from 'lucide-react'
+import {
+  CircleHelp,
+  Copy,
+  FilePen,
+  Paintbrush,
+  Piano,
+  SlidersHorizontal,
+  Trash2,
+} from 'lucide-react'
 import {
   Component,
   use,
@@ -11,9 +19,10 @@ import {
   type ReactNode,
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { LessonBlock, LessonExample } from '@/entities/lesson'
+import { imageSource, type LessonBlock, type LessonExample } from '@/entities/lesson'
 import { i18n, type LocalText } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
+import type { BlockStyle } from '@/shared/lib/style'
 import { C_MAJOR, CHORD_QUALITIES, INTERVAL_GROUPS, SCALE_KINDS } from '@/shared/lib/music'
 import {
   Dropdown,
@@ -27,18 +36,19 @@ import {
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Textarea } from '@/shared/ui/primitives/textarea'
-import { LessonBlock as Shown, linkTile } from '@/widgets/lesson-view'
+import { LessonBlock as Shown, linkTile, StyledBlock } from '@/widgets/lesson-view'
 import {
   blockExampleProblem,
   blockExamples,
   blockReads,
   withBlockExample,
-} from '../../model/block-examples'
+} from '../model/block-examples'
 import { blockName } from './block-names'
 import { LinkFields, PatternFields, VoicingsFields } from './ExampleFields'
 import { DocLocale } from './doc-locale'
 import { blockActions } from './menus'
 import { OpenScore } from './open-score'
+import { StyleBlock } from './style-block'
 
 const nothing = () => undefined
 
@@ -228,9 +238,62 @@ function KindFields({
       return <PatternFields block={block} onChange={onChange} />
     case 'link':
       return <LinkFields block={block} onChange={onChange} />
+    case 'image':
+      return <ImageFields block={block} onChange={onChange} />
     default:
       return null
   }
+}
+
+/** A picture's fields: its https address, and its words for who cannot see it, in the document's language. */
+function ImageFields({
+  block,
+  onChange,
+}: {
+  block: Extract<LessonBlock, { kind: 'image' }>
+  onChange: (block: LessonBlock) => void
+}) {
+  const { t } = useTranslation('learn')
+  const id = useId()
+  const locale = use(DocLocale)
+  const words = i18n.getFixedT(locale, 'learn')
+  const wrong = block.src !== '' && imageSource(block.src) === null
+  return (
+    <>
+      <div className="flex flex-col gap-1">
+        <label htmlFor={id} className="text-sm font-medium">
+          {t('edit.doc.imageSrc')}
+        </label>
+        <div className="flex items-center gap-1">
+          <Input
+            id={id}
+            type="url"
+            inputMode="url"
+            value={block.src}
+            placeholder="https://"
+            spellCheck={false}
+            autoCapitalize="off"
+            autoCorrect="off"
+            aria-invalid={wrong || undefined}
+            aria-describedby={wrong ? `${id}-problem` : undefined}
+            onChange={(event) => onChange({ ...block, src: event.target.value.trim() })}
+          />
+          <InfoTip name={t('edit.doc.imageSrc')}>{t('edit.doc.imageSrcInfo')}</InfoTip>
+        </div>
+        {wrong ? (
+          <p id={`${id}-problem`} className="text-xs text-destructive">
+            {t('edit.doc.imageSrcWrong')}
+          </p>
+        ) : null}
+      </div>
+      <WordsLine
+        label={t('edit.doc.imageAlt')}
+        value={block.alt}
+        placeholder={words('edit.doc.imageAlt')}
+        onChange={(alt) => onChange({ ...block, alt })}
+      />
+    </>
+  )
 }
 
 const HAS_FIELDS = new Set<LessonBlock['kind']>([
@@ -242,6 +305,7 @@ const HAS_FIELDS = new Set<LessonBlock['kind']>([
   'voicings',
   'pattern',
   'link',
+  'image',
 ])
 
 /** How many examples of notes stand before `pos` in the document: an example's place among them. */
@@ -255,6 +319,10 @@ function notesBefore(doc: ReactNodeViewProps['editor']['state']['doc'], pos: num
   })
   return count
 }
+
+/** What it holds on a card of its style, where it has one. */
+const InStyle = ({ style, children }: { style: BlockStyle | null; children: ReactNode }) =>
+  style ? <StyledBlock style={style}>{children}</StyledBlock> : children
 
 /** One of an example's tools: a 44px button on a phone, its name its tooltip. */
 function Tool({
@@ -302,11 +370,14 @@ export function ExampleView({
   const { t } = useTranslation('learn')
   const locale = use(DocLocale)
   const openScore = use(OpenScore)
+  const styleBlock = use(StyleBlock)
   // As it reads until it is worked on (round 25): chosen, or a field of it focused.
   const [focused, setFocused] = useState(false)
   const block = node.attrs['block'] as LessonBlock | null
   // Its fields open: at once for one that does not read yet (one just put in).
-  const [opened, setOpened] = useState(() => block !== null && !blockReads(block))
+  const [opened, setOpened] = useState(
+    () => block !== null && (!blockReads(block) || (block.kind === 'image' && block.src === '')),
+  )
   const panelId = useId()
   const working = selected || focused
   // Its fields close once it is let go: chosen again, it reads until its Edit.
@@ -319,6 +390,10 @@ export function ExampleView({
   const open = opened && working
   const words = i18n.getFixedT(locale, 'learn')
   const change = (next: LessonBlock) => updateAttributes({ block: next })
+  // Drawn in the style its node carries (its ⋯ › Style), over the one its block was written with.
+  const style = node.attrs['style'] as BlockStyle | null
+  const { style: _written, ...plain } = block
+  const shown = (style ? { ...plain, style } : plain) as LessonBlock
   const name = t(`edit.blocks.${blockName(block)}`)
   const examples = blockExamples(block)
   // Variants hold whole examples of their own: kept as written, moved, copied or deleted whole.
@@ -371,6 +446,11 @@ export function ExampleView({
               <FilePen aria-hidden />
             </Tool>
           ) : null}
+          {styleBlock && index !== null ? (
+            <Tool label={t('edit.doc.style')} onClick={() => styleBlock(index)}>
+              <Paintbrush aria-hidden />
+            </Tool>
+          ) : null}
           {actions
             .filter((action) => action.key === 'duplicate' || action.key === 'remove')
             .map((action) => (
@@ -385,54 +465,64 @@ export function ExampleView({
             ))}
         </div>
       ) : null}
-      {block.kind === 'question' ? (
-        // The question's card as the lesson shows it, its words typed where they print.
-        <div className="flex flex-col gap-3 card p-4 text-base">
-          <div className="flex items-start gap-3">
-            <span
-              aria-hidden
-              className="grid size-10 shrink-0 place-items-center rounded-pill bg-paint-lilac text-on-paint-lilac"
-            >
-              <CircleHelp className="size-5" />
-            </span>
-            <WordsLine
-              label={t('edit.doc.ask')}
-              value={block.ask}
-              placeholder={words('edit.doc.ask')}
-              className="h-auto min-h-10 flex-1 rounded-control border-transparent bg-transparent px-1 font-semibold shadow-none md:text-base dark:bg-transparent"
-              onChange={(ask) => change({ ...block, ask })}
-            />
-          </div>
-          <span
-            aria-hidden
-            className="ml-13 inline-flex h-10 w-fit items-center gap-2 rounded-pill border border-border px-4 text-sm font-medium"
-          >
-            <Piano className="size-4" />
-            {words('question.answer')}
-          </span>
-        </div>
-      ) : block.kind === 'link' ? (
-        // The link's row on its card as the lesson shows it (round 26), its title typed where it
-        // prints: one card, never a field over a copy of it.
-        <div className="card px-2">
-          <div className="flex min-h-16 items-center gap-3 py-2 pr-2 pl-1">
-            <TileMark {...linkTile(block.target)} />
-            <WordsLine
-              label={t('edit.doc.linkTitle')}
-              value={block.title}
-              placeholder={words('edit.doc.linkTitle')}
-              className="h-auto min-h-10 flex-1 rounded-control border-transparent bg-transparent px-1 text-lg font-semibold shadow-none md:text-lg dark:bg-transparent"
-              onChange={(title) => change({ ...block, title })}
-            />
-            <OpensMark />
-          </div>
-        </div>
+      {block.kind === 'question' || block.kind === 'link' ? (
+        <InStyle style={style}>
+          {block.kind === 'question' ? (
+            // The question's card as the lesson shows it, its words typed where they print.
+            <div className="flex flex-col gap-3 card p-4 text-base">
+              <div className="flex items-start gap-3">
+                <span
+                  aria-hidden
+                  className="grid size-10 shrink-0 place-items-center rounded-pill bg-paint-lilac text-on-paint-lilac"
+                >
+                  <CircleHelp className="size-5" />
+                </span>
+                <WordsLine
+                  label={t('edit.doc.ask')}
+                  value={block.ask}
+                  placeholder={words('edit.doc.ask')}
+                  className="h-auto min-h-10 flex-1 rounded-control border-transparent bg-transparent px-1 font-semibold shadow-none md:text-base dark:bg-transparent"
+                  onChange={(ask) => change({ ...block, ask })}
+                />
+              </div>
+              <span
+                aria-hidden
+                className="ml-13 inline-flex h-10 w-fit items-center gap-2 rounded-pill border border-border px-4 text-sm font-medium"
+              >
+                <Piano className="size-4" />
+                {words('question.answer')}
+              </span>
+            </div>
+          ) : block.kind === 'link' ? (
+            // The link's row on its card as the lesson shows it (round 26), its title typed where it
+            // prints: one card, never a field over a copy of it.
+            <div className="card px-2">
+              <div className="flex min-h-16 items-center gap-3 py-2 pr-2 pl-1">
+                <TileMark {...linkTile(block.target)} />
+                <WordsLine
+                  label={t('edit.doc.linkTitle')}
+                  value={block.title}
+                  placeholder={words('edit.doc.linkTitle')}
+                  className="h-auto min-h-10 flex-1 rounded-control border-transparent bg-transparent px-1 text-lg font-semibold shadow-none md:text-lg dark:bg-transparent"
+                  onChange={(title) => change({ ...block, title })}
+                />
+                <OpensMark />
+              </div>
+            </div>
+          ) : null}
+        </InStyle>
       ) : blockReads(block) ? (
         <Drawn
-          key={JSON.stringify(block)}
+          key={JSON.stringify(shown)}
           fallback={<p className="text-sm text-muted-foreground">{t('edit.doc.notShown')}</p>}
         >
-          <Shown block={block} onShow={nothing} />
+          {shown.kind === 'image' && imageSource(shown.src) === null ? (
+            <p className="rounded-card bg-muted p-4 text-sm text-muted-foreground">
+              {t('edit.doc.imageEmpty')}
+            </p>
+          ) : (
+            <Shown block={shown as Exclude<LessonBlock, { kind: 'question' }>} onShow={nothing} />
+          )}
         </Drawn>
       ) : (
         <p className="rounded-card bg-muted p-4 text-sm text-muted-foreground">

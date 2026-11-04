@@ -9,8 +9,8 @@ import type { Locale } from '@/shared/i18n'
 import { cn, useMediaQuery } from '@/shared/lib'
 import { ActionMenu } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { selectedBlock } from '../../model/doc-blocks'
-import { DOC } from '../../model/lesson-doc'
+import { selectedBlock } from '../model/doc-blocks'
+import { DOC } from '../model/lesson-doc'
 import { insertActions } from './menus'
 
 function ToolButton({

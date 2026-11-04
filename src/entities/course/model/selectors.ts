@@ -1,7 +1,7 @@
 import { keptContent } from '@/shared/api/content'
 import type { PieceId } from '@/entities/piece'
 import { courseLessonStepId, type Stage, type StepId } from '@/entities/step'
-import { updatesLesson, type Lesson } from '@/entities/lesson'
+import { readAbout, updatesLesson, type About, type Lesson } from '@/entities/lesson'
 import { COURSES } from '../content'
 import { COURSE_ORDER_ID, inCourseOrder, isCourseOrder } from './order'
 import { isWholeCourse, updatesCourse, type Course, type Shelf } from './types'
@@ -51,6 +51,7 @@ function catalog(): typeof built {
             shelf: record.shelf ?? course.shelf,
             stage: record.stage ?? course.stage,
             weeks: record.weeks ?? course.weeks,
+            ...(record.about ? { about: readAbout(record.about) } : {}),
           }
         : {}),
       ...(relessoned ? { lessons } : {}),
@@ -62,7 +63,10 @@ function catalog(): typeof built {
     if (builtIn.has(id) || !updatesCourse(id, record) || !isWholeCourse(record)) return []
     const { title, summary, shelf, stage, weeks } = record
     const lessons = lessonsOf(id, record.lessons, new Map())
-    return [{ id, title, summary, shelf, stage, weeks, lessons, songs: [] }]
+    const about = record.about ? readAbout(record.about) : undefined
+    return [
+      { id, title, summary, shelf, stage, weeks, lessons, songs: [], ...(about ? { about } : {}) },
+    ]
   })
   // In the order Manage courses gave them, where one is published.
   const order = kept.body('catalog', COURSE_ORDER_ID)
@@ -79,6 +83,12 @@ export const courseById = (id: string): Course | undefined => catalog().index.ge
 
 /** Every course as the learner has it, the app's own then the ones editors made, the database's newer copies in place. */
 export const allCourses = (): readonly Course[] => catalog().courses
+
+/** The Courses' About as published (R29 B9), each style sanitised; none where none is. */
+export function coursesAbout(): About | undefined {
+  const order = keptContent().body('catalog', COURSE_ORDER_ID)
+  return isCourseOrder(order) && order.about ? readAbout(order.about) : undefined
+}
 
 /** Every course's id, the app's own and the ones editors made: what a new course's id must not be. */
 export const courseIds = (): readonly string[] => [...catalog().index.keys()]
