@@ -60,7 +60,7 @@ export function ScorePage({
       aria-busy={state === 'loading'}
       data-slot="score-page"
       data-state={state}
-      className="relative w-full overflow-hidden rounded-sm bg-white shadow-sm ring-1 ring-border"
+      className="relative w-full overflow-hidden rounded-control bg-white shadow-sm ring-1 ring-border"
       style={{ aspectRatio: `${page.width} / ${page.height}` }}
     >
       <div
