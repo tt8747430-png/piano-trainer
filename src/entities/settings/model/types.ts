@@ -1,3 +1,4 @@
+import type { Bars } from './bars'
 import { isLocale, type Locale } from '@/shared/i18n/locale'
 import type { Inversion } from '@/shared/lib/music'
 import {
@@ -361,6 +362,8 @@ export interface SettingsState {
   chordPlayer: ChordPlayerSettings
   /** What Accompaniment shows (A24). */
   accompaniment: AccompanimentSettings
+  /** The bars the learner arranged (R29 B10): a surface left out holds its default. */
+  bars: Bars
 }
 
 /** How a lesson reads: one page of its sections (the plain page), or a section at a time. */

@@ -1,3 +1,4 @@
+import { barOf, useSettings } from '@/entities/settings'
 import { Heart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { PieceLink, type Entry } from '@/entities/piece'
@@ -21,8 +22,6 @@ export function FavouriteMark() {
 }
 
 /** A song's swipe (ADR 0106): to the right Favourite; to the left Move, then Archive at the edge. */
-const LEADING = ['favourite']
-const TRAILING = ['move', 'archive']
 
 /**
  * A song of the library as a row (Mindscape's deck row): its face as Songs shows it, a link to its
@@ -43,13 +42,16 @@ export function SongRow({
   onSelect: () => void
 }) {
   const { t } = useTranslation('songs')
+  // What each swipe offers: the learner's (R29 B10, Settings › Swipe actions).
+  const leading = useSettings((state) => barOf(state.bars, 'swipe.songs.leading'))
+  const trailing = useSettings((state) => barOf(state.bars, 'swipe.songs.trailing'))
   const { face } = useEntryFace(entry)
   const press = useLongPress({ onLongPress: onSelect })
   return (
     <li>
       <SwipeRow
-        leading={swipeOf(actions, LEADING)}
-        trailing={swipeOf(actions, TRAILING)}
+        leading={swipeOf(actions, leading)}
+        trailing={swipeOf(actions, trailing)}
         className="h-full"
       >
         <div className={cn(ROW_CARD, 'has-[>a:hover]:bg-muted')}>

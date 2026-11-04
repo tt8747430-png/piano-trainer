@@ -20,6 +20,8 @@ export const SETTINGS_PAGES = [
   'chord-player',
   'chord-finder',
   'trainers',
+  'select-toolbar',
+  'swipe-actions',
   'lessons',
 ] as const
 export type SettingsPageId = (typeof SETTINGS_PAGES)[number]
@@ -111,6 +113,12 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'scoreView.textSize': 'player',
   'scoreView.keys': 'player',
   'scoreView.annotations': 'player',
+  'bars.bar.player': 'player',
+  'bars.select.songs': 'select-toolbar',
+  'bars.swipe.songs.leading': 'swipe-actions',
+  'bars.swipe.songs.trailing': 'swipe-actions',
+  'bars.swipe.folders.leading': 'swipe-actions',
+  'bars.swipe.folders.trailing': 'swipe-actions',
   'otherHand.look': 'player',
   'otherHand.play': 'player',
   'playback.countdown': 'player',

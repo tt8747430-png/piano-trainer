@@ -155,6 +155,7 @@ export const songs: LocaleResources['songs'] = {
     },
   },
   select: {
+    more: 'Ещё',
     start: 'Выбрать',
     done: 'Готово',
     all: 'Выбрать все',

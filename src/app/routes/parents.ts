@@ -119,6 +119,8 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   // The Profile's and Settings' pages.
   '/shell/profile/activity': () => up({ to: '/profile' }),
   '/shell/settings/general': settingsPage,
+  '/shell/settings/select-toolbar': () => up({ to: '/settings/general' }),
+  '/shell/settings/swipe-actions': () => up({ to: '/settings/general' }),
   '/shell/settings/on-screen-piano': settingsPage,
   '/shell/settings/computer-keys': settingsPage,
   '/shell/settings/player': settingsPage,

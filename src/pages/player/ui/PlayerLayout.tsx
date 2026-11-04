@@ -6,6 +6,8 @@ import {
   Disc,
   Download,
   Gauge as TunerIcon,
+  Ellipsis,
+  LayoutGrid,
   ListMusic,
   Mic,
   MonitorCog,
@@ -15,10 +17,19 @@ import {
   Timer,
   Volume2,
 } from 'lucide-react'
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { Fragment, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
-import { selectKeyboard, selectScoreView, useSettings } from '@/entities/settings'
+import {
+  BAR_CATALOG,
+  barOf,
+  selectKeyboard,
+  selectScoreView,
+  useSettings,
+  type BarAct,
+} from '@/entities/settings'
+import { BAR_ICONS } from '@/widgets/bar-editor'
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { isMidiConnected, MidiButton, useMidiConnection } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
@@ -57,6 +68,7 @@ import { SheetMusic } from '@/widgets/sheet-music'
 import { SongPrint } from '@/widgets/song-print'
 import {
   PlayerDisplay,
+  PlayerToolbar,
   PlayerPlayback,
   PlayerVolumes,
   type VolumeTrack,
@@ -181,7 +193,7 @@ export function PlayerLayout({
   /** The View open as the screen opens: a piece's, where the learner asks each time (ADR 0108). */
   openView?: boolean
 }) {
-  const { t } = useTranslation(['player', 'songs'])
+  const { t } = useTranslation(['player', 'songs', 'settings'])
   const navigate = useNavigate()
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
@@ -271,6 +283,12 @@ export function PlayerLayout({
         content: <PlayerPlayback />,
       },
       {
+        id: 'toolbar',
+        label: t('settings:bars.playerToolbar'),
+        icon: LayoutGrid,
+        content: <PlayerToolbar />,
+      },
+      {
         id: 'display',
         label: t('settingsPage.display'),
         icon: MonitorCog,
@@ -305,6 +323,85 @@ export function PlayerLayout({
     ],
     request: settingsAt,
   }
+  // The foot bar's tools (R29 B8, B10): each act that works here, drawn from the catalog; the
+  // learner's bar in their order, the rest under More (Settings › Tool bar).
+  const rowOf = (key: string) => toolRows.find((row) => row.key === key)
+  const actTool = (act: BarAct, row: ToolRow | undefined) =>
+    row && row.kind === 'act' ? (
+      <FootTool
+        icon={BAR_ICONS[act]}
+        label={t(`settings:bars.act.${act}`)}
+        onClick={row.onSelect}
+      />
+    ) : null
+  const footTools: Partial<Record<BarAct, ReactNode>> = {
+    ...(takes
+      ? {
+          recordings: (
+            <FootTool
+              icon={Disc}
+              label={t('recordings.short')}
+              aria-haspopup="dialog"
+              aria-pressed={takes.stage !== 'idle' ? true : undefined}
+              onClick={() => setRecordingsOpen(true)}
+            />
+          ),
+          feedback: (
+            <FootTool
+              icon={CircleCheck}
+              label={t('feedback.label')}
+              aria-pressed={takes.shown !== null}
+              disabled={takes.list.length === 0}
+              title={takes.list.length === 0 ? t('feedback.none') : t('feedback.about')}
+              onClick={() => takes.show(takes.shown ? null : (takes.list[0]?.id ?? null))}
+            />
+          ),
+        }
+      : {}),
+    loop: <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />,
+    tempo: (
+      <TempoButton
+        look="foot"
+        mode={view.mode}
+        tempo={player.tempo}
+        shownTempo={player.shownTempo}
+        ownTempo={player.ownTempo}
+        speedTraining={view.speedTraining}
+        onTempo={player.setTempo}
+        onSpeedTraining={player.setSpeedTraining}
+      />
+    ),
+    modes: (
+      <FootTool
+        icon={MODE_LOOK[view.mode].icon}
+        label={t('modes.open')}
+        aria-haspopup="dialog"
+        onClick={() => setModesOpen(true)}
+      />
+    ),
+    metronome: (
+      <FootTool
+        icon={BAR_ICONS.metronome}
+        label={t('toolsSheet.metronome')}
+        onClick={() => void navigate({ to: '/practice/metronome' })}
+      />
+    ),
+    tuner: (
+      <FootTool
+        icon={BAR_ICONS.tuner}
+        label={t('tuner.title')}
+        onClick={() => setTunerOpen(true)}
+      />
+    ),
+    transpose: actTool('transpose', rowOf('transpose')),
+    version: actTool('version', rowOf('version')),
+    annotations: actTool('annotations', rowOf('annotations')),
+  }
+  const chosenFoot = useSettings((state) => barOf(state.bars, 'bar.player'))
+  const footShown = chosenFoot.filter((act) => footTools[act])
+  const footRest = BAR_CATALOG['bar.player'].filter(
+    (act) => !chosenFoot.includes(act) && footTools[act],
+  )
   // The Tools sheet's groups (R29 B8, B11): the quick tools, the score's, then ways to the Player's
   // other places. Metronome and Print are its own, no longer Settings' acts (one way to each).
   const toolGroups: readonly ToolGroup[] = [
@@ -551,42 +648,24 @@ export function PlayerLayout({
       </PlayerArea>
       {dock === 'top' ? null : keys}
       <PlayerFoot>
-        {takes ? (
-          <FootTool
-            icon={Disc}
-            label={t('recordings.short')}
-            aria-haspopup="dialog"
-            aria-pressed={takes.stage !== 'idle' ? true : undefined}
-            onClick={() => setRecordingsOpen(true)}
-          />
+        {footShown.map((act) => (
+          <Fragment key={act}>{footTools[act]}</Fragment>
+        ))}
+        {footRest.length > 0 ? (
+          <Popover>
+            <PopoverTrigger render={<FootTool icon={Ellipsis} label={t('settings:bars.more')} />} />
+            <PopoverContent
+              aria-label={t('settings:bars.more')}
+              side="top"
+              align="end"
+              className="grid w-72 grid-cols-3 gap-1 p-2"
+            >
+              {footRest.map((act) => (
+                <Fragment key={act}>{footTools[act]}</Fragment>
+              ))}
+            </PopoverContent>
+          </Popover>
         ) : null}
-        <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />
-        <TempoButton
-          look="foot"
-          mode={view.mode}
-          tempo={player.tempo}
-          shownTempo={player.shownTempo}
-          ownTempo={player.ownTempo}
-          speedTraining={view.speedTraining}
-          onTempo={player.setTempo}
-          onSpeedTraining={player.setSpeedTraining}
-        />
-        {takes ? (
-          <FootTool
-            icon={CircleCheck}
-            label={t('feedback.label')}
-            aria-pressed={takes.shown !== null}
-            disabled={takes.list.length === 0}
-            title={takes.list.length === 0 ? t('feedback.none') : t('feedback.about')}
-            onClick={() => takes.show(takes.shown ? null : (takes.list[0]?.id ?? null))}
-          />
-        ) : null}
-        <FootTool
-          icon={MODE_LOOK[view.mode].icon}
-          label={t('modes.open')}
-          aria-haspopup="dialog"
-          onClick={() => setModesOpen(true)}
-        />
       </PlayerFoot>
       <ModesSheet
         open={modesOpen}

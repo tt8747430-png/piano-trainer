@@ -1,7 +1,8 @@
-import { screen, within } from '@testing-library/react'
+import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { setBar } from '@/features/set-preference'
 import { TAKES_STORAGE_KEY, TAKES_VERSION, type Take } from '@/entities/take'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
@@ -34,14 +35,14 @@ function withTake(): Storage {
 }
 
 describe('the Player’s foot bar and Feedback (R29 B8)', () => {
-  it('labels its five tools, a song’s Recordings and Feedback among them', async () => {
+  it('labels its five tools, a song’s Recordings and Feedback among them, the rest under More', async () => {
     await renderApp('/play/bz5')
     const foot = await screen.findByRole('toolbar', { name: 'Practice tools' })
     expect(
       within(foot)
         .getAllByRole('button')
         .map((tool) => tool.textContent),
-    ).toEqual(['Recordings', 'Loop', 'Tempo', 'Feedback', 'Modes'])
+    ).toEqual(['Recordings', 'Loop', 'Tempo', 'Feedback', 'Modes', 'More'])
     expect(within(foot).getByRole('button', { name: 'Feedback' })).toBeDisabled()
   })
 
@@ -67,5 +68,24 @@ describe('the Player’s foot bar and Feedback (R29 B8)', () => {
     expect(within(sheet).getByText('Connect a piano to record a take.')).toBeInTheDocument()
     await user.click(within(sheet).getByRole('button', { name: /From bar 1/ }))
     expect(await screen.findByRole('button', { name: 'Hide feedback' })).toBeInTheDocument()
+  })
+
+  it('shows the chosen tools in order, the rest under More (R29 B10)', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/play/bz5')
+    act(() => setBar(settingsStore, 'bar.player', ['tuner', 'loop', 'tempo', 'modes']))
+    const foot = await screen.findByRole('toolbar', { name: 'Practice tools' })
+    expect(
+      within(foot)
+        .getAllByRole('button')
+        .map((tool) => tool.textContent),
+    ).toEqual(['Tuner', 'Loop', 'Tempo', 'Modes', 'More'])
+    await user.click(within(foot).getByRole('button', { name: 'More' }))
+    const more = await screen.findByRole('dialog', { name: 'More' })
+    expect(
+      within(more)
+        .getAllByRole('button')
+        .map((tool) => tool.textContent),
+    ).toEqual(['Recordings', 'Feedback', 'Metronome', 'Transpose', 'Version', 'Annotations'])
   })
 })

@@ -30,6 +30,8 @@ const PAGE_PATHS: Readonly<Record<SettingsPageId, readonly string[]>> = {
   lessons: ['pages/lesson/ui/LessonSettingsPage.tsx'],
   'chord-finder': ['pages/practice-settings/ui/ChordFinderSettingsPage.tsx'],
   trainers: ['pages/practice-settings/ui/TrainersSettingsPage.tsx'],
+  'select-toolbar': ['pages/settings/ui/SelectToolbarPage.tsx'],
+  'swipe-actions': ['pages/settings/ui/SwipeActionsPage.tsx'],
 }
 
 /** Each preference command and the settings it writes (`features/set-preference`). */
@@ -54,6 +56,7 @@ const COMMANDS: Readonly<Record<string, readonly (keyof typeof SETTING_HOMES)[]>
   setChordPlayer: ['chordPlayer.names'],
   setAccompaniment: ['accompaniment.hidden'],
   setMetronome: ['metronome.bpm'],
+  setBar: ['bars.bar.player', 'bars.select.songs', 'bars.swipe.songs.leading'],
 }
 
 /**

@@ -334,6 +334,7 @@ describe('Player', () => {
     expect(rows('While you play')).toEqual([
       'Audio playback',
       'Playback',
+      'Tool bar',
       'Display',
       'On-screen piano',
     ])

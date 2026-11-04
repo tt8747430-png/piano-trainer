@@ -3,6 +3,8 @@ export {
   GeneralPage,
   OnScreenPianoPage,
   PlayerSettingsPage,
+  SelectToolbarPage,
+  SwipeActionsPage,
   StoragePage,
   SettingsPage,
 } from '@/pages/settings'

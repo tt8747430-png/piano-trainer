@@ -202,6 +202,17 @@ const playerSettingsRoute = createRoute({
   path: '/settings/player',
   component: lazyRouteComponent(settingsScreens, 'PlayerSettingsPage'),
 })
+// The bars a learner arranges (R29 B10), General's pages.
+const selectToolbarRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/select-toolbar',
+  component: lazyRouteComponent(settingsScreens, 'SelectToolbarPage'),
+})
+const swipeActionsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/swipe-actions',
+  component: lazyRouteComponent(settingsScreens, 'SwipeActionsPage'),
+})
 const storageRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/storage',
@@ -867,6 +878,8 @@ const routeTree = rootRoute.addChildren([
     onScreenPianoRoute,
     computerKeysRoute,
     playerSettingsRoute,
+    selectToolbarRoute,
+    swipeActionsRoute,
     storageRoute,
     privacyRoute,
     termsRoute,
