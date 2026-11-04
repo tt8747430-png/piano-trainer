@@ -6,26 +6,26 @@ const bz5 = pieceById('bz5')
 if (!bz5) throw new Error('bz5 is a piece')
 
 describe('playedAs', () => {
-  it('reads the key and Simplify the Player last kept for the piece', () => {
-    expect(playedAs(bz5, { key: 'F#', simple: true, tempo: 60 })).toEqual({
-      key: 'F#',
+  it('reads how far the Player last moved the piece and Simplify (R29 T)', () => {
+    expect(playedAs(bz5, { transpose: -1, simple: true, tempo: 60 })).toEqual({
+      transpose: -1,
       simple: true,
     })
   })
 
-  it('reads the piece’s own key, not simplified, where the Player kept none or one it cannot read', () => {
-    expect(playedAs(bz5, undefined)).toEqual({ key: 'G', simple: false })
-    expect(playedAs(bz5, { key: 'H', simple: 'yes' })).toEqual({ key: 'G', simple: false })
+  it('reads the piece as written, not simplified, where the Player kept nothing it can read', () => {
+    expect(playedAs(bz5, undefined)).toEqual({ transpose: 0, simple: false })
+    expect(playedAs(bz5, { transpose: 9, simple: 'yes' })).toEqual({ transpose: 0, simple: false })
   })
 })
 
 describe('songToShare', () => {
   it('shares one of the app’s songs as a link to it, as last played', () => {
-    expect(songToShare(bz5, 'Song', { key: 'A', simple: true })).toEqual({
+    expect(songToShare(bz5, 'Song', { transpose: 2, simple: true })).toEqual({
       kind: 'piece',
       id: 'bz5',
       title: 'Song',
-      played: { key: 'A', simple: true },
+      played: { transpose: 2, simple: true },
     })
   })
 })

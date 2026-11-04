@@ -33,7 +33,7 @@ import type {
 } from '@/pages/player'
 import type { EditSearch, ExampleSearch } from '@/pages/score-editor'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
-import { isInversion, keyParam, note, noteParam } from '@/shared/lib/music'
+import { isInversion, keyParam, note, noteParam, TRANSPOSITION_RANGE } from '@/shared/lib/music'
 import { SWING_FEELS, TEMPO_RANGE, type SwingFeel } from '@/shared/lib/schedule'
 import type { SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
@@ -100,10 +100,12 @@ const BAR_MAX = 9999
 const bar = (raw: Raw): number | undefined => wholeIn(raw.bar, 1, BAR_MAX, undefined)
 
 export function readPlayerSearch(raw: Raw): PlayerSearch {
-  const key = readNote(raw.key)
+  const transpose = wholeIn(raw.transpose, TRANSPOSITION_RANGE.min, TRANSPOSITION_RANGE.max, 0)
   return {
     ...practiceView(raw),
-    key: key ? noteParam(key) : undefined,
+    transpose: transpose === 0 ? undefined : transpose,
+    tkey: raw.tkey === false ? false : undefined,
+    tchords: raw.tchords === false ? false : undefined,
     ...figures(raw),
     chordSize: chordSize(raw),
     simple: raw.simple === true,
@@ -126,9 +128,14 @@ const PLAYING = [
   'swing',
   'speedTraining',
 ] as const
-/** A piece's kept params (ADR 0038): its key, chord size and Simplify too (ADR 0105). */
+/**
+ * A piece's kept params (ADR 0038): how far it is moved (an offset from the key it is written in,
+ * R29 T), its chord size and Simplify too (ADR 0105).
+ */
 export const PLAYER_KEPT: readonly (keyof PlayerSearch & string)[] = [
-  'key',
+  'transpose',
+  'tkey',
+  'tchords',
   'chordSize',
   'simple',
   'staves',

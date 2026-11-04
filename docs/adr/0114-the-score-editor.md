@@ -160,3 +160,4 @@ reader hears the caret's place in a polite live line (`CaretLine`).
 - The research note comparing Flat and Dorico (2026-10-23) and the editor's three design specs, deleted.
 - r28 — The score's Settings: credits under the title, instruments, tempo, key, time, bars, staff size, bars per
   line, Hear notes as you edit; Tie on what is chosen (2026-11-01).
+- r29 (P2, T) — The key signature grid names each cell's key in the mode chosen and calls no signature "No sharps or flats"; Transpose's switches read Transpose key signature and Transpose chord symbols, as the Player's (2026-11-04).

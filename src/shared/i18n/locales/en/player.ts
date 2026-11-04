@@ -66,6 +66,13 @@ export const player = {
     semitones_one: '{{by}} semitone',
     semitones_other: '{{by}} semitones',
     reset: 'Reset',
+    // Dorico's and MuseScore's names for them, the same in the Player and the editor (R29 T).
+    signature: 'Transpose key signature',
+    signatureInfo:
+      'The key signature moves with the notes. Off, it stays as written and the moved notes take accidentals.',
+    chordSymbols: 'Transpose chord symbols',
+    chordSymbolsInfo:
+      'The chord symbols move with the notes. Off, they stay as written, as with a capo; the chords still sound moved.',
   },
   // The tools row's Simplify (ADR 0105, Chordify's): every chord its plain triad.
   simplify: {

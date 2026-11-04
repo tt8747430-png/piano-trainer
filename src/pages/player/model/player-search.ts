@@ -7,7 +7,7 @@ import {
 } from '@/entities/pattern'
 import { choosableChordSize, isDegreePiece, pieceFit, pieceKey, type Piece } from '@/entities/piece'
 import { ownChoice, type PracticeChoice } from '@/features/practice'
-import { noteFromParam, noteParam, transposedKey, transposition } from '@/shared/lib/music'
+import { transposedKey } from '@/shared/lib/music'
 import type { SetupChange, SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
 import { ownLeftOut } from './own-left-out'
@@ -43,9 +43,7 @@ export function resolveChoice(
   const fit = pieceFit(piece)
   const key = pieceKey(piece)
   return {
-    tonic: search.key
-      ? transposedKey(key, transposition(key.tonic, noteFromParam(search.key))).tonic
-      : own.tonic,
+    tonic: search.transpose ? transposedKey(key, search.transpose).tonic : own.tonic,
     pattern: playablePattern(book, search.pattern, own.pattern, fit),
     rh: playableFigure(search.rh, RIGHT_FIGURES, fit),
     lh: playableFigure(search.lh, LEFT_FIGURES, fit),
@@ -55,6 +53,8 @@ export function resolveChoice(
     // Its staves always sound as written; the Staves' Play turns each up or down (A35).
     tune: true,
     simple: search.simple === true,
+    signature: search.tkey !== false,
+    chordSymbols: search.tchords !== false,
   }
 }
 
@@ -65,7 +65,7 @@ export function searchPatch(piece: Piece, change: SetupChange): SetupChange {
     pattern: own.pattern,
     chordSize: isDegreePiece(piece) ? piece.chordSize.default : undefined,
   })
-  return 'key' in change
-    ? { ...written, key: change.key === noteParam(own.tonic) ? undefined : change.key }
+  return 'transpose' in change
+    ? { ...written, transpose: change.transpose === 0 ? undefined : change.transpose }
     : written
 }

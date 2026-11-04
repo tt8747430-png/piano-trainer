@@ -364,7 +364,7 @@ describe('Player', () => {
 
   it('plays no recording in another key, and says why in the Setup', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/play/romashki?key=E')
+    const { audio } = await renderApp('/play/romashki?transpose=2')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     expect(audio.recordings).toEqual([])
     await user.click(screen.getByRole('button', { name: 'Player settings' }))
@@ -413,7 +413,9 @@ describe('Player', () => {
   })
 
   it('reads a stale URL as the piece’s own setup', async () => {
-    const { router } = await renderApp('/play/bz5?key=H&tempo=999&mode=step&loop=9-3&swing=yes')
+    const { router } = await renderApp(
+      '/play/bz5?transpose=9&tempo=999&mode=step&loop=9-3&swing=yes',
+    )
     expect(await screen.findByRole('button', { name: 'Tempo: 100%' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Loop' })).toHaveAttribute('aria-pressed', 'false')
     expect(router.state.location.search).toEqual({})
@@ -527,12 +529,12 @@ describe('Player', () => {
 
   it('changes swing in the Setup sheet, the key kept as the tools row moved it', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/play/bz5?key=A')
+    const { router } = await renderApp('/play/bz5?transpose=2')
     await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     const swing = await screen.findByRole('radiogroup', { name: 'Swing' })
     expect(within(swing).getByRole('radio', { name: 'Straight' })).toBeChecked()
     await user.click(within(swing).getByRole('radio', { name: 'Hard' }))
-    expect(router.state.location.search).toMatchObject({ key: 'A', swing: 'hard' })
+    expect(router.state.location.search).toMatchObject({ transpose: 2, swing: 'hard' })
   })
 
   it('sets up a chord chart’s staves, then its accompaniment from the chords (A35)', async () => {

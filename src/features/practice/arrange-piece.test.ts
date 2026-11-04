@@ -37,6 +37,8 @@ describe('ownChoice', () => {
       chordSize: null,
       tune: false,
       simple: false,
+      signature: true,
+      chordSymbols: true,
     })
   })
 })

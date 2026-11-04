@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useKeyName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { keySymbol, printedSymbol, TRANSPOSITION_RANGE, type Key } from '@/shared/lib/music'
-import { Glyph, MenuSection } from '@/shared/ui'
+import { Glyph, MenuSection, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { PlayerTool } from '@/widgets/practice-player'
@@ -18,9 +18,10 @@ const signed = (semitones: number): string =>
  * after the View, its arrows and the key the music is in (`current`, as printed: `B♭m`), in the
  * accent once moved (`moved`). Its popover holds the one control both modes share: − the key it
  * lands in + (`landing`, `by` semitones from where it started, `−5` to `+6`, the short way), how far
- * that is (or `home`, the music's own key's name, where it is not moved), and Reset. Under it what
- * a mode adds (`children`: the editor's Apply to key and Apply to chords, its preview and its
- * Transpose button); `info`, the ⓘ beside its heading (the Player's recording, silent in another key).
+ * that is (or `home`, the music's own key's name, where it is not moved), Reset, and the two
+ * switches both modes share (R29 T): Transpose key signature and Transpose chord symbols. Under it
+ * what a mode adds (`children`: the editor's preview and its Transpose button); `info`, the ⓘ beside
+ * its heading (the Player's recording, silent in another key).
  */
 export function TransposeTool({
   current,
@@ -30,6 +31,10 @@ export function TransposeTool({
   home,
   info,
   onBy,
+  signature,
+  chordSymbols,
+  onSignature,
+  onChordSymbols,
   disabled = false,
   open,
   onOpenChange,
@@ -47,6 +52,12 @@ export function TransposeTool({
   home: string
   info?: ReactNode
   onBy: (semitones: number) => void
+  /** Transpose key signature (R29 T, Dorico's and MuseScore's words): off, the signature stays. */
+  signature: boolean
+  /** Transpose chord symbols: off, the symbols print as written over the moved chords. */
+  chordSymbols: boolean
+  onSignature: (on: boolean) => void
+  onChordSymbols: (on: boolean) => void
   /** Greyed: the editor's while a take records. */
   disabled?: boolean
   open?: boolean
@@ -120,6 +131,21 @@ export function TransposeTool({
             <RotateCcw data-icon="inline-start" aria-hidden />
             {t('transpose.reset')}
           </Button>
+          <div className="flex flex-col border-t border-hairline pt-2">
+            <SwitchRow
+              label={t('transpose.signature')}
+              info={t('transpose.signatureInfo')}
+              checked={signature}
+              onCheckedChange={onSignature}
+            />
+            <SwitchRow
+              label={t('transpose.chordSymbols')}
+              info={t('transpose.chordSymbolsInfo')}
+              checked={chordSymbols}
+              onCheckedChange={onChordSymbols}
+              className="border-b-0"
+            />
+          </div>
         </MenuSection>
         {children}
       </PopoverContent>

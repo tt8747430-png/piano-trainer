@@ -180,6 +180,32 @@ describe('arrange', () => {
     expect(inD.bars.map((b) => b.key && noteName(b.key.tonic))).toEqual([undefined, 'E♭'])
   })
 
+  it('keeps the key signature as written when Transpose key signature is off (R29 T)', () => {
+    const base = chart([['C']])
+    const changing: Chart = {
+      ...base,
+      sections: [
+        ...base.sections,
+        { key: { tonic: note('D', -1), minor: false }, lines: [[bar('Db', 4)]] },
+      ],
+    }
+    const kept = arrange(changing, { tonic: note('D'), pattern: BLOCK, keepSignature: true })
+    expect(noteName(kept.key.tonic)).toBe('C')
+    expect(kept.bars.map((b) => b.key && noteName(b.key.tonic))).toEqual([undefined, 'D♭'])
+    // The notes still move: C up a tone sounds D.
+    expect(kept.notes.some((n) => n.midi === 62)).toBe(true)
+  })
+
+  it('prints the written symbol over the moved tones when Transpose chord symbols is off', () => {
+    const kept = arrange(chart([['C']]), {
+      tonic: note('D'),
+      pattern: BLOCK,
+      keepChordSymbols: true,
+    })
+    expect(kept.chords[0]?.symbol).toBe('C')
+    expect(noteName(kept.chords[0]?.root ?? C)).toBe('D')
+  })
+
   it('carries 4/4 printed as common time to the score (ADR 0114)', () => {
     const common = { ...chart([['C']]), timeSymbol: true } as const
     expect(arrange(common, { tonic: C, pattern: BLOCK }).timeSymbol).toBe(true)

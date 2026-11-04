@@ -10,12 +10,6 @@ export const editor: LocaleResources['editor'] = {
   // The floating capsule of what is done to the notes chosen: Delete, Copy, Cut, Paste.
   selection: 'Выделенное',
   transpose: {
-    key: 'Менять тональность',
-    keyInfo:
-      'Ключевые знаки меняются вместе с музыкой. Если выключено, ноты всё равно сдвигаются и пишутся со случайными знаками в тональности песни.',
-    chords: 'Менять аккорды',
-    chordsInfo:
-      'Буквенные обозначения аккордов сдвигаются вместе с музыкой. Если выключено, остаются как написаны.',
     preview: 'Предпросмотр',
     apply: 'Транспонировать',
   },

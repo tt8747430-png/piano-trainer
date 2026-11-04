@@ -1,15 +1,15 @@
-/** How a piece is played, as a link keeps it: the key's tonic as a URL writes it (`F#`), and Simplify. */
+/** How a piece is played, as a link keeps it: how far it is moved (semitones), and Simplify. */
 export interface PlayedAs {
-  readonly key: string
+  readonly transpose: number
   readonly simple: boolean
 }
 
 /**
- * A piece of the app's as a link to itself (ADR 0107): its Player in the key it is played and as
- * simplified. Both are said, the song's own key and Simplify off too, so the link never takes the
- * key or Simplify its opener last kept for the song (ADR 0038).
+ * A piece of the app's as a link to itself (ADR 0107): its Player moved as it is played (an offset
+ * from the key it is written in, R29 T) and as simplified. Both are said, no move and Simplify off
+ * too, so the link never takes what its opener last kept for the song (ADR 0038).
  */
-export function pieceLink(piece: string, { key, simple }: PlayedAs): string {
-  const search = new URLSearchParams({ key, simple: String(simple) })
+export function pieceLink(piece: string, { transpose, simple }: PlayedAs): string {
+  const search = new URLSearchParams({ transpose: String(transpose), simple: String(simple) })
   return `/play/${encodeURIComponent(piece)}?${search}`
 }

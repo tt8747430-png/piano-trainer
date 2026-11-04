@@ -1,9 +1,17 @@
 import type { LeftFigureId, PatternChoice, RightFigureId } from '@/entities/pattern'
-import type { ChordSize, Inversion, KeyWalk, NoteParam } from '@/shared/lib/music'
+import type { ChordSize, Inversion, KeyWalk } from '@/shared/lib/music'
 
 /** The piece's own choices as the Player's URL holds them: an absent one is the piece's own. */
 export interface SetupParams {
-  readonly key?: NoteParam
+  /**
+   * How far the music is moved, in semitones from the key it is written in (−5 to +6, R29 T): an
+   * offset, so a song the editor rewrites in another key is still moved by the learner's choice.
+   */
+  readonly transpose?: number
+  /** `false`: Transpose key signature off, the signature as written (R29 T); absent, it moves. */
+  readonly tkey?: boolean
+  /** `false`: Transpose chord symbols off, the symbols as written (R29 T); absent, they move. */
+  readonly tchords?: boolean
   readonly pattern?: PatternChoice
   readonly rh?: RightFigureId
   readonly lh?: LeftFigureId

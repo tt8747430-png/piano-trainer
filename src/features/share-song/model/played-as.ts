@@ -1,19 +1,24 @@
-import { isDegreePiece, isOwnSongId, musicOf, pieceKey, type Piece } from '@/entities/piece'
+import { isDegreePiece, isOwnSongId, musicOf, type Piece } from '@/entities/piece'
 import type { RememberedView } from '@/entities/views'
-import { readNote } from '@/shared/lib'
-import { noteParam } from '@/shared/lib/music'
+import { TRANSPOSITION_RANGE } from '@/shared/lib/music'
+import type { PlayedAs } from './piece-link'
 import type { SongToShare } from './use-share-song'
 
 /**
- * How a piece is played, as its page shares it (ADR 0107): the key and Simplify its Player last kept
- * (ADR 0038, 0105), else its own key, as written.
+ * How a piece is played, as its page shares it (ADR 0107): how far its Player last moved it and
+ * Simplify (ADR 0038, 0105, R29 T), else as written.
  */
-export function playedAs(
-  piece: Piece,
-  remembered: RememberedView | undefined,
-): { key: string; simple: boolean } {
-  const tonic = readNote(remembered?.key) ?? pieceKey(piece).tonic
-  return { key: noteParam(tonic), simple: remembered?.simple === true }
+export function playedAs(_piece: Piece, remembered: RememberedView | undefined): PlayedAs {
+  const transpose = remembered?.transpose
+  const read =
+    typeof transpose === 'number' &&
+    Number.isInteger(transpose) &&
+    transpose >= TRANSPOSITION_RANGE.min &&
+    transpose <= TRANSPOSITION_RANGE.max
+  return {
+    transpose: read ? transpose : 0,
+    simple: remembered?.simple === true,
+  }
 }
 
 /**

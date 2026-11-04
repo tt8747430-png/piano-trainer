@@ -103,10 +103,10 @@ describe('search params', () => {
     expect(await searchAt('/practice/chords?key=H')).toMatchObject({ key: undefined })
     expect(
       await searchAt(
-        '/play/bz5?key=A&tempo=96&hands=lh&mode=wait&speedTraining=true&swing=light&loop=2-3&pattern=chart&rh=t1&lh=o&chordSize=ninths&simple=true',
+        '/play/bz5?transpose=2&tempo=96&hands=lh&mode=wait&speedTraining=true&swing=light&loop=2-3&pattern=chart&rh=t1&lh=o&chordSize=ninths&simple=true',
       ),
     ).toEqual({
-      key: 'A',
+      transpose: 2,
       tempo: 96,
       hands: 'lh',
       mode: 'wait',
@@ -159,7 +159,7 @@ describe('search params', () => {
   it('drop anything stale or hand-edited back to its default, without clamping', async () => {
     expect(
       await searchAt(
-        '/play/bz5?key=H&tempo=999&mode=dance&pattern=waltz&rh=zz&chordSize=elevenths',
+        '/play/bz5?transpose=9&tempo=999&mode=dance&pattern=waltz&rh=zz&chordSize=elevenths',
       ),
     ).toEqual(PLAYER_DEFAULTS)
     expect(await searchAt('/play/bz5?mode=step&loop=6-3&swing=yes&tempo=5')).toEqual(
@@ -173,9 +173,9 @@ describe('search params', () => {
     ).toEqual(CHORDS_DEFAULTS)
     expect(await searchAt('/practice/chords?quality=m7')).toMatchObject(CHORDS_DEFAULTS)
     expect(await searchAt('/practice/chords?inversion=3')).toMatchObject({ inversion: 0 })
-    expect(
-      await searchAt('/practice/scales?kind=ionian&tempo=5&chords=9&step=chords:tri'),
-    ).toEqual(SCALES_DEFAULTS)
+    expect(await searchAt('/practice/scales?kind=ionian&tempo=5&chords=9&step=chords:tri')).toEqual(
+      SCALES_DEFAULTS,
+    )
     expect(await searchAt('/songs?favourites=yes&stage=expert&key=H')).toEqual(SONGS_DEFAULTS)
   })
 
@@ -254,7 +254,12 @@ describe('search params', () => {
   it('keep a root and a key as written, a key no signature writes respelled', async () => {
     expect(await searchAt('/practice/chords?root=A%23')).toMatchObject({ root: 'A#' })
     expect(await searchAt('/practice/chords?root=Db&triad=min')).toMatchObject({ root: 'Db' })
-    expect(await searchAt('/play/bz5?key=B♭')).toMatchObject({ key: 'Bb' })
+    // The Player keeps how far it moves a song, and the two Transpose switches when off (R29 T).
+    expect(await searchAt('/play/bz5?transpose=-1&tkey=false&tchords=false')).toMatchObject({
+      transpose: -1,
+      tkey: false,
+      tchords: false,
+    })
     expect(await searchAt('/practice/progressions?key=Dbm')).toMatchObject({ key: 'C#m' })
     expect(await searchAt('/practice/progressions?key=C%23')).toMatchObject({ key: 'C#' })
   })

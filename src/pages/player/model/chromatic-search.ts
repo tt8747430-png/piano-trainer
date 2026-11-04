@@ -24,7 +24,7 @@ export type ChromaticSearch = PracticeView & {
   readonly chords: string
   readonly root: NoteParam
   readonly direction: ChromaticDirection
-} & Omit<SetupParams, 'key' | 'chordSize' | 'walk'>
+} & Omit<SetupParams, 'transpose' | 'tkey' | 'tchords' | 'chordSize' | 'walk'>
 
 /**
  * The walk's URL read: what it leaves out is the walk's own, and so is a pattern or figure it cannot

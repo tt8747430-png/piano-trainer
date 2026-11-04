@@ -55,11 +55,16 @@ export function usePlayer(
   const staves = useMemo(() => readStaves(search.staves), [search.staves])
   const progress = useProgressStoreApi()
   const book = usePatternBook()
-  const { key, pattern, rh, lh, inversion, nearest, chordSize, simple } = search
+  const { transpose, tkey, tchords, pattern, rh, lh, inversion, nearest, chordSize, simple } =
+    search
   const choice = useMemo(
     () =>
-      resolveChoice(piece, { key, pattern, rh, lh, inversion, nearest, chordSize, simple }, book),
-    [piece, key, pattern, rh, lh, inversion, nearest, chordSize, simple, book],
+      resolveChoice(
+        piece,
+        { transpose, tkey, tchords, pattern, rh, lh, inversion, nearest, chordSize, simple },
+        book,
+      ),
+    [piece, transpose, tkey, tchords, pattern, rh, lh, inversion, nearest, chordSize, simple, book],
   )
   // The Player plays the repeats taken, the bars unrolled as they are played.
   const performance = useMemo(

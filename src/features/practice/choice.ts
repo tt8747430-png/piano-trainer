@@ -10,4 +10,8 @@ export interface PracticeChoice extends AccompanimentChoice {
   readonly tune: boolean
   /** Simplify (ADR 0105): every chord played and shown as its plain triad on its root. */
   readonly simple: boolean
+  /** Transpose key signature (R29 T): the signature moves with the notes; off, it stays as written. */
+  readonly signature: boolean
+  /** Transpose chord symbols (R29 T): the symbols move; off, they print as written over the moved chord. */
+  readonly chordSymbols: boolean
 }

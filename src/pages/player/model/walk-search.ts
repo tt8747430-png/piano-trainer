@@ -15,7 +15,7 @@ import { ownLeftOut } from './own-left-out'
 export type WalkSearch = PracticeView & {
   readonly root: NoteParam
   readonly kind: ScaleKind
-} & Omit<SetupParams, 'key' | 'walk'>
+} & Omit<SetupParams, 'transpose' | 'tkey' | 'tchords' | 'walk'>
 
 /** What the walk's Setup changes: its root, the pattern and figures, and the chord size. */
 export type WalkChange = FigureChange &

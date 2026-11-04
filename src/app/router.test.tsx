@@ -61,7 +61,7 @@ describe('routes', () => {
 
   it.each([
     [
-      '/play/bz5?key=H&tempo=999&pattern=waltz&rh=zz&lh=zz&chordSize=elevenths',
+      '/play/bz5?transpose=9&tempo=999&pattern=waltz&rh=zz&lh=zz&chordSize=elevenths',
       ['key', 'tempo', 'pattern', 'rh', 'lh', 'chordSize'],
     ],
     ['/practice/chords?step=scale:major', ['step']],

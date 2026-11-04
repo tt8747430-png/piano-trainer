@@ -16,13 +16,13 @@ describe('Remembered views', () => {
   it('brings a piece back as it was played when it is opened plainly again, but not its loop', async () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
-    await useScreen('/play/bz5?key=A&pattern=r3&inversion=1&tempo=50&loop=1-2', storage)
+    await useScreen('/play/bz5?transpose=2&pattern=r3&inversion=1&tempo=50&loop=1-2', storage)
     const { router } = await renderApp('/songs/bz5', { storage })
     await user.click(await screen.findByRole('link', { name: 'Practise' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/play/bz5'))
     await waitFor(() =>
       expect(router.state.location.search).toEqual({
-        key: 'A',
+        transpose: 2,
         pattern: 'r3',
         inversion: 1,
         tempo: 50,
@@ -40,7 +40,7 @@ describe('Remembered views', () => {
     await user.click(screen.getByRole('button', { name: 'Simplify' }))
     await waitFor(() =>
       expect(first.viewsStore.getState().views['/play/lightly-row']).toEqual({
-        key: 'B',
+        transpose: -1,
         simple: true,
       }),
     )
@@ -49,7 +49,7 @@ describe('Remembered views', () => {
     const plain = await renderApp('/songs/lightly-row', { storage })
     await user.click(await screen.findByRole('link', { name: 'Practise' }))
     await waitFor(() =>
-      expect(plain.router.state.location.search).toEqual({ key: 'B', simple: true }),
+      expect(plain.router.state.location.search).toEqual({ transpose: -1, simple: true }),
     )
     expect(await screen.findByRole('button', { name: 'Simplify' })).toHaveAttribute(
       'aria-pressed',
@@ -61,7 +61,7 @@ describe('Remembered views', () => {
     await waitFor(() =>
       expect(looped.router.state.location.search).toEqual({
         loop: '2-3',
-        key: 'B',
+        transpose: -1,
         simple: true,
       }),
     )
@@ -74,10 +74,10 @@ describe('Remembered views', () => {
 
   it('remembers a screen’s own params as its route reads them, and no screen not found', async () => {
     const storage = createMemoryStorage()
-    const { viewsStore } = await renderApp('/play/bz5?key=A&junk=x', { storage })
+    const { viewsStore } = await renderApp('/play/bz5?transpose=2&junk=x', { storage })
     await waitFor(() => expect(viewsStore.getState().views['/play/bz5']).toBeDefined())
-    expect(viewsStore.getState().views['/play/bz5']).toEqual({ key: 'A' })
-    const missing = await renderApp('/play/nope?key=A', { storage: createMemoryStorage() })
+    expect(viewsStore.getState().views['/play/bz5']).toEqual({ transpose: 2 })
+    const missing = await renderApp('/play/nope?transpose=2', { storage: createMemoryStorage() })
     await screen.findAllByRole('heading', { level: 1 })
     expect(missing.viewsStore.getState().views['/play/nope']).toBeUndefined()
   })
@@ -144,13 +144,13 @@ describe('Remembered views', () => {
     storage.setItem(
       VIEWS_STORAGE_KEY,
       JSON.stringify({
-        state: { views: { '/play/bz5': { key: 'A', tempo: 'fast' } } },
+        state: { views: { '/play/bz5': { transpose: 2, tempo: 'fast' } } },
         version: VIEWS_VERSION,
       }),
     )
     const { router } = await renderApp('/songs/bz5', { storage })
     await user.click(await screen.findByRole('link', { name: 'Practise' }))
-    await waitFor(() => expect(router.state.location.search).toMatchObject({ key: 'A' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ transpose: 2 }))
     expect(router.state.location.search).not.toHaveProperty('tempo', 'fast')
     expect(
       await screen.findByRole('heading', { name: 'Still, my soul, be still' }),

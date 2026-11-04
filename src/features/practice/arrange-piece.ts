@@ -42,6 +42,8 @@ export const ownChoice = (piece: Piece): PracticeChoice => ({
   chordSize: null,
   tune: false,
   simple: false,
+  signature: true,
+  chordSymbols: true,
 })
 
 /**
@@ -76,6 +78,8 @@ function arrangeOptions(piece: Piece, choice: PracticeChoice, book: PatternBook)
   const fromChart = choice.pattern === 'chart'
   return {
     tonic: choice.tonic,
+    ...(choice.signature ? {} : { keepSignature: true }),
+    ...(choice.chordSymbols ? {} : { keepChordSymbols: true }),
     tempo: piece.tempo,
     ...accompanimentOptions(
       book,

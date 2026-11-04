@@ -12,11 +12,6 @@ export const editor = {
   selection: 'Selection',
   // The editor's Transpose (ADR 0115): its sheet writes the song in another key.
   transpose: {
-    key: 'Apply to key',
-    keyInfo:
-      'The key signature moves with the music. Off, the notes still move and are written with accidentals in the key the song is in.',
-    chords: 'Apply to chords',
-    chordsInfo: 'The chord symbols move with the music. Off, they stay as they are written.',
     preview: 'Preview',
     apply: 'Transpose',
   },

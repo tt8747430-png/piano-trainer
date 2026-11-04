@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { selectScoreView, useSettings } from '@/entities/settings'
 import { firstLine, transpose, type Draft, type TransposeApplies } from '@/features/score-editor'
 import { transposedKey } from '@/shared/lib/music'
-import { SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { ScoreSheet, type EditPrinted } from '@/widgets/score-sheet'
 import { TransposeTool } from '@/widgets/transpose'
@@ -46,7 +45,7 @@ function PreviewLine({ draft }: { draft: Draft }) {
 /**
  * The editor's Transpose (ADR 0115): the Player's one Transpose, its trigger the key the song is
  * written in and its control the same − the key it lands in +, how far, and Reset; under it what
- * writing needs: Apply to key and Apply to chords, each its ⓘ, the first line moved as a preview, and
+ * writing needs, after the shared Transpose key signature and Transpose chord symbols: the first line moved as a preview, and
  * Transpose, which writes the song so in one edit Undo takes back. Opened afresh each time, from the
  * song's key with both applied; closed, it changes nothing. While a take records it waits for Stop.
  */
@@ -81,25 +80,14 @@ export function EditorTranspose({ disabled }: { disabled: boolean }) {
       by={semitones}
       home={t('player:transpose.own.song')}
       onBy={setSemitones}
+      signature={applies.key}
+      chordSymbols={applies.chords}
+      onSignature={(key) => setApplies({ ...applies, key })}
+      onChordSymbols={(chords) => setApplies({ ...applies, chords })}
       disabled={disabled}
       open={open}
       onOpenChange={change}
     >
-      <div className="flex flex-col border-t border-hairline pt-2">
-        <SwitchRow
-          label={t('transpose.key')}
-          info={t('transpose.keyInfo')}
-          checked={applies.key}
-          onCheckedChange={(key) => setApplies({ ...applies, key })}
-        />
-        <SwitchRow
-          label={t('transpose.chords')}
-          info={t('transpose.chordsInfo')}
-          checked={applies.chords}
-          onCheckedChange={(chords) => setApplies({ ...applies, chords })}
-          className="border-b-0"
-        />
-      </div>
       <section aria-label={t('transpose.preview')} className="flex flex-col gap-2">
         <h3 className="text-sm font-semibold text-muted-foreground">{t('transpose.preview')}</h3>
         <div className="max-w-full overflow-x-auto overscroll-x-contain rounded-control border border-border bg-background p-2">

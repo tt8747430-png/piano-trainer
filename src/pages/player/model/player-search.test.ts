@@ -4,7 +4,7 @@ import { LEFT_FIGURE_IDS, LEFT_FIGURES, RIGHT_FIGURE_IDS, RIGHT_FIGURES } from '
 import { hasChartPlan, PIECES, pieceById, stavesOf, type Piece } from '@/entities/piece'
 import { splitsTheBeat } from '@/shared/lib/arrangement'
 import { ownChoice } from '@/features/practice'
-import { isCompound, note, noteParam, type SpelledNote } from '@/shared/lib/music'
+import { isCompound, note } from '@/shared/lib/music'
 import { resolveChoice, searchPatch } from './player-search'
 
 function piece(id: string) {
@@ -21,9 +21,10 @@ describe('resolveChoice', () => {
     expect(resolveChoice(bz5, {}, BUILT_IN_PATTERNS)).toEqual({ ...ownChoice(bz5), tune: true })
   })
 
-  it('takes the key, figures and tune the learner chose', () => {
+  it('takes how far the learner moved it, figures and tune (R29 T: an offset from its key)', () => {
+    // bz5 is written in G: up a tone is A.
     expect(
-      resolveChoice(bz5, { key: noteParam(note('A')), rh: 't1', lh: 'o' }, BUILT_IN_PATTERNS),
+      resolveChoice(bz5, { transpose: 2, rh: 't1', lh: 'o' }, BUILT_IN_PATTERNS),
     ).toMatchObject({
       tonic: note('A'),
       rh: 't1',
@@ -33,21 +34,19 @@ describe('resolveChoice', () => {
   })
 
   it('spells a key for the piece’s mode', () => {
-    expect(resolveChoice(bz5, { key: noteParam(note('A', 1)) }, BUILT_IN_PATTERNS).tonic).toEqual(
-      note('B', -1),
-    )
+    expect(resolveChoice(bz5, { transpose: 3 }, BUILT_IN_PATTERNS).tonic).toEqual(note('B', -1))
   })
 
   it('spells the key it moves to by its simplest signature, its own as it is written (ADR 0105)', () => {
-    const tonic = (piece: Piece, key: SpelledNote) =>
-      resolveChoice(piece, { key: noteParam(key) }, BUILT_IN_PATTERNS).tonic
-    // C♯ major writes seven sharps, D♭ five flats.
-    expect(tonic(bz5, note('C', 1))).toEqual(note('D', -1))
-    expect(tonic(bz5, note('G', -1))).toEqual(note('F', 1))
+    const tonic = (piece: Piece, transpose: number) =>
+      resolveChoice(piece, { transpose }, BUILT_IN_PATTERNS).tonic
+    // G up a tritone: C♯ major writes seven sharps, D♭ five flats.
+    expect(tonic(bz5, 6)).toEqual(note('D', -1))
+    expect(tonic(bz5, -1)).toEqual(note('F', 1))
     const inGFlat: Piece = { ...bz5, key: 'Gb' }
-    expect(tonic(inGFlat, note('F', 1))).toEqual(note('G', -1))
+    expect(tonic(inGFlat, 0)).toEqual(note('G', -1))
     // D minor down a semitone: C♯ minor, never D♭ minor.
-    expect(tonic(twofive, note('D', -1))).toEqual(note('C', 1))
+    expect(tonic(twofive, -1)).toEqual(note('C', 1))
   })
 
   it('simplifies the chords where the URL says so', () => {
@@ -96,14 +95,14 @@ describe('resolveChoice', () => {
 
 describe('searchPatch', () => {
   it('writes a choice equal to the piece’s own as absent', () => {
-    expect(searchPatch(bz5, { key: noteParam(note('G')) })).toEqual({ key: undefined })
+    expect(searchPatch(bz5, { transpose: 0 })).toEqual({ transpose: undefined })
     expect(searchPatch(bz5, { pattern: ownChoice(bz5).pattern })).toEqual({ pattern: undefined })
     expect(searchPatch(twofive, { chordSize: 'sevenths' })).toEqual({ chordSize: undefined })
   })
 
   it('keeps a choice that differs', () => {
-    expect(searchPatch(bz5, { key: noteParam(note('A')), rh: 't1' })).toEqual({
-      key: 'A',
+    expect(searchPatch(bz5, { transpose: 2, rh: 't1' })).toEqual({
+      transpose: 2,
       rh: 't1',
     })
   })

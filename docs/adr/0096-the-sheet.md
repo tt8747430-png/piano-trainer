@@ -49,3 +49,4 @@ The selection and the playhead read the same in every layout of both screens; a 
 - 0096 — Sheets that show as notation software does (2026-10-24): the playhead line and the colouring replaced the
   boxes. Its fields are ADR 0114's, its explanations ADR 0061's, its recording ADR 0028's.
 - 0115 — The layouts renamed Page view · Vertical scroll · Panorama (2026-10-27).
+- r29 (P16) — A selection's band runs by the bar's beats, from a bar line or a beat to the next (`beatGrid`, `snapRange`, `beatsBand`); no padding round the notes (2026-11-04).

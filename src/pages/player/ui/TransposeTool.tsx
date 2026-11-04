@@ -1,30 +1,29 @@
 import { useTranslation } from 'react-i18next'
 import { pieceKey, type Piece } from '@/entities/piece'
 import { useKeyName } from '@/shared/i18n'
-import {
-  noteParam,
-  transposedKey,
-  transposition,
-  type NoteParam,
-  type SpelledNote,
-} from '@/shared/lib/music'
+import { transposition, type SpelledNote } from '@/shared/lib/music'
 import { TransposeTool as Transpose } from '@/widgets/transpose'
 
 /**
- * The Player's Transpose (ADR 0105, 0115): the one Transpose, moving the key it is played in at once,
- * a semitone at a time, kept in the URL as its tonic. Where the piece's recording falls silent in
+ * The Player's Transpose (ADR 0105, 0115, R29 T): the one Transpose, moving the key it is played in
+ * at once, a semitone at a time, kept in the URL as an offset from the key the song is written in. Where the piece's recording falls silent in
  * another key, the ⓘ beside its heading says so.
  */
 export function TransposeTool({
   piece,
   tonic,
+  signature,
+  chordSymbols,
   onChange,
 }: {
   piece: Piece
   /** The tonic it is played in. */
   tonic: SpelledNote
-  /** The key's tonic chosen: the piece's own goes back to it. */
-  onChange: (key: NoteParam) => void
+  /** Whether the key signature and the chord symbols move with the notes (R29 T). */
+  signature: boolean
+  chordSymbols: boolean
+  /** A change: semitones from the key it is written in (0 goes back to it), or a switch. */
+  onChange: (change: { transpose?: number; tkey?: false; tchords?: false }) => void
 }) {
   const { t } = useTranslation('player')
   const keyName = useKeyName()
@@ -40,7 +39,12 @@ export function TransposeTool({
       home={t(`transpose.own.${piece.kind}`)}
       // The recording plays along in the piece's own key alone.
       info={piece.recording && by !== 0 ? t('recordingOnlyIn', { key: keyName(own) }) : undefined}
-      onBy={(semitones) => onChange(noteParam(transposedKey(own, semitones).tonic))}
+      onBy={(transpose) => onChange({ transpose })}
+      signature={signature}
+      chordSymbols={chordSymbols}
+      // A switch on is the default, left out of the URL; off, written there.
+      onSignature={(on) => onChange(on ? { tkey: undefined } : { tkey: false })}
+      onChordSymbols={(on) => onChange(on ? { tchords: undefined } : { tchords: false })}
     />
   )
 }

@@ -213,7 +213,7 @@ describe('Piece', () => {
   it('shares a song of the app as a link to it in the Player, in the key and as simplified as last played (ADR 0107)', async () => {
     const user = userEvent.setup()
     const { viewsStore } = await renderApp('/songs/bz5')
-    act(() => viewsStore.setState({ views: { '/play/bz5': { key: 'A', simple: true } } }))
+    act(() => viewsStore.setState({ views: { '/play/bz5': { transpose: 2, simple: true } } }))
     await openSettings(user)
     await user.click(await screen.findByRole('button', { name: /^Share link/ }))
     await waitFor(() =>
@@ -222,7 +222,7 @@ describe('Piece', () => {
       ),
     )
     const link = new URL(await navigator.clipboard.readText())
-    expect(`${link.pathname}${link.search}`).toBe('/play/bz5?key=A&simple=true')
+    expect(`${link.pathname}${link.search}`).toBe('/play/bz5?transpose=2&simple=true')
   })
 
   it('keeps Settings and ✎ (the score) in its bar; Practise, Learned and ♡ on its overview card (A38, R29)', async () => {

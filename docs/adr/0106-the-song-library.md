@@ -74,3 +74,4 @@ A study, practised on Practice, is in no library. A folder played song after son
 - r24 — New only adds (the Public library out of it); a row's face carries it into a folder, out, or onto Archive;
   Export… on a song's row (2026-10-30).
 - r26 — A song's page keeps Edit and Settings in its bar and Practise, Learned and ♡ on its overview card; its place in the library (Favourite, Folder, Archive or Restore) is its Settings page's, Noji's deck settings (2026-11-01).
+- r29 (ST17) — A folder's ⋯ menu became its Settings page from a gear in its bar: Name and look, Move to folder…, Archive folder, Delete folder (2026-11-04).

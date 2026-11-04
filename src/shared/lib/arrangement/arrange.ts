@@ -64,6 +64,16 @@ import type {
 export interface ArrangeOptions {
   /** The tonic to transpose to; the chart's mode stays. */
   readonly tonic: SpelledNote
+  /**
+   * Transpose's "Transpose key signature" turned off (R29 T): the key and the sections' keys stay as
+   * written, the moved notes printing what differs from them as accidentals.
+   */
+  readonly keepSignature?: boolean
+  /**
+   * Transpose's "Transpose chord symbols" turned off (R29 T): each chord's symbol as written over
+   * its moved tones, as with a capo: it sounds in the new key.
+   */
+  readonly keepChordSymbols?: boolean
   /** Every chord's pattern… */
   readonly pattern: Pattern
   /** …unless its method code is here: the chart's own plan… */
@@ -644,7 +654,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     playsTune.push(rh.kind === 'tune' && !written?.rh)
     chords.push({
       ...chord,
-      symbol: chordSymbol(chord),
+      symbol: chordSymbol(options.keepChordSymbols ? placed.chord : chord),
       tones,
       startTick: placed.startTick,
       durationTicks: placed.durationTicks,
@@ -753,7 +763,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     ),
   )
   return {
-    key,
+    key: options.keepSignature ? chart.key : key,
     meter: chart.meter,
     ...(chart.timeSymbol ? { timeSymbol: true } : {}),
     ...(chart.tempoUnit ? { tempoUnit: chart.tempoUnit } : {}),
@@ -762,7 +772,12 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     ...(timing.length > 0 ? { timing } : {}),
     pedal,
     bars: layout.bars.map((bar, index) => {
-      const own = sectionKeys[bar.section]
+      const section = chart.sections[bar.section]
+      const own = options.keepSignature
+        ? section?.key && !sameKey(section.key, chart.key)
+          ? section.key
+          : null
+        : sectionKeys[bar.section]
       const keyed = own ? { ...bar, key: own } : bar
       return index === 0 && options.tempo ? { ...keyed, tempo: options.tempo } : keyed
     }),

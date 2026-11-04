@@ -1250,8 +1250,8 @@ describe('the score editor', () => {
     expect(sheet).toHaveTextContent('A major')
     expect(sheet).toHaveTextContent('+2 semitones')
     expect(within(sheet).getByRole('button', { name: 'Reset' })).toBeEnabled()
-    expect(within(sheet).getByRole('switch', { name: 'Apply to key' })).toBeChecked()
-    expect(within(sheet).getByRole('switch', { name: 'Apply to chords' })).toBeChecked()
+    expect(within(sheet).getByRole('switch', { name: 'Transpose key signature' })).toBeChecked()
+    expect(within(sheet).getByRole('switch', { name: 'Transpose chord symbols' })).toBeChecked()
     expect(within(sheet).getByRole('region', { name: 'Preview' })).toBeInTheDocument()
     await user.click(within(sheet).getByRole('button', { name: 'Transpose' }))
     await waitFor(() =>
@@ -1275,7 +1275,7 @@ describe('the score editor', () => {
     await user.click(await screen.findByRole('button', { name: 'Transpose: G major' }))
     const sheet = await screen.findByRole('dialog', { name: 'Transpose' })
     await user.click(within(sheet).getByRole('button', { name: 'Down a semitone' }))
-    await user.click(within(sheet).getByRole('switch', { name: 'Apply to chords' }))
+    await user.click(within(sheet).getByRole('switch', { name: 'Transpose chord symbols' }))
     await user.click(within(sheet).getByRole('button', { name: 'Transpose' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
@@ -1784,7 +1784,7 @@ describe('the score editor', () => {
       PIECES_STORAGE_KEY,
       JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
     )
-    const { audio } = await renderApp('/play/my-1?key=A', { storage })
+    const { audio } = await renderApp('/play/my-1?transpose=2', { storage })
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     const keys = (audio.played.at(-1)?.sounds ?? []).flatMap((sound) =>
       sound.kind === 'note' ? [sound.midi] : [],

@@ -19,7 +19,7 @@ import { ShareSaid, useShareSong, type SongToShare } from '@/features/share-song
 import { useSongExport } from '@/features/song-files'
 import { useKeyName, useLocale } from '@/shared/i18n'
 import { useUp, useSetSearch } from '@/shared/lib'
-import { isCompound, noteParam } from '@/shared/lib/music'
+import { isCompound } from '@/shared/lib/music'
 import { ButtonLink, NotFound, type MenuAction } from '@/shared/ui'
 import { ScoreEditToggle } from '@/widgets/mode-switch'
 import { useScoreTracks } from '@/widgets/practice-player'
@@ -95,7 +95,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
         kind: 'piece',
         id: piece.id,
         title,
-        played: { key: noteParam(choice.tonic), simple: choice.simple && simplifies },
+        played: { transpose: search.transpose ?? 0, simple: choice.simple && simplifies },
       }
     : isDegreePiece(piece)
       ? null
@@ -169,7 +169,9 @@ function PiecePlayer({ piece }: { piece: Piece }) {
             <TransposeTool
               piece={piece}
               tonic={choice.tonic}
-              onChange={(key) => changeSetup({ key })}
+              signature={choice.signature}
+              chordSymbols={choice.chordSymbols}
+              onChange={changeSetup}
             />
             {controls.has('simplify') ? (
               <SimplifyTool on={choice.simple} simplifies={simplifies} onChange={simplify} />

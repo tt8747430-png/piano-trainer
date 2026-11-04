@@ -202,7 +202,7 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
 
   it('shares a song of the app as a link to itself, in the key it is played and as simplified', async () => {
     const user = userEvent.setup()
-    await renderApp('/play/bz5?key=A&simple=true')
+    await renderApp('/play/bz5?transpose=2&simple=true')
     await exportAs(user, 'Share link')
     await waitFor(() =>
       expect(screen.getByText(/^Link copied\. Anyone who opens it/)).toHaveAttribute(
@@ -213,7 +213,7 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
     const link = new URL(await navigator.clipboard.readText())
     expect(link.origin).toBe(window.location.origin)
     expect(link.pathname).toBe('/play/bz5')
-    expect(Object.fromEntries(link.searchParams)).toEqual({ key: 'A', simple: 'true' })
+    expect(Object.fromEntries(link.searchParams)).toEqual({ transpose: '2', simple: 'true' })
   })
 
   it('hands the link to the device’s share sheet where it has one', async () => {
@@ -226,7 +226,7 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
     await waitFor(() => expect(share).toHaveBeenCalledTimes(1))
     expect(share).toHaveBeenCalledWith({
       title: 'Still, my soul, be still',
-      url: `${window.location.origin}/play/bz5?key=G&simple=false`,
+      url: `${window.location.origin}/play/bz5?transpose=0&simple=false`,
     })
     // The share sheet says what it did: the screen says nothing.
     expect(screen.queryByText(/^Link copied/)).not.toBeInTheDocument()
@@ -280,7 +280,7 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
 
   it('says the key the Setup plays it in, its chords in that key', async () => {
     const user = userEvent.setup()
-    await renderApp('/play/bz5?key=A')
+    await renderApp('/play/bz5?transpose=2')
     await chooseMore(user, 'Song information')
     const sheet = await screen.findByRole('dialog', { name: 'Song information' })
     const [first] = within(within(sheet).getByRole('list', { name: 'Chords' })).getAllByRole(
@@ -292,7 +292,7 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
 
   it('prints the key and the chords as the views print chord symbols, with ♯ and ♭', async () => {
     const user = userEvent.setup()
-    await renderApp('/play/bz5?key=F%23')
+    await renderApp('/play/bz5?transpose=-1')
     await chooseMore(user, 'Song information')
     const sheet = await screen.findByRole('dialog', { name: 'Song information' })
     const chords = within(within(sheet).getByRole('list', { name: 'Chords' })).getAllByRole(
@@ -333,7 +333,7 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
 
   it('exports the music as written to a MusicXML file named for it (ADR 0107)', async () => {
     const user = userEvent.setup()
-    await renderApp('/play/bz5?key=A')
+    await renderApp('/play/bz5?transpose=2')
     const saved = catchDownloads()
     await exportAs(user, 'MusicXML')
     expect(saved.names).toEqual(['Still, my soul, be still.musicxml'])
