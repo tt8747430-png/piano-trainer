@@ -12,7 +12,8 @@ import {
   type TempoUnit,
 } from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
-import type { PieceLayout, ScoreHeader } from './score-header'
+import type { PieceLayout } from './piece-layout'
+import type { ScoreHeader } from './score-header'
 
 /** A saved id may name a piece a later version removed, so it stays a plain name. */
 export type PieceId = string

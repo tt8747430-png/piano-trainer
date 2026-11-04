@@ -16,6 +16,8 @@ export { LabelRow, type PrintedPart, type PrintLabel } from './LabelRow'
 export { rowChords, type PrintedChord, type RowChord } from './row-chords'
 export { Playhead } from './Playhead'
 export { ScoreView } from './ScoreView'
+export { ScorePage } from './ScorePage'
+export type { PageSetup } from './verovio/toolkit'
 export { scoreHeight, staffHeight, VERSE, versesOf } from './size'
 export {
   barsBand,

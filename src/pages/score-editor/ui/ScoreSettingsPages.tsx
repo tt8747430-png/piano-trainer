@@ -2,17 +2,20 @@ import { Milestone } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
-import { BARS_PER_LINE, STAFF_SIZES, useSectionHeading, type StaffSize } from '@/entities/piece'
+import { useSectionHeading } from '@/entities/piece'
 import {
   EDITOR_START_MODES,
   PALETTE_SIDES,
+  RECORDER_COUNT_INS,
   selectEditing,
+  selectRecorder,
+  type RecorderCountIn,
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { MetronomeSwitch, TuneSwitch } from '@/features/record-take'
 import { barsOf, MOST_BARS } from '@/features/score-editor'
-import { setEditing } from '@/features/set-preference'
+import { setEditing, setRecorderCountIn } from '@/features/set-preference'
 import {
   ChoiceCard,
   ChoiceRow,
@@ -22,8 +25,9 @@ import {
   Stepper,
   SwitchRow,
 } from '@/shared/ui'
-import { InstrumentList, type InstrumentFamily } from '@/widgets/instrument-list'
-import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { InstrumentsPanel } from './InstrumentsPanel'
+import { LayoutPanel } from './LayoutPanel'
+import { useEditorState } from '../model/editor-context'
 import { KeyPicker } from './KeyPicker'
 import { TempoPicker } from './TempoPopover'
 import { TimePicker } from './TimePicker'
@@ -85,69 +89,30 @@ function SignaturePage({ sign }: { sign: 'key' | 'time' }) {
   )
 }
 
-/** Bars per line offered: as the notes space them, or a few to a line (Flat's). */
-const LINE_BARS = [0, 2, 3, 4, 5, 6].filter((most) => most <= BARS_PER_LINE.max)
-
-/** The score's layout (A40): the staff size and the bars a line, its Settings' and its panel's. */
-export function LayoutChoices() {
-  const { t } = useTranslation('editor')
-  const { actions } = useScoreEditorContext()
-  const layout = useEditorState((state) => state.draft.layout)
-  return (
-    <>
-      <ChoiceCard
-        title={t('scoreSettings.staffSize')}
-        info={t('scoreSettings.staffSizeInfo')}
-        value={String(layout?.staffSize ?? 100)}
-        options={STAFF_SIZES.map((size) => ({
-          value: String(size),
-          label: t(`scoreSettings.staffSizes.${size}`),
-        }))}
-        onChange={(size) =>
-          actions.dispatch({ type: 'layout', staffSize: Number(size) as StaffSize })
-        }
-      />
-      <ChoiceCard
-        title={t('scoreSettings.barsPerLine')}
-        info={t('scoreSettings.barsPerLineInfo')}
-        value={String(layout?.barsPerLine ?? 0)}
-        options={LINE_BARS.map((most) => ({
-          value: String(most),
-          label: most === 0 ? t('scoreSettings.asWritten') : String(most),
-        }))}
-        onChange={(most) =>
-          actions.dispatch({ type: 'layout', barsPerLine: most === '0' ? null : Number(most) })
-        }
-      />
-    </>
-  )
-}
-
 /**
  * A page of the score's Settings: its Staves (Flat's Manage instruments), Key signature, Time
  * signature and Tempo (the pickers the printed marks open), Bars, Layout, Note input and Recording.
  */
 export function ScorePageBody({
   page,
-  families,
   bars,
   onBars,
   onDone,
 }: {
   page: ScorePage
-  families: readonly InstrumentFamily[]
   bars: number
   onBars: (count: number) => void
   onDone: () => void
 }) {
-  const { t } = useTranslation(['editor', 'songs'])
+  const { t } = useTranslation(['editor', 'songs', 'common'])
   const settings = useSettingsStoreApi()
   const editing = useSettings(selectEditing)
+  const recorder = useSettings(selectRecorder)
   switch (page) {
     case 'staves':
       return (
         <SettingsGroup bare info={t('scoreSettings.instrumentsInfo')}>
-          <InstrumentList families={families} />
+          <InstrumentsPanel />
         </SettingsGroup>
       )
     case 'key':
@@ -176,7 +141,7 @@ export function ScorePageBody({
         </SettingsGroup>
       )
     case 'layout':
-      return <LayoutChoices />
+      return <LayoutPanel />
     case 'input':
       return (
         <>
@@ -218,12 +183,25 @@ export function ScorePageBody({
       )
     case 'recording':
       return (
-        <SettingsGroup flush>
-          <SettingRows>
-            <MetronomeSwitch />
-            <TuneSwitch />
-          </SettingRows>
-        </SettingsGroup>
+        <>
+          <SettingsGroup flush>
+            <SettingRows>
+              <MetronomeSwitch />
+              <TuneSwitch />
+            </SettingRows>
+          </SettingsGroup>
+          <ChoiceCard
+            setting="recorder.countIn"
+            title={t('common:recorderSettings.countIn')}
+            info={t('common:recorderSettings.countInInfo')}
+            value={String(recorder.countIn)}
+            options={RECORDER_COUNT_INS.map((bars) => ({
+              value: String(bars),
+              label: t(`common:recorderSettings.countIns.${bars}`),
+            }))}
+            onChange={(bars) => setRecorderCountIn(settings, Number(bars) as RecorderCountIn)}
+          />
+        </>
       )
   }
 }

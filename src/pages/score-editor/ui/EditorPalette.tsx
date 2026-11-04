@@ -22,11 +22,10 @@ import { useFoldKeys } from '@/features/live-keyboard'
 import { cn, useRovingFocus, useScrollMotion } from '@/shared/lib'
 import { Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { InstrumentList } from '@/widgets/instrument-list'
 import { EDITOR_PANELS, type EditorPanelTab } from '../model/edit-search'
 import { useEditorPanel } from '../model/use-editor-panel'
-import { useInstrumentFamilies } from '../model/use-instrument-families'
-import { LayoutChoices } from './ScoreSettingsPages'
+import { InstrumentsPanel } from './InstrumentsPanel'
+import { LayoutPanel } from './LayoutPanel'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { gripRelease } from '../model/grip'
 import {
@@ -226,14 +225,13 @@ function PanelTabs() {
 
 /** The Instruments and Layout tabs' content, the score's Settings' own (one implementation). */
 function TabBody({ tab }: { tab: Exclude<EditorPanelTab, 'notation'> }) {
-  const families = useInstrumentFamilies()
   return tab === 'instruments' ? (
     <div className="flex flex-col gap-3 py-3">
-      <InstrumentList families={families} />
+      <InstrumentsPanel />
     </div>
   ) : (
     <div className="flex flex-col gap-4 py-3">
-      <LayoutChoices />
+      <LayoutPanel />
     </div>
   )
 }

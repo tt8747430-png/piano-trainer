@@ -10,12 +10,19 @@ export { handsIn, PRACTICE_MODES, waitsForNotes, type PracticeMode } from './pra
 export { usePractice, type Practice } from './use-practice'
 export { FULL_MIX, partGain, type Mix, type MixPart } from './mix'
 export {
+  allPlay,
   hiddenStaves,
+  isSolo,
   isStavesParam,
+  movedStaves,
+  orderedStaves,
   noteStaff,
   readStaves,
   stavesParam,
   trackOf,
+  withAllPlaying,
+  withShown,
+  withSolo,
   withTrack,
   type PlayerStaves,
   type TrackChoice,

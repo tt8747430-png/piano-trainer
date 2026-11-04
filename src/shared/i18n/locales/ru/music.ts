@@ -220,6 +220,7 @@ export const music: LocaleResources['music'] = {
   // Ноты: нотный стан плеера.
   sheet: {
     label: 'Ноты',
+    firstPage: 'Первая страница',
     layout: {
       label: 'Расположение',
       page: 'Страницы',

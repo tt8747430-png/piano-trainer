@@ -145,6 +145,7 @@ export function EditorSheet({
       lyrics={view.lyrics}
       edit={editPrinted}
       view={view.layout}
+      hidden={view.hidden}
       title={titleAt}
       room={room}
       covered={covered}

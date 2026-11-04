@@ -1,7 +1,71 @@
 import { describe, expect, it } from 'vitest'
 import { draftOf, shape } from '../testing/test-draft'
-import { addStaff, removeStaff, renameStaff, setStaffClef } from './staves'
+import {
+  addStaff,
+  moveStaff,
+  orderStaves,
+  placeAfterMove,
+  removeStaff,
+  renameStaff,
+  setStaffClef,
+  setStaffInstrument,
+} from './staves'
 import { verseCount } from './lyrics'
+
+describe('moveStaff (A40)', () => {
+  const THREE = {
+    staves: [
+      { name: 'A', notes: 'C5/4' },
+      { name: 'B', notes: 'D5/4' },
+      { name: 'C', notes: 'E5/4' },
+    ],
+    lyrics: ['la'],
+    lyricsOn: 1,
+  }
+  it('moves a staff with its notes, the others closing up, the words kept on their staff', () => {
+    const draft = draftOf(THREE)
+    const down = moveStaff(draft, 0, 2)
+    expect(down.staves.map((staff) => staff.name)).toEqual(['B', 'C', 'A'])
+    expect(shape(down.staves[2]?.notes ?? [])).toEqual(['C5@0/4'])
+    expect(down.lyricsOn).toBe(0)
+    const up = moveStaff(draft, 2, 0)
+    expect(up.staves.map((staff) => staff.name)).toEqual(['C', 'A', 'B'])
+    expect(up.lyricsOn).toBe(2)
+    expect(moveStaff(draft, 1, 1)).toBe(draft)
+    expect(moveStaff(draft, 5, 0)).toBe(draft)
+  })
+
+  it('puts the staves in an order, the words kept on their staff', () => {
+    const draft = draftOf(THREE)
+    const ordered = orderStaves(draft, [2, 0, 1])
+    expect(ordered.staves.map((staff) => staff.name)).toEqual(['C', 'A', 'B'])
+    expect(ordered.lyricsOn).toBe(2)
+    expect(orderStaves(draft, [0, 1, 2])).toBe(draft)
+    expect(orderStaves(draft, [0, 0, 1])).toBe(draft)
+  })
+
+  it('says where each staff stands after a move', () => {
+    expect([0, 1, 2, 3].map((at) => placeAfterMove(at, 0, 2))).toEqual([2, 0, 1, 3])
+    expect([0, 1, 2, 3].map((at) => placeAfterMove(at, 3, 1))).toEqual([0, 2, 3, 1])
+  })
+})
+
+describe('setStaffInstrument (A40)', () => {
+  const TWO_STAVES = {
+    staves: [
+      { name: 'Voice', notes: 'D5/4' },
+      { notes: 'G3/4', clef: 'bass' as const },
+    ],
+  }
+  it('names the staff and writes it in the instrument’s clef, its notes kept', () => {
+    const draft = draftOf(TWO_STAVES)
+    const bass = setStaffInstrument(draft, 0, { name: { en: 'Bass', ru: 'Бас' }, clef: 'bass' })
+    expect(bass.staves[0]).toMatchObject({ name: { en: 'Bass', ru: 'Бас' }, clef: 'bass' })
+    expect(bass.staves[0]?.notes).toBe(draft.staves[0]?.notes)
+    expect(setStaffInstrument(draft, 0, { clef: 'treble' }).staves[0]).not.toHaveProperty('name')
+    expect(setStaffInstrument(draft, 1, { clef: 'bass' })).toBe(draft)
+  })
+})
 
 const TWO = {
   staves: [

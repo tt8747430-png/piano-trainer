@@ -75,3 +75,68 @@ export function renameStaff(draft: Draft, place: number, text: string): Draft {
 /** A single staff written in another clef, its notes as they are (ADR 0097). */
 export const setStaffClef = (draft: Draft, place: number, clef: Clef): Draft =>
   withStaff(draft, place, (staff) => (staff.clef === clef ? staff : { ...staff, clef }))
+
+/** Where a staff at `at` stands once the staff at `from` has moved to `to` (the others close up). */
+export function placeAfterMove(at: number, from: number, to: number): number {
+  if (at === from) return to
+  if (from < at && at <= to) return at - 1
+  if (to <= at && at < from) return at + 1
+  return at
+}
+
+/**
+ * The single staff at `from` moved to `to`, top down (A40, Flat's instruments dragged by their
+ * handles): its notes, name and clef with it, the words kept on the staff they are on. The piano's
+ * grand staff stays under the single staves.
+ */
+export function moveStaff(draft: Draft, from: number, to: number): Draft {
+  const moved = draft.staves[from]
+  const at = Math.max(0, Math.min(to, draft.staves.length - 1))
+  if (!moved || at === from) return draft
+  const others = draft.staves.filter((_, i) => i !== from)
+  const { lyricsOn } = draft
+  return {
+    ...draft,
+    staves: [...others.slice(0, at), moved, ...others.slice(at)],
+    lyricsOn: typeof lyricsOn === 'number' ? placeAfterMove(lyricsOn, from, at) : lyricsOn,
+  }
+}
+
+/**
+ * The single staves put in a new order (A40, Flat's Sort › Score order): `order` names, top down,
+ * the place each staff stood at; the words kept on their staff. An order that is not the staves'
+ * own places, each once, changes nothing.
+ */
+export function orderStaves(draft: Draft, order: readonly number[]): Draft {
+  const count = draft.staves.length
+  const each = new Set(order)
+  if (order.length !== count || each.size !== count || order.some((at) => !draft.staves[at]))
+    return draft
+  if (order.every((at, i) => at === i)) return draft
+  const { lyricsOn } = draft
+  return {
+    ...draft,
+    staves: order.map((at) => draft.staves[at] as DraftStaff),
+    lyricsOn: typeof lyricsOn === 'number' ? order.indexOf(lyricsOn) : lyricsOn,
+  }
+}
+
+/**
+ * A single staff changed to another instrument (A40, Flat's Change instrument): its name and its
+ * clef, its notes as they are; a staff of no instrument's name loses its name.
+ */
+export function setStaffInstrument(
+  draft: Draft,
+  place: number,
+  instrument: { readonly name?: StaffName; readonly clef: Clef },
+): Draft {
+  return withStaff(draft, place, (staff) => {
+    const { name: _was, ...nameless } = staff
+    const changed: DraftStaff = {
+      ...nameless,
+      ...(instrument.name === undefined ? {} : { name: instrument.name }),
+      clef: instrument.clef,
+    }
+    return changed.clef === staff.clef && changed.name === staff.name ? staff : changed
+  })
+}

@@ -1,4 +1,4 @@
-import { songTitle, withHeaderLine } from '@/entities/piece'
+import { savedLayout, songTitle, withHeaderLine } from '@/entities/piece'
 import { markBars } from './bar-marks'
 import { setClefIn } from './clefs'
 import { shownRows, staffLeftFor } from './rows'
@@ -38,8 +38,17 @@ import {
 } from './notes'
 import { setTime } from './meters'
 import { joinSection, setSectionKey, setSectionKind } from './sections'
-import { addStaff, removeStaff, renameStaff, setStaffClef } from './staves'
-import { laidOut, setKey, setTempo, setTempoMark, transpose } from './settings'
+import {
+  addStaff,
+  moveStaff,
+  orderStaves,
+  placeAfterMove,
+  removeStaff,
+  renameStaff,
+  setStaffClef,
+  setStaffInstrument,
+} from './staves'
+import { setKey, setTempo, setTempoMark, transpose } from './settings'
 import { nextMode, type EditorAction, type EditorState } from './state'
 import { writeTake } from './take-edits'
 import { barAt, barsOf, keyAt } from './timeline'
@@ -297,6 +306,33 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
     }
     case 'renameStaff':
       return commit(state, renameStaff(draft, action.place, action.name))
+    case 'moveStaff': {
+      const next = moveStaff(draft, action.from, action.to)
+      if (next === draft) return state
+      // The caret stays on the staff it was on, wherever that staff now stands.
+      const kept =
+        layer === 'chords' || isHandLayer(layer)
+          ? layer
+          : singleStaff(placeAfterMove(staffPlace(layer), action.from, action.to))
+      return commit(state, next, { layer: kept, selection: null, chordNote: null, struck: null })
+    }
+    case 'orderStaves': {
+      const next = orderStaves(draft, action.order)
+      if (next === draft) return state
+      const kept =
+        layer === 'chords' || isHandLayer(layer)
+          ? layer
+          : singleStaff(action.order.indexOf(staffPlace(layer)))
+      return commit(state, next, { layer: kept, selection: null, chordNote: null, struck: null })
+    }
+    case 'staffInstrument':
+      return commit(
+        state,
+        setStaffInstrument(draft, action.place, {
+          ...(action.name === undefined ? {} : { name: action.name }),
+          clef: action.clef,
+        }),
+      )
     case 'piano': {
       // Never every staff out of sight: a lead sheet keeps its single staves (ADR 0114).
       if (draft.leadSheet === action.hidden || (action.hidden && draft.staves.length === 0))
@@ -448,14 +484,11 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
       return commit(state, Object.keys(header).length > 0 ? { ...rest, header } : rest)
     }
     case 'layout': {
-      const layout = laidOut(draft.layout ?? {}, action)
-      if (
-        layout.staffSize === draft.layout?.staffSize &&
-        layout.barsPerLine === draft.layout?.barsPerLine
-      )
-        return state
+      // Kept as the score keeps it: each field read, the standard ones left out (A40).
+      const layout = savedLayout(action.layout)
+      if (JSON.stringify(layout ?? {}) === JSON.stringify(draft.layout ?? {})) return state
       const { layout: _was, ...rest } = draft
-      return commit(state, Object.keys(layout).length > 0 ? { ...rest, layout } : rest)
+      return commit(state, layout ? { ...rest, layout } : rest)
     }
     case 'undo':
     case 'redo':

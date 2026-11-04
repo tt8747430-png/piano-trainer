@@ -1,4 +1,4 @@
-import type { PieceMusic } from '@/entities/piece'
+import { fullLayout, pageMm, type PieceMusic } from '@/entities/piece'
 import { barsOf, readDraft } from '@/features/score-editor'
 import { scoreToMusicXml } from '@/shared/lib/musicxml'
 import { notate } from '@/shared/lib/notation'
@@ -16,6 +16,22 @@ export interface SongFileNames {
   readonly staffNames: readonly (string | undefined)[]
   /** The piano's name, the instrument's. */
   readonly piano: string
+}
+
+/** A layout's page and staff, in millimetres, as the file's defaults write them. */
+function pageOf(layout: NonNullable<PieceMusic['layout']>) {
+  const { margins, staffSize } = fullLayout(layout)
+  const cm = (value: number) => value * 10
+  return {
+    ...pageMm(layout),
+    margins: {
+      top: cm(margins.top),
+      bottom: cm(margins.bottom),
+      left: cm(margins.left),
+      right: cm(margins.right),
+    },
+    staffMm: staffSize,
+  }
 }
 
 /** The software a song's file names as its maker. */
@@ -55,5 +71,7 @@ export function musicXmlOf(music: PieceMusic, names: SongFileNames): string {
     lineStarts,
     appData: writeSongFileData(songFileData(draft)),
     software: SOFTWARE,
+    // The page its Layout sets (A40), where it sets one.
+    ...(music.layout ? { page: pageOf(music.layout) } : {}),
   })
 }

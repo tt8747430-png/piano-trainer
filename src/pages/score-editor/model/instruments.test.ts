@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { PieceMusic } from '@/entities/piece'
 import { readDraft } from '@/features/score-editor'
-import { instrumentCount, voiceOf } from './instruments'
+import { instrumentCount, scoreOrder, voiceOf } from './instruments'
 
 const draftOf = (music: Partial<PieceMusic> = {}) =>
   readDraft({
@@ -14,6 +14,12 @@ const draftOf = (music: Partial<PieceMusic> = {}) =>
   })
 
 describe('the score’s instruments (round 28)', () => {
+  it('sorts the staves in score order: the voices as a choir, then the others (A40)', () => {
+    expect(
+      scoreOrder([{ name: 'Flute' }, { name: 'Bass' }, {}, { name: 'Soprano' }, { name: 'Alto' }]),
+    ).toEqual([3, 4, 1, 0, 2])
+  })
+
   it('knows a voice by its printed name in either language', () => {
     expect(voiceOf({ en: 'Tenor', ru: 'Тенор' })).toBe('tenor')
     expect(voiceOf('Сопрано')).toBe('soprano')

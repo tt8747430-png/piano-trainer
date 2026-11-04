@@ -16,7 +16,8 @@ import { ContentError } from './content-error'
 import { readNote } from './song-facts'
 import { musicOf, type PieceMusic } from './music'
 import { readPedalLine, writePedalLine } from './pedal-line'
-import { savedHeader, savedLayout } from './score-header'
+import { savedLayout } from './piece-layout'
+import { savedHeader } from './score-header'
 import {
   isOwnSongId,
   ownSongNumber,
@@ -39,7 +40,7 @@ import {
 } from './types'
 
 export const PIECES_STORAGE_KEY = 'pt-pieces'
-export const PIECES_VERSION = 10
+export const PIECES_VERSION = 11
 
 /** The learner's pieces. */
 export interface PiecesState {

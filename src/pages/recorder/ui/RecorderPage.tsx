@@ -23,7 +23,8 @@ import { useRecordings, type RecordingGroup } from '../model/use-recordings'
 function Progress({ progress }: { progress: RecorderProgressSource }) {
   const { t } = useTranslation('practice')
   const now = useSyncExternalStore(progress.subscribe, progress.current)
-  if (!now) return null
+  // The free recorder always counts in: it never waits for a first note.
+  if (!now || now.stage === 'waiting') return null
   return (
     <p aria-live="polite" className="font-heading text-4xl font-semibold tabular-nums">
       {now.stage === 'counting'

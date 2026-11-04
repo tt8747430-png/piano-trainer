@@ -96,7 +96,7 @@ describe('createSettingsStore', () => {
       metronome: false,
     })
     expect(DEFAULT_TRAINER).toEqual({ autoNext: false })
-    expect(DEFAULT_RECORDER).toEqual({ click: true, tune: false })
+    expect(DEFAULT_RECORDER).toEqual({ click: true, tune: false, countIn: 1 })
     expect(DEFAULT_MIDI).toEqual({
       input: true,
       device: null,
@@ -146,7 +146,7 @@ describe('createSettingsStore', () => {
         keyLength: 'short',
         railControls: ['zoom', 'pedal'],
       },
-      recorder: { click: false, tune: true },
+      recorder: { click: false, tune: true, countIn: 2 },
       editing: { hearNotes: false, startMode: 'insert', paletteSide: 'right' },
       sidebar: 'collapsed',
       paletteFolded: { panel: true, sheet: false },

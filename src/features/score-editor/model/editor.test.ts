@@ -149,6 +149,24 @@ describe('the editor', () => {
     expect(musicToSave(named.draft)?.staves).toEqual([{ name: 'Voice', notes: 'B4/4' }])
   })
 
+  it('moves a staff by its handle, the caret on its staff; Undo puts it back (A40)', () => {
+    const two = initialEditor(
+      draftOf({
+        staves: [
+          { name: 'A', notes: 'B4/4' },
+          { name: 'B', notes: 'C5/4' },
+        ],
+      }),
+    )
+    const moved = run({ ...two, layer: 'staff0' }, { type: 'moveStaff', from: 0, to: 1 })
+    expect(moved.draft.staves.map((staff) => staff.name)).toEqual(['B', 'A'])
+    expect(moved.layer).toBe('staff1')
+    expect(run(moved, { type: 'undo' }).draft).toEqual(two.draft)
+    const bass = run(two, { type: 'staffInstrument', place: 1, clef: 'bass' })
+    expect(bass.draft.staves[1]).toMatchObject({ clef: 'bass' })
+    expect(bass.draft.staves[1]).not.toHaveProperty('name')
+  })
+
   it('writes a double-dotted value and a 32nd', () => {
     const state = run(
       start(),
@@ -1116,18 +1134,20 @@ describe('the editor', () => {
     expect(lengths(run(one, { type: 'undo' }).draft)).toHaveLength(bars + 2)
   })
 
-  it('lays the score out at a staff size and so many bars a line at most, its own size left out (ADR 0114)', () => {
-    const laid = run(
-      initialEditor(draftOf()),
-      { type: 'layout', staffSize: 130 },
-      { type: 'layout', barsPerLine: 4 },
-    )
-    expect(laid.draft.layout).toEqual({ staffSize: 130, barsPerLine: 4 })
-    expect(musicToSave(laid.draft)?.layout).toEqual({ staffSize: 130, barsPerLine: 4 })
-    expect(run(laid, { type: 'layout', staffSize: 130 })).toBe(laid)
-    const own = run(laid, { type: 'layout', staffSize: 100 }, { type: 'layout', barsPerLine: null })
-    expect(own.draft).not.toHaveProperty('layout')
-    expect(run(laid, { type: 'layout', barsPerLine: 20 }).draft.layout).toEqual({ staffSize: 130 })
+  it('lays the score out as its Layout says, the standard fields left out (A40)', () => {
+    const laid = run(initialEditor(draftOf()), {
+      type: 'layout',
+      layout: { staffSize: 8.5, barsPerLine: 4, orientation: 'portrait', font: 'Leland' },
+    })
+    expect(laid.draft.layout).toEqual({ staffSize: 8.5, barsPerLine: 4, font: 'Leland' })
+    expect(musicToSave(laid.draft)?.layout).toEqual({
+      staffSize: 8.5,
+      barsPerLine: 4,
+      font: 'Leland',
+    })
+    expect(run(laid, { type: 'layout', layout: { ...laid.draft.layout } })).toBe(laid)
+    expect(run(laid, { type: 'layout', layout: {} }).draft).not.toHaveProperty('layout')
+    expect(run(laid, { type: 'undo' }).draft).not.toHaveProperty('layout')
   })
 
   it('undoes and redoes the changes with the caret, and a new change drops the redo', () => {

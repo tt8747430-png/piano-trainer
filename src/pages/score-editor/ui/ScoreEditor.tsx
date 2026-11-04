@@ -37,7 +37,7 @@ import { NoteToolbar, EditorPanel, PaletteSheet } from './EditorPalette'
 import { EditorSheet } from './EditorSheet'
 import { FieldDocked } from './field-docked'
 import { OpenField } from './OpenField'
-import { RecordingStrip } from './RecordingStrip'
+import { RecordingBar } from './RecordingBar'
 import { TakesSheet } from './TakesSheet'
 import { UnsavedNotice } from './UnsavedNotice'
 
@@ -252,7 +252,7 @@ function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) 
                 <div className="flex shrink-0 flex-col items-center gap-2">
                   <SelectionActions />
                   <div className="pointer-events-auto">
-                    {idle ? <EditorDock /> : <RecordingStrip />}
+                    {idle ? <EditorDock /> : <RecordingBar />}
                   </div>
                 </div>
               </div>

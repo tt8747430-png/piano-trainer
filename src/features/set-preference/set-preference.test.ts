@@ -150,7 +150,7 @@ describe('set-preference', () => {
   it('setRecorderClick saves whether the click goes on while a take records', () => {
     const { storage, store } = setUp()
     setRecorderClick(store, false)
-    expect(saved(storage).recorder).toEqual({ click: false, tune: false })
+    expect(saved(storage).recorder).toEqual({ click: false, tune: false, countIn: 1 })
     setRecorderClick(store, true)
     expect(store.getState().recorder.click).toBe(true)
   })
@@ -159,7 +159,7 @@ describe('set-preference', () => {
     const { storage, store } = setUp()
     setRecorderClick(store, false)
     setRecorderTune(store, true)
-    expect(saved(storage).recorder).toEqual({ click: false, tune: true })
+    expect(saved(storage).recorder).toEqual({ click: false, tune: true, countIn: 1 })
   })
 
   it('setMidi saves one MIDI setting and keeps the rest', () => {

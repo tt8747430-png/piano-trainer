@@ -4,6 +4,7 @@ import type { EditorAction, EditorState, EditorStore } from '@/features/score-ed
 import type { PlayHandle } from '@/shared/api/audio'
 import type { SheetView } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
+import type { StaffId } from '@/shared/lib/notation'
 import type { Scheduled } from '@/shared/lib/schedule'
 import type { SheetField } from '@/widgets/score-sheet'
 import type { EditorTakes } from './use-editor-takes'
@@ -48,6 +49,8 @@ export interface ScoreEditorValue {
     readonly setSpeed: (speed: number) => void
     /** How the score is laid out, the View's: down the screen, on A4 pages, or as one line across. */
     readonly layout: SheetView
+    /** The staves out of sight (A40, the Instruments' eye): the Player's `staves`. */
+    readonly hidden: readonly StaffId[]
     /** The field open over the sheet at the caret, typing what is printed there (ADR 0096); null while none is. */
     readonly field: SheetField | null
     /**

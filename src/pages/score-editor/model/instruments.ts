@@ -60,3 +60,21 @@ export function instrumentCount(draft: Draft, instrument: ScoreInstrument): Inst
     more: { type: 'addStaff', place, name: VOICES[instrument].name, clef: VOICES[instrument].clef },
   }
 }
+
+/**
+ * The single staves in a score's order (A40, Flat's Sort › Score order): the voices as a choir is
+ * stacked, top down, then the staves of no voice, each kind in the order it stands; the place each
+ * staff stood at.
+ */
+export function scoreOrder(staves: readonly { readonly name?: StaffName }[]): number[] {
+  const rank = (name: StaffName | undefined) => {
+    const voice = voiceOf(name)
+    return voice ? VOICE_IDS.indexOf(voice) : VOICE_IDS.length
+  }
+  return staves
+    .map((_, place) => place)
+    .sort((a, b) => rank(staves[a]?.name) - rank(staves[b]?.name) || a - b)
+}
+
+/** The instruments New instrument offers (A40): the piano where it is hidden, each voice, a staff. */
+export const NEW_INSTRUMENTS: readonly ScoreInstrument[] = ['piano', ...VOICE_IDS, 'staff']

@@ -249,15 +249,15 @@ describe('createPiecesStore', () => {
       bz1: {
         ...MUSIC,
         header: { subtitle: '  Op. 2 ', composer: 'Clara', lyricist: '  ', arranger: 4, x: 'y' },
-        layout: { staffSize: 130, barsPerLine: 12 },
+        layout: { staffSize: 8.5, barsPerLine: 12, font: 'Gootville' },
       },
-      bz2: { ...MUSIC, header: { composer: '' }, layout: { staffSize: 100, barsPerLine: 4 } },
+      bz2: { ...MUSIC, header: { composer: '' }, layout: { staffSize: 7, barsPerLine: 4 } },
     }
     const read = restored({ versions }).versions
     expect(read.bz1).toEqual({
       ...MUSIC,
       header: { subtitle: 'Op. 2', composer: 'Clara' },
-      layout: { staffSize: 130 },
+      layout: { staffSize: 8.5 },
     })
     expect(read.bz2).toEqual({ ...MUSIC, layout: { barsPerLine: 4 } })
   })

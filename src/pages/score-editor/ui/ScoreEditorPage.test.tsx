@@ -2075,7 +2075,9 @@ describe('the score editor’s takes', () => {
     expect(songOf(piecesStore.getState())).toEqual({ ...SONG, hands: SILENT_HANDS })
     expect(takesStore.getState().takes).toMatchObject([{ fromBar: 1 }])
 
-    // The takes' sheet opens on the take just kept.
+    // The take just kept opens to be reviewed (A40); Back, the takes.
+    const review = await screen.findByRole('dialog', { name: 'Review your recording' })
+    await user.click(within(review).getByRole('button', { name: 'Back' }))
     const sheet = await screen.findByRole('dialog', { name: 'Takes' })
     const [take] = within(sheet).getAllByRole('listitem')
     if (!take) throw new Error('the take is listed')
@@ -2085,11 +2087,11 @@ describe('the score editor’s takes', () => {
       audio.played.at(-1)?.sounds.flatMap((sound) => (sound.kind === 'note' ? [sound.midi] : [])),
     ).toEqual([43, 67, 71, 74])
 
-    await takeAction(user, take, 'Write into the score')
-    const form = await screen.findByRole('dialog', { name: 'Write into the score' })
+    await takeAction(user, take, 'Review')
+    const form = await screen.findByRole('dialog', { name: 'Review your recording' })
     expect(within(form).getByRole('combobox', { name: 'Into' })).toHaveTextContent('Both staves')
-    expect(within(form).getByRole('radio', { name: 'eighth' })).toBeChecked()
-    await user.click(within(form).getByRole('button', { name: 'Write from bar 1' }))
+    expect(within(form).getByRole('radio', { name: '1/8' })).toBeChecked()
+    await user.click(within(form).getByRole('button', { name: 'Save to score' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         hands: { rh: 'G4/1 B4/1 D5/1 | r/4 | r/4 | r/4', lh: 'G2/3 | r/4 | r/4 | r/4' },
@@ -2179,6 +2181,8 @@ describe('the score editor’s takes', () => {
     await startTake(user, keyboard)
     playArpeggio(audio, keyboard)
     await user.click(screen.getByRole('button', { name: 'Stop' }))
+    const review = await screen.findByRole('dialog', { name: 'Review your recording' })
+    await user.click(within(review).getByRole('button', { name: 'Back' }))
     const sheet = await screen.findByRole('dialog', { name: 'Takes' })
 
     const files: Blob[] = []
@@ -2263,13 +2267,9 @@ describe('the score editor’s takes', () => {
     playArpeggio(audio, keyboard)
     await user.click(screen.getByRole('button', { name: 'Stop' }))
 
-    const takes = await screen.findByRole('dialog', { name: 'Takes' })
+    const form = await screen.findByRole('dialog', { name: 'Review your recording' })
     expect(router.state.location.search).toEqual({ takes: true })
-    const [row] = within(takes).getAllByRole('listitem')
-    if (!row) throw new Error('the take is listed')
-    await takeAction(user, row, 'Write into the score')
-    const form = await screen.findByRole('dialog', { name: 'Write into the score' })
-    await user.click(within(form).getByRole('button', { name: /^Write from bar/ }))
+    await user.click(within(form).getByRole('button', { name: 'Save to score' }))
     await waitFor(() => expect(form).not.toBeInTheDocument())
     expect(router.state.location.search).toEqual({})
 

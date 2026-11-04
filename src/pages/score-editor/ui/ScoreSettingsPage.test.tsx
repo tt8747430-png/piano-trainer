@@ -78,13 +78,14 @@ describe('the score’s Settings (round 28)', () => {
     const { piecesStore } = await renderApp('/edit/my-1/settings?page=staves', {
       storage: withSong(),
     })
-    await user.click(await screen.findByRole('button', { name: 'One more Tenor' }))
+    await user.click(await screen.findByRole('button', { name: 'New instrument' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Tenor' }))
     await waitFor(() =>
       expect(piecesStore.getState().songs[0]?.staves).toEqual([
         expect.objectContaining({ name: { en: 'Tenor', ru: 'Тенор' }, clef: 'treble-8vb' }),
       ]),
     )
-    expect(screen.getByRole('status', { name: 'Tenor: 1' })).toBeInTheDocument()
+    expect(screen.getByRole('list', { name: 'Instruments' })).toHaveTextContent('Tenor')
     await user.click(screen.getByRole('button', { name: 'Back' }))
     await user.click(await screen.findByRole('button', { name: /^Bars/ }))
     await user.click(await screen.findByRole('button', { name: 'One bar more' }))
@@ -98,8 +99,9 @@ describe('the score’s Settings (round 28)', () => {
     const { piecesStore, settingsStore } = await renderApp('/edit/my-1/settings?page=layout', {
       storage: withSong(),
     })
-    const lines = await screen.findByRole('radiogroup', { name: 'Bars per line' })
-    await user.click(within(lines).getByRole('radio', { name: '2' }))
+    await user.click(await screen.findByRole('button', { name: 'Measures' }))
+    await user.click(screen.getByRole('button', { name: 'More measures per system' }))
+    await user.click(screen.getByRole('button', { name: 'More measures per system' }))
     await waitFor(() => expect(piecesStore.getState().songs[0]?.layout).toEqual({ barsPerLine: 2 }))
     await user.click(screen.getByRole('button', { name: 'Back' }))
     await user.click(await screen.findByRole('button', { name: /^Note input/ }))

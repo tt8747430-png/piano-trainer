@@ -55,6 +55,8 @@ export interface MeiOptions {
   readonly next?: NextLine | undefined
   /** The staves' names, printed at the line's head (a score's first line, ADR 0114). */
   readonly labels?: StaffLabels | undefined
+  /** A page's systems of so many bars each (A40, Measures per system): a break before each. */
+  readonly systemBars?: number | undefined
 }
 
 /**
@@ -134,6 +136,8 @@ export function scoreToMei(score: Score, options: MeiOptions = {}): string {
     if (changes) body.push(`<scoreDef${changes}/>`)
     // A multi-bar rest is one measure, named by its first bar (ADR 0087): its others are not drawn.
     const resting = restRun(score.measures, index)
+    const { systemBars } = options
+    if (systemBars && index > 0 && index % systemBars === 0) body.push('<sb/>')
     body.push(writer.measure(measure, index, resting))
     index += Math.max(resting - 1, 0)
   }

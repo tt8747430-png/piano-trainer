@@ -268,6 +268,8 @@ const readEditSearch = (raw: Raw): EditSearch => ({
   bar: bar(raw),
   // The panel's tab (A40): Notation, its first, written as none.
   ...(raw.panel === 'instruments' || raw.panel === 'layout' ? { panel: raw.panel } : {}),
+  // Which staves play and show (A40), the Player's own `staves` (A35).
+  ...(isStavesParam(raw.staves) ? { staves: raw.staves } : {}),
 })
 export const editSearch = routeSearch(readEditSearch, EDIT_DEFAULTS)
 

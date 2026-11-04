@@ -8,6 +8,7 @@ import {
 } from '@/shared/lib/notation'
 import type { ScoreLayout } from '../layout'
 import { engrave } from './engine'
+import type { PageSetup } from './toolkit'
 import { layoutOf } from './svg-layout'
 
 export interface DrawOptions {
@@ -99,6 +100,43 @@ export async function drawScore(
   if (options.names) nameHeads(element, score)
   host.replaceChildren(...sheet.childNodes)
   return withKeys(layout, score)
+}
+
+/**
+ * A score's first page as its Layout prints it (A40): Verovio's own page, its size, margins, staff,
+ * spacing, systems, bars' numbers and font as `page` sets them, its title at its head; drawn into
+ * `host` once whole. Stopped by `signal`, it leaves what was there and says false.
+ */
+export async function drawPage(
+  score: Score,
+  host: HTMLElement,
+  options: {
+    readonly page: PageSetup
+    readonly staves: readonly StaffId[]
+    readonly title: string
+    readonly labels?: StaffLabels | undefined
+  },
+  signal: AbortSignal,
+): Promise<boolean> {
+  const mei = scoreToMei(score, {
+    staves: options.staves,
+    title: options.title,
+    labels: options.labels,
+    systemBars: options.page.systemBars,
+  })
+  const [svg = ''] = await engrave(mei, { scale: 1, page: options.page })
+  if (signal.aborted) return false
+  const sheet = host.ownerDocument.createElement('div')
+  sheet.innerHTML = svg
+  const element = sheet.querySelector('svg')
+  if (!element) throw new Error('Verovio drew no page')
+  // None asked: the bars' numbers Verovio prints at each system are taken out.
+  if (options.page.measureNumbers === 'none')
+    for (const number of element.querySelectorAll('g.mNum')) number.remove()
+  element.removeAttribute('width')
+  element.removeAttribute('height')
+  host.replaceChildren(element)
+  return true
 }
 
 /**

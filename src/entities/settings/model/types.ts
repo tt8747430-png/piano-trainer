@@ -169,11 +169,17 @@ const SIDEBARS = ['open', 'collapsed'] as const
 export type Sidebar = (typeof SIDEBARS)[number]
 
 /** How the score editor's Recorder records a take (ADR 0028). */
+/** The bars counted in before a take (A40, Flat's Start countdown): none starts it on the first note. */
+export const RECORDER_COUNT_INS = [0, 1, 2] as const
+export type RecorderCountIn = (typeof RECORDER_COUNT_INS)[number]
+
 export interface RecorderSettings {
   /** The click goes on after the count-in, while the take records. */
   readonly click: boolean
   /** The song's tune plays under the take. */
   readonly tune: boolean
+  /** The bars counted in before a take. */
+  readonly countIn: RecorderCountIn
 }
 
 /** How the score editor writes (round 28, MuseScore's and Dorico's note input preferences). */
@@ -425,7 +431,7 @@ export const DEFAULT_SOUND: SoundSettings = { staves: {}, recording: 100, click:
 export const DEFAULT_TRAINER: TrainerSettings = { autoNext: false }
 
 /** In the thumbs' middle, icons alone: a name is the button's tooltip and its screen reader's. */
-export const DEFAULT_RECORDER: RecorderSettings = { click: true, tune: false }
+export const DEFAULT_RECORDER: RecorderSettings = { click: true, tune: false, countIn: 1 }
 
 /** A note heard as it is edited, as notation software does by default. */
 export const DEFAULT_EDITING: EditingSettings = {

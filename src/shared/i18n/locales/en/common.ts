@@ -216,6 +216,10 @@ export const common = {
   recorderSettings: {
     click: 'Click while recording',
     clickInfo: 'A click on every beat, so what you play lands in the right bars.',
+    metronome: 'Metronome',
+    countIn: 'Start countdown',
+    countIns: { '0': 'Off', '1': '1 bar', '2': '2 bars' },
+    countInInfo: 'Bars counted in before a take. Off: the take starts on your first note.',
     tune: 'Play melody',
     tuneInfo:
       'The song’s melody, its staves over the piano, plays under your take while you record. Shown where the song has one.',

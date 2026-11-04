@@ -1,6 +1,6 @@
 import type { ClefScope } from './clefs'
 import type { BarMarkChoice } from './bar-marks'
-import type { HeaderField, SectionKind, StaffName, StaffSize } from '@/entities/piece'
+import type { HeaderField, PieceLayout, SectionKind, StaffName } from '@/entities/piece'
 import type { Chord, Clef, Finger, Key, Midi, TempoUnit, Tick } from '@/shared/lib/music'
 import type { Clip } from './clip'
 import type { Draft, Layer, NoteLayer } from './draft'
@@ -147,6 +147,17 @@ export type EditorAction =
   | { readonly type: 'removeStaff'; readonly place: number }
   /** A single staff's printed name as typed (ADR 0097): an empty one takes it away. */
   | { readonly type: 'renameStaff'; readonly place: number; readonly name: string }
+  /** A single staff dragged to another place top down (A40); the caret stays on its staff. */
+  | { readonly type: 'moveStaff'; readonly from: number; readonly to: number }
+  /** The single staves in a new order (A40, Sort › Score order): each the place it stood at. */
+  | { readonly type: 'orderStaves'; readonly order: readonly number[] }
+  /** A single staff changed to another instrument (A40): its name and clef, its notes kept. */
+  | {
+      readonly type: 'staffInstrument'
+      readonly place: number
+      readonly name?: StaffName
+      readonly clef: Clef
+    }
   /** The piano's grand staff hidden, a lead sheet, its music kept and played, or shown (ADR 0114). */
   | { readonly type: 'piano'; readonly hidden: boolean }
   | { readonly type: 'shift'; readonly semitones: number }
@@ -236,12 +247,8 @@ export type EditorAction =
   | { readonly type: 'title'; readonly title: string }
   /** A line of what prints under the title, given anew (ADR 0114): an empty one takes it away. */
   | { readonly type: 'header'; readonly field: HeaderField; readonly text: string }
-  /** How the score is laid out (ADR 0114): its staff size or the most bars a line holds, null its own. */
-  | {
-      readonly type: 'layout'
-      readonly staffSize?: StaffSize
-      readonly barsPerLine?: number | null
-    }
+  /** How the score is laid out (A40, Flat's Layout): the whole layout anew, none its own. */
+  | { readonly type: 'layout'; readonly layout: PieceLayout }
   | { readonly type: 'undo' }
   | { readonly type: 'redo' }
 

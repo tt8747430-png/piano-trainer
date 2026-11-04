@@ -25,6 +25,7 @@ import {
   EDITOR_START_MODES,
   PALETTE_SIDES,
   DEFAULT_RECORDER,
+  RECORDER_COUNT_INS,
   DEFAULT_SIDEBAR,
   DEFAULT_OTHER_HAND,
   DEFAULT_PLAYBACK,
@@ -229,6 +230,7 @@ function recorderSettings(value: unknown): RecorderSettings {
   return {
     click: typeof saved.click === 'boolean' ? saved.click : DEFAULT_RECORDER.click,
     tune: typeof saved.tune === 'boolean' ? saved.tune : DEFAULT_RECORDER.tune,
+    countIn: RECORDER_COUNT_INS.find((bars) => bars === saved.countIn) ?? DEFAULT_RECORDER.countIn,
   }
 }
 

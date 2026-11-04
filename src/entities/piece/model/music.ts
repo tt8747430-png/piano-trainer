@@ -140,8 +140,7 @@ const sameSection = (a: Section, b: Section) =>
 export const sameMusic = (a: PieceMusic, b: PieceMusic): boolean =>
   a.title === b.title &&
   HEADER_FIELDS.every((field) => a.header?.[field] === b.header?.[field]) &&
-  a.layout?.staffSize === b.layout?.staffSize &&
-  a.layout?.barsPerLine === b.layout?.barsPerLine &&
+  JSON.stringify(a.layout ?? {}) === JSON.stringify(b.layout ?? {}) &&
   a.key === b.key &&
   a.meter === b.meter &&
   (a.timeSymbol ?? false) === (b.timeSymbol ?? false) &&
