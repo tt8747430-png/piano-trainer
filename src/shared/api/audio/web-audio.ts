@@ -1,5 +1,12 @@
 import type { Midi } from '@/shared/lib/music'
-import type { ClickSound, ClickVoice, NoteSound, Sound } from '@/shared/lib/schedule'
+import type {
+  ClickSound,
+  ClickVoice,
+  DrumSound,
+  KitPiece,
+  NoteSound,
+  Sound,
+} from '@/shared/lib/schedule'
 import { createLiveVoice } from './live-voice'
 import { createLookahead } from './lookahead'
 import { createMidiSoundOutput, type MidiSoundOutput } from './midi-sound-output'
@@ -300,6 +307,32 @@ function playRecorded(
  * How each beat's sound is made where its recording cannot be had (offline before the cache):
  * synthesised, nothing fetched. The Beeps are always these.
  */
+/**
+ * A kit's piece as the synthesised beat voices stand in for it, until its recorded kit is loaded
+ * (R29 SND): the kick and the toms a kick, the snare and the rim a snare, the cymbals a hat.
+ */
+const DRUM_STAND_IN: Readonly<Record<KitPiece, ClickVoice>> = {
+  kick: 'kick',
+  snare: 'snare',
+  rim: 'snare',
+  hatClosed: 'hat',
+  hatOpen: 'hat',
+  hatPedal: 'hat',
+  ride: 'hat',
+  rideBell: 'hat',
+  crash: 'hat',
+  tomHigh: 'kick',
+  tomMid: 'kick',
+  tomFloor: 'kick',
+}
+
+const drumStandIn = (drum: DrumSound): ClickSound & { voice: ClickVoice } => ({
+  kind: 'click',
+  at: drum.at,
+  accent: drum.velocity >= 0.8,
+  voice: DRUM_STAND_IN[drum.piece],
+})
+
 const CLICK_VOICES: Readonly<Record<ClickVoice, Render<ClickSound>>> = {
   click: playClick,
   beep: playBeep,
@@ -415,6 +448,9 @@ export function createWebAudioOutput({
       if (ringing && ringing.end > at && voices.has(ringing.voice)) dampedAt(ringing.voice, at)
       voice = playNote(context, sound, at, gain, ended)
       strings.set(sound.midi, { voice, end: at + sound.duration })
+    } else if (sound.kind === 'drum') {
+      const click = drumStandIn(sound)
+      voice = CLICK_VOICES[click.voice](context, click, at, gain * sound.velocity, ended)
     } else {
       const name = sound.voice ?? 'click'
       const buffer = isRecordedSound(name) ? recorded.buffer(context, name) : null

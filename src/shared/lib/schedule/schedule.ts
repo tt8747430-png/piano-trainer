@@ -54,6 +54,36 @@ export interface NoteSound {
   readonly part?: NoteHand
   /** A single staff's note (A35): its staff's place, which the mix turns up or down on its own. */
   readonly staff?: number
+  /** The instrument that plays it (R29 SND, the chord player's band): the piano where none is named. */
+  readonly instrument?: PitchedInstrument
+}
+
+/** What plays a pitched note: the piano, or the band's bass (electric or upright). */
+export type PitchedInstrument = 'piano' | 'bassElectric' | 'bassUpright'
+
+/** A drum kit's pieces (R29 SND): what a style's groove and the Metronome's Drum kit strike. */
+export const KIT_PIECES = [
+  'kick',
+  'snare',
+  'rim',
+  'hatClosed',
+  'hatOpen',
+  'hatPedal',
+  'ride',
+  'rideBell',
+  'crash',
+  'tomHigh',
+  'tomMid',
+  'tomFloor',
+] as const
+export type KitPiece = (typeof KIT_PIECES)[number]
+
+/** One stroke on the kit: which piece, when and how hard (0 to 1). */
+export interface DrumSound {
+  readonly kind: 'drum'
+  readonly at: number
+  readonly piece: KitPiece
+  readonly velocity: number
 }
 /**
  * A beat's sound, synthesised (ADR 0052): the Player's click, or the Metronome's beep and drums.
@@ -75,7 +105,7 @@ export interface PedalSound {
   readonly at: number
   readonly down: boolean
 }
-export type Sound = NoteSound | ClickSound | PedalSound
+export type Sound = NoteSound | ClickSound | PedalSound | DrumSound
 
 interface ScheduleOptions {
   /** Beats per minute. */
