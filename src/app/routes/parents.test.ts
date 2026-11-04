@@ -66,6 +66,32 @@ describe('parents', () => {
     expect(await parentOf(settings, narrow)).toMatchObject({ to: '/profile' })
   })
 
+  it('leads each tool up to Practice, and each tool’s Settings page up to its tool (R29 B11)', async () => {
+    const [learner] = learners
+    const tools = [
+      'metronome',
+      'chord-finder',
+      'circle-of-fifths',
+      'tap-tempo',
+      'recorder',
+      'drone',
+      'tuner',
+    ]
+    for (const tool of tools)
+      expect(
+        await parentOf({ routeId: `/shell/practice/${tool}`, params: {}, search: {} }, learner!),
+        tool,
+      ).toMatchObject({ to: '/practice' })
+    for (const tool of ['metronome', 'tuner'])
+      expect(
+        await parentOf(
+          { routeId: `/shell/practice/${tool}/settings`, params: {}, search: {} },
+          learner!,
+        ),
+        tool,
+      ).toMatchObject({ to: `/practice/${tool}` })
+  })
+
   it('leads the account pages to the account when signed in, else to the Profile', async () => {
     const signIn = { routeId: '/shell/account/sign-in', params: {}, search: {} }
     expect(await parentOf(signIn, learners[0]!)).toMatchObject({ to: '/settings/account' })

@@ -23,6 +23,8 @@ export const SETTINGS_PAGES = [
   'select-toolbar',
   'swipe-actions',
   'lessons',
+  'tuner',
+  'drone',
 ] as const
 export type SettingsPageId = (typeof SETTINGS_PAGES)[number]
 
@@ -132,4 +134,9 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'metronome.levels': 'metronome',
   'metronome.subdivision': 'metronome',
   'metronome.speed': 'metronome',
+  'tuner.a4': 'tuner',
+  'drone.root': 'drone',
+  'drone.kind': 'drone',
+  'drone.octave': 'drone',
+  'drone.volume': 'drone',
 }

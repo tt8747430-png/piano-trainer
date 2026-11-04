@@ -1,7 +1,22 @@
 import { describe, expect, it } from 'vitest'
-import { PRACTICE_PAGE_IDS, PRACTICE_PAGES } from './practice-pages'
+import { PRACTICE_GROUPS, PRACTICE_PAGE_IDS, PRACTICE_PAGES } from './practice-pages'
 
 describe('Practice’s pages', () => {
+  it('Tools is the first group, in this order (R29 B11)', () => {
+    expect(PRACTICE_GROUPS[0]).toEqual({
+      id: 'tools',
+      pages: [
+        'metronome',
+        'chordFinder',
+        'circleOfFifths',
+        'tapTempo',
+        'recorder',
+        'drone',
+        'tuner',
+      ],
+    })
+  })
+
   it('lists every page once, in a group', () => {
     expect([...PRACTICE_PAGE_IDS].sort()).toEqual(Object.keys(PRACTICE_PAGES).sort())
   })

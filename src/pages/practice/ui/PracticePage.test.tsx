@@ -22,23 +22,35 @@ describe('Practice', () => {
     ])
   })
 
-  it('lists the Chord player, Accompaniment and the Chord finder under Playing', async () => {
+  it('lists the tools first, under Tools (R29 B11)', async () => {
+    await renderApp('/practice')
+    const tools = await screen.findByRole('region', { name: 'Tools' })
+    expect(rowsOf(tools)).toEqual([
+      ['Metronome Clicks or drums, any tempo', '/practice/metronome'],
+      ['Chord finder Play a chord, see its name', '/practice/chord-finder'],
+      ['Circle of fifths Every key, its signature and chords', '/practice/circle-of-fifths'],
+      ['Tap tempo Tap in time, read the tempo', '/practice/tap-tempo'],
+      ['Recorder Record from your piano', '/practice/recorder'],
+      ['Drone A held note to play over', '/practice/drone'],
+      ['Tuner Hear how in tune a note is', '/practice/tuner'],
+    ])
+  })
+
+  it('lists the Chord player and Accompaniment under Playing', async () => {
     await renderApp('/practice')
     const playing = await screen.findByRole('region', { name: 'Playing' })
     expect(rowsOf(playing)).toEqual([
       ['Chord player A chord sheet played by a band', '/practice/chord-player'],
       ['Accompaniment Patterns for both hands', '/practice/accompaniment'],
-      ['Chord finder Play a chord, see its name', '/practice/chord-finder'],
     ])
   })
 
-  it('lists Exercises, Quiz and the Metronome under Training', async () => {
+  it('lists Exercises and the Quiz under Training', async () => {
     await renderApp('/practice')
     const training = await screen.findByRole('region', { name: 'Training' })
     expect(rowsOf(training)).toEqual([
       ['Exercises Technique and drills', '/practice/exercises'],
       ['Quiz Chords, keys, ear, reading', '/practice/quiz'],
-      ['Metronome Clicks or drums, any tempo', '/practice/metronome'],
     ])
   })
 

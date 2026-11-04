@@ -364,7 +364,38 @@ export interface SettingsState {
   accompaniment: AccompanimentSettings
   /** The bars the learner arranged (R29 B10): a surface left out holds its default. */
   bars: Bars
+  /** The Tuner's reference pitch (R29 B11). */
+  tuner: TunerSettings
+  /** The Drone as left (R29 B11). */
+  drone: DroneSettings
 }
+
+/** The concert A the Tuner reads against, Baroque to modern orchestral, in whole hertz. */
+export const A4_RANGE = { min: 415, max: 466 } as const
+/** The Tuner's reference (R29 B11): what A above middle C is tuned to, 440 Hz by default. */
+export interface TunerSettings {
+  readonly a4: number
+}
+export const DEFAULT_TUNER: TunerSettings = { a4: 440 }
+
+/** What the Drone holds over its root: the root alone, with its fifth, or its major or minor triad. */
+export const DRONE_KINDS = ['note', 'fifth', 'major', 'minor'] as const
+export type DroneKind = (typeof DRONE_KINDS)[number]
+export const isDroneKind = isOneOf(DRONE_KINDS)
+/** The octaves a drone's root sits in: C1 (the piano's low end) to C5. */
+export const DRONE_OCTAVES = { min: 1, max: 5 } as const
+
+/**
+ * The Drone (R29 B11): its root (a pitch class, 0 C to 11 B), what it holds over it, the octave its
+ * root sits in, and how loud it is (0–100).
+ */
+export interface DroneSettings {
+  readonly root: number
+  readonly kind: DroneKind
+  readonly octave: number
+  readonly volume: number
+}
+export const DEFAULT_DRONE: DroneSettings = { root: 0, kind: 'fifth', octave: 3, volume: 60 }
 
 /** How a lesson reads: one page of its sections (the plain page), or a section at a time. */
 export const LESSON_READINGS = ['page', 'sections'] as const

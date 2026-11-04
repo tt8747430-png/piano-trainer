@@ -16,18 +16,28 @@ export const PRACTICE_PAGES = {
   exercises: { to: '/practice/exercises', tile: PAGE_TILES.exercises },
   quiz: { to: '/practice/quiz', tile: PAGE_TILES.quiz },
   metronome: { to: '/practice/metronome', tile: PAGE_TILES.metronome },
+  circleOfFifths: { to: '/practice/circle-of-fifths', tile: PAGE_TILES.circleOfFifths },
+  tapTempo: { to: '/practice/tap-tempo', tile: PAGE_TILES.tapTempo },
+  recorder: { to: '/practice/recorder', tile: PAGE_TILES.recorder },
+  drone: { to: '/practice/drone', tile: PAGE_TILES.drone },
+  tuner: { to: '/practice/tuner', tile: PAGE_TILES.tuner },
 } as const satisfies Readonly<Record<string, { to: string; tile: Tile }>>
 export type PracticePageId = keyof typeof PRACTICE_PAGES
 
 /**
- * Practice's groups, each under its heading, in the order a learner reaches for them (ADR 0052):
- * Theory, the things a page shows on the keys; Playing, what the hands play at the keys; Training,
- * the drills and the clock that keeps them.
+ * Practice's groups, each under its heading, in the order a learner reaches for them (ADR 0052, R29
+ * B11): Tools first, what a musician keeps at the piano (the Metronome and the Chord finder among
+ * them); Theory, the things a page shows on the keys; Playing, what the hands play at the keys;
+ * Training, the drills.
  */
 export const PRACTICE_GROUPS = [
+  {
+    id: 'tools',
+    pages: ['metronome', 'chordFinder', 'circleOfFifths', 'tapTempo', 'recorder', 'drone', 'tuner'],
+  },
   { id: 'theory', pages: ['chords', 'scales', 'intervals', 'progressions'] },
-  { id: 'playing', pages: ['chordPlayer', 'accompaniment', 'chordFinder'] },
-  { id: 'training', pages: ['exercises', 'quiz', 'metronome'] },
+  { id: 'playing', pages: ['chordPlayer', 'accompaniment'] },
+  { id: 'training', pages: ['exercises', 'quiz'] },
 ] as const satisfies readonly { id: string; pages: readonly PracticePageId[] }[]
 
 /** Every page of Practice, in the order it lists them. */

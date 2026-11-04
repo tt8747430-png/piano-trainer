@@ -83,7 +83,12 @@ import {
   validateSharedSongSearch,
 } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
-import { CHORD_FINDER_KEPT, chordFinderSearch, readChordFinderSearch } from './routes/tool-search'
+import {
+  CHORD_FINDER_KEPT,
+  chordFinderSearch,
+  circleSearch,
+  readChordFinderSearch,
+} from './routes/tool-search'
 import { chordPlayerSearch, chordPlayerSettingsSearch } from './routes/chord-player-search'
 import { ShellLayout } from './ShellLayout'
 
@@ -664,6 +669,43 @@ const metronomeRoute = createRoute({
   path: '/practice/metronome',
   component: lazyRouteComponent(toolScreens, 'MetronomePage'),
 })
+// The tools (R29 B11): each a page of Practice's Tools on one layout, a Settings page where it has one.
+const metronomeSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/metronome/settings',
+  component: lazyRouteComponent(toolScreens, 'MetronomeSettingsPage'),
+})
+const circleOfFifthsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/circle-of-fifths',
+  ...circleSearch,
+  component: lazyRouteComponent(toolScreens, 'CircleOfFifthsPage'),
+})
+const tapTempoRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/tap-tempo',
+  component: lazyRouteComponent(toolScreens, 'TapTempoPage'),
+})
+const recorderRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/recorder',
+  component: lazyRouteComponent(toolScreens, 'RecorderPage'),
+})
+const droneRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/drone',
+  component: lazyRouteComponent(toolScreens, 'DronePage'),
+})
+const tunerRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/tuner',
+  component: lazyRouteComponent(toolScreens, 'TunerPage'),
+})
+const tunerSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/tuner/settings',
+  component: lazyRouteComponent(toolScreens, 'TunerSettingsPage'),
+})
 
 // Accompaniment: the patterns and their pieces, a page for each source (ADR 0047). A pattern is
 // explained, starred, hidden on its own page; the learner's own are made and edited (ADR 0047).
@@ -1054,6 +1096,13 @@ const routeTree = rootRoute.addChildren([
     exercisesRoute,
     chordFinderRoute,
     metronomeRoute,
+    metronomeSettingsRoute,
+    circleOfFifthsRoute,
+    tapTempoRoute,
+    recorderRoute,
+    droneRoute,
+    tunerRoute,
+    tunerSettingsRoute,
     chordPlayerRoute,
     chordPlayerSettingsRoute,
     trainerRoute,

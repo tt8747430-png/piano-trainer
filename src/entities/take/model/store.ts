@@ -8,6 +8,7 @@ import {
   LONGEST_TAKE_MS,
   TAKE_NAME_MAX,
   takeNumber,
+  type FreeTake,
   type PedalPress,
   type Take,
   type TakeId,
@@ -20,13 +21,15 @@ export const TAKES_VERSION = 2
 /** The learner's takes (ADR 0028), in the order recorded. */
 export interface TakesState {
   readonly takes: readonly Take[]
+  /** The Recorder's free recordings (R29 B11), in the order recorded. */
+  readonly free: readonly FreeTake[]
   /** The next take's number: a deleted id is never given again. */
   readonly nextTake: number
 }
 
 export type TakesStore = StoreApi<TakesState>
 
-const INITIAL: TakesState = { takes: [], nextTake: 1 }
+const INITIAL: TakesState = { takes: [], free: [], nextTake: 1 }
 
 /** A note as it is saved: `[midi, at, held, velocity]`. */
 type SavedNote = readonly [number, number, number, number]
@@ -41,12 +44,14 @@ const savedPress = ({ pedal, down, up }: PedalPress): SavedPress =>
   pedal === 'sustain' ? [down, up] : [down, up, pedal === 'soft' ? 1 : 2]
 
 /** What is saved: each note and press a short list of whole numbers, so a long take stays small. */
-const write = ({ takes, nextTake }: TakesState) => ({
-  takes: takes.map(({ notes, pedals, ...take }) => ({
-    ...take,
-    notes: notes.map((n): SavedNote => [n.midi, n.at, n.held, n.velocity]),
-    pedals: pedals.map(savedPress),
-  })),
+const written = <T extends FreeTake>({ notes, pedals, ...take }: T) => ({
+  ...take,
+  notes: notes.map((n): SavedNote => [n.midi, n.at, n.held, n.velocity]),
+  pedals: pedals.map(savedPress),
+})
+const write = ({ takes, free, nextTake }: TakesState) => ({
+  takes: takes.map(written),
+  free: free.map(written),
   nextTake,
 })
 
@@ -119,7 +124,16 @@ function barsOf(saved: unknown, length: number): number[] | null {
 /** A saved take whose fields read; its notes and presses kept one by one. */
 function takeOf(saved: unknown): Take | null {
   if (!isRecord(saved)) return null
-  const { id, pieceId, name, made, tempo, meter, fromBar, length, notes, pedals } = saved
+  const { pieceId, fromBar } = saved
+  const take = recordingOf(saved)
+  if (!take || typeof pieceId !== 'string' || pieceId === '') return null
+  return { ...take, pieceId, fromBar: barOf(fromBar) }
+}
+
+/** A saved recording, a song's take or a free one, whose fields read; its notes and presses kept one by one. */
+function recordingOf(saved: unknown): FreeTake | null {
+  if (!isRecord(saved)) return null
+  const { id, name, made, tempo, meter, length, notes, pedals } = saved
   const lasting = msWithin(length, LONGEST_TAKE_MS)
   const bars = lasting === null ? null : barsOf(saved.bars, lasting)
   const tempoRead =
@@ -129,8 +143,6 @@ function takeOf(saved: unknown): Take | null {
     tempo <= PIECE_TEMPO.max
   if (
     !isTakeId(id) ||
-    typeof pieceId !== 'string' ||
-    pieceId === '' ||
     typeof made !== 'number' ||
     !Number.isFinite(made) ||
     !tempoRead ||
@@ -144,12 +156,10 @@ function takeOf(saved: unknown): Take | null {
   }
   return {
     id,
-    pieceId,
     ...nameOf(name),
     made,
     tempo,
     meter,
-    fromBar: barOf(fromBar),
     length: lasting,
     notes: kept(notes, (each) => noteOf(each, lasting)),
     pedals: kept(pedals, (each) => pressOf(each, lasting)),
@@ -161,14 +171,15 @@ function takeOf(saved: unknown): Take | null {
 function sanitize(persisted: unknown): TakesState {
   const saved = savedObject<TakesState>(persisted)
   const seen = new Set<TakeId>()
-  const takes = kept(saved.takes, (each) => {
-    const take = takeOf(each)
+  const once = <T extends FreeTake>(take: T | null): T | null => {
     if (!take || seen.has(take.id)) return null
     seen.add(take.id)
     return take
-  })
-  const past = Math.max(0, ...takes.map((take) => takeNumber(take.id))) + 1
+  }
+  const takes = kept(saved.takes, (each) => once(takeOf(each)))
+  const free = kept(saved.free, (each) => once(recordingOf(each)))
+  const past = Math.max(0, ...[...takes, ...free].map((take) => takeNumber(take.id))) + 1
   const next =
     typeof saved.nextTake === 'number' && Number.isSafeInteger(saved.nextTake) ? saved.nextTake : 1
-  return { takes, nextTake: Math.max(next, past, 1) }
+  return { takes, free, nextTake: Math.max(next, past, 1) }
 }

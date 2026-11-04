@@ -668,3 +668,24 @@ describe('the recorded instruments (R29 SND)', () => {
     expect(context.noises.at(-1)?.stop).toBeCloseTo(2.29375)
   })
 })
+
+describe('a drone (R29 B11)', () => {
+  it('holds its keys as one sustained tone, swelling in, through a stop of the music', () => {
+    const { context, audio } = setUp()
+    audio.drone([midi(57), midi(64)], 0.6)
+    expect(context.oscillators.map((o) => Math.round(o.frequency))).toEqual([220, 440, 330, 659])
+    expect(context.oscillators.every((o) => o.stop === -1)).toBe(true)
+    expect(context.gains[0]?.ramps.at(-1)?.at).toBeCloseTo(0.4)
+    audio.stop()
+    expect(context.oscillators.every((o) => o.stop === -1)).toBe(true)
+  })
+
+  it('fades out on its stop, and its oscillators end once it is silent', () => {
+    const { context, audio } = setUp()
+    const stop = audio.drone([midi(57)], 0.6)
+    context.currentTime = 3
+    stop()
+    expect(context.gains[0]?.ramps.at(-1)).toEqual({ value: 0.0001, at: 3.4 })
+    for (const oscillator of context.oscillators) expect(oscillator.stop).toBeCloseTo(3.45)
+  })
+})

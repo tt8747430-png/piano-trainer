@@ -60,6 +60,8 @@ describe('settings selectors', () => {
       chordPlayer: DEFAULT_CHORD_PLAYER,
       accompaniment: DEFAULT_ACCOMPANIMENT,
       bars: DEFAULT_BARS,
+      tuner: { a4: 440 },
+      drone: { root: 0, kind: 'fifth', octave: 3, volume: 60 },
     }
     expect(selectPractice(state)).toBe(DEFAULT_PRACTICE)
     expect(selectSound(state)).toBe(DEFAULT_SOUND)

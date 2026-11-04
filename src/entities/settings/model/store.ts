@@ -82,11 +82,18 @@ import {
   type SettingsState,
   type SoundSettings,
   type TrainerSettings,
+  A4_RANGE,
+  DEFAULT_DRONE,
+  DEFAULT_TUNER,
+  DRONE_OCTAVES,
+  isDroneKind,
+  type DroneSettings,
+  type TunerSettings,
 } from './types'
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 23
+export const SETTINGS_VERSION = 24
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -127,6 +134,8 @@ export function createSettingsStore({
         chordPlayer: DEFAULT_CHORD_PLAYER,
         accompaniment: DEFAULT_ACCOMPANIMENT,
         bars: DEFAULT_BARS,
+        tuner: DEFAULT_TUNER,
+        drone: DEFAULT_DRONE,
       },
       read: sanitize,
     },
@@ -438,5 +447,30 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     chordPlayer: chordPlayerSettings(saved.chordPlayer),
     accompaniment: accompanimentSettings(saved.accompaniment),
     bars: barsSettings(saved.bars),
+    tuner: tunerSettings(saved.tuner),
+    drone: droneSettings(saved.drone),
+  }
+}
+
+/** A whole number from `min` to `max`; null otherwise. */
+const wholeWithin = (value: unknown, { min, max }: { min: number; max: number }): number | null =>
+  typeof value === 'number' && Number.isInteger(value) && value >= min && value <= max
+    ? value
+    : null
+
+/** The Tuner's A as saved, where it is a whole hertz within its range; 440 otherwise. */
+function tunerSettings(value: unknown): TunerSettings {
+  const saved = savedObject<TunerSettings>(value)
+  return { a4: wholeWithin(saved.a4, A4_RANGE) ?? DEFAULT_TUNER.a4 }
+}
+
+/** The Drone's root, kind, octave and volume, each as saved where valid. */
+function droneSettings(value: unknown): DroneSettings {
+  const saved = savedObject<DroneSettings>(value)
+  return {
+    root: wholeWithin(saved.root, { min: 0, max: 11 }) ?? DEFAULT_DRONE.root,
+    kind: isDroneKind(saved.kind) ? saved.kind : DEFAULT_DRONE.kind,
+    octave: wholeWithin(saved.octave, DRONE_OCTAVES) ?? DEFAULT_DRONE.octave,
+    volume: wholeWithin(saved.volume, { min: 0, max: 100 }) ?? DEFAULT_DRONE.volume,
   }
 }

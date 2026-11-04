@@ -3,6 +3,7 @@ export {
   LONGEST_TAKE_MS,
   TAKE_NAME_MAX,
   takeId,
+  type FreeTake,
   type PedalPress,
   type Played,
   type Take,
@@ -16,7 +17,13 @@ export {
   type TakesState,
   type TakesStore,
 } from './model/store'
-export { selectRoomLeft, selectTake, selectTakesOf } from './model/selectors'
+export {
+  selectFreeTake,
+  selectFreeTakes,
+  selectRoomLeft,
+  selectTake,
+  selectTakesOf,
+} from './model/selectors'
 export { TakesStoreProvider, useTakes, useTakesStoreApi } from './model/context'
 export { takeSounds, takeSoundsFrom } from './model/sounds'
 export { barMs, keepBars, takeBarCount, takeBarStart } from './model/bars'

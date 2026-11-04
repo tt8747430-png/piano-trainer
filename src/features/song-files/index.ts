@@ -1,4 +1,5 @@
 export { importSong } from './import-song'
+export { songOfTake } from './model/song-of-take'
 export { exportMidi, type PlayedMusic } from './model/export-midi'
 export type { MusicXmlFormat } from './model/export-music-xml'
 export { ExportSheet, SongExportSheet, type ExportFiles, type ExportShare } from './ui/ExportSheet'

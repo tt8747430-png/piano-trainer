@@ -16,7 +16,9 @@ describe('the Player’s Tools sheet (R29 B8)', () => {
     const sheet = await openTools(user)
     for (const group of ['Quick tools', 'On the score', 'More'])
       expect(within(sheet).getByRole('region', { name: group })).toBeInTheDocument()
-    for (const row of ['Metronome', 'Print', 'Audio and MIDI', 'Transpose', 'Display'])
+    for (const tool of ['Metronome', 'Recorder'])
+      expect(within(sheet).getByRole('group', { name: tool })).toBeInTheDocument()
+    for (const row of ['Tuner', 'Print', 'Audio and MIDI', 'Transpose', 'Display'])
       expect(within(sheet).getByRole('button', { name: new RegExp(`^${row}`) })).toBeInTheDocument()
   })
 

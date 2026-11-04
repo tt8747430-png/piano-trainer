@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { SHEET_NAME_MAX } from '@/entities/chord-sheet'
 import { BackButton, MoreMenu, NewSheet, RoundLink, ScreenHeader } from '@/shared/ui'
 import { ChordPlayer } from '@/widgets/chord-player'
+import { ToolsButton } from '@/widgets/tools-sheet'
 import { useChordPlayerPage } from '../model/use-chord-player-page'
 
 /**
@@ -21,6 +22,7 @@ export function ChordPlayerPage() {
         back={<BackButton />}
         actions={
           <>
+            <ToolsButton />
             <MoreMenu
               label={t('chordPlayer.more')}
               actions={[

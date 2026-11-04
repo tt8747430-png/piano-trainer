@@ -76,6 +76,7 @@ export const player: LocaleResources['player'] = {
     denied: 'Микрофон недоступен. Разрешите его в браузере, чтобы пользоваться тюнером.',
     a4: 'Ля первой октавы',
     hz: '{{hz}} Гц',
+    reference: 'Ля = {{hz}} Гц',
     lower: 'Ниже',
     higher: 'Выше',
   },
