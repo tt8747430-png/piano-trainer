@@ -20,7 +20,7 @@ export function SettingsGroup({
 }: {
   title?: string
   info?: ReactNode
-  footnote?: string
+  footnote?: ReactNode
   flush?: boolean
   /** Its own cards under its name (a list of instruments' families), no card round them. */
   bare?: boolean

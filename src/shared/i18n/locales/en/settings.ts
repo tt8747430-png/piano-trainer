@@ -116,7 +116,9 @@ export const settings = {
   about: {
     version: 'Version',
     madeWith:
-      'Verovio for the scores, Noto fonts, and Supabase for accounts and sync. Piano: Salamander Grand Piano by Alexander Holm (CC BY 3.0)',
+      'Verovio for the scores, Noto fonts, and Supabase for accounts and sync. Piano: Salamander Grand Piano by Alexander Holm,',
+    licence: 'CC BY 3.0',
+    lightPiano: 'The light piano: Splendid Grand Piano by AKAI (public domain).',
     // Software Update, as iOS's: where the next version stands, a tap looks for it.
     update: {
       current: 'Up to date',

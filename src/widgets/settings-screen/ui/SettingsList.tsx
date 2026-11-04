@@ -61,7 +61,24 @@ export function SettingsList() {
           render={<Link to="/settings/connect-piano" />}
         />
       </SettingsGroup>
-      <SettingsGroup flush title={t('groups.help.label')} footnote={t('about.madeWith')}>
+      <SettingsGroup
+        flush
+        title={t('groups.help.label')}
+        footnote={
+          <>
+            {t('about.madeWith')}{' '}
+            <a
+              href="https://creativecommons.org/licenses/by/3.0/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-link underline-offset-2 hover:underline"
+            >
+              {t('about.licence')}
+            </a>
+            . {t('about.lightPiano')}
+          </>
+        }
+      >
         <RowLink
           title={t('help.howToUse')}
           icon={LifeBuoy}

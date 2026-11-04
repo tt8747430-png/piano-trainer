@@ -1,7 +1,7 @@
 {
   "instrument": "piano",
-  "set": "Salamander Grand Piano V3",
-  "licence": "CC-BY-3.0",
+  "set": "Splendid Grand Piano",
+  "licence": "public-domain",
   "layers": [
     {
       "name": "mf",
@@ -10,184 +10,178 @@
   ],
   "samples": [
     {
-      "file": "A0.m4a",
-      "midi": 21,
+      "file": "B0.m4a",
+      "midi": 23,
       "layer": "mf",
-      "bytes": 37838
-    },
-    {
-      "file": "C1.m4a",
-      "midi": 24,
-      "layer": "mf",
-      "bytes": 37848
+      "bytes": 37815
     },
     {
       "file": "Ds1.m4a",
       "midi": 27,
       "layer": "mf",
-      "bytes": 37847
+      "bytes": 37885
     },
     {
-      "file": "Fs1.m4a",
-      "midi": 30,
+      "file": "F1.m4a",
+      "midi": 29,
       "layer": "mf",
-      "bytes": 37770
+      "bytes": 37799
     },
     {
       "file": "A1.m4a",
       "midi": 33,
       "layer": "mf",
-      "bytes": 37857
+      "bytes": 37856
     },
     {
-      "file": "C2.m4a",
-      "midi": 36,
+      "file": "B1.m4a",
+      "midi": 35,
       "layer": "mf",
-      "bytes": 37847
+      "bytes": 37878
     },
     {
-      "file": "Ds2.m4a",
-      "midi": 39,
+      "file": "D2.m4a",
+      "midi": 38,
       "layer": "mf",
-      "bytes": 37801
+      "bytes": 37887
     },
     {
-      "file": "Fs2.m4a",
-      "midi": 42,
+      "file": "F2.m4a",
+      "midi": 41,
       "layer": "mf",
-      "bytes": 37876
+      "bytes": 37834
     },
     {
       "file": "A2.m4a",
       "midi": 45,
       "layer": "mf",
-      "bytes": 37754
+      "bytes": 37870
     },
     {
       "file": "C3.m4a",
       "midi": 48,
       "layer": "mf",
-      "bytes": 37828
+      "bytes": 37753
     },
     {
-      "file": "Ds3.m4a",
-      "midi": 51,
+      "file": "D3.m4a",
+      "midi": 50,
       "layer": "mf",
-      "bytes": 37822
+      "bytes": 37816
     },
     {
-      "file": "Fs3.m4a",
-      "midi": 54,
+      "file": "F3.m4a",
+      "midi": 53,
       "layer": "mf",
-      "bytes": 37911
+      "bytes": 37800
     },
     {
       "file": "A3.m4a",
       "midi": 57,
       "layer": "mf",
-      "bytes": 37829
+      "bytes": 37909
     },
     {
       "file": "C4.m4a",
       "midi": 60,
       "layer": "mf",
-      "bytes": 37854
+      "bytes": 37741
     },
     {
-      "file": "Ds4.m4a",
-      "midi": 63,
+      "file": "D4.m4a",
+      "midi": 62,
       "layer": "mf",
-      "bytes": 37812
+      "bytes": 37840
     },
     {
-      "file": "Fs4.m4a",
-      "midi": 66,
+      "file": "F4.m4a",
+      "midi": 65,
       "layer": "mf",
-      "bytes": 37866
+      "bytes": 37764
     },
     {
       "file": "A4.m4a",
       "midi": 69,
       "layer": "mf",
-      "bytes": 37794
+      "bytes": 37881
     },
     {
       "file": "C5.m4a",
       "midi": 72,
       "layer": "mf",
-      "bytes": 37831
+      "bytes": 37811
     },
     {
-      "file": "Ds5.m4a",
-      "midi": 75,
+      "file": "D5.m4a",
+      "midi": 74,
       "layer": "mf",
-      "bytes": 37933
+      "bytes": 37747
     },
     {
-      "file": "Fs5.m4a",
-      "midi": 78,
+      "file": "F5.m4a",
+      "midi": 77,
       "layer": "mf",
-      "bytes": 37810
+      "bytes": 37840
     },
     {
       "file": "A5.m4a",
       "midi": 81,
       "layer": "mf",
-      "bytes": 37816
+      "bytes": 37808
     },
     {
-      "file": "C6.m4a",
-      "midi": 84,
+      "file": "B5.m4a",
+      "midi": 83,
       "layer": "mf",
-      "bytes": 37789
+      "bytes": 37830
     },
     {
       "file": "Ds6.m4a",
       "midi": 87,
       "layer": "mf",
-      "bytes": 37849
+      "bytes": 37746
     },
     {
       "file": "Fs6.m4a",
       "midi": 90,
       "layer": "mf",
-      "bytes": 37811
+      "bytes": 37677
     },
     {
       "file": "A6.m4a",
       "midi": 93,
       "layer": "mf",
-      "bytes": 37802
+      "bytes": 33459
     },
     {
       "file": "C7.m4a",
       "midi": 96,
       "layer": "mf",
-      "bytes": 37697
+      "bytes": 30755
     },
     {
       "file": "Ds7.m4a",
       "midi": 99,
       "layer": "mf",
-      "bytes": 37752
+      "bytes": 31191
     },
     {
       "file": "Fs7.m4a",
       "midi": 102,
       "layer": "mf",
-      "bytes": 37801
+      "bytes": 29852
     },
     {
       "file": "A7.m4a",
       "midi": 105,
       "layer": "mf",
-      "bytes": 37725
+      "bytes": 29655
     },
     {
       "file": "C8.m4a",
       "midi": 108,
       "layer": "mf",
-      "bytes": 37798
+      "bytes": 32065
     }
   ]
 }

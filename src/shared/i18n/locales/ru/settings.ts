@@ -113,7 +113,9 @@ export const settings: LocaleResources['settings'] = {
   about: {
     version: 'Версия',
     madeWith:
-      'Verovio для нот, шрифты Noto и Supabase для аккаунтов и синхронизации. Фортепиано: Salamander Grand Piano, автор Alexander Holm (CC BY 3.0)',
+      'Verovio для нот, шрифты Noto и Supabase для аккаунтов и синхронизации. Фортепиано: Salamander Grand Piano, автор Alexander Holm,',
+    licence: 'CC BY 3.0',
+    lightPiano: 'Лёгкое фортепиано: Splendid Grand Piano от AKAI (общественное достояние).',
     update: {
       current: 'Последняя версия',
       checking: 'Проверка…',
