@@ -3,8 +3,17 @@ import { BadgeCheck, Copy, Download, Info, LogIn, RefreshCw, Users } from 'lucid
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import { ButtonLink, ScreenHeader, say, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import {
+  ButtonLink,
+  ConfirmDialog,
+  ScreenHeader,
+  say,
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { Checkbox } from '@/shared/ui/primitives/checkbox'
 import { describes, descriptionOf, type usePublish } from '../model/use-publish'
 import { PublishFields, type PublishPreview } from './PublishFields'
 import { PublishSaid } from './PublishSaid'
@@ -135,6 +144,13 @@ function PublishForm({
 }) {
   const { t } = useTranslation('songs')
   const [text, setText] = useState(publishing.description)
+  // Unticked each time the page opens and after each publish (D3): the learner confirms every time.
+  const [rights, setRights] = useState(false)
+  const [unpublishing, setUnpublishing] = useState(false)
+  const publish = async () => {
+    await publishing.publish(text)
+    setRights(false)
+  }
   const live = publishing.state === 'published' || publishing.state === 'changed'
   const changed =
     publishing.state === 'changed' || descriptionOf(text) !== descriptionOf(publishing.description)
@@ -183,37 +199,59 @@ function PublishForm({
       <PublishFields item={item} authorName={publishing.authorName} text={text} onText={setText} />
       {/* The page's foot: what is done to it, Noji's pair of full-width buttons. */}
       <div className="mt-auto flex flex-col gap-3 pt-4">
+        {/* The rights, confirmed each time it is published (R29 D3): Publish waits for the tick. */}
+        {!live || changed ? (
+          <label className="flex cursor-pointer items-start gap-3 px-1 text-sm">
+            <Checkbox
+              className="mt-0.5"
+              checked={rights}
+              onCheckedChange={(on) => setRights(on === true)}
+            />
+            <span>
+              {t('public.rights')}{' '}
+              <Link to="/legal/terms" className="text-link underline-offset-2 hover:underline">
+                {t('public.terms')}
+              </Link>
+            </span>
+          </label>
+        ) : null}
         {live ? (
           <>
             <Button
               size="lg"
-              variant="soft"
-              disabled={publishing.busy}
-              onClick={() => void publishing.unpublish()}
-            >
-              {t('public.unpublishShort')}
-            </Button>
-            <Button
-              size="lg"
-              disabled={publishing.busy || !changed || !describes(text)}
-              onClick={() => void publishing.publish(text)}
+              disabled={publishing.busy || !changed || !describes(text) || !rights}
+              onClick={() => void publish()}
             >
               {t('public.publishNew')}
             </Button>
-          </>
-        ) : (
-          <>
-            <p className="px-1 text-sm text-muted-foreground">{t('public.rights')}</p>
             <Button
               size="lg"
-              disabled={publishing.busy || !describes(text)}
-              onClick={() => void publishing.publish(text)}
+              variant="soft"
+              className="text-destructive"
+              disabled={publishing.busy}
+              onClick={() => setUnpublishing(true)}
             >
-              {t('public.publishConfirm')}
+              {t('public.unpublishShort')}
             </Button>
           </>
+        ) : (
+          <Button
+            size="lg"
+            disabled={publishing.busy || !describes(text) || !rights}
+            onClick={() => void publish()}
+          >
+            {t('public.publishConfirm')}
+          </Button>
         )}
       </div>
+      <ConfirmDialog
+        open={unpublishing}
+        onOpenChange={setUnpublishing}
+        title={t('public.unpublishTitle')}
+        body={t('public.unpublishBody')}
+        action={t('public.unpublishShort')}
+        onConfirm={() => void publishing.unpublish()}
+      />
     </>
   )
 }

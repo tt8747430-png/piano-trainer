@@ -229,6 +229,9 @@ describe('publishing an own song', () => {
     expect(document.body).toHaveTextContent('9 more characters to go')
     expect(publish).toBeDisabled()
     await user.type(description, ' for the morning')
+    // The rights are confirmed each time (D3): Publish waits for the tick.
+    expect(publish).toBeDisabled()
+    await user.click(screen.getByRole('checkbox', { name: /I confirm that the title and composer/ }))
     expect(publish).toBeEnabled()
     await user.click(publish)
     expect(await screen.findByText('Published to the Public library.')).toBeVisible()
@@ -251,8 +254,13 @@ describe('publishing an own song', () => {
     const again = screen.getByRole('button', { name: 'Publish new version' })
     expect(again).toBeDisabled()
     await user.type(screen.getByRole('textbox', { name: 'Description' }), ', slowly')
+    expect(again).toBeDisabled()
+    await user.click(screen.getByRole('checkbox', { name: /I confirm/ }))
     expect(again).toBeEnabled()
+    // Unpublish asks first.
     await user.click(screen.getByRole('button', { name: 'Unpublish' }))
+    const asked = await screen.findByRole('alertdialog', { name: 'Unpublish it?' })
+    await user.click(within(asked).getByRole('button', { name: 'Unpublish' }))
     expect(await screen.findByText('Removed from the Public library.')).toBeVisible()
     await waitFor(() => expect(screen.queryByText('In the library')).toBeNull())
   })

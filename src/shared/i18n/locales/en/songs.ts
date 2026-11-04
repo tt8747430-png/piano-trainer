@@ -333,7 +333,12 @@ export const songs = {
     descriptionLeft_other: '{{count}} more characters to go',
     descriptionCount: '{{count}} of {{max}}',
     preview: 'As others will see it',
-    rights: 'Publish only music you wrote or may share.',
+    rights:
+      'I confirm that the title and composer are correct and that I have the rights to share digital and modified versions of this music.',
+    terms: 'The Terms of Use apply.',
+    unpublishTitle: 'Unpublish it?',
+    unpublishBody:
+      'It leaves the Public library at once. Learners who saved a copy keep theirs. You can publish it again later.',
     why: 'Why publish?',
     whyFoundTitle: 'Found by other learners',
     whyFound: 'Other learners find it, play it and save a copy to learn.',

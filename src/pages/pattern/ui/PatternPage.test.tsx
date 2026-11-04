@@ -177,6 +177,7 @@ describe('a pattern of the learner’s own in the Public library (ADR 0116)', ()
       screen.getByRole('textbox', { name: 'Description' }),
       'A walking bass under jazz chords',
     )
+    await user.click(screen.getByRole('checkbox', { name: /I confirm/ }))
     await user.click(screen.getByRole('button', { name: 'Publish' }))
     expect(await screen.findByText('Published to the Public library.')).toBeInTheDocument()
     const listed = await publicLibrary.browse({ kind: 'pattern', sort: 'new', query: '' })
@@ -191,6 +192,8 @@ describe('a pattern of the learner’s own in the Public library (ADR 0116)', ()
       ],
     })
     await user.click(await screen.findByRole('button', { name: 'Unpublish' }))
+    const asked = await screen.findByRole('alertdialog', { name: 'Unpublish it?' })
+    await user.click(within(asked).getByRole('button', { name: 'Unpublish' }))
     await waitFor(async () =>
       expect(await publicLibrary.browse({ kind: 'pattern', sort: 'new', query: '' })).toEqual({
         ok: true,
