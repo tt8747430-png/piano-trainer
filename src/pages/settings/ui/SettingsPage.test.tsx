@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { stubMatchMedia } from '@/shared/test/match-media'
 import { renderApp } from '@/app/testing/render-app'
+import { createFakeErrorReporter } from '@/shared/api/errors'
 import { untranslated } from '@/app/testing/untranslated'
 import { LAPTOP } from '@/shared/lib'
 import { stubServiceWorker } from '@/shared/test/pwa-register'
@@ -268,5 +269,21 @@ describe('Settings', () => {
     await waitFor(() =>
       expect(skipWaiting).toHaveBeenCalledExactlyOnceWith({ type: 'SKIP_WAITING' }),
     )
+  })
+
+  it('sends a problem from Help’s Report a problem with the app’s reports (R29 B2)', async () => {
+    const user = userEvent.setup()
+    const errors = createFakeErrorReporter()
+    await renderApp('/settings', { errors })
+    await user.click(await screen.findByRole('button', { name: 'Report a problem' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Report a problem' })
+    const send = within(sheet).getByRole('button', { name: 'Send' })
+    expect(send).toBeDisabled()
+    await user.type(within(sheet).getByRole('textbox'), 'The metronome stops at 200')
+    await user.click(send)
+    expect(errors.sent).toEqual([
+      expect.objectContaining({ message: 'Report: The metronome stops at 200' }),
+    ])
+    expect(await screen.findByText('Sent. Thank you.')).toBeInTheDocument()
   })
 })

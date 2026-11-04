@@ -33,6 +33,14 @@ export const legal = {
         heading: 'Taking it with you, and deleting it',
         text: 'Settings › Storage and backup saves a backup of everything to a file. Settings › Account deletes your account: it is removed for good after 30 days, and signing in before then lets you keep it.',
       },
+      children: {
+        heading: 'Children',
+        text: 'You need to be 13 or older to make an account. Younger learners can use the app without one, with everything kept on their device. If we learn that an account belongs to a child under 13, we delete it.',
+      },
+      contact: {
+        heading: 'Questions',
+        text: 'Ask about your data, or anything on this page, through Settings › Help › Report a problem. The app’s editors read every report.',
+      },
     },
   },
   terms: {
@@ -48,11 +56,19 @@ export const legal = {
       },
       publish: {
         heading: 'What you publish',
-        text: 'Publish only music you wrote, or may share. You keep the rights to it; publishing lets anyone play it and save a copy of it in the app. Songs that break someone’s rights, or are offensive, are taken out.',
+        text: 'Publish only music you wrote, or have the rights to share in digital and changed versions; each time you publish, you confirm that its title and composer are right and that you have those rights. You keep your rights. Publishing lets the app show your song or pattern in the Public library, and lets anyone play it and save a copy in the app. Anything reported as breaking someone’s rights, or as offensive, is read by the app’s editors and taken out if the report holds.',
       },
       content: {
         heading: 'The app’s own content',
         text: 'The lessons, songs and exercises that come with the app are for your own learning. The songs are public domain or arranged for the app.',
+      },
+      thirdParty: {
+        heading: 'Other people’s work in the app',
+        text: 'The app is built with other people’s work, each under its own licence: Verovio draws the scores, the Noto fonts set the text, Salamander Grand Piano (by Alexander Holm, CC BY 3.0) and Splendid Grand Piano (by AKAI, public domain) are the piano’s sound. Settings › Help lists them.',
+      },
+      contact: {
+        heading: 'Questions',
+        text: 'Ask about these terms through Settings › Help › Report a problem.',
       },
       changes: {
         heading: 'Changes',

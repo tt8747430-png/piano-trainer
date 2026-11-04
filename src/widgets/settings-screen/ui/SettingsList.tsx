@@ -14,6 +14,7 @@ import { useMidiSummary } from '@/features/connect-midi'
 import { useAccount, useLearnerView } from '@/shared/lib/account'
 import { RowLink, SettingsGroup, SwitchRow } from '@/shared/ui'
 import { AccountCard } from './AccountCard'
+import { ReportProblem } from './ReportProblem'
 import { UpdateRows } from './UpdateRows'
 
 /**
@@ -97,6 +98,7 @@ export function SettingsList() {
           paint="sand"
           render={<Link to="/legal/terms" />}
         />
+        <ReportProblem />
         <UpdateRows />
       </SettingsGroup>
       {learner.can ? (

@@ -163,6 +163,12 @@ export const settings = {
     signOut: 'Sign out',
   },
   // Help (ADR 0052): How to use, a short guide in plain steps, each part folding.
+  report: {
+    label: 'Report a problem',
+    what: 'What went wrong, and where? The app’s editors read every report.',
+    send: 'Send',
+    sent: 'Sent. Thank you.',
+  },
   help: {
     howToUse: 'How to use',
     privacy: 'Privacy',

@@ -3,11 +3,21 @@ import { useLocale } from '@/shared/i18n'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 
 /** When either page last changed. */
-const UPDATED = new Date(Date.UTC(2026, 9, 29))
+const UPDATED = new Date(Date.UTC(2026, 10, 4))
 
 /** Each page's sections, in their order. */
-const PRIVACY = ['device', 'account', 'sync', 'public', 'errors', 'where', 'delete'] as const
-const TERMS = ['use', 'account', 'publish', 'content', 'changes'] as const
+const PRIVACY = [
+  'device',
+  'account',
+  'sync',
+  'public',
+  'errors',
+  'where',
+  'delete',
+  'children',
+  'contact',
+] as const
+const TERMS = ['use', 'account', 'publish', 'content', 'thirdParty', 'contact', 'changes'] as const
 
 /**
  * The app's Privacy or Terms (ADR 0116), in one column: its title, when it last changed, then a heading

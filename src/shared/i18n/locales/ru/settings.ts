@@ -158,6 +158,12 @@ export const settings: LocaleResources['settings'] = {
     signOut: 'Выйти',
   },
 
+  report: {
+    label: 'Сообщить о проблеме',
+    what: 'Что пошло не так и где? Редакторы приложения читают каждое сообщение.',
+    send: 'Отправить',
+    sent: 'Отправлено. Спасибо.',
+  },
   help: {
     howToUse: 'Как пользоваться',
     privacy: 'Конфиденциальность',
