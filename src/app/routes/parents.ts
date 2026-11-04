@@ -243,6 +243,11 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/practice/progressions/$progressionId/edit': () => up({ to: '/practice/progressions' }),
   '/shell/practice/chord-finder': toPractice,
   '/shell/practice/metronome': toPractice,
+  '/shell/practice/chord-player': toPractice,
+  '/shell/practice/chord-player/settings': ({ search }) => {
+    const sheet = text(search.sheet)
+    return up({ to: '/practice/chord-player', search: sheet === undefined ? {} : { sheet } })
+  },
   '/shell/practice/quiz': toPractice,
   '/shell/practice/quiz/$trainerId': () => up({ to: '/practice/quiz' }),
   '/shell/practice/exercises': toPractice,

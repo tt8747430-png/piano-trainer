@@ -11,6 +11,7 @@ export const PRACTICE_PAGES = {
   intervals: { to: '/practice/intervals', tile: PAGE_TILES.intervals },
   progressions: { to: '/practice/progressions', tile: PAGE_TILES.progressions },
   accompaniment: { to: '/practice/accompaniment', tile: PAGE_TILES.patterns },
+  chordPlayer: { to: '/practice/chord-player', tile: PAGE_TILES.chordPlayer },
   chordFinder: { to: '/practice/chord-finder', tile: PAGE_TILES.chordFinder },
   exercises: { to: '/practice/exercises', tile: PAGE_TILES.exercises },
   quiz: { to: '/practice/quiz', tile: PAGE_TILES.quiz },
@@ -25,7 +26,7 @@ export type PracticePageId = keyof typeof PRACTICE_PAGES
  */
 export const PRACTICE_GROUPS = [
   { id: 'theory', pages: ['chords', 'scales', 'intervals', 'progressions'] },
-  { id: 'playing', pages: ['accompaniment', 'chordFinder'] },
+  { id: 'playing', pages: ['chordPlayer', 'accompaniment', 'chordFinder'] },
   { id: 'training', pages: ['exercises', 'quiz', 'metronome'] },
 ] as const satisfies readonly { id: string; pages: readonly PracticePageId[] }[]
 

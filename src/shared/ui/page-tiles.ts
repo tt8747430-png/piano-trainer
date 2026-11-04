@@ -13,6 +13,7 @@ import {
   Folder,
   ScanSearch,
   Ruler,
+  SquarePlay,
   type LucideIcon,
 } from 'lucide-react'
 import type { Paint } from './paint'
@@ -38,6 +39,8 @@ export const PAGE_TILES = {
   tensions: { icon: Layers, paint: 'grass' },
   patterns: { icon: AudioWaveform, paint: 'yellow' },
   progressions: { icon: ListMusic, paint: 'grass' },
+  // The Chord player (R29 CP1): a chord sheet played by a band.
+  chordPlayer: { icon: SquarePlay, paint: 'lilac' },
   chordFinder: { icon: ScanSearch, paint: 'sky' },
   exercises: { icon: Dumbbell, paint: 'sand' },
   quiz: { icon: ListChecks, paint: 'lilac' },

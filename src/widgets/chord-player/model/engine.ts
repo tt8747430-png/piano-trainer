@@ -1,4 +1,4 @@
-import type { ChordSheetSettings } from '@/entities/chord-sheet'
+import { DEFAULT_SHEET_SETTINGS, type ChordSheetSettings } from '@/entities/chord-sheet'
 import { variationParts, type Style } from '@/entities/pattern'
 import { PLAY_DELAY, type AudioOutput, type PlayHandle } from '@/shared/api/audio'
 import {
@@ -8,7 +8,14 @@ import {
   type DrumVoice,
   type PlayedBar,
 } from '@/shared/lib/arrangement'
-import { barTicks, beatsPerBar, beatsToTicks, TICKS_PER_BEAT, type Tick } from '@/shared/lib/music'
+import {
+  barTicks,
+  beatsPerBar,
+  beatsToTicks,
+  C_MAJOR,
+  TICKS_PER_BEAT,
+  type Tick,
+} from '@/shared/lib/music'
 import { SWING_SHARE, type KitPiece, type Sound } from '@/shared/lib/schedule'
 
 /** What the transport plays, read again before each chord: an edit lands at the next one. */
@@ -356,6 +363,35 @@ export type ChordEngine = ReturnType<typeof createChordEngine>
 
 const sameBox = (a: BoxPlace | null, b: BoxPlace | null) =>
   a === b || (a !== null && b !== null && a.section === b.section && a.index === b.index)
+
+/** A bar of a style over C at its tempo (its Style sheet's ▷): its first variation, its parts as written. */
+export function styleBar(style: Style): Sound[] {
+  const sheet: ChordSheet = {
+    key: C_MAJOR,
+    meter: style.meter,
+    sections: [
+      {
+        kind: 'verse',
+        repeats: 1,
+        variation: 1,
+        chords: [
+          { chord: { root: C_MAJOR.tonic, quality: 'maj' }, beats: beatsPerBar(style.meter) },
+        ],
+      },
+    ],
+  }
+  const { band, windows } = arranged(
+    { sheet, style, tempo: style.tempo, settings: DEFAULT_SHEET_SETTINGS },
+    null,
+  )
+  const seconds = (ticks: Tick) => (ticks * 60) / (style.tempo * TICKS_PER_BEAT)
+  return windows.flatMap((window) =>
+    windowSounds(band, window, seconds, style.swing, 0).map((sound) => ({
+      ...sound,
+      at: sound.at + seconds(window.from),
+    })),
+  )
+}
 
 /** A clock in a Worker, ticking every 50 ms: a hidden tab throttles a page's timers, not a worker's. */
 export const workerTicker: Ticker = (onTick) => {

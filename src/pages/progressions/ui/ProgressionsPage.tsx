@@ -6,7 +6,14 @@ import { libraryProgression } from '@/entities/progression-library'
 import { useSetSearch } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { keyFromParam } from '@/shared/lib/music'
-import { BackButton, RoundButton, RoundLink, ScreenHeader, Segmented } from '@/shared/ui'
+import {
+  BackButton,
+  ButtonLink,
+  RoundButton,
+  RoundLink,
+  ScreenHeader,
+  Segmented,
+} from '@/shared/ui'
 import { NewProgressionSheet } from '@/widgets/content-editor'
 import { SettingsGear } from '@/widgets/practice-pages'
 import {
@@ -70,6 +77,17 @@ export function ProgressionsPage() {
         onChange={(tab) => onChange({ tab: tab === 'progression' ? undefined : tab })}
       />
       <ProgressionExplorer view={view} onChange={onChange} />
+      {/* The Chord player plays the same chords in a style (R29 CP1): each page opens the other. */}
+      {view.tab === undefined ? (
+        <ButtonLink
+          variant="outline"
+          size="lg"
+          className="self-start"
+          render={<Link to="/practice/chord-player" search={{ p: view.p, key: view.key }} />}
+        >
+          {t('progressions.inChordPlayer')}
+        </ButtonLink>
+      ) : null}
       {editsContent(account) ? (
         <NewProgressionSheet open={newOne} onOpenChange={setNewOne} />
       ) : null}
