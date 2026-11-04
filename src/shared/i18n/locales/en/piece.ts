@@ -126,6 +126,10 @@ export const piece = {
   },
   settings: {
     details: 'Details',
+    appearance: 'Appearance',
+    look: 'Colour and picture',
+    lookSave: 'Save',
+    lookRemove: 'Remove',
     duplicate: 'Duplicate',
     duplicateTitle: 'Duplicate {{title}}?',
     duplicateBody:

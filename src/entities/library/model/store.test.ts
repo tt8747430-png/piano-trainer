@@ -67,6 +67,7 @@ describe('createLibraryStore', () => {
       ],
       sort: 'recent',
       nextFolder: 4,
+      songLooks: { bz5: { picture: 'piano', paint: 'grass' } },
       cardLooks: {
         home: DEFAULT_CARD_LOOK,
         'folder-3': { ...DEFAULT_CARD_LOOK, density: 'large' },

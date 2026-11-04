@@ -45,6 +45,8 @@ export interface LibraryState {
   readonly nextFolder: number
   /** How each place draws its rows, where the learner (or an editor, for everyone) styled them (B9). */
   readonly cardLooks: Partial<Record<CardPlace, CardLook>>
+  /** A song's own colour and picture (B9, Appearance), where the learner gave it one. */
+  readonly songLooks: Partial<Record<PieceId, FolderLook>>
 }
 
 export type LibraryStore = StoreApi<LibraryState>
@@ -57,6 +59,7 @@ export const INITIAL_LIBRARY: LibraryState = {
   sort: 'manual',
   nextFolder: 1,
   cardLooks: {},
+  songLooks: {},
 }
 
 export const createLibraryStore = (saving: SavingOptions = {}): LibraryStore =>
@@ -114,6 +117,16 @@ function placeOf(saved: unknown): SongPlace {
   return { folder: isFolderId(place.folder) ? place.folder : null, index: indexOf(place.index) }
 }
 
+/** Each song's look that reads: a picture and a paint of the lists, else none. */
+function songLooksOf(saved: unknown): Partial<Record<PieceId, FolderLook>> {
+  if (!isRecord(saved)) return {}
+  const looks: Partial<Record<PieceId, FolderLook>> = {}
+  for (const [id, look] of Object.entries(saved))
+    if (isPieceIdText(id) && isRecord(look) && isPicture(look.picture) && isPaint(look.paint))
+      looks[id] = { picture: look.picture, paint: look.paint }
+  return looks
+}
+
 /** Stored JSON is untrusted: what reads is kept, each folder and each song once, as many as are kept. */
 function sanitize(persisted: unknown): LibraryState {
   const saved = savedObject<LibraryState>(persisted)
@@ -157,6 +170,7 @@ function sanitize(persisted: unknown): LibraryState {
     archive: archive.slice(0, MOST_PIECES),
     sort: isSort(saved.sort) ? saved.sort : 'manual',
     nextFolder: Math.max(next, past, 1),
+    songLooks: songLooksOf(saved.songLooks),
     cardLooks: sanitiseCardLooks(
       saved.cardLooks,
       (place): place is CardPlace => place === 'home' || isFolderId(place),

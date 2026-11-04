@@ -1,6 +1,7 @@
 import { barOf, useSettings } from '@/entities/settings'
 import { Heart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { FOLDER_PICTURE_ICONS, useLibrary } from '@/entities/library'
 import { PieceLink, type Entry } from '@/entities/piece'
 import { cn, useLongPress } from '@/shared/lib'
 import { RowFace, SwipeRow } from '@/shared/ui'
@@ -49,7 +50,9 @@ export function SongRow({
   // What the place's look shows (R29 B9, Card style): the key and progress at its end, its chords.
   const { show } = useCardLook()
   const { face } = useEntryFace(entry, show)
-  const shown = show.chords ? face : { ...face, children: null }
+  // Its own colour and picture where the learner gave it one (B9, Appearance).
+  const look = useLibrary((state) => state.songLooks[entry.id])
+  const plain = show.chords ? face : { ...face, children: null }
   const press = useLongPress({ onLongPress: onSelect })
   return (
     <li>
@@ -60,7 +63,11 @@ export function SongRow({
       >
         <div className={cn(ROW_CARD, 'has-[>a:hover]:bg-muted')}>
           <PieceLink entry={entry} className={ROW_BODY} {...press}>
-            <RowFace {...shown} />
+            {look ? (
+              <RowFace {...plain} icon={FOLDER_PICTURE_ICONS[look.picture]} paint={look.paint} />
+            ) : (
+              <RowFace {...plain} />
+            )}
           </PieceLink>
           {favourite ? <FavouriteMark /> : null}
           <RowMore label={t('library.moreOf', { name: face.title })} actions={menuOf(actions)} />

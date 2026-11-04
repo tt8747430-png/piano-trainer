@@ -33,3 +33,20 @@ describe('Duplicate (R29 B9)', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe(`/songs/${copy?.id}`))
   })
 })
+
+describe('Appearance (R29 B9)', () => {
+  it('gives the song a colour and picture its row wears, and Remove takes them off', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs/bz5/settings')
+    await user.click(await screen.findByRole('button', { name: 'Colour and picture' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Colour and picture' })
+    await user.click(within(sheet).getByRole('radio', { name: 'Piano' }))
+    await user.click(within(sheet).getByRole('radio', { name: 'Grass' }))
+    await user.click(within(sheet).getByRole('button', { name: 'Save' }))
+    expect(libraryStore.getState().songLooks['bz5']).toEqual({ picture: 'piano', paint: 'grass' })
+    await user.click(screen.getByRole('button', { name: 'Colour and picture' }))
+    const again = await screen.findByRole('dialog', { name: 'Colour and picture' })
+    await user.click(within(again).getByRole('button', { name: 'Remove' }))
+    expect(libraryStore.getState().songLooks['bz5']).toBeUndefined()
+  })
+})

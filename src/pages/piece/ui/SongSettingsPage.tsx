@@ -8,6 +8,7 @@ import {
   FolderInput,
   Globe,
   Link2,
+  Palette,
 } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -48,6 +49,7 @@ import { ResetStepsRow } from '@/features/reset-progress'
 import { pieceStepId } from '@/entities/step'
 import { useSongPublish } from '../model/use-song-publish'
 import { OwnMusicAsk } from './OwnMusicAsk'
+import { SongLookSheet } from './SongLookSheet'
 import { OriginalSongDetails, OwnSongDetails } from './SongDetails'
 
 /** The route's song, or the way back where it is gone (an own song deleted in another tab). */
@@ -86,6 +88,7 @@ function SongSettings({ piece }: { piece: Piece }) {
   const [exporting, setExporting] = useState(false)
   const [asking, setAsking] = useState(false)
   const [copying, setCopying] = useState(false)
+  const [looking, setLooking] = useState(false)
   const piecesStore = usePiecesStoreApi()
   const navigate = useNavigate()
   const copyable = !isDegreePiece(piece)
@@ -157,6 +160,17 @@ function SongSettings({ piece }: { piece: Piece }) {
               icon={FileText}
               paint="sky"
               onClick={() => setSearch({ page: 'details' })}
+            />
+          </SettingsGroup>
+        ) : null}
+        {/* Its row's colour and picture (R29 B9, Appearance), the learner's own. */}
+        {inLibrary ? (
+          <SettingsGroup flush title={t('settings.appearance')}>
+            <RowButton
+              title={t('settings.look')}
+              icon={Palette}
+              paint="sky"
+              onClick={() => setLooking(true)}
             />
           </SettingsGroup>
         ) : null}
@@ -259,6 +273,7 @@ function SongSettings({ piece }: { piece: Piece }) {
             : undefined
         }
       />
+      {inLibrary ? <SongLookSheet id={piece.id} open={looking} onOpenChange={setLooking} /> : null}
       <ConfirmDialog
         open={copying}
         onOpenChange={setCopying}

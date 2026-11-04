@@ -123,6 +123,10 @@ export const piece: LocaleResources['piece'] = {
     editMusic: 'Изменить ноты',
   },
   settings: {
+    appearance: 'Оформление',
+    look: 'Цвет и картинка',
+    lookSave: 'Сохранить',
+    lookRemove: 'Убрать',
     duplicate: 'Создать копию',
     duplicateTitle: 'Создать копию «{{title}}»?',
     duplicateBody:
