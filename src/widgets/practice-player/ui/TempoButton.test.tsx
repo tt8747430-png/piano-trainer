@@ -6,10 +6,9 @@ import { i18n } from '@/shared/i18n'
 import { TempoButton } from './TempoButton'
 
 function renderTempo(props: Partial<Parameters<typeof TempoButton>[0]> = {}) {
-  const handlers = { onWait: vi.fn(), onTempo: vi.fn(), onSpeedTraining: vi.fn() }
+  const handlers = { onTempo: vi.fn(), onSpeedTraining: vi.fn() }
   renderWithSettings(
     <TempoButton
-      mode="listen"
       tempo={72}
       shownTempo={72}
       ownTempo={72}
@@ -22,7 +21,7 @@ function renderTempo(props: Partial<Parameters<typeof TempoButton>[0]> = {}) {
 }
 
 describe('TempoButton', () => {
-  it('says the tempo as a share of the piece’s, or Wait', () => {
+  it('says the tempo as a share of the piece’s', () => {
     renderTempo({ tempo: 54, shownTempo: 54 })
     expect(screen.getByRole('button', { name: 'Tempo: 75%' })).toBeInTheDocument()
   })
@@ -34,22 +33,25 @@ describe('TempoButton', () => {
     expect(gauge?.getAttribute('class')).not.toMatch(/:hidden/)
   })
 
-  it('chooses Wait mode or a speed', async () => {
+  it('chooses a speed, Wait mode the Modes sheet’s (R29 B8)', async () => {
     const user = userEvent.setup()
-    const { onWait, onTempo } = renderTempo()
+    const { onTempo } = renderTempo()
     await user.click(screen.getByRole('button', { name: 'Tempo: 100%' }))
     expect(await screen.findByRole('dialog', { name: 'Tempo' })).toBeInTheDocument()
     expect(
       await screen.findByRole('option', { name: 'Original tempo', selected: true }),
     ).toBeInTheDocument()
-    await user.click(screen.getByRole('option', { name: 'Wait mode' }))
-    expect(onWait).toHaveBeenCalled()
-    await user.click(screen.getByRole('button', { name: 'Tempo: 100%' }))
+    expect(screen.queryByRole('option', { name: 'Wait mode' })).not.toBeInTheDocument()
     await user.click(await screen.findByRole('option', { name: '50% speed' }))
     expect(onTempo).toHaveBeenLastCalledWith(36)
   })
 
-  it('only sets how fast the music plays back where it has no Wait mode or speed training (the editor’s)', async () => {
+  it('is a foot bar’s tool, its icon over its name, saying a changed tempo (R29 B8)', () => {
+    renderTempo({ look: 'foot', tempo: 54, shownTempo: 54 })
+    expect(screen.getByRole('button', { name: 'Tempo: 75%' })).toHaveTextContent('75%')
+  })
+
+  it('only sets how fast the music plays back where it has no speed training (the editor’s)', async () => {
     const user = userEvent.setup()
     const onTempo = vi.fn()
     renderWithSettings(<TempoButton tempo={45} ownTempo={90} onTempo={onTempo} />)
@@ -57,7 +59,6 @@ describe('TempoButton', () => {
     expect(
       await screen.findByRole('option', { name: '50% speed', selected: true }),
     ).toBeInTheDocument()
-    expect(screen.queryByRole('option', { name: 'Wait mode' })).not.toBeInTheDocument()
     expect(screen.queryByRole('switch', { name: /Speed training/ })).not.toBeInTheDocument()
     await user.click(screen.getByRole('option', { name: 'Original tempo' }))
     expect(onTempo).toHaveBeenLastCalledWith(90)

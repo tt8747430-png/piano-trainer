@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
 import { selectKeyboard, selectScoreView, useSettings } from '@/entities/settings'
-import { MidiButton } from '@/features/connect-midi'
+import { isMidiConnected, MidiButton, useMidiConnection } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Recording } from '@/shared/lib/schedule'
@@ -21,8 +21,11 @@ import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
   ClickButton,
   CountInBeat,
-  HandsButton,
+  FootTool,
   LoopButton,
+  MODE_LOOK,
+  ModesSheet,
+  PlayerFoot,
   PedalLamp,
   PlayerArea,
   PlayerScreen,
@@ -158,6 +161,10 @@ export function PlayerLayout({
     if (!twoHands && chosenHands !== 'both') setHands('both')
   }, [twoHands, chosenHands, setHands])
   usePlayerShortcuts(player, view, onClose)
+  // The Modes sheet (R29 B8), from the foot bar's Modes.
+  const [modesOpen, setModesOpen] = useState(false)
+  const { connection } = useMidiConnection()
+  const playable = isMidiConnected(connection) || player.keys
   // Print (ADR 0107): the music printed as the View shows it, while its render stands.
   const [printing, setPrinting] = useState(false)
   const [exporting, setExporting] = useState(false)
@@ -325,37 +332,52 @@ export function PlayerLayout({
         area="status"
         className="text-center landscape-phone:max-w-[45vw] landscape-phone:self-center"
       >
-        {view.mode === 'wait' ? (
+        {view.mode !== 'listen' ? (
           <WaitLine feedback={player.feedback} onAgain={practice.play} onLoop={player.setLoop} />
         ) : null}
         {status}
       </PlayerArea>
       {/* On a phone held upright the transport may stand into the gutters: it floats over the
-          sheet, and its seven controls (the tempo's value the longest) need the screen's width. */}
+          sheet, its five controls the screen's width at most. */}
       <PlayerArea
         area="dock"
         className="flex justify-center max-sm:-mx-gutter landscape-phone:items-center"
       >
         <PlayerDock
           practice={practice}
-          tempo={
-            <TempoButton
-              mode={view.mode}
-              tempo={player.tempo}
-              shownTempo={player.shownTempo}
-              ownTempo={player.ownTempo}
-              speedTraining={view.speedTraining}
-              onWait={() => player.setMode('wait')}
-              onTempo={player.listenAt}
-              onSpeedTraining={player.setSpeedTraining}
-            />
-          }
-          loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
           sound={<ClickButton on={player.click} onChange={player.setClick} />}
-          hands={twoHands ? <HandsButton hands={view.hands} onChange={player.setHands} /> : null}
         />
       </PlayerArea>
       {dock === 'top' ? null : keys}
+      <PlayerFoot>
+        <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />
+        <TempoButton
+          look="foot"
+          mode={view.mode}
+          tempo={player.tempo}
+          shownTempo={player.shownTempo}
+          ownTempo={player.ownTempo}
+          speedTraining={view.speedTraining}
+          onTempo={player.setTempo}
+          onSpeedTraining={player.setSpeedTraining}
+        />
+        <FootTool
+          icon={MODE_LOOK[view.mode].icon}
+          label={t('modes.open')}
+          aria-haspopup="dialog"
+          onClick={() => setModesOpen(true)}
+        />
+      </PlayerFoot>
+      <ModesSheet
+        open={modesOpen}
+        onOpenChange={setModesOpen}
+        mode={view.mode}
+        hands={view.hands}
+        twoHands={twoHands}
+        piano={playable}
+        onMode={player.setMode}
+        onHands={player.setHands}
+      />
       <CountInBeat count={practice.counting} />
       <PlayerExport
         open={exporting}

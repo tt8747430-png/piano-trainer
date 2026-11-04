@@ -210,21 +210,17 @@ describe('Player', () => {
     expect(settingsStore.getState().scoreView).toMatchObject({ music: 'grid', keys: false })
   })
 
-  it('holds the tempo, ‹, Play, ›, the loop, the metronome and the hands in one toolbar named Playback (ADR 0108, B7)', async () => {
+  it('holds Restart, ‹, Play, › and the metronome in one toolbar named Playback, the loop, tempo and modes in the foot bar (R29 B8)', async () => {
     await renderApp('/play/romashki')
     const dock = await screen.findByRole('toolbar', { name: 'Playback' })
     const names = within(dock)
       .getAllByRole('button')
       .map((button) => button.getAttribute('aria-label'))
-    expect(names).toEqual([
-      'Tempo: 100%',
-      'Back',
-      'Play',
-      'Next',
-      'Loop',
-      'Metronome',
-      'Hands: Both hands',
-    ])
+    expect(names).toEqual(['Restart', 'Back', 'Play', 'Next', 'Metronome'])
+    const foot = screen.getByRole('toolbar', { name: 'Practice tools' })
+    expect(within(foot).getByRole('button', { name: 'Loop' })).toBeInTheDocument()
+    expect(within(foot).getByRole('button', { name: 'Tempo: 100%' })).toBeInTheDocument()
+    expect(within(foot).getByRole('button', { name: 'Modes' })).toBeInTheDocument()
     expect(within(dock).getByRole('button', { name: 'Play' })).toHaveAttribute(
       'title',
       'Play (Space)',
@@ -449,7 +445,6 @@ describe('Player', () => {
     expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1)
     expect(screen.getByRole('button', { name: 'Close' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Tempo: 100%' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Hands: Both hands' })).toBeInTheDocument()
     expect(await screen.findByRole('button', { name: 'Bar 1: G' })).toBeInTheDocument()
     expect(progressStore.getState().practised.bz5).toBeDefined()
   })
@@ -514,21 +509,24 @@ describe('Player', () => {
     expect(audio.played).toHaveLength(2)
   })
 
-  it('chooses Wait mode and a speed from the tempo popover', async () => {
+  it('chooses a mode from the Modes sheet, in the URL without a history entry, and a speed from the tempo popover (R29 B8)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
-    await user.click(await screen.findByRole('button', { name: 'Tempo: 100%' }))
-    await user.click(await screen.findByRole('option', { name: 'Wait mode' }))
+    const entries = router.history.length
+    await user.click(await screen.findByRole('button', { name: 'Modes' }))
+    await user.click(await screen.findByRole('radio', { name: /^Sight-read/ }))
     expect(router.state.location.search).toMatchObject({ mode: 'wait' })
-    await user.click(screen.getByRole('button', { name: 'Tempo: Wait' }))
+    expect(router.history.length).toBe(entries)
+    await user.keyboard('{Escape}')
+    await user.click(screen.getByRole('button', { name: 'Tempo: 100%' }))
     await user.click(await screen.findByRole('option', { name: '50% speed' }))
-    expect(router.state.location.search).toEqual({ tempo: 36 })
+    expect(router.state.location.search).toEqual({ mode: 'wait', tempo: 36 })
   })
 
   it('waits for the notes in Wait mode once playing, says a wrong key, and takes the right ones from MIDI', async () => {
     const user = userEvent.setup()
     // The song's pattern opens with the left hand alone, so the left hand has notes to play at once.
-    const { midi: midiKeyboard } = await renderApp('/play/bz5?mode=wait&hands=lh')
+    const { midi: midiKeyboard } = await renderApp('/play/bz5?mode=practice&hands=lh')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     const prompt = await screen.findByText(/^Play /)
     const notes = prompt.textContent?.replace(/^Play /, '').split(' ') ?? []
@@ -546,20 +544,20 @@ describe('Player', () => {
     expect(await screen.findByText('Correct')).toBeInTheDocument()
   })
 
-  it('chooses a hand, muting the other staff', async () => {
+  it('chooses a hand in Practice, inline in the Modes sheet, muting the other staff (R29 B8)', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/play/bz5')
-    await user.click(await screen.findByRole('button', { name: 'Hands: Both hands' }))
-    await user.click(await screen.findByRole('option', { name: 'Left hand' }))
-    expect(router.state.location.search).toMatchObject({ hands: 'lh' })
+    const { router } = await renderApp('/play/bz5?mode=practice')
+    await user.click(await screen.findByRole('button', { name: 'Modes' }))
+    await user.click(await screen.findByRole('radio', { name: 'Left' }))
+    expect(router.state.location.search).toMatchObject({ mode: 'practice', hands: 'lh' })
     expect(document.querySelector('[data-slot="score"]')).toHaveAttribute('data-muted', 'treble')
   })
 
-  it('loops the bar the cursor is in from the transport, pressed while it loops, and removes the loop', async () => {
+  it('loops the bar the cursor is in from the foot bar, pressed while it loops, and removes the loop', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
-    const transport = await screen.findByRole('toolbar', { name: 'Playback' })
-    const loop = within(transport).getByRole('button', { name: 'Loop' })
+    const foot = await screen.findByRole('toolbar', { name: 'Practice tools' })
+    const loop = within(foot).getByRole('button', { name: 'Loop' })
     await user.click(loop)
     expect(router.state.location.search).toMatchObject({ loop: '1-1' })
     expect(loop).toHaveAttribute('aria-pressed', 'true')

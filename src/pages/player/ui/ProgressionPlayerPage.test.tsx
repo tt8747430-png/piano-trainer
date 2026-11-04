@@ -6,6 +6,9 @@ import { PATTERNS_STORAGE_KEY } from '@/entities/pattern'
 import { createMemoryStorage } from '@/shared/lib'
 import { pickKey } from '@/shared/test/pickers'
 
+/** The lowest key the right hand plays these chords from: the left hand's bass is under it. */
+const RIGHT_HAND = 48
+
 describe('A progression in the Player', () => {
   it('plays numerals in a key as sheet music, titled by them', async () => {
     await renderApp('/play/progression?p=ii-V-I&key=Bb')
@@ -31,9 +34,7 @@ describe('A progression in the Player', () => {
 
   it('starts in the inversion chosen in the Setup', async () => {
     const user = userEvent.setup()
-    const { router, audio } = await renderApp(
-      '/play/progression?p=ii-V-I&key=C&chordSize=sevenths&hands=rh',
-    )
+    const { router, audio } = await renderApp('/play/progression?p=ii-V-I&key=C&chordSize=sevenths')
     await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     expect(screen.getByRole('radio', { name: 'Root' })).toBeChecked()
     await user.click(screen.getByRole('radio', { name: '1st' }))
@@ -42,8 +43,9 @@ describe('A progression in the Player', () => {
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     // Dm7 from its 3rd: F3 A3 C4 D4.
     await waitFor(() => expect(audio.played).not.toHaveLength(0))
+    // The right hand's, over the left hand's bass (Listen plays both, R29 B8).
     const first = audio.played[0]?.sounds.flatMap((sound) =>
-      sound.kind === 'note' && sound.at === 0 ? [sound.midi] : [],
+      sound.kind === 'note' && sound.at === 0 && sound.midi >= RIGHT_HAND ? [sound.midi] : [],
     )
     expect(first?.toSorted((a, b) => a - b)).toEqual([53, 57, 60, 62])
   })
@@ -51,7 +53,7 @@ describe('A progression in the Player', () => {
   it('keeps every chord in the first one’s inversion with Voice leading off', async () => {
     const user = userEvent.setup()
     const { router, audio } = await renderApp(
-      '/play/progression?p=ii-V-I&key=C&chordSize=sevenths&hands=rh&inversion=1',
+      '/play/progression?p=ii-V-I&key=C&chordSize=sevenths&inversion=1',
     )
     await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     await user.click(screen.getByRole('switch', { name: /Voice leading/ }))
@@ -59,7 +61,10 @@ describe('A progression in the Player', () => {
     await user.keyboard('{Escape}')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     await waitFor(() => expect(audio.played).not.toHaveLength(0))
-    const sounds = audio.played[0]?.sounds ?? []
+    // The right hand's, over the left hand's bass (Listen plays both, R29 B8).
+    const sounds = (audio.played[0]?.sounds ?? []).filter(
+      (s) => s.kind !== 'note' || s.midi >= RIGHT_HAND,
+    )
     const starts = [...new Set(sounds.flatMap((s) => (s.kind === 'note' ? [s.at] : [])))].sort(
       (a, b) => a - b,
     )

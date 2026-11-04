@@ -52,6 +52,18 @@ export const player = {
     },
   },
   // The row of tools under the Player's bar (ADR 0108), as a screen reader names it.
+  restart: 'Restart',
+  foot: { label: 'Practice tools' },
+  modes: {
+    title: 'What would you like to do?',
+    open: 'Modes',
+    listen: { name: 'Listen', line: 'The app plays; follow the score.' },
+    wait: { name: 'Sight-read', line: 'The cursor waits for the right note or chord from your piano.' },
+    practice: { name: 'Practice', line: 'One hand at a time, the other heard or not.' },
+    follow: { name: 'Interpret', line: 'The cursor follows your tempo.' },
+    needsPiano: 'Connect a piano or use Piano keys.',
+    hands: { lh: 'Left', both: 'Both', rh: 'Right' },
+  },
   tools: 'Tools',
   // The tools row's Transpose (ADR 0105): the key the music is in, moved a semitone at a time.
   transpose: {
@@ -281,15 +293,12 @@ export const player = {
   },
   pace: {
     of: 'Tempo: {{value}}',
-    ownPace: 'Waits for your notes',
-    wait: 'Wait mode',
     playback: 'Playback speed',
-    playAlong: 'Listen and play along',
+    playAlong: 'Tempo',
     speed: '{{percent}} speed',
     // The popover's slider: a share of the piece's tempo, 50% to 200% in 5% steps (ADR 0105).
     speedLabel: 'Speed',
     own: 'Original tempo',
-    waitShort: 'Wait',
     speedTraining: 'Speed training',
     speedTrainingDetail: '{{percent}} faster each pass, up to 100%',
   },

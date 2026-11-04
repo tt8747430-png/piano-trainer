@@ -91,14 +91,15 @@ describe('usePracticePlayer', () => {
     expect(renderPlayer({ loop: '40-44' }).result.current.loop).toBeNull()
   })
 
-  it('mutes the staff of the hand not played', () => {
-    expect(renderPlayer({ hands: 'rh' }).result.current.muted).toBe('bass')
-    expect(renderPlayer({ hands: 'lh' }).result.current.muted).toBe('treble')
+  it('mutes the staff of the hand not practised, in Practice mode alone (R29 B8)', () => {
+    expect(renderPlayer({ mode: 'practice', hands: 'rh' }).result.current.muted).toBe('bass')
+    expect(renderPlayer({ mode: 'practice', hands: 'lh' }).result.current.muted).toBe('treble')
+    expect(renderPlayer({ hands: 'lh' }).result.current.muted).toBeUndefined()
     expect(renderPlayer().result.current.muted).toBeUndefined()
   })
 
   it('marks the hands the learner hears, and keeps the marked keys in view', () => {
-    const { result } = renderPlayer({ hands: 'lh' })
+    const { result } = renderPlayer({ mode: 'practice', hands: 'lh' })
     const marks = [...result.current.marks]
     expect(marks.length).toBeGreaterThan(0)
     expect(marks.every(([, mark]) => mark.tone === 'lh')).toBe(true)
