@@ -12,7 +12,6 @@ export const piece = {
     lessons_one: '{{count}} lesson',
     lessons_other: '{{count}} lessons',
     lessonsDone: '{{lessons}} · {{done}} done',
-    noLessons: 'No chords to learn',
   },
   // A section's page: its chords in order, its changes, its pattern; each lesson looped in the Player.
   learnSection: {

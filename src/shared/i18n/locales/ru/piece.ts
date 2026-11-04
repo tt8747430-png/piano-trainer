@@ -12,7 +12,6 @@ export const piece: LocaleResources['piece'] = {
     lessons_many: '{{count}} уроков',
     lessons_other: '{{count}} урока',
     lessonsDone: '{{lessons}} · пройдено: {{done}}',
-    noLessons: 'Нет аккордов для разучивания',
   },
   learnSection: {
     title: 'Учим раздел «{{section}}»',

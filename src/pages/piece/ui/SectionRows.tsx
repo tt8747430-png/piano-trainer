@@ -38,14 +38,15 @@ export function SectionRows({
             <li key={section}>
               <RowLink
                 title={heading}
-                detail={
-                  total === 0
-                    ? t('learnSong.noLessons')
-                    : t('learnSong.lessonsDone', {
+                // A section with no chords to learn says nothing of it (R29 A28).
+                {...(total === 0
+                  ? {}
+                  : {
+                      detail: t('learnSong.lessonsDone', {
                         lessons: t('learnSong.lessons', { count: total }),
                         done,
-                      })
-                }
+                      }),
+                    })}
                 icon={Music}
                 paint={sectionPaint(heading)}
                 render={<SectionLink piece={piece} section={section} />}

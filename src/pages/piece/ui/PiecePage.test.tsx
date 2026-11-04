@@ -361,7 +361,7 @@ describe('Piece: the learner’s own music', () => {
       within(sections)
         .getAllByRole('link')
         .map((row) => row.textContent),
-    ).toEqual(['Verse No chords to learn', 'Chorus No chords to learn'])
+    ).toEqual(['Verse', 'Chorus'])
   })
 
   it('edits a song in the score editor from ✎', async () => {
