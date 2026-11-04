@@ -48,6 +48,20 @@ function saved({ pieces, library }: { pieces?: object; library?: object }) {
   return storage
 }
 
+/** The learner's own folder, Sunday, holding two of the app's hymns (a learner's own place, D8). */
+const SUNDAY = {
+  folders: [
+    {
+      id: 'folder-1',
+      name: 'Sunday',
+      picture: 'church',
+      paint: 'sky',
+      songs: ['silent', 'amazing'],
+    },
+  ],
+  nextFolder: 2,
+}
+
 /** Where a song stands in the library the store holds, over the catalog and these own songs. */
 const placeOf = (state: LibraryState, id: string, ownSongs: readonly string[] = []) =>
   placeIn(
@@ -253,12 +267,14 @@ describe('Songs: the library’s Home and its folders (ADR 0106)', () => {
 describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
   it('moves a song by the Move sheet, and its toast’s Undo puts it back', async () => {
     const user = userEvent.setup()
-    const { libraryStore } = await renderApp('/songs/folders/hymns')
+    const { libraryStore } = await renderApp('/songs/folders/folder-1', {
+      storage: saved({ library: SUNDAY }),
+    })
     await rowAction(user, 'Silent Night', 'Move to…')
     const sheet = await screen.findByRole('dialog', { name: 'Move to' })
     // What moves, whole under the title; where it stands, marked Here.
     expect(sheet).toHaveAccessibleDescription('Silent Night')
-    const here = within(sheet).getByRole('button', { name: 'Hymns Here' })
+    const here = within(sheet).getByRole('button', { name: 'Sunday Here' })
     expect(here).toHaveAttribute('aria-disabled', 'true')
     // A tap on a place moves there at once, and the sheet closes.
     await user.click(within(sheet).getByRole('button', { name: 'Home' }))
@@ -266,14 +282,15 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Move to' })).toBeNull())
     expect(await screen.findByText('“Silent Night” moved to Home')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Undo' }))
-    expect(placeOf(libraryStore.getState(), 'silent')).toMatchObject({ folder: 'hymns' })
+    expect(placeOf(libraryStore.getState(), 'silent')).toMatchObject({ folder: 'folder-1' })
   })
 
   it('archives a song from its More, and Undo brings it back where it stood', async () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs/folders/hymns')
     await rowAction(user, 'Silent Night', 'Archive')
-    await confirmAsked(user, 'Archive', 'Archive “Silent Night”?')
+    // From a folder it is hidden from it (D10), to come back from its Archived.
+    await confirmAsked(user, 'Archive', 'Hide “Silent Night” from this folder?')
     expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived')
     await waitFor(() =>
       expect(screen.queryByRole('link', { name: /Silent Night/ })).not.toBeInTheDocument(),
@@ -306,23 +323,23 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
 
   it('edits a folder from its More: its name and look', async () => {
     const user = userEvent.setup()
-    const { libraryStore } = await renderApp('/songs')
-    await rowAction(user, 'Hymns', 'Edit folder')
+    const { libraryStore } = await renderApp('/songs', { storage: saved({ library: SUNDAY }) })
+    // A built-in folder is the catalog's (D8): no Edit folder in its More.
+    await user.click(await screen.findByRole('button', { name: 'More for Hymns' }))
+    expect(screen.queryByRole('menuitem', { name: 'Edit folder' })).toBeNull()
+    await user.keyboard('{Escape}')
+    await rowAction(user, 'Sunday', 'Edit folder')
     const sheet = await screen.findByRole('dialog', { name: 'Edit folder' })
-    // The field starts empty, its name the placeholder: nothing to select, nothing for iOS to lift.
     const name = within(sheet).getByRole('textbox', { name: 'Name' })
-    expect(name).toHaveValue('')
-    expect(name).toHaveAttribute('placeholder', 'Hymns')
-    await user.type(name, 'Sunday')
+    await user.clear(name)
+    await user.type(name, 'Vespers')
     await user.click(within(sheet).getByRole('radio', { name: 'Star' }))
     await user.click(within(sheet).getByRole('radio', { name: 'Lilac' }))
     await user.click(within(sheet).getByRole('button', { name: 'Save' }))
-    expect(libraryStore.getState().folders.find((folder) => folder.id === 'hymns')).toMatchObject({
-      name: 'Sunday',
-      picture: 'star',
-      paint: 'lilac',
-    })
-    expect(await screen.findByRole('link', { name: /^Sunday/ })).toBeInTheDocument()
+    expect(
+      libraryStore.getState().folders.find((folder) => folder.id === 'folder-1'),
+    ).toMatchObject({ name: 'Vespers', picture: 'star', paint: 'lilac' })
+    expect(await screen.findByRole('link', { name: /^Vespers/ })).toBeInTheDocument()
   })
 
   it('makes a folder from New, at Home, last, its name suggested', async () => {
@@ -438,14 +455,14 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
 
   it('archives a folder with its songs, the toast’s Undo putting it back where it stood', async () => {
     const user = userEvent.setup()
-    const { libraryStore } = await renderApp('/songs')
-    await rowAction(user, 'Hymns', 'Archive folder')
-    await confirmAsked(user, 'Archive', 'Archive the folder “Hymns”?')
-    expect(libraryStore.getState().archive[0]).toMatchObject({ kind: 'folder', index: 4 })
-    expect(await screen.findByText('“Hymns” archived with its songs')).toBeInTheDocument()
+    const { libraryStore } = await renderApp('/songs', { storage: saved({ library: SUNDAY }) })
+    await rowAction(user, 'Sunday', 'Archive folder')
+    await confirmAsked(user, 'Archive', 'Archive the folder “Sunday”?')
+    expect(libraryStore.getState().archive[0]).toMatchObject({ kind: 'folder', index: 0 })
+    expect(await screen.findByText('“Sunday” archived with its songs')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Undo' }))
     const folders = await screen.findByRole('region', { name: 'Folders' })
-    expect(rowNames(folders)[4]).toBe('Hymns 5 songs')
+    expect(rowNames(folders)[0]).toBe('Sunday 2 songs')
   })
 
   it('deletes an own folder from its Settings, asked first: its own songs for good, the app’s to the archive', async () => {
@@ -489,49 +506,60 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
 
   it('moves a folder into another by Move to…, never into itself, Undo putting it back', async () => {
     const user = userEvent.setup()
-    const { libraryStore } = await renderApp('/songs')
-    await rowAction(user, 'Hymns', 'Move to…')
+    const { libraryStore } = await renderApp('/songs', {
+      storage: saved({
+        library: {
+          folders: [
+            ...SUNDAY.folders,
+            { id: 'folder-2', name: 'Weekday', picture: 'sun', paint: 'sand', songs: [] },
+          ],
+          nextFolder: 3,
+        },
+      }),
+    })
+    await rowAction(user, 'Sunday', 'Move to…')
     const sheet = await screen.findByRole('dialog', { name: 'Move to' })
-    expect(within(sheet).getByRole('button', { name: 'Hymns' })).toHaveAttribute(
+    expect(within(sheet).getByRole('button', { name: 'Sunday' })).toHaveAttribute(
       'aria-disabled',
       'true',
     )
     expect(within(sheet).getByRole('button', { name: 'Home Here' })).toBeInTheDocument()
-    await user.click(within(sheet).getByRole('button', { name: 'Called to Play' }))
-    const moved = () => libraryStore.getState().folders.find((folder) => folder.id === 'hymns')
-    expect(moved()?.parent).toBe('called-to-play')
-    expect(await screen.findByText('“Hymns” moved to Called to Play')).toBeInTheDocument()
+    // The app's folders take nothing of a learner's (D8).
+    expect(within(sheet).getByRole('button', { name: 'Hymns' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
+    await user.click(within(sheet).getByRole('button', { name: 'Weekday' }))
+    const moved = () => libraryStore.getState().folders.find((folder) => folder.id === 'folder-1')
+    expect(moved()?.parent).toBe('folder-2')
+    expect(await screen.findByText('“Sunday” moved to Weekday')).toBeInTheDocument()
     // The Move sheet shows it in its folder, which opens and closes on its folders.
     await rowAction(user, 'Gorshkov’s songs', 'Move to…')
     const again = await screen.findByRole('dialog', { name: 'Move to' })
-    expect(within(again).getByRole('button', { name: 'Hymns' })).toBeInTheDocument()
-    await user.click(
-      within(again).getByRole('button', { name: 'Hide the folders in Called to Play' }),
-    )
-    expect(within(again).queryByRole('button', { name: 'Hymns' })).toBeNull()
+    expect(within(again).getByRole('button', { name: 'Sunday' })).toBeInTheDocument()
+    await user.click(within(again).getByRole('button', { name: 'Hide the folders in Weekday' }))
+    expect(within(again).queryByRole('button', { name: 'Sunday' })).toBeNull()
     await user.click(within(again).getByRole('button', { name: 'Close' }))
     await user.click(await screen.findByRole('button', { name: 'Undo' }))
     await waitFor(() => expect(moved()?.parent).toBeNull())
   })
 
-  it('deletes a built-in folder to the archive whole, saying so', async () => {
+  it('leaves a built-in folder its place alone: no Edit, Archive or Delete (D8)', async () => {
     const user = userEvent.setup()
-    const { libraryStore } = await renderApp('/songs')
-    await rowAction(user, 'Hymns', 'Delete folder')
-    const ask = await screen.findByRole('alertdialog', { name: 'Delete “Hymns”?' })
-    expect(ask).toHaveTextContent('It goes to the archive with the app’s songs in it: 5.')
-    await user.click(within(ask).getByRole('button', { name: 'Delete' }))
-    expect(libraryStore.getState().archive[0]).toMatchObject({
-      kind: 'folder',
-      folder: { id: 'hymns' },
-    })
+    await renderApp('/songs')
+    await user.click(await screen.findByRole('button', { name: 'More for Hymns' }))
+    expect((await screen.findAllByRole('menuitem')).map((item) => item.textContent)).toEqual([
+      'Move to…',
+    ])
   })
 })
 
 describe('Songs: Select (ADR 0106)', () => {
   it('chooses rows, says how many, and archives them from its bar at the foot', async () => {
     const user = userEvent.setup()
-    const { libraryStore } = await renderApp('/songs/folders/hymns')
+    const { libraryStore } = await renderApp('/songs/folders/folder-1', {
+      storage: saved({ library: SUNDAY }),
+    })
     await user.click(await screen.findByRole('button', { name: 'Select' }))
     expect(screen.getByRole('heading', { level: 1, name: 'Selected: 0' })).toBeInTheDocument()
     await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
@@ -542,7 +570,7 @@ describe('Songs: Select (ADR 0106)', () => {
     // its slot so the bar's buttons never shift as rows are chosen.
     expect(within(bar).getByRole('button', { name: 'Delete' })).toBeDisabled()
     await user.click(within(bar).getByRole('button', { name: 'Archive' }))
-    await confirmAsked(user, 'Archive', 'Archive 2 items?')
+    await confirmAsked(user, 'Archive', 'Hide 2 songs from this folder?')
     expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived')
     expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
     expect(await screen.findByText('Archived: 2')).toBeInTheDocument()
@@ -551,13 +579,26 @@ describe('Songs: Select (ADR 0106)', () => {
   it('archives folders and songs chosen together in one go, one Undo putting all of them back', async () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs', {
-      storage: saved({ pieces: { songs: [SONG], nextSong: 2 } }),
+      storage: saved({
+        pieces: { songs: [SONG], nextSong: 2 },
+        library: {
+          folders: [
+            ...SUNDAY.folders,
+            { id: 'folder-2', name: 'Weekday', picture: 'sun', paint: 'sand', songs: ['ode'] },
+          ],
+          nextFolder: 3,
+        },
+      }),
     })
     await user.click(await screen.findByRole('button', { name: 'Select' }))
+    // A built-in folder chosen too: it is the catalog's, so Archive waits (D8).
     await user.click(screen.getByRole('checkbox', { name: 'Select Hymns' }))
-    await user.click(screen.getByRole('checkbox', { name: 'Select Gorshkov’s songs' }))
-    await user.click(screen.getByRole('checkbox', { name: 'Select Morning' }))
     const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    expect(within(bar).getByRole('button', { name: 'Archive' })).toBeDisabled()
+    await user.click(screen.getByRole('checkbox', { name: 'Select Hymns' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Sunday' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Weekday' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Morning' }))
     await user.click(within(bar).getByRole('button', { name: 'Archive' }))
     await confirmAsked(user, 'Archive')
     expect(libraryStore.getState().archive).toHaveLength(3)
@@ -565,7 +606,7 @@ describe('Songs: Select (ADR 0106)', () => {
     await user.click(screen.getByRole('button', { name: 'Undo' }))
     await waitFor(() => expect(libraryStore.getState().archive).toEqual([]))
     const folders = await screen.findByRole('region', { name: 'Folders' })
-    expect(rowNames(folders).slice(4)).toEqual(['Hymns 5 songs', 'Gorshkov’s songs 4 songs'])
+    expect(rowNames(folders).slice(0, 2)).toEqual(['Sunday 2 songs', 'Weekday 1 song'])
     expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toEqual({ folder: null, index: 0 })
   })
 
@@ -656,11 +697,11 @@ describe('Songs: Select (ADR 0106)', () => {
   it('carries a song by its face into a folder, the folder lit as the target, with Undo', async () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs', {
-      storage: saved({ pieces: { songs: [SONG], nextSong: 2 } }),
+      storage: saved({ pieces: { songs: [SONG], nextSong: 2 }, library: SUNDAY }),
     })
     await user.click(await screen.findByRole('button', { name: 'Select' }))
     const song = rowOf('Select Morning')
-    const folder = rowOf('Select Hymns')
+    const folder = rowOf('Select Sunday')
     stubBox(song.row, { top: 600, width: 360, height: 72 })
     stubBox(folder.row, { top: 100, width: 360, height: 72 })
     const mouse = { button: 0, buttons: 1 }
@@ -673,10 +714,10 @@ describe('Songs: Select (ADR 0106)', () => {
     fireEvent.mouseUp(document, { button: 0, clientX: 30, clientY: 130 })
     await waitFor(() =>
       expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toMatchObject({
-        folder: 'hymns',
+        folder: 'folder-1',
       }),
     )
-    expect(await screen.findByText('“Morning” moved to Hymns')).toBeInTheDocument()
+    expect(await screen.findByText('“Morning” moved to Sunday')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Undo' }))
     await waitFor(() =>
       expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toMatchObject({ folder: null }),
@@ -685,7 +726,9 @@ describe('Songs: Select (ADR 0106)', () => {
 
   it('carries every row chosen onto Archive on the bar', async () => {
     const user = userEvent.setup()
-    const { libraryStore } = await renderApp('/songs/folders/hymns')
+    const { libraryStore } = await renderApp('/songs/folders/folder-1', {
+      storage: saved({ library: SUNDAY }),
+    })
     await user.click(await screen.findByRole('button', { name: 'Select' }))
     await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
     await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
@@ -721,7 +764,9 @@ describe('Songs: Select (ADR 0106)', () => {
 
   it('moves what is chosen by the Move sheet, into a new folder', async () => {
     const user = userEvent.setup()
-    const { libraryStore } = await renderApp('/songs/folders/hymns')
+    const { libraryStore } = await renderApp('/songs/folders/folder-1', {
+      storage: saved({ library: SUNDAY }),
+    })
     await user.click(await screen.findByRole('button', { name: 'Select' }))
     await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
     await user.click(screen.getByRole('button', { name: 'Move' }))
@@ -731,7 +776,7 @@ describe('Songs: Select (ADR 0106)', () => {
     await user.type(within(making).getByRole('textbox', { name: 'Name' }), 'Christmas')
     await user.click(within(making).getByRole('button', { name: 'Create folder' }))
     await waitFor(() =>
-      expect(placeOf(libraryStore.getState(), 'silent')).toMatchObject({ folder: 'folder-1' }),
+      expect(placeOf(libraryStore.getState(), 'silent')).toMatchObject({ folder: 'folder-2' }),
     )
   })
 
@@ -882,7 +927,9 @@ describe('Songs: your own', () => {
 
   it('makes a new song inside the folder open', async () => {
     const user = userEvent.setup()
-    const { router, libraryStore } = await renderApp('/songs/folders/hymns')
+    const { router, libraryStore } = await renderApp('/songs/folders/folder-1', {
+      storage: saved({ library: SUNDAY }),
+    })
     await user.click(await screen.findByRole('button', { name: 'New' }))
     await user.click(await screen.findByRole('button', { name: 'New song' }))
     await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Doxology{Enter}')
@@ -890,14 +937,16 @@ describe('Songs: your own', () => {
     await user.click(screen.getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
     expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toEqual({
-      folder: 'hymns',
-      index: 5,
+      folder: 'folder-1',
+      index: 2,
     })
   })
 
   it('makes a choir over the piano, or one voice alone: a lead sheet (ADR 0114, 0097)', async () => {
     const user = userEvent.setup()
-    const { piecesStore, router } = await renderApp('/songs/folders/hymns')
+    const { piecesStore, router } = await renderApp('/songs/folders/folder-1', {
+      storage: saved({ library: SUNDAY }),
+    })
     await user.click(await screen.findByRole('button', { name: 'New' }))
     await user.click(await screen.findByRole('button', { name: 'New song' }))
     await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Hymn{Enter}')
@@ -934,14 +983,16 @@ describe('Songs: your own', () => {
 
   it('makes a folder in the folder open', async () => {
     const user = userEvent.setup()
-    const { libraryStore } = await renderApp('/songs/folders/hymns')
+    const { libraryStore } = await renderApp('/songs/folders/folder-1', {
+      storage: saved({ library: SUNDAY }),
+    })
     await user.click(await screen.findByRole('button', { name: 'New' }))
     await user.click(await screen.findByRole('button', { name: 'New folder' }))
     const sheet = await screen.findByRole('dialog', { name: 'New folder' })
     await user.click(within(sheet).getByRole('button', { name: 'Create folder' }))
     expect(libraryStore.getState().folders.at(-1)).toMatchObject({
-      id: 'folder-1',
-      parent: 'hymns',
+      id: 'folder-2',
+      parent: 'folder-1',
     })
     const folders = await screen.findByRole('region', { name: 'Folders' })
     expect(rowNames(folders)).toEqual(['New folder Empty'])

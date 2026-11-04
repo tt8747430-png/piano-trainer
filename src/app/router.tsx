@@ -405,6 +405,18 @@ const folderSettingsRoute = createRoute({
   },
   component: lazyRouteComponent(songsScreens, 'FolderSettingsPage'),
 })
+// A folder's Archived (D10, R29 B4): the songs archived from it, each to unarchive.
+const folderArchivedRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/folders/$folderId/archived',
+  notFoundComponent: notFoundIn('songs'),
+  beforeLoad: async ({ params, context }) => {
+    const { folderIn } = await songsScreens()
+    const { pieces, library } = context
+    if (!folderIn(pieces.getState(), library.getState(), params.folderId)) throw notFound()
+  },
+  component: lazyRouteComponent(songsScreens, 'FolderArchivedPage'),
+})
 // The library's archive (ADR 0106): what the learner archived, to restore.
 const archiveRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -897,6 +909,7 @@ const routeTree = rootRoute.addChildren([
     folderRoute,
     folderSettingsRoute,
     archiveRoute,
+    folderArchivedRoute,
     sectionRoute,
     courseRoute,
     chordsRoute,

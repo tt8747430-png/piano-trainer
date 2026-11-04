@@ -8,6 +8,7 @@ import {
   subtreeIds,
   useFolderName,
   useLibraryLayout,
+  usePermissions,
   type FolderId,
   type LibraryLayout,
   type ShelvedFolder,
@@ -29,7 +30,8 @@ const ROW =
  * the title, whole; Home on its own tile, then every folder on its tile as the library nests them, a
  * folder with folders in it opening to them. A tap on a place moves there at once and closes, the
  * toast saying where with Undo. The place everything stands in now is marked Here; a folder that
- * moves cannot go into itself or a folder under it, greyed with why. New folder at its foot makes
+ * moves cannot go into itself or a folder under it, nor anything into one of the app's folders but an
+ * editor's (R29 B4), greyed with why. New folder at its foot makes
  * one at Home and moves them into it.
  */
 export function MoveSheet({
@@ -103,9 +105,17 @@ function MovePicker({
   const { t } = useTranslation('songs')
   const layout = useLibraryLayout()
   const nameOf = useFolderName()
+  const permits = usePermissions()
   const here = hereOf(layout, moving)
   // No folder goes into itself or a folder under it.
   const barred = new Set(moving.folders.flatMap((id) => subtreeIds(layout.folders, id)))
+  /** Why nothing moved goes into a folder, if it does not. */
+  const barredWhy = (folder: ShelvedFolder) =>
+    barred.has(folder.id)
+      ? t('move.intoItself')
+      : here !== folder.id && !permits('moveIn', { builtIn: folder.builtIn })
+        ? t('move.appsFolder')
+        : null
   // Every folder that holds folders starts open, as Mindscape's tree does.
   const [shut, setShut] = useState<ReadonlySet<FolderId>>(new Set())
   const toggle = (id: FolderId) =>
@@ -127,7 +137,7 @@ function MovePicker({
             tile={<FolderTile look={folder} />}
             name={nameOf(folder)}
             here={here === folder.id}
-            barred={barred.has(folder.id) ? t('move.intoItself') : null}
+            barred={barredWhy(folder)}
             onPick={() => onPick(folder.id)}
             toggle={
               inside.length > 0 ? { open, onToggle: () => toggle(folder.id), folder } : undefined

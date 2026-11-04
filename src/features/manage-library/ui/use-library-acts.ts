@@ -59,18 +59,32 @@ export function useLibraryActs() {
         undo(() => undoMove(store, catalog(), moves)),
       )
     },
-    /** Songs archived once asked (R17), said with Undo. */
-    archive: async (ids: readonly PieceId[]) => {
+    /**
+     * Songs archived once asked (R17), said with Undo; from a folder (`fromFolder`), asked as hidden
+     * from it, to come back from its Archived (D10).
+     */
+    archive: async (ids: readonly PieceId[], fromFolder = false) => {
       const [first] = ids
       if (!first) return
-      const asked = await confirm({
-        title:
-          ids.length === 1
-            ? t('library.archiving.one', { title: titleOf(first) })
-            : t('library.archiving.many', { count: ids.length }),
-        body: t('library.archiving.body'),
-        action: t('library.archive'),
-      })
+      const asked = await confirm(
+        fromFolder
+          ? {
+              title:
+                ids.length === 1
+                  ? t('library.hiding.one', { title: titleOf(first) })
+                  : t('library.hiding.many', { count: ids.length }),
+              body: t('library.hiding.body'),
+              action: t('library.archive'),
+            }
+          : {
+              title:
+                ids.length === 1
+                  ? t('library.archiving.one', { title: titleOf(first) })
+                  : t('library.archiving.many', { count: ids.length }),
+              body: t('library.archiving.body'),
+              action: t('library.archive'),
+            },
+      )
       if (!asked) return
       const archived = archiveSongs(store, catalog(), ids)
       const [only] = archived
@@ -86,19 +100,28 @@ export function useLibraryActs() {
      * What Select chose, archived in one go (songs, and folders with all they hold): one toast, its
      * Undo putting every one back exactly where it stood.
      */
-    archiveChosen: async (ids: readonly PieceId[], folders: readonly ShelvedFolder[]) => {
+    archiveChosen: async (
+      ids: readonly PieceId[],
+      folders: readonly ShelvedFolder[],
+      fromFolder = false,
+    ) => {
       const total = ids.length + folders.length
       const [chosenSong] = ids
       const [folderFirst] = folders
       if (total === 0) return
+      // Songs alone, from a folder: hidden from it, to come back from its Archived (D10).
+      const hiding = fromFolder && folders.length === 0
       const asked = await confirm({
-        title:
-          total > 1
+        title: hiding
+          ? total > 1
+            ? t('library.hiding.many', { count: total })
+            : t('library.hiding.one', { title: chosenSong ? titleOf(chosenSong) : '' })
+          : total > 1
             ? t('library.archiving.many', { count: total })
             : chosenSong
               ? t('library.archiving.one', { title: titleOf(chosenSong) })
               : t('library.archiving.folder', { name: folderFirst ? folderName(folderFirst) : '' }),
-        body: t('library.archiving.body'),
+        body: t(hiding ? 'library.hiding.body' : 'library.archiving.body'),
         action: t('library.archive'),
       })
       if (!asked) return

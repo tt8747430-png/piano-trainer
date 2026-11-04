@@ -28,10 +28,13 @@ function SongFace({ entry }: { entry: Entry }) {
  */
 export function ArchivedRow({
   entry,
+  restore,
   onRestore,
   more,
 }: {
   entry: ShelvedEntry
+  /** Restore's word: a folder's Archived says Unarchive. */
+  restore?: string
   onRestore: () => void
   more: ReactNode
 }) {
@@ -60,12 +63,14 @@ export function ArchivedRow({
       ) : null}
       <Button
         variant="soft"
-        aria-label={t('archive.restoreNamed', { name })}
+        aria-label={
+          restore ? t('folder.unarchiveNamed', { name }) : t('archive.restoreNamed', { name })
+        }
         onClick={onRestore}
         className="shrink-0"
       >
         <ArchiveRestore data-icon="inline-start" aria-hidden />
-        {t('library.restore')}
+        {restore ?? t('library.restore')}
       </Button>
       {more}
     </li>

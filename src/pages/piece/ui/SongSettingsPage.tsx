@@ -148,7 +148,8 @@ function SongSettings({ piece }: { piece: Piece }) {
         ) : null}
         {inLibrary ? (
           <SettingsGroup flush title={t('settings.library')}>
-            {archived ? null : (
+            {/* Where it may leave its folder (R29 B4): one of the app's songs in its folder stays. */}
+            {archived || !library.actions.some((each) => each.key === 'move') ? null : (
               <RowButton
                 title={t('settings.folder')}
                 value={folder}

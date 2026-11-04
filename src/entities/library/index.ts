@@ -26,6 +26,7 @@ export {
 export {
   arrangeLibrary,
   archivedSongs,
+  folderArchive,
   placeIn,
   savedLayout,
   type LibraryCatalog,
@@ -42,6 +43,16 @@ export {
   withoutDescendants,
   type TreeFolder,
 } from './model/tree'
+export {
+  can,
+  CURRICULUM_ACTS,
+  LIBRARY_ACTS,
+  type LibraryAct,
+  type LibraryActor,
+  type LibraryRole,
+  type LibraryTarget,
+} from './model/permissions'
+export { useCan, usePermissions } from './model/use-can'
 export { LibraryStoreProvider, useLibrary, useLibraryStoreApi } from './model/context'
 export { selectFavourites, selectIsFavourite, selectSort } from './model/selectors'
 export { useLibraryLayout } from './model/use-library-layout'

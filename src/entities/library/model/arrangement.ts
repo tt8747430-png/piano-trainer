@@ -4,6 +4,7 @@ import {
   COLLECTION_LOOKS,
   isOwnFolderId,
   type ArchiveEntry,
+  type FolderId,
   type SavedFolder,
   type SongPlace,
 } from './types'
@@ -151,3 +152,13 @@ export function placeIn(layout: LibraryLayout, id: PieceId): SongPlace | 'archiv
 export const archivedSongs = (
   entry: Pick<Extract<ShelvedEntry, { kind: 'folder' }>, 'folder' | 'subfolders'>,
 ): PieceId[] => [entry.folder, ...entry.subfolders].flatMap((folder) => folder.songs)
+
+/** The songs archived from a folder (D10's Archived (n)), the newest first. */
+export const folderArchive = (
+  layout: LibraryLayout,
+  folder: FolderId,
+): Extract<ShelvedEntry, { kind: 'song' }>[] =>
+  layout.archive.filter(
+    (entry): entry is Extract<ShelvedEntry, { kind: 'song' }> =>
+      entry.kind === 'song' && entry.from.folder === folder,
+  )

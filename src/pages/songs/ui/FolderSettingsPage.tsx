@@ -2,7 +2,12 @@ import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { Archive, FolderInput, Palette } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useFolderName, useLibraryLayout, type ShelvedFolder } from '@/entities/library'
+import {
+  useFolderName,
+  useLibraryLayout,
+  usePermissions,
+  type ShelvedFolder,
+} from '@/entities/library'
 import {
   DeleteFolderAsk,
   FolderSheet,
@@ -24,7 +29,8 @@ import {
 /**
  * A folder's Settings (R29, the owner's yes to ST17; a song's Settings page's shape): its name and
  * look (the Edit folder sheet), where it stands (Move to folder…), Archive folder, and Delete folder at
- * the page's foot. Reached from the gear in the folder's bar, where its ⋯ menu was.
+ * the page's foot. Reached from the gear in the folder's bar, where its ⋯ menu was. Each row where it
+ * may be done (R29 B4): a built-in folder is the catalog's, so Move to folder… alone.
  */
 export function FolderSettingsPage() {
   const { t } = useTranslation('songs')
@@ -45,6 +51,9 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
   const nameOf = useFolderName()
   const { folders } = useLibraryLayout()
   const acts = useLibraryActs()
+  const permits = usePermissions()
+  const may = (act: 'renameFolder' | 'archiveFolder' | 'deleteFolder') =>
+    permits(act, { builtIn: folder.builtIn })
   const navigate = useNavigate()
   const [editing, setEditing] = useState(false)
   const [moving, setMoving] = useState<Moving | null>(null)
@@ -61,14 +70,16 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
       <ScreenHeader title={t('folder.settings')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <p className="px-1 font-display text-2xl font-semibold text-balance">{name}</p>
-        <SettingsGroup flush>
-          <RowButton
-            title={t('folder.nameAndLook')}
-            icon={Palette}
-            paint="sky"
-            onClick={() => setEditing(true)}
-          />
-        </SettingsGroup>
+        {may('renameFolder') ? (
+          <SettingsGroup flush>
+            <RowButton
+              title={t('folder.nameAndLook')}
+              icon={Palette}
+              paint="sky"
+              onClick={() => setEditing(true)}
+            />
+          </SettingsGroup>
+        ) : null}
         <SettingsGroup flush title={t('folder.inLibrary')}>
           <RowButton
             title={t('folder.moveTo')}
@@ -77,18 +88,22 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
             paint="grass"
             onClick={() => setMoving({ songs: [], folders: [folder.id] })}
           />
-          <RowButton
-            title={t('folder.archive')}
-            icon={Archive}
-            paint="lilac"
-            onClick={async () => {
-              if (await acts.archiveFolder(folder)) void leave()
-            }}
-          />
+          {may('archiveFolder') ? (
+            <RowButton
+              title={t('folder.archive')}
+              icon={Archive}
+              paint="lilac"
+              onClick={async () => {
+                if (await acts.archiveFolder(folder)) void leave()
+              }}
+            />
+          ) : null}
         </SettingsGroup>
-        <DangerGroup footnote={t('folder.deleteSays')}>
-          <DangerRow title={t('folder.delete')} onClick={() => setDeleting(true)} />
-        </DangerGroup>
+        {may('deleteFolder') ? (
+          <DangerGroup footnote={t('folder.deleteSays')}>
+            <DangerRow title={t('folder.delete')} onClick={() => setDeleting(true)} />
+          </DangerGroup>
+        ) : null}
       </div>
       <FolderSheet target={editing ? { kind: 'edit', folder } : null} onOpenChange={setEditing} />
       <MoveSheet moving={moving} what={name} onOpenChange={(open) => open || setMoving(null)} />

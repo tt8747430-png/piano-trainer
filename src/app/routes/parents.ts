@@ -166,6 +166,8 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   },
   '/shell/songs/folders/$folderId/settings': (from) =>
     up({ to: '/songs/folders/$folderId', params: { folderId: param(from, 'folderId') } }),
+  '/shell/songs/folders/$folderId/archived': (from) =>
+    up({ to: '/songs/folders/$folderId', params: { folderId: param(from, 'folderId') } }),
   '/shell/songs/archive': toSongs,
   '/shell/songs/shared': toSongs,
   '/shell/songs/public': toSongs,

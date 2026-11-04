@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { can, LIBRARY_ACTS, type LibraryAct, type LibraryRole } from './permissions'
+import {
+  can,
+  CURRICULUM_ACTS,
+  LIBRARY_ACTS,
+  type LibraryAct,
+  type LibraryRole,
+} from './permissions'
 
 const BUILT_IN = { builtIn: true }
 const OWN = { builtIn: false }
@@ -59,5 +65,24 @@ describe('the library’s permissions (R29 B4, D8)', () => {
     ] as const) {
       expect(can({ role: 'admin' }, act, BUILT_IN)).toBe(false)
     }
+  })
+
+  it('offers no New folder inside a built-in folder: its folders are the learner’s own', () => {
+    for (const role of ['learner', 'editor', 'admin'] as const)
+      expect(can({ role }, 'addFolder', BUILT_IN)).toBe(false)
+  })
+
+  it('leaves a level, its chapters and the Courses shelf to editors', () => {
+    for (const target of ['level', 'chapter', 'shelf'] as const)
+      for (const act of CURRICULUM_ACTS) {
+        expect(can({ role: 'learner' }, act, { curriculum: target })).toBe(false)
+        expect(can({ role: 'editor' }, act, { curriculum: target })).toBe(true)
+        expect(can({ role: 'admin' }, act, { curriculum: target })).toBe(true)
+      }
+  })
+
+  it('asks a signed-out learner as a learner', () => {
+    expect(can(null, 'addSong', BUILT_IN)).toBe(false)
+    expect(can(null, 'archiveSong', BUILT_IN)).toBe(true)
   })
 })

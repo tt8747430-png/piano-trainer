@@ -1,7 +1,7 @@
 import { Archive, ArchiveRestore, FolderInput } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { placeIn, useLibraryLayout } from '@/entities/library'
+import { placeIn, useLibraryLayout, usePermissions } from '@/entities/library'
 import { entryTitles, type Entry } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
 import type { MenuAction } from '@/shared/ui'
@@ -10,8 +10,8 @@ import { useLibraryActs } from './use-library-acts'
 
 /**
  * A song's place in the library as a menu's actions (the song's page's More, the Player's, ADR
- * 0106): Move to… and Archive, each saying so in a toast with Undo; while it is archived, Restore
- * alone. The Move sheet comes with them, for the page to place.
+ * 0106): Move to… (where it may leave its folder, R29 B4) and Archive, each saying so in a toast with
+ * Undo; while it is archived, Restore alone. The Move sheet comes with them, for the page to place.
  */
 export function useSongActions(entry: Entry): {
   readonly actions: readonly MenuAction[]
@@ -21,8 +21,15 @@ export function useSongActions(entry: Entry): {
   const locale = useLocale()
   const layout = useLibraryLayout()
   const acts = useLibraryActs()
+  const permits = usePermissions()
   const [moving, setMoving] = useState(false)
-  const archived = placeIn(layout, entry.id) === 'archived'
+  const place = placeIn(layout, entry.id)
+  const archived = place === 'archived'
+  const folder =
+    place && place !== 'archived' && place.folder
+      ? layout.folders.find((each) => each.id === place.folder)
+      : undefined
+  const movable = permits('moveOut', { builtIn: folder?.builtIn ?? false })
   const actions: MenuAction[] = archived
     ? [
         {
@@ -33,12 +40,16 @@ export function useSongActions(entry: Entry): {
         },
       ]
     : [
-        {
-          key: 'move',
-          label: t('library.moveTo'),
-          icon: FolderInput,
-          onSelect: () => setMoving(true),
-        },
+        ...(movable
+          ? [
+              {
+                key: 'move',
+                label: t('library.moveTo'),
+                icon: FolderInput,
+                onSelect: () => setMoving(true),
+              },
+            ]
+          : []),
         {
           key: 'archive',
           label: t('library.archive'),
