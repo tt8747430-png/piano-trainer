@@ -6,7 +6,7 @@ import {
   type NoteSound,
   type Touch,
 } from '@/shared/lib/schedule'
-import type { PedalPress, Take, TakeNote } from './types'
+import type { FreeTake, PedalPress, TakeNote } from './types'
 
 /** When each note's key is struck next after it, by the note; none where it is not. */
 function nextStrikes(notes: readonly TakeNote[]): Map<TakeNote, number> {
@@ -67,7 +67,7 @@ const struckSoft = (note: TakeNote, pedals: readonly PedalPress[]): boolean =>
  * sustain's up where it was down as the key was let go, or to the sostenuto's that caught it, and
  * never past the same key struck again. Seconds from the take's first downbeat.
  */
-export function takeSounds(take: Take, touch: Touch): NoteSound[] {
+export function takeSounds(take: FreeTake, touch: Touch): NoteSound[] {
   const notes = take.notes.toSorted((a, b) => a.at - b.at)
   const next = nextStrikes(notes)
   return notes.map((note) => {
@@ -85,7 +85,7 @@ export function takeSounds(take: Take, touch: Touch): NoteSound[] {
 }
 
 /** The take heard from `fromMs` on: what starts there or later, its time from there. */
-export function takeSoundsFrom(take: Take, touch: Touch, fromMs: number): NoteSound[] {
+export function takeSoundsFrom(take: FreeTake, touch: Touch, fromMs: number): NoteSound[] {
   const from = fromMs / 1000
   return takeSounds(take, touch)
     .filter((sound) => sound.at >= from)
