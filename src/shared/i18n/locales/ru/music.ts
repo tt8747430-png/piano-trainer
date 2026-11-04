@@ -232,6 +232,7 @@ export const music: LocaleResources['music'] = {
     noteNames: 'Названия нот',
     chordNames: 'Аккордовые символы',
     loading: 'Загрузка нот',
+    barOf: 'Такт {{at}} из {{of}}',
     error: 'Ноты не удаётся показать.',
     bar: 'Такт {{n}}',
     barChords: 'Такт {{n}}: {{chords}}',

@@ -5,7 +5,7 @@ import type { NextLine, Score, StaffId, StaffLabels } from '@/shared/lib/notatio
 import { drawnStaves } from './drawn-staves'
 import type { ScoreLayout } from './layout'
 import { scoreHeight } from './size'
-import { StaffPlace } from './StaffPlace'
+import { ScoreSkeleton, type SkeletonBars } from './ScoreSkeleton'
 import { drawScore } from './verovio/draw'
 import { chosenParts } from './verovio/svg-chosen'
 import './score.css'
@@ -33,8 +33,11 @@ export function ScoreView({
   labels,
   selected,
   fill,
+  bars,
   children,
 }: {
+  /** Where its line stands in the score, said over its skeleton while it is drawn (A34). */
+  bars?: SkeletonBars | undefined
   score: Score
   scale: number
   fingers: boolean
@@ -176,10 +179,15 @@ export function ScoreView({
         className="pointer-events-none relative z-10"
       />
       {engraving.status === 'loading' ? (
-        // Its lines, faint, until the first engraving is in: the music on its way, not a gap.
+        // Its skeleton, until the first engraving is in: the music on its way, not a gap.
         <div className="absolute inset-x-0 top-0">
-          <StaffPlace height={scoreHeight(score, drawn)} scale={scale} count={drawn.length} />
-          <p className="sr-only">{t('sheet.loading')}</p>
+          <ScoreSkeleton
+            systems={1}
+            staves={drawn.length}
+            height={scoreHeight(score, drawn)}
+            scale={scale}
+            bars={bars}
+          />
         </div>
       ) : null}
       {engraving.status === 'error' ? (

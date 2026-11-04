@@ -242,6 +242,7 @@ export const music = {
     noteNames: 'Note names',
     chordNames: 'Chord symbols',
     loading: 'Loading the music',
+    barOf: 'Bar {{at}} of {{of}}',
     error: 'The music can’t be shown.',
     bar: 'Bar {{n}}',
     barChords: 'Bar {{n}}: {{chords}}',

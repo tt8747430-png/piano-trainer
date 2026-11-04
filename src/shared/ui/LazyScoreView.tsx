@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState, type ComponentProps } from
 import { loadScoreView } from './score/load'
 import { drawnStaves } from './score/drawn-staves'
 import { scoreHeight } from './score/size'
-import { StaffPlace } from './score/StaffPlace'
+import { ScoreSkeleton } from './score/ScoreSkeleton'
 
 const ScoreView = lazy(() => loadScoreView().then((module) => ({ default: module.ScoreView })))
 
@@ -41,11 +41,13 @@ export function LazyScoreView({
   const count = drawn.length
   // Its room before it is drawn: its staves and the verses under its tune, so nothing moves as it comes.
   const space = (
-    <StaffPlace
+    <ScoreSkeleton
       place={place}
+      systems={1}
+      staves={count}
       height={scoreHeight(props.score, drawn)}
       scale={scale}
-      count={count}
+      bars={props.bars}
     />
   )
   if (!shown) return space
