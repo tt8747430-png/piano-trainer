@@ -46,6 +46,22 @@ export {
 } from './chord-sheet'
 export { sheetToText, textToSheet } from './chord-sheet-text'
 export {
+  arrangeStyle,
+  barSteps,
+  bassLine,
+  DRUM_VOICES,
+  drumSteps,
+  type Band,
+  type BassLine,
+  type BassNote,
+  type BassStep,
+  type DrumGrid,
+  type DrumHit,
+  type DrumVoice,
+  type StepVelocities,
+  type StyleParts,
+} from './arrange-style'
+export {
   type BeatGroup,
   type Chart,
   type ChartBar,
