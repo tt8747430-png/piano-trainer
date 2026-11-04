@@ -11,6 +11,7 @@ import { localText, useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, RoundLink, ScreenHeader } from '@/shared/ui'
 import { LessonView, type UpLink } from '@/widgets/lesson-view'
+import { ToolsButton } from '@/widgets/tools-sheet'
 
 /** A lesson either side of this one, or the way on past the last: a router `Link`, named. */
 export interface WayLink {
@@ -71,6 +72,7 @@ export function LessonLayout({
         actions={
           <>
             <LearnedButton step={step} round />
+            <ToolsButton />
             <RoundLink label={t('settings.open')} icon={Settings} render={settings} />
             {editsContent(account) ? modes : null}
           </>

@@ -4,6 +4,7 @@ import { useSetSearch } from '@/shared/lib'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { IntervalExplorer, type IntervalView } from '@/widgets/interval-explorer'
 import { SettingsGear } from '@/widgets/practice-pages'
+import { ToolsButton } from '@/widgets/tools-sheet'
 
 /** The Intervals explorer: every interval over a chosen root, heard and written. */
 export function IntervalsPage() {
@@ -15,7 +16,12 @@ export function IntervalsPage() {
       <ScreenHeader
         title={t('pages.intervals')}
         back={<BackButton />}
-        actions={<SettingsGear page="intervals" />}
+        actions={
+          <>
+            <ToolsButton />
+            <SettingsGear page="intervals" />
+          </>
+        }
       />
       <IntervalExplorer view={view} onChange={onChange} />
     </div>

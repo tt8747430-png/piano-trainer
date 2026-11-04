@@ -5,7 +5,6 @@ import {
   CircleCheck,
   Disc,
   Download,
-  Gauge as TunerIcon,
   Ellipsis,
   LayoutGrid,
   ListMusic,
@@ -14,7 +13,6 @@ import {
   Piano,
   Printer,
   SlidersHorizontal,
-  Timer,
   Volume2,
 } from 'lucide-react'
 import { Fragment, useEffect, useMemo, useState, type ReactNode } from 'react'
@@ -54,17 +52,15 @@ import {
   PlayerTools,
   ScoreBar,
   TempoButton,
-  ToolsSheet,
   usePlayerShortcuts,
   hasVoiceCommands,
   useVoiceCommands,
-  type ToolGroup,
-  type ToolRow,
   WaitLine,
   type PracticePlayer,
   type PracticeView,
 } from '@/widgets/practice-player'
 import { SheetMusic } from '@/widgets/sheet-music'
+import { QuickTools, ToolsSheet, type ToolGroup, type ToolRow } from '@/widgets/tools-sheet'
 import { SongPrint } from '@/widgets/song-print'
 import {
   PlayerDisplay,
@@ -84,6 +80,7 @@ import { FeedbackCard } from './FeedbackCard'
 import { RecordingsSheet } from './RecordingsSheet'
 import type { PlayerTakes } from '../model/use-player-takes'
 import { TunerSheet } from '@/widgets/tuner'
+import { useMetronome } from '@/features/metronome'
 import { notePlace, type ScoreAnnotation } from '@/shared/lib/notation'
 
 /** A walk or a progression: one section, named nowhere. */
@@ -227,6 +224,9 @@ export function PlayerLayout({
   const [toolsOpen, setToolsOpen] = useState(false)
   const [settingsAt, setSettingsAt] = useState<{ readonly page: string } | null>(null)
   const [tunerOpen, setTunerOpen] = useState(false)
+  // The quick metronome (R29 B11): the song's tempo and time in the Metronome's voice, on with the
+  // sheet closed.
+  const quickMetronome = useMetronome({ bpm: player.tempo, meter: performance.meter })
   // The coach's line (R29 B8), put away for the visit by its ×.
   const [coached, setCoached] = useState(false)
   // Voice commands (R29 B8), on for the visit where the browser hears speech.
@@ -408,39 +408,7 @@ export function PlayerLayout({
     {
       key: 'quick',
       title: t('toolsSheet.quick'),
-      rows: [
-        {
-          key: 'metronome',
-          kind: 'act',
-          label: t('toolsSheet.metronome'),
-          icon: Timer,
-          paint: 'sand',
-          opens: true,
-          onSelect: () => void navigate({ to: '/practice/metronome' }),
-        },
-        ...(takes
-          ? [
-              {
-                key: 'recorder',
-                kind: 'act' as const,
-                label: t('recordings.recorder'),
-                icon: Disc,
-                paint: 'lilac' as const,
-                onSelect: () =>
-                  playable && takes.stage === 'idle' ? takes.record() : setRecordingsOpen(true),
-              },
-            ]
-          : []),
-        {
-          key: 'tuner',
-          kind: 'act',
-          label: t('tuner.title'),
-          icon: TunerIcon,
-          paint: 'grass',
-          onSelect: () => setTunerOpen(true),
-        },
-        ...inGroup('quick'),
-      ],
+      rows: [...inGroup('quick')],
     },
     {
       key: 'score',
@@ -555,7 +523,35 @@ export function PlayerLayout({
           <>
             <KeysToggle shown={player.keys} onShow={player.setKeys} />
             <MidiButton variant="tool" />
-            <ToolsSheet groups={toolGroups} open={toolsOpen} onOpenChange={setToolsOpen} />
+            <ToolsSheet
+              quick={
+                <QuickTools
+                  metronome={quickMetronome}
+                  recorder={
+                    takes
+                      ? {
+                          stage: takes.stage,
+                          unavailable: playable ? undefined : t('recordings.needsPiano'),
+                          record: takes.record,
+                          stop: takes.stop,
+                        }
+                      : {
+                          stage: 'idle',
+                          unavailable: t('recordings.needsPiano'),
+                          record: () => {},
+                          stop: () => {},
+                        }
+                  }
+                  onTuner={() => {
+                    setToolsOpen(false)
+                    setTunerOpen(true)
+                  }}
+                />
+              }
+              groups={toolGroups}
+              open={toolsOpen}
+              onOpenChange={setToolsOpen}
+            />
             <SettingsExtrasContext value={extras}>{setup}</SettingsExtrasContext>
           </>
         }

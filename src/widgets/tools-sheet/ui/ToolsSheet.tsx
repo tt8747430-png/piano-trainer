@@ -1,4 +1,5 @@
 import { ChevronRight, LayoutGrid, type LucideIcon } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { PAINT, Sheet, SheetContent, SheetTrigger, type Paint } from '@/shared/ui'
@@ -77,16 +78,23 @@ function Row({ row, close }: { row: ToolRow; close: () => void }) {
 }
 
 /**
- * The Tools sheet (R29 B8, B11's), from the Tools button in the bar before ⚙ (a grid): groups of rows,
- * each its coloured picture and name: the quick tools, the score's, how the Player listens, and ways
- * to the Player's other places (Audio/MIDI, Transpose, Change version, Display). A row that opens a
- * page or another sheet closes this one first, so a sheet never opens over a sheet.
+ * The Tools sheet (R29 B8, B11), from the Tools button in a bar (a grid), over any screen without
+ * leaving it: the quick tools first, live (`quick`), then groups of rows, each its coloured picture
+ * and name: on the Player the score's, how it listens, and ways to its other places (Audio/MIDI,
+ * Transpose, Change version, Display); elsewhere All tools. A row that opens a page or another sheet
+ * closes this one first, so a sheet never opens over a sheet.
  */
 export function ToolsSheet({
+  quick,
   groups,
   open,
   onOpenChange,
+  bar = false,
 }: {
+  /** In a screen's bar (a lesson's, an explorer's): the bar's round button, not the Player's tool. */
+  bar?: boolean
+  /** The quick tools, first (R29 B11): the Metronome, the Recorder and the Tuner, live. */
+  quick?: ReactNode
   groups: readonly ToolGroup[]
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -97,8 +105,9 @@ export function ToolsSheet({
       <SheetTrigger
         render={
           <Button
-            variant="tool"
+            variant={bar ? 'bar' : 'tool'}
             size="icon"
+            className={bar ? 'rounded-pill' : undefined}
             aria-label={t('toolsSheet.open')}
             title={t('toolsSheet.open')}
           />
@@ -108,6 +117,14 @@ export function ToolsSheet({
       </SheetTrigger>
       <SheetContent title={t('toolsSheet.open')}>
         <div className="flex flex-col gap-4">
+          {quick ? (
+            <section aria-label={t('toolsSheet.quick')} className="flex flex-col gap-1">
+              <h3 className="px-3 text-sm font-semibold text-muted-foreground">
+                {t('toolsSheet.quick')}
+              </h3>
+              <div className="card flex flex-col p-1">{quick}</div>
+            </section>
+          ) : null}
           {groups
             .filter((group) => group.rows.length > 0)
             .map((group) => (

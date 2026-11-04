@@ -20,6 +20,7 @@ import {
   type ScaleView,
 } from '@/widgets/scale-explorer'
 import { SettingsGear } from '@/widgets/practice-pages'
+import { ToolsButton } from '@/widgets/tools-sheet'
 import { StepPanel } from '@/widgets/step-panel'
 import { PiecesInKey } from './PiecesInKey'
 
@@ -65,6 +66,7 @@ export function ScalesPage() {
                 }}
               />
             ) : null}
+            <ToolsButton />
             <SettingsGear page="scales" />
           </>
         }
