@@ -10,6 +10,7 @@ import {
   confirm,
   InfoTip,
   NameField,
+  Said,
   SettingsGroup,
   Sheet,
   SheetContent,
@@ -152,7 +153,14 @@ export function RecorderPage() {
       }}
       controls={
         recordings.groups.length === 0 ? (
-          <p className="text-center text-muted-foreground">{t('tools.recorder.none')}</p>
+          // An empty state as the app's others (B2): what goes here, and how it comes.
+          <Said
+            icon={FileMusic}
+            paint="lilac"
+            title={t('tools.recorder.noneTitle')}
+            description={t('tools.recorder.none')}
+            action={null}
+          />
         ) : (
           <div className="flex flex-col gap-6">
             {recordings.groups.map((group) => (

@@ -10,7 +10,7 @@ describe('Practice → Recorder (R29 B11)', () => {
     await screen.findByRole('heading', { level: 1, name: 'Recorder' })
     expect(screen.getByRole('button', { name: 'Record' })).toBeDisabled()
     expect(screen.getByText(/Connect a piano to record/)).toBeInTheDocument()
-    expect(screen.getByText(/Nothing recorded yet/)).toBeInTheDocument()
+    expect(screen.getByText('No recordings yet')).toBeInTheDocument()
   })
 
   it('records a free take and makes a song of it', async () => {
@@ -74,6 +74,6 @@ describe('Practice → Recorder (R29 B11)', () => {
     const ask = await screen.findByRole('alertdialog', { name: 'Delete this recording?' })
     await user.click(within(ask).getByRole('button', { name: 'Delete' }))
     await waitFor(() => expect(app.takesStore.getState().free).toEqual([]))
-    expect(await screen.findByText(/Nothing recorded yet/)).toBeInTheDocument()
+    expect(await screen.findByText('No recordings yet')).toBeInTheDocument()
   })
 })
