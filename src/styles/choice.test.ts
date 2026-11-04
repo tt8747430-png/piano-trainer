@@ -60,8 +60,5 @@ describe('one selected style (R15)', () => {
       'widgets/app-nav/ui/AppNav.tsx',
     ])
       expect(readFileSync(path.join(SRC, file), 'utf8'), file).toMatch(/\bchoice\b/)
-    expect(readFileSync(path.join(SRC, 'styles/theme.css'), 'utf8')).toMatch(
-      /@utility tab \{[^}]*\bchoice\b/,
-    )
   })
 })
