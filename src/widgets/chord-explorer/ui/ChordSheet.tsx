@@ -10,7 +10,7 @@ export function ChordSheet({ placed }: { placed: PlacedChord }) {
   const { t } = useTranslation('music')
   const score = useMemo(() => notate(chordBar(placed)), [placed])
   return (
-    <section aria-label={t('sheet.label')} className="min-w-40">
+    <section aria-label={t('sheet.label')} className="flex w-full min-w-40 justify-center">
       <LazyScoreView score={score} />
     </section>
   )

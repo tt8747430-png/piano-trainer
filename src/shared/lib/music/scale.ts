@@ -298,14 +298,27 @@ export function scaleRootSpelling(pc: PitchClass, kind: ScaleKind): SpelledNote 
   return difference < 0 ? sharp : flat
 }
 
+/** The scales whose degrees the books name (tonic … leading note): the major and the three minors. */
+const NAMED_DEGREES: ReadonlySet<ScaleKind> = new Set(['major', 'natural', 'harmonic', 'melodic'])
+
 /**
- * Each degree's name in a seven-note scale, a key's names (`degreeNames`) for any mode: the 7th a
- * leading tone a half step under the tonic, a subtonic a whole step under it (natural minor's,
- * Mixolydian's). None for a scale of more or fewer notes.
+ * Each degree's name where the books name them (R29-P10): the major scale's and the three minors',
+ * the 7th a leading tone a half step under the tonic, a subtonic a whole step under it (natural
+ * minor's). None for a mode (told by its characteristic note), nor for a scale of more or fewer notes.
  */
 export function scaleDegreeNames(kind: ScaleKind): readonly DegreeName[] | null {
-  if (!isHeptatonic(kind)) return null
+  if (!NAMED_DEGREES.has(kind)) return null
   return degreeNames(scaleIntervals(kind)[6]?.semitones !== 11)
+}
+
+/**
+ * Which of a scale's notes differ from the major scale's (R29-P10), by their place in it: those its
+ * formula writes with a flat or a sharp (Dorian's ♭3 and ♭7, Lydian's ♯4, the blues' ♭3 ♭5 ♭7).
+ */
+export function alteredFromMajor(kind: ScaleKind): number[] {
+  return spellScale(note('C'), kind).flatMap((tone, at) =>
+    /[♭♯#𝄫𝄪]/u.test(tone.degree) ? [at] : [],
+  )
 }
 
 /** The gap between neighbouring notes of a scale: a half step, a whole step, or both (three semitones). */

@@ -19,6 +19,7 @@ import {
   scaleIntervals,
   scaleKey,
   scaleKindsIn,
+  alteredFromMajor,
   scaleDegreeNames,
   scaleRootSpelling,
   spellInKey,
@@ -284,7 +285,34 @@ describe('scaleRootSpelling, beyond today’s kinds', () => {
   })
 })
 
+describe('alteredFromMajor (R29-P10)', () => {
+  it.each([
+    ['major', []],
+    ['natural', [2, 5, 6]],
+    ['dorian', [2, 6]],
+    ['phrygian', [1, 2, 5, 6]],
+    ['lydian', [3]],
+    ['mixolydian', [6]],
+    ['locrian', [1, 2, 4, 5, 6]],
+    ['harmonic', [2, 5]],
+    ['melodic', [2]],
+  ] as const)('marks %s’s degrees that differ from major', (kind, altered) => {
+    expect(alteredFromMajor(kind)).toEqual(altered)
+  })
+
+  it('marks the blues scale’s ♭3, ♭5 and ♭7', () => {
+    // 1 ♭3 4 ♭5 5 ♭7: the 2nd, 4th and 6th of its six notes.
+    expect(alteredFromMajor('blues')).toEqual([1, 3, 5])
+  })
+})
+
 describe('scaleDegreeNames', () => {
+  it('names no mode’s degrees: a mode is told by its characteristic note', () => {
+    expect(scaleDegreeNames('dorian')).toBeNull()
+    expect(scaleDegreeNames('mixolydian')).toBeNull()
+    expect(scaleDegreeNames('lydian')).toBeNull()
+  })
+
   it('names a seven-note scale’s degrees, its 7th a leading tone or a subtonic', () => {
     expect(scaleDegreeNames('major')).toEqual([
       'tonic',
@@ -297,7 +325,7 @@ describe('scaleDegreeNames', () => {
     ])
     expect(scaleDegreeNames('natural')?.[6]).toBe('subtonic')
     expect(scaleDegreeNames('harmonic')?.[6]).toBe('leadingTone')
-    expect(scaleDegreeNames('mixolydian')?.[6]).toBe('subtonic')
+    expect(scaleDegreeNames('melodic')?.[6]).toBe('leadingTone')
     expect(scaleDegreeNames('pent')).toBeNull()
     expect(scaleDegreeNames('halfWhole')).toBeNull()
   })

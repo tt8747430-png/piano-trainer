@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { IN_PLACE } from '@/shared/lib'
 import {
+  alteredFromMajor,
   noteParam,
   relatedScale,
   scaleDegreeNames,
@@ -13,6 +14,15 @@ import {
 import { useScaleName } from '@/shared/i18n'
 import { ButtonLink, Fact } from '@/shared/ui'
 import { DegreeList } from './DegreeList'
+
+const CHARACTERISTIC = {
+  dorian: true,
+  phrygian: true,
+  lydian: true,
+  mixolydian: true,
+  locrian: true,
+} as const
+type Characteristic = keyof typeof CHARACTERISTIC
 
 /**
  * What a scale is made of (its degrees, a seven-note scale's each named by its function), and the
@@ -31,11 +41,26 @@ export function ScaleFacts({
   const scaleName = useScaleName()
   const related = relatedScale(root, kind)
   const names = scaleDegreeNames(kind)
+  const altered = alteredFromMajor(kind)
+  // A mode is told by the note that sets it apart (A43), its degrees not named.
+  const characteristic = kind in CHARACTERISTIC ? (kind as Characteristic) : null
   return (
     <dl className="flex flex-col gap-2">
       <Fact term={t('practice:scales.facts.formula')}>
-        <DegreeList items={tones.map((tone, at) => ({ top: tone.degree, name: names?.[at] }))} />
+        <DegreeList
+          alteredLabel={t('practice:scales.facts.altered')}
+          items={tones.map((tone, at) => ({
+            top: tone.degree,
+            name: names?.[at],
+            altered: altered.includes(at),
+          }))}
+        />
       </Fact>
+      {characteristic ? (
+        <Fact term={t('practice:scales.facts.sound')}>
+          {t(`practice:scales.facts.characteristic.${characteristic}`)}
+        </Fact>
+      ) : null}
       <Fact term={t('practice:scales.facts.gaps')}>
         {scaleGaps(kind)
           .map((gap) => t(`music:gap.${gap}`))

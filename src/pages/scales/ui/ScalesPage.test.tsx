@@ -132,6 +132,23 @@ describe('Practice → Scales and keys', () => {
     expect(screen.queryByRole('button', { name: /^Root/ })).not.toBeInTheDocument()
   })
 
+  it('writes Dorian’s formula 1 2 ♭3 4 5 6 ♭7, its ♭3 and ♭7 marked, and names its colour, not its degrees (R29-P10)', async () => {
+    await renderApp('/practice/scales?kind=dorian')
+    const formula = await screen.findByText('Formula')
+    const chips = within(formula.parentElement as HTMLElement).getAllByRole('listitem')
+    expect(chips.map((chip) => chip.textContent)).toEqual([
+      '1',
+      '2',
+      '♭3 (Differs from major)',
+      '4',
+      '5',
+      '6',
+      '♭7 (Differs from major)',
+    ])
+    expect(screen.getByText('Minor with a raised 6th')).toBeInTheDocument()
+    expect(screen.queryByText('Subdominant')).not.toBeInTheDocument()
+  })
+
   it('chooses the tonic among the twelve notes and the scale from a pop-up button', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales')

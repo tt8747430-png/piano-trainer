@@ -157,7 +157,22 @@ export const practice = {
     },
     tempo: 'Tempo',
     playUpDown: 'Play up and down',
-    facts: { formula: 'Formula', gaps: 'Structure', relative: 'Relative', modeOf: 'Mode of' },
+    facts: {
+      formula: 'Formula',
+      gaps: 'Structure',
+      relative: 'Relative',
+      modeOf: 'Mode of',
+      altered: 'Differs from major',
+      sound: 'Its colour',
+      // A mode told by the note that sets it apart from its major or minor (A43).
+      characteristic: {
+        dorian: 'Minor with a raised 6th',
+        phrygian: 'Minor with a lowered 2nd',
+        lydian: 'Major with a raised 4th',
+        mixolydian: 'Major with a lowered 7th',
+        locrian: 'Diminished: a lowered 2nd and 5th',
+      },
+    },
     chordsIn: 'Chords in this scale',
     keysPlay: { label: 'Keys play', chords: 'Chords', notes: 'Notes' },
     holds: '{{note}} is in {{chords}}',

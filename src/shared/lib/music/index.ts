@@ -202,6 +202,7 @@ export {
   modesOfKey,
   relatedScale,
   relativeKey,
+  alteredFromMajor,
   scaleDegreeNames,
   scaleGaps,
   scaleHasChords,

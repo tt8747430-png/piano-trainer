@@ -42,6 +42,7 @@ import {
 import { ChordFingering } from './ChordFingering'
 import { ChordBuilder } from './ChordBuilder'
 import { ChordPractice } from './ChordPractice'
+import { ChordHead } from './ChordHead'
 import { ChordSheet } from './ChordSheet'
 import { ColourNotes } from './ColourNotes'
 
@@ -138,30 +139,32 @@ export function ChordExplorer({
   return (
     <div className="flex flex-col gap-6">
       <PinnedKeyboard shown={shown} />
-      <div className="flex flex-wrap items-center justify-between gap-x-10 gap-y-4">
-        <div className="flex min-w-0 flex-col gap-3">
-          <hgroup>
-            <ChordHeading symbol={symbol} />
-            {quality ? (
-              <p className="text-muted-foreground">{t(`music:quality.${quality}`)}</p>
+      <ChordHead
+        name={
+          <>
+            <hgroup>
+              <ChordHeading symbol={symbol} />
+              {quality ? (
+                <p className="text-muted-foreground">{t(`music:quality.${quality}`)}</p>
+              ) : null}
+            </hgroup>
+            {others.length > 0 ? (
+              <p className="flex flex-wrap items-baseline gap-x-4">
+                <span className="text-muted-foreground">{t('practice:chords.written')}</span>
+                <span className="font-display text-xl font-semibold">
+                  {others
+                    .map((suffix) => printedSymbol(writtenSymbol({ root: built.root, suffix })))
+                    .join(' · ')}
+                </span>
+              </p>
             ) : null}
-          </hgroup>
-          {others.length > 0 ? (
-            <p className="flex flex-wrap items-baseline gap-x-4">
-              <span className="text-muted-foreground">{t('practice:chords.written')}</span>
-              <span className="font-display text-xl font-semibold">
-                {others
-                  .map((suffix) => printedSymbol(writtenSymbol({ root: built.root, suffix })))
-                  .join(' · ')}
-              </span>
-            </p>
-          ) : null}
-        </div>
-        <div className="flex flex-wrap items-center gap-x-10 gap-y-4">
-          <ChordSheet placed={placed} />
-        </div>
-      </div>
-      <ChordBuilder chord={chord} tones={built.tones} placed={placed} onChange={change} />
+          </>
+        }
+        staff={<ChordSheet placed={placed} />}
+        choices={
+          <ChordBuilder chord={chord} tones={built.tones} placed={placed} onChange={change} />
+        }
+      />
       <ChordFingering rows={rows} />
       <ColourNotes notes={notes} context={context} onToggle={colour} onPlay={colour} />
       {quality ? (
