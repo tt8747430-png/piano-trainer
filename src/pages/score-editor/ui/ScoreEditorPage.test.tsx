@@ -490,8 +490,8 @@ describe('the score editor', () => {
     const key = await openCategory(user, 'Key signature')
     expect(within(key).getByText('The whole song')).toBeInTheDocument()
     const here = within(key).getByRole('group', { name: 'Key' })
-    // One to seven sharps over one to seven flats, each named by its major key and its relative
-    // minor; no key signature is Switch to natural (ADR 0114).
+    // One to seven sharps over one to seven flats, each named by its key in the mode chosen; no key
+    // signature is No sharps or flats (ADR 0114, R29-P2).
     expect(within(here).getAllByRole('button')).toHaveLength(14)
     expect(
       within(within(here).getByRole('group', { name: 'Sharps' })).getAllByRole('button'),
@@ -499,17 +499,16 @@ describe('the score editor', () => {
     expect(
       within(within(here).getByRole('group', { name: 'Flats' })).getAllByRole('button'),
     ).toHaveLength(7)
-    expect(within(key).getByRole('button', { name: 'Switch to natural' })).toHaveAttribute(
-      'aria-pressed',
-      'false',
-    )
-    expect(within(here).getByRole('button', { name: 'G major / E minor' })).toHaveAttribute(
+    expect(
+      within(key).getByRole('button', { name: 'No sharps or flats · C major' }),
+    ).toHaveAttribute('aria-pressed', 'false')
+    expect(within(here).getByRole('button', { name: 'G major' })).toHaveAttribute(
       'aria-pressed',
       'true',
     )
     // At the song's head the key is the song's: no switch for the whole song.
     expect(within(key).queryByRole('switch')).not.toBeInTheDocument()
-    await user.click(within(here).getByRole('button', { name: 'D major / B minor' }))
+    await user.click(within(here).getByRole('button', { name: 'D major' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         key: 'D',

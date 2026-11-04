@@ -45,23 +45,17 @@ export function ScaleExplorer({
       ),
     )
   }
-  const choice = <ScaleChoice scale={scale} onChange={choose} />
   const musicKey = scale.show === 'key' ? keyOfScale(scale.root, scale.kind) : null
+  const choice = (
+    <ScaleChoice scale={scale} name={musicKey ? keyName(musicKey) : name} onChange={choose} />
+  )
   // The Key view is the key's: named as the key, whichever of its scales chose it.
   if (musicKey)
-    return (
-      <KeyView
-        scale={scale}
-        name={keyName(musicKey)}
-        musicKey={musicKey}
-        choice={choice}
-        onChange={onChange}
-      />
-    )
+    return <KeyView scale={scale} musicKey={musicKey} choice={choice} onChange={onChange} />
   const facts = <ScaleFacts root={root} kind={scale.kind} tones={spellScale(root, scale.kind)} />
   return scale.show === 'chords' ? (
-    <ChordsView scale={scale} name={name} onChange={onChange} choice={choice} facts={facts} />
+    <ChordsView scale={scale} onChange={onChange} choice={choice} facts={facts} />
   ) : (
-    <RunView scale={scale} name={name} onChange={onChange} choice={choice} facts={facts} />
+    <RunView scale={scale} onChange={onChange} choice={choice} facts={facts} />
   )
 }

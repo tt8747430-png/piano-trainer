@@ -1,12 +1,11 @@
-import { Link, Navigate, useSearch } from '@tanstack/react-router'
+import { Link, Navigate, useNavigate, useSearch } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isMethodBookId } from '@/entities/book'
-import { ACCOMPANIMENT_PARTS } from '@/entities/pattern'
+import { ACCOMPANIMENT_PARTS, usePartName } from '@/entities/pattern'
 import { selectAccompaniment, useSettings } from '@/entities/settings'
-import { BackButton, RoundLink, ScreenHeader } from '@/shared/ui'
+import { BackButton, Dropdown, RoundLink, ScreenHeader } from '@/shared/ui'
 import { SettingsGear } from '@/widgets/practice-pages'
-import { AccompanimentTabs } from './AccompanimentTabs'
 import { BookPieces } from './BookPieces'
 import { PatternShelves } from './PatternShelves'
 
@@ -20,6 +19,8 @@ export function AccompanimentPage() {
   const { t } = useTranslation('practice')
   const { show } = useSearch({ from: '/shell/practice/accompaniment' })
   const { hidden } = useSettings(selectAccompaniment)
+  const partName = usePartName()
+  const navigate = useNavigate()
   const parts = ACCOMPANIMENT_PARTS.filter((part) => !hidden.includes(part))
   // A source hidden on Accompaniment's Settings opens on the first one still shown.
   const first = parts[0]
@@ -41,7 +42,16 @@ export function AccompanimentPage() {
             <SettingsGear page="accompaniment" />
           </>
         }
-        tabs={<AccompanimentTabs parts={parts} current={show} />}
+      />
+      {/* Where the patterns come from, one menu at the page's head (A25): never a second bar row. */}
+      <Dropdown
+        label={t('accompaniment.source')}
+        value={show}
+        onChange={(part) =>
+          void navigate({ to: '/practice/accompaniment', search: { show: part }, replace: true })
+        }
+        options={parts.map((part) => ({ value: part, label: partName(part) }))}
+        className="self-start"
       />
       <div className="flex flex-col gap-8">
         <PatternShelves part={show} />

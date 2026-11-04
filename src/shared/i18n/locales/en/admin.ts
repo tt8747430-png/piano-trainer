@@ -27,6 +27,7 @@ export const admin = {
     feedback: 'Empty state',
     empty: 'Nothing here yet',
   },
+  section: 'Section',
   tabs: {
     overview: 'Overview',
     accounts: 'Accounts',

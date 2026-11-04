@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { VIEWS_STORAGE_KEY, VIEWS_VERSION } from '@/entities/views'
@@ -82,10 +82,11 @@ describe('Remembered views', () => {
     expect(missing.viewsStore.getState().views['/play/nope']).toBeUndefined()
   })
 
-  it('keeps a screen as it is when its own tab is tapped', async () => {
+  it('keeps a screen as it is when its own view is tapped', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?root=D&kind=dorian')
-    await user.click(await screen.findByRole('link', { name: 'Notes' }))
+    const views = await screen.findByRole('radiogroup', { name: 'Scales and keys' })
+    await user.click(within(views).getByRole('radio', { name: 'Notes' }))
     expect(router.state.location.search).toMatchObject({ root: 'D', kind: 'dorian' })
   })
 

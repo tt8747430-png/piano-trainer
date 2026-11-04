@@ -3,12 +3,11 @@ import { Dices } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useSetSearch } from '@/shared/lib'
 import { keyScale, noteParam, randomKey } from '@/shared/lib/music'
-import { BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
+import { BackButton, RoundButton, ScreenHeader, Segmented } from '@/shared/ui'
 import { keyOfScale, ScaleExplorer, showsOf, type ScaleView } from '@/widgets/scale-explorer'
 import { SettingsGear } from '@/widgets/practice-pages'
 import { StepPanel } from '@/widgets/step-panel'
 import { PiecesInKey } from './PiecesInKey'
-import { ScaleTabs } from './ScaleTabs'
 
 /**
  * Scales and keys: any scale on any root, with its path step's panel when opened from one; in its
@@ -39,9 +38,18 @@ export function ScalesPage() {
             <SettingsGear page="scales" />
           </>
         }
-        tabs={<ScaleTabs shows={showsOf(scale.kind)} current={scale.show} />}
       />
       {step ? <StepPanel step={step} /> : null}
+      {/* The scale's views, the same scale under another light: in the page, never a second bar row. */}
+      <Segmented
+        label={t('pages.scales')}
+        value={scale.show}
+        options={showsOf(scale.kind).map((show) => ({
+          value: show,
+          label: t(`scales.show.${show}`),
+        }))}
+        onChange={(show) => onChange({ show })}
+      />
       <ScaleExplorer scale={scale} onChange={onChange} />
       {key ? <PiecesInKey musicKey={key} /> : null}
     </div>

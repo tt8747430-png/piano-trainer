@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Key } from '@/shared/lib/music'
+import { sameKey, type Key } from '@/shared/lib/music'
 import { SwitchRow } from '@/shared/ui'
 import { KeySignaturePicker } from '@/shared/ui/pickers/KeySignaturePicker'
 import { useScoreEditorContext } from '../model/editor-context'
@@ -25,6 +25,7 @@ export function KeyPicker({ bar }: { bar?: number | undefined }) {
   const [whole, setWhole] = useState(false)
   const key = useKeyAt(bar, song || whole)
   const choose = (next: Key) =>
+    sameKey(next, key) ||
     actions.dispatch(
       song || whole
         ? { type: 'settings', key: next }

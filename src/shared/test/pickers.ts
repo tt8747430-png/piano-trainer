@@ -18,10 +18,16 @@ export async function pickIn(user: UserEvent, label: string, choice: string): Pr
   await user.click(within(panel).getByRole('radio', { name: choice }))
 }
 
-/** Opens a `KeyPicker`, takes a key on its circle and confirms it with Select. */
+/**
+ * Opens a `KeyPicker`, sets its mode (Major · Minor) to the key's and taps the key's cell, or No sharps
+ * or flats for C major and A minor ("G major", "E♭ minor").
+ */
 export async function pickKey(user: UserEvent, key: string, label = 'Key'): Promise<void> {
-  await pickIn(user, label, key)
-  await user.click(screen.getByRole('button', { name: `Select: ${key}` }))
+  await user.click(await screen.findByRole('button', { name: new RegExp(`^${escaped(label)}: `) }))
+  const minor = key.endsWith(' minor')
+  const mode = await screen.findByRole('radio', { name: minor ? 'Minor' : 'Major' })
+  if (mode.getAttribute('aria-checked') !== 'true') await user.click(mode)
+  await user.click(screen.getByRole('button', { name: new RegExp(`(^|· )${escaped(key)}$`) }))
 }
 
 /** Opens a `MenuPicker` and chooses one of its options. */

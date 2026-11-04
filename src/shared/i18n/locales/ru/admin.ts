@@ -28,6 +28,7 @@ export const admin: LocaleResources['admin'] = {
     feedback: 'Пустое состояние',
     empty: 'Здесь пока ничего нет',
   },
+  section: 'Раздел',
   tabs: {
     overview: 'Обзор',
     accounts: 'Аккаунты',

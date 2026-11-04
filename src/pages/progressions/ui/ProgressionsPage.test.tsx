@@ -22,10 +22,10 @@ const row = () =>
 /** The row once engraved: a staff takes a while under a full run. */
 const rowIs = (chords: readonly string[]) =>
   waitFor(() => expect(row()).toEqual(chords), { timeout: 5000 })
-/** Opens one of Progressions' tabs (A23). */
+/** Shows one of Progressions' views (A23), a segment in the page (R29-P1). */
 const openTab = (user: ReturnType<typeof userEvent.setup>, name: string) =>
   user.click(
-    within(screen.getByRole('navigation', { name: 'Progressions' })).getByRole('link', { name }),
+    within(screen.getByRole('radiogroup', { name: 'Progressions' })).getByRole('radio', { name }),
   )
 /** A library row, by its progression's name. */
 const card = (name: string) => screen.getByRole('article', { name })
@@ -430,11 +430,11 @@ describe('Practice → Progressions', () => {
     ).toHaveTextContent('Dm7 G7 CMaj7 · Gm7 C7 FMaj7 …')
   })
 
-  it('is three tabs, Progression · Library · Passing chords, each keeping the progression (A23)', async () => {
+  it('is three views, Progression · Library · Passing chords, each keeping the progression (A23)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions?p=I-IV-V&key=G')
-    const tabs = within(await screen.findByRole('navigation', { name: 'Progressions' }))
-    expect(tabs.getAllByRole('link').map((tab) => tab.textContent)).toEqual([
+    const tabs = within(await screen.findByRole('radiogroup', { name: 'Progressions' }))
+    expect(tabs.getAllByRole('radio').map((tab) => tab.textContent)).toEqual([
       'Progression',
       'Library',
       'Passing chords',
@@ -489,7 +489,7 @@ describe('Practice → Progressions', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice')
     await user.click(await screen.findByRole('link', { name: /^Progressions / }))
-    await screen.findByRole('navigation', { name: 'Progressions' })
+    await screen.findByRole('radiogroup', { name: 'Progressions' })
     await openTab(user, 'Library')
     await user.click(await findChooseButton('12-bar blues'))
     await waitFor(() =>

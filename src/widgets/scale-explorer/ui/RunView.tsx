@@ -23,13 +23,11 @@ const MOST_STARTS = 8
  */
 export function RunView({
   scale,
-  name,
   onChange,
   choice,
   facts,
 }: {
   scale: ScaleView
-  name: string
   onChange: (change: Partial<ScaleView>) => void
   /** Which scale: the explorer's own fields, before this view's. */
   choice: ReactNode
@@ -47,12 +45,11 @@ export function RunView({
   return (
     <ScaleLayout
       keyboard={<PinnedKeyboard shown={runShown(run, hands, runKeyShow(scale))} />}
-      name={name}
+      heading={choice}
       facts={facts}
       action={<PlayUpDown sounds={runSounds(run.music, scale.tempo)} />}
       fields={
         <>
-          {choice}
           <Labelled label={t('practice:hands')}>
             <Segmented
               label={t('practice:hands')}

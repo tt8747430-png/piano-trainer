@@ -50,7 +50,7 @@ describe('the Admin area', () => {
     await renderApp('/admin?tab=components', { auth: await signedInAs('admin') })
     for (const kind of ['Actions', 'Rows', 'Choices', 'Progress', 'Empty state'])
       expect(await screen.findByRole('region', { name: kind })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Components' })).toHaveAttribute('aria-current', 'page')
+    expect(screen.getByRole('combobox', { name: 'Section' })).toHaveTextContent('Components')
   })
 
   it('tells anyone else it is an admin’s', async () => {

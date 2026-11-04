@@ -1,7 +1,7 @@
-import { useSearch } from '@tanstack/react-router'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from '@/shared/lib/account'
-import { BackButton, NavTab, NavTabs, ScreenHeader } from '@/shared/ui'
+import { BackButton, Dropdown, ScreenHeader } from '@/shared/ui'
 import { NotOpen } from '@/widgets/content-editor'
 import { ADMIN_TABS, type AdminTab } from '../model/admin-tab'
 import { AccountsTab } from './AccountsTab'
@@ -35,31 +35,28 @@ export function AdminPage() {
   const { account } = useAccount()
   const { tab } = useSearch({ from: '/shell/admin' })
   const Tab = TABS[tab]
+  const navigate = useNavigate()
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader
-        title={t('title')}
-        back={<BackButton />}
-        tabs={
-          account?.role === 'admin' ? (
-            <NavTabs label={t('title')}>
-              {ADMIN_TABS.map((each) => (
-                <NavTab
-                  key={each}
-                  to="/admin"
-                  search={{ tab: each }}
-                  replace
-                  current={each === tab}
-                >
-                  {t(`tabs.${each}`)}
-                </NavTab>
-              ))}
-            </NavTabs>
-          ) : undefined
-        }
-      />
-      <div className="mx-auto w-full max-w-3xl">
-        {account?.role === 'admin' ? <Tab /> : <NotOpen line={t('notAdmin')} />}
+      <ScreenHeader title={t('title')} back={<BackButton />} />
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
+        {account?.role === 'admin' ? (
+          <>
+            {/* Nine sections: one menu at the content's head, never a second bar row (R29-P1). */}
+            <Dropdown
+              label={t('section')}
+              value={tab}
+              onChange={(each) =>
+                void navigate({ to: '/admin', search: { tab: each }, replace: true })
+              }
+              options={ADMIN_TABS.map((each) => ({ value: each, label: t(`tabs.${each}`) }))}
+              className="self-start"
+            />
+            <Tab />
+          </>
+        ) : (
+          <NotOpen line={t('notAdmin')} />
+        )}
       </div>
     </div>
   )

@@ -29,13 +29,11 @@ import { ScaleLayout } from './ScaleLayout'
  */
 export function KeyView({
   scale,
-  name,
   musicKey,
   choice,
   onChange,
 }: {
   scale: ScaleView
-  name: string
   /** The scale's key (`keyOfScale`): the Key view is offered only to a scale that has one. */
   musicKey: Key
   choice: ReactNode
@@ -61,11 +59,7 @@ export function KeyView({
     scaleShown(placeScale(tonic, kind)),
   )
   return (
-    <ScaleLayout
-      keyboard={<PinnedKeyboard shown={shown} range={range} />}
-      name={name}
-      fields={choice}
-    >
+    <ScaleLayout keyboard={<PinnedKeyboard shown={shown} range={range} />} heading={choice}>
       <div className="grid-fields items-start gap-x-10 gap-y-6">
         <CircleOfFifths current={musicKey} kind={scale.kind} onChange={onChange} />
         <div className="flex min-w-0 flex-col gap-6">

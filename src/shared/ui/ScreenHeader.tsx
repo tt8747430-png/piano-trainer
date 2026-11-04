@@ -3,11 +3,32 @@ import { cn } from '@/shared/lib'
 import { NO_BAR_SIZE, useScreenBar } from './screen-bar'
 import { usePageHeading } from './use-page-heading'
 
+type ScreenHeaderProps = {
+  /** The screen's name: its title and the page's. */
+  title: string
+  back?: ReactNode
+  /** Two at most, round; a third goes into a More menu. */
+  actions?: ReactNode
+  /** The page shows its title itself, large under the bar (a document in Edit): on a phone the bar
+   * keeps it for a screen reader alone and leaves its room to the bar's tools. */
+  titleOnPage?: boolean
+} & (
+  | {
+      /** A place's title, set larger in the same row. */
+      large: true
+      /** A place's views, in the title's place (a `Segmented`): only a place has them in its bar. */
+      switcher?: ReactNode
+    }
+  | { large?: false; switcher?: never }
+)
+
 /**
  * A screen's bar: one row of one height on every screen, Back, the title (one line, cut short with an
- * ellipsis) and at most two actions, More holding the rest; a page's tabs its second row. A place
- * (Learn, Songs, Practice) or a detail page (a song, a course) is `large`: the same one row, its title
- * set larger and allowed a second line. A hairline marks the bar
+ * ellipsis) and at most two actions, More holding the rest; never a second row (R29-P1: a page's
+ * views are a segmented control in its content). A place (Learn, Songs, Practice) or a detail page (a
+ * song, a course) is `large`: the same one row, its title set larger and allowed a second line; a
+ * place's views (`switcher`, Learn's Lessons · Courses) take the title's place, the title kept for a
+ * screen reader. A hairline marks the bar
  * once the page runs under it. It stays at the top, clear of the notch, slides away while reading down
  * and comes back as soon as the page turns up; it stays while focus is inside it.
  *
@@ -17,23 +38,10 @@ export function ScreenHeader({
   title,
   back,
   actions,
-  tabs,
+  switcher,
   large = false,
   titleOnPage = false,
-}: {
-  /** The screen's name: its title and the page's. */
-  title: string
-  back?: ReactNode
-  /** Two at most, round; a third goes into a More menu. */
-  actions?: ReactNode
-  /** The page's views (`NavTabs`): the bar's second row. */
-  tabs?: ReactNode
-  /** A place's title, set larger in the same row. */
-  large?: boolean
-  /** The page shows its title itself, large under the bar (a document in Edit): on a phone the bar
-   * keeps it for a screen reader alone and leaves its room to the bar's tools. */
-  titleOnPage?: boolean
-}) {
+}: ScreenHeaderProps) {
   const { shown, report, hold } = useScreenBar()
   const bar = useRef<HTMLElement>(null)
   const pageHeading = usePageHeading<HTMLHeadingElement>(title)
@@ -75,6 +83,7 @@ export function ScreenHeader({
     >
       <div className="flex min-h-14 items-center gap-2 py-1">
         {back ? <div className="shrink-0 print:hidden">{back}</div> : null}
+        {switcher ? <div className="flex min-w-0 flex-1 items-center">{switcher}</div> : null}
         <h1
           {...pageHeading}
           className={cn(
@@ -84,6 +93,7 @@ export function ScreenHeader({
             'line-clamp-2 leading-tight text-balance wrap-break-word',
             large ? 'text-[1.375rem] sm:text-2xl' : 'text-lg sm:text-xl',
             titleOnPage && 'max-sm:sr-only',
+            switcher && 'sr-only',
           )}
         >
           {title}
@@ -92,7 +102,6 @@ export function ScreenHeader({
           <div className="ms-auto flex shrink-0 items-center gap-1.5 print:hidden">{actions}</div>
         ) : null}
       </div>
-      {tabs}
     </header>
   )
 }

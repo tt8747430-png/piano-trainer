@@ -367,16 +367,6 @@
   }
 }
 
-/* A strip of tabs on a hairline, scrolling sideways where its tabs outrun the screen, its edges never
-   faded (R13); and one tab of it, the chosen one (a tab pressed, or the link of the page shown) in
-   the one selected fill (R15), as every chosen thing. */
-@utility tab-strip {
-  @apply relative flex gap-1 overflow-x-auto border-b border-border py-1 scrollbar-none;
-}
-@utility tab {
-  @apply relative inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-control px-3 text-base font-semibold whitespace-nowrap text-muted-foreground select-none choice focus-visible:-outline-offset-3;
-}
-
 /* A screen's gutter, and what bleeds across it to the screen's edges (a bar, a row that scrolls sideways). */
 @utility px-gutter {
   padding-inline: var(--gutter);

@@ -27,6 +27,16 @@ const SCREENS = [
 ] as const
 
 describe('the screen’s bar', () => {
+  // R29-P1: every bar one row of one height; a page's views are in its content, a place's in the
+  // title's place, never a strip of tabs under the bar.
+  it.each(SCREENS)('on %s is one row, with no tabs under it', async (path) => {
+    await renderApp(path)
+    await screen.findByRole('heading', { level: 1 })
+    const bar = document.querySelector('[data-slot="screen-bar"]')
+    expect(bar?.children).toHaveLength(1)
+    expect(bar?.querySelector('nav')).toBeNull()
+  })
+
   // A sticky bar goes no further than its parent: in a wrapper shorter than the page it scrolls
   // away for good, while the keys pinned under it still leave it room.
   it.each(SCREENS)(

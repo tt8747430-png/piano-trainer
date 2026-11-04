@@ -10,11 +10,12 @@ const SHARPS = [1, 2, 3, 4, 5, 6, 7] as const
 const FLATS = [-1, -2, -3, -4, -5, -6, -7] as const
 
 /**
- * A key signature chosen as notation apps choose it (ADR 0114, Flat's and Dorico's key sheets): Major ·
- * Minor, then one bordered grid of one to seven sharps over one to seven flats, each cell the signs
- * alone, named by its major and relative minor in its tooltip and to a screen reader, the one in force
- * tinted; Switch to natural under it. A cell keeps the mode. The score editor's key picker and a new
- * song's both are this one.
+ * A key signature chosen as notation apps choose it (ADR 0114, Flat's and Dorico's key sheets; R29-P2,
+ * Decided 22): Major · Minor, then one bordered grid of one to seven sharps over one to seven flats,
+ * each cell the signs with its key's tonic under them in the mode chosen (one name per key: D♭ is 5♭,
+ * C♯ 7♯), the one in force tinted; No sharps or flats under it. A cell keeps the mode. The score
+ * editor's key, a new song's and every Practice page's (`KeyPicker`) are this one. Every tap reports its
+ * key, the one in force too (a picker closes on it); the caller skips a key it already has.
  */
 export function KeySignaturePicker({
   value,
@@ -28,16 +29,20 @@ export function KeySignaturePicker({
     t(key.minor ? 'music:key.minor' : 'music:key.major', {
       tonic: printedNote(key.tonic),
     })
+  const tonicName = (key: Key) => `${printedNote(key.tonic)}${key.minor ? 'm' : ''}`
   const count = keySignature(value)
   const signature = (each: number) => signatureKey(each, value.minor)
   const cell = (each: number) => (
     <PickerCell
       key={each}
-      label={`${full(signatureKey(each, false))} / ${full(signatureKey(each, true))}`}
+      label={full(signature(each))}
       pressed={each === count}
-      onClick={() => (each === count ? undefined : onChange(signature(each)))}
+      onClick={() => onChange(signature(each))}
     >
-      <SignatureSigns count={each} />
+      <span className="flex flex-col items-center" aria-hidden>
+        <SignatureSigns count={each} />
+        <span className="text-sm leading-none font-semibold">{tonicName(signature(each))}</span>
+      </span>
     </PickerCell>
   )
   const natural = signature(0)
@@ -64,10 +69,9 @@ export function KeySignaturePicker({
         variant="link"
         className="h-11 justify-start self-start px-0 text-base text-link"
         aria-pressed={count === 0}
-        title={full(natural)}
-        onClick={() => (count === 0 ? undefined : onChange(natural))}
+        onClick={() => onChange(natural)}
       >
-        {t('editor:signature.natural')}
+        {t('editor:signature.natural')} · {full(natural)}
       </Button>
     </>
   )

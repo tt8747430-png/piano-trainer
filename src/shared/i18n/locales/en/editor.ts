@@ -168,7 +168,7 @@ export const editor = {
     flats: 'Flats',
     // A palette key that opens the picker, named by what is in force.
     change: '{{sign}}: {{now}}',
-    natural: 'Switch to natural',
+    natural: 'No sharps or flats',
     wholeSong: 'Change the key for the whole song',
     wholeSongInfo:
       'On, the song’s own key changes, its music moved with it, as at its start. Off, the key changes from this section on, up to the next change.',

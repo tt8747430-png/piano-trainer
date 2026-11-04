@@ -124,10 +124,18 @@ describe('Practice → Scales and keys', () => {
     expect(c4).not.toHaveAttribute('data-down')
   })
 
-  it('chooses the root among the twelve notes and the scale from a pop-up button', async () => {
+  it('reads its heading as the scale’s name, two menus Tonic and Scale, and nothing called Root (R29-P8)', async () => {
+    await renderApp('/practice/scales?root=B&kind=natural')
+    const heading = await screen.findByRole('heading', { level: 2, name: 'B natural minor' })
+    expect(within(heading).getByRole('button', { name: 'Tonic: B' })).toBeInTheDocument()
+    expect(within(heading).getByRole('button', { name: /^Scale: / })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /^Root/ })).not.toBeInTheDocument()
+  })
+
+  it('chooses the tonic among the twelve notes and the scale from a pop-up button', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales')
-    await pickIn(user, 'Root', 'E♭')
+    await pickIn(user, 'Tonic', 'E♭')
     await pickMenu(user, 'Scale', 'Harmonic minor')
     expect(router.state.location.search).toMatchObject({ root: 'Eb', kind: 'harmonic' })
   })
@@ -135,8 +143,8 @@ describe('Practice → Scales and keys', () => {
   it('shows each degree’s numeral over its chord in Chords view', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/scales')
-    const views = await screen.findByRole('navigation', { name: 'Scales and keys' })
-    await user.click(within(views).getByRole('link', { name: 'Harmony' }))
+    const views = await screen.findByRole('radiogroup', { name: 'Scales and keys' })
+    await user.click(within(views).getByRole('radio', { name: 'Harmony' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(shownText(within(keyboard).getByRole('button', { name: 'D4' }))).toContain('iiDm')
     expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-key-tonic')
@@ -220,11 +228,11 @@ describe('Practice → Scales and keys', () => {
   it('plays a scale up its octave as it is chosen, unless Settings turns that off', async () => {
     const user = userEvent.setup()
     const { audio, settingsStore } = await renderApp('/practice/scales')
-    await pickIn(user, 'Root', 'D')
+    await pickIn(user, 'Tonic', 'D')
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([62, 64, 66, 67, 69, 71, 73, 74])
     act(() => setKeyboard(settingsStore, { autoplay: false }))
     const played = audio.played.length
-    await pickIn(user, 'Root', 'E')
+    await pickIn(user, 'Tonic', 'E')
     expect(audio.played).toHaveLength(played)
   })
 
@@ -361,7 +369,7 @@ describe('Practice → Scales and keys', () => {
     await renderApp('/practice/scales?kind=blues&show=chords')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     expect(
-      within(screen.getByRole('navigation', { name: 'Scales and keys' })).getAllByRole('link'),
+      within(screen.getByRole('radiogroup', { name: 'Scales and keys' })).getAllByRole('radio'),
     ).toHaveLength(1)
     expect(shownText(within(keyboard).getByRole('button', { name: 'C4' }))).toContain('1')
   })
@@ -474,18 +482,19 @@ describe('Practice → Scales and keys', () => {
   })
 })
 
-describe('Practice → Scales and keys, its tabs', () => {
-  it('marks only the view shown as the current tab', async () => {
+describe('Practice → Scales and keys, its views', () => {
+  it('checks only the view shown, in the page and not in its bar (R29-P1)', async () => {
     await renderApp('/practice/scales?kind=harmonic&show=chords')
-    const nav = await screen.findByRole('navigation', { name: 'Scales and keys' })
+    const views = await screen.findByRole('radiogroup', { name: 'Scales and keys' })
+    expect(screen.getByRole('banner')).not.toContainElement(views)
     expect(
-      within(nav)
-        .getAllByRole('link')
-        .map((tab) => [tab.textContent, tab.getAttribute('aria-current')]),
+      within(views)
+        .getAllByRole('radio')
+        .map((view) => [view.textContent, view.getAttribute('aria-checked')]),
     ).toEqual([
-      ['Notes', null],
-      ['Harmony', 'page'],
-      ['Key', null],
+      ['Notes', 'false'],
+      ['Harmony', 'true'],
+      ['Key', 'false'],
     ])
   })
 })

@@ -108,8 +108,7 @@ export const practice: LocaleResources['practice'] = {
   scales: {
     show: { scale: 'Звуки', chords: 'Гармония', key: 'Тональность' },
     label: 'Гамма',
-    // The row of pickers over a scale: its root and its kind.
-    which: 'Какая гамма',
+    tonic: 'Тоника',
     octaves: 'Октавы',
     startOn: 'Начать с',
     openChord: 'Открыть {{chord}} в «Аккордах»',
@@ -288,6 +287,7 @@ export const practice: LocaleResources['practice'] = {
     },
   },
   accompaniment: {
+    source: 'Источник',
     noneYours: 'Здесь хранятся фактуры, которые вы отметили, создали или скрыли.',
     allHidden: 'Все фактуры здесь скрыты. Они хранятся на странице «Свои».',
   },

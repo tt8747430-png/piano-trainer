@@ -17,8 +17,23 @@ const saved = (state: object) => {
   )
   return storage
 }
-const tabs = () =>
-  within(screen.getByRole('navigation', { name: 'Accompaniment' })).getAllByRole('link')
+/** The Source menu's sources, the chosen one marked (R29-P1: a menu, not a row of tabs). */
+async function sources(label = 'Source'): Promise<[string, boolean][]> {
+  const user = userEvent.setup()
+  await user.click(screen.getByRole('combobox', { name: label }))
+  const options = (await screen.findAllByRole('option')).map((option): [string, boolean] => [
+    option.textContent ?? '',
+    option.getAttribute('aria-selected') === 'true',
+  ])
+  await user.keyboard('{Escape}')
+  return options
+}
+/** Which source the Source menu shows. */
+const source = () => screen.getByRole('combobox', { name: 'Source' })
+async function chooseSource(user: ReturnType<typeof userEvent.setup>, name: string) {
+  await user.click(source())
+  await user.click(await screen.findByRole('option', { name }))
+}
 const shelf = (name: string) => screen.getByRole('region', { name })
 const shelves = () => screen.getAllByRole('heading', { level: 2 }).map((each) => each.textContent)
 const rows = (name: string) =>
@@ -35,13 +50,13 @@ describe('Practice → Accompaniment', () => {
       await screen.findByRole('heading', { level: 1, name: 'Accompaniment' }),
     ).toBeInTheDocument()
     expect(router.state.location.pathname).toBe('/practice/accompaniment')
-    expect(tabs().map((tab) => [tab.textContent, tab.getAttribute('aria-current')])).toEqual([
-      ['Called to Play', 'page'],
-      ['Called to Play 2', null],
-      ['Bobrova', null],
-      ['Gorshkov', null],
-      ['Styles', null],
-      ['Yours', null],
+    expect(await sources()).toEqual([
+      ['Called to Play', true],
+      ['Called to Play 2', false],
+      ['Bobrova', false],
+      ['Gorshkov', false],
+      ['Styles', false],
+      ['Yours', false],
     ])
     expect(shelves()).toEqual(['The five ways (lesson 3)', 'Right-hand techniques', 'Studies'])
     expect(
@@ -59,7 +74,7 @@ describe('Practice → Accompaniment', () => {
   it('lists on Bobrova her seven types and the hymns they are practised on, each on Songs', async () => {
     await renderApp('/practice/accompaniment?show=seven-types')
     await screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
-    expect(screen.getByRole('link', { name: 'Bobrova' })).toHaveAttribute('aria-current', 'page')
+    expect(source()).toHaveTextContent('Bobrova')
     expect(shelves()).toEqual(['The seven types of accompaniment', 'Hymns'])
     expect(rows('The seven types of accompaniment')).toHaveLength(8)
     expect(rows('Hymns')).toEqual([
@@ -74,10 +89,7 @@ describe('Practice → Accompaniment', () => {
   it('lists on Called to Play 2 its octaves and chords, and the songs of its workbook', async () => {
     await renderApp('/practice/accompaniment?show=called-to-play-2')
     await screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
-    expect(screen.getByRole('link', { name: 'Called to Play 2' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    )
+    expect(source()).toHaveTextContent('Called to Play 2')
     expect(shelves()).toEqual(['Octaves and chords (level 2)', 'Called to Play, level 2'])
     expect(rows('Octaves and chords (level 2)')).toEqual(
       ['oct', 'octs', 'chd'].map((id) => `/practice/accompaniment/patterns/${id}`),
@@ -89,7 +101,7 @@ describe('Practice → Accompaniment', () => {
   it('lists on Gorshkov his textures and the songs his lessons play them on', async () => {
     await renderApp('/practice/accompaniment?show=gorshkov')
     await screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
-    expect(screen.getByRole('link', { name: 'Gorshkov' })).toHaveAttribute('aria-current', 'page')
+    expect(source()).toHaveTextContent('Gorshkov')
     expect(shelves()).toEqual(['Arranging the accompaniment', 'Gorshkov’s songs'])
     expect(rows('Arranging the accompaniment')).toEqual(
       ['g1', 'g2', 'g3', 'g4', 'g5', 'g6'].map((id) => `/practice/accompaniment/patterns/${id}`),
@@ -137,7 +149,7 @@ describe('Practice → Accompaniment', () => {
       '/practice/accompaniment/patterns/my-1',
     )
     expect(within(shelf('Hidden')).getByRole('link', { name: /^Funk/ })).toBeInTheDocument()
-    await user.click(screen.getByRole('link', { name: 'Styles' }))
+    await chooseSource(user, 'Styles')
     const styles = await screen.findByRole('region', { name: 'Rhythm styles' })
     expect(within(styles).getByRole('link', { name: /^Ballad arpeggio/ })).toBeInTheDocument()
     expect(within(styles).queryByRole('link', { name: /^Funk/ })).toBeNull()
@@ -150,12 +162,12 @@ describe('Practice → Accompaniment', () => {
     expect(screen.queryByRole('heading', { level: 2 })).not.toBeInTheDocument()
   })
 
-  it('changes page from a tab, without a new step of history', async () => {
+  it('changes source from its menu, without a new step of history', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/accompaniment')
     await screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
     const before = router.history.length
-    await user.click(screen.getByRole('link', { name: 'Bobrova' }))
+    await chooseSource(user, 'Bobrova')
     expect(await screen.findByRole('region', { name: 'Hymns' })).toBeInTheDocument()
     expect(router.state.location.href).toBe('/practice/accompaniment?show=seven-types')
     expect(router.history.length).toBe(before)
@@ -169,29 +181,26 @@ describe('Practice → Accompaniment', () => {
     await user.click(within(nav).getByRole('link', { name: 'Practice' }))
     await user.click(await screen.findByRole('link', { name: /^Accompaniment / }))
     expect(await screen.findByRole('region', { name: 'Hymns' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Bobrova' })).toHaveAttribute('aria-current', 'page')
+    expect(source()).toHaveTextContent('Bobrova')
   })
 
-  it('marks only the page shown as the current tab', async () => {
+  it('checks only the source shown in its menu', async () => {
     await renderApp('/practice/accompaniment?show=styles')
     await screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
-    expect(tabs().map((tab) => [tab.textContent, tab.getAttribute('aria-current')])).toEqual([
-      ['Called to Play', null],
-      ['Called to Play 2', null],
-      ['Bobrova', null],
-      ['Gorshkov', null],
-      ['Styles', 'page'],
-      ['Yours', null],
+    expect(await sources()).toEqual([
+      ['Called to Play', false],
+      ['Called to Play 2', false],
+      ['Bobrova', false],
+      ['Gorshkov', false],
+      ['Styles', true],
+      ['Yours', false],
     ])
   })
 
   it('opens on its first page for a page the URL names that it does not have', async () => {
     await renderApp('/practice/accompaniment?show=psalms')
     expect(await screen.findByRole('region', { name: 'Studies' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Called to Play' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    )
+    expect(source()).toHaveTextContent('Called to Play')
   })
 
   it('makes a new pattern from its bar', async () => {
@@ -211,11 +220,14 @@ describe('Practice → Accompaniment', () => {
       expect(
         await screen.findByRole('heading', { level: 1, name: 'Аккомпанемент' }),
       ).toBeInTheDocument()
-      expect(
-        within(screen.getByRole('navigation', { name: 'Аккомпанемент' }))
-          .getAllByRole('link')
-          .map((tab) => tab.textContent),
-      ).toEqual(['Called to Play', 'Called to Play 2', 'Боброва', 'Горшков', 'Стили', 'Свои'])
+      expect((await sources('Источник')).map(([name]) => name)).toEqual([
+        'Called to Play',
+        'Called to Play 2',
+        'Боброва',
+        'Горшков',
+        'Стили',
+        'Свои',
+      ])
       expect(untranslated(document.body)).toEqual([])
     },
   )

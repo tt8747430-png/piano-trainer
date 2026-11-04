@@ -43,10 +43,21 @@ describe('ScreenHeader', () => {
     expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
   })
 
-  it('holds a subject’s tabs in the bar, under the title', () => {
-    render(<ScreenHeader title="Chords" tabs={<nav aria-label="Chords" />} />)
+  it('sets a place’s views in the title’s place, in the bar’s one row, the title kept for a screen reader', () => {
+    render(
+      <ScreenHeader title="Learn" large switcher={<div role="radiogroup" aria-label="Views" />} />,
+    )
     const bar = screen.getByRole('banner')
-    expect(within(bar).getByRole('navigation', { name: 'Chords' })).toBeInTheDocument()
+    const views = within(bar).getByRole('radiogroup', { name: 'Views' })
+    expect(within(bar).getByRole('heading', { level: 1, name: 'Learn' })).toHaveClass('sr-only')
+    // One row: the switcher and the heading share it, nothing under it.
+    expect(views.parentElement?.parentElement).toBe(bar.firstElementChild)
+    expect(bar.children).toHaveLength(1)
+  })
+
+  it('gives only a place a switcher', () => {
+    // @ts-expect-error: a page under a place shows its views in its content (R29-P1)
+    render(<ScreenHeader title="Chords" switcher={<div />} />)
   })
 
   it('keeps a screen’s title in the bar, a long one on two lines rather than cut', () => {

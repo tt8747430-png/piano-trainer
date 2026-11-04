@@ -94,18 +94,38 @@ describe('NotePicker', () => {
 })
 
 describe('KeyPicker', () => {
-  it('takes a wedge, then Select returns its key', async () => {
+  it('opens the key-signature grid: a tap on 5♭ takes D♭ major and closes (R29-P2)', async () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
     render(<KeyPicker value={{ tonic: note('C'), minor: false }} onChange={onChange} />)
     await user.click(screen.getByRole('button', { name: 'Key: C major' }))
-    const circle = await screen.findByRole('radiogroup', { name: 'Key' })
-    await user.click(within(circle).getByRole('radio', { name: 'D major' }))
-    expect(onChange).not.toHaveBeenCalled()
-    await user.click(screen.getByRole('button', { name: 'Select: D major' }))
-    expect(onChange).toHaveBeenLastCalledWith({ tonic: note('D'), minor: false })
+    const sharps = await screen.findByRole('group', { name: 'Sharps' })
+    expect(within(sharps).getAllByRole('button')).toHaveLength(7)
+    expect(
+      within(screen.getByRole('group', { name: 'Flats' })).getAllByRole('button'),
+    ).toHaveLength(7)
+    // One name per key: C♯ is 7♯, D♭ 5♭, each a cell of its own; no circle.
+    expect(within(sharps).getByRole('button', { name: 'C♯ major' })).toBeInTheDocument()
+    expect(document.querySelector('[data-wedge]')).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'D♭ major' }))
+    expect(onChange).toHaveBeenLastCalledWith({ tonic: note('D', -1), minor: false })
+    expect(screen.queryByRole('group', { name: 'Sharps' })).not.toBeInTheDocument()
   })
 
+  it('names the minor keys in Minor', async () => {
+    const user = userEvent.setup()
+    render(<KeyPicker value={{ tonic: note('A'), minor: true }} onChange={vi.fn()} />)
+    await user.click(screen.getByRole('button', { name: 'Key: A minor' }))
+    const sharps = await screen.findByRole('group', { name: 'Sharps' })
+    expect(within(sharps).getByRole('button', { name: 'E minor' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /No sharps or flats · A minor/ })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+  })
+})
+
+describe('KeyCircle', () => {
   it('reaches both halves of a split wedge, the minors inside', async () => {
     const onChoose = vi.fn()
     const user = userEvent.setup()

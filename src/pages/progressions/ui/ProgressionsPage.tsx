@@ -6,12 +6,12 @@ import { libraryProgression } from '@/entities/progression-library'
 import { useSetSearch } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { keyFromParam } from '@/shared/lib/music'
-import { BackButton, RoundButton, RoundLink, ScreenHeader } from '@/shared/ui'
+import { BackButton, RoundButton, RoundLink, ScreenHeader, Segmented } from '@/shared/ui'
 import { NewProgressionSheet } from '@/widgets/content-editor'
 import { SettingsGear } from '@/widgets/practice-pages'
 import {
+  PROGRESSIONS_TABS,
   ProgressionExplorer,
-  ProgressionsTabs,
   type ProgressionsView,
 } from '@/widgets/progression-explorer'
 
@@ -58,7 +58,16 @@ export function ProgressionsPage() {
             <SettingsGear page="progressions" />
           </>
         }
-        tabs={<ProgressionsTabs current={view.tab} />}
+      />
+      {/* What is shown of the one progression: in the page, never a second bar row (R29-P1). */}
+      <Segmented
+        label={t('pages.progressions')}
+        value={view.tab ?? 'progression'}
+        options={PROGRESSIONS_TABS.map((tab) => ({
+          value: tab,
+          label: t(`progressions.tabs.${tab}`),
+        }))}
+        onChange={(tab) => onChange({ tab: tab === 'progression' ? undefined : tab })}
       />
       <ProgressionExplorer view={view} onChange={onChange} />
       {editsContent(account) ? (

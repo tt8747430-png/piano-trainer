@@ -4,15 +4,16 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { journeyById } from '@/entities/lesson'
 import { selectLearned, useProgress } from '@/entities/progress'
+import { useSetSearch } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { Fab, FloatingActions, NavTab, NavTabs, RoundLink, ScreenHeader } from '@/shared/ui'
+import { Fab, FloatingActions, RoundLink, ScreenHeader, Segmented } from '@/shared/ui'
 import { PlaceActions } from '@/widgets/app-nav'
 import { NewCourseSheet } from '@/widgets/content-editor'
 import { ContinueAction } from '@/widgets/continue-action'
 import { CourseShelves, currentJourney, JourneyLibrary } from '@/widgets/curriculum'
 
 /**
- * Learn (ADR 0053), the app's first place, a library: its header's toggle between the Lessons, a
+ * Learn (ADR 0053), the app's first place, a library: its bar's switch (in the title's place) between the Lessons, a
  * level chosen from its chips and its chapters as groups of rows, and the Courses, shelves of
  * courses as rows; Continue over both. An editor's Manage lessons or New course floats over it.
  */
@@ -23,6 +24,7 @@ export function LearnPage() {
   const { account } = useAccount()
   const journey = journeyById(journeyId) ?? currentJourney(learned)
   const [newCourse, setNewCourse] = useState(false)
+  const show = useSetSearch<{ view: 'lessons' | 'courses'; journey: string }>()
   return (
     <div className="flex flex-col">
       <ScreenHeader
@@ -48,20 +50,17 @@ export function LearnPage() {
             <PlaceActions />
           </>
         }
-        tabs={
-          <NavTabs label={t('learn:views.label')}>
-            {(['lessons', 'courses'] as const).map((shown) => (
-              <NavTab
-                key={shown}
-                to="/"
-                search={{ view: shown, journey: '' }}
-                replace
-                current={shown === view}
-              >
-                {t(`learn:views.${shown}`)}
-              </NavTab>
-            ))}
-          </NavTabs>
+        switcher={
+          <Segmented
+            label={t('learn:views.label')}
+            value={view}
+            options={(['lessons', 'courses'] as const).map((shown) => ({
+              value: shown,
+              label: t(`learn:views.${shown}`),
+            }))}
+            onChange={(shown) => show({ view: shown, journey: '' })}
+            compact
+          />
         }
       />
       {/* What to do next first; then the Lessons or the Courses. The days practised are the

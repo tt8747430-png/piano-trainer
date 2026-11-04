@@ -1,15 +1,13 @@
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useKeyName } from '@/shared/i18n'
 import { sameKey, type Key } from '@/shared/lib/music'
-import { Button } from '../primitives/button'
-import { KeyCircle } from './KeyCircle'
+import { KeySignaturePicker } from './KeySignaturePicker'
 import { PickerShell } from './PickerShell'
 
 /**
- * A key (a progression's, an example's, the Chord finder's): its name with ⌃⌄, opening the circle of
- * fifths (Ultimate Piano's), majors outside and relative minors inside, the keys written two ways
- * split; a wedge's tap takes it, "Select: D♭ major" confirms and closes.
+ * A key (a progression's, an example's, the Chord finder's): its name with ⌃⌄, opening the key
+ * signature grid (Flat's, R29-P2): Major · Minor, sharps over flats, each cell the signs and its key's
+ * name; a tap takes the key and closes. The same grid as the score editor's and New song's.
  */
 export function KeyPicker({
   value,
@@ -24,9 +22,9 @@ export function KeyPicker({
   bare?: boolean
   className?: string
 }) {
-  const { t } = useTranslation(['common', 'music'])
+  const { t } = useTranslation('music')
   const name = useKeyName()
-  const title = label ?? t('music:key.label')
+  const title = label ?? t('key.label')
   return (
     <PickerShell
       label={title}
@@ -37,42 +35,22 @@ export function KeyPicker({
       className={className}
     >
       {({ close, start }) => (
-        <KeyChooser
-          label={title}
-          value={value}
-          start={start}
-          onSelect={(key) => {
-            close()
-            if (!sameKey(key, value)) onChange(key)
-          }}
-          select={(key) => t('common:picker.select', { key: name(key) })}
-        />
+        <div className="flex flex-col gap-3" {...start}>
+          <KeySignaturePicker
+            value={value}
+            onChange={(key) => {
+              // A mode changed keeps the picker open (the grid then names that mode's keys); a cell
+              // taken closes it.
+              if (key.minor !== value.minor && sameKey({ ...key, minor: value.minor }, value)) {
+                onChange(key)
+                return
+              }
+              close()
+              if (!sameKey(key, value)) onChange(key)
+            }}
+          />
+        </div>
       )}
     </PickerShell>
-  )
-}
-
-/** The circle, the key it has taken, and Select to confirm it. */
-function KeyChooser({
-  label,
-  value,
-  start,
-  onSelect,
-  select,
-}: {
-  label: string
-  value: Key
-  start: { readonly 'data-picker-start': string }
-  onSelect: (key: Key) => void
-  select: (key: Key) => string
-}) {
-  const [taken, take] = useState(value)
-  return (
-    <div className="flex flex-col gap-3">
-      <KeyCircle label={label} value={taken} onChoose={take} start={start} />
-      <Button className="self-stretch" onClick={() => onSelect(taken)}>
-        {select(taken)}
-      </Button>
-    </div>
   )
 }

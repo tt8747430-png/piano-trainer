@@ -33,13 +33,11 @@ const KEYS_PLAY = ['chords', 'notes'] as const
  */
 export function ChordsView({
   scale,
-  name,
   onChange,
   choice,
   facts,
 }: {
   scale: ScaleView
-  name: string
   onChange: (change: Partial<ScaleView>) => void
   choice: ReactNode
   facts: ReactNode
@@ -79,7 +77,7 @@ export function ChordsView({
           onKeyPress={listening ? hear : undefined}
         />
       }
-      name={name}
+      heading={choice}
       facts={facts}
       action={
         <PlayUpDown
@@ -91,7 +89,6 @@ export function ChordsView({
       }
       fields={
         <>
-          {choice}
           <Labelled label={t('music:chordSize.label')}>
             <Segmented
               label={t('music:chordSize.label')}

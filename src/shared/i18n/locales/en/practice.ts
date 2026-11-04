@@ -122,8 +122,7 @@ export const practice = {
     // The tabs say what is in them (A32): its notes, its key's harmony, the key itself.
     show: { scale: 'Notes', chords: 'Harmony', key: 'Key' },
     label: 'Scale',
-    // The row of pickers over a scale: its root and its kind.
-    which: 'Which scale',
+    tonic: 'Tonic',
     octaves: 'Octaves',
     startOn: 'Start on',
     openChord: 'Open {{chord}} in Chords',
@@ -303,6 +302,7 @@ export const practice = {
   },
   // The line of a part of Accompaniment with no pattern to show.
   accompaniment: {
+    source: 'Source',
     noneYours: 'Patterns you star, make or hide are kept here.',
     allHidden: 'Every pattern here is hidden. You can find them under Yours.',
   },
