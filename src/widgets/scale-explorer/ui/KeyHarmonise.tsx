@@ -82,6 +82,7 @@ export function KeyHarmonise({
       <div className="grid-fields gap-6">
         {groups.map(({ group, chords }) => (
           <HoldingGroupCard
+            melody={note}
             key={group}
             group={group}
             chords={chords}

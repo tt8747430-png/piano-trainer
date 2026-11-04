@@ -666,6 +666,19 @@ describe('Practice → Scales and keys, Key view', () => {
     await waitFor(() => expect(router.state.location.search).toMatchObject({ melody: 'D' }))
   })
 
+  it('writes the note as each chord spells it, the melody’s name beside it (A43)', async () => {
+    await renderApp('/practice/scales?root=Ab&show=key&melody=Db')
+    const harmonise = await screen.findByRole('region', { name: 'Harmonise a melody note' })
+    // D♭ in A major is its 3rd, written C♯.
+    expect(
+      within(harmonise).getByRole('button', { name: /^Aas 3: C♯ \(= D♭\)/ }),
+    ).toBeInTheDocument()
+    // In D♭ itself it is the root, written as the melody: no spelling beside it.
+    expect(
+      within(harmonise).getByRole('button', { name: 'D♭as 1 · in the key' }),
+    ).toBeInTheDocument()
+  })
+
   it('prints the chords that harmonise a note as the sheets print them', async () => {
     await renderApp('/practice/scales?root=E&show=key')
     const harmonise = await screen.findByRole('region', { name: 'Harmonise a melody note' })

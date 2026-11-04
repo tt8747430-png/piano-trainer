@@ -510,6 +510,7 @@ export const practice: LocaleResources['practice'] = {
   },
 
   reharmonise: {
+    asSpelled: 'как {{degree}}: {{note}} (= {{melody}})',
     note: 'Нота мелодии',
     as: 'как {{degree}}',
     inKey: 'в тональности',

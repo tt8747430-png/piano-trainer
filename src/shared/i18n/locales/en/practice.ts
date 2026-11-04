@@ -536,6 +536,7 @@ export const practice = {
   },
 
   reharmonise: {
+    asSpelled: 'as {{degree}}: {{note}} (= {{melody}})',
     note: 'Melody note',
     as: 'as {{degree}}',
     inKey: 'in the key',
