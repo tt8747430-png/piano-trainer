@@ -74,7 +74,31 @@ rounds 2–5 were built: the prompt's order was not kept. From here the order is
 | B10 | Customisable bars, as memory-palaces does | 12 | open | | |
 | B11 | Tools, as a group of their own | 13 | open | | |
 
-## Where we are (2026-11-03, late evening)
+## Where we are (2026-11-04)
+
+Built and on `main`, each plan with its ledger (`.superpowers/sdd/<plan>/progress.md`, rulings and deferred
+minors) and a fresh review whose Critical/Important findings were fixed or ruled:
+- **Build 1, app Settings** (`plan/app-settings.impl.md`).
+- **The Player** (`plan/player.impl.md`): one gear, the Settings sheet (While you play · This song · Share; a panel
+  at the right on a laptop), Pick your view, Display the shown view's own, hands in the transport with Hear the
+  other hand, the beat strip a page at a time.
+- **The score editor** (`plan/editor.impl.md`): Piano keys in its bar, no Sound popover; the score's Settings a list
+  of pages (Title and credits; Music; How the editor works), Key and Time from a section; Settings › Sound and
+  recording and › Score editor gone.
+- **Songs** (`plan/songs.impl.md`): ✎ opens the score; Settings › Details holds the words; Move to folder….
+- **Practice P3**: Chords by name (size, then one Chord menu); the Add row kept.
+
+Left, in order:
+1. Practice redesign (`plan/practice-redesign.md`): P11, P1, P2, P8, P15, P16, P4–P6 (+ Top note for P3), P7, P9,
+   P10, P12, SND, CP1–CP6 (Chord player, Chordify's grooves `grooveOf`).
+2. Rounds 3–4 (`plan/rounds-3-4.md`): Transpose's offset, the sampled grand, imports, the editor against Flat;
+   tempo words in the model; a recorder Count-in switch.
+3. Part B planning.
+4. Owner's questions: section pages and their lessons (1.6 asked for the Player instead); the folder's Settings
+   page (ST17, deferred); the remaining mockups (Lyrics 2.15, polish 1.9/3.8/3.9).
+5. Bug known: the pedal's doubled icons on the Fantaisie-Impromptu.
+
+## Earlier: where we were (2026-11-03, late evening)
 
 Design by mockups with the owner's feedback per screen (claude.ai pages, copies in `mockups/`; feedback in
 `owner/feedback-*.md`; research in `research/chords-scales.md`; answers in prompt Decided 22–23).
