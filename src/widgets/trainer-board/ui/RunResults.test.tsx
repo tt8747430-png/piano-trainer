@@ -27,6 +27,14 @@ const cMajor: Question = {
   inversion: null,
 }
 
+const dMinor: Question = {
+  ...cMajor,
+  root: note('D'),
+  quality: 'min',
+  symbol: 'Dm',
+  tones: spellChord(note('D'), 'min'),
+}
+
 const renderResults = (summed: RunSummary = summary) =>
   renderWithSettings(
     <RunResults summary={summed} onAgain={vi.fn()} onReview={vi.fn()} onDone={vi.fn()} />,
@@ -53,12 +61,12 @@ describe('RunResults', () => {
     expect(screen.queryByRole('heading', { name: 'Missed' })).not.toBeInTheDocument()
   })
 
-  it('Review the missed ones starts a run of the two missed', async () => {
+  it('Review the missed ones starts a run of the two missed, each listed once', async () => {
     const onReview = vi.fn()
     await renderRouted(
       <FloatingHost screen="results">
         <RunResults
-          summary={{ ...summary, missed: [cMajor, cMajor] }}
+          summary={{ ...summary, missed: [cMajor, dMinor, cMajor] }}
           onAgain={vi.fn()}
           onReview={onReview}
           onDone={vi.fn()}
@@ -77,18 +85,7 @@ describe('RunResults', () => {
     await renderRouted(
       <FloatingHost screen="results">
         <RunResults
-          summary={{
-            ...summary,
-            missed: [
-              {
-                ...cMajor,
-                root: note('D'),
-                symbol: 'Dm',
-                quality: 'min',
-                tones: spellChord(note('D'), 'min'),
-              },
-            ],
-          }}
+          summary={{ ...summary, missed: [dMinor] }}
           onAgain={vi.fn()}
           onReview={vi.fn()}
           onDone={vi.fn()}

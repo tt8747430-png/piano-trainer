@@ -47,6 +47,11 @@ export function RunResults({
         { term: t('summary.bestStreak'), value: String(summary.bestStreak) },
       ]
   const missed = summary.cards ? [] : summary.missed
+  // Each thing missed once in the list, however often it was missed.
+  const toReview = missed.filter(
+    (question, i) =>
+      missed.findIndex((other) => words.answer(other) === words.answer(question)) === i,
+  )
   return (
     <section aria-labelledby="run-results" className="flex flex-col gap-6">
       <h2 id="run-results" ref={title} tabIndex={-1} className="text-4xl outline-none">
@@ -64,7 +69,7 @@ export function RunResults({
         <p className="text-muted-foreground">{t('summary.noneMissed')}</p>
       ) : (
         <RowGroup title={t('summary.review')}>
-          {missed.map((question, i) => {
+          {toReview.map((question, i) => {
             const page = reviewPage(question)
             return (
               <li key={i}>

@@ -92,7 +92,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
                 return `${spelled ? printedNote(spelled) : key} ${finger}`
               })
               .join(', ')}`}
-            className="w-full max-w-72 self-start"
+            className="w-full max-w-56 self-start"
           />
         ) : null}
       </section>
