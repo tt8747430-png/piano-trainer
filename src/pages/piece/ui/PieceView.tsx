@@ -1,7 +1,7 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Play, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { isOwnSongId, PieceFactLine, type Piece } from '@/entities/piece'
+import { PieceFactLine, type Piece } from '@/entities/piece'
 import { pieceStepId } from '@/entities/step'
 import { FavouriteButton } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
@@ -28,7 +28,6 @@ import { SectionRows } from './SectionRows'
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation(['piece', 'songs'])
-  const own = isOwnSongId(piece.id)
   const { performance, headings, sections } = useSongLessons(piece)
   const step = pieceStepId(piece.id)
   // A study, on Practice, is in no library (ADR 0106): no favourite.
@@ -71,7 +70,7 @@ export function PieceView({ piece }: { piece: Piece }) {
           {t('practise')}
         </ButtonLink>
         <div className="flex items-center gap-2">
-          {own ? null : <LearnedButton step={step} className="h-11 flex-1" />}
+          <LearnedButton step={step} className="h-11 flex-1" />
           {inLibrary ? <FavouriteButton piece={piece.id} /> : null}
         </div>
       </section>

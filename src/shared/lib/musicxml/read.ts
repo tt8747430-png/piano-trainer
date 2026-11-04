@@ -1,6 +1,7 @@
 // A MusicXML file read as music on a timeline: its parts' staves and notes in ticks, its bars and
 // their marks, its chord symbols, and what it holds that our music cannot, counted.
 
+import { inferMinor } from './infer-mode'
 import {
   CLEF_FORMS,
   CLEFS,
@@ -345,6 +346,8 @@ export function readMusicXml(source: string): ReadScore {
   const chords = new Map<Tick, Chord | null>()
   const bars: { -readonly [K in keyof ReadBar]?: ReadBar[K] }[] = []
   let key: Key | undefined
+  /** The first key's signature where it names no mode (A28): its mode inferred once read. */
+  let modeless: number | undefined
   let tempo: { tempo: number; unit?: TempoUnit } | undefined
   /** The tempo in force: the first, or the last change read. */
   let current: { tempo: number; unit?: TempoUnit } | undefined
@@ -440,6 +443,8 @@ export function readMusicXml(source: string): ReadScore {
               else if (!firstKeyed.done) {
                 key = read
                 firstKeyed.done = true
+                // No mode written: the music (and the title) say major or minor, at the end.
+                if (!textAt(keyElement, 'mode')) modeless = numberAt(keyElement, 'fifths')
               } else if (p === 0 && index > 0) bar.key = read
               else if (p === 0 && index === 0) key = read
             }
@@ -653,11 +658,20 @@ export function readMusicXml(source: string): ReadScore {
   const composer = creator('composer')
   const lyricist = creator('lyricist')
 
+  const firstBarEnd = (starts[0] ?? 0) + (lengths[0] ?? 0)
+  const lastBarStart = starts.at(-1) ?? 0
+  const keyRead =
+    modeless === undefined
+      ? key
+      : signatureKey(
+          modeless,
+          inferMinor(modeless, read, { firstBarEnd, lastBarStart, title: title?.trim() }),
+        )
   return {
     ...(title ? { title: title.trim() } : {}),
     ...(composer ? { composer } : {}),
     ...(lyricist ? { lyricist } : {}),
-    key: key ?? signatureKey(0, false),
+    key: keyRead ?? signatureKey(0, false),
     meter,
     ...(timeSymbol ? { timeSymbol: true } : {}),
     ...tempoOf(tempo, meter),

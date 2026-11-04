@@ -222,6 +222,29 @@ const pedalOf = (name: string) =>
     ({ tick, kind }) => `${kind}@${tick / B}`,
   )
 
+describe('readMusicXml’s key with no mode (R29 A28)', () => {
+  const bar = (n: number, bass: string, top: string) =>
+    `<measure number="${n}">${n === 1 ? '<attributes><divisions>1</divisions><key><fifths>4</fifths></key><time><beats>4</beats><beat-type>4</beat-type></time><staves>2</staves></attributes>' : ''}<note>${top}<duration>4</duration><voice>1</voice><type>whole</type><staff>1</staff></note><backup><duration>4</duration></backup><note>${bass}<duration>4</duration><voice>5</voice><type>whole</type><staff>2</staff></note></measure>`
+  const piece = (bars: string) =>
+    `<?xml version="1.0" encoding="UTF-8"?><score-partwise version="4.0"><part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list><part id="P1">${bars}</part></score-partwise>`
+
+  it('reads four sharps as C♯ minor when its bass is C♯ and B♯ sounds', () => {
+    const xml = piece(
+      bar(1, pitch('C', 2, 1), pitch('E', 4)) +
+        bar(2, pitch('G', 2, 1), pitch('B', 4, 1)) +
+        bar(3, pitch('C', 2, 1), pitch('C', 5, 1)),
+    )
+    expect(readMusicXml(xml).key).toEqual({ tonic: note('C', 1), minor: true })
+  })
+
+  it('keeps four sharps E major when its bass is E', () => {
+    const xml = piece(
+      bar(1, pitch('E', 2), pitch('G', 4, 1)) + bar(2, pitch('E', 2), pitch('B', 4)),
+    )
+    expect(readMusicXml(xml).key).toEqual({ tonic: note('E'), minor: false })
+  })
+})
+
 describe('readMusicXml’s pedal (ADR 0097, 0107)', () => {
   it('reads each pedal mark as an event of the piece’s line, never a note’s mark', () => {
     const score = readMusicXml(PIANO)

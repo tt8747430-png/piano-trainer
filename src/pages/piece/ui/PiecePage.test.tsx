@@ -449,7 +449,8 @@ describe('Piece: the learner’s own music', () => {
       storage: saved({ songs: [song], nextSong: 2 }),
     })
     expect(await screen.findByRole('heading', { level: 1, name: 'Morning' })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'Learned' })).toBeNull()
+    // Learned on an own song too (R29 A28), beside Favourite.
+    expect(screen.getByRole('button', { name: 'Learned' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Add to favourites' }))
     expect(libraryStore.getState().favourites).toEqual(['my-1'])
     await openSettings(user)
