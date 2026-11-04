@@ -157,9 +157,10 @@ describe('Show this when opening a song (ADR 0108, R29)', () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
     const first = await renderApp('/play/silent', { storage })
-    const panel = await openView(user, 'Sheet')
-    await user.click(within(panel).getByRole('checkbox', { name: 'Show this when opening a song' }))
-    expect(first.settingsStore.getState().scoreView.askOnOpen).toBe(true)
+    // A setting, so on the Player's Settings › Display, never in the popover (A4).
+    await openView(user, 'Sheet')
+    expect(screen.queryByRole('checkbox', { name: 'Show this when opening a song' })).toBeNull()
+    act(() => setScoreView(first.settingsStore, { askOnOpen: true }))
     first.unmount()
     const song = await renderApp('/play/bz5', { storage })
     expect(await screen.findByRole('dialog', { name: 'Pick your view' })).toBeInTheDocument()

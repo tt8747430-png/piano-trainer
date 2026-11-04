@@ -1,16 +1,10 @@
 import { ChevronDown, Eye } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  selectScoreView,
-  useSettings,
-  useSettingsStoreApi,
-  type MusicView,
-} from '@/entities/settings'
+import { useSettingsStoreApi, type MusicView } from '@/entities/settings'
 import { setScoreView } from '@/features/set-preference'
 import { Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Checkbox } from '@/shared/ui/primitives/checkbox'
 import {
   Popover,
   PopoverContent,
@@ -43,7 +37,6 @@ export function PickView({
 }) {
   const { t } = useTranslation('player')
   const settings = useSettingsStoreApi()
-  const askOnOpen = useSettings((state) => selectScoreView(state).askOnOpen)
   const [open, setOpen] = useState(openAtStart)
   const name = t(`views.short.${shown}`)
   // What a greyed view needs, said in the panel: a phone shows no tooltip.
@@ -98,13 +91,6 @@ export function PickView({
         >
           <ViewPicture view={shown} />
         </div>
-        <label className="flex min-h-11 items-center gap-3 self-start text-left text-base">
-          <Checkbox
-            checked={askOnOpen}
-            onCheckedChange={(ask) => setScoreView(settings, { askOnOpen: ask })}
-          />
-          {t('views.showOnOpen')}
-        </label>
         <Button className="self-stretch" onClick={() => setOpen(false)}>
           {t('views.done')}
         </Button>

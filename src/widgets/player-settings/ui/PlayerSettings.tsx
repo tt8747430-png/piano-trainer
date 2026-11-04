@@ -187,9 +187,17 @@ export function PlayerDisplay() {
   const settings = useSettingsStoreApi()
   const playback = useSettings(selectPlayback)
   const annotations = useSettings((state) => selectScoreView(state).annotations)
+  const askOnOpen = useSettings((state) => selectScoreView(state).askOnOpen)
   return (
     <>
       <SettingsGroup flush>
+        {/* Pick your view opened as a song opens (ADR 0108): a setting, so here, never in the popover (A4). */}
+        <SwitchRow
+          setting="scoreView.askOnOpen"
+          label={t('views.showOnOpen')}
+          checked={askOnOpen}
+          onCheckedChange={(ask) => setScoreView(settings, { askOnOpen: ask })}
+        />
         <SwitchRow
           setting="scoreView.annotations"
           label={t('settingsPage.annotations')}
