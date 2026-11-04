@@ -7,14 +7,25 @@ import {
   isDegreePiece,
   isLeadSheet,
   isOwnSongId,
+  isPiece,
   musicOf,
   pieceKey,
+  selectHasVersion,
+  usePieces,
   useRepertoire,
   type Piece,
 } from '@/entities/piece'
 import { selectScoreView, useSettings } from '@/entities/settings'
 import { PieceInversions } from '@/features/choose-diagram-inversion'
-import { beatGroupInBar, isSingleStaff, writtenBarAt } from '@/features/practice'
+import {
+  beatGroupInBar,
+  isSingleStaff,
+  stavesParam,
+  trackOf,
+  withTrack,
+  writtenBarAt,
+} from '@/features/practice'
+import { singleStaff } from '@/shared/lib/notation'
 import { ShareSaid, useShareSong, type SongToShare } from '@/features/share-song'
 import { useSongExport } from '@/features/song-files'
 import { useKeyName, useLocale } from '@/shared/i18n'
@@ -29,12 +40,13 @@ import { usePlayer } from '../model/use-player'
 import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
 import { SectionsSheet } from './SectionsSheet'
-import { SimplifyTool } from './SimplifyTool'
 import { SongInfo } from './SongInfo'
 import { ClefChoice } from './ClefChoice'
 import { TransposeTool } from './TransposeTool'
+import { VersionSheet, type VersionChoice } from './VersionSheet'
+import { VersionTool } from './VersionTool'
 
-function PiecePlayer({ piece }: { piece: Piece }) {
+function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
   const { t } = useTranslation(['player', 'piece', 'songs', 'editor'])
   const locale = useLocale()
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
@@ -51,9 +63,31 @@ function PiecePlayer({ piece }: { piece: Piece }) {
     recordingInKey,
     simplifies,
     changeSetup,
-    simplify,
     changeTrack,
   } = usePlayer(piece, search, setSearch)
+  // The Version sheet (R29 B8): the learner's version or the app's, the voice's staves heard and
+  // shown or not, at a level.
+  const [versionOpen, setVersionOpen] = useState(false)
+  const singles = (performance.staves ?? []).map((_, place) => singleStaff(place))
+  const solo =
+    singles.length > 0 &&
+    singles.every((id) => !trackOf(staves, id).play && !trackOf(staves, id).show)
+  const chosenVersion: VersionChoice = {
+    group: own && !search.app ? 'own' : solo || singles.length === 0 ? 'solo' : 'voice',
+    version: choice.version,
+  }
+  const chooseVersion = ({ group, version }: VersionChoice) => {
+    const voiced = group !== 'solo'
+    const next = singles.reduce(
+      (kept, id) => withTrack(kept, id, { play: voiced, show: voiced }),
+      staves,
+    )
+    setSearch({
+      version,
+      app: own && group !== 'own' ? true : undefined,
+      staves: group === 'own' ? search.staves : stavesParam(next),
+    })
+  }
   const keyName = useKeyName()
   // The tracks the Setup lists: each staff by its name and clef, the piano's, the recording (A35).
   const tracks = useScoreTracks({
@@ -96,7 +130,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
         kind: 'piece',
         id: piece.id,
         title,
-        played: { transpose: search.transpose ?? 0, simple: choice.simple && simplifies },
+        played: { transpose: search.transpose ?? 0, version: choice.version },
       }
     : isDegreePiece(piece)
       ? null
@@ -151,7 +185,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
             choice={choice}
             fit={fit}
             swing={isCompound(piece.meter) ? null : search.swing}
-            simple={choice.simple && simplifies}
+            simple={choice.version === 'simple' && simplifies}
             tracks={tracks}
             staves={staves}
             recordingWhy={
@@ -175,7 +209,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
               onChange={changeSetup}
             />
             {controls.has('simplify') ? (
-              <SimplifyTool on={choice.simple} simplifies={simplifies} onChange={simplify} />
+              <VersionTool version={choice.version} onOpen={() => setVersionOpen(true)} />
             ) : null}
           </>
         }
@@ -193,6 +227,15 @@ function PiecePlayer({ piece }: { piece: Piece }) {
         tracks={tracks}
       />
       <SongInfo piece={piece} performance={performance} {...sheetOf('info')} />
+      <VersionSheet
+        open={versionOpen}
+        onOpenChange={setVersionOpen}
+        chosen={chosenVersion}
+        own={own}
+        voice={singles.length > 0}
+        simplifies={simplifies}
+        onChoose={chooseVersion}
+      />
       <SectionsSheet
         starts={starts}
         headings={headings}
@@ -208,7 +251,12 @@ function PiecePlayer({ piece }: { piece: Piece }) {
 export function PlayerPage() {
   const { pieceId } = useParams({ from: '/full-screen/play/$pieceId' })
   const { t } = useTranslation('common')
-  const piece = useRepertoire().piece(pieceId)
+  const { app } = useSearch({ from: '/full-screen/play/$pieceId' })
+  const repertoire = useRepertoire()
+  const own = usePieces((state) => selectHasVersion(state, pieceId))
+  // The app's own song where the Version sheet chose it over the learner's version (R29 B8).
+  const original = own && app ? repertoire.original(pieceId) : undefined
+  const piece = original && isPiece(original) ? original : repertoire.piece(pieceId)
   if (!piece) {
     // An own song deleted in another tab.
     return (
@@ -217,5 +265,5 @@ export function PlayerPage() {
       </NotFound>
     )
   }
-  return <PiecePlayer key={piece.id} piece={piece} />
+  return <PiecePlayer key={piece.id} piece={piece} own={own} />
 }

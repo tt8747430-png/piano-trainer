@@ -49,9 +49,9 @@ describe('resolveChoice', () => {
     expect(tonic(twofive, -1)).toEqual(note('C', 1))
   })
 
-  it('simplifies the chords where the URL says so', () => {
-    expect(resolveChoice(bz5, { simple: true }, BUILT_IN_PATTERNS).simple).toBe(true)
-    expect(resolveChoice(bz5, {}, BUILT_IN_PATTERNS).simple).toBe(false)
+  it('plays the version the URL names, else the original (R29 B8)', () => {
+    expect(resolveChoice(bz5, { version: 'easy' }, BUILT_IN_PATTERNS).version).toBe('easy')
+    expect(resolveChoice(bz5, {}, BUILT_IN_PATTERNS).version).toBe('original')
   })
 
   it('plays the piece’s own pattern when the chart names no methods', () => {

@@ -603,7 +603,7 @@ describe('Player', () => {
     expect(screen.queryByRole('region', { name: 'Accompaniment from the chords' })).toBeNull()
     expect(screen.getByRole('region', { name: 'How it plays' })).toBeInTheDocument()
     await user.keyboard('{Escape}')
-    expect(screen.queryByRole('button', { name: /Simplify/ })).toBeNull()
+    expect(screen.queryByRole('button', { name: /^Version/ })).toBeNull()
   })
 
   it('plays and shows each staff as its switches say, in the URL; the last in sight stays (A35)', async () => {

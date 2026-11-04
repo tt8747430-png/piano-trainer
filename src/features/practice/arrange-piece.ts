@@ -18,6 +18,7 @@ import {
 import {
   arrange,
   isSimpleChart,
+  easyChart,
   simplifyChart,
   type ArrangeOptions,
   type Performance,
@@ -43,7 +44,7 @@ export const ownChoice = (piece: Piece): PracticeChoice => ({
   nearest: true,
   chordSize: null,
   tune: false,
-  simple: false,
+  version: 'original',
   signature: true,
   chordSymbols: true,
   clef: null,
@@ -62,7 +63,13 @@ export function arrangePiece(
   { unfold = false }: { unfold?: boolean } = {},
 ): Performance {
   const chart = chartOf(piece, choice.chordSize ?? undefined)
-  const performance = arrange(choice.simple ? simplifyChart(chart) : chart, {
+  const played =
+    choice.version === 'simple'
+      ? simplifyChart(chart)
+      : choice.version === 'easy'
+        ? easyChart(chart)
+        : chart
+  const performance = arrange(played, {
     ...arrangeOptions(piece, choice, book),
     ...(unfold ? { unfold } : {}),
   })

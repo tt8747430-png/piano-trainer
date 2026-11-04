@@ -36,7 +36,7 @@ describe('ownChoice', () => {
       nearest: true,
       chordSize: null,
       tune: false,
-      simple: false,
+      version: 'original',
       signature: true,
       chordSymbols: true,
       clef: null,
@@ -140,10 +140,18 @@ describe('Simplify (ADR 0105)', () => {
   it('plays every chord of a piece as its plain triad, in the key chosen', () => {
     // As written: G C Em G/B C/E Dsus4 D/F♯ D Am D7.
     expect(
-      symbols(arrangePiece(bz5, { ...ownChoice(bz5), simple: true }, BUILT_IN_PATTERNS)),
+      symbols(arrangePiece(bz5, { ...ownChoice(bz5), version: 'simple' }, BUILT_IN_PATTERNS)),
     ).toEqual(['G', 'C', 'Em', 'D', 'Am'])
-    const inA = { ...ownChoice(bz5), tonic: note('A'), simple: true }
+    const inA = { ...ownChoice(bz5), tonic: note('A'), version: 'simple' as const }
     expect(symbols(arrangePiece(bz5, inA, BUILT_IN_PATTERNS))).toEqual(['A', 'D', 'F#m', 'E', 'Bm'])
+  })
+
+  it('plays the Easy version: the tune over each chord’s root (R29 B8)', () => {
+    const easy = arrangePiece(bz5, { ...ownChoice(bz5), version: 'easy' }, BUILT_IN_PATTERNS)
+    const left = easy.notes.filter((n) => n.hand === 'lh')
+    // One root a chord, its pitch class the chord's root's.
+    expect(left.length).toBe(easy.chords.length)
+    expect(symbols(easy)).toEqual(['G', 'C', 'Em', 'D', 'Am'])
   })
 
   it('plays what a chord’s plain triad sounds: no 7th, no bass of its own', () => {
@@ -156,7 +164,11 @@ describe('Simplify (ADR 0105)', () => {
     }
     /** Each chord's pitch classes, and its lowest key's. */
     const sounds = (simple: boolean) => {
-      const played = arrangePiece(song, { ...ownChoice(song), simple }, BUILT_IN_PATTERNS)
+      const played = arrangePiece(
+        song,
+        { ...ownChoice(song), version: simple ? 'simple' : 'original' },
+        BUILT_IN_PATTERNS,
+      )
       return played.chords.map((_, index) => {
         const keys = played.notes.filter((n) => n.chord === index).map((n) => n.midi)
         return { tones: new Set(keys.map((key) => key % 12)), bass: Math.min(...keys) % 12 }
@@ -187,7 +199,11 @@ describe('Simplify (ADR 0105)', () => {
 
   it('plays a song written in degrees as triads, whatever its chord size', () => {
     const twofive = piece('romashki')
-    const choice = { ...ownChoice(twofive), chordSize: 'ninths' as const, simple: true }
+    const choice = {
+      ...ownChoice(twofive),
+      chordSize: 'ninths' as const,
+      version: 'simple' as const,
+    }
     const played = arrangePiece(twofive, choice, BUILT_IN_PATTERNS)
     expect(played.chords.every((c) => c.quality === 'maj' || c.quality === 'min')).toBe(true)
     expect(played.chords[0]?.symbol).toBe('Dm')

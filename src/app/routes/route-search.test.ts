@@ -47,13 +47,17 @@ describe('search params', () => {
     expect(await searchAt('/edit/bz5?takes=yes&record=1')).toEqual(EDIT_DEFAULTS)
   })
 
-  it('simplify a piece’s chords only where the URL says so, and nothing a walk plays (ADR 0105)', async () => {
-    expect(PLAYER_DEFAULTS).toMatchObject({ simple: false })
-    expect(await searchAt('/play/bz5?simple=true')).toEqual({ ...PLAYER_DEFAULTS, simple: true })
-    for (const stale of ['yes', '1', 'false'])
-      expect(await searchAt(`/play/bz5?simple=${stale}`)).toEqual(PLAYER_DEFAULTS)
-    expect(WALK_DEFAULTS).not.toHaveProperty('simple')
-    expect(CHROMATIC_DEFAULTS).not.toHaveProperty('simple')
+  it('play a piece’s version only where the URL names one, and nothing a walk plays (R29 B8)', async () => {
+    expect(PLAYER_DEFAULTS).toMatchObject({ version: 'original' })
+    for (const version of ['simple', 'easy'] as const)
+      expect(await searchAt(`/play/bz5?version=${version}`)).toEqual({
+        ...PLAYER_DEFAULTS,
+        version,
+      })
+    for (const stale of ['yes', '1', 'true'])
+      expect(await searchAt(`/play/bz5?version=${stale}`)).toEqual(PLAYER_DEFAULTS)
+    expect(WALK_DEFAULTS).not.toHaveProperty('version')
+    expect(CHROMATIC_DEFAULTS).not.toHaveProperty('version')
   })
 
   it('carry the bar between the Player and the score editor, a bar as printed (ADR 0115)', async () => {
@@ -103,7 +107,7 @@ describe('search params', () => {
     expect(await searchAt('/practice/chords?key=H')).toMatchObject({ key: undefined })
     expect(
       await searchAt(
-        '/play/bz5?transpose=2&tempo=96&hands=lh&mode=wait&speedTraining=true&swing=light&loop=2-3&pattern=chart&rh=t1&lh=o&chordSize=ninths&simple=true',
+        '/play/bz5?transpose=2&tempo=96&hands=lh&mode=wait&speedTraining=true&swing=light&loop=2-3&pattern=chart&rh=t1&lh=o&chordSize=ninths&version=easy',
       ),
     ).toEqual({
       transpose: 2,
@@ -117,7 +121,7 @@ describe('search params', () => {
       rh: 't1',
       lh: 'o',
       chordSize: 'ninths',
-      simple: true,
+      version: 'easy',
     })
     expect(await searchAt('/songs?q=душа&key=Em&stage=advanced&favourites=true')).toEqual({
       q: 'душа',

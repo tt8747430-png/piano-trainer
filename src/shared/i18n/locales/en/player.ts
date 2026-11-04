@@ -54,11 +54,27 @@ export const player = {
   // The row of tools under the Player's bar (ADR 0108), as a screen reader names it.
   restart: 'Restart',
   foot: { label: 'Practice tools' },
+  version: {
+    title: 'Choose your version',
+    label: 'Version',
+    of: 'Version: {{level}}',
+    group: { own: 'Your version', solo: 'Piano solo', voice: 'Piano and voice' },
+    level: { original: 'Original', simple: 'Simplified', easy: 'Easy' },
+    row: 'Difficulty {{n}} · {{accompaniment}}',
+    accompaniment: {
+      original: 'the accompaniment as written',
+      simple: 'every chord a triad',
+      easy: 'the tune over each root',
+    },
+  },
   modes: {
     title: 'What would you like to do?',
     open: 'Modes',
     listen: { name: 'Listen', line: 'The app plays; follow the score.' },
-    wait: { name: 'Sight-read', line: 'The cursor waits for the right note or chord from your piano.' },
+    wait: {
+      name: 'Sight-read',
+      line: 'The cursor waits for the right note or chord from your piano.',
+    },
     practice: { name: 'Practice', line: 'One hand at a time, the other heard or not.' },
     follow: { name: 'Interpret', line: 'The cursor follows your tempo.' },
     needsPiano: 'Connect a piano or use Piano keys.',
@@ -88,10 +104,8 @@ export const player = {
   },
   // The tools row's Simplify (ADR 0105, Chordify's): every chord its plain triad.
   simplify: {
-    label: 'Simplify',
-    about: 'Every chord as its plain major or minor triad',
     none: 'No chord to simplify',
-    chordSize: 'Simplify plays every chord as its triad.',
+    chordSize: 'The Simplified version plays every chord as its triad.',
   },
   /** The Diagrams view's chord to come, where none sounds yet: a pickup, a bar of no chord. */
   nextChord: 'Next: {{symbol}}',

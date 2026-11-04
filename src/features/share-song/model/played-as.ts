@@ -1,6 +1,10 @@
 import { isDegreePiece, isOwnSongId, musicOf, type Piece } from '@/entities/piece'
 import type { RememberedView } from '@/entities/views'
+import { SONG_VERSIONS, type SongVersion } from '@/features/practice'
+import { isOneOf } from '@/shared/lib'
 import { TRANSPOSITION_RANGE } from '@/shared/lib/music'
+
+const isSongVersion: (value: unknown) => value is SongVersion = isOneOf(SONG_VERSIONS)
 import type { PlayedAs } from './piece-link'
 import type { SongToShare } from './use-share-song'
 
@@ -17,7 +21,7 @@ export function playedAs(_piece: Piece, remembered: RememberedView | undefined):
     transpose <= TRANSPOSITION_RANGE.max
   return {
     transpose: read ? transpose : 0,
-    simple: remembered?.simple === true,
+    version: isSongVersion(remembered?.version) ? remembered.version : 'original',
   }
 }
 

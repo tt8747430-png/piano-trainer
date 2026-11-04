@@ -13,6 +13,7 @@ import {
   readStaves,
   simplifies,
   stavesParam,
+  type SongVersion,
   trackOf,
   withTrack,
   type PlayerStaves,
@@ -35,10 +36,10 @@ export interface PiecePlayerOf extends WalkingPlayerOf<PracticeChoice, SetupChan
   readonly staves: PlayerStaves
   /** Whether the recording plays in the key chosen: in its own alone. */
   readonly recordingInKey: boolean
-  /** Whether Simplify changes the piece as chosen: where it would not, it is greyed. */
+  /** Whether Simplified changes the piece as chosen: where it would not, it is greyed. */
   readonly simplifies: boolean
-  /** Simplify on or off. */
-  simplify(on: boolean): void
+  /** The version played (R29 B8). */
+  setVersion(version: SongVersion): void
   /** A track played or shown, or not. */
   changeTrack(id: TrackId, change: Partial<TrackChoice>): void
 }
@@ -55,13 +56,24 @@ export function usePlayer(
   const staves = useMemo(() => readStaves(search.staves), [search.staves])
   const progress = useProgressStoreApi()
   const book = usePatternBook()
-  const { transpose, tkey, tchords, clef, pattern, rh, lh, inversion, nearest, chordSize, simple } =
-    search
+  const {
+    transpose,
+    tkey,
+    tchords,
+    clef,
+    pattern,
+    rh,
+    lh,
+    inversion,
+    nearest,
+    chordSize,
+    version,
+  } = search
   const choice = useMemo(
     () =>
       resolveChoice(
         piece,
-        { transpose, tkey, tchords, clef, pattern, rh, lh, inversion, nearest, chordSize, simple },
+        { transpose, tkey, tchords, clef, pattern, rh, lh, inversion, nearest, chordSize, version },
         book,
       ),
     [
@@ -76,7 +88,7 @@ export function usePlayer(
       inversion,
       nearest,
       chordSize,
-      simple,
+      version,
       book,
     ],
   )
@@ -117,7 +129,7 @@ export function usePlayer(
     recordingInKey,
     simplifies: simplified,
     changeSetup: (change) => setSearch(searchPatch(piece, change)),
-    simplify: (on) => setSearch({ simple: on }),
+    setVersion: (next) => setSearch({ version: next }),
     changeTrack: (id, change) => setSearch({ staves: stavesParam(withTrack(staves, id, change)) }),
   }
 }

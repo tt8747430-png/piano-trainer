@@ -12,6 +12,7 @@ import {
   isStavesParam,
   PRACTICE_MODES,
   PROGRESSION,
+  SONG_VERSIONS,
   readChords,
 } from '@/features/practice'
 import {
@@ -65,7 +66,8 @@ const PRACTICE_DEFAULTS: PracticeView = {
 }
 // A piece: key, tempo, pattern and chord size default to the piece's own, so their absence is the
 // default; its chords as written, not simplified (ADR 0105).
-export const PLAYER_DEFAULTS: PlayerSearch = { ...PRACTICE_DEFAULTS, simple: false }
+export const PLAYER_DEFAULTS: PlayerSearch = { ...PRACTICE_DEFAULTS, version: 'original' }
+const isVersion = isOneOf(SONG_VERSIONS)
 /** The Player's own params: how it goes, whatever it plays. */
 /** The most beats of rest a loop takes before each repeat. */
 const MOST_REST = 4
@@ -109,7 +111,8 @@ export function readPlayerSearch(raw: Raw): PlayerSearch {
     clef: raw.clef === 'treble' || raw.clef === 'bass' ? raw.clef : undefined,
     ...figures(raw),
     chordSize: chordSize(raw),
-    simple: raw.simple === true,
+    version: valueOr(isVersion, raw.version, PLAYER_DEFAULTS.version),
+    app: raw.app === true ? true : undefined,
     bar: bar(raw),
     staves: isStavesParam(raw.staves) ? raw.staves : undefined,
   }
@@ -139,7 +142,7 @@ export const PLAYER_KEPT: readonly (keyof PlayerSearch & string)[] = [
   'tchords',
   'clef',
   'chordSize',
-  'simple',
+  'version',
   'staves',
   ...PLAYING,
 ]

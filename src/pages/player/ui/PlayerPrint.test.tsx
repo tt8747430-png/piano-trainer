@@ -68,7 +68,7 @@ describe('the Player’s Print (ADR 0107)', () => {
 
   it('prints the music transposed and simplified as the Player plays it', async () => {
     const user = userEvent.setup()
-    const { render } = await printed(user, '/play/bz5?transpose=2&simple=true', 'grid')
+    const { render } = await printed(user, '/play/bz5?transpose=2&version=simple', 'grid')
     expect(diagramsIn(render)).toEqual(['A', 'D', 'F♯m', 'E', 'Bm'])
     expect(render).not.toHaveTextContent('/')
   })
