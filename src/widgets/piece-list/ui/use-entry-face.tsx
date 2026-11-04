@@ -38,7 +38,11 @@ export interface EntryFace {
  * first chords (Chordify's song cards), then its key (named for a screen reader, as `PieceFacts`
  * names it), its stage's mark and, once learned, the learned badge.
  */
-export function useEntryFace(entry: Entry): EntryFace {
+export function useEntryFace(
+  entry: Entry,
+  /** What its end shows, both unless said (a place's Card style, R29 B9). */
+  show: { readonly key: boolean; readonly progress: boolean } = { key: true, progress: true },
+): EntryFace {
   const { t } = useTranslation(['songs', 'common', 'music'])
   const locale = useLocale()
   const { primary, secondary } = entryTitles(entry, locale)
@@ -53,14 +57,18 @@ export function useEntryFace(entry: Entry): EntryFace {
       detail: entry.kind === 'listing' ? t('songs:noChart') : secondary,
       count: entry.kind !== 'listing' && count > 0 ? t('songs:chordCount', { count }) : undefined,
       trailing:
-        entry.kind === 'listing' ? null : (
+        entry.kind === 'listing' || (!show.key && !show.progress) ? null : (
           <>
-            <span className="sr-only">{t('music:key.label')}</span>{' '}
-            <span className="shrink-0 font-display font-semibold tabular-nums">
-              {printedSymbol(keySymbol(pieceKey(entry)))}
-            </span>
-            {stage ? <StageMark stage={stage} /> : null}
-            {learned ? <LearnedBadge label={t('common:learned.done')} /> : null}
+            {show.key ? (
+              <>
+                <span className="sr-only">{t('music:key.label')}</span>{' '}
+                <span className="shrink-0 font-display font-semibold tabular-nums">
+                  {printedSymbol(keySymbol(pieceKey(entry)))}
+                </span>
+              </>
+            ) : null}
+            {show.progress && stage ? <StageMark stage={stage} /> : null}
+            {show.progress && learned ? <LearnedBadge label={t('common:learned.done')} /> : null}
           </>
         ),
       children:

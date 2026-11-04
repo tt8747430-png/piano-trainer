@@ -330,6 +330,44 @@
 }
 
 /*
+ * A block's or a place's look (R29 B9, `shared/lib/style`): the steps `styleVars` names, and a styled
+ * place's cards reading them. A place without a look of its own sets none of this and keeps DESIGN's card.
+ */
+:root {
+  --block-radius-0: 0px;
+  --block-radius-1: calc(var(--radius) - 6px);
+  --block-radius-2: var(--radius-card);
+  --block-radius-3: calc(var(--radius) + 6px);
+  --block-radius-4: calc(var(--radius) + 12px);
+  --block-shadow-0: none;
+  --block-shadow-1: var(--elevation-1);
+  --block-shadow-2: var(--elevation-2);
+  --block-shadow-3: var(--elevation-3);
+  --block-padding-compact: --spacing(2);
+  --block-padding-normal: --spacing(4);
+  --block-padding-roomy: --spacing(6);
+}
+[data-card-look] .card {
+  border-radius: var(--block-radius);
+  border-width: var(--block-border);
+  box-shadow: var(--block-shadow);
+  background-color: var(--block-surface);
+  color: var(--block-text);
+}
+[data-card-look][data-density='compact'] {
+  --row-min: --spacing(12);
+}
+[data-card-look][data-density='large'] {
+  --row-min: --spacing(20);
+}
+[data-card-look][data-layout='list'] {
+  grid-template-columns: 1fr;
+}
+[data-card-look][data-layout='grid'] {
+  grid-template-columns: repeat(auto-fill, minmax(min(11rem, 100%), 1fr));
+}
+
+/*
  * One selected style (R15, DESIGN.md Choices): every chosen thing (a segment, a chip, a toggle, a
  * tab, a place, a toolbar's tool, a picker's cell) wears the one chosen fill to its own edges, in
  * ink, its line and weight unchanged; hover is the lighter muted fill. One highlight, never two.

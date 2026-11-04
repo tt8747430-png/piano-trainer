@@ -55,7 +55,7 @@ export function LibraryScreen({
           <SelectionBar page={page} folder={folder} />
         </LibrarySelect>
       ) : (
-        <LibraryBrowse page={page} onClear={clear} />
+        <LibraryBrowse page={page} place={folder?.id ?? 'home'} onClear={clear} />
       )}
       {folder && archived > 0 && !page.select.on ? (
         <div className="card">

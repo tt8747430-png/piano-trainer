@@ -8,6 +8,7 @@ import { useEntryFace } from '@/widgets/piece-list'
 import { menuOf, swipeOf, type RowAction } from '../model/row-actions'
 import { ROW_BODY, ROW_CARD } from './row-class'
 import { RowMore } from './RowMore'
+import { useCardLook } from './card-look'
 
 /** A favourite's small filled ♡, at its row's end, read and chosen alike. */
 export function FavouriteMark() {
@@ -45,7 +46,10 @@ export function SongRow({
   // What each swipe offers: the learner's (R29 B10, Settings › Swipe actions).
   const leading = useSettings((state) => barOf(state.bars, 'swipe.songs.leading'))
   const trailing = useSettings((state) => barOf(state.bars, 'swipe.songs.trailing'))
-  const { face } = useEntryFace(entry)
+  // What the place's look shows (R29 B9, Card style): the key and progress at its end, its chords.
+  const { show } = useCardLook()
+  const { face } = useEntryFace(entry, show)
+  const shown = show.chords ? face : { ...face, children: null }
   const press = useLongPress({ onLongPress: onSelect })
   return (
     <li>
@@ -56,7 +60,7 @@ export function SongRow({
       >
         <div className={cn(ROW_CARD, 'has-[>a:hover]:bg-muted')}>
           <PieceLink entry={entry} className={ROW_BODY} {...press}>
-            <RowFace {...face} />
+            <RowFace {...shown} />
           </PieceLink>
           {favourite ? <FavouriteMark /> : null}
           <RowMore label={t('library.moreOf', { name: face.title })} actions={menuOf(actions)} />

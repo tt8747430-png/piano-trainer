@@ -19,9 +19,13 @@ import {
   type SavedFolder,
   type SongPlace,
 } from './types'
+import { sanitiseCardLooks, type CardLook } from './card-look'
+
+/** Where a card look is kept: a folder, or Home (R29 B9). */
+export type CardPlace = FolderId | 'home'
 
 export const LIBRARY_STORAGE_KEY = 'pt-library'
-export const LIBRARY_VERSION = 3
+export const LIBRARY_VERSION = 4
 
 /**
  * The learner's library (ADR 0106), only what they changed: read over the catalog
@@ -39,6 +43,8 @@ export interface LibraryState {
   readonly sort: LibrarySort
   /** The next own folder's number: a deleted folder's id is never given again. */
   readonly nextFolder: number
+  /** How each place draws its rows, where the learner (or an editor, for everyone) styled them (B9). */
+  readonly cardLooks: Partial<Record<CardPlace, CardLook>>
 }
 
 export type LibraryStore = StoreApi<LibraryState>
@@ -50,6 +56,7 @@ export const INITIAL_LIBRARY: LibraryState = {
   archive: [],
   sort: 'manual',
   nextFolder: 1,
+  cardLooks: {},
 }
 
 export const createLibraryStore = (saving: SavingOptions = {}): LibraryStore =>
@@ -150,5 +157,9 @@ function sanitize(persisted: unknown): LibraryState {
     archive: archive.slice(0, MOST_PIECES),
     sort: isSort(saved.sort) ? saved.sort : 'manual',
     nextFolder: Math.max(next, past, 1),
+    cardLooks: sanitiseCardLooks(
+      saved.cardLooks,
+      (place): place is CardPlace => place === 'home' || isFolderId(place),
+    ),
   }
 }

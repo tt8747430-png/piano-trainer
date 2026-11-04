@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { DEFAULT_CARD_LOOK } from './card-look'
 import { describe, expect, it } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createLibraryStore, INITIAL_LIBRARY, LIBRARY_STORAGE_KEY, LIBRARY_VERSION } from './store'
@@ -20,14 +21,14 @@ const SUNDAY = {
 } as const
 
 describe('createLibraryStore', () => {
-  it('starts holding nothing the learner changed, saved as pt-library version 3', () => {
+  it('starts holding nothing the learner changed, saved as pt-library version 4', () => {
     const storage = createMemoryStorage()
     const store = createLibraryStore({ storage, otherTabs: new EventTarget() })
     expect(store.getState()).toEqual(INITIAL_LIBRARY)
     store.setState({ favourites: ['bz5'] })
     expect(JSON.parse(storage.getItem('pt-library') ?? 'null')).toEqual({
       state: { ...INITIAL_LIBRARY, favourites: ['bz5'] },
-      version: 3,
+      version: 4,
     })
   })
 
@@ -66,6 +67,10 @@ describe('createLibraryStore', () => {
       ],
       sort: 'recent',
       nextFolder: 4,
+      cardLooks: {
+        home: DEFAULT_CARD_LOOK,
+        'folder-3': { ...DEFAULT_CARD_LOOK, density: 'large' },
+      },
     }
     expect(restored(saved)).toEqual(saved)
   })
@@ -151,7 +156,7 @@ describe('createLibraryStore', () => {
     const store = createLibraryStore({ storage, otherTabs })
     storage.setItem(
       LIBRARY_STORAGE_KEY,
-      JSON.stringify({ state: { ...INITIAL_LIBRARY, favourites: ['silent'] }, version: 3 }),
+      JSON.stringify({ state: { ...INITIAL_LIBRARY, favourites: ['silent'] }, version: 4 }),
     )
     otherTabs.dispatchEvent(
       new StorageEvent('storage', {

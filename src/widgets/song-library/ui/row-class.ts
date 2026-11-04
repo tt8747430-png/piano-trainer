@@ -14,4 +14,4 @@ export const ROW_CONTROL =
 
 /** The row's own part: its link to its page, or Select's toggle, holding its face. */
 export const ROW_BODY =
-  'group/row flex min-h-16 min-w-0 flex-1 items-center gap-3 self-stretch rounded-card py-2 pl-2 text-left focus-visible:-outline-offset-3'
+  'group/row flex min-h-[var(--row-min,4rem)] min-w-0 flex-1 items-center gap-3 self-stretch rounded-card py-2 pl-2 text-left focus-visible:-outline-offset-3'

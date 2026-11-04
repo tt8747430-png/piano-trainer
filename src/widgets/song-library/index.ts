@@ -1,5 +1,6 @@
 export { useCarrying, type CarryTarget } from './model/library-dnd'
 export type { RowAction } from './model/row-actions'
+export { CardLookProvider, cardLookProps, useCardLook } from './ui/card-look'
 export { DropZone } from './ui/DropZone'
 export { FilteredNotice } from './ui/FilteredNotice'
 export { FolderFace, type FolderHolds } from './ui/FolderFace'
