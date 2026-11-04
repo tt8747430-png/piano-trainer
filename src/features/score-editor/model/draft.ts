@@ -29,6 +29,7 @@ import {
   type Clef,
   type Hand,
   type HandClefs,
+  HOME_CLEF,
   barMarksOf,
   beatsToTicks,
   parseKey,
@@ -53,6 +54,7 @@ import {
   type SingleStaff,
   type StaffId,
 } from '@/shared/lib/notation'
+import { clefFor } from './clef-for'
 import { barsOf, chordsAt, sectionMeter, startsIn, type PlacedBar } from './timeline'
 
 /**
@@ -222,6 +224,22 @@ export function readDraft(music: PieceMusic): Draft {
       }
     }
   }
+  // A hand the pattern plays whole, its clef never written, is in the clef its notes read in (A34):
+  // a right hand sitting low keeps the treble unless most of it is below G3.
+  const first = sections[0]?.lines[0]?.[0]
+  if (first) {
+    const clefs = { ...first.clefs }
+    for (const hand of HAND_IDS) {
+      const whole = !sections.some((section) =>
+        section.lines.some((line) => line.some((bar) => bar.clefs?.[hand] !== undefined)),
+      )
+      const played = left.filter((each) => each.hand === hand).length === barCount(sections)
+      if (!whole || !played) continue
+      const clef = clefFor(hands[hand], hand === 'rh' ? 'upper' : 'lower')
+      if (clef !== HOME_CLEF[hand]) clefs[hand] = clef
+    }
+    if (Object.keys(clefs).length > 0) sections[0]!.lines[0]![0] = { ...first, clefs }
+  }
   return {
     ...(music.title === undefined ? {} : { title: music.title }),
     ...(music.header ? { header: music.header } : {}),
@@ -246,6 +264,10 @@ export function readDraft(music: PieceMusic): Draft {
     pedal: [...(chart.pedal ?? [])],
   }
 }
+
+/** How many bars the sections hold. */
+const barCount = (sections: readonly { readonly lines: readonly (readonly DraftBar[])[] }[]) =>
+  sections.reduce((sum, section) => sum + section.lines.reduce((n, line) => n + line.length, 0), 0)
 
 /** A draft bar as the chart reads it: its chords with their beats. */
 function chartBar(bar: DraftBar) {

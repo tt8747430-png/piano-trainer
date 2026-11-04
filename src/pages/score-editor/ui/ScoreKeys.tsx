@@ -38,7 +38,7 @@ export function ClefKeys() {
   return at.staff ? (
     <>
       <SectionLine>{said}</SectionLine>
-      <ClefPicker staff={at.staff} bar={at.bar} current={at.current} />
+      <ClefPicker staff={at.staff} bar={at.bar} current={at.current} scoped />
     </>
   ) : (
     <SectionLine>{reason}</SectionLine>

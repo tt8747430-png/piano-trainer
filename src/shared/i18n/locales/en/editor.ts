@@ -173,6 +173,13 @@ export const editor = {
     apply: 'Apply',
   },
   // The tempo mark's picker (ADR 0114).
+  // How far a clef chosen in the palette reaches (A34).
+  clefScope: {
+    label: 'Change the clef for',
+    bar: 'This bar only',
+    end: 'To the end',
+    staff: 'Whole staff',
+  },
   tempo: {
     save: 'Save',
     delete: 'Delete',

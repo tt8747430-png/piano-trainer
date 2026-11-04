@@ -150,6 +150,12 @@ export const editor: LocaleResources['editor'] = {
     cancel: 'Отмена',
     apply: 'Применить',
   },
+  clefScope: {
+    label: 'Сменить ключ',
+    bar: 'Только в этом такте',
+    end: 'До конца',
+    staff: 'Во всём нотоносце',
+  },
   tempo: {
     save: 'Сохранить',
     delete: 'Удалить',

@@ -651,6 +651,14 @@ describe('the score editor', () => {
       'aria-pressed',
       'true',
     )
+    // This bar only: the clef before it back in the next bar (A34).
+    await user.click(within(clef).getByRole('radio', { name: 'This bar only' }))
+    await user.click(within(clef).getByRole('button', { name: 'Tenor clef' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        hands: { lh: 'clef:tenor r/4 | clef:treble r/4 | r/4 | r/4' },
+      }),
+    )
   })
 
   it('draws a crescendo over the bars chosen in one go, engraved as a hairpin', async () => {
