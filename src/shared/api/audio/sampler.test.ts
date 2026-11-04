@@ -1,99 +1,15 @@
 import { describe, expect, it, vi } from 'vitest'
 import { midi } from '@/shared/lib/music'
-import { createSampleLoader } from './sample-loader'
-import type { SampleManifest } from './sample-manifest'
+import {
+  kitSet,
+  loaderOver,
+  pitchedSet,
+  sampleNameOf as nameOf,
+  SamplerContext,
+} from './sample-fakes'
 import { createSampler, pianoRelease } from './sampler'
 
-/** Just enough of an AudioContext to see what a sampler builds. */
-class SamplerContext {
-  currentTime = 0
-  readonly destination = {}
-  readonly sources: {
-    buffer: AudioBuffer | null
-    playbackRate: { value: number }
-    started: number
-    stopped: number
-    onended: (() => void) | null
-  }[] = []
-  readonly gains: { value: number; targets: { value: number; at: number; constant: number }[] }[] =
-    []
-
-  decodeAudioData = vi.fn(async (bytes: ArrayBuffer) => {
-    const [name = ''] = new TextDecoder().decode(bytes).split('\n')
-    return { length: 44_100, numberOfChannels: 1, duration: 1, name } as unknown as AudioBuffer
-  })
-
-  createBufferSource() {
-    const source = {
-      buffer: null as AudioBuffer | null,
-      playbackRate: { value: 1 },
-      started: -1,
-      stopped: -1,
-      onended: null as (() => void) | null,
-      connect: (next: unknown) => next,
-      disconnect: vi.fn(),
-      start(at: number) {
-        source.started = at
-      },
-      stop(at: number) {
-        source.stopped = at
-      },
-    }
-    this.sources.push(source)
-    return source
-  }
-
-  createGain() {
-    const record = {
-      value: 1,
-      targets: [] as { value: number; at: number; constant: number }[],
-    }
-    this.gains.push(record)
-    return {
-      gain: {
-        get value() {
-          return record.value
-        },
-        set value(level: number) {
-          record.value = level
-        },
-        setValueAtTime: vi.fn(),
-        cancelScheduledValues: vi.fn(),
-        setTargetAtTime: (value: number, at: number, constant: number) =>
-          void record.targets.push({ value, at, constant }),
-      },
-      connect: (next: unknown) => next,
-      disconnect: vi.fn(),
-    }
-  }
-}
-
-const ROOTS = Array.from({ length: 30 }, (_, index) => 21 + index * 3)
-const LAYERS = ['p', 'mp', 'mf', 'f'] as const
-
-const GRAND: SampleManifest = {
-  instrument: 'piano',
-  set: 'Salamander Grand Piano V3',
-  licence: 'CC-BY-3.0',
-  layers: [
-    { name: 'p', upTo: 0.35 },
-    { name: 'mp', upTo: 0.6 },
-    { name: 'mf', upTo: 0.85 },
-    { name: 'f', upTo: 1 },
-  ],
-  samples: LAYERS.flatMap((layer) =>
-    ROOTS.map((root) => ({ file: `${layer}/${root}.m4a`, midi: root, layer, bytes: 1, tune: 0 })),
-  ),
-}
-
-/** A loader over a set whose every file decodes to a buffer named by its URL. */
-function loaderOver(context: SamplerContext, manifests: Record<string, SampleManifest>) {
-  return createSampleLoader({
-    context: context as unknown as BaseAudioContext,
-    fetchJson: async (url) => manifests[url.split('/')[2] ?? ''] ?? null,
-    fetchBytes: async (url) => new TextEncoder().encode(url).buffer,
-  })
-}
+const GRAND = pitchedSet('piano', ['p', 'mp', 'mf', 'f'])
 
 async function grand() {
   const context = new SamplerContext()
@@ -104,8 +20,6 @@ async function grand() {
   await sampler.loaded()
   return { context, loader, sampler }
 }
-
-const nameOf = (buffer: AudioBuffer | null) => (buffer as unknown as { name: string } | null)?.name
 
 describe('createSampler', () => {
   it('picks the nearest root, at most a semitone away, for every key A0–C8', async () => {
@@ -197,24 +111,7 @@ describe('createSampler', () => {
 
   it('strikes a kit’s piece by its name, and lets a closed hat choke an open one', async () => {
     const context = new SamplerContext()
-    const kit: SampleManifest = {
-      instrument: 'drums',
-      set: 'Virtuosity Drums',
-      licence: 'CC0-1.0',
-      layers: [
-        { name: 'normal', upTo: 0.8 },
-        { name: 'accent', upTo: 1 },
-      ],
-      samples: ['hatOpen', 'hatClosed'].flatMap((voice) =>
-        ['normal', 'accent'].map((layer) => ({
-          file: `${layer}/${voice}.m4a`,
-          voice,
-          layer,
-          bytes: 1,
-          tune: 0,
-        })),
-      ),
-    }
+    const kit = kitSet(['hatOpen', 'hatClosed'])
     const sampler = createSampler(
       context as unknown as BaseAudioContext,
       loaderOver(context, { drums: kit }),

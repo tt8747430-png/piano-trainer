@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 import type { LoadSound } from './recorded-sounds'
+import { createSampleLoader, type SampleLoader } from './sample-loader'
+import { kitSet, loaderOver, pitchedSet, SamplerContext, sampleNameOf } from './sample-fakes'
 import { createWebAudioOutput, wholeFileMedia } from './web-audio'
 
 /** Just enough of an AudioContext to see what the adapter builds. */
@@ -124,10 +126,19 @@ class FakeContext {
 const A4: Sound = { kind: 'note', midi: midi(69), at: 0.05, duration: 1, velocity: 0.2 }
 const CLICK: Sound = { kind: 'click', at: 0, accent: true }
 
+/** No recorded instrument at all: every note synthesised, as offline before any set is cached. */
+const noSamples = (context: AudioContext) =>
+  createSampleLoader({ context, fetchJson: async () => null, fetchBytes: async () => null })
+
 function setUp({
   activated = true,
   loadSound,
-}: { activated?: boolean; loadSound?: LoadSound } = {}) {
+  loadSamples = noSamples,
+}: {
+  activated?: boolean
+  loadSound?: LoadSound
+  loadSamples?: (context: AudioContext) => SampleLoader
+} = {}) {
   const context = new FakeContext()
   const createContext = vi.fn(() => context as unknown as AudioContext)
   const frames: (() => void)[] = []
@@ -140,6 +151,7 @@ function setUp({
     pageNow: () => page.now,
     activated: () => gesture.activated,
     ...(loadSound ? { loadSound } : {}),
+    loadSamples,
   })
   return { context, createContext, frames, page, gesture, audio }
 }
@@ -572,5 +584,87 @@ describe('wholeFileMedia', () => {
     await vi.waitFor(() => expect(media.src).toBe('blob:vocal'))
     expect(fetchFile).toHaveBeenCalledWith('/assets/vocal.m4a')
     expect(media.preload).toBe('auto')
+  })
+})
+
+describe('the recorded instruments (R29 SND)', () => {
+  const SETS = {
+    piano: pitchedSet('piano', ['p', 'mp', 'mf', 'f']),
+    'piano-light': pitchedSet('piano', ['mf']),
+    'bass-electric': pitchedSet('bassElectric', ['p', 'f']),
+    'bass-upright': pitchedSet('bassUpright', ['p', 'f']),
+    drums: kitSet(['kick', 'snare', 'hatClosed', 'hatOpen']),
+  }
+  /** The sets loaded by a loader of their own: the adapter's context only plays. */
+  const withSets = () => {
+    const loader = loaderOver(new SamplerContext(), SETS)
+    return { loader, ...setUp({ loadSamples: () => loader }) }
+  }
+  const recorded = (context: FakeContext) =>
+    context.sources
+      .filter((source) => sampleNameOf(source.buffer as AudioBuffer | null) !== undefined)
+      .map((source) => sampleNameOf(source.buffer as AudioBuffer | null))
+
+  it('plays the synthesised voice for a note whose sample is not loaded', () => {
+    const { context, audio } = withSets()
+    audio.play([A4], 0)
+    expect(context.oscillators).toHaveLength(3)
+    expect(recorded(context)).toEqual([])
+  })
+
+  it('plays a note from the grand once its file is in, its damper falling at its end', async () => {
+    const { context, audio, loader } = withSets()
+    audio.play([A4], 0)
+    // Asked for as the note was scheduled: the grand's A4 is fetched, at the velocity's layer (p).
+    await vi.waitFor(() => expect(loader.buffer('/samples/piano/p/69.m4a')).not.toBeNull())
+    context.currentTime = 1
+    audio.play([A4], 1)
+    expect(recorded(context)).toEqual(['/samples/piano/p/69.m4a'])
+    expect(context.noises.at(-1)?.start).toBe(1.05)
+    // Held its second, then A4's damper: 0.29 s, between the bass's 0.6 s and the treble's 0.25 s.
+    expect(context.noises.at(-1)?.stop).toBeCloseTo(2.05 + 0.29375)
+  })
+
+  it('plays the band’s bass and drums from their sets at the scheduled time', async () => {
+    const { context, audio, loader } = withSets()
+    const band: Sound[] = [
+      {
+        kind: 'note',
+        midi: midi(40),
+        at: 0,
+        duration: 0.5,
+        velocity: 0.9,
+        instrument: 'bassElectric',
+      },
+      { kind: 'drum', at: 0.5, piece: 'snare', velocity: 0.9 },
+    ]
+    // Scheduled ahead, then stopped: their files are fetched all the same.
+    audio.play(band, 2)
+    audio.stop()
+    await vi.waitFor(() => {
+      expect(loader.buffer('/samples/bass-electric/f/39.m4a')).not.toBeNull()
+      expect(loader.buffer('/samples/drums/accent/snare.m4a')).not.toBeNull()
+    })
+    context.currentTime = 3
+    audio.play(band, 3)
+    context.currentTime = 3.45
+    audio.play([], 3.45)
+    expect(recorded(context)).toEqual([
+      '/samples/bass-electric/f/39.m4a',
+      '/samples/drums/accent/snare.m4a',
+    ])
+    expect(context.noises.slice(-2).map((source) => source.start)).toEqual([3, 3.5])
+  })
+
+  it('plays a held key from the grand, and lets it go at the release', async () => {
+    const { context, audio, loader } = withSets()
+    await audio.unlock()
+    await loader.load('/samples/piano/mf/69.m4a')
+    audio.press(midi(69), 100)
+    expect(context.oscillators).toHaveLength(0)
+    expect(recorded(context)).toEqual(['/samples/piano/mf/69.m4a'])
+    context.currentTime = 2
+    audio.release(midi(69))
+    expect(context.noises.at(-1)?.stop).toBeCloseTo(2.29375)
   })
 })
