@@ -392,6 +392,7 @@ export function notate(music: TimedMusic): Score {
     ...(music.timeSymbol ? { timeSymbol: true } : {}),
     ...(music.timeHidden ? { timeHidden: true } : {}),
     ...(music.tempoUnit ? { tempoUnit: music.tempoUnit } : {}),
+    ...(music.tempoText ? { tempoText: music.tempoText } : {}),
     staves: written,
     measures: drawnAs(measures),
   }

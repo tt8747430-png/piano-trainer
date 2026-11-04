@@ -22,8 +22,6 @@ export type SheetField =
   | { readonly kind: 'fingering' }
   /** Free text over the note (ADR 0097). */
   | { readonly kind: 'text' }
-  /** A tempo mark's beats a minute over the note (ADR 0097). */
-  | { readonly kind: 'tempo' }
 
 /** Where a field stands on a line, in its layout's px from the engraving's top left. */
 export interface FieldBox {

@@ -1,6 +1,7 @@
 import { stubMatchMedia } from '@/shared/test/match-media'
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { pickMenu } from '@/shared/test/pickers'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { VIEWS_STORAGE_KEY, VIEWS_VERSION } from '@/entities/views'
@@ -391,46 +392,72 @@ describe('the score editor', () => {
     expect(await screen.findByRole('link', { name: 'Go to Songs' })).toBeInTheDocument()
   })
 
-  it('sets the tempo mark on its dial: stepped, typed, in another note, on ✓ (ADR 0114)', async () => {
+  it('types, steps ±1 and ±10, chooses the beat, saves the tempo mark with its words (A34)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(
       await screen.findByRole('button', { name: 'Tempo: 90 BPM' }, { timeout: 4000 }),
     )
     const tempo = await screen.findByRole('dialog', { name: 'Tempo' })
-    const dial = within(tempo).getByRole('spinbutton', { name: 'Tempo' })
-    expect(dial).toHaveAttribute('aria-valuenow', '90')
-    expect(dial).toHaveAttribute('aria-valuetext', '90 a minute, Andante')
-    expect(within(tempo).getByRole('button', { name: 'Apply' })).toBeDisabled()
-    dial.focus()
+    const bpm = within(tempo).getByRole('textbox', { name: 'BPM' })
+    expect(bpm).toHaveValue('90')
+    expect(within(tempo).getByRole('button', { name: 'Save' })).toBeDisabled()
+    // ↑ a beat, ⇧↑ ten, typed, − a beat.
+    await user.click(bpm)
     await user.keyboard('{ArrowUp}')
-    expect(dial).toHaveAttribute('aria-valuenow', '91')
-    await user.keyboard('72{PageUp}')
-    expect(dial).toHaveAttribute('aria-valuenow', '82')
-    // The note the mark counts: the meter's beat first, another keeping the number.
-    const units = within(tempo).getByRole('radiogroup', { name: 'The note the tempo counts' })
-    expect(
-      within(units)
-        .getAllByRole('radio')
-        .map((unit) => unit.getAttribute('aria-label')),
-    ).toEqual([
-      'Quarter note',
-      'Dotted quarter note',
-      'Eighth note',
-      'Dotted eighth note',
-      'Sixteenth note',
-    ])
-    expect(within(units).getByRole('radio', { name: 'Quarter note' })).toBeChecked()
-    // Nothing changes until ✓.
+    expect(bpm).toHaveValue('91')
+    await user.keyboard('{Shift>}{ArrowUp}{/Shift}')
+    expect(bpm).toHaveValue('101')
+    await user.clear(bpm)
+    await user.type(bpm, '83{Enter}')
+    expect(bpm).toHaveValue('83')
+    await user.click(within(tempo).getByRole('button', { name: 'One beat a minute slower' }))
+    expect(bpm).toHaveValue('82')
+    // Nothing changes until Save.
     expect(songOf(piecesStore.getState())).toMatchObject({ tempo: 90 })
-    await user.click(within(units).getByRole('radio', { name: 'Eighth note' }))
-    expect(dial).toHaveAttribute('aria-valuenow', '82')
-    await user.click(within(tempo).getByRole('button', { name: 'Apply' }))
+    // The note the mark counts, another keeping the number; then the words printed with it.
+    await pickMenu(user, 'Beat', 'Eighth note')
+    expect(bpm).toHaveValue('82')
+    await pickMenu(user, 'Tempo text', 'Andante')
+    await user.click(within(tempo).getByRole('button', { name: 'Save' }))
     await waitFor(() =>
-      expect(songOf(piecesStore.getState())).toMatchObject({ tempo: 41, tempoUnit: '8' }),
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        tempo: 41,
+        tempoUnit: '8',
+        tempoText: 'Andante',
+      }),
     )
-    // The mark printed says it in its note.
-    expect(await screen.findByRole('button', { name: 'Tempo: \u{1D160} = 82' })).toBeInTheDocument()
+  })
+
+  it('adds a tempo change at the caret from Text, and deletes it (A34)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', {
+      storage: withSong({ staves: [{ notes: 'B4/4 | A4/4 | G4/4 | F#4/4' }] }),
+    })
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Staff 1 · Bar 1/))
+    const text = await openCategory(user, 'Text')
+    await user.click(within(text).getByRole('button', { name: 'Tempo change' }))
+    const change = await screen.findByRole('dialog', { name: 'Tempo change' })
+    // Mid-song, the song's beat: no Beat, no words, and nothing to delete yet.
+    expect(within(change).queryByRole('button', { name: /^Beat/ })).not.toBeInTheDocument()
+    expect(within(change).queryByRole('button', { name: 'Delete' })).not.toBeInTheDocument()
+    const bpm = within(change).getByRole('textbox', { name: 'BPM' })
+    await user.clear(bpm)
+    await user.type(bpm, '120{Enter}')
+    await user.click(within(change).getByRole('button', { name: 'Save' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        staves: [{ notes: 'B4/4[tempo:120] | A4/4 | G4/4 | F#4/4' }],
+      }),
+    )
+    await user.click(within(text).getByRole('button', { name: 'Tempo change' }))
+    const again = await screen.findByRole('dialog', { name: 'Tempo change' })
+    await user.click(within(again).getByRole('button', { name: 'Delete' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        staves: [{ notes: 'B4/4 | A4/4 | G4/4 | F#4/4' }],
+      }),
+    )
   })
 
   it('changes the song’s key at its first key signature, a later section’s from its own (ADR 0114)', async () => {

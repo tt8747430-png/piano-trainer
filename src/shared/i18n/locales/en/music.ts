@@ -158,6 +158,16 @@ export const music = {
   // A scale's structure in whole and half steps.
   gap: { W: 'W', H: 'H', 'W+H': 'W+H' },
   // A key, as a pop-up names it.
+  tempoField: {
+    beat: 'Beat',
+    bpm: 'BPM',
+    slower: 'One beat a minute slower',
+    faster: 'One beat a minute faster',
+    hear: 'Hear the tempo',
+    text: 'Tempo text',
+    noText: 'None',
+    ownText: 'Your own words',
+  },
   timeField: {
     label: 'Time signature',
     common: 'Common time, C',

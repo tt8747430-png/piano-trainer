@@ -211,7 +211,13 @@ export type EditorAction =
       readonly tempo?: number
     }
   /** The tempo mark as its picker sets it: a number of a note a minute (ADR 0114). */
-  | { readonly type: 'tempo'; readonly mark: number; readonly unit: TempoUnit }
+  | {
+      readonly type: 'tempo'
+      readonly mark: number
+      readonly unit: TempoUnit
+      /** The words printed with the mark; none takes them off, where it is said. */
+      readonly text?: string | null
+    }
   /** The music moved by semitones, the key and the chord symbols with it as asked (ADR 0115). */
   | {
       readonly type: 'transpose'

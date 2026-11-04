@@ -174,10 +174,9 @@ export const editor = {
   },
   // The tempo mark's picker (ADR 0114).
   tempo: {
-    mark: 'Tempo',
-    markInfo:
-      'Hold the circle and swipe up or down, drag it with the mouse or turn the mouse wheel; with the computer keys, ↑ ↓ a beat a minute, Page Up and Page Down ten, or type the number.',
-    unit: 'The note the tempo counts',
+    save: 'Save',
+    delete: 'Delete',
+    change: 'Tempo change',
     units: {
       '2': 'Half note',
       '2.': 'Dotted half note',
@@ -187,7 +186,6 @@ export const editor = {
       '8.': 'Dotted eighth note',
       '16': 'Sixteenth note',
     },
-    value: '{{mark}} a minute, {{word}}',
   },
   // The lines drawn over notes, each a key.
   lines: {
@@ -202,10 +200,8 @@ export const editor = {
   },
   // The words a note carries (ADR 0097): free text, a tempo mark, swing, a Roman numeral.
   words: {
+    swing: 'Swing',
     text: 'Text',
-    tempo: 'Tempo mark',
-    tempoRange: 'A tempo from {{from}} to {{to}} beats a minute.',
-    tempoGroup: 'Tempo & swing',
     swingEighths: 'Swing eighths',
     swingSixteenths: 'Swing sixteenths',
     straight: 'Straight eighths',

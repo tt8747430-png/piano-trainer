@@ -52,6 +52,13 @@ describe('the song’s settings', () => {
     expect(setTempoMark(draft, 700, '8').tempo).toBe(300)
     expect(setTempoMark(quarters, 100, '4')).toBe(quarters)
   })
+
+  it('prints the tempo mark’s words, kept until taken off (A34)', () => {
+    const allegro = setTempoMark(draft, 132, '4', ' Allegro ')
+    expect(allegro).toMatchObject({ tempo: 132, tempoText: 'Allegro' })
+    expect(setTempoMark(allegro, 120, '4').tempoText).toBe('Allegro')
+    expect(setTempoMark(allegro, 120, '4', null)).not.toHaveProperty('tempoText')
+  })
 })
 
 describe('transpose (ADR 0115)', () => {

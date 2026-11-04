@@ -151,10 +151,9 @@ export const editor: LocaleResources['editor'] = {
     apply: 'Применить',
   },
   tempo: {
-    mark: 'Темп',
-    markInfo:
-      'Удерживайте круг и ведите вверх или вниз, тяните мышью или крутите колесо; клавишами компьютера ↑ ↓ — на удар в минуту, Page Up и Page Down — на десять, или наберите число.',
-    unit: 'Какой нотой считается темп',
+    save: 'Сохранить',
+    delete: 'Удалить',
+    change: 'Смена темпа',
     units: {
       '2': 'Половинная',
       '2.': 'Половинная с точкой',
@@ -164,7 +163,6 @@ export const editor: LocaleResources['editor'] = {
       '8.': 'Восьмая с точкой',
       '16': 'Шестнадцатая',
     },
-    value: '{{mark}} в минуту, {{word}}',
   },
   lines: {
     slur: 'Лига',
@@ -178,10 +176,8 @@ export const editor: LocaleResources['editor'] = {
   },
   // Слова при ноте (ADR 0097): текст, темп, свинг, римская цифра.
   words: {
+    swing: 'Свинг',
     text: 'Текст',
-    tempo: 'Обозначение темпа',
-    tempoRange: 'Темп от {{from}} до {{to}} долей в минуту.',
-    tempoGroup: 'Темп и свинг',
     swingEighths: 'Свинг восьмыми',
     swingSixteenths: 'Свинг шестнадцатыми',
     straight: 'Ровные восьмые',

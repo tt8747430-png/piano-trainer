@@ -124,6 +124,8 @@ export interface Draft {
   readonly timeSymbol?: true
   /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
   readonly tempoUnit?: TempoUnit
+  /** The tempo mark's words printed with it (A34): Allegro, or the writer's own. */
+  readonly tempoText?: string
   readonly tempo: number
   /** The piece's pattern, kept for the Player's Setup; the editor's bars are all written (ADR 0114). */
   readonly pattern: PatternId
@@ -228,6 +230,7 @@ export function readDraft(music: PieceMusic): Draft {
     meter: music.meter,
     ...(music.timeSymbol ? { timeSymbol: true } : {}),
     ...(music.tempoUnit ? { tempoUnit: music.tempoUnit } : {}),
+    ...(music.tempoText ? { tempoText: music.tempoText } : {}),
     tempo: music.tempo,
     pattern: music.pattern,
     sections,
@@ -300,6 +303,7 @@ export function writeDraft(draft: Draft): PieceMusic {
     meter: draft.meter,
     ...(draft.timeSymbol ? { timeSymbol: true } : {}),
     ...(draft.tempoUnit ? { tempoUnit: draft.tempoUnit } : {}),
+    ...(draft.tempoText ? { tempoText: draft.tempoText } : {}),
     tempo: draft.tempo,
     pattern: draft.pattern,
     // Each bar in its section's meter (ADR 0097).

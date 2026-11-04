@@ -182,6 +182,10 @@ const JUMP_TEXT: Readonly<Record<Jump, string>> = {
 const escape = (text: string) =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
+/** A tempo mark's words before its note and number, bold as printed (A34): Allegro ♩ = 120. */
+const words = (text: string | undefined) =>
+  text ? `<rend fontweight="bold">${escape(text)}</rend> ` : ''
+
 /** A staff's name as Verovio prints it at the line's head, smaller than its words; a placeholder in italics. */
 const label = ({ text, placeholder }: PrintedName) =>
   `<label><rend fontsize="small"${placeholder ? ' fontstyle="italic"' : ''}>${escape(text)}</rend></label>`
@@ -400,7 +404,7 @@ class Writer {
       const dots = unit.endsWith('.') ? ' mm.dots="1"' : ''
       const value = unit.replace('.', '')
       controls.push(
-        `<tempo staff="${top}" tstamp="1" mm="${mark}" mm.unit="${value}"${dots} place="above">${unitNote(unit)} = ${mark}</tempo>`,
+        `<tempo staff="${top}" tstamp="1" mm="${mark}" mm.unit="${value}"${dots} place="above">${words(this.score.tempoText)}${unitNote(unit)} = ${mark}</tempo>`,
       )
     }
     if (measure.segno) controls.push(`<dir staff="${top}" tstamp="1" place="above">𝄋</dir>`)

@@ -157,10 +157,9 @@ function Tools() {
       </Section>
       <Section category="bar">
         <BarKeys />
-        {/* Flat's Measure: a tempo mark at the note, and swing from it (ADR 0097). */}
-        <GroupName name={t('words.tempoGroup')} />
-        <KeyGrid label={t('words.tempoGroup')}>
-          <FieldKey field="tempo" />
+        {/* Flat's Measure: swing from the note (ADR 0097). */}
+        <GroupName name={t('words.swing')} />
+        <KeyGrid label={t('words.swing')}>
           <SwingKeys />
         </KeyGrid>
       </Section>

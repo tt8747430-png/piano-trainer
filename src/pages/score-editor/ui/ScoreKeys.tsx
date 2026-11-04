@@ -8,7 +8,8 @@ import { isTool } from '../model/shortcuts'
 import { useNotesChosen } from '../model/use-notes-chosen'
 import { useSignatureFrom } from '../model/use-signature-from'
 import { FieldKey } from './FieldKey'
-import { CodaSign } from './palette-icons'
+import { CodaSign, FieldIcon } from './palette-icons'
+import { TempoChangePopover } from './TempoPopover'
 import {
   GroupName,
   KeyGrid,
@@ -151,6 +152,23 @@ function NumeralKey() {
   )
 }
 
+/** Flat's Tempo change in Text (A34): a tempo mark at the caret, set in its popover. */
+function TempoChangeKey() {
+  const { t } = useTranslation('editor')
+  const chosen = useNotesChosen()
+  return (
+    <TempoChangePopover
+      trigger={
+        <PaletteKey label={t('tempo.change')} reason={usePaletteReason()} disabled={!chosen}>
+          <span aria-hidden className="size-7">
+            <FieldIcon field="tempo" />
+          </span>
+        </PaletteKey>
+      }
+    />
+  )
+}
+
 export function TextKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
@@ -163,6 +181,7 @@ export function TextKeys() {
         <FieldKey field="chord" />
         <NumeralKey />
         <FieldKey field="text" />
+        <TempoChangeKey />
       </KeyGrid>
       {EXPRESSION_GROUP_IDS.map((group) => (
         <Fragment key={group}>

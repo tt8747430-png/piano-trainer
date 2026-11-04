@@ -65,6 +65,8 @@ export interface TimedMusic {
   readonly timeHidden?: true
   /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
   readonly tempoUnit?: TempoUnit
+  /** The tempo mark's words printed with it (A34): Allegro, or the writer's own. */
+  readonly tempoText?: string
   readonly bars: readonly (BarMarks & {
     /** The tempo marked over it, at the music's head: beats a minute. */
     readonly tempo?: number
@@ -224,6 +226,8 @@ export interface Score {
   readonly timeHidden?: true
   /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
   readonly tempoUnit?: TempoUnit
+  /** The tempo mark's words printed with it (A34): Allegro, or the writer's own. */
+  readonly tempoText?: string
   /** The staves it writes, top down. */
   readonly staves: readonly StaffId[]
   readonly measures: readonly Measure[]

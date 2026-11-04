@@ -45,7 +45,6 @@ const PLACES = {
   lyrics: ON,
   fingering: OVER,
   text: OVER,
-  tempo: OVER,
   staffName: ON,
 } as const satisfies Readonly<Record<Kind, object>>
 
@@ -58,7 +57,6 @@ const FACES = {
   lyrics: 'w-32 font-serif',
   fingering: 'w-24 text-center font-display font-semibold tabular-nums',
   text: 'w-44 font-serif italic',
-  tempo: 'w-24 text-center font-display font-semibold tabular-nums',
   staffName: 'w-44 font-serif',
 } as const satisfies Readonly<Record<Kind, string>>
 
@@ -68,7 +66,6 @@ const INPUT_MODES = {
   lyrics: 'text',
   fingering: 'numeric',
   text: 'text',
-  tempo: 'numeric',
   staffName: 'text',
 } as const satisfies Readonly<Record<Kind, 'text' | 'numeric'>>
 
