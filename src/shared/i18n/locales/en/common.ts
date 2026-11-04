@@ -216,9 +216,9 @@ export const common = {
   recorderSettings: {
     click: 'Click while recording',
     clickInfo: 'A click on every beat, so what you play lands in the right bars.',
-    tune: 'Play melody',
+    tune: 'Hear the other staves',
     tuneInfo:
-      'The song’s melody, its staves over the piano, plays under your take while you record. Shown where the song has one.',
+      'The song’s staves over the piano play under your take while you record. Shown where the song has them.',
   },
   // The MIDI keyboard's screen (Settings › MIDI keyboard, ADR 0034) and its MIDI log.
   midiSettings: {
