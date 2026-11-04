@@ -268,6 +268,13 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
     }),
   '/shell/practice/chord-finder': toPractice,
   '/shell/practice/metronome': toPractice,
+  '/shell/practice/metronome/settings': () => up({ to: '/practice/metronome' }),
+  '/shell/practice/circle-of-fifths': toPractice,
+  '/shell/practice/tap-tempo': toPractice,
+  '/shell/practice/recorder': toPractice,
+  '/shell/practice/drone': toPractice,
+  '/shell/practice/tuner': toPractice,
+  '/shell/practice/tuner/settings': () => up({ to: '/practice/tuner' }),
   '/shell/practice/chord-player': toPractice,
   '/shell/practice/chord-player/settings': ({ search }) => {
     const sheet = text(search.sheet)

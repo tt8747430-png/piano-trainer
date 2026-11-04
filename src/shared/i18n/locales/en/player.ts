@@ -86,6 +86,7 @@ export const player = {
     denied: 'The microphone is not available. Allow it in the browser to use the tuner.',
     a4: 'A4',
     hz: '{{hz}} Hz',
+    reference: 'A4 = {{hz}} Hz',
     lower: 'Lower A4',
     higher: 'Higher A4',
   },

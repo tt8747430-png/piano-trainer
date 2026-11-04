@@ -27,15 +27,16 @@ describe('Tab on Practice (A36)', () => {
     expect(names[0]).toBe('Skip to content')
     // The places before the page, as the sidebar stands left of it and the tab bar is the app's own.
     const learn = names.indexOf('Learn')
-    const chords = names.findIndex((name) => name.startsWith('Chords'))
+    const metronome = names.findIndex((name) => name.startsWith('Metronome'))
     expect(learn).toBeGreaterThan(0)
-    expect(chords).toBeGreaterThan(learn)
-    // The groups' rows in the order they are read: Theory, then Playing, then Training.
+    expect(metronome).toBeGreaterThan(learn)
+    // The groups' rows in the order they are read: Tools, Theory, Playing, then Training.
     const row = (start: string) => names.findIndex((name) => name.startsWith(start))
+    expect(row('Metronome')).toBeLessThan(row('Tuner'))
+    expect(row('Tuner')).toBeLessThan(row('Chords'))
     expect(row('Chords')).toBeLessThan(row('Intervals'))
     expect(row('Progressions')).toBeLessThan(row('Accompaniment'))
-    expect(row('Chord finder')).toBeLessThan(row('Exercises'))
-    expect(row('Quiz')).toBeLessThan(row('Metronome'))
+    expect(row('Accompaniment')).toBeLessThan(row('Exercises'))
     // Every link and button on the screen is reached, none skipped and none trapping the walk.
     const reachable = [...document.querySelectorAll('a[href], button:not([disabled])')].filter(
       (element) => !element.closest('[hidden], [inert], [aria-hidden="true"]'),

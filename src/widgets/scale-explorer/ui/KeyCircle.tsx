@@ -1,3 +1,4 @@
+import type { KeyboardEvent } from 'react'
 import { useKeyName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import {
@@ -97,21 +98,28 @@ export function KeyCircle({
   label,
   value,
   mark,
+  onChoose,
   className,
 }: {
   label: string
-  value: Key
+  /** The key shown; none, on the tool before a sector is tapped. */
+  value: Key | null
   mark?: (wedge: CircleWedge) => WedgeMark | undefined
+  /**
+   * A sector tapped (the Circle of fifths tool, R29 B11): each wedge a button naming its key, the
+   * picture a group. Never a key picker (D21–D22): it shows the key, it sets nothing.
+   */
+  onChoose?: (key: Key) => void
   className?: string
 }) {
   const name = useKeyName()
-  const chosen = wedgeOf(value)
+  const chosen = value ? wedgeOf(value) : undefined
   return (
     <div className={cn('relative mx-auto aspect-square w-full max-w-sm', className)}>
       <svg
         viewBox="0 0 100 100"
-        role="img"
-        aria-label={`${label}: ${name(value)}`}
+        role={onChoose ? 'group' : 'img'}
+        aria-label={value ? `${label}: ${name(value)}` : label}
         className="absolute inset-0 size-full overflow-visible"
       >
         {WEDGES.map((wedge, index) => {
@@ -122,7 +130,27 @@ export function KeyCircle({
           const size = (wedge.ring === 'major' ? 4.4 : 3.6) * (half ? 0.78 : 1)
           const small = wedge.ring === 'major' ? 3 : 2.6
           return (
-            <g key={index} data-wedge={index} data-on={on || undefined}>
+            <g
+              key={index}
+              data-wedge={index}
+              data-on={on || undefined}
+              {...(onChoose
+                ? {
+                    role: 'button',
+                    tabIndex: 0,
+                    'aria-label': name(wedge.key),
+                    'aria-pressed': on,
+                    className:
+                      'cursor-pointer outline-none [&:focus-visible>path]:stroke-ring [&:focus-visible>path]:stroke-[0.8]',
+                    onClick: () => onChoose(wedge.key),
+                    onKeyDown: (event: KeyboardEvent) => {
+                      if (event.key !== 'Enter' && event.key !== ' ') return
+                      event.preventDefault()
+                      onChoose(wedge.key)
+                    },
+                  }
+                : {})}
+            >
               <path
                 d={wedgePath(wedge.place, wedge.ring, wedge.part)}
                 strokeWidth={0.3}
@@ -155,7 +183,7 @@ export function KeyCircle({
         aria-hidden
         className="pointer-events-none absolute inset-[20%] grid place-content-center text-center font-display text-base leading-tight font-semibold text-balance"
       >
-        {name(value)}
+        {value ? name(value) : null}
       </p>
     </div>
   )

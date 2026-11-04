@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef } from 'react'
+import { useShallow } from 'zustand/react/shallow'
 import {
   selectOtherHand,
-  selectMetronome,
   selectPlayback,
   selectPractice,
   selectScoreView,
@@ -28,6 +28,7 @@ import {
   type PracticeMode,
 } from '@/features/practice'
 import { setPracticeToggle, setScoreView } from '@/features/set-preference'
+import { clickVoice } from '@/features/metronome'
 import type { Performance } from '@/shared/lib/arrangement'
 import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
@@ -139,11 +140,7 @@ export function usePracticePlayer(
   const otherHand = useSettings(selectOtherHand)
   const playback = useSettings(selectPlayback)
   // The click and count-in in the Metronome's sound and squares (A35, A39: one engine).
-  const { sound: clickSound, meter: clickMeter, levels: clickLevels } = useSettings(selectMetronome)
-  const voicing = useMemo(
-    () => ({ sound: clickSound, meter: clickMeter, levels: clickLevels }),
-    [clickSound, clickMeter, clickLevels],
-  )
+  const voicing = useSettings(useShallow(({ metronome }) => clickVoice(metronome, metronome.meter)))
   // The pedal played as the settings say (A27): as written, none, or with each chord.
   const played = useMemo(() => withPedal(written, playback.pedal), [written, playback.pedal])
   const performance = played

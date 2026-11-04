@@ -28,12 +28,23 @@ async function open(storage = createMemoryStorage()) {
   return { ...app, storage }
 }
 
+/** Settings saved before the app opens: the Metronome's parts given, the rest its defaults. */
+function savedMetronome(metronome: object): Storage {
+  const storage = createMemoryStorage()
+  storage.setItem(
+    'pt-settings',
+    JSON.stringify({ version: SETTINGS_VERSION, state: { metronome } }),
+  )
+  return storage
+}
+
 describe('Practice → Metronome', () => {
-  it('is listed with the training on Practice', async () => {
+  it('is listed first among the Tools on Practice (R29 B11)', async () => {
     const user = userEvent.setup()
     await renderApp('/practice')
-    const training = await screen.findByRole('region', { name: 'Training' })
-    await user.click(within(training).getByRole('link', { name: /Metronome/ }))
+    const tools = await screen.findByRole('region', { name: 'Tools' })
+    expect(within(tools).getAllByRole('link')[0]).toHaveTextContent(/^Metronome/)
+    await user.click(within(tools).getByRole('link', { name: /Metronome/ }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Metronome' })).toBeInTheDocument()
   })
 
@@ -96,11 +107,37 @@ describe('Practice → Metronome', () => {
     expect(after[0]).toEqual({ at: 1.145, voices: ['click'] })
   })
 
-  it('plays a drum beat in the time signature chosen, both saved', async () => {
+  it('sets its sound, what falls between the beats and its trainers on its Settings page (R29 B11)', async () => {
     const user = userEvent.setup()
-    const { audio, storage } = await open()
+    const storage = createMemoryStorage()
+    await renderApp('/practice/metronome/settings', { storage })
+    await screen.findByRole('heading', { level: 1, name: 'Metronome settings' })
     await user.click(screen.getByRole('combobox', { name: 'Sound' }))
     await user.click(await screen.findByRole('option', { name: 'Drum beat' }))
+    await user.click(screen.getByRole('combobox', { name: 'Between beats' }))
+    await user.click(await screen.findByRole('option', { name: 'Triplets' }))
+    expect(screen.queryByText('Start at')).toBeNull()
+    await user.click(screen.getByRole('switch', { name: /Speed trainer/ }))
+    for (const name of ['Start at', 'Goal', 'Speed up by', 'Every'])
+      expect(screen.getByText(name)).toBeVisible()
+    await user.click(screen.getByRole('switch', { name: /Silent bars/ }))
+    expect(saved(storage)).toMatchObject({
+      sound: 'drum',
+      subdivision: 'triplets',
+      speed: { on: true },
+      trainer: { on: true },
+    })
+    // Back to the Metronome: its tempo is the speed trainer's start, and its steps set it.
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    await screen.findByRole('heading', { level: 1, name: 'Metronome' })
+    const start = saved(storage).speed.from
+    await user.click(screen.getByRole('button', { name: 'Faster by 10' }))
+    expect(saved(storage).speed.from).toBe(start + 10)
+  })
+
+  it('plays a drum beat in the time signature chosen, both saved', async () => {
+    const user = userEvent.setup()
+    const { audio, storage } = await open(savedMetronome({ sound: 'drum' }))
     await user.click(screen.getByRole('combobox', { name: 'Time signature' }))
     await user.click(await screen.findByRole('option', { name: '3/4' }))
     expect(saved(storage)).toMatchObject({ bpm: 120, meter: '3/4', sound: 'drum' })
@@ -121,13 +158,9 @@ describe('Practice → Metronome', () => {
 
   it('plays its bars, then mutes its bars, the beats still shown while muted', async () => {
     const user = userEvent.setup()
-    const { audio, storage } = await open()
-    await user.click(screen.getByRole('combobox', { name: 'Time signature' }))
-    await user.click(await screen.findByRole('option', { name: '2/4' }))
-    await user.click(screen.getByRole('switch', { name: /Silent bars/ }))
-    await user.click(screen.getByRole('button', { name: 'Play −' }))
-    await user.click(screen.getByRole('button', { name: 'Then silent for −' }))
-    expect(saved(storage).trainer).toEqual({ on: true, play: 1, mute: 1 })
+    const { audio } = await open(
+      savedMetronome({ meter: '2/4', trainer: { on: true, play: 1, mute: 1 } }),
+    )
     await user.click(screen.getByRole('button', { name: 'Start' }))
     // At 120 in 2/4: the first bar sounds (0.1, 0.6), the second is silent (1.1, 1.6).
     await waitFor(() => expect(audio.played.length).toBeGreaterThan(0))
@@ -181,7 +214,7 @@ describe('Practice → Metronome', () => {
     )
     await open(storage)
     expect(tempo()).toBe('Tempo: 66 BPM')
-    expect(screen.getByRole('combobox', { name: 'Sound' })).toHaveTextContent('Beeps')
+    expect(screen.getByRole('combobox', { name: 'Time signature' })).toHaveTextContent('6/8')
     // 6/8 is counted in two dotted beats, as players count it (A39).
     expect(within(screen.getByRole('list', { name: 'Beats' })).getAllByRole('button')).toHaveLength(
       2,
@@ -202,18 +235,5 @@ describe('Practice → Metronome', () => {
       'normal',
       'normal',
     ])
-  })
-
-  it('shows the speed trainer’s tempos only while it is on (R30), its start the tempo set', async () => {
-    const { storage } = await open()
-    const user = userEvent.setup()
-    expect(screen.queryByText('Start at')).toBeNull()
-    await user.click(screen.getByRole('switch', { name: /Speed trainer/ }))
-    for (const name of ['Start at', 'Goal', 'Speed up by', 'Every'])
-      expect(screen.getByText(name)).toBeVisible()
-    // The tempo shown is the one it starts at, and the steps set it.
-    const start = saved(storage).speed.from
-    await user.click(screen.getByRole('button', { name: 'Faster by 10' }))
-    expect(saved(storage).speed.from).toBe(start + 10)
   })
 })
