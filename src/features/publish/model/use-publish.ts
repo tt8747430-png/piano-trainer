@@ -37,6 +37,7 @@ interface Shown {
   readonly id: string
   readonly description: string
   readonly saves: number
+  readonly category: PublicCategory | null
 }
 
 /** A learner's own song or pattern as it is published: its kind, its id among theirs, and its body. */
@@ -96,6 +97,7 @@ export function usePublish(item: PublishItem | null) {
           id: publicId,
           description: result.value.entry.meta.description ?? '',
           saves: result.value.entry.saves,
+          category: result.value.entry.category,
         })
     })
     return () => {
@@ -139,7 +141,12 @@ export function usePublish(item: PublishItem | null) {
       recordFirst(progress, 'published', new Date())
       setSaid(published ? 'updated' : 'published')
       setPublished(result.value)
-      setDetails({ id: result.value.id, description: said, saves: shown?.saves ?? 0 })
+      setDetails({
+        id: result.value.id,
+        description: said,
+        saves: shown?.saves ?? 0,
+        category: item.category ?? null,
+      })
     },
     [account, authorName, library, id, item, body, version, published, shown, progress],
   )
@@ -164,6 +171,8 @@ export function usePublish(item: PublishItem | null) {
     publicId,
     description: shown?.description ?? '',
     saves: shown?.saves ?? 0,
+    /** Its category as published (B3); none before, or for a pattern. */
+    category: shown?.category ?? null,
     publish,
     unpublish,
   }
