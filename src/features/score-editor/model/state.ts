@@ -1,3 +1,4 @@
+import type { ClefScope } from './clefs'
 import type { BarMarkChoice } from './bar-marks'
 import type { HeaderField, SectionKind, StaffName, StaffSize } from '@/entities/piece'
 import type { Chord, Clef, Finger, Key, Midi, TempoUnit, Tick } from '@/shared/lib/music'
@@ -192,7 +193,14 @@ export type EditorAction =
    * hand's staff changes clef from that bar on (ADR 0097), a single staff is written in it whole
    * (ADR 0097).
    */
-  | { readonly type: 'clef'; readonly staff: NoteLayer; readonly clef: Clef; readonly bar: number }
+  | {
+      readonly type: 'clef'
+      readonly staff: NoteLayer
+      readonly clef: Clef
+      readonly bar: number
+      /** How far a hand's clef reaches (A34): to the next change where not said. */
+      readonly scope?: ClefScope
+    }
   | { readonly type: 'sectionKind'; readonly section: number; readonly kind: SectionKind }
   | { readonly type: 'joinSection'; readonly section: number }
   /**
@@ -211,7 +219,13 @@ export type EditorAction =
       readonly tempo?: number
     }
   /** The tempo mark as its picker sets it: a number of a note a minute (ADR 0114). */
-  | { readonly type: 'tempo'; readonly mark: number; readonly unit: TempoUnit }
+  | {
+      readonly type: 'tempo'
+      readonly mark: number
+      readonly unit: TempoUnit
+      /** The words printed with the mark; none takes them off, where it is said. */
+      readonly text?: string | null
+    }
   /** The music moved by semitones, the key and the chord symbols with it as asked (ADR 0115). */
   | {
       readonly type: 'transpose'

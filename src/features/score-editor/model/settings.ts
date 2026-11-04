@@ -122,13 +122,28 @@ export function setTempo(draft: Draft, tempo: number): Draft {
  * song's beats a minute of it to a tick's part, kept within the tempos a piece is written at; the
  * unit said only where it is not the meter's beat.
  */
-export function setTempoMark(draft: Draft, mark: number, unit: TempoUnit): Draft {
+export function setTempoMark(
+  draft: Draft,
+  mark: number,
+  unit: TempoUnit,
+  text?: string | null,
+): Draft {
   const beats = Math.round(tempoOfMark(mark, unit, draft.meter) * TICKS_PER_BEAT) / TICKS_PER_BEAT
   const tempo = Math.min(PIECE_TEMPO.max, Math.max(PIECE_TEMPO.min, beats))
-  const { tempoUnit: _was, ...rest } = draft
-  const next: Draft =
-    unit === beatUnit(draft.meter) ? { ...rest, tempo } : { ...rest, tempo, tempoUnit: unit }
-  return next.tempo === draft.tempo && next.tempoUnit === draft.tempoUnit ? draft : next
+  const { tempoUnit: _was, tempoText: _said, ...rest } = draft
+  // The words as said: kept where the call says nothing of them, taken off where it says none.
+  const words = text === undefined ? draft.tempoText : (text?.trim().slice(0, 40) ?? '')
+  const next: Draft = {
+    ...rest,
+    tempo,
+    ...(unit === beatUnit(draft.meter) ? {} : { tempoUnit: unit }),
+    ...(words ? { tempoText: words } : {}),
+  }
+  return next.tempo === draft.tempo &&
+    next.tempoUnit === draft.tempoUnit &&
+    next.tempoText === draft.tempoText
+    ? draft
+    : next
 }
 
 /**

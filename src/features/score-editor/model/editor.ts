@@ -1,6 +1,6 @@
 import { songTitle, withHeaderLine } from '@/entities/piece'
 import { markBars } from './bar-marks'
-import { setClef } from './clefs'
+import { setClefIn } from './clefs'
 import { shownRows, staffLeftFor } from './rows'
 import { setBarTicks } from './bars'
 import { chosenNotes, chosenSpan, fingerPlace, shownValue, takenAway } from './chosen'
@@ -405,7 +405,7 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
       return commit(
         state,
         isHandLayer(action.staff)
-          ? setClef(draft, action.bar, action.staff, action.clef)
+          ? setClefIn(draft, action.bar, action.staff, action.clef, action.scope ?? 'end')
           : setStaffClef(draft, staffPlace(action.staff), action.clef),
       )
     // Each bar chosen, else the caret's.
@@ -434,7 +434,7 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
       return commit(state, next)
     }
     case 'tempo':
-      return commit(state, setTempoMark(draft, action.mark, action.unit))
+      return commit(state, setTempoMark(draft, action.mark, action.unit, action.text))
     case 'transpose':
       return commit(state, transpose(draft, action.semitones, action.applies))
     case 'title': {

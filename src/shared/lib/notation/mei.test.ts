@@ -121,6 +121,13 @@ describe('scoreToMei', () => {
     expect(mei).toMatch(/<harm staff="1" tstamp="1">D♭<\/harm>/)
     expect(mei).toMatch(/<tempo staff="1" tstamp="1" mm="84" mm\.unit="4"/)
   })
+
+  it('prints a tempo mark’s words before its note and number (A34)', () => {
+    const said = scoreToMei(
+      notate(music([n(61, note('D', -1), 'rh', 0, B)], { tempoText: 'Allegro' })),
+    )
+    expect(said).toMatch(/<tempo [^>]*><rend fontweight="bold">Allegro<\/rend> \S+ = 84<\/tempo>/u)
+  })
 })
 
 describe('scoreToMei, a note’s marks and the options', () => {

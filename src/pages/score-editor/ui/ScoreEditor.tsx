@@ -33,7 +33,7 @@ import { SelectionActions } from './SelectionActions'
 import { EditorActions, EditorLead } from './EditorHeader'
 import { EditorToolsRow } from './EditorToolsRow'
 import { EditorKeyboard } from './EditorKeyboard'
-import { NoteToolbar, PalettePanel, PaletteSheet } from './EditorPalette'
+import { NoteToolbar, EditorPanel, PaletteSheet } from './EditorPalette'
 import { EditorSheet } from './EditorSheet'
 import { FieldDocked } from './field-docked'
 import { OpenField } from './OpenField'
@@ -210,7 +210,7 @@ function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) 
                 right ? cn('border-l', PANEL_EDGE_RIGHT) : cn('border-r', PANEL_EDGE),
               )}
             >
-              <PalettePanel side={right ? 'right' : 'left'} onHide={() => fold(true)} />
+              <EditorPanel side={right ? 'right' : 'left'} onHide={() => fold(true)} />
             </aside>
           ) : null}
           {panel ? (

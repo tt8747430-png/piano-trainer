@@ -1,4 +1,5 @@
-import { G_CLEF } from '@/shared/ui/pickers/picker-pictures'
+import { SmuflPath } from '@/shared/ui/smufl'
+import { OctaveLineGlyph } from './palette-glyph'
 import type { ReactNode } from 'react'
 import type { BarEdit } from '@/features/score-editor'
 import type { PaletteCategory } from '../model/palette-categories'
@@ -30,11 +31,8 @@ const STAFF = (
   <path d="M2 6 H22 M2 9 H22 M2 12 H22 M2 15 H22 M2 18 H22" strokeWidth="0.9" opacity="0.45" />
 )
 
-/** The glyph's height in its units (1000 to an em), from its top at 1098 down to −658. */
-const G_CLEF_TOP = 1098
-const G_CLEF_HEIGHT = 1756
-/** The scale that stands the clef 20 units tall in a 24-unit square, flipped to the screen's y. */
-const G_CLEF_SCALE = 20 / G_CLEF_HEIGHT
+/** The staff space that stands the treble clef (seven spaces, 1098 over its line and 658 under) 20 units tall. */
+const CLEF_SPACE = 20 / 7.024
 
 /** A word or numeral drawn in the box: a dynamic, a chord, a time signature's figures. */
 function Word({
@@ -77,7 +75,7 @@ const SHARP = (
 /** Each category's picture in the palette's bar. */
 const CATEGORY_ICONS: Readonly<Record<PaletteCategory, ReactNode>> = {
   // An eighth note.
-  notes: (
+  modes: (
     <Icon>
       <g fill="currentColor" stroke="none">
         <ellipse cx="9" cy="17.5" rx="4.2" ry="3" transform="rotate(-20 9 17.5)" />
@@ -134,7 +132,7 @@ const CATEGORY_ICONS: Readonly<Record<PaletteCategory, ReactNode>> = {
     </Icon>
   ),
   // A bar between its barlines.
-  bar: (
+  measures: (
     <Icon>
       {STAFF}
       <path d="M5 6 V18 M19 6 V18" strokeWidth="2" />
@@ -143,11 +141,11 @@ const CATEGORY_ICONS: Readonly<Record<PaletteCategory, ReactNode>> = {
   // The treble clef, Bravura's.
   clef: (
     <Icon>
-      <path
-        d={G_CLEF}
-        fill="currentColor"
-        stroke="none"
-        transform={`translate(12 ${2 + G_CLEF_TOP * G_CLEF_SCALE}) scale(${G_CLEF_SCALE} ${-G_CLEF_SCALE}) translate(-336 0)`}
+      <SmuflPath
+        name="gClef"
+        x={12 - 1.342 * CLEF_SPACE}
+        y={2 + 4.392 * CLEF_SPACE}
+        space={CLEF_SPACE}
       />
     </Icon>
   ),
@@ -361,30 +359,10 @@ const LINE_ICONS = {
       <path d="M3 7 L21 12 L3 17" strokeWidth="2" />
     </Icon>
   ),
-  '8va': (
-    <Icon>
-      <Word text="8va" y={12} size={9} italic />
-      <path d="M4 17 H18 V21" strokeDasharray="2 2" />
-    </Icon>
-  ),
-  '8vb': (
-    <Icon>
-      <path d="M4 7 H18 V3" strokeDasharray="2 2" />
-      <Word text="8vb" y={18} size={9} italic />
-    </Icon>
-  ),
-  '15ma': (
-    <Icon>
-      <Word text="15ma" y={12} size={8} italic />
-      <path d="M4 17 H18 V21" strokeDasharray="2 2" />
-    </Icon>
-  ),
-  '15mb': (
-    <Icon>
-      <path d="M4 7 H18 V3" strokeDasharray="2 2" />
-      <Word text="15mb" y={18} size={8} italic />
-    </Icon>
-  ),
+  '8va': <OctaveLineGlyph line="8va" />,
+  '8vb': <OctaveLineGlyph line="8vb" />,
+  '15ma': <OctaveLineGlyph line="15ma" />,
+  '15mb': <OctaveLineGlyph line="15mb" />,
   // A glissando: a wavy line rising from one notehead to another.
   gliss: (
     <Icon>

@@ -163,12 +163,15 @@ export interface GraceNote {
   readonly appoggiatura?: true
 }
 
+/** A rolled chord's sign: a plain wavy line, or one with its arrow up or down (A34). */
+export type Arpeggio = true | 'up' | 'down'
+
 /** What is written on a note besides its pitch and time (ADR 0097); its pitch is the one it sounds. */
 export interface NoteMarks {
   readonly articulations?: readonly Articulation[]
   readonly ornament?: Ornament
-  /** Its chord rolled, low to high. */
-  readonly arpeggio?: true
+  /** Its chord rolled (A34): plain or up, low to high; down, high to low, its arrow saying which. */
+  readonly arpeggio?: Arpeggio
   readonly slurStart?: true
   readonly slurEnd?: true
   readonly octave?: OctaveLine

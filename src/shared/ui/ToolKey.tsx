@@ -26,6 +26,7 @@ export function ToolKey({
   reason,
   pressed,
   span = 'one',
+  tipSide = 'top',
   disabled,
   className,
   children,
@@ -40,6 +41,8 @@ export function ToolKey({
   reason?: string | undefined
   pressed?: boolean
   span?: keyof typeof SPAN
+  /** Where its tooltip opens: over it, or under it where it stands at the screen's top. */
+  tipSide?: 'top' | 'bottom'
 } & Omit<
   ComponentProps<typeof Button>,
   'variant' | 'size' | 'aria-label' | 'aria-pressed' | 'render' | 'nativeButton' | 'title'
@@ -82,7 +85,7 @@ export function ToolKey({
           </span>
         ) : null}
       </TooltipTrigger>
-      <TooltipContent>{description ?? tip}</TooltipContent>
+      <TooltipContent side={tipSide}>{description ?? tip}</TooltipContent>
     </Tooltip>
   )
 }

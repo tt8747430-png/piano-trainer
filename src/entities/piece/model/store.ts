@@ -179,6 +179,9 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     meter,
     ...(saved.timeSymbol === true ? { timeSymbol: true } : {}),
     ...(isTempoUnit(saved.tempoUnit) ? { tempoUnit: saved.tempoUnit } : {}),
+    ...(typeof saved.tempoText === 'string' && saved.tempoText.trim() !== ''
+      ? { tempoText: saved.tempoText.trim().slice(0, 40) }
+      : {}),
     tempo,
     pattern,
     sections: read,

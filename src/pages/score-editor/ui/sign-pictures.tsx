@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import type { BarMarkChoice } from '@/features/score-editor'
-import { keySignature, type Clef, type Key, type Meter, type MeterSymbol } from '@/shared/lib/music'
-import { G_CLEF } from '@/shared/ui/pickers/picker-pictures'
-import { ClefSign } from '@/shared/ui/pickers/picker-pictures'
+import { keySignature, type Clef, type Key } from '@/shared/lib/music'
+import { ClefSign, SignatureGlyphs } from '@/shared/ui/pickers/picker-pictures'
+import { SmuflPath, TimeSignatureSign } from '@/shared/ui/smufl'
 
 /** A staff space in the picture's units: its five lines from y 8 to 32. */
 const SPACE = 6
@@ -11,8 +11,6 @@ const LINES = [0, 1, 2, 3, 4].map((line) => TOP + line * SPACE)
 /** The picture's size: a short stretch of staff, wide enough for seven sharps after a clef. */
 const WIDTH = 96
 const HEIGHT = 40
-/** Bravura's units to the picture's: 250 to a staff space. */
-const GLYPH = SPACE / 250
 
 /**
  * A short staff a sign is drawn on (ADR 0115, forScore's palette): its five lines, in the soft ink
@@ -37,140 +35,34 @@ function Staff({ children }: { children: ReactNode }) {
   )
 }
 
-/** The treble clef, Bravura's, its curl round the G line (the second from the bottom). */
-function TrebleClef({ x }: { x: number }) {
+/** A key's signature after a treble clef, as forScore draws its palette's keys (ADR 0115). */
+export function KeyPicture({ signatureOf }: { signatureOf: Key }) {
+  const count = keySignature(signatureOf)
+  // Centred together: the clef, then the signature's signs.
+  const start = WIDTH / 2 - (18 + Math.abs(count) * SPACE * 1.15) / 2
   return (
-    <path
-      d={G_CLEF}
-      stroke="none"
-      transform={`translate(${x} ${TOP + 3 * SPACE}) scale(${GLYPH} ${-GLYPH}) translate(-336 0)`}
-    />
+    <Staff>
+      <SmuflPath name="gClef" x={start} y={TOP + 3 * SPACE} space={SPACE} />
+      <SignatureGlyphs count={count} x={start + 20} top={TOP} />
+    </Staff>
   )
 }
-
-/** A sharp centred on a line or space, three spaces tall. */
-function Sharp({ x, y }: { x: number; y: number }) {
-  return (
-    <path
-      d="M8.5 3h1.4v18H8.5zM14.1 2h1.4v18h-1.4zM5 9.6 19 6.6v2.8L5 12.4zM5 15.6l14-3v2.8L5 18.4z"
-      stroke="none"
-      transform={`translate(${x} ${y}) scale(0.55) translate(-12 -11.5)`}
-    />
-  )
-}
-
-/** A flat, its bowl on a line or space and its stem two spaces above. */
-function Flat({ x, y }: { x: number; y: number }) {
-  return (
-    <path
-      d={`M${x - 1.6} ${y - 10} V${y + 3} C${x + 3.6} ${y + 0.6} ${x + 4.6} ${y - 3.6} ${x + 1.2} ${y - 3.4} C${x - 0.2} ${y - 3.3} ${x - 1.2} ${y - 2.4} ${x - 1.6} ${y - 1.2}`}
-      fill="none"
-      strokeWidth="1.25"
-      strokeLinejoin="round"
-    />
-  )
-}
-
-/**
- * The staff steps of a treble signature's sharps (F♯ C♯ G♯ D♯ A♯ E♯ B♯) and flats (B♭ E♭ A♭ D♭ G♭
- * C♭ F♭), from the top line down: 0 the top line, 1 the space under it.
- */
-const SHARP_STEPS = [0, 3, -1, 2, 5, 1, 4] as const
-const FLAT_STEPS = [4, 1, 5, 2, 6, 3, 7] as const
-const stepY = (step: number) => TOP + (step * SPACE) / 2
 
 /** A clef drawn on its staff (ADR 0115, 0114): the picker's own picture. */
 export function ClefPicture({ clef }: { clef: Clef }) {
   return <ClefSign clef={clef} />
 }
 
-/** A key's signature after a treble clef, as forScore draws its palette's keys (ADR 0115). */
-export function KeyPicture({ signatureOf }: { signatureOf: Key }) {
-  const count = keySignature(signatureOf)
-  const steps = (count > 0 ? SHARP_STEPS : FLAT_STEPS).slice(0, Math.abs(count))
-  // Centred together: the clef, then the signature's signs, each a little apart.
-  const each = 7
-  const start = WIDTH / 2 - (16 + steps.length * each) / 2
-  return (
-    <Staff>
-      <TrebleClef x={start + 8} />
-      {steps.map((step, i) => {
-        const x = start + 20 + i * each
-        return count > 0 ? (
-          <Sharp key={step} x={x} y={stepY(step)} />
-        ) : (
-          <Flat key={step} x={x} y={stepY(step)} />
-        )
-      })}
-    </Staff>
-  )
-}
-
-/** Common time's C and cut time's ¢, as the music font prints them. */
-const TIME_SYMBOL: Readonly<Record<MeterSymbol, string>> = {
-  common: '\u{1D134}',
-  cut: '\u{1D135}',
-}
-
-/** A time signature, its count over its unit across the staff, or 4/4 as C, 2/2 as ¢ (ADR 0115, 0114). */
-export function TimePicture({
-  meter,
-  symbol = null,
-}: {
-  meter: Meter
-  symbol?: MeterSymbol | null
-}) {
-  const [count, unit] = meter.split('/')
-  const figure = {
-    textAnchor: 'middle',
-    dominantBaseline: 'central',
-    fontSize: 15,
-    fontWeight: 800,
-    stroke: 'none',
-    className: 'font-display',
-  } as const
-  return (
-    <Staff>
-      {symbol ? (
-        <text
-          x={WIDTH / 2}
-          y={TOP + 2 * SPACE}
-          textAnchor="middle"
-          dominantBaseline="central"
-          fontSize={26}
-          stroke="none"
-          className="font-music"
-        >
-          {TIME_SYMBOL[symbol]}
-        </text>
-      ) : (
-        <>
-          <text x={WIDTH / 2} y={TOP + SPACE} {...figure}>
-            {count}
-          </text>
-          <text x={WIDTH / 2} y={TOP + 3 * SPACE} {...figure}>
-            {unit}
-          </text>
-        </>
-      )}
-    </Staff>
-  )
-}
-
-/** A time signature as a key's face: its figures one over the other (ADR 0114). */
+/** A time signature as a key's face: its figures one over the other, Bravura's (ADR 0114). */
 export function TimeFigures({
   meter,
 }: {
   meter: { readonly count: number; readonly unit: number }
 }) {
   return (
-    <span
-      aria-hidden
-      className="flex flex-col items-center font-serif text-base leading-[0.85] font-bold"
-    >
-      <span>{meter.count}</span>
-      <span>{meter.unit}</span>
-    </span>
+    <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="currentColor">
+      <TimeSignatureSign count={meter.count} unit={meter.unit} x={12} y={12} space={5} />
+    </svg>
   )
 }
 

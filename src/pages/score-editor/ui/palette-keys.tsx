@@ -4,7 +4,13 @@ import { cn } from '@/shared/lib'
 import { InfoTip, ToolKey } from '@/shared/ui'
 import type { PaletteCategory } from '../model/palette-categories'
 import type { Tool } from '../model/shortcuts'
-import { PanelSections, useKeyTip, usePaletteDock, usePaletteForm } from './palette-form'
+import {
+  PaletteTipSide,
+  PanelSections,
+  useKeyTip,
+  usePaletteDock,
+  usePaletteForm,
+} from './palette-form'
 
 /** What is chosen on the music, as the pickers' cells show it (ADR 0114): a sky glyph on a sky wash. */
 const PRESSED = 'aria-pressed:bg-chosen aria-pressed:text-foreground'
@@ -16,7 +22,7 @@ const PRESSED = 'aria-pressed:bg-chosen aria-pressed:text-foreground'
  */
 const FACES = {
   grid: cn(
-    'h-11 w-auto min-w-0 rounded-none border-0 border-r border-b border-hairline bg-card px-0.5 text-foreground/80 shadow-none hover:bg-accent hover:text-foreground focus-visible:z-10 active:scale-100 landscape-phone:h-10',
+    'size-11 min-w-0 shrink-0 rounded-control border-0 bg-transparent px-0 text-foreground/80 shadow-none hover:bg-accent hover:text-foreground focus-visible:z-10 active:scale-100',
     PRESSED,
   ),
   bar: cn(
@@ -118,9 +124,9 @@ export function SectionLine({ children }: { children: ReactNode }) {
 }
 
 /**
- * A group of keys as the form lays them out (Flat's): a bordered table of square cells, 44px at the
- * least, as many to a row as the panel or the sheet holds, empty cells left blank so the table stays
- * whole; two columns of named keys in the list; in line in the toolbar.
+ * A group of keys as the form lays them out (A34, Flat's palettes): 44px cells, as many to a row as the
+ * panel or the sheet holds, the rows centred so a group's last row, where it is short, stands in the
+ * middle rather than hanging at the left; two columns of named keys in the list; in line in the toolbar.
  */
 export function KeyGrid({ label, children }: { label?: string | undefined; children: ReactNode }) {
   const form = usePaletteForm()
@@ -138,10 +144,12 @@ export function KeyGrid({ label, children }: { label?: string | undefined; child
       </div>
     )
   return (
-    <div {...group} className="overflow-hidden rounded-control border border-hairline bg-card">
-      <div className="-mr-px -mb-px grid grid-cols-[repeat(auto-fill,minmax(2.75rem,1fr))]">
-        {children}
-      </div>
+    <div
+      {...group}
+      data-slot="key-grid"
+      className="flex flex-wrap justify-center gap-0.5 rounded-control border border-hairline bg-card p-0.5"
+    >
+      {children}
     </div>
   )
 }
@@ -182,8 +190,12 @@ export function PaletteKey({
     <ToolKey
       label={label}
       tip={useKeyTip(label, tool)}
-      span={form === 'grid' ? span : 'one'}
-      className={cn(FACES[form], className)}
+      tipSide={use(PaletteTipSide)}
+      className={cn(
+        FACES[form],
+        form === 'grid' && span === 'wide' && 'w-auto min-w-22 px-2',
+        className,
+      )}
       {...props}
     >
       <Face label={label}>{children}</Face>
@@ -235,7 +247,7 @@ export function SignTile({
         'flex min-w-0 items-center transition-colors duration-150 ease-out focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring disabled:opacity-35 motion-reduce:transition-none',
         form === 'list'
           ? 'h-11 gap-2.5 rounded-control border border-hairline bg-card px-2 text-left text-sm leading-tight hover:bg-accent'
-          : 'col-span-2 h-11 justify-center border-r border-b border-hairline bg-card px-1 text-foreground/80 hover:bg-accent hover:text-foreground focus-visible:z-10 landscape-phone:h-10',
+          : 'h-11 w-22 justify-center rounded-control px-1 text-foreground/80 hover:bg-accent hover:text-foreground focus-visible:z-10',
         PRESSED,
       )}
     >

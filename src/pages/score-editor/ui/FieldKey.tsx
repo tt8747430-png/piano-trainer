@@ -17,7 +17,6 @@ const KEYS = {
   chord: { label: 'chord.symbol', picture: <FieldIcon field="chord" />, tool: 'chord' },
   fingering: { label: 'fingering', picture: <FieldIcon field="fingering" />, tool: 'fingering' },
   text: { label: 'words.text', picture: <FieldIcon field="text" />, tool: 'annotation' },
-  tempo: { label: 'words.tempo', picture: <FieldIcon field="tempo" />, tool: undefined },
 } as const satisfies Readonly<
   Record<Kind, { label: string; picture: ReactNode; tool: Tool | undefined }>
 >

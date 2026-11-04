@@ -1,3 +1,4 @@
+import { PaletteGlyph } from './palette-glyph'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { chosenNotes, hasMark, hasPedal, type MarkChoice } from '@/features/score-editor'
@@ -190,10 +191,17 @@ export function OrnamentKeys() {
           </Drawn>
         </MarkKey>
       ))}
-      <MarkKey mark={{ kind: 'arpeggio' }} label={t('marks.arpeggio')}>
+      {/* The rolled chord, Flat's three: plain, up and down, their arrows Bravura's (A34). */}
+      <MarkKey mark={{ kind: 'arpeggio', arpeggio: true }} label={t('marks.arpeggio')}>
         <Drawn>
-          <path d="M12 2 C9 4 15 6 12 8 C9 10 15 12 12 14 C9 16 15 18 12 20 M9 19 L12 22 L15 19" />
+          <path d="M12 2 C9 4 15 6 12 8 C9 10 15 12 12 14 C9 16 15 18 12 20 C9 21 12 22 12 22" />
         </Drawn>
+      </MarkKey>
+      <MarkKey mark={{ kind: 'arpeggio', arpeggio: 'up' }} label={t('marks.arpeggioUp')}>
+        <PaletteGlyph smufl="arpeggiatoUp" />
+      </MarkKey>
+      <MarkKey mark={{ kind: 'arpeggio', arpeggio: 'down' }} label={t('marks.arpeggioDown')}>
+        <PaletteGlyph smufl="arpeggiatoDown" />
       </MarkKey>
       <LineKeys lines={['gliss']} />
       <MarkKey mark={{ kind: 'ornament', ornament: 'mordent' }} label={t('marks.mordent')}>

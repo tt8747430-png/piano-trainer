@@ -63,11 +63,13 @@ export function PickerGrid({
 export function PickerCell({
   label,
   pressed,
+  disabled = false,
   onClick,
   children,
 }: {
   label: string
   pressed: boolean
+  disabled?: boolean
   onClick: () => void
   children: ReactNode
 }) {
@@ -77,8 +79,9 @@ export function PickerCell({
       aria-label={label}
       title={label}
       aria-pressed={pressed}
+      disabled={disabled}
       onClick={onClick}
-      className="grid min-h-13 min-w-11 place-items-center bg-card px-0.5 text-foreground/75 choice focus-visible:z-10 focus-visible:-outline-offset-3 motion-reduce:transition-none"
+      className="grid min-h-13 min-w-11 place-items-center bg-card px-0.5 text-foreground/75 choice focus-visible:z-10 focus-visible:-outline-offset-3 disabled:opacity-35 motion-reduce:transition-none"
     >
       {children}
     </button>

@@ -13,6 +13,7 @@ import {
   pedalLine,
   type SwingMark,
   type TremoloStrokes,
+  type Arpeggio,
 } from '@/shared/lib/music'
 import type { Draft, DraftNote, NoteLayer } from './draft'
 import { isAt, notesOf, withNotes, type Where } from './notes'
@@ -22,7 +23,7 @@ import { chordAt, keyAt } from './timeline'
 export type MarkChoice =
   | { readonly kind: 'articulation'; readonly articulation: Articulation }
   | { readonly kind: 'ornament'; readonly ornament: Ornament }
-  | { readonly kind: 'arpeggio' }
+  | { readonly kind: 'arpeggio'; readonly arpeggio: Arpeggio }
   | { readonly kind: 'slurStart' }
   | { readonly kind: 'slurEnd' }
   | { readonly kind: 'octave'; readonly octave: OctaveLine }
@@ -57,6 +58,8 @@ export function hasMark(marks: NoteMarks | undefined, mark: MarkChoice): boolean
       return marks?.swing === mark.swing
     case 'twoNoteTremolo':
       return marks?.twoNoteTremolo === mark.strokes
+    case 'arpeggio':
+      return marks?.arpeggio === mark.arpeggio
     default:
       return marks?.[mark.kind] === true
   }
@@ -106,6 +109,10 @@ export function withMark(
     case 'twoNoteTremolo':
       if (on) next.twoNoteTremolo = mark.strokes
       else if (next.twoNoteTremolo === mark.strokes) delete next.twoNoteTremolo
+      break
+    case 'arpeggio':
+      if (on) next.arpeggio = mark.arpeggio
+      else if (next.arpeggio === mark.arpeggio) delete next.arpeggio
       break
     default:
       if (on) next[mark.kind] = true

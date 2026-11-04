@@ -11,12 +11,12 @@ import type { BarMarkChoice } from '@/features/score-editor'
  * words. What is typed where it prints (ADR 0096) has its key among its kin.
  */
 export const PALETTE_CATEGORIES = [
-  'notes',
+  'modes',
   'pitch',
   'articulations',
   'ornaments',
   'dynamics',
-  'bar',
+  'measures',
   'clef',
   'key',
   'time',
@@ -27,7 +27,7 @@ export type PaletteCategory = (typeof PALETTE_CATEGORIES)[number]
 export const isPaletteCategory = isOneOf(PALETTE_CATEGORIES)
 
 /** What works in any row: what acts on bars, the chord names' too. */
-const ANY_ROW: readonly PaletteCategory[] = ['bar', 'key', 'time', 'repeats']
+const ANY_ROW: readonly PaletteCategory[] = ['measures', 'key', 'time', 'repeats']
 
 /**
  * Whether a category works where the caret writes: greyed elsewhere, never hidden. On a staff every

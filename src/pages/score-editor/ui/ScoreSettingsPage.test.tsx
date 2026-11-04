@@ -133,7 +133,7 @@ describe('the score’s Settings (round 28)', () => {
     const { piecesStore } = await renderApp('/edit/my-1/settings?page=key', { storage })
     await user.click(await screen.findByRole('combobox', { name: 'From' }))
     await user.click(await screen.findByRole('option', { name: /^Chorus, bar 3/ }))
-    await user.click(screen.getByRole('button', { name: 'D major' }))
+    await user.click(screen.getByRole('button', { name: 'D major / B minor' }))
     await waitFor(() =>
       expect(piecesStore.getState().songs[0]?.sections.map((each) => each.key)).toEqual([
         undefined,
@@ -184,7 +184,7 @@ describe('the score’s Settings (round 28)', () => {
     settings.unmount()
     // The next time the editor opens.
     await renderApp('/edit/my-1', { storage })
-    const palette = await screen.findByRole('region', { name: 'Tools' })
+    const palette = await screen.findByRole('region', { name: 'Editor panel' })
     expect(palette.closest('aside')).toHaveAttribute('data-side', 'right')
     await waitFor(() =>
       expect(within(palette).getByRole('combobox', { name: 'Editing mode' })).toHaveTextContent(

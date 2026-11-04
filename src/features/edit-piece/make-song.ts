@@ -14,6 +14,7 @@ import type { LocalText } from '@/shared/i18n'
 import {
   beatsPerBar,
   beatsToTicks,
+  meterParts,
   type Clef,
   type Key,
   type Meter,
@@ -67,6 +68,10 @@ export interface SongStart {
   readonly bars?: number
   /** 4/4 printed as common time's C, 2/2 as cut time's ¢ (ADR 0114). */
   readonly timeSymbol?: boolean
+  /** A pickup bar first, of this many of the meter's written beats (A34); none at 0. */
+  readonly pickup?: number
+  /** The tempo mark's words (A34): Allegro. */
+  readonly tempoText?: string | null
 }
 
 /** What New song asks: a title as typed, a key, a meter and how it starts. */
@@ -96,25 +101,33 @@ export function chartStart(
     tempoUnit,
     bars: count = START_BARS,
     timeSymbol = false,
+    pickup = 0,
+    tempoText,
   }: SongStart = {},
 ): PieceMusic {
   const beats = beatsPerBar(meter)
   const ticks = beatsToTicks(beats)
-  const bars = Array.from({ length: Math.max(1, Math.round(count)) }, () => ticks)
+  const written = meterParts(meter).count
+  // The pickup's beats, fewer than a whole bar's, as the bar counts them.
+  const upbeat = pickup > 0 && pickup < written ? (beats * pickup) / written : 0
+  const whole = Array.from({ length: Math.max(1, Math.round(count)) }, () => ticks)
+  const bars = upbeat > 0 ? [beatsToTicks(upbeat), ...whole] : whole
   const silent = writeHand(
     bars.map(() => []),
     bars,
   )
   const bar = writeBar({ chords: [], beats }, meter)
-  const rest = writeStaff([], [{ startTick: 0, ticks }])
+  const first = upbeat > 0 ? [writeBar({ chords: [], beats: upbeat }, meter)] : []
+  const rest = writeStaff([], [{ startTick: 0, ticks: bars[0] ?? ticks }])
   return {
     key: keyText(key),
     meter,
     ...(timeSymbol && (meter === '4/4' || meter === '2/2') ? { timeSymbol: true as const } : {}),
     tempo,
     ...(tempoUnit && tempoUnit !== '4' ? { tempoUnit } : {}),
+    ...(tempoText?.trim() ? { tempoText: tempoText.trim().slice(0, 40) } : {}),
     pattern: 'r1',
-    sections: [{ kind: 'verse', lines: [bars.map(() => bar).join(' ')] }],
+    sections: [{ kind: 'verse', lines: [[...first, ...whole.map(() => bar)].join(' ')] }],
     ...(staves.voices.length > 0
       ? {
           // Each voice's staff named for it; the treble clef, a staff's own, written as none.

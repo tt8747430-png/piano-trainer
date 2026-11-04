@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef, useState, type ReactNode, type Ref } from 'react'
 import { useTranslation } from 'react-i18next'
 import { staffScale, useSectionHeading, useStaffNames, useStaffTitle } from '@/entities/piece'
-import { barAt, type Draft, type Layer } from '@/features/score-editor'
+import { barAt, barsOf, type Draft, type Layer } from '@/features/score-editor'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, type SheetView } from '@/shared/lib'
 import { creditsRoom, PageCanvas, SheetPage, type TitlePlace } from '@/shared/ui'
 import { lineLead, measureWidths, notate, type StaffId } from '@/shared/lib/notation'
@@ -254,6 +254,7 @@ export function ScoreSheet({
     [sheetsOf, draft, across, roomAcross, widths, lyrics],
   )
   const caretBar = caret === null ? null : barAt(draft, caret).index
+  const barsInAll = barsOf(draft).length
   const playBar = playhead ? barAt(draft, playhead.tick).index : null
 
   const line = (
@@ -288,6 +289,7 @@ export function ScoreSheet({
         headings={headings}
         edit={edit}
         labels={sheet.line.bars[0]?.index === 0 ? labels : undefined}
+        barsInAll={barsInAll}
         staves={drawn}
         justify={!across}
         onWrite={onWrite}

@@ -107,6 +107,8 @@ interface PieceCommon extends EntryCommon {
   readonly timeSymbol?: true
   /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
   readonly tempoUnit?: TempoUnit
+  /** The tempo mark's words printed with it (A34): Allegro, or the writer's own. */
+  readonly tempoText?: string
   readonly tempo: number
   readonly pattern: PatternId
   /** A performance of the piece that plays along in Listen: in its own key and form. */

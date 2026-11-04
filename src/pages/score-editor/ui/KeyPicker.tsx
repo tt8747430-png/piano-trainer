@@ -8,11 +8,10 @@ import { useKeyAt } from '../model/use-key-at'
 import { useSignatureFrom } from '../model/use-signature-from'
 
 /**
- * The key signature picker (ADR 0114, after notation apps' key sheets): one bordered grid
- * of one to seven sharps over one to seven flats, each cell the signs alone, named by its major and
- * relative minor in its tooltip and to a screen reader, the one in force tinted; Switch to natural
- * under it (no key signature, C major or A minor). A cell keeps the key's mode, so Major · Minor over
- * the grid says which key each one is: a minor song goes to the signature's minor key. In a section
+ * The key signature picker (A34, ADR 0114, Flat's key grid): Major · Minor over the fifteen
+ * signatures, C/Am first, each on a short staff named by its major and relative minor, the one in
+ * force tinted. The mode is the one written to the score: a minor song goes to the signature's minor
+ * key. In a section
  * after the first, the key changes from it on (as Flat changes key from a bar) unless "Change the key
  * for the whole song" is on: then the song's own key, its music moved with it, as at its head. In the
  * palette, the first bar chosen's section (else the caret's); over a key signature printed on the

@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
-import { Mic, Pencil } from 'lucide-react'
+import { Mic } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { libraryCatalog, useLibraryStoreApi, type FolderId } from '@/entities/library'
@@ -22,18 +22,14 @@ import { cn } from '@/shared/lib'
 import {
   beatUnit,
   C_MAJOR,
-  METER_UNITS,
   meterParts,
   tempoUnitsFor,
-  unitNote,
   type Key,
   type Meter,
-  type MeterUnit,
   type TempoUnit,
 } from '@/shared/lib/music'
 import {
   BackMark,
-  Dropdown,
   NameField,
   SearchField,
   Sheet,
@@ -43,21 +39,18 @@ import {
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { KeySignaturePicker } from '@/shared/ui/pickers/KeySignaturePicker'
+import { TempoField } from '@/shared/ui/pickers/tempo-field'
+import { TimeSignatureField } from '@/shared/ui/pickers/time-signature-field'
 import { InstrumentList } from '@/widgets/instrument-list'
 
-/** The steps of New song, Flat's: its name, its instruments, then its setup fine-tuned. */
+/** The steps of New song, Flat's: its name, its instruments, then its time and key. */
 const STEPS = [1, 2, 3] as const
+const STEP_NAMES = {
+  1: 'setup.stepTitle',
+  2: 'setup.stepInstruments',
+  3: 'setup.stepTime',
+} as const
 type Step = (typeof STEPS)[number]
-
-/** The time signatures offered at once (Flat's): the common ones, common and cut time as signs. */
-const TIMES = [
-  { meter: '2/4', symbol: false },
-  { meter: '3/4', symbol: false },
-  { meter: '4/4', symbol: false },
-  { meter: '4/4', symbol: true },
-  { meter: '2/2', symbol: true },
-  { meter: '6/8', symbol: false },
-] as const satisfies readonly { meter: Meter; symbol: boolean }[]
 
 /** An instrument New song lists (round 27): the piano, or a voice, a staff named for it. */
 type Instrument = 'piano' | VoiceId
@@ -138,7 +131,8 @@ export function NewSongSheet({
   const [key, setKey] = useState<Key>(C_MAJOR)
   const [meter, setMeter] = useState<Meter>('4/4')
   const [timeSymbol, setTimeSymbol] = useState(false)
-  const [ownTime, setOwnTime] = useState(false)
+  const [tempoText, setTempoText] = useState<string | null>(null)
+  const [pickup, setPickup] = useState(0)
   const [making, setMaking] = useState(false)
   const [failed, setFailed] = useState(false)
   const createBuiltIn = useCreateBuiltInSong()
@@ -146,7 +140,8 @@ export function NewSongSheet({
   // The note the tempo counts, kept to those the time signature's beat allows.
   const units = tempoUnitsFor(meter)
   const unit = units.includes(tempoUnit) ? tempoUnit : beatUnit(meter)
-  const start = { staves, tempo, tempoUnit: unit, bars, timeSymbol }
+  const upbeats = Math.min(pickup, meterParts(meter).count - 1)
+  const start = { staves, tempo, tempoUnit: unit, tempoText, bars, timeSymbol, pickup: upbeats }
   const chosen = Number(staves.piano) + staves.voices.length
   const nameOf = (instrument: Instrument) =>
     instrument === 'piano' ? t('setup.piano') : localText(VOICES[instrument].name, locale)
@@ -254,18 +249,32 @@ export function NewSongSheet({
             onward()
           }}
         >
-          {/* The three steps as bars, those reached in ink (Flat's). */}
-          <div role="img" aria-label={t('setup.step', { at: step })} className="-mt-2 flex gap-1.5">
+          {/* The three steps by name, those reached in ink (A34, Flat's). */}
+          <ol aria-label={t('setup.steps')} className="-mt-2 grid grid-cols-3 gap-1.5">
             {STEPS.map((at) => (
-              <span
+              <li
                 key={at}
-                className={cn(
-                  'h-1.5 w-6 rounded-pill transition-colors duration-200',
-                  at <= step ? 'bg-foreground' : 'bg-border',
-                )}
-              />
+                aria-current={at === step ? 'step' : undefined}
+                className="flex min-w-0 flex-col gap-1"
+              >
+                <span
+                  aria-hidden
+                  className={cn(
+                    'h-1.5 rounded-pill transition-colors duration-200',
+                    at <= step ? 'bg-foreground' : 'bg-border',
+                  )}
+                />
+                <span
+                  className={cn(
+                    'text-xs leading-tight text-balance',
+                    at === step ? 'font-semibold text-foreground' : 'text-muted-foreground',
+                  )}
+                >
+                  {t(STEP_NAMES[at])}
+                </span>
+              </li>
             ))}
-          </div>
+          </ol>
           {step === 1 ? (
             <>
               <NameField
@@ -301,40 +310,45 @@ export function NewSongSheet({
             </>
           ) : (
             <>
-              <div className="flex flex-col">
-                <h3 className="font-sans font-semibold">{t('setup.fineTune')}</h3>
-                <p className="text-sm text-muted-foreground">{t('setup.fineTuneDetail')}</p>
-              </div>
+              <SheetPart title={t('setup.timeSignature')}>
+                <TimeSignatureField
+                  value={{ meter, symbol: timeSymbol }}
+                  onChange={(next) => {
+                    setMeter(next.meter)
+                    setTimeSymbol(next.symbol)
+                  }}
+                />
+              </SheetPart>
+              <SheetPart title={t('setup.keySignature')}>
+                <KeySignaturePicker value={key} onChange={setKey} />
+              </SheetPart>
               <SheetPart title={t('setup.tempo')}>
-                <div className="flex items-center gap-2">
-                  <Dropdown
-                    bare
-                    label={t('setup.tempoUnit')}
-                    value={unit}
-                    options={units.map((each) => ({
-                      value: each,
-                      label: t(`editor:tempo.units.${each}`),
-                    }))}
-                    face={(each) => (
-                      <span className="font-music text-2xl leading-none">{unitNote(each)}</span>
-                    )}
-                    onChange={setTempoUnit}
-                    className="h-11 w-20 shrink-0"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <Stepper
-                      label={t('setup.tempo')}
-                      typed
-                      value={tempo}
-                      min={20}
-                      max={400}
-                      format={(value) => t('setup.tempoValue', { tempo: value })}
-                      onChange={setTempo}
-                      decrease={t('setup.slower')}
-                      increase={t('setup.faster')}
-                    />
-                  </div>
-                </div>
+                <TempoField
+                  value={{ mark: tempo, unit, text: tempoText }}
+                  units={units}
+                  low={20}
+                  high={400}
+                  onChange={(next) => {
+                    setTempo(next.mark)
+                    setTempoUnit(next.unit)
+                    setTempoText(next.text)
+                  }}
+                />
+              </SheetPart>
+              <SheetPart title={t('setup.pickup')}>
+                <Stepper
+                  label={t('setup.pickup')}
+                  typed
+                  value={upbeats}
+                  min={0}
+                  max={meterParts(meter).count - 1}
+                  format={(count) =>
+                    count === 0 ? t('setup.noPickup') : t('setup.pickupValue', { count })
+                  }
+                  onChange={setPickup}
+                  decrease={t('setup.shorterPickup')}
+                  increase={t('setup.longerPickup')}
+                />
               </SheetPart>
               <SheetPart title={t('setup.bars')}>
                 <Stepper
@@ -348,109 +362,6 @@ export function NewSongSheet({
                   decrease={t('setup.fewerBars')}
                   increase={t('setup.moreBars')}
                 />
-              </SheetPart>
-              <SheetPart title={t('making.key')} detail={t('making.keyDetail')}>
-                <KeySignaturePicker value={key} onChange={setKey} />
-              </SheetPart>
-              <SheetPart title={t('making.meter')} detail={t('setup.meterDetail')}>
-                <div
-                  role="group"
-                  aria-label={t('making.meter')}
-                  className="grid grid-cols-7 overflow-hidden rounded-control border border-border bg-card"
-                >
-                  {TIMES.map((each) => {
-                    const pressed = !ownTime && meter === each.meter && timeSymbol === each.symbol
-                    const { count, unit: beat } = meterParts(each.meter)
-                    const name = each.symbol
-                      ? t(each.meter === '4/4' ? 'setup.common' : 'setup.cut')
-                      : each.meter
-                    return (
-                      <button
-                        key={`${each.meter}${each.symbol ? 's' : ''}`}
-                        type="button"
-                        aria-pressed={pressed}
-                        aria-label={name}
-                        title={name}
-                        onClick={() => {
-                          setOwnTime(false)
-                          setMeter(each.meter)
-                          setTimeSymbol(each.symbol)
-                        }}
-                        className={cn(
-                          'grid min-h-14 place-items-center border-r border-border font-display text-lg leading-none font-semibold focus-visible:-outline-offset-3',
-                          pressed && 'bg-chosen text-foreground',
-                        )}
-                      >
-                        {each.symbol ? (
-                          <span aria-hidden className="font-music text-3xl leading-none">
-                            {each.meter === '4/4' ? '\u{1D134}' : '\u{1D135}'}
-                          </span>
-                        ) : (
-                          <span aria-hidden className="flex flex-col items-center">
-                            <span>{count}</span>
-                            <span>{beat}</span>
-                          </span>
-                        )}
-                      </button>
-                    )
-                  })}
-                  <button
-                    type="button"
-                    aria-pressed={ownTime}
-                    aria-label={t('setup.customize')}
-                    title={t('setup.customize')}
-                    onClick={() => {
-                      setOwnTime(true)
-                      setTimeSymbol(false)
-                    }}
-                    className={cn(
-                      'grid min-h-14 place-items-center text-muted-foreground focus-visible:-outline-offset-3',
-                      ownTime && 'bg-chosen text-foreground',
-                    )}
-                  >
-                    <Pencil aria-hidden className="size-5" />
-                  </button>
-                </div>
-                {ownTime ? (
-                  <div className="flex items-end gap-2">
-                    <div className="flex min-w-0 flex-1 flex-col gap-1">
-                      <span className="text-sm text-muted-foreground">{t('setup.beats')}</span>
-                      <Stepper
-                        label={t('setup.beats')}
-                        typed
-                        value={meterParts(meter).count}
-                        min={1}
-                        max={12}
-                        onChange={(count) =>
-                          setMeter(`${count}/${meterParts(meter).unit}` as Meter)
-                        }
-                        decrease={t('setup.fewerBeats')}
-                        increase={t('setup.moreBeats')}
-                      />
-                    </div>
-                    <span aria-hidden className="pb-2 text-2xl text-muted-foreground">
-                      /
-                    </span>
-                    <div className="flex w-24 shrink-0 flex-col gap-1">
-                      <span className="text-sm text-muted-foreground">{t('setup.unit')}</span>
-                      <Dropdown
-                        bare
-                        label={t('setup.unit')}
-                        value={String(meterParts(meter).unit)}
-                        options={METER_UNITS.map((each) => ({
-                          value: String(each),
-                          label: String(each),
-                        }))}
-                        onChange={(each) =>
-                          setMeter(
-                            `${meterParts(meter).count}/${Number(each) as MeterUnit}` as Meter,
-                          )
-                        }
-                        className="h-11"
-                      />
-                    </div>
-                  </div>
-                ) : null}
               </SheetPart>
             </>
           )}

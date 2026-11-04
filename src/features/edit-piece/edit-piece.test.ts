@@ -126,6 +126,15 @@ describe('the learner’s songs', () => {
     expect(chartStart(key, '4/4')).not.toHaveProperty('timeSymbol')
   })
 
+  it('starts on a pickup bar of the beats asked, before the bars asked (A34)', () => {
+    const key = { tonic: note('C'), minor: false }
+    const song = chartStart(key, '4/4', { bars: 2, pickup: 1 })
+    expect(song.sections[0]?.lines[0]?.split(' ')).toHaveLength(3)
+    expect(song.sections[0]?.lines[0]).toMatch(/^\S*@1 /)
+    expect(song.hands?.rh).toBe('r/1 | r/4 | r/4')
+    expect(chartStart(key, '6/8', { bars: 1, pickup: 1 }).hands?.rh).toBe('r/1:3 | r/2')
+  })
+
   it('makes a song’s score as its staves say, every staff there and readable though empty', () => {
     const store = fresh()
     const key = { tonic: note('C'), minor: false }

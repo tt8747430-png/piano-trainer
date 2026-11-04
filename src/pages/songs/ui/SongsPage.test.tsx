@@ -919,13 +919,14 @@ describe('Songs: your own', () => {
     expect(within(sheet).getByText('1 selected')).toBeInTheDocument()
     expect(within(sheet).getByRole('status', { name: 'Piano: 1' })).toBeInTheDocument()
     await user.click(within(sheet).getByRole('button', { name: 'Next' }))
-    // Fine-tune: the tempo typed, more bars, the key signature, the time signature.
-    const tempo = within(sheet).getByRole('textbox', { name: 'Tempo' })
+    // Time and key: the tempo typed, a pickup, more bars, the key signature, the time signature.
+    const tempo = within(sheet).getByRole('textbox', { name: 'BPM' })
     await user.clear(tempo)
     await user.type(tempo, '120{Enter}')
+    await user.click(within(sheet).getByRole('button', { name: 'Longer pickup' }))
     await user.click(within(sheet).getByRole('button', { name: 'One bar more' }))
     await user.click(within(sheet).getByRole('radio', { name: 'Minor' }))
-    await user.click(within(sheet).getByRole('button', { name: 'E minor' }))
+    await user.click(within(sheet).getByRole('button', { name: 'G major / E minor' }))
     await user.click(within(sheet).getByRole('button', { name: '3/4' }))
     await user.click(within(sheet).getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
@@ -937,7 +938,9 @@ describe('Songs: your own', () => {
       meter: '3/4',
       tempo: 120,
     })
-    expect(song?.sections[0]?.lines[0]?.split(' ')).toHaveLength(5)
+    // The pickup bar, then the five bars asked.
+    expect(song?.sections[0]?.lines[0]?.split(' ')).toHaveLength(6)
+    expect(song?.sections[0]?.lines[0]).toMatch(/^\S*@1 /)
     expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toMatchObject({ folder: null })
   })
 
@@ -978,7 +981,7 @@ describe('Songs: your own', () => {
     await user.click(screen.getByRole('button', { name: 'One Alto fewer' }))
     await user.click(screen.getByRole('button', { name: 'One Piano fewer' }))
     await user.click(screen.getByRole('button', { name: 'Next' }))
-    await user.click(screen.getByRole('button', { name: 'Common time' }))
+    await user.click(screen.getByRole('button', { name: 'Common time, C' }))
     await user.click(screen.getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
     expect(piecesStore.getState().songs[0]).toMatchObject({

@@ -21,7 +21,6 @@ export const editor = {
   // folding; on a phone a sheet docked at its foot, compact (the quick row and the categories) or
   // expanded (every section, as keys or a list of names). The note-entry toolbar over the sheet.
   palette: {
-    label: 'Tools',
     toolbar: 'Note entry',
     open: 'Show every tool',
     close: 'Show fewer tools',
@@ -32,16 +31,16 @@ export const editor = {
     categories: 'Kinds of tools',
     keys: 'Keys',
     category: {
-      notes: 'Notes',
-      pitch: 'Pitch',
+      modes: 'Modes',
+      pitch: 'Pitch and representation',
       articulations: 'Articulations',
       ornaments: 'Ornaments',
       dynamics: 'Dynamics',
-      bar: 'Bar',
+      measures: 'Measures and brackets',
       clef: 'Clef',
       key: 'Key signature',
       time: 'Time signature',
-      repeats: 'Barlines & repeats',
+      repeats: 'Barlines and repeats',
       text: 'Text',
     },
   },
@@ -161,11 +160,8 @@ export const editor = {
     song: 'The whole song',
     // The key signature picker's tiles (ADR 0114).
     none: 'No key signature',
-    sharps: 'Sharps',
-    flats: 'Flats',
     // A palette key that opens the picker, named by what is in force.
     change: '{{sign}}: {{now}}',
-    natural: 'No sharps or flats',
     wholeSong: 'Change the key for the whole song',
     wholeSongInfo:
       'On, the song’s own key changes, its music moved with it, as at its start. Off, the key changes from this section on, up to the next change.',
@@ -176,11 +172,22 @@ export const editor = {
     apply: 'Apply',
   },
   // The tempo mark's picker (ADR 0114).
+  // How far a clef chosen in the palette reaches (A34).
+  clefScope: {
+    label: 'Change the clef for',
+    bar: 'This bar only',
+    end: 'To the end',
+    staff: 'Whole staff',
+  },
+  // The editor's panel (A40, Flat's): its three tabs.
+  panel: {
+    label: 'Editor panel',
+    tabs: { notation: 'Notation', instruments: 'Instruments', layout: 'Layout' },
+  },
   tempo: {
-    mark: 'Tempo',
-    markInfo:
-      'Hold the circle and swipe up or down, drag it with the mouse or turn the mouse wheel; with the computer keys, ↑ ↓ a beat a minute, Page Up and Page Down ten, or type the number.',
-    unit: 'The note the tempo counts',
+    save: 'Save',
+    delete: 'Delete',
+    change: 'Tempo change',
     units: {
       '2': 'Half note',
       '2.': 'Dotted half note',
@@ -189,35 +196,6 @@ export const editor = {
       '8': 'Eighth note',
       '8.': 'Dotted eighth note',
       '16': 'Sixteenth note',
-    },
-    value: '{{mark}} a minute, {{word}}',
-  },
-  // The time signature picker (ADR 0114): its wheels, its pickup, the C or ¢ for its figures.
-  time: {
-    // The section's tiles, Flat's: the common meters, then the picker for any other.
-    set: 'Time signature {{time}}',
-    other: 'Another time signature',
-    current: 'Current',
-    beat: 'Beat',
-    beatType: 'Beat type',
-    beatTypeInfo:
-      'The note each beat is counted in: a half, a quarter or an eighth. Changing it counts the bars anew; every note keeps its length. After the first section, a song counted in quarters cannot change to 3/8, 6/8, 9/8 or 12/8 (counted in dotted quarters), nor back: change it at the song’s start.',
-    pickup: 'Pickup',
-    pickupInfo:
-      'How long the first bar is where the song starts on an upbeat: a number of a note, 1/8 an eighth. – is none: a whole bar.',
-    pickupBeats: 'Pickup: how many',
-    pickupBeatType: 'Pickup: of which note',
-    symbol: {
-      common: 'Use common time symbol',
-      cut: 'Use cut time symbol',
-    },
-    symbolInfo: {
-      common: 'Prints 4/4 as C, wherever the song is in 4/4.',
-      cut: 'Prints 2/2 as ¢, wherever the song is in 2/2.',
-    },
-    symbolName: {
-      common: 'Common time, C',
-      cut: 'Cut time, ¢',
     },
   },
   // The lines drawn over notes, each a key.
@@ -233,10 +211,8 @@ export const editor = {
   },
   // The words a note carries (ADR 0097): free text, a tempo mark, swing, a Roman numeral.
   words: {
+    swing: 'Swing',
     text: 'Text',
-    tempo: 'Tempo mark',
-    tempoRange: 'A tempo from {{from}} to {{to}} beats a minute.',
-    tempoGroup: 'Tempo & swing',
     swingEighths: 'Swing eighths',
     swingSixteenths: 'Swing sixteenths',
     straight: 'Straight eighths',
@@ -375,6 +351,8 @@ export const editor = {
     twoNoteTremolo2: 'Tremolo between notes, two strokes (16ths)',
     twoNoteTremolo3: 'Tremolo between notes, three strokes (32nds)',
     arpeggio: 'Arpeggio',
+    arpeggioUp: 'Arpeggio up',
+    arpeggioDown: 'Arpeggio down',
     tie: 'Tie',
     ppp: 'Pianississimo',
     pp: 'Pianissimo',

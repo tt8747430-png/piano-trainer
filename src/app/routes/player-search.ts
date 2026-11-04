@@ -266,6 +266,8 @@ const readEditSearch = (raw: Raw): EditSearch => ({
   takes: raw.takes === true,
   record: raw.record === true,
   bar: bar(raw),
+  // The panel's tab (A40): Notation, its first, written as none.
+  ...(raw.panel === 'instruments' || raw.panel === 'layout' ? { panel: raw.panel } : {}),
 })
 export const editSearch = routeSearch(readEditSearch, EDIT_DEFAULTS)
 

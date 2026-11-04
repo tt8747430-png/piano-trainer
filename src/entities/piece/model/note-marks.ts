@@ -166,6 +166,8 @@ export function readMarks(text: string): NoteMarks | null {
     else if (dynamic) read = once('dynamic', dynamic)
     else if (expression) read = once('expression', expression)
     else if (word === 'arp') read = once('arpeggio', true)
+    else if (word === 'arp^') read = once('arpeggio', 'up')
+    else if (word === 'arpv') read = once('arpeggio', 'down')
     else if (word === GLISS) read = once('glissando', true)
     else if (TWO_NOTE_TREMOLO.test(word))
       read = once('twoNoteTremolo', Number(word.slice('ftrem'.length)) as TremoloStrokes)
@@ -208,7 +210,8 @@ export function writeMarks(marks: NoteMarks): string {
   return [
     ...(marks.articulations ?? []).map((articulation) => ARTICULATION_WORDS[articulation]),
     marks.ornament && ORNAMENT_WORDS[marks.ornament],
-    marks.arpeggio && 'arp',
+    marks.arpeggio &&
+      (marks.arpeggio === 'up' ? 'arp^' : marks.arpeggio === 'down' ? 'arpv' : 'arp'),
     marks.slurStart && '(',
     marks.slurEnd && ')',
     marks.octave,

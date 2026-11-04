@@ -1,26 +1,15 @@
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  BARLINE_CHOICES,
-  JUMP_CHOICES,
-  meterBar,
-  sectionMeter,
-  type BarMarkChoice,
-} from '@/features/score-editor'
-import {
-  EXPRESSION_GROUP_IDS,
-  EXPRESSION_GROUPS,
-  EXPRESSION_TEXT,
-  meterSymbol,
-  type Meter,
-} from '@/shared/lib/music'
-import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { BARLINE_CHOICES, JUMP_CHOICES, type BarMarkChoice } from '@/features/score-editor'
+import { EXPRESSION_GROUP_IDS, EXPRESSION_GROUPS, EXPRESSION_TEXT } from '@/shared/lib/music'
+import { useScoreEditorContext } from '../model/editor-context'
 import { isJumpWords, JUMP_SIGNS, JUMP_WORDS } from '../model/palette-categories'
 import { isTool } from '../model/shortcuts'
 import { useNotesChosen } from '../model/use-notes-chosen'
 import { useSignatureFrom } from '../model/use-signature-from'
 import { FieldKey } from './FieldKey'
-import { CodaSign } from './palette-icons'
+import { CodaSign, FieldIcon } from './palette-icons'
+import { TempoChangePopover } from './TempoPopover'
 import {
   GroupName,
   KeyGrid,
@@ -34,8 +23,7 @@ import { usePaletteReason } from './palette-reason'
 import { useClefAt, useClefSaid } from '../model/use-clef-at'
 import { ClefPicker } from './ClefPicker'
 import { KeyPicker } from './KeyPicker'
-import { BarlinePicture, TimePicture } from './sign-pictures'
-import { SignPicker } from './SignPicker'
+import { BarlinePicture } from './sign-pictures'
 import { TimePicker } from './TimePicker'
 
 /**
@@ -50,7 +38,7 @@ export function ClefKeys() {
   return at.staff ? (
     <>
       <SectionLine>{said}</SectionLine>
-      <ClefPicker staff={at.staff} bar={at.bar} current={at.current} />
+      <ClefPicker staff={at.staff} bar={at.bar} current={at.current} scoped />
     </>
   ) : (
     <SectionLine>{reason}</SectionLine>
@@ -68,71 +56,16 @@ export function KeySignatureKeys() {
   )
 }
 
-/** Flat's time signature tiles: the common meters, with C and ¢ as printed. */
-const QUICK_TIMES = [
-  { meter: '2/4', symbol: false },
-  { meter: '3/4', symbol: false },
-  { meter: '4/4', symbol: false },
-  { meter: '4/4', symbol: true },
-  { meter: '2/2', symbol: true },
-  { meter: '6/8', symbol: false },
-] as const satisfies readonly { meter: Meter; symbol: boolean }[]
-
 /**
- * Time signature in the palette (ADR 0114, Flat's): from the first bar chosen's section (else the
- * caret's), the common meters as tiles, C and ¢ among them, the one in force pressed, a tap changing
- * it; then Another, opening the picker over it, where the wheels slide and ✓ changes it. A meter the
- * bars after cannot be counted in is greyed.
+ * Time signature in the palette (A34, Flat's): from the first bar chosen's section (else the caret's),
+ * the one time signature control with Apply to, From this bar · Whole song.
  */
 export function TimeSignatureKeys() {
-  const { t } = useTranslation('editor')
-  const { actions } = useScoreEditorContext()
-  const { from, section, said } = useSignatureFrom(undefined)
-  const draft = useEditorState((state) => state.draft)
-  const meter = sectionMeter(draft, section)
-  const symbol = draft.timeSymbol === true ? meterSymbol(meter) : null
-  const title = t('palette.category.time')
+  const { said } = useSignatureFrom(undefined)
   return (
     <>
       <SectionLine>{said}</SectionLine>
-      <KeyGrid label={title}>
-        {QUICK_TIMES.map((quick) => {
-          const sign = quick.symbol ? meterSymbol(quick.meter) : null
-          const name = sign ? t(`time.symbolName.${sign}`) : quick.meter
-          return (
-            <SignTile
-              key={name}
-              label={t('time.set', { time: name })}
-              name={name}
-              pressed={meter === quick.meter && symbol === sign}
-              disabled={meter !== quick.meter && meterBar(draft, section, quick.meter) !== null}
-              onClick={() =>
-                actions.dispatch({
-                  type: 'time',
-                  bar: from,
-                  time: {
-                    meter: quick.meter,
-                    ...(meterSymbol(quick.meter) ? { timeSymbol: quick.symbol } : {}),
-                  },
-                })
-              }
-            >
-              <TimePicture meter={quick.meter} symbol={sign} />
-            </SignTile>
-          )
-        })}
-        <SignPicker
-          title={title}
-          description={said}
-          trigger={
-            <SignTile label={t('time.other')} name={t('time.other')}>
-              <TimePicture meter={meter} symbol={symbol} />
-            </SignTile>
-          }
-        >
-          {(close) => <TimePicker onDone={close} />}
-        </SignPicker>
-      </KeyGrid>
+      <TimePicker applyTo />
     </>
   )
 }
@@ -219,6 +152,23 @@ function NumeralKey() {
   )
 }
 
+/** Flat's Tempo change in Text (A34): a tempo mark at the caret, set in its popover. */
+function TempoChangeKey() {
+  const { t } = useTranslation('editor')
+  const chosen = useNotesChosen()
+  return (
+    <TempoChangePopover
+      trigger={
+        <PaletteKey label={t('tempo.change')} reason={usePaletteReason()} disabled={!chosen}>
+          <span aria-hidden className="size-7">
+            <FieldIcon field="tempo" />
+          </span>
+        </PaletteKey>
+      }
+    />
+  )
+}
+
 export function TextKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
@@ -231,6 +181,7 @@ export function TextKeys() {
         <FieldKey field="chord" />
         <NumeralKey />
         <FieldKey field="text" />
+        <TempoChangeKey />
       </KeyGrid>
       {EXPRESSION_GROUP_IDS.map((group) => (
         <Fragment key={group}>

@@ -2,7 +2,7 @@ import { useScoreEditorContext } from '../model/editor-context'
 import { ChordSymbolField } from './ChordSymbolField'
 import { FingeringField } from './FingeringField'
 import { LyricsField } from './LyricsField'
-import { TempoMarkField, TextField } from './WordsFields'
+import { TextField } from './WordsFields'
 
 /** The field open over the sheet, standing at the place the sheet drew for it (ADR 0096). */
 export function OpenField({ anchor }: { anchor: HTMLElement | null }) {
@@ -17,8 +17,6 @@ export function OpenField({ anchor }: { anchor: HTMLElement | null }) {
       return <FingeringField anchor={anchor} />
     case 'text':
       return <TextField anchor={anchor} />
-    case 'tempo':
-      return <TempoMarkField anchor={anchor} />
     case undefined:
       return null
   }

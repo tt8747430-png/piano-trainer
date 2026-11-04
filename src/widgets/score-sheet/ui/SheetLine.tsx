@@ -57,6 +57,7 @@ export const SheetLine = memo(function SheetLine({
   edit,
   labels,
   staves,
+  barsInAll = 0,
   scale = 1,
   print = false,
   justify = true,
@@ -115,6 +116,8 @@ export const SheetLine = memo(function SheetLine({
   labels?: StaffLabels | undefined
   /** The staves drawn, of those the line writes: one of the piano's the View hides left out. */
   staves: readonly StaffId[]
+  /** How many bars the whole score has: its skeleton says where this line stands (A34). */
+  barsInAll?: number
 }) {
   const ref = useRef<HTMLDivElement>(null)
   // A line of a few bars runs the sheet's width, as a printed page's does.
@@ -172,6 +175,9 @@ export const SheetLine = memo(function SheetLine({
         staves={staves}
         selected={selected}
         fill={justify && width > 0 ? width : undefined}
+        bars={
+          barsInAll > 0 ? { at: (sheet.line.bars[0]?.index ?? 0) + 1, of: barsInAll } : undefined
+        }
       >
         {(layout) => (
           <>

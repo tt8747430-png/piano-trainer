@@ -17,6 +17,7 @@ const MUSIC_FIELDS = [
   'meter',
   'timeSymbol',
   'tempoUnit',
+  'tempoText',
   'tempo',
   'pattern',
   'sections',

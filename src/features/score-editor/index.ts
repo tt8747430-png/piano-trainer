@@ -1,5 +1,5 @@
 export { shownRows } from './model/rows'
-export { clefAt } from './model/clefs'
+export { clefAt, type ClefScope } from './model/clefs'
 export {
   BARLINE_CHOICES,
   JUMP_CHOICES,
