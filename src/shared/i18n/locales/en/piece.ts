@@ -126,6 +126,11 @@ export const piece = {
   },
   settings: {
     details: 'Details',
+    duplicate: 'Duplicate',
+    duplicateTitle: 'Duplicate {{title}}?',
+    duplicateBody:
+      'A copy of its music becomes your own song, to change as you like. This one stays as it is.',
+    copyTitle: '{{title}} (copy)',
     resetProgress: 'Reset progress',
     resetProgressTitle: 'Reset this song’s progress?',
     resetProgressBody:

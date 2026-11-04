@@ -123,6 +123,11 @@ export const piece: LocaleResources['piece'] = {
     editMusic: 'Изменить ноты',
   },
   settings: {
+    duplicate: 'Создать копию',
+    duplicateTitle: 'Создать копию «{{title}}»?',
+    duplicateBody:
+      'Копия её музыки станет вашей песней, её можно менять как угодно. Эта песня останется как есть.',
+    copyTitle: '{{title}} (копия)',
     resetProgress: 'Сбросить прогресс',
     resetProgressTitle: 'Сбросить прогресс этой песни?',
     resetProgressBody: 'Она больше не отмечена выученной. Музыка и ваши версии остаются как есть.',

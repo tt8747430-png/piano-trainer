@@ -18,3 +18,18 @@ describe('a song’s Settings (R29 B9)', () => {
     await waitFor(() => expect(progressStore.getState().learned['piece:bz5']).toBeUndefined())
   })
 })
+
+describe('Duplicate (R29 B9)', () => {
+  it('makes, once asked, a copy of the song the learner’s own, and opens it', async () => {
+    const user = userEvent.setup()
+    const { piecesStore, router } = await renderApp('/songs/bz5/settings')
+    const before = piecesStore.getState().songs.length
+    await user.click(await screen.findByRole('button', { name: 'Duplicate' }))
+    const asked = await screen.findByRole('alertdialog', { name: /Duplicate/ })
+    await user.click(within(asked).getByRole('button', { name: 'Duplicate' }))
+    await waitFor(() => expect(piecesStore.getState().songs).toHaveLength(before + 1))
+    const copy = piecesStore.getState().songs.at(-1)
+    expect(copy?.title).toMatch(/\(copy\)$/)
+    await waitFor(() => expect(router.state.location.pathname).toBe(`/songs/${copy?.id}`))
+  })
+})

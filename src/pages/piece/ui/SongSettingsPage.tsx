@@ -1,7 +1,8 @@
-import { Link, useParams, useRouter, useSearch } from '@tanstack/react-router'
+import { Link, useNavigate, useParams, useRouter, useSearch } from '@tanstack/react-router'
 import {
   Archive,
   ArchiveRestore,
+  Copy,
   Download,
   FileText,
   FolderInput,
@@ -17,12 +18,14 @@ import {
   isOwnSongId,
   selectHasVersion,
   usePieces,
+  usePiecesStoreApi,
   useRepertoire,
   type ChartPiece,
   type Piece,
 } from '@/entities/piece'
 import { selectView } from '@/entities/views'
 import { useOriginalDraft } from '@/features/edit-original'
+import { duplicateSong } from '@/features/edit-piece'
 import { useSongActions } from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { SongExportSheet } from '@/features/song-files'
@@ -31,6 +34,7 @@ import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   BackButton,
   ButtonLink,
+  ConfirmDialog,
   NotFound,
   DangerGroup,
   DangerRow,
@@ -81,6 +85,15 @@ function SongSettings({ piece }: { piece: Piece }) {
   const library = useSongActions(piece)
   const [exporting, setExporting] = useState(false)
   const [asking, setAsking] = useState(false)
+  const [copying, setCopying] = useState(false)
+  const piecesStore = usePiecesStoreApi()
+  const navigate = useNavigate()
+  const copyable = !isDegreePiece(piece)
+  const duplicate = () => {
+    if (isDegreePiece(piece)) return
+    const id = duplicateSong(piecesStore, piece, t('settings.copyTitle', { title }))
+    void navigate({ to: '/songs/$pieceId', params: { pieceId: id } })
+  }
   // Where the focus goes back once a Delete or Reset is not wanted: the row that asked.
   const danger = useRef<HTMLDivElement>(null)
   const inLibrary = piece.kind !== 'study'
@@ -149,6 +162,15 @@ function SongSettings({ piece }: { piece: Piece }) {
         ) : null}
         {inLibrary ? (
           <SettingsGroup flush title={t('settings.library')}>
+            {/* Duplicate (R29 B9): a copy as the learner's own, a song in degrees aside. */}
+            {copyable ? (
+              <RowButton
+                title={t('settings.duplicate')}
+                icon={Copy}
+                paint="yellow"
+                onClick={() => setCopying(true)}
+              />
+            ) : null}
             {/* Where it may leave its folder (R29 B4): one of the app's songs in its folder stays. */}
             {archived || !library.actions.some((each) => each.key === 'move') ? null : (
               <RowButton
@@ -236,6 +258,15 @@ function SongSettings({ piece }: { piece: Piece }) {
               }
             : undefined
         }
+      />
+      <ConfirmDialog
+        open={copying}
+        onOpenChange={setCopying}
+        title={t('settings.duplicateTitle', { title })}
+        body={t('settings.duplicateBody')}
+        action={t('settings.duplicate')}
+        destructive={false}
+        onConfirm={duplicate}
       />
       {ownMusic ? (
         <OwnMusicAsk piece={ownMusic} open={asking} onOpenChange={setAsking} returnTo={danger} />

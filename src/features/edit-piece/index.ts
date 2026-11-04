@@ -1,3 +1,4 @@
+export { duplicateSong } from './duplicate-song'
 export { deleteSong } from './delete-song'
 export {
   addSong,
