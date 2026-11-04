@@ -14,7 +14,7 @@ import {
 } from '@/entities/piece'
 import { selectScoreView, useSettings } from '@/entities/settings'
 import { PieceInversions } from '@/features/choose-diagram-inversion'
-import { beatGroupInBar, writtenBarAt } from '@/features/practice'
+import { beatGroupInBar, isSingleStaff, writtenBarAt } from '@/features/practice'
 import { ShareSaid, useShareSong, type SongToShare } from '@/features/share-song'
 import { useSongExport } from '@/features/song-files'
 import { useKeyName, useLocale } from '@/shared/i18n'
@@ -31,6 +31,7 @@ import { PlayerLayout } from './PlayerLayout'
 import { SectionsSheet } from './SectionsSheet'
 import { SimplifyTool } from './SimplifyTool'
 import { SongInfo } from './SongInfo'
+import { ClefChoice } from './ClefChoice'
 import { TransposeTool } from './TransposeTool'
 
 function PiecePlayer({ piece }: { piece: Piece }) {
@@ -184,6 +185,11 @@ function PiecePlayer({ piece }: { piece: Piece }) {
         status={<ShareSaid said={shared.said} />}
         // Chordify's "Show this when opening a song" (ADR 0108): the View, to choose how it shows.
         openView={askView}
+        display={
+          isSingleStaff(piece) ? (
+            <ClefChoice value={choice.clef} onChange={(clef) => changeSetup({ clef })} />
+          ) : undefined
+        }
         tracks={tracks}
       />
       <SongInfo piece={piece} performance={performance} {...sheetOf('info')} />

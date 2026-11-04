@@ -147,6 +147,18 @@ export const player = {
   // The pedal's lamp by the keys (A27): the score's own mark, lit while the pedal is down.
   pedalLamp: { mark: 'Ped.', down: 'Pedal down', up: 'Pedal up' },
   // The Player's settings page (B7): how it always plays, every song's.
+  clef: {
+    label: 'Clef',
+    info: 'Read a song written on one staff in the clef you know best. The notes stay the same; only where they sit on the staff changes.',
+    written: 'Original',
+    treble: 'Treble',
+    bass: 'Bass',
+    examples: {
+      written: 'The clef the song is written in',
+      treble: '𝄞 Middle C on a line below the staff',
+      bass: '𝄢 Middle C on a line above the staff',
+    },
+  },
   settingsPage: {
     open: 'Player settings',
     whilePlaying: 'While you play',
@@ -156,6 +168,7 @@ export const player = {
     audioInfo:
       'How loud each staff, the recording and the metronome play, for every song. Only the chords turns the recording right down and the piano up, so you hear the chords alone.',
     metronome: 'Metronome sound and beats',
+    onScreenPiano: 'On-screen piano',
     speed: 'Playback speed',
     speedStepInfo:
       'How much faster each pass plays while speed training climbs to the song’s tempo.',

@@ -21,6 +21,8 @@ import {
   DEFAULT_SCORE_VIEW,
   DEFAULT_PRACTICE,
   DEFAULT_EDITING,
+  EDITOR_START_MODES,
+  PALETTE_SIDES,
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
   DEFAULT_OTHER_HAND,
@@ -81,7 +83,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 20
+export const SETTINGS_VERSION = 21
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -210,11 +212,16 @@ function recorderSettings(value: unknown): RecorderSettings {
   }
 }
 
+const isStartMode = isOneOf(EDITOR_START_MODES)
+const isPaletteSide = isOneOf(PALETTE_SIDES)
+
 /** The editor's preferences keep what was saved; one never saved, or not valid, takes its default. */
 function editingSettings(value: unknown): EditingSettings {
   const saved = savedObject<EditingSettings>(value)
   return {
     hearNotes: typeof saved.hearNotes === 'boolean' ? saved.hearNotes : DEFAULT_EDITING.hearNotes,
+    startMode: isStartMode(saved.startMode) ? saved.startMode : DEFAULT_EDITING.startMode,
+    paletteSide: isPaletteSide(saved.paletteSide) ? saved.paletteSide : DEFAULT_EDITING.paletteSide,
   }
 }
 

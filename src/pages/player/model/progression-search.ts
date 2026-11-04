@@ -17,7 +17,7 @@ export type ProgressionSearch = PracticeView & {
   /** Numerals as `numeralsParam` writes them: `ii-V-I`. */
   readonly p: string
   readonly key: KeyParam
-} & Omit<SetupParams, 'transpose' | 'tkey' | 'tchords'>
+} & Omit<SetupParams, 'transpose' | 'tkey' | 'tchords' | 'clef'>
 
 /** What a progression's Setup changes: its key, the pattern and figures, and the chord size. */
 export type ProgressionChange = FigureChange &

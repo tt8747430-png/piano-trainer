@@ -126,6 +126,47 @@ describe('Player', () => {
     expect(new Set(staves())).toEqual(new Set(['staff0']))
   })
 
+  it('reads a single-staff song in the clef Display’s Clef chooses, kept for the song (R29 B7)', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    const song = {
+      id: 'my-1',
+      title: 'Morning',
+      key: 'G',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['G C'] }],
+      staves: [{ notes: 'B4/4 | C5/4' }],
+      leadSheet: true,
+    }
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
+    )
+    const { router } = await renderApp('/play/my-1', { storage })
+    const display = await openDisplay(user)
+    const clef = within(display).getByRole('radiogroup', { name: 'Clef' })
+    expect(within(clef).getByRole('radio', { name: /^Original/ })).toBeChecked()
+    await user.click(within(clef).getByRole('radio', { name: /^Bass/ }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ clef: 'bass' }))
+    // Verovio draws the staff’s clef as SMuFL’s F clef.
+    await waitFor(
+      () =>
+        expect(
+          document.querySelector('[data-slot="score"] g.clef use')?.getAttribute('href'),
+        ).toMatch(/E062/),
+      { timeout: 4000 },
+    )
+  })
+
+  it('offers no Clef for a song on the piano’s staves', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/bz5')
+    const display = await openDisplay(user)
+    expect(within(display).queryByRole('radiogroup', { name: 'Clef' })).toBeNull()
+  })
+
   it('plays a song of bars of no chord: its written notes, each bar named by its number (ADR 0114)', async () => {
     const storage = createMemoryStorage()
     const song = {
@@ -298,6 +339,7 @@ describe('Player', () => {
       'Playback',
       'Display',
       'Metronome sound and beats',
+      'On-screen piano',
     ])
     expect(rows('This song')).toEqual(['Sections', 'Song information'])
     expect(rows('Share')).toEqual(['Export…', 'Print'])

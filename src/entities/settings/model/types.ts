@@ -170,7 +170,19 @@ export interface RecorderSettings {
 export interface EditingSettings {
   /** A note sounds as it is chosen on the score or its pitch is changed (the keys sound themselves). */
   readonly hearNotes: boolean
+  /** How the editor writes when it opens (Dorico's Insert default): the toolbar still switches it. */
+  readonly startMode: EditorStartMode
+  /** Which side of the sheet the palette docks on, from 48rem wide. */
+  readonly paletteSide: PaletteSide
 }
+
+/** The modes the editor may open in: Chord is chosen for a moment, never a way to start. */
+export const EDITOR_START_MODES = ['replace', 'insert'] as const
+export type EditorStartMode = (typeof EDITOR_START_MODES)[number]
+
+/** The palette's sides. */
+export const PALETTE_SIDES = ['left', 'right'] as const
+export type PaletteSide = (typeof PALETTE_SIDES)[number]
 
 /** The MIDI keyboard's settings. */
 export interface MidiSettings {
@@ -368,7 +380,11 @@ export const DEFAULT_TRAINER: TrainerSettings = { autoNext: false }
 export const DEFAULT_RECORDER: RecorderSettings = { click: true, tune: false }
 
 /** A note heard as it is edited, as notation software does by default. */
-export const DEFAULT_EDITING: EditingSettings = { hearNotes: true }
+export const DEFAULT_EDITING: EditingSettings = {
+  hearNotes: true,
+  startMode: 'replace',
+  paletteSide: 'left',
+}
 
 /** The owner's piano sounds itself: the app sounds no MIDI key until asked. */
 export const DEFAULT_MIDI: MidiSettings = {

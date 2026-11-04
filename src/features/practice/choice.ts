@@ -14,4 +14,6 @@ export interface PracticeChoice extends AccompanimentChoice {
   readonly signature: boolean
   /** Transpose chord symbols (R29 T): the symbols move; off, they print as written over the moved chord. */
   readonly chordSymbols: boolean
+  /** A single-staff song's staff read in this clef (R29 B7); null, as written. */
+  readonly clef: 'treble' | 'bass' | null
 }

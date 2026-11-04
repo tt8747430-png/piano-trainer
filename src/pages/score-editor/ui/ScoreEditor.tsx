@@ -1,8 +1,9 @@
 import { Outlet, useChildMatches } from '@tanstack/react-router'
-import { PanelLeftOpen } from 'lucide-react'
+import { PanelLeftOpen, PanelRightOpen } from 'lucide-react'
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  selectEditing,
   selectKeyboard,
   selectPaletteFolded,
   useSettings,
@@ -48,6 +49,9 @@ const DOCKED_GAP = 6
 /** The panel reaches the screen's left edge and the bar's hairline, past the screen's gutter and gap. */
 const PANEL_EDGE =
   '-mt-3 ml-[calc(-1*max(var(--gutter),env(safe-area-inset-left)))] landscape-phone:-mt-2'
+/** Docked at the right (Note input's Palette side): the screen's right edge, the sheet in the first column. */
+const PANEL_EDGE_RIGHT =
+  'col-start-2 row-start-1 -mt-3 mr-[calc(-1*max(var(--gutter),env(safe-area-inset-right)))] landscape-phone:-mt-2'
 /** The sheet at the foot reaches the screen's side edges. */
 const SHEET_EDGES = 'mx-[calc(-1*max(var(--gutter),env(safe-area-inset-left)))]'
 
@@ -95,6 +99,7 @@ function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) 
   useEditorShortcutList()
   const onSide = useMediaQuery(LANDSCAPE_PHONE)
   const panel = usePalettePanel()
+  const right = useSettings((state) => selectEditing(state).paletteSide) === 'right'
   const idle = editor.takes.stage === 'idle'
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const keysFolded = useFoldKeys().folded
@@ -190,19 +195,22 @@ function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) 
                   'grid min-h-0 grid-rows-[auto_minmax(0,1fr)] gap-x-3 gap-y-2',
                   folded
                     ? 'grid-cols-[minmax(0,1fr)]'
-                    : 'grid-cols-[18rem_minmax(0,1fr)] landscape-phone:grid-cols-[15rem_minmax(0,1fr)] xl:grid-cols-[20rem_minmax(0,1fr)]',
+                    : right
+                      ? 'grid-cols-[minmax(0,1fr)_18rem] landscape-phone:grid-cols-[minmax(0,1fr)_15rem] xl:grid-cols-[minmax(0,1fr)_20rem]'
+                      : 'grid-cols-[18rem_minmax(0,1fr)] landscape-phone:grid-cols-[15rem_minmax(0,1fr)] xl:grid-cols-[20rem_minmax(0,1fr)]',
                 )
               : 'flex min-h-0 flex-col'
           }
         >
           {panel && !folded ? (
             <aside
+              data-side={right ? 'right' : 'left'}
               className={cn(
-                'row-span-2 flex min-h-0 flex-col border-r border-hairline bg-card',
-                PANEL_EDGE,
+                'row-span-2 flex min-h-0 flex-col border-hairline bg-card',
+                right ? cn('border-l', PANEL_EDGE_RIGHT) : cn('border-r', PANEL_EDGE),
               )}
             >
-              <PalettePanel onHide={() => fold(true)} />
+              <PalettePanel side={right ? 'right' : 'left'} onHide={() => fold(true)} />
             </aside>
           ) : null}
           {panel ? (
@@ -218,7 +226,7 @@ function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) 
                     className="size-10 shrink-0 rounded-control text-muted-foreground hover:text-foreground"
                     onClick={() => fold(false)}
                   >
-                    <PanelLeftOpen aria-hidden />
+                    {right ? <PanelRightOpen aria-hidden /> : <PanelLeftOpen aria-hidden />}
                   </Button>
                 ) : null
               }

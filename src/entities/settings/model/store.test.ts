@@ -141,7 +141,7 @@ describe('createSettingsStore', () => {
         railControls: ['zoom', 'pedal'],
       },
       recorder: { click: false, tune: true },
-      editing: { hearNotes: false },
+      editing: { hearNotes: false, startMode: 'insert', paletteSide: 'right' },
       sidebar: 'collapsed',
       paletteFolded: { panel: true, sheet: false },
       paletteSections: ['notes', 'clef'],
@@ -281,7 +281,22 @@ describe('createSettingsStore', () => {
   it('hears notes as they are edited unless the learner saved otherwise (round 28)', () => {
     expect(DEFAULT_EDITING.hearNotes).toBe(true)
     expect(restored({ editing: { hearNotes: 'no' } }).editing).toEqual(DEFAULT_EDITING)
-    expect(restored({ editing: { hearNotes: false } }).editing).toEqual({ hearNotes: false })
+    expect(restored({ editing: { hearNotes: false } }).editing).toEqual({
+      ...DEFAULT_EDITING,
+      hearNotes: false,
+    })
+  })
+
+  it('opens the editor in Replace, its palette at the left, unless saved otherwise (R29 B7)', () => {
+    expect(DEFAULT_EDITING).toMatchObject({ startMode: 'replace', paletteSide: 'left' })
+    expect(restored({ editing: { startMode: 'chord', paletteSide: 'top' } }).editing).toEqual(
+      DEFAULT_EDITING,
+    )
+    expect(restored({ editing: { startMode: 'insert', paletteSide: 'right' } }).editing).toEqual({
+      ...DEFAULT_EDITING,
+      startMode: 'insert',
+      paletteSide: 'right',
+    })
   })
 
   it('turns a click that is not a boolean on, its default', () => {
@@ -309,9 +324,9 @@ describe('createSettingsStore', () => {
     expect(restored({ scoreView: { pinned: 'no' } }).scoreView.pinned).toBe(true)
   })
 
-  it('starts afresh over a save of the version before, whose count-in was a switch (B7)', () => {
-    expect(SETTINGS_VERSION).toBe(20)
-    expect(restored({ theme: 'dark', practice: { countIn: true } }, 19)).toEqual(
+  it('starts afresh over a save of the version before, which had no editor start or palette side (B7)', () => {
+    expect(SETTINGS_VERSION).toBe(21)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 20)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

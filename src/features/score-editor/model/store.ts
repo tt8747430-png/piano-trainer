@@ -1,7 +1,7 @@
 import { createStore, type StoreApi } from 'zustand/vanilla'
 import type { Draft } from './draft'
 import { reduce } from './editor'
-import { initialEditor, type EditorAction, type EditorState } from './state'
+import { initialEditor, type EditMode, type EditorAction, type EditorState } from './state'
 
 /** An editor's visit: its state, and the one way to change it. */
 export interface EditorStore extends StoreApi<EditorState> {
@@ -10,9 +10,16 @@ export interface EditorStore extends StoreApi<EditorState> {
   replace(draft: Draft): void
 }
 
-/** The editor's state for one visit; `onChange` hears each draft an action makes (to save it). */
-export function createEditorStore(draft: Draft, onChange: (draft: Draft) => void): EditorStore {
-  const store = createStore<EditorState>()(() => initialEditor(draft))
+/**
+ * The editor's state for one visit, opening in `mode` (the learner's Input mode on opening);
+ * `onChange` hears each draft an action makes (to save it).
+ */
+export function createEditorStore(
+  draft: Draft,
+  onChange: (draft: Draft) => void,
+  mode?: EditMode,
+): EditorStore {
+  const store = createStore<EditorState>()(() => initialEditor(draft, mode))
   return {
     ...store,
     dispatch(action) {
@@ -23,7 +30,7 @@ export function createEditorStore(draft: Draft, onChange: (draft: Draft) => void
       if (after.draft !== before.draft) onChange(after.draft)
     },
     replace(next) {
-      store.setState(initialEditor(next), true)
+      store.setState(initialEditor(next, store.getState().mode), true)
     },
   }
 }

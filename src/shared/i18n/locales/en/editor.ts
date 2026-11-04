@@ -758,6 +758,16 @@ export const editor = {
     barsPerLineInfo:
       'The most bars a line holds. A line holds fewer where they don’t fit the width.',
     editing: 'Editing',
+    startMode: 'Input mode on opening',
+    startModeInfo:
+      'How notes are written when the editor opens. Switch it any time with the mode button in the toolbar.',
+    startModes: { replace: 'Replace', insert: 'Insert' },
+    startModeExamples: {
+      replace: 'A note you play writes over the note at the caret',
+      insert: 'A note you play goes in at the caret and moves the rest along',
+    },
+    paletteSide: 'Palette side',
+    paletteSides: { left: 'Left', right: 'Right' },
     hearNotes: 'Play notes while editing',
     hearNotesInfo:
       'A note sounds when you tap it on the score or move its pitch. Keys you play sound anyway.',

@@ -3,7 +3,13 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import { BARS_PER_LINE, STAFF_SIZES, useSectionHeading, type StaffSize } from '@/entities/piece'
-import { selectEditing, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import {
+  EDITOR_START_MODES,
+  PALETTE_SIDES,
+  selectEditing,
+  useSettings,
+  useSettingsStoreApi,
+} from '@/entities/settings'
 import { MetronomeSwitch, TuneSwitch } from '@/features/record-take'
 import { barsOf, MOST_BARS } from '@/features/score-editor'
 import { setEditing } from '@/features/set-preference'
@@ -167,15 +173,42 @@ export function ScorePageBody({
       )
     case 'input':
       return (
-        <SettingsGroup flush>
-          <SwitchRow
-            setting="editing.hearNotes"
-            label={t('scoreSettings.hearNotes')}
-            info={t('scoreSettings.hearNotesInfo')}
-            checked={editing.hearNotes}
-            onCheckedChange={(hearNotes) => setEditing(settings, { hearNotes })}
+        <>
+          <SettingsGroup flush>
+            <SwitchRow
+              setting="editing.hearNotes"
+              label={t('scoreSettings.hearNotes')}
+              info={t('scoreSettings.hearNotesInfo')}
+              checked={editing.hearNotes}
+              onCheckedChange={(hearNotes) => setEditing(settings, { hearNotes })}
+            />
+          </SettingsGroup>
+          <ChoiceCard
+            setting="editing.startMode"
+            title={t('scoreSettings.startMode')}
+            info={t('scoreSettings.startModeInfo')}
+            value={editing.startMode}
+            options={EDITOR_START_MODES.map((mode) => ({
+              value: mode,
+              label: t(`scoreSettings.startModes.${mode}`),
+              example: t(`scoreSettings.startModeExamples.${mode}`),
+            }))}
+            onChange={(startMode) => setEditing(settings, { startMode })}
           />
-        </SettingsGroup>
+          {/* The palette docks beside the sheet from 48rem wide; a phone's is a sheet at the foot. */}
+          <div className="hidden md:contents">
+            <ChoiceCard
+              setting="editing.paletteSide"
+              title={t('scoreSettings.paletteSide')}
+              value={editing.paletteSide}
+              options={PALETTE_SIDES.map((side) => ({
+                value: side,
+                label: t(`scoreSettings.paletteSides.${side}`),
+              }))}
+              onChange={(paletteSide) => setEditing(settings, { paletteSide })}
+            />
+          </div>
+        </>
       )
     case 'recording':
       return (

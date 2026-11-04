@@ -9,6 +9,7 @@ import {
   chartOf,
   hasChartPlan,
   isDegreePiece,
+  isLeadSheet,
   patternsOfPiece,
   pieceKey,
   stavesOf,
@@ -22,6 +23,7 @@ import {
   type Performance,
 } from '@/shared/lib/arrangement'
 import type { ChordSize } from '@/shared/lib/music'
+import { withClef } from '@/shared/lib/notation'
 import type { PracticeChoice } from './choice'
 
 /** The chart's own plan when it has one (its methods, its sections' patterns), else the piece's pattern. */
@@ -44,6 +46,7 @@ export const ownChoice = (piece: Piece): PracticeChoice => ({
   simple: false,
   signature: true,
   chordSymbols: true,
+  clef: null,
 })
 
 /**
@@ -59,10 +62,11 @@ export function arrangePiece(
   { unfold = false }: { unfold?: boolean } = {},
 ): Performance {
   const chart = chartOf(piece, choice.chordSize ?? undefined)
-  return arrange(choice.simple ? simplifyChart(chart) : chart, {
+  const performance = arrange(choice.simple ? simplifyChart(chart) : chart, {
     ...arrangeOptions(piece, choice, book),
     ...(unfold ? { unfold } : {}),
   })
+  return choice.clef && isSingleStaff(piece) ? withClef(performance, 0, choice.clef) : performance
 }
 
 /**
@@ -71,6 +75,10 @@ export function arrangePiece(
  */
 export const simplifies = (piece: Piece, chordSize: ChordSize | null): boolean =>
   !isSimpleChart(chartOf(piece, chordSize ?? undefined))
+
+/** A song written on one single staff alone, no piano's (a lead sheet's tune): Display's Clef reads it. */
+export const isSingleStaff = (piece: Piece): boolean =>
+  isLeadSheet(piece) && !isDegreePiece(piece) && stavesOf(piece).length === 1
 
 /** The learner's choices as `arrange` takes them. */
 function arrangeOptions(piece: Piece, choice: PracticeChoice, book: PatternBook): ArrangeOptions {

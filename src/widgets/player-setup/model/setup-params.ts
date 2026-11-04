@@ -1,6 +1,10 @@
 import type { LeftFigureId, PatternChoice, RightFigureId } from '@/entities/pattern'
 import type { ChordSize, Inversion, KeyWalk } from '@/shared/lib/music'
 
+/** The clefs a single staff may be read in besides its own (Display's Clef). */
+export const PLAYED_CLEFS = ['treble', 'bass'] as const
+export type PlayedClef = (typeof PLAYED_CLEFS)[number]
+
 /** The piece's own choices as the Player's URL holds them: an absent one is the piece's own. */
 export interface SetupParams {
   /**
@@ -12,6 +16,8 @@ export interface SetupParams {
   readonly tkey?: boolean
   /** `false`: Transpose chord symbols off, the symbols as written (R29 T); absent, they move. */
   readonly tchords?: boolean
+  /** A single-staff song's staff in this clef (R29 B7, Display's Clef); absent, as written. */
+  readonly clef?: PlayedClef
   readonly pattern?: PatternChoice
   readonly rh?: RightFigureId
   readonly lh?: LeftFigureId

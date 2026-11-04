@@ -1,4 +1,11 @@
-import { ChevronsLeft, LayoutGrid, List, SquareChevronDown, SquareChevronUp } from 'lucide-react'
+import {
+  ChevronsLeft,
+  ChevronsRight,
+  LayoutGrid,
+  List,
+  SquareChevronDown,
+  SquareChevronUp,
+} from 'lucide-react'
 import { MotionConfig, motion } from 'motion/react'
 import {
   useEffect,
@@ -197,11 +204,17 @@ function Laid({
 const FIRST_OPEN: readonly PaletteCategory[] = ['notes', 'pitch']
 
 /**
- * The palette docked at the sheet's left (ADR 0114, Flat's notation panel): its head, then every
+ * The palette docked at the sheet's left, or its right as chosen (ADR 0114, Flat's notation panel): its head, then every
  * category an accordion row, several open at once, scrolling on its own; « hides it whole, the
  * sheet taking its room, the note-entry toolbar bringing it back. Never over the music.
  */
-export function PalettePanel({ onHide }: { onHide: () => void }) {
+export function PalettePanel({
+  side = 'left',
+  onHide,
+}: {
+  side?: 'left' | 'right'
+  onHide: () => void
+}) {
   const { t } = useTranslation('editor')
   const { takes } = useScoreEditorContext()
   const settings = useSettingsStoreApi()
@@ -228,7 +241,7 @@ export function PalettePanel({ onHide }: { onHide: () => void }) {
           className="size-9 text-muted-foreground hover:text-foreground"
           onClick={onHide}
         >
-          <ChevronsLeft aria-hidden />
+          {side === 'right' ? <ChevronsRight aria-hidden /> : <ChevronsLeft aria-hidden />}
         </Button>
       </div>
       <fieldset

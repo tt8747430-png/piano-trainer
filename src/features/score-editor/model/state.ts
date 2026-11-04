@@ -231,13 +231,13 @@ export type EditorAction =
   | { readonly type: 'undo' }
   | { readonly type: 'redo' }
 
-export const initialEditor = (draft: Draft): EditorState => ({
+export const initialEditor = (draft: Draft, mode: EditMode = 'replace'): EditorState => ({
   draft,
   caret: 0,
   // The top staff: the top single staff's where the score has one, else the right hand's.
   layer: topStaff(draft),
   value: { value: 4, dots: 0 },
-  mode: 'replace',
+  mode,
   selection: null,
   chordNote: null,
   grace: false,

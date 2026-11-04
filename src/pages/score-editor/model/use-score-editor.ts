@@ -67,15 +67,21 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   // A change the song's music cannot be written with: said so, the music last saved kept, until a
   // change saves or the notice is closed.
   const [unsaved, setUnsaved] = useState(false)
+  // The mode the learner opens in (Note input's Input mode on opening); the toolbar switches it after.
+  const startMode = useSettings((state) => selectEditing(state).startMode)
   const [store] = useState(() =>
-    createEditorStore(readDraft(target.music), (draft) => {
-      const music = musicToSave(draft)
-      setUnsaved(music === null)
-      if (!music) return
-      saved.music = music
-      if (target.kind === 'original' || target.kind === 'example') target.save(music)
-      else saveMusic(pieces, savingTo(target), music)
-    }),
+    createEditorStore(
+      readDraft(target.music),
+      (draft) => {
+        const music = musicToSave(draft)
+        setUnsaved(music === null)
+        if (!music) return
+        saved.music = music
+        if (target.kind === 'original' || target.kind === 'example') target.save(music)
+        else saveMusic(pieces, savingTo(target), music)
+      },
+      startMode,
+    ),
   )
   // The same music changed in another tab: the editor opens on it, so its next change does not
   // write over what was written there.

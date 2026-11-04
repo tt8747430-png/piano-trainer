@@ -151,6 +151,13 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
     expect(await moreActions(user)).toEqual(actions)
   })
 
+  it('opens the On-screen piano’s page, its one home (R29 B7)', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/play/bz5')
+    await chooseMore(user, 'On-screen piano')
+    await waitFor(() => expect(router.state.location.pathname).toBe('/settings/on-screen-piano'))
+  })
+
   it.each([
     ['a song', '/play/bz5', ['MusicXML', 'MIDI', 'Share link']],
     // With a recording, its MIDI fixed tempo or time aligned to the recording (ADR 0107).

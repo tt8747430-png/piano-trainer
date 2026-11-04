@@ -55,6 +55,7 @@ export function resolveChoice(
     simple: search.simple === true,
     signature: search.tkey !== false,
     chordSymbols: search.tchords !== false,
+    clef: search.clef ?? null,
   }
 }
 

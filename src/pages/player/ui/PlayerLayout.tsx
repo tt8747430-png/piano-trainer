@@ -1,5 +1,13 @@
 import { useNavigate } from '@tanstack/react-router'
-import { Download, MonitorCog, Printer, SlidersHorizontal, Timer, Volume2 } from 'lucide-react'
+import {
+  Download,
+  MonitorCog,
+  Piano,
+  Printer,
+  SlidersHorizontal,
+  Timer,
+  Volume2,
+} from 'lucide-react'
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
@@ -80,6 +88,7 @@ export function PlayerLayout({
   share,
   status,
   openView = false,
+  display,
   tracks,
 }: {
   /** The volumes the Settings' Audio playback lists: a piece's tracks; none for a walk. */
@@ -121,6 +130,8 @@ export function PlayerLayout({
   share?: ExportShare | undefined
   /** What the screen says beside Wait mode's line: what a piece's Share said. */
   status?: ReactNode
+  /** Display's own choices after the View's: a single-staff song's Clef (R29 B7). */
+  display?: ReactNode
   /** The View open as the screen opens: a piece's, where the learner asks each time (ADR 0108). */
   openView?: boolean
 }) {
@@ -174,7 +185,12 @@ export function PlayerLayout({
         id: 'display',
         label: t('settingsPage.display'),
         icon: MonitorCog,
-        content: <ViewSection view={shown} words={needs.lyrics !== 'words'} />,
+        content: (
+          <>
+            <ViewSection view={shown} words={needs.lyrics !== 'words'} />
+            {display}
+          </>
+        ),
       },
     ],
     acts: [
@@ -184,6 +200,14 @@ export function PlayerLayout({
         label: t('settingsPage.metronome'),
         icon: Timer,
         onSelect: () => void navigate({ to: '/practice/metronome' }),
+      },
+      // Its one home is Settings' (rule 18): a way there, never a second control.
+      {
+        key: 'on-screen-piano',
+        group: 'play',
+        label: t('settingsPage.onScreenPiano'),
+        icon: Piano,
+        onSelect: () => void navigate({ to: '/settings/on-screen-piano' }),
       },
       ...more.flatMap(({ icon, ...act }) =>
         icon ? [{ ...act, icon, group: 'song' as const }] : [],

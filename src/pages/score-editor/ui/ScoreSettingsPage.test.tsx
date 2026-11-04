@@ -1,6 +1,6 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { createMemoryStorage } from '@/shared/lib'
@@ -141,5 +141,55 @@ describe('the score’s Settings (round 28)', () => {
       ]),
     )
     expect(piecesStore.getState().songs[0]?.key).toBe('G')
+  })
+  it('has Play notes while editing, Input mode on opening and Palette side on Note input (R29 B7)', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/edit/my-1/settings?page=input', {
+      storage: withSong(),
+    })
+    expect(await screen.findByRole('switch', { name: /Play notes while editing/ })).toBeVisible()
+    const mode = screen.getByRole('radiogroup', { name: 'Input mode on opening' })
+    expect(within(mode).getByRole('radio', { name: /^Replace/ })).toBeChecked()
+    await user.click(within(mode).getByRole('radio', { name: /^Insert/ }))
+    const side = screen.getByRole('radiogroup', { name: 'Palette side' })
+    await user.click(within(side).getByRole('radio', { name: 'Right' }))
+    expect(settingsStore.getState().editing).toMatchObject({
+      startMode: 'insert',
+      paletteSide: 'right',
+    })
+  })
+
+  it('opens the editor in Insert, its palette at the right, when chosen (R29 B7)', async () => {
+    vi.stubGlobal('matchMedia', (media: string) => ({
+      media,
+      matches: media === '(min-width: 48rem)',
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    }))
+    const storage = withSong()
+    const settings = await renderApp('/edit/my-1/settings?page=input', { storage })
+    const user = userEvent.setup()
+    const mode = await screen.findByRole('radiogroup', { name: 'Input mode on opening' })
+    await user.click(within(mode).getByRole('radio', { name: /^Insert/ }))
+    await user.click(
+      within(screen.getByRole('radiogroup', { name: 'Palette side' })).getByRole('radio', {
+        name: 'Right',
+      }),
+    )
+    expect(settings.settingsStore.getState().editing.startMode).toBe('insert')
+    settings.unmount()
+    // The next time the editor opens.
+    await renderApp('/edit/my-1', { storage })
+    const palette = await screen.findByRole('region', { name: 'Tools' })
+    expect(palette.closest('aside')).toHaveAttribute('data-side', 'right')
+    await waitFor(() =>
+      expect(within(palette).getByRole('combobox', { name: 'Editing mode' })).toHaveTextContent(
+        'Insert',
+      ),
+    )
   })
 })
