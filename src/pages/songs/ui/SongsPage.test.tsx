@@ -367,7 +367,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
       within(sheet)
         .getAllByRole('button')
         .flatMap((row) => (row.textContent ? [row.textContent] : [])),
-    ).toEqual(['MusicXML', 'MIDI', 'Share link'])
+    ).toEqual(['MusicXML', 'Compressed MusicXML (.mxl)', 'MIDI', 'Share link'])
     await user.click(within(sheet).getByRole('button', { name: /^Share link/ }))
     await waitFor(() =>
       expect(screen.queryByRole('dialog', { name: 'Export' })).not.toBeInTheDocument(),

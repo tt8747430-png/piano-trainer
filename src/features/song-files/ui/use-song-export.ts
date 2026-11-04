@@ -14,7 +14,7 @@ import {
 import { arrangePiece, ownChoice } from '@/features/practice'
 import { useLocale } from '@/shared/i18n'
 import { exportMidi } from '../model/export-midi'
-import { exportMusicXml } from '../model/export-music-xml'
+import { exportMusicXml, type MusicXmlFormat } from '../model/export-music-xml'
 
 type Credit = NonNullable<Piece['credits']>[number]
 
@@ -32,7 +32,7 @@ const chartOf = (piece: Piece): ChartPiece =>
 
 /** A song's files: its score as MusicXML, its music as played as MIDI. */
 export interface SongFiles {
-  readonly musicXml: () => void
+  readonly musicXml: (format?: MusicXmlFormat) => void
   readonly midi: () => void
 }
 
@@ -56,15 +56,19 @@ export function useSongFiles(): (piece: Piece) => SongFiles {
       chart.header?.composer ?? creditNames(chart.credits, ['music', 'words-and-music', 'authors'])
     const lyricist = chart.header?.lyricist ?? creditNames(chart.credits, ['words', 'russian-text'])
     return {
-      musicXml: () =>
-        exportMusicXml(musicOf(chart), {
-          title,
-          ...(composer ? { composer } : {}),
-          ...(lyricist ? { lyricist } : {}),
-          headings: headingsOf(chart),
-          staffNames,
-          piano: t('music:sheet.staves.piano'),
-        }),
+      musicXml: (format) =>
+        exportMusicXml(
+          musicOf(chart),
+          {
+            title,
+            ...(composer ? { composer } : {}),
+            ...(lyricist ? { lyricist } : {}),
+            headings: headingsOf(chart),
+            staffNames,
+            piano: t('music:sheet.staves.piano'),
+          },
+          format,
+        ),
       midi: () =>
         exportMidi({
           performance: arrangePiece(chart, ownChoice(chart), BUILT_IN_PATTERNS),

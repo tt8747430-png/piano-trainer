@@ -377,6 +377,7 @@ export const songs = {
     action: 'Export…',
     title: 'Export',
     musicXml: 'MusicXML',
+    mxl: 'Compressed MusicXML (.mxl)',
     midi: 'MIDI',
     midiAligned: 'MIDI, time aligned',
     share: 'Share link',

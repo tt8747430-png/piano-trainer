@@ -1,10 +1,11 @@
-import { FileCode, FileMusic, Link2, type LucideIcon } from 'lucide-react'
+import { FileArchive, FileCode, FileMusic, Link2, type LucideIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { entryTitles, type Piece } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
 import { RowButton, Sheet, SheetContent, type Paint } from '@/shared/ui'
 import { useSongExport } from './use-song-export'
+import type { MusicXmlFormat } from '../model/export-music-xml'
 
 /** What the screen shares, as its own Share does it. */
 export type ExportShare = { readonly onSelect: () => void }
@@ -14,7 +15,7 @@ export type ExportShare = { readonly onSelect: () => void }
  * MIDI, timed to its recording where one plays along, and its link where the screen shares.
  */
 export type ExportFiles = {
-  readonly musicXml?: (() => void) | undefined
+  readonly musicXml?: ((format?: MusicXmlFormat) => void) | undefined
   readonly midi: () => void
   readonly midiAligned?: (() => void) | undefined
   readonly share?: ExportShare | undefined
@@ -52,7 +53,14 @@ export function ExportSheet({
             title: t('export.musicXml'),
             icon: FileCode,
             paint: 'sky' as const,
-            onSelect: files.musicXml,
+            onSelect: () => files.musicXml?.('musicxml'),
+          },
+          {
+            key: 'mxl',
+            title: t('export.mxl'),
+            icon: FileArchive,
+            paint: 'sky' as const,
+            onSelect: () => files.musicXml?.('mxl'),
           },
         ]
       : []),

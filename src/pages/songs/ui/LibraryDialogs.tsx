@@ -6,7 +6,7 @@ import { entryTitles, isSongCollectionId, useRepertoire } from '@/entities/piece
 import { selectView } from '@/entities/views'
 import { DeleteFolderAsk, FolderSheet, MoveSheet } from '@/features/manage-library'
 import { songToShare, useShareSong } from '@/features/share-song'
-import { ExportSheet, SongExportSheet, useSongFiles } from '@/features/song-files'
+import { ExportSheet, SongExportSheet, useSongFiles, type ExportFiles } from '@/features/song-files'
 import { useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { say } from '@/shared/ui'
@@ -62,8 +62,8 @@ export function LibraryDialogs({
           return piece ? [filesOf(piece)] : []
         })
       : []
-  const chosenFiles = {
-    musicXml: () => chosen.forEach((files) => files.musicXml()),
+  const chosenFiles: ExportFiles = {
+    musicXml: (format) => chosen.forEach((files) => files.musicXml(format)),
     midi: () => chosen.forEach((files) => files.midi()),
   }
   // One New song (round 26): in a collection's folder, an editor's is the collection's, for everyone.

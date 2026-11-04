@@ -1,5 +1,5 @@
 export { harmonyXml, readHarmony } from './harmony'
-export { isZip, MxlError, unzipMusicXml } from './mxl'
+export { isZip, MxlError, unzipMusicXml, writeMxl } from './mxl'
 export {
   LEFT_OUT,
   NotAScoreError,

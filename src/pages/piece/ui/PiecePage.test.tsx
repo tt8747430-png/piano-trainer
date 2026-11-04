@@ -189,7 +189,7 @@ describe('Piece', () => {
       within(within(sheet).getByRole('list', { name: 'Export' }))
         .getAllByRole('button')
         .map((row) => row.textContent),
-    ).toEqual(['MusicXML', 'MIDI', 'Share link'])
+    ).toEqual(['MusicXML', 'Compressed MusicXML (.mxl)', 'MIDI', 'Share link'])
   })
 
   it('keeps everything else on its Settings page, grouped: its music, its place, its ways out (round 26)', async () => {

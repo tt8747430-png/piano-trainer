@@ -159,12 +159,12 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
   })
 
   it.each([
-    ['a song', '/play/bz5', ['MusicXML', 'MIDI', 'Share link']],
+    ['a song', '/play/bz5', ['MusicXML', 'Compressed MusicXML (.mxl)', 'MIDI', 'Share link']],
     // With a recording, its MIDI fixed tempo or time aligned to the recording (ADR 0107).
     [
       'a song with a recording',
       '/play/romashki',
-      ['MusicXML', 'MIDI', 'MIDI, time aligned', 'Share link'],
+      ['MusicXML', 'Compressed MusicXML (.mxl)', 'MIDI', 'MIDI, time aligned', 'Share link'],
     ],
     ['a progression', '/play/progression?p=ii-V-I&key=Bb', ['MIDI']],
     ['a chromatic walk', '/play/chromatic?chords=m9&root=G', ['MIDI']],

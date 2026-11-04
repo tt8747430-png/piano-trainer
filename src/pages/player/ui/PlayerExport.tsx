@@ -6,6 +6,7 @@ import {
   exportMidi,
   type ExportFiles,
   type ExportShare,
+  type MusicXmlFormat,
   type PlayedMusic,
 } from '@/features/song-files'
 
@@ -32,7 +33,7 @@ export function PlayerExport({
   /** Each single staff's own name, top down; none where a staff has none. */
   staves: readonly (string | undefined)[]
   /** Export to MusicXML: a piece's music as written; none for a walk or an exercise. */
-  musicXml?: (() => void) | undefined
+  musicXml?: ((format?: MusicXmlFormat) => void) | undefined
   /** Export…'s link, where the screen shares. */
   share?: ExportShare | undefined
 }) {

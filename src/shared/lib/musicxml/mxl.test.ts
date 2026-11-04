@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isZip, MxlError, unzipMusicXml } from './mxl'
+import { isZip, MxlError, unzipMusicXml, writeMxl } from './mxl'
 
 /** A ZIP archive of files, each deflated or stored (no CRC: the reader does not check one). */
 async function zip(
@@ -69,5 +69,15 @@ describe('unzipMusicXml', () => {
     await expect(unzipMusicXml(await zip([{ name: 'a.txt', text: 'x' }]))).rejects.toThrow(MxlError)
     expect(isZip(new TextEncoder().encode('<xml/>'))).toBe(false)
     await expect(unzipMusicXml(new Uint8Array([1, 2, 3]))).rejects.toThrow(MxlError)
+  })
+})
+
+describe('writeMxl (R29 A29)', () => {
+  it('writes a score the reader takes back whole, with its container naming it', async () => {
+    const xml =
+      '<?xml version="1.0"?><score-partwise version="4.0"><work><work-title>Été</work-title></work></score-partwise>'
+    const bytes = writeMxl(xml)
+    expect(isZip(bytes)).toBe(true)
+    expect(await unzipMusicXml(bytes)).toBe(xml)
   })
 })

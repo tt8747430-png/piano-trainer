@@ -45,7 +45,7 @@ import { ViewSection } from '@/widgets/score-view-menu'
 import { SettingsExtrasContext, type SettingsExtras } from '@/widgets/player-setup'
 import { useChordKeys } from '../model/use-chord-keys'
 import { PlayerExport } from './PlayerExport'
-import type { ExportShare } from '@/features/song-files'
+import type { ExportShare, MusicXmlFormat } from '@/features/song-files'
 import { PickView } from './PickView'
 
 /** A walk or a progression: one section, named nowhere. */
@@ -125,7 +125,7 @@ export function PlayerLayout({
   /** The music's own acts in Settings, before Print: a piece's Song information and Sections (ADR 0107). */
   more?: readonly MenuAction[] | undefined
   /** Export…'s MusicXML: a piece's music as written (ADR 0107). */
-  musicXml?: (() => void) | undefined
+  musicXml?: ((format?: MusicXmlFormat) => void) | undefined
   /** Export…'s link: a piece's, as its page shares it. */
   share?: ExportShare | undefined
   /** What the screen says beside Wait mode's line: what a piece's Share said. */

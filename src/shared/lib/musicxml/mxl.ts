@@ -111,3 +111,73 @@ export async function unzipMusicXml(bytes: Uint8Array): Promise<string> {
   if (!score) throw new MxlError('No score in the archive')
   return decoder.decode(await contentOf(bytes, score))
 }
+
+/** CRC-32 (IEEE), the checksum a ZIP entry carries. */
+const CRC_TABLE = Array.from({ length: 256 }, (_, n) => {
+  let c = n
+  for (let k = 0; k < 8; k += 1) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1
+  return c >>> 0
+})
+function crc32(bytes: Uint8Array): number {
+  let crc = 0xffffffff
+  for (const byte of bytes) crc = (CRC_TABLE[(crc ^ byte) & 0xff] ?? 0) ^ (crc >>> 8)
+  return (crc ^ 0xffffffff) >>> 0
+}
+
+const SCORE_PATH = 'score.musicxml'
+const CONTAINER = `<?xml version="1.0" encoding="UTF-8"?>
+<container><rootfiles><rootfile full-path="${SCORE_PATH}" media-type="application/vnd.recordare.musicxml+xml"/></rootfiles></container>
+`
+
+/**
+ * A compressed MusicXML file (.mxl) of a score's text (R29 A29): a ZIP of `mimetype`,
+ * `META-INF/container.xml` naming the score, and the score, each stored as it is (a song's text is
+ * small; every reader takes stored entries).
+ */
+export function writeMxl(xml: string): Uint8Array<ArrayBuffer> {
+  const encoder = new TextEncoder()
+  const files = [
+    { name: 'mimetype', data: encoder.encode('application/vnd.recordare.musicxml') },
+    { name: 'META-INF/container.xml', data: encoder.encode(CONTAINER) },
+    { name: SCORE_PATH, data: encoder.encode(xml) },
+  ].map((file) => ({ ...file, path: encoder.encode(file.name), crc: crc32(file.data) }))
+  const local = files.reduce((sum, file) => sum + 30 + file.path.length + file.data.length, 0)
+  const central = files.reduce((sum, file) => sum + 46 + file.path.length, 0)
+  const out = new Uint8Array(local + central + 22)
+  const view = new DataView(out.buffer)
+  let at = 0
+  const offsets: number[] = []
+  for (const file of files) {
+    offsets.push(at)
+    view.setUint32(at, LOCAL_FILE, true)
+    view.setUint16(at + 4, 20, true)
+    view.setUint16(at + 8, STORED, true)
+    view.setUint32(at + 14, file.crc, true)
+    view.setUint32(at + 18, file.data.length, true)
+    view.setUint32(at + 22, file.data.length, true)
+    view.setUint16(at + 26, file.path.length, true)
+    out.set(file.path, at + 30)
+    out.set(file.data, at + 30 + file.path.length)
+    at += 30 + file.path.length + file.data.length
+  }
+  const directory = at
+  files.forEach((file, index) => {
+    view.setUint32(at, CENTRAL_FILE, true)
+    view.setUint16(at + 4, 20, true)
+    view.setUint16(at + 6, 20, true)
+    view.setUint16(at + 10, STORED, true)
+    view.setUint32(at + 16, file.crc, true)
+    view.setUint32(at + 20, file.data.length, true)
+    view.setUint32(at + 24, file.data.length, true)
+    view.setUint16(at + 28, file.path.length, true)
+    view.setUint32(at + 42, offsets[index] ?? 0, true)
+    out.set(file.path, at + 46)
+    at += 46 + file.path.length
+  })
+  view.setUint32(at, END_OF_DIRECTORY, true)
+  view.setUint16(at + 8, files.length, true)
+  view.setUint16(at + 10, files.length, true)
+  view.setUint32(at + 12, at - directory, true)
+  view.setUint32(at + 16, directory, true)
+  return out
+}

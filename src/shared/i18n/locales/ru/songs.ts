@@ -370,6 +370,7 @@ export const songs: LocaleResources['songs'] = {
     action: 'Экспорт…',
     title: 'Экспорт',
     musicXml: 'MusicXML',
+    mxl: 'Сжатый MusicXML (.mxl)',
     midi: 'MIDI',
     midiAligned: 'MIDI по записи',
     share: 'Ссылка',
