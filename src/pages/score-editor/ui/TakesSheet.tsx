@@ -4,12 +4,12 @@ import { Sheet, SheetContent } from '@/shared/ui'
 import { useScoreEditorContext } from '../model/editor-context'
 import { TAKES_PAGE } from '../model/use-editor-takes'
 import { TakeList } from './TakeList'
-import { WriteTakePage } from './WriteTakePage'
+import { RecordReview } from './RecordReview'
 
 /**
  * The takes (ADR 0028, 0096), their own sheet: opened by itself on a take just kept, and from Takes
- * beside the dock's Record. The piece's takes, each heard, written into the score, downloaded or
- * deleted; a take's form to write it is a page of the sheet. Recording is Record's alone: the sheet
+ * beside the dock's Record. The piece's takes, each heard, reviewed and saved to the score,
+ * downloaded or deleted; Review your recording (A40) is a page of the sheet, opened on a take just kept. Recording is Record's alone: the sheet
  * holds no Record, and no facts the learner cannot change.
  */
 export function TakesSheet() {
@@ -23,9 +23,9 @@ export function TakesSheet() {
   )
   return (
     <Sheet open={takes.open} onOpenChange={(open) => takes.show(open ? TAKES_PAGE : null)}>
-      <SheetContent title={writing ? t('recorder.write') : t('recorder.title')}>
+      <SheetContent title={writing ? t('review.title') : t('recorder.title')}>
         {writing ? (
-          <WriteTakePage take={writing} />
+          <RecordReview take={writing} />
         ) : (
           <div className="flex flex-col gap-4 pt-2">
             {page.kind === 'takes' && page.nothingPlayed ? (

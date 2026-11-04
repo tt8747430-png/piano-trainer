@@ -1,7 +1,12 @@
 import { useSearch } from '@tanstack/react-router'
 import { useEffect, useEffectEvent, useState } from 'react'
 import { isOwnSongId, selectOwnSong, usePiecesStoreApi, type PieceId } from '@/entities/piece'
-import { selectRecorder, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import {
+  selectRecorder,
+  useSettings,
+  useSettingsStoreApi,
+  type RecorderCountIn,
+} from '@/entities/settings'
 import {
   midiFile,
   quantise,
@@ -53,7 +58,10 @@ export const TAKES_PAGE: TakesPage = { kind: 'takes', nothingPlayed: false }
 export interface EditorTakes {
   /** Whose takes: the piece's id. */
   readonly pieceId: PieceId
-  /** Whether a take records: the screen's tools give way while it does. */
+  /**
+   * Whether a take records, waiting for its first note where it counts none in (A40): the screen's
+   * tools give way while it does.
+   */
   readonly stage: RecorderStage
   /** Where the take is, for the recording strip alone. */
   readonly progress: RecorderProgressSource
@@ -70,10 +78,12 @@ export interface EditorTakes {
   /** Forgets that Record was asked for, once it is pressed: the URL says nothing of it any more. */
   readonly answered: () => void
   /**
-   * Records a take from the caret's bar, to the song's tempo and meter, the click and the tune under
-   * it as Settings › Recording says (and as the recording strip's settings change it while it records).
+   * Record (A40, Flat's): a take from the caret's bar, to the song's tempo and meter, the click and
+   * the tune under it as Settings › Recording says; its count-in at once, or with Start countdown Off
+   * waiting for the first note played, its downbeat.
    */
   readonly record: () => void
+  /** Stops the take: one waiting for its first note keeps nothing. */
   readonly stop: () => void
   readonly write: (take: Take, choice: WriteChoice) => void
   readonly download: (take: Take) => void
@@ -115,8 +125,9 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
     const nothingPlayed = played.notes.length === 0
     // An own song deleted in another tab keeps no takes: one saved for it would be no one's.
     const songGone = isOwnSongId(pieceId) && !selectOwnSong(pieces.getState(), pieceId)
+    let saved: TakeId | null = null
     if (!nothingPlayed && !songGone) {
-      saveTake(takes, {
+      saved = saveTake(takes, {
         pieceId,
         made: Date.now(),
         tempo: plan.tempo,
@@ -125,8 +136,10 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
         ...played,
       })
     }
-    // A take kept as the screen goes is only saved: there is no sheet to show it on.
-    if (ending === 'stopped') show({ kind: 'takes', nothingPlayed })
+    // A take kept as the screen goes is only saved: there is no sheet to show it on. One kept is
+    // reviewed at once (A40, Review your recording).
+    if (ending === 'stopped')
+      show(saved ? { kind: 'write', id: saved } : { kind: 'takes', nothingPlayed })
   })
 
   // The metronome or the tune turned on or off while a take records sound so from the next beat.
@@ -134,10 +147,9 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
   const follow = useEffectEvent((next: Along) => recorder.along(next))
   useEffect(() => follow(along), [along])
 
-  const record = () => {
+  const start = (countIn: RecorderCountIn) => {
     const { draft, caret } = store.getState()
     const from = barAt(draft, caret).index
-    show(null)
     setFromBar(from + 1)
     recorder.start({
       bars: gridBars(draft),
@@ -148,8 +160,27 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
       // The song's tune whether it plays or not: it may be turned on while the take records.
       tune: hasTune(draft) ? tuneOf(draft, from) : [],
       along: settings.getState().recorder,
+      countIn,
     })
   }
+  const record = () => {
+    show(null)
+    start(settings.getState().recorder.countIn)
+  }
+  // Start countdown chosen while a take waits for its first note: it stops (keeping nothing) and
+  // counts in as now asked.
+  const recount = useEffectEvent((bars: RecorderCountIn) => {
+    if (recorder.stage !== 'waiting' || bars === 0) return
+    recorder.stop()
+    start(bars)
+  })
+  useEffect(
+    () =>
+      settings.subscribe((now, before) => {
+        if (now.recorder.countIn !== before.recorder.countIn) recount(now.recorder.countIn)
+      }),
+    [settings],
+  )
 
   const write = (take: Take, { into, split, grid }: WriteChoice) => {
     store.dispatch({ type: 'take', parts: takeParts(quantise(take, grid), into, split) })

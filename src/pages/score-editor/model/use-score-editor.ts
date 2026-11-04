@@ -5,6 +5,7 @@ import { entryTitles, sameMusic, usePiecesStoreApi } from '@/entities/piece'
 import { selectEditing, selectPractice, selectScoreView, useSettings } from '@/entities/settings'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { saveMusic } from '@/features/edit-piece'
+import { hiddenStaves } from '@/features/practice'
 import {
   barAt,
   barsOf,
@@ -25,11 +26,13 @@ import { arrangeDraft } from './arrange-draft'
 import type { ScoreEditorValue } from './editor-context'
 import type { EditSearch } from './edit-search'
 import { savedMusic, savingTo, type EditorTarget } from './editor-target'
-import { EVERY_STAFF, layerInSight, rowsInSight } from './rows-in-sight'
+import { layerInSight, rowsInSight } from './rows-in-sight'
 import { shortcutOf } from './shortcuts'
 import { fieldOf } from './fields'
 import { heardEdit } from './heard-edit'
 import { useEditorTakes } from './use-editor-takes'
+import { useEditorStaves } from './use-editor-staves'
+import { heardSounds } from './heard-staves'
 import { useOpenField } from './use-open-field'
 
 /** Where every key press is the field's or the open popup's own, not the editor's. */
@@ -107,6 +110,9 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     if (bar !== undefined) openAt(bar)
   }, [bar])
   const playback = usePlayback<'piece'>()
+  // The staves heard and in sight (A40): the Instruments' All, S and eye, the Player's `staves`.
+  const [staves] = useEditorStaves()
+  const hidden = useMemo(() => hiddenStaves(staves), [staves])
   // The learner's speed for Play, a share of the song's tempo: this visit's, never saved.
   const [speed, setSpeed] = useState(1)
   // The field open over the sheet, typing a chord symbol, a syllable or fingers where they print
@@ -170,7 +176,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
         fromTick: barAt(draft, caret).start,
       })
       setPass(played)
-      return played.sounds
+      return heardSounds(played.sounds, staves)
     })
   const { handle } = playback
   const heard = useMemo(() => (handle && pass ? { handle, pass } : null), [handle, pass])
@@ -221,7 +227,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
       const { layer, draft } = store.getState()
       const to = layerInSight(
         shownRows(draft),
-        rowsInSight(draft, { chordNames: shown.chordNames, hidden: EVERY_STAFF }),
+        rowsInSight(draft, { chordNames: shown.chordNames, hidden }),
         from,
         layer,
       )
@@ -230,7 +236,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     }
     keepInSight()
     return store.subscribe(keepInSight)
-  }, [store, shown])
+  }, [store, shown, hidden])
 
   return {
     store,
@@ -245,6 +251,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
       speed,
       setSpeed,
       layout: shown.layout,
+      hidden,
       field,
       openField,
     },

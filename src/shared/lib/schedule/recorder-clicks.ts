@@ -13,6 +13,11 @@ export interface ClickPlan {
   readonly click: boolean
   /** How long after the downbeat the take may last, in seconds. */
   readonly longest: number
+  /**
+   * The bars counted in before the take (A40, Start countdown): none, one or two; one unless said.
+   * With none the take starts on the learner's first note, its clicks from there.
+   */
+  readonly countIn?: number
 }
 
 interface RecorderClicks {
@@ -37,9 +42,18 @@ export function recorderClicks({
   tempo,
   click,
   longest,
+  countIn = 1,
 }: ClickPlan): RecorderClicks {
   const fromTick = bars[from]?.startTick ?? 0
-  const counted = countInBeats({ bars, meter }, fromTick)
+  const one = countInBeats({ bars, meter }, fromTick)
+  // A bar earlier again for each bar more counted in.
+  const bar = beatsPerBar(bars[from]?.meter ?? meter) * TICKS_PER_BEAT
+  const counted =
+    countIn <= 0
+      ? []
+      : Array.from({ length: countIn }, (_, i) => countIn - 1 - i).flatMap((back) =>
+          one.map((beat) => ({ ...beat, tick: beat.tick - back * bar })),
+        )
   /** Seconds after the first count-in beat. */
   const at = (tick: Tick) => secondsFor(tick - (counted[0]?.tick ?? fromTick), tempo)
   /** Seconds after the downbeat. */

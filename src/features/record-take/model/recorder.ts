@@ -21,6 +21,8 @@ export interface Along {
  * notes the takes have room for, the song's tune, and what sounds along with it as it starts.
  */
 export interface RecorderPlan extends Omit<ClickPlan, 'longest' | 'click'> {
+  /** The bars counted in (A40, Start countdown), one unless said: none starts the take on the first note. */
+  readonly countIn?: number
   readonly room: number
   /** The song's tune from the take's downbeat (seconds from it); empty where it has none. */
   readonly tune: readonly NoteSound[]
@@ -38,8 +40,12 @@ export interface RecorderSession {
 /** A sound this close after the moment asked for still sounds. */
 const EARLY = 1e-6
 
-/** Where a take is: in its count-in (the beat, from 1), or recording (the bar from its first, from 0, and whole seconds). */
+/**
+ * Where a take is: waiting for its first note (no count-in, A40), in its count-in (the beat, from
+ * 1), or recording (the bar from its first, from 0, and whole seconds).
+ */
 export type RecorderProgress =
+  | { readonly stage: 'waiting' }
   | { readonly stage: 'counting'; readonly beat: number }
   | { readonly stage: 'recording'; readonly bar: number; readonly seconds: number }
 
@@ -51,6 +57,7 @@ interface RecorderEvents {
 }
 
 function sameProgress(a: RecorderProgress | null, b: RecorderProgress): boolean {
+  if (a?.stage === 'waiting' && b.stage === 'waiting') return true
   if (a?.stage === 'counting' && b.stage === 'counting') return a.beat === b.beat
   if (a?.stage === 'recording' && b.stage === 'recording') {
     return a.bar === b.bar && a.seconds === b.seconds
@@ -77,9 +84,11 @@ export function startRecorder(
   let along = plan.along
   // What sounds stops first: nothing plays under a take.
   audio.stop()
-  const start = audio.now() + PLAY_DELAY
-  const downbeat = start + clicks.downbeat
-  const timing = { downbeat, tempo: plan.tempo, barLines: clicks.barStarts }
+  // No count-in: the take waits for the first note, its downbeat (A40, Start countdown Off).
+  const waits = (plan.countIn ?? 1) <= 0
+  let start = waits ? Infinity : audio.now() + PLAY_DELAY
+  let downbeat = start + clicks.downbeat
+  const timing = () => ({ downbeat, tempo: plan.tempo, barLines: clicks.barStarts })
   const beat = 60 / plan.tempo
   const heardNow = () => audio.audioTimeAt(performance.now())
   /** Plays what sounds along with the take from `from` on the audio clock on. */
@@ -92,7 +101,7 @@ export function startRecorder(
     const tune = along.tune ? plan.tune.filter((note) => downbeat + note.at >= from - EARLY) : []
     if (tune.length > 0) audio.play(tune, downbeat)
   }
-  accompany(start)
+  if (!waits) accompany(start)
 
   const heard: Heard[] = []
   let struck = 0
@@ -107,13 +116,20 @@ export function startRecorder(
     stopPedal()
     audio.stop()
     const at = Math.min(heardNow(), downbeat + longest)
-    on.ended(at > downbeat ? takeOf(heard, { ...timing, stop: at }) : null)
+    on.ended(at > downbeat ? takeOf(heard, { ...timing(), stop: at }) : null)
   }
 
   const stopNotes = midi.onNote((event) => {
     const at = audio.audioTimeAt(event.time)
+    if (start === Infinity) {
+      // Waiting: the first key struck is the take's downbeat; what sounds along starts from it.
+      if (!event.on) return
+      start = at
+      downbeat = at
+      accompany(audio.now() + PLAY_DELAY)
+    }
     heard.push({ kind: 'note', midi: event.midi, on: event.on, velocity: event.velocity, at })
-    if (event.on && isKept(event.midi, at, timing) && ++struck >= plan.room) stop()
+    if (event.on && isKept(event.midi, at, timing()) && ++struck >= plan.room) stop()
   })
   // A pedal already held as Record is pressed holds from the take's start.
   for (const pedal of midi.pedalsDown())
@@ -128,6 +144,10 @@ export function startRecorder(
   })
 
   const follow = () => {
+    if (start === Infinity) {
+      if (reported === null) on.progress((reported = { stage: 'waiting' }))
+      return
+    }
     const now = heardNow()
     const elapsed = now - downbeat
     if (elapsed >= longest) {
@@ -153,6 +173,7 @@ export function startRecorder(
     along: (next) => {
       if (stopped || (next.click === along.click && next.tune === along.tune)) return
       along = next
+      if (start === Infinity) return
       // What was asked to sound is let go, and sounds again as now asked from just after now.
       audio.stop()
       accompany(audio.now() + PLAY_DELAY)

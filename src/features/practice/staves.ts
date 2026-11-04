@@ -87,6 +87,88 @@ export const hiddenStaves = (staves: PlayerStaves): StaffId[] =>
     .filter((id): id is StaffId => id !== 'recording' && !trackOf(staves, id).show)
     .sort((a, b) => rank(a) - rank(b))
 
+/** The tracks changed at once: each of `ids` given `change`. */
+const withTracks = (
+  staves: PlayerStaves,
+  ids: readonly TrackId[],
+  change: (id: TrackId) => Partial<TrackChoice>,
+): PlayerStaves => ids.reduce((kept, id) => withTrack(kept, id, change(id)), staves)
+
+/** Whether every one of `tracks` plays (the editor's All switch, A40). */
+export const allPlay = (staves: PlayerStaves, tracks: readonly TrackId[]): boolean =>
+  tracks.every((id) => trackOf(staves, id).play)
+
+/** Every one of `tracks` heard, or none (A40, Flat's All). */
+export const withAllPlaying = (
+  staves: PlayerStaves,
+  tracks: readonly TrackId[],
+  play: boolean,
+): PlayerStaves => withTracks(staves, tracks, () => ({ play }))
+
+/** Whether `soloed` alone of `tracks` plays (Flat's S). */
+export const isSolo = (
+  staves: PlayerStaves,
+  soloed: readonly TrackId[],
+  tracks: readonly TrackId[],
+): boolean => tracks.every((id) => trackOf(staves, id).play === soloed.includes(id))
+
+/**
+ * Solo (A40, Flat's S): `soloed` alone heard, every other track silent; pressed again on the one
+ * soloed, every track heard again.
+ */
+export function withSolo(
+  staves: PlayerStaves,
+  soloed: readonly TrackId[],
+  tracks: readonly TrackId[],
+): PlayerStaves {
+  if (isSolo(staves, soloed, tracks)) return withAllPlaying(staves, tracks, true)
+  return withTracks(staves, tracks, (id) => ({ play: soloed.includes(id) }))
+}
+
+/**
+ * Some staves shown or hidden (A40, the eye): never every staff of `tracks` out of sight, as the
+ * sheets never hide every staff (ADR 0114); such a change leaves the staves as they were.
+ */
+export function withShown(
+  staves: PlayerStaves,
+  ids: readonly TrackId[],
+  show: boolean,
+  tracks: readonly TrackId[],
+): PlayerStaves {
+  const next = withTracks(staves, ids, () => ({ show }))
+  return tracks.some((id) => trackOf(next, id).show) ? next : staves
+}
+
+/**
+ * The single staves' choices after the staff at `from` moved to `to` (A40), or was taken away (`to`
+ * null): each choice follows its staff.
+ */
+export function movedStaves(staves: PlayerStaves, from: number, to: number | null): PlayerStaves {
+  const placeOf = (at: number): number | null => {
+    if (to === null) return at === from ? null : at > from ? at - 1 : at
+    if (at === from) return to
+    if (from < at && at <= to) return at - 1
+    if (to <= at && at < from) return at + 1
+    return at
+  }
+  return Object.fromEntries(
+    (Object.keys(staves) as TrackId[]).flatMap((id): [TrackId, TrackChoice | undefined][] => {
+      if (!isSingleStaff(id)) return [[id, staves[id]]]
+      const place = placeOf(Number(id.slice(5)))
+      return place === null ? [] : [[singleStaff(place), staves[id]]]
+    }),
+  )
+}
+
+/** The single staves' choices once the staves stand in `order` (each the place it stood at). */
+export const orderedStaves = (staves: PlayerStaves, order: readonly number[]): PlayerStaves =>
+  Object.fromEntries(
+    (Object.keys(staves) as TrackId[]).map((id): [TrackId, TrackChoice | undefined] => [
+      isSingleStaff(id) ? singleStaff(order.indexOf(Number(id.slice(5)))) : id,
+      staves[id],
+    ]),
+  )
+
 /** The staff a note is written on: a hand's the piano's upper or lower, a single staff's its own. */
 export const noteStaff = (note: { readonly hand: NoteHand; readonly staff?: number }): StaffId =>
   note.hand === 'rh' ? 'treble' : note.hand === 'lh' ? 'bass' : singleStaff(note.staff ?? 0)

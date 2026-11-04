@@ -19,6 +19,7 @@ const PLAN: RecorderPlan = {
   room: 100,
   tune: [],
   along: { click: true, tune: false },
+  countIn: 1,
 }
 
 function setUp(plan: RecorderPlan = PLAN) {
@@ -87,6 +88,38 @@ describe('startRecorder', () => {
         bars: [0, 2000],
       },
     ])
+  })
+
+  it('with no count-in waits for the first note, the take’s downbeat, the click from it (A40)', () => {
+    const { audio, keyboard, progress, ended, stop, reach } = setUp({ ...PLAN, countIn: 0 })
+    reach(3)
+    expect(progress).toEqual([{ stage: 'waiting' }])
+    // Nothing sounds while it waits.
+    expect(audio.played).toEqual([])
+    audio.setNow(5)
+    keyboard.press(midi(60))
+    expect(audio.played).toHaveLength(1)
+    audio.setNow(5.5)
+    keyboard.release(midi(60))
+    reach(5.6)
+    expect(progress.at(-1)).toEqual({ stage: 'recording', bar: 0, seconds: 0 })
+    audio.setNow(6)
+    stop()
+    expect(ended).toEqual([
+      {
+        notes: [{ midi: 60, at: 0, held: 500, velocity: 100 }],
+        pedals: [],
+        length: 1000,
+        bars: [0, 2000],
+      },
+    ])
+  })
+
+  it('stopped while it waits, keeps no take', () => {
+    const { ended, stop, reach } = setUp({ ...PLAN, countIn: 0 })
+    reach(2)
+    stop()
+    expect(ended).toEqual([null])
   })
 
   it('keeps each pedal’s presses as that pedal’s', () => {

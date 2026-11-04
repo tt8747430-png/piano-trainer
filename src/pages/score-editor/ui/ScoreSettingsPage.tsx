@@ -2,7 +2,13 @@ import { useSearch } from '@tanstack/react-router'
 import { Columns3, Gauge, Hash, Mic, Music2, Ruler, Volume2, type LucideIcon } from 'lucide-react'
 import { useId, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { HEADER_FIELDS, HEADER_MAX, TITLE_MAX, type HeaderField } from '@/entities/piece'
+import {
+  fullLayout,
+  HEADER_FIELDS,
+  HEADER_MAX,
+  TITLE_MAX,
+  type HeaderField,
+} from '@/entities/piece'
 import { barsOf } from '@/features/score-editor'
 import { useKeyName } from '@/shared/i18n'
 import { useSetSearch } from '@/shared/lib'
@@ -11,7 +17,6 @@ import { BackButton, RowButton, ScreenHeader, SettingsGroup, type Paint } from '
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { SCORE_PAGES, type ScorePage } from '../model/score-pages'
 import { ScorePageBody } from './ScoreSettingsPages'
-import { useInstrumentFamilies } from '../model/use-instrument-families'
 
 /** A name typed in its row (Flat's credits): its label, the field at its end, saved as it is left. */
 function NameRow({
@@ -68,7 +73,7 @@ function NameRow({
 /**
  * The score's Settings (round 28, Flat's score settings and credits, MuseScore's score properties):
  * one page of grouped rows in the editor's place, on its draft, so each change is one Undo step there.
- * Score: its title and what prints under it. Instruments: New song's families with − n +. Music: the
+ * Score: its title and what prints under it. Instruments: the editor's own (A40). Music: the
  * tempo, key and time signatures in the editor's own pickers, and the bars at the end. Layout: the
  * staff size and the bars a line holds. Editing: notes heard as they are edited, and the ways in (the
  * MIDI keyboard, the computer's keyboard and the recorder's settings). Back returns to the score.
@@ -84,16 +89,14 @@ export function ScoreSettingsPage() {
   const meter = draft.timeSymbol
     ? t(draft.meter === '2/2' ? 'music:timeField.cut' : 'music:timeField.common')
     : draft.meter
-  const families = useInstrumentFamilies()
   const nameOf = (field: HeaderField) => t(`scoreSettings.names.${field}`)
   const { page: asked } = useSearch({ strict: false }) as { page?: string }
   const page = SCORE_PAGES.find((each) => each === asked) ?? null
   const setSearch = useSetSearch<{ page: string | undefined }>()
   const open = (next: ScorePage | null) => setSearch({ page: next ?? undefined })
-  const staffSize = draft.layout?.staffSize ?? 100
-  const staffCount = families
-    .flatMap((family) => family.rows)
-    .reduce((n, each) => n + each.count, 0)
+  const laid = fullLayout(draft.layout)
+  // Each instrument once: every single staff, and the piano where it is in sight.
+  const staffCount = draft.staves.length + (draft.leadSheet ? 0 : 1)
   const row = (id: ScorePage, icon: LucideIcon, paint: Paint, value?: string) => (
     <RowButton
       key={id}
@@ -107,7 +110,6 @@ export function ScoreSettingsPage() {
   const inner = page ? (
     <ScorePageBody
       page={page}
-      families={families}
       bars={bars}
       onBars={(count) => actions.dispatch({ type: 'barCount', count })}
       onDone={() => open(null)}
@@ -154,7 +156,15 @@ export function ScoreSettingsPage() {
               {row('bars', Columns3, 'sky', String(bars))}
             </SettingsGroup>
             <SettingsGroup flush title={t('scoreSettings.howItWorks')}>
-              {row('layout', Ruler, 'grass', t(`scoreSettings.staffSizes.${staffSize}`))}
+              {row(
+                'layout',
+                Ruler,
+                'grass',
+                t('layout.summary', {
+                  page: t(`layout.pageSizes.${laid.pageSize}`),
+                  size: t('layout.mm', { value: laid.staffSize }),
+                }),
+              )}
               {row('input', Volume2, 'yellow')}
               {row('recording', Mic, 'sand')}
             </SettingsGroup>

@@ -51,6 +51,7 @@ const COMMANDS: Readonly<Record<string, readonly (keyof typeof SETTING_HOMES)[]>
   setKeyboard: ['keyboard.keySize', 'keyboard.typing'],
   setRecorderClick: ['recorder.click'],
   setRecorderTune: ['recorder.tune'],
+  setRecorderCountIn: ['recorder.countIn'],
   setEditing: ['editing.hearNotes'],
   setMidi: ['midi.input'],
   setChordFinder: ['chordFinder.remember'],

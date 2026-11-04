@@ -34,6 +34,23 @@ describe('recorderClicks', () => {
     expect(clicks.barStarts).toEqual([0, 2, 3, 5])
   })
 
+  it('counts in two bars, or none, as Start countdown says (A40)', () => {
+    const plan = {
+      bars: [{ startTick: 0, beats: 2 }],
+      meter: '2/4' as const,
+      from: 0,
+      tempo: 120,
+      click: false,
+      longest: 1,
+    }
+    const two = recorderClicks({ ...plan, countIn: 2 })
+    expect(two.downbeat).toBe(2)
+    expect(heard(two.sounds)).toEqual(['0!', '0.5', '1!', '1.5'])
+    const none = recorderClicks({ ...plan, countIn: 0 })
+    expect(none.downbeat).toBe(0)
+    expect(none.sounds).toEqual([])
+  })
+
   it('clicks a bar in its own meter, and the bars past the end in the last one’s (ADR 0097)', () => {
     // At 60 a beat is a second: a bar of 4/4, then one of 3/4 where the last section changes time.
     const clicks = recorderClicks({

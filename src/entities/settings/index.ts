@@ -24,6 +24,8 @@ export {
   type EditorStartMode,
   type PaletteSide,
   EDITOR_START_MODES,
+  RECORDER_COUNT_INS,
+  type RecorderCountIn,
   PALETTE_SIDES,
   type KeyboardSettings,
   LESSON_READINGS,

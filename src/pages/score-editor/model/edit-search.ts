@@ -9,6 +9,8 @@ export interface EditSearch {
   readonly bar?: number
   /** The panel's tab where it is not Notation (A40): Instruments or Layout. */
   readonly panel?: 'instruments' | 'layout'
+  /** Which staves play and show (A40), as the Player writes them (`stavesParam`, A35). */
+  readonly staves?: string
 }
 
 /** The editor's panel's tabs (A40, Flat's): Notation, Instruments, Layout. */

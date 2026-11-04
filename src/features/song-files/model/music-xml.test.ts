@@ -133,6 +133,18 @@ describe('a song’s MusicXML, exported then imported', () => {
     expect(songOfMusicXml(xml, 'x').song.music).toEqual(written(lead))
   })
 
+  it('writes the Layout’s page and staff size as the file’s defaults (A40)', () => {
+    const laid: PieceMusic = {
+      ...RICH,
+      layout: { pageSize: 'a3', orientation: 'landscape', staffSize: 8 },
+    }
+    const xml = musicXmlOf(laid, NAMES)
+    expect(xml).toContain('<scaling><millimeters>8</millimeters><tenths>40</tenths></scaling>')
+    expect(xml).toContain('<page-height>1485</page-height><page-width>2100</page-width>')
+    expect(xml).toContain('<left-margin>75</left-margin>')
+    expect(musicXmlOf(RICH, NAMES)).not.toContain('<defaults>')
+  })
+
   it('keeps a pickup', () => {
     const pickup: PieceMusic = {
       key: 'G',

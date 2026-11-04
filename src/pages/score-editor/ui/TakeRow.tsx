@@ -63,7 +63,7 @@ export function TakeRow({
         actions={[
           {
             key: 'write',
-            label: t('recorder.write'),
+            label: t('review.open'),
             icon: NotebookPen,
             onSelect: () => takes.show({ kind: 'write', id: take.id }),
           },

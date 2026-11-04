@@ -85,6 +85,7 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'keyboard.railControls': 'on-screen-piano',
   'recorder.click': 'score-editor',
   'recorder.tune': 'score-editor',
+  'recorder.countIn': 'score-editor',
   'editing.hearNotes': 'score-editor',
   'editing.startMode': 'score-editor',
   'editing.paletteSide': 'score-editor',

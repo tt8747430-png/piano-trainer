@@ -128,6 +128,18 @@ describe('scoreToMei', () => {
     )
     expect(said).toMatch(/<tempo [^>]*><rend fontweight="bold">Allegro<\/rend> \S+ = 84<\/tempo>/u)
   })
+
+  it('breaks a page’s systems every so many bars (A40, Measures per system)', () => {
+    const four = notate(
+      music([n(61, note('D', -1), 'rh', 0, B)], {
+        bars: [0, 1, 2, 3].map((bar) => ({ startTick: bar * 4 * B, beats: 4 })),
+      }),
+    )
+    const breaks = (text: string) => text.split('<sb/>').length - 1
+    expect(breaks(scoreToMei(four))).toBe(1)
+    expect(breaks(scoreToMei(four, { systemBars: 2 }))).toBe(2)
+    expect(breaks(scoreToMei(four, { systemBars: 1 }))).toBe(4)
+  })
 })
 
 describe('scoreToMei, a note’s marks and the options', () => {

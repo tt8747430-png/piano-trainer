@@ -1,5 +1,6 @@
 export type { Along } from './model/recorder'
 export { useRecorder, type RecorderProgressSource, type RecorderStage } from './use-recorder'
 export { MetronomeSwitch } from './ui/MetronomeSwitch'
+export { RecordingChoices } from './ui/RecordingChoices'
 export { TuneSwitch } from './ui/TuneSwitch'
 export { useFreeRecorder, type FreeRecorder } from './use-free-recorder'

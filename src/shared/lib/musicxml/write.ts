@@ -57,6 +57,51 @@ export interface MusicXmlOptions {
   readonly appData?: string
   /** The software named as the file's maker. */
   readonly software?: string
+  /**
+   * The printed page, as the score's Layout sets it (A40): its size and margins and the staff's
+   * height, in millimetres; written as the file's defaults.
+   */
+  readonly page?: {
+    readonly width: number
+    readonly height: number
+    readonly margins: {
+      readonly top: number
+      readonly bottom: number
+      readonly left: number
+      readonly right: number
+    }
+    readonly staffMm: number
+  }
+}
+
+/** MusicXML's tenths in a staff's height (its scaling's). */
+const STAFF_TENTHS = 40
+
+/** The page and the staff's size as MusicXML's defaults (A40): the scaling, the page's layout. */
+function defaultsOf(page: NonNullable<MusicXmlOptions['page']>): string {
+  const tenths = (mm: number) => String(Math.round((mm * STAFF_TENTHS) / page.staffMm))
+  const margin = (side: 'top' | 'bottom' | 'left' | 'right') =>
+    text(`${side}-margin`, tenths(page.margins[side]))
+  return tag(
+    'defaults',
+    {},
+    tag(
+      'scaling',
+      {},
+      text('millimeters', String(page.staffMm)) + text('tenths', String(STAFF_TENTHS)),
+    ) +
+      tag(
+        'page-layout',
+        {},
+        text('page-height', tenths(page.height)) +
+          text('page-width', tenths(page.width)) +
+          tag(
+            'page-margins',
+            { type: 'both' },
+            margin('left') + margin('right') + margin('top') + margin('bottom'),
+          ),
+      ),
+  )
 }
 
 /** The name the app's data is kept under in the file's identification. */
@@ -210,6 +255,7 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): st
     options.title ? tag('work', {}, text('work-title', options.title)) : '',
     options.title ? text('movement-title', options.title) : '',
     identification,
+    options.page ? defaultsOf(options.page) : '',
     tag('part-list', {}, partList),
     ...body,
     '</score-partwise>',
