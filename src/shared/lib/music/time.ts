@@ -199,6 +199,13 @@ export const isTempoUnit = (value: unknown): value is TempoUnit =>
 export const beatUnit = (meter: Meter): TempoUnit => (isCompound(meter) ? '4.' : '4')
 
 /**
+ * The beat a player feels and a tempo is read in (R29 A28): the half in x/2 (𝅗𝅥 = 80 in ¢), the dotted
+ * quarter in compound time, else the quarter. The song's ticks still count `beatUnit`.
+ */
+export const feltBeatUnit = (meter: Meter): TempoUnit =>
+  meterParts(meter).unit === 2 ? '2' : beatUnit(meter)
+
+/**
  * The notes a tempo mark is offered in, the meter's beat first (ADR 0114, as notation apps offer
  * them): a half, a dotted half and a quarter in x/2; a quarter, a dotted quarter, an eighth, a
  * dotted eighth and a sixteenth in x/4 and in x/8 of simple time; in compound, the dotted quarter

@@ -1,5 +1,12 @@
 import { useTranslation } from 'react-i18next'
-import { beatUnit, tempoMark, unitNote, type Meter, type TempoUnit } from '@/shared/lib/music'
+import {
+  beatUnit,
+  feltBeatUnit,
+  tempoMark,
+  unitNote,
+  type Meter,
+  type TempoUnit,
+} from '@/shared/lib/music'
 
 /**
  * A piece's tempo as its facts say it (ADR 0114): beats a minute where its mark counts the meter's
@@ -11,7 +18,10 @@ export function useTempoText(piece: {
   readonly tempoUnit?: TempoUnit | undefined
 }): string {
   const { t } = useTranslation('music')
-  const unit = piece.tempoUnit ?? beatUnit(piece.meter)
+  // Read in the beat a player feels (R29 A28): 𝅗𝅥 = 80 in ¢, ♩. = 60 in 6/8; a quarter beat as BPM.
+  const unit = piece.tempoUnit ?? feltBeatUnit(piece.meter)
   const mark = tempoMark(piece.tempo, unit, piece.meter)
-  return unit === beatUnit(piece.meter) ? t('bpm', { tempo: mark }) : `${unitNote(unit)} = ${mark}`
+  return unit === '4' && unit === beatUnit(piece.meter)
+    ? t('bpm', { tempo: mark })
+    : `${unitNote(unit)} = ${mark}`
 }

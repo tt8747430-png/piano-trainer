@@ -7,6 +7,7 @@ import {
   beatStarts,
   beatsToTicks,
   beatUnit,
+  feltBeatUnit,
   isTempoUnit,
   TEMPO_UNITS,
   tempoMark,
@@ -198,5 +199,13 @@ describe('beatGrouping (ADR 0115, 0114)', () => {
     expect(beatGrouping('6/8')).toEqual([3, 3])
     expect(beatGrouping('2/2')).toEqual([4, 4])
     expect(beatGrouping('7/8')).toEqual([2, 2, 3])
+  })
+})
+
+describe('the beat a tempo is read in (R29 A28)', () => {
+  it('is the half in x/2, the dotted quarter in compound time, else the quarter', () => {
+    expect(
+      ['2/2', '3/2', '6/8', '12/8', '4/4', '3/8'].map((meter) => feltBeatUnit(meter as Meter)),
+    ).toEqual(['2', '2', '4.', '4.', '4', '4.'])
   })
 })

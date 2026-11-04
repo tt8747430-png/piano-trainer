@@ -20,6 +20,7 @@ export {
   METERS,
   meterSymbol,
   beatUnit,
+  feltBeatUnit,
   isTempoUnit,
   TEMPO_UNITS,
   tempoMark,
