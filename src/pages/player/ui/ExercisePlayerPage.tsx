@@ -51,7 +51,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
   )
   const of = useExerciseOf(exercise, choice)
   // After each pass (its music played to its end or stopped), Next key moves round the circle of
-  // fifths, at the tempo that key last reached (A41).
+  // fifths or up a half step as the exercise's page chose, at the tempo that key last reached (A41).
   const { playing } = player.practice.state
   const [passed, setPassed] = useState(false)
   const [wasPlaying, setWasPlaying] = useState(playing)
@@ -65,7 +65,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
           setPassed(false)
           const minor = exercise.fields.tonality === true && choice.tonality === 'minor'
           setSearch({
-            ...exercisePatch(exercise, { root: nextKey(choice.root, minor) }),
+            ...exercisePatch(exercise, { root: nextKey(choice.root, minor, search.order) }),
             tempo: undefined,
           })
         }

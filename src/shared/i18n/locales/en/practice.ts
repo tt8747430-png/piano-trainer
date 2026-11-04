@@ -573,6 +573,8 @@ export const practice = {
   },
   // An exercise's page (A41), before the Player.
   exercisePage: {
+    order: 'Next key',
+    orders: { fifths: 'Circle of fifths', chromatic: 'Chromatic' },
     trains: 'What it trains',
     how: 'How to play it',
     options: 'Options',

@@ -14,6 +14,8 @@ import type { PracticeView } from '@/widgets/practice-player'
  */
 export type ExerciseSearch = Omit<PracticeView, 'swing'> & {
   readonly swing?: SwingFeel
+  /** Next key's order after each pass (A41): chromatic, or absent round the circle of fifths. */
+  readonly order?: 'chromatic'
 } & ExerciseParams
 
 /** What an exercise's Setup changes: any of its choices. */

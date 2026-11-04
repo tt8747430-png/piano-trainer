@@ -9,15 +9,18 @@ import {
   tempoKey,
   type Exercise,
   type ExerciseChoice,
+  HANON_TRAINS,
 } from '@/entities/exercise'
 import { selectTempo, useProgress } from '@/entities/progress'
 import { arrangeExercise } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
 import { useSetSearch } from '@/shared/lib'
+import { HANON_NUMBERS } from '@/shared/lib/exercise'
 import { noteParam, printedNote, type Hand } from '@/shared/lib/music'
 import { HANDS, TEMPO_RANGE } from '@/shared/lib/schedule'
 import {
   BackButton,
+  Dropdown,
   FabLink,
   FloatingActions,
   HandCard,
@@ -52,10 +55,10 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
   const locale = useLocale()
   const search = useSearch({ from: '/shell/practice/exercises/$exerciseId' })
   const setSearch = useSetSearch<ExercisePageSearch>()
-  const { root, tonality, octaves } = search
+  const { root, tonality, octaves, hanon, order } = search
   const choice: ExerciseChoice = useMemo(
-    () => exerciseChoice(exercise, { root, tonality, octaves }),
-    [exercise, root, tonality, octaves],
+    () => exerciseChoice(exercise, { root, tonality, octaves, hanon }),
+    [exercise, root, tonality, octaves, hanon],
   )
   const hands = exercise.options.bothHands ? 'both' : (search.hands ?? 'both')
   const performance = useMemo(() => arrangeExercise(exercise.id, choice), [exercise.id, choice])
@@ -100,6 +103,22 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
         <h2 id="exercise-options" className="text-xl">
           {t('practice:exercisePage.options')}
         </h2>
+        {exercise.fields.hanon ? (
+          <Labelled label={t('player:exercise.hanon.label')}>
+            <Dropdown
+              bare
+              label={t('player:exercise.hanon.label')}
+              value={choice.hanon}
+              options={HANON_NUMBERS.map((number) => ({
+                value: number,
+                label: t('player:exercise.hanon.number', { number }),
+                detail: localText(HANON_TRAINS[number], locale),
+              }))}
+              onChange={(next) => setSearch({ hanon: next, tempo: undefined })}
+              className="w-full"
+            />
+          </Labelled>
+        ) : null}
         {exercise.options.oneKey ? null : (
           <Labelled label={t('practice:exercisePage.key')}>
             <KeyPicker
@@ -118,6 +137,17 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
               }
             />
           </Labelled>
+        )}
+        {exercise.options.oneKey ? null : (
+          <NamedSegmented
+            label={t('practice:exercisePage.order')}
+            value={order ?? 'fifths'}
+            options={(['fifths', 'chromatic'] as const).map((each) => ({
+              value: each,
+              label: t(`practice:exercisePage.orders.${each}`),
+            }))}
+            onChange={(each) => setSearch({ order: each === 'chromatic' ? each : undefined })}
+          />
         )}
         {exercise.options.bothHands ? null : (
           <NamedSegmented
@@ -166,6 +196,8 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
                 root: noteParam(choice.root),
                 ...(exercise.fields.tonality ? { tonality: choice.tonality } : {}),
                 ...(exercise.fields.octaves ? { octaves: choice.octaves } : {}),
+                ...(exercise.fields.hanon ? { hanon: choice.hanon } : {}),
+                ...(order ? { order } : {}),
                 hands,
                 tempo,
               }}

@@ -546,6 +546,8 @@ export const practice: LocaleResources['practice'] = {
     },
   },
   exercisePage: {
+    order: 'Следующая тональность',
+    orders: { fifths: 'По квинтовому кругу', chromatic: 'Хроматически' },
     trains: 'Что тренирует',
     how: 'Как играть',
     options: 'Настройки',

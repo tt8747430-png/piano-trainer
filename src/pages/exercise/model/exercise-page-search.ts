@@ -1,4 +1,5 @@
 import type { Octaves, Tonality } from '@/entities/exercise'
+import type { HanonNumber } from '@/shared/lib/exercise'
 import type { NoteParam } from '@/shared/lib/music'
 import type { Hands } from '@/shared/lib/schedule'
 
@@ -9,4 +10,11 @@ export interface ExercisePageSearch {
   readonly hands?: Hands | undefined
   readonly octaves?: Octaves | undefined
   readonly tempo?: number | undefined
+  /** Which of Hanon's exercises, for Hanon's page. */
+  readonly hanon?: HanonNumber | undefined
+  /** The order Next key takes after each pass: round the circle of fifths, or up by half steps. */
+  readonly order?: KeyOrder | undefined
 }
+
+/** The orders Next key takes, the circle of fifths absent. */
+export type KeyOrder = 'chromatic'

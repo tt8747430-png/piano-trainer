@@ -23,6 +23,12 @@ describe('nextKey', () => {
     ])
   })
 
+  it('goes up by half steps where the page chose chromatic', () => {
+    const keys: SpelledNote[] = [note('C')]
+    for (let i = 0; i < 3; i++) keys.push(nextKey(keys.at(-1) ?? note('C'), false, 'chromatic'))
+    expect(keys.map(printedNote)).toEqual(['C', 'D♭', 'D', 'E♭'])
+  })
+
   it('spells a minor key’s tonic as minor keys are written', () => {
     expect(printedNote(nextKey(note('B'), true))).toBe('F♯')
     expect(printedNote(nextKey(note('C'), true))).toBe('G')

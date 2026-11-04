@@ -247,6 +247,7 @@ export function readExerciseSearch(raw: Raw): ExerciseSearch {
     hanon: when(isHanonNumber, raw.hanon),
     rhOctave: wholeIn(raw.rhOctave, 1, 7, undefined),
     lhOctave: wholeIn(raw.lhOctave, 1, 7, undefined),
+    order: raw.order === 'chromatic' ? 'chromatic' : undefined,
   }
 }
 export const exerciseSearch = routeSearch(readExerciseSearch, EXERCISE_DEFAULTS)
