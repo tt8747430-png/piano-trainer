@@ -51,6 +51,7 @@ function Row({ row, close }: { row: ToolRow; close: () => void }) {
       <label className={cn(reach, 'cursor-pointer')} title={row.disabled}>
         {face}
         <Switch
+          aria-label={row.label}
           checked={row.checked}
           disabled={row.disabled !== undefined}
           onCheckedChange={row.onCheckedChange}

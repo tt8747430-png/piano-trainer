@@ -130,6 +130,18 @@ export const player = {
       circle: 'Circle',
     },
   },
+  progress: 'Progress',
+  coach: {
+    listen: 'Tap Play to listen to the song.',
+    wait: 'Tap Play, then play the highlighted note.',
+    practice: 'Tap Play, then play the highlighted note with your hand.',
+    follow: 'Play the highlighted note; the music follows you.',
+    close: 'Hide the tip',
+  },
+  voice: {
+    label: 'Voice commands',
+    unavailable: 'Not available in this browser',
+  },
   modes: {
     title: 'What would you like to do?',
     open: 'Modes',

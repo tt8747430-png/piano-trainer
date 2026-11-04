@@ -1,3 +1,4 @@
+import { useLocale } from '@/shared/i18n'
 import { useNavigate } from '@tanstack/react-router'
 import {
   Cable,
@@ -6,6 +7,7 @@ import {
   Download,
   Gauge as TunerIcon,
   ListMusic,
+  Mic,
   MonitorCog,
   Piano,
   Printer,
@@ -43,6 +45,8 @@ import {
   TempoButton,
   ToolsSheet,
   usePlayerShortcuts,
+  hasVoiceCommands,
+  useVoiceCommands,
   type ToolGroup,
   type ToolRow,
   WaitLine,
@@ -63,6 +67,7 @@ import { useChordKeys } from '../model/use-chord-keys'
 import { PlayerExport } from './PlayerExport'
 import type { ExportShare } from '@/features/song-files'
 import { PickView } from './PickView'
+import { CoachLine } from './CoachLine'
 import { FeedbackCard } from './FeedbackCard'
 import { RecordingsSheet } from './RecordingsSheet'
 import type { PlayerTakes } from '../model/use-player-takes'
@@ -210,6 +215,30 @@ export function PlayerLayout({
   const [toolsOpen, setToolsOpen] = useState(false)
   const [settingsAt, setSettingsAt] = useState<{ readonly page: string } | null>(null)
   const [tunerOpen, setTunerOpen] = useState(false)
+  // The coach's line (R29 B8), put away for the visit by its ×.
+  const [coached, setCoached] = useState(false)
+  // Voice commands (R29 B8), on for the visit where the browser hears speech.
+  const [voice, setVoice] = useState(false)
+  const locale = useLocale()
+  useVoiceCommands(voice, locale, (command) => {
+    const step = (share: number) =>
+      player.setTempo(
+        Math.round(
+          Math.min(player.ownTempo * 2, Math.max(player.ownTempo / 2, player.tempo * share)),
+        ),
+      )
+    if (command === 'play') practice.play()
+    else if (command === 'stop') practice.stop()
+    else if (command === 'again') {
+      practice.restart()
+      practice.play()
+    } else if (command === 'slower') step(0.9)
+    else if (command === 'faster') step(1.1)
+    else if (command === 'next') practice.next()
+    else practice.prev()
+  })
+  const groups = performance.beatGroups.length
+  const progress = groups > 1 ? practice.state.beatGroup / (groups - 1) : 0
   const [recordingsOpen, setRecordingsOpen] = useState(false)
   // A take's feedback on the score (R29 B8): the take shown, its verdicts by where each note plays.
   const feedback = takes?.feedback ?? null
@@ -343,7 +372,23 @@ export function PlayerLayout({
         ...inGroup('score'),
       ],
     },
-    { key: 'listening', title: t('toolsSheet.listening'), rows: inGroup('listening') },
+    {
+      key: 'listening',
+      title: t('toolsSheet.listening'),
+      rows: [
+        {
+          key: 'voice',
+          kind: 'switch',
+          label: t('voice.label'),
+          icon: Mic,
+          paint: 'sky',
+          checked: voice,
+          disabled: hasVoiceCommands() ? undefined : t('voice.unavailable'),
+          onCheckedChange: setVoice,
+        },
+        ...inGroup('listening'),
+      ],
+    },
     {
       key: 'more',
       title: t('toolsSheet.more'),
@@ -426,6 +471,20 @@ export function PlayerLayout({
       />
       {dock === 'top' ? keys : null}
       <PlayerArea area="sheet" className="relative">
+        {/* How far through the music the cursor is: a thin line along the score's head. */}
+        <div
+          role="progressbar"
+          aria-label={t('progress')}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(progress * 100)}
+          className="absolute inset-x-0 top-0 z-10 h-0.5 bg-hairline"
+        >
+          <div className="h-full bg-primary" style={{ width: `${progress * 100}%` }} />
+        </div>
+        {!coached && !practice.state.playing && !annotating && !takes?.shown ? (
+          <CoachLine mode={view.mode} onClose={() => setCoached(true)} />
+        ) : null}
         {annotating}
         {feedback && takes?.shown ? (
           <FeedbackCard feedback={feedback} onClose={() => takes.show(null)} />

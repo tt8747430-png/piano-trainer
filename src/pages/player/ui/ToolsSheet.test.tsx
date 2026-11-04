@@ -59,4 +59,25 @@ describe('the Player’s Tools sheet (R29 B8)', () => {
     await user.click(within(bar).getByRole('button', { name: 'Done' }))
     expect(screen.queryByRole('toolbar', { name: 'Annotations' })).toBeNull()
   })
+
+  it('offers Voice commands only where the browser hears speech, saying so', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/bz5')
+    const sheet = await openTools(user)
+    const voice = within(sheet).getByRole('switch', { name: 'Voice commands' })
+    expect(voice).toHaveAttribute('aria-disabled', 'true')
+    expect(voice.closest('label')).toHaveAttribute('title', 'Not available in this browser')
+  })
+
+  it('coaches in one line until put away, the progress along the score’s head', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/bz5')
+    expect(await screen.findByText('Tap Play to listen to the song.')).toBeInTheDocument()
+    expect(screen.getByRole('progressbar', { name: 'Progress' })).toHaveAttribute(
+      'aria-valuenow',
+      '0',
+    )
+    await user.click(screen.getByRole('button', { name: 'Hide the tip' }))
+    expect(screen.queryByText('Tap Play to listen to the song.')).toBeNull()
+  })
 })
