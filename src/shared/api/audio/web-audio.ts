@@ -7,10 +7,13 @@ import type {
   NoteSound,
   Sound,
 } from '@/shared/lib/schedule'
+import { createInstruments, type Instruments } from './instruments'
 import { createLiveVoice } from './live-voice'
 import { createLookahead } from './lookahead'
 import { createMidiSoundOutput, type MidiSoundOutput } from './midi-sound-output'
 import { createRecordingPlayer, type Media } from './recording-player'
+import { createSampleLoader, type SampleLoader } from './sample-loader'
+import type { SamplerVoice } from './sampler'
 import { createSoundingKeys, NOTHING_PLAYED } from './sounding'
 import { stringDecay } from './string-decay'
 import { PLAY_DELAY, type AudioOutput } from './types'
@@ -32,10 +35,24 @@ const SILENT = 0.0001
 
 const frequencyOf = (key: Midi) => 440 * 2 ** ((key - 69) / 12)
 
-/** A sound's nodes: the oscillators that make it and the gain it leaves by. */
+/**
+ * A sound's nodes: the sources that make it and the gain it leaves by; a recorded voice's own damper
+ * (`release`), where it has one.
+ */
 interface Voice {
   readonly sources: readonly AudioScheduledSourceNode[]
   readonly output: GainNode
+  readonly release?: (at: number) => void
+}
+
+/** A recorded instrument's voice as the adapter keeps it: `ended` runs when it is over. */
+function recordedVoice(sampled: SamplerVoice, ended: () => void): Voice {
+  sampled.source.onended = ended
+  return {
+    sources: [sampled.source],
+    output: sampled.output,
+    release: (at) => sampled.release(at),
+  }
 }
 
 /** Builds a sound's voice at `gain` of its loudness (ADR 0105); `ended` runs when it is over. */
@@ -396,6 +413,7 @@ export function createWebAudioOutput({
   pageNow = () => performance.now(),
   activated = browserActivated,
   loadSound = fetchSound,
+  loadSamples = (context) => createSampleLoader({ context }),
 }: {
   createContext?: () => AudioContext | null
   frame?: (look: () => void) => void
@@ -406,12 +424,18 @@ export function createWebAudioOutput({
   activated?: () => boolean
   /** How a recorded sound is fetched and decoded. */
   loadSound?: LoadSound
+  /** The recorded instruments' loader for a context (R29 SND). */
+  loadSamples?: (context: AudioContext) => SampleLoader
 } = {}): AudioOutput {
   let context: AudioContext | null | undefined
+  /** The recorded instruments: the grand, the light piano, the basses and the kit. */
+  let instruments: Instruments | null = null
   const voices = new Set<Voice>()
   const recorded = createRecordedSounds(loadSound)
-  /** Each key's scheduled voice, and where it ends: a key struck again damps it (ADR 0034). */
-  const strings = new Map<Midi, { readonly voice: Voice; readonly end: number }>()
+  /**
+   * Each instrument's key's scheduled voice, and where it ends: a key struck again damps it (ADR 0034).
+   */
+  const strings = new Map<string, { readonly voice: Voice; readonly end: number }>()
   /** The keys the live voice holds sounding: apart from `voices`, so stop() never reaches them. */
   const held = new Map<Midi, Voice>()
   /** The keyboard's speaker the notes go to, while they go through the piano. */
@@ -421,7 +445,10 @@ export function createWebAudioOutput({
   const openContext = (): AudioContext | null => {
     if (context === undefined) {
       context = createContext()
-      if (context) void recorded.ready(context)
+      if (context) {
+        void recorded.ready(context)
+        instruments = createInstruments(context, loadSamples(context), context.destination)
+      }
     }
     return context
   }
@@ -444,13 +471,29 @@ export function createWebAudioOutput({
     const ended = () => voices.delete(voice)
     let voice: Voice
     if (sound.kind === 'note') {
-      const ringing = strings.get(sound.midi)
+      const instrument = sound.instrument ?? 'piano'
+      const string = `${instrument}:${sound.midi}`
+      const ringing = strings.get(string)
       if (ringing && ringing.end > at && voices.has(ringing.voice)) dampedAt(ringing.voice, at)
-      voice = playNote(context, sound, at, gain, ended)
-      strings.set(sound.midi, { voice, end: at + sound.duration })
+      // A bass note from its set; while that loads, and every piano note, the grand's or the light
+      // piano's; the synthesised voice only where neither is in (R29 SND).
+      const sampled =
+        (instrument === 'piano'
+          ? null
+          : instruments?.bass(instrument, sound.midi, sound.velocity, at, gain)) ??
+        instruments?.piano(sound.midi, sound.velocity, at, gain)
+      if (sampled) {
+        sampled.release(at + sound.duration)
+        voice = recordedVoice(sampled, ended)
+      } else voice = playNote(context, sound, at, gain, ended)
+      strings.set(string, { voice, end: at + sound.duration })
     } else if (sound.kind === 'drum') {
-      const click = drumStandIn(sound)
-      voice = CLICK_VOICES[click.voice](context, click, at, gain * sound.velocity, ended)
+      const sampled = instruments?.drum(sound.piece, sound.velocity, at, gain)
+      if (sampled) voice = recordedVoice(sampled, ended)
+      else {
+        const click = drumStandIn(sound)
+        voice = CLICK_VOICES[click.voice](context, click, at, gain * sound.velocity, ended)
+      }
     } else {
       const name = sound.voice ?? 'click'
       const buffer = isRecordedSound(name) ? recorded.buffer(context, name) : null
@@ -490,12 +533,14 @@ export function createWebAudioOutput({
       const audio = openContext()
       if (!audio) return
       if (heldBack(audio)) void audio.resume()
-      held.set(key, holdNote(audio, key, gain))
+      const sampled = instruments?.piano(key, gain, audio.currentTime, 1)
+      held.set(key, sampled ? recordedVoice(sampled, none) : holdNote(audio, key, gain))
     },
     silence(key) {
       const sound = held.get(key)
       if (!context || !sound) return
-      damped(context, sound)
+      if (sound.release) sound.release(context.currentTime)
+      else damped(context, sound)
       held.delete(key)
     },
     changed: keys.setLive,
@@ -507,6 +552,8 @@ export function createWebAudioOutput({
       const audio = openContext()
       // With no gesture behind it (a sound as a screen opens), resuming could only fail.
       if (audio && heldBack(audio) && activated()) await audio.resume()
+      // The light piano and the grand's middle are loaded as the audio opens, in the background.
+      void instruments?.warm()
       // The recorded clicks and drums are in before the first beat, or given up on soon.
       if (audio) await within(recorded.ready(audio), SOUNDS_WAIT)
     },
@@ -520,6 +567,8 @@ export function createWebAudioOutput({
         void audio.resume()
       }
       const start = at ?? audio.currentTime + PLAY_DELAY
+      // What the sounds strike is fetched as they are scheduled: in by the time they sound.
+      instruments?.need(sounds)
       lookahead.add(sounds, start, gain)
       return keys.add(sounds, start)
     },

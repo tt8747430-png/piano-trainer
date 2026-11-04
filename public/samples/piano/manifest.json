@@ -1,0 +1,853 @@
+{
+  "instrument": "piano",
+  "set": "Salamander Grand Piano V3",
+  "licence": "CC-BY-3.0",
+  "layers": [
+    {
+      "name": "p",
+      "upTo": 0.35
+    },
+    {
+      "name": "mp",
+      "upTo": 0.6
+    },
+    {
+      "name": "mf",
+      "upTo": 0.85
+    },
+    {
+      "name": "f",
+      "upTo": 1
+    }
+  ],
+  "samples": [
+    {
+      "file": "p/A0.m4a",
+      "midi": 21,
+      "layer": "p",
+      "bytes": 122985,
+      "tune": 10
+    },
+    {
+      "file": "p/C1.m4a",
+      "midi": 24,
+      "layer": "p",
+      "bytes": 122988,
+      "tune": 13
+    },
+    {
+      "file": "p/Ds1.m4a",
+      "midi": 27,
+      "layer": "p",
+      "bytes": 123063,
+      "tune": 11
+    },
+    {
+      "file": "p/Fs1.m4a",
+      "midi": 30,
+      "layer": "p",
+      "bytes": 123027,
+      "tune": -3
+    },
+    {
+      "file": "p/A1.m4a",
+      "midi": 33,
+      "layer": "p",
+      "bytes": 123043,
+      "tune": -9
+    },
+    {
+      "file": "p/C2.m4a",
+      "midi": 36,
+      "layer": "p",
+      "bytes": 123034,
+      "tune": -9
+    },
+    {
+      "file": "p/Ds2.m4a",
+      "midi": 39,
+      "layer": "p",
+      "bytes": 123081,
+      "tune": -11
+    },
+    {
+      "file": "p/Fs2.m4a",
+      "midi": 42,
+      "layer": "p",
+      "bytes": 123029,
+      "tune": -7
+    },
+    {
+      "file": "p/A2.m4a",
+      "midi": 45,
+      "layer": "p",
+      "bytes": 122986,
+      "tune": -4
+    },
+    {
+      "file": "p/C3.m4a",
+      "midi": 48,
+      "layer": "p",
+      "bytes": 74326
+    },
+    {
+      "file": "p/Ds3.m4a",
+      "midi": 51,
+      "layer": "p",
+      "bytes": 74350,
+      "tune": -6
+    },
+    {
+      "file": "p/Fs3.m4a",
+      "midi": 54,
+      "layer": "p",
+      "bytes": 74325,
+      "tune": -3
+    },
+    {
+      "file": "p/A3.m4a",
+      "midi": 57,
+      "layer": "p",
+      "bytes": 74346,
+      "tune": -3
+    },
+    {
+      "file": "p/C4.m4a",
+      "midi": 60,
+      "layer": "p",
+      "bytes": 74250,
+      "tune": -6
+    },
+    {
+      "file": "p/Ds4.m4a",
+      "midi": 63,
+      "layer": "p",
+      "bytes": 74244,
+      "tune": -3
+    },
+    {
+      "file": "p/Fs4.m4a",
+      "midi": 66,
+      "layer": "p",
+      "bytes": 74339
+    },
+    {
+      "file": "p/A4.m4a",
+      "midi": 69,
+      "layer": "p",
+      "bytes": 74284,
+      "tune": -4
+    },
+    {
+      "file": "p/C5.m4a",
+      "midi": 72,
+      "layer": "p",
+      "bytes": 37819,
+      "tune": -8
+    },
+    {
+      "file": "p/Ds5.m4a",
+      "midi": 75,
+      "layer": "p",
+      "bytes": 37847,
+      "tune": -8
+    },
+    {
+      "file": "p/Fs5.m4a",
+      "midi": 78,
+      "layer": "p",
+      "bytes": 37687,
+      "tune": -5
+    },
+    {
+      "file": "p/A5.m4a",
+      "midi": 81,
+      "layer": "p",
+      "bytes": 37802,
+      "tune": -7
+    },
+    {
+      "file": "p/C6.m4a",
+      "midi": 84,
+      "layer": "p",
+      "bytes": 37638,
+      "tune": -8
+    },
+    {
+      "file": "p/Ds6.m4a",
+      "midi": 87,
+      "layer": "p",
+      "bytes": 37754,
+      "tune": -12
+    },
+    {
+      "file": "p/Fs6.m4a",
+      "midi": 90,
+      "layer": "p",
+      "bytes": 37775,
+      "tune": -13
+    },
+    {
+      "file": "p/A6.m4a",
+      "midi": 93,
+      "layer": "p",
+      "bytes": 37763,
+      "tune": -12
+    },
+    {
+      "file": "p/C7.m4a",
+      "midi": 96,
+      "layer": "p",
+      "bytes": 37707,
+      "tune": -17
+    },
+    {
+      "file": "p/Ds7.m4a",
+      "midi": 99,
+      "layer": "p",
+      "bytes": 37638,
+      "tune": -17
+    },
+    {
+      "file": "p/Fs7.m4a",
+      "midi": 102,
+      "layer": "p",
+      "bytes": 37799
+    },
+    {
+      "file": "p/A7.m4a",
+      "midi": 105,
+      "layer": "p",
+      "bytes": 37770,
+      "tune": -38
+    },
+    {
+      "file": "p/C8.m4a",
+      "midi": 108,
+      "layer": "p",
+      "bytes": 35358,
+      "tune": -38
+    },
+    {
+      "file": "mp/A0.m4a",
+      "midi": 21,
+      "layer": "mp",
+      "bytes": 123018,
+      "tune": 10
+    },
+    {
+      "file": "mp/C1.m4a",
+      "midi": 24,
+      "layer": "mp",
+      "bytes": 123012,
+      "tune": 13
+    },
+    {
+      "file": "mp/Ds1.m4a",
+      "midi": 27,
+      "layer": "mp",
+      "bytes": 123022,
+      "tune": 11
+    },
+    {
+      "file": "mp/Fs1.m4a",
+      "midi": 30,
+      "layer": "mp",
+      "bytes": 123064,
+      "tune": -3
+    },
+    {
+      "file": "mp/A1.m4a",
+      "midi": 33,
+      "layer": "mp",
+      "bytes": 123071,
+      "tune": -9
+    },
+    {
+      "file": "mp/C2.m4a",
+      "midi": 36,
+      "layer": "mp",
+      "bytes": 123041,
+      "tune": -9
+    },
+    {
+      "file": "mp/Ds2.m4a",
+      "midi": 39,
+      "layer": "mp",
+      "bytes": 123050,
+      "tune": -11
+    },
+    {
+      "file": "mp/Fs2.m4a",
+      "midi": 42,
+      "layer": "mp",
+      "bytes": 123043,
+      "tune": -7
+    },
+    {
+      "file": "mp/A2.m4a",
+      "midi": 45,
+      "layer": "mp",
+      "bytes": 123087,
+      "tune": -4
+    },
+    {
+      "file": "mp/C3.m4a",
+      "midi": 48,
+      "layer": "mp",
+      "bytes": 74174
+    },
+    {
+      "file": "mp/Ds3.m4a",
+      "midi": 51,
+      "layer": "mp",
+      "bytes": 74300,
+      "tune": -6
+    },
+    {
+      "file": "mp/Fs3.m4a",
+      "midi": 54,
+      "layer": "mp",
+      "bytes": 74304,
+      "tune": -3
+    },
+    {
+      "file": "mp/A3.m4a",
+      "midi": 57,
+      "layer": "mp",
+      "bytes": 74277,
+      "tune": -3
+    },
+    {
+      "file": "mp/C4.m4a",
+      "midi": 60,
+      "layer": "mp",
+      "bytes": 74296,
+      "tune": -6
+    },
+    {
+      "file": "mp/Ds4.m4a",
+      "midi": 63,
+      "layer": "mp",
+      "bytes": 74216,
+      "tune": -3
+    },
+    {
+      "file": "mp/Fs4.m4a",
+      "midi": 66,
+      "layer": "mp",
+      "bytes": 74346
+    },
+    {
+      "file": "mp/A4.m4a",
+      "midi": 69,
+      "layer": "mp",
+      "bytes": 74303,
+      "tune": -4
+    },
+    {
+      "file": "mp/C5.m4a",
+      "midi": 72,
+      "layer": "mp",
+      "bytes": 37858,
+      "tune": -8
+    },
+    {
+      "file": "mp/Ds5.m4a",
+      "midi": 75,
+      "layer": "mp",
+      "bytes": 37863,
+      "tune": -8
+    },
+    {
+      "file": "mp/Fs5.m4a",
+      "midi": 78,
+      "layer": "mp",
+      "bytes": 37652,
+      "tune": -5
+    },
+    {
+      "file": "mp/A5.m4a",
+      "midi": 81,
+      "layer": "mp",
+      "bytes": 37818,
+      "tune": -7
+    },
+    {
+      "file": "mp/C6.m4a",
+      "midi": 84,
+      "layer": "mp",
+      "bytes": 37661,
+      "tune": -8
+    },
+    {
+      "file": "mp/Ds6.m4a",
+      "midi": 87,
+      "layer": "mp",
+      "bytes": 37784,
+      "tune": -12
+    },
+    {
+      "file": "mp/Fs6.m4a",
+      "midi": 90,
+      "layer": "mp",
+      "bytes": 37715,
+      "tune": -13
+    },
+    {
+      "file": "mp/A6.m4a",
+      "midi": 93,
+      "layer": "mp",
+      "bytes": 37783,
+      "tune": -12
+    },
+    {
+      "file": "mp/C7.m4a",
+      "midi": 96,
+      "layer": "mp",
+      "bytes": 37707,
+      "tune": -17
+    },
+    {
+      "file": "mp/Ds7.m4a",
+      "midi": 99,
+      "layer": "mp",
+      "bytes": 37633,
+      "tune": -17
+    },
+    {
+      "file": "mp/Fs7.m4a",
+      "midi": 102,
+      "layer": "mp",
+      "bytes": 37702
+    },
+    {
+      "file": "mp/A7.m4a",
+      "midi": 105,
+      "layer": "mp",
+      "bytes": 37660,
+      "tune": -38
+    },
+    {
+      "file": "mp/C8.m4a",
+      "midi": 108,
+      "layer": "mp",
+      "bytes": 37688,
+      "tune": -38
+    },
+    {
+      "file": "mf/A0.m4a",
+      "midi": 21,
+      "layer": "mf",
+      "bytes": 123024,
+      "tune": 10
+    },
+    {
+      "file": "mf/C1.m4a",
+      "midi": 24,
+      "layer": "mf",
+      "bytes": 123026,
+      "tune": 13
+    },
+    {
+      "file": "mf/Ds1.m4a",
+      "midi": 27,
+      "layer": "mf",
+      "bytes": 123066,
+      "tune": 11
+    },
+    {
+      "file": "mf/Fs1.m4a",
+      "midi": 30,
+      "layer": "mf",
+      "bytes": 122978,
+      "tune": -3
+    },
+    {
+      "file": "mf/A1.m4a",
+      "midi": 33,
+      "layer": "mf",
+      "bytes": 123005,
+      "tune": -9
+    },
+    {
+      "file": "mf/C2.m4a",
+      "midi": 36,
+      "layer": "mf",
+      "bytes": 123058,
+      "tune": -9
+    },
+    {
+      "file": "mf/Ds2.m4a",
+      "midi": 39,
+      "layer": "mf",
+      "bytes": 123007,
+      "tune": -11
+    },
+    {
+      "file": "mf/Fs2.m4a",
+      "midi": 42,
+      "layer": "mf",
+      "bytes": 123017,
+      "tune": -7
+    },
+    {
+      "file": "mf/A2.m4a",
+      "midi": 45,
+      "layer": "mf",
+      "bytes": 123012,
+      "tune": -4
+    },
+    {
+      "file": "mf/C3.m4a",
+      "midi": 48,
+      "layer": "mf",
+      "bytes": 74437
+    },
+    {
+      "file": "mf/Ds3.m4a",
+      "midi": 51,
+      "layer": "mf",
+      "bytes": 74364,
+      "tune": -6
+    },
+    {
+      "file": "mf/Fs3.m4a",
+      "midi": 54,
+      "layer": "mf",
+      "bytes": 74265,
+      "tune": -3
+    },
+    {
+      "file": "mf/A3.m4a",
+      "midi": 57,
+      "layer": "mf",
+      "bytes": 74306,
+      "tune": -3
+    },
+    {
+      "file": "mf/C4.m4a",
+      "midi": 60,
+      "layer": "mf",
+      "bytes": 74392,
+      "tune": -6
+    },
+    {
+      "file": "mf/Ds4.m4a",
+      "midi": 63,
+      "layer": "mf",
+      "bytes": 74319,
+      "tune": -3
+    },
+    {
+      "file": "mf/Fs4.m4a",
+      "midi": 66,
+      "layer": "mf",
+      "bytes": 74324
+    },
+    {
+      "file": "mf/A4.m4a",
+      "midi": 69,
+      "layer": "mf",
+      "bytes": 74370,
+      "tune": -4
+    },
+    {
+      "file": "mf/C5.m4a",
+      "midi": 72,
+      "layer": "mf",
+      "bytes": 37870,
+      "tune": -8
+    },
+    {
+      "file": "mf/Ds5.m4a",
+      "midi": 75,
+      "layer": "mf",
+      "bytes": 37802,
+      "tune": -8
+    },
+    {
+      "file": "mf/Fs5.m4a",
+      "midi": 78,
+      "layer": "mf",
+      "bytes": 37788,
+      "tune": -5
+    },
+    {
+      "file": "mf/A5.m4a",
+      "midi": 81,
+      "layer": "mf",
+      "bytes": 37799,
+      "tune": -7
+    },
+    {
+      "file": "mf/C6.m4a",
+      "midi": 84,
+      "layer": "mf",
+      "bytes": 37827,
+      "tune": -8
+    },
+    {
+      "file": "mf/Ds6.m4a",
+      "midi": 87,
+      "layer": "mf",
+      "bytes": 37758,
+      "tune": -12
+    },
+    {
+      "file": "mf/Fs6.m4a",
+      "midi": 90,
+      "layer": "mf",
+      "bytes": 37807,
+      "tune": -13
+    },
+    {
+      "file": "mf/A6.m4a",
+      "midi": 93,
+      "layer": "mf",
+      "bytes": 37765,
+      "tune": -12
+    },
+    {
+      "file": "mf/C7.m4a",
+      "midi": 96,
+      "layer": "mf",
+      "bytes": 37622,
+      "tune": -17
+    },
+    {
+      "file": "mf/Ds7.m4a",
+      "midi": 99,
+      "layer": "mf",
+      "bytes": 37808,
+      "tune": -17
+    },
+    {
+      "file": "mf/Fs7.m4a",
+      "midi": 102,
+      "layer": "mf",
+      "bytes": 37778
+    },
+    {
+      "file": "mf/A7.m4a",
+      "midi": 105,
+      "layer": "mf",
+      "bytes": 37597,
+      "tune": -38
+    },
+    {
+      "file": "mf/C8.m4a",
+      "midi": 108,
+      "layer": "mf",
+      "bytes": 37761,
+      "tune": -38
+    },
+    {
+      "file": "f/A0.m4a",
+      "midi": 21,
+      "layer": "f",
+      "bytes": 123144,
+      "tune": 10
+    },
+    {
+      "file": "f/C1.m4a",
+      "midi": 24,
+      "layer": "f",
+      "bytes": 122963,
+      "tune": 13
+    },
+    {
+      "file": "f/Ds1.m4a",
+      "midi": 27,
+      "layer": "f",
+      "bytes": 123081,
+      "tune": 11
+    },
+    {
+      "file": "f/Fs1.m4a",
+      "midi": 30,
+      "layer": "f",
+      "bytes": 123009,
+      "tune": -3
+    },
+    {
+      "file": "f/A1.m4a",
+      "midi": 33,
+      "layer": "f",
+      "bytes": 123085,
+      "tune": -9
+    },
+    {
+      "file": "f/C2.m4a",
+      "midi": 36,
+      "layer": "f",
+      "bytes": 123030,
+      "tune": -9
+    },
+    {
+      "file": "f/Ds2.m4a",
+      "midi": 39,
+      "layer": "f",
+      "bytes": 123017,
+      "tune": -11
+    },
+    {
+      "file": "f/Fs2.m4a",
+      "midi": 42,
+      "layer": "f",
+      "bytes": 123010,
+      "tune": -7
+    },
+    {
+      "file": "f/A2.m4a",
+      "midi": 45,
+      "layer": "f",
+      "bytes": 123054,
+      "tune": -4
+    },
+    {
+      "file": "f/C3.m4a",
+      "midi": 48,
+      "layer": "f",
+      "bytes": 74398
+    },
+    {
+      "file": "f/Ds3.m4a",
+      "midi": 51,
+      "layer": "f",
+      "bytes": 74356,
+      "tune": -6
+    },
+    {
+      "file": "f/Fs3.m4a",
+      "midi": 54,
+      "layer": "f",
+      "bytes": 74371,
+      "tune": -3
+    },
+    {
+      "file": "f/A3.m4a",
+      "midi": 57,
+      "layer": "f",
+      "bytes": 74381,
+      "tune": -3
+    },
+    {
+      "file": "f/C4.m4a",
+      "midi": 60,
+      "layer": "f",
+      "bytes": 74349,
+      "tune": -6
+    },
+    {
+      "file": "f/Ds4.m4a",
+      "midi": 63,
+      "layer": "f",
+      "bytes": 74288,
+      "tune": -3
+    },
+    {
+      "file": "f/Fs4.m4a",
+      "midi": 66,
+      "layer": "f",
+      "bytes": 74369
+    },
+    {
+      "file": "f/A4.m4a",
+      "midi": 69,
+      "layer": "f",
+      "bytes": 74356,
+      "tune": -4
+    },
+    {
+      "file": "f/C5.m4a",
+      "midi": 72,
+      "layer": "f",
+      "bytes": 37842,
+      "tune": -8
+    },
+    {
+      "file": "f/Ds5.m4a",
+      "midi": 75,
+      "layer": "f",
+      "bytes": 37846,
+      "tune": -8
+    },
+    {
+      "file": "f/Fs5.m4a",
+      "midi": 78,
+      "layer": "f",
+      "bytes": 37814,
+      "tune": -5
+    },
+    {
+      "file": "f/A5.m4a",
+      "midi": 81,
+      "layer": "f",
+      "bytes": 37850,
+      "tune": -7
+    },
+    {
+      "file": "f/C6.m4a",
+      "midi": 84,
+      "layer": "f",
+      "bytes": 37818,
+      "tune": -8
+    },
+    {
+      "file": "f/Ds6.m4a",
+      "midi": 87,
+      "layer": "f",
+      "bytes": 37844,
+      "tune": -12
+    },
+    {
+      "file": "f/Fs6.m4a",
+      "midi": 90,
+      "layer": "f",
+      "bytes": 37706,
+      "tune": -13
+    },
+    {
+      "file": "f/A6.m4a",
+      "midi": 93,
+      "layer": "f",
+      "bytes": 37681,
+      "tune": -12
+    },
+    {
+      "file": "f/C7.m4a",
+      "midi": 96,
+      "layer": "f",
+      "bytes": 37723,
+      "tune": -17
+    },
+    {
+      "file": "f/Ds7.m4a",
+      "midi": 99,
+      "layer": "f",
+      "bytes": 37795,
+      "tune": -17
+    },
+    {
+      "file": "f/Fs7.m4a",
+      "midi": 102,
+      "layer": "f",
+      "bytes": 37773
+    },
+    {
+      "file": "f/A7.m4a",
+      "midi": 105,
+      "layer": "f",
+      "bytes": 37746,
+      "tune": -38
+    },
+    {
+      "file": "f/C8.m4a",
+      "midi": 108,
+      "layer": "f",
+      "bytes": 37734,
+      "tune": -38
+    }
+  ]
+}

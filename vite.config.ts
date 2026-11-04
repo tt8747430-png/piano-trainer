@@ -2,7 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import type { Plugin } from 'vite'
-import { VitePWA } from 'vite-plugin-pwa'
+import { VitePWA, type VitePWAOptions } from 'vite-plugin-pwa'
 import { defineConfig } from 'vitest/config'
 import { PRECACHE_ENGRAVER_LIMIT } from './src/shared/config/precache.ts'
 import { THEME_COLORS } from './src/shared/config/theme-colors.ts'
@@ -50,6 +50,50 @@ function requireBackendEnv(): Plugin {
   }
 }
 
+/**
+ * The service worker's caches (Workbox). The app's files are precached, and with them every recorded
+ * instrument's set but the grand piano's (R29 SND: the app plays offline from its first visit); the
+ * grand's files are cached as each is first fetched, or all at once from Settings › Storage and backup.
+ */
+export const workbox = {
+  // The pieces' recordings too, so a recording plays offline.
+  globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,m4a,wav}'],
+  // The engraver's worker is the largest file; the recordings are held to less by a test.
+  maximumFileSizeToCacheInBytes: PRECACHE_ENGRAVER_LIMIT,
+  // Only the fonts' subsets the app's text reaches: a browser fetches a subset when a glyph in
+  // its range is drawn. None of these ranges holds a character the app writes (Onest's latin-ext
+  // does, a credit's ž; its math and symbols hold ♭ ♯ and arrows); a glyph that ever needs one
+  // fetches it from the network.
+  globIgnores: [
+    // An iPhone's launch images: each phone reads its own once, at its install.
+    '**/apple-splash-*.png',
+    '**/literata-{greek,greek-ext,vietnamese,cyrillic-ext,latin-ext}-*.woff2',
+    '**/onest-{vietnamese,cyrillic-ext}-*.woff2',
+    // The grand piano's 9 MB (A27): fetched as its notes are first played, not at install.
+    'samples/piano/**',
+  ],
+  runtimeCaching: [
+    // Every set's manifest, kept for offline and brought up to date when online.
+    {
+      urlPattern: /\/samples\/[^/]+\/manifest\.json$/,
+      handler: 'StaleWhileRevalidate',
+      options: { cacheName: 'samples-manifests' },
+    },
+    // The grand's files, each kept once fetched, with no expiry: Storage and backup removes them.
+    {
+      urlPattern: /\/samples\/piano\//,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'samples-piano',
+        cacheableResponse: { statuses: [200] },
+        rangeRequests: true,
+      },
+    },
+  ],
+  navigateFallback: '/index.html',
+  cleanupOutdatedCaches: true,
+} satisfies VitePWAOptions['workbox']
+
 export default defineConfig({
   // The build's version, as About says it: the commit Vercel built, or `dev` here.
   define: {
@@ -88,24 +132,7 @@ export default defineConfig({
           },
         ],
       },
-      workbox: {
-        // The pieces' recordings too, so a recording plays offline.
-        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,m4a,wav}'],
-        // The engraver's worker is the largest file; the recordings are held to less by a test.
-        maximumFileSizeToCacheInBytes: PRECACHE_ENGRAVER_LIMIT,
-        // Only the fonts' subsets the app's text reaches: a browser fetches a subset when a glyph in
-        // its range is drawn. None of these ranges holds a character the app writes (Onest's latin-ext
-        // does, a credit's ž; its math and symbols hold ♭ ♯ and arrows); a glyph that ever needs one
-        // fetches it from the network.
-        globIgnores: [
-          // An iPhone's launch images: each phone reads its own once, at its install.
-          '**/apple-splash-*.png',
-          '**/literata-{greek,greek-ext,vietnamese,cyrillic-ext,latin-ext}-*.woff2',
-          '**/onest-{vietnamese,cyrillic-ext}-*.woff2',
-        ],
-        navigateFallback: '/index.html',
-        cleanupOutdatedCaches: true,
-      },
+      workbox,
       devOptions: { enabled: false },
     }),
   ],

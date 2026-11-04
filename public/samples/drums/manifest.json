@@ -1,0 +1,161 @@
+{
+  "instrument": "drums",
+  "set": "Virtuosity Drums",
+  "licence": "CC0-1.0",
+  "layers": [
+    {
+      "name": "normal",
+      "upTo": 0.8
+    },
+    {
+      "name": "accent",
+      "upTo": 1
+    }
+  ],
+  "samples": [
+    {
+      "file": "normal/kick.m4a",
+      "voice": "kick",
+      "layer": "normal",
+      "bytes": 19154
+    },
+    {
+      "file": "normal/snare.m4a",
+      "voice": "snare",
+      "layer": "normal",
+      "bytes": 19431
+    },
+    {
+      "file": "normal/rim.m4a",
+      "voice": "rim",
+      "layer": "normal",
+      "bytes": 12932
+    },
+    {
+      "file": "normal/hatClosed.m4a",
+      "voice": "hatClosed",
+      "layer": "normal",
+      "bytes": 9550
+    },
+    {
+      "file": "normal/hatOpen.m4a",
+      "voice": "hatOpen",
+      "layer": "normal",
+      "bytes": 40115
+    },
+    {
+      "file": "normal/hatPedal.m4a",
+      "voice": "hatPedal",
+      "layer": "normal",
+      "bytes": 13932
+    },
+    {
+      "file": "normal/ride.m4a",
+      "voice": "ride",
+      "layer": "normal",
+      "bytes": 48604
+    },
+    {
+      "file": "normal/rideBell.m4a",
+      "voice": "rideBell",
+      "layer": "normal",
+      "bytes": 48576
+    },
+    {
+      "file": "normal/crash.m4a",
+      "voice": "crash",
+      "layer": "normal",
+      "bytes": 55979
+    },
+    {
+      "file": "normal/tomHigh.m4a",
+      "voice": "tomHigh",
+      "layer": "normal",
+      "bytes": 24009
+    },
+    {
+      "file": "normal/tomMid.m4a",
+      "voice": "tomMid",
+      "layer": "normal",
+      "bytes": 23980
+    },
+    {
+      "file": "normal/tomFloor.m4a",
+      "voice": "tomFloor",
+      "layer": "normal",
+      "bytes": 24363
+    },
+    {
+      "file": "accent/kick.m4a",
+      "voice": "kick",
+      "layer": "accent",
+      "bytes": 19847
+    },
+    {
+      "file": "accent/snare.m4a",
+      "voice": "snare",
+      "layer": "accent",
+      "bytes": 19240
+    },
+    {
+      "file": "accent/rim.m4a",
+      "voice": "rim",
+      "layer": "accent",
+      "bytes": 13191
+    },
+    {
+      "file": "accent/hatClosed.m4a",
+      "voice": "hatClosed",
+      "layer": "accent",
+      "bytes": 9987
+    },
+    {
+      "file": "accent/hatOpen.m4a",
+      "voice": "hatOpen",
+      "layer": "accent",
+      "bytes": 40050
+    },
+    {
+      "file": "accent/hatPedal.m4a",
+      "voice": "hatPedal",
+      "layer": "accent",
+      "bytes": 13118
+    },
+    {
+      "file": "accent/ride.m4a",
+      "voice": "ride",
+      "layer": "accent",
+      "bytes": 48345
+    },
+    {
+      "file": "accent/rideBell.m4a",
+      "voice": "rideBell",
+      "layer": "accent",
+      "bytes": 47044
+    },
+    {
+      "file": "accent/crash.m4a",
+      "voice": "crash",
+      "layer": "accent",
+      "bytes": 56166
+    },
+    {
+      "file": "accent/tomHigh.m4a",
+      "voice": "tomHigh",
+      "layer": "accent",
+      "bytes": 24244
+    },
+    {
+      "file": "accent/tomMid.m4a",
+      "voice": "tomMid",
+      "layer": "accent",
+      "bytes": 23579
+    },
+    {
+      "file": "accent/tomFloor.m4a",
+      "voice": "tomFloor",
+      "layer": "accent",
+      "bytes": 23985
+    }
+  ]
+}

@@ -41,6 +41,24 @@ export const settings = {
     safe: 'Kept safe: the browser won’t clear them to make room',
     refused: 'This browser decides for itself. Installing the app, or a backup, keeps them safe.',
   },
+  // The grand piano's recorded notes on this device (A27, R29 SND).
+  pianoSound: {
+    label: 'Piano sound',
+    info: 'The piano is a recorded grand: Salamander Grand Piano, a Yamaha C5. Its notes are downloaded as you first play them. Download them all to hear the grand offline; until then, offline, the piano plays a lighter recorded sound.',
+    reading: 'Finding out what this device keeps…',
+    kept: '{{kept}} of {{total}} on this device',
+    ready: 'Ready offline',
+    download: 'Download for offline',
+    downloading: 'Downloading… {{percent}}%',
+    failed: 'Some notes could not be downloaded. Try again when you’re online.',
+    remove: 'Remove piano samples',
+    title: 'Remove the piano samples?',
+    body: 'Offline, the piano plays a lighter recorded sound until you download them again.',
+    cancel: 'Keep them',
+    confirm: 'Remove',
+    footnote:
+      'Resetting clears learned steps, practised songs and quiz answers on this device. Removing the piano samples frees their space; they download again as you play.',
+  },
   backup: {
     label: 'Backup',
     says: 'Your songs, folders, takes, patterns, progress and settings live on this device only. Save them as a file to keep them safe or to move them to another device.',
@@ -97,7 +115,8 @@ export const settings = {
   },
   about: {
     version: 'Version',
-    madeWith: 'Verovio for the scores, Noto fonts, and Supabase for accounts and sync',
+    madeWith:
+      'Verovio for the scores, Noto fonts, and Supabase for accounts and sync. Piano: Salamander Grand Piano by Alexander Holm (CC BY 3.0)',
     // Software Update, as iOS's: where the next version stands, a tap looks for it.
     update: {
       current: 'Up to date',

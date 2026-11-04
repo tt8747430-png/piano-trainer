@@ -1,0 +1,149 @@
+{
+  "instrument": "bassElectric",
+  "set": "Growlybass",
+  "licence": "CC0-1.0",
+  "layers": [
+    {
+      "name": "p",
+      "upTo": 0.6
+    },
+    {
+      "name": "f",
+      "upTo": 1
+    }
+  ],
+  "samples": [
+    {
+      "file": "p/E1.m4a",
+      "midi": 28,
+      "layer": "p",
+      "bytes": 31802
+    },
+    {
+      "file": "p/Fs1.m4a",
+      "midi": 30,
+      "layer": "p",
+      "bytes": 32029
+    },
+    {
+      "file": "p/A1.m4a",
+      "midi": 33,
+      "layer": "p",
+      "bytes": 31635
+    },
+    {
+      "file": "p/C2.m4a",
+      "midi": 36,
+      "layer": "p",
+      "bytes": 31661
+    },
+    {
+      "file": "p/Ds2.m4a",
+      "midi": 39,
+      "layer": "p",
+      "bytes": 31687
+    },
+    {
+      "file": "p/Fs2.m4a",
+      "midi": 42,
+      "layer": "p",
+      "bytes": 31665
+    },
+    {
+      "file": "p/A2.m4a",
+      "midi": 45,
+      "layer": "p",
+      "bytes": 31764
+    },
+    {
+      "file": "p/C3.m4a",
+      "midi": 48,
+      "layer": "p",
+      "bytes": 31691
+    },
+    {
+      "file": "p/Ds3.m4a",
+      "midi": 51,
+      "layer": "p",
+      "bytes": 31688
+    },
+    {
+      "file": "p/Fs3.m4a",
+      "midi": 54,
+      "layer": "p",
+      "bytes": 31885
+    },
+    {
+      "file": "p/A3.m4a",
+      "midi": 57,
+      "layer": "p",
+      "bytes": 31718
+    },
+    {
+      "file": "f/E1.m4a",
+      "midi": 28,
+      "layer": "f",
+      "bytes": 31715
+    },
+    {
+      "file": "f/Fs1.m4a",
+      "midi": 30,
+      "layer": "f",
+      "bytes": 31711
+    },
+    {
+      "file": "f/A1.m4a",
+      "midi": 33,
+      "layer": "f",
+      "bytes": 31693
+    },
+    {
+      "file": "f/C2.m4a",
+      "midi": 36,
+      "layer": "f",
+      "bytes": 31693
+    },
+    {
+      "file": "f/Ds2.m4a",
+      "midi": 39,
+      "layer": "f",
+      "bytes": 31681
+    },
+    {
+      "file": "f/Fs2.m4a",
+      "midi": 42,
+      "layer": "f",
+      "bytes": 31672
+    },
+    {
+      "file": "f/A2.m4a",
+      "midi": 45,
+      "layer": "f",
+      "bytes": 31661
+    },
+    {
+      "file": "f/C3.m4a",
+      "midi": 48,
+      "layer": "f",
+      "bytes": 31654
+    },
+    {
+      "file": "f/Ds3.m4a",
+      "midi": 51,
+      "layer": "f",
+      "bytes": 31692
+    },
+    {
+      "file": "f/Fs3.m4a",
+      "midi": 54,
+      "layer": "f",
+      "bytes": 31841
+    },
+    {
+      "file": "f/A3.m4a",
+      "midi": 57,
+      "layer": "f",
+      "bytes": 31704
+    }
+  ]
+}
