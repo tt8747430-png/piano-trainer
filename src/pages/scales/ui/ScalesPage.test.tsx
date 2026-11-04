@@ -364,7 +364,7 @@ describe('Practice → Scales and keys', () => {
     expect(router.state.location.search).toMatchObject({ compare: 'natural' })
     await pickMenu(user, 'Compare with', 'None')
     expect(router.state.location.search).not.toHaveProperty('compare')
-    await router.navigate({ to: '/practice/scales', search: (prev) => ({ ...prev, kind: 'pent' }) })
+    await router.navigate({ to: '/practice/scales', search: { kind: 'pent' } })
     await waitFor(() =>
       expect(screen.queryByRole('button', { name: /^Compare with: / })).not.toBeInTheDocument(),
     )

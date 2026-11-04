@@ -1,7 +1,5 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { useSettingsStoreApi } from '@/entities/settings'
-import { setDrone } from '@/features/set-preference'
 import {
   modeVamp,
   pitchClassOf,
@@ -23,7 +21,6 @@ import { vampSounds } from '../model/vamp'
 export function ModeVamp({ root, kind }: { root: SpelledNote; kind: ScaleKind }) {
   const { t } = useTranslation('practice')
   const playback = usePlayback<'vamp'>()
-  const store = useSettingsStoreApi()
   const degrees = modeVamp(kind)
   if (degrees.length === 0) return null
   const chords = degrees
@@ -46,8 +43,7 @@ export function ModeVamp({ root, kind }: { root: SpelledNote; kind: ScaleKind })
       <ButtonLink
         variant="soft"
         className="rounded-pill"
-        onClick={() => setDrone(store, { root: pitchClassOf(root) })}
-        render={<Link to="/practice/drone" />}
+        render={<Link to="/practice/drone" search={{ root: pitchClassOf(root) }} />}
       >
         {t('scales.vamp.drone', { note: printedNote(root) })}
       </ButtonLink>

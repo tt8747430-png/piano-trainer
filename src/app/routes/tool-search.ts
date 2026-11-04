@@ -23,3 +23,13 @@ export function readCircleSearch(raw: Raw): CircleView {
   return key ? { key: keyParam(key) } : {}
 }
 export const circleSearch = routeSearch(readCircleSearch, {})
+
+// The Drone (R29 B11, A43): a root brought by a link (a mode's Drone on its tonic), which the page
+// takes as its own and then drops.
+export function readDroneSearch(raw: Raw): { readonly root?: number } {
+  const root = raw.root
+  return typeof root === 'number' && Number.isInteger(root) && root >= 0 && root <= 11
+    ? { root }
+    : {}
+}
+export const droneSearch = routeSearch(readDroneSearch, {})

@@ -88,6 +88,7 @@ import {
   CHORD_FINDER_KEPT,
   chordFinderSearch,
   circleSearch,
+  droneSearch,
   readChordFinderSearch,
 } from './routes/tool-search'
 import { chordPlayerSearch, chordPlayerSettingsSearch } from './routes/chord-player-search'
@@ -707,6 +708,7 @@ const recorderRoute = createRoute({
 const droneRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/drone',
+  ...droneSearch,
   component: lazyRouteComponent(toolScreens, 'DronePage'),
 })
 const tunerRoute = createRoute({

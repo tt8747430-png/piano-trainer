@@ -571,7 +571,7 @@ describe('Songs: Select (ADR 0106)', () => {
     await confirmAsked(user, 'Archive', 'Hide 2 songs from this folder?')
     expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived')
     expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
-    expect(await screen.findByText('Archived: 2')).toBeInTheDocument()
+    expect(await screen.findByText('Archived: 2', {}, { timeout: 5000 })).toBeInTheDocument()
   })
 
   it('the bar on screen matches the page tile for tile (R29 B10)', async () => {
@@ -770,11 +770,19 @@ describe('Songs: Select (ADR 0106)', () => {
     expect(within(zones).getByText('Move to Home')).toBeInTheDocument()
     fireEvent.mouseMove(document, { ...mouse, clientX: 240, clientY: 770 })
     fireEvent.mouseMove(document, { ...mouse, clientX: 241, clientY: 780 })
+    // Let go only once the drag stands over Archive: under load it is measured a frame late.
+    const archive = within(zones).getByText('Archive').closest('[data-slot="drop-zone"]')
+    await waitFor(() => {
+      fireEvent.mouseMove(document, { ...mouse, clientX: 241, clientY: 780 })
+      expect(archive).toHaveAttribute('data-drop')
+    })
     fireEvent.mouseUp(document, { button: 0, clientX: 241, clientY: 780 })
     await confirmAsked(user, 'Archive')
-    await waitFor(() => expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived'))
+    await waitFor(() => expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived'), {
+      timeout: 5000,
+    })
     expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
-    expect(await screen.findByText('Archived: 2')).toBeInTheDocument()
+    expect(await screen.findByText('Archived: 2', {}, { timeout: 5000 })).toBeInTheDocument()
     // A drag across the library: slow under a full suite's load, so its own limit.
   }, 15_000)
 

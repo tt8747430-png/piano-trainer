@@ -1,3 +1,4 @@
+import { useSearch } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -9,7 +10,7 @@ import {
 } from '@/entities/settings'
 import { setDrone } from '@/features/set-preference'
 import { formatPercent, useLocale } from '@/shared/i18n'
-import { useWakeLock } from '@/shared/lib'
+import { useSetSearch, useWakeLock } from '@/shared/lib'
 import { pitchClass, type PitchClass } from '@/shared/lib/music'
 import { volumeGain } from '@/shared/lib/schedule'
 import { useServices } from '@/shared/lib/services'
@@ -35,6 +36,14 @@ export function DronePage() {
   const store = useSettingsStoreApi()
   const drone = useSettings(selectDrone)
   const [on, setOn] = useState(false)
+  // A root a link brought (a mode's Drone on its tonic): taken as the Drone's own, then dropped.
+  const { root: brought } = useSearch({ strict: false }) as { root?: number }
+  const setSearch = useSetSearch<{ root?: number }>()
+  useEffect(() => {
+    if (brought === undefined) return
+    setDrone(store, { root: brought })
+    setSearch({ root: undefined })
+  }, [brought, store, setSearch])
   useWakeLock(on)
   const keys = droneKeys(drone)
   const sounding = keys.join(' ')

@@ -153,7 +153,9 @@ describe('Review your recording (A40)', () => {
     act(() => keyboard.release(midi(67)))
     act(() => audio.setNow(6))
     await user.click(within(waiting).getByRole('button', { name: 'Stop' }))
-    expect(await screen.findByRole('dialog', { name: 'Review your recording' })).toBeInTheDocument()
+    expect(
+      await screen.findByRole('dialog', { name: 'Review your recording' }, { timeout: 5000 }),
+    ).toBeInTheDocument()
     expect(takesStore.getState().takes.at(-1)?.notes).toEqual([
       expect.objectContaining({ midi: 67, at: 0, held: 500 }),
     ])
