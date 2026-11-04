@@ -921,6 +921,17 @@
   & > [data-area='actions'] {
     grid-area: actions;
   }
+  /* Below 360px (a phone with Display Zoom, its CSS pixels physically larger): each icon button 36px
+     wide, still 44px tall, and Done's padding tighter, so Close, Done and the end's buttons keep one
+     row and none covers another (R29). */
+  @media (max-width: 359.98px) {
+    & :is([data-area='lead'], [data-area='actions']) [class~='size-11'] {
+      width: --spacing(9);
+    }
+    & [data-area='lead'] [data-slot='button']:not([class~='size-11']) {
+      padding-inline: --spacing(2);
+    }
+  }
   /* Where the bar is one row too narrow for them (a phone held upright), the tools float under it as
      a capsule over the music, in its middle as the transport floats in the middle of its foot (ADR
      0115, round 27): they act on what is shown, not on where the learner is, and take no room from

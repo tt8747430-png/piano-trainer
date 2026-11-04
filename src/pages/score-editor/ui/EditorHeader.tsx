@@ -31,7 +31,11 @@ export function EditorLead({ done }: { done?: ReactNode }) {
       >
         <X aria-hidden />
       </Button>
-      <BarTitle title={meta.title} />
+      {/* The title prints at the head of the score: in the bar from 40rem, where it has the room
+          (on a phone it was squeezed to a sliver between Close and the bar's tools). */}
+      <span className="hidden min-w-0 sm:contents">
+        <BarTitle title={meta.title} />
+      </span>
       {done ?? <ScoreEditToggle pieceId={meta.id} editing bar={bar} disabled={recording} />}
     </>
   )
@@ -56,7 +60,11 @@ export function EditorActions({ draft }: { draft?: ReactNode }) {
   return (
     <>
       <KeysToggle shown={!keys.folded} onShow={(shown) => keys.fold(!shown)} />
-      <MidiButton variant="tool" />
+      {/* On a phone held upright the bar has room for Close, Done and five more: MIDI is the one
+          that waits for a wider screen (a keyboard still plays; Settings › Connect a piano). */}
+      <span className="contents max-sm:hidden">
+        <MidiButton variant="tool" />
+      </span>
       {/* The Tools sheet where the Player has it (R29 B11), its metronome at the song's tempo. */}
       <ToolsButton song={song} />
       <Button
