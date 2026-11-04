@@ -148,8 +148,12 @@ function BlocksDocument({
           placeholder: ({ editor: each, node, pos, hasAnchor }) =>
             placeholderOf(
               node.type.name,
-              each.state.doc.resolve(pos).parent.type.name,
-              hasAnchor,
+              // Drawn for the state to come, the editor's may be shorter.
+              pos <= each.state.doc.content.size
+                ? each.state.doc.resolve(pos).parent.type.name
+                : 'doc',
+              // An empty About's one line says what to do, caret or not.
+              hasAnchor || each.state.doc.childCount === 1,
               words,
             ),
         }),

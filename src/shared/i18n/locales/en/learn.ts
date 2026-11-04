@@ -66,6 +66,8 @@ export const learn = {
     songCount_other: '{{count}} songs',
     done: 'Course complete',
     facts: 'About this course',
+    // The course's own document under its head (R29 B9), an editor's.
+    about: 'About',
   },
   // Where a lesson is: a journey's chapter, or a course.
   place: 'Lesson {{n}} of {{total}}',

@@ -2,10 +2,12 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { useRef, useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { COURSE_WEEKS, SHELVES, type Course, type CourseRecord } from '@/entities/course'
+import { hasAbout } from '@/entities/lesson'
 import { STAGES } from '@/entities/step'
 import { useAddLesson, useCourseDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { Dropdown } from '@/shared/ui'
+import { AboutDocument } from '@/widgets/lesson-document'
 import {
   AddRow,
   DocText,
@@ -39,7 +41,10 @@ function CourseDocument({
   const { t } = useTranslation(['learn', 'common'])
   const words = i18n.getFixedT(locale, 'learn')
   const [record, setRecord] = useState(initial)
+  // The record as last written: the About's document writes over it, whenever it was opened.
+  const latest = useRef(initial)
   const change = (next: CourseRecord) => {
+    latest.current = next
     setRecord(next)
     onChange(next)
   }
@@ -103,6 +108,24 @@ function CourseDocument({
           />
         </PropertyRow>
       </Properties>
+      {/* Its About (R29 B9): the lesson's document under the course's head, written in place. */}
+      <section aria-labelledby="course-about" className="flex flex-col gap-2">
+        <h2 id="course-about" className="font-display text-2xl">
+          {t('learn:course.about')}
+        </h2>
+        <AboutDocument
+          initial={record.about ?? []}
+          locale={locale}
+          label={t('learn:course.about')}
+          onChange={(about) => {
+            // An About with nothing in it is none; the document's own first steps save nothing.
+            const { about: was, ...rest } = latest.current
+            const next = hasAbout(about) ? about : undefined
+            if (JSON.stringify(next) === JSON.stringify(was)) return
+            change(next ? { ...rest, about: next } : rest)
+          }}
+        />
+      </section>
       <RowGroups
         groups={[
           {

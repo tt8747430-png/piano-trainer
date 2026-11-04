@@ -101,21 +101,20 @@ export function lessonToDoc(lesson: Lesson, locale: Locale): DocNode {
 /** A page's About as its document in `locale` (R29 B9): the lesson's, with no title or summary. */
 export const aboutToDoc = (about: About, locale: Locale): DocNode => ({
   type: 'doc',
-  content: sectionNodes(about, locale),
+  content: sectionNodes(about, locale, true),
 })
 
 /** Sections as the document's nodes: each heading, its blocks and its takeaway, each with its style. */
-function sectionNodes(sections: readonly LessonSection[], locale: Locale): DocNode[] {
-  return sections.flatMap((section) => [
-    {
-      type: DOC.heading,
-      attrs: {
-        level: 2,
-        text: section.heading,
-        ...(section.style ? { style: section.style } : {}),
-      },
-      content: run(section.heading[locale]),
-    },
+function sectionNodes(
+  sections: readonly LessonSection[],
+  locale: Locale,
+  /** An About's first section may have no heading: its blocks then open the document. */
+  headless = false,
+): DocNode[] {
+  return sections.flatMap((section, at) => [
+    ...(headless && at === 0 && !section.heading.en && !section.heading.ru && !section.style
+      ? []
+      : [headingNode(section, locale)]),
     ...section.blocks.map((block) => blockNode(block, locale)),
     ...(section.takeaway
       ? [
@@ -131,6 +130,16 @@ function sectionNodes(sections: readonly LessonSection[], locale: Locale): DocNo
       : []),
   ])
 }
+
+const headingNode = (section: LessonSection, locale: Locale): DocNode => ({
+  type: DOC.heading,
+  attrs: {
+    level: 2,
+    text: section.heading,
+    ...(section.style ? { style: section.style } : {}),
+  },
+  content: run(section.heading[locale]),
+})
 
 /** A node's words, its runs one after the other. */
 export const textOf = (node: DocNode | undefined): string =>

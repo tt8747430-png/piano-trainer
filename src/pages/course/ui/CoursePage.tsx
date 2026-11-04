@@ -9,6 +9,7 @@ import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, FabLink, FloatingActions, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
+import { AboutView } from '@/widgets/lesson-view'
 import { EditToggle } from '@/widgets/mode-switch'
 import {
   CourseFacts,
@@ -60,8 +61,9 @@ function CourseAction({ course }: { course: Course }) {
 
 /**
  * A course's page (ADR 0053, 0061): one card, its icon on its level's paint beside what it teaches
- * and its facts in words, and along its foot how much is learned; then its lessons numbered as
- * taught, the next ringed, and its guided songs. Its one way in floats.
+ * and its facts in words, and along its foot how much is learned; its About, where an editor wrote
+ * one (R29 B9); then its lessons numbered as taught, the next ringed, and its guided songs. Its one
+ * way in floats.
  */
 export function CoursePage() {
   const { t } = useTranslation('learn')
@@ -135,6 +137,8 @@ export function CoursePage() {
           <CourseAction course={course} />
         </div>
       </section>
+      {/* Its About (R29 B9): the editor's document, each block in its own style. */}
+      <AboutView about={course.about} label={t('course.about')} />
       <div className="flex max-w-3xl flex-col gap-8">
         <CourseLessons course={course} next={next} />
         <GuidedSongs course={course} />

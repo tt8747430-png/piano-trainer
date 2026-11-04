@@ -1,4 +1,4 @@
-import type { Lesson } from '@/entities/lesson'
+import { readAbout, type About, type Lesson } from '@/entities/lesson'
 import type { PieceId } from '@/entities/piece'
 import { isStage, type Stage } from '@/entities/step'
 import type { LocalText } from '@/shared/i18n'
@@ -28,6 +28,8 @@ export interface Course {
   readonly lessons: readonly Lesson[]
   /** The songs that strengthen what it teaches, played in the Player. */
   readonly songs: readonly PieceId[]
+  /** Its About (R29 B9): a document under its page's head, an editor's; none, nothing there. */
+  readonly about?: About
 }
 
 /**
@@ -44,6 +46,8 @@ export interface CourseRecord {
   readonly shelf?: Shelf
   readonly stage?: Stage
   readonly weeks?: number
+  /** Its About (R29 B9), as written. */
+  readonly about?: About
 }
 
 export const courseRecord = ({
@@ -54,6 +58,7 @@ export const courseRecord = ({
   shelf,
   stage,
   weeks,
+  about,
 }: Course): CourseRecord => ({
   id,
   title,
@@ -62,6 +67,7 @@ export const courseRecord = ({
   shelf,
   stage,
   weeks,
+  ...(about ? { about } : {}),
 })
 
 const isShelf = (value: unknown): value is Shelf => SHELVES.some((shelf) => shelf === value)
@@ -96,7 +102,8 @@ export function isCourseRecord(id: string, body: unknown): body is CourseRecord 
     (record.lessons === undefined || isIdList(record.lessons)) &&
     (record.shelf === undefined || isShelf(record.shelf)) &&
     (record.stage === undefined || isStage(record.stage)) &&
-    (record.weeks === undefined || isWeeks(record.weeks))
+    (record.weeks === undefined || isWeeks(record.weeks)) &&
+    (record.about === undefined || readAbout(record.about) !== undefined)
   )
 }
 
