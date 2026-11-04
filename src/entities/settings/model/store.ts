@@ -85,7 +85,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 21
+export const SETTINGS_VERSION = 22
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -308,8 +308,9 @@ const isSheetView = isOneOf(SHEET_VIEWS)
  */
 function scoreViewSettings(value: unknown): ScoreViewSettings {
   const saved = savedObject<ScoreViewSettings>(value)
-  const switched = (key: 'askOnOpen' | 'chordNames' | 'lyrics' | 'pinned' | 'keys') =>
-    typeof saved[key] === 'boolean' ? saved[key] : DEFAULT_SCORE_VIEW[key]
+  const switched = (
+    key: 'askOnOpen' | 'chordNames' | 'lyrics' | 'pinned' | 'keys' | 'annotations',
+  ) => (typeof saved[key] === 'boolean' ? saved[key] : DEFAULT_SCORE_VIEW[key])
   return {
     layout: isSheetView(saved.layout) ? saved.layout : DEFAULT_SCORE_VIEW.layout,
     music: isMusicView(saved.music) ? saved.music : DEFAULT_SCORE_VIEW.music,
@@ -320,6 +321,7 @@ function scoreViewSettings(value: unknown): ScoreViewSettings {
     pinned: switched('pinned'),
     textSize: isTextSize(saved.textSize) ? saved.textSize : DEFAULT_SCORE_VIEW.textSize,
     keys: switched('keys'),
+    annotations: switched('annotations'),
   }
 }
 

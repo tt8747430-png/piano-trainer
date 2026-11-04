@@ -8,6 +8,7 @@ import {
   SPEED_STEPS,
   selectOtherHand,
   selectPlayback,
+  selectScoreView,
   selectSound,
   type SpeedStep,
   useSettings,
@@ -18,12 +19,13 @@ import {
   onlyTheChords,
   setOtherHand,
   setPlayback,
+  setScoreView,
   setSound,
   setStaffVolume,
 } from '@/features/set-preference'
 import { formatPercent, useLocale } from '@/shared/i18n'
 import { PEDAL_PLAYS } from '@/shared/lib/schedule'
-import { RowLink, ChoiceCard, SettingRows, SettingsGroup } from '@/shared/ui'
+import { RowLink, ChoiceCard, SettingRows, SettingsGroup, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 
@@ -179,8 +181,17 @@ export function PlayerDisplay() {
   const { t } = useTranslation('player')
   const settings = useSettingsStoreApi()
   const playback = useSettings(selectPlayback)
+  const annotations = useSettings((state) => selectScoreView(state).annotations)
   return (
     <>
+      <SettingsGroup flush>
+        <SwitchRow
+          setting="scoreView.annotations"
+          label={t('settingsPage.annotations')}
+          checked={annotations}
+          onCheckedChange={(on) => setScoreView(settings, { annotations: on })}
+        />
+      </SettingsGroup>
       <ChoiceCard
         title={t('settingsPage.countdown.label')}
         info={t('settingsPage.countdown.info')}

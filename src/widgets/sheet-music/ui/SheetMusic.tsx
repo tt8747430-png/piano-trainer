@@ -4,7 +4,7 @@ import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { useElementSize, type SheetView } from '@/shared/lib'
 import type { Tick } from '@/shared/lib/music'
-import type { StaffId } from '@/shared/lib/notation'
+import type { ScoreAnnotation, StaffId } from '@/shared/lib/notation'
 import type { PieceLayout, ScoreHeader } from '@/entities/piece'
 import { SheetTitle } from '@/shared/ui'
 import { labelRow, ScoreView, scoreHeight, type Picked, type ScoreLayout } from '@/shared/ui/score'
@@ -13,6 +13,7 @@ import { groupOfTick } from '../model/group-of-tick'
 import { keepsLoop } from '../model/keeps-loop'
 import { SheetLines } from './SheetLines'
 import { PedalMarks } from './PedalMarks'
+import { CircledNotes, NoteVerdicts, type NoteVerdictMark } from './NoteVerdicts'
 import { SheetOverlay } from './SheetOverlay'
 import { useSheetScore } from './use-sheet-score'
 
@@ -106,6 +107,8 @@ export function SheetMusic({
   muted,
   onJump,
   onLoopChange,
+  verdicts,
+  annotations,
   view = ACROSS,
   title,
   credits,
@@ -146,12 +149,17 @@ export function SheetMusic({
   onJump: (beatGroup: number) => void
   /** The loop chosen, or let go of (a note clicked, Escape). */
   onLoopChange: (loop: BarRange | null) => void
+  /** A take's verdicts, each judged note's head in its ink (R29 B8, Feedback); none without. */
+  verdicts?: ReadonlyMap<string, NoteVerdictMark> | undefined
+  /** The learner's typed marks (R29 B8), written on the score, its circled notes ringed. */
+  annotations?: readonly ScoreAnnotation[] | undefined
 }) {
   const { t } = useTranslation('music')
   const { score, tempos, staves, labels } = useSheetScore(
     performance,
     { lyrics: view.lyrics, piano, hidden: view.hidden },
     staffNames,
+    annotations,
   )
   const scroller = useRef<HTMLDivElement>(null)
   // The room under the title, the labels' row's and the engraving's to fill.
@@ -220,7 +228,13 @@ export function SheetMusic({
   const [resting, setResting] = useState({ loop: loopKey, at: current })
   if (resting.loop !== loopKey) setResting({ loop: loopKey, at: current })
   const playheadShown = cursor && (!loop || playing || current !== resting.at)
-  const pedalMarks = <PedalMarks performance={performance} current={current} />
+  const pedalMarks = (
+    <>
+      <PedalMarks performance={performance} current={current} />
+      {verdicts ? <NoteVerdicts score={score} verdicts={verdicts} /> : null}
+      {annotations ? <CircledNotes score={score} marks={annotations} /> : null}
+    </>
+  )
   if (view.layout !== 'panorama')
     return (
       <>

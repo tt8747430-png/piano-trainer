@@ -41,4 +41,22 @@ describe('the Player’s Tools sheet (R29 B8)', () => {
     await user.click(within(await openTools(user)).getByRole('button', { name: 'Transpose' }))
     expect(await screen.findByRole('button', { name: 'Down a semitone' })).toBeInTheDocument()
   })
+
+  it('annotates the place the cursor is in, typed, saved with the song (R29 B8, D7)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/play/bz5')
+    await user.click(within(await openTools(user)).getByRole('button', { name: 'Annotations' }))
+    const bar = await screen.findByRole('toolbar', { name: 'Annotations' })
+    await user.click(within(bar).getByRole('button', { name: 'Pause' }))
+    await user.click(within(bar).getByRole('button', { name: 'Fingering' }))
+    await user.click(await screen.findByRole('button', { name: '3' }))
+    expect(piecesStore.getState().annotations.bz5).toEqual([
+      { at: 0, staff: 'treble', kind: 'pause' },
+      { at: 0, staff: 'treble', kind: 'fingering', value: 3 },
+    ])
+    await user.click(within(bar).getByRole('button', { name: 'Clear the marks here' }))
+    expect(piecesStore.getState().annotations).toEqual({})
+    await user.click(within(bar).getByRole('button', { name: 'Done' }))
+    expect(screen.queryByRole('toolbar', { name: 'Annotations' })).toBeNull()
+  })
 })

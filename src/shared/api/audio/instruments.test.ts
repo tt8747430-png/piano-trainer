@@ -28,7 +28,14 @@ describe('createInstruments', () => {
   it('plays the chord player’s bass and drums from their sets at the scheduled time', async () => {
     const { context, loader, instruments } = setUp()
     const band: Sound[] = [
-      { kind: 'note', midi: midi(40), at: 0, duration: 1, velocity: 0.9, instrument: 'bassUpright' },
+      {
+        kind: 'note',
+        midi: midi(40),
+        at: 0,
+        duration: 1,
+        velocity: 0.9,
+        instrument: 'bassUpright',
+      },
       { kind: 'drum', at: 0, piece: 'rim', velocity: 0.5 },
     ]
     instruments.need(band)

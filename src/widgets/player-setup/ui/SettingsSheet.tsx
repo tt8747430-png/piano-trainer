@@ -33,13 +33,15 @@ export function SettingsSheet({
   const { t } = useTranslation('player')
   const { pages, acts, request } = useSettingsExtras()
   const [open, setOpen] = useState(false)
-  // Asked from elsewhere (the Tools sheet's Display): open at that page.
-  const openAt = useEffectEvent((at: string) => {
-    onPage(at)
-    setOpen(true)
-  })
+  // Asked from elsewhere (the Tools sheet's Display): it opens, at that page.
+  const [asked, setAsked] = useState(request)
+  if (request !== asked) {
+    setAsked(request)
+    if (request) setOpen(true)
+  }
+  const turnTo = useEffectEvent((at: string) => onPage(at))
   useEffect(() => {
-    if (request) openAt(request.page)
+    if (request) turnTo(request.page)
   }, [request])
   // On a laptop a panel at the right, the music in sight beside it (R29, screen 4.1).
   const laptop = useMediaQuery(LAPTOP)

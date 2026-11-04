@@ -1,7 +1,11 @@
 import { useNavigate } from '@tanstack/react-router'
 import {
   Cable,
+  CircleCheck,
+  Disc,
   Download,
+  Gauge as TunerIcon,
+  ListMusic,
   MonitorCog,
   Piano,
   Printer,
@@ -59,6 +63,11 @@ import { useChordKeys } from '../model/use-chord-keys'
 import { PlayerExport } from './PlayerExport'
 import type { ExportShare } from '@/features/song-files'
 import { PickView } from './PickView'
+import { FeedbackCard } from './FeedbackCard'
+import { RecordingsSheet } from './RecordingsSheet'
+import type { PlayerTakes } from '../model/use-player-takes'
+import { TunerSheet } from '@/widgets/tuner'
+import { notePlace, type ScoreAnnotation } from '@/shared/lib/notation'
 
 /** A walk or a progression: one section, named nowhere. */
 const NO_HEADINGS: readonly string[] = []
@@ -67,7 +76,10 @@ const NO_STAVES: readonly { readonly name?: StaffName }[] = []
 /** A walk or a progression: no acts of its own. */
 const NO_ACTS: readonly MenuAction[] = []
 /** A walk or a progression: no tools of its own. */
-const NO_TOOLS: readonly ToolRow[] = []
+const NO_TOOLS: readonly PlacedToolRow[] = []
+
+/** A row of the Tools sheet a screen adds, and the group it joins. */
+export type PlacedToolRow = ToolRow & { readonly group: 'quick' | 'score' | 'listening' | 'more' }
 
 /**
  * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar (`ScoreBar`, ADR
@@ -105,9 +117,21 @@ export function PlayerLayout({
   display,
   tracks,
   toolRows = NO_TOOLS,
+  takes,
+  annotations,
+  annotating,
 }: {
-  /** The music's own rows of the Tools sheet (R29 B8): a piece's Transpose and Change version. */
-  toolRows?: readonly ToolRow[]
+  /** The learner's typed marks, written on the score (R29 B8); none for a walk. */
+  annotations?: readonly ScoreAnnotation[] | undefined
+  /** The Annotate bar over the score while it is on (R29 B8). */
+  annotating?: ReactNode
+  /**
+   * The music's own rows of the Tools sheet (R29 B8), each in its group: a piece's Transpose and
+   * Change version, the Rhythm game.
+   */
+  toolRows?: readonly PlacedToolRow[]
+  /** A song's takes (R29 B8): the Recorder, My recordings and Feedback; none for a walk. */
+  takes?: PlayerTakes | undefined
   /** The volumes the Settings' Audio playback lists: a piece's tracks; none for a walk. */
   tracks?: readonly VolumeTrack[] | undefined
   /**
@@ -185,6 +209,18 @@ export function PlayerLayout({
   // The Tools sheet (R29 B8), and Settings opened at a page from it.
   const [toolsOpen, setToolsOpen] = useState(false)
   const [settingsAt, setSettingsAt] = useState<{ readonly page: string } | null>(null)
+  const [tunerOpen, setTunerOpen] = useState(false)
+  const [recordingsOpen, setRecordingsOpen] = useState(false)
+  // A take's feedback on the score (R29 B8): the take shown, its verdicts by where each note plays.
+  const feedback = takes?.feedback ?? null
+  const verdicts = useMemo(
+    () =>
+      feedback
+        ? new Map(feedback.notes.map((note) => [notePlace(note.tick, note.midi), note.verdict]))
+        : undefined,
+    [feedback],
+  )
+  const inGroup = (group: PlacedToolRow['group']) => toolRows.filter((row) => row.group === group)
   // The Player's one Settings (R29, Flat's one menu): how the Player works, then the acts on this
   // music: its own (a piece's Sections and Song information), Export… and Print.
   const extras: SettingsExtras = {
@@ -256,6 +292,28 @@ export function PlayerLayout({
           opens: true,
           onSelect: () => void navigate({ to: '/practice/metronome' }),
         },
+        ...(takes
+          ? [
+              {
+                key: 'recorder',
+                kind: 'act' as const,
+                label: t('recordings.recorder'),
+                icon: Disc,
+                paint: 'lilac' as const,
+                onSelect: () =>
+                  playable && takes.stage === 'idle' ? takes.record() : setRecordingsOpen(true),
+              },
+            ]
+          : []),
+        {
+          key: 'tuner',
+          kind: 'act',
+          label: t('tuner.title'),
+          icon: TunerIcon,
+          paint: 'grass',
+          onSelect: () => setTunerOpen(true),
+        },
+        ...inGroup('quick'),
       ],
     },
     {
@@ -270,8 +328,22 @@ export function PlayerLayout({
           paint: 'sky',
           onSelect: () => setPrinting(true),
         },
+        ...(takes
+          ? [
+              {
+                key: 'recordings',
+                kind: 'act' as const,
+                label: t('recordings.title'),
+                icon: ListMusic,
+                paint: 'yellow' as const,
+                onSelect: () => setRecordingsOpen(true),
+              },
+            ]
+          : []),
+        ...inGroup('score'),
       ],
     },
+    { key: 'listening', title: t('toolsSheet.listening'), rows: inGroup('listening') },
     {
       key: 'more',
       title: t('toolsSheet.more'),
@@ -285,7 +357,7 @@ export function PlayerLayout({
           opens: true,
           onSelect: () => void navigate({ to: '/settings/connect-piano' }),
         },
-        ...toolRows,
+        ...inGroup('more'),
         {
           key: 'display',
           kind: 'act',
@@ -353,7 +425,11 @@ export function PlayerLayout({
         }
       />
       {dock === 'top' ? keys : null}
-      <PlayerArea area="sheet">
+      <PlayerArea area="sheet" className="relative">
+        {annotating}
+        {feedback && takes?.shown ? (
+          <FeedbackCard feedback={feedback} onClose={() => takes.show(null)} />
+        ) : null}
         {shown === 'sheet' ? (
           <SheetMusic
             view={sheetView}
@@ -376,6 +452,8 @@ export function PlayerLayout({
             onJump={practice.jumpToBeatGroup}
             playing={practice.state.playing}
             onLoopChange={player.setLoop}
+            verdicts={verdicts}
+            annotations={annotations}
           />
         ) : (
           <ChordView
@@ -414,6 +492,15 @@ export function PlayerLayout({
       </PlayerArea>
       {dock === 'top' ? null : keys}
       <PlayerFoot>
+        {takes ? (
+          <FootTool
+            icon={Disc}
+            label={t('recordings.short')}
+            aria-haspopup="dialog"
+            aria-pressed={takes.stage !== 'idle' ? true : undefined}
+            onClick={() => setRecordingsOpen(true)}
+          />
+        ) : null}
         <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />
         <TempoButton
           look="foot"
@@ -425,6 +512,16 @@ export function PlayerLayout({
           onTempo={player.setTempo}
           onSpeedTraining={player.setSpeedTraining}
         />
+        {takes ? (
+          <FootTool
+            icon={CircleCheck}
+            label={t('feedback.label')}
+            aria-pressed={takes.shown !== null}
+            disabled={takes.list.length === 0}
+            title={takes.list.length === 0 ? t('feedback.none') : t('feedback.about')}
+            onClick={() => takes.show(takes.shown ? null : (takes.list[0]?.id ?? null))}
+          />
+        ) : null}
         <FootTool
           icon={MODE_LOOK[view.mode].icon}
           label={t('modes.open')}
@@ -443,6 +540,15 @@ export function PlayerLayout({
         onHands={player.setHands}
       />
       <CountInBeat count={practice.counting} />
+      <TunerSheet open={tunerOpen} onOpenChange={setTunerOpen} />
+      {takes ? (
+        <RecordingsSheet
+          takes={takes}
+          piano={isMidiConnected(connection)}
+          open={recordingsOpen}
+          onOpenChange={setRecordingsOpen}
+        />
+      ) : null}
       <PlayerExport
         open={exporting}
         onOpenChange={setExporting}

@@ -1,5 +1,5 @@
 import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { ArrowUpDown, Info, Layers, ListTree } from 'lucide-react'
+import { ArrowUpDown, Drum, Info, Layers, ListTree, PenLine } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -12,9 +12,12 @@ import {
   pieceKey,
   selectHasVersion,
   usePieces,
+  usePiecesStoreApi,
   useRepertoire,
+  type Annotation,
   type Piece,
 } from '@/entities/piece'
+import { clearAnnotations, setAnnotation } from '@/features/annotate'
 import { selectScoreView, useSettings } from '@/entities/settings'
 import { PieceInversions } from '@/features/choose-diagram-inversion'
 import {
@@ -37,6 +40,7 @@ import { useScoreTracks } from '@/widgets/practice-player'
 import type { PlayerSearch } from '../model/player-search'
 import { sectionAt, sectionStarts } from '../model/section-starts'
 import { usePlayer } from '../model/use-player'
+import { usePlayerTakes } from '../model/use-player-takes'
 import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
 import { SectionsSheet } from './SectionsSheet'
@@ -45,6 +49,10 @@ import { ClefChoice } from './ClefChoice'
 import { TransposeTool } from './TransposeTool'
 import { VersionSheet, type VersionChoice } from './VersionSheet'
 import { VersionTool } from './VersionTool'
+import { AnnotateBar } from './AnnotateBar'
+
+/** A song with no typed marks. */
+const NO_MARKS: readonly Annotation[] = []
 
 function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
   const { t } = useTranslation(['player', 'piece', 'songs', 'editor'])
@@ -69,6 +77,13 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
   // shown or not, at a level.
   const [versionOpen, setVersionOpen] = useState(false)
   const [transposing, setTransposing] = useState(false)
+  // Annotate (R29 B8): the learner's typed marks, shown as Display says; the bar while marking.
+  const pieces = usePiecesStoreApi()
+  const marks = usePieces((state) => state.annotations[piece.id]) ?? NO_MARKS
+  const marksShown = useSettings((state) => selectScoreView(state).annotations)
+  const [annotating, setAnnotating] = useState(false)
+  // The Rhythm game (R29 B8): a take judged on its timing alone, any key counting.
+  const [rhythm, setRhythm] = useState(false)
   const singles = (performance.staves ?? []).map((_, place) => singleStaff(place))
   const solo =
     singles.length > 0 &&
@@ -107,6 +122,8 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
     const group = beatGroupInBar(performance, written)
     if (group !== null) jumpToBeatGroup(group)
   }
+  // The song's takes (R29 B8): recorded from the bar the cursor is in, judged against the music.
+  const takes = usePlayerTakes(piece.id, performance, { bar, tempo: player.tempo, rhythm })
   // Opened at a bar (Practise from the editor's caret, ADR 0115): the cursor goes there, once, and
   // the URL forgets it, so the view remembered never holds it.
   const openAt = useEffectEvent((at: number) => {
@@ -228,20 +245,54 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
           ) : undefined
         }
         tracks={tracks}
+        takes={takes}
+        annotations={marksShown || annotating ? marks : undefined}
+        annotating={
+          annotating ? (
+            <AnnotateBar
+              at={performance.beatGroups[player.practice.state.beatGroup]?.tick ?? 0}
+              staves={isLeadSheet(piece) ? singles : ['treble', 'bass']}
+              onMark={(mark) => setAnnotation(pieces, piece.id, mark)}
+              onClear={(at, staff) => clearAnnotations(pieces, piece.id, at, staff)}
+              onDone={() => setAnnotating(false)}
+            />
+          ) : null
+        }
         // The Tools sheet's ways to the tools row's Transpose and the Version sheet (R29 B8).
         toolRows={[
           {
             key: 'transpose',
+            group: 'more',
             kind: 'act',
             label: t('player:transpose.name'),
             icon: ArrowUpDown,
             paint: 'lilac',
             onSelect: () => setTransposing(true),
           },
+          {
+            key: 'annotations',
+            group: 'score',
+            kind: 'act',
+            label: t('player:annotate.label'),
+            icon: PenLine,
+            paint: 'lilac',
+            onSelect: () => setAnnotating(true),
+          },
+          {
+            key: 'rhythm',
+            group: 'listening',
+            kind: 'switch',
+            label: t('player:rhythm.label'),
+            icon: Drum,
+            paint: 'sand',
+            checked: rhythm,
+            onCheckedChange: setRhythm,
+          },
           ...(controls.has('simplify')
             ? [
                 {
                   key: 'version',
+                  group: 'more' as const,
                   kind: 'act' as const,
                   label: t('player:version.change'),
                   icon: Layers,

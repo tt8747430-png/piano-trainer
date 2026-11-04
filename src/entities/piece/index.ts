@@ -119,3 +119,10 @@ export { staffNamesOf, useStaffNames, useStaffTitle } from './ui/use-staff-names
 export { TempoText } from './ui/TempoText'
 export { useTempoText } from './ui/use-tempo-text'
 export { COLLECTIONS, METHOD_BOOK_PIECES, PIECES, SONG_COLLECTIONS } from './content'
+export {
+  ANNOTATION_KINDS,
+  ANNOTATION_TEXT_MAX,
+  samePlace,
+  type Annotation,
+  type AnnotationKind,
+} from './model/annotations'

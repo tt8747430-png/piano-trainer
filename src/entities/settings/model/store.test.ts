@@ -176,6 +176,7 @@ describe('createSettingsStore', () => {
         pinned: false,
         textSize: 130,
         keys: false,
+        annotations: false,
       },
       metronome: {
         bpm: 72,
@@ -259,6 +260,7 @@ describe('createSettingsStore', () => {
       pinned: true,
       textSize: 100,
       keys: true,
+      annotations: true,
     })
     expect(restored({ scoreView: { layout: 'paper' } }).scoreView).toEqual(DEFAULT_SCORE_VIEW)
   })
@@ -327,9 +329,9 @@ describe('createSettingsStore', () => {
     expect(restored({ scoreView: { pinned: 'no' } }).scoreView.pinned).toBe(true)
   })
 
-  it('starts afresh over a save of the version before, which had no editor start or palette side (B7)', () => {
-    expect(SETTINGS_VERSION).toBe(21)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 20)).toEqual(
+  it('starts afresh over a save of the version before, which had no Show annotations (R29 B8)', () => {
+    expect(SETTINGS_VERSION).toBe(22)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 21)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

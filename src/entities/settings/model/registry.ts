@@ -110,6 +110,7 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'scoreView.pinned': 'player',
   'scoreView.textSize': 'player',
   'scoreView.keys': 'player',
+  'scoreView.annotations': 'player',
   'otherHand.look': 'player',
   'otherHand.play': 'player',
   'playback.countdown': 'player',

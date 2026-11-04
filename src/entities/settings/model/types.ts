@@ -266,6 +266,8 @@ export interface ScoreViewSettings {
   readonly textSize: TextSize
   /** The keys under the score: off, the score has the screen. */
   readonly keys: boolean
+  /** The learner's typed marks on the score (R29 B8). */
+  readonly annotations: boolean
 }
 
 /**
@@ -283,6 +285,7 @@ export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   pinned: true,
   textSize: 100,
   keys: true,
+  annotations: true,
 }
 
 /** The bar trainer as left: on or off, its counts kept either way. */
