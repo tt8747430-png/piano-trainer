@@ -63,6 +63,14 @@ describe('Practice → Scales and keys', () => {
     expect(audio.played.length).toBeGreaterThan(0)
   })
 
+  it('opens the Drone on the mode’s tonic', async () => {
+    const user = userEvent.setup()
+    const { router, settingsStore } = await renderApp('/practice/scales?root=D&kind=dorian')
+    await user.click(await screen.findByRole('link', { name: 'Drone on D' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/drone'))
+    expect(settingsStore.getState().drone.root).toBe(2)
+  })
+
   it('opens the scale’s exercises in the Player, each on this scale', async () => {
     await renderApp('/practice/scales?root=D&kind=dorian')
     const practise = await screen.findByRole('region', { name: 'Practise in the Player' })

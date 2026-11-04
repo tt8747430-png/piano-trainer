@@ -134,7 +134,7 @@ export const practice = {
   },
   // Scales and keys: the run, the chords, the key.
   scales: {
-    vamp: { label: 'Vamp', play: 'Play the vamp: {{chords}}' },
+    vamp: { label: 'Vamp', play: 'Play the vamp: {{chords}}', drone: 'Drone on {{note}}' },
     // The tabs say what is in them (A32): its notes, its key's harmony, the key itself.
     show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
     // Under each view's name, what it holds of the scale chosen (R29-P7): a choice visibly drives all three.

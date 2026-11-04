@@ -119,7 +119,7 @@ export const practice: LocaleResources['practice'] = {
     chromatic: 'По полутонам',
   },
   scales: {
-    vamp: { label: 'Вамп', play: 'Сыграть вамп: {{chords}}' },
+    vamp: { label: 'Вамп', play: 'Сыграть вамп: {{chords}}', drone: 'Бурдон на {{note}}' },
     show: { scale: 'Гамма', chords: 'Аккорды', key: 'Тональность' },
     views: {
       notes_one: '{{count}} нота',
