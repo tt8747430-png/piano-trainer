@@ -119,6 +119,7 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
   their own. `pages/<thing>`, `widgets/*-explorer`, `widgets/practice-pages`, `features/trainer`; an editor's progression editor (`/practice/progressions/$progressionId/edit`, New progression a sheet from Progressions' +, `pages/progression-editor`; the editors' shared parts in `widgets/content-editor`). Fingering by hand
   (scales and arpeggios as the printed books, chords by rule) and the voicings live in the kernel (`music/fingering`,
   `chord-fingering`, `voicing`); Hanon and the daily scale routine in `shared/lib/exercise`.
+  The Chord player (`/practice/chord-player`, its Settings `/practice/chord-player/settings`; ADR 0112): a chord sheet of sections and chord boxes played in a style (piano, bass, drums; `arrangement/chord-sheet.ts`, `arrange-style.ts`, the styles in `entities/pattern/content/styles`), `widgets/chord-player` (its engine a Worker clock), the learner's sheets in `entities/chord-sheet` (`pt-chord-sheets`, synced as `chord_sheets`).
 - **The Player** (`/play/$pieceId`, and walks, progressions and exercises under `/play/`) — one screen
   (`pages/player`'s `PlayerLayout`) over any Performance: its bar Close · title · Edit | Piano keys · MIDI · its one
   gear, the Player's Settings (`SettingsSheet`, `widgets/player-setup`: the music's choices, then pages and acts
