@@ -65,6 +65,25 @@ export function AccountProvider({
     }
   }, [signedIn, sync])
 
-  const value = useMemo(() => ({ auth, sync, account, ready }), [auth, sync, account, ready])
+  // Learner view lives in memory alone: a reload, or signing out, ends it.
+  const [learnerView, setLearnerView] = useState(false)
+  const realRole = account?.role ?? null
+  const viewing = learnerView && realRole !== null && realRole !== 'learner'
+  const shown = useMemo(
+    () => (viewing && account ? { ...account, role: 'learner' as const } : account),
+    [viewing, account],
+  )
+  const value = useMemo(
+    () => ({
+      auth,
+      sync,
+      account: shown,
+      ready,
+      learnerView: viewing,
+      setLearnerView,
+      realRole,
+    }),
+    [auth, sync, shown, ready, viewing, realRole],
+  )
   return <Context value={value}>{children}</Context>
 }

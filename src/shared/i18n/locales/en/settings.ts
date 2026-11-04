@@ -1,4 +1,11 @@
 export const settings = {
+  // Learner view (R29 B5): an editor or admin sees the app as a learner, this session only.
+  learnerView: {
+    label: 'View as a learner',
+    info: 'See the app as a learner does: every editor and admin control hidden. Nothing is saved or changed; it ends when you exit, reload or sign out.',
+    on: 'Viewing as a learner',
+    exit: 'Exit',
+  },
   title: 'Settings',
   language: { label: 'Language', en: 'English', ru: 'Русский' },
   theme: { label: 'Appearance', system: 'Same as the device', light: 'Light', dark: 'Dark' },

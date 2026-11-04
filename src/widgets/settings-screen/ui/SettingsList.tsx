@@ -11,8 +11,8 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useMidiSummary } from '@/features/connect-midi'
-import { useAccount } from '@/shared/lib/account'
-import { RowLink, SettingsGroup } from '@/shared/ui'
+import { useAccount, useLearnerView } from '@/shared/lib/account'
+import { RowLink, SettingsGroup, SwitchRow } from '@/shared/ui'
 import { AccountCard } from './AccountCard'
 import { UpdateRows } from './UpdateRows'
 
@@ -27,6 +27,7 @@ import { UpdateRows } from './UpdateRows'
 export function SettingsList() {
   const { t } = useTranslation(['settings', 'admin'])
   const { account } = useAccount()
+  const learner = useLearnerView()
   const midi = useMidiSummary()
   return (
     <div className="flex flex-col gap-7 [&_a[aria-current=page]]:bg-muted">
@@ -81,6 +82,17 @@ export function SettingsList() {
         />
         <UpdateRows />
       </SettingsGroup>
+      {learner.can ? (
+        <SettingsGroup flush>
+          {/* An editor's or admin's look at the app as a learner sees it (R29 B5): this session only. */}
+          <SwitchRow
+            label={t('learnerView.label')}
+            info={t('learnerView.info')}
+            checked={learner.on}
+            onCheckedChange={learner.set}
+          />
+        </SettingsGroup>
+      ) : null}
       {account?.role === 'admin' ? (
         <SettingsGroup flush>
           <RowLink
