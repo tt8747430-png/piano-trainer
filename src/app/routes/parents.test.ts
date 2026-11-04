@@ -72,6 +72,16 @@ describe('parents', () => {
     expect(await parentOf(signIn, learners[2]!)).toMatchObject({ to: '/profile' })
   })
 
+  it('leads an Explore item up to Explore', async () => {
+    const [learner] = learners
+    expect(
+      await parentOf(
+        { routeId: '/shell/songs/public/$itemId', params: { itemId: 'p-1' }, search: {} },
+        learner!,
+      ),
+    ).toMatchObject({ to: '/songs', search: { view: 'explore' } })
+  })
+
   it('leads a song to its folder, a study to Accompaniment, and their Player to their page', async () => {
     const [learner] = learners
     const { library } = learner!.context

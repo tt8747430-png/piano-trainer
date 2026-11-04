@@ -432,13 +432,11 @@ export function sheetToChart(sheet: ChordSheet): Chart {
       { beats: bar.beats, chords: bar.chords.map(({ chord, beats }) => ({ ...chord, beats })) },
     ])
   }
-  const sections = [...rounds.values()].map(
-    (bars): ChartSection => ({
-      lines: Array.from({ length: Math.ceil(bars.length / 4) }, (_, line) =>
-        bars.slice(line * 4, line * 4 + 4),
-      ),
-    }),
-  )
+  const sections = [...rounds.values()].map((bars): ChartSection => ({
+    lines: Array.from({ length: Math.ceil(bars.length / 4) }, (_, line) =>
+      bars.slice(line * 4, line * 4 + 4),
+    ),
+  }))
   return { key: sheet.key, meter: sheet.meter, sections }
 }
 

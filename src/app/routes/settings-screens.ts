@@ -1,5 +1,8 @@
 export {
   AccountSettingsPage,
+  ChangePasswordPage,
+  EditProfilePage,
+  ProfilePrivacyPage,
   GeneralPage,
   OnScreenPianoPage,
   PlayerSettingsPage,
@@ -26,5 +29,14 @@ export {
   SignInPage,
   SignUpPage,
 } from '@/pages/account'
-export { ActivityPage, ProfilePage } from '@/pages/profile'
+export {
+  AchievementPage,
+  AchievementsPage,
+  BadgePage,
+  BadgesPage,
+  NotificationsPage,
+  ProfilePage,
+  StreakPage,
+} from '@/pages/profile'
 export { PrivacyPage, TermsPage } from '@/pages/legal'
+export { isBadgeId, isMilestoneId } from '@/entities/progress'

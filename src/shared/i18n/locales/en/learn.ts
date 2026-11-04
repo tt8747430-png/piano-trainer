@@ -41,6 +41,8 @@ export const learn = {
     done: 'Practised today.',
     practised: '{{day}}: practised',
     missed: '{{day}}: not practised',
+    previous: 'Previous month',
+    next: 'Next month',
   },
   kind: {
     lesson: 'Lesson',

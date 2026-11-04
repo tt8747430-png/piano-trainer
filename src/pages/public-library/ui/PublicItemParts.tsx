@@ -1,40 +1,30 @@
 import { useTranslation } from 'react-i18next'
 import type { PublicEntry } from '@/shared/api/public-library'
-import { cn } from '@/shared/lib'
-import { PAINT } from '@/shared/ui'
-import { itemPaint } from '@/features/publish'
+import { Avatar } from '@/shared/ui'
+import { SavesCount, useAuthorName } from '@/widgets/song-preview'
 
 /**
- * Who published an item, under its title: their initial in a round mark of their own paint, their
- * name, and how often the item is saved.
+ * Who shared an item (D12): their picture and name where their profile is public, else a learner's
+ * mark and "Piano Trainer learner"; then its saves (its stars are the rating's, under it).
  */
 export function Byline({ entry }: { entry: PublicEntry }) {
   const { t } = useTranslation('songs')
-  const paint = PAINT[itemPaint(entry.authorName)]
-  const initial = [...entry.authorName.trim()][0]?.toLocaleUpperCase() ?? '?'
+  const author = useAuthorName(entry)
   return (
-    <div className="-mt-2 flex items-center gap-3">
-      <span
-        aria-hidden
-        className={cn(
-          'grid size-11 shrink-0 place-items-center rounded-pill font-display text-lg font-semibold',
-          paint.fill,
-          paint.ink,
-        )}
-      >
-        {initial}
-      </span>
+    <div className="flex items-center gap-3">
+      <Avatar name={entry.authorName || null} picture={entry.authorAvatar} size="byline" />
       <span className="flex min-w-0 flex-col">
-        <span className="truncate font-semibold">{entry.authorName}</span>
-        <span className="text-sm text-muted-foreground tabular-nums">
-          {entry.saves > 0 ? t('public.saves', { count: entry.saves }) : t('public.savesNone')}
-        </span>
+        <span className="text-sm text-muted-foreground">{t('explore.sharedBy')}</span>
+        <span className="truncate font-semibold">{author}</span>
+      </span>
+      <span className="ml-auto flex shrink-0 items-center gap-3 text-sm font-semibold text-muted-foreground">
+        <SavesCount count={entry.saves} />
       </span>
     </div>
   )
 }
 
-/** What its author wrote of it (Noji's About), under its byline; nothing where they wrote nothing. */
+/** What its author wrote of it (Noji's About); nothing where they wrote nothing. */
 export function About({ entry }: { entry: PublicEntry }) {
   const { t } = useTranslation('songs')
   const text = entry.meta.description
@@ -42,7 +32,7 @@ export function About({ entry }: { entry: PublicEntry }) {
   return (
     <section aria-labelledby="public-about" className="flex flex-col gap-1.5">
       <h2 id="public-about" className="text-sm font-semibold text-muted-foreground">
-        {t('public.about')}
+        {t(entry.kind === 'pattern' ? 'explore.aboutPattern' : 'explore.aboutSong')}
       </h2>
       <p className="text-pretty whitespace-pre-line">{text}</p>
     </section>
@@ -73,21 +63,16 @@ export function ReadingItem({ label }: { label: string }) {
       <p role="status" className="sr-only">
         {label}
       </p>
-      <div aria-hidden className="-mt-2 flex items-center gap-3">
-        <span className="size-11 rounded-pill bg-muted motion-safe:animate-pulse" />
-        <span className="flex flex-col gap-2">
-          <span className="h-4 w-28 rounded-pill bg-muted motion-safe:animate-pulse" />
-          <span className="h-3 w-20 rounded-pill bg-muted motion-safe:animate-pulse" />
-        </span>
-      </div>
-      <div aria-hidden className="flex gap-2">
-        {[16, 14, 20].map((width) => (
-          <span
-            key={width}
-            className="h-8 rounded-pill bg-muted motion-safe:animate-pulse"
-            style={{ width: `${width / 4}rem` }}
-          />
-        ))}
+      <div aria-hidden className="card flex flex-col gap-4 p-4">
+        <span className="h-4 w-48 rounded-pill bg-muted motion-safe:animate-pulse" />
+        <div className="flex items-center gap-3">
+          <span className="size-11 rounded-pill bg-muted motion-safe:animate-pulse" />
+          <span className="flex flex-col gap-2">
+            <span className="h-3 w-16 rounded-pill bg-muted motion-safe:animate-pulse" />
+            <span className="h-4 w-28 rounded-pill bg-muted motion-safe:animate-pulse" />
+          </span>
+        </div>
+        <span className="h-8 w-40 rounded-pill bg-muted motion-safe:animate-pulse" />
       </div>
       <div aria-hidden className="h-48 rounded-card bg-muted motion-safe:animate-pulse" />
     </div>

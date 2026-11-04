@@ -58,7 +58,19 @@ export interface ProgressState {
    * it opens next time, so its tempo ladder goes on from the rung it reached.
    */
   readonly tempos: Readonly<Partial<Record<string, number>>>
+  /** The seconds played each day (B1), by the day on the learner's calendar, the latest DAYS_KEPT. */
+  readonly seconds: Readonly<Partial<Record<string, number>>>
+  /** The keys practised (B1, Scale Master): a scale or a key's chords played in it, and the day it first was. */
+  readonly keys: Readonly<Partial<Record<string, string>>>
+  /** The day each badge tier (`streak:2`) and milestone (`first-song`) was first reached. */
+  readonly earned: Readonly<Partial<Record<string, string>>>
+  /** The day of a first the stores do not keep: a song published, a minute on a connected piano. */
+  readonly firsts: Readonly<Partial<Record<FirstId, string>>>
 }
+
+/** The firsts the progress keeps the day of, written where they happen. */
+export const FIRSTS = ['published', 'midi'] as const
+export type FirstId = (typeof FIRSTS)[number]
 
 export const EMPTY_PROGRESS: ProgressState = {
   learned: {},
@@ -70,4 +82,8 @@ export const EMPTY_PROGRESS: ProgressState = {
   holds: {},
   read: {},
   tempos: {},
+  seconds: {},
+  keys: {},
+  earned: {},
+  firsts: {},
 }

@@ -80,6 +80,10 @@ export function createSupabaseAuth(
       ask(async (client) => {
         answer(await client.auth.updateUser({ password }))
       }),
+    updateEmail: (email) =>
+      ask(async (client) => {
+        answer(await client.auth.updateUser({ email }))
+      }),
     updateName: (name) =>
       ask(async (client) =>
         accountOf(answer(await client.auth.updateUser({ data: { name } })).user),

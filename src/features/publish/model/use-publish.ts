@@ -2,11 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { NetFailed } from '@/shared/api/network'
 import {
   DESCRIPTION_MAX,
+  type PublicCategory,
   type PublicEntry,
   type PublicKind,
   type Published,
 } from '@/shared/api/public-library'
 import { contentHash, useOnline } from '@/shared/lib'
+import { useProgressStoreApi } from '@/entities/progress'
+import { recordFirst } from '@/features/record-practised'
 import { useAccount } from '@/shared/lib/account'
 import { usePublicLibrary } from '@/shared/lib/public-library'
 
@@ -43,6 +46,8 @@ export interface PublishItem {
   readonly sourceId: string
   readonly title: string
   readonly meta: PublicEntry['meta']
+  /** A song's category, chosen on the Publish page (B3); none for a pattern. */
+  readonly category?: PublicCategory | null
   /** As a save holds it, read back by the saving side (`readSharedSong`, an own pattern's reader). */
   readonly body: unknown
 }
@@ -59,6 +64,7 @@ export function usePublish(item: PublishItem | null) {
   const library = usePublicLibrary()
   const { account } = useAccount()
   const online = useOnline()
+  const progress = useProgressStoreApi()
   const [published, setPublished] = useState<Published | null | undefined>(undefined)
   const [said, setSaid] = useState<PublishSaid>(null)
   const [busy, setBusy] = useState(false)
@@ -123,16 +129,19 @@ export function usePublish(item: PublishItem | null) {
         title: item.title,
         authorName,
         meta: { ...item.meta, ...(said ? { description: said } : {}) },
+        category: item.category ?? null,
         body,
         version,
       })
       setBusy(false)
       if (!result.ok) return setSaid(saidOf(result))
+      // The First published song milestone (B1).
+      recordFirst(progress, 'published', new Date())
       setSaid(published ? 'updated' : 'published')
       setPublished(result.value)
       setDetails({ id: result.value.id, description: said, saves: shown?.saves ?? 0 })
     },
-    [account, authorName, library, id, item, body, version, published, shown],
+    [account, authorName, library, id, item, body, version, published, shown, progress],
   )
 
   const unpublish = useCallback(async () => {

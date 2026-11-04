@@ -1,9 +1,10 @@
-import { useId } from 'react'
+import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Flame } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Flame } from 'lucide-react'
 import { dateOfDay, monthOf, selectDays, streak, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
+import { RoundButton } from '@/shared/ui'
 import { useToday } from '../model/use-today'
 
 /**
@@ -11,18 +12,28 @@ import { useToday } from '../model/use-today'
  * row from Monday, each day practised filled, today ringed; over it its month's name and, while a run
  * of days goes on, whether today has kept it (the run's length is the Profile's first figure).
  */
-export function PracticeCalendar({ title }: { title: string }) {
+export function PracticeCalendar({
+  title,
+  browse = false,
+}: {
+  title: string
+  /** ‹ › to the months before (the Streak page's); this month alone where false. */
+  browse?: boolean
+}) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const headingId = useId()
   const days = useProgress(selectDays)
   const today = useToday()
-  const weeks = monthOf(days, today)
+  // Months back from today's: 0 is this month; never one after it.
+  const [shift, setShift] = useState(0)
+  const weeks = monthOf(days, today, shift)
   const run = streak(days, today)
   const practisedToday = days.includes(today)
-  const month = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(
-    dateOfDay(today),
-  )
+  const shown = dateOfDay(today)
+  shown.setDate(1)
+  shown.setMonth(shown.getMonth() + shift)
+  const month = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(shown)
   const long = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' })
   const narrow = new Intl.DateTimeFormat(locale, { weekday: 'narrow' })
   // A Monday to Sunday week for the column names: 5–11 January 2026.
@@ -34,8 +45,28 @@ export function PracticeCalendar({ title }: { title: string }) {
       </h2>
       <div className="flex flex-col gap-3 card p-4">
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-          <p className="font-display text-lg font-semibold first-letter:uppercase">{month}</p>
-          {run > 0 ? (
+          <p
+            aria-live={browse ? 'polite' : undefined}
+            className="font-display text-lg font-semibold first-letter:uppercase"
+          >
+            {month}
+          </p>
+          {browse ? (
+            <span className="ml-auto flex gap-1">
+              <RoundButton
+                label={t('days.previous')}
+                icon={ChevronLeft}
+                onClick={() => setShift((n) => n - 1)}
+              />
+              <RoundButton
+                label={t('days.next')}
+                icon={ChevronRight}
+                disabled={shift === 0}
+                onClick={() => setShift((n) => Math.min(0, n + 1))}
+              />
+            </span>
+          ) : null}
+          {!browse && run > 0 ? (
             <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
               <Flame aria-hidden className="size-4 shrink-0 text-paint-full-sand" />
               {practisedToday ? t('days.done') : t('days.keep')}

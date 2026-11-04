@@ -10,8 +10,8 @@ export interface BadgeFigures {
   readonly bestStreak: number
   readonly songsLearned: number
   readonly lessonsDone: number
-  /** The scales learned (a scale's step marked learned). */
-  readonly scalesLearned: number
+  /** The keys practised, of 24: a scale or a key's chords played in it. */
+  readonly keysPractised: number
   readonly daysPractised: number
   /** The learner's own songs and folders. */
   readonly libraryBuilt: number
@@ -34,7 +34,7 @@ export const BADGES: readonly BadgeDef[] = [
   { id: 'streak', figure: 'bestStreak', tiers: [3, 7, 30, 100] },
   { id: 'repertoire', figure: 'songsLearned', tiers: [1, 5, 15, 40] },
   { id: 'lessons', figure: 'lessonsDone', tiers: [1, 10, 30, 75] },
-  { id: 'scales', figure: 'scalesLearned', tiers: [1, 3, 6, 12] },
+  { id: 'scales', figure: 'keysPractised', tiers: [3, 8, 15, 24] },
   { id: 'devotion', figure: 'daysPractised', tiers: [7, 30, 100, 365] },
   { id: 'library', figure: 'libraryBuilt', tiers: [1, 5, 15, 40] },
 ]
@@ -91,3 +91,6 @@ export function nextMilestone(figures: BadgeFigures): {
   const { share: _share, ...milestone } = best
   return milestone
 }
+
+export const isBadgeId = (value: unknown): value is BadgeId =>
+  BADGES.some((badge) => badge.id === value)

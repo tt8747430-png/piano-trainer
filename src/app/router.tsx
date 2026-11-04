@@ -75,8 +75,13 @@ import {
   validatePracticeSettingsSearch,
 } from './routes/practice-search'
 import { searchSearch } from './routes/search-search'
-import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
-import { publicSearch } from './routes/public-search'
+import {
+  readSongsHomeSearch,
+  SONGS_KEPT,
+  songsHomeSearch,
+  songsSearch,
+  validateSharedSongSearch,
+} from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
 import { CHORD_FINDER_KEPT, chordFinderSearch, readChordFinderSearch } from './routes/tool-search'
 import { chordPlayerSearch, chordPlayerSettingsSearch } from './routes/chord-player-search'
@@ -169,11 +174,47 @@ const profileRoute = createRoute({
   path: '/profile',
   component: lazyRouteComponent(settingsScreens, 'ProfilePage'),
 })
-// Its Activity (round 26, Noji's): the days at the piano in figures and the month's calendar.
-const activityRoute = createRoute({
+// The Profile's pages (B1): Streak, the badges and one badge, the achievements and one, the
+// notifications.
+const streakRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/profile/activity',
-  component: lazyRouteComponent(settingsScreens, 'ActivityPage'),
+  path: '/profile/streak',
+  component: lazyRouteComponent(settingsScreens, 'StreakPage'),
+})
+const badgesRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/profile/badges',
+  component: lazyRouteComponent(settingsScreens, 'BadgesPage'),
+})
+const badgeRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/profile/badges/$badgeId',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params: { badgeId } }) => {
+    const { isBadgeId } = await settingsScreens()
+    if (!isBadgeId(badgeId)) throw notFound()
+  },
+  component: lazyRouteComponent(settingsScreens, 'BadgePage'),
+})
+const achievementsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/profile/achievements',
+  component: lazyRouteComponent(settingsScreens, 'AchievementsPage'),
+})
+const achievementRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/profile/achievements/$achievementId',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params: { achievementId } }) => {
+    const { isMilestoneId } = await settingsScreens()
+    if (!isMilestoneId(achievementId)) throw notFound()
+  },
+  component: lazyRouteComponent(settingsScreens, 'AchievementPage'),
+})
+const notificationsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/profile/notifications',
+  component: lazyRouteComponent(settingsScreens, 'NotificationsPage'),
 })
 // Settings' pages (R20, R22): General, the on-screen piano, the computer keys, sound and recording,
 // storage and backup, and the account's.
@@ -222,6 +263,22 @@ const accountSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/account',
   component: lazyRouteComponent(settingsScreens, 'AccountSettingsPage'),
+})
+// The account's own pages (B1): Edit profile, Change password, and Privacy.
+const editProfileRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/account/profile',
+  component: lazyRouteComponent(settingsScreens, 'EditProfilePage'),
+})
+const changePasswordRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/account/password',
+  component: lazyRouteComponent(settingsScreens, 'ChangePasswordPage'),
+})
+const profilePrivacyRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/privacy',
+  component: lazyRouteComponent(settingsScreens, 'ProfilePrivacyPage'),
 })
 // How to use (ADR 0052): a short guide, reached from Settings' Help.
 const howToUseRoute = createRoute({
@@ -328,16 +385,11 @@ const searchRoute = createRoute({
 const songsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs',
-  ...songsSearch,
+  ...songsHomeSearch,
+  ...remembered(readSongsHomeSearch, SONGS_KEPT, SONGS_KEPT),
   component: lazyRouteComponent(songsScreens, 'SongsPage'),
 })
-// The Public library (ADR 0116): learners' published songs, and one to hear and save.
-const publicLibraryRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/songs/public',
-  ...publicSearch,
-  component: lazyRouteComponent(songsScreens, 'PublicLibraryPage'),
-})
+// A published song or pattern (ADR 0116), Explore's item: its path kept, so published links work.
 const publicSongRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs/public/$itemId',
@@ -895,7 +947,12 @@ const routeTree = rootRoute.addChildren([
   shellRoute.addChildren([
     learnRoute,
     profileRoute,
-    activityRoute,
+    streakRoute,
+    badgesRoute,
+    badgeRoute,
+    achievementsRoute,
+    achievementRoute,
+    notificationsRoute,
     adminRoute,
     settingsRoute,
     generalRoute,
@@ -906,6 +963,9 @@ const routeTree = rootRoute.addChildren([
     privacyRoute,
     termsRoute,
     accountSettingsRoute,
+    editProfileRoute,
+    changePasswordRoute,
+    profilePrivacyRoute,
     howToUseRoute,
     aboutRoute,
     midiSettingsRoute,
@@ -925,7 +985,6 @@ const routeTree = rootRoute.addChildren([
     searchRoute,
     songsRoute,
     sharedSongRoute,
-    publicLibraryRoute,
     publicSongRoute,
     pieceRoute,
     pieceSettingsRoute,
@@ -1017,8 +1076,12 @@ export function createAppRouter({
     const validate: unknown = route.options.validateSearch
     const read: Record<string, unknown> =
       typeof validate === 'function' ? validate(toLocation.search) : {}
+    const only = match.staticData.remembered
     const own = Object.entries(toLocation.search).filter(
-      ([param, value]) => param in read && JSON.stringify(read[param]) === JSON.stringify(value),
+      ([param, value]) =>
+        param in read &&
+        (only === true || only.includes(param)) &&
+        JSON.stringify(read[param]) === JSON.stringify(value),
     )
     rememberView(views, toLocation.pathname, Object.fromEntries(own))
   })
@@ -1034,7 +1097,10 @@ declare module '@tanstack/react-router' {
   interface StaticDataRouteOption {
     /** A screen on its own (the Player, the Check), which nothing else is laid over. */
     fullScreen?: true
-    /** A screen that comes back the learner's way (ADR 0038): its view saved in `pt-views`. */
-    remembered?: true
+    /**
+     * A screen that comes back the learner's way (ADR 0038): its view saved in `pt-views`; every
+     * param it reads, or those listed alone.
+     */
+    remembered?: true | readonly string[]
   }
 }

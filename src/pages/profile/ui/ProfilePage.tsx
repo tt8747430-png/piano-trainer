@@ -1,179 +1,215 @@
 import { Link } from '@tanstack/react-router'
-import {
-  BookOpenCheck,
-  CalendarDays,
-  Flame,
-  Footprints,
-  Music,
-  Settings,
-  Sparkles,
-  type LucideIcon,
-} from 'lucide-react'
-import { useId, useMemo } from 'react'
+import { Bell, Camera, Clock, Flame, Music, Settings, type LucideIcon } from 'lucide-react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  practiceRecord,
-  selectDays,
-  streak,
-  useProgress,
-  type PracticeRecord,
-} from '@/entities/progress'
-import { useAccount } from '@/shared/lib/account'
-import { Avatar, ButtonLink, RoundLink, RowLink, ScreenHeader, SettingsGroup } from '@/shared/ui'
+import { useNotifications } from '@/entities/notification'
+import { selectDays, streak, useProgress } from '@/entities/progress'
+import { useProfileFigures } from '@/features/track-achievements'
+import { cn } from '@/shared/lib'
+import { useAccount, useLearnerProfile } from '@/shared/lib/account'
 import { useAppUpdate } from '@/shared/lib/app-update'
-import { Badges } from './Badges'
+import { Avatar, ButtonLink, RoundLink, ScreenHeader } from '@/shared/ui'
 import { useToday } from '@/widgets/practice-days'
+import { usePracticeTime } from '../model/format'
+import { AchievementsPreview } from './AchievementsPreview'
+import { BadgesPreview, NextMilestone } from './BadgesPreview'
 
 /**
- * The Profile, a place of its own (memory-palaces'): the learner's name in its bar with Settings,
- * the screen's action, beside it (the Account is Settings' first row); their picture, email (or a
- * guest's Sign in) and three figures of their practice; a row to their Activity (Noji's, a page of
- * its own); the rest of their record; their badges. Each thing opens one way.
+ * The Profile, a place of its own (B1, memory-palaces'): the learner's name in its bar with their
+ * notifications' bell and, on a phone, Settings; their picture (Edit photo on it), name, handle and
+ * year joined, and three tiles: the day streak (to Streak), the songs learned, the time practised;
+ * the badge nearest; the first badges and achievements, each with See all. A guest sees the
+ * device's figures and Sign in; while the server's profile is read, its lines are grey.
  */
 export function ProfilePage() {
   const { t } = useTranslation(['account', 'common', 'settings'])
   const { account } = useAccount()
+  const { state } = useLearnerProfile()
   const updateReady = useAppUpdate().status === 'ready'
+  const unread = useNotifications((held) => held.notices.filter((notice) => !notice.read).length)
+  const name = state.kind === 'ready' && state.profile.name ? state.profile.name : account?.name
   return (
     <div className="flex flex-col gap-2">
       <ScreenHeader
-        title={account ? account.name || account.email : t('profile.title')}
+        title={account ? name || account.email : t('profile.title')}
         large
         actions={
-          // The laptop's sidebar has Settings at its foot: the bar's would be a second way.
-          <span className="relative lg:hidden">
-            <RoundLink
-              label={
-                updateReady
-                  ? `${t('common:nav.settings')}, ${t('settings:about.update.ready')}`
-                  : t('common:nav.settings')
-              }
-              icon={Settings}
-              render={<Link to="/settings" />}
-            />
-            {/* A version waits (cleared by installing it, not by Later), as iOS's Settings badge. */}
-            {updateReady ? (
-              <span
-                aria-hidden
-                className="pointer-events-none absolute top-1 right-1 size-2.5 rounded-pill bg-destructive ring-2 ring-background"
+          <>
+            <span className="relative">
+              <RoundLink
+                label={
+                  unread > 0
+                    ? t('profile.notifications.unread', { count: unread })
+                    : t('profile.notifications.open')
+                }
+                icon={Bell}
+                render={<Link to="/profile/notifications" />}
               />
-            ) : null}
-          </span>
+              {unread > 0 ? (
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute top-0.5 right-0.5 grid min-w-4.5 place-items-center rounded-pill bg-destructive px-1 text-[0.6875rem] leading-4.5 font-semibold text-white tabular-nums ring-2 ring-background"
+                >
+                  {unread > 99 ? '99+' : unread}
+                </span>
+              ) : null}
+            </span>
+            {/* The laptop's sidebar has Settings at its foot: the bar's would be a second way. */}
+            <span className="relative lg:hidden">
+              <RoundLink
+                label={
+                  updateReady
+                    ? `${t('common:nav.settings')}, ${t('settings:about.update.ready')}`
+                    : t('common:nav.settings')
+                }
+                icon={Settings}
+                render={<Link to="/settings" />}
+              />
+              {updateReady ? (
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute top-1 right-1 size-2.5 rounded-pill bg-destructive ring-2 ring-background"
+                />
+              ) : null}
+            </span>
+          </>
         }
       />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <Hero />
-        <SettingsGroup flush>
-          <RowLink
-            title={t('profile.activity')}
-            icon={CalendarDays}
-            paint="grass"
-            render={<Link to="/profile/activity" />}
-          />
-        </SettingsGroup>
-        <Record />
-        <Badges />
+        <NextMilestone />
+        <BadgesPreview />
+        <AchievementsPreview />
       </div>
     </div>
   )
 }
 
-/** The learner: their picture, their email or a guest's Sign in, and three figures of their practice. */
+/**
+ * The learner: their picture with Edit photo, their name, handle and year joined; a guest's Sign
+ * in; then the three tiles.
+ */
 function Hero() {
   const { t } = useTranslation('account')
   const { account } = useAccount()
-  const name = account ? account.name || account.email : null
+  const { state } = useLearnerProfile()
+  const profile = state.kind === 'ready' ? state.profile : null
+  const name = profile?.name || account?.name || account?.email || null
+  const year = profile ? new Date(profile.joined).getFullYear() : null
   return (
     <section
       aria-label={name ?? t('profile.guest')}
       className="flex flex-col items-center gap-4 pt-2 text-center"
     >
-      <Avatar name={name} size="hero" />
+      <div className="relative">
+        <Avatar name={name} size="hero" picture={profile?.avatar ?? null} />
+        {account ? (
+          // Edit photo on the picture's lower right (memory-palaces'): it opens Edit profile.
+          <span className="absolute -right-2 -bottom-2 rounded-pill bg-background p-0.5">
+            <RoundLink
+              label={t('profile.editPhoto')}
+              icon={Camera}
+              render={<Link to="/settings/account/profile" />}
+            />
+          </span>
+        ) : null}
+      </div>
       {account ? (
-        <p className="max-w-full text-pretty break-all text-muted-foreground">{account.email}</p>
+        state.kind === 'loading' ? (
+          <div aria-busy className="flex flex-col items-center gap-2">
+            <p role="status" className="sr-only">
+              {t('profile.loading')}
+            </p>
+            <span
+              aria-hidden
+              className="h-6 w-40 rounded-pill bg-muted motion-safe:animate-pulse"
+            />
+            <span
+              aria-hidden
+              className="h-4 w-32 rounded-pill bg-muted motion-safe:animate-pulse"
+            />
+          </div>
+        ) : (
+          <div className="flex max-w-full flex-col gap-1">
+            <p className="font-display text-2xl font-semibold text-balance break-words">{name}</p>
+            {year ? (
+              <p className="text-muted-foreground">
+                {profile?.handle
+                  ? t('profile.handleJoined', { handle: profile.handle, year })
+                  : t('profile.joined', { year })}
+              </p>
+            ) : null}
+          </div>
+        )
       ) : (
         <div className="flex max-w-sm flex-col items-center gap-3">
-          <div className="flex flex-col gap-0.5">
-            <p className="font-display text-xl font-semibold text-balance">{t('profile.guest')}</p>
-          </div>
+          <p className="font-display text-xl font-semibold text-balance">{t('profile.guest')}</p>
           <ButtonLink render={<Link to="/account/sign-in" />}>{t('profile.signIn')}</ButtonLink>
         </div>
       )}
-      <Figures />
+      <Tiles />
     </section>
   )
 }
 
-/** Days in a row, songs played and steps learned, side by side, a hairline between them. */
-function Figures() {
+/** The day streak (a link to Streak), the songs learned and the time practised, side by side. */
+function Tiles() {
   const { t } = useTranslation('account')
   const days = useProgress(selectDays)
-  const progress = useProgress((state) => state)
   const today = useToday()
-  const record = useMemo(() => practiceRecord(progress), [progress])
-  const figures = [
-    { label: t('profile.streak'), value: streak(days, today), icon: Flame },
-    { label: t('profile.songs'), value: record.songsPlayed, icon: Music },
-    { label: t('profile.steps'), value: record.stepsLearned, icon: Footprints },
-  ] as const
+  const figures = useProfileFigures()
+  const time = usePracticeTime()
+  const run = useMemo(() => streak(days, today), [days, today])
   return (
-    <dl
-      aria-label={t('profile.figures')}
-      className="mt-1 flex w-full max-w-sm items-stretch divide-x divide-border"
-    >
-      {figures.map(({ label, value, icon: Icon }) => (
-        <div
-          key={label}
-          className="flex min-w-0 flex-1 flex-col-reverse items-center gap-1 px-2 text-center"
+    <ul aria-label={t('profile.figures')} className="mt-1 grid w-full grid-cols-3 gap-2">
+      <li className="min-w-0">
+        <Link
+          to="/profile/streak"
+          className={cn(
+            TILE,
+            'transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3',
+          )}
         >
-          <dt className="text-xs text-pretty text-muted-foreground sm:text-sm">{label}</dt>
-          <dd className="flex items-center gap-1.5 font-display text-2xl leading-none font-semibold tabular-nums">
-            <Icon aria-hidden className="size-4 shrink-0 text-muted-foreground" />
-            {value}
-          </dd>
+          <TileFace label={t('profile.tiles.streak')} value={run} icon={Flame} />
+        </Link>
+      </li>
+      <li className="min-w-0">
+        <div className={TILE}>
+          <TileFace label={t('profile.tiles.songs')} value={figures.songsLearned} icon={Music} />
         </div>
-      ))}
-    </dl>
+      </li>
+      <li className="min-w-0">
+        <div className={TILE}>
+          <TileFace
+            label={t('profile.tiles.time')}
+            value={time(figures.practiceSeconds)}
+            icon={Clock}
+          />
+        </div>
+      </li>
+    </ul>
   )
 }
 
-/** The figures of the record the hero leaves out: one card, a figure a line, its number at its end. */
-const RECORD = [
-  ['lessonsDone', 'lessons', BookOpenCheck],
-  ['skillsKnown', 'skills', Sparkles],
-] as const satisfies readonly (readonly [keyof PracticeRecord, string, LucideIcon])[]
+const TILE = 'card flex h-full flex-col items-center justify-start gap-1.5 px-2 py-3 text-center'
 
-function Record() {
-  const { t } = useTranslation('account')
-  const headingId = useId()
-  const progress = useProgress((state) => state)
-  const record = useMemo(() => practiceRecord(progress), [progress])
+/** A tile's figure over its name, read as one: "3 Day streak". */
+function TileFace({
+  label,
+  value,
+  icon: Icon,
+}: {
+  label: string
+  value: number | string
+  icon: LucideIcon
+}) {
   return (
-    <section aria-labelledby={headingId} className="flex flex-col gap-2">
-      <h2 id={headingId} className="px-3 font-sans text-sm font-semibold text-muted-foreground">
-        {t('profile.record')}
-      </h2>
-      {Object.values(record).every((figure) => figure === 0) ? (
-        // Nothing practised yet: where the record starts, and the way to start it.
-        <div className="flex flex-col items-start gap-3 card p-4">
-          <p className="text-pretty text-muted-foreground">{t('profile.recordEmpty')}</p>
-          <ButtonLink variant="outline" render={<Link to="/" />}>
-            {t('profile.recordStart')}
-          </ButtonLink>
-        </div>
-      ) : (
-        <dl className="flex flex-col divide-y divide-border card px-4">
-          {RECORD.map(([field, label, Icon]) => (
-            <div key={field} className="flex min-h-12 items-center gap-3 py-2">
-              <Icon aria-hidden className="size-5 shrink-0 text-muted-foreground" />
-              <dt className="min-w-0 flex-1 text-pretty">{t(`profile.${label}`)}</dt>
-              <dd className="font-display text-lg font-semibold tabular-nums">{record[field]}</dd>
-            </div>
-          ))}
-        </dl>
-      )}
-    </section>
+    <>
+      <span className="flex flex-col items-center gap-1 font-display text-lg leading-tight font-semibold text-balance tabular-nums sm:text-2xl">
+        <Icon aria-hidden className="size-4 shrink-0 text-muted-foreground" />
+        {value}
+      </span>
+      <span className="text-xs text-pretty text-muted-foreground sm:text-sm">{label}</span>
+    </>
   )
 }
-
-/** What each badge is drawn with: the figure it counts. */

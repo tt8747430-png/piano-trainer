@@ -117,7 +117,15 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/settings': ({ wide }) => (wide ? null : up({ to: '/profile' })),
 
   // The Profile's and Settings' pages.
-  '/shell/profile/activity': () => up({ to: '/profile' }),
+  '/shell/profile/streak': () => up({ to: '/profile' }),
+  '/shell/profile/badges': () => up({ to: '/profile' }),
+  '/shell/profile/badges/$badgeId': () => up({ to: '/profile/badges' }),
+  '/shell/profile/achievements': () => up({ to: '/profile' }),
+  '/shell/profile/achievements/$achievementId': () => up({ to: '/profile/achievements' }),
+  '/shell/profile/notifications': () => up({ to: '/profile' }),
+  '/shell/settings/account/profile': () => up({ to: '/settings/account' }),
+  '/shell/settings/account/password': () => up({ to: '/settings/account' }),
+  '/shell/settings/privacy': () => up({ to: '/settings/account' }),
   '/shell/settings/general': settingsPage,
   '/shell/settings/on-screen-piano': settingsPage,
   '/shell/settings/computer-keys': settingsPage,
@@ -171,8 +179,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
     up({ to: '/songs/folders/$folderId', params: { folderId: param(from, 'folderId') } }),
   '/shell/songs/archive': toSongs,
   '/shell/songs/shared': toSongs,
-  '/shell/songs/public': toSongs,
-  '/shell/songs/public/$itemId': () => up({ to: '/songs/public' }),
+  '/shell/songs/public/$itemId': () => up({ to: '/songs', search: { view: 'explore' } }),
 
   // The Player and the score editor: up to the piece's page; the editor's Settings and a take up
   // to the editor.

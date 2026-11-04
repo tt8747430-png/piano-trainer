@@ -9,6 +9,11 @@ import {
   type DiagramInversionsStore,
 } from '@/entities/diagram-inversion'
 import { createLibraryStore, LIBRARY_STORAGE_KEY, type LibraryStore } from '@/entities/library'
+import {
+  createNotificationsStore,
+  NOTIFICATIONS_STORAGE_KEY,
+  type NotificationsStore,
+} from '@/entities/notification'
 import { createPatternsStore, PATTERNS_STORAGE_KEY, type PatternsStore } from '@/entities/pattern'
 import { createPiecesStore, PIECES_STORAGE_KEY, type PiecesStore } from '@/entities/piece'
 import { createProgressStore, PROGRESS_STORAGE_KEY, type ProgressStore } from '@/entities/progress'
@@ -35,6 +40,7 @@ import {
 } from '@/shared/api/content'
 import { createWebMidi, hasWebMidi } from '@/shared/api/midi'
 import { lazyBackend, type Backend } from '@/shared/api/supabase'
+import { createSupabaseProfile, type ProfilePort } from '@/shared/api/profile'
 import { createSupabasePublicLibrary, type PublicLibrary } from '@/shared/api/public-library'
 import { createSupabaseCloud, type CloudSync } from '@/shared/api/sync'
 import { safeLocalStorage, type SavingOptions } from '@/shared/lib'
@@ -60,6 +66,7 @@ export interface Stores {
   readonly library: LibraryStore
   readonly diagramInversions: DiagramInversionsStore
   readonly chordSheets: ChordSheetsStore
+  readonly notifications: NotificationsStore
 }
 
 /**
@@ -80,6 +87,7 @@ export function createStores(
     library: createLibraryStore(saving),
     diagramInversions: createDiagramInversionsStore(saving),
     chordSheets: createChordSheetsStore(saving),
+    notifications: createNotificationsStore(saving),
   }
 }
 
@@ -118,6 +126,7 @@ export const SYNCED_SAVES: readonly SyncedSave[] = [
   { table: 'views', key: VIEWS_STORAGE_KEY },
   { table: 'diagram_inversions', key: DIAGRAM_INVERSIONS_STORAGE_KEY },
   { table: 'chord_sheets', key: CHORD_SHEETS_STORAGE_KEY },
+  { table: 'notifications', key: NOTIFICATIONS_STORAGE_KEY },
 ]
 
 /**
@@ -144,6 +153,9 @@ export const createCloud = (backend: Backend): CloudSync => createSupabaseCloud(
 /** The Public library: the project's tables (ADR 0116). */
 export const createPublicLibrary = (backend: Backend): PublicLibrary =>
   createSupabasePublicLibrary(backend)
+
+/** The learner's profile: the project's `learner_profiles` and `avatars` (B1). */
+export const createProfile = (backend: Backend): ProfilePort => createSupabaseProfile(backend)
 
 /** The admin's tools: the project's `admin` function and tables (ADR 0116). */
 export const createAdmin = (backend: Backend): AdminPort => createSupabaseAdmin(backend)

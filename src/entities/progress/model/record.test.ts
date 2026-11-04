@@ -10,6 +10,8 @@ describe('practiceRecord', () => {
       stepsLearned: 0,
       lessonsDone: 0,
       songsPlayed: 0,
+      songsLearned: 0,
+      practiceSeconds: 0,
       skillsKnown: 0,
     })
   })
@@ -33,7 +35,22 @@ describe('practiceRecord', () => {
       stepsLearned: 2,
       lessonsDone: 1,
       songsPlayed: 2,
+      songsLearned: 0,
+      practiceSeconds: 0,
       skillsKnown: 1,
     })
+  })
+
+  it('counts practice seconds and songs learned', () => {
+    const state: ProgressState = {
+      ...EMPTY_PROGRESS,
+      learned: {
+        'piece:bz5': '2026-10-01',
+        'piece:ode': '2026-10-02',
+        'scales:c': '2026-10-02',
+      } as ProgressState['learned'],
+      seconds: { '2026-11-03': 600, '2026-11-04': 210 },
+    }
+    expect(practiceRecord(state)).toMatchObject({ songsLearned: 2, practiceSeconds: 810 })
   })
 })

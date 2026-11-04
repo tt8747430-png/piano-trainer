@@ -75,11 +75,15 @@ export function restoreView<S extends object>(
   }
 }
 
-/** A remembered route's options: it says it is remembered, and restores its view on entering. */
+/**
+ * A remembered route's options: it says it is remembered, and restores its view on entering. With
+ * `only`, it remembers those params alone (Songs' view, never its filters); else every one it reads.
+ */
 export const remembered = <S extends object>(
   read: (raw: Raw) => S,
   kept: readonly (keyof S & string)[],
+  only?: readonly (keyof S & string)[],
 ) => ({
-  staticData: { remembered: true } as const,
+  staticData: { remembered: only ?? (true as const) },
   beforeLoad: restoreView(read, kept),
 })

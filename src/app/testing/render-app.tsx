@@ -13,6 +13,7 @@ import { createFakeAuth, type AuthGateway } from '@/shared/api/auth'
 import { filesContent, type ContentPort } from '@/shared/api/content'
 import { createFakeContentEditing, type ContentEditingPort } from '@/shared/api/content-editing'
 import { createFakeErrorReporter, type ErrorReporter } from '@/shared/api/errors'
+import { createFakeProfile, type ProfilePort } from '@/shared/api/profile'
 import { createFakePublicLibrary, type PublicLibrary } from '@/shared/api/public-library'
 import { createFakeCloud } from '@/shared/api/sync'
 import { createMemoryStorage } from '@/shared/lib'
@@ -27,7 +28,7 @@ import { createAppRouter } from '../router'
  * language, with fake audio and MIDI it hands back for the test to drive; `webMidi: false` is a
  * browser without it; `content` is where songs' music and lessons come from (all on the device unless
  * a test says otherwise); `auth` and `cloud` are fakes, signed out unless the test signs in;
- * `welcomed: false` is the app's first run, with its welcome; `publicLibrary`, `admin`, `features`, `contentEditing` and `errors` fakes, empty unless given.
+ * `welcomed: false` is the app's first run, with its welcome; `publicLibrary`, `profile`, `admin`, `features`, `contentEditing` and `errors` fakes, empty unless given.
  * Every screen's code is loaded first, and the score's engraver, so a test waits on the app and
  * never on the runner importing a lazy chunk.
  * What the app hears on the window and the document (its stores another tab's saves, its router the
@@ -44,6 +45,7 @@ export async function renderApp(
     cloud = createFakeCloud(),
     welcomed = true,
     publicLibrary = createFakePublicLibrary(),
+    profile = createFakeProfile(),
     admin = createFakeAdmin(),
     features = createFakeFeatures(),
     contentEditing = createFakeContentEditing(),
@@ -57,6 +59,7 @@ export async function renderApp(
     cloud?: ReturnType<typeof createFakeCloud>
     welcomed?: boolean
     publicLibrary?: PublicLibrary
+    profile?: ProfilePort
     admin?: AdminPort
     features?: FeaturesPort
     contentEditing?: ContentEditingPort
@@ -88,6 +91,7 @@ export async function renderApp(
       auth={auth}
       sync={sync}
       publicLibrary={publicLibrary}
+      profile={profile}
       admin={admin}
       features={features}
       contentEditing={contentEditing}
@@ -107,6 +111,7 @@ export async function renderApp(
     libraryStore: stores.library,
     diagramInversionsStore: stores.diagramInversions,
     chordSheetsStore: stores.chordSheets,
+    notificationsStore: stores.notifications,
     audio,
     midi,
     auth,

@@ -6,7 +6,7 @@ const none: BadgeFigures = {
   bestStreak: 0,
   songsLearned: 0,
   lessonsDone: 0,
-  scalesLearned: 0,
+  keysPractised: 0,
   daysPractised: 0,
   libraryBuilt: 0,
 }
@@ -40,12 +40,24 @@ describe('the badges (B1)', () => {
     expect(next).toMatchObject({ id: 'repertoire', tier: 'gold', left: 2, goal: 15 })
   })
 
+  it('Scale Master counts keys practised', () => {
+    const scales = (keysPractised: number) =>
+      badgesOf({ ...none, keysPractised }).find((b) => b.id === 'scales')
+    expect(BADGES.find((badge) => badge.id === 'scales')).toMatchObject({
+      figure: 'keysPractised',
+      tiers: [3, 8, 15, 24],
+    })
+    expect(scales(2)).toMatchObject({ earned: 0, next: 3 })
+    expect(scales(8)).toMatchObject({ earned: 2, tier: 'silver', next: 15 })
+    expect(scales(24)).toMatchObject({ earned: 4, next: null })
+  })
+
   it('has no next milestone once every tier is earned', () => {
     const all = {
       bestStreak: 999,
       songsLearned: 999,
       lessonsDone: 999,
-      scalesLearned: 99,
+      keysPractised: 24,
       daysPractised: 999,
       libraryBuilt: 999,
     }

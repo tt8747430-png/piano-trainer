@@ -7,6 +7,7 @@ import { BackButton, RoundButton, RoundLink, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { LibraryPage } from '../model/use-library-page'
 import { ArchiveButton } from './ArchiveButton'
+import { SongsSwitch } from './SongsSwitch'
 
 /**
  * The library's bar (Mindscape's): its title says where the learner is, Songs at Home, the folder's
@@ -48,10 +49,14 @@ export function LibraryHeader({
     )
   const name = folder ? nameOf(folder) : t('title')
   const above = folder?.parent ? folders.find((each) => each.id === folder.parent) : undefined
+  // Home's bar has Songs' switch, My songs · Explore, in its title's place (D1).
+  const place = folder
+    ? ({ large: false } as const)
+    : ({ large: true, switcher: <SongsSwitch value="mine" /> } as const)
   return (
     <ScreenHeader
       title={name}
-      large={!folder}
+      {...place}
       back={
         folder ? (
           <BackButton

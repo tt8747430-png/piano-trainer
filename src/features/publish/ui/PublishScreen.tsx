@@ -74,11 +74,14 @@ export function PublishScreen({
   item,
   publishing,
   back,
+  fields,
 }: {
   item: PublishPreview
   publishing: ReturnType<typeof usePublish>
   /** The bar's way back: the song's Settings, the pattern's page. */
   back: ReactNode
+  /** The item's own fields under its description: a song's category (B3). */
+  fields?: ReactNode
 }) {
   const { t } = useTranslation(['songs', 'editor'])
   return (
@@ -92,6 +95,7 @@ export function PublishScreen({
             key={publishing.description}
             item={item}
             publishing={publishing}
+            fields={fields}
           />
         ) : (
           <div className="flex flex-col items-start gap-3 card p-4">
@@ -110,9 +114,11 @@ export function PublishScreen({
 function PublishForm({
   item,
   publishing,
+  fields,
 }: {
   item: PublishPreview
   publishing: ReturnType<typeof usePublish>
+  fields: ReactNode
 }) {
   const { t } = useTranslation('songs')
   const [text, setText] = useState(publishing.description)
@@ -156,6 +162,7 @@ function PublishForm({
         </>
       ) : null}
       <PublishFields item={item} authorName={publishing.authorName} text={text} onText={setText} />
+      {fields}
       {/* The page's foot: what is done to it, Noji's pair of full-width buttons. */}
       <div className="mt-auto flex flex-col gap-3 pt-4">
         {/* The rights, confirmed each time it is published (R29 D3): Publish waits for the tick. */}
