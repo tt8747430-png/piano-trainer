@@ -19,7 +19,7 @@ function filesUnder(dir: string): string[] {
  */
 const OTHER_FOCUS =
   /focus-visible:(?:ring-(?!0\b)\S+|border-ring|underline|outline-[12](?![\d])|outline-hidden|bg-\S+)/g
-const IN_PLACE = ['pages/piece/ui/SongEdit.tsx']
+const IN_PLACE = ['pages/piece/ui/SongDetails.tsx']
 
 describe('one focus ring (A36)', () => {
   it('is drawn by the base rule alone: 3px of the ring colour, 2px outside', () => {
