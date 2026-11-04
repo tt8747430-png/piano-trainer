@@ -4,7 +4,13 @@ import { cn } from '@/shared/lib'
 import { InfoTip, ToolKey } from '@/shared/ui'
 import type { PaletteCategory } from '../model/palette-categories'
 import type { Tool } from '../model/shortcuts'
-import { PanelSections, useKeyTip, usePaletteDock, usePaletteForm } from './palette-form'
+import {
+  PaletteTipSide,
+  PanelSections,
+  useKeyTip,
+  usePaletteDock,
+  usePaletteForm,
+} from './palette-form'
 
 /** What is chosen on the music, as the pickers' cells show it (ADR 0114): a sky glyph on a sky wash. */
 const PRESSED = 'aria-pressed:bg-chosen aria-pressed:text-foreground'
@@ -184,6 +190,7 @@ export function PaletteKey({
     <ToolKey
       label={label}
       tip={useKeyTip(label, tool)}
+      tipSide={use(PaletteTipSide)}
       className={cn(
         FACES[form],
         form === 'grid' && span === 'wide' && 'w-auto min-w-22 px-2',

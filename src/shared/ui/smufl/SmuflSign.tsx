@@ -117,7 +117,7 @@ export function SmuflGlyph({
       viewBox={`0 0 ${cell} ${cell}`}
       width={cell}
       height={cell}
-      className="shrink-0 overflow-visible"
+      className="size-full max-h-11 max-w-11 shrink-0 overflow-visible"
     >
       <SmuflRun names={names} x={cell / 2} y={baseline} space={space} />
     </svg>

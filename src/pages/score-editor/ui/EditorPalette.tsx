@@ -45,6 +45,7 @@ import {
 } from './MarkKeys'
 import { NoteBar, NoteKeys, PitchKeys } from './NoteKeys'
 import {
+  PaletteTipSide,
   PaletteDockContext,
   PaletteFormContext,
   PanelSections,
@@ -287,9 +288,11 @@ export function NoteToolbar({
           pill ? 'rounded-control bg-muted px-1' : 'flex-1',
         )}
       >
-        <Laid dock="sheet" form="bar">
-          <NoteBar />
-        </Laid>
+        <PaletteTipSide value={pill ? 'bottom' : 'top'}>
+          <Laid dock="sheet" form="bar">
+            <NoteBar />
+          </Laid>
+        </PaletteTipSide>
       </div>
       {pill ? <span className="flex-1" /> : null}
       {end}

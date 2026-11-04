@@ -18,7 +18,12 @@ export function TupletGlyph({ num, of }: { num: number; of?: number | undefined 
   const width = 44
   const baseline = 27
   return (
-    <svg aria-hidden data-slot="smufl-glyph" viewBox={`0 0 ${width} 44`} width={44} height={44}>
+    <svg
+      aria-hidden
+      data-slot="smufl-glyph"
+      viewBox={`0 0 ${width} 44`}
+      className="size-full max-h-11 max-w-11"
+    >
       <path
         d="M8 26 V19 H15 M29 19 H36 V26"
         fill="none"

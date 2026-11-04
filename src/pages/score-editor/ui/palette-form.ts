@@ -27,6 +27,12 @@ export const PaletteDockContext = createContext<PaletteDock>('sheet')
 /** Where the palette around stands. */
 export const usePaletteDock = (): PaletteDock => use(PaletteDockContext)
 
+/**
+ * Which side of a key its tooltip opens on (A34): under the toolbar at the screen's top, over the
+ * keys at its foot, so a tooltip never covers the bar's words or the music.
+ */
+export const PaletteTipSide = createContext<'top' | 'bottom'>('top')
+
 /** A key's tooltip, as Flat's: its name, then its shortcut in brackets where it has one. */
 export function useKeyTip(label: string, tool?: Tool): string {
   const caps = modifierCaps(useShortcutsPlatform())
