@@ -1,4 +1,4 @@
-import { ArrowRight, Check, Eye, ListChecks, Square, Volume2, X } from 'lucide-react'
+import { Check, Eye, ListChecks, SkipForward, Square, Volume2, X } from 'lucide-react'
 import { useId, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMidiKeyDown } from '@/features/connect-midi'
@@ -199,12 +199,12 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
   const primaryIcon = result
     ? trainer.run.over
       ? ListChecks
-      : ArrowRight
+      : SkipForward
     : card
       ? Eye
       : choosesKeys(question)
         ? Check
-        : ArrowRight
+        : SkipForward
 
   return (
     <section ref={board} className="flex min-h-0 flex-1 flex-col gap-4 landscape-phone:gap-2">

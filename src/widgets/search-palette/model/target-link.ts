@@ -98,10 +98,10 @@ export function targetLink(target: IndexTarget): { readonly link: Up; readonly t
       }
     case 'exercise':
       return {
+        // Its page first (A41): what it trains and what to start it at.
         link: opens({
-          to: '/play/exercise/$exerciseId',
+          to: '/practice/exercises/$exerciseId',
           params: { exerciseId: target.exercise },
-          state: OPEN_PLAINLY,
         }),
         tile: PAGE_TILES.exercises,
       }

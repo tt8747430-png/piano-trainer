@@ -56,6 +56,14 @@ export interface ExerciseFields {
   readonly handOctaves?: true
 }
 
+/** What an exercise's page leaves out: a Key, where it runs through every key; Hands, where it needs both. */
+export interface ExerciseOptions {
+  /** One line through all keys, or a key the day chooses: no Key to choose. */
+  readonly oneKey?: true
+  /** Written for the two hands together: no Hands to choose. */
+  readonly bothHands?: true
+}
+
 /** An exercise: what it is called and trains, the choices its rule takes, and how it plays when the URL names none. */
 export interface Exercise {
   readonly id: ExerciseId
@@ -64,6 +72,10 @@ export interface Exercise {
   readonly name: LocalText
   /** What it trains, in a line (whose idea it is, its group says). */
   readonly trains: LocalText
+  /** How to play it, in plain words: what its page says over its fingering's picture (A41). */
+  readonly how: LocalText
+  /** What its page offers beyond its fields: which of Key and Hands it has. */
+  readonly options: ExerciseOptions
   readonly fields: ExerciseFields
   readonly own: Partial<ExerciseChoice>
   readonly tempo: number

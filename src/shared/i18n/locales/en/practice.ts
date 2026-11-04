@@ -544,6 +544,22 @@ export const practice = {
       dominant: 'Dominant 7ths',
     },
   },
+  // An exercise's page (A41), before the Player.
+  exercisePage: {
+    trains: 'What it trains',
+    how: 'How to play it',
+    options: 'Options',
+    key: 'Key',
+    hands: 'Hands',
+    octaves: 'Octaves',
+    tempo: 'Tempo',
+    bpm: '{{bpm}} beats a minute',
+    slower: 'Slower',
+    faster: 'Faster',
+    start: 'Start',
+    rh: 'Right hand',
+    lh: 'Left hand',
+  },
   exercises: {
     // The Exercises page's groups.
     groups: {

@@ -1,11 +1,15 @@
 import { useParams, useSearch } from '@tanstack/react-router'
+import { SkipForward } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isExerciseId, exerciseOf, type ExerciseChoice, type Exercise } from '@/entities/exercise'
 import { localText, useKeyName, useLocale, useScaleName } from '@/shared/i18n'
 import { useUp, useSetSearch } from '@/shared/lib'
 import { printedChord } from '@/shared/lib/music'
-import type { ExerciseSearch } from '../model/exercise-search'
+import { exercisePatch, type ExerciseSearch } from '../model/exercise-search'
+import { nextKey } from '../model/next-key'
 import { useExercisePlayer } from '../model/use-exercise-player'
+import { Button } from '@/shared/ui/primitives/button'
 import { ExerciseSetup } from './ExerciseSetup'
 import { PlayerLayout } from './PlayerLayout'
 
@@ -46,6 +50,26 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
     setSearch,
   )
   const of = useExerciseOf(exercise, choice)
+  // After each pass (its music played to its end or stopped), Next key moves round the circle of
+  // fifths, at the tempo that key last reached (A41).
+  const { playing } = player.practice.state
+  const [passed, setPassed] = useState(false)
+  const [wasPlaying, setWasPlaying] = useState(playing)
+  if (wasPlaying !== playing) {
+    setWasPlaying(playing)
+    if (!playing) setPassed(true)
+  }
+  const goOn =
+    passed && !playing && !exercise.options.oneKey
+      ? () => {
+          setPassed(false)
+          const minor = exercise.fields.tonality === true && choice.tonality === 'minor'
+          setSearch({
+            ...exercisePatch(exercise, { root: nextKey(choice.root, minor) }),
+            tempo: undefined,
+          })
+        }
+      : null
   return (
     <PlayerLayout
       title={t('exercise.title', {
@@ -58,6 +82,14 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
       view={view}
       player={player}
       performance={performance}
+      status={
+        goOn ? (
+          <Button variant="soft" size="pill" onClick={goOn}>
+            {t('exercise.nextKey')}
+            <SkipForward data-icon="inline-end" aria-hidden />
+          </Button>
+        ) : null
+      }
       setup={
         <ExerciseSetup
           exercise={exercise}

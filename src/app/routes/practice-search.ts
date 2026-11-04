@@ -7,9 +7,12 @@ import {
   isTimeLimit,
   type TrainerView,
 } from '@/features/trainer'
-import { valueOr } from '@/shared/lib'
-import { parseNoteInOctave, PIANO } from '@/shared/lib/music'
-import { routeSearch, type Input, type Raw } from './read-search'
+import { isOctaves, isTonality } from '@/entities/exercise'
+import type { ExercisePageSearch } from '@/pages/exercise'
+import { readNote, valueOr, wholeIn } from '@/shared/lib'
+import { noteParam, parseNoteInOctave, PIANO } from '@/shared/lib/music'
+import { TEMPO_RANGE } from '@/shared/lib/schedule'
+import { isHands, routeSearch, type Input, type Raw } from './read-search'
 
 // The Check: the step it checks; none is not found, so nothing is left out of the URL.
 interface CheckSearch {
@@ -81,3 +84,18 @@ export function validatePracticeSettingsSearch(
   const raw: Raw = input
   return { from: isPracticeSettingsFrom(raw.from) ? raw.from : undefined }
 }
+
+// An exercise's page (A41): the key, hands, octaves and tempo it is set to start at, each absent for
+// the exercise's own.
+const EXERCISE_PAGE_DEFAULTS: ExercisePageSearch = {}
+export function readExercisePageSearch(raw: Raw): ExercisePageSearch {
+  const root = readNote(raw.root)
+  return {
+    root: root ? noteParam(root) : undefined,
+    tonality: isTonality(raw.tonality) ? raw.tonality : undefined,
+    hands: isHands(raw.hands) ? raw.hands : undefined,
+    octaves: isOctaves(raw.octaves) ? raw.octaves : undefined,
+    tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, undefined),
+  }
+}
+export const exercisePageSearch = routeSearch(readExercisePageSearch, EXERCISE_PAGE_DEFAULTS)

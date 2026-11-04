@@ -30,6 +30,28 @@ describe('An exercise in the Player', () => {
     expect(audio.stops).toBeGreaterThan(0)
   })
 
+  it('offers Next key after a pass, a fifth up, leaving the tempo to that key’s own', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/play/exercise/five-finger?tempo=100')
+    expect(screen.queryByRole('button', { name: 'Next key' })).not.toBeInTheDocument()
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    await user.click(screen.getByRole('button', { name: 'Stop' }))
+    await user.click(screen.getByRole('button', { name: 'Next key' }))
+    expect(router.state.location.search).toMatchObject({ root: 'G' })
+    expect(
+      await screen.findByRole('heading', { name: 'Five-finger position: G major' }),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Next key' })).not.toBeInTheDocument()
+    // No tempo carried over: the new key opens at the tempo it reached (its own in `tempos`).
+    expect(router.state.location.search).not.toHaveProperty('tempo')
+  })
+
+  it('prints no chord symbol and no staff name on an exercise’s score', async () => {
+    await renderApp('/play/exercise/five-finger')
+    await screen.findByRole('heading', { name: 'Five-finger position: C major' })
+    expect(document.body).not.toHaveTextContent(/\bPiano\b/)
+  })
+
   it('offers only the choices its rule takes, and writes them to the URL', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/exercise/sixth-diminished-chords')
@@ -104,16 +126,17 @@ describe('An exercise in the Player', () => {
     expect(router.state.location.search).not.toHaveProperty('swing')
   })
 
-  it('comes back as it was left when opened plainly', async () => {
+  it('comes back with its swing as it was left, started again from its page', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/exercises')
     await user.click(await screen.findByRole('link', { name: /^Arpeggios from the 3rd / }))
+    await user.click(await screen.findByRole('link', { name: 'Start' }))
     await screen.findByRole('heading', { name: /^Arpeggios from the 3rd: / })
     await user.click(screen.getByRole('button', { name: 'Player settings' }))
     await user.click(await screen.findByRole('radio', { name: 'Light' }))
     await user.keyboard('{Escape}')
     await user.click(await screen.findByRole('button', { name: 'Close' }))
-    await user.click(await screen.findByRole('link', { name: /^Arpeggios from the 3rd / }))
+    await user.click(await screen.findByRole('link', { name: 'Start' }))
     await screen.findByRole('heading', { name: /^Arpeggios from the 3rd: / })
     expect(router.state.location.pathname).toBe('/play/exercise/from-third')
     expect(router.state.location.search).toHaveProperty('swing')

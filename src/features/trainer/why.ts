@@ -3,7 +3,6 @@ import {
   keyParam,
   keySignature,
   LETTERS,
-  noteName,
   numeralChord,
   parseNumerals,
   printedChord,
@@ -167,7 +166,7 @@ export function whyAnswer(question: Question): LocalizedWhy {
       return {
         key: 'note',
         values: {
-          note: `${noteName(question.spelled)}${writtenOctave(question.key, question.spelled)}`,
+          note: `${printedNote(question.spelled)}${writtenOctave(question.key, question.spelled)}`,
           clef: question.clef === 'bass' ? 'bass' : 'treble',
           place: notePlace(question.key, question.spelled, question.clef),
         },

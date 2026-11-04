@@ -514,6 +514,21 @@ export const practice: LocaleResources['practice'] = {
       dominant: 'Доминантсептаккорды',
     },
   },
+  exercisePage: {
+    trains: 'Что тренирует',
+    how: 'Как играть',
+    options: 'Настройки',
+    key: 'Тональность',
+    hands: 'Руки',
+    octaves: 'Октавы',
+    tempo: 'Темп',
+    bpm: '{{bpm}} ударов в минуту',
+    slower: 'Медленнее',
+    faster: 'Быстрее',
+    start: 'Начать',
+    rh: 'Правая рука',
+    lh: 'Левая рука',
+  },
   exercises: {
     groups: {
       technique: 'Техника пальцев',
