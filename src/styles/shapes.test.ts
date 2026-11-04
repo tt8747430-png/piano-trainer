@@ -28,7 +28,9 @@ const CORNER =
 const CSS_RADIUS = /border(?:-[a-z]+)*-radius:\s*([^;]+);/g
 
 /** Corners written in CSS that are motion, not shape: the keys folding into their round button. */
-const CSS_ALLOWED = new Set(['styles/theme.css:1.75rem'])
+// A styled place's corner (R29 B9) is the learner's choice among `--block-radius-0…4`, each a
+// step of the scale's `--radius`, read through `--block-radius`.
+const CSS_ALLOWED = new Set(['styles/theme.css:1.75rem', 'styles/theme.css:var(--block-radius)'])
 
 function filesUnder(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {

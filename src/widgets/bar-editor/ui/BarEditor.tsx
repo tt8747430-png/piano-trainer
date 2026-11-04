@@ -54,7 +54,7 @@ function Tile({
         title={canRemove ? undefined : t('bars.keepOne')}
         disabled={!canRemove}
         onClick={onRemove}
-        className="absolute -top-2 -right-2 grid size-6 place-items-center rounded-full bg-destructive text-destructive-foreground disabled:opacity-40"
+        className="absolute -top-2 -right-2 grid size-6 place-items-center rounded-pill bg-destructive text-destructive-foreground disabled:opacity-40"
       >
         <Minus aria-hidden className="size-3.5" />
       </button>

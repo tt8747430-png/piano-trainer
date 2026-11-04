@@ -19,7 +19,7 @@ export function FootTool({
     <button
       type="button"
       className={cn(
-        'flex min-h-12 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-control px-0.5 py-1 text-[0.6875rem] text-muted-foreground transition-colors outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 aria-pressed:text-primary aria-expanded:text-foreground landscape-phone:min-h-10 landscape-phone:flex-row landscape-phone:gap-1.5',
+        'flex min-h-12 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-control px-0.5 py-1 text-[0.6875rem] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-50 aria-pressed:text-primary aria-expanded:text-foreground landscape-phone:min-h-10 landscape-phone:flex-row landscape-phone:gap-1.5',
         className,
       )}
       {...props}

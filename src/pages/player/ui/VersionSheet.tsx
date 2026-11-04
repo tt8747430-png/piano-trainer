@@ -24,7 +24,7 @@ function Dots({ level }: { level: number }) {
       {[1, 2, 3].map((dot) => (
         <span
           key={dot}
-          className={cn('size-1.5 rounded-full', dot <= level ? 'bg-primary' : 'bg-muted')}
+          className={cn('size-1.5 rounded-pill', dot <= level ? 'bg-primary' : 'bg-muted')}
         />
       ))}
     </span>

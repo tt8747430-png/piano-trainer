@@ -1,7 +1,7 @@
-import { ChevronRight, LayoutGrid, type LucideIcon } from 'lucide-react'
+import { LayoutGrid, type LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import { PAINT, Sheet, SheetContent, SheetTrigger, type Paint } from '@/shared/ui'
+import { OpensMark, PAINT, Sheet, SheetContent, SheetTrigger, type Paint } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Switch } from '@/shared/ui/primitives/switch'
 
@@ -71,7 +71,7 @@ function Row({ row, close }: { row: ToolRow; close: () => void }) {
     >
       {face}
       {row.value ? <span className="text-sm text-muted-foreground">{row.value}</span> : null}
-      {row.opens ? <ChevronRight aria-hidden className="size-4 text-muted-foreground" /> : null}
+      {row.opens ? <OpensMark /> : null}
     </button>
   )
 }

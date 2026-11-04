@@ -108,7 +108,7 @@ export function TunerSheet({
                 <span
                   aria-hidden
                   className={cn(
-                    'absolute inset-y-0 w-1 -translate-x-1/2 rounded-full transition-[left] duration-100',
+                    'absolute inset-y-0 w-1 -translate-x-1/2 rounded-pill transition-[left] duration-100',
                     tuned ? 'bg-paint-full-grass' : 'bg-primary',
                   )}
                   style={{ left: `${50 + cents}%` }}

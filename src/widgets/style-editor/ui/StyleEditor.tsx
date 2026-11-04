@@ -68,7 +68,6 @@ function ColourRow({
             className={cn(
               'grid size-11 place-items-center rounded-pill border border-border',
               paint === 'plain' ? 'bg-card' : `bg-paint-${paint}`,
-              'aria-pressed:ring-2 aria-pressed:ring-foreground aria-pressed:ring-offset-2 aria-pressed:ring-offset-background',
             )}
           >
             {value === paint ? <Check aria-hidden className="size-4" /> : null}
@@ -77,7 +76,6 @@ function ColourRow({
         <label
           className={cn(
             'relative grid size-11 cursor-pointer place-items-center overflow-hidden rounded-pill border border-border',
-            custom && 'ring-2 ring-foreground ring-offset-2 ring-offset-background',
           )}
           title={t('style.custom')}
           style={custom ? { backgroundColor: value } : undefined}
@@ -89,6 +87,9 @@ function ColourRow({
               !custom && 'bg-[conic-gradient(red,yellow,lime,aqua,blue,magenta,red)] opacity-80',
             )}
           />
+          {custom ? (
+            <Check aria-hidden className="absolute size-4 text-white mix-blend-difference" />
+          ) : null}
           <input
             type="color"
             aria-label={`${label}: ${t('style.custom')}`}
