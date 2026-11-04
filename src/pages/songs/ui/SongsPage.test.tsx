@@ -909,7 +909,7 @@ describe('Songs: your own', () => {
     await user.type(tempo, '120{Enter}')
     await user.click(within(sheet).getByRole('button', { name: 'One bar more' }))
     await user.click(within(sheet).getByRole('radio', { name: 'Minor' }))
-    await user.click(within(sheet).getByRole('button', { name: 'E minor' }))
+    await user.click(within(sheet).getByRole('button', { name: 'G major / E minor' }))
     await user.click(within(sheet).getByRole('button', { name: '3/4' }))
     await user.click(within(sheet).getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))

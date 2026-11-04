@@ -161,11 +161,8 @@ export const editor = {
     song: 'The whole song',
     // The key signature picker's tiles (ADR 0114).
     none: 'No key signature',
-    sharps: 'Sharps',
-    flats: 'Flats',
     // A palette key that opens the picker, named by what is in force.
     change: '{{sign}}: {{now}}',
-    natural: 'No sharps or flats',
     wholeSong: 'Change the key for the whole song',
     wholeSongInfo:
       'On, the song’s own key changes, its music moved with it, as at its start. Off, the key changes from this section on, up to the next change.',

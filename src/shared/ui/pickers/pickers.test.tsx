@@ -93,34 +93,39 @@ describe('NotePicker', () => {
 })
 
 describe('KeyPicker', () => {
-  it('opens the key-signature grid: a tap on 5♭ takes D♭ major and closes (R29-P2)', async () => {
+  it('15 keys named by major and minor, C/Am included, no Switch to natural (A34)', async () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
     render(<KeyPicker value={{ tonic: note('C'), minor: false }} onChange={onChange} />)
     await user.click(screen.getByRole('button', { name: 'Key: C major' }))
-    const sharps = await screen.findByRole('group', { name: 'Sharps' })
-    expect(within(sharps).getAllByRole('button')).toHaveLength(7)
-    expect(
-      within(screen.getByRole('group', { name: 'Flats' })).getAllByRole('button'),
-    ).toHaveLength(7)
-    // One name per key: C♯ is 7♯, D♭ 5♭, each a cell of its own; no circle.
-    expect(within(sharps).getByRole('button', { name: 'C♯ major' })).toBeInTheDocument()
+    const grid = await screen.findByRole('group', { name: 'Key' })
+    const cells = within(grid).getAllByRole('button')
+    expect(cells).toHaveLength(15)
+    // C/Am first in the reading order, then the sharps, then the flats; one name per key.
+    expect(cells[0]).toHaveAccessibleName('C major / A minor')
+    expect(cells[0]).toHaveAttribute('aria-pressed', 'true')
+    expect(cells[0]).toHaveTextContent('C / Am')
+    expect(cells[7]).toHaveAccessibleName('C♯ major / A♯ minor')
+    expect(cells[10]).toHaveAccessibleName('E♭ major / C minor')
+    expect(screen.queryByRole('button', { name: /No sharps or flats/ })).not.toBeInTheDocument()
     expect(document.querySelector('[data-wedge]')).toBeNull()
-    await user.click(screen.getByRole('button', { name: 'D♭ major' }))
+    await user.click(screen.getByRole('button', { name: 'D♭ major / B♭ minor' }))
     expect(onChange).toHaveBeenLastCalledWith({ tonic: note('D', -1), minor: false })
-    expect(screen.queryByRole('group', { name: 'Sharps' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('group', { name: 'Key' })).not.toBeInTheDocument()
   })
 
-  it('names the minor keys in Minor', async () => {
+  it('takes each signature’s minor in Minor, and Major · Minor keeps the signature', async () => {
     const user = userEvent.setup()
-    render(<KeyPicker value={{ tonic: note('A'), minor: true }} onChange={vi.fn()} />)
+    const onChange = vi.fn()
+    render(<KeyPicker value={{ tonic: note('A'), minor: true }} onChange={onChange} />)
     await user.click(screen.getByRole('button', { name: 'Key: A minor' }))
-    const sharps = await screen.findByRole('group', { name: 'Sharps' })
-    expect(within(sharps).getByRole('button', { name: 'E minor' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /No sharps or flats · A minor/ })).toHaveAttribute(
+    const grid = await screen.findByRole('group', { name: 'Key' })
+    expect(within(grid).getByRole('button', { name: 'C major / A minor' })).toHaveAttribute(
       'aria-pressed',
       'true',
     )
+    await user.click(within(grid).getByRole('button', { name: 'G major / E minor' }))
+    expect(onChange).toHaveBeenLastCalledWith({ tonic: note('E'), minor: true })
   })
 })
 
