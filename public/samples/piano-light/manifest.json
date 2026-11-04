@@ -1,0 +1,193 @@
+{
+  "instrument": "piano",
+  "set": "Salamander Grand Piano V3",
+  "licence": "CC-BY-3.0",
+  "layers": [
+    {
+      "name": "mf",
+      "upTo": 1
+    }
+  ],
+  "samples": [
+    {
+      "file": "A0.m4a",
+      "midi": 21,
+      "layer": "mf",
+      "bytes": 37838
+    },
+    {
+      "file": "C1.m4a",
+      "midi": 24,
+      "layer": "mf",
+      "bytes": 37848
+    },
+    {
+      "file": "Ds1.m4a",
+      "midi": 27,
+      "layer": "mf",
+      "bytes": 37847
+    },
+    {
+      "file": "Fs1.m4a",
+      "midi": 30,
+      "layer": "mf",
+      "bytes": 37770
+    },
+    {
+      "file": "A1.m4a",
+      "midi": 33,
+      "layer": "mf",
+      "bytes": 37857
+    },
+    {
+      "file": "C2.m4a",
+      "midi": 36,
+      "layer": "mf",
+      "bytes": 37847
+    },
+    {
+      "file": "Ds2.m4a",
+      "midi": 39,
+      "layer": "mf",
+      "bytes": 37801
+    },
+    {
+      "file": "Fs2.m4a",
+      "midi": 42,
+      "layer": "mf",
+      "bytes": 37876
+    },
+    {
+      "file": "A2.m4a",
+      "midi": 45,
+      "layer": "mf",
+      "bytes": 37754
+    },
+    {
+      "file": "C3.m4a",
+      "midi": 48,
+      "layer": "mf",
+      "bytes": 37828
+    },
+    {
+      "file": "Ds3.m4a",
+      "midi": 51,
+      "layer": "mf",
+      "bytes": 37822
+    },
+    {
+      "file": "Fs3.m4a",
+      "midi": 54,
+      "layer": "mf",
+      "bytes": 37911
+    },
+    {
+      "file": "A3.m4a",
+      "midi": 57,
+      "layer": "mf",
+      "bytes": 37829
+    },
+    {
+      "file": "C4.m4a",
+      "midi": 60,
+      "layer": "mf",
+      "bytes": 37854
+    },
+    {
+      "file": "Ds4.m4a",
+      "midi": 63,
+      "layer": "mf",
+      "bytes": 37812
+    },
+    {
+      "file": "Fs4.m4a",
+      "midi": 66,
+      "layer": "mf",
+      "bytes": 37866
+    },
+    {
+      "file": "A4.m4a",
+      "midi": 69,
+      "layer": "mf",
+      "bytes": 37794
+    },
+    {
+      "file": "C5.m4a",
+      "midi": 72,
+      "layer": "mf",
+      "bytes": 37831
+    },
+    {
+      "file": "Ds5.m4a",
+      "midi": 75,
+      "layer": "mf",
+      "bytes": 37933
+    },
+    {
+      "file": "Fs5.m4a",
+      "midi": 78,
+      "layer": "mf",
+      "bytes": 37810
+    },
+    {
+      "file": "A5.m4a",
+      "midi": 81,
+      "layer": "mf",
+      "bytes": 37816
+    },
+    {
+      "file": "C6.m4a",
+      "midi": 84,
+      "layer": "mf",
+      "bytes": 37789
+    },
+    {
+      "file": "Ds6.m4a",
+      "midi": 87,
+      "layer": "mf",
+      "bytes": 37849
+    },
+    {
+      "file": "Fs6.m4a",
+      "midi": 90,
+      "layer": "mf",
+      "bytes": 37811
+    },
+    {
+      "file": "A6.m4a",
+      "midi": 93,
+      "layer": "mf",
+      "bytes": 37802
+    },
+    {
+      "file": "C7.m4a",
+      "midi": 96,
+      "layer": "mf",
+      "bytes": 37697
+    },
+    {
+      "file": "Ds7.m4a",
+      "midi": 99,
+      "layer": "mf",
+      "bytes": 37752
+    },
+    {
+      "file": "Fs7.m4a",
+      "midi": 102,
+      "layer": "mf",
+      "bytes": 37801
+    },
+    {
+      "file": "A7.m4a",
+      "midi": 105,
+      "layer": "mf",
+      "bytes": 37725
+    },
+    {
+      "file": "C8.m4a",
+      "midi": 108,
+      "layer": "mf",
+      "bytes": 37798
+    }
+  ]
+}

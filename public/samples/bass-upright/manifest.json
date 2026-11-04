@@ -1,0 +1,161 @@
+{
+  "instrument": "bassUpright",
+  "set": "Meatbass",
+  "licence": "CC0-1.0",
+  "layers": [
+    {
+      "name": "p",
+      "upTo": 0.6
+    },
+    {
+      "name": "f",
+      "upTo": 1
+    }
+  ],
+  "samples": [
+    {
+      "file": "p/C1.m4a",
+      "midi": 24,
+      "layer": "p",
+      "bytes": 30786
+    },
+    {
+      "file": "p/Ds1.m4a",
+      "midi": 27,
+      "layer": "p",
+      "bytes": 30030
+    },
+    {
+      "file": "p/Fs1.m4a",
+      "midi": 30,
+      "layer": "p",
+      "bytes": 30601
+    },
+    {
+      "file": "p/A1.m4a",
+      "midi": 33,
+      "layer": "p",
+      "bytes": 30974
+    },
+    {
+      "file": "p/C2.m4a",
+      "midi": 36,
+      "layer": "p",
+      "bytes": 30574
+    },
+    {
+      "file": "p/Ds2.m4a",
+      "midi": 39,
+      "layer": "p",
+      "bytes": 30908
+    },
+    {
+      "file": "p/Fs2.m4a",
+      "midi": 42,
+      "layer": "p",
+      "bytes": 30320
+    },
+    {
+      "file": "p/A2.m4a",
+      "midi": 45,
+      "layer": "p",
+      "bytes": 29537
+    },
+    {
+      "file": "p/C3.m4a",
+      "midi": 48,
+      "layer": "p",
+      "bytes": 21622
+    },
+    {
+      "file": "p/Ds3.m4a",
+      "midi": 51,
+      "layer": "p",
+      "bytes": 30202
+    },
+    {
+      "file": "p/Fs3.m4a",
+      "midi": 54,
+      "layer": "p",
+      "bytes": 29800
+    },
+    {
+      "file": "p/A3.m4a",
+      "midi": 57,
+      "layer": "p",
+      "bytes": 30255
+    },
+    {
+      "file": "f/C1.m4a",
+      "midi": 24,
+      "layer": "f",
+      "bytes": 31561
+    },
+    {
+      "file": "f/Ds1.m4a",
+      "midi": 27,
+      "layer": "f",
+      "bytes": 30919
+    },
+    {
+      "file": "f/Fs1.m4a",
+      "midi": 30,
+      "layer": "f",
+      "bytes": 30623
+    },
+    {
+      "file": "f/A1.m4a",
+      "midi": 33,
+      "layer": "f",
+      "bytes": 30901
+    },
+    {
+      "file": "f/C2.m4a",
+      "midi": 36,
+      "layer": "f",
+      "bytes": 30554
+    },
+    {
+      "file": "f/Ds2.m4a",
+      "midi": 39,
+      "layer": "f",
+      "bytes": 31177
+    },
+    {
+      "file": "f/Fs2.m4a",
+      "midi": 42,
+      "layer": "f",
+      "bytes": 30847
+    },
+    {
+      "file": "f/A2.m4a",
+      "midi": 45,
+      "layer": "f",
+      "bytes": 30363
+    },
+    {
+      "file": "f/C3.m4a",
+      "midi": 48,
+      "layer": "f",
+      "bytes": 24782
+    },
+    {
+      "file": "f/Ds3.m4a",
+      "midi": 51,
+      "layer": "f",
+      "bytes": 30223
+    },
+    {
+      "file": "f/Fs3.m4a",
+      "midi": 54,
+      "layer": "f",
+      "bytes": 30200
+    },
+    {
+      "file": "f/A3.m4a",
+      "midi": 57,
+      "layer": "f",
+      "bytes": 30450
+    }
+  ]
+}
