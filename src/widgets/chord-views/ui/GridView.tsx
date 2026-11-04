@@ -8,6 +8,8 @@ import { SheetTitle } from '@/shared/ui'
 import { ChordChart } from '@/widgets/chord-chart'
 import { loopedBars } from '../model/beat-span'
 import { inSight } from '../model/in-sight'
+import { useFollow } from '../model/use-follow'
+import { BackToPlayhead } from './BackToPlayhead'
 import { gridWords } from '../model/lyric-lines'
 
 /**
@@ -26,6 +28,7 @@ export function GridView({
   beat,
   loop,
   words,
+  playing,
   onBeat,
 }: {
   title: string
@@ -35,6 +38,8 @@ export function GridView({
   loop: BarRange | null
   /** The View's Lyrics: the words under the beats. */
   words: boolean
+  /** Whether the music plays: a scroll by hand then pauses following (A37). */
+  playing: boolean
   /** A beat tapped: the tick it is first played at. */
   onBeat: (at: Tick) => void
 }) {
@@ -43,17 +48,21 @@ export function GridView({
   const sung = useMemo(() => (words ? gridWords(performance) : undefined), [words, performance])
   const scroller = useRef<HTMLElement>(null)
   // The bar last kept in sight; none before the Grid opens.
-  const kept = useRef<number | null>(null)
+  const kept = useRef<string | null>(null)
   const motion = useScrollMotion()
+  // The one follow rule (A37): a scroll by hand while it plays pauses it, the pill brings it back.
+  const follow = useFollow(scroller, playing)
+  const { following, returns } = follow
   useEffect(() => {
     const box = scroller.current
     const here = box?.querySelector('[aria-current="step"]')
-    if (!box || !here || kept.current === bar) return
+    const place = `${bar}:${returns}`
+    if (!box || !here || !following || kept.current === place) return
     const opening = kept.current === null
-    kept.current = bar
+    kept.current = place
     if (opening && inSight(here, box)) return
     here.scrollIntoView({ block: 'nearest', behavior: motion })
-  }, [bar, motion])
+  }, [bar, motion, following, returns])
   return (
     <section
       ref={scroller}
@@ -73,6 +82,7 @@ export function GridView({
         className="mx-auto w-full"
       />
       <div aria-hidden className="-mt-6 h-(--float-room) shrink-0" />
+      <BackToPlayhead follow={follow} />
     </section>
   )
 }

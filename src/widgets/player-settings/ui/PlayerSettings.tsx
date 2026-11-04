@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next'
 import {
   COUNTDOWNS,
   CURSORS,
+  FOLLOW_RETURNS,
+  type FollowReturn,
   OTHER_HAND_LOOKS,
   SPEED_STEPS,
   barOf,
@@ -214,6 +216,34 @@ export function PlayerDisplay() {
         options={CURSORS.map((value) => ({ value, label: t(`settingsPage.cursor.${value}`) }))}
         onChange={(cursor) => setPlayback(settings, { cursor })}
       />
+      {/* The views' one follow rule (A37). */}
+      <SettingsGroup flush>
+        <SwitchRow
+          setting="playback.follow"
+          label={t('settingsPage.follow.label')}
+          info={t('settingsPage.follow.info')}
+          checked={playback.follow}
+          onCheckedChange={(follow) => setPlayback(settings, { follow })}
+        />
+      </SettingsGroup>
+      {playback.follow ? (
+        <ChoiceCard
+          title={t('settingsPage.follow.return')}
+          info={t('settingsPage.follow.returnInfo')}
+          setting="playback.followReturn"
+          value={String(playback.followReturn)}
+          options={FOLLOW_RETURNS.map((seconds) => ({
+            value: String(seconds),
+            label:
+              seconds === 0
+                ? t('settingsPage.follow.off')
+                : t('settingsPage.follow.seconds', { count: seconds }),
+          }))}
+          onChange={(value) =>
+            setPlayback(settings, { followReturn: Number(value) as FollowReturn })
+          }
+        />
+      ) : null}
     </>
   )
 }

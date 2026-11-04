@@ -22,6 +22,7 @@ export const player = {
   // The Player's views of the music (ADR 0108), Pick your view's (R29); each names its own part of the
   // screen.
   views: {
+    backToPlayhead: 'Back to the playhead',
     pick: 'Pick your view',
     pickNote: 'How the song is shown while you play.',
     showOnOpen: 'Show this when opening a song',
@@ -271,6 +272,15 @@ export const player = {
     bar: 'Bar {{bar}}',
   },
   settingsPage: {
+    follow: {
+      label: 'Follow the music',
+      info: 'Grid and Chords over lyrics keep the line playing in sight. Scroll by hand and they stop following until you tap Back to the playhead.',
+      return: 'Return to the playhead after',
+      returnInfo:
+        'After you scroll by hand, how long the view waits before following the music again.',
+      off: 'Never',
+      seconds: '{{count}} s',
+    },
     annotations: 'Show annotations',
     open: 'Player settings',
     whilePlaying: 'While you play',

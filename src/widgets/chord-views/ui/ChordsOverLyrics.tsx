@@ -17,6 +17,8 @@ import { SheetTitle } from '@/shared/ui'
 import { ChordSummary } from '@/widgets/chord-diagrams'
 import { loopedBars } from '../model/beat-span'
 import { footRoom, inSight, lineScroll } from '../model/in-sight'
+import { useFollow } from '../model/use-follow'
+import { BackToPlayhead } from './BackToPlayhead'
 import { lyricLines, shownLines, soundingChip, type Span } from '../model/lyric-lines'
 import { foldRepeats } from '../model/repeated-lines'
 import { BeatStrip } from './BeatStrip'
@@ -43,6 +45,7 @@ export function ChordsOverLyrics({
   loop,
   pinned,
   textSize,
+  playing,
   onGo,
   onSymbol,
 }: {
@@ -59,6 +62,8 @@ export function ChordsOverLyrics({
   pinned: boolean
   /** The words and their chords, as a percent of their own size. */
   textSize: TextSize
+  /** Whether the music plays: a scroll by hand then pauses following (A37). */
+  playing: boolean
   onGo: (at: Tick) => void
   /** A pinned diagram tapped, by its symbol: the cursor taken to it. */
   onSymbol: (symbol: string) => void
@@ -69,7 +74,8 @@ export function ChordsOverLyrics({
   const chosen = usePieceInversions()?.chosen
   const summary = useMemo(() => chordSummary(performance, chosen), [performance, chosen])
   const bar = writtenBarOf(performance, beat.bar)
-  const playing = lines.findIndex((line) => line.bars.includes(bar))
+  // The line sounding.
+  const soundingLine = lines.findIndex((line) => line.bars.includes(bar))
   const chip = soundingChip(lines, written)
   const soundingChord = chip ? lines[chip.line]?.segments[chip.segment]?.chord : null
   const sounding =
@@ -81,17 +87,21 @@ export function ChordsOverLyrics({
   const scroller = useRef<HTMLElement>(null)
   const strip = useRef<HTMLDivElement>(null)
   // The line last kept in sight; none before the view opens.
-  const kept = useRef<number | null>(null)
+  const kept = useRef<string | null>(null)
   const motion = useScrollMotion()
+  // The one follow rule (A37): a scroll by hand while it plays pauses it, the pill brings it back.
+  const follow = useFollow(scroller, playing)
+  const { following, returns } = follow
   // The line playing brought into the top third of the room between the strip and the transport as
   // the music reaches it, where it is not there already. Opening, the view stays at its top, its
   // title in sight, where that line is in sight there (a loop's further on is brought to).
   useEffect(() => {
     const box = scroller.current
-    const line = box?.querySelector(`[data-line="${playing}"]`)
-    if (!box || !line || kept.current === playing) return
+    const line = box?.querySelector(`[data-line="${soundingLine}"]`)
+    const place = `${soundingLine}:${returns}`
+    if (!box || !line || !following || kept.current === place) return
     const opening = kept.current === null
-    kept.current = playing
+    kept.current = place
     if (opening && inSight(line, box)) return
     const held = strip.current?.offsetHeight ?? 0
     const { top, height } = line.getBoundingClientRect()
@@ -102,7 +112,7 @@ export function ChordsOverLyrics({
       room: box.clientHeight - held - footRoom(box),
     })
     if (by !== null) box.scrollTo({ top: Math.max(0, box.scrollTop + by), behavior: motion })
-  }, [playing, motion])
+  }, [soundingLine, motion, following, returns])
   return (
     <section
       ref={scroller}
@@ -142,7 +152,7 @@ export function ChordsOverLyrics({
                 line={line}
                 index={index}
                 performance={performance}
-                playing={index === playing}
+                playing={index === soundingLine}
                 sounding={chip?.line === index ? chip.segment : null}
                 looped={line.bars.some((each) => looped.has(each))}
                 diagramOf={diagramOf}
@@ -154,6 +164,7 @@ export function ChordsOverLyrics({
       </div>
       {/* Room to scroll the last line clear of the transport floating over the foot. */}
       <div aria-hidden className="h-(--float-room) shrink-0" />
+      <BackToPlayhead follow={follow} />
     </section>
   )
 }

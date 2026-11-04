@@ -87,6 +87,9 @@ export type Countdown = (typeof COUNTDOWNS)[number]
  */
 export const CURSORS = ['none', 'beats', 'continuous'] as const
 export type Cursor = (typeof CURSORS)[number]
+/** After how long a view scrolled by hand goes back to following the music, in seconds; 0 never. */
+export const FOLLOW_RETURNS = [0, 3, 5, 10] as const
+export type FollowReturn = (typeof FOLLOW_RETURNS)[number]
 /** How much faster each pass of speed training plays, a share of the piece's tempo in percent. */
 export const SPEED_STEPS = [2, 5, 10] as const
 export type SpeedStep = (typeof SPEED_STEPS)[number]
@@ -100,6 +103,10 @@ export interface PlaybackSettings {
   readonly cursor: Cursor
   readonly pedal: PedalPlay
   readonly speedStep: SpeedStep
+  /** The views keep the music playing in sight (A37); a scroll by hand pauses it. */
+  readonly follow: boolean
+  /** After a scroll by hand, back to the playhead after this many seconds; 0 waits for its pill. */
+  readonly followReturn: FollowReturn
 }
 /** No count-in, the cursor gliding, the pedal as written, 5% a pass: the Player as it always was. */
 export const DEFAULT_PLAYBACK: PlaybackSettings = {
@@ -107,6 +114,8 @@ export const DEFAULT_PLAYBACK: PlaybackSettings = {
   cursor: 'continuous',
   pedal: 'written',
   speedStep: 5,
+  follow: true,
+  followReturn: 5,
 }
 
 /** How every trainer goes, whatever it asks. */

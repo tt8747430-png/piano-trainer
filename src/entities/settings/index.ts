@@ -30,6 +30,8 @@ export {
   OTHER_HAND_LOOKS,
   COUNTDOWNS,
   CURSORS,
+  FOLLOW_RETURNS,
+  type FollowReturn,
   SPEED_STEPS,
   type Countdown,
   type Cursor,

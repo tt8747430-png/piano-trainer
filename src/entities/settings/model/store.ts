@@ -28,6 +28,8 @@ import {
   DEFAULT_SIDEBAR,
   DEFAULT_OTHER_HAND,
   DEFAULT_PLAYBACK,
+  FOLLOW_RETURNS,
+  type FollowReturn,
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
@@ -182,6 +184,10 @@ function playbackSettings(value: unknown): PlaybackSettings {
     cursor: isCursor(saved.cursor) ? saved.cursor : initial.cursor,
     pedal: isPedalPlay(saved.pedal) ? saved.pedal : initial.pedal,
     speedStep: isSpeedStep(saved.speedStep) ? saved.speedStep : initial.speedStep,
+    follow: typeof saved.follow === 'boolean' ? saved.follow : initial.follow,
+    followReturn: (FOLLOW_RETURNS as readonly unknown[]).includes(saved.followReturn)
+      ? (saved.followReturn as FollowReturn)
+      : initial.followReturn,
   }
 }
 

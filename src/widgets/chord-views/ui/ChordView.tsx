@@ -73,6 +73,7 @@ export function ChordView({
       beat={beat}
       loop={loop}
       words={words}
+      playing={practice.state.playing}
       onBeat={go}
     />
   ) : view === 'lyrics' ? (
@@ -86,6 +87,7 @@ export function ChordView({
       loop={loop}
       pinned={pinned}
       textSize={textSize}
+      playing={practice.state.playing}
       onGo={go}
       onSymbol={goToChord}
     />
