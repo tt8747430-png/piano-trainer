@@ -118,6 +118,35 @@ report, impeccable audit, full gate recorded) before the next starts.
 | "progress.md says done" | It was wrong for 14 items; check the code. |
 | "It's only docs or a small fix" | Small fixes skip the implementation plan, not the description. |
 
+## Asking the owner: show it, recommend, or decide
+
+Round 29's questions came back as "I need more context how it will look like", "what do you mean with one row",
+"what is hymn 1", "I don't know how it will look like to take this decision". The owner decides by seeing, not by
+reading options. So:
+
+- **Decide what is not theirs.** "Use proper decision", "what is the best option", "why do we need this
+  distinction", "why do you need them" all mean: research it (the reference apps, the books, the platform's
+  guidelines) and decide, then log the ruling. Never ask about how the code is built, a distinction inside the
+  model, or a name only the code uses. In autonomous mode ask nothing (rule 2b below).
+- **A question the owner must answer is drawn, in context.** Put it in an artifact with a mockup of the whole
+  screen or row it changes (bar, toolbar, sheet, Settings page together), each option drawn side by side, at a
+  phone's width and a laptop's. Use `impeccable` for the mockups; never ask about a control in isolation.
+- **Each question names** where it lives (screen, route), what changes for the learner, the options in the
+  learner's words (no jargon, no internal ids: say "the bar's one row: Close, title, Edit, gear", never "one
+  row"), and your recommendation with its reason.
+- **Numbered, so answers can be numbered.** The owner replies "1. yes 2. … 6. use proper decision". Read every
+  answer against its number:
+  - "yes" or "yes maybe": build it, refined by best practice;
+  - "maybe": recommend and decide;
+  - "I don't like neither": come back with new options, drawn;
+  - "I need more context" or "I don't understand the question": redraw it with the whole screen and ask again.
+- **One artifact per area** (the song page, the Player, the editor), every page and every option in it, with a
+  feedback box per page. The owner writes feedback inside it, in the order they scroll. Read all of it, apply it,
+  answer each comment there, and keep the artifact current. "Continue without my feedback for other pages" means
+  apply the same patterns to the pages they skipped.
+- **Their answer becomes the spec.** Write it into the item's plan block (the plan gate below) before building,
+  in their words where they gave words.
+
 ## Skills: which one, when
 
 Check for a fitting skill before acting (`using-superpowers`), read its current text, then follow it; this file
@@ -158,7 +187,12 @@ written beside it.
 
 1. **Before starting:** fetch and check that the branch is level with `main` (`claude/keen-gates-q9bnit` unless told otherwise).
 2. **A message is not a stop.** When the owner writes while work is running, take in what they say and carry on with the tasks in hand; stop only when they say "stop".
-2b. **Work in rounds, in a loop.** Keep going round after round without asking. Stop only for decisions that are genuinely the owner's, and put those as clear questions at the end of the report. When the owner says "continue", pick up exactly where the work stopped.
+2b. **Work in rounds, in a loop.** Keep going round after round without asking. Stop only for decisions that are genuinely the owner's, and put those as questions drawn in context ("Asking the owner" above), at the end of the report. When the owner says "continue", pick up exactly where the work stopped.
+   - **Never end a turn while work is left.** "Why did you stop?" came three times in round 29. A finished item,
+     a pushed commit, a passing suite or a report is not a stopping point; the next item is. End only when every
+     task is done or the rest needs the owner, and then say which.
+   - **Agents that stop are your work:** when one stops (usage limit, error), check what it committed and what
+     is left, and finish it or resume it; never report it as done.
    - **"Continue with all" means autonomous mode.** Work through every open task (the plan's rounds, the log's
      "left for later" and deferred items, the review findings) one round after another, without asking anything:
      no AskUserQuestion, no "shall I…", no stopping to report between rounds. Where a choice is the owner's, take

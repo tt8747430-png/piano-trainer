@@ -321,3 +321,33 @@ The full brief is `.scratch/r29/prompt.md`; these are the patterns behind it, to
   activation, checked with two real builds).
 - **Imports keep everything:** tuplets, any tempo, MIDI tempo and meter changes.
 
+
+## 2026-11-03 to 11-04 (round 29, the questions and the build)
+
+- **Questions:** see SKILL.md, "Asking the owner". Text-only questions with internal words failed; the
+  artifacts with mockups of whole pages and a feedback box per page worked.
+- **Audit against the brief:** "did you read it every time you implement something": every item since a round's
+  start is checked against the prompt's lines, and the description is fixed before the build (the plan gate).
+- **Skills from their official source:** superpowers is obra's (`obra/superpowers`); when asked which skills are
+  missing, list them and add them, then write how to use them into this skill.
+- **One icon, one meaning:** never one icon for two acts; two acts kept together get two buttons or two distinct
+  icons.
+- **Shared parts and confirmation:** use the shared component, and confirm before a destructive act.
+- **No duplicate menus or settings,** checked on the Player, the editor and every Practice page; settings never
+  scattered over four menus in a bar: one gear per screen (Flat's), Edit beside the title, no ⋯ menu button.
+- **Tabs that make a page's header taller than the other pages' are rejected.** A page's views sit in its content
+  or take the title's place.
+- **Show what the device has:** Computer keys only on a computer; nothing that does not work here.
+- **Sheets follow the music everywhere,** with the same features in every place a sheet appears.
+- **Key picking:** no circle of fifths; a key grid like the music editors', and C♯/D♭ written as the reference
+  apps write them.
+- **Chord sizes:** add, add2, add9 as chords are named; not a "seventh" choice the learner can't place.
+- **Scales page:** every control says what it belongs to (the run, the sheet, the keys); "Root B" says of which
+  scale; octaves are a stepper and go further; the formula and structure are computed, never hard-coded; hands
+  drawn as real hands, not shapes; the top of the page full, not half empty.
+- **Four switches in a row are not a phone layout;** rows adapt to the width, as the reference screenshots do.
+- **Chord player:** as Musicca's, with its controls and options; the best free sounds, through proper libraries.
+- **The pedal:** one pedal mark per press (Fantaisie-Impromptu showed doubled ones).
+- **Back:** research how Back works (iOS Back, Android Up) and go to the screen the learner came from, else the
+  parent (R26, `app/routes/parents.ts`).
+- **"Why did you stop?"** three times: keep working until the list is empty (SKILL.md 2b).

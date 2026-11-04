@@ -4,7 +4,7 @@ Taken from the superpowers skills (obra/superpowers: brainstorming, writing-plan
 
 ## Before building
 
-- **Know what you know.** If the owner's message (with its screenshots and `feedback-log.md`) says what to build, build it; don't open a conversation. Ask only what changes what gets built, as one direct question at the end of a report, never as a stall.
+- **Know what you know.** If the owner's message (with its screenshots and `feedback-log.md`) says what to build, build it; don't open a conversation. Ask only what changes what gets built and is the owner's to decide, drawn in context with your recommendation (SKILL.md, "Asking the owner"), at the end of a report, never as a stall.
 - **Look before you ask.** Read the code, the ADR and the reference first; most questions answer themselves.
 - **Size the work in a line.** Small: do it now. Medium: a short plan in your head or the todo list. Large (several areas, a new model shape): write a spec in `.scratch/<feature>/spec.md` with the decisions, then build. Plans name files, signatures, test names and the check that proves each step, never the code itself; a plan longer than its spec is a transcript.
 - **Name the approaches only when they differ in a way the owner would care about**, recommend one, and go.
