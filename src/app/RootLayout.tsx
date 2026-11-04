@@ -1,6 +1,7 @@
 import { Outlet, useRouterState } from '@tanstack/react-router'
 import { useLayoutEffect, useState } from 'react'
 import { ReloadOnRestore } from '@/features/backup-data'
+import { useFirstMidiSession } from '@/features/record-practised'
 import { ShortcutsHelp } from '@/features/shortcuts-help'
 import { useTrackAchievements } from '@/features/track-achievements'
 import { startKeyboardReveal, startKeyboardViewport } from '@/shared/lib'
@@ -17,6 +18,8 @@ export function RootLayout() {
   const [update] = useState(() => createAppUpdate())
   // Badges' tiers and milestones kept as they are reached, and their notifications (B1).
   useTrackAchievements()
+  // The First MIDI session (B1): a minute played on a connected piano, wherever it is played.
+  useFirstMidiSession()
   // An update waits while the Player or the Check has the screen: it would cut a practice off.
   const fullScreen = useRouterState({
     select: (state) => state.matches.some((match) => match.staticData.fullScreen === true),
