@@ -123,6 +123,12 @@ export const piece: LocaleResources['piece'] = {
     editMusic: 'Изменить ноты',
   },
   settings: {
+    resetProgress: 'Сбросить прогресс',
+    resetProgressTitle: 'Сбросить прогресс этой песни?',
+    resetProgressBody: 'Она больше не отмечена выученной. Музыка и ваши версии остаются как есть.',
+    resetProgressCancel: 'Оставить',
+    resetProgressConfirm: 'Сбросить',
+    resetProgressDone: 'Прогресс сброшен.',
     details: 'Подробности',
     overview: 'Песня',
     title: 'Настройки',

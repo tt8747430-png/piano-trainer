@@ -40,6 +40,8 @@ import {
   SettingsGroup,
 } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
+import { ResetStepsRow } from '@/features/reset-progress'
+import { pieceStepId } from '@/entities/step'
 import { useSongPublish } from '../model/use-song-publish'
 import { OwnMusicAsk } from './OwnMusicAsk'
 import { OriginalSongDetails, OwnSongDetails } from './SongDetails'
@@ -198,6 +200,18 @@ function SongSettings({ piece }: { piece: Piece }) {
             onClick={() => setExporting(true)}
           />
         </SettingsGroup>
+        {/* Reset progress (R29 B9): the song's Learned mark, kept apart from its music. */}
+        <ResetStepsRow
+          steps={[pieceStepId(piece.id)]}
+          words={{
+            row: t('settings.resetProgress'),
+            title: t('settings.resetProgressTitle'),
+            body: t('settings.resetProgressBody'),
+            cancel: t('settings.resetProgressCancel'),
+            confirm: t('settings.resetProgressConfirm'),
+            done: t('settings.resetProgressDone'),
+          }}
+        />
         {ownMusic ? (
           <div ref={danger}>
             <DangerGroup

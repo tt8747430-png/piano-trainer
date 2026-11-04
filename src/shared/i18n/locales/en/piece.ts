@@ -126,6 +126,13 @@ export const piece = {
   },
   settings: {
     details: 'Details',
+    resetProgress: 'Reset progress',
+    resetProgressTitle: 'Reset this song’s progress?',
+    resetProgressBody:
+      'It is no longer marked learned. Its music and your versions stay as they are.',
+    resetProgressCancel: 'Keep it',
+    resetProgressConfirm: 'Reset',
+    resetProgressDone: 'Progress reset.',
     overview: 'The song',
     title: 'Settings',
     open: 'Settings',
