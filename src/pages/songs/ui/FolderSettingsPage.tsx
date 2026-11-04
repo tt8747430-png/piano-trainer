@@ -1,6 +1,6 @@
 import { useForgetScreens } from '@/shared/lib'
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { Archive, FolderInput, Palette } from 'lucide-react'
+import { Archive, FolderInput, LayoutGrid, Palette } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -23,6 +23,7 @@ import {
   DangerRow,
   NotFound,
   RowButton,
+  RowLink,
   ScreenHeader,
   SettingsGroup,
 } from '@/shared/ui'
@@ -85,6 +86,17 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
             />
           </SettingsGroup>
         ) : null}
+        {/* How its rows look (R29 B9): the learner's own, in a built-in folder too. */}
+        <SettingsGroup flush title={t('folder.appearance')}>
+          <RowLink
+            render={
+              <Link to="/songs/folders/$folderId/card-style" params={{ folderId: folder.id }} />
+            }
+            icon={LayoutGrid}
+            paint="yellow"
+            title={t('cardStyle.title')}
+          />
+        </SettingsGroup>
         <SettingsGroup flush title={t('folder.inLibrary')}>
           <RowButton
             title={t('folder.moveTo')}

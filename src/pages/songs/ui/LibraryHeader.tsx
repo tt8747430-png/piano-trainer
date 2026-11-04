@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { CheckCheck, ListChecks, ListX, Settings } from 'lucide-react'
+import { CheckCheck, ListChecks, ListX, Palette, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, useLibraryLayout, type ShelvedFolder } from '@/entities/library'
 import { useUp } from '@/shared/lib'
@@ -73,6 +73,14 @@ export function LibraryHeader({
             onClick={() => page.select.start()}
           />
           {folder ? null : <ArchiveButton />}
+          {/* Home's Card style (R29 B9): a folder's is on its Settings page. */}
+          {folder ? null : (
+            <RoundLink
+              label={t('cardStyle.open')}
+              icon={Palette}
+              render={<Link to="/songs/card-style" />}
+            />
+          )}
           {/* A folder's own settings (name, look, place, Archive, Delete) are its Settings page. */}
           {folder ? (
             <RoundLink

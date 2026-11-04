@@ -474,6 +474,23 @@ const folderSettingsRoute = createRoute({
   },
   component: lazyRouteComponent(songsScreens, 'FolderSettingsPage'),
 })
+// A place's Card style (R29 B9): a folder's from its Settings, Home's from Songs' Card style.
+const folderCardStyleRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/folders/$folderId/card-style',
+  notFoundComponent: notFoundIn('songs'),
+  beforeLoad: async ({ params, context }) => {
+    const { folderIn } = await songsScreens()
+    const { pieces, library } = context
+    if (!folderIn(pieces.getState(), library.getState(), params.folderId)) throw notFound()
+  },
+  component: lazyRouteComponent(songsScreens, 'FolderCardStylePage'),
+})
+const homeCardStyleRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/card-style',
+  component: lazyRouteComponent(songsScreens, 'HomeCardStylePage'),
+})
 // A folder's Archived (D10, R29 B4): the songs archived from it, each to unarchive.
 const folderArchivedRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -1004,6 +1021,8 @@ const routeTree = rootRoute.addChildren([
     piecePublishRoute,
     folderRoute,
     folderSettingsRoute,
+    folderCardStyleRoute,
+    homeCardStyleRoute,
     archiveRoute,
     folderArchivedRoute,
     sectionRoute,

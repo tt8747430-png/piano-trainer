@@ -51,5 +51,11 @@ export function folderOf(pieces: PiecesState, library: LibraryState, id: string)
 export { PiecePage, PublishPage, SectionPage, SongSettingsPage } from '@/pages/piece'
 export { ArchivePage, FolderArchivedPage } from '@/pages/song-archive'
 export { SharedSongPage } from '@/pages/shared-song'
-export { FolderPage, FolderSettingsPage, SongsPage } from '@/pages/songs'
+export {
+  FolderCardStylePage,
+  FolderPage,
+  FolderSettingsPage,
+  HomeCardStylePage,
+  SongsPage,
+} from '@/pages/songs'
 export { PublicSongPage } from '@/pages/public-library'
