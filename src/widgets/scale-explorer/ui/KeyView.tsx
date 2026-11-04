@@ -9,6 +9,8 @@ import {
   placeBorrowedChords,
   placeScale,
   placeScaleChords,
+  printedNote,
+  soundsAs,
   walkChords,
   type Key,
 } from '@/shared/lib/music'
@@ -73,7 +75,11 @@ export function KeyView({
           chords={borrowed}
           detail={({ chord }) => {
             const named = borrowedName(musicKey, chord.degree)
-            return named ? t(`scales.key.borrowedName.${named}`) : undefined
+            if (!named) return undefined
+            const name = t(`scales.key.borrowedName.${named}`)
+            // A root the books spell on a white key's flat (C♭ in B♭ minor) says the key it plays (A43).
+            const sounds = soundsAs(chord.root)
+            return sounds ? t('scales.key.soundsAs', { name, note: printedNote(sounds) }) : name
           }}
         />
       </section>

@@ -573,7 +573,7 @@ describe('Practice → Scales and keys, Key view', () => {
       within(borrowed.parentElement ?? document.body)
         .getAllByRole('button')
         .map((chord) => chord.textContent),
-    ).toEqual(['B♭IPicardy third', 'C♭♭IINeapolitan'])
+    ).toEqual(['B♭IPicardy third', 'C♭♭IINeapolitan · sounds as B'])
   })
 
   it('chooses a key by the heading’s Tonic, and shows its signature, notes, relative and modes', async () => {

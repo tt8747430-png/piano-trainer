@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   midiOf,
   note,
+  soundsAs,
   noteFromParam,
   noteName,
   noteParam,
@@ -198,5 +199,15 @@ describe('otherSpelling', () => {
   it('leaves a note with no other spelling as it is', () => {
     expect(otherSpelling(note('G', 1))).toEqual(note('A', -1))
     expect(otherSpelling(note('D'))).toEqual(note('D'))
+  })
+})
+
+describe('soundsAs (A43)', () => {
+  it('names the key a respelled note plays, and nothing for a note read as written', () => {
+    expect(soundsAs(note('C', -1))).toEqual(note('B'))
+    expect(soundsAs(note('E', 1))).toEqual(note('F'))
+    expect(soundsAs(note('B', -2))).toEqual(note('A'))
+    expect(soundsAs(note('B', -1))).toBeUndefined()
+    expect(soundsAs(note('C'))).toBeUndefined()
   })
 })

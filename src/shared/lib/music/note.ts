@@ -156,6 +156,15 @@ export function plainRoot(spelled: SpelledNote): SpelledNote {
   return odd ? plainSpelling(pitchClassOf(spelled), spelled.accidental > 0) : spelled
 }
 
+/**
+ * The key a note sounds as where its spelling needs a respelling to be read on the keys (C♭ sounds as
+ * B, E♯ as F, a double flat or sharp as its plain name); none where it is read as written.
+ */
+export function soundsAs(spelled: SpelledNote): SpelledNote | undefined {
+  const plain = plainRoot(spelled)
+  return plain === spelled ? undefined : plain
+}
+
 /** The root a chord or scale on this pitch class is named from: only C♯/D♭ and G♯/A♭ lean. */
 export function rootSpelling(pc: PitchClass, preferSharps: boolean): SpelledNote {
   switch (pc) {

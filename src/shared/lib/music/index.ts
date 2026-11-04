@@ -65,6 +65,7 @@ export {
   plainSpelling,
   rootSpelling,
   sameNote,
+  soundsAs,
   writtenName,
   writtenOctave,
   type Accidental,

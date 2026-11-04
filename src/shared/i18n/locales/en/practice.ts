@@ -215,6 +215,7 @@ export const practice = {
       neighbours: 'Beside it on the circle',
       borrowed: 'Borrowed chords',
       // The borrowed chords the harmony books name.
+      soundsAs: '{{name}} · sounds as {{note}}',
       borrowedName: {
         picardy: 'Picardy third',
         neapolitan: 'Neapolitan',

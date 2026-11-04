@@ -200,6 +200,7 @@ export const practice: LocaleResources['practice'] = {
       enharmonic: 'Энгармонически',
       neighbours: 'Соседи по кругу',
       borrowed: 'Заимствованные аккорды',
+      soundsAs: '{{name}} · звучит как {{note}}',
       borrowedName: {
         picardy: 'Пикардийская терция',
         neapolitan: 'Неаполитанский',
