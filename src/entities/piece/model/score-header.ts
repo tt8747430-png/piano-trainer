@@ -1,12 +1,34 @@
 import { isRecord, plainText } from '@/shared/lib'
 
-/** The names a score prints under its title (Flat's credits), in the order they are asked for. */
-export const HEADER_FIELDS = ['subtitle', 'composer', 'lyricist', 'arranger'] as const
+/**
+ * The credits a score carries (Flat's, MuseScore's), in the order they are asked for: those printed
+ * under its title, then the facts a publisher prints at its foot (A28).
+ */
+export const HEADER_FIELDS = [
+  'subtitle',
+  'composer',
+  'lyricist',
+  'arranger',
+  'translator',
+  'tune',
+  'source',
+  'year',
+  'copyright',
+] as const
 export type HeaderField = (typeof HEADER_FIELDS)[number]
 
+/** The credits asked for on every score; the others are added by role (Add credit). */
+export const USUAL_HEADER_FIELDS: readonly HeaderField[] = [
+  'subtitle',
+  'composer',
+  'lyricist',
+  'arranger',
+]
+
 /**
- * What a score prints under its title (Flat's credits, ADR 0114): its subtitle centred under it, the
- * composer and the arranger at the right, the lyricist at the left; each as the learner typed it.
+ * What a score prints under its title (Flat's credits, ADR 0114): its subtitle centred under it with
+ * its hymn tune's name, the composer and the arranger at the right, the lyricist and the translator
+ * at the left; its source, year and copyright kept with it; each as the learner typed it.
  */
 export type ScoreHeader = Readonly<Partial<Record<HeaderField, string>>>
 

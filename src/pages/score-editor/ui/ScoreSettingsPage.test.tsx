@@ -42,6 +42,22 @@ describe('the score’s Settings (round 28)', () => {
     await waitFor(() => expect(piecesStore.getState().songs[0]?.header).toBeUndefined())
   })
 
+  it('adds a credit by its role from Add credit, and saves it with the score (A28)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1/settings', { storage: withSong() })
+    const credits = await screen.findByRole('region', { name: 'Title and credits' })
+    expect(within(credits).queryByRole('textbox', { name: 'Translator' })).not.toBeInTheDocument()
+    await user.click(within(credits).getByRole('button', { name: 'Add credit' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Translator' }))
+    await user.type(
+      await within(credits).findByRole('textbox', { name: 'Translator' }),
+      'Boris Pasternak{Enter}',
+    )
+    await waitFor(() =>
+      expect(piecesStore.getState().songs[0]?.header).toEqual({ translator: 'Boris Pasternak' }),
+    )
+  })
+
   it('lists Title and credits, Music and How the editor works, each row opening its page (R29, 3.3)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/edit/my-1/settings', { storage: withSong() })

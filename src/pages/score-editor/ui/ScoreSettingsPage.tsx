@@ -1,5 +1,15 @@
 import { useSearch } from '@tanstack/react-router'
-import { Columns3, Gauge, Hash, Mic, Music2, Ruler, Volume2, type LucideIcon } from 'lucide-react'
+import {
+  Columns3,
+  Gauge,
+  Hash,
+  Mic,
+  Music2,
+  Plus,
+  Ruler,
+  Volume2,
+  type LucideIcon,
+} from 'lucide-react'
 import { useId, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -7,13 +17,21 @@ import {
   HEADER_FIELDS,
   HEADER_MAX,
   TITLE_MAX,
+  USUAL_HEADER_FIELDS,
   type HeaderField,
 } from '@/entities/piece'
 import { barsOf } from '@/features/score-editor'
 import { useKeyName } from '@/shared/i18n'
 import { useSetSearch } from '@/shared/lib'
 import { beatUnit, tempoMark, unitNote } from '@/shared/lib/music'
-import { BackButton, RowButton, ScreenHeader, SettingsGroup, type Paint } from '@/shared/ui'
+import {
+  ActionMenu,
+  BackButton,
+  RowButton,
+  ScreenHeader,
+  SettingsGroup,
+  type Paint,
+} from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { SCORE_PAGES, type ScorePage } from '../model/score-pages'
 import { ScorePageBody } from './ScoreSettingsPages'
@@ -90,6 +108,15 @@ export function ScoreSettingsPage() {
     ? t(draft.meter === '2/2' ? 'music:timeField.cut' : 'music:timeField.common')
     : draft.meter
   const nameOf = (field: HeaderField) => t(`scoreSettings.names.${field}`)
+  // The usual credits always, the others once written or added by their role (Add credit).
+  const [added, setAdded] = useState<readonly HeaderField[]>([])
+  const shown = HEADER_FIELDS.filter(
+    (field) =>
+      USUAL_HEADER_FIELDS.includes(field) ||
+      draft.header?.[field] !== undefined ||
+      added.includes(field),
+  )
+  const addable = HEADER_FIELDS.filter((field) => !shown.includes(field))
   const { page: asked } = useSearch({ strict: false }) as { page?: string }
   const page = SCORE_PAGES.find((each) => each === asked) ?? null
   const setSearch = useSetSearch<{ page: string | undefined }>()
@@ -137,7 +164,7 @@ export function ScoreSettingsPage() {
                 placeholder={t('scoreSettings.add')}
                 onSave={(title) => actions.dispatch({ type: 'title', title })}
               />
-              {HEADER_FIELDS.map((field) => (
+              {shown.map((field) => (
                 <NameRow
                   key={field}
                   label={nameOf(field)}
@@ -147,6 +174,24 @@ export function ScoreSettingsPage() {
                   onSave={(text) => actions.dispatch({ type: 'header', field, text })}
                 />
               ))}
+              {addable.length > 0 ? (
+                <div className="px-1 py-2">
+                  <ActionMenu
+                    label={t('scoreSettings.addCredit')}
+                    trigger={
+                      <>
+                        <Plus aria-hidden />
+                        {t('scoreSettings.addCredit')}
+                      </>
+                    }
+                    actions={addable.map((field) => ({
+                      key: field,
+                      label: nameOf(field),
+                      onSelect: () => setAdded((was) => [...was, field]),
+                    }))}
+                  />
+                </div>
+              ) : null}
             </SettingsGroup>
             <SettingsGroup flush title={t('scoreSettings.music')}>
               {row('staves', Music2, 'lilac', String(staffCount))}

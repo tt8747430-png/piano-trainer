@@ -126,6 +126,28 @@ describe('a song’s MusicXML, exported then imported', () => {
     expect(back.song.music).toEqual(written(tremolo))
   })
 
+  it('writes and reads composer, lyricist, arranger, translator, rights and source (A28)', () => {
+    const xml = musicXmlOf(RICH, {
+      ...NAMES,
+      composer: 'Clara Schumann',
+      lyricist: 'Heine',
+      arranger: 'A. Learner',
+      translator: 'B. Translator',
+      rights: '© 2026 A. Learner',
+      source: 'Lieder, Op. 13',
+    })
+    expect(xml).toContain('<creator type="arranger">A. Learner</creator>')
+    expect(xml).toContain('<rights>© 2026 A. Learner</rights>')
+    expect(songOfMusicXml(xml, 'x').song.music.header).toEqual({
+      composer: 'Clara Schumann',
+      lyricist: 'Heine',
+      arranger: 'A. Learner',
+      translator: 'B. Translator',
+      copyright: '© 2026 A. Learner',
+      source: 'Lieder, Op. 13',
+    })
+  })
+
   it('keeps a lead sheet’s piano, not printed', () => {
     const lead: PieceMusic = { ...RICH, leadSheet: true }
     const xml = musicXmlOf(lead, { ...NAMES, staffNames: ['Flute', 'Cello'] })

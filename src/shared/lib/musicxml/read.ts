@@ -128,6 +128,12 @@ export interface ReadScore {
   readonly title?: string
   readonly composer?: string
   readonly lyricist?: string
+  readonly arranger?: string
+  readonly translator?: string
+  /** Its copyright line (`<rights>`). */
+  readonly rights?: string
+  /** Where it comes from (`<source>`): a book, a collection. */
+  readonly source?: string
   readonly key: Key
   readonly meter: Meter
   readonly timeSymbol?: true
@@ -657,6 +663,14 @@ export function readMusicXml(source: string): ReadScore {
       .trim() || undefined
   const composer = creator('composer')
   const lyricist = creator('lyricist')
+  const arranger = creator('arranger')
+  const translator = creator('translator')
+  const identified = (name: string) => {
+    const found = childAt(childAt(root, 'identification') ?? root, name)
+    return found ? textOf(found).trim() || undefined : undefined
+  }
+  const rights = identified('rights')
+  const sourceLine = identified('source')
 
   const firstBarEnd = (starts[0] ?? 0) + (lengths[0] ?? 0)
   const lastBarStart = starts.at(-1) ?? 0
@@ -671,6 +685,10 @@ export function readMusicXml(source: string): ReadScore {
     ...(title ? { title: title.trim() } : {}),
     ...(composer ? { composer } : {}),
     ...(lyricist ? { lyricist } : {}),
+    ...(arranger ? { arranger } : {}),
+    ...(translator ? { translator } : {}),
+    ...(rights ? { rights } : {}),
+    ...(sourceLine ? { source: sourceLine } : {}),
     key: keyRead ?? signatureKey(0, false),
     meter,
     ...(timeSymbol ? { timeSymbol: true } : {}),

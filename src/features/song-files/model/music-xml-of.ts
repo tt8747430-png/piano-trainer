@@ -10,6 +10,10 @@ export interface SongFileNames {
   readonly title: string
   readonly composer?: string
   readonly lyricist?: string
+  readonly arranger?: string
+  readonly translator?: string
+  readonly rights?: string
+  readonly source?: string
   /** Each section's heading, as the score prints it. */
   readonly headings: readonly string[]
   /** Each single staff's own name, top down; none where it has none. */
@@ -58,6 +62,10 @@ export function musicXmlOf(music: PieceMusic, names: SongFileNames): string {
     title: names.title,
     ...(names.composer ? { composer: names.composer } : {}),
     ...(names.lyricist ? { lyricist: names.lyricist } : {}),
+    ...(names.arranger ? { arranger: names.arranger } : {}),
+    ...(names.translator ? { translator: names.translator } : {}),
+    ...(names.rights ? { rights: names.rights } : {}),
+    ...(names.source ? { source: names.source } : {}),
     staffNames: names.staffNames,
     pianoName: names.piano,
     pianoHidden: draft.leadSheet,

@@ -812,10 +812,16 @@ export const editor = {
       composer: 'Composer',
       lyricist: 'Lyricist',
       arranger: 'Arranger',
+      translator: 'Translator',
+      tune: 'Tune name',
+      source: 'Source or collection',
+      year: 'Year',
+      copyright: 'Copyright',
     },
+    addCredit: 'Add credit',
     add: 'Add',
     namesInfo:
-      'Printed under the title, as a printed score has them: the subtitle in the middle, the lyricist on the left, the composer and the arranger on the right.',
+      'Printed under the title, as a printed score has them: the subtitle in the middle with a hymn tune’s name under it, the lyricist and the translator on the left, the composer and the arranger on the right. The source, year and copyright stay with the score and go with it when it is exported.',
     instruments: 'Instruments',
     instrumentsInfo:
       'Each instrument is a staff. Taking one away takes its notes with it; Undo in the editor brings them back. Rename a staff by tapping its name on the score.',

@@ -1,4 +1,10 @@
-import { readSharedSong, songTitle, TITLE_MAX, type SharedSong } from '@/entities/piece'
+import {
+  readSharedSong,
+  savedHeader,
+  songTitle,
+  TITLE_MAX,
+  type SharedSong,
+} from '@/entities/piece'
 import { writeDraft } from '@/features/score-editor'
 import { readMusicXml } from '@/shared/lib/musicxml'
 import { draftOfScore, type LeftCounts } from './draft-of-score'
@@ -35,9 +41,18 @@ export function songOfMusicXml(text: string, fileName: string): ReadSong {
   if (score.notes.length > MOST_NOTES) throw new SongFileError('too-large')
   const { draft, leftOut } = draftOfScore(score)
   const title = titleOf(score.title, fileName)
+  // Who the file names, kept as the score's credits (A28).
+  const header = savedHeader({
+    composer: score.composer,
+    lyricist: score.lyricist,
+    arranger: score.arranger,
+    translator: score.translator,
+    copyright: score.rights,
+    source: score.source,
+  })
   let song: SharedSong | null
   try {
-    song = readSharedSong({ ...writeDraft(draft), title })
+    song = readSharedSong({ ...writeDraft(header ? { ...draft, header } : draft), title })
   } catch {
     song = null
   }

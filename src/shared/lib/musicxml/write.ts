@@ -43,6 +43,12 @@ export interface MusicXmlOptions {
   /** Who wrote the music, and the words. */
   readonly composer?: string
   readonly lyricist?: string
+  readonly arranger?: string
+  readonly translator?: string
+  /** Its copyright line, written as `<rights>`. */
+  readonly rights?: string
+  /** Where it comes from, written as `<source>`. */
+  readonly source?: string
   /** Each single staff's own name, top down; none prints none. */
   readonly staffNames?: readonly (string | undefined)[]
   /** The piano's part's name, printed over its brace as the app's score prints it. */
@@ -224,6 +230,11 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): st
   const creators = [
     options.composer ? tag('creator', { type: 'composer' }, escapeText(options.composer)) : '',
     options.lyricist ? tag('creator', { type: 'lyricist' }, escapeText(options.lyricist)) : '',
+    options.arranger ? tag('creator', { type: 'arranger' }, escapeText(options.arranger)) : '',
+    options.translator
+      ? tag('creator', { type: 'translator' }, escapeText(options.translator))
+      : '',
+    options.rights ? tag('rights', {}, escapeText(options.rights)) : '',
   ].join('')
   const identification = tag(
     'identification',
@@ -237,6 +248,7 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): st
       tag('supports', { element: 'beam', type: 'yes' }),
       tag('supports', { element: 'stem', type: 'no' }),
     ),
+    options.source ? tag('source', {}, escapeText(options.source)) : '',
     options.appData === undefined
       ? ''
       : tag(

@@ -41,8 +41,10 @@ export { HAND_IDS, type HandId } from './model/parse-hands'
 export { readPedalLine, writePedalLine } from './model/pedal-line'
 export {
   HEADER_FIELDS,
+  USUAL_HEADER_FIELDS,
   HEADER_MAX,
   headerLine,
+  savedHeader,
   withHeaderLine,
   type HeaderField,
   type ScoreHeader,
