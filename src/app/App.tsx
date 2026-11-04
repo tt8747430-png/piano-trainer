@@ -1,4 +1,5 @@
 import { RouterProvider } from '@tanstack/react-router'
+import { ChordSheetsStoreProvider } from '@/entities/chord-sheet'
 import { DiagramInversionsStoreProvider } from '@/entities/diagram-inversion'
 import { LibraryStoreProvider } from '@/entities/library'
 import { PatternsStoreProvider } from '@/entities/pattern'
@@ -68,19 +69,21 @@ export function App({
                         <TakesStoreProvider store={stores.takes}>
                           <LibraryStoreProvider store={stores.library}>
                             <DiagramInversionsStoreProvider store={stores.diagramInversions}>
-                              <ServicesProvider services={services}>
-                                <LocaleSync />
-                                <AudioUnlock />
-                                <MidiReconnect />
-                                <MidiSync />
-                                <ThemeProvider>
-                                  <ShortcutsProvider>
-                                    <RouterProvider router={router} />
-                                    <Toaster />
-                                    <Confirmer />
-                                  </ShortcutsProvider>
-                                </ThemeProvider>
-                              </ServicesProvider>
+                              <ChordSheetsStoreProvider store={stores.chordSheets}>
+                                <ServicesProvider services={services}>
+                                  <LocaleSync />
+                                  <AudioUnlock />
+                                  <MidiReconnect />
+                                  <MidiSync />
+                                  <ThemeProvider>
+                                    <ShortcutsProvider>
+                                      <RouterProvider router={router} />
+                                      <Toaster />
+                                      <Confirmer />
+                                    </ShortcutsProvider>
+                                  </ThemeProvider>
+                                </ServicesProvider>
+                              </ChordSheetsStoreProvider>
                             </DiagramInversionsStoreProvider>
                           </LibraryStoreProvider>
                         </TakesStoreProvider>

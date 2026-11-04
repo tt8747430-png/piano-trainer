@@ -12,6 +12,7 @@ const MIRROR_TABLES = [
   'pieces',
   'takes',
   'library',
+  'chord_sheets',
 ] as const
 
 const BUCKETS = ['takes', 'avatars'] as const

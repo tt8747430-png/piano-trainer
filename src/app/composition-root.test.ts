@@ -34,6 +34,7 @@ describe('createStores', () => {
     const storage = createMemoryStorage()
     const stores = createStores({ storage, signal: untilTestEnds() }, { languages: ['ru'] })
     expect(Object.keys(stores).sort()).toEqual([
+      'chordSheets',
       'diagramInversions',
       'library',
       'patterns',
@@ -63,6 +64,7 @@ describe('createBackend and createAuth', () => {
 describe('createSync', () => {
   it('syncs every saved store but the keyboard’s, which is this device’s alone', () => {
     expect(SYNCED_SAVES.map((save) => save.key).sort()).toEqual([
+      'pt-chord-sheets',
       'pt-diagram-inversions',
       'pt-library',
       'pt-patterns',
