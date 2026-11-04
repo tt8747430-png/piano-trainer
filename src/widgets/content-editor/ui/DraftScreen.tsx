@@ -40,6 +40,7 @@ export function DraftScreen<T>({
   unreadable,
   language,
   modes,
+  publishPage,
   children,
 }: {
   draft: ContentDraft<T>
@@ -59,6 +60,8 @@ export function DraftScreen<T>({
   language?: { value: Locale; onChange: (locale: Locale) => void }
   /** The item's Done (`EditToggle`), at the bar's end: the page in Edit, not another page. */
   modes?: ReactNode
+  /** The item's Publish page (R29 B6), which the bar's Publish opens. */
+  publishPage?: { readonly link: ReactElement; readonly open: () => void }
   children: (initial: T) => ReactNode
 }) {
   const { t } = useTranslation('editor')
@@ -85,6 +88,7 @@ export function DraftScreen<T>({
                 title={title}
                 unreadable={unreadable}
                 onReset={draft.reopen}
+                publishPage={publishPage}
                 more={language ? languageActions(language.value, language.onChange, words) : []}
               />
               {modes}

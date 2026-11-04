@@ -537,6 +537,17 @@ const progressionEditRoute = createRoute({
   path: '/practice/progressions/$progressionId/edit',
   component: lazyRouteComponent(explorerScreens, 'ProgressionEditorPage'),
 })
+// A progression's Settings and Publish page (R29 B6), an editor's, from its editor's bar.
+const progressionSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/progressions/$progressionId/settings',
+  component: lazyRouteComponent(explorerScreens, 'ProgressionSettingsPage'),
+})
+const progressionPublishRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/progressions/$progressionId/publish',
+  component: lazyRouteComponent(explorerScreens, 'ProgressionPublishPage'),
+})
 
 // The Chord finder (ADR 0052): a tool of its own, any chord played or tapped named, spelled and written.
 const chordFinderRoute = createRoute({
@@ -665,6 +676,28 @@ const lessonSettingsRoute = createRoute({
     await ensureContent(context.content, 'lesson', params.lessonId)
   },
   component: lazyRouteComponent(learnScreens, 'LessonSettingsPage'),
+})
+// An item's Publish page (R29 B6): an editor's, from its Settings' Publish….
+const lessonPublishRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/lessons/$lessonId/publish',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params, context }) => {
+    const { lessonById, lessonPlace } = await learnScreens()
+    if (!lessonById(params.lessonId) || !lessonPlace(params.lessonId)) throw notFound()
+    await ensureContent(context.content, 'lesson', params.lessonId)
+  },
+  component: lazyRouteComponent(learnScreens, 'LessonPublishPage'),
+})
+const coursePublishRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/courses/$courseId/publish',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params }) => {
+    const { courseById } = await learnScreens()
+    if (!courseById(params.courseId)) throw notFound()
+  },
+  component: lazyRouteComponent(learnScreens, 'CoursePublishPage'),
 })
 const courseSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -901,6 +934,8 @@ const routeTree = rootRoute.addChildren([
     intervalsRoute,
     progressionsRoute,
     progressionEditRoute,
+    progressionSettingsRoute,
+    progressionPublishRoute,
     accompanimentRoute,
     newPatternRoute,
     patternRoute,
@@ -910,6 +945,8 @@ const routeTree = rootRoute.addChildren([
     courseLessonRoute,
     lessonSettingsRoute,
     courseSettingsRoute,
+    lessonPublishRoute,
+    coursePublishRoute,
     courseLessonSettingsRoute,
     lessonEditRoute,
     courseLessonEditRoute,

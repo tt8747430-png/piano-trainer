@@ -220,6 +220,8 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
     return up({ to: '/', search: { view: 'lessons', ...(journey ? { journey } : {}) } })
   },
   '/shell/lessons/$lessonId/settings': toLesson,
+  '/shell/lessons/$lessonId/publish': (from) =>
+    up({ to: '/lessons/$lessonId/settings', params: { lessonId: param(from, 'lessonId') } }),
   '/shell/lessons/$lessonId/edit': toLesson,
   '/full-screen/lessons/$lessonId/example': ({ params, search }) => {
     const course = text(search.course)
@@ -230,6 +232,8 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   },
   '/shell/courses/$courseId': toCourses,
   '/shell/courses/$courseId/settings': toCourse,
+  '/shell/courses/$courseId/publish': (from) =>
+    up({ to: '/courses/$courseId/settings', params: { courseId: param(from, 'courseId') } }),
   '/shell/courses/$courseId/edit': toCourse,
   '/shell/courses/$courseId/$lessonId': toCourse,
   '/shell/courses/$courseId/$lessonId/settings': toCourseLesson,
@@ -242,6 +246,16 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/practice/intervals': toPractice,
   '/shell/practice/progressions': toPractice,
   '/shell/practice/progressions/$progressionId/edit': () => up({ to: '/practice/progressions' }),
+  '/shell/practice/progressions/$progressionId/settings': (from) =>
+    up({
+      to: '/practice/progressions/$progressionId/edit',
+      params: { progressionId: param(from, 'progressionId') },
+    }),
+  '/shell/practice/progressions/$progressionId/publish': (from) =>
+    up({
+      to: '/practice/progressions/$progressionId/settings',
+      params: { progressionId: param(from, 'progressionId') },
+    }),
   '/shell/practice/chord-finder': toPractice,
   '/shell/practice/metronome': toPractice,
   '/shell/practice/chord-player': toPractice,

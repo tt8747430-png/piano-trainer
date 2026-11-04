@@ -1,6 +1,7 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { tickAndPublish } from '@/shared/test/publish'
 import { renderApp } from '@/app/testing/render-app'
 import { COURSES } from '@/entities/course'
 import { LESSONS, lessonPlace } from '@/entities/lesson'
@@ -99,14 +100,13 @@ describe('a lesson’s Settings (round 28)', () => {
     await user.click(screen.getByRole('combobox', { name: 'Read first' }))
     await user.click(await screen.findByRole('option', { name: other.title.en }))
     await user.keyboard('{Escape}')
-    // Its changes, there once there are some, with Publish.
-    expect(screen.queryByText('Unpublished changes')).not.toBeInTheDocument()
-    await screen.findByText('Saved · not published', {}, { timeout: 3000 })
-    expect(screen.getByText('Unpublished changes')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Publish' }))
-    await user.click(
-      within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
-    )
+    // Publish… says where it stands, and opens its Publish page (R29 B6).
+    const row = await screen.findByRole('link', { name: /^Publish…/ })
+    await waitFor(() => expect(row).toHaveTextContent('Changed since it was published'), {
+      timeout: 3000,
+    })
+    await user.click(row)
+    await tickAndPublish(user)
     await waitFor(() =>
       expect(content.body('lesson', LESSON.id)).toMatchObject({
         after: [...(LESSON.after ?? []), other.id],

@@ -1,9 +1,9 @@
 import { CloudCheck, CloudOff, Ellipsis, History, LoaderCircle, Trash2, Upload } from 'lucide-react'
-import { useState } from 'react'
+import { useState, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { NetResult } from '@/shared/api/network'
 import { cn } from '@/shared/lib'
-import { ActionMenu, say, type MenuAction } from '@/shared/ui'
+import { ActionMenu, ButtonLink, say, type MenuAction } from '@/shared/ui'
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -64,7 +64,9 @@ export function DraftStatus({ draft, className }: { draft: DraftState; className
 
 /**
  * The draft's actions in the screen's bar (ADR 0116, round 21): its menu (Versions, to restore one,
- * and Discard) and Publish, the bar's one accent. What publishing, discarding or restoring changes is
+ * and Discard) and Publish, the bar's one accent. An item with a Publish page (R29 B6: a song, a
+ * lesson, a course, a progression) has Publish as the way to it, the rights ticked there each time,
+ * and Versions there too; its menu keeps Discard. What publishing, discarding or restoring changes is
  * asked first; after discarding or restoring, the editor opens again on the item as published
  * (`onReset`).
  */
@@ -76,6 +78,7 @@ export function DraftActions({
   more = [],
   publishInMenu = false,
   variant = 'ghost',
+  publishPage,
 }: {
   draft: Pick<ContentDraft, 'drafted' | 'saved' | 'publish' | 'discard' | 'versions' | 'restore'>
   title: string
@@ -88,6 +91,8 @@ export function DraftActions({
   publishInMenu?: boolean
   /** The menu's button: a page's bar's, or the score's (`tool`). */
   variant?: 'ghost' | 'tool'
+  /** The item's Publish page: a router `Link` to it, and the way there from a menu. */
+  publishPage?: { readonly link: ReactElement; readonly open: () => void } | undefined
 }) {
   const { t } = useTranslation('editor')
   const [asked, setAsked] = useState<Asked>(null)
@@ -139,19 +144,23 @@ export function DraftActions({
                   key: 'publish',
                   label: t('original.publish'),
                   icon: Upload,
-                  disabled: !draft.drafted || busy,
-                  onSelect: () => setAsked('publish'),
+                  disabled: publishPage ? false : !draft.drafted || busy,
+                  onSelect: () => (publishPage ? publishPage.open() : setAsked('publish')),
                 },
               ]
             : []),
           ...more,
-          {
-            key: 'versions',
-            ...(more.length > 0 ? { group: t('original.draft') } : {}),
-            label: t('original.versions'),
-            icon: History,
-            onSelect: () => setAsked('versions'),
-          },
+          ...(publishPage
+            ? []
+            : [
+                {
+                  key: 'versions',
+                  ...(more.length > 0 ? { group: t('original.draft') } : {}),
+                  label: t('original.versions'),
+                  icon: History,
+                  onSelect: () => setAsked('versions'),
+                },
+              ]),
           {
             key: 'discard',
             label: t('original.discard'),
@@ -162,7 +171,11 @@ export function DraftActions({
           },
         ]}
       />
-      {publishInMenu ? null : (
+      {publishInMenu ? null : publishPage ? (
+        <ButtonLink className="h-11 shrink-0 rounded-pill px-4" render={publishPage.link}>
+          {t('original.publish')}
+        </ButtonLink>
+      ) : (
         <Button
           className="h-11 shrink-0 rounded-pill px-4"
           disabled={!draft.drafted || busy}

@@ -101,7 +101,7 @@ describe('A pattern’s page', () => {
       within(more)
         .getAllByRole('menuitem')
         .map((action) => action.textContent),
-    ).toEqual(['Edit', 'Publish in library', 'Delete'])
+    ).toEqual(['Edit', 'Publish…', 'Delete'])
     await user.click(within(more).getByRole('menuitem', { name: 'Delete' }))
     await user.click(await screen.findByRole('button', { name: 'Delete' }))
     await waitFor(() =>
@@ -170,8 +170,8 @@ describe('a pattern of the learner’s own in the Public library (ADR 0116)', ()
       publicLibrary,
     })
     await user.click(await screen.findByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Publish in library' }))
-    await screen.findByRole('heading', { level: 1, name: 'Publish in library' })
+    await user.click(await screen.findByRole('menuitem', { name: 'Publish…' }))
+    await screen.findByRole('heading', { level: 1, name: 'Publish' })
     expect(router.state.location.pathname).toBe('/practice/accompaniment/patterns/my-1/publish')
     await user.type(
       screen.getByRole('textbox', { name: 'Description' }),

@@ -651,17 +651,44 @@ export const editor = {
   },
   // An item made in the app, given up on its Settings page (round 28).
   remove: {
-    unpublish: 'Unpublish',
-    unpublishTitle: 'Unpublish {{title}}?',
-    unpublishBody:
-      'Learners no longer get it. It stays here unpublished, to change and publish again.',
-    unpublished: 'Unpublished',
     delete: 'Delete',
     deleteTitle: 'Delete {{title}}?',
     deleteBody:
       'It is deleted for good, with its unpublished changes and every version kept of it.',
     deleted: 'Deleted',
-    footnote: 'Unpublishing takes it from learners; deleting it can’t be undone.',
+    footnote: 'Deleting it can’t be undone.',
+  },
+  // One Publish page for every item (R29 B6): where it stands, what changed, the rights, Publish;
+  // once published its link, View, Versions and Unpublish last.
+  publishPage: {
+    title: 'Publish',
+    open: 'Publish…',
+    why: 'Why publish here?',
+    whyBody:
+      'Publishing gives every learner this version the next time the app starts. Each version published is kept, so you can restore an earlier one.',
+    standing: {
+      unpublished: 'Not published',
+      published: 'Published',
+      changed: 'Changed since it was published',
+    },
+    changes: 'What changed',
+    changesDrafted: 'Your changes since it was last published are saved and wait to be published.',
+    changesNone: 'Nothing has changed since it was published.',
+    preview: 'As learners will see it',
+    publish: 'Publish',
+    publishNew: 'Publish new version',
+    link: 'Its link',
+    view: 'View',
+    versions: 'Versions',
+    restoreTitle: 'Restore this version?',
+    restoreBody: 'It is published again for every learner, in place of the one they have now.',
+    unpublish: 'Unpublish',
+    unpublishTitle: 'Unpublish {{title}}?',
+    unpublishBody: 'Learners no longer get it. It stays yours, as a draft, to publish again.',
+    unpublished: 'Unpublished',
+    shareLink: 'Share link',
+    shared: 'Link copied',
+    shareFailed: 'The link could not be copied',
   },
   original: {
     draft: 'Publishing',

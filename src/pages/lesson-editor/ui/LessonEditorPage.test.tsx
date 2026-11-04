@@ -2,6 +2,7 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { Editor } from '@tiptap/core'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { publishOnItsPage } from '@/shared/test/publish'
 import { renderApp } from '@/app/testing/render-app'
 import { COURSES } from '@/entities/course'
 import { LESSONS, lessonExamples, lessonPlace, type Lesson } from '@/entities/lesson'
@@ -52,13 +53,8 @@ async function chooseExample(kind: string, name: string) {
 }
 
 /** Publishes the draft once it is saved: the bar's Publish, then the dialog's. */
-async function publish(user: ReturnType<typeof userEvent.setup>) {
-  await screen.findByText('Saved · not published', {}, { timeout: 3000 })
-  await user.click(screen.getByRole('button', { name: 'Publish' }))
-  await user.click(
-    within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
-  )
-}
+/** Publish, the one way: the bar's Publish opens the Publish page (R29 B6). */
+const publish = publishOnItsPage
 
 const saved = async (content: ReturnType<typeof editing>, id = LESSON.id) => {
   const draft = await content.draft('lesson', id)
@@ -97,7 +93,11 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     expect(line(doc, 'p[data-lesson-title]')).toHaveTextContent(LESSON.title.en)
     expect(doc.querySelectorAll('h2')).toHaveLength(LESSON.sections.length)
     expect(screen.queryByText('Not published')).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Publish' })).toBeDisabled()
+    // Publish opens the lesson's Publish page (R29 B6), the rights ticked there.
+    expect(screen.getByRole('link', { name: 'Publish' })).toHaveAttribute(
+      'href',
+      `/lessons/${LESSON.id}/publish`,
+    )
     expect(screen.queryByRole('radio', { name: 'Preview' })).not.toBeInTheDocument()
   })
 
@@ -234,17 +234,7 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     await user.clear(chords)
     await user.type(chords, 'C Qx G7')
     expect(chords).toHaveAccessibleDescription('“Qx” doesn’t read')
-    await publish(user)
-    expect(
-      await screen.findByText(
-        'Every text needs words in both languages, and every example must read. Put them right, then publish.',
-      ),
-    ).toBeInTheDocument()
-    // Publish took the focus away, and the example reads as the lesson again: a tap opens it anew.
-    await user.click(
-      (await chooseExample('chords', 'Chords')).getByRole('button', { name: 'Edit' }),
-    )
-    const again = (await screen.findAllByRole('textbox', { name: 'Chords' }))[0]!
+    const again = chords
     await user.clear(again)
     await user.type(again, 'C Am G7')
     expect(again).not.toHaveAccessibleDescription()

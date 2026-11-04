@@ -1,21 +1,19 @@
 import { Link } from '@tanstack/react-router'
-import { BadgeCheck, Copy, Download, Info, LogIn, RefreshCw, Users } from 'lucide-react'
+import { BadgeCheck, Download, Info, LogIn, RefreshCw, Users } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/shared/lib'
 import {
   ButtonLink,
   ConfirmDialog,
   ScreenHeader,
-  say,
   Sheet,
   SheetContent,
   SheetTrigger,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Checkbox } from '@/shared/ui/primitives/checkbox'
 import { describes, descriptionOf, type usePublish } from '../model/use-publish'
 import { PublishFields, type PublishPreview } from './PublishFields'
+import { CopyLinkField, RightsCheck, StandingLine } from './PublishParts'
 import { PublishSaid } from './PublishSaid'
 
 /** Why publish, three reasons each under its picture (Noji's "Why should I publish my deck?"). */
@@ -60,32 +58,6 @@ function WhyPublish() {
   )
 }
 
-/** Its address in the Public library, in a field with Copy (Noji's). */
-function PublicLink({ publicId }: { publicId: string }) {
-  const { t } = useTranslation('songs')
-  const url = `${window.location.origin}/songs/public/${publicId}`
-  return (
-    <div className="flex min-h-14 items-center gap-2 rounded-control bg-muted pr-1.5 pl-4">
-      <span className="min-w-0 flex-1 truncate text-muted-foreground select-text">{url}</span>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="size-11 shrink-0 rounded-control"
-        aria-label={t('public.copyLink')}
-        title={t('public.copyLink')}
-        onClick={() =>
-          void navigator.clipboard
-            ?.writeText(url)
-            .then(() => say(t('public.linkCopied')))
-            .catch(() => say(t('public.linkNotCopied')))
-        }
-      >
-        <Copy aria-hidden />
-      </Button>
-    </div>
-  )
-}
-
 /**
  * Publish in library, a page of its own for a song or a pattern (round 27, Noji's): why publish behind
  * the ⓘ in the bar, in a sheet.
@@ -108,10 +80,10 @@ export function PublishScreen({
   /** The bar's way back: the song's Settings, the pattern's page. */
   back: ReactNode
 }) {
-  const { t } = useTranslation('songs')
+  const { t } = useTranslation(['songs', 'editor'])
   return (
     <div className="flex min-h-screen-free flex-col gap-6">
-      <ScreenHeader title={t('public.publishIn')} back={back} actions={<WhyPublish />} />
+      <ScreenHeader title={t('editor:publishPage.title')} back={back} actions={<WhyPublish />} />
       <PublishSaid said={publishing.said} />
       <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6">
         {publishing.signedIn ? (
@@ -156,25 +128,12 @@ function PublishForm({
     publishing.state === 'changed' || descriptionOf(text) !== descriptionOf(publishing.description)
   return (
     <>
+      {live ? null : <StandingLine standing="unpublished" />}
       {live && publishing.publicId ? (
         <>
-          <p
-            className={cn(
-              'flex items-center gap-2 px-1 font-semibold',
-              publishing.state === 'published' ? 'text-link' : 'text-foreground',
-            )}
-          >
-            <span
-              aria-hidden
-              className={cn(
-                'size-2.5 rounded-pill',
-                publishing.state === 'published' ? 'bg-link' : 'bg-paint-sand',
-              )}
-            />
-            {t(publishing.state === 'published' ? 'public.live' : 'public.changedSince')}
-          </p>
+          <StandingLine standing={publishing.state === 'published' ? 'published' : 'changed'} />
           <div className="-mt-3 flex flex-col gap-3">
-            <PublicLink publicId={publishing.publicId} />
+            <CopyLinkField url={`${window.location.origin}/songs/public/${publishing.publicId}`} />
             <ButtonLink
               variant="outline"
               size="lg"
@@ -200,21 +159,7 @@ function PublishForm({
       {/* The page's foot: what is done to it, Noji's pair of full-width buttons. */}
       <div className="mt-auto flex flex-col gap-3 pt-4">
         {/* The rights, confirmed each time it is published (R29 D3): Publish waits for the tick. */}
-        {!live || changed ? (
-          <label className="flex cursor-pointer items-start gap-3 px-1 text-sm">
-            <Checkbox
-              className="mt-0.5"
-              checked={rights}
-              onCheckedChange={(on) => setRights(on === true)}
-            />
-            <span>
-              {t('public.rights')}{' '}
-              <Link to="/legal/terms" className="text-link underline-offset-2 hover:underline">
-                {t('public.terms')}
-              </Link>
-            </span>
-          </label>
-        ) : null}
+        {!live || changed ? <RightsCheck checked={rights} onChange={setRights} /> : null}
         {live ? (
           <>
             <Button

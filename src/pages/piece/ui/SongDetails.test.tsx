@@ -92,6 +92,8 @@ describe('a song’s Details in its Settings (R29 1.2)', () => {
       { timeout: 4000 },
     )
     await user.click(screen.getByRole('button', { name: 'Back' }))
-    expect(await screen.findByText('Not published')).toBeInTheDocument()
+    // Publish… says it changed since it was published (R29 B6).
+    const row = await screen.findByRole('link', { name: /^Publish…/ })
+    await waitFor(() => expect(row).toHaveTextContent('Changed since it was published'))
   })
 })

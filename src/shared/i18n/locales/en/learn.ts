@@ -139,7 +139,6 @@ export const learn = {
     readFirst: 'Read first',
     languages: 'Written in',
     noLanguage: 'Not yet in full',
-    changes: 'Unpublished changes',
     opening: 'Opening…',
   },
   reading: {

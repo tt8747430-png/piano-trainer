@@ -228,3 +228,15 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r28 — An item made in the app (a level's lesson, a course) has Remove on its Settings: Unpublish (status back to draft, its body kept as its draft) and Delete (its row, its draft and versions cascading); the port's `unpublish` and `remove`; no migration (the policies let an editor update and delete). The app's own items ship with it and only leave a level or shelf (2026-11-02).
 - r29 — Profiles (name, handle, bio, avatar, public) with an avatars bucket and access tests; the author of a published song from a public profile (decided 2026-11-02, being built in round 29; spec `.scratch/r29/profile/spec.md`).
 - r29 — Built: `learner_profiles` (name, a unique lower-case handle, bio, avatar, public, private by default; started on sign-up from the name given; `handle_available` for a signed-in learner), a public profile's avatar readable from the `avatars` bucket; access tested by `tests/profile-access.sql` (2026-11-03).
+- r30 — One publishing model (R29 B6): every published item (a song, a pattern, a lesson, a course, a
+  progression) has the same acts in the same places, a typed table the screens read
+  (`features/publish/model/acts.ts`, its test holding every kind to it): Edit and Settings in the item's bar;
+  Publish… and Share link on its Settings, then Delete last there (`RemoveGroup`, Delete alone); one Publish page
+  (`/<item>/publish`: where it stands, what changed, a preview, the rights ticked each time (D3), Publish or
+  Publish new version; once published its link, View, Versions (a restore asked first) and Unpublish last, for an
+  item made in the app). A learner publishes their own song or pattern to Explore (`PublishScreen`); an editor the
+  app's items to everyone (`DraftPublishScreen`). The bars' Publish opens the Publish page, never a one-tap
+  publish; a level and the courses' order, which have no Publish page, keep their bar's Publish. A progression has
+  a Settings page (`/practice/progressions/$progressionId/settings`) from its editor's gear. The level and the
+  Courses' shelves are edited in place on Learn (R29 B4, `?edit`), `/journeys/$journeyId/edit` and
+  `/courses/manage` gone (2026-11-04).

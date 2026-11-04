@@ -289,7 +289,6 @@ export const songs = {
   // A song someone shared as a link.
   // The Public library (ADR 0116): learners' songs published for anyone to play and save a copy of.
   public: {
-    publishIn: 'Publish in library',
     title: 'Public library',
     kinds: { label: 'Songs or patterns', song: 'Songs', pattern: 'Patterns' },
     seeAll: 'See all',
@@ -360,8 +359,6 @@ export const songs = {
     whyYoursTitle: 'Always yours',
     whyYours: 'It stays yours: update it or take it out whenever you like.',
     // A published song's or pattern's Publish page (Noji's).
-    live: 'In the library',
-    changedSince: 'Changed since you published it',
     copyLink: 'Copy link',
     linkCopied: 'Link copied.',
     linkNotCopied: 'The link couldn’t be copied.',

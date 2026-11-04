@@ -126,7 +126,6 @@ export const learn: LocaleResources['learn'] = {
     readFirst: 'Сначала прочесть',
     languages: 'Языки',
     noLanguage: 'Пока не полностью',
-    changes: 'Неопубликованные изменения',
     opening: 'Открываем…',
   },
   reading: {

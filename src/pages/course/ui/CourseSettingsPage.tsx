@@ -8,12 +8,12 @@ import { localText, useLocale } from '@/shared/i18n'
 import { shareLink } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, RowButton, RowLink, say, ScreenHeader, SettingsGroup } from '@/shared/ui'
-import { ChangesGroup } from '@/widgets/content-editor'
+import { PublishRow } from '@/widgets/content-editor'
 
 /**
  * A course's Settings (`/courses/$courseId/settings`, round 28, as a song's): Share link, and apart
- * the learner's progress in it reset, asked first. An editor's: the shelf it stands on (Manage
- * courses), and its changes with Publish. What it is (its title, summary, level and length) is
+ * the learner's progress in it reset, asked first. An editor's: the shelf it stands on, and
+ * (R29 B6) Publish… before Share link, Delete last. What it is (its title, summary, level and length) is
  * written on the course itself, in Edit.
  */
 export function CourseSettingsPage() {
@@ -36,7 +36,9 @@ export function CourseSettingsPage() {
       <ScreenHeader title={t('settings.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <p className="px-1 font-display text-2xl font-semibold text-balance">{title}</p>
+        {editsContent(account) ? <EditorRows course={course} /> : null}
         <SettingsGroup flush title={t('settings.share')}>
+          {editsContent(account) ? <CoursePublishRow course={course} /> : null}
           <RowButton
             title={t('settings.shareLink')}
             icon={Link2}
@@ -44,7 +46,6 @@ export function CourseSettingsPage() {
             onClick={() => void share()}
           />
         </SettingsGroup>
-        {editsContent(account) ? <EditorRows course={course} title={title} /> : null}
         <ResetStepsRow
           steps={courseStepIds(course)}
           words={{
@@ -71,24 +72,31 @@ export function CourseSettingsPage() {
   )
 }
 
-/** An editor's rows (ADR 0116): its shelf, a way to Manage courses; its changes with Publish. */
-function EditorRows({ course, title }: { course: Course; title: string }) {
+/** An editor's rows (ADR 0116): the shelf it stands on, a way to the shelves' Edit mode. */
+function EditorRows({ course }: { course: Course }) {
   const { t } = useTranslation('learn')
-  const draft = useCourseDraft(course)
-  const shelf =
-    draft.load.state === 'ready' ? (draft.load.value.shelf ?? course.shelf) : course.shelf
   return (
-    <>
-      <SettingsGroup flush title={t('settings.course')}>
-        <RowLink
-          title={t('edit.course.shelf')}
-          value={t(`shelves.${shelf}`)}
-          icon={Library}
-          paint="sky"
-          render={<Link to="/" search={{ view: 'courses', edit: true }} />}
-        />
-      </SettingsGroup>
-      <ChangesGroup draft={draft} title={title} unreadable={t('edit.course.unreadable')} />
-    </>
+    <SettingsGroup flush title={t('settings.course')}>
+      <RowLink
+        title={t('edit.course.shelf')}
+        value={t(`shelves.${course.shelf}`)}
+        icon={Library}
+        paint="sky"
+        render={<Link to="/" search={{ view: 'courses', edit: true }} />}
+      />
+    </SettingsGroup>
+  )
+}
+
+/** Publish… (R29 B6): its Publish page, where it stands as its value. */
+function CoursePublishRow({ course }: { course: Course }) {
+  const draft = useCourseDraft(course)
+  return (
+    <PublishRow
+      kind="course"
+      id={course.id}
+      draft={draft}
+      link={<Link to="/courses/$courseId/publish" params={{ courseId: course.id }} />}
+    />
   )
 }

@@ -1,10 +1,12 @@
+import { Link, useNavigate } from '@tanstack/react-router'
+import { Settings } from 'lucide-react'
 import { useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PROGRESSION_STYLES, type LibraryProgression } from '@/entities/progression-library'
 import { useProgressionDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { parseNumerals } from '@/shared/lib/music'
-import { Dropdown, InfoTip, TypedField } from '@/shared/ui'
+import { Dropdown, InfoTip, RoundLink, TypedField } from '@/shared/ui'
 import { DocText, DraftScreen, Properties, PropertyRow } from '@/widgets/content-editor'
 
 /** A line of numerals as the field holds it: none where it is empty. */
@@ -118,11 +120,13 @@ export function ProgressionEditor({
   /** A router `Link` to Progressions. */
   toProgressions: ReactElement
 }) {
-  const { t } = useTranslation('practice')
+  const { t } = useTranslation(['practice', 'learn'])
   const shown = useLocale()
   // The language written: the interface's to start with, switched in the bar.
   const [locale, setLocale] = useState<Locale>(shown)
   const draft = useProgressionDraft(progression)
+  const navigate = useNavigate()
+  const params = { progressionId: progression.id }
   // A new progression's name is its draft's: the device has none of it.
   const opened = draft.load.state === 'ready' ? draft.load.value : progression
   const title = localText(opened.name, shown) || opened.id
@@ -136,6 +140,21 @@ export function ProgressionEditor({
       editorsOnly={t('progressions.edit.editorsOnly')}
       unreadable={t('progressions.edit.unreadable')}
       language={{ value: locale, onChange: setLocale }}
+      // Its Publish page and its Settings (R29 B6): every item's acts in the same places.
+      publishPage={{
+        link: <Link to="/practice/progressions/$progressionId/publish" params={params} />,
+        open: () =>
+          void draft
+            .flush()
+            .then(() => navigate({ to: '/practice/progressions/$progressionId/publish', params })),
+      }}
+      modes={
+        <RoundLink
+          label={t('learn:settings.title')}
+          icon={Settings}
+          render={<Link to="/practice/progressions/$progressionId/settings" params={params} />}
+        />
+      }
     >
       {(initial) => (
         <ProgressionDocument key={locale} initial={initial} locale={locale} onChange={draft.save} />

@@ -275,7 +275,6 @@ export const songs: LocaleResources['songs'] = {
     unit: 'Доля',
   },
   public: {
-    publishIn: 'Опубликовать в библиотеке',
     title: 'Общая библиотека',
     kinds: { label: 'Песни или рисунки', song: 'Песни', pattern: 'Рисунки' },
     seeAll: 'Все',
@@ -352,8 +351,6 @@ export const songs: LocaleResources['songs'] = {
     whyCredit: 'Где бы её ни сохранили, на ней ваше имя.',
     whyYoursTitle: 'Всегда ваша',
     whyYours: 'Она остаётся вашей: обновляйте или убирайте когда угодно.',
-    live: 'В библиотеке',
-    changedSince: 'Изменилась после публикации',
     copyLink: 'Скопировать ссылку',
     linkCopied: 'Ссылка скопирована.',
     linkNotCopied: 'Ссылку не удалось скопировать.',

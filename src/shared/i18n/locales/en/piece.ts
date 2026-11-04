@@ -135,10 +135,5 @@ export const piece = {
     archived: 'Archived',
     share: 'Share',
     shareLink: 'Share link',
-    publish: 'Publish in library',
-    published: 'Published',
-    changed: 'Changed since',
-    notPublished: 'Not published',
-    changes: 'Unpublished changes',
   },
 } as const

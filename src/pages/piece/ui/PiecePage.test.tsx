@@ -336,7 +336,7 @@ describe('Piece: the learner’s own music', () => {
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
     ).toEqual(['In your library', 'Share'])
     expectLastAndAlone(screen.getByRole('button', { name: 'Delete' }))
-    expect(screen.getByRole('link', { name: /^Publish in library/ })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /^Publish…/ })).toHaveAttribute(
       'href',
       '/songs/my-1/publish',
     )
