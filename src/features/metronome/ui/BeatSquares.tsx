@@ -22,15 +22,18 @@ export function BeatSquares({
   sounding,
   muted,
   onTap,
+  small = false,
 }: {
   levels: readonly BeatLevel[]
   sounding: number | null
   muted: boolean
   onTap: (beat: number) => void
+  /** The quick Metronome's in the Tools sheet (B11): the same squares, a row the sheet's width. */
+  small?: boolean
 }) {
   const { t } = useTranslation('practice')
   return (
-    <div className="flex w-full flex-col items-center gap-2">
+    <div className={cn('flex w-full flex-col items-center', small ? 'gap-1' : 'gap-2')}>
       {/* Kept in its place while heard, so the squares never move. */}
       <p
         aria-hidden={!muted}
@@ -45,10 +48,20 @@ export function BeatSquares({
       <ol
         aria-label={t('metronome.beats')}
         data-muted={muted || undefined}
-        className="flex w-full max-w-md items-end justify-center gap-1.5 sm:gap-3"
+        className={cn(
+          'flex w-full items-end justify-center',
+          small ? 'max-w-xs gap-1' : 'max-w-md gap-1.5 sm:gap-3',
+        )}
       >
         {levels.map((level, beat) => (
-          <li key={beat} className={cn('flex max-w-12 flex-1', beat === 0 && 'max-w-16 grow-2')}>
+          <li
+            key={beat}
+            className={cn(
+              'flex flex-1',
+              small ? 'max-w-8' : 'max-w-12',
+              beat === 0 && (small ? 'max-w-11 grow-2' : 'max-w-16 grow-2'),
+            )}
+          >
             <button
               type="button"
               aria-current={beat === sounding ? 'true' : undefined}

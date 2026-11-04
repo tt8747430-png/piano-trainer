@@ -53,6 +53,19 @@ describe('the Tools sheet over any screen (R29 B11)', () => {
     expect(settingsStore.getState().metronome.bpm).toBe(120)
   })
 
+  it('its metronome shows the bar’s beats, the one sounding marked, as the Metronome’s', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/play/bz5')
+    const sheet = await openTools(user)
+    const beats = within(sheet).getByRole('list', { name: 'Beats' })
+    expect(within(beats).getAllByRole('button')).toHaveLength(4)
+    await user.click(within(sheet).getByRole('button', { name: 'Start metronome' }))
+    act(() => audio.setNow(0.2))
+    await waitFor(() =>
+      expect(within(beats).getAllByRole('button')[0]).toHaveAttribute('aria-current', 'true'),
+    )
+  })
+
   it('the page under it does not change', async () => {
     const user = userEvent.setup()
     const { router, audio } = await renderApp('/practice/chords?root=D')

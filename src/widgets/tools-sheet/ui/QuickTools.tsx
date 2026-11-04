@@ -1,8 +1,8 @@
 import { Circle, Gauge, Minus, Play, Plus, Square, Timer, type LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Metronome } from '@/features/metronome'
 import type { RecorderStage } from '@/features/record-take'
+import { BeatSquares, type Metronome } from '@/features/metronome'
 import { cn } from '@/shared/lib'
 import { PAINT, type Paint } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -117,6 +117,16 @@ export function QuickTools({
           )}
         </Button>
       </QuickRow>
+      {/* The bar's beats, lit as they sound (B11), tapped to change their level as on the Metronome. */}
+      <div className="px-3 pb-2">
+        <BeatSquares
+          small
+          levels={metronome.beatLevels}
+          sounding={metronome.beat}
+          muted={metronome.muted}
+          onTap={metronome.tapBeat}
+        />
+      </div>
       <QuickRow
         icon={Circle}
         paint="lilac"
