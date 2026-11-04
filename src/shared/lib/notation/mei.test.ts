@@ -274,7 +274,7 @@ describe('scoreToMei, a note’s marks and the options', () => {
   it('writes a step’s name halfway to the next note (A43)', () => {
     const written = scoreToMei(plain([c(0, { step: 'W' }), c(B)]))
     expect(written).toContain(
-      '<dir staff="1" tstamp="1.5" place="above"><rend fontsize="small">W</rend></dir>',
+      '<dir staff="1" tstamp="1.5" place="below"><rend fontsize="small">W</rend></dir>',
     )
   })
 

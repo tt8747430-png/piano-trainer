@@ -532,10 +532,10 @@ class Writer {
     const length = ticksOf(event.duration, this.score.meter)
     const after = this.stamp(event.tick + length)
     this.marks(marks, id, staff, controls, after)
-    // A step's name halfway to the next note, over the gap it names (A43).
+    // A step's name halfway to the next note, under the gap it names, below its degree (A43).
     if (marks?.step)
       controls.push(
-        `<dir staff="${this.number(staff)}" tstamp="${this.stamp(event.tick + length / 2)}" place="above"><rend fontsize="small">${escape(marks.step)}</rend></dir>`,
+        `<dir staff="${this.number(staff)}" tstamp="${this.stamp(event.tick + length / 2)}" place="below"><rend fontsize="small">${escape(marks.step)}</rend></dir>`,
       )
     const graces = (marks?.grace ?? [])
       .map(
