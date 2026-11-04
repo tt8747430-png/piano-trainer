@@ -1,6 +1,6 @@
 import { act, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderLiveKeyboard as setUp } from '../testing/render-live-keyboard'
 
 describe('PedalToggle', () => {
@@ -38,8 +38,23 @@ describe('PedalToggle', () => {
     expect(pedal).toHaveAttribute('aria-pressed', 'false')
   })
 
-  it('wears the pedal mark a score prints', () => {
+  it('draws the pedal as an icon with its name, not the 𝆮 glyph (R29 A26)', () => {
     setUp()
-    expect(screen.getByRole('button', { name: 'Pedal' })).toHaveTextContent('\u{1D1AE}')
+    const pedal = screen.getByRole('button', { name: 'Pedal' })
+    expect(pedal.querySelector('svg')).not.toBeNull()
+    expect(pedal).toHaveTextContent('Sustain')
+    expect(pedal).not.toHaveTextContent('\u{1D1AE}')
+  })
+
+  it('lets its own hold up when the page hides, leaving the MIDI foot’s alone (R29 A26)', async () => {
+    const user = userEvent.setup()
+    const { audio } = setUp()
+    await user.click(screen.getByRole('button', { name: 'Pedal' }))
+    expect(audio.pedals().sustain).toBe(true)
+    const hidden = vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('hidden')
+    act(() => void document.dispatchEvent(new Event('visibilitychange')))
+    hidden.mockRestore()
+    expect(audio.pedals().sustain).toBe(false)
+    expect(screen.getByRole('button', { name: 'Pedal' })).toHaveAttribute('aria-pressed', 'false')
   })
 })

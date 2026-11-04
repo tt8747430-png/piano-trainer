@@ -4,7 +4,7 @@ import { selectKeyboard, useSettings } from '@/entities/settings'
 import { MidiSoundToggle, useHeldKeys } from '@/features/connect-midi'
 import { nameChords, printedSymbol, rangeOf, type Midi } from '@/shared/lib/music'
 import { hasFinePointer, type RailControl } from '@/shared/lib'
-import { useLiveVoice, useSoundingKeys } from '@/shared/lib/services'
+import { useLiveVoice, usePedal, useSoundingKeys } from '@/shared/lib/services'
 import { useShortcuts } from '@/shared/lib/shortcuts'
 import { PianoKeyboard, RailGroup } from '@/shared/ui'
 import { useSpacePedal } from '../model/use-space-pedal'
@@ -124,6 +124,12 @@ export function LiveKeyboard({
         : null,
     [namesChords, chordNames, live, held],
   )
+  // The pedals down, whoever holds them (R29 A26): the bar under the keys.
+  const pedals = {
+    sustain: usePedal('sustain'),
+    sostenuto: usePedal('sostenuto'),
+    soft: usePedal('soft'),
+  }
   // The rail holds the controls the learner keeps on it, how the keys look apart from how they play.
   const kept = new Set(railControls)
   const control = (id: RailControl, element: ReactNode) =>
@@ -150,6 +156,7 @@ export function LiveKeyboard({
       onKeyPress={play}
       onKeyRelease={letGo}
       railEnd={railEnd}
+      pedals={pedals}
     >
       {lookControls.length > 0 ? <RailGroup>{lookControls}</RailGroup> : null}
       {playControls.length > 0 ? <RailGroup>{playControls}</RailGroup> : null}

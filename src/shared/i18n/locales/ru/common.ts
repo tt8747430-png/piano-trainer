@@ -78,6 +78,7 @@ export const common: LocaleResources['common'] = {
   more: 'Ещё',
   moreActions: 'Ещё действия',
   stop: 'Стоп',
+  pedals: { label: 'Педали', sustain: 'Прав.', sostenuto: 'Сост.', soft: 'Лев.' },
   rail: {
     octaveDown: 'Октава вниз',
     octaveUp: 'Октава вверх',
@@ -99,6 +100,18 @@ export const common: LocaleResources['common'] = {
     chord: 'Сыгранный аккорд',
     fold: 'Спрятать клавиши',
     unfold: 'Клавиши',
+    named: {
+      zoom: 'Масштаб',
+      noteNames: 'Названия',
+      noteValue: { c: 'C', all: 'Все', none: 'Выкл.' },
+      chordNames: 'Аккорды',
+      glissando: 'Глисс.',
+      sustain: 'Педаль',
+      sound: 'Звук',
+      hide: 'Скрыть',
+    },
+    chordNamesTitle: 'Показывать обозначение аккорда нажатых клавиш',
+    glissandoTitle: 'Проведите по клавишам, чтобы сыграть их',
   },
   keyboardSettings: {
     keySize: {

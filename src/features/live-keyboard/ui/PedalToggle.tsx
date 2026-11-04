@@ -2,9 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePedal, useServices } from '@/shared/lib/services'
 import { RailButton } from '@/shared/ui'
-
-/** The pedal mark a score prints under the staff (𝆮, in the music font). */
-export const PEDAL_MARK = '\u{1D1AE}'
+import { PedalIcon } from '@/shared/ui/icons/PedalIcon'
 
 /**
  * The rail's sustain pedal, for a touch screen or a mouse: a tap puts its own hold down or up, beside
@@ -18,25 +16,32 @@ export function PedalToggle() {
   const down = usePedal()
   /** Whether this button holds the pedal down. */
   const held = useRef(false)
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    const lift = () => {
       if (held.current) audio.pedal('sustain', false)
       held.current = false
-    },
-    [audio],
-  )
+    }
+    // Let up on leaving (R29 A26): a page hidden keeps no sustain it cannot lift.
+    const onHide = () => {
+      if (document.visibilityState === 'hidden') lift()
+    }
+    document.addEventListener('visibilitychange', onHide)
+    return () => {
+      document.removeEventListener('visibilitychange', onHide)
+      lift()
+    }
+  }, [audio])
   return (
     <RailButton
       label={t('rail.pedal')}
+      name={t('rail.named.sustain')}
       aria-pressed={down}
       onClick={() => {
         held.current = !held.current
         audio.pedal('sustain', held.current)
       }}
     >
-      <span aria-hidden className="font-music text-3xl leading-none font-normal tracking-normal">
-        {PEDAL_MARK}
-      </span>
+      <PedalIcon aria-hidden className="size-5" />
     </RailButton>
   )
 }

@@ -1,20 +1,27 @@
-import { Volume2, Waves, ZoomIn, type LucideIcon } from 'lucide-react'
+import {
+  CaseSensitive,
+  MoveHorizontal,
+  Music2,
+  Volume2,
+  ZoomIn,
+  type LucideIcon,
+} from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
 import { RAIL_CONTROLS, railControls, toggled, type RailControl } from '@/shared/lib'
 import { SettingField, ToggleGrid, ToggleTile } from '@/shared/ui'
-import { PEDAL_MARK } from './PedalToggle'
+import { PedalIcon } from '@/shared/ui/icons/PedalIcon'
 
-/** Each control as the rail draws it: its icon, or the glyph its button wears. */
+/** Each control as the rail draws it (R29 A26): its icon, the pedal's drawn as lucide's are. */
 const PICTURE: Readonly<Record<RailControl, { icon: LucideIcon } | { glyph: ReactNode }>> = {
   zoom: { icon: ZoomIn },
-  noteNames: { glyph: 'CDE' },
-  chordNames: { glyph: 'Cm7' },
+  noteNames: { icon: CaseSensitive },
+  chordNames: { icon: Music2 },
   midiSound: { icon: Volume2 },
-  glissando: { icon: Waves },
-  pedal: { glyph: <span className="font-music text-3xl leading-none">{PEDAL_MARK}</span> },
+  glissando: { icon: MoveHorizontal },
+  pedal: { glyph: <PedalIcon aria-hidden className="size-5" /> },
 }
 
 /**

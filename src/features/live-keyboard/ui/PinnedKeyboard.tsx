@@ -103,6 +103,7 @@ export function PinnedKeyboard({
         <RailGroup>
           <RailButton
             label={t('rail.fold')}
+            name={t('rail.named.hide')}
             icon={dock === 'bottom' ? ChevronDown : ChevronUp}
             onClick={() => fold(true)}
           />

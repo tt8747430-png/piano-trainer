@@ -144,3 +144,41 @@ describe('keyLook', () => {
     expect(sameLook(look('ii'), look('ii'))).toBe(true)
   })
 })
+
+describe('a key’s labels (R29 A26)', () => {
+  const marked: KeyMark = { tone: 'root', label: '1', caption: '3', note: 'C' }
+  const text = (letters?: ReadonlyMap<Midi, string>): KeyText => ({
+    namedKeys: 'none',
+    markNotes: true,
+    ...(letters ? { letters } : {}),
+  })
+  const count = (look: ReturnType<typeof keyLook>) =>
+    (look.letter ? 1 : 0) +
+    (look.label ? 1 + (look.label.caption ? 1 : 0) + (look.label.note ? 1 : 0) : 0)
+
+  it('never stacks more than two: the finger and the degree, the note’s name dropped', () => {
+    const look = keyLook(midi(60), { marks: new Map([[midi(60), marked]]) }, text())
+    expect(count(look)).toBe(2)
+    expect(look.label).toMatchObject({ text: '1', caption: '3' })
+    expect(look.label?.note).toBeUndefined()
+  })
+
+  it('keeps the computer key’s letter first while it plays, then the finger', () => {
+    const look = keyLook(
+      midi(60),
+      { marks: new Map([[midi(60), marked]]) },
+      text(new Map([[midi(60), 'A']])),
+    )
+    expect(look.letter).toBe('A')
+    expect(count(look)).toBe(2)
+  })
+
+  it('shows a degree with its note where nothing else labels the key', () => {
+    const look = keyLook(
+      midi(60),
+      { marks: new Map([[midi(60), { tone: 'root', label: '1', note: 'C' }]]) },
+      text(),
+    )
+    expect(look.label).toMatchObject({ text: '1', note: 'C' })
+  })
+})

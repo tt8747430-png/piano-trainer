@@ -91,6 +91,7 @@ export const common = {
   // What a Play button says while its sound plays.
   stop: 'Stop',
   // The keyboard's rail: its buttons.
+  pedals: { label: 'Pedals', sustain: 'Sus.', sostenuto: 'Sost.', soft: 'Soft' },
   rail: {
     octaveDown: 'Octave down',
     octaveUp: 'Octave up',
@@ -107,6 +108,19 @@ export const common = {
     chord: 'Chord played',
     fold: 'Hide the keys',
     unfold: 'Keys',
+    // Each control's name in sight under its picture (R29 A26).
+    named: {
+      zoom: 'Zoom',
+      noteNames: 'Names',
+      noteValue: { c: 'C', all: 'All', none: 'Off' },
+      chordNames: 'Chords',
+      glissando: 'Gliss.',
+      sustain: 'Sustain',
+      sound: 'Sound',
+      hide: 'Hide',
+    },
+    chordNamesTitle: 'Show the chord symbol of the keys held',
+    glissandoTitle: 'Slide across the keys to play them',
   },
   // The keyboard settings: in the keyboard's rail and in Settings.
   keyboardSettings: {

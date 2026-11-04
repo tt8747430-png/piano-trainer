@@ -1,7 +1,8 @@
+import { Music2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
-import { Glyph, RailButton } from '@/shared/ui'
+import { RailButton } from '@/shared/ui'
 
 /**
  * The rail's chord names: on, the rail names the chord a hand holds; off, it says nothing. It wears
@@ -15,11 +16,12 @@ export function ChordNamesToggle({ disabled = false }: { disabled?: boolean }) {
   return (
     <RailButton
       label={t('keyboardSettings.chordNames')}
+      title={t('rail.chordNamesTitle')}
+      name={t('rail.named.chordNames')}
+      icon={Music2}
       aria-pressed={chordNames && !disabled}
       disabled={disabled}
       onClick={() => setKeyboard(store, { chordNames: !chordNames })}
-    >
-      <Glyph text="Cm7" />
-    </RailButton>
+    />
   )
 }

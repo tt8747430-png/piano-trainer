@@ -1,4 +1,4 @@
-import { Waves } from 'lucide-react'
+import { MoveHorizontal } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
@@ -12,7 +12,9 @@ export function GlissandoToggle() {
   return (
     <RailButton
       label={t('rail.glissando')}
-      icon={Waves}
+      title={t('rail.glissandoTitle')}
+      name={t('rail.named.glissando')}
+      icon={MoveHorizontal}
       aria-pressed={on}
       onClick={() => setKeyboard(store, { swipe: on ? 'scroll' : 'glissando' })}
     />

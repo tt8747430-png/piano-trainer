@@ -117,6 +117,19 @@ function labelOf(
   return name === undefined ? undefined : { kind: 'name', text: name }
 }
 
+/**
+ * A key never stacks more than two labels (R29 A26), kept in this order: the computer key's letter
+ * while it plays, the finger (a mark's caption), the degree or name (its text), the note's name
+ * under it. What the order leaves past the second goes.
+ */
+function atMostTwo(label: KeyLabel, lettered: boolean): KeyLabel {
+  const room = lettered ? 1 : 2
+  const { caption, note, ...rest } = label
+  if (room === 1) return rest
+  if (caption !== undefined) return { ...rest, caption }
+  return note === undefined ? rest : { ...rest, note }
+}
+
 /** A chord's or a scale's tone marked on its key: its role's colour (or `tone`), its degree and its spelled note. */
 export const toneMark = (
   tone: Pick<Tone, 'role' | 'degree' | 'note'>,
@@ -128,11 +141,12 @@ export function keyLook(key: Midi, states: KeyStates, text: KeyText): KeyLook {
   const mark = states.marks?.get(key)
   const label = labelOf(key, mark, states.wrong?.has(key) ?? false, text)
   const letter = text.letters?.get(key)
+  const shown = label ? atMostTwo(label, letter !== undefined) : undefined
   return {
     fill: fillOf(key, states, mark),
     down: states.down?.has(key) ?? false,
     outlined: states.outlined?.has(key) ?? false,
-    ...(label ? { label } : {}),
+    ...(shown ? { label: shown } : {}),
     ...(letter ? { letter } : {}),
   }
 }

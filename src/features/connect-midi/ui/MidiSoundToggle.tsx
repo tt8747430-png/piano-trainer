@@ -15,6 +15,7 @@ export function MidiSoundToggle() {
   return (
     <RailButton
       label={t('rail.sound')}
+      name={t('rail.named.sound')}
       icon={Volume2}
       aria-pressed={sound}
       onClick={() => setMidi(store, { sound: !sound })}

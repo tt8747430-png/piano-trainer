@@ -11,19 +11,26 @@ import { cn } from '@/shared/lib'
  */
 export function RailButton({
   label,
+  name,
   icon: Icon,
   title = label,
   className,
   children,
   ...props
-}: { label: string; icon?: LucideIcon } & ComponentProps<'button'>) {
+}: {
+  label: string
+  /** Its name in sight under its picture (R29 A26), where the picture alone would not say it. */
+  name?: string | undefined
+  icon?: LucideIcon
+} & ComponentProps<'button'>) {
   return (
     <button
       type="button"
       aria-label={label}
       title={title}
       className={cn(
-        'group/rail relative flex h-11 min-w-11 shrink-0 items-end justify-center px-0.5 pb-1 text-on-key-rail outline-none disabled:opacity-40',
+        'group/rail relative flex min-w-11 shrink-0 flex-col items-center justify-end px-0.5 pb-1 text-on-key-rail outline-none disabled:opacity-40',
+        name === undefined ? 'h-11' : 'h-14',
         className,
       )}
       {...props}
@@ -31,6 +38,11 @@ export function RailButton({
       <span className="grid h-7 min-w-9 place-items-center rounded-control px-1.5 text-xs font-bold tracking-wide transition-colors duration-200 ease-out group-hover/rail:bg-on-key-rail/10 group-focus-visible/rail:outline-3 group-focus-visible/rail:-outline-offset-3 group-focus-visible/rail:outline-ring group-disabled/rail:bg-transparent group-aria-pressed/rail:bg-on-key-rail group-aria-pressed/rail:text-key-rail">
         {Icon ? <Icon aria-hidden className="size-5" /> : children}
       </span>
+      {name === undefined ? null : (
+        <span aria-hidden className="text-[11px] leading-tight whitespace-nowrap">
+          {name}
+        </span>
+      )}
     </button>
   )
 }
