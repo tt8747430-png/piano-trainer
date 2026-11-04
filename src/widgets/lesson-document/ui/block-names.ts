@@ -1,7 +1,7 @@
 import type { Node } from '@tiptap/pm/model'
 import type { TFunction } from 'i18next'
 import type { LessonBlock } from '@/entities/lesson'
-import { DOC } from '../../model/lesson-doc'
+import { DOC } from '../model/lesson-doc'
 import type { Insertable } from './commands'
 
 /** What a block is called in the editor: a note with a name is a rule. */

@@ -14,7 +14,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { ActionMenu } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { blockStart, FIXED_BLOCKS, moveBlockTo, selectedBlock } from '../../model/doc-blocks'
+import { blockStart, FIXED_BLOCKS, moveBlockTo, selectedBlock } from '../model/doc-blocks'
 import { nodeName } from './block-names'
 import { addLineAfter } from './commands'
 import { blockActions } from './menus'

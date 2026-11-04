@@ -13,8 +13,8 @@ import {
   selectedBlock,
   turnBlockInto,
   type TurnInto,
-} from '../../model/doc-blocks'
-import { blockNode, DOC, type DocNode } from '../../model/lesson-doc'
+} from '../model/doc-blocks'
+import { blockNode, DOC, type DocNode } from '../model/lesson-doc'
 
 /** What the Insert menu and the slash menu put in: a lesson's block, a section's heading or takeaway. */
 export type Insertable = InsertableBlock | 'section' | 'takeaway'

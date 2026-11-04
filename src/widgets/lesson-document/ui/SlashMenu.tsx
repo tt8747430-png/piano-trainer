@@ -4,7 +4,7 @@ import { useEffect, useId, useState, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Locale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { DOC } from '../../model/lesson-doc'
+import { DOC } from '../model/lesson-doc'
 import { insertActions } from './menus'
 
 /** A key the document hands the slash menu first: true where the menu took it. */

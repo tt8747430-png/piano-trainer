@@ -22,7 +22,7 @@ import {
 } from 'lucide-react'
 import type { Locale } from '@/shared/i18n'
 import { say, type MenuAction } from '@/shared/ui'
-import { blockTurn, FIXED_BLOCKS, TURN_INTO, type TurnInto } from '../../model/doc-blocks'
+import { blockTurn, FIXED_BLOCKS, TURN_INTO, type TurnInto } from '../model/doc-blocks'
 import { insertableName, nodeName } from './block-names'
 import { actOnBlock, insertBlock, INSERTABLES, turnInto, type Insertable } from './commands'
 

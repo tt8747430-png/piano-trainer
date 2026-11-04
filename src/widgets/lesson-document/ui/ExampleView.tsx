@@ -33,7 +33,7 @@ import {
   blockExamples,
   blockReads,
   withBlockExample,
-} from '../../model/block-examples'
+} from '../model/block-examples'
 import { blockName } from './block-names'
 import { LinkFields, PatternFields, VoicingsFields } from './ExampleFields'
 import { DocLocale } from './doc-locale'
