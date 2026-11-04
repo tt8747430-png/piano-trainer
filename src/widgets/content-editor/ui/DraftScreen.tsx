@@ -79,7 +79,7 @@ export function DraftScreen<T>({
         titleOnPage={modes !== undefined}
         // Where the draft stands, then Publish and the draft's menu, at the bar's end: nothing under
         // the bar (the language is the menu's, ticked there).
-        actions={
+        tools={
           open ? (
             <>
               <DraftStatus draft={draft} className="me-1" />
@@ -91,12 +91,10 @@ export function DraftScreen<T>({
                 publishPage={publishPage}
                 more={language ? languageActions(language.value, language.onChange, words) : []}
               />
-              {modes}
             </>
-          ) : (
-            modes
-          )
+          ) : null
         }
+        edit={modes}
       />
       {!editor ? (
         <NotOpen line={editorsOnly}>

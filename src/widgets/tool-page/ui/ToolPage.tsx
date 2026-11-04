@@ -54,18 +54,14 @@ export function ToolPage({
       <ScreenHeader
         title={title}
         back={<BackButton />}
-        actions={
-          actions || settings ? (
-            <div className="flex gap-2">
-              {actions}
-              {settings ? (
-                <RoundLink
-                  label={t('practice:settings.open', { page: title })}
-                  icon={Settings}
-                  render={settings}
-                />
-              ) : null}
-            </div>
+        tools={actions}
+        settings={
+          settings ? (
+            <RoundLink
+              label={t('practice:settings.open', { page: title })}
+              icon={Settings}
+              render={settings}
+            />
           ) : undefined
         }
       />

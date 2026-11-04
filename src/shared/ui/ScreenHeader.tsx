@@ -7,8 +7,15 @@ type ScreenHeaderProps = {
   /** The screen's name: its title and the page's. */
   title: string
   back?: ReactNode
-  /** Two at most, round; a third goes into a More menu. */
-  actions?: ReactNode
+  /**
+   * The bar's end, always in this order whatever order they are given (A3, DESIGN.md Placement): the
+   * screen's tools (Search, MIDI, an act on the item such as a lesson's Learned), its Settings (the
+   * gear), More (⋯, commands only) and Edit ⇄ Done at the very end.
+   */
+  tools?: ReactNode
+  settings?: ReactNode
+  more?: ReactNode
+  edit?: ReactNode
   /** The page shows its title itself, large under the bar (a document in Edit): on a phone the bar
    * keeps it for a screen reader alone and leaves its room to the bar's tools. */
   titleOnPage?: boolean
@@ -37,7 +44,10 @@ type ScreenHeaderProps = {
 export function ScreenHeader({
   title,
   back,
-  actions,
+  tools,
+  settings,
+  more,
+  edit,
   switcher,
   large = false,
   titleOnPage = false,
@@ -98,8 +108,13 @@ export function ScreenHeader({
         >
           {title}
         </h1>
-        {actions ? (
-          <div className="ms-auto flex shrink-0 items-center gap-1.5 print:hidden">{actions}</div>
+        {tools || settings || more || edit ? (
+          <div className="ms-auto flex shrink-0 items-center gap-1.5 print:hidden">
+            {tools}
+            {settings}
+            {more}
+            {edit}
+          </div>
         ) : null}
       </div>
     </header>

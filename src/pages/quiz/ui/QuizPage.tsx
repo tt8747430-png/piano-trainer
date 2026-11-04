@@ -14,12 +14,8 @@ export function QuizPage() {
       <ScreenHeader
         title={t('pages.quiz')}
         back={<BackButton />}
-        actions={
-          <>
-            <GapsLink />
-            <SettingsGear page="quiz" />
-          </>
-        }
+        tools={<GapsLink />}
+        settings={<SettingsGear page="quiz" />}
       />
       <div className="grid items-start gap-6 lg:grid-cols-2">
         {QUIZ_GROUPS.map((group) => (

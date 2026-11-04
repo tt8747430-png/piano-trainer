@@ -32,18 +32,19 @@ export function LibraryHeader({
     return (
       <ScreenHeader
         title={t('select.count', { count: select.count })}
-        actions={
-          <>
-            {/* Round, as Select was: the bar keeps its one row at 320px, the rows under it still. */}
-            <RoundButton
-              label={t(select.all ? 'select.none' : 'select.all')}
-              icon={select.all ? ListX : CheckCheck}
-              onClick={select.toggleAll}
-            />
-            <Button variant="soft" onClick={select.exit}>
-              {t('select.done')}
-            </Button>
-          </>
+        // Round, as Select was: the bar keeps its one row at 320px, the rows under it still.
+        tools={
+          <RoundButton
+            label={t(select.all ? 'select.none' : 'select.all')}
+            icon={select.all ? ListX : CheckCheck}
+            onClick={select.toggleAll}
+          />
+        }
+        // Done ends Select where Edit's Done stands: the bar's very end (A3).
+        edit={
+          <Button variant="soft" onClick={select.exit}>
+            {t('select.done')}
+          </Button>
         }
       />
     )
@@ -65,7 +66,7 @@ export function LibraryHeader({
           />
         ) : undefined
       }
-      actions={
+      tools={
         <>
           <RoundButton
             label={t('select.start')}
@@ -81,17 +82,19 @@ export function LibraryHeader({
               render={<Link to="/songs/card-style" />}
             />
           )}
-          {/* A folder's own settings (name, look, place, Archive, Delete) are its Settings page. */}
-          {folder ? (
-            <RoundLink
-              label={t('folder.openSettings', { name })}
-              icon={Settings}
-              render={
-                <Link to="/songs/folders/$folderId/settings" params={{ folderId: folder.id }} />
-              }
-            />
-          ) : null}
         </>
+      }
+      // A folder's own settings (name, look, place, Archive, Delete) are its Settings page.
+      settings={
+        folder ? (
+          <RoundLink
+            label={t('folder.openSettings', { name })}
+            icon={Settings}
+            render={
+              <Link to="/songs/folders/$folderId/settings" params={{ folderId: folder.id }} />
+            }
+          />
+        ) : null
       }
     />
   )

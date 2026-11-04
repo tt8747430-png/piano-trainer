@@ -14,7 +14,7 @@ export function PracticePage() {
   const gaps = useGapsCount()
   return (
     <div className="flex flex-col gap-2">
-      <ScreenHeader title={t('title')} large actions={<PlaceActions />} />
+      <ScreenHeader title={t('title')} large tools={<PlaceActions />} />
       <div className="grid items-start gap-6 lg:grid-cols-2 xl:grid-cols-3">
         {PRACTICE_GROUPS.map((group) => (
           <SettingsGroup key={group.id} title={t(`groups.${group.id}`)} flush>

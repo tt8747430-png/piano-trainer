@@ -33,46 +33,46 @@ export function ProfilePage() {
       <ScreenHeader
         title={account ? name || account.email : t('profile.title')}
         large
-        actions={
-          <>
-            <span className="relative">
-              <RoundLink
-                label={
-                  unread > 0
-                    ? t('profile.notifications.unread', { count: unread })
-                    : t('profile.notifications.open')
-                }
-                icon={Bell}
-                render={<Link to="/profile/notifications" />}
+        tools={
+          <span className="relative">
+            <RoundLink
+              label={
+                unread > 0
+                  ? t('profile.notifications.unread', { count: unread })
+                  : t('profile.notifications.open')
+              }
+              icon={Bell}
+              render={<Link to="/profile/notifications" />}
+            />
+            {unread > 0 ? (
+              <span
+                aria-hidden
+                className="pointer-events-none absolute top-0.5 right-0.5 grid min-w-4.5 place-items-center rounded-pill bg-destructive px-1 text-[0.6875rem] leading-4.5 font-semibold text-white tabular-nums ring-2 ring-background"
+              >
+                {unread > 99 ? '99+' : unread}
+              </span>
+            ) : null}
+          </span>
+        }
+        settings={
+          // The laptop's sidebar has Settings at its foot: the bar's would be a second way.
+          <span className="relative lg:hidden">
+            <RoundLink
+              label={
+                updateReady
+                  ? `${t('common:nav.settings')}, ${t('settings:about.update.ready')}`
+                  : t('common:nav.settings')
+              }
+              icon={Settings}
+              render={<Link to="/settings" />}
+            />
+            {updateReady ? (
+              <span
+                aria-hidden
+                className="pointer-events-none absolute top-1 right-1 size-2.5 rounded-pill bg-destructive ring-2 ring-background"
               />
-              {unread > 0 ? (
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute top-0.5 right-0.5 grid min-w-4.5 place-items-center rounded-pill bg-destructive px-1 text-[0.6875rem] leading-4.5 font-semibold text-white tabular-nums ring-2 ring-background"
-                >
-                  {unread > 99 ? '99+' : unread}
-                </span>
-              ) : null}
-            </span>
-            {/* The laptop's sidebar has Settings at its foot: the bar's would be a second way. */}
-            <span className="relative lg:hidden">
-              <RoundLink
-                label={
-                  updateReady
-                    ? `${t('common:nav.settings')}, ${t('settings:about.update.ready')}`
-                    : t('common:nav.settings')
-                }
-                icon={Settings}
-                render={<Link to="/settings" />}
-              />
-              {updateReady ? (
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute top-1 right-1 size-2.5 rounded-pill bg-destructive ring-2 ring-background"
-                />
-              ) : null}
-            </span>
-          </>
+            ) : null}
+          </span>
         }
       />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">

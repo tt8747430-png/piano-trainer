@@ -86,7 +86,7 @@ export function PublishScreen({
   const { t } = useTranslation(['songs', 'editor'])
   return (
     <div className="flex min-h-screen-free flex-col gap-6">
-      <ScreenHeader title={t('editor:publishPage.title')} back={back} actions={<WhyPublish />} />
+      <ScreenHeader title={t('editor:publishPage.title')} back={back} tools={<WhyPublish />} />
       <PublishSaid said={publishing.said} />
       <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6">
         {publishing.signedIn ? (

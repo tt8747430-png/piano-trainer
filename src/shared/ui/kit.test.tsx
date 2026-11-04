@@ -38,7 +38,7 @@ const MODES = [
 
 describe('ScreenHeader', () => {
   it('titles the screen with its level-1 heading and holds its actions', () => {
-    render(<ScreenHeader title="Learn" actions={<button type="button">Settings</button>} />)
+    render(<ScreenHeader title="Learn" settings={<button type="button">Settings</button>} />)
     expect(screen.getByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
   })
@@ -60,12 +60,26 @@ describe('ScreenHeader', () => {
     render(<ScreenHeader title="Chords" switcher={<div />} />)
   })
 
-  it('keeps a screen’s title in the bar, a long one on two lines rather than cut', () => {
+  it('draws tools, Settings, More and Edit in that order, whatever order they are given (A3)', () => {
     render(
       <ScreenHeader
-        title="Wonderful Grace of Jesus"
-        actions={<button type="button">Edit</button>}
+        title="Song"
+        edit={<button type="button">Edit</button>}
+        more={<button type="button">More</button>}
+        settings={<button type="button">Settings</button>}
+        tools={<button type="button">MIDI</button>}
       />,
+    )
+    expect(
+      within(screen.getByRole('banner'))
+        .getAllByRole('button')
+        .map((button) => button.textContent),
+    ).toEqual(['MIDI', 'Settings', 'More', 'Edit'])
+  })
+
+  it('keeps a screen’s title in the bar, a long one on two lines rather than cut', () => {
+    render(
+      <ScreenHeader title="Wonderful Grace of Jesus" edit={<button type="button">Edit</button>} />,
     )
     const title = screen.getByRole('heading', { level: 1 })
     expect(within(screen.getByRole('banner')).getByRole('heading', { level: 1 })).toBe(title)

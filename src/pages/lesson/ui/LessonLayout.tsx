@@ -69,14 +69,14 @@ export function LessonLayout({
       <ScreenHeader
         title={localText(lesson.title, locale)}
         back={back}
-        actions={
+        tools={
           <>
             <LearnedButton step={step} round />
             <ToolsButton />
-            <RoundLink label={t('settings.open')} icon={Settings} render={settings} />
-            {editsContent(account) ? modes : null}
           </>
         }
+        settings={<RoundLink label={t('settings.open')} icon={Settings} render={settings} />}
+        edit={editsContent(account) ? modes : null}
       />
       <nav aria-label={t('placeLabel')} className="-mt-3 text-muted-foreground print:hidden">
         {place}

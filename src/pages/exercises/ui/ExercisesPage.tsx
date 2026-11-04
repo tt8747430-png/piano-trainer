@@ -14,7 +14,7 @@ export function ExercisesPage() {
       <ScreenHeader
         title={t('pages.exercises')}
         back={<BackButton />}
-        actions={<SettingsGear page="exercises" />}
+        settings={<SettingsGear page="exercises" />}
       />
       <ExerciseList />
     </div>

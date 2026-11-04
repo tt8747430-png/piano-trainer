@@ -184,7 +184,7 @@ export function PublicSongPage() {
       <ScreenHeader
         title={title}
         back={<BackButton />}
-        actions={
+        tools={
           <RoundButton label={t('public.report')} icon={Flag} onClick={() => setReporting(true)} />
         }
       />

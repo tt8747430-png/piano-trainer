@@ -40,7 +40,7 @@ export function ArchivePage() {
       <ScreenHeader
         title={t('archive.title')}
         back={<BackButton />}
-        actions={
+        tools={
           archive.length > 0 ? (
             <Button
               variant="soft"

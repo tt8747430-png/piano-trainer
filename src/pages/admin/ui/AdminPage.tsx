@@ -43,7 +43,7 @@ export function AdminPage() {
       <ScreenHeader
         title={t('title')}
         back={<BackButton />}
-        actions={
+        tools={
           learner.can ? (
             <RoundButton
               label={t('viewAsLearner')}

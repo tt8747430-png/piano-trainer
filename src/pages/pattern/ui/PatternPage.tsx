@@ -173,12 +173,8 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
       <ScreenHeader
         title={name}
         back={<BackButton />}
-        actions={
-          <>
-            <FavouriteButton pattern={pattern} />
-            <MoreMenu actions={more.actions} />
-          </>
-        }
+        tools={<FavouriteButton pattern={pattern} />}
+        more={<MoreMenu actions={more.actions} />}
       />
       <PinnedKeyboard shown={shown} />
       <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">

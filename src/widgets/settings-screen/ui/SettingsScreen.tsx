@@ -29,7 +29,7 @@ export function SettingsScreen({
       <ScreenHeader
         title={title}
         back={!wide || sub ? <BackButton /> : undefined}
-        actions={actions}
+        tools={actions}
       />
       {wide ? (
         <div className="grid grid-cols-[20rem_minmax(0,44rem)] items-start gap-10">

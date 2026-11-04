@@ -16,12 +16,8 @@ export function IntervalsPage() {
       <ScreenHeader
         title={t('pages.intervals')}
         back={<BackButton />}
-        actions={
-          <>
-            <ToolsButton />
-            <SettingsGear page="intervals" />
-          </>
-        }
+        tools={<ToolsButton />}
+        settings={<SettingsGear page="intervals" />}
       />
       <IntervalExplorer view={view} onChange={onChange} />
     </div>

@@ -44,17 +44,15 @@ export function PieceView({ piece }: { piece: Piece }) {
     <div className="flex flex-col gap-6 pb-4">
       <PieceHeader
         entry={piece}
-        actions={
-          // The pencil opens the score in the editor (R29 1.2): a learner's edit of a built-in
-          // song is their version, an editor's the song everyone sees (A38, ADR 0115).
-          <>
-            {settings}
-            <EditToggle
-              editing={false}
-              onEdit={() => void navigate({ to: '/edit/$pieceId', params: { pieceId: piece.id } })}
-              onDone={() => undefined}
-            />
-          </>
+        settings={settings}
+        // The pencil opens the score in the editor (R29 1.2): a learner's edit of a built-in
+        // song is their version, an editor's the song everyone sees (A38, ADR 0115).
+        edit={
+          <EditToggle
+            editing={false}
+            onEdit={() => void navigate({ to: '/edit/$pieceId', params: { pieceId: piece.id } })}
+            onDone={() => undefined}
+          />
         }
       />
       {/* From a laptop's width two columns (A28): the head, the about and the overview card at a

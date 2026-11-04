@@ -32,16 +32,14 @@ export function AccompanimentPage() {
       <ScreenHeader
         title={t('pages.accompaniment')}
         back={<BackButton />}
-        actions={
-          <>
-            <RoundLink
-              label={t('patterns.new')}
-              icon={Plus}
-              render={<Link to="/practice/accompaniment/patterns/new" />}
-            />
-            <SettingsGear page="accompaniment" />
-          </>
+        tools={
+          <RoundLink
+            label={t('patterns.new')}
+            icon={Plus}
+            render={<Link to="/practice/accompaniment/patterns/new" />}
+          />
         }
+        settings={<SettingsGear page="accompaniment" />}
       />
       {/* Where the patterns come from, one menu at the page's head (A25): never a second bar row. */}
       <Dropdown

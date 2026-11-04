@@ -17,12 +17,8 @@ export function ChordsPage() {
       <ScreenHeader
         title={t('pages.chords')}
         back={<BackButton />}
-        actions={
-          <>
-            <ToolsButton />
-            <SettingsGear page="chords" />
-          </>
-        }
+        tools={<ToolsButton />}
+        settings={<SettingsGear page="chords" />}
       />
       {step ? <StepPanel step={step} /> : null}
       <ChordExplorer chord={chord} onChange={onChange} />

@@ -85,27 +85,27 @@ export function CoursePage() {
         // A course's name in full over its page, as a song's: the bar echoes it once scrolled.
         large
         back={<BackButton />}
-        actions={
-          <>
-            <RoundLink
-              label={t('settings.open')}
-              icon={Settings}
-              render={<Link to="/courses/$courseId/settings" params={{ courseId }} />}
+        settings={
+          <RoundLink
+            label={t('settings.open')}
+            icon={Settings}
+            render={<Link to="/courses/$courseId/settings" params={{ courseId }} />}
+          />
+        }
+        edit={
+          editsContent(account) ? (
+            <EditToggle
+              editing={false}
+              onDone={() => undefined}
+              onEdit={() =>
+                void navigate({
+                  to: '/courses/$courseId/edit',
+                  params: { courseId },
+                  replace: true,
+                })
+              }
             />
-            {editsContent(account) ? (
-              <EditToggle
-                editing={false}
-                onDone={() => undefined}
-                onEdit={() =>
-                  void navigate({
-                    to: '/courses/$courseId/edit',
-                    params: { courseId },
-                    replace: true,
-                  })
-                }
-              />
-            ) : null}
-          </>
+          ) : null
         }
       />
       {/* One card: what it is, its facts and progress, and its one way in along its foot. */}

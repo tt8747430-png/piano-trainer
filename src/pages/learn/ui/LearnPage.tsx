@@ -44,13 +44,13 @@ export function LearnPage() {
     <ScreenHeader
       title={t('learn:title')}
       large
-      actions={
+      tools={
         <>
           {actions}
           {editing ? null : <PlaceActions />}
-          {toggle}
         </>
       }
+      edit={toggle}
       switcher={
         <Segmented
           label={t('learn:views.label')}

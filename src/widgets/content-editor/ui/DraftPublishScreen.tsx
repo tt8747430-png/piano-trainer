@@ -89,7 +89,7 @@ export function DraftPublishScreen<T>({
       <ScreenHeader
         title={t('publishPage.title')}
         back={back}
-        actions={
+        tools={
           <InfoTip name={t('publishPage.title')} bar>
             {t('publishPage.whyBody')}
           </InfoTip>

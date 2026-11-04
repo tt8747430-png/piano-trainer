@@ -54,7 +54,7 @@ export function ScalesPage() {
       <ScreenHeader
         title={t('pages.scales')}
         back={<BackButton />}
-        actions={
+        tools={
           <>
             {key ? (
               <RoundButton
@@ -67,9 +67,9 @@ export function ScalesPage() {
               />
             ) : null}
             <ToolsButton />
-            <SettingsGear page="scales" />
           </>
         }
+        settings={<SettingsGear page="scales" />}
       />
       {step ? <StepPanel step={step} /> : null}
       {/* The scale's views, the same scale under another light: in the page, never a second bar row. */}

@@ -401,8 +401,10 @@ every piece is shown in the Admin area's Components):
   what the thing is under it in a line, its facts as one line of chips, then its sections, each headed with a count
   and See all where it is cut short. The primary action (Practise, Start, Continue, Practise in the Player) is the
   floating action, never a full-width button on the page.
-- **The bar holds Back, the title and at most two round actions**; More holds the rest, its destructive action last,
-  red and alone. The primary action is never in the bar.
+- **The bar holds Back, the title, then at its end in one order on every screen** (A3; `ScreenHeader`'s slots, so a page
+  cannot reorder them): the screen's **tools** (Search on a place, MIDI, Tools, an act on the item such as a lesson's
+  Learned), its **Settings** (the gear), **More** (⋯, commands only, its destructive action last, red and alone), and
+  **Edit ⇄ Done** at the very end (Select's Done too). The primary action is never in the bar: it floats at the foot.
 - **Lists are grouped cards of rows** (`SettingsGroup`; `RowGroup` for a browsed list, one card in columns): a soft tile, the title, one detail line, then a
   value, a status pill or a chevron; on a Settings page a choice among words is a `ChoiceCard` (the setting's name in
   the card's semibold heading, each choice a radio row with its example in muted small text under it, the chosen

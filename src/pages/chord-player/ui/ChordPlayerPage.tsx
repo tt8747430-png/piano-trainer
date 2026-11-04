@@ -20,43 +20,43 @@ export function ChordPlayerPage() {
       <ScreenHeader
         title={t('pages.chordPlayer')}
         back={<BackButton />}
-        actions={
-          <>
-            <ToolsButton />
-            <MoreMenu
-              label={t('chordPlayer.more')}
-              actions={[
-                {
-                  key: 'new',
-                  label: t('chordPlayer.newSheet'),
-                  icon: FilePlus2,
-                  onSelect: () => void page.startNew(),
-                },
-                {
-                  key: 'save',
-                  label: t('chordPlayer.saveAs'),
-                  icon: Save,
-                  onSelect: () => page.setSaving(''),
-                },
-                {
-                  key: 'share',
-                  label: t('chordPlayer.share'),
-                  icon: Link2,
-                  onSelect: () => void page.share(),
-                },
-              ]}
-            />
-            <RoundLink
-              label={t('settings.open', { page: t('pages.chordPlayer') })}
-              icon={Settings}
-              render={
-                <Link
-                  to="/practice/chord-player/settings"
-                  search={page.sheetId === undefined ? {} : { sheet: page.sheetId }}
-                />
-              }
-            />
-          </>
+        tools={<ToolsButton />}
+        more={
+          <MoreMenu
+            label={t('chordPlayer.more')}
+            actions={[
+              {
+                key: 'new',
+                label: t('chordPlayer.newSheet'),
+                icon: FilePlus2,
+                onSelect: () => void page.startNew(),
+              },
+              {
+                key: 'save',
+                label: t('chordPlayer.saveAs'),
+                icon: Save,
+                onSelect: () => page.setSaving(''),
+              },
+              {
+                key: 'share',
+                label: t('chordPlayer.share'),
+                icon: Link2,
+                onSelect: () => void page.share(),
+              },
+            ]}
+          />
+        }
+        settings={
+          <RoundLink
+            label={t('settings.open', { page: t('pages.chordPlayer') })}
+            icon={Settings}
+            render={
+              <Link
+                to="/practice/chord-player/settings"
+                search={page.sheetId === undefined ? {} : { sheet: page.sheetId }}
+              />
+            }
+          />
         }
       />
       {hand ? (

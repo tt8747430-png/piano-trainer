@@ -67,7 +67,7 @@ export function NotificationsPage() {
       <ScreenHeader
         title={t('profile.notifications.title')}
         back={<BackButton />}
-        actions={
+        more={
           notices.length > 0 ? (
             <MoreMenu
               label={t('profile.notifications.more')}

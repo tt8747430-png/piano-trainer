@@ -47,7 +47,7 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
             <BackButton />
           )
         }
-        actions={
+        tools={
           <>
             {/* How the drill asks, out of the way on the setup: gone once a run starts. */}
             {asks && !running ? (

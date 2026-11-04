@@ -39,32 +39,30 @@ export function ProgressionsPage() {
       <ScreenHeader
         title={t('pages.progressions')}
         back={<BackButton />}
-        actions={
-          <>
-            {editsContent(account) ? (
-              <>
-                {shown ? (
-                  <RoundLink
-                    label={t('progressions.edit.open')}
-                    icon={PencilLine}
-                    render={
-                      <Link
-                        to="/practice/progressions/$progressionId/edit"
-                        params={{ progressionId: shown.id }}
-                      />
-                    }
-                  />
-                ) : null}
-                <RoundButton
-                  label={t('progressions.edit.new')}
-                  icon={Plus}
-                  onClick={() => setNewOne(true)}
+        tools={
+          editsContent(account) ? (
+            <>
+              {shown ? (
+                <RoundLink
+                  label={t('progressions.edit.open')}
+                  icon={PencilLine}
+                  render={
+                    <Link
+                      to="/practice/progressions/$progressionId/edit"
+                      params={{ progressionId: shown.id }}
+                    />
+                  }
                 />
-              </>
-            ) : null}
-            <SettingsGear page="progressions" />
-          </>
+              ) : null}
+              <RoundButton
+                label={t('progressions.edit.new')}
+                icon={Plus}
+                onClick={() => setNewOne(true)}
+              />
+            </>
+          ) : null
         }
+        settings={<SettingsGear page="progressions" />}
       />
       {/* What is shown of the one progression: in the page, never a second bar row (R29-P1). */}
       <Segmented
