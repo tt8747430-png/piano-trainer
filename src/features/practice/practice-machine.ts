@@ -1,8 +1,8 @@
 import type { Performance } from '@/shared/lib/arrangement'
-import { pitchClass, type Midi, type PitchClass } from '@/shared/lib/music'
+import { pitchClass, TICKS_PER_BEAT, type Midi, type PitchClass, type Tick } from '@/shared/lib/music'
 import { audibleHands, type Audible, type Hands } from '@/shared/lib/schedule'
 import type { BeatGroupRange } from './loop'
-import type { PracticeMode } from './practice-mode'
+import { waitsForNotes, type PracticeMode } from './practice-mode'
 
 export type Outcome = 'waiting' | 'correct' | 'wrong' | 'finished'
 
@@ -44,6 +44,13 @@ export interface PracticeState {
    * is not counted as played.
    */
   readonly skipped: boolean
+  /**
+   * Interpret: the beat group the learner's last onset completed, and when (seconds): the app plays
+   * its other hands then. A new object each onset.
+   */
+  readonly matched: { readonly beatGroup: number; readonly at: number } | null
+  /** Interpret: the last three completed onsets, where they stand and when (seconds), oldest first. */
+  readonly onsets: readonly { readonly tick: Tick; readonly at: number }[]
 }
 
 export type PracticeEvent =
@@ -64,7 +71,8 @@ export type PracticeEvent =
   | { readonly type: 'prev' }
   /** The learner tapped a beat group. */
   | { readonly type: 'jumpToBeatGroup'; readonly beatGroup: number }
-  | { readonly type: 'noteOn'; readonly midi: Midi }
+  /** A key played; `at` is when, in seconds on the audio clock (what Interpret times). */
+  | { readonly type: 'noteOn'; readonly midi: Midi; readonly at?: number }
 
 /** The hands Wait mode waits for: the audible ones, never a staff over the piano (ADR 0097). */
 export const practisedHands = (hands: Hands): Audible => ({ ...audibleHands(hands), staff: false })
@@ -117,7 +125,7 @@ function moveTo(state: PracticeState, beatGroup: number): PracticeState {
     slips: beatGroup === bounds(state).first ? {} : state.slips,
     skipped: beatGroup === bounds(state).first ? false : state.skipped,
     arrival: state.arrival + 1,
-    expected: state.mode === 'wait' ? expectedAt(state.performance, beatGroup, state.hands) : [],
+    expected: waitsForNotes(state.mode) ? expectedAt(state.performance, beatGroup, state.hands) : [],
     received: [],
     ahead: [],
     outcome: 'waiting',
@@ -163,6 +171,8 @@ export function initialPractice(
     slips: {},
     passes: 0,
     skipped: false,
+    matched: null,
+    onsets: [],
   }
   return moveTo(state, bounds(state).first)
 }
@@ -176,7 +186,7 @@ function next(state: PracticeState): PracticeState {
   if (state.performance.beatGroups.length === 0) return state
   const { first, last } = bounds(state)
   if (state.beatGroup < last) return moveTo(state, state.beatGroup + 1)
-  const played = state.mode === 'wait' && state.playing && !state.skipped
+  const played = waitsForNotes(state.mode) && state.playing && !state.skipped
   const passes = played ? state.passes + 1 : state.passes
   if (state.mode === 'listen' || state.loop) return { ...moveTo(state, first), passes }
   return {
@@ -196,11 +206,11 @@ function prev(state: PracticeState): PracticeState {
   if (state.performance.beatGroups.length === 0) return state
   const { first, last } = bounds(state)
   if (state.beatGroup > first) return moveTo(state, state.beatGroup - 1)
-  return moveTo(state, state.mode === 'wait' ? first : last)
+  return moveTo(state, waitsForNotes(state.mode) ? first : last)
 }
 
-function noteOn(state: PracticeState, key: Midi): PracticeState {
-  if (state.mode !== 'wait' || !state.playing || state.outcome === 'finished') return state
+function noteOn(state: PracticeState, key: Midi, at: number | undefined): PracticeState {
+  if (!waitsForNotes(state.mode) || !state.playing || state.outcome === 'finished') return state
   const pc = pitchClass(key)
   // Played while the app plays the other hand or a rest: it belongs to a beat group to come.
   if (state.outcome === 'correct' || state.expected.length === 0) {
@@ -213,7 +223,37 @@ function noteOn(state: PracticeState, key: Midi): PracticeState {
   }
   const received = state.received.includes(pc) ? state.received : [...state.received, pc]
   const outcome = isComplete(state.expected, received) ? 'correct' : 'waiting'
+  if (state.mode === 'follow' && outcome === 'correct') return followOn(state, at ?? 0)
   return { ...state, received, outcome, wrong: null }
+}
+
+/** The most onsets Interpret keeps: the last two beats' three. */
+const ONSETS_KEPT = 3
+
+/** Interpret: the beat group done, the cursor moves on at once, the onset timed. */
+function followOn(state: PracticeState, at: number): PracticeState {
+  const tick = state.performance.beatGroups[state.beatGroup]?.tick ?? 0
+  const onsets = [...state.onsets, { tick, at }].slice(-ONSETS_KEPT)
+  const matched = { beatGroup: state.beatGroup, at }
+  return { ...next(state), matched, onsets }
+}
+
+/** Interpret follows between these shares of the tempo chosen. */
+const FOLLOW_RANGE = { min: 0.4, max: 2 } as const
+
+/**
+ * Interpret's tempo (R29 B8): the learner's, from the last two beats' onsets, clamped to 40–200 % of
+ * the tempo chosen; null before two onsets are timed.
+ */
+export function followTempo(state: PracticeState, tempo: number): number | null {
+  const first = state.onsets[0]
+  const last = state.onsets.at(-1)
+  if (!first || !last || first === last) return null
+  const beats = (last.tick - first.tick) / TICKS_PER_BEAT
+  const seconds = last.at - first.at
+  if (beats <= 0) return null
+  const measured = seconds <= 0 ? Infinity : (beats * 60) / seconds
+  return Math.round(Math.min(tempo * FOLLOW_RANGE.max, Math.max(tempo * FOLLOW_RANGE.min, measured)))
 }
 
 /** Every rule of Listen and Wait mode; the practice hook connects it to time and sound. */
@@ -231,6 +271,8 @@ export function practiceReducer(state: PracticeState, event: PracticeEvent): Pra
         // on is begun part way unless it is at the start.
         slips: {},
         skipped: true,
+        matched: null,
+        onsets: [],
       }
       // A finished pass starts again at the start.
       if (state.outcome === 'finished') return moveTo(configured, bounds(configured).first)
@@ -270,6 +312,6 @@ export function practiceReducer(state: PracticeState, event: PracticeEvent): Pra
       return moveTo({ ...state, skipped: state.skipped || to > state.beatGroup }, to)
     }
     case 'noteOn':
-      return noteOn(state, event.midi)
+      return noteOn(state, event.midi, event.at)
   }
 }

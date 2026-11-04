@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import type { Performance } from '@/shared/lib/arrangement'
-import { notate, type StaffId } from '@/shared/lib/notation'
+import { annotate, notate, type ScoreAnnotation, type StaffId } from '@/shared/lib/notation'
 import { useStaffLabels } from '@/shared/ui/score'
 import { playedMusic } from '../model/played-music'
 
@@ -10,6 +10,9 @@ import { playedMusic } from '../model/played-music'
  * its tempo marks taken out to be said in the labels' row (ADR 0087), the staves the view keeps (never
  * none, ADR 0097) and their names as printed at the first line's head (ADR 0114).
  */
+/** No typed marks. */
+const NO_MARKS: readonly ScoreAnnotation[] = []
+
 export function useSheetScore(
   performance: Performance,
   {
@@ -18,10 +21,12 @@ export function useSheetScore(
     hidden,
   }: { readonly lyrics: boolean; readonly piano: boolean; readonly hidden: readonly StaffId[] },
   staffNames: readonly (string | undefined)[],
+  marks: readonly ScoreAnnotation[] = NO_MARKS,
 ) {
+  // The learner's typed marks written in as the engraving's own (R29 B8).
   const written = useMemo(
-    () => notate(playedMusic(performance, { lyrics, piano })),
-    [performance, lyrics, piano],
+    () => annotate(notate(playedMusic(performance, { lyrics, piano })), marks),
+    [performance, lyrics, piano, marks],
   )
   const { score, tempos } = useMemo(
     () => ({

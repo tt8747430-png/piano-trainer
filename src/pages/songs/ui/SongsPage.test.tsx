@@ -1,3 +1,4 @@
+import { setBar } from '@/features/set-preference'
 import { act, cleanup, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
@@ -573,6 +574,21 @@ describe('Songs: Select (ADR 0106)', () => {
     expect(await screen.findByText('Archived: 2')).toBeInTheDocument()
   })
 
+  it('the bar on screen matches the page tile for tile (R29 B10)', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/songs/folders/folder-1', {
+      storage: saved({ library: SUNDAY }),
+    })
+    act(() => setBar(settingsStore, 'select.songs', ['delete', 'export', 'move']))
+    await user.click(await screen.findByRole('button', { name: 'Select' }))
+    const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    expect(
+      within(bar)
+        .getAllByRole('button')
+        .map((each) => each.textContent),
+    ).toEqual(['Delete', 'Export', 'Move', 'More'])
+  })
+
   it('archives folders and songs chosen together in one go, one Undo putting all of them back', async () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs', {
@@ -640,11 +656,14 @@ describe('Songs: Select (ADR 0106)', () => {
     await renderApp('/songs/folders/hymns')
     await user.click(await screen.findByRole('button', { name: 'Select' }))
     const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
-    // Nothing chosen, nothing to export.
-    expect(within(bar).getByRole('button', { name: 'Export' })).toBeDisabled()
+    // Export is under More on the bar as it comes (R29 B10). Nothing chosen, nothing to export.
+    await user.click(within(bar).getByRole('button', { name: 'More' }))
+    expect(await screen.findByRole('button', { name: 'Export' })).toBeDisabled()
+    await user.keyboard('{Escape}')
     await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
     await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
-    await user.click(within(bar).getByRole('button', { name: 'Export' }))
+    await user.click(within(bar).getByRole('button', { name: 'More' }))
+    await user.click(await screen.findByRole('button', { name: 'Export' }))
     const sheet = await screen.findByRole('dialog', { name: 'Export' })
     expect(within(sheet).getByText('Selected: 2')).toBeInTheDocument()
     const midi = within(sheet).getByText('MIDI', { exact: true }).closest('button')

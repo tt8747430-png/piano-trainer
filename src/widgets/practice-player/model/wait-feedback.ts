@@ -1,5 +1,6 @@
 import {
   practisedHands,
+  waitsForNotes,
   spellPitchClass,
   type BarRange,
   type PracticeState,
@@ -21,7 +22,7 @@ export type WaitFeedback =
 
 /** Wait mode's line now: the notes to play as written, a wrong key, right, or finished; nothing while stopped. */
 export function waitFeedback(performance: Performance, state: PracticeState): WaitFeedback | null {
-  if (state.mode !== 'wait') return null
+  if (!waitsForNotes(state.mode)) return null
   if (state.outcome === 'finished') return { kind: 'finished', ...passReport(state.slips) }
   if (!state.playing) return null
   if (state.outcome === 'correct') return { kind: 'right' }

@@ -15,7 +15,12 @@ export function TransposeTool({
   signature,
   chordSymbols,
   onChange,
+  open,
+  onOpenChange,
 }: {
+  /** Its popover open, where the screen opens it (the Tools sheet's Transpose, R29 B8). */
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
   piece: Piece
   /** The tonic it is played in. */
   tonic: SpelledNote
@@ -45,6 +50,8 @@ export function TransposeTool({
       // A switch on is the default, left out of the URL; off, written there.
       onSignature={(on) => onChange(on ? { tkey: undefined } : { tkey: false })}
       onChordSymbols={(on) => onChange(on ? { tchords: undefined } : { tchords: false })}
+      {...(open === undefined ? {} : { open })}
+      {...(onOpenChange ? { onOpenChange } : {})}
     />
   )
 }

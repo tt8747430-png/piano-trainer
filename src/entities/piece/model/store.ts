@@ -1,3 +1,4 @@
+import { annotationOf, type Annotation } from './annotations'
 import type { StoreApi } from 'zustand/vanilla'
 import { isPatternId } from '@/entities/pattern'
 import { createSavedStore, isOneOf, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
@@ -38,7 +39,7 @@ import {
 } from './types'
 
 export const PIECES_STORAGE_KEY = 'pt-pieces'
-export const PIECES_VERSION = 9
+export const PIECES_VERSION = 10
 
 /** The learner's pieces. */
 export interface PiecesState {
@@ -48,11 +49,13 @@ export interface PiecesState {
   readonly songs: readonly OwnSong[]
   /** The next own song's number: a deleted id is never given again. */
   readonly nextSong: number
+  /** The learner's typed marks on each song, by its id (R29 B8): its copy of the song carries them. */
+  readonly annotations: Readonly<Record<string, readonly Annotation[]>>
 }
 
 export type PiecesStore = StoreApi<PiecesState>
 
-const INITIAL: PiecesState = { versions: {}, songs: [], nextSong: 1 }
+const INITIAL: PiecesState = { versions: {}, songs: [], nextSong: 1, annotations: {} }
 
 export const createPiecesStore = (saving: SavingOptions = {}): PiecesStore =>
   createSavedStore(
@@ -284,5 +287,12 @@ function sanitize(persisted: unknown, current: PiecesState): PiecesState {
   const past = Math.max(0, ...songs.map((song) => ownSongNumber(song.id))) + 1
   const next =
     typeof saved.nextSong === 'number' && Number.isSafeInteger(saved.nextSong) ? saved.nextSong : 1
-  return { versions, songs, nextSong: Math.max(next, past, 1) }
+  const annotations: Record<string, readonly Annotation[]> = {}
+  if (isRecord(saved.annotations)) {
+    for (const [id, marks] of Object.entries(saved.annotations)) {
+      const read = (Array.isArray(marks) ? marks : []).flatMap((mark) => annotationOf(mark) ?? [])
+      if (read.length > 0) annotations[id] = read
+    }
+  }
+  return { versions, songs, nextSong: Math.max(next, past, 1), annotations }
 }

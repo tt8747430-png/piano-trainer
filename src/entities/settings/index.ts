@@ -87,3 +87,18 @@ export {
   type SettingsField,
   type SettingsPageId,
 } from './model/registry'
+export {
+  BAR_ACTS,
+  BAR_CATALOG,
+  BAR_LIMITS,
+  BAR_SURFACES,
+  barAvailable,
+  barCanShrink,
+  barHasRoom,
+  barOf,
+  DEFAULT_BARS,
+  normaliseBar,
+  type BarAct,
+  type Bars,
+  type BarSurface,
+} from './model/bars'

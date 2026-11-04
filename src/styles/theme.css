@@ -780,6 +780,28 @@
       'sheet'
       'status';
   }
+  /* The Player's foot bar (R29 B8) at the screen's foot, under the keys: a row only where it is. */
+  & > [data-area='foot'] {
+    grid-area: foot;
+  }
+  &:has(> [data-area='foot']) {
+    grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+    grid-template-areas:
+      'bar'
+      'sheet'
+      'status'
+      'keys'
+      'foot';
+  }
+  &[data-keys='top']:has(> [data-area='foot']) {
+    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      'bar'
+      'keys'
+      'sheet'
+      'status'
+      'foot';
+  }
   /* On a phone on its side the bar is one row, Wait mode's line in it beside its end group: the line
      keeps its words, and the tools the room left, their names cut short where it is not enough (ADR
      0108, 0105, 0115). The bar's columns are the screen's, so the line stands in its own. */
@@ -808,6 +830,22 @@
         'keys keys keys keys'
         'sheet sheet sheet sheet';
     }
+    &:has(> [data-area='foot']) {
+      grid-template-rows: auto minmax(0, 1fr) auto auto;
+      grid-template-areas:
+        'bar bar bar bar'
+        'sheet sheet sheet sheet'
+        'keys keys keys keys'
+        'foot foot foot foot';
+    }
+    &[data-keys='top']:has(> [data-area='foot']) {
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
+      grid-template-areas:
+        'bar bar bar bar'
+        'keys keys keys keys'
+        'sheet sheet sheet sheet'
+        'foot foot foot foot';
+    }
   }
 }
 
@@ -819,6 +857,9 @@
 @utility score-bar {
   position: relative;
   isolation: isolate;
+  /* Over the music, whose area is positioned for what floats on it (R29 B8): the tools' capsule
+     hanging under the bar on a phone held upright stays above the sheet and takes its taps. */
+  z-index: 25;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-areas: 'lead actions';

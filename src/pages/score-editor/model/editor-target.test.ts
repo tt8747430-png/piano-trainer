@@ -10,7 +10,7 @@ import {
 import { readDraft, writeDraft } from '@/features/score-editor'
 import { editorTarget } from './editor-target'
 
-const NONE: PiecesState = { versions: {}, songs: [], nextSong: 1 }
+const NONE: PiecesState = { versions: {}, songs: [], nextSong: 1, annotations: {} }
 const SONG = {
   id: 'my-1' as const,
   title: 'Morning',

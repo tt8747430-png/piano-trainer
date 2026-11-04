@@ -25,17 +25,40 @@ describe('createPiecesStore', () => {
   it('starts with no versions and no songs, and saves under pt-pieces', () => {
     const storage = createMemoryStorage()
     const store = createPiecesStore({ storage, otherTabs: new EventTarget() })
-    expect(store.getState()).toEqual({ versions: {}, songs: [], nextSong: 1 })
+    expect(store.getState()).toEqual({ versions: {}, songs: [], nextSong: 1, annotations: {} })
     store.setState({ versions: { bz1: MUSIC } })
     expect(JSON.parse(storage.getItem('pt-pieces') ?? 'null')).toEqual({
-      state: { versions: { bz1: MUSIC }, songs: [], nextSong: 1 },
+      state: { versions: { bz1: MUSIC }, songs: [], nextSong: 1, annotations: {} },
       version: PIECES_VERSION,
     })
   })
 
   it('restores what was saved', () => {
-    const saved = { versions: { bz1: MUSIC }, songs: [SONG], nextSong: 2 }
+    const saved = { versions: { bz1: MUSIC }, songs: [SONG], nextSong: 2, annotations: {} }
     expect(restored(saved)).toEqual(saved)
+  })
+
+  describe('annotations (R29 B8)', () => {
+    const MARKS = [
+      { at: 0, staff: 'treble', kind: 'fingering', value: 3 },
+      { at: 24, staff: 'bass', kind: 'dynamic', value: 'mf' },
+      { at: 48, staff: 'treble', kind: 'text', value: 'lightly' },
+      { at: 72, staff: 'treble', kind: 'pause' },
+    ]
+
+    it('keeps each song’s typed marks, each where it reads', () => {
+      const read = restored({
+        annotations: {
+          bz1: [...MARKS, { at: -1, staff: 'treble', kind: 'breath' }, { at: 0, kind: 'text' }],
+          bz2: 'none',
+        },
+      })
+      expect(read.annotations).toEqual({ bz1: MARKS })
+    })
+
+    it('reads its version only', () => {
+      expect(restored({ annotations: { bz1: MARKS } }, PIECES_VERSION - 1).annotations).toEqual({})
+    })
   })
 
   it('keeps 4/4 printed as common time, and reads anything else there as its figures (ADR 0114)', () => {
@@ -253,7 +276,7 @@ describe('createPiecesStore', () => {
 
   it('reads nothing of a save from before the pedal was a line of its own', () => {
     const saved = { versions: { bz1: MUSIC }, songs: [SONG], nextSong: 2 }
-    expect(restored(saved, 8)).toEqual({ versions: {}, songs: [], nextSong: 1 })
+    expect(restored(saved, 8)).toEqual({ versions: {}, songs: [], nextSong: 1, annotations: {} })
   })
 
   it('drops a single staff longer than its chart', () => {

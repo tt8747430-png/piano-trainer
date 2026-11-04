@@ -140,11 +140,11 @@ function firstNoteOn(bytes: Uint8Array): number {
 
 describe('the acts on the music in the Player’s Settings (R29)', () => {
   it.each([
-    ['a song', '/play/bz5', ['Sections', 'Song information', 'Export…', 'Print']],
+    ['a song', '/play/bz5', ['Sections', 'Song information', 'Export…']],
     // A study is in no library (ADR 0106).
-    ['a study', '/play/ex3', ['Sections', 'Study information', 'Export…', 'Print']],
-    ['a walk', '/play/walk?root=D&kind=dorian', ['Export…', 'Print']],
-    ['an exercise', '/play/exercise/hanon', ['Export…', 'Print']],
+    ['a study', '/play/ex3', ['Sections', 'Study information', 'Export…']],
+    ['a walk', '/play/walk?root=D&kind=dorian', ['Export…']],
+    ['an exercise', '/play/exercise/hanon', ['Export…']],
   ])('lists what %s has', async (_music, path, actions) => {
     const user = userEvent.setup()
     await renderApp(path)
@@ -184,7 +184,7 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
   it('shares an own song with its music, saying the link is copied where there is no share sheet', async () => {
     const user = userEvent.setup()
     await renderApp('/play/my-1', { storage: withSong() })
-    expect(await moreActions(user)).toEqual(['Sections', 'Song information', 'Export…', 'Print'])
+    expect(await moreActions(user)).toEqual(['Sections', 'Song information', 'Export…'])
     await user.keyboard('{Escape}')
     await exportAs(user, 'Share link')
     await waitFor(() =>
@@ -209,7 +209,7 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
 
   it('shares a song of the app as a link to itself, in the key it is played and as simplified', async () => {
     const user = userEvent.setup()
-    await renderApp('/play/bz5?transpose=2&simple=true')
+    await renderApp('/play/bz5?transpose=2&version=simple')
     await exportAs(user, 'Share link')
     await waitFor(() =>
       expect(screen.getByText(/^Link copied\. Anyone who opens it/)).toHaveAttribute(
@@ -220,7 +220,7 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
     const link = new URL(await navigator.clipboard.readText())
     expect(link.origin).toBe(window.location.origin)
     expect(link.pathname).toBe('/play/bz5')
-    expect(Object.fromEntries(link.searchParams)).toEqual({ transpose: '2', simple: 'true' })
+    expect(Object.fromEntries(link.searchParams)).toEqual({ transpose: '2', version: 'simple' })
   })
 
   it('hands the link to the device’s share sheet where it has one', async () => {
@@ -233,7 +233,7 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
     await waitFor(() => expect(share).toHaveBeenCalledTimes(1))
     expect(share).toHaveBeenCalledWith({
       title: 'Still, my soul, be still',
-      url: `${window.location.origin}/play/bz5?transpose=0&simple=false`,
+      url: `${window.location.origin}/play/bz5?transpose=0&version=original`,
     })
     // The share sheet says what it did: the screen says nothing.
     expect(screen.queryByText(/^Link copied/)).not.toBeInTheDocument()

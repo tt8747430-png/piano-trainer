@@ -14,3 +14,9 @@ export {
   type PianoDownload,
   type PianoKept,
 } from './piano-download'
+export {
+  createFakeMicrophone,
+  openBrowserMicrophone,
+  type Microphone,
+  type OpenMicrophone,
+} from './microphone'

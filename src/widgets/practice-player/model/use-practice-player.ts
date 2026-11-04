@@ -16,8 +16,10 @@ import {
   pedalKeys,
   playerRange,
   practiceMarks,
+  handsIn,
   practisedHands,
   readLoop,
+  waitsForNotes,
   usePractice,
   type BarRange,
   type Mix,
@@ -166,9 +168,11 @@ export function usePracticePlayer(
     () => readLoop(view.loop, performance.bars.length),
     [view.loop, performance.bars.length],
   )
+  // One hand at a time is Practice mode's alone (R29 B8): every other mode plays and waits for both.
+  const practisedHand = handsIn(view.mode, view.hands)
   const practice = usePractice(performance, {
     mode: view.mode,
-    hands: view.hands,
+    hands: practisedHand,
     tempo,
     ownTempo,
     speedTraining: view.speedTraining,
@@ -185,11 +189,11 @@ export function usePracticePlayer(
     accompany: otherHand.play,
   })
   const { state, press } = practice
-  const waiting = state.mode === 'wait'
+  const waiting = waitsForNotes(state.mode)
   const received = waiting ? state.received : undefined
   const hands = useMemo(
-    () => (waiting ? practisedHands(view.hands) : audibleHands(view.hands)),
-    [waiting, view.hands],
+    () => (waiting ? practisedHands(practisedHand) : audibleHands(practisedHand)),
+    [waiting, practisedHand],
   )
   const range = useMemo(() => playerRange(performance), [performance])
   // Stable while the beat group is, so the keyboard's memoised keys re-render only when theirs change.
@@ -227,7 +231,7 @@ export function usePracticePlayer(
         ? 'down'
         : 'up'
   // The staves out of sight: the Staves' Show, and the other hand's where it is hidden (A35).
-  const other = otherHand.look === 'hide' ? MUTED[view.hands] : undefined
+  const other = otherHand.look === 'hide' ? MUTED[practisedHand] : undefined
   const hidden = useMemo(() => {
     const off = hiddenStaves(staves)
     return other === undefined || off.includes(other) ? off : [...off, other]
@@ -246,7 +250,7 @@ export function usePracticePlayer(
     inView,
     wrong,
     feedback: waitFeedback(performance, state),
-    muted: otherHand.look === 'dim' ? MUTED[view.hands] : undefined,
+    muted: otherHand.look === 'dim' ? MUTED[practisedHand] : undefined,
     hidden,
     fingers: toggles.fingerNumbers,
     names: toggles.namedNotes,

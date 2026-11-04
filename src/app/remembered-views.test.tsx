@@ -37,11 +37,14 @@ describe('Remembered views', () => {
     await user.click(await screen.findByRole('button', { name: /^Transpose/ }))
     await user.click(await screen.findByRole('button', { name: 'Down a semitone' }))
     await user.keyboard('{Escape}')
-    await user.click(screen.getByRole('button', { name: 'Simplify' }))
+    await user.click(screen.getByRole('button', { name: 'Version: Original' }))
+    const simplified = await screen.findAllByRole('button', { name: /^Simplified/ })
+    // Piano and voice, the group it plays in.
+    await user.click(simplified.at(-1) as HTMLElement)
     await waitFor(() =>
       expect(first.viewsStore.getState().views['/play/lightly-row']).toEqual({
         transpose: -1,
-        simple: true,
+        version: 'simple',
       }),
     )
     first.unmount()
@@ -49,12 +52,9 @@ describe('Remembered views', () => {
     const plain = await renderApp('/songs/lightly-row', { storage })
     await user.click(await screen.findByRole('link', { name: 'Practise' }))
     await waitFor(() =>
-      expect(plain.router.state.location.search).toEqual({ transpose: -1, simple: true }),
+      expect(plain.router.state.location.search).toEqual({ transpose: -1, version: 'simple' }),
     )
-    expect(await screen.findByRole('button', { name: 'Simplify' })).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    )
+    expect(await screen.findByRole('button', { name: 'Version: Simplified' })).toBeInTheDocument()
     plain.unmount()
     // Opened by a link that names its bars: those, transposed and simplified as kept.
     const looped = await renderApp('/play/lightly-row?loop=2-3', { storage })
@@ -62,13 +62,13 @@ describe('Remembered views', () => {
       expect(looped.router.state.location.search).toEqual({
         loop: '2-3',
         transpose: -1,
-        simple: true,
+        version: 'simple',
       }),
     )
     looped.unmount()
     // Another piece plays as written.
     const other = await renderApp('/play/bz5?loop=1-1', { storage })
-    await screen.findByRole('button', { name: 'Simplify' })
+    await screen.findByRole('button', { name: 'Version: Original' })
     expect(other.router.state.location.search).toEqual({ loop: '1-1' })
   })
 

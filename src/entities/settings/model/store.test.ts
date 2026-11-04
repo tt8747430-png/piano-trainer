@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { DEFAULT_BARS } from './bars'
 import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createSettingsStore, SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from './store'
@@ -55,6 +56,7 @@ const DEFAULTS = {
   progressions: DEFAULT_PROGRESSIONS,
   chordPlayer: DEFAULT_CHORD_PLAYER,
   accompaniment: DEFAULT_ACCOMPANIMENT,
+  bars: DEFAULT_BARS,
 }
 
 describe('createSettingsStore', () => {
@@ -166,6 +168,7 @@ describe('createSettingsStore', () => {
           [53, 57, 60],
         ],
       },
+      bars: { ...DEFAULT_BARS, 'select.songs': ['delete', 'move'] },
       scoreView: {
         layout: 'vertical',
         music: 'grid',
@@ -176,6 +179,7 @@ describe('createSettingsStore', () => {
         pinned: false,
         textSize: 130,
         keys: false,
+        annotations: false,
       },
       metronome: {
         bpm: 72,
@@ -259,6 +263,7 @@ describe('createSettingsStore', () => {
       pinned: true,
       textSize: 100,
       keys: true,
+      annotations: true,
     })
     expect(restored({ scoreView: { layout: 'paper' } }).scoreView).toEqual(DEFAULT_SCORE_VIEW)
   })
@@ -327,9 +332,26 @@ describe('createSettingsStore', () => {
     expect(restored({ scoreView: { pinned: 'no' } }).scoreView.pinned).toBe(true)
   })
 
-  it('starts afresh over a save of the version before, which had no editor start or palette side (B7)', () => {
-    expect(SETTINGS_VERSION).toBe(21)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 20)).toEqual(
+  it('keeps each bar as arranged where it reads within its limits (R29 B10)', () => {
+    expect(
+      restored({
+        bars: {
+          'select.songs': ['move', 'delete', 'tuner', 'move'],
+          'bar.player': ['loop'],
+          'swipe.songs.leading': [],
+          nowhere: ['move'],
+        },
+      }).bars,
+    ).toEqual({
+      ...DEFAULT_BARS,
+      'select.songs': ['move', 'delete'],
+      'swipe.songs.leading': [],
+    })
+  })
+
+  it('starts afresh over a save of the version before, which had no bars of the learner’s (R29 B10)', () => {
+    expect(SETTINGS_VERSION).toBe(23)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 22)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

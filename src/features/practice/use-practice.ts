@@ -25,12 +25,13 @@ import { loopBeatGroups, loopTicks, type BarRange, type BeatGroupRange } from '.
 import { heardIn, mixGain, partGain, type Mix } from './mix'
 import {
   accompanyingHands,
+  followTempo,
   initialPractice,
   practiceReducer,
   type PracticeEvent,
   type PracticeState,
 } from './practice-machine'
-import type { PracticeMode } from './practice-mode'
+import { waitsForNotes, type PracticeMode } from './practice-mode'
 import { speedUp } from './speed'
 import { startTransport, type Transport } from './transport'
 
@@ -87,6 +88,8 @@ export interface Practice {
   next(): void
   prev(): void
   jumpToBeatGroup(beatGroup: number): void
+  /** Back to the start (R29 B8, Restart): bar 1, or the loop's first bar. */
+  restart(): void
   /** An on-screen key: the same as a MIDI note-on. */
   press(midi: Midi): void
 }
@@ -246,7 +249,10 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   // Wait mode, playing: once the practised hand has played (or has nothing to play), the app plays the
   // rest of the beat group and moves on. Through rests, each beat group is due on the audio clock
   // where the last one ends, so a run of them keeps its time.
-  const waiting = state.mode === 'wait' && state.playing
+  const waiting = waitsForNotes(state.mode) && state.playing
+  // Interpret plays the other hands and waits through rests at the learner's tempo (R29 B8).
+  const followed = state.mode === 'follow' ? followTempo(state, tempo) : null
+  const paced = followed ?? tempo
   const answered = state.outcome === 'correct'
   const rest = state.outcome === 'waiting' && state.expected.length === 0
   const due = useRef<number | null>(null)
@@ -258,12 +264,17 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
       accompanyAll.current ? along : { rh: false, lh: false, staff: along.staff },
       mixed.current,
     )
-    audio.play(beatGroupSounds(state.performance, state.beatGroup, { tempo, hands }), at, gain)
+    audio.play(
+      beatGroupSounds(state.performance, state.beatGroup, { tempo: paced, hands }),
+      at,
+      gain,
+    )
     if (answered) {
       due.current = null
       return CORRECT_PAUSE_MS
     }
-    due.current = at + untilNextBeatGroup(state.performance, state.beatGroup, { tempo, swing })
+    due.current =
+      at + untilNextBeatGroup(state.performance, state.beatGroup, { tempo: paced, swing })
     return Math.max(0, (due.current - PLAY_DELAY - audio.now()) * 1000)
   })
   useEffect(() => {
@@ -275,12 +286,27 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     return () => clearTimeout(timer)
   }, [waiting, answered, rest, state.arrival, state.performance])
 
+  // Interpret: each onset that completes a beat group sounds that group's other hands at once, at the
+  // learner's tempo; the cursor has already moved on.
+  const followAlong = useEffectEvent((beatGroup: number) => {
+    const along = accompanyingHands(state.hands)
+    const hands = heardIn(
+      accompanyAll.current ? along : { rh: false, lh: false, staff: along.staff },
+      mixed.current,
+    )
+    audio.play(beatGroupSounds(state.performance, beatGroup, { tempo: paced, hands }), undefined, gain)
+  })
+  const { matched } = state
+  useEffect(() => {
+    if (matched) followAlong(matched.beatGroup)
+  }, [matched])
+
   useEffect(
     () =>
       midi?.onNote((event) => {
-        if (event.on) dispatch({ type: 'noteOn', midi: event.midi })
+        if (event.on) dispatch({ type: 'noteOn', midi: event.midi, at: audio.now() })
       }),
-    [midi],
+    [midi, audio],
   )
 
   // Loaded while the Player is open, so the first Play starts it at once and the tap primes it.
@@ -314,13 +340,14 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     },
     stop() {
       // Wait mode's accompaniment, queued ahead through rests, stops with it (Listen's stops with its transport).
-      if (state.mode === 'wait') audio.stop()
+      if (waitsForNotes(state.mode)) audio.stop()
       dispatch({ type: 'stop' })
     },
     next: () => move({ type: 'next' }),
     prev: () => move({ type: 'prev' }),
     jumpToBeatGroup: (beatGroup: number) => move({ type: 'jumpToBeatGroup', beatGroup }),
-    press: (key: Midi) => dispatch({ type: 'noteOn', midi: key }),
+    restart: () => move({ type: 'jumpToBeatGroup', beatGroup: state.loop?.first ?? 0 }),
+    press: (key: Midi) => dispatch({ type: 'noteOn', midi: key, at: audio.now() }),
   }
 
   const clock = useCallback(() => transport.current?.tickAt(audio.now()) ?? null, [audio])

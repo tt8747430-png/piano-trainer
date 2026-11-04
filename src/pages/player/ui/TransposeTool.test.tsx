@@ -26,7 +26,7 @@ describe('Transpose (ADR 0105)', () => {
     expect(tools.map((tool) => tool.getAttribute('aria-label'))).toEqual([
       'View: Sheet',
       'Transpose: C major',
-      'Simplify',
+      'Version: Original',
     ])
     expect(shownText(tools[1] ?? document.body)).toContain('TransposeC')
   })

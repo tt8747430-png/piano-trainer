@@ -1,7 +1,9 @@
-/** How a piece is played, as a link keeps it: how far it is moved (semitones), and Simplify. */
+import type { SongVersion } from '@/features/practice'
+
+/** How a piece is played, as a link keeps it: how far it is moved (semitones), and its version. */
 export interface PlayedAs {
   readonly transpose: number
-  readonly simple: boolean
+  readonly version: SongVersion
 }
 
 /**
@@ -9,7 +11,7 @@ export interface PlayedAs {
  * from the key it is written in, R29 T) and as simplified. Both are said, no move and Simplify off
  * too, so the link never takes what its opener last kept for the song (ADR 0038).
  */
-export function pieceLink(piece: string, { transpose, simple }: PlayedAs): string {
-  const search = new URLSearchParams({ transpose: String(transpose), simple: String(simple) })
+export function pieceLink(piece: string, { transpose, version }: PlayedAs): string {
+  const search = new URLSearchParams({ transpose: String(transpose), version })
   return `/play/${encodeURIComponent(piece)}?${search}`
 }

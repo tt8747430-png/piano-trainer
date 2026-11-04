@@ -1,3 +1,4 @@
+import { barOf, useSettings } from '@/entities/settings'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, type ShelvedFolder } from '@/entities/library'
@@ -9,8 +10,6 @@ import { ROW_BODY, ROW_CARD } from './row-class'
 import { RowMore } from './RowMore'
 
 /** A folder's swipe (ADR 0106): to the right Edit; to the left Move, then Archive at the edge. */
-const LEADING = ['edit']
-const TRAILING = ['move', 'archive']
 
 /**
  * A folder of the library as a row (Mindscape's `FolderRow`): its tile, name and what it holds, a
@@ -30,13 +29,16 @@ export function FolderRow({
   onSelect: () => void
 }) {
   const { t } = useTranslation('songs')
+  // What each swipe offers: the learner's (R29 B10, Settings › Swipe actions).
+  const leading = useSettings((state) => barOf(state.bars, 'swipe.folders.leading'))
+  const trailing = useSettings((state) => barOf(state.bars, 'swipe.folders.trailing'))
   const nameOf = useFolderName()
   const press = useLongPress({ onLongPress: onSelect })
   return (
     <li className="min-w-0">
       <SwipeRow
-        leading={swipeOf(actions, LEADING)}
-        trailing={swipeOf(actions, TRAILING)}
+        leading={swipeOf(actions, leading)}
+        trailing={swipeOf(actions, trailing)}
         className="h-full"
       >
         <div className={cn(ROW_CARD, 'has-[>a:hover]:bg-muted')}>

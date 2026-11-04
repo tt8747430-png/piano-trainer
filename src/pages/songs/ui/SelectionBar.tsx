@@ -1,6 +1,10 @@
+import { Fragment, type ReactNode } from 'react'
+import { BAR_CATALOG, barOf, useSettings, type BarAct } from '@/entities/settings'
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import {
   Archive,
   Download,
+  Ellipsis,
   FolderInput,
   FolderOutput,
   Heart,
@@ -68,6 +72,55 @@ export function SelectionBar({
   const carrying = useCarrying()
   const { select } = page
   const noSongs = select.songs.length === 0
+  // The learner's bar (R29 B10, Settings › Select toolbar), the rest under More.
+  const chosen = useSettings((state) => barOf(state.bars, 'select.songs'))
+  const acts: Partial<Record<BarAct, ReactNode>> = {
+    favourite: (
+      <BarAction
+        label={t(select.allFavourite ? 'select.unfavourite' : 'select.favourite')}
+        icon={select.allFavourite ? HeartOff : Heart}
+        onClick={select.favourite}
+        disabled={noSongs}
+      />
+    ),
+    move: page.may('moveOut') ? (
+      <BarAction
+        label={t('select.move')}
+        icon={FolderInput}
+        onClick={select.move}
+        disabled={!select.movable}
+      />
+    ) : null,
+    export: (
+      <BarAction
+        label={t('select.export')}
+        icon={Download}
+        onClick={select.export}
+        disabled={noSongs}
+      />
+    ),
+    archive: (
+      <BarAction
+        label={t('select.archive')}
+        icon={Archive}
+        onClick={select.archive}
+        disabled={!select.archivable}
+      />
+    ),
+    delete: page.may('deleteSong') ? (
+      <BarAction
+        label={t('select.delete')}
+        icon={Trash2}
+        onClick={select.delete}
+        disabled={!select.deletable}
+        destructive
+      />
+    ) : null,
+  }
+  // What the place never allows is not there at all (R29 B4), in the bar or under More.
+  const allowed = (act: BarAct) => acts[act] != null
+  const shown = chosen.filter(allowed)
+  const rest = BAR_CATALOG['select.songs'].filter((act) => !chosen.includes(act) && allowed(act))
   if (carrying) {
     const parent = folder?.parent
       ? page.layout.folders.find((each) => each.id === folder.parent)
@@ -103,40 +156,33 @@ export function SelectionBar({
         data-takes-tab-bar=""
         className="flex gap-1 rounded-card border border-border bg-raised p-1 elevation-3"
       >
-        <BarAction
-          label={t(select.allFavourite ? 'select.unfavourite' : 'select.favourite')}
-          icon={select.allFavourite ? HeartOff : Heart}
-          onClick={select.favourite}
-          disabled={noSongs}
-        />
-        {page.may('moveOut') ? (
-          <BarAction
-            label={t('select.move')}
-            icon={FolderInput}
-            onClick={select.move}
-            disabled={!select.movable}
-          />
-        ) : null}
-        <BarAction
-          label={t('select.export')}
-          icon={Download}
-          onClick={select.export}
-          disabled={noSongs}
-        />
-        <BarAction
-          label={t('select.archive')}
-          icon={Archive}
-          onClick={select.archive}
-          disabled={!select.archivable}
-        />
-        {page.may('deleteSong') ? (
-          <BarAction
-            label={t('select.delete')}
-            icon={Trash2}
-            onClick={select.delete}
-            disabled={!select.deletable}
-            destructive
-          />
+        {shown.map((act) => (
+          <Fragment key={act}>{acts[act]}</Fragment>
+        ))}
+        {rest.length > 0 ? (
+          <Popover>
+            <PopoverTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  className="h-14 min-w-13 flex-col gap-0.5 rounded-control px-1 text-xs sm:min-w-16"
+                />
+              }
+            >
+              <Ellipsis aria-hidden className="size-5" />
+              {t('select.more')}
+            </PopoverTrigger>
+            <PopoverContent
+              side="top"
+              align="end"
+              aria-label={t('select.more')}
+              className="flex w-auto gap-1 p-1"
+            >
+              {rest.map((act) => (
+                <Fragment key={act}>{acts[act]}</Fragment>
+              ))}
+            </PopoverContent>
+          </Popover>
         ) : null}
       </div>
     </FloatingActions>

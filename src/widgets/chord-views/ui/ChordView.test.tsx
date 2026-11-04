@@ -40,6 +40,7 @@ function renderSummary(bar: number) {
     state: { ...initialPractice(performance, 'listen', 'both'), beatGroup: barGroup(bar) },
     clock: null,
     jumpToBeatGroup: vi.fn(),
+    restart: vi.fn(),
   }
   const rendered = renderWithSettings(
     <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
@@ -125,6 +126,7 @@ function renderPair(bar: number) {
     state: { ...initialPractice(performance, 'listen', 'both'), beatGroup: barGroup(bar) },
     clock: null,
     jumpToBeatGroup: vi.fn(),
+    restart: vi.fn(),
   }
   const { container, unmount } = renderWithSettings(
     <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
@@ -248,6 +250,7 @@ function renderView(
     state: { ...initialPractice(sungPerformance, 'listen', 'both'), beatGroup: group },
     clock: null,
     jumpToBeatGroup: vi.fn(),
+    restart: vi.fn(),
   }
   return renderWithSettings(
     <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>

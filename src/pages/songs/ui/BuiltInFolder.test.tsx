@@ -81,7 +81,15 @@ describe.each(['signed-out', 'learner', 'learner-view'] as const)(
         within(bar)
           .getAllByRole('button')
           .map((button) => button.textContent),
-      ).toEqual(['Favourite', 'Export', 'Archive'])
+      ).toEqual(['Favourite', 'Archive', 'More'])
+      // Nor under More: the place never allows them (B4), whatever the learner's bar (B10).
+      await user.click(within(bar).getByRole('button', { name: 'More' }))
+      const more = await screen.findByRole('dialog', { name: 'More' })
+      expect(
+        within(more)
+          .getAllByRole('button')
+          .map((button) => button.textContent),
+      ).toEqual(['Export'])
     })
 
     it('sorts the folder, and the sort is kept', async () => {

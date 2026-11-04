@@ -6,8 +6,10 @@ import {
   CURSORS,
   OTHER_HAND_LOOKS,
   SPEED_STEPS,
+  barOf,
   selectOtherHand,
   selectPlayback,
+  selectScoreView,
   selectSound,
   type SpeedStep,
   useSettings,
@@ -17,13 +19,16 @@ import type { TrackId } from '@/features/practice'
 import {
   onlyTheChords,
   setOtherHand,
+  setBar,
   setPlayback,
+  setScoreView,
   setSound,
   setStaffVolume,
 } from '@/features/set-preference'
 import { formatPercent, useLocale } from '@/shared/i18n'
+import { BarEditor } from '@/widgets/bar-editor'
 import { PEDAL_PLAYS } from '@/shared/lib/schedule'
-import { RowLink, ChoiceCard, SettingRows, SettingsGroup } from '@/shared/ui'
+import { RowLink, ChoiceCard, SettingRows, SettingsGroup, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 
@@ -138,31 +143,12 @@ export function PlayerPlayback() {
   return (
     <>
       <ChoiceCard
-        title={t('settingsPage.countdown.label')}
-        info={t('settingsPage.countdown.info')}
-        setting="playback.countdown"
-        value={playback.countdown}
-        options={COUNTDOWNS.map((value) => ({
-          value,
-          label: t(`settingsPage.countdown.${value}`),
-        }))}
-        onChange={(countdown) => setPlayback(settings, { countdown })}
-      />
-      <ChoiceCard
         title={t('settingsPage.pedal.label')}
         info={t('settingsPage.pedal.info')}
         setting="playback.pedal"
         value={playback.pedal}
         options={PEDAL_PLAYS.map((value) => ({ value, label: t(`settingsPage.pedal.${value}`) }))}
         onChange={(pedal) => setPlayback(settings, { pedal })}
-      />
-      <ChoiceCard
-        title={t('settingsPage.cursor.label')}
-        info={t('settingsPage.cursor.info')}
-        setting="playback.cursor"
-        value={playback.cursor}
-        options={CURSORS.map((value) => ({ value, label: t(`settingsPage.cursor.${value}`) }))}
-        onChange={(cursor) => setPlayback(settings, { cursor })}
       />
       <ChoiceCard
         title={t('pace.speedTraining')}
@@ -190,6 +176,66 @@ export function PlayerPlayback() {
   )
 }
 
+/**
+ * How the Player shows the music while it plays (the Player's Settings › Display, R29 B8): the
+ * count-in, None, Audible or Visual (its beats counted on the score), and the cursor.
+ */
+export function PlayerDisplay() {
+  const { t } = useTranslation('player')
+  const settings = useSettingsStoreApi()
+  const playback = useSettings(selectPlayback)
+  const annotations = useSettings((state) => selectScoreView(state).annotations)
+  return (
+    <>
+      <SettingsGroup flush>
+        <SwitchRow
+          setting="scoreView.annotations"
+          label={t('settingsPage.annotations')}
+          checked={annotations}
+          onCheckedChange={(on) => setScoreView(settings, { annotations: on })}
+        />
+      </SettingsGroup>
+      <ChoiceCard
+        title={t('settingsPage.countdown.label')}
+        info={t('settingsPage.countdown.info')}
+        setting="playback.countdown"
+        value={playback.countdown}
+        options={COUNTDOWNS.map((value) => ({
+          value,
+          label: t(`settingsPage.countdown.${value}`),
+        }))}
+        onChange={(countdown) => setPlayback(settings, { countdown })}
+      />
+      <ChoiceCard
+        title={t('settingsPage.cursor.label')}
+        info={t('settingsPage.cursor.info')}
+        setting="playback.cursor"
+        value={playback.cursor}
+        options={CURSORS.map((value) => ({ value, label: t(`settingsPage.cursor.${value}`) }))}
+        onChange={(cursor) => setPlayback(settings, { cursor })}
+      />
+    </>
+  )
+}
+
+/**
+ * The Player's foot bar arranged (R29 B10, D9): four or five tools on the bar, the rest under More,
+ * the same for every song (the Player's Settings › Tool bar).
+ */
+export function PlayerToolbar() {
+  const { t } = useTranslation('settings')
+  const settings = useSettingsStoreApi()
+  const bar = useSettings((state) => barOf(state.bars, 'bar.player'))
+  return (
+    <BarEditor
+      surface="bar.player"
+      bar={bar}
+      label={t('bars.playerToolbar')}
+      onChange={(acts) => setBar(settings, 'bar.player', acts)}
+    />
+  )
+}
+
 /** Every page of the Player's Settings in one column, for a screen with no Player to open them from
  * (Settings › Player, a song's /settings link). */
 export function PlayerSettings({ tracks }: { tracks: readonly VolumeTrack[] }) {
@@ -206,6 +252,8 @@ export function PlayerSettings({ tracks }: { tracks: readonly VolumeTrack[] }) {
         />
       </SettingsGroup>
       <PlayerPlayback />
+      <PlayerDisplay />
+      <PlayerToolbar />
     </>
   )
 }

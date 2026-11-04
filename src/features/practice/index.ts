@@ -5,7 +5,8 @@ export {
   type PracticeEvent,
   type PracticeState,
 } from './practice-machine'
-export { PRACTICE_MODES, type PracticeMode } from './practice-mode'
+export { SONG_VERSIONS, type SongVersion } from './choice'
+export { handsIn, PRACTICE_MODES, waitsForNotes, type PracticeMode } from './practice-mode'
 export { usePractice, type Practice } from './use-practice'
 export { FULL_MIX, partGain, type Mix, type MixPart } from './mix'
 export {

@@ -1,3 +1,4 @@
+import { BAR_SURFACES, DEFAULT_BARS, normaliseBar, type Bars } from './bars'
 import type { StoreApi } from 'zustand/vanilla'
 import { isLocale } from '@/shared/i18n/locale'
 import { isStaffId } from '@/shared/lib/notation'
@@ -85,7 +86,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 21
+export const SETTINGS_VERSION = 23
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -125,6 +126,7 @@ export function createSettingsStore({
         progressions: DEFAULT_PROGRESSIONS,
         chordPlayer: DEFAULT_CHORD_PLAYER,
         accompaniment: DEFAULT_ACCOMPANIMENT,
+        bars: DEFAULT_BARS,
       },
       read: sanitize,
     },
@@ -308,8 +310,9 @@ const isSheetView = isOneOf(SHEET_VIEWS)
  */
 function scoreViewSettings(value: unknown): ScoreViewSettings {
   const saved = savedObject<ScoreViewSettings>(value)
-  const switched = (key: 'askOnOpen' | 'chordNames' | 'lyrics' | 'pinned' | 'keys') =>
-    typeof saved[key] === 'boolean' ? saved[key] : DEFAULT_SCORE_VIEW[key]
+  const switched = (
+    key: 'askOnOpen' | 'chordNames' | 'lyrics' | 'pinned' | 'keys' | 'annotations',
+  ) => (typeof saved[key] === 'boolean' ? saved[key] : DEFAULT_SCORE_VIEW[key])
   return {
     layout: isSheetView(saved.layout) ? saved.layout : DEFAULT_SCORE_VIEW.layout,
     music: isMusicView(saved.music) ? saved.music : DEFAULT_SCORE_VIEW.music,
@@ -320,6 +323,7 @@ function scoreViewSettings(value: unknown): ScoreViewSettings {
     pinned: switched('pinned'),
     textSize: isTextSize(saved.textSize) ? saved.textSize : DEFAULT_SCORE_VIEW.textSize,
     keys: switched('keys'),
+    annotations: switched('annotations'),
   }
 }
 
@@ -399,6 +403,14 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
  * current one otherwise; a practice toggle or trainer setting not saved, or not valid, takes its
  * default.
  */
+/** Each surface's bar as saved, where it reads within its limits (`normaliseBar`); else its default. */
+function barsSettings(value: unknown): Bars {
+  const saved = savedObject<Record<string, unknown>>(value)
+  return Object.fromEntries(
+    BAR_SURFACES.map((surface) => [surface, normaliseBar(surface, saved[surface])]),
+  )
+}
+
 function sanitize(persisted: unknown, current: SettingsState): SettingsState {
   const saved = savedObject<SettingsState>(persisted)
   return {
@@ -425,5 +437,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     progressions: progressionsSettings(saved.progressions),
     chordPlayer: chordPlayerSettings(saved.chordPlayer),
     accompaniment: accompanimentSettings(saved.accompaniment),
+    bars: barsSettings(saved.bars),
   }
 }

@@ -6,14 +6,14 @@ import {
   type PatternBook,
 } from '@/entities/pattern'
 import { choosableChordSize, isDegreePiece, pieceFit, pieceKey, type Piece } from '@/entities/piece'
-import { ownChoice, type PracticeChoice } from '@/features/practice'
+import { ownChoice, type PracticeChoice, type SongVersion } from '@/features/practice'
 import { transposedKey } from '@/shared/lib/music'
 import type { SetupChange, SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
 import { ownLeftOut } from './own-left-out'
 
-/** A piece's own choices as the Player's URL holds them: its Setup's, and Simplify (ADR 0105). */
-export type PieceParams = SetupParams & { readonly simple?: boolean }
+/** A piece's own choices as the Player's URL holds them: its Setup's, and its version (R29 B8). */
+export type PieceParams = SetupParams & { readonly version?: SongVersion }
 
 /**
  * The Player's URL: how it goes, and the piece's own choices, Simplify on or off (ADR
@@ -22,7 +22,10 @@ export type PieceParams = SetupParams & { readonly simple?: boolean }
  */
 export type PlayerSearch = PracticeView &
   SetupParams & {
-    readonly simple: boolean
+    /** The version played (R29 B8): as written, Simplified or Easy. */
+    readonly version: SongVersion
+    /** The app's own song played, not the learner's version of it (R29 B8, the Version sheet). */
+    readonly app?: boolean
     readonly bar?: number
     /** Which tracks play and show (A35): `u1s0,l0s1`, all on where absent (`stavesParam`). */
     readonly staves?: string
@@ -52,7 +55,7 @@ export function resolveChoice(
     chordSize: choosableChordSize(piece) === null ? null : (search.chordSize ?? null),
     // Its staves always sound as written; the Staves' Play turns each up or down (A35).
     tune: true,
-    simple: search.simple === true,
+    version: search.version ?? 'original',
     signature: search.tkey !== false,
     chordSymbols: search.tchords !== false,
     clef: search.clef ?? null,

@@ -1,5 +1,5 @@
 import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { Info, ListTree } from 'lucide-react'
+import { ArrowUpDown, Drum, Info, Layers, ListTree, PenLine } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -7,14 +7,28 @@ import {
   isDegreePiece,
   isLeadSheet,
   isOwnSongId,
+  isPiece,
   musicOf,
   pieceKey,
+  selectHasVersion,
+  usePieces,
+  usePiecesStoreApi,
   useRepertoire,
+  type Annotation,
   type Piece,
 } from '@/entities/piece'
+import { clearAnnotations, setAnnotation } from '@/features/annotate'
 import { selectScoreView, useSettings } from '@/entities/settings'
 import { PieceInversions } from '@/features/choose-diagram-inversion'
-import { beatGroupInBar, isSingleStaff, writtenBarAt } from '@/features/practice'
+import {
+  beatGroupInBar,
+  isSingleStaff,
+  stavesParam,
+  trackOf,
+  withTrack,
+  writtenBarAt,
+} from '@/features/practice'
+import { singleStaff } from '@/shared/lib/notation'
 import { ShareSaid, useShareSong, type SongToShare } from '@/features/share-song'
 import { useSongExport } from '@/features/song-files'
 import { useKeyName, useLocale } from '@/shared/i18n'
@@ -26,15 +40,21 @@ import { useScoreTracks } from '@/widgets/practice-player'
 import type { PlayerSearch } from '../model/player-search'
 import { sectionAt, sectionStarts } from '../model/section-starts'
 import { usePlayer } from '../model/use-player'
+import { usePlayerTakes } from '../model/use-player-takes'
 import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
 import { SectionsSheet } from './SectionsSheet'
-import { SimplifyTool } from './SimplifyTool'
 import { SongInfo } from './SongInfo'
 import { ClefChoice } from './ClefChoice'
 import { TransposeTool } from './TransposeTool'
+import { VersionSheet, type VersionChoice } from './VersionSheet'
+import { VersionTool } from './VersionTool'
+import { AnnotateBar } from './AnnotateBar'
 
-function PiecePlayer({ piece }: { piece: Piece }) {
+/** A song with no typed marks. */
+const NO_MARKS: readonly Annotation[] = []
+
+function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
   const { t } = useTranslation(['player', 'piece', 'songs', 'editor'])
   const locale = useLocale()
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
@@ -51,9 +71,39 @@ function PiecePlayer({ piece }: { piece: Piece }) {
     recordingInKey,
     simplifies,
     changeSetup,
-    simplify,
     changeTrack,
   } = usePlayer(piece, search, setSearch)
+  // The Version sheet (R29 B8): the learner's version or the app's, the voice's staves heard and
+  // shown or not, at a level.
+  const [versionOpen, setVersionOpen] = useState(false)
+  const [transposing, setTransposing] = useState(false)
+  // Annotate (R29 B8): the learner's typed marks, shown as Display says; the bar while marking.
+  const pieces = usePiecesStoreApi()
+  const marks = usePieces((state) => state.annotations[piece.id]) ?? NO_MARKS
+  const marksShown = useSettings((state) => selectScoreView(state).annotations)
+  const [annotating, setAnnotating] = useState(false)
+  // The Rhythm game (R29 B8): a take judged on its timing alone, any key counting.
+  const [rhythm, setRhythm] = useState(false)
+  const singles = (performance.staves ?? []).map((_, place) => singleStaff(place))
+  const solo =
+    singles.length > 0 &&
+    singles.every((id) => !trackOf(staves, id).play && !trackOf(staves, id).show)
+  const chosenVersion: VersionChoice = {
+    group: own && !search.app ? 'own' : solo || singles.length === 0 ? 'solo' : 'voice',
+    version: choice.version,
+  }
+  const chooseVersion = ({ group, version }: VersionChoice) => {
+    const voiced = group !== 'solo'
+    const next = singles.reduce(
+      (kept, id) => withTrack(kept, id, { play: voiced, show: voiced }),
+      staves,
+    )
+    setSearch({
+      version,
+      app: own && group !== 'own' ? true : undefined,
+      staves: group === 'own' ? search.staves : stavesParam(next),
+    })
+  }
   const keyName = useKeyName()
   // The tracks the Setup lists: each staff by its name and clef, the piano's, the recording (A35).
   const tracks = useScoreTracks({
@@ -72,6 +122,8 @@ function PiecePlayer({ piece }: { piece: Piece }) {
     const group = beatGroupInBar(performance, written)
     if (group !== null) jumpToBeatGroup(group)
   }
+  // The song's takes (R29 B8): recorded from the bar the cursor is in, judged against the music.
+  const takes = usePlayerTakes(piece.id, performance, { bar, tempo: player.tempo, rhythm })
   // Opened at a bar (Practise from the editor's caret, ADR 0115): the cursor goes there, once, and
   // the URL forgets it, so the view remembered never holds it.
   const openAt = useEffectEvent((at: number) => {
@@ -96,7 +148,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
         kind: 'piece',
         id: piece.id,
         title,
-        played: { transpose: search.transpose ?? 0, simple: choice.simple && simplifies },
+        played: { transpose: search.transpose ?? 0, version: choice.version },
       }
     : isDegreePiece(piece)
       ? null
@@ -151,7 +203,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
             choice={choice}
             fit={fit}
             swing={isCompound(piece.meter) ? null : search.swing}
-            simple={choice.simple && simplifies}
+            simple={choice.version === 'simple' && simplifies}
             tracks={tracks}
             staves={staves}
             recordingWhy={
@@ -173,9 +225,11 @@ function PiecePlayer({ piece }: { piece: Piece }) {
               signature={choice.signature}
               chordSymbols={choice.chordSymbols}
               onChange={changeSetup}
+              open={transposing}
+              onOpenChange={setTransposing}
             />
             {controls.has('simplify') ? (
-              <SimplifyTool on={choice.simple} simplifies={simplifies} onChange={simplify} />
+              <VersionTool version={choice.version} onOpen={() => setVersionOpen(true)} />
             ) : null}
           </>
         }
@@ -191,8 +245,75 @@ function PiecePlayer({ piece }: { piece: Piece }) {
           ) : undefined
         }
         tracks={tracks}
+        takes={takes}
+        annotations={marksShown || annotating ? marks : undefined}
+        annotating={
+          annotating ? (
+            <AnnotateBar
+              at={performance.beatGroups[player.practice.state.beatGroup]?.tick ?? 0}
+              staves={isLeadSheet(piece) ? singles : ['treble', 'bass']}
+              onMark={(mark) => setAnnotation(pieces, piece.id, mark)}
+              onClear={(at, staff) => clearAnnotations(pieces, piece.id, at, staff)}
+              onDone={() => setAnnotating(false)}
+            />
+          ) : null
+        }
+        // The Tools sheet's ways to the tools row's Transpose and the Version sheet (R29 B8).
+        toolRows={[
+          {
+            key: 'transpose',
+            group: 'more',
+            kind: 'act',
+            label: t('player:transpose.name'),
+            icon: ArrowUpDown,
+            paint: 'lilac',
+            onSelect: () => setTransposing(true),
+          },
+          {
+            key: 'annotations',
+            group: 'score',
+            kind: 'act',
+            label: t('player:annotate.label'),
+            icon: PenLine,
+            paint: 'lilac',
+            onSelect: () => setAnnotating(true),
+          },
+          {
+            key: 'rhythm',
+            group: 'listening',
+            kind: 'switch',
+            label: t('player:rhythm.label'),
+            icon: Drum,
+            paint: 'sand',
+            checked: rhythm,
+            onCheckedChange: setRhythm,
+          },
+          ...(controls.has('simplify')
+            ? [
+                {
+                  key: 'version',
+                  group: 'more' as const,
+                  kind: 'act' as const,
+                  label: t('player:version.change'),
+                  icon: Layers,
+                  paint: 'yellow' as const,
+                  value: t(`player:version.level.${choice.version}`),
+                  onSelect: () => setVersionOpen(true),
+                },
+              ]
+            : []),
+        ]}
       />
       <SongInfo piece={piece} performance={performance} {...sheetOf('info')} />
+      <VersionSheet
+        open={versionOpen}
+        onOpenChange={setVersionOpen}
+        chosen={chosenVersion}
+        own={own}
+        voice={singles.length > 0}
+        simplifies={simplifies}
+        onChoose={chooseVersion}
+      />
       <SectionsSheet
         starts={starts}
         headings={headings}
@@ -208,7 +329,12 @@ function PiecePlayer({ piece }: { piece: Piece }) {
 export function PlayerPage() {
   const { pieceId } = useParams({ from: '/full-screen/play/$pieceId' })
   const { t } = useTranslation('common')
-  const piece = useRepertoire().piece(pieceId)
+  const { app } = useSearch({ from: '/full-screen/play/$pieceId' })
+  const repertoire = useRepertoire()
+  const own = usePieces((state) => selectHasVersion(state, pieceId))
+  // The app's own song where the Version sheet chose it over the learner's version (R29 B8).
+  const original = own && app ? repertoire.original(pieceId) : undefined
+  const piece = original && isPiece(original) ? original : repertoire.piece(pieceId)
   if (!piece) {
     // An own song deleted in another tab.
     return (
@@ -217,5 +343,5 @@ export function PlayerPage() {
       </NotFound>
     )
   }
-  return <PiecePlayer key={piece.id} piece={piece} />
+  return <PiecePlayer key={piece.id} piece={piece} own={own} />
 }

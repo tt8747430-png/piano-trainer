@@ -1,3 +1,4 @@
+import type { Bars } from './bars'
 import { isLocale, type Locale } from '@/shared/i18n/locale'
 import type { Inversion } from '@/shared/lib/music'
 import {
@@ -266,6 +267,8 @@ export interface ScoreViewSettings {
   readonly textSize: TextSize
   /** The keys under the score: off, the score has the screen. */
   readonly keys: boolean
+  /** The learner's typed marks on the score (R29 B8). */
+  readonly annotations: boolean
 }
 
 /**
@@ -283,6 +286,7 @@ export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   pinned: true,
   textSize: 100,
   keys: true,
+  annotations: true,
 }
 
 /** The bar trainer as left: on or off, its counts kept either way. */
@@ -358,6 +362,8 @@ export interface SettingsState {
   chordPlayer: ChordPlayerSettings
   /** What Accompaniment shows (A24). */
   accompaniment: AccompanimentSettings
+  /** The bars the learner arranged (R29 B10): a surface left out holds its default. */
+  bars: Bars
 }
 
 /** How a lesson reads: one page of its sections (the plain page), or a section at a time. */

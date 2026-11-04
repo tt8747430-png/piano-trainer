@@ -15,15 +15,15 @@ const catchPrint = () => {
   return print
 }
 
-/** The Player open in a view of the music, its Settings' Print chosen; the print render once printed. */
+/** The Player open in a view of the music, its Tools' Print chosen (R29 B8); the print render once printed. */
 async function printed(user: User, path: string, music: MusicView, locale?: 'ru') {
   const print = catchPrint()
   const { settingsStore } = await renderApp(path, locale ? { locale } : undefined)
   await screen.findByRole('heading', { level: 1 })
   act(() => setScoreView(settingsStore, { music }))
-  const settings = locale ? 'Настройки плеера' : 'Player settings'
-  await user.click(await screen.findByRole('button', { name: settings }))
-  const sheet = await screen.findByRole('dialog', { name: settings })
+  const tools = locale ? 'Инструменты' : 'Tools'
+  await user.click(await screen.findByRole('button', { name: tools }))
+  const sheet = await screen.findByRole('dialog', { name: tools })
   await user.click(within(sheet).getByRole('button', { name: locale ? 'Печать' : 'Print' }))
   await waitFor(() => expect(print).toHaveBeenCalledTimes(1), { timeout: 10_000 })
   const render = document.querySelector<HTMLElement>('[data-slot="song-print"]')
@@ -68,7 +68,7 @@ describe('the Player’s Print (ADR 0107)', () => {
 
   it('prints the music transposed and simplified as the Player plays it', async () => {
     const user = userEvent.setup()
-    const { render } = await printed(user, '/play/bz5?transpose=2&simple=true', 'grid')
+    const { render } = await printed(user, '/play/bz5?transpose=2&version=simple', 'grid')
     expect(diagramsIn(render)).toEqual(['A', 'D', 'F♯m', 'E', 'Bm'])
     expect(render).not.toHaveTextContent('/')
   })

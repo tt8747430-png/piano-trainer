@@ -177,6 +177,7 @@ export const songs = {
   },
   // Select (Mindscape's): rows chosen for one action.
   select: {
+    more: 'More',
     start: 'Select',
     done: 'Done',
     all: 'Select all',

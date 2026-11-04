@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { DEFAULT_BARS } from './bars'
 import {
   selectChordFinder,
   selectKeyboard,
@@ -58,6 +59,7 @@ describe('settings selectors', () => {
       progressions: DEFAULT_PROGRESSIONS,
       chordPlayer: DEFAULT_CHORD_PLAYER,
       accompaniment: DEFAULT_ACCOMPANIMENT,
+      bars: DEFAULT_BARS,
     }
     expect(selectPractice(state)).toBe(DEFAULT_PRACTICE)
     expect(selectSound(state)).toBe(DEFAULT_SOUND)

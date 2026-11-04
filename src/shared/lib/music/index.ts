@@ -379,3 +379,4 @@ export { CHURCH_MODES, isMinorMode, modeKey, readInMode, type ChurchMode } from 
 export { nashvilleNumber } from './nashville'
 export { randomProgression } from './progression-random'
 export { fingerPassage } from './passage-fingering'
+export { centsOff, detectPitch, nearestNote } from './pitch-detect'
