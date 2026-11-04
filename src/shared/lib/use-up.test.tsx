@@ -89,7 +89,8 @@ describe('useUp', () => {
     const router = await open(['/songs/grace'])
     await user.click(screen.getByRole('button', { name: 'Back' }))
     await screen.findByText('Songs')
-    expect(at(router)).toEqual({ path: '/songs', index: 1 })
+    // In the song's place: Back from Songs never comes down again to the song.
+    expect(at(router)).toEqual({ path: '/songs', index: 0 })
   })
 
   it('does nothing on a place', async () => {
@@ -107,6 +108,6 @@ describe('useUp', () => {
     forgetScreens(router.history, '/songs')
     await user.click(screen.getByRole('button', { name: 'Back' }))
     await screen.findByText('Songs')
-    expect(at(router)).toEqual({ path: '/songs', index: 2 })
+    expect(at(router)).toEqual({ path: '/songs', index: 1 })
   })
 })

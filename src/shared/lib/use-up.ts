@@ -27,7 +27,9 @@ export function useUp(): () => void {
         if (path === undefined) break
         if (path !== null) return history.go(index - here)
       }
-      await router.navigate({ ...parent, state: OPEN_PLAINLY })
+      // In this screen's place, as Android's synthetic back stack: Back from the parent goes on up,
+      // never down again to the screen it came up from.
+      await router.navigate({ ...parent, state: OPEN_PLAINLY, replace: true })
     })()
 }
 
