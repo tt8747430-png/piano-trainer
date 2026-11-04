@@ -138,31 +138,12 @@ export function PlayerPlayback() {
   return (
     <>
       <ChoiceCard
-        title={t('settingsPage.countdown.label')}
-        info={t('settingsPage.countdown.info')}
-        setting="playback.countdown"
-        value={playback.countdown}
-        options={COUNTDOWNS.map((value) => ({
-          value,
-          label: t(`settingsPage.countdown.${value}`),
-        }))}
-        onChange={(countdown) => setPlayback(settings, { countdown })}
-      />
-      <ChoiceCard
         title={t('settingsPage.pedal.label')}
         info={t('settingsPage.pedal.info')}
         setting="playback.pedal"
         value={playback.pedal}
         options={PEDAL_PLAYS.map((value) => ({ value, label: t(`settingsPage.pedal.${value}`) }))}
         onChange={(pedal) => setPlayback(settings, { pedal })}
-      />
-      <ChoiceCard
-        title={t('settingsPage.cursor.label')}
-        info={t('settingsPage.cursor.info')}
-        setting="playback.cursor"
-        value={playback.cursor}
-        options={CURSORS.map((value) => ({ value, label: t(`settingsPage.cursor.${value}`) }))}
-        onChange={(cursor) => setPlayback(settings, { cursor })}
       />
       <ChoiceCard
         title={t('pace.speedTraining')}
@@ -190,6 +171,39 @@ export function PlayerPlayback() {
   )
 }
 
+/**
+ * How the Player shows the music while it plays (the Player's Settings › Display, R29 B8): the
+ * count-in, None, Audible or Visual (its beats counted on the score), and the cursor.
+ */
+export function PlayerDisplay() {
+  const { t } = useTranslation('player')
+  const settings = useSettingsStoreApi()
+  const playback = useSettings(selectPlayback)
+  return (
+    <>
+      <ChoiceCard
+        title={t('settingsPage.countdown.label')}
+        info={t('settingsPage.countdown.info')}
+        setting="playback.countdown"
+        value={playback.countdown}
+        options={COUNTDOWNS.map((value) => ({
+          value,
+          label: t(`settingsPage.countdown.${value}`),
+        }))}
+        onChange={(countdown) => setPlayback(settings, { countdown })}
+      />
+      <ChoiceCard
+        title={t('settingsPage.cursor.label')}
+        info={t('settingsPage.cursor.info')}
+        setting="playback.cursor"
+        value={playback.cursor}
+        options={CURSORS.map((value) => ({ value, label: t(`settingsPage.cursor.${value}`) }))}
+        onChange={(cursor) => setPlayback(settings, { cursor })}
+      />
+    </>
+  )
+}
+
 /** Every page of the Player's Settings in one column, for a screen with no Player to open them from
  * (Settings › Player, a song's /settings link). */
 export function PlayerSettings({ tracks }: { tracks: readonly VolumeTrack[] }) {
@@ -206,6 +220,7 @@ export function PlayerSettings({ tracks }: { tracks: readonly VolumeTrack[] }) {
         />
       </SettingsGroup>
       <PlayerPlayback />
+      <PlayerDisplay />
     </>
   )
 }

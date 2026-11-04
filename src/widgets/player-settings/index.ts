@@ -1,4 +1,5 @@
 export {
+  PlayerDisplay,
   PlayerPlayback,
   PlayerSettings,
   PlayerVolumes,

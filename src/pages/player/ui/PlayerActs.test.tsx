@@ -140,11 +140,11 @@ function firstNoteOn(bytes: Uint8Array): number {
 
 describe('the acts on the music in the Player’s Settings (R29)', () => {
   it.each([
-    ['a song', '/play/bz5', ['Sections', 'Song information', 'Export…', 'Print']],
+    ['a song', '/play/bz5', ['Sections', 'Song information', 'Export…']],
     // A study is in no library (ADR 0106).
-    ['a study', '/play/ex3', ['Sections', 'Study information', 'Export…', 'Print']],
-    ['a walk', '/play/walk?root=D&kind=dorian', ['Export…', 'Print']],
-    ['an exercise', '/play/exercise/hanon', ['Export…', 'Print']],
+    ['a study', '/play/ex3', ['Sections', 'Study information', 'Export…']],
+    ['a walk', '/play/walk?root=D&kind=dorian', ['Export…']],
+    ['an exercise', '/play/exercise/hanon', ['Export…']],
   ])('lists what %s has', async (_music, path, actions) => {
     const user = userEvent.setup()
     await renderApp(path)
@@ -184,7 +184,7 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
   it('shares an own song with its music, saying the link is copied where there is no share sheet', async () => {
     const user = userEvent.setup()
     await renderApp('/play/my-1', { storage: withSong() })
-    expect(await moreActions(user)).toEqual(['Sections', 'Song information', 'Export…', 'Print'])
+    expect(await moreActions(user)).toEqual(['Sections', 'Song information', 'Export…'])
     await user.keyboard('{Escape}')
     await exportAs(user, 'Share link')
     await waitFor(() =>

@@ -1,5 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 import {
+  Cable,
   Download,
   MonitorCog,
   Piano,
@@ -36,14 +37,22 @@ import {
   PlayerTools,
   ScoreBar,
   TempoButton,
+  ToolsSheet,
   usePlayerShortcuts,
+  type ToolGroup,
+  type ToolRow,
   WaitLine,
   type PracticePlayer,
   type PracticeView,
 } from '@/widgets/practice-player'
 import { SheetMusic } from '@/widgets/sheet-music'
 import { SongPrint } from '@/widgets/song-print'
-import { PlayerPlayback, PlayerVolumes, type VolumeTrack } from '@/widgets/player-settings'
+import {
+  PlayerDisplay,
+  PlayerPlayback,
+  PlayerVolumes,
+  type VolumeTrack,
+} from '@/widgets/player-settings'
 import { ViewSection } from '@/widgets/score-view-menu'
 import { SettingsExtrasContext, type SettingsExtras } from '@/widgets/player-setup'
 import { useChordKeys } from '../model/use-chord-keys'
@@ -57,6 +66,8 @@ const NO_HEADINGS: readonly string[] = []
 const NO_STAVES: readonly { readonly name?: StaffName }[] = []
 /** A walk or a progression: no acts of its own. */
 const NO_ACTS: readonly MenuAction[] = []
+/** A walk or a progression: no tools of its own. */
+const NO_TOOLS: readonly ToolRow[] = []
 
 /**
  * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar (`ScoreBar`, ADR
@@ -93,7 +104,10 @@ export function PlayerLayout({
   openView = false,
   display,
   tracks,
+  toolRows = NO_TOOLS,
 }: {
+  /** The music's own rows of the Tools sheet (R29 B8): a piece's Transpose and Change version. */
+  toolRows?: readonly ToolRow[]
   /** The volumes the Settings' Audio playback lists: a piece's tracks; none for a walk. */
   tracks?: readonly VolumeTrack[] | undefined
   /**
@@ -168,6 +182,9 @@ export function PlayerLayout({
   // Print (ADR 0107): the music printed as the View shows it, while its render stands.
   const [printing, setPrinting] = useState(false)
   const [exporting, setExporting] = useState(false)
+  // The Tools sheet (R29 B8), and Settings opened at a page from it.
+  const [toolsOpen, setToolsOpen] = useState(false)
+  const [settingsAt, setSettingsAt] = useState<{ readonly page: string } | null>(null)
   // The Player's one Settings (R29, Flat's one menu): how the Player works, then the acts on this
   // music: its own (a piece's Sections and Song information), Export… and Print.
   const extras: SettingsExtras = {
@@ -196,18 +213,12 @@ export function PlayerLayout({
           <>
             <ViewSection view={shown} words={needs.lyrics !== 'words'} />
             {display}
+            <PlayerDisplay />
           </>
         ),
       },
     ],
     acts: [
-      {
-        key: 'metronome',
-        group: 'play',
-        label: t('settingsPage.metronome'),
-        icon: Timer,
-        onSelect: () => void navigate({ to: '/practice/metronome' }),
-      },
       // Its one home is Settings' (rule 18): a way there, never a second control.
       {
         key: 'on-screen-piano',
@@ -226,15 +237,67 @@ export function PlayerLayout({
         icon: Download,
         onSelect: () => setExporting(true),
       },
-      {
-        key: 'print',
-        group: 'share',
-        label: t('print'),
-        icon: Printer,
-        onSelect: () => setPrinting(true),
-      },
     ],
+    request: settingsAt,
   }
+  // The Tools sheet's groups (R29 B8, B11): the quick tools, the score's, then ways to the Player's
+  // other places. Metronome and Print are its own, no longer Settings' acts (one way to each).
+  const toolGroups: readonly ToolGroup[] = [
+    {
+      key: 'quick',
+      title: t('toolsSheet.quick'),
+      rows: [
+        {
+          key: 'metronome',
+          kind: 'act',
+          label: t('toolsSheet.metronome'),
+          icon: Timer,
+          paint: 'sand',
+          opens: true,
+          onSelect: () => void navigate({ to: '/practice/metronome' }),
+        },
+      ],
+    },
+    {
+      key: 'score',
+      title: t('toolsSheet.score'),
+      rows: [
+        {
+          key: 'print',
+          kind: 'act',
+          label: t('print'),
+          icon: Printer,
+          paint: 'sky',
+          onSelect: () => setPrinting(true),
+        },
+      ],
+    },
+    {
+      key: 'more',
+      title: t('toolsSheet.more'),
+      rows: [
+        {
+          key: 'audio-midi',
+          kind: 'act',
+          label: t('toolsSheet.audioMidi'),
+          icon: Cable,
+          paint: 'grass',
+          opens: true,
+          onSelect: () => void navigate({ to: '/settings/connect-piano' }),
+        },
+        ...toolRows,
+        {
+          key: 'display',
+          kind: 'act',
+          label: t('settingsPage.display'),
+          icon: MonitorCog,
+          paint: 'sky',
+          opens: true,
+          onSelect: () => setSettingsAt({ page: 'display' }),
+        },
+      ],
+    },
+  ]
   // A chord view's keys in Listen: the chord sounding as its diagram draws it (ADR 0108); a pattern
   // lesson's, each note as it sounds, whatever the view (ADR 0111).
   const chordKeys = useChordKeys(
@@ -278,6 +341,7 @@ export function PlayerLayout({
           <>
             <KeysToggle shown={player.keys} onShow={player.setKeys} />
             <MidiButton variant="tool" />
+            <ToolsSheet groups={toolGroups} open={toolsOpen} onOpenChange={setToolsOpen} />
             <SettingsExtrasContext value={extras}>{setup}</SettingsExtrasContext>
           </>
         }

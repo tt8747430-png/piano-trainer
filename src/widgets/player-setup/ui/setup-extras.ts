@@ -29,6 +29,11 @@ export interface SettingsAct {
 export interface SettingsExtras {
   readonly pages: readonly SettingsPageRow[]
   readonly acts: readonly SettingsAct[]
+  /**
+   * The sheet opened at one of its pages from elsewhere (the Tools sheet's Display, R29 B8): a new
+   * object each time it is asked.
+   */
+  readonly request?: { readonly page: string } | null
 }
 
 export const SettingsExtrasContext = createContext<SettingsExtras>({ pages: [], acts: [] })

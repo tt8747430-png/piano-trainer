@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useEffect, useEffectEvent, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { BackButton, RowButton, Sheet, SheetContent, SettingsGroup } from '@/shared/ui'
@@ -31,8 +31,16 @@ export function SettingsSheet({
   children: ReactNode
 }) {
   const { t } = useTranslation('player')
-  const { pages, acts } = useSettingsExtras()
+  const { pages, acts, request } = useSettingsExtras()
   const [open, setOpen] = useState(false)
+  // Asked from elsewhere (the Tools sheet's Display): open at that page.
+  const openAt = useEffectEvent((at: string) => {
+    onPage(at)
+    setOpen(true)
+  })
+  useEffect(() => {
+    if (request) openAt(request.page)
+  }, [request])
   // On a laptop a panel at the right, the music in sight beside it (R29, screen 4.1).
   const laptop = useMediaQuery(LAPTOP)
   const extra = pages.find((each) => each.id === page)

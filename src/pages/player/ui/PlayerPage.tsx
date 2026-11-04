@@ -1,5 +1,5 @@
 import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { Info, ListTree } from 'lucide-react'
+import { ArrowUpDown, Info, Layers, ListTree } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -68,6 +68,7 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
   // The Version sheet (R29 B8): the learner's version or the app's, the voice's staves heard and
   // shown or not, at a level.
   const [versionOpen, setVersionOpen] = useState(false)
+  const [transposing, setTransposing] = useState(false)
   const singles = (performance.staves ?? []).map((_, place) => singleStaff(place))
   const solo =
     singles.length > 0 &&
@@ -207,6 +208,8 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
               signature={choice.signature}
               chordSymbols={choice.chordSymbols}
               onChange={changeSetup}
+              open={transposing}
+              onOpenChange={setTransposing}
             />
             {controls.has('simplify') ? (
               <VersionTool version={choice.version} onOpen={() => setVersionOpen(true)} />
@@ -225,6 +228,30 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
           ) : undefined
         }
         tracks={tracks}
+        // The Tools sheet's ways to the tools row's Transpose and the Version sheet (R29 B8).
+        toolRows={[
+          {
+            key: 'transpose',
+            kind: 'act',
+            label: t('player:transpose.name'),
+            icon: ArrowUpDown,
+            paint: 'lilac',
+            onSelect: () => setTransposing(true),
+          },
+          ...(controls.has('simplify')
+            ? [
+                {
+                  key: 'version',
+                  kind: 'act' as const,
+                  label: t('player:version.change'),
+                  icon: Layers,
+                  paint: 'yellow' as const,
+                  value: t(`player:version.level.${choice.version}`),
+                  onSelect: () => setVersionOpen(true),
+                },
+              ]
+            : []),
+        ]}
       />
       <SongInfo piece={piece} performance={performance} {...sheetOf('info')} />
       <VersionSheet

@@ -68,6 +68,7 @@ describe('Player', () => {
         'Edit',
         'Piano keys',
         'MIDI keyboard',
+        'Tools',
         'Player settings',
       ])
       // Every control is its icon alone.
@@ -334,11 +335,10 @@ describe('Player', () => {
       'Audio playback',
       'Playback',
       'Display',
-      'Metronome sound and beats',
       'On-screen piano',
     ])
     expect(rows('This song')).toEqual(['Sections', 'Song information'])
-    expect(rows('Share')).toEqual(['Export…', 'Print'])
+    expect(rows('Share')).toEqual(['Export…'])
     await user.click(within(works).getByRole('button', { name: 'Audio playback' }))
     expect(await screen.findByRole('dialog', { name: 'Audio playback' })).toBeInTheDocument()
     const labels = [...document.querySelectorAll('[data-slot="slider-label"]')].map(
