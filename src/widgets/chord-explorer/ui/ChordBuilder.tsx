@@ -25,7 +25,7 @@ import {
   Segmented,
 } from '@/shared/ui'
 import { takesTwoHands, type ChordView } from '../model/chord-view'
-import { RightHandFrom } from './RightHandFrom'
+import { TopNote } from './TopNote'
 import { VoicingField } from './VoicingField'
 
 /** A chord of a size, by its triad and its 7th: one row of the Chord menu. */
@@ -138,8 +138,8 @@ export function ChordBuilder({
         />
       </Labelled>
       {twoHands && inversions > 1 ? (
-        <Labelled label={t('practice:chords.builder.handFrom')}>
-          <RightHandFrom
+        <Labelled label={t('practice:chords.builder.topNote')}>
+          <TopNote
             tones={tones}
             value={chord.inversion}
             onChange={(inversion) => onChange({ inversion })}

@@ -50,7 +50,8 @@ export const practice = {
       // The row of pickers over a chord: its root, the chord by name and its voicing.
       chord: 'Chord',
       // A chord of five notes or more, its root left to the bass: where its right hand starts.
-      handFrom: 'Right hand from',
+      // A chord shared between the hands is named by the note on top of the right hand (R29-P3).
+      topNote: 'Top note',
       sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
       sizeNames: {
         triad: 'Triad',
