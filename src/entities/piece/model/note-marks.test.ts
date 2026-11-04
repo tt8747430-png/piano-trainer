@@ -2,6 +2,16 @@ import { describe, expect, it } from 'vitest'
 import { midi, note } from '@/shared/lib/music'
 import { readMarks, writeMarks } from './note-marks'
 
+describe('a rolled chord’s direction (A34)', () => {
+  it('reads and writes the plain, the upward and the downward arpeggio', () => {
+    expect(readMarks('arp')).toEqual({ arpeggio: true })
+    expect(readMarks('arp^')).toEqual({ arpeggio: 'up' })
+    expect(readMarks('arpv')).toEqual({ arpeggio: 'down' })
+    expect(writeMarks({ arpeggio: 'down' })).toBe('arpv')
+    expect(writeMarks({ arpeggio: 'up' })).toBe('arp^')
+  })
+})
+
 describe('readMarks', () => {
   it('reads articulations, which may join, in the order written', () => {
     expect(readMarks('acc,stacc')).toEqual({ articulations: ['accent', 'staccato'] })

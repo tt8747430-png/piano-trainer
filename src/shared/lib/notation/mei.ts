@@ -620,7 +620,10 @@ class Writer {
       controls.push(`<breath staff="${n}" tstamp="${after}"/>`)
     if (marks.articulations?.includes('caesura'))
       controls.push(`<caesura staff="${n}" tstamp="${after}"/>`)
-    if (marks.arpeggio) controls.push(`<arpeg staff="${n}" plist="#${id}"/>`)
+    if (marks.arpeggio)
+      controls.push(
+        `<arpeg staff="${n}" plist="#${id}"${marks.arpeggio === true ? '' : ` order="${marks.arpeggio}"`}/>`,
+      )
     // A tempo mark from the note on (ADR 0097), in the song's tempo unit, as the head's is printed.
     if (marks.tempo !== undefined) {
       const unit = this.score.tempoUnit ?? beatUnit(this.score.meter)

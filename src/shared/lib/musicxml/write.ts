@@ -601,7 +601,11 @@ class PartWriter {
         first && marks?.articulations?.includes('fermata')
           ? tag('fermata', { type: 'upright' })
           : '',
-        marks?.arpeggio ? '<arpeggiate/>' : '',
+        marks?.arpeggio
+          ? marks.arpeggio === true
+            ? '<arpeggiate/>'
+            : `<arpeggiate direction="${marks.arpeggio}"/>`
+          : '',
       ].join('')
       out.push(
         tag(

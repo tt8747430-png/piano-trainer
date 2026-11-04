@@ -993,9 +993,11 @@ function readNote(
             else leftOut += 1
           }
           break
-        case 'arpeggiate':
-          marks.arpeggio = true
+        case 'arpeggiate': {
+          const direction = child.attrs.direction
+          marks.arpeggio = direction === 'up' || direction === 'down' ? direction : true
           break
+        }
         default:
           break
       }

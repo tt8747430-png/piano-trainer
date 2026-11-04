@@ -47,7 +47,12 @@ describe('sixthDiminishedChords', () => {
     expect(onset(chords, 'rh', B)).toBe('F A♭ B D')
     expect(chords.chords.slice(0, 3).map((chord) => chord.symbol)).toEqual(['C6', 'B°7', 'C6'])
     // The left hand holds the root a bar at a time.
-    expect([0, 4 * B, 8 * B, 12 * B].map((tick) => onset(chords, 'lh', tick))).toEqual(['C', 'C', 'C', 'C'])
+    expect([0, 4 * B, 8 * B, 12 * B].map((tick) => onset(chords, 'lh', tick))).toEqual([
+      'C',
+      'C',
+      'C',
+      'C',
+    ])
   })
 
   it('drops the second voice from the top into the left hand in drop 2', () => {

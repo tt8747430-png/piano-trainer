@@ -347,6 +347,8 @@ export const editor = {
     twoNoteTremolo2: 'Tremolo between notes, two strokes (16ths)',
     twoNoteTremolo3: 'Tremolo between notes, three strokes (32nds)',
     arpeggio: 'Arpeggio',
+    arpeggioUp: 'Arpeggio up',
+    arpeggioDown: 'Arpeggio down',
     tie: 'Tie',
     ppp: 'Pianississimo',
     pp: 'Pianissimo',

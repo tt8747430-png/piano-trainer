@@ -233,14 +233,16 @@ export function loudness(notes: readonly PerformanceNote[]): number[] {
 export function rollOffsets(notes: readonly PerformanceNote[]): number[] {
   return notes.map((n) => {
     if (!n.marks?.arpeggio) return 0
-    const below = notes.filter(
+    // Rolled down, from the highest: the notes over it come first.
+    const down = n.marks.arpeggio === 'down'
+    const before = notes.filter(
       (other) =>
         other.marks?.arpeggio &&
         other.hand === n.hand &&
         other.startTick === n.startTick &&
-        other.midi < n.midi,
+        (down ? other.midi > n.midi : other.midi < n.midi),
     )
-    return +(below.length * ROLL_STEP).toFixed(3)
+    return +(before.length * ROLL_STEP).toFixed(3)
   })
 }
 

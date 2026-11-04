@@ -323,6 +323,7 @@ export {
   type GraceNote,
   type Hairpin,
   type NoteMarks,
+  type Arpeggio,
   type OctaveLine,
   type Ornament,
   type Pedal,

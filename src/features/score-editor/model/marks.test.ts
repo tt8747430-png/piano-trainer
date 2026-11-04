@@ -133,7 +133,7 @@ describe('markNotes', () => {
   })
 
   it('changes nothing where no note starts', () => {
-    expect(markNotes(draft, 'rh', B, { kind: 'arpeggio' })).toBe(draft)
+    expect(markNotes(draft, 'rh', B, { kind: 'arpeggio', arpeggio: true })).toBe(draft)
   })
 })
 

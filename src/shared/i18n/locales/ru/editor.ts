@@ -311,6 +311,8 @@ export const editor: LocaleResources['editor'] = {
     twoNoteTremolo2: 'Тремоло между нотами, две черты (шестнадцатые)',
     twoNoteTremolo3: 'Тремоло между нотами, три черты (тридцать вторые)',
     arpeggio: 'Арпеджиато',
+    arpeggioUp: 'Арпеджиато вверх',
+    arpeggioDown: 'Арпеджиато вниз',
     tie: 'Связующая лига',
     ppp: 'Пиано-пианиссимо',
     pp: 'Пианиссимо',

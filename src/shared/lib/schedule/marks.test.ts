@@ -193,6 +193,15 @@ describe('rollOffsets', () => {
     ]
     expect(rollOffsets(notes)).toEqual([0.06, 0, 0.03, 0])
   })
+
+  it('rolls a chord marked arpeggio down from its highest key (A34)', () => {
+    const notes = [
+      played(67, 0, { arpeggio: 'down' }),
+      played(60, 0, { arpeggio: 'down' }),
+      played(64, 0, { arpeggio: 'down' }),
+    ]
+    expect(rollOffsets(notes)).toEqual([0, 0.06, 0.03])
+  })
 })
 
 describe('glissandoTargets', () => {
