@@ -34,7 +34,10 @@ export function KeyFacts({ value }: { value: Key }) {
       <Fact term={t('scales.key.signature')}>
         {signature.length === 0
           ? t('scales.key.noSignature')
-          : signature.map(printedNote).join(' ')}
+          : t(signature[0]?.accidental === 1 ? 'scales.key.sharps' : 'scales.key.flats', {
+              count: signature.length,
+              notes: signature.map(printedNote).join(' '),
+            })}
       </Fact>
       <Fact term={t('scales.facts.relative')}>
         <KeyLink value={relative} />

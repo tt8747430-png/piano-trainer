@@ -583,7 +583,7 @@ describe('Practice → Scales and keys, Key view', () => {
     await pickIn(user, 'Tonic', 'E♭')
     expect(router.state.location.search).toEqual({ root: 'Eb', show: 'key' })
     expect(await screen.findByRole('heading', { level: 2, name: 'E♭ major' })).toBeInTheDocument()
-    expect(screen.getByText('B♭ E♭ A♭')).toBeInTheDocument()
+    expect(screen.getByText('3 flats: B♭ E♭ A♭')).toBeInTheDocument()
     const relative = screen
       .getAllByRole('link', { name: 'C minor' })
       .filter((link) => !circle.contains(link))
