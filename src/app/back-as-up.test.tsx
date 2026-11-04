@@ -68,13 +68,13 @@ describe('Back goes up, on every place', () => {
     await waitFor(() => expect(at(router)).toEqual({ path: '/', entry: 0 }))
   })
 
-  it('Practice: Chords, its root and quality changed, then Back lands in Practice', async () => {
+  it('Practice: Chords, its root and chord changed, then Back lands in Practice', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice')
     await user.click(await screen.findByRole('link', { name: /^Chords / }))
     await screen.findByRole('heading', { level: 1, name: 'Chords' })
     await pickIn(user, 'Root', 'D')
-    await pickMenu(user, 'Quality', 'Minor')
+    await pickMenu(user, 'Chord', 'Dm')
     await waitFor(() => expect(router.state.location.search).toMatchObject({ root: 'D' }))
     expect(at(router).entry).toBe(1)
     await back(user)
