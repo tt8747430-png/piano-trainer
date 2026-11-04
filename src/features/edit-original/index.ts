@@ -4,6 +4,7 @@ export {
   type ContentDraft,
   type DraftLoad,
   type DraftSpec,
+  type Unreadable,
 } from './model/use-content-draft'
 export { useAddLesson } from './model/use-add-lesson'
 export { useCourseDraft } from './model/use-course-draft'
@@ -17,3 +18,4 @@ export { draftWithMusic, useOriginalDraft } from './model/use-original-draft'
 export { useProgressionDraft } from './model/use-progression-draft'
 export { DraftActions, DraftStatus } from './ui/DraftBar'
 export { RemoveGroup } from './ui/RemoveGroup'
+export { VersionsDialog } from './ui/VersionsDialog'

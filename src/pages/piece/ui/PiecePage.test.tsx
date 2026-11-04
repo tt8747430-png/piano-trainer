@@ -200,9 +200,8 @@ describe('Piece', () => {
     ).toEqual(['In your library', 'Share'])
     // Favourite is an act on the song (its ♡, its menus), never a switch here (R19).
     expect(screen.queryByRole('switch', { name: 'Favourite' })).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /^Move to folder…/ })).toHaveTextContent(
-      '«Боже, спасибо»',
-    )
+    // One of the app's songs stays in its folder (D8): Archive, no Move to folder….
+    expect(screen.queryByRole('button', { name: /^Move to folder…/ })).toBeNull()
     for (const name of ['Archive', 'Export…'])
       expect(screen.getByRole('button', { name })).toBeInTheDocument()
     // Nothing of the learner's own to give up, and no original for a learner.
@@ -337,7 +336,7 @@ describe('Piece: the learner’s own music', () => {
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
     ).toEqual(['In your library', 'Share'])
     expectLastAndAlone(screen.getByRole('button', { name: 'Delete' }))
-    expect(screen.getByRole('link', { name: /^Publish in library/ })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /^Publish…/ })).toHaveAttribute(
       'href',
       '/songs/my-1/publish',
     )
@@ -477,6 +476,11 @@ describe('Piece: the learner’s library (ADR 0106)', () => {
     storage.setItem(LIBRARY_STORAGE_KEY, JSON.stringify({ state, version: LIBRARY_VERSION }))
     return storage
   }
+  /** The learner's own folder, holding one of the app's songs (theirs to move, D8). */
+  const SUNDAY = {
+    folders: [{ id: 'folder-1', name: 'Sunday', picture: 'church', paint: 'sky', songs: ['bz5'] }],
+    nextFolder: 2,
+  }
   const placeOf = (state: Parameters<typeof arrangeLibrary>[0], id: string) =>
     placeIn(arrangeLibrary(state, libraryCatalog({ ownSongs: [] })), id)
 
@@ -491,19 +495,27 @@ describe('Piece: the learner’s library (ADR 0106)', () => {
 
   it('moves the song to another folder from its Settings’ Folder, saying so with Undo', async () => {
     const user = userEvent.setup()
-    const { libraryStore } = await renderApp('/songs/bz5')
+    const { libraryStore } = await renderApp('/songs/bz5', { storage: kept(SUNDAY) })
     await openSettings(user)
     await user.click(await screen.findByRole('button', { name: /^Move to folder…/ }))
     const sheet = await screen.findByRole('dialog', { name: 'Move to' })
     // Where it stands now is marked Here, no place to move it to; a tap elsewhere moves at once.
-    expect(within(sheet).getByRole('button', { name: '«Боже, спасибо» Here' })).toHaveAttribute(
+    expect(within(sheet).getByRole('button', { name: 'Sunday Here' })).toHaveAttribute(
       'aria-disabled',
       'true',
     )
-    await user.click(within(sheet).getByRole('button', { name: 'Hymns' }))
-    expect(placeOf(libraryStore.getState(), 'bz5')).toMatchObject({ folder: 'hymns' })
+    await user.click(within(sheet).getByRole('button', { name: 'Home' }))
+    expect(placeOf(libraryStore.getState(), 'bz5')).toMatchObject({ folder: null })
     await user.click(await screen.findByRole('button', { name: 'Undo' }))
-    expect(placeOf(libraryStore.getState(), 'bz5')).toEqual({ folder: 'bozhe-spasibo', index: 4 })
+    expect(placeOf(libraryStore.getState(), 'bz5')).toEqual({ folder: 'folder-1', index: 0 })
+  })
+
+  it('keeps one of the app’s songs in its folder: no Move to folder… (R29 B4, D8)', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs/bz5')
+    await openSettings(user)
+    expect(await screen.findByRole('button', { name: 'Archive' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /^Move to folder…/ })).toBeNull()
   })
 
   it('archives the song from its Settings, and restores it from there while it is archived', async () => {
@@ -532,7 +544,10 @@ describe('Piece: the learner’s library (ADR 0106)', () => {
 
   it('reads in Russian', async () => {
     const user = userEvent.setup()
-    await renderApp('/songs/bz5', { locale: 'ru', storage: kept({ favourites: ['bz5'] }) })
+    await renderApp('/songs/bz5', {
+      locale: 'ru',
+      storage: kept({ ...SUNDAY, favourites: ['bz5'] }),
+    })
     expect(await screen.findByRole('button', { name: 'Убрать из избранного' })).toBeInTheDocument()
     const bar = document.querySelector('[data-slot="screen-bar"]') as HTMLElement
     await user.click(within(bar).getByRole('link', { name: 'Настройки' }))

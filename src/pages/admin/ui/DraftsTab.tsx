@@ -38,9 +38,10 @@ function editorOf({ kind, id }: Pick<DraftListing, 'kind' | 'id'>): ReactElement
     case 'course':
       return <Link to="/courses/$courseId/edit" params={{ courseId: id }} />
     case 'journey':
-      return <Link to="/journeys/$journeyId/edit" params={{ journeyId: id }} />
+      // A level and the shelves are edited in place, on Learn (R29 B4).
+      return <Link to="/" search={{ view: 'lessons', journey: id, edit: true }} />
     case 'catalog':
-      return <Link to="/courses/manage" />
+      return <Link to="/" search={{ view: 'courses', edit: true }} />
     case 'progression':
       return <Link to="/practice/progressions/$progressionId/edit" params={{ progressionId: id }} />
     case 'lesson': {

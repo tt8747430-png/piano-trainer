@@ -51,7 +51,8 @@ function BarAction({
  * Favourite and Export… for the songs chosen, Move and Archive for every row chosen (folders with all they
  * hold), and Delete where everything chosen can be deleted (the learner's own songs, and folders).
  * Its slots stay put as rows are chosen: one that cannot act on the choice is greyed, never taken
- * away. While a row's face is carried, the bar is where it drops: Archive, and in a folder, out to
+ * away; one the place never allows (a learner's built-in folder: Move and Delete, R29 B4) is not
+ * there. While a row's face is carried, the bar is where it drops: Archive, and in a folder, out to
  * the place the folder stands in (iOS Files').
  */
 export function SelectionBar({
@@ -79,7 +80,7 @@ export function SelectionBar({
           data-takes-tab-bar=""
           className="flex w-[min(24rem,calc(100vw-2rem))] gap-1 rounded-card border border-border bg-raised p-1 elevation-3"
         >
-          {folder ? (
+          {folder && page.may('moveOut') ? (
             <DropZone
               zone="out"
               label={t('drag.moveOut', {
@@ -108,12 +109,14 @@ export function SelectionBar({
           onClick={select.favourite}
           disabled={noSongs}
         />
-        <BarAction
-          label={t('select.move')}
-          icon={FolderInput}
-          onClick={select.move}
-          disabled={select.count === 0}
-        />
+        {page.may('moveOut') ? (
+          <BarAction
+            label={t('select.move')}
+            icon={FolderInput}
+            onClick={select.move}
+            disabled={!select.movable}
+          />
+        ) : null}
         <BarAction
           label={t('select.export')}
           icon={Download}
@@ -124,15 +127,17 @@ export function SelectionBar({
           label={t('select.archive')}
           icon={Archive}
           onClick={select.archive}
-          disabled={select.count === 0}
+          disabled={!select.archivable}
         />
-        <BarAction
-          label={t('select.delete')}
-          icon={Trash2}
-          onClick={select.delete}
-          disabled={!select.deletable}
-          destructive
-        />
+        {page.may('deleteSong') ? (
+          <BarAction
+            label={t('select.delete')}
+            icon={Trash2}
+            onClick={select.delete}
+            disabled={!select.deletable}
+            destructive
+          />
+        ) : null}
       </div>
     </FloatingActions>
   )

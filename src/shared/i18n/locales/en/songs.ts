@@ -66,6 +66,12 @@ export const songs = {
       many: 'Archive {{count}} items?',
       body: 'You can restore them from the Archive.',
     },
+    // Archive in a folder (D10): hidden from it, brought back from its Archived (n).
+    hiding: {
+      one: 'Hide “{{title}}” from this folder?',
+      many: 'Hide {{count}} songs from this folder?',
+      body: 'You can bring it back from Archived.',
+    },
     home: 'Home',
     favourite: 'Add to favourites',
     unfavourite: 'Remove from favourites',
@@ -96,11 +102,18 @@ export const songs = {
     // The place what moves stands in now.
     here: 'Here',
     intoItself: 'A folder cannot go into itself or a folder in it',
+    appsFolder: 'Only editors add to the app’s folders',
     expand: 'Show the folders in {{name}}',
     collapse: 'Hide the folders in {{name}}',
   },
   // A folder of the library: the app's collections and the learner's own.
   folder: {
+    // A folder's Archived (D10): the songs hidden from it, to bring back.
+    archived: 'Archived',
+    archivedCount: 'Archived ({{count}})',
+    archivedIn: 'Archived from {{name}}',
+    unarchive: 'Unarchive',
+    unarchiveNamed: 'Unarchive {{name}}',
     list: 'Folders',
     new: 'New folder',
     edit: 'Edit folder',
@@ -276,7 +289,6 @@ export const songs = {
   // A song someone shared as a link.
   // The Public library (ADR 0116): learners' songs published for anyone to play and save a copy of.
   public: {
-    publishIn: 'Publish in library',
     title: 'Public library',
     kinds: { label: 'Songs or patterns', song: 'Songs', pattern: 'Patterns' },
     seeAll: 'See all',
@@ -347,8 +359,6 @@ export const songs = {
     whyYoursTitle: 'Always yours',
     whyYours: 'It stays yours: update it or take it out whenever you like.',
     // A published song's or pattern's Publish page (Noji's).
-    live: 'In the library',
-    changedSince: 'Changed since you published it',
     copyLink: 'Copy link',
     linkCopied: 'Link copied.',
     linkNotCopied: 'The link couldn’t be copied.',

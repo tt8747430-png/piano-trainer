@@ -75,11 +75,13 @@ export function LibraryEmpty({
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent className="flex-row flex-wrap justify-center">
-        <Button variant="soft" onClick={() => page.open({ kind: 'new-song' })}>
-          <Plus data-icon="inline-start" aria-hidden />
-          {t('newSong')}
-        </Button>
-        {inFolder ? (
+        {page.may('addSong') ? (
+          <Button variant="soft" onClick={() => page.open({ kind: 'new-song' })}>
+            <Plus data-icon="inline-start" aria-hidden />
+            {t('newSong')}
+          </Button>
+        ) : null}
+        {inFolder && page.may('moveIn') ? (
           <Button variant="soft" onClick={() => page.open({ kind: 'move-in' })}>
             <FolderInput data-icon="inline-start" aria-hidden />
             {t('folder.moveIn')}

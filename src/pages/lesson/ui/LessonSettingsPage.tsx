@@ -37,7 +37,7 @@ import {
   SettingsGroup,
   TileMark,
 } from '@/shared/ui'
-import { ChangesGroup } from '@/widgets/content-editor'
+import { PublishRow } from '@/widgets/content-editor'
 
 /** Where a lesson stands: a level's chapter, or a course. */
 type Where =
@@ -70,7 +70,7 @@ export function LessonSettingsPage() {
         kind: 'level',
         level: localText(place.journey.title, locale),
         chapter: localText(place.chapter.title, locale),
-        manage: <Link to="/journeys/$journeyId/edit" params={{ journeyId: place.journey.id }} />,
+        manage: <Link to="/" search={{ view: 'lessons', journey: place.journey.id, edit: true }} />,
       }}
     />
   )
@@ -139,6 +139,14 @@ function LessonSettings({
     if (shared === 'copied') say(t('settings.shared'))
     if (shared === 'failed') say(t('settings.shareFailed'))
   }
+  const shareRow = (
+    <RowButton
+      title={t('settings.shareLink')}
+      icon={Link2}
+      paint="grass"
+      onClick={() => void share()}
+    />
+  )
   return (
     <div className="flex flex-col gap-6 pb-8">
       <ScreenHeader title={t('settings.title')} back={back} />
@@ -151,17 +159,19 @@ function LessonSettings({
           options={LESSON_READINGS.map((value) => ({ value, label: t(`reading.${value}`) }))}
           onChange={(value) => setLessonReading(settings, value)}
         />
-        <SettingsGroup flush title={t('settings.share')}>
-          <RowButton
-            title={t('settings.shareLink')}
-            icon={Link2}
-            paint="grass"
-            onClick={() => void share()}
-          />
-        </SettingsGroup>
         {editsContent(account) ? (
-          <EditorRows lesson={lesson} id={id} title={title} where={where} readFirst={readFirst} />
-        ) : null}
+          <EditorRows
+            lesson={lesson}
+            id={id}
+            where={where}
+            readFirst={readFirst}
+            shareRow={shareRow}
+          />
+        ) : (
+          <SettingsGroup flush title={t('settings.share')}>
+            {shareRow}
+          </SettingsGroup>
+        )}
         <ResetStepsRow
           steps={[step]}
           words={{
@@ -204,21 +214,22 @@ function ValueRow({ title, value, icon }: { title: string; value: string; icon: 
 
 /**
  * An editor's rows (ADR 0116): where the lesson stands, a way to where it is placed; the lessons to
- * read first, chosen here, saved to its draft; the languages its draft has in full; and the draft's
- * changes, where they stand with Publish and its menu.
+ * read first, chosen here, saved to its draft; the languages its draft has in full; then (R29 B6)
+ * Publish… with where it stands, and Share link.
  */
 function EditorRows({
   lesson,
   id,
-  title,
   where,
   readFirst,
+  shareRow,
 }: {
   lesson: Lesson
   id: string
-  title: string
   where: Where
   readFirst: boolean
+  /** Share link, after Publish…. */
+  shareRow: ReactNode
 }) {
   const { t } = useTranslation(['learn', 'settings'])
   const locale = useLocale()
@@ -283,7 +294,18 @@ function EditorRows({
           }
         />
       </SettingsGroup>
-      <ChangesGroup draft={draft} title={title} unreadable={t('edit.unreadable')} />
+      <SettingsGroup flush title={t('settings.share')}>
+        {/* A level's lesson is published on its Publish page; a course's with its course. */}
+        {where.kind === 'level' ? (
+          <PublishRow
+            kind="lesson"
+            id={id}
+            draft={draft}
+            link={<Link to="/lessons/$lessonId/publish" params={{ lessonId: id }} />}
+          />
+        ) : null}
+        {shareRow}
+      </SettingsGroup>
     </>
   )
 }

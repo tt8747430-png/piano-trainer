@@ -5,13 +5,10 @@ import type { NetResult } from '@/shared/api/network'
 import { useContentEditing } from '@/shared/lib/content-editing'
 import { ConfirmDialog, DangerGroup, DangerRow, say } from '@/shared/ui'
 
-type Asked = 'unpublish' | 'delete' | null
-
 /**
- * An item made in the app, given up (round 28): Unpublish while learners have it (it stays the
- * editor's, unpublished) and Delete for good, each asked first, on the item's Settings page. One of
- * the app's own lessons or courses has neither: it ships with the app, and leaves its level or shelf
- * from Manage lessons or Manage courses.
+ * An item made in the app, deleted for good (round 28, R29 B6): its Settings page's last group, asked
+ * first (typed where learners have it). Unpublish is its Publish page's. One of the app's own lessons
+ * or courses has none: it ships with the app, and leaves its level or shelf in Learn's Edit mode.
  */
 export function RemoveGroup({
   kind,
@@ -29,7 +26,7 @@ export function RemoveGroup({
   const { t } = useTranslation('editor')
   const editing = useContentEditing()
   const [published, setPublished] = useState(false)
-  const [asked, setAsked] = useState<Asked>(null)
+  const [asked, setAsked] = useState(false)
   useEffect(() => {
     let current = true
     void editing.published(kind, id).then((result) => {
@@ -41,7 +38,7 @@ export function RemoveGroup({
   }, [editing, kind, id])
   const run = async (act: () => Promise<NetResult<void>>, done: string, then: () => void) => {
     const result = await act()
-    setAsked(null)
+    setAsked(false)
     if (!result.ok)
       return say(
         t(result.reason === 'offline' ? 'original.actionOffline' : 'original.actionFailed'),
@@ -51,28 +48,17 @@ export function RemoveGroup({
   }
   return (
     <DangerGroup footnote={t('remove.footnote')}>
-      {published ? (
-        <DangerRow title={t('remove.unpublish')} onClick={() => setAsked('unpublish')} />
-      ) : null}
-      <DangerRow title={t('remove.delete')} onClick={() => setAsked('delete')} />
+      <DangerRow title={t('remove.delete')} onClick={() => setAsked(true)} />
       <ConfirmDialog
-        open={asked !== null}
-        onOpenChange={(open) => (open ? null : setAsked(null))}
-        title={t(asked === 'unpublish' ? 'remove.unpublishTitle' : 'remove.deleteTitle', { title })}
-        body={t(asked === 'unpublish' ? 'remove.unpublishBody' : 'remove.deleteBody')}
-        action={t(asked === 'unpublish' ? 'remove.unpublish' : 'remove.delete')}
+        open={asked}
+        onOpenChange={setAsked}
+        title={t('remove.deleteTitle', { title })}
+        body={t('remove.deleteBody')}
+        action={t('remove.delete')}
         cancel={t('original.cancel')}
         // Deleting what learners have is typed first (R17).
-        typed={asked === 'delete' && published ? title : undefined}
-        onConfirm={() =>
-          void (asked === 'unpublish'
-            ? run(
-                () => editing.unpublish(kind, id),
-                t('remove.unpublished'),
-                () => setPublished(false),
-              )
-            : run(() => editing.remove(kind, id), t('remove.deleted'), onDeleted))
-        }
+        typed={published ? title : undefined}
+        onConfirm={() => void run(() => editing.remove(kind, id), t('remove.deleted'), onDeleted)}
       />
     </DangerGroup>
   )

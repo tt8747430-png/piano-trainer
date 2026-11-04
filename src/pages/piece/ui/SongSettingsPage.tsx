@@ -3,7 +3,6 @@ import {
   Archive,
   ArchiveRestore,
   Download,
-  FilePen,
   FileText,
   FolderInput,
   Globe,
@@ -23,7 +22,7 @@ import {
   type Piece,
 } from '@/entities/piece'
 import { selectView } from '@/entities/views'
-import { DraftActions, DraftStatus, useOriginalDraft } from '@/features/edit-original'
+import { useOriginalDraft } from '@/features/edit-original'
 import { useSongActions } from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { SongExportSheet } from '@/features/song-files'
@@ -39,8 +38,8 @@ import {
   RowLink,
   ScreenHeader,
   SettingsGroup,
-  TileMark,
 } from '@/shared/ui'
+import { PublishRow } from '@/widgets/content-editor'
 import { useSongPublish } from '../model/use-song-publish'
 import { OwnMusicAsk } from './OwnMusicAsk'
 import { OriginalSongDetails, OwnSongDetails } from './SongDetails'
@@ -68,7 +67,7 @@ export function SongSettingsPage() {
  * Reset to the original, asked first.
  */
 function SongSettings({ piece }: { piece: Piece }) {
-  const { t } = useTranslation(['piece', 'songs'])
+  const { t } = useTranslation(['piece', 'songs', 'editor'])
   const { account } = useAccount()
   const own = isOwnSongId(piece.id) ? piece.id : null
   const hasVersion = usePieces((state) => selectHasVersion(state, piece.id))
@@ -148,7 +147,8 @@ function SongSettings({ piece }: { piece: Piece }) {
         ) : null}
         {inLibrary ? (
           <SettingsGroup flush title={t('settings.library')}>
-            {archived ? null : (
+            {/* Where it may leave its folder (R29 B4): one of the app's songs in its folder stays. */}
+            {archived || !library.actions.some((each) => each.key === 'move') ? null : (
               <RowButton
                 title={t('settings.folder')}
                 value={folder}
@@ -169,33 +169,35 @@ function SongSettings({ piece }: { piece: Piece }) {
             />
           </SettingsGroup>
         ) : null}
+        {/* Publish…, Share link, then Delete last (R29 B6), as every item's Settings. */}
         <SettingsGroup flush title={t('settings.share')}>
+          {item ? (
+            <RowLink
+              title={t('editor:publishPage.open')}
+              value={t(
+                publishing.state === 'published'
+                  ? 'editor:publishPage.standing.published'
+                  : publishing.state === 'changed'
+                    ? 'editor:publishPage.standing.changed'
+                    : 'editor:publishPage.standing.unpublished',
+              )}
+              icon={Globe}
+              paint="lilac"
+              render={<Link to="/songs/$pieceId/publish" params={{ pieceId: piece.id }} />}
+            />
+          ) : original ? (
+            <OriginalPublishRow piece={original} />
+          ) : null}
+          {shareable ? (
+            <RowButton title={t('settings.shareLink')} icon={Link2} paint="grass" onClick={share} />
+          ) : null}
           <RowButton
             title={t('songs:export.action')}
             icon={Download}
             paint="sky"
             onClick={() => setExporting(true)}
           />
-          {shareable ? (
-            <RowButton title={t('settings.shareLink')} icon={Link2} paint="grass" onClick={share} />
-          ) : null}
-          {item ? (
-            <RowLink
-              title={t('settings.publish')}
-              value={t(
-                publishing.state === 'published'
-                  ? 'settings.published'
-                  : publishing.state === 'changed'
-                    ? 'settings.changed'
-                    : 'settings.notPublished',
-              )}
-              icon={Globe}
-              paint="lilac"
-              render={<Link to="/songs/$pieceId/publish" params={{ pieceId: piece.id }} />}
-            />
-          ) : null}
         </SettingsGroup>
-        {original ? <UnpublishedChanges piece={original} title={title} /> : null}
         {ownMusic ? (
           <div ref={danger}>
             <DangerGroup
@@ -228,27 +230,15 @@ function SongSettings({ piece }: { piece: Piece }) {
   )
 }
 
-/**
- * A built-in song's changes not published yet, an editor's (ADR 0116): where they stand, with their
- * menu (Publish, Versions, Discard). Nothing shows while the song is as published.
- */
-function UnpublishedChanges({ piece, title }: { piece: ChartPiece; title: string }) {
-  const { t } = useTranslation(['piece', 'editor'])
+/** An editor's built-in song's Publish… (R29 B6): its Publish page, where its draft stands. */
+function OriginalPublishRow({ piece }: { piece: ChartPiece }) {
   const draft = useOriginalDraft(piece)
-  if (draft.load.state !== 'ready' || !draft.drafted) return null
   return (
-    <SettingsGroup flush>
-      <div className="flex min-h-16 items-center gap-3 py-2 pr-2 pl-2">
-        <TileMark icon={FilePen} paint="sand" />
-        <span className="min-w-0 flex-1 text-lg font-semibold">{t('settings.changes')}</span>
-        <DraftStatus draft={draft} />
-        <DraftActions
-          draft={draft}
-          title={title}
-          unreadable={t('editor:original.unreadable')}
-          onReset={draft.reopen}
-        />
-      </div>
-    </SettingsGroup>
+    <PublishRow
+      kind="piece"
+      id={piece.id}
+      draft={draft}
+      link={<Link to="/songs/$pieceId/publish" params={{ pieceId: piece.id }} />}
+    />
   )
 }

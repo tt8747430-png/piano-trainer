@@ -203,6 +203,15 @@ export function CourseEditor({
       editorsOnly={t('edit.course.editorsOnly')}
       unreadable={t('edit.course.unreadable')}
       language={{ value: locale, onChange: setLocale }}
+      publishPage={{
+        link: <Link to="/courses/$courseId/publish" params={{ courseId: course.id }} />,
+        open: () =>
+          void draft
+            .flush()
+            .then(() =>
+              navigate({ to: '/courses/$courseId/publish', params: { courseId: course.id } }),
+            ),
+      }}
     >
       {(initial) => (
         <CourseDocument

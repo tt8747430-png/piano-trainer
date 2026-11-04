@@ -1,6 +1,7 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { publishOnItsPage } from '@/shared/test/publish'
 import { renderApp } from '@/app/testing/render-app'
 import { progressionById } from '@/entities/progression-library'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
@@ -39,12 +40,7 @@ describe('the progression editor (content as data)', () => {
     const major = await screen.findByRole('textbox', { name: 'In a major key' })
     await user.clear(major)
     await user.type(major, 'I vi ii V')
-    const strip = document.body
-    await within(strip).findByText('Saved · not published', {}, { timeout: 3000 })
-    await user.click(within(strip).getByRole('button', { name: 'Publish' }))
-    await user.click(
-      within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
-    )
+    await publishOnItsPage(user)
     await screen.findByText('Published. Learners get it the next time the app starts.')
     expect(content.body('progression', DOO_WOP.id)).toMatchObject({ major: 'I vi ii V' })
   })

@@ -85,6 +85,10 @@ function indexed() {
 export const libraryProgression = (param: string, minor: boolean): LibraryProgression | undefined =>
   indexed().byLine.get(modeLine(param, minor))
 
+/** Whether the app ships a progression (one an editor made in the app may be deleted). */
+export const shipsWithApp = (id: string): boolean =>
+  PROGRESSION_LIBRARY.some((each) => each.id === id)
+
 /** The library's progression of an id; none for any other word. */
 export const progressionById = (id: string): LibraryProgression | undefined =>
   indexed().byId.get(id)

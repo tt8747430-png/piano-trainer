@@ -92,6 +92,7 @@ export function LibrarySelect({
         ) : null
       }}
       onCarry={(keys, target) => select.carry(keys as Chosen[], target)}
+      accepts={(keys, target) => select.accepts(keys as Chosen[], target)}
     >
       <div className="flex flex-col gap-6">
         {view.folders.length > 0 ? (

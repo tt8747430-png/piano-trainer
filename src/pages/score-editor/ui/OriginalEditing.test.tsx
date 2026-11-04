@@ -1,6 +1,8 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { confirmAsked } from '@/shared/test/confirm'
+import { tickAndPublish } from '@/shared/test/publish'
 import { renderApp } from '@/app/testing/render-app'
 import { isDegreePiece, isPiece, PIECES, pieceRecordBody, type ChartPiece } from '@/entities/piece'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
@@ -57,12 +59,9 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
     const strip = document.body
     // Nothing is said of the draft while the song is as published (round 28).
     expect(within(strip).queryByRole('status', { name: /published/i })).not.toBeInTheDocument()
-    // Publish is the draft menu's first command (round 26): greyed while nothing is changed.
+    // Publish is the draft menu's first command (round 26), the way to the song's Publish page.
     await user.click(screen.getByRole('button', { name: 'Publishing' }))
-    expect(await screen.findByRole('menuitem', { name: 'Publish' })).toHaveAttribute(
-      'aria-disabled',
-      'true',
-    )
+    expect(await screen.findByRole('menuitem', { name: 'Publish' })).toBeInTheDocument()
     await user.keyboard('{Escape}')
 
     await writeChord(user, 'Dm7')
@@ -71,10 +70,10 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
     expect(JSON.stringify(draft.ok && draft.value?.body)).toContain('Dm7')
     expect(piecesStore.getState().versions).toEqual({})
 
+    // Its Publish page (R29 B6): the rights ticked, then Publish new version.
     await user.click(screen.getByRole('button', { name: 'Publishing' }))
     await user.click(await screen.findByRole('menuitem', { name: 'Publish' }))
-    const asked = await screen.findByRole('alertdialog')
-    await user.click(within(asked).getByRole('button', { name: 'Publish' }))
+    await tickAndPublish(user)
     expect(
       await screen.findByText('Published. Learners get it the next time the app starts.'),
     ).toBeInTheDocument()
@@ -113,17 +112,16 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
       meta: {},
     })
     await content.publish('piece', SONG.id)
-    await renderApp(`/edit/${SONG.id}`, {
+    // Versions are the Publish page's (R29 B6); a restore asks first.
+    await renderApp(`/songs/${SONG.id}/publish`, {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await screen.findByRole('button', { name: 'Publishing' })
-    const strip = document.body
-    await user.click(within(strip).getByRole('button', { name: 'Publishing' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Versions' }))
+    await user.click(await screen.findByRole('button', { name: 'Versions' }))
     const versions = await screen.findByRole('alertdialog')
     expect(within(versions).getByText('Newest')).toBeInTheDocument()
     await user.click(within(versions).getByRole('button', { name: 'Restore' }))
+    await confirmAsked(user, 'Restore', 'Restore this version?')
     expect(
       await screen.findByText('Restored. Learners get it the next time the app starts.'),
     ).toBeInTheDocument()

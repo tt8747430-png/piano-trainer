@@ -31,12 +31,12 @@ describe('Learner view (R29 B5)', () => {
     await waitFor(() => expect(screen.queryByRole('link', { name: /^Admin/ })).toBeNull())
     expect(screen.getByRole('status')).toHaveTextContent('Viewing as a learner')
     expect(saved()).toBe(before)
-    // An editor's controls are gone elsewhere too: Learn has no Manage lessons.
+    // An editor's controls are gone elsewhere too: Learn has no Edit.
     await settings.router.navigate({ to: '/' })
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
-    expect(screen.queryByRole('link', { name: 'Manage lessons' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Edit' })).toBeNull()
     await user.click(screen.getByRole('button', { name: 'Exit' }))
-    expect(await screen.findByRole('link', { name: 'Manage lessons' })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: 'Edit' })).toBeInTheDocument()
   })
 
   it('is not offered to a learner', async () => {
@@ -60,14 +60,9 @@ describe('Learner view (R29 B5)', () => {
     expect(screen.queryByRole('link', { name: /^Admin/ })).toBeNull()
     const lesson = LESSONS[0]!
     const walk: [string, { role: 'link' | 'button'; name: string }[]][] = [
-      ['/', [{ role: 'link', name: 'Manage lessons' }]],
-      [
-        '/?view=courses',
-        [
-          { role: 'link', name: 'Manage courses' },
-          { role: 'button', name: 'New course' },
-        ],
-      ],
+      ['/', [{ role: 'button', name: 'Edit' }]],
+      ['/?view=courses', [{ role: 'button', name: 'Edit' }]],
+      ['/?view=courses&edit=1', [{ role: 'button', name: 'New course' }]],
       [`/lessons/${lesson.id}`, [{ role: 'button', name: 'Edit' }]],
       ['/practice/progressions', [{ role: 'button', name: 'New progression' }]],
     ]

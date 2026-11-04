@@ -23,25 +23,20 @@ function render(editing: ReturnType<typeof createFakeContentEditing>, onDeleted 
 }
 
 describe('RemoveGroup (round 28)', () => {
-  it('unpublishes a course made in the app once asked: learners no longer get it', async () => {
+  it('asks a published one’s title typed before it deletes it', async () => {
     const user = userEvent.setup()
     const editing = await made({ publish: true })
     render(editing)
-    await user.click(await screen.findByRole('button', { name: /Unpublish/ }))
+    // Unpublish is the Publish page's (R29 B6): Delete alone here.
+    await user.click(await screen.findByRole('button', { name: /Delete/ }))
+    expect(screen.queryByRole('button', { name: /Unpublish/ })).not.toBeInTheDocument()
     const asked = await screen.findByRole('alertdialog')
-    expect(asked).toHaveTextContent('Unpublish Jazz?')
-    await user.click(within(asked).getByRole('button', { name: 'Unpublish' }))
-    await waitFor(() => expect(editing.body('course', 'jazz')).toBeUndefined())
-    expect(await editing.draft('course', 'jazz')).toMatchObject({
-      ok: true,
-      value: { body: { id: 'jazz' } },
-    })
     await waitFor(() =>
-      expect(screen.queryByRole('button', { name: /Unpublish/ })).not.toBeInTheDocument(),
+      expect(within(asked).getByRole('button', { name: 'Delete' })).toBeDisabled(),
     )
   })
 
-  it('offers no Unpublish for one not published, and deletes it once asked', async () => {
+  it('deletes one not published once asked', async () => {
     const user = userEvent.setup()
     const editing = await made({ publish: false })
     const onDeleted = render(editing)

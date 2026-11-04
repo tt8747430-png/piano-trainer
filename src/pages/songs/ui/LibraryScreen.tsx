@@ -1,9 +1,9 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { Globe } from 'lucide-react'
+import { Archive, Globe } from 'lucide-react'
 import { useDeferredValue } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RowLink } from '@/shared/ui'
-import { useFolderName, type ShelvedFolder } from '@/entities/library'
+import { folderArchive, useFolderName, type ShelvedFolder } from '@/entities/library'
 import { useSongDrop, useSongImport } from '@/features/song-files'
 import type { SongsFilter } from '../model/songs-filter'
 import { useLibraryPage } from '../model/use-library-page'
@@ -41,6 +41,8 @@ export function LibraryScreen({
   const clear = () => void navigate({ to: '.', search: {}, replace: true })
   const { view } = page
   const empty = view.folders.length === 0 && view.shown === 0
+  // The folder's songs archived from it (D10): its last row, Archived (n), while there are some.
+  const archived = folder ? folderArchive(page.layout, folder.id).length : 0
   return (
     <div className="flex flex-col gap-4 pb-4" {...drop.dropProps}>
       <LibraryHeader page={page} folder={folder} />
@@ -66,6 +68,18 @@ export function LibraryScreen({
       ) : (
         <LibraryBrowse page={page} onClear={clear} />
       )}
+      {folder && archived > 0 && !page.select.on ? (
+        <div className="card">
+          <RowLink
+            render={
+              <Link to="/songs/folders/$folderId/archived" params={{ folderId: folder.id }} />
+            }
+            icon={Archive}
+            paint="lilac"
+            title={t('folder.archivedCount', { count: archived })}
+          />
+        </div>
+      ) : null}
       {!page.select.on ? (
         <NewActions page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
       ) : empty ? (

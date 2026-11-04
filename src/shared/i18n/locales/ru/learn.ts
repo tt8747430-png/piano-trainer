@@ -126,7 +126,6 @@ export const learn: LocaleResources['learn'] = {
     readFirst: 'Сначала прочесть',
     languages: 'Языки',
     noLanguage: 'Пока не полностью',
-    changes: 'Неопубликованные изменения',
     opening: 'Открываем…',
   },
   reading: {
@@ -246,7 +245,6 @@ export const learn: LocaleResources['learn'] = {
       question: 'Вопрос',
       link: 'Ссылка',
     },
-    bar: { journey: 'Уроки' },
     back: 'К уроку',
     editorsOnly: 'Урок правит только редактор.',
     unreadable:
@@ -268,18 +266,17 @@ export const learn: LocaleResources['learn'] = {
       addFailed: 'Не создано: возможно, с таким названием уже есть.',
     },
     courses: {
-      open: 'Управление курсами',
-      back: 'К курсам',
       editorsOnly: 'Курсами управляет только редактор.',
       empty: 'На этой полке нет курсов. Курс попадает сюда по своему свойству «Полка».',
     },
     journey: {
+      removeChapter: 'Удалить главу',
+      removingChapter: 'Удалить «{{title}}»?',
+      removingChapterBody: 'Её уроки уйдут с этого уровня. Сами уроки сохранятся.',
+      chapterAdded: 'Глава добавлена: {{title}}',
       chapterN: 'Глава {{n}}',
       lesson: 'Урок',
-      open: 'Управлять уроками',
       goal: 'Цель',
-      back: 'К урокам',
-      editorsOnly: 'Уроками управляет только редактор.',
       unreadable:
         'У названия, цели и каждой главы должны быть слова на обоих языках. Исправьте и опубликуйте.',
       chapterName: 'Название главы',

@@ -1,5 +1,3 @@
 export { CourseEditorPage } from './ui/CourseEditorPage'
 export { CourseLessonEditorPage } from './ui/CourseLessonEditorPage'
 export { LessonEditorPage } from './ui/LessonEditorPage'
-export { JourneyEditorPage } from './ui/JourneyEditorPage'
-export { CourseOrderEditorPage } from './ui/CourseOrderEditorPage'

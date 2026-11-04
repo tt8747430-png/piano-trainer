@@ -2278,7 +2278,7 @@ describe('the score editor’s takes', () => {
 
   it('records at once when the song was made to record, a MIDI keyboard connected', async () => {
     const user = userEvent.setup()
-    const { router, midi: keyboard } = await renderApp('/songs/folders/hymns')
+    const { router, midi: keyboard } = await renderApp('/songs')
     connect(keyboard)
     await user.click(await screen.findByRole('button', { name: 'New' }))
     // Record, the + menu's own way in: the same sheet, made to be played in.
@@ -2294,7 +2294,7 @@ describe('the score editor’s takes', () => {
 
   it('opens Record’s popover when the song was made to record with no MIDI keyboard', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/songs/folders/hymns')
+    const { router } = await renderApp('/songs')
     await user.click(await screen.findByRole('button', { name: 'New' }))
     // Record, the + menu's own way in: the same sheet, made to be played in.
     await user.click(await screen.findByRole('button', { name: 'Record' }))

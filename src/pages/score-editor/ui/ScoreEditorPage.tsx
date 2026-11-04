@@ -1,4 +1,4 @@
-import { Link, useParams, useSearch } from '@tanstack/react-router'
+import { Link, useNavigate, useParams, useSearch } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -53,6 +53,7 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
   const locale = useLocale()
   const { bar } = useSearch({ from: '/full-screen/edit/$pieceId' })
   const draft = useOriginalDraft(piece)
+  const navigate = useNavigate()
   const { load, save } = draft
   // The score writes the draft's music; the rest of the song (what its page says) stays the draft's.
   const target = useMemo(() => {
@@ -90,6 +91,16 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
             onReset={draft.reopen}
             publishInMenu
             variant="tool"
+            // Its Publish page (R29 B6), the rights ticked there each time.
+            publishPage={{
+              link: <Link to="/songs/$pieceId/publish" params={{ pieceId: piece.id }} />,
+              open: () =>
+                void draft
+                  .flush()
+                  .then(() =>
+                    navigate({ to: '/songs/$pieceId/publish', params: { pieceId: piece.id } }),
+                  ),
+            }}
           />
         </>
       }

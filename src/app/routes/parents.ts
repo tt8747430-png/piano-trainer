@@ -166,6 +166,8 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   },
   '/shell/songs/folders/$folderId/settings': (from) =>
     up({ to: '/songs/folders/$folderId', params: { folderId: param(from, 'folderId') } }),
+  '/shell/songs/folders/$folderId/archived': (from) =>
+    up({ to: '/songs/folders/$folderId', params: { folderId: param(from, 'folderId') } }),
   '/shell/songs/archive': toSongs,
   '/shell/songs/shared': toSongs,
   '/shell/songs/public': toSongs,
@@ -218,6 +220,8 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
     return up({ to: '/', search: { view: 'lessons', ...(journey ? { journey } : {}) } })
   },
   '/shell/lessons/$lessonId/settings': toLesson,
+  '/shell/lessons/$lessonId/publish': (from) =>
+    up({ to: '/lessons/$lessonId/settings', params: { lessonId: param(from, 'lessonId') } }),
   '/shell/lessons/$lessonId/edit': toLesson,
   '/full-screen/lessons/$lessonId/example': ({ params, search }) => {
     const course = text(search.course)
@@ -228,13 +232,12 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   },
   '/shell/courses/$courseId': toCourses,
   '/shell/courses/$courseId/settings': toCourse,
+  '/shell/courses/$courseId/publish': (from) =>
+    up({ to: '/courses/$courseId/settings', params: { courseId: param(from, 'courseId') } }),
   '/shell/courses/$courseId/edit': toCourse,
   '/shell/courses/$courseId/$lessonId': toCourse,
   '/shell/courses/$courseId/$lessonId/settings': toCourseLesson,
   '/shell/courses/$courseId/$lessonId/edit': toCourseLesson,
-  '/shell/courses/manage': toCourses,
-  '/shell/journeys/$journeyId/edit': (from) =>
-    up({ to: '/', search: { view: 'lessons', journey: param(from, 'journeyId') } }),
 
   // Practice: each page up to Practice; a trainer up to the Quiz; a pattern up to Accompaniment,
   // its Edit and Publish up to it; a study and its sections the same.
@@ -243,6 +246,16 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/practice/intervals': toPractice,
   '/shell/practice/progressions': toPractice,
   '/shell/practice/progressions/$progressionId/edit': () => up({ to: '/practice/progressions' }),
+  '/shell/practice/progressions/$progressionId/settings': (from) =>
+    up({
+      to: '/practice/progressions/$progressionId/edit',
+      params: { progressionId: param(from, 'progressionId') },
+    }),
+  '/shell/practice/progressions/$progressionId/publish': (from) =>
+    up({
+      to: '/practice/progressions/$progressionId/settings',
+      params: { progressionId: param(from, 'progressionId') },
+    }),
   '/shell/practice/chord-finder': toPractice,
   '/shell/practice/metronome': toPractice,
   '/shell/practice/chord-player': toPractice,

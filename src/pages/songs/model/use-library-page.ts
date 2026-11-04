@@ -9,7 +9,9 @@ import {
   useLibrary,
   useLibraryLayout,
   useLibraryStoreApi,
+  usePermissions,
   type FolderId,
+  type LibraryAct,
   type LibrarySort,
   type ShelvedFolder,
 } from '@/entities/library'
@@ -61,6 +63,7 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
   const practised = useProgress(selectPractised)
   const folderName = useFolderName()
   const acts = useLibraryActs()
+  const permits = usePermissions()
   const navigate = useNavigate()
   const [pending, setPending] = useState<Pending | null>(null)
   const [selecting, setSelecting] = useState(false)
@@ -91,6 +94,42 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
   )
   const chosenFolders = layout.folders.filter((each) => inSight.includes(folderKey(each.id)))
   const catalog = () => libraryCatalog(repertoire)
+  /** Whether the act may be done here, in the folder open or at Home (the learner's own). */
+  const may = (act: LibraryAct) => permits(act, { builtIn: folder?.builtIn ?? false })
+  /** Whether a folder may be renamed, archived, deleted… itself (a built-in one, by no one). */
+  const mayOnFolder = (act: LibraryAct, each: ShelvedFolder) =>
+    permits(act, { builtIn: each.builtIn })
+  /** Whether a song may be deleted: the learner's own alone. */
+  const mayDelete = (id: PieceId) => permits('deleteSong', { builtIn: !isOwnSongId(id) })
+  /**
+   * Whether rows may be carried to a target: out of here, and into a folder that takes them; Archive
+   * takes songs, and folders that may be archived.
+   */
+  const accepts = (
+    songs: readonly PieceId[],
+    folders: readonly ShelvedFolder[],
+    target: CarryTarget,
+  ) => {
+    if ('into' in target) {
+      const into = layout.folders.find((each) => each.id === target.into)
+      return into !== undefined && may('moveOut') && permits('moveIn', { builtIn: into.builtIn })
+    }
+    if (target.zone === 'out') return may('moveOut')
+    return (
+      (songs.length === 0 || may('archiveSong')) &&
+      folders.every((each) => mayOnFolder('archiveFolder', each))
+    )
+  }
+  /** The songs and folders a list of rows' keys names. */
+  const rowsOf = (keys: readonly Chosen[]) => {
+    const songs = keys.flatMap((key) =>
+      key.startsWith('song:') ? [key.slice('song:'.length)] : [],
+    )
+    const folderIds = new Set(
+      keys.flatMap((key) => (key.startsWith('folder:') ? [key.slice('folder:'.length)] : [])),
+    )
+    return { songs, folders: layout.folders.filter((each) => folderIds.has(each.id)) }
+  }
   const exit = () => {
     setSelecting(false)
     setChosen(new Set())
@@ -110,6 +149,11 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
     close: () => setPending(null),
     acts,
     titleOf,
+    may,
+    mayOnFolder,
+    mayDelete,
+    /** Songs archived, asked first: in a folder, hidden from it (D10), brought back from its Archived. */
+    archive: (ids: readonly PieceId[]) => acts.archive(ids, folder !== null),
     setSort: (next: LibrarySort) => setSort(store, next),
     /** Whether a drag may move the rows: only in the order the learner drags, with nothing hidden. */
     sortable: sort === 'manual' && !view.filtering,
@@ -159,7 +203,7 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
           what: t('select.count', { count: chosenSongs.length }),
         }),
       archive: () => {
-        acts.archiveChosen(chosenSongs, chosenFolders)
+        acts.archiveChosen(chosenSongs, chosenFolders, folder !== null)
         exit()
       },
       /** What a row's face carries: every row chosen in sight where it is chosen, else itself. */
@@ -168,26 +212,37 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
        * What was carried, dropped (ADR 0106): into a folder, out to the place this folder stands in,
        * or on Archive; said in a toast with Undo, as Move to… and Archive say it. It ends Select.
        */
+      /** Whether a target takes what is carried (the permission table): one refused is not offered. */
+      accepts: (keys: readonly Chosen[], target: CarryTarget) => {
+        const { songs, folders } = rowsOf(keys)
+        return accepts(songs, folders, target)
+      },
       carry: (keys: readonly Chosen[], target: CarryTarget) => {
-        const songs = keys.flatMap((key) =>
-          key.startsWith('song:') ? [key.slice('song:'.length)] : [],
-        )
-        const folderIds = new Set(
-          keys.flatMap((key) => (key.startsWith('folder:') ? [key.slice('folder:'.length)] : [])),
-        )
-        const folders = layout.folders.filter((each) => folderIds.has(each.id))
+        const { songs, folders } = rowsOf(keys)
+        if (!accepts(songs, folders, target)) return
         const moving = { songs, folders: folders.map((each) => each.id) }
         const into =
           'into' in target ? layout.folders.find((each) => each.id === target.into) : undefined
         if (into) acts.move(moving, into.id)
         else if ('zone' in target && target.zone === 'out')
           acts.move(moving, folder?.parent ?? null)
-        else if ('zone' in target && target.zone === 'archive') acts.archiveChosen(songs, folders)
+        else if ('zone' in target && target.zone === 'archive')
+          acts.archiveChosen(songs, folders, folder !== null)
         else return
         exit()
       },
-      /** Delete is offered where everything chosen can be: the learner's own songs, and folders. */
-      deletable: inSight.length > 0 && chosenSongs.every(isOwnSongId),
+      /** Move is offered where what is chosen may leave this place. */
+      movable: inSight.length > 0 && may('moveOut'),
+      /** Archive, where every song and every folder chosen may be archived. */
+      archivable:
+        inSight.length > 0 &&
+        (chosenSongs.length === 0 || may('archiveSong')) &&
+        chosenFolders.every((each) => mayOnFolder('archiveFolder', each)),
+      /** Delete is offered where everything chosen can be: the learner's own songs, and own folders. */
+      deletable:
+        inSight.length > 0 &&
+        chosenSongs.every(mayDelete) &&
+        chosenFolders.every((each) => mayOnFolder('deleteFolder', each)),
       delete: () => setPending({ kind: 'delete-chosen' }),
     },
     /** Leaves a folder's page for the place it stands in: it was deleted or archived. */

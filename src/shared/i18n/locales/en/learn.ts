@@ -139,7 +139,6 @@ export const learn = {
     readFirst: 'Read first',
     languages: 'Written in',
     noLanguage: 'Not yet in full',
-    changes: 'Unpublished changes',
     opening: 'Opening…',
   },
   reading: {
@@ -260,7 +259,6 @@ export const learn = {
       link: 'Link',
     },
     // The editor's bar: what is edited; the document under it names which.
-    bar: { journey: 'Manage lessons' },
     back: 'Back to the lesson',
     editorsOnly: 'Only an editor edits a lesson.',
     unreadable:
@@ -282,18 +280,17 @@ export const learn = {
       addFailed: 'It could not be made: one of that name may be there already.',
     },
     courses: {
-      open: 'Manage courses',
-      back: 'Back to the Courses',
       editorsOnly: 'Only an editor manages the courses.',
       empty: 'No courses on this shelf. A course’s Shelf puts it here.',
     },
     journey: {
+      removeChapter: 'Remove chapter',
+      removingChapter: 'Remove “{{title}}”?',
+      removingChapterBody: 'Its lessons leave this level. The lessons themselves are kept.',
+      chapterAdded: 'Chapter added: {{title}}',
       chapterN: 'Chapter {{n}}',
       lesson: 'Lesson',
-      open: 'Manage lessons',
       goal: 'Goal',
-      back: 'Back to the Lessons',
-      editorsOnly: 'Only an editor manages the lessons.',
       unreadable:
         'The title, the goal and every chapter’s name need words in both languages. Put them right, then publish.',
       chapterName: 'Chapter name',

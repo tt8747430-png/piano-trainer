@@ -61,7 +61,7 @@ function FavouriteButton({ pattern }: { pattern: BookPattern }) {
  * open (the dialogs) and what was done (a line) come with them.
  */
 function usePatternActions(pattern: BookPattern, name: string) {
-  const { t } = useTranslation(['practice', 'songs'])
+  const { t } = useTranslation(['practice', 'songs', 'editor'])
   const store = usePatternsStoreApi()
   const navigate = useNavigate()
   const own = isOwnPatternId(pattern.ref) ? pattern.ref : null
@@ -114,7 +114,7 @@ function usePatternActions(pattern: BookPattern, name: string) {
           },
           {
             key: 'publish',
-            label: t('songs:public.publishIn'),
+            label: t('editor:publishPage.open'),
             icon: Globe,
             onSelect: () =>
               void navigate({

@@ -51,18 +51,9 @@ describe('a new song in a collection’s folder (content as data, round 26: one 
     ).toBeInTheDocument()
   })
 
-  it('is a learner’s own song, in their library', async () => {
-    const user = userEvent.setup()
-    const { router, piecesStore } = await renderApp('/songs/folders/hymns', {
-      auth: await signedInAs('learner'),
-    })
-    const sheet = await newSong(user)
-    await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), 'Abide with me')
-    // Flat's three steps: the name, the instruments, the setup.
-    await user.click(within(sheet).getByRole('button', { name: 'Next' }))
-    await user.click(within(sheet).getByRole('button', { name: 'Next' }))
-    await user.click(within(sheet).getByRole('button', { name: 'Create song' }))
-    await waitFor(() => expect(router.state.location.pathname).toMatch(/^\/edit\/my-/))
-    expect(piecesStore.getState().songs.map((song) => song.title)).toEqual(['Abide with me'])
+  it('is not a learner’s to add: their folder has no + (R29 B4, D8)', async () => {
+    await renderApp('/songs/folders/hymns', { auth: await signedInAs('learner') })
+    await screen.findByRole('heading', { level: 1, name: 'Hymns' })
+    expect(screen.queryByRole('button', { name: 'New' })).toBeNull()
   })
 })

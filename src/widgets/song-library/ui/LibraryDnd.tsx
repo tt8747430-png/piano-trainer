@@ -39,6 +39,7 @@ const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
  * the drop's target) or onto a place on the bar (Archive, Move out); the drop goes to `onCarry`.
  * A mouse lifts a row once it has gone 8px, a finger once it has held it a quarter of a second, so a
  * tap still chooses and a swipe still scrolls; the keyboard sorts by the handles, and Move to… moves.
+ * A target `accepts` refuses (the permission table, R29 B4) is never offered: the row snaps back.
  */
 export function LibraryDnd({
   carried,
@@ -46,6 +47,7 @@ export function LibraryDnd({
   targetName,
   inHand,
   onCarry,
+  accepts = () => true,
   children,
 }: {
   /** The rows' keys a row's body carries: every row chosen where it is chosen, else itself. */
@@ -57,6 +59,8 @@ export function LibraryDnd({
   /** The rows carried, as the hand holds them. */
   inHand: (keys: readonly string[]) => ReactNode
   onCarry: (keys: readonly string[], target: CarryTarget) => void
+  /** Whether a target takes these rows; one it refuses is not offered. */
+  accepts?: (keys: readonly string[], target: CarryTarget) => boolean
   children: ReactNode
 }) {
   const { t } = useTranslation('songs')
@@ -91,7 +95,11 @@ export function LibraryDnd({
   const collision: CollisionDetection = (args) => {
     const active = String(args.active.id)
     if (active.startsWith(CARRY)) {
-      const targets = args.droppableContainers.filter((each) => targetOf(each.id) !== null)
+      const keys = carried(active.slice(CARRY.length))
+      const targets = args.droppableContainers.filter((each) => {
+        const target = targetOf(each.id)
+        return target !== null && accepts(keys, target)
+      })
       const scoped = { ...args, droppableContainers: targets }
       return args.pointerCoordinates ? pointerWithin(scoped) : rectIntersection(scoped)
     }

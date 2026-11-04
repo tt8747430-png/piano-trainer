@@ -15,6 +15,7 @@ export {
   libraryProgressions,
   progressionById,
   progressionMode,
+  shipsWithApp,
 } from './model/selectors'
 export {
   heardLine,

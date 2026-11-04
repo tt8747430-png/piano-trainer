@@ -207,10 +207,10 @@ describe('publishing an own song', () => {
       publicLibrary,
       auth: await signedIn(),
     })
-    const row = await screen.findByRole('link', { name: /^Publish in library/ })
+    const row = await screen.findByRole('link', { name: /^Publish…/ })
     expect(row).toHaveTextContent('Not published')
     await user.click(row)
-    await screen.findByRole('heading', { level: 1, name: 'Publish in library' })
+    await screen.findByRole('heading', { level: 1, name: 'Publish' })
     expect(document.body).toHaveTextContent('The Terms of Use apply.')
     // Its row as others will see it: its title, by whom, its key and time.
     expect(screen.getByRole('region', { name: 'As others will see it' })).toHaveTextContent(
@@ -231,7 +231,9 @@ describe('publishing an own song', () => {
     await user.type(description, ' for the morning')
     // The rights are confirmed each time (D3): Publish waits for the tick.
     expect(publish).toBeDisabled()
-    await user.click(screen.getByRole('checkbox', { name: /I confirm that the title and composer/ }))
+    await user.click(
+      screen.getByRole('checkbox', { name: /I confirm that the title and composer/ }),
+    )
     expect(publish).toBeEnabled()
     await user.click(publish)
     expect(await screen.findByText('Published to the Public library.')).toBeVisible()
@@ -242,7 +244,7 @@ describe('publishing an own song', () => {
     })
     // The page says where it stands (Noji's): in the library, its link, View in library, its saves;
     // a new version only once something changed; Unpublish.
-    expect(await screen.findByText('In the library')).toBeVisible()
+    expect(await screen.findByText('Published', { exact: true })).toBeVisible()
     const id = found.ok ? found.value[0]?.id : ''
     expect(screen.getByRole('link', { name: 'View in library' })).toHaveAttribute(
       'href',
@@ -262,7 +264,7 @@ describe('publishing an own song', () => {
     const asked = await screen.findByRole('alertdialog', { name: 'Unpublish it?' })
     await user.click(within(asked).getByRole('button', { name: 'Unpublish' }))
     expect(await screen.findByText('Removed from the Public library.')).toBeVisible()
-    await waitFor(() => expect(screen.queryByText('In the library')).toBeNull())
+    await waitFor(() => expect(screen.queryByText('Published', { exact: true })).toBeNull())
   })
 
   it('shows what its author wrote of an item on its page', async () => {
@@ -285,7 +287,7 @@ describe('publishing an own song', () => {
   it('asks a learner signed out to sign in first', async () => {
     const user = userEvent.setup()
     await renderApp('/songs/my-1/settings', { storage: ownSong() })
-    await user.click(await screen.findByRole('link', { name: /^Publish in library/ }))
+    await user.click(await screen.findByRole('link', { name: /^Publish…/ }))
     expect(await screen.findByRole('link', { name: 'Sign in' })).toHaveAttribute(
       'href',
       '/account/sign-in',

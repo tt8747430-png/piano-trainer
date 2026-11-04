@@ -1,4 +1,4 @@
-import { useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { useRef, useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
@@ -70,6 +70,20 @@ export function LessonEditor({
       editorsOnly={t('edit.editorsOnly')}
       unreadable={t('edit.unreadable')}
       language={{ value: locale, onChange: setLocale }}
+      // A level's lesson's Publish page (R29 B6); a course's is published with its course.
+      publishPage={
+        course
+          ? undefined
+          : {
+              link: <Link to="/lessons/$lessonId/publish" params={{ lessonId: id }} />,
+              open: () =>
+                void draft
+                  .flush()
+                  .then(() =>
+                    navigate({ to: '/lessons/$lessonId/publish', params: { lessonId: id } }),
+                  ),
+            }
+      }
     >
       {(initial) => {
         const last = written.current?.opened === draft.opened ? written.current.lesson : initial

@@ -133,10 +133,5 @@ export const piece: LocaleResources['piece'] = {
     archived: 'В архиве',
     share: 'Поделиться',
     shareLink: 'Ссылка',
-    publish: 'Опубликовать в библиотеке',
-    published: 'Опубликована',
-    changed: 'Изменена',
-    notPublished: 'Не опубликована',
-    changes: 'Неопубликованные изменения',
   },
 }
