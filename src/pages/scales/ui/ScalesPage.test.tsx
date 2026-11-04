@@ -14,6 +14,10 @@ const notes = (sounds: readonly Sound[]) =>
 const pressed = (voice: readonly LiveEvent[]) =>
   voice.flatMap((event) => (event.kind === 'press' ? [event.midi] : []))
 
+/** What each wedge of the circle writes, its name and its line under it. */
+const wedgesOf = (circle: HTMLElement) =>
+  [...circle.querySelectorAll('[data-wedge]')].map((wedge) => wedge.textContent ?? '')
+
 describe('Practice → Scales and keys', () => {
   it('spells E♭ harmonic minor with its C♭ and names its structure', async () => {
     await renderApp('/practice/scales?root=Eb&kind=harmonic')
@@ -161,7 +165,7 @@ describe('Practice → Scales and keys', () => {
     const user = userEvent.setup()
     await renderApp('/practice/scales')
     const views = await screen.findByRole('radiogroup', { name: 'Scales and keys' })
-    await user.click(within(views).getByRole('radio', { name: 'Harmony' }))
+    await user.click(within(views).getByRole('radio', { name: 'Chords' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(shownText(within(keyboard).getByRole('button', { name: 'D4' }))).toContain('iiDm')
     expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-key-tonic')
@@ -382,12 +386,10 @@ describe('Practice → Scales and keys', () => {
     ])
   })
 
-  it('has no Chords view for a scale without seven notes', async () => {
+  it('has no Chords view for a scale without seven notes, and then no views control at all', async () => {
     await renderApp('/practice/scales?kind=blues&show=chords')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
-    expect(
-      within(screen.getByRole('radiogroup', { name: 'Scales and keys' })).getAllByRole('radio'),
-    ).toHaveLength(1)
+    expect(screen.queryByRole('radiogroup', { name: 'Scales and keys' })).not.toBeInTheDocument()
     expect(shownText(within(keyboard).getByRole('button', { name: 'C4' }))).toContain('1')
   })
 
@@ -500,7 +502,7 @@ describe('Practice → Scales and keys', () => {
 })
 
 describe('Practice → Scales and keys, its views', () => {
-  it('checks only the view shown, in the page and not in its bar (R29-P1)', async () => {
+  it('checks only the view shown, in the page and not in its bar, each with what it holds (R29-P1, P7)', async () => {
     await renderApp('/practice/scales?kind=harmonic&show=chords')
     const views = await screen.findByRole('radiogroup', { name: 'Scales and keys' })
     expect(screen.getByRole('banner')).not.toContainElement(views)
@@ -509,9 +511,9 @@ describe('Practice → Scales and keys, its views', () => {
         .getAllByRole('radio')
         .map((view) => [view.textContent, view.getAttribute('aria-checked')]),
     ).toEqual([
-      ['Notes', 'false'],
-      ['Harmony', 'true'],
-      ['Key', 'false'],
+      ['Scale7 notes', 'false'],
+      ['Chordsi–vii°', 'true'],
+      ['Key3 flats', 'false'],
     ])
   })
 })
@@ -520,16 +522,20 @@ describe('Practice → Scales and keys, Key view', () => {
   it('shows a key on the circle of fifths, marking its seven chords', async () => {
     await renderApp('/practice/scales?show=key')
     expect(await screen.findByRole('heading', { level: 2, name: 'C major' })).toBeInTheDocument()
-    const circle = screen.getByRole('radiogroup', { name: 'Circle of fifths' })
-    expect(within(circle).getByRole('radio', { name: 'C major' })).toBeChecked()
-    expect(within(circle).getByRole('radio', { name: 'F major' })).toHaveTextContent('IV')
+    // A picture (R29-P7): one image named by its key, no wedge a button; the heading chooses.
+    const circle = screen.getByRole('img', { name: 'Circle of fifths: C major' })
+    expect(within(circle).queryAllByRole('button')).toHaveLength(0)
+    expect(within(circle).queryAllByRole('radio')).toHaveLength(0)
+    expect(circle.querySelector('[data-on]')).toHaveTextContent('CI')
+    const wedges = wedgesOf(circle)
+    expect(wedges).toContain('FIV')
     // Its vii° stands on B minor's place, written as the chord it is.
-    expect(within(circle).getByRole('radio', { name: 'B minor' })).toHaveTextContent('B°vii°')
-    expect(within(circle).getByRole('radio', { name: 'E♭ major' })).toHaveTextContent('3♭')
+    expect(wedges).toContain('B°vii°')
+    expect(wedges).toContain('E♭3♭')
     // A key the circle names is printed as a chord is, over its signature's count and sign.
-    expect(within(circle).getByRole('radio', { name: 'F♯ minor' })).toHaveTextContent('F♯m3♯')
+    expect(wedges).toContain('F♯m3♯')
     // A key written two ways is split, each half one spelling.
-    expect(within(circle).getByRole('radio', { name: 'C♭ major' })).toHaveTextContent('C♭7♭')
+    expect(wedges).toContain('C♭7♭')
   })
 
   it('names a minor scale’s key and marks the notes its signature writes', async () => {
@@ -543,11 +549,9 @@ describe('Practice → Scales and keys, Key view', () => {
 
   it('writes the key’s chords on the circle as the key spells them, and its borrowed chords plainly', async () => {
     await renderApp('/practice/scales?root=Db&show=key')
-    const circle = await screen.findByRole('radiogroup', { name: 'Circle of fifths' })
+    const circle = await screen.findByRole('img', { name: /^Circle of fifths/ })
     // IV and ii of D♭ major stand on the split places' G♭ and E♭ minor halves, not F♯'s and D♯'s.
-    expect(within(circle).getByRole('radio', { name: 'G♭ major' })).toHaveTextContent('G♭IV')
-    expect(within(circle).getByRole('radio', { name: 'F♯ major' })).toHaveTextContent('F♯6♯')
-    expect(within(circle).getByRole('radio', { name: 'E♭ minor' })).toHaveTextContent('E♭mii')
+    expect(wedgesOf(circle)).toEqual(expect.arrayContaining(['G♭IV', 'F♯6♯', 'E♭mii']))
     const borrowed = screen.getByRole('heading', { level: 3, name: 'Borrowed chords' })
     const names = within(borrowed.parentElement ?? circle)
       .getAllByRole('button')
@@ -565,11 +569,11 @@ describe('Practice → Scales and keys, Key view', () => {
     ).toEqual(['B♭IPicardy third', 'C♭♭IINeapolitan'])
   })
 
-  it('chooses a key on the circle, and shows its signature, notes, relative and modes', async () => {
+  it('chooses a key by the heading’s Tonic, and shows its signature, notes, relative and modes', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?show=key')
-    const circle = await screen.findByRole('radiogroup', { name: 'Circle of fifths' })
-    await user.click(within(circle).getByRole('radio', { name: 'E♭ major' }))
+    const circle = await screen.findByRole('img', { name: /^Circle of fifths/ })
+    await pickIn(user, 'Tonic', 'E♭')
     expect(router.state.location.search).toEqual({ root: 'Eb', show: 'key' })
     expect(await screen.findByRole('heading', { level: 2, name: 'E♭ major' })).toBeInTheDocument()
     expect(screen.getByText('B♭ E♭ A♭')).toBeInTheDocument()
@@ -611,21 +615,6 @@ describe('Practice → Scales and keys, Key view', () => {
     expect(router.state.location.search).toEqual({ root: 'F', kind: 'dorian', hands: 'lh' })
     expect(await screen.findByRole('heading', { level: 2, name: 'F Dorian' })).toBeInTheDocument()
     expect(router.history.length).toBe(entries)
-  })
-
-  it('goes to a minor key as its natural minor, and keeps the minor it was on', async () => {
-    const user = userEvent.setup()
-    const { router } = await renderApp('/practice/scales?show=key')
-    const circle = await screen.findByRole('radiogroup', { name: 'Circle of fifths' })
-    await user.click(within(circle).getByRole('radio', { name: 'A minor' }))
-    expect(router.state.location.search).toEqual({ root: 'A', kind: 'natural', show: 'key' })
-    await pickMenu(user, 'Scale', 'Harmonic minor')
-    await user.click(
-      within(screen.getByRole('radiogroup', { name: 'Circle of fifths' })).getByRole('radio', {
-        name: 'E minor',
-      }),
-    )
-    expect(router.state.location.search).toEqual({ root: 'E', kind: 'harmonic', show: 'key' })
   })
 
   it('plays the chords the key borrows', async () => {
@@ -706,7 +695,7 @@ describe('Practice → Scales and keys, Key view', () => {
     await renderApp('/practice/scales?kind=dorian&show=key')
     expect(await screen.findByRole('heading', { level: 2, name: 'C Dorian' })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'Key' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('navigation', { name: 'Circle of fifths' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('img', { name: /^Circle of fifths/ })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'A random key' })).not.toBeInTheDocument()
   })
 })

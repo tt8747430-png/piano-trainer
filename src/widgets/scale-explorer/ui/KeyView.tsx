@@ -61,7 +61,7 @@ export function KeyView({
   return (
     <ScaleLayout keyboard={<PinnedKeyboard shown={shown} range={range} />} heading={choice}>
       <div className="grid-fields items-start gap-x-10 gap-y-6">
-        <CircleOfFifths current={musicKey} kind={scale.kind} onChange={onChange} />
+        <CircleOfFifths current={musicKey} />
         <div className="flex min-w-0 flex-col gap-6">
           <KeySignature value={musicKey} />
           <KeyFacts value={musicKey} />

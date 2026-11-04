@@ -266,6 +266,7 @@ export {
   STACK_SIZES,
   sizeOfNotes,
   scaleChordAt,
+  scaleChords,
   scaleChordHolds,
   type BorrowedName,
   type ChordNotes,

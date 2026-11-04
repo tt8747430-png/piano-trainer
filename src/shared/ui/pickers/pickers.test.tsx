@@ -2,7 +2,6 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { note, pitchClass } from '@/shared/lib/music'
-import { KeyCircle } from './KeyCircle'
 import { KeyPicker } from './KeyPicker'
 import { KeysChecklist } from './KeysChecklist'
 import { MenuPicker } from './MenuPicker'
@@ -122,35 +121,6 @@ describe('KeyPicker', () => {
       'aria-pressed',
       'true',
     )
-  })
-})
-
-describe('KeyCircle', () => {
-  it('reaches both halves of a split wedge, the minors inside', async () => {
-    const onChoose = vi.fn()
-    const user = userEvent.setup()
-    render(<KeyCircle label="Key" value={{ tonic: note('C'), minor: false }} onChoose={onChoose} />)
-    const circle = screen.getByRole('radiogroup', { name: 'Key' })
-    await user.click(within(circle).getByRole('radio', { name: 'F♯ major' }))
-    expect(onChoose).toHaveBeenLastCalledWith({ tonic: note('F', 1), minor: false })
-    await user.click(within(circle).getByRole('radio', { name: 'G♭ major' }))
-    expect(onChoose).toHaveBeenLastCalledWith({ tonic: note('G', -1), minor: false })
-    await user.click(within(circle).getByRole('radio', { name: 'E♭ minor' }))
-    expect(onChoose).toHaveBeenLastCalledWith({ tonic: note('E', -1), minor: true })
-    expect(within(circle).getAllByRole('radio')).toHaveLength(30)
-  })
-
-  it('goes round a ring with ← →, crosses to the minors with ↓, chooses with Enter', async () => {
-    const onChoose = vi.fn()
-    const user = userEvent.setup()
-    render(<KeyCircle label="Key" value={{ tonic: note('C'), minor: false }} onChoose={onChoose} />)
-    const c = screen.getByRole('radio', { name: 'C major' })
-    expect(c).toBeChecked()
-    c.focus()
-    await user.keyboard('{ArrowRight}{ArrowDown}{Enter}')
-    expect(onChoose).toHaveBeenLastCalledWith({ tonic: note('E'), minor: true })
-    await user.keyboard('{ArrowLeft}{ArrowLeft}{Enter}')
-    expect(onChoose).toHaveBeenLastCalledWith({ tonic: note('D'), minor: true })
   })
 })
 

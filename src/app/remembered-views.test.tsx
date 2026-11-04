@@ -86,7 +86,7 @@ describe('Remembered views', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?root=D&kind=dorian')
     const views = await screen.findByRole('radiogroup', { name: 'Scales and keys' })
-    await user.click(within(views).getByRole('radio', { name: 'Notes' }))
+    await user.click(within(views).getByRole('radio', { name: 'Scale' }))
     expect(router.state.location.search).toMatchObject({ root: 'D', kind: 'dorian' })
   })
 

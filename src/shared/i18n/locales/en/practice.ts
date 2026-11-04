@@ -120,7 +120,17 @@ export const practice = {
   // Scales and keys: the run, the chords, the key.
   scales: {
     // The tabs say what is in them (A32): its notes, its key's harmony, the key itself.
-    show: { scale: 'Notes', chords: 'Harmony', key: 'Key' },
+    show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
+    // Under each view's name, what it holds of the scale chosen (R29-P7): a choice visibly drives all three.
+    views: {
+      notes_one: '{{count}} note',
+      notes_other: '{{count}} notes',
+      sharps_one: '{{count}} sharp',
+      sharps_other: '{{count}} sharps',
+      flats_one: '{{count}} flat',
+      flats_other: '{{count}} flats',
+      plain: 'No sharps or flats',
+    },
     label: 'Scale',
     tonic: 'Tonic',
     octaves: 'Octaves',

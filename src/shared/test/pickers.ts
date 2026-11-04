@@ -11,7 +11,7 @@ export const picker = (label: string): HTMLElement =>
 export const pickerValue = (label: string): string =>
   (picker(label).getAttribute('aria-label') ?? '').slice(label.length + 2)
 
-/** Opens a picker and taps one of its cells or wedges (`PitchPicker`, `NotePicker`, `KeyCircle`). */
+/** Opens a picker and taps one of its cells or wedges (`PitchPicker`, `NotePicker`). */
 export async function pickIn(user: UserEvent, label: string, choice: string): Promise<void> {
   await user.click(await screen.findByRole('button', { name: new RegExp(`^${escaped(label)}: `) }))
   const panel = await screen.findByRole('radiogroup', { name: label })

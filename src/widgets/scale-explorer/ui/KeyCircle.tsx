@@ -1,4 +1,3 @@
-import type { KeyboardEvent } from 'react'
 import { useKeyName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import {
@@ -11,7 +10,7 @@ import {
   type CircleRing,
   type Key,
 } from '@/shared/lib/music'
-import { cellCentre, signatureCount, wedgePath, type WedgePart } from './circle-layout'
+import { cellCentre, signatureCount, wedgePath, type WedgePart } from '../model/circle-layout'
 
 const RINGS: readonly CircleRing[] = ['major', 'minor']
 
@@ -88,65 +87,31 @@ const wedgeOf = (key: Key): CircleWedge | undefined =>
   )
 
 /**
- * The circle of fifths as a key's chooser (Ultimate Piano's): majors outside and their relative minors
- * inside, each wedge its key's name over its signature's count, the keys written two ways split in
- * halves, one spelling each. The key chosen is tinted and named in the middle; `mark` writes one of a
- * key's chords in a wedge's place, tinted lighter. A radio group: ← → go round a ring, ↑ ↓ cross to
- * the other, Enter or Space chooses.
+ * The circle of fifths as a picture (R29-P7: the Key view's, not a picker; the heading's menus choose
+ * the key): majors outside and their relative minors inside, each wedge its key's name over its
+ * signature's count, the keys written two ways split in halves. The key shown is tinted and named in
+ * the middle; `mark` writes one of the key's chords in a wedge's place, tinted lighter. One image to
+ * a screen reader, named by its label and the key.
  */
 export function KeyCircle({
   label,
   value,
-  onChoose,
   mark,
-  start,
   className,
 }: {
   label: string
   value: Key
-  onChoose: (key: Key) => void
   mark?: (wedge: CircleWedge) => WedgeMark | undefined
-  /** Spread on the value chosen: where the focus lands as the panel opens. */
-  start?: { readonly 'data-picker-start': string }
   className?: string
 }) {
   const name = useKeyName()
   const chosen = wedgeOf(value)
-  const onKeyDown = (event: KeyboardEvent<SVGElement>, wedge: CircleWedge) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      onChoose(wedge.key)
-      return
-    }
-    const ring = WEDGES.filter((each) => each.ring === wedge.ring)
-    const at = ring.indexOf(wedge)
-    const other = WEDGES.filter((each) => each.ring !== wedge.ring && each.place === wedge.place)
-    const next = {
-      ArrowRight: ring[(at + 1) % ring.length],
-      ArrowLeft: ring[(at - 1 + ring.length) % ring.length],
-      ArrowUp:
-        wedge.ring === 'minor'
-          ? (other.find((each) => each.part === wedge.part) ?? other[0])
-          : undefined,
-      ArrowDown:
-        wedge.ring === 'major'
-          ? (other.find((each) => each.part === wedge.part) ?? other[0])
-          : undefined,
-    }[event.key]
-    if (!['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(event.key)) return
-    event.preventDefault()
-    if (!next) return
-    const target = event.currentTarget.ownerSVGElement?.querySelector<SVGElement>(
-      `[data-wedge="${WEDGES.indexOf(next)}"]`,
-    )
-    target?.focus()
-  }
   return (
     <div className={cn('relative mx-auto aspect-square w-full max-w-sm', className)}>
       <svg
         viewBox="0 0 100 100"
-        role="radiogroup"
-        aria-label={label}
+        role="img"
+        aria-label={`${label}: ${name(value)}`}
         className="absolute inset-0 size-full overflow-visible"
       >
         {WEDGES.map((wedge, index) => {
@@ -157,28 +122,13 @@ export function KeyCircle({
           const size = (wedge.ring === 'major' ? 4.4 : 3.6) * (half ? 0.78 : 1)
           const small = wedge.ring === 'major' ? 3 : 2.6
           return (
-            <g
-              key={index}
-              data-wedge={index}
-              role="radio"
-              aria-checked={on}
-              aria-label={name(wedge.key)}
-              tabIndex={on || (chosen === undefined && index === 0) ? 0 : -1}
-              {...(on ? start : {})}
-              onClick={() => onChoose(wedge.key)}
-              onKeyDown={(event) => onKeyDown(event, wedge)}
-              className="group cursor-pointer outline-none"
-            >
+            <g key={index} data-wedge={index} data-on={on || undefined}>
               <path
                 d={wedgePath(wedge.place, wedge.ring, wedge.part)}
                 strokeWidth={0.3}
                 className={cn(
-                  'stroke-border transition-colors duration-150 group-focus-visible:stroke-ring group-focus-visible:[stroke-width:1]',
-                  on
-                    ? 'fill-key-tonic'
-                    : marked
-                      ? 'fill-key-scale group-hover:fill-key-scale-down'
-                      : 'fill-card group-hover:fill-muted',
+                  'stroke-border',
+                  on ? 'fill-key-tonic' : marked ? 'fill-key-scale' : 'fill-card',
                 )}
               />
               <text
@@ -186,7 +136,7 @@ export function KeyCircle({
                 y={y}
                 textAnchor="middle"
                 className={cn(
-                  'pointer-events-none fill-current font-semibold',
+                  'fill-current font-semibold',
                   on ? 'text-on-key-tonic' : marked ? 'text-foreground' : 'text-muted-foreground',
                 )}
               >

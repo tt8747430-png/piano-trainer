@@ -52,8 +52,13 @@ export function Segmented<V extends OptionValue>({
           <Radio.Root
             key={String(option.value)}
             value={option.value}
-            aria-label={optionName(option)}
-            aria-describedby={why}
+            // Named by its word; its second line (`detail`) describes it.
+            aria-label={optionName(option) ?? (option.detail ? option.label : undefined)}
+            aria-describedby={
+              [why, option.detail ? `${id}-detail-${index}` : undefined]
+                .filter(Boolean)
+                .join(' ') || undefined
+            }
             title={option.reason}
             disabled={option.reason !== undefined}
             className={cn(
@@ -69,6 +74,15 @@ export function Segmented<V extends OptionValue>({
           >
             {option.icon}
             {option.label}
+            {/* A second line under its word, in soft ink: what the segment holds (Scales' "7 notes"). */}
+            {option.detail ? (
+              <span
+                id={`${id}-detail-${index}`}
+                className="text-sm font-normal text-muted-foreground"
+              >
+                {option.detail}
+              </span>
+            ) : null}
             {why ? (
               <span id={why} hidden>
                 {option.reason}
