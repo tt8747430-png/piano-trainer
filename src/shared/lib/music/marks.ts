@@ -194,6 +194,8 @@ export interface NoteMarks {
   readonly numeral?: string
   /** Free text over the staff, as the learner typed it. */
   readonly text?: string
+  /** The step from it to the next note named (A43: `W`, `H`), printed small between the two. */
+  readonly step?: string
 }
 
 /** Semitones a note is written from where it sounds under each octave line. */

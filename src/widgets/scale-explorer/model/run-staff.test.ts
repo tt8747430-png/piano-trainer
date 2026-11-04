@@ -1,0 +1,68 @@
+import { describe, expect, it } from 'vitest'
+import { DEFAULT_SCALE_STAFF } from '@/entities/settings'
+import { note, noteParam } from '@/shared/lib/music'
+import { runStaff, type RunStaffWords } from './run-staff'
+import { scaleRunOf } from './scale-run'
+
+const words: RunStaffWords = {
+  whole: 'W',
+  half: 'H',
+  wholeAndHalf: 'W+H',
+  tonic: 'Tonic',
+  leading: 'Leading note',
+  lower: 'Lower tetrachord',
+  upper: 'Upper tetrachord',
+}
+const view = {
+  root: noteParam(note('C')),
+  kind: 'major',
+  start: 1,
+  octaves: 1,
+  rhythm: 'even',
+  hands: 'rh',
+  direction: 'up',
+} as const
+
+const marked = (layers = DEFAULT_SCALE_STAFF, kind: 'major' | 'harmonic' = 'major') => {
+  const run = scaleRunOf({ ...view, kind })
+  return runStaff(run.music, 'rh', run.placed, layers, words).notes.map((each) => each.marks)
+}
+
+describe('runStaff', () => {
+  it('sits the degree numbers under each note', () => {
+    expect(marked().map((each) => each?.numeral)).toEqual(['1', '2', '3', '4', '5', '6', '7', '1'])
+  })
+
+  it('names W W H W W W H between the notes of C major', () => {
+    expect(marked().map((each) => each?.step)).toEqual([
+      'W',
+      'W',
+      'H',
+      'W',
+      'W',
+      'W',
+      'H',
+      undefined,
+    ])
+  })
+
+  it('names harmonic minor’s step and a half', () => {
+    expect(marked(DEFAULT_SCALE_STAFF, 'harmonic').map((each) => each?.step)[5]).toBe('W+H')
+  })
+
+  it('names the tonic, the leading note and the tetrachords where switched on', () => {
+    const texts = marked({ degrees: false, steps: false, tonic: true, tetrachords: true }).map(
+      (each) => each?.text,
+    )
+    expect(texts[0]).toBe('Tonic · Lower tetrachord')
+    expect(texts[4]).toBe('Upper tetrachord')
+    expect(texts[6]).toBe('Leading note')
+    expect(texts[7]).toBe('Tonic')
+  })
+
+  it('leaves the music alone with every layer off', () => {
+    const run = scaleRunOf(view)
+    const off = { degrees: false, steps: false, tonic: false, tetrachords: false }
+    expect(runStaff(run.music, 'rh', run.placed, off, words)).toBe(run.music)
+  })
+})

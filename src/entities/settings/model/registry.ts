@@ -142,4 +142,8 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'drone.kind': 'drone',
   'drone.octave': 'drone',
   'drone.volume': 'drone',
+  'scaleStaff.degrees': 'scales',
+  'scaleStaff.steps': 'scales',
+  'scaleStaff.tonic': 'scales',
+  'scaleStaff.tetrachords': 'scales',
 }

@@ -529,8 +529,14 @@ class Writer {
       ].filter(Boolean)
       return `<note ${attrs.join(' ')}${single && inside ? `>${inside}</note>` : '/>'}`
     })
-    const after = this.stamp(event.tick + ticksOf(event.duration, this.score.meter))
+    const length = ticksOf(event.duration, this.score.meter)
+    const after = this.stamp(event.tick + length)
     this.marks(marks, id, staff, controls, after)
+    // A step's name halfway to the next note, over the gap it names (A43).
+    if (marks?.step)
+      controls.push(
+        `<dir staff="${this.number(staff)}" tstamp="${this.stamp(event.tick + length / 2)}" place="above"><rend fontsize="small">${escape(marks.step)}</rend></dir>`,
+      )
     const graces = (marks?.grace ?? [])
       .map(
         (grace, i) =>

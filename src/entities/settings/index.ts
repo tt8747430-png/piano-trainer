@@ -58,6 +58,8 @@ export {
   type DroneKind,
   type DroneSettings,
   type TunerSettings,
+  DEFAULT_SCALE_STAFF,
+  type ScaleStaffSettings,
 } from './model/types'
 export { resolveTheme } from './model/resolve-theme'
 export {
@@ -71,6 +73,7 @@ export {
   selectProgressions,
   selectChordPlayer,
   selectDrone,
+  selectScaleStaff,
   selectTuner,
   selectAccompaniment,
   selectScoreView,

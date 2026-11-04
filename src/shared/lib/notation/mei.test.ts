@@ -271,6 +271,13 @@ describe('scoreToMei, a note’s marks and the options', () => {
     )
   })
 
+  it('writes a step’s name halfway to the next note (A43)', () => {
+    const written = scoreToMei(plain([c(0, { step: 'W' }), c(B)]))
+    expect(written).toContain(
+      '<dir staff="1" tstamp="1.5" place="above"><rend fontsize="small">W</rend></dir>',
+    )
+  })
+
   it('writes an acciaccatura slashed and an appoggiatura unslashed before their notes', () => {
     const grace = { midi: midi(62), spelled: note('D') }
     const written = scoreToMei(

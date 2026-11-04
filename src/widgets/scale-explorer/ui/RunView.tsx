@@ -1,9 +1,11 @@
 import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { selectScaleStaff, useSettings } from '@/entities/settings'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { hasStandardFingering, noteFromParam, spellScale, printedNote } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, RUN_DIRECTIONS, runSounds } from '@/shared/lib/schedule'
 import { Dropdown, Labelled, MenuPicker, Segmented, Stepper } from '@/shared/ui'
+import { runStaff } from '../model/run-staff'
 import { runShown, scaleRunOf } from '../model/scale-run'
 import {
   MAX_OCTAVES,
@@ -45,6 +47,27 @@ export function RunView({
   const run = useMemo(
     () => scaleRunOf({ root, kind, start, octaves, fingering, rhythm, hands, direction }),
     [root, kind, start, octaves, fingering, rhythm, hands, direction],
+  )
+  const layers = useSettings(selectScaleStaff)
+  // The theory written on the playing hand's staff (A43), the right hand's when both play.
+  const written = useMemo(
+    () =>
+      runStaff(
+        run.music,
+        hands === 'lh' ? 'lh' : 'rh',
+        [...run.placed, ...run.down.placed],
+        layers,
+        {
+          whole: t('practice:scaleStaff.whole'),
+          half: t('practice:scaleStaff.half'),
+          wholeAndHalf: t('practice:scaleStaff.wholeAndHalf'),
+          tonic: t('practice:scaleStaff.tonicName'),
+          leading: t('practice:scaleStaff.leadingName'),
+          lower: t('practice:scaleStaff.lower'),
+          upper: t('practice:scaleStaff.upper'),
+        },
+      ),
+    [run, hands, layers, t],
   )
   const tonic = noteFromParam(root)
   const tones = spellScale(tonic, kind)
@@ -135,7 +158,7 @@ export function RunView({
         </>
       }
     >
-      <ScaleSheet music={run.music} hands={hands} fingers />
+      <ScaleSheet music={written} hands={hands} fingers />
       <ScaleFingering run={run} standard={hasStandardFingering(kind)} />
       <ScaleExercises root={tonic} kind={kind} />
     </ScaleLayout>

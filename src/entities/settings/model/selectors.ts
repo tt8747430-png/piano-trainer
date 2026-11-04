@@ -5,6 +5,7 @@ import type {
   ProgressionsSettings,
   ChordPlayerSettings,
   DroneSettings,
+  ScaleStaffSettings,
   TunerSettings,
   ScoreViewSettings,
   KeyboardSettings,
@@ -65,6 +66,7 @@ export const selectProgressions = (state: SettingsState): ProgressionsSettings =
 /** How the Chord player writes its chords and voices its piano (R29 CP6). */
 export const selectTuner = (state: SettingsState): TunerSettings => state.tuner
 export const selectDrone = (state: SettingsState): DroneSettings => state.drone
+export const selectScaleStaff = (state: SettingsState): ScaleStaffSettings => state.scaleStaff
 export const selectChordPlayer = (state: SettingsState): ChordPlayerSettings => state.chordPlayer
 /** Accompaniment's sources the learner hid (A24). */
 export const selectAccompaniment = (state: SettingsState): AccompanimentSettings =>

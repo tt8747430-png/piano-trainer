@@ -62,6 +62,7 @@ describe('settings selectors', () => {
       bars: DEFAULT_BARS,
       tuner: { a4: 440 },
       drone: { root: 0, kind: 'fifth', octave: 3, volume: 60 },
+      scaleStaff: { degrees: true, steps: true, tonic: false, tetrachords: false },
     }
     expect(selectPractice(state)).toBe(DEFAULT_PRACTICE)
     expect(selectSound(state)).toBe(DEFAULT_SOUND)

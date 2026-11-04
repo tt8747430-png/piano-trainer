@@ -59,6 +59,7 @@ const DEFAULTS = {
   bars: DEFAULT_BARS,
   tuner: { a4: 440 },
   drone: { root: 0, kind: 'fifth', octave: 3, volume: 60 },
+  scaleStaff: { degrees: true, steps: true, tonic: false, tetrachords: false },
 }
 
 describe('createSettingsStore', () => {
@@ -180,6 +181,7 @@ describe('createSettingsStore', () => {
       bars: { ...DEFAULT_BARS, 'select.songs': ['delete', 'move'] },
       tuner: { a4: 442 },
       drone: { root: 9, kind: 'note', octave: 2, volume: 80 },
+      scaleStaff: { degrees: false, steps: true, tonic: true, tetrachords: false },
       scoreView: {
         layout: 'vertical',
         music: 'grid',

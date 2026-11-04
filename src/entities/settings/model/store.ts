@@ -91,6 +91,8 @@ import {
   DRONE_OCTAVES,
   isDroneKind,
   type DroneSettings,
+  DEFAULT_SCALE_STAFF,
+  type ScaleStaffSettings,
   type TunerSettings,
 } from './types'
 
@@ -139,6 +141,7 @@ export function createSettingsStore({
         bars: DEFAULT_BARS,
         tuner: DEFAULT_TUNER,
         drone: DEFAULT_DRONE,
+        scaleStaff: DEFAULT_SCALE_STAFF,
       },
       read: sanitize,
     },
@@ -457,6 +460,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     bars: barsSettings(saved.bars),
     tuner: tunerSettings(saved.tuner),
     drone: droneSettings(saved.drone),
+    scaleStaff: scaleStaffSettings(saved.scaleStaff),
   }
 }
 
@@ -480,5 +484,18 @@ function droneSettings(value: unknown): DroneSettings {
     kind: isDroneKind(saved.kind) ? saved.kind : DEFAULT_DRONE.kind,
     octave: wholeWithin(saved.octave, DRONE_OCTAVES) ?? DEFAULT_DRONE.octave,
     volume: wholeWithin(saved.volume, { min: 0, max: 100 }) ?? DEFAULT_DRONE.volume,
+  }
+}
+
+/** The Scales staff's layers, each as saved where it is a switch's value. */
+function scaleStaffSettings(value: unknown): ScaleStaffSettings {
+  const saved = savedObject<ScaleStaffSettings>(value)
+  const on = (key: keyof ScaleStaffSettings) =>
+    typeof saved[key] === 'boolean' ? saved[key] : DEFAULT_SCALE_STAFF[key]
+  return {
+    degrees: on('degrees'),
+    steps: on('steps'),
+    tonic: on('tonic'),
+    tetrachords: on('tetrachords'),
   }
 }

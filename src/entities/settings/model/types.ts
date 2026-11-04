@@ -383,6 +383,25 @@ export interface SettingsState {
   tuner: TunerSettings
   /** The Drone as left (R29 B11). */
   drone: DroneSettings
+  /** What the Scales page writes on its staff (A43). */
+  scaleStaff: ScaleStaffSettings
+}
+
+/**
+ * The theory written on the Scales page's staff (A43): each note's degree under it, the whole and
+ * half steps between the notes, the tonic and leading note named, and the two tetrachords bracketed.
+ */
+export interface ScaleStaffSettings {
+  readonly degrees: boolean
+  readonly steps: boolean
+  readonly tonic: boolean
+  readonly tetrachords: boolean
+}
+export const DEFAULT_SCALE_STAFF: ScaleStaffSettings = {
+  degrees: true,
+  steps: true,
+  tonic: false,
+  tetrachords: false,
 }
 
 /** The concert A the Tuner reads against, Baroque to modern orchestral, in whole hertz. */
