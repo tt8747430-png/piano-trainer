@@ -16,6 +16,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
+import { useForgetScreens } from '@/shared/lib'
 
 /**
  * The learner's music's way back, asked first: their version reset to the book's, or their song
@@ -45,6 +46,7 @@ export function OwnMusicAsk({
   const takes = useTakesStoreApi()
   const library = useLibraryStoreApi()
   const navigate = useNavigate()
+  const forget = useForgetScreens()
   const words = piece.kind === 'version' ? 'resetting' : 'deleting'
   const act = () => {
     if (piece.kind === 'version') {
@@ -53,6 +55,7 @@ export function OwnMusicAsk({
     }
     // Leave the page first: it has nothing to show once the song is gone.
     const { id } = piece
+    forget(`/songs/${id}`, `/play/${id}`, `/edit/${id}`)
     // Deleted as the library deletes one: out of its folder and the favourites, with its takes.
     void navigate({ to: '/songs', replace: true }).then(() =>
       deleteOwnSongs(

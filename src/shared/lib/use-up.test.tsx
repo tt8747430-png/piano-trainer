@@ -6,10 +6,10 @@ import {
   Outlet,
   RouterProvider,
 } from '@tanstack/react-router'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import type { Up } from './up-context'
+import { forgetScreens, type Up } from './up-context'
 import { UpProvider } from './up-provider'
 import { useUp } from './use-up'
 
@@ -76,17 +76,15 @@ describe('useUp', () => {
     expect(at(router)).toEqual({ path: '/songs', index: 0 })
   })
 
-  it('pushes the parent when the learner came from elsewhere, so the browser’s Back returns', async () => {
+  it('returns to the screen the learner came from in the app, as a phone’s Back does', async () => {
     const user = userEvent.setup()
     const router = await open(['/'])
     await user.click(screen.getByRole('button', { name: 'Back' }))
-    await screen.findByText('Songs')
-    expect(at(router)).toEqual({ path: '/songs', index: 2 })
-    router.history.back()
-    await waitFor(() => expect(at(router).path).toBe('/songs/grace'))
+    await screen.findByText('Learn')
+    expect(at(router)).toEqual({ path: '/', index: 0 })
   })
 
-  it('opened directly, pushes the parent', async () => {
+  it('opened directly (a link, a reload), goes up to the parent, never out of the app', async () => {
     const user = userEvent.setup()
     const router = await open(['/songs/grace'])
     await user.click(screen.getByRole('button', { name: 'Back' }))
@@ -101,5 +99,14 @@ describe('useUp', () => {
     await screen.findByText('Songs')
     await user.click(screen.getByRole('button', { name: 'Back' }))
     expect(at(router)).toEqual({ path: '/songs', index: 0 })
+  })
+
+  it('steps past a screen deleted since, to the parent where none is left before it', async () => {
+    const user = userEvent.setup()
+    const router = await open(['/songs'])
+    forgetScreens(router.history, '/songs')
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    await screen.findByText('Songs')
+    expect(at(router)).toEqual({ path: '/songs', index: 2 })
   })
 })

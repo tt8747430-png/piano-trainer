@@ -12,7 +12,7 @@ import {
 } from '@/entities/progression-library'
 import { RemoveGroup, useProgressionDraft } from '@/features/edit-original'
 import { localText, useLocale } from '@/shared/i18n'
-import { shareLink } from '@/shared/lib'
+import { shareLink, useForgetScreens } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, RowButton, say, ScreenHeader, SettingsGroup, TileMark } from '@/shared/ui'
 import { DraftPublishScreen, NotOpen, PublishRow } from '@/widgets/content-editor'
@@ -51,6 +51,7 @@ function ProgressionSettings({ progression }: { progression: LibraryProgression 
   const locale = useLocale()
   const { account } = useAccount()
   const navigate = useNavigate()
+  const forget = useForgetScreens()
   const draft = useProgressionDraft(progression)
   const written = draft.load.state === 'ready' ? draft.load.value : progression
   const title = localText(written.name, locale) || written.id
@@ -90,7 +91,10 @@ function ProgressionSettings({ progression }: { progression: LibraryProgression 
                 kind="progression"
                 id={progression.id}
                 title={title}
-                onDeleted={() => void navigate({ to: '/practice/progressions', replace: true })}
+                onDeleted={() => {
+                  forget(`/practice/progressions/${progression.id}`, `/play/progression`)
+                  void navigate({ to: '/practice/progressions', replace: true })
+                }}
               />
             )}
           </>

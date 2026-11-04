@@ -8,8 +8,9 @@ import { folderOf } from './routes/songs-screens'
 import { pickIn, pickMenu } from '@/shared/test/pickers'
 import { renderApp } from './testing/render-app'
 
-// Back means up (rule 26): each place walked down a path and Back pressed to its foot. A phone's:
-// the test's matchMedia answers no to the laptop's width.
+// Back (rule 26): to the screen the learner came from in the app, else up to the parent. Each place
+// walked down a path and Back pressed to its foot; a phone's: the test's matchMedia answers no to the
+// laptop's width.
 
 const OWNER = { id: 'ed', email: 'ed@example.com', password: 'secret-pass', name: 'Ed' }
 
@@ -94,5 +95,23 @@ describe('Back goes up, on every place', () => {
     await waitFor(() => expect(at(router)).toEqual({ path: '/settings', entry: 1 }))
     await back(user)
     await waitFor(() => expect(at(router)).toEqual({ path: '/profile', entry: 0 }))
+  })
+
+  it('returns to the screen a song was opened from, not to Songs', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice')
+    await screen.findByRole('heading', { level: 1, name: 'Practice' })
+    await act(() => router.navigate({ to: '/songs/$pieceId', params: { pieceId: 'bz5' } }))
+    await back(user)
+    await waitFor(() => expect(at(router)).toEqual({ path: '/practice', entry: 0 }))
+  })
+
+  it('opened from a link, goes up to the parent and stays in the app', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/songs/bz5/settings')
+    await back(user)
+    await waitFor(() => expect(at(router).path).toBe('/songs/bz5'))
+    await back(user)
+    await waitFor(() => expect(at(router).path).toMatch(/^\/songs/))
   })
 })

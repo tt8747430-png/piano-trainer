@@ -1,3 +1,4 @@
+import { useForgetScreens } from '@/shared/lib'
 import { useNavigate } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -65,6 +66,7 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
   const acts = useLibraryActs()
   const permits = usePermissions()
   const navigate = useNavigate()
+  const forget = useForgetScreens()
   const [pending, setPending] = useState<Pending | null>(null)
   const [selecting, setSelecting] = useState(false)
   const [chosen, setChosen] = useState<ReadonlySet<Chosen>>(new Set())
@@ -246,14 +248,16 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
       delete: () => setPending({ kind: 'delete-chosen' }),
     },
     /** Leaves a folder's page for the place it stands in: it was deleted or archived. */
-    leave: () =>
+    leave: () => {
+      if (folder) forget(`/songs/folders/${folder.id}`)
       void (folder?.parent
         ? navigate({
             to: '/songs/folders/$folderId',
             params: { folderId: folder.parent },
             replace: true,
           })
-        : navigate({ to: '/songs', replace: true })),
+        : navigate({ to: '/songs', replace: true }))
+    },
   }
 }
 

@@ -1,3 +1,4 @@
+import { useForgetScreens } from '@/shared/lib'
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { Archive, FolderInput, Palette } from 'lucide-react'
 import { useState } from 'react'
@@ -58,13 +59,17 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
   const [editing, setEditing] = useState(false)
   const [moving, setMoving] = useState<Moving | null>(null)
   const [deleting, setDeleting] = useState(false)
+  const forget = useForgetScreens()
   const name = nameOf(folder)
   const above = folder.parent ? folders.find((each) => each.id === folder.parent) : undefined
   // Out of the library (archived or deleted): to where it stood, its folder or Home.
-  const leave = () =>
-    above
+  const leave = () => {
+    // Its screens are gone for Back too: the folder's page and its Settings.
+    forget(`/songs/folders/${folder.id}`)
+    return above
       ? navigate({ to: '/songs/folders/$folderId', params: { folderId: above.id }, replace: true })
       : navigate({ to: '/songs', replace: true })
+  }
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader title={t('folder.settings')} back={<BackButton />} />

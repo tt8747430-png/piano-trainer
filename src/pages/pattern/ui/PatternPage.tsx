@@ -37,6 +37,7 @@ import {
 } from '@/shared/ui'
 import { PatternPlay, PatternStaff, usePatternSample } from '@/widgets/pattern-music'
 import { PieceList } from '@/widgets/piece-list'
+import { useForgetScreens } from '@/shared/lib'
 
 /** The star in the bar: a favourite comes first in the Player's list. */
 function FavouriteButton({ pattern }: { pattern: BookPattern }) {
@@ -64,12 +65,14 @@ function usePatternActions(pattern: BookPattern, name: string) {
   const { t } = useTranslation(['practice', 'songs', 'editor'])
   const store = usePatternsStoreApi()
   const navigate = useNavigate()
+  const forget = useForgetScreens()
   const own = isOwnPatternId(pattern.ref) ? pattern.ref : null
   const builtIn = isPatternId(pattern.ref) ? pattern.ref : null
   const hidden = usePatterns((state) => builtIn !== null && selectIsHidden(builtIn)(state))
   const [deleteAsked, setDeleteAsked] = useState(false)
   const remove = (id: OwnPatternId) => {
-    // Leave the page first: it has nothing to show once the pattern is gone.
+    // Leave the page first: it has nothing to show once the pattern is gone, nor Back its screens.
+    forget(`/practice/accompaniment/patterns/${id}`)
     void navigate({
       to: '/practice/accompaniment',
       search: { show: 'yours' },

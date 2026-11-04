@@ -78,7 +78,7 @@ export {
   typedKey,
   typingLetters,
 } from './typing-keys'
-export { useUp } from './use-up'
+export { useForgetScreens, useUp } from './use-up'
 export { UpProvider } from './up-provider'
 export type { FindUp, Up } from './up-context'
 export { READ_DISTANCE, useHiddenWhileReading } from './use-hidden-while-reading'
