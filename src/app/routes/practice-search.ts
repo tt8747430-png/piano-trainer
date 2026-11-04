@@ -7,7 +7,7 @@ import {
   isTimeLimit,
   type TrainerView,
 } from '@/features/trainer'
-import { isHanonNumber, isOctaves, isTonality } from '@/entities/exercise'
+import { isHanonNumber, isHanonRhythm, isOctaves, isTonality } from '@/entities/exercise'
 import type { ExercisePageSearch } from '@/pages/exercise'
 import { readNote, valueOr, wholeIn } from '@/shared/lib'
 import { noteParam, parseNoteInOctave, PIANO } from '@/shared/lib/music'
@@ -97,6 +97,7 @@ export function readExercisePageSearch(raw: Raw): ExercisePageSearch {
     octaves: isOctaves(raw.octaves) ? raw.octaves : undefined,
     tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, undefined),
     hanon: isHanonNumber(raw.hanon) ? raw.hanon : undefined,
+    rhythm: isHanonRhythm(raw.rhythm) ? raw.rhythm : undefined,
     order: raw.order === 'chromatic' ? 'chromatic' : undefined,
     target: wholeIn(raw.target, TEMPO_RANGE.min, TEMPO_RANGE.max, undefined),
   }

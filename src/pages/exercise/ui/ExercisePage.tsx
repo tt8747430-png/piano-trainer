@@ -15,7 +15,7 @@ import { selectTempo, useProgress } from '@/entities/progress'
 import { arrangeExercise } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
 import { useSetSearch } from '@/shared/lib'
-import { HANON_NUMBERS } from '@/shared/lib/exercise'
+import { HANON_NUMBERS, HANON_RHYTHMS } from '@/shared/lib/exercise'
 import { noteParam, printedNote, type Hand } from '@/shared/lib/music'
 import { HANDS, TEMPO_RANGE } from '@/shared/lib/schedule'
 import {
@@ -55,10 +55,10 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
   const locale = useLocale()
   const search = useSearch({ from: '/shell/practice/exercises/$exerciseId' })
   const setSearch = useSetSearch<ExercisePageSearch>()
-  const { root, tonality, octaves, hanon, order, target } = search
+  const { root, tonality, octaves, hanon, rhythm, order, target } = search
   const choice: ExerciseChoice = useMemo(
-    () => exerciseChoice(exercise, { root, tonality, octaves, hanon }),
-    [exercise, root, tonality, octaves, hanon],
+    () => exerciseChoice(exercise, { root, tonality, octaves, hanon, rhythm }),
+    [exercise, root, tonality, octaves, hanon, rhythm],
   )
   const hands = exercise.options.bothHands ? 'both' : (search.hands ?? 'both')
   const performance = useMemo(() => arrangeExercise(exercise.id, choice), [exercise.id, choice])
@@ -118,6 +118,17 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
               className="w-full"
             />
           </Labelled>
+        ) : null}
+        {exercise.fields.rhythm ? (
+          <NamedSegmented
+            label={t('player:exercise.rhythm.label')}
+            value={choice.rhythm}
+            options={HANON_RHYTHMS.map((each) => ({
+              value: each,
+              label: t(`player:exercise.rhythm.${each}`),
+            }))}
+            onChange={(each) => setSearch({ rhythm: each === 'even' ? undefined : each })}
+          />
         ) : null}
         {exercise.options.oneKey ? null : (
           <Labelled label={t('practice:exercisePage.key')}>
@@ -216,6 +227,9 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
                 ...(exercise.fields.tonality ? { tonality: choice.tonality } : {}),
                 ...(exercise.fields.octaves ? { octaves: choice.octaves } : {}),
                 ...(exercise.fields.hanon ? { hanon: choice.hanon } : {}),
+                ...(exercise.fields.rhythm && choice.rhythm !== 'even'
+                  ? { rhythm: choice.rhythm }
+                  : {}),
                 ...(order ? { order } : {}),
                 hands,
                 tempo,

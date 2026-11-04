@@ -62,6 +62,21 @@ describe('hanon', () => {
     expect(fingers(thirteen, 'rh', 0)).toBe('31425345')
   })
 
+  it('plays a figure dotted, long-short, each pair still a quarter, and the bar kept', () => {
+    const even = notesOf(hanon({ root: C, number: 1 }), 'rh')
+    const dotted = notesOf(hanon({ root: C, number: 1, rhythm: 'dotted' }), 'rh')
+    const reverse = notesOf(hanon({ root: C, number: 1, rhythm: 'reverse' }), 'rh')
+    expect(dotted.map((n) => n.midi)).toEqual(even.map((n) => n.midi))
+    expect(dotted.slice(0, 4).map((n) => n.durationTicks)).toEqual([
+      BAR * 0.1875,
+      BAR * 0.0625,
+      BAR * 0.1875,
+      BAR * 0.0625,
+    ])
+    expect(reverse[1]?.startTick).toBe(BAR * 0.0625)
+    expect(dotted[8]?.startTick).toBe(BAR)
+  })
+
   it('ends No. 20 on a chord: the right hand’s E and C over the left hand’s octave C', () => {
     const exercise = hanon({ root: C, number: 20 })
     const last = exercise.notes.filter((n) => n.startTick === exercise.totalTicks - BAR)

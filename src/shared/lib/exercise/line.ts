@@ -92,15 +92,20 @@ export const handBelow = (keys: readonly Played[], below = 12): Played[] =>
 export function inEighths(
   hands: Readonly<Partial<Record<Hand, readonly Played[]>>>,
   from: Tick = 0,
+  /** The notes' lengths in turn, in 8ths, repeating (a dotted pair is 1.5 then 0.5): even by default. */
+  lengths: readonly number[] = [1],
 ): LineNote[] {
-  return BOTH_HANDS.flatMap((hand) =>
-    (hands[hand] ?? []).map((key, i, keys) => {
-      const startTick = from + i * EIGHTH
+  return BOTH_HANDS.flatMap((hand) => {
+    let startTick = from
+    return (hands[hand] ?? []).map((key, i, keys) => {
+      const length = Math.round((lengths[i % lengths.length] ?? 1) * EIGHTH)
+      const at = startTick
+      startTick += length
       const last = i === keys.length - 1
-      const durationTicks = last ? Math.ceil((startTick + EIGHTH) / BAR) * BAR - startTick : EIGHTH
-      return { ...key, hand, startTick, durationTicks }
-    }),
-  )
+      const durationTicks = last ? Math.ceil((at + length) / BAR) * BAR - at : length
+      return { ...key, hand, startTick: at, durationTicks }
+    })
+  })
 }
 
 /**

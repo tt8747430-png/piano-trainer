@@ -52,6 +52,8 @@ export interface ExerciseFields {
   readonly tonality?: true
   /** Which of Hanon's Nos. 1 to 20. */
   readonly hanon?: true
+  /** Hanon's rhythms: even, dotted or reverse dotted. */
+  readonly rhythm?: true
   /** Each hand's start octave (a scale run). */
   readonly handOctaves?: true
 }

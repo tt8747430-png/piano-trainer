@@ -34,6 +34,7 @@ const BASE: ExerciseChoice = {
   from: 'root',
   tonality: 'major',
   hanon: 1,
+  rhythm: 'even',
 }
 
 /** A value the exercise allows, or its own. */
@@ -83,6 +84,7 @@ export function exerciseChoice(exercise: Exercise, params: ExerciseParams): Exer
     from: allowed(params.from, fields.from, own.from),
     tonality: allowed(params.tonality, fields.tonality, own.tonality),
     hanon: allowed(params.hanon, fields.hanon, own.hanon),
+    rhythm: allowed(params.rhythm, fields.rhythm, own.rhythm),
     // A hand's octave where the exercise takes one; the run keeps its own where it would not fit.
     ...(fields.handOctaves && params.rhOctave !== undefined ? { rhOctave: params.rhOctave } : {}),
     ...(fields.handOctaves && params.lhOctave !== undefined ? { lhOctave: params.lhOctave } : {}),

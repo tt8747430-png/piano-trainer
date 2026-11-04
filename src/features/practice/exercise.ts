@@ -71,6 +71,6 @@ export function arrangeExercise(id: ExerciseId, choice: ExerciseChoice): Perform
     case 'five-finger':
       return fiveFinger({ root, minor })
     case 'hanon':
-      return hanon({ root, number: choice.hanon })
+      return hanon({ root, number: choice.hanon, rhythm: choice.rhythm })
   }
 }

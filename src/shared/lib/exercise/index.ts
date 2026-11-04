@@ -18,6 +18,13 @@ export {
   sequenceExercise,
   type HandOctaves,
 } from './scales'
-export { HANON_NUMBERS, hanon, hanonDegrees, type HanonNumber } from './hanon'
+export {
+  HANON_NUMBERS,
+  HANON_RHYTHMS,
+  hanon,
+  hanonDegrees,
+  type HanonNumber,
+  type HanonRhythm,
+} from './hanon'
 export { fiveFinger } from './technique'
 export { ROUTINE_PARTS, scaleRoutine, type RoutinePart } from './routine'

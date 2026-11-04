@@ -37,6 +37,8 @@ describe('An exercise’s page', () => {
     await user.click(screen.getByRole('combobox', { name: 'Exercise' }))
     await user.click(await screen.findByRole('option', { name: /^No\. 3\b/ }))
     expect(router.state.location.search).toMatchObject({ hanon: 3 })
+    await user.click(screen.getByRole('radio', { name: 'Dotted' }))
+    expect(router.state.location.search).toMatchObject({ rhythm: 'dotted' })
     await user.click(screen.getByRole('radio', { name: 'Chromatic' }))
     expect(router.state.location.search).toMatchObject({ order: 'chromatic' })
     await user.click(screen.getByRole('button', { name: 'Raise the target' }))
@@ -44,6 +46,7 @@ describe('An exercise’s page', () => {
     expect(start.getAttribute('href')).toMatch(/target=\d+/)
     expect(start.getAttribute('href')).toContain('speedTraining=true')
     expect(start.getAttribute('href')).toContain('hanon=3')
+    expect(start.getAttribute('href')).toContain('rhythm=dotted')
     expect(start.getAttribute('href')).toContain('order=chromatic')
   })
 

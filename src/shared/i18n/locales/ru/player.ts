@@ -431,6 +431,7 @@ export const player: LocaleResources['player'] = {
   exercise: {
     nextKey: 'Следующая тональность',
     title: '{{name}}: {{of}}',
+    rhythm: { label: 'Ритм', even: 'Ровно', dotted: 'Пунктир', reverse: 'Обратный пунктир' },
     hanon: { label: 'Упражнение', number: '№ {{number}}', name: 'Ганон № {{number}}' },
     scale: 'Гамма',
     chord: 'Аккорд',

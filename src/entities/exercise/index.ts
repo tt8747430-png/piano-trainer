@@ -7,6 +7,7 @@ export {
   isFigureId,
   isFingering,
   isHanonNumber,
+  isHanonRhythm,
   isTonality,
   isOctaves,
   isVoicing,

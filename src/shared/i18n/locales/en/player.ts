@@ -469,6 +469,7 @@ export const player = {
     nextKey: 'Next key',
     title: '{{name}}: {{of}}',
     // Hanon's The Virtuoso Pianist, Part I: which exercise.
+    rhythm: { label: 'Rhythm', even: 'Even', dotted: 'Dotted', reverse: 'Reverse dotted' },
     hanon: { label: 'Exercise', number: 'No. {{number}}', name: 'Hanon No. {{number}}' },
     scale: 'Scale',
     chord: 'Chord',

@@ -392,7 +392,7 @@ export const EXERCISES: readonly Exercise[] = [
       ru: 'Держите руку в позиции пяти пальцев и хорошо поднимайте каждый палец; играйте ровно, все ноты одинаково громко, пока фигура поднимается на две октавы и возвращается.',
     },
     options: {},
-    fields: { root: 'key', hanon: true },
+    fields: { root: 'key', hanon: true, rhythm: true },
     own: { hanon: 1 },
     // The book's Part I runs from ♩ = 60 to 108: start at the bottom and climb.
     tempo: 60,

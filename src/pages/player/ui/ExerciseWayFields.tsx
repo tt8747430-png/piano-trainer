@@ -7,7 +7,7 @@ import {
   type Exercise,
 } from '@/entities/exercise'
 import { localText, useLocale } from '@/shared/i18n'
-import { HANON_NUMBERS } from '@/shared/lib/exercise'
+import { HANON_NUMBERS, HANON_RHYTHMS } from '@/shared/lib/exercise'
 import { fingeringsOf, isInversion, spellChord } from '@/shared/lib/music'
 import { Dropdown, InversionChoice, NamedSegmented, Segmented } from '@/shared/ui'
 import type { ExerciseChange } from '../model/exercise-search'
@@ -40,6 +40,17 @@ export function ExerciseWayFields({
             detail: localText(HANON_TRAINS[number], locale),
           }))}
           onChange={(hanon) => onChange({ hanon })}
+        />
+      ) : null}
+      {fields.rhythm ? (
+        <Segmented
+          label={t('exercise.rhythm.label')}
+          value={choice.rhythm}
+          options={HANON_RHYTHMS.map((value) => ({
+            value,
+            label: t(`exercise.rhythm.${value}`),
+          }))}
+          onChange={(rhythm) => onChange({ rhythm })}
         />
       ) : null}
       {fields.fingering && fingerings.length > 1 ? (

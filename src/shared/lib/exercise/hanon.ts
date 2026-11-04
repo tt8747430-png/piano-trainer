@@ -20,6 +20,18 @@ export const HANON_NUMBERS = [
 export type HanonNumber = (typeof HANON_NUMBERS)[number]
 
 /**
+ * The rhythms Hanon's figures are practised in: even 8ths as printed, dotted (long-short) and
+ * reverse dotted (short-long), each pair still filling a quarter so a figure keeps its bar.
+ */
+export const HANON_RHYTHMS = ['even', 'dotted', 'reverse'] as const
+export type HanonRhythm = (typeof HANON_RHYTHMS)[number]
+const RHYTHM_LENGTHS: Readonly<Record<HanonRhythm, readonly number[]>> = {
+  even: [1],
+  dotted: [1.5, 0.5],
+  reverse: [0.5, 1.5],
+}
+
+/**
  * A run of one figure, carried a degree at a time: its first note's degree above the tonic, how many
  * times it is played (counting down where it is negative), its notes by degree above its first, and
  * each hand's fingers (a digit a note).
@@ -232,13 +244,14 @@ export function hanonDegrees(number: HanonNumber): number[] {
 
 /**
  * Hanon's Nos. 1 to 20 (The Virtuoso Pianist, Part I) in any major key, as the book prints them in
- * C: in 8ths, a figure a bar, both hands on the same notes with their own fingers, the left two
+ * C: in 8ths (or dotted, either way round), a figure a bar, both hands on the same notes with their own fingers, the left two
  * octaves below the right so each reads on its own staff; home on the tonic held for a bar (No. 20
  * on a chord).
  */
 export function hanon(choice: {
   readonly root: SpelledNote
   readonly number: HanonNumber
+  readonly rhythm?: HanonRhythm
 }): Performance {
   const exercise = HANON[choice.number]
   const octaves = spanOctaves(exercise)
@@ -260,7 +273,11 @@ export function hanon(choice: {
   }
   const home = (side: 'rh' | 'lh'): Played[] =>
     fingered(end[side].degrees.map(placeOf(side)), toFingers(end[side].fingers))
-  const body = inEighths({ rh: figures('rh'), lh: figures('lh') })
+  const body = inEighths(
+    { rh: figures('rh'), lh: figures('lh') },
+    0,
+    RHYTHM_LENGTHS[choice.rhythm ?? 'even'],
+  )
   const endTick = Math.max(...body.map((n) => n.startTick + n.durationTicks))
   return exercisePerformance({
     key: { tonic: choice.root, minor: false },

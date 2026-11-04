@@ -7,7 +7,13 @@ import {
   type ScaleKind,
   type SpelledNote,
 } from '@/shared/lib/music'
-import { HANON_NUMBERS, type ChordToneFrom, type HanonNumber } from '@/shared/lib/exercise'
+import {
+  HANON_NUMBERS,
+  HANON_RHYTHMS,
+  type ChordToneFrom,
+  type HanonNumber,
+  type HanonRhythm,
+} from '@/shared/lib/exercise'
 
 // What an exercise is played from, as its URL holds it: apart from the rules that write it, so the
 // router's validators carry no generator into the first paint.
@@ -76,6 +82,8 @@ export interface ExerciseChoice {
   readonly tonality: Tonality
   /** Which of Hanon's Nos. 1 to 20. */
   readonly hanon: HanonNumber
+  /** The rhythm Hanon's figures are played in. */
+  readonly rhythm: HanonRhythm
   /** The octave the right hand starts in (a scale run's), where the learner chose one; else its own. */
   readonly rhOctave?: number
   /** The octave the left hand starts in, likewise. */
@@ -90,3 +98,4 @@ export const isChordTone = isOneOf(CHORD_TONES)
 export const isTonality = isOneOf(TONALITIES)
 export const isFingering = isOneOf(FINGERINGS)
 export const isHanonNumber = isOneOf(HANON_NUMBERS)
+export const isHanonRhythm = isOneOf(HANON_RHYTHMS)
