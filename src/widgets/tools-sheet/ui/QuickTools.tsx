@@ -31,7 +31,11 @@ function QuickRow({
   children: ReactNode
 }) {
   return (
-    <div role="group" aria-label={label} className="flex min-h-14 items-center gap-3 px-3 py-1.5">
+    <div
+      role="group"
+      aria-label={label}
+      className="flex min-h-14 flex-wrap items-center gap-x-3 gap-y-1 px-3 py-1.5"
+    >
       <span
         aria-hidden
         className={cn(
@@ -42,11 +46,11 @@ function QuickRow({
       >
         <Icon className="size-5" />
       </span>
-      <span className="flex min-w-0 flex-1 flex-col text-left">
-        <span className="break-words">{label}</span>
+      <span className="flex min-w-32 flex-1 flex-col text-left">
+        <span>{label}</span>
         {detail ? <span className="text-sm text-muted-foreground">{detail}</span> : null}
       </span>
-      <div className="flex shrink-0 items-center gap-1">{children}</div>
+      <div className="ml-auto flex shrink-0 items-center gap-1">{children}</div>
     </div>
   )
 }

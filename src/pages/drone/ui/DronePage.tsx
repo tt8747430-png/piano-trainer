@@ -70,6 +70,7 @@ export function DronePage() {
               >
                 <span className="text-lg">{t('tools.drone.root')}</span>
                 <PitchPicker
+                  bare
                   label={t('tools.drone.root')}
                   value={pitchClass(drone.root)}
                   onChange={(root: PitchClass) => setDrone(store, { root })}
