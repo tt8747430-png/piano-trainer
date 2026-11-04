@@ -13,7 +13,7 @@ export function TimePopover({ bar, trigger }: { bar: number; trigger: ReactEleme
   const { said } = useSignatureFrom(bar)
   return (
     <SignPicker title={t('palette.category.time')} description={said} trigger={trigger}>
-      {(close) => <TimePicker bar={bar} onDone={close} />}
+      {() => <TimePicker bar={bar} />}
     </SignPicker>
   )
 }

@@ -158,6 +158,24 @@ export const music = {
   // A scale's structure in whole and half steps.
   gap: { W: 'W', H: 'H', 'W+H': 'W+H' },
   // A key, as a pop-up names it.
+  timeField: {
+    label: 'Time signature',
+    common: 'Common time, C',
+    cut: 'Cut time, ¢',
+    other: 'Other',
+    beats: 'Beats',
+    fewerBeats: 'One beat fewer',
+    moreBeats: 'One beat more',
+    beatUnit: 'Beat unit',
+    barred: 'The song cannot change to this here',
+    pickup: 'Pickup',
+    noPickup: 'None',
+    shorterPickup: 'Shorter pickup',
+    longerPickup: 'Longer pickup',
+    applyTo: 'Apply to',
+    fromBar: 'From this bar',
+    wholeSong: 'Whole song',
+  },
   key: {
     label: 'Key',
     major: '{{tonic}} major',

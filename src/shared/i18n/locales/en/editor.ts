@@ -189,34 +189,6 @@ export const editor = {
     },
     value: '{{mark}} a minute, {{word}}',
   },
-  // The time signature picker (ADR 0114): its wheels, its pickup, the C or ¢ for its figures.
-  time: {
-    // The section's tiles, Flat's: the common meters, then the picker for any other.
-    set: 'Time signature {{time}}',
-    other: 'Another time signature',
-    current: 'Current',
-    beat: 'Beat',
-    beatType: 'Beat type',
-    beatTypeInfo:
-      'The note each beat is counted in: a half, a quarter or an eighth. Changing it counts the bars anew; every note keeps its length. After the first section, a song counted in quarters cannot change to 3/8, 6/8, 9/8 or 12/8 (counted in dotted quarters), nor back: change it at the song’s start.',
-    pickup: 'Pickup',
-    pickupInfo:
-      'How long the first bar is where the song starts on an upbeat: a number of a note, 1/8 an eighth. – is none: a whole bar.',
-    pickupBeats: 'Pickup: how many',
-    pickupBeatType: 'Pickup: of which note',
-    symbol: {
-      common: 'Use common time symbol',
-      cut: 'Use cut time symbol',
-    },
-    symbolInfo: {
-      common: 'Prints 4/4 as C, wherever the song is in 4/4.',
-      cut: 'Prints 2/2 as ¢, wherever the song is in 2/2.',
-    },
-    symbolName: {
-      common: 'Common time, C',
-      cut: 'Cut time, ¢',
-    },
-  },
   // The lines drawn over notes, each a key.
   lines: {
     slur: 'Slur',

@@ -179,6 +179,8 @@ export interface TimeChoice {
   readonly timeSymbol?: boolean
   /** The first bar's length at the song's head, in the new meter's ticks: a pickup, or a whole bar. */
   readonly pickup?: Tick
+  /** The whole song in the meter, wherever it is applied: every section's own given up (A34). */
+  readonly whole?: boolean
 }
 
 /**
@@ -186,10 +188,12 @@ export interface TimeChoice {
  * its first section (`setMeter`), else from that section on (`setSectionMeter`), only where it
  * changes; the song's C or ¢; and at its head, the pickup.
  */
-export function setTime(draft: Draft, section: number, choice: TimeChoice): Draft {
+export function setTime(draft: Draft, at: number, choice: TimeChoice): Draft {
+  const section = choice.whole ? 0 : at
   if (meterBar(draft, section, choice.meter)) return draft
   let next = draft
-  if (choice.meter !== sectionMeter(draft, section))
+  if (choice.whole) next = setMeter(next, choice.meter)
+  else if (choice.meter !== sectionMeter(draft, section))
     next =
       section === 0 ? setMeter(next, choice.meter) : setSectionMeter(next, section, choice.meter)
   if (choice.timeSymbol !== undefined && choice.timeSymbol !== (next.timeSymbol ?? false)) {

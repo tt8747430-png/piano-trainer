@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { BarMarkChoice } from '@/features/score-editor'
-import { keySignature, type Clef, type Key, type Meter, type MeterSymbol } from '@/shared/lib/music'
+import { keySignature, type Clef, type Key } from '@/shared/lib/music'
 import { ClefSign, SignatureGlyphs } from '@/shared/ui/pickers/picker-pictures'
 import { SmuflPath, TimeSignatureSign } from '@/shared/ui/smufl'
 
@@ -51,29 +51,6 @@ export function KeyPicture({ signatureOf }: { signatureOf: Key }) {
 /** A clef drawn on its staff (ADR 0115, 0114): the picker's own picture. */
 export function ClefPicture({ clef }: { clef: Clef }) {
   return <ClefSign clef={clef} />
-}
-
-/** A time signature, its count over its unit across the staff, or 4/4 as C, 2/2 as ¢ (ADR 0115, 0114). */
-export function TimePicture({
-  meter,
-  symbol = null,
-}: {
-  meter: Meter
-  symbol?: MeterSymbol | null
-}) {
-  const [count = 4, unit = 4] = meter.split('/').map(Number)
-  return (
-    <Staff>
-      <TimeSignatureSign
-        count={count}
-        unit={unit}
-        symbol={symbol}
-        x={WIDTH / 2}
-        y={TOP + 2 * SPACE}
-        space={SPACE}
-      />
-    </Staff>
-  )
 }
 
 /** A time signature as a key's face: its figures one over the other, Bravura's (ADR 0114). */

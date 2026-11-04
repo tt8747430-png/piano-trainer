@@ -33,7 +33,7 @@ import type { ScorePage } from '../model/score-pages'
  * The Key signature's or Time signature's page (R29, 3.5): From — the start, or a section, by its
  * first bar — then the picker the printed sign opens, changing it from there on.
  */
-function SignaturePage({ sign, onDone }: { sign: 'key' | 'time'; onDone: () => void }) {
+function SignaturePage({ sign }: { sign: 'key' | 'time' }) {
   const { t } = useTranslation('editor')
   const named = useSectionHeading()
   const sections = useEditorState((state) => state.draft.sections)
@@ -78,7 +78,7 @@ function SignaturePage({ sign, onDone }: { sign: 'key' | 'time'; onDone: () => v
         {sign === 'key' ? (
           <KeyPicker key={from} bar={from} />
         ) : (
-          <TimePicker key={from} bar={from} onDone={onDone} />
+          <TimePicker key={from} bar={from} />
         )}
       </div>
     </>
@@ -119,7 +119,7 @@ export function ScorePageBody({
       )
     case 'key':
     case 'time':
-      return <SignaturePage sign={page} onDone={onDone} />
+      return <SignaturePage sign={page} />
     case 'tempo':
       return (
         <div className="card p-4">

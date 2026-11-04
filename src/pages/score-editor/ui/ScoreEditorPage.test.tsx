@@ -529,38 +529,16 @@ describe('the score editor', () => {
     await user.keyboard('{Escape}')
     const time = await openCategory(user, 'Time signature')
     expect(within(time).getByText('From Chorus on (bar 5)')).toBeInTheDocument()
-    // Flat's tiles, the meter in force pressed; Another opens the picker: nothing changes until Apply.
-    expect(within(time).getByRole('button', { name: 'Time signature 4/4' })).toHaveAttribute(
+    // Flat's tiles, the meter in force pressed; a tap writes it at once (A34).
+    expect(within(time).getByRole('button', { name: '4/4' })).toHaveAttribute(
       'aria-pressed',
       'true',
     )
-    await user.click(within(time).getByRole('button', { name: 'Another time signature' }))
-    const picker = await screen.findByRole('dialog', { name: 'Time signature' })
-    const beat = within(picker).getByRole('spinbutton', { name: 'Beat' })
-    expect(beat).toHaveAttribute('aria-valuetext', '4')
     // A later section has no pickup: the song's head has.
-    expect(
-      within(picker).queryByRole('spinbutton', { name: 'Pickup: how many' }),
-    ).not.toBeInTheDocument()
-    expect(within(picker).getByRole('button', { name: 'Apply' })).toBeDisabled()
-    // A meter counted in dotted quarters cannot follow the verse's quarters: 6/8's 8 greyed.
-    beat.focus()
-    await user.keyboard('6')
-    expect(beat).toHaveAttribute('aria-valuetext', '6')
-    within(picker).getByRole('spinbutton', { name: 'Beat type' }).focus()
-    await user.keyboard('8')
-    expect(within(picker).getByRole('spinbutton', { name: 'Beat type' })).toHaveAttribute(
-      'aria-valuetext',
-      '4',
-    )
-    beat.focus()
-    await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}')
-    expect(beat).toHaveAttribute('aria-valuetext', '3')
-    expect(songOf(piecesStore.getState())).not.toHaveProperty('sections.1.meter')
-    await user.click(within(picker).getByRole('button', { name: 'Apply' }))
-    await waitFor(() =>
-      expect(screen.queryByRole('dialog', { name: 'Time signature' })).not.toBeInTheDocument(),
-    )
+    expect(within(time).queryByRole('textbox', { name: 'Pickup' })).not.toBeInTheDocument()
+    // A meter counted in dotted quarters cannot follow the verse's quarters: 6/8 greyed.
+    expect(within(time).getByRole('button', { name: '6/8' })).toBeDisabled()
+    await user.click(within(time).getByRole('button', { name: '3/4' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         meter: '4/4',
@@ -578,16 +556,19 @@ describe('the score editor', () => {
     await user.click(printed)
     const change = await screen.findByRole('dialog', { name: 'Time signature' })
     expect(within(change).getByText('From Chorus on (bar 5)')).toBeInTheDocument()
-    // Stepped on its wheel with the keys: 3 up to 4.
-    within(change).getByRole('spinbutton', { name: 'Beat' }).focus()
-    await user.keyboard('{ArrowUp}')
-    await user.click(within(change).getByRole('button', { name: 'Apply' }))
+    await user.click(within(change).getByRole('button', { name: 'One beat more' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         sections: [{ lines: ['G G G G'] }, { lines: ['C C C C'] }],
       }),
     )
     expect(piecesStore.getState().songs[0]?.sections[1]).not.toHaveProperty('meter')
+    await user.keyboard('{Escape}')
+    // Apply to: Whole song, from the chorus's bar, writes the song's own meter.
+    const whole = await openCategory(user, 'Time signature')
+    await user.click(within(whole).getByRole('radio', { name: 'Whole song' }))
+    await user.click(within(whole).getByRole('button', { name: '2/4' }))
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ meter: '2/4' }))
     // Two pickers and three engravings of the whole song: longer than one edit's test.
   }, 30_000)
 
@@ -697,7 +678,7 @@ describe('the score editor', () => {
     )
   })
 
-  it('changes the whole song’s time from the one printed: its meter, pickup and C, on Apply (ADR 0114)', async () => {
+  it('changes the whole song’s time from the one printed: its C and pickup, each a step (A34)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     const openPicker = async () => {
@@ -711,35 +692,26 @@ describe('the score editor', () => {
       return screen.findByRole('dialog', { name: 'Time signature' })
     }
     const picker = await openPicker()
-    // At the song's first bar, the whole song's (ADR 0097).
+    // At the song's first bar, the whole song's (ADR 0097), its pickup with it.
     expect(within(picker).getByText('The whole song')).toBeInTheDocument()
-    expect(within(picker).getByRole('spinbutton', { name: 'Beat type' })).toHaveAttribute(
-      'aria-valuetext',
-      '4',
-    )
-    // Cancel leaves the song as it was.
-    within(picker).getByRole('spinbutton', { name: 'Beat' }).focus()
-    await user.keyboard('{ArrowDown}')
-    await user.click(within(picker).getByRole('button', { name: 'Cancel' }))
-    expect(songOf(piecesStore.getState())).toMatchObject({ meter: '4/4' })
-    // C and a pickup of a quarter, in one Apply.
-    const again = await openPicker()
-    await user.click(within(again).getByRole('switch', { name: 'Use common time symbol' }))
-    expect(within(again).getByRole('img', { name: 'Common time, C' })).toBeInTheDocument()
-    const pickup = within(again).getByRole('spinbutton', { name: 'Pickup: how many' })
-    expect(pickup).toHaveAttribute('aria-valuetext', '–')
-    pickup.focus()
-    await user.keyboard('{ArrowUp}')
-    expect(pickup).toHaveAttribute('aria-valuetext', '1')
-    expect(
-      within(again).getByRole('spinbutton', { name: 'Pickup: of which note' }),
-    ).toHaveAttribute('aria-valuetext', '4')
-    await user.click(within(again).getByRole('button', { name: 'Apply' }))
+    const pickup = within(picker).getByRole('textbox', { name: 'Pickup' })
+    expect(pickup).toHaveValue('0')
+    await user.click(within(picker).getByRole('button', { name: 'Common time, C' }))
+    await user.click(within(picker).getByRole('button', { name: 'Longer pickup' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         meter: '4/4',
         timeSymbol: true,
         sections: [{ lines: ['G@1 G G G'] }],
+      }),
+    )
+    // Each choice one step: Undo takes the pickup back, the C kept.
+    await user.keyboard('{Escape}')
+    await user.click(screen.getByRole('button', { name: /^Undo/ }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        timeSymbol: true,
+        sections: [{ lines: ['G G G G'] }],
       }),
     )
   })
@@ -777,7 +749,7 @@ describe('the score editor', () => {
     )
   })
 
-  it('writes a song in cut time from the time signature’s wheels, its ¢ on (ADR 0114)', async () => {
+  it('writes a song in cut time from the time signature’s ¢ tile (A34)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     const [time] = await screen.findAllByRole(
@@ -788,13 +760,7 @@ describe('the score editor', () => {
     if (!time) throw new Error('no time signature')
     await user.click(time)
     const picker = await screen.findByRole('dialog', { name: 'Time signature' })
-    within(picker).getByRole('spinbutton', { name: 'Beat' }).focus()
-    await user.keyboard('2')
-    within(picker).getByRole('spinbutton', { name: 'Beat type' }).focus()
-    await user.keyboard('{ArrowDown}')
-    await user.click(within(picker).getByRole('switch', { name: 'Use cut time symbol' }))
-    expect(within(picker).getByRole('img', { name: 'Cut time, ¢' })).toBeInTheDocument()
-    await user.keyboard('{Enter}')
+    await user.click(within(picker).getByRole('button', { name: 'Cut time, ¢' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         meter: '2/2',

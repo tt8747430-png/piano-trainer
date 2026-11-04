@@ -153,6 +153,24 @@ export const music: LocaleResources['music'] = {
   // Тон и полутон: Т и П.
   gap: { W: 'Т', H: 'П', 'W+H': 'Т+П' },
   // Карточки справочника интервалов: название интервала и его краткое обозначение.
+  timeField: {
+    label: 'Размер',
+    common: 'Размер C (4/4)',
+    cut: 'Размер ¢ (2/2)',
+    other: 'Другой',
+    beats: 'Доли',
+    fewerBeats: 'На долю меньше',
+    moreBeats: 'На долю больше',
+    beatUnit: 'Длительность доли',
+    barred: 'Здесь песня не может перейти в этот размер',
+    pickup: 'Затакт',
+    noPickup: 'Нет',
+    shorterPickup: 'Короче затакт',
+    longerPickup: 'Длиннее затакт',
+    applyTo: 'Применить',
+    fromBar: 'С этого такта',
+    wholeSong: 'Ко всей песне',
+  },
   key: {
     label: 'Тональность',
     major: '{{tonic}} мажор',
