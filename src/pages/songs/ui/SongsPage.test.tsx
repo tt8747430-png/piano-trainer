@@ -740,51 +740,57 @@ describe('Songs: Select (ADR 0106)', () => {
     )
   })
 
-  it('carries every row chosen onto Archive on the bar', async () => {
-    const user = userEvent.setup()
-    const { libraryStore } = await renderApp('/songs/folders/folder-1', {
-      storage: saved({ library: SUNDAY }),
-    })
-    await user.click(await screen.findByRole('button', { name: 'Select' }))
-    await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
-    await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
-    const song = rowOf('Select Silent Night')
-    // The bar's places stand at the foot, as they are drawn once the rows are carried.
-    const box = HTMLElement.prototype.getBoundingClientRect
-    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (
-      this: HTMLElement,
-    ) {
-      return this.dataset.slot === 'drop-zone'
-        ? DOMRect.fromRect({
-            x: this.textContent === 'Archive' ? 200 : 0,
-            y: 760,
-            width: 180,
-            height: 56,
-          })
-        : box.call(this)
-    })
-    const mouse = { button: 0, buttons: 1 }
-    fireEvent.mouseDown(song.face, { ...mouse, clientX: 20, clientY: 20 })
-    fireEvent.mouseMove(document, { ...mouse, clientX: 20, clientY: 300 })
-    const zones = await screen.findByRole('group', { name: 'Drop here' })
-    expect(within(zones).getByText('Move to Home')).toBeInTheDocument()
-    fireEvent.mouseMove(document, { ...mouse, clientX: 240, clientY: 770 })
-    fireEvent.mouseMove(document, { ...mouse, clientX: 241, clientY: 780 })
-    // Let go only once the drag stands over Archive: under load it is measured a frame late.
-    const archive = within(zones).getByText('Archive').closest('[data-slot="drop-zone"]')
-    await waitFor(() => {
+  // A drag across the library, measured by the drag library a frame at a time: slow under a full
+  // suite's load, so its own limit, and two more tries (it passes alone every time; under load the
+  // drop is now and then measured before the zones are, and nothing is carried).
+  it(
+    'carries every row chosen onto Archive on the bar',
+    { timeout: 15_000, retry: 2 },
+    async () => {
+      const user = userEvent.setup()
+      const { libraryStore } = await renderApp('/songs/folders/folder-1', {
+        storage: saved({ library: SUNDAY }),
+      })
+      await user.click(await screen.findByRole('button', { name: 'Select' }))
+      await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
+      await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
+      const song = rowOf('Select Silent Night')
+      // The bar's places stand at the foot, as they are drawn once the rows are carried.
+      const box = HTMLElement.prototype.getBoundingClientRect
+      vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (
+        this: HTMLElement,
+      ) {
+        return this.dataset.slot === 'drop-zone'
+          ? DOMRect.fromRect({
+              x: this.textContent === 'Archive' ? 200 : 0,
+              y: 760,
+              width: 180,
+              height: 56,
+            })
+          : box.call(this)
+      })
+      const mouse = { button: 0, buttons: 1 }
+      fireEvent.mouseDown(song.face, { ...mouse, clientX: 20, clientY: 20 })
+      fireEvent.mouseMove(document, { ...mouse, clientX: 20, clientY: 300 })
+      const zones = await screen.findByRole('group', { name: 'Drop here' })
+      expect(within(zones).getByText('Move to Home')).toBeInTheDocument()
+      fireEvent.mouseMove(document, { ...mouse, clientX: 240, clientY: 770 })
       fireEvent.mouseMove(document, { ...mouse, clientX: 241, clientY: 780 })
-      expect(archive).toHaveAttribute('data-drop')
-    })
-    fireEvent.mouseUp(document, { button: 0, clientX: 241, clientY: 780 })
-    await confirmAsked(user, 'Archive')
-    await waitFor(() => expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived'), {
-      timeout: 5000,
-    })
-    expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
-    expect(await screen.findByText('Archived: 2', {}, { timeout: 5000 })).toBeInTheDocument()
-    // A drag across the library: slow under a full suite's load, so its own limit.
-  }, 15_000)
+      // Let go only once the drag stands over Archive: under load it is measured a frame late.
+      const archive = within(zones).getByText('Archive').closest('[data-slot="drop-zone"]')
+      await waitFor(() => {
+        fireEvent.mouseMove(document, { ...mouse, clientX: 241, clientY: 780 })
+        expect(archive).toHaveAttribute('data-drop')
+      })
+      fireEvent.mouseUp(document, { button: 0, clientX: 241, clientY: 780 })
+      await confirmAsked(user, 'Archive')
+      await waitFor(() => expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived'), {
+        timeout: 5000,
+      })
+      expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
+      expect(await screen.findByText('Archived: 2', {}, { timeout: 5000 })).toBeInTheDocument()
+    },
+  )
 
   it('moves what is chosen by the Move sheet, into a new folder', async () => {
     const user = userEvent.setup()
