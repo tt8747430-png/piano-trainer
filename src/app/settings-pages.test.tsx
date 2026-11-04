@@ -14,6 +14,7 @@ const PAGES: readonly (readonly [SettingsPageId, string])[] = [
   ['score-editor', '/edit/bz5/settings?page=recording'],
   ['progressions', '/settings/progressions'],
   ['accompaniment', '/settings/accompaniment'],
+  ['chord-player', '/practice/chord-player/settings'],
   ['chord-finder', '/settings/chord-finder'],
   ['trainers', '/settings/exercises-and-quiz'],
   ['lessons', `/lessons/${LESSONS[0]!.id}/settings`],
