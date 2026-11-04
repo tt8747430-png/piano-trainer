@@ -3,6 +3,7 @@ import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { VIEWS_STORAGE_KEY, VIEWS_VERSION } from '@/entities/views'
 import {
   isDegreePiece,
   musicOf,
@@ -1235,6 +1236,26 @@ describe('the score editor', () => {
     // No MIDI keyboard yet: Record's popover says what it needs (ADR 0096).
     await user.click(within(dock).getByRole('button', { name: 'Record' }))
     expect(await screen.findByRole('dialog', { name: 'Record' })).toBeInTheDocument()
+  })
+
+  it('says how far the Player plays it, and Use this loads that offset (R29 T)', async () => {
+    const user = userEvent.setup()
+    const storage = withSong()
+    storage.setItem(
+      VIEWS_STORAGE_KEY,
+      JSON.stringify({
+        state: { views: { '/play/my-1': { transpose: 2 } }, searchRecent: [] },
+        version: VIEWS_VERSION,
+      }),
+    )
+    await renderApp('/edit/my-1', { storage })
+    await user.click(await screen.findByRole('button', { name: 'Transpose: G major' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Transpose' })
+    expect(sheet).toHaveTextContent('In the Player: +2 (A major)')
+    expect(within(sheet).getByRole('button', { name: 'Transpose' })).toBeDisabled()
+    await user.click(within(sheet).getByRole('button', { name: 'Use this' }))
+    expect(sheet).toHaveTextContent('+2 semitones')
+    expect(within(sheet).getByRole('button', { name: 'Transpose' })).toBeEnabled()
   })
 
   it('transposes the song from the Player’s one Transpose, the key and chords as asked, Undo taking it back (ADR 0115)', async () => {

@@ -12,6 +12,8 @@ export const editor: LocaleResources['editor'] = {
   transpose: {
     preview: 'Предпросмотр',
     apply: 'Транспонировать',
+    inPlayer: 'В плеере: {{by}} ({{key}})',
+    useThis: 'Взять это',
   },
   palette: {
     label: 'Инструменты',

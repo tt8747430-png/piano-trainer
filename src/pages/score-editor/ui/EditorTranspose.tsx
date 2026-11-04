@@ -1,6 +1,9 @@
+import { useParams, useRouter } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectScoreView, useSettings } from '@/entities/settings'
+import { selectView } from '@/entities/views'
+import { useKeyName } from '@/shared/i18n'
 import { firstLine, transpose, type Draft, type TransposeApplies } from '@/features/score-editor'
 import { transposedKey } from '@/shared/lib/music'
 import { Button } from '@/shared/ui/primitives/button'
@@ -61,6 +64,14 @@ export function EditorTranspose({ disabled }: { disabled: boolean }) {
     [open, draft, semitones, applies],
   )
   const line = useMemo(() => firstLine(moved), [moved])
+  // How far the learner plays it in the Player (R29 T): said here, ready to write with Use this.
+  const router = useRouter()
+  const keyName = useKeyName()
+  const { pieceId } = useParams({ strict: false })
+  const played = pieceId
+    ? (selectView(router.options.context.views.getState(), `/play/${pieceId}`)?.transpose ?? 0)
+    : 0
+  const playedBy = typeof played === 'number' ? played : 0
   const change = (opened: boolean) => {
     if (opened) {
       setSemitones(0)
@@ -88,6 +99,17 @@ export function EditorTranspose({ disabled }: { disabled: boolean }) {
       open={open}
       onOpenChange={change}
     >
+      {playedBy !== 0 ? (
+        <p className="flex items-center justify-between gap-2 text-sm text-muted-foreground">
+          {t('transpose.inPlayer', {
+            by: playedBy > 0 ? `+${playedBy}` : `−${-playedBy}`,
+            key: keyName(transposedKey(draft.key, playedBy)),
+          })}
+          <Button variant="soft" size="pill" onClick={() => setSemitones(playedBy)}>
+            {t('transpose.useThis')}
+          </Button>
+        </p>
+      ) : null}
       <section aria-label={t('transpose.preview')} className="flex flex-col gap-2">
         <h3 className="text-sm font-semibold text-muted-foreground">{t('transpose.preview')}</h3>
         <div className="max-w-full overflow-x-auto overscroll-x-contain rounded-control border border-border bg-background p-2">

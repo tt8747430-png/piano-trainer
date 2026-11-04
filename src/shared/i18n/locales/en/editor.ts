@@ -14,6 +14,8 @@ export const editor = {
   transpose: {
     preview: 'Preview',
     apply: 'Transpose',
+    inPlayer: 'In the Player: {{by}} ({{key}})',
+    useThis: 'Use this',
   },
   // The one palette (ADR 0114, Flat's): on a laptop a panel docked at the sheet's left, its sections
   // folding; on a phone a sheet docked at its foot, compact (the quick row and the categories) or
