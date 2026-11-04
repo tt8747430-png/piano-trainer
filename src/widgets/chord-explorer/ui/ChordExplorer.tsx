@@ -1,8 +1,10 @@
 import { selectKeyboard, useSettings } from '@/entities/settings'
 import { Square } from 'lucide-react'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useProgressStoreApi } from '@/entities/progress'
 import { PinnedKeyboard } from '@/features/live-keyboard'
+import { recordKeyPractised } from '@/features/record-practised'
 import { ArpeggioIcon } from '@/shared/ui/icons/ArpeggioIcon'
 import { chordShown, noteOnTop, useShownKeys } from '@/features/play-example'
 import { useKeyName } from '@/shared/i18n'
@@ -100,10 +102,20 @@ export function ChordExplorer({
   // A choice sounds by itself, unless Settings › Keyboard turns that off: it has no button, so no
   // Stop, and it cuts off what played.
   const { autoplay } = useSettings(selectKeyboard)
+  // A key's chords played in it count the key practised (B1's Keys practised, as the walk Player's).
+  const progress = useProgressStoreApi()
+  const practised = (view: ChordView) => {
+    if (view.key) recordKeyPractised(progress, view.key, new Date())
+  }
+  useEffect(() => {
+    if (playback.playing !== null && chord.key) recordKeyPractised(progress, chord.key, new Date())
+  }, [playback.playing, chord.key, progress])
   const change = (next: Partial<ChordView>) => {
     const view = changedView(chord, next)
     onChange(view)
-    if (autoplay) play(chordSounds(chordKeys(view), { arpeggio: false }))
+    if (!autoplay) return
+    play(chordSounds(chordKeys(view), { arpeggio: false }))
+    practised(view)
   }
   const parts = partsFromParams(chord)
   const key = chord.key ? keyFromParam(chord.key) : undefined

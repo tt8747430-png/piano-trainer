@@ -67,6 +67,15 @@ describe('Practice → Chords', () => {
     expect(audio.played).toHaveLength(0)
   })
 
+  it('counts a key practised once a chord opened in it plays (B1)', async () => {
+    const user = userEvent.setup()
+    const { progressStore } = await renderApp('/practice/chords?root=D&triad=min&key=C')
+    expect(await screen.findByRole('heading', { level: 2, name: 'Dm' })).toBeInTheDocument()
+    expect(progressStore.getState().keys['C']).toBeUndefined()
+    await user.click(screen.getByRole('button', { name: 'Play' }))
+    await waitFor(() => expect(progressStore.getState().keys['C']).toBeDefined())
+  })
+
   it('writes the chord on a staff', async () => {
     await renderApp('/practice/chords?triad=dim&size=7&seventh=diminished')
     const sheet = await screen.findByRole('region', { name: 'Sheet music' })
