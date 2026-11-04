@@ -136,7 +136,7 @@ export function StyleEditor({
         <h2 id="style-presets" className="px-1 text-sm font-semibold text-muted-foreground">
           {t('style.presets')}
         </h2>
-        <div className="flex gap-2 overflow-x-auto pb-1">
+        <div className="flex flex-wrap gap-2">
           {PRESETS.map((preset) => (
             <button
               key={preset}
