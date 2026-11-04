@@ -63,6 +63,16 @@ export {
   RIGHT_FIGURES,
 } from './content/figures'
 export { METHODS } from './content/methods'
+export { STYLE_FAMILIES, type StyleFamily } from './model/style-types'
+export {
+  BUILT_IN_STYLES,
+  DEFAULT_STYLE_ID,
+  styleBook,
+  styleVariations,
+  variationParts,
+  type Style,
+  type StyleBook,
+} from './model/styles'
 export { METHOD_PATTERNS } from './model/method-patterns'
 export { useFullShelfName } from './ui/use-full-shelf-name'
 export { usePartName } from './ui/use-part-name'

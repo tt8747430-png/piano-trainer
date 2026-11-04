@@ -1,4 +1,9 @@
 import {
+  CHORD_SHEETS_STORAGE_KEY,
+  createChordSheetsStore,
+  type ChordSheetsStore,
+} from '@/entities/chord-sheet'
+import {
   createDiagramInversionsStore,
   DIAGRAM_INVERSIONS_STORAGE_KEY,
   type DiagramInversionsStore,
@@ -54,6 +59,7 @@ export interface Stores {
   readonly views: ViewsStore
   readonly library: LibraryStore
   readonly diagramInversions: DiagramInversionsStore
+  readonly chordSheets: ChordSheetsStore
 }
 
 /**
@@ -73,6 +79,7 @@ export function createStores(
     views: createViewsStore(saving),
     library: createLibraryStore(saving),
     diagramInversions: createDiagramInversionsStore(saving),
+    chordSheets: createChordSheetsStore(saving),
   }
 }
 
@@ -110,6 +117,7 @@ export const SYNCED_SAVES: readonly SyncedSave[] = [
   { table: 'library', key: LIBRARY_STORAGE_KEY },
   { table: 'views', key: VIEWS_STORAGE_KEY },
   { table: 'diagram_inversions', key: DIAGRAM_INVERSIONS_STORAGE_KEY },
+  { table: 'chord_sheets', key: CHORD_SHEETS_STORAGE_KEY },
 ]
 
 /**

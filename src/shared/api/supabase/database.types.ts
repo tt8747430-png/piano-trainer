@@ -322,6 +322,7 @@ export type Database = {
         }
         Relationships: []
       }
+      chord_sheets: DocumentTable
       diagram_inversions: DocumentTable
       library: DocumentTable
       patterns: DocumentTable

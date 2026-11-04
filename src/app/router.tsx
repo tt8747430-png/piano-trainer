@@ -79,6 +79,7 @@ import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
 import { publicSearch } from './routes/public-search'
 import { remembered, restoreView } from './routes/remember'
 import { CHORD_FINDER_KEPT, chordFinderSearch, readChordFinderSearch } from './routes/tool-search'
+import { chordPlayerSearch, chordPlayerSettingsSearch } from './routes/chord-player-search'
 import { ShellLayout } from './ShellLayout'
 
 // Each screen module becomes one chunk, loaded when one of its routes is first matched. A route
@@ -95,6 +96,7 @@ const learnScreens = () => import('./routes/learn-screens')
 const lessonEditorScreens = () => import('./routes/lesson-editor-screens')
 const explorerScreens = () => import('./routes/explorer-screens')
 const toolScreens = () => import('./routes/tool-screens')
+const chordPlayerScreens = () => import('./routes/chord-player-screens')
 const accompanimentScreens = () => import('./routes/accompaniment-screens')
 const practiceScreens = () => import('./routes/practice-screens')
 
@@ -533,6 +535,20 @@ const chordFinderRoute = createRoute({
   component: lazyRouteComponent(toolScreens, 'ChordFinderPage'),
 })
 
+// The Chord player (R29 CP1): a chord sheet of sections played by a band in a style; its own Settings.
+const chordPlayerRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/chord-player',
+  ...chordPlayerSearch,
+  component: lazyRouteComponent(chordPlayerScreens, 'ChordPlayerPage'),
+})
+const chordPlayerSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/chord-player/settings',
+  ...chordPlayerSettingsSearch,
+  component: lazyRouteComponent(chordPlayerScreens, 'ChordPlayerSettingsPage'),
+})
+
 // The Metronome (ADR 0052): a steady beat at any tempo, its choices saved in pt-settings.
 const metronomeRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -908,6 +924,8 @@ const routeTree = rootRoute.addChildren([
     exercisesRoute,
     chordFinderRoute,
     metronomeRoute,
+    chordPlayerRoute,
+    chordPlayerSettingsRoute,
     trainerRoute,
     studyRoute,
     studySectionRoute,

@@ -74,6 +74,19 @@ use one.
   Player there looped; a song's page names the library's progressions it uses as chips, each opening Progressions in
   the song's key, one heard only inside a longer one left out.
 
+- **The Chord player** (`/practice/chord-player`, R29 CP1–CP6, Decided 22): two pages, one engine. Progressions
+  is the page to learn a progression; the Chord player plays a **chord sheet** along with a band, and each opens the
+  other with the same chords. A chord sheet (`shared/lib/arrangement/chord-sheet.ts`) is sections (Intro, Verse,
+  Pre-chorus, Chorus, Bridge, Solo, Outro), each played ×1–8 in one of its style's variations, of chords lasting 1
+  to 8 beats laid end to end across the bar lines; its text (`sheetToText`) is a Share link's and a saved sheet's
+  form. A **style** (`entities/pattern/content/styles`, Pop 1 first and the default) is the piano's two hands, the
+  bass's line of degrees and the drums' 16-step grid a bar, a fill on a section's last bar its last time round and
+  a crash on its first beat, swing as triplets (`arrangeStyle`); Accompaniment's patterns are its piano-only
+  styles. The transport queues each chord 0.1 s ahead from the sheet as it stands, so an edit lands at the next
+  chord. **My chord sheets** are `pt-chord-sheets` (version 1, synced as `chord_sheets`): the sheet in hand and
+  the learner's own, each its text, style, tempo and how it plays (instruments, count-in, repeat, volume,
+  transpose, set on the Chord player's Settings); Written as and Voicing are `pt-settings.chordPlayer`.
+
 ## Consequences
 
 A new progression is one entry with its lines; its other mode is never a second entry. Nothing about a progression
@@ -92,3 +105,4 @@ is saved: views remember numerals, and the Player's `bar` and `loop` open a piec
   (2026-10-28), from Musicca's and piano.org's progression pages.
 - r29 — Three tabs; the roles and moves drawn on the chords; the library a list; Written as and Voicing on
   Progressions' Settings (2026-11-03).
+- r29 — The Chord player: chord sheets of sections, styles with a band, My chord sheets synced (2026-11-04).

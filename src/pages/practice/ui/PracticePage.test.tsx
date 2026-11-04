@@ -22,10 +22,11 @@ describe('Practice', () => {
     ])
   })
 
-  it('lists Accompaniment and the Chord finder under Playing', async () => {
+  it('lists the Chord player, Accompaniment and the Chord finder under Playing', async () => {
     await renderApp('/practice')
     const playing = await screen.findByRole('region', { name: 'Playing' })
     expect(rowsOf(playing)).toEqual([
+      ['Chord player A chord sheet played by a band', '/practice/chord-player'],
       ['Accompaniment Patterns for both hands', '/practice/accompaniment'],
       ['Chord finder Play a chord, see its name', '/practice/chord-finder'],
     ])

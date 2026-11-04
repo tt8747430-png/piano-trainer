@@ -16,6 +16,7 @@ import {
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
+  DEFAULT_CHORD_PLAYER,
   DEFAULT_ACCOMPANIMENT,
   defaultKeyboard,
   TEXT_SIZES,
@@ -52,6 +53,7 @@ const DEFAULTS = {
   welcomed: false,
   lessonReading: 'page',
   progressions: DEFAULT_PROGRESSIONS,
+  chordPlayer: DEFAULT_CHORD_PLAYER,
   accompaniment: DEFAULT_ACCOMPANIMENT,
 }
 
@@ -188,6 +190,7 @@ describe('createSettingsStore', () => {
       welcomed: true,
       lessonReading: 'sections',
       progressions: { names: 'chords', voicing: 'block', inversion: 1 },
+      chordPlayer: { names: 'nashville', voicing: 'block' },
       accompaniment: { hidden: ['yours'] },
     }
     expect(restored(saved)).toEqual(saved)

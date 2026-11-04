@@ -141,6 +141,9 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   chord size (`maj`, `min`, `dom`, `domb9`, `hd`, `=quality`). _Avoid:_ step, chord role.
 - **Progression** («Последовательность»): a line of numerals practised in any key. Never a piece. _Avoid:_ chord
   flow, sequence.
+- **Chord sheet** («Гармоническая сетка»): the Chord player's sections of chords, each chord lasting whole beats,
+  played by a band in a **Style** («Стиль»: piano, bass and drums, with up to four **Variations**). The page is the
+  **Chord player** («Аккордовый плеер»). _Avoid:_ song, chart (a piece's), project.
 - **Mode** (a progression's, «Лад»): the church mode its numerals are read in on the key's tonic (Lydian,
   Mixolydian, Dorian, Phrygian, Locrian), each degree that mode's own chord, written against the major or minor key
   its 3rd says (`readInMode`, `modeKey`). _Avoid:_ scale (here), modal key.
