@@ -40,21 +40,9 @@ export const practice: LocaleResources['practice'] = {
   chords: {
     written: 'Другие обозначения',
     builder: {
-      // The row of pickers over a chord: its root, quality and voicing.
+      // The row of pickers over a chord: its root, the chord by name and its voicing.
       chord: 'Аккорд',
-      quality: 'Вид',
-      suspension: 'Задержание',
-      none: 'Нет',
       handFrom: 'Правая рука от',
-      triads: {
-        maj: 'Мажорное',
-        min: 'Минорное',
-        dim: 'Уменьшённое',
-        aug: 'Увеличенное',
-        sus2: 'С задержанной секундой',
-        sus4: 'С задержанной квартой',
-        power: 'Квинтовый (5)',
-      },
       // A stack named by its top interval, as a chord symbol writes it: a triad up to the 5th.
       sizes: { triad: '5', seventh: '7', ninth: '9', eleventh: '11', thirteenth: '13' },
       sizeNames: {
@@ -63,12 +51,6 @@ export const practice: LocaleResources['practice'] = {
         ninth: 'Нонаккорд',
         eleventh: 'Ундецимаккорд',
         thirteenth: 'Терцдецимаккорд',
-      },
-      seventh: 'Септима',
-      sevenths: {
-        minor: 'Малая септима',
-        major: 'Большая септима',
-        diminished: 'Уменьшённая септима',
       },
     },
     voicing: {

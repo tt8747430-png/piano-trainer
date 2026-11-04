@@ -38,7 +38,7 @@ describe('Practice → Chords', () => {
     await renderApp('/practice/chords')
     expect(await screen.findByRole('heading', { level: 2, name: 'C' })).toBeInTheDocument()
     expect(screen.getByText('Major triad')).toBeInTheDocument()
-    expect(pickerValue('Quality')).toBe('Major')
+    expect(pickerValue('Chord')).toBe('C')
     const sizes = screen.getByRole('radiogroup', { name: 'Chord size' })
     expect(within(sizes).getByRole('radio', { name: 'Triad' })).toBeChecked()
     expect(pickerValue('Root')).toBe('C')
@@ -50,7 +50,7 @@ describe('Practice → Chords', () => {
     const user = userEvent.setup()
     const { router, audio } = await renderApp('/practice/chords?root=G&size=7')
     expect(await screen.findByRole('heading', { level: 2, name: 'G7' })).toBeInTheDocument()
-    await pickMenu(user, 'Quality', 'Minor')
+    await pickMenu(user, 'Chord', 'Gm7')
     expect(router.state.location.search).toMatchObject({ root: 'G', triad: 'min', size: 7 })
     expect(await screen.findByRole('heading', { level: 2, name: 'Gm7' })).toBeInTheDocument()
     await user.click(screen.getByRole('radio', { name: '11th · Eleventh chord' }))
@@ -62,7 +62,7 @@ describe('Practice → Chords', () => {
     const user = userEvent.setup()
     const { audio, settingsStore } = await renderApp('/practice/chords')
     act(() => setKeyboard(settingsStore, { autoplay: false }))
-    await pickMenu(user, 'Quality', 'Minor')
+    await pickMenu(user, 'Chord', 'Cm')
     expect(await screen.findByRole('heading', { level: 2, name: 'Cm' })).toBeInTheDocument()
     expect(audio.played).toHaveLength(0)
   })
@@ -84,40 +84,31 @@ describe('Practice → Chords', () => {
     expect(sheet.querySelector('svg')).toBe(engraved)
   })
 
-  it('suspends a major chord apart from its quality, offering only what its size takes', async () => {
+  it('names the chords of a size in one Chord menu, a suspension among them (R29, Decided 22)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/chords?triad=sus4&size=13')
     expect(await screen.findByRole('heading', { level: 2, name: 'C13sus4' })).toBeInTheDocument()
-    expect(pickerValue('Quality')).toBe('Major')
-    const suspension = screen.getByRole('radiogroup', { name: 'Suspension' })
-    expect(
-      within(suspension)
-        .getAllByRole('radio')
-        .map((option) => option.textContent),
-    ).toEqual(['None', 'sus4'])
+    expect(pickerValue('Chord')).toBe('C13sus4')
+    // A size the suspension does not stack to keeps the major chord of that size.
     await user.click(screen.getByRole('radio', { name: '11th · Eleventh chord' }))
     expect(router.state.location.search).toMatchObject({ size: 11 })
     expect(router.state.location.search).not.toHaveProperty('triad')
     expect(await screen.findByRole('heading', { level: 2, name: 'C11' })).toBeInTheDocument()
-    expect(screen.queryByRole('radiogroup', { name: 'Suspension' })).not.toBeInTheDocument()
   })
 
-  it('offers a suspension under a major chord only, drawing no row under another (R30)', async () => {
-    await renderApp('/practice/chords?triad=min')
-    await screen.findByRole('heading', { level: 2, name: 'Cm' })
+  it('asks no 7th and no Suspension of its own (R29, the owner’s)', async () => {
+    await renderApp('/practice/chords?triad=min&size=9')
+    await screen.findByRole('heading', { level: 2, name: 'Cm9' })
     expect(screen.queryByRole('radiogroup', { name: 'Suspension' })).not.toBeInTheDocument()
     expect(screen.queryByRole('radiogroup', { name: '7th' })).not.toBeInTheDocument()
   })
 
-  it('offers only the sizes the quality stacks to', async () => {
-    await renderApp('/practice/chords?triad=aug')
-    await screen.findByRole('heading', { level: 2, name: 'C+' })
-    const sizes = screen.getByRole('radiogroup', { name: 'Chord size' })
-    expect(
-      within(sizes)
-        .getAllByRole('radio')
-        .map((radio) => radio.textContent),
-    ).toEqual(['Triad', '7th', '9th'])
+  it('keeps the chord’s family as the size changes: Cm9 at 13th is Cm13', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/chords?triad=min&size=9')
+    await screen.findByRole('heading', { level: 2, name: 'Cm9' })
+    await user.click(screen.getByRole('radio', { name: '13th · Thirteenth chord' }))
+    expect(await screen.findByRole('heading', { level: 2, name: 'Cm13' })).toBeInTheDocument()
   })
 
   it('plays from one transport capsule', async () => {
@@ -258,16 +249,16 @@ describe('Practice → Chords', () => {
   it('names every choice on screen, in the order a chord is built', async () => {
     await renderApp('/practice/chords?size=7')
     await screen.findByRole('heading', { level: 2, name: 'C7' })
-    // Its root, quality and voicing in one row of pickers, the rest as fields under it.
+    // Its root, the chord by name and its voicing in one row of pickers, the rest as fields under it.
     const row = screen.getByRole('group', { name: 'Chord' })
     expect(
       within(row)
         .getAllByRole('button', { name: /: / })
         .map((button) => button.getAttribute('aria-label')),
-    ).toEqual(['Root: C', 'Quality: Major', 'Voicing: Close'])
+    ).toEqual(['Root: C', 'Chord: C7', 'Voicing: Close'])
     expect(
       screen.getAllByRole('radiogroup').map((group) => group.getAttribute('aria-label')),
-    ).toEqual(['Chord size', '7th', 'Suspension', 'Inversion', 'Hands'])
+    ).toEqual(['Chord size', 'Inversion', 'Hands'])
   })
 
   it('walks a chord the table names chromatically in the Player, from its root', async () => {

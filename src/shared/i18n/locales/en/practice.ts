@@ -47,22 +47,10 @@ export const practice = {
     written: 'Also written',
     // Chords builds a chord part by part.
     builder: {
-      // The row of pickers over a chord: its root, quality and voicing.
+      // The row of pickers over a chord: its root, the chord by name and its voicing.
       chord: 'Chord',
-      quality: 'Quality',
-      suspension: 'Suspension',
-      none: 'None',
       // A chord of five notes or more, its root left to the bass: where its right hand starts.
       handFrom: 'Right hand from',
-      triads: {
-        maj: 'Major',
-        min: 'Minor',
-        dim: 'Diminished',
-        aug: 'Augmented',
-        sus2: 'Suspended 2nd',
-        sus4: 'Suspended 4th',
-        power: 'Power (5)',
-      },
       sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
       sizeNames: {
         triad: 'Triad',
@@ -71,8 +59,6 @@ export const practice = {
         eleventh: 'Eleventh chord',
         thirteenth: 'Thirteenth chord',
       },
-      seventh: '7th',
-      sevenths: { minor: 'Minor 7th', major: 'Major 7th', diminished: 'Diminished 7th' },
     },
     // How the chord is laid on the keys: the jazz pianist's voicings, each explained in its ⓘ.
     voicing: {

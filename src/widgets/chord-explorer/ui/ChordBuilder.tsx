@@ -1,13 +1,16 @@
 import { useTranslation } from 'react-i18next'
 import {
   BUILT_SIZES,
+  buildChord,
   chordInversions,
-  SEVENTH_DEGREE,
+  printedNote,
   seventhsOf,
   sizesOf,
+  TRIADS,
   voicingTakesInversion,
   type BuiltSize,
   type PlacedChord,
+  type Seventh,
   type Tone,
   type Triad,
 } from '@/shared/lib/music'
@@ -21,14 +24,28 @@ import {
   PickerRow,
   Segmented,
 } from '@/shared/ui'
-import { isSuspended, takesTwoHands, type ChordView } from '../model/chord-view'
+import { takesTwoHands, type ChordView } from '../model/chord-view'
 import { RightHandFrom } from './RightHandFrom'
 import { VoicingField } from './VoicingField'
 
-/** A chord's quality: its 3rd and 5th, or its 5th alone. A suspension is a field of its own. */
-const QUALITIES = ['maj', 'min', 'aug', 'dim', 'power'] as const satisfies readonly Triad[]
-/** The suspensions, each a major chord's 3rd taken by a 2nd or a 4th. */
-const SUSPENSIONS = ['sus2', 'sus4'] as const satisfies readonly Triad[]
+/** A chord of a size, by its triad and its 7th: one row of the Chord menu. */
+interface ChordType {
+  readonly triad: Triad
+  readonly seventh: Seventh
+}
+
+/**
+ * The chords of a size, as chord dictionaries list them by name (R29, Decided 22): every triad that
+ * stacks to it, with each 7th it takes from a 7th chord up (Cmaj7, C7, Cm7, Cm(maj7), Cø7, C°7 …).
+ */
+const typesOf = (size: BuiltSize): readonly ChordType[] =>
+  TRIADS.filter((triad) => sizesOf(triad).includes(size)).flatMap((triad) =>
+    (size === 5 ? (['minor'] as const) : seventhsOf(triad, size)).map((seventh) => ({
+      triad,
+      seventh,
+    })),
+  )
+const typeKey = ({ triad, seventh }: ChordType) => `${triad}:${seventh}`
 
 /** Each size's name on screen. */
 const SIZE_NAMES = {
@@ -63,15 +80,16 @@ export function ChordBuilder({
 }) {
   const { t } = useTranslation(['practice', 'music', 'common'])
   const parts = partsFromParams(chord)
-  // The quality shown: a suspended chord is a major one with its 3rd suspended.
-  const quality = isSuspended(parts.triad) ? 'maj' : parts.triad
-  const suspensions =
-    quality === 'maj' ? SUSPENSIONS.filter((each) => sizesOf(each).includes(parts.size)) : []
-  const sevenths = seventhsOf(parts.triad, parts.size)
+  const root = noteFromParam(chord.root)
+  // Each chord of this size named as it is written on this root: C, Cm, C°, Cmaj7, Cm(maj9) …
+  const types = typesOf(parts.size)
+  const named = (type: ChordType) =>
+    printedNote(root) +
+    buildChord(root, { ...type, size: parts.size, added: [], alterations: [] }).suffix
+  const current = types.find((each) => each.triad === parts.triad && each.seventh === parts.seventh)
   const close = chord.voicing === 'close'
   const twoHands = close && takesTwoHands(tones.length)
   const inverts = voicingTakesInversion(chord.voicing)
-  const choosesSeventh = parts.size > 5 && sevenths.length > 1
   const inversions = chordInversions(tones).length
   return (
     <div className="grid-fields gap-x-10 gap-y-5">
@@ -83,13 +101,13 @@ export function ChordBuilder({
             onChange={(root) => onChange({ root: noteParam(root) })}
           />
           <MenuPicker
-            label={t('practice:chords.builder.quality')}
-            value={quality}
-            options={QUALITIES.map((each) => ({
-              value: each,
-              label: t(`practice:chords.builder.triads.${each}`),
-            }))}
-            onChange={(next) => onChange({ triad: next })}
+            label={t('practice:chords.builder.chord')}
+            value={typeKey(current ?? types[0] ?? { triad: 'maj', seventh: 'minor' })}
+            options={types.map((type) => ({ value: typeKey(type), label: named(type) }))}
+            onChange={(key) => {
+              const type = types.find((each) => typeKey(each) === key)
+              if (type) onChange(type)
+            }}
           />
           <VoicingField
             tones={tones}
@@ -103,45 +121,22 @@ export function ChordBuilder({
         <Segmented
           label={t('music:chordSize.label')}
           value={parts.size}
-          options={BUILT_SIZES.filter((size) => sizesOf(quality).includes(size)).map((size) => ({
+          options={BUILT_SIZES.map((size) => ({
             value: size,
             label: t(`practice:chords.builder.sizes.${SIZE_NAMES[size]}`),
             title: t(`practice:chords.builder.sizeNames.${SIZE_NAMES[size]}`),
           }))}
-          onChange={(size) => onChange({ size })}
+          onChange={(size) => {
+            // The chord's family kept where the size has it (Cm9 at 13th is Cm13), else its triad's.
+            const next = typesOf(size)
+            const kept =
+              next.find((each) => each.triad === parts.triad && each.seventh === parts.seventh) ??
+              next.find((each) => each.triad === parts.triad) ??
+              next[0]
+            onChange({ size, ...kept })
+          }}
         />
       </Labelled>
-      {choosesSeventh ? (
-        <Labelled label={t('practice:chords.builder.seventh')}>
-          <Segmented
-            label={t('practice:chords.builder.seventh')}
-            value={parts.seventh}
-            options={sevenths.map((seventh) => ({
-              value: seventh,
-              label: SEVENTH_DEGREE[seventh],
-              title: t(`practice:chords.builder.sevenths.${seventh}`),
-            }))}
-            onChange={(seventh) => onChange({ seventh })}
-          />
-        </Labelled>
-      ) : null}
-      {suspensions.length > 0 ? (
-        <Labelled label={t('practice:chords.builder.suspension')}>
-          <Segmented<Triad>
-            label={t('practice:chords.builder.suspension')}
-            value={parts.triad}
-            options={[
-              { value: 'maj', label: t('practice:chords.builder.none') },
-              ...suspensions.map((each) => ({
-                value: each,
-                label: each,
-                title: t(`practice:chords.builder.triads.${each}`),
-              })),
-            ]}
-            onChange={(triad) => onChange({ triad })}
-          />
-        </Labelled>
-      ) : null}
       {twoHands && inversions > 1 ? (
         <Labelled label={t('practice:chords.builder.handFrom')}>
           <RightHandFrom
