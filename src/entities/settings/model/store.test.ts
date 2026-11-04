@@ -57,6 +57,8 @@ const DEFAULTS = {
   chordPlayer: DEFAULT_CHORD_PLAYER,
   accompaniment: DEFAULT_ACCOMPANIMENT,
   bars: DEFAULT_BARS,
+  tuner: { a4: 440 },
+  drone: { root: 0, kind: 'fifth', octave: 3, volume: 60 },
 }
 
 describe('createSettingsStore', () => {
@@ -169,6 +171,8 @@ describe('createSettingsStore', () => {
         ],
       },
       bars: { ...DEFAULT_BARS, 'select.songs': ['delete', 'move'] },
+      tuner: { a4: 442 },
+      drone: { root: 9, kind: 'note', octave: 2, volume: 80 },
       scoreView: {
         layout: 'vertical',
         music: 'grid',
@@ -349,11 +353,28 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('starts afresh over a save of the version before, which had no bars of the learner’s (R29 B10)', () => {
-    expect(SETTINGS_VERSION).toBe(23)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 22)).toEqual(
+  it('starts afresh over a save of the version before, which had no Tuner or Drone (R29 B11)', () => {
+    expect(SETTINGS_VERSION).toBe(24)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 23)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
+  })
+
+  it('keeps the Tuner’s A and the Drone where they read, their defaults otherwise (R29 B11)', () => {
+    expect(restored({ tuner: { a4: 432 } }).tuner).toEqual({ a4: 432 })
+    expect(restored({ tuner: { a4: 500 } }).tuner).toEqual({ a4: 440 })
+    expect(restored({ drone: { root: 7, kind: 'minor', octave: 9, volume: 30 } }).drone).toEqual({
+      root: 7,
+      kind: 'minor',
+      octave: 3,
+      volume: 30,
+    })
+    expect(restored({ drone: { root: 12, kind: 'cluster' } }).drone).toEqual({
+      root: 0,
+      kind: 'fifth',
+      octave: 3,
+      volume: 60,
+    })
   })
 
   it('starts the Metronome at 120 in 4/4 with a click, each part saved kept where valid (A39)', () => {

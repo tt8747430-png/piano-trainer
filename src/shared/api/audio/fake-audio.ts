@@ -1,3 +1,4 @@
+import type { Midi } from '@/shared/lib/music'
 import type { RecordingPlay, Sound } from '@/shared/lib/schedule'
 import { createLiveVoice } from './live-voice'
 import { createSoundingKeys } from './sounding'
@@ -33,7 +34,16 @@ export interface FakeAudio extends AudioOutput {
     readonly play: RecordingPlay
     readonly volume?: () => number
   }[]
+  /** Each drone started: its keys, how loud, and whether it was stopped. */
+  readonly drones: readonly FakeDrone[]
   setNow(seconds: number): void
+}
+
+/** A drone the fake was asked for (R29 B11). */
+export interface FakeDrone {
+  readonly keys: readonly Midi[]
+  readonly gain: number
+  readonly stopped: boolean
 }
 
 export function createFakeAudio(): FakeAudio {
@@ -45,6 +55,7 @@ export function createFakeAudio(): FakeAudio {
   const recordings: { src: string; play: RecordingPlay; volume?: () => number }[] = []
   const voice: LiveEvent[] = []
   let notesOut: NoteOutput | null = null
+  const drones: { keys: readonly Midi[]; gain: number; stopped: boolean }[] = []
   const keys = createSoundingKeys({ now: () => clock })
   const live = createLiveVoice({ strike() {}, silence() {}, changed: keys.setLive })
   return {
@@ -82,6 +93,13 @@ export function createFakeAudio(): FakeAudio {
     playRecording(src, play, volume) {
       recordings.push(volume ? { src, play, volume } : { src, play })
     },
+    drone(keys, gain) {
+      const drone = { keys, gain, stopped: false }
+      drones.push(drone)
+      return () => {
+        drone.stopped = true
+      }
+    },
     now: () => clock,
     audioTimeAt: (pageTime) => clock + (pageTime - performance.now()) / 1000,
     sounding: keys.current,
@@ -113,6 +131,9 @@ export function createFakeAudio(): FakeAudio {
     },
     get recordings() {
       return recordings
+    },
+    get drones() {
+      return drones
     },
   }
 }

@@ -74,6 +74,12 @@ export interface AudioOutput {
    * `play.until`, as loud as `volume` says as it plays (0 to 1; at full where none is given).
    */
   playRecording(src: string, play: RecordingPlay, volume?: () => number): void
+  /**
+   * A drone (R29 B11): `keys` held as one sustained, synthesised tone at `gain` (0 to 1), faded in,
+   * until the stop it returns fades it out. Apart from `stop()`, as the live voice is: a click or a
+   * song stopping leaves it sounding.
+   */
+  drone(keys: readonly Midi[], gain: number): () => void
   /** The audio clock in seconds; 0 before there is any. */
   now(): number
   /**
