@@ -10,7 +10,7 @@
 - Port: `PublicEntry` gains `category`, `rating`, `authorAvatar`, `opening`; `rate`, `myRating`; `browse` by category and `rated`. Fake, Supabase adapter and contract test alike.
 - **CategoryPicker** (`widgets/song-preview`) for the Publish page: `PublishScreen` takes a `fields` slot and `PublishItem` a `category` (forwarded). **To wire (B6):** in `pages/piece/ui/PublishPage.tsx`, hold `category` state, pass `<CategoryPicker value onChange />` as `fields` and `category` in the item; count a category change as a change for Publish new version.
 
-**B1, the Profile** (commit below)
+**B1, the Profile** (commit `b3d0f2fe`)
 - `shared/api/profile` (port, Supabase adapter, fake, contract test), `shared/lib/image` (square 256 WebP ≤ 200 KB), `ProfileProvider`/`useLearnerProfile` (offline first), `createProfile()`.
 - `pt-progress` v5: `seconds`, `keys`, `earned`, `firsts`; `milestones.ts` (level n at n²×10 min), `notices.ts`, `withEarned`; Scale Master counts keys (3·8·15·24). `pt-notifications` (synced, table `notifications`). `useTrackAchievements` in `RootLayout`; `usePracticeClock` in the Player, walks and trainers; keys recorded by the walk Player; First published recorded on publish.
 - Pages: Profile (hero, bell with count, Edit photo, tiles, Almost there, Badges and Achievements previews with See all, guest, skeleton), Badges, a badge, Achievements (records, milestones), a milestone, Streak (replaces Activity, ‹ › months), Notifications (groups, ×/swipe, Mark all read, Clear all asked). Settings: Edit profile (12 built-in pictures, upload, handle check, bio, email link, Save in the bar, offline read-only), Change password, Privacy; Delete account typed DELETE/УДАЛИТЬ through `deleteAccountMachine`.
@@ -34,3 +34,6 @@
 - `20261104120100_public_authors.sql`: the `public_authors` view.
 - `20261104120200_notifications.sql`: the synced `notifications` table and `push_documents` taking it.
 - Then `supabase/tests/public-access.sql` (expected line updated).
+
+## Checks
+typecheck and lint clean; `test:changed` 4727 passed. Not mine: `composition-root.test.ts` "build on the project the environment names" fails in this worktree, which has no `.env.local`; a score-editor palette test timed out under load and passes alone. `npm run build` passes with the two env names set.
