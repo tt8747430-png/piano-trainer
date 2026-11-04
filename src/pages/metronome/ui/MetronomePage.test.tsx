@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { SETTINGS_VERSION } from '@/entities/settings'
-import type { ClickSound } from '@/shared/lib/schedule'
+import type { ClickSound, DrumSound } from '@/shared/lib/schedule'
 import { createMemoryStorage } from '@/shared/lib'
 
 const saved = (storage: Storage) =>
@@ -13,8 +13,10 @@ const saved = (storage: Storage) =>
 const beatsPlayed = (played: readonly { sounds: readonly unknown[]; at: number }[]) =>
   played.map(({ at, sounds }) => ({
     at: Number(at.toFixed(3)),
-    voices: (sounds as ClickSound[]).map(
-      ({ voice, accent }) => `${voice ?? 'click'}${accent ? '!' : ''}`,
+    voices: (sounds as (ClickSound | DrumSound)[]).map((sound) =>
+      sound.kind === 'drum'
+        ? `${sound.piece}${sound.velocity >= 1 ? '!' : ''}`
+        : `${sound.voice ?? 'click'}${sound.accent ? '!' : ''}`,
     ),
   }))
 
@@ -109,9 +111,10 @@ describe('Practice → Metronome', () => {
     await waitFor(() =>
       // A waltz: the kick on 1, the snare on 2 and 3, the hat on every 8th (A39).
       expect(beatsPlayed(audio.played).map(({ voices }) => voices)).toEqual([
-        ['kick!', 'hat', 'hat'],
-        ['snare', 'hat', 'hat'],
-        ['snare', 'hat', 'hat'],
+        // On the recorded kit (R29 SND).
+        ['kick!', 'hatClosed', 'hatClosed'],
+        ['snare', 'hatClosed', 'hatClosed'],
+        ['snare', 'hatClosed', 'hatClosed'],
       ]),
     )
   })

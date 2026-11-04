@@ -10,10 +10,13 @@ import {
   mutedBar,
   plannedBeats,
 } from './metronome'
+import type { ClickSound, DrumSound } from './schedule'
 
 /** A beat's sounds as their voices, `!` where accented. */
-const voices = (sounds: readonly { voice?: string; accent: boolean }[]) =>
-  sounds.map(({ voice, accent }) => `${voice ?? 'click'}${accent ? '!' : ''}`)
+const voices = (sounds: readonly (ClickSound | DrumSound)[]) =>
+  sounds.map((sound) =>
+    sound.kind === 'drum' ? sound.piece : `${sound.voice ?? 'click'}${sound.accent ? '!' : ''}`,
+  )
 
 const voiced = (meter: string, sound: 'click' | 'beep' | 'drum') => ({
   meter,
@@ -47,19 +50,23 @@ describe('the Metronome’s beats', () => {
     expect(voices(beatSounds(voiced('4/4', 'beep'), 3, 0.5))).toEqual(['beep'])
   })
 
-  it('plays a drum groove: kick, snare, the hat on 8ths at their offsets in the beat', () => {
+  it('plays a drum groove on the recorded kit: kick, snare, the closed hat on 8ths (R29 SND)', () => {
     const first = beatSounds(voiced('4/4', 'drum'), 0, 0.5)
-    expect(first.map((sound) => `${sound.voice}@${sound.at}`)).toEqual([
-      'kick@0',
-      'hat@0',
-      'hat@0.25',
+    expect(first).toEqual([
+      { kind: 'drum', at: 0, piece: 'kick', velocity: 1 },
+      { kind: 'drum', at: 0, piece: 'hatClosed', velocity: 0.8 },
+      { kind: 'drum', at: 0.25, piece: 'hatClosed', velocity: 0.55 },
     ])
-    expect(voices(beatSounds(voiced('4/4', 'drum'), 1, 0.5))).toEqual(['snare', 'hat', 'hat'])
+    expect(
+      beatSounds(voiced('4/4', 'drum'), 1, 0.5).map((sound) =>
+        sound.kind === 'drum' ? sound.piece : sound.kind,
+      ),
+    ).toEqual(['snare', 'hatClosed', 'hatClosed'])
   })
 
   it('subdivides softer than the beat, and leaves a silent beat silent', () => {
     const beat = beatSounds({ ...voiced('2/4', 'click'), subdivision: '8ths' }, 1, 0.5)
-    expect(beat.map((sound) => [sound.at, sound.gain])).toEqual([
+    expect(beat.map((sound) => [sound.at, sound.kind === 'click' ? sound.gain : null])).toEqual([
       [0, 0.6],
       [0.25, 0.35],
     ])

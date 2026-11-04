@@ -4,9 +4,10 @@ import {
   meterBeats,
   parseMeter,
   type BeatLevel,
+  type DrumVoice,
   type Subdivision,
 } from './meter'
-import type { ClickSound } from './schedule'
+import type { ClickSound, DrumSound, KitPiece } from './schedule'
 
 /**
  * The meters the Metronome offers in its menu (A39); any signature `parseMeter` reads is kept, the
@@ -58,7 +59,14 @@ export interface MetronomeVoice {
 }
 
 /** A drum groove's loudness: its kick and snare, its hat on the beat and off it. */
-const DRUM_GAIN = { drum: 1, hat: 0.8, offbeat: 0.55 } as const
+const DRUM_GAIN = { drum: 1, backbeat: 0.9, hat: 0.8, offbeat: 0.55 } as const
+
+/** The kit's piece each voice of the groove strikes. */
+const KIT_OF: Readonly<Record<DrumVoice, KitPiece>> = {
+  kick: 'kick',
+  snare: 'snare',
+  hat: 'hatClosed',
+}
 
 /**
  * What sounds on beat `beat` of a bar (from 0), at its offsets from the beat's start: the beat at
@@ -68,7 +76,7 @@ export function beatSounds(
   { meter, sound, levels, subdivision }: MetronomeVoice,
   beat: number,
   secondsPerBeat: number,
-): readonly ClickSound[] {
+): readonly (ClickSound | DrumSound)[] {
   const clicks = barClicks({
     meter: meterOf(meter),
     levels,
@@ -76,25 +84,26 @@ export function beatSounds(
     secondsPerBeat,
     drums: sound === 'drum',
   }).filter((click) => click.beat === beat)
-  return clicks.flatMap((click): ClickSound[] => {
+  return clicks.flatMap((click): (ClickSound | DrumSound)[] => {
     const at = click.at - beat * secondsPerBeat
     const accent = click.level === 'downbeat' || click.level === 'accent'
     const gain = LEVEL_GAIN[click.level]
     if (sound !== 'drum')
       return [{ kind: 'click', at, accent, gain, ...(sound === 'click' ? {} : { voice: sound }) }]
-    // A groove's kick and snare keep one loudness, the backbeat as strong as the bar's first; a
-    // square's accent lifts its drum, and the hat sits under them, softer off the beat.
+    // The groove on the recorded kit (R29 SND): the kick and snare as strong as the bar's first, a
+    // square's accent striking them hardest; the closed hat under them, softer off the beat.
     return click.voices.map((voice) => ({
-      kind: 'click',
+      kind: 'drum',
       at,
-      accent: voice !== 'hat' && accent,
-      gain:
+      piece: KIT_OF[voice],
+      velocity:
         voice === 'hat'
           ? click.level === 'sub'
             ? DRUM_GAIN.offbeat
             : DRUM_GAIN.hat
-          : DRUM_GAIN.drum,
-      voice,
+          : accent
+            ? DRUM_GAIN.drum
+            : DRUM_GAIN.backbeat,
     }))
   })
 }
