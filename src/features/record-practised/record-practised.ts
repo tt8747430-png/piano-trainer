@@ -10,3 +10,11 @@ export function recordPractised(store: ProgressStore, pieceId: PieceId, now: Dat
     ),
   )
 }
+
+/** Records that an exercise was played through today (A41): its row is ticked, and the day practised. */
+export function recordExercised(store: ProgressStore, exerciseId: string, now: Date): void {
+  const day = localDay(now)
+  store.setState((state) =>
+    withDay({ ...state, exercised: { ...state.exercised, [exerciseId]: day } }, day),
+  )
+}

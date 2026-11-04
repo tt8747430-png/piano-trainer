@@ -8,6 +8,7 @@ import type { StepId } from '@/entities/step'
 export const selectLearned = (state: ProgressState) => state.learned
 export const selectDays = (state: ProgressState) => state.days
 export const selectPractised = (state: ProgressState) => state.practised
+export const selectExercised = (state: ProgressState) => state.exercised
 export const selectTrainerRecords = (state: ProgressState) => state.trainers
 export const selectLessons = (state: ProgressState) => state.lessons
 

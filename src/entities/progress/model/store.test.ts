@@ -45,6 +45,7 @@ describe('createProgressStore', () => {
       earned: { 'streak:1': '2026-10-11', 'first-song': '2026-10-10' },
       firsts: { published: '2026-10-11' },
       bestTake: 96,
+      exercised: { 'scale-routine': '2026-10-11' },
     }
     writeSaved(storage, saved)
     expect(createProgressStore({ storage }).getState()).toEqual(saved)
@@ -101,6 +102,7 @@ describe('createProgressStore', () => {
       earned: { 'streak:2': '2026-10-11', 'streak:9': '2026-10-11', '': '2026-10-11' },
       firsts: { midi: '2026-10-11', cake: '2026-10-11' },
       bestTake: 140,
+      exercised: { 'scale-routine': '2026-10-11', 'Bad Id': '2026-10-11', hanon: 'today' },
       extra: true,
     })
     expect(createProgressStore({ storage }).getState()).toEqual({
@@ -124,6 +126,7 @@ describe('createProgressStore', () => {
       earned: { 'streak:2': '2026-10-11' },
       firsts: { midi: '2026-10-11' },
       bestTake: 0,
+      exercised: { 'scale-routine': '2026-10-11' },
     })
   })
 
@@ -155,7 +158,10 @@ describe('createProgressStore', () => {
     writeSaved(storage, {
       tempos: { 'hanon:5:C': 84, 'scale:G': 96, 'hanon:2': 900, 'Bad Key': 60, arpeggio: 'fast' },
     })
-    expect(createProgressStore({ storage }).getState().tempos).toEqual({ 'hanon:5:C': 84, 'scale:G': 96 })
+    expect(createProgressStore({ storage }).getState().tempos).toEqual({
+      'hanon:5:C': 84,
+      'scale:G': 96,
+    })
   })
 
   it('reads a save without tempos as none kept', () => {

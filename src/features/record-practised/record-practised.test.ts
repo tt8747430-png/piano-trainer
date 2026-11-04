@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 import { createProgressStore } from '@/entities/progress'
 import { createMemoryStorage } from '@/shared/lib'
-import { recordDay, recordPractised } from './index'
+import { recordDay, recordExercised, recordPractised } from './index'
 
 describe('recordPractised', () => {
   it('saves when each piece was last opened, keeping the others', () => {
@@ -35,5 +35,14 @@ describe('recordDay', () => {
     const store = createProgressStore({ storage: createMemoryStorage() })
     recordPractised(store, 'bz5', new Date(2026, 9, 11, 9))
     expect(store.getState().days).toEqual(['2026-10-11'])
+  })
+})
+
+describe('recordExercised', () => {
+  it('ticks an exercise for the day played, and the day as practised', () => {
+    const store = createProgressStore({ storage: createMemoryStorage() })
+    recordExercised(store, 'scale-routine', new Date(2026, 9, 11, 9))
+    expect(store.getState().exercised).toEqual({ 'scale-routine': '2026-10-11' })
+    expect(store.getState().days).toContain('2026-10-11')
   })
 })

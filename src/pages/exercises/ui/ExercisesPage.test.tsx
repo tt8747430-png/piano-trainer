@@ -1,7 +1,8 @@
-import { screen, within } from '@testing-library/react'
+import { act, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
+import { recordExercised } from '@/features/record-practised'
 
 describe('Practice → Exercises', () => {
   it('lists the drills of no other page in three groups, technique first', async () => {
@@ -23,6 +24,15 @@ describe('Practice → Exercises', () => {
     const row = within(harris).getByRole('link', { name: /^Drop-2 7ths \S/ })
     expect(row).toHaveAttribute('href', '/practice/exercises/drop-two')
     expect(within(row).getByRole('img', { name: 'Professional' })).toBeInTheDocument()
+  })
+
+  it('ticks an exercise played through today (A41)', async () => {
+    const { progressStore } = await renderApp('/practice/exercises')
+    const harris = await screen.findByRole('region', { name: 'Barry Harris' })
+    const row = within(harris).getByRole('link', { name: /^Drop-2 7ths \S/ })
+    expect(within(row).queryByText('Done today')).not.toBeInTheDocument()
+    act(() => recordExercised(progressStore, 'drop-two', new Date()))
+    expect(within(row).getByText('Done today')).toBeInTheDocument()
   })
 
   it('leaves a scale’s and a chord’s exercises to their own pages', async () => {

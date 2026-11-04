@@ -104,6 +104,8 @@ const isDayKey = (key: string): key is string => /^\d{4}-\d{2}-\d{2}$/.test(key)
 const isDaySeconds = (value: unknown): value is number => isCount(value) && value <= 86_400
 
 /** A key as the URL writes it (`G`, `Ebm`, `F#m`). */
+/** An exercise's id, as the catalog writes them (`scale-routine`). */
+const isExerciseKey = (key: string): key is string => /^[a-z0-9]+(-[a-z0-9]+)*$/.test(key)
 const isKeyName = (key: string): key is string => /^[A-G](#|b)?m?$/.test(key)
 
 /** What an earned day is kept under: a badge's tier (`streak:2`) or a milestone's id. */
@@ -166,5 +168,8 @@ function sanitize(persisted: unknown): ProgressState {
       typeof saved.bestTake === 'number' && saved.bestTake >= 0 && saved.bestTake <= 100
         ? Math.round(saved.bestTake)
         : 0,
+    exercised: kept(saved.exercised, isExerciseKey, (value) =>
+      typeof value === 'string' && isDayKey(value) ? value : undefined,
+    ),
   }
 }

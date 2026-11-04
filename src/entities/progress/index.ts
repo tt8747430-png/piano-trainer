@@ -53,6 +53,7 @@ export {
   selectLearned,
   selectLessonDone,
   selectLessons,
+  selectExercised,
   selectPractised,
   selectRead,
   selectTempo,

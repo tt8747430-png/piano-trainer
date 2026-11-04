@@ -1,8 +1,10 @@
 import { useParams, useSearch } from '@tanstack/react-router'
 import { SkipForward } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isExerciseId, exerciseOf, type ExerciseChoice, type Exercise } from '@/entities/exercise'
+import { useProgressStoreApi } from '@/entities/progress'
+import { recordExercised } from '@/features/record-practised'
 import { localText, useKeyName, useLocale, useScaleName } from '@/shared/i18n'
 import { useUp, useSetSearch } from '@/shared/lib'
 import { printedChord } from '@/shared/lib/music'
@@ -59,6 +61,11 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
     setWasPlaying(playing)
     if (!playing) setPassed(true)
   }
+  // A pass played ticks the exercise's row for the day (A41).
+  const progress = useProgressStoreApi()
+  useEffect(() => {
+    if (passed) recordExercised(progress, exercise.id, new Date())
+  }, [passed, progress, exercise.id])
   const goOn =
     passed && !playing && !exercise.options.oneKey
       ? () => {
