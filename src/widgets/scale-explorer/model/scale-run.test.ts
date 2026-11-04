@@ -13,6 +13,19 @@ const view = {
 } as const
 
 describe('scaleRunOf', () => {
+  it('runs four octaves of D major, 57 notes up and down (R29-P9)', () => {
+    const run = scaleRunOf({ ...view, root: noteParam(note('D')), octaves: 4 })
+    expect(run.placed).toHaveLength(29)
+    expect(run.music.notes).toHaveLength(57)
+  })
+
+  it('stops at the top going up alone, and starts there going down alone', () => {
+    const up = scaleRunOf({ ...view, direction: 'up' })
+    expect(up.music.notes.map((each) => each.midi)).toEqual([60, 62, 64, 65, 67, 69, 71, 72])
+    const down = scaleRunOf({ ...view, direction: 'down' })
+    expect(down.music.notes.map((each) => each.midi)).toEqual([72, 71, 69, 67, 65, 64, 62, 60])
+  })
+
   it('runs two octaves where asked, fingered as the books carry it on', () => {
     const run = scaleRunOf({ ...view, octaves: 2 })
     expect(run.placed).toHaveLength(15)

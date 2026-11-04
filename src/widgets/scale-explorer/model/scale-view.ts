@@ -6,7 +6,7 @@ import {
   type NoteParam,
   type ScaleKind,
 } from '@/shared/lib/music'
-import type { Hands, PracticeRhythm } from '@/shared/lib/schedule'
+import type { Hands, PracticeRhythm, RunDirection } from '@/shared/lib/schedule'
 
 /** The views of a scale, in the order their tabs stand. */
 export const SCALE_SHOWS = ['scale', 'chords', 'key'] as const
@@ -19,17 +19,17 @@ export const showsOf = (kind: ScaleKind): readonly ScaleShow[] =>
       show === 'scale' || (show === 'chords' ? scaleHasChords(kind) : keyMode(kind) !== null),
   )
 
-/** A run's octaves on the Scales page. */
-export const RUN_OCTAVES = [1, 2] as const
-export type RunOctaves = (typeof RUN_OCTAVES)[number]
+/** A run's octaves on the Scales page: one to four, as the scale books practise them (R29-P9). */
+export const MIN_OCTAVES = 1
+export const MAX_OCTAVES = 4
+export type RunOctaves = 1 | 2 | 3 | 4
 
-/** What the run's keys carry, as the reference's switch over its keys: its notes, or a hand's fingers. */
-export const RUN_KEY_SHOWS = ['notes', 'lh', 'rh'] as const
-export type RunKeyShow = (typeof RUN_KEY_SHOWS)[number]
+/** What the run's keys carry: its notes, or a hand's fingers. */
+export type RunKeyShow = 'notes' | 'lh' | 'rh'
 
-/** What the run's keys carry where the view names nothing: the playing hand's fingers, the right for both. */
-export const runKeyShow = (view: Pick<ScaleView, 'onKeys' | 'hands'>): RunKeyShow =>
-  view.onKeys ?? (view.hands === 'lh' ? 'lh' : 'rh')
+/** What the run's keys carry: the playing hand's fingers, the right for both (the piano's toolbar names notes). */
+export const runKeyShow = (view: Pick<ScaleView, 'hands'>): RunKeyShow =>
+  view.hands === 'lh' ? 'lh' : 'rh'
 
 /** What the Scales explorer shows: the scale, what its keys carry, and how it is practised. */
 export interface ScaleView {
@@ -42,16 +42,16 @@ export interface ScaleView {
   readonly show: ScaleShow
   /** The degree the run starts on, 1 the tonic (Scale view). */
   readonly start: number
-  /** How many octaves the run climbs (Scale view): one, or two as the books teach it. */
+  /** How many octaves the run climbs (Scale view): one to four. */
   readonly octaves: RunOctaves
+  /** Which way the run goes (Scale view); absent, up and back down. */
+  readonly direction?: Exclude<RunDirection, 'both'>
   /** How the run is fingered; absent, as its start is (`ownFingering`). */
   readonly fingering?: Fingering
   readonly rhythm: PracticeRhythm
   readonly tempo: number
   /** The hand that plays the run, or both; its fingers stand under the keys (the right hand's for both). */
   readonly hands: Hands
-  /** What the run's keys carry (Scale view); absent, the playing hand's fingers. */
-  readonly onKeys?: RunKeyShow
   /** How many notes each chord stacks: 3 a triad … 7 a 13th (Chords view). */
   readonly chords: ChordNotes
   /** Root position (0) to the 3rd inversion, as far as the chords stack. */

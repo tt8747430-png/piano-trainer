@@ -311,27 +311,28 @@ describe('Practice → Scales and keys', () => {
     ).toBeInTheDocument()
   })
 
-  it('climbs two octaves where asked, kept in the URL', async () => {
+  it('climbs two octaves where asked and up to four, kept in the URL (R29-P9)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales')
-    const octaves = await screen.findByRole('radiogroup', { name: 'Octaves' })
-    await user.click(within(octaves).getByRole('radio', { name: '2' }))
+    const more = await screen.findByRole('button', { name: 'More octaves' })
+    await user.click(more)
     expect(router.state.location.search).toMatchObject({ octaves: 2 })
     expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('123123412312345')
+    await user.click(more)
+    await user.click(more)
+    expect(router.state.location.search).toMatchObject({ octaves: 4 })
+    expect(more).toBeDisabled()
   })
 
-  it('shows the notes alone or either hand’s fingers on the keys, kept in the URL', async () => {
+  it('goes up alone or down alone from its Direction, and has no On the keys of its own (R29-P9)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales')
-    const onKeys = await screen.findByRole('radiogroup', { name: 'On the keys' })
-    expect(within(onKeys).getByRole('radio', { name: 'Right hand' })).toBeChecked()
-    await user.click(within(onKeys).getByRole('radio', { name: 'Left hand' }))
-    expect(router.state.location.search).toMatchObject({ onKeys: 'lh' })
-    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('54321321')
-    await user.click(within(onKeys).getByRole('radio', { name: 'Notes' }))
-    expect(document.querySelector('[data-slot="finger-row"]')).not.toBeInTheDocument()
-    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
-    expect(shownText(within(keyboard).getByRole('button', { name: 'E4' }))).toContain('3')
+    await pickMenu(user, 'Direction', 'Up')
+    expect(router.state.location.search).toMatchObject({ direction: 'up' })
+    await pickMenu(user, 'Direction', 'Up and down')
+    expect(router.state.location.search).not.toHaveProperty('direction')
+    // What the keys carry is the on-screen piano's own toolbar's.
+    expect(screen.queryByRole('radiogroup', { name: 'On the keys' })).not.toBeInTheDocument()
   })
 
   it('opens each of the key’s chords in Chords from its card, in the key (A32, A33)', async () => {

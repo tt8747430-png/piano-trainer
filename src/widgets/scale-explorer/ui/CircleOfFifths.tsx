@@ -17,7 +17,5 @@ export function CircleOfFifths({ current }: { current: Key }) {
     if (!chord || (part !== 0 && !sameNote(chord.root, key.tonic))) return undefined
     return { symbol: chord.symbol, numeral: chord.numeral }
   }
-  return (
-    <KeyCircle label={t('scales.key.circle')} value={current} mark={mark} />
-  )
+  return <KeyCircle label={t('scales.key.circle')} value={current} mark={mark} />
 }

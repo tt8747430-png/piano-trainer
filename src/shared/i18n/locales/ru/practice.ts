@@ -124,10 +124,12 @@ export const practice: LocaleResources['practice'] = {
     },
     label: 'Гамма',
     tonic: 'Тоника',
+    fewerOctaves: 'Меньше октав',
+    moreOctaves: 'Больше октав',
+    direction: { label: 'Направление', both: 'Вверх и вниз', up: 'Вверх', down: 'Вниз' },
     octaves: 'Октавы',
     startOn: 'Начать с',
     openChord: 'Открыть {{chord}} в «Аккордах»',
-    onKeys: { label: 'На клавишах', notes: 'Ноты', lh: 'Левая рука', rh: 'Правая рука' },
     byHand: {
       title: 'Аппликатура по рукам',
       lh: 'Левая рука',

@@ -37,7 +37,10 @@ interface ScaleRun {
 
 /** The run a Scale view shows: from its start note over its octaves, fingered as chosen or as its start is. */
 export function scaleRunOf(
-  view: Pick<ScaleView, 'root' | 'kind' | 'start' | 'octaves' | 'fingering' | 'rhythm' | 'hands'>,
+  view: Pick<
+    ScaleView,
+    'root' | 'kind' | 'start' | 'octaves' | 'fingering' | 'rhythm' | 'hands' | 'direction'
+  >,
 ): ScaleRun {
   const root = noteFromParam(view.root)
   const start = view.start - 1
@@ -70,6 +73,7 @@ export function scaleRunOf(
         hands: view.hands,
         key: scaleKey(root, view.kind),
         down: { notes: down.placed, fingers: down.fingers },
+        direction: view.direction ?? 'both',
       },
     ),
   }

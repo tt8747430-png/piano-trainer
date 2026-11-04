@@ -133,11 +133,13 @@ export const practice = {
     },
     label: 'Scale',
     tonic: 'Tonic',
+    fewerOctaves: 'Fewer octaves',
+    moreOctaves: 'More octaves',
+    direction: { label: 'Direction', both: 'Up and down', up: 'Up', down: 'Down' },
     octaves: 'Octaves',
     startOn: 'Start on',
     openChord: 'Open {{chord}} in Chords',
     // What the run's keys carry: its notes, or a hand's fingers.
-    onKeys: { label: 'On the keys', notes: 'Notes', lh: 'Left hand', rh: 'Right hand' },
     // The run's fingering hand by hand, each hand drawn with its fingers numbered.
     byHand: {
       title: 'Fingering by hand',

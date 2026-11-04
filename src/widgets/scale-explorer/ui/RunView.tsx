@@ -2,10 +2,16 @@ import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { hasStandardFingering, noteFromParam, spellScale, printedNote } from '@/shared/lib/music'
-import { PRACTICE_RHYTHM_IDS, runSounds } from '@/shared/lib/schedule'
-import { Dropdown, Labelled, MenuPicker, Segmented } from '@/shared/ui'
+import { PRACTICE_RHYTHM_IDS, RUN_DIRECTIONS, runSounds } from '@/shared/lib/schedule'
+import { Dropdown, Labelled, MenuPicker, Segmented, Stepper } from '@/shared/ui'
 import { runShown, scaleRunOf } from '../model/scale-run'
-import { RUN_KEY_SHOWS, RUN_OCTAVES, runKeyShow, type ScaleView } from '../model/scale-view'
+import {
+  MAX_OCTAVES,
+  MIN_OCTAVES,
+  runKeyShow,
+  type RunOctaves,
+  type ScaleView,
+} from '../model/scale-view'
 import { PlayUpDown } from './PlayUpDown'
 import { ScaleExercises } from './ScaleExercises'
 import { ScaleFingering } from './ScaleFingering'
@@ -35,10 +41,10 @@ export function RunView({
   facts: ReactNode
 }) {
   const { t } = useTranslation(['practice', 'common'])
-  const { root, kind, start, octaves, fingering, rhythm, hands } = scale
+  const { root, kind, start, octaves, fingering, rhythm, hands, direction } = scale
   const run = useMemo(
-    () => scaleRunOf({ root, kind, start, octaves, fingering, rhythm, hands }),
-    [root, kind, start, octaves, fingering, rhythm, hands],
+    () => scaleRunOf({ root, kind, start, octaves, fingering, rhythm, hands, direction }),
+    [root, kind, start, octaves, fingering, rhythm, hands, direction],
   )
   const tonic = noteFromParam(root)
   const tones = spellScale(tonic, kind)
@@ -62,24 +68,28 @@ export function RunView({
               onChange={(next) => onChange({ hands: next })}
             />
           </Labelled>
-          <Labelled label={t('practice:scales.onKeys.label')}>
-            <Segmented
-              label={t('practice:scales.onKeys.label')}
-              value={runKeyShow(scale)}
-              options={RUN_KEY_SHOWS.map((show) => ({
-                value: show,
-                label: t(`practice:scales.onKeys.${show}`),
-              }))}
-              onChange={(onKeys) => onChange({ onKeys })}
-            />
-          </Labelled>
           <Labelled label={t('practice:scales.octaves')}>
-            {/* Bare numbers: the name beside them says what they count. */}
-            <Segmented
+            {/* One to four octaves, as the scale books practise them (R29-P9). */}
+            <Stepper
               label={t('practice:scales.octaves')}
               value={octaves}
-              options={RUN_OCTAVES.map((value) => ({ value, label: String(value) }))}
-              onChange={(next) => onChange({ octaves: next })}
+              min={MIN_OCTAVES}
+              max={MAX_OCTAVES}
+              onChange={(next) => onChange({ octaves: next as RunOctaves })}
+              decrease={t('practice:scales.fewerOctaves')}
+              increase={t('practice:scales.moreOctaves')}
+            />
+          </Labelled>
+          <Labelled label={t('practice:scales.direction.label')}>
+            <MenuPicker
+              bare
+              label={t('practice:scales.direction.label')}
+              value={direction ?? 'both'}
+              options={RUN_DIRECTIONS.map((way) => ({
+                value: way,
+                label: t(`practice:scales.direction.${way}`),
+              }))}
+              onChange={(way) => onChange({ direction: way === 'both' ? undefined : way })}
             />
           </Labelled>
           {/* The chromatic scale from another note is the chromatic scale on that root. A menu of the

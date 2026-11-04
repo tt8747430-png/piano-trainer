@@ -33,7 +33,13 @@ interface RunOptions {
   readonly key: Key
   /** The way down where it is not the way up (melodic minor's natural minor), with its own fingers. */
   readonly down?: RunWay
+  /** Which way it goes (R29-P9): up and back down (the default), up alone, or down alone from the top. */
+  readonly direction?: RunDirection
 }
+
+/** Which way a scale is practised: up and down as the books play it, or one way. */
+export const RUN_DIRECTIONS = ['both', 'up', 'down'] as const
+export type RunDirection = (typeof RUN_DIRECTIONS)[number]
 
 /**
  * A scale's notes up and back down in 8ths of a practice rhythm, for one hand or both (the left an
@@ -44,13 +50,11 @@ export function scaleRun(up: RunWay, options: RunOptions): TimedMusic {
   const lengths = PRACTICE_RHYTHMS[options.rhythm]
   const down = options.down ?? up
   const indices = up.notes.map((_, index) => index)
-  const upAndDown = [
-    ...indices.map((index) => ({ way: up, index })),
-    ...indices
-      .slice(0, -1)
-      .reverse()
-      .map((index) => ({ way: down, index })),
-  ]
+  const direction = options.direction ?? 'both'
+  const going = indices.map((index) => ({ way: up, index }))
+  const coming = [...indices].reverse().map((index) => ({ way: down, index }))
+  const upAndDown =
+    direction === 'up' ? going : direction === 'down' ? coming : [...going, ...coming.slice(1)]
   const crossings = (hand: Hand) =>
     fingerCrossings(
       upAndDown.map(({ way, index }) => way.notes[index]?.midi ?? midi(0)),

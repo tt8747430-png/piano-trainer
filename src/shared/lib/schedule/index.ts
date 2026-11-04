@@ -41,7 +41,7 @@ export {
 export { chordBar } from './chord-bar'
 export { pedalSpanAt, type PedalSpan } from './pedal-marks'
 export { clickLevel, voicedClick, type ClickVoicing } from './click-voice'
-export { runSounds, scaleRun } from './run'
+export { RUN_DIRECTIONS, runSounds, scaleRun, type RunDirection } from './run'
 export { noteLine, twoHands, type NoteLineMeter } from './note-line'
 export { voicingKeys, voicingsMusic, type VoicedKey, type WrittenVoicing } from './voicings'
 export { keysSoundingAt, keysStruckAt, keyWindows, type KeyWindow } from './sounding'
