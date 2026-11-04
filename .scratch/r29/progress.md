@@ -74,6 +74,24 @@ rounds 2–5 were built: the prompt's order was not kept. From here the order is
 | B10 | Customisable bars, as memory-palaces does | 12 | open | | |
 | B11 | Tools, as a group of their own | 13 | open | | |
 
+## Where we are (2026-11-04, late): agents on B4/B6, B8/B10, B1/B3; inline work pushed to the branch
+
+- **SND:** the light piano now from Splendid Grand Piano (public domain, cloned by git; zip download refused);
+  Settings' credits link CC BY 3.0; the Metronome's drum groove on the recorded kit.
+- **B2 part 1:** Privacy and Terms rewritten (Children, Questions, publishing licence and takedown, others'
+  work); Report a problem in Settings › Help (sent with the error reports); copy.md holds before and after.
+- **A26:** rail names and icons, the pedal icon, two labels a key at most, PedalBar, the toggle lets up when
+  the page hides. **A28:** tempo in the felt beat. **T:** the editor's Transpose shows the Player's offset,
+  Use this. **A29:** .mxl export. **A37:** summary split In this song · In order.
+- **Rulings:** Computer keys stays off the rail (it is On-screen piano's, a computer's only), cost: one more
+  tap to reach it; the pedal lifts on the page hiding (route change and dialogs unmount or leave it, as the
+  MIDI foot does), cost: a held pedal through a sheet; PDF stays the Player's Print (no second row in
+  Export…, one way to each act); written beams and directions-at-tick wait for a song-text format change
+  (an editor round), cost: imported beams re-grouped by our rule; A37's follow setting waits for B8's
+  Display.
+- **Next:** merge the three agents; A34+A40 (editor against Flat) to an agent; B9, B11, B2 part 2; the full
+  suite, build, push main.
+
 ## Where we are (2026-11-04, night): Chord player merged, Part B started — main c0c4566e
 
 Full suite 7355 tests (one stray mark fixed after), build green; pushed to the branch and main.
