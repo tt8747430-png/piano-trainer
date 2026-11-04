@@ -132,18 +132,20 @@ export function useLibraryActs() {
             : t('library.restoredMany', { count: ids.length }),
         )
     },
-    archiveFolder: async (folder: { id: FolderId; name?: string }) => {
+    /** A folder archived once the learner says so, with Undo; whether it was. */
+    archiveFolder: async (folder: { id: FolderId; name?: string }): Promise<boolean> => {
       const asked = await confirm({
         title: t('library.archiving.folder', { name: folderName(folder) }),
         body: t('library.archiving.body'),
         action: t('library.archive'),
       })
-      if (!asked) return
+      if (!asked) return false
       archiveFolder(store, catalog(), folder.id)
       say(
         t('library.folderArchived', { name: folderName(folder) }),
         undo(() => restoreFolder(store, catalog(), folder.id, true)),
       )
+      return true
     },
     restoreFolder: (folder: { id: FolderId; name?: string }) => {
       restoreFolder(store, catalog(), folder.id)

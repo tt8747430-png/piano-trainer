@@ -391,6 +391,18 @@ const folderRoute = createRoute({
   },
   component: lazyRouteComponent(songsScreens, 'FolderPage'),
 })
+// A folder's Settings (R29): its name and look, where it stands, Archive and Delete.
+const folderSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/folders/$folderId/settings',
+  notFoundComponent: notFoundIn('songs'),
+  beforeLoad: async ({ params, context }) => {
+    const { folderIn } = await songsScreens()
+    const { pieces, library } = context
+    if (!folderIn(pieces.getState(), library.getState(), params.folderId)) throw notFound()
+  },
+  component: lazyRouteComponent(songsScreens, 'FolderSettingsPage'),
+})
 // The library's archive (ADR 0106): what the learner archived, to restore.
 const archiveRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -867,6 +879,7 @@ const routeTree = rootRoute.addChildren([
     pieceSettingsRoute,
     piecePublishRoute,
     folderRoute,
+    folderSettingsRoute,
     archiveRoute,
     sectionRoute,
     courseRoute,

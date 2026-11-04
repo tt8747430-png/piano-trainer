@@ -134,6 +134,13 @@ export const songs: LocaleResources['songs'] = {
     more: 'Ещё: {{name}}',
     archive: 'Папку в архив',
     delete: 'Удалить папку',
+    settings: 'Настройки папки',
+    openSettings: 'Настройки: {{name}}',
+    nameAndLook: 'Название и вид',
+    inLibrary: 'В библиотеке',
+    moveTo: 'Переместить в папку…',
+    deleteSays:
+      'Своя папка и ваши песни в ней удаляются навсегда; песни приложения уходят в архив.',
     emptyTitle: 'В этой папке пусто',
     emptyDescription: 'Создайте здесь песню или папку, или перенесите песни сюда.',
     moveIn: 'Перенести песни сюда',

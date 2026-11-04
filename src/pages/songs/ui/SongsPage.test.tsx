@@ -448,7 +448,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     expect(rowNames(folders)[4]).toBe('Hymns 5 songs')
   })
 
-  it('deletes an own folder, asked first: its own songs for good, the app’s to the archive', async () => {
+  it('deletes an own folder from its Settings, asked first: its own songs for good, the app’s to the archive', async () => {
     const user = userEvent.setup()
     const { libraryStore, piecesStore } = await renderApp('/songs/folders/folder-1', {
       storage: saved({
@@ -467,8 +467,13 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
         },
       }),
     })
-    await user.click(await screen.findByRole('button', { name: 'More for Sunday' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Delete folder' }))
+    // The folder's gear opens its Settings page (R29), Delete folder at its foot.
+    await user.click(await screen.findByRole('link', { name: 'Settings for Sunday' }))
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Folder settings' }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /^Move to folder…/ })).toHaveTextContent('Songs')
+    await user.click(screen.getByRole('button', { name: 'Delete folder' }))
     const ask = await screen.findByRole('alertdialog', { name: 'Delete “Sunday”?' })
     expect(ask).toHaveTextContent(
       'The folder is deleted for good. Your own songs in it are deleted for good, with their takes: 1. The app’s songs in it go to the archive: 1.',

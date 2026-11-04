@@ -141,6 +141,14 @@ export const songs = {
     more: 'More for {{name}}',
     archive: 'Archive folder',
     delete: 'Delete folder',
+    // A folder's Settings page (R29), from the gear in its bar.
+    settings: 'Folder settings',
+    openSettings: 'Settings for {{name}}',
+    nameAndLook: 'Name and look',
+    inLibrary: 'In the library',
+    moveTo: 'Move to folder…',
+    deleteSays:
+      'An own folder and your own songs in it are deleted for good; the app’s songs go to the archive.',
     emptyTitle: 'This folder is empty',
     emptyDescription: 'Make a song or a folder here, or move songs in.',
     moveIn: 'Move songs here',

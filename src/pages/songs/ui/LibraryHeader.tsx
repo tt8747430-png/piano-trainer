@@ -1,17 +1,9 @@
-import {
-  Archive,
-  CheckCheck,
-  Ellipsis,
-  FolderInput,
-  ListChecks,
-  ListX,
-  PencilLine,
-  Trash2,
-} from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { CheckCheck, ListChecks, ListX, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, useLibraryLayout, type ShelvedFolder } from '@/entities/library'
 import { useUp } from '@/shared/lib'
-import { ActionMenu, BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
+import { BackButton, RoundButton, RoundLink, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { LibraryPage } from '../model/use-library-page'
 import { ArchiveButton } from './ArchiveButton'
@@ -19,8 +11,8 @@ import { ArchiveButton } from './ArchiveButton'
 /**
  * The library's bar (Mindscape's): its title says where the learner is, Songs at Home, the folder's
  * name in one, with Back, which goes up a level, to the folder it stands in or Home, named so; then
- * Select, and at Home the archive's button and the Profile, in a folder its More (Edit folder, New song here, Move to…, Archive
- * folder, Delete folder). While Select is on, the count chosen is its title, with Select all (round) and
+ * Select, and at Home the archive's button and the Profile, in a folder the gear to its Settings page
+ * (its name and look, Move to folder…, Archive folder, Delete folder). While Select is on, the count chosen is its title, with Select all (round) and
  * Done.
  */
 export function LibraryHeader({
@@ -76,50 +68,14 @@ export function LibraryHeader({
             onClick={() => page.select.start()}
           />
           {folder ? null : <ArchiveButton />}
+          {/* A folder's own settings (name, look, place, Archive, Delete) are its Settings page. */}
           {folder ? (
-            <ActionMenu
-              label={t('folder.more', { name })}
-              align="end"
-              trigger={<Ellipsis aria-hidden />}
+            <RoundLink
+              label={t('folder.openSettings', { name })}
+              icon={Settings}
               render={
-                <Button
-                  variant="bar"
-                  size="icon"
-                  className="rounded-pill"
-                  aria-label={t('folder.more', { name })}
-                  title={t('folder.more', { name })}
-                />
+                <Link to="/songs/folders/$folderId/settings" params={{ folderId: folder.id }} />
               }
-              actions={[
-                {
-                  key: 'edit',
-                  label: t('folder.edit'),
-                  icon: PencilLine,
-                  onSelect: () => page.open({ kind: 'folder', target: { kind: 'edit', folder } }),
-                },
-                {
-                  key: 'move',
-                  label: t('library.moveTo'),
-                  icon: FolderInput,
-                  onSelect: () => page.moveOne({ songs: [], folders: [folder.id] }, name),
-                },
-                {
-                  key: 'archive',
-                  label: t('folder.archive'),
-                  icon: Archive,
-                  onSelect: () => {
-                    page.leave()
-                    page.acts.archiveFolder(folder)
-                  },
-                },
-                {
-                  key: 'delete',
-                  label: t('folder.delete'),
-                  icon: Trash2,
-                  destructive: true,
-                  onSelect: () => page.open({ kind: 'delete-folder', folder }),
-                },
-              ]}
             />
           ) : null}
         </>
