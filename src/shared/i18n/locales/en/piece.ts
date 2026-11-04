@@ -79,6 +79,7 @@ export const piece = {
   },
   scaleOf: 'Scale: {{scale}}',
   // What is said of a song or study, behind its ⓘ.
+  aboutMore: 'More',
   about: { song: 'About the song', study: 'About the study' },
   meter: 'Time signature',
   credit: {

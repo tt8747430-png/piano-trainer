@@ -46,7 +46,19 @@ export function PieceFactCards({
  * A piece's facts in one quiet line under its title (ADR 0111, amended): its key, time and tempo, as
  * a songbook's heading prints them. The key is the one it is played in (`played`), else its own.
  */
-export function PieceFactLine({ piece, played }: { piece: Piece; played?: Key }) {
+export function PieceFactLine({
+  piece,
+  played,
+  keyLink,
+}: {
+  piece: Piece
+  played?: Key
+  /**
+   * The key as a link (its key on Scales, A28): the value given, wrapped by the page in a link
+   * stretched over the chip (`after:absolute after:inset-0`).
+   */
+  keyLink?: (value: ReactNode) => ReactNode
+}) {
   const { t } = useTranslation(['piece', 'music'])
   const tempo = useTempoText(piece)
   const facts = [
@@ -61,13 +73,15 @@ export function PieceFactLine({ piece, played }: { piece: Piece; played?: Key })
   ]
   return (
     <dl className="flex flex-wrap items-center gap-2">
-      {facts.map((fact) => (
+      {facts.map((fact, at) => (
         <div
           key={fact.name}
-          className="flex h-8 items-center gap-1.5 rounded-pill border border-border bg-card px-3 text-sm"
+          className="relative flex h-8 items-center gap-1.5 rounded-pill border border-border bg-card px-3 text-sm has-[a:hover]:bg-muted"
         >
           <dt className="text-muted-foreground">{fact.name}</dt>
-          <dd className="font-semibold tabular-nums">{fact.value}</dd>
+          <dd className="font-semibold tabular-nums">
+            {at === 0 && keyLink ? keyLink(fact.value) : fact.value}
+          </dd>
         </div>
       ))}
     </dl>

@@ -11,6 +11,7 @@ import {
 } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
 import { keySymbol, printedSymbol } from '@/shared/lib/music'
+import { ScaleLink } from './PieceAbout'
 
 /**
  * A listing's facts under its bar (`PieceHeader`), in one quiet line that reads and is not pressed:
@@ -28,8 +29,9 @@ export function PieceFacts({ entry }: { entry: Entry }) {
       {secondary ? <p>{secondary}</p> : null}
       <dl className="flex flex-wrap items-center gap-x-2 gap-y-1">
         <dt className="sr-only">{t('music:key.label')}</dt>
-        <dd className="font-display font-semibold text-foreground tabular-nums">
-          {printedSymbol(keySymbol(pieceKey(entry)))}
+        <dd className="relative font-display font-semibold text-foreground tabular-nums">
+          {/* The key is the way to its scale (A28), as on a song's page. */}
+          <ScaleLink entry={entry}>{printedSymbol(keySymbol(pieceKey(entry)))}</ScaleLink>
         </dd>
         <dd aria-hidden>·</dd>
         <dt className="sr-only">{t('meter')}</dt>

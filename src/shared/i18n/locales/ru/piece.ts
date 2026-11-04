@@ -77,6 +77,7 @@ export const piece: LocaleResources['piece'] = {
     confirm: 'Удалить навсегда',
     cancel: 'Оставить',
   },
+  aboutMore: 'Ещё',
   about: { song: 'О песне', study: 'Об этюде' },
   scaleOf: 'Гамма: {{scale}}',
   meter: 'Размер',
