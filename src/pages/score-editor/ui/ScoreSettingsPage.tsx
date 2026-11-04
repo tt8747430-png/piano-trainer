@@ -3,17 +3,15 @@ import { Columns3, Gauge, Hash, Mic, Music2, Ruler, Volume2, type LucideIcon } f
 import { useId, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { HEADER_FIELDS, HEADER_MAX, TITLE_MAX, type HeaderField } from '@/entities/piece'
-import { VOICE_IDS, VOICES } from '@/features/edit-piece'
 import { barsOf } from '@/features/score-editor'
-import { localText, useKeyName, useLocale } from '@/shared/i18n'
+import { useKeyName } from '@/shared/i18n'
 import { useSetSearch } from '@/shared/lib'
 import { beatUnit, tempoMark, unitNote } from '@/shared/lib/music'
 import { BackButton, RowButton, ScreenHeader, SettingsGroup, type Paint } from '@/shared/ui'
-import type { InstrumentFamily } from '@/widgets/instrument-list'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { instrumentCount, type ScoreInstrument } from '../model/instruments'
 import { SCORE_PAGES, type ScorePage } from '../model/score-pages'
 import { ScorePageBody } from './ScoreSettingsPages'
+import { useInstrumentFamilies } from '../model/use-instrument-families'
 
 /** A name typed in its row (Flat's credits): its label, the field at its end, saved as it is left. */
 function NameRow({
@@ -78,7 +76,6 @@ function NameRow({
 export function ScoreSettingsPage() {
   const { t } = useTranslation(['editor', 'songs', 'music'])
   const { actions, meta } = useScoreEditorContext()
-  const locale = useLocale()
   const keyName = useKeyName()
   const draft = useEditorState((state) => state.draft)
   const bars = barsOf(draft).length
@@ -87,35 +84,7 @@ export function ScoreSettingsPage() {
   const meter = draft.timeSymbol
     ? t(draft.meter === '2/2' ? 'music:timeField.cut' : 'music:timeField.common')
     : draft.meter
-  const count = (instrument: ScoreInstrument) => {
-    const { count, fewer, more } = instrumentCount(draft, instrument)
-    return {
-      key: instrument,
-      count,
-      onFewer: fewer ? () => actions.dispatch(fewer) : undefined,
-      onMore: more ? () => actions.dispatch(more) : undefined,
-    }
-  }
-  const families: InstrumentFamily[] = [
-    {
-      key: 'vocals',
-      title: t('songs:setup.families.vocals'),
-      rows: VOICE_IDS.map((voice) => ({
-        ...count(voice),
-        name: localText(VOICES[voice].name, locale),
-      })),
-    },
-    {
-      key: 'keyboards',
-      title: t('songs:setup.families.keyboards'),
-      rows: [{ ...count('piano'), name: t('songs:setup.piano') }],
-    },
-    {
-      key: 'other',
-      title: t('scoreSettings.families.other'),
-      rows: [{ ...count('staff'), name: t('scoreSettings.staff') }],
-    },
-  ]
+  const families = useInstrumentFamilies()
   const nameOf = (field: HeaderField) => t(`scoreSettings.names.${field}`)
   const { page: asked } = useSearch({ strict: false }) as { page?: string }
   const page = SCORE_PAGES.find((each) => each === asked) ?? null

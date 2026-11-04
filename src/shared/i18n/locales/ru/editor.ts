@@ -16,7 +16,6 @@ export const editor: LocaleResources['editor'] = {
     useThis: 'Взять это',
   },
   palette: {
-    label: 'Инструменты',
     toolbar: 'Ввод нот',
     open: 'Показать все инструменты',
     close: 'Показать меньше инструментов',
@@ -155,6 +154,10 @@ export const editor: LocaleResources['editor'] = {
     bar: 'Только в этом такте',
     end: 'До конца',
     staff: 'Во всём нотоносце',
+  },
+  panel: {
+    label: 'Панель редактора',
+    tabs: { notation: 'Нотация', instruments: 'Инструменты', layout: 'Макет' },
   },
   tempo: {
     save: 'Сохранить',

@@ -21,7 +21,6 @@ export const editor = {
   // folding; on a phone a sheet docked at its foot, compact (the quick row and the categories) or
   // expanded (every section, as keys or a list of names). The note-entry toolbar over the sheet.
   palette: {
-    label: 'Tools',
     toolbar: 'Note entry',
     open: 'Show every tool',
     close: 'Show fewer tools',
@@ -179,6 +178,11 @@ export const editor = {
     bar: 'This bar only',
     end: 'To the end',
     staff: 'Whole staff',
+  },
+  // The editor's panel (A40, Flat's): its three tabs.
+  panel: {
+    label: 'Editor panel',
+    tabs: { notation: 'Notation', instruments: 'Instruments', layout: 'Layout' },
   },
   tempo: {
     save: 'Save',

@@ -123,7 +123,7 @@ describe('the score editor', () => {
     await waitFor(() =>
       expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff · Bar 1/),
     )
-    const palette = screen.getByRole('region', { name: 'Tools' })
+    const palette = screen.getByRole('region', { name: 'Editor panel' })
     expect(within(palette).queryByRole('radiogroup', { name: 'Voice' })).not.toBeInTheDocument()
     await user.keyboard('{Alt>}{ArrowDown}{/Alt}')
     expect(screen.getByRole('status')).toHaveTextContent(/^Lower staff · Bar 1/)
@@ -227,7 +227,7 @@ describe('the score editor', () => {
   it('opens its sheet compact, Flat’s: the everyday tools over the categories, expanding at one tapped (ADR 0114)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    const palette = await screen.findByRole('region', { name: 'Tools' })
+    const palette = await screen.findByRole('region', { name: 'Editor panel' })
     const quick = within(palette).getByRole('toolbar', { name: 'Note entry' })
     expect(within(quick).getByRole('group', { name: 'Note value' })).toBeInTheDocument()
     for (const name of ['Natural', 'Sharp', 'Flat', 'Enharmonic spelling', 'Tie', 'Rest'])
@@ -321,7 +321,7 @@ describe('the score editor', () => {
 
   it('opens its palette dragged up by its grab handle, and folds it at a tap, as Flat’s sheet', async () => {
     await renderApp('/edit/my-1', { storage: withSong() })
-    const palette = await screen.findByRole('region', { name: 'Tools' })
+    const palette = await screen.findByRole('region', { name: 'Editor panel' })
     const grip = palette.querySelector('[data-slot="palette-grip"]')
     if (!grip) throw new Error('no grab handle')
     fireEvent.pointerDown(grip, { clientY: 500, pointerId: 1 })
@@ -337,7 +337,7 @@ describe('the score editor', () => {
     const user = userEvent.setup()
     sizedAs('(min-width: 48rem)')
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    const palette = await screen.findByRole('region', { name: 'Tools' })
+    const palette = await screen.findByRole('region', { name: 'Editor panel' })
     // Its sections fold one by one, Flat's: the notes and their pitch open.
     expect(within(palette).getByRole('button', { name: 'Pitch' })).toHaveAttribute(
       'aria-expanded',
@@ -353,10 +353,10 @@ describe('the score editor', () => {
     expect(screen.getByRole('button', { name: 'Piano keys' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Hide the tools' }))
     expect(settingsStore.getState().paletteFolded).toEqual({ panel: true })
-    expect(screen.queryByRole('region', { name: 'Tools' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'Editor panel' })).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Show the tools' }))
     expect(settingsStore.getState().paletteFolded).toEqual({ panel: false })
-    expect(await screen.findByRole('region', { name: 'Tools' })).toBeInTheDocument()
+    expect(await screen.findByRole('region', { name: 'Editor panel' })).toBeInTheDocument()
   })
 
   it('shows and hides the keys from the bar’s Piano keys, as the Player’s (R29)', async () => {
@@ -1441,7 +1441,7 @@ describe('the score editor', () => {
     const { piecesStore, settingsStore } = await renderApp('/edit/my-1', {
       storage: withSong({ staves: [{ notes: EMPTY_TUNE }] }),
     })
-    const palette = await screen.findByRole('region', { name: 'Tools' })
+    const palette = await screen.findByRole('region', { name: 'Editor panel' })
     for (const name of ['Quarter note', '32nd note', 'Dotted'])
       expect(within(palette).getByRole('button', { name })).toBeInTheDocument()
     const notes = await openCategory(user, 'Notes')
@@ -1572,13 +1572,13 @@ describe('the score editor', () => {
   it('types in a slim bar over a phone’s own keyboard, in the sheet’s place, as Flat’s phone does (ADR 0114)', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })
-    expect(await screen.findByRole('region', { name: 'Tools' })).toBeInTheDocument()
+    expect(await screen.findByRole('region', { name: 'Editor panel' })).toBeInTheDocument()
     await user.keyboard('{Control>}k{/Control}')
     const field = await screen.findByRole('textbox', { name: 'Chord symbol' })
     expect(field.closest('[data-side]')).toHaveAttribute('data-side', 'top')
-    expect(screen.queryByRole('region', { name: 'Tools' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'Editor panel' })).not.toBeInTheDocument()
     await user.keyboard('{Escape}')
-    expect(await screen.findByRole('region', { name: 'Tools' })).toBeInTheDocument()
+    expect(await screen.findByRole('region', { name: 'Editor panel' })).toBeInTheDocument()
   })
 
   it('opens the fingering field from the palette’s one key, over the one note of a chord chosen (ADR 0096)', async () => {

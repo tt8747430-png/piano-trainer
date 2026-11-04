@@ -184,7 +184,7 @@ describe('the score’s Settings (round 28)', () => {
     settings.unmount()
     // The next time the editor opens.
     await renderApp('/edit/my-1', { storage })
-    const palette = await screen.findByRole('region', { name: 'Tools' })
+    const palette = await screen.findByRole('region', { name: 'Editor panel' })
     expect(palette.closest('aside')).toHaveAttribute('data-side', 'right')
     await waitFor(() =>
       expect(within(palette).getByRole('combobox', { name: 'Editing mode' })).toHaveTextContent(

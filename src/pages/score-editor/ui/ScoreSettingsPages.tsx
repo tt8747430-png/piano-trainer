@@ -88,6 +88,41 @@ function SignaturePage({ sign }: { sign: 'key' | 'time' }) {
 /** Bars per line offered: as the notes space them, or a few to a line (Flat's). */
 const LINE_BARS = [0, 2, 3, 4, 5, 6].filter((most) => most <= BARS_PER_LINE.max)
 
+/** The score's layout (A40): the staff size and the bars a line, its Settings' and its panel's. */
+export function LayoutChoices() {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const layout = useEditorState((state) => state.draft.layout)
+  return (
+    <>
+      <ChoiceCard
+        title={t('scoreSettings.staffSize')}
+        info={t('scoreSettings.staffSizeInfo')}
+        value={String(layout?.staffSize ?? 100)}
+        options={STAFF_SIZES.map((size) => ({
+          value: String(size),
+          label: t(`scoreSettings.staffSizes.${size}`),
+        }))}
+        onChange={(size) =>
+          actions.dispatch({ type: 'layout', staffSize: Number(size) as StaffSize })
+        }
+      />
+      <ChoiceCard
+        title={t('scoreSettings.barsPerLine')}
+        info={t('scoreSettings.barsPerLineInfo')}
+        value={String(layout?.barsPerLine ?? 0)}
+        options={LINE_BARS.map((most) => ({
+          value: String(most),
+          label: most === 0 ? t('scoreSettings.asWritten') : String(most),
+        }))}
+        onChange={(most) =>
+          actions.dispatch({ type: 'layout', barsPerLine: most === '0' ? null : Number(most) })
+        }
+      />
+    </>
+  )
+}
+
 /**
  * A page of the score's Settings: its Staves (Flat's Manage instruments), Key signature, Time
  * signature and Tempo (the pickers the printed marks open), Bars, Layout, Note input and Recording.
@@ -106,10 +141,8 @@ export function ScorePageBody({
   onDone: () => void
 }) {
   const { t } = useTranslation(['editor', 'songs'])
-  const { actions } = useScoreEditorContext()
   const settings = useSettingsStoreApi()
   const editing = useSettings(selectEditing)
-  const layout = useEditorState((state) => state.draft.layout)
   switch (page) {
     case 'staves':
       return (
@@ -143,34 +176,7 @@ export function ScorePageBody({
         </SettingsGroup>
       )
     case 'layout':
-      return (
-        <>
-          <ChoiceCard
-            title={t('scoreSettings.staffSize')}
-            info={t('scoreSettings.staffSizeInfo')}
-            value={String(layout?.staffSize ?? 100)}
-            options={STAFF_SIZES.map((size) => ({
-              value: String(size),
-              label: t(`scoreSettings.staffSizes.${size}`),
-            }))}
-            onChange={(size) =>
-              actions.dispatch({ type: 'layout', staffSize: Number(size) as StaffSize })
-            }
-          />
-          <ChoiceCard
-            title={t('scoreSettings.barsPerLine')}
-            info={t('scoreSettings.barsPerLineInfo')}
-            value={String(layout?.barsPerLine ?? 0)}
-            options={LINE_BARS.map((most) => ({
-              value: String(most),
-              label: most === 0 ? t('scoreSettings.asWritten') : String(most),
-            }))}
-            onChange={(most) =>
-              actions.dispatch({ type: 'layout', barsPerLine: most === '0' ? null : Number(most) })
-            }
-          />
-        </>
-      )
+      return <LayoutChoices />
     case 'input':
       return (
         <>

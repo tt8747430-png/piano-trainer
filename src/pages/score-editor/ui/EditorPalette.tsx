@@ -20,7 +20,13 @@ import { useTranslation } from 'react-i18next'
 import { chosenNotes, EDIT_MODES } from '@/features/score-editor'
 import { useFoldKeys } from '@/features/live-keyboard'
 import { cn, useRovingFocus, useScrollMotion } from '@/shared/lib'
+import { Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { InstrumentList } from '@/widgets/instrument-list'
+import { EDITOR_PANELS, type EditorPanelTab } from '../model/edit-search'
+import { useEditorPanel } from '../model/use-editor-panel'
+import { useInstrumentFamilies } from '../model/use-instrument-families'
+import { LayoutChoices } from './ScoreSettingsPages'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { gripRelease } from '../model/grip'
 import {
@@ -200,15 +206,49 @@ function Laid({
   )
 }
 
+/**
+ * The panel's tabs (A40, Flat's Notation · Instruments · Layout), a segmented control over the panel
+ * and at the top of the phone's sheet, the tab in the URL.
+ */
+function PanelTabs() {
+  const { t } = useTranslation('editor')
+  const [tab, setTab] = useEditorPanel()
+  return (
+    <Segmented
+      label={t('panel.label')}
+      compact
+      value={tab}
+      options={EDITOR_PANELS.map((each) => ({ value: each, label: t(`panel.tabs.${each}`) }))}
+      onChange={setTab}
+    />
+  )
+}
+
+/** The Instruments and Layout tabs' content, the score's Settings' own (one implementation). */
+function TabBody({ tab }: { tab: Exclude<EditorPanelTab, 'notation'> }) {
+  const families = useInstrumentFamilies()
+  return tab === 'instruments' ? (
+    <div className="flex flex-col gap-3 py-3">
+      <InstrumentList families={families} />
+    </div>
+  ) : (
+    <div className="flex flex-col gap-4 py-3">
+      <LayoutChoices />
+    </div>
+  )
+}
+
 /** Flat's default: the notes and their pitch open, the rest folded until opened. */
 const FIRST_OPEN: readonly PaletteCategory[] = ['notes', 'pitch']
 
 /**
- * The palette docked at the sheet's left, or its right as chosen (ADR 0114, Flat's notation panel): its head, then every
- * category an accordion row, several open at once, scrolling on its own; « hides it whole, the
- * sheet taking its room, the note-entry toolbar bringing it back. Never over the music.
+ * The editor's panel docked at the sheet's left, or its right as chosen (A40, ADR 0114, Flat's): its
+ * head with Notation · Instruments · Layout and «; under Notation every category an accordion row,
+ * several open at once, scrolling on its own; Instruments the score's staves, Layout its layout. «
+ * hides it whole, the sheet taking its room, the note-entry toolbar bringing it back. Never over the
+ * music.
  */
-export function PalettePanel({
+export function EditorPanel({
   side = 'left',
   onHide,
 }: {
@@ -229,10 +269,13 @@ export function PalettePanel({
       PALETTE_CATEGORIES.filter((each) => next.has(each)),
     )
   }
+  const [tab] = useEditorPanel()
   return (
-    <section aria-label={t('palette.label')} className="flex min-h-0 flex-col">
-      <div className="flex h-12 shrink-0 items-center gap-2 border-b border-hairline px-4">
-        <h2 className="flex-1 text-sm font-semibold text-muted-foreground">{t('palette.label')}</h2>
+    <section aria-label={t('panel.label')} className="flex min-h-0 flex-col">
+      <div className="flex h-12 shrink-0 items-center gap-2 border-b border-hairline px-3">
+        <div className="min-w-0 flex-1">
+          <PanelTabs />
+        </div>
         <Button
           variant="ghost"
           size="icon"
@@ -248,11 +291,15 @@ export function PalettePanel({
         disabled={takes.stage !== 'idle'}
         className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4"
       >
-        <PanelSections value={{ open, toggle }}>
-          <Laid dock="panel" form="grid">
-            <Tools />
-          </Laid>
-        </PanelSections>
+        {tab === 'notation' ? (
+          <PanelSections value={{ open, toggle }}>
+            <Laid dock="panel" form="grid">
+              <Tools />
+            </Laid>
+          </PanelSections>
+        ) : (
+          <TabBody tab={tab} />
+        )}
       </fieldset>
     </section>
   )
@@ -478,6 +525,7 @@ export function PaletteSheet({
   const { takes } = useScoreEditorContext()
   const layer = useEditorState((state) => state.layer)
   const keys = useFoldKeys()
+  const [tab] = useEditorPanel()
   const motionOf = useScrollMotion()
   const scroller = useRef<HTMLDivElement>(null)
   const [list, setList] = useState(false)
@@ -507,7 +555,9 @@ export function PaletteSheet({
     }
     onFold(!open)
   }
+  const [, setTab] = useEditorPanel()
   const choose = (category: PaletteCategory) => {
+    if (tab !== 'notation') setTab('notation')
     setCurrent(category)
     if (!expanded) {
       expand(true, category)
@@ -527,12 +577,17 @@ export function PaletteSheet({
   return (
     <MotionConfig reducedMotion="user">
       <section
-        aria-label={t('palette.label')}
+        aria-label={t('panel.label')}
         className="pointer-events-auto flex min-h-0 flex-col gap-1.5 rounded-t-card border border-b-0 border-border bg-card px-3 pb-1 shadow-[0_-6px_20px_-8px] shadow-foreground/15"
       >
         <fieldset disabled={takes.stage !== 'idle'} className="contents">
           <Grip folded={!expanded} onFold={(next) => expand(!next)} />
-          {expanded ? (
+          {expanded ? <PanelTabs /> : null}
+          {expanded && tab !== 'notation' ? (
+            <div className="h-[min(38dvh,22rem)] min-h-0 overflow-y-auto overscroll-contain">
+              <TabBody tab={tab} />
+            </div>
+          ) : expanded ? (
             <Sections
               scroller={scroller}
               list={list}
@@ -543,8 +598,11 @@ export function PaletteSheet({
             <NoteToolbar />
           )}
           <div className="flex shrink-0 items-center gap-1">
-            <CategoryBar current={expanded ? current : null} onChoose={choose} />
-            {expanded ? (
+            <CategoryBar
+              current={expanded && tab === 'notation' ? current : null}
+              onChoose={choose}
+            />
+            {expanded && tab === 'notation' ? (
               <Button
                 variant="ghost"
                 size="icon"
