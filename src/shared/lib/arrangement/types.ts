@@ -236,6 +236,8 @@ export interface Performance {
   readonly meter: Meter
   /** 4/4 printed as common time's C, 2/2 as cut time's ¢ (ADR 0114). */
   readonly timeSymbol?: true
+  /** No chord symbols and no staff names printed: an exercise's line, not a song (A41). */
+  readonly plain?: true
   /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
   readonly tempoUnit?: TempoUnit
   readonly totalTicks: Tick

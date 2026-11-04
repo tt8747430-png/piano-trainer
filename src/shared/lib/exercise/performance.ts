@@ -49,7 +49,8 @@ function sounding(starts: readonly Tick[], tick: Tick): number {
 
 /**
  * An exercise's notes and harmony as the Player plays and writes them: bars of 4/4 to the end of the
- * last note, four bars a line, a chord at each passage's start, the notes that start together grouped.
+ * last note, four bars a line, a chord at each passage's start (heard, and shown by the chord views,
+ * but printed on none of its score), the notes that start together grouped.
  */
 export function exercisePerformance(music: {
   readonly key: Key
@@ -93,6 +94,8 @@ export function exercisePerformance(music: {
   return {
     key: music.key,
     meter: '4/4',
+    // A drill, not a song: its score prints no chord symbol and no staff name (A41).
+    plain: true,
     totalTicks: barCount * BAR,
     bars,
     chords,

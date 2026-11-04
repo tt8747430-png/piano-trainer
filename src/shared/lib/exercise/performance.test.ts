@@ -67,4 +67,15 @@ describe('exercisePerformance', () => {
       [EIGHTH, [2]],
     ])
   })
+
+  it('an exercise’s score has no chord symbol and no staff name', () => {
+    const performance = exercisePerformance({
+      key: C_MAJOR,
+      notes: [at(0, 60)],
+      harmony: [{ chord: { root: note('C'), quality: 'maj' }, startTick: 0 }],
+    })
+    // Its harmony is kept for the chord views; its score is marked plain, printing neither.
+    expect(performance.chords).toHaveLength(1)
+    expect(performance.plain).toBe(true)
+  })
 })

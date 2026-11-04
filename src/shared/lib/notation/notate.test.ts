@@ -184,6 +184,12 @@ describe('notate', () => {
     ])
   })
 
+  it('writes a plain line (an exercise’s) with no chord symbol, and says it names no staff', () => {
+    const score = notate(music([n(60, note('C'), 'rh', 0, 4 * B)], { plain: true }))
+    expect(score.measures.map((measure) => measure.chords)).toEqual([[]])
+    expect(score.plain).toBe(true)
+  })
+
   it('writes no chord symbol over a bar of no chord (ADR 0114)', () => {
     const score = notate(
       music([n(60, note('C'), 'rh', 0, 4 * B), n(62, note('D'), 'rh', 4 * B, 4 * B)], {

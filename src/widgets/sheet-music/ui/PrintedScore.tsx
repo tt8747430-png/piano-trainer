@@ -52,14 +52,16 @@ export function PrintedScore({
     { lyrics: view.lyrics, piano, hidden: view.hidden },
     staffNames,
   )
-  const row = labelRow(view.chordNames)
+  // An exercise's line prints no chord symbol (A41): its harmony is the chord views'.
+  const chordNames = view.chordNames && score.plain !== true
+  const row = labelRow(chordNames)
   const lines = useMemo(() => {
-    const widths = measureWidths(score, PRINT_SCALE, view.chordNames, labels)
+    const widths = measureWidths(score, PRINT_SCALE, chordNames, labels)
     return scoreLines(score, performance, {
       room: PAGE_LINE / PRINT_SCALE - lineLead(score),
       widths,
     })
-  }, [score, performance, view.chordNames, labels])
+  }, [score, performance, chordNames, labels])
   // The lines engraved so far, by their first bar: the print waits for every one.
   const engraved = useRef(new Set<number>())
   const told = useRef(false)
@@ -98,7 +100,7 @@ export function PrintedScore({
                     performance={performance}
                     headings={headings}
                     positions={positions}
-                    chordNames={view.chordNames}
+                    chordNames={chordNames}
                     tempos={tempos}
                     firstBar={each.first}
                   />

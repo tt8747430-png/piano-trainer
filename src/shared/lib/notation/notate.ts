@@ -377,7 +377,8 @@ export function notate(music: TimedMusic): Score {
       ...barMarksOf(placed),
       ...staffClefs(clefs[index] ?? HOME_CLEF, single),
       staves,
-      chords: music.chords
+      // An exercise's line prints no chord symbol: its harmony is the Player's to show, not the page's.
+      chords: (music.plain ? [] : music.chords)
         .filter(
           (chord) =>
             chord.startTick >= placed.startTick && chord.startTick < placed.startTick + ticks,
@@ -391,6 +392,7 @@ export function notate(music: TimedMusic): Score {
     meter: music.meter,
     ...(music.timeSymbol ? { timeSymbol: true } : {}),
     ...(music.timeHidden ? { timeHidden: true } : {}),
+    ...(music.plain ? { plain: true } : {}),
     ...(music.tempoUnit ? { tempoUnit: music.tempoUnit } : {}),
     ...(music.tempoText ? { tempoText: music.tempoText } : {}),
     staves: written,
