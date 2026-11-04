@@ -16,6 +16,7 @@ export {
   courseLesson,
   coursesOn,
   courseStepIds,
+  coursesAbout,
   nextCourseLesson,
   previousCourseLesson,
   pieceStage,

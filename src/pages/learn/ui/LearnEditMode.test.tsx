@@ -1,8 +1,12 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import type { Editor } from '@tiptap/core'
+import { afterEach, describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { coursesOn } from '@/entities/course'
+import { coursesOn, type CourseOrder } from '@/entities/course'
+import { keepContent } from '@/shared/api/content'
+import { BLOCK_PRESETS } from '@/shared/lib/style'
+import { stubTextLayout } from '@/shared/test/layout'
 import { JOURNEYS, type Journey } from '@/entities/lesson'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
 import { createFakeContentEditing } from '@/shared/api/content-editing'
@@ -181,6 +185,70 @@ describe('the Courses’ shelves in Edit mode, in place (R29 B4)', () => {
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
     expect(screen.queryByRole('button', { name: 'Edit' })).toBeNull()
     expect(screen.queryByRole('button', { name: /^Move: / })).toBeNull()
+  })
+})
+
+describe('the Courses’ About (R29 B9)', () => {
+  afterEach(() => keepContent([]))
+
+  it('is written in Edit mode over the shelves, with / and its blocks, into the order’s draft', async () => {
+    stubTextLayout()
+    const user = userEvent.setup()
+    const content = createFakeContentEditing()
+    await renderApp('/?view=courses&edit=1', {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    const doc = await screen.findByRole('textbox', { name: 'About the courses' })
+    const editor = (doc as HTMLElement & { editor: Editor }).editor
+    act(() => void editor.commands.focus('end'))
+    await waitFor(() => expect(editor.view.dom).toHaveFocus())
+    await user.keyboard('/section')
+    await screen.findByRole('listbox', { name: 'Insert' })
+    await user.keyboard('{Enter}Where to begin')
+    await waitFor(
+      async () => {
+        const draft = await content.draft('catalog', 'courses')
+        const body = draft.ok ? (draft.value?.body as CourseOrder | undefined) : undefined
+        expect(body?.about).toEqual([{ heading: { en: 'Where to begin', ru: '' }, blocks: [] }])
+        expect(body?.courses.length).toBeGreaterThan(0)
+      },
+      { timeout: 3000 },
+    )
+  })
+
+  it('is read over the shelves, each block in its style', async () => {
+    keepContent([
+      {
+        kind: 'catalog',
+        id: 'courses',
+        version: 'v1',
+        body: {
+          courses: [],
+          about: [
+            {
+              heading: { en: '', ru: '' },
+              blocks: [
+                {
+                  kind: 'note',
+                  text: {
+                    en: 'Begin with the beginner’s shelf.',
+                    ru: 'Начните с полки для начинающих.',
+                  },
+                  style: BLOCK_PRESETS.bold,
+                },
+              ],
+            },
+          ],
+        },
+      },
+    ])
+    await renderApp('/?view=courses')
+    const about = await screen.findByRole('region', { name: 'About the courses' })
+    const words = within(about).getByText('Begin with the beginner’s shelf.')
+    expect(
+      words.closest<HTMLElement>('[data-block-style]')?.style.getPropertyValue('--block-border'),
+    ).toBe('3px')
   })
 })
 

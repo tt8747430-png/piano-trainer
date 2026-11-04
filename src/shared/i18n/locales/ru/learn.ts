@@ -44,6 +44,8 @@ export const learn: LocaleResources['learn'] = {
     study: 'Этюд',
     song: 'Песня',
   },
+  // Документ над полками курсов (R29 B9), от редактора.
+  coursesAbout: 'О курсах',
   course: {
     start: 'Начать курс',
     continue: 'Продолжить',

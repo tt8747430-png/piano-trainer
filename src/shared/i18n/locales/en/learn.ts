@@ -52,6 +52,8 @@ export const learn = {
     song: 'Song',
   },
   // A course's page: its facts, its one way in, its lessons and its guided songs.
+  // The Courses' own document over their shelves (R29 B9), an editor's.
+  coursesAbout: 'About the courses',
   course: {
     start: 'Start course',
     continue: 'Continue',

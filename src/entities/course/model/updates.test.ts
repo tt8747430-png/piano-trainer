@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { keepContent } from '@/shared/api/content'
 import { DEFAULT_STYLE } from '@/shared/lib/style'
 import { COURSES } from '../content'
-import { courseById, courseLesson, coursesOn } from './selectors'
+import { courseById, courseLesson, coursesAbout, coursesOn } from './selectors'
 import { courseRecord, updatesCourse } from './types'
 
 afterEach(() => keepContent([]))
@@ -126,6 +126,20 @@ describe('a course’s texts over the kept content (round 12)', () => {
   it('passes over a lessons list that is not a list of ids', () => {
     kept({ ...texts, lessons: [1, 2] })
     expect(courseById(course.id)).toBe(course)
+  })
+})
+
+describe('the Courses’ About (R29 B9)', () => {
+  it('is the published course order’s, each style sanitised', () => {
+    expect(coursesAbout()).toBeUndefined()
+    const about = [
+      {
+        heading: { en: 'Start here', ru: 'Начните здесь' },
+        blocks: [{ kind: 'text', text: { en: 'Hi', ru: 'Привет' }, style: { border: 3 } }],
+      },
+    ]
+    keepContent([{ kind: 'catalog', id: 'courses', version: 'v1', body: { courses: [], about } }])
+    expect(coursesAbout()?.[0]?.blocks[0]?.style).toEqual({ ...DEFAULT_STYLE, border: 3 })
   })
 })
 

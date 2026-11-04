@@ -1,9 +1,15 @@
-import { useId } from 'react'
+import { lazy, Suspense, useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { coursesOn, SHELVES, type Shelf } from '@/entities/course'
+import { coursesAbout, coursesOn, SHELVES, type Shelf } from '@/entities/course'
+import { hasAbout } from '@/entities/lesson'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { continueStep } from '../model/continue-step'
 import { CourseCard } from './CourseCard'
+
+/** An About's view, its own chunk: most visits to the Courses have none to draw. */
+const AboutView = lazy(() =>
+  import('@/widgets/lesson-view').then((module) => ({ default: module.AboutView })),
+)
 
 /** A shelf as a group of the library: its name small over one card of its courses' rows. */
 function ShelfSection({ shelf, current }: { shelf: Shelf; current: string | undefined }) {
@@ -29,13 +35,22 @@ function ShelfSection({ shelf, current }: { shelf: Shelf; current: string | unde
 /**
  * The Courses (ADR 0053), as the courses-app shelves them: the beginner's, the intermediate's, the
  * technique courses, chords and improvising, then the method books. The course Continue is in ringed.
+ * Over them the Courses' About, where an editor wrote one (R29 B9).
  */
 export function CourseShelves() {
+  const { t } = useTranslation('learn')
+  const about = coursesAbout()
   const learned = useProgress(selectLearned)
   const next = continueStep(learned)
   const current = next && 'course' in next ? next.course.id : undefined
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+      {/* The Courses' About (R29 B9), an editor's, over the shelves. */}
+      {hasAbout(about) ? (
+        <Suspense fallback={null}>
+          <AboutView about={about} label={t('coursesAbout')} className="px-1" />
+        </Suspense>
+      ) : null}
       {SHELVES.map((shelf) => (
         <ShelfSection key={shelf} shelf={shelf} current={current} />
       ))}
