@@ -2,6 +2,7 @@ import {
   keyMode,
   scaleHasChords,
   type ChordNotes,
+  type ComparedScale,
   type Fingering,
   type NoteParam,
   type ScaleKind,
@@ -46,6 +47,8 @@ export interface ScaleView {
   readonly octaves: RunOctaves
   /** Which way the run goes (Scale view); absent, up and back down. */
   readonly direction?: Exclude<RunDirection, 'both'>
+  /** The scale on the same tonic its notes are compared with (Scale view, A43); absent, none. */
+  readonly compare?: ComparedScale
   /** How the run is fingered; absent, as its start is (`ownFingering`). */
   readonly fingering?: Fingering
   readonly rhythm: PracticeRhythm

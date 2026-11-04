@@ -357,6 +357,19 @@ describe('Practice → Scales and keys', () => {
     expect(screen.queryByRole('radiogroup', { name: 'On the keys' })).not.toBeInTheDocument()
   })
 
+  it('compares C major with C minor, and offers no comparison for a pentatonic (A43)', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/scales')
+    await pickMenu(user, 'Compare with', 'C natural minor')
+    expect(router.state.location.search).toMatchObject({ compare: 'natural' })
+    await pickMenu(user, 'Compare with', 'None')
+    expect(router.state.location.search).not.toHaveProperty('compare')
+    await router.navigate({ to: '/practice/scales', search: (prev) => ({ ...prev, kind: 'pent' }) })
+    await waitFor(() =>
+      expect(screen.queryByRole('button', { name: /^Compare with: / })).not.toBeInTheDocument(),
+    )
+  })
+
   it('opens each of the key’s chords in Chords from its card, in the key (A32, A33)', async () => {
     await renderApp('/practice/scales?show=chords')
     await screen.findByRole('heading', { level: 2, name: 'C major' })

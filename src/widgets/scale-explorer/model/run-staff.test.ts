@@ -70,6 +70,20 @@ describe('runStaff', () => {
     ).toEqual([note('B')])
   })
 
+  it('writes C minor’s E♭ A♭ B♭ over the notes compared with them', () => {
+    const run = scaleRunOf(view)
+    const off = { degrees: false, steps: false, tonic: false, tetrachords: false }
+    const compared = new Map([
+      ['3', 'E♭'],
+      ['6', 'A♭'],
+      ['7', 'B♭'],
+    ])
+    const texts = runStaff(run.music, 'rh', run.placed, off, words, undefined, compared).notes.map(
+      (each) => each.marks?.text,
+    )
+    expect(texts).toEqual([undefined, undefined, 'E♭', undefined, undefined, 'A♭', 'B♭', undefined])
+  })
+
   it('leaves the music alone with every layer off', () => {
     const run = scaleRunOf(view)
     const off = { degrees: false, steps: false, tonic: false, tetrachords: false }

@@ -37,9 +37,11 @@ export function runStaff(
   words: RunStaffWords,
   /** A mode's degree that sets it apart (`characteristicDegree`), as its tone writes it: always named. */
   characteristic?: string,
+  /** The scale compared with (A43): by this scale's degree, the other's note written over it. */
+  compared?: ReadonlyMap<string, string>,
 ): TimedMusic {
   const any = layers.degrees || layers.steps || layers.tonic || layers.tetrachords
-  if (!any && characteristic === undefined) return music
+  if (!any && characteristic === undefined && !compared?.size) return music
   const degrees = new Map<Midi, string>(placed.map((key) => [key.midi, key.tone.degree]))
   // Tetrachords split a seven-note scale in two: the 1st to 4th and the 5th to the octave.
   const sevens = new Set(placed.map((key) => key.tone.pitchClass)).size === 7
@@ -68,7 +70,8 @@ export function runStaff(
         : undefined
     const special =
       characteristic !== undefined && degree === characteristic ? words.characteristic : undefined
-    const text = [special, named, half].filter(Boolean).join(' · ') || undefined
+    const other = degree === undefined ? undefined : compared?.get(degree)
+    const text = [other, special, named, half].filter(Boolean).join(' · ') || undefined
     notes[index] = {
       ...note,
       marks: {

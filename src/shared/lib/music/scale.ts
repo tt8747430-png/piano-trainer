@@ -347,6 +347,27 @@ const VAMPS: Partial<Record<ScaleKind, readonly number[]>> = {
 }
 export const modeVamp = (kind: ScaleKind): readonly number[] => VAMPS[kind] ?? []
 
+/** The scales a seven-note scale is compared with on its own tonic (A43): the major and the minor. */
+export const COMPARED_SCALES = ['major', 'natural'] as const
+export type ComparedScale = (typeof COMPARED_SCALES)[number]
+
+/**
+ * Where a scale on the same tonic differs from this one (A43's Compare with): each degree whose note
+ * is another, with the other scale's note. None where either scale has not seven notes.
+ */
+export function scaleDifferences(
+  root: SpelledNote,
+  kind: ScaleKind,
+  other: ScaleKind,
+): { readonly at: number; readonly note: SpelledNote }[] {
+  const own = spellScale(root, kind)
+  const theirs = spellScale(root, other)
+  if (own.length !== 7 || theirs.length !== 7) return []
+  return theirs.flatMap((tone, at) =>
+    own[at]?.pitchClass === tone.pitchClass ? [] : [{ at, note: tone.note }],
+  )
+}
+
 /** The gap between neighbouring notes of a scale: a half step, a whole step, or both (three semitones). */
 type ScaleGap = 'H' | 'W' | 'W+H'
 const GAP_BY_SEMITONES: Readonly<Record<number, ScaleGap>> = { 1: 'H', 2: 'W', 3: 'W+H' }

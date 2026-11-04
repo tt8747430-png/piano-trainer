@@ -14,6 +14,7 @@ import {
   fingeringsOf,
   fitParts,
   INVERSIONS,
+  COMPARED_SCALES,
   keyFromParam,
   keyMode,
   keyParam,
@@ -139,6 +140,7 @@ function chosenFingering(kind: ScaleKind, start: number, raw: unknown): Fingerin
     ? raw
     : undefined
 }
+const isComparedScale = isOneOf(COMPARED_SCALES)
 export function readScalesSearch(raw: Raw): ScalesSearch {
   const kind = valueOr(isScaleKind, raw.kind, SCALES_DEFAULTS.kind)
   const root = readNote(raw.root)
@@ -154,6 +156,9 @@ export function readScalesSearch(raw: Raw): ScalesSearch {
     start,
     octaves: raw.octaves === 2 || raw.octaves === 3 || raw.octaves === 4 ? raw.octaves : 1,
     ...(raw.direction === 'up' || raw.direction === 'down' ? { direction: raw.direction } : {}),
+    ...(isComparedScale(raw.compare) && raw.compare !== kind && scaleIntervals(kind).length === 7
+      ? { compare: raw.compare }
+      : {}),
     fingering: chosenFingering(kind, start - 1, raw.fingering),
     rhythm: valueOr(isRhythm, raw.rhythm, SCALES_DEFAULTS.rhythm),
     tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, SCALES_DEFAULTS.tempo),

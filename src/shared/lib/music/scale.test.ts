@@ -17,6 +17,7 @@ import {
   scaleGaps,
   characteristicDegree,
   modeVamp,
+  scaleDifferences,
   scaleHasChords,
   scaleIntervals,
   scaleKey,
@@ -111,6 +112,19 @@ describe('a mode’s character (A43)', () => {
     expect(modeVamp('mixolydian')).toEqual([0, 6])
     expect(modeVamp('major')).toEqual([])
     expect(characteristicDegree('major')).toBeUndefined()
+  })
+})
+
+describe('scaleDifferences (A43)', () => {
+  it('finds E♭ A♭ B♭ where C minor differs from C major', () => {
+    expect(
+      scaleDifferences(note('C'), 'major', 'natural').map((each) => noteName(each.note)),
+    ).toEqual(['E♭', 'A♭', 'B♭'])
+  })
+
+  it('finds D Dorian’s B against D minor, and nothing for a pentatonic', () => {
+    expect(scaleDifferences(note('D'), 'natural', 'dorian')).toEqual([{ at: 5, note: note('B') }])
+    expect(scaleDifferences(note('C'), 'pent', 'major')).toEqual([])
   })
 })
 

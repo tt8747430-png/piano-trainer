@@ -134,6 +134,7 @@ export const practice = {
   },
   // Scales and keys: the run, the chords, the key.
   scales: {
+    compare: { label: 'Compare with', none: 'None' },
     vamp: { label: 'Vamp', play: 'Play the vamp: {{chords}}', drone: 'Drone on {{note}}' },
     // The tabs say what is in them (A32): its notes, its key's harmony, the key itself.
     show: { scale: 'Scale', chords: 'Chords', key: 'Key' },

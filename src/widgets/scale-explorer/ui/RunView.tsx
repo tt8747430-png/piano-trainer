@@ -1,9 +1,12 @@
 import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useScaleName } from '@/shared/i18n'
 import { selectScaleStaff, useSettings } from '@/entities/settings'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import {
   characteristicDegree,
+  COMPARED_SCALES,
+  scaleDifferences,
   hasStandardFingering,
   noteFromParam,
   spellScale,
@@ -50,7 +53,8 @@ export function RunView({
   facts: ReactNode
 }) {
   const { t } = useTranslation(['practice', 'common'])
-  const { root, kind, start, octaves, fingering, rhythm, hands, direction } = scale
+  const { root, kind, start, octaves, fingering, rhythm, hands, direction, compare } = scale
+  const scaleName = useScaleName()
   const run = useMemo(
     () => scaleRunOf({ root, kind, start, octaves, fingering, rhythm, hands, direction }),
     [root, kind, start, octaves, fingering, rhythm, hands, direction],
@@ -62,6 +66,16 @@ export function RunView({
   const { music, placed, down } = run
   const written = useMemo(() => {
     const at = characteristicDegree(kind)
+    const own = spellScale(noteFromParam(root), kind)
+    // The compared scale's notes where they differ, over this scale's notes on those degrees.
+    const compared = new Map(
+      compare
+        ? scaleDifferences(noteFromParam(root), kind, compare).flatMap(({ at: place, note }) => {
+            const degree = own[place]?.degree
+            return degree ? [[degree, printedNote(note)] as const] : []
+          })
+        : [],
+    )
     return runStaff(
       music,
       hands === 'lh' ? 'lh' : 'rh',
@@ -77,9 +91,10 @@ export function RunView({
         upper: t('practice:scaleStaff.upper'),
         characteristic: t('practice:scaleStaff.characteristic'),
       },
-      at === undefined ? undefined : spellScale(noteFromParam(root), kind)[at]?.degree,
+      at === undefined ? undefined : own[at]?.degree,
+      compared,
     )
-  }, [music, placed, down, hands, layers, t, root, kind])
+  }, [music, placed, down, hands, layers, t, root, kind, compare])
   return (
     <ScaleLayout
       keyboard={<PinnedKeyboard shown={runShown(run, hands, runKeyShow(scale))} />}
@@ -124,6 +139,24 @@ export function RunView({
               onChange={(way) => onChange({ direction: way === 'both' ? undefined : way })}
             />
           </Labelled>
+          {/* Compare with the major or minor on the same tonic (A43): its other notes over the run. */}
+          {tones.length === 7 ? (
+            <Labelled label={t('practice:scales.compare.label')}>
+              <MenuPicker
+                bare
+                label={t('practice:scales.compare.label')}
+                value={compare ?? 'none'}
+                options={[
+                  { value: 'none' as const, label: t('practice:scales.compare.none') },
+                  ...COMPARED_SCALES.filter((other) => other !== kind).map((other) => ({
+                    value: other,
+                    label: scaleName(tonic, other),
+                  })),
+                ]}
+                onChange={(next) => onChange({ compare: next === 'none' ? undefined : next })}
+              />
+            </Labelled>
+          ) : null}
           {/* The chromatic scale from another note is the chromatic scale on that root. A menu of the
               scale's notes: seven or eight outgrow a narrow phone's row. */}
           {tones.length <= MOST_STARTS ? (
