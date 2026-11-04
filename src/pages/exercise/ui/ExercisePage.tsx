@@ -55,7 +55,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
   const locale = useLocale()
   const search = useSearch({ from: '/shell/practice/exercises/$exerciseId' })
   const setSearch = useSetSearch<ExercisePageSearch>()
-  const { root, tonality, octaves, hanon, order } = search
+  const { root, tonality, octaves, hanon, order, target } = search
   const choice: ExerciseChoice = useMemo(
     () => exerciseChoice(exercise, { root, tonality, octaves, hanon }),
     [exercise, root, tonality, octaves, hanon],
@@ -182,6 +182,25 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
             increase={t('practice:exercisePage.faster')}
           />
         </Labelled>
+        {/* The tempo speed training climbs to, from the Tempo above: set, the Player starts it. */}
+        <Labelled label={t('practice:exercisePage.target')}>
+          <Stepper
+            label={t('practice:exercisePage.target')}
+            value={Math.max(target ?? tempo, tempo)}
+            min={tempo}
+            max={TEMPO_RANGE.max}
+            step={TEMPO_STEP}
+            typed
+            format={(bpm) =>
+              bpm > tempo
+                ? t('practice:exercisePage.bpm', { bpm })
+                : t('practice:exercisePage.noTarget')
+            }
+            onChange={(bpm) => setSearch({ target: bpm > tempo ? bpm : undefined })}
+            decrease={t('practice:exercisePage.lowerTarget')}
+            increase={t('practice:exercisePage.raiseTarget')}
+          />
+        </Labelled>
       </section>
       <FloatingActions>
         <FabLink
@@ -200,6 +219,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
                 ...(order ? { order } : {}),
                 hands,
                 tempo,
+                ...(target !== undefined && target > tempo ? { target, speedTraining: true } : {}),
               }}
             />
           }

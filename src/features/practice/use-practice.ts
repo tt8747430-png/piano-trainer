@@ -42,6 +42,8 @@ export interface PracticeSetup {
   readonly tempo: number
   /** The piece's own: speed training climbs to it. */
   readonly ownTempo: number
+  /** Where speed training climbs to instead of the piece's own tempo (A41's Target tempo). */
+  readonly ceiling?: number
   readonly speedTraining: boolean
   readonly swing: SwingFeel
   /** The bars looped; null plays the whole piece. */
@@ -157,7 +159,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   const { rh, lh, staff } = heard
   const clicks = partGain(mix, 'click') > 0
   const recording = partGain(mix, 'recording') > 0 ? setup.recording : null
-  const up = speedTraining ? speedUp(tempo, ownTempo, setup.speedStep) : undefined
+  const up = speedTraining ? speedUp(tempo, setup.ceiling ?? ownTempo, setup.speedStep) : undefined
   const upStep = up?.step
   const upUntil = up?.until
   const listening = state.mode === 'listen' && state.playing
@@ -294,7 +296,11 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
       accompanyAll.current ? along : { rh: false, lh: false, staff: along.staff },
       mixed.current,
     )
-    audio.play(beatGroupSounds(state.performance, beatGroup, { tempo: paced, hands }), undefined, gain)
+    audio.play(
+      beatGroupSounds(state.performance, beatGroup, { tempo: paced, hands }),
+      undefined,
+      gain,
+    )
   })
   const { matched } = state
   useEffect(() => {

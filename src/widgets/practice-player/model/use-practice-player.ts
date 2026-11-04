@@ -172,6 +172,7 @@ export function usePracticePlayer(
     hands: practisedHand,
     tempo,
     ownTempo,
+    ...(view.target !== undefined ? { ceiling: view.target } : {}),
     speedTraining: view.speedTraining,
     swing: view.swing,
     loop,

@@ -12,6 +12,8 @@ export interface ExercisePageSearch {
   readonly tempo?: number | undefined
   /** Which of Hanon's exercises, for Hanon's page. */
   readonly hanon?: HanonNumber | undefined
+  /** The tempo speed training climbs to; absent, none set. */
+  readonly target?: number | undefined
   /** The order Next key takes after each pass: round the circle of fifths, or up by half steps. */
   readonly order?: KeyOrder | undefined
 }

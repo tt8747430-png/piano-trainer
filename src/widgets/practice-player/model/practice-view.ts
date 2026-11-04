@@ -6,6 +6,8 @@ export interface PracticeView {
   readonly mode: PracticeMode
   readonly tempo?: number
   readonly speedTraining: boolean
+  /** The tempo speed training climbs to, where not the piece's own (an exercise's Target tempo, A41). */
+  readonly target?: number
   readonly hands: Hands
   /** How much its 8ths swing (ADR 0115). */
   readonly swing: SwingFeel

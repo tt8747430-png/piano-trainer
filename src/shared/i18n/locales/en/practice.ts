@@ -573,6 +573,10 @@ export const practice = {
   },
   // An exercise's page (A41), before the Player.
   exercisePage: {
+    target: 'Target tempo',
+    noTarget: 'None',
+    lowerTarget: 'Lower the target',
+    raiseTarget: 'Raise the target',
     doneToday: 'Done today',
     order: 'Next key',
     orders: { fifths: 'Circle of fifths', chromatic: 'Chromatic' },

@@ -248,6 +248,7 @@ export function readExerciseSearch(raw: Raw): ExerciseSearch {
     rhOctave: wholeIn(raw.rhOctave, 1, 7, undefined),
     lhOctave: wholeIn(raw.lhOctave, 1, 7, undefined),
     order: raw.order === 'chromatic' ? 'chromatic' : undefined,
+    target: wholeIn(raw.target, TEMPO_RANGE.min, TEMPO_RANGE.max, undefined),
   }
 }
 export const exerciseSearch = routeSearch(readExerciseSearch, EXERCISE_DEFAULTS)

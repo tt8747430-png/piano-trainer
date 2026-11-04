@@ -461,6 +461,19 @@ describe('usePractice: a loop and speed training', () => {
     expect(result.current.passTempo).toBeNull()
   })
 
+  it('climbs toward a target tempo where one is set, in its steps (A41)', () => {
+    const { result } = renderPractice(ONE_BAR, {
+      tempo: 60,
+      ownTempo: 120,
+      ceiling: 200,
+      speedTraining: true,
+    })
+    act(() => result.current.play())
+    clockTo(0.1 + 3.5)
+    clockTo(0.1 + 4.2)
+    expect(result.current.passTempo).toBe(70)
+  })
+
   it('starts again from the cursor, the climb carried on, when the hands change mid-training', () => {
     const training = { ...LISTEN, tempo: 60, ownTempo: 120, speedTraining: true }
     const { result, rerender } = renderPractice(ONE_BAR, training)

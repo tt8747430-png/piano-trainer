@@ -546,6 +546,10 @@ export const practice: LocaleResources['practice'] = {
     },
   },
   exercisePage: {
+    target: 'Целевой темп',
+    noTarget: 'Нет',
+    lowerTarget: 'Понизить цель',
+    raiseTarget: 'Повысить цель',
     doneToday: 'Сегодня сделано',
     order: 'Следующая тональность',
     orders: { fifths: 'По квинтовому кругу', chromatic: 'Хроматически' },

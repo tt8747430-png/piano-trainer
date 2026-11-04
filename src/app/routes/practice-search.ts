@@ -98,6 +98,7 @@ export function readExercisePageSearch(raw: Raw): ExercisePageSearch {
     tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, undefined),
     hanon: isHanonNumber(raw.hanon) ? raw.hanon : undefined,
     order: raw.order === 'chromatic' ? 'chromatic' : undefined,
+    target: wholeIn(raw.target, TEMPO_RANGE.min, TEMPO_RANGE.max, undefined),
   }
 }
 export const exercisePageSearch = routeSearch(readExercisePageSearch, EXERCISE_PAGE_DEFAULTS)

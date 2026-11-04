@@ -30,7 +30,7 @@ describe('An exercise’s page', () => {
     expect(router.state.location.search).toMatchObject({ root: 'G' })
   })
 
-  it('chooses Hanon’s number and Next key’s order, and Start carries both (A41)', async () => {
+  it('chooses Hanon’s number, Next key’s order and a target tempo, and Start carries them (A41)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/exercises/hanon')
     await screen.findByRole('heading', { level: 1, name: 'Hanon No. 1' })
@@ -39,7 +39,10 @@ describe('An exercise’s page', () => {
     expect(router.state.location.search).toMatchObject({ hanon: 3 })
     await user.click(screen.getByRole('radio', { name: 'Chromatic' }))
     expect(router.state.location.search).toMatchObject({ order: 'chromatic' })
+    await user.click(screen.getByRole('button', { name: 'Raise the target' }))
     const start = screen.getByRole('link', { name: 'Start' })
+    expect(start.getAttribute('href')).toMatch(/target=\d+/)
+    expect(start.getAttribute('href')).toContain('speedTraining=true')
     expect(start.getAttribute('href')).toContain('hanon=3')
     expect(start.getAttribute('href')).toContain('order=chromatic')
   })
