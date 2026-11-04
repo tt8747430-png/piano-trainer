@@ -27,5 +27,9 @@ export const withKeyPractised = (state: ProgressState, key: string, day: string)
   state.keys[key] ? state : { ...state, keys: { ...state.keys, [key]: day } }
 
 /** The progress with a first (a song published, a minute on a connected piano) kept on its day, once. */
+/** A take's accuracy kept where it beats the best so far. */
+export const withBestTake = (state: ProgressState, percent: number): ProgressState =>
+  percent > state.bestTake ? { ...state, bestTake: Math.min(100, Math.round(percent)) } : state
+
 export const withFirst = (state: ProgressState, first: FirstId, day: string): ProgressState =>
   state.firsts[first] ? state : { ...state, firsts: { ...state.firsts, [first]: day } }

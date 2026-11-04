@@ -29,6 +29,7 @@ const state: ProgressState = {
   keys: {},
   earned: {},
   firsts: {},
+  bestTake: 0,
 }
 
 describe('selectTempo', () => {

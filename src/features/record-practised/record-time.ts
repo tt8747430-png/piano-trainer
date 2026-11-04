@@ -3,6 +3,7 @@ import {
   localDay,
   SILENCE_COUNTED_S,
   useProgressStoreApi,
+  withBestTake,
   withFirst,
   withKeyPractised,
   withPracticeTime,
@@ -22,6 +23,13 @@ export function recordKeyPractised(store: ProgressStore, key: string, now: Date)
   const state = store.getState()
   const next = withKeyPractised(state, key, localDay(now))
   if (next !== state) store.setState({ keys: next.keys })
+}
+
+/** Records how well a take was played (B8's Feedback), kept where it beats the best (A perfect take). */
+export function recordTakeAccuracy(store: ProgressStore, percent: number): void {
+  const state = store.getState()
+  const next = withBestTake(state, percent)
+  if (next !== state) store.setState({ bestTake: next.bestTake })
 }
 
 /** Records a first (a song published, a minute on a connected piano), once. */

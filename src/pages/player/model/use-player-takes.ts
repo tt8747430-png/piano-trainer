@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import type { PieceId } from '@/entities/piece'
 import { selectRecorder, useSettingsStoreApi } from '@/entities/settings'
@@ -12,7 +12,9 @@ import {
   type Take,
   type TakeId,
 } from '@/entities/take'
+import { useProgressStoreApi } from '@/entities/progress'
 import { saveTake } from '@/features/manage-takes'
+import { recordTakeAccuracy } from '@/features/record-practised'
 import { useRecorder, type RecorderStage } from '@/features/record-take'
 import type { Performance } from '@/shared/lib/arrangement'
 
@@ -63,6 +65,12 @@ export function usePlayerTakes(
     () => (shown ? feedbackOf(performance, shown, { rhythm }) : null),
     [shown, performance, rhythm],
   )
+  // How well it was played counts toward A perfect take (B1), the best kept.
+  const progress = useProgressStoreApi()
+  const percent = feedback?.percent
+  useEffect(() => {
+    if (percent !== undefined) recordTakeAccuracy(progress, percent)
+  }, [percent, progress])
   return {
     stage: recorder.stage,
     list,

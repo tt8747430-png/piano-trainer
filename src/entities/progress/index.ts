@@ -87,6 +87,7 @@ export { noticesOf } from './model/notices'
 export {
   practiceSeconds,
   SILENCE_COUNTED_S,
+  withBestTake,
   withFirst,
   withKeyPractised,
   withPracticeTime,

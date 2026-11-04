@@ -52,3 +52,19 @@ describe('milestones', () => {
     expect(profileFigures(state, KEPT).bestAccuracy).toBe(100)
   })
 })
+
+describe('A perfect take (B1, B8)', () => {
+  it('counts a take played in the Player as a trainer run does, the better of the two', () => {
+    expect(profileFigures({ ...EMPTY_PROGRESS, bestTake: 100 }, KEPT).bestAccuracy).toBe(100)
+    expect(
+      profileFigures(
+        {
+          ...EMPTY_PROGRESS,
+          bestTake: 70,
+          trainers: { 'name-chord:3': { runs: 1, last: 90, best: 90, bestStreak: 3 } },
+        },
+        KEPT,
+      ).bestAccuracy,
+    ).toBe(90)
+  })
+})

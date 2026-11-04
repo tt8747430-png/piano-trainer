@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { practiceSeconds, withFirst, withKeyPractised, withPracticeTime } from './time'
+import {
+  practiceSeconds,
+  withBestTake,
+  withFirst,
+  withKeyPractised,
+  withPracticeTime,
+} from './time'
 import { EMPTY_PROGRESS } from './types'
 
 describe('practice time', () => {
@@ -21,5 +27,14 @@ describe('practice time', () => {
     expect(withFirst(published, 'published', '2026-11-05').firsts).toEqual({
       published: '2026-11-03',
     })
+  })
+})
+
+describe('withBestTake (B1)', () => {
+  it('keeps a take’s accuracy only where it beats the best', () => {
+    const once = withBestTake(EMPTY_PROGRESS, 82.4)
+    expect(once.bestTake).toBe(82)
+    expect(withBestTake(once, 70)).toBe(once)
+    expect(withBestTake(once, 100).bestTake).toBe(100)
   })
 })

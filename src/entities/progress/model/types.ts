@@ -66,6 +66,8 @@ export interface ProgressState {
   readonly earned: Readonly<Partial<Record<string, string>>>
   /** The day of a first the stores do not keep: a song published, a minute on a connected piano. */
   readonly firsts: Readonly<Partial<Record<FirstId, string>>>
+  /** The best a take in the Player was played, per cent of its notes right (B8's Feedback; A perfect take). */
+  readonly bestTake: number
 }
 
 /** The firsts the progress keeps the day of, written where they happen. */
@@ -86,4 +88,5 @@ export const EMPTY_PROGRESS: ProgressState = {
   keys: {},
   earned: {},
   firsts: {},
+  bestTake: 0,
 }

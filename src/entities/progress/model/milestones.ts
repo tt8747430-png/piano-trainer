@@ -61,7 +61,11 @@ export function profileFigures(
     recordings: kept.recordings,
     published: state.firsts.published ? 1 : 0,
     midi: state.firsts.midi ? 1 : 0,
-    bestAccuracy: Math.max(0, ...Object.values(state.trainers).map((run) => run?.best ?? 0)),
+    // A trainer's best run, or a take in the Player (B8's Feedback), whichever was played better.
+    bestAccuracy: Math.max(
+      state.bestTake,
+      ...Object.values(state.trainers).map((run) => run?.best ?? 0),
+    ),
   }
 }
 

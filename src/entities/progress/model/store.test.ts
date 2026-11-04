@@ -44,6 +44,7 @@ describe('createProgressStore', () => {
       keys: { G: '2026-10-10', Ebm: '2026-10-11' },
       earned: { 'streak:1': '2026-10-11', 'first-song': '2026-10-10' },
       firsts: { published: '2026-10-11' },
+      bestTake: 96,
     }
     writeSaved(storage, saved)
     expect(createProgressStore({ storage }).getState()).toEqual(saved)
@@ -99,6 +100,7 @@ describe('createProgressStore', () => {
       keys: { G: '2026-10-11', H: '2026-10-11', Am: 'today' },
       earned: { 'streak:2': '2026-10-11', 'streak:9': '2026-10-11', '': '2026-10-11' },
       firsts: { midi: '2026-10-11', cake: '2026-10-11' },
+      bestTake: 140,
       extra: true,
     })
     expect(createProgressStore({ storage }).getState()).toEqual({
@@ -121,6 +123,7 @@ describe('createProgressStore', () => {
       keys: { G: '2026-10-11' },
       earned: { 'streak:2': '2026-10-11' },
       firsts: { midi: '2026-10-11' },
+      bestTake: 0,
     })
   })
 

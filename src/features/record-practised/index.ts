@@ -5,5 +5,6 @@ export {
   recordFirst,
   recordKeyPractised,
   recordPracticeTime,
+  recordTakeAccuracy,
   usePracticeClock,
 } from './record-time'

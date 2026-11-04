@@ -158,5 +158,9 @@ function sanitize(persisted: unknown): ProgressState {
     firsts: kept(saved.firsts, isFirst, (value) =>
       typeof value === 'string' && isDayKey(value) ? value : undefined,
     ),
+    bestTake:
+      typeof saved.bestTake === 'number' && saved.bestTake >= 0 && saved.bestTake <= 100
+        ? Math.round(saved.bestTake)
+        : 0,
   }
 }
