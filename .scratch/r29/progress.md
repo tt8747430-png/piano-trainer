@@ -52,27 +52,27 @@ rounds 2–5 were built: the prompt's order was not kept. From here the order is
 | A31 | Nothing flickers, nothing jumps | 1 | partial (audit: 7875ffe7 stops drawing Chords' rows that don't apply, undoing "rows that stay") | 0a9069b4 | measured before paint, rows that stay, a bar that holds; a CLS about 0.01 on Chords and Scales at 1280 on a fresh load remains (audit); Chords' heading block height goes with A20 |
 | A32 | The theory pages: one owner per idea, no copies | 2 | partial (audit: the app-wide Notation and names settings don't exist) | 31080752 | the relative key on the Key tab only; Intervals links the Quiz's Intervals drill; Harmony's chords open Chords |
 | A33 | Colour notes: one model | 2 | done | 8355d0ed, b417ebf7 | one panel: Chord tones · Tensions · Avoid, a tap adds the note (C9, C7♯11, Cadd9); `colour=` in the URL; `key=` follows the chord's degree from its root. Dm7 as ii takes 13 (the spec's table), not avoided |
-| A34 | The score editor against Flat and the editors in `piano-data` | 4 | open | | |
+| A34 | The score editor against Flat and the editors in `piano-data` | 4 | partial | A34/A40 merge | glyphs, key grid, time and tempo controls, New song steps, arpeggios, clef rule, skeletons. Left: cross-staff notes, n:m tuplets (kernel) |
 | A35 | The Player: play staves, not "melody" and patterns | 4 | done | 49809bdd, 093e86b9 | Staves (Play/Show, recording a track), accompaniment for charts only, Melody gone, other hand, controlsFor + audit table; click from the Metronome engine. Daisy fields is a chart (audit); Clef display not built |
 | A36 | Focus and keyboard walking | 1 | done | a2569823 | one 3px focus outline with a test; Practice walked by Tab in a test |
 | A37 | The chord views (Diagrams, Grid, Chords over lyrics) as Chordify does them | 4 | open | | |
 | A38 | One meaning for the pencil, for everyone | 1 | in progress | | song page done (audit); editing in the chord views (Grid, Chords over lyrics, Diagrams) goes with A37 in round 4 |
 | A39 | The Metronome, against the metronome apps players use | 2 | in progress | a61dde1c | engine model and the page (audit); the Player's click and count-in from its engine (093e86b9). Left: samples (owner's CC0 files), flash |
-| A40 | The score editor's panels, against Flat's | 4 | open | | |
+| A40 | The score editor's panels, against Flat's | 4 | partial | A34/A40 merge | Notation · Instruments · Layout, Flat's group order. Left: items 3–6 (instrument solo/show, Layout groups, MIDI review, bar tools) |
 | A41 | Exercises and the Quiz, inside | 2 | in progress | 41a450d5 | drills Flashcards · Name it · Play it · By ear, Start a labelled button, no time signature on a question's staff. Left: the results page, the Why line and stats, the exercise page and Next key |
 | A42 | Every theory, practice and training page against rule 30 | 1 | in progress | | part done with A23–A25; the rest open |
 | A43 | The Key tab's content, and theory written on the music | 2 | in progress | 9c6e182f | the degrees table gone from Key (Harmony owns it); a minor key borrows the Picardy I and the Neapolitan (C♭ in B♭ minor). Left: theory written on the music |
-| B1 | The Profile, as complete as memory-palaces' | 5 | in progress | ef48f266, 00c8af17, 5baac640 | server: learner_profiles, handle check, public avatars (access test green). Device: tiered badges and the Almost there card on the Profile. Next, after the Settings rebuild merges (it owns the Account pages): avatar picker, Edit profile (handle, bio), Privacy, notifications, Streak merged with Activity |
-| B2 | Professional copy | 6 | open | | |
-| B3 | Explore in Songs | 7 | open | | |
-| B4 | Edit in place | 8 | open | | |
-| B5 | Learner view | 9 | open | | |
-| B6 | One publishing model | 10 | open | | |
+| B1 | The Profile, as complete as memory-palaces' | 5 | done | b3-b1 merge, 04ee566e, 30db5c6b, ce59c541 | hero, tiles, bell, badges, achievements, streak, Edit profile, Privacy; First MIDI session (a minute on a connected piano), keys from the Chords explorer, A perfect take from B8's Feedback. Left: side-by-side screenshots with the references |
+| B2 | Professional copy | 6 | partial | legal, copy.md, ReportProblem | Privacy and Terms rewritten, Report a problem. Left: part 2, the empty states and ⓘ texts by namespace |
+| B3 | Explore in Songs | 7 | done | b3-b1 merge | My songs · Explore, categories, shelves, ratings, authors; migrations applied |
+| B4 | Edit in place | 8 | done | b4-b6 merge | Learn's Edit, LevelEditor, ShelfEditor, `can` table for built-in folders |
+| B5 | Learner view | 9 | done | earlier round | `useLearnerView` |
+| B6 | One publishing model | 10 | done | b4-b6 merge | DraftPublishScreen for every item |
 | B7 | Real settings for the Player and the editor | 4 | partial (audit: Clef, Replace/Insert, palette side, the score's Layout link and the On-screen piano link missing; "Hear notes" drawn on two pages) | 4ffa41de | /settings/player (and a song's gear, /play/$pieceId/settings), /settings/score-editor; Clef, Replace/Insert, palette side not offered (no engine for them) |
-| B8 | The Player's practice flow | 11 | open | | |
-| B9 | Customisable pages and cards | 14 | open | | |
-| B10 | Customisable bars, as memory-palaces does | 12 | open | | |
-| B11 | Tools, as a group of their own | 13 | open | | |
+| B8 | The Player's practice flow | 11 | done | d64f5262 | modes, versions, Tools sheet, Feedback, Recorder, Tuner, Annotations, Rhythm game, coach and progress lines, Voice commands. Left: the Rhythm game hides no pitch yet; lesson swipes |
+| B9 | Customisable pages and cards | 14 | partial | 1dfd25f6, 3cc7c5d7, Duplicate, cfbbbec4, About | style model, style editor, Card style per place, Duplicate, Reset progress, a song's colour and picture, About. Left: covers (a private bucket: the owner's call), Rename as its own act, customisable About documents on course/song pages |
+| B10 | Customisable bars, as memory-palaces does | 12 | done | d64f5262 | Select toolbar, swipe actions, the Player's tool bar, one tile editor |
+| B11 | Tools, as a group of their own | 13 | done | d5eaefab, editor Tools, 47c34402 | tool pages, Tools sheet over the Player, the editor, a lesson and the explorers, lit beats in the quick metronome |
 
 ## Where we are (2026-11-04, late): agents on B4/B6, B8/B10, B1/B3; inline work pushed to the branch
 
