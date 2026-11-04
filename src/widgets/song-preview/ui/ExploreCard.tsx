@@ -82,7 +82,7 @@ export function ExploreCard({ entry, className }: { entry: PublicEntry; classNam
       to="/songs/public/$itemId"
       params={{ itemId: entry.id }}
       className={cn(
-        'card flex h-full flex-col gap-2 p-2.5 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
+        'card relative flex h-full flex-col gap-2 p-2.5 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
         className,
       )}
     >
