@@ -342,6 +342,8 @@ export interface SettingsState {
   lessonReading: LessonReading
   /** How Progressions writes and voices every progression (A24). */
   progressions: ProgressionsSettings
+  /** How the Chord player writes its chords and voices its piano (R29 CP6). */
+  chordPlayer: ChordPlayerSettings
   /** What Accompaniment shows (A24). */
   accompaniment: AccompanimentSettings
 }
@@ -420,6 +422,16 @@ export const DEFAULT_PROGRESSIONS: ProgressionsSettings = {
   voicing: 'led',
   inversion: 0,
 }
+
+/**
+ * How the Chord player writes every chord sheet's boxes (R29 CP6), large on each box: as chord
+ * symbols, Roman numerals or Nashville numbers; and how its piano voices them, led or as blocks.
+ */
+export interface ChordPlayerSettings {
+  readonly names: ProgressionNames
+  readonly voicing: ProgressionVoicing
+}
+export const DEFAULT_CHORD_PLAYER: ChordPlayerSettings = { names: 'chords', voicing: 'led' }
 
 /** Accompaniment's sources the learner hid from its tabs, by their ids (A24). */
 export interface AccompanimentSettings {

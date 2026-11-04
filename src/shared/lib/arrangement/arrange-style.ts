@@ -275,12 +275,13 @@ function drumsOf(
  * The band over a sheet: each section in its parts (`parts`, by the section's index), every bar as
  * played. The piano by its pattern (`arrange`); the bass by its line on the chord sounding, changing
  * with every chord struck; the drums by their grid; the fill on a section's last bar its last time
- * round and the crash on its first beat. `swing` plays the 16ths on triplets.
+ * round and the crash on its first beat. `swing` plays the 16ths on triplets; `block` voices
+ * the piano's chords in root position.
  */
 export function arrangeStyle(
   sheet: ChordSheet,
   parts: readonly StyleParts[],
-  options: { readonly swing?: boolean },
+  options: { readonly swing?: boolean; readonly block?: boolean },
 ): Band {
   const swing = options.swing === true
   const bars = playOrder(sheet)
@@ -297,6 +298,8 @@ export function arrangeStyle(
         tonic: sheet.key.tonic,
         pattern: first,
         sections: patterns,
+        // Blocks: every chord in root position; else each voice-led from the one before.
+        ...(options.block ? { inversion: 0, nearest: false } : {}),
       })
     : null
   const bass: BassNote[] = []

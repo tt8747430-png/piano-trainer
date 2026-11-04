@@ -6,6 +6,8 @@ export {
   type ChordFinderSettings,
   type AccompanimentSettings,
   type ProgressionsSettings,
+  type ChordPlayerSettings,
+  DEFAULT_CHORD_PLAYER,
   type ProgressionNames,
   type ProgressionVoicing,
   PROGRESSION_NAMES,
@@ -50,6 +52,7 @@ export {
 export {
   selectChordFinder,
   selectProgressions,
+  selectChordPlayer,
   selectAccompaniment,
   selectScoreView,
   selectKeyboard,

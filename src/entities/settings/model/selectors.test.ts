@@ -26,6 +26,7 @@ import {
   DEFAULT_EDITING,
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
+  DEFAULT_CHORD_PLAYER,
   DEFAULT_ACCOMPANIMENT,
   defaultKeyboard,
   type SettingsState,
@@ -55,6 +56,7 @@ describe('settings selectors', () => {
       playback: DEFAULT_PLAYBACK,
       metronome: DEFAULT_METRONOME,
       progressions: DEFAULT_PROGRESSIONS,
+      chordPlayer: DEFAULT_CHORD_PLAYER,
       accompaniment: DEFAULT_ACCOMPANIMENT,
     }
     expect(selectPractice(state)).toBe(DEFAULT_PRACTICE)

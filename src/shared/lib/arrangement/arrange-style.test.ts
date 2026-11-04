@@ -111,6 +111,11 @@ describe('a style over a chord sheet', () => {
     expect(none.bass).toEqual([])
     expect(none.totalTicks).toBe(0)
   })
+  it('voices the piano in root-position blocks where asked', () => {
+    const band = arrangeStyle(sheetOf(section('G')), [POP], { block: true })
+    const right = band.piano?.notes.filter((note) => note.hand === 'rh') ?? []
+    expect(Math.min(...right.map((note) => note.midi)) % 12).toBe(7)
+  })
   it('a part a style has none of plays nothing', () => {
     const band = arrangeStyle(
       sheetOf(section('C')),

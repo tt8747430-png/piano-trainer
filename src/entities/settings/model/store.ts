@@ -28,6 +28,8 @@ import {
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
+  DEFAULT_CHORD_PLAYER,
+  type ChordPlayerSettings,
   DEFAULT_ACCOMPANIMENT,
   isProgressionNames,
   isProgressionVoicing,
@@ -119,6 +121,7 @@ export function createSettingsStore({
         welcomed: false,
         lessonReading: 'page',
         progressions: DEFAULT_PROGRESSIONS,
+        chordPlayer: DEFAULT_CHORD_PLAYER,
         accompaniment: DEFAULT_ACCOMPANIMENT,
       },
       read: sanitize,
@@ -271,6 +274,15 @@ function progressionsSettings(value: unknown): ProgressionsSettings {
   }
 }
 
+/** The Chord player's choices as saved where each is still one of its values, the default otherwise. */
+function chordPlayerSettings(value: unknown): ChordPlayerSettings {
+  const saved = savedObject<ChordPlayerSettings>(value)
+  return {
+    names: isProgressionNames(saved.names) ? saved.names : DEFAULT_CHORD_PLAYER.names,
+    voicing: isProgressionVoicing(saved.voicing) ? saved.voicing : DEFAULT_CHORD_PLAYER.voicing,
+  }
+}
+
 /** Accompaniment's hidden sources: ids, each once. */
 function accompanimentSettings(value: unknown): AccompanimentSettings {
   const hidden: unknown = savedObject<AccompanimentSettings>(value).hidden
@@ -404,6 +416,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     welcomed: saved.welcomed === true,
     lessonReading: isLessonReading(saved.lessonReading) ? saved.lessonReading : 'page',
     progressions: progressionsSettings(saved.progressions),
+    chordPlayer: chordPlayerSettings(saved.chordPlayer),
     accompaniment: accompanimentSettings(saved.accompaniment),
   }
 }

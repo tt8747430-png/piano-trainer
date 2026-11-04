@@ -26,6 +26,7 @@ const PAGE_PATHS: Readonly<Record<SettingsPageId, readonly string[]>> = {
   intervals: ['pages/practice-settings/ui/ExplorerSettingsPages.tsx'],
   progressions: ['pages/practice-settings/ui/ProgressionsSettingsPage.tsx'],
   accompaniment: ['pages/practice-settings/ui/AccompanimentSettingsPage.tsx'],
+  'chord-player': ['pages/chord-player-settings/'],
   lessons: ['pages/lesson/ui/LessonSettingsPage.tsx'],
   'chord-finder': ['pages/practice-settings/ui/ChordFinderSettingsPage.tsx'],
   trainers: ['pages/practice-settings/ui/TrainersSettingsPage.tsx'],
@@ -50,6 +51,7 @@ const COMMANDS: Readonly<Record<string, readonly (keyof typeof SETTING_HOMES)[]>
   setMidi: ['midi.input'],
   setChordFinder: ['chordFinder.remember'],
   setProgressions: ['progressions.names'],
+  setChordPlayer: ['chordPlayer.names'],
   setAccompaniment: ['accompaniment.hidden'],
   setMetronome: ['metronome.bpm'],
 }

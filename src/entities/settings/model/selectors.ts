@@ -3,6 +3,7 @@ import type {
   AccompanimentSettings,
   ChordFinderSettings,
   ProgressionsSettings,
+  ChordPlayerSettings,
   ScoreViewSettings,
   KeyboardSettings,
   OtherHandSettings,
@@ -59,6 +60,8 @@ export const selectLessonReading = (state: SettingsState): LessonReading => stat
 
 /** How every progression is written and voiced (A24). */
 export const selectProgressions = (state: SettingsState): ProgressionsSettings => state.progressions
+/** How the Chord player writes its chords and voices its piano (R29 CP6). */
+export const selectChordPlayer = (state: SettingsState): ChordPlayerSettings => state.chordPlayer
 /** Accompaniment's sources the learner hid (A24). */
 export const selectAccompaniment = (state: SettingsState): AccompanimentSettings =>
   state.accompaniment
