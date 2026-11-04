@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -171,5 +171,11 @@ describe('Practice → Intervals', () => {
       'В лесу родилась ёлочка',
     )
     expect(untranslated(document.body)).toEqual([])
+  })
+
+  it('writes the interval last played on a staff, the way it plays (A22)', async () => {
+    await renderApp('/practice/intervals')
+    const sheet = await screen.findByRole('region', { name: 'The interval written' })
+    await waitFor(() => expect(sheet.querySelector('svg')).toBeInTheDocument())
   })
 })

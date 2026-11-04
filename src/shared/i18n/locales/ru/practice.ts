@@ -214,6 +214,7 @@ export const practice: LocaleResources['practice'] = {
     keyProgressions: 'Последовательности в этой тональности',
   },
   intervals: {
+    written: 'Интервал на нотном стане',
     simple: 'Простые интервалы',
     compound: 'Составные интервалы',
     playAs: 'Играть',

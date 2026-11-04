@@ -230,6 +230,7 @@ export const practice = {
     keyProgressions: 'Progressions in this key',
   },
   intervals: {
+    written: 'The interval written',
     simple: 'Simple intervals',
     compound: 'Compound intervals',
     // How every row plays its interval, as ear-training apps and exam syllabi name it (R29-P12).

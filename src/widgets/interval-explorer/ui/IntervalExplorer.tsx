@@ -1,9 +1,15 @@
 import { Link } from '@tanstack/react-router'
 import { Ear } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFold } from '@/features/fold-section'
 import { PinnedKeyboard } from '@/features/live-keyboard'
-import { intervalRoot, useShownKeys, writesInterval } from '@/features/play-example'
+import {
+  intervalExample,
+  intervalRoot,
+  useShownKeys,
+  writesInterval,
+} from '@/features/play-example'
 import {
   INTERVAL_GROUP_IDS,
   noteFromParam,
@@ -11,6 +17,7 @@ import {
   pitchClassOf,
   type IntervalGroup,
 } from '@/shared/lib/music'
+import { notate } from '@/shared/lib/notation'
 import type { IntervalWay } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import {
@@ -18,6 +25,7 @@ import {
   FloatingBar,
   FloatingBarPlay,
   FoldGroup,
+  LazyScoreView,
   Labelled,
   PitchPicker,
   RowGroup,
@@ -27,6 +35,7 @@ import {
   type ShownKeys,
 } from '@/shared/ui'
 import { INTERVAL_ROWS, everyInterval, type RowInterval } from '../model/interval-rows'
+import { intervalMusic } from '../model/interval-music'
 import { INTERVAL_PLAY_WAYS, type IntervalView } from '../model/interval-view'
 import { IntervalRow } from './IntervalRow'
 import { WayPicture } from './WayPicture'
@@ -49,6 +58,14 @@ export function IntervalExplorer({
   const { t } = useTranslation('practice')
   const [shown, show] = useShownKeys(view.root, intervalRoot(noteFromParam(view.root)))
   const playback = usePlayback<RowInterval | 'all'>()
+  // The interval last played, written on a staff the way it plays (A22); a major third to start.
+  const [written, write] = useState<RowInterval>('M3')
+  const root = noteFromParam(view.root)
+  const shownName = writesInterval(root, written) ? written : 'M3'
+  const score = useMemo(
+    () => notate(intervalMusic(intervalExample(root, shownName).music, view.way)),
+    [root, shownName, view.way],
+  )
   return (
     <div className="flex flex-col gap-6">
       <PinnedKeyboard shown={shown} />
@@ -74,6 +91,9 @@ export function IntervalExplorer({
           </Labelled>
         </div>
       </div>
+      <section aria-label={t('intervals.written')} className="flex w-full min-w-40 justify-center">
+        <LazyScoreView score={score} />
+      </section>
       <FloatingActions>
         <FloatingBar label={t('transport')}>
           <FloatingBarPlay
@@ -93,6 +113,7 @@ export function IntervalExplorer({
           view={view}
           playback={playback}
           onShow={show}
+          onWrite={write}
         />
       ))}
       <EarTraining />
@@ -124,11 +145,14 @@ function IntervalGroupFold({
   view,
   playback,
   onShow,
+  onWrite,
 }: {
   group: IntervalGroup
   view: IntervalView
   playback: Playback
   onShow: (shown: ShownKeys) => void
+  /** The interval played, written on the page's staff. */
+  onWrite: (name: RowInterval) => void
 }) {
   const { t } = useTranslation('practice')
   const fold = useFold(`intervals.${group}`)
@@ -151,7 +175,10 @@ function IntervalGroupFold({
               way={way}
               playing={playback.playing === name}
               onPlay={(sounds) => playback.toggle(name, sounds)}
-              onShow={onShow}
+              onShow={(shown) => {
+                onShow(shown)
+                onWrite(name)
+              }}
             />
           </li>
         ))}
