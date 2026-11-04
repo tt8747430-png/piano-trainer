@@ -26,3 +26,4 @@ export { NOTE_VALUES, ticksOf, TUPLET_COUNTS, tupletOf, valuesOf, type TupletCou
 export { labelLead, lineLead, measureWidths } from './measure-widths'
 export { pedalId, scoreToMei, type NextLine, type PrintedName, type StaffLabels } from './mei'
 export { barStartOf, beamPlan } from './beams'
+export { barRange, beatGrid, snapRange, type BeatMark, type TickRange } from './beats'

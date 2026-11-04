@@ -1,7 +1,7 @@
 import { memo, useEffect, useEffectEvent, useRef, type Ref } from 'react'
 import { layerStaff, type Layer } from '@/features/score-editor'
 import type { Midi, Tick } from '@/shared/lib/music'
-import type { StaffId, StaffLabels } from '@/shared/lib/notation'
+import { beatGrid, type StaffId, type StaffLabels } from '@/shared/lib/notation'
 import { cn, useElementSize } from '@/shared/lib'
 import { LazyScoreView, useCanvasReveal } from '@/shared/ui'
 import type { LineSheet } from '../model/line-sheets'
@@ -189,6 +189,7 @@ export const SheetLine = memo(function SheetLine({
               scroller={justify ? undefined : ref}
               tapsOf={tapsOf}
               selection={selection}
+              beats={beatGrid(sheet.score.measures)}
               onPlace={onPlace}
               onReach={onReach}
               onDeselect={onDeselect}

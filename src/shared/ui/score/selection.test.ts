@@ -7,7 +7,7 @@ import {
   loopEnds,
   MARK,
   pickAt,
-  rangeBand,
+  beatsBand,
   spaceOf,
   spanOf,
 } from './selection'
@@ -79,7 +79,6 @@ const laid: ScoreLayout = {
 }
 const space = 10
 const reach = MARK.reach * space
-const pad = MARK.pad * space
 const lead = MARK.lead * space
 
 describe('the one selection’s marks (ADR 0096)', () => {
@@ -88,32 +87,20 @@ describe('the one selection’s marks (ADR 0096)', () => {
     expect(spanOf([bass, treble])).toEqual({ top: 40, bottom: 160 })
   })
 
-  it('bands a range over its staff, from its first note’s left edge to its last’s right edge', () => {
-    // Bar 1 on the treble: the chord and the sharp note after it, not bar 2's.
-    expect(rangeBand(laid, { staves: ['treble'], from: 0, to: 96 }, treble)).toEqual({
-      left: 70 - pad,
-      width: 142 + pad - (70 - pad),
-      top: 40 - reach,
-      height: 40 + 2 * reach,
-    })
-  })
-
-  it('takes the line from top to foot whatever its notes reach, and its rests', () => {
-    const band = rangeBand(laid, { staves: ['treble'], from: 96, to: 192 }, treble)
-    expect(band).toEqual({
-      left: 215 - pad,
-      width: 311 + pad - (215 - pad),
-      top: 40 - reach,
-      height: 40 + 2 * reach,
-    })
-  })
-
-  it('bands the chord row from its first place to where its last ends, and none off the line', () => {
-    const row = { top: -40, bottom: -4 }
-    const band = rangeBand(laid, { staves: [], from: 96, to: 192 }, row)
-    expect(band?.left).toBe(215 - lead)
+  it('bands a whole bar from its barline to the next, never round its notes alone (R29-P16)', () => {
+    // Bar 2: in from its barline at 200 to in from its closing barline at 350.
+    const band = beatsBand(laid, 96, 192, treble)
+    expect(band?.left).toBe(200 + MARK.inset * space)
     expect((band?.left ?? 0) + (band?.width ?? 0)).toBe(350 - MARK.inset * space)
-    expect(rangeBand(laid, { staves: [], from: 300, to: 400 }, row)).toBeNull()
+    expect(band?.top).toBe(40 - reach)
+    expect(band?.height).toBe(40 + 2 * reach)
+  })
+
+  it('starts a line’s first bar after its clef and key, and a beat inside a bar before its notes', () => {
+    expect(beatsBand(laid, 0, 96, treble)?.left).toBe(60)
+    const row = { top: -40, bottom: -4 }
+    expect(beatsBand(laid, 120, 192, row)?.left).toBeLessThan(260)
+    expect(beatsBand(laid, 300, 400, row)).toBeNull()
   })
 
   it('bands the bars of a loop over every staff, barline to barline, its line’s clef and key left out', () => {

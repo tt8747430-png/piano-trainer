@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { staffLayer, type Layer } from '@/features/score-editor'
 import { useBarName } from '@/shared/i18n'
 import { keySignature, printedChord, type Midi, type Tick } from '@/shared/lib/music'
-import { staffClefAt, type TimedMusic } from '@/shared/lib/notation'
+import { staffClefAt, type BeatMark, type TimedMusic } from '@/shared/lib/notation'
 import {
   MARK,
   pickAt,
@@ -71,6 +71,7 @@ export function LineOverlay({
   placesOf,
   tapsOf,
   chordNames,
+  beats,
   row,
   labels,
   headings,
@@ -122,6 +123,8 @@ export function LineOverlay({
   /** Where a click lands in a layer, on a note or a bar's start, never an empty step (ADR 0096). */
   tapsOf: (layer: Layer) => readonly Tick[]
   chordNames: boolean
+  /** The line's beats from its start (`beatGrid`): what a band snaps to (R29-P16). */
+  beats: readonly BeatMark[]
   /** What edits a thing printed, opened from its button (ADR 0114). */
   edit: EditPrinted
 }) {
@@ -146,6 +149,7 @@ export function LineOverlay({
   const chosen = chosenBand(layout, line.start, selection, {
     row,
     staff: staffOfLayer(layout.staves, layer),
+    beats,
   })
   // Whether a note written in the caret's row starts at the caret: its notes are a grip.
   const caretOnNote =

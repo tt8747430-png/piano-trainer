@@ -19,11 +19,11 @@ export { ScoreView } from './ScoreView'
 export { scoreHeight, staffHeight, VERSE, versesOf } from './size'
 export {
   barsBand,
+  beatsBand,
   caretLine,
   loopEnds,
   MARK,
   pickAt,
-  rangeBand,
   spaceOf,
   spanOf,
   type BandBox,

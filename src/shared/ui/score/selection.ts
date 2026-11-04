@@ -80,47 +80,35 @@ export const headsChosen = (layout: Pick<ScoreLayout, 'heads'>, chosen: Chosen):
       (chosen.midi === undefined || head.midi === chosen.midi),
   )
 
-/** What is drawn of a choice: its heads, and its rests where it is no one key of a chord. */
-const drawnChosen = (layout: Pick<ScoreLayout, 'heads' | 'rests'>, chosen: Chosen): Extent[] => [
-  ...headsChosen(layout, chosen),
-  ...(chosen.midi === undefined
-    ? (layout.rests ?? []).filter(
-        (rest) =>
-          rest.tick >= chosen.from &&
-          rest.tick < chosen.to &&
-          (!chosen.staves || chosen.staves.includes(rest.staff)),
-      )
-    : []),
-]
-
 type Laid = Pick<ScoreLayout, 'measures' | 'onsets' | 'staves' | 'heads' | 'rests' | 'signs'>
 
 /**
- * A range chosen (ADR 0096), the editor's notes: a light band over the staves `span` takes, from
- * its first note's left edge to its last note's right edge (its rests too), top line to foot and a
- * little past them; where nothing chosen is drawn here (the chord row), from its first place to
- * where its last ends. None where the line holds none of it.
+ * A range of whole beats chosen (R29-P16, Decided 21): one band over the staves `span` takes, from
+ * its first beat to the end of its last, read off the layout's timeline (`from`, `to` its ticks, the
+ * caller having snapped them to the bar's beats, `snapRange`): a bar's first beat from its barline
+ * (on a line's first bar, after its clef, key and time), a beat inside a bar from just before its
+ * notes; to the next bar's barline, in from it, or just before the next beat's notes. None where the
+ * line holds none of it.
  */
-export function rangeBand(layout: Laid, chosen: Chosen, span: Span): BandBox | null {
+export function beatsBand(layout: Laid, from: Tick, to: Tick, span: Span): BandBox | null {
   const space = spaceOf(layout)
-  const drawn = drawnChosen(layout, chosen)
-  if (drawn.length > 0) {
-    const left = Math.min(...drawn.map((box) => box.left)) - MARK.pad * space
-    const right = Math.max(...drawn.map((box) => box.right)) + MARK.pad * space
-    return { left, width: right - left, ...over(span, space) }
-  }
   const first = layout.measures[0]
   const last = layout.measures.at(-1)
   if (!first || !last) return null
-  const from = Math.max(chosen.from, first.startTick)
-  const to = Math.min(chosen.to, last.startTick + last.ticks)
-  if (from >= to) return null
-  const left = xAtTick(layout, from) - MARK.lead * space
-  // To a barline: in from it, so the next bar stays clear.
-  const atBar = layout.measures.find((m) => m.startTick + m.ticks === to)
-  const right = atBar
-    ? atBar.x + atBar.width - MARK.inset * space
-    : xAtTick(layout, to) - MARK.lead * space
+  const start = Math.max(from, first.startTick)
+  const end = Math.min(to, last.startTick + last.ticks)
+  if (start >= end) return null
+  const opens = layout.measures.findIndex((m) => m.startTick === start)
+  const left =
+    opens > 0
+      ? loopEnds(layout, opens, opens).start + MARK.inset * space
+      : opens === 0
+        ? loopEnds(layout, 0, 0).start
+        : xAtTick(layout, start) - MARK.lead * space
+  const closes = layout.measures.find((m) => m.startTick + m.ticks === end)
+  const right = closes
+    ? closes.x + closes.width - MARK.inset * space
+    : xAtTick(layout, end) - MARK.lead * space
   return { left, width: Math.max(MARK.pad * space, right - left), ...over(span, space) }
 }
 
