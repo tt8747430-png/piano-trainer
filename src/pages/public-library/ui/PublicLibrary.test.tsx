@@ -211,7 +211,7 @@ describe('publishing an own song', () => {
     expect(row).toHaveTextContent('Not published')
     await user.click(row)
     await screen.findByRole('heading', { level: 1, name: 'Publish in library' })
-    expect(document.body).toHaveTextContent('Publish only music you wrote or may share.')
+    expect(document.body).toHaveTextContent('The Terms of Use apply.')
     // Its row as others will see it: its title, by whom, its key and time.
     expect(screen.getByRole('region', { name: 'As others will see it' })).toHaveTextContent(
       /Morning.*Ana/,
