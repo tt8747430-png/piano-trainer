@@ -78,7 +78,7 @@ function useReason(category: PaletteCategory): string | undefined {
 }
 
 /** The categories whose tools say more than their names: the editing modes. */
-const EXPLAINED: readonly PaletteCategory[] = ['notes']
+const EXPLAINED: readonly PaletteCategory[] = ['modes']
 
 /** What a key played does in each editing mode (ADR 0114), where their names alone do not say. */
 function About() {
@@ -129,7 +129,7 @@ function Tools() {
   const { t } = useTranslation('editor')
   return (
     <>
-      <Section category="notes">
+      <Section category="modes">
         <NoteKeys />
       </Section>
       <Section category="pitch">
@@ -162,7 +162,7 @@ function Tools() {
           <PedalKeys />
         </KeyGrid>
       </Section>
-      <Section category="bar">
+      <Section category="measures">
         <BarKeys />
         {/* Flat's Measure: swing from the note (ADR 0097). */}
         <GroupName name={t('words.swing')} />
@@ -239,7 +239,7 @@ function TabBody({ tab }: { tab: Exclude<EditorPanelTab, 'notation'> }) {
 }
 
 /** Flat's default: the notes and their pitch open, the rest folded until opened. */
-const FIRST_OPEN: readonly PaletteCategory[] = ['notes', 'pitch']
+const FIRST_OPEN: readonly PaletteCategory[] = ['modes', 'pitch']
 
 /**
  * The editor's panel docked at the sheet's left, or its right as chosen (A40, ADR 0114, Flat's): its
@@ -530,7 +530,7 @@ export function PaletteSheet({
   const scroller = useRef<HTMLDivElement>(null)
   const [list, setList] = useState(false)
   // Opened at what the caret's row writes: the chord row's first open category is Bar.
-  const [current, setCurrent] = useState<PaletteCategory>(layer === 'chords' ? 'bar' : 'notes')
+  const [current, setCurrent] = useState<PaletteCategory>(layer === 'chords' ? 'measures' : 'modes')
   // A category to open at, scrolled to at once once the sections are in.
   const pending = useRef<PaletteCategory | null>(null)
   // While the sections scroll to a category tapped, the bar keeps it; a hand on them lets it follow.

@@ -75,7 +75,7 @@ const SHARP = (
 /** Each category's picture in the palette's bar. */
 const CATEGORY_ICONS: Readonly<Record<PaletteCategory, ReactNode>> = {
   // An eighth note.
-  notes: (
+  modes: (
     <Icon>
       <g fill="currentColor" stroke="none">
         <ellipse cx="9" cy="17.5" rx="4.2" ry="3" transform="rotate(-20 9 17.5)" />
@@ -132,7 +132,7 @@ const CATEGORY_ICONS: Readonly<Record<PaletteCategory, ReactNode>> = {
     </Icon>
   ),
   // A bar between its barlines.
-  bar: (
+  measures: (
     <Icon>
       {STAFF}
       <path d="M5 6 V18 M19 6 V18" strokeWidth="2" />

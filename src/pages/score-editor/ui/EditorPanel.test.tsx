@@ -36,7 +36,7 @@ describe('the editor’s panel (A40)', () => {
     const { router } = await renderApp('/edit/my-1', { storage: withSong() })
     // The phone's sheet, expanded from its bar of categories: the three tabs at its top.
     const kinds = await screen.findByRole('toolbar', { name: 'Kinds of tools' })
-    await user.click(within(kinds).getByRole('button', { name: 'Notes' }))
+    await user.click(within(kinds).getByRole('button', { name: 'Modes' }))
     const tabs = await screen.findByRole('radiogroup', { name: 'Editor panel' })
     expect(
       within(tabs)
@@ -55,6 +55,6 @@ describe('the editor’s panel (A40)', () => {
     // Notation, the first, is written as none.
     await user.click(within(tabs).getByRole('radio', { name: 'Notation' }))
     await waitFor(() => expect(router.state.location.search).not.toHaveProperty('panel'))
-    expect(screen.getByRole('region', { name: 'Notes' })).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Modes' })).toBeInTheDocument()
   })
 })

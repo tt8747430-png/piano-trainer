@@ -4,12 +4,12 @@ import { categoryOpen, greyedBy, PALETTE_CATEGORIES } from './palette-categories
 describe('the palette’s categories', () => {
   it('holds every tool in one palette in Flat’s order, the fields’ keys among their kin (ADR 0096)', () => {
     expect(PALETTE_CATEGORIES).toEqual([
-      'notes',
+      'modes',
       'pitch',
       'articulations',
       'ornaments',
       'dynamics',
-      'bar',
+      'measures',
       'clef',
       'key',
       'time',
@@ -22,7 +22,7 @@ describe('the palette’s categories', () => {
     const open = (layer: Parameters<typeof categoryOpen>[1]) =>
       PALETTE_CATEGORIES.filter((category) => categoryOpen(category, layer))
     // What acts on bars; the chord symbols are typed where a tap on the chord row opens them (ADR 0114).
-    expect(open('chords')).toEqual(['bar', 'key', 'time', 'repeats'])
+    expect(open('chords')).toEqual(['measures', 'key', 'time', 'repeats'])
     expect(open('staff0')).toEqual(PALETTE_CATEGORIES)
     expect(open('lh')).toEqual(PALETTE_CATEGORIES)
   })
@@ -33,14 +33,14 @@ describe('the palette’s categories', () => {
     expect(greyedBy('pitch', { ...where, layer: 'chords' })).toBe('staff')
     expect(greyedBy('clef', { ...where, layer: 'chords' })).toBe('staff')
     expect(greyedBy('clef', { ...where, layer: 'staff1' })).toBeNull()
-    expect(greyedBy('bar', { ...where, layer: 'chords' })).toBeNull()
+    expect(greyedBy('measures', { ...where, layer: 'chords' })).toBeNull()
   })
 
   it('greys the tools that change notes until a note is chosen', () => {
     const none = { chosen: false }
     for (const category of ['pitch', 'articulations', 'ornaments', 'dynamics', 'text'] as const)
       expect(greyedBy(category, { ...none, layer: 'rh' })).toBe('chooseNote')
-    expect(greyedBy('notes', { ...none, layer: 'rh' })).toBeNull()
+    expect(greyedBy('modes', { ...none, layer: 'rh' })).toBeNull()
     expect(greyedBy('clef', { chosen: true, layer: 'lh' })).toBeNull()
   })
 })
