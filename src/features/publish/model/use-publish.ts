@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { NetFailed } from '@/shared/api/network'
 import {
   DESCRIPTION_MAX,
+  type PublicCategory,
   type PublicEntry,
   type PublicKind,
   type Published,
@@ -43,6 +44,8 @@ export interface PublishItem {
   readonly sourceId: string
   readonly title: string
   readonly meta: PublicEntry['meta']
+  /** A song's category, chosen on the Publish page (B3); none for a pattern. */
+  readonly category?: PublicCategory | null
   /** As a save holds it, read back by the saving side (`readSharedSong`, an own pattern's reader). */
   readonly body: unknown
 }
@@ -123,6 +126,7 @@ export function usePublish(item: PublishItem | null) {
         title: item.title,
         authorName,
         meta: { ...item.meta, ...(said ? { description: said } : {}) },
+        category: item.category ?? null,
         body,
         version,
       })

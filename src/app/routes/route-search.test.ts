@@ -10,7 +10,7 @@ import {
 } from './explorer-search'
 import { CHROMATIC_DEFAULTS, EDIT_DEFAULTS, PLAYER_DEFAULTS, WALK_DEFAULTS } from './player-search'
 import { CHORD_FINDER_DEFAULTS } from './tool-search'
-import { SONGS_DEFAULTS } from './songs-search'
+import { SONGS_DEFAULTS, SONGS_HOME_DEFAULTS } from './songs-search'
 
 /** What a route reads from a URL, however it was typed, kept or edited. */
 async function searchAt(url: string) {
@@ -21,7 +21,7 @@ async function searchAt(url: string) {
 
 describe('search params', () => {
   it('fill every default for an empty URL', async () => {
-    expect(await searchAt('/songs')).toEqual(SONGS_DEFAULTS)
+    expect(await searchAt('/songs')).toEqual(SONGS_HOME_DEFAULTS)
     expect(await searchAt('/practice/chords')).toEqual(CHORDS_DEFAULTS)
     expect(await searchAt('/practice/scales')).toEqual(SCALES_DEFAULTS)
     expect(await searchAt('/play/bz5')).toEqual(PLAYER_DEFAULTS)
@@ -120,6 +120,7 @@ describe('search params', () => {
       simple: true,
     })
     expect(await searchAt('/songs?q=душа&key=Em&stage=advanced&favourites=true')).toEqual({
+      ...SONGS_HOME_DEFAULTS,
       q: 'душа',
       stage: 'advanced',
       key: 'Em',
@@ -136,10 +137,10 @@ describe('search params', () => {
 
   it('read a song key as written, sharps and flats in the URL’s spelling (ADR 0106)', async () => {
     expect(await searchAt(`/songs?key=${encodeURIComponent('F♯m')}`)).toEqual({
-      ...SONGS_DEFAULTS,
+      ...SONGS_HOME_DEFAULTS,
       key: 'F#m',
     })
-    expect(await searchAt('/songs?key=Gb')).toEqual({ ...SONGS_DEFAULTS, key: 'Gb' })
+    expect(await searchAt('/songs?key=Gb')).toEqual({ ...SONGS_HOME_DEFAULTS, key: 'Gb' })
   })
 
   it('drop a Reading notes range end that is off the piano or no MIDI key', async () => {
@@ -176,7 +177,7 @@ describe('search params', () => {
     expect(await searchAt('/practice/scales?kind=ionian&tempo=5&chords=9&step=chords:tri')).toEqual(
       SCALES_DEFAULTS,
     )
-    expect(await searchAt('/songs?favourites=yes&stage=expert&key=H')).toEqual(SONGS_DEFAULTS)
+    expect(await searchAt('/songs?favourites=yes&stage=expert&key=H')).toEqual(SONGS_HOME_DEFAULTS)
   })
 
   it('ignore an old link’s fingers: the playing hand’s stand under the keys', async () => {

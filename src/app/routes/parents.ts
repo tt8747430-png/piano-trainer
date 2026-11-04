@@ -168,8 +168,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
     up({ to: '/songs/folders/$folderId', params: { folderId: param(from, 'folderId') } }),
   '/shell/songs/archive': toSongs,
   '/shell/songs/shared': toSongs,
-  '/shell/songs/public': toSongs,
-  '/shell/songs/public/$itemId': () => up({ to: '/songs/public' }),
+  '/shell/songs/public/$itemId': () => up({ to: '/songs', search: { view: 'explore' } }),
 
   // The Player and the score editor: up to the piece's page; the editor's Settings and a take up
   // to the editor.

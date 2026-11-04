@@ -344,13 +344,10 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     expect(rowNames(folders).at(-1)).toBe('New folder Empty')
   })
 
-  it('New only adds: a song, an import, a folder; the Public library is a row of its own', async () => {
+  it('New only adds: a song, an import, a folder; Explore is the bar’s switch', async () => {
     const user = userEvent.setup()
     await renderApp('/songs')
-    expect(await screen.findByRole('link', { name: 'Public library' })).toHaveAttribute(
-      'href',
-      '/songs/public',
-    )
+    expect(await screen.findByRole('radio', { name: 'Explore' })).toBeInTheDocument()
     await user.click(await screen.findByRole('button', { name: 'New' }))
     expect(await screen.findByRole('button', { name: /New song/ })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Import/ })).toBeInTheDocument()

@@ -52,4 +52,4 @@ export { PiecePage, PublishPage, SectionPage, SongSettingsPage } from '@/pages/p
 export { ArchivePage } from '@/pages/song-archive'
 export { SharedSongPage } from '@/pages/shared-song'
 export { FolderPage, FolderSettingsPage, SongsPage } from '@/pages/songs'
-export { PublicLibraryPage, PublicSongPage } from '@/pages/public-library'
+export { PublicSongPage } from '@/pages/public-library'

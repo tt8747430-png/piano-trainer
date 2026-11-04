@@ -1,6 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { TileMark, type Paint } from '@/shared/ui'
+import { TileMark } from './TileMark'
+import type { Paint } from './paint'
 import {
   Empty,
   EmptyContent,

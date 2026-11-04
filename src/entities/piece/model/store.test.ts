@@ -283,6 +283,13 @@ describe('createPiecesStore', () => {
     ).toHaveLength(80)
   })
 
+  it('keeps the Explore item a song was added from, a field added later read as none', () => {
+    expect(restored({ songs: [{ ...SONG, publicId: 'abc-1' }], nextSong: 2 }).songs).toEqual([
+      { ...SONG, publicId: 'abc-1' },
+    ])
+    expect(restored({ songs: [{ ...SONG, publicId: 7 }], nextSong: 2 }).songs).toEqual([SONG])
+  })
+
   it('keeps nextSong past every own id', () => {
     expect(restored({ songs: [{ ...SONG, id: 'my-7' }], nextSong: 3 }).nextSong).toBe(8)
     expect(restored({ nextSong: 'many' }).nextSong).toBe(1)

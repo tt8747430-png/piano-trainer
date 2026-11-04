@@ -13,6 +13,8 @@ export interface OwnSong extends PieceMusic {
   readonly id: OwnSongId
   readonly title: string
   readonly author?: string
+  /** The Public library's item it was added from (Explore), so its page reads Open in my library. */
+  readonly publicId?: string
   /** What is said about it, written on its page. */
   readonly note?: LocalText
 }

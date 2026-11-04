@@ -126,6 +126,7 @@ export type Database = {
           author_id: string
           author_name: string
           body: Json
+          category: string | null
           hidden: boolean
           id: string
           kind: string
@@ -142,6 +143,7 @@ export type Database = {
           author_id?: string
           author_name: string
           body: Json
+          category?: string | null
           hidden?: boolean
           id?: string
           kind?: string
@@ -156,6 +158,7 @@ export type Database = {
         Update: {
           author_name?: string
           body?: Json
+          category?: string | null
           meta?: Json
           title?: string
           version?: string
@@ -195,6 +198,20 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: 'public_saves_item_id_fkey'
+            columns: ['item_id']
+            isOneToOne: false
+            referencedRelation: 'public_items'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      public_ratings: {
+        Row: { item_id: string; rated_at: string; stars: number; user_id: string }
+        Insert: { item_id: string; rated_at?: string; stars: number; user_id?: string }
+        Update: { rated_at?: string; stars?: number }
+        Relationships: [
+          {
+            foreignKeyName: 'public_ratings_item_id_fkey'
             columns: ['item_id']
             isOneToOne: false
             referencedRelation: 'public_items'
@@ -333,7 +350,24 @@ export type Database = {
       takes: DocumentTable
       views: DocumentTable
     }
-    Views: { [_ in never]: never }
+    Views: {
+      public_authors: {
+        Row: { avatar: string | null; id: string | null; name: string | null }
+        Relationships: []
+      }
+      public_item_ratings: {
+        Row: { average: number | null; count: number | null; item_id: string | null }
+        Relationships: [
+          {
+            foreignKeyName: 'public_ratings_item_id_fkey'
+            columns: ['item_id']
+            isOneToOne: false
+            referencedRelation: 'public_items'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+    }
     Functions: {
       handle_available: { Args: { wanted: string }; Returns: boolean }
       invoke_purge_account: { Args: never; Returns: undefined }
@@ -347,6 +381,10 @@ export type Database = {
       }
       is_publish_blocked: { Args: never; Returns: boolean }
       save_public_item: { Args: { p_item: string }; Returns: number }
+      rate_public_item: {
+        Args: { p_item: string; p_stars: number }
+        Returns: { average: number; count: number }[]
+      }
       push_documents: { Args: { p_rows: Json; p_table: string }; Returns: Json }
     }
     Enums: { [_ in never]: never }

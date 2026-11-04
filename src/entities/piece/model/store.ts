@@ -239,11 +239,14 @@ function songOf(saved: unknown): OwnSong | null {
   const author = isText(saved.author) ? saved.author.trim().slice(0, TITLE_MAX) : ''
   // What is said of it, written on its page (round 28).
   const note = readNote(saved.note)
+  // The Explore item it was added from (B3): an id, as long as a title at most.
+  const publicId = isText(saved.publicId) ? saved.publicId.trim().slice(0, TITLE_MAX) : ''
   return {
     id: saved.id,
     title: song.title,
     ...song.music,
     ...(author ? { author } : {}),
+    ...(publicId ? { publicId } : {}),
     ...(note ? { note } : {}),
   }
 }

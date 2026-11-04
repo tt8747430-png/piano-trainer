@@ -1,8 +1,6 @@
-import { Link, useNavigate } from '@tanstack/react-router'
-import { Globe } from 'lucide-react'
+import { useNavigate } from '@tanstack/react-router'
 import { useDeferredValue } from 'react'
 import { useTranslation } from 'react-i18next'
-import { RowLink } from '@/shared/ui'
 import { useFolderName, type ShelvedFolder } from '@/entities/library'
 import { useSongDrop, useSongImport } from '@/features/song-files'
 import type { SongsFilter } from '../model/songs-filter'
@@ -17,8 +15,8 @@ import { NewActions } from './NewActions'
 import { SelectionBar } from './SelectionBar'
 
 /**
- * A place of the library (ADR 0106, Mindscape's `DeckLibraryPage`): Home (`folder` null), its
- * folders then its own songs, or a folder, its songs; the bar, the search and filters, the rows read
+ * A place of the library (ADR 0106, Mindscape's `DeckLibraryPage`): Home (`folder` null, My songs
+ * in Songs' switch), its folders then its own songs, or a folder, its songs; the bar, the search and filters, the rows read
  * or chosen in Select, and New floating (New song, New folder, Import), or Select's bar in its
  * place; a MusicXML or MIDI file dropped on it imported (ADR 0107).
  */
@@ -45,17 +43,6 @@ export function LibraryScreen({
     <div className="flex flex-col gap-4 pb-4" {...drop.dropProps}>
       <LibraryHeader page={page} folder={folder} />
       <LibraryFilters page={page} filter={filter} screen={folder ? nameOf(folder) : t('title')} />
-      {/* Home's way to what others shared, first of its rows (Noji's Discover). */}
-      {folder || page.select.on ? null : (
-        <div className="card">
-          <RowLink
-            render={<Link to="/songs/public" />}
-            icon={Globe}
-            paint="sky"
-            title={t('public.title')}
-          />
-        </div>
-      )}
       {empty ? (
         <LibraryEmpty page={page} inFolder={folder !== null} filter={filter} onClear={clear} />
       ) : page.select.on ? (

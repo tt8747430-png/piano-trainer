@@ -75,8 +75,13 @@ import {
   validatePracticeSettingsSearch,
 } from './routes/practice-search'
 import { searchSearch } from './routes/search-search'
-import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
-import { publicSearch } from './routes/public-search'
+import {
+  readSongsHomeSearch,
+  SONGS_KEPT,
+  songsHomeSearch,
+  songsSearch,
+  validateSharedSongSearch,
+} from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
 import { CHORD_FINDER_KEPT, chordFinderSearch, readChordFinderSearch } from './routes/tool-search'
 import { chordPlayerSearch, chordPlayerSettingsSearch } from './routes/chord-player-search'
@@ -322,16 +327,11 @@ const searchRoute = createRoute({
 const songsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs',
-  ...songsSearch,
+  ...songsHomeSearch,
+  ...remembered(readSongsHomeSearch, SONGS_KEPT, SONGS_KEPT),
   component: lazyRouteComponent(songsScreens, 'SongsPage'),
 })
-// The Public library (ADR 0116): learners' published songs, and one to hear and save.
-const publicLibraryRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/songs/public',
-  ...publicSearch,
-  component: lazyRouteComponent(songsScreens, 'PublicLibraryPage'),
-})
+// A published song or pattern (ADR 0116), Explore's item: its path kept, so published links work.
 const publicSongRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs/public/$itemId',
@@ -889,7 +889,6 @@ const routeTree = rootRoute.addChildren([
     searchRoute,
     songsRoute,
     sharedSongRoute,
-    publicLibraryRoute,
     publicSongRoute,
     pieceRoute,
     pieceSettingsRoute,
@@ -978,8 +977,12 @@ export function createAppRouter({
     const validate: unknown = route.options.validateSearch
     const read: Record<string, unknown> =
       typeof validate === 'function' ? validate(toLocation.search) : {}
+    const only = match.staticData.remembered
     const own = Object.entries(toLocation.search).filter(
-      ([param, value]) => param in read && JSON.stringify(read[param]) === JSON.stringify(value),
+      ([param, value]) =>
+        param in read &&
+        (only === true || only.includes(param)) &&
+        JSON.stringify(read[param]) === JSON.stringify(value),
     )
     rememberView(views, toLocation.pathname, Object.fromEntries(own))
   })
@@ -995,7 +998,10 @@ declare module '@tanstack/react-router' {
   interface StaticDataRouteOption {
     /** A screen on its own (the Player, the Check), which nothing else is laid over. */
     fullScreen?: true
-    /** A screen that comes back the learner's way (ADR 0038): its view saved in `pt-views`. */
-    remembered?: true
+    /**
+     * A screen that comes back the learner's way (ADR 0038): its view saved in `pt-views`; every
+     * param it reads, or those listed alone.
+     */
+    remembered?: true | readonly string[]
   }
 }
