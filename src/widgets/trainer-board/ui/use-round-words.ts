@@ -2,12 +2,35 @@ import { useTranslation } from 'react-i18next'
 import {
   cadenceNumerals,
   signatureOption,
+  whyAnswer,
+  type Cadence,
   type ChoiceQuestion,
   type Question,
 } from '@/features/trainer'
 import { useKeyName, useScaleName } from '@/shared/i18n'
-import { noteName, parseKey, printedSymbol, writtenName } from '@/shared/lib/music'
+import {
+  keyFromParam,
+  noteName,
+  parseKey,
+  printedSymbol,
+  writtenName,
+  type ChordQuality,
+  type KeyParam,
+  type ReferenceInterval,
+  type ScaleKind,
+} from '@/shared/lib/music'
 import { INVERSION_NAMES } from '@/shared/ui'
+
+type Step = '1' | '2' | '3' | '4'
+type Place =
+  | 'line'
+  | 'space'
+  | 'under'
+  | 'over'
+  | 'ledgerBelow'
+  | 'byLedgerBelow'
+  | 'ledgerAbove'
+  | 'byLedgerAbove'
 
 /** A key signature's count as the options write it (`3♯`, `2♭`, `0`), read back. */
 const COUNT = /^(\d)(♯|♭)$/
@@ -161,5 +184,87 @@ export function useRoundWords() {
     }
   }
 
-  return { prompt, options, answer }
+  /**
+   * Why the round's answer is its answer, in words (A41): the kernel's reasons, each id it gives
+   * named in the learner's language.
+   */
+  function why(question: Question): string {
+    const { key: kind, values } = whyAnswer(question)
+    const text = (name: string) => String(values[name] ?? '')
+    const count = Number(values.count ?? 0)
+    const chord = {
+      notes: text('notes'),
+      formula: text('formula'),
+      root: text('root'),
+      quality: t(`music:quality.${text('quality') as ChordQuality}`).toLowerCase(),
+    }
+    const key = () => keyName(keyFromParam(text('key') as KeyParam))
+    switch (kind) {
+      case 'chord':
+        return t('quiz:why.chord', chord)
+      case 'inversion':
+        return t('quiz:why.inversion', {
+          ...chord,
+          bass: text('bass'),
+          position: t(
+            `music:inversionName.${INVERSION_NAMES[Number(values.position ?? 0)] ?? 'root'}`,
+          ).toLowerCase(),
+        })
+      case 'interval':
+        return t('quiz:why.interval', {
+          count,
+          low: text('low'),
+          high: text('high'),
+          number: text('number'),
+          interval: t(`music:interval.${text('interval') as ReferenceInterval}.name`),
+        })
+      case 'scale':
+        return t('quiz:why.scale', {
+          scale: `${text('root')} ${t(`music:scaleName.${text('kind') as ScaleKind}`)}`,
+          notes: text('notes'),
+          steps: text('steps')
+            .split(' ')
+            .map((step) => t(`quiz:why.step.${step as Step}`))
+            .join('–'),
+        })
+      case 'note': {
+        const [place = 'line', n = ''] = text('place').split(/(?<=[a-z])(?=\d)|:/)
+        return t('quiz:why.note', {
+          note: text('note'),
+          clef: t(`quiz:why.clef.${text('clef') as 'treble' | 'bass'}`),
+          place: t(`quiz:why.place.${place as Place}`, { n }),
+        })
+      }
+      case 'signature':
+        return t(`quiz:why.${text('sign') as 'sharps' | 'flats'}`, {
+          key: key(),
+          count,
+          notes: text('notes'),
+        })
+      case 'noSignature':
+        return t('quiz:why.noSignature', { key: key() })
+      case 'degrees':
+        return t('quiz:why.degrees', { key: key(), notes: text('notes') })
+      case 'role':
+        return t('quiz:why.role', {
+          key: key(),
+          numeral: text('numeral'),
+          degree: text('degree'),
+          root: text('root'),
+          notes: text('notes'),
+        })
+      case 'progression':
+        return t('quiz:why.progression', {
+          key: key(),
+          numerals: text('numerals'),
+          chords: text('chords'),
+        })
+      case 'cadence':
+        return t(`quiz:why.cadence.${text('cadence') as Cadence}`, {
+          numerals: text('numerals'),
+        })
+    }
+  }
+
+  return { prompt, options, answer, why }
 }

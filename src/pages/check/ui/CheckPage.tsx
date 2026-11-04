@@ -8,7 +8,7 @@ import { MidiButton } from '@/features/connect-midi'
 import { checkPlan, useTrainer, type CheckPlan } from '@/features/trainer'
 import { useUp } from '@/shared/lib'
 import { useShortcuts } from '@/shared/lib/shortcuts'
-import { RoundButton, usePageHeading } from '@/shared/ui'
+import { FloatingHost, RoundButton, usePageHeading } from '@/shared/ui'
 import { Progress } from '@/shared/ui/primitives/progress'
 import { useStepTitle } from '@/widgets/curriculum'
 import { TrainerBoard } from '@/widgets/trainer-board'
@@ -31,34 +31,37 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
   const heading = usePageHeading<HTMLHeadingElement>(t('quiz:checkTitle', { title }))
   const progress = t('quiz:progress', { n: trainer.number, total: plan.length })
 
+  // The round's one action floats in the capsule, as on a trainer's screen: this screen hosts it.
   return (
-    <div className="flex flex-1 flex-col gap-5 pt-2 landscape-phone:gap-3">
-      <header className="flex items-center gap-3">
-        <RoundButton label={t('common:close')} icon={X} onClick={close} />
-        <Progress
-          value={answered}
-          max={plan.length}
-          aria-label={progress}
-          getAriaValueText={() => progress}
-          className="flex-1"
-        />
-        <MidiButton />
-      </header>
-      <h1 {...heading} className="text-2xl outline-none">
-        {t('quiz:checkTitle', { title })}
-      </h1>
-      {trainer.summary ? (
-        <CheckResult
-          plan={plan}
-          correct={trainer.run.answered.filter((round) => round.correct).length}
-          title={title}
-          newlyLearned={!learnedBefore}
-          onDone={close}
-        />
-      ) : (
-        <TrainerBoard trainer={trainer} asks={plan.asks} />
-      )}
-    </div>
+    <FloatingHost screen="check">
+      <div className="flex flex-1 flex-col gap-5 pt-2 pb-20 landscape-phone:gap-3">
+        <header className="flex items-center gap-3">
+          <RoundButton label={t('common:close')} icon={X} onClick={close} />
+          <Progress
+            value={answered}
+            max={plan.length}
+            aria-label={progress}
+            getAriaValueText={() => progress}
+            className="flex-1"
+          />
+          <MidiButton />
+        </header>
+        <h1 {...heading} className="text-2xl outline-none">
+          {t('quiz:checkTitle', { title })}
+        </h1>
+        {trainer.summary ? (
+          <CheckResult
+            plan={plan}
+            correct={trainer.run.answered.filter((round) => round.correct).length}
+            title={title}
+            newlyLearned={!learnedBefore}
+            onDone={close}
+          />
+        ) : (
+          <TrainerBoard trainer={trainer} asks={plan.asks} />
+        )}
+      </div>
+    </FloatingHost>
   )
 }
 
