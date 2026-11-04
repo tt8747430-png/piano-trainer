@@ -25,6 +25,8 @@ import { usePaletteDock, usePaletteForm } from './palette-form'
 import { KeyGrid, PaletteKey } from './palette-keys'
 import { usePaletteReason } from './palette-reason'
 import { LineKeys } from './LineKeys'
+import { PaletteGlyph, TupletGlyph } from './palette-glyph'
+import type { SmuflName } from '@/shared/ui/smufl'
 
 /** A key drawn as notation: a glyph of the music font, at a note value's size. */
 const GLYPH = 'font-sans text-3xl leading-none'
@@ -311,17 +313,6 @@ export function NoteKeys() {
   )
 }
 
-/** A tuplet's bracket round its count, as Flat's key and a score draw it: ⌐3¬. */
-function TupletBracket({ num }: { num: TupletCount }) {
-  return (
-    <span aria-hidden className="flex items-start gap-0.5 font-display text-base leading-none">
-      <span className="mt-1 size-1.5 border-t-[1.5px] border-l-[1.5px] border-current" />
-      <span className="font-semibold italic">{num}</span>
-      <span className="mt-1 size-1.5 border-t-[1.5px] border-r-[1.5px] border-current" />
-    </span>
-  )
-}
-
 /** One tuplet's key: on the value chosen, the same again off; greyed where the meter or value takes none. */
 function TupletKey({ num }: { num: TupletCount }) {
   const { t } = useTranslation('editor')
@@ -338,7 +329,7 @@ function TupletKey({ num }: { num: TupletCount }) {
       disabled={!takesTuplet(value, num, meter)}
       onClick={() => actions.dispatch({ type: 'tuplet', num })}
     >
-      <TupletBracket num={num} />
+      <TupletGlyph num={num} />
     </PaletteKey>
   )
 }
@@ -430,23 +421,11 @@ function Move({ up, by }: { up: boolean; by: 'half' | 'step' | 'octave' }) {
   )
 }
 
-/**
- * A grace note before its note, as Flat's keys draw it: a small flagged note, then a head; the
- * acciaccatura's stem slashed.
- */
-function GraceNote({ kind }: { kind: GraceKind }) {
-  return (
-    <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="currentColor">
-      <ellipse cx="6" cy="16" rx="2.6" ry="1.9" transform="rotate(-20 6 16)" />
-      <rect x="7.9" y="6" width="1.1" height="10" />
-      <path d="M9 6c0 2 3.2 2.6 2.9 5.6-.4-1.6-1.6-2.3-2.9-2.5z" />
-      {kind === 'acciaccatura' ? (
-        <path d="M4.5 12.5 12 7.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-      ) : null}
-      <ellipse cx="16.5" cy="17" rx="3.8" ry="2.7" transform="rotate(-20 16.5 17)" />
-    </svg>
-  )
-}
+/** A grace note's key as the score prints it: Bravura's small note, the acciaccatura's stem slashed. */
+const GRACE_GLYPHS = {
+  appoggiatura: 'graceNoteAppoggiaturaStemUp',
+  acciaccatura: 'graceNoteAcciaccaturaStemUp',
+} as const satisfies Readonly<Record<GraceKind, SmuflName>>
 
 /** Flat's two grace-note keys, with their shortcuts: the appoggiatura (9), the acciaccatura (⇧9). */
 const GRACE_KEYS = [
@@ -491,7 +470,7 @@ function GraceKeys() {
       disabled={off}
       onClick={() => actions.dispatch({ type: 'grace', kind })}
     >
-      <GraceNote kind={kind} />
+      <PaletteGlyph smufl={GRACE_GLYPHS[kind]} />
     </PaletteKey>
   ))
 }
