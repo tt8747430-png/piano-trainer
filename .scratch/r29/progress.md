@@ -74,6 +74,33 @@ rounds 2–5 were built: the prompt's order was not kept. From here the order is
 | B10 | Customisable bars, as memory-palaces does | 12 | open | | |
 | B11 | Tools, as a group of their own | 13 | open | | |
 
+## Where we are (2026-11-04, evening): Practice redesign, ST17, T
+
+**On the branch (and main up to `1d1beb72`):** P1 (one bar height, switcher, Segmented/Source/Section menus),
+P2 (key-signature grid in every KeyPicker), P3 Top note, P4 (Play · Arpeggio named), P5 (HandCard on Chords),
+P6 (ChordHead), P7 (views with summaries, the circle a picture), P8 (Tonic · Scale heading), P9 (1–4 octaves,
+Direction, On the keys gone), P10 (alteredFromMajor, degree names, mode colour), P12 (Intervals: Play as, meanings),
+P16 (beatGrid/snapRange, beatsBand), the band's sound contract (`NoteSound.instrument`, `DrumSound`),
+ST17 (folder Settings page), A27 pedal (a lift a hair before a press is one change), T in progress (relative
+`transpose`, `tkey`, `tchords`; the switches in the one Transpose popover; arrange keepSignature/keepChordSymbols).
+
+**Agents running (worktrees):** chord player (CP1–CP6, brief `briefs/chord-player.md`), sounds (SND + A27,
+brief `briefs/sound.md`). Merge each after reading its report and diff.
+
+**Rulings (owner may change):**
+- P1: Songs keeps its Public library row; no My songs · Explore switcher (the public page would have to become a
+  place). Admin's nine tabs and Accompaniment's six sources are menus (Section, Source), not segments.
+- P2: Decided 22 followed: no twin names. Every tap reports its key; the editor ignores a repeat.
+- P5: Scales keep the numbered hand beside a run (a run crosses fingers); the drawn hand is Chords'.
+- P7: Harmonise and Borrowed chords stay on the Key view; Triads · 7ths not moved back from Settings.
+- P9: Tempo stays the slider on the page (not moved into the capsule yet).
+- P12: an interval's songs stay behind its ⓘ; the row's staff picture not drawn (its name and meaning are).
+- P15 (one sheet everywhere) not built: the Player's and editor's sheets stay their own; deferred.
+- P16: the band snaps to beats; the editor's selection still extends by notes.
+- CP: Progressions and Accompaniment stay (Decided 22: two pages, one engine); Export audio waits for samples.
+- SND: no new npm package in a worktree: our own sampler, no smplr.
+- T: the Player keeps an offset, never writes the song (the plan's default to the owner's question).
+
 ## Where we are (2026-11-04)
 
 Built and on `main`, each plan with its ledger (`.superpowers/sdd/<plan>/progress.md`, rulings and deferred
