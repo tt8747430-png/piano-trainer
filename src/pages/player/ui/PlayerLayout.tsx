@@ -13,7 +13,6 @@ import {
   SlidersHorizontal,
 } from 'lucide-react'
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
-import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
 import {
@@ -26,7 +25,7 @@ import {
 } from '@/entities/settings'
 import { retireTip } from '@/features/set-preference'
 import { isMidiConnected, MidiButton, useMidiConnection } from '@/features/connect-midi'
-import { LiveKeyboard } from '@/features/live-keyboard'
+import { KeyboardSettingsFields, LiveKeyboard } from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Recording } from '@/shared/lib/schedule'
 import { ActionMenu, type MenuAction } from '@/shared/ui'
@@ -208,6 +207,8 @@ export function PlayerLayout({
   const [exporting, setExporting] = useState(false)
   // The Settings open as a panel beside the music (a laptop): the screen ends where it starts.
   const [panel, setPanel] = useState(false)
+  // Settings opened at a page from elsewhere: the piano's ⚙ opens its page in this sheet (R31-P).
+  const [settingsAt, setSettingsAt] = useState<{ readonly page: string } | null>(null)
   const [tunerOpen, setTunerOpen] = useState(false)
   // The coach's line (R29 B8, R31-P): shown until put away by its × or done (Play pressed in
   // Listen), remembered for good.
@@ -276,21 +277,20 @@ export function PlayerLayout({
           </>
         ),
       },
-    ],
-    // The on-screen piano's settings have one home, the app's On-screen piano page, for every
-    // keyboard in the app (R32): a link row to it, Back returning to the Player.
-    links: [
+      // The on-screen piano's page in the Player's own sheet (the owner's ruling, R31-P: the
+      // piano's ⚙ never leaves the Player): the app's On-screen piano fields, one implementation.
       {
         id: 'piano',
         label: t('settingsPage.onScreenPiano'),
         icon: Piano,
         description: t('settingsPage.about.piano'),
         value: t(`common:keyboardSettings.keySize.${keySize}`),
-        render: <Link to="/settings/on-screen-piano" />,
+        content: <KeyboardSettingsFields />,
       },
     ],
     // Its acts are More's (R31-P): the sheet holds how the Player works, never what it does.
     acts: [],
+    request: settingsAt,
     onPanel: setPanel,
   }
   // The foot's More (R31-P): the music's acts only, in parts: the song's, practice's, the tools,
@@ -391,6 +391,7 @@ export function PlayerLayout({
         // The drawn pedal goes down with the score's while the music plays; stopped, it is up.
         sustained={playing && player.pedalDown}
         onKeyPress={player.tapKey}
+        onSettings={() => setSettingsAt({ page: 'piano' })}
         // Space is Play here: the pedal is the rail's, or a MIDI keyboard's.
         spacePedal={false}
       />
