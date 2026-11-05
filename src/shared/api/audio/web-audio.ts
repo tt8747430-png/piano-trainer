@@ -1,11 +1,12 @@
 import type { Midi } from '@/shared/lib/music'
-import type {
-  ClickSound,
-  ClickVoice,
-  DrumSound,
-  KitPiece,
-  NoteSound,
-  Sound,
+import {
+  SOFT_GAIN,
+  type ClickSound,
+  type ClickVoice,
+  type DrumSound,
+  type KitPiece,
+  type NoteSound,
+  type Sound,
 } from '@/shared/lib/schedule'
 import { createInstruments, type Instruments } from './instruments'
 import { createLiveVoice } from './live-voice'
@@ -82,6 +83,8 @@ function partials(context: AudioContext, frequency: number, filter: AudioNode, a
 const DAMPING = 0.04
 /** How long after its damper falls a voice's oscillators stop. */
 const DAMPED = 0.25
+/** The soft pedal's low-pass: this many times the key's pitch, kept between these (Hz), gently. */
+const SOFT_TONE = { over: 6, lowest: 900, highest: 4000, q: 0.5 } as const
 
 /**
  * A scheduled note (ADR 0034): it rises in 8 ms, then dies away as a string does (`stringDecay`, a
@@ -117,10 +120,27 @@ function dampedAt({ sources, output }: Voice, at: number) {
 }
 
 /**
- * A key a hand holds, struck at `gain` now: it rises in 8 ms, then dies away as a string does (a
- * lower key longer) and never stops by itself: its damper stops it (`damped`).
+ * The soft pedal's tone for a key struck under it (una corda): fewer strings struck, by a softer
+ * part of the hammer, so the upper partials fall away. A low-pass about two and a half octaves over
+ * the key, into `destination`; what the voice sounds goes through it.
  */
-function holdNote(context: AudioContext, key: Midi, gain: number): Voice {
+function softTone(context: AudioContext, key: Midi): BiquadFilterNode {
+  const filter = context.createBiquadFilter()
+  filter.type = 'lowpass'
+  filter.frequency.value = Math.min(
+    SOFT_TONE.highest,
+    Math.max(SOFT_TONE.lowest, frequencyOf(key) * SOFT_TONE.over),
+  )
+  filter.Q.value = SOFT_TONE.q
+  filter.connect(context.destination)
+  return filter
+}
+
+/**
+ * A key a hand holds, struck at `gain` now into `destination`: it rises in 8 ms, then dies away as a
+ * string does (a lower key longer) and never stops by itself: its damper stops it (`damped`).
+ */
+function holdNote(context: AudioContext, key: Midi, gain: number, destination: AudioNode): Voice {
   const at = context.currentTime
   const frequency = frequencyOf(key)
   const decay = stringDecay(key)
@@ -133,7 +153,7 @@ function holdNote(context: AudioContext, key: Midi, gain: number): Voice {
   envelope.gain.exponentialRampToValueAtTime(Math.max(SILENT, gain), at + 0.008)
   envelope.gain.setTargetAtTime(SILENT, at + 0.008, decay)
   const sources = partials(context, frequency, filter, at)
-  filter.connect(envelope).connect(context.destination)
+  filter.connect(envelope).connect(destination)
   return { sources, output: envelope }
 }
 
@@ -440,6 +460,8 @@ export function createWebAudioOutput({
   const held = new Map<Midi, Voice>()
   /** The keyboard's speaker the notes go to, while they go through the piano. */
   let piano: MidiSoundOutput | null = null
+  /** The live voice's volume: a gain, the square of the Volume's share (ADR 0105's way). */
+  let liveVolume = 1
 
   /** The AudioContext, created on first use; null where the browser has none. */
   const openContext = (): AudioContext | null => {
@@ -529,12 +551,18 @@ export function createWebAudioOutput({
   // 0.45 s after every seek, play or change of rate, so the recording could never be kept in time.
   const recordings = createRecordingPlayer({ now: heard, createMedia })
   const voice = createLiveVoice({
-    strike(key, gain) {
+    strike(key, gain, soft) {
       const audio = openContext()
       if (!audio) return
       if (heldBack(audio)) void audio.resume()
-      const sampled = instruments?.piano(key, gain, audio.currentTime, 1)
-      held.set(key, sampled ? recordedVoice(sampled, none) : holdNote(audio, key, gain))
+      // Under the soft pedal two thirds as loud and darker; every key as loud as the piano's Volume.
+      const level = liveVolume * (soft ? SOFT_GAIN : 1)
+      const out = soft ? softTone(audio, key) : audio.destination
+      const sampled = instruments?.piano(key, gain, audio.currentTime, level, out)
+      held.set(
+        key,
+        sampled ? recordedVoice(sampled, none) : holdNote(audio, key, gain * level, out),
+      )
     },
     silence(key) {
       const sound = held.get(key)
@@ -589,6 +617,9 @@ export function createWebAudioOutput({
     release: voice.release,
     pedal: voice.pedal,
     pedals: voice.pedals,
+    pianoVolume(share) {
+      liveVolume = Math.min(1, Math.max(0, share)) ** 2
+    },
     notesTo(output) {
       piano?.stop()
       piano = output

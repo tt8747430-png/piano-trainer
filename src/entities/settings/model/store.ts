@@ -89,7 +89,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 31
+export const SETTINGS_VERSION = 32
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -387,6 +387,7 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
       typeof saved.foldedLandscape === 'boolean' ? saved.foldedLandscape : current.foldedLandscape,
     keyLength: isKeyLength(saved.keyLength) ? saved.keyLength : current.keyLength,
     pedals: saved.pedals === 'all' || saved.pedals === 'sustain' ? saved.pedals : current.pedals,
+    volume: isVolume(saved.volume) ? saved.volume : current.volume,
   }
 }
 

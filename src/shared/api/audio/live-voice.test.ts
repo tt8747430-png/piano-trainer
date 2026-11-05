@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { midi, type Midi } from '@/shared/lib/music'
-import { SOFT_GAIN, velocityGain, type Damper } from '@/shared/lib/schedule'
+import { velocityGain, type Damper } from '@/shared/lib/schedule'
 import { createLiveVoice } from './live-voice'
 
 const C = midi(60)
@@ -10,7 +10,8 @@ function setUp() {
   const heard: string[] = []
   const changes: Damper[] = []
   const voice = createLiveVoice({
-    strike: (key: Midi, gain: number) => heard.push(`strike ${key} ${gain}`),
+    strike: (key: Midi, gain: number, soft: boolean) =>
+      heard.push(`strike ${key} ${gain}${soft ? ' soft' : ''}`),
     silence: (key: Midi) => heard.push(`silence ${key}`),
     changed: (damper) => changes.push(damper),
   })
@@ -81,11 +82,44 @@ describe('createLiveVoice', () => {
     expect(heard.slice(1)).toEqual(['silence 60', `strike 60 ${velocityGain(64)}`])
   })
 
-  it('strikes a key under the soft pedal at two thirds of its gain', () => {
+  it('strikes a key under the soft pedal as soft, and the next one plain once it lifts', () => {
     const { voice, heard } = setUp()
     voice.pedal('soft', true)
     voice.press(C, 127)
-    expect(heard).toEqual([`strike 60 ${velocityGain(127) * SOFT_GAIN}`])
+    voice.release(C)
+    voice.pedal('soft', false)
+    voice.press(C, 127)
+    expect(heard).toEqual([
+      `strike 60 ${velocityGain(127)} soft`,
+      'silence 60',
+      `strike 60 ${velocityGain(127)}`,
+    ])
+  })
+
+  it('lets every key the sustain held go together as it lifts, once each', () => {
+    const { voice, heard } = setUp()
+    const E = midi(64)
+    voice.pedal('sustain', true)
+    voice.press(C, 100)
+    voice.press(E, 100)
+    voice.release(C)
+    voice.release(E)
+    voice.pedal('sustain', false)
+    expect(heard.slice(2)).toEqual(['silence 60', 'silence 64'])
+    voice.pedal('sustain', false)
+    expect(heard).toHaveLength(4)
+  })
+
+  it('keeps a key the sostenuto caught ringing after the sustain lifts', () => {
+    const { voice, heard } = setUp()
+    voice.press(C, 100)
+    voice.pedal('sostenuto', true)
+    voice.pedal('sustain', true)
+    voice.release(C)
+    voice.pedal('sustain', false)
+    expect(heard).toHaveLength(1)
+    voice.pedal('sostenuto', false)
+    expect(heard.at(-1)).toBe('silence 60')
   })
 
   it('says what sounds after every change, and keeps the pedals until one changes', () => {

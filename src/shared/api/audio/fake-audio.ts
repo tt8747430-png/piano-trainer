@@ -25,6 +25,8 @@ export interface FakeAudio extends AudioOutput {
   readonly stops: number
   /** What the hands did to the live voice, in order. */
   readonly voice: readonly LiveEvent[]
+  /** The live voice's volume, as last set (`pianoVolume`). */
+  readonly volume: number
   /** The keyboard's speaker the notes are sent to; null: the browser. */
   readonly notesOut: NoteOutput | null
   readonly loadedRecordings: readonly string[]
@@ -45,6 +47,7 @@ export function createFakeAudio(): FakeAudio {
   const recordings: { src: string; play: RecordingPlay; volume?: () => number }[] = []
   const voice: LiveEvent[] = []
   let notesOut: NoteOutput | null = null
+  let volume = 1
   const keys = createSoundingKeys({ now: () => clock })
   const live = createLiveVoice({ strike() {}, silence() {}, changed: keys.setLive })
   return {
@@ -73,6 +76,9 @@ export function createFakeAudio(): FakeAudio {
       live.pedal(pedal, down)
     },
     pedals: live.pedals,
+    pianoVolume(share) {
+      volume = share
+    },
     notesTo(output) {
       notesOut = output
     },
@@ -104,6 +110,9 @@ export function createFakeAudio(): FakeAudio {
     },
     get voice() {
       return voice
+    },
+    get volume() {
+      return volume
     },
     get notesOut() {
       return notesOut

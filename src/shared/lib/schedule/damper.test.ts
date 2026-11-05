@@ -77,6 +77,37 @@ describe('damp', () => {
     expect([...damper.sounding]).toEqual([C])
   })
 
+  it('catches every key sounding when the sostenuto goes down under the sustain', () => {
+    const caught = after(
+      pedal('sustain', true),
+      press(C),
+      release(C),
+      press(E),
+      release(E),
+      pedal('sostenuto', true),
+      press(G),
+      release(G),
+    )
+    expect([...caught.damper.caught].toSorted()).toEqual([C, E])
+    const up = damp(caught.damper, pedal('sustain', false))
+    expect(up.stopped).toEqual([G])
+    expect([...up.damper.sounding].toSorted()).toEqual([C, E])
+  })
+
+  it('stops every key the sustain held together as it comes up', () => {
+    const { stopped } = after(
+      pedal('sustain', true),
+      press(C),
+      press(E),
+      press(G),
+      release(C),
+      release(E),
+      release(G),
+      pedal('sustain', false),
+    )
+    expect(stopped).toEqual([C, E, G])
+  })
+
   it('stops nothing with the soft pedal', () => {
     expect(after(press(C), pedal('soft', true)).stopped).toEqual([])
     const { damper, stopped } = after(press(C), pedal('soft', true), pedal('soft', false))

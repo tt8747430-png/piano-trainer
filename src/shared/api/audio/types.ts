@@ -56,6 +56,11 @@ export interface AudioOutput {
   press(key: Midi, velocity: number): void
   release(key: Midi): void
   /**
+   * How loud the live voice plays, 0 to 1 (the On-screen piano's Volume): a share of each key's
+   * loudness, heard from the next key struck. At full until set.
+   */
+  pianoVolume(share: number): void
+  /**
    * A source puts `pedal` down or lets it up: each down is paired with its own up, and the pedal is
    * down while any source holds it.
    */

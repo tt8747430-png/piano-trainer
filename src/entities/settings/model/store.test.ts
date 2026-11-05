@@ -154,6 +154,7 @@ describe('createSettingsStore', () => {
         foldedLandscape: false,
         keyLength: 'short',
         pedals: 'all',
+        volume: 70,
       },
       recorder: { click: false, tune: true, countIn: 2 },
       editing: { hearNotes: false, paletteSide: 'right' },
@@ -351,9 +352,9 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('starts afresh over a save of the version before the palette’s list view and Accompaniment’s sources left Settings (R32)', () => {
-    expect(SETTINGS_VERSION).toBe(31)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 30)).toEqual(
+  it('starts afresh over a save of the version before the piano’s volume (R33)', () => {
+    expect(SETTINGS_VERSION).toBe(32)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 31)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })
@@ -437,6 +438,7 @@ describe('createSettingsStore', () => {
       foldedLandscape: true,
       keyLength: 'long',
       pedals: 'sustain',
+      volume: 100,
     })
     expect(keyboard(false).typing).toBe(false)
   })
@@ -455,6 +457,7 @@ describe('createSettingsStore', () => {
       foldedLandscape: 'no',
       keyLength: 'tiny',
       pedals: 'three',
+      volume: 140,
     }
     expect(restored({ theme: 'light', locale: 'en', keyboard }).keyboard).toEqual({
       keySize: 'fit',
@@ -469,6 +472,7 @@ describe('createSettingsStore', () => {
       foldedLandscape: true,
       keyLength: 'long',
       pedals: 'sustain',
+      volume: 100,
     })
   })
 

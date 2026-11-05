@@ -147,8 +147,10 @@ export interface KeyboardSettings {
    */
   readonly foldedLandscape: boolean
   readonly keyLength: KeyLength
-  /** The pedals drawn at the end of the keys' strip (R31-P): sustain alone, or all three. */
+  /** The pedals on the rail beneath the keys (R32): sustain alone, or all three. */
   readonly pedals: PedalsShown
+  /** How loud the keys a hand plays sound (the live voice), a whole percent from 0 to 100 (R33). */
+  readonly volume: number
 }
 
 const SIDEBARS = ['open', 'collapsed'] as const
@@ -506,6 +508,7 @@ export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
   foldedLandscape: true,
   keyLength: 'long',
   pedals: 'sustain',
+  volume: 100,
 })
 
 export const isTheme = isOneOf(THEMES)
