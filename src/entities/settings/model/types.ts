@@ -150,6 +150,15 @@ export interface KeyboardSettings {
   readonly volume: number
 }
 
+/** The sizes of screen the keys' height is kept for (R34): a phone upright, on its side, a wider screen. */
+export const KEYS_SCREEN_SIZES = ['phone', 'side', 'wide'] as const
+export type KeysScreenSize = (typeof KEYS_SCREEN_SIZES)[number]
+/** The keys' height the divider set, in px, for each size of screen; null: a piano's proportion. */
+export type KeysHeight = Readonly<Record<KeysScreenSize, number | null>>
+export const DEFAULT_KEYS_HEIGHT: KeysHeight = { phone: null, side: null, wide: null }
+/** The tallest height kept: no screen has keys taller. */
+export const KEYS_HEIGHT_MOST = 2000
+
 const SIDEBARS = ['open', 'collapsed'] as const
 /** A laptop's sidebar: its places named, or their icons alone. */
 export type Sidebar = (typeof SIDEBARS)[number]
@@ -333,6 +342,8 @@ export interface SettingsState {
   sound: SoundSettings
   trainer: TrainerSettings
   keyboard: KeyboardSettings
+  /** The keys' height the divider set, per size of screen (R34): the screen as the learner left it. */
+  keysHeight: KeysHeight
   recorder: RecorderSettings
   /** How the score editor writes (round 28). */
   editing: EditingSettings

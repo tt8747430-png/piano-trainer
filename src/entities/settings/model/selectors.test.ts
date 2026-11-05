@@ -3,6 +3,7 @@ import { DEFAULT_BARS } from './bars'
 import {
   selectChordFinder,
   selectKeyboard,
+  selectKeysHeight,
   selectOtherHand,
   selectMetronome,
   selectMidi,
@@ -41,6 +42,7 @@ describe('settings selectors', () => {
       sound: DEFAULT_SOUND,
       trainer: DEFAULT_TRAINER,
       keyboard: defaultKeyboard(false),
+      keysHeight: { phone: 120, side: null, wide: null },
       recorder: DEFAULT_RECORDER,
       editing: DEFAULT_EDITING,
       foldedSections: ['chords.tensions'],
@@ -71,6 +73,7 @@ describe('settings selectors', () => {
     expect(selectOtherHand(state)).toBe(DEFAULT_OTHER_HAND)
     expect(selectTrainer(state)).toBe(DEFAULT_TRAINER)
     expect(selectKeyboard(state)).toBe(state.keyboard)
+    expect(selectKeysHeight(state)).toEqual({ phone: 120, side: null, wide: null })
     expect(selectRecorder(state)).toBe(DEFAULT_RECORDER)
     expect(selectSidebar(state)).toBe('collapsed')
     expect(selectMidi(state)).toBe(DEFAULT_MIDI)

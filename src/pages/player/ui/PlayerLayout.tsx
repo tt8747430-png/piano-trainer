@@ -25,7 +25,12 @@ import {
 } from '@/entities/settings'
 import { retireTip } from '@/features/set-preference'
 import { isMidiConnected, MidiButton, useMidiConnection } from '@/features/connect-midi'
-import { KeyboardSettingsFields, KeyboardTools, LiveKeyboard } from '@/features/live-keyboard'
+import {
+  KeyboardSettingsFields,
+  KeyboardStrip,
+  KeyboardTools,
+  LiveKeyboard,
+} from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Recording } from '@/shared/lib/schedule'
 import { ActionMenu, type MenuAction } from '@/shared/ui'
@@ -372,7 +377,15 @@ export function PlayerLayout({
     practice.state,
     shown !== 'sheet' && view.keys !== true,
   )
-  const keys = !player.keys ? null : (
+  const keys = !player.keys ? (
+    // Hidden, a thin strip where they stood brings them back at a tap (R34, Songscription's).
+    <PlayerArea area="keys" className="-mx-gutter">
+      <KeyboardStrip
+        edge={dock === 'top' ? 'below' : 'above'}
+        onShow={() => player.setKeys(true)}
+      />
+    </PlayerArea>
+  ) : (
     // Edge to edge (R34, Songscription's): the keys reach both sides of the screen.
     <PlayerArea area="keys" className="-mx-gutter">
       <LiveKeyboard
@@ -388,6 +401,7 @@ export function PlayerLayout({
         onKeyPress={player.tapKey}
         // Space is Play here: the pedal is the bar's Sustain, or a MIDI keyboard's.
         spacePedal={false}
+        divider={dock === 'top' ? 'below' : 'above'}
       />
     </PlayerArea>
   )

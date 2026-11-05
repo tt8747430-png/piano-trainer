@@ -68,14 +68,18 @@ describe('PinnedKeyboard', () => {
     expect(toggle()).toHaveAttribute('aria-pressed', 'false')
   })
 
-  it('leaves nothing floating where the keys were: the bar’s Keyboard brings them back (R34)', async () => {
+  it('folds hidden keys into a strip where they stood, nothing floating: a tap brings them back (R34)', async () => {
     const user = userEvent.setup()
     renderPinned({ onSide: false })
     await user.click(toggle())
     expect(keys()).not.toBeInTheDocument()
-    expect(screen.getAllByRole('button')).toEqual([toggle()])
-    await user.click(toggle())
+    const strip = screen.getByRole('button', { name: 'Show the keyboard' })
+    expect(strip).toHaveTextContent('Keyboard')
+    expect(strip.closest('[data-slot="docked"]')).not.toBeNull()
+    expect(screen.getAllByRole('button')).toEqual([toggle(), strip])
+    await user.click(strip)
     expect(keys()).toBeInTheDocument()
+    expect(toggle()).toHaveAttribute('aria-pressed', 'true')
   })
 
   it('remembers the keys shown on a phone on its side, apart from the upright choice', async () => {
@@ -104,5 +108,7 @@ describe('PinnedKeyboard', () => {
     const docked = document.querySelector('[data-slot="docked"]')
     expect(docked).toHaveClass('px-0', 'pb-0')
     expect(docked?.querySelectorAll('button:not([data-midi])')).toHaveLength(0)
+    // Its divider over the keys, facing the music.
+    expect(docked?.firstElementChild?.firstElementChild).toHaveAttribute('role', 'separator')
   })
 })

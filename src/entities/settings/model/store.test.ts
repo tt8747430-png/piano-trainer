@@ -38,6 +38,7 @@ const DEFAULTS = {
   sound: DEFAULT_SOUND,
   trainer: DEFAULT_TRAINER,
   keyboard: defaultKeyboard(false),
+  keysHeight: { phone: null, side: null, wide: null },
   recorder: DEFAULT_RECORDER,
   editing: DEFAULT_EDITING,
   sidebar: DEFAULT_SIDEBAR,
@@ -155,6 +156,7 @@ describe('createSettingsStore', () => {
         pedals: 'all',
         volume: 70,
       },
+      keysHeight: { phone: 140, side: null, wide: 210 },
       recorder: { click: false, tune: true, countIn: 2 },
       editing: { hearNotes: false, paletteSide: 'right' },
       sidebar: 'collapsed',
@@ -351,11 +353,24 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('starts afresh over a save of the version before All keys (R34)', () => {
-    expect(SETTINGS_VERSION).toBe(33)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 32)).toEqual(
+  it('starts afresh over a save of the version before the keys’ height (R34)', () => {
+    expect(SETTINGS_VERSION).toBe(34)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 33)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
+  })
+
+  it('keeps the keys’ height per screen size where it is whole px a screen holds, else none (R34)', () => {
+    expect(restored({ keysHeight: { phone: 120, side: 4.5, wide: -3 } }).keysHeight).toEqual({
+      phone: 120,
+      side: null,
+      wide: null,
+    })
+    expect(restored({ keysHeight: 'tall' }).keysHeight).toEqual({
+      phone: null,
+      side: null,
+      wide: null,
+    })
   })
 
   it('keeps the Tuner’s A where it reads, 440 otherwise (R29 B11)', () => {

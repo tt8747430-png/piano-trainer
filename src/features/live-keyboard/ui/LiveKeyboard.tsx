@@ -1,4 +1,4 @@
-import { useMemo, type ComponentProps } from 'react'
+import { useMemo, useRef, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings } from '@/entities/settings'
 import { useHeldKeys } from '@/features/connect-midi'
@@ -6,9 +6,11 @@ import { rangeOf, type Midi } from '@/shared/lib/music'
 import { hasFinePointer } from '@/shared/lib'
 import { useLiveVoice, useSoundingKeys } from '@/shared/lib/services'
 import { useShortcuts } from '@/shared/lib/shortcuts'
-import { PianoKeyboard } from '@/shared/ui'
+import { MIN_KEYS_PX, PianoKeyboard } from '@/shared/ui'
+import { useKeysHeight } from '../model/use-keys-height'
 import { useSpacePedal } from '../model/use-space-pedal'
 import { useTyping } from '../model/use-typing'
+import { KeysDivider, type DividerEdge } from './KeysDivider'
 
 /** A key plays itself unless the screen says otherwise. */
 const ALONE = (key: Midi): readonly Midi[] => [key]
@@ -24,7 +26,8 @@ const NOTHING: ReadonlySet<Midi> = new Set()
  * keys to keep in sight, it follows the keys the app sounds. With `spotlight`, the keys the app puts
  * down are the ones struck last: an arpeggio's or a run's key alone, a chord's keys together, every
  * mark kept. With `keyPlays`, a key a hand plays may sound more than itself (a degree's chord), all of
- * it down while the key is held.
+ * it down while the key is held. Keys at the screen's edge (`divider`: on the side facing the music)
+ * stand as tall as their divider sets them, kept per size of screen (R34).
  */
 export function LiveKeyboard({
   keyPlays,
@@ -34,11 +37,14 @@ export function LiveKeyboard({
   spacePedal = true,
   namesKeys = true,
   showsSound = true,
+  divider,
   ...keyboard
 }: Omit<
   ComponentProps<typeof PianoKeyboard>,
-  'down' | 'keySize' | 'swipe' | 'namedKeys' | 'markNotes' | 'letters' | 'onKeyPress'
+  'down' | 'keySize' | 'swipe' | 'namedKeys' | 'markNotes' | 'letters' | 'onKeyPress' | 'height'
 > & {
+  /** The divider that resizes the keys, on the side facing the music; none inside a card. */
+  divider?: DividerEdge | undefined
   /** What a tap means besides its sound: a quiz's choice, Wait mode's answer. */
   onKeyPress?: ((key: Midi) => void) | undefined
   /** The explorers' keyboards: the keys struck last go down, alone or together. */
@@ -102,16 +108,43 @@ export function LiveKeyboard({
         : new Set([...sounding, ...live, ...held, ...[...typed.held].flatMap(plays)]),
     [sounding, live, held, typed.held, plays],
   )
-  return (
+  const keysHeight = useKeysHeight()
+  const box = useRef<HTMLDivElement>(null)
+  // Half the screen at most, a saved height cut down to it on a shorter screen.
+  const most = Math.max(MIN_KEYS_PX, Math.round(window.innerHeight / 2))
+  const height =
+    divider === undefined || keysHeight.height === null
+      ? undefined
+      : Math.min(most, Math.max(MIN_KEYS_PX, keysHeight.height))
+  const keys = (
     <PianoKeyboard
       {...keyboard}
       {...settings}
       inView={typed.inView}
       down={down}
       letters={typed.letters}
+      height={height}
       keyPlays={keyPlays}
       onKeyPress={play}
       onKeyRelease={letGo}
     />
+  )
+  if (divider === undefined) return keys
+  const resize = (
+    <KeysDivider
+      edge={divider}
+      height={height ?? null}
+      least={MIN_KEYS_PX}
+      most={most}
+      measure={() => box.current?.getBoundingClientRect().height ?? MIN_KEYS_PX}
+      onResize={keysHeight.set}
+    />
+  )
+  return (
+    <div className="flex flex-col">
+      {divider === 'above' ? resize : null}
+      <div ref={box}>{keys}</div>
+      {divider === 'below' ? resize : null}
+    </div>
   )
 }

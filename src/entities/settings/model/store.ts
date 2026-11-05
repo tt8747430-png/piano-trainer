@@ -26,6 +26,8 @@ import {
   DEFAULT_RECORDER,
   RECORDER_COUNT_INS,
   DEFAULT_SIDEBAR,
+  DEFAULT_KEYS_HEIGHT,
+  KEYS_HEIGHT_MOST,
   DEFAULT_OTHER_HAND,
   DEFAULT_PLAYBACK,
   FOLLOW_RETURNS,
@@ -68,6 +70,7 @@ import {
   type ChordFinderSettings,
   type ProgressionsSettings,
   type KeyboardSettings,
+  type KeysHeight,
   type MetronomeSettings,
   type MidiSettings,
   type OtherHandSettings,
@@ -88,7 +91,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 33
+export const SETTINGS_VERSION = 34
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -111,6 +114,7 @@ export function createSettingsStore({
         sound: DEFAULT_SOUND,
         trainer: DEFAULT_TRAINER,
         keyboard: defaultKeyboard(finePointer),
+        keysHeight: DEFAULT_KEYS_HEIGHT,
         recorder: DEFAULT_RECORDER,
         editing: DEFAULT_EDITING,
         sidebar: DEFAULT_SIDEBAR,
@@ -369,6 +373,16 @@ function foldedSections(value: unknown): string[] {
   return [...new Set(ids)].slice(-FOLDED_MAX)
 }
 
+/** Each size's height kept where it is a whole number of px a screen could hold, else none. */
+function keysHeight(value: unknown): KeysHeight {
+  const saved = savedObject<KeysHeight>(value)
+  const height = (each: unknown) =>
+    Number.isInteger(each) && typeof each === 'number' && each > 0 && each <= KEYS_HEIGHT_MOST
+      ? each
+      : null
+  return { phone: height(saved.phone), side: height(saved.side), wide: height(saved.wide) }
+}
+
 /** Each saved choice that is still one of its values stands; anything else takes the current one. */
 function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSettings {
   const saved = savedObject<KeyboardSettings>(value)
@@ -411,6 +425,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     sound: soundSettings(saved.sound),
     trainer: trainerSettings(saved.trainer),
     keyboard: keyboardSettings(saved.keyboard, current.keyboard),
+    keysHeight: keysHeight(saved.keysHeight),
     recorder: recorderSettings(saved.recorder),
     editing: editingSettings(saved.editing),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,

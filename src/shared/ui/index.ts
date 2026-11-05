@@ -75,6 +75,7 @@ export { PlayToggle } from './PlayToggle'
 export { usePlayKey } from './use-play-key'
 export {
   NO_KEYS,
+  MIN_KEYS_PX,
   PianoKeyboard,
   toneMark,
   unmarked,

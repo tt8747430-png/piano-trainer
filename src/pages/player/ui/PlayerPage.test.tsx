@@ -777,6 +777,18 @@ describe('Player', () => {
     expect(settingsStore.getState().scoreView.keys).toBe(!before)
   })
 
+  it('folds hidden keys into a strip at the foot that brings them back at a tap, under a divider when shown (R34)', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/play/bz5')
+    await screen.findByRole('group', { name: 'Keyboard' })
+    expect(screen.getByRole('separator', { name: 'Resize keyboard' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Keyboard' }))
+    expect(screen.queryByRole('group', { name: 'Keyboard' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Show the keyboard' }))
+    expect(screen.getByRole('group', { name: 'Keyboard' })).toBeInTheDocument()
+    expect(settingsStore.getState().scoreView.keys).toBe(true)
+  })
+
   it('turns to Edit at its cursor’s bar from the pencil at the bar’s end (ADR 0115, round 26)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5?bar=3')
