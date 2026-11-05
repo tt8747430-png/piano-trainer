@@ -22,7 +22,9 @@ export function Transport({
   onPlay,
   onBack,
   onNext,
+  start,
   end,
+  docked = false,
 }: {
   /** The toolbar's name. */
   label: string
@@ -38,16 +40,22 @@ export function Transport({
   onPlay: () => void
   onBack: () => void
   onNext: () => void
+  /** The screen's own, before the tempo's (the Player's Loop). */
+  start?: ReactNode
   /** The screen's own three, after ›. */
   end: ReactNode
+  /** In the screen's own row at its foot (the Player's, R31-P), never floating over the music. */
+  docked?: boolean
 }) {
   return (
     // Under 390px its controls are 40px, ‹ › narrower and the pill hugs them, so the seven fit a
     // 320px screen; under 360px Play is 48px.
     <FloatingBar
       label={label}
+      docked={docked}
       className="gap-1 max-sm:gap-0 narrow-phone:px-0 landscape-phone:gap-0.5"
     >
+      {start}
       {tempo}
       <FloatingBarButton
         label={back.label}

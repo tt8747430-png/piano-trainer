@@ -7,8 +7,8 @@ import { untranslated } from '@/app/testing/untranslated'
 
 type User = ReturnType<typeof userEvent.setup>
 
-/** The tools row under the Player's bar. */
-const toolsRow = () => screen.findByRole('toolbar', { name: 'Tools' })
+/** The Player's foot bar (R31-P). */
+const toolsRow = () => screen.findByRole('toolbar', { name: 'Practice tools' })
 
 /** Opens Transpose from the tools row: its popover. */
 async function openTranspose(user: User) {
@@ -20,15 +20,17 @@ async function openTranspose(user: User) {
 }
 
 describe('Transpose (ADR 0105)', () => {
-  it('stands after the View in the tools row, named by the key the music is in', async () => {
+  it('stands after the View in the foot bar, named by the key the music is in', async () => {
     await renderApp('/play/lightly-row')
     const tools = within(await toolsRow()).getAllByRole('button')
-    expect(tools.map((tool) => tool.getAttribute('aria-label'))).toEqual([
+    expect(tools.map((tool) => tool.getAttribute('aria-label') ?? tool.textContent)).toEqual([
       'View: Sheet',
       'Transpose: C major',
       'Version: Original',
+      'Listen',
+      'More',
     ])
-    expect(shownText(tools[1] ?? document.body)).toContain('TransposeC')
+    expect(shownText(tools[1] ?? document.body)).toContain('C')
   })
 
   it('moves the key a semitone at a time, each key spelled by its simplest signature', async () => {
@@ -40,9 +42,7 @@ describe('Transpose (ADR 0105)', () => {
     expect(router.state.location.search).toMatchObject({ transpose: -1 })
     expect(popover).toHaveTextContent('B major')
     expect(popover).toHaveTextContent('−1')
-    expect(shownText(screen.getByRole('button', { name: 'Transpose: B major, −1' }))).toContain(
-      'TransposeB',
-    )
+    expect(shownText(screen.getByRole('button', { name: 'Transpose: B major, −1' }))).toContain('B')
     await user.click(within(popover).getByRole('button', { name: 'Up a semitone' }))
     await user.click(within(popover).getByRole('button', { name: 'Up a semitone' }))
     // Up a semitone from C: D♭ major's five flats, not C♯ major's seven sharps.
@@ -62,7 +62,7 @@ describe('Transpose (ADR 0105)', () => {
     expect(popover).toHaveTextContent('+1')
     // The tool prints the key as a chord symbol is printed.
     expect(shownText(screen.getByRole('button', { name: 'Transpose: F♯ major, +1' }))).toContain(
-      'TransposeF♯',
+      'F♯',
     )
   })
 
@@ -139,7 +139,7 @@ describe('Transpose (ADR 0105)', () => {
     const user = userEvent.setup()
     await renderApp('/play/romashki?transpose=2', { locale: 'ru' })
     const tool = await screen.findByRole('button', { name: 'Тональность: E минор, +2' })
-    expect(shownText(tool)).toContain('ТональностьEm')
+    expect(shownText(tool)).toContain('Em')
     await user.click(tool)
     const popover = (await screen.findAllByRole('dialog', { name: 'Транспонировать' }))[0]
     expect(popover).toHaveTextContent('+2 полутона')

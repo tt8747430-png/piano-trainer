@@ -8,10 +8,16 @@ import { createMemoryStorage } from '@/shared/lib'
 
 type User = ReturnType<typeof userEvent.setup>
 
-/** Opens the Player's Settings and finds its Sections. */
-async function sectionsAction(user: User, settings = 'Player settings', name = 'Sections') {
-  await user.click(await screen.findByRole('button', { name: settings }))
-  return within(await screen.findByRole('dialog', { name: settings })).getByRole('button', { name })
+/** Opens the foot's More and finds its Sections. */
+async function sectionsAction(
+  user: User,
+  foot = 'Practice tools',
+  more = 'More',
+  name = 'Sections',
+) {
+  const bar = await screen.findByRole('toolbar', { name: foot })
+  await user.click(within(bar).getByRole('button', { name: more }))
+  return within(await screen.findByRole('menu')).getByRole('menuitem', { name })
 }
 
 /** The sheet's sections, each its name and where it starts. */
@@ -76,14 +82,14 @@ describe('the Player’s Sections (ADR 0107)', () => {
     )
     await renderApp('/play/my-1', { storage })
     const sections = await sectionsAction(user)
-    expect(sections).toBeDisabled()
+    expect(sections).toHaveAttribute('aria-disabled', 'true')
     expect(sections).toHaveAccessibleDescription('This song has one section.')
   })
 
   it('reads in Russian', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5', { locale: 'ru' })
-    await user.click(await sectionsAction(user, 'Настройки плеера', 'Разделы'))
+    await user.click(await sectionsAction(user, 'Инструменты занятия', 'Ещё', 'Разделы'))
     const sheet = await screen.findByRole('dialog', { name: 'Разделы' })
     expect(sectionsIn(sheet)).toEqual(['Куплет Такт 1', 'Припев Такт 9', 'Окончание Такт 19'])
     expect(untranslated(sheet)).toEqual([])

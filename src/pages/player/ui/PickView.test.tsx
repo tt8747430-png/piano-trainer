@@ -45,7 +45,7 @@ function withSongOfNoChords(): Storage {
   return storage
 }
 
-/** Opens Pick your view from the tools row, named by the view shown. */
+/** Opens Pick your view from the foot bar, named by the view shown. */
 async function openView(user: User, shown: string) {
   await user.click(await screen.findByRole('button', { name: `View: ${shown}` }))
   return screen.findByRole('dialog', { name: 'Pick your view' })
@@ -82,12 +82,12 @@ function chipsAre(part: HTMLElement, ...names: string[]) {
 /** A chip of the menu, by its name. */
 const chip = (part: HTMLElement, name: string) => within(part).getByRole('button', { name })
 
-describe('the tools row (ADR 0108)', () => {
-  it('stands under the bar and names the view shown, opening Pick your view from there (R29)', async () => {
+describe('the foot bar’s View (ADR 0108, R31-P)', () => {
+  it('stands in the foot bar and names the view shown, opening Pick your view from there (R29)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/silent')
-    const tools = await screen.findByRole('toolbar', { name: 'Tools' })
-    expect(tools.closest('[data-area="tools"]')).toBeInTheDocument()
+    const tools = await screen.findByRole('toolbar', { name: 'Practice tools' })
+    expect(tools.closest('[data-area="foot"]')).toBeInTheDocument()
     const view = within(tools).getByRole('button', { name: 'View: Sheet' })
     expect(view).toHaveTextContent('Sheet')
     expect(view).toHaveAttribute('aria-haspopup')
@@ -109,34 +109,34 @@ describe('the tools row (ADR 0108)', () => {
 })
 
 describe('while Diagrams plays (ADR 0108)', () => {
-  /** The bar's two groups and the tools row. */
-  // The score's bar, one surface holding its buttons and its tools (ADR 0115).
+  // The score's bar, one surface holding its buttons (ADR 0115, R31-P).
   const bar = () => {
     const found = document.querySelector('header[data-area="bar"]')
     if (!found) throw new Error('bar')
-    expect(found.querySelector('[data-area="tools"]')).toBeInTheDocument()
     return [found]
   }
 
-  it('steps the bar with its tools aside, back at a tap on the free room or once it stops', async () => {
+  it('steps the bar aside, the transport and foot staying, back at a tap on the free room or once it stops', async () => {
     const user = userEvent.setup()
     await savedAs('diagrams', '/play/bz5')
     const transport = screen.getByRole('toolbar', { name: 'Playback' })
-    const dock = transport.closest('[data-area="dock"]')
+    // The transport is docked in its own row, never floating: it does not step aside (R31-P).
+    const dock = transport.closest('[data-area="transport"]')
+    expect(dock).toBeInTheDocument()
     await user.click(within(transport).getByRole('button', { name: 'Play' }))
     for (const area of bar()) {
       expect(area).toHaveAttribute('data-hidden')
       expect(area).toHaveAttribute('inert')
     }
     expect(dock).not.toHaveAttribute('data-hidden')
-    // A tap on the free room brings them back, and the next sends them aside with the transport.
+    // A tap on the free room brings the bar back, and the next sends it aside again.
     const title = screen.getByRole('heading', { level: 1 })
     await user.click(title)
     for (const area of bar()) expect(area).not.toHaveAttribute('data-hidden')
     await user.click(title)
     for (const area of bar()) expect(area).toHaveAttribute('data-hidden')
-    expect(dock).toHaveAttribute('data-hidden')
-    // Stopped (Space, the transport aside too), everything is back.
+    expect(dock).not.toHaveAttribute('data-hidden')
+    // Stopped (Space), everything is back.
     await user.keyboard(' ')
     for (const area of bar()) expect(area).not.toHaveAttribute('data-hidden')
     expect(dock).not.toHaveAttribute('data-hidden')

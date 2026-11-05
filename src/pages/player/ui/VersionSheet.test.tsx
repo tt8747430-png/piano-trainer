@@ -26,9 +26,9 @@ function withSong(...lines: string[]): Storage {
   return storage
 }
 
-/** The tools row's Version, opening the Version sheet. */
+/** The foot bar's Version, opening the Version sheet. */
 const versionTool = async () =>
-  within(await screen.findByRole('toolbar', { name: 'Tools' })).getByRole('button', {
+  within(await screen.findByRole('toolbar', { name: 'Practice tools' })).getByRole('button', {
     name: /^Version: /,
   })
 
@@ -98,8 +98,9 @@ describe('the Version sheet (R29 B8)', () => {
     const user = userEvent.setup()
     await renderApp('/play/my-1?version=simple', { storage: withSong('Cmaj7 G7/B') })
     expect(await screen.findByRole('button', { name: 'Bar 2: G' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Player settings' }))
-    await user.click(await screen.findByRole('button', { name: 'Song information' }))
+    const foot = await screen.findByRole('toolbar', { name: 'Practice tools' })
+    await user.click(within(foot).getByRole('button', { name: 'More' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Song information' }))
     const info = await screen.findByRole('dialog', { name: 'Song information' })
     const chords = within(within(info).getByRole('list', { name: 'Chords' })).getAllByRole('button')
     expect(chords.map((chord) => chord.textContent)).toEqual(['C', 'G'])

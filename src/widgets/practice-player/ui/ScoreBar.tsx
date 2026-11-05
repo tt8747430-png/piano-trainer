@@ -21,7 +21,7 @@ export function ScoreBar({
 }: {
   lead: ReactNode
   actions: ReactNode
-  tools: ReactNode
+  tools?: ReactNode
 }) {
   const { bar } = use(ChromeShownContext)
   return (

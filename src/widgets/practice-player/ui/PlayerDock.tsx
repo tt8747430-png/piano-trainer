@@ -9,18 +9,29 @@ import { DOCK_BUTTON } from './dock-sizes'
 import { Transport } from './Transport'
 
 /**
- * The Player's transport (ADR 0061, 0108, R29 B8): Restart (to bar 1, or the loop's start), ‹, the big
- * Play or Stop (honey), ›, and the metronome's quick toggle (B7), in the pill the score editor's
- * shares (`Transport`, ADR 0115), floating along the sheet's foot at every size. The loop, the tempo
- * and the modes are the foot bar's (`PlayerFoot`).
+ * The Player's transport (ADR 0061, 0108, R31-P): Loop, Restart (to bar 1, or the loop's start), ‹,
+ * the big Play or Stop (honey), ›, the tempo and the metronome's click, the score editor's pill
+ * (`Transport`, ADR 0115) docked in its own row at the foot, never floating over the music.
  */
-export function PlayerDock({ practice, sound }: { practice: Practice; sound: ReactNode }) {
+export function PlayerDock({
+  practice,
+  loop,
+  tempo,
+  sound,
+}: {
+  practice: Practice
+  loop: ReactNode
+  tempo: ReactNode
+  sound: ReactNode
+}) {
   const { t } = useTranslation('player')
   const { playing } = practice.state
   const action = playing ? t('stop') : t('play')
   return (
     <Transport
       label={t('transport')}
+      docked
+      start={loop}
       tempo={
         <FloatingBarButton
           label={t('restart')}
@@ -38,7 +49,12 @@ export function PlayerDock({ practice, sound }: { practice: Practice; sound: Rea
       onPlay={playing ? practice.stop : practice.play}
       onBack={practice.prev}
       onNext={practice.next}
-      end={sound}
+      end={
+        <>
+          {tempo}
+          {sound}
+        </>
+      }
     />
   )
 }

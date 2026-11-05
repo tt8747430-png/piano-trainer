@@ -59,7 +59,7 @@ const COMMANDS: Readonly<Record<string, readonly (keyof typeof SETTING_HOMES)[]>
   setAccompaniment: ['accompaniment.hidden'],
   setMetronome: ['metronome.bpm'],
   setTunerA4: ['tuner.a4'],
-  setBar: ['bars.bar.player', 'bars.select.songs', 'bars.swipe.songs.leading'],
+  setBar: ['bars.select.songs', 'bars.swipe.songs.leading'],
 }
 
 /**

@@ -92,6 +92,7 @@ export const player: LocaleResources['player'] = {
     fromBar: 'С такта {{bar}}',
   },
   feedback: {
+    howDidIPlay: 'Как я сыграл?',
     label: 'Разбор',
     about: 'Ваш последний дубль, отмеченный в нотах',
     none: 'Сначала запишите дубль',

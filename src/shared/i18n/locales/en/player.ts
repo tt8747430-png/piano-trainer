@@ -102,6 +102,7 @@ export const player = {
     fromBar: 'From bar {{bar}}',
   },
   feedback: {
+    howDidIPlay: 'How did I play?',
     label: 'Feedback',
     about: 'Your last take, marked on the score',
     none: 'Record a take first',

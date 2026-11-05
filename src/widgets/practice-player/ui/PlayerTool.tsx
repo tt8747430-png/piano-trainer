@@ -1,7 +1,8 @@
 import type { LucideIcon } from 'lucide-react'
-import type { ComponentProps, ReactNode } from 'react'
+import { use, type ComponentProps, type ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
+import { InFoot } from '../model/in-foot'
 
 /**
  * A tool of the Player's tools row (ADR 0108, 0105): a toolbar's text button (ADR 0115), its icon, then
@@ -15,6 +16,7 @@ import { Button } from '@/shared/ui/primitives/button'
  * row's room on a phone held upright, where its words are a size down and its padding narrower;
  * open or pressed (a switch, `aria-pressed`), it wears the muted fill a pressed button does. On a
  * phone on its side, where the row stands in the bar's, the tools share what room the bar leaves.
+ * In the Player's foot bar it wears the foot's look: its icon over its value or name (R31-P).
  */
 export function PlayerTool({
   icon: Icon,
@@ -44,6 +46,26 @@ export function PlayerTool({
   ComponentProps<typeof Button>,
   'variant' | 'size' | 'aria-label' | 'title' | 'children' | 'value'
 >) {
+  // In the foot bar (R31-P): its icon over what it is set to, or its name, as every foot tool.
+  if (use(InFoot))
+    return (
+      <Button
+        variant="ghost"
+        aria-label={label}
+        title={tip ?? label}
+        className={cn(
+          'flex h-auto min-h-12 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-control px-0.5 py-1 text-[0.6875rem] font-normal text-muted-foreground hover:text-foreground aria-expanded:text-foreground landscape-phone:min-h-10 landscape-phone:flex-row landscape-phone:gap-1.5',
+          className,
+        )}
+        {...props}
+      >
+        <Icon aria-hidden className="size-5 shrink-0" />
+        <span className="flex max-w-full min-w-0 items-center gap-0.5 leading-tight">
+          <span className="truncate">{value ?? name}</span>
+          {children}
+        </span>
+      </Button>
+    )
   return (
     <Button
       variant="tool"

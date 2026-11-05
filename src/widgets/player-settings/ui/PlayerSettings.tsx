@@ -8,7 +8,6 @@ import {
   type FollowReturn,
   OTHER_HAND_LOOKS,
   SPEED_STEPS,
-  barOf,
   selectOtherHand,
   selectPlayback,
   selectScoreView,
@@ -21,14 +20,12 @@ import type { TrackId } from '@/features/practice'
 import {
   onlyTheChords,
   setOtherHand,
-  setBar,
   setPlayback,
   setScoreView,
   setSound,
   setStaffVolume,
 } from '@/features/set-preference'
 import { formatPercent, useLocale } from '@/shared/i18n'
-import { BarEditor } from '@/widgets/bar-editor'
 import { PEDAL_PLAYS } from '@/shared/lib/schedule'
 import { RowLink, ChoiceCard, SettingRows, SettingsGroup, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -256,24 +253,6 @@ export function PlayerDisplay() {
   )
 }
 
-/**
- * The Player's foot bar arranged (R29 B10, D9): four or five tools on the bar, the rest under More,
- * the same for every song (the Player's Settings › Tool bar).
- */
-export function PlayerToolbar() {
-  const { t } = useTranslation('settings')
-  const settings = useSettingsStoreApi()
-  const bar = useSettings((state) => barOf(state.bars, 'bar.player'))
-  return (
-    <BarEditor
-      surface="bar.player"
-      bar={bar}
-      label={t('bars.playerToolbar')}
-      onChange={(acts) => setBar(settings, 'bar.player', acts)}
-    />
-  )
-}
-
 /** Every page of the Player's Settings in one column, for a screen with no Player to open them from
  * (Settings › Player, a song's /settings link). */
 export function PlayerSettings({ tracks }: { tracks: readonly VolumeTrack[] }) {
@@ -291,7 +270,6 @@ export function PlayerSettings({ tracks }: { tracks: readonly VolumeTrack[] }) {
       </SettingsGroup>
       <PlayerPlayback />
       <PlayerDisplay />
-      <PlayerToolbar />
     </>
   )
 }

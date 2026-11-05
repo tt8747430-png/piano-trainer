@@ -56,8 +56,8 @@ describe('Player', () => {
       sizedAs(query)
       await renderApp('/play/bz5')
       await screen.findByRole('button', { name: 'Player settings' })
-      // Close, then the tools and Edit at the end, as the editor's bar has Done; the title is on the
-      // sheet. The View is the tools row's, under the bar (ADR 0108).
+      // Close, the title and Edit, then Piano keys, MIDI and the one gear (R31-P); the View is the
+      // foot bar's (ADR 0108).
       const controls = [
         ...document.querySelectorAll(
           ':is([data-area="lead"], [data-area="actions"]) :is(button, a)',
@@ -68,7 +68,6 @@ describe('Player', () => {
         'Edit',
         'Piano keys',
         'MIDI keyboard',
-        'Tools',
         'Player settings',
       ])
       // Every control is its icon alone.
@@ -211,17 +210,24 @@ describe('Player', () => {
     expect(settingsStore.getState().scoreView).toMatchObject({ music: 'grid', keys: false })
   })
 
-  it('holds Restart, ‹, Play, › and the metronome in one toolbar named Playback, the loop, tempo and modes in the foot bar (R29 B8)', async () => {
+  it('holds Loop, Restart, ‹, Play, ›, the tempo and the metronome in one toolbar named Playback, the View, the music’s tools, the mode and More in the foot bar (R31-P)', async () => {
     await renderApp('/play/romashki')
     const dock = await screen.findByRole('toolbar', { name: 'Playback' })
+    expect(dock.closest('[data-area="transport"]')).toBeInTheDocument()
     const names = within(dock)
       .getAllByRole('button')
       .map((button) => button.getAttribute('aria-label'))
-    expect(names).toEqual(['Restart', 'Back', 'Play', 'Next', 'Metronome'])
+    expect(names).toEqual(['Loop', 'Restart', 'Back', 'Play', 'Next', 'Tempo: 100%', 'Metronome'])
+    expect(within(dock).getByRole('button', { name: 'Loop' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    )
     const foot = screen.getByRole('toolbar', { name: 'Practice tools' })
-    expect(within(foot).getByRole('button', { name: 'Loop' })).toBeInTheDocument()
-    expect(within(foot).getByRole('button', { name: 'Tempo: 100%' })).toBeInTheDocument()
-    expect(within(foot).getByRole('button', { name: 'Modes' })).toBeInTheDocument()
+    expect(foot.closest('[data-area="foot"]')).toBeInTheDocument()
+    expect(within(foot).getByRole('button', { name: /^View: / })).toBeInTheDocument()
+    expect(within(foot).getByRole('button', { name: /^Transpose: / })).toBeInTheDocument()
+    expect(within(foot).getByRole('button', { name: 'Listen' })).toBeInTheDocument()
+    expect(within(foot).getByRole('button', { name: 'More' })).toBeInTheDocument()
     expect(within(dock).getByRole('button', { name: 'Play' })).toHaveAttribute(
       'title',
       'Play (Space)',
@@ -310,22 +316,24 @@ describe('Player', () => {
     expect(notes.length).toBeGreaterThan(0)
   })
 
-  it('docks the keys at the foot, under the toolbar, unless the settings dock them at the top', async () => {
+  it('docks the keys at the foot, above the transport, unless the settings dock them at the top', async () => {
     const { settingsStore } = await renderApp('/play/romashki')
     const dock = await screen.findByRole('toolbar', { name: 'Playback' })
+    const music = document.querySelector('[data-area="sheet"]')
+    if (!music) throw new Error('the music’s area')
     const keys = screen.getByRole('group', { name: 'Keyboard' })
-    expect(dock.compareDocumentPosition(keys) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(music.compareDocumentPosition(keys) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(dock.compareDocumentPosition(keys) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
     act(() => settingsStore.setState((state) => ({ keyboard: { ...state.keyboard, dock: 'top' } })))
     const top = screen.getByRole('group', { name: 'Keyboard' })
-    expect(dock.compareDocumentPosition(top) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
+    expect(music.compareDocumentPosition(top) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
   })
 
-  it('opens its one Settings from the gear: the music’s choices, While you play, This song and Share (R29)', async () => {
+  it('opens its one Settings from the gear: the music’s choices and While you play, none of the music’s acts (R29, R31-P)', async () => {
     const user = userEvent.setup()
     const { audio, settingsStore } = await renderApp('/play/romashki?tempo=36')
     await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     const sheet = await screen.findByRole('dialog', { name: 'Player settings' })
-    // The owner's order (2.5): While you play, This song, Share.
     const rows = (group: string) =>
       within(within(sheet).getByRole('region', { name: group }))
         .getAllByRole('button')
@@ -334,12 +342,12 @@ describe('Player', () => {
     expect(rows('While you play')).toEqual([
       'Audio playback',
       'Playback',
-      'Tool bar',
       'On-screen piano',
       'Display',
     ])
-    expect(rows('This song')).toEqual(['Sections', 'Song information'])
-    expect(rows('Share')).toEqual(['Share link', 'Export…'])
+    // The music's acts are the foot's More, never the gear's (R31-P).
+    for (const group of ['This song', 'Share'])
+      expect(within(sheet).queryByRole('region', { name: group })).not.toBeInTheDocument()
     await user.click(within(works).getByRole('button', { name: 'Audio playback' }))
     expect(await screen.findByRole('dialog', { name: 'Audio playback' })).toBeInTheDocument()
     const labels = [...document.querySelectorAll('[data-slot="slider-label"]')].map(
@@ -510,11 +518,11 @@ describe('Player', () => {
     expect(audio.played).toHaveLength(2)
   })
 
-  it('chooses a mode from the Modes sheet, in the URL without a history entry, and a speed from the tempo popover (R29 B8)', async () => {
+  it('chooses a mode from the Modes sheet, opened by the foot’s Mode, in the URL without a history entry, and a speed from the tempo popover (R29 B8)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
     const entries = router.history.length
-    await user.click(await screen.findByRole('button', { name: 'Modes' }))
+    await user.click(await screen.findByRole('button', { name: 'Listen' }))
     await user.click(await screen.findByRole('radio', { name: /^Sight-read/ }))
     expect(router.state.location.search).toMatchObject({ mode: 'wait' })
     expect(router.history.length).toBe(entries)
@@ -548,17 +556,17 @@ describe('Player', () => {
   it('chooses a hand in Practice, inline in the Modes sheet, muting the other staff (R29 B8)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5?mode=practice')
-    await user.click(await screen.findByRole('button', { name: 'Modes' }))
+    await user.click(await screen.findByRole('button', { name: 'Practice' }))
     await user.click(await screen.findByRole('radio', { name: 'Left' }))
     expect(router.state.location.search).toMatchObject({ mode: 'practice', hands: 'lh' })
     expect(document.querySelector('[data-slot="score"]')).toHaveAttribute('data-muted', 'treble')
   })
 
-  it('loops the bar the cursor is in from the foot bar, pressed while it loops, and removes the loop', async () => {
+  it('loops the bar the cursor is in from the transport, pressed while it loops, and removes the loop', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
-    const foot = await screen.findByRole('toolbar', { name: 'Practice tools' })
-    const loop = within(foot).getByRole('button', { name: 'Loop' })
+    const transport = await screen.findByRole('toolbar', { name: 'Playback' })
+    const loop = within(transport).getByRole('button', { name: 'Loop' })
     await user.click(loop)
     expect(router.state.location.search).toMatchObject({ loop: '1-1' })
     expect(loop).toHaveAttribute('aria-pressed', 'true')
@@ -669,14 +677,15 @@ describe('Player', () => {
     expect(screen.queryByRole('combobox', { name: 'In all 12 keys' })).not.toBeInTheDocument()
   })
 
-  it('hides its transport at a tap on the screen’s free room, and brings it back', async () => {
+  it('keeps its transport docked at a tap on the screen’s free room, never floating away (R31-P)', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
     const transport = await screen.findByRole('toolbar', { name: 'Playback' })
-    const dock = transport.closest('[data-area="dock"]')
+    const dock = transport.closest('[data-area="transport"]')
+    expect(dock).toBeInTheDocument()
     await user.click(screen.getByRole('heading', { level: 1 }))
-    expect(dock).toHaveAttribute('data-hidden')
-    expect(dock).toHaveAttribute('inert')
+    expect(dock).not.toHaveAttribute('data-hidden')
+    expect(dock).not.toHaveAttribute('inert')
     await user.click(screen.getByRole('heading', { level: 1 }))
     expect(dock).not.toHaveAttribute('data-hidden')
   })

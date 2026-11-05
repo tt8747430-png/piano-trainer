@@ -4,51 +4,68 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { createMemoryStorage } from '@/shared/lib'
 
-/** Opens the Tools sheet from the Player's bar. */
-async function openTools(user: ReturnType<typeof userEvent.setup>) {
-  await user.click(await screen.findByRole('button', { name: 'Tools' }))
-  return screen.findByRole('dialog', { name: 'Tools' })
+type User = ReturnType<typeof userEvent.setup>
+
+/** The Player's foot bar (R31-P). */
+const footBar = () => screen.findByRole('toolbar', { name: 'Practice tools' })
+
+/** Opens the foot's More: its menu. */
+async function openMore(user: User) {
+  await user.click(within(await footBar()).getByRole('button', { name: 'More' }))
+  return screen.findByRole('menu')
 }
 
-describe('the Player’s Tools sheet (R29 B8)', () => {
-  it('opens from the bar before the gear, its rows in groups', async () => {
+describe('the Player’s bar, foot and More (R31-P)', () => {
+  it('has no Tools button: its bar holds Close, Edit, the keys, MIDI and the one gear', async () => {
+    await renderApp('/play/bz5')
+    expect(await screen.findByRole('button', { name: 'Player settings' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Tools' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('toolbar', { name: 'Tools' })).not.toBeInTheDocument()
+  })
+
+  it('lists in its Settings what the Player does while you play, no acts of the music', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
-    const sheet = await openTools(user)
-    for (const group of ['Quick tools', 'On the score', 'More'])
-      expect(within(sheet).getByRole('region', { name: group })).toBeInTheDocument()
-    for (const tool of ['Metronome', 'Recorder'])
-      expect(within(sheet).getByRole('group', { name: tool })).toBeInTheDocument()
-    for (const row of ['Tuner', 'Print', 'Audio and MIDI', 'Transpose', 'Display'])
-      expect(within(sheet).getByRole('button', { name: new RegExp(`^${row}`) })).toBeInTheDocument()
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Player settings' })
+    const group = within(sheet).getByRole('region', { name: 'While you play' })
+    expect(
+      within(group)
+        .getAllByRole('button')
+        .map((page) => page.textContent),
+    ).toEqual(['Audio playback', 'Playback', 'On-screen piano', 'Display'])
+    for (const name of ['This song', 'Share'])
+      expect(within(sheet).queryByRole('region', { name })).not.toBeInTheDocument()
   })
 
   it('opens the Player’s Settings at Display: one home', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
-    await user.click(within(await openTools(user)).getByRole('button', { name: 'Display' }))
+    await user.click(await screen.findByRole('button', { name: 'Player settings' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Player settings' })
+    await user.click(within(sheet).getByRole('button', { name: 'Display' }))
     const settings = await screen.findByRole('dialog', { name: 'Display' })
     expect(within(settings).getByRole('radiogroup', { name: 'Cursor' })).toBeInTheDocument()
   })
 
-  it('opens the Version sheet from Change version', async () => {
+  it('opens the Version sheet from the foot’s Version', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
-    await user.click(within(await openTools(user)).getByRole('button', { name: /^Change version/ }))
+    await user.click(within(await footBar()).getByRole('button', { name: /^Version/ }))
     expect(await screen.findByRole('dialog', { name: 'Choose your version' })).toBeInTheDocument()
   })
 
-  it('opens Transpose’s popover', async () => {
+  it('opens Transpose’s popover from the foot’s Transpose', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
-    await user.click(within(await openTools(user)).getByRole('button', { name: 'Transpose' }))
+    await user.click(within(await footBar()).getByRole('button', { name: /^Transpose/ }))
     expect(await screen.findByRole('button', { name: 'Down a semitone' })).toBeInTheDocument()
   })
 
   it('annotates the place the cursor is in, typed, saved with the song (R29 B8, D7)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/play/bz5')
-    await user.click(within(await openTools(user)).getByRole('button', { name: 'Annotations' }))
+    await user.click(within(await openMore(user)).getByRole('menuitem', { name: 'Annotations' }))
     const bar = await screen.findByRole('toolbar', { name: 'Annotations' })
     await user.click(within(bar).getByRole('button', { name: 'Pause' }))
     await user.click(within(bar).getByRole('button', { name: 'Fingering' }))
@@ -66,10 +83,11 @@ describe('the Player’s Tools sheet (R29 B8)', () => {
   it('offers Voice commands only where the browser hears speech, saying so', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
-    const sheet = await openTools(user)
-    const voice = within(sheet).getByRole('switch', { name: 'Voice commands' })
+    const voice = within(await openMore(user)).getByRole('menuitemcheckbox', {
+      name: 'Voice commands',
+    })
     expect(voice).toHaveAttribute('aria-disabled', 'true')
-    expect(voice.closest('label')).toHaveAttribute('title', 'Not available in this browser')
+    expect(voice).toHaveAccessibleDescription('Not available in this browser')
   })
 
   it('coaches in one line until put away, the progress along the score’s head', async () => {
