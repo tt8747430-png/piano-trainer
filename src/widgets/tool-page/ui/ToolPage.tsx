@@ -19,15 +19,17 @@ export interface ToolPlay {
 
 /**
  * One tool's page (R29 B11), the same for every tool on Practice's Tools: the bar (Back, the tool's
- * name, its own act and ⚙ to its Settings page, A24); the readout or picture in the middle, filling
- * the height the page has (rule 28); the controls under it; and the tool's Start/Stop floating in the
- * thumb's reach (rule 5).
+ * name, its own act and ⚙ to its Settings page where it has several settings, A24); the readout or
+ * picture in the middle, filling the height the page has (rule 28); what sets it under it, or beside
+ * it from a laptop's width (`side`, R32: the Metronome's settings in place, as Chordify's); and the
+ * tool's Start/Stop floating in the thumb's reach (rule 5).
  */
 export function ToolPage({
   title,
   settings,
   actions,
   controls,
+  side,
   play,
   dial,
   keys,
@@ -40,6 +42,8 @@ export function ToolPage({
   actions?: ReactNode
   /** What sets the tool, under the readout. */
   controls?: ReactNode
+  /** What sets the tool in place (R32): under the readout on a phone, beside it from a laptop's width. */
+  side?: ReactNode
   play?: ToolPlay
   /** The tool's other acts, folded in a `SpeedDial` beside its Start (the Chord finder's). */
   dial?: ReactNode
@@ -66,15 +70,27 @@ export function ToolPage({
         }
       />
       {keys}
-      <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 pb-8">
-        <section
-          aria-label={title}
-          className="flex min-h-56 flex-1 flex-col items-center justify-center gap-4 text-center"
-        >
-          {children}
-        </section>
-        {controls ? <div className="flex w-full flex-col gap-6">{controls}</div> : null}
-      </div>
+      {side ? (
+        <div className="mx-auto grid w-full max-w-6xl flex-1 items-start gap-6 pb-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:gap-10">
+          <section
+            aria-label={title}
+            className="flex min-h-56 flex-col items-center justify-center gap-4 text-center lg:sticky lg:top-24"
+          >
+            {children}
+          </section>
+          <div className="flex w-full flex-col gap-6">{side}</div>
+        </div>
+      ) : (
+        <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 pb-8">
+          <section
+            aria-label={title}
+            className="flex min-h-56 flex-1 flex-col items-center justify-center gap-4 text-center"
+          >
+            {children}
+          </section>
+          {controls ? <div className="flex w-full flex-col gap-6">{controls}</div> : null}
+        </div>
+      )}
       {play || dial ? (
         <FloatingActions>
           {dial}

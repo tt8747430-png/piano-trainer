@@ -43,6 +43,8 @@ import {
   ToggleChips,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { selectTrainer, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { setAutoNext } from '@/features/set-preference'
 import { ListSheetRow } from './ListSheetRow'
 
 type ListField = keyof typeof CUSTOM_CHOICES
@@ -109,6 +111,8 @@ export function TrainerSetup({
   footer?: ReactNode
 }) {
   const { t } = useTranslation(['quiz', 'music'])
+  const store = useSettingsStoreApi()
+  const { autoNext } = useSettings(selectTrainer)
   const drill = drillOf(trainer, view)
   const fields = new Set(level === CUSTOM ? trainer.custom : [])
   const write = (field: ListField, chosen: readonly string[]) => {
@@ -339,6 +343,14 @@ export function TrainerSetup({
             onChange={(limit) => onChange({ limit: limit === 0 ? undefined : limit })}
           />
         </SettingField>
+        {/* How every drill goes on (R32): its one home is here, beside the drill it changes. */}
+        <SwitchRow
+          setting="trainer.autoNext"
+          label={t('quiz:autoNext')}
+          info={t('quiz:timing.autoNextInfo')}
+          checked={autoNext}
+          onCheckedChange={(on) => setAutoNext(store, on)}
+        />
       </SetupGroup>
 
       {footer}

@@ -107,18 +107,17 @@ describe('Practice → Metronome', () => {
     expect(after[0]).toEqual({ at: 1.145, voices: ['click'] })
   })
 
-  it('sets its sound, what falls between the beats and its trainers on its Settings page (R29 B11)', async () => {
+  it('sets its sound, subdivision and practice aids in place, as Chordify’s (R32)', async () => {
     const user = userEvent.setup()
-    const storage = createMemoryStorage()
-    await renderApp('/practice/metronome/settings', { storage })
-    await screen.findByRole('heading', { level: 1, name: 'Metronome settings' })
+    const { storage } = await open()
+    expect(screen.queryByRole('link', { name: 'Metronome settings' })).toBeNull()
     await user.click(screen.getByRole('combobox', { name: 'Sound' }))
-    await user.click(await screen.findByRole('option', { name: 'Drum beat' }))
-    await user.click(screen.getByRole('combobox', { name: 'Between beats' }))
+    await user.click(await screen.findByRole('option', { name: 'Drum kit' }))
+    await user.click(screen.getByRole('combobox', { name: 'Subdivision' }))
     await user.click(await screen.findByRole('option', { name: 'Triplets' }))
-    expect(screen.queryByText('Start at')).toBeNull()
+    expect(screen.queryByText('Start tempo')).toBeNull()
     await user.click(screen.getByRole('switch', { name: /Speed trainer/ }))
-    for (const name of ['Start at', 'Goal', 'Speed up by', 'Every'])
+    for (const name of ['Start tempo', 'Target tempo', 'Increase by', 'Every'])
       expect(screen.getByText(name)).toBeVisible()
     await user.click(screen.getByRole('switch', { name: /Silent bars/ }))
     expect(saved(storage)).toMatchObject({
@@ -127,9 +126,7 @@ describe('Practice → Metronome', () => {
       speed: { on: true },
       trainer: { on: true },
     })
-    // Back to the Metronome: its tempo is the speed trainer's start, and its steps set it.
-    await user.click(screen.getByRole('button', { name: 'Back' }))
-    await screen.findByRole('heading', { level: 1, name: 'Metronome' })
+    // While the speed trainer is on, the tempo shown is its start, and the steps set it.
     const start = saved(storage).speed.from
     await user.click(screen.getByRole('button', { name: 'Faster by 10' }))
     expect(saved(storage).speed.from).toBe(start + 10)

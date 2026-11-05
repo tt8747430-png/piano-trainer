@@ -13,6 +13,11 @@ const keyboard = () => screen.getByRole('group', { name: 'Keyboard' })
 const key = (name: string) => within(keyboard()).getByRole('button', { name })
 const name = () => screen.getAllByRole('heading', { level: 2 })[0]
 const played = () => screen.getByRole('region', { name: 'Played' })
+/** The staff's chords: none where the staff is not drawn, as while nothing has been played (R32). */
+const staffItems = () => {
+  const staff = screen.queryByRole('region', { name: /^(On the staff|Played)$/ })
+  return staff ? within(staff).queryAllByRole('listitem') : []
+}
 const playedNames = () =>
   within(played())
     .getAllByRole('listitem')
@@ -29,13 +34,28 @@ function remembering() {
 }
 
 describe('Practice → Chord finder', () => {
+  it('offers chords to try while empty, with no empty staff, and names the one tried (R32)', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/chord-finder')
+    await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
+    expect(screen.queryByRole('region', { name: 'On the staff' })).toBeNull()
+    expect(screen.getByRole('button', { name: /^Spelled in: C major/ })).toBeInTheDocument()
+    const tries = screen.getByRole('list', { name: 'Try a chord' })
+    await user.click(within(tries).getByRole('button', { name: 'A minor 7th' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ keys: '57-60-64-67' }))
+    expect(screen.getByRole('heading', { level: 2, name: 'Am7' })).toBeInTheDocument()
+    expect(screen.queryByRole('list', { name: 'Try a chord' })).toBeNull()
+  })
+
   it('names the keys tapped, keeps them in the URL, and reads them every way they read', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/chord-finder')
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Chord finder' }),
     ).toBeInTheDocument()
-    expect(screen.getByText('On your MIDI keyboard, or tap its keys.')).toBeInTheDocument()
+    expect(
+      screen.getByText('Hold three or more keys; the chord is named as you play.'),
+    ).toBeInTheDocument()
     for (const each of ['A3', 'C4', 'E4', 'G4']) await user.click(key(each))
     await waitFor(() => expect(router.state.location.search).toMatchObject({ keys: '57-60-64-67' }))
     expect(screen.getByRole('heading', { level: 2, name: 'Am7' })).toBeInTheDocument()
@@ -64,8 +84,8 @@ describe('Practice → Chord finder', () => {
     const { midi: piano } = await renderApp('/practice/chord-finder')
     await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
     const staff = () => screen.getByRole('region', { name: 'On the staff' })
-    // Nothing played: the grand staff waits empty.
-    expect(within(staff()).queryAllByRole('listitem')).toHaveLength(0)
+    // Nothing played: no staff yet.
+    expect(staffItems()).toHaveLength(0)
     act(() => {
       for (const each of [48, 52, 55]) piano.press(midi(each))
     })
@@ -79,7 +99,7 @@ describe('Practice → Chord finder', () => {
     act(() => {
       for (const each of [48, 52, 55]) piano.release(midi(each))
     })
-    await waitFor(() => expect(within(staff()).queryAllByRole('listitem')).toHaveLength(0))
+    await waitFor(() => expect(staffItems()).toHaveLength(0))
     expect(name()).toHaveTextContent(/^C$/)
   })
 
@@ -102,9 +122,7 @@ describe('Practice → Chord finder', () => {
     await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
     expect(playedNames()).toEqual(['C', 'F'])
     act(() => setChordFinder(second.settingsStore, { remember: false }))
-    expect(
-      within(screen.getByRole('region', { name: 'On the staff' })).queryAllByRole('listitem'),
-    ).toHaveLength(0)
+    expect(staffItems()).toHaveLength(0)
     expect(JSON.parse(storage.getItem('pt-settings') ?? '{}').state.chordFinder.chords).toEqual([])
   })
 
@@ -172,7 +190,7 @@ describe('Practice → Chord finder', () => {
       settingsStore.setState((state) => ({ keyboard: { ...state.keyboard, folded: true } })),
     )
     expect(
-      screen.getByText('On your MIDI keyboard, or show the keys to tap one.'),
+      screen.getByText('Play it on a connected piano, or show the keyboard to tap one.'),
     ).toBeInTheDocument()
   })
 
@@ -270,7 +288,7 @@ describe('Practice → Chord finder', () => {
         within(screen.getByRole('region', { name: 'On the staff' })).getByRole('listitem'),
       ).toHaveTextContent(/^C♯m7/),
     )
-    expect(screen.getByRole('button', { name: /^Key/ })).toHaveTextContent('C♯')
+    expect(screen.getByRole('button', { name: /^Spelled in/ })).toHaveTextContent('C♯')
     await user.click(screen.getByRole('button', { name: 'Read as E6/C♯' }))
     expect(screen.getByRole('heading', { level: 2, name: 'E6/C♯' })).toBeInTheDocument()
     // What the URL holds keeps its ASCII.
@@ -307,9 +325,7 @@ describe('Practice → Chord finder', () => {
     await user.click(screen.getByRole('button', { name: 'Clear the keys' }))
     expect(screen.queryByRole('button', { name: 'Clear the keys' })).not.toBeInTheDocument()
     await waitFor(() => expect(router.state.location.search).not.toHaveProperty('keys'))
-    expect(
-      within(screen.getByRole('region', { name: 'On the staff' })).queryAllByRole('listitem'),
-    ).toHaveLength(0)
+    expect(staffItems()).toHaveLength(0)
   })
 
   it('lets the whole chord go at a tap on its root, and a key of another note alone', async () => {
@@ -340,7 +356,7 @@ describe('Practice → Chord finder', () => {
     await waitFor(() => expect(playedNames()).toEqual(['C']))
     await user.click(screen.getByRole('button', { name: 'More actions' }))
     await user.click(screen.getByRole('button', { name: 'Forget the chords played' }))
-    expect(within(played()).queryAllByRole('listitem')).toHaveLength(0)
+    expect(staffItems()).toHaveLength(0)
     expect(JSON.parse(storage.getItem('pt-settings') ?? '{}').state.chordFinder.chords).toEqual([])
     await play([53, 57, 60])
     await waitFor(() => expect(playedNames()).toEqual(['F']))

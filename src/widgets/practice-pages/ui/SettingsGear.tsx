@@ -3,28 +3,24 @@ import { Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { RoundLink } from '@/shared/ui'
 
-/** Each Practice page with a gear, and the Settings page it opens: Exercises and the Quiz share one. */
+/**
+ * Each Practice page with a gear, and the Settings page it opens (R32): only a page whose Settings hold
+ * several things of its own. A page with one setting keeps it in place, and the piano's are the
+ * keyboard strip's ⚙, so Chords, Intervals, Exercises and the Quiz have no gear.
+ */
 const SETTINGS_OF = {
-  chords: '/settings/chords',
   scales: '/settings/scales',
-  intervals: '/settings/intervals',
   progressions: '/settings/progressions',
   accompaniment: '/settings/accompaniment',
   'chord-finder': '/settings/chord-finder',
-  exercises: '/settings/exercises-and-quiz',
-  quiz: '/settings/exercises-and-quiz',
 } as const
 export type GearPage = keyof typeof SETTINGS_OF
 
 const PAGE_NAME = {
-  chords: 'chords',
   scales: 'scales',
-  intervals: 'intervals',
   progressions: 'progressions',
   accompaniment: 'accompaniment',
   'chord-finder': 'chordFinder',
-  exercises: 'exercises',
-  quiz: 'quiz',
 } as const satisfies Record<GearPage, string>
 
 /**

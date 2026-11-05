@@ -60,7 +60,8 @@ export const quiz = {
     limitInfo: 'When the time runs out, the answer is shown and the round counts as missed.',
     off: 'Off',
     left: 'Time left',
-    autoNextInfo: 'After a right answer, or a card revealed, the next round starts by itself.',
+    autoNextInfo:
+      'After a correct answer or a revealed card, the next question follows without a tap.',
   },
   /** What each trainer asks, a line under its name. */
   about: {
@@ -147,7 +148,7 @@ export const quiz = {
   round: 'Round: {{n}}',
   roundOf: 'Round {{n}} of {{total}}',
   stop: 'End the run',
-  autoNext: 'Go on automatically',
+  autoNext: 'Advance automatically',
   record: { runs: 'Runs: {{count}}', best: 'Best: {{percent}}', last: 'Last: {{percent}}' },
   summary: {
     title: 'Results',

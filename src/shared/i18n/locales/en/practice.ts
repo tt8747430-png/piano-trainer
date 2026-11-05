@@ -430,9 +430,15 @@ export const practice = {
     upper: 'Upper tetrachord',
   },
   chordFinder: {
-    promptTitle: 'Play a chord',
-    prompt: 'On your MIDI keyboard, or tap its keys.',
-    promptFolded: 'On your MIDI keyboard, or show the keys to tap one.',
+    promptTitle: 'Play or tap a chord',
+    prompt: 'Hold three or more keys; the chord is named as you play.',
+    promptFolded: 'Play it on a connected piano, or show the keyboard to tap one.',
+    // The chords an empty Chord finder offers to try, each put on the keys at a tap (R32).
+    tryLabel: 'Try a chord',
+    try: { major: 'C major', minor7: 'A minor 7th', dominant7: 'D dominant 7th' },
+    spelledIn: 'Spelled in',
+    spelledInInfo:
+      'Accidentals follow this key: the same black key is B♭ in F major and A♯ in B major, and each chord shows its numeral in the key.',
     none: 'No chord matches these notes.',
     note: 'One note',
     powerChord: 'Power chord',
@@ -452,12 +458,16 @@ export const practice = {
     played: 'Played',
     // The staff where the chords are not remembered: the chord down now, else nothing.
     staff: 'On the staff',
-    remember: 'Remember the chords',
-    rememberDetail: 'The staff keeps the last {{count}} chords played, and so does this device.',
-    inKeysShown: 'Keys it is in',
-    scaleShown: 'Scale on the keys',
-    scaleShownDetail: 'The key’s scale on every octave of the keys, each key with its note',
-    slash: 'Over the bass',
+    remember: 'Keep chord history',
+    rememberDetail:
+      'The staff keeps the last {{count}} chords you played, on this device, until you clear them.',
+    inKeysShown: 'Keys that contain the chord',
+    scaleShown: 'Key’s scale on the keyboard',
+    scaleShownDetail:
+      'Marks the key’s scale on every octave of the keyboard, each key with its note.',
+    slash: 'Slash chords for inversions',
+    // Its Settings' groups (R32).
+    groups: { names: 'Chord names', analysis: 'Analysis', history: 'History' },
     // The bass where the name leaves it out and it is no inversion: a bass beyond the 7th.
     bass: '{{note}} in the bass',
     // How the keys are laid out, as jazz pianists name it.
@@ -689,6 +699,7 @@ export const practice = {
       info: 'Each step clockwise adds a sharp or takes away a flat. Neighbouring keys share all but one note, so music moves most easily between them. Each major key and the minor key inside it share one signature.',
     },
     tuner: {
+      group: 'Tuning',
       settings: 'Reference pitch',
       a4About:
         'The pitch of A above middle C. 440 Hz is the standard; some orchestras tune to 442 Hz, Baroque ensembles to 415 Hz.',
@@ -715,8 +726,9 @@ export const practice = {
     faster: 'Faster by {{step}}',
     tap: 'Tap tempo',
     sound: 'Sound',
-    sounds: { click: 'Clicks', beep: 'Beeps', drum: 'Drum beat' },
+    sounds: { click: 'Click', beep: 'Beep', drum: 'Drum kit' },
     meter: 'Time signature',
+    group: 'Rhythm',
     // Each beat's square, tapped round: accent, beat, silent (as Soundbrenner's).
     levels: {
       downbeat: 'Downbeat',
@@ -725,22 +737,22 @@ export const practice = {
       silent: 'Silent beat',
       tap: 'Tap a square to accent it or leave it silent',
     },
-    subdivision: 'Between beats',
+    subdivision: 'Subdivision',
     subdivisions: {
-      none: 'Nothing',
-      '8ths': '8ths',
+      none: 'None',
+      '8ths': 'Eighth notes',
       triplets: 'Triplets',
-      '16ths': '16ths',
-      swing: 'Swing 8ths',
+      '16ths': 'Sixteenth notes',
+      swing: 'Swung eighths',
     },
     // The speed trainer: from one tempo toward another, step by step.
-    trainers: 'Practice',
+    trainers: 'Practice aids',
     speed: {
       label: 'Speed trainer',
-      info: 'Begin slower and build up speed as you play. The Metronome starts at your start tempo, goes up by the step every few bars, and holds the goal once it gets there.',
-      from: 'Start at',
-      to: 'Goal',
-      step: 'Speed up by',
+      info: 'Builds tempo gradually: the Metronome starts at the start tempo, rises by the increment every few bars and holds the target tempo once it is reached.',
+      from: 'Start tempo',
+      to: 'Target tempo',
+      step: 'Increase by',
       every: 'Every',
       bars_one: '{{count}} bar',
       bars_other: '{{count}} bars',
@@ -753,9 +765,9 @@ export const practice = {
     // The bar trainer: bars played, then bars muted, to keep time with no click.
     trainer: 'Silent bars',
     trainerInfo:
-      'Tests your own sense of time. The Metronome plays a few bars, then goes quiet for a few while you keep the beat going, and comes back in. If you kept time, you land right on its beat.',
-    played: 'Play',
-    mutedBars: 'Then silent for',
+      'Tests your internal pulse: the Metronome plays a number of bars, then mutes for a number of bars while you keep time, and re-enters on the downbeat.',
+    played: 'Audible',
+    mutedBars: 'Muted',
     bars_one: '{{count}} bar',
     bars_other: '{{count}} bars',
     muted: 'Keep counting',

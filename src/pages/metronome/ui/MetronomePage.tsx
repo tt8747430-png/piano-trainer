@@ -1,23 +1,23 @@
-import { Link } from '@tanstack/react-router'
 import { Hand } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { BeatSquares, useMetronome } from '@/features/metronome'
 import { useShortcuts } from '@/shared/lib/shortcuts'
-import { BPM_RANGE, METRONOME_METERS, type MetronomeMeter } from '@/shared/lib/schedule'
-import { Dropdown, InfoTip, SettingsGroup } from '@/shared/ui'
+import { BPM_RANGE } from '@/shared/lib/schedule'
+import { InfoTip } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { ToolPage } from '@/widgets/tool-page'
-import { MetronomeRow } from './MetronomeRow'
+import { MetronomeSettings } from './MetronomeSettings'
 import { TempoSteps } from './TempoSteps'
 import { TempoWordTip } from './TempoWordTip'
 
 /**
- * The Metronome (ADR 0052), a tool on Practice (R29 B11), on the tools' one layout: the tempo large
- * between its steps and its word, the bar's beats as squares to tap (accent · beat · silent), then the
- * slider with Tap tempo and the time signature; Start floating. How it sounds and its two trainers
- * are its Settings page, off its gear. Space starts and stops it, ↑ ↓ change the tempo by 1, with
- * Shift by 10. What it does is its bar's ⓘ.
+ * The Metronome (ADR 0052), a tool on Practice (R29 B11), on the tools' one layout, every setting in
+ * place as Chordify's (R32): the tempo large between its steps and its word, the bar's beats as
+ * squares to tap (accent · beat · silent), the slider with Tap tempo; then, under it on a phone and
+ * beside it on a laptop, Sound (time signature, sound, subdivision) and Practice aids (the speed
+ * trainer, silent bars); Start floating. No gear: nothing of it is anywhere else. Space starts and
+ * stops it, ↑ ↓ change the tempo by 1, with Shift by 10. What it does is its bar's ⓘ.
  */
 export function MetronomePage() {
   const { t } = useTranslation(['practice', 'common'])
@@ -61,43 +61,12 @@ export function MetronomePage() {
           {t('practice:metronome.info')}
         </InfoTip>
       }
-      settings={<Link to="/practice/metronome/settings" />}
       play={{
         label: t('practice:metronome.start'),
         playing: metronome.playing,
         onToggle: metronome.toggle,
       }}
-      controls={
-        <div className="mx-auto flex w-full max-w-md flex-col gap-6">
-          <div className="flex w-full items-center gap-3" data-setting="metronome.bpm">
-            <Slider
-              value={metronome.tempoNow}
-              min={BPM_RANGE.min}
-              max={BPM_RANGE.max}
-              onValueChange={(bpm) => metronome.setBpm(bpm)}
-              className="min-w-24 flex-1"
-            >
-              <SliderLabel className="sr-only">{t('practice:metronome.slider')}</SliderLabel>
-            </Slider>
-            <Button variant="soft" onClick={metronome.tap} className="shrink-0 rounded-pill">
-              <Hand aria-hidden />
-              {t('practice:metronome.tap')}
-            </Button>
-          </div>
-          <SettingsGroup>
-            <MetronomeRow label={t('practice:metronome.meter')} setting="metronome.meter">
-              <Dropdown<MetronomeMeter>
-                label={t('practice:metronome.meter')}
-                value={metronome.meter}
-                onChange={metronome.setMeter}
-                options={METRONOME_METERS.map((meter) => ({ value: meter, label: meter }))}
-                bare
-                align="end"
-              />
-            </MetronomeRow>
-          </SettingsGroup>
-        </div>
-      }
+      side={<MetronomeSettings metronome={metronome} />}
     >
       <div className="flex flex-col items-center gap-2">
         <TempoSteps bpm={metronome.tempoNow} onStep={metronome.nudge} />
@@ -109,6 +78,21 @@ export function MetronomePage() {
         muted={metronome.muted}
         onTap={metronome.tapBeat}
       />
+      <div className="flex w-full max-w-md items-center gap-3" data-setting="metronome.bpm">
+        <Slider
+          value={metronome.tempoNow}
+          min={BPM_RANGE.min}
+          max={BPM_RANGE.max}
+          onValueChange={(bpm) => metronome.setBpm(bpm)}
+          className="min-w-24 flex-1"
+        >
+          <SliderLabel className="sr-only">{t('practice:metronome.slider')}</SliderLabel>
+        </Slider>
+        <Button variant="soft" onClick={metronome.tap} className="shrink-0 rounded-pill">
+          <Hand aria-hidden />
+          {t('practice:metronome.tap')}
+        </Button>
+      </div>
     </ToolPage>
   )
 }

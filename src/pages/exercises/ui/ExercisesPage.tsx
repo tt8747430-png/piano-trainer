@@ -2,7 +2,6 @@ import { useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { PracticeLibrary } from '@/widgets/practice-library'
-import { SettingsGear } from '@/widgets/practice-pages'
 import { useExerciseLibrary } from '../model/use-exercise-library'
 
 /**
@@ -17,11 +16,7 @@ export function ExercisesPage() {
   const { groups, items } = useExerciseLibrary()
   return (
     <div className="flex flex-col gap-4 pb-4">
-      <ScreenHeader
-        title={t('pages.exercises')}
-        back={<BackButton />}
-        settings={<SettingsGear page="exercises" />}
-      />
+      <ScreenHeader title={t('pages.exercises')} back={<BackButton />} />
       <PracticeLibrary
         kind="exercises"
         view={view}

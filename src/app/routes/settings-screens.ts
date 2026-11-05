@@ -16,11 +16,8 @@ export { AboutPage } from '@/pages/about'
 export {
   AccompanimentSettingsPage,
   ChordFinderSettingsPage,
-  ChordsSettingsPage,
-  IntervalsSettingsPage,
   ProgressionsSettingsPage,
   ScalesSettingsPage,
-  TrainersSettingsPage,
 } from '@/pages/practice-settings'
 export { MidiLogPage } from '@/pages/midi-log'
 export { MidiSettingsPage } from '@/pages/midi-settings'

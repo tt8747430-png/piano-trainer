@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { GapsLink, QUIZ_GROUPS, QUIZ_TRAINERS, TrainerList } from '@/widgets/trainer-list'
-import { SettingsGear } from '@/widgets/practice-pages'
 
 /**
  * Quiz: every trainer, grouped by what it asks, each row opening its trainer as it was left. My gaps,
@@ -11,12 +10,7 @@ export function QuizPage() {
   const { t } = useTranslation('practice')
   return (
     <div className="flex flex-col gap-2">
-      <ScreenHeader
-        title={t('pages.quiz')}
-        back={<BackButton />}
-        tools={<GapsLink />}
-        settings={<SettingsGear page="quiz" />}
-      />
+      <ScreenHeader title={t('pages.quiz')} back={<BackButton />} tools={<GapsLink />} />
       <div className="grid items-start gap-6 lg:grid-cols-2">
         {QUIZ_GROUPS.map((group) => (
           <TrainerList

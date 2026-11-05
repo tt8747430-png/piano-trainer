@@ -287,10 +287,10 @@ describe('A trainer', () => {
     expect(gaps.router.state.location.search).toEqual({ rounds: 20 })
   })
 
-  it('leaves Go on automatically to Exercises and Quiz’s Settings, not its setup (A24, R18)', async () => {
+  it('sets Advance automatically in its setup, its one home (R32)', async () => {
     await renderApp('/practice/quiz/build-scale')
     await screen.findByRole('button', { name: 'Start' })
-    expect(screen.queryByRole('switch', { name: 'Go on automatically' })).not.toBeInTheDocument()
+    expect(screen.getByRole('switch', { name: /Advance automatically/ })).not.toBeChecked()
   })
 
   it('says My gaps has none yet, with a way to a trainer', async () => {
