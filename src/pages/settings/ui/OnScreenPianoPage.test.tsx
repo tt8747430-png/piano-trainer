@@ -8,7 +8,9 @@ describe('Settings › On-screen piano holds the computer keyboard', () => {
     stubMatchMedia({ dark: false, pointer: 'fine' })
     await renderApp('/settings/on-screen-piano')
     expect(await screen.findByRole('region', { name: 'Computer keyboard' })).toBeInTheDocument()
-    expect(screen.getByRole('switch', { name: /Play with computer keyboard/ })).toBeInTheDocument()
+    expect(
+      screen.getByRole('switch', { name: /Play with computer keyboard/ }),
+    ).toBeInTheDocument()
   })
 
   it('hides the computer keyboard on a phone', async () => {

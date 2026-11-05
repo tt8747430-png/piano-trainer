@@ -237,8 +237,12 @@ export const music = {
       page: 'Page view',
       vertical: 'Vertical scroll',
       panorama: 'Panorama',
-      about:
-        'Page view: on A4 pages, as it prints. Vertical scroll: line under line, scrolled down. Panorama: the whole song in one line, scrolled across.',
+      // The layout chosen, said in one line under the tiles (R32).
+      describe: {
+        page: 'Printed A4 pages, as the score will print.',
+        vertical: 'Systems down the screen at full width.',
+        panorama: 'One continuous system that scrolls sideways.',
+      },
     },
     // A staff's own options, inline on its card (ADR 0061).
     fingers: 'Fingers',

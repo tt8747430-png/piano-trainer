@@ -4,7 +4,7 @@ import { cn } from '@/shared/lib'
 
 /**
  * A button in the keyboard's rail: a 44px target whose picture (an `icon`, or the glyph it is given
- * as children) sits on a chip inside the drawn rail at its foot, clear of the rail's edges and of
+ * as children) sits on a chip centred in the rail, clear of the rail's edges and of
  * the next chip. The chip takes the hover, the pressed fill and the focus ring, so none reaches over
  * a key or is cut by the keys' scroller. It is named by its label, which a pointer resting on it
  * reads; `aria-pressed` makes it a toggle, its chip filled while it is on.
@@ -29,7 +29,7 @@ export function RailButton({
       aria-label={label}
       title={title}
       className={cn(
-        'group/rail relative flex min-w-11 shrink-0 flex-col items-center justify-end px-0.5 pb-1 text-on-key-rail outline-none disabled:opacity-40',
+        'group/rail relative flex min-w-11 shrink-0 flex-col items-center justify-center px-0.5 text-on-key-rail outline-none disabled:opacity-40',
         name === undefined ? 'h-11' : 'h-14',
         className,
       )}

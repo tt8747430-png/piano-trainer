@@ -60,3 +60,7 @@ give the keys a box (`stubBox`) and the scroller its metrics (`stubScrolling`).
 - r31 (R31-P) — The rail's box and its buttons (names, chord names, glissando, MIDI sound, the sustain latch) go: the
   strip holds the chord, − +, ⚙ and the pedals drawn from the bench (hold, or tap to lock the sustain); `railControls`
   becomes `pedals` (sustain or all three). The bar under the keys goes (2026-11-05).
+- r32 (R32-A) — Nothing above the keys: the strip becomes the rail beneath them, the pedals centred on a lyre as a
+  piano's (soft · sostenuto · sustain, or the sustain alone), the chord held at its start, ‹ › − + ⚙ at its end; a
+  latched sustain carries a honey dot. The On-screen piano's page is the one home of the keys' settings, the
+  Player's gear a link to it; its options ordered Keys · While you play · Placement, each with its line (2026-11-05).

@@ -1,4 +1,4 @@
-export { Pedal, PedalPaddle } from './Pedal'
+export { Pedal, PedalLyre, PedalPaddle } from './Pedal'
 export { PianoKeyboard } from './PianoKeyboard'
 export { RailButton } from './RailButton'
 export { RailGroup } from './RailGroup'

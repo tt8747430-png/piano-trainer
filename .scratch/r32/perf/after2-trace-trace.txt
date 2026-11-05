@@ -1,0 +1,25 @@
+  9617ms RunTask
+  2791ms LocalFrameView::UpdateStyleAndLayout
+  2778ms FunctionCall
+  2769ms LocalFrameView::RunStyleAndLayoutLifecyclePhases
+  2746ms WebFrameWidgetImpl::UpdateLifecycle
+  2488ms WebFrameWidgetImpl::BeginMainFrame
+  1990ms MessagePort::Accept
+  1829ms EventHandler::handleMouseMoveEvent
+  1796ms LayoutView::HitTest
+  1734ms Blink.Style.UpdateTime
+  1732ms UpdateLayoutTree
+  1662ms Document::updateStyle
+  1645ms Document::recalcStyle
+  1528ms LocalFrameView::RunPaintLifecyclePhase
+  1158ms LocalFrameView::pushPaintArtifactToCompositor
+  1157ms Blink.CompositingCommit.UpdateTime
+  1156ms Layerize
+  1141ms PaintArtifactCompositor::Update
+  1029ms Blink.Layout.UpdateTime
+  1022ms LocalFrameView::layout
+  1021ms Layout
+   774ms RasterTask
+   735ms AsyncTask Run
+   656ms Blink.Animate.UpdateTime
+   654ms PageAnimator::serviceScriptedAnimations

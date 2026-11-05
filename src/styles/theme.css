@@ -89,6 +89,10 @@
   --color-pedal-down: var(--pedal-down);
   --color-pedal-shank: var(--pedal-shank);
   --color-pedal-shank-down: var(--pedal-shank-down);
+  --color-pedal-sheen: var(--pedal-sheen);
+  --color-pedal-lyre: var(--pedal-lyre);
+  --color-pedal-name: var(--pedal-name);
+  --color-pedal-name-down: var(--pedal-name-down);
   --color-key-shade: var(--key-shade);
   --color-key-lip: var(--key-lip);
   --color-key-sheen: var(--key-sheen);
@@ -580,6 +584,11 @@
 @utility min-w-longest-word {
   min-width: min(100%, min-content);
 }
+/* Drawn only in sight (R32): a long score's lines out of view cost no style, layout, paint or hit
+   test. Its height while skipped is the screen's to give (`contain-intrinsic-size` in `style`). */
+@utility drawn-in-sight {
+  content-visibility: auto;
+}
 /* What floats over the page casts a soft shade (`tokens.css`' `--elevation-*`): resting second
    actions, the main action and the transport, a pointer over either. */
 @utility elevation-1 {
@@ -873,6 +882,36 @@
       'status'
       'transport'
       'foot';
+  }
+  /* A laptop's dock is one row (R32): the song tools at its start, the transport centred over it,
+     More at its end. */
+  @media (width >= 80rem) {
+    &:has(> [data-area='transport']):has(> [data-area='foot']) {
+      grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+      grid-template-areas:
+        'bar'
+        'sheet'
+        'status'
+        'keys'
+        'dock';
+    }
+    &[data-keys='top']:has(> [data-area='transport']):has(> [data-area='foot']) {
+      grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+      grid-template-areas:
+        'bar'
+        'keys'
+        'sheet'
+        'status'
+        'dock';
+    }
+    &:has(> [data-area='foot']) > :is([data-area='transport'], [data-area='foot']) {
+      grid-area: dock;
+    }
+    &:has(> [data-area='foot']) > [data-area='transport'] {
+      z-index: 1;
+      justify-self: center;
+      align-self: center;
+    }
   }
   /* On a phone on its side the bar is one row, Wait mode's line in it beside its end group, keeping
      its words (ADR 0108, 0105, 0115). The bar's columns are the screen's, so the line stands in its

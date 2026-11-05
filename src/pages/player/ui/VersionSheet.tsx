@@ -73,7 +73,10 @@ export function VersionSheet({
               <Segmented
                 label={t('version.arrangement')}
                 value={chosen.group}
-                options={groups.map((group) => ({ value: group, label: t(`version.group.${group}`) }))}
+                options={groups.map((group) => ({
+                  value: group,
+                  label: t(`version.group.${group}`),
+                }))}
                 onChange={(group) => onChoose({ group, version: chosen.version })}
               />
             </Labelled>

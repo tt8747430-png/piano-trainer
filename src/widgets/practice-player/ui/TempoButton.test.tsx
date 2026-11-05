@@ -26,11 +26,9 @@ describe('TempoButton', () => {
     expect(screen.getByRole('button', { name: 'Tempo: 75%' })).toBeInTheDocument()
   })
 
-  it('wears its gauge beside the value at every size, the pill sized to fit (ADR 0114)', () => {
+  it('reads as a metronome mark, its share of the piece’s tempo in its name (R32)', () => {
     renderTempo()
-    const gauge = screen.getByRole('button', { name: 'Tempo: 100%' }).querySelector('svg')
-    expect(gauge).not.toBeNull()
-    expect(gauge?.getAttribute('class')).not.toMatch(/:hidden/)
+    expect(screen.getByRole('button', { name: 'Tempo: 100%' })).toHaveTextContent(/= 72$/)
   })
 
   it('chooses a speed, Wait mode the Modes sheet’s (R29 B8)', async () => {

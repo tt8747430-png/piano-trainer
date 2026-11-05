@@ -105,10 +105,9 @@ describe('Settings', () => {
     await renderApp('/settings/on-screen-piano')
     expect(await screen.findByRole('heading', { level: 1, name: 'On-screen piano' })).toBeVisible()
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
-      'Appearance',
-      'Position',
-      'Playing',
-      'Pedals',
+      'Keys',
+      'While you play',
+      'Placement',
     ])
     expect(screen.queryByRole('switch', { name: /^Play with computer keyboard/ })).toBeNull()
   })
@@ -198,10 +197,10 @@ describe('Settings', () => {
     const { settingsStore, router } = await renderApp('/settings/on-screen-piano')
     const keys = await screen.findByRole('radiogroup', { name: 'Key size' })
     await user.click(within(keys).getByRole('radio', { name: 'Large' }))
-    await user.click(screen.getByRole('switch', { name: /^Chord names/ }))
+    await user.click(screen.getByRole('switch', { name: /^Chord symbol/ }))
     const swipe = screen.getByRole('radiogroup', { name: 'Swipe gesture' })
     await user.click(within(swipe).getByRole('radio', { name: 'Glissando' }))
-    // Fold the keys: the two saved folds as one choice of three (R21).
+    // Collapse keyboard: the two saved folds as one choice of three (R21).
     const fold = screen.getByRole('radiogroup', { name: 'Collapse keyboard' })
     expect(within(fold).getByRole('radio', { name: 'In landscape' })).toBeChecked()
     await user.click(within(fold).getByRole('radio', { name: 'Always' }))
@@ -221,15 +220,14 @@ describe('Settings', () => {
     })
   })
 
-  it('says what a keyboard choice does in a popover beside its name, never in a line under it', async () => {
-    const user = userEvent.setup()
+  it('says what each keyboard choice does in one line under its name (R32)', async () => {
     await renderApp('/settings/on-screen-piano')
-    await user.click(await screen.findByRole('button', { name: 'About Key size' }))
-    expect(await screen.findByRole('dialog', { name: 'Key size' })).toHaveTextContent(
-      /across the full width/,
+    expect(
+      await screen.findByText('How many keys fit across the screen; the rest scroll into view.'),
+    ).toBeVisible()
+    expect(screen.getByRole('switch', { name: /^Chord symbol/ })).toHaveAccessibleDescription(
+      'Names the chord you hold at the start of the pedal rail.',
     )
-    await user.keyboard('{Escape}')
-    await waitFor(() => expect(screen.queryByText(/across the full width/)).toBeNull())
   })
 
   it('draws the sustain pedal, or all three, as chosen (R31-P)', async () => {
@@ -252,7 +250,6 @@ describe('Settings', () => {
       '/settings/general',
       '/settings/on-screen-piano',
       '/settings/computer-keys',
-      '/settings/player',
       '/settings/storage',
     ]) {
       const { unmount } = await renderApp(path, { locale: 'ru' })

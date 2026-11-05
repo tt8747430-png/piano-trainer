@@ -76,6 +76,7 @@ export { usePlayKey } from './use-play-key'
 export {
   NO_KEYS,
   Pedal,
+  PedalLyre,
   PedalPaddle,
   PianoKeyboard,
   RailButton,

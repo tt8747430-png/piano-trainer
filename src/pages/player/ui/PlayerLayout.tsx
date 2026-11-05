@@ -13,10 +13,12 @@ import {
   SlidersHorizontal,
 } from 'lucide-react'
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
 import {
   selectKeyboard,
+  selectPlayback,
   selectScoreView,
   selectTipSeen,
   useSettings,
@@ -24,7 +26,7 @@ import {
 } from '@/entities/settings'
 import { retireTip } from '@/features/set-preference'
 import { isMidiConnected, MidiButton, useMidiConnection } from '@/features/connect-midi'
-import { KeyboardSettingsFields, LiveKeyboard } from '@/features/live-keyboard'
+import { LiveKeyboard } from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Recording } from '@/shared/lib/schedule'
 import { ActionMenu, type MenuAction } from '@/shared/ui'
@@ -173,9 +175,11 @@ export function PlayerLayout({
   /** The View open as the screen opens: a piece's, where the learner asks each time (ADR 0108). */
   openView?: boolean
 }) {
-  const { t } = useTranslation(['player', 'songs', 'settings'])
+  const { t } = useTranslation(['player', 'songs', 'settings', 'music', 'common'])
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
+  const keySize = useSettings((state) => selectKeyboard(state).keySize)
+  const countdown = useSettings((state) => selectPlayback(state).countdown)
   const scoreView = useSettings(selectScoreView)
   const { hidden } = player
   const sheetView = useMemo(() => ({ ...scoreView, hidden }), [scoreView, hidden])
@@ -202,8 +206,6 @@ export function PlayerLayout({
   // Print (ADR 0107): the music printed as the View shows it, while its render stands.
   const [printing, setPrinting] = useState(false)
   const [exporting, setExporting] = useState(false)
-  // Settings opened at a page (the piano's ⚙, the View's Display settings…).
-  const [settingsAt, setSettingsAt] = useState<{ readonly page: string } | null>(null)
   // The Settings open as a panel beside the music (a laptop): the screen ends where it starts.
   const [panel, setPanel] = useState(false)
   const [tunerOpen, setTunerOpen] = useState(false)
@@ -256,20 +258,16 @@ export function PlayerLayout({
         id: 'playback',
         label: t('settingsPage.playback'),
         icon: SlidersHorizontal,
+        description: t('settingsPage.about.playback'),
+        value: `${t('settingsPage.countdown.label')}: ${t(`settingsPage.countdown.${countdown}`)}`,
         content: <PlayerPlayback>{playback}</PlayerPlayback>,
-      },
-      // The piano's own page, here in the sheet (R31-P): the app's On-screen piano page, the
-      // same fields, never a second set; opened from the piano's ⚙ too.
-      {
-        id: 'piano',
-        label: t('settingsPage.onScreenPiano'),
-        icon: Piano,
-        content: <KeyboardSettingsFields />,
       },
       {
         id: 'display',
         label: t('settingsPage.display'),
         icon: MonitorCog,
+        description: t('settingsPage.about.display'),
+        value: shown === 'sheet' ? t(`music:sheet.layout.${scoreView.layout}`) : undefined,
         content: (
           <>
             <ViewSection view={shown} words={needs.lyrics !== 'words'} />
@@ -279,9 +277,20 @@ export function PlayerLayout({
         ),
       },
     ],
+    // The on-screen piano's settings have one home, the app's On-screen piano page, for every
+    // keyboard in the app (R32): a link row to it, Back returning to the Player.
+    links: [
+      {
+        id: 'piano',
+        label: t('settingsPage.onScreenPiano'),
+        icon: Piano,
+        description: t('settingsPage.about.piano'),
+        value: t(`common:keyboardSettings.keySize.${keySize}`),
+        render: <Link to="/settings/on-screen-piano" />,
+      },
+    ],
     // Its acts are More's (R31-P): the sheet holds how the Player works, never what it does.
     acts: [],
-    request: settingsAt,
     onPanel: setPanel,
   }
   // The foot's More (R31-P): the music's acts only, in parts: the song's, practice's, the tools,
@@ -379,8 +388,6 @@ export function PlayerLayout({
         // Keys the pedal alone holds, ringed apart from a hand's (A27); the lamp at the rail's end.
         // The score's pedal and the keys it holds while the music sounds; stopped, nothing hangs (R31-P).
         outlined={chordKeys || !playing ? undefined : player.pedalKeys}
-        // Its ⚙ opens the piano's page in this sheet, never the app's (R31-P).
-        onSettings={() => setSettingsAt({ page: 'piano' })}
         // The drawn pedal goes down with the score's while the music plays; stopped, it is up.
         sustained={playing && player.pedalDown}
         onKeyPress={player.tapKey}
@@ -411,13 +418,21 @@ export function PlayerLayout({
         actions={
           <>
             <KeysToggle shown={player.keys} onShow={player.setKeys} />
-            <MidiButton variant="tool" />
+            {/* MIDI only while a keyboard is connected or connecting (R31-P, R32); it is
+                connected from Settings › Connect a piano. */}
+            {isMidiConnected(connection) || connection.kind === 'connecting' ? (
+              <MidiButton variant="tool" />
+            ) : null}
             <SettingsExtrasContext value={extras}>{setup}</SettingsExtrasContext>
           </>
         }
       />
       {dock === 'top' ? keys : null}
       <PlayerArea area="sheet" className="relative">
+        {/* The tip floats over the music's foot, taking no row and covering no control (R32). */}
+        {!coached && !practice.state.playing && !annotating && !takes?.shown ? (
+          <CoachLine mode={view.mode} onClose={() => retireTip(settingsStore, tip)} />
+        ) : null}
         {/* How far through the music the cursor is: a thin line along the score's head. */}
         <div
           role="progressbar"
@@ -473,21 +488,25 @@ export function PlayerLayout({
           />
         )}
       </PlayerArea>
-      <PlayerArea
-        area="status"
-        className="text-center landscape-phone:max-w-[45vw] landscape-phone:self-center"
-      >
-        {!coached && !practice.state.playing && !annotating && !takes?.shown ? (
-          <CoachLine mode={view.mode} onClose={() => retireTip(settingsStore, tip)} />
-        ) : null}
-        {view.mode !== 'listen' ? (
-          <WaitLine feedback={player.feedback} onAgain={practice.play} onLoop={player.setLoop} />
-        ) : null}
-        {status}
-      </PlayerArea>
+      {/* Wait mode's line and what the screen says: a row only while there is something to say,
+          so nothing reserves a band between the music and the keys (R32). */}
+      {view.mode !== 'listen' || status ? (
+        <PlayerArea
+          area="status"
+          className="py-1 text-center landscape-phone:max-w-[45vw] landscape-phone:self-center landscape-phone:py-0"
+        >
+          {view.mode !== 'listen' ? (
+            <WaitLine feedback={player.feedback} onAgain={practice.play} onLoop={player.setLoop} />
+          ) : null}
+          {status}
+        </PlayerArea>
+      ) : null}
       {dock === 'top' ? null : keys}
       {/* The transport in its own row at the foot (R31-P): never floating over the music. */}
-      <PlayerArea area="transport" className="-mx-gutter border-t border-hairline px-gutter">
+      <PlayerArea
+        area="transport"
+        className="-mx-gutter border-t border-hairline px-gutter xl:border-t-0"
+      >
         <div className="mx-auto w-full max-w-xl">
           <PlayerDock
             practice={practice}

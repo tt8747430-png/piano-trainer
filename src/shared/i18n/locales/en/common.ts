@@ -116,11 +116,14 @@ export const common = {
   // What a Play button says while its sound plays.
   stop: 'Stop',
   // The keyboard's rail: its buttons.
-  // The pedals at the end of the keys' strip (R31-P): each one's name under it, and what it is for.
+  // The pedals on their lyre beneath the keys (R32): each one's name under it, and what it does.
   pedals: {
-    sustain: { name: 'Sustain', label: 'Sustain pedal: hold it, or tap to keep it down' },
-    sostenuto: { name: 'Sost.', label: 'Sostenuto pedal: holds the notes down as it is pressed' },
-    soft: { name: 'Soft', label: 'Soft pedal: hold it to play quieter' },
+    sustain: { name: 'Sustain', label: 'Sustain pedal — hold, or tap to latch' },
+    sostenuto: {
+      name: 'Sost.',
+      label: 'Sostenuto pedal — sustains only the notes held as it is pressed',
+    },
+    soft: { name: 'Soft', label: 'Soft pedal (una corda) — softens the tone while held' },
   },
   rail: {
     settings: 'Piano settings',
@@ -132,67 +135,71 @@ export const common = {
     keysInSight: 'Keys in sight',
     showing_one: 'Showing {{count}} key ({{from}}–{{to}})',
     showing_other: 'Showing {{count}} keys ({{from}}–{{to}})',
-    chord: 'Chord played',
+    chord: 'Chord held',
     fold: 'Hide the keys',
     unfold: 'Keys',
     // Each control's name in sight under its picture (R29 A26).
     named: {
-      zoom: 'Zoom',
       hide: 'Hide',
     },
   },
   // The keyboard settings: in the keyboard's rail and in Settings.
   keyboardSettings: {
-    pedals: { label: 'Pedals', sustain: 'Sustain only', all: 'All three' },
+    pedals: {
+      label: 'Pedals',
+      detail: 'Adds the soft and sostenuto pedals beside the sustain.',
+      sustain: 'Sustain only',
+      all: 'All three',
+    },
     keySize: {
       label: 'Key size',
-      detail: 'Fit shows the keys a page needs across the full width; the rest scroll into view',
-      fit: 'Fit',
+      detail: 'How many keys fit across the screen; the rest scroll into view.',
+      fit: 'Fit to music',
       large: 'Large',
-      piano: 'All 88',
+      piano: 'Full keyboard',
     },
     keyLength: {
-      label: 'Key length',
-      detail: 'Short keys leave more of the page visible',
-      long: 'Long',
-      short: 'Short',
+      label: 'Key depth',
+      detail: 'Compact keys leave more of the screen to the score.',
+      long: 'Full',
+      short: 'Compact',
     },
     namedKeys: {
       label: 'Note names',
-      detail: 'Which keys show their note name',
-      c: 'Every C',
-      all: 'Every key',
-      none: 'None',
+      detail: 'Which keys carry their note name.',
+      c: 'On every C',
+      all: 'On every key',
+      none: 'Hidden',
     },
     markNotes: 'Note names on highlighted keys',
-    markNotesNote: 'A chord’s or scale’s keys show their note name under the degree',
-    chordNames: 'Chord names',
-    chordNamesNote: 'The strip above the keys names the chord you are holding',
+    markNotesNote: 'Shows each note’s name beneath its chord tone or scale degree.',
+    chordNames: 'Chord symbol',
+    chordNamesNote: 'Names the chord you hold at the start of the pedal rail.',
     dock: {
       label: 'Position',
-      detail: 'Above the tab bar, or below the page title',
+      detail: 'Where pages dock their keyboard.',
       bottom: 'Bottom',
       top: 'Top',
     },
     fold: {
       label: 'Collapse keyboard',
       detail:
-        'A collapsed keyboard waits behind a Keys button. In landscape: when a phone is turned sideways, in lessons, Practice pages, songs and the editor; the Player has its own setting',
+        'When the keyboard collapses into a Keys button. In landscape applies to lessons, explorers, songs and the editor; the Player manages its own.',
       never: 'Never',
       side: 'In landscape',
       always: 'Always',
     },
     swipe: {
       label: 'Swipe gesture',
-      detail: 'Scrolls the on-screen piano, or plays every key it crosses (glissando)',
+      detail: 'Scrolls the keyboard, or plays every key your finger crosses.',
       scroll: 'Scroll',
       glissando: 'Glissando',
     },
     typing: 'Play with computer keyboard',
-    typingNote: 'The letter keys play the on-screen piano',
+    typingNote: 'The letter keys play the on-screen piano.',
     typingHint: 'Z and X shift the octave · Space holds the sustain pedal',
-    autoplay: 'Play what you choose',
-    autoplayNote: 'A chord or scale chosen on a Practice page sounds immediately',
+    autoplay: 'Play on selection',
+    autoplayNote: 'Chords and scales sound as soon as you select them on a Practice page.',
   },
   // The computer's shortcuts: the sheet, and the groups every screen shares.
   shortcuts: {

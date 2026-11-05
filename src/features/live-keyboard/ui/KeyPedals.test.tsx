@@ -53,4 +53,29 @@ describe('the keys’ pedals (R31-P)', () => {
     expect(screen.getByRole('button', { name: /^Soft pedal/ })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /^Sostenuto pedal/ })).toBeInTheDocument()
   })
+
+  it('stands the pedals on their lyre beneath the keys, soft to sustain as on a piano (R32)', () => {
+    const { settingsStore } = setUp()
+    act(() => setKeyboard(settingsStore, { pedals: 'all' }))
+    const keys = screen.getByRole('group', { name: 'Keyboard' })
+    const lyre = document.querySelector('[data-slot="pedal-lyre"]')
+    if (!lyre) throw new Error('no lyre')
+    // Beneath the keys: the lyre follows them in the document, nothing of the rail before them.
+    expect(keys.compareDocumentPosition(lyre) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(
+      [...lyre.querySelectorAll('[data-slot="pedal"]')].map(
+        (pedal) => pedal.getAttribute('aria-label')?.split(' ')[0],
+      ),
+    ).toEqual(['Soft', 'Sostenuto', 'Sustain'])
+  })
+
+  it('marks a latched sustain with its dot, gone as it lifts (R32)', () => {
+    vi.useFakeTimers()
+    setUp()
+    const pedal = screen.getByRole('button', { name: /^Sustain pedal/ })
+    press(pedal, 80)
+    expect(pedal.querySelector('circle')).not.toBeNull()
+    press(pedal, 80)
+    expect(pedal.querySelector('circle')).toBeNull()
+  })
 })

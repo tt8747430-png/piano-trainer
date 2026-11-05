@@ -36,11 +36,11 @@ const FOLD_SETTINGS: Readonly<Record<Fold, Pick<KeyboardSettings, 'folded' | 'fo
   }
 
 /**
- * The on-screen piano's settings (R21, R22), saved for every on-screen piano, in Settings' groups:
- * Look (key size, key length and note names as pictures of the keys; names on marked keys, chord
- * names), Position (where a page's keys sit, when they fold away), Playing (a swipe, playing what
- * is chosen) and the buttons the bar over the keys holds. Each row's ⓘ says what it does where its
- * name can't (ADR 0096). The computer keys have their own page (`TypingSwitch`).
+ * The on-screen piano's settings (R21, R22, R32), saved for every on-screen piano, ordered by what a
+ * pianist changes most: Keys (size, note names, depth), While you play (the chord symbol, names on
+ * highlighted keys, the pedals, the swipe, play on selection), then Placement (where a page docks
+ * the keys, when they hide). Each option says what it does in one line under its name; choices of
+ * look are pictures of the keys. The computer keys have their own page (`TypingSwitch`).
  */
 export function KeyboardSettingsFields() {
   const { t } = useTranslation(['common', 'settings'])
@@ -53,7 +53,7 @@ export function KeyboardSettingsFields() {
           <PictureChoice
             setting="keyboard.keySize"
             label={t('keyboardSettings.keySize.label')}
-            info={t('keyboardSettings.keySize.detail')}
+            description={t('keyboardSettings.keySize.detail')}
             value={keyboard.keySize}
             options={KEY_SIZES.map((value) => ({
               value,
@@ -63,19 +63,9 @@ export function KeyboardSettingsFields() {
             onChange={(keySize) => setKeyboard(store, { keySize })}
           />
           <PictureChoice
-            setting="keyboard.keyLength"
-            label={t('keyboardSettings.keyLength.label')}
-            value={keyboard.keyLength}
-            options={KEY_LENGTHS.map((value) => ({
-              value,
-              label: t(`keyboardSettings.keyLength.${value}`),
-              picture: <KeyLengthPicture length={value} />,
-            }))}
-            onChange={(keyLength) => setKeyboard(store, { keyLength })}
-          />
-          <PictureChoice
             setting="keyboard.namedKeys"
             label={t('keyboardSettings.namedKeys.label')}
+            description={t('keyboardSettings.namedKeys.detail')}
             value={keyboard.namedKeys}
             options={NAMED_KEYS.map((value) => ({
               value,
@@ -84,55 +74,58 @@ export function KeyboardSettingsFields() {
             }))}
             onChange={(namedKeys) => setKeyboard(store, { namedKeys })}
           />
-          <SwitchRow
-            setting="keyboard.markNotes"
-            label={t('keyboardSettings.markNotes')}
-            info={t('keyboardSettings.markNotesNote')}
-            checked={keyboard.markNotes}
-            onCheckedChange={(markNotes) => setKeyboard(store, { markNotes })}
-          />
-          <SwitchRow
-            setting="keyboard.chordNames"
-            label={t('keyboardSettings.chordNames')}
-            info={t('keyboardSettings.chordNamesNote')}
-            checked={keyboard.chordNames}
-            onCheckedChange={(chordNames) => setKeyboard(store, { chordNames })}
-          />
-        </SettingRows>
-      </SettingsGroup>
-      <SettingsGroup title={t('settings:piano.place')}>
-        <SettingRows>
           <PictureChoice
-            setting="keyboard.dock"
-            label={t('keyboardSettings.dock.label')}
-            value={keyboard.dock}
-            options={KEY_DOCKS.map((value) => ({
+            setting="keyboard.keyLength"
+            label={t('keyboardSettings.keyLength.label')}
+            description={t('keyboardSettings.keyLength.detail')}
+            value={keyboard.keyLength}
+            options={KEY_LENGTHS.map((value) => ({
               value,
-              label: t(`keyboardSettings.dock.${value}`),
-              picture: <DockPicture dock={value} />,
+              label: t(`keyboardSettings.keyLength.${value}`),
+              picture: <KeyLengthPicture length={value} />,
             }))}
-            onChange={(dock) => setKeyboard(store, { dock })}
-          />
-          <PictureChoice
-            setting="keyboard.folded"
-            label={t('keyboardSettings.fold.label')}
-            info={t('keyboardSettings.fold.detail')}
-            value={foldOf(keyboard)}
-            options={FOLDS.map((value) => ({
-              value,
-              label: t(`keyboardSettings.fold.${value}`),
-              picture: <FoldPicture fold={value} />,
-            }))}
-            onChange={(fold) => setKeyboard(store, FOLD_SETTINGS[fold])}
+            onChange={(keyLength) => setKeyboard(store, { keyLength })}
           />
         </SettingRows>
       </SettingsGroup>
       <SettingsGroup title={t('settings:piano.play')}>
         <SettingRows>
+          <SwitchRow
+            setting="keyboard.chordNames"
+            label={t('keyboardSettings.chordNames')}
+            description={t('keyboardSettings.chordNamesNote')}
+            checked={keyboard.chordNames}
+            onCheckedChange={(chordNames) => setKeyboard(store, { chordNames })}
+          />
+          <SwitchRow
+            setting="keyboard.markNotes"
+            label={t('keyboardSettings.markNotes')}
+            description={t('keyboardSettings.markNotesNote')}
+            checked={keyboard.markNotes}
+            onCheckedChange={(markNotes) => setKeyboard(store, { markNotes })}
+          />
+          <PictureChoice
+            setting="keyboard.pedals"
+            label={t('keyboardSettings.pedals.label')}
+            description={t('keyboardSettings.pedals.detail')}
+            value={keyboard.pedals}
+            options={PEDALS_SHOWN.map((value) => ({
+              value,
+              label: t(`keyboardSettings.pedals.${value}`),
+              picture: (
+                <span className="flex items-end gap-0.5">
+                  {Array.from({ length: value === 'all' ? 3 : 1 }, (_, at) => (
+                    <PedalPaddle key={at} down={false} className="h-5 w-7" />
+                  ))}
+                </span>
+              ),
+            }))}
+            onChange={(pedals) => setKeyboard(store, { pedals })}
+          />
           <PictureChoice
             setting="keyboard.swipe"
             label={t('keyboardSettings.swipe.label')}
-            info={t('keyboardSettings.swipe.detail')}
+            description={t('keyboardSettings.swipe.detail')}
             value={keyboard.swipe}
             options={SWIPES.map((value) => ({
               value,
@@ -144,30 +137,37 @@ export function KeyboardSettingsFields() {
           <SwitchRow
             setting="keyboard.autoplay"
             label={t('keyboardSettings.autoplay')}
-            info={t('keyboardSettings.autoplayNote')}
+            description={t('keyboardSettings.autoplayNote')}
             checked={keyboard.autoplay}
             onCheckedChange={(autoplay) => setKeyboard(store, { autoplay })}
           />
         </SettingRows>
       </SettingsGroup>
-      <SettingsGroup title={t('settings:piano.pedals')}>
+      <SettingsGroup title={t('settings:piano.place')}>
         <SettingRows>
           <PictureChoice
-            setting="keyboard.pedals"
-            label={t('keyboardSettings.pedals.label')}
-            value={keyboard.pedals}
-            options={PEDALS_SHOWN.map((value) => ({
+            setting="keyboard.dock"
+            label={t('keyboardSettings.dock.label')}
+            description={t('keyboardSettings.dock.detail')}
+            value={keyboard.dock}
+            options={KEY_DOCKS.map((value) => ({
               value,
-              label: t(`keyboardSettings.pedals.${value}`),
-              picture: (
-                <span className="flex gap-0.5">
-                  {Array.from({ length: value === 'all' ? 3 : 1 }, (_, at) => (
-                    <PedalPaddle key={at} down={false} className="h-6 w-7" />
-                  ))}
-                </span>
-              ),
+              label: t(`keyboardSettings.dock.${value}`),
+              picture: <DockPicture dock={value} />,
             }))}
-            onChange={(pedals) => setKeyboard(store, { pedals })}
+            onChange={(dock) => setKeyboard(store, { dock })}
+          />
+          <PictureChoice
+            setting="keyboard.folded"
+            label={t('keyboardSettings.fold.label')}
+            description={t('keyboardSettings.fold.detail')}
+            value={foldOf(keyboard)}
+            options={FOLDS.map((value) => ({
+              value,
+              label: t(`keyboardSettings.fold.${value}`),
+              picture: <FoldPicture fold={value} />,
+            }))}
+            onChange={(fold) => setKeyboard(store, FOLD_SETTINGS[fold])}
           />
         </SettingRows>
       </SettingsGroup>
@@ -184,12 +184,8 @@ export function TypingSwitch() {
     <SwitchRow
       setting="keyboard.typing"
       label={t('keyboardSettings.typing')}
-      info={
-        <>
-          <p>{t('keyboardSettings.typingNote')}</p>
-          <p>{t('keyboardSettings.typingHint')}</p>
-        </>
-      }
+      description={t('keyboardSettings.typingNote')}
+      info={t('keyboardSettings.typingHint')}
       checked={typing}
       onCheckedChange={(on) => setKeyboard(store, { typing: on })}
     />

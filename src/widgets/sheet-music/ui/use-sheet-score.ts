@@ -43,8 +43,11 @@ export function useSheetScore(
     }),
     [written],
   )
-  const kept = score.staves.filter((staff) => !hidden.includes(staff))
-  const staves = kept.length > 0 ? kept : score.staves
+  // Held while the score and the staves hidden stay, so the sheet's memoised lines stay still (R32).
+  const staves = useMemo(() => {
+    const kept = score.staves.filter((staff) => !hidden.includes(staff))
+    return kept.length > 0 ? kept : score.staves
+  }, [score, hidden])
   const named = useStaffLabels(
     staves,
     staffNames.map((text) => (text === undefined ? undefined : { text })),

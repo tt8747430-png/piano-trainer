@@ -23,9 +23,9 @@ const NOTHING: ReadonlySet<Midi> = new Set()
  * The keyboard every screen shows, set up as the learner chose (the keyboard settings): a key goes
  * down while the app sounds it, a MIDI keyboard holds it, or a finger or a typed key presses it;
  * a tapped or typed key sounds while it is held (on under the pedal) and before it does whatever
- * else the screen makes it mean. Its strip (R31-P) is slim and holds no settings: the chord a hand
- * holds, the keys' size (− +), ⚙ to the piano's own settings (`onSettings`: the screen's sheet, else
- * the app's page), and at its end the pedals, drawn as a piano's. With chord names on, the strip names the chord a
+ * else the screen makes it mean. Nothing stands above its keys (R32): its rail beneath them holds the
+ * chord a hand holds, the pedals centred on their lyre as a piano's, the keys' size (− +) and ⚙ to the
+ * piano's own settings (`onSettings`: the screen's sheet, else the app's page). With chord names on, the strip names the chord a
  * hand holds (three notes or more, held or on under the pedal; never what the app sounds). Unless the
  * screen says which keys to keep in sight, it follows the keys the app sounds. With `spotlight`,
  * the keys the app puts down are the ones struck last: an arpeggio's or a run's key alone, a
@@ -153,12 +153,8 @@ export function LiveKeyboard({
       keyPlays={keyPlays}
       onKeyPress={play}
       onKeyRelease={letGo}
-      railEnd={
-        <>
-          <KeyPedals sustained={sustained} />
-          {railEnd}
-        </>
-      }
+      pedals={<KeyPedals sustained={sustained} />}
+      railEnd={railEnd}
     >
       <RailGroup>
         <KeyZoom />

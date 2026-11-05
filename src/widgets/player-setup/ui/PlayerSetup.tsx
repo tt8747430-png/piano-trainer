@@ -1,4 +1,3 @@
-import type { LucideIcon } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -11,20 +10,19 @@ import {
   type AccompanimentChoice,
   type PatternFit,
 } from '@/entities/pattern'
-import { BackButton, RowButton, SettingsGroup } from '@/shared/ui'
+import { BackButton } from '@/shared/ui'
 import type { FigureChange } from '../model/setup-params'
 import { FigurePage } from './FigurePage'
 import { PatternPage } from './PatternPage'
 import { SettingsSheet } from './SettingsSheet'
 import { SetupContext, type SetupPage } from './setup-context'
+import type { SettingsRow } from './setup-extras'
 
-/** A page of the music's own choices (R31-P: a song's Staves, its Accompaniment), a row on the first. */
-export interface MusicPage {
-  readonly id: string
-  readonly label: string
-  readonly icon: LucideIcon
-  /** What it is set to, under its name (Staves: the ones playing). */
-  readonly detail?: string | undefined
+/**
+ * A page of the music's own choices (R31-P: a song's Staves, its Accompaniment): a row on the first
+ * page, ranked among the Player's own (R32), with what it controls and what it is set to.
+ */
+export interface MusicPage extends SettingsRow {
   readonly content: ReactNode
 }
 
@@ -144,26 +142,10 @@ export function PlayerSetup({
         setFrom('main')
       }}
       inner={inner}
+      music={pages}
     >
       <SetupContext value={{ figures, fit, openPage, onFigures }}>
         <div ref={main} className="flex flex-col gap-5">
-          {pages.length > 0 ? (
-            <SettingsGroup flush>
-              {pages.map(({ id, label, icon, detail }) => (
-                <RowButton
-                  key={id}
-                  title={label}
-                  detail={detail}
-                  icon={icon}
-                  paint="lilac"
-                  onClick={() => {
-                    setOpened(null)
-                    setPage(id)
-                  }}
-                />
-              ))}
-            </SettingsGroup>
-          ) : null}
           {children}
         </div>
       </SetupContext>

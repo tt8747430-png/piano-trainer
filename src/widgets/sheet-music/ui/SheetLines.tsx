@@ -13,10 +13,10 @@ import {
   type StaffId,
   type StaffLabels,
 } from '@/shared/lib/notation'
-import { labelRow, ScoreView, scoreHeight, type Picked } from '@/shared/ui/score'
+import { labelRow, scoreHeight, type Picked } from '@/shared/ui/score'
 import { FINGERS, systemFit } from '../model/fit-scale'
 import { scoreLines, type ScoreLine } from '../model/score-lines'
-import { SheetOverlay } from './SheetOverlay'
+import { ELSEWHERE, SheetLine } from './SheetLine'
 import { LINE_GAP, SheetPages } from './SheetPages'
 
 /** A line's engraving on a screen this wide is at its own size; narrower, smaller, down to the least. */
@@ -131,49 +131,45 @@ export function SheetLines({
     [score, performance, room, widths, layout?.barsPerLine],
   )
 
+  // The beat group's line: only it and the line just left render as the music moves on (R32).
+  const playingBar = performance.beatGroups[current]?.bar
+  const onLine = (each: ScoreLine) =>
+    playingBar !== undefined &&
+    playingBar >= each.first &&
+    playingBar < each.first + each.score.measures.length
   // A line the playhead comes onto comes into sight: the playhead brings its line (ADR 0096).
-  const line = (each: ScoreLine) => (
-    <div
-      key={each.first}
-      data-slot="sheet-line"
-      className="relative scroll-my-4"
-      style={{ paddingTop: labels }}
-    >
-      <ScoreView
-        score={each.score}
+  const line = (each: ScoreLine) => {
+    const here = onLine(each)
+    return (
+      <SheetLine
+        key={each.first}
+        line={each}
+        labels={labels}
+        height={scoreHeight(each.score, staves) * scale}
         scale={scale}
         fingers={fingers}
         names={names}
         muted={muted}
         staves={staves}
-        timeBefore={each.timeBefore}
-        next={each.next}
-        labels={each.first === 0 ? staffNames : undefined}
+        staffNames={each.first === 0 ? staffNames : undefined}
         fill={inner > 0 ? inner : undefined}
         selected={selected}
-      >
-        {(layout) => (
-          <SheetOverlay
-            layout={layout}
-            performance={performance}
-            headings={headings}
-            positions={positions}
-            chordNames={chordNames}
-            tempos={tempos}
-            current={current}
-            clock={clock}
-            loop={loop}
-            playheadShown={playheadShown}
-            onJump={onJump}
-            onPick={onPick}
-            onLoopChange={onLoopChange}
-            onChoose={onChoose}
-            firstBar={each.first}
-          />
-        )}
-      </ScoreView>
-    </div>
-  )
+        performance={performance}
+        headings={headings}
+        positions={positions}
+        chordNames={chordNames}
+        tempos={tempos}
+        current={here ? current : ELSEWHERE}
+        clock={here ? clock : null}
+        loop={loop}
+        playheadShown={playheadShown}
+        onJump={onJump}
+        onPick={onPick}
+        onLoopChange={onLoopChange}
+        onChoose={onChoose}
+      />
+    )
+  }
 
   if (!pages)
     return (

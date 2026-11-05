@@ -592,8 +592,8 @@ describe('Diagrams (ADR 0108)', () => {
     const user = userEvent.setup()
     await inView('diagrams', '/play/silent')
     await user.click(await screen.findByRole('button', { name: 'Player settings' }))
-    await user.click(await screen.findByRole('button', { name: 'Display' }))
-    const menu = await screen.findByRole('dialog', { name: 'Display' })
+    await user.click(await screen.findByRole('button', { name: /^Score view/ }))
+    const menu = await screen.findByRole('dialog', { name: 'Score view' })
     const mode = within(within(menu).getByRole('region', { name: 'Diagrams' })).getByRole(
       'radiogroup',
       { name: 'Mode' },

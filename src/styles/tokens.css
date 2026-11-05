@@ -206,6 +206,11 @@
   --pedal-down: #a8822f;
   --pedal-shank: #8a6a28;
   --pedal-shank-down: #6b4f18;
+  /* The plate's highlight, the lyre the pedals rise from, and their names on it (R32). */
+  --pedal-sheen: #f3dea4;
+  --pedal-lyre: var(--p-black-key);
+  --pedal-name: #cbbfae;
+  --pedal-name-down: #f3dea4;
   --key-shade: color-mix(in oklab, var(--p-ink) 7%, transparent);
   --key-lip: color-mix(in oklab, var(--p-ink) 5%, transparent);
   --key-sheen: color-mix(in oklab, var(--p-white) 12%, transparent);
@@ -284,6 +289,10 @@
     --pedal-down: #8f6c26;
     --pedal-shank: #a07c32;
     --pedal-shank-down: #e0c27c;
+    --pedal-sheen: #e8cf8f;
+    --pedal-lyre: #1d1916;
+    --pedal-name: #b5aca1;
+    --pedal-name-down: #e8cf8f;
     --mark-wash: 50%;
   }
 }

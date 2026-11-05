@@ -27,9 +27,8 @@ export const settings: LocaleResources['settings'] = {
     guide: 'Руководство',
     feedback: 'Сообщить о проблеме',
     about: 'О приложении',
-    player: 'Плеер',
   },
-  piano: { look: 'Оформление', place: 'Расположение', play: 'Игра', pedals: 'Педали' },
+  piano: { look: 'Клавиши', place: 'Размещение', play: 'Во время игры' },
   progress: {
     reset: 'Сбросить прогресс',
     title: 'Сбросить прогресс?',
