@@ -84,7 +84,7 @@ export function TitleField({ place }: { place: TitlePlace }) {
               settled.current = false
               setTyped(meta.title)
             }}
-            className="max-w-full cursor-text rounded-control px-1 text-balance wrap-break-word transition-colors duration-200 ease-out hover:bg-foreground/5"
+            className="inline-flex min-h-11 max-w-full cursor-text items-center justify-center rounded-control px-1 text-balance wrap-break-word transition-colors duration-200 ease-out hover:bg-foreground/5"
           >
             {meta.title}
           </button>
