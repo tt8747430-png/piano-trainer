@@ -1,4 +1,3 @@
-import { ArrowDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { pieceStage } from '@/entities/course'
 import { selectSort, useLibrary, type LibrarySort } from '@/entities/library'
@@ -8,7 +7,7 @@ import { pieceStepId, StageMark } from '@/entities/step'
 import { useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { keySymbol, printedSymbol } from '@/shared/lib/music'
-import { LearnedBadge } from '@/shared/ui'
+import { LearnedBadge, SortHeading, TABLE_CELL } from '@/shared/ui'
 import { FavouriteMark, menuOf, RowMore, useCardLook } from '@/widgets/song-library'
 import type { LibraryPage } from '../model/use-library-page'
 import { songActions } from './row-actions'
@@ -20,34 +19,22 @@ const SORTED_BY: Partial<Record<'title' | 'key' | 'played', LibrarySort>> = {
   played: 'recent',
 }
 
-const CELL = 'px-3 py-2 text-start align-middle'
+const CELL = TABLE_CELL
 
-function SortHeading({
+/** A heading of a column the library sorts by: tapped while sorted, back to the learner's own order. */
+function SongSortHeading({
   column,
   label,
   page,
-  className,
 }: {
   column: 'title' | 'key' | 'played'
   label: string
   page: LibraryPage
-  className?: string
 }) {
   const sort = useLibrary(selectSort)
-  const by = SORTED_BY[column]
+  const by = SORTED_BY[column] ?? 'manual'
   const on = sort === by
-  return (
-    <th scope="col" aria-sort={on ? 'ascending' : 'none'} className={cn(CELL, className)}>
-      <button
-        type="button"
-        onClick={() => page.setSort(on ? 'manual' : (by ?? 'manual'))}
-        className="-mx-2 inline-flex min-h-9 items-center gap-1 rounded-control px-2 font-semibold hover:bg-muted"
-      >
-        {label}
-        {on ? <ArrowDown aria-hidden className="size-3.5" /> : null}
-      </button>
-    </th>
-  )
+  return <SortHeading label={label} on={on} onSort={() => page.setSort(on ? 'manual' : by)} />
 }
 
 /** The date a song was played last, as the learner's language writes a day. */
@@ -142,8 +129,10 @@ export function SongTable({ entries, page }: { entries: readonly Entry[]; page: 
       <caption className="sr-only">{t('songs:title')}</caption>
       <thead className="border-b border-border text-sm text-muted-foreground">
         <tr>
-          <SortHeading column="title" label={t('songs:table.title')} page={page} />
-          {show.key ? <SortHeading column="key" label={t('music:key.label')} page={page} /> : null}
+          <SongSortHeading column="title" label={t('songs:table.title')} page={page} />
+          {show.key ? (
+            <SongSortHeading column="key" label={t('music:key.label')} page={page} />
+          ) : null}
           {show.chords ? (
             <th scope="col" className={cn(CELL, 'font-semibold')}>
               {t('songs:table.chords')}
@@ -159,7 +148,7 @@ export function SongTable({ entries, page }: { entries: readonly Entry[]; page: 
               {t('common:learned.done')}
             </th>
           ) : null}
-          <SortHeading column="played" label={t('songs:table.played')} page={page} />
+          <SongSortHeading column="played" label={t('songs:table.played')} page={page} />
           <th scope="col" className={CELL}>
             <span className="sr-only">{t('songs:table.actions')}</span>
           </th>

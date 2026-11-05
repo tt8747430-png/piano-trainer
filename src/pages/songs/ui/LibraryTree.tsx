@@ -13,18 +13,10 @@ import {
   type ShelvedFolder,
 } from '@/entities/library'
 import { cn } from '@/shared/lib'
-import { PAINT } from '@/shared/ui'
+import { PAINT, TREE_ITEM, TreeCount, TreeHeading, TreeItem, TreeList } from '@/shared/ui'
 
 /** Where the learner is in the library, as the tree marks it. */
 export type TreePlace = 'all' | 'favourites' | FolderId
-
-const ITEM =
-  'flex min-h-10 min-w-0 flex-1 items-center gap-2.5 rounded-control px-2 text-[0.9375rem] font-medium text-foreground transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3 aria-[current=page]:bg-chosen aria-[current=page]:font-semibold'
-
-/** A count at a row's end, in soft ink. */
-const Count = ({ n }: { n: number }) => (
-  <span className="ms-auto ps-2 text-sm font-normal text-muted-foreground tabular-nums">{n}</span>
-)
 
 /** A small tile of a folder's picture on its paint, the tree's size. */
 function FolderSwatch({ folder }: { folder: ShelvedFolder }) {
@@ -46,7 +38,7 @@ function FolderSwatch({ folder }: { folder: ShelvedFolder }) {
 function Place({
   to,
   favourites = false,
-  icon: Icon,
+  icon,
   label,
   count,
   current,
@@ -59,21 +51,21 @@ function Place({
   current: boolean
 }) {
   return (
-    <li className="flex">
-      <Link
-        to={to}
-        search={to === '/songs' ? (favourites ? { favourites: true } : {}) : undefined}
-        // The tree marks the place itself: the router's own mark would light All songs in a folder.
-        activeOptions={{ exact: true, includeSearch: true }}
-        activeProps={{}}
-        aria-current={current ? 'page' : undefined}
-        className={ITEM}
-      >
-        <Icon aria-hidden className="size-4.5 shrink-0 text-muted-foreground" />
-        <span className="min-w-0 truncate">{label}</span>
-        <Count n={count} />
-      </Link>
-    </li>
+    <TreeItem
+      icon={icon}
+      label={label}
+      count={count}
+      current={current}
+      render={
+        <Link
+          to={to}
+          search={to === '/songs' ? (favourites ? { favourites: true } : {}) : undefined}
+          // The tree marks the place itself: the router's own mark would light All songs in a folder.
+          activeOptions={{ exact: true, includeSearch: true }}
+          activeProps={{}}
+        />
+      }
+    />
   )
 }
 
@@ -107,7 +99,7 @@ export function LibraryTree({ current, extra }: { current: TreePlace; extra?: Re
     const folders = childFolders(layout.folders, parent)
     if (folders.length === 0) return null
     return (
-      <ul className="flex flex-col gap-0.5">
+      <TreeList>
         {folders.map((folder) => {
           const nested = childFolders(layout.folders, folder.id).length > 0
           const unfolded = nested && (open.has(folder.id) || path.includes(folder.id))
@@ -142,23 +134,23 @@ export function LibraryTree({ current, extra }: { current: TreePlace; extra?: Re
                   to="/songs/folders/$folderId"
                   params={{ folderId: folder.id }}
                   aria-current={current === folder.id ? 'page' : undefined}
-                  className={ITEM}
+                  className={TREE_ITEM}
                 >
                   <FolderSwatch folder={folder} />
                   <span className="min-w-0 truncate">{name}</span>
-                  <Count n={folder.songs.length} />
+                  <TreeCount n={folder.songs.length} />
                 </Link>
               </div>
               {unfolded ? branch(folder.id, depth + 1) : null}
             </li>
           )
         })}
-      </ul>
+      </TreeList>
     )
   }
   return (
     <nav aria-label={t('tree.label')} className="flex flex-col gap-1">
-      <ul className="flex flex-col gap-0.5">
+      <TreeList>
         <Place
           to="/songs"
           icon={Music}
@@ -174,13 +166,11 @@ export function LibraryTree({ current, extra }: { current: TreePlace; extra?: Re
           count={favourites}
           current={current === 'favourites'}
         />
-      </ul>
-      <h2 className="px-2 pt-4 pb-1 font-sans text-xs font-semibold text-muted-foreground">
-        {t('tree.folders')}
-      </h2>
+      </TreeList>
+      <TreeHeading>{t('tree.folders')}</TreeHeading>
       {branch(null, 0)}
       {extra}
-      <ul className="mt-4 flex flex-col gap-0.5">
+      <TreeList className="mt-4">
         <Place
           to="/songs/archive"
           icon={Archive}
@@ -188,7 +178,7 @@ export function LibraryTree({ current, extra }: { current: TreePlace; extra?: Re
           count={layout.archive.length}
           current={false}
         />
-      </ul>
+      </TreeList>
     </nav>
   )
 }
