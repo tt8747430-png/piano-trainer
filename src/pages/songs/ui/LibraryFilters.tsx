@@ -23,11 +23,14 @@ export function LibraryFilters({
   page,
   filter,
   screen,
+  sortInHeadings = false,
 }: {
   page: LibraryPage
   filter: SongsFilter
   /** The screen's name, for the search's. */
   screen: string
+  /** The table's headings sort (a laptop's two panes): no sort joined to the search. */
+  sortInHeadings?: boolean
 }) {
   const { t } = useTranslation('songs')
   const set = useSetSearch<SongsFilter>()
@@ -41,7 +44,9 @@ export function LibraryFilters({
             label={t('search')}
             hint={t('searchHint')}
             screen={screen}
-            end={<SortChoice value={page.sort} onChange={page.setSort} />}
+            end={
+              sortInHeadings ? undefined : <SortChoice value={page.sort} onChange={page.setSort} />
+            }
           />
         </div>
         <FilterSheet page={page} filter={filter} />

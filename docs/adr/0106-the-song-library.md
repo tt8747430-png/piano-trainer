@@ -78,3 +78,8 @@ A study, practised on Practice, is in no library. A folder played song after son
 - r30 — A folder is edited in place: its ✎ beside its name (or a folder row's Edit folder) opens its name, picture and
   paint under the bar (`?edit=true`, `FolderEditPanel`), Done saving them; the Edit folder sheet and Settings' Name and
   look go. Songs' bar: Select, Archive with its count, and More holding Card style (2026-11-05).
+- r30 (S2) — From 64rem the library is two panes: the tree on the left (All songs, Favourites, the folders nested and
+  folded, the Archive; `LibraryTree`), the place's songs on the right as a table (`SongTable`) whose headings sort
+  (Title, Key, Last played; again, the learner's order) and whose columns follow the place's Card style. Home lists
+  every song there (`libraryView`'s `tree`), a folder its own; the folders are the tree's. A phone keeps the list
+  (2026-11-05).

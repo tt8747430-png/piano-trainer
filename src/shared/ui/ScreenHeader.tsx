@@ -9,7 +9,7 @@ import { usePageHeading } from './use-page-heading'
 /**
  * A screen's Edit (iOS's Edit · Done, Notion's in-place edit): the pencil right after the title, so it
  * reads as "edit this"; while editing, Done in its place, so the control never moves between modes.
- * The screen enters Edit in place.
+ * The screen enters Edit in place; it passes only the acts that apply while editing.
  */
 export interface EditAction {
   readonly editing: boolean

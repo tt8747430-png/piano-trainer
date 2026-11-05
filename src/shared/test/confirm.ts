@@ -5,7 +5,8 @@ import { expect } from 'vitest'
 /**
  * Answers the app's question (`confirm`, R17) with its act, checking the question asked where
  * `title` says it. The act is pressed once the question has settled open, and the question is
- * waited out: under a full suite's load an act pressed mid-opening can be lost.
+ * waited out: under a full suite's load an act pressed mid-opening can be lost, and the question can
+ * take longer than a second to leave.
  */
 export async function confirmAsked(
   user: ReturnType<typeof userEvent.setup>,
@@ -16,5 +17,5 @@ export async function confirmAsked(
   expect(dialog).toBeInTheDocument()
   await waitFor(() => expect(dialog).not.toHaveAttribute('data-starting-style'))
   await user.click(within(dialog).getByRole('button', { name: action }))
-  await waitFor(() => expect(dialog).not.toBeInTheDocument())
+  await waitFor(() => expect(dialog).not.toBeInTheDocument(), { timeout: 5000 })
 }

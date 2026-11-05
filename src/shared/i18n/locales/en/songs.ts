@@ -224,6 +224,22 @@ export const songs = {
     description: 'Make a song, or restore what you archived.',
   },
   // The archive (ADR 0106, Mindscape's): what was archived, to restore.
+  // The laptop's library tree (R30 S2), Apple Music's sidebar.
+  // The laptop's table of songs (R30 S2): its headings.
+  table: {
+    title: 'Title',
+    chords: 'Chords',
+    level: 'Level',
+    played: 'Last played',
+    actions: 'Actions',
+  },
+  tree: {
+    label: 'Library',
+    all: 'All songs',
+    folders: 'Folders',
+    unfold: 'Show the folders in {{name}}',
+    fold: 'Hide the folders in {{name}}',
+  },
   archive: {
     title: 'Archive',
     openCount: 'Archive: {{count}}',

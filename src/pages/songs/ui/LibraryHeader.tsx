@@ -77,15 +77,18 @@ export function LibraryHeader({
           />
         ) : undefined
       }
+      // While the folder is in Edit only Done stands beside its name: Select and its Settings wait.
       tools={
-        <>
-          <RoundButton
-            label={t('select.start')}
-            icon={ListChecks}
-            onClick={() => page.select.start()}
-          />
-          {folder ? null : <ArchiveButton />}
-        </>
+        edit?.editing ? null : (
+          <>
+            <RoundButton
+              label={t('select.start')}
+              icon={ListChecks}
+              onClick={() => page.select.start()}
+            />
+            {folder ? null : <ArchiveButton />}
+          </>
+        )
       }
       // Home's Card style (R29 B9), Home's own: a folder's is on its Settings page.
       more={
@@ -105,7 +108,7 @@ export function LibraryHeader({
       edit={edit}
       // A folder's own settings (name, look, place, Archive, Delete) are its Settings page.
       settings={
-        folder ? (
+        folder && !edit?.editing ? (
           <RoundLink
             label={t('folder.openSettings', { name })}
             icon={Settings}

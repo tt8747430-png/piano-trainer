@@ -53,7 +53,12 @@ export type Pending =
  * what it shows under the filters and the sort, Select and what it does to the rows chosen, the
  * order dragged, and what the page has open over it.
  */
-export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter) {
+export function useLibraryPage(
+  folder: ShelvedFolder | null,
+  filter: SongsFilter,
+  /** Beside the library's tree (a laptop's two panes): the folders are the tree's. */
+  { tree = false }: { tree?: boolean } = {},
+) {
   const { t } = useTranslation('songs')
   const locale = useLocale()
   const store = useLibraryStoreApi()
@@ -73,16 +78,23 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
 
   const view = useMemo(() => {
     const compare = new Intl.Collator(locale).compare
-    return libraryView(layout, folder?.id ?? null, filter, sort, {
-      entryOf: (id) => repertoire.entry(id),
-      titleOf: (entry) => entryTitles(entry, locale).primary,
-      folderName,
-      favourites: new Set(favourites),
-      opened: byLastOpened(practised),
-      compare,
-      home: t('library.home'),
-    })
-  }, [layout, folder, filter, sort, repertoire, locale, folderName, favourites, practised, t])
+    return libraryView(
+      layout,
+      folder?.id ?? null,
+      filter,
+      sort,
+      {
+        entryOf: (id) => repertoire.entry(id),
+        titleOf: (entry) => entryTitles(entry, locale).primary,
+        folderName,
+        favourites: new Set(favourites),
+        opened: byLastOpened(practised),
+        compare,
+        home: t('library.home'),
+      },
+      { tree },
+    )
+  }, [layout, folder, filter, sort, repertoire, locale, folderName, favourites, practised, t, tree])
 
   // Every row on screen, in order: what Select all chooses.
   const rows: Chosen[] = [

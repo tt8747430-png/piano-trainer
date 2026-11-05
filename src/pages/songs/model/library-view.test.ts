@@ -53,6 +53,28 @@ const ids = (groups: ReturnType<typeof view>['groups']) =>
 const songsOf = (id: string) => SONG_COLLECTIONS.find((c) => c.id === id)?.entries ?? []
 
 describe('libraryView', () => {
+  it('on a laptop lists every song at Home in one list, the tree holding the folders', () => {
+    const all = libraryView(layout, null, NONE, 'manual', lookups, { tree: true })
+    expect(all.folders).toEqual([])
+    expect(all.groups).toHaveLength(1)
+    expect(ids(all.groups)).toEqual(SONG_COLLECTIONS.flatMap((c) => c.entries.map((e) => e.id)))
+    expect(all.hidden).toBe(0)
+  })
+
+  it('on a laptop lists a folder’s own songs, its folders in the tree', () => {
+    const inHymns = libraryView(nestedLayout, 'hymns', NONE, 'manual', lookups, { tree: true })
+    expect(inHymns.folders).toEqual([])
+    expect(ids(inHymns.groups)).toEqual(songsOf('hymns').map((e) => e.id))
+  })
+
+  it('on a laptop narrows every song at Home, in one list', () => {
+    const found = libraryView(layout, null, { ...NONE, favourites: true }, 'manual', lookups, {
+      tree: true,
+    })
+    expect(found.groups).toHaveLength(1)
+    expect(ids(found.groups).toSorted()).toEqual(['bz5', 'silent'])
+  })
+
   it('shows Home’s folders, then its own songs, hiding nothing while nothing filters', () => {
     const home = view()
     expect(home.folders.map((each) => each.folder.id)).toEqual(SONG_COLLECTIONS.map((c) => c.id))

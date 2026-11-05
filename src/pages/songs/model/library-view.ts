@@ -106,6 +106,9 @@ export function sortSongs(
  * then its own songs, each in the sort's order. While the filters narrow, they look through all the
  * place holds, its folders' folders too: the songs that match under their folders' paths from it
  * (its own last, under its name), and the folders whose names match the search.
+ *
+ * Beside the library's tree (`tree`, a laptop's two panes) the folders are the tree's: Home lists every
+ * song in one list (All songs), a folder its own songs, each narrowed by the filters in one list.
  */
 export function libraryView(
   layout: LibraryLayout,
@@ -113,6 +116,7 @@ export function libraryView(
   filter: SongsFilter,
   sort: LibrarySort,
   lookups: ViewLookups,
+  { tree = false }: { tree?: boolean } = {},
 ): LibraryView {
   const keeps = (entry: Entry) =>
     (filter.stage === 'any' || pieceStage(entry.id) === filter.stage) &&
@@ -146,17 +150,25 @@ export function libraryView(
       .map(lookups.folderName)
       .join(' › ')
 
-  const lists = filtering
+  const lists = tree
     ? [
-        ...nested.map((folder) => ({ folder, heading: pathOf(folder), songs: folder.songs })),
         {
           folder: here ?? null,
-          heading: here ? lookups.folderName(here) : lookups.home,
-          songs: own,
+          heading: null,
+          songs: place === null ? [...nested.flatMap((folder) => folder.songs), ...own] : own,
         },
       ]
-    : [{ folder: here ?? null, heading: null, songs: own }]
-  const named = filtering && nested.length > 0
+    : filtering
+      ? [
+          ...nested.map((folder) => ({ folder, heading: pathOf(folder), songs: folder.songs })),
+          {
+            folder: here ?? null,
+            heading: here ? lookups.folderName(here) : lookups.home,
+            songs: own,
+          },
+        ]
+      : [{ folder: here ?? null, heading: null, songs: own }]
+  const named = !tree && filtering && nested.length > 0
   const groups = lists
     .map((list): SongGroup => ({
       key: list.folder?.id ?? 'home',
@@ -164,10 +176,13 @@ export function libraryView(
       folder: list.folder?.id ?? null,
       entries: sortSongs(entries(list.songs).filter(keeps), sort, lookups),
     }))
-    .filter((group) => group.entries.length > 0 || !filtering)
-  const scope = [...nested.flatMap((folder) => entries(folder.songs)), ...entries(own)]
+    .filter((group) => group.entries.length > 0 || !filtering || tree)
+  const scope =
+    tree && place !== null
+      ? entries(own)
+      : [...nested.flatMap((folder) => entries(folder.songs)), ...entries(own)]
   const shown = groups.reduce((sum, group) => sum + group.entries.length, 0)
-  const total = filtering ? scope.length : entries(own).length
+  const total = filtering || tree ? scope.length : entries(own).length
   const folderView = (folder: ShelvedFolder): FolderView => ({
     folder,
     folders: childFolders(layout.folders, folder.id).length,
@@ -176,11 +191,13 @@ export function libraryView(
   })
   const searched = filter.q.trim() !== ''
   return {
-    folders: (filtering
-      ? searched
-        ? byName(nested).filter((folder) => matchesQuery([lookups.folderName(folder)], filter.q))
-        : []
-      : byName(childFolders(layout.folders, place))
+    folders: (tree
+      ? []
+      : filtering
+        ? searched
+          ? byName(nested).filter((folder) => matchesQuery([lookups.folderName(folder)], filter.q))
+          : []
+        : byName(childFolders(layout.folders, place))
     ).map(folderView),
     groups,
     scope,

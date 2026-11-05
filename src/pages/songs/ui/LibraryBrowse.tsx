@@ -9,6 +9,7 @@ import {
 } from '@/widgets/song-library'
 import { folderKey, songKey, type LibraryPage } from '../model/use-library-page'
 import { folderActions, songActions } from './row-actions'
+import { SongTable } from './SongTable'
 
 /**
  * The library as it is read (Mindscape's browse): the place's folders, each a row to its page, then
@@ -18,11 +19,14 @@ import { folderActions, songActions } from './row-actions'
 export function LibraryBrowse({
   page,
   place,
+  table = false,
   onClear,
 }: {
   page: LibraryPage
   /** Where it is: its look is this place's Card style (R29 B9). */
   place: CardPlace
+  /** Its songs as a table (a laptop's right pane, R30 S2), the folders the tree's. */
+  table?: boolean
   onClear: () => void
 }) {
   const { t } = useTranslation('songs')
@@ -49,7 +53,10 @@ export function LibraryBrowse({
             </ul>
           </section>
         ) : null}
-        {view.groups.map((group) =>
+        {table ? (
+          <SongTable entries={view.groups.flatMap((group) => group.entries)} page={page} />
+        ) : null}
+        {(table ? [] : view.groups).map((group) =>
           group.entries.length === 0 ? null : (
             <section
               key={group.key}

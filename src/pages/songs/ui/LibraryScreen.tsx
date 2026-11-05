@@ -14,7 +14,7 @@ import {
 import { useRepertoire } from '@/entities/piece'
 import { editFolder, FolderEditPanel, type FolderEdit } from '@/features/manage-library'
 import { useSongDrop, useSongImport } from '@/features/song-files'
-import { useSetSearch } from '@/shared/lib'
+import { useMediaQuery, useSetSearch } from '@/shared/lib'
 import type { FolderSearch, SongsFilter } from '../model/songs-filter'
 import { useLibraryPage } from '../model/use-library-page'
 import { LibraryBrowse } from './LibraryBrowse'
@@ -23,8 +23,12 @@ import { LibraryEmpty } from './LibraryEmpty'
 import { LibraryFilters } from './LibraryFilters'
 import { LibraryHeader } from './LibraryHeader'
 import { LibrarySelect } from './LibrarySelect'
+import { LibraryTree } from './LibraryTree'
 import { NewActions } from './NewActions'
 import { SelectionBar } from './SelectionBar'
+
+/** The width from which the library shows its tree beside the songs: the sidebar's, `lg`. */
+const TWO_PANES = '(min-width: 64rem)'
 
 /**
  * A place of the library (ADR 0106, Mindscape's `DeckLibraryPage`): Home (`folder` null, My songs
@@ -46,7 +50,9 @@ export function LibraryScreen({
   const nameOf = useFolderName()
   const navigate = useNavigate()
   const q = useDeferredValue(filter.q)
-  const page = useLibraryPage(folder, { ...filter, q })
+  // A laptop's two panes (R30 S2): the library's tree on the left, the place's songs on the right.
+  const wide = useMediaQuery(TWO_PANES)
+  const page = useLibraryPage(folder, { ...filter, q }, { tree: wide })
   // Import, from New or a file dropped on the library, made where the learner is (ADR 0107).
   const songImport = useSongImport(folder?.id ?? null)
   const drop = useSongDrop(songImport.importFile)
@@ -79,6 +85,47 @@ export function LibraryScreen({
   const empty = view.folders.length === 0 && view.shown === 0
   // The folder's songs archived from it (D10): its last row, Archived (n), while there are some.
   const archived = folder ? folderArchive(page.layout, folder.id).length : 0
+  // What the place shows under its bar: in the right pane on a laptop, the whole width on a phone.
+  const body = (
+    <>
+      {folder && editing ? (
+        <FolderEditPanel
+          value={editing}
+          placeholder={nameOf(folder)}
+          onChange={setDraft}
+          onDone={done}
+        />
+      ) : null}
+      <LibraryFilters
+        page={page}
+        filter={filter}
+        screen={folder ? nameOf(folder) : t('title')}
+        sortInHeadings={wide && !page.select.on}
+      />
+      {empty ? (
+        <LibraryEmpty page={page} inFolder={folder !== null} filter={filter} onClear={clear} />
+      ) : page.select.on ? (
+        // Select's bar in the rows' drag: its places take what a row's face carries.
+        <LibrarySelect page={page} folder={folder}>
+          <SelectionBar page={page} folder={folder} />
+        </LibrarySelect>
+      ) : (
+        <LibraryBrowse page={page} place={folder?.id ?? 'home'} table={wide} onClear={clear} />
+      )}
+      {folder && archived > 0 && !page.select.on ? (
+        <div className="card">
+          <RowLink
+            render={
+              <Link to="/songs/folders/$folderId/archived" params={{ folderId: folder.id }} />
+            }
+            icon={Archive}
+            paint="lilac"
+            title={t('folder.archivedCount', { count: archived })}
+          />
+        </div>
+      ) : null}
+    </>
+  )
   return (
     <div className="flex flex-col gap-4 pb-4" {...drop.dropProps}>
       <LibraryHeader
@@ -94,37 +141,16 @@ export function LibraryScreen({
             : undefined
         }
       />
-      {folder && editing ? (
-        <FolderEditPanel
-          value={editing}
-          placeholder={nameOf(folder)}
-          onChange={setDraft}
-          onDone={done}
-        />
-      ) : null}
-      <LibraryFilters page={page} filter={filter} screen={folder ? nameOf(folder) : t('title')} />
-      {empty ? (
-        <LibraryEmpty page={page} inFolder={folder !== null} filter={filter} onClear={clear} />
-      ) : page.select.on ? (
-        // Select's bar in the rows' drag: its places take what a row's face carries.
-        <LibrarySelect page={page} folder={folder}>
-          <SelectionBar page={page} folder={folder} />
-        </LibrarySelect>
-      ) : (
-        <LibraryBrowse page={page} place={folder?.id ?? 'home'} onClear={clear} />
-      )}
-      {folder && archived > 0 && !page.select.on ? (
-        <div className="card">
-          <RowLink
-            render={
-              <Link to="/songs/folders/$folderId/archived" params={{ folderId: folder.id }} />
-            }
-            icon={Archive}
-            paint="lilac"
-            title={t('folder.archivedCount', { count: archived })}
-          />
+      {wide ? (
+        <div className="grid grid-cols-[17rem_minmax(0,1fr)] items-start gap-8">
+          <aside className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pb-4">
+            <LibraryTree current={folder?.id ?? (filter.favourites ? 'favourites' : 'all')} />
+          </aside>
+          <div className="flex min-w-0 flex-col gap-4">{body}</div>
         </div>
-      ) : null}
+      ) : (
+        body
+      )}
       {!page.select.on ? (
         <NewActions page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
       ) : empty ? (

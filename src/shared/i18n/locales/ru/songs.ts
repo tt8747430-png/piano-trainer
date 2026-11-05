@@ -208,6 +208,20 @@ export const songs: LocaleResources['songs'] = {
     title: 'Библиотека пуста',
     description: 'Создайте песню или восстановите то, что в архиве.',
   },
+  table: {
+    title: 'Название',
+    chords: 'Аккорды',
+    level: 'Уровень',
+    played: 'Последний раз',
+    actions: 'Действия',
+  },
+  tree: {
+    label: 'Библиотека',
+    all: 'Все песни',
+    folders: 'Папки',
+    unfold: 'Показать папки в «{{name}}»',
+    fold: 'Скрыть папки в «{{name}}»',
+  },
   archive: {
     title: 'Архив',
     openCount: 'Архив: {{count}}',
