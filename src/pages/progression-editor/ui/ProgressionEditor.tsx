@@ -148,7 +148,7 @@ export function ProgressionEditor({
             .flush()
             .then(() => navigate({ to: '/practice/progressions/$progressionId/publish', params })),
       }}
-      modes={
+      settings={
         <RoundLink
           label={t('learn:settings.title')}
           icon={Settings}

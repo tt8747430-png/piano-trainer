@@ -390,8 +390,9 @@ square at the top.
 ### Placement
 
 - **A detail page** reads title, facts, sections; its one primary action floats at the foot.
-- **The bar** (`ScreenHeader`) is one row of one height on every screen: Back, the title, then at its end, in this order
-  whatever the page passes: tools, Settings (the gear), More, Edit ⇄ Done. A place's or a detail page's title is larger
+- **The bar** (`ScreenHeader`) is one row of one height on every screen: Back, the title with its Edit (a quiet pencil)
+  right after it, then at its end, in this order whatever the page passes: tools, Settings (the gear), More, and Done
+  while editing. A place's or a detail page's title is larger
   in the same row and may take two lines. Nothing hangs under the bar: a status goes in it or in its menu, and a page's
   views sit in its content. It slides away while reading down and returns as the page turns up.
 - **Page, sheet or menu:** a page for settings and many fields; a sheet for creating one thing or one focused choice; a

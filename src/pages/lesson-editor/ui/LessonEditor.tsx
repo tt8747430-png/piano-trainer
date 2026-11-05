@@ -5,6 +5,7 @@ import type { Lesson } from '@/entities/lesson'
 import { useLessonDraft } from '@/features/edit-original'
 import { localText, useLocale, type Locale } from '@/shared/i18n'
 import { DraftScreen } from '@/widgets/content-editor'
+import type { EditAction } from '@/shared/ui'
 import { LessonDocument, OpenScore } from '@/widgets/lesson-document'
 
 /**
@@ -18,7 +19,7 @@ export function LessonEditor({
   id,
   back,
   toLesson,
-  modes,
+  edit,
   course,
 }: {
   lesson: Lesson
@@ -28,8 +29,8 @@ export function LessonEditor({
   back: ReactNode
   /** A router `Link` to the lesson's own page. */
   toLesson: ReactElement
-  /** Its Edit toggle, set to Done. */
-  modes?: ReactNode
+  /** Its Edit, in Edit: Done at the bar's end. */
+  edit?: EditAction
   /** The course whose lesson it is, where it is a course's: an example's score opens under it. */
   course?: string
 }) {
@@ -62,7 +63,7 @@ export function LessonEditor({
       draft={draft}
       // The lesson's own title over it, as it reads: the page in Edit, not another page.
       heading={title}
-      modes={modes}
+      edit={edit}
       title={title}
       back={back}
       backTo={{ link: toLesson, label: t('edit.back') }}

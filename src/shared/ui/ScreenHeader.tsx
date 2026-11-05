@@ -1,7 +1,22 @@
+import { PencilLine } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
+import { Button } from './primitives/button'
 import { NO_BAR_SIZE, useScreenBar } from './screen-bar'
 import { usePageHeading } from './use-page-heading'
+
+/**
+ * A screen's Edit (iOS's Edit · Done, Notion's in-place edit): the pencil right after the title, so it
+ * reads as "edit this"; while editing, Done at the bar's very end. The screen enters Edit in place.
+ */
+export interface EditAction {
+  readonly editing: boolean
+  readonly onEdit: () => void
+  readonly onDone: () => void
+  /** Done waits (a take recording, a save under way). */
+  readonly disabled?: boolean
+}
 
 type ScreenHeaderProps = {
   /** The screen's name: its title and the page's. */
@@ -10,12 +25,13 @@ type ScreenHeaderProps = {
   /**
    * The bar's end, always in this order whatever order they are given (A3, DESIGN.md Placement): the
    * screen's tools (Search, MIDI, an act on the item such as a lesson's Learned), its Settings (the
-   * gear), More (⋯, commands only) and Edit ⇄ Done at the very end.
+   * gear), More (⋯, commands only), and Done while editing.
    */
   tools?: ReactNode
   settings?: ReactNode
   more?: ReactNode
-  edit?: ReactNode
+  /** The screen's Edit: its pencil beside the title, Done at the bar's end while editing. */
+  edit?: EditAction
   /** The page shows its title itself, large under the bar (a document in Edit): on a phone the bar
    * keeps it for a screen reader alone and leaves its room to the bar's tools. */
   titleOnPage?: boolean
@@ -94,30 +110,66 @@ export function ScreenHeader({
       <div className="flex min-h-14 items-center gap-2 py-1">
         {back ? <div className="shrink-0 print:hidden">{back}</div> : null}
         {switcher ? <div className="flex min-w-0 flex-1 items-center">{switcher}</div> : null}
-        <h1
-          {...pageHeading}
-          className={cn(
-            'min-w-0 flex-1 font-display font-semibold outline-none',
-            // A name takes a second line rather than be cut (a lesson's, a song's): never an ellipsis
-            // on a phone where two lines say it all.
-            'line-clamp-2 leading-tight text-balance wrap-break-word',
-            large ? 'text-[1.375rem] sm:text-2xl' : 'text-lg sm:text-xl',
-            titleOnPage && 'max-sm:sr-only',
-            switcher && 'sr-only',
-          )}
-        >
-          {title}
-        </h1>
-        {tools || settings || more || edit ? (
+        <div className={cn('flex min-w-0 items-center gap-0.5', switcher ? 'shrink-0' : 'flex-1')}>
+          <h1
+            {...pageHeading}
+            className={cn(
+              'min-w-0 font-display font-semibold outline-none',
+              // A name takes a second line rather than be cut (a lesson's, a song's): never an ellipsis
+              // on a phone where two lines say it all.
+              'line-clamp-2 leading-tight text-balance wrap-break-word',
+              large ? 'text-[1.375rem] sm:text-2xl' : 'text-lg sm:text-xl',
+              titleOnPage && 'max-sm:sr-only',
+              switcher && 'sr-only',
+            )}
+          >
+            {title}
+          </h1>
+          {edit && !edit.editing ? <EditPencil onEdit={edit.onEdit} /> : null}
+        </div>
+        {tools || settings || more || edit?.editing ? (
           <div className="ms-auto flex shrink-0 items-center gap-1.5 print:hidden">
             {tools}
             {settings}
             {more}
-            {edit}
+            {edit?.editing ? <EditDone action={edit} /> : null}
           </div>
         ) : null}
       </div>
     </header>
+  )
+}
+
+/** The pencil beside the title: quiet, the title's own act, a 44px target. */
+function EditPencil({ onEdit }: { onEdit: () => void }) {
+  const { t } = useTranslation('common')
+  const label = t('editMode.edit')
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      aria-label={label}
+      title={label}
+      className="shrink-0 text-muted-foreground print:hidden"
+      onClick={onEdit}
+    >
+      <PencilLine aria-hidden />
+    </Button>
+  )
+}
+
+/** Done, at the bar's end while the screen is in Edit. */
+function EditDone({ action }: { action: EditAction }) {
+  const { t } = useTranslation('common')
+  return (
+    <Button
+      variant="bar"
+      disabled={action.disabled}
+      className="shrink-0 rounded-pill px-4 font-semibold"
+      onClick={action.onDone}
+    >
+      {t('editMode.done')}
+    </Button>
   )
 }
 

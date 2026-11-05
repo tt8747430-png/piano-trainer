@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { DraftActions, DraftStatus, type ContentDraft } from '@/features/edit-original'
 import type { Locale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { ButtonLink, ScreenHeader } from '@/shared/ui'
+import { ButtonLink, ScreenHeader, type EditAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import { languageActions } from './LanguageChoice'
@@ -39,7 +39,8 @@ export function DraftScreen<T>({
   editorsOnly,
   unreadable,
   language,
-  modes,
+  edit,
+  settings,
   publishPage,
   children,
 }: {
@@ -58,8 +59,10 @@ export function DraftScreen<T>({
   unreadable: string
   /** The language the document is written in: chosen in the draft's menu, ticked there. */
   language?: { value: Locale; onChange: (locale: Locale) => void }
-  /** The item's Done (`EditToggle`), at the bar's end: the page in Edit, not another page. */
-  modes?: ReactNode
+  /** The item's Edit, in Edit: Done at the bar's end, the page in Edit rather than another page. */
+  edit?: EditAction
+  /** A router `Link` to the item's Settings, its gear in the bar. */
+  settings?: ReactNode
   /** The item's Publish page (R29 B6), which the bar's Publish opens. */
   publishPage?: { readonly link: ReactElement; readonly open: () => void }
   children: (initial: T) => ReactNode
@@ -76,7 +79,7 @@ export function DraftScreen<T>({
         title={heading}
         back={back}
         // The document shows the item's title large under the bar.
-        titleOnPage={modes !== undefined}
+        titleOnPage
         // Where the draft stands, then Publish and the draft's menu, at the bar's end: nothing under
         // the bar (the language is the menu's, ticked there).
         tools={
@@ -94,7 +97,8 @@ export function DraftScreen<T>({
             </>
           ) : null
         }
-        edit={modes}
+        settings={settings}
+        edit={edit}
       />
       {!editor ? (
         <NotOpen line={editorsOnly}>

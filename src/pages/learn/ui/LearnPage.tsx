@@ -16,7 +16,6 @@ import {
   ShelfEditor,
   type LearnView,
 } from '@/widgets/curriculum'
-import { EditToggle } from '@/widgets/mode-switch'
 
 /**
  * Learn (ADR 0053), the app's first place, a library: its bar's switch (in the title's place) between
@@ -33,13 +32,9 @@ export function LearnPage() {
   const show = useSetSearch<LearnView>()
   const editable = useCan('reorder', { curriculum: view === 'lessons' ? 'level' : 'shelf' })
   const editing = edit && editable
-  const toggle = editable ? (
-    <EditToggle
-      editing={editing}
-      onEdit={() => show({ edit: true })}
-      onDone={() => show({ edit: false })}
-    />
-  ) : null
+  const toggle = editable
+    ? { editing, onEdit: () => show({ edit: true }), onDone: () => show({ edit: false }) }
+    : undefined
   const bar = (actions: ReactNode) => (
     <ScreenHeader
       title={t('learn:title')}

@@ -6,7 +6,7 @@ import { hasAbout } from '@/entities/lesson'
 import { STAGES } from '@/entities/step'
 import { useAddLesson, useCourseDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
-import { Dropdown } from '@/shared/ui'
+import { Dropdown, type EditAction } from '@/shared/ui'
 import { AboutDocument } from '@/widgets/lesson-document'
 import {
   AddRow,
@@ -174,7 +174,7 @@ export function CourseEditor({
   course,
   back,
   toCourse,
-  modes,
+  edit,
 }: {
   course: Course
   /** The screen's Back (`BackButton`). */
@@ -182,7 +182,7 @@ export function CourseEditor({
   /** A router `Link` to the course's page. */
   toCourse: ReactElement
   /** Its Read · Edit switch, set to Edit. */
-  modes?: ReactNode
+  edit?: EditAction
 }) {
   const { t } = useTranslation('learn')
   const shown = useLocale()
@@ -219,7 +219,7 @@ export function CourseEditor({
       draft={draft}
       // The course's own name over it, as it reads: the page in Edit, not another page.
       heading={title}
-      modes={modes}
+      edit={edit}
       title={title}
       back={back}
       backTo={{ link: toCourse, label: t('edit.course.back') }}

@@ -10,7 +10,6 @@ import { cn } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, FabLink, FloatingActions, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
 import { AboutView } from '@/widgets/lesson-view'
-import { EditToggle } from '@/widgets/mode-switch'
 import {
   CourseFacts,
   courseProgress,
@@ -93,19 +92,18 @@ export function CoursePage() {
           />
         }
         edit={
-          editsContent(account) ? (
-            <EditToggle
-              editing={false}
-              onDone={() => undefined}
-              onEdit={() =>
-                void navigate({
-                  to: '/courses/$courseId/edit',
-                  params: { courseId },
-                  replace: true,
-                })
+          editsContent(account)
+            ? {
+                editing: false,
+                onEdit: () =>
+                  void navigate({
+                    to: '/courses/$courseId/edit',
+                    params: { courseId },
+                    replace: true,
+                  }),
+                onDone: () => undefined,
               }
-            />
-          ) : null
+            : undefined
         }
       />
       {/* One card: what it is, its facts and progress, and its one way in along its foot. */}

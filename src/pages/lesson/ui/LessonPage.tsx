@@ -1,4 +1,3 @@
-import { EditToggle } from '@/widgets/mode-switch'
 import { Link, useParams, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { lessonById, lessonPlace, nextLessonId, previousLessonId } from '@/entities/lesson'
@@ -32,25 +31,21 @@ export function LessonPage() {
       key={lesson.id}
       lesson={lesson}
       step={lessonStepId(lesson.id)}
-      modes={
-        <EditToggle
-          editing={false}
-          onDone={() =>
-            void navigate({
-              to: '/lessons/$lessonId',
-              params: { lessonId: lesson.id },
-              replace: true,
-            })
-          }
-          onEdit={() =>
-            void navigate({
-              to: '/lessons/$lessonId/edit',
-              params: { lessonId: lesson.id },
-              replace: true,
-            })
-          }
-        />
-      }
+      edit={{
+        editing: false,
+        onDone: () =>
+          void navigate({
+            to: '/lessons/$lessonId',
+            params: { lessonId: lesson.id },
+            replace: true,
+          }),
+        onEdit: () =>
+          void navigate({
+            to: '/lessons/$lessonId/edit',
+            params: { lessonId: lesson.id },
+            replace: true,
+          }),
+      }}
       settings={<Link to="/lessons/$lessonId/settings" params={{ lessonId: lesson.id }} />}
       back={<BackButton />}
       after={(lesson.after ?? []).flatMap((id) => {

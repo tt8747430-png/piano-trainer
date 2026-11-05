@@ -40,8 +40,8 @@ export function LibraryHeader({
             onClick={select.toggleAll}
           />
         }
-        // Done ends Select where Edit's Done stands: the bar's very end (A3).
-        edit={
+        // Done ends Select at the bar's very end, where Edit's Done stands (A3).
+        more={
           <Button variant="soft" onClick={select.exit}>
             {t('select.done')}
           </Button>

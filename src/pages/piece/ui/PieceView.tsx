@@ -7,7 +7,6 @@ import { FavouriteButton } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
 import { OPEN_PLAINLY } from '@/shared/lib'
 import { ButtonLink, RoundLink } from '@/shared/ui'
-import { EditToggle } from '@/widgets/mode-switch'
 import { useSongLessons } from '../model/use-song-lessons'
 import { PieceAbout, ScaleLink } from './PieceAbout'
 import { PieceByline } from './PieceByline'
@@ -47,13 +46,11 @@ export function PieceView({ piece }: { piece: Piece }) {
         settings={settings}
         // The pencil opens the score in the editor (R29 1.2): a learner's edit of a built-in
         // song is their version, an editor's the song everyone sees (A38, ADR 0115).
-        edit={
-          <EditToggle
-            editing={false}
-            onEdit={() => void navigate({ to: '/edit/$pieceId', params: { pieceId: piece.id } })}
-            onDone={() => undefined}
-          />
-        }
+        edit={{
+          editing: false,
+          onEdit: () => void navigate({ to: '/edit/$pieceId', params: { pieceId: piece.id } }),
+          onDone: () => undefined,
+        }}
       />
       {/* From a laptop's width two columns (A28): the head, the about and the overview card at a
           reading width on the left; the chords and sections on the right. One column below. */}

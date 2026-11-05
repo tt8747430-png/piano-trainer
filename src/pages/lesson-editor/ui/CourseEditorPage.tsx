@@ -1,7 +1,6 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { blankCourse, courseById } from '@/entities/course'
 import { BackButton } from '@/shared/ui'
-import { EditToggle } from '@/widgets/mode-switch'
 import { CourseEditor } from './CourseEditor'
 
 /**
@@ -18,15 +17,12 @@ export function CourseEditorPage() {
       course={course}
       back={<BackButton />}
       toCourse={<Link to="/courses/$courseId" params={{ courseId }} />}
-      modes={
-        <EditToggle
-          editing={true}
-          onDone={() =>
-            void navigate({ to: '/courses/$courseId', params: { courseId }, replace: true })
-          }
-          onEdit={() => undefined}
-        />
-      }
+      edit={{
+        editing: true,
+        onDone: () =>
+          void navigate({ to: '/courses/$courseId', params: { courseId }, replace: true }),
+        onEdit: () => undefined,
+      }}
     />
   )
 }

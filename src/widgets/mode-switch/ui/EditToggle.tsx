@@ -3,28 +3,26 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
- * Edit mode's one button (Noji's, iOS's Edit · Done), at the bar's end in both modes so it never moves:
- * a pencil, Edit, enters it; in Edit the word Done leaves it (a check would read as Learned). A page enters Edit in place, it
- * does not open another (round 26). `tool` is the score's bar's look, `bar` a page's.
+ * The score's Edit · Done in its toolbar (the Player's and the editor's, ADR 0115), at the bar's end in
+ * both modes so it never moves: a pencil enters Edit; in Edit the word Done leaves it (a check would
+ * read as Learned). A page's bar has its own, the pencil beside its title (`ScreenHeader`'s `edit`).
  */
 export function EditToggle({
   editing,
   onEdit,
   onDone,
-  variant = 'bar',
   disabled = false,
 }: {
   editing: boolean
   onEdit: () => void
   onDone: () => void
-  variant?: 'bar' | 'tool'
   disabled?: boolean
 }) {
   const { t } = useTranslation('common')
   if (editing)
     return (
       <Button
-        variant={variant}
+        variant="tool"
         disabled={disabled}
         className="shrink-0 rounded-pill px-4 font-semibold"
         onClick={onDone}
@@ -35,7 +33,7 @@ export function EditToggle({
   const label = t('editMode.edit')
   return (
     <Button
-      variant={variant}
+      variant="tool"
       size="icon"
       aria-label={label}
       title={label}

@@ -60,26 +60,45 @@ describe('ScreenHeader', () => {
     render(<ScreenHeader title="Chords" switcher={<div />} />)
   })
 
-  it('draws tools, Settings, More and Edit in that order, whatever order they are given (A3)', () => {
+  it('puts Edit beside the title and tools, Settings and More at the bar’s end, in that order (A3)', () => {
     render(
       <ScreenHeader
         title="Song"
-        edit={<button type="button">Edit</button>}
+        edit={{ editing: false, onEdit: () => undefined, onDone: () => undefined }}
         more={<button type="button">More</button>}
         settings={<button type="button">Settings</button>}
         tools={<button type="button">MIDI</button>}
       />,
     )
+    const buttons = within(screen.getByRole('banner')).getAllByRole('button')
     expect(
-      within(screen.getByRole('banner'))
-        .getAllByRole('button')
-        .map((button) => button.textContent),
-    ).toEqual(['MIDI', 'Settings', 'More', 'Edit'])
+      buttons.map((button) => button.getAttribute('aria-label') ?? button.textContent),
+    ).toEqual(['Edit', 'MIDI', 'Settings', 'More'])
+    // The pencil follows the title in the same group, so it wraps with the title's last line.
+    expect(screen.getByRole('heading', { level: 1 }).nextElementSibling).toBe(buttons[0])
+  })
+
+  it('shows Done at the bar’s very end while editing, and no pencil', async () => {
+    const onDone = vi.fn()
+    render(
+      <ScreenHeader
+        title="Song"
+        edit={{ editing: true, onEdit: () => undefined, onDone }}
+        settings={<button type="button">Settings</button>}
+      />,
+    )
+    const buttons = within(screen.getByRole('banner')).getAllByRole('button')
+    expect(buttons.map((button) => button.textContent)).toEqual(['Settings', 'Done'])
+    await userEvent.click(screen.getByRole('button', { name: 'Done' }))
+    expect(onDone).toHaveBeenCalledOnce()
   })
 
   it('keeps a screen’s title in the bar, a long one on two lines rather than cut', () => {
     render(
-      <ScreenHeader title="Wonderful Grace of Jesus" edit={<button type="button">Edit</button>} />,
+      <ScreenHeader
+        title="Wonderful Grace of Jesus"
+        edit={{ editing: false, onEdit: () => undefined, onDone: () => undefined }}
+      />,
     )
     const title = screen.getByRole('heading', { level: 1 })
     expect(within(screen.getByRole('banner')).getByRole('heading', { level: 1 })).toBe(title)
