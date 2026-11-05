@@ -159,6 +159,7 @@ describe('backup', () => {
       'pt-views',
       'pt-library',
       'pt-diagram-inversions',
+      'pt-practice-library',
     ])
   })
 })

@@ -116,6 +116,7 @@ export async function renderApp(
     diagramInversionsStore: stores.diagramInversions,
     chordSheetsStore: stores.chordSheets,
     notificationsStore: stores.notifications,
+    practiceLibraryStore: stores.practiceLibrary,
     audio,
     midi,
     auth,

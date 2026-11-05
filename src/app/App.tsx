@@ -4,6 +4,7 @@ import { DiagramInversionsStoreProvider } from '@/entities/diagram-inversion'
 import { LibraryStoreProvider } from '@/entities/library'
 import { NotificationsStoreProvider } from '@/entities/notification'
 import { PatternsStoreProvider } from '@/entities/pattern'
+import { PracticeLibraryStoreProvider } from '@/entities/practice-library'
 import { PiecesStoreProvider } from '@/entities/piece'
 import { ProgressStoreProvider } from '@/entities/progress'
 import { SettingsStoreProvider } from '@/entities/settings'
@@ -75,31 +76,33 @@ export function App({
                     <SettingsStoreProvider store={stores.settings}>
                       <ProgressStoreProvider store={stores.progress}>
                         <PatternsStoreProvider store={stores.patterns}>
-                          <PiecesStoreProvider store={stores.pieces}>
-                            <TakesStoreProvider store={stores.takes}>
-                              <LibraryStoreProvider store={stores.library}>
-                                <DiagramInversionsStoreProvider store={stores.diagramInversions}>
-                                  <ChordSheetsStoreProvider store={stores.chordSheets}>
-                                    <NotificationsStoreProvider store={stores.notifications}>
-                                      <ServicesProvider services={services}>
-                                        <LocaleSync />
-                                        <AudioUnlock />
-                                        <MidiReconnect />
-                                        <MidiSync />
-                                        <ThemeProvider>
-                                          <ShortcutsProvider>
-                                            <RouterProvider router={router} />
-                                            <Toaster />
-                                            <Confirmer />
-                                          </ShortcutsProvider>
-                                        </ThemeProvider>
-                                      </ServicesProvider>
-                                    </NotificationsStoreProvider>
-                                  </ChordSheetsStoreProvider>
-                                </DiagramInversionsStoreProvider>
-                              </LibraryStoreProvider>
-                            </TakesStoreProvider>
-                          </PiecesStoreProvider>
+                          <PracticeLibraryStoreProvider store={stores.practiceLibrary}>
+                            <PiecesStoreProvider store={stores.pieces}>
+                              <TakesStoreProvider store={stores.takes}>
+                                <LibraryStoreProvider store={stores.library}>
+                                  <DiagramInversionsStoreProvider store={stores.diagramInversions}>
+                                    <ChordSheetsStoreProvider store={stores.chordSheets}>
+                                      <NotificationsStoreProvider store={stores.notifications}>
+                                        <ServicesProvider services={services}>
+                                          <LocaleSync />
+                                          <AudioUnlock />
+                                          <MidiReconnect />
+                                          <MidiSync />
+                                          <ThemeProvider>
+                                            <ShortcutsProvider>
+                                              <RouterProvider router={router} />
+                                              <Toaster />
+                                              <Confirmer />
+                                            </ShortcutsProvider>
+                                          </ThemeProvider>
+                                        </ServicesProvider>
+                                      </NotificationsStoreProvider>
+                                    </ChordSheetsStoreProvider>
+                                  </DiagramInversionsStoreProvider>
+                                </LibraryStoreProvider>
+                              </TakesStoreProvider>
+                            </PiecesStoreProvider>
+                          </PracticeLibraryStoreProvider>
                         </PatternsStoreProvider>
                       </ProgressStoreProvider>
                     </SettingsStoreProvider>

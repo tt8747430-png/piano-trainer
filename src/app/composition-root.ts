@@ -15,6 +15,11 @@ import {
   type NotificationsStore,
 } from '@/entities/notification'
 import { createPatternsStore, PATTERNS_STORAGE_KEY, type PatternsStore } from '@/entities/pattern'
+import {
+  createPracticeLibraryStore,
+  PRACTICE_LIBRARY_STORAGE_KEY,
+  type PracticeLibraryStore,
+} from '@/entities/practice-library'
 import { createPiecesStore, PIECES_STORAGE_KEY, type PiecesStore } from '@/entities/piece'
 import { createProgressStore, PROGRESS_STORAGE_KEY, type ProgressStore } from '@/entities/progress'
 import { createSettingsStore, SETTINGS_STORAGE_KEY, type SettingsStore } from '@/entities/settings'
@@ -68,6 +73,7 @@ export interface Stores {
   readonly diagramInversions: DiagramInversionsStore
   readonly chordSheets: ChordSheetsStore
   readonly notifications: NotificationsStore
+  readonly practiceLibrary: PracticeLibraryStore
 }
 
 /**
@@ -89,6 +95,7 @@ export function createStores(
     diagramInversions: createDiagramInversionsStore(saving),
     chordSheets: createChordSheetsStore(saving),
     notifications: createNotificationsStore(saving),
+    practiceLibrary: createPracticeLibraryStore(saving),
   }
 }
 
@@ -128,6 +135,7 @@ export const SYNCED_SAVES: readonly SyncedSave[] = [
   { table: 'diagram_inversions', key: DIAGRAM_INVERSIONS_STORAGE_KEY },
   { table: 'chord_sheets', key: CHORD_SHEETS_STORAGE_KEY },
   { table: 'notifications', key: NOTIFICATIONS_STORAGE_KEY },
+  { table: 'practice_library', key: PRACTICE_LIBRARY_STORAGE_KEY },
 ]
 
 /**
