@@ -167,6 +167,8 @@ are reference only, but progressions are facts.
 
 - **Mockups and questions:** text questions failed; whole-page mockups with a feedback box each worked.
 - **Test every UI at least twice** (2026-11-05).
+- **Impeccable twice on each page and each mockup,** as it is made, never only at the round's end: "each page and each
+  mockup and not only at the end" (2026-11-05).
 - **Plan before building:** generic descriptions led to wrong builds. "Did you read it every time you implement something."
 - **"Why did you stop?"** three times: keep going until the list is empty. A message is not a stop.
 - **The maximum principle:** "this spawns too many agents and eats up all the usage".

@@ -13,7 +13,8 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 5. **Write the test first,** then the screen.
 6. **Every state:** loading, empty, error, offline; every control's hover, focus, disabled.
 7. **Both languages,** in the musician's terms, the Russian written rather than translated word for word.
-8. **Two passes** ([testing](testing.md)), then `impeccable audit` at the round's end.
+8. **Two passes** ([testing](testing.md)), each with an `impeccable` check of this page (`critique` or `audit`, then
+   again after the fixes), page by page as it is built, never only at the round's end.
 
 ## Rules for every screen
 
@@ -108,7 +109,8 @@ screen, every font loaded, every toggle and box works.
 page alone? Does each option look like our app beside a real screenshot? Is any word internal? Does any option break a rule
 above or an earlier ruling in `feedback-log.md`? Is the difference between options visible at a glance?
 
-A change after Check 2 means running it again.
+Each check includes an `impeccable critique` of the mockup itself, so every mockup is checked by impeccable at least
+twice. A change after Check 2 means running it again.
 
 ### Reading the answers
 
