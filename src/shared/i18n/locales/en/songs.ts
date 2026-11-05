@@ -3,8 +3,8 @@ export const songs = {
   search: 'Search songs',
   // The search box's hint: short, for a phone's width beside the sort.
   searchHint: 'Search',
-  noChart: 'No chart yet',
-  empty: 'No songs match.',
+  noChart: 'Chart not available',
+  empty: 'No matching songs.',
   // Nothing to list for a search: it names what was searched.
   emptyQuery: 'No songs match “{{query}}”.',
   // A song's stage, as its course places it (ADR 0053).
@@ -27,12 +27,12 @@ export const songs = {
     any: 'Any',
     noFolder: 'Not in a folder',
     learned: 'Learned',
-    notLearned: 'Not learned yet',
+    notLearned: 'Not yet learned',
     key: 'Key',
     anyKey: 'Any key',
     // A key chosen, with how many songs here are in it.
     keyCount: '{{key}} · {{count}}',
-    onlyFavourites: 'Only favourites',
+    onlyFavourites: 'Favourites only',
     show_one: 'Show {{count}} song',
     show_other: 'Show {{count}} songs',
     showNone: 'No songs to show',
@@ -150,7 +150,7 @@ export const songs = {
     hiding: {
       one: 'Hide “{{title}}” from this folder?',
       many: 'Hide {{count}} songs from this folder?',
-      body: 'You can bring it back from Archived.',
+      body: 'You can restore it from Archived at any time.',
     },
     home: 'Home',
     play: 'Play',
@@ -168,8 +168,8 @@ export const songs = {
     archived: '“{{title}}” archived',
     archivedMany: 'Archived: {{count}}',
     folderArchived: '“{{name}}” archived with its songs',
-    restored: '“{{title}}” is back in the library',
-    restoredMany: 'Back in the library: {{count}}',
+    restored: '“{{title}}” restored to the library',
+    restoredMany: 'Restored to the library: {{count}}',
     favouritedOne: '“{{title}}” added to favourites',
     unfavouritedOne: '“{{title}}” removed from favourites',
     favourited: 'Added to favourites: {{count}}',
@@ -182,8 +182,8 @@ export const songs = {
     newFolder: 'New folder',
     // The place what moves stands in now.
     here: 'Here',
-    intoItself: 'A folder cannot go into itself or a folder in it',
-    appsFolder: 'Only editors add to the app’s folders',
+    intoItself: 'A folder can’t be moved into itself or one of its subfolders',
+    appsFolder: 'Only editors can add songs to built-in folders',
     expand: 'Show the folders in {{name}}',
     collapse: 'Hide the folders in {{name}}',
   },
@@ -241,18 +241,18 @@ export const songs = {
     inLibrary: 'In the library',
     moveTo: 'Move to folder…',
     deleteSays:
-      'An own folder and your own songs in it are deleted for good; the app’s songs go to the archive.',
+      'Deleting a folder permanently removes it and your own songs inside. Built-in songs are moved to the archive.',
     emptyTitle: 'This folder is empty',
-    emptyDescription: 'Make a song or a folder here, or move songs in.',
+    emptyDescription: 'Create a song or folder here, or move existing songs into it.',
     moveIn: 'Move songs here',
     deleting: {
       title: 'Delete “{{name}}”?',
-      builtIn: 'It goes to the archive with the app’s songs in it: {{count}}.',
-      own: 'The folder is deleted for good.',
-      ownSongs: 'Your own songs in it are deleted for good, with their takes: {{count}}.',
-      appSongs: 'The app’s songs in it go to the archive: {{count}}.',
+      builtIn: 'The folder and its built-in songs ({{count}}) will be moved to the archive.',
+      own: 'The folder will be permanently deleted.',
+      ownSongs: 'Your songs in it ({{count}}) and their recordings will be permanently deleted.',
+      appSongs: 'Built-in songs in it ({{count}}) will be moved to the archive.',
       confirm: 'Delete',
-      cancel: 'Keep it',
+      cancel: 'Cancel',
     },
   },
   // Select (Mindscape's): rows chosen for one action.
@@ -264,7 +264,7 @@ export const songs = {
     none: 'Deselect all',
     count: 'Selected: {{count}}',
     toggle: 'Select {{name}}',
-    actions: 'For what is selected',
+    actions: 'Selection actions',
     favourite: 'Favourite',
     unfavourite: 'Unfavourite',
     move: 'Move',
@@ -275,11 +275,11 @@ export const songs = {
   // Delete, asked first: the learner's own songs, and what Select chose.
   deleting: {
     one: 'Delete “{{title}}”?',
-    many: 'Delete what is selected? {{count}}',
-    songs: 'Your songs go for good, with their takes: {{count}}.',
-    folders: 'Folders: {{count}}. Your own songs in them go for good; the app’s go to the archive.',
+    many: 'Delete {{count}} selected items?',
+    songs: 'Your songs ({{count}}) and their recordings will be permanently deleted.',
+    folders: 'Folders ({{count}}) will be deleted. Your songs in them are removed permanently; built-in songs are moved to the archive.',
     confirm: 'Delete',
-    cancel: 'Keep them',
+    cancel: 'Cancel',
   },
   // A row moved by its handle, as a screen reader hears it.
   drag: {
@@ -302,7 +302,7 @@ export const songs = {
   // Home with nothing in it: every song and folder archived.
   homeEmpty: {
     title: 'Your library is empty',
-    description: 'Make a song, or restore what you archived.',
+    description: 'Create a song, or restore items from the archive.',
   },
   // The archive (ADR 0106, Mindscape's): what was archived, to restore.
   // The laptop's library tree (R30 S2), Apple Music's sidebar.
@@ -325,7 +325,7 @@ export const songs = {
     title: 'Archive',
     openCount: 'Archive: {{count}}',
     restoreAll: 'Restore all',
-    restoredAll: 'Everything is back in the library',
+    restoredAll: 'All items restored to the library',
     restoreNamed: 'Restore {{name}}',
     empty: {
       title: 'Nothing archived',

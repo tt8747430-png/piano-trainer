@@ -52,17 +52,17 @@ export const piece = {
   writeChart: 'Write the chart',
   // A songbook entry whose chords are not written yet.
   noChart: {
-    title: 'No chart yet',
-    description: 'Write its chords bar by bar, and it plays in any key with any pattern.',
+    title: 'Chart not available',
+    description: 'Enter its chords bar by bar to play it in any key with any accompaniment pattern.',
   },
   yourVersion: 'Your version',
   music: 'Music',
   reset: 'Reset to the original',
   resetting: {
     title: 'Reset {{title}}?',
-    says: 'Your chords, staves and written-out hands are removed, and it goes back to the book’s version.',
+    says: 'Your chords, staves and written-out parts will be removed, and the song will revert to the published version.',
     confirm: 'Reset',
-    cancel: 'Keep mine',
+    cancel: 'Cancel',
   },
   delete: 'Delete',
   // An own song sent on as a link: its chart, staves and written hands inside it.
@@ -73,9 +73,9 @@ export const piece = {
   shareTooLong: 'This song is too long to fit in a link.',
   deleting: {
     title: 'Delete {{title}}?',
-    says: 'It is deleted for good, with its music and takes.',
-    confirm: 'Delete for good',
-    cancel: 'Keep it',
+    says: 'The song, its music and its recordings will be permanently deleted.',
+    confirm: 'Delete permanently',
+    cancel: 'Cancel',
   },
   scaleOf: 'Scale: {{scale}}',
   // What is said of a song or study, behind its ⓘ.

@@ -347,7 +347,7 @@ describe('Piece', () => {
     if (!listing) throw new Error('the catalog has no listing')
     await renderApp(`/songs/${listing.id}`)
     // It says what is missing, and what writing it gives.
-    expect(await screen.findByText('No chart yet')).toBeInTheDocument()
+    expect(await screen.findByText('Chart not available')).toBeInTheDocument()
     expect(
       (await screen.findByRole('link', { name: 'Write the chart' })).closest(
         '[data-slot="floating-actions"]',
@@ -498,7 +498,7 @@ describe('Piece: the learner’s own music', () => {
     expect(libraryStore.getState().favourites).toEqual(['my-1'])
     await openSettings(user)
     await user.click(await screen.findByRole('button', { name: 'Delete song' }))
-    await user.click(await screen.findByRole('button', { name: 'Delete for good' }))
+    await user.click(await screen.findByRole('button', { name: 'Delete permanently' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs'))
     expect(piecesStore.getState().songs).toEqual([])
     expect(libraryStore.getState().favourites).toEqual([])
