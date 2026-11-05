@@ -226,17 +226,13 @@ describe('Pick your view greys a view the music cannot show (ADR 0108)', () => {
 })
 
 describe('Settings › Display, the view shown’s own (ADR 0108, R29)', () => {
-  it('holds the sheet music’s own: its Layout first, then what it shows', async () => {
+  it('holds the sheet music’s own: what it shows, its layout the sheet’s pill’s (R34)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/silent')
     const page = await openDisplay(user)
     expect(groupsOf(page)).toEqual(['Sheet music'])
     const sheet = within(page).getByRole('region', { name: 'Sheet music' })
-    const layout = within(sheet).getByRole('radiogroup', { name: 'Layout' })
-    expect(segmentsOf(layout)).toEqual(['Page view', 'Vertical scroll', 'Panorama'])
-    expect(within(layout).getByRole('radio', { name: 'Vertical scroll' })).toBeChecked()
-    await user.click(within(layout).getByRole('radio', { name: 'Panorama' }))
-    expect(settingsStore.getState().scoreView.layout).toBe('panorama')
+    expect(within(sheet).queryByRole('radiogroup', { name: 'Layout' })).not.toBeInTheDocument()
     expect(within(sheet).queryByRole('radiogroup', { name: 'Mode' })).not.toBeInTheDocument()
     chipsAre(
       within(sheet).getByRole('group', { name: 'Show' }),
@@ -246,8 +242,17 @@ describe('Settings › Display, the view shown’s own (ADR 0108, R29)', () => {
       'Finger numbers',
       'Note names',
     )
-    // The layout chosen, said in one line under its tiles (R32).
-    expect(sheet).toHaveTextContent('One continuous system that scrolls sideways.')
+    await user.keyboard('{Escape}')
+    const pill = document.querySelector<HTMLElement>('[data-slot="sheet-pill"]')!
+    const layout = within(pill).getByRole('radiogroup', { name: 'Layout' })
+    expect(
+      within(layout)
+        .getAllByRole('radio')
+        .map((radio) => radio.ariaLabel),
+    ).toEqual(['Page view', 'Vertical scroll', 'Panorama'])
+    expect(within(layout).getByRole('radio', { name: 'Vertical scroll' })).toBeChecked()
+    await user.click(within(layout).getByRole('radio', { name: 'Panorama' }))
+    expect(settingsStore.getState().scoreView.layout).toBe('panorama')
   })
 
   it('holds Diagrams’ own: its Mode, then its Lyrics, and nothing of the sheet music’s', async () => {
@@ -332,8 +337,13 @@ describe('Settings › Display, the view shown’s own (ADR 0108, R29)', () => {
     act(() => setScoreView(settingsStore, { music: 'grid' }))
     expect(chip(page, 'Текст')).toHaveAttribute('aria-pressed')
     act(() => setScoreView(settingsStore, { music: 'sheet' }))
-    const layout = within(page).getByRole('radiogroup', { name: 'Расположение' })
-    expect(segmentsOf(layout)).toEqual(['Страницы', 'Прокрутка вниз', 'Панорама'])
+    const pill = document.querySelector<HTMLElement>('[data-slot="sheet-pill"]')!
+    const layout = within(pill).getByRole('radiogroup', { name: 'Расположение', hidden: true })
+    expect(
+      within(layout)
+        .getAllByRole('radio', { hidden: true })
+        .map((radio) => radio.ariaLabel),
+    ).toEqual(['Страницы', 'Прокрутка вниз', 'Панорама'])
     expect(untranslated(document.body)).toEqual([])
   })
 })

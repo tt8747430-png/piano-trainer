@@ -33,7 +33,7 @@ import {
 } from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Recording } from '@/shared/lib/schedule'
-import { ActionMenu, type MenuAction } from '@/shared/ui'
+import { ActionMenu, SheetPill, SheetToolsContext, type MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
   ClickButton,
@@ -60,7 +60,7 @@ import {
 import { SheetMusic } from '@/widgets/sheet-music'
 import { SongPrint } from '@/widgets/song-print'
 import { PlayerDisplay, PlayerPlayback } from '@/widgets/player-settings'
-import { ViewSection } from '@/widgets/score-view-menu'
+import { SheetLayoutTools, ViewSection } from '@/widgets/score-view-menu'
 import { SettingsExtrasContext, type SettingsExtras } from '@/widgets/player-setup'
 import { useChordKeys } from '../model/use-chord-keys'
 import { PlayerExport } from './PlayerExport'
@@ -465,30 +465,39 @@ export function PlayerLayout({
           <FeedbackCard feedback={feedback} onClose={() => takes.show(null)} />
         ) : null}
         {shown === 'sheet' ? (
-          <SheetMusic
-            view={sheetView}
-            piano={piano}
-            staffNames={names}
-            title={title}
-            credits={credits}
-            layout={layout}
-            // The pedal as it plays (A27): its Ped. marks the ones heard, lit as they pass.
-            performance={player.performance}
-            headings={headings}
-            current={practice.state.beatGroup}
-            clock={player.cursor === 'continuous' ? practice.clock : null}
-            cursor={player.cursor !== 'none'}
-            loop={player.loop}
-            fingers={player.fingers}
-            names={player.names}
-            positions={player.positions}
-            muted={player.muted}
-            onJump={practice.jumpToBeatGroup}
-            playing={practice.state.playing}
-            onLoopChange={player.setLoop}
-            verdicts={verdicts}
-            annotations={annotations}
-          />
+          // The sheet's one pill at its foot (R34, Songscription's): the layout, and in Page view the
+          // canvas's zoom beside it.
+          <SheetToolsContext value={<SheetLayoutTools />}>
+            <SheetMusic
+              view={sheetView}
+              piano={piano}
+              staffNames={names}
+              title={title}
+              credits={credits}
+              layout={layout}
+              // The pedal as it plays (A27): its Ped. marks the ones heard, lit as they pass.
+              performance={player.performance}
+              headings={headings}
+              current={practice.state.beatGroup}
+              clock={player.cursor === 'continuous' ? practice.clock : null}
+              cursor={player.cursor !== 'none'}
+              loop={player.loop}
+              fingers={player.fingers}
+              names={player.names}
+              positions={player.positions}
+              muted={player.muted}
+              onJump={practice.jumpToBeatGroup}
+              playing={practice.state.playing}
+              onLoopChange={player.setLoop}
+              verdicts={verdicts}
+              annotations={annotations}
+            />
+            {scoreView.layout === 'page' ? null : (
+              <SheetPill>
+                <SheetLayoutTools />
+              </SheetPill>
+            )}
+          </SheetToolsContext>
         ) : (
           <ChordView
             view={shown}

@@ -1863,11 +1863,8 @@ describe('the score editor', () => {
     const view = await openGear(user, /^View/)
     // The score alone: no tiles of the Player's views, no view's heading, no Every view.
     expect(within(view).queryByRole('radiogroup', { name: 'Show the music as' })).toBeNull()
-    expect(
-      within(view)
-        .getAllByRole('radio')
-        .map((layout) => layout.textContent),
-    ).toEqual(['Page view', 'Vertical scroll', 'Panorama'])
+    // The layout is the sheet's pill's (R34): never a second choice here.
+    expect(within(view).queryByRole('radiogroup', { name: 'Layout' })).toBeNull()
     expect(
       within(view)
         .getAllByRole('group')
@@ -1888,7 +1885,9 @@ describe('the score editor', () => {
     await user.click(within(view).getByRole('button', { name: 'Finger numbers' }))
     expect(settingsStore.getState().practice.fingerNumbers).toBe(true)
     expect(within(view).queryByRole('radiogroup', { name: /beside/ })).not.toBeInTheDocument()
-    await user.click(within(view).getByRole('radio', { name: 'Page view' }))
+    await user.keyboard('{Escape}')
+    const pill = document.querySelector<HTMLElement>('[data-slot="sheet-pill"]')!
+    await user.click(within(pill).getByRole('radio', { name: 'Page view' }))
     expect(settingsStore.getState().scoreView.layout).toBe('page')
     expect(settingsStore.getState()).not.toHaveProperty('editorLayout')
   })

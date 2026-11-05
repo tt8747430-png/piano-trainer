@@ -213,13 +213,13 @@ describe('Player', () => {
   it('shows the score as its Display and Pick your view say, remembered for every piece', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/romashki')
-    const display = await openDisplay(user)
-    await user.click(within(display).getByRole('radio', { name: 'Page view' }))
+    await screen.findByRole('group', { name: 'Keyboard' })
+    const pill = document.querySelector<HTMLElement>('[data-slot="sheet-pill"]')!
+    await user.click(within(pill).getByRole('radio', { name: 'Page view' }))
     expect(settingsStore.getState().scoreView.layout).toBe('page')
     await waitFor(() =>
       expect(document.querySelector('[data-slot="sheet-page"]')).toBeInTheDocument(),
     )
-    await user.keyboard('{Escape}')
     await user.click(await screen.findByRole('button', { name: 'View: Sheet' }))
     await user.click(await screen.findByRole('radio', { name: 'Grid' }))
     // The music's area, under the menu's own part for the Grid (ADR 0108).
