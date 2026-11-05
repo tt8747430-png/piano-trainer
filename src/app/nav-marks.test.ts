@@ -15,7 +15,6 @@ const MARKS = ['ChevronRight', 'ChevronLeft', 'ArrowLeft', 'ArrowRight']
 const ALLOWED = [
   'shared/ui/NavMarks.tsx',
   'shared/ui/BackButton.tsx',
-  'shared/ui/piano-keyboard/KeyRail.tsx',
   'widgets/practice-player/ui/Transport.tsx',
   'widgets/lesson-view/ui/LessonView.tsx',
   'pages/lesson/ui/LessonLayout.tsx',
