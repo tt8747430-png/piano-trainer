@@ -33,7 +33,7 @@ describe('the Player’s bar, foot and More (R31-P)', () => {
       within(group)
         .getAllByRole('button')
         .map((page) => page.textContent),
-    ).toEqual(['Audio playback', 'Playback', 'On-screen piano', 'Display'])
+    ).toEqual(['Playback', 'On-screen piano', 'Display'])
     for (const name of ['This song', 'Share'])
       expect(within(sheet).queryByRole('region', { name })).not.toBeInTheDocument()
   })
@@ -52,7 +52,7 @@ describe('the Player’s bar, foot and More (R31-P)', () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
     await user.click(within(await footBar()).getByRole('button', { name: /^Version/ }))
-    expect(await screen.findByRole('dialog', { name: 'Choose your version' })).toBeInTheDocument()
+    expect(await screen.findByRole('dialog', { name: 'Version' })).toBeInTheDocument()
   })
 
   it('opens Transpose’s popover from the foot’s Transpose', async () => {
