@@ -82,7 +82,6 @@ import {
   SONGS_KEPT,
   songsHomeSearch,
   folderSearch,
-  pieceSearch,
   validateJoinGroupSearch,
   validateSharedSongSearch,
 } from './routes/songs-search'
@@ -450,7 +449,6 @@ const pieceRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs/$pieceId',
   notFoundComponent: notFoundIn('songs'),
-  ...pieceSearch,
   beforeLoad: async ({ params, context }) => {
     const { entryIn, shelfOf } = await songsScreens()
     const entry = entryIn(context.pieces.getState(), params.pieceId)

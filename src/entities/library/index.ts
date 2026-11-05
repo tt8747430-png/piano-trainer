@@ -77,6 +77,7 @@ export {
   TAG_MAX,
   tagOf,
   tagsOf,
+  tagSuggestions,
   type SongDetails,
   type SongGenre,
   type SongLanguage,
