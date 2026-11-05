@@ -158,6 +158,7 @@ function SongSettings({ piece }: { piece: Piece }) {
             )}
             <SwitchRow
               label={t('settings.favourite')}
+              className="min-h-16 border-b-0 pr-3 pl-4"
               checked={favourite}
               onCheckedChange={() => toggleFavourite(libraryStore, piece.id)}
             />

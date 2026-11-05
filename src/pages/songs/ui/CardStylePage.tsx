@@ -1,5 +1,5 @@
 import { Link, useParams } from '@tanstack/react-router'
-import { Check, Layers, Laptop, RotateCcw, Smartphone } from 'lucide-react'
+import { Check, Layers, RotateCcw } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -132,17 +132,18 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
         preview={
           <div className="flex h-full flex-col gap-3">
             <div className="flex min-h-11 items-center justify-between gap-3">
-              <p className="min-w-0 truncate font-display text-lg font-semibold">{name}</p>
-              <Segmented<Device>
-                label={t('cardStyle.previewOn')}
-                compact
-                value={device}
-                options={[
-                  { value: 'phone', label: t('cardStyle.phone'), icon: <Smartphone aria-hidden /> },
-                  { value: 'laptop', label: t('cardStyle.laptop'), icon: <Laptop aria-hidden /> },
-                ]}
-                onChange={setDevice}
-              />
+              <p className="min-w-0 flex-1 truncate font-display text-lg font-semibold">{name}</p>
+              <div className="w-48 shrink-0">
+                <Segmented<Device>
+                  label={t('cardStyle.previewOn')}
+                  value={device}
+                  options={[
+                    { value: 'phone', label: t('cardStyle.phone') },
+                    { value: 'laptop', label: t('cardStyle.laptop') },
+                  ]}
+                  onChange={setDevice}
+                />
+              </div>
             </div>
             <StylePreview look={draft} page={page} device={device} />
           </div>
@@ -239,6 +240,7 @@ function StylePreview({
 }) {
   const { t } = useTranslation('songs')
   const songs = page.view.groups.flatMap((group) => group.entries)
+  // What the pane holds whole: two rows on a phone, a page's worth on a laptop.
   const folders = device === 'phone' ? page.view.folders.slice(0, 2) : []
   if (songs.length === 0 && folders.length === 0)
     return <p className="text-muted-foreground">{t('cardStyle.empty')}</p>
@@ -266,7 +268,7 @@ function StylePreview({
                 onSelect={() => undefined}
               />
             ))}
-            {songs.slice(0, device === 'laptop' ? 6 : 3 - folders.length).map((entry) => (
+            {songs.slice(0, device === 'laptop' ? 6 : 2 - folders.length).map((entry) => (
               <SongRow
                 key={entry.id}
                 entry={entry}

@@ -265,7 +265,10 @@ function DetailsCard({ piece, writes }: { piece: Piece; writes: SongWrites | nul
   )
 }
 
-/** A property the learner reads and does not change here: as printed, or a course's. */
+/**
+ * A property the learner reads and does not change here: as printed, or a course's. Its value stands
+ * where an editable row's does, the chevron's room kept.
+ */
 function ReadRow({ title, value, info }: { title: string; value: string; info?: string }) {
   return (
     <div className="flex min-h-16 min-w-0 items-center gap-3 py-2 pr-3 pl-4">
@@ -273,6 +276,7 @@ function ReadRow({ title, value, info }: { title: string; value: string; info?: 
         title={title}
         value={value}
         trailing={info ? <InfoTip name={title}>{info}</InfoTip> : undefined}
+        end={<span aria-hidden className="size-5 shrink-0" />}
       />
     </div>
   )

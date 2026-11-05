@@ -243,7 +243,7 @@ function PresetStrip({
       <div
         role="radiogroup"
         aria-label={t('style.presets')}
-        className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-2 overflow-x-auto px-gutter py-1 scrollbar-none lg:mx-0 lg:scroll-px-0 lg:px-0"
+        className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-2 overflow-x-auto px-gutter py-1 scrollbar-none lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0"
       >
         {PRESETS.map((preset) => (
           <button

@@ -42,6 +42,7 @@ export function InviteCard({
       {group.mine ? (
         <SwitchRow
           label={t('groups.linkOn')}
+          className="min-h-16 border-b-0 pr-3 pl-4"
           checked={group.inviteOpen}
           onCheckedChange={(open) =>
             void port.setInviteOpen(group.id, open).then((r) => onChanged(r.ok))
