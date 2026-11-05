@@ -45,25 +45,24 @@ Learned; ⚙ Settings. Play floats (honey, 56px).
 5. **Details** (heading "Details"), a card of property rows, each a 52px row of name (left, soft ink) and value (right,
    ink), editable rows with a chevron:
    - **Title** — the learner's own song or an editor's built-in song: text.
-   - **About** — the same: a paragraph.
-   - **Music**, **Words**, **Arranger** ("Harmony" credit) — text; written into the score's header (the same lines the
+   - **Description** — the same: a paragraph.
+   - **Composer**, **Lyricist**, **Arranger** (the "Harmony" credit) — text; written into the score's header (the same lines the
      score prints), so the score and the page agree. On one of the app's songs, as printed, not editable.
    - **Level** — select: None, Beginner … Professional with their marks. One of the app's songs in a course: the
      course's level, not editable, with ⓘ "Set by its course".
    - **Genre** — select: None, Hymn, Worship, Christmas, Folk, Classical, Pop, Jazz, Children’s, Study.
-   - **Language** — select: No words, English, Russian, Ukrainian, German, Latin, Another language.
+   - **Language** — select: Instrumental, English, Russian, Ukrainian, German, Latin, Another language.
    - **Tags** — multi-select: the chips, then "Add a tag".
-   - **Book** — the source, where it has one, not editable.
-   An empty editable value reads "Add" in soft ink.
+   An empty editable value reads "Not set" in soft ink. (The book stays in the byline, not repeated here.)
 
 **Laptop (from 64rem):** two columns. Left (24rem, sticky under the bar): the cover (full column width up to 240px,
 its ♡), the byline, the facts line, About, Details. Right: the music. Nothing else moves.
 
 **Editing a property** (Notion's): a tap on a row opens its editor, **a popover beside the row on a laptop, a sheet on
 a phone**, titled with the property's name:
-- Text (Title, Music, Words, Arranger): one field, focused, with **Done**; Enter saves; an empty Music, Words or
-  Arranger removes the line; an empty Title keeps the old title.
-- About: a text box (6 lines), **Done**.
+- Text (Title, Composer, Lyricist, Arranger): one field, focused, with **Done**; Enter saves; an empty Composer,
+  Lyricist or Arranger removes the line; an empty Title keeps the old title.
+- Description: a text box (6 lines), **Done**.
 - Select (Level, Genre, Language): the options as rows with a check on the chosen; a tap saves and closes.
 - Tags: the song's tags as chips with ×, a field "Add a tag", under it the library's other tags that match what is
   typed (a tap adds), and "Create “…”" for a new one; Enter adds. **Done** closes.
@@ -134,6 +133,15 @@ One column, `max-w-2xl`, groups in order:
   sharing** (asked first).
 - **An invite** (`/songs/groups/join?code=…`): a card with the group's picture, "Join Choir?", "4 members", **Join**;
   signed out Sign in (back here after); off or wrong: "This invite link is off or wrong."; loading; offline.
+
+## Wording (the owner, 2026-11-05, during the round)
+
+"Write professional wording and sentences and not plain": every label, description and empty state in Songs, card
+style and groups is written as a shipped product writes it (Apple Music, MuseScore, Notion): Composer, Lyricist,
+Arranger, Description, Not set, Corner radius, Spacing (Compact · Standard · Spacious), Shadow (None · Subtle ·
+Strong), Background, Card contents, Reset to default, Apply to…, Library home only, All folders, Share invite link,
+Join with a link, Stop sharing; confirmations say what will happen ("will be permanently deleted", "will be moved to
+the archive") and Cancel.
 
 ## What goes
 

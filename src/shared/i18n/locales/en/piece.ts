@@ -53,7 +53,8 @@ export const piece = {
   // A songbook entry whose chords are not written yet.
   noChart: {
     title: 'Chart not available',
-    description: 'Enter its chords bar by bar to play it in any key with any accompaniment pattern.',
+    description:
+      'Enter its chords bar by bar to play it in any key with any accompaniment pattern.',
   },
   yourVersion: 'Your version',
   music: 'Music',

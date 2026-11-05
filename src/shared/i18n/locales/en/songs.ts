@@ -277,7 +277,8 @@ export const songs = {
     one: 'Delete “{{title}}”?',
     many: 'Delete {{count}} selected items?',
     songs: 'Your songs ({{count}}) and their recordings will be permanently deleted.',
-    folders: 'Folders ({{count}}) will be deleted. Your songs in them are removed permanently; built-in songs are moved to the archive.',
+    folders:
+      'Folders ({{count}}) will be deleted. Your songs in them are removed permanently; built-in songs are moved to the archive.',
     confirm: 'Delete',
     cancel: 'Cancel',
   },
