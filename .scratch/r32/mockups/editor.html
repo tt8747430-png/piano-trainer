@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>Score editor palette</title>
+<title>Flat palette</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Noto+Music&family=Onest:wght@400;500;600&display=swap">
@@ -186,38 +186,36 @@ span[aria-label^="Level"] { font-size: 14px !important }
 
 <div class="wrap">
   <div class="intro">
-    <h1>The score editor · Round 32 · palette and settings</h1>
-    <p class="soft">Your words: two homes for the time signature, greyed tools that do not apply, the piano keys only in the gear on a phone. Redrawn as Flat, MuseScore 4 and Dorico do it: each thing printed on the score is set from the score and its palette category alone; the gear keeps what the score does not print; a tool that cannot act is not drawn. Each screen has a box for your answer.</p>
+    <h1>The score editor · Round 32 · the palette as Flat’s</h1>
+    <p class="soft">Your words: “this menu in the palette doesn’t follow how the Flat editor does this.” Redrawn from Flat’s help centre and your own captures of Flat’s app and web editor: every section in one scroll, the strip jumping within it, the list view, Time signature as tiles with Customize, Key signature and Clef as bare tables, Tempo in Measure. Each screen has a box for your answer.</p>
     <p class="soft" id="storeNote">Connecting the feedback store…</p>
   </div>
-  <nav class="toc" aria-label="Questions"><a href="#q1">1 One home</a><a href="#q2">2 The gear</a><a href="#q3">3 Only what applies</a><a href="#q4">4 Piano keys</a><a href="#q5">5 The title</a>
+  <nav class="toc" aria-label="Questions"><a href="#q1">1 The palette</a><a href="#q2">2 Time signature</a><a href="#q3">3 Key and clef</a><a href="#q4">4 Tempo</a><a href="#q5">5 Laptop</a>
     <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="ptSize(1)">iPhone 17 Pro · app</button><script>var PT_SIZES=[['pro','iPhone 17 Pro · app'],['safari','iPhone 17 Pro · Safari'],['small','Smaller iPhone · app']];function ptSize(step){var k=0;try{k=Math.max(0,PT_SIZES.findIndex(function(x){return x[0]===localStorage.getItem('pt-mock-size')}))}catch(e){}k=(k+step)%PT_SIZES.length;document.body.classList.remove('small','safari');if(PT_SIZES[k][0]!=='pro')document.body.classList.add(PT_SIZES[k][0]);document.getElementById('sizeBtn').textContent=PT_SIZES[k][1];try{localStorage.setItem('pt-mock-size',PT_SIZES[k][0])}catch(e){}}ptSize(0)</script></span></nav>
-  <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>One home for the time signature, key and clef</h2></div>
-    <p class="where">Where: /edit/hot-cross-buns, phone and laptop.</p>
-    <p>What changes: a tap on the printed time signature, key or clef chooses its bar and opens that palette category; the gear’s Music page (Key signature, Time signature, Tempo, Bars) goes. The tempo is set on its printed mark; bars are added and deleted in Measures.</p>
+  <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>The palette: every section in one scroll</h2></div>
+    <p class="where">Where: /edit/hot-cross-buns on a phone.</p>
+    <p>What changes: the expanded palette shows every section one after another, as Flat’s; the strip lights the section in view and scrolls to the one tapped; ≡ shows every tool by name.</p>
     <div class="screens" id="s1"></div>
-    <div class="rec">Built as drawn: Flat’s “click on the time signature in the score, or use the Time signature section”, one control.</div>
   </section>
-  <section class="q" id="q2"><div class="qhead"><span class="qnum">2</span><h2>The gear: what the score does not print</h2></div>
-    <p class="where">Where: the editor’s ⚙.</p>
-    <p>What changes: precise names, ordered by frequency of use, each with a one-line description; no intermediate pages.</p>
+  <section class="q" id="q2"><div class="qhead"><span class="qnum">2</span><h2>Time signature: tiles, then Customize</h2></div>
+    <p class="where">Where: the palette’s Time signature, and the time signature printed on the score.</p>
+    <p>What changes: six tiles as Flat’s (common and cut time are tiles); Customize opens the Time signature and Pickup wheels with ✗ ✓. Nothing else inline.</p>
     <div class="screens" id="s2"></div>
   </section>
-  <section class="q" id="q3"><div class="qhead"><span class="qnum">3</span><h2>Only what applies, never greyed</h2></div>
-    <p class="where">Where: the palette, every category.</p>
-    <p>What changes: a tool that cannot act on what is chosen is not drawn; Write as common or cut time only for 4/4 and 2/2; From this bar · Whole song only where they differ.</p>
+  <section class="q" id="q3"><div class="qhead"><span class="qnum">3</span><h2>Key signature and clef: bare tables</h2></div>
+    <p class="where">Where: the palette’s Key signature and Clef.</p>
+    <p>What changes: no Major · Minor, no names in the cells, no whole-song switch, no This bar · Until the end · Entire staff. A selection limits the change, as Flat does.</p>
     <div class="screens" id="s3"></div>
   </section>
-  <section class="q" id="q4"><div class="qhead"><span class="qnum">4</span><h2>Piano keys on a phone</h2></div>
-    <p class="where">Where: the editor’s bar, phone held upright.</p>
-    <p>What changes: Piano keys stands in the bar before Play, as on the laptop and as Flat’s keyboard button.</p>
+  <section class="q" id="q4"><div class="qhead"><span class="qnum">4</span><h2>Tempo in Measure</h2></div>
+    <p class="where">Where: the palette’s Measure, and the tempo mark printed on the score.</p>
+    <p>What changes: Tempo, accel., rit. and a tempo move from Text to Measure, as Flat has them.</p>
     <div class="screens" id="s4"></div>
   </section>
-  <section class="q" id="q5"><div class="qhead"><span class="qnum">5</span><h2>Your call: the title</h2></div>
-    <p class="where">Where: the title printed at the score’s head.</p>
-    <p>What changes for you: where the title and composer are typed. A opens one Title and credits page from the title (Flat); B keeps the title typed in place.</p>
+  <section class="q" id="q5"><div class="qhead"><span class="qnum">5</span><h2>On a laptop</h2></div>
+    <p class="where">Where: the editor from 48rem.</p>
+    <p>What changes: Flat’s web panel: every section stacked, each folding by its chevron; no strip.</p>
     <div class="screens" id="s5"></div>
-    <div class="rec">Recommendation: <b>A</b>, Flat’s credits dialog; built so. B is a small change back if you prefer it.</div>
   </section>
 </div>
 <script>
@@ -328,29 +326,58 @@ const macTime = mac(`${macBar()}<div style="display:grid;grid-template-columns:3
 const macGear = mac(`${macBar(true)}<div style="display:grid;grid-template-columns:360px 1fr 380px;height:calc(100% - 72px)"><div style="border-right:1px solid var(--line);padding:12px;display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-content:start;background:var(--card)">${strip(0, false, true)}${noteBody}</div>${macSheet}<div style="border-left:1px solid var(--line);background:var(--card);padding:16px;display:grid;gap:12px;align-content:start"><div style="display:flex;align-items:center"><b style="font:600 22px var(--display)">Score</b><span class="rb plain" style="margin-left:auto">${ic('x', 20)}</span></div><div class="group">${[['p-sky', 'eye', 'View', '', 'Sheet music'], ['p-lilac', 'updown', 'Transpose', '', 'C'], ['p-sand', 'rec', 'Record a take'], ['p-yellow', 'takes', 'Takes', '', '2']].map(row).join('')}</div><div class="h2" style="padding:6px 0"><span>Settings</span></div><div class="group">${[['p-lilac', 'music', 'Instruments', 'Add, remove and reorder staves', '1'], ['p-grass', 'bars', 'Layout', 'Staff size, measures per system, page format'], ['p-yellow', 'piano', 'Note input', 'Note playback during editing, palette position'], ['p-sand', 'mic', 'Recording', 'Metronome, melody playback, count-in']].map(row).join('')}</div></div></div>`, 'Songs');
 const unfolded = (body, cat, stripHtml) => `<div style="position:absolute;left:8px;right:8px;bottom:42px;max-height:62%;background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:6px 10px 10px;display:flex;flex-direction:column;gap:8px"><div class="grip"></div><div style="overflow:hidden;display:grid;gap:12px;align-content:start">${body}</div>${stripHtml || strip(cat, true)}</div>`;
 
+
+
+/* R32-C: the palette as Flat's, every section in one scroll, Time with Customize, Key and Clef bare tables. */
+Object.assign(P, { list: '<path d="M4 6h16M4 12h11M4 18h7"/>', grid4: '<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>', pencil: '<path d="M21.2 6.8a2.8 2.8 0 0 0-4-4L3.8 16.2 3 21l4.8-.8Z"/><path d="m15 5 4 4"/>', up: '<path d="m6 15 6-6 6 6"/>', metro2: '<path d="M10 3h4l4 18H6Z"/><path d="m12 15 6-8"/>' });
+const tbl = (cells, cols = 7, h = 48) => { const all = [...cells, ...Array((cols - cells.length % cols) % cols).fill(['', 0])]; const rows = all.length / cols; return `<div style="display:grid;grid-template-columns:repeat(${cols},minmax(0,1fr));border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)">${all.map(([g, on, t], i) => `<span title="${t || ''}" style="display:grid;place-items:center;height:${h}px;border-right:${(i + 1) % cols ? '1px solid var(--line)' : '0'};border-bottom:${i < (rows - 1) * cols ? '1px solid var(--line)' : '0'};${on ? 'background:color-mix(in oklab,var(--sky) 70%,transparent);color:var(--sky-ink)' : ''}">${g || ''}</span>`).join('')}</div>`; };
+const head = (t, fold = false) => `<div style="display:flex;align-items:center;min-height:32px"><b style="font-size:15px">${t}</b>${fold ? `<span style="margin-left:auto;color:var(--ink-soft)">${ic('up', 18)}</span>` : ''}</div>`;
+const fr = (n, d) => `<span style="display:grid;font:800 17px/0.95 'Literata',serif;text-align:center">${n}<br>${d}</span>`;
+const SHARP_Y = [0, 3, -1, 2, 5, 1, 4], FLAT_Y = [4, 1, 5, 2, 6, 3, 7];
+const signs = (n, g, ys) => `<svg width="${12 + n * 7}" height="36" viewBox="0 0 ${12 + n * 7} 36" aria-hidden="true">${Array.from({ length: n }, (_, i) => `<text x="${4 + i * 7}" y="${12 + ys[i] * 3}" font-family="Noto Music,serif" font-size="15" fill="currentColor">${g}</text>`).join('')}</svg>`;
+const sharps = (n) => signs(n, '♯', SHARP_Y);
+const flats = (n) => signs(n, '♭', FLAT_Y);
+const SIG_NAMES = ['G major / E minor', 'D major / B minor', 'A major / F♯ minor', 'E major / C♯ minor', 'B major / G♯ minor', 'F♯ major / D♯ minor', 'C♯ major / A♯ minor'];
+const keySec = (on = 0, fold = false, natural = true) => `<div style="display:grid;gap:8px">${head('Key signature', fold)}${tbl([...[1, 2, 3, 4, 5, 6, 7].map((n) => [sharps(n), n === on, SIG_NAMES[n - 1]]), ...[1, 2, 3, 4, 5, 6, 7].map((n) => [flats(n), -n === on])])}${natural ? `<span style="color:var(--sky-ink);font-weight:600;font-size:15px;min-height:44px;display:flex;align-items:center">Switch to natural</span>` : ''}</div>`;
+const TIME_TILES = [['2', '4'], ['3', '4'], ['4', '4'], ['C'], ['¢'], ['6', '8']];
+const timeTiles = (on = '4/4') => TIME_TILES.map(([a, b]) => [b ? fr(a, b) : `<span style="font:700 24px 'Literata',serif">${a}</span>`, (b ? `${a}/${b}` : a) === on]);
+const timeSec = (on = '4/4', fold = false, web = false) => `<div style="display:grid;gap:8px">${head('Time signature', fold)}${web ? tbl([...timeTiles(on), [ic('pencil', 20), 0, 'Customize']], 7) : `${tbl(timeTiles(on), 7)}<span style="display:flex;gap:10px;align-items:center;min-height:48px;padding:0 14px;border:1px solid var(--line);border-radius:12px;color:var(--ink-soft);font-size:16px">${ic('pencil', 20)} Customize</span>`}</div>`;
+const CLEF_G = ['𝄞', '𝄞⁸', '𝄞₈', '𝄞¹⁵', '𝄞₁₅'], CLEF_C = ['𝄡', '𝄡', '𝄡', '𝄡', '𝄡'], CLEF_F = ['𝄢', '𝄢⁸', '𝄢₈', '𝄢¹⁵', '𝄢₁₅', '𝄢', '𝄢'];
+const clefCell = (g, on) => [`<span style="font:400 24px 'Noto Music',serif">${g}</span>`, on];
+const clefSec = (fold = false) => `<div style="display:grid;gap:8px">${head('Clef', fold)}${tbl([...CLEF_G.map((g, i) => clefCell(g, i === 0)), ['', 0], ['', 0], ...CLEF_C.map((g) => clefCell(g)), ['', 0], ['', 0], ...CLEF_F.map((g) => clefCell(g))])}</div>`;
+const notationSec = (fold = false) => `<div style="display:grid;gap:8px">${head('Notation', fold)}${tbl([['+♩', 0], ['𝅝', 0], ['𝅗𝅥', 0], ['𝅘𝅥', 1], ['𝅘𝅥𝅮', 0], ['𝅘𝅥𝅯', 0], ['𝅘𝅥𝅰', 0], ['•', 0], ['• •', 0], ['<svg width="28" height="14" viewBox="0 0 28 14"><path d="M3 4q11 10 22 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>', 0], ['<b style="font:700 15px Literata,serif">⌐3⌝</b>', 0], ['𝄽', 0], ['♮', 0], ['♯', 0], ['♭', 0]].map(([g, on]) => [sized(g, 24), on]))}</div>`;
+const measureSec = (fold = false) => `<div style="display:grid;gap:8px">${head('Measure', fold)}${tbl([['+𝄀', 0, 'Insert measure before'], ['𝄀+', 0, 'Insert measure after'], ['−𝄀', 0, 'Remove measure'], ['↵', 0, 'System break'], ['⤓', 0, 'Page break'], ['▬', 0, 'Multimeasure rest'], ['𝄎', 0, 'One-bar repeat'], ['𝄏', 0, 'Two-bar repeat'], ['<i style="font:600 13px Literata,serif">accel.</i>', 0], ['<i style="font:600 13px Literata,serif">rit.</i>', 0], ['<i style="font:600 12px Literata,serif">a tempo</i>', 0], [ic('metro2', 20), 0, 'Tempo'], ['<b style="font:700 15px Literata,serif">A</b>', 0, 'New section']].map(([g, on, t]) => [sized(g, 22), on, t]))}</div>`;
+const stripFor = (on, list = false) => { const cells = CATS.map((c, i) => `<span style="flex:none;width:44px;height:44px;border-radius:11px;display:grid;place-items:center;${i === on ? 'background:var(--card);box-shadow:0 1px 2px rgba(0,0,0,.12);color:var(--ink)' : 'color:var(--ink-soft)'}">${c}</span>`).join(''); const shift = Math.max(0, on - 4) * 44; return `<div style="display:grid;grid-template-columns:minmax(0,1fr) 44px 44px;align-items:center;gap:4px"><div style="overflow:hidden;background:var(--sand);border-radius:14px;padding:2px;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 88%,transparent)"><div style="display:flex;margin-left:-${shift}px">${cells}</div></div><span class="rb plain" title="${list ? 'Show as grid' : 'Show as list'}">${ic(list ? 'grid4' : 'list', 22)}</span><span class="rb plain">${ic('trayDown', 22)}</span></div>`; };
+const sheetUnfolded = (body, on, list = false) => `<div style="position:absolute;left:8px;right:8px;bottom:42px;top:46%;background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:6px 10px 10px;display:flex;flex-direction:column;gap:8px"><div class="grip"></div><div style="overflow:hidden;display:grid;gap:18px;align-content:start;flex:1">${body}</div>${stripFor(on, list)}</div>`;
+const foldedFlat = (on = 0) => `<div style="position:absolute;left:8px;right:8px;bottom:42px;background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:6px 10px 10px;display:grid;gap:6px"><div class="grip"></div>${noteRow}${stripFor(on).replace(ic('trayDown', 22), ic('tray', 22))}</div>`;
+const listRow = (icon, name, faded = false) => `<span style="display:flex;gap:10px;align-items:center;min-height:48px;padding:0 12px;border:1px solid var(--line);border-radius:12px;font-size:15px;${faded ? 'opacity:.4' : ''}"><span style="width:28px;display:grid;place-items:center">${icon}</span>${name}</span>`;
+const listBody = `<div style="display:grid;gap:8px">${head('Measure')}<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${[['+𝄀', 'Insert measure before'], ['𝄀+', 'Insert measure after'], ['−𝄀', 'Remove measure'], ['↵', 'System break'], ['⤓', 'Page break'], ['▬', 'Multimeasure rest'], ['𝄎', 'One-bar repeat'], ['𝄏', 'Two-bar repeat'], ['<i style="font:600 12px Literata,serif">accel.</i>', 'Accelerando'], ['<i style="font:600 12px Literata,serif">rit.</i>', 'Ritardando'], ['<i style="font:600 11px Literata,serif">a tempo</i>', 'A tempo'], [ic('metro2', 18), 'Tempo']].map(([g, n]) => listRow(sized(g, 20), n)).join('')}</div></div>`;
+const customizeSheet = `<div style="position:absolute;inset:0;background:rgba(0,0,0,.18)"></div><div class="sheet" style="top:330px;align-content:start;grid-auto-rows:max-content"><div class="grip"></div><div style="display:flex;align-items:center"><b style="font:600 22px var(--display)">Customize time signature</b><span class="rb plain" style="margin-left:auto">${ic('x', 20)}</span></div><div style="display:flex;justify-content:center;gap:18px">${wheel(['6', '7', '8'], ['4', '8', '16'], 'Time signature')}${wheel(['', '–', '1'], ['', '8', ''], 'Pickup')}</div><div style="display:flex;justify-content:flex-end;gap:8px">${rb('x')}<span class="rb" style="background:var(--honey);color:var(--honey-ink)">${ic('check', 20)}</span></div></div>`;
+const tempoSheet = `<div style="position:absolute;inset:0;background:rgba(0,0,0,.18)"></div><div class="sheet" style="top:300px;align-content:start;grid-auto-rows:max-content;justify-items:center"><div class="grip"></div><div style="display:flex;align-items:center;width:100%"><b style="font:600 22px var(--display)">Tempo</b><span class="rb plain" style="margin-left:auto">${ic('x', 20)}</span></div><div style="width:200px;height:200px;border-radius:50%;background:var(--honey);color:var(--honey-ink);display:grid;place-items:center;text-align:center"><div><div style="font:700 64px/1 var(--sans)">92</div><div style="font:italic 600 20px Literata,serif">Moderato</div></div></div><div style="display:flex;gap:6px">${['♩', '♩.', '𝅗𝅥', '♪'].map((u, i) => `<span class="rb ${i ? 'plain' : ''}" style="font:400 22px 'Noto Music',serif">${u}</span>`).join('')}</div><div style="color:var(--ink-soft);font-size:14px">Hold and swipe to change the tempo</div><div style="display:flex;justify-content:flex-end;gap:8px;width:100%">${rb('x')}<span class="rb" style="background:var(--honey);color:var(--honey-ink)">${ic('check', 20)}</span></div></div>`;
+const macPanel = (body, popover = '') => mac(`${macBar()}<div style="display:grid;grid-template-columns:360px 1fr;height:calc(100% - 72px);position:relative"><div style="border-right:1px solid var(--line);padding:12px;display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-content:start;background:var(--card);overflow:hidden">${body}</div>${macSheet}${popover}</div>`, 'Songs');
+const macCustomize = `<div style="position:absolute;left:300px;top:330px;width:340px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,.18);padding:16px;display:grid;gap:12px"><div style="display:flex;align-items:center"><b style="font:600 20px var(--display)">Customize time signature</b><span class="rb plain" style="margin-left:auto">${ic('x', 20)}</span></div><div style="display:flex;justify-content:center;gap:18px">${wheel(['6', '7', '8'], ['4', '8', '16'], 'Time signature')}${wheel(['', '–', '1'], ['', '8', ''], 'Pickup')}</div><div style="display:flex;justify-content:flex-end;gap:8px">${rb('x')}<span class="rb" style="background:var(--honey);color:var(--honey-ink)">${ic('check', 20)}</span></div></div>`;
+
 document.getElementById('s1').innerHTML = [
-  fig('1.1', 'Phone · the printed 4/4 tapped', 'Its bar is chosen and the palette opens at Time signature: the one place a time signature is set. At the song’s head, with one meter, there is no From this bar · Whole song (they mean the same).', app(`${barK()}${musicSel}${unfolded(timeCat('4/4', [['3', '4', '5'], ['2', '4', '8']], true), 8)}`)),
-  fig('1.2', 'Laptop · Time in the panel, no second page', 'The panel at the left is the only Time signature; the gear has no Music page, so your screenshot’s right-hand Time signature page is gone.', macTime),
-  fig('1.3', 'Laptop · the gear beside it', 'The gear holds only what the score does not print: View, Transpose, Record a take, Takes, then Instruments, Layout, Note input, Recording.', macGear),
+  fig('1.1', 'Folded', 'Flat’s: the chosen tab’s tools in one row over the strip of tabs; at its end Show as list (≡) and Expand.', app(`${barK()}${music()}${foldedFlat(0)}`)),
+  fig('1.2', 'Expanded: every section in one scroll', 'Flat’s: Notation, Pitch and representation, Articulations, Ornaments, Dynamics, Measure, Clef, Key signature, Time signature, Barlines and repeats, Text, one after another; the tab of the section in view is lit, a tab tapped scrolls to its section.', app(`${barK()}${music(1)}${sheetUnfolded(notationSec() + measureSec(), 0)}`)),
+  fig('1.3', 'List view', 'Flat’s ≡: every tool as a bordered row with its name, two to a line; ⊞ goes back to the grid.', app(`${barK()}${music(1)}${sheetUnfolded(listBody, 5, true)}`)),
 ].join('');
 document.getElementById('s2').innerHTML = [
-  fig('2.1', 'Phone · the gear', 'Each setting is one tap from the first page, with no intermediate Music or How the editor works page, and a concise description under its name. Key, time signature, tempo, bars and the title are set on the score.', app(`${barK(false, true)}${music()}${paletteFolded(0)}${gearNew}`)),
+  fig('2.1', 'Time signature', 'Flat’s tiles 2/4 · 3/4 · 4/4 · C · ¢ · 6/8, a tap writing it at once from the bar chosen; Customize under them. No form, no switch, no From/Whole choice.', app(`${barK()}${musicSel}${sheetUnfolded(keySec(0, false, false) + timeSec('4/4'), 8)}`)),
+  fig('2.2', 'Customize', 'Any meter and the pickup, as Flat’s mobile Customize: slide the figures, ✓ writes them in one step, ✗ leaves the score as it was.', app(`${barK()}${musicSel}${sheetUnfolded(timeSec('4/4'), 8)}${customizeSheet}`)),
 ].join('');
 document.getElementById('s3').innerHTML = [
-  fig('3.1', 'Time at 4/4', 'Write as common or cut time is there for 4/4 and 2/2…', app(`${barK()}${musicSel}${unfolded(timeCat('4/4', [['3', '4', '5'], ['2', '4', '8']], true), 8)}`)),
-  fig('3.2', 'Time at 5/4, later in the song', '…and not at all for 5/4. In a later section From this bar · Whole song appears, since there they differ.', app(`${barK()}${musicSel}${unfolded(timeCat('5/4', [['4', '5', '6'], ['2', '4', '8']], false, 'From Chorus (bar 9)', true), 8)}`)),
-  fig('3.3', 'Articulations, nothing chosen', 'A category whose tools act on notes asks for a selection in place of a greyed grid.', app(`${barK()}${music(1)}${unfolded(hint('Articulations', 'Select a note to use these tools.'), 2)}`)),
-  fig('3.4', 'Notation, the last note chosen', 'No tie (no note of the same pitch follows): the key is not drawn and the grid closes up.', app(`${barK()}${music(1)}${unfolded(noteShown, 0)}`)),
-  fig('3.5', 'The chord row', 'With the caret on the chord symbols, the strip holds only what acts there: Note (the durations), Measures, Key signature, Time signature, Barlines and repeats.', app(`${barK()}${music(1)}${unfolded(measBody, 0, stripBars)}`)),
+  fig('3.1', 'Key signature', 'Flat’s table: one to seven sharps over one to seven flats, bare, each named in its tooltip (“A major / F♯ minor”); Switch to natural under it while a key has sharps or flats.', app(`${barK()}${musicSel}${sheetUnfolded(keySec(3) + timeSec('4/4'), 7)}`)),
+  fig('3.2', 'Clef', 'Flat’s table, a family a row; no question: a range of bars selected changes those bars, else the clef holds to the next one.', app(`${barK()}${musicSel}${sheetUnfolded(clefSec() + keySec(0, false, false), 6)}`)),
 ].join('');
 document.getElementById('s4').innerHTML = [
-  fig('4.1', 'Phone · Piano keys in the bar', 'Flat’s keyboard button, before Play: one tap shows the keys under the palette, another hides them. The gear’s View no longer carries it.', app(`${barK(true)}${music(1)}<div style="flex:none">${paletteDocked(0)}</div>${keyboard}`)),
+  fig('4.1', 'Tempo in Measure', 'Flat’s Tempo tool beside accel., rit. and a tempo in Measure; it opens the tempo dial for the bar chosen.', app(`${barK()}${music(1)}${sheetUnfolded(measureSec(), 5)}`)),
+  fig('4.2', 'The tempo dial', 'Flat’s mobile tempo screen: hold and swipe, the Italian word with it, the beat unit under it, ✗ ✓.', app(`${barK()}${music(1)}${tempoSheet}`)),
 ].join('');
 document.getElementById('s5').innerHTML = [
-  fig('5.A', 'A · The title opens Title and credits (recommended)', 'Flat’s: “click on the title of your score to access the credits”. One page for the title and every credit; nothing typed in a second place.', app(`${barK()}${music()}${paletteFolded(0)}${creditsSheet}`)),
-  fig('5.B', 'B · The title typed in place', 'As today: a tap turns the title into a field at its printed size; the composer and other credits keep a Title and credits row in the gear, since a song with no credits prints nothing under the title to tap (no label you did not write).', app(`${barK()}<div style="flex:1;overflow:hidden;background:var(--paper);padding:0 16px"><div style="text-align:center;padding:8px 0 2px"><span style="font:600 20px var(--display);box-shadow:inset 0 -2px 0 var(--sky-ink)">Hot Cross Buns|</span></div>${sys()}</div>${paletteFolded(0)}`)),
+  fig('5.1', 'Laptop: the panel', 'Flat’s web panel: every section stacked, each folding by its ⌃; Key signature, Time signature with its pencil cell for Customize.', macPanel(clefSec(true) + keySec(3, true) + timeSec('4/4', true, true))),
+  fig('5.2', 'Laptop: Customize', 'The pencil opens Customize as a popover beside the panel.', macPanel(keySec(0, true, false) + timeSec('4/4', true, true), macCustomize)),
 ].join('');
-
 
 // ——— strips: the frame takes the scaled height of what it holds ———
 document.querySelectorAll('.dev[data-fit]').forEach(d => { const sc = d.firstElementChild; const k = parseFloat(getComputedStyle(d).getPropertyValue('--s')); d.style.height = (sc.offsetHeight * k + 18) + 'px' });
@@ -362,7 +389,7 @@ document.getElementById('themeBtn').onclick = () => { const r = document.documen
 // ——— feedback under every screen ———
 (function () {
   const figs = Array.from(document.querySelectorAll('figure[data-fb]')); const answers = {}; let db = null, local = {};
-  try { local = JSON.parse(localStorage.getItem('r32-editor-feedback') || '{}') } catch (e) {}
+  try { local = JSON.parse(localStorage.getItem('r32c-editor-feedback') || '{}') } catch (e) {}
   const key = n => 's' + n.replace(/\./g, '-');
   function render(id) { const f = document.querySelector('[data-key="' + id + '"]'); if (!f) return; const a = answers[id] || {};
     f.querySelectorAll('.fb button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === a.verdict)));
@@ -371,7 +398,7 @@ document.getElementById('themeBtn').onclick = () => { const r = document.documen
     if (link) link.classList.toggle('done', Array.from(f.closest('section').querySelectorAll('figure[data-key]')).some(x => (answers[x.dataset.key] || {}).verdict)) }
   async function save(id, patch) { answers[id] = Object.assign({}, answers[id], patch, { at: new Date().toISOString() }); render(id);
     const st = document.querySelector('[data-key="' + id + '"] .saved');
-    try { local[id] = answers[id]; localStorage.setItem('r32-editor-feedback', JSON.stringify(local)) } catch (e) {}
+    try { local[id] = answers[id]; localStorage.setItem('r32c-editor-feedback', JSON.stringify(local)) } catch (e) {}
     if (!db) { st.textContent = 'Kept in this browser only.'; return }
     try { await db.doc('feedback/' + id).set(answers[id]); st.textContent = 'Saved.' } catch (e) { st.textContent = 'Could not save; kept in this browser.' } }
   figs.forEach(f => { const id = key(f.dataset.fb); f.dataset.key = id;
