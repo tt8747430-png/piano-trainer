@@ -22,14 +22,14 @@ export function KeyZoom() {
         <RailButton
           label={t('rail.zoomOut')}
           icon={ZoomOut}
-          className="h-auto pb-0"
+          className="h-10 justify-center pb-0"
           disabled={smaller === null}
           onClick={() => smaller && setKeyboard(store, { keySize: smaller })}
         />
         <RailButton
           label={t('rail.zoomIn')}
           icon={ZoomIn}
-          className="h-auto pb-0"
+          className="h-10 justify-center pb-0"
           disabled={larger === null}
           onClick={() => larger && setKeyboard(store, { keySize: larger })}
         />

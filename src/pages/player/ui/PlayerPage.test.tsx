@@ -272,6 +272,19 @@ describe('Player', () => {
     expect(screen.getByRole('dialog', { name: 'Playback' })).toBeInTheDocument()
   })
 
+  it('makes room for its laptop panel: nothing of the screen is under it (R31-P)', async () => {
+    sizedAs('(min-width: 64rem)')
+    const user = userEvent.setup()
+    await renderApp('/play/bz5')
+    const screenOf = () => document.querySelector('[data-keys]')
+    await waitFor(() => expect(screenOf()).not.toBeNull())
+    expect(screenOf()).not.toHaveAttribute('data-panel')
+    const sheet = await openSettings(user)
+    await waitFor(() => expect(screenOf()).toHaveAttribute('data-panel'))
+    await user.click(within(sheet).getByRole('button', { name: 'Close' }))
+    await waitFor(() => expect(screenOf()).not.toHaveAttribute('data-panel'))
+  })
+
   it('names each page of While you play apart in Russian (R29 review)', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5', { locale: 'ru' })

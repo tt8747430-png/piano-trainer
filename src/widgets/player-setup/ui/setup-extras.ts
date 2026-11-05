@@ -34,6 +34,8 @@ export interface SettingsExtras {
    * object each time it is asked.
    */
   readonly request?: { readonly page: string } | null
+  /** Told when the sheet opens or closes as a panel at the right (a laptop): the screen makes room. */
+  readonly onPanel?: (open: boolean) => void
 }
 
 export const SettingsExtrasContext = createContext<SettingsExtras>({ pages: [], acts: [] })

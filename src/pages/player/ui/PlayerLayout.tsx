@@ -204,6 +204,8 @@ export function PlayerLayout({
   const [exporting, setExporting] = useState(false)
   // Settings opened at a page (the piano's ⚙, the View's Display settings…).
   const [settingsAt, setSettingsAt] = useState<{ readonly page: string } | null>(null)
+  // The Settings open as a panel beside the music (a laptop): the screen ends where it starts.
+  const [panel, setPanel] = useState(false)
   const [tunerOpen, setTunerOpen] = useState(false)
   // The coach's line (R29 B8, R31-P): shown until put away by its × or done (Play pressed in
   // Listen), remembered for good.
@@ -280,6 +282,7 @@ export function PlayerLayout({
     // Its acts are More's (R31-P): the sheet holds how the Player works, never what it does.
     acts: [],
     request: settingsAt,
+    onPanel: setPanel,
   }
   // The foot's More (R31-P): the music's acts only, in parts: the song's, practice's, the tools,
   // listening, sharing. Every setting is the gear's.
@@ -388,7 +391,7 @@ export function PlayerLayout({
   )
   return (
     // While Diagrams plays, the bar and the tools row step aside (ADR 0108).
-    <PlayerScreen keys={dock} aside={shown === 'diagrams' && practice.state.playing}>
+    <PlayerScreen keys={dock} aside={shown === 'diagrams' && practice.state.playing} panel={panel}>
       {/* The score's bar, the editor's in shape (ADR 0115): Close, then Practise · Edit;
           Piano keys, MIDI and Settings; the View and the music's tools. The loop is the transport's (ADR
           0108). */}

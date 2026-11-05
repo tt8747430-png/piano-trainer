@@ -31,7 +31,7 @@ export function SettingsSheet({
   children: ReactNode
 }) {
   const { t } = useTranslation('player')
-  const { pages, acts, request } = useSettingsExtras()
+  const { pages, acts, request, onPanel } = useSettingsExtras()
   const [open, setOpen] = useState(false)
   // Asked from elsewhere (the Tools sheet's Display): it opens, at that page.
   const [asked, setAsked] = useState(request)
@@ -45,6 +45,13 @@ export function SettingsSheet({
   }, [request])
   // On a laptop a panel at the right, the music in sight beside it (R29, screen 4.1).
   const laptop = useMediaQuery(LAPTOP)
+  // Beside the music, the screen makes room for it, so nothing of the screen is under it.
+  const panelled = open && laptop
+  const tellPanel = useEffectEvent((shown: boolean) => onPanel?.(shown))
+  useEffect(() => {
+    tellPanel(panelled)
+    return () => tellPanel(false)
+  }, [panelled])
   const extra = pages.find((each) => each.id === page)
   const actsIn = (group: SettingsAct['group']) => acts.filter((each) => each.group === group)
   const act = ({ key, label, icon, disabled, reason, onSelect }: SettingsAct) => (
