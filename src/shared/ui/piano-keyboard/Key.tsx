@@ -71,7 +71,22 @@ interface KeyProps {
   /** A click, with its click count (0 for a click no pointer made): it plays unless a pointer's press already did. */
   readonly onClickPress: (key: Midi, clickCount: number) => void
   readonly onFocusKey: (key: Midi) => void
+  /**
+   * All keys across the screen (R34): on a phone's narrow keys only middle C keeps its name, small
+   * and on one line over its neighbours (Songscription's), and a mark's note name goes.
+   */
+  readonly slim: boolean
 }
+
+/** Middle C: the one key named on a phone's narrow keys. */
+const MIDDLE_C = 60
+/** A phone's narrow keys (a white key under 12px): the keys' container is under 39rem. */
+const SLIM = {
+  key: '@max-[39rem]:overflow-visible',
+  label: 'z-5 @max-[39rem]:px-0 @max-[39rem]:whitespace-nowrap @max-[39rem]:wrap-normal',
+  text: '@max-[39rem]:text-[0.5rem]',
+  gone: '@max-[39rem]:hidden',
+} as const
 
 function KeyButton({
   geometry,
@@ -83,6 +98,7 @@ function KeyButton({
   onPointerPress,
   onClickPress,
   onFocusKey,
+  slim,
 }: KeyProps) {
   const { black } = geometry
   const descriptionId = useId()
@@ -108,6 +124,7 @@ function KeyButton({
         (look.down ? DOWN : REST)[look.fill],
         look.down ? 'translate-y-0.5' : null,
         look.outlined ? 'ring-3 ring-ring ring-inset' : null,
+        slim && !black ? SLIM.key : null,
       )}
       style={{
         left: `${geometry.left}%`,
@@ -150,6 +167,8 @@ function KeyButton({
           className={cn(
             'relative flex w-full flex-col items-center px-0.5 text-center leading-tight wrap-anywhere transition-opacity duration-200 ease-out',
             look.label.ghost && 'opacity-40',
+            slim && SLIM.label,
+            slim && look.label.kind === 'name' && geometry.midi !== MIDDLE_C && SLIM.gone,
           )}
         >
           {look.label.caption ? (
@@ -160,10 +179,14 @@ function KeyButton({
             className={cn(
               'font-bold tabular-nums',
               look.label.kind === 'name' || look.label.caption ? 'text-xs' : 'text-sm',
+              slim && SLIM.text,
             )}
           />
           {look.label.note ? (
-            <Glyph text={look.label.note} className="text-xs font-semibold opacity-80" />
+            <Glyph
+              text={look.label.note}
+              className={cn('text-xs font-semibold opacity-80', slim && SLIM.gone)}
+            />
           ) : null}
         </span>
       ) : null}
@@ -183,5 +206,6 @@ export const Key = memo(
     a.onPointerPress === b.onPointerPress &&
     a.onClickPress === b.onClickPress &&
     a.onFocusKey === b.onFocusKey &&
+    a.slim === b.slim &&
     sameLook(a.look, b.look),
 )

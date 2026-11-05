@@ -75,7 +75,7 @@ export function EditorActions() {
     <>
       {/* The keyboard's controls at every size (R34, Songscription's): the chord held, Sustain and
           Keyboard; a phone held upright has the MIDI keyboard in Settings › Connect a piano. */}
-      <PageKeyboardTools variant="tool" />
+      <PageKeyboardTools variant="tool" pedalsFromSm />
       <span className="contents max-sm:hidden">
         <MidiButton variant="tool" />
       </span>

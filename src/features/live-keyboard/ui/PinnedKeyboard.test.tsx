@@ -106,7 +106,7 @@ describe('PinnedKeyboard', () => {
   it('stands edge to edge, with nothing under its keys', () => {
     renderPinned({ onSide: false })
     const docked = document.querySelector('[data-slot="docked"]')
-    expect(docked).toHaveClass('px-0', 'pb-0')
+    expect(docked).not.toHaveClass('px-gutter')
     expect(docked?.querySelectorAll('button:not([data-midi])')).toHaveLength(0)
     // Its divider over the keys, facing the music.
     expect(docked?.firstElementChild?.firstElementChild).toHaveAttribute('role', 'separator')

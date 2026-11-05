@@ -79,9 +79,13 @@ export function PinnedKeyboard({
   // Edge to edge (R34): the dock's gutters and foot are the keys' own.
   if (dock === 'bottom')
     return (
-      <Docked className="vt-keys border-t-0 px-0 pt-0 pb-0 landscape-phone:pr-0 landscape-phone:pb-0 lg:pb-0">
+      <Docked bleed className="vt-keys">
         {body}
       </Docked>
     )
-  return <Pinned className={cn('vt-keys px-0 pb-0', className)}>{body}</Pinned>
+  return (
+    <Pinned bleed className={cn('vt-keys', className)}>
+      {body}
+    </Pinned>
+  )
 }

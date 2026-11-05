@@ -11,6 +11,11 @@ export interface KeyboardToolsProps {
   namesChords?: boolean
   /** The music playing holds the sustain down (its score's pedal mark): the Sustain lit with it. */
   sustained?: boolean
+  /**
+   * Where the bar is full on a phone held upright (the editor's: Undo, Redo, Play), the Sustain stands
+   * from 40rem only; Space and a MIDI foot still hold the pedal there.
+   */
+  pedalsFromSm?: boolean
 }
 
 /**
@@ -25,12 +30,17 @@ export function KeyboardTools({
   variant = 'bar',
   namesChords = true,
   sustained = false,
+  pedalsFromSm = false,
 }: KeyboardToolsProps & { shown: boolean; onShow: (shown: boolean) => void }) {
   const { t } = useTranslation('common')
   return (
     <>
       {namesChords && shown ? <HeldChord /> : null}
-      {shown ? <SustainControl variant={variant} sustained={sustained} /> : null}
+      {shown ? (
+        <span className={pedalsFromSm ? 'contents max-sm:hidden' : 'contents'}>
+          <SustainControl variant={variant} sustained={sustained} />
+        </span>
+      ) : null}
       <Button
         variant={variant}
         size="icon"

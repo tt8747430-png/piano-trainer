@@ -198,6 +198,7 @@ export function PianoKeyboard({
             onPointerPress={onPointerPress}
             onClickPress={click}
             onFocusKey={setTabStop}
+            slim={keySize === 'piano'}
           />
         )
       }),
@@ -216,6 +217,7 @@ export function PianoKeyboard({
       tabStop,
       onPointerPress,
       click,
+      keySize,
     ],
   )
 
