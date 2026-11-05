@@ -450,7 +450,7 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
       return commit(
         state,
         isHandLayer(action.staff)
-          ? setClefIn(draft, action.bar, action.staff, action.clef, action.scope ?? 'end')
+          ? setClefIn(draft, action.bar, action.staff, action.clef, action.to)
           : setStaffClef(draft, staffPlace(action.staff), action.clef),
       )
     case 'sectionKind':

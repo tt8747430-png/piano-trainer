@@ -2,7 +2,7 @@ import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { PickerLayoutContext } from './picker-layout'
-import { TimeSignatureField } from './time-signature-field'
+import { TimeSignatureField, TimeSignatureTiles } from './time-signature-field'
 
 describe('TimeSignatureField (R31-E, the owner’s ruling)', () => {
   it('has the common meters as tiles, the one in force pressed, none the song cannot take (R32-B)', async () => {
@@ -96,14 +96,41 @@ describe('TimeSignatureField (R31-E, the owner’s ruling)', () => {
     rerender(<TimeSignatureField value={{ meter: '5/4', symbol: false }} onChange={onChange} />)
     expect(screen.queryByRole('switch')).not.toBeInTheDocument()
   })
+})
 
-  it('in a row, its tiles alone', () => {
+describe('TimeSignatureTiles (R32-C, Flat’s palette)', () => {
+  it('has Flat’s tiles, common and cut time among them, then Customize; none the song cannot take', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
     render(
-      <PickerLayoutContext value="row">
-        <TimeSignatureField value={{ meter: '4/4', symbol: false }} onChange={vi.fn()} />
+      <PickerLayoutContext value="palette">
+        <TimeSignatureTiles
+          value={{ meter: '4/4', symbol: true }}
+          onChange={onChange}
+          barred={(meter) => meter === '6/8'}
+          customize={<button type="button">Customize</button>}
+        />
       </PickerLayoutContext>,
     )
-    expect(screen.getByRole('group', { name: 'Time signature' })).toBeInTheDocument()
+    const tiles = within(screen.getByRole('group', { name: 'Time signature' })).getAllByRole(
+      'button',
+    )
+    expect(tiles.map((tile) => tile.getAttribute('aria-label'))).toEqual([
+      '2/4',
+      '3/4',
+      '4/4',
+      'Common time, C',
+      'Cut time, ¢',
+    ])
+    expect(screen.getByRole('button', { name: 'Common time, C' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(screen.getByRole('button', { name: '4/4' })).toHaveAttribute('aria-pressed', 'false')
+    await user.click(screen.getByRole('button', { name: 'Cut time, ¢' }))
+    expect(onChange).toHaveBeenLastCalledWith({ meter: '2/2', symbol: true })
+    expect(screen.getByRole('button', { name: 'Customize' })).toBeInTheDocument()
+    // No wheels and no switch inline: they are Customize's.
     expect(screen.queryByRole('spinbutton')).not.toBeInTheDocument()
     expect(screen.queryByRole('switch')).not.toBeInTheDocument()
   })

@@ -15,6 +15,9 @@ owner's, typos fixed.
   printed signs open; the title opens Title and credits; the gear holds only what the score does not print.
 - **Only what applies (2026-11-05):** "show only the actions relevant at that time like the write as common in the 5/4
   is not relevant and is weird that it is shown but is disabled". Hidden, never greyed.
+- **The palette as Flat's, its menus too (2026-11-05):** "this menu in the palette doesn't follow how the flat editor
+  does this … as close as possible as the flat editor and its ui and its management and features". Every section in
+  one scroll; Time signature as Flat's tiles with Customize; Key signature and Clef bare tables; Tempo in Measure.
 - **Piano keys on a phone (2026-11-05):** a button in the editor's bar, never only in the gear.
 - **Professional wording (2026-11-05):** "write professionally, not plain words": precise notation terms and concise
   sentences, as Apple, Flat, MuseScore and Dorico write them, in English and Russian.

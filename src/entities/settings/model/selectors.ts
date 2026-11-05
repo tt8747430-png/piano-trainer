@@ -35,6 +35,8 @@ export const selectEditing = (state: SettingsState): EditingSettings => state.ed
 export const selectSidebar = (state: SettingsState): Sidebar => state.sidebar
 /** Whether the palette is folded where it stands: as the learner left it there, else the panel shown and the sheet compact. */
 export const selectPaletteFolded = (state: SettingsState): boolean => state.paletteFolded
+/** Whether the palette shows its tools as named rows (R32-C, Flat's list view). */
+export const selectPaletteList = (state: SettingsState): boolean => state.paletteList
 /** The palette's category chosen, by name; null until the learner chooses. */
 export const selectPaletteCategory = (state: SettingsState): string | null => state.paletteCategory
 /** The mode the score editor writes in, as it was left. */

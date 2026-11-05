@@ -18,17 +18,16 @@ export function useKeyNames() {
 }
 
 /**
- * The key in force where the palette's Key signature changes it: the song's own at its head (or for
- * the whole song), a section's after.
+ * The key in force where the palette's Key signature changes it: the song's own at its head, a
+ * section's after.
  */
-export const useKeyAt = (song: boolean) => {
+export const useKeyAt = () => {
   const at = useSignatureFrom()
-  const whole = song || at.song
   // The draft, not the key read from it: a section's key is parsed afresh each time, its tonic a new
   // object, so it is read once per draft (a selector returning it would never settle).
   const draft = useEditorState((state) => state.draft)
   return useMemo(
-    () => (whole ? draft.key : sectionKey(draft, at.section)),
-    [whole, draft, at.section],
+    () => (at.song ? draft.key : sectionKey(draft, at.section)),
+    [at.song, draft, at.section],
   )
 }

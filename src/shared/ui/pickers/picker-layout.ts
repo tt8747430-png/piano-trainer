@@ -1,11 +1,12 @@
 import { createContext, use } from 'react'
 
 /**
- * How a picker's signs are laid out (R31-E): `grid`, its bordered grid with what it asks besides (a
- * key's mode, a clef's reach); `row`, its signs alone in one row, as the score editor's folded
- * palette shows them (Flat's).
+ * How a picker's signs are laid out (R31-E, R32-C): `grid`, its bordered grid with what it asks
+ * besides (a key's mode), as a sheet or a new song shows it; `palette`, the score editor's palette's
+ * section as Flat's, its signs bare in a table; `row`, its signs alone in one row, as the editor's
+ * folded palette shows them (Flat's).
  */
-export type PickerLayout = 'grid' | 'row'
+export type PickerLayout = 'grid' | 'palette' | 'row'
 
 export const PickerLayoutContext = createContext<PickerLayout>('grid')
 

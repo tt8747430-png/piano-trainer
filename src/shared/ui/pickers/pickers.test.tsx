@@ -3,9 +3,11 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { note, pitchClass } from '@/shared/lib/music'
 import { KeyPicker } from './KeyPicker'
+import { KeySignaturePicker } from './KeySignaturePicker'
 import { KeysChecklist } from './KeysChecklist'
 import { MenuPicker } from './MenuPicker'
 import { NotePicker } from './NotePicker'
+import { PickerLayoutContext } from './picker-layout'
 import { PickerRow } from './PickerRow'
 import { PitchPicker } from './PitchPicker'
 
@@ -126,6 +128,36 @@ describe('KeyPicker', () => {
     )
     await user.click(within(grid).getByRole('button', { name: 'G major / E minor' }))
     expect(onChange).toHaveBeenLastCalledWith({ tonic: note('E'), minor: true })
+  })
+})
+
+describe('KeySignaturePicker in the score editor’s palette (R32-C, Flat’s)', () => {
+  it('shows the signatures bare, sharps over flats, no mode, and Switch to natural while sharps or flats stand', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    const { rerender } = render(
+      <PickerLayoutContext value="palette">
+        <KeySignaturePicker value={{ tonic: note('A'), minor: false }} onChange={onChange} />
+      </PickerLayoutContext>,
+    )
+    expect(
+      within(screen.getByRole('group', { name: 'Sharps' })).getAllByRole('button'),
+    ).toHaveLength(7)
+    expect(
+      within(screen.getByRole('group', { name: 'Flats' })).getAllByRole('button'),
+    ).toHaveLength(7)
+    const three = screen.getByRole('button', { name: 'A major / F♯ minor' })
+    expect(three).toHaveAttribute('aria-pressed', 'true')
+    expect(three).toHaveTextContent('')
+    expect(screen.queryByRole('radiogroup')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Switch to natural' }))
+    expect(onChange).toHaveBeenLastCalledWith({ tonic: note('C'), minor: false })
+    rerender(
+      <PickerLayoutContext value="palette">
+        <KeySignaturePicker value={{ tonic: note('C'), minor: false }} onChange={onChange} />
+      </PickerLayoutContext>,
+    )
+    expect(screen.queryByRole('button', { name: 'Switch to natural' })).not.toBeInTheDocument()
   })
 })
 

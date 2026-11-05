@@ -22,7 +22,19 @@ const FACES = {
     'size-10 shrink-0 rounded-control border-0 bg-transparent px-0 text-foreground/75 shadow-none hover:bg-accent hover:text-foreground focus-visible:-outline-offset-3 landscape-phone:size-9',
     PRESSED,
   ),
+  // Flat's list view: a bordered row, its picture then its name.
+  list: cn(
+    'h-12 w-full min-w-0 justify-start gap-2.5 rounded-control border border-hairline bg-card px-3 text-start text-base text-foreground/80 shadow-none hover:bg-accent hover:text-foreground active:scale-100',
+    PRESSED,
+  ),
 } as const
+
+/** A key's name beside its picture in the list view. */
+const ListName = ({ label }: { label: string }) => (
+  <span className="min-w-0 truncate font-sans text-base leading-tight font-normal not-italic">
+    {label}
+  </span>
+)
 
 /** A cell two wide in a section's grid: a term's words, a barline's drawing. */
 const WIDE = 'col-span-2'
@@ -45,7 +57,9 @@ export function PaletteSection({
     <section
       aria-label={title}
       data-category={category}
-      className={bar ? 'flex shrink-0 items-center gap-0.5' : 'flex flex-col gap-2 pb-1'}
+      className={
+        bar ? 'flex shrink-0 items-center gap-0.5' : 'flex scroll-mt-2 flex-col gap-2 pb-1'
+      }
     >
       {children}
     </section>
@@ -74,7 +88,6 @@ export function PaletteHint({ children }: { children: ReactNode }) {
   const bar = usePaletteForm() === 'bar'
   return (
     <p
-      role="status"
       className={cn(
         'text-sm text-muted-foreground',
         bar
@@ -87,12 +100,6 @@ export function PaletteHint({ children }: { children: ReactNode }) {
   )
 }
 
-/** What a section says over its keys (whose staff, from which bar); nothing in the row. */
-export function SectionLine({ children }: { children: ReactNode }) {
-  if (usePaletteForm() === 'bar') return null
-  return <p className="text-sm text-muted-foreground">{children}</p>
-}
-
 /**
  * A group of keys as the form lays them out (R31-E, Flat's palettes): in a section a table of equal
  * bordered cells, as many to a row as the room holds, its last row's cells keeping their lines; in
@@ -100,9 +107,17 @@ export function SectionLine({ children }: { children: ReactNode }) {
  */
 export function KeyGrid({ label, children }: { label?: string | undefined; children: ReactNode }) {
   const group = { role: label ? 'group' : undefined, 'aria-label': label }
-  if (usePaletteForm() === 'bar')
+  const form = usePaletteForm()
+  if (form === 'bar')
     return (
       <div {...group} className="contents">
+        {children}
+      </div>
+    )
+  // Flat's list view: two named rows to a line.
+  if (form === 'list')
+    return (
+      <div {...group} data-slot="key-grid" className="grid grid-cols-2 gap-2">
         {children}
       </div>
     )
@@ -144,11 +159,13 @@ export function PaletteKey({
         FACES[form],
         span === 'wide' && form === 'bar' && 'w-auto min-w-20 px-2',
         className,
+        form === 'list' && 'col-span-1',
       )}
-      {...(span ? { span } : {})}
+      {...(span && form !== 'list' ? { span } : {})}
       {...props}
     >
       {children}
+      {form === 'list' ? <ListName label={label} /> : null}
     </ToolKey>
   )
 }
@@ -186,15 +203,18 @@ export function SignTile({
       {...props}
       className={cn(
         'flex min-w-0 items-center justify-center px-1 text-foreground/80 transition-colors duration-150 ease-out hover:bg-accent hover:text-foreground focus-visible:z-10 focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring disabled:opacity-35 motion-reduce:transition-none',
-        form === 'grid'
-          ? cn('h-12 bg-card shadow-[inset_-1px_-1px_0_var(--color-hairline)]', WIDE)
-          : 'h-10 w-20 shrink-0 rounded-control',
+        form === 'grid' &&
+          cn('h-12 bg-card shadow-[inset_-1px_-1px_0_var(--color-hairline)]', WIDE),
+        form === 'bar' && 'h-10 w-20 shrink-0 rounded-control',
+        form === 'list' &&
+          'h-12 justify-start gap-2.5 rounded-control border border-hairline bg-card px-3',
         PRESSED,
       )}
     >
       <span aria-hidden className="flex h-9 shrink-0 justify-center">
         {children}
       </span>
+      {form === 'list' ? <ListName label={label} /> : null}
     </button>
   )
 }

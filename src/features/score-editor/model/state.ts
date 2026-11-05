@@ -1,4 +1,3 @@
-import type { ClefScope } from './clefs'
 import type { BarMarkChoice } from './bar-marks'
 import type { HeaderField, PieceLayout, SectionKind, StaffName } from '@/entities/piece'
 import type { Chord, Clef, Finger, Key, Midi, TempoUnit, Tick } from '@/shared/lib/music'
@@ -201,17 +200,16 @@ export type EditorAction =
   /** Barlines on the bars chosen, else the caret's (a repeat, an ending, a double or final barline). */
   | { readonly type: 'barMarks'; readonly choice: BarMarkChoice }
   /**
-   * A staff's clef (a clef's on the sheet, else the caret's staff from the first bar chosen): a
-   * hand's staff changes clef from that bar on (ADR 0097), a single staff is written in it whole
-   * (ADR 0097).
+   * A staff's clef (the caret's staff from the first bar chosen): a hand's staff changes clef over
+   * the bars chosen (`to`, the last), else from that bar until the next change (R32-C, Flat's); a
+   * single staff is written in it whole (ADR 0097).
    */
   | {
       readonly type: 'clef'
       readonly staff: NoteLayer
       readonly clef: Clef
       readonly bar: number
-      /** How far a hand's clef reaches (A34): to the next change where not said. */
-      readonly scope?: ClefScope
+      readonly to?: number
     }
   | { readonly type: 'sectionKind'; readonly section: number; readonly kind: SectionKind }
   | { readonly type: 'joinSection'; readonly section: number }
