@@ -20,9 +20,10 @@ import { Button } from '@/shared/ui/primitives/button'
 const BASS_ROLES = ['root', '3rd', '5th', '7th'] as const
 
 /**
- * A chord's choices (R29 CP2, P14 folded in), opened by a double tap or Enter on its box: its symbol
- * typed, its length in beats, its bass note, and the passing chords that lead from it to the next
- * box, each put before that box at a tap; Delete chord at the foot.
+ * A chord's sheet (R29 CP2, P14 folded in, R32), opened by a tap or Enter on its tile, or a letter
+ * typed on it (the symbol starting from that letter): its symbol typed, its length in beats, its bass
+ * note, and the passing chords that lead from it to the next tile, each put before that tile at a
+ * tap; Delete chord at the foot.
  */
 export function ChordDialog({
   open,
@@ -31,6 +32,7 @@ export function ChordDialog({
   beats,
   next,
   musicKey,
+  typed: started,
   onChord,
   onBeats,
   onInsert,
@@ -43,13 +45,15 @@ export function ChordDialog({
   /** The box after it, where there is one: what its passing chords lead to. */
   next: Chord | null
   musicKey: Key
+  /** A letter typed on the chord's tile: the symbol starts from it. */
+  typed?: string | undefined
   onChord(chord: Chord): void
   onBeats(beats: number): void
   onInsert(chords: readonly Chord[]): void
   onRemove(): void
 }) {
   const { t } = useTranslation('practice')
-  const [typed, setTyped] = useState<string | null>(null)
+  const [typed, setTyped] = useState<string | null>(started ?? null)
   const symbol = chordSymbol(chord)
   const read = typed === null ? chord : readChordSymbol(typed)
   const tones = spellChord(chord.root, chord.quality)

@@ -1,13 +1,16 @@
 import {
   closestCenter,
   DndContext,
+  DragOverlay,
   KeyboardSensor,
-  PointerSensor,
+  MouseSensor,
+  pointerWithin,
+  TouchSensor,
   useSensor,
   useSensors,
+  type CollisionDetection,
   type DragEndEvent,
 } from '@dnd-kit/core'
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import {
   SortableContext,
   sortableKeyboardCoordinates,
@@ -22,7 +25,7 @@ import { libraryParam, progressionMode } from '@/entities/progression-library'
 import { selectChordPlayer, useSettings } from '@/entities/settings'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { localText, useKeyName, useLocale } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
+import { cn, useMediaQuery } from '@/shared/lib'
 import {
   barCount,
   duplicateSection,
@@ -34,6 +37,7 @@ import {
   removeChord,
   removeSection,
   resizeChord,
+  sectionBars,
   setChord,
   withSection,
   addSection,
@@ -49,7 +53,6 @@ import {
   parseNumerals,
   printedChord,
   randomProgression,
-  readChordSymbol,
   type Chord,
   type Numeral,
 } from '@/shared/lib/music'
@@ -71,10 +74,34 @@ import { SHEET_TEMPO } from '@/entities/chord-sheet'
 import type { BoxPlace } from '../model/engine'
 import type { ChordSheetInHand } from '../model/use-chord-sheet'
 import { useChordTransport } from '../model/use-chord-transport'
+import { dropMove, readDragId, sectionDragId, landsOn } from '../model/sheet-dnd'
 import { ChordDialog } from './ChordDialog'
+import { ChordFace, type TileActs } from './ChordTile'
 import { LibrarySheet } from './LibrarySheet'
-import { SheetSection, type BoxActs } from './SheetSection'
+import { SheetSection } from './SheetSection'
 import { StyleSheet } from './StyleSheet'
+
+const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
+/** How a dropped tile settles into its place: the app's one ease-out (DESIGN.md, Motion). */
+const DROP_ANIMATION = { duration: 200, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+
+/**
+ * What a drop may land on (memory-palaces' `useSortableBlock`): only what the thing in hand may land
+ * among (a section among the sections, a chord among its own section's), the one under the pointer
+ * first, else the nearest.
+ */
+const scopedCollision: CollisionDetection = (args) => {
+  const active = readDragId(args.active.id)
+  const scoped = {
+    ...args,
+    droppableContainers: args.droppableContainers.filter((container) => {
+      const over = readDragId(container.id)
+      return active !== null && over !== null && landsOn(active, over)
+    }),
+  }
+  const under = pointerWithin(scoped)
+  return under.length > 0 ? under : closestCenter(scoped)
+}
 
 /** Where the Chord player's links go: a saved sheet opened, the sheet in hand, a progression put in hand. */
 export interface ChordPlayerRoutes {
@@ -95,9 +122,12 @@ function sheetNumerals(sheet: ChordSheet): Numeral[] | null {
 }
 
 /**
- * The Chord player (R29 CP1–CP6): the head (the sheet's name opening the Library, its Style, Tempo
- * and key), the sheet's sections of bars and chord boxes, Randomize and Add section at its foot, the
- * on-screen piano, and the floating transport (Play on Space, Loop, Practise in the Player).
+ * The Chord player (R29 CP1–CP6, R32): the head (the sheet's name opening the Library, its Style,
+ * Tempo and key), the sheet's sections of equal chord tiles, Add section and Randomize at its foot,
+ * the on-screen piano, and the floating transport (Play on Space, Loop, Practise in the Player). One
+ * drag context holds the sections and their chords (memory-palaces' fix): a mouse moves a thing
+ * after 8px, a finger after a quarter-second hold, the keys after Space; the thing in hand is drawn
+ * in the overlay, lifted, and lands only where it may.
  */
 export function ChordPlayer({
   hand,
@@ -128,8 +158,9 @@ export function ChordPlayer({
     settings: entry.settings,
     block: prefs.voicing === 'block',
   })
-  const [typing, setTyping] = useState<{ place: BoxPlace; text: string } | null>(null)
-  const [dialog, setDialog] = useState<BoxPlace | null>(null)
+  const [dialog, setDialog] = useState<{ place: BoxPlace; typed?: string } | null>(null)
+  const [inHand, setInHand] = useState<string | null>(null)
+  const reduced = useMediaQuery(REDUCED_MOTION)
   const [library, setLibrary] = useState(false)
   const [styles, setStyles] = useState(false)
   const meter = shown.meter
@@ -137,17 +168,8 @@ export function ChordPlayer({
   const inSection = (section: number, change: (each: Section) => Section) =>
     hand.editShown((sheet) => withSection(sheet, section, change))
   const chordAt = (place: BoxPlace) => shown.sections[place.section]?.chords[place.index]
-  const acts: BoxActs = {
-    type(place, text) {
-      const chord = readChordSymbol(text)
-      if (!chord) {
-        say(t('chordPlayer.unread', { text }))
-        return false
-      }
-      inSection(place.section, (section) => setChord(section, place.index, chord))
-      return true
-    },
-    open: setDialog,
+  const acts: TileActs & { add(section: number): void } = {
+    open: (place, typed) => setDialog(typed === undefined ? { place } : { place, typed }),
     remove(place) {
       const gone = chordAt(place)
       if (!gone) return
@@ -160,7 +182,6 @@ export function ChordPlayer({
     },
     resize: (place, beats) =>
       inSection(place.section, (section) => resizeChord(section, place.index, beats)),
-    move: (section, from, to) => inSection(section, (each) => moveChord(each, from, to)),
     add(section) {
       const chords = shown.sections[section]?.chords ?? []
       const last = chords.at(-1)?.chord ?? {
@@ -168,7 +189,7 @@ export function ChordPlayer({
         quality: shown.key.minor ? 'min' : 'maj',
       }
       inSection(section, (each) => insertChord(each, each.chords.length, last, meter))
-      setTyping({ place: { section, index: chords.length }, text: '' })
+      setDialog({ place: { section, index: chords.length } })
     },
   }
 
@@ -192,7 +213,7 @@ export function ChordPlayer({
     })
   }
 
-  const loopSection = transport.lit?.section ?? dialog?.section ?? 0
+  const loopSection = transport.lit?.section ?? dialog?.place.section ?? 0
   const loopName = t(`chordPlayer.sections.${shown.sections[loopSection]?.kind ?? 'verse'}`)
   const numerals = sheetNumerals(shown)
   const hasChords = shown.sections.some((section) => section.chords.length > 0)
@@ -209,20 +230,25 @@ export function ChordPlayer({
   ])
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+      keyboardCodes: { start: ['Space'], cancel: ['Escape'], end: ['Space', 'Enter'] },
+    }),
   )
-  const sectionIds = shown.sections.map((_, i) => `section-${i}`)
-  const onSectionDrop = ({ active, over }: DragEndEvent) => {
-    if (!over || active.id === over.id) return
-    hand.edit((sheet) =>
-      moveSection(
-        sheet,
-        sectionIds.indexOf(String(active.id)),
-        sectionIds.indexOf(String(over.id)),
-      ),
-    )
+  const sectionIds = shown.sections.map((_, i) => sectionDragId(i))
+  const onDrop = ({ active, over }: DragEndEvent) => {
+    setInHand(null)
+    const move = dropMove(active.id, over?.id)
+    if (move?.kind === 'section') hand.edit((sheet) => moveSection(sheet, move.from, move.to))
+    else if (move?.kind === 'chord')
+      inSection(move.section, (each) => moveChord(each, move.from, move.to))
   }
+  const held = readDragId(inHand)
+  const heldChord =
+    held?.kind === 'chord' ? shown.sections[held.section]?.chords[held.index] : undefined
+  const heldSection = held?.kind === 'section' ? shown.sections[held.section] : undefined
   const askDelete = async (index: number) => {
     const section = shown.sections[index]
     if (!section) return
@@ -237,9 +263,9 @@ export function ChordPlayer({
       }))
     if (yes) hand.edit((sheet) => removeSection(sheet, index))
   }
-  const dialogChord = dialog ? chordAt(dialog) : undefined
+  const dialogChord = dialog ? chordAt(dialog.place) : undefined
   const dialogNext = dialog
-    ? (shown.sections[dialog.section]?.chords[dialog.index + 1]?.chord ?? null)
+    ? (shown.sections[dialog.place.section]?.chords[dialog.place.index + 1]?.chord ?? null)
     : null
 
   return (
@@ -287,20 +313,18 @@ export function ChordPlayer({
         </div>
       </div>
 
-      {hasChords ? null : <p className="text-muted-foreground">{t('chordPlayer.emptySheet')}</p>}
-
       <DndContext
         sensors={sensors}
-        collisionDetection={closestCenter}
-        modifiers={[restrictToVerticalAxis]}
-        onDragEnd={onSectionDrop}
+        collisionDetection={scopedCollision}
+        onDragStart={({ active }) => setInHand(String(active.id))}
+        onDragEnd={onDrop}
+        onDragCancel={() => setInHand(null)}
       >
         <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
           <div className="flex flex-col gap-4">
             {shown.sections.map((section, index) => (
               <SheetSection
                 key={sectionIds[index]}
-                sortId={sectionIds[index] ?? ''}
                 section={section}
                 index={index}
                 musicKey={shown.key}
@@ -308,8 +332,6 @@ export function ChordPlayer({
                 names={prefs.names}
                 variations={variations}
                 lit={transport.lit}
-                typing={typing}
-                onTyping={setTyping}
                 acts={acts}
                 onChange={(change) => inSection(index, (each) => ({ ...each, ...change }))}
                 onDuplicate={() => hand.edit((sheet) => duplicateSection(sheet, index))}
@@ -319,6 +341,25 @@ export function ChordPlayer({
             ))}
           </div>
         </SortableContext>
+        {/* The thing in hand, drawn as itself and lifted (memory-palaces' cause 3). */}
+        <DragOverlay dropAnimation={reduced ? null : DROP_ANIMATION}>
+          {heldChord ? (
+            <ChordFace
+              chord={heldChord.chord}
+              beats={heldChord.beats}
+              musicKey={shown.key}
+              names={prefs.names}
+              lifted
+            />
+          ) : heldSection ? (
+            <div className="flex min-h-14 items-center gap-3 card px-4 elevation-3">
+              <span className="font-semibold">{t(`chordPlayer.sections.${heldSection.kind}`)}</span>
+              <span className="text-sm text-muted-foreground tabular-nums">
+                {t('chordPlayer.bars', { count: sectionBars(heldSection, meter).length })}
+              </span>
+            </div>
+          ) : null}
+        </DragOverlay>
       </DndContext>
 
       <div className="flex flex-wrap gap-2">
@@ -403,20 +444,22 @@ export function ChordPlayer({
           beats={dialogChord.beats}
           next={dialogNext}
           musicKey={shown.key}
+          typed={dialog.typed}
           onChord={(chord) =>
-            inSection(dialog.section, (each) => setChord(each, dialog.index, chord))
+            inSection(dialog.place.section, (each) => setChord(each, dialog.place.index, chord))
           }
-          onBeats={(beats) => acts.resize(dialog, beats)}
+          onBeats={(beats) => acts.resize(dialog.place, beats)}
           onInsert={(chords: readonly Chord[]) => {
-            inSection(dialog.section, (each) =>
+            inSection(dialog.place.section, (each) =>
               chords.reduce(
-                (section, chord, i) => insertChord(section, dialog.index + 1 + i, chord, meter),
+                (section, chord, i) =>
+                  insertChord(section, dialog.place.index + 1 + i, chord, meter),
                 each,
               ),
             )
             setDialog(null)
           }}
-          onRemove={() => acts.remove(dialog)}
+          onRemove={() => acts.remove(dialog.place)}
         />
       ) : null}
       <LibrarySheet
