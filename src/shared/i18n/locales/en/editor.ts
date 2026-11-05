@@ -784,6 +784,7 @@ export const editor = {
       layout: 'Layout',
       input: 'Note input',
       recording: 'Recording',
+      piano: 'On-screen piano',
     },
     // What each setting does, one line under its name.
     details: {
@@ -791,6 +792,7 @@ export const editor = {
       layout: 'Staff size, measures per system, page format',
       input: 'Note playback during editing, palette position',
       recording: 'Metronome, melody playback, count-in',
+      piano: 'Key size, note names, volume, pedals',
     },
     title: 'Score settings',
     score: 'Score',

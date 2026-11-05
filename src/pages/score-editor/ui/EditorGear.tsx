@@ -1,9 +1,20 @@
-import { ArrowUpDown, Circle, Eye, ListMusic, Mic, Music2, Piano, Ruler } from 'lucide-react'
+import {
+  ArrowUpDown,
+  Circle,
+  Eye,
+  KeyboardMusic,
+  ListMusic,
+  Mic,
+  Music2,
+  Piano,
+  Ruler,
+} from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectScoreView, useSettings } from '@/entities/settings'
 import { selectTakesOf, useTakes } from '@/entities/take'
 import { MidiControl } from '@/features/connect-midi'
+import { KeyboardSettingsFields } from '@/features/live-keyboard'
 import { useKeyName } from '@/shared/i18n'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { BackButton, RowButton, RowTrigger, SettingsGroup, Sheet, SheetContent } from '@/shared/ui'
@@ -162,6 +173,14 @@ function MainPage({ draft }: { draft: EditorDraft | undefined }) {
             paint="sand"
             onClick={() => view.setGear('recording')}
           />
+          {/* The keys' own settings in the editor's gear, as the Player's sheet holds them (R34). */}
+          <RowTrigger
+            title={t('scoreSettings.pages.piano')}
+            detail={t('scoreSettings.details.piano')}
+            icon={KeyboardMusic}
+            paint="sky"
+            onClick={() => view.setGear('piano')}
+          />
         </SettingsGroup>
       )}
       {draft ? (
@@ -186,6 +205,8 @@ function PageBody({ page }: { page: Exclude<GearPage, 'main'> }) {
       return <RecordPage />
     case 'credits':
       return <CreditsPage />
+    case 'piano':
+      return <KeyboardSettingsFields />
     default:
       return <ScorePageBody page={page} />
   }
