@@ -5,20 +5,21 @@ import {
   Music,
   PanelLeftClose,
   PanelLeftOpen,
-  Search,
-  Settings,
   UserRound,
 } from 'lucide-react'
 import type { ComponentType } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectSidebar, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setSidebar } from '@/features/set-preference'
-import { cn, OPEN_PLAINLY, useMediaQuery } from '@/shared/lib'
+import { OPEN_PLAINLY, useMediaQuery } from '@/shared/lib'
 import { useAccount, useLearnerProfile } from '@/shared/lib/account'
 import { keyHint, useShortcutsPlatform, useShortcuts, type Combo } from '@/shared/lib/shortcuts'
 import { Avatar } from '@/shared/ui'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
 import { useSearchPalette } from '@/widgets/search-palette'
+import { SidebarAccount } from './SidebarAccount'
+import { SidebarRecents } from './SidebarRecents'
+import { SidebarSearch } from './SidebarSearch'
 
 interface Place {
   readonly to: '/' | '/songs' | '/practice' | '/profile' | '/settings'
@@ -101,16 +102,8 @@ const SIDEBAR_SHOWN = '(min-width: 64rem)'
  * platform's modifier and K from anywhere (a phone has it in a place's bar).
  */
 const SEARCH_KEY: Combo = { code: 'KeyK', mod: true }
-/** What else sits at the sidebar's foot: Settings, on the modifier and a comma (a phone's is in the Profile). */
-const FOOT: readonly Place[] = [
-  {
-    to: '/settings',
-    label: 'nav.settings',
-    icon: Settings,
-    exact: false,
-    key: { code: 'Comma', mod: true },
-  },
-]
+/** Settings, the gear beside the learner at the sidebar's foot, on the modifier and a comma. */
+const SETTINGS_KEY: Combo = { code: 'Comma', mod: true }
 
 const PLACE_LINK =
   'flex h-14 flex-col items-center justify-center gap-0.5 rounded-control text-sm font-semibold text-muted-foreground choice focus-visible:-outline-offset-3 lg:h-11 lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-base lg:group-data-[sidebar=collapsed]/nav:justify-center lg:group-data-[sidebar=collapsed]/nav:px-0'
@@ -177,40 +170,12 @@ function PlaceLink({
   )
 }
 
-/** Search at the sidebar's foot: it opens the palette, so it is a button, never a place of its own. */
-function SearchItem({ collapsed }: { collapsed: boolean }) {
-  const { t } = useTranslation('common')
-  const palette = useSearchPalette()
-  const mac = useShortcutsPlatform()
-  const label = t('nav.search')
-  const content = (
-    <>
-      <Search aria-hidden className="size-6 shrink-0 lg:size-5" />
-      <span className="lg:group-data-[sidebar=collapsed]/nav:sr-only">{label}</span>
-    </>
-  )
-  const props = {
-    type: 'button',
-    title: keyHint(label, SEARCH_KEY, mac),
-    onClick: () => palette.open(),
-    className: cn(PLACE_LINK, 'w-full'),
-  } as const
-  if (!collapsed) return <button {...props}>{content}</button>
-  return (
-    <Tooltip>
-      <TooltipTrigger render={<button {...props} />}>{content}</TooltipTrigger>
-      <TooltipContent side="right" className="max-lg:hidden">
-        {label}
-      </TooltipContent>
-    </Tooltip>
-  )
-}
-
 /**
- * The main navigation: a bar docked along the bottom on phones; from 1024px a sidebar that collapses
- * to its icons and remembers it, with Search at its foot. From the computer's keys, Alt
- * and a place's number goes there, the platform's modifier with K opens Search, and with B collapses
- * or opens the sidebar.
+ * The main navigation: a bar docked along the bottom on phones (the four places, the Profile last);
+ * from 1024px a sidebar as Claude's (R32): the name and its collapse toggle, Search as a field, the
+ * places, Recents (the songs opened last), and the learner at its foot with Settings beside; it
+ * collapses to a rail of icons and remembers it. From the computer's keys, Alt and a place's number
+ * goes there, the modifier with K opens Search, with a comma Settings, with B collapses or opens it.
  */
 export function AppNav() {
   const { t } = useTranslation('common')
@@ -226,11 +191,16 @@ export function AppNav() {
   useShortcuts(
     t('shortcuts.app'),
     [
-      ...[...PLACES, ...FOOT].flatMap(({ to, label, key }) =>
+      ...PLACES.flatMap(({ to, label, key }) =>
         key
           ? [{ label: t(label), combo: key, run: () => void navigate({ to, state: OPEN_PLAINLY }) }]
           : [],
       ),
+      {
+        label: t('nav.settings'),
+        combo: SETTINGS_KEY,
+        run: () => void navigate({ to: '/settings', state: OPEN_PLAINLY }),
+      },
       { label: t('nav.search'), combo: SEARCH_KEY, run: () => palette.open() },
       { label: t('shortcuts.sidebar'), combo: SIDEBAR_KEY, run: toggle },
     ],
@@ -269,31 +239,24 @@ export function AppNav() {
           <ToggleIcon aria-hidden className="size-5" />
         </button>
       </div>
-      <ul className="mx-auto flex max-w-md gap-1 px-2 pt-1.5 landscape-phone:mx-0 landscape-phone:w-full landscape-phone:flex-col landscape-phone:px-1 landscape-phone:pt-0 lg:mx-0 lg:max-w-none lg:flex-1 lg:flex-col lg:px-3 lg:pt-0">
+      {sidebarShown ? (
+        <div className="flex px-3 pb-3 group-data-[sidebar=collapsed]/nav:justify-center">
+          <SidebarSearch collapsed={collapsed} combo={SEARCH_KEY} />
+        </div>
+      ) : null}
+      <ul className="mx-auto flex max-w-md gap-1 px-2 pt-1.5 landscape-phone:mx-0 landscape-phone:w-full landscape-phone:flex-col landscape-phone:px-1 landscape-phone:pt-0 lg:mx-0 lg:max-w-none lg:flex-col lg:px-3 lg:pt-0">
         {(sidebarShown ? PLACES.filter((place) => place !== PROFILE) : PLACES).map((place) => (
           <li key={place.to} className="flex-1 landscape-phone:flex-none lg:flex-none">
             <PlaceLink place={place} collapsed={collapsed} />
           </li>
         ))}
-        {sidebarShown && (
-          <li className="mt-auto pb-4">
-            <ul className="flex flex-col gap-1">
-              <li>
-                <SearchItem collapsed={collapsed} />
-              </li>
-              {FOOT.map((place) => (
-                <li key={place.to}>
-                  <PlaceLink place={place} collapsed={collapsed} />
-                </li>
-              ))}
-              {/* The learner, last in the sidebar as an app's account is (memory-palaces', Linear's, Slack's). */}
-              <li className="mt-2 border-t border-border pt-3">
-                <PlaceLink place={PROFILE} collapsed={collapsed} />
-              </li>
-            </ul>
-          </li>
-        )}
       </ul>
+      {sidebarShown ? (
+        <div className="flex min-h-0 flex-1 flex-col justify-between gap-3 px-3 pb-4">
+          {collapsed ? <span /> : <SidebarRecents />}
+          <SidebarAccount collapsed={collapsed} />
+        </div>
+      ) : null}
     </nav>
   )
 }

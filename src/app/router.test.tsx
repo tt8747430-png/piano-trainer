@@ -141,7 +141,7 @@ describe('the app shell', () => {
   it('puts the focus on a screen’s heading as a link opens it', async () => {
     const user = userEvent.setup()
     await renderApp('/practice')
-    await user.click(await screen.findByRole('link', { name: /^Chords/ }))
+    await user.click(await screen.findByRole('link', { name: /^Chords Triads/ }))
     const heading = await screen.findByRole('heading', { level: 1, name: 'Chords' })
     await waitFor(() => expect(heading).toHaveFocus())
   })
