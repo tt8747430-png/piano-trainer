@@ -343,8 +343,9 @@ on a phone, 24px from 640px, 40px beside the sidebar.
   inside.
 - **A page that shows a thing on the keys** reads top to bottom: the keys pinned, what it is with its one Play, its
   choices, then its titled sections. No page splits into two columns of unrelated things.
-- **Settings:** one column of grouped cards on a phone; from 64rem two panes, the list (20rem, sticky) beside the page
-  (44rem). Never two columns of unequal groups.
+- **Settings:** one column of grouped cards on a phone, each page pushed with Back; from 64rem the libraries' two
+  panes: a sidebar of tree rows (17rem, a painted swatch each, sticky under the bar and scrolling on its own) beside
+  the page (44rem), which scrolls with the window. Never two columns of unequal groups.
 - **The editor's palette docks:** from 48rem a panel at the sheet's left with the note-entry toolbar over the sheet; on a
   phone held upright a sheet at the foot.
 - **Equal columns:** a chart's lines are grids of equal beats; a score's lines are justified to their share of the

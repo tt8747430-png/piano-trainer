@@ -151,3 +151,15 @@ into view), 1.4 drawn for an administrator.
 **Pass 2** (fresh read at 393 and 1400, both themes): one honey action per screen (Add flag, Send report) ✓; the
 destructive rows red and alone ✓; every target ≥ 44px (Legal rows, sidebar rows 44px) ✓; no internal word on screen ✓;
 the Russian longest string (Политика конфиденциальности) fits a phone row ✓; no overflow at 393 ✓. Nothing changed.
+
+## Changed while building
+
+- The first group is **App** (ru Приложение), not General: "General › General" read twice in the list (Pass 1, ru).
+- ru Storage and backup is **Хранилище и копии** (the longer name was cut in the laptop sidebar); Software update is **Обновления · Актуальная версия** (it wrapped to four lines on a phone).
+- `/settings/player` stays (the Player round owns it; `settings-pages.test` renders the Player's preferences there); it is not listed, so it stands alone with Back to Settings.
+
+## Built pages: two impeccable passes
+
+**Pass 1** (402×874 and 1710×904, en light, ru dark): a row's value stopped short of the chevron's column (Software update beside Licence) — values now end-aligned in every row (`RowFace`); "App › General" replaced "General › General"; the ru sidebar cut Хранилище и резервные копии, and Обновление ПО · Последняя версия wrapped to four lines — both shortened; the bar editor cut its tiles' names (Name an…, Переме…) — tiles grow to their name, Edit replaces Name and look; "The toolbar is full" read wrong on a swipe side — "All slots are in use"; the legal pages still pointed at Settings › Help.
+
+**Pass 2** (fresh shots of every page, `.scratch/r32/pass2/`): the laptop sidebar holds still at the end of a scrolled Terms of Service with About marked; every page has its Back on a phone; no text cut; the only inspector lines are the bar editor's 24px − badges (their reach is 44px through a pseudo-element the inspector does not measure) and the choice cards' 16px radio dots inside 44px labels.
