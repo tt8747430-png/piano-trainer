@@ -219,7 +219,7 @@ function BlockBody({
               variant="outline"
               render={
                 <Link
-                  to="/practice/progressions"
+                  to="/practice/progressions/line"
                   search={{
                     key: keyParam(key),
                     p: numeralsParam(numerals),

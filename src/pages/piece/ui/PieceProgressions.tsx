@@ -26,7 +26,7 @@ export function PieceProgressions({ piece }: { piece: Piece }) {
         {used.map(({ progression, key }) => (
           <li key={progression.id}>
             <Link
-              to="/practice/progressions"
+              to="/practice/progressions/line"
               search={{
                 key: keyParam(key),
                 p: libraryParam(progression, key.minor),

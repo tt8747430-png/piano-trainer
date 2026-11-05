@@ -21,7 +21,7 @@ export function ReviewLink({
       if (question.cadence)
         return (
           <Link
-            to="/practice/progressions"
+            to="/practice/progressions/line"
             search={{ key: keyParam(question.cadence.key) }}
             {...props}
           />
@@ -61,7 +61,7 @@ export function ReviewLink({
     case 'name-progression':
       return (
         <Link
-          to="/practice/progressions"
+          to="/practice/progressions/line"
           search={{ key: keyParam(question.key), p: question.line }}
           {...props}
         />
@@ -70,7 +70,11 @@ export function ReviewLink({
     case 'name-cadence':
     case 'cadence-card':
       return (
-        <Link to="/practice/progressions" search={{ key: keyParam(question.key) }} {...props} />
+        <Link
+          to="/practice/progressions/line"
+          search={{ key: keyParam(question.key) }}
+          {...props}
+        />
       )
     case 'read-note':
       return null

@@ -283,7 +283,7 @@ export const practice = {
   progressions: {
     edit: {
       open: 'Edit the progression',
-      new: 'New progression',
+      new: 'New in the library',
       bar: 'Edit progression',
       lines: 'Lines',
       heading: 'The progression',
@@ -307,10 +307,22 @@ export const practice = {
     minorLine: 'These numerals are a minor key’s.',
     playIn: 'Play them in {{key}}',
     throughKeys: 'Practise in all 12 keys',
-    inChordPlayer: 'Play in the Chord player',
-    // Progressions' tabs (A23).
-    tabs: { progression: 'Progression', library: 'Library', passing: 'Passing chords' },
-    allStyles: 'All styles',
+    inChordPlayer: 'Play it in the Chord player',
+    inChordPlayerLine: 'With a band, in any style',
+    // The learner's own progressions, Mine (R30-4): kept from a line typed, renamed, deleted.
+    mine: {
+      new: 'New progression',
+      keep: 'Keep in Mine',
+      edit: 'Edit the progression',
+      name: 'Name',
+      line: 'Chords',
+      create: 'Keep progression',
+      save: 'Save',
+      more: 'More',
+      delete: 'Delete',
+      deleting: 'Delete “{{name}}”?',
+      deletingBody: 'It leaves Mine for good.',
+    },
     // How the row is read and played (ADR 0112): its mode, how its chords are named, voice-led or blocks.
     mode: {
       label: 'Mode',
@@ -334,11 +346,6 @@ export const practice = {
       label: 'First chord’s inversion',
       info: 'The position a voice-led row starts in; each chord after it moves to the nearest one. A triad has no 3rd inversion, so it starts from its 2nd.',
     },
-    // The library as cards, a card a progression (ADR 0112).
-    library: 'Library',
-    chordCount_one: '{{count}} chord',
-    chordCount_other: '{{count}} chords',
-    chordsIn: 'Its chords in the key',
     /** What leads into each chord of the progression (ADR 0112). */
     lead: {
       label: 'Approach chords',

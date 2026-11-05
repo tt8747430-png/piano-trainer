@@ -29,6 +29,7 @@ export const common = {
     toScales: 'Go to Scales and keys',
     toAccompaniment: 'Go to Accompaniment',
     toExercises: 'Go to Exercises',
+    toProgressions: 'Go to Progressions',
     toTakes: 'Go to the takes',
   },
   // The one confirm dialog (R17): Cancel is the default; a typed confirmation names what to type.

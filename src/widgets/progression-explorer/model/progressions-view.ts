@@ -3,7 +3,6 @@ import {
   libraryProgression,
   progressionMode,
   type LibraryProgression,
-  type ProgressionStyle,
 } from '@/entities/progression-library'
 import type { PatternId } from '@/entities/pattern'
 import type { ProgressionsSettings } from '@/entities/settings'
@@ -25,27 +24,20 @@ import {
   type RowPosition,
 } from '@/shared/lib/music'
 
-/** Progressions' tabs (A23): the progression shown, the library, and the passing chords. */
-export const PROGRESSIONS_TABS = ['progression', 'library', 'passing'] as const
-export type ProgressionsTab = (typeof PROGRESSIONS_TABS)[number]
-
 /**
- * What Progressions shows (A23): the tab; numerals (`I-V-vi-IV`) in a key, at a chord size, read in
- * a church mode where one is chosen; what leads into each chord, where something does; the library's
- * style shown; and the two chords Passing chords looks at. How it is written and voiced is
- * Progressions' Settings (A24), not the URL's.
+ * What a progression's page shows (A23, R30-4): numerals (`I-V-vi-IV`) in a key, at a chord size,
+ * read in a church mode where one is chosen; what leads into each chord, where something does; and
+ * the two chords Passing chords looks at. How it is written and voiced is Progressions' Settings
+ * (A24), not the URL's. A line typed holds it all in its URL; a library's or the learner's own
+ * progression holds its line itself (`ProgressionSearch`).
  */
 export interface ProgressionsView {
-  /** The tab shown; the progression where left out. */
-  readonly tab?: Exclude<ProgressionsTab, 'progression'>
   readonly key: KeyParam
   readonly p: string
   /** The church mode the line is read in; the key's major or minor where left out. */
   readonly mode?: ChurchMode
   readonly size: ChordSize
   readonly lead?: LeadIn
-  /** The library's style shown; every style where left out. */
-  readonly style?: ProgressionStyle
   /** Passing chords: the chord they lead from, by its place in the row; the next one after it. */
   readonly between?: number
   /** Passing chords: only the ways whose chords are all the key's. */
@@ -159,3 +151,66 @@ export function playerSearch(view: ProgressionsView, settings: ProgressionsSetti
     ...rowPosition(settings),
   }
 }
+
+/**
+ * A library's or the learner's own progression's URL (R30-4): the key it is shown in, its chord size
+ * (its own where left out), what leads into each chord, and Passing chords' pair and In the key only.
+ */
+export interface ProgressionSearch {
+  readonly key: KeyParam
+  readonly size?: ChordSize
+  readonly lead?: LeadIn
+  readonly between?: number
+  readonly inKey?: boolean
+}
+
+/** A progression's URL as a view, its line yet to be written in. */
+const baseView = ({ size: _size, ...search }: ProgressionSearch): ProgressionsView => ({
+  ...search,
+  p: '',
+  size: 'triads',
+})
+
+/**
+ * What a library progression's page shows for its URL: its line in the key's mode where it has one,
+ * else in the key of the same tonic and the mode it has; at the chord size the URL names, else its
+ * own; in its church mode where it is heard in one (`chosenView`).
+ */
+export function libraryView(
+  search: ProgressionSearch,
+  progression: LibraryProgression,
+): ProgressionsView {
+  const view = chosenView(baseView(search), progression)
+  return search.size ? { ...view, size: search.size } : view
+}
+
+/** A progression the learner keeps, as its page reads it: its line, the mode it is read in. */
+export interface KeptLine {
+  readonly line: string
+  readonly minor: boolean
+  readonly mode?: ChurchMode
+}
+
+/**
+ * What the learner's own progression's page shows for its URL: its line in a key of the mode it was
+ * typed in, on the URL's tonic, read in its church mode where it has one.
+ */
+export function keptView(search: ProgressionSearch, kept: KeptLine): ProgressionsView {
+  const { tonic, minor } = keyFromParam(search.key)
+  return {
+    ...baseView(search),
+    key: minor === kept.minor ? search.key : keyParam(writtenKey({ tonic, minor: kept.minor })),
+    p: kept.line,
+    size: search.size ?? 'triads',
+    ...(kept.mode ? { mode: kept.mode } : {}),
+  }
+}
+
+/** The URL of a progression's page for the view it changed to: all but its line and mode. */
+export const progressionSearch = ({
+  key,
+  size,
+  lead,
+  between,
+  inKey,
+}: ProgressionsView): ProgressionSearch => ({ key, size, lead, between, inKey })

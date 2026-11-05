@@ -16,6 +16,7 @@ import {
   type PatternsStore,
 } from '@/entities/pattern'
 import type { LibraryStore } from '@/entities/library'
+import type { PracticeLibraryStore } from '@/entities/practice-library'
 import type { PiecesStore } from '@/entities/piece'
 import type { TakesStore } from '@/entities/take'
 import type { ViewsStore } from '@/entities/views'
@@ -36,10 +37,10 @@ import {
   CHORDS_KEPT,
   chordsSearch,
   intervalsSearch,
+  progressionSearch,
   progressionsSearch,
   readChordsSearch,
   readIntervalsSearch,
-  readProgressionsSearch,
   readScalesSearch,
   SCALES_KEPT,
   scalesSearch,
@@ -142,6 +143,7 @@ export interface RouterContext {
   readonly pieces: PiecesStore
   readonly takes: TakesStore
   readonly library: LibraryStore
+  readonly practiceLibrary: PracticeLibraryStore
   readonly content: ContentPort
 }
 
@@ -656,12 +658,32 @@ const intervalsRoute = createRoute({
   ...remembered(readIntervalsSearch, []),
   component: lazyRouteComponent(explorerScreens, 'IntervalsPage'),
 })
+// Progressions (R30-4): the library, a progression's own page (the library's or the learner's own),
+// and a line typed, which every link to a line of chords opens.
 const progressionsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/progressions',
-  ...progressionsSearch,
-  ...remembered(readProgressionsSearch, []),
+  ...practiceLibrarySearch,
+  ...remembered(readPracticeLibrarySearch, PRACTICE_LIBRARY_KEPT, PRACTICE_LIBRARY_KEPT),
   component: lazyRouteComponent(explorerScreens, 'ProgressionsPage'),
+})
+const progressionLineRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/progressions/line',
+  ...progressionsSearch,
+  component: lazyRouteComponent(explorerScreens, 'ProgressionLinePage'),
+})
+const progressionRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/progressions/$progressionId',
+  notFoundComponent: notFoundIn('progressions'),
+  ...progressionSearch,
+  beforeLoad: async ({ params, context }) => {
+    const { isProgressionThere } = await explorerScreens()
+    const own = context.practiceLibrary.getState().progressions
+    if (!isProgressionThere(params.progressionId, own)) throw notFound()
+  },
+  component: lazyRouteComponent(explorerScreens, 'ProgressionPage'),
 })
 // An editor's progression editor (content as data, ADR 0116), and a new progression.
 const progressionEditRoute = createRoute({
@@ -1103,6 +1125,8 @@ const routeTree = rootRoute.addChildren([
     scalesRoute,
     intervalsRoute,
     progressionsRoute,
+    progressionLineRoute,
+    progressionRoute,
     progressionEditRoute,
     progressionSettingsRoute,
     progressionPublishRoute,
@@ -1161,12 +1185,13 @@ export function createAppRouter({
   pieces,
   takes,
   library,
+  practiceLibrary,
   content,
 }: RouterContext & { history?: RouterHistory }) {
   const router = createRouter({
     routeTree,
     history,
-    context: { views, patterns, pieces, takes, library, content },
+    context: { views, patterns, pieces, takes, library, practiceLibrary, content },
     defaultPreload: 'intent',
     defaultErrorComponent: RouteError,
     defaultPendingComponent: RoutePending,

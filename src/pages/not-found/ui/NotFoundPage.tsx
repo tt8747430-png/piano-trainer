@@ -10,6 +10,7 @@ const WAYS = {
   scales: { to: '/practice/scales', label: 'notFound.toScales' },
   accompaniment: { to: '/practice/accompaniment', label: 'notFound.toAccompaniment' },
   exercises: { to: '/practice/exercises', label: 'notFound.toExercises' },
+  progressions: { to: '/practice/progressions', label: 'notFound.toProgressions' },
 } as const
 export type NotFoundWay = keyof typeof WAYS
 

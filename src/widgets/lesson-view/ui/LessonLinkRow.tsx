@@ -115,7 +115,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
           {...linkTile(target)}
           render={
             <Link
-              to="/practice/progressions"
+              to="/practice/progressions/line"
               search={{ key: keyParam(key), p: numeralsParam(numerals), size }}
             />
           }
@@ -131,7 +131,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
         <RowLink
           title={title}
           {...linkTile(target)}
-          render={<Link to="/practice/progressions" search={search} />}
+          render={<Link to="/practice/progressions/line" search={search} />}
         />
       )
     }
@@ -160,7 +160,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
         <RowLink
           title={title}
           {...linkTile(target)}
-          render={<Link to="/practice/progressions" search={search} />}
+          render={<Link to="/practice/progressions/line" search={search} />}
         />
       )
     }

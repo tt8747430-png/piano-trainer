@@ -30,6 +30,7 @@ export const common: LocaleResources['common'] = {
     toScales: 'К гаммам и тональностям',
     toAccompaniment: 'К аккомпанементу',
     toExercises: 'К упражнениям',
+    toProgressions: 'К последовательностям',
     toTakes: 'К дублям',
   },
   storageFull: {
