@@ -20,12 +20,13 @@ import {
   type SongPlace,
 } from './types'
 import { sanitiseCardLooks, type CardLook } from './card-look'
+import { isEmptyDetails, sanitiseSongDetails, type SongDetails } from './song-details'
 
 /** Where a card look is kept: a folder, or Home (R29 B9). */
 export type CardPlace = FolderId | 'home'
 
 export const LIBRARY_STORAGE_KEY = 'pt-library'
-export const LIBRARY_VERSION = 4
+export const LIBRARY_VERSION = 5
 
 /**
  * The learner's library (ADR 0106), only what they changed: read over the catalog
@@ -47,6 +48,8 @@ export interface LibraryState {
   readonly cardLooks: Partial<Record<CardPlace, CardLook>>
   /** A song's own colour and picture (B9, Appearance), where the learner gave it one. */
   readonly songLooks: Partial<Record<PieceId, FolderLook>>
+  /** A song's details in the library (R30 S5: level, genre, language, tags), where the learner gave some. */
+  readonly songDetails: Partial<Record<PieceId, SongDetails>>
 }
 
 export type LibraryStore = StoreApi<LibraryState>
@@ -60,6 +63,7 @@ export const INITIAL_LIBRARY: LibraryState = {
   nextFolder: 1,
   cardLooks: {},
   songLooks: {},
+  songDetails: {},
 }
 
 export const createLibraryStore = (saving: SavingOptions = {}): LibraryStore =>
@@ -118,6 +122,17 @@ function placeOf(saved: unknown): SongPlace {
 }
 
 /** Each song's look that reads: a picture and a paint of the lists, else none. */
+/** The songs' details kept: each song's that says something, by a song's id. */
+function songDetailsOf(saved: unknown): Partial<Record<PieceId, SongDetails>> {
+  if (!isRecord(saved)) return {}
+  const kept: Partial<Record<PieceId, SongDetails>> = {}
+  for (const [id, value] of Object.entries(saved)) {
+    const details = sanitiseSongDetails(value)
+    if (isPieceIdText(id) && !isEmptyDetails(details)) kept[id] = details
+  }
+  return kept
+}
+
 function songLooksOf(saved: unknown): Partial<Record<PieceId, FolderLook>> {
   if (!isRecord(saved)) return {}
   const looks: Partial<Record<PieceId, FolderLook>> = {}
@@ -171,6 +186,7 @@ function sanitize(persisted: unknown): LibraryState {
     sort: isSort(saved.sort) ? saved.sort : 'manual',
     nextFolder: Math.max(next, past, 1),
     songLooks: songLooksOf(saved.songLooks),
+    songDetails: songDetailsOf(saved.songDetails),
     cardLooks: sanitiseCardLooks(
       saved.cardLooks,
       (place): place is CardPlace => place === 'home' || isFolderId(place),

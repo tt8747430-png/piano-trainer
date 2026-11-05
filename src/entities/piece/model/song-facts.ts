@@ -1,14 +1,13 @@
 import type { Locale, LocalText } from '@/shared/i18n'
-import { withHeaderLine, type ScoreHeader } from './score-header'
+import type { ScoreHeader } from './score-header'
 import type { Credit } from './types'
 
-/** What a song's page says of it, written in place in Edit (round 28): Flat's score credits. */
+/**
+ * What a song's page says of it and writes in its Edit (R30): its title and what is said about it.
+ * Who wrote it is the score's (its composer and lyricist, printed and edited on the score).
+ */
 export interface SongFacts {
   readonly title: string
-  /** Who wrote the music. */
-  readonly music: string
-  /** Who wrote the words. */
-  readonly words: string
   /** What is said about it, in the language written. */
   readonly about: string
 }
@@ -35,26 +34,17 @@ const titleField = (piece: FactsOf, locale: Locale) =>
       ? 'titleRu'
       : 'title'
 
-const namesOf = (credits: readonly Credit[] | undefined, roles: readonly Credit['role'][]) => {
-  const credit = credits?.find((one) => roles.includes(one.role))
-  return credit && 'names' in credit ? credit.names : undefined
-}
-
 export function songFacts(piece: FactsOf, locale: Locale): SongFacts {
   return {
     title: piece[titleField(piece, locale)] ?? piece.title,
-    music: piece.header?.composer ?? namesOf(piece.credits, ['music', 'words-and-music']) ?? '',
-    words: piece.header?.lyricist ?? namesOf(piece.credits, ['words', 'words-and-music']) ?? '',
     about: piece.note?.[locale] ?? '',
   }
 }
 
 /**
- * The piece with these facts: its title in this language where one is written, who wrote its music
- * and words as its score's composer and lyricist (one place for them, printed under its title and
- * said on its page), and what is said about it in the language written (both, for a first one or a
- * song of one language, `oneLanguage`: a learner's own; none where it is empty). Its credits as the
- * app's content prints them are left as they are.
+ * The piece with these facts: its title in this language where one is written, and what is said about
+ * it in the language written (both, for a first one or a song of one language, `oneLanguage`: a
+ * learner's own; none where it is empty). Its score's lines and its credits are left as they are.
  */
 export function withSongFacts<T extends FactsOf>(
   piece: T,
@@ -63,16 +53,10 @@ export function withSongFacts<T extends FactsOf>(
   oneLanguage = false,
 ): T {
   const about = facts.about.trim()
-  const header = withHeaderLine(
-    withHeaderLine(piece.header ?? {}, 'composer', facts.music),
-    'lyricist',
-    facts.words,
-  )
-  const { note: _note, header: _header, ...rest } = piece
+  const { note: _note, ...rest } = piece
   return {
     ...rest,
     [titleField(piece, locale)]: facts.title.trim() || piece[titleField(piece, locale)],
-    ...(Object.keys(header).length > 0 ? { header } : {}),
     ...(about
       ? {
           note:

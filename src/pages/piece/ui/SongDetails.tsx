@@ -11,15 +11,14 @@ import {
 import { useOriginalDraft } from '@/features/edit-original'
 import { setSongFacts } from '@/features/edit-piece'
 import { useLocale } from '@/shared/i18n'
-import { DocText, Properties, PropertyRow, NotOpen } from '@/widgets/content-editor'
+import { DocText, NotOpen } from '@/widgets/content-editor'
 
 /** The longest a title or a name is written on the page. */
 const NAME_MAX = 80
 
 /**
- * What a song's page says of it, written in place (round 28, Flat's score credits, Noji's deck
- * edited where it reads): its title as the page's heading, who wrote its music and words as its
- * properties, what is said about it as a paragraph, and the way to its music on the score.
+ * What a song's page says of itself, written in place in its Edit (R30, Noji's deck edited where it
+ * reads): its title and what is said about it. Who wrote it is the score's, printed and edited there.
  */
 function SongFactsForm({
   initial,
@@ -38,20 +37,8 @@ function SongFactsForm({
   }
   // Each field writes one language's words: the other's are the song's as they are.
   const text = (value: string) => ({ en: value, ru: value })
-  const line = (field: 'music' | 'words') => (
-    <input
-      aria-label={t(`facts.${field}`)}
-      autoComplete="off"
-      data-1p-ignore
-      maxLength={NAME_MAX}
-      value={facts[field]}
-      placeholder={t('facts.add')}
-      onChange={(event) => change({ [field]: event.target.value })}
-      className="w-full min-w-0 rounded-control bg-transparent px-2 py-2 text-right text-lg caret-primary outline-none placeholder:text-muted-foreground hover:bg-muted focus-visible:bg-muted"
-    />
-  )
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+    <div className="flex w-full flex-col gap-4">
       <DocText
         label={t('facts.title')}
         size="title"
@@ -60,10 +47,6 @@ function SongFactsForm({
         placeholder={t('facts.titlePlaceholder')}
         onChange={(value) => change({ title: value[locale].slice(0, NAME_MAX) })}
       />
-      <Properties label={t('facts.credits')}>
-        <PropertyRow name={t('facts.music')}>{line('music')}</PropertyRow>
-        <PropertyRow name={t('facts.words')}>{line('words')}</PropertyRow>
-      </Properties>
       <DocText
         label={t('facts.about')}
         locale={locale}

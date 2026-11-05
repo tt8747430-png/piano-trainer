@@ -68,3 +68,15 @@ export { useLibraryLayout } from './model/use-library-layout'
 export { FolderTile } from './ui/FolderTile'
 export { FOLDER_PICTURE_ICONS } from './ui/folder-pictures'
 export { useFolderName } from './ui/use-folder-name'
+export {
+  MOST_TAGS,
+  NO_DETAILS,
+  SONG_GENRES,
+  SONG_LANGUAGES,
+  TAG_MAX,
+  tagOf,
+  tagsOf,
+  type SongDetails,
+  type SongGenre,
+  type SongLanguage,
+} from './model/song-details'
