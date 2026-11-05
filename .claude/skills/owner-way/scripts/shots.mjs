@@ -10,11 +10,11 @@ import { chromium } from '@playwright/test'
 
 const SIZES = [
   { name: 'iphone-app', width: 393, height: 852, touch: true },
-  { name: 'iphone-safari', width: 393, height: 659, touch: true },
+  { name: 'iphone-safari', width: 393, height: 695, touch: true },
   { name: 'iphone-side', width: 852, height: 393, touch: true },
-  { name: 'display-zoom', width: 320, height: 693, touch: true },
-  { name: 'laptop', width: 1280, height: 800, touch: false },
-  { name: 'macbook-air', width: 1710, height: 1000, touch: false },
+  { name: 'iphone-402', width: 402, height: 874, touch: true },
+  { name: 'macbook-safari', width: 1710, height: 904, touch: false },
+  { name: 'macbook-app', width: 1710, height: 984, touch: false },
 ]
 const THEMES = ['light', 'dark']
 const LANGUAGES = [

@@ -13,21 +13,25 @@ learner sees. Passing tests say nothing about a clipped title.
 | Startup, routing, PWA, config     | `npm run build`, then `npm run preview`                                      |
 | Before pushing to `main`          | the full `npm run test` once, then `npm run build`; `npm run e2e` for a flow |
 
-Never run two suites at once. Never `pgrep -f` or `pkill -f` a pattern your own command holds. Give a long command a limit
+A command over 10 seconds runs in the background. Never run two suites at once. Never `pgrep -f` or `pkill -f` a pattern your own command holds. Give a long command a limit
 of about twice what it needs. A test that fails only under load is made robust, and you say so.
 
 ## The size matrix
 
-Each is the size the screen actually gets. A new device's real size is `window.innerWidth` and `innerHeight` measured on it.
+Sizes come from the device, never from what a browser's emulator reports. Measured 2026-11-05 unless marked.
 
-| Name            | Size      | What it is                                                  |
-| --------------- | --------- | ----------------------------------------------------------- |
-| `iphone-app`    | 393×852   | iPhone 14 Pro, the installed app, the whole screen          |
-| `iphone-safari` | 393×659   | iPhone 14 Pro in Safari, its bars showing                   |
-| `iphone-side`   | 852×393   | the phone on its side on the music stand                    |
-| `display-zoom`  | 320×693   | the narrowest phone; nothing may clip here                  |
-| `laptop`        | 1280×800  | a small laptop                                              |
-| `macbook-air`   | 1710×1000 | the owner's 15-inch MacBook Air, a browser window at 1710   |
+| Name             | Size     | What it is                                       | Source                                                     |
+| ---------------- | -------- | ------------------------------------------------ | ---------------------------------------------------------- |
+| `iphone-app`     | 393×852  | iPhone 14 Pro, the installed app                 | published spec, the whole screen                           |
+| `iphone-safari`  | 393×695  | iPhone 14 Pro in Safari, bars showing            | measured in Safari on a simulated 393×852 phone            |
+| `iphone-side`    | 852×393  | on its side, the installed app                   | published spec; Safari's side size is **not measured**     |
+| `iphone-402`     | 402×874  | the owner's larger phone size                    | the owner's list                                           |
+| `macbook-safari` | 1710×904 | MacBook Air M3 15-inch, Safari filling the screen | measured in Safari on the owner's Mac                      |
+| `macbook-app`    | 1710×984 | the same Mac, the most an app window can take    | macOS's usable screen, measured; a title bar takes some    |
+
+Safari's bars collapse on scrolling, taking the phone to 393×735 (`100lvh`). The simulator ran a newer iOS than a real 14 Pro
+may, and Safari's bars differ by version, so to settle a size open a page logging `innerWidth`, `innerHeight` and `100svh`
+on the phone itself. The Mac's screen is 1710×1107 (macOS's default for this panel, native 2880×1864).
 
 Every size runs in **light and dark**, and in **English and Russian**, whose strings run 20–30% longer.
 
@@ -88,7 +92,7 @@ Use Playwright's `page` (real Chrome) for what a still image hides:
 
 ## What to look for
 
-- Nothing clipped, cut, overflowing or badly wrapped; titles take two lines before an ellipsis.
+- Nothing clipped, cut, overflowing or badly wrapped at any size; titles take two lines before an ellipsis.
 - Nothing hangs under the bar; nothing square pokes out of a rounded card.
 - One honey control; one place current; one way to each action.
 - Floating things reserve no space and keep their gap above the home indicator.

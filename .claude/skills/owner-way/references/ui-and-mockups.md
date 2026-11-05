@@ -73,7 +73,7 @@ question about a screen is always a drawing of that screen.
 One published artifact per area (the song page, the Player, the editor), with every page and option in it:
 
 - **The whole screen, never the control alone:** bar, toolbar, content, floating actions, tab bar.
-- **Phone and laptop side by side** for every option: an iPhone frame at 393×852 and a laptop frame at 1280×800.
+- **Phone and laptop side by side** for every option: an iPhone frame at 393×852 and a MacBook frame at 1710×904.
 - **Real parts:** `DESIGN.md`'s tokens copied in as CSS variables, Literata and Onest, the app's real 44px sizes, corners,
   icons and honey. It must read as our app.
 - **Real content:** a real song, real chords, the exact English label each control will carry, one Russian check of the
@@ -101,7 +101,7 @@ Numbered, so the owner can answer "1. yes 2. …", and in this order:
 
 A broken drawing wastes the owner's time as much as a broken screen.
 
-**Check 1, the render:** open it at 393 and 1280 wide, in light and dark. Nothing overflows, every frame shows its whole
+**Check 1, the render:** open it at 393 and 1710 wide, in light and dark. Nothing overflows, every frame shows its whole
 screen, every font loaded, every toggle and box works.
 
 **Check 2, as the owner:** read it from the top with no context from this session. Can each question be answered from the

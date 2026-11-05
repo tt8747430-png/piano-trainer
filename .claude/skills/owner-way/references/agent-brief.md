@@ -21,10 +21,21 @@ Then append the common part, unchanged.
 
 ## Setup
 
-- If `node_modules` is missing in your worktree, symlink the main checkout's. Never `npm install` there.
+- If `node_modules` is missing in your worktree, symlink the main checkout's. Do not run `npm install`, because the folder
+  is shared. If you need a package, install it directly.
 - Merge the session's branch first; it holds every earlier round.
 - Read `CLAUDE.md`, `docs/CODE_STYLE.md`, `DESIGN.md`, and in `.claude/skills/owner-way`: `SKILL.md`,
   `references/ui-and-mockups.md`, `references/testing.md`, and your area in `references/feedback-log.md`.
+
+- Chordify research notes, where the session has them, are read for their features, implemented as close as possible.
+  chordify.net limits automated access; try to reach it with a headless browser.
+
+## The owner's standing rules
+
+- The quality of real apps. No legacy code, backwards compatibility or duplication.
+- Phone and desktop work the same. Consistency everywhere.
+- Explanations go in ⓘ popups (`InfoTip`). No hardcoded text on the score.
+- Everything must be implemented and nothing left unimplemented.
 
 ## Process
 
@@ -38,7 +49,7 @@ Then append the common part, unchanged.
 - Run both browser passes in `references/testing.md` on every route you changed.
 - Merge the session's branch again before reporting, and resolve conflicts.
 - Amend your area's ADR. Leave `CLAUDE.md` alone; it is updated at the merge.
-- Give each long command a limit of about twice what it needs. Wait for a command's own completion notice. Stop everything
+- A command over 10 seconds runs in the background. Give each long one a limit of about twice what it needs. Wait for a command's own completion notice. Stop everything
   you started by PID.
 - Everything in the brief is built; nothing is left unimplemented.
 

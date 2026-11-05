@@ -165,7 +165,7 @@ utilities by `@theme inline` in `src/styles/theme.css`.
   `landscape-phone:`, `small-phone:` (under 390px), `narrow-phone:` (under 360px).
 - **Same features, words and layout logic at every size** in the
   [size matrix](../.claude/skills/owner-way/references/testing.md#the-size-matrix). Nothing is clipped or wraps badly at
-  320px.
+  any of them.
 - **A screen takes the width it is given.** No `max-w-*` on a screen. Its gutter is `px-gutter`; lists are `grid-cards`,
   fields `grid-fields`, chord buttons `grid-chords`.
 - **Floating things float.** The page gets scroll room under them (`pb-foot-*`, `--float-room`), not an empty row. What

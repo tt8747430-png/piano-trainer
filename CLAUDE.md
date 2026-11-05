@@ -43,7 +43,7 @@ Contradicting an ADR: say so, then amend it. This file is a map; a component's d
    sets out.
 4. Before a push that touches shared code (`shared/lib`, an entity's model, `app/`, test setup, config): the full
    `npm run test`, once. After startup, routing, the PWA or config: `npm run build` too. CI runs only by hand, so these
-   local checks are the gate.
+   local checks are the gate. A command over 10 seconds runs in the background.
 
 ## Commands
 

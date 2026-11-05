@@ -178,4 +178,11 @@ are reference only, but progressions are facts.
 - **Learners' data:** never read it.
 - **Skills** come from their official source; superpowers is `obra/superpowers`.
 - **Interrupting means wait:** take in the new message and continue from it.
+- **Everything built, nothing left,** and documented in the docs (2026-11-05).
+- **A command over 10 seconds runs in the background** (2026-11-05).
+- **Context under about 450k tokens** (2026-11-05).
+- **Supabase:** any database action is allowed, directly, with best practices (2026-11-05).
+- **Real device sizes, researched:** "research also in the internet not only assume the browser gives you the right sizes"
+  (2026-11-05).
+- **Preserve the owner's edits** to these files when rewriting them (2026-11-05).
 - **Latest words win;** keep the brief consistent when they do.
