@@ -41,9 +41,10 @@ ways, with a time limit and a Next that waits for the answer.
   the inversion it needs, and its Cards show its name or its staff, a trainer naming the card faces it has
   (`Trainer.sides`). Like a progression, a cadence rates no skill.
 - **One setup for every trainer** (`widgets/trainer-setup`): the drill and what a card shows, Options (level,
-  Custom's lists each a sheet of checks that never empties, switches, rounds), Timing (time limit), the record,
-  Start, a labelled primary button held in reach at the foot; how every drill goes (Go on automatically) is
-  Exercises and Quiz's Settings (`/settings/exercises-and-quiz`, A24). A question's staff prints the clef and the
+  Custom's lists each a sheet that says what it includes and why (R32: "2 of 46 included · Recommended set", Select
+  all, Clear, Restore recommended, each group's count and All or None, a check box and an example on each row) and
+  never empties, switches, rounds), Timing (time limit, and Advance automatically, its one home, R32), the record,
+  Start, a labelled primary button held in reach at the foot. A question's staff prints the clef and the
   notes, no time signature (`timeHidden`); the drill in a sentence behind the bar's ⓘ. Every explanation is an ⓘ. A run takes
   the setup's place until its X or its results' Done.
 - **What a trainer asks is view state** (its drill, level, rounds, time limit and Custom choices in the URL,

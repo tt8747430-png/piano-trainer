@@ -86,10 +86,11 @@ a Performance becomes a Score (`notation`) or sounds (`schedule`).
   Publish; MusicXML and MIDI in and out. `pages/songs`, `piece`, `public-library`; `widgets/song-library`;
   `features/manage-library`, `song-files`, `publish`, `share-folder`; `entities/library`, `piece`. Groups and
   folders shared with them: `pages/groups`, `shared/api/groups`.
-- **Practice** (`/practice`): Tools (Metronome, Chord finder, Circle of fifths, Tuner), then Chords, Scales and keys,
-  Intervals, Progressions, Accompaniment, the Chord player, Exercises and Quiz. Exercises, Accompaniment and
-  Progressions are one library, `widgets/practice-library`, its favourites and the learner's progressions
-  `entities/practice-library`; a progression's page is `pages/progression`.
+- **Practice** (`/practice`): Up next, then Chords, Scales and keys, Intervals, Progressions, Accompaniment, the Chord
+  player, Exercises and Quiz, the Tools last (Metronome, Tuner, Chord finder, Circle of fifths), each tool's settings
+  in place; the bar's Tools menu is `widgets/tools-sheet`. Exercises, Accompaniment (patterns only) and Progressions
+  are one library, `widgets/practice-library`, arranged by the learner; its favourites, arrangements and the learner's
+  progressions `entities/practice-library`; a progression's page is `pages/progression`.
 - **The Player** (`/play/$pieceId`): one screen over any Performance. Modes Listen · Sight-read · Practice · Interpret,
   versions Original · Simple · Easy. `pages/player`; `widgets/practice-player`, `chord-views`, `sheet-music`,
   `player-setup`; `features/practice`.
