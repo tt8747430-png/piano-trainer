@@ -81,7 +81,7 @@ describe('the Player as its settings say (B7, A27)', () => {
     act(() => setPlayback(settingsStore, { pedal: 'automatic' }))
     await waitFor(() =>
       expect(document.querySelector('style[data-slot="pedal-marks"]')?.textContent).toContain(
-        '[id="ped-0"]',
+        '#ped-0',
       ),
     )
     // The score's pedal is down at the cursor, yet nothing plays: no pedal hangs.

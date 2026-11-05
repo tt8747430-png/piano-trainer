@@ -2,7 +2,7 @@ import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { useElementSize, type SheetView } from '@/shared/lib'
+import { useElementSize, useLatestCallback, type SheetView } from '@/shared/lib'
 import type { Tick } from '@/shared/lib/music'
 import type { ScoreAnnotation, StaffId } from '@/shared/lib/notation'
 import type { PieceLayout, ScoreHeader } from '@/entities/piece'
@@ -192,24 +192,27 @@ export function SheetMusic({
   // loop's start (else the cursor's bar) to the one reached, exactly.
   const anchor = useRef<number | null>(null)
   const group = performance.beatGroups[current]
-  const onChoose = (at: number, extend: boolean) => {
+  const onChoose = useLatestCallback((at: number, extend: boolean) => {
     if (!extend) anchor.current = at
     const from = extend ? (anchor.current ?? loop?.first ?? group?.bar ?? at) : at
     onLoopChange({ first: Math.min(from, at), last: Math.max(from, at) })
-  }
+  })
   // A note or a chord clicked, as the editor's click (ADR 0096): the cursor goes to its beat group and
   // it alone is marked until the cursor moves; the loop stays for a note inside it (`keepsLoop`).
   const [picked, setPicked] = useState<{ readonly picked: Picked; readonly group: number } | null>(
     null,
   )
-  const onPick = (next: Picked) => {
+  const onPick = useLatestCallback((next: Picked) => {
     const at = groupOfTick(performance, next.tick)
     if (at === null) return
     anchor.current = null
     if (loop && !keepsLoop(loop, performance.beatGroups[at]?.bar)) onLoopChange(null)
     onJump(at)
     setPicked({ picked: next, group: at })
-  }
+  })
+  // The lines are memoised: what they are handed is held for good, calling the latest (R32).
+  const jump = useLatestCallback(onJump)
+  const loopChange = useLatestCallback(onLoopChange)
   const here = picked?.group === current ? picked.picked : null
   // What is chosen, in the selection's colour (ADR 0096): the loop's notes, else the one clicked; the
   // notes the playhead is at are not chosen.
@@ -260,9 +263,9 @@ export function SheetMusic({
           chordNames={chordNames}
           tempos={tempos}
           muted={muted}
-          onJump={onJump}
+          onJump={jump}
           onPick={onPick}
-          onLoopChange={onLoopChange}
+          onLoopChange={loopChange}
           onChoose={onChoose}
           selected={selected}
           playheadShown={playheadShown}

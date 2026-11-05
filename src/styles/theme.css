@@ -577,6 +577,11 @@
 @utility min-w-longest-word {
   min-width: min(100%, min-content);
 }
+/* Drawn only in sight (R32): a long score's lines out of view cost no style, layout, paint or hit
+   test. Its height while skipped is the screen's to give (`contain-intrinsic-size` in `style`). */
+@utility drawn-in-sight {
+  content-visibility: auto;
+}
 /* What floats over the page casts a soft shade (`tokens.css`' `--elevation-*`): resting second
    actions, the main action and the transport, a pointer over either. */
 @utility elevation-1 {

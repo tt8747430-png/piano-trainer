@@ -1,0 +1,149 @@
+{
+ "commits": 143,
+ "rendered": 0,
+ "frames": 481,
+ "p50": 17,
+ "p95": 50,
+ "worst": 433,
+ "over50": 16,
+ "longTasks": 7,
+ "longTaskMs": 554,
+ "engravedAtStart": 64,
+ "redrawn": [],
+ "muts": [
+  [
+   "attributes:playhead@style",
+   510
+  ],
+  [
+   "attributes:BUTTON@class",
+   401
+  ],
+  [
+   "childList:BUTTON+1",
+   205
+  ],
+  [
+   "attributes:BUTTON@aria-describedby",
+   202
+  ],
+  [
+   "childList:BUTTON",
+   202
+  ],
+  [
+   "attributes:SPAN@class",
+   107
+  ],
+  [
+   "attributes:BUTTON@data-down",
+   100
+  ],
+  [
+   "attributes:DIV@style",
+   98
+  ],
+  [
+   "attributes:BUTTON@aria-current",
+   12
+  ],
+  [
+   "attributes:SPAN@data-glyph",
+   6
+  ],
+  [
+   "attributes:DIV@aria-valuenow",
+   4
+  ],
+  [
+   "childList:DIV",
+   3
+  ],
+  [
+   "childList:DIV+1",
+   2
+  ],
+  [
+   "attributes:playhead@class",
+   1
+  ],
+  [
+   "attributes:rect@y",
+   1
+  ],
+  [
+   "attributes:rect@height",
+   1
+  ],
+  [
+   "attributes:rect@class",
+   1
+  ],
+  [
+   "attributes:path@d",
+   1
+  ],
+  [
+   "attributes:path@class",
+   1
+  ],
+  [
+   "attributes:svg@data-down",
+   1
+  ],
+  [
+   "attributes:pedal@aria-pressed",
+   1
+  ],
+  [
+   "childList:button",
+   1
+  ],
+  [
+   "childList:button+1",
+   1
+  ],
+  [
+   "attributes:button@aria-label",
+   1
+  ],
+  [
+   "attributes:button@title",
+   1
+  ]
+ ],
+ "top": [],
+ "hottest": [
+  "  4191ms (program) :0",
+  "  3556ms (idle) :0",
+  "   604ms exports.jsxDEV react_jsx-dev-runtime.js:192",
+  "   239ms isElementHiddenForAria :3568",
+  "   119ms exports.createElement react-CIvdkyUs.js:624",
+  "   115ms (garbage collector) :0",
+  "   114ms ReactElement react_jsx-dev-runtime.js:105",
+  "    71ms run :0",
+  "    48ms scrollIntoView :0",
+  "    47ms measure :0",
+  "    44ms checkVisibility :0",
+  "    41ms react_stack_bottom_frame react-dom_client.js:14136",
+  "    36ms (anon) sounding.ts:25",
+  "    33ms RecordingsSheet RecordingsSheet.tsx:14",
+  "    31ms createTask :0",
+  "    31ms translate i18next.js:461",
+  "    30ms useTranslation react-i18next.js:1191",
+  "    30ms createWorkInProgress react-dom_client.js:2877",
+  "    27ms exports.jsx jsx-runtime-D40CfFAp.js:192",
+  "    27ms runWithFiberInDEV react-dom_client.js:938",
+  "    27ms (anon) lookahead.ts:20",
+  "    27ms propagateParentContextChanges react-dom_client.js:3316",
+  "    25ms addObjectDiffToProperties react-dom_client.js:2559",
+  "    24ms beginWork react-dom_client.js:6326",
+  "    23ms scoreHeight size.ts:30",
+  "    23ms formatPercent format-number.ts:7",
+  "    23ms fetch :0",
+  "    22ms areHookInputsEqual react-dom_client.js:4379",
+  "    22ms exports.jsxs jsx-runtime-D40CfFAp.js:202",
+  "    22ms (anon) rolldown-runtime-SbdDWaPq.js:22"
+ ],
+ "errs": []
+}

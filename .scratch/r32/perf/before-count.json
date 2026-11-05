@@ -1,0 +1,146 @@
+{
+ "commits": 118,
+ "rendered": 86073,
+ "frames": 373,
+ "p50": 17,
+ "p95": 83,
+ "worst": 417,
+ "over50": 47,
+ "longTasks": 33,
+ "longTaskMs": 2252,
+ "top": [
+  [
+   "KeyButton",
+   20768
+  ],
+  [
+   "ScoreView",
+   7552
+  ],
+  [
+   "SheetOverlay",
+   7552
+  ],
+  [
+   "LabelRow",
+   7552
+  ],
+  [
+   "BarTargets",
+   7552
+  ],
+  [
+   "Glyph",
+   3322
+  ],
+  [
+   "Button",
+   3304
+  ],
+  [
+   "memo",
+   2478
+  ],
+  [
+   "DialogPortal",
+   1298
+  ],
+  [
+   "Drawer",
+   1062
+  ],
+  [
+   "DrawerRoot",
+   1062
+  ],
+  [
+   "DrawerVirtualKeyboardProvider",
+   1062
+  ],
+  [
+   "Sheet",
+   945
+  ],
+  [
+   "PopoverTrigger",
+   944
+  ],
+  [
+   "SheetContent",
+   944
+  ],
+  [
+   "DrawerContent",
+   944
+  ],
+  [
+   "DrawerPortal",
+   944
+  ],
+  [
+   "FloatingTree",
+   590
+  ],
+  [
+   "RailButton",
+   590
+  ],
+  [
+   "FloatingBarButton",
+   590
+  ],
+  [
+   "Popover",
+   472
+  ],
+  [
+   "PopoverRoot",
+   472
+  ],
+  [
+   "PopoverRootComponent",
+   472
+  ],
+  [
+   "PopoverContent",
+   472
+  ],
+  [
+   "PopoverPortal",
+   472
+  ]
+ ],
+ "hottest": [
+  "  4567ms (program) :0",
+  "  2436ms (idle) :0",
+  "   684ms exports.jsxDEV react_jsx-dev-runtime.js:192",
+  "   190ms ReactElement react_jsx-dev-runtime.js:105",
+  "   132ms run :0",
+  "   125ms (garbage collector) :0",
+  "    87ms measure :0",
+  "    61ms exports.createElement react-CIvdkyUs.js:624",
+  "    56ms createWorkInProgress react-dom_client.js:2877",
+  "    51ms updateProperties react-dom_client.js:10693",
+  "    50ms commitUpdate react-dom_client.js:11375",
+  "    49ms scrollIntoView :0",
+  "    48ms runWithFiberInDEV react-dom_client.js:938",
+  "    46ms logComponentRender react-dom_client.js:2631",
+  "    45ms walk :9",
+  "    44ms setValueForStyles react-dom_client.js:1906",
+  "    44ms addObjectDiffToProperties react-dom_client.js:2559",
+  "    43ms validateProperty react-dom_client.js:1972",
+  "    41ms now :0",
+  "    38ms areHookInputsEqual react-dom_client.js:4379",
+  "    37ms setProp react-dom_client.js:10282",
+  "    37ms updateMemo react-dom_client.js:5133",
+  "    37ms react_stack_bottom_frame react-dom_client.js:14136",
+  "    35ms ReactStrictModeWarnings.recordLegacyContextWarning react-dom_client.js:14107",
+  "    34ms useTranslation react-i18next.js:1191",
+  "    33ms defineKeyPropWarningGetter react_jsx-dev-runtime.js:89",
+  "    33ms commitMutationEffectsOnFiber react-dom_client.js:7839",
+  "    32ms createTask :0",
+  "    31ms RecordingsSheet RecordingsSheet.tsx:14",
+  "    29ms validateProperties$2 react-dom_client.js:1964"
+ ],
+ "errs": []
+}

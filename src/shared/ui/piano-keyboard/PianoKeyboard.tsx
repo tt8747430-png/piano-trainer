@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
   type KeyboardEvent,
+  type PointerEvent,
   type ReactNode,
 } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -169,6 +170,17 @@ export function PianoKeyboard({
   const press = useCallback((key: Midi) => latestPress.current(key), [])
   const letGo = useCallback((key: Midi) => latestRelease.current?.(key), [])
   const pointers = useKeyPointers({ swipe, keys, scroller, onPress: press, onRelease: letGo })
+  const { pointerDown } = pointers
+  // One handler for every key, held for good: a key whose look stays the same never renders again
+  // as the music moves on (R32: a fresh handler re-rendered all 88 keys on every beat).
+  const onPointerPress = useCallback(
+    (at: Midi, event: PointerEvent<HTMLElement>) => {
+      // A key clicked takes no focus, yet Tab comes back to it.
+      setTabStop(at)
+      pointerDown(at, event)
+    },
+    [pointerDown],
+  )
 
   const down = useMemo(() => {
     if (pointers.pressed.size === 0) return states.down
@@ -184,6 +196,51 @@ export function PianoKeyboard({
   useKeyboardScroll(scroller, PIANO_LAYOUT.keys, span, inView, keySize, white)
   // A key size just chosen says for a moment what it shows, over the page's own caption.
   const sizeCaption = useSizeCaption(scroller, keySize)
+
+  // The 88 keys' looks, worked out again only when what they show changes: the screen around them
+  // renders on every beat, the keys only as theirs change (R32).
+  const { marks, lit, selected, outlined, wrong } = states
+  const { click } = pointers
+  const keyButtons = useMemo(
+    () =>
+      PIANO_LAYOUT.keys.map((key) => {
+        const look = keyLook(
+          key.midi,
+          { marks, lit, selected, outlined, wrong, down },
+          { namedKeys, letters, markNotes },
+        )
+        return (
+          <Key
+            key={key.midi}
+            geometry={key}
+            name={names.get(key.midi) ?? ''}
+            description={keyDescription(look, words)}
+            look={look}
+            chosen={selected?.has(key.midi)}
+            tabStop={key.midi === tabStop}
+            onPointerPress={onPointerPress}
+            onClickPress={click}
+            onFocusKey={setTabStop}
+          />
+        )
+      }),
+    [
+      marks,
+      lit,
+      selected,
+      outlined,
+      wrong,
+      down,
+      namedKeys,
+      letters,
+      markNotes,
+      names,
+      words,
+      tabStop,
+      onPointerPress,
+      click,
+    ],
+  )
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const next = MOVES[event.key]?.(tabStop)
@@ -225,27 +282,7 @@ export function PianoKeyboard({
                 : keysLength(`calc(${white} * ${KEY_LENGTH})`, MOST_KEYS),
           }}
         >
-          {PIANO_LAYOUT.keys.map((key) => {
-            const look = keyLook(key.midi, { ...states, down }, { namedKeys, letters, markNotes })
-            return (
-              <Key
-                key={key.midi}
-                geometry={key}
-                name={names.get(key.midi) ?? ''}
-                description={keyDescription(look, words)}
-                look={look}
-                chosen={states.selected?.has(key.midi)}
-                tabStop={key.midi === tabStop}
-                onPointerPress={(at, event) => {
-                  // A key clicked takes no focus, yet Tab comes back to it.
-                  setTabStop(at)
-                  pointers.pointerDown(at, event)
-                }}
-                onClickPress={pointers.click}
-                onFocusKey={setTabStop}
-              />
-            )
-          })}
+          {keyButtons}
           {/* The rail's shade falling on the keys. */}
           <span
             aria-hidden
