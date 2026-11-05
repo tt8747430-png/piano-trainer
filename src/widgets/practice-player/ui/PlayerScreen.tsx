@@ -29,12 +29,18 @@ export function PlayerScreen({
   keys,
   aside = false,
   panel = false,
+  docked = false,
   children,
 }: {
   keys: KeyboardSettings['dock']
   aside?: boolean
   /** A panel at the right is open (a laptop's Settings): the screen ends where it starts. */
   panel?: boolean
+  /**
+   * Nothing floats over the music (the Player's docked transport and foot, R31-P): no scroll room
+   * kept for a floating capsule at its head or a transport at its foot.
+   */
+  docked?: boolean
   children: ReactNode
 }) {
   const { shown, setShown, show, reading } = useHiddenWhileReading()
@@ -59,7 +65,11 @@ export function PlayerScreen({
     <div
       data-keys={keys}
       data-panel={panel || undefined}
-      className={cn(SCORE_SCREEN, 'data-panel:pe-[min(28rem,100vw)]')}
+      className={cn(
+        SCORE_SCREEN,
+        'data-panel:pe-[min(28rem,100vw)]',
+        docked && '[--float-room:0px] [--tools-room:0px]',
+      )}
       onPointerDown={onMusic(reading.onPointerDown)}
       onPointerMove={onMusic(reading.onPointerMove)}
       onTouchStart={onMusic(reading.onTouchStart)}

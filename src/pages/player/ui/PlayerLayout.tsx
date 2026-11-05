@@ -391,7 +391,12 @@ export function PlayerLayout({
   )
   return (
     // While Diagrams plays, the bar and the tools row step aside (ADR 0108).
-    <PlayerScreen keys={dock} aside={shown === 'diagrams' && practice.state.playing} panel={panel}>
+    <PlayerScreen
+      keys={dock}
+      aside={shown === 'diagrams' && practice.state.playing}
+      panel={panel}
+      docked
+    >
       {/* The score's bar, the editor's in shape (ADR 0115): Close, then Practise · Edit;
           Piano keys, MIDI and Settings; the View and the music's tools. The loop is the transport's (ADR
           0108). */}
