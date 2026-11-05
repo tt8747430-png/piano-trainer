@@ -9,6 +9,7 @@ import type { Scheduled } from '@/shared/lib/schedule'
 import type { SheetField } from '@/widgets/score-sheet'
 import type { EditorTakes } from './use-editor-takes'
 import type { EditorTarget } from './editor-target'
+import type { GearPage } from './gear-pages'
 
 /** What Play plays, while it plays: its pass, and where it started on the audio clock. */
 export interface Heard {
@@ -41,12 +42,10 @@ export interface ScoreEditorValue {
     readonly lyrics: boolean
     /** The notes' fingers printed, the View's Finger numbers: the fingering field types them there. */
     readonly fingers: boolean
-    /**
-     * How fast Play plays, as a share of the song's tempo (1 its own): the learner's speed to check
-     * what was written at, never the song's tempo (ADR 0114).
-     */
-    readonly speed: number
-    readonly setSpeed: (speed: number) => void
+    /** The gear's sheet (R31-E) at its page, or shut (null). */
+    readonly gear: GearPage | null
+    /** Opens the gear's sheet at a page, turns it, or shuts it (null). */
+    readonly setGear: (page: GearPage | null) => void
     /** How the score is laid out, the View's: down the screen, on A4 pages, or as one line across. */
     readonly layout: SheetView
     /** The staves out of sight (A40, the Instruments' eye): the Player's `staves`. */

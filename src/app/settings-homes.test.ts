@@ -18,7 +18,6 @@ const PAGE_PATHS: Readonly<Record<SettingsPageId, readonly string[]>> = {
     'widgets/practice-player/',
     'widgets/score-view-menu/',
     'widgets/player-setup/',
-    'pages/score-editor/ui/EditorToolsRow.tsx',
   ],
   metronome: ['pages/metronome/', 'features/metronome/'],
   tuner: ['pages/tuner/'],

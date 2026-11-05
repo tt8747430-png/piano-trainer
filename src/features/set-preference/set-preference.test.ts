@@ -20,7 +20,8 @@ import {
   setRecorderTune,
   setSectionFolded,
   setPaletteFolded,
-  setPaletteSections,
+  setPaletteCategory,
+  setEditorMode,
   setSidebar,
   setSound,
   setStaffVolume,
@@ -72,19 +73,25 @@ describe('set-preference', () => {
     expect(store.getState().foldedSections).toEqual(['progressions.between'])
   })
 
-  it('setPaletteSections keeps the panel’s open sections, and saves them', () => {
+  it('setPaletteCategory keeps the palette’s category chosen, and saves it', () => {
     const { storage, store } = setUp()
-    setPaletteSections(store, ['notes', 'dynamics'])
-    expect(store.getState().paletteSections).toEqual(['notes', 'dynamics'])
-    expect(saved(storage).paletteSections).toEqual(['notes', 'dynamics'])
+    setPaletteCategory(store, 'dynamics')
+    expect(store.getState().paletteCategory).toBe('dynamics')
+    expect(saved(storage).paletteCategory).toBe('dynamics')
+  })
+
+  it('setEditorMode keeps the mode the editor writes in, and saves it', () => {
+    const { storage, store } = setUp()
+    setEditorMode(store, 'insert')
+    expect(store.getState().editorMode).toBe('insert')
+    expect(saved(storage).editorMode).toBe('insert')
   })
 
   it('setPaletteFolded folds the editor’s palette where it stands, and saves it', () => {
     const { storage, store } = setUp()
-    setPaletteFolded(store, 'panel', true)
-    expect(store.getState().paletteFolded).toEqual({ panel: true })
-    setPaletteFolded(store, 'sheet', false)
-    expect(saved(storage).paletteFolded).toEqual({ panel: true, sheet: false })
+    setPaletteFolded(store, false)
+    expect(store.getState().paletteFolded).toBe(false)
+    expect(saved(storage).paletteFolded).toBe(false)
   })
 
   it('setSidebar collapses the sidebar and saves it', () => {

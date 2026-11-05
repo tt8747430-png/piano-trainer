@@ -125,6 +125,8 @@ export type EditorAction =
   | { readonly type: 'chordNote'; readonly direction: -1 | 1 }
   | { readonly type: 'key'; readonly key: Midi; readonly time: number }
   | { readonly type: 'rest' }
+  /** A note written at the caret, at the last note's pitch or the staff's middle line (R31-E, Flat's Add note). */
+  | { readonly type: 'addNote' }
   /**
    * The notes chosen, a chord's one note, else the notes or chord at the caret; with `back`, where
    * none is there, the ones before it (Backspace).
@@ -196,7 +198,6 @@ export type EditorAction =
   /** The song made so many bars long, at its end (the score's Settings, round 28). */
   | { readonly type: 'barCount'; readonly count: number }
   | { readonly type: 'clip'; readonly edit: ClipEdit }
-  | { readonly type: 'barLength'; readonly ticks: Tick }
   /** Barlines on the bars chosen, else the caret's (a repeat, an ending, a double or final barline). */
   | { readonly type: 'barMarks'; readonly choice: BarMarkChoice }
   /**

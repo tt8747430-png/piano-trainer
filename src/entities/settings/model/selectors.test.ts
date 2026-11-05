@@ -50,8 +50,9 @@ describe('settings selectors', () => {
       practiceRecent: [],
       lessonReading: 'sections',
       sidebar: 'collapsed',
-      paletteFolded: {},
-      paletteSections: null,
+      paletteFolded: true,
+      paletteCategory: null,
+      editorMode: 'replace',
       midi: DEFAULT_MIDI,
       chordFinder: DEFAULT_CHORD_FINDER,
       scoreView: DEFAULT_SCORE_VIEW,
@@ -77,13 +78,9 @@ describe('settings selectors', () => {
     expect(selectChordFinder(state)).toBe(DEFAULT_CHORD_FINDER)
   })
 
-  it('keeps the palette’s panel shown and its sheet compact, until the learner chooses', () => {
-    const unset = { paletteFolded: {} } as unknown as SettingsState
-    expect(selectPaletteFolded('sheet')(unset)).toBe(true)
-    expect(selectPaletteFolded('panel')(unset)).toBe(false)
-    const chosen = { paletteFolded: { panel: true, sheet: false } } as unknown as SettingsState
-    expect(selectPaletteFolded('sheet')(chosen)).toBe(false)
-    expect(selectPaletteFolded('panel')(chosen)).toBe(true)
+  it('keeps the floating palette as the learner left it, folded or not (R31-E)', () => {
+    const chosen = { paletteFolded: false } as unknown as SettingsState
+    expect(selectPaletteFolded(chosen)).toBe(false)
   })
 
   it('says whether a section is folded away', () => {

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { sameKey, type Key } from '@/shared/lib/music'
 import { SwitchRow } from '@/shared/ui'
 import { KeySignaturePicker } from '@/shared/ui/pickers/KeySignaturePicker'
+import { usePickerLayout } from '@/shared/ui/pickers/picker-layout'
 import { useScoreEditorContext } from '../model/editor-context'
 import { useKeyAt } from '../model/use-key-at'
 import { useSignatureFrom } from '../model/use-signature-from'
@@ -23,6 +24,8 @@ export function KeyPicker({ bar }: { bar?: number | undefined }) {
   const { from, song } = useSignatureFrom(bar)
   const [whole, setWhole] = useState(false)
   const key = useKeyAt(bar, song || whole)
+  // In the folded palette's row its signatures alone, from the section on (R31-E).
+  const row = usePickerLayout() === 'row'
   const choose = (next: Key) =>
     sameKey(next, key) ||
     actions.dispatch(
@@ -33,7 +36,7 @@ export function KeyPicker({ bar }: { bar?: number | undefined }) {
   return (
     <>
       <KeySignaturePicker value={key} onChange={choose} />
-      {song ? null : (
+      {song || row ? null : (
         <SwitchRow
           label={t('signature.wholeSong')}
           info={t('signature.wholeSongInfo')}

@@ -24,9 +24,9 @@ const buttonVariants = cva(
         // A screen's bar's round button: a soft fill, no frame, the fill deepening under the pointer.
         bar: 'rounded-full bg-muted/70 text-foreground hover:bg-muted aria-expanded:bg-muted aria-pressed:bg-chosen',
         link: 'text-base font-semibold text-link underline-offset-4 hover:underline',
-        // A toolbar's button, the score's bar's every one (ADR 0115): no frame of its own on the
+        // A toolbar's round button, the score's bar's every one (ADR 0115, R31-E): no frame of its own on the
         // bar's band, the muted fill while it is hovered, open or pressed.
-        tool: 'rounded-xl text-foreground hover:bg-muted aria-expanded:bg-muted aria-pressed:bg-chosen',
+        tool: 'rounded-full text-foreground hover:bg-muted aria-expanded:bg-muted aria-pressed:bg-chosen',
       },
       // Every size is at least a 44px touch target, so the CLI's smaller sizes are gone.
       size: {

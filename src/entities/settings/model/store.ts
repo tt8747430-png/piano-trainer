@@ -64,7 +64,6 @@ import {
   isOctaveShift,
   isPedalWay,
   isSidebar,
-  PALETTE_PLACES,
   isSwipe,
   isTheme,
   isTouch,
@@ -76,7 +75,6 @@ import {
   type MidiSettings,
   type OtherHandSettings,
   type PlaybackSettings,
-  type PaletteFolds,
   type PracticeToggles,
   type EditingSettings,
   type RecorderSettings,
@@ -93,7 +91,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 28
+export const SETTINGS_VERSION = 29
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -119,8 +117,9 @@ export function createSettingsStore({
         recorder: DEFAULT_RECORDER,
         editing: DEFAULT_EDITING,
         sidebar: DEFAULT_SIDEBAR,
-        paletteFolded: {},
-        paletteSections: null,
+        paletteFolded: true,
+        paletteCategory: null,
+        editorMode: 'replace',
         midi: DEFAULT_MIDI,
         chordFinder: DEFAULT_CHORD_FINDER,
         scoreView: DEFAULT_SCORE_VIEW,
@@ -201,19 +200,9 @@ function otherHandSettings(value: unknown): OtherHandSettings {
 }
 
 /** Each place's fold as saved where it is a boolean; a place never chosen stays unset. */
-/** The panel's open sections: names, or none chosen. */
-const paletteSections = (value: unknown): readonly string[] | null =>
-  Array.isArray(value) && value.every((name) => typeof name === 'string') ? value : null
-
-function paletteFolds(value: unknown): PaletteFolds {
-  const saved = savedObject<PaletteFolds>(value)
-  return Object.fromEntries(
-    PALETTE_PLACES.flatMap((place) => {
-      const folded: unknown = saved[place]
-      return typeof folded === 'boolean' ? [[place, folded]] : []
-    }),
-  )
-}
+/** The palette's category: a name, or none chosen. */
+const paletteCategory = (value: unknown): string | null =>
+  typeof value === 'string' && value !== '' ? value : null
 
 /** A trainer setting keeps what was saved; one never saved, or not valid, takes its default. */
 function trainerSettings(value: unknown): TrainerSettings {
@@ -241,7 +230,6 @@ function editingSettings(value: unknown): EditingSettings {
   const saved = savedObject<EditingSettings>(value)
   return {
     hearNotes: typeof saved.hearNotes === 'boolean' ? saved.hearNotes : DEFAULT_EDITING.hearNotes,
-    startMode: isStartMode(saved.startMode) ? saved.startMode : DEFAULT_EDITING.startMode,
     paletteSide: isPaletteSide(saved.paletteSide) ? saved.paletteSide : DEFAULT_EDITING.paletteSide,
   }
 }
@@ -439,8 +427,10 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     recorder: recorderSettings(saved.recorder),
     editing: editingSettings(saved.editing),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,
-    paletteFolded: paletteFolds(saved.paletteFolded),
-    paletteSections: paletteSections(saved.paletteSections),
+    paletteFolded:
+      typeof saved.paletteFolded === 'boolean' ? saved.paletteFolded : current.paletteFolded,
+    paletteCategory: paletteCategory(saved.paletteCategory),
+    editorMode: isStartMode(saved.editorMode) ? saved.editorMode : current.editorMode,
     midi: midiSettings(saved.midi),
     chordFinder: chordFinderSettings(saved.chordFinder),
     scoreView: scoreViewSettings(saved.scoreView),

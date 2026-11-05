@@ -3,12 +3,29 @@
 // layer over text, a target under 44px on a touch screen. Read by shots.mjs; kept free of imports.
 (at = 'top') => {
   const found = []
+  // The floating layer an element is drawn in: a bar or a pill (fixed or sticky), or a card placed
+  // absolutely above the page (a z-index of 10 or more), as check 3 reads one.
   const layered = (el) => {
     for (let e = el; e && e !== document.body; e = e.parentElement) {
-      const p = getComputedStyle(e).position
-      if (p === 'fixed' || p === 'sticky') return e
+      const cs = getComputedStyle(e)
+      const p = cs.position
+      if (p === 'fixed' || p === 'sticky' || (p === 'absolute' && Number(cs.zIndex) >= 10)) return e
     }
     return null
+  }
+  // What of an element is drawn: its box cut by every scroller or clipping box round it.
+  const shown = (el) => {
+    let { left, top, right, bottom } = el.getBoundingClientRect()
+    for (let e = el.parentElement; e && e !== document.body; e = e.parentElement) {
+      const cs = getComputedStyle(e)
+      if (cs.overflowX === 'visible' && cs.overflowY === 'visible') continue
+      const r = e.getBoundingClientRect()
+      left = Math.max(left, r.left)
+      top = Math.max(top, r.top)
+      right = Math.min(right, r.right)
+      bottom = Math.min(bottom, r.bottom)
+    }
+    return { left, top, right, bottom }
   }
   const name = (el) => {
     const label = el.getAttribute('aria-label') || el.textContent?.trim().slice(0, 40) || ''
@@ -40,7 +57,8 @@
     ...texts,
     ...document.querySelectorAll('button, a, [role="button"], input, svg:not(svg svg)'),
   ].filter((el) => visible(el) && !hidden(el) && !inScore(el) && !isKey(el))
-  const boxes = leaves.map((el) => [el, el.getBoundingClientRect()])
+  // Each as drawn: a key scrolled out of its strip's box is not on top of the button beside it.
+  const boxes = leaves.map((el) => [el, shown(el)])
   const cross = (a, b, m = 2) =>
     a.left + m < b.right && b.left + m < a.right && a.top + m < b.bottom && b.top + m < a.bottom
   for (let i = 0; i < boxes.length; i++)

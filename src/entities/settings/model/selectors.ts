@@ -1,6 +1,7 @@
 import type { Locale } from '@/shared/i18n/locale'
 import type {
   AccompanimentSettings,
+  EditorStartMode,
   ChordFinderSettings,
   ProgressionsSettings,
   ChordPlayerSettings,
@@ -15,7 +16,6 @@ import type {
   PracticeToggles,
   RecorderSettings,
   EditingSettings,
-  PalettePlace,
   SettingsState,
   Sidebar,
   SoundSettings,
@@ -34,13 +34,11 @@ export const selectRecorder = (state: SettingsState): RecorderSettings => state.
 export const selectEditing = (state: SettingsState): EditingSettings => state.editing
 export const selectSidebar = (state: SettingsState): Sidebar => state.sidebar
 /** Whether the palette is folded where it stands: as the learner left it there, else the panel shown and the sheet compact. */
-export const selectPaletteFolded =
-  (place: PalettePlace) =>
-  (state: SettingsState): boolean =>
-    state.paletteFolded[place] ?? place === 'sheet'
-/** The editor's panel's open sections, by name; null until the learner chooses. */
-export const selectPaletteSections = (state: SettingsState): readonly string[] | null =>
-  state.paletteSections
+export const selectPaletteFolded = (state: SettingsState): boolean => state.paletteFolded
+/** The palette's category chosen, by name; null until the learner chooses. */
+export const selectPaletteCategory = (state: SettingsState): string | null => state.paletteCategory
+/** The mode the score editor writes in, as it was left. */
+export const selectEditorMode = (state: SettingsState): EditorStartMode => state.editorMode
 export const selectMidi = (state: SettingsState): MidiSettings => state.midi
 /** Whether the section `id` is folded away. */
 export const selectSectionFolded =

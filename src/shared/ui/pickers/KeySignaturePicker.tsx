@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { keySignature, signatureKey, writtenKey, type Key, printedNote } from '@/shared/lib/music'
 import { Segmented } from '../Segmented'
 import { PickerCell } from './PickerGrid'
+import { usePickerLayout } from './picker-layout'
 import { SignatureSigns } from './picker-pictures'
 
 /**
@@ -28,6 +29,7 @@ export function KeySignaturePicker({
 }) {
   const { t } = useTranslation(['editor', 'music'])
   const count = keySignature(value)
+  const row = usePickerLayout() === 'row'
   const cell = (each: number) => {
     const major = signatureKey(each, false)
     const minor = signatureKey(each, true)
@@ -57,6 +59,17 @@ export function KeySignaturePicker({
       </PickerCell>
     )
   }
+  // In a row (the score editor's folded palette, R31-E): the signatures alone.
+  if (row)
+    return (
+      <div
+        role="group"
+        aria-label={t('music:key.label')}
+        className="flex shrink-0 items-center gap-0.5"
+      >
+        {SIGNATURES.map(cell)}
+      </div>
+    )
   return (
     <>
       {/* The mode written to the score, on the same tonic: C major to C minor. */}

@@ -6,7 +6,6 @@ export {
   REPEAT_BAR_CHOICES,
   type BarMarkChoice,
 } from './model/bar-marks'
-export { barLengths } from './model/bars'
 export { copyTarget, whyNoPaste } from './model/clip-edits'
 export { chordSuggestions } from './model/chords'
 export {

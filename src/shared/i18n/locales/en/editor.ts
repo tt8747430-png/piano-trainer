@@ -1,5 +1,6 @@
 export const editor = {
   play: 'Play',
+  stop: 'Stop',
   undo: 'Undo',
   redo: 'Redo',
   // A change the song's music cannot be written with: nothing saved over what was.
@@ -26,12 +27,16 @@ export const editor = {
     close: 'Show fewer tools',
     hide: 'Hide the tools',
     show: 'Show the tools',
-    list: 'Show the tools’ names',
-    grid: 'Show the tools as keys',
     categories: 'Kinds of tools',
     keys: 'Keys',
+    // A category's sections, each a titled grid (R31-E, Flat's).
+    groups: {
+      notation: 'Notation',
+      tuplets: 'Tuplets',
+      bars: 'Bars',
+    },
     category: {
-      modes: 'Modes',
+      notes: 'Note',
       pitch: 'Pitch and representation',
       articulations: 'Articulations',
       ornaments: 'Ornaments',
@@ -245,7 +250,6 @@ export const editor = {
   },
   panel: {
     label: 'Editor panel',
-    tabs: { notation: 'Notation', instruments: 'Instruments', layout: 'Layout' },
   },
   tempo: {
     save: 'Save',
@@ -480,10 +484,11 @@ export const editor = {
     nonuplet: 'Nonuplet',
   },
   rest: 'Rest',
+  addNote: 'Add note',
   // The editing modes (ADR 0114, Flat's Melody · Insert · Chord), one chosen in the Notes section,
   // the ⓘ beside its name saying what a key played does in each (ADR 0096).
   mode: {
-    label: 'Editing mode',
+    label: 'Input mode',
     replace: 'Replace',
     insert: 'Insert',
     chord: 'Chord',
@@ -528,13 +533,9 @@ export const editor = {
     newLine: 'Line break',
     joinLine: 'Join lines',
     newSection: 'New section',
-    length: 'Bar length',
-    repeats: 'Bar repeats & rests',
+    repeats: 'Rests and repeats',
     repeatsInfo:
       'A bar repeat writes the bar (or two) before into the bars chosen and draws its sign while they stay the same. A multi-bar rest empties the bars chosen and draws them as one rest with their count.',
-    lengthInfo:
-      'A bar longer or shorter than the meter’s. The first bar’s pickup is the time signature’s.',
-    lengthOf: 'Bar length {{time}}',
   },
   section: {
     kind: 'Section',
@@ -764,6 +765,7 @@ export const editor = {
     notSavedOffline: 'Offline: not saved yet',
     notSaved: 'Not saved: it tries again with your next change',
     publish: 'Publish',
+    publishMore: 'Publish…',
     publishTitle: 'Publish {{title}}?',
     publishBody:
       'Every learner gets this version the next time the app starts. The version it replaces is kept, to restore.',
@@ -781,6 +783,7 @@ export const editor = {
     restore: 'Restore',
     restored: 'Restored. Learners get it the next time the app starts.',
     discard: 'Discard changes',
+    nothingToDiscard: 'Nothing has changed since it was published.',
     discardTitle: 'Discard the changes?',
     discardBody: 'It goes back to its published version, and the changes are lost.',
     discarded: 'Changes discarded',
@@ -807,6 +810,16 @@ export const editor = {
     title: 'Score settings',
     open: 'Settings…',
     score: 'Score',
+    // The gear's first page (R31-E, Flat's one menu): the score's acts, then its Settings.
+    acts: {
+      view: 'View',
+      transpose: 'Transpose',
+      record: 'Record a take',
+      takes: 'Takes',
+      settings: 'Settings',
+      musicDetail: 'Staves, key, time, tempo, bars',
+      howItWorksDetail: 'Layout, note input, recording',
+    },
     names: {
       title: 'Title',
       subtitle: 'Subtitle',
@@ -837,14 +850,6 @@ export const editor = {
     barsInfo: 'Bars are added or taken away at the end of the song.',
     layout: 'Layout',
     editing: 'Editing',
-    startMode: 'Input mode on opening',
-    startModeInfo:
-      'How notes are written when the editor opens. Switch it any time with the mode button in the toolbar.',
-    startModes: { replace: 'Replace', insert: 'Insert' },
-    startModeExamples: {
-      replace: 'A note you play writes over the note at the caret',
-      insert: 'A note you play goes in at the caret and moves the rest along',
-    },
     paletteSide: 'Palette side',
     paletteSides: { left: 'Left', right: 'Right' },
     hearNotes: 'Play notes while editing',

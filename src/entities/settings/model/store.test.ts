@@ -42,8 +42,9 @@ const DEFAULTS = {
   recorder: DEFAULT_RECORDER,
   editing: DEFAULT_EDITING,
   sidebar: DEFAULT_SIDEBAR,
-  paletteFolded: {},
-  paletteSections: null,
+  paletteFolded: true,
+  paletteCategory: null,
+  editorMode: 'replace',
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
   scoreView: DEFAULT_SCORE_VIEW,
@@ -156,10 +157,11 @@ describe('createSettingsStore', () => {
         pedals: 'all',
       },
       recorder: { click: false, tune: true, countIn: 2 },
-      editing: { hearNotes: false, startMode: 'insert', paletteSide: 'right' },
+      editing: { hearNotes: false, paletteSide: 'right' },
       sidebar: 'collapsed',
-      paletteFolded: { panel: true, sheet: false },
-      paletteSections: ['notes', 'clef'],
+      paletteFolded: false,
+      paletteCategory: 'clef',
+      editorMode: 'insert',
       midi: {
         input: false,
         device: 'Piano',
@@ -285,20 +287,14 @@ describe('createSettingsStore', () => {
 
   it('opens a sidebar saved as anything but open or collapsed', () => {
     expect(restored({ sidebar: 'wide' }).sidebar).toBe('open')
-    expect(restored({ paletteFolded: true }).paletteFolded).toEqual({})
-    expect(restored({ paletteFolded: { panel: 'yes', sheet: false } }).paletteFolded).toEqual({
-      sheet: false,
-    })
+    expect(restored({ paletteFolded: false }).paletteFolded).toBe(false)
+    expect(restored({ paletteFolded: { sheet: false } }).paletteFolded).toBe(true)
   })
 
-  it('keeps the palette panel’s open sections by name, and none chosen where they are not names', () => {
-    expect(restored({ paletteSections: ['notes', 'bar'] }).paletteSections).toEqual([
-      'notes',
-      'bar',
-    ])
-    expect(restored({ paletteSections: [] }).paletteSections).toEqual([])
-    expect(restored({ paletteSections: 'notes' }).paletteSections).toBeNull()
-    expect(restored({ paletteSections: ['notes', 3] }).paletteSections).toBeNull()
+  it('keeps the palette’s category by name, and none chosen where it is not a name (R31-E)', () => {
+    expect(restored({ paletteCategory: 'clef' }).paletteCategory).toBe('clef')
+    expect(restored({ paletteCategory: '' }).paletteCategory).toBeNull()
+    expect(restored({ paletteCategory: ['clef'] }).paletteCategory).toBeNull()
   })
 
   it('hears notes as they are edited unless the learner saved otherwise (round 28)', () => {
@@ -310,15 +306,15 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('opens the editor in Replace, its palette at the left, unless saved otherwise (R29 B7)', () => {
-    expect(DEFAULT_EDITING).toMatchObject({ startMode: 'replace', paletteSide: 'left' })
-    expect(restored({ editing: { startMode: 'chord', paletteSide: 'top' } }).editing).toEqual(
-      DEFAULT_EDITING,
-    )
-    expect(restored({ editing: { startMode: 'insert', paletteSide: 'right' } }).editing).toEqual({
-      ...DEFAULT_EDITING,
-      startMode: 'insert',
-      paletteSide: 'right',
+  it('opens the editor in Replace, its palette at the left, unless left otherwise (R29 B7, R31-E)', () => {
+    expect(DEFAULT_EDITING).toMatchObject({ paletteSide: 'left' })
+    expect(restored({ editorMode: 'chord', editing: { paletteSide: 'top' } })).toMatchObject({
+      editorMode: 'replace',
+      editing: DEFAULT_EDITING,
+    })
+    expect(restored({ editorMode: 'insert', editing: { paletteSide: 'right' } })).toMatchObject({
+      editorMode: 'insert',
+      editing: { ...DEFAULT_EDITING, paletteSide: 'right' },
     })
   })
 
@@ -363,9 +359,9 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('starts afresh over a save of the version before Practice’s Continue (R30-4)', () => {
-    expect(SETTINGS_VERSION).toBe(28)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 27)).toEqual(
+  it('starts afresh over a save of the version before the editor’s mode as left (R31-E)', () => {
+    expect(SETTINGS_VERSION).toBe(29)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 28)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

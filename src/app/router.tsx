@@ -105,7 +105,6 @@ const searchScreens = () => import('./routes/search-screens')
 const songsScreens = () => import('./routes/songs-screens')
 const groupsScreens = () => import('./routes/groups-screens')
 const playerScreens = () => import('./routes/player-screens')
-const scoreSettingsScreens = () => import('./routes/score-settings-screens')
 const learnScreens = () => import('./routes/learn-screens')
 const lessonEditorScreens = () => import('./routes/lesson-editor-screens')
 const explorerScreens = () => import('./routes/explorer-screens')
@@ -1001,14 +1000,6 @@ const editRoute = createRoute({
   component: lazyRouteComponent(playerScreens, 'ScoreEditorPage'),
 })
 
-// The score's Settings (round 28), in the editor's place on its draft: its credits, instruments,
-// tempo, key, time, bars, layout and the editor's preferences.
-const editSettingsRoute = createRoute({
-  getParentRoute: () => editRoute,
-  path: '/settings',
-  component: lazyRouteComponent(scoreSettingsScreens, 'ScoreSettingsPage'),
-})
-
 // A take's page, in the shell: a page to read and listen to, beside the editor that recorded it.
 const takeRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -1143,7 +1134,7 @@ const routeTree = rootRoute.addChildren([
     chromaticRoute,
     progressionPlayerRoute,
     exerciseRoute,
-    editRoute.addChildren([editSettingsRoute]),
+    editRoute,
     exampleEditRoute,
     checkRoute,
   ]),

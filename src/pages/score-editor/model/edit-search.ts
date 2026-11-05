@@ -7,15 +7,9 @@ export interface EditSearch {
   readonly takes: boolean
   readonly record: boolean
   readonly bar?: number
-  /** The panel's tab where it is not Notation (A40): Instruments or Layout. */
-  readonly panel?: 'instruments' | 'layout'
   /** Which staves play and show (A40), as the Player writes them (`stavesParam`, A35). */
   readonly staves?: string
 }
-
-/** The editor's panel's tabs (A40, Flat's): Notation, Instruments, Layout. */
-export const EDITOR_PANELS = ['notation', 'instruments', 'layout'] as const
-export type EditorPanelTab = (typeof EDITOR_PANELS)[number]
 
 /**
  * A lesson's example of notes on the score (round 27): its place among the lesson's examples of

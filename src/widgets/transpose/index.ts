@@ -1,1 +1,1 @@
-export { TransposeTool } from './ui/TransposeTool'
+export { TransposeFields, TransposeTool } from './ui/TransposeTool'

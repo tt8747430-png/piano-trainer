@@ -31,7 +31,8 @@ export type SettingsPageId = (typeof SETTINGS_PAGES)[number]
 export const NOT_PREFERENCES = [
   'sidebar',
   'paletteFolded',
-  'paletteSections',
+  'paletteCategory',
+  'editorMode',
   'foldedSections',
   'welcomed',
   'tipsSeen',
@@ -88,7 +89,6 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'recorder.tune': 'score-editor',
   'recorder.countIn': 'score-editor',
   'editing.hearNotes': 'score-editor',
-  'editing.startMode': 'score-editor',
   'editing.paletteSide': 'score-editor',
   'midi.input': 'connect-piano',
   'midi.device': 'connect-piano',
