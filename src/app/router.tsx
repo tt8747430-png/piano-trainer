@@ -31,7 +31,6 @@ import { RootLayout } from './RootLayout'
 import { RouteError } from './RouteError'
 import { RoutePending } from './RoutePending'
 import { callbackSearch } from './routes/account-search'
-import { adminSearch } from './routes/admin-search'
 import { ensureContent } from './routes/content'
 import { validateNewPatternSearch } from './routes/accompaniment-search'
 import {
@@ -171,12 +170,22 @@ const settingsRoute = createRoute({
   path: '/settings',
   component: lazyRouteComponent(settingsScreens, 'SettingsPage'),
 })
-// The Admin area (ADR 0116): accounts, groups, feature switches, reports, activity; an admin's alone.
+// Administration (ADR 0116, R32): an administrator's sections, each a page of Settings; on a phone
+// `/admin` lists them, on a laptop it opens the first. Its own chunk.
 const adminRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/admin',
-  ...adminSearch,
   component: lazyRouteComponent(adminScreens, 'AdminPage'),
+})
+const adminSectionRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/admin/$section',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params }) => {
+    const { isAdminSection } = await adminScreens()
+    if (!isAdminSection(params.section)) throw notFound()
+  },
+  component: lazyRouteComponent(adminScreens, 'AdminSectionPage'),
 })
 // The Profile (round 3): the learner, the days they practised, their record.
 const profileRoute = createRoute({
@@ -247,13 +256,14 @@ const computerKeysRoute = createRoute({
   },
   component: lazyRouteComponent(settingsScreens, 'OnScreenPianoPage'),
 })
-// The Player's kind page (B7, R18): how the Player always plays.
+// The Player's preferences as a page (B7, R18): the Player's gear is their home on screen; Settings
+// does not list it, so it stands alone in one column with Back to Settings.
 const playerSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/player',
   component: lazyRouteComponent(settingsScreens, 'PlayerSettingsPage'),
 })
-// The bars a learner arranges (R29 B10), General's pages.
+// The bars a learner arranges (R29 B10), Settings › Library's pages (R32).
 const selectToolbarRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/select-toolbar',
@@ -306,6 +316,12 @@ const howToUseRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/how-to-use',
   component: lazyRouteComponent(settingsScreens, 'HowToUsePage'),
+})
+// Report a problem (R32): Settings › Support's page, sent with the app's error reports.
+const feedbackRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/feedback',
+  component: lazyRouteComponent(settingsScreens, 'FeedbackPage'),
 })
 // About (R29 B9): the version, the build, the licence and the credits, from Settings' Help.
 const aboutRoute = createRoute({
@@ -1081,11 +1097,11 @@ const routeTree = rootRoute.addChildren([
     achievementRoute,
     notificationsRoute,
     adminRoute,
+    adminSectionRoute,
     settingsRoute,
     generalRoute,
     onScreenPianoRoute,
     computerKeysRoute,
-    playerSettingsRoute,
     selectToolbarRoute,
     swipeActionsRoute,
     storageRoute,
@@ -1096,6 +1112,8 @@ const routeTree = rootRoute.addChildren([
     changePasswordRoute,
     profilePrivacyRoute,
     howToUseRoute,
+    feedbackRoute,
+    playerSettingsRoute,
     aboutRoute,
     midiSettingsRoute,
     midiLogRoute,

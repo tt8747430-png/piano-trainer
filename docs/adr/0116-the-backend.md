@@ -56,9 +56,13 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   when it is made. Accounts are listed and their roles changed through the `admin` Edge Function, which checks the
   caller's role itself; never by a client query on `auth.users`. Groups, their members and feature switches are
   admins' tables; a switch is on for everyone, no one, or chosen groups, and the app asks `my_features()` at start
-  and at each sign-in (`useFeature`): every build goes to everyone, a feature waits behind its switch. The Admin
-  area (`/admin`, its own chunk, in Settings for admins): Accounts, Groups, Switches, Reports, Activity; every
-  change is written to `admin_log`.
+  and at each sign-in (`useFeature`): every build goes to everyone, a feature waits behind its switch. **Administration**
+  (R32; `/admin` and `/admin/$section`, its own chunk, in Settings for administrators: a list on a phone, a group of
+  Settings' sidebar on a laptop, each section a Settings page): Overview, Accounts (a change that removes an
+  administrator asks first), Groups (members folded under Manage members), Feature flags, Content reports (Suspend
+  publishing asks first), Feedback (learners' Report a problem, told from errors by its `Report: ` prefix), Error
+  log, Audit log, Drafts, Component gallery; every confirmation the one `ConfirmDialog`; every change is written to
+  `admin_log`.
 - **The lesson editor** (`pages/lesson-editor`, round 21 to 28; Notion's, Craft's and BlockNote's block editors,
   Obsidian's Live Preview) is one TipTap document that reads as the lesson and as a page being edited:
   - each block's **gutter** shows beside the block under the pointer, or the caret's on a phone (left of the text on
@@ -241,3 +245,4 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   Courses' shelves are edited in place on Learn (R29 B4, `?edit`), `/journeys/$journeyId/edit` and
   `/courses/manage` gone (2026-11-04).
 - r30-5 — The learner's own lessons and courses sync as a document table like the others (`own_lessons`, migration `20261105130000_own_lessons`: owner-only RLS, realtime, `push_documents` taking it; to be applied on the project). The lesson and course editors take a source (`LessonSource`, `CourseSource`): an editor's draft on the server, or the learner's own on the device (`LocalScreen`, `useRestingSave`, whose `REST_MS` the drafts share) (2026-11-05).
+- r32 — The Admin area became Administration: ten sections, each a Settings page (`/admin/$section`), in Settings' sidebar on a laptop and a list on a phone; Feedback apart from the Error log; the learner preview's second way (the Administration bar's button) gone, its home the Account; no database change (2026-11-05).

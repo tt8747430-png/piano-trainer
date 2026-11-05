@@ -29,9 +29,14 @@ interface Place {
    * Where else the place is the current one: Learn's lessons and courses (ADR 0053); the Profile's
    * Settings and account pages, opened from it.
    */
-  readonly also?: readonly ('/lessons' | '/courses' | '/settings' | '/account')[]
-  /** Where it is current only while the sidebar is not shown: Settings, the sidebar's own place. */
-  readonly alsoWithoutSidebar?: readonly '/settings'[]
+  readonly also?: readonly (
+    '/lessons' | '/courses' | '/settings' | '/account' | '/admin' | '/legal'
+  )[]
+  /**
+   * Where it is current only while the sidebar is not shown: Settings and its pages (Administration,
+   * the legal pages), the sidebar's own place.
+   */
+  readonly alsoWithoutSidebar?: readonly ('/settings' | '/admin' | '/legal')[]
   /** The place's shortcut: Alt and its number. */
   readonly key?: Combo
 }
@@ -58,7 +63,7 @@ const PROFILE: Place = {
   icon: ProfileIcon,
   exact: false,
   also: ['/account'],
-  alsoWithoutSidebar: ['/settings'],
+  alsoWithoutSidebar: ['/settings', '/admin', '/legal'],
   key: { code: 'Digit4', alt: true },
 }
 
@@ -108,6 +113,8 @@ const FOOT: readonly Place[] = [
     label: 'nav.settings',
     icon: Settings,
     exact: false,
+    // Administration and the legal pages are Settings' pages (R32).
+    also: ['/admin', '/legal'],
     key: { code: 'Comma', mod: true },
   },
 ]

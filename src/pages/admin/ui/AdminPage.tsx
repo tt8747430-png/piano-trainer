@@ -1,80 +1,52 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
+import { Link, Navigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { GraduationCap } from 'lucide-react'
-import { useAccount, useLearnerView } from '@/shared/lib/account'
-import { BackButton, Dropdown, RoundButton, ScreenHeader } from '@/shared/ui'
+import { LAPTOP, useMediaQuery } from '@/shared/lib'
+import { useAccount } from '@/shared/lib/account'
+import { RowLink, SettingsGroup } from '@/shared/ui'
 import { NotOpen } from '@/widgets/content-editor'
-import { ADMIN_TABS, type AdminTab } from '../model/admin-tab'
-import { AccountsTab } from './AccountsTab'
-import { ActivityTab } from './ActivityTab'
-import { ComponentsTab } from './ComponentsTab'
-import { DraftsTab } from './DraftsTab'
-import { ErrorsTab } from './ErrorsTab'
-import { GroupsTab } from './GroupsTab'
-import { OverviewTab } from './OverviewTab'
-import { ReportsTab } from './ReportsTab'
-import { SwitchesTab } from './SwitchesTab'
+import {
+  ADMIN_PICTURES,
+  ADMIN_SECTIONS,
+  SettingsScreen,
+  type AdminSection,
+} from '@/widgets/settings-screen'
 
-const TABS: Readonly<Record<AdminTab, () => React.JSX.Element>> = {
-  overview: OverviewTab,
-  accounts: AccountsTab,
-  groups: GroupsTab,
-  switches: SwitchesTab,
-  reports: ReportsTab,
-  errors: ErrorsTab,
-  activity: ActivityTab,
-  drafts: DraftsTab,
-  components: ComponentsTab,
-}
+/** The sections in their two groups: the people and the content, then the logs and the tools. */
+const GROUPS: readonly (readonly AdminSection[])[] = [
+  ADMIN_SECTIONS.slice(0, 5),
+  ADMIN_SECTIONS.slice(5),
+]
 
 /**
- * The Admin area (ADR 0116), an admin's alone: Accounts, Groups, Switches, Reports, Errors and Activity, a
- * tab each. Anyone else is told it is an admin's; the server refuses them all the same.
+ * Administration (ADR 0116, R32), an administrator's alone: on a phone the list of its sections, each
+ * pushing its page; on a laptop the sidebar lists them, so this opens the first. Anyone else is told
+ * it is an administrator's; the server refuses them all the same.
  */
 export function AdminPage() {
   const { t } = useTranslation('admin')
   const { account } = useAccount()
-  const { tab } = useSearch({ from: '/shell/admin' })
-  const Tab = TABS[tab]
-  const navigate = useNavigate()
-  const learner = useLearnerView()
+  const wide = useMediaQuery(LAPTOP)
+  if (account?.role === 'admin' && wide)
+    return <Navigate to="/admin/$section" params={{ section: 'overview' }} replace />
   return (
-    <div className="flex flex-col gap-6">
-      <ScreenHeader
-        title={t('title')}
-        back={<BackButton />}
-        tools={
-          learner.can ? (
-            <RoundButton
-              label={t('viewAsLearner')}
-              icon={GraduationCap}
-              onClick={() => {
-                learner.set(true)
-                void navigate({ to: '/' })
-              }}
-            />
-          ) : undefined
-        }
-      />
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
-        {account?.role === 'admin' ? (
-          <>
-            {/* Nine sections: one menu at the content's head, never a second bar row (R29-P1). */}
-            <Dropdown
-              label={t('section')}
-              value={tab}
-              onChange={(each) =>
-                void navigate({ to: '/admin', search: { tab: each }, replace: true })
-              }
-              options={ADMIN_TABS.map((each) => ({ value: each, label: t(`tabs.${each}`) }))}
-              className="self-start"
-            />
-            <Tab />
-          </>
-        ) : (
-          <NotOpen line={t('notAdmin')} />
-        )}
-      </div>
-    </div>
+    <SettingsScreen title={t('title')}>
+      {account?.role === 'admin' ? (
+        GROUPS.map((sections) => (
+          <SettingsGroup key={sections.join()} flush>
+            {sections.map((section) => (
+              <RowLink
+                key={section}
+                title={t(`sections.${section}`)}
+                icon={ADMIN_PICTURES[section].icon}
+                paint={ADMIN_PICTURES[section].paint}
+                render={<Link to="/admin/$section" params={{ section }} />}
+              />
+            ))}
+          </SettingsGroup>
+        ))
+      ) : (
+        <NotOpen line={t('notAdmin')} />
+      )}
+    </SettingsScreen>
   )
 }

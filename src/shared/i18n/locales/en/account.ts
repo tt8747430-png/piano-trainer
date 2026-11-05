@@ -85,7 +85,8 @@ export const account = {
         'first-lesson': 'Finish any lesson in Learn.',
         'first-recording': 'Record a take in the Player.',
         'first-published': 'Publish one of your songs from its Settings: Publish in library.',
-        'first-midi': 'Connect a piano in Settings and play it for a minute.',
+        'first-midi':
+          'Connect a MIDI keyboard in Settings › MIDI devices and play it for a minute.',
         'perfect-take': 'Answer every question right in an Exercise or a Quiz run.',
       },
       level: 'Level',

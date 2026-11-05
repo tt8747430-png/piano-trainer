@@ -20,15 +20,28 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
 - **The Profile** is the learner at a glance: their name as its title, their initial, email (or a guest's Sign in),
   one row of three figures (days in a row, days practised, songs played); rows to Settings and the Account; Activity
   (the month's calendar, whether today kept the run in its header); the rest of the record as a short list; badges.
-- **Settings** is one grouped list (R20): the account card (the learner's initial, name, email and one line of the
-  sync), General (General, Storage and backup), Piano (On-screen piano, with Computer keys inside it where a mouse
-  or trackpad hovers, and Connect a piano), Help; only what concerns the whole app (R29: the Player's, the editor's,
-  Sound and recording's and each Practice page's settings are behind their own gear; how lessons read is a lesson's
-  Settings'), and an admin's Admin area, each row its icon in a coloured square; one column on a phone, two
-  panes from 64rem (the list beside the page, General first, neither with Back). **The Account** reads as an edit
-  profile: the initial; Profile (the name, Save once changed, the email, Change password); Sync (where it stands, Sync
-  now, what syncs: its one home); then Sign out and Delete account…, each red in a group of its own at the foot, a
-  footnote under it, asking through the one confirm dialog (the email typed for Delete).
+- **Settings** (R32, iOS's Settings and macOS's System Settings; `widgets/settings-screen`, its groups one model in
+  `model/sections.ts`): the account first (the learner's initial, name, email and one line of the sync, or Sign in),
+  then **App** (General: Appearance and Language; Storage and backup), **Piano** (On-screen piano, with Computer
+  keyboard inside it where a mouse or trackpad hovers; MIDI devices, its connection as its value), **Library**
+  (Selection toolbar, Swipe actions: memory-palaces' and iOS Mail's, pages of Settings' own), **Support** (User guide,
+  Report a problem: a page with its field in sight, greyed offline; About, the version or a waiting update as its
+  value), and for an administrator **Administration**. Only what concerns the whole app (R29: the Player's, the
+  editor's and each Practice page's settings are behind their own gear; how lessons read is a lesson's Settings').
+  **On a phone** one grouped list, each row its icon in a coloured square, each page pushed with Back (to Settings,
+  or to the page it is under). **On a laptop** (from 64rem) the two panes of the libraries (Songs' tree and list): the
+  sidebar (17rem, `TreeItem` rows with a painted swatch, the account first, the groups headed) stands sticky under the
+  bar with its own height and scroll, so the page beside it (44rem) scrolls with the window and never drags it; the
+  page shown is marked, a page under a page marking its parent (Edit profile the account, the legal pages About, the
+  MIDI log MIDI devices) and keeping its Back; a top-level page has none. A page Settings does not list (a Practice
+  page's Settings) stands alone in one column with Back. **About** is a Settings page: the app's icon, name, version
+  and build; Software update (its status the value, a tap checks, Install and restart under it when one waits) and
+  the licence; Legal (Privacy Policy, Terms of Service, each a row; their pages go up to About); Acknowledgements.
+  **The Account** reads as an edit profile: the initial; Profile (the name, Save once changed, the email, Change
+  password); for an editor or administrator **Editorial access** (the role, and Preview as learner: the app as a
+  learner sees it for the session, its one home); Sync (where it stands, Sync now, what syncs: its one home); then
+  Sign out and Delete account…, each red in a group of its own at the foot, a footnote under it, asking through the
+  one confirm dialog (the email typed for Delete).
 - **Practice lists its pages and remembers nothing**, in three headed groups as the reference app and memory-palaces
   list theirs: **Theory** (Chords, Scales and keys, Intervals, Progressions: the things a page shows on the keys),
   **Playing** (Accompaniment, the Chord finder: what the hands play) and **Training** (Exercises, Quiz, Metronome).
@@ -121,7 +134,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
 - **Musical terms** are one list each in the kernel: the tempo words with their ranges (`TEMPO_TERMS`, larghissimo
   to prestissimo; ten name a tempo, the shades between only describe), the editor's expression text in three groups
   (`EXPRESSION_GROUPS`: character, tempo changes, technique), each meaning in both languages.
-- **How to use** is Settings' Help: six folding parts in the order a learner meets them, each step beside the icon
+- **User guide** is Settings' Support: six folding parts in the order a learner meets them, each step beside the icon
   its control wears.
 - **Search** (`/search?q=`) lists every named thing by kind, each a row to its page: Practice's pages, songs and
   folders, lessons, chord qualities, scale kinds, progressions, patterns, exercises and trainers. It is one projection
@@ -173,3 +186,4 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
   badge names its goal over its meter instead of the count twice (2026-11-05).
 - r30 — Drone, Tap tempo and the Recorder leave Practice: the Metronome has its Tap, and recording is the score editor's (Songs' + › Record) (2026-11-05).
 - r30-4 — Exercises, Accompaniment and Progressions are one library, the Songs library's shape (`widgets/practice-library`); the Source menu, Progressions' three tabs and the fixed grids go; a progression has its own page; favourites and the learner's progressions in `pt-practice-library` (2026-11-05).
+- r32 — Settings rebuilt (the owner's report, `.scratch/r32/plan/settings.md`): on a laptop the sidebar scrolls on its own beside the page (it had scrolled with it, its foot out of reach), compact tree rows, the page shown marked; Selection toolbar and Swipe actions a Library group of their own (they had no Back under General); About a Settings page with Software update, Legal and Acknowledgements (its Back was dead on a laptop, its column apart); Privacy and Terms under About; Report a problem a page; Preview as learner on the Account; Administration in Settings' sidebar; the words made professional, en and ru (2026-11-05).

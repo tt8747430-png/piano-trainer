@@ -1,6 +1,7 @@
 export { AccountSettingsPage } from './ui/AccountSettingsPage'
 export { GeneralPage } from './ui/GeneralPage'
 export { OnScreenPianoPage } from './ui/OnScreenPianoPage'
+export { FeedbackPage } from './ui/FeedbackPage'
 export { PlayerSettingsPage } from './ui/PlayerSettingsPage'
 export { SelectToolbarPage } from './ui/SelectToolbarPage'
 export { SwipeActionsPage } from './ui/SwipeActionsPage'

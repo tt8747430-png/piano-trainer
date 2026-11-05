@@ -2,6 +2,7 @@ import { useRender } from '@base-ui/react/use-render'
 import type { LucideIcon } from 'lucide-react'
 import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '@/shared/lib'
+import { PAINT, type Paint } from './paint'
 
 /** A tree row's look: a link or button the width of the pane, the place open marked by `aria-current`. */
 export const TREE_ITEM =
@@ -10,6 +11,20 @@ export const TREE_ITEM =
 /** A count at a tree row's end, in soft ink. */
 export const TreeCount = ({ n }: { n: number }) => (
   <span className="ms-auto ps-2 text-sm font-normal text-muted-foreground tabular-nums">{n}</span>
+)
+
+/** A tree row's painted picture: its icon on its paint's wash, the tree's size (a folder, a Settings page). */
+export const TreeSwatch = ({ icon: Icon, paint }: { icon: LucideIcon; paint: Paint }) => (
+  <span
+    aria-hidden
+    className={cn(
+      'grid size-6 shrink-0 place-items-center rounded-pill',
+      PAINT[paint].fill,
+      PAINT[paint].ink,
+    )}
+  >
+    <Icon className="size-3.5" />
+  </span>
 )
 
 /** A run of a tree's rows. */

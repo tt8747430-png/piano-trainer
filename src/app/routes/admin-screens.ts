@@ -1,2 +1,2 @@
-// The Admin area, its own chunk: only an admin ever loads it.
-export { AdminPage } from '@/pages/admin'
+// Administration, its own chunk: only an administrator ever loads it.
+export { AdminPage, AdminSectionPage, isAdminSection } from '@/pages/admin'

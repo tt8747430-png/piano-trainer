@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
-import { BackButton, ScreenHeader } from '@/shared/ui'
+import { SettingsScreen } from '@/widgets/settings-screen'
 
 /** When either page last changed. */
 const UPDATED = new Date(Date.UTC(2026, 10, 4))
@@ -21,7 +21,8 @@ const TERMS = ['use', 'account', 'publish', 'content', 'thirdParty', 'contact', 
 
 /**
  * The app's Privacy or Terms (ADR 0116), in one column: its title, when it last changed, then a heading
- * and a paragraph a section. Read signed in or not; Back leads to Settings › Help.
+ * and a paragraph a section, a Settings page under About (R32: About marked beside it on a laptop).
+ * Read signed in or not; Back returns to where it was opened (the sign-up form), else to About.
  */
 export function LegalPage({ page }: { page: 'privacy' | 'terms' }) {
   const { t } = useTranslation('legal')
@@ -40,16 +41,17 @@ export function LegalPage({ page }: { page: 'privacy' | 'terms' }) {
           text: t(`terms.sections.${key}.text`),
         }))
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 pb-8">
-      <ScreenHeader title={t(`${page}.title`)} back={<BackButton />} />
-      <p className="-mt-3 text-sm text-muted-foreground">{t('updated', { date })}</p>
-      {sections.map(({ key, heading, text }) => (
-        <section key={key} className="flex flex-col gap-1.5">
-          <h2 className="font-display text-xl">{heading}</h2>
-          <p className="text-pretty">{text}</p>
-        </section>
-      ))}
-    </div>
+    <SettingsScreen title={t(`${page}.title`)} sub>
+      <div className="flex flex-col gap-5">
+        <p className="text-sm text-muted-foreground">{t('updated', { date })}</p>
+        {sections.map(({ key, heading, text }) => (
+          <section key={key} className="flex flex-col gap-1.5">
+            <h2 className="font-display text-xl">{heading}</h2>
+            <p className="text-pretty">{text}</p>
+          </section>
+        ))}
+      </div>
+    </SettingsScreen>
   )
 }
 

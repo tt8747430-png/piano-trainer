@@ -3,24 +3,20 @@ import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
 import type { Report } from '@/shared/api/admin'
 import { useAdmin } from '@/shared/lib/admin'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/shared/ui/primitives/alert-dialog'
+import { ConfirmDialog } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useLoaded } from '../model/use-loaded'
 import { useChangeProblem } from '../model/use-change-problem'
 import { FailureLine, LoadedState } from './LoadedState'
 
+/** The reasons a report gives, as the Public library's Report sheet offers them. */
+const REASONS = ['not-theirs', 'offensive', 'spam', 'broken'] as const
+const isReason = (value: string): value is (typeof REASONS)[number] =>
+  (REASONS as readonly string[]).includes(value)
+
 /**
- * The Public library's reports, the newest first: the song, its author, the reason and note; Hide
- * (or Show again), Stop them publishing (asked first), Dismiss.
+ * Administration › Content reports: the Public library's reports, the newest first: the song, its author, the reason and note; Hide
+ * (or Restore), Suspend publishing (asked first), Dismiss.
  */
 export function ReportsTab() {
   const { t } = useTranslation(['admin', 'songs'])
@@ -54,9 +50,9 @@ export function ReportsTab() {
                   </p>
                   <p className="text-sm text-muted-foreground">
                     {t('reports.by', { name: report.authorName })} ·{' '}
-                    {t(`songs:public.reasons.${report.reason as 'spam'}`, {
-                      defaultValue: report.reason,
-                    })}{' '}
+                    {isReason(report.reason)
+                      ? t(`songs:public.reasons.${report.reason}`)
+                      : report.reason}{' '}
                     ·{' '}
                     {new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(
                       new Date(report.reportedAt),
@@ -88,28 +84,19 @@ export function ReportsTab() {
           )
         }
       </LoadedState>
-      <AlertDialog open={blocking !== null} onOpenChange={(open) => !open && setBlocking(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {t('reports.blockTitle', { name: blocking?.authorName ?? '' })}
-            </AlertDialogTitle>
-            <AlertDialogDescription>{t('reports.blockBody')}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t('reports.cancel')}</AlertDialogCancel>
-            <AlertDialogAction
-              variant="destructive"
-              onClick={() => {
-                if (blocking) void admin.block(blocking.authorId).then(after)
-                setBlocking(null)
-              }}
-            >
-              {t('reports.block')}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmDialog
+        open={blocking !== null}
+        onOpenChange={(open) => {
+          if (!open) setBlocking(null)
+        }}
+        title={t('reports.blockTitle', { name: blocking?.authorName ?? '' })}
+        body={t('reports.blockBody')}
+        action={t('reports.block')}
+        onConfirm={() => {
+          if (blocking) void admin.block(blocking.authorId).then(after)
+          setBlocking(null)
+        }}
+      />
     </div>
   )
 }

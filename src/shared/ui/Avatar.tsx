@@ -6,6 +6,8 @@ import { PAINT } from './paint'
 const SIZE = {
   /** The tab bar's and sidebar's: an icon's size. */
   icon: 'size-6 text-sm lg:size-5 lg:text-xs',
+  /** A tree row's: its swatch's size (Settings' sidebar). */
+  tree: 'size-6 text-xs',
   /** A byline's: beside a name. */
   byline: 'size-11 text-lg',
   /** A row's: its tile's size. */
