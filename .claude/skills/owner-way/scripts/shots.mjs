@@ -102,7 +102,7 @@ for (const size of SIZES) {
         const check = async (at) => {
           await page.screenshot({ path: join(out, `${label}${at}.png`) })
           shots += 1
-          for (const line of await page.evaluate(`(${inspect})()`)) problems.push(`${label}${at}: ${line}`)
+          for (const line of await page.evaluate(`(${inspect})(${JSON.stringify(at === '-mid' ? 'mid' : at === '-end' ? 'end' : scrolls ? 'top' : 'only')})`)) problems.push(`${label}${at}: ${line}`)
         }
         let scrolls = false
         for (const act of acts) {

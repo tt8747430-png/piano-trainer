@@ -1,8 +1,15 @@
 // The checks a still shot hides, run in the page (references/testing.md, "What the shots check").
 // Returns one line for each thing found: text cut off, things on top of each other, a floating
 // layer over text, a target under 44px on a touch screen. Read by shots.mjs; kept free of imports.
-() => {
+(at = 'top') => {
   const found = []
+  const layered = (el) => {
+    for (let e = el; e && e !== document.body; e = e.parentElement) {
+      const p = getComputedStyle(e).position
+      if (p === 'fixed' || p === 'sticky') return e
+    }
+    return null
+  }
   const name = (el) => {
     const label = el.getAttribute('aria-label') || el.textContent?.trim().slice(0, 40) || ''
     return `${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}${label ? ` “${label}”` : ''}`
@@ -40,6 +47,8 @@
       const [a, ra] = boxes[i]
       const [b, rb] = boxes[j]
       if (a.contains(b) || b.contains(a) || !cross(ra, rb)) continue
+      // Content scrolling under a bar or a floating button is COVERED's question, not this one's.
+      if (layered(a) !== layered(b)) continue
       // Only what is drawn on top counts: the topmost element at the crossing's centre must be one of them.
       const x = (Math.max(ra.left, rb.left) + Math.min(ra.right, rb.right)) / 2
       const y = (Math.max(ra.top, rb.top) + Math.min(ra.bottom, rb.bottom)) / 2
@@ -49,14 +58,23 @@
     }
   // 3. A floating layer (fixed or sticky) over text that is not its own: a pill over a title.
   const layers = [...document.querySelectorAll('body *')].filter((el) => {
-    const p = getComputedStyle(el).position
-    return (p === 'fixed' || p === 'sticky') && visible(el) && !hidden(el)
+    const cs = getComputedStyle(el)
+    const p = cs.position
+    // Bars and floating pills: fixed or sticky, or placed absolutely above the page (a z-index).
+    const floats = p === 'fixed' || p === 'sticky' || (p === 'absolute' && Number(cs.zIndex) >= 10)
+    return floats && visible(el) && !hidden(el)
   })
   for (const layer of layers) {
     const r = layer.getBoundingClientRect()
     if (r.width >= innerWidth - 2 && r.height >= innerHeight - 2) continue // a sheet's backdrop
+    // What scrolls can be scrolled out from under a layer, except at the page's end (a layer low on
+    // the screen) or at its start (a layer high on it): only there is it hidden for good.
+    const low = r.top > innerHeight / 2
+    // A layer that holds neither edge (a sticky preview in mid-page) is a fault at every scroll.
+    const edged = r.top < 16 || r.bottom > innerHeight * 0.75
+    if (edged && at !== 'only' && ((low && at !== 'end') || (!low && at !== 'top'))) continue
     for (const el of texts) {
-      if (layer.contains(el) || el.contains(layer) || inScore(el)) continue
+      if (layer.contains(el) || el.contains(layer)) continue
       const t = el.getBoundingClientRect()
       if (!cross(r, t, 4)) continue
       const top = document.elementFromPoint((t.left + t.right) / 2, (t.top + t.bottom) / 2)
