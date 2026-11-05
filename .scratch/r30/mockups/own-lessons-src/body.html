@@ -42,7 +42,7 @@
   </div>
   <nav class="toc" aria-label="Questions">
     <a href="#q1">1 Your lessons</a><a href="#q2">2 Your courses</a><a href="#q3">3 A lesson’s Settings</a><a href="#q4">4 Editing your course</a>
-    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="(function(b){var s=document.body.classList.toggle('small');b.textContent=s?'Smaller iPhone · 393 × 852':'iPhone 17 Pro · 402 × 874';try{localStorage.setItem('pt-mock-size',s?'small':'pro')}catch(e){}})(this)">iPhone 17 Pro · 402 × 874</button><script>try{if(localStorage.getItem('pt-mock-size')==='small'){document.body.classList.add('small');document.getElementById('sizeBtn').textContent='Smaller iPhone · 393 × 852'}}catch(e){}</script></span>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="ptSize(1)">iPhone 17 Pro · app</button><script>var PT_SIZES=[['pro','iPhone 17 Pro · app'],['safari','iPhone 17 Pro · Safari'],['small','Smaller iPhone · app']];function ptSize(step){var k=0;try{k=Math.max(0,PT_SIZES.findIndex(function(x){return x[0]===localStorage.getItem('pt-mock-size')}))}catch(e){}k=(k+step)%PT_SIZES.length;document.body.classList.remove('small','safari');if(PT_SIZES[k][0]!=='pro')document.body.classList.add(PT_SIZES[k][0]);document.getElementById('sizeBtn').textContent=PT_SIZES[k][1];try{localStorage.setItem('pt-mock-size',PT_SIZES[k][0])}catch(e){}}ptSize(0)</script></span>
   </nav>
 
   <section class="q" id="q1">
