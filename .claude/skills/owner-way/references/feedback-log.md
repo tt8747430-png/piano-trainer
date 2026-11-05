@@ -110,6 +110,11 @@ owner's, typos fixed.
   prerequisites, SATB on voicings. More content: rootless voicings, locked hands, modulation, slash chords, cadences.
 
 ## Practice
+- **Practice ordered by relevance,** learning before tools, with a clear purpose; the Metronome's settings in place as
+  Chordify's; the header's Tools a real menu, never a redirect; tools' settings never a single-option page or a redirect
+  to app Settings; the Chord player simple, Apple-like, its drag and drop working (memory-palaces' fix); selection popups
+  that say what is selected and why; the libraries editable like Songs, the built-in ones too; content kinds never
+  mixed (patterns, method-book lessons, songs); Continue useful or gone; the sidebar like Claude's (2026-11-05).
 
 - Grouped rows with a picture, a name and a line. **No strip hides options:** a key picker and menus.
 - **Every Practice page has its own Settings page;** the app's Settings holds only what is app-wide.
@@ -168,6 +173,9 @@ are reference only, but progressions are facts.
   visual choices ("these are very heavy to read").
 
 ## Words
+- **Professional wording, everywhere:** "refactor all the text and string and all names and write professionally, not
+  plain words. write professional wording and sentences and not plain like you did before" — labels, settings, tips and
+  empty states read like Apple, Chordify, Flat or MuseScore, in en and ru; this replaces the earlier "plain words" (2026-11-05).
 
 - **The term a musician uses:** "check all the strings … use professional terms". Failed: Move smoothly, Between two chords,
   Starting position, Who wrote it, Through the keys, Hear notes as you edit, Tune, First chord.
