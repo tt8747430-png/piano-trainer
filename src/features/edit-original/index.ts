@@ -1,5 +1,4 @@
 export {
-  DRAFT_SAVE_DELAY_MS,
   useContentDraft,
   type ContentDraft,
   type DraftLoad,

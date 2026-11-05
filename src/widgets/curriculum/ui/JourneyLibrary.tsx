@@ -1,4 +1,4 @@
-import { BookOpenText, ChartNoAxesColumnIncreasing, Check, KeyboardMusic } from 'lucide-react'
+import { BookOpenText, ChartNoAxesColumnIncreasing, KeyboardMusic } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -24,12 +24,14 @@ import {
   type StepId,
 } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { cn, useSetSearch } from '@/shared/lib'
-import { ChoiceChips, OpensMark, PAINT, ProgressRing } from '@/shared/ui'
+import { useSetSearch } from '@/shared/lib'
+import { ChoiceChips, PAINT } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
-import type { LearnView } from '../model/learn-view'
+import { OWN_LESSONS, type LearnView } from '../model/learn-view'
 import { journeyProgress, lessonShare } from '../model/progress'
 import { useStepTitle } from '../model/use-step-title'
+import { LessonRow } from './LessonRow'
+import { OwnLessons } from './OwnLessons'
 
 const ICON = {
   lesson: BookOpenText,
@@ -86,48 +88,17 @@ function StepRow({
         ]
   return (
     <li>
-      <StepLink
-        step={step}
-        aria-current={next ? 'step' : undefined}
-        className="group flex min-h-16 items-center gap-4 px-3 py-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
-      >
-        <ProgressRing share={done || next ? 0 : share} className={paint.ink}>
-          <span
-            aria-hidden
-            className={cn(
-              'grid size-10 shrink-0 place-items-center',
-              step.kind === 'lesson' ? 'rounded-pill' : 'rounded-control',
-              done ? 'bg-learned text-learned-foreground' : cn(paint.fill, paint.ink),
-              next && 'ring-2 ring-primary ring-offset-2 ring-offset-card',
-            )}
-          >
-            {done ? (
-              <Check className="size-5" strokeWidth={3} />
-            ) : (
-              <Icon className="size-5" strokeWidth={1.75} />
-            )}
-          </span>
-        </ProgressRing>
-        <span className="flex min-w-0 flex-1 flex-col">
-          <span className="font-semibold text-pretty">
-            {title}
-            {/* The check and the arc say it to the eye alone. */}
-            {done ? <span className="sr-only">, {t('learned')}</span> : null}
-            {!done && share > 0 ? (
-              <span className="sr-only">, {t('read', { percent: Math.round(share * 100) })}</span>
-            ) : null}
-          </span>
-          <span className="text-sm text-muted-foreground tabular-nums">
-            {detail.filter(Boolean).join(' · ')}
-          </span>
-        </span>
-        {next ? (
-          <span className="shrink-0 rounded-pill bg-primary px-2.5 py-0.5 text-xs font-semibold text-primary-foreground">
-            {t('upNext')}
-          </span>
-        ) : null}
-        <OpensMark />
-      </StepLink>
+      <LessonRow
+        render={<StepLink step={step} />}
+        mark={<Icon className="size-5" strokeWidth={1.75} />}
+        square={step.kind !== 'lesson'}
+        paint={paint}
+        done={done}
+        share={share}
+        current={next}
+        title={title}
+        detail={detail.filter(Boolean).join(' · ')}
+      />
     </li>
   )
 }
@@ -185,16 +156,10 @@ function ChapterGroup({
   )
 }
 
-/**
- * The Lessons as a library (ADR 0053, amended): the four levels as chips, each with how many of its
- * steps are learned; under them the level's name, what it makes of the learner and how far along they
- * are; then its chapters as groups of rows, each step a row that opens it. Every step opens; the order
- * only suggests.
- */
-export function JourneyLibrary({ journey }: { journey: Journey }) {
-  const { t } = useTranslation(['learn', 'common'])
+/** A level's name, its goal, how far along the learner is, and its chapters as groups of rows. */
+function LevelLessons({ journey }: { journey: Journey }) {
+  const { t } = useTranslation('learn')
   const locale = useLocale()
-  const setSearch = useSetSearch<LearnView>()
   const learned = useProgress(selectLearned)
   const next = continueStep(learned)?.id
   const headingId = useId()
@@ -206,24 +171,14 @@ export function JourneyLibrary({ journey }: { journey: Journey }) {
       .map((step, i): [StepId, number] => [stepIdOf(step), i + 1]),
   )
   return (
-    <div className="flex flex-col gap-6">
-      <ChoiceChips
-        label={t('learn:journey.label')}
-        value={journey.id}
-        scroll
-        options={allJourneys().map((each) => ({
-          value: each.id,
-          label: t(`common:stage.${each.stage}`),
-        }))}
-        onChange={(id) => setSearch({ view: 'lessons', journey: id })}
-      />
+    <>
       <section aria-labelledby={headingId} className="flex flex-col gap-1 px-3">
         <h2 id={headingId} className="text-2xl font-semibold text-balance">
           {localText(journey.title, locale)}
         </h2>
         <p className="text-pretty text-muted-foreground">{localText(journey.goal, locale)}</p>
         <p className="text-sm text-muted-foreground tabular-nums">
-          {t('learn:journey.steps', { learned: progress.done, total: progress.total })}
+          {t('journey.steps', { learned: progress.done, total: progress.total })}
         </p>
       </section>
       {journey.chapters.map((chapter, i) => (
@@ -236,6 +191,35 @@ export function JourneyLibrary({ journey }: { journey: Journey }) {
           next={next}
         />
       ))}
+    </>
+  )
+}
+
+/**
+ * The Lessons as a library (ADR 0053, amended): the four levels as chips, then Your lessons (R30-5);
+ * under them the level's name, what it makes of the learner and how far along they are, then its
+ * chapters as groups of rows, each step a row that opens it; or the learner's own lessons. Every
+ * step opens; the order only suggests.
+ */
+export function JourneyLibrary({ journey }: { journey: Journey | typeof OWN_LESSONS }) {
+  const { t } = useTranslation(['learn', 'common'])
+  const setSearch = useSetSearch<LearnView>()
+  return (
+    <div className="flex flex-col gap-6">
+      <ChoiceChips
+        label={t('learn:journey.label')}
+        value={journey === OWN_LESSONS ? OWN_LESSONS : journey.id}
+        scroll
+        options={[
+          ...allJourneys().map((each) => ({
+            value: each.id,
+            label: t(`common:stage.${each.stage}`),
+          })),
+          { value: OWN_LESSONS, label: t('learn:own.lessons') },
+        ]}
+        onChange={(id) => setSearch({ view: 'lessons', journey: id })}
+      />
+      {journey === OWN_LESSONS ? <OwnLessons /> : <LevelLessons journey={journey} />}
     </div>
   )
 }

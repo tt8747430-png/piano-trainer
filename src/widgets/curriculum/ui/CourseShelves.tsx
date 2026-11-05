@@ -5,6 +5,7 @@ import { hasAbout } from '@/entities/lesson'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { continueStep } from '../model/continue-step'
 import { CourseCard } from './CourseCard'
+import { OwnCourses } from './OwnCourses'
 
 /** An About's view, its own chunk: most visits to the Courses have none to draw. */
 const AboutView = lazy(() =>
@@ -34,7 +35,8 @@ function ShelfSection({ shelf, current }: { shelf: Shelf; current: string | unde
 
 /**
  * The Courses (ADR 0053), as the courses-app shelves them: the beginner's, the intermediate's, the
- * technique courses, chords and improvising, then the method books. The course Continue is in ringed.
+ * technique courses, chords and improvising, then the method books; then Your courses (R30-5), the
+ * learner's own. The course Continue is in ringed.
  * Over them the Courses' About, where an editor wrote one (R29 B9).
  */
 export function CourseShelves() {
@@ -54,6 +56,7 @@ export function CourseShelves() {
       {SHELVES.map((shelf) => (
         <ShelfSection key={shelf} shelf={shelf} current={current} />
       ))}
+      <OwnCourses />
     </div>
   )
 }

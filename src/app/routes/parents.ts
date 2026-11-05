@@ -240,9 +240,16 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
 
   // Learn: a lesson up to its level, a course's lesson up to the course, the course up to the
   // Courses; Settings and Edit up to what they set or edit.
+  // A lesson read in a course of the learner's goes up to that course; one of their own to Your
+  // lessons (R30-5).
   '/shell/lessons/$lessonId': async (from) => {
-    const { lessonPlace } = await import('./learn-screens')
-    const journey = lessonPlace(param(from, 'lessonId'))?.journey.id
+    const { isOwnCourseId, isOwnLessonId, lessonPlace, OWN_LESSONS } =
+      await import('./learn-screens')
+    const course = text(from.search.course)
+    if (course && isOwnCourseId(course))
+      return up({ to: '/courses/$courseId', params: { courseId: course } })
+    const lessonId = param(from, 'lessonId')
+    const journey = isOwnLessonId(lessonId) ? OWN_LESSONS : lessonPlace(lessonId)?.journey.id
     return up({ to: '/', search: { view: 'lessons', ...(journey ? { journey } : {}) } })
   },
   '/shell/lessons/$lessonId/settings': toLesson,

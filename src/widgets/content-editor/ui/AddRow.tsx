@@ -1,18 +1,30 @@
-import { Plus, Undo2 } from 'lucide-react'
+import { Plus, type LucideIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NewSheet, SheetPart } from '@/shared/ui'
 
-/** An item that may be added back by its name: a lesson the course had. */
+/** An item that may be added by its name: a lesson the course had, or one to add by reference. */
 export interface Addable {
   readonly key: string
   readonly title: string
+  /** A line under its name: where it is from. */
+  readonly detail?: string | undefined
+}
+
+/** Items that may be added, under their heading, each wearing the group's picture. */
+export interface AddGroup {
+  readonly title: string
+  readonly icon: LucideIcon
+  readonly items: readonly Addable[]
+  /** Listed only once something is typed: a long list found by name (the app's lessons). */
+  readonly typed?: boolean
 }
 
 /**
  * A list's last row (round 25): "+ Add lesson", which opens the app's New sheet: its name, then
- * Create. Where items may be added back (lessons taken out of a course), the sheet lists them too,
- * narrowed by the name typed, each added by a tap. Why one was not made is said in the sheet.
+ * Create. Where items may be added (lessons taken out of a course; for the learner's own course, their
+ * lessons and the app's, R30-5), the sheet lists them too in their groups, narrowed by the name typed,
+ * each added by a tap. Why one was not made is said in the sheet.
  */
 export function AddRow({
   label,
@@ -31,8 +43,8 @@ export function AddRow({
   createLabel: string
   /** Said where a new one was not made. */
   failed: string
-  /** What may be added back by its name. */
-  found?: readonly Addable[]
+  /** What may be added by its name, in groups. */
+  found?: readonly AddGroup[]
   onPick?: (key: string) => void
   /** Makes a new one; false where it was not made. */
   onCreate: (name: string) => Promise<boolean>
@@ -43,7 +55,11 @@ export function AddRow({
   const [busy, setBusy] = useState(false)
   const [failed, setFailed] = useState(false)
   const typed = name.trim().toLowerCase()
-  const matches = found.filter((item) => item.title.toLowerCase().includes(typed))
+  const groups = found.flatMap((group) => {
+    if (group.typed && typed === '') return []
+    const items = group.items.filter((item) => item.title.toLowerCase().includes(typed))
+    return items.length > 0 ? [{ ...group, items }] : []
+  })
   const close = (next: boolean) => {
     setOpen(next)
     if (!next) {
@@ -84,27 +100,32 @@ export function AddRow({
         failed={failed ? failedLine : null}
         onCreate={() => void create()}
       >
-        {matches.length > 0 ? (
-          <SheetPart title={t('edit.order.addBack')}>
+        {groups.map(({ title: heading, icon: Icon, items }) => (
+          <SheetPart key={heading} title={heading}>
             <ul className="flex flex-col">
-              {matches.map((item) => (
+              {items.map((item) => (
                 <li key={item.key}>
                   <button
                     type="button"
-                    className="flex min-h-11 w-full items-center gap-2 rounded-control px-2 text-left transition-colors duration-150 ease-out hover:bg-card"
+                    className="flex min-h-11 w-full items-center gap-2 rounded-control px-2 py-1 text-left transition-colors duration-150 ease-out hover:bg-card"
                     onClick={() => {
                       onPick?.(item.key)
                       close(false)
                     }}
                   >
-                    <Undo2 aria-hidden className="size-4 shrink-0 text-muted-foreground" />
-                    {item.title}
+                    <Icon aria-hidden className="size-4 shrink-0 text-muted-foreground" />
+                    <span className="flex min-w-0 flex-col">
+                      {item.title}
+                      {item.detail ? (
+                        <span className="text-sm text-muted-foreground">{item.detail}</span>
+                      ) : null}
+                    </span>
                   </button>
                 </li>
               ))}
             </ul>
           </SheetPart>
-        ) : null}
+        ))}
       </NewSheet>
     </>
   )

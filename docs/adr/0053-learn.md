@@ -28,6 +28,23 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
 - **Steps and learned marks** (`entities/step`): `lesson:<id>`, `course:<course>/<lesson>`, `piece:<id>`,
   `chords:<family>`, `scale:<kind>`. A mark on one track never counts for another. A whole piece's Learned is the
   learner's own; lessons never set it (ADR 0111).
+- **The learner's own lessons and courses** (R30-5, `entities/own-lessons`, `pt-own-lessons`, version 1,
+  synced as `own_lessons`): the Lessons' fifth chip after the levels, **Your lessons** (`?journey=own`),
+  lists the lessons the learner wrote, each a row as a level's lesson is (learned, read so far), then New
+  lesson (a name, then the lesson editor). The Courses end on **Your courses**, each on its cover (a
+  Songs folder's picture and paint), then New course (a name, then the course editor). An own lesson is
+  the app's lesson document under `own-lesson-n`, read at `/lessons/own-lesson-n` as any lesson, its
+  progress the same step (`lesson:<id>`), never part of a level's journey or of Continue; it is written
+  once in the learner's language and reads the same in the other (`inBothLanguages`). An own course
+  (`own-course-n`) is a title, a line, a cover and lessons in order: the learner's own, and the levels'
+  added by reference, which stay the app's, their progress their own wherever they are read; a lesson
+  read in it (`/lessons/$lessonId?course=own-course-n`) has the course over it and its lessons either
+  side. The editors are the app's `LessonEditor` and `CourseEditor` on a local source (`LessonSource`,
+  `CourseSource` `own`: no draft, no Publish, kept as the editor rests, Done keeping what waits; an
+  example of notes is written as text, the score's Edit music being the app's lessons'). Their Settings:
+  how lessons read, Rename, Duplicate (the copy opened), Reset progress, and Delete last, asked first
+  (a lesson leaves every own course, its progress with it; a course's lessons stay). No Share link:
+  sharing them is drawn later. Search finds them.
 - **A lesson is a worksheet**: prose, steps and notes, and examples that play in place on the lesson's keys: chords
   as the lesson writes them, one quality on twelve roots, a scale, an interval's card, a line of notes on its staff,
   voicings written hand by hand, a progression's row, and a pattern heard over its piece's first line (a pattern is
@@ -101,3 +118,4 @@ course.
 - r28 — A lesson's and a course's Settings pages, from a gear in their bar: reading, Share link, Reset progress;
   an editor's place, Read first, languages and changes. The lesson's ⋯ removed (2026-11-01).
 - r28 — An example of notes lays out as a sheet: its bars in rows as many as fit the card (`rowsOf`, by the notes struck), each row shrunk to fit, a later row printing its clef and bar number but not its time; Play marks the note sounding on its row; the note names and Play under the music on a phone (2026-11-02).
+- r30-5 — Learners make their own lessons and courses: Your lessons and Your courses, the same editors on the device, their Settings, Search (2026-11-05).

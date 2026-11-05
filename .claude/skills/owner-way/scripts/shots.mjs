@@ -7,7 +7,8 @@
 //   node .claude/skills/owner-way/scripts/shots.mjs <base-url> <out-dir> <step> [step…]
 //
 // A step is a route, then any acts after " >> ": `click=<name>` taps the button, link, tab or
-// option of that name; `scroll` shoots the page part way and at its end; `wait=<ms>`.
+// option of that name; `type=<text>` types into the field focused (a sheet's name); `scroll` shoots
+// the page part way and at its end; `wait=<ms>`.
 //   "/play/hot-cross-buns >> click=Original"   "/songs/folders/f1/settings >> click=Card style >> scroll"
 // SIZES=iphone-app,macbook-safari THEMES=light LANGUAGES=en narrow the matrix while iterating;
 // the whole matrix is the pass.
@@ -117,6 +118,9 @@ for (const size of SIZES) {
               .first()
             await target.click({ timeout: 5000 }).catch((error) => problems.push(`${label}: no “${value}” to tap (${error.message.split('\n')[0]})`))
             await page.waitForTimeout(600)
+          } else if (kind === 'type') {
+            await page.keyboard.type(act.slice('type='.length))
+            await page.waitForTimeout(300)
           } else if (kind === 'wait') await page.waitForTimeout(Number(value))
           else if (kind === 'scroll') scrolls = true
         }

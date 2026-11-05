@@ -240,3 +240,4 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   a Settings page (`/practice/progressions/$progressionId/settings`) from its editor's gear. The level and the
   Courses' shelves are edited in place on Learn (R29 B4, `?edit`), `/journeys/$journeyId/edit` and
   `/courses/manage` gone (2026-11-04).
+- r30-5 — The learner's own lessons and courses sync as a document table like the others (`own_lessons`, migration `20261105130000_own_lessons`: owner-only RLS, realtime, `push_documents` taking it; to be applied on the project). The lesson and course editors take a source (`LessonSource`, `CourseSource`): an editor's draft on the server, or the learner's own on the device (`LocalScreen`, `useRestingSave`, whose `REST_MS` the drafts share) (2026-11-05).

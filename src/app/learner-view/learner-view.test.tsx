@@ -62,7 +62,8 @@ describe('Learner view (R29 B5)', () => {
     const walk: [string, { role: 'link' | 'button'; name: string }[]][] = [
       ['/', [{ role: 'button', name: 'Edit' }]],
       ['/?view=courses', [{ role: 'button', name: 'Edit' }]],
-      ['/?view=courses&edit=1', [{ role: 'button', name: 'New course' }]],
+      // The shelves' Edit mode is not opened (Your courses' New course is every learner's, R30-5).
+      ['/?view=courses&edit=1', [{ role: 'button', name: 'Done' }]],
       [`/lessons/${lesson.id}`, [{ role: 'button', name: 'Edit' }]],
       ['/practice/progressions', [{ role: 'button', name: 'New in the library' }]],
     ]
