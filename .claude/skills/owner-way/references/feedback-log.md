@@ -166,6 +166,10 @@ are reference only, but progressions are facts.
 - **One icon, one meaning.** **One home per idea:** the page shows what you look at, its Settings how it always behaves.
 
 ## Profile and Settings
+- **Settings refactored and audited:** a Back on every page (Customise select toolbar, About had none or a broken one);
+  on a laptop the section list and the page scroll apart, as the libraries' panes; each preference checked for whether
+  it belongs in app Settings or its screen's gear, View as a learner placed where it belongs; professional wording
+  (2026-11-05).
 
 - memory-palaces' Profile: the initial, three figures, Activity, badges. The Account is Settings' first row; Sign out and
   Delete are rows asking in a dialog.
