@@ -37,7 +37,12 @@ export const common: LocaleResources['common'] = {
     settings: 'Настройки',
   },
   confirm: { cancel: 'Отмена', type: 'Введите «{{expect}}», чтобы подтвердить' },
-  update: { available: 'Готова новая версия', update: 'Обновить', later: 'Позже' },
+  update: {
+    available: 'Готова новая версия',
+    update: 'Обновить',
+    later: 'Позже',
+    restarting: 'Перезапуск…',
+  },
   // A picker's panel: the circle's Select, and the Keys sheet's (Chord Trainer's).
   picker: {
     select: 'Выбрать: {{key}}',

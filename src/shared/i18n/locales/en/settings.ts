@@ -156,7 +156,9 @@ export const settings = {
     update: {
       current: 'Up to date',
       checking: 'Checking…',
+      downloading: 'Downloading…',
       ready: 'New version ready',
+      installing: 'Restarting…',
       offline: "Can't check while offline",
       failed: "Couldn't check. Try again",
       install: 'Install and restart',

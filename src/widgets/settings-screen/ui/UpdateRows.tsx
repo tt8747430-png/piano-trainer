@@ -13,21 +13,23 @@ import { RowButton } from '@/shared/ui'
 export function UpdateRows() {
   const { t } = useTranslation('settings')
   const { status, check, install } = useAppUpdate()
+  const busy = status === 'checking' || status === 'downloading'
   return (
     <>
       <RowButton
         title={t('about.version')}
-        icon={status === 'checking' ? LoaderCircle : Info}
+        icon={busy ? LoaderCircle : Info}
         paint="lilac"
         value={`${APP_BUILD} · ${t(`about.update.${status}`)}`}
-        disabled={status === 'checking'}
+        disabled={busy}
         onClick={check}
       />
-      {status === 'ready' ? (
+      {status === 'ready' || status === 'installing' ? (
         <RowButton
-          title={t('about.update.install')}
-          icon={Download}
+          title={t(status === 'installing' ? 'about.update.installing' : 'about.update.install')}
+          icon={status === 'installing' ? LoaderCircle : Download}
           paint="grass"
+          disabled={status === 'installing'}
           onClick={install}
         />
       ) : null}

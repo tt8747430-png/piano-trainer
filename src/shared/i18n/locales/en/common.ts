@@ -32,7 +32,12 @@ export const common = {
   },
   // The one confirm dialog (R17): Cancel is the default; a typed confirmation names what to type.
   confirm: { cancel: 'Cancel', type: 'Type “{{expect}}” to confirm' },
-  update: { available: 'A new version is ready', update: 'Update', later: 'Later' },
+  update: {
+    available: 'A new version is ready',
+    update: 'Update',
+    later: 'Later',
+    restarting: 'Restarting…',
+  },
   // A save the device had no room for.
   storageFull: {
     message: 'This device is out of room: your last change was not saved.',

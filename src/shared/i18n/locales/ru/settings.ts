@@ -152,7 +152,9 @@ export const settings: LocaleResources['settings'] = {
     update: {
       current: 'Последняя версия',
       checking: 'Проверка…',
+      downloading: 'Загрузка…',
       ready: 'Готова новая версия',
+      installing: 'Перезапуск…',
       offline: 'Без сети проверить нельзя',
       failed: 'Не удалось проверить. Попробуйте ещё раз',
       install: 'Установить и перезапустить',

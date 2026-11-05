@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 import { useAppUpdate } from '@/shared/lib/app-update'
 import { checkOnReturn } from './check-on-return'
-import { installed } from './installed'
+import { lookFor } from './look-for'
+import { takeOver } from './take-over'
 import { UpdateBanner } from './UpdateBanner'
 
 /**
@@ -33,24 +34,12 @@ export function UpdatePrompt({
       if (!registration) return
       checkOnReturn(registration)
       update.connect({
-        look: async () => {
-          await registration.update()
-          return (await installed(registration)) !== null
-        },
-        install: () => {
-          void installed(registration).then((waiting) => {
-            // None waits: it is active already (a page no version controlled), and a reload takes it.
-            if (!waiting) return setReloadDue(true)
-            // The page reloads once the new version has taken over: when it controls the page, or,
-            // on a page no version controls yet (opened for the first time), once it is active.
-            const reload = () => setReloadDue(true)
-            navigator.serviceWorker?.addEventListener('controllerchange', reload, { once: true })
-            waiting.addEventListener('statechange', () => {
-              if (waiting.state === 'activated') reload()
-            })
-            waiting.postMessage({ type: 'SKIP_WAITING' })
-          })
-        },
+        look: () =>
+          lookFor(registration, {
+            onInstalled: () => update.found(),
+            onLost: () => update.lost(),
+          }),
+        install: () => takeOver(registration, navigator.serviceWorker, () => setReloadDue(true)),
       })
     },
     onNeedReload: () => setReloadDue(true),
@@ -73,7 +62,11 @@ export function UpdatePrompt({
     if (reloadDue && offer) reload()
   }, [reloadDue, offer, reload])
 
-  return status === 'ready' && offer && !later ? (
-    <UpdateBanner onUpdate={() => update.install()} onLater={() => setLater(true)} />
+  return (status === 'ready' || status === 'installing') && offer && !later ? (
+    <UpdateBanner
+      installing={status === 'installing'}
+      onUpdate={() => update.install()}
+      onLater={() => setLater(true)}
+    />
   ) : null
 }

@@ -27,6 +27,14 @@ const registration = {
 }
 let registeredWith: RegisterOptions = {}
 
+// jsdom has no service worker container; a page whose worker registered has one, which says when a
+// new version takes the page over.
+if (!('serviceWorker' in navigator))
+  Object.defineProperty(navigator, 'serviceWorker', {
+    configurable: true,
+    value: { addEventListener: () => undefined },
+  })
+
 export function useRegisterSW(options: RegisterOptions = {}) {
   // Registers once, as the real hook does in its state's initialiser. What the app then sets
   // listening on the page (a look for a new version on each return) stops once the test is over,
