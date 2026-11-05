@@ -32,7 +32,7 @@ const tabs = (on) => `<div class="tabs">${[['grad', 'Learn'], ['music', 'Songs']
 const sidebar = (on) => `<aside class="sb"><div class="brand">Piano Trainer <span style="color:var(--ink-soft)">${ic('panel', 20)}</span></div>
   ${[['grad', 'Learn'], ['music', 'Songs'], ['metro', 'Practice']].map(([i, l]) => `<div class="it ${l === on ? 'on' : ''}">${ic(i, 20)}${l}</div>`).join('')}
   <div class="foot"><div class="it">${ic('search', 20)}Search</div><div class="it">${ic('gear', 20)}Settings</div><div class="acc"><div class="it"><span class="av p-yellow" style="width:22px;height:22px;font-size:12px">K</span>Profile</div></div></div></aside>`;
-const phone = (inner, tab) => `<div class="dev phone"><div class="scr">${status()}${inner}${tab ? tabs(tab) : ''}</div></div>`;
+const phone = (inner, tab) => `<div class="dev phone"><div class="scr">${status()}${inner}${tab ? tabs(tab) : ''}<span class="homeind" aria-hidden="true"></span></div></div>`;
 const mac = (inner, on = 'Songs') => `<div class="dev mac"><div class="scr mac">${sidebar(on)}<div class="main">${inner}</div></div></div>`;
 const fig = (id, title, body, dev) => `<figure data-fb="${id}" data-title="${title}"><div class="scrollx">${dev}</div><figcaption><b>${id} ${title}</b>${body}</figcaption></figure>`;
 const kb = (dots) => `<span class="kbd">${Array(7).fill('<i></i>').join('')}${[9, 20, 41, 52, 63].map(x => `<b style="left:${x}%"></b>`).join('')}${dots.map(x => `<u style="left:${x}%"></u>`).join('')}</span>`;
