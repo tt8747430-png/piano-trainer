@@ -1,65 +1,48 @@
 # An agent's brief
 
-Write one brief per agent into the session's scratchpad (`briefs/<round>-<area>.md`). Start with its own part:
+Used only when SKILL.md's agent test passes. Write one brief per agent to `.scratch/<round>/briefs/<area>.md`, launch with
+`isolation: "worktree"` and a one-line prompt giving the brief's path and a free dev-server port (5191, 5192, …). The agent
+cannot see the chat, so the brief carries everything.
 
-1. **Opening line:** the job in one line, and that it works in its own worktree.
-2. **Docs:** the ADR to write or amend, the ADRs to read first, and the CLAUDE.md entries for its area.
-3. **Boundaries:** what other agents are changing at the same time. Name those files and tell it to stay out.
-4. **The owner's screenshots:** their paths in `scratchpad/<round>/owner/`, each described in a line or two (what it shows, which app). The agent can't see the chat.
-5. **The owner's words:** quoted verbatim.
-6. **Build:** numbered items, each concrete and checkable. Name the components and the model functions involved. Say "decide and say why in the ADR" where a design choice is the agent's.
-7. **Screens to shoot.**
+## Its own part, in this order
 
-Then append the common part below unchanged. Launch with `isolation: "worktree"` and a one-line prompt pointing at the brief's path and a free dev-server port (5191, 5192, …).
+1. **The job** in one line.
+2. **Docs:** the ADRs to read and amend.
+3. **Boundaries:** what other agents are changing now, named by file, to stay out of.
+4. **The owner's screenshots:** paths under `.scratch/<round>/owner/`, each described in a line or two.
+5. **The owner's words,** quoted verbatim.
+6. **Build:** numbered, checkable items naming the components and model functions. Say "decide and say why in the ADR" where
+   a choice is the agent's.
+7. **Routes to shoot.**
+
+Then append the common part, unchanged.
 
 ---
 
 ## Setup
-- If `node_modules` is missing in your worktree, run `ln -s /home/user/piano-trainer/node_modules node_modules`. Do not run `npm install`, because the folder is shared. If you need a package install it directly.
-- Run `git merge claude/keen-gates-q9bnit` first. That local branch holds every round before yours.
-- Read these first:
-  - `CLAUDE.md`, whose rules bind you;
-  - `docs/CODE_STYLE.md`, `DESIGN.md` ;
-  - the round's spec in `.scratch/<feature>/spec.md`, if it has one;
-  - the ADR of each area your round changes (`docs/adr/README.md` lists them) and any other your brief names.
-- Chordify research notes are in `/tmp/claude-0/-home-user-piano-trainer/05b98fad-a70e-53a3-9b61-b349107350d2/scratchpad/chordify/research.md`. Read them for their features and implement as close as possible.  copy Chordify's code or wording. chordify.net blocks automated access, so  try to reach it with headless browsers. 
 
-## The owner's standing rules
-- The quality of real apps.
-- No legacy code, backwards compatibility or duplication.
-- Phone and desktop work the same.
-- Explanations go in ⓘ popups (the kit's `InfoTip`), never in a line of text under a control.
-- No hardcoded text on the score.
-- Consistency everywhere.
-- Nothing is cut short or wraps badly at 320px.
+- If `node_modules` is missing in your worktree, symlink the main checkout's. Never `npm install` there.
+- Merge the session's branch first; it holds every earlier round.
+- Read `CLAUDE.md`, `docs/CODE_STYLE.md`, `DESIGN.md`, and in `.claude/skills/owner-way`: `SKILL.md`,
+  `references/ui-and-mockups.md`, `references/testing.md`, and your area in `references/feedback-log.md`.
 
 ## Process
-- Write tests first.
-- Make small commits, each ending with exactly these two lines:
-  `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`
-  `Claude-Session: https://claude.ai/code/session_01RLULmeGMHBXAgs4W7vM6qK`
-- Never run `npm run format`. Use `npx prettier --write <files you touched>`.
-- Never `git checkout`, `restore`, `stash` or `reset` what you did not create. Do not push.
-- Commit each task as soon as it is finished: one proper commit per task, its message saying what changed and why. You need not run tests before each commit; `npm run typecheck && npm run lint` is enough there. When the round is finished, run only the tests your changes reach (`npm run test:changed`, or `npm run test:related -- <changed source files>`) and fix what fails. Never run the full `npm run test`: it runs once, on the merged branch, at the merge. Run `npm run build` only if you touched startup, routing, the PWA or config.
-- Before you report, merge `claude/keen-gates-q9bnit` again if it moved, and resolve any conflicts.
-- Amend the ADR of the area you changed, in the style of `docs/adr/0105-*.md`: its decision as it stands now, and one line in its History. Write a new ADR only for a new area, and add it to `docs/adr/README.md`. Add the glossary rows. Do not edit `CLAUDE.md`; it is updated at the merge.
-- Put every string in English and Russian.
-- Screenshots:
-  - Run a dev server with `npx vite --port <your port> --strictPort` in the background.
-  - Use Playwright: `require('/opt/node-tools/node_modules/playwright-core')`, `chromium.launch({ executablePath: '/opt/pw-browsers/chromium' })`, deviceScaleFactor 2.
-  - Shoot each screen your brief lists at check the real iphone 14 Pro   app sizes. check the real sizes and real safari sizes , check the real improve MacBook Air M3 15 Inch  app sizes. check the real sizes and real safari sizes 
- only where something may be clipped.
-  - Look at every shot and fix what is cut, crowded or misaligned.
-- Background work:
-  - Give every long command a limit of about twice what it needs (`timeout 1800 <command>` for a large test run), so a mistake cannot run on. Your own work has no time limit.
-  - Wait for a background command by its own completion notice; never a loop of your own. If you must poll, poll its PID (`kill -0 <pid>`) or a line its log prints at the end, never `pgrep -f`/`pkill -f` with a pattern your own command holds.
-  - Before you report, stop everything you started (dev server, loops, test runs) by PID, and say in the report that nothing of yours is running.
 
-## Report back (under 500 words)
-- What you built, file by file.
-- The commits.
-- The test results.
-- The screenshot paths.
-- Your decisions.
-- That nothing you started is still running.
-- everythgins must be implemented and nothigns should be left uninmplemented
+- Write your plan and report skeleton to a file at once, and save after each item, so an interruption loses nothing.
+- Test first. Every string in English and Russian.
+- One commit per task, its message saying what changed and why, ending with the attribution lines the session gives.
+- Never `npm run format`: `npx prettier --write <files you touched>`.
+- Never `checkout`, `restore`, `stash` or `reset` what you did not create. Do not push.
+- Before each commit: `npm run typecheck && npm run lint`. When finished: `npm run test:changed`, and `npm run build` only
+  after touching startup, routing, the PWA or config. Never the full suite: it runs once, on the merged branch.
+- Run both browser passes in `references/testing.md` on every route you changed.
+- Merge the session's branch again before reporting, and resolve conflicts.
+- Amend your area's ADR. Leave `CLAUDE.md` alone; it is updated at the merge.
+- Give each long command a limit of about twice what it needs. Wait for a command's own completion notice. Stop everything
+  you started by PID.
+- Everything in the brief is built; nothing is left unimplemented.
+
+## Report (under 500 words)
+
+What you built, the commits, the test results, both passes' results with the shots' folder, your decisions, what is left and
+why, and that nothing you started is running.
