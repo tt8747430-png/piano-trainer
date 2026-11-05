@@ -19,7 +19,7 @@ export function SheetLayoutField({
 }) {
   const { t } = useTranslation('music')
   return (
-    <Labelled label={t('sheet.layout.label')} info={t('sheet.layout.about')}>
+    <Labelled label={t('sheet.layout.label')}>
       <PictureTiles
         label={t('sheet.layout.label')}
         value={value}
@@ -31,6 +31,8 @@ export function SheetLayoutField({
         }))}
         onChange={onChange}
       />
+      {/* The layout chosen, in one line (R32: Songscription's View menu). */}
+      <p className="text-sm text-muted-foreground">{t(`sheet.layout.describe.${value}`)}</p>
     </Labelled>
   )
 }

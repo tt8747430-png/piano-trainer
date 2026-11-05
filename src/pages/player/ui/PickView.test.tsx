@@ -52,10 +52,10 @@ async function openView(user: User, shown: string) {
 }
 
 /** Opens the Player's Settings › Display: the view shown's own. */
-async function openDisplay(user: User, settings = 'Player settings', display = 'Display') {
+async function openDisplay(user: User, settings = 'Player settings', display = 'Score view') {
   await user.click(await screen.findByRole('button', { name: settings }))
   const sheet = await screen.findByRole('dialog', { name: settings })
-  await user.click(within(sheet).getByRole('button', { name: display }))
+  await user.click(within(sheet).getByRole('button', { name: new RegExp(`^${display}`) }))
   return screen.findByRole('dialog', { name: display })
 }
 
@@ -246,10 +246,8 @@ describe('Settings › Display, the view shown’s own (ADR 0108, R29)', () => {
       'Finger numbers',
       'Note names',
     )
-    await user.click(within(sheet).getByRole('button', { name: 'About Layout' }))
-    expect(await screen.findByRole('dialog', { name: 'Layout' })).toHaveTextContent(
-      'Panorama: the whole song in one line, scrolled across.',
-    )
+    // The layout chosen, said in one line under its tiles (R32).
+    expect(sheet).toHaveTextContent('One continuous system that scrolls sideways.')
   })
 
   it('holds Diagrams’ own: its Mode, then its Lyrics, and nothing of the sheet music’s', async () => {
@@ -328,7 +326,7 @@ describe('Settings › Display, the view shown’s own (ADR 0108, R29)', () => {
   it('reads in Russian', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await savedAs('lyrics', '/play/silent', { locale: 'ru' })
-    const page = await openDisplay(user, 'Настройки плеера', 'Отображение')
+    const page = await openDisplay(user, 'Настройки плеера', 'Вид нот')
     expect(within(page).getByRole('group', { name: 'Размер текста' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
     act(() => setScoreView(settingsStore, { music: 'grid' }))

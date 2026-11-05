@@ -17,7 +17,7 @@ export function PlayerFoot({ children }: { children: ReactNode }) {
       data-area="foot"
       className="-mx-gutter flex min-w-0 items-stretch justify-around gap-0 border-t border-hairline px-1 pt-1 pb-1"
     >
-      <div className="mx-auto flex w-full max-w-xl min-w-0 items-stretch justify-around">
+      <div className="mx-auto flex w-full max-w-xl min-w-0 items-stretch justify-around xl:max-w-none xl:justify-start xl:gap-1 xl:[&>:last-child]:ms-auto">
         <InFoot value>{children}</InFoot>
       </div>
     </div>

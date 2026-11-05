@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
 import {
   selectKeyboard,
+  selectPlayback,
   selectScoreView,
   selectTipSeen,
   useSettings,
@@ -173,9 +174,11 @@ export function PlayerLayout({
   /** The View open as the screen opens: a piece's, where the learner asks each time (ADR 0108). */
   openView?: boolean
 }) {
-  const { t } = useTranslation(['player', 'songs', 'settings'])
+  const { t } = useTranslation(['player', 'songs', 'settings', 'music', 'common'])
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
+  const keySize = useSettings((state) => selectKeyboard(state).keySize)
+  const countdown = useSettings((state) => selectPlayback(state).countdown)
   const scoreView = useSettings(selectScoreView)
   const { hidden } = player
   const sheetView = useMemo(() => ({ ...scoreView, hidden }), [scoreView, hidden])
@@ -256,6 +259,8 @@ export function PlayerLayout({
         id: 'playback',
         label: t('settingsPage.playback'),
         icon: SlidersHorizontal,
+        description: t('settingsPage.about.playback'),
+        value: `${t('settingsPage.countdown.label')}: ${t(`settingsPage.countdown.${countdown}`)}`,
         content: <PlayerPlayback>{playback}</PlayerPlayback>,
       },
       // The piano's own page, here in the sheet (R31-P): the app's On-screen piano page, the
@@ -264,12 +269,16 @@ export function PlayerLayout({
         id: 'piano',
         label: t('settingsPage.onScreenPiano'),
         icon: Piano,
+        description: t('settingsPage.about.piano'),
+        value: t(`common:keyboardSettings.keySize.${keySize}`),
         content: <KeyboardSettingsFields />,
       },
       {
         id: 'display',
         label: t('settingsPage.display'),
         icon: MonitorCog,
+        description: t('settingsPage.about.display'),
+        value: shown === 'sheet' ? t(`music:sheet.layout.${scoreView.layout}`) : undefined,
         content: (
           <>
             <ViewSection view={shown} words={needs.lyrics !== 'words'} />
@@ -411,13 +420,21 @@ export function PlayerLayout({
         actions={
           <>
             <KeysToggle shown={player.keys} onShow={player.setKeys} />
-            <MidiButton variant="tool" />
+            {/* MIDI only while a keyboard is connected or connecting (R31-P, R32); it is
+                connected from Settings › Connect a piano. */}
+            {isMidiConnected(connection) || connection.kind === 'connecting' ? (
+              <MidiButton variant="tool" />
+            ) : null}
             <SettingsExtrasContext value={extras}>{setup}</SettingsExtrasContext>
           </>
         }
       />
       {dock === 'top' ? keys : null}
       <PlayerArea area="sheet" className="relative">
+        {/* The tip floats over the music's foot, taking no row and covering no control (R32). */}
+        {!coached && !practice.state.playing && !annotating && !takes?.shown ? (
+          <CoachLine mode={view.mode} onClose={() => retireTip(settingsStore, tip)} />
+        ) : null}
         {/* How far through the music the cursor is: a thin line along the score's head. */}
         <div
           role="progressbar"
@@ -473,21 +490,25 @@ export function PlayerLayout({
           />
         )}
       </PlayerArea>
-      <PlayerArea
-        area="status"
-        className="text-center landscape-phone:max-w-[45vw] landscape-phone:self-center"
-      >
-        {!coached && !practice.state.playing && !annotating && !takes?.shown ? (
-          <CoachLine mode={view.mode} onClose={() => retireTip(settingsStore, tip)} />
-        ) : null}
-        {view.mode !== 'listen' ? (
-          <WaitLine feedback={player.feedback} onAgain={practice.play} onLoop={player.setLoop} />
-        ) : null}
-        {status}
-      </PlayerArea>
+      {/* Wait mode's line and what the screen says: a row only while there is something to say,
+          so nothing reserves a band between the music and the keys (R32). */}
+      {view.mode !== 'listen' || status ? (
+        <PlayerArea
+          area="status"
+          className="py-1 text-center landscape-phone:max-w-[45vw] landscape-phone:self-center landscape-phone:py-0"
+        >
+          {view.mode !== 'listen' ? (
+            <WaitLine feedback={player.feedback} onAgain={practice.play} onLoop={player.setLoop} />
+          ) : null}
+          {status}
+        </PlayerArea>
+      ) : null}
       {dock === 'top' ? null : keys}
       {/* The transport in its own row at the foot (R31-P): never floating over the music. */}
-      <PlayerArea area="transport" className="-mx-gutter border-t border-hairline px-gutter">
+      <PlayerArea
+        area="transport"
+        className="-mx-gutter border-t border-hairline px-gutter xl:border-t-0"
+      >
         <div className="mx-auto w-full max-w-xl">
           <PlayerDock
             practice={practice}

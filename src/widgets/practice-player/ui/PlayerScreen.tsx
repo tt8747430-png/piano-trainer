@@ -68,7 +68,9 @@ export function PlayerScreen({
       className={cn(
         SCORE_SCREEN,
         'data-panel:pe-[min(28rem,100vw)]',
-        docked && '[--float-room:0px]',
+        // Docked, its rows meet: the keys follow the music and the transport the keys, no band
+        // between them (R32).
+        docked && '[--float-room:0px] gap-y-0 landscape-phone:gap-y-0',
       )}
       onPointerDown={onMusic(reading.onPointerDown)}
       onPointerMove={onMusic(reading.onPointerMove)}

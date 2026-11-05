@@ -37,12 +37,12 @@ const shownText = (control: Element) => {
   return seen.textContent?.trim() ?? ''
 }
 
-/** Opens the Player's Settings › Display. */
+/** Opens the Player's Settings › Score view. */
 async function openDisplay(user: ReturnType<typeof userEvent.setup>) {
   await user.click(await screen.findByRole('button', { name: 'Player settings' }))
   const sheet = await screen.findByRole('dialog', { name: 'Player settings' })
-  await user.click(within(sheet).getByRole('button', { name: 'Display' }))
-  return screen.findByRole('dialog', { name: 'Display' })
+  await user.click(within(sheet).getByRole('button', { name: /^Score view/ }))
+  return screen.findByRole('dialog', { name: 'Score view' })
 }
 
 /** Opens the Player's Settings, its first page. */
@@ -59,6 +59,16 @@ async function openMusicPage(user: ReturnType<typeof userEvent.setup>, row: stri
 }
 
 describe('Player', () => {
+  /** The Player's Settings pages in the order they stand, by each row's name (R32). */
+  const pageTitles = (sheet: HTMLElement) =>
+    within(sheet)
+      .getAllByRole('button')
+      .map((row) =>
+        ['Score view', 'Playback', 'Staves', 'Accompaniment', 'On-screen piano'].find((title) =>
+          row.textContent?.startsWith(title),
+        ),
+      )
+      .filter((title) => title !== undefined)
   it.each([
     ['a phone held upright', 'none'],
     ['a phone on its side', LANDSCAPE_PHONE],
@@ -69,8 +79,8 @@ describe('Player', () => {
       sizedAs(query)
       await renderApp('/play/bz5')
       await screen.findByRole('button', { name: 'Player settings' })
-      // Close, the title and Edit, then Piano keys, MIDI and the one gear (R31-P); the View is the
-      // foot bar's (ADR 0108).
+      // Close, the title and Edit, then Piano keys and the one gear (R31-P); MIDI only with a
+      // keyboard connected (R32); the View is the foot bar's (ADR 0108).
       const controls = [
         ...document.querySelectorAll(
           ':is([data-area="lead"], [data-area="actions"]) :is(button, a)',
@@ -80,7 +90,6 @@ describe('Player', () => {
         'Close',
         'Edit',
         'Piano keys',
-        'MIDI keyboard',
         'Player settings',
       ])
       // Every control is its icon alone.
@@ -267,7 +276,7 @@ describe('Player', () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
     const sheet = await openSettings(user)
-    await user.click(within(sheet).getByRole('button', { name: 'Playback' }))
+    await user.click(within(sheet).getByRole('button', { name: /^Playback/ }))
     await user.click(screen.getByRole('button', { name: 'Play' }))
     expect(screen.getByRole('dialog', { name: 'Playback' })).toBeInTheDocument()
   })
@@ -285,12 +294,12 @@ describe('Player', () => {
     await waitFor(() => expect(screenOf()).not.toHaveAttribute('data-panel'))
   })
 
-  it('names each page of While you play apart in Russian (R29 review)', async () => {
+  it('names each page of its Settings apart in Russian (R29 review)', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5', { locale: 'ru' })
     await user.click(await screen.findByRole('button', { name: 'Настройки плеера' }))
     const sheet = await screen.findByRole('dialog', { name: 'Настройки плеера' })
-    const rows = within(within(sheet).getByRole('region', { name: 'Во время игры' }))
+    const rows = within(sheet)
       .getAllByRole('button')
       .map((row) => row.textContent)
     expect(new Set(rows).size).toBe(rows.length)
@@ -354,16 +363,22 @@ describe('Player', () => {
     expect(music.compareDocumentPosition(top) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
   })
 
-  it('opens its one Settings from the gear: the music’s choices and While you play, none of the music’s acts (R29, R31-P)', async () => {
+  it('opens its one Settings from the gear: its pages ranked by use, none of the music’s acts (R29, R31-P, R32)', async () => {
     const user = userEvent.setup()
     const { audio, settingsStore } = await renderApp('/play/romashki?tempo=36')
     const sheet = await openSettings(user)
-    const rows = (group: string) =>
-      within(within(sheet).getByRole('region', { name: group }))
-        .getAllByRole('button')
-        .map((row) => row.textContent)
-    const works = within(sheet).getByRole('region', { name: 'While you play' })
-    expect(rows('While you play')).toEqual(['Playback', 'On-screen piano', 'Display'])
+    const works = sheet
+    expect(pageTitles(sheet)).toEqual([
+      'Score view',
+      'Playback',
+      'Staves',
+      'Accompaniment',
+      'On-screen piano',
+    ])
+    // Each row says what it controls and what it is set to (R32).
+    expect(within(sheet).getByRole('button', { name: /^Score view/ })).toHaveTextContent(
+      'Layout, cursor and what appears on the score',
+    )
     // The music's own are rows of the first page, not tables on it (R31-P): the Staves, with what
     // plays, and the Accompaniment.
     const staves = within(sheet).getByRole('button', { name: /^Staves/ })
@@ -376,7 +391,7 @@ describe('Player', () => {
     const sliderLabels = () =>
       [...document.querySelectorAll('[data-slot="slider-label"]')].map((label) => label.textContent)
     // The click's volume is Playback's, with the metronome's page and the count-in.
-    await user.click(within(works).getByRole('button', { name: 'Playback' }))
+    await user.click(within(works).getByRole('button', { name: /^Playback/ }))
     expect(await screen.findByRole('dialog', { name: 'Playback' })).toBeInTheDocument()
     expect(sliderLabels()).toEqual(['Metronome'])
     expect(screen.getByRole('link', { name: /Metronome/ })).toBeInTheDocument()
@@ -658,7 +673,7 @@ describe('Player', () => {
     // A score has no Accompaniment page; its Swing is Playback's, at its head.
     expect(screen.queryByRole('button', { name: /^Accompaniment/ })).toBeNull()
     expect(screen.queryByRole('region', { name: 'Accompaniment from the chords' })).toBeNull()
-    await user.click(await screen.findByRole('button', { name: 'Playback' }))
+    await user.click(await screen.findByRole('button', { name: /^Playback/ }))
     expect(await screen.findByRole('radiogroup', { name: 'Swing' })).toBeInTheDocument()
     await user.keyboard('{Escape}')
     expect(screen.queryByRole('button', { name: /^Version/ })).toBeNull()

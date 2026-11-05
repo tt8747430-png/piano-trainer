@@ -1,11 +1,19 @@
 import { createContext, use, type ReactNode } from 'react'
 import type { LucideIcon } from 'lucide-react'
 
-/** A page of the Player's Settings opened from its row (Display, Playback, Volume). */
-export interface SettingsPageRow {
+/** A page's row on the Player's Settings (R32): its name, what it controls, what it is set to. */
+export interface SettingsRow {
   readonly id: string
   readonly label: string
   readonly icon: LucideIcon
+  /** What the page controls, in one line under its name. */
+  readonly description?: string | undefined
+  /** What it is set to now, at the row's end. */
+  readonly value?: string | undefined
+}
+
+/** A page of the Player's Settings opened from its row (Score view, Playback, On-screen piano). */
+export interface SettingsPageRow extends SettingsRow {
   readonly content: ReactNode
 }
 

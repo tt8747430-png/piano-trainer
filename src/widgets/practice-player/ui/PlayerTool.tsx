@@ -54,7 +54,7 @@ export function PlayerTool({
         aria-label={label}
         title={tip ?? label}
         className={cn(
-          'flex h-auto min-h-12 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-control px-0.5 py-1 text-[0.6875rem] font-normal text-muted-foreground hover:text-foreground aria-expanded:text-foreground landscape-phone:min-h-10 landscape-phone:flex-row landscape-phone:gap-1.5',
+          'flex h-auto min-h-12 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-control px-0.5 py-1 text-[0.6875rem] font-normal xl:min-w-16 xl:flex-none xl:px-3 text-muted-foreground hover:text-foreground aria-expanded:text-foreground landscape-phone:min-h-10 landscape-phone:flex-row landscape-phone:gap-1.5',
           className,
         )}
         {...props}

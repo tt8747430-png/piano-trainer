@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectPlayback, useSettings } from '@/entities/settings'
 import type { PracticeMode } from '@/features/practice'
+import { unitNote } from '@/shared/lib/music'
 import { formatPercent, useLocale } from '@/shared/i18n'
 import { Listbox, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -93,9 +94,12 @@ export function TempoButton({
             />
           }
         >
-          {/* The gauge beside the value at every size (ADR 0114): the pill is sized to fit it. */}
-          <Gauge data-icon="inline-start" />
-          <span className="tabular-nums">{value}</span>
+          {/* The tempo as a metronome mark (R32: MuseScore's BPM, Songscription's ♩ = 87), the
+              share of the piece's tempo in its name and its popover. */}
+          <span aria-hidden className="flex items-baseline gap-1 tabular-nums">
+            <span className="font-music text-lg leading-none">{unitNote('4')}</span>
+            {`= ${shownTempo}`}
+          </span>
         </PopoverTrigger>
       )}
       <PopoverContent

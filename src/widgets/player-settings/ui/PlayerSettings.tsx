@@ -95,9 +95,9 @@ export function PlayerVolumes({ tracks }: { tracks: readonly VolumeTrack[] }) {
 }
 
 /**
- * How the Player plays, every song (the Player's Settings › Playback, R31-P): the music's own first
- * (`children`: a score's Swing), the pedal, the count-in, the metronome (its page and its volume),
- * speed training's step and the other hand's look; each choice a card (R29).
+ * How the Player plays, every song (the Player's Settings › Playback, R31-P, R32): the music's own
+ * first (`children`: a score's Swing), then the count-in, the pedalling, the metronome (its page and
+ * its level), speed training's step and the other hand's look; each choice a card with its line.
  */
 export function PlayerPlayback({ children }: { children?: ReactNode }) {
   const { t } = useTranslation(['player', 'music'])
@@ -110,15 +110,8 @@ export function PlayerPlayback({ children }: { children?: ReactNode }) {
     <>
       {children}
       <ChoiceCard
-        title={t('settingsPage.pedal.label')}
-        info={t('settingsPage.pedal.info')}
-        setting="playback.pedal"
-        value={playback.pedal}
-        options={PEDAL_PLAYS.map((value) => ({ value, label: t(`settingsPage.pedal.${value}`) }))}
-        onChange={(pedal) => setPlayback(settings, { pedal })}
-      />
-      <ChoiceCard
         title={t('settingsPage.countdown.label')}
+        description={t('settingsPage.countdown.detail')}
         info={t('settingsPage.countdown.info')}
         setting="playback.countdown"
         value={playback.countdown}
@@ -127,6 +120,15 @@ export function PlayerPlayback({ children }: { children?: ReactNode }) {
           label: t(`settingsPage.countdown.${value}`),
         }))}
         onChange={(countdown) => setPlayback(settings, { countdown })}
+      />
+      <ChoiceCard
+        title={t('settingsPage.pedal.label')}
+        description={t('settingsPage.pedal.detail')}
+        info={t('settingsPage.pedal.info')}
+        setting="playback.pedal"
+        value={playback.pedal}
+        options={PEDAL_PLAYS.map((value) => ({ value, label: t(`settingsPage.pedal.${value}`) }))}
+        onChange={(pedal) => setPlayback(settings, { pedal })}
       />
       <SettingsGroup flush>
         <RowLink
@@ -146,6 +148,7 @@ export function PlayerPlayback({ children }: { children?: ReactNode }) {
       </SettingsGroup>
       <ChoiceCard
         title={t('pace.speedTraining')}
+        description={t('settingsPage.speedStepDetail')}
         info={t('settingsPage.speedStepInfo')}
         setting="playback.speedStep"
         value={String(playback.speedStep)}
@@ -157,6 +160,7 @@ export function PlayerPlayback({ children }: { children?: ReactNode }) {
       />
       <ChoiceCard
         title={t('settingsPage.otherHand.label')}
+        description={t('settingsPage.otherHand.detail')}
         info={t('settingsPage.otherHand.info')}
         setting="otherHand.look"
         value={otherHand.look}
@@ -171,8 +175,9 @@ export function PlayerPlayback({ children }: { children?: ReactNode }) {
 }
 
 /**
- * How the Player shows the music while it plays (the Player's Settings › Display, R29 B8): Pick
- * your view on opening, annotations, the cursor and following the music. The count-in is Playback's.
+ * How the Player shows the music while it plays (the Player's Settings › Score view, R29 B8, R32):
+ * the cursor and following the music, then annotations and Pick your view on opening; each with
+ * its line. The count-in is Playback's.
  */
 export function PlayerDisplay() {
   const { t } = useTranslation('player')
@@ -182,23 +187,9 @@ export function PlayerDisplay() {
   const askOnOpen = useSettings((state) => selectScoreView(state).askOnOpen)
   return (
     <>
-      <SettingsGroup flush>
-        {/* Pick your view opened as a song opens (ADR 0108): a setting, so here, never in the popover (A4). */}
-        <SwitchRow
-          setting="scoreView.askOnOpen"
-          label={t('views.showOnOpen')}
-          checked={askOnOpen}
-          onCheckedChange={(ask) => setScoreView(settings, { askOnOpen: ask })}
-        />
-        <SwitchRow
-          setting="scoreView.annotations"
-          label={t('settingsPage.annotations')}
-          checked={annotations}
-          onCheckedChange={(on) => setScoreView(settings, { annotations: on })}
-        />
-      </SettingsGroup>
       <ChoiceCard
         title={t('settingsPage.cursor.label')}
+        description={t('settingsPage.cursor.detail')}
         info={t('settingsPage.cursor.info')}
         setting="playback.cursor"
         value={playback.cursor}
@@ -210,6 +201,7 @@ export function PlayerDisplay() {
         <SwitchRow
           setting="playback.follow"
           label={t('settingsPage.follow.label')}
+          description={t('settingsPage.follow.detail')}
           info={t('settingsPage.follow.info')}
           checked={playback.follow}
           onCheckedChange={(follow) => setPlayback(settings, { follow })}
@@ -233,6 +225,22 @@ export function PlayerDisplay() {
           }
         />
       ) : null}
+      <SettingsGroup flush>
+        {/* Pick your view opened as a song opens (ADR 0108): a setting, so here, never in the popover (A4). */}
+        <SwitchRow
+          setting="scoreView.askOnOpen"
+          label={t('views.showOnOpen')}
+          checked={askOnOpen}
+          onCheckedChange={(ask) => setScoreView(settings, { askOnOpen: ask })}
+        />
+        <SwitchRow
+          setting="scoreView.annotations"
+          label={t('settingsPage.annotations')}
+          description={t('settingsPage.annotationsDetail')}
+          checked={annotations}
+          onCheckedChange={(on) => setScoreView(settings, { annotations: on })}
+        />
+      </SettingsGroup>
     </>
   )
 }
