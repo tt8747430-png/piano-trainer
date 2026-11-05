@@ -61,9 +61,9 @@ what they changed.
   as quick toggles over the music, as the transport keeps the metronome's. Clef (the reference's "Original or
   chosen") is not offered yet: the notation has no re-clefing of a staff.
 - **The pedal shown** (A27): the sheet draws the pedal as it plays; the Ped. mark the music plays under is lit in
-  the playhead's ink while its pedal is down; the drawn sustain pedal under the keys goes down while the score's pedal holds (R31-P), outlined only while
-  playing; keys sounding only under the
-  pedal ringed, apart from a hand's.
+  the playhead's ink while its pedal is down (an id selector, restyling that mark alone); the sustain on the piano's
+  rail goes down while the score's pedal holds, keys sounding only under the pedal ringed, apart from a hand's, while
+  playing alone.
 - **More:** the library's acts (ADR 0106), Song information (the chord summary, the key as played, time, tempo and
   tuning as fact cards), Sections (each by name and its first bar, a tap taking the cursor there), Share, Print and
   Export to MIDI (ADR 0107).
@@ -103,3 +103,11 @@ The score editor's Play and its recorder's click keep their own switches. A reco
 - r29 (Player plan) — One gear: the bar is Close · title · Edit | Piano keys · MIDI · Settings, no Setup and no More. The Player's Settings is one sheet (Flat's one menu; a panel at the right on a laptop): in the owner's order: the music's own choices; While you play (Audio playback, Playback, Display as pages inside it, Metronome); This song (Sections, Song information); Share (Export…, Print, for any music). The library's acts are the song page's, Score settings the editor's gear. On a laptop the panel stays open beside the music; a one-hand song plays both hands, a hand chosen before forgotten. `/play/$pieceId/settings` is gone. Hear the other hand sits in the transport's hands popover; music of one hand has no hands button (2026-11-03).
 - r29 (T) — Transpose is one control in the Player and the editor: − key +, Reset, Transpose key signature, Transpose chord symbols. The Player keeps an offset from the written key (`transpose`, −5 to +6; `tkey`, `tchords` when off), so a song the editor rewrites in another key still plays moved by the learner's choice; it never writes the song. Shared links carry the offset (2026-11-04).
 - r31 (P) — The docked transport over a foot bar with More; the Tool bar setting gone; the Settings sheet as subpages (Staves with each track's volume, Accompaniment, Playback, On-screen piano, Display); Version with Arrangement and plain lines; Transpose with a preview applied by its button (2026-11-05).
+- r32 (R32-A) — Performance: the sheet's lines memoised (`SheetLine`), a line rendering only as the music enters or
+  leaves it, lines out of sight skipped by the browser (`drawn-in-sight`); the keys' looks memoised; the lookahead
+  reads only its due head (Fantaisie-Impromptu, 10 s: 2.25 s blocked → 0.6 s). Nothing reserved: the Player's rows
+  meet, the status row only while it speaks, the tip a capsule over the music's foot. Settings one ranked list —
+  Score view, Playback, Staves, Accompaniment, then a link to the On-screen piano's page, the one home of every
+  keyboard's settings — each row with its line and value, each option with its line. `/settings/player` is gone: the
+  Player's gear is its settings' home. MIDI shows only while connected; the tempo reads ♩ = 92; a laptop's dock is one
+  row from 80rem (2026-11-05).

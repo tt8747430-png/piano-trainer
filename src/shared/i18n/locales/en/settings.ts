@@ -28,7 +28,6 @@ export const settings = {
     guide: 'User guide',
     feedback: 'Report a problem',
     about: 'About',
-    player: 'Player',
   },
   // The on-screen piano's page: its groups.
   piano: { look: 'Keys', place: 'Placement', play: 'While you play' },

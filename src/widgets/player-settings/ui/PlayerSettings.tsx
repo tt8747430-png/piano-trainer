@@ -17,82 +17,10 @@ import {
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
-import type { TrackId } from '@/features/practice'
-import {
-  onlyTheChords,
-  setOtherHand,
-  setPlayback,
-  setScoreView,
-  setSound,
-  setStaffVolume,
-} from '@/features/set-preference'
+import { setOtherHand, setPlayback, setScoreView, setSound } from '@/features/set-preference'
 import { formatPercent, useLocale } from '@/shared/i18n'
 import { PEDAL_PLAYS } from '@/shared/lib/schedule'
-import {
-  RowLink,
-  ChoiceCard,
-  SettingRows,
-  SettingsGroup,
-  SwitchRow,
-  VolumeSlider,
-} from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
-
-/** A track the Audio playback lists: its id and its name. */
-export interface VolumeTrack {
-  readonly id: TrackId
-  readonly label: string
-}
-
-/**
- * The Player's settings (B7, Flat's Playback options and the reference's Display): how it always
- * plays, for every song. Audio playback: each track's volume (a song's own staves by name where the
- * page is a song's, else the piano's two and the recording), the metronome's, and Only the chords;
- * the Metronome's sound and beats a row to its own page (A39). Playback speed: speed training's step.
- * Display: the count-in, the cursor, the layout, the keys and the finger numbers. Practice: the other
- * hand's look and its Wait-mode accompaniment (A35). Pedal: as written, off, or automatic (A27).
- */
-/** The piano's staves' and a recording's volumes, for every song (Settings › Player, R31-P: a song's are its Staves page's). */
-export function PlayerVolumes({ tracks }: { tracks: readonly VolumeTrack[] }) {
-  const { t } = useTranslation(['player', 'music'])
-  const settings = useSettingsStoreApi()
-  const sound = useSettings(selectSound)
-  const recording = tracks.some((track) => track.id === 'recording')
-  return (
-    <SettingsGroup title={t('settingsPage.audio')} info={t('settingsPage.audioInfo')}>
-      <SettingRows>
-        {tracks.map(({ id, label }) =>
-          id === 'recording' ? (
-            <VolumeSlider
-              key={id}
-              label={label}
-              setting="sound.recording"
-              value={sound.recording}
-              onChange={(percent) => setSound(settings, { recording: percent })}
-            />
-          ) : (
-            <VolumeSlider
-              key={id}
-              label={label}
-              setting="sound.staves"
-              value={sound.staves[id] ?? 100}
-              onChange={(percent) => setStaffVolume(settings, id, percent)}
-            />
-          ),
-        )}
-      </SettingRows>
-      {recording ? (
-        <Button
-          variant="outline"
-          className="min-h-11 self-start rounded-pill px-4 text-base"
-          onClick={() => onlyTheChords(settings)}
-        >
-          {t('sound.onlyChords')}
-        </Button>
-      ) : null}
-    </SettingsGroup>
-  )
-}
+import { RowLink, ChoiceCard, SettingsGroup, SwitchRow, VolumeSlider } from '@/shared/ui'
 
 /**
  * How the Player plays, every song (the Player's Settings › Playback, R31-P, R32): the music's own
@@ -241,18 +169,6 @@ export function PlayerDisplay() {
           onCheckedChange={(on) => setScoreView(settings, { annotations: on })}
         />
       </SettingsGroup>
-    </>
-  )
-}
-
-/** Every page of the Player's Settings in one column, for a screen with no Player to open them from
- * (Settings › Player, a song's /settings link). */
-export function PlayerSettings({ tracks }: { tracks: readonly VolumeTrack[] }) {
-  return (
-    <>
-      <PlayerVolumes tracks={tracks} />
-      <PlayerPlayback />
-      <PlayerDisplay />
     </>
   )
 }

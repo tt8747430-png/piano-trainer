@@ -61,8 +61,7 @@ async function openMusicPage(user: ReturnType<typeof userEvent.setup>, row: stri
 describe('Player', () => {
   /** The Player's Settings pages in the order they stand, by each row's name (R32). */
   const pageTitles = (sheet: HTMLElement) =>
-    within(sheet)
-      .getAllByRole('button')
+    [...sheet.querySelectorAll('button, a')]
       .map((row) =>
         ['Score view', 'Playback', 'Staves', 'Accompaniment', 'On-screen piano'].find((title) =>
           row.textContent?.startsWith(title),
@@ -299,9 +298,7 @@ describe('Player', () => {
     await renderApp('/play/bz5', { locale: 'ru' })
     await user.click(await screen.findByRole('button', { name: 'Настройки плеера' }))
     const sheet = await screen.findByRole('dialog', { name: 'Настройки плеера' })
-    const rows = within(sheet)
-      .getAllByRole('button')
-      .map((row) => row.textContent)
+    const rows = [...sheet.querySelectorAll('button, a')].map((row) => row.textContent)
     expect(new Set(rows).size).toBe(rows.length)
   })
 

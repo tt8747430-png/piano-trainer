@@ -211,9 +211,7 @@ describe('Settings', () => {
       foldedLandscape: false,
     })
     await act(() => router.navigate({ to: '/settings/computer-keys' }))
-    await user.click(
-      await screen.findByRole('switch', { name: /^Play with computer keyboard/ }),
-    )
+    await user.click(await screen.findByRole('switch', { name: /^Play with computer keyboard/ }))
     expect(settingsStore.getState().keyboard).toMatchObject({
       keySize: 'large',
       typing: true,
@@ -252,7 +250,6 @@ describe('Settings', () => {
       '/settings/general',
       '/settings/on-screen-piano',
       '/settings/computer-keys',
-      '/settings/player',
       '/settings/storage',
     ]) {
       const { unmount } = await renderApp(path, { locale: 'ru' })

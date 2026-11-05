@@ -290,9 +290,6 @@ export const player = {
     whilePlaying: 'While you play',
     songGroup: 'This song',
     shareGroup: 'Share',
-    audio: 'Levels',
-    audioInfo:
-      'The level of each staff, the recording and the metronome, for every song. Chords only mutes the recording and raises the piano, so the harmony is heard on its own.',
     metronome: 'Metronome sound and beats',
     onScreenPiano: 'On-screen piano',
     speed: 'Playback speed',

@@ -1,7 +1,15 @@
-import { useEffect, useEffectEvent, useState, type ReactNode } from 'react'
+import { useEffect, useEffectEvent, useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
-import { BackButton, RowButton, Sheet, SheetContent, SettingsGroup, type Paint } from '@/shared/ui'
+import {
+  BackButton,
+  RowButton,
+  RowLink,
+  Sheet,
+  SheetContent,
+  SettingsGroup,
+  type Paint,
+} from '@/shared/ui'
 import { SetupTrigger } from './SetupTrigger'
 import { useSettingsExtras, type SettingsAct, type SettingsRow } from './setup-extras'
 
@@ -53,7 +61,7 @@ export function SettingsSheet({
   children?: ReactNode
 }) {
   const { t } = useTranslation('player')
-  const { pages, acts, request, onPanel } = useSettingsExtras()
+  const { pages, links = [], acts, request, onPanel } = useSettingsExtras()
   const [open, setOpen] = useState(false)
   // Asked from elsewhere (the Tools sheet's Display): it opens, at that page.
   const [asked, setAsked] = useState(request)
@@ -75,7 +83,11 @@ export function SettingsSheet({
     return () => tellPanel(false)
   }, [panelled])
   const extra = pages.find((each) => each.id === page)
-  const rows = [...music, ...pages].sort((a, b) => rank(a) - rank(b))
+  const rows: readonly (SettingsRow & { readonly render?: ReactElement })[] = [
+    ...music,
+    ...pages,
+    ...links,
+  ].sort((a, b) => rank(a) - rank(b))
   const actsIn = (group: SettingsAct['group']) => acts.filter((each) => each.group === group)
   const act = ({ key, label, icon, disabled, reason, onSelect }: SettingsAct) => (
     <RowButton
@@ -115,17 +127,30 @@ export function SettingsSheet({
             {children}
             {rows.length > 0 || actsIn('play').length > 0 ? (
               <SettingsGroup flush>
-                {rows.map(({ id, label, icon, description, value }) => (
-                  <RowButton
-                    key={id}
-                    title={label}
-                    detail={description}
-                    value={value}
-                    icon={icon}
-                    paint={PAGE_PAINT[id] ?? 'sky'}
-                    onClick={() => onPage(id)}
-                  />
-                ))}
+                {rows.map(({ id, label, icon, description, value, render }) =>
+                  // A row to a setting's home elsewhere is a link; the sheet's own pages turn in it.
+                  render ? (
+                    <RowLink
+                      key={id}
+                      title={label}
+                      detail={description}
+                      value={value}
+                      icon={icon}
+                      paint={PAGE_PAINT[id] ?? 'sky'}
+                      render={render}
+                    />
+                  ) : (
+                    <RowButton
+                      key={id}
+                      title={label}
+                      detail={description}
+                      value={value}
+                      icon={icon}
+                      paint={PAGE_PAINT[id] ?? 'sky'}
+                      onClick={() => onPage(id)}
+                    />
+                  ),
+                )}
                 {actsIn('play').map(act)}
               </SettingsGroup>
             ) : null}

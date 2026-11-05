@@ -75,6 +75,8 @@ owner's, typos fixed.
 - **Settings a learner understands, ordered by what matters to them;** the sheet's View settings usable; nothing reserves
   a band above the keyboard, nor a tip; proper pedals, not a lever at the keys' corner (piano sites as the reference);
   the Player smooth with many notes (the Fantaisie hung). Build the approved mockup whole, "not only half" (2026-11-05).
+  Built in R32-A: pedals centred beneath the keys on the piano's rail; the On-screen piano's page the one home of the
+  keys' settings, the Player's gear a link to it; `/settings/player` gone, the gear the Player's settings' home.
 
 - Every Chordify feature but guitar. Plain which view a setting belongs to; Layout is the sheet music's alone.
 - **Diagrams** animate; strip and diagrams swipe by themselves, the page never moves; no odd scroll bar; a swipe goes to the

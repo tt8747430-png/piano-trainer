@@ -111,3 +111,11 @@ song*.
 
 The 56px strip above the keys; the lone lever at its end; the empty status row and its gaps; the tip's own row; the
 greyed MIDI button with no keyboard.
+
+### 7. One home for each setting (the coordinator, after the Settings round)
+
+- **The On-screen piano's page** (Settings › On-screen piano) is the one home of every on-screen keyboard's settings.
+  The Player's gear lists it as a link row ("On-screen piano · Key size, note names and pedals · Fit to music ›"),
+  ranked last; Back from the page returns to the Player. The piano rail's ⚙ opens the same page everywhere.
+- **`/settings/player` goes** with its page, its route, its parent and its strings: the Player's gear is the home of the
+  Player's settings (`settings-pages.test` reads them through the gear's Score view, Playback and Staves).

@@ -4,19 +4,31 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { setMetronome, setPlayback } from '@/features/set-preference'
 
-describe('Settings › Player (B7)', () => {
+/** Opens the Player's gear at one of its pages, by its row's name (R32: the gear is their home). */
+async function openPage(user: ReturnType<typeof userEvent.setup>, row: RegExp) {
+  await user.click(await screen.findByRole('button', { name: 'Player settings' }))
+  const sheet = await screen.findByRole('dialog', { name: 'Player settings' })
+  await user.click(within(sheet).getByRole('button', { name: row }))
+  return screen.findByRole('dialog')
+}
+
+describe('the Player’s settings, its gear their one home (B7, R32)', () => {
   it('sets how the Player always plays: count-in, cursor, the other hand’s look, the pedal', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings/player')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Player' })).toBeInTheDocument()
-    await user.click(screen.getByRole('radio', { name: 'Visual' }))
+    const { settingsStore } = await renderApp('/play/bz5')
+    const playback = await openPage(user, /^Playback/)
+    await user.click(within(playback).getByRole('radio', { name: 'Silent' }))
+    await user.click(within(playback).getByRole('radio', { name: 'Hide' }))
+    await user.click(within(playback).getByRole('radio', { name: 'Automatic' }))
+    await user.click(within(playback).getByRole('button', { name: 'Back' }))
+    await user.click(
+      within(await screen.findByRole('dialog')).getByRole('button', { name: /^Score view/ }),
+    )
     await user.click(
       within(screen.getByRole('radiogroup', { name: 'Cursor' })).getByRole('radio', {
-        name: 'Beats',
+        name: 'By note',
       }),
     )
-    await user.click(screen.getByRole('radio', { name: 'Hide' }))
-    await user.click(screen.getByRole('radio', { name: 'Automatic' }))
     expect(settingsStore.getState().playback).toMatchObject({
       countdown: 'visual',
       cursor: 'beats',
@@ -26,11 +38,12 @@ describe('Settings › Player (B7)', () => {
   })
 
   it('links to the Metronome, whose sound and beats the Player’s click plays', async () => {
-    await renderApp('/settings/player')
-    expect(await screen.findByRole('link', { name: 'Metronome sound and beats' })).toHaveAttribute(
-      'href',
-      '/practice/metronome',
-    )
+    const user = userEvent.setup()
+    await renderApp('/play/bz5')
+    const playback = await openPage(user, /^Playback/)
+    expect(
+      within(playback).getByRole('link', { name: 'Metronome sound and beats' }),
+    ).toHaveAttribute('href', '/practice/metronome')
   })
 })
 

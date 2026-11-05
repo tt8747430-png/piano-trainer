@@ -256,13 +256,6 @@ const computerKeysRoute = createRoute({
   },
   component: lazyRouteComponent(settingsScreens, 'OnScreenPianoPage'),
 })
-// The Player's preferences as a page (B7, R18): the Player's gear is their home on screen; Settings
-// does not list it, so it stands alone in one column with Back to Settings.
-const playerSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/player',
-  component: lazyRouteComponent(settingsScreens, 'PlayerSettingsPage'),
-})
 // The bars a learner arranges (R29 B10), Settings › Library's pages (R32).
 const selectToolbarRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -1113,7 +1106,6 @@ const routeTree = rootRoute.addChildren([
     profilePrivacyRoute,
     howToUseRoute,
     feedbackRoute,
-    playerSettingsRoute,
     aboutRoute,
     midiSettingsRoute,
     midiLogRoute,

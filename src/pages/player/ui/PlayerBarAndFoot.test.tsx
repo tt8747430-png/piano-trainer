@@ -17,8 +17,7 @@ async function openMore(user: User) {
 
 /** The Player's Settings pages in the order they stand, by each row's name (R32). */
 const pageTitles = (sheet: HTMLElement) =>
-  within(sheet)
-    .getAllByRole('button')
+  [...sheet.querySelectorAll('button, a')]
     .map((row) =>
       ['Score view', 'Playback', 'Staves', 'Accompaniment', 'On-screen piano'].find((title) =>
         row.textContent?.startsWith(title),

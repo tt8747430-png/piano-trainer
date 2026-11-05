@@ -469,15 +469,16 @@ time. The learner is their initial on the yellow paint (`Avatar`).
 
 ### The keyboard
 
-The whole piano, A0 to C8, under a slim strip and scrolling sideways with no bar.
+The whole piano, A0 to C8, scrolling sideways, nothing above its keys: they follow the music directly.
 
-- **The strip** (R31-P): no box of its own, a hairline at its foot. It holds the chord a hand holds at its start, then −
-  and + for the keys' size and ⚙ to the piano's settings (the screen's own sheet where it has one), and at its end the
-  pedals. Every other piano choice is its settings page's, never a second button on the strip.
-- **The pedals:** drawn as the player sees them from the bench, a brass paddle (`--pedal`) on its shank, sinking and
-  darkening while down, 48px to press; the sustain alone, or soft, sostenuto and sustain. Hold one to hold it; a tap
-  locks the sustain down, a padlock on it, the next lifts it. While music plays, the sustain shows the score's pedal;
-  stopped, nothing is down or lit.
+- **The rail** (R32): the instrument's case beneath the keys, 56px in `--key-rail`. The chord a hand holds at its
+  start (Literata), the pedals centred, ‹ › (a mouse, a long keyboard), − and + for the keys' size and ⚙ to the
+  On-screen piano's page at its end. Every other piano choice is that page's, never a second button on the rail.
+- **The pedals:** centred on a dark lyre (`--pedal-lyre`) as on an upright or a grand: the sustain alone, or soft,
+  sostenuto and sustain left to right. Each a brass plate (`--pedal`) on its shank with its name under it
+  (`--pedal-name`), 48px to press. Down it sinks 3px under a honey glow; latched (a tap on the sustain) it carries a
+  honey dot; a second tap lifts it. While music plays, the sustain shows the score's pedal; stopped, nothing is down
+  or lit.
 
 - **Proportion:** a key is 4.4 times as long as a white key is wide, at least 96px and at most 32% of the screen's height
   (22% on a phone on its side).

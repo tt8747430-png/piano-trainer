@@ -4,17 +4,20 @@ import { describe, expect, it } from 'vitest'
 import { SETTING_HOMES, type SettingKey, type SettingsPageId } from '@/entities/settings'
 import { LESSONS } from '@/entities/lesson'
 import { openGear } from './testing/editor-gear'
+import { openPlayerGear } from './testing/player-gear'
 import { renderApp } from './testing/render-app'
 
 /**
  * Settings' own pages, by the page each is the home of (R18, R20): a route, or the rows that turn a
- * screen's gear to it (the score editor's, R32-B).
+ * screen's gear to it (the score editor's, R32-B; the Player's, R32).
  */
 const PAGES: readonly (readonly [SettingsPageId, string, ...RegExp[]])[] = [
   ['general', '/settings/general'],
   ['on-screen-piano', '/settings/on-screen-piano'],
   ['connect-piano', '/settings/connect-piano'],
-  ['player', '/settings/player'],
+  ['player', '/play/bz5', /^Score view/],
+  ['player', '/play/bz5', /^Playback/],
+  ['player', '/play/bz5', /^Staves/],
   ['score-editor', '/edit/bz5', /^Note input/],
   ['score-editor', '/edit/bz5', /^Recording/],
   ['progressions', '/settings/progressions'],
@@ -38,7 +41,10 @@ describe('each setting drawn on its one home (R18, A10)', () => {
     for (const [page, path, ...rows] of PAGES) {
       const { unmount } = await renderApp(path)
       let place: ParentNode = document
-      if (rows.length > 0) place = await openGear(user, ...rows)
+      if (rows.length > 0)
+        place = path.startsWith('/play/')
+          ? await openPlayerGear(user, ...rows)
+          : await openGear(user, ...rows)
       else await screen.findByRole('heading', { level: 1 })
       // A key drawn more than once on its own page (a volume a staff) counts once.
       const keys = [
