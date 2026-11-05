@@ -18,7 +18,6 @@ import {
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
   DEFAULT_CHORD_PLAYER,
-  DEFAULT_ACCOMPANIMENT,
   defaultKeyboard,
   TEXT_SIZES,
 } from './types'
@@ -59,7 +58,6 @@ const DEFAULTS = {
   lessonReading: 'page',
   progressions: DEFAULT_PROGRESSIONS,
   chordPlayer: DEFAULT_CHORD_PLAYER,
-  accompaniment: DEFAULT_ACCOMPANIMENT,
   bars: DEFAULT_BARS,
   tuner: { a4: 440 },
   scaleStaff: { degrees: true, steps: true, tonic: false, tetrachords: false },
@@ -214,7 +212,6 @@ describe('createSettingsStore', () => {
       lessonReading: 'sections',
       progressions: { names: 'chords', voicing: 'block', inversion: 1 },
       chordPlayer: { names: 'nashville', voicing: 'block' },
-      accompaniment: { hidden: ['yours'] },
     }
     expect(restored(saved)).toEqual(saved)
   })
@@ -233,13 +230,6 @@ describe('createSettingsStore', () => {
   it('paints the key’s scale on the Chord finder’s keys only where that was saved (A24)', () => {
     expect(restored({ chordFinder: { scale: true } }).chordFinder.scale).toBe(true)
     expect(restored({ chordFinder: { scale: 'yes' } }).chordFinder.scale).toBe(false)
-  })
-
-  it('shows every Accompaniment source until one is hidden, each hidden once (A24)', () => {
-    expect(DEFAULT_ACCOMPANIMENT).toEqual({ hidden: [] })
-    expect(
-      restored({ accompaniment: { hidden: ['styles', 'styles', 3, 'gorshkov'] } }).accompaniment,
-    ).toEqual({ hidden: ['styles', 'gorshkov'] })
   })
 
   it('keeps each chord remembered that is still the keys of one, the newest at most', () => {
@@ -361,9 +351,9 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('starts afresh over a save of the version before the palette’s list view (R32-C)', () => {
-    expect(SETTINGS_VERSION).toBe(30)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 29)).toEqual(
+  it('starts afresh over a save of the version before the palette’s list view and Accompaniment’s sources left Settings (R32)', () => {
+    expect(SETTINGS_VERSION).toBe(31)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 30)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

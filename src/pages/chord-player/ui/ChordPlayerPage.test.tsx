@@ -1,8 +1,7 @@
-import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { stubBox } from '@/shared/test/layout'
 
 /** The transport's clock ticks in a Worker, which jsdom has not: one the test ticks by hand. */
 let workers: { onmessage: (() => void) | null }[] = []
@@ -37,32 +36,46 @@ describe('the Chord player', () => {
     expect(screen.getByRole('region', { name: 'Verse' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 1, name: 'Chord player' })).toBeInTheDocument()
   })
-  it('typing Fm in a box and Enter shows Fm with iv and away, a flat typed as b read as ♭', async () => {
+  it('a letter typed on a tile opens its sheet with the symbol begun: Fm shows iv and away', async () => {
     const user = userEvent.setup()
     await open()
     const c = await screen.findByRole('button', { name: /^C, 4 beats$/ })
     c.focus()
     await user.keyboard('F')
-    await user.type(screen.getByRole('textbox', { name: 'Chord' }), 'm{Enter}')
+    const sheet = await screen.findByRole('dialog', { name: 'Chord' })
+    const symbol = within(sheet).getByRole('textbox', { name: 'Chord symbol' })
+    expect(symbol).toHaveValue('F')
+    await user.type(symbol, 'm')
+    await user.keyboard('{Escape}')
     const typed = await screen.findByRole('button', { name: /^Fm, 4 beats$/ })
     expect(typed).toHaveTextContent('iv · away')
-    ;(await screen.findByRole('button', { name: /^G, 4 beats$/ })).focus()
-    await user.keyboard('B')
-    await user.type(screen.getByRole('textbox', { name: 'Chord' }), 'bm7{Enter}')
-    expect(await screen.findByRole('button', { name: /^B♭m7, 4 beats$/ })).toHaveTextContent('B♭m7')
   })
-  it('dragging a box’s edge back by a beat makes it 3 beats', async () => {
+  it('a tap opens a tile’s sheet, where its length and a flat typed as b are set (R32)', async () => {
+    const user = userEvent.setup()
     await open()
-    const c = await screen.findByRole('button', { name: /^C, 4 beats$/ })
-    const bar = c.closest('[data-bar]')
-    if (!bar) throw new Error('no bar')
-    stubBox(bar, { width: 400, height: 96 })
-    const edge = c.querySelector('[data-edge]')
-    if (!edge) throw new Error('no edge')
-    fireEvent.pointerDown(edge, { button: 0, pointerId: 1, clientX: 400 })
-    fireEvent.pointerMove(edge, { pointerId: 1, clientX: 300 })
-    fireEvent.pointerUp(edge, { pointerId: 1, clientX: 300 })
+    await user.click(await screen.findByRole('button', { name: /^G, 4 beats$/ }))
+    const sheet = await screen.findByRole('dialog', { name: 'Chord' })
+    const symbol = within(sheet).getByRole('textbox', { name: 'Chord symbol' })
+    await user.clear(symbol)
+    await user.type(symbol, 'Bbm7')
+    await user.click(within(sheet).getByRole('button', { name: 'Shorter' }))
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(boxes()).toEqual(['C, 4 beats', 'B♭m7, 3 beats']))
+  })
+  it('Shift and an arrow shorten a focused tile by a beat, the next taking it up', async () => {
+    const user = userEvent.setup()
+    await open()
+    ;(await screen.findByRole('button', { name: /^C, 4 beats$/ })).focus()
+    await user.keyboard('{Shift>}{ArrowLeft}{/Shift}')
     await waitFor(() => expect(boxes()).toEqual(['C, 3 beats', 'G, 5 beats']))
+  })
+  it('draws each section’s chords as equal tiles with an add tile, and no how-to sentence (R32)', async () => {
+    await open()
+    const verse = await screen.findByRole('region', { name: 'Verse' })
+    expect(within(verse).getByRole('list', { name: 'Chords of Verse' })).toBeInTheDocument()
+    expect(within(verse).getByText('2 bars')).toBeInTheDocument()
+    expect(within(verse).getByRole('button', { name: 'Add a chord to Verse' })).toBeInTheDocument()
+    expect(screen.queryByText(/No chords yet/)).toBeNull()
   })
   it('Backspace deletes a box and Undo puts it back', async () => {
     const user = userEvent.setup()

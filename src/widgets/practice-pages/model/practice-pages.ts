@@ -22,22 +22,35 @@ export const PRACTICE_PAGES = {
 export type PracticePageId = keyof typeof PRACTICE_PAGES
 
 /**
- * Practice's groups, each under its heading, in the order a learner reaches for them (ADR 0052, R29
- * B11): Tools first, what a musician keeps at the piano (the Metronome and the Chord finder among
- * them); Theory, the things a page shows on the keys; Playing, what the hands play at the keys;
- * Training, the drills.
+ * Practice's groups, each under its heading, by relevance (R32, as Yousician, Simply Piano and
+ * musictheory.net order a practice home): Theory, the things a page shows on the keys; Playing, what
+ * the hands play; Training, the drills; then Tools, last and compact, what a musician reaches for
+ * while doing something else (also in the header's Tools menu).
  */
 export const PRACTICE_GROUPS = [
-  {
-    id: 'tools',
-    pages: ['metronome', 'chordFinder', 'circleOfFifths', 'tuner'],
-  },
   { id: 'theory', pages: ['chords', 'scales', 'intervals', 'progressions'] },
-  { id: 'playing', pages: ['chordPlayer', 'accompaniment'] },
+  { id: 'playing', pages: ['accompaniment', 'chordPlayer'] },
   { id: 'training', pages: ['exercises', 'quiz'] },
+  { id: 'tools', pages: ['metronome', 'tuner', 'chordFinder', 'circleOfFifths'] },
 ] as const satisfies readonly { id: string; pages: readonly PracticePageId[] }[]
 
 /** Every page of Practice, in the order it lists them. */
 export const PRACTICE_PAGE_IDS: readonly PracticePageId[] = PRACTICE_GROUPS.flatMap(
   (group) => group.pages,
 )
+
+/** Whether a word is one of Practice's pages (a page id saved, read back). */
+export const isPracticePageId = (value: unknown): value is PracticePageId =>
+  PRACTICE_PAGE_IDS.some((page) => page === value)
+
+/**
+ * The Practice page a path is on (R32): its own path or any path under it (a progression's page is
+ * Progressions', a drill the Quiz's); null off Practice's pages.
+ */
+export function practicePageAt(pathname: string): PracticePageId | null {
+  const found = PRACTICE_PAGE_IDS.find((page) => {
+    const { to } = PRACTICE_PAGES[page]
+    return pathname === to || pathname.startsWith(`${to}/`)
+  })
+  return found ?? null
+}

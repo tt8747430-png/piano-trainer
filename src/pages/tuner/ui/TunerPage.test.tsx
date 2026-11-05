@@ -10,13 +10,13 @@ describe('Practice → Tuner (R29 B11)', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('The microphone is not available')
   })
 
-  it('keeps its A4 on its Settings page, and the tuner reads against it', async () => {
+  it('sets its reference pitch in place, under the readout (R32)', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/practice/tuner/settings')
-    await screen.findByRole('heading', { level: 1, name: 'Tuner settings' })
+    const { settingsStore } = await renderApp('/practice/tuner')
+    await screen.findByRole('heading', { level: 1, name: 'Tuner' })
     await user.click(screen.getByRole('button', { name: 'Higher A4' }))
     await user.click(screen.getByRole('button', { name: 'Higher A4' }))
-    expect(screen.getByText('442 Hz')).toBeInTheDocument()
+    expect(screen.getByText('A4 = 442 Hz')).toBeInTheDocument()
     expect(settingsStore.getState().tuner.a4).toBe(442)
   })
 })

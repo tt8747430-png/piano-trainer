@@ -56,9 +56,7 @@ export function LibrarySearch({
   const set = useSetSearch<PracticeLibraryView>()
   const sorts = PRACTICE_SORTS.filter((sort) => levels || sort !== 'level')
   const sortName = (sort: (typeof PRACTICE_SORTS)[number]) =>
-    sort === 'group'
-      ? t(`practice:library.table.${groupWord}`)
-      : t(`practice:library.table.${sort}`)
+    sort === 'group' ? t('practice:library.sortManual') : t(`practice:library.table.${sort}`)
   const styles = groupWord === 'style'
   const placeName =
     view.place === FAVOURITES || view.place === MINE || view.place === HIDDEN

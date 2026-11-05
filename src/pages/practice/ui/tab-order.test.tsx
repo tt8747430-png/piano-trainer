@@ -27,16 +27,16 @@ describe('Tab on Practice (A36)', () => {
     expect(names[0]).toBe('Skip to content')
     // The places before the page, as the sidebar stands left of it and the tab bar is the app's own.
     const learn = names.indexOf('Learn')
-    const metronome = names.findIndex((name) => name.startsWith('Metronome'))
-    expect(learn).toBeGreaterThan(0)
-    expect(metronome).toBeGreaterThan(learn)
-    // The columns in the order they are read (R30-4): Tools and Playing, then Theory and Training.
     const row = (start: string) => names.findIndex((name) => name.startsWith(start))
-    expect(row('Metronome')).toBeLessThan(row('Tuner'))
-    expect(row('Tuner')).toBeLessThan(row('Accompaniment'))
-    expect(row('Accompaniment')).toBeLessThan(row('Chords'))
-    expect(row('Chords')).toBeLessThan(row('Intervals'))
-    expect(row('Progressions')).toBeLessThan(row('Exercises'))
+    expect(learn).toBeGreaterThan(0)
+    expect(row('Five-finger position')).toBeGreaterThan(learn)
+    // In the order the page is read (R32): Start here, Theory, Playing, Training, then the Tools.
+    expect(row('Five-finger position')).toBeLessThan(row('Chords Triads'))
+    expect(row('Chords Triads')).toBeLessThan(row('Progressions'))
+    expect(row('Progressions')).toBeLessThan(row('Accompaniment'))
+    expect(row('Accompaniment')).toBeLessThan(row('Exercises'))
+    expect(row('Quiz')).toBeLessThan(row('Metronome'))
+    expect(row('Metronome')).toBeLessThan(row('Circle of fifths'))
     // Every link and button on the screen is reached, none skipped and none trapping the walk.
     const reachable = [...document.querySelectorAll('a[href], button:not([disabled])')].filter(
       (element) => !element.closest('[hidden], [inert], [aria-hidden="true"]'),

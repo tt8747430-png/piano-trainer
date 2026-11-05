@@ -1,5 +1,5 @@
 import { stubMatchMedia } from '@/shared/test/match-media'
-import { screen, within } from '@testing-library/react'
+import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -20,19 +20,26 @@ describe('AppNav', () => {
     expect(bar.queryByRole('button', { name: 'Search' })).not.toBeInTheDocument()
   })
 
-  it("puts the Profile at the sidebar's foot on a laptop, under Search and Settings", async () => {
+  it("is Claude's sidebar on a laptop: Search, the places, Recents, the learner and Settings at its foot (R32)", async () => {
     // Every media query matches: the sidebar's among them.
     stubMatchMedia({ dark: true })
-    await renderApp('/songs')
+    const { progressStore } = await renderApp('/songs')
     const bar = within(await nav())
-    expect(bar.getAllByRole('link').map((link) => link.textContent)).toEqual([
-      'Learn',
-      'Songs',
-      'Practice',
-      'Settings',
-      'Profile',
-    ])
+    expect(
+      bar.getAllByRole('link').map((link) => link.getAttribute('aria-label') ?? link.textContent),
+    ).toEqual(['Learn', 'Songs', 'Practice', 'Profile', 'Settings'])
     expect(bar.getByRole('button', { name: 'Search' })).toBeInTheDocument()
+    expect(bar.getByRole('link', { name: 'Profile' })).toHaveTextContent('Guest')
+    // Recents: the songs opened last, none until one is.
+    expect(bar.queryByRole('region', { name: 'Recents' })).toBeNull()
+    act(() =>
+      progressStore.setState((state) => ({
+        ...state,
+        practised: { twinkle: '2026-11-05T10:00:00.000Z' },
+      })),
+    )
+    const recents = await bar.findByRole('region', { name: 'Recents' })
+    expect(within(recents).getAllByRole('link')).toHaveLength(1)
   })
 
   it('marks Settings alone current on a laptop, where it is in the sidebar', async () => {
@@ -40,8 +47,8 @@ describe('AppNav', () => {
     stubMatchMedia({ dark: true })
     await renderApp('/settings')
     const links = within(await nav())
-    expect(links.getByRole('link', { name: /^Settings/ })).toHaveAttribute('aria-current', 'page')
-    expect(links.getByRole('link', { name: /^Profile/ })).not.toHaveAttribute('aria-current')
+    expect(links.getByRole('link', { name: 'Settings' })).toHaveAttribute('aria-current', 'page')
+    expect(links.getByRole('link', { name: 'Profile' })).not.toHaveAttribute('aria-current')
   })
 
   it('collapses to its icons, each place still named, and opens again', async () => {

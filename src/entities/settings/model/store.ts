@@ -35,7 +35,6 @@ import {
   DEFAULT_PROGRESSIONS,
   DEFAULT_CHORD_PLAYER,
   type ChordPlayerSettings,
-  DEFAULT_ACCOMPANIMENT,
   isProgressionNames,
   isProgressionVoicing,
   DEVICE_NAME_MAX,
@@ -67,7 +66,6 @@ import {
   isSwipe,
   isTheme,
   isTouch,
-  type AccompanimentSettings,
   type ChordFinderSettings,
   type ProgressionsSettings,
   type KeyboardSettings,
@@ -91,7 +89,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 30
+export const SETTINGS_VERSION = 31
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -134,7 +132,6 @@ export function createSettingsStore({
         lessonReading: 'page',
         progressions: DEFAULT_PROGRESSIONS,
         chordPlayer: DEFAULT_CHORD_PLAYER,
-        accompaniment: DEFAULT_ACCOMPANIMENT,
         bars: DEFAULT_BARS,
         tuner: DEFAULT_TUNER,
         scaleStaff: DEFAULT_SCALE_STAFF,
@@ -297,16 +294,6 @@ function chordPlayerSettings(value: unknown): ChordPlayerSettings {
   }
 }
 
-/** Accompaniment's hidden sources: ids, each once. */
-function accompanimentSettings(value: unknown): AccompanimentSettings {
-  const hidden: unknown = savedObject<AccompanimentSettings>(value).hidden
-  return {
-    hidden: Array.isArray(hidden)
-      ? [...new Set(hidden.filter((id): id is string => typeof id === 'string'))]
-      : DEFAULT_ACCOMPANIMENT.hidden,
-  }
-}
-
 const isSheetView = isOneOf(SHEET_VIEWS)
 
 /**
@@ -455,7 +442,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     lessonReading: isLessonReading(saved.lessonReading) ? saved.lessonReading : 'page',
     progressions: progressionsSettings(saved.progressions),
     chordPlayer: chordPlayerSettings(saved.chordPlayer),
-    accompaniment: accompanimentSettings(saved.accompaniment),
     bars: barsSettings(saved.bars),
     tuner: tunerSettings(saved.tuner),
     scaleStaff: scaleStaffSettings(saved.scaleStaff),

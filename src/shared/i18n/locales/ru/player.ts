@@ -61,15 +61,6 @@ export const player: LocaleResources['player'] = {
     },
     alreadySimple: 'Аккорды и так простые',
   },
-  toolsSheet: {
-    metronome: 'Метроном',
-    open: 'Инструменты',
-    quick: 'Быстрые инструменты',
-    score: 'На нотах',
-    listening: 'Слушание',
-    more: 'Ещё',
-    audioMidi: 'Звук и MIDI',
-  },
   tuner: {
     title: 'Тюнер',
     note: 'Услышанная нота',

@@ -20,7 +20,10 @@ import {
   CHORD_FAMILIES,
   CHORD_QUALITIES,
   chordFamily,
+  chordSymbol,
   INTERVAL_GROUPS,
+  INTERVALS,
+  printedSymbol,
   LETTERS,
   midiOf,
   note,
@@ -43,6 +46,8 @@ import {
   ToggleChips,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { selectTrainer, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { setAutoNext } from '@/features/set-preference'
 import { ListSheetRow } from './ListSheetRow'
 
 type ListField = keyof typeof CUSTOM_CHOICES
@@ -109,6 +114,8 @@ export function TrainerSetup({
   footer?: ReactNode
 }) {
   const { t } = useTranslation(['quiz', 'music'])
+  const store = useSettingsStoreApi()
+  const { autoNext } = useSettings(selectTrainer)
   const drill = drillOf(trainer, view)
   const fields = new Set(level === CUSTOM ? trainer.custom : [])
   const write = (field: ListField, chosen: readonly string[]) => {
@@ -176,10 +183,15 @@ export function TrainerSetup({
           <ListSheetRow
             label={t('quiz:choice.chords')}
             value={listOf('chords')}
+            recommended={CUSTOM_OWN.chords}
             groups={CHORD_FAMILIES.map((family) => ({
               label: t(`music:family.${family}`),
               options: CHORD_QUALITIES.filter((quality) => chordFamily(quality) === family).map(
-                (quality) => ({ value: quality, label: t(`music:quality.${quality}`) }),
+                (quality) => ({
+                  value: quality,
+                  label: t(`music:quality.${quality}`),
+                  example: printedSymbol(chordSymbol({ root: note('C'), quality })),
+                }),
               ),
             }))}
             onChange={(chosen) => write('chords', chosen)}
@@ -189,13 +201,18 @@ export function TrainerSetup({
           <ListSheetRow
             label={t('quiz:choice.intervals')}
             value={listOf('intervals')}
+            recommended={CUSTOM_OWN.intervals}
             groups={(['simple', 'compound'] as const).map((group) => ({
               label: t(`quiz:intervalGroups.${group}`),
               options: INTERVAL_GROUPS[group]
                 .filter((interval) => interval !== 'r')
                 .map((interval) => ({
                   value: interval,
-                  label: `${t(`music:interval.${interval}.name`)} · ${t(`music:interval.${interval}.short`)}`,
+                  label: t(`music:interval.${interval}.name`),
+                  example: t('quiz:choice.semitones', {
+                    short: t(`music:interval.${interval}.short`),
+                    count: INTERVALS[interval].semitones,
+                  }),
                 })),
             }))}
             onChange={(chosen) => write('intervals', chosen)}
@@ -241,6 +258,7 @@ export function TrainerSetup({
           <ListSheetRow
             label={t('quiz:choice.scales')}
             value={listOf('scales')}
+            recommended={CUSTOM_OWN.scales}
             groups={SCALE_FAMILIES.map((family) => ({
               label: t(`music:scaleFamily.${family}`),
               options: scaleKindsIn(family).map((kind) => ({
@@ -255,6 +273,7 @@ export function TrainerSetup({
           <ListSheetRow
             label={t('quiz:choice.kinds')}
             value={listOf('kinds')}
+            recommended={CUSTOM_OWN.kinds}
             groups={[
               {
                 options: CUSTOM_CHOICES.kinds.map((kind) => ({
@@ -339,6 +358,14 @@ export function TrainerSetup({
             onChange={(limit) => onChange({ limit: limit === 0 ? undefined : limit })}
           />
         </SettingField>
+        {/* How every drill goes on (R32): its one home is here, beside the drill it changes. */}
+        <SwitchRow
+          setting="trainer.autoNext"
+          label={t('quiz:autoNext')}
+          info={t('quiz:timing.autoNextInfo')}
+          checked={autoNext}
+          onCheckedChange={(on) => setAutoNext(store, on)}
+        />
       </SetupGroup>
 
       {footer}

@@ -6,7 +6,6 @@ import { midi } from '@/shared/lib/music'
 import {
   notePracticeOpened,
   rememberChords,
-  setAccompaniment,
   setAutoNext,
   setChordFinder,
   setProgressions,
@@ -45,15 +44,6 @@ describe('set-preference', () => {
       voicing: 'block',
       inversion: 0,
     })
-  })
-
-  it('setAccompaniment hides a source once and shows it again (A24)', () => {
-    const { store } = setUp()
-    setAccompaniment(store, 'styles', false)
-    setAccompaniment(store, 'styles', false)
-    expect(store.getState().accompaniment.hidden).toEqual(['styles'])
-    setAccompaniment(store, 'styles', true)
-    expect(store.getState().accompaniment.hidden).toEqual([])
   })
 
   it('setTheme changes and saves the theme', () => {

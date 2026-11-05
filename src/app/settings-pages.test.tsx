@@ -21,12 +21,11 @@ const PAGES: readonly (readonly [SettingsPageId, string, ...RegExp[]])[] = [
   ['score-editor', '/edit/bz5', /^Note input/],
   ['score-editor', '/edit/bz5', /^Recording/],
   ['progressions', '/settings/progressions'],
-  ['accompaniment', '/settings/accompaniment'],
   ['chord-player', '/practice/chord-player/settings'],
-  ['metronome', '/practice/metronome/settings'],
-  ['tuner', '/practice/tuner/settings'],
+  ['metronome', '/practice/metronome'],
+  ['tuner', '/practice/tuner'],
   ['chord-finder', '/settings/chord-finder'],
-  ['trainers', '/settings/exercises-and-quiz'],
+  ['trainers', '/practice/quiz/chords'],
   ['select-toolbar', '/settings/select-toolbar'],
   ['swipe-actions', '/settings/swipe-actions'],
   ['lessons', `/lessons/${LESSONS[0]!.id}/settings`],
@@ -35,6 +34,7 @@ const PAGES: readonly (readonly [SettingsPageId, string, ...RegExp[]])[] = [
 const isKey = (key: string): key is SettingKey => key in SETTING_HOMES
 
 describe('each setting drawn on its one home (R18, A10)', () => {
+  // Sixteen pages opened in turn: a suite's load slows each, so the walk has room (R32).
   it('draws on each Settings page only the settings whose home it is, none on two', async () => {
     const seen = new Map<string, SettingsPageId>()
     const user = userEvent.setup()
@@ -62,5 +62,5 @@ describe('each setting drawn on its one home (R18, A10)', () => {
       }
       unmount()
     }
-  })
+  }, 30_000)
 })

@@ -1,3 +1,4 @@
+import type { ArrangedLibrary, Arrangement } from './arrangement'
 import type { PracticeLibraryState } from './store'
 import type { OwnProgression, OwnProgressionId, PracticeKind } from './types'
 
@@ -22,3 +23,9 @@ export const selectOwnProgression =
   (id: OwnProgressionId) =>
   (state: PracticeLibraryState): OwnProgression | undefined =>
     state.progressions.find((progression) => progression.id === id)
+
+/** How the learner arranged a library (R32). */
+export const selectArrangement =
+  (library: ArrangedLibrary) =>
+  (state: PracticeLibraryState): Arrangement =>
+    state.arrangements[library]

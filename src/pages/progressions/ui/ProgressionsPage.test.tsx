@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
-import { PRACTICE_LIBRARY_STORAGE_KEY } from '@/entities/practice-library'
+import { PRACTICE_LIBRARY_STORAGE_KEY, PRACTICE_LIBRARY_VERSION } from '@/entities/practice-library'
 import { createMemoryStorage } from '@/shared/lib'
 import { stubMatchMedia } from '@/shared/test/match-media'
 
@@ -18,7 +18,7 @@ const kept = (state: object) => {
         nextOwn: 1,
         ...state,
       },
-      version: 1,
+      version: PRACTICE_LIBRARY_VERSION,
     }),
   )
   return storage

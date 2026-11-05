@@ -14,7 +14,7 @@ import {
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { NewProgressionSheet } from '@/widgets/content-editor'
-import { PracticeLibrary } from '@/widgets/practice-library'
+import { PracticeLibrary, useArrangeMode } from '@/widgets/practice-library'
 import { SettingsGear } from '@/widgets/practice-pages'
 import { KeepProgressionSheet } from '@/widgets/progression-explorer'
 import { useProgressionLibrary } from '../model/use-progression-library'
@@ -36,6 +36,7 @@ export function ProgressionsPage() {
   const { account } = useAccount()
   const navigate = useNavigate()
   const { groups, items } = useProgressionLibrary()
+  const { editing, edit } = useArrangeMode()
   const [open, setOpen] = useState<Open>('none')
   const editor = editsContent(account)
   const newMine = () => setOpen('mine')
@@ -44,6 +45,7 @@ export function ProgressionsPage() {
       <ScreenHeader
         title={t('pages.progressions')}
         back={<BackButton />}
+        edit={edit}
         settings={<SettingsGear page="progressions" />}
       />
       <PracticeLibrary
@@ -63,21 +65,24 @@ export function ProgressionsPage() {
           ),
         }}
         screen={t('pages.progressions')}
+        editing={editing}
       />
-      <FloatingActions>
-        {editor ? (
-          <SpeedDial label={t('progressions.mine.new')} icon={Plus} main>
-            <SpeedDialAction
-              label={t('progressions.edit.new')}
-              icon={Library}
-              onClick={() => setOpen('library')}
-            />
-            <SpeedDialAction label={t('progressions.mine.new')} icon={Plus} onClick={newMine} />
-          </SpeedDial>
-        ) : (
-          <Fab label={t('progressions.mine.new')} icon={Plus} onClick={newMine} />
-        )}
-      </FloatingActions>
+      {editing ? null : (
+        <FloatingActions>
+          {editor ? (
+            <SpeedDial label={t('progressions.mine.new')} icon={Plus} main>
+              <SpeedDialAction
+                label={t('progressions.edit.new')}
+                icon={Library}
+                onClick={() => setOpen('library')}
+              />
+              <SpeedDialAction label={t('progressions.mine.new')} icon={Plus} onClick={newMine} />
+            </SpeedDial>
+          ) : (
+            <Fab label={t('progressions.mine.new')} icon={Plus} onClick={newMine} />
+          )}
+        </FloatingActions>
+      )}
       {open === 'mine' ? (
         <KeepProgressionSheet
           open

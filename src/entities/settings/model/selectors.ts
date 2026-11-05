@@ -1,6 +1,5 @@
 import type { Locale } from '@/shared/i18n/locale'
 import type {
-  AccompanimentSettings,
   EditorStartMode,
   ChordFinderSettings,
   ProgressionsSettings,
@@ -71,6 +70,3 @@ export const selectProgressions = (state: SettingsState): ProgressionsSettings =
 export const selectTuner = (state: SettingsState): TunerSettings => state.tuner
 export const selectScaleStaff = (state: SettingsState): ScaleStaffSettings => state.scaleStaff
 export const selectChordPlayer = (state: SettingsState): ChordPlayerSettings => state.chordPlayer
-/** Accompaniment's sources the learner hid (A24). */
-export const selectAccompaniment = (state: SettingsState): AccompanimentSettings =>
-  state.accompaniment

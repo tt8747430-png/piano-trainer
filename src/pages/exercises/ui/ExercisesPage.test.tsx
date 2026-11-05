@@ -27,9 +27,9 @@ describe('Practice → Exercises, the library on a phone (R30-4)', () => {
     const { progressStore } = await renderApp('/practice/exercises')
     const harris = await screen.findByRole('region', { name: 'Barry Harris' })
     const row = within(harris).getByRole('link', { name: /^Drop-2 7ths \S/ })
-    expect(within(row).queryByText('Done today')).not.toBeInTheDocument()
+    expect(within(row).queryByText('Completed today')).not.toBeInTheDocument()
     act(() => recordExercised(progressStore, 'drop-two', new Date()))
-    expect(within(row).getByText('Done today')).toBeInTheDocument()
+    expect(within(row).getByText('Completed today')).toBeInTheDocument()
   })
 
   it('leaves a scale’s and a chord’s exercises to their own pages', async () => {

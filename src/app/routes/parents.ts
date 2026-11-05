@@ -60,14 +60,9 @@ const settingsPage: Parent = ({ wide }) => (wide ? null : up({ to: '/settings' }
 const toAbout: Parent = () => up({ to: '/settings/about' })
 /** Each Practice page, where its gear opens its Settings from. */
 const PRACTICE_PAGES: Readonly<Record<PracticeSettingsFrom, Up>> = {
-  chords: up({ to: '/practice/chords' }),
   scales: up({ to: '/practice/scales' }),
-  intervals: up({ to: '/practice/intervals' }),
   progressions: up({ to: '/practice/progressions' }),
-  accompaniment: up({ to: '/practice/accompaniment' }),
   'chord-finder': up({ to: '/practice/chord-finder' }),
-  exercises: up({ to: '/practice/exercises' }),
-  quiz: up({ to: '/practice/quiz' }),
 }
 /** A Practice page's Settings (A24): up to the page its gear was pressed on, else to Practice (R29:
  * Settings no longer lists them). */
@@ -136,13 +131,9 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/settings/how-to-use': settingsPage,
   '/shell/settings/about': settingsPage,
   '/shell/settings/connect-piano': settingsPage,
-  '/shell/settings/chords': practiceSettings,
   '/shell/settings/scales': practiceSettings,
-  '/shell/settings/intervals': practiceSettings,
   '/shell/settings/progressions': practiceSettings,
-  '/shell/settings/accompaniment': practiceSettings,
   '/shell/settings/chord-finder': practiceSettings,
-  '/shell/settings/exercises-and-quiz': practiceSettings,
   '/shell/settings/connect-piano/log': () => up({ to: '/settings/connect-piano' }),
   '/shell/admin': toSettings,
   '/shell/admin/$section': ({ wide }) => (wide ? null : up({ to: '/admin' })),
@@ -307,10 +298,8 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
     }),
   '/shell/practice/chord-finder': toPractice,
   '/shell/practice/metronome': toPractice,
-  '/shell/practice/metronome/settings': () => up({ to: '/practice/metronome' }),
   '/shell/practice/circle-of-fifths': toPractice,
   '/shell/practice/tuner': toPractice,
-  '/shell/practice/tuner/settings': () => up({ to: '/practice/tuner' }),
   '/shell/practice/chord-player': toPractice,
   '/shell/practice/chord-player/settings': ({ search }) => {
     const sheet = text(search.sheet)
@@ -325,12 +314,13 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/practice/accompaniment/patterns/$patternRef': toPatternPlace,
   '/shell/practice/accompaniment/patterns/$patternRef/edit': toPattern,
   '/shell/practice/accompaniment/patterns/$patternRef/publish': toPattern,
+  // A study is its method book's course's (R32: Accompaniment lists patterns only).
   '/shell/practice/accompaniment/studies/$pieceId': async (from) => {
     const { studyPlace } = await import('./accompaniment-screens')
-    return up({
-      to: '/practice/accompaniment',
-      search: { place: studyPlace(param(from, 'pieceId')) },
-    })
+    const book = studyPlace(param(from, 'pieceId'))
+    return book === 'all'
+      ? up({ to: '/practice/accompaniment' })
+      : up({ to: '/courses/$courseId', params: { courseId: book } })
   },
   '/shell/practice/accompaniment/studies/$pieceId/sections/$section': toStudy,
 }

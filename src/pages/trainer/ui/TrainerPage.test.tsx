@@ -219,7 +219,7 @@ describe('A trainer', () => {
   it('shows Custom’s choices when Custom is the level, each written to the URL', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/quiz/intervals?level=custom&drill=ear')
-    const heard = await screen.findByRole('group', { name: 'How they sound' })
+    const heard = await screen.findByRole('group', { name: 'Presentation' })
     await user.click(within(heard).getByRole('button', { name: 'Together' }))
     expect(router.state.location.search).toMatchObject({ ways: 'up.together' })
   })
@@ -236,11 +236,19 @@ describe('A trainer', () => {
   it('chooses Custom’s chords in a sheet, and its keys in the Keys sheet by their signatures', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/quiz/chords?level=custom')
-    const chords = await screen.findByRole('button', { name: /^Chords/ })
+    const chords = await screen.findByRole('button', { name: /^Chord qualities/ })
     expect(chords).toHaveTextContent('2 of 46')
     await user.click(chords)
-    await user.click(await screen.findByRole('checkbox', { name: 'Diminished triad' }))
+    // What is included, and why: the recommended set, until the learner changes it (R32).
+    const qualities = await screen.findByRole('dialog', { name: 'Chord qualities' })
+    expect(within(qualities).getByText(/^2 of 46 included · Recommended set$/)).toBeInTheDocument()
+    expect(within(qualities).getByRole('checkbox', { name: 'Minor triad' })).toHaveTextContent('Cm')
+    await user.click(within(qualities).getByRole('checkbox', { name: 'Diminished triad' }))
     expect(router.state.location.search).toMatchObject({ chords: 'maj.min.dim' })
+    expect(within(qualities).getByText(/^3 of 46 included · Custom selection$/)).toBeInTheDocument()
+    await user.click(within(qualities).getByRole('button', { name: 'Restore recommended' }))
+    expect(router.state.location.search).not.toHaveProperty('chords')
+    await user.click(within(qualities).getByRole('checkbox', { name: 'Diminished triad' }))
     await user.click(screen.getByRole('button', { name: 'Close' }))
     const keys = screen.getByRole('button', { name: /^Keys/ })
     expect(keys).toHaveTextContent('7 of 15')
@@ -257,15 +265,16 @@ describe('A trainer', () => {
   it('keeps the last of a list chosen: a run always asks something', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/quiz/chords?level=custom&chords=maj')
-    await user.click(await screen.findByRole('button', { name: /^Chords/ }))
+    await user.click(await screen.findByRole('button', { name: /^Chord qualities/ }))
     await user.click(await screen.findByRole('checkbox', { name: 'Major triad' }))
     expect(router.state.location.search).toMatchObject({ chords: 'maj' })
+    expect(screen.getByRole('button', { name: 'Clear' })).toBeDisabled()
   })
 
   it('shows Reading notes’ Custom range at middle C’s octave, as the run asks it', async () => {
     await renderApp('/practice/quiz/reading-notes?level=custom')
-    expect(await screen.findByRole('combobox', { name: /^From/ })).toHaveTextContent('C4')
-    expect(screen.getByRole('combobox', { name: /^To/ })).toHaveTextContent('C5')
+    expect(await screen.findByRole('combobox', { name: /^Lowest note/ })).toHaveTextContent('C4')
+    expect(screen.getByRole('combobox', { name: /^Highest note/ })).toHaveTextContent('C5')
   })
 
   it('opens a level its trainer does not have at the first, and keeps it out of the URL', async () => {
@@ -287,10 +296,10 @@ describe('A trainer', () => {
     expect(gaps.router.state.location.search).toEqual({ rounds: 20 })
   })
 
-  it('leaves Go on automatically to Exercises and Quiz’s Settings, not its setup (A24, R18)', async () => {
+  it('sets Advance automatically in its setup, its one home (R32)', async () => {
     await renderApp('/practice/quiz/build-scale')
     await screen.findByRole('button', { name: 'Start' })
-    expect(screen.queryByRole('switch', { name: 'Go on automatically' })).not.toBeInTheDocument()
+    expect(screen.getByRole('switch', { name: /Advance automatically/ })).not.toBeChecked()
   })
 
   it('says My gaps has none yet, with a way to a trainer', async () => {

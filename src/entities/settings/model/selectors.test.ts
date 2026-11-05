@@ -28,7 +28,6 @@ import {
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
   DEFAULT_CHORD_PLAYER,
-  DEFAULT_ACCOMPANIMENT,
   defaultKeyboard,
   type SettingsState,
 } from './types'
@@ -62,7 +61,6 @@ describe('settings selectors', () => {
       metronome: DEFAULT_METRONOME,
       progressions: DEFAULT_PROGRESSIONS,
       chordPlayer: DEFAULT_CHORD_PLAYER,
-      accompaniment: DEFAULT_ACCOMPANIMENT,
       bars: DEFAULT_BARS,
       tuner: { a4: 440 },
       scaleStaff: { degrees: true, steps: true, tonic: false, tetrachords: false },

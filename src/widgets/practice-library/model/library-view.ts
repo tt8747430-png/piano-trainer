@@ -28,10 +28,15 @@ export interface PracticeLibraryView {
   readonly stage: Stage | 'any'
 }
 
-/** A book of a library (Barry Harris, Called to Play) or a style (Pop): a place of its tree. */
+/**
+ * A book of a library (Barry Harris, Called to Play), a style (Pop) or the learner's folder: a place
+ * of its tree.
+ */
 export interface LibraryGroup {
   readonly id: string
   readonly name: string
+  /** Where the rest of a book's material is (R32): its course in Learn, its songs in Songs. */
+  readonly links?: ReactNode
 }
 
 /** A run of rows on a phone: a book's, or a book's songs apart from its patterns. */
@@ -68,6 +73,11 @@ export interface LibraryItem {
   readonly actions: readonly RowAction[]
   /** What it carries at its end before its level (an exercise done today). */
   readonly trailing?: ReactNode
+  /**
+   * Its own hiding, where its page keeps one (a pattern, which the Player's picker leaves out too);
+   * else the library's arrangement hides it.
+   */
+  readonly hide?: { readonly hidden: boolean; toggle(): void }
 }
 
 /** A run of rows on a phone, as it shows: its rows, and how many it holds. */

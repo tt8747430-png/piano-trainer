@@ -16,6 +16,8 @@ export const common: LocaleResources['common'] = {
     profile: 'Профиль',
     collapse: 'Свернуть боковую панель',
     open: 'Развернуть боковую панель',
+    recents: 'Недавние',
+    guest: 'Гость',
   },
   errors: {
     title: 'Что-то пошло не так',
