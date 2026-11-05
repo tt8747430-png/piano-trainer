@@ -369,6 +369,8 @@ export interface SettingsState {
   foldedSections: readonly string[]
   /** Whether the welcome was seen: the app's first run shows it once. */
   welcomed: boolean
+  /** The tips put away or done (R31-P), by their ids (`coach.listen`): a tip shows until then. */
+  tipsSeen: readonly string[]
   /** How a lesson reads (round 26): one page of its sections, or a section at a time. */
   lessonReading: LessonReading
   /** How Progressions writes and voices every progression (A24). */

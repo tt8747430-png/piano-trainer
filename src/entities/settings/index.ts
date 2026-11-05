@@ -84,6 +84,7 @@ export {
   selectPaletteFolded,
   selectPaletteSections,
   selectSidebar,
+  selectTipSeen,
   selectWelcomed,
   selectLessonReading,
   selectSound,

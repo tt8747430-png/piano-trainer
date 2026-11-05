@@ -52,6 +52,7 @@ const DEFAULTS = {
   metronome: DEFAULT_METRONOME,
   foldedSections: [],
   welcomed: false,
+  tipsSeen: [],
   lessonReading: 'page',
   progressions: DEFAULT_PROGRESSIONS,
   chordPlayer: DEFAULT_CHORD_PLAYER,
@@ -203,6 +204,7 @@ describe('createSettingsStore', () => {
       },
       foldedSections: ['chords.tensions'],
       welcomed: true,
+      tipsSeen: ['coach.listen'],
       lessonReading: 'sections',
       progressions: { names: 'chords', voicing: 'block', inversion: 1 },
       chordPlayer: { names: 'nashville', voicing: 'block' },
@@ -360,9 +362,9 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('starts afresh over a save of the version before, which kept a Drone (r30)', () => {
-    expect(SETTINGS_VERSION).toBe(25)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 24)).toEqual(
+  it('starts afresh over a save of the version before, which kept no tips seen (R31-P)', () => {
+    expect(SETTINGS_VERSION).toBe(26)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 25)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

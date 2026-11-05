@@ -94,7 +94,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 25
+export const SETTINGS_VERSION = 26
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -130,6 +130,7 @@ export function createSettingsStore({
         metronome: DEFAULT_METRONOME,
         foldedSections: [],
         welcomed: false,
+        tipsSeen: [],
         lessonReading: 'page',
         progressions: DEFAULT_PROGRESSIONS,
         chordPlayer: DEFAULT_CHORD_PLAYER,
@@ -448,6 +449,12 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     metronome: metronomeSettings(saved.metronome),
     foldedSections: foldedSections(saved.foldedSections),
     welcomed: saved.welcomed === true,
+    tipsSeen: Array.isArray(saved.tipsSeen)
+      ? [...new Set(saved.tipsSeen.filter((id): id is string => typeof id === 'string'))].slice(
+          0,
+          64,
+        )
+      : [],
     lessonReading: isLessonReading(saved.lessonReading) ? saved.lessonReading : 'page',
     progressions: progressionsSettings(saved.progressions),
     chordPlayer: chordPlayerSettings(saved.chordPlayer),

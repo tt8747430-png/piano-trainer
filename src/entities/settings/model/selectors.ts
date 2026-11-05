@@ -56,6 +56,11 @@ export const selectPlayback = (state: SettingsState): PlaybackSettings => state.
 export const selectMetronome = (state: SettingsState): MetronomeSettings => state.metronome
 
 export const selectWelcomed = (state: SettingsState): boolean => state.welcomed
+/** Whether a tip was put away or done (R31-P): it shows no more. */
+export const selectTipSeen =
+  (id: string) =>
+  (state: SettingsState): boolean =>
+    state.tipsSeen.includes(id)
 
 /** How a lesson reads (round 26): one page, or a section at a time. */
 export const selectLessonReading = (state: SettingsState): LessonReading => state.lessonReading

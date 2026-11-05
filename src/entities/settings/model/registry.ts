@@ -34,6 +34,7 @@ export const NOT_PREFERENCES = [
   'paletteSections',
   'foldedSections',
   'welcomed',
+  'tipsSeen',
   'chordFinder.chords',
 ] as const
 

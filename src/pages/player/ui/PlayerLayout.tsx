@@ -24,9 +24,12 @@ import {
   barOf,
   selectKeyboard,
   selectScoreView,
+  selectTipSeen,
   useSettings,
+  useSettingsStoreApi,
   type BarAct,
 } from '@/entities/settings'
+import { retireTip } from '@/features/set-preference'
 import { BAR_ICONS } from '@/widgets/bar-editor'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { isMidiConnected, MidiButton, useMidiConnection } from '@/features/connect-midi'
@@ -228,8 +231,15 @@ export function PlayerLayout({
   // The quick metronome (R29 B11): the song's tempo and time in the Metronome's voice, on with the
   // sheet closed.
   const quickMetronome = useMetronome({ bpm: player.tempo, meter: performance.meter })
-  // The coach's line (R29 B8), put away for the visit by its ×.
-  const [coached, setCoached] = useState(false)
+  // The coach's line (R29 B8, R31-P): shown until put away by its × or done (Play pressed in
+  // Listen), remembered for good.
+  const settingsStore = useSettingsStoreApi()
+  const tip = `coach.${view.mode}`
+  const coached = useSettings(selectTipSeen(tip))
+  const playing = practice.state.playing
+  useEffect(() => {
+    if (playing && view.mode === 'listen') retireTip(settingsStore, tip)
+  }, [playing, view.mode, settingsStore, tip])
   // Voice commands (R29 B8), on for the visit where the browser hears speech.
   const [voice, setVoice] = useState(false)
   const locale = useLocale()
@@ -509,8 +519,13 @@ export function PlayerLayout({
         marks={chordKeys?.marks ?? player.marks}
         wrong={player.wrong}
         // Keys the pedal alone holds, ringed apart from a hand's (A27); the lamp at the rail's end.
-        outlined={chordKeys ? undefined : player.pedalKeys}
-        railEnd={player.pedal === 'none' ? undefined : <PedalLamp down={player.pedal === 'down'} />}
+        // The score's pedal and the keys it holds while the music sounds; stopped, nothing hangs (R31-P).
+        outlined={chordKeys || !playing ? undefined : player.pedalKeys}
+        railEnd={
+          player.pedal === 'none' ? undefined : (
+            <PedalLamp down={playing && player.pedal === 'down'} />
+          )
+        }
         onKeyPress={player.tapKey}
         // Space is Play here: the pedal is the rail's, or a MIDI keyboard's.
         spacePedal={false}
@@ -636,7 +651,7 @@ export function PlayerLayout({
         className="text-center landscape-phone:max-w-[45vw] landscape-phone:self-center"
       >
         {!coached && !practice.state.playing && !annotating && !takes?.shown ? (
-          <CoachLine mode={view.mode} onClose={() => setCoached(true)} />
+          <CoachLine mode={view.mode} onClose={() => retireTip(settingsStore, tip)} />
         ) : null}
         {view.mode !== 'listen' ? (
           <WaitLine feedback={player.feedback} onAgain={practice.play} onLoop={player.setLoop} />

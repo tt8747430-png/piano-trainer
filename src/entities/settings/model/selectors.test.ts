@@ -46,6 +46,7 @@ describe('settings selectors', () => {
       editing: DEFAULT_EDITING,
       foldedSections: ['chords.tensions'],
       welcomed: true,
+      tipsSeen: [],
       lessonReading: 'sections',
       sidebar: 'collapsed',
       paletteFolded: {},

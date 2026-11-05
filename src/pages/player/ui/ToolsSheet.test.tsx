@@ -1,7 +1,8 @@
-import { screen, within } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { createMemoryStorage } from '@/shared/lib'
 
 /** Opens the Tools sheet from the Player's bar. */
 async function openTools(user: ReturnType<typeof userEvent.setup>) {
@@ -81,5 +82,25 @@ describe('the Player’s Tools sheet (R29 B8)', () => {
     )
     await user.click(screen.getByRole('button', { name: 'Hide the tip' }))
     expect(screen.queryByText('Tap Play to listen to the song.')).toBeNull()
+  })
+
+  it('remembers a tip put away: it shows on no later visit (R31-P)', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    const { settingsStore, unmount } = await renderApp('/play/bz5', { storage })
+    await user.click(await screen.findByRole('button', { name: 'Hide the tip' }))
+    expect(settingsStore.getState().tipsSeen).toContain('coach.listen')
+    unmount()
+    await renderApp('/play/bz5', { storage })
+    expect(await screen.findByRole('button', { name: 'Play' })).toBeInTheDocument()
+    expect(screen.queryByText('Tap Play to listen to the song.')).toBeNull()
+  })
+
+  it('retires Listen’s tip once Play is pressed (R31-P)', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/play/bz5')
+    await screen.findByText('Tap Play to listen to the song.')
+    await user.click(screen.getByRole('button', { name: 'Play' }))
+    await waitFor(() => expect(settingsStore.getState().tipsSeen).toContain('coach.listen'))
   })
 })
