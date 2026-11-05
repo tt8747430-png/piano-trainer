@@ -1,3 +1,4 @@
+import { stubMatchMedia } from '@/shared/test/match-media'
 import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Settings } from 'lucide-react'
@@ -43,16 +44,31 @@ describe('ScreenHeader', () => {
     expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
   })
 
-  it('sets a place’s views in the title’s place, in the bar’s one row, the title kept for a screen reader', () => {
+  it('sets a place’s views beside its title on a laptop, in the bar’s one row', () => {
+    // Every media query matches: the laptop's width among them.
+    stubMatchMedia({ dark: true })
     render(
       <ScreenHeader title="Learn" large switcher={<div role="radiogroup" aria-label="Views" />} />,
     )
     const bar = screen.getByRole('banner')
-    const views = within(bar).getByRole('radiogroup', { name: 'Views' })
-    expect(within(bar).getByRole('heading', { level: 1, name: 'Learn' })).toHaveClass('sr-only')
-    // One row: the switcher and the heading share it, nothing under it.
-    expect(views.parentElement?.parentElement).toBe(bar.firstElementChild)
+    expect(within(bar).getByRole('radiogroup', { name: 'Views' })).toBeInTheDocument()
+    expect(within(bar).getByRole('heading', { level: 1, name: 'Learn' })).not.toHaveClass('sr-only')
     expect(bar.children).toHaveLength(1)
+  })
+
+  it('sets a place’s views under the bar on a phone, the bar keeping its tools', () => {
+    render(
+      <ScreenHeader
+        title="Songs"
+        large
+        switcher={<div role="radiogroup" aria-label="Views" />}
+        tools={<button type="button">Select</button>}
+      />,
+    )
+    const bar = screen.getByRole('banner')
+    expect(within(bar).queryByRole('radiogroup')).toBeNull()
+    expect(screen.getAllByRole('radiogroup', { name: 'Views' })).toHaveLength(1)
+    expect(within(bar).getByRole('heading', { level: 1, name: 'Songs' })).toBeVisible()
   })
 
   it('gives only a place a switcher', () => {

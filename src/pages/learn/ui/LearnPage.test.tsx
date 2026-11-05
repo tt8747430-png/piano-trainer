@@ -122,9 +122,9 @@ describe('Learn', () => {
     it('come up from the header’s toggle, shelf by shelf', async () => {
       const user = userEvent.setup()
       const { router } = await renderApp('/')
-      // In the bar's one row, in the title's place (R29-P1).
+      // On a phone, under the bar: the bar keeps its one row and its tools.
       const toggle = await screen.findByRole('radiogroup', { name: 'What Learn shows' })
-      expect(screen.getByRole('banner')).toContainElement(toggle)
+      expect(screen.getByRole('banner')).not.toContainElement(toggle)
       expect(within(toggle).getByRole('radio', { name: 'Lessons' })).toBeChecked()
       await user.click(within(toggle).getByRole('radio', { name: 'Courses' }))
       expect(router.state.location.search).toMatchObject({ view: 'courses' })
