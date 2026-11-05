@@ -99,7 +99,7 @@ export function ScorePageBody({
   onBars,
   onDone,
 }: {
-  page: ScorePage
+  page: Exclude<ScorePage, 'credits'>
   bars: number
   onBars: (count: number) => void
   onDone: () => void

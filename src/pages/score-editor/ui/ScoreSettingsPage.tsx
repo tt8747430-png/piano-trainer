@@ -7,6 +7,7 @@ import {
   Music2,
   Plus,
   Ruler,
+  Type,
   Volume2,
   type LucideIcon,
 } from 'lucide-react'
@@ -134,14 +135,55 @@ export function ScoreSettingsPage() {
       onClick={() => open(id)}
     />
   )
-  const inner = page ? (
-    <ScorePageBody
-      page={page}
-      bars={bars}
-      onBars={(count) => actions.dispatch({ type: 'barCount', count })}
-      onDone={() => open(null)}
-    />
-  ) : null
+  const inner =
+    page === 'credits' ? (
+      <>
+        <SettingsGroup flush info={t('scoreSettings.namesInfo')}>
+          <NameRow
+            label={t('scoreSettings.names.title')}
+            value={meta.title}
+            max={TITLE_MAX}
+            placeholder={t('scoreSettings.add')}
+            onSave={(title) => actions.dispatch({ type: 'title', title })}
+          />
+          {shown.map((field) => (
+            <NameRow
+              key={field}
+              label={nameOf(field)}
+              value={draft.header?.[field] ?? ''}
+              max={HEADER_MAX}
+              placeholder={t('scoreSettings.add')}
+              onSave={(text) => actions.dispatch({ type: 'header', field, text })}
+            />
+          ))}
+          {addable.length > 0 ? (
+            <div className="px-1 py-2">
+              <ActionMenu
+                label={t('scoreSettings.addCredit')}
+                trigger={
+                  <>
+                    <Plus aria-hidden />
+                    {t('scoreSettings.addCredit')}
+                  </>
+                }
+                actions={addable.map((field) => ({
+                  key: field,
+                  label: nameOf(field),
+                  onSelect: () => setAdded((was) => [...was, field]),
+                }))}
+              />
+            </div>
+          ) : null}
+        </SettingsGroup>
+      </>
+    ) : page ? (
+      <ScorePageBody
+        page={page}
+        bars={bars}
+        onBars={(count) => actions.dispatch({ type: 'barCount', count })}
+        onDone={() => open(null)}
+      />
+    ) : null
   return (
     // In the full screen's column, at its own height: it scrolls, never squeezed to the screen's.
     <div className="flex shrink-0 flex-col gap-6 pb-8">
@@ -152,47 +194,8 @@ export function ScoreSettingsPage() {
       <div className="mx-auto w-full max-w-2xl space-y-7">
         {inner ?? (
           <>
-            <SettingsGroup
-              flush
-              title={t('scoreSettings.credits')}
-              info={t('scoreSettings.namesInfo')}
-            >
-              <NameRow
-                label={t('scoreSettings.names.title')}
-                value={meta.title}
-                max={TITLE_MAX}
-                placeholder={t('scoreSettings.add')}
-                onSave={(title) => actions.dispatch({ type: 'title', title })}
-              />
-              {shown.map((field) => (
-                <NameRow
-                  key={field}
-                  label={nameOf(field)}
-                  value={draft.header?.[field] ?? ''}
-                  max={HEADER_MAX}
-                  placeholder={t('scoreSettings.add')}
-                  onSave={(text) => actions.dispatch({ type: 'header', field, text })}
-                />
-              ))}
-              {addable.length > 0 ? (
-                <div className="px-1 py-2">
-                  <ActionMenu
-                    label={t('scoreSettings.addCredit')}
-                    trigger={
-                      <>
-                        <Plus aria-hidden />
-                        {t('scoreSettings.addCredit')}
-                      </>
-                    }
-                    actions={addable.map((field) => ({
-                      key: field,
-                      label: nameOf(field),
-                      onSelect: () => setAdded((was) => [...was, field]),
-                    }))}
-                  />
-                </div>
-              ) : null}
-            </SettingsGroup>
+            {/* The score's title and what prints under it, a page of its own as the others (R31-E). */}
+            <SettingsGroup flush>{row('credits', Type, 'yellow', meta.title)}</SettingsGroup>
             <SettingsGroup flush title={t('scoreSettings.music')}>
               {row('staves', Music2, 'lilac', String(staffCount))}
               {row('key', Hash, 'sky', keyName(draft.key))}

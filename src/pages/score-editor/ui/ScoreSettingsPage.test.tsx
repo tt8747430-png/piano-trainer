@@ -30,6 +30,8 @@ describe('the score’s Settings (round 28)', () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'Score settings' }))
+    // Its title and credits a page of their own, as the others (R31-E).
+    await user.click(await screen.findByRole('button', { name: /^Title and credits/ }))
     const composer = await screen.findByRole('textbox', { name: 'Composer' })
     await user.type(composer, 'Clara Schumann{Enter}')
     await waitFor(() =>
@@ -37,6 +39,7 @@ describe('the score’s Settings (round 28)', () => {
     )
     // Back on the score, it prints under the title, and Undo takes it away.
     await user.click(screen.getByRole('button', { name: 'Back' }))
+    await user.click(await screen.findByRole('button', { name: 'Back' }))
     expect(await screen.findByText('Clara Schumann')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Undo' }))
     await waitFor(() => expect(piecesStore.getState().songs[0]?.header).toBeUndefined())
@@ -44,13 +47,17 @@ describe('the score’s Settings (round 28)', () => {
 
   it('adds a credit by its role from Add credit, and saves it with the score (A28)', async () => {
     const user = userEvent.setup()
-    const { piecesStore } = await renderApp('/edit/my-1/settings', { storage: withSong() })
-    const credits = await screen.findByRole('region', { name: 'Title and credits' })
-    expect(within(credits).queryByRole('textbox', { name: 'Translator' })).not.toBeInTheDocument()
-    await user.click(within(credits).getByRole('button', { name: 'Add credit' }))
+    const { piecesStore } = await renderApp('/edit/my-1/settings?page=credits', {
+      storage: withSong(),
+    })
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Title and credits' }),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('textbox', { name: 'Translator' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Add credit' }))
     await user.click(await screen.findByRole('menuitem', { name: 'Translator' }))
     await user.type(
-      await within(credits).findByRole('textbox', { name: 'Translator' }),
+      await screen.findByRole('textbox', { name: 'Translator' }),
       'Boris Pasternak{Enter}',
     )
     await waitFor(() =>
@@ -61,7 +68,9 @@ describe('the score’s Settings (round 28)', () => {
   it('lists Title and credits, Music and How the editor works, each row opening its page (R29, 3.3)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/edit/my-1/settings', { storage: withSong() })
-    expect(await screen.findByRole('region', { name: 'Title and credits' })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: /^Title and credits/ })).toHaveTextContent(
+      'Morning',
+    )
     const rows = (group: string) =>
       within(screen.getByRole('region', { name: group })).getAllByRole('button')
     for (const [at, name] of [

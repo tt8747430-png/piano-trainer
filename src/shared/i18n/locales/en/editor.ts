@@ -794,6 +794,7 @@ export const editor = {
     credits: 'Title and credits',
     howItWorks: 'How the editor works',
     pages: {
+      credits: 'Title and credits',
       staves: 'Staves',
       key: 'Key signature',
       time: 'Time signature',

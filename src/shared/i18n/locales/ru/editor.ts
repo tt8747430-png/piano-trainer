@@ -726,6 +726,7 @@ export const editor: LocaleResources['editor'] = {
     credits: 'Название и авторы',
     howItWorks: 'Как работает редактор',
     pages: {
+      credits: 'Название и авторы',
       staves: 'Нотоносцы',
       key: 'Ключевые знаки',
       time: 'Размер',
