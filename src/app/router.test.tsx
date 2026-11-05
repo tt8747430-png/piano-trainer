@@ -176,15 +176,8 @@ describe('the app shell', () => {
     await renderApp('/songs')
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
     const links = within(nav).getAllByRole('link')
-    expect(links.map((link) => link.textContent)).toEqual([
-      'Learn',
-      'Songs',
-      'Practice',
-      'Profile',
-      'Settings',
-    ])
-    // Search is the palette's: a button, never a place of its own (rule 27).
-    expect(within(nav).getByRole('button', { name: 'Search' })).toBeInTheDocument()
+    // A phone's bar: the four places; Search and Settings are the sidebar's, on a laptop.
+    expect(links.map((link) => link.textContent)).toEqual(['Learn', 'Songs', 'Practice', 'Profile'])
     expect(within(nav).getByRole('link', { name: 'Songs' })).toHaveAttribute('aria-current', 'page')
   })
 
