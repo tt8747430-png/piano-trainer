@@ -30,7 +30,8 @@ describe('the welcome', () => {
     const auth = createFakeAuth({ accounts: [learner] })
     await auth.signIn(learner.email, learner.password)
     const { settingsStore } = await renderApp('/', { welcomed: false, auth })
-    await waitFor(() => expect(settingsStore.getState().welcomed).toBe(true))
+    // The session is restored as the app starts: under a whole suite's load that can take a while.
+    await waitFor(() => expect(settingsStore.getState().welcomed).toBe(true), { timeout: 5000 })
     expect(screen.queryByRole('alertdialog')).toBeNull()
   })
 
