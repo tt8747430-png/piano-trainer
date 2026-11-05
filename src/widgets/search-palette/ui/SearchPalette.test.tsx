@@ -62,7 +62,7 @@ describe('the Search palette', () => {
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
     await user.keyboard('{Control>}k{/Control}')
     const suggested = await rowsOf('Suggestions')
-    expect(suggested[0]).toHaveTextContent(/^Metronome/)
+    expect(suggested[0]).toHaveTextContent(/^Chords/)
     expect(screen.queryByRole('group', { name: 'Recent searches' })).toBeNull()
   })
 

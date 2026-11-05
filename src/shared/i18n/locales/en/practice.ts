@@ -1,7 +1,24 @@
 export const practice = {
   title: 'Practice',
+  // What Practice is for, under its title (R32).
+  purpose: 'Daily technique, theory and accompaniment, in one place.',
+  // What the learner's record says is next (R32), or where a new learner starts.
+  upNext: {
+    title: 'Up next',
+    start: 'Start here',
+    review: {
+      title: 'Quiz review',
+      why_one: '{{count}} skill due for review',
+      why_other: '{{count}} skills due for review',
+    },
+    exercise: 'Last practised {{when}}',
+    page: 'Last opened in Practice',
+    firstExercise: 'Recommended first step',
+    firstPage: 'Build any chord from its root',
+    today: 'today',
+    yesterday: 'yesterday',
+  },
   // Practice's groups of pages (ADR 0052), each under its heading.
-  continue: 'Continue',
   groups: { tools: 'Tools', theory: 'Theory', playing: 'Playing', training: 'Training' },
   // Its pages, each by its name.
   pages: {
@@ -20,18 +37,23 @@ export const practice = {
   },
   // What a page says of itself in one short line, on Practice and in Search.
   about: {
-    chords: 'Triads to 13ths, inversions',
-    scales: 'Scales, their chords, keys',
-    intervals: 'Every interval on the keys',
-    progressions: 'Known loops in any key',
-    accompaniment: 'Patterns for both hands',
-    chordPlayer: 'A chord sheet played by a band',
-    chordFinder: 'Play a chord, see its name',
-    exercises: 'Technique and drills',
-    quiz: 'Chords, keys, ear, reading',
-    metronome: 'Clicks or drums, any tempo',
-    circleOfFifths: 'Every key, its signature and chords',
-    tuner: 'Hear how in tune a note is',
+    chords: 'Triads to thirteenths, voicings and fingerings',
+    scales: 'Scales, modes, harmony and key signatures',
+    intervals: 'Every interval, by ear and on the keyboard',
+    progressions: 'Common progressions in every key',
+    accompaniment: 'Left- and right-hand accompaniment patterns',
+    chordPlayer: 'Chord charts played by a backing band',
+    chordFinder: 'Names any chord you play',
+    exercises: 'Technique, book by book',
+    quiz: 'Chords, keys, intervals and sight-reading',
+    metronome: 'Tempo, meter and subdivision',
+    circleOfFifths: 'Keys, signatures and related keys',
+    tuner: 'Pitch measured against A4',
+  },
+  // A tool's tile on Practice (R32): what it is set to now.
+  toolValue: {
+    metronome: '{{bpm}} BPM · {{meter}}',
+    tuner: 'A4 = {{hz}} Hz',
   },
   // Each Practice page's Settings (A24): its gear, and what its page holds.
   settings: {
@@ -713,7 +735,9 @@ export const practice = {
       faster: 'Faster',
       tempo: '{{bpm}} BPM',
       tuner: 'Tuner',
-      all: 'All tools',
+      off: 'Off',
+      listening: 'Listening · {{reference}}',
+      openMetronome: 'Open Metronome',
       open: 'Tools',
     },
   },

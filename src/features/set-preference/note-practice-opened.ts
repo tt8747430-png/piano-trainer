@@ -1,6 +1,6 @@
 import type { SettingsStore } from '@/entities/settings'
 
-/** A page of Practice opened from its list (R30-4): first in its Continue, eight kept at most. */
+/** A page of Practice opened, however it was reached (R32): first for Up next, eight kept at most. */
 export function notePracticeOpened(store: SettingsStore, page: string): void {
   const { practiceRecent } = store.getState()
   store.setState({

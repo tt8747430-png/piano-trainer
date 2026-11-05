@@ -71,15 +71,6 @@ export const player = {
     },
     alreadySimple: 'Its chords are already simple',
   },
-  toolsSheet: {
-    metronome: 'Metronome',
-    open: 'Tools',
-    quick: 'Quick tools',
-    score: 'On the score',
-    listening: 'Listening',
-    more: 'More',
-    audioMidi: 'Audio and MIDI',
-  },
   tuner: {
     title: 'Tuner',
     note: 'Note heard',
