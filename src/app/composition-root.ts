@@ -16,6 +16,11 @@ import {
 } from '@/entities/notification'
 import { createPatternsStore, PATTERNS_STORAGE_KEY, type PatternsStore } from '@/entities/pattern'
 import {
+  createOwnLessonsStore,
+  OWN_LESSONS_STORAGE_KEY,
+  type OwnLessonsStore,
+} from '@/entities/own-lessons'
+import {
   createPracticeLibraryStore,
   PRACTICE_LIBRARY_STORAGE_KEY,
   type PracticeLibraryStore,
@@ -74,6 +79,7 @@ export interface Stores {
   readonly chordSheets: ChordSheetsStore
   readonly notifications: NotificationsStore
   readonly practiceLibrary: PracticeLibraryStore
+  readonly ownLessons: OwnLessonsStore
 }
 
 /**
@@ -96,6 +102,7 @@ export function createStores(
     chordSheets: createChordSheetsStore(saving),
     notifications: createNotificationsStore(saving),
     practiceLibrary: createPracticeLibraryStore(saving),
+    ownLessons: createOwnLessonsStore(saving),
   }
 }
 
@@ -136,6 +143,7 @@ export const SYNCED_SAVES: readonly SyncedSave[] = [
   { table: 'chord_sheets', key: CHORD_SHEETS_STORAGE_KEY },
   { table: 'notifications', key: NOTIFICATIONS_STORAGE_KEY },
   { table: 'practice_library', key: PRACTICE_LIBRARY_STORAGE_KEY },
+  { table: 'own_lessons', key: OWN_LESSONS_STORAGE_KEY },
 ]
 
 /**

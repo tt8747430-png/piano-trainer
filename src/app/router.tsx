@@ -16,6 +16,7 @@ import {
   type PatternsStore,
 } from '@/entities/pattern'
 import type { LibraryStore } from '@/entities/library'
+import type { OwnLessonsStore } from '@/entities/own-lessons'
 import type { PracticeLibraryStore } from '@/entities/practice-library'
 import type { PiecesStore } from '@/entities/piece'
 import type { TakesStore } from '@/entities/take'
@@ -143,6 +144,7 @@ export interface RouterContext {
   readonly takes: TakesStore
   readonly library: LibraryStore
   readonly practiceLibrary: PracticeLibraryStore
+  readonly ownLessons: OwnLessonsStore
   readonly content: ContentPort
 }
 
@@ -1177,12 +1179,13 @@ export function createAppRouter({
   takes,
   library,
   practiceLibrary,
+  ownLessons,
   content,
 }: RouterContext & { history?: RouterHistory }) {
   const router = createRouter({
     routeTree,
     history,
-    context: { views, patterns, pieces, takes, library, practiceLibrary, content },
+    context: { views, patterns, pieces, takes, library, practiceLibrary, ownLessons, content },
     defaultPreload: 'intent',
     defaultErrorComponent: RouteError,
     defaultPendingComponent: RoutePending,

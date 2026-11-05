@@ -117,6 +117,7 @@ export async function renderApp(
     chordSheetsStore: stores.chordSheets,
     notificationsStore: stores.notifications,
     practiceLibraryStore: stores.practiceLibrary,
+    ownLessonsStore: stores.ownLessons,
     audio,
     midi,
     auth,

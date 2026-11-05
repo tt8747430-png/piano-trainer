@@ -160,6 +160,7 @@ describe('backup', () => {
       'pt-library',
       'pt-diagram-inversions',
       'pt-practice-library',
+      'pt-own-lessons',
     ])
   })
 })
