@@ -7,21 +7,22 @@ const parts = (
   <ScoreBar
     lead={<button type="button">Close</button>}
     actions={<button type="button">Setup</button>}
-    tools={<div role="toolbar" aria-label="Tools" />}
   />
 )
 
 describe('ScoreBar (ADR 0115)', () => {
-  it('is one surface holding the lead, the actions and the tools, in that order', () => {
+  it('is one surface holding the lead and the actions, in that order', () => {
     render(parts)
     const bar = document.querySelector('header[data-area="bar"]')
     expect(bar).toHaveClass('score-bar')
     const areas = [...(bar?.children ?? [])].map((child) => child.getAttribute('data-area'))
-    expect(areas).toEqual(['lead', 'actions', 'tools'])
+    expect(areas).toEqual(['lead', 'actions'])
     expect(screen.getByRole('button', { name: 'Close' }).closest('[data-area="lead"]')).not.toBe(
       null,
     )
-    expect(screen.getByRole('toolbar', { name: 'Tools' }).closest('header')).toBe(bar)
+    expect(screen.getByRole('button', { name: 'Setup' }).closest('[data-area="actions"]')).not.toBe(
+      null,
+    )
   })
 
   it('steps aside whole, out of reach, its room kept', () => {

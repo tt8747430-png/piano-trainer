@@ -2,6 +2,7 @@ import type { LocaleResources } from '../../types'
 
 export const editor: LocaleResources['editor'] = {
   play: 'Сыграть',
+  stop: 'Стоп',
   undo: 'Отменить',
   redo: 'Повторить',
   unsaved: 'Это изменение нельзя сохранить: песня остаётся такой, какой была сохранена.',
@@ -21,12 +22,15 @@ export const editor: LocaleResources['editor'] = {
     close: 'Показать меньше инструментов',
     hide: 'Скрыть инструменты',
     show: 'Показать инструменты',
-    list: 'Показать названия инструментов',
-    grid: 'Показать инструменты кнопками',
     categories: 'Виды инструментов',
     keys: 'Клавиши',
+    groups: {
+      notation: 'Нотация',
+      tuplets: 'Дуоли, триоли и др.',
+      bars: 'Такты',
+    },
     category: {
-      modes: 'Режимы',
+      notes: 'Нота',
       pitch: 'Высота и запись',
       articulations: 'Штрихи',
       ornaments: 'Мелизмы',
@@ -220,7 +224,6 @@ export const editor: LocaleResources['editor'] = {
   },
   panel: {
     label: 'Панель редактора',
-    tabs: { notation: 'Нотация', instruments: 'Инструменты', layout: 'Макет' },
   },
   tempo: {
     save: 'Сохранить',
@@ -442,6 +445,7 @@ export const editor: LocaleResources['editor'] = {
     nonuplet: 'Ноноль',
   },
   rest: 'Пауза',
+  addNote: 'Добавить ноту',
   mode: {
     label: 'Режим ввода',
     replace: 'Замена',
@@ -484,12 +488,9 @@ export const editor: LocaleResources['editor'] = {
     newLine: 'Разрыв строки',
     joinLine: 'Соединить строки',
     newSection: 'Новый раздел',
-    length: 'Длина такта',
-    repeats: 'Повторы тактов и паузы',
+    repeats: 'Паузы и повторы',
     repeatsInfo:
       'Знак повтора переписывает предыдущий такт (или два) в выбранные и рисуется, пока они совпадают. Многотактовая пауза очищает выбранные такты и рисует их одной паузой с числом тактов.',
-    lengthInfo: 'Такт длиннее или короче размера. Затакт задаётся в размере.',
-    lengthOf: 'Длина такта {{time}}',
   },
   section: {
     kind: 'Раздел',
@@ -698,6 +699,7 @@ export const editor: LocaleResources['editor'] = {
     notSavedOffline: 'Нет сети: пока не сохранено',
     notSaved: 'Не сохранено: попробуем снова при следующей правке',
     publish: 'Опубликовать',
+    publishMore: 'Опубликовать…',
     publishTitle: 'Опубликовать «{{title}}»?',
     publishBody:
       'Все ученики получат эту версию при следующем запуске приложения. Прежняя версия сохранится, её можно вернуть.',
@@ -715,6 +717,7 @@ export const editor: LocaleResources['editor'] = {
     restore: 'Вернуть',
     restored: 'Версия возвращена. Ученики получат её при следующем запуске приложения.',
     discard: 'Отменить изменения',
+    nothingToDiscard: 'С публикации ничего не изменилось.',
     discardTitle: 'Отменить изменения?',
     discardBody: 'Вернётся опубликованная версия, изменения пропадут.',
     discarded: 'Изменения отменены',
@@ -737,8 +740,16 @@ export const editor: LocaleResources['editor'] = {
       recording: 'Запись',
     },
     title: 'Настройки партитуры',
-    open: 'Настройки…',
     score: 'Партитура',
+    acts: {
+      view: 'Вид',
+      transpose: 'Транспонировать',
+      record: 'Записать дубль',
+      takes: 'Дубли',
+      settings: 'Настройки',
+      musicDetail: 'Нотоносцы, тональность, размер, темп, такты',
+      howItWorksDetail: 'Вёрстка, ввод нот, запись',
+    },
     names: {
       title: 'Название',
       subtitle: 'Подзаголовок',
@@ -769,14 +780,6 @@ export const editor: LocaleResources['editor'] = {
     barsInfo: 'Такты добавляются и убираются в конце песни.',
     layout: 'Вёрстка',
     editing: 'Правка',
-    startMode: 'Режим ввода при открытии',
-    startModeInfo:
-      'Как пишутся ноты, когда редактор открывается. Режим можно сменить в любой момент кнопкой на панели инструментов.',
-    startModes: { replace: 'Замена', insert: 'Вставка' },
-    startModeExamples: {
-      replace: 'Сыгранная нота заменяет ноту у курсора',
-      insert: 'Сыгранная нота встаёт у курсора и сдвигает следующие',
-    },
     paletteSide: 'Сторона панели',
     paletteSides: { left: 'Слева', right: 'Справа' },
     hearNotes: 'Проигрывать ноты при вводе',

@@ -11,7 +11,7 @@ import type { BarMarkChoice } from '@/features/score-editor'
  * words. What is typed where it prints (ADR 0096) has its key among its kin.
  */
 export const PALETTE_CATEGORIES = [
-  'modes',
+  'notes',
   'pitch',
   'articulations',
   'ornaments',

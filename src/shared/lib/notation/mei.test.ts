@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { midi, note, type Clef, type SpelledNote, TICKS_PER_BEAT } from '@/shared/lib/music'
+import {
+  beatsPerBar,
+  beatsToTicks,
+  METERS,
+  meterParts,
+  midi,
+  note,
+  type Clef,
+  type SpelledNote,
+  TICKS_PER_BEAT,
+} from '@/shared/lib/music'
 import { scoreToMei } from './mei'
 import { notate } from './notate'
 import type { TimedMusic, TimedNote } from './types'
@@ -460,6 +470,29 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(cut(true)).toMatch(/<scoreDef meter\.count="2" meter\.unit="2" meter\.sym="cut"/)
     expect(cut(false)).toMatch(/<scoreDef meter\.count="2" meter\.unit="2"/)
     expect(cut(false)).not.toContain('meter.sym')
+  })
+
+  it('writes every meter of one to sixteen over a whole to a sixteenth by its figures (R31-E)', () => {
+    for (const meter of METERS) {
+      const { count, unit } = meterParts(meter)
+      const beats = beatsPerBar(meter)
+      const mei = scoreToMei(
+        notate(
+          music([], {
+            chords: [],
+            meter,
+            bars: [
+              { startTick: 0, beats },
+              { startTick: beatsToTicks(beats), beats, barline: 'final' },
+            ],
+          }),
+        ),
+      )
+      expect(mei, meter).toMatch(
+        new RegExp(`<scoreDef meter\\.count="${count}" meter\\.unit="${unit}"`),
+      )
+      expect(mei, meter).not.toContain('meter.sym')
+    }
   })
 
   it('hides the time on a line that goes on in it, and shows it where it changes', () => {

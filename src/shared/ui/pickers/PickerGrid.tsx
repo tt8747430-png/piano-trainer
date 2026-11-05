@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib'
+import { usePickerLayout } from './picker-layout'
 
 /** A picker grid's columns: four on the narrowest phone, so each cell keeps 44px; seven from 380px. */
 const COLUMNS = 'grid-cols-4 min-[380px]:grid-cols-7'
@@ -20,6 +21,13 @@ export function PickerGrid({
   /** Each group's cells, in order: a group starts a row of its own. */
   rows: readonly { readonly label: string; readonly cells: readonly ReactNode[] }[]
 }) {
+  // In a row (the score editor's folded palette, R31-E): every sign in turn, nothing between.
+  if (usePickerLayout() === 'row')
+    return (
+      <div role="group" aria-label={label} className="flex shrink-0 items-center gap-0.5">
+        {rows.flatMap((row) => row.cells)}
+      </div>
+    )
   return (
     <div
       role="group"
@@ -73,6 +81,7 @@ export function PickerCell({
   onClick: () => void
   children: ReactNode
 }) {
+  const row = usePickerLayout() === 'row'
   return (
     <button
       type="button"
@@ -81,7 +90,10 @@ export function PickerCell({
       aria-pressed={pressed}
       disabled={disabled}
       onClick={onClick}
-      className="grid min-h-13 min-w-11 place-items-center bg-card px-0.5 text-foreground/75 choice focus-visible:z-10 focus-visible:-outline-offset-3 disabled:opacity-35 motion-reduce:transition-none"
+      className={cn(
+        'grid place-items-center px-0.5 text-foreground/75 choice focus-visible:z-10 focus-visible:-outline-offset-3 disabled:opacity-35 motion-reduce:transition-none',
+        row ? 'h-10 min-w-11 shrink-0 rounded-control' : 'min-h-13 min-w-11 bg-card',
+      )}
     >
       {children}
     </button>

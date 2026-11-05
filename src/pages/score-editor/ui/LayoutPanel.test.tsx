@@ -1,6 +1,7 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { openGear } from '@/app/testing/editor-gear'
 import { renderApp } from '@/app/testing/render-app'
 import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { createMemoryStorage } from '@/shared/lib'
@@ -51,9 +52,8 @@ async function pageShape(): Promise<number> {
 describe('the editor’s Layout (A40)', () => {
   it('each group changes the preview and saves with the score', async () => {
     const user = userEvent.setup()
-    const { piecesStore } = await renderApp('/edit/my-1/settings?page=layout', {
-      storage: withSong(),
-    })
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await openGear(user, /^How the editor works/, /^Layout/)
     // Pages: an upright A4, turned on its side.
     expect(await pageShape()).toBeLessThan(1)
     await user.click(screen.getByRole('radio', { name: 'Landscape' }))
@@ -91,9 +91,8 @@ describe('the editor’s Layout (A40)', () => {
 
   it('Reset, asked first, puts every setting back', async () => {
     const user = userEvent.setup()
-    const { piecesStore } = await renderApp('/edit/my-1/settings?page=layout', {
-      storage: withSong(),
-    })
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await openGear(user, /^How the editor works/, /^Layout/)
     const reset = await screen.findByRole('button', { name: 'Reset' })
     expect(reset).toBeDisabled()
     await user.click(screen.getByRole('radio', { name: 'A3' }))

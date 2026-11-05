@@ -317,6 +317,7 @@ export function NewSongSheet({
                     setMeter(next.meter)
                     setTimeSymbol(next.symbol)
                   }}
+                  pickup={{ beats: upbeats, onChange: setPickup }}
                 />
               </SheetPart>
               <SheetPart title={t('setup.keySignature')}>
@@ -333,21 +334,6 @@ export function NewSongSheet({
                     setTempoUnit(next.unit)
                     setTempoText(next.text)
                   }}
-                />
-              </SheetPart>
-              <SheetPart title={t('setup.pickup')}>
-                <Stepper
-                  label={t('setup.pickup')}
-                  typed
-                  value={upbeats}
-                  min={0}
-                  max={meterParts(meter).count - 1}
-                  format={(count) =>
-                    count === 0 ? t('setup.noPickup') : t('setup.pickupValue', { count })
-                  }
-                  onChange={setPickup}
-                  decrease={t('setup.shorterPickup')}
-                  increase={t('setup.longerPickup')}
                 />
               </SheetPart>
               <SheetPart title={t('setup.bars')}>

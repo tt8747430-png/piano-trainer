@@ -38,7 +38,7 @@ export function PlayerScreen({
   panel?: boolean
   /**
    * Nothing floats over the music (the Player's docked transport and foot, R31-P): no scroll room
-   * kept for a floating capsule at its head or a transport at its foot.
+   * kept for a transport floating at its foot.
    */
   docked?: boolean
   children: ReactNode
@@ -68,7 +68,7 @@ export function PlayerScreen({
       className={cn(
         SCORE_SCREEN,
         'data-panel:pe-[min(28rem,100vw)]',
-        docked && '[--float-room:0px] [--tools-room:0px]',
+        docked && '[--float-room:0px]',
       )}
       onPointerDown={onMusic(reading.onPointerDown)}
       onPointerMove={onMusic(reading.onPointerMove)}

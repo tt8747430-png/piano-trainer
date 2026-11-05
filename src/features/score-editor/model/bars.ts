@@ -1,5 +1,5 @@
-import { beatsPerBar, TICKS_PER_BEAT, type Meter, type Tick } from '@/shared/lib/music'
-import { staffPlace, ticksOf } from '@/shared/lib/notation'
+import { beatsPerBar, TICKS_PER_BEAT, type Tick } from '@/shared/lib/music'
+import { staffPlace } from '@/shared/lib/notation'
 import type { BarsClip } from './clip'
 import {
   isHandLayer,
@@ -146,13 +146,6 @@ export function pasteBars(draft: Draft, after: number, clip: BarsClip): Draft {
       (a, b) => a.startTick - b.startTick || a.midi - b.midi,
     ),
   )
-}
-
-/** A bar's lengths to choose: an eighth at a time up to the meter's bar. */
-export function barLengths(meter: Meter): Tick[] {
-  const eighth = ticksOf({ value: 8, dots: 0 }, meter)
-  const full = beatsPerBar(meter) * TICKS_PER_BEAT
-  return Array.from({ length: full / eighth }, (_, i) => (i + 1) * eighth)
 }
 
 /** A bar of the first section's meter, its own or the song's (ADR 0097): what a pickup is short of. */

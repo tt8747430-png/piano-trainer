@@ -151,18 +151,6 @@ export interface KeyboardSettings {
   readonly pedals: PedalsShown
 }
 
-/**
- * Where the score editor's palette stands (ADR 0114, Flat's): a panel docked at the sheet's left
- * (a laptop, a tablet, a phone on its side), or a sheet docked at its foot (a phone held upright).
- */
-export const PALETTE_PLACES = ['panel', 'sheet'] as const
-export type PalettePlace = (typeof PALETTE_PLACES)[number]
-/**
- * Whether the palette is folded, as the learner last left it in each place; a place never chosen
- * takes its default (ADR 0114): the panel shown, the sheet compact (its quick row and its tabs).
- */
-export type PaletteFolds = Readonly<Partial<Record<PalettePlace, boolean>>>
-
 const SIDEBARS = ['open', 'collapsed'] as const
 /** A laptop's sidebar: its places named, or their icons alone. */
 export type Sidebar = (typeof SIDEBARS)[number]
@@ -185,13 +173,14 @@ export interface RecorderSettings {
 export interface EditingSettings {
   /** A note sounds as it is chosen on the score or its pitch is changed (the keys sound themselves). */
   readonly hearNotes: boolean
-  /** How the editor writes when it opens (Dorico's Insert default): the toolbar still switches it. */
-  readonly startMode: EditorStartMode
   /** Which side of the sheet the palette docks on, from 48rem wide. */
   readonly paletteSide: PaletteSide
 }
 
-/** The modes the editor may open in: Chord is chosen for a moment, never a way to start. */
+/**
+ * The modes the editor opens in, as it was left (R31-E): Chord is chosen for a moment, never a way
+ * to start.
+ */
 export const EDITOR_START_MODES = ['replace', 'insert'] as const
 export type EditorStartMode = (typeof EDITOR_START_MODES)[number]
 
@@ -349,13 +338,15 @@ export interface SettingsState {
   /** How the score editor writes (round 28). */
   editing: EditingSettings
   sidebar: Sidebar
-  /** Whether the score editor's palette is folded to its quick row and categories, by where it stands. */
-  paletteFolded: PaletteFolds
   /**
-   * The editor's panel's sections open, by name, as the learner left them (ADR 0114); null until
-   * they open or fold one, the panel then opening its first ones.
+   * Whether the score editor's palette floating on a phone is folded to its category's row and the
+   * categories (R31-E), as the learner left it; folded as it first opens.
    */
-  paletteSections: readonly string[] | null
+  paletteFolded: boolean
+  /** The palette's category chosen, by name, as the learner left it (R31-E); null until chosen. */
+  paletteCategory: string | null
+  /** The mode the score editor writes in, as it was left (R31-E). */
+  editorMode: EditorStartMode
   midi: MidiSettings
   chordFinder: ChordFinderSettings
   scoreView: ScoreViewSettings
@@ -437,7 +428,6 @@ export const DEFAULT_RECORDER: RecorderSettings = { click: true, tune: false, co
 /** A note heard as it is edited, as notation software does by default. */
 export const DEFAULT_EDITING: EditingSettings = {
   hearNotes: true,
-  startMode: 'replace',
   paletteSide: 'left',
 }
 

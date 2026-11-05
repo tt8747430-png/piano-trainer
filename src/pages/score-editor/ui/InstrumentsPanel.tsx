@@ -160,7 +160,7 @@ export function InstrumentsPanel() {
   return (
     <>
       <StaffList
-        label={t('panel.tabs.instruments')}
+        label={t('scoreSettings.instruments')}
         rows={[...single, ...piano]}
         all={playingAll}
         onAll={(on) => setStaves(withAllPlaying(staves, tracks, on))}

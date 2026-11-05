@@ -49,36 +49,29 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
     beat on; a syllable under the note (Cmd or Ctrl with L), Space or Enter
     going on, `-` and `_` their marks, ↓ ↑ the verses; the fingers over the note (Shift with F), a chord's bottom up.
     A field is greyed while the View hides what it writes.
-- **One palette** on the selection, docked as Flat's and never floating over the music (`EditorPalette`, one tree
-  for every size):
-  - **A panel** at the sheet's left where the screen is 48rem across (`usePalettePanel`: a laptop at any window size,
-    a tablet, a phone on its side, whose height is too short for a sheet at the foot; width decides, not the pointer).
-    Its sections fold as an accordion, several open at once, the Notes and Pitch open first; « hides it whole, the
-    sheet taking its room, and the toolbar's first key shows it again.
-  - **The note-entry toolbar** over the sheet beside it, Flat's quick toolbar: ♮ ♯ ♭ and Respell, the values whole to
-    64th, Dotted, Double dotted, Tie, the triplet (the duplet in compound time) and Rest, in a sand pill; the Keys toggle at its end. It scrolls sideways
-    where the room is short.
-  - **A sheet** docked at the foot on a phone held upright, shrinking the sheet rather than covering it. Compact, as it
-    opens: the same everyday tools as a quick row over the bar of categories. Expanded (its ⏏, a category tapped, or
-    its grab handle dragged up): every section stacked and scrolling, the bar following them; its keys a table, or a
-    list naming each (list mode). The keys stand where the sections would: expanded, it folds them; with them shown,
-    it stays compact. While it is expanded the transport steps aside. A field typed in (a chord symbol, the lyrics,
-    the fingering) swaps the sheet for a slim bar over the phone's own keyboard (`FieldDocked`).
-  - **Sections in Flat's order:** Notes (the editing modes and the tuplets of 2 to 9; on the sheet the everyday
-    tools too) · Pitch (steps, semitones, octaves, the grace notes, 8va, 8vb, 15ma and 15mb) · Articulations (with
-    portato, the breath mark, the caesura, the slur and the fingering) · Ornaments (with the inverted turn, the
-    tremolos of 1 to 3 strokes, the glissando, and Tremolo between notes on the first of a pair) · Dynamics (every one of Flat's, with the hairpins and the pedal) ·
-    Bar (with the page break; Tempo & swing: a tempo change typed over the note, the swing marks; Bar repeats &
-    rests) · Clef · Key signature · Time signature (the common meters as tiles, C and ¢ among them, then Another
-    opening the picker) · Barlines & repeats (with repeat ×N, once more each tap up to nine, and the 3rd and 4th
-    endings) · Text (the Lyrics and the chord symbol's keys, free text typed over the note, the Roman numeral of the
-    chord there, then the expression words).
-  - **Keys** are Flat's: square cells of a bordered table, 44px at the least, empty cells left blank; pressed, a sky
-    glyph on a sky wash (as the pickers' cells); greyed, faded, the tooltip saying why. A tooltip is the key's name
-    then its shortcut in brackets, as Flat's (`TOOL_SHORTCUTS`).
-  - Whether the panel is hidden and the sheet compact is kept by place (`paletteFolded`: `panel`, `sheet`); the panel
-    shown and the sheet compact until the learner chooses; the panel's open sections by name (`paletteSections`),
-    the Notes and Pitch until the learner opens or folds one.
+- **The bar** (R31-E, Flat's): Close · Done | Play · Undo · Redo · ⚙; from 40rem the title after Close and Piano
+  keys and MIDI before Play. Play plays from the caret's bar (Stop while it sounds); no floating transport, no tools
+  capsule. Every button is round, inside the bar; below 360px only the icon buttons narrow.
+- **One gear** (`EditorGear`, the Player's shape: a sheet on a phone, a panel at the right on a laptop, a page at a
+  time with Back): View, Transpose, Record a take, Takes; Settings as pages (Title and credits; Music: staves, key,
+  time, tempo, bars; How the editor works: layout, note input, recording); an original's Publish…, Versions and
+  Discard changes, its saved state beside the title. The editor opens in the mode it was left in (`editorMode`).
+- **One palette** on the selection (`EditorPalette`, one tree for every size), a category chosen at a time
+  (`paletteCategory`, kept):
+  - **A panel** at the sheet's side from 48rem (`usePalettePanel`), left or right as Note input says: every category
+    in rows, then the chosen one's sections as titled grids.
+  - **A card floating** over the sheet's foot on a phone held upright, the sheet keeping room to scroll above it.
+    Folded (`paletteFolded`, as it opens): the category's tools in one row over the strip of categories, Show every
+    tool its own last cell; unfolded: its titled grids, up to half the screen, scrolling. The keys fold away for it.
+    A field typed in swaps it for a slim bar over the phone's own keyboard (`FieldDocked`).
+  - **Categories in Flat's order:** Note (Input mode: Replace, Insert, Chord; Notation: Add note, whole to 64th,
+    dot, double dot, tie, Tuplets ⌄, rest, ♮ ♯ ♭, respell) · Pitch · Articulations · Ornaments · Dynamics ·
+    Measures (bars added and deleted, line and page breaks, a new section; rests and repeats; swing; no bar length: a
+    bar's length is its time signature) · Clef · Key signature · Time signature (the common tiles, Current and
+    Pickup as wheels on a staff, Write as common or cut time, ✗ ✓) · Barlines & repeats · Text. In the row, a
+    picker's signs alone (`PickerLayoutContext`).
+  - **Keys** are Flat's: equal cells of a bordered table, 44px at the least; pressed, a sky glyph on a sky wash;
+    greyed, faded, the tooltip saying why. A tooltip is the key's name then its shortcut, as Flat's.
 - **Flat's shortcuts** where the typing keys leave them free (`TOOL_SHORTCUTS`, one table for the keys, the tooltips
   and the `?` sheet): 1–6 the values, 8 a rest, 9 a grace note, 0 = − ♮ ♯ ♭, the full stop a dot, the comma a tie,
   a letter alone plays the piano, so Flat's J, S, T and P take Shift (Respell, a slur, a trill,
@@ -99,11 +92,10 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   - **Key:** one to seven sharps over one to seven flats, Major · Minor, Switch to natural; Change the key for the
     whole song moves the music, else the key changes from that section on and the notes stay where they are.
   - **Clef:** every clef the notation writes, a family a row.
-- **The score's Settings** (`/edit/$pieceId/settings`, Flat's score settings): a page in the editor's place,
-  on its draft (a child route of the editor's, its own lazy chunk), so each change is one Undo step back on
-  the score; while it stands there the editor's keys and MIDI write nothing. It opens from the bar's gear
-  (by Undo and Redo), from the Player's More (Settings…, every piece being edited) and from the credits
-  printed under the title (as Flat's title opens its credits). Its groups, in plain musical words:
+- **The score's Settings** (Flat's score settings): pages of the gear's sheet, on the editor's draft, so each change
+  is one Undo step back on the score; while the gear is open the editor's keys and MIDI write nothing. It opens from
+  the bar's gear and, at Title and credits, from the credits printed under the title (as Flat's title opens its
+  credits). Its groups, in plain musical words:
   - **Score:** the title, **Subtitle**, **Composer**, **Lyricist** and **Arranger**, each typed in its row
     (`header`, saved with the music line by line). They print under the title in lines and on pages, in the
     Player and the editor alike: the subtitle centred, the lyricist at the left, the composer over the
@@ -161,3 +153,5 @@ reader hears the caret's place in a polite live line (`CaretLine`).
 - r28 — The score's Settings: credits under the title, instruments, tempo, key, time, bars, staff size, bars per
   line, Hear notes as you edit; Tie on what is chosen (2026-11-01).
 - r29 (P2, T) — The key signature grid names each cell's key in the mode chosen and calls no signature "No sharps or flats"; Transpose's switches read Transpose key signature and Transpose chord symbols, as the Player's (2026-11-04).
+- R31-E — One bar with Play; one gear holding the acts, Settings and the draft; the palette floating on a phone and
+  a panel of one category at a time; the time signature's wheels; every meter of 1–16 over 1 to 16 (2026-11-05).

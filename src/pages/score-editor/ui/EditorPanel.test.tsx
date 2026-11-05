@@ -1,6 +1,7 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { openGear } from '@/app/testing/editor-gear'
 import { renderApp } from '@/app/testing/render-app'
 import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { createMemoryStorage } from '@/shared/lib'
@@ -31,32 +32,46 @@ const withSong = () => {
   return storage
 }
 
-describe('the editor’s panel (A40)', () => {
-  it('three tabs, the URL holds the tab', async () => {
+describe('the editor’s palette (R31-E)', () => {
+  it('shows the category chosen in the strip, and opens on it the next time', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/edit/my-1', { storage: withSong() })
-    // The phone's sheet, expanded from its bar of categories: the three tabs at its top.
+    const storage = withSong()
+    const first = await renderApp('/edit/my-1', { storage })
+    // The Notes first: Notation's tools in the folded row.
     const kinds = await screen.findByRole('toolbar', { name: 'Kinds of tools' })
-    await user.click(within(kinds).getByRole('button', { name: 'Modes' }))
-    const tabs = await screen.findByRole('radiogroup', { name: 'Editor panel' })
-    expect(
-      within(tabs)
-        .getAllByRole('radio')
-        .map((tab) => tab.textContent),
-    ).toEqual(['Notation', 'Instruments', 'Layout'])
-    expect(within(tabs).getByRole('radio', { name: 'Notation' })).toBeChecked()
-    await user.click(within(tabs).getByRole('radio', { name: 'Instruments' }))
-    await waitFor(() =>
-      expect(router.state.location.search).toMatchObject({ panel: 'instruments' }),
+    expect(within(kinds).getByRole('button', { name: 'Note' })).toHaveAttribute(
+      'aria-current',
+      'true',
     )
-    expect(await screen.findByRole('list', { name: 'Instruments' })).toHaveTextContent('Piano')
-    await user.click(within(tabs).getByRole('radio', { name: 'Layout' }))
-    await waitFor(() => expect(router.state.location.search).toMatchObject({ panel: 'layout' }))
-    expect(screen.getByRole('radiogroup', { name: 'Orientation' })).toBeInTheDocument()
-    // Notation, the first, is written as none.
-    await user.click(within(tabs).getByRole('radio', { name: 'Notation' }))
-    await waitFor(() => expect(router.state.location.search).not.toHaveProperty('panel'))
-    expect(screen.getByRole('region', { name: 'Modes' })).toBeInTheDocument()
+    expect(
+      within(screen.getByRole('region', { name: 'Note' })).getByRole('button', {
+        name: 'Add note',
+      }),
+    ).toBeInTheDocument()
+    await user.click(within(kinds).getByRole('button', { name: 'Dynamics' }))
+    expect(await screen.findByRole('region', { name: 'Dynamics' })).toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'Note' })).not.toBeInTheDocument()
+    // No tabs of Instruments or Layout: they are the gear's Settings.
+    expect(screen.queryByRole('radiogroup', { name: 'Editor panel' })).not.toBeInTheDocument()
+    expect(first.settingsStore.getState().paletteCategory).toBe('dynamics')
+    first.unmount()
+    await renderApp('/edit/my-1', { storage })
+    expect(await screen.findByRole('region', { name: 'Dynamics' })).toBeInTheDocument()
+  })
+
+  it('unfolds to every tool of the category as titled grids, and folds again', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await user.click(await screen.findByRole('button', { name: 'Show every tool' }))
+    const notes = await screen.findByRole('region', { name: 'Note' })
+    expect(within(notes).getByRole('group', { name: 'Input mode' })).toBeInTheDocument()
+    expect(within(notes).getByRole('heading', { name: 'Notation' })).toBeInTheDocument()
+    expect(settingsStore.getState().paletteFolded).toBe(false)
+    await user.click(screen.getByRole('button', { name: 'Show fewer tools' }))
+    await waitFor(() =>
+      expect(screen.queryByRole('group', { name: 'Input mode' })).not.toBeInTheDocument(),
+    )
+    expect(settingsStore.getState().paletteFolded).toBe(true)
   })
 })
 
@@ -64,10 +79,7 @@ describe('the editor’s Instruments (A40)', () => {
   it('solo, the eye, New instrument and Delete, the staves in the URL as the Player’s', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/edit/my-1', { storage: withSong() })
-    const kinds = await screen.findByRole('toolbar', { name: 'Kinds of tools' })
-    await user.click(within(kinds).getByRole('button', { name: 'Modes' }))
-    const tabs = await screen.findByRole('radiogroup', { name: 'Editor panel' })
-    await user.click(within(tabs).getByRole('radio', { name: 'Instruments' }))
+    await openGear(user, /^Music/, /^Staves/)
     const list = await screen.findByRole('list', { name: 'Instruments' })
     expect(
       within(list)

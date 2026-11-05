@@ -1059,16 +1059,31 @@ describe('the editor', () => {
     expect(form(deleted.draft)[0]?.[0]).toHaveLength(4)
   })
 
-  it('adds and deletes bars, changes a bar’s length and starts a line and a section', () => {
+  it('adds and deletes bars and starts a line and a section', () => {
     const state = run(initialEditor(draftOf()), { type: 'bars', edit: 'insert' })
     expect(form(state.draft)).toEqual([[['G@0', '', 'C@0']]])
     expect(state.caret).toBe(4 * B)
-    expect(lengths(run(state, { type: 'barLength', ticks: 2 * B }).draft)).toEqual([4, 2, 4])
     expect(form(run(state, { type: 'bars', edit: 'delete' }).draft)).toEqual([[['G@0', 'C@0']]])
     expect(form(run(state, { type: 'bars', edit: 'newLine' }).draft)).toEqual([
       [['G@0'], ['', 'C@0']],
     ])
     expect(run(state, { type: 'bars', edit: 'newSection' }).draft.sections).toHaveLength(2)
+  })
+
+  it('adds a note at the caret as Flat’s Add note: the staff’s middle line, then the last pitch (R31-E)', () => {
+    const start = run(initialEditor(oneStaff()), { type: 'layer', layer: 'staff0' })
+    const first = run(start, { type: 'addNote' })
+    expect(shape(staffNotes(first.draft))[0]).toBe('B4@0/1')
+    const moved = run(
+      first,
+      { type: 'move', by: 'step', direction: -1 },
+      { type: 'step', steps: 1 },
+    )
+    const second = run(moved, { type: 'move', by: 'step', direction: 1 }, { type: 'addNote' })
+    expect(shape(staffNotes(second.draft)).slice(0, 2)).toEqual(['C5@0/1', 'C5@1/1'])
+    // Nothing in the chord row.
+    const chords = run(initialEditor(draftOf()), { type: 'layer', layer: 'chords' })
+    expect(run(chords, { type: 'addNote' })).toBe(chords)
   })
 
   it('changes the song’s settings', () => {
@@ -1235,12 +1250,6 @@ describe('the palette on what is chosen', () => {
     const before = run(initialEditor(draftOf()), { type: 'bars', edit: 'insertBefore' })
     expect(form(before.draft)).toEqual([[['', 'G@0', 'C@0']]])
     expect(before.caret).toBe(0)
-    const both = run(
-      initialEditor(draftOf()),
-      { type: 'layer', layer: 'chords' },
-      { type: 'move', by: 'bar', direction: 1, extend: true },
-    )
-    expect(lengths(run(both, { type: 'barLength', ticks: 2 * B }).draft)).toEqual([2, 2])
     // From the bar given, wherever the caret is (a clef on the sheet, ADR 0114).
     const clef = run(initialEditor(draftOf()), { type: 'clef', staff: 'rh', clef: 'bass', bar: 1 })
     expect(clef.draft.sections[0]?.lines[0]?.[1]?.clefs).toEqual({ rh: 'bass' })
@@ -1275,7 +1284,6 @@ describe('createEditorStore', () => {
       { type: 'delete' },
       { type: 'place', tick: 0, layer: 'chords' },
       { type: 'bars', edit: 'newLine' },
-      { type: 'barLength', ticks: 4 * B },
       { type: 'chord', chord: parseChordSymbol('G') },
     ]
     for (const action of nothing) store.dispatch(action)

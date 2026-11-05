@@ -6,6 +6,7 @@ import { CLEF_FORMS, CLEFS, type Clef, type ClefShape } from '@/shared/lib/music
 import { useScoreEditorContext } from '../model/editor-context'
 import { PickerCell, PickerGrid } from '@/shared/ui/pickers/PickerGrid'
 import { ClefSign } from '@/shared/ui/pickers/picker-pictures'
+import { usePickerLayout } from '@/shared/ui/pickers/picker-layout'
 
 /** The clefs by their sign, each family a row of its own: the G clefs, the C clefs, the F clefs. */
 const FAMILIES: readonly ClefShape[] = ['G', 'C', 'F']
@@ -34,7 +35,9 @@ export function ClefPicker({
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const [scope, setScope] = useState<ClefScope>('end')
-  const asks = scoped && isHandLayer(staff)
+  // In the folded palette's row its clefs alone, each from the bar on (R31-E).
+  const grid = usePickerLayout() === 'grid'
+  const asks = scoped && isHandLayer(staff) && grid
   const cell = (clef: Clef) => (
     <PickerCell
       key={clef}
@@ -49,7 +52,7 @@ export function ClefPicker({
       <ClefSign clef={clef} />
     </PickerCell>
   )
-  const grid = (
+  const signs = (
     <PickerGrid
       label={t('palette.category.clef')}
       rows={FAMILIES.map((shape) => ({
@@ -69,9 +72,9 @@ export function ClefPicker({
         }))}
         onChange={setScope}
       />
-      {grid}
+      {signs}
     </>
   ) : (
-    grid
+    signs
   )
 }

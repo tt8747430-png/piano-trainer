@@ -29,6 +29,8 @@ const WHEEL_ZOOM = Math.log(2) / 6 / 100
 const SETTLE_MS = 160
 /** How long the zoom's buttons stay in sight once the pages are left alone. */
 const CONTROLS_MS = 2500
+/** How far the zoom's buttons stand from the canvas's edges and what floats over them, in CSS px. */
+const CONTROLS_GAP = 8
 
 /** The tallest line on the pages (`data-slot="sheet-line"`), at their size: a fit keeps one whole in sight. */
 function tallestLine(pages: HTMLElement | null): number | undefined {
@@ -48,7 +50,7 @@ function tallestLine(pages: HTMLElement | null): number | undefined {
  * the pages are fitted again. A grip (`data-grip`: a note's, the loop's) drags itself, not the canvas.
  * The zoom's buttons come into sight as the pages are moved or zoomed, never at a tap (which would
  * leave them under the next tap, ADR 0115), and fade once the pages are left alone, or at a tap on
- * them.
+ * them; they stand at the canvas's foot, at its right, clear of what floats over it (R31-E).
  */
 export function PageCanvas({
   column,
@@ -267,7 +269,10 @@ export function PageCanvas({
         data-shown={controls || undefined}
         // Out of sight, its buttons are out of reach, but a keyboard's Tab still brings them back.
         onFocus={showControls}
-        className="absolute top-2 right-2 flex items-center rounded-pill bg-card/95 text-card-foreground opacity-0 shadow-md ring-1 ring-hairline transition-opacity duration-300 ease-out not-data-shown:pointer-events-none focus-within:pointer-events-auto focus-within:opacity-100 data-shown:opacity-100"
+        // At the canvas's foot, clear of what floats over its edges (R31-E): never over the bar's
+        // tools, a notice or a card at the music's head.
+        style={{ right: right + CONTROLS_GAP, bottom: bottom + CONTROLS_GAP }}
+        className="absolute flex items-center rounded-pill bg-card/95 text-card-foreground opacity-0 shadow-md ring-1 ring-hairline transition-opacity duration-300 ease-out not-data-shown:pointer-events-none focus-within:pointer-events-auto focus-within:opacity-100 data-shown:opacity-100"
         onPointerDown={showControls}
       >
         <Button

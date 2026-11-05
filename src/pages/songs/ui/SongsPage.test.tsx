@@ -967,11 +967,12 @@ describe('Songs: your own', () => {
     const tempo = within(sheet).getByRole('textbox', { name: 'BPM' })
     await user.clear(tempo)
     await user.type(tempo, '120{Enter}')
-    await user.click(within(sheet).getByRole('button', { name: 'Longer pickup' }))
     await user.click(within(sheet).getByRole('button', { name: 'One bar more' }))
     await user.click(within(sheet).getByRole('radio', { name: 'Minor' }))
     await user.click(within(sheet).getByRole('button', { name: 'G major / E minor' }))
     await user.click(within(sheet).getByRole('button', { name: '3/4' }))
+    within(sheet).getByRole('spinbutton', { name: 'Pickup beats' }).focus()
+    await user.keyboard('{ArrowUp}')
     await user.click(within(sheet).getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
     const song = piecesStore.getState().songs[0]
@@ -1025,7 +1026,7 @@ describe('Songs: your own', () => {
     await user.click(screen.getByRole('button', { name: 'One Alto fewer' }))
     await user.click(screen.getByRole('button', { name: 'One Piano fewer' }))
     await user.click(screen.getByRole('button', { name: 'Next' }))
-    await user.click(screen.getByRole('button', { name: 'Common time, C' }))
+    await user.click(screen.getByRole('switch', { name: 'Write as common or cut time' }))
     await user.click(screen.getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
     expect(piecesStore.getState().songs[0]).toMatchObject({

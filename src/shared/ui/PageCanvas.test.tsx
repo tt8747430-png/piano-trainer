@@ -76,6 +76,20 @@ describe('PageCanvas', () => {
     expect(controls()).not.toHaveAttribute('data-shown')
   })
 
+  it('stands its zoom’s buttons at the foot’s right, clear of what floats over the canvas (R31-E)', () => {
+    render(
+      <PageCanvas column={794} covered={{ right: 320, bottom: 140 }}>
+        <span />
+      </PageCanvas>,
+    )
+    const controls = screen
+      .getByRole('region', { name: /^Pages/ })
+      .querySelector<HTMLElement>('[data-slot="canvas-controls"]')
+    expect(controls?.style.right).toBe('328px')
+    expect(controls?.style.bottom).toBe('148px')
+    expect(controls?.style.top).toBe('')
+  })
+
   it('zooms in and out by its buttons, saying how far', async () => {
     const user = userEvent.setup()
     canvas()

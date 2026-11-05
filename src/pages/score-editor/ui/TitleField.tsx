@@ -1,4 +1,3 @@
-import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TITLE_MAX } from '@/entities/piece'
@@ -97,27 +96,20 @@ export function TitleField({ place }: { place: TitlePlace }) {
 }
 
 /**
- * What prints under the title (round 28, Flat's credits): a click opens the score's Settings at its
- * names, as Flat's title opens its credits. A lesson's example has no Settings: printed alone.
+ * What prints under the title (round 28, Flat's credits): a click opens the gear at Title and
+ * credits, as Flat's title opens its credits. A lesson's example has no Settings: printed alone.
  */
 function CreditsField() {
   const { t } = useTranslation('editor')
-  const { meta } = useScoreEditorContext()
+  const { meta, view } = useScoreEditorContext()
   const credits = useEditorState((state) => state.draft.header)
-  const navigate = useNavigate()
   if (!hasCredits(credits)) return null
   if (meta.kind === 'example') return <SheetCredits credits={credits} />
   return (
     <button
       type="button"
-      title={t('scoreSettings.title')}
-      onClick={() =>
-        void navigate({
-          to: '/edit/$pieceId/settings',
-          params: { pieceId: meta.id },
-          search: (prev) => prev,
-        })
-      }
+      title={t('scoreSettings.credits')}
+      onClick={() => view.setGear('credits')}
       className="block w-full rounded-control px-1 text-start transition-colors duration-200 ease-out hover:bg-foreground/5"
     >
       <SheetCredits credits={credits} />

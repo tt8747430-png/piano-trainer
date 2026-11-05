@@ -1,6 +1,7 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { openGear } from '@/app/testing/editor-gear'
 import { renderApp } from '@/app/testing/render-app'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
 import { createFakeContentEditing } from '@/shared/api/content-editing'
@@ -46,9 +47,10 @@ describe('a new song in a collection’s folder (content as data, round 26: one 
     })
     expect(content.body('piece', 'abide-with-me')).toBeUndefined()
     expect(piecesStore.getState().songs).toEqual([])
-    expect(
-      await screen.findByRole('button', { name: 'Publishing' }, { timeout: 5000 }),
-    ).toBeInTheDocument()
+    // The original's draft: Publish… is the gear's (R31-E).
+    await screen.findByRole('button', { name: 'Score settings' }, { timeout: 5000 })
+    const gear = await openGear(user)
+    expect(within(gear).getByRole('button', { name: 'Publish…' })).toBeInTheDocument()
   })
 
   it('is not a learner’s to add: their folder has no + (R29 B4, D8)', async () => {

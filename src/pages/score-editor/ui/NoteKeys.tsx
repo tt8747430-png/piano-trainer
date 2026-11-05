@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowLeftRight, ArrowUp } from 'lucide-react'
+import { ArrowDown, ArrowLeftRight, ArrowUp, ChevronDown } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
@@ -16,13 +16,13 @@ import {
 } from '@/features/score-editor'
 import { isCompound, type Accidental } from '@/shared/lib/music'
 import { TUPLET_COUNTS, tupletOf, type TupletCount } from '@/shared/lib/notation'
-import { Dropdown } from '@/shared/ui'
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useNotesChosen } from '../model/use-notes-chosen'
 import { TUPLET_WORDS, VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
 import type { Tool } from '../model/shortcuts'
-import { usePaletteDock, usePaletteForm } from './palette-form'
-import { KeyGrid, PaletteKey } from './palette-keys'
+import { PaletteFormContext, usePaletteForm } from './palette-form'
+import { GroupName, KeyGrid, PaletteKey } from './palette-keys'
 import { usePaletteReason } from './palette-reason'
 import { LineKeys } from './LineKeys'
 import { PaletteGlyph, TupletGlyph } from './palette-glyph'
@@ -181,39 +181,63 @@ function ModeIcon({ mode }: { mode: EditMode }) {
 }
 
 /**
- * The editing modes (ADR 0114, Flat's Melody · Insert · Chord), one pop-up button: one always chosen; what a key played
- * does in each is the ⓘ beside the section's name (ADR 0096); I cycles them.
+ * The input modes (ADR 0114, R31-E, Flat's Melody · Insert · Chord): a cell each, the one the editor
+ * writes in pressed; what a key played does in each is the ⓘ beside the section's title (ADR 0096);
+ * I cycles them.
  */
-function ModeChoice() {
+function ModeKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const mode = useEditorState((state) => state.mode)
   return (
-    <Dropdown
-      label={t('mode.label')}
-      value={mode}
-      className="w-full"
-      face={(each) => (
-        <span className="flex items-center gap-2">
+    <KeyGrid label={t('mode.label')}>
+      {EDIT_MODES.map((each) => (
+        <PaletteKey
+          key={each}
+          label={t(`mode.${each}`)}
+          tool={each === 'chord' ? undefined : 'mode'}
+          pressed={mode === each}
+          onClick={() => actions.dispatch({ type: 'mode', mode: each })}
+        >
           <ModeIcon mode={each} />
-          {t(`mode.${each}`)}
-        </span>
-      )}
-      options={EDIT_MODES.map((each) => ({
-        value: each,
-        label: t(`mode.${each}`),
-        icon: <ModeIcon mode={each} />,
-      }))}
-      onChange={(next) => actions.dispatch({ type: 'mode', mode: next })}
-    />
+        </PaletteKey>
+      ))}
+    </KeyGrid>
+  )
+}
+
+/** What a key played does in each input mode (ADR 0114), where their names alone do not say. */
+function ModesAbout() {
+  const { t } = useTranslation('editor')
+  return (
+    <dl className="flex flex-col gap-2">
+      {EDIT_MODES.map((mode) => (
+        <div key={mode}>
+          <dt className="font-semibold">{t(`mode.${mode}`)}</dt>
+          <dd className="text-muted-foreground">{t(`mode.${mode}Detail`)}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}
+
+/** Add note's picture (Flat's): a quarter note with a plus. */
+function AddNoteIcon() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="currentColor">
+      <ellipse cx="13" cy="17.5" rx="4.2" ry="3" transform="rotate(-20 13 17.5)" />
+      <rect x="16.1" y="3" width="1.6" height="14.5" />
+      <path d="M3 7.25h6v1.5H3zM5.25 5h1.5v6h-1.5z" />
+    </svg>
   )
 }
 
 /**
- * The everyday tools, Flat's quick toolbar in its order: the accidentals ♮ ♯ ♭ and Respell, the
- * values whole to 64th, Dotted and Double dotted (out of reach where the meter takes none), Tie,
- * Tuplet (the meter's first: a triplet, a duplet in compound time) and Rest. The note-entry toolbar over the sheet on a
- * laptop, the sheet's quick row on a phone, and the Notes' keys there.
+ * The everyday tools, Flat's Notation in its order (R31-E): Add note, the values whole to 64th,
+ * Dotted and Double dotted (out of reach where the meter takes none), Tie, Tuplets (the meter's
+ * first, a triplet or a duplet in compound time, its ⌄ opening the others), Rest, then the
+ * accidentals ♮ ♯ ♭ and Respell. The note-entry toolbar over the sheet on a laptop, the phone's
+ * folded row, and the Notes' grid.
  */
 export function NoteBar() {
   const { t } = useTranslation('editor')
@@ -226,24 +250,18 @@ export function NoteBar() {
   const doubleDottable = useEditorState((state) =>
     takesDot((shownValue(state) ?? state.value).value, state.draft.meter, 2),
   )
+  const onStaff = useEditorState((state) => state.layer !== 'chords')
   const off = !useNotesChosen()
   return (
     <>
-      <AccidentalKeys />
       <PaletteKey
-        label={t('respell')}
-        tool="respell"
-        reason={t('reason.chooseNote')}
-        disabled={off}
-        onClick={() => dispatch({ type: 'respell' })}
+        label={t('addNote')}
+        reason={t('reason.staff')}
+        disabled={!onStaff}
+        onClick={() => dispatch({ type: 'addNote' })}
       >
-        <span aria-hidden className="flex items-center [&_svg]:size-4.5">
-          <Flat />
-          <ArrowLeftRight className="size-3.5!" strokeWidth={2.5} />
-          <Sharp />
-        </span>
+        <AddNoteIcon />
       </PaletteKey>
-      <Divider />
       <ValueKeys />
       <Divider />
       <PaletteKey
@@ -282,10 +300,25 @@ export function NoteBar() {
           <path d="M3 10 C8 16 16 16 21 10" />
         </svg>
       </PaletteKey>
-      <QuickTupletKey />
+      <TupletsKey />
       <PaletteKey label={t('rest')} tool="rest" onClick={() => dispatch({ type: 'rest' })}>
         <span aria-hidden className={GLYPH}>
           {REST}
+        </span>
+      </PaletteKey>
+      <Divider />
+      <AccidentalKeys />
+      <PaletteKey
+        label={t('respell')}
+        tool="respell"
+        reason={t('reason.chooseNote')}
+        disabled={off}
+        onClick={() => dispatch({ type: 'respell' })}
+      >
+        <span aria-hidden className="flex items-center [&_svg]:size-4.5">
+          <Flat />
+          <ArrowLeftRight className="size-3.5!" strokeWidth={2.5} />
+          <Sharp />
         </span>
       </PaletteKey>
     </>
@@ -293,21 +326,23 @@ export function NoteBar() {
 }
 
 /**
- * The Notes section: the editing modes, then, where the palette is a sheet at the foot (a phone),
- * the everyday tools in its table; on a laptop those stand in the note-entry toolbar over the sheet.
+ * The Notes category (R31-E): the input modes, then Notation's tools. In the row the modes are left
+ * out: they are a choice made once, not a tool used at every note.
  */
 export function NoteKeys() {
-  const sheet = usePaletteDock() === 'sheet'
+  const { t } = useTranslation('editor')
+  const row = usePaletteForm() === 'bar'
   return (
     <>
-      <ModeChoice />
-      {sheet ? (
-        <KeyGrid>
-          <NoteBar />
-        </KeyGrid>
-      ) : null}
-      <KeyGrid>
-        <TupletKeys quick={!sheet} />
+      {row ? null : (
+        <>
+          <GroupName name={t('mode.label')} info={<ModesAbout />} />
+          <ModeKeys />
+          <GroupName name={t('palette.groups.notation')} />
+        </>
+      )}
+      <KeyGrid label={t('palette.groups.notation')}>
+        <NoteBar />
       </KeyGrid>
     </>
   )
@@ -334,22 +369,40 @@ function TupletKey({ num }: { num: TupletCount }) {
   )
 }
 
-/** The quick toolbar's Tuplet, Flat's: the meter's first, a triplet, or a duplet in compound time. */
-function QuickTupletKey() {
-  const compound = useEditorState((state) => isCompound(state.draft.meter))
-  return <TupletKey num={compound ? 2 : 3} />
-}
-
 /**
- * The tuplets two to nine (ADR 0097, Flat's ⇧2–⇧8, nine by its key alone), each on the value
- * chosen: the chosen note's, else the next written; greyed where the meter writes such notes plainly (two or four to a simple
- * beat, three or six to a compound one) or the value is too short for it.
+ * Tuplets (R31-E, Flat's 3 ⌄): the meter's first on its face, a triplet or a duplet in compound
+ * time, opening the tuplets two to nine (ADR 0097, Flat's ⇧2–⇧8, nine by its key alone), each on the
+ * value chosen; greyed where the meter writes such notes plainly or the value is too short for it.
+ * The one on the value chosen is pressed.
  */
-function TupletKeys({ quick }: { quick: boolean }) {
+function TupletsKey() {
+  const { t } = useTranslation('editor')
   const compound = useEditorState((state) => isCompound(state.draft.meter))
-  // On the phone's sheet the everyday tools above hold the quick tuplet already.
-  const shown = quick ? TUPLET_COUNTS : TUPLET_COUNTS.filter((num) => num !== (compound ? 2 : 3))
-  return shown.map((num) => <TupletKey key={num} num={num} />)
+  const on = useShown()?.tuplet !== undefined
+  const label = t('palette.groups.tuplets')
+  return (
+    <Popover>
+      <PopoverTrigger
+        render={
+          <PaletteKey label={label} pressed={on}>
+            <span aria-hidden className="flex items-center gap-0.5">
+              <TupletGlyph num={compound ? 2 : 3} />
+              <ChevronDown className="size-3.5!" strokeWidth={2.5} />
+            </span>
+          </PaletteKey>
+        }
+      />
+      <PopoverContent aria-label={label} side="top" className="w-72 max-w-[calc(100vw-2rem)] p-3">
+        <PaletteFormContext value="grid">
+          <KeyGrid label={label}>
+            {TUPLET_COUNTS.map((num) => (
+              <TupletKey key={num} num={num} />
+            ))}
+          </KeyGrid>
+        </PaletteFormContext>
+      </PopoverContent>
+    </Popover>
+  )
 }
 
 /** Chord's picture: noteheads stacked on one stem, as the next notes stack onto the one at the caret. */

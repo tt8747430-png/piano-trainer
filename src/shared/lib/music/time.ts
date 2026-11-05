@@ -104,16 +104,31 @@ const EIGHTHS: Readonly<Record<number, readonly number[]>> = {
 }
 
 /**
- * The beats a bar is counted in, each its length in ticks (ADR 0114): what the click sounds on and
- * a count-in counts. A half each in x/2, a quarter in x/4, a dotted quarter in 6/8; a bar of x/8 in
- * simple time its eighths in twos and threes (7/8 as 2+2+3).
+ * A bar's short notes (eighths, or sixteenths in x/16) in twos and threes (R31-E): LilyPond's where it
+ * has one, else threes then one or two twos, so 13 is 3+3+3+2+2 and 16 is 3+3+3+3+2+2.
+ */
+function shortGroups(count: number): readonly number[] {
+  const own = EIGHTHS[count]
+  if (own) return own
+  const twos = [0, 2, 1][count % 3] ?? 0
+  const threes = (count - 2 * twos) / 3
+  return [...Array.from({ length: threes }, () => 3), ...Array.from({ length: twos }, () => 2)]
+}
+
+/**
+ * The beats a bar is counted in, each its length in ticks (ADR 0114, R31-E): what the click sounds on
+ * and a count-in counts. A whole note each in x/1, a half in x/2, a quarter in x/4, a dotted quarter
+ * in 6/8; a bar of x/8 in simple time its eighths in twos and threes (7/8 as 2+2+3), and a bar of
+ * x/16 its sixteenths so (5/16 as 3+2).
  */
 export function meterBeats(meter: Meter): Tick[] {
   const { count, unit } = meterParts(meter)
+  if (unit === 1) return Array.from({ length: count }, () => 4 * TICKS_PER_BEAT)
   if (unit === 2) return Array.from({ length: count }, () => 2 * TICKS_PER_BEAT)
   if (unit === 4) return Array.from({ length: count }, () => TICKS_PER_BEAT)
   if (isCompound(meter)) return Array.from({ length: count / 3 }, () => TICKS_PER_BEAT)
-  return (EIGHTHS[count] ?? [count]).map((eighths) => eighths * eighthTicks(meter))
+  const short = unit === 16 ? TICKS_PER_BEAT / 4 : eighthTicks(meter)
+  return shortGroups(count).map((each) => each * short)
 }
 
 /** Five, six, seven … beats a bar felt in groups: 5/4 as 3+2, 6/4 as 3+3, 7/4 as 4+3. */
@@ -126,6 +141,10 @@ const GROUPS: Readonly<Record<number, readonly number[]>> = {
   10: [3, 3, 2, 2],
   11: [3, 3, 3, 2],
   12: [3, 3, 3, 3],
+  13: [4, 3, 3, 3],
+  14: [4, 4, 3, 3],
+  15: [3, 3, 3, 3, 3],
+  16: [4, 4, 4, 4],
 }
 
 /**
@@ -170,10 +189,12 @@ export function beatStarts(meter: Meter): { readonly tick: Tick; readonly accent
 /**
  * How a bar's eighths fall into its counted beats (ADR 0115, 0114, as notation apps print it under
  * a time signature): two to a quarter's beat, three to a dotted quarter's, four to a half's; 7/8 is
- * 2, 2, 3.
+ * 2, 2, 3. A bar of x/16 counts its sixteenths so: 5/16 is 3, 2 (R31-E).
  */
-export const beatGrouping = (meter: Meter): number[] =>
-  meterBeats(meter).map((ticks) => ticks / eighthTicks(meter))
+export const beatGrouping = (meter: Meter): number[] => {
+  const short = meterParts(meter).unit === 16 ? TICKS_PER_BEAT / 4 : eighthTicks(meter)
+  return meterBeats(meter).map((ticks) => ticks / short)
+}
 
 /**
  * A pickup: a first bar shorter than its meter's (its own, ADR 0097, else `meter`), which is the end
@@ -210,18 +231,20 @@ export const beatUnit = (meter: Meter): TempoUnit => (isCompound(meter) ? '4.' :
  * quarter in compound time, else the quarter. The song's ticks still count `beatUnit`.
  */
 export const feltBeatUnit = (meter: Meter): TempoUnit =>
-  meterParts(meter).unit === 2 ? '2' : beatUnit(meter)
+  meterParts(meter).unit <= 2 ? '2' : beatUnit(meter)
 
 /**
  * The notes a tempo mark is offered in, the meter's beat first (ADR 0114, as notation apps offer
- * them): a half, a dotted half and a quarter in x/2; a quarter, a dotted quarter, an eighth, a
- * dotted eighth and a sixteenth in x/4 and in x/8 of simple time; in compound, the dotted quarter
- * first, then the eighth, the quarter, the dotted eighth and the dotted half.
+ * them): a half, a dotted half and a quarter in x/1 and x/2; a quarter, a dotted quarter, an
+ * eighth, a dotted eighth and a sixteenth in x/4 and in x/8 of simple time; a sixteenth, an eighth,
+ * a dotted eighth and a quarter in x/16; in compound, the dotted quarter first, then the eighth, the
+ * quarter, the dotted eighth and the dotted half.
  */
 export function tempoUnitsFor(meter: Meter): TempoUnit[] {
   if (isCompound(meter)) return ['4.', '8', '4', '8.', '2.']
-  if (meterParts(meter).unit === 2) return ['2', '2.', '4']
+  if (meterParts(meter).unit <= 2) return ['2', '2.', '4']
   if (meterParts(meter).unit === 8) return ['8', '8.', '4', '4.', '16']
+  if (meterParts(meter).unit === 16) return ['16', '8', '8.', '4']
   return ['4', '4.', '8', '8.', '16']
 }
 

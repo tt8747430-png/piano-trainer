@@ -110,6 +110,26 @@ describe('meters (ADR 0114)', () => {
     expect(beats('5/8')).toEqual([1.5, 1])
   })
 
+  it('counts every meter of one to sixteen over a whole to a sixteenth, its beats filling its bar (R31-E)', () => {
+    const beats = (meter: Meter) => meterBeats(meter).map((ticks) => ticks / B)
+    expect(beats('2/1')).toEqual([4, 4])
+    expect(beats('5/16')).toEqual([0.75, 0.5])
+    expect(beats('16/16')).toEqual([0.75, 0.75, 0.75, 0.75, 0.5, 0.5])
+    expect(beats('13/8')).toEqual([1.5, 1.5, 1.5, 1, 1])
+    expect(beats('15/8')).toEqual([1, 1, 1, 1, 1])
+    for (const meter of METERS)
+      expect(
+        meterBeats(meter).reduce((sum, each) => sum + each, 0),
+        meter,
+      ).toBe(barTicks(meter))
+    expect(meterGroups('14/4')).toEqual([4, 4, 3, 3])
+    expect(meterGroups('16/2')).toEqual([4, 4, 4, 4])
+    expect(beatGrouping('7/16')).toEqual([2, 2, 3])
+    expect(tempoUnitsFor('3/1')).toEqual(['2', '2.', '4'])
+    expect(tempoUnitsFor('7/16')[0]).toBe('16')
+    expect(feltBeatUnit('2/1')).toBe('2')
+  })
+
   it('groups five and more beats: 5/4 as 3+2, 6/4 as 3+3, 7/4 as 4+3', () => {
     expect(meterGroups('4/4')).toEqual([4])
     expect(meterGroups('5/4')).toEqual([3, 2])

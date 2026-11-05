@@ -28,9 +28,9 @@ const starts = (sizes: readonly number[]) =>
  * How the Metronome counts a bar of `meter`, on the kernel's own counting (`music/time`, ADR 0114):
  * its beats (each as many of the signature's notes as it lasts), the note the tempo counts, and
  * where its groups start (beat indexes). A compound meter counts its dotted beats; a meter in
- * eighths that is not compound counts its eighths, grouped as the kernel groups them (7/8 as
- * 2+2+3), or as `grouping` says where it adds up (5/8 as 2+3); any other its written beats, a long
- * bar grouped (5/4 as 3+2).
+ * eighths that is not compound, or in sixteenths, counts its eighths or sixteenths, grouped as the
+ * kernel groups them (7/8 as 2+2+3), or as `grouping` says where it adds up (5/8 as 2+3); any other
+ * its written beats, a long bar grouped (5/4 as 3+2).
  */
 export function meterBeats(
   meter: Meter,
@@ -47,7 +47,7 @@ export function meterBeats(
       unit,
       groups: starts(meterGroups(meter)),
     }
-  if (unit === 8) {
+  if (unit === 8 || unit === 16) {
     const sizes =
       grouping && grouping.reduce((sum, size) => sum + size, 0) === count
         ? grouping

@@ -47,6 +47,7 @@ export function SheetContent({
   title,
   description,
   info,
+  status,
   children,
   footer,
   full = false,
@@ -57,6 +58,8 @@ export function SheetContent({
   description?: string
   /** What the sheet's tools do, where their names alone do not say: an ⓘ after the title (ADR 0096). */
   info?: ReactNode
+  /** Where what the sheet acts on stands, beside its title (a draft's saved state, R31-E). */
+  status?: ReactNode
   children: ReactNode
   footer?: ReactNode
   /** The whole screen's height at every size: a preview opened full screen (ADR 0115). */
@@ -83,11 +86,12 @@ export function SheetContent({
     >
       <DrawerHeader className="flex-row items-start justify-between gap-3 px-5 pt-1 pb-4 text-left landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-left">
         <div className="flex min-w-0 flex-col gap-1 pt-1">
-          <div className="flex items-center gap-1.5">
+          <div className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1">
             <DrawerTitle className="font-display text-2xl leading-tight font-semibold text-pretty break-words">
               {title}
             </DrawerTitle>
             {info ? <InfoTip name={title}>{info}</InfoTip> : null}
+            {status}
           </div>
           {description ? (
             <DrawerDescription className="text-base leading-snug text-pretty break-words text-muted-foreground">
