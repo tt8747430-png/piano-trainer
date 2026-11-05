@@ -470,6 +470,7 @@ export const songs: LocaleResources['songs'] = {
     patternCount_many: '{{count}} фактур',
     patternCount_other: '{{count}} фактуры',
     loading: 'Загружаем обзор…',
+    offlineLine: 'Для обзора нужен интернет. Все ваши песни доступны и так.',
     offline: 'Обзор доступен при подключении к интернету.',
     failed: 'Обзор не загрузился. Попробуйте чуть позже.',
     again: 'Повторить',

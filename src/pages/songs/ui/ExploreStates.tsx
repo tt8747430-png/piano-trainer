@@ -1,23 +1,33 @@
 import { CloudOff, Globe, TriangleAlert } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import type { SongsHome } from '../model/explore-view'
 import type { NetFailure } from '@/shared/api/network'
-import { cn } from '@/shared/lib'
+import { cn, useSetSearch } from '@/shared/lib'
 import { Said } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
-/** Why Explore shows nothing: offline (it works online alone) or failed; Try again either way. */
+/** Why Explore shows nothing: offline (it works online alone; My songs are all here) or failed (Try again). */
 export function ExploreFailed({ reason, onRetry }: { reason: NetFailure; onRetry: () => void }) {
   const { t } = useTranslation('songs')
+  const show = useSetSearch<SongsHome>()
   const offline = reason === 'offline'
+  // Offline, trying again cannot help: the learner's own songs are all here (R30 S7).
   return (
     <Said
       icon={offline ? CloudOff : TriangleAlert}
       paint="sand"
       title={offline ? t('explore.offline') : t('explore.failed')}
+      description={offline ? t('explore.offlineLine') : undefined}
       action={
-        <Button variant="soft" onClick={onRetry}>
-          {t('explore.again')}
-        </Button>
+        offline ? (
+          <Button variant="soft" onClick={() => show({ view: 'mine' })}>
+            {t('explore.views.mine')}
+          </Button>
+        ) : (
+          <Button variant="soft" onClick={onRetry}>
+            {t('explore.again')}
+          </Button>
+        )
       }
     />
   )

@@ -142,13 +142,16 @@ describe('Explore', () => {
     expect(await screen.findByRole('region', { name: 'New' })).toBeVisible()
   })
 
-  it('offline says when online', async () => {
+  it('offline says when online, and offers My songs, which are all here', async () => {
     vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
-    await renderApp('/songs?view=explore', {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/songs?view=explore', {
       publicLibrary: createFakePublicLibrary({ online: () => false }),
     })
     expect(await screen.findByText('Explore is available when online.')).toBeVisible()
-    expect(screen.getByRole('button', { name: 'Try again' })).toBeVisible()
+    expect(screen.queryByRole('button', { name: 'Try again' })).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'My songs' }))
+    expect(router.state.location.search).not.toMatchObject({ view: 'explore' })
   })
 
   it('a search with no match offers Clear', async () => {
