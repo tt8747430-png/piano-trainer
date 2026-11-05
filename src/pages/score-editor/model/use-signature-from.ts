@@ -4,16 +4,15 @@ import { barsOf, chosenBars } from '@/features/score-editor'
 import { useEditorState } from './editor-context'
 
 /**
- * Where a key or time signature changes from (ADR 0114, 0097), as Flat changes either from a bar: the
- * section of the bar given (its sign on the sheet), else of the first bar chosen (or the caret's), from
- * there on up to the next change; in the song's first section, the whole song. `said` names which,
- * over the choice.
+ * Where the palette's Key signature or Time signature changes from (ADR 0114, 0097), as Flat changes
+ * either from a bar: the section of the first bar chosen (or the caret's; a sign tapped on the score
+ * chooses its bar), from there on up to the next change; in the song's first section, the whole
+ * song. `said` names which, over the choice.
  */
-export function useSignatureFrom(bar: number | undefined) {
+export function useSignatureFrom() {
   const { t } = useTranslation('editor')
   const named = useSectionHeading()
-  const chosen = useEditorState((state) => chosenBars(state).from)
-  const from = bar ?? chosen
+  const from = useEditorState((state) => chosenBars(state).from)
   const section = useEditorState((state) => barsOf(state.draft)[from]?.section ?? 0)
   const heading = useEditorState((state) => state.draft.sections[section]?.heading)
   // The section's first bar, as printed.

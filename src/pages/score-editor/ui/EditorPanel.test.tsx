@@ -38,7 +38,7 @@ describe('the editor’s palette (R31-E)', () => {
     const storage = withSong()
     const first = await renderApp('/edit/my-1', { storage })
     // The Notes first: Notation's tools in the folded row.
-    const kinds = await screen.findByRole('toolbar', { name: 'Kinds of tools' })
+    const kinds = await screen.findByRole('toolbar', { name: 'Palette categories' })
     expect(within(kinds).getByRole('button', { name: 'Note' })).toHaveAttribute(
       'aria-current',
       'true',
@@ -62,12 +62,12 @@ describe('the editor’s palette (R31-E)', () => {
   it('unfolds to every tool of the category as titled grids, and folds again', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    await user.click(await screen.findByRole('button', { name: 'Show every tool' }))
+    await user.click(await screen.findByRole('button', { name: 'Expand palette' }))
     const notes = await screen.findByRole('region', { name: 'Note' })
     expect(within(notes).getByRole('group', { name: 'Input mode' })).toBeInTheDocument()
     expect(within(notes).getByRole('heading', { name: 'Notation' })).toBeInTheDocument()
     expect(settingsStore.getState().paletteFolded).toBe(false)
-    await user.click(screen.getByRole('button', { name: 'Show fewer tools' }))
+    await user.click(screen.getByRole('button', { name: 'Collapse palette' }))
     await waitFor(() =>
       expect(screen.queryByRole('group', { name: 'Input mode' })).not.toBeInTheDocument(),
     )
@@ -79,7 +79,7 @@ describe('the editor’s Instruments (A40)', () => {
   it('solo, the eye, New instrument and Delete, the staves in the URL as the Player’s', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/edit/my-1', { storage: withSong() })
-    await openGear(user, /^Music/, /^Staves/)
+    await openGear(user, /^Instruments/)
     const list = await screen.findByRole('list', { name: 'Instruments' })
     expect(
       within(list)

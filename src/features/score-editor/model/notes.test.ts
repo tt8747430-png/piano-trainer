@@ -14,6 +14,7 @@ import {
   setFingers,
   shiftNotes,
   startNear,
+  canTie,
   tieNotes,
   toggleAccidental,
   writeNotes,
@@ -216,6 +217,18 @@ describe('tieNotes', () => {
   it('changes nothing where no same key follows', () => {
     const draft = draftOf({ staves: [{ notes: 'B4/2 A4/2' }] })
     expect(tieNotes(draft, 'staff0', 0)).toBe(draft)
+  })
+})
+
+describe('canTie (R32-B)', () => {
+  it('says a tie can go where the same key follows the note', () => {
+    expect(canTie(draftOf({ staves: [{ notes: 'B4/2 B4/2' }] }), 'staff0', 0)).toBe(true)
+  })
+
+  it('says none can where another key or nothing follows', () => {
+    const draft = draftOf({ staves: [{ notes: 'B4/2 A4/2' }] })
+    expect(canTie(draft, 'staff0', 0)).toBe(false)
+    expect(canTie(draft, 'staff0', 2 * B)).toBe(false)
   })
 })
 

@@ -76,7 +76,9 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
     await user.click(within(again).getByRole('button', { name: 'Publish…' }))
     await tickAndPublish(user)
     expect(
-      await screen.findByText('Published. Learners get it the next time the app starts.'),
+      await screen.findByText(
+        'Published. Learners will receive it the next time they open the app.',
+      ),
     ).toBeInTheDocument()
     expect(JSON.stringify(content.body('piece', SONG.id))).toContain('Dm7')
     expect(await content.draft('piece', SONG.id)).toEqual({ ok: true, value: null })
@@ -120,7 +122,9 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
     await user.click(within(versions).getByRole('button', { name: 'Restore' }))
     await confirmAsked(user, 'Restore', 'Restore this version?')
     expect(
-      await screen.findByText('Restored. Learners get it the next time the app starts.'),
+      await screen.findByText(
+        'Restored. Learners will receive it the next time they open the app.',
+      ),
     ).toBeInTheDocument()
     expect(content.body('piece', SONG.id)).toEqual(pieceRecordBody(SONG))
   })
@@ -132,7 +136,7 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
       contentEditing: content,
     })
     expect(
-      await screen.findByText('You’re offline: it opens once you’re back online.'),
+      await screen.findByText('You’re offline. It will open when you reconnect.'),
     ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument()
   })

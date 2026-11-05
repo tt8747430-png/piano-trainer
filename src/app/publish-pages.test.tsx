@@ -100,7 +100,9 @@ describe('one Publish page for every item (R29 B6)', () => {
       await user.click(screen.getByRole('checkbox', { name: /I confirm/ }))
       expect(publish).toBeEnabled()
       await user.click(publish)
-      await screen.findByText('Published. Learners get it the next time the app starts.')
+      await screen.findByText(
+        'Published. Learners will receive it the next time they open the app.',
+      )
       expect(content.body(kind, id)).toEqual(changed)
       // Ticked each time: unticked again once published.
       expect(screen.getByRole('checkbox', { name: /I confirm/ })).not.toBeChecked()

@@ -560,3 +560,10 @@ export function tieNotes(draft: Draft, layer: NoteLayer, span: Tick | TickSpan):
   }
   return changed ? withNotes(draft, layer, notes) : draft
 }
+
+/**
+ * Whether Tie has a note to join in `span` (R32-B): a note there with the same key's note starting
+ * where it ends. Where none has, the palette draws no Tie.
+ */
+export const canTie = (draft: Draft, layer: NoteLayer, span: Tick | TickSpan): boolean =>
+  tieNotes(draft, layer, span) !== draft

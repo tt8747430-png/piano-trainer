@@ -10,6 +10,14 @@ owner's, typos fixed.
   in the 5/4 is not relevant and is weird that it is shown but is disabled"; the palette and menus as Flat's; the piano
   shown on a phone from the editor itself, never only from Settings (2026-11-05).
 
+- **One home each, as Flat (2026-11-05):** "we can at the same time edit the time signature from the settings and from
+  the palette which is strange". The time signature, key and clef are set in the palette's category, which their
+  printed signs open; the title opens Title and credits; the gear holds only what the score does not print.
+- **Only what applies (2026-11-05):** "show only the actions relevant at that time like the write as common in the 5/4
+  is not relevant and is weird that it is shown but is disabled". Hidden, never greyed.
+- **Piano keys on a phone (2026-11-05):** a button in the editor's bar, never only in the gear.
+- **Professional wording (2026-11-05):** "write professionally, not plain words": precise notation terms and concise
+  sentences, as Apple, Flat, MuseScore and Dorico write them, in English and Russian.
 - **A real notation app:** "proper scores, proper functions like a real music notation software". Like Flat's: "the same
   features and same music notation and same icons and styles". No hand separation, pattern adding or verse adding inside it.
 - **Laptop:** a docked side panel and a note-entry toolbar, never a folded bar at the foot ("annoying and not movable").

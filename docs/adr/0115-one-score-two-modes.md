@@ -23,7 +23,7 @@ edit, and a learner practising should not change the music by accident.
 - **One bar** (`ScoreBar`): one band of card paper to the screen's edges with one hairline under it. Its buttons are a
   toolbar's (the button's `tool` variant: round, no frame at rest, the muted fill on hover, while open and pressed,
   44px). Close and Practise · Edit lead; each mode's buttons end it (the Player's Piano keys · MIDI · gear, the
-  editor's Piano keys · MIDI · Play · Undo · Redo · gear, R31-E). One row at every size, the same height in both
+  editor's Piano keys · MIDI · Play · Undo · Redo · gear, R31-E; the editor's Piano keys at every size, R32-B). One row at every size, the same height in both
   modes, so the sheet never moves as the mode switches.
 - **No tools row** (R31-E): the Player's View is its Settings', Transpose its More's; the editor's View and
   Transpose are its gear's first page, Delete · Copy · Cut · Paste float by what is chosen.
@@ -44,8 +44,8 @@ edit, and a learner practising should not change the music by accident.
   Practise · Edit switches.
 - **One View menu** in both modes (ADR 0108) and one layout setting (ADR 0096). The keys fold from their rail and
   come back from the View. Which staves show is the Player's Setup's (ADR 0105); the editor shows every staff.
-- **Each mode a kind page** (B7): the Player's settings (ADR 0105) and Settings › Score editor, whose Editing group a
-  score's own Settings shows too.
+- **Each mode a kind page** (B7): the Player's settings (ADR 0105) and the editor's gear (ADR 0114), which holds only
+  what the score does not print: Instruments, Layout, Note input, Recording (R32-B).
 
 ## Consequences
 
@@ -78,3 +78,5 @@ own Play melody switch: it plays the tune under a take.
   Settings, ADR 0114); under 360px the bar's buttons are 40px with no gaps, so a 320px phone holds them
   (2026-11-01).
 - r29 (editor plan) — The editor's bar is the Player's in shape: Close · Done | Piano keys · MIDI · Undo · Redo · gear; the dock has no Sound popover. The score's Settings is a list of pages (Title and credits; Music: Staves, Key signature, Time signature, Tempo, Bars; How the editor works: Layout, Note input, Recording); Settings › Sound and recording and Settings › Score editor are gone, their switches homed here (2026-11-03). Kept as they are for now: Key and Time change from the start or a section's first bar (keys and meters are a section's; a change mid-section starts a section there); a take always counts in a bar (no Count-in switch); Tempo's word follows its speed (free words such as a tempo text wait for the tempo marking's text in the model, rounds 3–4); the editor's Piano keys fold the keys (`keyboard.folded`), the Player's show or hide them (`scoreView.keys`), since expanding the palette folds the keys and must not hide the Player's.
+- R32-B — The editor's bar carries Piano keys on a phone too (Flat's keyboard button); the View has no keys chip; the
+  gear holds only what the score does not print (2026-11-05).

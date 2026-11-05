@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { useShallow } from 'zustand/react/shallow'
+import { useMemo } from 'react'
 import { sectionKey } from '@/features/score-editor'
 import { noteName, printedSymbol, type Key } from '@/shared/lib/music'
 import { useEditorState } from './editor-context'
@@ -17,11 +17,18 @@ export function useKeyNames() {
   }
 }
 
-/** The key in force where the picker changes it: the song's own at its head, a section's after. */
-export const useKeyAt = (bar: number | undefined, song?: boolean) => {
-  const at = useSignatureFrom(bar)
-  const whole = song ?? at.song
-  return useEditorState(
-    useShallow((state) => (whole ? state.draft.key : sectionKey(state.draft, at.section))),
+/**
+ * The key in force where the palette's Key signature changes it: the song's own at its head (or for
+ * the whole song), a section's after.
+ */
+export const useKeyAt = (song: boolean) => {
+  const at = useSignatureFrom()
+  const whole = song || at.song
+  // The draft, not the key read from it: a section's key is parsed afresh each time, its tonic a new
+  // object, so it is read once per draft (a selector returning it would never settle).
+  const draft = useEditorState((state) => state.draft)
+  return useMemo(
+    () => (whole ? draft.key : sectionKey(draft, at.section)),
+    [whole, draft, at.section],
   )
 }

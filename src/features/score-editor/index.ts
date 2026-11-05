@@ -38,7 +38,7 @@ export {
   type EditorAction,
   type EditorState,
 } from './model/state'
-export { carriesAccidental, notesAt, notesOf, startNear } from './model/notes'
+export { canTie, carriesAccidental, notesAt, notesOf, startNear } from './model/notes'
 export { meterBar, sameKind, type TimeChoice } from './model/meters'
 export { createEditorStore, type EditorStore } from './model/store'
 export { takeParts, type TakeInto } from './model/take-edits'

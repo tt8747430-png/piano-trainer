@@ -1,6 +1,6 @@
 # ADR 0114 — The score editor edits a score as notation software does, on what is chosen and where it is printed
 
-- **Status:** accepted · **Date:** 2026-10-01 · consolidated 2026-10-27 · amended 2026-11-01
+- **Status:** accepted · **Date:** 2026-10-01 · consolidated 2026-10-27 · amended 2026-11-05
 
 ## Context
 
@@ -26,19 +26,28 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   Shift a semitone, with Cmd or Ctrl an octave. The selection is notes, two tick spans: Shift ← → a note, with Alt to
   the bar's end, Home or End to an end; Alt ↑ ↓ step through a chord's notes. Escape lets go.
 - **Every tool acts on what is chosen.** With only a caret, a value sets the next note's value; with notes chosen it
-  makes them that long (`setDuration`). ♯ ♭ ♮ are toggles; a rest makes a range's notes rests; a tool that needs notes
-  is greyed, saying why.
+  makes them that long (`setDuration`). ♯ ♭ ♮ are toggles; a rest makes a range's notes rests.
+- **Only what applies is shown** (R32-B, MuseScore's Properties panel; the owner: "show only the actions relevant at
+  that time"): a key that cannot act on what is chosen is not drawn, never greyed (the tie where no note of the same
+  key follows, `canTie`; a dot or tuplet the value cannot take; the accidentals, Respell, the expressions, Roman
+  numeral and Tempo change with no note chosen; a line with nothing to draw over; a field that cannot open there).
+  Pitch, Articulations, Ornaments and Dynamics, whose every tool changes notes, say "Select a note to use these
+  tools." in place of their grid. The strip holds only the categories that act where the caret writes: in the chord
+  row Note (the values), Measures, Key signature, Time signature, Barlines and repeats.
 - **Three editing modes**, Flat's: **Replace** writes over what is at the caret; **Insert** writes there and pushes the
   staff's later notes right, adding bars at the end to hold them, and Delete or Cut close the gap; **Chord** adds the
   key to the chord at the caret. I cycles them.
 - **The clipboard acts on what is chosen**: bars in the chord row, notes on a staff (`Clip`). Paste writes from the
   caret on its staff and leaves what it pasted chosen; it is greyed where the clip cannot go, saying why.
-- **Edited where it is printed**, as Flat and Dorico do; there is no Song sheet:
-  - the title, typed in place at its printed size;
+- **Edited where it is printed**, as Flat and Dorico do; there is no Song sheet, and nothing printed has a second
+  home in the gear (R32-B):
+  - the title and the credits under it, each opening Title and credits (Flat's credits dialog), the one place they
+    are typed; a lesson's example prints its title alone;
   - the tempo mark, a dial: the beats a minute large in a circle with its tempo word, held and swiped along a ruler of
     tempo words, the note it counts chosen under it;
-  - a key signature, the time signature, a clef, and a key's place where it prints none, each opening its sign
-    picker;
+  - a key signature, the time signature, a clef, and a key's place where it prints none, each choosing its bar (a
+    clef's on its staff) and opening the palette at its category (`useOpenCategory`): the panel on a laptop, the
+    palette unfolded on a phone, the keys folding for it;
   - a section's name, opening its menu (named as a song's part, or joined to the one before);
   - a staff's name, opening its menu: Rename, Add a staff over or under, Remove (its notes with it; Undo brings them
     back), Hide or Show the piano. The last staff in sight is never removed or hidden;
@@ -49,13 +58,13 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
     beat on; a syllable under the note (Cmd or Ctrl with L), Space or Enter
     going on, `-` and `_` their marks, ↓ ↑ the verses; the fingers over the note (Shift with F), a chord's bottom up.
     A field is greyed while the View hides what it writes.
-- **The bar** (R31-E, Flat's): Close · Done | Play · Undo · Redo · ⚙; from 40rem the title after Close and Piano
-  keys and MIDI before Play. Play plays from the caret's bar (Stop while it sounds); no floating transport, no tools
+- **The bar** (R31-E, R32-B, Flat's): Close · Done | Piano keys · Play · Undo · Redo · ⚙ at every size (Flat's
+  keyboard button); from 40rem the title after Close and MIDI before Play. Play plays from the caret's bar (Stop while it sounds); no floating transport, no tools
   capsule. Every button is round, inside the bar; below 360px only the icon buttons narrow.
-- **One gear** (`EditorGear`, the Player's shape: a sheet on a phone, a panel at the right on a laptop, a page at a
-  time with Back): View, Transpose, Record a take, Takes; Settings as pages (Title and credits; Music: staves, key,
-  time, tempo, bars; How the editor works: layout, note input, recording); an original's Publish…, Versions and
-  Discard changes, its saved state beside the title. The editor opens in the mode it was left in (`editorMode`).
+- **One gear** (`EditorGear`, Flat's document menu, the Player's shape: a sheet on a phone, a panel at the right on
+  a laptop, a page at a time with Back): View, Transpose, Record a take, Takes; Settings, each one tap away with a
+  one-line description: Instruments, Layout, Note input, Recording; an original's Publish…, Versions and Discard
+  changes, its saved state beside the title. It holds nothing the score prints (R32-B). The editor opens in the mode it was left in (`editorMode`).
 - **One palette** on the selection (`EditorPalette`, one tree for every size), a category chosen at a time
   (`paletteCategory`, kept):
   - **A panel** at the sheet's side from 48rem (`usePalettePanel`), left or right as Note input says: every category
@@ -84,40 +93,41 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   step above in the key before each note chosen on any staff; the other kind's key switches it, its pitch kept; the
   same key again takes it off. Put there, it is chosen (`grace`): ↑ ↓, Shift a semitone, the accidentals, Respell, a
   key played, the drag and Delete edit it as a note; Escape or any other action goes back to its note.
-- **Sign pickers** (`SignPicker`): a sheet from the foot on a phone, a popover by the sign on a laptop, ✗ and ✓ at its
-  foot (Escape and Enter), one Undo step.
-  - **Time:** Current and Pickup, each drawn as it prints on faint staff lines, each figure a wheel. Within the
-    song's kind any section takes any meter; across kinds the song's own meter at its head rewrites every tick so each
-    note keeps its length (a meter that would split a note is greyed). For 4/4 and 2/2, the C or ¢ symbol.
-  - **Key:** one to seven sharps over one to seven flats, Major · Minor, Switch to natural; Change the key for the
-    whole song moves the music, else the key changes from that section on and the notes stay where they are.
-  - **Clef:** every clef the notation writes, a family a row.
-- **The score's Settings** (Flat's score settings): pages of the gear's sheet, on the editor's draft, so each change
-  is one Undo step back on the score; while the gear is open the editor's keys and MIDI write nothing. It opens from
-  the bar's gear and, at Title and credits, from the credits printed under the title (as Flat's title opens its
-  credits). Its groups, in plain musical words:
-  - **Score:** the title, **Subtitle**, **Composer**, **Lyricist** and **Arranger**, each typed in its row
-    (`header`, saved with the music line by line). They print under the title in lines and on pages, in the
-    Player and the editor alike: the subtitle centred, the lyricist at the left, the composer over the
-    arranger at the right, nothing the learner did not write. One line across prints the title alone.
-  - **Instruments:** New song's families with − n + (`widgets/instrument-list`, one widget for both): a voice
-    is added under the last of its kind, else over the next voice down (a choir's order), named and clefed
-    as New song names it; a staff of no voice is Other's **Staff**; one fewer takes the last away with its
-    notes (Undo brings them back); the piano hides (its music kept), never the last staff in sight; eight
-    single staves at most. A staff is renamed on the score, as before.
-  - **Music:** the tempo, key and time in the editor's own pickers (the whole song's, as at its head), and
-    **Bars**, a stepper adding silent bars at the end or taking the last ones away.
-  - **Layout:** **Staff size**, five sizes from 75% to 130% (Flat's staff size, Dorico's space size), over
-    the size the screen gives; a phone on its side still fits a whole system. **Bars per line**, As written
-    or 1 to 8 at most (Flat's measures per system): fewer where they do not fit. Both are the song's
-    (`layout`), so the Player lays it out the same; one line across fits its height and keeps neither.
-  - **Editing:** **Hear notes as you edit** (`pt-settings.editing.hearNotes`, on): a note clicked on the score,
-    a note or chord stepped, shifted or given an accidental, a chord's one note stepped to, sounds, never
-    over Play (MuseScore's and Dorico's play notes when editing). Then the MIDI keyboard's and the keyboard's
-    own settings, as rows to their pages.
-  - Left out, as a piano learner rarely needs them: the copyright line (Publish in library has its own
-    description), page size and margins (we print A4), bar-number policies, instruments without their own
-    sound (ADR 0097), and turning off the caret's advance after a note.
+- **The palette's signs** (R32-B: the time signature, key and clef are set in their category alone; the tempo mark
+  keeps its own dial, `SignPicker`):
+  - **Time:** the common tiles, Current and Pickup, each drawn as it prints on faint staff lines, each figure a
+    wheel, ✗ and ✓ at the foot, one Undo step. Within the song's kind any section takes any meter; across kinds the
+    song's own meter at its head rewrites every tick so each note keeps its length (a meter that would split a note
+    has no tile). Write as common or cut time is shown for 4/4 and 2/2 alone; From this bar · Whole song only where
+    they differ (after the first section, or where a section has a meter of its own).
+  - **Key:** one to seven sharps over one to seven flats, Major · Minor, Switch to natural; after the first section,
+    Apply to the whole song moves the music, else the key changes from that section on and the notes stay.
+  - **Clef:** every clef the notation writes, a family a row; on a piano staff, This bar · Until the end · Entire
+    staff.
+- **The score's Settings** (R32-B, Flat's document menu): pages of the gear's sheet, on the editor's draft, so each
+  change is one Undo step back on the score; while the gear is open the editor's keys and MIDI write nothing. Precise
+  names, most used first, each with a one-line description:
+  - **Instruments:** New song's families with − n + (`widgets/instrument-list`, one widget for both): a voice is
+    added under the last of its kind, else over the next voice down (a choir's order), named and clefed as New song
+    names it; a staff of no voice is Other's **Staff**; one fewer takes the last away with its notes (Undo brings
+    them back); the piano hides (its music kept), never the last staff in sight; eight single staves at most. A staff
+    is renamed on the score.
+  - **Layout:** **Staff size**, five sizes from 75% to 130% (Flat's staff size, Dorico's space size), over the size
+    the screen gives; a phone on its side still fits a whole system. **Measures per system**, Auto or 1 to 8 at most
+    (Flat's measures per system): fewer where they do not fit. Both are the song's (`layout`), so the Player lays it
+    out the same; one line across fits its height and keeps neither.
+  - **Note input:** **Play notes while editing** (`pt-settings.editing.hearNotes`, on): a note selected on the score,
+    a note or chord stepped, shifted or given an accidental, a chord's one note stepped to, sounds, never over Play
+    (MuseScore's and Dorico's play notes when editing); **Palette position**, left or right, from 48rem.
+  - **Recording:** the metronome, the melody under a take, the count-in.
+  - **Title and credits** (opened from the title on the score alone): the title, **Subtitle**, **Composer**,
+    **Lyricist** and **Arranger**, each typed in its row (`header`, saved with the music line by line), the others
+    by Add credit. They print under the title in lines and on pages, in the Player and the editor alike: the subtitle
+    centred, the lyricist at the left, the composer over the arranger at the right, nothing the learner did not
+    write. One line across prints the title alone.
+  - Not here, as the score prints them: the key, time signature, clef, tempo and bars (the palette and the printed
+    marks). Left out, as a piano learner rarely needs them: page size and margins in Settings (we print A4),
+    bar-number policies, instruments without their own sound (ADR 0097), and turning off the caret's advance.
 - **Tie acts on what is chosen:** each note chosen joins the same key's note after it, a run of one key
   chosen whole becoming one note; with only a caret, the caret's notes.
 - **A key or a meter changes at a section, never mid-bar; a clef at a bar.**
@@ -155,3 +165,8 @@ reader hears the caret's place in a polite live line (`CaretLine`).
 - r29 (P2, T) — The key signature grid names each cell's key in the mode chosen and calls no signature "No sharps or flats"; Transpose's switches read Transpose key signature and Transpose chord symbols, as the Player's (2026-11-04).
 - R31-E — One bar with Play; one gear holding the acts, Settings and the draft; the palette floating on a phone and
   a panel of one category at a time; the time signature's wheels; every meter of 1–16 over 1 to 16 (2026-11-05).
+- R32-B — One home for each printed thing: the time signature, key and clef set in the palette's category, which their
+  printed signs open; the title opens Title and credits; the gear's Music page (key, time, tempo, bars) gone; Settings
+  one tap each (Instruments, Layout, Note input, Recording) with a line saying what each does; only the tools that
+  apply are drawn, never greyed; Piano keys in the phone's bar; the editor's strings in professional notation terms
+  (2026-11-05).

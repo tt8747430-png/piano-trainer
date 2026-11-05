@@ -69,7 +69,9 @@ describe('the course editor (ADR 0116, round 12)', () => {
     await user.type(await field('Summary'), '!')
     await publish(user)
     expect(
-      await screen.findByText('Published. Learners get it the next time the app starts.'),
+      await screen.findByText(
+        'Published. Learners will receive it the next time they open the app.',
+      ),
     ).toBeInTheDocument()
     expect(content.body('course', COURSE.id)).toEqual({
       id: COURSE.id,
@@ -119,7 +121,7 @@ describe('the course editor (ADR 0116, round 12)', () => {
     expect(screen.queryByRole('button', { name: /^Move (up|down)/ })).not.toBeInTheDocument()
     await user.click(await screen.findByRole('menuitem', { name: 'Remove' }))
     await publish(user)
-    await screen.findByText('Published. Learners get it the next time the app starts.')
+    await screen.findByText('Published. Learners will receive it the next time they open the app.')
     expect((content.body('course', COURSE.id) as { lessons: string[] }).lessons).toEqual(
       COURSE.lessons.filter((lesson) => lesson !== third).map((lesson) => lesson.id),
     )
