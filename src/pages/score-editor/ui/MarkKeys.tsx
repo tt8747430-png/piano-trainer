@@ -7,7 +7,6 @@ import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useNotesChosen } from '../model/use-notes-chosen'
 import type { Tool } from '../model/shortcuts'
 import { PaletteKey } from './palette-keys'
-import { usePaletteReason } from './palette-reason'
 import { LineKeys } from './LineKeys'
 
 /** A glyph of the music font (Noto Music), at a key's size. */
@@ -55,7 +54,7 @@ const useMarkOn = (mark: MarkChoice): boolean =>
     return notes.length > 0 && notes.every((n) => hasMark(n.marks, mark))
   })
 
-/** One mark's key: on and off on the notes chosen; greyed with none chosen, saying why. */
+/** One mark's key: on and off on the notes chosen; left out with none chosen (R32-B). */
 function MarkKey({
   mark,
   label,
@@ -68,13 +67,13 @@ function MarkKey({
   children: ReactNode
 }) {
   const { actions } = useScoreEditorContext()
+  const on = useMarkOn(mark)
+  if (!useNotesChosen()) return null
   return (
     <PaletteKey
       label={label}
       tool={tool}
-      reason={usePaletteReason()}
-      pressed={useMarkOn(mark)}
-      disabled={!useNotesChosen()}
+      pressed={on}
       onClick={() => actions.dispatch({ type: 'mark', mark })}
     >
       {children}

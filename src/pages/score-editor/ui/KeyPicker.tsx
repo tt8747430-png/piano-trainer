@@ -14,16 +14,16 @@ import { useSignatureFrom } from '../model/use-signature-from'
  * force tinted. The mode is the one written to the score: a minor song goes to the signature's minor
  * key. In a section
  * after the first, the key changes from it on (as Flat changes key from a bar) unless "Change the key
- * for the whole song" is on: then the song's own key, its music moved with it, as at its head. In the
- * palette, the first bar chosen's section (else the caret's); over a key signature printed on the
- * sheet, its bar's (`bar`). A tap changes it.
+ * for the whole song" is on: then the song's own key, its music moved with it, as at its head. The
+ * palette's Key signature, the one place a key is chosen (R32-B): the first bar chosen's section
+ * (else the caret's; a key signature tapped on the score chooses its bar). A tap changes it.
  */
-export function KeyPicker({ bar }: { bar?: number | undefined }) {
+export function KeyPicker() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
-  const { from, song } = useSignatureFrom(bar)
+  const { from, song } = useSignatureFrom()
   const [whole, setWhole] = useState(false)
-  const key = useKeyAt(bar, song || whole)
+  const key = useKeyAt(whole)
   // In the folded palette's row its signatures alone, from the section on (R31-E).
   const row = usePickerLayout() === 'row'
   const choose = (next: Key) =>

@@ -1,20 +1,22 @@
 import { describe, expect, it } from 'vitest'
 import { gearBack, GEAR_PAGES } from './gear-pages'
 
-describe('the gear’s pages (R31-E)', () => {
-  it('goes back from each page to the one it was turned from, and shuts from the first', () => {
+describe('the gear’s pages (R32-B)', () => {
+  it('goes back from each setting to the first page, and shuts from the first', () => {
     expect(gearBack('main')).toBeNull()
     expect(gearBack('view')).toBe('main')
-    expect(gearBack('music')).toBe('main')
-    expect(gearBack('time')).toBe('music')
-    expect(gearBack('input')).toBe('howItWorks')
+    expect(gearBack('instruments')).toBe('main')
+    expect(gearBack('input')).toBe('main')
   })
 
-  it('reaches the first page from every page', () => {
-    for (const page of GEAR_PAGES) {
-      let at: typeof page | null = page
-      for (let steps = 0; at !== null && at !== 'main' && steps < 4; steps++) at = gearBack(at)
-      expect(at === null || at === 'main').toBe(true)
-    }
+  it('shuts from Title and credits, which the printed title opens', () => {
+    expect(gearBack('credits')).toBeNull()
+  })
+
+  it('holds nothing the score prints and sets where it prints it', () => {
+    expect(GEAR_PAGES).not.toContain('key')
+    expect(GEAR_PAGES).not.toContain('time')
+    expect(GEAR_PAGES).not.toContain('tempo')
+    expect(GEAR_PAGES).not.toContain('bars')
   })
 })

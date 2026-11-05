@@ -41,7 +41,7 @@ describe('the progression editor (content as data)', () => {
     await user.clear(major)
     await user.type(major, 'I vi ii V')
     await publishOnItsPage(user)
-    await screen.findByText('Published. Learners get it the next time the app starts.')
+    await screen.findByText('Published. Learners will receive it the next time they open the app.')
     expect(content.body('progression', DOO_WOP.id)).toMatchObject({ major: 'I vi ii V' })
   })
 

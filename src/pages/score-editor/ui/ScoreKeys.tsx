@@ -19,7 +19,6 @@ import {
   SignTile,
   TermKey,
 } from './palette-keys'
-import { usePaletteReason } from './palette-reason'
 import { useClefAt, useClefSaid } from '../model/use-clef-at'
 import { ClefPicker } from './ClefPicker'
 import { KeyPicker } from './KeyPicker'
@@ -27,27 +26,29 @@ import { BarlinePicture } from './sign-pictures'
 import { TimePicker } from './TimePicker'
 
 /**
- * Clef in the palette (ADR 0097, 0114): the caret's staff from the first bar chosen (else the
- * caret's), its picker's 17 clefs under what it changes, the clef in force pressed; where the caret
- * writes chords, why there is none.
+ * Clef in the palette (ADR 0097, 0114), the one place a clef is chosen (R32-B): the caret's staff
+ * from the first bar chosen (else the caret's; a clef tapped on the score chooses its bar and staff),
+ * its picker's 17 clefs under what it changes, the clef in force pressed. The chord row has no clef:
+ * there the category is not in the strip.
  */
 export function ClefKeys() {
   const at = useClefAt()
-  const { said } = useClefSaid(at)
-  const reason = usePaletteReason()
-  return at.staff ? (
+  const said = useClefSaid(at)
+  if (!at.staff) return null
+  return (
     <>
       <SectionLine>{said}</SectionLine>
-      <ClefPicker staff={at.staff} bar={at.bar} current={at.current} scoped />
+      <ClefPicker staff={at.staff} bar={at.bar} current={at.current} />
     </>
-  ) : (
-    <SectionLine>{reason}</SectionLine>
   )
 }
 
-/** Key signature in the palette (ADR 0114): its picker under what it changes, Flat's 7♯ over 7♭. */
+/**
+ * Key signature in the palette (ADR 0114), the one place a key is chosen (R32-B): its picker under
+ * what it changes, Flat's 7♯ over 7♭.
+ */
 export function KeySignatureKeys() {
-  const { said } = useSignatureFrom(undefined)
+  const { said } = useSignatureFrom()
   return (
     <>
       <SectionLine>{said}</SectionLine>
@@ -57,15 +58,15 @@ export function KeySignatureKeys() {
 }
 
 /**
- * Time signature in the palette (A34, Flat's): from the first bar chosen's section (else the caret's),
- * the one time signature control with Apply to, From this bar · Whole song.
+ * Time signature in the palette (A34, Flat's), the one place a meter is chosen (R32-B): from the first
+ * bar chosen's section (else the caret's), the one time signature control.
  */
 export function TimeSignatureKeys() {
-  const { said } = useSignatureFrom(undefined)
+  const { said } = useSignatureFrom()
   return (
     <>
       <SectionLine>{said}</SectionLine>
-      <TimePicker applyTo />
+      <TimePicker />
     </>
   )
 }
@@ -131,18 +132,16 @@ export function RepeatKeys() {
  */
 /**
  * The Roman numeral key (ADR 0097, Flat's ⌘⇧K): the numeral of the chord sounding at the notes
- * chosen, in the key there (the numerals kernel's), under them; again, taken off.
+ * chosen, in the key there (the numerals kernel's), under them; again, taken off. Drawn while notes
+ * are chosen (R32-B).
  */
 function NumeralKey() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
-  const chosen = useNotesChosen()
   return (
     <PaletteKey
       label={t('words.numeral')}
       tool="numeral"
-      reason={usePaletteReason()}
-      disabled={!chosen}
       onClick={() => actions.dispatch({ type: 'numeral' })}
     >
       <span aria-hidden className="font-serif text-lg font-semibold leading-none">
@@ -152,14 +151,13 @@ function NumeralKey() {
   )
 }
 
-/** Flat's Tempo change in Text (A34): a tempo mark at the caret, set in its popover. */
+/** Flat's Tempo change in Text (A34): a tempo mark at the notes chosen, set in its popover. */
 function TempoChangeKey() {
   const { t } = useTranslation('editor')
-  const chosen = useNotesChosen()
   return (
     <TempoChangePopover
       trigger={
-        <PaletteKey label={t('tempo.change')} reason={usePaletteReason()} disabled={!chosen}>
+        <PaletteKey label={t('tempo.change')}>
           <span aria-hidden className="size-7">
             <FieldIcon field="tempo" />
           </span>
@@ -173,17 +171,17 @@ export function TextKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const chosen = useNotesChosen()
-  const reason = usePaletteReason()
   return (
     <>
       <KeyGrid>
         <FieldKey field="lyrics" />
         <FieldKey field="chord" />
-        <NumeralKey />
+        {chosen ? <NumeralKey /> : null}
         <FieldKey field="text" />
-        <TempoChangeKey />
+        {chosen ? <TempoChangeKey /> : null}
       </KeyGrid>
-      {EXPRESSION_GROUP_IDS.map((group) => (
+      {/* The expression words act on the notes chosen: drawn while some are (R32-B). */}
+      {(chosen ? EXPRESSION_GROUP_IDS : []).map((group) => (
         <Fragment key={group}>
           <GroupName name={t(`expressions.${group}`)} />
           <KeyGrid label={t(`expressions.${group}`)}>
@@ -193,8 +191,6 @@ export function TextKeys() {
                 label={t(`marks.${expression}`)}
                 term={EXPRESSION_TEXT[expression]}
                 meaning={t(`meaning.${expression}`)}
-                reason={reason}
-                disabled={!chosen}
                 onClick={() =>
                   actions.dispatch({ type: 'mark', mark: { kind: 'expression', expression } })
                 }

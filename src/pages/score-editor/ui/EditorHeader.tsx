@@ -61,8 +61,8 @@ function PlayButton() {
 }
 
 /**
- * The editor's bar's end (R31-E, Flat's): from 40rem the piano keys and the MIDI keyboard (hidden
- * without Web MIDI), then Play, Undo, Redo and the one gear, the score's acts and its Settings
+ * The editor's bar's end (R31-E, R32-B, Flat's): the piano keys, from 40rem the MIDI keyboard
+ * (hidden without Web MIDI), then Play, Undo, Redo and the one gear, the score's acts and its Settings
  * (`EditorGear`). While a take records they wait for Stop.
  */
 export function EditorActions() {
@@ -74,9 +74,10 @@ export function EditorActions() {
   const keys = useFoldKeys()
   return (
     <>
-      {/* A phone held upright keeps its keys' own fold, and Settings › Connect a piano. */}
+      {/* The piano keys at every size (R32-B, Flat's keyboard button); a phone held upright has
+          the MIDI keyboard in Settings › Connect a piano. */}
+      <KeysToggle shown={!keys.folded} onShow={(shown) => keys.fold(!shown)} />
       <span className="contents max-sm:hidden">
-        <KeysToggle shown={!keys.folded} onShow={(shown) => keys.fold(!shown)} />
         <MidiButton variant="tool" />
       </span>
       <PlayButton />

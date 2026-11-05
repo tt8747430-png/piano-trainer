@@ -141,7 +141,7 @@ describe('Review your recording (A40)', () => {
     expect(within(waiting).getByRole('radio', { name: 'Off' })).toBeChecked()
     await waitFor(() =>
       expect(within(waiting).getByRole('status')).toHaveTextContent(
-        'Play to start recording. The take starts on your first note.',
+        'Start playing to begin recording. The take begins with your first note.',
       ),
     )
     // Nothing sounds until the first note: the take starts on it.
