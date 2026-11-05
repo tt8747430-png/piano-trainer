@@ -1,0 +1,92 @@
+// R30-5 screens: the app's own lessons and courses as they are, the learner's beside them.
+Object.assign(P, {
+  bookopen: '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+  pencil: '<path d="M21.2 6.8a2.8 2.8 0 0 0-4-4L3.8 16.2 3 21l4.8-.8Z"/>',
+  feet: '<path d="M4 16v-2.4C4 11.5 3 10.5 3 8c0-2.7 1.5-6 4.5-6C9.4 2 10 3.8 10 5.5c0 3.1-2 5.7-2 8.7V16a2 2 0 1 1-4 0Z"/><path d="M20 20v-2.4c0-2.1 1-3.1 1-5.6 0-2.7-1.5-6-4.5-6C14.6 6 14 7.8 14 9.5c0 3.1 2 5.7 2 8.7V20a2 2 0 1 0 4 0Z"/>',
+  rename: '<path d="M12 20h9"/><path d="M16.4 3.6a2 2 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+  reset: '<path d="M3 12a9 9 0 1 0 9-9 9.8 9.8 0 0 0-6.7 2.7L3 8"/><path d="M3 3v5h5"/>',
+});
+const bookT = (paint, a) => a === 1
+  ? `<span class="ring"><span class="in learned">${ic('check', 20, 3)}</span></span>`
+  : `<span class="ring${a ? ' arc' : ''}" style="--a:${Math.round((a || 0) * 360)}deg"><span class="in ${paint}">${ic('bookopen', 20)}</span></span>`;
+const learnBar = (on, macy) => `<div class="bar"><div class="ttabs"><span class="${on === 'lessons' ? 'on' : ''}">Lessons</span><span class="${on === 'courses' ? 'on' : ''}">Courses</span></div><div class="tools">${macy ? '' : rb('search')}</div></div>`;
+const contCard = `<div class="contc"><div style="flex:1;min-width:0"><div class="l">Continue · Foundations</div><div class="n">Finding your way on the keys</div><div style="display:flex;gap:10px;align-items:center"><div class="bar2" style="flex:1"></div><span style="font-size:14px;color:var(--ink-soft);margin-top:8px">0/13</span></div></div><span class="rb" style="background:var(--honey);color:var(--honey-ink);width:48px;height:48px">${ic('bookopen', 22)}</span></div>`;
+const levelChips = `<div class="chips"><span class="chip2">Beginner</span><span class="chip2">Intermediate</span><span class="chip2">Advanced</span><span class="chip2">Professional</span><span class="chip2 on">Your lessons</span></div>`;
+const levelChipsPhone = `<div class="chips" style="margin-right:-16px"><span class="chip2" style="margin-left:-60px">Advanced</span><span class="chip2">Professional</span><span class="chip2 on">Your lessons</span></div>`;
+// The learner's own lessons: name, sections, how far read (0..1, 1 learned).
+const OWN = [
+  ['Hymn intros in G', '3 sections', 1],
+  ['Left-hand patterns for “Amazing Grace”', '4 sections · 2 read', 0.5],
+  ['Reading the alto line', '2 sections', 0],
+];
+const ownRow = ([n, d, a]) => `<div class="row">${bookT('p-sand', a)}<div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div>${ic('chev', 18)}</div>`;
+const addRow = (label) => `<div class="row add"><span class="tile">${ic('plus', 22)}</span><div class="txt"><div class="n">${label}</div></div></div>`;
+const ownHead = `<div class="lhead"><h4>Your lessons</h4><p>1 of 3 learned</p></div>`;
+const ownList = `<div style="display:grid;gap:12px">${ownHead}<div class="group">${OWN.map(ownRow).join('')}${addRow('New lesson')}</div></div>`;
+const lessonsPhone = phone(`${learnBar('lessons')}<div class="scroll pad" style="gap:18px;padding-top:8px">${contCard}${levelChipsPhone}${ownList}</div>`, 'Learn');
+const lessonsMac = mac(`${learnBar('lessons', true)}<div style="width:784px;margin:0 auto;display:grid;gap:22px;padding-top:8px">${contCard}${levelChips}${ownList}</div>`, 'Learn');
+const newSheet = phone(`${learnBar('lessons')}<div class="scroll pad" style="gap:18px;padding-top:8px">${contCard}${levelChipsPhone}<div style="display:grid;gap:12px"><div class="lhead"><h4>Your lessons</h4><p>No lessons of your own yet.</p></div><div class="group">${addRow('New lesson')}</div></div></div><div class="scrimm"></div><div class="sheet" style="padding-bottom:40px"><div class="grip"></div><div style="font:600 20px var(--display);padding:4px 4px 6px">New lesson</div><div style="display:grid;gap:6px"><span style="font-size:14px;color:var(--ink-soft);padding-left:4px">Name</span><div class="field" style="color:var(--ink);border-color:var(--ink-soft)">Hymn intros in G<span style="width:1.5px;height:20px;background:var(--ink)"></span></div></div><div class="btn" style="margin-top:6px">Create lesson</div></div>`, null);
+document.getElementById('s1').innerHTML = [
+  fig('1.1', 'Phone, Your lessons', 'The chips scrolled to their end, Your lessons chosen: a row a lesson (a check once learned, an arc as it is read), New lesson last.', lessonsPhone),
+  fig('1.2', 'Laptop, Your lessons', 'The same column as a level’s, the five chips in one row.', lessonsMac),
+  fig('1.3', 'Phone, none yet, New lesson', 'With no lessons of your own: the line says so, and New lesson opens its sheet: a name, then Create lesson.', newSheet),
+].join('');
+
+// ——— 2: Your courses ———
+const shelfRow = (p, i, n, d) => `<div class="row"><span class="tile ${p}">${ic(i, 22)}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div>${ic('chev', 18)}</div>`;
+const OWNC = [['p-sky', 'church', 'Sunday hymn playing', '4 lessons · 1 learned'], ['p-lilac', 'book', 'Reading four voices', '2 lessons']];
+const ownCourses = `<div style="display:grid;gap:8px"><div class="h2">Your courses</div><div class="group">${OWNC.map(([p, i, n, d]) => shelfRow(p, i, n, d)).join('')}${addRow('New course')}</div></div>`;
+const chordShelf = `<div style="display:grid;gap:8px"><div class="h2">Chords and improvisation</div><div class="group">${shelfRow('p-lilac', 'piano', 'Mastering Chords', '6 lessons · 3 songs · 6 weeks')}${shelfRow('p-lilac', 'star', 'Improvising with Chords', '5 lessons · 2 songs · 5 weeks')}</div></div>`;
+const methodShelf = `<div style="display:grid;gap:8px"><div class="h2">Method books</div><div class="group">${shelfRow('p-sand', 'book', 'Called to Play', '17 lessons · 40 songs · 20 weeks')}${shelfRow('p-sand', 'book', 'Called to Play 2', '15 lessons · 22 songs · 16 weeks')}</div></div>`;
+const coursesPhone = phone(`${learnBar('courses')}<div class="scroll pad" style="gap:22px;padding-top:8px;justify-content:flex-end;padding-bottom:100px">${chordShelf}${methodShelf}${ownCourses}</div>`, 'Learn');
+const coursesMac = mac(`${learnBar('courses', true)}<div style="width:784px;margin:0 auto;display:grid;gap:22px;padding-top:8px;align-content:end;flex:1;padding-bottom:40px">${chordShelf}${methodShelf}${ownCourses}</div>`, 'Learn');
+document.getElementById('s2').innerHTML = [
+  fig('2.1', 'Phone, Courses at their end', 'Scrolled past the shelves: Method books, then Your courses, each on its cover, then New course.', coursesPhone),
+  fig('2.2', 'Laptop, Courses at their end', 'The same, in the Courses’ one column.', coursesMac),
+].join('');
+
+// ——— 3: an own lesson's Settings ———
+const setBody = (gap) => `<div style="display:grid;gap:${gap}px">
+  <div style="font:600 24px/1.25 var(--display);padding:0 4px">Reading the alto line</div>
+  <div class="group" style="padding:14px 18px;display:grid;gap:2px"><div style="font-weight:600;font-size:17px;margin-bottom:4px">Lessons read as</div><div class="radio"><i class="on"></i>One page</div><div class="radio"><i></i>A section at a time</div></div>
+  <div class="pgroup"><div class="plabel">The lesson</div><div class="group"><div class="setrow"><span class="tile p-sky">${ic('rename', 20)}</span><span class="n">Rename</span></div><div class="setrow"><span class="tile p-grass">${ic('copy', 20)}</span><span class="n">Duplicate</span></div></div></div>
+  <div class="pgroup"><div class="plabel">Progress</div><div class="group"><div class="setrow"><span class="tile p-sand">${ic('reset', 20)}</span><span style="display:grid"><span class="n">Reset progress</span><span style="color:var(--ink-soft);font-size:15px">It is marked not learned and its sections unread. Nothing else changes.</span></span></div></div></div>
+  <div class="group"><div class="setrow bad"><span class="tile bad">${ic('trash', 20)}</span><span class="n">Delete lesson</span></div></div>
+</div>`;
+const setBar = `<div class="bar">${rb('back')}<div class="t">Settings</div></div>`;
+const settingsPhone = phone(`${setBar}<div class="scroll pad" style="padding-top:10px">${setBody(22)}</div>`, null);
+const settingsMac = mac(`${setBar}<div style="width:672px;margin:0 auto;padding-top:8px">${setBody(26)}</div>`, 'Learn');
+const deleteAsk = phone(`${setBar}<div class="scroll pad" style="padding-top:10px">${setBody(22)}</div><div class="scrimm"></div><div class="sheet" style="padding-bottom:40px"><div class="grip"></div><div style="font:600 20px var(--display);padding:4px">Delete “Reading the alto line”?</div><p style="color:var(--ink-soft);padding:0 4px">It leaves Your lessons and every course of yours that has it. Its progress goes too.</p><div class="btn" style="background:var(--bad);color:var(--bad-ink)">Delete</div><div class="btn ghost">Cancel</div></div>`, null);
+document.getElementById('s3').innerHTML = [
+  fig('3.1', 'Phone, Settings', 'Reading as every lesson’s; The lesson: Rename (a sheet with its name) and Duplicate (“… copy”, opened); Progress; Delete last.', settingsPhone),
+  fig('3.2', 'Laptop, Settings', 'The same rows in the settings column.', settingsMac),
+  fig('3.3', 'Phone, Delete asked first', 'Delete asks, naming what goes with it.', deleteAsk),
+].join('');
+
+// ——— 4: the course editor on an own course ———
+const ROWS = [
+  ['p-sky', 'Hymn intros in G', 'Your lesson'],
+  ['p-sky', 'The bass clef and the grand staff', 'Foundations'],
+  ['p-sky', 'Left-hand patterns for “Amazing Grace”', 'Your lesson'],
+  ['p-sky', 'Inversions', 'Fluency'],
+];
+const erow = ([p, n, d], i) => `<div class="erow"><span class="g">${ic('grip', 18)}</span><span class="num ${p}">${i + 1}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div><span class="rb sm">${ic('more', 20)}</span></div>`;
+const editBody = `<div style="display:grid;gap:18px">
+  <div style="display:grid;gap:6px"><div class="doct">Sunday hymn playing</div><div class="docs">Intros, left-hand patterns and four-part reading for the hymns we play on Sunday.</div></div>
+  <div class="props"><div class="prop"><span class="k">Cover</span><span class="val"><span class="tile p-sky" style="width:36px;height:36px">${ic('church', 20)}</span>Church · Sky ${ic('down', 16)}</span></div></div>
+  <div style="font:600 24px var(--display)">Lessons</div>
+  <div>${ROWS.map(erow).join('')}<div class="erow" style="color:var(--ink);font-weight:600"><span class="g">${ic('plus', 20)}</span>Add lesson</div></div>
+</div>`;
+// The bar names the course only once its title scrolls away (the document's title is the page's).
+const editBar = `<div class="bar">${rb('back')}<div class="tools"><div class="done">Done</div></div></div>`;
+const editPhone = phone(`${editBar}<div class="scroll pad" style="padding-top:8px">${editBody}</div>`, null);
+const editMac = mac(`${editBar}<div style="width:768px;margin:0 auto;padding-top:8px">${editBody}</div>`, 'Learn');
+const addPop = phone(`${editBar}<div class="scroll pad" style="padding-top:8px">${editBody}</div><div class="pop" style="left:16px;right:16px;bottom:40px"><div class="field" style="color:var(--ink);border-color:var(--ink-soft)">${ic('search', 18)}chord</div><div class="pl">Your lessons</div><div class="pi">${ic('bookopen', 18)}Reading the alto line</div><div class="pl">The app’s lessons</div><div class="pi hi">${ic('bookopen', 18)}<span style="display:grid;line-height:1.25">Chord functions: tonic, subdominant, dominant<span style="font-size:13px;color:var(--ink-soft)">Fluency</span></span></div><div class="pi">${ic('bookopen', 18)}<span style="display:grid;line-height:1.25">Your first chords<span style="font-size:13px;color:var(--ink-soft)">Foundations</span></span></div><div class="pi" style="font-weight:600">${ic('plus', 18)}New lesson “chord”</div></div>`, null);
+const coverPop = phone(`${editBar}<div class="scroll pad" style="padding-top:8px">${editBody}</div><div class="pop" style="left:16px;right:16px;top:330px;padding:14px;gap:12px"><div class="pl" style="padding:0">Picture</div><div class="lookgrid" style="max-width:316px">${['music', 'piano', 'mic', 'grad', 'clock', 'metro', 'church', 'book', 'heart', 'star', 'image', 'users'].map((i, k) => `<span class="p-sky${k === 6 ? ' on' : ''}">${ic(i, 20)}</span>`).join('')}</div><div class="pl" style="padding:0">Paint</div><div class="dots">${['sandw', 'sky', 'grass', 'yellow', 'lilac'].map((p, k) => `<span style="background:var(--${p})" class="${k === 1 ? 'on' : ''}"></span>`).join('')}</div></div>`, null);
+document.getElementById('s4').innerHTML = [
+  fig('4.1', 'Phone, editing your course', 'Title and line written in place; Cover; the lessons as rows, each held by its handle to move, its ⋯ to remove; Add lesson last. Done saves and reads the course.', editPhone),
+  fig('4.2', 'Laptop, editing your course', 'The same document in the editor’s column.', editMac),
+  fig('4.3', 'Phone, Add lesson', 'Typing finds your lessons first, then the app’s with their level; or a new lesson of that name.', addPop),
+  fig('4.4', 'Phone, Cover', 'A picture and a paint, as a Songs folder’s.', coverPop),
+].join('');
+
