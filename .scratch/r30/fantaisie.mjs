@@ -4,7 +4,7 @@ import { chromium } from '@playwright/test'
 const [base, out] = process.argv.slice(2)
 const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--autoplay-policy=no-user-gesture-required'] })
 const c = await b.newContext({ viewport: { width: 393, height: 852 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 })
-await c.addInitScript(() => { Object.defineProperty(navigator, 'standalone', { get: () => true }); if (!localStorage.getItem('pt-settings')) localStorage.setItem('pt-settings', JSON.stringify({ state: { welcomed: true }, version: 25 })) })
+await c.addInitScript(() => { Object.defineProperty(navigator, 'standalone', { get: () => true }); if (!localStorage.getItem('pt-settings')) localStorage.setItem('pt-settings', JSON.stringify({ state: { welcomed: true }, version: 27 })) })
 const p = await c.newPage()
 const cdp = await c.newCDPSession(p)
 await cdp.send('Emulation.setSafeAreaInsetsOverride', { insets: { top: 59, bottom: 34, left: 0, right: 0 } })
