@@ -104,7 +104,6 @@ end;
 $$;
 revoke execute on function private.add_group_owner() from public, anon, authenticated;
 
-drop trigger if exists add_group_owner on public.learner_groups;
 create trigger add_group_owner after insert on public.learner_groups
   for each row execute function private.add_group_owner();
 
@@ -130,7 +129,6 @@ end;
 $$;
 revoke execute on function private.guard_shared_folder() from public, anon;
 
-drop trigger if exists guard_shared_folder on public.shared_folders;
 create trigger guard_shared_folder before update on public.shared_folders
   for each row execute function private.guard_shared_folder();
 

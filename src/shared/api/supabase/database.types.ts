@@ -339,6 +339,94 @@ export type Database = {
         }
         Relationships: []
       }
+      learner_groups: {
+        Row: {
+          created_at: string
+          id: string
+          invite_code: string
+          invite_open: boolean
+          name: string
+          owner: string
+          paint: string
+          picture: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          invite_code?: string
+          invite_open?: boolean
+          name: string
+          owner?: string
+          paint?: string
+          picture?: string
+        }
+        Update: { invite_open?: boolean; name?: string; paint?: string; picture?: string }
+        Relationships: []
+      }
+      learner_group_members: {
+        Row: { group_id: string; joined_at: string; name: string; role: string; user_id: string }
+        Insert: {
+          group_id: string
+          joined_at?: string
+          name?: string
+          role?: string
+          user_id: string
+        }
+        Update: { name?: string }
+        Relationships: [
+          {
+            foreignKeyName: 'learner_group_members_group_id_fkey'
+            columns: ['group_id']
+            isOneToOne: false
+            referencedRelation: 'learner_groups'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      shared_folders: {
+        Row: {
+          can_edit: boolean
+          folder_key: string
+          group_id: string
+          id: string
+          name: string
+          owner: string
+          paint: string
+          picture: string
+          songs: Json
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          can_edit?: boolean
+          folder_key: string
+          group_id: string
+          id?: string
+          name: string
+          owner?: string
+          paint: string
+          picture: string
+          songs?: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          can_edit?: boolean
+          name?: string
+          paint?: string
+          picture?: string
+          songs?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'shared_folders_group_id_fkey'
+            columns: ['group_id']
+            isOneToOne: false
+            referencedRelation: 'learner_groups'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       chord_sheets: DocumentTable
       notifications: DocumentTable
       diagram_inversions: DocumentTable
@@ -387,6 +475,11 @@ export type Database = {
         Returns: { average: number; count: number }[]
       }
       push_documents: { Args: { p_rows: Json; p_table: string }; Returns: Json }
+      learner_group_invite: {
+        Args: { p_code: string }
+        Returns: { id: string; members: number; name: string }[]
+      }
+      join_learner_group: { Args: { p_code: string }; Returns: string }
     }
     Enums: { [_ in never]: never }
     CompositeTypes: { [_ in never]: never }
