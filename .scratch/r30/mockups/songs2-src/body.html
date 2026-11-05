@@ -6,7 +6,7 @@
   </div>
   <nav class="toc" aria-label="Questions">
     <a href="#q1">1 My songs · Explore</a><a href="#q2">2 Filters</a><a href="#q3">3 Card style</a><a href="#q4">4 Song page and Settings</a><a href="#q5">5 Menus</a>
-    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="(function(b){var s=document.body.classList.toggle('small');b.textContent=s?'Smaller iPhone · 393 × 852':'iPhone 17 Pro · 402 × 874';try{localStorage.setItem('pt-mock-size',s?'small':'pro')}catch(e){}})(this)">iPhone 17 Pro · 402 × 874</button><script>try{if(localStorage.getItem('pt-mock-size')==='small'){document.body.classList.add('small');document.getElementById('sizeBtn').textContent='Smaller iPhone · 393 × 852'}}catch(e){}</script></span>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="ptSize(1)">iPhone 17 Pro · app</button><script>var PT_SIZES=[['pro','iPhone 17 Pro · app'],['safari','iPhone 17 Pro · Safari'],['small','Smaller iPhone · app']];function ptSize(step){var k=0;try{k=Math.max(0,PT_SIZES.findIndex(function(x){return x[0]===localStorage.getItem('pt-mock-size')}))}catch(e){}k=(k+step)%PT_SIZES.length;document.body.classList.remove('small','safari');if(PT_SIZES[k][0]!=='pro')document.body.classList.add(PT_SIZES[k][0]);document.getElementById('sizeBtn').textContent=PT_SIZES[k][1];try{localStorage.setItem('pt-mock-size',PT_SIZES[k][0])}catch(e){}}ptSize(0)</script></span>
   </nav>
   <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>The view switch</h2></div>
     <p class="where">Where: Songs (My songs · Explore) and Learn (Lessons · Courses), the same control.</p>
