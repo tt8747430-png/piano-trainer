@@ -51,12 +51,16 @@ export function PedalPaddle({
         className={cn('stroke-pedal-sheen stroke-[1.4]', down ? 'opacity-35' : 'opacity-80')}
       />
       {latched ? (
-        <circle
-          cx="38"
-          cy="4"
-          r="5"
-          className="fill-primary stroke-primary-foreground stroke-[1.5]"
-        />
+        // The latch's indicator light, as on a stage piano's Sustain button: lit honey with its glow.
+        <g data-slot="pedal-latch">
+          <circle cx="38" cy="4" r="7" className="fill-primary opacity-35" />
+          <circle
+            cx="38"
+            cy="4"
+            r="4"
+            className="fill-primary stroke-primary-foreground stroke-[1.5]"
+          />
+        </g>
       ) : null}
     </svg>
   )

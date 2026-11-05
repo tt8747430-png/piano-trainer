@@ -127,6 +127,8 @@ export const common = {
     },
     soft: { name: 'Soft', label: 'Soft pedal (una corda) — softens the tone while held' },
   },
+  // The piano's settings in place, from its rail's ⚙ (R33).
+  pianoSheet: { title: 'Piano', all: 'All piano settings' },
   rail: {
     settings: 'Piano settings',
     octaveDown: 'Octave down',
@@ -197,6 +199,7 @@ export const common = {
       scroll: 'Scroll',
       glissando: 'Glissando',
     },
+    volume: 'Volume',
     typing: 'Play with computer keyboard',
     typingNote: 'The letter keys play the on-screen piano.',
     typingHint: 'Z and X shift the octave · Space holds the sustain pedal',

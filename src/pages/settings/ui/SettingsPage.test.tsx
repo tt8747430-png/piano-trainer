@@ -105,10 +105,13 @@ describe('Settings', () => {
     await renderApp('/settings/on-screen-piano')
     expect(await screen.findByRole('heading', { level: 1, name: 'On-screen piano' })).toBeVisible()
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
-      'Keys',
+      'Keys and sound',
+      'Display',
       'While you play',
       'Placement',
     ])
+    // The piano's Volume, at full until turned down.
+    expect(screen.getByRole('slider', { hidden: true })).toHaveAttribute('aria-valuenow', '100')
     expect(screen.queryByRole('switch', { name: /^Play with computer keyboard/ })).toBeNull()
   })
 

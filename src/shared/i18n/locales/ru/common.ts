@@ -113,6 +113,7 @@ export const common: LocaleResources['common'] = {
     },
     soft: { name: 'Левая', label: 'Левая педаль (una corda) — смягчает звук, пока нажата' },
   },
+  pianoSheet: { title: 'Фортепиано', all: 'Все настройки фортепиано' },
   rail: {
     settings: 'Настройки фортепиано',
     octaveDown: 'Октава вниз',
@@ -182,6 +183,7 @@ export const common: LocaleResources['common'] = {
       scroll: 'Прокрутка',
       glissando: 'Глиссандо',
     },
+    volume: 'Громкость',
     typing: 'Играть на клавиатуре компьютера',
     typingNote: 'Буквенные клавиши играют на экранном фортепиано.',
     typingHint: 'Z и X сдвигают октаву · Пробел держит правую педаль',

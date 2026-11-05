@@ -28,7 +28,12 @@ export const settings: LocaleResources['settings'] = {
     feedback: 'Сообщить о проблеме',
     about: 'О приложении',
   },
-  piano: { look: 'Клавиши', place: 'Размещение', play: 'Во время игры' },
+  piano: {
+    essentials: 'Клавиши и звук',
+    look: 'Отображение',
+    place: 'Размещение',
+    play: 'Во время игры',
+  },
   progress: {
     reset: 'Сбросить прогресс',
     title: 'Сбросить прогресс?',

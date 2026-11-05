@@ -30,7 +30,12 @@ export const settings = {
     about: 'About',
   },
   // The on-screen piano's page: its groups.
-  piano: { look: 'Keys', place: 'Placement', play: 'While you play' },
+  piano: {
+    essentials: 'Keys and sound',
+    look: 'Display',
+    place: 'Placement',
+    play: 'While you play',
+  },
   progress: {
     reset: 'Reset progress',
     title: 'Reset progress?',

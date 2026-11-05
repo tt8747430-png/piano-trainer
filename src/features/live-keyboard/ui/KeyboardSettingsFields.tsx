@@ -6,7 +6,15 @@ import {
   type KeyboardSettings,
 } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
-import { KEY_DOCKS, KEY_LENGTHS, KEY_SIZES, NAMED_KEYS, PEDALS_SHOWN, SWIPES } from '@/shared/lib'
+import {
+  hasFinePointer,
+  KEY_DOCKS,
+  KEY_LENGTHS,
+  KEY_SIZES,
+  NAMED_KEYS,
+  PEDALS_SHOWN,
+  SWIPES,
+} from '@/shared/lib'
 import {
   DockPicture,
   FoldPicture,
@@ -19,6 +27,7 @@ import {
   SettingsGroup,
   SwipePicture,
   SwitchRow,
+  VolumeSlider,
 } from '@/shared/ui'
 
 /** Fold the keys (R21): never, on a phone on its side, or always; the two saved folds as one choice. */
@@ -36,11 +45,75 @@ const FOLD_SETTINGS: Readonly<Record<Fold, Pick<KeyboardSettings, 'folded' | 'fo
   }
 
 /**
- * The on-screen piano's settings (R21, R22, R32), saved for every on-screen piano, ordered by what a
- * pianist changes most: Keys (size, note names, depth), While you play (the chord symbol, names on
- * highlighted keys, the pedals, the swipe, play on selection), then Placement (where a page docks
- * the keys, when they hide). Each option says what it does in one line under its name; choices of
- * look are pictures of the keys. The computer keys have their own page (`TypingSwitch`).
+ * What matters while playing (R33, musicca's Settings): the key size, the note names, the volume, the
+ * pedals and, on a computer, its keys. The rows of the piano's sheet from its rail's ⚙ and the first
+ * group of the On-screen piano page: one control for each, wherever it shows.
+ */
+export function PianoEssentialRows() {
+  const { t } = useTranslation('common')
+  const store = useSettingsStoreApi()
+  const keyboard = useSettings(selectKeyboard)
+  return (
+    <>
+      <PictureChoice
+        setting="keyboard.keySize"
+        label={t('keyboardSettings.keySize.label')}
+        description={t('keyboardSettings.keySize.detail')}
+        value={keyboard.keySize}
+        options={KEY_SIZES.map((value) => ({
+          value,
+          label: t(`keyboardSettings.keySize.${value}`),
+          picture: <KeySizePicture size={value} />,
+        }))}
+        onChange={(keySize) => setKeyboard(store, { keySize })}
+      />
+      <PictureChoice
+        setting="keyboard.namedKeys"
+        label={t('keyboardSettings.namedKeys.label')}
+        description={t('keyboardSettings.namedKeys.detail')}
+        value={keyboard.namedKeys}
+        options={NAMED_KEYS.map((value) => ({
+          value,
+          label: t(`keyboardSettings.namedKeys.${value}`),
+          picture: <NoteNamesPicture names={value} />,
+        }))}
+        onChange={(namedKeys) => setKeyboard(store, { namedKeys })}
+      />
+      <VolumeSlider
+        setting="keyboard.volume"
+        label={t('keyboardSettings.volume')}
+        value={keyboard.volume}
+        onChange={(volume) => setKeyboard(store, { volume })}
+      />
+      <PictureChoice
+        setting="keyboard.pedals"
+        label={t('keyboardSettings.pedals.label')}
+        description={t('keyboardSettings.pedals.detail')}
+        value={keyboard.pedals}
+        options={PEDALS_SHOWN.map((value) => ({
+          value,
+          label: t(`keyboardSettings.pedals.${value}`),
+          picture: (
+            <span className="flex items-end gap-0.5">
+              {Array.from({ length: value === 'all' ? 3 : 1 }, (_, at) => (
+                <PedalPaddle key={at} down={false} className="h-5 w-7" />
+              ))}
+            </span>
+          ),
+        }))}
+        onChange={(pedals) => setKeyboard(store, { pedals })}
+      />
+      {hasFinePointer() ? <TypingSwitch /> : null}
+    </>
+  )
+}
+
+/**
+ * The on-screen piano's settings (R21, R22, R32, R33), saved for every on-screen piano, ordered by
+ * what a pianist changes most: Keys and sound (the piano sheet's rows), Display (depth, the chord
+ * symbol, names on highlighted keys), While you play (the swipe, play on selection), then Placement
+ * (where a page docks the keys, when they hide). Each option says what it does in one line under its
+ * name; choices of look are pictures of the keys.
  */
 export function KeyboardSettingsFields() {
   const { t } = useTranslation(['common', 'settings'])
@@ -48,32 +121,13 @@ export function KeyboardSettingsFields() {
   const keyboard = useSettings(selectKeyboard)
   return (
     <>
+      <SettingsGroup title={t('settings:piano.essentials')}>
+        <SettingRows>
+          <PianoEssentialRows />
+        </SettingRows>
+      </SettingsGroup>
       <SettingsGroup title={t('settings:piano.look')}>
         <SettingRows>
-          <PictureChoice
-            setting="keyboard.keySize"
-            label={t('keyboardSettings.keySize.label')}
-            description={t('keyboardSettings.keySize.detail')}
-            value={keyboard.keySize}
-            options={KEY_SIZES.map((value) => ({
-              value,
-              label: t(`keyboardSettings.keySize.${value}`),
-              picture: <KeySizePicture size={value} />,
-            }))}
-            onChange={(keySize) => setKeyboard(store, { keySize })}
-          />
-          <PictureChoice
-            setting="keyboard.namedKeys"
-            label={t('keyboardSettings.namedKeys.label')}
-            description={t('keyboardSettings.namedKeys.detail')}
-            value={keyboard.namedKeys}
-            options={NAMED_KEYS.map((value) => ({
-              value,
-              label: t(`keyboardSettings.namedKeys.${value}`),
-              picture: <NoteNamesPicture names={value} />,
-            }))}
-            onChange={(namedKeys) => setKeyboard(store, { namedKeys })}
-          />
           <PictureChoice
             setting="keyboard.keyLength"
             label={t('keyboardSettings.keyLength.label')}
@@ -86,10 +140,6 @@ export function KeyboardSettingsFields() {
             }))}
             onChange={(keyLength) => setKeyboard(store, { keyLength })}
           />
-        </SettingRows>
-      </SettingsGroup>
-      <SettingsGroup title={t('settings:piano.play')}>
-        <SettingRows>
           <SwitchRow
             setting="keyboard.chordNames"
             label={t('keyboardSettings.chordNames')}
@@ -104,24 +154,10 @@ export function KeyboardSettingsFields() {
             checked={keyboard.markNotes}
             onCheckedChange={(markNotes) => setKeyboard(store, { markNotes })}
           />
-          <PictureChoice
-            setting="keyboard.pedals"
-            label={t('keyboardSettings.pedals.label')}
-            description={t('keyboardSettings.pedals.detail')}
-            value={keyboard.pedals}
-            options={PEDALS_SHOWN.map((value) => ({
-              value,
-              label: t(`keyboardSettings.pedals.${value}`),
-              picture: (
-                <span className="flex items-end gap-0.5">
-                  {Array.from({ length: value === 'all' ? 3 : 1 }, (_, at) => (
-                    <PedalPaddle key={at} down={false} className="h-5 w-7" />
-                  ))}
-                </span>
-              ),
-            }))}
-            onChange={(pedals) => setKeyboard(store, { pedals })}
-          />
+        </SettingRows>
+      </SettingsGroup>
+      <SettingsGroup title={t('settings:piano.play')}>
+        <SettingRows>
           <PictureChoice
             setting="keyboard.swipe"
             label={t('keyboardSettings.swipe.label')}

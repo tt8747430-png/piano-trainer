@@ -23,7 +23,8 @@ export interface RailCaption {
  * they follow the music directly. It spans the piano's length and scrolls with it (a swipe on it
  * scrolls the keys); what it holds stays in view wherever the keys are scrolled. At its start the
  * `caption` (the chord a hand holds); centred, as on an upright or a grand, the `pedals` on their
- * lyre; at its end ‹ › an octave together (for a mouse on a keyboard long enough, which cannot swipe;
+ * lyre (giving way towards the start where the rail is short, so its end never scrolls out of
+ * sight); at its end ‹ › an octave together (for a mouse on a keyboard long enough, which cannot swipe;
  * keys that do not scroll have none), `children` (the screen's `RailGroup`s of `RailButton`s), and
  * `end`, never scrolled away. On a short rail the buttons scroll sideways.
  */
@@ -54,12 +55,12 @@ export function KeyRail({
   return (
     <div data-slot="key-rail" className="relative h-14 shrink-0 bg-key-rail">
       <div
-        className="sticky left-0 grid h-full grid-cols-[minmax(max-content,1fr)_auto_minmax(0,1fr)] items-center px-1"
+        className="sticky left-0 grid h-full grid-cols-[minmax(0,1fr)_auto_minmax(max-content,1fr)] items-center px-1"
         style={{ width: IN_VIEW }}
       >
         <div className="flex min-w-0 items-center">
           {caption?.text ? (
-            <p className="h-9 w-max px-2 font-display text-lg/9 font-semibold text-on-key-rail">
+            <p className="h-9 min-w-0 truncate px-2 font-display text-lg/9 font-semibold text-on-key-rail">
               <span className="sr-only">{caption.label}: </span>
               {caption.text}
             </p>
