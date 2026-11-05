@@ -2,19 +2,23 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
 import { useAdmin } from '@/shared/lib/admin'
-import { groupErrors } from '../model/group-errors'
+import { groupErrors, splitReports } from '../model/group-errors'
 import { useLoaded } from '../model/use-loaded'
 import { LoadedState } from './LoadedState'
 
 /**
- * What went wrong on learners' devices, one row a message, the most recently seen first: how many
+ * Administration › Error log: what went wrong on learners' devices (their own reports are
+ * Feedback's), one row a message, the most recently seen first: how many
  * times and on how many screens, then the latest's when, where and build, its stack folded.
  */
 export function ErrorsTab() {
   const { t } = useTranslation('admin')
   const locale = useLocale()
   const admin = useAdmin()
-  const load = useCallback(() => admin.errors(), [admin])
+  const load = useCallback(async () => {
+    const result = await admin.errors()
+    return result.ok ? { ok: true as const, value: splitReports(result.value).errors } : result
+  }, [admin])
   const { loaded, reload } = useLoaded(load)
   const date = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' })
   return (

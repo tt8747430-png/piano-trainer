@@ -4,21 +4,21 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 
 const PARTS = [
-  'Find and organise songs',
+  'Organise your library',
   'Play a song',
   'Learn a song',
-  'Edit a song',
-  'Play on a connected piano',
+  'Edit a score',
+  'Play a MIDI keyboard',
   'Keep time',
 ]
 
-describe('Settings → How to use', () => {
-  it('is reached from Settings’ Help, its parts in plain steps', async () => {
+describe('Settings › Support › User guide', () => {
+  it('is reached from Settings’ Support, its parts in steps', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/settings')
-    const help = await screen.findByRole('region', { name: 'Help' })
-    await user.click(within(help).getByRole('link', { name: /How to use/ }))
-    expect(await screen.findByRole('heading', { level: 1, name: 'How to use' })).toBeInTheDocument()
+    const help = await screen.findByRole('region', { name: 'Support' })
+    await user.click(within(help).getByRole('link', { name: /User guide/ }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'User guide' })).toBeInTheDocument()
     expect(router.state.location.pathname).toBe('/settings/how-to-use')
     expect(
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
@@ -41,8 +41,8 @@ describe('Settings → How to use', () => {
   it('reads in Russian', async () => {
     await renderApp('/settings/how-to-use', { locale: 'ru' })
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Как пользоваться' }),
+      await screen.findByRole('heading', { level: 1, name: 'Руководство' }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 2, name: 'Держать темп' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: 'Метроном' })).toBeInTheDocument()
   })
 })

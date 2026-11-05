@@ -3,7 +3,7 @@
 export const legal = {
   updated: 'Last changed {{date}}',
   privacy: {
-    title: 'Privacy',
+    title: 'Privacy Policy',
     sections: {
       device: {
         heading: 'On your device',
@@ -39,12 +39,12 @@ export const legal = {
       },
       contact: {
         heading: 'Questions',
-        text: 'Ask about your data, or anything on this page, through Settings › Help › Report a problem. The app’s editors read every report.',
+        text: 'Ask about your data, or anything on this page, through Settings › Support › Report a problem. The app’s editors read every report.',
       },
     },
   },
   terms: {
-    title: 'Terms',
+    title: 'Terms of Service',
     sections: {
       use: {
         heading: 'Using the app',
@@ -64,11 +64,11 @@ export const legal = {
       },
       thirdParty: {
         heading: 'Other people’s work in the app',
-        text: 'The app is built with other people’s work, each under its own licence: Verovio draws the scores, the Noto fonts set the text, Salamander Grand Piano (by Alexander Holm, CC BY 3.0) and Splendid Grand Piano (by AKAI, public domain) are the piano’s sound. Settings › Help lists them.',
+        text: 'The app is built with other people’s work, each under its own licence: Verovio draws the scores, the Noto fonts set the text, Salamander Grand Piano (by Alexander Holm, CC BY 3.0) and Splendid Grand Piano (by AKAI, public domain) are the piano’s sound. Settings › About lists them.',
       },
       contact: {
         heading: 'Questions',
-        text: 'Ask about these terms through Settings › Help › Report a problem.',
+        text: 'Ask about these terms through Settings › Support › Report a problem.',
       },
       changes: {
         heading: 'Changes',

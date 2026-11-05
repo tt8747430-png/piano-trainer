@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import type { NetResult } from '@/shared/api/network'
 import { useAdmin } from '@/shared/lib/admin'
 import { useContentEditing } from '@/shared/lib/content-editing'
+import { splitReports } from '../model/group-errors'
 import { overviewOf, type Overview } from '../model/overview'
 import { useLoaded } from '../model/use-loaded'
 import { LoadedState } from './LoadedState'
@@ -26,7 +27,7 @@ const FIGURES = [
 ] as const satisfies readonly (readonly [keyof Overview, LucideIcon])[]
 
 /**
- * The Admin area's first page: the app this week at a glance, six figures in one card (accounts, the
+ * Administration › Overview: the app this week at a glance, six figures in one card (accounts, the
  * week's new and active ones, its errors, the reports to look at, the drafts not yet published).
  */
 export function OverviewTab() {
@@ -50,7 +51,7 @@ export function OverviewTab() {
       value: overviewOf(
         {
           accounts: accounts.value,
-          errors: errors.value,
+          errors: splitReports(errors.value).errors,
           reports: reports.value.length,
           drafts: drafts.value,
         },

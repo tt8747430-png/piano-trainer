@@ -40,16 +40,17 @@ describe('Settings', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/profile'))
   })
 
-  it('holds only the app’s own pages: the account card, General, Piano, Help', async () => {
+  it('holds only the app’s own pages: the account card, App, Piano, Library, Support', async () => {
     await renderApp('/settings')
     const card = within(await screen.findByRole('navigation', { name: 'Account' }))
     expect(card.getAllByRole('link').map((link) => link.textContent)).toEqual([
-      'Sign in Sign in to sync your songs on every device',
+      'Sign in Sync your library across your devices',
     ])
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
-      'General',
+      'App',
       'Piano',
-      'Help',
+      'Library',
+      'Support',
     ])
     expect(
       screen
@@ -61,11 +62,14 @@ describe('Settings', () => {
       '/settings/storage',
       '/settings/on-screen-piano',
       '/settings/connect-piano',
+      '/settings/select-toolbar',
+      '/settings/swipe-actions',
       '/settings/how-to-use',
-      '/legal/privacy',
-      '/legal/terms',
+      '/settings/feedback',
       '/settings/about',
     ])
+    // View as a learner and the legal pages are elsewhere (R32): the Account, About.
+    expect(screen.queryByRole('switch')).toBeNull()
   })
 
   it('has no Player, Score editor, Sound and recording, Computer keys or Practice rows', async () => {
@@ -90,7 +94,7 @@ describe('Settings', () => {
     expect(within(language).getByRole('radio', { name: 'English' })).toBeChecked()
     // The appearance a card of three (R29), the device's chosen.
     const theme = within(general).getByRole('radiogroup', { name: 'Appearance' })
-    expect(within(theme).getByRole('radio', { name: 'Same as the device' })).toBeChecked()
+    expect(within(theme).getByRole('radio', { name: 'Match system' })).toBeChecked()
     await user.click(within(theme).getByRole('radio', { name: 'Dark' }))
     expect(settingsStore.getState().theme).toBe('dark')
     await user.click(within(language).getByRole('radio', { name: 'Русский' }))
@@ -101,12 +105,12 @@ describe('Settings', () => {
     await renderApp('/settings/on-screen-piano')
     expect(await screen.findByRole('heading', { level: 1, name: 'On-screen piano' })).toBeVisible()
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
-      'Look',
+      'Appearance',
       'Position',
       'Playing',
       'Pedals',
     ])
-    expect(screen.queryByRole('switch', { name: /^Play from the computer keys/ })).toBeNull()
+    expect(screen.queryByRole('switch', { name: /^Play with computer keyboard/ })).toBeNull()
   })
 
   it('keeps what the device keeps, the backup and the progress under Storage and backup', async () => {
@@ -114,26 +118,67 @@ describe('Settings', () => {
     await screen.findByRole('region', { name: 'Backup' })
     expect(screen.queryByRole('button', { name: 'Sync now' })).toBeNull()
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
-      'On this device',
+      'Device storage',
       'Backup',
     ])
   })
 
-  it('stands in two panes on a laptop: the list beside General, neither with Back (R20)', async () => {
+  it('stands in two panes on a laptop: the sidebar beside General, neither with Back (R32)', async () => {
     onLaptop()
     const { router } = await renderApp('/settings')
     await waitFor(() => expect(router.state.location.pathname).toBe('/settings/general'))
     expect(await screen.findByRole('heading', { level: 1, name: 'General' })).toBeInTheDocument()
-    expect(screen.getByRole('navigation', { name: 'Account' })).toBeInTheDocument()
+    const sidebar = screen.getByRole('complementary', { name: 'Settings' })
     expect(screen.getByRole('radiogroup', { name: 'Language' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'General' })).toHaveAttribute('aria-current', 'page')
+    expect(within(sidebar).getByRole('link', { name: 'General' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    )
     expect(screen.queryByRole('button', { name: 'Back' })).toBeNull()
   })
 
-  it('says the app’s version under Help', async () => {
+  it('scrolls the laptop’s sidebar on its own, never with the page (R32, the owner’s bug)', async () => {
+    onLaptop()
+    await renderApp('/settings/storage')
+    const sidebar = await screen.findByRole('complementary', { name: 'Settings' })
+    // Sticky under the bar, no taller than the window, its own scroller: as Songs' tree.
+    expect(sidebar).toHaveClass('sticky', 'top-20', 'max-h-[calc(100dvh-6rem)]', 'overflow-y-auto')
+  })
+
+  it('marks the page a page is under on a laptop, and keeps that page’s Back', async () => {
+    onLaptop()
+    const user = userEvent.setup()
+    const { router } = await renderApp('/settings/about')
+    const sidebar = await screen.findByRole('complementary', { name: 'Settings' })
+    expect(within(sidebar).getByRole('link', { name: 'About' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    )
+    // About on a laptop (the owner's bug): beside the sidebar, with no dead Back.
+    expect(screen.queryByRole('button', { name: 'Back' })).toBeNull()
+    await user.click(screen.getByRole('link', { name: 'Privacy Policy' }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Privacy Policy' })).toBeVisible()
+    expect(
+      within(screen.getByRole('complementary', { name: 'Settings' })).getByRole('link', {
+        name: 'About',
+      }),
+    ).toHaveAttribute('aria-current', 'page')
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/settings/about'))
+  })
+
+  it('draws a page Settings does not list alone, with Back, on a laptop', async () => {
+    onLaptop()
+    await renderApp('/settings/chords')
+    await screen.findByRole('heading', { level: 1 })
+    expect(screen.queryByRole('complementary', { name: 'Settings' })).toBeNull()
+    expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument()
+  })
+
+  it('says the app’s version on About’s row', async () => {
     await renderApp('/settings')
-    const help = await screen.findByRole('region', { name: 'Help' })
-    expect(help).toHaveTextContent(/Version\s*dev/)
+    const about = await screen.findByRole('link', { name: /^About/ })
+    expect(about.querySelector('[data-slot="row-value"]')?.textContent).toMatch(/\d/)
   })
 
   it('says what a backup holds beside its heading, never in a line under it', async () => {
@@ -154,11 +199,11 @@ describe('Settings', () => {
     const keys = await screen.findByRole('radiogroup', { name: 'Key size' })
     await user.click(within(keys).getByRole('radio', { name: 'Large' }))
     await user.click(screen.getByRole('switch', { name: /^Chord names/ }))
-    const swipe = screen.getByRole('radiogroup', { name: 'A swipe on the keys' })
-    await user.click(within(swipe).getByRole('radio', { name: 'Plays' }))
+    const swipe = screen.getByRole('radiogroup', { name: 'Swipe gesture' })
+    await user.click(within(swipe).getByRole('radio', { name: 'Glissando' }))
     // Fold the keys: the two saved folds as one choice of three (R21).
-    const fold = screen.getByRole('radiogroup', { name: 'Fold the keys' })
-    expect(within(fold).getByRole('radio', { name: 'On its side' })).toBeChecked()
+    const fold = screen.getByRole('radiogroup', { name: 'Collapse keyboard' })
+    expect(within(fold).getByRole('radio', { name: 'In landscape' })).toBeChecked()
     await user.click(within(fold).getByRole('radio', { name: 'Always' }))
     expect(settingsStore.getState().keyboard).toMatchObject({ folded: true })
     await user.click(within(fold).getByRole('radio', { name: 'Never' }))
@@ -167,7 +212,7 @@ describe('Settings', () => {
       foldedLandscape: false,
     })
     await act(() => router.navigate({ to: '/settings/computer-keys' }))
-    await user.click(await screen.findByRole('switch', { name: /^Play from the computer keys/ }))
+    await user.click(await screen.findByRole('switch', { name: /^Play with computer keyboard/ }))
     expect(settingsStore.getState().keyboard).toMatchObject({
       keySize: 'large',
       typing: true,
@@ -181,10 +226,10 @@ describe('Settings', () => {
     await renderApp('/settings/on-screen-piano')
     await user.click(await screen.findByRole('button', { name: 'About Key size' }))
     expect(await screen.findByRole('dialog', { name: 'Key size' })).toHaveTextContent(
-      /fills the width/,
+      /across the full width/,
     )
     await user.keyboard('{Escape}')
-    await waitFor(() => expect(screen.queryByText(/fills the width/)).toBeNull())
+    await waitFor(() => expect(screen.queryByText(/across the full width/)).toBeNull())
   })
 
   it('draws the sustain pedal, or all three, as chosen (R31-P)', async () => {
@@ -195,10 +240,10 @@ describe('Settings', () => {
     expect(settingsStore.getState().keyboard.pedals).toBe('all')
   })
 
-  it('says on Connect a piano’s row when the browser cannot connect one', async () => {
+  it('says on MIDI devices’ row when the browser cannot connect one', async () => {
     await renderApp('/settings', { webMidi: false })
-    const row = (await screen.findByText('Connect a piano')).closest('a') as HTMLElement
-    expect(row).toHaveTextContent(/Connect a piano\s*Not available/)
+    const row = await screen.findByRole('link', { name: /^MIDI devices/ })
+    expect(row).toHaveTextContent(/MIDI devices\s*Not available/)
   })
 
   it('reads in Russian, with nothing left in English', async () => {
@@ -223,7 +268,7 @@ describe('Settings', () => {
     act(() => progressStore.setState({ learned: { 'chords:tri': '2026-09-25T10:00:00Z' } }))
     expectLastAndAlone(await screen.findByRole('button', { name: /^Reset progress/ }))
     await user.click(await screen.findByRole('button', { name: /^Reset progress/ }))
-    await user.click(screen.getByRole('button', { name: 'Keep it' }))
+    await user.click(screen.getByRole('button', { name: 'Cancel' }))
     expect(progressStore.getState().learned['chords:tri']).toBeDefined()
     await user.click(screen.getByRole('button', { name: /^Reset progress/ }))
     await user.click(await screen.findByRole('button', { name: 'Reset' }))
@@ -231,14 +276,14 @@ describe('Settings', () => {
     await waitFor(() => expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument())
   })
 
-  it('says the version is up to date, and that it cannot look offline', async () => {
+  it('says on About the app is up to date, and that it cannot check offline', async () => {
     const user = userEvent.setup()
-    await renderApp('/settings')
-    const version = await screen.findByRole('button', { name: /^Version/ })
-    expect(version).toHaveTextContent('Up to date')
+    await renderApp('/settings/about')
+    const update = await screen.findByRole('button', { name: /^Software update/ })
+    expect(update).toHaveTextContent('Up to date')
     vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
-    await user.click(version)
-    expect(version).toHaveTextContent("Can't check while offline")
+    await user.click(update)
+    expect(update).toHaveTextContent('Unavailable offline')
   })
 
   it('installs a waiting version from Settings, and marks the Profile’s way there', async () => {
@@ -246,11 +291,15 @@ describe('Settings', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/profile')
     expect(
-      await screen.findByRole('link', { name: 'Settings, New version ready' }),
+      await screen.findByRole('link', { name: 'Settings, Update available' }),
     ).toBeInTheDocument()
     await act(() => router.navigate({ to: '/settings' }))
-    expect(await screen.findByRole('button', { name: /^Version/ })).toHaveTextContent(
-      'New version ready',
+    expect(await screen.findByRole('link', { name: /^About/ })).toHaveTextContent(
+      'Update available',
+    )
+    await act(() => router.navigate({ to: '/settings/about' }))
+    expect(await screen.findByRole('button', { name: /^Software update/ })).toHaveTextContent(
+      'Update available',
     )
     await user.click(screen.getByRole('button', { name: 'Install and restart' }))
     await waitFor(() =>
@@ -258,19 +307,33 @@ describe('Settings', () => {
     )
   })
 
-  it('sends a problem from Help’s Report a problem with the app’s reports (R29 B2)', async () => {
+  it('sends a problem from Support’s Report a problem page with the app’s reports (R32)', async () => {
     const user = userEvent.setup()
     const errors = createFakeErrorReporter()
-    await renderApp('/settings', { errors })
-    await user.click(await screen.findByRole('button', { name: 'Report a problem' }))
-    const sheet = await screen.findByRole('dialog', { name: 'Report a problem' })
-    const send = within(sheet).getByRole('button', { name: 'Send' })
+    const { router } = await renderApp('/settings', { errors })
+    await user.click(await screen.findByRole('link', { name: 'Report a problem' }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Report a problem' })).toBeVisible()
+    const send = screen.getByRole('button', { name: 'Send report' })
     expect(send).toBeDisabled()
-    await user.type(within(sheet).getByRole('textbox'), 'The metronome stops at 200')
+    await user.type(
+      screen.getByRole('textbox', { name: 'Description' }),
+      'The metronome stops at 200',
+    )
     await user.click(send)
     expect(errors.sent).toEqual([
       expect.objectContaining({ message: 'Report: The metronome stops at 200' }),
     ])
-    expect(await screen.findByText('Sent. Thank you.')).toBeInTheDocument()
+    expect(await screen.findByText('Report sent. Thank you.')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/settings'))
+  })
+
+  it('cannot send a report offline, and says why', async () => {
+    vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+    const user = userEvent.setup()
+    await renderApp('/settings/feedback')
+    await user.type(await screen.findByRole('textbox', { name: 'Description' }), 'Broken')
+    expect(screen.getByRole('button', { name: 'Send report' })).toBeDisabled()
+    expect(screen.getByText('Sending requires an internet connection.')).toBeInTheDocument()
   })
 })

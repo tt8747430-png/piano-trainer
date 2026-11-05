@@ -25,9 +25,9 @@ async function asLearner(how: 'signed-out' | 'learner' | 'learner-view', user: U
   if (how === 'signed-out') return renderApp('/songs/folders/hymns')
   if (how === 'learner')
     return renderApp('/songs/folders/hymns', { auth: await signedInAs('learner') })
-  const app = await renderApp('/settings', { auth: await signedInAs('editor') })
-  await user.click(await screen.findByRole('switch', { name: 'View as a learner' }))
-  await screen.findByRole('status')
+  const app = await renderApp('/settings/account', { auth: await signedInAs('editor') })
+  await user.click(await screen.findByRole('switch', { name: 'Preview as learner' }))
+  await screen.findByText('Previewing as learner')
   await app.router.navigate({ to: '/songs/folders/$folderId', params: { folderId: 'hymns' } })
   await screen.findByRole('heading', { level: 1, name: 'Hymns' })
   return app
