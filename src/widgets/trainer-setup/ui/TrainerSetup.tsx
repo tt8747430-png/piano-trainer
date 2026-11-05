@@ -20,7 +20,10 @@ import {
   CHORD_FAMILIES,
   CHORD_QUALITIES,
   chordFamily,
+  chordSymbol,
   INTERVAL_GROUPS,
+  INTERVALS,
+  printedSymbol,
   LETTERS,
   midiOf,
   note,
@@ -180,10 +183,15 @@ export function TrainerSetup({
           <ListSheetRow
             label={t('quiz:choice.chords')}
             value={listOf('chords')}
+            recommended={CUSTOM_OWN.chords}
             groups={CHORD_FAMILIES.map((family) => ({
               label: t(`music:family.${family}`),
               options: CHORD_QUALITIES.filter((quality) => chordFamily(quality) === family).map(
-                (quality) => ({ value: quality, label: t(`music:quality.${quality}`) }),
+                (quality) => ({
+                  value: quality,
+                  label: t(`music:quality.${quality}`),
+                  example: printedSymbol(chordSymbol({ root: note('C'), quality })),
+                }),
               ),
             }))}
             onChange={(chosen) => write('chords', chosen)}
@@ -193,13 +201,18 @@ export function TrainerSetup({
           <ListSheetRow
             label={t('quiz:choice.intervals')}
             value={listOf('intervals')}
+            recommended={CUSTOM_OWN.intervals}
             groups={(['simple', 'compound'] as const).map((group) => ({
               label: t(`quiz:intervalGroups.${group}`),
               options: INTERVAL_GROUPS[group]
                 .filter((interval) => interval !== 'r')
                 .map((interval) => ({
                   value: interval,
-                  label: `${t(`music:interval.${interval}.name`)} · ${t(`music:interval.${interval}.short`)}`,
+                  label: t(`music:interval.${interval}.name`),
+                  example: t('quiz:choice.semitones', {
+                    short: t(`music:interval.${interval}.short`),
+                    count: INTERVALS[interval].semitones,
+                  }),
                 })),
             }))}
             onChange={(chosen) => write('intervals', chosen)}
@@ -245,6 +258,7 @@ export function TrainerSetup({
           <ListSheetRow
             label={t('quiz:choice.scales')}
             value={listOf('scales')}
+            recommended={CUSTOM_OWN.scales}
             groups={SCALE_FAMILIES.map((family) => ({
               label: t(`music:scaleFamily.${family}`),
               options: scaleKindsIn(family).map((kind) => ({
@@ -259,6 +273,7 @@ export function TrainerSetup({
           <ListSheetRow
             label={t('quiz:choice.kinds')}
             value={listOf('kinds')}
+            recommended={CUSTOM_OWN.kinds}
             groups={[
               {
                 options: CUSTOM_CHOICES.kinds.map((kind) => ({
