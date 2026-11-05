@@ -210,8 +210,8 @@ span[aria-label^="Level"] { font-size: 14px !important }
   </section>
 
   <section class="q" id="q3"><div class="qhead"><span class="qnum">3</span><h2>Settings ordered by relevance, each option explained</h2></div>
-    <p class="where">Where: the Player’s ⚙, and the piano rail’s ⚙ (the On-screen piano page, also in Settings).</p>
-    <p>What changes: the pages appear in the order a pianist reaches for them — Score view, Playback, Staves, Accompaniment, On-screen piano — each with one line on what it controls and its current choice. Every option on a page carries a one-line description; pictures show the layouts, key sizes, labels and pedals.</p>
+    <p class="where">Where: the Player’s ⚙; the On-screen piano page in Settings, opened from it and from every piano rail’s ⚙.</p>
+    <p>What changes: the pages appear in the order a pianist reaches for them — Score view, Playback, Staves, Accompaniment, then a link to the On-screen piano page, the one home of every keyboard’s settings — each with one line on what it controls and its current choice. Every option on a page carries a one-line description; pictures show the layouts, key sizes, labels and pedals.</p>
     <div class="screens" id="s3"></div>
   </section>
 
@@ -377,26 +377,26 @@ const mini = (kind) => `<svg width="60" height="34" viewBox="0 0 60 34" aria-hid
 
 const settingsMain = sheetOver('Player settings', false, `<div class="group">${[
   ['p-lilac', 'eye', 'Score view', 'Layout, cursor and what appears on the score', 'Vertical'],
-  ['p-grass', 'sliders', 'Playback', 'Count-in, metronome, pedalling and practice tempo', '1 bar'],
+  ['p-grass', 'sliders', 'Playback', 'Count-in, pedalling, metronome and practice tempo', 'Audible'],
   ['p-sky', 'rows', 'Staves', 'Which staves sound and appear, and their levels', 'All'],
   ['p-yellow', 'note', 'Accompaniment', 'Pattern, chord voicing and swing', 'Broken'],
-  ['p-sand', 'keys', 'On-screen piano', 'Key size, note names and pedals', 'Fit'],
+  ['p-sand', 'keys', 'On-screen piano', 'Key size, note names and pedals', 'Fit to music'],
 ].map(navRow).join('')}</div>`)
 
 const scoreView = sheetOver('Score view', true, `<div class="group">${opt('Layout', 'How the systems are arranged on screen.', tiles([pic('Page', mini('page')), pic('Vertical scroll', mini('vertical'), true), pic('Panorama', mini('panorama'))]))}<div style="padding:0 14px 12px;font-size:14px;color:var(--ink-soft)"><b style="color:var(--ink)">Vertical scroll:</b> systems down the screen at full width.</div></div>
-  <div class="group">${opt('Show on the score', 'Markings drawn over and under the staves.', `<div style="display:flex;gap:8px;flex-wrap:wrap">${['Chord symbols', 'Lyrics', 'Fingering', 'Chord positions', 'Note names'].map((x, i) => `<span class="chip ${i < 2 ? 'on' : ''}" style="height:44px">${x}</span>`).join('')}</div>`).replace('border-top:1px solid var(--line)', 'border-top:0')}${opt('Cursor', 'How the playhead moves with the music.', seg(['Off', 'By beat', 'Continuous'], 2))}${swRow('Follow the music', 'Keeps the system being played in view.', true)}</div>`, 80)
+  <div class="group">${opt('Show on the score', 'Markings drawn over and under the staves.', `<div style="display:flex;gap:8px;flex-wrap:wrap">${['Chord symbols', 'Lyrics', 'Fingering', 'Chord positions', 'Note names'].map((x, i) => `<span class="chip ${i < 2 ? 'on' : ''}" style="height:44px">${x}</span>`).join('')}</div>`).replace('border-top:1px solid var(--line)', 'border-top:0')}${opt('Cursor', 'How the playhead moves with the music.', seg(['Off', 'By note', 'Continuous'], 2))}${swRow('Follow the music', 'Keeps the passage being played in view.', true)}</div>`, 80)
 
-const playbackPage = sheetOver('Playback', true, `<div class="group">${opt('Count-in', 'One bar before the music begins.', seg(['Off', 'Audible', 'Silent'], 1)).replace('border-top:1px solid var(--line)', 'border-top:0')}${opt('Pedalling', 'How the sustain pedal is played back.', seg(['As marked', 'Automatic', 'Off'], 0))}${opt('Metronome level', 'Volume of the click against the music.', '<div style="height:6px;border-radius:9px;background:linear-gradient(90deg,var(--ink) 70%,var(--line) 70%)"></div>')}</div>
+const playbackPage = sheetOver('Playback', true, `<div class="group">${opt('Count-in', 'A bar counted before the music begins.', seg(['Off', 'Audible', 'Silent'], 1)).replace('border-top:1px solid var(--line)', 'border-top:0')}${opt('Pedalling', 'How the sustain pedal is played back.', seg(['As marked', 'Automatic', 'Off'], 0))}${opt('Metronome level', 'Volume of the click against the music.', '<div style="height:6px;border-radius:9px;background:linear-gradient(90deg,var(--ink) 70%,var(--line) 70%)"></div>')}</div>
   <div class="group">${opt('Speed training step', 'Tempo increase after each clean pass.', seg(['2%', '5%', '10%'], 1)).replace('border-top:1px solid var(--line)', 'border-top:0')}${opt('Other hand in practice', 'How the hand you are not practising appears.', seg(['Show', 'Dim', 'Hide'], 1))}</div>`, 80)
 
-const pianoPage = sheetOver('On-screen piano', true, `${group('Keys', `${opt('Key size', 'How many keys fit across the screen.', tiles([pic('Fit the song', mini('fit'), true), pic('Large', mini('large')), pic('Full keyboard', mini('all'))]))}${opt('Note names', 'Which keys are labelled with their note name.', seg(['On C', 'Every key', 'Hidden'], 0))}`)}
-  ${group('While you play', `${swRow('Chord symbol', 'Names the chord you hold, at the pedal rail’s start.', true)}${opt('Pedals', 'Soft and sostenuto pedals beside the sustain.', tiles([pic('Sustain only', mini('one'), true), pic('All three', mini('three'))]))}${swRow('Glissando', 'A swipe across the keys plays every key it crosses.', false)}`)}`, 70)
+const pianoPage = sheetOver('On-screen piano', true, `${group('Keys', `${opt('Key size', 'How many keys fit across the screen.', tiles([pic('Fit to music', mini('fit'), true), pic('Large', mini('large')), pic('Full keyboard', mini('all'))]))}${opt('Note names', 'Which keys carry their note name.', seg(['On every C', 'On every key', 'Hidden'], 0))}`)}
+  ${group('While you play', `${swRow('Chord symbol', 'Names the chord you hold at the start of the pedal rail.', true)}${opt('Pedals', 'Adds the soft and sostenuto pedals beside the sustain.', tiles([pic('Sustain only', mini('one'), true), pic('All three', mini('three'))]))}${opt('Swipe gesture', 'Scrolls the keyboard, or plays every key your finger crosses.', seg(['Scroll', 'Glissando'], 0))}`)}`, 70)
 
 document.getElementById('s3').innerHTML = [
-  fig('3.1', 'Player settings', 'Five pages in the order they are used, each with a line on what it controls and its current choice.', settingsMain),
+  fig('3.1', 'Player settings', 'Four pages in the order they are used, each with a line on what it controls and its current choice; last, a link to the On-screen piano page in Settings, the one home of every keyboard’s settings (Back returns to the Player).', settingsMain),
   fig('3.2', 'Score view', 'Layout as pictures, the one chosen described beneath; what appears on the score; the cursor; following the music.', scoreView),
   fig('3.3', 'Playback', 'Count-in, pedalling and the metronome first; speed training and the other hand after. Each option with its line.', playbackPage),
-  fig('3.4', 'On-screen piano', 'Keys first (size, note names), then what helps while you play (chord symbol, pedals, glissando); position and auto-hide follow further down.', pianoPage),
+  fig('3.4', 'Settings › On-screen piano', 'The one home of the keyboard’s settings, opened from the Player’s link and every piano rail’s ⚙: Keys first (size, note names), then While you play (chord symbol, pedals, swipe gesture); Placement (position, Collapse keyboard) follows further down.', pianoPage),
 ].join('')
 
 const before = `<div class="dev phone"><div class="scr"><img src="../shots/before/play-hot-cross-buns-click-Play-iphone-17-pro-light-en.png" alt="The Player today, playing" style="width:100%;height:100%;object-fit:cover;object-position:top"></div></div>`
