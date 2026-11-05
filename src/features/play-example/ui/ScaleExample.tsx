@@ -15,8 +15,8 @@ const RUN_TEMPO = 96
 
 /**
  * A scale in a lesson: its name, its run up and back on one staff, and on its card its own options
- * (the fingers, the notes' names) and Play, which runs it on the page's keys, each key with its
- * degree and, where shown, its finger.
+ * (the fingers and the notes' names on its staff) and Play, which runs it on the page's keys, each
+ * key with its degree.
  */
 export function ScaleExample({
   root,
@@ -34,7 +34,7 @@ export function ScaleExample({
   const [fingers, setFingers] = useState(true)
   const [names, setNames] = useState(false)
   const tonic = useMemo(() => noteFromParam(root), [root])
-  const example = useMemo(() => scaleExample(tonic, kind, fingers), [tonic, kind, fingers])
+  const example = useMemo(() => scaleExample(tonic, kind), [tonic, kind])
   const score = useMemo(() => notate(example.music), [example])
   return (
     <figure aria-labelledby={captionId} className="flex flex-col gap-3 card p-4">

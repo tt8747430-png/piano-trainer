@@ -199,10 +199,9 @@ export function usePracticePlayer(
     () =>
       practiceMarks(performance, state.beatGroup, {
         hands,
-        fingers: toggles.fingerNumbers,
         ...(received ? { received } : {}),
       }),
-    [performance, state.beatGroup, hands, toggles.fingerNumbers, received],
+    [performance, state.beatGroup, hands, received],
   )
   const inView = useMemo(() => rangeOf([...marks.keys()]), [marks])
   const wrong = useMemo(

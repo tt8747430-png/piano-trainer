@@ -21,8 +21,6 @@ import type { ShownKeys } from '@/shared/ui'
 export function scaleExample(
   root: SpelledNote,
   kind: ScaleKind,
-  /** The keys carry the right hand's fingers. */
-  withFingers = true,
 ): { readonly shown: ShownKeys; readonly music: TimedMusic } {
   const fingered = (way: ScaleKind, notes: readonly PlacedTone[]) => {
     const keys = notes.map((key) => key.midi)
@@ -37,7 +35,7 @@ export function scaleExample(
   const downKind = kindComingDown(kind)
   const down = placeScale(root, downKind)
   return {
-    shown: scaleShown(placed, withFingers ? fingers.rh : undefined),
+    shown: scaleShown(placed),
     music: scaleRun(
       { notes: placed, fingers },
       {

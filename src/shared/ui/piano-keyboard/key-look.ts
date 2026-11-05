@@ -7,7 +7,6 @@ import {
   printedKeyName,
   CHORD_ROLES,
   type ChordRole,
-  type Finger,
   type Midi,
   type Tone,
 } from '@/shared/lib/music'
@@ -21,10 +20,6 @@ export interface KeyMark {
   readonly caption?: string
   /** The note it marks, as the page spells it (E, F♯), named under the label while marked notes are named. */
   readonly note?: string
-  /** A finger number, drawn in the finger row under the keys. */
-  readonly finger?: Finger
-  /** Its finger crosses (the thumb passing under, a finger over it): its circle in the link's sky. */
-  readonly crossing?: true
   /**
    * Where a voice was a moment ago (a voice's letter on the key it left): the key plain, its label
    * faint, so the voice's move shows.
@@ -119,7 +114,7 @@ function labelOf(
 
 /**
  * A key never stacks more than two labels (R29 A26), kept in this order: the computer key's letter
- * while it plays, the finger (a mark's caption), the degree or name (its text), the note's name
+ * while it plays, a mark's caption (a degree's numeral), the degree or name (its text), the note's name
  * under it. What the order leaves past the second goes.
  */
 function atMostTwo(label: KeyLabel, lettered: boolean): KeyLabel {

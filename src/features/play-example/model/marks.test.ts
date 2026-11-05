@@ -26,11 +26,6 @@ describe('scaleShown', () => {
     expect(shown.marks.get(midi(62))).toEqual({ tone: 'tonic', label: '1', note: 'D' })
     expect(shown.marks.get(midi(65))).toEqual({ tone: 'scale', label: '♭3', note: 'F' })
   })
-
-  it('puts a hand’s finger on each key where it has one', () => {
-    const shown = scaleShown(placeScale(note('C'), 'major'), [1, 2, 3, 1, 2, 3, 4, 5])
-    expect(shown.marks.get(midi(65))).toMatchObject({ label: '4', finger: 1 })
-  })
 })
 
 describe('chordsRange', () => {

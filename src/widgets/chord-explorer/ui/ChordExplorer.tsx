@@ -17,10 +17,8 @@ import {
   printedSymbol,
   qualitySpellings,
   writtenSymbol,
-  type ChordFingers,
   type ChordQuality,
   type ColourNote,
-  type PlacedChord,
   type Triad,
 } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
@@ -32,7 +30,6 @@ import {
   FloatingBarButton,
   FloatingBarPlay,
   usePlayKey,
-  type ShownKeys,
 } from '@/shared/ui'
 import {
   changedView,
@@ -59,20 +56,6 @@ const TRIAD_QUALITY: Readonly<Record<Triad, ChordQuality>> = {
   power: 'five',
 }
 
-/** The chord's keys by role, each with the finger its hand puts on it, as Scales marks a run's. */
-function fingeredShown(placed: PlacedChord, fingers: ChordFingers): ShownKeys {
-  const shown = chordShown([...placed.lh, ...placed.rh])
-  const marks = new Map(shown.marks)
-  for (const hand of ['lh', 'rh'] as const) {
-    placed[hand].forEach((key, i) => {
-      const mark = marks.get(key.midi)
-      const finger = fingers[hand][i]
-      if (mark && finger !== undefined) marks.set(key.midi, { ...mark, finger })
-    })
-  }
-  return { ...shown, marks }
-}
-
 /**
  * Any chord built part by part on any root, read top to bottom: the keys by role and degree; what it
  * is (its symbol, its tones, the other ways it is written, the chord on a staff), Play and Arpeggio floating;
@@ -89,11 +72,12 @@ export function ChordExplorer({
   const play = usePlay()
   const playback = usePlayback<string>()
   // Placed once per view: a Play or Stop re-renders here, and a new placement would engrave the staff again.
-  const { chord: built, placed, fingers } = useMemo(() => viewChord(chord), [chord])
+  const { chord: built, placed } = useMemo(() => viewChord(chord), [chord])
   const rows = useMemo(() => fingeringRows(chord), [chord])
   // What stands on the keys is this chord's: a tension played over the last one is forgotten with it.
   const at = Object.values(chord).join(' ')
-  const [shown, show] = useShownKeys(at, fingeredShown(placed, fingers))
+  // The keys by role, no finger numbers on them (R34): the fingering table and hands show them.
+  const [shown, show] = useShownKeys(at, chordShown([...placed.lh, ...placed.rh]))
   const symbol = writtenSymbol(built)
   const { quality } = built
   // The other ways its symbol is written: the table's, where the table has the chord, each printed
