@@ -3,10 +3,12 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import {
+  canTie,
   carriesAccidental,
   chosenNotes,
   EDIT_MODES,
   NOTE_VALUES,
+  selectionSpan,
   shownValue,
   takesDot,
   takesTuplet,
@@ -15,7 +17,7 @@ import {
   type GraceKind,
 } from '@/features/score-editor'
 import { isCompound, type Accidental } from '@/shared/lib/music'
-import { TUPLET_COUNTS, tupletOf, type TupletCount } from '@/shared/lib/notation'
+import { TUPLET_COUNTS, type TupletCount } from '@/shared/lib/notation'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useNotesChosen } from '../model/use-notes-chosen'
@@ -23,7 +25,6 @@ import { TUPLET_WORDS, VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
 import type { Tool } from '../model/shortcuts'
 import { PaletteFormContext, usePaletteForm } from './palette-form'
 import { GroupName, KeyGrid, PaletteKey } from './palette-keys'
-import { usePaletteReason } from './palette-reason'
 import { LineKeys } from './LineKeys'
 import { PaletteGlyph, TupletGlyph } from './palette-glyph'
 import type { SmuflName } from '@/shared/ui/smufl'
@@ -101,7 +102,7 @@ const ACCIDENTAL_KEYS = [0, 1, -1] as const satisfies readonly Accidental[]
 /**
  * The accidentals, Flat's (ADR 0114): each a toggle on the notes chosen, pressed while every one
  * carries its sign, a tap writing the sign or taking it off (the note back as the key spells it);
- * greyed with no note chosen.
+ * left out with no note chosen (R32-B).
  */
 function AccidentalKeys() {
   const { t } = useTranslation('editor')
@@ -113,6 +114,7 @@ function AccidentalKeys() {
       return ACCIDENTAL_KEYS.map((accidental) => carriesAccidental(notes, accidental))
     }),
   )
+  if (!chosen) return null
   const keys = {
     1: { label: t('accidentals.sharp'), picture: <Sharp />, tool: 'sharp' },
     [-1]: { label: t('accidentals.flat'), picture: <Flat />, tool: 'flat' },
@@ -125,9 +127,7 @@ function AccidentalKeys() {
         key={label}
         label={label}
         tool={tool}
-        reason={t('reason.chooseNote')}
         pressed={carried[i] ?? false}
-        disabled={!chosen}
         onClick={() => actions.dispatch({ type: 'accidental', accidental })}
       >
         <span aria-hidden>{picture}</span>
@@ -251,55 +251,64 @@ export function NoteBar() {
     takesDot((shownValue(state) ?? state.value).value, state.draft.meter, 2),
   )
   const onStaff = useEditorState((state) => state.layer !== 'chords')
-  const off = !useNotesChosen()
+  const chosen = useNotesChosen()
+  // A tie only where a note there has the same key's note after it (R32-B).
+  const tieable = useEditorState(
+    (state) =>
+      state.layer !== 'chords' &&
+      canTie(
+        state.draft,
+        state.layer,
+        state.selection ? selectionSpan(state.selection) : state.caret,
+      ),
+  )
   return (
     <>
-      <PaletteKey
-        label={t('addNote')}
-        reason={t('reason.staff')}
-        disabled={!onStaff}
-        onClick={() => dispatch({ type: 'addNote' })}
-      >
-        <AddNoteIcon />
-      </PaletteKey>
+      {onStaff ? (
+        <PaletteKey label={t('addNote')} onClick={() => dispatch({ type: 'addNote' })}>
+          <AddNoteIcon />
+        </PaletteKey>
+      ) : null}
       <ValueKeys />
       <Divider />
-      <PaletteKey
-        label={t('dot')}
-        tool="dot"
-        reason={t('reason.noDot')}
-        pressed={shown?.dots === 1}
-        disabled={!dottable}
-        onClick={() => dispatch({ type: 'dot' })}
-      >
-        <span aria-hidden className={GLYPH}>
-          {VALUE_GLYPHS[4]}.
-        </span>
-      </PaletteKey>
-      <PaletteKey
-        label={t('doubleDot')}
-        reason={t('reason.noDot')}
-        pressed={shown?.dots === 2}
-        disabled={!doubleDottable}
-        onClick={() => dispatch({ type: 'dot', dots: 2 })}
-      >
-        <span aria-hidden className={GLYPH}>
-          {VALUE_GLYPHS[4]}..
-        </span>
-      </PaletteKey>
-      <PaletteKey label={t('marks.tie')} tool="tie" onClick={() => dispatch({ type: 'tie' })}>
-        <svg
-          aria-hidden
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          className="size-6"
+      {dottable ? (
+        <PaletteKey
+          label={t('dot')}
+          tool="dot"
+          pressed={shown?.dots === 1}
+          onClick={() => dispatch({ type: 'dot' })}
         >
-          <path d="M3 10 C8 16 16 16 21 10" />
-        </svg>
-      </PaletteKey>
+          <span aria-hidden className={GLYPH}>
+            {VALUE_GLYPHS[4]}.
+          </span>
+        </PaletteKey>
+      ) : null}
+      {doubleDottable ? (
+        <PaletteKey
+          label={t('doubleDot')}
+          pressed={shown?.dots === 2}
+          onClick={() => dispatch({ type: 'dot', dots: 2 })}
+        >
+          <span aria-hidden className={GLYPH}>
+            {VALUE_GLYPHS[4]}..
+          </span>
+        </PaletteKey>
+      ) : null}
+      {tieable ? (
+        <PaletteKey label={t('marks.tie')} tool="tie" onClick={() => dispatch({ type: 'tie' })}>
+          <svg
+            aria-hidden
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            className="size-6"
+          >
+            <path d="M3 10 C8 16 16 16 21 10" />
+          </svg>
+        </PaletteKey>
+      ) : null}
       <TupletsKey />
       <PaletteKey label={t('rest')} tool="rest" onClick={() => dispatch({ type: 'rest' })}>
         <span aria-hidden className={GLYPH}>
@@ -308,19 +317,19 @@ export function NoteBar() {
       </PaletteKey>
       <Divider />
       <AccidentalKeys />
-      <PaletteKey
-        label={t('respell')}
-        tool="respell"
-        reason={t('reason.chooseNote')}
-        disabled={off}
-        onClick={() => dispatch({ type: 'respell' })}
-      >
-        <span aria-hidden className="flex items-center [&_svg]:size-4.5">
-          <Flat />
-          <ArrowLeftRight className="size-3.5!" strokeWidth={2.5} />
-          <Sharp />
-        </span>
-      </PaletteKey>
+      {chosen ? (
+        <PaletteKey
+          label={t('respell')}
+          tool="respell"
+          onClick={() => dispatch({ type: 'respell' })}
+        >
+          <span aria-hidden className="flex items-center [&_svg]:size-4.5">
+            <Flat />
+            <ArrowLeftRight className="size-3.5!" strokeWidth={2.5} />
+            <Sharp />
+          </span>
+        </PaletteKey>
+      ) : null}
     </>
   )
 }
@@ -355,13 +364,12 @@ function TupletKey({ num }: { num: TupletCount }) {
   const shown = useShown()
   const meter = useEditorState((state) => state.draft.meter)
   const value = useEditorState((state) => (shownValue(state) ?? state.value).value)
+  if (!takesTuplet(value, num, meter)) return null
   return (
     <PaletteKey
       label={t(`tuplets.${TUPLET_WORDS[num]}`)}
       tool={num === 9 ? undefined : `tuplet${num}`}
-      reason={t(tupletOf(num, meter) ? 'reason.shortTuplet' : 'reason.plainTuplet')}
       pressed={shown?.tuplet?.num === num}
-      disabled={!takesTuplet(value, num, meter)}
       onClick={() => actions.dispatch({ type: 'tuplet', num })}
     >
       <TupletGlyph num={num} />
@@ -493,8 +501,6 @@ const GRACE_KEYS = [
 function GraceKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
-  const off = !useNotesChosen()
-  const reason = usePaletteReason()
   const kinds = useEditorState(
     useShallow((state) =>
       GRACE_KEYS.map(({ kind }) => {
@@ -518,9 +524,7 @@ function GraceKeys() {
       key={kind}
       label={t(label)}
       tool={tool}
-      reason={reason}
       pressed={kinds[i] ?? false}
-      disabled={off}
       onClick={() => actions.dispatch({ type: 'grace', kind })}
     >
       <PaletteGlyph smufl={GRACE_GLYPHS[kind]} />
@@ -538,8 +542,6 @@ export function PitchKeys() {
   const { actions } = useScoreEditorContext()
   const shift = (semitones: number) => actions.dispatch({ type: 'shift', semitones })
   const step = (steps: number) => actions.dispatch({ type: 'step', steps })
-  const off = !useNotesChosen()
-  const reason = usePaletteReason()
   const pairs = [
     // In the keys' order: ↑ ↓ a step in the key, with Shift a semitone, with Cmd an octave.
     { by: 'step', up: t('stepUp'), down: t('stepDown'), move: step, size: 1 },
@@ -549,16 +551,10 @@ export function PitchKeys() {
   return (
     <KeyGrid>
       {pairs.flatMap(({ by, up, down, move, size }) => [
-        <PaletteKey key={up} label={up} reason={reason} disabled={off} onClick={() => move(size)}>
+        <PaletteKey key={up} label={up} onClick={() => move(size)}>
           <Move up by={by} />
         </PaletteKey>,
-        <PaletteKey
-          key={down}
-          label={down}
-          reason={reason}
-          disabled={off}
-          onClick={() => move(-size)}
-        >
+        <PaletteKey key={down} label={down} onClick={() => move(-size)}>
           <Move up={false} by={by} />
         </PaletteKey>,
       ])}

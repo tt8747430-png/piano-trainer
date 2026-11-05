@@ -1,17 +1,15 @@
 import { Link, useNavigate, useParams, useRouter } from '@tanstack/react-router'
-import {
-  Archive,
-  ArchiveRestore,
-  Copy,
-  Download,
-  FolderInput,
-  Globe,
-  Link2,
-  PencilLine,
-} from 'lucide-react'
+import { Archive, ArchiveRestore, Copy, Download, FolderInput, Globe, Link2 } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { placeIn, useFolderName, useLibraryLayout } from '@/entities/library'
+import {
+  placeIn,
+  selectIsFavourite,
+  useFolderName,
+  useLibrary,
+  useLibraryLayout,
+  useLibraryStoreApi,
+} from '@/entities/library'
 import {
   hasEditableOriginal,
   isDegreePiece,
@@ -27,7 +25,7 @@ import {
 import { selectView } from '@/entities/views'
 import { useOriginalDraft } from '@/features/edit-original'
 import { duplicateSong } from '@/features/edit-piece'
-import { useSongActions } from '@/features/manage-library'
+import { toggleFavourite, useSongActions } from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { SongExportSheet } from '@/features/song-files'
 import { useLocale } from '@/shared/i18n'
@@ -43,6 +41,7 @@ import {
   RowLink,
   ScreenHeader,
   SettingsGroup,
+  SwitchRow,
 } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
 import { useSongPublish } from '../model/use-song-publish'
@@ -64,12 +63,11 @@ export function SongSettingsPage() {
 }
 
 /**
- * A song's Settings (round 26, Noji's deck settings, memory-palaces' deck settings): one list of
- * grouped rows, each a setting with its value at its end or a way on, a sheet or a page. Its music,
- * edited on the score; its place in the library (Favourite, its folder, Archive or Restore); its ways
- * out (Export…, Share link, Publish in library, a page); an editor's unpublished changes, their status and
- * menu (Publish, Versions, Discard); and last, apart, the learner's own music given up: Delete, or
- * Reset to the original, asked first.
+ * A song's Settings (R32-C; Noji's and memory-palaces' deck settings): how the song lives in the
+ * library and how it leaves it, the page editing what it says of itself. The song at the head; its
+ * Library (Folder, Favourite, Duplicate, Archive or Restore); Share (Publish with its state, Share
+ * link, Export…); and last, apart, the learner's own music given up: Delete, or Reset to the
+ * original, asked first.
  */
 function SongSettings({ piece }: { piece: Piece }) {
   const { t } = useTranslation(['piece', 'songs', 'editor'])
@@ -84,6 +82,8 @@ function SongSettings({ piece }: { piece: Piece }) {
   const layout = useLibraryLayout()
   const folderName = useFolderName()
   const library = useSongActions(piece)
+  const libraryStore = useLibraryStoreApi()
+  const favourite = useLibrary(selectIsFavourite(piece.id))
   const [exporting, setExporting] = useState(false)
   const [asking, setAsking] = useState(false)
   const [copying, setCopying] = useState(false)
@@ -130,10 +130,10 @@ function SongSettings({ piece }: { piece: Piece }) {
       <ScreenHeader title={t('settings.title')} back={<BackButton />} />
       <ShareSaid said={shared.said} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        {/* The song at the head and its page's Edit; its score is ✎'s on the page (R31-S). */}
+        {/* The song at the head: what these settings are for (R32-C). */}
         <SettingsGroup flush>
           <div className="flex min-h-20 items-center gap-4 px-4 py-3">
-            <SongCover piece={piece} favourite={false} className="w-14 shrink-0 text-xl" />
+            <SongCover piece={piece} className="w-14 shrink-0 text-xl" />
             <div className="flex min-w-0 flex-col gap-0.5">
               <p className="font-display text-lg leading-tight font-semibold text-balance">
                 {title}
@@ -143,15 +143,6 @@ function SongSettings({ piece }: { piece: Piece }) {
               ) : null}
             </div>
           </div>
-          <RowLink
-            title={t('settings.editPage')}
-            detail={t('settings.editPageLine')}
-            icon={PencilLine}
-            paint="sand"
-            render={
-              <Link to="/songs/$pieceId" params={{ pieceId: piece.id }} search={{ edit: true }} />
-            }
-          />
         </SettingsGroup>
         {inLibrary ? (
           <SettingsGroup flush title={t('settings.library')}>
@@ -165,6 +156,12 @@ function SongSettings({ piece }: { piece: Piece }) {
                 onClick={() => library.actions.find((each) => each.key === 'move')?.onSelect()}
               />
             )}
+            <SwitchRow
+              label={t('settings.favourite')}
+              className="min-h-16 border-b-0 pr-3 pl-4"
+              checked={favourite}
+              onCheckedChange={() => toggleFavourite(libraryStore, piece.id)}
+            />
             {/* Duplicate (R29 B9): a copy as the learner's own, a song in degrees aside. */}
             {copyable ? (
               <RowButton

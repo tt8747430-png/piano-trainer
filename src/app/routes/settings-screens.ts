@@ -5,6 +5,7 @@ export {
   ProfilePrivacyPage,
   GeneralPage,
   OnScreenPianoPage,
+  FeedbackPage,
   PlayerSettingsPage,
   SelectToolbarPage,
   SwipeActionsPage,

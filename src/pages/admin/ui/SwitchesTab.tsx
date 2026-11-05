@@ -3,17 +3,7 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { FeatureSwitch, Group, SwitchState } from '@/shared/api/admin'
 import { useAdmin } from '@/shared/lib/admin'
-import { FormField, InfoTip, RoundButton, Segmented } from '@/shared/ui'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/shared/ui/primitives/alert-dialog'
+import { ConfirmDialog, FormField, InfoTip, RoundButton, Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Switch } from '@/shared/ui/primitives/switch'
 import { useLoaded } from '../model/use-loaded'
@@ -24,8 +14,8 @@ const STATES = ['everyone', 'nobody', 'groups'] as const satisfies readonly Swit
 const KEY = /^[a-z][a-z0-9-]{1,40}$/
 
 /**
- * Feature switches: each on for everyone, no one or chosen groups; added by key and label, deleted
- * once asked.
+ * Administration › Feature flags: each enabled for everyone, no one or selected groups; added by key
+ * and description, deleted once asked.
  */
 export function SwitchesTab() {
   const { t } = useTranslation('admin')
@@ -47,7 +37,7 @@ export function SwitchesTab() {
     <div className="flex flex-col gap-4">
       <h2 className="flex items-center gap-1 px-3 font-sans text-sm font-semibold text-muted-foreground">
         {t('switches.new')}
-        <InfoTip name={t('tabs.switches')}>{t('switches.info')}</InfoTip>
+        <InfoTip name={t('sections.flags')}>{t('switches.info')}</InfoTip>
       </h2>
       <form
         className="flex flex-col gap-3 sm:flex-row sm:items-end"
@@ -118,28 +108,19 @@ export function SwitchesTab() {
           )
         }
       </LoadedState>
-      <AlertDialog open={deleting !== null} onOpenChange={(open) => !open && setDeleting(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {t('switches.deleteTitle', { label: deleting?.label ?? '' })}
-            </AlertDialogTitle>
-            <AlertDialogDescription>{t('switches.deleteBody')}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t('switches.cancel')}</AlertDialogCancel>
-            <AlertDialogAction
-              variant="destructive"
-              onClick={() => {
-                if (deleting) void admin.deleteSwitch(deleting.key).then(after)
-                setDeleting(null)
-              }}
-            >
-              {t('switches.confirm')}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmDialog
+        open={deleting !== null}
+        onOpenChange={(open) => {
+          if (!open) setDeleting(null)
+        }}
+        title={t('switches.deleteTitle', { label: deleting?.label ?? '' })}
+        body={t('switches.deleteBody')}
+        action={t('switches.confirm')}
+        onConfirm={() => {
+          if (deleting) void admin.deleteSwitch(deleting.key).then(after)
+          setDeleting(null)
+        }}
+      />
     </div>
   )
 }

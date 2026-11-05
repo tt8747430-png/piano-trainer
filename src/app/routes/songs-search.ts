@@ -38,8 +38,6 @@ const readFolderSearch = (raw: Raw): FolderSearch => ({
 export const folderSearch = routeSearch(readFolderSearch, FOLDER_DEFAULTS)
 
 // A song's page (R30 S4): in Edit or not, entered from its ✎.
-export const PIECE_DEFAULTS: { edit: boolean } = { edit: false }
-export const pieceSearch = routeSearch((raw: Raw) => ({ edit: raw.edit === true }), PIECE_DEFAULTS)
 
 // Songs' Home (D1): My songs or Explore, remembered as Learn's view is; Explore's category chip
 // and a shelf's See all in the URL beside the library's filters.

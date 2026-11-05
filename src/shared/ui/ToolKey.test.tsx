@@ -45,31 +45,14 @@ describe('ToolKey', () => {
     )
   })
 
-  it('greyed, says why in its tooltip and to a screen reader', () => {
+  it('greys while its palette waits, with nothing said beyond its name', () => {
     render(
-      <ToolKey
-        label="Staccato"
-        reason="Choose a note first: these change the notes chosen."
-        disabled
-      >
+      <ToolKey label="Staccato" disabled>
         .
       </ToolKey>,
     )
     const staccato = screen.getByRole('button', { name: 'Staccato' })
     expect(staccato).toBeDisabled()
-    expect(staccato).toHaveAttribute('title', 'Choose a note first: these change the notes chosen.')
-    expect(staccato).toHaveAccessibleDescription(
-      'Choose a note first: these change the notes chosen.',
-    )
-  })
-
-  it('says no reason while it works', () => {
-    render(
-      <ToolKey label="Staccato" reason="Choose a note first: these change the notes chosen.">
-        .
-      </ToolKey>,
-    )
-    const staccato = screen.getByRole('button', { name: 'Staccato' })
     expect(staccato).not.toHaveAttribute('title')
     expect(staccato).toHaveAccessibleDescription('')
   })

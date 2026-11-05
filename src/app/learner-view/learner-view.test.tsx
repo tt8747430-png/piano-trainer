@@ -1,4 +1,4 @@
-import { act, screen, waitFor } from '@testing-library/react'
+import { act, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -14,23 +14,29 @@ async function signedInAs(role: AccountRole) {
   return auth
 }
 
-describe('Learner view (R29 B5)', () => {
+describe('Preview as learner (R29 B5, R32: on the Account)', () => {
   it('shows an editor the app as a learner sees it, with Exit, and saves nothing', async () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
     const auth = await signedInAs('admin')
-    const settings = await renderApp('/settings', { auth, storage })
+    const settings = await renderApp('/settings/account', { auth, storage })
     const saved = () =>
       Array.from({ length: storage.length }, (_, at) => storage.key(at))
         .map((key) => `${key}=${storage.getItem(key ?? '')}`)
         .join('|')
-    expect(await screen.findByRole('link', { name: /^Admin/ })).toBeInTheDocument()
+    const preview = await screen.findByRole('switch', { name: 'Preview as learner' })
     const before = saved()
-    await user.click(screen.getByRole('switch', { name: 'View as a learner' }))
-    // A learner's Settings: no Admin; the notice over every screen says so, with Exit.
-    await waitFor(() => expect(screen.queryByRole('link', { name: /^Admin/ })).toBeNull())
-    expect(screen.getByRole('status')).toHaveTextContent('Viewing as a learner')
+    await user.click(preview)
+    // The notice over every screen says so, with Exit; the role stays said beside the switch.
+    expect(await screen.findByText('Previewing as learner')).toBeVisible()
+    expect(screen.getByRole('region', { name: 'Editorial access' })).toHaveTextContent(
+      'Administrator',
+    )
     expect(saved()).toBe(before)
+    // A learner's Settings: no Administration.
+    await settings.router.navigate({ to: '/settings' })
+    await screen.findByRole('region', { name: 'App' })
+    expect(screen.queryByRole('link', { name: /^Administration/ })).toBeNull()
     // An editor's controls are gone elsewhere too: Learn has no Edit.
     await settings.router.navigate({ to: '/' })
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
@@ -39,25 +45,29 @@ describe('Learner view (R29 B5)', () => {
     expect(await screen.findByRole('button', { name: 'Edit' })).toBeInTheDocument()
   })
 
-  it('is not offered to a learner', async () => {
-    await renderApp('/settings', { auth: await signedInAs('learner') })
-    await screen.findByRole('heading', { level: 1, name: 'Settings' })
-    expect(screen.queryByRole('switch', { name: 'View as a learner' })).toBeNull()
-  })
-  it('turns on from the Admin area and opens Learn', async () => {
-    const user = userEvent.setup()
-    const { router } = await renderApp('/admin', { auth: await signedInAs('admin') })
-    await user.click(await screen.findByRole('button', { name: 'View as a learner' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/'))
-    expect(await screen.findByRole('status')).toHaveTextContent('Viewing as a learner')
+  it('is not offered to a learner, and lives on the Account alone', async () => {
+    const { unmount } = await renderApp('/settings/account', {
+      auth: await signedInAs('learner'),
+    })
+    await screen.findByRole('heading', { level: 1, name: 'Account' })
+    expect(screen.queryByRole('switch', { name: 'Preview as learner' })).toBeNull()
+    expect(screen.queryByRole('region', { name: 'Editorial access' })).toBeNull()
+    unmount()
+    // One way to it (R32): neither Settings' list nor Administration has a second.
+    const admin = await signedInAs('admin')
+    const settings = await renderApp('/settings', { auth: admin })
+    await screen.findByRole('link', { name: /^Administration/ })
+    expect(screen.queryByRole('switch', { name: 'Preview as learner' })).toBeNull()
+    await act(() => settings.router.navigate({ to: '/admin' }))
+    await screen.findByRole('heading', { level: 1, name: 'Administration' })
+    expect(screen.queryByRole('button', { name: 'Preview as learner' })).toBeNull()
   })
 
   it('shows no editor or admin control on the screens that have them', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/settings', { auth: await signedInAs('admin') })
-    await user.click(await screen.findByRole('switch', { name: 'View as a learner' }))
-    await screen.findByRole('status')
-    expect(screen.queryByRole('link', { name: /^Admin/ })).toBeNull()
+    const { router } = await renderApp('/settings/account', { auth: await signedInAs('admin') })
+    await user.click(await screen.findByRole('switch', { name: 'Preview as learner' }))
+    await screen.findByText('Previewing as learner')
     const lesson = LESSONS[0]!
     const walk: [string, { role: 'link' | 'button'; name: string }[]][] = [
       ['/', [{ role: 'button', name: 'Edit' }]],
@@ -80,12 +90,12 @@ describe('Learner view (R29 B5)', () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
     const auth = await signedInAs('admin')
-    const first = await renderApp('/settings', { auth, storage })
-    await user.click(await screen.findByRole('switch', { name: 'View as a learner' }))
-    await screen.findByRole('status')
+    const first = await renderApp('/settings/account', { auth, storage })
+    await user.click(await screen.findByRole('switch', { name: 'Preview as learner' }))
+    await screen.findByText('Previewing as learner')
     first.unmount()
     await renderApp('/settings', { auth, storage })
-    expect(await screen.findByRole('link', { name: /^Admin/ })).toBeInTheDocument()
-    expect(screen.queryByText('Viewing as a learner')).toBeNull()
+    expect(await screen.findByRole('link', { name: /^Administration/ })).toBeInTheDocument()
+    expect(screen.queryByText('Previewing as learner')).toBeNull()
   })
 })

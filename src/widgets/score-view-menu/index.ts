@@ -1,4 +1,3 @@
-export { PartChip, PartChips } from './ui/PartChip'
 export { ScoreViewMenu } from './ui/ScoreViewMenu'
 export { SheetViewFields } from './ui/SheetViewFields'
 export { ViewSection } from './ui/ViewSection'

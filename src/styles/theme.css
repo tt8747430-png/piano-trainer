@@ -350,7 +350,6 @@
   --block-shadow-0: none;
   --block-shadow-1: var(--elevation-1);
   --block-shadow-2: var(--elevation-2);
-  --block-shadow-3: var(--elevation-3);
   --block-padding-compact: --spacing(2);
   --block-padding-normal: --spacing(4);
   --block-padding-roomy: --spacing(6);
@@ -371,11 +370,15 @@
   color: var(--block-text);
   padding: var(--block-padding);
 }
-[data-card-look][data-density='compact'] {
+/* Spacing is the rows' height too (R32-C): a table's rows on a laptop, a card's on a phone. */
+[data-card-look][data-spacing='compact'] {
   --row-min: --spacing(12);
 }
-[data-card-look][data-density='large'] {
+[data-card-look][data-spacing='roomy'] {
   --row-min: --spacing(20);
+}
+[data-card-look] tbody tr {
+  height: var(--row-min, --spacing(16));
 }
 [data-card-look][data-layout='list'] {
   grid-template-columns: 1fr;

@@ -53,7 +53,7 @@ describe('the editor’s Layout (A40)', () => {
   it('each group changes the preview and saves with the score', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    await openGear(user, /^How the editor works/, /^Layout/)
+    await openGear(user, /^Layout/)
     // Pages: an upright A4, turned on its side.
     expect(await pageShape()).toBeLessThan(1)
     await user.click(screen.getByRole('radio', { name: 'Landscape' }))
@@ -92,13 +92,13 @@ describe('the editor’s Layout (A40)', () => {
   it('Reset, asked first, puts every setting back', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    await openGear(user, /^How the editor works/, /^Layout/)
+    await openGear(user, /^Layout/)
     const reset = await screen.findByRole('button', { name: 'Reset' })
     expect(reset).toBeDisabled()
     await user.click(screen.getByRole('radio', { name: 'A3' }))
     await waitFor(() => expect(piecesStore.getState().songs[0]?.layout).toEqual({ pageSize: 'a3' }))
     await user.click(reset)
-    const asked = await screen.findByRole('alertdialog', { name: 'Reset the layout?' })
+    const asked = await screen.findByRole('alertdialog', { name: 'Reset layout?' })
     await user.click(within(asked).getByRole('button', { name: 'Reset' }))
     await waitFor(() => expect(piecesStore.getState().songs[0]).not.toHaveProperty('layout'))
   })

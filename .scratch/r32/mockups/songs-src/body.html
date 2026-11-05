@@ -1,0 +1,43 @@
+<div class="wrap">
+  <div class="intro">
+    <h1>The song page, its details, card style, groups · Round 32</h1>
+    <p class="soft">Drawn on the iPhone 17 Pro as the installed app (402 × 874) and the MacBook Air 15″ in Safari (1710 × 904), scaled down. Under each screen: <b>Looks right</b>, <b>Change it</b> or <b>Not needed</b>, and a note.</p>
+    <p class="soft" id="storeNote">Connecting the feedback store…</p>
+  </div>
+  <nav class="toc" aria-label="Questions">
+    <a href="#q1">1 Song page</a><a href="#q2">2 Editing details</a><a href="#q3">3 Settings</a><a href="#q4">4 Card style</a><a href="#q5">5 Groups</a><a href="#q6">6 Your choice</a>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="ptSize(1)">iPhone 17 Pro · app</button><script>var PT_SIZES=[['pro','iPhone 17 Pro · app'],['safari','iPhone 17 Pro · Safari'],['small','Smaller iPhone · app']];function ptSize(step){var k=0;try{k=Math.max(0,PT_SIZES.findIndex(function(x){return x[0]===localStorage.getItem('pt-mock-size')}))}catch(e){}k=(k+step)%PT_SIZES.length;document.body.classList.remove('small','safari');if(PT_SIZES[k][0]!=='pro')document.body.classList.add(PT_SIZES[k][0]);document.getElementById('sizeBtn').textContent=PT_SIZES[k][1];try{localStorage.setItem('pt-mock-size',PT_SIZES[k][0])}catch(e){}}ptSize(0)</script></span>
+  </nav>
+  <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>The song page</h2></div>
+    <p class="where">Where: Songs › a song (<code>/songs/hot-cross-buns</code>), phone and laptop.</p>
+    <p>What changes: the top says what the song is in one glance (cover, who wrote it, one line of facts, the about), the music follows, and <b>Details</b> lists everything about the song as properties: Composer, Lyricist, Arranger, Level, Genre, Language, Tags. On a laptop the song fills the left column and its music the right, so the screen is full.</p>
+    <div class="screens" id="s1"></div>
+    <div class="rec">Recommendation: Apple Music’s album page for the top (cover, byline, a facts line, the about clamped with More) and MuseScore’s score page for Details (a plain list of property and value under the music).</div>
+  </section>
+  <section class="q" id="q2"><div class="qhead"><span class="qnum">2</span><h2>Editing the details</h2></div>
+    <p class="where">Where: the song page’s Details, and its cover.</p>
+    <p>What changes: there is no Edit mode and no Edit song page. A tap on a property edits that one, as in Notion: a sheet on a phone, a popover beside it on a laptop, kept as you choose. Composer, Lyricist and Arranger are properties too and write the lines the score prints, so you never leave for the score to change who wrote it. A tap on the cover changes its picture and paint.</p>
+    <div class="screens" id="s2"></div>
+  </section>
+  <section class="q" id="q3"><div class="qhead"><span class="qnum">3</span><h2>The song’s Settings</h2></div>
+    <p class="where">Where: the song’s ⚙.</p>
+    <p>What changes: Settings only holds how the song lives in your library and how it leaves it: Folder, Favourite (a switch), Duplicate, Archive; Publish, Share link, Export; Delete apart. Edit song page goes, since the page edits itself.</p>
+    <div class="screens" id="s3"></div>
+  </section>
+  <section class="q" id="q4"><div class="qhead"><span class="qnum">4</span><h2>Card style</h2></div>
+    <p class="where">Where: Songs’ More › Card style, a folder’s ⋯ › Card style. A lesson block’s style is the same editor.</p>
+    <p>What changes, as in memory-palaces: <b>presets first</b>, in one strip; the preview is <b>pinned</b>, a pane of its own between the bar and the controls that never moves and never covers them; a <b>Phone · Laptop</b> switch shows the rows as each will draw them; Reset in the bar, <b>Apply to…</b> and <b>Apply</b> at the foot. On a laptop the library now follows the style: List is the table inside a card in the style, Cards and Grid draw the cards.</p>
+    <div class="screens" id="s4"></div>
+  </section>
+  <section class="q" id="q5"><div class="qhead"><span class="qnum">5</span><h2>Groups</h2></div>
+    <p class="where">Where: Songs › Groups (the tree on a laptop, Shared with me on a phone), a group, an invite link, a shared folder.</p>
+    <p>What changes: groups could not be made (a server rule refused every new group; fixed). Groups are rows with their picture and paint; a group’s page has its invite card, what is shared with it with Share a folder…, and its members; Join with a link takes a link someone sent you.</p>
+    <div class="screens" id="s5"></div>
+  </section>
+  <section class="q" id="q6"><div class="qhead"><span class="qnum">6</span><h2>Where Details stands on a phone</h2></div>
+    <p class="where">Where: the song page on a phone.</p>
+    <p>What changes for you: where you find Level, Genre, Tags and who wrote it.</p>
+    <div class="screens" id="s6"></div>
+    <div class="rec">Recommendation: <b>A</b>, Details at the foot, as Apple Music puts an album’s information under its songs: you open a song to play it, so its music comes first.</div>
+  </section>
+</div>

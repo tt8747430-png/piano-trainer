@@ -54,8 +54,10 @@ const accountUp: Parent = ({ signedIn }) =>
 
 const toPractice: Parent = () => up({ to: '/practice' })
 const toSettings: Parent = () => up({ to: '/settings' })
-/** A page of Settings: up to its list on a phone; on a laptop the list stands beside it (R20). */
+/** A page of Settings: up to its list on a phone; on a laptop its sidebar stands beside it (R32). */
 const settingsPage: Parent = ({ wide }) => (wide ? null : up({ to: '/settings' }))
+/** A legal page: up to About, where Settings opens it (R32). */
+const toAbout: Parent = () => up({ to: '/settings/about' })
 /** Each Practice page, where its gear opens its Settings from. */
 const PRACTICE_PAGES: Readonly<Record<PracticeSettingsFrom, Up>> = {
   chords: up({ to: '/practice/chords' }),
@@ -124,11 +126,12 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/settings/account/password': () => up({ to: '/settings/account' }),
   '/shell/settings/privacy': () => up({ to: '/settings/account' }),
   '/shell/settings/general': settingsPage,
-  '/shell/settings/select-toolbar': () => up({ to: '/settings/general' }),
-  '/shell/settings/swipe-actions': () => up({ to: '/settings/general' }),
+  '/shell/settings/select-toolbar': settingsPage,
+  '/shell/settings/swipe-actions': settingsPage,
+  '/shell/settings/feedback': settingsPage,
+  '/shell/settings/player': toSettings,
   '/shell/settings/on-screen-piano': settingsPage,
   '/shell/settings/computer-keys': settingsPage,
-  '/shell/settings/player': settingsPage,
   '/shell/settings/storage': settingsPage,
   '/shell/settings/account': settingsPage,
   '/shell/settings/how-to-use': settingsPage,
@@ -143,8 +146,9 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/settings/exercises-and-quiz': practiceSettings,
   '/shell/settings/connect-piano/log': () => up({ to: '/settings/connect-piano' }),
   '/shell/admin': toSettings,
-  '/shell/legal/privacy': () => up({ to: '/settings/how-to-use' }),
-  '/shell/legal/terms': () => up({ to: '/settings/how-to-use' }),
+  '/shell/admin/$section': ({ wide }) => (wide ? null : up({ to: '/admin' })),
+  '/shell/legal/privacy': toAbout,
+  '/shell/legal/terms': toAbout,
   '/shell/account/sign-in': accountUp,
   '/shell/account/create': accountUp,
   '/shell/account/forgot': accountUp,

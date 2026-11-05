@@ -32,29 +32,25 @@ const sameChosen = (a: Chosen, b: Chosen) =>
   a.value.meter === b.value.meter && a.value.symbol === b.value.symbol && a.pickup === b.pickup
 
 /**
- * The time signature written to the score (A34, R31-E): the one control, `TimeSignatureField`, its
- * choice written by ✓ as one step Undo takes back, ✗ leaving it as it was (both at the bottom right,
- * the owner's ruling). From a bar's section on (`bar`, a sign's on the sheet, else the first bar
- * chosen's), the whole song's in its first section with its pickup; in the palette (`applyTo`),
- * From this bar · Whole song. In the folded palette's row, its tiles alone, a tap writing at once.
- * `onDone` once it is written or left (a picker opened over the sheet closes).
+ * The palette's Time signature (A34, R31-E, R32-B), the one place a meter is chosen: the one control,
+ * `TimeSignatureField`, its choice written by ✓ as one step Undo takes back, ✗ leaving it as it was
+ * (both at the bottom right, the owner's ruling). From the first bar chosen's section on (a time
+ * signature tapped on the score chooses its bar), the whole song's in its first section with its
+ * pickup. From this bar · Whole song only where the two differ: after the first section, or where a
+ * later section has a meter of its own. In the folded palette's row, its tiles alone, a tap writing
+ * at once.
  */
-export function TimePicker({
-  bar,
-  applyTo = false,
-  onDone,
-}: {
-  bar?: number | undefined
-  applyTo?: boolean
-  onDone?: () => void
-}) {
+export function TimePicker() {
   const { t } = useTranslation('music')
   const { actions } = useScoreEditorContext()
-  const { from, section, song } = useSignatureFrom(bar)
+  const { from, section, song } = useSignatureFrom()
   const draft = useEditorState((state) => state.draft)
   const [where, setWhere] = useState<TimeApplyTo>('from')
   const [staged, setStaged] = useState<Chosen | null>(null)
   const row = usePickerLayout() === 'row'
+  // At the head of a song in one meter, from this bar and the whole song are the same.
+  const applyTo =
+    !song || draft.sections.some((each) => (each.heading.meter ?? draft.meter) !== draft.meter)
   const whole = applyTo && where === 'whole'
   const meter = sectionMeter(draft, whole ? 0 : section)
   const atHead = song || whole
@@ -91,10 +87,7 @@ export function TimePicker({
       />
     )
   const blocked = barred(chosen.value.meter)
-  const finish = () => {
-    setStaged(null)
-    onDone?.()
-  }
+  const finish = () => setStaged(null)
   return (
     <div className="flex flex-col gap-3">
       {applyTo ? (

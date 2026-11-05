@@ -12,10 +12,9 @@ import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { gripRelease } from '../model/grip'
 import {
-  closedBy,
-  greyedBy,
   isPaletteCategory,
-  PALETTE_CATEGORIES,
+  needsNote,
+  openCategories,
   type PaletteCategory,
 } from '../model/palette-categories'
 import { BarKeys } from './BarKeys'
@@ -32,8 +31,7 @@ import {
 import { NoteKeys, PitchKeys } from './NoteKeys'
 import { PaletteFormContext, type PaletteForm } from './palette-form'
 import { CategoryIcon } from './palette-icons'
-import { GroupName, KeyGrid, PaletteSection } from './palette-keys'
-import { PaletteReason } from './palette-reason'
+import { GroupName, KeyGrid, PaletteHint, PaletteSection } from './palette-keys'
 import { ClefKeys, KeySignatureKeys, RepeatKeys, TextKeys, TimeSignatureKeys } from './ScoreKeys'
 
 /** The app's one ease-out (DESIGN.md's Motion). */
@@ -42,41 +40,32 @@ const EASE = [0.22, 1, 0.36, 1] as const
 const SLIDE = 0.22
 
 /**
- * The palette's category (R31-E), the panel's and the floating sheet's one: as the learner left it,
- * else Notes, Flat's first.
+ * The palette's category (R31-E, R32-B), the panel's and the floating sheet's one: as the learner left
+ * it, else Notes, Flat's first; where it does not act (the chord row's notes), the first that does.
  */
 function useCategory(): readonly [PaletteCategory, (category: PaletteCategory) => void] {
   const settings = useSettingsStoreApi()
   const saved = useSettings(selectPaletteCategory)
-  const category = isPaletteCategory(saved) ? saved : 'notes'
+  const open = openCategories(useEditorState((state) => state.layer))
+  const wanted = isPaletteCategory(saved) ? saved : 'notes'
+  const category = open.includes(wanted) ? wanted : (open[0] ?? 'measures')
   return [category, (next) => setPaletteCategory(settings, next)] as const
 }
 
-/** Why a category's tools are greyed where the caret writes, or nothing where they work. */
-function useReason(category: PaletteCategory): string | undefined {
-  const { t } = useTranslation('editor')
-  const layer = useEditorState((state) => state.layer)
-  const chosen = useEditorState((state) => chosenNotes(state).length > 0)
-  const why = greyedBy(category, { layer, chosen })
-  return why ? t(`reason.${why}`) : undefined
-}
-
 /**
- * One category's tools (ADR 0114, R31-E): titled grids, the first under the category's own name
- * with why its tools are greyed, where they are, in the ⓘ beside it (ADR 0096); in the row, its keys
- * alone. Each greyed key says why in its tooltip.
+ * One category's tools (ADR 0114, R31-E): titled grids, the first under the category's own name; in
+ * the row, its keys alone. Only the tools that act on what is chosen are drawn (R32-B); a category
+ * whose every tool changes notes asks for one while none is chosen, in place of its tools.
  */
 function Category({ category }: { category: PaletteCategory }) {
   const { t } = useTranslation('editor')
-  const reason = useReason(category)
+  const waits = useEditorState((state) => needsNote(category, chosenNotes(state).length > 0))
   const title = t(`palette.category.${category}`)
   return (
     <PaletteSection category={category} title={title}>
       {/* Notes titles its own sections: its input modes, then Notation. */}
-      {category === 'notes' ? null : <GroupName name={title} info={reason} />}
-      <PaletteReason value={reason}>
-        <Tools category={category} />
-      </PaletteReason>
+      {category === 'notes' ? null : <GroupName name={title} />}
+      {waits ? <PaletteHint>{t('palette.chooseNote')}</PaletteHint> : <Tools category={category} />}
     </PaletteSection>
   )
 }
@@ -192,7 +181,8 @@ const fadeOf = ({ before, after }: { before: boolean; after: boolean }) =>
 
 /**
  * The strip of categories (R31-E, Flat's tab bar): a picture each in a sand pill, the chosen one on
- * a card-paper thumb that slides to the one tapped. On a phone it scrolls sideways in its own box,
+ * a card-paper thumb that slides to the one tapped; only those that act where the caret writes
+ * (R32-B). On a phone it scrolls sideways in its own box,
  * the chosen one scrolled into view, fading only at an edge with more past it; in the panel
  * (`wrap`), every category in rows.
  */
@@ -206,7 +196,7 @@ function CategoryStrip({
   wrap?: boolean
 }) {
   const { t } = useTranslation('editor')
-  const layer = useEditorState((state) => state.layer)
+  const categories = openCategories(useEditorState((state) => state.layer))
   const strip = useRef<HTMLDivElement>(null)
   const roving = useRovingFocus(strip)
   const motionOf = useScrollMotion()
@@ -231,10 +221,8 @@ function CategoryStrip({
         wrap ? 'flex-wrap' : cn('overflow-x-auto scrollbar-none', fadeOf(edges)),
       )}
     >
-      {PALETTE_CATEGORIES.map((category) => {
+      {categories.map((category) => {
         const name = t(`palette.category.${category}`)
-        // Greyed where the caret writes, its tooltip says why under its name (ADR 0096).
-        const closed = closedBy(category, layer)
         const chosen = current === category
         return (
           <button
@@ -242,11 +230,10 @@ function CategoryStrip({
             data-for={category}
             type="button"
             aria-label={name}
-            title={closed ? `${name}\n${t(`reason.${closed}`)}` : name}
+            title={name}
             aria-current={chosen ? 'true' : undefined}
-            data-off={closed ? true : undefined}
             onClick={() => onChoose(category)}
-            className="relative grid size-11 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground focus-visible:-outline-offset-3 aria-[current=true]:text-foreground data-off:opacity-40 [&_svg]:relative [&_svg]:size-6"
+            className="relative grid size-11 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground focus-visible:-outline-offset-3 aria-[current=true]:text-foreground [&_svg]:relative [&_svg]:size-6"
           >
             {chosen ? (
               <motion.span

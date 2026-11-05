@@ -17,11 +17,12 @@ export type GroupsData =
 
 /**
  * The learner's groups and the folders shared with them, read once signed in (R30 S6), and again
- * on `reload` after a change. Signed out, none: groups need an account.
+ * on `reload` after a change. Signed out, none: groups need an account; while the session is being
+ * restored, loading.
  */
 export function useGroupsData(): { data: GroupsData; reload: () => void } {
   const port = useGroups()
-  const { account } = useAccount()
+  const { account, ready } = useAccount()
   const [held, setData] = useState<GroupsData>({ kind: 'loading' })
   const [round, setRound] = useState(0)
   useEffect(() => {
@@ -38,5 +39,6 @@ export function useGroupsData(): { data: GroupsData; reload: () => void } {
     }
   }, [port, account, round])
   const reload = useCallback(() => setRound((was) => was + 1), [])
-  return { data: account ? held : { kind: 'guest' }, reload }
+  // Until the session is restored nobody is known: loading, never a Sign in flashed at a member.
+  return { data: !ready ? { kind: 'loading' } : account ? held : { kind: 'guest' }, reload }
 }

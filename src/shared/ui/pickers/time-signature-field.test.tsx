@@ -5,7 +5,7 @@ import { PickerLayoutContext } from './picker-layout'
 import { TimeSignatureField } from './time-signature-field'
 
 describe('TimeSignatureField (R31-E, the owner’s ruling)', () => {
-  it('has the common meters as tiles, the one in force pressed, one the song cannot take greyed', async () => {
+  it('has the common meters as tiles, the one in force pressed, none the song cannot take (R32-B)', async () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
     render(
@@ -23,13 +23,12 @@ describe('TimeSignatureField (R31-E, the owner’s ruling)', () => {
       '2/4',
       '3/4',
       '4/4',
-      '6/8',
       '9/8',
       '12/8',
     ])
     expect(tiles[0]?.querySelectorAll('[data-smufl]')).toHaveLength(2)
     expect(screen.getByRole('button', { name: '4/4' })).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByRole('button', { name: '6/8' })).toBeDisabled()
+    expect(screen.queryByRole('button', { name: '6/8' })).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: '9/8' }))
     expect(onChange).toHaveBeenLastCalledWith({ meter: '9/8', symbol: false })
   })
@@ -86,7 +85,7 @@ describe('TimeSignatureField (R31-E, the owner’s ruling)', () => {
     expect(screen.queryByRole('group', { name: 'Pickup' })).not.toBeInTheDocument()
   })
 
-  it('writes 4/4 and 2/2 as common or cut time from its switch, greyed for any other', async () => {
+  it('writes 4/4 and 2/2 as common or cut time from its switch, shown for those alone (R32-B)', async () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
     const { rerender } = render(
@@ -94,10 +93,8 @@ describe('TimeSignatureField (R31-E, the owner’s ruling)', () => {
     )
     await user.click(screen.getByRole('switch', { name: 'Write as common or cut time' }))
     expect(onChange).toHaveBeenLastCalledWith({ meter: '2/2', symbol: true })
-    rerender(<TimeSignatureField value={{ meter: '3/4', symbol: false }} onChange={onChange} />)
-    expect(screen.getByRole('switch', { name: 'Write as common or cut time' })).toHaveAttribute(
-      'data-disabled',
-    )
+    rerender(<TimeSignatureField value={{ meter: '5/4', symbol: false }} onChange={onChange} />)
+    expect(screen.queryByRole('switch')).not.toBeInTheDocument()
   })
 
   it('in a row, its tiles alone', () => {

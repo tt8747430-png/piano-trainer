@@ -113,7 +113,9 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     await user.keyboard(' again')
     await publish(user)
     expect(
-      await screen.findByText('Published. Learners get it the next time the app starts.'),
+      await screen.findByText(
+        'Published. Learners will receive it the next time they open the app.',
+      ),
     ).toBeInTheDocument()
     expect(content.body('lesson', LESSON.id)).toMatchObject({
       id: LESSON.id,
@@ -240,7 +242,9 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     expect(again).not.toHaveAccessibleDescription()
     await publish(user)
     expect(
-      await screen.findByText('Published. Learners get it the next time the app starts.'),
+      await screen.findByText(
+        'Published. Learners will receive it the next time they open the app.',
+      ),
     ).toBeInTheDocument()
     expect(JSON.stringify(content.body('lesson', lesson.id))).toContain('["C","Am","G7"]')
   })
@@ -271,7 +275,9 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     await user.keyboard('{Escape}')
     await publish(user)
     expect(
-      await screen.findByText('Published. Learners get it the next time the app starts.'),
+      await screen.findByText(
+        'Published. Learners will receive it the next time they open the app.',
+      ),
     ).toBeInTheDocument()
     expect(JSON.stringify(content.body('lesson', lesson.id))).toContain('C3 G3 | E4 B4')
   })

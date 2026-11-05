@@ -1,22 +1,21 @@
-import { ArrowUpDown, Circle, Eye, ListMusic, Music2, Piano, Settings2, Type } from 'lucide-react'
+import { ArrowUpDown, Circle, Eye, ListMusic, Mic, Music2, Piano, Ruler } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectScoreView, useSettings } from '@/entities/settings'
 import { selectTakesOf, useTakes } from '@/entities/take'
 import { MidiControl } from '@/features/connect-midi'
-import { useFoldKeys } from '@/features/live-keyboard'
 import { useKeyName } from '@/shared/i18n'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { BackButton, RowButton, RowTrigger, SettingsGroup, Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { PartChip, PRINTED_PARTS, SheetViewFields } from '@/widgets/score-view-menu'
+import { PRINTED_PARTS, SheetViewFields } from '@/widgets/score-view-menu'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { gearBack, type GearPage } from '../model/gear-pages'
 import { useRecordTake } from '../model/use-record-take'
 import { TAKES_PAGE } from '../model/use-editor-takes'
 import { CreditsPage } from './CreditsPage'
 import { EditorTranspose } from './EditorTranspose'
-import { HowItWorksPage, MusicPage, ScorePageBody } from './ScoreSettingsPages'
+import { ScorePageBody } from './ScoreSettingsPages'
 
 /** An original's draft in the gear (ADR 0116, R31-E): where it stands, and its acts' rows. */
 export interface EditorDraft {
@@ -39,34 +38,16 @@ function useTitle(page: GearPage): string {
     case 'transpose':
     case 'record':
       return t(`scoreSettings.acts.${page}`)
-    case 'music':
-      return t('scoreSettings.music')
-    case 'howItWorks':
-      return t('scoreSettings.howItWorks')
     default:
       return t(`scoreSettings.pages.${page}`)
   }
 }
 
-/**
- * The View's page: the sheet music's layout and what it shows; on a phone, whose bar has no room for
- * them, the piano keys too.
- */
+/** The View's page: the sheet music's layout and what it shows. */
 function ViewPage() {
-  const { t } = useTranslation('player')
-  const keys = useFoldKeys()
   return (
     <div className="flex flex-col gap-5">
-      <SheetViewFields parts={PRINTED_PARTS}>
-        <span className="contents sm:hidden">
-          <PartChip
-            icon={<Piano />}
-            label={t('pianoKeys')}
-            pressed={!keys.folded}
-            onPressedChange={(shown) => keys.fold(!shown)}
-          />
-        </span>
-      </SheetViewFields>
+      <SheetViewFields parts={PRINTED_PARTS} />
     </div>
   )
 }
@@ -91,10 +72,11 @@ function RecordPage() {
 }
 
 /**
- * The gear's first page (R31-E, Flat's one menu): the score's acts, View, Transpose, Record a take
- * and Takes; then its Settings, Title and credits, Music and How the editor works, each a page;
- * then an original's draft's acts. A lesson's example is shown and moved alone: no takes, no
- * Settings.
+ * The gear's first page (R32-B, Flat's document menu): the score's acts, View, Transpose, Record a
+ * take and Takes; then its Settings, each one tap from here with a line saying what it does:
+ * Instruments, Layout, Note input, Recording; then an original's draft's acts. What the score prints
+ * (the title, key, time, clef, tempo) is set where it prints (ADR 0114), never here. A lesson's
+ * example is shown and moved alone: no takes, no Settings.
  */
 function MainPage({ draft }: { draft: EditorDraft | undefined }) {
   const { t } = useTranslation(['editor', 'music'])
@@ -102,6 +84,10 @@ function MainPage({ draft }: { draft: EditorDraft | undefined }) {
   const keyName = useKeyName()
   const layout = useSettings((state) => selectScoreView(state).layout)
   const key = useEditorState((state) => state.draft.key)
+  // Each instrument once: every single staff, and the piano where it is in sight.
+  const staffCount = useEditorState(
+    (state) => state.draft.staves.length + (state.draft.leadSheet ? 0 : 1),
+  )
   const count = useTakes((state) => selectTakesOf(state, takes.pieceId).length)
   const { record } = useRecordTake()
   const example = meta.kind === 'example'
@@ -148,25 +134,33 @@ function MainPage({ draft }: { draft: EditorDraft | undefined }) {
       {example ? null : (
         <SettingsGroup flush title={t('scoreSettings.acts.settings')}>
           <RowTrigger
-            title={t('scoreSettings.credits')}
-            detail={meta.title}
-            icon={Type}
-            paint="yellow"
-            onClick={() => view.setGear('credits')}
-          />
-          <RowTrigger
-            title={t('scoreSettings.music')}
-            detail={t('scoreSettings.acts.musicDetail')}
+            title={t('scoreSettings.pages.instruments')}
+            detail={t('scoreSettings.details.instruments')}
             icon={Music2}
             paint="lilac"
-            onClick={() => view.setGear('music')}
+            value={String(staffCount)}
+            onClick={() => view.setGear('instruments')}
           />
           <RowTrigger
-            title={t('scoreSettings.howItWorks')}
-            detail={t('scoreSettings.acts.howItWorksDetail')}
-            icon={Settings2}
+            title={t('scoreSettings.pages.layout')}
+            detail={t('scoreSettings.details.layout')}
+            icon={Ruler}
             paint="grass"
-            onClick={() => view.setGear('howItWorks')}
+            onClick={() => view.setGear('layout')}
+          />
+          <RowTrigger
+            title={t('scoreSettings.pages.input')}
+            detail={t('scoreSettings.details.input')}
+            icon={Piano}
+            paint="yellow"
+            onClick={() => view.setGear('input')}
+          />
+          <RowTrigger
+            title={t('scoreSettings.pages.recording')}
+            detail={t('scoreSettings.details.recording')}
+            icon={Mic}
+            paint="sand"
+            onClick={() => view.setGear('recording')}
           />
         </SettingsGroup>
       )}
@@ -192,12 +186,8 @@ function PageBody({ page }: { page: Exclude<GearPage, 'main'> }) {
       return <RecordPage />
     case 'credits':
       return <CreditsPage />
-    case 'music':
-      return <MusicPage />
-    case 'howItWorks':
-      return <HowItWorksPage />
     default:
-      return <ScorePageBody page={page} onDone={back} />
+      return <ScorePageBody page={page} />
   }
 }
 
@@ -205,7 +195,8 @@ function PageBody({ page }: { page: Exclude<GearPage, 'main'> }) {
  * The editor's one gear (R31-E, Flat's one menu; ADR 0115): a sheet from the foot on a phone, a
  * panel at the right on a laptop with the music in sight beside it. Its first page holds the score's
  * acts and its Settings; each row turns to its page in the same sheet, every page with Back to the
- * one it came from, so a sheet never opens over a sheet. An original's draft says where it stands
+ * first, so a sheet never opens over a sheet; Title and credits, opened from the title on the score,
+ * stands alone. An original's draft says where it stands
  * beside the title.
  */
 export function EditorGear({ draft }: { draft: EditorDraft | undefined }) {
@@ -227,7 +218,10 @@ export function EditorGear({ draft }: { draft: EditorDraft | undefined }) {
           <MainPage draft={draft} />
         ) : (
           <div className="flex flex-col gap-5">
-            <BackButton onClick={() => view.setGear(gearBack(page))} />
+            {/* Title and credits opens from the title on the score: its sheet's Close shuts it. */}
+            {gearBack(page) === null ? null : (
+              <BackButton onClick={() => view.setGear(gearBack(page))} />
+            )}
             <PageBody page={page} />
           </div>
         )}

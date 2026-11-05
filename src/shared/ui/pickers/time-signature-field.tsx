@@ -42,8 +42,9 @@ export function TimeSignatureTile({ value }: { value: TimeSignatureValue }) {
  * Settings and New song): the common meters as tiles; Current, its figures as wheels on a staff,
  * any count of one to sixteen over a whole note to a sixteenth; Pickup beside it, the beats before
  * the first bar line (0 none), where the song's head is changed (`pickup`); and Write as common or
- * cut time, for 4/4 and 2/2 alone. In a row (the folded palette) its tiles alone. Each change is
- * reported; `barred` greys a meter the song cannot take here.
+ * cut time, shown for 4/4 and 2/2 alone (R32-B: what does not apply is not drawn). In a row (the
+ * folded palette) its tiles alone. Each change is reported; a meter the song cannot take here
+ * (`barred`) has no tile.
  */
 export function TimeSignatureField({
   value,
@@ -64,12 +65,11 @@ export function TimeSignatureField({
   const choose = (meter: Meter | undefined) =>
     meter ? onChange({ meter, symbol: value.symbol && meterSymbol(meter) !== null }) : undefined
   const row = usePickerLayout() === 'row'
-  const cells = TILES.map((meter) => (
+  const cells = TILES.filter((meter) => !barred(meter)).map((meter) => (
     <PickerCell
       key={meter}
       label={meter}
       pressed={meter === value.meter}
-      disabled={barred(meter)}
       onClick={() => choose(meter)}
     >
       <TimeSignatureTile value={{ meter, symbol: false }} />
@@ -131,19 +131,16 @@ export function TimeSignatureField({
           />
         ) : null}
       </div>
-      <label
-        htmlFor={switchId}
-        title={symbolOf ? undefined : t('timeField.symbolOnly')}
-        className="flex min-h-11 items-center justify-between gap-3 has-disabled:opacity-50"
-      >
-        <span className="text-base">{t('timeField.symbol')}</span>
-        <Switch
-          id={switchId}
-          checked={value.symbol && symbolOf !== null}
-          disabled={symbolOf === null}
-          onCheckedChange={(symbol) => onChange({ meter: value.meter, symbol })}
-        />
-      </label>
+      {symbolOf === null ? null : (
+        <label htmlFor={switchId} className="flex min-h-11 items-center justify-between gap-3">
+          <span className="text-base">{t('timeField.symbol')}</span>
+          <Switch
+            id={switchId}
+            checked={value.symbol}
+            onCheckedChange={(symbol) => onChange({ meter: value.meter, symbol })}
+          />
+        </label>
+      )}
     </div>
   )
 }

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { barOf, useSettings, useSettingsStoreApi, type BarSurface } from '@/entities/settings'
 import { setBar } from '@/features/set-preference'
-import { Segmented } from '@/shared/ui'
+import { Segmented, SettingsGroup } from '@/shared/ui'
 import { BarEditor } from '@/widgets/bar-editor'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
@@ -14,33 +14,41 @@ const KINDS = {
 type Kind = keyof typeof KINDS
 
 /** One side of a swipe: its heading and its tiles, none to two. */
-function Side({ surface, title }: { surface: BarSurface; title: string }) {
+function Side({
+  surface,
+  title,
+  footnote,
+}: {
+  surface: BarSurface
+  title: string
+  footnote?: string
+}) {
   const settings = useSettingsStoreApi()
   const bar = useSettings((state) => barOf(state.bars, surface))
   return (
-    <section className="flex flex-col gap-2">
-      <h2 className="font-sans text-base font-semibold">{title}</h2>
+    <SettingsGroup bare title={title} footnote={footnote}>
       <BarEditor
         surface={surface}
         bar={bar}
         label={title}
         onChange={(acts) => setBar(settings, surface, acts)}
       />
-    </section>
+    </SettingsGroup>
   )
 }
 
 /**
- * Settings › General › Swipe actions (R29 B10, memory-palaces'): for songs and for folders, what a
- * swipe right and a swipe left offer, up to two each. Archive and Delete still ask first (rule 17).
+ * Settings › Library › Swipe actions (R29 B10, R32; memory-palaces', iOS Mail's Swipe Options): for
+ * songs and for folders, what the leading (right) and trailing (left) swipe offer, up to two each.
+ * Archive and Delete still ask first (rule 17), as the footnote says.
  */
 export function SwipeActionsPage() {
   const { t } = useTranslation('settings')
   const [kind, setKind] = useState<Kind>('songs')
   return (
-    <SettingsScreen title={t('bars.swipeActions')}>
+    <SettingsScreen title={t('pages.swipeActions')}>
       <Segmented
-        label={t('bars.swipeActions')}
+        label={t('pages.swipeActions')}
         value={kind}
         options={[
           { value: 'songs', label: t('bars.songRows') },
@@ -49,7 +57,12 @@ export function SwipeActionsPage() {
         onChange={setKind}
       />
       <Side key={`${kind}-right`} surface={KINDS[kind].right} title={t('bars.swipeRight')} />
-      <Side key={`${kind}-left`} surface={KINDS[kind].left} title={t('bars.swipeLeft')} />
+      <Side
+        key={`${kind}-left`}
+        surface={KINDS[kind].left}
+        title={t('bars.swipeLeft')}
+        footnote={t('bars.swipeFootnote')}
+      />
     </SettingsScreen>
   )
 }

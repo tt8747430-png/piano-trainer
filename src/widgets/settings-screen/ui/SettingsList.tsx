@@ -1,113 +1,54 @@
 import { Link } from '@tanstack/react-router'
-import {
-  Cable,
-  HardDrive,
-  Info,
-  LifeBuoy,
-  Piano,
-  ScrollText,
-  Settings2,
-  ShieldCheck,
-  ShieldUser,
-} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useMidiSummary } from '@/features/connect-midi'
-import { useAccount, useLearnerView } from '@/shared/lib/account'
-import { RowLink, SettingsGroup, SwitchRow } from '@/shared/ui'
+import { APP_VERSION } from '@/shared/config'
+import { useAccount } from '@/shared/lib/account'
+import { useAppUpdate } from '@/shared/lib/app-update'
+import { RowLink, SettingsGroup } from '@/shared/ui'
+import { ADMIN_ENTRY, SETTINGS_GROUPS, type SettingsPageEntry } from '../model/sections'
 import { AccountCard } from './AccountCard'
-import { ReportProblem } from './ReportProblem'
-import { UpdateRows } from './UpdateRows'
 
 /**
- * Settings' list, as iOS's reads: the account card first, then a row for each page, each its icon in
- * a coloured square (R21): General (General, Storage and backup); Piano (the on-screen piano, with the computer keys
- * inside it, and a connected piano); Help. Only what concerns the whole app: the Player's, the editor's and
- * each Practice page's settings are behind their own gear (R29 Decided 22–23); Help (How to use, Privacy, Terms) and the app's version;
- * and for an admin, the Admin area. A phone's Settings screen is this list alone; a laptop's keeps it
- * beside the page chosen (`SettingsScreen`), the page shown marked.
+ * Settings' list on a phone (R32, iOS's Settings): the account card first, then General, Piano,
+ * Library and Support, each row its icon in a coloured square and, where it has one, its value
+ * before the chevron (MIDI devices' connection, About's version or a waiting update); for an
+ * administrator, Administration last. Each row pushes its page, whose Back comes here. Only what
+ * concerns the whole app: a screen's own settings are behind its gear (R29).
  */
 export function SettingsList() {
   const { t } = useTranslation(['settings', 'admin'])
   const { account } = useAccount()
-  const learner = useLearnerView()
   const midi = useMidiSummary()
+  const { status } = useAppUpdate()
+  const valueOf = (page: SettingsPageEntry): string | undefined => {
+    if (page.to === '/settings/connect-piano') return midi
+    if (page.to === '/settings/about')
+      return status === 'ready' ? t('settings:about.update.ready') : APP_VERSION
+    return undefined
+  }
   return (
-    <div className="flex flex-col gap-7 [&_a[aria-current=page]]:bg-muted">
+    <div className="flex flex-col gap-7">
       <AccountCard />
-      <SettingsGroup flush title={t('sections.general')}>
-        <RowLink
-          title={t('sections.general')}
-          icon={Settings2}
-          paint="sky"
-          render={<Link to="/settings/general" />}
-        />
-        <RowLink
-          title={t('pages.storage')}
-          icon={HardDrive}
-          paint="grass"
-          render={<Link to="/settings/storage" />}
-        />
-      </SettingsGroup>
-      <SettingsGroup flush title={t('groups.piano.label')}>
-        <RowLink
-          title={t('pages.onScreenPiano')}
-          icon={Piano}
-          paint="lilac"
-          render={<Link to="/settings/on-screen-piano" />}
-        />
-        <RowLink
-          title={t('pages.connectPiano')}
-          icon={Cable}
-          paint="sky"
-          value={midi}
-          render={<Link to="/settings/connect-piano" />}
-        />
-      </SettingsGroup>
-      <SettingsGroup flush title={t('groups.help.label')}>
-        <RowLink
-          title={t('help.howToUse')}
-          icon={LifeBuoy}
-          paint="sky"
-          render={<Link to="/settings/how-to-use" />}
-        />
-        <RowLink
-          title={t('help.privacy')}
-          icon={ShieldCheck}
-          paint="grass"
-          render={<Link to="/legal/privacy" />}
-        />
-        <RowLink
-          title={t('help.terms')}
-          icon={ScrollText}
-          paint="sand"
-          render={<Link to="/legal/terms" />}
-        />
-        <ReportProblem />
-        <RowLink
-          title={t('help.about')}
-          icon={Info}
-          paint="sand"
-          render={<Link to="/settings/about" />}
-        />
-        <UpdateRows />
-      </SettingsGroup>
-      {learner.can ? (
-        <SettingsGroup flush>
-          {/* An editor's or admin's look at the app as a learner sees it (R29 B5): this session only. */}
-          <SwitchRow
-            label={t('learnerView.label')}
-            info={t('learnerView.info')}
-            checked={learner.on}
-            onCheckedChange={learner.set}
-          />
+      {SETTINGS_GROUPS.map((group) => (
+        <SettingsGroup key={group.title} flush title={t(`settings:${group.title}`)}>
+          {group.pages.map((page) => (
+            <RowLink
+              key={page.to}
+              title={t(`settings:${page.title}`)}
+              icon={page.icon}
+              paint={page.paint}
+              value={valueOf(page)}
+              render={<Link to={page.to} />}
+            />
+          ))}
         </SettingsGroup>
-      ) : null}
+      ))}
       {account?.role === 'admin' ? (
         <SettingsGroup flush>
           <RowLink
             title={t('admin:title')}
-            icon={ShieldUser}
-            paint="lilac"
+            icon={ADMIN_ENTRY.icon}
+            paint={ADMIN_ENTRY.paint}
             render={<Link to="/admin" />}
           />
         </SettingsGroup>

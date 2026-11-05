@@ -13,27 +13,15 @@ import {
   type ShelvedFolder,
 } from '@/entities/library'
 import { cn } from '@/shared/lib'
-import { PAINT, TREE_ITEM, TreeCount, TreeHeading, TreeItem, TreeList } from '@/shared/ui'
+import { TREE_ITEM, TreeCount, TreeHeading, TreeItem, TreeList, TreeSwatch } from '@/shared/ui'
 
 /** Where the learner is in the library, as the tree marks it. */
 export type TreePlace = 'all' | 'favourites' | FolderId
 
 /** A small tile of a folder's picture on its paint, the tree's size. */
-function FolderSwatch({ folder }: { folder: ShelvedFolder }) {
-  const Icon = FOLDER_PICTURE_ICONS[folder.picture]
-  return (
-    <span
-      aria-hidden
-      className={cn(
-        'grid size-6 shrink-0 place-items-center rounded-pill',
-        PAINT[folder.paint].fill,
-        PAINT[folder.paint].ink,
-      )}
-    >
-      <Icon className="size-3.5" />
-    </span>
-  )
-}
+const FolderSwatch = ({ folder }: { folder: ShelvedFolder }) => (
+  <TreeSwatch icon={FOLDER_PICTURE_ICONS[folder.picture]} paint={folder.paint} />
+)
 
 function Place({
   to,

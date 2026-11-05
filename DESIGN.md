@@ -343,8 +343,9 @@ on a phone, 24px from 640px, 40px beside the sidebar.
   inside.
 - **A page that shows a thing on the keys** reads top to bottom: the keys pinned, what it is with its one Play, its
   choices, then its titled sections. No page splits into two columns of unrelated things.
-- **Settings:** one column of grouped cards on a phone; from 64rem two panes, the list (20rem, sticky) beside the page
-  (44rem). Never two columns of unequal groups.
+- **Settings:** one column of grouped cards on a phone, each page pushed with Back; from 64rem the libraries' two
+  panes: a sidebar of tree rows (17rem, a painted swatch each, sticky under the bar and scrolling on its own) beside
+  the page (44rem), which scrolls with the window. Never two columns of unequal groups.
 - **The editor's palette docks:** from 48rem a panel at the sheet's left with the note-entry toolbar over the sheet; on a
   phone held upright a sheet at the foot.
 - **Equal columns:** a chart's lines are grids of equal beats; a score's lines are justified to their share of the
@@ -450,6 +451,11 @@ square at the top.
   only for movement.
 - **Sheet** (`Sheet`): card paper, the sheet corner on top, a grab handle, a Literata title with Close, an optional
   footer. It stands on the phone's keyboard. Never a sheet over a sheet.
+- **Properties** (a song's Details): a `RowTrigger` per property, its name and value, the value "Not set" in soft ink
+  where empty; a tap opens its editor beside it (a popover on a laptop, a sheet on a phone), titled with its name.
+- **A place's card style** (`StyleEditor`): the preview is a pinned pane on the muted fill, of fixed height, never over a
+  control; presets lead as a strip of drawn tiles, the chosen ringed in ink. Styles are made of the paints, so the dark
+  theme redraws them; Night alone is a dark card in both themes.
 - **Popover and ⓘ:** an `InfoTip` is a 16px ⓘ in soft ink beside a name; no line of explanation stands under a control.
 - **Toast** (`say`): a card over the screen's foot, clear of all that floats there, with Undo and ✕; gone in five
   seconds.

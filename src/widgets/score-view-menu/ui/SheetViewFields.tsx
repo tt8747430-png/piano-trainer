@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectScoreView, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setScoreView } from '@/features/set-preference'
@@ -25,16 +24,10 @@ function PartsAbout({ parts }: { parts: readonly SheetPart[] }) {
 /**
  * The sheet music's own part of the View (ADR 0096, 0108, 0115): its layout first, three tiles with
  * their miniatures; then what it shows as chips (`parts`: the Player's every one, the editor's what a
- * score prints), and after them a screen's own (`children`: the editor's Keys). Which staves play
- * and show is the Player's Setup's (A35).
+ * score prints). Which staves play and show is the Player's Setup's (A35); the piano keys are each
+ * bar's own button (R32-B).
  */
-export function SheetViewFields({
-  parts = SHEET_PARTS,
-  children,
-}: {
-  parts?: readonly SheetPart[]
-  children?: ReactNode
-}) {
+export function SheetViewFields({ parts = SHEET_PARTS }: { parts?: readonly SheetPart[] }) {
   const { t } = useTranslation('music')
   const store = useSettingsStoreApi()
   const layout = useSettings((state) => selectScoreView(state).layout)
@@ -49,7 +42,6 @@ export function SheetViewFields({
         {listed.map((part) => (
           <ViewChip key={part} part={part} />
         ))}
-        {children}
       </PartChips>
     </>
   )

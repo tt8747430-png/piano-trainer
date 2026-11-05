@@ -17,27 +17,25 @@ const family = (shape: ClefShape): Clef[] =>
  * The clef picker (ADR 0097, 0114, after notation apps' clef sheets): one bordered grid, the G
  * clefs (treble, an octave or two up or down), the C clefs (soprano to baritone) and the F clefs (bass,
  * up or down, on the third line and the fifth), each drawn on a short staff, named in its tooltip and
- * to a screen reader, the one the staff is in tinted. A tap writes it: one of the piano's staves from
- * the bar on, a single staff's whole.
+ * to a screen reader, the one the staff is in tinted: the palette's Clef, the one place a clef is
+ * chosen (R32-B). A tap writes it: one of the piano's staves from the bar on, a single staff's whole.
  */
 export function ClefPicker({
   staff,
   bar,
   current,
-  scoped = false,
 }: {
   staff: NoteLayer
   bar: number
   current: Clef | null
-  /** In the palette (A34): This bar only · To the end · Whole staff, a hand's staff's. */
-  scoped?: boolean
 }) {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const [scope, setScope] = useState<ClefScope>('end')
-  // In the folded palette's row its clefs alone, each from the bar on (R31-E).
+  // In the folded palette's row its clefs alone, each from the bar on (R31-E); unfolded, a hand's
+  // staff asks This bar only · To the end · Whole staff (A34).
   const grid = usePickerLayout() === 'grid'
-  const asks = scoped && isHandLayer(staff) && grid
+  const asks = isHandLayer(staff) && grid
   const cell = (clef: Clef) => (
     <PickerCell
       key={clef}

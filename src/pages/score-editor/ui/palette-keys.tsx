@@ -54,7 +54,7 @@ export function PaletteSection({
 
 /**
  * A section's title over its grid (Flat's Notation, Pitch and representation), with what its tools
- * do or why they are greyed where they are in the ⓘ beside it (ADR 0096); nothing in the row.
+ * do in the ⓘ beside it (ADR 0096); nothing in the row.
  */
 export function GroupName({ name, info }: { name: string; info?: ReactNode }) {
   if (usePaletteForm() === 'bar') return null
@@ -63,6 +63,27 @@ export function GroupName({ name, info }: { name: string; info?: ReactNode }) {
       <h3 className="text-[0.9375rem] leading-tight font-semibold">{name}</h3>
       {info ? <InfoTip name={name}>{info}</InfoTip> : null}
     </div>
+  )
+}
+
+/**
+ * What a category says in place of its tools while it has none to show (R32-B): to choose a note.
+ * In the row too, where it stands in the tools' place.
+ */
+export function PaletteHint({ children }: { children: ReactNode }) {
+  const bar = usePaletteForm() === 'bar'
+  return (
+    <p
+      role="status"
+      className={cn(
+        'text-sm text-muted-foreground',
+        bar
+          ? 'flex min-h-10 items-center px-2'
+          : 'rounded-control border border-dashed border-hairline p-3',
+      )}
+    >
+      {children}
+    </p>
   )
 }
 
@@ -102,7 +123,8 @@ export function KeyGrid({ label, children }: { label?: string | undefined; child
 
 /**
  * A palette's key (`ToolKey`), as the form lays it out: a cell of the section's table, or the row's
- * glyph. Its tooltip names it, then its shortcut (`tool`, Flat's); greyed, why (`reason`, ADR 0096).
+ * glyph. Its tooltip names it, then its shortcut (`tool`, Flat's). A key that cannot act on what is
+ * chosen is not drawn (R32-B): its caller leaves it out.
  */
 export function PaletteKey({
   label,
@@ -133,15 +155,13 @@ export function PaletteKey({
 
 /**
  * A sign's key (ADR 0115, 0114): the sign drawn on a short staff (`children`), named in its tooltip
- * and to a screen reader. Two cells of the section's table, or the row's; a trigger for the sign's
- * picker where it opens one. Pressed where it is so already; greyed, its tooltip says why (`reason`).
+ * and to a screen reader. Two cells of the section's table, or the row's. Pressed where it is so
+ * already.
  */
 export function SignTile({
   label,
   tool,
-  reason,
   pressed,
-  disabled = false,
   children,
   ...props
 }: {
@@ -149,9 +169,7 @@ export function SignTile({
   label: string
   /** Its shortcut, named in its tooltip. */
   tool?: Tool | undefined
-  reason?: string | undefined
   pressed?: boolean
-  disabled?: boolean
   children: ReactNode
 } & Omit<
   ComponentProps<'button'>,
@@ -163,9 +181,8 @@ export function SignTile({
     <button
       type="button"
       aria-label={label}
-      title={disabled && reason ? `${tip}\n${reason}` : tip}
+      title={tip}
       aria-pressed={pressed}
-      disabled={disabled}
       {...props}
       className={cn(
         'flex min-w-0 items-center justify-center px-1 text-foreground/80 transition-colors duration-150 ease-out hover:bg-accent hover:text-foreground focus-visible:z-10 focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring disabled:opacity-35 motion-reduce:transition-none',
@@ -184,24 +201,19 @@ export function SignTile({
 
 /**
  * A term's key (ADR 0096): the term alone as a score prints it, two cells wide, its name for a screen
- * reader, what it means (`meaning`: dolce, sweetly) its tooltip and a screen reader's description;
- * greyed, why.
+ * reader, what it means (`meaning`: dolce, sweetly) its tooltip and a screen reader's description.
  */
 export function TermKey({
   label,
   term,
   meaning,
   tool,
-  reason,
-  disabled = false,
   onClick,
 }: {
   label: string
   term: string
   meaning: string
   tool?: Tool
-  reason?: string | undefined
-  disabled?: boolean
   onClick: () => void
 }) {
   return (
@@ -209,8 +221,6 @@ export function TermKey({
       label={label}
       tool={tool}
       description={meaning}
-      reason={reason}
-      disabled={disabled}
       span="wide"
       onClick={onClick}
       className="whitespace-nowrap"

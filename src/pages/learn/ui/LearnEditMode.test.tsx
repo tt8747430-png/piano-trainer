@@ -33,7 +33,7 @@ async function publish(user: ReturnType<typeof userEvent.setup>) {
   await user.click(
     within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
   )
-  await screen.findByText('Published. Learners get it the next time the app starts.')
+  await screen.findByText('Published. Learners will receive it the next time they open the app.')
 }
 
 describe('a level’s Edit mode, in place on the Lessons (R29 B4)', () => {
@@ -253,7 +253,7 @@ describe('the Courses’ About (R29 B9)', () => {
     const words = within(about).getByText('Begin with the beginner’s shelf.')
     expect(
       words.closest<HTMLElement>('[data-block-style]')?.style.getPropertyValue('--block-border'),
-    ).toBe('3px')
+    ).toBe('2px')
   })
 })
 

@@ -1,26 +1,19 @@
-import { Trash2 } from 'lucide-react'
+import { ChevronDown, Trash2 } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { AdminAccount, Group } from '@/shared/api/admin'
 import { useAdmin } from '@/shared/lib/admin'
-import { FormField, RoundButton } from '@/shared/ui'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/shared/ui/primitives/alert-dialog'
+import { ConfirmDialog, FormField, RoundButton } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Switch } from '@/shared/ui/primitives/switch'
 import { useLoaded } from '../model/use-loaded'
 import { useChangeProblem } from '../model/use-change-problem'
 import { FailureLine, LoadedState } from './LoadedState'
 
-/** Groups: made by name, each with its members chosen from the accounts, and deleted, asked first. */
+/**
+ * Administration › Groups: made by name, each with its members chosen from the accounts (folded under
+ * Manage members), and deleted, asked first.
+ */
 export function GroupsTab() {
   const { t } = useTranslation('admin')
   const admin = useAdmin()
@@ -80,41 +73,42 @@ export function GroupsTab() {
                       onClick={() => setDeleting(group)}
                     />
                   </div>
-                  <Members
-                    group={group}
-                    accounts={accounts}
-                    onChange={(userId, member) =>
-                      void admin.setMember(group.id, userId, member).then(after)
-                    }
-                  />
+                  {/* Every account a switch: folded, so a long list of accounts stays out of the way. */}
+                  <details className="group/members">
+                    <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-control text-sm font-semibold text-link [&::-webkit-details-marker]:hidden">
+                      <ChevronDown
+                        aria-hidden
+                        className="size-4 -rotate-90 transition-transform duration-200 group-open/members:rotate-0"
+                      />
+                      {t('groups.manage')}
+                    </summary>
+                    <Members
+                      group={group}
+                      accounts={accounts}
+                      onChange={(userId, member) =>
+                        void admin.setMember(group.id, userId, member).then(after)
+                      }
+                    />
+                  </details>
                 </li>
               ))}
             </ul>
           )
         }
       </LoadedState>
-      <AlertDialog open={deleting !== null} onOpenChange={(open) => !open && setDeleting(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {t('groups.deleteTitle', { name: deleting?.name ?? '' })}
-            </AlertDialogTitle>
-            <AlertDialogDescription>{t('groups.deleteBody')}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t('groups.cancel')}</AlertDialogCancel>
-            <AlertDialogAction
-              variant="destructive"
-              onClick={() => {
-                if (deleting) void admin.deleteGroup(deleting.id).then(after)
-                setDeleting(null)
-              }}
-            >
-              {t('groups.confirm')}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmDialog
+        open={deleting !== null}
+        onOpenChange={(open) => {
+          if (!open) setDeleting(null)
+        }}
+        title={t('groups.deleteTitle', { name: deleting?.name ?? '' })}
+        body={t('groups.deleteBody')}
+        action={t('groups.confirm')}
+        onConfirm={() => {
+          if (deleting) void admin.deleteGroup(deleting.id).then(after)
+          setDeleting(null)
+        }}
+      />
     </div>
   )
 }

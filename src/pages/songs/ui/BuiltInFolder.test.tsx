@@ -25,9 +25,9 @@ async function asLearner(how: 'signed-out' | 'learner' | 'learner-view', user: U
   if (how === 'signed-out') return renderApp('/songs/folders/hymns')
   if (how === 'learner')
     return renderApp('/songs/folders/hymns', { auth: await signedInAs('learner') })
-  const app = await renderApp('/settings', { auth: await signedInAs('editor') })
-  await user.click(await screen.findByRole('switch', { name: 'View as a learner' }))
-  await screen.findByRole('status')
+  const app = await renderApp('/settings/account', { auth: await signedInAs('editor') })
+  await user.click(await screen.findByRole('switch', { name: 'Preview as learner' }))
+  await screen.findByText('Previewing as learner')
   await app.router.navigate({ to: '/songs/folders/$folderId', params: { folderId: 'hymns' } })
   await screen.findByRole('heading', { level: 1, name: 'Hymns' })
   return app
@@ -80,7 +80,7 @@ describe.each(['signed-out', 'learner', 'learner-view'] as const)(
       await asLearner(how, user)
       await user.click(await screen.findByRole('button', { name: 'Select' }))
       await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
-      const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+      const bar = screen.getByRole('toolbar', { name: 'Selection actions' })
       expect(
         within(bar)
           .getAllByRole('button')
@@ -144,7 +144,7 @@ describe('a learner at Home (R29 B4)', () => {
     const called = within(sheet).getAllByRole('button', { name: /^Called to Play/ })
     for (const each of called) {
       expect(each).toHaveAttribute('aria-disabled', 'true')
-      expect(each).toHaveAttribute('title', 'Only editors add to the app’s folders')
+      expect(each).toHaveAttribute('title', 'Only editors can add songs to built-in folders')
     }
   })
 })

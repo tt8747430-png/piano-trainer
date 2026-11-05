@@ -73,7 +73,10 @@ describe('createLibraryStore', () => {
       },
       cardLooks: {
         home: DEFAULT_CARD_LOOK,
-        'folder-3': { ...DEFAULT_CARD_LOOK, density: 'large' },
+        'folder-3': {
+          ...DEFAULT_CARD_LOOK,
+          style: { ...DEFAULT_CARD_LOOK.style, padding: 'roomy' },
+        },
       },
     }
     expect(restored(saved)).toEqual(saved)

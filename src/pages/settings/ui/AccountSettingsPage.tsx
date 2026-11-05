@@ -4,7 +4,7 @@ import { useReducer, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
 import { useOnline, useUp } from '@/shared/lib'
-import { authProblem, useAccount, useLearnerProfile } from '@/shared/lib/account'
+import { authProblem, useAccount, useLearnerProfile, useLearnerView } from '@/shared/lib/account'
 import {
   Avatar,
   ConfirmDialog,
@@ -14,6 +14,7 @@ import {
   RowLink,
   say,
   SettingsGroup as Group,
+  SwitchRow,
 } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 import { DELETE_CLOSED, deleteAccountMachine } from '../model/delete-account-machine'
@@ -24,7 +25,8 @@ import { SyncGroup } from './SyncGroup'
  * its top; Profile, their name, saved once changed, their email and Change password; Sync, its one
  * home (where it stands, Sync now, what syncs); then, each red and alone (R25), Sign out (on this
  * device, asked first) and Delete account… last, the email typed to confirm, its 30 days' grace in
- * its footnote. A guest is offered Sign in and Create an account.
+ * its footnote. An editor or administrator has Editorial access before Sync (R32). A guest is offered
+ * Sign in and Create account.
  */
 export function AccountSettingsPage() {
   const { t } = useTranslation(['settings', 'account'])
@@ -58,6 +60,7 @@ export function AccountSettingsPage() {
               render={<Link to="/settings/privacy" />}
             />
           </Group>
+          <EditorialAccess />
           <SyncGroup />
           <SignOut />
           <DeleteAccount onScheduled={setScheduled} />
@@ -66,6 +69,31 @@ export function AccountSettingsPage() {
         <Guest scheduled={scheduled} />
       )}
     </SettingsScreen>
+  )
+}
+
+/**
+ * Editorial access (R32): the role an editor or an administrator holds, and Preview as learner, the
+ * app as a learner sees it for this session (R29 B5) — its one home, beside the role it depends on.
+ * A learner sees neither. Its role is the account's real one, the preview hiding it from the rest.
+ */
+function EditorialAccess() {
+  const { t } = useTranslation('settings')
+  const learner = useLearnerView()
+  if (!learner.can || learner.role === null) return null
+  return (
+    <Group flush title={t('accountPage.editorial')}>
+      <dl className="flex min-h-16 items-center justify-between gap-4 px-4 py-2">
+        <dt className="text-lg font-semibold">{t('accountPage.role')}</dt>
+        <dd className="text-end text-muted-foreground">{t(`accountPage.roles.${learner.role}`)}</dd>
+      </dl>
+      <SwitchRow
+        label={t('learnerView.label')}
+        info={t('learnerView.info')}
+        checked={learner.on}
+        onCheckedChange={learner.set}
+      />
+    </Group>
   )
 }
 
