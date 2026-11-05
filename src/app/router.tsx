@@ -80,7 +80,7 @@ import {
   readSongsHomeSearch,
   SONGS_KEPT,
   songsHomeSearch,
-  songsSearch,
+  folderSearch,
   validateSharedSongSearch,
 } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
@@ -461,7 +461,7 @@ const folderRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs/folders/$folderId',
   notFoundComponent: notFoundIn('songs'),
-  ...songsSearch,
+  ...folderSearch,
   beforeLoad: async ({ params, context }) => {
     const { folderIn } = await songsScreens()
     const { pieces, library } = context

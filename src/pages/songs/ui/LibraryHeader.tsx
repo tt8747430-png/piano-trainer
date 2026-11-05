@@ -1,33 +1,44 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { CheckCheck, ListChecks, ListX, Palette, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, useLibraryLayout, type ShelvedFolder } from '@/entities/library'
 import { useUp } from '@/shared/lib'
-import { BackButton, RoundButton, RoundLink, ScreenHeader } from '@/shared/ui'
+import {
+  BackButton,
+  MoreMenu,
+  RoundButton,
+  RoundLink,
+  ScreenHeader,
+  type EditAction,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { LibraryPage } from '../model/use-library-page'
 import { ArchiveButton } from './ArchiveButton'
 import { SongsSwitch } from './SongsSwitch'
 
 /**
- * The library's bar (Mindscape's): its title says where the learner is, Songs at Home, the folder's
- * name in one, with Back, which goes up a level, to the folder it stands in or Home, named so; then
- * Select, and at Home the archive's button and the Profile, in a folder the gear to its Settings page
- * (its name and look, Move to folder…, Archive folder, Delete folder). While Select is on, the count chosen is its title, with Select all (round) and
- * Done.
+ * The library's bar (Mindscape's): its title says where the learner is, Songs at Home with its views
+ * (My songs · Explore), the folder's name in one with its Edit beside it (its name and look, in place)
+ * and Back, which goes up a level, named so; then Select, and at Home the Archive (its count) and More
+ * (Card style), in a folder the gear to its Settings page (Share, Card style, Move to folder…, Archive
+ * folder, Delete folder). While Select is on, the count chosen is its title, with Select all and Done.
  */
 export function LibraryHeader({
   page,
   folder,
+  edit,
 }: {
   page: LibraryPage
   folder: ShelvedFolder | null
+  /** The folder's Edit, where it may be renamed. */
+  edit?: EditAction
 }) {
   const { t } = useTranslation('songs')
   const nameOf = useFolderName()
   const { folders } = useLibraryLayout()
   const { select } = page
   const up = useUp()
+  const navigate = useNavigate()
   if (select.on)
     return (
       <ScreenHeader
@@ -74,16 +85,24 @@ export function LibraryHeader({
             onClick={() => page.select.start()}
           />
           {folder ? null : <ArchiveButton />}
-          {/* Home's Card style (R29 B9): a folder's is on its Settings page. */}
-          {folder ? null : (
-            <RoundLink
-              label={t('cardStyle.open')}
-              icon={Palette}
-              render={<Link to="/songs/card-style" />}
-            />
-          )}
         </>
       }
+      // Home's Card style (R29 B9), Home's own: a folder's is on its Settings page.
+      more={
+        folder ? null : (
+          <MoreMenu
+            actions={[
+              {
+                key: 'card-style',
+                label: t('cardStyle.open'),
+                icon: Palette,
+                onSelect: () => void navigate({ to: '/songs/card-style' }),
+              },
+            ]}
+          />
+        )
+      }
+      edit={edit}
       // A folder's own settings (name, look, place, Archive, Delete) are its Settings page.
       settings={
         folder ? (

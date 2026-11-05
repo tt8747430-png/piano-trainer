@@ -1,6 +1,6 @@
 import { useForgetScreens } from '@/shared/lib'
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { Archive, FolderInput, LayoutGrid, Palette } from 'lucide-react'
+import { Archive, FolderInput, LayoutGrid } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -9,13 +9,7 @@ import {
   usePermissions,
   type ShelvedFolder,
 } from '@/entities/library'
-import {
-  DeleteFolderAsk,
-  FolderSheet,
-  MoveSheet,
-  useLibraryActs,
-  type Moving,
-} from '@/features/manage-library'
+import { DeleteFolderAsk, MoveSheet, useLibraryActs, type Moving } from '@/features/manage-library'
 import {
   BackButton,
   ButtonLink,
@@ -29,8 +23,8 @@ import {
 } from '@/shared/ui'
 
 /**
- * A folder's Settings (R29, the owner's yes to ST17; a song's Settings page's shape): its name and
- * look (the Edit folder sheet), where it stands (Move to folder…), Archive folder, and Delete folder at
+ * A folder's Settings (R29, the owner's yes to ST17; a song's Settings page's shape): how its rows
+ * look (its name and look are edited in place, its ✎ beside its name), where it stands (Move to folder…), Archive folder, and Delete folder at
  * the page's foot. Reached from the gear in the folder's bar, where its ⋯ menu was. Each row where it
  * may be done (R29 B4): a built-in folder is the catalog's, so Move to folder… alone.
  */
@@ -54,10 +48,8 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
   const { folders } = useLibraryLayout()
   const acts = useLibraryActs()
   const permits = usePermissions()
-  const may = (act: 'renameFolder' | 'archiveFolder' | 'deleteFolder') =>
-    permits(act, { builtIn: folder.builtIn })
+  const may = (act: 'archiveFolder' | 'deleteFolder') => permits(act, { builtIn: folder.builtIn })
   const navigate = useNavigate()
-  const [editing, setEditing] = useState(false)
   const [moving, setMoving] = useState<Moving | null>(null)
   const [deleting, setDeleting] = useState(false)
   const forget = useForgetScreens()
@@ -79,14 +71,6 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
         {/* Its name and look, then how its rows look (R29 B9): the card style the learner's own, in a
             built-in folder too. */}
         <SettingsGroup flush title={t('folder.appearance')}>
-          {may('renameFolder') ? (
-            <RowButton
-              title={t('folder.nameAndLook')}
-              icon={Palette}
-              paint="sky"
-              onClick={() => setEditing(true)}
-            />
-          ) : null}
           <RowLink
             render={
               <Link to="/songs/folders/$folderId/card-style" params={{ folderId: folder.id }} />
@@ -121,7 +105,6 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
           </DangerGroup>
         ) : null}
       </div>
-      <FolderSheet target={editing ? { kind: 'edit', folder } : null} onOpenChange={setEditing} />
       <MoveSheet moving={moving} what={name} onOpenChange={(open) => open || setMoving(null)} />
       <DeleteFolderAsk
         folder={deleting ? folder : null}

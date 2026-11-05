@@ -16,5 +16,5 @@ export function FolderPage() {
         <ButtonLink render={<Link to="/songs" />}>{t('notFound.toSongs')}</ButtonLink>
       </NotFound>
     )
-  return <LibraryScreen key={folder.id} folder={folder} filter={search} />
+  return <LibraryScreen key={folder.id} folder={folder} filter={search} inEdit={search.edit} />
 }

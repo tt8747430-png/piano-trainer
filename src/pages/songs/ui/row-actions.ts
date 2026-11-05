@@ -85,7 +85,7 @@ export function folderActions(
       label: t('folder.edit'),
       icon: PencilLine,
       paint: 'grass',
-      onSelect: () => page.open({ kind: 'folder', target: { kind: 'edit', folder } }),
+      onSelect: () => page.editFolder(folder.id),
     },
     page.may('moveOut') && {
       key: 'move',

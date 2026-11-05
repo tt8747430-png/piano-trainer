@@ -149,6 +149,13 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
     pending,
     open: setPending,
     close: () => setPending(null),
+    /** A folder opened in Edit, its name and look in place (a folder row's Edit, as its ✎). */
+    editFolder: (id: FolderId) =>
+      void navigate({
+        to: '/songs/folders/$folderId',
+        params: { folderId: id },
+        search: { edit: true },
+      }),
     acts,
     titleOf,
     may,

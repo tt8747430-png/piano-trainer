@@ -131,7 +131,6 @@ export const songs: LocaleResources['songs'] = {
       lilac: 'Сиреневый',
     },
     create: 'Создать папку',
-    save: 'Сохранить',
     songCount_one: '{{count}} песня',
     songCount_few: '{{count}} песни',
     songCount_many: '{{count}} песен',
@@ -148,7 +147,6 @@ export const songs: LocaleResources['songs'] = {
     settings: 'Настройки папки',
     openSettings: 'Настройки: {{name}}',
     appearance: 'Оформление',
-    nameAndLook: 'Название и вид',
     inLibrary: 'В библиотеке',
     moveTo: 'Переместить в папку…',
     deleteSays:

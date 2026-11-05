@@ -15,3 +15,8 @@ export interface SongsFilter {
   /** Only the learner's favourites. */
   readonly favourites: boolean
 }
+
+/** A folder's URL: the library's filters, and whether the folder is in Edit (its name and look in place). */
+export interface FolderSearch extends SongsFilter {
+  readonly edit: boolean
+}

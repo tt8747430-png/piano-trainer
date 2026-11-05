@@ -322,25 +322,51 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived')
   })
 
-  it('edits a folder from its More: its name and look', async () => {
+  it('edits a folder in place from its More: its name and look, Done saving them', async () => {
     const user = userEvent.setup()
-    const { libraryStore } = await renderApp('/songs', { storage: saved({ library: SUNDAY }) })
+    const { libraryStore, router } = await renderApp('/songs', {
+      storage: saved({ library: SUNDAY }),
+    })
     // A built-in folder is the catalog's (D8): no Edit folder in its More.
     await user.click(await screen.findByRole('button', { name: 'More for Hymns' }))
     expect(screen.queryByRole('menuitem', { name: 'Edit folder' })).toBeNull()
     await user.keyboard('{Escape}')
     await rowAction(user, 'Sunday', 'Edit folder')
-    const sheet = await screen.findByRole('dialog', { name: 'Edit folder' })
-    const name = within(sheet).getByRole('textbox', { name: 'Name' })
-    await user.clear(name)
+    // The folder opens in Edit: its name and look under the bar, in its URL.
+    const form = await screen.findByRole('form', { name: 'Edit folder' })
+    expect(router.state.location.search).toMatchObject({ edit: true })
+    const name = within(form).getByRole('textbox', { name: 'Name' })
+    expect(name).toHaveAttribute('placeholder', 'Sunday')
     await user.type(name, 'Vespers')
-    await user.click(within(sheet).getByRole('radio', { name: 'Star' }))
-    await user.click(within(sheet).getByRole('radio', { name: 'Lilac' }))
-    await user.click(within(sheet).getByRole('button', { name: 'Save' }))
+    await user.click(within(form).getByRole('radio', { name: 'Star' }))
+    await user.click(within(form).getByRole('radio', { name: 'Lilac' }))
+    await user.click(screen.getByRole('button', { name: 'Done' }))
     expect(
       libraryStore.getState().folders.find((folder) => folder.id === 'folder-1'),
     ).toMatchObject({ name: 'Vespers', picture: 'star', paint: 'lilac' })
-    expect(await screen.findByRole('link', { name: /^Vespers/ })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: 'Vespers' })).toBeInTheDocument()
+    expect(screen.queryByRole('form', { name: 'Edit folder' })).toBeNull()
+    expect(router.state.location.search).not.toHaveProperty('edit')
+  })
+
+  it('edits a folder from the pencil beside its name; nothing typed keeps its name', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs/folders/folder-1', {
+      storage: saved({ library: SUNDAY }),
+    })
+    const heading = await screen.findByRole('heading', { level: 1, name: 'Sunday' })
+    const edit = screen.getByRole('button', { name: 'Edit' })
+    expect(heading.nextElementSibling).toBe(edit)
+    await user.click(edit)
+    await user.click(
+      within(await screen.findByRole('form', { name: 'Edit folder' })).getByRole('radio', {
+        name: 'Lilac',
+      }),
+    )
+    await user.click(screen.getByRole('button', { name: 'Done' }))
+    expect(
+      libraryStore.getState().folders.find((folder) => folder.id === 'folder-1'),
+    ).toMatchObject({ name: 'Sunday', paint: 'lilac' })
   })
 
   it('makes a folder from New, at Home, last, its name suggested', async () => {

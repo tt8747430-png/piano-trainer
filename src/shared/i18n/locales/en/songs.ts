@@ -143,7 +143,6 @@ export const songs = {
       lilac: 'Lilac',
     },
     create: 'Create folder',
-    save: 'Save',
     songCount_one: '{{count}} song',
     songCount_other: '{{count}} songs',
     folderCount_one: '{{count}} folder',
@@ -158,7 +157,6 @@ export const songs = {
     settings: 'Folder settings',
     openSettings: 'Settings for {{name}}',
     appearance: 'Appearance',
-    nameAndLook: 'Name and look',
     inLibrary: 'In the library',
     moveTo: 'Move to folder…',
     deleteSays:

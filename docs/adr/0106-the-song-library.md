@@ -75,3 +75,6 @@ A study, practised on Practice, is in no library. A folder played song after son
   Export… on a song's row (2026-10-30).
 - r26 — A song's page keeps Edit and Settings in its bar and Practise, Learned and ♡ on its overview card; its place in the library (Favourite, Folder, Archive or Restore) is its Settings page's, Noji's deck settings (2026-11-01).
 - r29 (ST17) — A folder's ⋯ menu became its Settings page from a gear in its bar: Name and look, Move to folder…, Archive folder, Delete folder (2026-11-04).
+- r30 — A folder is edited in place: its ✎ beside its name (or a folder row's Edit folder) opens its name, picture and
+  paint under the bar (`?edit=true`, `FolderEditPanel`), Done saving them; the Edit folder sheet and Settings' Name and
+  look go. Songs' bar: Select, Archive with its count, and More holding Card style (2026-11-05).

@@ -10,7 +10,7 @@ import {
 } from './explorer-search'
 import { CHROMATIC_DEFAULTS, EDIT_DEFAULTS, PLAYER_DEFAULTS, WALK_DEFAULTS } from './player-search'
 import { CHORD_FINDER_DEFAULTS } from './tool-search'
-import { SONGS_DEFAULTS, SONGS_HOME_DEFAULTS } from './songs-search'
+import { FOLDER_DEFAULTS, SONGS_HOME_DEFAULTS } from './songs-search'
 
 /** What a route reads from a URL, however it was typed, kept or edited. */
 async function searchAt(url: string) {
@@ -130,7 +130,11 @@ describe('search params', () => {
       key: 'Em',
       favourites: true,
     })
-    expect(await searchAt('/songs/folders/hymns?q=душа')).toEqual({ ...SONGS_DEFAULTS, q: 'душа' })
+    expect(await searchAt('/songs/folders/hymns?q=душа')).toEqual({ ...FOLDER_DEFAULTS, q: 'душа' })
+    expect(await searchAt('/songs/folders/hymns?edit=true')).toEqual({
+      ...FOLDER_DEFAULTS,
+      edit: true,
+    })
     expect(await searchAt('/practice/scales?root=Eb&kind=harmonic&chords=4')).toMatchObject({
       root: 'Eb',
       kind: 'harmonic',

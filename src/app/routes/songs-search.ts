@@ -1,5 +1,5 @@
 import { isStage } from '@/entities/step'
-import type { ExploreCategory, SongsFilter, SongsHome } from '@/pages/songs'
+import type { ExploreCategory, FolderSearch, SongsFilter, SongsHome } from '@/pages/songs'
 import { readText } from '@/shared/lib'
 import { keyParam, parseKey } from '@/shared/lib/music'
 import { routeSearch, type Raw } from './read-search'
@@ -24,7 +24,14 @@ function readSongsSearch(raw: Raw): SongsFilter {
     favourites: raw.favourites === true,
   }
 }
-export const songsSearch = routeSearch(readSongsSearch, SONGS_DEFAULTS)
+// A folder's: the filters, and its Edit (the folder's name and look in place), entered from its ✎ or
+// a folder row's Edit.
+export const FOLDER_DEFAULTS: FolderSearch = { ...SONGS_DEFAULTS, edit: false }
+const readFolderSearch = (raw: Raw): FolderSearch => ({
+  ...readSongsSearch(raw),
+  edit: raw.edit === true,
+})
+export const folderSearch = routeSearch(readFolderSearch, FOLDER_DEFAULTS)
 
 // Songs' Home (D1): My songs or Explore, remembered as Learn's view is; Explore's category chip
 // and a shelf's See all in the URL beside the library's filters.
