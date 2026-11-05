@@ -32,7 +32,7 @@ export function SidebarSearch({ collapsed, combo }: { collapsed: boolean; combo:
       {collapsed ? null : (
         <>
           <span className="flex-1 text-left">{label}</span>
-          <kbd className="rounded-sm bg-muted px-1.5 font-sans text-xs text-muted-foreground">
+          <kbd className="rounded-control bg-muted px-1.5 font-sans text-xs text-muted-foreground">
             {hint}
           </kbd>
         </>

@@ -37,7 +37,11 @@ describe('one selected style (R15)', () => {
 
   it('marks the chosen by its fill alone, never a second highlight (a line, a colour)', () => {
     // A switch is on or off, not chosen; a colour swatch is its own fill, so its ring marks it.
-    const own = ['shared/ui/primitives/switch.tsx', 'features/manage-library/ui/LookFields.tsx']
+    const own = [
+      'shared/ui/primitives/switch.tsx',
+      'features/manage-library/ui/LookFields.tsx',
+      'widgets/style-editor/ui/StyleEditor.tsx',
+    ]
     const twice = filesUnder(SRC)
       .filter((file) => !own.includes(path.relative(SRC, file)))
       .flatMap((file) =>

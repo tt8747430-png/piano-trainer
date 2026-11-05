@@ -168,7 +168,7 @@ describe('Settings', () => {
 
   it('draws a page Settings does not list alone, with Back, on a laptop', async () => {
     onLaptop()
-    await renderApp('/settings/chords')
+    await renderApp('/settings/chord-finder')
     await screen.findByRole('heading', { level: 1 })
     expect(screen.queryByRole('complementary', { name: 'Settings' })).toBeNull()
     expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument()

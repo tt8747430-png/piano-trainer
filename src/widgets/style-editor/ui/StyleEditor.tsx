@@ -364,7 +364,7 @@ function RowsPicture({ layout }: { layout: (typeof STYLE_LAYOUTS)[number] }) {
       )}
     >
       {Array.from({ length: cells }, (_, cell) => (
-        <span key={cell} className="rounded-xs bg-current opacity-60" />
+        <span key={cell} className="rounded-pill bg-current opacity-60" />
       ))}
     </span>
   )
