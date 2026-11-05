@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { Timer } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   COUNTDOWNS,
@@ -27,53 +28,20 @@ import {
 } from '@/features/set-preference'
 import { formatPercent, useLocale } from '@/shared/i18n'
 import { PEDAL_PLAYS } from '@/shared/lib/schedule'
-import { RowLink, ChoiceCard, SettingRows, SettingsGroup, SwitchRow } from '@/shared/ui'
+import {
+  RowLink,
+  ChoiceCard,
+  SettingRows,
+  SettingsGroup,
+  SwitchRow,
+  VolumeSlider,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
-
-/** A volume as a screen reader says it: its percent, as the language writes one. */
-const PERCENT = { style: 'unit', unit: 'percent' } as const
-/** A volume's steps on its slider, and with the arrow keys. */
-const VOLUME_STEP = 5
 
 /** A track the Audio playback lists: its id and its name. */
 export interface VolumeTrack {
   readonly id: TrackId
   readonly label: string
-}
-
-/** One volume: its name and percent over its slider, saved as it moves. */
-function VolumeSlider({
-  label,
-  setting,
-  value,
-  onChange,
-}: {
-  label: string
-  setting: string
-  value: number
-  onChange: (percent: number) => void
-}) {
-  const locale = useLocale()
-  return (
-    <div data-setting={setting}>
-      <Slider
-        min={0}
-        max={100}
-        step={VOLUME_STEP}
-        value={value}
-        onValueChange={onChange}
-        format={PERCENT}
-        locale={locale}
-        className="flex flex-col gap-2 pb-2.5"
-      >
-        <div className="flex justify-between gap-3 text-base">
-          <SliderLabel>{label}</SliderLabel>
-          <span className="text-muted-foreground tabular-nums">{formatPercent(locale, value)}</span>
-        </div>
-      </Slider>
-    </div>
-  )
 }
 
 /**
@@ -84,7 +52,7 @@ function VolumeSlider({
  * Display: the count-in, the cursor, the layout, the keys and the finger numbers. Practice: the other
  * hand's look and its Wait-mode accompaniment (A35). Pedal: as written, off, or automatic (A27).
  */
-/** The volumes of this music's staves, its recording and the click (the Player's Settings › Volume). */
+/** The piano's staves' and a recording's volumes, for every song (Settings › Player, R31-P: a song's are its Staves page's). */
 export function PlayerVolumes({ tracks }: { tracks: readonly VolumeTrack[] }) {
   const { t } = useTranslation(['player', 'music'])
   const settings = useSettingsStoreApi()
@@ -112,12 +80,6 @@ export function PlayerVolumes({ tracks }: { tracks: readonly VolumeTrack[] }) {
             />
           ),
         )}
-        <VolumeSlider
-          label={t('sound.click')}
-          setting="sound.click"
-          value={sound.click}
-          onChange={(percent) => setSound(settings, { click: percent })}
-        />
       </SettingRows>
       {recording ? (
         <Button
@@ -132,15 +94,21 @@ export function PlayerVolumes({ tracks }: { tracks: readonly VolumeTrack[] }) {
   )
 }
 
-/** How the Player plays, every song (the Player's Settings › Playback): each choice a card (R29). */
-export function PlayerPlayback() {
+/**
+ * How the Player plays, every song (the Player's Settings › Playback, R31-P): the music's own first
+ * (`children`: a score's Swing), the pedal, the count-in, the metronome (its page and its volume),
+ * speed training's step and the other hand's look; each choice a card (R29).
+ */
+export function PlayerPlayback({ children }: { children?: ReactNode }) {
   const { t } = useTranslation(['player', 'music'])
   const locale = useLocale()
   const settings = useSettingsStoreApi()
   const playback = useSettings(selectPlayback)
   const otherHand = useSettings(selectOtherHand)
+  const click = useSettings((state) => selectSound(state).click)
   return (
     <>
+      {children}
       <ChoiceCard
         title={t('settingsPage.pedal.label')}
         info={t('settingsPage.pedal.info')}
@@ -149,6 +117,33 @@ export function PlayerPlayback() {
         options={PEDAL_PLAYS.map((value) => ({ value, label: t(`settingsPage.pedal.${value}`) }))}
         onChange={(pedal) => setPlayback(settings, { pedal })}
       />
+      <ChoiceCard
+        title={t('settingsPage.countdown.label')}
+        info={t('settingsPage.countdown.info')}
+        setting="playback.countdown"
+        value={playback.countdown}
+        options={COUNTDOWNS.map((value) => ({
+          value,
+          label: t(`settingsPage.countdown.${value}`),
+        }))}
+        onChange={(countdown) => setPlayback(settings, { countdown })}
+      />
+      <SettingsGroup flush>
+        <RowLink
+          title={t('settingsPage.metronome')}
+          icon={Timer}
+          paint="sand"
+          render={<Link to="/practice/metronome" />}
+        />
+        <div className="px-4 pt-3">
+          <VolumeSlider
+            label={t('sound.click')}
+            setting="sound.click"
+            value={click}
+            onChange={(percent) => setSound(settings, { click: percent })}
+          />
+        </div>
+      </SettingsGroup>
       <ChoiceCard
         title={t('pace.speedTraining')}
         info={t('settingsPage.speedStepInfo')}
@@ -176,8 +171,8 @@ export function PlayerPlayback() {
 }
 
 /**
- * How the Player shows the music while it plays (the Player's Settings › Display, R29 B8): the
- * count-in, None, Audible or Visual (its beats counted on the score), and the cursor.
+ * How the Player shows the music while it plays (the Player's Settings › Display, R29 B8): Pick
+ * your view on opening, annotations, the cursor and following the music. The count-in is Playback's.
  */
 export function PlayerDisplay() {
   const { t } = useTranslation('player')
@@ -202,17 +197,6 @@ export function PlayerDisplay() {
           onCheckedChange={(on) => setScoreView(settings, { annotations: on })}
         />
       </SettingsGroup>
-      <ChoiceCard
-        title={t('settingsPage.countdown.label')}
-        info={t('settingsPage.countdown.info')}
-        setting="playback.countdown"
-        value={playback.countdown}
-        options={COUNTDOWNS.map((value) => ({
-          value,
-          label: t(`settingsPage.countdown.${value}`),
-        }))}
-        onChange={(countdown) => setPlayback(settings, { countdown })}
-      />
       <ChoiceCard
         title={t('settingsPage.cursor.label')}
         info={t('settingsPage.cursor.info')}
@@ -256,18 +240,9 @@ export function PlayerDisplay() {
 /** Every page of the Player's Settings in one column, for a screen with no Player to open them from
  * (Settings › Player, a song's /settings link). */
 export function PlayerSettings({ tracks }: { tracks: readonly VolumeTrack[] }) {
-  const { t } = useTranslation('player')
   return (
     <>
       <PlayerVolumes tracks={tracks} />
-      <SettingsGroup flush>
-        <RowLink
-          title={t('settingsPage.metronome')}
-          icon={Timer}
-          paint="sand"
-          render={<Link to="/practice/metronome" />}
-        />
-      </SettingsGroup>
       <PlayerPlayback />
       <PlayerDisplay />
     </>

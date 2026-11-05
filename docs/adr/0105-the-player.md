@@ -54,18 +54,35 @@ what they changed.
   page in the Player's place, `/play/$pieceId/settings`, Back to the song as played): **Audio playback**, a volume
   for each staff (by place, saved for every song, `sound.staves`), the recording and the metronome, and Only the
   chords; a row to the **Metronome's** sound and beats; **Playback speed** (speed training's step, 2 · 5 · 10%);
-  **Display** (Count-in None · Audible · Visual, Cursor None · Beats · Continuous, the layout, the keys, finger
-  numbers); **One hand** (the other hand Show · Dim · Hide, and Play the other hand, Wait mode's accompaniment);
+  the Count-in (None · Audible · Visual) with Playback; **Display** (Cursor None · Beats · Continuous, the
+  layout, the keys, finger numbers); **One hand** (the other hand Show · Dim · Hide, and Play the other hand, Wait mode's accompaniment);
   **Pedal** As written · Off · Automatic (`withPedal`, A27). A volume is a gain of its share squared, asked as each
   sound renders; a staff's Play off is a gain of 0. The View's chips for the layout, the keys and finger numbers stay
   as quick toggles over the music, as the transport keeps the metronome's. Clef (the reference's "Original or
   chosen") is not offered yet: the notation has no re-clefing of a staff.
 - **The pedal shown** (A27): the sheet draws the pedal as it plays; the Ped. mark the music plays under is lit in
-  the playhead's ink while its pedal is down; a Ped. lamp at the end of the keys' rail; keys sounding only under the
+  the playhead's ink while its pedal is down; the drawn sustain pedal under the keys goes down while the score's pedal holds (R31-P), outlined only while
+  playing; keys sounding only under the
   pedal ringed, apart from a hand's.
 - **More:** the library's acts (ADR 0106), Song information (the chord summary, the key as played, time, tempo and
   tuning as fact cards), Sections (each by name and its first bar, a tap taking the cursor there), Share, Print and
   Export to MIDI (ADR 0107).
+- **The screen's frame (R31-P):** the bar (Close · title · Edit score | Piano keys · MIDI · Settings) over the score;
+  nothing floats over the music. At the foot a docked transport (Loop · ‹ · Play · › · Tempo · Sound) over a foot bar
+  of fixed order: the View, the song tools (Transpose, Version), Mode and **More**. More holds the music's acts only
+  (Sections, Song information | My recordings, How did I play?, Annotate | Print, Tuner, Voice commands, the Rhythm
+  game | Export, Share); every setting is the gear's. The customisable Tool bar is gone.
+- **The Settings sheet (R31-P)** is a page of rows, each opening a subpage with Back: the music's own first —
+  **Staves** (each track's Play, Show and volume together; Only the chords where a recording plays) and, for a chart,
+  **Accompaniment** (chord size, the pattern and its hands, Swing) — then While you play: **Playback** (a score's
+  Swing, the pedal, the count-in, the Metronome's page and volume, speed training's step, the other hand),
+  **On-screen piano** (the app's own fields) and **Display** (Pick your view on opening, annotations, the cursor,
+  following). A pattern or figure list closes back to the page it was opened from.
+- **Version (R31-P):** titled Version; the Arrangement (Your version · Piano solo · Piano and voice) a segmented
+  switch at its head, changed at once; then Original, Simplified, Easy, each with its difficulty and a plain line.
+  Where Simplified changes nothing, its line says "Its chords are already simple" and it cannot be chosen.
+- **Transpose with a preview (R31-P):** − + and Reset change only what the popover shows, the key it lands in and the
+  first line in that key (`PreviewLine`, `widgets/transpose`, the editor's too); **Transpose** applies it.
 - **A visit's own params** (`bar`, `click`, `keys`) are never remembered; a link naming `click` or `keys` opens in
   Listen.
 - **Its keys** are drawn by the Player itself and never folded on a phone on its side.
@@ -85,3 +102,4 @@ The score editor's Play and its recorder's click keep their own switches. A reco
 - r29 — A score plays its staves (Play and Show per staff, the recording a track); only a chart gets an accompaniment; Melody gone; the Player's settings page; the click from the one metronome engine; the pedal shown (2026-11-03).
 - r29 (Player plan) — One gear: the bar is Close · title · Edit | Piano keys · MIDI · Settings, no Setup and no More. The Player's Settings is one sheet (Flat's one menu; a panel at the right on a laptop): in the owner's order: the music's own choices; While you play (Audio playback, Playback, Display as pages inside it, Metronome); This song (Sections, Song information); Share (Export…, Print, for any music). The library's acts are the song page's, Score settings the editor's gear. On a laptop the panel stays open beside the music; a one-hand song plays both hands, a hand chosen before forgotten. `/play/$pieceId/settings` is gone. Hear the other hand sits in the transport's hands popover; music of one hand has no hands button (2026-11-03).
 - r29 (T) — Transpose is one control in the Player and the editor: − key +, Reset, Transpose key signature, Transpose chord symbols. The Player keeps an offset from the written key (`transpose`, −5 to +6; `tkey`, `tchords` when off), so a song the editor rewrites in another key still plays moved by the learner's choice; it never writes the song. Shared links carry the offset (2026-11-04).
+- r31 (P) — The docked transport over a foot bar with More; the Tool bar setting gone; the Settings sheet as subpages (Staves with each track's volume, Accompaniment, Playback, On-screen piano, Display); Version with Arrangement and plain lines; Transpose with a preview applied by its button (2026-11-05).

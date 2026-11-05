@@ -11,7 +11,6 @@ import {
   Piano,
   Printer,
   SlidersHorizontal,
-  Volume2,
 } from 'lucide-react'
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -55,12 +54,7 @@ import {
 } from '@/widgets/practice-player'
 import { SheetMusic } from '@/widgets/sheet-music'
 import { SongPrint } from '@/widgets/song-print'
-import {
-  PlayerDisplay,
-  PlayerPlayback,
-  PlayerVolumes,
-  type VolumeTrack,
-} from '@/widgets/player-settings'
+import { PlayerDisplay, PlayerPlayback } from '@/widgets/player-settings'
 import { ViewSection } from '@/widgets/score-view-menu'
 import { SettingsExtrasContext, type SettingsExtras } from '@/widgets/player-setup'
 import { useChordKeys } from '../model/use-chord-keys'
@@ -121,7 +115,7 @@ export function PlayerLayout({
   status,
   openView = false,
   display,
-  tracks,
+  playback,
   moreActs = NO_ACTS_MORE,
   takes,
   annotations,
@@ -135,8 +129,8 @@ export function PlayerLayout({
   moreActs?: readonly MoreAct[]
   /** A song's takes (R29 B8): the Recorder, My recordings and Feedback; none for a walk. */
   takes?: PlayerTakes | undefined
-  /** The volumes the Settings' Audio playback lists: a piece's tracks; none for a walk. */
-  tracks?: readonly VolumeTrack[] | undefined
+  /** The music's own on the Settings' Playback page (R31-P): a score's Swing. */
+  playback?: ReactNode
   /**
    * Whether the sheet writes the piano's staves: not for a song that hides them, a lead sheet (ADR
    * 0114). The keys and what plays are the same.
@@ -256,21 +250,11 @@ export function PlayerLayout({
   // music: its own (a piece's Sections and Song information), Export… and Print.
   const extras: SettingsExtras = {
     pages: [
-      ...(tracks
-        ? [
-            {
-              id: 'audio',
-              label: t('settingsPage.audio'),
-              icon: Volume2,
-              content: <PlayerVolumes tracks={tracks} />,
-            },
-          ]
-        : []),
       {
         id: 'playback',
         label: t('settingsPage.playback'),
         icon: SlidersHorizontal,
-        content: <PlayerPlayback />,
+        content: <PlayerPlayback>{playback}</PlayerPlayback>,
       },
       // The piano's own page, here in the sheet (R31-P): the app's On-screen piano page, the
       // same fields, never a second set; opened from the piano's ⚙ too.

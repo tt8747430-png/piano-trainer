@@ -57,17 +57,19 @@ export const player = {
   foot: { label: 'Practice tools' },
   version: {
     change: 'Change version',
-    title: 'Choose your version',
+    title: 'Version',
     label: 'Version',
     of: 'Version: {{level}}',
+    arrangement: 'Arrangement',
     group: { own: 'Your version', solo: 'Piano solo', voice: 'Piano and voice' },
     level: { original: 'Original', simple: 'Simplified', easy: 'Easy' },
-    row: 'Difficulty {{n}} · {{accompaniment}}',
-    accompaniment: {
-      original: 'the accompaniment as written',
-      simple: 'every chord a triad',
-      easy: 'the tune over each root',
+    difficulty: 'Difficulty {{n}} of 3',
+    about: {
+      original: 'The score as written',
+      simple: 'Every chord a plain triad, the tune kept',
+      easy: 'The tune, one note of each chord',
     },
+    alreadySimple: 'Its chords are already simple',
   },
   toolsSheet: {
     metronome: 'Metronome',
@@ -182,7 +184,6 @@ export const player = {
   },
   // The tools row's Simplify (ADR 0105, Chordify's): every chord its plain triad.
   simplify: {
-    none: 'No chord to simplify',
     chordSize: 'The Simplified version plays every chord as its triad.',
   },
   /** The Diagrams view's chord to come, where none sounds yet: a pickup, a bar of no chord. */
@@ -241,10 +242,13 @@ export const player = {
   staves: {
     title: 'Staves',
     about:
-      'Which staves play and which the score shows, each by its name, and the song’s recording as a track of its own. How loud each one plays is on the Player’s settings.',
+      'Which staves play, which the score shows and how loud each plays, each by its name, the song’s recording as a track of its own.',
+    all: 'All playing',
+    none: 'None playing',
     play: 'Play',
     show: 'Show',
     playOf: 'Play {{track}}',
+    volumeOf: '{{track}} volume',
     showOf: 'Show {{track}}',
   },
   playing: 'How it plays',
@@ -293,6 +297,7 @@ export const player = {
     speed: 'Playback speed',
     speedStepInfo:
       'How much faster each pass plays while speed training climbs to the song’s tempo.',
+    accompaniment: 'Accompaniment',
     playback: 'Playback',
     display: 'Display',
     countdown: {

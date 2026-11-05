@@ -150,3 +150,4 @@ export {
   type Annotation,
   type AnnotationKind,
 } from './model/annotations'
+export { asChartPiece } from './model/degree-chart'

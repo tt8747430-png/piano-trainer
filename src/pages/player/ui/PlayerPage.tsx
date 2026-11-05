@@ -36,7 +36,7 @@ import { useUp, useSetSearch } from '@/shared/lib'
 import { isCompound } from '@/shared/lib/music'
 import { ButtonLink, NotFound, type MenuAction } from '@/shared/ui'
 import { ScoreEditToggle } from '@/widgets/mode-switch'
-import { useScoreTracks } from '@/widgets/practice-player'
+import { SwingField, useScoreTracks } from '@/widgets/practice-player'
 import type { PlayerSearch } from '../model/player-search'
 import { sectionAt, sectionStarts } from '../model/section-starts'
 import { usePlayer } from '../model/use-player'
@@ -244,7 +244,11 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
             <ClefChoice value={choice.clef} onChange={(clef) => changeSetup({ clef })} />
           ) : undefined
         }
-        tracks={tracks}
+        playback={
+          !controls.has('accompaniment') && controls.has('swing') && !isCompound(piece.meter) ? (
+            <SwingField swing={search.swing} onSwing={player.setSwing} />
+          ) : undefined
+        }
         takes={takes}
         annotations={marksShown || annotating ? marks : undefined}
         annotating={

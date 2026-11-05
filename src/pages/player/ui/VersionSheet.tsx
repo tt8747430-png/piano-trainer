@@ -1,9 +1,8 @@
-import { Check, ChevronDown } from 'lucide-react'
-import { useState } from 'react'
+import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { SONG_VERSIONS, type SongVersion } from '@/features/practice'
 import { cn } from '@/shared/lib'
-import { Sheet, SheetContent } from '@/shared/ui'
+import { Labelled, Segmented, Sheet, SheetContent } from '@/shared/ui'
 
 /** How hard each version is to play, out of three: the row's dots. */
 const DIFFICULTY: Readonly<Record<SongVersion, number>> = { original: 3, simple: 2, easy: 1 }
@@ -32,11 +31,12 @@ function Dots({ level }: { level: number }) {
 }
 
 /**
- * The Version sheet (R29 B8, "Choose your version"): the song's versions in groups that fold, the
- * learner's own version first where they have one, then the app's for the piano alone and, where the
- * song has a tune's staff, the piano with the voice; in each, Original, Simplified (every chord its
- * plain triad, greyed where none would change) and Easy (the tune over each chord's root), each with
- * its difficulty. The one playing is checked; a row chosen plays it and the sheet closes.
+ * The Version sheet (R29 B8, R31-P): at its head the arrangement, where the song has more than one
+ * (the learner's own version first, the piano alone, the piano with the voice where the song has a
+ * tune's staff), changed at once; then the three levels, each with its difficulty and one plain line:
+ * Original, Simplified (every chord its plain triad; where none would change, its line says so and
+ * it cannot be chosen) and Easy. The one playing is checked; a level chosen plays it and the sheet
+ * closes.
  */
 export function VersionSheet({
   open,
@@ -64,74 +64,54 @@ export function VersionSheet({
     'solo',
     ...(voice ? ['voice' as const] : []),
   ]
-  const [folded, setFolded] = useState<ReadonlySet<Group>>(new Set())
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent title={t('version.title')}>
-        <div className="flex flex-col gap-4">
-          {groups.map((group) => {
-            const isOpen = !folded.has(group)
-            return (
-              <section key={group} className="card flex flex-col px-2 py-2">
-                <h3>
+        <div className="flex flex-col gap-5">
+          {groups.length > 1 ? (
+            <Labelled label={t('version.arrangement')}>
+              <Segmented
+                label={t('version.arrangement')}
+                value={chosen.group}
+                options={groups.map((group) => ({ value: group, label: t(`version.group.${group}`) }))}
+                onChange={(group) => onChoose({ group, version: chosen.version })}
+              />
+            </Labelled>
+          ) : null}
+          <ul className="card flex flex-col divide-y divide-hairline overflow-hidden">
+            {SONG_VERSIONS.map((version) => {
+              const current = chosen.version === version
+              const same = version === 'simple' && !simplifies
+              return (
+                <li key={version}>
                   <button
                     type="button"
-                    aria-expanded={isOpen}
-                    className="flex min-h-11 w-full items-center justify-between rounded-control px-3 text-left font-semibold hover:bg-muted"
-                    onClick={() =>
-                      setFolded((was) => {
-                        const next = new Set(was)
-                        if (next.has(group)) next.delete(group)
-                        else next.add(group)
-                        return next
-                      })
-                    }
+                    aria-pressed={current}
+                    disabled={same}
+                    className="flex min-h-16 w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-muted disabled:hover:bg-transparent"
+                    onClick={() => {
+                      onChoose({ group: chosen.group, version })
+                      onOpenChange(false)
+                    }}
                   >
-                    {t(`version.group.${group}`)}
-                    <ChevronDown
-                      aria-hidden
-                      className={cn('size-4 transition-transform', isOpen && 'rotate-180')}
-                    />
+                    <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                      <span className="flex items-center gap-2.5 text-base font-semibold">
+                        {t(`version.level.${version}`)}
+                        <Dots level={DIFFICULTY[version]} />
+                        <span className="sr-only">
+                          {t('version.difficulty', { n: DIFFICULTY[version] })}
+                        </span>
+                      </span>
+                      <span className="text-sm text-pretty text-muted-foreground">
+                        {same ? t('version.alreadySimple') : t(`version.about.${version}`)}
+                      </span>
+                    </span>
+                    {current ? <Check aria-hidden className="size-5 text-primary" /> : null}
                   </button>
-                </h3>
-                {isOpen ? (
-                  <ul className="flex flex-col">
-                    {SONG_VERSIONS.map((version) => {
-                      const current = chosen.group === group && chosen.version === version
-                      const greyed = version === 'simple' && !simplifies
-                      return (
-                        <li key={version}>
-                          <button
-                            type="button"
-                            aria-pressed={current}
-                            disabled={greyed}
-                            title={greyed ? t('simplify.none') : undefined}
-                            className="flex min-h-12 w-full items-center gap-3 rounded-control px-3 py-2 text-left hover:bg-muted disabled:opacity-50 disabled:hover:bg-transparent"
-                            onClick={() => {
-                              onChoose({ group, version })
-                              onOpenChange(false)
-                            }}
-                          >
-                            <span className="flex min-w-0 flex-1 flex-col">
-                              <span>{t(`version.level.${version}`)}</span>
-                              <span className="flex items-center gap-2 text-sm text-muted-foreground">
-                                <Dots level={DIFFICULTY[version]} />
-                                {t('version.row', {
-                                  n: DIFFICULTY[version],
-                                  accompaniment: t(`version.accompaniment.${version}`),
-                                })}
-                              </span>
-                            </span>
-                            {current ? <Check aria-hidden className="size-5 text-primary" /> : null}
-                          </button>
-                        </li>
-                      )
-                    })}
-                  </ul>
-                ) : null}
-              </section>
-            )
-          })}
+                </li>
+              )
+            })}
+          </ul>
         </div>
       </SheetContent>
     </Sheet>

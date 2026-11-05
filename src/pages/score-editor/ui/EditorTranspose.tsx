@@ -86,7 +86,7 @@ export function EditorTranspose({ disabled }: { disabled: boolean }) {
   return (
     <TransposeTool
       current={draft.key}
-      moved={false}
+      moved={0}
       landing={transposedKey(draft.key, semitones)}
       by={semitones}
       home={t('player:transpose.own.song')}

@@ -7,7 +7,7 @@ export {
 } from './model/setup-params'
 export { KeyWalkField } from './ui/KeyWalkField'
 export { PatternCard } from './ui/PatternCard'
-export { PlayerSetup } from './ui/PlayerSetup'
+export { PlayerSetup, type MusicPage } from './ui/PlayerSetup'
 export {
   SettingsExtrasContext,
   type SettingsAct,

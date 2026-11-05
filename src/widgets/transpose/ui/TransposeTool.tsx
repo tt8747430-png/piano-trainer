@@ -20,7 +20,7 @@ const signed = (semitones: number): string =>
  * lands in + (`landing`, `by` semitones from where it started, `−5` to `+6`, the short way), how far
  * that is (or `home`, the music's own key's name, where it is not moved), Reset, and the two
  * switches both modes share (R29 T): Transpose key signature and Transpose chord symbols. Under it
- * what a mode adds (`children`: the editor's preview and its Transpose button); `info`, the ⓘ beside
+ * what a mode adds (`children`: the Preview and the Transpose button); `info`, the ⓘ beside
  * its heading (the Player's recording, silent in another key).
  */
 export function TransposeTool({
@@ -42,8 +42,8 @@ export function TransposeTool({
 }: {
   /** The key the music is in now: the trigger's value. */
   current: Key
-  /** Whether it is played in another key than its own: the trigger's value in the accent. */
-  moved: boolean
+  /** How far it is played from its own key, in semitones: the trigger's value in the accent where not 0. */
+  moved: number
   /** The key the control lands in. */
   landing: Key
   /** How far that is, in semitones. */
@@ -75,8 +75,8 @@ export function TransposeTool({
           <PlayerTool
             icon={ArrowUpDown}
             label={
-              moved
-                ? t('transpose.moved', { key: name, by: signed(by) })
+              moved !== 0
+                ? t('transpose.moved', { key: name, by: signed(moved) })
                 : t('transpose.of', { key: name })
             }
             name={t('transpose.name')}
@@ -85,7 +85,7 @@ export function TransposeTool({
             value={
               <Glyph
                 text={printedSymbol(keySymbol(current))}
-                className={cn('font-display', moved && 'text-link')}
+                className={cn('font-display', moved !== 0 && 'text-link')}
               />
             }
           />
