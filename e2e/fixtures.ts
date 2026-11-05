@@ -1,16 +1,14 @@
 import AxeBuilder from '@axe-core/playwright'
 import { test as base, expect, type Page } from '@playwright/test'
+import { SETTINGS_VERSION } from '../src/entities/settings/model/store'
 
 /** The app as a returning learner opens it: the welcome already seen. */
 export const test = base.extend({
   page: async ({ page }, provide) => {
-    await page.addInitScript(() => {
+    await page.addInitScript((version) => {
       if (!localStorage.getItem('pt-settings'))
-        localStorage.setItem(
-          'pt-settings',
-          JSON.stringify({ state: { welcomed: true }, version: 15 }),
-        )
-    })
+        localStorage.setItem('pt-settings', JSON.stringify({ state: { welcomed: true }, version }))
+    }, SETTINGS_VERSION)
     await provide(page)
   },
 })
