@@ -40,6 +40,7 @@ import {
 } from '@/shared/api/content'
 import { createWebMidi, hasWebMidi } from '@/shared/api/midi'
 import { lazyBackend, type Backend } from '@/shared/api/supabase'
+import { createSupabaseGroups, type GroupsPort } from '@/shared/api/groups'
 import { createSupabaseProfile, type ProfilePort } from '@/shared/api/profile'
 import { createSupabasePublicLibrary, type PublicLibrary } from '@/shared/api/public-library'
 import { createSupabaseCloud, type CloudSync } from '@/shared/api/sync'
@@ -156,6 +157,8 @@ export const createPublicLibrary = (backend: Backend): PublicLibrary =>
 
 /** The learner's profile: the project's `learner_profiles` and `avatars` (B1). */
 export const createProfile = (backend: Backend): ProfilePort => createSupabaseProfile(backend)
+/** The learner's groups and shared folders: the project's `learner_groups` and `shared_folders` (R30 S6). */
+export const createGroups = (backend: Backend): GroupsPort => createSupabaseGroups(backend)
 
 /** The admin's tools: the project's `admin` function and tables (ADR 0116). */
 export const createAdmin = (backend: Backend): AdminPort => createSupabaseAdmin(backend)

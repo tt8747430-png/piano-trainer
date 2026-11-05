@@ -85,3 +85,9 @@ A study, practised on Practice, is in no library. A folder played song after son
   (2026-11-05).
 - r30 (S3) — A phone's Home: Continue (the last two songs played, whole cards), Folders, then All songs (Home's own
   first, then every folder's), folded after ten with Show all n; Select keeps the library's own places (2026-11-05).
+- r30 (S6) — Groups: with an account a learner makes a group, invites by a link (on or off), and shares any folder with
+  it, each group Can view or Can edit (folder ⚙ › Share with a group). Members find it in Shared with me (the tree; a
+  phone's Home) and open its songs: the app's by id, an own song as a shared song is (Save to my songs). The owner's
+  device keeps each share following its folder. Server: `learner_groups`, `learner_group_members`, `shared_folders`
+  under RLS (members read; owner or editor writes), `join_learner_group` and `learner_group_invite`; the `GroupsPort`
+  (`shared/api/groups`, a fake with the same rules), `features/share-folder`, `pages/groups` (2026-11-05).

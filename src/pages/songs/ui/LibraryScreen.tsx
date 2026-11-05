@@ -25,6 +25,7 @@ import { LibraryFilters } from './LibraryFilters'
 import { LibraryHeader } from './LibraryHeader'
 import { LibrarySelect } from './LibrarySelect'
 import { LibraryTree } from './LibraryTree'
+import { SharedWithMe } from './SharedWithMe'
 import { NewActions } from './NewActions'
 import { SelectionBar } from './SelectionBar'
 
@@ -114,7 +115,15 @@ export function LibraryScreen({
         <>
           {/* A phone's Home opens with what was played last (R30 S3); a laptop's tree has its place. */}
           {folder === null && !wide && view.shown === view.scope.length ? <ContinueShelf /> : null}
-          <LibraryBrowse page={page} place={folder?.id ?? 'home'} table={wide} onClear={clear} />
+          <LibraryBrowse
+            page={page}
+            place={folder?.id ?? 'home'}
+            table={wide}
+            afterFolders={
+              folder === null && !wide && !view.filtering ? <SharedWithMe inTree={false} /> : null
+            }
+            onClear={clear}
+          />
         </>
       )}
       {folder && archived > 0 && !page.select.on ? (
@@ -149,7 +158,10 @@ export function LibraryScreen({
       {wide ? (
         <div className="grid grid-cols-[17rem_minmax(0,1fr)] items-start gap-8">
           <aside className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pb-4">
-            <LibraryTree current={folder?.id ?? (filter.favourites ? 'favourites' : 'all')} />
+            <LibraryTree
+              current={folder?.id ?? (filter.favourites ? 'favourites' : 'all')}
+              extra={<SharedWithMe inTree />}
+            />
           </aside>
           <div className="flex min-w-0 flex-col gap-4">{body}</div>
         </div>

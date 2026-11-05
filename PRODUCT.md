@@ -41,7 +41,8 @@ Four places, **Learn · Songs · Practice · Profile**, plus Search and Settings
   answered on the keys, links into Practice and the Player. Continue picks up where the learner left off.
 - **Songs:** one library of nested folders, favourites and an archive, with search, sort and filters. A song's page
   has its key, chords as diagrams, its progressions and its sections, each with short lessons. Songs can be shared as a
-  link, printed, and exported or imported as MusicXML and MIDI.
+  link, printed, and exported or imported as MusicXML and MIDI. With an account, any folder can be shared with a
+  group (a class, a choir, a band) the learner invites by a link, each group able to view or to edit.
 - **The Player:** the music as sheet music, chords over lyrics, animated chord diagrams or a grid. Four modes (Listen,
   Sight-read, Practice, Interpret), three versions (Original, Simple, Easy), a loop, tempo, transpose and the sound mix.
   It also plays scales, progressions and exercises.

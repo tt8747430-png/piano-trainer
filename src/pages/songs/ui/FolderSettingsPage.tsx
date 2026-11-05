@@ -1,6 +1,6 @@
 import { useForgetScreens } from '@/shared/lib'
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { Archive, FolderInput, LayoutGrid } from 'lucide-react'
+import { Archive, FolderInput, LayoutGrid, Users } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -10,6 +10,9 @@ import {
   type ShelvedFolder,
 } from '@/entities/library'
 import { DeleteFolderAsk, MoveSheet, useLibraryActs, type Moving } from '@/features/manage-library'
+import { entryTitles, useRepertoire } from '@/entities/piece'
+import { folderShareOf, ShareFolderSheet, useGroupsData } from '@/features/share-folder'
+import { useLocale } from '@/shared/i18n'
 import {
   BackButton,
   ButtonLink,
@@ -52,6 +55,14 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
   const navigate = useNavigate()
   const [moving, setMoving] = useState<Moving | null>(null)
   const [deleting, setDeleting] = useState(false)
+  const [sharing, setSharing] = useState(false)
+  const repertoire = useRepertoire()
+  const locale = useLocale()
+  const { data: groups } = useGroupsData()
+  const shares =
+    groups.kind === 'ready'
+      ? groups.shared.filter((each) => each.mine && each.folderKey === folder.id).length
+      : 0
   const forget = useForgetScreens()
   const name = nameOf(folder)
   const above = folder.parent ? folders.find((each) => each.id === folder.parent) : undefined
@@ -70,6 +81,16 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
         <p className="px-1 font-display text-2xl font-semibold text-balance">{name}</p>
         {/* Its name and look, then how its rows look (R29 B9): the card style the learner's own, in a
             built-in folder too. */}
+        {/* Shared with a group (R30 S6): the groups that have it, a sheet to tick them. */}
+        <SettingsGroup flush title={t('groups.title')}>
+          <RowButton
+            title={t('groups.share')}
+            value={shares > 0 ? t('groups.shareCount', { count: shares }) : undefined}
+            icon={Users}
+            paint="sky"
+            onClick={() => setSharing(true)}
+          />
+        </SettingsGroup>
         <SettingsGroup flush title={t('folder.appearance')}>
           <RowLink
             render={
@@ -110,6 +131,19 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
         folder={deleting ? folder : null}
         onOpenChange={setDeleting}
         onDeleted={() => void leave()}
+      />
+      <ShareFolderSheet
+        open={sharing}
+        onOpenChange={setSharing}
+        folder={folderShareOf(
+          folder,
+          nameOf(folder),
+          (id) => {
+            const entry = repertoire.entry(id)
+            return entry && entry.kind !== 'listing' ? entry : undefined
+          },
+          (piece) => entryTitles(piece, locale).primary,
+        )}
       />
     </div>
   )

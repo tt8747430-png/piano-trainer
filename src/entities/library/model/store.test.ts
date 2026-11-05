@@ -160,7 +160,10 @@ describe('createLibraryStore', () => {
     const store = createLibraryStore({ storage, otherTabs })
     storage.setItem(
       LIBRARY_STORAGE_KEY,
-      JSON.stringify({ state: { ...INITIAL_LIBRARY, favourites: ['silent'] }, version: LIBRARY_VERSION }),
+      JSON.stringify({
+        state: { ...INITIAL_LIBRARY, favourites: ['silent'] },
+        version: LIBRARY_VERSION,
+      }),
     )
     otherTabs.dispatchEvent(
       new StorageEvent('storage', {

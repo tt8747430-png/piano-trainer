@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DEFAULT_CARD_LOOK, useFolderName, useLibrary, type CardPlace } from '@/entities/library'
 import {
@@ -25,6 +25,7 @@ export function LibraryBrowse({
   page,
   place,
   table = false,
+  afterFolders,
   onClear,
 }: {
   page: LibraryPage
@@ -32,6 +33,8 @@ export function LibraryBrowse({
   place: CardPlace
   /** Its songs as a table (a laptop's right pane, R30 S2), the folders the tree's. */
   table?: boolean
+  /** What stands between the folders and the songs: a phone's Home's Shared with me (R30 S6). */
+  afterFolders?: ReactNode
   onClear: () => void
 }) {
   const { t } = useTranslation('songs')
@@ -71,6 +74,7 @@ export function LibraryBrowse({
             </ul>
           </section>
         ) : null}
+        {afterFolders}
         {table ? (
           <SongTable entries={view.groups.flatMap((group) => group.entries)} page={page} />
         ) : null}

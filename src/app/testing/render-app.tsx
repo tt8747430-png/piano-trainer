@@ -13,6 +13,7 @@ import { createFakeAuth, type AuthGateway } from '@/shared/api/auth'
 import { filesContent, type ContentPort } from '@/shared/api/content'
 import { createFakeContentEditing, type ContentEditingPort } from '@/shared/api/content-editing'
 import { createFakeErrorReporter, type ErrorReporter } from '@/shared/api/errors'
+import { createFakeGroups, type GroupsPort } from '@/shared/api/groups'
 import { createFakeProfile, type ProfilePort } from '@/shared/api/profile'
 import { createFakePublicLibrary, type PublicLibrary } from '@/shared/api/public-library'
 import { createFakeCloud } from '@/shared/api/sync'
@@ -46,6 +47,7 @@ export async function renderApp(
     welcomed = true,
     publicLibrary = createFakePublicLibrary(),
     profile = createFakeProfile(),
+    groups = createFakeGroups(),
     admin = createFakeAdmin(),
     features = createFakeFeatures(),
     contentEditing = createFakeContentEditing(),
@@ -60,6 +62,7 @@ export async function renderApp(
     welcomed?: boolean
     publicLibrary?: PublicLibrary
     profile?: ProfilePort
+    groups?: GroupsPort
     admin?: AdminPort
     features?: FeaturesPort
     contentEditing?: ContentEditingPort
@@ -92,6 +95,7 @@ export async function renderApp(
       sync={sync}
       publicLibrary={publicLibrary}
       profile={profile}
+      groups={groups}
       admin={admin}
       features={features}
       contentEditing={contentEditing}

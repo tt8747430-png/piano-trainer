@@ -164,6 +164,11 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
       : up({ to: '/songs' })
   },
   '/shell/songs/$pieceId/settings': pieceHome,
+  // Groups (R30 S6): from Songs; a group and an invite link up to Groups; a shared folder up to its group.
+  '/shell/songs/groups': toSongs,
+  '/shell/songs/groups/join': () => up({ to: '/songs/groups' }),
+  '/shell/songs/groups/$groupId': () => up({ to: '/songs/groups' }),
+  '/shell/songs/shared-folders/$sharedId': toSongs,
   '/shell/songs/$pieceId/publish': pieceHome,
   '/shell/songs/$pieceId/sections/$section': (from) =>
     up({ to: '/songs/$pieceId', params: { pieceId: param(from, 'pieceId') } }),

@@ -1,10 +1,11 @@
-import { useRouter } from '@tanstack/react-router'
+import { useNavigate, useRouter } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ShelvedFolder } from '@/entities/library'
 import { entryTitles, isSongCollectionId, useRepertoire } from '@/entities/piece'
 import { selectView } from '@/entities/views'
 import { DeleteFolderAsk, FolderSheet, MoveSheet } from '@/features/manage-library'
+import { NewGroupSheet } from '@/features/share-folder'
 import { songToShare, useShareSong } from '@/features/share-song'
 import { ExportSheet, SongExportSheet, useSongFiles, type ExportFiles } from '@/features/song-files'
 import { useLocale } from '@/shared/i18n'
@@ -39,6 +40,7 @@ export function LibraryDialogs({
   const repertoire = useRepertoire()
   const locale = useLocale()
   const router = useRouter()
+  const navigate = useNavigate()
   const shared = useShareSong()
   const said = shared.said
   useEffect(() => {
@@ -97,6 +99,14 @@ export function LibraryDialogs({
         }}
       />
       <DeleteAsk page={page} />
+      <NewGroupSheet
+        open={pending?.kind === 'new-group'}
+        onOpenChange={shut}
+        onMade={(group) => {
+          page.close()
+          void navigate({ to: '/songs/groups/$groupId', params: { groupId: group.id } })
+        }}
+      />
       <NewSongSheet
         open={pending?.kind === 'new-song'}
         onOpenChange={shut}

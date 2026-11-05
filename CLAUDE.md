@@ -83,7 +83,8 @@ a Performance becomes a Score (`notation`) or sounds (`schedule`).
   `lesson-editor`; `widgets/curriculum`, `lesson-view`.
 - **Songs** (`/songs`): My songs · Explore. One library of folders, favourites and an archive; a song's page, Settings and
   Publish; MusicXML and MIDI in and out. `pages/songs`, `piece`, `public-library`; `widgets/song-library`;
-  `features/manage-library`, `song-files`, `publish`; `entities/library`, `piece`.
+  `features/manage-library`, `song-files`, `publish`, `share-folder`; `entities/library`, `piece`. Groups and
+  folders shared with them: `pages/groups`, `shared/api/groups`.
 - **Practice** (`/practice`): Tools (Metronome, Chord finder, Circle of fifths, Tap tempo, Recorder, Drone, Tuner), then
   Chords, Scales and keys, Intervals, Progressions, Accompaniment, the Chord player, Exercises and Quiz.
 - **The Player** (`/play/$pieceId`): one screen over any Performance. Modes Listen · Sight-read · Practice · Interpret,

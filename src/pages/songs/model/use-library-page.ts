@@ -45,6 +45,7 @@ export type Pending =
   | { readonly kind: 'delete-chosen' }
   | { readonly kind: 'new-song'; readonly record?: boolean }
   | { readonly kind: 'move-in' }
+  | { readonly kind: 'new-group' }
   | { readonly kind: 'export'; readonly song: PieceId }
   | { readonly kind: 'export-chosen'; readonly songs: readonly PieceId[]; readonly what: string }
 

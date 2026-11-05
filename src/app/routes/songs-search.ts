@@ -73,3 +73,8 @@ export const SONGS_KEPT = ['view'] as const satisfies readonly (keyof SongsHome)
 export const validateSharedSongSearch = (raw: Raw): { song: string } => ({
   song: readText(raw.song, ''),
 })
+
+// An invite link to a group (R30 S6): its code, only read as text.
+export const validateJoinGroupSearch = (raw: Raw): { code: string } => ({
+  code: readText(raw.code, ''),
+})

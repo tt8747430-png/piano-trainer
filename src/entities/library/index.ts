@@ -2,6 +2,7 @@ export {
   FOLDER_NAME_MAX,
   FOLDER_PAINTS,
   FOLDER_PICTURES,
+  isFolderPicture,
   folderName,
   LIBRARY_SORTS,
   MOST_FOLDERS,

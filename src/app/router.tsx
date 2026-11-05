@@ -82,6 +82,7 @@ import {
   songsHomeSearch,
   folderSearch,
   pieceSearch,
+  validateJoinGroupSearch,
   validateSharedSongSearch,
 } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
@@ -103,6 +104,7 @@ const settingsScreens = () => import('./routes/settings-screens')
 const adminScreens = () => import('./routes/admin-screens')
 const searchScreens = () => import('./routes/search-screens')
 const songsScreens = () => import('./routes/songs-screens')
+const groupsScreens = () => import('./routes/groups-screens')
 const playerScreens = () => import('./routes/player-screens')
 const scoreSettingsScreens = () => import('./routes/score-settings-screens')
 const learnScreens = () => import('./routes/learn-screens')
@@ -413,6 +415,29 @@ const publicSongRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs/public/$itemId',
   component: lazyRouteComponent(songsScreens, 'PublicSongPage'),
+})
+// Groups and the folders shared with them (R30 S6): a learner's groups, a group, an invite link, a
+// shared folder.
+const groupsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/groups',
+  component: lazyRouteComponent(groupsScreens, 'GroupsPage'),
+})
+const joinGroupRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/groups/join',
+  validateSearch: validateJoinGroupSearch,
+  component: lazyRouteComponent(groupsScreens, 'JoinGroupPage'),
+})
+const groupRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/groups/$groupId',
+  component: lazyRouteComponent(groupsScreens, 'GroupPage'),
+})
+const sharedFolderRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/shared-folders/$sharedId',
+  component: lazyRouteComponent(groupsScreens, 'SharedFolderPage'),
 })
 const sharedSongRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -1074,6 +1099,10 @@ const routeTree = rootRoute.addChildren([
     searchRoute,
     songsRoute,
     sharedSongRoute,
+    groupsRoute,
+    joinGroupRoute,
+    groupRoute,
+    sharedFolderRoute,
     publicSongRoute,
     pieceRoute,
     pieceSettingsRoute,

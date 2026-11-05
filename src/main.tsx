@@ -13,6 +13,7 @@ import {
   createContentUpdates,
   createFeatures,
   createProfile,
+  createGroups,
   createPublicLibrary,
   createServices,
   createStores,
@@ -43,6 +44,7 @@ createRoot(rootElement).render(
       sync={sync}
       publicLibrary={createPublicLibrary(backend)}
       profile={createProfile(backend)}
+      groups={createGroups(backend)}
       admin={createAdmin(backend)}
       features={createFeatures(backend)}
       contentEditing={createContentEditing(backend)}
