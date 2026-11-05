@@ -36,7 +36,6 @@ colors:
   lilac-deep: '#6A5988'
   sand-deep: '#7D5B40'
   key-bed: '#CBC2B9'
-  key-rail: '#DFD8CF'
   key-black: '#332C28'
   dusk-ground: '#191512'
   dusk-card: '#24201C'
@@ -49,7 +48,6 @@ colors:
   dusk-key-white: '#D4D0CB'
   dusk-key-black: '#171310'
   dusk-key-bed: '#787069'
-  dusk-key-rail: '#332C27'
   dusk-sand: '#3C3026'
   dusk-yellow: '#3E3420'
   dusk-grass: '#2B3728'
@@ -470,22 +468,42 @@ time. The learner is their initial on the yellow paint (`Avatar`).
 
 ### The keyboard
 
-The whole piano, A0 to C8, scrolling sideways, nothing above its keys: they follow the music directly.
+The whole piano, A0 to C8, and nothing else (R34, Songscription's): slim, edge to edge at the foot of the screen (or
+under the bar where Position is Top), nothing above or under its keys; no rail, no chord caption, no buttons, no
+pedals, no finger numbers. Every control is the screen's bar's; nothing about the keyboard floats.
 
-- **The rail** (R32): the instrument's case beneath the keys, 56px in `--key-rail`. The chord a hand holds at its
-  start (Literata), the pedals centred where they fit (on a narrow phone they give way towards the start, so the end
-  never scrolls away), ‹ › (a mouse, a long keyboard), − and + for the keys' size and ⚙ at its end. ⚙ opens the
-  **Piano** sheet in place (R33, musicca's Settings): Key size, Note names, Volume, Pedals, on a computer Play with
-  computer keyboard, then All piano settings; the same rows head the On-screen piano page. The Player's ⚙ opens the
-  Player's sheet.
-- **The pedals:** centred on a dark lyre (`--pedal-lyre`) as on an upright or a grand: the sustain alone, or soft,
-  sostenuto and sustain left to right. Each a brass plate (`--pedal`) on its shank with its name under it
-  (`--pedal-name`), 48px to press. Down it sinks 3px under a honey glow; latched (a tap on the sustain) it carries a
-  lit honey indicator with its glow, as a stage piano's Sustain light; a second tap lifts it. While music plays, the sustain shows the score's pedal; stopped, nothing is down
-  or lit.
+- **Key size** (Settings › On-screen piano): **All keys** (the default) fit the width and never scroll; **Fit to
+  music** and **Large** show fewer, larger keys that scroll to follow the music.
+- **The divider** between the music and the keys (Songscription's "Resize score and piano roll"): a 12px bar on the
+  keys' edge facing the music, a hairline on its outer edge and a 36×4 grip in its middle, its 44px reach over the
+  music. Dragged, the keys grow taller or shorter (56px to half the screen), their widths unchanged; Arrow Up and
+  Down step 16px, Home and End go to the ends, a double click or Enter returns to the piano's proportion. The height
+  is kept for a phone upright, a phone on its side and a wider screen apart. A splitter to a screen reader.
+- **In the bar** (`KeyboardTools`), before the gear: the chord held (from 40rem: a small soft label "Chord held" then
+  the symbol in Literata, 20px), **Sustain** while the keys show, and **Keyboard** (the piano icon, pressed while
+  they show). Sustain wears a pedal drawn as a line icon; down from anywhere (a finger, Space, a MIDI foot, the
+  score's pedal while music plays) it fills `--key-down`, as a key held down, never a second honey control. Held it
+  holds; a tap latches it until the next. With Pedals: All three, a ⌄ beside it opens Soft and Sostenuto, worked the
+  same way; a dot on the ⌄ while either is down.
+- **Settings:** the screen's gear: the Player's sheet and the editor's gear each hold the On-screen piano page;
+  a Practice page's Settings end with its row.
+- **Hidden** (the bar's Keyboard), the keys fold into a 44px strip where they stood, the screen's width, in the
+  sunken fill with a hairline on its music side: the piano icon, **Keyboard**, ↗; a tap brings them back
+  (Songscription's Score only). Nothing floats.
+- **Names on narrow keys:** with All keys on a phone (a white key under 12px), only middle C keeps its name, 8px on
+  one line over its neighbours, and a mark's note name goes; a mark's degree stays.
+- **The editor's bar** on a phone held upright keeps Keyboard; its Sustain stands from 40rem.
 
-- **Proportion:** a key is 4.4 times as long as a white key is wide, at least 96px and at most 32% of the screen's height
-  (22% on a phone on its side).
+### The sheet's pill
+
+One small floating control at the score's bottom-right in the Player and the editor (Songscription's view pill): a
+card-paper capsule with a hairline ring and a soft shadow, 8px from the sheet's edges and clear of what floats there.
+**Layout** as three 44px icon radios (Page view · Vertical scroll · Panorama, the chosen one in the chosen fill, each
+naming what it does when pointed at), then in Page view the canvas's zoom (− n % + Fit). Always in sight, so it never
+appears under a finger; the layout's one control.
+
+- **Proportion:** until the divider sets a height, a key is 4.4 times as long as a white key is wide, at least 56px and
+  at most 32% of the screen's height (22% on a phone on its side).
 - **Keys** (R33, a real piano's): ivory white keys (card paper, softer by night) lit from the player's side, deeper
   under the felt, an edge in light and one in shade, a front lip, a soft cast shadow; ebony black keys bevelled, a
   sheen towards the player, a sloped front, their shadow on the ivory; a 1px bed parts them; the key slip's red felt
