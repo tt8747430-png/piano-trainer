@@ -59,28 +59,37 @@ describe('time', () => {
 })
 
 describe('meters (ADR 0114)', () => {
-  it('has a count of one to twelve over a half, a quarter or an eighth', () => {
-    expect(METERS).toHaveLength(36)
-    expect(METERS.slice(0, 2)).toEqual(['1/2', '2/2'])
-    expect(METERS.at(-1)).toBe('12/8')
+  it('has a count of one to sixteen over a whole to a sixteenth (R31-E)', () => {
+    expect(METERS).toHaveLength(80)
+    expect(METERS.slice(0, 2)).toEqual(['1/1', '2/1'])
+    expect(METERS.at(-1)).toBe('16/16')
     expect(METERS.every(isMeter)).toBe(true)
     expect(COMMON_METERS.every(isMeter)).toBe(true)
   })
 
   it('tells a meter from anything else', () => {
-    expect(['5/4', '2/2', '7/8', '12/8'].every(isMeter)).toBe(true)
-    expect(['13/4', '0/4', '4/16', '4/3', 'C', 4, null, '04/4'].some(isMeter)).toBe(false)
+    expect(['5/4', '2/2', '7/8', '12/8', '13/8', '5/16', '4/1'].every(isMeter)).toBe(true)
+    expect(['17/4', '0/4', '4/32', '4/3', 'C', 4, null, '04/4'].some(isMeter)).toBe(false)
   })
 
   it('reads and makes a meter of its figures', () => {
     expect(meterParts('7/8')).toEqual({ count: 7, unit: 8 })
     expect(meterOf(3, 2)).toBe('3/2')
-    expect(meterOf(13, 4)).toBeUndefined()
-    expect(meterOf(3, 16)).toBeUndefined()
+    expect(meterOf(13, 4)).toBe('13/4')
+    expect(meterOf(3, 16)).toBe('3/16')
+    expect(meterOf(17, 4)).toBeUndefined()
+    expect(meterOf(3, 32)).toBeUndefined()
+    expect(meterParts('5/16')).toEqual({ count: 5, unit: 16 })
+  })
+
+  it('counts a whole note’s and a sixteenth’s meters in quarters (R31-E)', () => {
+    expect(beatsPerBar('2/1')).toBe(8)
+    expect(beatsPerBar('5/16')).toBe(1.25)
+    expect(beatsPerBar('7/16')).toBe(1.75)
   })
 
   it('counts compound meters in dotted quarters, the others in quarters', () => {
-    expect(METERS.filter(isCompound)).toEqual(['3/8', '6/8', '9/8', '12/8'])
+    expect(METERS.filter(isCompound)).toEqual(['3/8', '6/8', '9/8', '12/8', '15/8'])
     expect(
       ['2/2', '3/2', '2/4', '5/4', '6/4', '3/8', '6/8', '9/8', '12/8', '7/8'].map((m) =>
         beatsPerBar(m as never),

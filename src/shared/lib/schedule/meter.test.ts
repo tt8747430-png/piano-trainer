@@ -27,7 +27,7 @@ describe('a meter', () => {
   it('reads any time signature the app writes, and refuses what is none', () => {
     expect(parseMeter('7/8')).toBe('7/8')
     expect(parseMeter(' 12/8 ')).toBe('12/8')
-    for (const wrong of ['', '4', '0/4', '4/3', '4/0', '13/4', 'a/b'])
+    for (const wrong of ['', '4', '0/4', '4/3', '4/0', '17/4', 'a/b'])
       expect(parseMeter(wrong)).toBeNull()
   })
 

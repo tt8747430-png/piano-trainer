@@ -109,7 +109,7 @@ describe('createPiecesStore', () => {
       sections: [
         { kind: 'verse', lines: ['Bm'] },
         { kind: 'chorus', meter: '6/8', lines: ['G A'] },
-        { kind: 'ending', meter: '13/8', lines: ['Bm'] },
+        { kind: 'ending', meter: '17/8', lines: ['Bm'] },
       ],
       hands: { lh: 'B2/4 | - | - | -' },
     }
