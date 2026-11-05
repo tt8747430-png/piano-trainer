@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Archive, ChevronDown, ChevronRight, Heart, Music, type LucideIcon } from 'lucide-react'
+import { Archive, ChevronDown, Heart, Music, type LucideIcon } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -33,7 +33,7 @@ function FolderSwatch({ folder }: { folder: ShelvedFolder }) {
     <span
       aria-hidden
       className={cn(
-        'grid size-6 shrink-0 place-items-center rounded-md',
+        'grid size-6 shrink-0 place-items-center rounded-pill',
         PAINT[folder.paint].fill,
         PAINT[folder.paint].ink,
       )}
@@ -124,13 +124,16 @@ export function LibraryTree({ current, extra }: { current: TreePlace; extra?: Re
                     aria-expanded={unfolded}
                     aria-label={t(unfolded ? 'tree.fold' : 'tree.unfold', { name })}
                     onClick={() => toggle(folder.id)}
-                    className="grid size-6 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-muted"
+                    className="grid size-6 shrink-0 place-items-center rounded-control text-muted-foreground hover:bg-muted"
                   >
-                    {unfolded ? (
-                      <ChevronDown aria-hidden className="size-4" />
-                    ) : (
-                      <ChevronRight aria-hidden className="size-4" />
-                    )}
+                    {/* A disclosure, not a way somewhere: one chevron, turned while folded. */}
+                    <ChevronDown
+                      aria-hidden
+                      className={cn(
+                        'size-4 transition-transform duration-200',
+                        !unfolded && '-rotate-90',
+                      )}
+                    />
                   </button>
                 ) : (
                   <span aria-hidden className="size-6 shrink-0" />
