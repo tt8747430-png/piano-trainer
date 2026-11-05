@@ -23,8 +23,10 @@ const done = ({ error, status }: { error: { message: string } | null; status: nu
   if (error) throw thrown(error, status)
 }
 
+// Its members' ids, counted here: an embedded `count` is an aggregate, which PostgREST refuses unless
+// the project turns aggregates on.
 const GROUP =
-  'id, name, picture, paint, owner, invite_code, invite_open, learner_group_members(count)'
+  'id, name, picture, paint, owner, invite_code, invite_open, learner_group_members(user_id)'
 
 /**
  * The learner's groups on Supabase (R30 S6): `learner_groups`, `learner_group_members` and
@@ -52,7 +54,7 @@ export function createSupabaseGroups(backend: Backend, { online }: NetOptions = 
       owner: string
       invite_code: string
       invite_open: boolean
-      learner_group_members: { count: number }[]
+      learner_group_members: { user_id: string }[]
     },
     me: string,
   ): LearnerGroup => ({
@@ -63,7 +65,7 @@ export function createSupabaseGroups(backend: Backend, { online }: NetOptions = 
     mine: row.owner === me,
     inviteCode: row.invite_code,
     inviteOpen: row.invite_open,
-    members: row.learner_group_members[0]?.count ?? 0,
+    members: row.learner_group_members.length,
   })
   return {
     groups: () =>

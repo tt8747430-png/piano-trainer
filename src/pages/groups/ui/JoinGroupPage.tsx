@@ -28,7 +28,7 @@ type Read =
 export function JoinGroupPage() {
   const { t } = useTranslation('songs')
   const { code } = useSearch({ from: '/shell/songs/groups/join' })
-  const { account } = useAccount()
+  const { account, ready } = useAccount()
   const port = useGroups()
   const navigate = useNavigate()
   const [read, setRead] = useState<Read>({ kind: 'loading' })
@@ -57,7 +57,11 @@ export function JoinGroupPage() {
       })
     else setRead({ kind: 'failed', offline: joined.reason === 'offline' })
   }
-  const shown: Read | { readonly kind: 'guest' } = account ? read : { kind: 'guest' }
+  const shown: Read | { readonly kind: 'guest' } = !ready
+    ? { kind: 'loading' }
+    : account
+      ? read
+      : { kind: 'guest' }
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 pb-8">
       <ScreenHeader title={t('groups.title')} back={<BackButton />} />
