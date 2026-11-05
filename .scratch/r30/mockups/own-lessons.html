@@ -385,8 +385,8 @@ const editBody = `<div style="display:grid;gap:18px">
   <div style="font:600 24px var(--display)">Lessons</div>
   <div>${ROWS.map(erow).join('')}<div class="erow" style="color:var(--ink);font-weight:600"><span class="g">${ic('plus', 20)}</span>Add lesson</div></div>
 </div>`;
-// The bar names the course only once its title scrolls away (the document's title is the page's).
-const editBar = `<div class="bar">${rb('back')}<div class="tools"><div class="done">Done</div></div></div>`;
+// As built: Done stands beside the title's place (the app's one Edit spot); the bar names the course only once its title scrolls away.
+const editBar = `<div class="bar">${rb('back')}<div class="done" style="background:var(--sand);color:var(--ink)">Done</div></div>`;
 const editPhone = phone(`${editBar}<div class="scroll pad" style="padding-top:8px">${editBody}</div>`, null);
 const editMac = mac(`${editBar}<div style="width:768px;margin:0 auto;padding-top:8px">${editBody}</div>`, 'Learn');
 const addPop = phone(`${editBar}<div class="scroll pad" style="padding-top:8px">${editBody}</div><div class="pop" style="left:16px;right:16px;bottom:40px"><div class="field" style="color:var(--ink);border-color:var(--ink-soft)">${ic('search', 18)}chord</div><div class="pl">Your lessons</div><div class="pi">${ic('bookopen', 18)}Reading the alto line</div><div class="pl">The app’s lessons</div><div class="pi hi">${ic('bookopen', 18)}<span style="display:grid;line-height:1.25">Chord functions: tonic, subdominant, dominant<span style="font-size:13px;color:var(--ink-soft)">Fluency</span></span></div><div class="pi">${ic('bookopen', 18)}<span style="display:grid;line-height:1.25">Your first chords<span style="font-size:13px;color:var(--ink-soft)">Foundations</span></span></div><div class="pi" style="font-weight:600">${ic('plus', 18)}New lesson “chord”</div></div>`, null);

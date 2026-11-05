@@ -164,9 +164,14 @@ describe('the Courses’ shelves in Edit mode, in place (R29 B4)', () => {
       auth: await signedInAs('editor'),
       contentEditing: createFakeContentEditing(),
     })
-    // No floating + outside Edit mode: an editor sees the page a learner sees.
+    // No shelf's New course outside Edit mode: an editor sees the page a learner sees, Your courses'
+    // own New course (R30-5) with it.
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
-    expect(screen.queryByRole('button', { name: 'New course' })).toBeNull()
+    expect(
+      within(screen.getByRole('region', { name: 'Beginner courses' })).queryByRole('button', {
+        name: 'New course',
+      }),
+    ).toBeNull()
     await user.click(screen.getByRole('button', { name: 'Edit' }))
     const beginner = await screen.findByRole('region', { name: 'Beginner courses' })
     const rows = within(within(beginner).getByRole('list')).getAllByRole('listitem')

@@ -8,7 +8,6 @@ import { useProgressStoreApi } from '@/entities/progress'
 import { LearnedButton, useLearned } from '@/features/mark-learned'
 import { recordSectionRead } from '@/features/record-reading'
 import { localText, useLocale } from '@/shared/i18n'
-import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, RoundLink, ScreenHeader, type EditAction } from '@/shared/ui'
 import { LessonView, type UpLink } from '@/widgets/lesson-view'
 import { ToolsButton } from '@/widgets/tools-sheet'
@@ -34,7 +33,8 @@ export interface LessonTrack {
  * its title with Learned in its bar, where it is (`place`), the lesson under its
  * floating bar of sections, and at its end the lesson before and the way on, which learns it (on a
  * phone, read a page at a time, the bar's Done). Its Settings (round 28, a song's gear) in the bar;
- * an editor has its lesson editor there too (`edit`, ADR 0116).
+ * its lesson editor there too where it may be edited (`edit`: an editor's, ADR 0116; the learner's
+ * own, R30-5).
  */
 export function LessonLayout({
   lesson,
@@ -54,8 +54,8 @@ export function LessonLayout({
   /** The screen's Back (`BackButton`). */
   back: ReactNode
   track: LessonTrack
-  /** Its Edit, an editor's: the pencil beside its title. */
-  edit: EditAction
+  /** Its Edit: the pencil beside its title, an editor's, or the learner's on their own lesson. */
+  edit?: EditAction | undefined
   /** A router `Link` to its Settings page. */
   settings: ReactElement
 }) {
@@ -63,7 +63,6 @@ export function LessonLayout({
   const locale = useLocale()
   const { learn } = useLearned(step)
   const progress = useProgressStoreApi()
-  const { account } = useAccount()
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
       <ScreenHeader
@@ -76,7 +75,7 @@ export function LessonLayout({
           </>
         }
         settings={<RoundLink label={t('settings.open')} icon={Settings} render={settings} />}
-        edit={editsContent(account) ? edit : undefined}
+        edit={edit}
       />
       <nav aria-label={t('placeLabel')} className="-mt-3 text-muted-foreground print:hidden">
         {place}

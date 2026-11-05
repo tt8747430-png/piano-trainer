@@ -2,6 +2,7 @@ import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { Link2, Library } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { COURSES, courseById, courseStepIds, type Course } from '@/entities/course'
+import { selectOwnCourse, useOwnLessons } from '@/entities/own-lessons'
 import { RemoveGroup, useCourseDraft } from '@/features/edit-original'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
@@ -9,12 +10,13 @@ import { shareLink } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, RowButton, RowLink, say, ScreenHeader, SettingsGroup } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
+import { OwnCourseSettings } from './OwnCourseSettings'
 
 /**
  * A course's Settings (`/courses/$courseId/settings`, round 28, as a song's): Share link, and apart
  * the learner's progress in it reset, asked first. An editor's: the shelf it stands on, and
  * (R29 B6) Publish… before Share link, Delete last. What it is (its title, summary, level and length) is
- * written on the course itself, in Edit.
+ * written on the course itself, in Edit. A course of the learner's own (R30-5): `OwnCourseSettings`.
  */
 export function CourseSettingsPage() {
   const { t } = useTranslation('learn')
@@ -22,7 +24,9 @@ export function CourseSettingsPage() {
   const { account } = useAccount()
   const navigate = useNavigate()
   const { courseId } = useParams({ from: '/shell/courses/$courseId/settings' })
+  const own = useOwnLessons(selectOwnCourse(courseId))
   const course = courseById(courseId)
+  if (own) return <OwnCourseSettings key={courseId} course={own} />
   // The route finds no course that is not there.
   if (!course) return null
   const title = localText(course.title, locale)

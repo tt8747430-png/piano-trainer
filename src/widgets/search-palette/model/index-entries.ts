@@ -2,6 +2,7 @@ import { EXERCISES, type ExerciseId } from '@/entities/exercise'
 import { allCourses } from '@/entities/course'
 import { LESSONS, lessonById, lessonPlace } from '@/entities/lesson'
 import type { FolderId } from '@/entities/library'
+import type { OwnCourse, OwnLesson } from '@/entities/own-lessons'
 import type { BookPattern, PatternRef } from '@/entities/pattern'
 import { entryTitles, type Entry, type PieceId } from '@/entities/piece'
 import type { OwnProgression } from '@/entities/practice-library'
@@ -107,6 +108,9 @@ export interface IndexSources {
   readonly patterns: readonly BookPattern[]
   /** The progressions the learner keeps, Mine (R30-4). */
   readonly progressions: readonly OwnProgression[]
+  /** The lessons and courses the learner made (R30-5). */
+  readonly ownLessons: readonly OwnLesson[]
+  readonly ownCourses: readonly OwnCourse[]
 }
 
 /** The root a chord quality and a scale kind are shown on. */
@@ -130,6 +134,8 @@ export function indexEntries({
   archived,
   patterns,
   progressions,
+  ownLessons,
+  ownCourses,
 }: IndexSources): IndexEntry[] {
   return [
     ...PRACTICE_PAGE_IDS.map((page): IndexEntry => {
@@ -175,6 +181,22 @@ export function indexEntries({
         target: { opens: 'lesson', lesson: lesson.id },
       }
     }),
+    // The learner's own, each written once and read alike in both languages (R30-5).
+    ...ownLessons.map((lesson): IndexEntry => ({
+      id: `lessons:${lesson.id}`,
+      kind: 'lessons',
+      ...named(lesson.title, locale),
+      detail: localText(lesson.summary, locale),
+      target: { opens: 'lesson', lesson: lesson.id },
+    })),
+    ...ownCourses.map((course): IndexEntry => ({
+      id: `courses:${course.id}`,
+      kind: 'courses',
+      title: course.title,
+      detail: course.line,
+      words: [],
+      target: { opens: 'course', course: course.id },
+    })),
     ...allCourses().flatMap((course): IndexEntry[] => [
       {
         id: `courses:${course.id}`,

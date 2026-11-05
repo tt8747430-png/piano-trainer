@@ -13,3 +13,6 @@ export interface LearnView {
 }
 
 export const LEARN_DEFAULTS: LearnView = { view: 'lessons', journey: '', edit: false }
+
+/** The Lessons' fifth chip, after the levels (R30-5): Your lessons, the learner's own. */
+export const OWN_LESSONS = 'own'

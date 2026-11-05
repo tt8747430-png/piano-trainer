@@ -19,8 +19,7 @@ export function CourseLessonEditorPage() {
       <LessonEditor
         key={id}
         lesson={blankLesson(lessonId)}
-        id={id}
-        course={courseId}
+        source={{ kind: 'draft', id, course: courseId }}
         back={<BackButton />}
         toLesson={<Link to="/courses/$courseId/edit" params={{ courseId }} />}
       />
@@ -29,8 +28,7 @@ export function CourseLessonEditorPage() {
     <LessonEditor
       key={id}
       lesson={place.lesson}
-      id={id}
-      course={courseId}
+      source={{ kind: 'draft', id, course: courseId }}
       back={<BackButton />}
       toLesson={<Link to="/courses/$courseId/$lessonId" params={{ courseId, lessonId }} />}
       edit={{

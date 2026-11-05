@@ -295,3 +295,10 @@ function nodeSections(nodes: readonly DocNode[], locale: Locale): LessonSection[
     ...(takeawayStyle ? { takeawayStyle } : {}),
   }))
 }
+
+/**
+ * A lesson written in one language that reads the same in the other (R30-5, a learner's own): every
+ * text the document holds in `locale` written into the other language too.
+ */
+export const inBothLanguages = (lesson: Lesson, locale: Locale): Lesson =>
+  docToLesson(lessonToDoc(lesson, locale), lesson, locale === 'en' ? 'ru' : 'en')

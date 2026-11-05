@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { courseLesson, nextCourseLesson, previousCourseLesson } from '@/entities/course'
 import { courseLessonStepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
+import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton } from '@/shared/ui'
 import { LessonLayout, PlaceLink } from './LessonLayout'
 
@@ -14,6 +15,7 @@ export function CourseLessonPage() {
   const navigate = useNavigate()
   const { t } = useTranslation('learn')
   const locale = useLocale()
+  const { account } = useAccount()
   const { courseId, lessonId } = useParams({ from: '/shell/courses/$courseId/$lessonId' })
   const place = courseLesson(courseId, lessonId)
   // The route finds no lesson its course does not have.
@@ -32,21 +34,25 @@ export function CourseLessonPage() {
       key={lessonId}
       lesson={place.lesson}
       step={courseLessonStepId(courseId, lessonId)}
-      edit={{
-        editing: false,
-        onDone: () =>
-          void navigate({
-            to: '/courses/$courseId/$lessonId',
-            params: { courseId, lessonId },
-            replace: true,
-          }),
-        onEdit: () =>
-          void navigate({
-            to: '/courses/$courseId/$lessonId/edit',
-            params: { courseId, lessonId },
-            replace: true,
-          }),
-      }}
+      edit={
+        editsContent(account)
+          ? {
+              editing: false,
+              onDone: () =>
+                void navigate({
+                  to: '/courses/$courseId/$lessonId',
+                  params: { courseId, lessonId },
+                  replace: true,
+                }),
+              onEdit: () =>
+                void navigate({
+                  to: '/courses/$courseId/$lessonId/edit',
+                  params: { courseId, lessonId },
+                  replace: true,
+                }),
+            }
+          : undefined
+      }
       settings={<Link to="/courses/$courseId/$lessonId/settings" params={{ courseId, lessonId }} />}
       back={<BackButton />}
       after={(place.lesson.after ?? []).flatMap((id) => {

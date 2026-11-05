@@ -231,7 +231,11 @@ describe('the course editor (ADR 0116, round 12)', () => {
   it('offers no new course to a learner', async () => {
     await renderApp('/?view=courses&edit=1', { auth: await signedInAs('learner') })
     await screen.findByRole('heading', { level: 1 })
-    expect(screen.queryByRole('button', { name: 'New course' })).not.toBeInTheDocument()
+    // Only Your courses' own (R30-5): no shelf in Edit mode.
+    expect(screen.getAllByRole('button', { name: 'New course' })).toHaveLength(1)
+    expect(screen.getByRole('region', { name: 'Your courses' })).toContainElement(
+      screen.getByRole('button', { name: 'New course' }),
+    )
   })
 
   it('tells a learner it is an editor’s, with the way back', async () => {

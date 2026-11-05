@@ -13,6 +13,7 @@ import {
   currentJourney,
   JourneyLibrary,
   LevelEditor,
+  OWN_LESSONS,
   ShelfEditor,
   type LearnView,
 } from '@/widgets/curriculum'
@@ -28,13 +29,16 @@ export function LearnPage() {
   const { t } = useTranslation(['learn', 'common'])
   const { view, journey: journeyId, edit } = useSearch({ from: '/shell/' })
   const learned = useProgress(selectLearned)
+  const own = view === 'lessons' && journeyId === OWN_LESSONS
   const journey = journeyById(journeyId) ?? currentJourney(learned)
   const show = useSetSearch<LearnView>()
   const editable = useCan('reorder', { curriculum: view === 'lessons' ? 'level' : 'shelf' })
-  const editing = edit && editable
-  const toggle = editable
-    ? { editing, onEdit: () => show({ edit: true }), onDone: () => show({ edit: false }) }
-    : undefined
+  // Your lessons have no Edit mode: each is edited on its own page.
+  const editing = edit && editable && !own
+  const toggle =
+    editable && !own
+      ? { editing, onEdit: () => show({ edit: true }), onDone: () => show({ edit: false }) }
+      : undefined
   const bar = (actions: ReactNode) => (
     <ScreenHeader
       title={t('learn:title')}
@@ -76,7 +80,11 @@ export function LearnPage() {
           Profile's. */}
       <div className="mx-auto mt-4 flex w-full max-w-2xl min-w-0 flex-col gap-8">
         <ContinueAction />
-        {view === 'lessons' ? <JourneyLibrary journey={journey} /> : <CourseShelves />}
+        {view === 'lessons' ? (
+          <JourneyLibrary journey={own ? OWN_LESSONS : journey} />
+        ) : (
+          <CourseShelves />
+        )}
       </div>
     </div>
   )

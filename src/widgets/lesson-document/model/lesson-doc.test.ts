@@ -7,6 +7,7 @@ import {
   DOC,
   docToAbout,
   docToLesson,
+  inBothLanguages,
   lessonToDoc,
   textOf,
   type DocNode,
@@ -225,5 +226,24 @@ describe('an About as a document (R29 B9)', () => {
 
   it('is none from an empty document', () => {
     expect(docToAbout({ type: 'doc', content: [{ type: DOC.paragraph }] }, 'en')).toEqual([])
+  })
+})
+
+describe('a learner’s own lesson in both languages (R30-5)', () => {
+  it('writes every text of the document in the language written into the other', () => {
+    const written = lesson([
+      { kind: 'text', lead: { en: 'Lead.', ru: '' }, text: { en: 'Body', ru: '' } },
+      { kind: 'steps', steps: [{ en: 'First', ru: '' }] },
+    ])
+    const both = inBothLanguages(written, 'en')
+    expect(both.title).toEqual({ en: 'Title', ru: 'Title' })
+    expect(both.summary).toEqual({ en: 'Summary', ru: 'Summary' })
+    expect(both.sections[0]?.heading).toEqual({ en: 'One', ru: 'One' })
+    expect(both.sections[0]?.takeaway).toEqual({ en: 'In short', ru: 'In short' })
+    expect(both.sections[0]?.blocks).toEqual([
+      { kind: 'text', lead: { en: 'Lead.', ru: 'Lead.' }, text: { en: 'Body', ru: 'Body' } },
+      { kind: 'steps', steps: [{ en: 'First', ru: 'First' }] },
+    ])
+    expect(inBothLanguages(written, 'ru').title).toEqual({ en: 'Заголовок', ru: 'Заголовок' })
   })
 })

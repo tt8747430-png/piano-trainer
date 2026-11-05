@@ -65,7 +65,7 @@ import {
   WALK_KEPT,
   walkSearch,
 } from './routes/player-search'
-import { LEARN_KEPT, learnSearch, readLearnSearch } from './routes/learn-search'
+import { LEARN_KEPT, learnSearch, lessonSearch, readLearnSearch } from './routes/learn-search'
 import {
   exercisePageSearch,
   PRACTICE_LIBRARY_KEPT,
@@ -808,26 +808,43 @@ const publishPatternRoute = createRoute({
   component: lazyRouteComponent(accompanimentScreens, 'PatternPublishPage'),
 })
 
+/**
+ * A lesson's page is there for a lesson of a level, brought onto the device first (ADR 0116), or for
+ * one of the learner's own while they keep it (R30-5); else it is not found.
+ */
+async function findLesson(context: RouterContext, lessonId: string): Promise<void> {
+  const { isOwnLessonId, selectOwnLesson, lessonById, lessonPlace } = await learnScreens()
+  if (isOwnLessonId(lessonId)) {
+    if (!selectOwnLesson(lessonId)(context.ownLessons.getState())) throw notFound()
+    return
+  }
+  if (!lessonById(lessonId) || !lessonPlace(lessonId)) throw notFound()
+  await ensureContent(context.content, 'lesson', lessonId)
+}
+
+/** A course's page is there for one of the app's, or one of the learner's own while they keep it. */
+async function findCourse(context: RouterContext, courseId: string): Promise<void> {
+  const { isOwnCourseId, selectOwnCourse, courseById } = await learnScreens()
+  const there = isOwnCourseId(courseId)
+    ? selectOwnCourse(courseId)(context.ownLessons.getState()) !== undefined
+    : courseById(courseId) !== undefined
+  if (!there) throw notFound()
+}
+
 // A lesson of the Lessons' journeys; a course and its own lessons (ADR 0053).
 const lessonRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/lessons/$lessonId',
   notFoundComponent: notFoundIn('learn'),
-  beforeLoad: async ({ params, context }) => {
-    const { lessonById, lessonPlace } = await learnScreens()
-    if (!lessonById(params.lessonId) || !lessonPlace(params.lessonId)) throw notFound()
-    await ensureContent(context.content, 'lesson', params.lessonId)
-  },
+  ...lessonSearch,
+  beforeLoad: ({ params, context }) => findLesson(context, params.lessonId),
   component: lazyRouteComponent(learnScreens, 'LessonPage'),
 })
 const courseRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/courses/$courseId',
   notFoundComponent: notFoundIn('learn'),
-  beforeLoad: async ({ params }) => {
-    const { courseById } = await learnScreens()
-    if (!courseById(params.courseId)) throw notFound()
-  },
+  beforeLoad: ({ params, context }) => findCourse(context, params.courseId),
   component: lazyRouteComponent(learnScreens, 'CoursePage'),
 })
 const courseLessonRoute = createRoute({
@@ -847,11 +864,7 @@ const lessonSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/lessons/$lessonId/settings',
   notFoundComponent: notFoundIn('learn'),
-  beforeLoad: async ({ params, context }) => {
-    const { lessonById, lessonPlace } = await learnScreens()
-    if (!lessonById(params.lessonId) || !lessonPlace(params.lessonId)) throw notFound()
-    await ensureContent(context.content, 'lesson', params.lessonId)
-  },
+  beforeLoad: ({ params, context }) => findLesson(context, params.lessonId),
   component: lazyRouteComponent(learnScreens, 'LessonSettingsPage'),
 })
 // An item's Publish page (R29 B6): an editor's, from its Settings' Publish….
@@ -880,10 +893,7 @@ const courseSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/courses/$courseId/settings',
   notFoundComponent: notFoundIn('learn'),
-  beforeLoad: async ({ params }) => {
-    const { courseById } = await learnScreens()
-    if (!courseById(params.courseId)) throw notFound()
-  },
+  beforeLoad: ({ params, context }) => findCourse(context, params.courseId),
   component: lazyRouteComponent(learnScreens, 'CourseSettingsPage'),
 })
 const courseLessonSettingsRoute = createRoute({
@@ -904,7 +914,12 @@ const courseEditRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/courses/$courseId/edit',
   notFoundComponent: notFoundIn('learn'),
-  // A course not yet published is there for its editor: the draft New course made.
+  // A course not yet published is there for its editor: the draft New course made. The learner's
+  // own is theirs while they keep it.
+  beforeLoad: async ({ params, context }) => {
+    const { isOwnCourseId } = await learnScreens()
+    if (isOwnCourseId(params.courseId)) await findCourse(context, params.courseId)
+  },
   component: lazyRouteComponent(lessonEditorScreens, 'CourseEditorPage'),
 })
 const lessonEditRoute = createRoute({
@@ -912,8 +927,11 @@ const lessonEditRoute = createRoute({
   path: '/lessons/$lessonId/edit',
   notFoundComponent: notFoundIn('learn'),
   beforeLoad: async ({ params, context }) => {
-    // A lesson not yet published is there for its editor: the draft the journey editor made.
-    await ensureContent(context.content, 'lesson', params.lessonId)
+    const { isOwnLessonId } = await learnScreens()
+    // The learner's own lesson while they keep it; any other is an editor's, one not yet published
+    // there for its editor: the draft the journey editor made.
+    if (isOwnLessonId(params.lessonId)) await findLesson(context, params.lessonId)
+    else await ensureContent(context.content, 'lesson', params.lessonId)
   },
   component: lazyRouteComponent(lessonEditorScreens, 'LessonEditorPage'),
 })

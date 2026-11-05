@@ -75,10 +75,13 @@ export function NewSheet({
   children?: ReactNode
 }) {
   const named = name.trim() !== ''
+  const nameId = useId()
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         title={title}
+        // Its name first, focused as it opens: the phone's keyboard comes up under it.
+        initialFocus={() => document.getElementById(nameId) ?? true}
         footer={
           <div className="flex flex-col gap-2">
             <Button size="lg" disabled={!named || creating} onClick={onCreate}>
@@ -101,6 +104,7 @@ export function NewSheet({
           }}
         >
           <NameField
+            id={nameId}
             label={nameLabel}
             value={name}
             maxLength={maxLength}
