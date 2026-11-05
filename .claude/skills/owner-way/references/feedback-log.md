@@ -5,6 +5,10 @@ was either built or is still open. Add a ruling here the same day it is given, r
 owner's, typos fixed.
 
 ## Score editor
+- **One home for each thing; only what applies shown:** "we can at the same time edit the time signature from the
+  settings and from the palette which is strange"; "show only the actions relevant at that time like the write as common
+  in the 5/4 is not relevant and is weird that it is shown but is disabled"; the palette and menus as Flat's; the piano
+  shown on a phone from the editor itself, never only from Settings (2026-11-05).
 
 - **A real notation app:** "proper scores, proper functions like a real music notation software". Like Flat's: "the same
   features and same music notation and same icons and styles". No hand separation, pattern adding or verse adding inside it.
@@ -60,6 +64,9 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **Settings a learner understands, ordered by what matters to them;** the sheet's View settings usable; nothing reserves
+  a band above the keyboard, nor a tip; proper pedals, not a lever at the keys' corner (piano sites as the reference);
+  the Player smooth with many notes (the Fantaisie hung). Build the approved mockup whole, "not only half" (2026-11-05).
 
 - Every Chordify feature but guitar. Plain which view a setting belongs to; Layout is the sheet music's alone.
 - **Diagrams** animate; strip and diagrams swipe by themselves, the page never moves; no odd scroll bar; a swipe goes to the
@@ -70,6 +77,9 @@ owner's, typos fixed.
 - **Drum grooves:** Chordify's.
 
 ## Song page
+- **The song page, its settings and its editing redone,** on phone and laptop: details (words, music and harmony, level,
+  genre, language, tags) edited as properties, not the inline editor; card styles intuitive, showing what they change in
+  the real list, as memory-palaces' pinned cards and presets; the groups pages work and look right (2026-11-05).
 
 - **Calm:** too much at once is wrong. Play in the floating actions, Edit beside the title, Learned at the header's right.
 - No "Learn the song step by step" card. A song with no sections must not look odd. Descriptions short or behind ⓘ.
@@ -164,6 +174,9 @@ are reference only, but progressions are facts.
 - No ubiquitous-language glossary (2026-11-05): "i dont want the ubiquitous language anymore".
 
 ## Process
+- **Mockups in the owner's frames:** the real iPhone 17 Pro (app, Safari, and the smaller iPhone) and the MacBook Air
+  with a macOS Safari window; inspired by the example apps and sites the owner sends (2026-11-05).
+- **A signed-in learner is never asked to sign in again** after an update (2026-11-05).
 
 - **Mockups and questions:** text questions failed; whole-page mockups with a feedback box each worked.
 - **Test every UI at least twice** (2026-11-05).
