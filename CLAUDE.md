@@ -86,7 +86,9 @@ a Performance becomes a Score (`notation`) or sounds (`schedule`).
   `features/manage-library`, `song-files`, `publish`, `share-folder`; `entities/library`, `piece`. Groups and
   folders shared with them: `pages/groups`, `shared/api/groups`.
 - **Practice** (`/practice`): Tools (Metronome, Chord finder, Circle of fifths, Tuner), then Chords, Scales and keys,
-  Intervals, Progressions, Accompaniment, the Chord player, Exercises and Quiz.
+  Intervals, Progressions, Accompaniment, the Chord player, Exercises and Quiz. Exercises, Accompaniment and
+  Progressions are one library, `widgets/practice-library`, its favourites and the learner's progressions
+  `entities/practice-library`; a progression's page is `pages/progression`.
 - **The Player** (`/play/$pieceId`): one screen over any Performance. Modes Listen · Sight-read · Practice · Interpret,
   versions Original · Simple · Easy. `pages/player`; `widgets/practice-player`, `chord-views`, `sheet-music`,
   `player-setup`; `features/practice`.

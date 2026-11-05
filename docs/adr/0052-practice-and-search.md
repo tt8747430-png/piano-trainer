@@ -69,10 +69,30 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     buttons), beside **Play all** (each interval in turn) and Stop (A22). Within the octave each row's ⓘ names songs
     that open with it, rising and falling (the unison once, the tritone under both spellings), each language its own
     list of titles; ear training a row into the Quiz, which owns it. The cards with a staff are the lessons';
-  - Progressions: its typed line and Between (ADR 0112);
-  - Accompaniment: a tab for each method book (named in the interface's script: Bobrova, Боброва), Styles and Yours,
-    those hidden on its Settings left out; a pattern's page and the editor of the learner's own;
-    a study's page.
+  - **Exercises, Accompaniment and Progressions are one library** (`widgets/practice-library`, R30-4), the Songs
+    library's shape and its own parts (the kit's `FilterSheet`, `FilterChips`, `SortChoice`, `RowMore`,
+    `FavouriteMark`, `TreeItem`, `SortHeading`): the search with Sort (Book or Style, Name, Level) and Filter (Level;
+    Style for Progressions, the tree's own place); on a phone Favourites while there are some, each book (or style) a
+    run of rows folded after five with Show all n, Mine last, a row its picture, name, line and level (pips and its
+    number), ♡ in its ⋯ and on a swipe; from 64rem the tree (All, Favourites, the books, Mine, Hidden; a count of
+    none hidden; 44px rows) beside a table its headings sort (Name, Book, Level; Accompaniment's Hands, each figure's
+    name; Progressions' Numerals). Its view (`q`, `sort`, `place`, `stage`) is the URL's; `place` and `sort` are
+    remembered. Creating is the floating honey +. A level is the content's: an exercise's own, a pattern's its book's
+    course's, a study's its own; the rhythm styles, the learner's patterns and every progression have none, so
+    Progressions shows, sorts and filters by no level;
+  - Exercises: its three books; an exercise's page has the ♡ in its bar;
+  - Accompaniment: each method book (named in the interface's script: Bobrova, Боброва) and the rhythm styles a
+    place, its patterns then the songs they are practised on (`<book>: songs`); Mine the learner's patterns, Hidden the
+    built-ins they hid; a book hidden on its Settings left out. A pattern's ♡ is `pt-patterns`' (the Player's
+    picker reads it), a song's `pt-library`'s. Back from a pattern or a study goes to its book's place;
+  - Progressions opens on its library (each style a place, Mine the learner's own). A progression's page
+    (`/practice/progressions/$id`, the library's or `mine-n`) has its ♡, its Key and Chords (size), approach chords, its
+    chords with their roles and bass moves, the Player's diagrams and staff, Play it in the Chord player, practising in
+    all 12 keys, Passing chords as its section and the songs it is in (a second column on a laptop), Play floating. A
+    line typed anywhere opens `/practice/progressions/line` (named where the library has it), kept in Mine from its
+    bar; the learner's own is changed on its page, renamed by Edit, deleted asked first (ADR 0112). Favourites of
+    exercises and progressions and the learner's progressions are `pt-practice-library` (version 1, synced);
+    a pattern's page and the editor of the learner's own; a study's page.
 - **The Chord finder** (`/practice/chord-finder?keys=&key=`) is the one tool at the keys: the chord a MIDI keyboard
   plays (as its keys went down, read on once they are let go), else the keys tapped (kept in the URL, a link to send).
   One stage in the middle: the chord named as large as the page allows in every reading, over its grand staff, the
@@ -152,3 +172,4 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
 - r30 — On a laptop the Profile sits at the sidebar's foot under Search and Settings, as an app's account does; a locked
   badge names its goal over its meter instead of the count twice (2026-11-05).
 - r30 — Drone, Tap tempo and the Recorder leave Practice: the Metronome has its Tap, and recording is the score editor's (Songs' + › Record) (2026-11-05).
+- r30-4 — Exercises, Accompaniment and Progressions are one library, the Songs library's shape (`widgets/practice-library`); the Source menu, Progressions' three tabs and the fixed grids go; a progression has its own page; favourites and the learner's progressions in `pt-practice-library` (2026-11-05).
