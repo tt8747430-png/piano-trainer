@@ -6,6 +6,7 @@ import {
   sanitiseSongDetails,
   tagOf,
   tagsOf,
+  tagSuggestions,
 } from './song-details'
 
 describe('a song’s details', () => {
@@ -33,5 +34,25 @@ describe('a song’s details', () => {
   it('says when the details say nothing', () => {
     expect(isEmptyDetails(NO_DETAILS)).toBe(true)
     expect(isEmptyDetails({ ...NO_DETAILS, tags: ['a'] })).toBe(false)
+  })
+})
+
+describe('tags offered as one is typed (R32-C)', () => {
+  const library = {
+    a: { ...NO_DETAILS, tags: ['warm-up', 'three notes'] },
+    b: { ...NO_DETAILS, tags: ['sunday', 'three hands'] },
+  }
+
+  it('offers the library’s other tags, the song’s own left out, sorted', () => {
+    expect(tagSuggestions(library, ['warm-up'], '')).toEqual([
+      'sunday',
+      'three hands',
+      'three notes',
+    ])
+  })
+
+  it('narrows them to those holding what is typed, as a tag is kept', () => {
+    expect(tagSuggestions(library, [], '  THR ')).toEqual(['three hands', 'three notes'])
+    expect(tagSuggestions(library, [], 'zzz')).toEqual([])
   })
 })

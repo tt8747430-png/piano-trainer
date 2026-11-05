@@ -1,8 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { FOLDER_PICTURE_ICONS, isFolderPicture } from '@/entities/library'
-import { useGroupsData, useKeepSharesCurrent } from '@/features/share-folder'
+import { groupTile, useGroupsData, useKeepSharesCurrent } from '@/features/share-folder'
 import { RowLink, SettingsGroup } from '@/shared/ui'
 
 /**
@@ -28,9 +27,7 @@ export function SharedWithMe({ inTree }: { inTree: boolean }) {
             </h2>
             <ul className="flex flex-col gap-0.5">
               {shared.map((folder) => {
-                const Icon = isFolderPicture(folder.picture)
-                  ? FOLDER_PICTURE_ICONS[folder.picture]
-                  : Users
+                const { icon: Icon } = groupTile(folder)
                 return (
                   <li key={folder.id} className="flex">
                     <Link
@@ -66,12 +63,10 @@ export function SharedWithMe({ inTree }: { inTree: boolean }) {
   return (
     <SettingsGroup flush title={t('groups.sharedWithMe')}>
       {shared.map((folder) => {
-        const Icon = isFolderPicture(folder.picture) ? FOLDER_PICTURE_ICONS[folder.picture] : Users
         return (
           <RowLink
             key={folder.id}
-            icon={Icon}
-            paint="lilac"
+            {...groupTile(folder)}
             title={folder.name}
             detail={t('groups.sharedBy', {
               name: folder.ownerName,

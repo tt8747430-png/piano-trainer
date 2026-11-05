@@ -11,19 +11,19 @@ export const CardLookProvider = CardLookContext.Provider
 export const useCardLook = () => use(CardLookContext)
 
 /**
- * A list's attributes for a place's look: its custom properties, density and layout, read by the
+ * A list's attributes for a place's look: its custom properties, spacing and layout, read by the
  * theme's `[data-card-look]` rules; nothing for a place that keeps the default.
  */
 export function cardLookProps(look: CardLook | undefined): {
   'data-card-look'?: ''
-  'data-density'?: string
+  'data-spacing'?: string
   'data-layout'?: string
   style?: CSSProperties
 } {
   if (!look) return {}
   return {
     'data-card-look': '',
-    'data-density': look.density,
+    'data-spacing': look.style.padding,
     'data-layout': look.style.layout,
     style: styleVars(look.style) as CSSProperties,
   }

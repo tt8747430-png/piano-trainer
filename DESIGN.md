@@ -450,6 +450,11 @@ square at the top.
   only for movement.
 - **Sheet** (`Sheet`): card paper, the sheet corner on top, a grab handle, a Literata title with Close, an optional
   footer. It stands on the phone's keyboard. Never a sheet over a sheet.
+- **Properties** (a song's Details): a `RowTrigger` per property, its name and value, the value "Not set" in soft ink
+  where empty; a tap opens its editor beside it (a popover on a laptop, a sheet on a phone), titled with its name.
+- **A place's card style** (`StyleEditor`): the preview is a pinned pane on the muted fill, of fixed height, never over a
+  control; presets lead as a strip of drawn tiles, the chosen ringed in ink. Styles are made of the paints, so the dark
+  theme redraws them; Night alone is a dark card in both themes.
 - **Popover and ⓘ:** an `InfoTip` is a 16px ⓘ in soft ink beside a name; no line of explanation stands under a control.
 - **Toast** (`say`): a card over the screen's foot, clear of all that floats there, with Undo and ✕; gone in five
   seconds.

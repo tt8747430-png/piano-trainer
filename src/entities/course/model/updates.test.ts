@@ -135,11 +135,11 @@ describe('the Courses’ About (R29 B9)', () => {
     const about = [
       {
         heading: { en: 'Start here', ru: 'Начните здесь' },
-        blocks: [{ kind: 'text', text: { en: 'Hi', ru: 'Привет' }, style: { border: 3 } }],
+        blocks: [{ kind: 'text', text: { en: 'Hi', ru: 'Привет' }, style: { border: 2 } }],
       },
     ]
     keepContent([{ kind: 'catalog', id: 'courses', version: 'v1', body: { courses: [], about } }])
-    expect(coursesAbout()?.[0]?.blocks[0]?.style).toEqual({ ...DEFAULT_STYLE, border: 3 })
+    expect(coursesAbout()?.[0]?.blocks[0]?.style).toEqual({ ...DEFAULT_STYLE, border: 2 })
   })
 })
 

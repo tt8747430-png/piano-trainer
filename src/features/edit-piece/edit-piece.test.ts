@@ -10,6 +10,7 @@ import {
   makeSong,
   resetVersion,
   saveMusic,
+  setSongCredit,
   SINGLE_STAVES_MAX,
 } from './index'
 
@@ -233,5 +234,21 @@ describe('resetVersion', () => {
     saveMusic(store, { kind: 'version', id: 'amazing', original: ORIGINAL }, CHANGED)
     resetVersion(store, 'amazing')
     expect(store.getState().versions).toEqual({})
+  })
+})
+
+describe('setSongCredit (R32-C)', () => {
+  it('writes who wrote an own song into its score’s lines, and an empty line takes it away', () => {
+    const store = fresh()
+    const id = makeSong(store, {
+      title: 'Morning',
+      key: { tonic: note('G'), minor: false },
+      meter: '3/4',
+    })
+    if (!id) throw new Error('made')
+    setSongCredit(store, id, 'arranger', 'Mary Smith')
+    expect(store.getState().songs[0]?.header).toEqual({ arranger: 'Mary Smith' })
+    setSongCredit(store, id, 'arranger', '')
+    expect(store.getState().songs[0]?.header).toEqual({})
   })
 })

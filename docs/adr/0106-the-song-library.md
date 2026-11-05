@@ -97,3 +97,17 @@ A study, practised on Practice, is in no library. A folder played song after son
   share, away), a folder's with Card style. Filter adds Folder (Not in a folder) and Progress. My songs · Explore are
   the bar's title. Card style: the preview pinned, presets a grid, Corners, Border and Shadow as choices, text in its
   ink, Reset and Apply docked (2026-11-05).
+- r32 (R32-C) — Card style is memory-palaces': presets first in one strip of drawn tiles (Custom while the style is
+  none of them), the preview a pinned pane of fixed height that never covers a control, a Phone · Laptop switch in
+  it; Layout, Spacing (the rows' height: Density goes), Card (Corner radius, Border and Shadow in three steps),
+  Colours, Card contents; Reset to default in the bar, Apply to… (a menu, every folder asked first) and Apply at the
+  foot. The default layout is List; Paper is the sand paint, so it follows the theme. The laptop's pane follows the
+  place's style: List is the table inside a card in the style, its rows as tall as Spacing says; Cards and Grid draw
+  the cards (2026-11-05).
+- r32 (R32-C) — Groups could not be made: the insert returned its row under a SELECT policy of membership alone,
+  checked before the trigger made the maker a member; `learner_groups`' policy now lets its owner read it
+  (`20261105150000_learner_groups_owner_reads.sql`), and the list counts members' ids (an embedded count is an
+  aggregate PostgREST refuses). The pages wait for the session before saying Sign in. Groups are rows with their
+  picture and paint, members and folders counted; Join with a link (a pasted invite link or its code); a group's
+  page holds its invite link, its shared folders with Share a folder…, and its members (Member for one without a
+  name, a failure with Try again); a shared folder of the learner's own has Stop sharing (2026-11-05).

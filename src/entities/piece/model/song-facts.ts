@@ -1,5 +1,5 @@
 import type { Locale, LocalText } from '@/shared/i18n'
-import type { ScoreHeader } from './score-header'
+import { withHeaderLine, type ScoreHeader } from './score-header'
 import type { Credit } from './types'
 
 /**
@@ -70,12 +70,18 @@ export function withSongFacts<T extends FactsOf>(
 
 /**
  * The credits a song's page and its information show: who wrote it as its score names them, where
- * it names them, in place of the content's music and words credits; every other credit as it is.
+ * it names them, in place of the content's music and words credits (its arranger in place of its
+ * harmony credit); every other credit as it is.
  */
 export function shownCredits(piece: FactsOf): readonly Credit[] {
-  const { composer, lyricist } = piece.header ?? {}
-  if (composer === undefined && lyricist === undefined) return piece.credits ?? []
-  const kept = (piece.credits ?? []).filter((credit) => !WRITTEN.has(credit.role))
+  const { composer, lyricist, arranger } = piece.header ?? {}
+  const written = composer !== undefined || lyricist !== undefined
+  if (!written && arranger === undefined) return piece.credits ?? []
+  const kept = (piece.credits ?? []).filter(
+    (credit) =>
+      !(written && WRITTEN.has(credit.role)) &&
+      !(arranger !== undefined && credit.role === 'harmony'),
+  )
   const named: Credit[] =
     composer !== undefined && composer === lyricist
       ? [{ role: 'words-and-music', names: composer }]
@@ -83,7 +89,46 @@ export function shownCredits(piece: FactsOf): readonly Credit[] {
           ...(lyricist === undefined ? [] : [{ role: 'words', names: lyricist } as const]),
           ...(composer === undefined ? [] : [{ role: 'music', names: composer } as const]),
         ]
-  return [...kept, ...named]
+  return [
+    ...kept,
+    ...named,
+    ...(arranger === undefined ? [] : [{ role: 'harmony', names: arranger } as const]),
+  ]
+}
+
+/** The credits a song's Details edit (R32-C): the lines its score prints for them. */
+export const SONG_CREDITS = ['composer', 'lyricist', 'arranger'] as const
+export type SongCredit = (typeof SONG_CREDITS)[number]
+
+/** The roles each credit stands for among the content's credits. */
+const CREDIT_ROLES: Readonly<Record<SongCredit, readonly Credit['role'][]>> = {
+  composer: ['music', 'words-and-music'],
+  lyricist: ['words', 'words-and-music'],
+  arranger: ['harmony'],
+}
+
+/** Who a song's credit names (its Music, Words or Arranger), as its page shows it; '' where none. */
+export function songCredit(piece: FactsOf, field: SongCredit): string {
+  const credit = shownCredits(piece).find((each) => CREDIT_ROLES[field].includes(each.role))
+  return credit && credit.role !== 'unknown' ? credit.names : ''
+}
+
+/**
+ * The piece with one of its credits written as its score prints it (R32-C): the score's line, and the
+ * content's credit it stands for gone, so an emptied line takes the credit away. A shared Words and
+ * music splits into its two lines first.
+ */
+export function withSongCredit<T extends FactsOf>(piece: T, field: SongCredit, text: string): T {
+  const credits = piece.credits ?? []
+  const shared = credits.find((credit) => credit.role === 'words-and-music')
+  const split =
+    shared && shared.role !== 'unknown' && field !== 'arranger'
+      ? { composer: shared.names, lyricist: shared.names, ...piece.header }
+      : (piece.header ?? {})
+  const header = withHeaderLine(split, field, text)
+  const gone = new Set<Credit['role']>(CREDIT_ROLES[field])
+  if (field !== 'arranger') gone.add('words-and-music')
+  return { ...piece, header, credits: credits.filter((credit) => !gone.has(credit.role)) }
 }
 
 const isText = (value: unknown): value is string => typeof value === 'string'

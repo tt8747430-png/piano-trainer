@@ -1,4 +1,11 @@
-import { withSongFacts, type OwnSongId, type PiecesStore, type SongFacts } from '@/entities/piece'
+import {
+  withSongCredit,
+  withSongFacts,
+  type OwnSongId,
+  type PiecesStore,
+  type SongCredit,
+  type SongFacts,
+} from '@/entities/piece'
 import type { Locale } from '@/shared/i18n'
 
 /**
@@ -16,5 +23,20 @@ export function setSongFacts(
     songs: state.songs.map((song) =>
       song.id === id ? withSongFacts(song, facts, locale, true) : song,
     ),
+  }))
+}
+
+/**
+ * Writes who wrote an own song (R32-C, its Details' Music, Words or Arranger): the line its score
+ * prints, the same on its page; an empty line takes the credit away.
+ */
+export function setSongCredit(
+  store: PiecesStore,
+  id: OwnSongId,
+  field: SongCredit,
+  text: string,
+): void {
+  store.setState((state) => ({
+    songs: state.songs.map((song) => (song.id === id ? withSongCredit(song, field, text) : song)),
   }))
 }

@@ -10,9 +10,7 @@ import {
   type ShelvedFolder,
 } from '@/entities/library'
 import { DeleteFolderAsk, MoveSheet, useLibraryActs, type Moving } from '@/features/manage-library'
-import { entryTitles, useRepertoire } from '@/entities/piece'
-import { folderShareOf, ShareFolderSheet, useGroupsData } from '@/features/share-folder'
-import { useLocale } from '@/shared/i18n'
+import { ShareFolderSheet, useFolderShare, useGroupsData } from '@/features/share-folder'
 import {
   BackButton,
   ButtonLink,
@@ -56,8 +54,7 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
   const [moving, setMoving] = useState<Moving | null>(null)
   const [deleting, setDeleting] = useState(false)
   const [sharing, setSharing] = useState(false)
-  const repertoire = useRepertoire()
-  const locale = useLocale()
+  const shareOf = useFolderShare()
   const { data: groups } = useGroupsData()
   const shares =
     groups.kind === 'ready'
@@ -132,19 +129,7 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
         onOpenChange={setDeleting}
         onDeleted={() => void leave()}
       />
-      <ShareFolderSheet
-        open={sharing}
-        onOpenChange={setSharing}
-        folder={folderShareOf(
-          folder,
-          nameOf(folder),
-          (id) => {
-            const entry = repertoire.entry(id)
-            return entry && entry.kind !== 'listing' ? entry : undefined
-          },
-          (piece) => entryTitles(piece, locale).primary,
-        )}
-      />
+      <ShareFolderSheet open={sharing} onOpenChange={setSharing} folder={shareOf(folder)} />
     </div>
   )
 }

@@ -56,6 +56,24 @@ export function tagsOf(values: readonly unknown[]): string[] {
   return kept.slice(0, MOST_TAGS)
 }
 
+/**
+ * The tags the library's other songs carry that a song may take (R32-C, Notion's multi-select): each
+ * once, sorted, none the song has, holding what is typed (read as a tag is kept).
+ */
+export function tagSuggestions<K extends string>(
+  details: Readonly<Partial<Record<K, SongDetails>>>,
+  chosen: readonly string[],
+  typed: string,
+): string[] {
+  const part = tagOf(typed) ?? ''
+  const all = new Set(
+    Object.values<SongDetails | undefined>(details).flatMap((each) => each?.tags ?? []),
+  )
+  return [...all]
+    .filter((tag) => !chosen.includes(tag) && tag.includes(part))
+    .sort((a, b) => a.localeCompare(b))
+}
+
 /** Any value read as a song's details: what it says that is valid, none for the rest. */
 export function sanitiseSongDetails(value: unknown): SongDetails {
   const saved = isRecord(value) ? value : {}

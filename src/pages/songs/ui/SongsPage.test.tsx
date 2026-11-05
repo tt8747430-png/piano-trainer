@@ -168,7 +168,7 @@ describe('Songs: the library’s Home and its folders (ADR 0106)', () => {
 
   it('lists a folder’s songs, marking a listing with no chart', async () => {
     await renderApp('/songs/folders/bozhe-spasibo')
-    expect(await screen.findAllByText('No chart yet')).not.toHaveLength(0)
+    expect(await screen.findAllByText('Chart not available')).not.toHaveLength(0)
   })
 
   it('looks through the whole library at Home, the songs found under their folders’ names', async () => {
@@ -221,7 +221,7 @@ describe('Songs: the library’s Home and its folders (ADR 0106)', () => {
     expect(song).not.toHaveAccessibleName(/Dsus4/)
     expect(within(song).getByText('Мир, душа, храни')).toBeVisible()
     expect(within(song).getByText('7 chords')).toBeVisible()
-    const listing = screen.getAllByRole('link', { name: /No chart yet/ })[0]
+    const listing = screen.getAllByRole('link', { name: /Chart not available/ })[0]
     expect(listing?.querySelector('[data-slot="row-chords"]')).toBeNull()
     expect(listing).not.toHaveAccessibleName(/chord/)
   })
@@ -520,7 +520,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     await user.click(screen.getByRole('button', { name: 'Delete folder' }))
     const ask = await screen.findByRole('alertdialog', { name: 'Delete “Sunday”?' })
     expect(ask).toHaveTextContent(
-      'The folder is deleted for good. Your own songs in it are deleted for good, with their takes: 1. The app’s songs in it go to the archive: 1.',
+      'The folder will be permanently deleted. Your songs in it (1) and their recordings will be permanently deleted. Built-in songs in it (1) will be moved to the archive.',
     )
     await user.click(within(ask).getByRole('button', { name: 'Delete' }))
     await waitFor(() =>
@@ -593,7 +593,7 @@ describe('Songs: Select (ADR 0106)', () => {
     await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
     await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
     expect(screen.getByRole('heading', { level: 1, name: 'Selected: 2' })).toBeInTheDocument()
-    const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    const bar = screen.getByRole('toolbar', { name: 'Selection actions' })
     // Delete is for the learner's own songs and folders: none of these, so it is greyed, kept in
     // its slot so the bar's buttons never shift as rows are chosen.
     expect(within(bar).getByRole('button', { name: 'Delete' })).toBeDisabled()
@@ -611,7 +611,7 @@ describe('Songs: Select (ADR 0106)', () => {
     })
     act(() => setBar(settingsStore, 'select.songs', ['delete', 'export', 'move']))
     await user.click(await screen.findByRole('button', { name: 'Select' }))
-    const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    const bar = screen.getByRole('toolbar', { name: 'Selection actions' })
     expect(
       within(bar)
         .getAllByRole('button')
@@ -636,7 +636,7 @@ describe('Songs: Select (ADR 0106)', () => {
     await user.click(await screen.findByRole('button', { name: 'Select' }))
     // A built-in folder chosen too: it is the catalog's, so Archive waits (D8).
     await user.click(screen.getByRole('checkbox', { name: 'Select Hymns' }))
-    const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    const bar = screen.getByRole('toolbar', { name: 'Selection actions' })
     expect(within(bar).getByRole('button', { name: 'Archive' })).toBeDisabled()
     await user.click(screen.getByRole('checkbox', { name: 'Select Hymns' }))
     await user.click(screen.getByRole('checkbox', { name: 'Select Sunday' }))
@@ -661,7 +661,7 @@ describe('Songs: Select (ADR 0106)', () => {
     await user.click(await screen.findByRole('button', { name: 'Select' }))
     await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
     await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
-    const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    const bar = screen.getByRole('toolbar', { name: 'Selection actions' })
     await user.click(within(bar).getByRole('button', { name: 'Favourite' }))
     expect(libraryStore.getState().favourites).toEqual(['silent', 'amazing'])
     await user.click(await screen.findByRole('button', { name: 'Undo' }))
@@ -685,7 +685,7 @@ describe('Songs: Select (ADR 0106)', () => {
     })
     await renderApp('/songs/folders/hymns')
     await user.click(await screen.findByRole('button', { name: 'Select' }))
-    const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    const bar = screen.getByRole('toolbar', { name: 'Selection actions' })
     // Export is under More on the bar as it comes (R29 B10). Nothing chosen, nothing to export.
     await user.click(within(bar).getByRole('button', { name: 'More' }))
     expect(await screen.findByRole('button', { name: 'Export' })).toBeDisabled()
@@ -718,7 +718,7 @@ describe('Songs: Select (ADR 0106)', () => {
       expect(screen.queryByRole('checkbox', { name: 'Select Silent Night' })).toBeNull(),
     )
     expect(screen.getByRole('heading', { level: 1, name: 'Selected: 1' })).toBeInTheDocument()
-    const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    const bar = screen.getByRole('toolbar', { name: 'Selection actions' })
     await user.click(within(bar).getByRole('button', { name: 'Archive' }))
     await confirmAsked(user, 'Archive')
     expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
@@ -897,7 +897,7 @@ describe('Songs: the sort and the filters (ADR 0106)', () => {
       storage: saved({ library: { favourites: ['silent'] } }),
     })
     const sheet = await openFilters(user)
-    await user.click(within(sheet).getByRole('switch', { name: 'Only favourites' }))
+    await user.click(within(sheet).getByRole('switch', { name: 'Favourites only' }))
     expect(router.state.location.search).toMatchObject({ favourites: true })
     await user.click(within(sheet).getByRole('button', { name: 'Show 1 song' }))
     expect(await screen.findByRole('link', { name: /Silent Night/ })).toBeInTheDocument()
@@ -1091,7 +1091,7 @@ describe('Songs: your own', () => {
     }
     await renderApp('/songs?q=лань', { storage: saved({ pieces: { versions: { bz4: version } } }) })
     const row = await screen.findByRole('link', { name: /Как лань желает/ })
-    expect(row).not.toHaveTextContent('No chart yet')
+    expect(row).not.toHaveTextContent('Chart not available')
   })
 })
 
