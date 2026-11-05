@@ -117,3 +117,6 @@ A new option has one obvious form by this rule. A test reaches a folded action b
 - r29 — A Settings page's choices are `ChoiceCard`s, every choice in sight with its example (the owner's answer, part 2 of the mockups, 2026-11-03).
 - r30 — Edit sits beside the title on every screen; `ScreenHeader` draws the pencil and, in its place, Done from one
   `EditAction`; Select's Done takes the More slot (2026-11-05).
+- r31 (R31-P) — Nothing floats over the Player's music: the transport is docked in its own row (Loop, Restart, ‹ ▶ ›,
+  Tempo, Click) over the foot (View, Key, Version, Mode, More). The Tools sheet and the tools capsule leave the Player;
+  More holds the music's acts, the gear its settings; tips are remembered once put away (2026-11-05).

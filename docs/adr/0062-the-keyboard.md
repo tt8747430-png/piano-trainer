@@ -57,3 +57,6 @@ give the keys a box (`stubBox`) and the scroller its metrics (`stubScrolling`).
 - 0059 — Keys that hold still (2026-10-16).
 - 0062 — A reading page folds its keys on a phone on its side (2026-10-20).
 - r29 — Fingering on the keys one way (one circle, right hand above the name, left below; a crossing the accent colour with an arc), never two rows of numbers (decided 2026-11-02, being built in round 29; spec `.scratch/r29/fingering-service/spec.md`).
+- r31 (R31-P) — The rail's box and its buttons (names, chord names, glissando, MIDI sound, the sustain latch) go: the
+  strip holds the chord, − +, ⚙ and the pedals drawn from the bench (hold, or tap to lock the sustain); `railControls`
+  becomes `pedals` (sustain or all three). The bar under the keys goes (2026-11-05).

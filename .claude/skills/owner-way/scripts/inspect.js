@@ -24,7 +24,8 @@
   const hidden = (el) => el.closest('[aria-hidden="true"], [inert], .sr-only')
   // A piano's keys sit on each other by design and are sized by the keyboard, not as targets.
   const isKey = (el) => /^[A-G]( sharp| flat)?\s?-?\d$|^Bar \d+|^Такт \d+/.test(el.getAttribute('aria-label') ?? '')
-  const inScore = (el) => el.closest('svg') && el.closest('[data-slot="score"]')
+  // The score's own tap areas (a clef's, a bar's) lie over its music by design.
+  const inScore = (el) => el.closest('[data-slot="score"]') !== null
   // 1. Text cut: a box narrower than its text with no ellipsis, or a line clamp hiding a word.
   const texts = [...document.querySelectorAll('body *')].filter(
     (el) => [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()) && visible(el) && !hidden(el),
@@ -100,7 +101,7 @@
   // 5. Touch targets.
   if (matchMedia('(pointer: coarse)').matches)
     for (const el of document.querySelectorAll('button, a[href], [role="button"], [role="tab"], [role="radio"]')) {
-      if (!visible(el) || hidden(el) || isKey(el)) continue
+      if (!visible(el) || hidden(el) || isKey(el) || inScore(el)) continue
       const r = el.getBoundingClientRect()
       if (r.width < 40 || r.height < 40) found.push(`SMALL ${name(el)}: ${Math.round(r.width)}×${Math.round(r.height)}`)
     }
