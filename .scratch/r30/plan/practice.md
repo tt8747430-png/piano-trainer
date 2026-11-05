@@ -26,9 +26,9 @@ rulings: feedback-log › Practice, Navigation and bars, Actions and menus.
 - Bar: "Practice" (large), Search (phone). Groups: **Tools** (Metronome, Chord finder, Circle of fifths, Tuner),
   **Theory** (Chords, Scales and keys, Intervals, Progressions), **Playing** (Chord player, Accompaniment), **Training**
   (Exercises, Quiz).
-- Laptop: two columns of groups, Tools and Theory left, Playing and Training right, so no column stands alone; rows keep
-  their picture, name and line.
-- Continue: the last two Practice pages opened, as on Songs, above the groups.
+- Laptop: two columns of groups, Tools and Playing left, Theory and Training right (six rows each), so no column stands
+  alone; rows keep their picture, name and line. (Built, R30-4.)
+- Continue: the last two Practice pages opened, as on Songs, above the groups. (Built, R30-4: `practiceRecent`.)
 
 ### 2. One library for Exercises, Accompaniment and Progressions (`widgets/practice-library`)
 
