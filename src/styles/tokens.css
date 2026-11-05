@@ -212,8 +212,18 @@
   --pedal-name: #cbbfae;
   --pedal-name-down: #f3dea4;
   --key-shade: color-mix(in oklab, var(--p-ink) 7%, transparent);
-  --key-lip: color-mix(in oklab, var(--p-ink) 5%, transparent);
   --key-sheen: color-mix(in oklab, var(--p-white) 12%, transparent);
+  /*
+   * A real piano's keys (R33): the felt strip along their far end; light falling from the player's
+   * side, deepening under the felt; an ivory key's edges, one catching the light and one in shade; the
+   * shadow a key casts.
+   */
+  --key-felt: #7c302c;
+  --key-far: color-mix(in oklab, var(--p-ink) 16%, transparent);
+  --key-near: color-mix(in oklab, var(--p-ink) 6%, transparent);
+  --key-edge-light: color-mix(in oklab, var(--p-white) 60%, transparent);
+  --key-edge-shade: color-mix(in oklab, var(--p-ink) 12%, transparent);
+  --key-cast: color-mix(in oklab, var(--p-ink) 22%, transparent);
   --on-key-white: var(--p-ink);
   --on-key-black: var(--p-white);
   /* A mark is its wash at rest and its full colour when its key sounds; a plain key down turns sky. */
@@ -285,6 +295,9 @@
     --key-bed: var(--p-dusk-bed);
     --key-rail: var(--p-dusk-rail);
     --on-key-rail: var(--p-dusk-ink);
+    --key-felt: #5a2422;
+    --key-edge-light: color-mix(in oklab, var(--p-white) 22%, transparent);
+    --key-cast: color-mix(in oklab, #000 45%, transparent);
     --pedal: #c69f4c;
     --pedal-down: #8f6c26;
     --pedal-shank: #a07c32;

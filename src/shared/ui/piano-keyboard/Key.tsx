@@ -47,6 +47,15 @@ const DOWN: Readonly<Record<KeyFill, string>> = {
   scale: 'bg-key-scale-down text-on-key-scale',
 }
 
+/**
+ * A key's face as a real piano's (R33): light and shade over its fill, so every mark keeps its colour;
+ * a key down sinks, darker under the felt, its shadow gone.
+ */
+const FACE = {
+  white: { rest: 'key-face-white', down: 'key-face-white-down' },
+  black: { rest: 'key-face-black', down: 'key-face-black-down' },
+} as const
+
 interface KeyProps {
   readonly geometry: KeyGeometry
   readonly name: string
@@ -95,6 +104,7 @@ function KeyButton({
       className={cn(
         'group absolute top-0 flex flex-col items-center justify-end overflow-hidden pb-2.5 transition duration-80 ease-out outline-none hover:brightness-95',
         black ? 'z-10 rounded-b-key-black' : 'rounded-b-key-white border-r border-key-bed',
+        FACE[black ? 'black' : 'white'][look.down ? 'down' : 'rest'],
         (look.down ? DOWN : REST)[look.fill],
         look.down ? 'translate-y-0.5' : null,
         look.outlined ? 'ring-3 ring-ring ring-inset' : null,
@@ -110,7 +120,7 @@ function KeyButton({
         aria-hidden
         className={cn(
           'absolute inset-x-0 bottom-0 origin-bottom transition duration-80 ease-out',
-          black ? 'h-2 bg-key-sheen' : 'h-1.5 bg-key-lip',
+          black ? 'h-2 key-front-black' : 'h-1.5 key-lip-white',
           look.down ? 'scale-y-33' : null,
         )}
       />
@@ -131,9 +141,7 @@ function KeyButton({
           {description}
         </span>
       ) : null}
-      {look.letter ? (
-        <Glyph text={look.letter} className="relative text-xs font-semibold opacity-70" />
-      ) : null}
+      {look.letter ? <Glyph text={look.letter} className="relative key-cap font-semibold" /> : null}
       {look.label ? (
         <span
           aria-hidden

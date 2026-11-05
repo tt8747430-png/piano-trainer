@@ -279,10 +279,15 @@ export function PianoKeyboard({
           }}
         >
           {keyButtons}
-          {/* The case's shade falling on the keys' far end. */}
+          {/* The key slip's felt along the keys' far end, and the case's shade falling under it. */}
           <span
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 top-0 z-20 h-2 bg-linear-to-b from-key-shade to-transparent"
+            className="pointer-events-none absolute inset-x-0 top-1 z-20 h-2 bg-linear-to-b from-key-shade to-transparent"
+          />
+          <span
+            aria-hidden
+            data-slot="key-felt"
+            className="pointer-events-none absolute inset-x-0 top-0 z-20 key-felt"
           />
         </div>
         {scrolls ? <FingerRow marks={states.marks} /> : null}

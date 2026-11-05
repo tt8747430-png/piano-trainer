@@ -94,8 +94,8 @@
   --color-pedal-name: var(--pedal-name);
   --color-pedal-name-down: var(--pedal-name-down);
   --color-key-shade: var(--key-shade);
-  --color-key-lip: var(--key-lip);
   --color-key-sheen: var(--key-sheen);
+  --color-key-felt: var(--key-felt);
   --color-on-key-white: var(--on-key-white);
   --color-on-key-black: var(--on-key-black);
   --color-key-down: var(--key-down);
@@ -591,6 +591,88 @@
 }
 /* What floats over the page casts a soft shade (`tokens.css`' `--elevation-*`): resting second
    actions, the main action and the transport, a pointer over either. */
+/*
+ * A key's face as a real piano's (R33), drawn as light and shade over whatever fill the key has, so a
+ * mark keeps its colour: an ivory key lit from the player's side, deeper under the felt, its edges
+ * catching the light and the shade, casting a little shadow; sunk, the far end goes darker.
+ */
+@utility key-face-white {
+  background-image: linear-gradient(
+    to bottom,
+    var(--key-far) 0,
+    transparent 16%,
+    transparent 80%,
+    var(--key-near) 100%
+  );
+  box-shadow:
+    inset 1px 0 0 var(--key-edge-light),
+    inset -1px 0 0 var(--key-edge-shade),
+    0 1px 2px var(--key-cast);
+}
+@utility key-face-white-down {
+  background-image: linear-gradient(to bottom, var(--key-cast) 0, transparent 28%);
+  box-shadow:
+    inset 1px 0 0 var(--key-edge-light),
+    inset -1px 0 0 var(--key-edge-shade);
+}
+/* An ebony key: bevelled sides, a sheen along its top towards the player, its shadow on the ivory. */
+@utility key-face-black {
+  background-image: linear-gradient(
+    to bottom,
+    var(--key-cast) 0,
+    transparent 10%,
+    var(--key-sheen) 84%,
+    transparent 100%
+  );
+  box-shadow:
+    inset 2px 0 0 var(--key-sheen),
+    inset -2px 0 0 var(--key-cast),
+    1px 3px 4px var(--key-cast);
+}
+@utility key-face-black-down {
+  background-image: linear-gradient(
+    to bottom,
+    var(--key-cast) 0,
+    transparent 14%,
+    var(--key-sheen) 90%
+  );
+  box-shadow:
+    inset 2px 0 0 var(--key-sheen),
+    inset -2px 0 0 var(--key-cast),
+    0 1px 2px var(--key-cast);
+}
+/* A white key's front lip catching the light; a black key's sloped front. */
+@utility key-lip-white {
+  background-image: linear-gradient(to bottom, var(--key-edge-light), var(--key-far));
+}
+@utility key-front-black {
+  background-image: linear-gradient(to bottom, var(--key-sheen), var(--key-cast));
+}
+/* A computer key's cap printed on a key: the letter that plays it. */
+@utility key-cap {
+  display: grid;
+  place-items: center;
+  min-width: 1rem;
+  height: 1rem;
+  padding-inline: 0.1875rem;
+  border-radius: 0.25rem;
+  font-size: 0.625rem;
+  line-height: 1;
+  text-transform: uppercase;
+  background-color: color-mix(in oklab, currentColor 12%, transparent);
+  box-shadow: inset 0 -1px 0 color-mix(in oklab, currentColor 22%, transparent);
+}
+/* The key slip's felt along the keys' far end, its shadow on them. */
+@utility key-felt {
+  height: 0.25rem;
+  background-image: linear-gradient(
+    to bottom,
+    var(--key-felt),
+    color-mix(in oklab, var(--key-felt) 70%, black)
+  );
+  box-shadow: 0 2px 3px var(--key-cast);
+}
+
 @utility elevation-1 {
   box-shadow: var(--elevation-1);
 }
