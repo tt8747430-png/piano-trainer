@@ -1826,6 +1826,7 @@ describe('the score editor', () => {
     )
     await renderApp('/play/my-1', { storage })
     await user.click(await screen.findByRole('button', { name: 'Player settings' }))
+    await user.click(await screen.findByRole('button', { name: /^Staves/ }))
     expect(await screen.findByRole('switch', { name: 'Play Staff 1' })).toBeChecked()
   })
 

@@ -11,10 +11,10 @@ async function openTools(user: ReturnType<typeof userEvent.setup>) {
 }
 
 describe('the Tools sheet over any screen (R29 B11)', () => {
-  it('opens from the Player, a lesson and each explorer', async () => {
+  it('opens from the score editor, a lesson and each explorer', async () => {
     const user = userEvent.setup()
     const screens = [
-      '/play/bz5',
+      '/edit/bz5',
       `/lessons/${LESSONS[0]!.id}`,
       '/practice/chords',
       '/practice/scales',
@@ -26,13 +26,11 @@ describe('the Tools sheet over any screen (R29 B11)', () => {
       const sheet = await openTools(user)
       const quick = within(sheet).getByRole('region', { name: 'Quick tools' })
       expect(within(quick).getByRole('group', { name: 'Metronome' }), path).toBeInTheDocument()
-      // The Recorder takes a song's takes: only the Player has a song on screen.
-      expect(within(quick).queryByRole('group', { name: 'Recorder' }) !== null, path).toBe(
-        path === '/play/bz5',
-      )
+      // A take is the score editor's to record, never a quick tool.
+      expect(within(quick).queryByRole('group', { name: 'Recorder' }), path).toBeNull()
       expect(within(quick).getByRole('button', { name: 'Tuner' }), path).toBeInTheDocument()
-      // Away from the Player, the quick tools and the way to them all.
-      if (path !== '/play/bz5')
+      // Away from a song, the quick tools and the way to them all.
+      if (path !== '/edit/bz5')
         expect(within(sheet).getByRole('button', { name: 'All tools' })).toBeInTheDocument()
       unmount()
     }
@@ -40,7 +38,7 @@ describe('the Tools sheet over any screen (R29 B11)', () => {
 
   it('its metronome takes the song’s tempo', async () => {
     const user = userEvent.setup()
-    const { audio, settingsStore } = await renderApp('/play/bz5')
+    const { audio, settingsStore } = await renderApp('/edit/bz5')
     const sheet = await openTools(user)
     const metronome = within(sheet).getByRole('group', { name: 'Metronome' })
     expect(metronome).toHaveTextContent('The song’s tempo · 4/4')
@@ -58,7 +56,7 @@ describe('the Tools sheet over any screen (R29 B11)', () => {
 
   it('its metronome shows the bar’s beats, the one sounding marked, as the Metronome’s', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/play/bz5')
+    const { audio } = await renderApp('/edit/bz5')
     const sheet = await openTools(user)
     const beats = within(sheet).getByRole('list', { name: 'Beats' })
     expect(within(beats).getAllByRole('button')).toHaveLength(4)
