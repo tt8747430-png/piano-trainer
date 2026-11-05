@@ -79,8 +79,9 @@ a Performance becomes a Score (`notation`) or sounds (`schedule`).
 
 **Learn · Songs · Practice · Profile**; `app/router.tsx` has every route.
 
-- **Learn** (`/`): Lessons by level and Courses; a lesson is one page of sections. `pages/learn`, `course`, `lesson`,
-  `lesson-editor`; `widgets/curriculum`, `lesson-view`.
+- **Learn** (`/`): Lessons by level and Courses; a lesson is one page of sections. Your lessons and Your courses are
+  the learner's own, in the same editors on the device. `pages/learn`, `course`, `lesson`, `lesson-editor`;
+  `widgets/curriculum`, `lesson-view`; `features/manage-own-lessons`; `entities/own-lessons`.
 - **Songs** (`/songs`): My songs · Explore. One library of folders, favourites and an archive; a song's page, Settings and
   Publish; MusicXML and MIDI in and out. `pages/songs`, `piece`, `public-library`; `widgets/song-library`;
   `features/manage-library`, `song-files`, `publish`, `share-folder`; `entities/library`, `piece`. Groups and
