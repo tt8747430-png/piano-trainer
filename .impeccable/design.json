@@ -1,0 +1,1129 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-05T00:28:25.197898+00:00",
+  "title": "Design System: Piano Trainer",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#F7F3EE",
+        "tonalRamp": [
+          "#30271c",
+          "#52422d",
+          "#765c3d",
+          "#a67f4f",
+          "#bb9d77",
+          "#cdbaa2",
+          "#e1d7cc",
+          "#f5f3ef"
+        ]
+      },
+      "paper-card": {
+        "role": "neutral",
+        "displayName": "Paper Card",
+        "canonical": "#FEFDFB",
+        "tonalRamp": [
+          "#372c16",
+          "#5e4a21",
+          "#88692a",
+          "#c39232",
+          "#d1ac61",
+          "#dbc394",
+          "#e8dcc4",
+          "#f7f4ed"
+        ]
+      },
+      "sand-sunken": {
+        "role": "neutral",
+        "displayName": "Sand Sunken",
+        "canonical": "#EEE9E2",
+        "tonalRamp": [
+          "#2d271f",
+          "#4d4232",
+          "#6e5d45",
+          "#9a805b",
+          "#b19d81",
+          "#c7baa8",
+          "#ded7ce",
+          "#f4f3f0"
+        ]
+      },
+      "sand-hairline": {
+        "role": "neutral",
+        "displayName": "Sand Hairline",
+        "canonical": "#E5DFD6",
+        "tonalRamp": [
+          "#2c2720",
+          "#4b4234",
+          "#6b5d48",
+          "#95805f",
+          "#ae9d84",
+          "#c5baaa",
+          "#ddd8d0",
+          "#f4f3f0"
+        ]
+      },
+      "soft-line": {
+        "role": "neutral",
+        "displayName": "Soft Line",
+        "canonical": "#DAD1C8",
+        "tonalRamp": [
+          "#2c2621",
+          "#4a4036",
+          "#69594a",
+          "#927a63",
+          "#ab9987",
+          "#c3b8ac",
+          "#dcd6d0",
+          "#f4f2f1"
+        ]
+      },
+      "control-line": {
+        "role": "neutral",
+        "displayName": "Control Line",
+        "canonical": "#908479",
+        "tonalRamp": [
+          "#292624",
+          "#45403b",
+          "#615952",
+          "#867a6f",
+          "#a29990",
+          "#bdb7b2",
+          "#d9d6d3",
+          "#f3f2f1"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#332921",
+        "tonalRamp": [
+          "#2c2620",
+          "#4b3f35",
+          "#6a5748",
+          "#947861",
+          "#ad9785",
+          "#c4b6ab",
+          "#ddd5d0",
+          "#f4f2f1"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Ink Soft",
+        "canonical": "#685E56",
+        "tonalRamp": [
+          "#292624",
+          "#453f3b",
+          "#615852",
+          "#86796f",
+          "#a29890",
+          "#bdb7b2",
+          "#d9d6d3",
+          "#f3f2f1"
+        ]
+      },
+      "umber": {
+        "role": "neutral",
+        "displayName": "Umber",
+        "canonical": "#4B4038",
+        "tonalRamp": [
+          "#2a2622",
+          "#473f38",
+          "#65574e",
+          "#8c7869",
+          "#a7978b",
+          "#c0b6af",
+          "#dbd6d2",
+          "#f3f2f1"
+        ]
+      },
+      "honey": {
+        "role": "primary",
+        "displayName": "Honey",
+        "canonical": "#EDC684",
+        "tonalRamp": [
+          "#3b2c12",
+          "#664a1a",
+          "#94681f",
+          "#d49121",
+          "#dfab53",
+          "#e3c38c",
+          "#ecdcc0",
+          "#f8f4ec"
+        ]
+      },
+      "honey-night": {
+        "role": "neutral",
+        "displayName": "Honey Night",
+        "canonical": "#D4B176",
+        "tonalRamp": [
+          "#352a18",
+          "#5a4725",
+          "#826430",
+          "#b98a3c",
+          "#caa668",
+          "#d6bf99",
+          "#e6dac7",
+          "#f7f3ee"
+        ]
+      },
+      "sky-mist": {
+        "role": "secondary",
+        "displayName": "Sky Mist",
+        "canonical": "#E0EFFA",
+        "tonalRamp": [
+          "#12293a",
+          "#1b4565",
+          "#216292",
+          "#2388d1",
+          "#55a3dd",
+          "#8dbee2",
+          "#c1daec",
+          "#ecf3f8"
+        ]
+      },
+      "sky-mist-ink": {
+        "role": "neutral",
+        "displayName": "Sky Mist Ink",
+        "canonical": "#2A597F",
+        "tonalRamp": [
+          "#182834",
+          "#264259",
+          "#325d81",
+          "#3e81b7",
+          "#6a9ec8",
+          "#9abbd5",
+          "#c7d8e5",
+          "#eef3f6"
+        ]
+      },
+      "sky-deep": {
+        "role": "secondary",
+        "displayName": "Sky Deep",
+        "canonical": "#356890",
+        "tonalRamp": [
+          "#1a2833",
+          "#284357",
+          "#355e7e",
+          "#4381b2",
+          "#6e9ec4",
+          "#9cbbd3",
+          "#c8d8e4",
+          "#eef3f6"
+        ]
+      },
+      "grass-deep": {
+        "role": "tertiary",
+        "displayName": "Grass Deep",
+        "canonical": "#44684A",
+        "tonalRamp": [
+          "#202c22",
+          "#354a39",
+          "#496a4e",
+          "#61946a",
+          "#85ad8c",
+          "#abc4af",
+          "#d0dcd2",
+          "#f1f4f1"
+        ]
+      },
+      "ochre": {
+        "role": "tertiary",
+        "displayName": "Ochre",
+        "canonical": "#A8742A",
+        "tonalRamp": [
+          "#372916",
+          "#5e4521",
+          "#88612a",
+          "#c38732",
+          "#d1a361",
+          "#dbbe94",
+          "#e8d9c4",
+          "#f7f3ed"
+        ]
+      },
+      "crimson": {
+        "role": "tertiary",
+        "displayName": "Crimson",
+        "canonical": "#A34243",
+        "tonalRamp": [
+          "#321b1b",
+          "#552a2b",
+          "#7b3839",
+          "#ad4748",
+          "#c17172",
+          "#d19f9f",
+          "#e3caca",
+          "#f6efef"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "White",
+        "canonical": "#FFFFFF",
+        "tonalRamp": [
+          "#262626",
+          "#404040",
+          "#595959",
+          "#7a7a7a",
+          "#999999",
+          "#b8b8b8",
+          "#d6d6d6",
+          "#f2f2f2"
+        ]
+      },
+      "paint-brick": {
+        "role": "tertiary",
+        "displayName": "Paint Brick",
+        "canonical": "#E19E8C",
+        "tonalRamp": [
+          "#361d16",
+          "#5e2f22",
+          "#873f2b",
+          "#c15234",
+          "#d07962",
+          "#daa495",
+          "#e8ccc5",
+          "#f7efed"
+        ]
+      },
+      "paint-yellow": {
+        "role": "tertiary",
+        "displayName": "Paint Yellow",
+        "canonical": "#E8C67D",
+        "tonalRamp": [
+          "#3a2d13",
+          "#634d1c",
+          "#906d22",
+          "#cf9926",
+          "#dbb157",
+          "#e1c78e",
+          "#ebdec1",
+          "#f8f4ed"
+        ]
+      },
+      "paint-grass": {
+        "role": "tertiary",
+        "displayName": "Paint Grass",
+        "canonical": "#9BC093",
+        "tonalRamp": [
+          "#222d1f",
+          "#374d32",
+          "#4c6e45",
+          "#669a5b",
+          "#89b280",
+          "#aec7a8",
+          "#d1dece",
+          "#f1f4f0"
+        ]
+      },
+      "paint-sky": {
+        "role": "tertiary",
+        "displayName": "Paint Sky",
+        "canonical": "#85B8DC",
+        "tonalRamp": [
+          "#172936",
+          "#23455c",
+          "#2e6185",
+          "#3886bd",
+          "#65a2cd",
+          "#97bdd8",
+          "#c6d9e7",
+          "#eef3f7"
+        ]
+      },
+      "paint-lilac": {
+        "role": "tertiary",
+        "displayName": "Paint Lilac",
+        "canonical": "#B8A8D8",
+        "tonalRamp": [
+          "#231c31",
+          "#392c53",
+          "#4f3b77",
+          "#6b4da8",
+          "#8d75bd",
+          "#b0a1ce",
+          "#d2cbe2",
+          "#f1eff5"
+        ]
+      },
+      "paint-sand": {
+        "role": "tertiary",
+        "displayName": "Paint Sand",
+        "canonical": "#D3AC8A",
+        "tonalRamp": [
+          "#33251a",
+          "#573e29",
+          "#7d5736",
+          "#b17744",
+          "#c4966e",
+          "#d2b69d",
+          "#e4d5c9",
+          "#f6f2ef"
+        ]
+      },
+      "paint-teal": {
+        "role": "tertiary",
+        "displayName": "Paint Teal",
+        "canonical": "#82C2C1",
+        "tonalRamp": [
+          "#1d302f",
+          "#2e5151",
+          "#3e7473",
+          "#51a4a3",
+          "#79b9b8",
+          "#a3cccb",
+          "#cce0e0",
+          "#eff5f5"
+        ]
+      },
+      "wash-yellow": {
+        "role": "tertiary",
+        "displayName": "Wash Yellow",
+        "canonical": "#F7E8C4",
+        "tonalRamp": [
+          "#3b2f11",
+          "#675019",
+          "#95721d",
+          "#d6a01f",
+          "#e0b652",
+          "#e4ca8b",
+          "#ede0c0",
+          "#f8f5ec"
+        ]
+      },
+      "wash-grass": {
+        "role": "tertiary",
+        "displayName": "Wash Grass",
+        "canonical": "#D9EBD5",
+        "tonalRamp": [
+          "#20301c",
+          "#34522e",
+          "#48753d",
+          "#5fa550",
+          "#84ba78",
+          "#aacca3",
+          "#cfe1cc",
+          "#f0f5ef"
+        ]
+      },
+      "wash-sky": {
+        "role": "tertiary",
+        "displayName": "Wash Sky",
+        "canonical": "#D1E6F7",
+        "tonalRamp": [
+          "#13283a",
+          "#1c4464",
+          "#225f91",
+          "#2683cf",
+          "#57a0db",
+          "#8ebce1",
+          "#c1d8eb",
+          "#edf3f8"
+        ]
+      },
+      "wash-lilac": {
+        "role": "tertiary",
+        "displayName": "Wash Lilac",
+        "canonical": "#E6DFF6",
+        "tonalRamp": [
+          "#201736",
+          "#35235c",
+          "#482d85",
+          "#6037be",
+          "#8464ce",
+          "#ab97d9",
+          "#d0c6e7",
+          "#f0eef7"
+        ]
+      },
+      "wash-sand": {
+        "role": "tertiary",
+        "displayName": "Wash Sand",
+        "canonical": "#F5E0CF",
+        "tonalRamp": [
+          "#382414",
+          "#613c1e",
+          "#8d5426",
+          "#c9722b",
+          "#d6935c",
+          "#deb491",
+          "#ead4c3",
+          "#f8f2ed"
+        ]
+      },
+      "yellow-deep": {
+        "role": "neutral",
+        "displayName": "Yellow Deep",
+        "canonical": "#7A5B22",
+        "tonalRamp": [
+          "#362b17",
+          "#5d4823",
+          "#86662d",
+          "#be8e36",
+          "#cea964",
+          "#d9c196",
+          "#e7dbc5",
+          "#f7f4ee"
+        ]
+      },
+      "lilac-deep": {
+        "role": "neutral",
+        "displayName": "Lilac Deep",
+        "canonical": "#6A5988",
+        "tonalRamp": [
+          "#25202c",
+          "#3d354a",
+          "#55496a",
+          "#736194",
+          "#9485ad",
+          "#b4abc4",
+          "#d4d0dc",
+          "#f2f1f4"
+        ]
+      },
+      "sand-deep": {
+        "role": "neutral",
+        "displayName": "Sand Deep",
+        "canonical": "#7D5B40",
+        "tonalRamp": [
+          "#2f251d",
+          "#503e2f",
+          "#735640",
+          "#a17654",
+          "#b7967b",
+          "#cbb5a5",
+          "#e0d5cd",
+          "#f5f2f0"
+        ]
+      },
+      "key-bed": {
+        "role": "neutral",
+        "displayName": "Key Bed",
+        "canonical": "#CBC2B9",
+        "tonalRamp": [
+          "#2a2622",
+          "#474038",
+          "#65594e",
+          "#8c7a69",
+          "#a7998b",
+          "#c0b8af",
+          "#dbd6d2",
+          "#f3f2f1"
+        ]
+      },
+      "key-rail": {
+        "role": "neutral",
+        "displayName": "Key Rail",
+        "canonical": "#DFD8CF",
+        "tonalRamp": [
+          "#2c2721",
+          "#4a4136",
+          "#695b4a",
+          "#927d62",
+          "#ac9b86",
+          "#c3b9ac",
+          "#dcd7d0",
+          "#f4f2f1"
+        ]
+      },
+      "key-black": {
+        "role": "neutral",
+        "displayName": "Key Black",
+        "canonical": "#332C28",
+        "tonalRamp": [
+          "#2a2523",
+          "#463e3a",
+          "#635750",
+          "#89766c",
+          "#a4968e",
+          "#bfb6b0",
+          "#dad5d3",
+          "#f3f2f1"
+        ]
+      },
+      "dusk-ground": {
+        "role": "neutral",
+        "displayName": "Dusk Ground",
+        "canonical": "#191512",
+        "tonalRamp": [
+          "#2b2622",
+          "#483f37",
+          "#66574c",
+          "#8e7867",
+          "#a8978a",
+          "#c1b6ae",
+          "#dbd6d1",
+          "#f4f2f1"
+        ]
+      },
+      "dusk-card": {
+        "role": "neutral",
+        "displayName": "Dusk Card",
+        "canonical": "#24201C",
+        "tonalRamp": [
+          "#2a2623",
+          "#464039",
+          "#63594f",
+          "#897a6b",
+          "#a5998d",
+          "#bfb8b0",
+          "#dad6d2",
+          "#f3f2f1"
+        ]
+      },
+      "dusk-sunken": {
+        "role": "neutral",
+        "displayName": "Dusk Sunken",
+        "canonical": "#2E2924",
+        "tonalRamp": [
+          "#2a2623",
+          "#46403a",
+          "#635950",
+          "#897a6c",
+          "#a4998e",
+          "#bfb8b0",
+          "#dad6d3",
+          "#f3f2f1"
+        ]
+      },
+      "dusk-hairline": {
+        "role": "neutral",
+        "displayName": "Dusk Hairline",
+        "canonical": "#37322D",
+        "tonalRamp": [
+          "#292623",
+          "#45403b",
+          "#615951",
+          "#867a6e",
+          "#a29990",
+          "#bdb8b2",
+          "#d9d6d3",
+          "#f3f2f1"
+        ]
+      },
+      "dusk-line": {
+        "role": "neutral",
+        "displayName": "Dusk Line",
+        "canonical": "#453E38",
+        "tonalRamp": [
+          "#292623",
+          "#453f3a",
+          "#615951",
+          "#87796e",
+          "#a3988f",
+          "#beb7b1",
+          "#d9d6d3",
+          "#f3f2f1"
+        ]
+      },
+      "dusk-control": {
+        "role": "neutral",
+        "displayName": "Dusk Control",
+        "canonical": "#7D7368",
+        "tonalRamp": [
+          "#292624",
+          "#44403b",
+          "#605a52",
+          "#857b6f",
+          "#a29990",
+          "#bdb8b2",
+          "#d9d6d3",
+          "#f3f2f2"
+        ]
+      },
+      "dusk-ink": {
+        "role": "neutral",
+        "displayName": "Dusk Ink",
+        "canonical": "#EDE9E1",
+        "tonalRamp": [
+          "#2d291f",
+          "#4d4433",
+          "#6d6046",
+          "#99845c",
+          "#b0a182",
+          "#c6bda9",
+          "#ded9cf",
+          "#f4f3f0"
+        ]
+      },
+      "dusk-muted": {
+        "role": "neutral",
+        "displayName": "Dusk Muted",
+        "canonical": "#BBB3A8",
+        "tonalRamp": [
+          "#2a2723",
+          "#464139",
+          "#635b50",
+          "#897d6c",
+          "#a59b8d",
+          "#bfb9b0",
+          "#dad7d3",
+          "#f3f2f1"
+        ]
+      },
+      "dusk-key-white": {
+        "role": "neutral",
+        "displayName": "Dusk Key White",
+        "canonical": "#D4D0CB",
+        "tonalRamp": [
+          "#292724",
+          "#45403b",
+          "#615a52",
+          "#867c6f",
+          "#a29a90",
+          "#bdb8b2",
+          "#d9d7d3",
+          "#f3f2f1"
+        ]
+      },
+      "dusk-key-black": {
+        "role": "neutral",
+        "displayName": "Dusk Key Black",
+        "canonical": "#171310",
+        "tonalRamp": [
+          "#2b2621",
+          "#493e37",
+          "#67574b",
+          "#907765",
+          "#aa9788",
+          "#c2b6ad",
+          "#dcd5d1",
+          "#f4f2f1"
+        ]
+      },
+      "dusk-key-bed": {
+        "role": "neutral",
+        "displayName": "Dusk Key Bed",
+        "canonical": "#787069",
+        "tonalRamp": [
+          "#282624",
+          "#43403c",
+          "#5e5954",
+          "#827a72",
+          "#9f9993",
+          "#bcb7b4",
+          "#d8d6d4",
+          "#f3f2f2"
+        ]
+      },
+      "dusk-key-rail": {
+        "role": "neutral",
+        "displayName": "Dusk Key Rail",
+        "canonical": "#332C27",
+        "tonalRamp": [
+          "#2a2623",
+          "#473f39",
+          "#64584f",
+          "#8a786a",
+          "#a6978c",
+          "#bfb6b0",
+          "#dad6d2",
+          "#f3f2f1"
+        ]
+      },
+      "dusk-sand": {
+        "role": "neutral",
+        "displayName": "Dusk Sand",
+        "canonical": "#3C3026",
+        "tonalRamp": [
+          "#2c2620",
+          "#4b3f34",
+          "#6b5848",
+          "#95785f",
+          "#ae9784",
+          "#c5b6aa",
+          "#ddd6d0",
+          "#f4f2f0"
+        ]
+      },
+      "dusk-yellow": {
+        "role": "neutral",
+        "displayName": "Dusk Yellow",
+        "canonical": "#3E3420",
+        "tonalRamp": [
+          "#2f291d",
+          "#50452f",
+          "#726240",
+          "#a18754",
+          "#b7a37b",
+          "#cabea5",
+          "#e0d9cd",
+          "#f5f3f0"
+        ]
+      },
+      "dusk-grass": {
+        "role": "neutral",
+        "displayName": "Dusk Grass",
+        "canonical": "#2B3728",
+        "tonalRamp": [
+          "#242b22",
+          "#3b4838",
+          "#52664d",
+          "#6f8d67",
+          "#90a88a",
+          "#b2c1ae",
+          "#d3dbd2",
+          "#f1f4f1"
+        ]
+      },
+      "dusk-sky": {
+        "role": "neutral",
+        "displayName": "Dusk Sky",
+        "canonical": "#253541",
+        "tonalRamp": [
+          "#1f272e",
+          "#32424e",
+          "#445c6f",
+          "#597f9b",
+          "#7f9db3",
+          "#a7bac8",
+          "#ced7de",
+          "#f0f3f4"
+        ]
+      },
+      "dusk-lilac": {
+        "role": "neutral",
+        "displayName": "Dusk Lilac",
+        "canonical": "#352F40",
+        "tonalRamp": [
+          "#25222a",
+          "#3d3848",
+          "#564d65",
+          "#75688d",
+          "#958ba7",
+          "#b5afc1",
+          "#d5d2db",
+          "#f2f1f3"
+        ]
+      },
+      "sand-light": {
+        "role": "neutral",
+        "displayName": "Sand Light",
+        "canonical": "#DBB697",
+        "tonalRamp": [
+          "#342519",
+          "#593e27",
+          "#7f5633",
+          "#b57540",
+          "#c7956b",
+          "#d4b59b",
+          "#e5d5c8",
+          "#f6f2ee"
+        ]
+      },
+      "yellow-light": {
+        "role": "neutral",
+        "displayName": "Yellow Light",
+        "canonical": "#E3C383",
+        "tonalRamp": [
+          "#382c15",
+          "#604a20",
+          "#8b6a28",
+          "#c6942e",
+          "#d4ad5e",
+          "#ddc492",
+          "#e9dcc3",
+          "#f7f4ed"
+        ]
+      },
+      "grass-light": {
+        "role": "neutral",
+        "displayName": "Grass Light",
+        "canonical": "#8FC090",
+        "tonalRamp": [
+          "#1f2e1f",
+          "#314e32",
+          "#436f44",
+          "#599c5a",
+          "#7fb380",
+          "#a7c8a8",
+          "#cedfce",
+          "#f0f5f0"
+        ]
+      },
+      "sky-light": {
+        "role": "neutral",
+        "displayName": "Sky Light",
+        "canonical": "#89B7DE",
+        "tonalRamp": [
+          "#172836",
+          "#23425c",
+          "#2d5d85",
+          "#3780be",
+          "#649dce",
+          "#96bad9",
+          "#c5d8e7",
+          "#eef3f7"
+        ]
+      },
+      "lilac-light": {
+        "role": "neutral",
+        "displayName": "Lilac Light",
+        "canonical": "#BDAFD9",
+        "tonalRamp": [
+          "#231c30",
+          "#3a2e52",
+          "#503d75",
+          "#6c50a5",
+          "#8e78ba",
+          "#b1a3cd",
+          "#d3cce1",
+          "#f1eff5"
+        ]
+      },
+      "ochre-light": {
+        "role": "neutral",
+        "displayName": "Ochre Light",
+        "canonical": "#E0B26F",
+        "tonalRamp": [
+          "#382a14",
+          "#61461f",
+          "#8c6327",
+          "#c8892d",
+          "#d6a45c",
+          "#debf92",
+          "#e9dac3",
+          "#f8f3ed"
+        ]
+      },
+      "crimson-light": {
+        "role": "neutral",
+        "displayName": "Crimson Light",
+        "canonical": "#E18885",
+        "tonalRamp": [
+          "#371716",
+          "#5f2321",
+          "#892d2a",
+          "#c33632",
+          "#d26460",
+          "#db9694",
+          "#e8c5c4",
+          "#f7eeed"
+        ]
+      },
+      "sky-night": {
+        "role": "neutral",
+        "displayName": "Sky Night",
+        "canonical": "#1F303E",
+        "tonalRamp": [
+          "#1d272f",
+          "#2f4151",
+          "#3f5c73",
+          "#527ea3",
+          "#7a9cb8",
+          "#a4b9cb",
+          "#ccd7e0",
+          "#f0f3f5"
+        ]
+      },
+      "sky-night-ink": {
+        "role": "neutral",
+        "displayName": "Sky Night Ink",
+        "canonical": "#C2DBF1",
+        "tonalRamp": [
+          "#152738",
+          "#204260",
+          "#285c8a",
+          "#2f7fc6",
+          "#5e9dd4",
+          "#93badc",
+          "#c4d7e9",
+          "#edf3f7"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "A screen's title from 1024px."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Everything read."
+      },
+      "control": {
+        "displayName": "Control",
+        "purpose": "Buttons, values, segments."
+      }
+    },
+    "shadows": [
+      {
+        "name": "elevation-1",
+        "value": "var(--elevation-1)",
+        "purpose": "Resting second actions."
+      },
+      {
+        "name": "elevation-2",
+        "value": "var(--elevation-2)",
+        "purpose": "The main action and the transport."
+      },
+      {
+        "name": "elevation-3",
+        "value": "var(--elevation-3)",
+        "purpose": "Under a pointer, or an open dial."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "The one curve."
+      },
+      {
+        "name": "sheet",
+        "value": "cubic-bezier(0.32, 0.72, 0, 1)",
+        "purpose": "Sheets, 450ms."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one honey action of a screen.",
+      "html": "<button class=\"ds-btn-primary\">Practise</button>",
+      "css": ".ds-btn-primary{font-family:var(--font-sans);font-size:1rem;font-weight:600;border-radius:var(--radius-control);height:2.75rem;padding:0 1rem;transition:background-color .2s cubic-bezier(.22,1,.36,1);background:var(--primary);color:var(--primary-foreground);border:0}.ds-btn-primary:hover{filter:brightness(.95)}.ds-btn-primary:focus-visible{outline:3px solid var(--ring);outline-offset:2px}"
+    },
+    {
+      "name": "Soft Button",
+      "kind": "button",
+      "refersTo": "button-soft",
+      "description": "A second action beside the honey one.",
+      "html": "<button class=\"ds-btn-soft\">Arpeggio</button>",
+      "css": ".ds-btn-soft{font-family:var(--font-sans);font-size:1rem;font-weight:600;border-radius:var(--radius-control);height:2.75rem;padding:0 1rem;transition:background-color .2s cubic-bezier(.22,1,.36,1);background:var(--card);color:var(--foreground);border:1px solid var(--input)}.ds-btn-soft:hover{background:var(--muted)}.ds-btn-soft:focus-visible{outline:3px solid var(--ring);outline-offset:2px}"
+    },
+    {
+      "name": "Destructive Button",
+      "kind": "button",
+      "refersTo": "button-destructive",
+      "description": "Card paper with a crimson line and label.",
+      "html": "<button class=\"ds-btn-danger\">Delete</button>",
+      "css": ".ds-btn-danger{font-family:var(--font-sans);font-size:1rem;font-weight:600;border-radius:var(--radius-control);height:2.75rem;padding:0 1rem;transition:background-color .2s cubic-bezier(.22,1,.36,1);background:var(--card);color:var(--destructive);border:1px solid var(--destructive)}.ds-btn-danger:hover{background:color-mix(in oklab,var(--destructive) 10%,transparent)}.ds-btn-danger:focus-visible{outline:3px solid var(--destructive);outline-offset:2px}"
+    },
+    {
+      "name": "Segmented",
+      "kind": "custom",
+      "refersTo": "segmented-selected",
+      "description": "Two to five choices, all in sight, the chosen in the neutral fill.",
+      "html": "<div class=\"ds-seg\" role=\"radiogroup\"><button aria-checked=\"true\" role=\"radio\">Lessons</button><button aria-checked=\"false\" role=\"radio\">Courses</button></div>",
+      "css": ".ds-seg{display:inline-flex;border:1px solid var(--input);border-radius:var(--radius-control);background:var(--card);overflow:hidden}.ds-seg button{height:2.75rem;padding:0 1rem;border:0;background:none;color:var(--muted-foreground);font:600 1rem var(--font-sans)}.ds-seg button:hover{background:var(--muted)}.ds-seg button[aria-checked=true]{background:var(--chosen);color:var(--foreground)}"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Card paper on the page, parted by a 1px soft line, never a shadow.",
+      "html": "<div class=\"ds-card\"><h3>Still, my soul</h3><p>G major · 4/4</p></div>",
+      "css": ".ds-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);padding:1.25rem;color:var(--foreground)}.ds-card h3{margin:0;font:600 1.25rem/1.25 var(--font-display)}.ds-card p{margin:.25rem 0 0;color:var(--muted-foreground);font:400 .875rem var(--font-sans)}"
+    },
+    {
+      "name": "Row Link",
+      "kind": "nav",
+      "refersTo": "row-link",
+      "description": "A row that opens a page: label, value, chevron.",
+      "html": "<a class=\"ds-row\" href=\"#\"><span>Key signature</span><span>G major ›</span></a>",
+      "css": ".ds-row{display:flex;justify-content:space-between;align-items:center;min-height:4rem;padding:0 1rem;background:var(--card);color:var(--foreground);font:600 1.0625rem var(--font-sans);text-decoration:none;border-radius:var(--radius-card)}.ds-row:hover{background:var(--muted)}.ds-row span+span{color:var(--muted-foreground);font-weight:400;font-size:1rem}"
+    }
+  ],
+  "narrative": {
+    "northStar": "A labelled picture book of the piano, printed quietly",
+    "overview": "The keyboard and the music are cut open, and every key, chord and control wears its printed name. Warm paper for the\npage, a lighter paper for the cards on it, a soft 1px line round every card and control, and seven paints faded to one\neven lightness so any two sit together. Titles and chord symbols are set in a book serif; everything read and every\ncontrol is in a sans.\n\nThe app is read from a phone on a music stand, glanced at between chords with both hands on the keys, and written in\non a laptop. The labelled keyboard is the hero: on every screen that sounds anything it plays when touched, and every\nkey the app sounds goes down on it. Density is low, targets are 44px, and colour carries meaning, so it is spent\nsparingly. These screens are Operate surfaces (lessons and How to use are Read): precision and restraint, patterns the\nlearner already knows.\n\nNot this: mascots, kicker labels over headings, the dark neon piano app.",
+    "keyCharacteristics": [
+      "Two papers and a 1px line do the work a shadow does elsewhere.",
+      "One honey control per screen; the chosen is neutral.",
+      "Every paint means one thing, by where it appears.",
+      "A book serif for names, a sans for reading and acting.",
+      "Floating things float, and nothing jumps."
+    ],
+    "rules": [
+      {
+        "name": "The One Honey Rule",
+        "body": "Each screen has exactly one honey control, borderless, ink on it. A second action beside it is soft: card paper in the control line.",
+        "section": "colors"
+      },
+      {
+        "name": "The Neutral Choice Rule",
+        "body": "What is chosen wears the chosen fill or an umber check, never a paint, so colour keeps meaning something. The navigation is monochrome for the same reason.",
+        "section": "colors"
+      },
+      {
+        "name": "The Palette Law",
+        "body": "Role colours sit on chord tones, hand colours in the Player, chrome paints as washes naming a place or a kind. Brick means the root and the right hand, nothing else.",
+        "section": "colors"
+      },
+      {
+        "name": "The Second Cue Rule",
+        "body": "Colour is never the only cue: a coloured key always shows its degree, finger or note.",
+        "section": "colors"
+      },
+      {
+        "name": "The Serif Names Rule",
+        "body": "Literata at 600 sets every `h1`–`h3` and every chord symbol. It never sets a control, a tab or a key label.",
+        "section": "typography"
+      },
+      {
+        "name": "The Printed Chord Rule",
+        "body": "A chord on screen is printed (`C♯m7`). What is stored, typed or put in a URL stays ASCII.",
+        "section": "typography"
+      },
+      {
+        "name": "The Still Numbers Rule",
+        "body": "Numbers that change in place (tempo, counts, bars, fingers, times) are tabular. Neither face fakes a bold.",
+        "section": "typography"
+      },
+      {
+        "name": "The Floating Rule",
+        "body": "The transport, the floating actions and the zoom buttons take no layout room; the page gets scroll room under them, and over music they step aside while it is read.",
+        "section": "layout"
+      },
+      {
+        "name": "The Still Screen Rule",
+        "body": "Nothing jumps. Controls hold their place between the Player and the editor and on entering Select; what floats is measured before first paint; a score being engraved keeps its old drawing until the new one is whole.",
+        "section": "layout"
+      },
+      {
+        "name": "The Piano Exception Rule",
+        "body": "The rail's 8px shade, a white key's lip and a black key's slope draw a piano and appear nowhere else.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Whole Card Rule",
+        "body": "Rows inside a rounded card keep its corners; nothing square pokes out.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do give each screen one honey control and show the chosen in neutrals.",
+      "Do part cards by surface and a 1px line.",
+      "Do label every coloured key, and give every quiet value a firm one under `prefers-contrast: more`.",
+      "Do set titles and chord symbols in Literata 600 and everything else in Onest.",
+      "Do keep targets at 44px and focus visible, with a shared component for every kind of thing."
+    ],
+    "donts": [
+      "Don't fill a second control with colour, or show the chosen in a paint.",
+      "Don't colour the navigation, or put a chord role or hand colour on the chrome.",
+      "Don't set a control in the serif.",
+      "Don't draw a 2px line round a card or lift a card with a shadow.",
+      "Don't draw a key that does nothing, stack a sheet on a sheet, or write how-to paragraphs.",
+      "Don't hang anything under a screen's bar, or cut a title that two lines could hold."
+    ]
+  }
+}
