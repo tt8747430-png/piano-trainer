@@ -15,14 +15,14 @@ Then append the common part below unchanged. Launch with `isolation: "worktree"`
 ---
 
 ## Setup
-- If `node_modules` is missing in your worktree, run `ln -s /home/user/piano-trainer/node_modules node_modules`. Do not run `npm install`, because the folder is shared. If you need a package, say so in your report.
+- If `node_modules` is missing in your worktree, run `ln -s /home/user/piano-trainer/node_modules node_modules`. Do not run `npm install`, because the folder is shared. If you need a package install it directly.
 - Run `git merge claude/keen-gates-q9bnit` first. That local branch holds every round before yours.
 - Read these first:
   - `CLAUDE.md`, whose rules bind you;
-  - `docs/CODE_STYLE.md`, `DESIGN.md` and `docs/UBIQUITOUS_LANGUAGE.md`;
+  - `docs/CODE_STYLE.md`, `DESIGN.md` ;
   - the round's spec in `.scratch/<feature>/spec.md`, if it has one;
   - the ADR of each area your round changes (`docs/adr/README.md` lists them) and any other your brief names.
-- Chordify research notes are in `/tmp/claude-0/-home-user-piano-trainer/05b98fad-a70e-53a3-9b61-b349107350d2/scratchpad/chordify/research.md`. Read them for behaviour only: never copy Chordify's code or wording. chordify.net blocks automated access, so do not try to reach it.
+- Chordify research notes are in `/tmp/claude-0/-home-user-piano-trainer/05b98fad-a70e-53a3-9b61-b349107350d2/scratchpad/chordify/research.md`. Read them for their features and implement as close as possible.  copy Chordify's code or wording. chordify.net blocks automated access, so  try to reach it with headless browsers. 
 
 ## The owner's standing rules
 - The quality of real apps.
@@ -47,7 +47,8 @@ Then append the common part below unchanged. Launch with `isolation: "worktree"`
 - Screenshots:
   - Run a dev server with `npx vite --port <your port> --strictPort` in the background.
   - Use Playwright: `require('/opt/node-tools/node_modules/playwright-core')`, `chromium.launch({ executablePath: '/opt/pw-browsers/chromium' })`, deviceScaleFactor 2.
-  - Shoot each screen your brief lists at 402×874 and 1280×800; add 320×693 and 874×402 only where something may be clipped.
+  - Shoot each screen your brief lists at check the real iphone 14 Pro   app sizes. check the real sizes and real safari sizes , check the real improve MacBook Air M3 15 Inch  app sizes. check the real sizes and real safari sizes 
+ only where something may be clipped.
   - Look at every shot and fix what is cut, crowded or misaligned.
 - Background work:
   - Give every long command a limit of about twice what it needs (`timeout 1800 <command>` for a large test run), so a mistake cannot run on. Your own work has no time limit.
@@ -61,3 +62,4 @@ Then append the common part below unchanged. Launch with `isolation: "worktree"`
 - The screenshot paths.
 - Your decisions.
 - That nothing you started is still running.
+- everythgins must be implemented and nothigns should be left uninmplemented

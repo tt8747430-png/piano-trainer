@@ -19,10 +19,10 @@ Compare against real apps, never against "good enough for a prototype":
 | Engraving | LilyPond and abcjs rules, Verovio (the engine we use) |
 | Player views, chords, lessons | Chordify (no guitar features) |
 | Library, folders, archive, swipe actions, dialogs above the keyboard | Mindscape and the owner's `memory-palaces` repo, whose code you may copy |
-| Metronome, time/key/clef/tempo pickers | the owner's screenshots |
+| Metronome, time/key/clef/tempo pickers | the owner's screenshots, and the chordify apps and other references from the piano-data|
 | New song / new score, creating things | Flat's new score (`piano-data/reference-apps/flat-score-editor`, IMG_4516–4522): one sheet, steppers, a key-signature grid, time tiles, Create pinned |
 | Public library, publish, export, a deck's actions, Profile | Noji (`piano-data/reference-apps/new_app_2`) |
-| Profile tab, Settings, the tab bar shown and hidden, selection bar | memory-palaces (`/home/user/memory-palaces`: `AppNav`, `BottomDock`, `ProfilePage`, `SettingsPage`) |
+| Profile tab, Settings, the tab bar shown and hidden, selection bar | memory-palaces (`/home/user/memory-palaces`: `AppNav`, `BottomDock`, `ProfilePage`, `SettingsPage`), and also other best practices apps.  |
 | Lesson and course editors | Obsidian's live preview, Notion/Craft's floating toolbar |
 
 When the owner points at a reference, study how that app actually behaves: its help docs, its layout on a phone and on a desktop, its icons and names. Then come as close as our look allows. "Try to make it as close as possible to this" means the layout, the interaction and the features, not a loose nod to them.
@@ -41,9 +41,9 @@ These come straight from their feedback. Each has burned a round before.
   publishable key). Config lives in the host's environment variables (Vercel's), with a `.env.example` of names
   and placeholders in the repo; `.env*` stays in `.gitignore`.
 - Security, secrets, accounts, hosting and what the repo exposes are never decided on the owner's behalf, not even
-  in autonomous mode: ask, or leave it as the owner's to-do with the steps.
+  in autonomous mode.
 - Supabase: the project's MCP server is in `.mcp.json` (the owner authenticates it with `/mcp` on their computer); a
-  cloud session uses its connected Supabase tools. The `supabase` skills come before any database work.
+  cloud session uses its connected Supabase tools. The `supabase` skills come before any database work. You are allowed to do any supabase database actions. and in automonomous mode the supabase doesnt ask me to allow but you can directly do what you want and implement with the best practices. 
 
 **Interaction** (rounds 24–25: each of these sent a round back)
 - One way to each action: no button that repeats a row, menu item or field beside it. Adding a direct way removes
@@ -58,7 +58,7 @@ These come straight from their feedback. Each has burned a round before.
 - Never ship a flaw you noticed and "report" it: fix it to the obvious right behaviour first.
 
 **Layout**
-- Phone and desktop have the same features, text and layout logic. Check an iPhone (402×874 and 393×852, and 320×693 with Display Zoom), a phone on its side (874×402) and a laptop (1280×800). Nothing may be clipped, overflow or wrap badly at 320px.
+- Phone and desktop have the same features, text and layout logic. Check an iPhone (402×874 check the real iphone 14 Pro app sizes in PWA Mode and in Safari mode), a phone on its side (check the real iphone 14 Pro app sizes in PWA Mode and in Safari mode) and a laptop (check the real  MacBook Air M3 15 Inch  app sizes. check the real sizes and real safari sizes ). Nothing may be clipped, overflow or wrap badly at check the real iiphone 14 Pro app  sizes. check the real sizes and real safari sizes .
 - Floating things float. Palettes, the transport, the zoom controls and the tools reserve no space under them and never push the page. Auto-hide must be reliable.
 - Nothing may trap a click meant for something else. After a popover closes, the next tap must reach its target. Test overlapping layers.
 - Controls must not jump when switching modes (Player ↔ editor) or entering Select mode. Icons stay put and heights stay equal.
@@ -97,8 +97,7 @@ the metronome") produced wrong builds in round 29 and cost a full audit. The gat
    - **Will build:** the screen and its route, where it is reached from, each control in order with its kind and
      its exact English label (the term Flat, Dorico, MuseScore or Sibelius uses), values and default, what
      moves from where to where, what is removed.
-   - **Not in this item.** **Done when:** the tests and the screenshots (390×844, 844×390, 1280×800).
-   - **Owner's question**, only where the brief leaves it open, with the default.
+- everythings must be built and not left. 
 2. **The implementation plan, per subsystem** (`superpowers:writing-plans` / `writing-plans`, saved beside the
    spec): Goal, Architecture, Global Constraints copied verbatim from the brief and the owner's corrections,
    Review Focus, then tasks with files, interfaces, a failing test first, the command, the commit; the
@@ -112,11 +111,11 @@ report, impeccable audit, full gate recorded) before the next starts.
 
 | Thought | Reality |
 |---|---|
-| "The owner asked for it directly, I can just build it" | Describe it first; a direct request is still an item. |
+| "The owner asked for it directly, I can just build it" | Plan it, and implement it with the best practices; a direct request is still an item.  |
 | "I remember what the brief says" | Re-read the section; the audit found builds against lines that were remembered wrong. |
-| "A reference app does it differently, I'll follow that" | The brief and the owner's corrections decide; a reference informs, it does not overrule (round 29's grooves). |
+| "A reference app does it differently, I'll follow that" | The brief and the owner's corrections decide; a reference informs, it does not overrule . |
 | "progress.md says done" | It was wrong for 14 items; check the code. |
-| "It's only docs or a small fix" | Small fixes skip the implementation plan, not the description. |
+| "It's only docs or a small fix" | Small fixes skip the implementation plan, not the description. everythings must be built and not left, and everything that is build must be documented in docs.|
 
 ## Asking the owner: show it, recommend, or decide
 
@@ -173,36 +172,26 @@ add it.
 ## Agents that keep their work
 
 A planning or audit agent writes its file at once (a skeleton of every heading) and saves after each item, so an
-interruption loses nothing; its brief lives in `.scratch/<round>/briefs/`. An agent stopped by the owner cannot be
-resumed: start a new one from its saved file, never from scratch.
+interruption loses nothing; its brief lives in `.scratch/<round>/briefs/`. An agent stopped by the owner can be
+resumed, it also could be stopped by accident, stop only if you receive the word "stop".  when you start a new one, start it from  its saved file, never from scratch.
 
-## Sources: facts, not files
-
-A page or file with no licence is all rights reserved, not free: its code, audio and wording never ship. The facts
-in it (a progression, a groove, a behaviour) may be used in our own words and code. Samples and fonts ship only
-under a licence that allows it (CC0, or CC-BY with the credit in Settings), with each file's source and licence
-written beside it.
+## Sources: direct implementation 
 
 ## How the owner wants work run
 
 1. **Before starting:** fetch and check that the branch is level with `main` (`claude/keen-gates-q9bnit` unless told otherwise).
 2. **A message is not a stop.** When the owner writes while work is running, take in what they say and carry on with the tasks in hand; stop only when they say "stop".
-2b. **Work in rounds, in a loop.** Keep going round after round without asking. Stop only for decisions that are genuinely the owner's, and put those as questions drawn in context ("Asking the owner" above), at the end of the report. When the owner says "continue", pick up exactly where the work stopped.
+2b. **Work in rounds, in a loop.** Keep going round after round without asking. Dont stop at all, until you finish all taks you need to continue. at the end report what you did, with best practices. When the owner says "continue", pick up exactly where the work stopped.
    - **Never end a turn while work is left.** "Why did you stop?" came three times in round 29. A finished item,
      a pushed commit, a passing suite or a report is not a stopping point; the next item is. End only when every
-     task is done or the rest needs the owner, and then say which.
+     task is done and nothing must be left.
    - **Agents that stop are your work:** when one stops (usage limit, error), check what it committed and what
-     is left, and finish it or resume it; never report it as done.
-   - **"Continue with all" means autonomous mode.** Work through every open task (the plan's rounds, the log's
-     "left for later" and deferred items, the review findings) one round after another, without asking anything:
-     no AskUserQuestion, no "shall I…", no stopping to report between rounds. Where a choice is the owner's, take
-     the sensible default (never on secrets, security or hosting: see Secrets and config), write it in the log's
-     decisions with the reason, and carry on; their to-dos (keys,
-     accounts, legal review) go in the log, never block the work. Keep the gate (typecheck, lint, the full suite
-     and the build before `main`) and push each round. Stop only when every task is done, or something needs
-     credentials or an action only the owner can take and nothing else is left; then report once.
+     is left, and continue until everytings is finished and nothing is left; never report it as done.
+   - **"Continue with all" means autonomous mode.** Work through every open task (the plan's rounds, the review findings) one round after another, without asking anything, and everything must be implemented and nothing left:
+     no AskUserQuestion, no "shall I…", no stopping to report between rounds. continue until everything is  implemented and nothing left. Keep the gate (typecheck, lint, the full suite
+     and the build before `main`) and push each round. Stop only when every task is done, and everything is implemented and nothing left; then report with best practices.
 3. **Do the work yourself; agents are the exception.** The owner pays for every agent's context: each one starts from nothing, rereads CLAUDE.md, the docs and the code, and its report lands back in yours. Five agents cost about five sessions. The rule is the *maximum principle*: the best result for the least usage. So:
-   - **By default you work inline**, one task after another, in this session: read only what the task needs, edit, run the tests it reaches, commit. Most rounds, including feature rounds and bug hunts, are done this way.
+   - **By default you work inline**, one task after another, in this session, a command that is more than 10 seconds must be run in background so that you can continue to do other thigns: read only what the task needs, edit, run the tests it reaches, commit. Most rounds, including feature rounds and bug hunts, are done this way.
    - **Use an agent only when all of these hold:** the work is large (hours, not minutes), it splits into parts that touch different files, each part can be briefed in under a page without the chat's history, and running them in parallel saves the owner real time. Two or three agents at most; never more than the parts that are truly independent.
    - **Cheap jobs get a cheap model:** reading saved pages, screenshots or docs to write notes, a mechanical edit with a complete spec, or a search goes to a smaller model (`model: "sonnet"`, or `"haiku"` for pure extraction), read-only, with no worktree. Judgment, design and multi-file code take the strongest model.
    - **Never delegate** a lookup you can do in a few tool calls, a review you could do by reading the diff, or work whose brief would need the conversation's history.
@@ -219,7 +208,7 @@ written beside it.
    - **Flaky tests:** a test that fails only under load and passes alone gets made robust (e.g. a longer wait on engraving), and you say so.
 5. **Commits:** one proper commit per finished task. The message says what changed and why and ends with the session's attribution lines. Prettier never runs on CLAUDE.md.
 6. **Merge and push:** once the merged suite and the build are green, update the docs (see below), then run `git push -u origin <branch> && git push origin HEAD:main`. Remove finished worktrees and their branches.
-7. **Context:** keep it under about 300k tokens. Read the part of a file you need (offset and limit, grep), never whole long files; keep tool output short (filter test and build output to the summary lines). When reading a large batch of pages or images is unavoidable, one cheap read-only agent writes notes to a file.
+7. **Context:** keep it under about 450 tokens. Read the part of a file you need (offset and limit, grep), never whole long files; keep tool output short (filter test and build output to the summary lines). When reading a large batch of pages or images is unavoidable, one cheap read-only agent writes notes to a file.
 8. **Data and content:**
    - **Transcriptions:** a transcribed score must match the source note for note. Check it again before merging.
    - **Bobrova:** material from Bobrova's books is credited to Bobrova, as is everything marked "n.b.".
@@ -229,13 +218,13 @@ written beside it.
    - **The owner's reference material** is in `piano-data/` (books, scores, screenshots of other apps, saved web pages in `piano-data/web-references/`). Read what the task needs; the app reads none of it at runtime.
    - **Saved pages are a starting point, not the whole source.** When they lack something the work needs (more fingerings, chord types, scales, progressions, terms), fetch the rest of the same sites (piano.org, musicca.com, vitapiano.com, the chord-chart sites, Flat's and Dorico's help) with WebFetch or curl, and search the web where no saved site covers it.
    - **Facts and behaviour only:** check every fact against music theory (sites have errors: note any you find), never copy wording, code or assets.
-   - **Open-source references** (LilyPond, abcjs, Verovio, memory-palaces) may be read for how they solve a problem and, where licences allow, ported to TypeScript.
-   - **Prefer an existing library** to hand-written code when one does the job well; say so before adding a package, and never `npm install` in a worktree.
+   - **Open-source references** (LilyPond, abcjs, Verovio, memory-palaces) may be read for how they solve a problem and, ported to TypeScript.
+   - **Prefer an existing library** to hand-written code when one does the job well.
 10. **Merging to `main`:**
-    - Code reaches `main` only after the full suite and the build pass on the merged branch.
+    - Code reaches `main` only after the full suite and the build pass on the merged branch. such  command that is more than 10 seconds must be run in background so that you can continue to do other thigns
     - Docs, skills, prompts and settings that touch no code may go to `main` at once (picked onto it), so the next session has them; say that you did.
     - Ignore Vercel's deployment status and CI; the local checks are the gate.
-11. **When the usage limit stops the work:** wait for the reset, then resume each stopped agent with SendMessage from where it stopped (its work is saved), never start it again from scratch. When the owner says "continue", pick up exactly there.
+11. **When the usage limit stops the work:** wait for the reset, then resume each stopped agent with SendMessage from where it stopped (its work is saved), never start it again from scratch.
 12. **A question to answer, not a task to do:** when the owner asks something ("why …", "have you …", "what about …"), answer it first, in a line or two, before doing anything else; when they ask you to research and then say what you will do, stop after saying it.
 
 ## How to work well (the best practices this skill adopts)
@@ -250,9 +239,7 @@ Keep reports short, answer first, no preamble or recap:
 - the decisions that are the owner's, as direct questions;
 - the push state: branch, `main`, and whether tests and the build passed.
 
-In a review loop, keep a running list of areas reviewed and areas left, and give it in each round's report.
-
-If agents are running and the owner asks, say so; never guess their results. If something takes long, explain where the time goes and how to make it faster.
+IN a review loop everything must be implemented and nothing left.
 
 ## Repo facts the work depends on
 
@@ -265,4 +252,4 @@ If agents are running and the owner asks, say so; never guess their results. If 
   - **ADRs:** amend the area's ADR (`docs/adr/README.md`), styled like 0105: the decision as it stands now, one line in its History. A new ADR only for a new area, added to the README's index. `DESIGN.md` where the look changed.
   - **Glossary:** rows in `docs/UBIQUITOUS_LANGUAGE.md`.
   - **CLAUDE.md:** its rules and short map, kept current: rename what was renamed and drop what was deleted. It stays a map, never a list of components; detail goes in the ADR.
-- **Never:** a model ID in a commit; copying Chordify's code; retrying bot-check circumvention against chordify.net. The owner's saved Chordify page holds their account details, so never copy it into the repo.
+- **Never:** a model ID in a commit. 
