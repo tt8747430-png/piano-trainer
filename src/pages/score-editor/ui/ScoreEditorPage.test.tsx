@@ -69,15 +69,22 @@ async function writeChord(user: ReturnType<typeof userEvent.setup>, bar: number,
 }
 
 /**
- * Opens a category of the palette from its strip of categories (R31-E), every tool of it shown (the
- * floating sheet unfolded on a phone): its region, named for it.
+ * Opens a category of the palette (R32-C, Flat's): on a phone from its strip of categories, the
+ * floating sheet unfolded to every section; in a laptop's panel its section, unfolded where its title
+ * folded it. Its region, named for it.
  */
 async function openCategory(user: ReturnType<typeof userEvent.setup>, category: string) {
-  const strip = await screen.findByRole('toolbar', { name: 'Palette categories' })
-  await user.click(within(strip).getByRole('button', { name: category }))
-  const more = screen.queryByRole('button', { name: 'Expand palette' })
-  if (more) await user.click(more)
-  return screen.findByRole('region', { name: category })
+  await screen.findByRole('region', { name: 'Editor panel' })
+  const strip = screen.queryByRole('toolbar', { name: 'Palette categories' })
+  if (strip) {
+    await user.click(within(strip).getByRole('button', { name: category }))
+    const more = screen.queryByRole('button', { name: 'Expand palette' })
+    if (more) await user.click(more)
+  }
+  const region = await screen.findByRole('region', { name: category })
+  const title = within(region).queryByRole('button', { name: category, expanded: false })
+  if (title) await user.click(title)
+  return region
 }
 
 /**
@@ -344,7 +351,7 @@ describe('the score editor', () => {
     expect(await screen.findByRole('button', { name: 'Expand palette' })).toBeInTheDocument()
   })
 
-  it('docks its palette as a panel at the sheet’s side where there is room: every category, the chosen one’s grids (R31-E)', async () => {
+  it('docks its palette as a panel at the sheet’s side where there is room: every section stacked, each folding by its title (R32-C, Flat’s)', async () => {
     const user = userEvent.setup()
     sizedAs('(min-width: 48rem)')
     await renderApp('/edit/my-1', { storage: withSong() })
@@ -356,10 +363,16 @@ describe('the score editor', () => {
     expect(within(notes).getByRole('button', { name: 'Quarter note' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Expand palette' })).not.toBeInTheDocument()
     expect(screen.queryByRole('toolbar', { name: 'Note input' })).not.toBeInTheDocument()
-    await user.click(within(palette).getByRole('button', { name: 'Dynamics' }))
-    const dynamics = await within(palette).findByRole('region', { name: 'Dynamics' })
-    expect(within(dynamics).getByRole('button', { name: 'Forte' })).toBeInTheDocument()
-    expect(within(palette).queryByRole('region', { name: 'Note' })).not.toBeInTheDocument()
+    // No strip of categories: every section in one scroll, as Flat's web panel.
+    expect(screen.queryByRole('toolbar', { name: 'Palette categories' })).not.toBeInTheDocument()
+    for (const name of ['Measures and brackets', 'Key signature', 'Time signature', 'Text'])
+      expect(within(palette).getByRole('region', { name })).toBeInTheDocument()
+    // A section folds by its title, and comes back.
+    const title = within(notes).getByRole('button', { name: 'Note', expanded: true })
+    await user.click(title)
+    expect(within(notes).queryByRole('button', { name: 'Quarter note' })).not.toBeInTheDocument()
+    await user.click(within(notes).getByRole('button', { name: 'Note', expanded: false }))
+    expect(within(notes).getByRole('button', { name: 'Quarter note' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Piano keys' })).toBeInTheDocument()
   })
 
@@ -433,13 +446,13 @@ describe('the score editor', () => {
     )
   })
 
-  it('adds a tempo change at the caret from Text, and deletes it (A34)', async () => {
+  it('adds a tempo change at the caret from Measure’s Tempo, and deletes it (R32-C, Flat’s)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', {
       storage: withSong({ staves: [{ notes: 'B4/4 | A4/4 | G4/4 | F#4/4' }] }),
     })
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Staff 1 · Bar 1/))
-    const text = await openCategory(user, 'Text')
+    const text = await openCategory(user, 'Measures and brackets')
     await user.click(within(text).getByRole('button', { name: 'Tempo change' }))
     const change = await screen.findByRole('dialog', { name: 'Tempo change' })
     // Mid-song, the song's beat: no Beat, no words, and nothing to delete yet.
@@ -476,12 +489,7 @@ describe('the score editor', () => {
     })
     // The verse's: the song's own key, the music moved with it; the sign opens the palette's Key.
     const song = await tapPrinted(user, 'Key signature, bar 1', 'Key signature')
-    expect(within(song).getByText('Applies to the whole song')).toBeInTheDocument()
-    await user.click(
-      within(within(song).getByRole('group', { name: 'Key' })).getByRole('button', {
-        name: /^A major/,
-      }),
-    )
+    await user.click(within(song).getByRole('button', { name: /^A major/ }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         key: 'A',
@@ -490,12 +498,7 @@ describe('the score editor', () => {
     )
     // The chorus's: a key change from it on, its notes where they are.
     const change = await tapPrinted(user, 'Key signature, bar 5', 'Key signature')
-    expect(within(change).getByText('From Chorus (bar 5)')).toBeInTheDocument()
-    await user.click(
-      within(within(change).getByRole('group', { name: 'Key' })).getByRole('button', {
-        name: /^D major/,
-      }),
-    )
+    await user.click(within(change).getByRole('button', { name: /^D major/ }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         key: 'A',
@@ -509,20 +512,16 @@ describe('the score editor', () => {
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await screen.findByRole('status')
     const key = await openCategory(user, 'Key signature')
-    expect(within(key).getByText('Applies to the whole song')).toBeInTheDocument()
     const here = within(key).getByRole('group', { name: 'Key' })
-    // The fifteen signatures, each named by its major and relative minor, C/Am first (A34).
-    expect(within(here).getAllByRole('button')).toHaveLength(15)
-    expect(within(here).getByRole('button', { name: 'C major / A minor' })).toHaveAttribute(
-      'aria-pressed',
-      'false',
-    )
+    // Flat's table: one to seven sharps over one to seven flats, bare, named in their tooltips.
+    expect(within(here).getAllByRole('button')).toHaveLength(14)
     expect(within(here).getByRole('button', { name: 'G major / E minor' })).toHaveAttribute(
       'aria-pressed',
       'true',
     )
-    // At the song's head the key is the song's: no switch for the whole song.
+    // No mode and no switch: Flat's Key signature asks nothing.
     expect(within(key).queryByRole('switch')).not.toBeInTheDocument()
+    expect(within(key).queryByRole('radiogroup')).not.toBeInTheDocument()
     await user.click(within(here).getByRole('button', { name: 'D major / B minor' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
@@ -548,18 +547,14 @@ describe('the score editor', () => {
     // The tap opened the chord's field in the sheet's place: left, the sheet is back.
     await user.keyboard('{Escape}')
     const time = await openCategory(user, 'Time signature')
-    expect(within(time).getByText('From Chorus (bar 5)')).toBeInTheDocument()
-    // Flat's tiles, the meter in force pressed; a tap writes it at once (A34).
+    // Flat's tiles, the meter in force pressed; a tap writes it at once (R32-C).
     expect(within(time).getByRole('button', { name: '4/4' })).toHaveAttribute(
       'aria-pressed',
       'true',
     )
-    // A later section has no pickup: the song's head has.
-    expect(within(time).queryByRole('group', { name: 'Pickup' })).not.toBeInTheDocument()
     // A meter counted in dotted quarters cannot follow the verse's quarters: no 6/8 (R32-B).
     expect(within(time).queryByRole('button', { name: '6/8' })).not.toBeInTheDocument()
     await user.click(within(time).getByRole('button', { name: '3/4' }))
-    await user.click(within(time).getByRole('button', { name: 'Apply' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         meter: '4/4',
@@ -567,25 +562,22 @@ describe('the score editor', () => {
         hands: { lh: 'r/4 | r/4 | r/4 | r/4 | r/3 | r/3 | r/3 | r/3' },
       }),
     )
-    // Its 3/4 printed where the chorus starts opens the same palette: back to the song's 4/4 there.
+    // Its 3/4 printed where the chorus starts opens the same section: Customize, a later section
+    // with no pickup, its wheels back to the song's 4/4 there, written by ✓.
     const change = await tapPrinted(user, 'Time signature, bar 5', 'Time signature')
-    expect(within(change).getByText('From Chorus (bar 5)')).toBeInTheDocument()
-    within(change).getByRole('spinbutton', { name: 'Beats' }).focus()
+    await user.click(within(change).getByRole('button', { name: 'Customize' }))
+    const custom = await screen.findByRole('dialog', { name: 'Customize time signature' })
+    expect(within(custom).queryByRole('group', { name: 'Pickup' })).not.toBeInTheDocument()
+    within(custom).getByRole('spinbutton', { name: 'Beats' }).focus()
     await user.keyboard('{ArrowUp}')
-    await user.click(within(change).getByRole('button', { name: 'Apply' }))
+    await user.click(within(custom).getByRole('button', { name: 'Apply' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         sections: [{ lines: ['G G G G'] }, { lines: ['C C C C'] }],
       }),
     )
     expect(piecesStore.getState().songs[0]?.sections[1]).not.toHaveProperty('meter')
-    // Apply to: Whole song, from the chorus's bar, writes the song's own meter.
-    const whole = await openCategory(user, 'Time signature')
-    await user.click(within(whole).getByRole('radio', { name: 'Whole song' }))
-    await user.click(within(whole).getByRole('button', { name: '2/4' }))
-    await user.click(within(whole).getByRole('button', { name: 'Apply' }))
-    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ meter: '2/4' }))
-    // Two pickers and three engravings of the whole song: longer than one edit's test.
+    // Customize and three engravings of the whole song: longer than one edit's test.
   }, 30_000)
 
   it('puts a repeat round the caret’s bar from Barlines & repeats, saved in the chart', async () => {
@@ -625,7 +617,6 @@ describe('the score editor', () => {
       detail: 1,
     })
     const clef = await openCategory(user, 'Clef')
-    expect(within(clef).getByText('Lower staff, from bar 1')).toBeInTheDocument()
     expect(within(clef).getByRole('button', { name: 'Bass clef' })).toHaveAttribute(
       'aria-pressed',
       'true',
@@ -640,8 +631,10 @@ describe('the score editor', () => {
       'aria-pressed',
       'true',
     )
-    // This bar only: the clef before it back in the next bar (A34).
-    await user.click(within(clef).getByRole('radio', { name: 'This bar' }))
+    // A range chosen takes the clef alone, the clef before it back after it (R32-C, Flat's): no
+    // question asked.
+    expect(within(clef).queryByRole('radiogroup')).not.toBeInTheDocument()
+    await user.keyboard('{Shift>}{ArrowRight}{/Shift}')
     await user.click(within(clef).getByRole('button', { name: 'Tenor clef' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
@@ -704,41 +697,44 @@ describe('the score editor', () => {
     expect(within(bars).queryByRole('button', { name: 'Start repeat' })).not.toBeInTheDocument()
   })
 
-  it('changes the whole song’s time from the one printed: its C and pickup, written by ✓ as one step (R31-E)', async () => {
+  it('writes common time from its tile, and a pickup from Customize by ✓ as one step (R32-C, Flat’s)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    const openPicker = () => tapPrinted(user, 'Time signature, bar 1', 'Time signature')
-    const picker = await openPicker()
-    // At the song's first bar, the whole song's (ADR 0097), its pickup with it; in one meter,
-    // From this bar and Whole song are one, so neither is offered (R32-B).
-    expect(within(picker).getByText('Applies to the whole song')).toBeInTheDocument()
-    expect(within(picker).queryByRole('radio', { name: 'Whole song' })).not.toBeInTheDocument()
-    const pickup = within(picker).getByRole('spinbutton', { name: 'Pickup beats' })
+    const time = await tapPrinted(user, 'Time signature, bar 1', 'Time signature')
+    // Flat's tiles: common and cut time are tiles of their own, a tap writing at once; nothing else
+    // inline, no wheels and no switch.
+    expect(within(time).queryByRole('spinbutton')).not.toBeInTheDocument()
+    expect(within(time).queryByRole('switch')).not.toBeInTheDocument()
+    await user.click(within(time).getByRole('button', { name: 'Common time, C' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({ meter: '4/4', timeSymbol: true }),
+    )
+    // Customize: at the song's head, the meter's wheels and the pickup's; nothing written until ✓.
+    await user.click(within(time).getByRole('button', { name: 'Customize' }))
+    const custom = await screen.findByRole('dialog', { name: 'Customize time signature' })
+    const pickup = within(custom).getByRole('spinbutton', { name: 'Pickup beats' })
     expect(pickup).toHaveAttribute('aria-valuenow', '0')
-    await user.click(within(picker).getByRole('switch', { name: 'Write as common or cut time' }))
     pickup.focus()
     await user.keyboard('{ArrowUp}')
-    // Nothing written until ✓.
-    expect(songOf(piecesStore.getState())).not.toHaveProperty('timeSymbol')
-    await user.click(within(picker).getByRole('button', { name: 'Apply' }))
+    expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['G G G G'] }] })
+    await user.click(within(custom).getByRole('button', { name: 'Apply' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
-        meter: '4/4',
-        timeSymbol: true,
         sections: [{ lines: ['G@1 G G G'] }],
       }),
     )
-    // One step: Undo takes the pickup and the C back.
+    // One step: Undo takes the pickup back.
     await user.click(screen.getByRole('button', { name: /^Undo/ }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         sections: [{ lines: ['G G G G'] }],
       }),
     )
-    expect(songOf(piecesStore.getState())).not.toHaveProperty('timeSymbol')
     // ✗ leaves it as it was.
-    const again = await openPicker()
-    await user.click(within(again).getByRole('button', { name: '3/4' }))
+    await user.click(within(time).getByRole('button', { name: 'Customize' }))
+    const again = await screen.findByRole('dialog', { name: 'Customize time signature' })
+    within(again).getByRole('spinbutton', { name: 'Beats' }).focus()
+    await user.keyboard('{ArrowDown}')
     await user.click(within(again).getByRole('button', { name: 'Cancel' }))
     expect(songOf(piecesStore.getState())).toMatchObject({ meter: '4/4' })
   })
@@ -749,7 +745,6 @@ describe('the score editor', () => {
       storage: withSong({ hands: SILENT_HANDS }),
     })
     const clef = await tapPrinted(user, 'Clef, Lower staff, bar 1', 'Clef')
-    expect(within(clef).getByText('Lower staff, from bar 1')).toBeInTheDocument()
     expect(within(clef).getByRole('button', { name: 'Bass clef' })).toHaveAttribute(
       'aria-pressed',
       'true',
@@ -773,17 +768,11 @@ describe('the score editor', () => {
     )
   })
 
-  it('writes a song in cut time from its 2/2 tile and the cut time switch, by ✓ (R31-E)', async () => {
+  it('writes a song in cut time from its ¢ tile at once (R32-C, Flat’s)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    const picker = await tapPrinted(user, 'Time signature, bar 1', 'Time signature')
-    // The C or ¢ switch is shown for 4/4 and 2/2 alone (R32-B): the song is in 4/4.
-    expect(
-      within(picker).getByRole('switch', { name: 'Write as common or cut time' }),
-    ).toBeVisible()
-    await user.click(within(picker).getByRole('button', { name: '2/2' }))
-    await user.click(within(picker).getByRole('switch', { name: 'Write as common or cut time' }))
-    await user.click(within(picker).getByRole('button', { name: 'Apply' }))
+    const time = await tapPrinted(user, 'Time signature, bar 1', 'Time signature')
+    await user.click(within(time).getByRole('button', { name: 'Cut time, ¢' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         meter: '2/2',
@@ -1661,7 +1650,10 @@ describe('the score editor', () => {
     expect(within(character).getByRole('button', { name: 'Con brio' })).toHaveAccessibleDescription(
       'With spirit',
     )
-    const tempo = within(text).getByRole('group', { name: 'Tempo changes' })
+    // The tempo words are Measure's, as Flat's (R32-C).
+    expect(within(text).queryByRole('group', { name: 'Tempo changes' })).not.toBeInTheDocument()
+    const measure = await openCategory(user, 'Measures and brackets')
+    const tempo = within(measure).getByRole('group', { name: 'Tempo changes' })
     const rit = within(tempo).getByRole('button', { name: 'Ritardando' })
     expect(within(rit).getByText('rit.')).toBeVisible()
     expect(rit).toHaveAccessibleDescription('Gradually slower')
@@ -1670,7 +1662,7 @@ describe('the score editor', () => {
     )
     const technique = within(text).getByRole('group', { name: 'Technique' })
     expect(within(technique).getByRole('button', { name: 'Mano destra' })).toHaveTextContent('m.d.')
-    await user.click(dolce)
+    await user.click(within(text).getByRole('button', { name: 'Dolce' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         staves: [{ notes: 'B4/4[dolce] | A4/4 | G4/4 | F#4/4' }],

@@ -43,6 +43,7 @@ const DEFAULTS = {
   editing: DEFAULT_EDITING,
   sidebar: DEFAULT_SIDEBAR,
   paletteFolded: true,
+  paletteList: false,
   paletteCategory: null,
   editorMode: 'replace',
   midi: DEFAULT_MIDI,
@@ -160,6 +161,7 @@ describe('createSettingsStore', () => {
       editing: { hearNotes: false, paletteSide: 'right' },
       sidebar: 'collapsed',
       paletteFolded: false,
+      paletteList: true,
       paletteCategory: 'clef',
       editorMode: 'insert',
       midi: {
@@ -359,9 +361,9 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('starts afresh over a save of the version before the editor’s mode as left (R31-E)', () => {
-    expect(SETTINGS_VERSION).toBe(29)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 28)).toEqual(
+  it('starts afresh over a save of the version before the palette’s list view (R32-C)', () => {
+    expect(SETTINGS_VERSION).toBe(30)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 29)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

@@ -30,6 +30,9 @@ export const editor = {
     categories: 'Palette categories',
     // In place of the tools that change notes, while none is chosen (R32-B).
     chooseNote: 'Select a note to use these tools.',
+    // Flat's list view and grid view (R32-C).
+    asList: 'Show as list',
+    asGrid: 'Show as grid',
     keys: 'Keys',
     // A category's sections, each a titled grid (R31-E, Flat's).
     groups: {
@@ -128,7 +131,6 @@ export const editor = {
   },
   // The palette's Clef: the caret's staff changes clef from the bar chosen on (ADR 0097).
   clef: {
-    from: '{{staff}}, from bar {{bar}}',
     family: {
       G: 'G clefs',
       C: 'C clefs',
@@ -155,16 +157,10 @@ export const editor = {
   // The palette's Key and Time and their popovers: a section's key or meter, or the whole song's,
   // changed there (ADR 0114, 0097).
   signature: {
-    // A change of key or time from a section on, up to the next change (ADR 0114, 0097).
-    fromSection: 'From {{section}} (bar {{bar}})',
-    song: 'Applies to the whole song',
     // The key signature picker's tiles (ADR 0114).
     none: 'No key signature',
     // A palette key that opens the picker, named by what is in force.
     change: '{{sign}}: {{now}}',
-    wholeSong: 'Apply to the whole song',
-    wholeSongInfo:
-      'When on, the song’s main key changes and its music is transposed with it. When off, the key changes from this section until the next key change.',
   },
   // Every picker's Cancel and Apply (ADR 0114).
   picker: {
@@ -172,13 +168,6 @@ export const editor = {
     apply: 'Apply',
   },
   // The tempo mark's picker (ADR 0114).
-  // How far a clef chosen in the palette reaches (A34).
-  clefScope: {
-    label: 'Apply clef to',
-    bar: 'This bar',
-    end: 'Until the end',
-    staff: 'Entire staff',
-  },
   // The editor's panel (A40, Flat's): its three tabs.
   instruments: {
     all: 'All',

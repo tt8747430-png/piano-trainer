@@ -24,6 +24,8 @@ export const editor: LocaleResources['editor'] = {
     show: 'Показать панель',
     categories: 'Разделы панели',
     chooseNote: 'Выделите ноту, чтобы воспользоваться этими инструментами.',
+    asList: 'Показать списком',
+    asGrid: 'Показать сеткой',
     keys: 'Клавиши',
     groups: {
       notation: 'Нотация',
@@ -111,7 +113,6 @@ export const editor: LocaleResources['editor'] = {
     'ds-coda': 'Вернуться к знаку сеньо, затем перейти к коде',
   },
   clef: {
-    from: '{{staff}}, с такта {{bar}}',
     family: {
       G: 'Ключи соль',
       C: 'Ключи до',
@@ -136,23 +137,12 @@ export const editor: LocaleResources['editor'] = {
     subbass: 'Ключ фа на пятой линейке',
   },
   signature: {
-    fromSection: 'С раздела «{{section}}» (такт {{bar}})',
-    song: 'Применяется ко всей песне',
     none: 'Без ключевых знаков',
     change: '{{sign}}: {{now}}',
-    wholeSong: 'Применить ко всей песне',
-    wholeSongInfo:
-      'Если включено, меняется основная тональность песни, и музыка транспонируется вместе с ней. Если выключено, тональность меняется с этого раздела до следующей смены тональности.',
   },
   picker: {
     cancel: 'Отмена',
     apply: 'Применить',
-  },
-  clefScope: {
-    label: 'Применить ключ',
-    bar: 'К этому такту',
-    end: 'До конца',
-    staff: 'Ко всему нотоносцу',
   },
   instruments: {
     all: 'Все',

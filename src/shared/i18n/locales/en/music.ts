@@ -180,9 +180,9 @@ export const music = {
     pickup: 'Pickup',
     pickupBeats: 'Pickup beats',
     symbol: 'Write as common or cut time',
-    applyTo: 'Apply to',
-    fromBar: 'From this bar',
-    wholeSong: 'Whole song',
+    // Flat's Customize (R32-C): any meter and the pickup, on wheels.
+    customize: 'Customize',
+    customizeTitle: 'Customize time signature',
   },
   key: {
     label: 'Key',
@@ -193,6 +193,10 @@ export const music = {
     mode: 'Major or minor',
     majorMode: 'Major',
     minorMode: 'Minor',
+    // The palette's Key signature (R32-C, Flat's): its two rows, and its way back to no signature.
+    sharps: 'Sharps',
+    flats: 'Flats',
+    toNatural: 'Switch to natural',
   },
   // The Intervals reference's cards: each interval's name and short name.
   interval: {

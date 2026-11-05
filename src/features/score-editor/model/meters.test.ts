@@ -193,12 +193,4 @@ describe('setTime, the time signature’s picker applied (ADR 0114)', () => {
     const chorus = setSectionMeter(song, 1, '2/4')
     expect(setTime(chorus, 0, { meter: '4/4' })).toBe(chorus)
   })
-
-  it('writes the whole song in the meter from the palette’s Whole song, a section’s own given up (A34)', () => {
-    const chorus = setSectionMeter(song, 1, '2/4')
-    const whole = setTime(chorus, 1, { meter: '4/4', whole: true })
-    expect(whole.meter).toBe('4/4')
-    expect(whole.sections[1]?.heading.meter).toBeUndefined()
-    expect(lengths(whole)).toEqual([4, 4, 4, 4])
-  })
 })

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { keySignature, signatureKey, writtenKey, type Key, printedNote } from '@/shared/lib/music'
 import { Segmented } from '../Segmented'
-import { PickerCell } from './PickerGrid'
+import { PickerCell, PickerGrid } from './PickerGrid'
 import { usePickerLayout } from './picker-layout'
 import { SignatureSigns } from './picker-pictures'
 
@@ -10,6 +10,9 @@ import { SignatureSigns } from './picker-pictures'
  * seven sharps, then one to seven flats.
  */
 const SIGNATURES = [0, 1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5, -6, -7] as const
+/** The palette's rows (Flat's): one to seven sharps, then one to seven flats. */
+const SHARPS = [1, 2, 3, 4, 5, 6, 7] as const
+const FLATS = [-1, -2, -3, -4, -5, -6, -7] as const
 
 /**
  * A key signature chosen as Flat and Dorico choose it (A34, ADR 0114): Major · Minor, then one grid of
@@ -29,7 +32,7 @@ export function KeySignaturePicker({
 }) {
   const { t } = useTranslation(['editor', 'music'])
   const count = keySignature(value)
-  const row = usePickerLayout() === 'row'
+  const layout = usePickerLayout()
   const cell = (each: number) => {
     const major = signatureKey(each, false)
     const minor = signatureKey(each, true)
@@ -59,8 +62,50 @@ export function KeySignaturePicker({
       </PickerCell>
     )
   }
+  // In the score editor's palette (R32-C, Flat's Key signature): the signatures bare, one to seven
+  // sharps over one to seven flats, each named in its tooltip; Switch to natural under them while
+  // the key has any.
+  if (layout === 'palette') {
+    const bare = (each: number) => {
+      const major = signatureKey(each, false)
+      const minor = signatureKey(each, true)
+      return (
+        <PickerCell
+          key={each}
+          label={`${t('music:key.major', { tonic: printedNote(major.tonic) })} / ${t(
+            'music:key.minor',
+            { tonic: printedNote(minor.tonic) },
+          )}`}
+          pressed={each === count}
+          onClick={() => onChange(value.minor ? minor : major)}
+        >
+          <SignatureSigns count={each} />
+        </PickerCell>
+      )
+    }
+    return (
+      <div className="flex flex-col gap-1">
+        <PickerGrid
+          label={t('music:key.label')}
+          rows={[
+            { label: t('music:key.sharps'), cells: SHARPS.map(bare) },
+            { label: t('music:key.flats'), cells: FLATS.map(bare) },
+          ]}
+        />
+        {count === 0 ? null : (
+          <button
+            type="button"
+            onClick={() => onChange(value.minor ? signatureKey(0, true) : signatureKey(0, false))}
+            className="flex min-h-11 items-center self-start rounded-control px-1 text-base font-semibold text-link hover:underline"
+          >
+            {t('music:key.toNatural')}
+          </button>
+        )}
+      </div>
+    )
+  }
   // In a row (the score editor's folded palette, R31-E): the signatures alone.
-  if (row)
+  if (layout === 'row')
     return (
       <div
         role="group"

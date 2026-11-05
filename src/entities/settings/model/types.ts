@@ -343,6 +343,8 @@ export interface SettingsState {
    * categories (R31-E), as the learner left it; folded as it first opens.
    */
   paletteFolded: boolean
+  /** Whether the palette shows its tools as named rows, Flat's list view, rather than as cells (R32-C). */
+  paletteList: boolean
   /** The palette's category chosen, by name, as the learner left it (R31-E); null until chosen. */
   paletteCategory: string | null
   /** The mode the score editor writes in, as it was left (R31-E). */

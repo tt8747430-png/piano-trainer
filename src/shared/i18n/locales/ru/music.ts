@@ -174,9 +174,8 @@ export const music: LocaleResources['music'] = {
     pickup: 'Затакт',
     pickupBeats: 'Доли затакта',
     symbol: 'Писать как C или ¢',
-    applyTo: 'Применить',
-    fromBar: 'С этого такта',
-    wholeSong: 'Ко всей песне',
+    customize: 'Настроить',
+    customizeTitle: 'Настройка размера',
   },
   key: {
     label: 'Тональность',
@@ -186,6 +185,9 @@ export const music: LocaleResources['music'] = {
     mode: 'Мажор или минор',
     majorMode: 'Мажор',
     minorMode: 'Минор',
+    sharps: 'Диезы',
+    flats: 'Бемоли',
+    toNatural: 'Без ключевых знаков',
   },
   interval: {
     r: { name: 'Прима', short: 'ч1' },

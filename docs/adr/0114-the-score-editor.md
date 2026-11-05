@@ -65,22 +65,26 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   a laptop, a page at a time with Back): View, Transpose, Record a take, Takes; Settings, each one tap away with a
   one-line description: Instruments, Layout, Note input, Recording; an original's Publish…, Versions and Discard
   changes, its saved state beside the title. It holds nothing the score prints (R32-B). The editor opens in the mode it was left in (`editorMode`).
-- **One palette** on the selection (`EditorPalette`, one tree for every size), a category chosen at a time
-  (`paletteCategory`, kept):
-  - **A panel** at the sheet's side from 48rem (`usePalettePanel`), left or right as Note input says: every category
-    in rows, then the chosen one's sections as titled grids.
+- **One palette** on the selection (`EditorPalette`, one tree for every size), as Flat's (R32-C, help.flat.io and
+  the owner's captures of Flat's app and web editor): every category a titled section, all of them in one scroll;
+  the category chosen (`paletteCategory`, kept) is the section kept in sight:
+  - **A panel** at the sheet's side from 48rem (`usePalettePanel`), left or right as Note input says, as Flat's web
+    panel: every section stacked, each folding by its title (`foldedSections`); no strip. A sign tapped on the score
+    unfolds its section and scrolls to it.
   - **A card floating** over the sheet's foot on a phone held upright, the sheet keeping room to scroll above it.
-    Folded (`paletteFolded`, as it opens): the category's tools in one row over the strip of categories, Show every
-    tool its own last cell; unfolded: its titled grids, up to half the screen, scrolling. The keys fold away for it.
-    A field typed in swaps it for a slim bar over the phone's own keyboard (`FieldDocked`).
+    Folded (`paletteFolded`, as it opens): the chosen category's tools in one row over the strip of categories;
+    unfolded: every section in one scroll, up to half the screen, the strip lighting the section in sight and
+    scrolling to the one tapped; Flat's **Show as list** (`paletteList`) turns the cells into named rows, two to a
+    line. The keys fold away for it. A field typed in swaps it for a slim bar over the phone's own keyboard
+    (`FieldDocked`).
   - **Categories in Flat's order:** Note (Input mode: Replace, Insert, Chord; Notation: Add note, whole to 64th,
     dot, double dot, tie, Tuplets ⌄, rest, ♮ ♯ ♭, respell) · Pitch · Articulations · Ornaments · Dynamics ·
-    Measures (bars added and deleted, line and page breaks, a new section; rests and repeats; swing; no bar length: a
-    bar's length is its time signature) · Clef · Key signature · Time signature (the common tiles, Current and
-    Pickup as wheels on a staff, Write as common or cut time, ✗ ✓) · Barlines & repeats · Text. In the row, a
-    picker's signs alone (`PickerLayoutContext`).
-  - **Keys** are Flat's: equal cells of a bordered table, 44px at the least; pressed, a sky glyph on a sky wash;
-    greyed, faded, the tooltip saying why. A tooltip is the key's name then its shortcut, as Flat's.
+    Measures (bars added and deleted, line and page breaks, a new section; rests and repeats; Tempo and the tempo
+    words, accel., rit., a tempo…, as Flat's Measure; swing) · Clef · Key signature · Time signature · Barlines &
+    repeats · Text (lyrics, chord symbols, Roman numerals, free text, the character and technique words). In the
+    row, a picker's signs alone (`PickerLayoutContext`: `row`; the sections' `palette`).
+  - **Keys** are Flat's: equal cells of a bordered table, 44px at the least; pressed, a sky glyph on a sky wash. A
+    tooltip is the key's name then its shortcut, as Flat's. A key that cannot act is not drawn (R32-B).
 - **Flat's shortcuts** where the typing keys leave them free (`TOOL_SHORTCUTS`, one table for the keys, the tooltips
   and the `?` sheet): 1–6 the values, 8 a rest, 9 a grace note, 0 = − ♮ ♯ ♭, the full stop a dot, the comma a tie,
   a letter alone plays the piano, so Flat's J, S, T and P take Shift (Respell, a slur, a trill,
@@ -93,17 +97,20 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   step above in the key before each note chosen on any staff; the other kind's key switches it, its pitch kept; the
   same key again takes it off. Put there, it is chosen (`grace`): ↑ ↓, Shift a semitone, the accidentals, Respell, a
   key played, the drag and Delete edit it as a note; Escape or any other action goes back to its note.
-- **The palette's signs** (R32-B: the time signature, key and clef are set in their category alone; the tempo mark
-  keeps its own dial, `SignPicker`):
-  - **Time:** the common tiles, Current and Pickup, each drawn as it prints on faint staff lines, each figure a
-    wheel, ✗ and ✓ at the foot, one Undo step. Within the song's kind any section takes any meter; across kinds the
-    song's own meter at its head rewrites every tick so each note keeps its length (a meter that would split a note
-    has no tile). Write as common or cut time is shown for 4/4 and 2/2 alone; From this bar · Whole song only where
-    they differ (after the first section, or where a section has a meter of its own).
-  - **Key:** one to seven sharps over one to seven flats, Major · Minor, Switch to natural; after the first section,
-    Apply to the whole song moves the music, else the key changes from that section on and the notes stay.
-  - **Clef:** every clef the notation writes, a family a row; on a piano staff, This bar · Until the end · Entire
-    staff.
+- **The palette's signs** (R32-C, Flat's; the time signature, key and clef set in their section alone, which their
+  printed signs open; the tempo mark keeps its own dial, `SignPicker`):
+  - **Time:** Flat's tiles 2/4 · 3/4 · 4/4 · C · ¢ · 6/8, a tap writing it at once from the first bar chosen's
+    section on (the song's own in its first), one Undo step; a meter the song cannot take there has no tile. Then
+    **Customize** (a wide button; its own cell in the folded row) opens the meter as it prints, its figures wheels
+    (any count of 1–16 over 1 to 16), and at the song's head the Pickup wheel, ✗ and ✓ at the foot: a sheet on a
+    phone, a popover on a laptop. Within the song's kind any section takes any meter; across kinds the song's own
+    meter at its head rewrites every tick so each note keeps its length.
+  - **Key:** Flat's table, one to seven sharps over one to seven flats, bare, each named in its tooltip (A major /
+    F♯ minor), in the song's mode; **Switch to natural** under it while the key has any. From the first bar chosen's
+    section on, the song's own key in its first section.
+  - **Clef:** Flat's table, a family a row; no question: on a piano staff a range of bars chosen takes the clef
+    alone, the one before it back after it, else it holds until the next clef; a single staff is written in it
+    whole.
 - **The score's Settings** (R32-B, Flat's document menu): pages of the gear's sheet, on the editor's draft, so each
   change is one Undo step back on the score; while the gear is open the editor's keys and MIDI write nothing. Precise
   names, most used first, each with a one-line description:
@@ -170,3 +177,7 @@ reader hears the caret's place in a polite live line (`CaretLine`).
   one tap each (Instruments, Layout, Note input, Recording) with a line saying what each does; only the tools that
   apply are drawn, never greyed; Piano keys in the phone's bar; the editor's strings in professional notation terms
   (2026-11-05).
+- R32-C — The palette as Flat's: every section in one scroll (the phone's unfolded sheet with its strip, the laptop's
+  panel folding by titles), Show as list; Time signature as Flat's six tiles and Customize with its wheels; Key
+  signature and Clef as bare tables, Switch to natural, a range of bars chosen for a clef; Tempo and the tempo words in
+  Measures (2026-11-05).

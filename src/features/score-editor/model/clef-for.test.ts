@@ -21,36 +21,29 @@ describe('clefFor (A34)', () => {
   })
 })
 
-describe('a clef change from the palette (A34)', () => {
+describe('a clef change from the palette (R32-C, Flat’s)', () => {
   const draft = draftOf({
     sections: [{ kind: 'verse', lines: ['C C C C'] }],
     hands: { lh: 'C3/4 | C3/4 | C3/4 | C3/4' },
   })
+  const clefs = (music: typeof draft) => [0, 1, 2, 3].map((bar) => clefAt(music, bar, 'lh'))
 
-  it('changes this bar only, the clef before it back after it', () => {
-    const one = setClefIn(draft, 1, 'lh', 'treble', 'bar')
-    expect([0, 1, 2, 3].map((bar) => clefAt(one, bar, 'lh'))).toEqual([
+  it('changes the bars chosen alone, the clef before them back after them', () => {
+    expect(clefs(setClefIn(draft, 1, 'lh', 'treble', 1))).toEqual([
       'bass',
       'treble',
       'bass',
+      'bass',
+    ])
+    expect(clefs(setClefIn(draft, 1, 'lh', 'treble', 2))).toEqual([
+      'bass',
+      'treble',
+      'treble',
       'bass',
     ])
   })
 
-  it('changes to the end, or the whole staff, its other changes given up', () => {
-    const end = setClefIn(draft, 2, 'lh', 'treble', 'end')
-    expect([0, 1, 2, 3].map((bar) => clefAt(end, bar, 'lh'))).toEqual([
-      'bass',
-      'bass',
-      'treble',
-      'treble',
-    ])
-    const whole = setClefIn(setClefIn(draft, 1, 'lh', 'tenor', 'bar'), 2, 'lh', 'treble', 'staff')
-    expect([0, 1, 2, 3].map((bar) => clefAt(whole, bar, 'lh'))).toEqual([
-      'treble',
-      'treble',
-      'treble',
-      'treble',
-    ])
+  it('changes from the bar until the next clef with no range chosen', () => {
+    expect(clefs(setClefIn(draft, 2, 'lh', 'treble'))).toEqual(['bass', 'bass', 'treble', 'treble'])
   })
 })
