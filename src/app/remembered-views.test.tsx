@@ -97,7 +97,7 @@ describe('Remembered views', () => {
       '/play/progression?p=ii-V-I&key=D&chordSize=ninths&pattern=jazz&walk=fifths',
       storage,
     )
-    const { router } = await renderApp('/practice/progressions?p=I-IV-V&key=G', { storage })
+    const { router } = await renderApp('/practice/progressions/line?p=I-IV-V&key=G', { storage })
     await user.click(await screen.findByRole('link', { name: 'In G major' }))
     await waitFor(() =>
       expect(router.state.location.search).toEqual({

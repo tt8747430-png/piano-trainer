@@ -660,7 +660,6 @@ export const practice: LocaleResources['practice'] = {
     },
     sheet: {
       metronome: 'Метроном',
-      followsSong: 'Темп песни',
       start: 'Включить метроном',
       stop: 'Остановить метроном',
       slower: 'Медленнее',

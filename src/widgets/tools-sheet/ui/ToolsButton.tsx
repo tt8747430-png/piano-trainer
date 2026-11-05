@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { LayoutGrid } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useMetronome, type SongTime } from '@/features/metronome'
+import { useMetronome } from '@/features/metronome'
 import { TunerSheet } from '@/widgets/tuner'
 import { QuickTools } from './QuickTools'
 import { ToolsSheet } from './ToolsSheet'
@@ -13,17 +13,12 @@ import { ToolsSheet } from './ToolsSheet'
  * Tuner, then All tools, Practice's Tools group. The Metronome runs on with the sheet closed, until
  * the page is left.
  */
-export function ToolsButton({
-  song = null,
-}: {
-  /** The song's tempo and time, where the screen holds one (the score editor): the quick Metronome's. */
-  song?: SongTime | null
-} = {}) {
+export function ToolsButton() {
   const { t } = useTranslation(['practice', 'player'])
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const [tuner, setTuner] = useState(false)
-  const metronome = useMetronome(song)
+  const metronome = useMetronome()
   return (
     <>
       <ToolsSheet

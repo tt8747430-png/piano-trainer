@@ -59,7 +59,7 @@ export function QuickTools({ metronome, onTuner }: { metronome: Metronome; onTun
         icon={Timer}
         paint="sand"
         label={t('tools.sheet.metronome')}
-        detail={`${metronome.following ? `${t('tools.sheet.followsSong')} · ` : ''}${metronome.meter}`}
+        detail={metronome.meter}
       >
         <Button
           variant="ghost"

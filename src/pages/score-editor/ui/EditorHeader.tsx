@@ -52,7 +52,7 @@ function PlayButton() {
       aria-label={label}
       title={label}
       disabled={takes.stage !== 'idle'}
-      className="rounded-full"
+      className="rounded-pill"
       onClick={actions.togglePlay}
     >
       {meta.playing ? <Square aria-hidden className="fill-current" /> : <Play aria-hidden />}

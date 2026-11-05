@@ -696,7 +696,6 @@ export const practice = {
     // The Tools sheet over any screen.
     sheet: {
       metronome: 'Metronome',
-      followsSong: 'The song’s tempo',
       start: 'Start metronome',
       stop: 'Stop metronome',
       slower: 'Slower',

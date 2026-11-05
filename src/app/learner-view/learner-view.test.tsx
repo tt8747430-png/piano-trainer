@@ -64,7 +64,7 @@ describe('Learner view (R29 B5)', () => {
       ['/?view=courses', [{ role: 'button', name: 'Edit' }]],
       ['/?view=courses&edit=1', [{ role: 'button', name: 'New course' }]],
       [`/lessons/${lesson.id}`, [{ role: 'button', name: 'Edit' }]],
-      ['/practice/progressions', [{ role: 'button', name: 'New progression' }]],
+      ['/practice/progressions', [{ role: 'button', name: 'New in the library' }]],
     ]
     for (const [path, controls] of walk) {
       await act(() => router.navigate({ href: path }))

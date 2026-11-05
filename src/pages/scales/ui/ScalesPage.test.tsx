@@ -509,7 +509,7 @@ describe('Practice → Scales and keys', () => {
     const inKey = screen.getByRole('region', { name: 'Progressions in this key' })
     const cadence = within(inKey).getByRole('link', { name: 'Complete cadence I–IV–V–I' })
     expect(cadence.getAttribute('href')).toBe(
-      '/practice/progressions?key=D&p=I-IV-V-I&size=sevenths',
+      '/practice/progressions/line?key=D&p=I-IV-V-I&size=sevenths',
     )
     expect(within(inKey).getAllByRole('link')).toHaveLength(4)
   })
