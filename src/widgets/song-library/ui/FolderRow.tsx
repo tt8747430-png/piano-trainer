@@ -3,11 +3,17 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, type ShelvedFolder } from '@/entities/library'
 import { cn, useLongPress } from '@/shared/lib'
-import { OpensMark, SwipeRow } from '@/shared/ui'
-import { menuOf, swipeOf, type RowAction } from '../model/row-actions'
+import {
+  menuOf,
+  OpensMark,
+  ROW_BODY,
+  ROW_CARD,
+  RowMore,
+  swipeOf,
+  SwipeRow,
+  type RowAction,
+} from '@/shared/ui'
 import { FolderFace, type FolderHolds } from './FolderFace'
-import { ROW_BODY, ROW_CARD } from './row-class'
-import { RowMore } from './RowMore'
 
 /** A folder's swipe (ADR 0106): to the right Edit; to the left Move, then Archive at the edge. */
 
@@ -28,7 +34,7 @@ export function FolderRow({
   actions: readonly RowAction[]
   onSelect: () => void
 }) {
-  const { t } = useTranslation('songs')
+  const { t } = useTranslation('common')
   // What each swipe offers: the learner's (R29 B10, Settings › Swipe actions).
   const leading = useSettings((state) => barOf(state.bars, 'swipe.folders.leading'))
   const trailing = useSettings((state) => barOf(state.bars, 'swipe.folders.trailing'))

@@ -1,16 +1,11 @@
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DEFAULT_CARD_LOOK, useFolderName, useLibrary, type CardPlace } from '@/entities/library'
-import {
-  CardLookProvider,
-  cardLookProps,
-  FilteredNotice,
-  FolderRow,
-  SongRow,
-} from '@/widgets/song-library'
+import { CardLookProvider, cardLookProps, FolderRow, SongRow } from '@/widgets/song-library'
 import { folderKey, songKey, type LibraryPage } from '../model/use-library-page'
 import { folderActions, songActions } from './row-actions'
 import { SongTable } from './SongTable'
+import { FilteredNotice } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /** How many of Home's every song show before Show all. */
@@ -37,7 +32,7 @@ export function LibraryBrowse({
   afterFolders?: ReactNode
   onClear: () => void
 }) {
-  const { t } = useTranslation('songs')
+  const { t } = useTranslation(['songs', 'common'])
   const nameOf = useFolderName()
   const look = useLibrary((state) => state.cardLooks[place])
   const { view } = page

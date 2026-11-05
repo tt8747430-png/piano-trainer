@@ -6,7 +6,7 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { CARRY, INTO, useLibraryDnd } from '../model/library-dnd'
-import { ROW_BODY, ROW_CARD, ROW_CONTROL } from './row-class'
+import { ROW_BODY, ROW_CARD, ROW_CONTROL } from '@/shared/ui'
 
 /**
  * The check a chosen row wears, umber while chosen (the neutral chosen), a ring while not. It comes

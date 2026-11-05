@@ -37,6 +37,21 @@ export const common: LocaleResources['common'] = {
     help: 'Скачайте резервную копию в настройках и удалите ненужные дубли.',
     settings: 'Настройки',
   },
+  library: {
+    favourites: 'Избранное',
+    favourite: 'Добавить в избранное',
+    unfavourite: 'Убрать из избранного',
+    moreOf: 'Ещё: {{name}}',
+    sort: 'Порядок',
+    clearFilters: 'Сбросить фильтры',
+    filtered: 'Показано: {{shown}} из {{total}}',
+    filters: {
+      title: 'Фильтры',
+      on: 'Фильтры: включено {{count}}',
+      chips: 'Включённые фильтры',
+      remove: 'Убрать: {{name}}',
+    },
+  },
   confirm: { cancel: 'Отмена', type: 'Введите «{{expect}}», чтобы подтвердить' },
   update: {
     available: 'Готова новая версия',

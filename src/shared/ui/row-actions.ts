@@ -1,5 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
-import type { MenuAction, Paint, SwipeAction } from '@/shared/ui'
+import type { MenuAction } from './ActionMenu'
+import type { Paint } from './paint'
+import type { SwipeAction } from './SwipeRow'
 
 /** One of a row's actions: in its More at every size, and on a swipe where it is one of the swipe's. */
 export interface RowAction {

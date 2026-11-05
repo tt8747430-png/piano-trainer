@@ -7,8 +7,8 @@ import { pieceStepId, StageMark } from '@/entities/step'
 import { useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { keySymbol, printedSymbol } from '@/shared/lib/music'
-import { LearnedBadge, SortHeading, TABLE_CELL } from '@/shared/ui'
-import { FavouriteMark, menuOf, RowMore, useCardLook } from '@/widgets/song-library'
+import { FavouriteMark, LearnedBadge, menuOf, RowMore, SortHeading, TABLE_CELL } from '@/shared/ui'
+import { useCardLook } from '@/widgets/song-library'
 import type { LibraryPage } from '../model/use-library-page'
 import { songActions } from './row-actions'
 
@@ -106,7 +106,7 @@ function SongTableRow({ entry, page }: { entry: Entry; page: LibraryPage }) {
         <span className="flex items-center justify-end gap-1">
           {favourite ? <FavouriteMark /> : null}
           <RowMore
-            label={t('songs:library.moreOf', { name: primary })}
+            label={t('common:library.moreOf', { name: primary })}
             actions={menuOf(songActions(entry, page, t))}
           />
         </span>

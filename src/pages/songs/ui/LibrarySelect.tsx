@@ -3,15 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useFolderName, type ShelvedFolder } from '@/entities/library'
 import type { Entry, PieceId } from '@/entities/piece'
 import { useEntryFace } from '@/widgets/piece-list'
-import { RowFace } from '@/shared/ui'
-import {
-  FavouriteMark,
-  FolderFace,
-  LibraryDnd,
-  RowInHand,
-  SelectRow,
-  SortableRows,
-} from '@/widgets/song-library'
+import { FavouriteMark, RowFace } from '@/shared/ui'
+import { FolderFace, LibraryDnd, RowInHand, SelectRow, SortableRows } from '@/widgets/song-library'
 import { folderKey, songKey, type Chosen, type LibraryPage } from '../model/use-library-page'
 
 /** A song's face in Select, as its row shows it, its ♡ where it is a favourite. */

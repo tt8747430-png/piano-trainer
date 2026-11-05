@@ -1,15 +1,15 @@
-import { ArrowDownUp, Search, X } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { LIBRARY_SORTS, type LibrarySort } from '@/entities/library'
+import { LIBRARY_SORTS } from '@/entities/library'
 import { useSetSearch } from '@/shared/lib'
 import { keyFromParam } from '@/shared/lib/music'
 import { useKeyName } from '@/shared/i18n'
-import { Dropdown, SearchField } from '@/shared/ui'
+import { FilterChips, SearchField, SortChoice, type FilterChipOn } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useSearchPalette } from '@/widgets/search-palette'
 import type { SongsFilter } from '../model/songs-filter'
 import type { LibraryPage } from '../model/use-library-page'
-import { FilterSheet } from './FilterSheet'
+import { SongsFilterSheet } from './FilterSheet'
 
 /**
  * The library's search and filters (ADR 0106, the owner's examples): one search box with the sort
@@ -45,13 +45,23 @@ export function LibraryFilters({
             hint={t('searchHint')}
             screen={screen}
             end={
-              sortInHeadings ? undefined : <SortChoice value={page.sort} onChange={page.setSort} />
+              sortInHeadings ? undefined : (
+                <SortChoice
+                  value={page.sort}
+                  options={LIBRARY_SORTS.map((sort) => ({
+                    value: sort,
+                    label: t(`sort.${sort}`),
+                    short: t(`sort.short.${sort}`),
+                  }))}
+                  onChange={page.setSort}
+                />
+              )
             }
           />
         </div>
-        <FilterSheet page={page} filter={filter} />
+        <SongsFilterSheet page={page} filter={filter} />
       </div>
-      <FilterChips filter={filter} />
+      <SongsFilterChips filter={filter} />
       {filter.q.trim() === '' ? null : <SearchEverywhere query={filter.q} />}
     </div>
   )
@@ -69,41 +79,13 @@ function SearchEverywhere({ query }: { query: string }) {
   )
 }
 
-/** The sort, joined to the search's end: its value in a word or two, the full names in its list. */
-function SortChoice({
-  value,
-  onChange,
-}: {
-  value: LibrarySort
-  onChange: (sort: LibrarySort) => void
-}) {
-  const { t } = useTranslation('songs')
-  return (
-    <Dropdown<LibrarySort>
-      label={t('sort.label')}
-      value={value}
-      onChange={onChange}
-      options={LIBRARY_SORTS.map((sort) => ({ value: sort, label: t(`sort.${sort}`) }))}
-      bare
-      align="end"
-      face={(sort) => (
-        <span className="flex items-center gap-1.5">
-          <ArrowDownUp aria-hidden className="size-4 shrink-0 text-muted-foreground" />
-          <span className="whitespace-nowrap">{t(`sort.short.${sort}`)}</span>
-        </span>
-      )}
-      className="h-full gap-1.5 rounded-none rounded-r-control border-0 border-l border-input bg-muted px-3 text-sm shadow-none hover:bg-accent focus-visible:-outline-offset-3"
-    />
-  )
-}
-
 /** The filters on, each a chip that takes it off, in a row that scrolls sideways (the search's own box says its text). */
-function FilterChips({ filter }: { filter: SongsFilter }) {
+function SongsFilterChips({ filter }: { filter: SongsFilter }) {
   const { t } = useTranslation('songs')
   const { t: common } = useTranslation('common')
   const keyName = useKeyName()
   const set = useSetSearch<SongsFilter>()
-  const chips = [
+  const chips: (FilterChipOn | null)[] = [
     filter.key === ''
       ? null
       : {
@@ -119,7 +101,11 @@ function FilterChips({ filter }: { filter: SongsFilter }) {
           off: () => set({ stage: 'any' }),
         },
     filter.favourites
-      ? { id: 'favourites', name: t('favourites'), off: () => set({ favourites: false }) }
+      ? {
+          id: 'favourites',
+          name: common('library.favourites'),
+          off: () => set({ favourites: false }),
+        }
       : null,
     filter.folder === 'none'
       ? { id: 'folder', name: t('filters.noFolder'), off: () => set({ folder: 'any' }) }
@@ -131,27 +117,6 @@ function FilterChips({ filter }: { filter: SongsFilter }) {
           name: t(filter.learned === 'yes' ? 'filters.learned' : 'filters.notLearned'),
           off: () => set({ learned: 'any' }),
         },
-  ].filter((chip) => chip !== null)
-  if (chips.length === 0) return null
-  return (
-    // Room round the chips inside the scroller, so a chip's focus ring is not cut.
-    <ul
-      aria-label={t('filters.chips')}
-      className="-mx-gutter -my-1 flex gap-2 overflow-x-auto px-gutter py-1 [scrollbar-width:none]"
-    >
-      {chips.map((chip) => (
-        <li key={chip.id} className="shrink-0">
-          <button
-            type="button"
-            aria-label={t('filters.remove', { name: chip.name })}
-            onClick={chip.off}
-            className="flex h-11 items-center gap-1.5 rounded-pill border border-input bg-muted py-1 pr-2 pl-3.5 text-sm font-semibold whitespace-nowrap transition-colors duration-200 ease-out hover:bg-accent"
-          >
-            {chip.name}
-            <X aria-hidden className="size-4 text-muted-foreground" />
-          </button>
-        </li>
-      ))}
-    </ul>
-  )
+  ]
+  return <FilterChips chips={chips.filter((chip) => chip !== null)} />
 }

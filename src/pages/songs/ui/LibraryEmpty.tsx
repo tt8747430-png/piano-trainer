@@ -60,7 +60,7 @@ export function LibraryEmpty({
         </EmptyHeader>
         <EmptyContent>
           <Button variant="soft" onClick={onClear}>
-            {t('clearFilters')}
+            {common('library.clearFilters')}
           </Button>
         </EmptyContent>
       </Empty>
