@@ -390,9 +390,9 @@ square at the top.
 ### Placement
 
 - **A detail page** reads title, facts, sections; its one primary action floats at the foot.
-- **The bar** (`ScreenHeader`) is one row of one height on every screen: Back, the title with its Edit (a quiet pencil)
-  right after it, then at its end, in this order whatever the page passes: tools, Settings (the gear), More, and Done
-  while editing. A place's or a detail page's title is larger
+- **The bar** (`ScreenHeader`) is one row of one height on every screen: Back, the title with its Edit (a quiet pencil;
+  Done in its place while editing) right after it, then at its end, in this order whatever the page passes: tools,
+  Settings (the gear), More. A place's or a detail page's title is larger
   in the same row and may take two lines. Nothing hangs under the bar: a status goes in it or in its menu, and a page's
   views sit in its content. A place's views (Learn's Lessons · Courses, Songs' My songs · Explore) are a compact
   `Segmented` of their own width: beside the title from 64rem, under the bar on a phone. It slides away while reading down and returns as the page turns up.

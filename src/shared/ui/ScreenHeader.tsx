@@ -8,7 +8,8 @@ import { usePageHeading } from './use-page-heading'
 
 /**
  * A screen's Edit (iOS's Edit · Done, Notion's in-place edit): the pencil right after the title, so it
- * reads as "edit this"; while editing, Done at the bar's very end. The screen enters Edit in place.
+ * reads as "edit this"; while editing, Done in its place, so the control never moves between modes.
+ * The screen enters Edit in place.
  */
 export interface EditAction {
   readonly editing: boolean
@@ -25,12 +26,12 @@ type ScreenHeaderProps = {
   /**
    * The bar's end, always in this order whatever order they are given (A3, DESIGN.md Placement): the
    * screen's tools (Search, MIDI, an act on the item such as a lesson's Learned), its Settings (the
-   * gear), More (⋯, commands only), and Done while editing.
+   * gear) and More (⋯, commands only).
    */
   tools?: ReactNode
   settings?: ReactNode
   more?: ReactNode
-  /** The screen's Edit: its pencil beside the title, Done at the bar's end while editing. */
+  /** The screen's Edit: its pencil beside the title, Done in its place while editing. */
   edit?: EditAction
   /** The page shows its title itself, large under the bar (a document in Edit): on a phone the bar
    * keeps it for a screen reader alone and leaves its room to the bar's tools. */
@@ -128,15 +129,20 @@ export function ScreenHeader({
           >
             {title}
           </h1>
-          {edit && !edit.editing ? <EditPencil onEdit={edit.onEdit} /> : null}
+          {edit ? (
+            edit.editing ? (
+              <EditDone action={edit} />
+            ) : (
+              <EditPencil onEdit={edit.onEdit} />
+            )
+          ) : null}
           {switcher && wide ? <div className="ms-4 w-fit shrink-0">{switcher}</div> : null}
         </div>
-        {tools || settings || more || edit?.editing ? (
+        {tools || settings || more ? (
           <div className="ms-auto flex shrink-0 items-center gap-1.5 print:hidden">
             {tools}
             {settings}
             {more}
-            {edit?.editing ? <EditDone action={edit} /> : null}
           </div>
         ) : null}
       </div>
@@ -174,14 +180,14 @@ function EditPencil({ onEdit }: { onEdit: () => void }) {
   )
 }
 
-/** Done, at the bar's end while the screen is in Edit. */
+/** Done, in the pencil's place beside the title while the screen is in Edit. */
 function EditDone({ action }: { action: EditAction }) {
   const { t } = useTranslation('common')
   return (
     <Button
       variant="bar"
       disabled={action.disabled}
-      className="shrink-0 rounded-pill px-4 font-semibold"
+      className="ms-1 shrink-0 rounded-pill px-4 font-semibold"
       onClick={action.onDone}
     >
       {t('editMode.done')}

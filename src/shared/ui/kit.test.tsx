@@ -94,7 +94,7 @@ describe('ScreenHeader', () => {
     expect(screen.getByRole('heading', { level: 1 }).nextElementSibling).toBe(buttons[0])
   })
 
-  it('shows Done at the bar’s very end while editing, and no pencil', async () => {
+  it('shows Done in the pencil’s place beside the title while editing', async () => {
     const onDone = vi.fn()
     render(
       <ScreenHeader
@@ -104,7 +104,8 @@ describe('ScreenHeader', () => {
       />,
     )
     const buttons = within(screen.getByRole('banner')).getAllByRole('button')
-    expect(buttons.map((button) => button.textContent)).toEqual(['Settings', 'Done'])
+    expect(buttons.map((button) => button.textContent)).toEqual(['Done', 'Settings'])
+    expect(screen.getByRole('heading', { level: 1 }).nextElementSibling).toBe(buttons[0])
     await userEvent.click(screen.getByRole('button', { name: 'Done' }))
     expect(onDone).toHaveBeenCalledOnce()
   })
