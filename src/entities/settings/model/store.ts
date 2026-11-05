@@ -86,11 +86,7 @@ import {
   type SoundSettings,
   type TrainerSettings,
   A4_RANGE,
-  DEFAULT_DRONE,
   DEFAULT_TUNER,
-  DRONE_OCTAVES,
-  isDroneKind,
-  type DroneSettings,
   DEFAULT_SCALE_STAFF,
   type ScaleStaffSettings,
   type TunerSettings,
@@ -98,7 +94,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 24
+export const SETTINGS_VERSION = 25
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -140,7 +136,6 @@ export function createSettingsStore({
         accompaniment: DEFAULT_ACCOMPANIMENT,
         bars: DEFAULT_BARS,
         tuner: DEFAULT_TUNER,
-        drone: DEFAULT_DRONE,
         scaleStaff: DEFAULT_SCALE_STAFF,
       },
       read: sanitize,
@@ -459,7 +454,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     accompaniment: accompanimentSettings(saved.accompaniment),
     bars: barsSettings(saved.bars),
     tuner: tunerSettings(saved.tuner),
-    drone: droneSettings(saved.drone),
     scaleStaff: scaleStaffSettings(saved.scaleStaff),
   }
 }
@@ -474,17 +468,6 @@ const wholeWithin = (value: unknown, { min, max }: { min: number; max: number })
 function tunerSettings(value: unknown): TunerSettings {
   const saved = savedObject<TunerSettings>(value)
   return { a4: wholeWithin(saved.a4, A4_RANGE) ?? DEFAULT_TUNER.a4 }
-}
-
-/** The Drone's root, kind, octave and volume, each as saved where valid. */
-function droneSettings(value: unknown): DroneSettings {
-  const saved = savedObject<DroneSettings>(value)
-  return {
-    root: wholeWithin(saved.root, { min: 0, max: 11 }) ?? DEFAULT_DRONE.root,
-    kind: isDroneKind(saved.kind) ? saved.kind : DEFAULT_DRONE.kind,
-    octave: wholeWithin(saved.octave, DRONE_OCTAVES) ?? DEFAULT_DRONE.octave,
-    volume: wholeWithin(saved.volume, { min: 0, max: 100 }) ?? DEFAULT_DRONE.volume,
-  }
 }
 
 /** The Scales staff's layers, each as saved where it is a switch's value. */

@@ -109,49 +109,6 @@ const playNote: Render<NoteSound> = (context, note, at, gain, ended) => {
   return { sources, output: envelope }
 }
 
-/** How long a drone takes to swell in and to fade away, in seconds. */
-const DRONE_FADE = 0.4
-/** A drone's tone: a sine with a soft triangle an octave up, so it sits under the piano, not on it. */
-const DRONE_PARTIALS = [
-  { multiple: 1, type: 'sine', level: 1 },
-  { multiple: 2, type: 'triangle', level: 0.18 },
-] as const
-
-/**
- * A drone (R29 B11): each key's partials held through one gain, swelling in over `DRONE_FADE`;
- * stopping fades it out and stops its oscillators once it is silent.
- */
-function playDrone(context: AudioContext, keys: readonly Midi[], gain: number): () => void {
-  const at = context.currentTime
-  const level = Math.max(SILENT, (gain * 0.5) / Math.max(1, Math.sqrt(keys.length)))
-  const output = context.createGain()
-  output.gain.setValueAtTime(SILENT, at)
-  output.gain.exponentialRampToValueAtTime(level, at + DRONE_FADE)
-  output.connect(context.destination)
-  const sources = keys.flatMap((key) =>
-    DRONE_PARTIALS.map(({ multiple, type, level: share }) => {
-      const oscillator = context.createOscillator()
-      const partial = context.createGain()
-      oscillator.type = type
-      oscillator.frequency.value = frequencyOf(key) * multiple
-      partial.gain.value = share
-      oscillator.connect(partial).connect(output)
-      oscillator.start(at)
-      return oscillator
-    }),
-  )
-  let stopped = false
-  return () => {
-    if (stopped) return
-    stopped = true
-    const now = context.currentTime
-    output.gain.cancelScheduledValues(now)
-    output.gain.setValueAtTime(Math.max(SILENT, output.gain.value), now)
-    output.gain.exponentialRampToValueAtTime(SILENT, now + DRONE_FADE)
-    for (const source of sources) source.stop(now + DRONE_FADE + 0.05)
-  }
-}
-
 /** A scheduled voice's damper falls at `at`, where its key is struck again (one voice a key). */
 function dampedAt({ sources, output }: Voice, at: number) {
   output.gain.cancelScheduledValues(at)
@@ -644,12 +601,6 @@ export function createWebAudioOutput({
             pageNow,
           })
         : null
-    },
-    drone(keys, gain) {
-      const audio = openContext()
-      if (!audio) return none
-      if (heldBack(audio)) void audio.resume()
-      return playDrone(audio, keys, gain)
     },
     loadRecording: (src) => recordings.load(src),
     playRecording: (src, play, volume) => recordings.play(src, play, volume),

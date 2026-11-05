@@ -26,7 +26,10 @@ describe('the Tools sheet over any screen (R29 B11)', () => {
       const sheet = await openTools(user)
       const quick = within(sheet).getByRole('region', { name: 'Quick tools' })
       expect(within(quick).getByRole('group', { name: 'Metronome' }), path).toBeInTheDocument()
-      expect(within(quick).getByRole('group', { name: 'Recorder' }), path).toBeInTheDocument()
+      // The Recorder takes a song's takes: only the Player has a song on screen.
+      expect(within(quick).queryByRole('group', { name: 'Recorder' }) !== null, path).toBe(
+        path === '/play/bz5',
+      )
       expect(within(quick).getByRole('button', { name: 'Tuner' }), path).toBeInTheDocument()
       // Away from the Player, the quick tools and the way to them all.
       if (path !== '/play/bz5')

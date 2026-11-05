@@ -17,9 +17,6 @@ export const PRACTICE_PAGES = {
   quiz: { to: '/practice/quiz', tile: PAGE_TILES.quiz },
   metronome: { to: '/practice/metronome', tile: PAGE_TILES.metronome },
   circleOfFifths: { to: '/practice/circle-of-fifths', tile: PAGE_TILES.circleOfFifths },
-  tapTempo: { to: '/practice/tap-tempo', tile: PAGE_TILES.tapTempo },
-  recorder: { to: '/practice/recorder', tile: PAGE_TILES.recorder },
-  drone: { to: '/practice/drone', tile: PAGE_TILES.drone },
   tuner: { to: '/practice/tuner', tile: PAGE_TILES.tuner },
 } as const satisfies Readonly<Record<string, { to: string; tile: Tile }>>
 export type PracticePageId = keyof typeof PRACTICE_PAGES
@@ -33,7 +30,7 @@ export type PracticePageId = keyof typeof PRACTICE_PAGES
 export const PRACTICE_GROUPS = [
   {
     id: 'tools',
-    pages: ['metronome', 'chordFinder', 'circleOfFifths', 'tapTempo', 'recorder', 'drone', 'tuner'],
+    pages: ['metronome', 'chordFinder', 'circleOfFifths', 'tuner'],
   },
   { id: 'theory', pages: ['chords', 'scales', 'intervals', 'progressions'] },
   { id: 'playing', pages: ['chordPlayer', 'accompaniment'] },

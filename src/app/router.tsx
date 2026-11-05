@@ -90,7 +90,6 @@ import {
   CHORD_FINDER_KEPT,
   chordFinderSearch,
   circleSearch,
-  droneSearch,
   readChordFinderSearch,
 } from './routes/tool-search'
 import { chordPlayerSearch, chordPlayerSettingsSearch } from './routes/chord-player-search'
@@ -722,22 +721,6 @@ const circleOfFifthsRoute = createRoute({
   ...circleSearch,
   component: lazyRouteComponent(toolScreens, 'CircleOfFifthsPage'),
 })
-const tapTempoRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/tap-tempo',
-  component: lazyRouteComponent(toolScreens, 'TapTempoPage'),
-})
-const recorderRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/recorder',
-  component: lazyRouteComponent(toolScreens, 'RecorderPage'),
-})
-const droneRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/drone',
-  ...droneSearch,
-  component: lazyRouteComponent(toolScreens, 'DronePage'),
-})
 const tunerRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/tuner',
@@ -1145,9 +1128,6 @@ const routeTree = rootRoute.addChildren([
     metronomeRoute,
     metronomeSettingsRoute,
     circleOfFifthsRoute,
-    tapTempoRoute,
-    recorderRoute,
-    droneRoute,
     tunerRoute,
     tunerSettingsRoute,
     chordPlayerRoute,

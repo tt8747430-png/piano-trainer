@@ -56,7 +56,6 @@ const withTake = () => {
             bars: [0, 2000],
           },
         ],
-        free: [],
         nextTake: 2,
       },
       version: TAKES_VERSION,

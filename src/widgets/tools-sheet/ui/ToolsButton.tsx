@@ -2,9 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { LayoutGrid } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isMidiConnected, useMidiConnection } from '@/features/connect-midi'
 import { useMetronome, type SongTime } from '@/features/metronome'
-import { useFreeRecorder } from '@/features/record-take'
 import { TunerSheet } from '@/widgets/tuner'
 import { QuickTools } from './QuickTools'
 import { ToolsSheet } from './ToolsSheet'
@@ -12,8 +10,8 @@ import { ToolsSheet } from './ToolsSheet'
 /**
  * The Tools button in a screen's bar (R29 B11): a lesson's, each explorer's. It opens the Tools sheet
  * over the page, which stays as it was: the quick Metronome (the Metronome's own tempo and time), the
- * Recorder (a free recording) and the Tuner, then All tools, Practice's Tools group. The Metronome and
- * the Recorder run on with the sheet closed, until the page is left.
+ * Tuner, then All tools, Practice's Tools group. The Metronome runs on with the sheet closed, until
+ * the page is left.
  */
 export function ToolsButton({
   song = null,
@@ -26,9 +24,6 @@ export function ToolsButton({
   const [open, setOpen] = useState(false)
   const [tuner, setTuner] = useState(false)
   const metronome = useMetronome(song)
-  const recorder = useFreeRecorder()
-  const { connection } = useMidiConnection()
-  const piano = isMidiConnected(connection)
   return (
     <>
       <ToolsSheet
@@ -38,10 +33,6 @@ export function ToolsButton({
         quick={
           <QuickTools
             metronome={metronome}
-            recorder={{
-              ...recorder,
-              unavailable: piano ? undefined : t('practice:tools.recorder.needsPiano'),
-            }}
             onTuner={() => {
               setOpen(false)
               setTuner(true)

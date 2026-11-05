@@ -29,9 +29,6 @@ describe('Practice', () => {
       ['Metronome Clicks or drums, any tempo', '/practice/metronome'],
       ['Chord finder Play a chord, see its name', '/practice/chord-finder'],
       ['Circle of fifths Every key, its signature and chords', '/practice/circle-of-fifths'],
-      ['Tap tempo Tap in time, read the tempo', '/practice/tap-tempo'],
-      ['Recorder Record from your piano', '/practice/recorder'],
-      ['Drone A held note to play over', '/practice/drone'],
       ['Tuner Hear how in tune a note is', '/practice/tuner'],
     ])
   })

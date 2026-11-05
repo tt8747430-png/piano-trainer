@@ -17,7 +17,6 @@ const PAGES: readonly (readonly [SettingsPageId, string])[] = [
   ['chord-player', '/practice/chord-player/settings'],
   ['metronome', '/practice/metronome/settings'],
   ['tuner', '/practice/tuner/settings'],
-  ['drone', '/practice/drone'],
   ['chord-finder', '/settings/chord-finder'],
   ['trainers', '/settings/exercises-and-quiz'],
   ['select-toolbar', '/settings/select-toolbar'],

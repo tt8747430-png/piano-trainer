@@ -13,9 +13,6 @@ export const practice = {
     chordFinder: 'Chord finder',
     metronome: 'Metronome',
     circleOfFifths: 'Circle of fifths',
-    tapTempo: 'Tap tempo',
-    recorder: 'Recorder',
-    drone: 'Drone',
     tuner: 'Tuner',
     exercises: 'Exercises',
     quiz: 'Quiz',
@@ -33,9 +30,6 @@ export const practice = {
     quiz: 'Chords, keys, ear, reading',
     metronome: 'Clicks or drums, any tempo',
     circleOfFifths: 'Every key, its signature and chords',
-    tapTempo: 'Tap in time, read the tempo',
-    recorder: 'Record from your piano',
-    drone: 'A held note to play over',
     tuner: 'Hear how in tune a note is',
   },
   // Each Practice page's Settings (A24): its gear, and what its page holds.
@@ -135,7 +129,7 @@ export const practice = {
   // Scales and keys: the run, the chords, the key.
   scales: {
     compare: { label: 'Compare with', none: 'None' },
-    vamp: { label: 'Vamp', play: 'Play the vamp: {{chords}}', drone: 'Drone on {{note}}' },
+    vamp: { label: 'Vamp', play: 'Play the vamp: {{chords}}' },
     // The tabs say what is in them (A32): its notes, its key's harmony, the key itself.
     show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
     // Under each view's name, what it holds of the scale chosen (R29-P7): a choice visibly drives all three.
@@ -616,14 +610,6 @@ export const practice = {
   // The Metronome (ADR 0052): its tempo, sound, time signature and beats.
   // The tools (R29 B11): each on its own page, and the quick ones over any screen.
   tools: {
-    tapTempo: {
-      pad: 'Tap in time',
-      none: 'Tap at least twice',
-      bpm: '{{bpm}} BPM',
-      use: 'Use in Metronome',
-      used: 'The Metronome is at {{bpm}} BPM',
-      info: 'Tap the pad in time with the music you hear or imagine. From the second tap the tempo is the average of your last few taps; pause for two seconds to start again.',
-    },
     circle: {
       label: 'Circle of fifths',
       majors: 'Major keys outside, their relative minors inside',
@@ -640,53 +626,6 @@ export const practice = {
       play: 'Play {{chord}}',
       open: 'Open in Scales and keys',
       info: 'Each step clockwise adds a sharp or takes away a flat. Neighbouring keys share all but one note, so music moves most easily between them. Each major key and the minor key inside it share one signature.',
-    },
-    drone: {
-      root: 'Root',
-      kind: 'What sounds',
-      kinds: { note: 'Note', fifth: 'Fifth', major: 'Major', minor: 'Minor' },
-      kindAbout: {
-        note: 'The root alone',
-        fifth: 'Root and fifth',
-        major: 'A major triad',
-        minor: 'A minor triad',
-      },
-      octave: 'Octave',
-      lower: 'Octave lower',
-      higher: 'Octave higher',
-      volume: 'Volume',
-      start: 'Start drone',
-      sounding: 'Sounding: {{notes}}',
-      silent: 'Press play to hear the drone',
-      info: 'A drone holds a note under your playing so you hear every interval against it. Play a scale over it to hear each degree, or tune your ear to a key before you start.',
-    },
-    recorder: {
-      record: 'Record',
-      stop: 'Stop recording',
-      counting: 'Count-in: {{beat}}',
-      recording: 'Recording: {{seconds}} s',
-      needsPiano: 'Connect a piano to record. The Recorder takes the keys from MIDI.',
-      connect: 'Connect a piano',
-      free: 'Free recordings',
-      ofSong: 'Takes of {{title}}',
-      noneTitle: 'No recordings yet',
-      none: 'Connect a piano and press Record: what you play is kept here.',
-      notes_one: '{{count}} note',
-      notes_other: '{{count}} notes',
-      play: 'Play',
-      stopPlaying: 'Stop',
-      rename: 'Rename',
-      renameTitle: 'Rename recording',
-      name: 'Name',
-      save: 'Save',
-      export: 'Export MIDI',
-      makeSong: 'Make a song from it',
-      made: '{{title}} is in My songs',
-      delete: 'Delete',
-      deleteTitle: 'Delete this recording?',
-      deleteBody: 'It is gone for good, and cannot be brought back.',
-      actions: 'Actions for {{name}}',
-      info: 'Records what you play on a connected piano to the Metronome’s tempo and time. Play it back, export it as a MIDI file, or make a song of it: the notes are snapped to the beat and written as a score you can edit.',
     },
     tuner: {
       settings: 'Reference pitch',

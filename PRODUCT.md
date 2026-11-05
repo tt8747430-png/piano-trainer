@@ -49,7 +49,7 @@ Four places, **Learn · Songs · Practice · Profile**, plus Search and Settings
 - **The score editor:** the Player's score in Edit mode. Any song can be edited and the learner can write their own:
   notes, chords, lyrics, fingering, staves, key, time, clef and tempo, all edited where they print. Takes are recorded
   from a MIDI keyboard and keep what was played: each key's timing and velocity, and the pedals.
-- **Practice:** Tools (Metronome, Chord finder, Circle of fifths, Tap tempo, Recorder, Drone, Tuner), then Chords, Scales
+- **Practice:** Tools (Metronome, Chord finder, Circle of fifths, Tuner), then Chords, Scales
   and keys, Intervals, Progressions, Accompaniment, the Chord player, Exercises and Quiz (trainers with levels; My gaps
   across them).
 - **Public library:** Explore, in Songs, holds what learners publish. A learner's own song is private until they publish

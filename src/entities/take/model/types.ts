@@ -63,12 +63,6 @@ export interface Take extends Played {
   readonly fromBar: number
 }
 
-/**
- * A free recording (R29 B11, the Recorder): what was played on the piano to the Metronome's click,
- * of no song, so from no bar of one. Played, named, exported and deleted as a take is.
- */
-export type FreeTake = Omit<Take, 'pieceId' | 'fromBar'>
-
 /** The longest name a take keeps. */
 export const TAKE_NAME_MAX = 40
 

@@ -151,3 +151,4 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
 - r29 — Back amended (the owner's report, research in `.scratch/r29/research/back-navigation.md`): to the screen the learner came from in the app, as iOS's Back and Android's in-app Up and Back; up the parents table only where the screen was opened directly (Android's synthetic back stack); a deleted thing's screens stepped past (`useForgetScreens`) (2026-11-04).
 - r30 — On a laptop the Profile sits at the sidebar's foot under Search and Settings, as an app's account does; a locked
   badge names its goal over its meter instead of the count twice (2026-11-05).
+- r30 — Drone, Tap tempo and the Recorder leave Practice: the Metronome has its Tap, and recording is the score editor's (Songs' + › Record) (2026-11-05).

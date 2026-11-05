@@ -7,7 +7,7 @@ import { cn } from '@/shared/lib'
 import { PAINT, type Paint } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
-/** What the quick Recorder records: a take of the song on screen, or a free recording. */
+/** What the quick Recorder records: a take of the song on screen. */
 export interface QuickRecorder {
   readonly stage: RecorderStage
   /** Why it cannot record, said while it cannot (no piano connected). */
@@ -58,8 +58,8 @@ function QuickRow({
 /**
  * The quick tools at the top of the Tools sheet (R29 B11), live without leaving the page: the
  * Metronome (Start/Stop, its tempo − and +, its time; a song's tempo and time where one is on screen,
- * else the Metronome's own), the Recorder (Record/Stop: a take of the song on screen, else a free
- * recording) and the Tuner (its sheet, listening).
+ * else the Metronome's own), the Recorder where a song is on screen (Record/Stop: a take of it) and
+ * the Tuner (its sheet, listening).
  */
 export function QuickTools({
   metronome,
@@ -67,11 +67,11 @@ export function QuickTools({
   onTuner,
 }: {
   metronome: Metronome
-  recorder: QuickRecorder
+  recorder?: QuickRecorder
   onTuner: () => void
 }) {
   const { t } = useTranslation('practice')
-  const recording = recorder.stage !== 'idle'
+  const recording = recorder !== undefined && recorder.stage !== 'idle'
   return (
     <>
       <QuickRow
@@ -127,21 +127,23 @@ export function QuickTools({
           onTap={metronome.tapBeat}
         />
       </div>
-      <QuickRow
-        icon={Circle}
-        paint="lilac"
-        label={t('tools.sheet.recorder')}
-        detail={recording ? undefined : recorder.unavailable}
-      >
-        <Button
-          variant={recording ? 'secondary' : 'default'}
-          disabled={!recording && recorder.unavailable !== undefined}
-          onClick={recording ? recorder.stop : recorder.record}
+      {recorder ? (
+        <QuickRow
+          icon={Circle}
+          paint="lilac"
+          label={t('tools.sheet.recorder')}
+          detail={recording ? undefined : recorder.unavailable}
         >
-          {recording ? <Square data-icon="inline-start" /> : <Circle data-icon="inline-start" />}
-          {recording ? t('tools.sheet.stopRecording') : t('tools.sheet.record')}
-        </Button>
-      </QuickRow>
+          <Button
+            variant={recording ? 'secondary' : 'default'}
+            disabled={!recording && recorder.unavailable !== undefined}
+            onClick={recording ? recorder.stop : recorder.record}
+          >
+            {recording ? <Square data-icon="inline-start" /> : <Circle data-icon="inline-start" />}
+            {recording ? t('tools.sheet.stopRecording') : t('tools.sheet.record')}
+          </Button>
+        </QuickRow>
+      ) : null}
       <button
         type="button"
         onClick={onTuner}

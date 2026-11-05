@@ -68,15 +68,7 @@ describe('parents', () => {
 
   it('leads each tool up to Practice, and each tool’s Settings page up to its tool (R29 B11)', async () => {
     const [learner] = learners
-    const tools = [
-      'metronome',
-      'chord-finder',
-      'circle-of-fifths',
-      'tap-tempo',
-      'recorder',
-      'drone',
-      'tuner',
-    ]
+    const tools = ['metronome', 'chord-finder', 'circle-of-fifths', 'tuner']
     for (const tool of tools)
       expect(
         await parentOf({ routeId: `/shell/practice/${tool}`, params: {}, search: {} }, learner!),

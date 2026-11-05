@@ -22,7 +22,6 @@ const PAGE_PATHS: Readonly<Record<SettingsPageId, readonly string[]>> = {
   ],
   metronome: ['pages/metronome/', 'features/metronome/'],
   tuner: ['pages/tuner/'],
-  drone: ['pages/drone/'],
   chords: ['pages/practice-settings/ui/ExplorerSettingsPages.tsx'],
   scales: ['pages/practice-settings/ui/ExplorerSettingsPages.tsx'],
   intervals: ['pages/practice-settings/ui/ExplorerSettingsPages.tsx'],
@@ -60,7 +59,6 @@ const COMMANDS: Readonly<Record<string, readonly (keyof typeof SETTING_HOMES)[]>
   setAccompaniment: ['accompaniment.hidden'],
   setMetronome: ['metronome.bpm'],
   setTunerA4: ['tuner.a4'],
-  setDrone: ['drone.root'],
   setBar: ['bars.bar.player', 'bars.select.songs', 'bars.swipe.songs.leading'],
 }
 

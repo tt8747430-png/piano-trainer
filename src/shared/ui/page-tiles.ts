@@ -1,10 +1,7 @@
 import {
-  AudioLines,
   AudioWaveform,
   Disc3,
   Gauge,
-  Hand,
-  Mic,
   BookOpenText,
   ChartNoAxesColumnIncreasing,
   CircleDot,
@@ -51,11 +48,8 @@ export const PAGE_TILES = {
   quiz: { icon: ListChecks, paint: 'lilac' },
   // The Metronome (ADR 0052): a steady beat to practise to.
   metronome: { icon: Metronome, paint: 'grass' },
-  // The tools (R29 B11): the circle, the tap pad, the Recorder, the Drone and the Tuner.
+  // The tools (R29 B11): the circle and the Tuner.
   circleOfFifths: { icon: Disc3, paint: 'lilac' },
-  tapTempo: { icon: Hand, paint: 'yellow' },
-  recorder: { icon: Mic, paint: 'sand' },
-  drone: { icon: AudioLines, paint: 'sky' },
   tuner: { icon: Gauge, paint: 'grass' },
   // A folder of the library (ADR 0106): songs, in their order.
   folder: { icon: Folder, paint: 'yellow' },

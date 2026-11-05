@@ -46,10 +46,10 @@ describe('createTakesStore', () => {
   it('starts with no takes, and saves each note and press compactly under pt-takes', () => {
     const storage = createMemoryStorage()
     const store = createTakesStore({ storage, otherTabs: new EventTarget() })
-    expect(store.getState()).toEqual({ takes: [], free: [], nextTake: 1 })
+    expect(store.getState()).toEqual({ takes: [], nextTake: 1 })
     store.setState({ takes: [TAKE], nextTake: 2 })
     expect(JSON.parse(storage.getItem('pt-takes') ?? 'null')).toEqual({
-      state: { takes: [SAVED_TAKE], free: [], nextTake: 2 },
+      state: { takes: [SAVED_TAKE], nextTake: 2 },
       version: TAKES_VERSION,
     })
   })
@@ -57,19 +57,8 @@ describe('createTakesStore', () => {
   it('restores what was saved', () => {
     expect(restored({ takes: [SAVED_TAKE], nextTake: 2 })).toEqual({
       takes: [TAKE],
-      free: [],
       nextTake: 2,
     })
-  })
-
-  it('keeps the Recorder’s free recordings, of no song and no bar, numbered with the takes (R29 B11)', () => {
-    const { pieceId: _piece, fromBar: _bar, ...recording } = SAVED_TAKE
-    const { pieceId: _p, fromBar: _b, ...read } = TAKE
-    const state = restored({ takes: [], free: [{ ...recording, id: 'take-4' }], nextTake: 2 })
-    expect(state.free).toEqual([{ ...read, id: 'take-4' }])
-    expect(state.nextTake).toBe(5)
-    // An id is one recording's, whichever list it is in.
-    expect(restored({ takes: [SAVED_TAKE], free: [recording] }).free).toEqual([])
   })
 
   it('drops a note or a press that cannot be one, and keeps the rest of the take', () => {
@@ -167,6 +156,6 @@ describe('createTakesStore', () => {
     const later = { ...SAVED_TAKE, id: 'take-7' }
     expect(restored({ takes: [later], nextTake: 3 }).nextTake).toBe(8)
     expect(restored({ takes: [], nextTake: 12 }).nextTake).toBe(12)
-    expect(restored('nonsense')).toEqual({ takes: [], free: [], nextTake: 1 })
+    expect(restored('nonsense')).toEqual({ takes: [], nextTake: 1 })
   })
 })

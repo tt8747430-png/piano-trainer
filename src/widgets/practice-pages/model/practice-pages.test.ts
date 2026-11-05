@@ -5,15 +5,7 @@ describe('Practice’s pages', () => {
   it('Tools is the first group, in this order (R29 B11)', () => {
     expect(PRACTICE_GROUPS[0]).toEqual({
       id: 'tools',
-      pages: [
-        'metronome',
-        'chordFinder',
-        'circleOfFifths',
-        'tapTempo',
-        'recorder',
-        'drone',
-        'tuner',
-      ],
+      pages: ['metronome', 'chordFinder', 'circleOfFifths', 'tuner'],
     })
   })
 

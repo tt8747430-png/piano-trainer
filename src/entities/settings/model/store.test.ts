@@ -58,7 +58,6 @@ const DEFAULTS = {
   accompaniment: DEFAULT_ACCOMPANIMENT,
   bars: DEFAULT_BARS,
   tuner: { a4: 440 },
-  drone: { root: 0, kind: 'fifth', octave: 3, volume: 60 },
   scaleStaff: { degrees: true, steps: true, tonic: false, tetrachords: false },
 }
 
@@ -180,7 +179,6 @@ describe('createSettingsStore', () => {
       },
       bars: { ...DEFAULT_BARS, 'select.songs': ['delete', 'move'] },
       tuner: { a4: 442 },
-      drone: { root: 9, kind: 'note', octave: 2, volume: 80 },
       scaleStaff: { degrees: false, steps: true, tonic: true, tetrachords: false },
       scoreView: {
         layout: 'vertical',
@@ -362,28 +360,16 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('starts afresh over a save of the version before, which had no Tuner or Drone (R29 B11)', () => {
-    expect(SETTINGS_VERSION).toBe(24)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 23)).toEqual(
+  it('starts afresh over a save of the version before, which kept a Drone (r30)', () => {
+    expect(SETTINGS_VERSION).toBe(25)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 24)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })
 
-  it('keeps the Tuner’s A and the Drone where they read, their defaults otherwise (R29 B11)', () => {
+  it('keeps the Tuner’s A where it reads, 440 otherwise (R29 B11)', () => {
     expect(restored({ tuner: { a4: 432 } }).tuner).toEqual({ a4: 432 })
     expect(restored({ tuner: { a4: 500 } }).tuner).toEqual({ a4: 440 })
-    expect(restored({ drone: { root: 7, kind: 'minor', octave: 9, volume: 30 } }).drone).toEqual({
-      root: 7,
-      kind: 'minor',
-      octave: 3,
-      volume: 30,
-    })
-    expect(restored({ drone: { root: 12, kind: 'cluster' } }).drone).toEqual({
-      root: 0,
-      kind: 'fifth',
-      octave: 3,
-      volume: 60,
-    })
   })
 
   it('starts the Metronome at 120 in 4/4 with a click, each part saved kept where valid (A39)', () => {
