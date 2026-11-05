@@ -473,6 +473,10 @@
 @utility top-screen-bar {
   top: var(--screen-bar, 0px);
 }
+/* What is pinned under the bar keeps the notch's room only while the bar is away (\`Pinned\`). */
+@utility pt-pinned {
+  padding-top: calc(env(safe-area-inset-top) * var(--screen-bar-away, 0));
+}
 @utility pb-safe {
   padding-bottom: env(safe-area-inset-bottom);
 }

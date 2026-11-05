@@ -5,7 +5,7 @@ import { useCan } from '@/entities/library'
 import { journeyById } from '@/entities/lesson'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { useSetSearch } from '@/shared/lib'
-import { ScreenHeader, Segmented } from '@/shared/ui'
+import { ScreenHeader, TitleTabs } from '@/shared/ui'
 import { PlaceActions } from '@/widgets/app-nav'
 import { ContinueAction } from '@/widgets/continue-action'
 import {
@@ -46,8 +46,8 @@ export function LearnPage() {
         </>
       }
       edit={toggle}
-      switcher={
-        <Segmented
+      views={
+        <TitleTabs
           label={t('learn:views.label')}
           value={view}
           options={(['lessons', 'courses'] as const).map((shown) => ({
@@ -55,7 +55,6 @@ export function LearnPage() {
             label: t(`learn:views.${shown}`),
           }))}
           onChange={(shown) => show({ view: shown, journey: '' })}
-          compact
         />
       }
     />

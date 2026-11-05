@@ -61,6 +61,7 @@ export function BlockStyleSheet({
         <StyleEditor
           value={style}
           layouts={false}
+          inSheet
           onChange={(next) => (index === null ? undefined : setBlockStyle(editor, index, next))}
           preview={
             <StyledBlock style={style}>

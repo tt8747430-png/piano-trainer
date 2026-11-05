@@ -20,6 +20,7 @@ import {
   usePieces,
   usePiecesStoreApi,
   useRepertoire,
+  entryTitles,
   type ChartPiece,
   type Piece,
 } from '@/entities/piece'
@@ -29,6 +30,7 @@ import { duplicateSong } from '@/features/edit-piece'
 import { useSongActions } from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { SongExportSheet } from '@/features/song-files'
+import { useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   BackButton,
@@ -45,7 +47,6 @@ import {
 import { PublishRow } from '@/widgets/content-editor'
 import { useSongPublish } from '../model/use-song-publish'
 import { OwnMusicAsk } from './OwnMusicAsk'
-import { PieceByline } from './PieceByline'
 import { SongCover } from './SongCover'
 
 /** The route's song, or the way back where it is gone (an own song deleted in another tab). */
@@ -76,6 +77,8 @@ function SongSettings({ piece }: { piece: Piece }) {
   const own = isOwnSongId(piece.id) ? piece.id : null
   const hasVersion = usePieces((state) => selectHasVersion(state, piece.id))
   const { item, title, publishing } = useSongPublish(piece)
+  // Its other name (as the other language writes it), in a line under the title.
+  const subtitle = entryTitles(piece, useLocale()).secondary
   const shared = useShareSong()
   const router = useRouter()
   const layout = useLibraryLayout()
@@ -130,10 +133,14 @@ function SongSettings({ piece }: { piece: Piece }) {
         {/* The song at the head and its page's Edit; its score is ✎'s on the page (R31-S). */}
         <SettingsGroup flush>
           <div className="flex min-h-20 items-center gap-4 px-4 py-3">
-            <SongCover piece={piece} className="w-14 shrink-0 text-xl" />
-            <div className="min-w-0">
-              <p className="font-display text-lg font-semibold text-balance">{title}</p>
-              <PieceByline piece={piece} />
+            <SongCover piece={piece} favourite={false} className="w-14 shrink-0 text-xl" />
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <p className="font-display text-lg leading-tight font-semibold text-balance">
+                {title}
+              </p>
+              {subtitle ? (
+                <p className="truncate text-sm text-muted-foreground">{subtitle}</p>
+              ) : null}
             </div>
           </div>
           <RowLink

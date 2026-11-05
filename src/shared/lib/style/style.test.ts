@@ -42,4 +42,11 @@ describe('the block style (R29 B9)', () => {
     expect(vars['--block-text']).toBe('#102030')
     expect(vars['--block-radius']).toBe('var(--block-radius-3)')
   })
+
+  it('writes a paint chosen as text in its ink, never its pale wash (R31-S)', () => {
+    const vars = styleVars({ ...DEFAULT_STYLE, surface: 'sky', text: 'sky' })
+    expect(vars['--block-surface']).toBe('var(--paint-sky)')
+    expect(vars['--block-text']).toBe('var(--on-paint-sky)')
+    expect(styleVars(DEFAULT_STYLE)['--block-text']).toBe('var(--foreground)')
+  })
 })

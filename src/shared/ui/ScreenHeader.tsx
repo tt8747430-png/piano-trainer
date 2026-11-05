@@ -1,7 +1,7 @@
 import { PencilLine } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn, useMediaQuery } from '@/shared/lib'
+import { cn } from '@/shared/lib'
 import { Button } from './primitives/button'
 import { NO_BAR_SIZE, useScreenBar } from './screen-bar'
 import { usePageHeading } from './use-page-heading'
@@ -43,12 +43,12 @@ type ScreenHeaderProps = {
       /** A place's title, set larger in the same row. */
       large: true
       /**
-       * A place's views (a compact `Segmented`): beside its title in the bar on a laptop, under the bar
-       * in the page on a phone, so the bar keeps its one row and its tools. Only a place has them.
+       * A place's views (R31-S): its title's place in the bar taken by their words (a `TitleTabs`), on
+       * a phone and a laptop alike; the title is still the page's heading, to a screen reader.
        */
-      switcher?: ReactNode
+      views?: ReactNode
     }
-  | { large?: false; switcher?: never }
+  | { large?: false; views?: never }
 )
 
 /**
@@ -56,8 +56,8 @@ type ScreenHeaderProps = {
  * ellipsis) and at most two actions, More holding the rest; never a second row (R29-P1: a page's
  * views are a segmented control in its content). A place (Learn, Songs, Practice) or a detail page (a
  * song, a course) is `large`: the same one row, its title set larger and allowed a second line; a
- * place's views (`switcher`, Learn's Lessons · Courses, Songs' My songs · Explore) sit beside its title on
- * a laptop and under the bar on a phone, their own width. A hairline marks the bar once the page runs
+ * place's views (`views`, Learn's Lessons · Courses, Songs' My songs · Explore) stand as its title, a
+ * tab each (R31-S). A hairline marks the bar once the page runs
  * under it. It stays at the top, clear of the notch, slides away while reading down
  * and comes back as soon as the page turns up; it stays while focus is inside it.
  *
@@ -70,7 +70,7 @@ export function ScreenHeader({
   settings,
   more,
   edit,
-  switcher,
+  views,
   large = false,
   titleOnPage = false,
 }: ScreenHeaderProps) {
@@ -78,8 +78,6 @@ export function ScreenHeader({
   const bar = useRef<HTMLElement>(null)
   const pageHeading = usePageHeading<HTMLHeadingElement>(title)
   const scrolled = useScrolled()
-  // Where a place's views fit beside its title (the sidebar's width, `lg`); one copy, never two.
-  const wide = useMediaQuery(VIEWS_BESIDE_TITLE)
   useEffect(() => {
     const element = bar.current
     if (!element) return
@@ -127,10 +125,13 @@ export function ScreenHeader({
               'line-clamp-2 leading-tight text-balance wrap-break-word',
               large ? 'text-[1.375rem] sm:text-2xl' : 'text-lg sm:text-xl',
               titleOnPage && 'max-sm:sr-only',
+              // A place's views say where it is: its name stays the page's heading, unseen.
+              views && 'sr-only',
             )}
           >
             {title}
           </h1>
+          {views}
           {edit ? (
             edit.editing ? (
               <EditDone action={edit} />
@@ -138,7 +139,6 @@ export function ScreenHeader({
               <EditPencil onEdit={edit.onEdit} label={edit.label} />
             )
           ) : null}
-          {switcher && wide ? <div className="ms-4 w-fit shrink-0">{switcher}</div> : null}
         </div>
         {tools || settings || more ? (
           <div className="ms-auto flex shrink-0 items-center gap-1.5 print:hidden">
@@ -150,19 +150,8 @@ export function ScreenHeader({
       </div>
     </header>
   )
-  // A phone's views under the bar, in the page: the bar stays one row.
-  return switcher && !wide ? (
-    <>
-      {header}
-      <div className="w-fit print:hidden">{switcher}</div>
-    </>
-  ) : (
-    header
-  )
+  return header
 }
-
-/** The width from which a place's views sit beside its title in the bar: the sidebar's, `lg`. */
-const VIEWS_BESIDE_TITLE = '(min-width: 64rem)'
 
 /** The pencil beside the title: quiet, the title's own act, a 44px target. */
 function EditPencil({ onEdit, label: named }: { onEdit: () => void; label?: string }) {

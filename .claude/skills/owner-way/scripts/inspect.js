@@ -16,7 +16,7 @@
   }
   const visible = (el) => {
     const r = el.getBoundingClientRect()
-    if (r.width < 1 || r.height < 1) return false
+    if (r.width <= 1 || r.height <= 1) return false
     if (r.bottom < 0 || r.top > innerHeight || r.right < 0 || r.left > innerWidth) return false
     const cs = getComputedStyle(el)
     return cs.visibility !== 'hidden' && cs.display !== 'none' && Number(cs.opacity) > 0.05
@@ -71,7 +71,11 @@
     // the screen) or at its start (a layer high on it): only there is it hidden for good.
     const low = r.top > innerHeight / 2
     // A layer that holds neither edge (a sticky preview in mid-page) is a fault at every scroll.
-    const edged = r.top < 16 || r.bottom > innerHeight * 0.75
+    // A pane pinned under a bar (a preview stacked on it) is the bar's: content scrolls under both.
+    const stacked = layers.some(
+      (other) => other !== layer && !layer.contains(other) && Math.abs(other.getBoundingClientRect().bottom - r.top) < 4,
+    )
+    const edged = r.top < 16 || r.bottom > innerHeight * 0.75 || stacked
     if (edged && at !== 'only' && ((low && at !== 'end') || (!low && at !== 'top'))) continue
     for (const el of texts) {
       if (layer.contains(el) || el.contains(layer)) continue

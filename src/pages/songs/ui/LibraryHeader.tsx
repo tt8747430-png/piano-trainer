@@ -9,12 +9,13 @@ import {
   RoundButton,
   RoundLink,
   ScreenHeader,
+  TitleTabs,
   type EditAction,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { LibraryPage } from '../model/use-library-page'
 import { ArchiveButton } from './ArchiveButton'
-import { SongsSwitch } from './SongsSwitch'
+import { useSongsViews } from './SongsSwitch'
 
 /**
  * The library's bar (Mindscape's): its title says where the learner is, Songs at Home with its views
@@ -34,6 +35,7 @@ export function LibraryHeader({
   edit?: EditAction
 }) {
   const { t } = useTranslation('songs')
+  const views = useSongsViews('mine')
   const nameOf = useFolderName()
   const { folders } = useLibraryLayout()
   const { select } = page
@@ -64,7 +66,7 @@ export function LibraryHeader({
   // Home's bar has Songs' switch, My songs · Explore, in its title's place (D1).
   const place = folder
     ? ({ large: false } as const)
-    : ({ large: true, switcher: <SongsSwitch value="mine" /> } as const)
+    : ({ large: true, views: <TitleTabs {...views} /> } as const)
   return (
     <ScreenHeader
       title={name}

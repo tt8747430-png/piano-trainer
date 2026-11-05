@@ -91,3 +91,9 @@ A study, practised on Practice, is in no library. A folder played song after son
   device keeps each share following its folder. Server: `learner_groups`, `learner_group_members`, `shared_folders`
   under RLS (members read; owner or editor writes), `join_learner_group` and `learner_group_invite`; the `GroupsPort`
   (`shared/api/groups`, a fake with the same rules), `features/share-folder`, `pages/groups` (2026-11-05).
+- r31 (R31-S) — A song's ✎ opens the score editor; its page is edited from Settings › Edit song page. Settings: the
+  song at its head, Library, Share (Publish, Share link, Export…), Delete apart; a song has no Reset progress (its
+  Learned is the bar's). Export holds the files alone; Share link is its own act. Row menus in parts (open, library,
+  share, away), a folder's with Card style. Filter adds Folder (Not in a folder) and Progress. My songs · Explore are
+  the bar's title. Card style: the preview pinned, presets a grid, Corners, Border and Shadow as choices, text in its
+  ink, Reset and Apply docked (2026-11-05).

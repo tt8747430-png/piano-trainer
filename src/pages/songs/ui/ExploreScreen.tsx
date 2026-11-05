@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next'
 import { useSetSearch } from '@/shared/lib'
-import { ChoiceChips, ScreenHeader, SearchField } from '@/shared/ui'
+import { ChoiceChips, ScreenHeader, SearchField, TitleTabs } from '@/shared/ui'
 import { EXPLORE_CATEGORIES, type SongsHome } from '../model/explore-view'
 import { ExploreResults } from './ExploreResults'
 import { ExploreShelves } from './ExploreShelves'
-import { SongsSwitch } from './SongsSwitch'
+import { useSongsViews } from './SongsSwitch'
 
 /**
  * Explore (B3, D1, Noji's library page): Songs' second view, what learners published. Its bar the
@@ -15,10 +15,11 @@ import { SongsSwitch } from './SongsSwitch'
 export function ExploreScreen({ home }: { home: SongsHome }) {
   const { t } = useTranslation('songs')
   const show = useSetSearch<SongsHome>()
+  const views = useSongsViews('explore')
   const listing = home.q.trim() !== '' || home.shelf !== ''
   return (
     <div className="flex flex-col gap-4 pb-4">
-      <ScreenHeader title={t('title')} large switcher={<SongsSwitch value="explore" />} />
+      <ScreenHeader title={t('title')} large views={<TitleTabs {...views} />} />
       <div className="flex min-w-0 flex-col gap-3">
         <div className="lg:max-w-2xl">
           <SearchField

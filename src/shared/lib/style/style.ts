@@ -81,6 +81,14 @@ export function sanitiseStyle(value: unknown): BlockStyle {
 const paintVar = (paint: BlockStyle['surface'], plain: string) =>
   paint === 'plain' ? plain : paint.startsWith('#') ? paint : `var(--paint-${paint})`
 
+/** A paint as text: its ink, which reads on its wash and on the card (R31-S). */
+const inkVar = (paint: BlockStyle['text']) =>
+  paint === 'plain'
+    ? 'var(--foreground)'
+    : paint.startsWith('#')
+      ? paint
+      : `var(--on-paint-${paint})`
+
 /** A style as the custom properties a block reads (`--block-*`), and nothing else. */
 export function styleVars(style: BlockStyle): Readonly<Record<`--block-${string}`, string>> {
   return {
@@ -88,7 +96,7 @@ export function styleVars(style: BlockStyle): Readonly<Record<`--block-${string}
     '--block-border': `${style.border}px`,
     '--block-shadow': `var(--block-shadow-${style.shadow})`,
     '--block-surface': paintVar(style.surface, 'var(--card)'),
-    '--block-text': paintVar(style.text, 'var(--foreground)'),
+    '--block-text': inkVar(style.text),
     '--block-padding': `var(--block-padding-${style.padding})`,
   }
 }

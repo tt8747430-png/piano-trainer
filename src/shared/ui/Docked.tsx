@@ -5,7 +5,8 @@ import { cn } from '@/shared/lib'
  * Keeps its content at the foot of the screen, over the phone's tab bar, the screen's width beside a
  * rail or a sidebar, while the page scrolls above it. Its height is the page's `--docked`: the page
  * pads its foot clear of it (`pb-docked-*`), and what floats at the foot stands over it
- * (`bottom-docked`). One thing is docked at a time.
+ * (`bottom-docked`). One thing is docked at a time. Below it, down to the screen's edge (the home
+ * indicator's strip, or under the tab bar), its own ground: nothing of the page shows there (R31-S).
  */
 export function Docked({ children, className }: { children: ReactNode; className?: string }) {
   const docked = useRef<HTMLDivElement>(null)
@@ -29,7 +30,7 @@ export function Docked({ children, className }: { children: ReactNode; className
       ref={docked}
       data-slot="docked"
       className={cn(
-        'fixed inset-x-0 bottom-nav-bar z-20 border-t border-border bg-background px-gutter pt-1 pb-2 print:hidden landscape-phone:left-rail landscape-phone:pr-gutter-safe landscape-phone:pb-safe-2 lg:left-sidebar lg:pb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
+        "fixed inset-x-0 bottom-nav-bar z-20 border-t border-border bg-background px-gutter pt-1 pb-2 print:hidden after:absolute after:inset-x-0 after:top-full after:h-(--nav-bar) after:bg-background after:content-[''] landscape-phone:left-rail landscape-phone:pr-gutter-safe landscape-phone:pb-safe-2 lg:left-sidebar lg:pb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed",
         className,
       )}
     >

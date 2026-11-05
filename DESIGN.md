@@ -394,8 +394,11 @@ square at the top.
   Done in its place while editing) right after it, then at its end, in this order whatever the page passes: tools,
   Settings (the gear), More. A place's or a detail page's title is larger
   in the same row and may take two lines. Nothing hangs under the bar: a status goes in it or in its menu, and a page's
-  views sit in its content. A place's views (Learn's Lessons · Courses, Songs' My songs · Explore) are a compact
-  `Segmented` of their own width: beside the title from 64rem, under the bar on a phone. It slides away while reading down and returns as the page turns up.
+  views sit in its content. A place's views (Learn's Lessons · Courses, Songs' My songs · Explore) are its title
+  (`TitleTabs`): their words where the title stands, in Onest at the large title's size, the one shown in ink with an
+  ink line under it, the other in soft ink; the place's name stays the page's heading, unseen. A pane kept in sight
+  under the bar (a style's preview) is `Pinned`: solid, edge to edge, moving with the bar; never a card floating over
+  the controls. What is docked at the foot (`Docked`) owns the ground down to the screen's edge. It slides away while reading down and returns as the page turns up.
 - **Page, sheet or menu:** a page for settings and many fields; a sheet for creating one thing or one focused choice; a
   menu for one-tap commands. A sheet never holds a second sheet; a menu never holds a setting.
 - **An act on an item is a button, never a switch:** Favourite and Learned on the item's card and in its menus. An item's

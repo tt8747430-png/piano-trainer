@@ -11,7 +11,16 @@ import { PAINT } from '@/shared/ui'
  * (its Edit), else its key on the soft yellow; its Favourite on the cover's corner. A study is in no
  * library: no favourite.
  */
-export function SongCover({ piece, className }: { piece: Piece; className?: string }) {
+export function SongCover({
+  piece,
+  className,
+  favourite = true,
+}: {
+  piece: Piece
+  className?: string
+  /** Its ♡ on its corner: the song page's; a head that names the song (its Settings) has none. */
+  favourite?: boolean
+}) {
   const { t } = useTranslation('piece')
   const look = useLibrary((state) => state.songLooks[piece.id])
   const Icon = look ? FOLDER_PICTURE_ICONS[look.picture] : null
@@ -35,7 +44,7 @@ export function SongCover({ piece, className }: { piece: Piece; className?: stri
           </span>
         )}
       </div>
-      {piece.kind === 'study' ? null : (
+      {piece.kind === 'study' || !favourite ? null : (
         <FavouriteButton
           piece={piece.id}
           className="absolute -right-3 -bottom-3 bg-card shadow-sm hover:bg-card"

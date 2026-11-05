@@ -20,6 +20,7 @@ import {
   ButtonLink,
   ChoiceCard,
   ConfirmDialog,
+  Docked,
   NotFound,
   ScreenHeader,
   SettingsGroup,
@@ -137,9 +138,9 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
   )
 
   return (
-    <div className="flex flex-col gap-6 pb-8">
+    <div className="flex flex-col gap-6 pb-docked-8">
       <ScreenHeader title={t('cardStyle.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-7">
         <p className="px-1 font-display text-2xl font-semibold text-balance">
           {folder ? nameOf(folder) : t('library.home')}
         </p>
@@ -147,55 +148,63 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
           value={draft.style}
           onChange={(style) => setDraft({ ...draft, style })}
           preview={preview}
-        />
-        <SettingsGroup title={t('cardStyle.shows')}>
-          {CARD_SHOWS.map((show) => (
-            <SwitchRow
-              key={show}
-              label={t(`cardStyle.show.${show}`)}
-              checked={draft.show[show]}
-              onCheckedChange={(on) => setDraft({ ...draft, show: { ...draft.show, [show]: on } })}
-            />
-          ))}
-        </SettingsGroup>
-        <ChoiceCard
-          title={t('cardStyle.density')}
-          value={draft.density}
-          options={CARD_DENSITIES.map((density) => ({
-            value: density,
-            label: t(`cardStyle.densities.${density}.label`),
-            example: t(`cardStyle.densities.${density}.example`),
-          }))}
-          onChange={(density) => setDraft({ ...draft, density })}
-        />
-        <ChoiceCard<Reach>
-          title={t('cardStyle.applyTo')}
-          value={reach}
-          options={[
-            { value: 'this', label: t(folder ? 'cardStyle.thisFolder' : 'cardStyle.homeOnly') },
-            ...(subfolders.length > 0
-              ? [
-                  {
-                    value: 'below' as const,
-                    label: t('cardStyle.withSubfolders', { count: subfolders.length }),
-                  },
-                ]
-              : []),
-            {
-              value: 'every',
-              label: t('cardStyle.everyFolder', { count: everyFolder.length }),
-            },
-          ]}
-          onChange={setReach}
-        />
-        <div className="flex flex-wrap items-center justify-end gap-3">
+        >
+          <SettingsGroup title={t('cardStyle.shows')}>
+            {CARD_SHOWS.map((show) => (
+              <SwitchRow
+                key={show}
+                label={t(`cardStyle.show.${show}`)}
+                checked={draft.show[show]}
+                onCheckedChange={(on) =>
+                  setDraft({ ...draft, show: { ...draft.show, [show]: on } })
+                }
+              />
+            ))}
+          </SettingsGroup>
+          <ChoiceCard
+            title={t('cardStyle.density')}
+            value={draft.density}
+            options={CARD_DENSITIES.map((density) => ({
+              value: density,
+              label: t(`cardStyle.densities.${density}.label`),
+              example: t(`cardStyle.densities.${density}.example`),
+            }))}
+            onChange={(density) => setDraft({ ...draft, density })}
+          />
+          <ChoiceCard<Reach>
+            title={t('cardStyle.applyTo')}
+            value={reach}
+            options={[
+              { value: 'this', label: t(folder ? 'cardStyle.thisFolder' : 'cardStyle.homeOnly') },
+              ...(subfolders.length > 0
+                ? [
+                    {
+                      value: 'below' as const,
+                      label: t('cardStyle.withSubfolders', { count: subfolders.length }),
+                    },
+                  ]
+                : []),
+              {
+                value: 'every',
+                label: t('cardStyle.everyFolder', { count: everyFolder.length }),
+              },
+            ]}
+            onChange={setReach}
+          />
+        </StyleEditor>
+      </div>
+      {/* Reset and Apply at the foot, always in reach (R31-S): never under a long page's end. */}
+      <Docked className="pt-3">
+        <div className="mx-auto flex w-full max-w-5xl items-center gap-3">
           {said ? (
-            <p role="status" className="mr-auto text-sm text-muted-foreground">
+            <p role="status" className="me-auto text-sm text-muted-foreground">
               {said}
             </p>
           ) : null}
           <Button
-            variant="ghost"
+            variant="soft"
+            size="lg"
+            className="ms-auto"
             onClick={() => {
               resetCardLook(store, place)
               setDraft(DEFAULT_CARD_LOOK)
@@ -204,9 +213,11 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
           >
             {t('cardStyle.reset')}
           </Button>
-          <Button onClick={onApply}>{t('cardStyle.apply')}</Button>
+          <Button size="lg" onClick={onApply}>
+            {t('cardStyle.apply')}
+          </Button>
         </div>
-      </div>
+      </Docked>
       <ConfirmDialog
         open={asking}
         onOpenChange={setAsking}

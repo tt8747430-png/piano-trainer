@@ -1,4 +1,3 @@
-import { stubMatchMedia } from '@/shared/test/match-media'
 import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Settings } from 'lucide-react'
@@ -8,6 +7,7 @@ import { ChordSizeField } from './ChordSizeField'
 import { Dropdown } from './Dropdown'
 import { FactCard } from './FactCard'
 import { InversionChoice } from './InversionChoice'
+import { TitleTabs } from './TitleTabs'
 import { RankMark } from './RankMark'
 import { NamedSegmented } from './NamedSegmented'
 import { Labelled } from './Labelled'
@@ -44,36 +44,40 @@ describe('ScreenHeader', () => {
     expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
   })
 
-  it('sets a place’s views beside its title on a laptop, in the bar’s one row', () => {
-    // Every media query matches: the laptop's width among them.
-    stubMatchMedia({ dark: true })
-    render(
-      <ScreenHeader title="Learn" large switcher={<div role="radiogroup" aria-label="Views" />} />,
-    )
-    const bar = screen.getByRole('banner')
-    expect(within(bar).getByRole('radiogroup', { name: 'Views' })).toBeInTheDocument()
-    expect(within(bar).getByRole('heading', { level: 1, name: 'Learn' })).not.toHaveClass('sr-only')
-    expect(bar.children).toHaveLength(1)
-  })
-
-  it('sets a place’s views under the bar on a phone, the bar keeping its tools', () => {
+  it('sets a place’s views as its title, its name still the page’s heading (R31-S)', async () => {
+    const user = userEvent.setup()
+    const shown: string[] = []
     render(
       <ScreenHeader
         title="Songs"
         large
-        switcher={<div role="radiogroup" aria-label="Views" />}
+        views={
+          <TitleTabs
+            label="Views"
+            value="mine"
+            options={[
+              { value: 'mine', label: 'My songs' },
+              { value: 'explore', label: 'Explore' },
+            ]}
+            onChange={(view) => shown.push(view)}
+          />
+        }
         tools={<button type="button">Select</button>}
       />,
     )
     const bar = screen.getByRole('banner')
-    expect(within(bar).queryByRole('radiogroup')).toBeNull()
-    expect(screen.getAllByRole('radiogroup', { name: 'Views' })).toHaveLength(1)
-    expect(within(bar).getByRole('heading', { level: 1, name: 'Songs' })).toBeVisible()
+    expect(within(bar).getByRole('heading', { level: 1, name: 'Songs' })).toHaveClass('sr-only')
+    expect(within(bar).getByRole('radio', { name: 'My songs' })).toBeChecked()
+    await user.click(within(bar).getByRole('radio', { name: 'Explore' }))
+    expect(shown).toEqual(['explore'])
+    // One row: the views where the title stands, nothing under the bar.
+    expect(bar.nextElementSibling).toBeNull()
+    expect(within(bar).getByRole('button', { name: 'Select' })).toBeInTheDocument()
   })
 
-  it('gives only a place a switcher', () => {
+  it('gives only a place its views', () => {
     // @ts-expect-error: a page under a place shows its views in its content (R29-P1)
-    render(<ScreenHeader title="Chords" switcher={<div />} />)
+    render(<ScreenHeader title="Chords" views={<div />} />)
   })
 
   it('puts Edit beside the title and tools, Settings and More at the bar’s end, in that order (A3)', () => {
