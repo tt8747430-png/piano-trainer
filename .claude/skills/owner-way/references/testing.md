@@ -57,6 +57,10 @@ as the installed app: the status bar and the home indicator are emulated as safe
 - a target under 40px on a touch screen (`SMALL`);
 - a page wider than its screen, or a page error.
 
+**A page is shot only once fully loaded** (the owner's rule): every capture, the app's and a reference site's, waits on
+`scripts/settle.mjs` (load, network quiet, fonts, images, no busy region or spinner, a still layout) and reports a
+part that never settles instead of shooting past it.
+
 `SIZES`, `THEMES` and `LANGUAGES` narrow it while iterating; a pass is the whole matrix. The Claude-in-Chrome tab is no substitute: it reports as hidden,
 so lazy staves stay blank and sheets never finish opening.
 

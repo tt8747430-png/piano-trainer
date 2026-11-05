@@ -204,6 +204,7 @@ are reference only, but progressions are facts.
 - No ubiquitous-language glossary (2026-11-05): "i dont want the ubiquitous language anymore".
 
 ## Process
+- **Never a screenshot before the page has fully loaded** (2026-11-05): `scripts/settle.mjs` before every shot.
 - **Mockups in the owner's frames:** the real iPhone 17 Pro (app, Safari, and the smaller iPhone) and the MacBook Air
   with a macOS Safari window; inspired by the example apps and sites the owner sends (2026-11-05).
 - **A signed-in learner is never asked to sign in again** after an update (2026-11-05).

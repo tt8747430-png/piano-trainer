@@ -15,6 +15,7 @@
 import { mkdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { chromium } from '@playwright/test'
+import { settle } from './settle.mjs'
 
 const ALL_SIZES = [
   // The installed app on an iPhone: the status bar (59) and the home indicator (34) are the page's.
@@ -96,11 +97,13 @@ for (const size of SIZES) {
         await page
           .waitForFunction(() => !document.querySelector('[data-slot="score-skeleton"]') && (!document.querySelector('[data-slot="score"]') || document.querySelector('[data-slot="score"] svg g.note')), null, { timeout: 15000 })
           .catch(() => problems.push(`${route}: the score was not drawn within 15 s`))
-        await page.waitForTimeout(900)
+        // Never a shot before the page has fully loaded (the owner's rule).
+        for (const part of await settle(page)) problems.push(`${route}: never settled (${part})`)
         const slug =
           step.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').slice(0, 80) || 'home'
         const label = `${slug}-${size.name}-${theme}-${language.name}`
         const check = async (at) => {
+          for (const part of await settle(page)) problems.push(`${label}${at}: never settled (${part})`)
           await page.screenshot({ path: join(out, `${label}${at}.png`) })
           shots += 1
           for (const line of await page.evaluate(`(${inspect})(${JSON.stringify(at === '-mid' ? 'mid' : at === '-end' ? 'end' : scrolls ? 'top' : 'only')})`)) problems.push(`${label}${at}: ${line}`)
