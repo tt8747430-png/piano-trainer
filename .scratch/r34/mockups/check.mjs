@@ -20,7 +20,7 @@ for (const [w, h] of [
     const wide = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)
     if (wide) console.log('WIDE', w, theme)
     if (theme === 'light' || w === 1710)
-      for (const id of ['q1','q2','q3','q4','q5','q6','q7']) {
+      for (const id of ['q1','q2','q3','q4','q5','q6','q7','q8']) {
         const el = page.locator(`#${id}`)
         await el.screenshot({ path: `${out}/${id}-${w}-${theme}.png` })
       }

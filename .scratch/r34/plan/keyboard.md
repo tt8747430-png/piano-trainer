@@ -97,6 +97,21 @@ Intervals, a progression, the Chord player, a lesson, a song's preview, a take, 
 - Where: the Player, the score editor, every page's docked keys. Not the trainers' or a chord diagram's keys inside a
   card (they are not at the screen's edge).
 
+### 4b. The folded keys' strip (coordinator, the owner's "check all the views also without the piano roll")
+
+- Songscription's Score only folds its roll and keys into a thin labelled strip at the very bottom ("Piano roll ↗")
+  that one tap reopens. Ours: hidden from the bar's Keyboard, the keys fold into a strip where they stood, the
+  screen's width, 44px (a target), a hairline on its music side: the piano icon, **Keyboard**, ↗ (Maximize2).
+  Named "Show the keyboard" (ru "Показать клавиатуру"). The Player, the editor and every page's docked keys.
+
+### 4c. The sheet's one pill (Songscription's view pill: Page · Infinite width · Infinite height · − 100% +)
+
+- One small floating control at the score's bottom-right, always in sight (it never appears under a finger,
+  ADR 0115): **Layout** as three icon radios, Page view · Vertical scroll · Panorama (named, each saying what it does
+  when pointed at), then in Page view the canvas's zoom (− n % + Fit the page to the width) in the same pill.
+- The Layout tiles leave the Player's Display and the editor's View: the pill is the layout's one control
+  (`SheetLayoutTools`). The canvas's zoom no longer fades in and out.
+
 ### 5. Settings
 
 - **The Player's ⚙:** its On-screen piano page keeps `KeyboardSettingsFields` (the owner's ruling).

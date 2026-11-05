@@ -5,7 +5,7 @@
     <p class="soft">Each screen has <b>Approve</b>, <b>Revise</b> or <b>Remove</b> and a note; your answers stay in this browser.</p>
   </div>
   <nav class="toc" aria-label="Questions">
-    <a href="#q1">1 Keys at the foot</a><a href="#q2">2 The bar</a><a href="#q3">3 Pedals</a><a href="#q4">4 Divider and key size</a><a href="#q5">5 Pages</a><a href="#q6">6 Settings</a><a href="#q7">7 Before and after</a>
+    <a href="#q1">1 Keys at the foot</a><a href="#q2">2 The bar</a><a href="#q3">3 Pedals</a><a href="#q4">4 Divider and key size</a><a href="#q5">5 Pages</a><a href="#q6">6 Settings</a><a href="#q7">7 Before and after</a><a href="#q8">8 The sheet’s pill</a>
     <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="ptSize(1)">iPhone 17 Pro · app</button><script>var PT_SIZES=[['pro','iPhone 17 Pro · app'],['safari','iPhone 17 Pro · Safari'],['small','Smaller iPhone · app']];function ptSize(step){var k=0;try{k=Math.max(0,PT_SIZES.findIndex(function(x){return x[0]===localStorage.getItem('pt-mock-size')}))}catch(e){}k=(k+step)%PT_SIZES.length;document.body.classList.remove('small','safari');if(PT_SIZES[k][0]!=='pro')document.body.classList.add(PT_SIZES[k][0]);document.getElementById('sizeBtn').textContent=PT_SIZES[k][1];try{localStorage.setItem('pt-mock-size',PT_SIZES[k][0])}catch(e){}}ptSize(0)</script></span>
   </nav>
 
@@ -53,5 +53,12 @@
   <section class="q" id="q7"><div class="qhead"><span class="qnum">7</span><h2>Before and after</h2></div>
     <p class="where">Where: the Player on the iPhone 17 Pro; Chords on the MacBook.</p>
     <div class="screens" id="s7"></div>
+  </section>
+
+  <section class="q" id="q8"><div class="qhead"><span class="qnum">8</span><h2>The sheet’s one pill: layout and zoom together</h2></div>
+    <p class="where">Where: the Player and the score editor, at the score’s bottom-right corner.</p>
+    <p>What changes: as Songscription’s view pill (Page · Infinite width · Infinite height · Smaller · 100% · Larger), one small floating control at the score’s corner: the layout’s three choices, and in Page view the zoom beside them. The Layout tiles leave Display and the editor’s View, so the layout has one place. The zoom no longer fades in and out.</p>
+    <div class="screens" id="s8"></div>
+    <div class="rec">Recommendation: as drawn: one control for how the score looks, where your eyes are.</div>
   </section>
 </div>

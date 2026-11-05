@@ -9,6 +9,12 @@ Object.assign(P, {
   chevd: '<path d="m7 10 5 5 5-5"/>',
   hand: '<path d="M18 11V6a2 2 0 0 0-4 0v5M14 10V4a2 2 0 0 0-4 0v6M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.9-6-2.4l-3.6-3.6a2 2 0 0 1 2.8-2.8L7 15"/>',
   grid: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  file: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h6M8 13h8M8 17h8"/>',
+  rows: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18"/>',
+  pano: '<path d="M2 7v10M6 5v14"/><rect x="10" y="3" width="12" height="18" rx="2"/>',
+  zout: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M8 11h6"/>',
+  zin: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/>',
+  fit: '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',
   cable: '<path d="M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1M19 15V6.5a3.5 3.5 0 0 0-7 0v11a3.5 3.5 0 0 1-7 0V9M21 21v-2h-4M3 5h4V3M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3"/>',
 })
 
@@ -31,6 +37,8 @@ const piano88 = ({ h = 56, w = {}, dn = [], b = {}, bdn = [], names = 'c', from 
   }).join('')
   return `<div class="pk slim" style="height:${h}px;flex:none"><div class="felt"></div>${white}${black}</div>`
 }
+const strip = () => `<div class="kstrip">${ic('keys', 16)}Keyboard${ic('fit', 14)}</div>`
+const pill = (layout = 'vertical') => `<div class="spill"><span class="rb ${layout === 'page' ? 'on' : ''}" title="Page view">${ic('file', 20)}</span><span class="rb ${layout === 'vertical' ? 'on' : ''}" title="Vertical scroll">${ic('rows', 20)}</span><span class="rb ${layout === 'panorama' ? 'on' : ''}" title="Panorama">${ic('pano', 20)}</span>${layout === 'page' ? `<span class="sep"></span><span class="rb">${ic('zout', 20)}</span><span class="pct">100 %</span><span class="rb">${ic('zin', 20)}</span><span class="rb">${ic('fit', 18)}</span>` : ''}</div>`
 const divider = (drag = false) => `<div class="divider ${drag ? 'drag' : ''}" role="separator" aria-label="Resize keyboard"><i></i></div>`
 
 // The bar's keyboard tools: the chord held (laptop), Sustain (+ ⌄ with All three), Keyboard.
@@ -47,13 +55,13 @@ const kTools = ({ chord = '', lit = false, three = false, shown = true, latchedM
 const playerBar = (o = {}, wide = false) => `<div class="bar">${rb('x', 'plain')}<div class="t ${wide ? 'lg' : ''}"><span>Hot Cross Buns</span><span class="rb sm" style="color:var(--ink)">${ic('pen', 20)}</span></div><div class="tools">${kTools(o)}${rb('gear')}</div></div>`
 const PLAY_MARKS = { w: { 25: 'rh', 16: 'lh', 18: 'lh', 20: 'lh' }, dn: [25, 16, 18, 20] }
 const phonePlayer = ({ keys = true, h = 56, drag = false, lit = false, three = false, marks = PLAY_MARKS, overlay = '' } = {}) =>
-  app(`${playerBar({ lit, three, shown: keys })}<div style="position:relative;flex:1;min-height:0;display:flex;flex-direction:column">${score(4)}${overlay}</div>
-  ${keys ? divider(drag) + piano88({ h, ...marks }) : ''}<div style="background:var(--card);border-top:1px solid var(--line)">${transportRow(true)}${tools()}</div>`)
+  app(`${playerBar({ lit, three, shown: keys })}<div style="position:relative;flex:1;min-height:0;display:flex;flex-direction:column">${score(4)}${pill()}${overlay}</div>
+  ${keys ? divider(drag) + piano88({ h, ...marks }) : strip()}<div style="background:var(--card);border-top:1px solid var(--line)">${transportRow(true)}${tools()}</div>`)
 const macPlayer = ({ keys = true, h = 145, chord = 'C', lit = false, three = false, overlay = '', latchedMore = false, size = 'all' } = {}) =>
   mac(`${playerBar({ chord, lit, three, shown: keys, latchedMore }, true)}
   <div style="display:flex;flex-direction:column;height:calc(100% - 88px)">
-    <div style="position:relative;flex:1;min-height:0;overflow:hidden;display:flex;justify-content:center;background:var(--sand);padding-top:16px"><div style="width:640px;background:var(--card);box-shadow:0 2px 10px rgba(0,0,0,.08);padding:20px 40px">${title}${sys(0, 560)}${sys(0, 560, 8, ['C', 'G', 'C'])}${sys(0, 560)}</div>${overlay}</div>
-    ${keys ? divider() + (size === 'all' ? piano88({ h, ...PLAY_MARKS }) : piano({ whites: 22, octave: 2, h, w: { 16: 'rh', 0: 'lh', 2: 'lh', 4: 'lh' }, dn: [16, 0, 2, 4] })) : ''}
+    <div style="position:relative;flex:1;min-height:0;overflow:hidden;display:flex;justify-content:center;background:var(--sand);padding-top:16px"><div style="width:640px;background:var(--card);box-shadow:0 2px 10px rgba(0,0,0,.08);padding:20px 40px">${title}${sys(0, 560)}${sys(0, 560, 8, ['C', 'G', 'C'])}${sys(0, 560)}</div>${pill(size === 'pagepill' ? 'page' : 'vertical')}${overlay}</div>
+    ${keys ? divider() + (size !== 'large' ? piano88({ h, ...PLAY_MARKS }) : piano({ whites: 22, octave: 2, h, w: { 16: 'rh', 0: 'lh', 2: 'lh', 4: 'lh' }, dn: [16, 0, 2, 4] })) : ''}
     <div style="display:flex;align-items:center;justify-content:space-between;min-height:64px;padding:0 40px;background:var(--card);border-top:1px solid var(--line)"><span style="display:flex;gap:4px">${tbtn('eye', 'Sheet ⌄')}${tbtn('layers', 'Original')}${tbtn('ear', 'Listen')}</span><span style="display:flex;align-items:center;gap:8px">${rb('loop', 'plain')}${rb('prev', 'plain')}<span style="width:56px;height:56px;border-radius:99px;background:var(--honey);color:var(--honey-ink);display:grid;place-items:center">${ic('pause', 26, 2.6)}</span>${rb('next', 'plain')}<span class="chip" style="height:44px">♩ = 92</span>${rb('metro', 'plain')}</span>${tbtn('more', 'More')}</div>
   </div>`)
 
@@ -65,7 +73,7 @@ const finderBody = (chord) => `<div style="flex:1;min-height:0;display:grid;alig
 const finderBar = (o) => `<div class="bar">${rb('back')}<div class="t"><span>Chord finder</span></div><div class="tools">${kTools(o)}${rb('cable')}${rb('gear')}</div></div>`
 const C_MAJOR = { w: { 23: 'lit', 25: 'lit', 27: 'lit' }, dn: [23, 25, 27] }
 const finder = ({ keys = true, chord = 'C', lit = false } = {}) =>
-  app(`${finderBar({ lit, shown: keys })}${finderBody(keys ? chord : '')}${keys ? divider() + piano88({ h: 56, ...C_MAJOR }) : ''}<div style="height:34px;background:var(--card)"></div>`)
+  app(`${finderBar({ lit, shown: keys })}${finderBody(keys ? chord : '')}${keys ? divider() + piano88({ h: 56, ...C_MAJOR }) : strip()}<div style="height:34px;background:var(--card)"></div>`)
 
 const chordsMain = `<div style="flex:1;min-height:0;overflow:hidden;padding:20px 40px;background:var(--paper)"><div style="background:var(--card);border-radius:20px;box-shadow:inset 0 0 0 1px var(--line);padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:20px">
   <div style="display:grid;gap:12px;align-content:start"><div style="font:600 64px/1 var(--display)">C</div><div class="soft">Major triad</div>
@@ -87,7 +95,7 @@ document.getElementById('s1').innerHTML = [
 
 document.getElementById('s2').innerHTML = [
   fig('2.1', 'Phone bar', 'Close, the title and ✎; then Sustain, Keyboard (pressed: the keys show) and ⚙. No chord on a phone.', phonePlayer()),
-  fig('2.2', 'Phone, keys hidden', 'Keyboard tapped: the keys go, the music takes their room, Sustain leaves the bar with them. Nothing floats.', phonePlayer({ keys: false })),
+  fig('2.2', 'Phone, keys hidden', 'Keyboard tapped: the keys fold into a thin “Keyboard” strip at the foot that brings them back at a tap (Songscription’s Score only); Sustain leaves the bar with them.', phonePlayer({ keys: false })),
   fig('2.3', 'Laptop bar, a chord held', '“Chord held C” as you hold C–E–G on the keys or a MIDI keyboard; gone when you let go.', macPlayer({ chord: 'C' })),
 ].join('')
 
@@ -103,7 +111,7 @@ document.getElementById('s4').innerHTML = [
 
 document.getElementById('s5').innerHTML = [
   fig('5.1', 'Chord finder, phone', 'C major tapped on the keys; the stage names it. Sustain, Keyboard, MIDI and ⚙ in the bar.', finder()),
-  fig('5.2', 'Chord finder, keys hidden', 'The stage takes the screen; Keyboard brings the keys back. No floating Keys button.', finder({ keys: false })),
+  fig('5.2', 'Chord finder, keys hidden', 'The stage takes the screen; the strip at the foot or the bar’s Keyboard brings the keys back. Nothing floats.', finder({ keys: false })),
   fig('5.3', 'Chords, laptop', 'The chord’s keys marked by role, no finger numbers under them.', macChords()),
 ].join('')
 
@@ -128,4 +136,10 @@ document.getElementById('s7').innerHTML = [
   fig('7.2', 'Player, this design', 'Slim 88 keys edge to edge; Sustain and Keyboard in the bar.', phonePlayer()),
   fig('7.3', 'Chords today', 'Finger circles under the keys and the rail with ‹ › − + ⚙ Hide.', shot('before-chords-laptop.png', 'Chords today', 'mac')),
   fig('7.4', 'Chords, this design', 'The keys alone, at the foot, under the divider.', macChords()),
+].join('')
+
+const pagePlayer = macPlayer({ size: 'pagepill' })
+document.getElementById('s8').innerHTML = [
+  fig('8.1', 'Phone, Vertical scroll', 'The sheet’s one pill at its foot’s right: Page view · Vertical scroll · Panorama, the one chosen filled.', phonePlayer()),
+  fig('8.2', 'Laptop, Page view', 'In Page view the zoom joins the same pill: − 100 % + and Fit the page to the width. Always in sight, so it never appears under a finger.', pagePlayer),
 ].join('')
