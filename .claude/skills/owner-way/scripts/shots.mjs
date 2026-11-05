@@ -20,7 +20,7 @@ const ALL_SIZES = [
   { name: 'iphone-app', width: 393, height: 852, touch: true, insets: { top: 59, bottom: 34 }, standalone: true },
   { name: 'iphone-safari', width: 393, height: 695, touch: true },
   { name: 'iphone-side', width: 852, height: 393, touch: true, insets: { left: 59, right: 59, bottom: 21 }, standalone: true },
-  { name: 'iphone-402', width: 402, height: 874, touch: true, insets: { top: 62, bottom: 34 }, standalone: true },
+  { name: 'iphone-17-pro', width: 402, height: 874, touch: true, insets: { top: 62, bottom: 34 }, standalone: true },
   { name: 'macbook-safari', width: 1710, height: 904, touch: false },
   { name: 'macbook-app', width: 1710, height: 984, touch: false },
 ]

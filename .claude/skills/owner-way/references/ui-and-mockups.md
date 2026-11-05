@@ -74,7 +74,9 @@ question about a screen is always a drawing of that screen.
 One published artifact per area (the song page, the Player, the editor), with every page and option in it:
 
 - **The whole screen, never the control alone:** bar, toolbar, content, floating actions, tab bar.
-- **Phone and laptop side by side** for every option: an iPhone frame at 393×852 and a MacBook frame at 1710×904.
+- **Phone and laptop side by side** for every option: the owner's real iPhone 17 Pro frame (`.scratch/r30/mockups/iphone-17-pro.png`,
+  its screen at 24,23 in a 450×920 frame) at 402×874, a switch beside Light / dark redrawing every phone at the smaller
+  393×852 in the same frame, and a MacBook frame at 1710×904.
 - **Real parts:** `DESIGN.md`'s tokens copied in as CSS variables, Literata and Onest, the app's real 44px sizes, corners,
   icons and honey. It must read as our app.
 - **Real content:** a real song, real chords, the exact English label each control will carry, one Russian check of the

@@ -6,7 +6,7 @@
   </div>
   <nav class="toc" aria-label="Questions">
     <a href="#q1">1 My songs · Explore</a><a href="#q2">2 Filters</a><a href="#q3">3 Card style</a><a href="#q4">4 Song page and Settings</a><a href="#q5">5 Menus</a>
-    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button></span>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="(function(b){var s=document.body.classList.toggle('small');b.textContent=s?'Smaller iPhone · 393 × 852':'iPhone 17 Pro · 402 × 874';try{localStorage.setItem('pt-mock-size',s?'small':'pro')}catch(e){}})(this)">iPhone 17 Pro · 402 × 874</button><script>try{if(localStorage.getItem('pt-mock-size')==='small'){document.body.classList.add('small');document.getElementById('sizeBtn').textContent='Smaller iPhone · 393 × 852'}}catch(e){}</script></span>
   </nav>
   <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>The view switch</h2></div>
     <p class="where">Where: Songs (My songs · Explore) and Learn (Lessons · Courses), the same control.</p>

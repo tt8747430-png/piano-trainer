@@ -5,7 +5,7 @@
     <p class="soft" id="storeNote">Connecting the feedback store…</p>
   </div>
   <nav class="toc" aria-label="Questions"><a href="#q1">1 The bar</a><a href="#q2">2 The palette</a><a href="#q3">3 Time signature</a><a href="#q4">4 Laptop</a>
-    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button></span></nav>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="(function(b){var s=document.body.classList.toggle('small');b.textContent=s?'Smaller iPhone · 393 × 852':'iPhone 17 Pro · 402 × 874';try{localStorage.setItem('pt-mock-size',s?'small':'pro')}catch(e){}})(this)">iPhone 17 Pro · 402 × 874</button><script>try{if(localStorage.getItem('pt-mock-size')==='small'){document.body.classList.add('small');document.getElementById('sizeBtn').textContent='Smaller iPhone · 393 × 852'}}catch(e){}</script></span></nav>
   <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>One bar, Flat’s</h2></div>
     <p class="where">Where: /edit/a-song.</p>
     <p>What changes: Close · Done | ▶ · Undo · Redo · ⚙. The Tools button, the floating View and Transpose capsule, and the floating transport go: Play is the bar’s; View, Transpose, Record and Takes are the gear’s first page; Tempo is Settings’. One gear, no ⋯, as you ruled. The save state sits beside the gear page’s title, never a mark beside Done.</p>

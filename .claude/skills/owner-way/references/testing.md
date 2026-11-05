@@ -25,7 +25,7 @@ Sizes come from the device, never from what a browser's emulator reports. Measur
 | `iphone-app`     | 393×852  | iPhone 14 Pro, the installed app                 | published spec, the whole screen                           |
 | `iphone-safari`  | 393×695  | iPhone 14 Pro in Safari, bars showing            | measured in Safari on a simulated 393×852 phone            |
 | `iphone-side`    | 852×393  | on its side, the installed app                   | published spec; Safari's side size is **not measured**     |
-| `iphone-402`     | 402×874  | the owner's larger phone size                    | the owner's list                                           |
+| `iphone-17-pro`  | 402×874  | iPhone 17 Pro, the installed app                 | the owner's frame (status bar 62, home indicator 34)       |
 | `macbook-safari` | 1710×904 | MacBook Air M3 15-inch, Safari filling the screen | measured in Safari on the owner's Mac                      |
 | `macbook-app`    | 1710×984 | the same Mac, the most an app window can take    | macOS's usable screen, measured; a title bar takes some    |
 

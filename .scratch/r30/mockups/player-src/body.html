@@ -6,7 +6,7 @@
   </div>
   <nav class="toc" aria-label="Questions">
     <a href="#q1">1 The screen</a><a href="#q2">2 The piano and its pedal</a><a href="#q3">3 Settings</a><a href="#q4">4 Version, Transpose, More, Tempo</a>
-    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button></span>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="(function(b){var s=document.body.classList.toggle('small');b.textContent=s?'Smaller iPhone · 393 × 852':'iPhone 17 Pro · 402 × 874';try{localStorage.setItem('pt-mock-size',s?'small':'pro')}catch(e){}})(this)">iPhone 17 Pro · 402 × 874</button><script>try{if(localStorage.getItem('pt-mock-size')==='small'){document.body.classList.add('small');document.getElementById('sizeBtn').textContent='Smaller iPhone · 393 × 852'}}catch(e){}</script></span>
   </nav>
   <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>One bar, one dock, nothing floating over the score</h2></div>
     <p class="where">Where: the Player, /play/a-song.</p>

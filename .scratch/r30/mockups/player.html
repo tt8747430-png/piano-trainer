@@ -64,9 +64,12 @@ figure textarea, .qfb textarea { width: 100%; min-height: 40px; font: 13px var(-
 
 /* ——— device frames (true sizes, scaled) ——— */
 .dev { position: relative; overflow: hidden; border-radius: 34px; background: var(--frame); padding: 9px }
-.dev.phone { width: calc(393px * var(--s) + 18px); height: calc(852px * var(--s) + 18px); --s: .74 }
+.dev.phone { --fw: 450px; --fh: 920px; --sx: 24px; --sy: 23px; --sw: 402px; --sh: 874px; --sr: 62px; --sb: 62px; --s: .74; width: calc(var(--fw) * var(--s)); height: calc(var(--fh) * var(--s)); padding: 0; border-radius: 0; background: none; overflow: visible }
+body.small .dev.phone { --fw: 440px; --fh: 899px; --sx: 23.5px; --sy: 22.5px; --sw: 393px; --sh: 852px; --sr: 60px; --sb: 54px }
+.dev.phone::after { content: ''; position: absolute; inset: 0; background: url(iphone-17-pro.png) 0 0 / 100% 100% no-repeat; pointer-events: none; z-index: 3 }
 .dev.mac { width: calc(1710px * var(--s) + 22px); height: calc(904px * var(--s) + 34px); --s: .55; border-radius: 16px; padding: 11px 11px 23px }
 .dev > .scr { width: 393px; height: 852px; transform: scale(var(--s)); transform-origin: 0 0; border-radius: 26px }
+.dev.phone > .scr { position: absolute; left: calc(var(--sx) * var(--s)); top: calc(var(--sy) * var(--s)); width: var(--sw); height: var(--sh); border-radius: var(--sr) }
 .dev.mac > .scr { width: 1710px; height: 904px; border-radius: 4px }
 @media (max-width: 720px) { .dev.mac { --s: .42 } .dev.phone { --s: .7 } }
 .scrollx { overflow-x: auto; max-width: 100% }
@@ -119,7 +122,7 @@ figure textarea, .qfb textarea { width: 100%; min-height: 40px; font: 13px var(-
 .tabs { position: absolute; left: 0; right: 0; bottom: 0; height: 84px; background: var(--card); border-top: 1px solid var(--line); display: flex; padding: 6px 8px 0; gap: 4px }
 .tabs div { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; font: 600 12px var(--sans); color: var(--ink-soft); padding-top: 6px; border-radius: 12px; height: 54px }
 .tabs div.on { background: var(--sand); color: var(--ink) }
-.status { height: 47px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; font: 600 15px var(--sans) }
+.status { height: var(--sb, 47px); flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; font: 600 15px var(--sans) }
 .scroll { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0 }
 .scroll > * { flex-shrink: 0 }
 .cards { display: flex; gap: 10px }
@@ -181,7 +184,7 @@ span[aria-label^="Level"] { font-size: 14px !important }
   </div>
   <nav class="toc" aria-label="Questions">
     <a href="#q1">1 The screen</a><a href="#q2">2 The piano and its pedal</a><a href="#q3">3 Settings</a><a href="#q4">4 Version, Transpose, More, Tempo</a>
-    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button></span>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="(function(b){var s=document.body.classList.toggle('small');b.textContent=s?'Smaller iPhone · 393 × 852':'iPhone 17 Pro · 402 × 874';try{localStorage.setItem('pt-mock-size',s?'small':'pro')}catch(e){}})(this)">iPhone 17 Pro · 402 × 874</button><script>try{if(localStorage.getItem('pt-mock-size')==='small'){document.body.classList.add('small');document.getElementById('sizeBtn').textContent='Smaller iPhone · 393 × 852'}}catch(e){}</script></span>
   </nav>
   <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>One bar, one dock, nothing floating over the score</h2></div>
     <p class="where">Where: the Player, /play/a-song.</p>
@@ -273,7 +276,7 @@ Object.assign(P, {
   lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
   pause: '<path d="M8 5v14M16 5v14"/>',
 });
-const app = (inner) => `<div class="dev phone"><div class="scr" style="display:flex;flex-direction:column"><div style="height:47px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 30px 6px;font:600 15px var(--sans)"><span>9:41</span><span>••• ▮</span></div>${inner}</div></div>`;
+const app = (inner) => `<div class="dev phone"><div class="scr" style="display:flex;flex-direction:column"><div style="height:var(--sb, 47px);display:flex;align-items:center;justify-content:space-between;padding:0 30px 6px;font:600 15px var(--sans)"><span>9:41</span><span>••• ▮</span></div>${inner}</div></div>`;
 // a score system: staff lines and note heads, in ink
 const sys = (y, w = 361, notes = 8, chords = ['C', 'G']) => `<svg width="${w}" height="120" viewBox="0 0 ${w} 120" style="display:block;color:var(--ink)" aria-hidden="true">${chords.map((c, i) => `<text x="${50 + i * (w - 60) / chords.length}" y="12" font-family="Literata,serif" font-size="14" font-weight="600" fill="currentColor">${c}</text>`).join('')}${[0, 1].map((s) => [0, 1, 2, 3, 4].map((l) => `<line x1="6" x2="${w - 4}" y1="${22 + s * 52 + l * 7}" y2="${22 + s * 52 + l * 7}" stroke="currentColor" stroke-width=".7" opacity=".7"/>`).join('')).join('')}<line x1="6" x2="6" y1="22" y2="102" stroke="currentColor"/><line x1="${w - 4}" x2="${w - 4}" y1="22" y2="102" stroke="currentColor"/><line x1="${w / 2}" x2="${w / 2}" y1="22" y2="102" stroke="currentColor" stroke-width=".7"/><text x="10" y="50" font-size="30" fill="currentColor">𝄞</text><text x="10" y="94" font-size="24" fill="currentColor">𝄢</text>${Array.from({ length: notes }, (_, i) => `<ellipse cx="${48 + i * (w - 60) / notes}" cy="${29 + ((i * 5) % 4) * 3.5}" rx="4.4" ry="3.3" fill="currentColor" transform="rotate(-20 ${48 + i * (w - 60) / notes} ${29 + ((i * 5) % 4) * 3.5})"/>`).join('')}${Array.from({ length: notes / 2 }, (_, i) => `<ellipse cx="${48 + i * 2 * (w - 60) / notes}" cy="${88 - (i % 2) * 7}" rx="4.4" ry="3.3" fill="none" stroke="currentColor" stroke-width="1.4"/>`).join('')}</svg>`;
 const title = `<div style="text-align:center;font:600 20px var(--display);padding:8px 0 2px">Hot Cross Buns</div><div style="font-size:14px;color:var(--ink-soft);padding:0 16px">1 · Verse · ♩ = 92</div>`;
