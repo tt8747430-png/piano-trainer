@@ -371,11 +371,6 @@ export const practice = {
     },
   },
   // The line of a part of Accompaniment with no pattern to show.
-  accompaniment: {
-    source: 'Source',
-    noneYours: 'Patterns you star, make or hide are kept here.',
-    allHidden: 'Every pattern here is hidden. You can find them under Yours.',
-  },
   // Patterns: each explained and heard, the learner's favourites, hidden and own.
   patterns: {
     new: 'New pattern',
@@ -389,7 +384,7 @@ export const practice = {
     hide: 'Hide from the Player',
     show: 'Show in the Player',
     hiddenNote:
-      'Hidden from the Player’s list and from its shelf. You can still find it under Yours.',
+      'Hidden from the Player’s list and from its book. You can still find it under Hidden.',
     edit: 'Edit',
     delete: 'Delete',
     deleting: {
@@ -606,6 +601,9 @@ export const practice = {
     mine: 'Mine',
     hidden: 'Hidden',
     searchHint: 'Search',
+    songsOf: '{{book}}: songs',
+    // An accompaniment's hands, each its figure.
+    handsLine: 'LH: {{left}} · RH: {{right}}',
     showAll: 'Show all {{count}}',
     anyLevel: 'Any',
     anyStyle: 'Any',

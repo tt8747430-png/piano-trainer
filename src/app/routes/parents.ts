@@ -91,11 +91,11 @@ const toPattern: Parent = (from) =>
     params: { patternRef: param(from, 'patternRef') },
   })
 const toAccompaniment: Parent = () => up({ to: '/practice/accompaniment' })
-/** A pattern up to the page of Accompaniment that lists it. */
-const toPatternPart: Parent = async (from) => {
-  const { patternPart } = await import('./accompaniment-screens')
-  const show = patternPart(from.context.patterns.getState(), param(from, 'patternRef'))
-  return up({ to: '/practice/accompaniment', search: { show } })
+/** A pattern up to the place of Accompaniment's library that lists it. */
+const toPatternPlace: Parent = async (from) => {
+  const { patternPlace } = await import('./accompaniment-screens')
+  const place = patternPlace(from.context.patterns.getState(), param(from, 'patternRef'))
+  return up({ to: '/practice/accompaniment', search: { place } })
 }
 const toStudy: Parent = (from) =>
   up({
@@ -295,10 +295,16 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/practice/exercises/$exerciseId': () => up({ to: '/practice/exercises' }),
   '/shell/practice/accompaniment': toPractice,
   '/shell/practice/accompaniment/patterns/new': toAccompaniment,
-  '/shell/practice/accompaniment/patterns/$patternRef': toPatternPart,
+  '/shell/practice/accompaniment/patterns/$patternRef': toPatternPlace,
   '/shell/practice/accompaniment/patterns/$patternRef/edit': toPattern,
   '/shell/practice/accompaniment/patterns/$patternRef/publish': toPattern,
-  '/shell/practice/accompaniment/studies/$pieceId': toAccompaniment,
+  '/shell/practice/accompaniment/studies/$pieceId': async (from) => {
+    const { studyPlace } = await import('./accompaniment-screens')
+    return up({
+      to: '/practice/accompaniment',
+      search: { place: studyPlace(param(from, 'pieceId')) },
+    })
+  },
   '/shell/practice/accompaniment/studies/$pieceId/sections/$section': toStudy,
 }
 

@@ -132,6 +132,11 @@ export function readPracticeLibrarySearch(raw: Raw): PracticeLibraryView {
     stage: isStage(raw.stage) ? raw.stage : PRACTICE_LIBRARY_DEFAULTS.stage,
   }
 }
+/** What a library remembers between visits: its place and its sort; the search and level are one visit's. */
+export const PRACTICE_LIBRARY_KEPT = [
+  'place',
+  'sort',
+] as const satisfies readonly (keyof PracticeLibraryView)[]
 export const practiceLibrarySearch = routeSearch(
   readPracticeLibrarySearch,
   PRACTICE_LIBRARY_DEFAULTS,

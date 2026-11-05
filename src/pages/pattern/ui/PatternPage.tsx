@@ -75,7 +75,7 @@ function usePatternActions(pattern: BookPattern, name: string) {
     forget(`/practice/accompaniment/patterns/${id}`)
     void navigate({
       to: '/practice/accompaniment',
-      search: { show: 'yours' },
+      search: { place: 'mine' },
       replace: true,
     }).then(() => deleteOwnPattern(store, id))
   }

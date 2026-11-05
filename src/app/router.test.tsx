@@ -37,7 +37,7 @@ const ROUTES = [
   ['/search?q=dorian', '/search'],
   ['/check?of=chords:tri', '/check'],
   ['/practice', '/practice'],
-  ['/practice/accompaniment?show=seven-types', '/practice/accompaniment'],
+  ['/practice/accompaniment?place=seven-types', '/practice/accompaniment'],
   ['/practice/accompaniment/patterns/M1', '/practice/accompaniment/patterns/$patternRef'],
   ['/practice/accompaniment/studies/ex3', '/practice/accompaniment/studies/$pieceId'],
   ['/songs/bz5/sections/2', '/songs/$pieceId/sections/$section'],
@@ -397,8 +397,10 @@ describe('shelves', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/accompaniment/studies/ex3')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.href).toBe('/practice/accompaniment'))
-    expect(await screen.findByRole('region', { name: 'Studies' })).toBeInTheDocument()
+    await waitFor(() =>
+      expect(router.state.location.href).toBe('/practice/accompaniment?place=called-to-play'),
+    )
+    expect(await screen.findByRole('region', { name: 'Called to Play: songs' })).toBeInTheDocument()
   })
 
   it('closes the Player of a song written in degrees, opened directly, to its page on Songs', async () => {

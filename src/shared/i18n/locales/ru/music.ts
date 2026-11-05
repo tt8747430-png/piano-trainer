@@ -273,7 +273,7 @@ export const music: LocaleResources['music'] = {
     lastStaff: 'Последний видимый нотоносец остаётся',
   },
   patternShelf: { favourites: 'Избранное', own: 'Ваши фактуры', hidden: 'Скрытые' },
-  patternPart: { styles: 'Стили', yours: 'Свои' },
+  patternPart: { styles: 'Ритмические стили', yours: 'Мои' },
   play: 'Сыграть',
   playNotes: 'Сыграть {{notes}}',
   playBar: 'Сыграть такт {{n}}',

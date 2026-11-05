@@ -358,11 +358,6 @@ export const practice: LocaleResources['practice'] = {
       theory: 'Теория',
     },
   },
-  accompaniment: {
-    source: 'Источник',
-    noneYours: 'Здесь хранятся фактуры, которые вы отметили, создали или скрыли.',
-    allHidden: 'Все фактуры здесь скрыты. Они хранятся на странице «Свои».',
-  },
   patterns: {
     new: 'Новая фактура',
     favourite: 'Избранное',
@@ -374,7 +369,7 @@ export const practice: LocaleResources['practice'] = {
     makeOwn: 'Сделать свою на её основе',
     hide: 'Скрыть из плеера',
     show: 'Показать в плеере',
-    hiddenNote: 'Скрыта из списка плеера и со своей полки. Её по-прежнему можно найти в «Своих».',
+    hiddenNote: 'Скрыта из списка плеера и из своей книги. Её по-прежнему можно найти в «Скрытых».',
     edit: 'Изменить',
     delete: 'Удалить',
     deleting: {
@@ -577,6 +572,8 @@ export const practice: LocaleResources['practice'] = {
     mine: 'Мои',
     hidden: 'Скрытые',
     searchHint: 'Поиск',
+    songsOf: '{{book}}: песни',
+    handsLine: 'Л. р.: {{left}} · П. р.: {{right}}',
     showAll: 'Показать все: {{count}}',
     anyLevel: 'Любой',
     anyStyle: 'Любой',
