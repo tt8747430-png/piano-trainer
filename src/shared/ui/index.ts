@@ -75,12 +75,8 @@ export { PlayToggle } from './PlayToggle'
 export { usePlayKey } from './use-play-key'
 export {
   NO_KEYS,
-  Pedal,
-  PedalLyre,
-  PedalPaddle,
+  MIN_KEYS_PX,
   PianoKeyboard,
-  RailButton,
-  RailGroup,
   toneMark,
   unmarked,
   type KeyMark,
@@ -112,13 +108,13 @@ export { usePageHeading } from './use-page-heading'
 export { Segmented } from './Segmented'
 export { ChordText } from './ChordText'
 export { HandCard, type FingeredKey } from './HandCard'
-export { SheetLayoutField } from './SheetLayoutField'
+export { SheetLayoutPicker } from './SheetLayoutPicker'
+export { SheetPill } from './SheetPill'
+export { SheetToolsContext } from './sheet-tools'
 export { PictureChoice } from './PictureChoice'
 export { PictureTiles } from './PictureTiles'
 export {
   DockPicture,
-  FoldPicture,
-  KeyLengthPicture,
   KeySizePicture,
   NoteNamesPicture,
   SwipePicture,

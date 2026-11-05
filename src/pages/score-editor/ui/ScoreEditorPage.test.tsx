@@ -373,33 +373,32 @@ describe('the score editor', () => {
     expect(within(notes).queryByRole('button', { name: 'Quarter note' })).not.toBeInTheDocument()
     await user.click(within(notes).getByRole('button', { name: 'Note', expanded: false }))
     expect(within(notes).getByRole('button', { name: 'Quarter note' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Piano keys' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Keyboard' })).toBeInTheDocument()
   })
 
-  it('shows and hides the keys from the bar’s Piano keys, as the Player’s (R29)', async () => {
+  it('shows and hides the keys from the bar’s Keyboard, as the Player’s (R34)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    const keys = await screen.findByRole('button', { name: 'Piano keys' })
+    const keys = await screen.findByRole('button', { name: 'Keyboard' })
     expect(keys).toHaveAttribute('aria-pressed', 'true')
     await user.click(keys)
     expect(settingsStore.getState().keyboard.folded).toBe(true)
-    expect(screen.getByRole('button', { name: 'Piano keys' })).toHaveAttribute(
+    expect(screen.queryByRole('group', { name: 'Keyboard' })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Keyboard' })).toHaveAttribute(
       'aria-pressed',
       'false',
     )
-    await user.click(screen.getByRole('button', { name: 'Piano keys' }))
+    await user.click(screen.getByRole('button', { name: 'Keyboard' }))
     expect(settingsStore.getState().keyboard.folded).toBe(false)
+    expect(screen.getByRole('group', { name: 'Keyboard' })).toBeInTheDocument()
   })
 
-  it('folds its keys from their rail, and brings them back from the bar’s Piano keys', async () => {
+  it('keeps the Sustain in the bar only while its keys show (R34)', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    await user.click(await screen.findByRole('button', { name: 'Hide the keys' }))
-    expect(settingsStore.getState().keyboard.folded).toBe(true)
-    expect(screen.queryByRole('button', { name: 'Hide the keys' })).not.toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Piano keys' }))
-    expect(settingsStore.getState().keyboard.folded).toBe(false)
-    expect(screen.getByRole('button', { name: 'Hide the keys' })).toBeInTheDocument()
+    await renderApp('/edit/my-1', { storage: withSong() })
+    expect(await screen.findByRole('button', { name: /^Sustain pedal/ })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Keyboard' }))
+    expect(screen.queryByRole('button', { name: /^Sustain pedal/ })).not.toBeInTheDocument()
   })
 
   it('says the song is gone once another tab deletes it, keeping no take for it', async () => {
@@ -1095,12 +1094,12 @@ describe('the score editor', () => {
     const user = userEvent.setup()
     sizedAs(LANDSCAPE_PHONE)
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    const keys = await screen.findByRole('button', { name: 'Piano keys' })
+    const keys = await screen.findByRole('button', { name: 'Keyboard' })
     expect(keys).toHaveAttribute('aria-pressed', 'false')
     await user.click(keys)
     expect(settingsStore.getState().keyboard.foldedLandscape).toBe(false)
     expect(settingsStore.getState().keyboard.folded).toBe(false)
-    expect(screen.getByRole('button', { name: 'Hide the keys' })).toBeInTheDocument()
+    expect(screen.getByRole('group', { name: 'Keyboard' })).toBeInTheDocument()
   })
 
   it('offers no side for its palette beside the sheet, nor a switch for it, in the View (ADR 0114)', async () => {
@@ -1164,9 +1163,10 @@ describe('the score editor', () => {
           '[data-area="lead"] :is(button, a), [data-area="actions"] :is(button, a)',
         ),
       ]
-      // Close, then Done beside the title, the one in words (iOS's; Flat's); Piano keys, MIDI,
-      // Play, Undo, Redo and the gear at the end.
-      expect(bar).toHaveLength(8)
+      // Close, then Done beside the title, the one in words (iOS's; Flat's); Sustain (while the
+      // keys show: not on a phone on its side, where they open hidden), Keyboard, MIDI, Play, Undo,
+      // Redo and the gear at the end.
+      expect(bar).toHaveLength(query === LANDSCAPE_PHONE ? 8 : 9)
       expect(bar[1]).toHaveTextContent('Done')
       for (const control of [bar[0]!, ...bar.slice(2)]) {
         const name = control.getAttribute('aria-label') ?? ''
@@ -1838,12 +1838,13 @@ describe('the score editor', () => {
     expect(piecesStore.getState().versions.bz4?.sections[0]?.lines[0]).toBe('Fm _ _ _')
   })
 
-  it('keeps Piano keys and the MIDI keyboard first of its bar’s end, where the Player’s are, then Play, Undo, Redo and its one gear, Done beside the title (ADR 0114, 0115, R31-E)', async () => {
+  it('keeps Sustain, Keyboard and the MIDI keyboard first of its bar’s end, where the Player’s are, then Play, Undo, Redo and its one gear, Done beside the title (ADR 0114, 0115, R31-E, R34)', async () => {
     await renderApp('/edit/my-1', { storage: withSong() })
     const midiButton = await screen.findByRole('button', { name: 'MIDI keyboard' })
     const end = midiButton.closest('[data-area="actions"]')
     expect(namesIn(end as HTMLElement)).toEqual([
-      'Piano keys',
+      'Sustain pedal — hold, or tap to latch',
+      'Keyboard',
       'MIDI keyboard',
       'Play',
       'Undo',
@@ -1862,11 +1863,8 @@ describe('the score editor', () => {
     const view = await openGear(user, /^View/)
     // The score alone: no tiles of the Player's views, no view's heading, no Every view.
     expect(within(view).queryByRole('radiogroup', { name: 'Show the music as' })).toBeNull()
-    expect(
-      within(view)
-        .getAllByRole('radio')
-        .map((layout) => layout.textContent),
-    ).toEqual(['Page view', 'Vertical scroll', 'Panorama'])
+    // The layout is the sheet's pill's (R34): never a second choice here.
+    expect(within(view).queryByRole('radiogroup', { name: 'Layout' })).toBeNull()
     expect(
       within(view)
         .getAllByRole('group')
@@ -1887,7 +1885,9 @@ describe('the score editor', () => {
     await user.click(within(view).getByRole('button', { name: 'Finger numbers' }))
     expect(settingsStore.getState().practice.fingerNumbers).toBe(true)
     expect(within(view).queryByRole('radiogroup', { name: /beside/ })).not.toBeInTheDocument()
-    await user.click(within(view).getByRole('radio', { name: 'Page view' }))
+    await user.keyboard('{Escape}')
+    const pill = document.querySelector<HTMLElement>('[data-slot="sheet-pill"]')!
+    await user.click(within(pill).getByRole('radio', { name: 'Page view' }))
     expect(settingsStore.getState().scoreView.layout).toBe('page')
     expect(settingsStore.getState()).not.toHaveProperty('editorLayout')
   })

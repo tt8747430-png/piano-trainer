@@ -40,8 +40,7 @@ describe('PianoKeyboard', () => {
   it('is one tab stop, from the start of its range, and the arrow keys walk the keys', async () => {
     const user = userEvent.setup()
     renderKeyboard()
-    // The rail's buttons come after the keys, as they stand beneath them (R32).
-    screen.getByRole('button', { name: 'Octave down' }).focus()
+    screen.getByRole('button', { name: 'After' }).focus()
     await user.tab({ shift: true })
     expect(screen.getByRole('button', { name: 'C4' })).toHaveFocus()
     await user.keyboard('{ArrowRight}')
@@ -53,7 +52,7 @@ describe('PianoKeyboard', () => {
     await user.keyboard('{Home}')
     expect(screen.getByRole('button', { name: 'A0' })).toHaveFocus()
     await user.tab()
-    expect(screen.getByRole('button', { name: 'Octave down' })).toHaveFocus()
+    expect(screen.getByRole('button', { name: 'After' })).toHaveFocus()
   })
 
   it('makes the key last pressed the tab stop', async () => {
@@ -62,7 +61,7 @@ describe('PianoKeyboard', () => {
     await user.click(screen.getByRole('button', { name: 'G4' }))
     // A click takes no focus (Space after it is the pedal's), yet Tab comes back to the key clicked.
     expect(screen.getByRole('button', { name: 'G4' })).not.toHaveFocus()
-    screen.getByRole('button', { name: 'Octave down' }).focus()
+    screen.getByRole('button', { name: 'After' }).focus()
     await user.tab({ shift: true })
     expect(screen.getByRole('button', { name: 'G4' })).toHaveFocus()
   })
@@ -168,26 +167,12 @@ describe('PianoKeyboard', () => {
     expect(screen.getByRole('button', { name: 'G4' })).toHaveClass('ring-ring')
   })
 
-  it('has ‹ › that move it an octave, in both swipes', async () => {
-    const { scrolls } = stubScrolling({ clientWidth: 390, scrollWidth: 52 * 28 })
-    const user = userEvent.setup()
-    const { rerender } = renderKeyboard({ swipe: 'scroll' })
-    const opened = scrolls.at(-1) ?? 0
-    await user.click(screen.getByRole('button', { name: 'Octave up' }))
-    expect(scrolls.at(-1)).toBe(opened + 7 * 28)
-    rerender(<PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} swipe="glissando" />)
-    await user.click(screen.getByRole('button', { name: 'Octave down' }))
-    expect(scrolls.at(-1)).toBe(opened)
-  })
-
-  it('shows the whole piano with nothing to move: no ‹ ›, no map, no finger row', () => {
-    renderKeyboard({
-      keySize: 'piano',
-      marks: new Map<Midi, KeyMark>([[C4, { tone: 'tonic', label: '1', finger: 1 }]]),
-    })
-    expect(screen.queryByRole('button', { name: 'Octave up' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('slider', { name: 'Keys in view' })).not.toBeInTheDocument()
-    expect(document.querySelector('[data-slot="finger-row"]')).not.toBeInTheDocument()
+  it('is its keys alone: no rail, no buttons of its own, nothing under the keys (R34)', () => {
+    renderKeyboard({ keySize: 'fit' })
+    const scroller = document.querySelector('[data-slot="keys-scroller"]')
+    const buttons = within(scroller as HTMLElement).getAllByRole('button')
+    expect(buttons).toHaveLength(88)
+    expect(screen.queryByRole('button', { name: /Octave|Settings|Sustain/ })).toBeNull()
   })
 
   it('is never longer than the screen’s share for the keys, though that is under the shortest keys', () => {
@@ -195,7 +180,7 @@ describe('PianoKeyboard', () => {
     const keys = screen.getByRole('group', { name: 'Keyboard' })
     // A phone on its side keeps the music more room than the shortest keys would leave it.
     expect(keys.style.height).toMatch(
-      /^clamp\(min\(96px, var\(--keys-most\)\), .*, var\(--keys-most\)\)$/,
+      /^clamp\(min\(56px, var\(--keys-most\)\), .*, var\(--keys-most\)\)$/,
     )
   })
 
@@ -222,51 +207,11 @@ describe('PianoKeyboard', () => {
     expect(screen.getByRole('group', { name: 'Keyboard' }).style.height).not.toContain('/ 19')
   })
 
-  it('keeps short keys within their own share of the screen too', () => {
-    renderKeyboard({ keyLength: 'short' })
+  it('stands as tall as the divider set it, its keys as wide as ever', () => {
+    renderKeyboard({ height: 120 })
     const keys = screen.getByRole('group', { name: 'Keyboard' })
-    expect(keys.style.height).toMatch(/^clamp\(min\(96px, calc\(var\(--keys-most\) \* 2 \/ 3\)\), /)
-  })
-
-  it('scrolls from its rail: the rail moves with the keys, its controls kept in view', () => {
-    renderKeyboard()
-    const scroller = document.querySelector('[data-slot="keys-scroller"]')
-    expect(scroller).toContainElement(screen.getByRole('button', { name: 'Octave up' }))
-    expect(scroller).toContainElement(screen.getByRole('group', { name: 'Keyboard' }))
-  })
-
-  it('keeps ‹ › together at the rail’s end, before the screen’s controls', () => {
-    renderKeyboard({ children: <button type="button">Settings</button> })
-    const rail = screen
-      .getAllByRole('button')
-      .filter((button) => !/\d$/.test(button.ariaLabel ?? ''))
-      .filter((element) => element.textContent !== 'After')
-    const inOrder = [...rail].sort((a, b) =>
-      a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1,
-    )
-    expect(inOrder.map((element) => element.ariaLabel ?? element.textContent)).toEqual([
-      'Octave down',
-      'Octave up',
-      'Settings',
-    ])
-  })
-
-  it('holds the controls it is given in its rail', () => {
-    renderKeyboard({ children: <button type="button">Settings</button> })
-    expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
-  })
-
-  it('puts fingers in circles under their keys, a black key’s above a white key’s', () => {
-    renderKeyboard({
-      marks: new Map<Midi, KeyMark>([
-        [C4, { tone: 'scale', label: 'x', finger: 3 }],
-        [midi(61), { tone: 'scale', label: 'y', finger: 4 }],
-      ]),
-    })
-    const row = document.querySelector('[data-slot="finger-row"]')
-    expect(row).toHaveTextContent('34')
-    expect(screen.getByText('3')).toHaveClass('bottom-0')
-    expect(screen.getByText('4')).toHaveClass('top-0')
+    expect(keys.style.height).toBe('120px')
+    expect(keys.style.width).toContain('100cqw')
   })
 
   it('keeps the keys that matter in view when its key size changes', () => {

@@ -6,6 +6,7 @@ import { stubBox } from '@/shared/test/layout'
 import { stubResizeObserver } from '@/shared/test/resize'
 import { useCanvasReveal } from './canvas-reveal'
 import { PageCanvas } from './PageCanvas'
+import { SheetToolsContext } from './sheet-tools'
 
 /** The pages' place on the canvas as its transform says: moved by x and y, drawn at zoom. */
 function placed(region: HTMLElement) {
@@ -40,40 +41,31 @@ const canvas = (onClick = vi.fn()) => {
 }
 
 describe('PageCanvas', () => {
-  it('shows its zoom’s buttons as the pages are moved or zoomed, and hides them once left alone or tapped', () => {
-    vi.useFakeTimers()
-    const region = canvas()
-    region.setPointerCapture = vi.fn()
-    const controls = () => region.querySelector('[data-slot="canvas-controls"]')
-    expect(controls()).not.toHaveAttribute('data-shown')
-    fireEvent.wheel(region, { deltaY: 40 })
-    expect(controls()).toHaveAttribute('data-shown')
-    act(() => vi.advanceTimersByTime(3000))
-    expect(controls()).not.toHaveAttribute('data-shown')
-    fireEvent.pointerDown(region, { button: 0, pointerId: 1, clientX: 10, clientY: 10 })
-    fireEvent.pointerMove(region, { pointerId: 1, clientX: 60, clientY: 60 })
-    expect(controls()).toHaveAttribute('data-shown')
-    fireEvent.pointerUp(region, { pointerId: 1, clientX: 60, clientY: 60 })
-    // The click a drag ends with is the drag's, for this turn alone.
-    act(() => vi.advanceTimersByTime(1))
-    fireEvent.pointerDown(region, { button: 0, pointerId: 2, clientX: 10, clientY: 10 })
-    fireEvent.pointerUp(region, { pointerId: 2, clientX: 10, clientY: 10 })
-    expect(controls()).not.toHaveAttribute('data-shown')
-    vi.useRealTimers()
-  })
-
-  it('never puts its zoom’s buttons under a tap: the tap reaches what it was on (ADR 0115)', () => {
+  it('keeps its zoom’s buttons in sight, in the sheet’s one pill, never put under a tap (R34, ADR 0115)', () => {
     const onClick = vi.fn()
     const region = canvas(onClick)
-    const controls = () => region.querySelector('[data-slot="canvas-controls"]')
+    const pill = region.querySelector('[data-slot="sheet-pill"]')
+    expect(pill).toContainElement(screen.getByRole('button', { name: 'Zoom in' }))
+    // A touch's tap on the music reaches it.
     const bar = screen.getByRole('button', { name: 'Bar 1' })
-    // A touch's tap: down, up and the click, with no move between.
     fireEvent.pointerDown(bar, { button: 0, pointerId: 1, clientX: 10, clientY: 10 })
-    expect(controls()).not.toHaveAttribute('data-shown')
     fireEvent.pointerUp(bar, { pointerId: 1, clientX: 10, clientY: 10 })
     fireEvent.click(bar)
     expect(onClick).toHaveBeenCalledOnce()
-    expect(controls()).not.toHaveAttribute('data-shown')
+  })
+
+  it('puts the sheet’s own tools before its zoom in the one pill', () => {
+    render(
+      <SheetToolsContext value={<button type="button">Layout</button>}>
+        <PageCanvas column={794}>
+          <span />
+        </PageCanvas>
+      </SheetToolsContext>,
+    )
+    const pill = document.querySelector('[data-slot="sheet-pill"]')
+    expect(
+      [...(pill?.querySelectorAll('button') ?? [])].map((b) => b.ariaLabel ?? b.textContent),
+    ).toEqual(['Layout', 'Zoom out', 'Zoom in', 'Fit the page to the width'])
   })
 
   it('stands its zoom’s buttons at the foot’s right, clear of what floats over the canvas (R31-E)', () => {
@@ -84,7 +76,7 @@ describe('PageCanvas', () => {
     )
     const controls = screen
       .getByRole('region', { name: /^Pages/ })
-      .querySelector<HTMLElement>('[data-slot="canvas-controls"]')
+      .querySelector<HTMLElement>('[data-slot="sheet-pill"]')
     expect(controls?.style.right).toBe('328px')
     expect(controls?.style.bottom).toBe('148px')
     expect(controls?.style.top).toBe('')

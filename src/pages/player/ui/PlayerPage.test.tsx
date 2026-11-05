@@ -78,8 +78,8 @@ describe('Player', () => {
       sizedAs(query)
       await renderApp('/play/bz5')
       await screen.findByRole('button', { name: 'Player settings' })
-      // Close, the title and Edit, then Piano keys and the one gear (R31-P); MIDI only with a
-      // keyboard connected (R32); the View is the foot bar's (ADR 0108).
+      // Close, the title and Edit, then Sustain and Keyboard (R34) and the one gear (R31-P); MIDI
+      // only with a keyboard connected (R32); the View is the foot bar's (ADR 0108).
       const controls = [
         ...document.querySelectorAll(
           ':is([data-area="lead"], [data-area="actions"]) :is(button, a)',
@@ -88,7 +88,8 @@ describe('Player', () => {
       expect(controls.map((control) => control.getAttribute('aria-label'))).toEqual([
         'Close',
         'Edit',
-        'Piano keys',
+        'Sustain pedal — hold, or tap to latch',
+        'Keyboard',
         'Player settings',
       ])
       // Every control is its icon alone.
@@ -212,13 +213,13 @@ describe('Player', () => {
   it('shows the score as its Display and Pick your view say, remembered for every piece', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/romashki')
-    const display = await openDisplay(user)
-    await user.click(within(display).getByRole('radio', { name: 'Page view' }))
+    await screen.findByRole('group', { name: 'Keyboard' })
+    const pill = document.querySelector<HTMLElement>('[data-slot="sheet-pill"]')!
+    await user.click(within(pill).getByRole('radio', { name: 'Page view' }))
     expect(settingsStore.getState().scoreView.layout).toBe('page')
     await waitFor(() =>
       expect(document.querySelector('[data-slot="sheet-page"]')).toBeInTheDocument(),
     )
-    await user.keyboard('{Escape}')
     await user.click(await screen.findByRole('button', { name: 'View: Sheet' }))
     await user.click(await screen.findByRole('radio', { name: 'Grid' }))
     // The music's area, under the menu's own part for the Grid (ADR 0108).
@@ -227,7 +228,7 @@ describe('Player', () => {
     expect(within(music).queryByRole('region', { name: 'Sheet music' })).not.toBeInTheDocument()
     expect(within(music).getByRole('region', { name: 'Grid' })).toBeInTheDocument()
     await user.keyboard('{Escape}')
-    await user.click(screen.getByRole('button', { name: 'Piano keys' }))
+    await user.click(screen.getByRole('button', { name: 'Keyboard' }))
     expect(settingsStore.getState().scoreView).toMatchObject({ music: 'grid', keys: false })
   })
 
@@ -692,12 +693,13 @@ describe('Player', () => {
     expect(lower).toHaveAttribute('title', 'The last staff in sight stays')
   })
 
-  it('puts the fingers under the keys with Finger numbers', async () => {
+  it('puts no finger numbers on or under the keys, Finger numbers or not: the score prints them (R34)', async () => {
     const { settingsStore } = await renderApp('/play/bz5')
-    await screen.findByRole('group', { name: 'Keyboard' })
-    expect(document.querySelector('[data-slot="finger-row"]')).not.toBeInTheDocument()
+    const keys = await screen.findByRole('group', { name: 'Keyboard' })
     act(() => setPracticeToggle(settingsStore, 'fingerNumbers', true))
-    expect(document.querySelector('[data-slot="finger-row"]')).toBeInTheDocument()
+    // The keys are the keyboard's last part: nothing hangs under them.
+    expect(keys.closest('[data-area="keys"]')?.lastElementChild).toContainElement(keys)
+    expect(keys.nextElementSibling).toBeNull()
   })
 
   it('names the notes on the staff with Named notes, and saves the toggle', async () => {
@@ -765,14 +767,26 @@ describe('Player', () => {
     expect(within(lead).getByRole('button', { name: 'Edit' })).toBeInTheDocument()
   })
 
-  it('shows and hides the piano keys from the bar, saved (Flat’s keyboard button)', async () => {
+  it('shows and hides the keys from the bar’s Keyboard, saved (R34, Songscription’s)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/bz5')
-    const keys = await screen.findByRole('button', { name: 'Piano keys' })
+    const keys = await screen.findByRole('button', { name: 'Keyboard' })
     const before = settingsStore.getState().scoreView.keys
     expect(keys).toHaveAttribute('aria-pressed', String(before))
     await user.click(keys)
     expect(settingsStore.getState().scoreView.keys).toBe(!before)
+  })
+
+  it('folds hidden keys into a strip at the foot that brings them back at a tap, under a divider when shown (R34)', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/play/bz5')
+    await screen.findByRole('group', { name: 'Keyboard' })
+    expect(screen.getByRole('separator', { name: 'Resize keyboard' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Keyboard' }))
+    expect(screen.queryByRole('group', { name: 'Keyboard' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Show the keyboard' }))
+    expect(screen.getByRole('group', { name: 'Keyboard' })).toBeInTheDocument()
+    expect(settingsStore.getState().scoreView.keys).toBe(true)
   })
 
   it('turns to Edit at its cursor’s bar from the pencil at the bar’s end (ADR 0115, round 26)', async () => {

@@ -85,6 +85,11 @@ owner's, typos fixed.
   indicator) or the score's, every key under it released together with a real damper; soft quieter and darker,
   sostenuto as a piano's; the rail's ⚙ a Piano sheet in place (Key size, Note names, Volume, Pedals); the Player's
   piano settings stay in its sheet. Record and Mark not repeated on the keys (the editor's Record, the Chord finder).
+- **Songscription's keyboard (2026-11-05):** "it doesn't still look good with these, and this rail at the bottom, look
+  at the songscription piano implementation"; "i don't want finger number under the keyboard and no piano roll yet".
+  Built in R34: the rail gone, the keys slim and edge to edge (All keys the default), the chord held, Sustain and
+  Keyboard in the bar, a divider resizing the keys, hidden keys a "Keyboard" strip, the sheet's layout and zoom in one
+  pill; no finger numbers on or under the keys; no piano roll.
 
 - Every Chordify feature but guitar. Plain which view a setting belongs to; Layout is the sheet music's alone.
 - **Diagrams** animate; strip and diagrams swipe by themselves, the page never moves; no odd scroll bar; a swipe goes to the

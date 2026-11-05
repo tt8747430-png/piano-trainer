@@ -25,10 +25,15 @@ import {
 } from '@/entities/settings'
 import { retireTip } from '@/features/set-preference'
 import { isMidiConnected, MidiButton, useMidiConnection } from '@/features/connect-midi'
-import { KeyboardSettingsFields, LiveKeyboard } from '@/features/live-keyboard'
+import {
+  KeyboardSettingsFields,
+  KeyboardStrip,
+  KeyboardTools,
+  LiveKeyboard,
+} from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Recording } from '@/shared/lib/schedule'
-import { ActionMenu, type MenuAction } from '@/shared/ui'
+import { ActionMenu, SheetPill, SheetToolsContext, type MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
   ClickButton,
@@ -41,7 +46,6 @@ import {
   PlayerArea,
   PlayerScreen,
   BarTitle,
-  KeysToggle,
   PlayerClose,
   PlayerDock,
   ScoreBar,
@@ -56,7 +60,7 @@ import {
 import { SheetMusic } from '@/widgets/sheet-music'
 import { SongPrint } from '@/widgets/song-print'
 import { PlayerDisplay, PlayerPlayback } from '@/widgets/player-settings'
-import { ViewSection } from '@/widgets/score-view-menu'
+import { SheetLayoutTools, ViewSection } from '@/widgets/score-view-menu'
 import { SettingsExtrasContext, type SettingsExtras } from '@/widgets/player-setup'
 import { useChordKeys } from '../model/use-chord-keys'
 import { PlayerExport } from './PlayerExport'
@@ -207,8 +211,6 @@ export function PlayerLayout({
   const [exporting, setExporting] = useState(false)
   // The Settings open as a panel beside the music (a laptop): the screen ends where it starts.
   const [panel, setPanel] = useState(false)
-  // Settings opened at a page from elsewhere: the piano's ⚙ opens its page in this sheet (R31-P).
-  const [settingsAt, setSettingsAt] = useState<{ readonly page: string } | null>(null)
   const [tunerOpen, setTunerOpen] = useState(false)
   // The coach's line (R29 B8, R31-P): shown until put away by its × or done (Play pressed in
   // Listen), remembered for good.
@@ -290,7 +292,6 @@ export function PlayerLayout({
     ],
     // Its acts are More's (R31-P): the sheet holds how the Player works, never what it does.
     acts: [],
-    request: settingsAt,
     onPanel: setPanel,
   }
   // The foot's More (R31-P): the music's acts only, in parts: the song's, practice's, the tools,
@@ -376,8 +377,17 @@ export function PlayerLayout({
     practice.state,
     shown !== 'sheet' && view.keys !== true,
   )
-  const keys = !player.keys ? null : (
-    <PlayerArea area="keys">
+  const keys = !player.keys ? (
+    // Hidden, a thin strip where they stood brings them back at a tap (R34, Songscription's).
+    <PlayerArea area="keys" className="-mx-gutter">
+      <KeyboardStrip
+        edge={dock === 'top' ? 'below' : 'above'}
+        onShow={() => player.setKeys(true)}
+      />
+    </PlayerArea>
+  ) : (
+    // Edge to edge (R34, Songscription's): the keys reach both sides of the screen.
+    <PlayerArea area="keys" className="-mx-gutter">
       <LiveKeyboard
         range={player.range}
         inView={chordKeys ? chordKeys.inView : player.inView}
@@ -385,15 +395,13 @@ export function PlayerLayout({
         fitInView
         marks={chordKeys?.marks ?? player.marks}
         wrong={player.wrong}
-        // Keys the pedal alone holds, ringed apart from a hand's (A27); the lamp at the rail's end.
-        // The score's pedal and the keys it holds while the music sounds; stopped, nothing hangs (R31-P).
+        // Keys the pedal alone holds, ringed apart from a hand's (A27): the score's pedal and the keys
+        // it holds while the music sounds; stopped, nothing hangs (R31-P).
         outlined={chordKeys || !playing ? undefined : player.pedalKeys}
-        // The drawn pedal goes down with the score's while the music plays; stopped, it is up.
-        sustained={playing && player.pedalDown}
         onKeyPress={player.tapKey}
-        onSettings={() => setSettingsAt({ page: 'piano' })}
-        // Space is Play here: the pedal is the rail's, or a MIDI keyboard's.
+        // Space is Play here: the pedal is the bar's Sustain, or a MIDI keyboard's.
         spacePedal={false}
+        divider={dock === 'top' ? 'below' : 'above'}
       />
     </PlayerArea>
   )
@@ -418,7 +426,14 @@ export function PlayerLayout({
         }
         actions={
           <>
-            <KeysToggle shown={player.keys} onShow={player.setKeys} />
+            {/* The keyboard's controls (R34, Songscription's): the chord held, Sustain, lit with
+                the score's pedal while the music plays, and Keyboard. */}
+            <KeyboardTools
+              variant="tool"
+              shown={player.keys}
+              onShow={player.setKeys}
+              sustained={playing && player.pedalDown}
+            />
             {/* MIDI only while a keyboard is connected or connecting (R31-P, R32); it is
                 connected from Settings › Connect a piano. */}
             {isMidiConnected(connection) || connection.kind === 'connecting' ? (
@@ -450,30 +465,39 @@ export function PlayerLayout({
           <FeedbackCard feedback={feedback} onClose={() => takes.show(null)} />
         ) : null}
         {shown === 'sheet' ? (
-          <SheetMusic
-            view={sheetView}
-            piano={piano}
-            staffNames={names}
-            title={title}
-            credits={credits}
-            layout={layout}
-            // The pedal as it plays (A27): its Ped. marks the ones heard, lit as they pass.
-            performance={player.performance}
-            headings={headings}
-            current={practice.state.beatGroup}
-            clock={player.cursor === 'continuous' ? practice.clock : null}
-            cursor={player.cursor !== 'none'}
-            loop={player.loop}
-            fingers={player.fingers}
-            names={player.names}
-            positions={player.positions}
-            muted={player.muted}
-            onJump={practice.jumpToBeatGroup}
-            playing={practice.state.playing}
-            onLoopChange={player.setLoop}
-            verdicts={verdicts}
-            annotations={annotations}
-          />
+          // The sheet's one pill at its foot (R34, Songscription's): the layout, and in Page view the
+          // canvas's zoom beside it.
+          <SheetToolsContext value={<SheetLayoutTools />}>
+            <SheetMusic
+              view={sheetView}
+              piano={piano}
+              staffNames={names}
+              title={title}
+              credits={credits}
+              layout={layout}
+              // The pedal as it plays (A27): its Ped. marks the ones heard, lit as they pass.
+              performance={player.performance}
+              headings={headings}
+              current={practice.state.beatGroup}
+              clock={player.cursor === 'continuous' ? practice.clock : null}
+              cursor={player.cursor !== 'none'}
+              loop={player.loop}
+              fingers={player.fingers}
+              names={player.names}
+              positions={player.positions}
+              muted={player.muted}
+              onJump={practice.jumpToBeatGroup}
+              playing={practice.state.playing}
+              onLoopChange={player.setLoop}
+              verdicts={verdicts}
+              annotations={annotations}
+            />
+            {scoreView.layout === 'page' ? null : (
+              <SheetPill>
+                <SheetLayoutTools />
+              </SheetPill>
+            )}
+          </SheetToolsContext>
         ) : (
           <ChordView
             view={shown}

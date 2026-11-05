@@ -1,4 +1,5 @@
 import { useSearch } from '@tanstack/react-router'
+import { PageKeyboardTools } from '@/features/live-keyboard'
 import { useTranslation } from 'react-i18next'
 import { useSetSearch } from '@/shared/lib'
 import { BackButton, ScreenHeader } from '@/shared/ui'
@@ -12,7 +13,16 @@ export function IntervalsPage() {
   const onChange = useSetSearch<IntervalView>()
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('pages.intervals')} back={<BackButton />} tools={<ToolsButton />} />
+      <ScreenHeader
+        title={t('pages.intervals')}
+        back={<BackButton />}
+        tools={
+          <>
+            <PageKeyboardTools />
+            <ToolsButton />
+          </>
+        }
+      />
       <IntervalExplorer view={view} onChange={onChange} />
     </div>
   )

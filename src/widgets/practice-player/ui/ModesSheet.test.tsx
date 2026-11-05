@@ -51,6 +51,6 @@ describe('ModesSheet', () => {
 
   it('says a mode that listens to the keys needs a piano, where none is there', () => {
     renderWithSettings(sheet({ piano: false }))
-    expect(screen.getAllByText('Connect a piano or use Piano keys.')).toHaveLength(3)
+    expect(screen.getAllByText('Connect a piano or show the Keyboard.')).toHaveLength(3)
   })
 })

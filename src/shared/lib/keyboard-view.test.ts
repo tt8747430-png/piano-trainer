@@ -3,7 +3,6 @@ import { PIANO_LAYOUT } from './keyboard-layout'
 import {
   keepCentre,
   keysInView,
-  scrollByOctave,
   scrollToCentre,
   scrollToReveal,
   scrollToShow,
@@ -26,12 +25,6 @@ describe('the keyboard view', () => {
     expect(scrollToCentre(at(0), 0.5)).toBe(1950)
     expect(scrollToCentre(at(0), 0.01)).toBe(0)
     expect(scrollToCentre(at(0), 0.99)).toBe(3900)
-  })
-
-  it('moves the view an octave, within the keyboard', () => {
-    expect(scrollByOctave(at(1000), 52, 1)).toBe(1700)
-    expect(scrollByOctave(at(300), 52, -1)).toBe(0)
-    expect(scrollByOctave(at(3500), 52, 1)).toBe(3900)
   })
 
   it('names the white keys wholly in view', () => {

@@ -61,18 +61,8 @@ export function SettingsSheet({
   children?: ReactNode
 }) {
   const { t } = useTranslation('player')
-  const { pages, links = [], acts, request, onPanel } = useSettingsExtras()
+  const { pages, links = [], acts, onPanel } = useSettingsExtras()
   const [open, setOpen] = useState(false)
-  // Asked from elsewhere (the Tools sheet's Display): it opens, at that page.
-  const [asked, setAsked] = useState(request)
-  if (request !== asked) {
-    setAsked(request)
-    if (request) setOpen(true)
-  }
-  const turnTo = useEffectEvent((at: string) => onPage(at))
-  useEffect(() => {
-    if (request) turnTo(request.page)
-  }, [request])
   // On a laptop a panel at the right, the music in sight beside it (R29, screen 4.1).
   const laptop = useMediaQuery(LAPTOP)
   // Beside the music, the screen makes room for it, so nothing of the screen is under it.

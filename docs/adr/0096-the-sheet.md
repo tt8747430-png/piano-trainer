@@ -11,10 +11,10 @@ editor each had their own cursor, box and gestures, different again in each layo
 ## Decision
 
 - **Three layouts**, one setting for both screens (`scoreView.layout`): **Page view** (`page`), **Vertical scroll**
-  (`vertical`) and **Panorama** (`panorama`), chosen as tiles with their miniatures.
+  (`vertical`) and **Panorama** (`panorama`), chosen in the sheet's one pill at its bottom-right (`SheetPill`, R34).
   - Page view: A4 pages at their print size (ADR 0087) on a canvas (`PageCanvas`), opened with a page's width fitted
     to the room left by what floats over it, dragged, pinched or zoomed with Ctrl or ⌘ and the wheel (10–400%). Its
-    zoom buttons are in sight only while the pages are moved, never at a tap, and take no pointer out of sight. A
+    zoom buttons stand in the sheet's pill beside the layout, always in sight, so never put under a tap (R34). A
     point is read back through the zoom. The caret's line and the line playing are kept in sight (`useCanvasReveal`).
   - Vertical scroll: lines down the screen, the staff full size from a 600px sheet and smaller under it.
   - Panorama: the whole piece on one line.
@@ -50,3 +50,4 @@ The selection and the playhead read the same in every layout of both screens; a 
   boxes. Its fields are ADR 0114's, its explanations ADR 0061's, its recording ADR 0028's.
 - 0115 — The layouts renamed Page view · Vertical scroll · Panorama (2026-10-27).
 - r29 (P16) — A selection's band runs by the bar's beats, from a bar line or a beat to the next (`beatGrid`, `snapRange`, `beatsBand`); no padding round the notes (2026-11-04).
+- r34 (R34) — The layout and the page view's zoom in one pill at the score's corner, always in sight (Songscription's view pill); the Layout tiles leave Display and the editor's View (2026-11-05).

@@ -16,7 +16,9 @@ import {
   useKeyboardTop,
   useMediaQuery,
 } from '@/shared/lib'
+import { SheetPill, SheetToolsContext } from '@/shared/ui'
 import { PlayerArea, SCORE_SCREEN, ScoreBar } from '@/widgets/practice-player'
+import { SheetLayoutTools } from '@/widgets/score-view-menu'
 import { ScoreEditorContext, useScoreEditorContext } from '../model/editor-context'
 import type { EditorTarget } from '../model/editor-target'
 import { useEditorShortcutList } from '../model/use-editor-shortcut-list'
@@ -195,7 +197,16 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
             </aside>
           ) : null}
           <div className="relative flex min-h-0 flex-1 flex-col">
-            <div className="min-h-0 flex-1">{music}</div>
+            {/* The sheet's one pill at its foot, clear of what floats there (R34, Songscription's):
+                the layout, and in Page view the canvas's zoom beside it. */}
+            <SheetToolsContext value={<SheetLayoutTools />}>
+              <div className="min-h-0 flex-1">{music}</div>
+            </SheetToolsContext>
+            {editor.view.layout === 'page' ? null : (
+              <SheetPill covered={{ bottom: below + GAP }}>
+                <SheetLayoutTools />
+              </SheetPill>
+            )}
             {/* What floats over the music (ADR 0115): above it, only its own controls taking a touch. */}
             <div className="pointer-events-none absolute inset-0 z-30">
               {/* A change that could not be saved, said at the sheet's head. */}

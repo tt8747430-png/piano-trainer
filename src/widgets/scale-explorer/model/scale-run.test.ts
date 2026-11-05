@@ -33,16 +33,6 @@ describe('scaleRunOf', () => {
     expect(run.fingers.lh.join('')).toBe('543213214321321')
   })
 
-  it('marks the keys a finger crosses to going up: the right thumb on F, the left 3 on A', () => {
-    const marks = runShown(scaleRunOf(view), 'rh', 'rh').marks
-    const crossed = (shown: ReadonlyMap<number, { crossing?: true }>) =>
-      [...shown.entries()].flatMap(([key, mark]) => (mark.crossing ? [key] : []))
-    expect(crossed(marks)).toEqual([65])
-    // The left hand plays an octave down: its 3 crosses over to A3.
-    const left = runShown(scaleRunOf({ ...view, hands: 'lh' }), 'lh', 'lh').marks
-    expect(crossed(left)).toEqual([57])
-  })
-
   it('holds the run coming down, melodic minor’s natural 6th and 7th to mark', () => {
     const run = scaleRunOf({ ...view, root: noteParam(note('A')), kind: 'melodic' })
     const pcs = (tones: readonly { midi: number }[]) => tones.map((tone) => tone.midi % 12)
@@ -84,28 +74,18 @@ describe('scaleRunOf', () => {
 })
 
 describe('runShown', () => {
-  it('marks the playing hand’s keys with their degrees and that hand’s fingers', () => {
+  it('marks the playing hand’s keys with their degrees, no fingers on them (R34)', () => {
     for (const hands of ['rh', 'lh', 'both'] as const) {
       const run = scaleRunOf({ ...view, hands })
-      const shown = runShown(run, hands, hands === 'lh' ? 'lh' : 'rh')
+      const shown = runShown(run, hands)
       const played = new Set(run.music.notes.map((n) => n.midi))
       expect(new Set(shown.keys)).toEqual(played)
       expect([...shown.marks.keys()].every((key) => played.has(key))).toBe(true)
     }
-    const lh = runShown(scaleRunOf({ ...view, hands: 'lh' }), 'lh', 'lh')
-    expect(lh.marks.get(midi(48))?.finger).toBe(5)
-    expect(lh.marks.get(midi(60))?.finger).toBe(1)
-    const rh = runShown(scaleRunOf(view), 'rh', 'rh')
-    expect(rh.marks.get(midi(60))?.finger).toBe(1)
-  })
-
-  it('shows the notes alone, or either hand’s fingers on the right hand’s keys', () => {
-    const run = scaleRunOf(view)
-    const notes = runShown(run, 'rh', 'notes')
-    expect(notes.marks.get(midi(60))?.finger).toBeUndefined()
-    expect(notes.marks.get(midi(60))?.label).toBe('1')
-    const lh = runShown(run, 'rh', 'lh')
-    expect(lh.marks.get(midi(60))?.finger).toBe(5)
-    expect(lh.marks.get(midi(72))?.finger).toBe(1)
+    const lh = runShown(scaleRunOf({ ...view, hands: 'lh' }), 'lh')
+    expect(lh.marks.get(midi(48))).toMatchObject({ label: '1' })
+    expect(runShown(scaleRunOf(view), 'rh').marks.get(midi(60))).toEqual(
+      expect.not.objectContaining({ finger: expect.anything() }),
+    )
   })
 })

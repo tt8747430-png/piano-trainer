@@ -44,6 +44,7 @@ describe('the editor’s gear (R32-B, Flat’s document menu)', () => {
       'Layout',
       'Note input',
       'Recording',
+      'On-screen piano',
     ])
       expect(rows.some((row) => row?.startsWith(name))).toBe(true)
     // What the score prints is set where it prints: no title, key, time, tempo or bars here.
@@ -65,6 +66,15 @@ describe('the editor’s gear (R32-B, Flat’s document menu)', () => {
     expect(
       within(await screen.findByRole('dialog')).getByRole('heading', { name: 'Score' }),
     ).toBeInTheDocument()
+  })
+
+  it('holds the on-screen piano’s settings, as the Player’s sheet does (R34)', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    const sheet = await openGear(user, /^On-screen piano/)
+    const sizes = within(sheet).getByRole('radiogroup', { name: 'Key size' })
+    await user.click(within(sizes).getByRole('radio', { name: 'Large' }))
+    expect(settingsStore.getState().keyboard.keySize).toBe('large')
   })
 
   it('opens Title and credits from the title printed on the score, the one place it is typed', async () => {

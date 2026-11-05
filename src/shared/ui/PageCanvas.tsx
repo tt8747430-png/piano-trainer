@@ -1,5 +1,6 @@
 import { Maximize2, ZoomIn, ZoomOut } from 'lucide-react'
 import {
+  use,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -20,6 +21,8 @@ import {
 } from '@/shared/lib'
 import { RevealContext, type Revealed } from './canvas-reveal'
 import { Button } from './primitives/button'
+import { SheetPill } from './SheetPill'
+import { SheetToolsContext } from './sheet-tools'
 
 /** How far a press moves before it is a drag of the canvas, not a click on what it holds. */
 const DRAG_START = 6
@@ -27,10 +30,6 @@ const DRAG_START = 6
 const WHEEL_ZOOM = Math.log(2) / 6 / 100
 /** How long after the last move the pages are drawn again sharp at their zoom. */
 const SETTLE_MS = 160
-/** How long the zoom's buttons stay in sight once the pages are left alone. */
-const CONTROLS_MS = 2500
-/** How far the zoom's buttons stand from the canvas's edges and what floats over them, in CSS px. */
-const CONTROLS_GAP = 8
 
 /** The tallest line on the pages (`data-slot="sheet-line"`), at their size: a fit keeps one whole in sight. */
 function tallestLine(pages: HTMLElement | null): number | undefined {
@@ -48,9 +47,9 @@ function tallestLine(pages: HTMLElement | null): number | undefined {
  * larger than shows a whole line in the screen's height (a phone on its side). What is brought into
  * sight (the caret's line, the playhead's) comes clear of what floats over it, and stays in sight as
  * the pages are fitted again. A grip (`data-grip`: a note's, the loop's) drags itself, not the canvas.
- * The zoom's buttons come into sight as the pages are moved or zoomed, never at a tap (which would
- * leave them under the next tap, ADR 0115), and fade once the pages are left alone, or at a tap on
- * them; they stand at the canvas's foot, at its right, clear of what floats over it (R31-E).
+ * The zoom's buttons stand in the sheet's one pill (`SheetPill`, R34, Songscription's) after the
+ * sheet's own tools (`SheetToolsContext`: the layout), always in sight at the canvas's foot, at its
+ * right, clear of what floats over it (R31-E): never appearing under a finger (ADR 0115).
  */
 export function PageCanvas({
   column,
@@ -76,15 +75,7 @@ export function PageCanvas({
   const [zoom, setZoom] = useState(1)
   // Fitted until the learner moves or zooms it; fitted again when the screen or the pages change.
   const moved = useRef(false)
-  const [controls, setControls] = useState(false)
-  const controlsTimer = useRef(0)
-  useEffect(() => () => window.clearTimeout(controlsTimer.current), [])
-  /** The zoom's buttons in sight, for a while after the pages were last touched. */
-  const showControls = useCallback(() => {
-    setControls(true)
-    window.clearTimeout(controlsTimer.current)
-    controlsTimer.current = window.setTimeout(() => setControls(false), CONTROLS_MS)
-  }, [])
+  const tools = use(SheetToolsContext)
 
   // While the canvas moves, its pages are one layer the browser only slides and stretches; once it
   // settles they are drawn again at the zoom, so the music is sharp however close it is read.
@@ -171,7 +162,6 @@ export function PageCanvas({
     const onWheel = (event: WheelEvent) => {
       event.preventDefault()
       moved.current = true
-      showControls()
       const box = element.getBoundingClientRect()
       const size = { width: box.width, height: box.height }
       const pages = content.current
@@ -187,7 +177,7 @@ export function PageCanvas({
     }
     element.addEventListener('wheel', onWheel, { passive: false })
     return () => element.removeEventListener('wheel', onWheel)
-  }, [show, showControls])
+  }, [show])
 
   // The pointers down on the canvas, where each was last; a drag once one has moved far enough.
   const pointers = useRef(new Map<number, { x: number; y: number }>())
@@ -196,9 +186,8 @@ export function PageCanvas({
     // A grip (a note's, the loop's) drags itself. Not its pointer capture: a touch is captured by
     // whatever it lands on, so every touch would be a grip's.
     const target = event.target as Element
-    // A tap shows nothing: the zoom's buttons appearing under a finger would take the next tap
-    // meant for the music or a popover's way out (ADR 0115). They come as the pages move.
-    if (target.closest('[data-slot="canvas-controls"]')) return
+    // The pill's buttons are their own: a press on them never drags the pages.
+    if (target.closest('[data-slot="sheet-pill"]')) return
     if (event.button !== 0 || target.closest('[data-grip]')) return
     pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY })
   }
@@ -218,13 +207,11 @@ export function PageCanvas({
       const middle = { x: (now.x + other.x) / 2 - box.left, y: (now.y + other.y) / 2 - box.top }
       const zoomed = zoomAt(view.current, view.current.zoom * (after / Math.max(before, 1)), middle)
       show(panBy(zoomed, (now.x - last.x) / 2, (now.y - last.y) / 2, sheet, screen))
-      showControls()
       dragging.current = true
       moved.current = true
     } else {
       if (!dragging.current && Math.hypot(now.x - last.x, now.y - last.y) < DRAG_START) return
       if (!dragging.current) event.currentTarget.setPointerCapture(event.pointerId)
-      showControls()
       dragging.current = true
       moved.current = true
       show(panBy(view.current, now.x - last.x, now.y - last.y, sheet, screen))
@@ -232,12 +219,7 @@ export function PageCanvas({
     pointers.current.set(event.pointerId, now)
   }
   const onPointerUp = (event: PointerEvent<HTMLDivElement>) => {
-    const tracked = pointers.current.delete(event.pointerId)
-    // A tap on the pages, not a drag: the zoom's buttons go out of the way of the music.
-    if (tracked && pointers.current.size === 0 && !dragging.current) {
-      window.clearTimeout(controlsTimer.current)
-      setControls(false)
-    }
+    pointers.current.delete(event.pointerId)
     if (pointers.current.size > 0 || !dragging.current) return
     // The click a drag ends with is the drag's, not a click on what it was over.
     const swallow = (click: MouseEvent) => {
@@ -264,17 +246,8 @@ export function PageCanvas({
       <div ref={content} className="absolute top-0 left-0 w-max origin-top-left">
         <RevealContext value={revealElement}>{children}</RevealContext>
       </div>
-      <div
-        data-slot="canvas-controls"
-        data-shown={controls || undefined}
-        // Out of sight, its buttons are out of reach, but a keyboard's Tab still brings them back.
-        onFocus={showControls}
-        // At the canvas's foot, clear of what floats over its edges (R31-E): never over the bar's
-        // tools, a notice or a card at the music's head.
-        style={{ right: right + CONTROLS_GAP, bottom: bottom + CONTROLS_GAP }}
-        className="absolute flex items-center rounded-pill bg-card/95 text-card-foreground opacity-0 shadow-md ring-1 ring-hairline transition-opacity duration-300 ease-out not-data-shown:pointer-events-none focus-within:pointer-events-auto focus-within:opacity-100 data-shown:opacity-100"
-        onPointerDown={showControls}
-      >
+      <SheetPill covered={covered}>
+        {tools}
         <Button
           variant="ghost"
           size="icon"
@@ -311,7 +284,7 @@ export function PageCanvas({
         >
           <Maximize2 aria-hidden />
         </Button>
-      </div>
+      </SheetPill>
     </div>
   )
 }

@@ -117,8 +117,7 @@ export const common = {
   moreActions: 'More actions',
   // What a Play button says while its sound plays.
   stop: 'Stop',
-  // The keyboard's rail: its buttons.
-  // The pedals on their lyre beneath the keys (R32): each one's name under it, and what it does.
+  // The pedals worked from the bar (R34): each one's name, and what it does.
   pedals: {
     sustain: { name: 'Sustain', label: 'Sustain pedal — hold, or tap to latch' },
     sostenuto: {
@@ -127,46 +126,29 @@ export const common = {
     },
     soft: { name: 'Soft', label: 'Soft pedal (una corda) — softens the tone while held' },
   },
-  // The piano's settings in place, from its rail's ⚙ (R33).
-  pianoSheet: { title: 'Piano', all: 'All piano settings' },
-  rail: {
-    settings: 'Piano settings',
-    octaveDown: 'Octave down',
-    octaveUp: 'Octave up',
-    zoomOut: 'Smaller keys',
-    zoomIn: 'Larger keys',
-    // What a key size just chosen shows, said for a moment on the rail.
-    keysInSight: 'Keys in sight',
-    showing_one: 'Showing {{count}} key ({{from}}–{{to}})',
-    showing_other: 'Showing {{count}} keys ({{from}}–{{to}})',
+  // The on-screen keyboard's controls in the screen's bar (R34).
+  keyboardTools: {
+    keyboard: 'Keyboard',
+    show: 'Show the keyboard',
     chord: 'Chord held',
-    fold: 'Hide the keys',
-    unfold: 'Keys',
-    // Each control's name in sight under its picture (R29 A26).
-    named: {
-      hide: 'Hide',
-    },
+    morePedals: 'Soft and sostenuto pedals',
+    latched: 'Latched',
+    resize: 'Resize keyboard',
   },
-  // The keyboard settings: in the keyboard's rail and in Settings.
+  // The keyboard settings: Settings › On-screen piano.
   keyboardSettings: {
     pedals: {
       label: 'Pedals',
-      detail: 'Adds the soft and sostenuto pedals beside the sustain.',
+      detail: 'Adds the soft and sostenuto pedals to the Sustain button’s menu.',
       sustain: 'Sustain only',
       all: 'All three',
     },
     keySize: {
       label: 'Key size',
-      detail: 'How many keys fit across the screen; the rest scroll into view.',
+      detail: 'All keys fit the width; a larger size scrolls to follow the music.',
       fit: 'Fit to music',
       large: 'Large',
-      piano: 'Full keyboard',
-    },
-    keyLength: {
-      label: 'Key depth',
-      detail: 'Compact keys leave more of the screen to the score.',
-      long: 'Full',
-      short: 'Compact',
+      piano: 'All keys',
     },
     namedKeys: {
       label: 'Note names',
@@ -178,20 +160,12 @@ export const common = {
     markNotes: 'Note names on highlighted keys',
     markNotesNote: 'Shows each note’s name beneath its chord tone or scale degree.',
     chordNames: 'Chord symbol',
-    chordNamesNote: 'Names the chord you hold at the start of the pedal rail.',
+    chordNamesNote: 'Names the chord you hold in the bar.',
     dock: {
       label: 'Position',
       detail: 'Where pages dock their keyboard.',
       bottom: 'Bottom',
       top: 'Top',
-    },
-    fold: {
-      label: 'Collapse keyboard',
-      detail:
-        'When the keyboard collapses into a Keys button. In landscape applies to lessons, explorers, songs and the editor; the Player manages its own.',
-      never: 'Never',
-      side: 'In landscape',
-      always: 'Always',
     },
     swipe: {
       label: 'Swipe gesture',

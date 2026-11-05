@@ -1,4 +1,5 @@
 import { useSearch } from '@tanstack/react-router'
+import { PageKeyboardTools } from '@/features/live-keyboard'
 import { Dices } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useSetSearch } from '@/shared/lib'
@@ -56,6 +57,7 @@ export function ScalesPage() {
         back={<BackButton />}
         tools={
           <>
+            <PageKeyboardTools />
             {key ? (
               <RoundButton
                 label={t('scales.key.random')}

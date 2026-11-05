@@ -22,28 +22,23 @@ describe('practiceMarks', () => {
     expect(left.length).toBeGreaterThan(0)
     const marks = practiceMarks(performance, 0, {
       hands: { rh: false, lh: true, staff: false },
-      fingers: false,
     })
     expect([...marks.keys()].sort()).toEqual([...left].sort())
     expect([...marks.values()].every((mark) => mark.tone === 'lh')).toBe(true)
   })
 
-  it('gives each mark its finger with Finger numbers, the label keeping the note’s name', () => {
-    const fingered = practiceMarks(performance, 0, { hands: BOTH, fingers: true })
-    const plain = practiceMarks(performance, 0, { hands: BOTH, fingers: false })
+  it('puts no finger on a key, the label the note’s name: the score prints the fingers (R34)', () => {
+    const marks = practiceMarks(performance, 0, { hands: BOTH })
     const group = performance.beatGroups[0]
     for (const index of group?.notes ?? []) {
       const played = performance.notes[index]
       if (!played || played.hand === 'staff') continue
-      const mark = fingered.get(played.midi)
-      expect(mark?.label).toBe(noteName(played.spelled))
-      expect(mark?.finger).toBe(played.finger)
-      expect(plain.get(played.midi)?.finger).toBeUndefined()
+      expect(marks.get(played.midi)).toEqual({ tone: played.hand, label: noteName(played.spelled) })
     }
   })
 
   it('marks the beat group’s notes by hand, labelled with note names', () => {
-    const marks = practiceMarks(performance, 0, { hands: BOTH, fingers: false })
+    const marks = practiceMarks(performance, 0, { hands: BOTH })
     const group = performance.beatGroups[0]
     expect(marks.size).toBeGreaterThan(0)
     for (const index of group?.notes ?? []) {
@@ -58,9 +53,7 @@ describe('practiceMarks', () => {
   it('marks a single staff’s notes where it is heard, never the tune left unheard (ADR 0097)', () => {
     const tones = (played: typeof performance) =>
       played.beatGroups.flatMap((_, group) =>
-        [...practiceMarks(played, group, { hands: BOTH, fingers: false }).values()].map(
-          (mark) => mark.tone,
-        ),
+        [...practiceMarks(played, group, { hands: BOTH }).values()].map((mark) => mark.tone),
       )
     const heard = TWO_BARS_UNDER_A_STAFF
     const unheard = {
@@ -77,7 +70,6 @@ describe('practiceMarks', () => {
     if (!first) throw new Error('empty group')
     const marks = practiceMarks(performance, 0, {
       hands: BOTH,
-      fingers: false,
       received: [pitchClass(first.midi)],
     })
     expect(marks.get(first.midi)?.label).toBe('✓')

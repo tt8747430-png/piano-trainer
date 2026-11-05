@@ -1,4 +1,5 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
+import { PageKeyboardTools } from '@/features/live-keyboard'
 import { CloudOff, Flag, FolderOpen, Plus, SearchX, TriangleAlert } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -185,7 +186,14 @@ export function PublicSongPage() {
         title={title}
         back={<BackButton />}
         tools={
-          <RoundButton label={t('public.report')} icon={Flag} onClick={() => setReporting(true)} />
+          <>
+            {reading.kind === 'song' ? <PageKeyboardTools /> : null}
+            <RoundButton
+              label={t('public.report')}
+              icon={Flag}
+              onClick={() => setReporting(true)}
+            />
+          </>
         }
       />
       {/* Its overview card, as a song's page has (Noji's deck header): whose it is, its stars and saves. */}

@@ -1,15 +1,9 @@
 import { useTranslation } from 'react-i18next'
-import {
-  selectKeyboard,
-  useSettings,
-  useSettingsStoreApi,
-  type KeyboardSettings,
-} from '@/entities/settings'
+import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
 import {
   hasFinePointer,
   KEY_DOCKS,
-  KEY_LENGTHS,
   KEY_SIZES,
   NAMED_KEYS,
   PEDALS_SHOWN,
@@ -17,11 +11,8 @@ import {
 } from '@/shared/lib'
 import {
   DockPicture,
-  FoldPicture,
-  KeyLengthPicture,
   KeySizePicture,
   NoteNamesPicture,
-  PedalPaddle,
   PictureChoice,
   SettingRows,
   SettingsGroup,
@@ -29,25 +20,11 @@ import {
   SwitchRow,
   VolumeSlider,
 } from '@/shared/ui'
-
-/** Fold the keys (R21): never, on a phone on its side, or always; the two saved folds as one choice. */
-const FOLDS = ['never', 'side', 'always'] as const
-type Fold = (typeof FOLDS)[number]
-
-const foldOf = ({ folded, foldedLandscape }: KeyboardSettings): Fold =>
-  folded ? 'always' : foldedLandscape ? 'side' : 'never'
-
-const FOLD_SETTINGS: Readonly<Record<Fold, Pick<KeyboardSettings, 'folded' | 'foldedLandscape'>>> =
-  {
-    never: { folded: false, foldedLandscape: false },
-    side: { folded: false, foldedLandscape: true },
-    always: { folded: true, foldedLandscape: true },
-  }
+import { PedalIcon } from './PedalIcon'
 
 /**
  * What matters while playing (R33, musicca's Settings): the key size, the note names, the volume, the
- * pedals and, on a computer, its keys. The rows of the piano's sheet from its rail's ⚙ and the first
- * group of the On-screen piano page: one control for each, wherever it shows.
+ * pedals and, on a computer, its keys: the On-screen piano page's first group.
  */
 export function PianoEssentialRows() {
   const { t } = useTranslation('common')
@@ -96,7 +73,7 @@ export function PianoEssentialRows() {
           picture: (
             <span className="flex items-end gap-0.5">
               {Array.from({ length: value === 'all' ? 3 : 1 }, (_, at) => (
-                <PedalPaddle key={at} down={false} className="h-5 w-7" />
+                <PedalIcon key={at} />
               ))}
             </span>
           ),
@@ -109,11 +86,12 @@ export function PianoEssentialRows() {
 }
 
 /**
- * The on-screen piano's settings (R21, R22, R32, R33), saved for every on-screen piano, ordered by
- * what a pianist changes most: Keys and sound (the piano sheet's rows), Display (depth, the chord
- * symbol, names on highlighted keys), While you play (the swipe, play on selection), then Placement
- * (where a page docks the keys, when they hide). Each option says what it does in one line under its
- * name; choices of look are pictures of the keys.
+ * The on-screen piano's settings (R21, R22, R32, R33, R34), saved for every on-screen piano, ordered
+ * by what a pianist changes most: Keys and sound, Display (the chord symbol, names on highlighted
+ * keys), While you play (the swipe, play on selection), then Placement (where a page docks the keys).
+ * The keys' height is the divider's, and showing them the bar's Keyboard: neither is a setting here.
+ * Each option says what it does in one line under its name; choices of look are pictures of the keys.
+ * Settings › On-screen piano, and the same page in the Player's and the editor's gear.
  */
 export function KeyboardSettingsFields() {
   const { t } = useTranslation(['common', 'settings'])
@@ -128,18 +106,6 @@ export function KeyboardSettingsFields() {
       </SettingsGroup>
       <SettingsGroup title={t('settings:piano.look')}>
         <SettingRows>
-          <PictureChoice
-            setting="keyboard.keyLength"
-            label={t('keyboardSettings.keyLength.label')}
-            description={t('keyboardSettings.keyLength.detail')}
-            value={keyboard.keyLength}
-            options={KEY_LENGTHS.map((value) => ({
-              value,
-              label: t(`keyboardSettings.keyLength.${value}`),
-              picture: <KeyLengthPicture length={value} />,
-            }))}
-            onChange={(keyLength) => setKeyboard(store, { keyLength })}
-          />
           <SwitchRow
             setting="keyboard.chordNames"
             label={t('keyboardSettings.chordNames')}
@@ -192,18 +158,6 @@ export function KeyboardSettingsFields() {
               picture: <DockPicture dock={value} />,
             }))}
             onChange={(dock) => setKeyboard(store, { dock })}
-          />
-          <PictureChoice
-            setting="keyboard.folded"
-            label={t('keyboardSettings.fold.label')}
-            description={t('keyboardSettings.fold.detail')}
-            value={foldOf(keyboard)}
-            options={FOLDS.map((value) => ({
-              value,
-              label: t(`keyboardSettings.fold.${value}`),
-              picture: <FoldPicture fold={value} />,
-            }))}
-            onChange={(fold) => setKeyboard(store, FOLD_SETTINGS[fold])}
           />
         </SettingRows>
       </SettingsGroup>

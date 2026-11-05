@@ -1,4 +1,5 @@
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
+import { PageKeyboardTools } from '@/features/live-keyboard'
 import { Plus } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -46,7 +47,11 @@ export function SharedSongPage() {
   const title = reading.kind === 'song' ? reading.song.title : t('shared.title')
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={title} back={<BackButton />} />
+      <ScreenHeader
+        title={title}
+        back={<BackButton />}
+        tools={reading.kind === 'song' ? <PageKeyboardTools /> : undefined}
+      />
       {reading.kind === 'reading' ? (
         <p role="status" className="text-muted-foreground">
           {t('shared.reading')}

@@ -47,11 +47,6 @@ export interface SettingsExtras {
   /** Rows to a setting's home elsewhere, ranked among the pages. */
   readonly links?: readonly SettingsLinkRow[]
   readonly acts: readonly SettingsAct[]
-  /**
-   * The sheet opened at one of its pages from elsewhere (the Tools sheet's Display, R29 B8): a new
-   * object each time it is asked.
-   */
-  readonly request?: { readonly page: string } | null
   /** Told when the sheet opens or closes as a panel at the right (a laptop): the screen makes room. */
   readonly onPanel?: (open: boolean) => void
 }

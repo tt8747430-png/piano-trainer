@@ -1,4 +1,5 @@
 import { Link, type LinkProps } from '@tanstack/react-router'
+import { PageKeyboardTools } from '@/features/live-keyboard'
 import { ArrowRight, ChevronsLeft, Settings } from 'lucide-react'
 import { Fragment, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -71,6 +72,7 @@ export function LessonLayout({
         tools={
           <>
             <LearnedButton step={step} round />
+            <PageKeyboardTools />
             <ToolsButton />
           </>
         }
