@@ -35,6 +35,7 @@ export const NOT_PREFERENCES = [
   'foldedSections',
   'welcomed',
   'tipsSeen',
+  'practiceRecent',
   'chordFinder.chords',
 ] as const
 
@@ -116,7 +117,6 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'scoreView.textSize': 'player',
   'scoreView.keys': 'player',
   'scoreView.annotations': 'player',
-  'bars.bar.player': 'player',
   'bars.select.songs': 'select-toolbar',
   'bars.swipe.songs.leading': 'swipe-actions',
   'bars.swipe.songs.trailing': 'swipe-actions',

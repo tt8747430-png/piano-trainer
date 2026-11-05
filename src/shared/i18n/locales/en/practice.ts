@@ -1,6 +1,7 @@
 export const practice = {
   title: 'Practice',
   // Practice's groups of pages (ADR 0052), each under its heading.
+  continue: 'Continue',
   groups: { tools: 'Tools', theory: 'Theory', playing: 'Playing', training: 'Training' },
   // Its pages, each by its name.
   pages: {

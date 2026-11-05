@@ -1,4 +1,5 @@
 import { act, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
@@ -48,6 +49,20 @@ describe('Practice', () => {
     expect(rowsOf(training)).toEqual([
       ['Exercises Technique and drills', '/practice/exercises'],
       ['Quiz Chords, keys, ear, reading', '/practice/quiz'],
+    ])
+  })
+
+  it('keeps the last two pages opened from it under Continue, the latest first (R30-4)', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice')
+    expect(screen.queryByRole('region', { name: 'Continue' })).not.toBeInTheDocument()
+    await user.click(await screen.findByRole('link', { name: /^Tuner/ }))
+    await act(() => router.navigate({ to: '/practice' }))
+    await user.click(await screen.findByRole('link', { name: /^Chords/ }))
+    await act(() => router.navigate({ to: '/practice' }))
+    expect(rowsOf(await screen.findByRole('region', { name: 'Continue' }))).toEqual([
+      ['Chords Triads to 13ths, inversions', '/practice/chords'],
+      ['Tuner Hear how in tune a note is', '/practice/tuner'],
     ])
   })
 

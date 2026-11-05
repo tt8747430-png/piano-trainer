@@ -2,6 +2,7 @@ import type { LocaleResources } from '../../types'
 
 export const practice: LocaleResources['practice'] = {
   title: 'Практика',
+  continue: 'Продолжить',
   groups: { tools: 'Инструменты', theory: 'Теория', playing: 'Игра', training: 'Тренировка' },
   pages: {
     chords: 'Аккорды',

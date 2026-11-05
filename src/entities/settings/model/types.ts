@@ -370,6 +370,8 @@ export interface SettingsState {
   welcomed: boolean
   /** The tips put away or done (R31-P), by their ids (`coach.listen`): a tip shows until then. */
   tipsSeen: readonly string[]
+  /** Practice's pages opened from its list, the latest first (R30-4): its Continue's two. */
+  practiceRecent: readonly string[]
   /** How a lesson reads (round 26): one page of its sections, or a section at a time. */
   lessonReading: LessonReading
   /** How Progressions writes and voices every progression (A24). */

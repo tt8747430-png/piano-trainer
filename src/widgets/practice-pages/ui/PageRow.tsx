@@ -1,6 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { OPEN_PLAINLY } from '@/shared/lib'
+import { useSettingsStoreApi } from '@/entities/settings'
+import { notePracticeOpened } from '@/features/set-preference'
 import { RowLink } from '@/shared/ui'
 import { PRACTICE_PAGES, type PracticePageId } from '../model/practice-pages'
 import { usePageWords } from './use-page-words'
@@ -13,13 +15,14 @@ export function PageRow({ page, trailing }: { page: PracticePageId; trailing?: R
   const words = usePageWords()
   const { title, about } = words(page)
   const { to, tile } = PRACTICE_PAGES[page]
+  const store = useSettingsStoreApi()
   return (
     <RowLink
       title={title}
       detail={about}
       {...tile}
       trailing={trailing}
-      render={<Link to={to} state={OPEN_PLAINLY} />}
+      render={<Link to={to} state={OPEN_PLAINLY} onClick={() => notePracticeOpened(store, page)} />}
     />
   )
 }

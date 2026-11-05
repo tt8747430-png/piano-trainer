@@ -47,6 +47,7 @@ describe('settings selectors', () => {
       foldedSections: ['chords.tensions'],
       welcomed: true,
       tipsSeen: [],
+      practiceRecent: [],
       lessonReading: 'sections',
       sidebar: 'collapsed',
       paletteFolded: {},

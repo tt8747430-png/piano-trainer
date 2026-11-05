@@ -53,6 +53,7 @@ const DEFAULTS = {
   foldedSections: [],
   welcomed: false,
   tipsSeen: [],
+  practiceRecent: [],
   lessonReading: 'page',
   progressions: DEFAULT_PROGRESSIONS,
   chordPlayer: DEFAULT_CHORD_PLAYER,
@@ -205,6 +206,7 @@ describe('createSettingsStore', () => {
       foldedSections: ['chords.tensions'],
       welcomed: true,
       tipsSeen: ['coach.listen'],
+      practiceRecent: ['tuner', 'chords'],
       lessonReading: 'sections',
       progressions: { names: 'chords', voicing: 'block', inversion: 1 },
       chordPlayer: { names: 'nashville', voicing: 'block' },
@@ -350,7 +352,6 @@ describe('createSettingsStore', () => {
       restored({
         bars: {
           'select.songs': ['move', 'delete', 'tuner', 'move'],
-          'bar.player': ['loop'],
           'swipe.songs.leading': [],
           nowhere: ['move'],
         },
@@ -362,9 +363,9 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('starts afresh over a save of the version before, which kept the rail’s buttons (R31-P)', () => {
-    expect(SETTINGS_VERSION).toBe(27)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 26)).toEqual(
+  it('starts afresh over a save of the version before Practice’s Continue (R30-4)', () => {
+    expect(SETTINGS_VERSION).toBe(28)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 27)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

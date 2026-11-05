@@ -4,6 +4,7 @@ import { createSettingsStore, defaultKeyboard } from '@/entities/settings'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import {
+  notePracticeOpened,
   rememberChords,
   setAccompaniment,
   setAutoNext,
@@ -214,5 +215,12 @@ describe('set-preference', () => {
       slash: false,
       chords: [],
     })
+  })
+
+  it('keeps Practice’s pages opened, the latest first, each once, eight at most (R30-4)', () => {
+    const store = createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] })
+    for (const page of ['tuner', 'chords', 'tuner', 'a', 'b', 'c', 'd', 'e', 'f', 'g'])
+      notePracticeOpened(store, page)
+    expect(store.getState().practiceRecent).toEqual(['g', 'f', 'e', 'd', 'c', 'b', 'a', 'tuner'])
   })
 })

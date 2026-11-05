@@ -30,13 +30,13 @@ describe('Tab on Practice (A36)', () => {
     const metronome = names.findIndex((name) => name.startsWith('Metronome'))
     expect(learn).toBeGreaterThan(0)
     expect(metronome).toBeGreaterThan(learn)
-    // The groups' rows in the order they are read: Tools, Theory, Playing, then Training.
+    // The columns in the order they are read (R30-4): Tools and Playing, then Theory and Training.
     const row = (start: string) => names.findIndex((name) => name.startsWith(start))
     expect(row('Metronome')).toBeLessThan(row('Tuner'))
-    expect(row('Tuner')).toBeLessThan(row('Chords'))
+    expect(row('Tuner')).toBeLessThan(row('Accompaniment'))
+    expect(row('Accompaniment')).toBeLessThan(row('Chords'))
     expect(row('Chords')).toBeLessThan(row('Intervals'))
-    expect(row('Progressions')).toBeLessThan(row('Accompaniment'))
-    expect(row('Accompaniment')).toBeLessThan(row('Exercises'))
+    expect(row('Progressions')).toBeLessThan(row('Exercises'))
     // Every link and button on the screen is reached, none skipped and none trapping the walk.
     const reachable = [...document.querySelectorAll('a[href], button:not([disabled])')].filter(
       (element) => !element.closest('[hidden], [inert], [aria-hidden="true"]'),
