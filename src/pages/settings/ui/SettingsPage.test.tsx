@@ -1,4 +1,4 @@
-import { act, screen, waitFor, within } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { stubMatchMedia } from '@/shared/test/match-media'
@@ -203,16 +203,9 @@ describe('Settings', () => {
     await user.click(screen.getByRole('switch', { name: /^Chord symbol/ }))
     const swipe = screen.getByRole('radiogroup', { name: 'Swipe gesture' })
     await user.click(within(swipe).getByRole('radio', { name: 'Glissando' }))
-    // Collapse keyboard: the two saved folds as one choice of three (R21).
-    const fold = screen.getByRole('radiogroup', { name: 'Collapse keyboard' })
-    expect(within(fold).getByRole('radio', { name: 'In landscape' })).toBeChecked()
-    await user.click(within(fold).getByRole('radio', { name: 'Always' }))
-    expect(settingsStore.getState().keyboard).toMatchObject({ folded: true })
-    await user.click(within(fold).getByRole('radio', { name: 'Never' }))
-    expect(settingsStore.getState().keyboard).toMatchObject({
-      folded: false,
-      foldedLandscape: false,
-    })
+    // The keys' height is the divider's and showing them the bar's Keyboard (R34): no setting here.
+    for (const name of ['Collapse keyboard', 'Key depth'])
+      expect(screen.queryByRole('radiogroup', { name })).not.toBeInTheDocument()
     await act(() => router.navigate({ to: '/settings/computer-keys' }))
     await user.click(await screen.findByRole('switch', { name: /^Play with computer keyboard/ }))
     expect(settingsStore.getState().keyboard).toMatchObject({
@@ -226,10 +219,10 @@ describe('Settings', () => {
   it('says what each keyboard choice does in one line under its name (R32)', async () => {
     await renderApp('/settings/on-screen-piano')
     expect(
-      await screen.findByText('How many keys fit across the screen; the rest scroll into view.'),
+      await screen.findByText('All keys fit the width; a larger size scrolls to follow the music.'),
     ).toBeVisible()
     expect(screen.getByRole('switch', { name: /^Chord symbol/ })).toHaveAccessibleDescription(
-      'Names the chord you hold at the start of the pedal rail.',
+      'Names the chord you hold in the bar.',
     )
   })
 
@@ -239,6 +232,18 @@ describe('Settings', () => {
     expect(settingsStore.getState().keyboard.pedals).toBe('sustain')
     await user.click(await screen.findByRole('radio', { name: 'All three' }))
     expect(settingsStore.getState().keyboard.pedals).toBe('all')
+  })
+
+  it('starts on All keys, and sets the piano’s volume (R33, R34)', async () => {
+    const { settingsStore, audio } = await renderApp('/settings/on-screen-piano')
+    const sizes = await screen.findByRole('radiogroup', { name: 'Key size' })
+    expect(within(sizes).getByRole('radio', { name: 'All keys' })).toBeChecked()
+    expect(audio.volume).toBe(1)
+    const volume = screen.getByRole('slider', { hidden: true })
+    act(() => volume.focus())
+    fireEvent.keyDown(volume, { key: 'Home' })
+    await waitFor(() => expect(audio.volume).toBe(0))
+    expect(settingsStore.getState().keyboard.volume).toBe(0)
   })
 
   it('says on MIDI devices’ row when the browser cannot connect one', async () => {

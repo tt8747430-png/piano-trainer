@@ -152,7 +152,6 @@ describe('createSettingsStore', () => {
         dock: 'top',
         folded: true,
         foldedLandscape: false,
-        keyLength: 'short',
         pedals: 'all',
         volume: 70,
       },
@@ -352,9 +351,9 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('starts afresh over a save of the version before the piano’s volume (R33)', () => {
-    expect(SETTINGS_VERSION).toBe(32)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 31)).toEqual(
+  it('starts afresh over a save of the version before All keys (R34)', () => {
+    expect(SETTINGS_VERSION).toBe(33)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 32)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })
@@ -426,7 +425,7 @@ describe('createSettingsStore', () => {
         finePointer,
       }).getState().keyboard
     expect(keyboard(true)).toEqual({
-      keySize: 'fit',
+      keySize: 'piano',
       swipe: 'scroll',
       namedKeys: 'c',
       markNotes: true,
@@ -436,7 +435,6 @@ describe('createSettingsStore', () => {
       dock: 'bottom',
       folded: false,
       foldedLandscape: true,
-      keyLength: 'long',
       pedals: 'sustain',
       volume: 100,
     })
@@ -455,12 +453,11 @@ describe('createSettingsStore', () => {
       dock: 'top',
       folded: true,
       foldedLandscape: 'no',
-      keyLength: 'tiny',
       pedals: 'three',
       volume: 140,
     }
     expect(restored({ theme: 'light', locale: 'en', keyboard }).keyboard).toEqual({
-      keySize: 'fit',
+      keySize: 'piano',
       swipe: 'glissando',
       namedKeys: 'all',
       markNotes: true,
@@ -470,7 +467,6 @@ describe('createSettingsStore', () => {
       dock: 'top',
       folded: true,
       foldedLandscape: true,
-      keyLength: 'long',
       pedals: 'sustain',
       volume: 100,
     })

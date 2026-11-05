@@ -2,7 +2,7 @@ import { Link, useSearch } from '@tanstack/react-router'
 import { Eraser, ListX, Music2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
-import { PinnedKeyboard, useFoldKeys } from '@/features/live-keyboard'
+import { PageKeyboardTools, PinnedKeyboard, useFoldKeys } from '@/features/live-keyboard'
 import { partsParams, useSetSearch } from '@/shared/lib'
 import { keyFromParam, keyParam, noteParam } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
@@ -49,7 +49,13 @@ export function ChordFinderPage() {
   return (
     <ToolPage
       title={t('practice:pages.chordFinder')}
-      actions={<MidiButton />}
+      actions={
+        <>
+          {/* The stage names the chord held: the bar does not name it again. */}
+          <PageKeyboardTools screen="playing" namesChords={false} />
+          <MidiButton />
+        </>
+      }
       settings={<Link to="/settings/chord-finder" search={{ from: 'chord-finder' }} />}
       keys={
         <PinnedKeyboard

@@ -1,7 +1,6 @@
 import type { LocaleResources } from '../../types'
 
 export const player: LocaleResources['player'] = {
-  pianoKeys: 'Клавиатура пианино',
   setup: 'Параметры',
   more: 'Ещё',
   info: { song: 'О песне', study: 'Об этюде' },
@@ -135,7 +134,7 @@ export const player: LocaleResources['player'] = {
     wait: { name: 'С листа', line: 'Курсор ждёт верной ноты или аккорда с вашего пианино.' },
     practice: { name: 'Разучивать', line: 'Одна рука за раз, другая звучит или молчит.' },
     follow: { name: 'Играть в своём темпе', line: 'Курсор следует за вашим темпом.' },
-    needsPiano: 'Подключите пианино или включите клавиши на экране.',
+    needsPiano: 'Подключите пианино или включите клавиатуру.',
     hands: { lh: 'Левая', both: 'Обе', rh: 'Правая' },
   },
   tools: 'Инструменты',

@@ -1,4 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
+import { PageKeyboardTools } from '@/features/live-keyboard'
 import { BookmarkPlus, PencilLine, Trash2 } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -71,6 +72,7 @@ export function ProgressionScreen({
   ) : null
   const tools = (
     <>
+      <PageKeyboardTools />
       {library || own ? (
         <PracticeFavouriteButton kind="progressions" id={(library ?? own)?.id ?? ''} />
       ) : (

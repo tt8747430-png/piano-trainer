@@ -13,15 +13,11 @@ export { OPEN_PLAINLY } from './open-plainly'
 export { isOneOf } from './is-one-of'
 export {
   KEY_DOCKS,
-  KEY_LENGTHS,
   KEY_SIZES,
   NAMED_KEYS,
-  nextNamedKeys,
   PEDALS_SHOWN,
   SWIPES,
-  zoomKeySize,
   type KeyDock,
-  type KeyLength,
   type KeySize,
   type NamedKeys,
   type PedalsShown,
@@ -42,7 +38,6 @@ export {
   scrollToReveal,
   scrollToShow,
   keysInView,
-  scrollByOctave,
   scrollToCentre,
   viewFrame,
   type ScrollMetrics,

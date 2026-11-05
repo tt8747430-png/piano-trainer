@@ -8,6 +8,7 @@ import { createMemoryStorage } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
 import { FloatingHost } from '@/shared/ui'
+import { PageKeyboardTools } from './PageKeyboardTools'
 import { PinnedKeyboard } from './PinnedKeyboard'
 
 /** A screen as tall or as short as asked: a phone on its side matches the `landscape-phone` query alone. */
@@ -24,6 +25,7 @@ function stubScreen(onSide: boolean) {
   }))
 }
 
+/** A page's keys with its bar's keyboard controls beside them, as a page's bar holds them (R34). */
 function renderPinned({
   onSide,
   screen: kind,
@@ -41,6 +43,7 @@ function renderPinned({
     <SettingsStoreProvider store={settingsStore}>
       <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
         <FloatingHost screen="page">
+          <PageKeyboardTools screen={kind} />
           <PinnedKeyboard shown={{ keys: [midi(60)], marks: new Map() }} screen={kind} />
         </FloatingHost>
       </ServicesProvider>
@@ -49,56 +52,57 @@ function renderPinned({
   return { settingsStore }
 }
 
-const keysButton = () => screen.queryByRole('button', { name: 'Keys' })
-const foldButton = () => screen.queryByRole('button', { name: 'Hide the keys' })
+const keys = () => screen.queryByRole('group', { name: 'Keyboard' })
+const toggle = () => screen.getByRole('button', { name: 'Keyboard' })
 
 describe('PinnedKeyboard', () => {
-  it('opens a reading page with its keys out on a phone held upright', () => {
+  it('opens a reading page with its keys out on a phone held upright, Keyboard pressed', () => {
     renderPinned({ onSide: false })
-    expect(foldButton()).toBeInTheDocument()
-    expect(keysButton()).not.toBeInTheDocument()
+    expect(keys()).toBeInTheDocument()
+    expect(toggle()).toHaveAttribute('aria-pressed', 'true')
   })
 
-  it('opens a reading page with its keys folded on a phone on its side', () => {
+  it('opens a reading page with its keys hidden on a phone on its side', () => {
     renderPinned({ onSide: true })
-    expect(keysButton()).toBeInTheDocument()
-    expect(foldButton()).not.toBeInTheDocument()
+    expect(keys()).not.toBeInTheDocument()
+    expect(toggle()).toHaveAttribute('aria-pressed', 'false')
   })
 
-  it('remembers the keys unfolded on a phone on its side, apart from the upright fold', async () => {
+  it('leaves nothing floating where the keys were: the bar’s Keyboard brings them back (R34)', async () => {
+    const user = userEvent.setup()
+    renderPinned({ onSide: false })
+    await user.click(toggle())
+    expect(keys()).not.toBeInTheDocument()
+    expect(screen.getAllByRole('button')).toEqual([toggle()])
+    await user.click(toggle())
+    expect(keys()).toBeInTheDocument()
+  })
+
+  it('remembers the keys shown on a phone on its side, apart from the upright choice', async () => {
     const user = userEvent.setup()
     const { settingsStore } = renderPinned({ onSide: true })
-    await user.click(screen.getByRole('button', { name: 'Keys' }))
-    expect(foldButton()).toBeInTheDocument()
+    await user.click(toggle())
+    expect(keys()).toBeInTheDocument()
     expect(settingsStore.getState().keyboard).toMatchObject({
       foldedLandscape: false,
       folded: false,
     })
-  })
-
-  it('folds on a phone on its side without folding the keys held upright', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = renderPinned({ onSide: true })
-    await user.click(screen.getByRole('button', { name: 'Keys' }))
-    await user.click(screen.getByRole('button', { name: 'Hide the keys' }))
-    expect(keysButton()).toBeInTheDocument()
+    await user.click(toggle())
     expect(settingsStore.getState().keyboard).toMatchObject({
       foldedLandscape: true,
       folded: false,
     })
   })
 
-  it('keeps Hide the keys in sight, out of the rail controls that scroll on a short rail', () => {
-    renderPinned({ onSide: false })
-    expect(foldButton()?.closest('[data-slot=rail-controls]')).toBeNull()
-    expect(
-      screen.getByRole('button', { name: 'Larger keys' }).closest('[data-slot=rail-controls]'),
-    ).not.toBeNull()
-  })
-
   it('keeps the keys out on a screen played on, a phone on its side or not', () => {
     renderPinned({ onSide: true, screen: 'playing' })
-    expect(foldButton()).toBeInTheDocument()
-    expect(keysButton()).not.toBeInTheDocument()
+    expect(keys()).toBeInTheDocument()
+  })
+
+  it('stands edge to edge, with nothing under its keys', () => {
+    renderPinned({ onSide: false })
+    const docked = document.querySelector('[data-slot="docked"]')
+    expect(docked).toHaveClass('px-0', 'pb-0')
+    expect(docked?.querySelectorAll('button:not([data-midi])')).toHaveLength(0)
   })
 })

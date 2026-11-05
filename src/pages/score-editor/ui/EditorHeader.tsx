@@ -2,11 +2,11 @@ import { Play, Redo2, Settings, Square, Undo2, X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
-import { useFoldKeys } from '@/features/live-keyboard'
+import { PageKeyboardTools } from '@/features/live-keyboard'
 import { barAt } from '@/features/score-editor'
 import { Button } from '@/shared/ui/primitives/button'
 import { ScoreEditToggle } from '@/widgets/mode-switch'
-import { BarTitle, KeysToggle } from '@/widgets/practice-player'
+import { BarTitle } from '@/widgets/practice-player'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /**
@@ -61,7 +61,7 @@ function PlayButton() {
 }
 
 /**
- * The editor's bar's end (R31-E, R32-B, Flat's): the piano keys, from 40rem the MIDI keyboard
+ * The editor's bar's end (R31-E, R32-B, R34, Flat's): the keyboard's controls, from 40rem the MIDI keyboard
  * (hidden without Web MIDI), then Play, Undo, Redo and the one gear, the score's acts and its Settings
  * (`EditorGear`). While a take records they wait for Stop.
  */
@@ -71,12 +71,11 @@ export function EditorActions() {
   const canUndo = useEditorState((state) => state.past.length > 0)
   const canRedo = useEditorState((state) => state.future.length > 0)
   const recording = takes.stage !== 'idle'
-  const keys = useFoldKeys()
   return (
     <>
-      {/* The piano keys at every size (R32-B, Flat's keyboard button); a phone held upright has
-          the MIDI keyboard in Settings › Connect a piano. */}
-      <KeysToggle shown={!keys.folded} onShow={(shown) => keys.fold(!shown)} />
+      {/* The keyboard's controls at every size (R34, Songscription's): the chord held, Sustain and
+          Keyboard; a phone held upright has the MIDI keyboard in Settings › Connect a piano. */}
+      <PageKeyboardTools variant="tool" />
       <span className="contents max-sm:hidden">
         <MidiButton variant="tool" />
       </span>

@@ -256,9 +256,8 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
         outlined={checked?.outlined}
         wrong={checked?.wrong}
         onKeyPress={choosing ? trainer.toggleKey : pressing ? trainer.pressKey : undefined}
-        // A round asks for a chord or its name: the rail does not say it, nor do the keys go down
-        // while a round asked by ear sounds; a round played on the keys hides their names.
-        namesChords={false}
+        // A round asks for a chord or its name: the keys do not go down while a round asked by ear
+        // sounds, and a round played on the keys hides their names.
         namesKeys={!choosesKeys(question) && !pressesKeys(question)}
         showsSound={!heard || result !== null}
       />

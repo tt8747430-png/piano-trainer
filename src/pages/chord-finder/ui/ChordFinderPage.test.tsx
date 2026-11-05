@@ -145,42 +145,25 @@ describe('Practice → Chord finder', () => {
     ])
   })
 
-  it('folds its keys away to a button that brings them back, remembered', async () => {
+  it('hides its keys from the bar’s Keyboard and brings them back, remembered, nothing floating (R34)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/practice/chord-finder?keys=60-64-67')
-    await user.click(await screen.findByRole('button', { name: 'Hide the keys' }))
+    await screen.findByRole('group', { name: 'Keyboard' })
+    await user.click(screen.getByRole('button', { name: 'Keyboard' }))
     expect(screen.queryByRole('group', { name: 'Keyboard' })).not.toBeInTheDocument()
     expect(settingsStore.getState().keyboard.folded).toBe(true)
     expect(screen.getByRole('heading', { level: 2, name: 'C' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Keys' }))
+    expect(screen.queryByRole('button', { name: 'Keys' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Keyboard' }))
     expect(keyboard()).toBeInTheDocument()
     expect(settingsStore.getState().keyboard.folded).toBe(false)
   })
 
-  it('floats the folded keys lowest among its actions, nearest the foot they unfold to', async () => {
-    const { settingsStore } = await renderApp('/practice/chord-finder?keys=60-64-67')
+  it('holds Sustain and Keyboard in its bar, naming no chord there: its stage names it', async () => {
+    await renderApp('/practice/chord-finder?keys=60-64-67')
     await screen.findByRole('group', { name: 'Keyboard' })
-    act(() =>
-      settingsStore.setState((state) => ({ keyboard: { ...state.keyboard, folded: true } })),
-    )
-    const keys = screen.getByRole('button', { name: 'Keys' })
-    expect(keys.closest('[data-slot="floating-actions"]')).not.toBeNull()
-    expect(keys.closest('[data-slot="floating-actions"] > *')).toHaveClass('order-last')
-  })
-
-  it('floats the folded keys under the screen’s bar where they dock at the top, taking no row', async () => {
-    const { settingsStore } = await renderApp('/practice/chord-finder?keys=60-64-67')
-    await screen.findByRole('group', { name: 'Keyboard' })
-    act(() =>
-      settingsStore.setState((state) => ({
-        keyboard: { ...state.keyboard, dock: 'top', folded: true },
-      })),
-    )
-    // Fixed, it stands out of the page's flow, under the screen's bar.
-    expect(screen.getByRole('button', { name: 'Keys' }).parentElement).toHaveClass(
-      'fixed',
-      'top-screen-bar',
-    )
+    expect(screen.getByRole('button', { name: /^Sustain pedal/ })).toBeInTheDocument()
+    expect(document.querySelector('[data-slot="held-chord"]')).toBeNull()
   })
 
   it('asks for MIDI with the keys folded and nothing tapped', async () => {

@@ -75,12 +75,7 @@ export { PlayToggle } from './PlayToggle'
 export { usePlayKey } from './use-play-key'
 export {
   NO_KEYS,
-  Pedal,
-  PedalLyre,
-  PedalPaddle,
   PianoKeyboard,
-  RailButton,
-  RailGroup,
   toneMark,
   unmarked,
   type KeyMark,
@@ -117,8 +112,6 @@ export { PictureChoice } from './PictureChoice'
 export { PictureTiles } from './PictureTiles'
 export {
   DockPicture,
-  FoldPicture,
-  KeyLengthPicture,
   KeySizePicture,
   NoteNamesPicture,
   SwipePicture,

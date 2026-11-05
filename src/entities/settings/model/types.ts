@@ -4,7 +4,6 @@ import type { Inversion } from '@/shared/lib/music'
 import {
   isOneOf,
   KEY_DOCKS,
-  KEY_LENGTHS,
   KEY_SIZES,
   NAMED_KEYS,
   OCTAVE_SHIFTS,
@@ -12,7 +11,6 @@ import {
   SWIPES,
   type KeyDock,
   type SheetView,
-  type KeyLength,
   type KeySize,
   type NamedKeys,
   type OctaveShift,
@@ -124,14 +122,14 @@ export interface TrainerSettings {
 }
 
 /** How every lesson shows its examples. */
-/** The keyboard settings: the same on every screen, set in Settings or from the keys' rail. */
+/** The keyboard settings: the same on every screen, set in Settings › On-screen piano. */
 export interface KeyboardSettings {
   readonly keySize: KeySize
   readonly swipe: Swipe
   readonly namedKeys: NamedKeys
   /** A key a page marks (a chord's, a scale's) names its note under its degree. */
   readonly markNotes: boolean
-  /** The rail names the chord a hand holds. */
+  /** The bar names the chord a hand holds. */
   readonly chordNames: boolean
   /** The computer keyboard plays the keys. */
   readonly typing: boolean
@@ -139,15 +137,14 @@ export interface KeyboardSettings {
   readonly autoplay: boolean
   /** Where a page's keys stay while it scrolls. */
   readonly dock: KeyDock
-  /** A page's keys folded away to a button that brings them back. */
+  /** A page's keys hidden from its bar's Keyboard (R34): the screen as the learner left it. */
   readonly folded: boolean
   /**
    * On a phone on its side, a reading page's keys (a lesson's, an explorer's, a song's) folded away,
    * apart from `folded`: the screen is too short for the page and the keys both (ADR 0062).
    */
   readonly foldedLandscape: boolean
-  readonly keyLength: KeyLength
-  /** The pedals on the rail beneath the keys (R32): sustain alone, or all three. */
+  /** The pedals the bar's Sustain works (R34): sustain alone, or with soft and sostenuto in its menu. */
   readonly pedals: PedalsShown
   /** How loud the keys a hand plays sound (the live voice), a whole percent from 0 to 100 (R33). */
   readonly volume: number
@@ -496,7 +493,7 @@ export const DEFAULT_CHORD_PLAYER: ChordPlayerSettings = { names: 'chords', voic
 
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
-  keySize: 'fit',
+  keySize: 'piano',
   swipe: 'scroll',
   namedKeys: 'c',
   markNotes: true,
@@ -506,7 +503,6 @@ export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
   dock: 'bottom',
   folded: false,
   foldedLandscape: true,
-  keyLength: 'long',
   pedals: 'sustain',
   volume: 100,
 })
@@ -515,7 +511,6 @@ export const isTheme = isOneOf(THEMES)
 export const isKeySize = isOneOf(KEY_SIZES)
 export const isSwipe = isOneOf(SWIPES)
 export const isKeyDock = isOneOf(KEY_DOCKS)
-export const isKeyLength = isOneOf(KEY_LENGTHS)
 export const isNamedKeys = isOneOf(NAMED_KEYS)
 export const isSidebar = isOneOf(SIDEBARS)
 export const isOctaveShift = isOneOf(OCTAVE_SHIFTS)

@@ -1,18 +1,14 @@
-import { useMemo, useState, type ComponentProps, type ReactNode } from 'react'
+import { useMemo, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings } from '@/entities/settings'
 import { useHeldKeys } from '@/features/connect-midi'
-import { nameChords, printedSymbol, rangeOf, type Midi } from '@/shared/lib/music'
+import { rangeOf, type Midi } from '@/shared/lib/music'
 import { hasFinePointer } from '@/shared/lib'
 import { useLiveVoice, useSoundingKeys } from '@/shared/lib/services'
 import { useShortcuts } from '@/shared/lib/shortcuts'
-import { PianoKeyboard, RailButton, RailGroup } from '@/shared/ui'
+import { PianoKeyboard } from '@/shared/ui'
 import { useSpacePedal } from '../model/use-space-pedal'
 import { useTyping } from '../model/use-typing'
-import { Settings2 } from 'lucide-react'
-import { KeyPedals } from './KeyPedals'
-import { KeyZoom } from './KeyZoom'
-import { PianoSettingsSheet } from './PianoSettingsSheet'
 
 /** A key plays itself unless the screen says otherwise. */
 const ALONE = (key: Midi): readonly Midi[] => [key]
@@ -23,14 +19,12 @@ const NOTHING: ReadonlySet<Midi> = new Set()
  * The keyboard every screen shows, set up as the learner chose (the keyboard settings): a key goes
  * down while the app sounds it, a MIDI keyboard holds it, or a finger or a typed key presses it;
  * a tapped or typed key sounds while it is held (on under the pedal) and before it does whatever
- * else the screen makes it mean. Nothing stands above its keys (R32): its rail beneath them holds the
- * chord a hand holds, the pedals centred on their lyre as a piano's, the keys' size (− +) and ⚙ to the
- * piano's own settings (`onSettings`: the screen's sheet, else the piano's sheet in place, R33). With chord names on, the rail names the chord a
- * hand holds (three notes or more, held or on under the pedal; never what the app sounds). Unless the
- * screen says which keys to keep in sight, it follows the keys the app sounds. With `spotlight`,
- * the keys the app puts down are the ones struck last: an arpeggio's or a run's key alone, a
- * chord's keys together, every mark kept. With `keyPlays`, a key a hand plays may sound more than
- * itself (a degree's chord), all of it down while the key is held.
+ * else the screen makes it mean. Its keys alone (R34): the chord held, the pedals and Keyboard are
+ * the screen's bar's (`KeyboardTools`), its settings the screen's gear's. Unless the screen says which
+ * keys to keep in sight, it follows the keys the app sounds. With `spotlight`, the keys the app puts
+ * down are the ones struck last: an arpeggio's or a run's key alone, a chord's keys together, every
+ * mark kept. With `keyPlays`, a key a hand plays may sound more than itself (a degree's chord), all of
+ * it down while the key is held.
  */
 export function LiveKeyboard({
   keyPlays,
@@ -38,25 +32,12 @@ export function LiveKeyboard({
   inView,
   spotlight = false,
   spacePedal = true,
-  namesChords = true,
   namesKeys = true,
   showsSound = true,
-  railEnd,
-  onSettings,
-  sustained = false,
   ...keyboard
 }: Omit<
   ComponentProps<typeof PianoKeyboard>,
-  | 'down'
-  | 'keySize'
-  | 'swipe'
-  | 'namedKeys'
-  | 'markNotes'
-  | 'keyLength'
-  | 'letters'
-  | 'caption'
-  | 'children'
-  | 'onKeyPress'
+  'down' | 'keySize' | 'swipe' | 'namedKeys' | 'markNotes' | 'letters' | 'onKeyPress'
 > & {
   /** What a tap means besides its sound: a quiz's choice, Wait mode's answer. */
   onKeyPress?: ((key: Midi) => void) | undefined
@@ -64,8 +45,6 @@ export function LiveKeyboard({
   spotlight?: boolean
   /** Space holds the pedal while typing plays the keys: off where the screen gives Space a job. */
   spacePedal?: boolean
-  /** The rail may name the chord a hand holds: off where its name is the question (a round). */
-  namesChords?: boolean
   /**
    * The keys carry their names as the learner chose: off where a key's name is the answer (a round
    * played on the keys), whatever the setting.
@@ -73,21 +52,13 @@ export function LiveKeyboard({
   namesKeys?: boolean
   /** The keys the app sounds go down: off where what sounds is the question (a round by ear). */
   showsSound?: boolean
-  /** The rail's last control: a page's keys fold away from it. */
-  railEnd?: ReactNode
-  /** The piano's settings where the screen keeps them (the Player's sheet); else the piano's sheet. */
-  onSettings?: (() => void) | undefined
-  /** The music playing holds the sustain pedal down (its score's pedal mark): drawn down. */
-  sustained?: boolean
 }) {
-  const { typing, chordNames, keySize, swipe, namedKeys, markNotes, keyLength } =
-    useSettings(selectKeyboard)
+  const { typing, keySize, swipe, namedKeys, markNotes } = useSettings(selectKeyboard)
   const settings = {
     keySize,
     swipe,
     namedKeys: namesKeys ? namedKeys : ('none' as const),
     markNotes,
-    keyLength,
   }
   const heard = useSoundingKeys(spotlight ? 'struck' : 'sounding')
   const sounding = showsSound ? heard : NOTHING
@@ -131,38 +102,16 @@ export function LiveKeyboard({
         : new Set([...sounding, ...live, ...held, ...[...typed.held].flatMap(plays)]),
     [sounding, live, held, typed.held, plays],
   )
-  // What a hand plays: the live voice's keys and a MIDI keyboard's, held or on under the pedal,
-  // named as the sheets print a chord (`C♯m`).
-  const chord = useMemo(
-    () =>
-      namesChords && chordNames
-        ? printedSymbol(nameChords([...live, ...held])[0]?.symbol ?? '')
-        : null,
-    [namesChords, chordNames, live, held],
-  )
-  const [sheet, setSheet] = useState(false)
-  const openSettings = onSettings ?? (() => setSheet(true))
   return (
-    <>
-      <PianoKeyboard
-        {...keyboard}
-        {...settings}
-        inView={typed.inView}
-        down={down}
-        letters={typed.letters}
-        caption={chord === null ? undefined : { label: t('rail.chord'), text: chord }}
-        keyPlays={keyPlays}
-        onKeyPress={play}
-        onKeyRelease={letGo}
-        pedals={<KeyPedals sustained={sustained} />}
-        railEnd={railEnd}
-      >
-        <RailGroup>
-          <KeyZoom />
-          <RailButton label={t('rail.settings')} icon={Settings2} onClick={openSettings} />
-        </RailGroup>
-      </PianoKeyboard>
-      {onSettings ? null : <PianoSettingsSheet open={sheet} onOpenChange={setSheet} />}
-    </>
+    <PianoKeyboard
+      {...keyboard}
+      {...settings}
+      inView={typed.inView}
+      down={down}
+      letters={typed.letters}
+      keyPlays={keyPlays}
+      onKeyPress={play}
+      onKeyRelease={letGo}
+    />
   )
 }

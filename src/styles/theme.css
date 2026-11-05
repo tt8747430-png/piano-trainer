@@ -83,16 +83,6 @@
   --color-key-white: var(--key-white);
   --color-key-black: var(--key-black);
   --color-key-bed: var(--key-bed);
-  --color-key-rail: var(--key-rail);
-  --color-on-key-rail: var(--on-key-rail);
-  --color-pedal: var(--pedal);
-  --color-pedal-down: var(--pedal-down);
-  --color-pedal-shank: var(--pedal-shank);
-  --color-pedal-shank-down: var(--pedal-shank-down);
-  --color-pedal-sheen: var(--pedal-sheen);
-  --color-pedal-lyre: var(--pedal-lyre);
-  --color-pedal-name: var(--pedal-name);
-  --color-pedal-name-down: var(--pedal-name-down);
   --color-key-shade: var(--key-shade);
   --color-key-sheen: var(--key-sheen);
   --color-key-felt: var(--key-felt);
@@ -117,7 +107,7 @@
    * chord symbols only; every control reads in Onest.
    */
   --font-display: 'Literata Variable', 'Text Accidentals', 'Noto Music', Georgia, serif;
-  /* A music sign that stands alone (the rail's pedal mark): set by the music font's own metrics. */
+  /* A music sign that stands alone: set by the music font's own metrics. */
   --font-music: 'Noto Music', serif;
 
   --color-role-root: var(--role-root);
@@ -207,7 +197,7 @@
     }
   }
   /* The keys' greatest height, a share of the screen's: a phone on its side keeps room for the music,
-     its keys, their rail and their foot together under half its height. */
+     its keys and their divider together under half its height. */
   :root {
     --keys-most: 32dvh;
     @variant landscape-phone {
@@ -311,11 +301,11 @@
     outline-offset: 2px;
   }
   /* A focused control scrolls clear of what stays over the page (WCAG 2.4.11): the pinned keyboard at
-     its tallest (the notch, the rail, keys at --keys-most, the finger row, its foot), and at the foot the
+     its tallest (the notch, its divider, keys at --keys-most), and at the foot the
      phone's tab bar and the keys docked over it. */
   html:has([data-slot='pinned']) {
     scroll-padding-top: calc(
-      var(--keys-most) + --spacing(23) + max(--spacing(4), env(safe-area-inset-top))
+      var(--keys-most) + --spacing(6) + max(--spacing(4), env(safe-area-inset-top))
     );
   }
   html:has([data-slot='app-nav']) {
@@ -767,11 +757,8 @@
     --spacing(--value(integer)) + var(--nav-bar) + var(--docked, 0px) + var(--floating-foot)
   );
 }
-/* The keys and the button they fold into share one name, so folding morphs one into the other
-   (`morph`); the page under them changes at once. The two are never stretched into each other's
-   shape: each keeps its own size in a frame that grows or shrinks from the corner they share (the
-   foot's right, or the top's), rounding as it nears the button, while the one leaving fades out
-   first and the one coming fades in after it. */
+/* The keys shown or hidden from the bar's Keyboard (R34) leave and come as one, fading, while the
+   page under them takes or gives their room at once; the screen's floating actions ride with them. */
 @utility vt-keys {
   view-transition-name: keys;
 }
@@ -812,12 +799,6 @@
 :root[data-morph$='-top']::view-transition-new(keys) {
   object-position: right top;
 }
-:root[data-morph^='keys-unfold']::view-transition-image-pair(keys) {
-  animation: keys-square 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-:root[data-morph^='keys-fold']::view-transition-image-pair(keys) {
-  animation: keys-square 340ms cubic-bezier(0.22, 1, 0.36, 1) reverse both;
-}
 :root[data-morph^='keys-unfold']::view-transition-old(keys) {
   animation: keys-leave 120ms ease-out both;
 }
@@ -829,14 +810,6 @@
 }
 :root[data-morph^='keys-fold']::view-transition-new(keys) {
   animation: keys-come 180ms 160ms ease-out both;
-}
-@keyframes keys-square {
-  from {
-    border-radius: 1.75rem;
-  }
-  to {
-    border-radius: 0;
-  }
 }
 @keyframes keys-leave {
   to {

@@ -90,16 +90,6 @@ export function KeySizePicture({ size }: { size: 'piano' | 'fit' | 'large' }) {
   )
 }
 
-/** Key length: a tall key or a short one. */
-export function KeyLengthPicture({ length }: { length: 'long' | 'short' }) {
-  const height = length === 'long' ? 32 : 16
-  return (
-    <Frame>
-      <Keys x={14} y={4} width={36} height={height} whites={5} />
-    </Frame>
-  )
-}
-
 /** Note names: a dot on every C, on every key, or on none. */
 export function NoteNamesPicture({ names }: { names: 'c' | 'all' | 'none' }) {
   return (
@@ -110,7 +100,7 @@ export function NoteNamesPicture({ names }: { names: 'c' | 'all' | 'none' }) {
 }
 
 /** A page's outline, its lines of text, and the keys at its foot or under its title. */
-function Page({ keys }: { keys: 'top' | 'bottom' | 'none' }) {
+function Page({ keys }: { keys: 'top' | 'bottom' }) {
   return (
     <>
       <rect
@@ -123,12 +113,7 @@ function Page({ keys }: { keys: 'top' | 'bottom' | 'none' }) {
         className="fill-none stroke-current"
       />
       <rect x={18} y={4.5} width={14} height={2.4} rx={1} className="fill-current" />
-      {(keys === 'top'
-        ? [22, 26, 30]
-        : keys === 'bottom'
-          ? [11, 15, 19]
-          : [11, 16, 21, 26, 31]
-      ).map((y) => (
+      {(keys === 'top' ? [22, 26, 30] : [11, 15, 19]).map((y) => (
         <line
           key={y}
           x1={18}
@@ -139,9 +124,7 @@ function Page({ keys }: { keys: 'top' | 'bottom' | 'none' }) {
           className="stroke-current opacity-40"
         />
       ))}
-      {keys === 'none' ? null : (
-        <Keys x={16} y={keys === 'top' ? 9 : 25} width={32} height={10} whites={8} />
-      )}
+      <Keys x={16} y={keys === 'top' ? 9 : 25} width={32} height={10} whites={8} />
     </>
   )
 }
@@ -151,51 +134,6 @@ export function DockPicture({ dock }: { dock: 'top' | 'bottom' }) {
   return (
     <Frame>
       <Page keys={dock} />
-    </Frame>
-  )
-}
-
-/** A phone on its side. */
-function SidePhone({ keys }: { keys: boolean }) {
-  return (
-    <>
-      <rect
-        x={6}
-        y={8}
-        width={52}
-        height={26}
-        rx={4}
-        strokeWidth={0.9}
-        className="fill-none stroke-current"
-      />
-      {keys ? (
-        <Keys x={10} y={22} width={44} height={9} whites={12} />
-      ) : (
-        [14, 19, 24, 29].map((y) => (
-          <line
-            key={y}
-            x1={11}
-            x2={53}
-            y1={y}
-            y2={y}
-            strokeWidth={1}
-            className="stroke-current opacity-40"
-          />
-        ))
-      )}
-    </>
-  )
-}
-
-/** Fold the keyboard: never (the keys in sight), on a phone on its side, or always. */
-export function FoldPicture({ fold }: { fold: 'never' | 'side' | 'always' }) {
-  return (
-    <Frame>
-      {fold === 'side' ? (
-        <SidePhone keys={false} />
-      ) : (
-        <Page keys={fold === 'never' ? 'bottom' : 'none'} />
-      )}
     </Frame>
   )
 }

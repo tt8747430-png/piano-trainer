@@ -36,6 +36,8 @@ export const NOT_PREFERENCES = [
   'tipsSeen',
   'practiceRecent',
   'chordFinder.chords',
+  'keyboard.folded',
+  'keyboard.foldedLandscape',
 ] as const
 
 type Leaf<T> = {
@@ -79,9 +81,6 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'keyboard.typing': 'on-screen-piano',
   'keyboard.autoplay': 'on-screen-piano',
   'keyboard.dock': 'on-screen-piano',
-  'keyboard.folded': 'on-screen-piano',
-  'keyboard.foldedLandscape': 'on-screen-piano',
-  'keyboard.keyLength': 'on-screen-piano',
   'keyboard.pedals': 'on-screen-piano',
   'keyboard.volume': 'on-screen-piano',
   'recorder.click': 'score-editor',
