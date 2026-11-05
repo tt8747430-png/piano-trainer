@@ -76,17 +76,18 @@ describe('the Player as its settings say (B7, A27)', () => {
     expect(voices.slice(0, 2)).toEqual(['kick', 'hat'])
   })
 
-  it('shows the pedal: a lamp at the keys’ rail, lit while it is down, the Ped. mark it plays under (A27)', async () => {
+  it('marks the pedal it plays under; the drawn pedal stays up while stopped (A27, R31-P)', async () => {
     const { settingsStore } = await renderApp('/play/bz5')
     act(() => setPlayback(settingsStore, { pedal: 'automatic' }))
-    // The automatic pedal goes down with the first chord, where the cursor stands.
-    expect(await screen.findByRole('img', { name: 'Pedal down' })).toHaveTextContent('Ped.')
     await waitFor(() =>
       expect(document.querySelector('style[data-slot="pedal-marks"]')?.textContent).toContain(
         '[id="ped-0"]',
       ),
     )
-    act(() => setPlayback(settingsStore, { pedal: 'off' }))
-    expect(screen.queryByRole('img', { name: /^Pedal/ })).toBeNull()
+    // The score's pedal is down at the cursor, yet nothing plays: no pedal hangs.
+    expect(screen.getByRole('button', { name: /^Sustain pedal/ })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    )
   })
 })

@@ -75,6 +75,8 @@ export { PlayToggle } from './PlayToggle'
 export { usePlayKey } from './use-play-key'
 export {
   NO_KEYS,
+  Pedal,
+  PedalPaddle,
   PianoKeyboard,
   RailButton,
   RailGroup,

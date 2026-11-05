@@ -21,7 +21,7 @@ export const settings = {
     scoreEditor: 'Score editor',
   },
   // The on-screen piano's page: its groups.
-  piano: { look: 'Look', place: 'Position', play: 'Playing', bar: 'Bar over the keys' },
+  piano: { look: 'Look', place: 'Position', play: 'Playing', pedals: 'Pedals' },
   // How a take is recorded in the score editor (ADR 0028), as its recording strip's settings say too.
   recording: 'Recording',
   progress: {

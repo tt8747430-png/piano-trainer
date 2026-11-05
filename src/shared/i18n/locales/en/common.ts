@@ -97,8 +97,14 @@ export const common = {
   // What a Play button says while its sound plays.
   stop: 'Stop',
   // The keyboard's rail: its buttons.
-  pedals: { label: 'Pedals', sustain: 'Sus.', sostenuto: 'Sost.', soft: 'Soft' },
+  // The pedals at the end of the keys' strip (R31-P): each one's name under it, and what it is for.
+  pedals: {
+    sustain: { name: 'Sustain', label: 'Sustain pedal: hold it, or tap to keep it down' },
+    sostenuto: { name: 'Sost.', label: 'Sostenuto pedal: holds the notes down as it is pressed' },
+    soft: { name: 'Soft', label: 'Soft pedal: hold it to play quieter' },
+  },
   rail: {
+    settings: 'Piano settings',
     octaveDown: 'Octave down',
     octaveUp: 'Octave up',
     zoomOut: 'Smaller keys',
@@ -107,29 +113,18 @@ export const common = {
     keysInSight: 'Keys in sight',
     showing_one: 'Showing {{count}} key ({{from}}–{{to}})',
     showing_other: 'Showing {{count}} keys ({{from}}–{{to}})',
-    names: { c: 'Note names: every C', all: 'Note names: every key', none: 'Note names: off' },
-    glissando: 'Glissando',
-    pedal: 'Pedal',
-    sound: 'Sound the MIDI keyboard',
     chord: 'Chord played',
     fold: 'Hide the keys',
     unfold: 'Keys',
     // Each control's name in sight under its picture (R29 A26).
     named: {
       zoom: 'Zoom',
-      noteNames: 'Names',
-      noteValue: { c: 'C', all: 'All', none: 'Off' },
-      chordNames: 'Chords',
-      glissando: 'Gliss.',
-      sustain: 'Sustain',
-      sound: 'Sound',
       hide: 'Hide',
     },
-    chordNamesTitle: 'Show the chord symbol of the keys held',
-    glissandoTitle: 'Slide across the keys to play them',
   },
   // The keyboard settings: in the keyboard's rail and in Settings.
   keyboardSettings: {
+    pedals: { label: 'Pedals', sustain: 'The sustain pedal', all: 'All three' },
     keySize: {
       label: 'Key size',
       detail: 'Fit fills the width with the keys a page shows; the rest scroll in beside them',
@@ -179,17 +174,6 @@ export const common = {
     typingHint: 'Z X move an octave · Space holds the pedal',
     autoplay: 'Play what you choose',
     autoplayNote: 'A chord or a scale chosen on a Practice page plays at once',
-  },
-  // Which controls the bar over the keys holds: each by the picture it wears there.
-  railControls: {
-    label: 'Buttons on the bar',
-    detail: 'Keep the ones you use; the rest stay here',
-    zoom: { label: 'Key size', detail: 'Smaller or larger keys' },
-    noteNames: { label: 'Note names', detail: 'Every C, every key or none' },
-    chordNames: { label: 'Chord names', detail: 'Names the chord you hold' },
-    midiSound: { label: 'MIDI sound', detail: 'Hear a MIDI keyboard here' },
-    glissando: { label: 'Glissando', detail: 'A swipe plays the keys' },
-    pedal: { label: 'Pedal', detail: 'Holds the notes on' },
   },
   // The computer's shortcuts: the sheet, and the groups every screen shares.
   shortcuts: {

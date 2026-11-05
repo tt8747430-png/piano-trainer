@@ -46,7 +46,6 @@ import {
   MODE_LOOK,
   ModesSheet,
   PlayerFoot,
-  PedalLamp,
   PlayerArea,
   PlayerScreen,
   BarTitle,
@@ -521,11 +520,10 @@ export function PlayerLayout({
         // Keys the pedal alone holds, ringed apart from a hand's (A27); the lamp at the rail's end.
         // The score's pedal and the keys it holds while the music sounds; stopped, nothing hangs (R31-P).
         outlined={chordKeys || !playing ? undefined : player.pedalKeys}
-        railEnd={
-          player.pedal === 'none' ? undefined : (
-            <PedalLamp down={playing && player.pedal === 'down'} />
-          )
-        }
+        // Its ⚙ opens the piano's page in this sheet, never the app's (R31-P).
+        onSettings={() => setSettingsAt({ page: 'piano' })}
+        // The drawn pedal goes down with the score's while the music plays; stopped, it is up.
+        sustained={playing && player.pedalDown}
         onKeyPress={player.tapKey}
         // Space is Play here: the pedal is the rail's, or a MIDI keyboard's.
         spacePedal={false}

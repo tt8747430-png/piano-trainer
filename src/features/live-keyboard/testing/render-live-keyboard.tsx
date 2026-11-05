@@ -17,11 +17,13 @@ export function renderLiveKeyboard({
   keyPlays,
   spotlight = false,
   marks,
+  onSettings,
 }: {
   onKeyPress?: (key: Midi) => void
   keyPlays?: (key: Midi) => readonly Midi[]
   spotlight?: boolean
   marks?: ReadonlyMap<Midi, KeyMark>
+  onSettings?: () => void
 } = {}) {
   const audio = createFakeAudio()
   const midiKeyboard = createFakeMidi()
@@ -40,6 +42,7 @@ export function renderLiveKeyboard({
           marks={marks}
           keyPlays={keyPlays}
           {...(onKeyPress ? { onKeyPress } : {})}
+          onSettings={onSettings ?? (() => undefined)}
         />
         <input aria-label="Search" />
       </ServicesProvider>

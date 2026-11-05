@@ -20,7 +20,7 @@ export const settings: LocaleResources['settings'] = {
     player: 'Плеер',
     scoreEditor: 'Нотный редактор',
   },
-  piano: { look: 'Вид', place: 'Положение', play: 'Игра', bar: 'Панель над клавишами' },
+  piano: { look: 'Вид', place: 'Положение', play: 'Игра', pedals: 'Педали' },
   recording: 'Запись',
   progress: {
     reset: 'Сбросить прогресс',

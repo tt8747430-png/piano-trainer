@@ -104,7 +104,7 @@ describe('Settings', () => {
       'Look',
       'Position',
       'Playing',
-      'Bar over the keys',
+      'Pedals',
     ])
     expect(screen.queryByRole('switch', { name: /^Play from the computer keys/ })).toBeNull()
   })
@@ -187,26 +187,12 @@ describe('Settings', () => {
     await waitFor(() => expect(screen.queryByText(/fills the width/)).toBeNull())
   })
 
-  it('keeps on the bar over the keys only the buttons chosen, in the bar’s order', async () => {
+  it('draws the sustain pedal, or all three, as chosen (R31-P)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings/on-screen-piano')
-    const bar = await screen.findByRole('group', { name: 'Buttons on the bar' })
-    await user.click(within(bar).getByRole('button', { name: /^Glissando/ }))
-    expect(within(bar).getByRole('button', { name: /^Glissando/ })).toHaveAttribute(
-      'aria-pressed',
-      'false',
-    )
-    await user.click(within(bar).getByRole('button', { name: /^Glissando/ }))
-    expect(settingsStore.getState().keyboard.railControls).toEqual([
-      'zoom',
-      'noteNames',
-      'chordNames',
-      'midiSound',
-      'glissando',
-      'pedal',
-    ])
-    await user.click(within(bar).getByRole('button', { name: /^Note names/ }))
-    expect(settingsStore.getState().keyboard.railControls).not.toContain('noteNames')
+    expect(settingsStore.getState().keyboard.pedals).toBe('sustain')
+    await user.click(await screen.findByRole('radio', { name: 'All three' }))
+    expect(settingsStore.getState().keyboard.pedals).toBe('all')
   })
 
   it('says on Connect a piano’s row when the browser cannot connect one', async () => {

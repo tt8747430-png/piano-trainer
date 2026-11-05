@@ -85,6 +85,10 @@
   --color-key-bed: var(--key-bed);
   --color-key-rail: var(--key-rail);
   --color-on-key-rail: var(--on-key-rail);
+  --color-pedal: var(--pedal);
+  --color-pedal-down: var(--pedal-down);
+  --color-pedal-shank: var(--pedal-shank);
+  --color-pedal-shank-down: var(--pedal-shank-down);
   --color-key-shade: var(--key-shade);
   --color-key-lip: var(--key-lip);
   --color-key-sheen: var(--key-sheen);

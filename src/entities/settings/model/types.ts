@@ -9,7 +9,6 @@ import {
   NAMED_KEYS,
   OCTAVE_SHIFTS,
   PEDAL_WAYS,
-  RAIL_CONTROLS,
   SWIPES,
   type KeyDock,
   type SheetView,
@@ -18,7 +17,7 @@ import {
   type NamedKeys,
   type OctaveShift,
   type PedalWay,
-  type RailControl,
+  type PedalsShown,
   type Swipe,
 } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
@@ -148,8 +147,8 @@ export interface KeyboardSettings {
    */
   readonly foldedLandscape: boolean
   readonly keyLength: KeyLength
-  /** The controls the keys' rail holds, in its order. */
-  readonly railControls: readonly RailControl[]
+  /** The pedals drawn at the end of the keys' strip (R31-P): sustain alone, or all three. */
+  readonly pedals: PedalsShown
 }
 
 /**
@@ -521,7 +520,7 @@ export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
   folded: false,
   foldedLandscape: true,
   keyLength: 'long',
-  railControls: RAIL_CONTROLS,
+  pedals: 'sustain',
 })
 
 export const isTheme = isOneOf(THEMES)

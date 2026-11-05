@@ -5,7 +5,6 @@ import { isStaffId } from '@/shared/lib/notation'
 import {
   createSavedStore,
   isOneOf,
-  railControls,
   SHEET_VIEWS,
   readKeyList,
   savedObject,
@@ -94,7 +93,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 26
+export const SETTINGS_VERSION = 27
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -410,7 +409,7 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
     foldedLandscape:
       typeof saved.foldedLandscape === 'boolean' ? saved.foldedLandscape : current.foldedLandscape,
     keyLength: isKeyLength(saved.keyLength) ? saved.keyLength : current.keyLength,
-    railControls: railControls(saved.railControls, current.railControls),
+    pedals: saved.pedals === 'all' || saved.pedals === 'sustain' ? saved.pedals : current.pedals,
   }
 }
 

@@ -82,7 +82,7 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'keyboard.folded': 'on-screen-piano',
   'keyboard.foldedLandscape': 'on-screen-piano',
   'keyboard.keyLength': 'on-screen-piano',
-  'keyboard.railControls': 'on-screen-piano',
+  'keyboard.pedals': 'on-screen-piano',
   'recorder.click': 'score-editor',
   'recorder.tune': 'score-editor',
   'recorder.countIn': 'score-editor',

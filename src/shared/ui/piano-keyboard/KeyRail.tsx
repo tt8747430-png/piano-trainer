@@ -50,14 +50,13 @@ export function KeyRail({
   }
   return (
     <div className="relative h-14 shrink-0">
-      {/* The rail itself, drawn along the strip's foot: the buttons' targets reach above it; their
-          names (R29 A26) sit on it under their pictures. */}
-      <span aria-hidden className="absolute inset-x-0 bottom-0 h-12 bg-key-rail" />
+      {/* A slim strip over the keys (R31-P): no box of its own, a hairline at its foot. */}
+      <span aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-hairline" />
       <div className="sticky left-0 flex h-full items-end px-1" style={{ width: IN_VIEW }}>
         {/* The caption at the rail's start; the buttons give way first, scrolling sideways. */}
         <div className="flex min-w-16 flex-1 items-end">
           {caption?.text ? (
-            <p className="h-9 w-max bg-key-rail px-2 font-display text-lg/9 font-semibold text-on-key-rail">
+            <p className="h-9 w-max px-2 font-display text-lg/9 font-semibold text-foreground">
               <span className="sr-only">{caption.label}: </span>
               {caption.text}
             </p>

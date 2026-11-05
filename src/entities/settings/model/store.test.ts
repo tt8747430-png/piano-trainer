@@ -152,7 +152,7 @@ describe('createSettingsStore', () => {
         folded: true,
         foldedLandscape: false,
         keyLength: 'short',
-        railControls: ['zoom', 'pedal'],
+        pedals: 'all',
       },
       recorder: { click: false, tune: true, countIn: 2 },
       editing: { hearNotes: false, startMode: 'insert', paletteSide: 'right' },
@@ -362,9 +362,9 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('starts afresh over a save of the version before, which kept no tips seen (R31-P)', () => {
-    expect(SETTINGS_VERSION).toBe(26)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 25)).toEqual(
+  it('starts afresh over a save of the version before, which kept the rail’s buttons (R31-P)', () => {
+    expect(SETTINGS_VERSION).toBe(27)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 26)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })
@@ -447,7 +447,7 @@ describe('createSettingsStore', () => {
       folded: false,
       foldedLandscape: true,
       keyLength: 'long',
-      railControls: ['zoom', 'noteNames', 'chordNames', 'midiSound', 'glissando', 'pedal'],
+      pedals: 'sustain',
     })
     expect(keyboard(false).typing).toBe(false)
   })
@@ -465,7 +465,7 @@ describe('createSettingsStore', () => {
       folded: true,
       foldedLandscape: 'no',
       keyLength: 'tiny',
-      railControls: ['pedal', 'pedal', 'nope'],
+      pedals: 'three',
     }
     expect(restored({ theme: 'light', locale: 'en', keyboard }).keyboard).toEqual({
       keySize: 'fit',
@@ -479,7 +479,7 @@ describe('createSettingsStore', () => {
       folded: true,
       foldedLandscape: true,
       keyLength: 'long',
-      railControls: ['pedal'],
+      pedals: 'sustain',
     })
   })
 

@@ -1,19 +1,18 @@
-import { Fragment, useMemo, type ComponentProps, type ReactNode } from 'react'
+import { useMemo, type ComponentProps, type ReactNode } from 'react'
+import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings } from '@/entities/settings'
-import { MidiSoundToggle, useHeldKeys } from '@/features/connect-midi'
+import { useHeldKeys } from '@/features/connect-midi'
 import { nameChords, printedSymbol, rangeOf, type Midi } from '@/shared/lib/music'
-import { hasFinePointer, type RailControl } from '@/shared/lib'
-import { useLiveVoice, usePedal, useSoundingKeys } from '@/shared/lib/services'
+import { hasFinePointer } from '@/shared/lib'
+import { useLiveVoice, useSoundingKeys } from '@/shared/lib/services'
 import { useShortcuts } from '@/shared/lib/shortcuts'
-import { PianoKeyboard, RailGroup } from '@/shared/ui'
+import { PianoKeyboard, RailButton, RailGroup } from '@/shared/ui'
 import { useSpacePedal } from '../model/use-space-pedal'
 import { useTyping } from '../model/use-typing'
-import { ChordNamesToggle } from './ChordNamesToggle'
-import { GlissandoToggle } from './GlissandoToggle'
+import { Settings2 } from 'lucide-react'
+import { KeyPedals } from './KeyPedals'
 import { KeyZoom } from './KeyZoom'
-import { NamedKeysToggle } from './NamedKeysToggle'
-import { PedalToggle } from './PedalToggle'
 
 /** A key plays itself unless the screen says otherwise. */
 const ALONE = (key: Midi): readonly Midi[] => [key]
@@ -24,10 +23,9 @@ const NOTHING: ReadonlySet<Midi> = new Set()
  * The keyboard every screen shows, set up as the learner chose (the keyboard settings): a key goes
  * down while the app sounds it, a MIDI keyboard holds it, or a finger or a typed key presses it;
  * a tapped or typed key sounds while it is held (on under the pedal) and before it does whatever
- * else the screen makes it mean. Its rail holds its settings in sight, as pictures (those the learner
- * keeps on it, `railControls`; every one is in Settings too): how the keys
- * look (their size as a zoom, their names, the chord names, the typing letters), then how they play
- * (a MIDI keyboard's sound, glissando, the pedal). With chord names on, the rail names the chord a
+ * else the screen makes it mean. Its strip (R31-P) is slim and holds no settings: the chord a hand
+ * holds, the keys' size (− +), ⚙ to the piano's own settings (`onSettings`: the screen's sheet, else
+ * the app's page), and at its end the pedals, drawn as a piano's. With chord names on, the strip names the chord a
  * hand holds (three notes or more, held or on under the pedal; never what the app sounds). Unless the
  * screen says which keys to keep in sight, it follows the keys the app sounds. With `spotlight`,
  * the keys the app puts down are the ones struck last: an arpeggio's or a run's key alone, a
@@ -44,6 +42,8 @@ export function LiveKeyboard({
   namesKeys = true,
   showsSound = true,
   railEnd,
+  onSettings,
+  sustained = false,
   ...keyboard
 }: Omit<
   ComponentProps<typeof PianoKeyboard>,
@@ -75,8 +75,12 @@ export function LiveKeyboard({
   showsSound?: boolean
   /** The rail's last control: a page's keys fold away from it. */
   railEnd?: ReactNode
+  /** The piano's settings where the screen keeps them (the Player's sheet); else the app's page. */
+  onSettings?: (() => void) | undefined
+  /** The music playing holds the sustain pedal down (its score's pedal mark): drawn down. */
+  sustained?: boolean
 }) {
-  const { typing, chordNames, railControls, keySize, swipe, namedKeys, markNotes, keyLength } =
+  const { typing, chordNames, keySize, swipe, namedKeys, markNotes, keyLength } =
     useSettings(selectKeyboard)
   const settings = {
     keySize,
@@ -136,26 +140,8 @@ export function LiveKeyboard({
         : null,
     [namesChords, chordNames, live, held],
   )
-  // The pedals down, whoever holds them (R29 A26): the bar under the keys.
-  const pedals = {
-    sustain: usePedal('sustain'),
-    sostenuto: usePedal('sostenuto'),
-    soft: usePedal('soft'),
-  }
-  // The rail holds the controls the learner keeps on it, how the keys look apart from how they play.
-  const kept = new Set(railControls)
-  const control = (id: RailControl, element: ReactNode) =>
-    kept.has(id) ? <Fragment key={id}>{element}</Fragment> : null
-  const lookControls = [
-    control('zoom', <KeyZoom />),
-    control('noteNames', <NamedKeysToggle disabled={!namesKeys} />),
-    control('chordNames', <ChordNamesToggle disabled={!namesChords} />),
-  ].filter(Boolean)
-  const playControls = [
-    control('midiSound', <MidiSoundToggle />),
-    control('glissando', <GlissandoToggle />),
-    control('pedal', <PedalToggle />),
-  ].filter(Boolean)
+  const navigate = useNavigate()
+  const openSettings = onSettings ?? (() => void navigate({ to: '/settings/on-screen-piano' }))
   return (
     <PianoKeyboard
       {...keyboard}
@@ -167,11 +153,17 @@ export function LiveKeyboard({
       keyPlays={keyPlays}
       onKeyPress={play}
       onKeyRelease={letGo}
-      railEnd={railEnd}
-      pedals={pedals}
+      railEnd={
+        <>
+          <KeyPedals sustained={sustained} />
+          {railEnd}
+        </>
+      }
     >
-      {lookControls.length > 0 ? <RailGroup>{lookControls}</RailGroup> : null}
-      {playControls.length > 0 ? <RailGroup>{playControls}</RailGroup> : null}
+      <RailGroup>
+        <KeyZoom />
+        <RailButton label={t('rail.settings')} icon={Settings2} onClick={openSettings} />
+      </RailGroup>
     </PianoKeyboard>
   )
 }

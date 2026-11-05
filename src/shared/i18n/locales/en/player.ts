@@ -247,8 +247,6 @@ export const player = {
     showOf: 'Show {{track}}',
   },
   playing: 'How it plays',
-  // The pedal's lamp by the keys (A27): the score's own mark, lit while the pedal is down.
-  pedalLamp: { mark: 'Ped.', down: 'Pedal down', up: 'Pedal up' },
   // The Player's settings page (B7): how it always plays, every song's.
   clef: {
     label: 'Clef',

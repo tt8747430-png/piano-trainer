@@ -1,6 +1,6 @@
 import { act, fireEvent, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { midi } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { renderLiveKeyboard as setUp } from '../testing/render-live-keyboard'
@@ -17,30 +17,26 @@ const hold = (...names: string[]) =>
 const chord = () => screen.queryByText('Chord played:')?.parentElement?.textContent ?? null
 
 describe('the keyboard’s rail', () => {
-  it('holds every control in sight, as pictures: no settings button, no pop-up', () => {
+  it('holds the keys’ size, the piano’s settings and its pedal: nothing else (R31-P)', () => {
     setUp()
     // No map of the keys in view: a swipe on the keys scrolls them.
     expect(screen.queryByRole('slider', { name: 'Keys in view' })).not.toBeInTheDocument()
-    for (const name of ['Smaller keys', 'Larger keys', 'Glissando', 'Pedal']) {
+    for (const name of ['Smaller keys', 'Larger keys', 'Piano settings']) {
       expect(screen.getByRole('button', { name })).toBeInTheDocument()
     }
-    expect(screen.queryByRole('button', { name: 'Keyboard settings' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('radio')).not.toBeInTheDocument()
-  })
-
-  it('holds only the controls the learner chose to keep on it', () => {
-    const { settingsStore } = setUp()
-    act(() =>
-      settingsStore.setState((state) => ({
-        keyboard: { ...state.keyboard, railControls: ['zoom', 'pedal'] },
-      })),
-    )
-    for (const name of ['Smaller keys', 'Larger keys', 'Pedal']) {
-      expect(screen.getByRole('button', { name })).toBeInTheDocument()
-    }
-    for (const name of [/^Note names/, 'Chord names', 'Play from the computer keys', 'Glissando']) {
+    expect(screen.getByRole('button', { name: /^Sustain pedal/ })).toBeInTheDocument()
+    // Every other choice is the piano's settings', never a second control on the strip.
+    for (const name of [/^Note names/, 'Chord names', 'Glissando', 'Sound the MIDI keyboard']) {
       expect(screen.queryByRole('button', { name })).not.toBeInTheDocument()
     }
+  })
+
+  it('opens the piano’s settings where the screen keeps them', async () => {
+    const user = userEvent.setup()
+    const onSettings = vi.fn()
+    setUp({ onSettings })
+    await user.click(screen.getByRole('button', { name: 'Piano settings' }))
+    expect(onSettings).toHaveBeenCalledTimes(1)
   })
 
   it('zooms the keys a step at a time, saved, the button at an end off', async () => {
@@ -56,38 +52,6 @@ describe('the keyboard’s rail', () => {
     expect(settingsStore.getState().keyboard.keySize).toBe('piano')
     expect(smaller).toBeDisabled()
     expect(larger).toBeEnabled()
-  })
-
-  it('turns the note names round from one button, which says what the keys show', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = setUp()
-    const names = () => screen.getByRole('button', { name: /^Note names/ })
-    expect(names()).toHaveAccessibleName('Note names: every C')
-    expect(names()).toHaveAttribute('aria-pressed', 'true')
-    await user.click(names())
-    expect(names()).toHaveAccessibleName('Note names: every key')
-    expect(settingsStore.getState().keyboard.namedKeys).toBe('all')
-    await user.click(names())
-    expect(names()).toHaveAccessibleName('Note names: off')
-    expect(names()).toHaveAttribute('aria-pressed', 'false')
-    await user.click(names())
-    expect(settingsStore.getState().keyboard.namedKeys).toBe('c')
-  })
-
-  it('offers Sound the MIDI keyboard only while one is connected, and saves it', async () => {
-    const user = userEvent.setup()
-    const { settingsStore, midiKeyboard } = setUp()
-    const sound = () => screen.queryByRole('button', { name: 'Sound the MIDI keyboard' })
-    expect(sound()).not.toBeInTheDocument()
-    await act(() => midiKeyboard.connect())
-    await user.click(sound() ?? document.body)
-    expect(sound()).toHaveAttribute('aria-pressed', 'true')
-    expect(settingsStore.getState().midi.sound).toBe(true)
-  })
-
-  it('names each button on hover', () => {
-    setUp()
-    expect(screen.getByRole('button', { name: 'Pedal' })).toHaveAttribute('title', 'Pedal')
   })
 
   it('names the chord a hand holds, and nothing under three notes', () => {
@@ -131,18 +95,6 @@ describe('the keyboard’s rail', () => {
     const { audio } = setUp()
     act(() => void audio.play(chordSounds([60, 64, 67].map(midi), { arpeggio: false }), 0))
     act(() => audio.setNow(0.1))
-    expect(chord()).toBeNull()
-  })
-
-  it('names the chords played or not, as its button says, saved', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = setUp()
-    const names = screen.getByRole('button', { name: 'Chord names' })
-    expect(names).toHaveAttribute('aria-pressed', 'true')
-    await user.click(names)
-    expect(names).toHaveAttribute('aria-pressed', 'false')
-    expect(settingsStore.getState().keyboard.chordNames).toBe(false)
-    hold('C4', 'E4', 'G4')
     expect(chord()).toBeNull()
   })
 })

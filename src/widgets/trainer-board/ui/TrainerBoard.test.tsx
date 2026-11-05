@@ -98,9 +98,6 @@ describe('TrainerBoard', () => {
         pointerType: 'touch',
       })
     expect(screen.queryByText('Chord played:')).not.toBeInTheDocument()
-    const names = screen.getByRole('button', { name: 'Chord names' })
-    expect(names).toBeDisabled()
-    expect(names).toHaveAttribute('aria-pressed', 'false')
   })
 
   it('names the answer after a wrong build', async () => {

@@ -201,6 +201,11 @@
   --key-bed: var(--p-bed);
   --key-rail: var(--p-rail);
   --on-key-rail: var(--p-ink);
+  /* A piano's brass pedal (R31-P): its paddle, pressed, and its shank. */
+  --pedal: #d4ae58;
+  --pedal-down: #a8822f;
+  --pedal-shank: #8a6a28;
+  --pedal-shank-down: #6b4f18;
   --key-shade: color-mix(in oklab, var(--p-ink) 7%, transparent);
   --key-lip: color-mix(in oklab, var(--p-ink) 5%, transparent);
   --key-sheen: color-mix(in oklab, var(--p-white) 12%, transparent);
@@ -275,6 +280,10 @@
     --key-bed: var(--p-dusk-bed);
     --key-rail: var(--p-dusk-rail);
     --on-key-rail: var(--p-dusk-ink);
+    --pedal: #c69f4c;
+    --pedal-down: #8f6c26;
+    --pedal-shank: #a07c32;
+    --pedal-shank-down: #e0c27c;
     --mark-wash: 50%;
   }
 }

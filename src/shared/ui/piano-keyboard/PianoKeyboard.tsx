@@ -20,7 +20,6 @@ import { midi, PIANO, type KeyRange, type Midi } from '@/shared/lib/music'
 import { FingerRow } from './FingerRow'
 import { Key } from './Key'
 import { KeyRail, type RailCaption } from './KeyRail'
-import { PedalBar, type PedalsDown } from './PedalBar'
 import { keyDescription, keyLook, type KeyStates, type KeyStateWords } from './key-look'
 import { useKeyNames } from './use-key-names'
 import { useKeyPointers } from './use-key-pointers'
@@ -93,7 +92,6 @@ export function PianoKeyboard({
   letters,
   caption,
   railEnd,
-  pedals,
   keyPlays,
   onKeyPress,
   onKeyRelease,
@@ -124,8 +122,6 @@ export function PianoKeyboard({
   caption?: RailCaption | undefined
   /** The rail's last control, always in sight (a page's Hide the keys). */
   railEnd?: ReactNode
-  /** The pedals down, drawn as a bar under the keys (R29 A26): a live keyboard's. */
-  pedals?: PedalsDown | undefined
   /**
    * What a key plays when a hand presses it: the key alone, unless the screen makes it more (a
    * degree's key its chord). All of it is down while the key is held.
@@ -260,14 +256,7 @@ export function PianoKeyboard({
       </div>
     </div>
   )
-  return pedals ? (
-    <>
-      {keyboard}
-      <PedalBar {...pedals} />
-    </>
-  ) : (
-    keyboard
-  )
+  return keyboard
 }
 
 /**

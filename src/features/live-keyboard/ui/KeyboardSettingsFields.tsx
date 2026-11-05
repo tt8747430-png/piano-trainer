@@ -6,20 +6,20 @@ import {
   type KeyboardSettings,
 } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
-import { KEY_DOCKS, KEY_LENGTHS, KEY_SIZES, NAMED_KEYS, SWIPES } from '@/shared/lib'
+import { KEY_DOCKS, KEY_LENGTHS, KEY_SIZES, NAMED_KEYS, PEDALS_SHOWN, SWIPES } from '@/shared/lib'
 import {
   DockPicture,
   FoldPicture,
   KeyLengthPicture,
   KeySizePicture,
   NoteNamesPicture,
+  PedalPaddle,
   PictureChoice,
   SettingRows,
   SettingsGroup,
   SwipePicture,
   SwitchRow,
 } from '@/shared/ui'
-import { RailControlsField } from './RailControlsField'
 
 /** Fold the keys (R21): never, on a phone on its side, or always; the two saved folds as one choice. */
 const FOLDS = ['never', 'side', 'always'] as const
@@ -150,8 +150,26 @@ export function KeyboardSettingsFields() {
           />
         </SettingRows>
       </SettingsGroup>
-      <SettingsGroup title={t('settings:piano.bar')}>
-        <RailControlsField />
+      <SettingsGroup title={t('settings:piano.pedals')}>
+        <SettingRows>
+          <PictureChoice
+            setting="keyboard.pedals"
+            label={t('keyboardSettings.pedals.label')}
+            value={keyboard.pedals}
+            options={PEDALS_SHOWN.map((value) => ({
+              value,
+              label: t(`keyboardSettings.pedals.${value}`),
+              picture: (
+                <span className="flex gap-0.5">
+                  {Array.from({ length: value === 'all' ? 3 : 1 }, (_, at) => (
+                    <PedalPaddle key={at} down={false} className="h-6 w-7" />
+                  ))}
+                </span>
+              ),
+            }))}
+            onChange={(pedals) => setKeyboard(store, { pedals })}
+          />
+        </SettingRows>
       </SettingsGroup>
     </>
   )

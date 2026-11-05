@@ -92,7 +92,7 @@ describe('PinnedKeyboard', () => {
     renderPinned({ onSide: false })
     expect(foldButton()?.closest('[data-slot=rail-controls]')).toBeNull()
     expect(
-      screen.getByRole('button', { name: 'Pedal' }).closest('[data-slot=rail-controls]'),
+      screen.getByRole('button', { name: 'Larger keys' }).closest('[data-slot=rail-controls]'),
     ).not.toBeNull()
   })
 
