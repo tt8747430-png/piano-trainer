@@ -9,8 +9,9 @@ import {
 } from './selectors'
 import { createPracticeLibraryStore, PRACTICE_LIBRARY_STORAGE_KEY } from './store'
 import { ownProgressionName } from './types'
+import { EMPTY_ARRANGEMENT as EMPTY } from './arrangement'
 
-const restored = (state: unknown, version = 1) => {
+const restored = (state: unknown, version = 2) => {
   const storage = createMemoryStorage()
   storage.setItem(PRACTICE_LIBRARY_STORAGE_KEY, JSON.stringify({ state, version }))
   return createPracticeLibraryStore({ storage, otherTabs: new EventTarget() }).getState()
@@ -26,6 +27,8 @@ describe('createPracticeLibraryStore', () => {
       favourites: { exercises: [], progressions: [] },
       progressions: [],
       nextOwn: 1,
+      arrangements: { exercises: EMPTY, accompaniment: EMPTY, progressions: EMPTY },
+      nextFolder: 1,
     })
     store.setState({ favourites: { exercises: ['hanon'], progressions: [] } })
     expect(JSON.parse(storage.getItem('pt-practice-library') ?? 'null')).toEqual({
@@ -33,8 +36,10 @@ describe('createPracticeLibraryStore', () => {
         favourites: { exercises: ['hanon'], progressions: [] },
         progressions: [],
         nextOwn: 1,
+        arrangements: { exercises: EMPTY, accompaniment: EMPTY, progressions: EMPTY },
+        nextFolder: 1,
       },
-      version: 1,
+      version: 2,
     })
   })
 
@@ -46,8 +51,45 @@ describe('createPracticeLibraryStore', () => {
         { id: 'mine-2', name: 'Dorian', line: 'i-IV', minor: true, mode: 'dorian' },
       ],
       nextOwn: 3,
+      arrangements: {
+        exercises: {
+          ...EMPTY,
+          order: ['jonny', 'technique'],
+          placeNames: { technique: 'Warm-ups' },
+          folders: [{ id: 'folder-1', name: 'Morning routine' }],
+          placed: { modes: 'folder-1' },
+          itemNames: { hanon: 'Hanon No. 1' },
+          hiddenItems: ['five-finger'],
+          sequence: { technique: ['hanon', 'five-finger'] },
+        },
+        accompaniment: { ...EMPTY, hiddenPlaces: ['styles'] },
+        progressions: EMPTY,
+      },
+      nextFolder: 2,
     }
     expect(restored(saved)).toEqual(saved)
+  })
+
+  it('keeps of an arrangement only what reads, and never reuses a folder’s number (R32)', () => {
+    const state = restored({
+      arrangements: {
+        exercises: {
+          folders: [
+            { id: 'folder-4', name: 'Keep' },
+            { id: 'nope', name: 'x' },
+            { id: 'folder-5', name: ' ' },
+          ],
+          placeNames: { technique: '', jonny: 42 },
+          hiddenItems: ['hanon', 7, 'hanon'],
+        },
+      },
+    })
+    expect(state.arrangements.exercises).toEqual({
+      ...EMPTY,
+      folders: [{ id: 'folder-4', name: 'Keep' }],
+      hiddenItems: ['hanon'],
+    })
+    expect(state.nextFolder).toBe(5)
   })
 
   it('reads a save of another version as nothing kept', () => {

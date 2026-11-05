@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest'
-import { createPracticeLibraryStore } from '@/entities/practice-library'
+import { createPracticeLibraryStore, renamePlace } from '@/entities/practice-library'
 import { createMemoryStorage } from '@/shared/lib'
+import { arrangeLibrary, makeLibraryFolder } from './arrange-library'
 import { deleteProgression } from './delete-progression'
 import { saveProgression } from './save-progression'
 import { togglePracticeFavourite } from './toggle-favourite'
@@ -61,5 +62,25 @@ describe('deleteProgression', () => {
     expect(library.getState().progressions).toEqual([])
     expect(library.getState().favourites.progressions).toEqual([])
     expect(saveProgression(library, DRAFT)).toBe('mine-2')
+  })
+})
+
+describe('arranging a library (R32)', () => {
+  it('makes folders under numbers never reused, each library its own', () => {
+    const library = store()
+    expect(makeLibraryFolder(library, 'exercises', 'Morning routine')).toBe('folder-1')
+    expect(makeLibraryFolder(library, 'accompaniment', 'Sunday')).toBe('folder-2')
+    expect(makeLibraryFolder(library, 'accompaniment', '   ')).toBeNull()
+    expect(library.getState().arrangements.exercises.folders).toEqual([
+      { id: 'folder-1', name: 'Morning routine' },
+    ])
+    expect(library.getState().nextFolder).toBe(3)
+  })
+
+  it('applies a change to the one library named', () => {
+    const library = store()
+    arrangeLibrary(library, 'progressions', (each) => renamePlace(each, 'pop', 'Worship sets'))
+    expect(library.getState().arrangements.progressions.placeNames).toEqual({ pop: 'Worship sets' })
+    expect(library.getState().arrangements.exercises.placeNames).toEqual({})
   })
 })

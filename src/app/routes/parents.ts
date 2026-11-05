@@ -60,7 +60,6 @@ const settingsPage: Parent = ({ wide }) => (wide ? null : up({ to: '/settings' }
 const PRACTICE_PAGES: Readonly<Record<PracticeSettingsFrom, Up>> = {
   scales: up({ to: '/practice/scales' }),
   progressions: up({ to: '/practice/progressions' }),
-  accompaniment: up({ to: '/practice/accompaniment' }),
   'chord-finder': up({ to: '/practice/chord-finder' }),
 }
 /** A Practice page's Settings (A24): up to the page its gear was pressed on, else to Practice (R29:
@@ -132,7 +131,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/settings/connect-piano': settingsPage,
   '/shell/settings/scales': practiceSettings,
   '/shell/settings/progressions': practiceSettings,
-  '/shell/settings/accompaniment': practiceSettings,
   '/shell/settings/chord-finder': practiceSettings,
   '/shell/settings/connect-piano/log': () => up({ to: '/settings/connect-piano' }),
   '/shell/admin': toSettings,
@@ -313,12 +311,13 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/practice/accompaniment/patterns/$patternRef': toPatternPlace,
   '/shell/practice/accompaniment/patterns/$patternRef/edit': toPattern,
   '/shell/practice/accompaniment/patterns/$patternRef/publish': toPattern,
+  // A study is its method book's course's (R32: Accompaniment lists patterns only).
   '/shell/practice/accompaniment/studies/$pieceId': async (from) => {
     const { studyPlace } = await import('./accompaniment-screens')
-    return up({
-      to: '/practice/accompaniment',
-      search: { place: studyPlace(param(from, 'pieceId')) },
-    })
+    const book = studyPlace(param(from, 'pieceId'))
+    return book === 'all'
+      ? up({ to: '/practice/accompaniment' })
+      : up({ to: '/courses/$courseId', params: { courseId: book } })
   },
   '/shell/practice/accompaniment/studies/$pieceId/sections/$section': toStudy,
 }

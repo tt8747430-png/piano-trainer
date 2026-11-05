@@ -9,7 +9,6 @@ describe('Practice pages’ Settings (A24, R18)', () => {
   it.each([
     ['/practice/scales', 'Scales and keys', '/settings/scales'],
     ['/practice/progressions', 'Progressions', '/settings/progressions'],
-    ['/practice/accompaniment', 'Accompaniment', '/settings/accompaniment'],
     ['/practice/chord-finder', 'Chord finder', '/settings/chord-finder'],
   ])(
     'opens %s’s Settings from the gear in its bar, and Back returns to it',
@@ -67,6 +66,7 @@ describe('Practice pages’ Settings (A24, R18)', () => {
     ['/practice/intervals', 'Intervals'],
     ['/practice/exercises', 'Exercises'],
     ['/practice/quiz', 'Quiz'],
+    ['/practice/accompaniment', 'Accompaniment'],
   ])('gives %s no gear: nothing of its own to set on a page (R32)', async (path, name) => {
     await renderApp(path)
     await title(name)
@@ -79,13 +79,5 @@ describe('Practice pages’ Settings (A24, R18)', () => {
     await screen.findByRole('heading', { level: 1 })
     await user.click(screen.getByRole('switch', { name: /Advance automatically/ }))
     expect(settingsStore.getState().trainer.autoNext).toBe(true)
-  })
-
-  it('hides an Accompaniment source from its tabs, and shows it again', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings/accompaniment')
-    await title('Accompaniment')
-    await user.click(screen.getByRole('switch', { name: 'Rhythm styles' }))
-    expect(settingsStore.getState().accompaniment.hidden).toEqual(['styles'])
   })
 })

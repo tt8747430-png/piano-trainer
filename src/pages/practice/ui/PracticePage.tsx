@@ -35,10 +35,9 @@ export function PracticePage() {
   const cards = upNext({ gaps, exercised, recent, firstExercise: FIRST_EXERCISE })
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-1">
-        <ScreenHeader title={t('title')} large tools={<PlaceActions />} />
-        <p className="px-1 text-pretty text-muted-foreground">{t('purpose')}</p>
-      </div>
+      <ScreenHeader title={t('title')} large tools={<PlaceActions />} />
+      {/* What Practice is for, close under the title it explains. */}
+      <p className="-mt-5 px-1 text-pretty text-muted-foreground">{t('purpose')}</p>
       <UpNext cards={cards} />
       <div className="grid items-start gap-6 lg:grid-cols-2">
         {COLUMNS.map((column) => (

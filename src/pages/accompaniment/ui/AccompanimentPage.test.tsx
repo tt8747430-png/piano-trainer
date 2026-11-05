@@ -27,7 +27,7 @@ const rows = (name: string) =>
 const opened = () => screen.findByRole('heading', { level: 1, name: 'Accompaniment' })
 
 describe('Practice → Accompaniment, the library on a phone (R30-4)', () => {
-  it('opens from Practice on every book: its patterns, then the songs they are practised on', async () => {
+  it('opens from Practice on every book’s patterns, patterns only (R32)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice')
     await user.click(await screen.findByRole('link', { name: /^Accompaniment / }))
@@ -35,13 +35,9 @@ describe('Practice → Accompaniment, the library on a phone (R30-4)', () => {
     expect(router.state.location.pathname).toBe('/practice/accompaniment')
     expect(shelves()).toEqual([
       'Called to Play',
-      'Called to Play: songs',
       'Called to Play 2',
-      'Called to Play 2: songs',
       'Bobrova',
-      'Bobrova: songs',
       'Gorshkov',
-      'Gorshkov: songs',
       'Rhythm styles',
     ])
     expect(
@@ -50,71 +46,90 @@ describe('Practice → Accompaniment, the library on a phone (R30-4)', () => {
       }),
     ).toHaveAttribute('href', '/practice/accompaniment/patterns/M1')
     // Each run folds after five: Show all says how many it holds.
-    expect(rows('Called to Play')).toHaveLength(5)
-    await user.click(within(shelf('Called to Play')).getByRole('button', { name: 'Show all 17' }))
-    expect(rows('Called to Play')).toHaveLength(17)
+    const patterns = () => rows('Called to Play').filter((href) => href?.includes('/patterns/'))
+    expect(patterns()).toHaveLength(5)
+    await user.click(within(shelf('Called to Play')).getByRole('button', { name: /^Show all/ }))
+    expect(patterns().length).toBeGreaterThan(5)
+    // No song or study among them.
+    expect(screen.queryByRole('link', { name: /^Amazing Grace/ })).toBeNull()
   })
 
-  it('lists a book’s songs, each opening its page: Called to Play’s studies', async () => {
-    await renderApp('/practice/accompaniment?place=called-to-play')
-    await opened()
-    expect(rows('Called to Play: songs')).toEqual(
-      ['ex3', 'exm1', 'exm2', 'exm3', 'ex5', 'ex6', 'ex7', 'ex8', 'ex9'].map(
-        (id) => `/practice/accompaniment/studies/${id}`,
-      ),
-    )
-  })
-
-  it('lists on Bobrova her seven types and the hymns they are practised on, each on Songs', async () => {
-    await renderApp('/practice/accompaniment?place=seven-types')
-    await opened()
-    expect(shelves()).toEqual(['Bobrova', 'Bobrova: songs'])
-    expect(rows('Bobrova')).toHaveLength(8)
-    expect(rows('Bobrova: songs')).toEqual([
-      '/songs/otche',
-      '/songs/ode',
-      '/songs/silent',
-      '/songs/amazing',
-      '/songs/wonderful',
-    ])
-  })
-
-  it('lists on Called to Play 2 its octaves and chords, and the songs of its workbook', async () => {
+  it('links a method book to its course in Learn and its songs in Songs, apart from its patterns (R32)', async () => {
     await renderApp('/practice/accompaniment?place=called-to-play-2')
     await opened()
-    expect(rows('Called to Play 2')).toEqual(
-      ['oct', 'octs', 'chd'].map((id) => `/practice/accompaniment/patterns/${id}`),
+    const book = shelf('Called to Play 2')
+    expect(within(book).getByRole('link', { name: 'Course in Learn' })).toHaveAttribute(
+      'href',
+      '/courses/called-to-play-2',
     )
-    expect(rows('Called to Play 2: songs')).toHaveLength(25)
-    expect(rows('Called to Play 2: songs')[0]).toBe('/songs/molitva')
-  })
-
-  it('lists on Gorshkov his textures and the songs his lessons play them on', async () => {
-    await renderApp('/practice/accompaniment?place=gorshkov')
-    await opened()
-    expect(rows('Gorshkov')).toEqual(
-      ['g1', 'g2', 'g3', 'g4', 'g5', 'g6'].map((id) => `/practice/accompaniment/patterns/${id}`),
+    expect(within(book).getByRole('link', { name: 'Songs in Songs' })).toHaveAttribute(
+      'href',
+      '/songs/folders/called-to-play-2',
     )
-    expect(rows('Gorshkov: songs')).toEqual([
-      '/songs/romashki',
-      '/songs/olen',
-      '/songs/wafriend',
-      '/songs/metel',
-    ])
-  })
-
-  it('lists no lessons: a book’s lessons are its course on Learn', async () => {
-    await renderApp('/practice/accompaniment?place=gorshkov')
-    await screen.findByRole('region', { name: 'Gorshkov' })
-    expect(screen.queryByRole('link', { name: /lessons/i })).not.toBeInTheDocument()
   })
 
   it('marks a book’s patterns at its course’s level, and none on the rhythm styles', async () => {
     await renderApp('/practice/accompaniment?place=gorshkov')
-    const m1 = within(await screen.findByRole('region', { name: 'Gorshkov' })).getAllByRole(
-      'link',
-    )[0]
+    // Its first pattern, after the book's links to its course and songs.
+    const m1 = within(await screen.findByRole('region', { name: 'Gorshkov' }))
+      .getAllByRole('link')
+      .find((link) => link.getAttribute('href')?.includes('/patterns/'))
     expect(within(m1 ?? document.body).getByRole('img', { name: 'Advanced' })).toBeInTheDocument()
+  })
+
+  it('renames, moves and hides a pattern from its More, each undone or restored (R32)', async () => {
+    const user = userEvent.setup()
+    const { patternsStore, practiceLibraryStore } = await renderApp(
+      '/practice/accompaniment?place=styles',
+    )
+    await opened()
+    await user.click(screen.getByRole('button', { name: /^More for Ballad arpeggio/ }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Rename…' }))
+    const rename = await screen.findByRole('dialog', { name: 'Rename' })
+    const name = within(rename).getByRole('textbox', { name: 'Name' })
+    await user.clear(name)
+    await user.type(name, 'Opening ballad')
+    await user.click(within(rename).getByRole('button', { name: 'Save' }))
+    expect(
+      await within(shelf('Rhythm styles')).findByRole('link', { name: /^Opening ballad/ }),
+    ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /^More for Opening ballad/ }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Restore original name' }))
+    expect(practiceLibraryStore.getState().arrangements.accompaniment.itemNames).toEqual({})
+    // Hidden as its own page hides it, so the Player's picker leaves it out too.
+    await user.click(screen.getByRole('button', { name: /^More for Ballad arpeggio/ }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Hide' }))
+    expect(patternsStore.getState().hidden).toContain('ballad')
+  })
+
+  it('arranges its books in Edit: renames one, makes a folder and moves a pattern into it (R32)', async () => {
+    const user = userEvent.setup()
+    const { practiceLibraryStore } = await renderApp('/practice/accompaniment')
+    await opened()
+    await user.click(screen.getByRole('button', { name: 'Arrange library' }))
+    const places = await screen.findByRole('list', { name: 'Places' })
+    expect(within(places).getByRole('button', { name: 'Reorder Gorshkov' })).toBeInTheDocument()
+    await user.click(within(places).getByRole('button', { name: 'Gorshkov: more' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Rename…' }))
+    const rename = await screen.findByRole('dialog', { name: 'Rename' })
+    const name = within(rename).getByRole('textbox', { name: 'Name' })
+    await user.clear(name)
+    await user.type(name, 'Горшков')
+    await user.click(within(rename).getByRole('button', { name: 'Save' }))
+    await user.click(screen.getByRole('button', { name: 'New folder' }))
+    const folder = await screen.findByRole('dialog', { name: 'New folder' })
+    await user.type(within(folder).getByRole('textbox', { name: 'Name' }), 'Sunday service')
+    await user.click(within(folder).getByRole('button', { name: 'Create folder' }))
+    await user.click(screen.getByRole('button', { name: 'Done' }))
+    expect(shelves()).toContain('Горшков')
+    await user.click(screen.getAllByRole('button', { name: /^More for / })[0] ?? document.body)
+    await user.click(await screen.findByRole('menuitem', { name: 'Move to…' }))
+    const move = await screen.findByRole('dialog', { name: /^Move/ })
+    await user.click(within(move).getByRole('button', { name: /^Sunday service/ }))
+    expect(shelves()).toContain('Sunday service')
+    expect(practiceLibraryStore.getState().arrangements.accompaniment.folders).toEqual([
+      { id: 'folder-1', name: 'Sunday service' },
+    ])
   })
 
   it('lists the rhythm styles, each pattern with its idea', async () => {
@@ -168,29 +183,14 @@ describe('Practice → Accompaniment, the library on a phone (R30-4)', () => {
     ).not.toHaveLength(0)
   })
 
-  it('makes a pattern and a song favourites from their More', async () => {
+  it('makes a pattern a favourite from its More', async () => {
     const user = userEvent.setup()
-    const { patternsStore, libraryStore } = await renderApp(
-      '/practice/accompaniment?place=seven-types',
-    )
+    const { patternsStore } = await renderApp('/practice/accompaniment?place=seven-types')
     await opened()
-    await user.click(screen.getByRole('button', { name: /^More for Amazing Grace/ }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Add to favourites' }))
-    expect(libraryStore.getState().favourites).toContain('amazing')
     const first = within(shelf('Bobrova')).getAllByRole('button', { name: /^More for / })[0]
     await user.click(first ?? document.body)
     await user.click(await screen.findByRole('menuitem', { name: 'Add to favourites' }))
     expect(patternsStore.getState().favourites).toHaveLength(1)
-  })
-
-  it('leaves out a book its Settings hide', async () => {
-    const user = userEvent.setup()
-    const { router } = await renderApp('/settings/accompaniment')
-    await user.click(await screen.findByRole('switch', { name: 'Gorshkov' }))
-    await router.navigate({ to: '/practice/accompaniment' })
-    await opened()
-    expect(shelves()).not.toContain('Gorshkov')
-    expect(shelves()).toContain('Bobrova')
   })
 
   it('opens on All for a place the URL names that it does not have', async () => {
@@ -227,7 +227,7 @@ describe('Practice → Accompaniment on a laptop (R30-4)', () => {
     stubMatchMedia({ dark: true })
     await renderApp('/practice/accompaniment?place=called-to-play')
     const tree = await screen.findByRole('navigation', { name: 'Accompaniment by book' })
-    expect(within(tree).getByRole('button', { name: /^Called to Play\s*26$/ })).toHaveAttribute(
+    expect(within(tree).getAllByRole('button', { name: /^Called to Play/ })[0]).toHaveAttribute(
       'aria-current',
       'page',
     )

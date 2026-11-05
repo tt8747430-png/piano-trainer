@@ -63,12 +63,7 @@ export function readTrainerSearch(raw: Raw): TrainerView {
 export const trainerSearch = routeSearch(readTrainerSearch, TRAINER_DEFAULTS)
 
 // A Practice page's Settings (A24): the page its gear was pressed on, kept only for Back.
-export const PRACTICE_SETTINGS_FROM = [
-  'scales',
-  'progressions',
-  'accompaniment',
-  'chord-finder',
-] as const
+export const PRACTICE_SETTINGS_FROM = ['scales', 'progressions', 'chord-finder'] as const
 export type PracticeSettingsFrom = (typeof PRACTICE_SETTINGS_FROM)[number]
 export const isPracticeSettingsFrom = (value: unknown): value is PracticeSettingsFrom =>
   PRACTICE_SETTINGS_FROM.some((page) => page === value)

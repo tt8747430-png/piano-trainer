@@ -11,7 +11,6 @@ import { RoundLink } from '@/shared/ui'
 const SETTINGS_OF = {
   scales: '/settings/scales',
   progressions: '/settings/progressions',
-  accompaniment: '/settings/accompaniment',
   'chord-finder': '/settings/chord-finder',
 } as const
 export type GearPage = keyof typeof SETTINGS_OF
@@ -19,7 +18,6 @@ export type GearPage = keyof typeof SETTINGS_OF
 const PAGE_NAME = {
   scales: 'scales',
   progressions: 'progressions',
-  accompaniment: 'accompaniment',
   'chord-finder': 'chordFinder',
 } as const satisfies Record<GearPage, string>
 

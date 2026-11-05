@@ -393,14 +393,11 @@ describe('shelves', () => {
     )
   })
 
-  it('goes back from a study opened directly to Accompaniment, on the page of its studies', async () => {
+  it('goes back from a study opened directly to its method book’s course (R32)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/accompaniment/studies/ex3')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
-    await waitFor(() =>
-      expect(router.state.location.href).toBe('/practice/accompaniment?place=called-to-play'),
-    )
-    expect(await screen.findByRole('region', { name: 'Called to Play: songs' })).toBeInTheDocument()
+    await waitFor(() => expect(router.state.location.pathname).toBe('/courses/called-to-play'))
   })
 
   it('closes the Player of a song written in degrees, opened directly, to its page on Songs', async () => {

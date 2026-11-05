@@ -369,8 +369,6 @@ export interface SettingsState {
   progressions: ProgressionsSettings
   /** How the Chord player writes its chords and voices its piano (R29 CP6). */
   chordPlayer: ChordPlayerSettings
-  /** What Accompaniment shows (A24). */
-  accompaniment: AccompanimentSettings
   /** The bars the learner arranged (R29 B10): a surface left out holds its default. */
   bars: Bars
   /** The Tuner's reference pitch (R29 B11). */
@@ -491,13 +489,6 @@ export interface ChordPlayerSettings {
   readonly voicing: ProgressionVoicing
 }
 export const DEFAULT_CHORD_PLAYER: ChordPlayerSettings = { names: 'chords', voicing: 'led' }
-
-/** Accompaniment's sources the learner hid from its tabs, by their ids (A24). */
-export interface AccompanimentSettings {
-  readonly hidden: readonly string[]
-}
-
-export const DEFAULT_ACCOMPANIMENT: AccompanimentSettings = { hidden: [] }
 
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({

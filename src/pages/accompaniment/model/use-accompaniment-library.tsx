@@ -1,13 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import { AudioWaveform, Heart, HeartOff, Music, UserRound } from 'lucide-react'
+import { AudioWaveform, GraduationCap, Heart, HeartOff, Music, UserRound } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isMethodBookId, METHOD_BOOK_IDS } from '@/entities/book'
-import { courseById, pieceStage } from '@/entities/course'
-import {
-  selectFavourites as selectSongFavourites,
-  useLibrary,
-  useLibraryStoreApi,
-} from '@/entities/library'
+import { courseById } from '@/entities/course'
 import {
   LEFT_FIGURES,
   partOfShelf,
@@ -23,34 +18,37 @@ import {
   useShelfName,
   type AccompanimentPart,
   type BookPattern,
+  type PatternId,
 } from '@/entities/pattern'
-import {
-  entryTitles,
-  METHOD_BOOK_PIECES,
-  PieceLink,
-  pieceChords,
-  useRepertoire,
-} from '@/entities/piece'
-import { selectAccompaniment, useSettings } from '@/entities/settings'
-import { toggleFavourite as toggleSongFavourite } from '@/features/manage-library'
-import { toggleFavourite as togglePatternFavourite } from '@/features/manage-patterns'
+import { isSongCollectionId, METHOD_BOOK_PIECES } from '@/entities/piece'
+import { toggleFavourite, toggleHidden } from '@/features/manage-patterns'
 import { localText, useLocale } from '@/shared/i18n'
-import { printedSymbol } from '@/shared/lib/music'
+import { OPEN_PLAINLY } from '@/shared/lib'
 import type { RowAction } from '@/shared/ui'
-import { HIDDEN, MINE, type LibraryGroup, type LibraryItem } from '@/widgets/practice-library'
+import { MINE, type LibraryGroup, type LibraryItem } from '@/widgets/practice-library'
 
 /** The books Accompaniment lists, in its order: the method books, then the rhythm styles. */
 const BOOKS: readonly AccompanimentPart[] = [...METHOD_BOOK_IDS, 'styles']
 
-/** Between a study's first chords on its row's line. */
-const CHORD_DASH = ' – '
+/** A link of a book's place to where the rest of its material is: its course, its songs. */
+const BOOK_LINK =
+  'inline-flex min-h-11 items-center gap-2 rounded-pill border border-input bg-card px-3 text-sm font-semibold transition-colors duration-200 ease-out hover:bg-muted'
+
+/** The Songs folder that holds a method book's songs, where Songs lists one. */
+function songsFolderOf(part: AccompanimentPart): string | undefined {
+  if (!isMethodBookId(part)) return undefined
+  const { id } = METHOD_BOOK_PIECES[part]
+  if (isSongCollectionId(id)) return id
+  return isSongCollectionId(part) ? part : undefined
+}
 
 /**
- * The Accompaniment library's books and rows (R30-4): each method book (Called to Play, Called to
- * Play 2, Bobrova, Gorshkov) and the rhythm styles a place, its patterns then the songs they are
- * practised on; the patterns the learner made Mine, the built-in ones they hid Hidden; a book hidden
- * on Accompaniment's Settings left out, and Mine with Yours. A pattern's level is its book's
- * course's, a song's its own; the styles' patterns and the learner's have none.
+ * The Accompaniment library's books and rows (R30-4, R32): patterns only, each method book (Called to
+ * Play, Called to Play 2, Боброва, Gorshkov) and the rhythm styles a place of its patterns, with links
+ * to the book's course in Learn and its songs in Songs, kept apart from the patterns; the patterns the
+ * learner made Mine. A built-in pattern hides as its page hides it (the Player's picker leaves it out
+ * too), so Hidden and the picker agree. A pattern's level is its book's course's; the styles' and the
+ * learner's have none.
  */
 export function useAccompanimentLibrary(): {
   groups: readonly LibraryGroup[]
@@ -65,12 +63,44 @@ export function useAccompanimentLibrary(): {
   const favourites = usePatterns(selectFavourites)
   const hidden = usePatterns(selectHidden)
   const patterns = usePatternsStoreApi()
-  const songFavourites = useLibrary(selectSongFavourites)
-  const library = useLibraryStoreApi()
-  const repertoire = useRepertoire()
-  const { hidden: away } = useSettings(selectAccompaniment)
-  const shown = (part: AccompanimentPart) => !away.includes(part)
-  const groups = BOOKS.filter(shown).map((part) => ({ id: part, name: partName(part) }))
+  const groups = BOOKS.map((part): LibraryGroup => {
+    const course = isMethodBookId(part) ? courseById(part) : undefined
+    const folder = songsFolderOf(part)
+    return {
+      id: part,
+      name: partName(part),
+      ...(course || folder
+        ? {
+            links: (
+              <>
+                {course ? (
+                  <Link
+                    to="/courses/$courseId"
+                    params={{ courseId: course.id }}
+                    state={OPEN_PLAINLY}
+                    className={BOOK_LINK}
+                  >
+                    <GraduationCap aria-hidden className="size-4" />
+                    {t('practice:library.links.course')}
+                  </Link>
+                ) : null}
+                {folder ? (
+                  <Link
+                    to="/songs/folders/$folderId"
+                    params={{ folderId: folder }}
+                    state={OPEN_PLAINLY}
+                    className={BOOK_LINK}
+                  >
+                    <Music aria-hidden className="size-4" />
+                    {t('practice:library.links.songs')}
+                  </Link>
+                ) : null}
+              </>
+            ),
+          }
+        : {}),
+    }
+  })
   const favouriteAction = (favourite: boolean, onSelect: () => void): RowAction => ({
     key: 'favourite',
     label: t(favourite ? 'common:library.unfavourite' : 'common:library.favourite'),
@@ -88,6 +118,7 @@ export function useAccompanimentLibrary(): {
     group: string,
     shelf: string,
     stage: LibraryItem['stage'],
+    builtIn?: PatternId,
   ): LibraryItem => {
     const favourite = favourites.includes(pattern.ref)
     return {
@@ -107,61 +138,31 @@ export function useAccompanimentLibrary(): {
         />
       ),
       favourite,
-      actions: [favouriteAction(favourite, () => togglePatternFavourite(patterns, pattern.ref))],
+      actions: [favouriteAction(favourite, () => toggleFavourite(patterns, pattern.ref))],
+      ...(builtIn
+        ? {
+            hide: {
+              hidden: hidden.includes(builtIn),
+              toggle: () => toggleHidden(patterns, builtIn),
+            },
+          }
+        : {}),
     }
   }
-  const builtIn = PATTERN_GROUPS.flatMap((group) => {
+  const builtInItems = PATTERN_GROUPS.flatMap((group) => {
     const part = partOfShelf(group)
-    if (!shown(part)) return []
+    if (part === 'yours') return []
     const stage = isMethodBookId(part) ? courseById(part)?.stage : undefined
     const shelf = shelfName({ shelf: group, patterns: [] })
     return patternsIn(group).flatMap((id) => {
       const pattern = book.get(id)
-      if (!pattern) return []
-      return [patternItem(pattern, hidden.includes(id) ? HIDDEN : part, shelf, stage)]
+      return pattern ? [patternItem(pattern, part, shelf, stage, id)] : []
     })
   })
-  const songs = METHOD_BOOK_IDS.filter(shown).flatMap((part) => {
-    const collection = METHOD_BOOK_PIECES[part]
-    const section = {
-      id: `${part}:songs`,
-      name: t('practice:library.songsOf', { book: partName(part) }),
-    }
-    return collection.entries.map((each): LibraryItem => {
-      const entry = repertoire.entry(each.id) ?? each
-      const { primary, secondary } = entryTitles(entry, locale)
-      const stage = pieceStage(entry.id)
-      const favourite = songFavourites.includes(entry.id)
-      return {
-        id: `piece:${entry.id}`,
-        name: primary,
-        detail: secondary ?? pieceChords(entry).map(printedSymbol).join(CHORD_DASH),
-        group: part,
-        section,
-        ...(stage ? { stage } : {}),
-        words: [localText(collection.name, locale)],
-        icon: Music,
-        paint: 'grass',
-        link: <PieceLink entry={entry} />,
-        favourite,
-        actions: [favouriteAction(favourite, () => toggleSongFavourite(library, entry.id))],
-      }
-    })
-  })
-  const mine = shown('yours')
-  const own = mine
-    ? book.own.map((pattern) =>
-        patternItem(pattern, MINE, shelfName({ shelf: 'own', patterns: [] }), undefined),
-      )
-    : []
-  // Each book's patterns, then its songs; the styles; Mine; the hidden.
-  const byBook = groups.flatMap((group) => [
-    ...builtIn.filter((item) => item.group === group.id),
-    ...songs.filter((item) => item.group === group.id),
-  ])
-  return {
-    groups,
-    items: [...byBook, ...own, ...builtIn.filter((item) => item.group === HIDDEN)],
-    mine,
-  }
+  const own = book.own.map((pattern) =>
+    patternItem(pattern, MINE, shelfName({ shelf: 'own', patterns: [] }), undefined),
+  )
+  // Each book's patterns in the books' order, then the learner's own.
+  const byBook = BOOKS.flatMap((part) => builtInItems.filter((item) => item.group === part))
+  return { groups, items: [...byBook, ...own], mine: true }
 }

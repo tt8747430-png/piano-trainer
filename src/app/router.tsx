@@ -334,12 +334,6 @@ const progressionsSettingsRoute = createRoute({
   validateSearch: validatePracticeSettingsSearch,
   component: lazyRouteComponent(settingsScreens, 'ProgressionsSettingsPage'),
 })
-const accompanimentSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/accompaniment',
-  validateSearch: validatePracticeSettingsSearch,
-  component: lazyRouteComponent(settingsScreens, 'AccompanimentSettingsPage'),
-})
 const chordFinderSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/chord-finder',
@@ -1075,7 +1069,6 @@ const routeTree = rootRoute.addChildren([
     midiLogRoute,
     scalesSettingsRoute,
     progressionsSettingsRoute,
-    accompanimentSettingsRoute,
     chordFinderSettingsRoute,
     signInRoute,
     signUpRoute,

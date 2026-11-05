@@ -12,3 +12,4 @@ export {
 } from './model/library-view'
 export { LIBRARY_KINDS, type GroupWord, type LibraryKind } from './model/library-words'
 export { PracticeLibrary } from './ui/PracticeLibrary'
+export { useArrangeMode } from './model/use-arrange-mode'

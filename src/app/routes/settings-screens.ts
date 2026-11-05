@@ -14,7 +14,6 @@ export {
 export { HowToUsePage } from '@/pages/how-to-use'
 export { AboutPage } from '@/pages/about'
 export {
-  AccompanimentSettingsPage,
   ChordFinderSettingsPage,
   ProgressionsSettingsPage,
   ScalesSettingsPage,

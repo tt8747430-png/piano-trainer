@@ -58,9 +58,6 @@ export const practice = {
   // Each Practice page's Settings (A24): its gear, and what its page holds.
   settings: {
     open: '{{page}} settings',
-    trainers: 'Exercises and Quiz',
-    sources: 'Sources shown',
-    lastSource: 'One source stays shown',
   },
   // Words the explorers share.
   root: 'Root',
@@ -633,6 +630,41 @@ export const practice = {
   },
   // One library for Exercises, Accompaniment and Progressions (R30-4), the Songs library's shape.
   library: {
+    // Arranging a library (R32): Edit, each row's More, and the sheets they open.
+    edit: {
+      arrange: 'Arrange library',
+      rename: 'Rename…',
+      move: 'Move to…',
+      hide: 'Hide',
+      show: 'Show',
+      restore: 'Restore original name',
+      renameTitle: 'Rename',
+      newFolder: 'New folder',
+      name: 'Name',
+      save: 'Save',
+      create: 'Create folder',
+      moveTitle: 'Move “{{name}}”',
+      ownPlace: 'Original place',
+      hidden: '“{{name}}” hidden',
+      shown: '“{{name}}” shown',
+      moved: '“{{name}}” moved to {{place}}',
+      made: 'Folder “{{name}}” created',
+      undo: 'Undo',
+      places: 'Places',
+      movePlace: 'Reorder {{name}}',
+      moveRow: 'Reorder {{name}}',
+      placeMenu: '{{name}}: more',
+      hiddenPlace: 'Hidden',
+      emptyPlace: 'Nothing here yet.',
+      deleteFolder: {
+        title: 'Delete the folder “{{name}}”?',
+        body: 'Its items return to their original places.',
+        action: 'Delete folder',
+      },
+    },
+    // Where the rest of a method book's material is (R32): kept apart from its patterns.
+    links: { course: 'Course in Learn', songs: 'Songs in Songs' },
+    sortManual: 'Manual',
     rows: 'The library',
     all: 'All',
     books: 'Books',
@@ -640,7 +672,6 @@ export const practice = {
     mine: 'Mine',
     hidden: 'Hidden',
     searchHint: 'Search',
-    songsOf: '{{book}}: songs',
     // An accompaniment's hands, each its figure.
     handsLine: 'LH: {{left}} · RH: {{right}}',
     showAll: 'Show all {{count}}',
@@ -674,8 +705,8 @@ export const practice = {
       accompaniment: {
         tree: 'Accompaniment by book',
         search: 'Search accompaniment',
-        noMatch: 'No patterns or songs match “{{query}}”.',
-        favouritesHint: 'Tap ⋯ on a pattern or a song, then Add to favourites.',
+        noMatch: 'No patterns match “{{query}}”.',
+        favouritesHint: 'Tap ⋯ on a pattern, then Add to favourites.',
         all: 'All accompaniment',
         mineEmpty: 'Patterns you make are kept here.',
       },
