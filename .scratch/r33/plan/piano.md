@@ -80,7 +80,7 @@
 - **⚙ opens a sheet "Piano"** (musicca's Settings popover) over the screen, the controls in order:
   1. **Key size** — pictures: Fit to music · Large · Full keyboard (default Fit to music)
   2. **Note names** — pictures: On every C · On every key · Hidden (default On every C)
-  3. **Volume** — slider 0–100 %, default 80 % (new: `keyboard.volume`)
+  3. **Volume** — slider 0–100 %, default 100 % (new: `keyboard.volume`; full keeps the keys level with the music)
   4. **Pedals** — pictures: Sustain only · All three (default Sustain only)
   5. **Play with computer keyboard** — switch, on a computer only (shows the letters on the keys)
   6. a row **All piano settings** → Settings › On-screen piano (depth, chord symbol, swipe, position…).

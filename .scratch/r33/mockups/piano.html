@@ -236,8 +236,8 @@ code { font-size: 13px; background: var(--sand); border-radius: 6px; padding: 1p
 .psheet .row2 { display: grid; gap: 8px; padding: 10px 0; border-top: 1px solid var(--line) }
 .psheet .row2:first-of-type { border-top: 0 }
 .psheet .lbl { font-weight: 600 } .psheet .sub { font-size: 13px; color: var(--ink-soft) }
-.slider { height: 6px; border-radius: 9px; background: linear-gradient(90deg, var(--ink) 80%, var(--line) 80%); position: relative }
-.slider::after { content: ""; position: absolute; left: calc(80% - 11px); top: -8px; width: 22px; height: 22px; border-radius: 99px; background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,.3) }
+.slider { height: 6px; border-radius: 9px; background: linear-gradient(90deg, var(--ink) 100%, var(--line) 100%); position: relative }
+.slider::after { content: ""; position: absolute; left: calc(100% - 22px); top: -8px; width: 22px; height: 22px; border-radius: 99px; background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,.3) }
 .pop { position: absolute; width: 380px; background: var(--card); border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,.22), 0 0 0 1px var(--line); padding: 12px 16px; display: grid; gap: 4px; z-index: 6 }
 
 </style>
@@ -444,7 +444,7 @@ const pics = (items, on) => `<div style="display:grid;grid-template-columns:repe
 const sheetBody = (computer, side = false) => `${side ? '' : '<div class="grip"></div>'}<div style="display:flex;align-items:center"><b style="font:600 22px var(--display)">Piano</b><span style="margin-left:auto">${rb('x', 'plain')}</span></div>
   <div class="row2"><div class="lbl">Key size</div>${pics([['Fit to music', mini(10)], ['Large', mini(5)], ['Full keyboard', mini(21)]], 0)}</div>
   <div class="row2"><div class="lbl">Note names</div>${pics([['On every C', mini(8, 'c')], ['On every key', mini(8, 'all')], ['Hidden', mini(8)]], 0)}</div>
-  <div class="row2"><div style="display:flex;justify-content:space-between"><span class="lbl">Volume</span><span class="sub">80 %</span></div><div class="slider"></div></div>
+  <div class="row2"><div style="display:flex;justify-content:space-between"><span class="lbl">Volume</span><span class="sub">100 %</span></div><div class="slider"></div></div>
   <div class="row2"><div class="lbl">Pedals</div>${pics([['Sustain only', paddles(1)], ['All three', paddles(3)]], 0)}</div>
   ${computer ? `<div class="row2" style="grid-template-columns:1fr auto;align-items:center"><span class="lbl">Play with computer keyboard</span>${'<span style="width:52px;height:32px;border-radius:99px;background:var(--grass-ink);position:relative"><i style="position:absolute;right:3px;top:3px;width:26px;height:26px;border-radius:99px;background:#fff"></i></span>'}</div>` : ''}
   <div class="row2" style="grid-template-columns:1fr auto;align-items:center;min-height:44px"><span class="lbl">All piano settings</span>${ic('chev', 18)}</div>`

@@ -80,6 +80,11 @@ owner's, typos fixed.
   the Player smooth with many notes (the Fantaisie hung). Build the approved mockup whole, "not only half" (2026-11-05).
   Built in R32-A: pedals centred beneath the keys on the piano's rail; the On-screen piano's page the one home of the
   keys' settings, the Player's gear a link to it; `/settings/player` gone, the gear the Player's settings' home.
+- **Proper pianos, proper pedals (2026-11-05):** "i need proper pianos with proper pedal and implementations" (musicca,
+  piano.org). Built in R33: ivory and ebony keys with felt and depth everywhere; the sustain held, latched (a lit
+  indicator) or the score's, every key under it released together with a real damper; soft quieter and darker,
+  sostenuto as a piano's; the rail's ⚙ a Piano sheet in place (Key size, Note names, Volume, Pedals); the Player's
+  piano settings stay in its sheet. Record and Mark not repeated on the keys (the editor's Record, the Chord finder).
 
 - Every Chordify feature but guitar. Plain which view a setting belongs to; Layout is the sheet music's alone.
 - **Diagrams** animate; strip and diagrams swipe by themselves, the page never moves; no odd scroll bar; a swipe goes to the

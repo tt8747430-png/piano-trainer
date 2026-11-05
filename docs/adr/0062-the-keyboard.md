@@ -41,7 +41,19 @@ swung and re-zoomed as a page showed other keys. Each screen that wanted a compu
 - **Letters alone are the piano's.** Typing owns A to ' and Z X, so a shortcut takes a named key or a letter typing
   leaves free (R, I). In the Player Space is Play; elsewhere Space is the pedal and a screen's one Play takes Enter
   (`usePlayKey`). Two screens mounted together never bind one key.
-- **The keyboard settings are saved** and the same on every keyboard.
+- **The keyboard settings are saved** and the same on every keyboard. The rail's ⚙ opens the **Piano** sheet in place
+  (`PianoSettingsSheet`): Key size, Note names, Volume, Pedals and, on a computer, Play with computer keyboard
+  (`PianoEssentialRows`, the same rows heading the On-screen piano page, so each keeps one control), then All piano
+  settings. A screen that keeps the piano's settings itself (the Player) passes `onSettings`.
+- **A real piano's keys** (R33): ivory and ebony drawn as light and shade over each key's fill (`key-face-*`), a lip and
+  a slope, the key slip's felt; a key down sinks. Every mark keeps its colour.
+- **The pedals sound as a piano's** (`damp`, the live voice, the WebAudio adapter): the sustain, held from any source
+  (a finger, Space, CC64, the score while music plays) or latched by a tap, keeps every key struck or let go under it
+  ringing; on its lift they stop together, each with its register's damper (0.6 s in the bass to 0.25 s in the
+  treble). A key struck again under it fades its old sound in 50 ms as the new one starts. The soft pedal (CC67, una
+  corda) strikes a key two thirds as loud through a low-pass of its own; the sostenuto (CC66) catches the dampers
+  raised as it goes down (the keys held, or every key sounding under the sustain) and lets them go as it lifts. The
+  keys a hand plays sound as loud as the piano's Volume (`keyboard.volume`, its square a gain).
 
 ## Consequences
 
@@ -64,3 +76,6 @@ give the keys a box (`stubBox`) and the scroller its metrics (`stubScrolling`).
   piano's (soft · sostenuto · sustain, or the sustain alone), the chord held at its start, ‹ › − + ⚙ at its end; a
   latched sustain carries a honey dot. The On-screen piano's page is the one home of the keys' settings, the
   Player's gear a link to it; its options ordered Keys · While you play · Placement, each with its line (2026-11-05).
+- r33 (R33) — A real piano's keys (ivory, ebony, felt, depth); the Piano sheet in place from the rail's ⚙, with a
+  Volume; the rail's end never scrolled away; the latch's light; the soft pedal quieter and darker, the sostenuto
+  catching every raised damper (2026-11-05).

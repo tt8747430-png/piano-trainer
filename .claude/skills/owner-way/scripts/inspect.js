@@ -40,7 +40,7 @@
   }
   const hidden = (el) => el.closest('[aria-hidden="true"], [inert], .sr-only')
   // A piano's keys sit on each other by design and are sized by the keyboard, not as targets.
-  const isKey = (el) => /^[A-G]( sharp| flat)?\s?-?\d$|^Bar \d+|^Такт \d+/.test(el.getAttribute('aria-label') ?? '')
+  const isKey = (el) => el.hasAttribute('data-midi') || /^[A-G]( sharp| flat)?\s?-?\d$|^Bar \d+|^Такт \d+/.test(el.getAttribute('aria-label') ?? '')
   // The score's own tap areas (a clef's, a bar's) lie over its music by design.
   const inScore = (el) => el.closest('[data-slot="score"]') !== null
   // 1. Text cut: a box narrower than its text with no ellipsis, or a line clamp hiding a word.

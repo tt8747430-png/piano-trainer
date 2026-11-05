@@ -89,7 +89,7 @@ const pics = (items, on) => `<div style="display:grid;grid-template-columns:repe
 const sheetBody = (computer, side = false) => `${side ? '' : '<div class="grip"></div>'}<div style="display:flex;align-items:center"><b style="font:600 22px var(--display)">Piano</b><span style="margin-left:auto">${rb('x', 'plain')}</span></div>
   <div class="row2"><div class="lbl">Key size</div>${pics([['Fit to music', mini(10)], ['Large', mini(5)], ['Full keyboard', mini(21)]], 0)}</div>
   <div class="row2"><div class="lbl">Note names</div>${pics([['On every C', mini(8, 'c')], ['On every key', mini(8, 'all')], ['Hidden', mini(8)]], 0)}</div>
-  <div class="row2"><div style="display:flex;justify-content:space-between"><span class="lbl">Volume</span><span class="sub">80 %</span></div><div class="slider"></div></div>
+  <div class="row2"><div style="display:flex;justify-content:space-between"><span class="lbl">Volume</span><span class="sub">100 %</span></div><div class="slider"></div></div>
   <div class="row2"><div class="lbl">Pedals</div>${pics([['Sustain only', paddles(1)], ['All three', paddles(3)]], 0)}</div>
   ${computer ? `<div class="row2" style="grid-template-columns:1fr auto;align-items:center"><span class="lbl">Play with computer keyboard</span>${'<span style="width:52px;height:32px;border-radius:99px;background:var(--grass-ink);position:relative"><i style="position:absolute;right:3px;top:3px;width:26px;height:26px;border-radius:99px;background:#fff"></i></span>'}</div>` : ''}
   <div class="row2" style="grid-template-columns:1fr auto;align-items:center;min-height:44px"><span class="lbl">All piano settings</span>${ic('chev', 18)}</div>`

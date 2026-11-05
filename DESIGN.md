@@ -373,8 +373,8 @@ with sand. Shadows belong to what floats over the page, and they are soft, layer
 
 Sheets rise over a page dimmed to 10% black and need no shadow.
 
-**The Piano Exception Rule.** The rail's 8px shade, a white key's lip and a black key's slope draw a piano and appear
-nowhere else.
+**The Piano Exception Rule.** The keys' light and shade (`key-face-*`), the felt strip, the case's shade, a white key's
+lip and a black key's slope draw a piano and appear nowhere else.
 
 ## Shapes
 
@@ -473,20 +473,27 @@ time. The learner is their initial on the yellow paint (`Avatar`).
 The whole piano, A0 to C8, scrolling sideways, nothing above its keys: they follow the music directly.
 
 - **The rail** (R32): the instrument's case beneath the keys, 56px in `--key-rail`. The chord a hand holds at its
-  start (Literata), the pedals centred, ‹ › (a mouse, a long keyboard), − and + for the keys' size and ⚙ to the
-  On-screen piano's page at its end. Every other piano choice is that page's, never a second button on the rail.
+  start (Literata), the pedals centred where they fit (on a narrow phone they give way towards the start, so the end
+  never scrolls away), ‹ › (a mouse, a long keyboard), − and + for the keys' size and ⚙ at its end. ⚙ opens the
+  **Piano** sheet in place (R33, musicca's Settings): Key size, Note names, Volume, Pedals, on a computer Play with
+  computer keyboard, then All piano settings; the same rows head the On-screen piano page. The Player's ⚙ opens the
+  Player's sheet.
 - **The pedals:** centred on a dark lyre (`--pedal-lyre`) as on an upright or a grand: the sustain alone, or soft,
   sostenuto and sustain left to right. Each a brass plate (`--pedal`) on its shank with its name under it
   (`--pedal-name`), 48px to press. Down it sinks 3px under a honey glow; latched (a tap on the sustain) it carries a
-  honey dot; a second tap lifts it. While music plays, the sustain shows the score's pedal; stopped, nothing is down
+  lit honey indicator with its glow, as a stage piano's Sustain light; a second tap lifts it. While music plays, the sustain shows the score's pedal; stopped, nothing is down
   or lit.
 
 - **Proportion:** a key is 4.4 times as long as a white key is wide, at least 96px and at most 32% of the screen's height
   (22% on a phone on its side).
-- **Keys:** white keys are card paper, softer by night; black keys a warm black; a 1px bed parts them.
+- **Keys** (R33, a real piano's): ivory white keys (card paper, softer by night) lit from the player's side, deeper
+  under the felt, an edge in light and one in shade, a front lip, a soft cast shadow; ebony black keys bevelled, a
+  sheen towards the player, a sloped front, their shadow on the ivory; a 1px bed parts them; the key slip's red felt
+  (`--key-felt`) along their far end. The light and shade lie over each key's fill, so marks keep their colour. A
+  computer letter sits on its key as a small key cap.
 - **Marks:** a role, a hand or a scale's note is its wash at rest and full paint while it sounds, ink on it. A scale's
   notes are sky, its tonic yellow.
-- **Down:** a plain key turns sky, drops 2px in 80ms and stays down at least 150ms. A quiz's chosen keys are honey, a wrong
+- **Down:** a plain key turns sky, sinks 2px in 80ms (its far end darker under the felt, its shadow gone) and stays down at least 150ms. A quiz's chosen keys are honey, a wrong
   key crimson with ✕, a missing key a deep-sky ring.
 - **Focus:** a two-tone ring, ink outside and white inside, so it shows on any key.
 - **Access:** keys are buttons named by note, one in the tab order, the arrows walking the rest.

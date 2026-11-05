@@ -52,6 +52,6 @@ code { font-size: 13px; background: var(--sand); border-radius: 6px; padding: 1p
 .psheet .row2 { display: grid; gap: 8px; padding: 10px 0; border-top: 1px solid var(--line) }
 .psheet .row2:first-of-type { border-top: 0 }
 .psheet .lbl { font-weight: 600 } .psheet .sub { font-size: 13px; color: var(--ink-soft) }
-.slider { height: 6px; border-radius: 9px; background: linear-gradient(90deg, var(--ink) 80%, var(--line) 80%); position: relative }
-.slider::after { content: ""; position: absolute; left: calc(80% - 11px); top: -8px; width: 22px; height: 22px; border-radius: 99px; background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,.3) }
+.slider { height: 6px; border-radius: 9px; background: linear-gradient(90deg, var(--ink) 100%, var(--line) 100%); position: relative }
+.slider::after { content: ""; position: absolute; left: calc(100% - 22px); top: -8px; width: 22px; height: 22px; border-radius: 99px; background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,.3) }
 .pop { position: absolute; width: 380px; background: var(--card); border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,.22), 0 0 0 1px var(--line); padding: 12px 16px; display: grid; gap: 4px; z-index: 6 }
