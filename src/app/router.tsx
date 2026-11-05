@@ -70,6 +70,7 @@ import {
 import { LEARN_KEPT, learnSearch, readLearnSearch } from './routes/learn-search'
 import {
   exercisePageSearch,
+  practiceLibrarySearch,
   readTrainerSearch,
   trainerSearch,
   validateCheckSearch,
@@ -570,6 +571,7 @@ const quizRoute = createRoute({
 const exercisesRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/exercises',
+  ...practiceLibrarySearch,
   component: lazyRouteComponent(practiceScreens, 'ExercisesPage'),
 })
 // An exercise's page (A41): what it trains, how to play it, and what to start it at.

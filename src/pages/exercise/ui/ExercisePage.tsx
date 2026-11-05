@@ -1,3 +1,4 @@
+import { PracticeFavouriteButton } from '@/features/manage-practice-library'
 import { Link, useParams, useSearch } from '@tanstack/react-router'
 import { Play } from 'lucide-react'
 import { useMemo } from 'react'
@@ -73,7 +74,11 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
     shownHand === 'rh' ? t('practice:exercisePage.rh') : t('practice:exercisePage.lh')
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={name} back={<BackButton />} />
+      <ScreenHeader
+        title={name}
+        back={<BackButton />}
+        tools={<PracticeFavouriteButton kind="exercises" id={exercise.id} />}
+      />
       <section aria-labelledby="exercise-trains" className="flex flex-col gap-2">
         <h2 id="exercise-trains" className="text-xl">
           {t('practice:exercisePage.trains')}
