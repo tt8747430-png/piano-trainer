@@ -26,7 +26,7 @@ export function LibraryBrowse({
   page: LibraryPage
   /** Where it is: its look is this place's Card style (R29 B9). */
   place: CardPlace
-  /** Its songs as a table (a laptop's right pane, R30 S2), the folders the tree's. */
+  /** A laptop's right pane (R30 S2), the folders the tree's: its songs a table in the List layout. */
   table?: boolean
   /** What stands between the folders and the songs: a phone's Home's Shared with me (R30 S6). */
   afterFolders?: ReactNode
@@ -37,6 +37,8 @@ export function LibraryBrowse({
   const look = useLibrary((state) => state.cardLooks[place])
   const { view } = page
   const styled = cardLookProps(look)
+  // A laptop's pane draws its songs as a table in List, as the style's cards in Cards and Grid.
+  const asTable = table && (look?.style.layout ?? 'list') === 'list'
   // Home's every song folds after its first (a calm page, never thousands of pixels): Show all n.
   const [unfolded, setUnfolded] = useState(false)
   const headed = view.groups.some((group) => group.key === 'all')
@@ -70,10 +72,19 @@ export function LibraryBrowse({
           </section>
         ) : null}
         {afterFolders}
-        {table ? (
-          <SongTable entries={view.groups.flatMap((group) => group.entries)} page={page} />
+        {asTable ? (
+          // List on a laptop is the table, inside one card in the place's style (R32-C).
+          look ? (
+            <div {...styled}>
+              <div className="card overflow-hidden px-2">
+                <SongTable entries={view.groups.flatMap((group) => group.entries)} page={page} />
+              </div>
+            </div>
+          ) : (
+            <SongTable entries={view.groups.flatMap((group) => group.entries)} page={page} />
+          )
         ) : null}
-        {(table ? [] : view.groups).map((group) =>
+        {(asTable ? [] : view.groups).map((group) =>
           group.entries.length === 0 ? null : (
             <section
               key={group.key}

@@ -253,7 +253,7 @@ describe('the Courses’ About (R29 B9)', () => {
     const words = within(about).getByText('Begin with the beginner’s shelf.')
     expect(
       words.closest<HTMLElement>('[data-block-style]')?.style.getPropertyValue('--block-border'),
-    ).toBe('3px')
+    ).toBe('2px')
   })
 })
 

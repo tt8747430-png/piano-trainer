@@ -10,10 +10,10 @@ describe('a folder’s card look (R29 B9)', () => {
         show: { key: false, chords: 'yes' },
         density: 'large',
       }),
+      // Density went (R32-C): Spacing is the rows' height.
     ).toEqual({
       style: { ...DEFAULT_STYLE, radius: 4 },
       show: { key: false, chords: true, progress: true },
-      density: 'large',
     })
   })
 
@@ -23,11 +23,11 @@ describe('a folder’s card look (R29 B9)', () => {
 
   it('keeps the looks of places that can be named, and drops the rest', () => {
     const looks = sanitiseCardLooks(
-      { home: { density: 'compact' }, 'folder-2': {}, 'nowhere!': {}, hymns: null },
+      { home: { style: { padding: 'compact' } }, 'folder-2': {}, 'nowhere!': {}, hymns: null },
       (place): place is string => place === 'home' || place === 'folder-2' || place === 'hymns',
     )
     expect(Object.keys(looks).sort()).toEqual(['folder-2', 'home', 'hymns'])
-    expect(looks.home?.density).toBe('compact')
+    expect(looks.home?.style.padding).toBe('compact')
     expect(looks.hymns).toEqual(DEFAULT_CARD_LOOK)
   })
 })

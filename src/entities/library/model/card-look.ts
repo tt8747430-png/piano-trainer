@@ -1,28 +1,23 @@
 import { isRecord } from '@/shared/lib'
 import { DEFAULT_STYLE, sanitiseStyle, type BlockStyle } from '@/shared/lib/style'
 
-/** How tall a place's rows stand: Compact, Comfortable (the default) or Large. */
-export const CARD_DENSITIES = ['compact', 'comfortable', 'large'] as const
-export type CardDensity = (typeof CARD_DENSITIES)[number]
-
 /** What a song's row shows beside its title. */
 export const CARD_SHOWS = ['key', 'chords', 'progress'] as const
 export type CardShow = (typeof CARD_SHOWS)[number]
 
 /**
- * How a place of the library draws its rows (R29 B9, memory-palaces' deck card style): their style,
- * what a song's row shows, and how tall they stand. Saved per place (a folder, or Home).
+ * How a place of the library draws its rows (R29 B9, R32-C; memory-palaces' deck card style): their
+ * style (its spacing is also how tall they stand) and what a song's row shows. Saved per place (a
+ * folder, or Home).
  */
 export interface CardLook {
   readonly style: BlockStyle
   readonly show: Readonly<Record<CardShow, boolean>>
-  readonly density: CardDensity
 }
 
 export const DEFAULT_CARD_LOOK: CardLook = {
   style: DEFAULT_STYLE,
   show: { key: true, chords: true, progress: true },
-  density: 'comfortable',
 }
 
 /** Any value read as a card look: what it says that is valid, the default for the rest. */
@@ -37,9 +32,6 @@ export function sanitiseCardLook(value: unknown): CardLook {
       progress:
         typeof show.progress === 'boolean' ? show.progress : DEFAULT_CARD_LOOK.show.progress,
     },
-    density: (CARD_DENSITIES as readonly unknown[]).includes(saved.density)
-      ? (saved.density as CardDensity)
-      : DEFAULT_CARD_LOOK.density,
   }
 }
 

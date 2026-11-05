@@ -189,7 +189,7 @@ describe('a course’s About (R29 B9)', () => {
     await user.click(await screen.findByRole('button', { name: 'More: Text' }))
     await user.click(await screen.findByRole('menuitem', { name: 'Style' }))
     const sheet = await screen.findByRole('dialog', { name: 'Style: Text' })
-    await user.click(within(sheet).getByRole('button', { name: 'Night' }))
+    await user.click(within(sheet).getByRole('radio', { name: 'Night' }))
     await waitFor(
       async () => {
         const draft = await content.draft('course', gorshkov.id)
