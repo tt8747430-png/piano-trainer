@@ -14,6 +14,7 @@ import { Switch } from './primitives/switch'
 export function SwitchRow({
   icon,
   label,
+  description,
   info,
   checked,
   disabled = false,
@@ -25,6 +26,8 @@ export function SwitchRow({
   /** What it turns on, drawn: an icon or a glyph on a muted square, or a row's tile (`TileMark`) as it is. */
   icon?: ReactNode
   label: string
+  /** What it does, in one line under its name (R32): every option in Settings says what it does. */
+  description?: string | undefined
   /** What it does, opened from the ⓘ after the label. */
   info?: ReactNode
   checked: boolean
@@ -42,6 +45,10 @@ export function SwitchRow({
   const lastId = `${id}-last`
   const why = disabled ? reason : undefined
   const whyId = `${id}-why`
+  const descriptionId = `${id}-description`
+  const describedBy = [description ? descriptionId : null, why ? whyId : null]
+    .filter((each) => each !== null)
+    .join(' ')
   return (
     <div
       data-slot="switch-row"
@@ -78,6 +85,11 @@ export function SwitchRow({
             </InfoTip>
           ) : null}
         </span>
+        {description ? (
+          <span id={descriptionId} className="block text-sm text-muted-foreground">
+            {description}
+          </span>
+        ) : null}
         {why ? (
           <span id={whyId} className="sr-only">
             {why}
@@ -87,7 +99,7 @@ export function SwitchRow({
       <Switch
         id={id}
         aria-labelledby={head ? `${headId} ${lastId}` : lastId}
-        aria-describedby={why ? whyId : undefined}
+        aria-describedby={describedBy || undefined}
         checked={checked}
         disabled={disabled}
         onCheckedChange={onCheckedChange}

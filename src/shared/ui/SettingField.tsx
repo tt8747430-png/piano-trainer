@@ -13,17 +13,20 @@ const LAYOUT = {
 
 /**
  * One choice in Settings: its name as a row's text (the group around it has the heading), what it
- * does in an `InfoTip` beside the name where its name alone does not say (ADR 0096), and its
+ * does in one line under it (`description`, R32) or in an `InfoTip` beside it (ADR 0096), and its
  * control, under the name or at its right (`layout`).
  */
 export function SettingField({
   label,
+  description,
   info,
   layout = 'under',
   setting,
   children,
 }: {
   label: string
+  /** What it does, in one line under its name (R32): every option in Settings says what it does. */
+  description?: string | undefined
   /** What it does, opened from the ⓘ beside the name. */
   info?: ReactNode
   layout?: keyof typeof LAYOUT
@@ -35,16 +38,19 @@ export function SettingField({
   return (
     <div data-slot="setting-field" data-setting={setting} className={LAYOUT[layout]}>
       {/* The ⓘ goes with the name's last word, never alone at a line's start. */}
-      <span className="min-w-0 text-foreground">
-        {head ? `${head} ` : null}
-        <span className="whitespace-nowrap">
-          {last}
-          {info ? (
-            <InfoTip name={label} className="ms-1.5 align-middle">
-              {info}
-            </InfoTip>
-          ) : null}
+      <span className="flex min-w-0 flex-col">
+        <span className="text-foreground">
+          {head ? `${head} ` : null}
+          <span className="whitespace-nowrap">
+            {last}
+            {info ? (
+              <InfoTip name={label} className="ms-1.5 align-middle">
+                {info}
+              </InfoTip>
+            ) : null}
+          </span>
         </span>
+        {description ? <span className="text-sm text-muted-foreground">{description}</span> : null}
       </span>
       {children}
     </div>

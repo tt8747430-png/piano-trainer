@@ -75,7 +75,8 @@ const MOVES: Readonly<Partial<Record<string, (key: Midi) => Midi>>> = {
 }
 
 /**
- * The one keyboard: the whole piano hung from its rail, scrolling sideways, its `range`
+ * The one keyboard: the whole piano over its rail (the pedals, the chord held, its controls; R32),
+ * scrolling sideways, its `range`
  * filling the width at Fit. A group named "Keyboard" whose keys are buttons named by note, one of
  * them in the tab order; the arrow keys walk the rest. A key plays the instant it is touched and the
  * keys hold still under a finger (Glissando plays each key a finger slides onto); the keyboard
@@ -93,6 +94,7 @@ export function PianoKeyboard({
   letters,
   caption,
   railEnd,
+  pedals,
   keyPlays,
   onKeyPress,
   onKeyRelease,
@@ -123,6 +125,8 @@ export function PianoKeyboard({
   caption?: RailCaption | undefined
   /** The rail's last control, always in sight (a page's Hide the keys). */
   railEnd?: ReactNode
+  /** The pedals on their lyre, centred on the rail beneath the keys. */
+  pedals?: ReactNode
   /**
    * What a key plays when a hand presses it: the key alone, unless the screen makes it more (a
    * degree's key its chord). All of it is down while the key is held.
@@ -260,14 +264,6 @@ export function PianoKeyboard({
         className="flex shrink-0 flex-col"
         style={{ width: `calc(${PIANO_LAYOUT.whites} * ${white})` }}
       >
-        <KeyRail
-          scroller={scroller}
-          scrolls={scrolls}
-          caption={sizeCaption ?? caption}
-          end={railEnd}
-        >
-          {children}
-        </KeyRail>
         <div
           ref={keys}
           role="group"
@@ -283,13 +279,22 @@ export function PianoKeyboard({
           }}
         >
           {keyButtons}
-          {/* The rail's shade falling on the keys. */}
+          {/* The case's shade falling on the keys' far end. */}
           <span
             aria-hidden
             className="pointer-events-none absolute inset-x-0 top-0 z-20 h-2 bg-linear-to-b from-key-shade to-transparent"
           />
         </div>
         {scrolls ? <FingerRow marks={states.marks} /> : null}
+        <KeyRail
+          scroller={scroller}
+          scrolls={scrolls}
+          caption={sizeCaption ?? caption}
+          pedals={pedals}
+          end={railEnd}
+        >
+          {children}
+        </KeyRail>
       </div>
     </div>
   )

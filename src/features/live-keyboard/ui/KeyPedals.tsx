@@ -3,15 +3,15 @@ import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings } from '@/entities/settings'
 import type { PedalKind } from '@/shared/lib/schedule'
 import { usePedal, useServices } from '@/shared/lib/services'
-import { Pedal } from '@/shared/ui'
+import { Pedal, PedalLyre } from '@/shared/ui'
 
 /** A press shorter than this is a tap: it locks the sustain down (or lifts it, locked). */
 const TAP_MS = 300
 
 /**
- * One pedal of the live keyboard (R31-P): drawn down whenever it is down, whoever holds it (the music
- * playing, `music`; a MIDI foot, Space, or this). Held, it holds; the sustain also locks on a tap, its padlock
- * on it, and lifts on the next. Whatever this pedal holds lets up as the page hides or the keys go:
+ * One pedal of the live keyboard (R31-P, R32): drawn down whenever it is down, whoever holds it (the
+ * music playing, `music`; a MIDI foot, Space, or this). Held, it holds; the sustain also latches on a
+ * tap, a honey dot on it, and lifts on the next. Whatever this pedal holds lets up as the page hides or the keys go:
  * no screen keeps a pedal it cannot lift.
  */
 function KeyPedal({ pedal, music = false }: { pedal: PedalKind; music?: boolean }) {
@@ -57,7 +57,7 @@ function KeyPedal({ pedal, music = false }: { pedal: PedalKind; music?: boolean 
       label={t(`pedals.${pedal}.label`)}
       name={t(`pedals.${pedal}.name`)}
       down={down}
-      locked={locked}
+      latched={locked}
       onPointerDown={(event) => {
         event.currentTarget.setPointerCapture(event.pointerId)
         long.current = false
@@ -83,14 +83,15 @@ function KeyPedal({ pedal, music = false }: { pedal: PedalKind; music?: boolean 
 }
 
 /**
- * The pedals the learner shows (On-screen piano › Pedals): the sustain, or soft, sostenuto and
- * sustain. `sustained`: the music playing holds the sustain down (its score's pedal at the cursor),
- * drawn down with it.
+ * The pedals the learner shows (On-screen piano › Pedals), on their lyre centred beneath the keys as
+ * on an upright or a grand (R32): the sustain alone, or soft, sostenuto and sustain, left to right.
+ * `sustained`: the music playing holds the sustain down (its score's pedal at the cursor), drawn
+ * down with it.
  */
 export function KeyPedals({ sustained = false }: { sustained?: boolean }) {
   const { pedals } = useSettings(selectKeyboard)
   return (
-    <span data-slot="key-pedals" className="flex shrink-0 items-end">
+    <PedalLyre>
       {pedals === 'all' ? (
         <>
           <KeyPedal pedal="soft" />
@@ -98,6 +99,6 @@ export function KeyPedals({ sustained = false }: { sustained?: boolean }) {
         </>
       ) : null}
       <KeyPedal pedal="sustain" music={sustained} />
-    </span>
+    </PedalLyre>
   )
 }

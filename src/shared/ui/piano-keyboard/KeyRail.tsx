@@ -19,24 +19,27 @@ export interface RailCaption {
 }
 
 /**
- * The rail the keys hang from, the piano's length: a swipe on it, or on the keys (Scroll), scrolls
- * them. Its controls stay in view wherever the keys are scrolled, each clear of the rail's edges: at
- * its end ‹ › an octave together (one control, never a lone arrow in the corner a Back takes; for a
- * mouse on a rail long enough, which cannot swipe: a finger does not see them) and `children` (the
- * screen's `RailGroup`s of `RailButton`s). Keys that do not scroll have no ‹ ›; the rail's `end`
- * stays at its end, out of the buttons that scroll. Its `caption` is said at its start; on a short
- * rail the buttons scroll sideways.
+ * The piano's rail beneath the keys (R32), the instrument's case: nothing stands above the keys, so
+ * they follow the music directly. It spans the piano's length and scrolls with it (a swipe on it
+ * scrolls the keys); what it holds stays in view wherever the keys are scrolled. At its start the
+ * `caption` (the chord a hand holds); centred, as on an upright or a grand, the `pedals` on their
+ * lyre; at its end ‹ › an octave together (for a mouse on a keyboard long enough, which cannot swipe;
+ * keys that do not scroll have none), `children` (the screen's `RailGroup`s of `RailButton`s), and
+ * `end`, never scrolled away. On a short rail the buttons scroll sideways.
  */
 export function KeyRail({
   scroller,
   scrolls,
   caption,
+  pedals,
   end,
   children,
 }: {
   scroller: RefObject<HTMLElement | null>
   scrolls: boolean
   caption?: RailCaption | undefined
+  /** The pedals on their lyre, centred beneath the keys. */
+  pedals?: ReactNode
   /** The rail's last control (a page's Hide the keys): always in sight, never scrolled away. */
   end?: ReactNode
   children?: ReactNode
@@ -49,37 +52,43 @@ export function KeyRail({
     element.scrollTo({ left: scrollByOctave(element, PIANO_LAYOUT.whites, by), behavior: motion })
   }
   return (
-    <div className="relative h-14 shrink-0">
-      {/* A slim strip over the keys (R31-P): no box of its own, a hairline at its foot. */}
-      <span aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-hairline" />
-      <div className="sticky left-0 flex h-full items-end px-1" style={{ width: IN_VIEW }}>
-        {/* The caption at the rail's start; the buttons give way first, scrolling sideways. */}
-        <div className="flex min-w-16 flex-1 items-end">
+    <div data-slot="key-rail" className="relative h-14 shrink-0 bg-key-rail">
+      <div
+        className="sticky left-0 grid h-full grid-cols-[minmax(max-content,1fr)_auto_minmax(0,1fr)] items-center px-1"
+        style={{ width: IN_VIEW }}
+      >
+        <div className="flex min-w-0 items-center">
           {caption?.text ? (
-            <p className="h-9 w-max px-2 font-display text-lg/9 font-semibold text-foreground">
+            <p className="h-9 w-max px-2 font-display text-lg/9 font-semibold text-on-key-rail">
               <span className="sr-only">{caption.label}: </span>
               {caption.text}
             </p>
           ) : null}
         </div>
-        {/* Fading at an edge with more beyond it, so a row too long for a phone reads as one to swipe. */}
-        <div
-          data-slot="rail-controls"
-          className="flex min-w-0 overflow-x-auto overscroll-x-contain scrollbar-none"
-        >
-          {scrolls ? (
-            <RailGroup className="@max-md:hidden pointer-coarse:hidden">
-              <RailButton
-                label={t('rail.octaveDown')}
-                icon={ChevronLeft}
-                onClick={() => step(-1)}
-              />
-              <RailButton label={t('rail.octaveUp')} icon={ChevronRight} onClick={() => step(1)} />
-            </RailGroup>
-          ) : null}
-          {children}
+        <div className="flex h-full justify-center">{pedals}</div>
+        <div className="flex min-w-0 items-center justify-end">
+          <div
+            data-slot="rail-controls"
+            className="flex min-w-0 overflow-x-auto overscroll-x-contain scrollbar-none"
+          >
+            {scrolls ? (
+              <RailGroup className="@max-md:hidden pointer-coarse:hidden">
+                <RailButton
+                  label={t('rail.octaveDown')}
+                  icon={ChevronLeft}
+                  onClick={() => step(-1)}
+                />
+                <RailButton
+                  label={t('rail.octaveUp')}
+                  icon={ChevronRight}
+                  onClick={() => step(1)}
+                />
+              </RailGroup>
+            ) : null}
+            {children}
+          </div>
+          {end}
         </div>
-        {end}
       </div>
     </div>
   )

@@ -14,7 +14,7 @@ const hold = (...names: string[]) =>
     }),
   )
 /** What the rail says of the chord held, its name for a screen reader first; null while it says nothing. */
-const chord = () => screen.queryByText('Chord played:')?.parentElement?.textContent ?? null
+const chord = () => screen.queryByText('Chord held:')?.parentElement?.textContent ?? null
 
 describe('the keyboard’s rail', () => {
   it('holds the keys’ size, the piano’s settings and its pedal: nothing else (R31-P)', () => {
@@ -60,7 +60,7 @@ describe('the keyboard’s rail', () => {
     expect(chord()).toBeNull()
     const g4 = screen.getByRole('button', { name: 'G4' })
     fireEvent.pointerDown(g4, { pointerId: 2, pointerType: 'touch' })
-    expect(chord()).toBe('Chord played: C')
+    expect(chord()).toBe('Chord held: C')
     fireEvent.pointerUp(g4, { pointerId: 2, pointerType: 'touch' })
     expect(chord()).toBeNull()
   })
@@ -68,19 +68,19 @@ describe('the keyboard’s rail', () => {
   it('names a chord over the bass it is played on', () => {
     setUp()
     hold('E4', 'G4', 'B4', 'D4')
-    expect(chord()).toBe('Chord played: Em7/D')
+    expect(chord()).toBe('Chord held: Em7/D')
   })
 
   it('prints the chord held as the sheets print it, ♯ and ♭ as signs', () => {
     const { midiKeyboard } = setUp()
     act(() => [61, 64, 68].forEach((key) => midiKeyboard.press(midi(key))))
-    expect(chord()).toBe('Chord played: C♯m')
+    expect(chord()).toBe('Chord held: C♯m')
   })
 
   it('names the keys held on a MIDI keyboard', () => {
     const { midiKeyboard } = setUp()
     act(() => [62, 65, 69].forEach((key) => midiKeyboard.press(midi(key))))
-    expect(chord()).toBe('Chord played: Dm')
+    expect(chord()).toBe('Chord held: Dm')
   })
 
   it('names the keys the pedal holds, each tapped and let go', async () => {
@@ -88,7 +88,7 @@ describe('the keyboard’s rail', () => {
     const { audio } = setUp()
     act(() => audio.pedal('sustain', true))
     for (const name of ['C4', 'E4', 'G4']) await user.click(screen.getByRole('button', { name }))
-    expect(chord()).toBe('Chord played: C')
+    expect(chord()).toBe('Chord held: C')
   })
 
   it('names what a hand plays, not what the app sounds', () => {

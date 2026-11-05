@@ -40,9 +40,9 @@ describe('PianoKeyboard', () => {
   it('is one tab stop, from the start of its range, and the arrow keys walk the keys', async () => {
     const user = userEvent.setup()
     renderKeyboard()
-    // The rail's buttons come before the keys, as they stand above them.
-    screen.getByRole('button', { name: 'Octave up' }).focus()
-    await user.tab()
+    // The rail's buttons come after the keys, as they stand beneath them (R32).
+    screen.getByRole('button', { name: 'Octave down' }).focus()
+    await user.tab({ shift: true })
     expect(screen.getByRole('button', { name: 'C4' })).toHaveFocus()
     await user.keyboard('{ArrowRight}')
     expect(screen.getByRole('button', { name: 'C sharp 4' })).toHaveFocus()
@@ -53,7 +53,7 @@ describe('PianoKeyboard', () => {
     await user.keyboard('{Home}')
     expect(screen.getByRole('button', { name: 'A0' })).toHaveFocus()
     await user.tab()
-    expect(screen.getByRole('button', { name: 'After' })).toHaveFocus()
+    expect(screen.getByRole('button', { name: 'Octave down' })).toHaveFocus()
   })
 
   it('makes the key last pressed the tab stop', async () => {
@@ -62,7 +62,7 @@ describe('PianoKeyboard', () => {
     await user.click(screen.getByRole('button', { name: 'G4' }))
     // A click takes no focus (Space after it is the pedal's), yet Tab comes back to the key clicked.
     expect(screen.getByRole('button', { name: 'G4' })).not.toHaveFocus()
-    screen.getByRole('button', { name: 'After' }).focus()
+    screen.getByRole('button', { name: 'Octave down' }).focus()
     await user.tab({ shift: true })
     expect(screen.getByRole('button', { name: 'G4' })).toHaveFocus()
   })

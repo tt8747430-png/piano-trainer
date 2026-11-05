@@ -97,7 +97,7 @@ describe('TrainerBoard', () => {
         pointerId,
         pointerType: 'touch',
       })
-    expect(screen.queryByText('Chord played:')).not.toBeInTheDocument()
+    expect(screen.queryByText('Chord held:')).not.toBeInTheDocument()
   })
 
   it('names the answer after a wrong build', async () => {
