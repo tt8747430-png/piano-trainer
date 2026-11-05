@@ -175,12 +175,6 @@
       "skillPath": "skills/engineering/triage/SKILL.md",
       "computedHash": "7c923b6a677cfe689500721f08307e2a4c46797ff169dc55ef6c34a431a0d533"
     },
-    "ubiquitous-language": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "skillPath": "skills/deprecated/ubiquitous-language/SKILL.md",
-      "computedHash": "0395170031b57ea63f2eb22561542894c03e3047430a2f1118a06b411054429b"
-    },
     "vercel-cli": {
       "source": "vercel/vercel",
       "sourceType": "github",

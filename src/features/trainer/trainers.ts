@@ -286,7 +286,7 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     sides: [],
     asks: (level) => ({ kind: 'roles', ...ROLE_LEVEL[level as RoleLevel] }),
   },
-  // A progression is no skill (UBIQUITOUS_LANGUAGE): its answers rate nothing.
+  // A progression is no skill: its answers rate nothing.
   'progressions-by-ear': {
     id: 'progressions-by-ear',
     levels: PROGRESSION_LEVELS,
