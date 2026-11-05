@@ -54,3 +54,70 @@ export async function settle(page, { timeout = 30000 } = {}) {
   )
   return late
 }
+
+/**
+ * What only greets or interrupts, never what a shot is of (the owner, 2026-11-05: "never make unintended images of
+ * such things as this sign in popups or tours, only when you explicitly need this"): the app's welcome, a sign-in or
+ * sign-up prompt, a product tour, a cookie or newsletter banner. Each is dismissed by its own way out, the gentlest
+ * first (skip, not now, close), never by signing in or agreeing to more than the essentials.
+ */
+const WAYS_OUT = [
+  /^skip( the)? tour$/i,
+  /^skip$/i,
+  /^not now$/i,
+  /^maybe later$/i,
+  /^no,? thanks$/i,
+  /^start playing$/i,
+  /^начать$/i,
+  /^got it$/i,
+  /^ok,? got it$/i,
+  /^reject( all)?$/i,
+  /^only (necessary|essential)( cookies)?$/i,
+  /^accept( all)?( cookies)?$/i,
+  /^close$/i,
+  /^закрыть$/i,
+  /^dismiss$/i,
+]
+/** Where such things sit: a dialog, a banner, a tour's popover, a fixed layer over the page. */
+const INTERRUPTIONS =
+  '[role="dialog"], [role="alertdialog"], [aria-modal="true"], [class*="tour" i], [class*="cookie" i], [class*="consent" i], [class*="banner" i], [class*="onboard" i], [id*="cookie" i], [id*="consent" i]'
+
+/**
+ * Clears every greeting and interruption on the page, unless `ONBOARDING=1` asks to keep them (a check of the
+ * welcome or a tour itself). Returns what it dismissed, so the caller can say so; a layer it could not dismiss is
+ * left for the caller to report.
+ */
+export async function clearOnboarding(page, { rounds = 6 } = {}) {
+  if (process.env.ONBOARDING === '1') return []
+  const dismissed = []
+  for (let round = 0; round < rounds; round += 1) {
+    const way = await page.evaluate(
+      ([selector, patterns]) => {
+        const regexes = patterns.map(([source, flags]) => new RegExp(source, flags))
+        const visible = (element) => {
+          const box = element.getBoundingClientRect()
+          return box.width > 0 && box.height > 0 && getComputedStyle(element).visibility !== 'hidden'
+        }
+        const layers = [...document.querySelectorAll(selector)].filter(visible)
+        for (const regex of regexes)
+          for (const layer of layers)
+            for (const control of layer.querySelectorAll('button, [role="button"], a')) {
+              const name = (control.getAttribute('aria-label') || control.textContent || '').trim()
+              if (visible(control) && regex.test(name)) {
+                control.setAttribute('data-way-out', 'true')
+                return name
+              }
+            }
+        return null
+      },
+      [INTERRUPTIONS, WAYS_OUT.map((regex) => [regex.source, regex.flags])],
+    )
+    if (!way) break
+    await page.locator('[data-way-out="true"]').first().click({ timeout: 3000 }).catch(() => {})
+    await page.evaluate(() => document.querySelector('[data-way-out]')?.removeAttribute('data-way-out'))
+    await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {})
+    dismissed.push(way)
+  }
+  if (dismissed.length < rounds) await page.keyboard.press('Escape').catch(() => {})
+  return dismissed
+}

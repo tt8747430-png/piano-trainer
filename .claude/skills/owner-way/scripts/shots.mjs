@@ -15,7 +15,7 @@
 import { mkdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { chromium } from '@playwright/test'
-import { settle } from './settle.mjs'
+import { clearOnboarding, settle } from './settle.mjs'
 
 const ALL_SIZES = [
   // The installed app on an iPhone: the status bar (59) and the home indicator (34) are the page's.
@@ -99,6 +99,10 @@ for (const size of SIZES) {
           .catch(() => problems.push(`${route}: the score was not drawn within 15 s`))
         // Never a shot before the page has fully loaded (the owner's rule).
         for (const part of await settle(page)) problems.push(`${route}: never settled (${part})`)
+        // No welcome, sign-in prompt or tour in a shot unless one is asked for (ONBOARDING=1): cleared once, as the
+        // page loads and before any act, so a sheet a step opens on purpose is never closed.
+        const greeted = await clearOnboarding(page)
+        if (greeted.length) problems.push(`${route}: dismissed before shooting: ${greeted.join(', ')}`)
         const slug =
           step.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').slice(0, 80) || 'home'
         const label = `${slug}-${size.name}-${theme}-${language.name}`
