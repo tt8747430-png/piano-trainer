@@ -43,55 +43,52 @@ async function signedInAs(role: AccountRole) {
   return auth
 }
 
-describe('a song’s Details in its Settings (R29 1.2)', () => {
-  it('writes an own song’s title, who wrote it and what is said of it on Details, saved', async () => {
+describe('what a song says of itself, in its page’s Edit (R30 S5)', () => {
+  it('writes an own song’s title and what is said of it, saved; who wrote it is the score’s', async () => {
     const user = userEvent.setup()
-    const { piecesStore } = await renderApp('/songs/my-1/settings', { storage: withSong() })
-    await user.click(await screen.findByRole('button', { name: 'Details' }))
-    const title = screen.getByRole('textbox', { name: 'Title' })
+    const { piecesStore } = await renderApp('/songs/my-1?edit=true', { storage: withSong() })
+    const title = await screen.findByRole('textbox', { name: 'Title' })
     await user.clear(title)
     await user.type(title, 'Evening')
-    await user.type(screen.getByRole('textbox', { name: 'Composer' }), 'Ana')
     await user.type(screen.getByRole('textbox', { name: 'About the song' }), 'A lullaby')
+    expect(screen.queryByRole('textbox', { name: 'Composer' })).not.toBeInTheDocument()
     expect(piecesStore.getState().songs[0]).toMatchObject({
       title: 'Evening',
-      // Credits is its score's composer: one place, printed under its title too.
-      header: { composer: 'Ana' },
       note: { en: 'A lullaby', ru: 'A lullaby' },
     })
-    await user.click(screen.getByRole('button', { name: 'Back' }))
-    expect(await screen.findByText('Evening')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Done' }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Evening' })).toBeInTheDocument()
   })
 
-  it('gives a learner no Details on one of the app’s songs: nothing there is theirs to write', async () => {
-    await renderApp(`/songs/${SONG.id}/settings`, { auth: await signedInAs('learner') })
-    await screen.findByRole('heading', { level: 1 })
-    expect(screen.queryByRole('button', { name: 'Details' })).not.toBeInTheDocument()
+  it('gives a learner no title or about to write on one of the app’s songs, only its details', async () => {
+    await renderApp(`/songs/${SONG.id}?edit=true`, { auth: await signedInAs('learner') })
+    expect(await screen.findByRole('textbox', { name: 'Add a tag' })).toBeInTheDocument()
+    expect(screen.queryByRole('textbox', { name: 'Title' })).not.toBeInTheDocument()
   })
 
-  it('writes an editor’s changes into the song’s draft from Details, said unpublished on Settings', async () => {
+  it('writes an editor’s changes into the song’s draft, said unpublished on Settings', async () => {
     const user = userEvent.setup()
     const content = createFakeContentEditing({
       items: [{ kind: 'piece', id: SONG.id, body: pieceRecordBody(SONG), meta: {} }],
     })
-    await renderApp(`/songs/${SONG.id}/settings`, {
+    await renderApp(`/songs/${SONG.id}?edit=true`, {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await user.click(await screen.findByRole('button', { name: 'Details' }))
-    const words = await screen.findByRole('textbox', { name: 'Lyricist' })
-    await user.clear(words)
-    await user.type(words, 'Someone')
+    const about = await screen.findByRole('textbox', { name: 'About the song' })
+    await user.clear(about)
+    await user.type(about, 'Sung at evening')
     await waitFor(
       async () => {
         const draft = await content.draft('piece', SONG.id)
         expect(draft.ok && draft.value?.body).toMatchObject({
-          header: expect.objectContaining({ lyricist: 'Someone' }),
+          note: expect.objectContaining({ en: 'Sung at evening' }),
         })
       },
       { timeout: 4000 },
     )
-    await user.click(screen.getByRole('button', { name: 'Back' }))
+    await user.click(screen.getByRole('button', { name: 'Done' }))
+    await user.click(await screen.findByRole('link', { name: 'Settings' }))
     // Publish… says it changed since it was published (R29 B6).
     const row = await screen.findByRole('link', { name: /^Publish…/ })
     await waitFor(() => expect(row).toHaveTextContent('Changed since it was published'))

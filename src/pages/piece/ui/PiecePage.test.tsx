@@ -197,7 +197,7 @@ describe('Piece', () => {
     await openSettings(userEvent.setup())
     expect(
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
-    ).toEqual(['Appearance', 'In your library', 'Share'])
+    ).toEqual(['In your library', 'Share'])
     // Favourite is an act on the song (its ♡, its menus), never a switch here (R19).
     expect(screen.queryByRole('switch', { name: 'Favourite' })).not.toBeInTheDocument()
     // One of the app's songs stays in its folder (D8): Archive, no Move to folder….
@@ -224,26 +224,62 @@ describe('Piece', () => {
     expect(`${link.pathname}${link.search}`).toBe('/play/bz5?transpose=2&version=simple')
   })
 
-  it('keeps Settings and ✎ (the score) in its bar; Practise, Learned and ♡ on its overview card (A38, R29)', async () => {
+  it('keeps Learned and Settings in its bar, ✎ beside the title, ♡ on the cover and Play floating (R30 S4)', async () => {
     const user = userEvent.setup()
-    await renderApp('/songs/bz5')
-    const card = await screen.findByRole('region', { name: 'The song' })
-    expect(within(card).getByRole('link', { name: 'Practise' })).toHaveAttribute(
-      'href',
-      '/play/bz5',
-    )
-    for (const name of ['Learned', 'Add to favourites'])
-      expect(within(card).getByRole('button', { name })).toBeInTheDocument()
-    expect(within(card).queryByRole('link', { name: 'Edit score' })).toBeNull()
-    const bar = document.querySelector('[data-slot="screen-bar"]') as HTMLElement
+    const { router } = await renderApp('/songs/bz5')
+    const song = await screen.findByRole('region', { name: 'The song' })
+    expect(within(song).getByRole('button', { name: 'Add to favourites' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Practise' })).toHaveAttribute('href', '/play/bz5')
+    const bar = screen.getByRole('banner')
+    expect(within(bar).getByRole('button', { name: 'Learned' })).toBeInTheDocument()
     expect(within(bar).getByRole('link', { name: 'Settings' })).toHaveAttribute(
       'href',
       '/songs/bz5/settings',
     )
-    expect(within(bar).queryByRole('button', { name: 'More' })).toBeNull()
-    // ✎ opens the score in the editor, the learner's version of one of the app's songs (R29 1.2).
-    await user.click(within(bar).getByRole('button', { name: 'Edit' }))
-    expect(await screen.findByRole('button', { name: 'Done' })).toBeInTheDocument()
+    // ✎ beside the title puts the page in Edit in place; Done in its place ends it.
+    const edit = within(bar).getByRole('button', { name: 'Edit' })
+    expect(within(bar).getByRole('heading', { level: 1 }).nextElementSibling).toBe(edit)
+    await user.click(edit)
+    expect(router.state.location.search).toMatchObject({ edit: true })
+    expect(within(bar).queryByRole('button', { name: 'Learned' })).toBeNull()
+    expect(screen.getByRole('link', { name: 'Edit on the score' })).toHaveAttribute(
+      'href',
+      '/edit/bz5',
+    )
+    await user.click(within(bar).getByRole('button', { name: 'Done' }))
+    expect(router.state.location.search).not.toHaveProperty('edit')
+  })
+
+  it('gives the song a cover in its Edit, and Remove the cover takes it off', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs/bz5?edit=true')
+    await user.click(await screen.findByRole('radio', { name: 'Piano' }))
+    await user.click(screen.getByRole('radio', { name: 'Grass' }))
+    expect(libraryStore.getState().songLooks['bz5']).toEqual({ picture: 'piano', paint: 'grass' })
+    await user.click(screen.getByRole('button', { name: 'Remove the cover' }))
+    expect(libraryStore.getState().songLooks['bz5']).toBeUndefined()
+  })
+
+  it('keeps a song’s genre, language and tags from its Edit, read on its page', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs/bz5?edit=true')
+    await user.click(await screen.findByRole('combobox', { name: /^Genre/ }))
+    await user.click(await screen.findByRole('option', { name: 'Hymn' }))
+    await user.click(screen.getByRole('combobox', { name: /^Language/ }))
+    await user.click(await screen.findByRole('option', { name: 'Russian' }))
+    await user.type(screen.getByRole('textbox', { name: 'Add a tag' }), 'Sunday{Enter}')
+    expect(libraryStore.getState().songDetails.bz5).toMatchObject({
+      genre: 'hymn',
+      language: 'ru',
+      tags: ['sunday'],
+    })
+    await user.click(screen.getByRole('button', { name: 'Done' }))
+    const details = await screen.findByRole('list', { name: 'Details' })
+    expect(within(details).getByText('Hymn')).toBeInTheDocument()
+    expect(within(details).getByText('Russian')).toBeInTheDocument()
+    expect(
+      within(screen.getByRole('list', { name: 'Tags' })).getByText('sunday'),
+    ).toBeInTheDocument()
   })
 
   it('opens the Player and marks the song learned', async () => {
@@ -334,7 +370,7 @@ describe('Piece: the learner’s own music', () => {
     await openSettings(user)
     expect(
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
-    ).toEqual(['Appearance', 'In your library', 'Share'])
+    ).toEqual(['In your library', 'Share'])
     expectLastAndAlone(screen.getByRole('button', { name: 'Delete' }))
     expect(screen.getByRole('link', { name: /^Publish…/ })).toHaveAttribute(
       'href',
@@ -363,10 +399,10 @@ describe('Piece: the learner’s own music', () => {
     ).toEqual(['Verse', 'Chorus'])
   })
 
-  it('edits a song in the score editor from ✎', async () => {
+  it('opens the score from its Edit’s Edit on the score: who wrote it is the score’s', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/songs/amazing')
-    await user.click(await screen.findByRole('button', { name: 'Edit' }))
+    const { router } = await renderApp('/songs/amazing?edit=true')
+    await user.click(await screen.findByRole('link', { name: 'Edit on the score' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/amazing'))
   })
 

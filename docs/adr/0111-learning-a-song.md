@@ -54,3 +54,9 @@ along is not built: it would need timing windows the Player does not keep.
   Publish new version at the foot, why publish in a sheet (2026-11-01).
 - r28 — The song's page in Edit, where its words are the learner's (an own song) or an editor's (the app's): its title in the language shown, who wrote its music and words (properties), what is said of it, and Edit the music; Settings, then Edit at the bar's end. Elsewhere the pencil opens the learner's version of the score (2026-11-01).
 - r28 — Who wrote a song lives in one place: its score's composer and lyricist (`header`), written from the page's Edit or the score's Settings, printed under its title and shown in place of the content's music and words credits (`shownCredits`) (2026-11-02).
+- r30 (S4, S5) — The song's page: its ✎ beside the title puts the page in Edit in place (`?edit=true`), Learned (named;
+  the check alone on a phone) and Settings in the bar, ♡ on its cover (its picture and paint, or its key), Play floating.
+  Song details are never printed: level, genre, language and tags (the library's `songDetails`), cover; its title and
+  about are an own song's or an editor's. Who wrote it is the score's alone (`SongFacts` lost Music and Words); Edit says
+  so and links to the score. Settings › Details and Colour and picture go. Your practice: the day played last and the
+  takes (2026-11-05).

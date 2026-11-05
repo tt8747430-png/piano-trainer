@@ -13,15 +13,34 @@ import { useLearned } from './use-learned'
 export function LearnedButton({
   step,
   round = false,
+  bar = false,
   className,
 }: {
   step: StepId
   round?: boolean
+  /**
+   * In a song's bar (R30 S4): the check and the word on the bar's soft fill, grass once learned; on a
+   * phone the check alone, so the title keeps its room.
+   */
+  bar?: boolean
   /** Its size beside a larger button (a song's Practise), as that button's. */
   className?: string
 }) {
   const { t } = useTranslation('common')
   const { learned, toggle } = useLearned(step)
+  if (bar)
+    return (
+      <Toggle
+        pressed={learned}
+        onPressedChange={toggle}
+        title={t('learned.done')}
+        className="h-11 min-w-11 gap-1.5 rounded-pill border-transparent bg-muted/70 px-3.5 font-semibold text-foreground hover:bg-muted aria-pressed:bg-learned aria-pressed:text-learned-foreground max-sm:px-0"
+      >
+        <Check aria-hidden className="size-4" strokeWidth={2.75} />
+        {/* A phone's bar keeps its room for the title: the check alone, named still. */}
+        <span className="max-sm:sr-only">{t('learned.done')}</span>
+      </Toggle>
+    )
   if (round)
     return (
       <Toggle

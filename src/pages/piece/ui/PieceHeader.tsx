@@ -9,10 +9,12 @@ import { BackButton, ScreenHeader, type EditAction } from '@/shared/ui'
  */
 export function PieceHeader({
   entry,
+  tools,
   settings,
   edit,
 }: {
   entry: Entry
+  tools?: ReactNode
   settings?: ReactNode
   edit?: EditAction
 }) {
@@ -23,6 +25,7 @@ export function PieceHeader({
       // A song's name in full over its page, as a deck's in Noji's: the bar echoes it once scrolled.
       large
       back={<BackButton />}
+      tools={tools}
       settings={settings}
       edit={edit}
     />
