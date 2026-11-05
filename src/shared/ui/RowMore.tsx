@@ -1,7 +1,7 @@
 import { Ellipsis } from 'lucide-react'
-import { ActionMenu, type MenuAction } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
-import { ROW_CONTROL } from './row-class'
+import { ActionMenu, type MenuAction } from './ActionMenu'
+import { Button } from './primitives/button'
+import { ROW_CONTROL } from './library-row-class'
 
 /**
  * A row's More (⋯): every action of the row, at every size, named for what it is the More of; none

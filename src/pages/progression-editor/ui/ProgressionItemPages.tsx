@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import {
   blankProgression,
   libraryLine,
-  libraryParam,
   progressionById,
   progressionMode,
   shipsWithApp,
@@ -28,13 +27,9 @@ function useRouteProgression(from: 'settings' | 'publish'): LibraryProgression {
   return progressionById(progressionId) ?? blankProgression(progressionId, '')
 }
 
-/** Where a progression is shown on Progressions: its numerals, in the key of its mode. */
-function progressionPath(progression: LibraryProgression): string {
-  const minor = progressionMode(progression, false)
-  const search = new URLSearchParams({ p: libraryParam(progression, minor) })
-  if (minor) search.set('key', 'Am')
-  return `/practice/progressions?${search.toString()}`
-}
+/** Where a progression is shown: its own page (R30-4). */
+const progressionPath = (progression: LibraryProgression): string =>
+  `/practice/progressions/${progression.id}`
 
 /**
  * A progression's Settings (`/practice/progressions/$progressionId/settings`, R29 B6), an editor's,
@@ -119,7 +114,6 @@ function ProgressionPublish({ progression }: { progression: LibraryProgression }
   const written = draft.load.state === 'ready' ? draft.load.value : progression
   const title = localText(written.name, locale) || written.id
   const path = progressionPath(written)
-  const minor = progressionMode(written, false)
   return (
     <DraftPublishScreen
       kind="progression"
@@ -127,7 +121,9 @@ function ProgressionPublish({ progression }: { progression: LibraryProgression }
       draft={draft}
       title={title}
       path={path}
-      view={<Link to="/practice/progressions" search={{ p: libraryParam(written, minor) }} />}
+      view={
+        <Link to="/practice/progressions/$progressionId" params={{ progressionId: written.id }} />
+      }
       unreadable={t('progressions.edit.unreadable')}
       back={<BackButton />}
       removable={!shipsWithApp(progression.id)}
@@ -137,7 +133,9 @@ function ProgressionPublish({ progression }: { progression: LibraryProgression }
           <span className="flex min-w-0 flex-col">
             <span className="text-lg font-semibold text-balance">{title}</span>
             <span className="text-sm text-muted-foreground">
-              {(written.major ?? written.minor) ? libraryLine(written, minor) : ''}
+              {(written.major ?? written.minor)
+                ? libraryLine(written, progressionMode(written, false))
+                : ''}
             </span>
           </span>
         </div>

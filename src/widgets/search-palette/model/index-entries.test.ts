@@ -41,6 +41,7 @@ const sources = (locale: IndexSources['locale'] = 'en'): IndexSources => ({
   folders,
   archived,
   patterns,
+  progressions: [{ id: 'mine-1', name: 'Sunday loop', line: 'vi-IV-I-V', minor: false }],
 })
 const all = indexEntries(sources())
 const ofKind = (kind: IndexEntry['kind'], entries = all) =>
@@ -63,7 +64,7 @@ describe('indexEntries', () => {
     expect(ofKind('chords')).toHaveLength(CHORD_QUALITIES.length)
     expect(ofKind('scales')).toHaveLength(SCALE_KINDS.length)
     expect(ofKind('progressions')).toHaveLength(
-      libraryByStyle().flatMap((style) => style.progressions).length,
+      libraryByStyle().flatMap((style) => style.progressions).length + 1,
     )
     expect(ofKind('patterns')).toHaveLength(PATTERN_IDS.length)
     expect(ofKind('exercises')).toHaveLength(EXERCISES.length)
@@ -110,17 +111,21 @@ describe('indexEntries', () => {
     expect(titled(triads.title.ru, indexEntries(sources('ru'))).words).toContain(triads.title.en)
   })
 
-  it('shows a library progression by its line, opened in the mode it has', () => {
+  it('shows a library progression by its line, opening its own page (R30-4)', () => {
     const axis = ofKind('progressions').find((entry) => entry.id === 'progressions:axis')
     expect(axis).toMatchObject({
       title: 'Axis of Awesome',
       detail: 'I–V–vi–IV',
-      target: { opens: 'progression', p: 'I-V-vi-IV', minor: false },
+      target: { opens: 'progression', id: 'axis' },
     })
-    const minorOnly = ofKind('progressions').filter(
-      (entry) => entry.target.opens === 'progression' && entry.target.minor,
-    )
-    expect(minorOnly.length).toBeGreaterThan(0)
+  })
+
+  it('finds the progressions the learner keeps, by their names', () => {
+    expect(titled('Sunday loop')).toMatchObject({
+      kind: 'progressions',
+      detail: 'vi–IV–I–V',
+      target: { opens: 'progression', id: 'mine-1' },
+    })
   })
 
   it('names a pattern, an exercise and a trainer with a line on what each is', () => {

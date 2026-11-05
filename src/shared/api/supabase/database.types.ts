@@ -429,6 +429,7 @@ export type Database = {
       }
       chord_sheets: DocumentTable
       notifications: DocumentTable
+      practice_library: DocumentTable
       diagram_inversions: DocumentTable
       library: DocumentTable
       patterns: DocumentTable

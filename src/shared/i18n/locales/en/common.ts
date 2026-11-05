@@ -29,9 +29,28 @@ export const common = {
     toScales: 'Go to Scales and keys',
     toAccompaniment: 'Go to Accompaniment',
     toExercises: 'Go to Exercises',
+    toProgressions: 'Go to Progressions',
     toTakes: 'Go to the takes',
   },
   // The one confirm dialog (R17): Cancel is the default; a typed confirmation names what to type.
+  // A library's chrome (Songs', Practice's; ADR 0106): favourites, the search's sort, the filters.
+  library: {
+    favourites: 'Favourites',
+    favourite: 'Add to favourites',
+    unfavourite: 'Remove from favourites',
+    moreOf: 'More for {{name}}',
+    sort: 'Sort',
+    clearFilters: 'Clear filters',
+    // What the filters hide (Mindscape's FilteredNotice).
+    filtered: 'Shown: {{shown}} of {{total}}',
+    filters: {
+      title: 'Filters',
+      on: 'Filters: {{count}} on',
+      // What is on, as a removable chip under the search.
+      chips: 'Filters on',
+      remove: 'Remove {{name}}',
+    },
+  },
   confirm: { cancel: 'Cancel', type: 'Type “{{expect}}” to confirm' },
   update: {
     available: 'A new version is ready',

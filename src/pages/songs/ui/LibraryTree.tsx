@@ -77,6 +77,7 @@ function Place({
  */
 export function LibraryTree({ current, extra }: { current: TreePlace; extra?: ReactNode }) {
   const { t } = useTranslation('songs')
+  const { t: common } = useTranslation('common')
   const layout = useLibraryLayout()
   const nameOf = useFolderName()
   const favourites = useLibrary((state) => state.favourites.length)
@@ -162,7 +163,7 @@ export function LibraryTree({ current, extra }: { current: TreePlace; extra?: Re
           to="/songs"
           favourites
           icon={Heart}
-          label={t('favourites')}
+          label={common('library.favourites')}
           count={favourites}
           current={current === 'favourites'}
         />

@@ -342,7 +342,7 @@ export function ChordPlayer({
             size="lg"
             render={
               <Link
-                to="/practice/progressions"
+                to="/practice/progressions/line"
                 search={{ p: numeralsParam(numerals), key: keyParam(shown.key) }}
               />
             }

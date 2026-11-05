@@ -11,12 +11,12 @@ import { toggleFavourite } from '../toggle-favourite'
  * filled heart, as a pattern's star is; named by what a tap does.
  */
 export function FavouriteButton({ piece, className }: { piece: PieceId; className?: string }) {
-  const { t } = useTranslation('songs')
+  const { t } = useTranslation(['songs', 'common'])
   const store = useLibraryStoreApi()
   const favourite = useLibrary(selectIsFavourite(piece))
   return (
     <RoundButton
-      label={t(favourite ? 'library.unfavourite' : 'library.favourite')}
+      label={t(favourite ? 'common:library.unfavourite' : 'common:library.favourite')}
       icon={Heart}
       aria-pressed={favourite}
       onClick={() => toggleFavourite(store, piece)}

@@ -14,7 +14,7 @@ export function useCreateProgression() {
   return useCallback(
     async (name: string): Promise<NetResult<string>> => {
       const taken = libraryProgressions().map((each) => each.id)
-      const id = slug(name, [...taken, 'new'], 'progression')
+      const id = slug(name, [...taken, 'new', 'line'], 'progression')
       const progression = blankProgression(id, name.trim())
       const made = await editing.create('progression', id, {
         body: progression,

@@ -290,7 +290,7 @@ export const music = {
   // A list of patterns, Accompaniment's and the Setup's: the learner's shelves round the groups.
   patternShelf: { favourites: 'Favourites', own: 'Your patterns', hidden: 'Hidden' },
   // Accompaniment's parts after its method books', which their books name.
-  patternPart: { styles: 'Styles', yours: 'Yours' },
+  patternPart: { styles: 'Rhythm styles', yours: 'Mine' },
   // What plays on a page's keys, a lesson's and an explorer's alike: its Play, a line's and a bar's.
   play: 'Play',
   playNotes: 'Play {{notes}}',

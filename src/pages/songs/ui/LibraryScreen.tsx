@@ -2,7 +2,7 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { Archive } from 'lucide-react'
 import { useDeferredValue, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { RowLink } from '@/shared/ui'
+import { LIBRARY_PANES, RowLink } from '@/shared/ui'
 import {
   folderArchive,
   libraryCatalog,
@@ -29,9 +29,6 @@ import { SharedWithMe } from './SharedWithMe'
 import { NewActions } from './NewActions'
 import { SelectionBar } from './SelectionBar'
 
-/** The width from which the library shows its tree beside the songs: the sidebar's, `lg`. */
-const TWO_PANES = '(min-width: 64rem)'
-
 /**
  * A place of the library (ADR 0106, Mindscape's `DeckLibraryPage`): Home (`folder` null, My songs
  * in Songs' switch), its folders then its own songs, or a folder, its songs; the bar, the search and filters, the rows read
@@ -53,7 +50,7 @@ export function LibraryScreen({
   const navigate = useNavigate()
   const q = useDeferredValue(filter.q)
   // A laptop's two panes (R30 S2): the library's tree on the left, the place's songs on the right.
-  const wide = useMediaQuery(TWO_PANES)
+  const wide = useMediaQuery(LIBRARY_PANES)
   const page = useLibraryPage(folder, { ...filter, q }, { tree: wide })
   // Import, from New or a file dropped on the library, made where the learner is (ADR 0107).
   const songImport = useSongImport(folder?.id ?? null)

@@ -1,27 +1,21 @@
 import { barOf, useSettings } from '@/entities/settings'
-import { Heart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { FOLDER_PICTURE_ICONS, useLibrary } from '@/entities/library'
 import { PieceLink, type Entry } from '@/entities/piece'
 import { cn, useLongPress } from '@/shared/lib'
-import { RowFace, SwipeRow } from '@/shared/ui'
+import {
+  FavouriteMark,
+  menuOf,
+  ROW_BODY,
+  ROW_CARD,
+  RowFace,
+  RowMore,
+  swipeOf,
+  SwipeRow,
+  type RowAction,
+} from '@/shared/ui'
 import { useEntryFace } from '@/widgets/piece-list'
-import { menuOf, swipeOf, type RowAction } from '../model/row-actions'
-import { ROW_BODY, ROW_CARD } from './row-class'
-import { RowMore } from './RowMore'
 import { useCardLook } from './card-look'
-
-/** A favourite's small filled ♡, at its row's end, read and chosen alike. */
-export function FavouriteMark() {
-  const { t } = useTranslation('songs')
-  return (
-    <Heart
-      role="img"
-      aria-label={t('favourites')}
-      className="size-4 shrink-0 fill-current text-muted-foreground"
-    />
-  )
-}
 
 /** A song's swipe (ADR 0106): to the right Favourite; to the left Move, then Archive at the edge. */
 
@@ -43,7 +37,7 @@ export function SongRow({
   /** Starts Select with this song chosen: a long press on it. */
   onSelect: () => void
 }) {
-  const { t } = useTranslation('songs')
+  const { t } = useTranslation('common')
   // What each swipe offers: the learner's (R29 B10, Settings › Swipe actions).
   const leading = useSettings((state) => barOf(state.bars, 'swipe.songs.leading'))
   const trailing = useSettings((state) => barOf(state.bars, 'swipe.songs.trailing'))

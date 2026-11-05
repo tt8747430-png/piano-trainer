@@ -74,7 +74,7 @@ export function PractiseChords({
                 {...PAGE_TILES.progressions}
                 render={
                   <Link
-                    to="/practice/progressions"
+                    to="/practice/progressions/line"
                     search={{
                       key: keyParam(circleKey(pitchClassOf(root), minor)),
                       p: libraryParam(progression, minor),

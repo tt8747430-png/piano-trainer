@@ -510,7 +510,7 @@ describe('LessonView’s accompaniment', () => {
       { timeout: 5000 },
     )
     const tool = screen.getByRole('link', { name: 'Open in Progressions' }).getAttribute('href')
-    expect(tool).toMatch(/^\/practice\/progressions\?/)
+    expect(tool).toMatch(/^\/practice\/progressions\/line\?/)
     expect(tool).toMatch(/[?&]p=ii-V-I(&|$)/)
     expect(tool).toMatch(/[?&]key=C(&|$)/)
     expect(tool).toMatch(/[?&]size=sevenths(&|$)/)
@@ -630,7 +630,7 @@ describe('LessonView’s accompaniment', () => {
     // Passing chords, on Progressions: the pair as a line in its key.
     expect(screen.getByRole('link', { name: 'C to F, between' })).toHaveAttribute(
       'href',
-      '/practice/progressions?key=C&p=I-IV',
+      '/practice/progressions/line?key=C&p=I-IV',
     )
     // A melody note harmonised, on the Key view of its key.
     expect(screen.getByRole('link', { name: 'E harmonised' })).toHaveAttribute(

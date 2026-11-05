@@ -1,5 +1,6 @@
 export {
   LEFT_FIGURE_IDS,
+  PATTERN_GROUPS,
   PATTERN_IDS,
   RIGHT_FIGURE_IDS,
   isLeftFigureId,
@@ -47,7 +48,8 @@ export {
 export { PatternsStoreProvider, usePatterns, usePatternsStoreApi } from './model/context'
 export { usePatternBook } from './model/use-pattern-book'
 export { ACCOMPANIMENT_PARTS, isAccompanimentPart, type AccompanimentPart } from './model/parts'
-export { partOfShelf, partShelves, pickerShelves } from './model/shelves'
+export { partOfShelf, pickerShelves } from './model/shelves'
+export { patternsIn } from './model/groups'
 export { followsInversion } from './model/plays-chord'
 export {
   selectFavourites,

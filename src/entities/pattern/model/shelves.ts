@@ -54,23 +54,6 @@ function shelves(
   ].filter((shelf) => shelf.patterns.length > 0)
 }
 
-/**
- * One part of Accompaniment: a book's groups or the rhythm styles without the hidden; on Yours the
- * favourites, the learner's own, and the hidden at the end, so one can be found and shown again.
- */
-export function partShelves(
-  book: PatternBook,
-  choices: Choices,
-  part: AccompanimentPart,
-): PatternShelf[] {
-  const hidden = new Set(choices.hidden)
-  const shown = shelves(book, choices, (id) => hidden.has(id))
-  const away = inBook(book, choices.hidden)
-  const all: PatternShelf[] =
-    away.length > 0 ? [...shown, { shelf: 'hidden', patterns: away }] : shown
-  return all.filter(({ shelf }) => partOfShelf(shelf) === part)
-}
-
 /** The Setup's picker: every part's shelves together, the hidden left out, all but the one playing now. */
 export function pickerShelves(
   book: PatternBook,

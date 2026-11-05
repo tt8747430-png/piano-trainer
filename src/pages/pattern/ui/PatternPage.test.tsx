@@ -72,7 +72,7 @@ describe('A pattern’s page', () => {
     expect(patternsStore.getState().hidden).toEqual(['ballad'])
     expect(
       screen.getByText(
-        'Hidden from the Player’s list and from its shelf. You can still find it under Yours.',
+        'Hidden from the Player’s list and from its book. You can still find it under Hidden.',
       ),
     ).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'More' }))
@@ -105,15 +105,15 @@ describe('A pattern’s page', () => {
     await user.click(within(more).getByRole('menuitem', { name: 'Delete' }))
     await user.click(await screen.findByRole('button', { name: 'Delete' }))
     await waitFor(() =>
-      expect(router.state.location.href).toBe('/practice/accompaniment?show=yours'),
+      expect(router.state.location.href).toBe('/practice/accompaniment?place=mine'),
     )
     expect(patternsStore.getState()).toMatchObject({ own: [], favourites: [] })
   })
 
   it.each([
-    ['M1', '/practice/accompaniment'],
-    ['r1', '/practice/accompaniment?show=seven-types'],
-    ['ballad', '/practice/accompaniment?show=styles'],
+    ['M1', '/practice/accompaniment?place=called-to-play'],
+    ['r1', '/practice/accompaniment?place=seven-types'],
+    ['ballad', '/practice/accompaniment?place=styles'],
   ])('goes back from %s, opened directly, to its page of Accompaniment', async (ref, page) => {
     const user = userEvent.setup()
     const { router } = await renderApp(`/practice/accompaniment/patterns/${ref}`)
@@ -121,7 +121,7 @@ describe('A pattern’s page', () => {
     await waitFor(() => expect(router.state.location.href).toBe(page))
   })
 
-  it('goes back from a hidden pattern, opened directly, to Yours, where Hidden lists it', async () => {
+  it('goes back from a hidden pattern, opened directly, to Hidden, which lists it', async () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
     storage.setItem(
@@ -134,7 +134,7 @@ describe('A pattern’s page', () => {
     const { router } = await renderApp('/practice/accompaniment/patterns/ballad', { storage })
     await user.click(await screen.findByRole('button', { name: 'Back' }))
     await waitFor(() =>
-      expect(router.state.location.href).toBe('/practice/accompaniment?show=yours'),
+      expect(router.state.location.href).toBe('/practice/accompaniment?place=hidden'),
     )
   })
 

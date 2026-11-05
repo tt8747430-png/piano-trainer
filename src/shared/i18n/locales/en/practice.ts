@@ -283,7 +283,7 @@ export const practice = {
   progressions: {
     edit: {
       open: 'Edit the progression',
-      new: 'New progression',
+      new: 'New in the library',
       bar: 'Edit progression',
       lines: 'Lines',
       heading: 'The progression',
@@ -307,10 +307,22 @@ export const practice = {
     minorLine: 'These numerals are a minor key’s.',
     playIn: 'Play them in {{key}}',
     throughKeys: 'Practise in all 12 keys',
-    inChordPlayer: 'Play in the Chord player',
-    // Progressions' tabs (A23).
-    tabs: { progression: 'Progression', library: 'Library', passing: 'Passing chords' },
-    allStyles: 'All styles',
+    inChordPlayer: 'Play it in the Chord player',
+    inChordPlayerLine: 'With a band, in any style',
+    // The learner's own progressions, Mine (R30-4): kept from a line typed, renamed, deleted.
+    mine: {
+      new: 'New progression',
+      keep: 'Keep in Mine',
+      edit: 'Edit the progression',
+      name: 'Name',
+      line: 'Chords',
+      create: 'Keep progression',
+      save: 'Save',
+      more: 'More',
+      delete: 'Delete',
+      deleting: 'Delete “{{name}}”?',
+      deletingBody: 'It leaves Mine for good.',
+    },
     // How the row is read and played (ADR 0112): its mode, how its chords are named, voice-led or blocks.
     mode: {
       label: 'Mode',
@@ -334,11 +346,6 @@ export const practice = {
       label: 'First chord’s inversion',
       info: 'The position a voice-led row starts in; each chord after it moves to the nearest one. A triad has no 3rd inversion, so it starts from its 2nd.',
     },
-    // The library as cards, a card a progression (ADR 0112).
-    library: 'Library',
-    chordCount_one: '{{count}} chord',
-    chordCount_other: '{{count}} chords',
-    chordsIn: 'Its chords in the key',
     /** What leads into each chord of the progression (ADR 0112). */
     lead: {
       label: 'Approach chords',
@@ -371,11 +378,6 @@ export const practice = {
     },
   },
   // The line of a part of Accompaniment with no pattern to show.
-  accompaniment: {
-    source: 'Source',
-    noneYours: 'Patterns you star, make or hide are kept here.',
-    allHidden: 'Every pattern here is hidden. You can find them under Yours.',
-  },
   // Patterns: each explained and heard, the learner's favourites, hidden and own.
   patterns: {
     new: 'New pattern',
@@ -389,7 +391,7 @@ export const practice = {
     hide: 'Hide from the Player',
     show: 'Show in the Player',
     hiddenNote:
-      'Hidden from the Player’s list and from its shelf. You can still find it under Yours.',
+      'Hidden from the Player’s list and from its book. You can still find it under Hidden.',
     edit: 'Edit',
     delete: 'Delete',
     deleting: {
@@ -595,6 +597,64 @@ export const practice = {
       technique: 'Finger technique',
       barryHarris: 'Barry Harris',
       jonny: 'Piano With Jonny',
+    },
+  },
+  // One library for Exercises, Accompaniment and Progressions (R30-4), the Songs library's shape.
+  library: {
+    rows: 'The library',
+    all: 'All',
+    books: 'Books',
+    styles: 'Styles',
+    mine: 'Mine',
+    hidden: 'Hidden',
+    searchHint: 'Search',
+    songsOf: '{{book}}: songs',
+    // An accompaniment's hands, each its figure.
+    handsLine: 'LH: {{left}} · RH: {{right}}',
+    showAll: 'Show all {{count}}',
+    anyLevel: 'Any',
+    anyStyle: 'Any',
+    chipLevel: 'Level: {{level}}',
+    show: 'Show {{count}}',
+    showNone: 'Nothing to show',
+    clear: 'Clear',
+    noFavourites: 'No favourites yet',
+    noneFiltered: 'Nothing here matches these filters.',
+    empty: 'Nothing here yet.',
+    table: {
+      name: 'Name',
+      book: 'Book',
+      style: 'Style',
+      level: 'Level',
+      hands: 'Hands',
+      numerals: 'Numerals',
+      actions: 'Actions',
+    },
+    kinds: {
+      exercises: {
+        tree: 'Exercises by book',
+        search: 'Search exercises',
+        noMatch: 'No exercises match “{{query}}”.',
+        favouritesHint: 'Tap ⋯ on an exercise, then Add to favourites.',
+        all: 'All exercises',
+        mineEmpty: 'Nothing of your own here yet.',
+      },
+      accompaniment: {
+        tree: 'Accompaniment by book',
+        search: 'Search accompaniment',
+        noMatch: 'No patterns or songs match “{{query}}”.',
+        favouritesHint: 'Tap ⋯ on a pattern or a song, then Add to favourites.',
+        all: 'All accompaniment',
+        mineEmpty: 'Patterns you make are kept here.',
+      },
+      progressions: {
+        tree: 'Progressions by style',
+        search: 'Search progressions',
+        noMatch: 'No progressions match “{{query}}”.',
+        favouritesHint: 'Tap ⋯ on a progression, then Add to favourites.',
+        all: 'All progressions',
+        mineEmpty: 'Progressions you keep are here.',
+      },
     },
   },
   quiz: {

@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { archivedSongs, useFolderName, useLibraryLayout } from '@/entities/library'
 import { PATTERN_IDS, usePatternBook } from '@/entities/pattern'
+import { selectOwnProgressions, usePracticeLibrary } from '@/entities/practice-library'
 import { allCollections, useRepertoire } from '@/entities/piece'
 import { useKeyName, useLocale } from '@/shared/i18n'
 import { usePageWords } from '@/widgets/practice-pages'
@@ -38,6 +39,7 @@ export function useIndex(names: IndexNames): IndexEntry[] {
   const book = usePatternBook()
   const library = useLibraryLayout()
   const folderName = useFolderName()
+  const progressions = usePracticeLibrary(selectOwnProgressions)
   return useMemo(
     () =>
       indexEntries({
@@ -60,7 +62,8 @@ export function useIndex(names: IndexNames): IndexEntry[] {
           ),
         ),
         patterns: [...book.own, ...PATTERN_IDS.map((id) => book.require(id))],
+        progressions,
       }),
-    [locale, names, repertoire, library, folderName, book],
+    [locale, names, repertoire, library, folderName, book, progressions],
   )
 }

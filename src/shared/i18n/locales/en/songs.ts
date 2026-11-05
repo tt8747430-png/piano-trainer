@@ -16,9 +16,6 @@ export const songs = {
   emptyKey: 'No songs here in {{key}}.',
   emptyFilters: 'No songs here match these filters.',
   emptyQueryFilters: 'No songs match “{{query}}” with these filters.',
-  clearFilters: 'Clear filters',
-  // What the filters hide (Mindscape's FilteredNotice).
-  filtered: 'Shown: {{shown}} of {{total}}',
   // A song's row counts its chords, each once over any bass (Chordify's 7 Tips: three to five for a
   // beginner).
   chordCount_one: '{{count}} chord',
@@ -31,8 +28,6 @@ export const songs = {
     noFolder: 'Not in a folder',
     learned: 'Learned',
     notLearned: 'Not learned yet',
-    title: 'Filters',
-    on: 'Filters: {{count}} on',
     key: 'Key',
     anyKey: 'Any key',
     // A key chosen, with how many songs here are in it.
@@ -41,16 +36,11 @@ export const songs = {
     show_one: 'Show {{count}} song',
     show_other: 'Show {{count}} songs',
     showNone: 'No songs to show',
-    // What is on, as a removable chip under the search.
-    chips: 'Filters on',
     chipKey: 'Key: {{key}}',
     chipStage: 'Level: {{stage}}',
-    remove: 'Remove {{name}}',
   },
-  favourites: 'Favourites',
   // The library's sort, kept (ADR 0106).
   sort: {
-    label: 'Sort',
     manual: 'Manual',
     name: 'Name',
     recent: 'Recently played',
@@ -147,14 +137,11 @@ export const songs = {
     editScore: 'Edit score',
     settings: 'Settings',
     shareLink: 'Share link',
-    favourite: 'Add to favourites',
-    unfavourite: 'Remove from favourites',
     moveTo: 'Move to folder…',
     archive: 'Archive',
     restore: 'Restore',
     delete: 'Delete',
     more: 'More',
-    moreOf: 'More for {{name}}',
     undo: 'Undo',
     moved: '“{{title}}” moved to {{place}}',
     movedMany: 'Moved to {{place}}: {{count}}',

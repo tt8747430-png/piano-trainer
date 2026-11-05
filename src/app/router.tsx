@@ -16,6 +16,7 @@ import {
   type PatternsStore,
 } from '@/entities/pattern'
 import type { LibraryStore } from '@/entities/library'
+import type { PracticeLibraryStore } from '@/entities/practice-library'
 import type { PiecesStore } from '@/entities/piece'
 import type { TakesStore } from '@/entities/take'
 import type { ViewsStore } from '@/entities/views'
@@ -31,19 +32,15 @@ import { RoutePending } from './RoutePending'
 import { callbackSearch } from './routes/account-search'
 import { adminSearch } from './routes/admin-search'
 import { ensureContent } from './routes/content'
-import {
-  accompanimentSearch,
-  readAccompanimentSearch,
-  validateNewPatternSearch,
-} from './routes/accompaniment-search'
+import { validateNewPatternSearch } from './routes/accompaniment-search'
 import {
   CHORDS_KEPT,
   chordsSearch,
   intervalsSearch,
+  progressionSearch,
   progressionsSearch,
   readChordsSearch,
   readIntervalsSearch,
-  readProgressionsSearch,
   readScalesSearch,
   SCALES_KEPT,
   scalesSearch,
@@ -70,6 +67,9 @@ import {
 import { LEARN_KEPT, learnSearch, readLearnSearch } from './routes/learn-search'
 import {
   exercisePageSearch,
+  PRACTICE_LIBRARY_KEPT,
+  practiceLibrarySearch,
+  readPracticeLibrarySearch,
   readTrainerSearch,
   trainerSearch,
   validateCheckSearch,
@@ -142,6 +142,7 @@ export interface RouterContext {
   readonly pieces: PiecesStore
   readonly takes: TakesStore
   readonly library: LibraryStore
+  readonly practiceLibrary: PracticeLibraryStore
   readonly content: ContentPort
 }
 
@@ -569,6 +570,8 @@ const quizRoute = createRoute({
 const exercisesRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/exercises',
+  ...practiceLibrarySearch,
+  ...remembered(readPracticeLibrarySearch, PRACTICE_LIBRARY_KEPT, PRACTICE_LIBRARY_KEPT),
   component: lazyRouteComponent(practiceScreens, 'ExercisesPage'),
 })
 // An exercise's page (A41): what it trains, how to play it, and what to start it at.
@@ -654,12 +657,32 @@ const intervalsRoute = createRoute({
   ...remembered(readIntervalsSearch, []),
   component: lazyRouteComponent(explorerScreens, 'IntervalsPage'),
 })
+// Progressions (R30-4): the library, a progression's own page (the library's or the learner's own),
+// and a line typed, which every link to a line of chords opens.
 const progressionsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/progressions',
-  ...progressionsSearch,
-  ...remembered(readProgressionsSearch, []),
+  ...practiceLibrarySearch,
+  ...remembered(readPracticeLibrarySearch, PRACTICE_LIBRARY_KEPT, PRACTICE_LIBRARY_KEPT),
   component: lazyRouteComponent(explorerScreens, 'ProgressionsPage'),
+})
+const progressionLineRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/progressions/line',
+  ...progressionsSearch,
+  component: lazyRouteComponent(explorerScreens, 'ProgressionLinePage'),
+})
+const progressionRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/progressions/$progressionId',
+  notFoundComponent: notFoundIn('progressions'),
+  ...progressionSearch,
+  beforeLoad: async ({ params, context }) => {
+    const { isProgressionThere } = await explorerScreens()
+    const own = context.practiceLibrary.getState().progressions
+    if (!isProgressionThere(params.progressionId, own)) throw notFound()
+  },
+  component: lazyRouteComponent(explorerScreens, 'ProgressionPage'),
 })
 // An editor's progression editor (content as data, ADR 0116), and a new progression.
 const progressionEditRoute = createRoute({
@@ -736,8 +759,8 @@ const tunerSettingsRoute = createRoute({
 const accompanimentRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/accompaniment',
-  ...accompanimentSearch,
-  ...remembered(readAccompanimentSearch, []),
+  ...practiceLibrarySearch,
+  ...remembered(readPracticeLibrarySearch, PRACTICE_LIBRARY_KEPT, PRACTICE_LIBRARY_KEPT),
   component: lazyRouteComponent(accompanimentScreens, 'AccompanimentPage'),
 })
 /** Whether a ref names a pattern the book holds: every built-in, and the learner's own still kept. */
@@ -1093,6 +1116,8 @@ const routeTree = rootRoute.addChildren([
     scalesRoute,
     intervalsRoute,
     progressionsRoute,
+    progressionLineRoute,
+    progressionRoute,
     progressionEditRoute,
     progressionSettingsRoute,
     progressionPublishRoute,
@@ -1151,12 +1176,13 @@ export function createAppRouter({
   pieces,
   takes,
   library,
+  practiceLibrary,
   content,
 }: RouterContext & { history?: RouterHistory }) {
   const router = createRouter({
     routeTree,
     history,
-    context: { views, patterns, pieces, takes, library, content },
+    context: { views, patterns, pieces, takes, library, practiceLibrary, content },
     defaultPreload: 'intent',
     defaultErrorComponent: RouteError,
     defaultPendingComponent: RoutePending,

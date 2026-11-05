@@ -1,7 +1,7 @@
 import type { RegisteredRouter, ValidateNavigateOptions } from '@tanstack/react-router'
 import { Music } from 'lucide-react'
 import { OPEN_PLAINLY, qualityParams, type Up } from '@/shared/lib'
-import { keyParam, note, noteParam } from '@/shared/lib/music'
+import { noteParam } from '@/shared/lib/music'
 import { PAGE_TILES, type Tile } from '@/shared/ui'
 import { PRACTICE_PAGES } from '@/widgets/practice-pages'
 import type { IndexTarget } from './index-entries'
@@ -74,18 +74,17 @@ export function targetLink(target: IndexTarget): { readonly link: Up; readonly t
     case 'progression':
       return {
         link: opens({
-          to: '/practice/progressions',
-          search: {
-            p: target.p,
-            key: keyParam({ tonic: note('C'), minor: target.minor }),
-            ...(target.size ? { size: target.size } : {}),
-          },
+          to: '/practice/progressions/$progressionId',
+          params: { progressionId: target.id },
         }),
         tile: PAGE_TILES.progressions,
       }
     case 'typed-line':
       return {
-        link: opens({ to: '/practice/progressions', search: { key: target.key, p: target.p } }),
+        link: opens({
+          to: '/practice/progressions/line',
+          search: { key: target.key, p: target.p },
+        }),
         tile: PAGE_TILES.progressions,
       }
     case 'pattern':

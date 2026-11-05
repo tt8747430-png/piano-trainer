@@ -35,8 +35,7 @@ import { PRACTICE_RHYTHM_IDS, TEMPO_RANGE } from '@/shared/lib/schedule'
 import type { ChordView } from '@/widgets/chord-explorer'
 import { INTERVAL_WAYS, type IntervalWay } from '@/shared/lib/schedule'
 import type { IntervalView } from '@/widgets/interval-explorer'
-import type { ProgressionStyle } from '@/entities/progression-library'
-import type { ProgressionsView } from '@/widgets/progression-explorer'
+import type { ProgressionSearch, ProgressionsView } from '@/widgets/progression-explorer'
 import type { ScaleShow, ScaleView } from '@/widgets/scale-explorer'
 import {
   C_MAJOR_PARAM,
@@ -188,8 +187,8 @@ export function readIntervalsSearch(raw: Raw): IntervalView {
 }
 export const intervalsSearch = routeSearch(readIntervalsSearch, INTERVALS_DEFAULTS)
 
-// Progressions: numerals in a key at a chord size, and what leads into each chord, where something
-// does; an unread line is the Player's own.
+// A line typed (R30-4, `/practice/progressions/line`): numerals in a key at a chord size, and what
+// leads into each chord, where something does; an unread line is the Player's own.
 export const PROGRESSIONS_DEFAULTS: ProgressionsView = {
   key: C_MAJOR_PARAM,
   p: PROGRESSION.numerals,
@@ -212,17 +211,9 @@ export function readProgressionsSearch(raw: Raw): ProgressionsView {
         : undefined,
     inKey: raw.inKey === true ? true : undefined,
     mode: isChurchMode(raw.mode) ? raw.mode : undefined,
-    tab: raw.tab === 'library' || raw.tab === 'passing' ? raw.tab : undefined,
-    style: isProgressionStyle(raw.style) ? raw.style : undefined,
   }
 }
 const isChurchMode = isOneOf(CHURCH_MODES)
-/**
- * A library style as a word: the styles are the library's (content, not startup's), so the page
- * shows every style for one it doesn't know.
- */
-const isProgressionStyle = (value: unknown): value is ProgressionStyle =>
-  typeof value === 'string' && /^[a-z]{1,20}$/.test(value)
 /** Progressions' line left out of the URL only where its key opens on it. */
 const stripOpeningLine: SearchMiddleware<ProgressionsView> = (context) => {
   const search = context.next(context.search)
@@ -239,3 +230,18 @@ export const progressionsSearch = {
     middlewares: [stripSearchParams<ProgressionsView>(PROGRESSIONS_STRIPPED), stripOpeningLine],
   },
 }
+
+// A library's or the learner's own progression's page (R30-4): the key it is shown in, its chord size
+// (its own where left out), what leads into each chord, Passing chords' pair and In the key only.
+const PROGRESSION_DEFAULTS: ProgressionSearch = { key: C_MAJOR_PARAM }
+export function readProgressionSearch(raw: Raw): ProgressionSearch {
+  const line = readProgressionsSearch(raw)
+  return {
+    key: line.key,
+    size: isChordSize(raw.size) ? raw.size : undefined,
+    lead: line.lead,
+    between: line.between,
+    inKey: line.inKey,
+  }
+}
+export const progressionSearch = routeSearch(readProgressionSearch, PROGRESSION_DEFAULTS)

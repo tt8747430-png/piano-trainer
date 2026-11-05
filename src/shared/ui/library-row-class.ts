@@ -1,4 +1,4 @@
-// A row of the library (ADR 0106), as the list draws it, as Select draws it and as the hand holds it
+// A row of a library (Songs', Practice's; ADR 0106), as the list draws it, as Select draws it and as the hand holds it
 // (Mindscape's `row-style`: the drag's overlay is the row it came from, never a row of another size).
 
 /**

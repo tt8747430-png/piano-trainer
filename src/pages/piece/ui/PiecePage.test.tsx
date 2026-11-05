@@ -83,7 +83,7 @@ describe('Piece', () => {
       'Plagal cadenceI–IV–I',
     ])
     const href = new URL(links[0]?.getAttribute('href') ?? '', 'http://x')
-    expect(href.pathname).toBe('/practice/progressions')
+    expect(href.pathname).toBe('/practice/progressions/line')
     expect(Object.fromEntries(href.searchParams)).toEqual({ key: 'G', p: 'I-IV-I-V' })
   })
 

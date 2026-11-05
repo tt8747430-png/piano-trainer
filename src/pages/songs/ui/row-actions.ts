@@ -15,7 +15,7 @@ import {
 import type { TFunction } from 'i18next'
 import type { ShelvedFolder } from '@/entities/library'
 import { isPiece, type Entry } from '@/entities/piece'
-import type { RowAction } from '@/widgets/song-library'
+import type { RowAction } from '@/shared/ui'
 import type { LibraryPage } from '../model/use-library-page'
 
 /**
@@ -24,7 +24,11 @@ import type { LibraryPage } from '../model/use-library-page'
  * B4); Share link and Export… (its files, ADR 0107) where it has music; Archive, and Delete for the
  * learner's own song alone, asked first.
  */
-export function songActions(entry: Entry, page: LibraryPage, t: TFunction<'songs'>): RowAction[] {
+export function songActions(
+  entry: Entry,
+  page: LibraryPage,
+  t: TFunction<['songs', 'common']>,
+): RowAction[] {
   const favourite = page.favourites.includes(entry.id)
   const music = isPiece(entry)
   return [
@@ -63,7 +67,7 @@ export function songActions(entry: Entry, page: LibraryPage, t: TFunction<'songs
     {
       key: 'favourite',
       group: 'library',
-      label: t(favourite ? 'library.unfavourite' : 'library.favourite'),
+      label: t(favourite ? 'common:library.unfavourite' : 'common:library.favourite'),
       icon: favourite ? HeartOff : Heart,
       paint: 'sand',
       onSelect: () => page.acts.toggleFavourite(entry.id),

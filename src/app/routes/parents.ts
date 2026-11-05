@@ -91,11 +91,11 @@ const toPattern: Parent = (from) =>
     params: { patternRef: param(from, 'patternRef') },
   })
 const toAccompaniment: Parent = () => up({ to: '/practice/accompaniment' })
-/** A pattern up to the page of Accompaniment that lists it. */
-const toPatternPart: Parent = async (from) => {
-  const { patternPart } = await import('./accompaniment-screens')
-  const show = patternPart(from.context.patterns.getState(), param(from, 'patternRef'))
-  return up({ to: '/practice/accompaniment', search: { show } })
+/** A pattern up to the place of Accompaniment's library that lists it. */
+const toPatternPlace: Parent = async (from) => {
+  const { patternPlace } = await import('./accompaniment-screens')
+  const place = patternPlace(from.context.patterns.getState(), param(from, 'patternRef'))
+  return up({ to: '/practice/accompaniment', search: { place } })
 }
 const toStudy: Parent = (from) =>
   up({
@@ -204,11 +204,19 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
       search: readScalesSearch({ root: search.root, kind: search.kind, show: 'chords' }),
     }),
   '/full-screen/play/chromatic': toPractice,
-  '/full-screen/play/progression': ({ search }) =>
-    up({
-      to: '/practice/progressions',
-      search: readProgressionsSearch({ p: search.p, key: search.key }),
-    }),
+  // The Player of a progression: up to its page, the library's where the line is the library's.
+  '/full-screen/play/progression': async ({ search }) => {
+    const line = readProgressionsSearch({ p: search.p, key: search.key })
+    const { libraryLineId } = await import('./progression-place')
+    const progressionId = libraryLineId(line.p, line.key)
+    return progressionId
+      ? up({
+          to: '/practice/progressions/$progressionId',
+          params: { progressionId },
+          search: { key: line.key },
+        })
+      : up({ to: '/practice/progressions/line', search: line })
+  },
   '/full-screen/play/exercise/$exerciseId': (from) =>
     up({
       to: '/practice/exercises/$exerciseId',
@@ -263,7 +271,20 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/practice/scales': toPractice,
   '/shell/practice/intervals': toPractice,
   '/shell/practice/progressions': toPractice,
-  '/shell/practice/progressions/$progressionId/edit': () => up({ to: '/practice/progressions' }),
+  '/shell/practice/progressions/line': () => up({ to: '/practice/progressions' }),
+  '/shell/practice/progressions/$progressionId': async (from) => {
+    const { progressionPlace } = await import('./progression-place')
+    const place = progressionPlace(param(from, 'progressionId'))
+    return up({ to: '/practice/progressions', search: { place } })
+  },
+  // An editor's editor: up to the progression's page where the library has it, else the library.
+  '/shell/practice/progressions/$progressionId/edit': async (from) => {
+    const { progressionPlace } = await import('./progression-place')
+    const progressionId = param(from, 'progressionId')
+    return progressionPlace(progressionId) === 'all'
+      ? up({ to: '/practice/progressions' })
+      : up({ to: '/practice/progressions/$progressionId', params: { progressionId } })
+  },
   '/shell/practice/progressions/$progressionId/settings': (from) =>
     up({
       to: '/practice/progressions/$progressionId/edit',
@@ -291,10 +312,16 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/practice/exercises/$exerciseId': () => up({ to: '/practice/exercises' }),
   '/shell/practice/accompaniment': toPractice,
   '/shell/practice/accompaniment/patterns/new': toAccompaniment,
-  '/shell/practice/accompaniment/patterns/$patternRef': toPatternPart,
+  '/shell/practice/accompaniment/patterns/$patternRef': toPatternPlace,
   '/shell/practice/accompaniment/patterns/$patternRef/edit': toPattern,
   '/shell/practice/accompaniment/patterns/$patternRef/publish': toPattern,
-  '/shell/practice/accompaniment/studies/$pieceId': toAccompaniment,
+  '/shell/practice/accompaniment/studies/$pieceId': async (from) => {
+    const { studyPlace } = await import('./accompaniment-screens')
+    return up({
+      to: '/practice/accompaniment',
+      search: { place: studyPlace(param(from, 'pieceId')) },
+    })
+  },
   '/shell/practice/accompaniment/studies/$pieceId/sections/$section': toStudy,
 }
 

@@ -1,4 +1,4 @@
-import { isStepId, type StepId } from '@/entities/step'
+import { isStage, isStepId, type StepId } from '@/entities/step'
 import {
   isCardSide,
   isDrill,
@@ -9,7 +9,8 @@ import {
 } from '@/features/trainer'
 import { isHanonNumber, isHanonRhythm, isOctaves, isTonality } from '@/entities/exercise'
 import type { ExercisePageSearch } from '@/pages/exercise'
-import { readNote, valueOr, wholeIn } from '@/shared/lib'
+import type { PracticeLibraryView, PracticeSort } from '@/widgets/practice-library'
+import { readNote, readText, valueOr, wholeIn } from '@/shared/lib'
 import { noteParam, parseNoteInOctave, PIANO } from '@/shared/lib/music'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import { isHands, routeSearch, type Input, type Raw } from './read-search'
@@ -103,3 +104,40 @@ export function readExercisePageSearch(raw: Raw): ExercisePageSearch {
   }
 }
 export const exercisePageSearch = routeSearch(readExercisePageSearch, EXERCISE_PAGE_DEFAULTS)
+
+// A library of Practice's (R30-4: Exercises, Accompaniment, Progressions), as Songs' holds its
+// filters: what is searched, the sort, the place open in its tree, the one level shown. A place is a
+// word the page reads against its own books; one it does not have shows All.
+export const PRACTICE_LIBRARY_DEFAULTS: PracticeLibraryView = {
+  q: '',
+  sort: 'group',
+  place: 'all',
+  stage: 'any',
+}
+const PRACTICE_SORTS: readonly string[] = [
+  'group',
+  'name',
+  'level',
+] satisfies readonly PracticeSort[]
+const isPracticeSort = (value: unknown): value is PracticeSort =>
+  typeof value === 'string' && PRACTICE_SORTS.includes(value)
+export function readPracticeLibrarySearch(raw: Raw): PracticeLibraryView {
+  return {
+    q: readText(raw.q, PRACTICE_LIBRARY_DEFAULTS.q),
+    sort: isPracticeSort(raw.sort) ? raw.sort : PRACTICE_LIBRARY_DEFAULTS.sort,
+    place:
+      typeof raw.place === 'string' && /^[a-z0-9-]{1,40}$/i.test(raw.place)
+        ? raw.place
+        : PRACTICE_LIBRARY_DEFAULTS.place,
+    stage: isStage(raw.stage) ? raw.stage : PRACTICE_LIBRARY_DEFAULTS.stage,
+  }
+}
+/** What a library remembers between visits: its place and its sort; the search and level are one visit's. */
+export const PRACTICE_LIBRARY_KEPT = [
+  'place',
+  'sort',
+] as const satisfies readonly (keyof PracticeLibraryView)[]
+export const practiceLibrarySearch = routeSearch(
+  readPracticeLibrarySearch,
+  PRACTICE_LIBRARY_DEFAULTS,
+)

@@ -78,7 +78,7 @@ describe('Practice pages’ Settings (A24, R18)', () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings/accompaniment')
     await title('Accompaniment')
-    await user.click(screen.getByRole('switch', { name: 'Styles' }))
+    await user.click(screen.getByRole('switch', { name: 'Rhythm styles' }))
     expect(settingsStore.getState().accompaniment.hidden).toEqual(['styles'])
   })
 })

@@ -5,7 +5,7 @@ import { cn } from '@/shared/lib'
 
 /** A tree row's look: a link or button the width of the pane, the place open marked by `aria-current`. */
 export const TREE_ITEM =
-  'flex min-h-10 min-w-0 flex-1 items-center gap-2.5 rounded-control px-2 text-[0.9375rem] font-medium text-foreground transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3 aria-[current=page]:bg-chosen aria-[current=page]:font-semibold'
+  'flex min-h-11 min-w-0 flex-1 items-center gap-2.5 rounded-control px-2 text-[0.9375rem] font-medium text-foreground transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3 aria-[current=page]:bg-chosen aria-[current=page]:font-semibold'
 
 /** A count at a tree row's end, in soft ink. */
 export const TreeCount = ({ n }: { n: number }) => (
