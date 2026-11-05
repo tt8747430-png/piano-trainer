@@ -49,6 +49,8 @@ export interface ViewLookups {
   readonly titleOf: (entry: Entry) => string
   readonly folderName: (folder: ShelvedFolder) => string
   readonly favourites: ReadonlySet<PieceId>
+  /** The songs the learner has learned. */
+  readonly learned: ReadonlySet<PieceId>
   /** The songs played, the latest first. */
   readonly opened: readonly PieceId[]
   readonly compare: (a: string, b: string) => number
@@ -63,7 +65,11 @@ const FIRST_TITLES = 3
 
 /** The filters that narrow, besides the search: what the Filter button counts and its chips name. */
 export const filtersOn = (filter: SongsFilter): number =>
-  Number(filter.stage !== 'any') + Number(filter.key !== '') + Number(filter.favourites)
+  Number(filter.stage !== 'any') +
+  Number(filter.key !== '') +
+  Number(filter.favourites) +
+  Number(filter.folder !== 'any') +
+  Number(filter.learned !== 'any')
 
 /** Whether a filter narrows anything. */
 export const isFiltering = (filter: SongsFilter): boolean =>
@@ -128,7 +134,10 @@ export function libraryView(
     everySong?: boolean
   } = {},
 ): LibraryView {
+  const loose = new Set(layout.home)
   const keeps = (entry: Entry) =>
+    (filter.folder === 'any' || loose.has(entry.id)) &&
+    (filter.learned === 'any' || lookups.learned.has(entry.id) === (filter.learned === 'yes')) &&
     (filter.stage === 'any' || pieceStage(entry.id) === filter.stage) &&
     (filter.key === '' || songKeyParam(entry) === filter.key) &&
     (!filter.favourites || lookups.favourites.has(entry.id)) &&

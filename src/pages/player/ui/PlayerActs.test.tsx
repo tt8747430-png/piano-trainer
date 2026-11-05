@@ -140,9 +140,9 @@ function firstNoteOn(bytes: Uint8Array): number {
 
 describe('the acts on the music in the Player’s Settings (R29)', () => {
   it.each([
-    ['a song', '/play/bz5', ['Sections', 'Song information', 'Export…']],
+    ['a song', '/play/bz5', ['Sections', 'Song information', 'Share link', 'Export…']],
     // A study is in no library (ADR 0106).
-    ['a study', '/play/ex3', ['Sections', 'Study information', 'Export…']],
+    ['a study', '/play/ex3', ['Sections', 'Study information', 'Share link', 'Export…']],
     ['a walk', '/play/walk?root=D&kind=dorian', ['Export…']],
     ['an exercise', '/play/exercise/hanon', ['Export…']],
   ])('lists what %s has', async (_music, path, actions) => {
@@ -159,12 +159,13 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
   })
 
   it.each([
-    ['a song', '/play/bz5', ['MusicXML', 'Compressed MusicXML (.mxl)', 'MIDI', 'Share link']],
+    // Its files alone: its link is Share link, an act of its own (R31-S).
+    ['a song', '/play/bz5', ['MusicXML', 'Compressed MusicXML (.mxl)', 'MIDI']],
     // With a recording, its MIDI fixed tempo or time aligned to the recording (ADR 0107).
     [
       'a song with a recording',
       '/play/romashki',
-      ['MusicXML', 'Compressed MusicXML (.mxl)', 'MIDI', 'MIDI, time aligned', 'Share link'],
+      ['MusicXML', 'Compressed MusicXML (.mxl)', 'MIDI', 'MIDI, time aligned'],
     ],
     ['a progression', '/play/progression?p=ii-V-I&key=Bb', ['MIDI']],
     ['a chromatic walk', '/play/chromatic?chords=m9&root=G', ['MIDI']],
@@ -184,9 +185,14 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
   it('shares an own song with its music, saying the link is copied where there is no share sheet', async () => {
     const user = userEvent.setup()
     await renderApp('/play/my-1', { storage: withSong() })
-    expect(await moreActions(user)).toEqual(['Sections', 'Song information', 'Export…'])
+    expect(await moreActions(user)).toEqual([
+      'Sections',
+      'Song information',
+      'Share link',
+      'Export…',
+    ])
     await user.keyboard('{Escape}')
-    await exportAs(user, 'Share link')
+    await chooseMore(user, 'Share link')
     await waitFor(() =>
       expect(screen.getByText(/^Link copied\. Anyone who opens it can add/)).toHaveAttribute(
         'role',
@@ -210,7 +216,7 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
   it('shares a song of the app as a link to itself, in the key it is played and as simplified', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5?transpose=2&version=simple')
-    await exportAs(user, 'Share link')
+    await chooseMore(user, 'Share link')
     await waitFor(() =>
       expect(screen.getByText(/^Link copied\. Anyone who opens it/)).toHaveAttribute(
         'role',
@@ -229,7 +235,7 @@ describe('the acts on the music in the Player’s Settings (R29)', () => {
     Object.defineProperty(navigator, 'share', { value: share, configurable: true })
     onTestFinished(() => void Reflect.deleteProperty(navigator, 'share'))
     await renderApp('/play/bz5')
-    await exportAs(user, 'Share link')
+    await chooseMore(user, 'Share link')
     await waitFor(() => expect(share).toHaveBeenCalledTimes(1))
     expect(share).toHaveBeenCalledWith({
       title: 'Still, my soul, be still',

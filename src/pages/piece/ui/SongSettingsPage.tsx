@@ -1,5 +1,14 @@
 import { Link, useNavigate, useParams, useRouter } from '@tanstack/react-router'
-import { Archive, ArchiveRestore, Copy, Download, FolderInput, Globe, Link2 } from 'lucide-react'
+import {
+  Archive,
+  ArchiveRestore,
+  Copy,
+  Download,
+  FolderInput,
+  Globe,
+  Link2,
+  PencilLine,
+} from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { placeIn, useFolderName, useLibraryLayout } from '@/entities/library'
@@ -34,10 +43,10 @@ import {
   SettingsGroup,
 } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
-import { ResetStepsRow } from '@/features/reset-progress'
-import { pieceStepId } from '@/entities/step'
 import { useSongPublish } from '../model/use-song-publish'
 import { OwnMusicAsk } from './OwnMusicAsk'
+import { PieceByline } from './PieceByline'
+import { SongCover } from './SongCover'
 
 /** The route's song, or the way back where it is gone (an own song deleted in another tab). */
 export function SongSettingsPage() {
@@ -118,19 +127,27 @@ function SongSettings({ piece }: { piece: Piece }) {
       <ScreenHeader title={t('settings.title')} back={<BackButton />} />
       <ShareSaid said={shared.said} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <p className="px-1 font-display text-2xl font-semibold text-balance">{title}</p>
-        {/* What the song says of itself, its cover and its details are its page's Edit (R30 S5). */}
+        {/* The song at the head and its page's Edit; its score is ✎'s on the page (R31-S). */}
+        <SettingsGroup flush>
+          <div className="flex min-h-20 items-center gap-4 px-4 py-3">
+            <SongCover piece={piece} className="w-14 shrink-0 text-xl" />
+            <div className="min-w-0">
+              <p className="font-display text-lg font-semibold text-balance">{title}</p>
+              <PieceByline piece={piece} />
+            </div>
+          </div>
+          <RowLink
+            title={t('settings.editPage')}
+            detail={t('settings.editPageLine')}
+            icon={PencilLine}
+            paint="sand"
+            render={
+              <Link to="/songs/$pieceId" params={{ pieceId: piece.id }} search={{ edit: true }} />
+            }
+          />
+        </SettingsGroup>
         {inLibrary ? (
           <SettingsGroup flush title={t('settings.library')}>
-            {/* Duplicate (R29 B9): a copy as the learner's own, a song in degrees aside. */}
-            {copyable ? (
-              <RowButton
-                title={t('settings.duplicate')}
-                icon={Copy}
-                paint="yellow"
-                onClick={() => setCopying(true)}
-              />
-            ) : null}
             {/* Where it may leave its folder (R29 B4): one of the app's songs in its folder stays. */}
             {archived || !library.actions.some((each) => each.key === 'move') ? null : (
               <RowButton
@@ -141,6 +158,15 @@ function SongSettings({ piece }: { piece: Piece }) {
                 onClick={() => library.actions.find((each) => each.key === 'move')?.onSelect()}
               />
             )}
+            {/* Duplicate (R29 B9): a copy as the learner's own, a song in degrees aside. */}
+            {copyable ? (
+              <RowButton
+                title={t('settings.duplicate')}
+                icon={Copy}
+                paint="yellow"
+                onClick={() => setCopying(true)}
+              />
+            ) : null}
             <RowButton
               title={t(archived ? 'songs:library.restore' : 'songs:library.archive')}
               icon={archived ? ArchiveRestore : Archive}
@@ -153,7 +179,7 @@ function SongSettings({ piece }: { piece: Piece }) {
             />
           </SettingsGroup>
         ) : null}
-        {/* Publish…, Share link, then Delete last (R29 B6), as every item's Settings. */}
+        {/* Publish, Share link and Export, each once: Export holds the files alone (R31-S). */}
         <SettingsGroup flush title={t('settings.share')}>
           {item ? (
             <RowLink
@@ -177,30 +203,19 @@ function SongSettings({ piece }: { piece: Piece }) {
           ) : null}
           <RowButton
             title={t('songs:export.action')}
+            detail={t('settings.exportLine')}
             icon={Download}
             paint="sky"
             onClick={() => setExporting(true)}
           />
         </SettingsGroup>
-        {/* Reset progress (R29 B9): the song's Learned mark, kept apart from its music. */}
-        <ResetStepsRow
-          steps={[pieceStepId(piece.id)]}
-          words={{
-            row: t('settings.resetProgress'),
-            title: t('settings.resetProgressTitle'),
-            body: t('settings.resetProgressBody'),
-            cancel: t('settings.resetProgressCancel'),
-            confirm: t('settings.resetProgressConfirm'),
-            done: t('settings.resetProgressDone'),
-          }}
-        />
         {ownMusic ? (
           <div ref={danger}>
             <DangerGroup
               footnote={t(ownMusic.kind === 'song' ? 'deleting.says' : 'resetting.says')}
             >
               <DangerRow
-                title={t(ownMusic.kind === 'song' ? 'delete' : 'reset')}
+                title={t(ownMusic.kind === 'song' ? 'settings.deleteSong' : 'reset')}
                 onClick={() => setAsking(true)}
               />
             </DangerGroup>
@@ -208,17 +223,7 @@ function SongSettings({ piece }: { piece: Piece }) {
         ) : null}
       </div>
       {inLibrary ? library.sheet : null}
-      <SongExportSheet
-        piece={exporting ? piece : null}
-        onOpenChange={setExporting}
-        share={
-          shareable
-            ? {
-                onSelect: share,
-              }
-            : undefined
-        }
-      />
+      <SongExportSheet piece={exporting ? piece : null} onOpenChange={setExporting} />
       <ConfirmDialog
         open={copying}
         onOpenChange={setCopying}

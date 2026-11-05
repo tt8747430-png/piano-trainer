@@ -91,6 +91,6 @@ describe('what a song says of itself, in its page’s Edit (R30 S5)', () => {
     await user.click(await screen.findByRole('link', { name: 'Settings' }))
     // Publish… says it changed since it was published (R29 B6).
     const row = await screen.findByRole('link', { name: /^Publish…/ })
-    await waitFor(() => expect(row).toHaveTextContent('Changed since it was published'))
+    await waitFor(() => expect(row).toHaveTextContent('Has changes'))
   })
 })

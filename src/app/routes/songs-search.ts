@@ -10,6 +10,8 @@ export const SONGS_DEFAULTS: SongsFilter = {
   stage: 'any',
   key: '',
   favourites: false,
+  folder: 'any',
+  learned: 'any',
 }
 /** A key as a song is written in, spelled as written (a song in G♭ is not one in F♯); none if none reads. */
 function readSongKey(raw: unknown): SongsFilter['key'] {
@@ -22,6 +24,8 @@ function readSongsSearch(raw: Raw): SongsFilter {
     stage: isStage(raw.stage) ? raw.stage : SONGS_DEFAULTS.stage,
     key: readSongKey(raw.key),
     favourites: raw.favourites === true,
+    folder: raw.folder === 'none' ? 'none' : 'any',
+    learned: raw.learned === 'yes' || raw.learned === 'no' ? raw.learned : 'any',
   }
 }
 // A folder's: the filters, and its Edit (the folder's name and look in place), entered from its ✎ or

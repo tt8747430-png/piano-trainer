@@ -1,6 +1,7 @@
 export const common = {
   appName: 'Piano Trainer',
   skipToContent: 'Skip to content',
+  progressGroup: 'Progress',
   back: 'Back',
   // Edit mode (Noji's, iOS's): a pencil in the bar enters it, a check leaves it.
   editMode: { edit: 'Edit', done: 'Done' },

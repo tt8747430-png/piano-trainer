@@ -7,7 +7,6 @@ import { COURSES } from '@/entities/course'
 import { LESSONS, lessonPlace } from '@/entities/lesson'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
 import { createFakeContentEditing } from '@/shared/api/content-editing'
-import { expectLastAndAlone } from '@/shared/test/danger'
 
 /** The screen bar's Settings (the gear), not the sidebar's. */
 async function openSettings(user: ReturnType<typeof userEvent.setup>) {
@@ -40,7 +39,7 @@ describe('a lesson’s Settings (round 28)', () => {
     expect(within(reading).getByRole('radio', { name: /One page/ })).toBeChecked()
     expect(document.querySelector('[data-setting="lessonReading"]')).not.toBeNull()
     expect(screen.getByRole('button', { name: 'Share link' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Reset progress' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /^Reset progress/ })).toBeInTheDocument()
     // An editor's rows are an editor's alone.
     expect(screen.queryByRole('link', { name: /Level/ })).not.toBeInTheDocument()
     expect(screen.queryByText('Written in')).not.toBeInTheDocument()
@@ -62,8 +61,13 @@ describe('a lesson’s Settings (round 28)', () => {
       learned: { [`lesson:${LESSON.id}`]: '2026-10-01', [`lesson:${other.id}`]: '2026-10-01' },
       read: { [`lesson:${LESSON.id}`]: [0, 1] },
     })
-    expectLastAndAlone(await screen.findByRole('button', { name: 'Reset progress' }))
-    await user.click(await screen.findByRole('button', { name: 'Reset progress' }))
+    // Reset progress loses no music: its own group, Progress, never a red row (R31-S).
+    expect(
+      within(await screen.findByRole('region', { name: 'Progress' })).getByRole('button', {
+        name: /^Reset progress/,
+      }),
+    ).toBeVisible()
+    await user.click(await screen.findByRole('button', { name: /^Reset progress/ }))
     const ask = await screen.findByRole('alertdialog', { name: 'Reset this lesson’s progress?' })
     await user.click(within(ask).getByRole('button', { name: 'Reset' }))
     expect(progressStore.getState().learned).toEqual({ [`lesson:${other.id}`]: '2026-10-01' })
@@ -102,7 +106,7 @@ describe('a lesson’s Settings (round 28)', () => {
     await user.keyboard('{Escape}')
     // Publish… says where it stands, and opens its Publish page (R29 B6).
     const row = await screen.findByRole('link', { name: /^Publish…/ })
-    await waitFor(() => expect(row).toHaveTextContent('Changed since it was published'), {
+    await waitFor(() => expect(row).toHaveTextContent('Has changes'), {
       timeout: 3000,
     })
     await user.click(row)

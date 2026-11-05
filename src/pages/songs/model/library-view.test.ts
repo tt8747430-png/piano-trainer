@@ -36,12 +36,20 @@ const nestedLayout = arrangeLibrary(
   },
   CATALOG,
 )
-const NONE: SongsFilter = { q: '', stage: 'any', key: '', favourites: false }
+const NONE: SongsFilter = {
+  q: '',
+  stage: 'any',
+  key: '',
+  favourites: false,
+  folder: 'any',
+  learned: 'any',
+}
 const lookups: ViewLookups = {
   entryOf: entryById,
   titleOf: (entry) => entry.title,
   folderName: (folder) => folder.name ?? folder.id,
   favourites: new Set(['bz5', 'silent']),
+  learned: new Set(['silent']),
   opened: ['silent', 'bz5'],
   compare: (a, b) => a.localeCompare(b, 'en'),
   home: 'Home',
@@ -54,6 +62,21 @@ const ids = (groups: ReturnType<typeof view>['groups']) =>
 const songsOf = (id: string) => SONG_COLLECTIONS.find((c) => c.id === id)?.entries ?? []
 
 describe('libraryView', () => {
+  it('Not in a folder keeps Home’s own songs alone, through the whole library (R31-S)', () => {
+    // A song moved out of its collection stands at Home, in no folder; filtering looks through all.
+    const at = arrangeLibrary({ ...INITIAL_LIBRARY, home: ['bz5'] }, CATALOG)
+    expect(ids(view({ folder: 'none' }, null, at).groups)).toEqual(['bz5'])
+    expect(filtersOn({ ...NONE, folder: 'none' })).toBe(1)
+  })
+
+  it('Progress keeps the songs learned, or those not learned yet (R31-S)', () => {
+    expect(ids(view({ learned: 'yes' }).groups)).toEqual(['silent'])
+    const notYet = ids(view({ learned: 'no' }).groups)
+    expect(notYet).not.toContain('silent')
+    expect(notYet).toContain('bz5')
+    expect(filtersOn({ ...NONE, learned: 'no' })).toBe(1)
+  })
+
   it('at Home lists every song under the folders, in one list headed All songs', () => {
     const home = libraryView(layout, null, NONE, 'manual', lookups, { everySong: true })
     expect(home.folders.map((each) => each.folder.id)).toEqual(SONG_COLLECTIONS.map((c) => c.id))

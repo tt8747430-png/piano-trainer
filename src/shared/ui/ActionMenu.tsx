@@ -27,6 +27,8 @@ export interface MenuAction {
   readonly destructive?: boolean
   /** The group it is in, named small over the first of it (Insert's Text · Music · Ask and link). */
   readonly group?: string
+  /** Its group parted by a separator but not named: a row's ⋯, whose groups say themselves (R31-S). */
+  readonly unnamed?: boolean
   /** One of a choice (the language written in): a checked item, ticked when it is the one. */
   readonly checked?: boolean
 }
@@ -129,7 +131,7 @@ export function ActionMenu({
           <Fragment key={`${group.name ?? ''}-${at}`}>
             {at > 0 ? <DropdownMenuSeparator /> : null}
             <DropdownMenuGroup>
-              {group.name ? (
+              {group.name && !group.actions[0]?.unnamed ? (
                 <DropdownMenuLabel className="px-3 pt-1.5 pb-0.5">{group.name}</DropdownMenuLabel>
               ) : null}
               {group.actions.map(item)}

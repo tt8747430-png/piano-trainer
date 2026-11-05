@@ -5,7 +5,6 @@ import {
   ExportSheet,
   exportMidi,
   type ExportFiles,
-  type ExportShare,
   type MusicXmlFormat,
   type PlayedMusic,
 } from '@/features/song-files'
@@ -23,7 +22,6 @@ export function PlayerExport({
   recording,
   staves,
   musicXml,
-  share,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -34,8 +32,6 @@ export function PlayerExport({
   staves: readonly (string | undefined)[]
   /** Export to MusicXML: a piece's music as written; none for a walk or an exercise. */
   musicXml?: ((format?: MusicXmlFormat) => void) | undefined
-  /** Export…'s link, where the screen shares. */
-  share?: ExportShare | undefined
 }) {
   const { t } = useTranslation('common')
   const staffTitle = useStaffTitle()
@@ -46,7 +42,6 @@ export function PlayerExport({
   }
   const files: ExportFiles = {
     musicXml,
-    share,
     midi: () => exportMidi({ ...music, names }),
     // The notes at the recording's own tempo, from where its bar 1 begins.
     midiAligned: recording

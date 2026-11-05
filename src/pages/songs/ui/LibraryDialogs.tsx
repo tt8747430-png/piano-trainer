@@ -47,13 +47,18 @@ export function LibraryDialogs({
     if (said) say(t(`piece:${SAID[said]}`))
   }, [said, t])
   const exported = pending?.kind === 'export' ? (repertoire.piece(pending.song) ?? null) : null
-  const toShare = exported
-    ? songToShare(
-        exported,
-        entryTitles(exported, locale).primary,
-        selectView(router.options.context.views.getState(), `/play/${exported.id}`),
-      )
-    : null
+  // Share link, from a row's ⋯ (R31-S): shared at once, as the song's Settings shares it.
+  const sharing = pending?.kind === 'share' ? (repertoire.piece(pending.song) ?? null) : null
+  useEffect(() => {
+    if (!sharing) return
+    page.close()
+    const what = songToShare(
+      sharing,
+      entryTitles(sharing, locale).primary,
+      selectView(router.options.context.views.getState(), `/play/${sharing.id}`),
+    )
+    if (what) shared.share(what)
+  }, [sharing, page, locale, router, shared])
   // The songs Select chose, each one's file in turn.
   const filesOf = useSongFiles()
   const chosen =
@@ -119,17 +124,7 @@ export function LibraryDialogs({
         files={chosenFiles}
         onOpenChange={shut}
       />
-      <SongExportSheet
-        piece={exported}
-        onOpenChange={shut}
-        share={
-          toShare
-            ? {
-                onSelect: () => shared.share(toShare),
-              }
-            : undefined
-        }
-      />
+      <SongExportSheet piece={exported} onOpenChange={shut} />
       {folder ? (
         <MoveInSheet
           page={page}

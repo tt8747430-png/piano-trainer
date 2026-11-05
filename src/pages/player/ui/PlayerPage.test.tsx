@@ -339,7 +339,7 @@ describe('Player', () => {
       'On-screen piano',
     ])
     expect(rows('This song')).toEqual(['Sections', 'Song information'])
-    expect(rows('Share')).toEqual(['Export…'])
+    expect(rows('Share')).toEqual(['Share link', 'Export…'])
     await user.click(within(works).getByRole('button', { name: 'Audio playback' }))
     expect(await screen.findByRole('dialog', { name: 'Audio playback' })).toBeInTheDocument()
     const labels = [...document.querySelectorAll('[data-slot="slider-label"]')].map(

@@ -33,7 +33,14 @@ import { useLibraryPage } from '../model/use-library-page'
 /** Where Apply to… keeps the look: this place, it with its subfolders, or every folder. */
 type Reach = 'this' | 'below' | 'every'
 
-const NO_FILTER = { q: '', stage: 'any', key: '', favourites: false } as const
+const NO_FILTER = {
+  q: '',
+  stage: 'any',
+  key: '',
+  favourites: false,
+  folder: 'any',
+  learned: 'any',
+} as const
 
 /** A folder's Card style (R29 B9), reached from its Settings › Appearance. */
 export function FolderCardStylePage() {

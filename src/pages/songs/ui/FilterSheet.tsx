@@ -5,7 +5,7 @@ import { STAGES, type Stage } from '@/entities/step'
 import { useMediaQuery, useSetSearch } from '@/shared/lib'
 import { keyFromParam, type KeyParam } from '@/shared/lib/music'
 import { useKeyName } from '@/shared/i18n'
-import { FoldGroup, Sheet, SheetContent, SwitchRow } from '@/shared/ui'
+import { FoldGroup, Segmented, Sheet, SheetContent, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { Toggle } from '@/shared/ui/primitives/toggle'
@@ -95,6 +95,32 @@ function FilterFields({ page, filter }: { page: LibraryPage; filter: SongsFilter
   const keyChoices = keyed ? keys : [{ key: filter.key as KeyParam, count: 0 }, ...keys]
   return (
     <div className="flex flex-col gap-6">
+      {/* What has no folder (R31-S): a question for Home, where the folders are. */}
+      {page.atHome ? (
+        <FilterGroup title={t('filters.folder')} list={false}>
+          <Segmented
+            label={t('filters.folder')}
+            value={filter.folder}
+            options={[
+              { value: 'any', label: t('filters.any') },
+              { value: 'none', label: t('filters.noFolder') },
+            ]}
+            onChange={(folder) => set({ folder })}
+          />
+        </FilterGroup>
+      ) : null}
+      <FilterGroup title={t('filters.progress')} list={false}>
+        <Segmented
+          label={t('filters.progress')}
+          value={filter.learned}
+          options={[
+            { value: 'any', label: t('filters.any') },
+            { value: 'yes', label: t('filters.learned') },
+            { value: 'no', label: t('filters.notLearned') },
+          ]}
+          onChange={(learned) => set({ learned })}
+        />
+      </FilterGroup>
       <FilterGroup title={t('filters.key')}>
         <Chip pressed={filter.key === ''} onPress={() => set({ key: '' })}>
           {t('filters.anyKey')}
@@ -169,7 +195,7 @@ function Chip({
         onPressedChange={() => {
           if (!pressed) onPress()
         }}
-        className="h-10 max-w-full min-w-14 text-muted-foreground aria-pressed:text-foreground"
+        className="h-11 max-w-full min-w-14 text-muted-foreground aria-pressed:text-foreground"
       >
         <span className="truncate">{children}</span>
       </Toggle>
@@ -197,7 +223,9 @@ function FilterFoot({
         size="lg"
         variant="soft"
         disabled={filtersOn(filter) === 0}
-        onClick={() => set({ key: '', stage: 'any', favourites: false })}
+        onClick={() =>
+          set({ key: '', stage: 'any', favourites: false, folder: 'any', learned: 'any' })
+        }
         className="flex-1"
       >
         {t('clearFilters')}

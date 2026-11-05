@@ -179,17 +179,17 @@ describe('Piece', () => {
     expect(screen.getByRole('link', { name: 'Practise' })).toHaveAttribute('href', '/play/ex3')
   })
 
-  it('exports from one sheet: MusicXML for notation apps, MIDI, and its link, each named for its file', async () => {
+  it('exports from one sheet: MusicXML for notation apps and MIDI, each named for its file', async () => {
     const user = userEvent.setup()
     await renderApp('/songs/bz5')
     await openSettings(user)
-    await user.click(await screen.findByRole('button', { name: 'Export…' }))
+    await user.click(await screen.findByRole('button', { name: /^Export…/ }))
     const sheet = await screen.findByRole('dialog', { name: 'Export' })
     expect(
       within(within(sheet).getByRole('list', { name: 'Export' }))
         .getAllByRole('button')
         .map((row) => row.textContent),
-    ).toEqual(['MusicXML', 'Compressed MusicXML (.mxl)', 'MIDI', 'Share link'])
+    ).toEqual(['MusicXML', 'Compressed MusicXML (.mxl)', 'MIDI'])
   })
 
   it('keeps everything else on its Settings page, grouped: its music, its place, its ways out (round 26)', async () => {
@@ -197,13 +197,19 @@ describe('Piece', () => {
     await openSettings(userEvent.setup())
     expect(
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
-    ).toEqual(['In your library', 'Share'])
+    ).toEqual(['Library', 'Share'])
     // Favourite is an act on the song (its ♡, its menus), never a switch here (R19).
     expect(screen.queryByRole('switch', { name: 'Favourite' })).not.toBeInTheDocument()
     // One of the app's songs stays in its folder (D8): Archive, no Move to folder….
     expect(screen.queryByRole('button', { name: /^Move to folder…/ })).toBeNull()
-    for (const name of ['Archive', 'Export…'])
-      expect(screen.getByRole('button', { name })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Archive' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /^Export…/ })).toBeInTheDocument()
+    // The song at the head, its page edited from here; its score is ✎'s on the page (R31-S).
+    expect(screen.getByRole('link', { name: /^Edit song page/ })).toHaveAttribute(
+      'href',
+      '/songs/bz5?edit=true',
+    )
+    expect(screen.queryByRole('link', { name: 'Edit score' })).toBeNull()
     // Nothing of the learner's own to give up, and no original for a learner.
     expect(screen.queryByRole('button', { name: /^(Delete|Reset to the original)$/ })).toBeNull()
     expect(screen.queryByRole('link', { name: /Edit the original/ })).toBeNull()
@@ -236,11 +242,20 @@ describe('Piece', () => {
       'href',
       '/songs/bz5/settings',
     )
-    // ✎ beside the title puts the page in Edit in place; Done in its place ends it.
-    const edit = within(bar).getByRole('button', { name: 'Edit' })
+    // ✎ beside the title opens the score editor (R31-S).
+    const edit = within(bar).getByRole('button', { name: 'Edit score' })
     expect(within(bar).getByRole('heading', { level: 1 }).nextElementSibling).toBe(edit)
     await user.click(edit)
+    await waitFor(() => expect(router.state.location.pathname).toBe('/edit/bz5'))
+  })
+
+  it('edits the song page from its Settings: Edit song page, Done beside the title (R31-S)', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/songs/bz5/settings')
+    await user.click(await screen.findByRole('link', { name: /^Edit song page/ }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/songs/bz5'))
     expect(router.state.location.search).toMatchObject({ edit: true })
+    const bar = screen.getByRole('banner')
     expect(within(bar).queryByRole('button', { name: 'Learned' })).toBeNull()
     expect(screen.getByRole('link', { name: 'Edit on the score' })).toHaveAttribute(
       'href',
@@ -370,13 +385,13 @@ describe('Piece: the learner’s own music', () => {
     await openSettings(user)
     expect(
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
-    ).toEqual(['In your library', 'Share'])
-    expectLastAndAlone(screen.getByRole('button', { name: 'Delete' }))
+    ).toEqual(['Library', 'Share'])
+    expectLastAndAlone(screen.getByRole('button', { name: 'Delete song' }))
     expect(screen.getByRole('link', { name: /^Publish…/ })).toHaveAttribute(
       'href',
       '/songs/my-1/publish',
     )
-    expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Delete song' })).toBeInTheDocument()
   })
 
   it('has nothing to learn in a song of no chord symbol: its sections say so', async () => {
@@ -489,7 +504,7 @@ describe('Piece: the learner’s own music', () => {
     await user.click(screen.getByRole('button', { name: 'Add to favourites' }))
     expect(libraryStore.getState().favourites).toEqual(['my-1'])
     await openSettings(user)
-    await user.click(await screen.findByRole('button', { name: 'Delete' }))
+    await user.click(await screen.findByRole('button', { name: 'Delete song' }))
     await user.click(await screen.findByRole('button', { name: 'Delete for good' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs'))
     expect(piecesStore.getState().songs).toEqual([])

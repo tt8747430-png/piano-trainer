@@ -1,4 +1,4 @@
-import { Link, useSearch } from '@tanstack/react-router'
+import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { Info, Play, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLibrary, useLibraryStoreApi } from '@/entities/library'
@@ -35,10 +35,10 @@ import { YourPractice } from './YourPractice'
  * sections, the learner's practice of it, its chords and progressions), side by side from a laptop's
  * width; Play floats, the Player as it was left.
  *
- * Its ✎ puts the page in Edit where it reads (`?edit=true`): the bar keeps its title with Done in the
- * pencil's place; its title and about become fields where they are the learner's (an own song) or an
- * editor's (the app's original); its cover, level, genre, language and tags are every learner's. Who
- * wrote it is the score's: the page says so and links to the score.
+ * Its ✎ opens the score editor, its music being what a song is edited for (R31-S). The page itself is put in Edit from its Settings (Edit song page, `?edit=true`):
+ * the bar keeps its title with Done beside it; its title and about become fields where they are the
+ * learner's (an own song) or an editor's (the app's original); its cover, level, genre, language and
+ * tags are every learner's. Who wrote it is the score's: the page says so and links to the score.
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation(['piece', 'songs'])
@@ -46,6 +46,7 @@ export function PieceView({ piece }: { piece: Piece }) {
   const { account } = useAccount()
   const editing = useSearch({ strict: false }).edit === true
   const setSearch = useSetSearch<{ edit: boolean }>()
+  const navigate = useNavigate()
   const step = pieceStepId(piece.id)
   const settings = (
     <RoundLink
@@ -65,11 +66,21 @@ export function PieceView({ piece }: { piece: Piece }) {
         entry={piece}
         tools={editing ? null : <LearnedButton step={step} bar />}
         settings={editing ? null : settings}
-        edit={{
-          editing,
-          onEdit: () => setSearch({ edit: true }),
-          onDone: () => setSearch({ edit: false }),
-        }}
+        edit={
+          editing
+            ? {
+                editing,
+                onEdit: () => setSearch({ edit: true }),
+                onDone: () => setSearch({ edit: false }),
+              }
+            : {
+                editing,
+                label: t('piece:editScore'),
+                onEdit: () =>
+                  void navigate({ to: '/edit/$pieceId', params: { pieceId: piece.id } }),
+                onDone: () => setSearch({ edit: false }),
+              }
+        }
       />
       <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:items-start lg:gap-x-10">
         <section aria-label={t('piece:song')} className="flex min-w-0 flex-col gap-5">

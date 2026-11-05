@@ -94,7 +94,7 @@ describe('one Publish page for every item (R29 B6)', () => {
       await content.saveDraft(kind, id, { body: changed, meta: {} })
       await renderApp(path, { auth: await signedInAs('editor'), contentEditing: content })
       expect(await screen.findByRole('heading', { level: 1, name: 'Publish' })).toBeInTheDocument()
-      expect(await screen.findByText('Changed since it was published')).toBeInTheDocument()
+      expect(await screen.findByText('Has changes')).toBeInTheDocument()
       const publish = screen.getByRole('button', { name: 'Publish new version' })
       expect(publish).toBeDisabled()
       await user.click(screen.getByRole('checkbox', { name: /I confirm/ }))

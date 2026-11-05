@@ -5,6 +5,7 @@ import {
   CircleCheck,
   Disc,
   Download,
+  Link2,
   Ellipsis,
   LayoutGrid,
   ListMusic,
@@ -73,7 +74,7 @@ import { ViewSection } from '@/widgets/score-view-menu'
 import { SettingsExtrasContext, type SettingsExtras } from '@/widgets/player-setup'
 import { useChordKeys } from '../model/use-chord-keys'
 import { PlayerExport } from './PlayerExport'
-import type { ExportShare, MusicXmlFormat } from '@/features/song-files'
+import type { MusicXmlFormat } from '@/features/song-files'
 import { PickView } from './PickView'
 import { CoachLine } from './CoachLine'
 import { FeedbackCard } from './FeedbackCard'
@@ -181,8 +182,8 @@ export function PlayerLayout({
   more?: readonly MenuAction[] | undefined
   /** Export…'s MusicXML: a piece's music as written (ADR 0107). */
   musicXml?: ((format?: MusicXmlFormat) => void) | undefined
-  /** Export…'s link: a piece's, as its page shares it. */
-  share?: ExportShare | undefined
+  /** Share link: a piece's, as its page shares it; its own act, never Export's row (R31-S). */
+  share?: { readonly onSelect: () => void } | undefined
   /** What the screen says beside Wait mode's line: what a piece's Share said. */
   status?: ReactNode
   /** Display's own choices after the View's: a single-staff song's Clef (R29 B7). */
@@ -313,6 +314,17 @@ export function PlayerLayout({
       ...more.flatMap(({ icon, ...act }) =>
         icon ? [{ ...act, icon, group: 'song' as const }] : [],
       ),
+      ...(share
+        ? [
+            {
+              key: 'share-link',
+              group: 'share' as const,
+              label: t('songs:library.shareLink'),
+              icon: Link2,
+              onSelect: share.onSelect,
+            },
+          ]
+        : []),
       {
         key: 'export',
         group: 'share',
@@ -690,7 +702,6 @@ export function PlayerLayout({
         recording={recording}
         staves={names}
         musicXml={musicXml}
-        share={share}
       />
       {printing ? (
         <SongPrint

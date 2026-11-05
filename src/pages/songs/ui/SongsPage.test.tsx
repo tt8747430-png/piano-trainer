@@ -271,7 +271,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     const { libraryStore } = await renderApp('/songs/folders/folder-1', {
       storage: saved({ library: SUNDAY }),
     })
-    await rowAction(user, 'Silent Night', 'Move to…')
+    await rowAction(user, 'Silent Night', 'Move to folder…')
     const sheet = await screen.findByRole('dialog', { name: 'Move to' })
     // What moves, whole under the title; where it stands, marked Here.
     expect(sheet).toHaveAccessibleDescription('Silent Night')
@@ -399,7 +399,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     expect(screen.queryByRole('button', { name: /Public library/ })).not.toBeInTheDocument()
   })
 
-  it('exports a song from its row’s More: one sheet of MusicXML, MIDI and its link', async () => {
+  it('exports a song from its row’s More: one sheet of its files; Share link its own act (R31-S)', async () => {
     const user = userEvent.setup()
     await renderApp('/songs', { storage: saved({ pieces: { songs: [SONG], nextSong: 2 } }) })
     await rowAction(user, 'Morning', 'Export…')
@@ -408,12 +408,15 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
       within(sheet)
         .getAllByRole('button')
         .flatMap((row) => (row.textContent ? [row.textContent] : [])),
-    ).toEqual(['MusicXML', 'Compressed MusicXML (.mxl)', 'MIDI', 'Share link'])
-    await user.click(within(sheet).getByRole('button', { name: /^Share link/ }))
+    ).toEqual(['MusicXML', 'Compressed MusicXML (.mxl)', 'MIDI'])
+    await user.keyboard('{Escape}')
     await waitFor(() =>
       expect(screen.queryByRole('dialog', { name: 'Export' })).not.toBeInTheDocument(),
     )
-    expect(new URL(await navigator.clipboard.readText()).pathname).toBe('/songs/shared')
+    await rowAction(user, 'Morning', 'Share link')
+    await waitFor(async () =>
+      expect(new URL(await navigator.clipboard.readText()).pathname).toBe('/songs/shared'),
+    )
   })
 
   it('imports a MIDI file from New as the learner’s song, opening its page (ADR 0107)', async () => {
@@ -541,7 +544,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
         },
       }),
     })
-    await rowAction(user, 'Sunday', 'Move to…')
+    await rowAction(user, 'Sunday', 'Move to folder…')
     const sheet = await screen.findByRole('dialog', { name: 'Move to' })
     expect(within(sheet).getByRole('button', { name: 'Sunday' })).toHaveAttribute(
       'aria-disabled',
@@ -558,7 +561,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     expect(moved()?.parent).toBe('folder-2')
     expect(await screen.findByText('“Sunday” moved to Weekday')).toBeInTheDocument()
     // The Move sheet shows it in its folder, which opens and closes on its folders.
-    await rowAction(user, 'Gorshkov’s songs', 'Move to…')
+    await rowAction(user, 'Gorshkov’s songs', 'Move to folder…')
     const again = await screen.findByRole('dialog', { name: 'Move to' })
     expect(within(again).getByRole('button', { name: 'Sunday' })).toBeInTheDocument()
     await user.click(within(again).getByRole('button', { name: 'Hide the folders in Weekday' }))
@@ -573,7 +576,8 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     await renderApp('/songs')
     await user.click(await screen.findByRole('button', { name: 'More for Hymns' }))
     expect((await screen.findAllByRole('menuitem')).map((item) => item.textContent)).toEqual([
-      'Move to…',
+      'Card style',
+      'Move to folder…',
     ])
   })
 })

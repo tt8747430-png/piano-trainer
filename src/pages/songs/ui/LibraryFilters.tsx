@@ -121,6 +121,16 @@ function FilterChips({ filter }: { filter: SongsFilter }) {
     filter.favourites
       ? { id: 'favourites', name: t('favourites'), off: () => set({ favourites: false }) }
       : null,
+    filter.folder === 'none'
+      ? { id: 'folder', name: t('filters.noFolder'), off: () => set({ folder: 'any' }) }
+      : null,
+    filter.learned === 'any'
+      ? null
+      : {
+          id: 'learned',
+          name: t(filter.learned === 'yes' ? 'filters.learned' : 'filters.notLearned'),
+          off: () => set({ learned: 'any' }),
+        },
   ].filter((chip) => chip !== null)
   if (chips.length === 0) return null
   return (
@@ -135,7 +145,7 @@ function FilterChips({ filter }: { filter: SongsFilter }) {
             type="button"
             aria-label={t('filters.remove', { name: chip.name })}
             onClick={chip.off}
-            className="flex h-9 items-center gap-1.5 rounded-pill border border-input bg-muted py-1 pr-2 pl-3.5 text-sm font-semibold whitespace-nowrap transition-colors duration-200 ease-out hover:bg-accent"
+            className="flex h-11 items-center gap-1.5 rounded-pill border border-input bg-muted py-1 pr-2 pl-3.5 text-sm font-semibold whitespace-nowrap transition-colors duration-200 ease-out hover:bg-accent"
           >
             {chip.name}
             <X aria-hidden className="size-4 text-muted-foreground" />

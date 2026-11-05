@@ -17,7 +17,7 @@ import {
   type ShelvedFolder,
 } from '@/entities/library'
 import { entryTitles, isOwnSongId, useRepertoire, type PieceId } from '@/entities/piece'
-import { byLastOpened, selectPractised, useProgress } from '@/entities/progress'
+import { byLastOpened, selectLearned, selectPractised, useProgress } from '@/entities/progress'
 import {
   orderFolders,
   orderSongs,
@@ -47,6 +47,7 @@ export type Pending =
   | { readonly kind: 'move-in' }
   | { readonly kind: 'new-group' }
   | { readonly kind: 'export'; readonly song: PieceId }
+  | { readonly kind: 'share'; readonly song: PieceId }
   | { readonly kind: 'export-chosen'; readonly songs: readonly PieceId[]; readonly what: string }
 
 /**
@@ -68,6 +69,7 @@ export function useLibraryPage(
   const favourites = useLibrary(selectFavourites)
   const sort = useLibrary(selectSort)
   const practised = useProgress(selectPractised)
+  const learnedSteps = useProgress(selectLearned)
   const folderName = useFolderName()
   const acts = useLibraryActs()
   const permits = usePermissions()
@@ -89,6 +91,12 @@ export function useLibraryPage(
         titleOf: (entry) => entryTitles(entry, locale).primary,
         folderName,
         favourites: new Set(favourites),
+        // A song is learned as its step is (ADR 0053): `piece:<id>`.
+        learned: new Set(
+          Object.keys(learnedSteps).flatMap((step) =>
+            step.startsWith('piece:') ? [step.slice('piece:'.length)] : [],
+          ),
+        ),
         opened: byLastOpened(practised),
         compare,
         home: t('library.home'),
@@ -97,7 +105,21 @@ export function useLibraryPage(
       // Every song at Home while browsing; Select drags in the library's own places.
       { tree, everySong: !tree && !selecting },
     )
-  }, [layout, folder, filter, sort, repertoire, locale, folderName, favourites, practised, t, tree, selecting])
+  }, [
+    layout,
+    folder,
+    filter,
+    sort,
+    repertoire,
+    locale,
+    folderName,
+    favourites,
+    learnedSteps,
+    practised,
+    t,
+    tree,
+    selecting,
+  ])
 
   // Every row on screen, in order: what Select all chooses.
   const rows: Chosen[] = [
@@ -171,6 +193,20 @@ export function useLibraryPage(
         params: { folderId: id },
         search: { edit: true },
       }),
+    /** A folder's Card style, from its row's ⋯ (R31-S). */
+    openCardStyle: (id: FolderId) =>
+      void navigate({ to: '/songs/folders/$folderId/card-style', params: { folderId: id } }),
+    /** A song opened where its row's ⋯ says: played, its score edited, or its Settings (R31-S). */
+    openSong: (id: PieceId, where: 'play' | 'edit' | 'settings') =>
+      void navigate(
+        where === 'play'
+          ? { to: '/play/$pieceId', params: { pieceId: id } }
+          : where === 'edit'
+            ? { to: '/edit/$pieceId', params: { pieceId: id } }
+            : { to: '/songs/$pieceId/settings', params: { pieceId: id } },
+      ),
+    /** At Home, where the folders are: Filter asks for the songs in none (R31-S). */
+    atHome: folder === null,
     acts,
     titleOf,
     may,

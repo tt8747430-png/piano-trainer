@@ -54,9 +54,13 @@ describe.each(['signed-out', 'learner', 'learner-view'] as const)(
       const user = userEvent.setup()
       await asLearner(how, user)
       expect(await moreOf(user, 'Silent Night')).toEqual([
+        'Play',
+        'Edit score',
+        'Settings',
         'Add to favourites',
-        'Archive',
+        'Share link',
         'Export…',
+        'Archive',
       ])
     })
 
@@ -126,7 +130,7 @@ describe('an editor in a built-in folder (R29 B4, D8)', () => {
     expect(screen.getByRole('button', { name: /^Import/ })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /^New folder/ })).toBeNull()
     await user.keyboard('{Escape}')
-    expect(await moreOf(user, 'Silent Night')).toContain('Move to…')
+    expect(await moreOf(user, 'Silent Night')).toContain('Move to folder…')
   })
 })
 
@@ -135,7 +139,7 @@ describe('a learner at Home (R29 B4)', () => {
     const user = userEvent.setup()
     await renderApp('/songs')
     await user.click(await screen.findByRole('button', { name: 'More for Hymns' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Move to…' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Move to folder…' }))
     const sheet = await screen.findByRole('dialog', { name: 'Move to' })
     const called = within(sheet).getAllByRole('button', { name: /^Called to Play/ })
     for (const each of called) {

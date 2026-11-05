@@ -3,7 +3,8 @@ import type { KeyParam } from '@/shared/lib/music'
 
 /**
  * What narrows the library's songs (ADR 0106), at Home through the whole library, in a folder
- * through all it holds: the search, one level, one key, the favourites. In the URL, never
+ * through all it holds: the search, one level, one key, the favourites, the songs in no folder, the
+ * songs learned or not yet. In the URL, never
  * remembered.
  */
 export interface SongsFilter {
@@ -14,6 +15,10 @@ export interface SongsFilter {
   readonly key: KeyParam | ''
   /** Only the learner's favourites. */
   readonly favourites: boolean
+  /** Only the songs in no folder (R31-S): Home's own, at Home. */
+  readonly folder: 'any' | 'none'
+  /** Only the songs learned, or only those not learned yet (R31-S). */
+  readonly learned: 'any' | 'yes' | 'no'
 }
 
 /** A folder's URL: the library's filters, and whether the folder is in Edit (its name and look in place). */

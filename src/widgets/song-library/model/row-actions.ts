@@ -10,16 +10,19 @@ export interface RowAction {
   readonly paint: Paint
   readonly onSelect: () => void
   readonly destructive?: boolean
+  /** Its part of the menu (open, library, share), parted from the next by a separator (R31-S). */
+  readonly group?: string
 }
 
 /** A row's actions as its More lists them. */
 export const menuOf = (actions: readonly RowAction[]): MenuAction[] =>
-  actions.map(({ key, label, icon, onSelect, destructive }) => ({
+  actions.map(({ key, label, icon, onSelect, destructive, group }) => ({
     key,
     label,
     icon,
     onSelect,
     ...(destructive ? { destructive } : {}),
+    ...(group ? { group, unnamed: true } : {}),
   }))
 
 /** The actions a swipe shows, those of `keys` in that order: the last of a side fires at its edge. */

@@ -17,6 +17,8 @@ export interface EditAction {
   readonly onDone: () => void
   /** Done waits (a take recording, a save under way). */
   readonly disabled?: boolean
+  /** What ✎ edits, where Edit alone would not say: a song's page edits its score (R31-S). */
+  readonly label?: string
 }
 
 type ScreenHeaderProps = {
@@ -133,7 +135,7 @@ export function ScreenHeader({
             edit.editing ? (
               <EditDone action={edit} />
             ) : (
-              <EditPencil onEdit={edit.onEdit} />
+              <EditPencil onEdit={edit.onEdit} label={edit.label} />
             )
           ) : null}
           {switcher && wide ? <div className="ms-4 w-fit shrink-0">{switcher}</div> : null}
@@ -163,9 +165,9 @@ export function ScreenHeader({
 const VIEWS_BESIDE_TITLE = '(min-width: 64rem)'
 
 /** The pencil beside the title: quiet, the title's own act, a 44px target. */
-function EditPencil({ onEdit }: { onEdit: () => void }) {
+function EditPencil({ onEdit, label: named }: { onEdit: () => void; label?: string }) {
   const { t } = useTranslation('common')
-  const label = t('editMode.edit')
+  const label = named ?? t('editMode.edit')
   return (
     <Button
       variant="ghost"

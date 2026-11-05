@@ -25,6 +25,12 @@ export const songs = {
   chordCount_other: '{{count}} chords',
   // The Filter button and its sheet (ADR 0106): Key, Level and Favourites, each folding.
   filters: {
+    folder: 'Folder',
+    progress: 'Progress',
+    any: 'Any',
+    noFolder: 'Not in a folder',
+    learned: 'Learned',
+    notLearned: 'Not learned yet',
     title: 'Filters',
     on: 'Filters: {{count}} on',
     key: 'Key',
@@ -75,10 +81,12 @@ export const songs = {
     shareCount_other: '{{count}} groups',
     done: 'Done',
     guestTitle: 'Share folders with a group',
-    guestLine: 'A class, a choir or a band: sign in to make a group and share songs only with its members.',
+    guestLine:
+      'A class, a choir or a band: sign in to make a group and share songs only with its members.',
     signIn: 'Sign in',
     loading: 'Loading your groups…',
-    noneToShare: 'You have no groups yet. Make one with Songs’ + (New group), then share this folder with it.',
+    noneToShare:
+      'You have no groups yet. Make one with Songs’ + (New group), then share this folder with it.',
     access: 'What the group may do',
     canView: 'Can view',
     canEdit: 'Can edit',
@@ -135,9 +143,13 @@ export const songs = {
       body: 'You can bring it back from Archived.',
     },
     home: 'Home',
+    play: 'Play',
+    editScore: 'Edit score',
+    settings: 'Settings',
+    shareLink: 'Share link',
     favourite: 'Add to favourites',
     unfavourite: 'Remove from favourites',
-    moveTo: 'Move to…',
+    moveTo: 'Move to folder…',
     archive: 'Archive',
     restore: 'Restore',
     delete: 'Delete',
@@ -517,7 +529,6 @@ export const songs = {
     mxl: 'Compressed MusicXML (.mxl)',
     midi: 'MIDI',
     midiAligned: 'MIDI, time aligned',
-    share: 'Share link',
   },
   // A song read from a MusicXML or MIDI file (ADR 0107): New's Import, or a file dropped on the
   // library; what the file holds that a song can't, listed after.

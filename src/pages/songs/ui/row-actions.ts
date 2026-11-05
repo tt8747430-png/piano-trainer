@@ -1,4 +1,17 @@
-import { Archive, Download, FolderInput, Heart, HeartOff, PencilLine, Trash2 } from 'lucide-react'
+import {
+  Archive,
+  Download,
+  FolderInput,
+  Heart,
+  HeartOff,
+  Link2,
+  Music,
+  Palette,
+  PencilLine,
+  Play,
+  Settings,
+  Trash2,
+} from 'lucide-react'
 import type { TFunction } from 'i18next'
 import type { ShelvedFolder } from '@/entities/library'
 import { isPiece, type Entry } from '@/entities/piece'
@@ -6,15 +19,50 @@ import type { RowAction } from '@/widgets/song-library'
 import type { LibraryPage } from '../model/use-library-page'
 
 /**
- * A song's actions in the library (ADR 0106): Favourite, Move to… (where it may leave the folder,
- * R29 B4), Archive, Export… (its files and link, ADR 0107) where it has music, and Delete for the
+ * A song's actions in the library (ADR 0106, R31-S), in the menu's four parts: Play, Edit score and
+ * Settings (a song with music); Favourite and Move to folder… (where it may leave the folder, R29
+ * B4); Share link and Export… (its files, ADR 0107) where it has music; Archive, and Delete for the
  * learner's own song alone, asked first.
  */
 export function songActions(entry: Entry, page: LibraryPage, t: TFunction<'songs'>): RowAction[] {
   const favourite = page.favourites.includes(entry.id)
+  const music = isPiece(entry)
   return [
     {
+      key: 'play',
+      group: 'open',
+      label: t('library.play'),
+      icon: Play,
+      paint: 'yellow',
+      onSelect: () => page.openSong(entry.id, 'play'),
+    },
+    ...(music
+      ? [
+          {
+            key: 'edit',
+            group: 'open',
+            label: t('library.editScore'),
+            icon: Music,
+            paint: 'sky' as const,
+            onSelect: () => page.openSong(entry.id, 'edit'),
+          },
+        ]
+      : []),
+    ...(music
+      ? [
+          {
+            key: 'settings',
+            group: 'open',
+            label: t('library.settings'),
+            icon: Settings,
+            paint: 'sand' as const,
+            onSelect: () => page.openSong(entry.id, 'settings'),
+          },
+        ]
+      : []),
+    {
       key: 'favourite',
+      group: 'library',
       label: t(favourite ? 'library.unfavourite' : 'library.favourite'),
       icon: favourite ? HeartOff : Heart,
       paint: 'sand',
@@ -24,6 +72,7 @@ export function songActions(entry: Entry, page: LibraryPage, t: TFunction<'songs
       ? [
           {
             key: 'move',
+            group: 'library',
             label: t('library.moveTo'),
             icon: FolderInput,
             paint: 'sky' as const,
@@ -32,25 +81,35 @@ export function songActions(entry: Entry, page: LibraryPage, t: TFunction<'songs
           },
         ]
       : []),
-    ...(page.may('archiveSong')
+    ...(music
       ? [
           {
-            key: 'archive',
-            label: t('library.archive'),
-            icon: Archive,
-            paint: 'lilac' as const,
-            onSelect: () => page.archive([entry.id]),
+            key: 'share',
+            group: 'share',
+            label: t('library.shareLink'),
+            icon: Link2,
+            paint: 'grass' as const,
+            onSelect: () => page.open({ kind: 'share', song: entry.id }),
           },
-        ]
-      : []),
-    ...(isPiece(entry)
-      ? [
           {
             key: 'export',
+            group: 'share',
             label: t('export.action'),
             icon: Download,
             paint: 'grass' as const,
             onSelect: () => page.open({ kind: 'export', song: entry.id }),
+          },
+        ]
+      : []),
+    ...(page.may('archiveSong')
+      ? [
+          {
+            key: 'archive',
+            group: 'away',
+            label: t('library.archive'),
+            icon: Archive,
+            paint: 'lilac' as const,
+            onSelect: () => page.archive([entry.id]),
           },
         ]
       : []),
@@ -82,13 +141,23 @@ export function folderActions(
   const actions: (RowAction | false)[] = [
     page.mayOnFolder('renameFolder', folder) && {
       key: 'edit',
+      group: 'look',
       label: t('folder.edit'),
       icon: PencilLine,
       paint: 'grass',
       onSelect: () => page.editFolder(folder.id),
     },
+    {
+      key: 'card-style',
+      group: 'look',
+      label: t('cardStyle.open'),
+      icon: Palette,
+      paint: 'yellow',
+      onSelect: () => page.openCardStyle(folder.id),
+    },
     page.may('moveOut') && {
       key: 'move',
+      group: 'place',
       label: t('library.moveTo'),
       icon: FolderInput,
       paint: 'sky',
@@ -96,6 +165,7 @@ export function folderActions(
     },
     page.mayOnFolder('archiveFolder', folder) && {
       key: 'archive',
+      group: 'away',
       label: t('folder.archive'),
       icon: Archive,
       paint: 'lilac',

@@ -729,7 +729,7 @@ export const editor = {
     standing: {
       unpublished: 'Not published',
       published: 'Published',
-      changed: 'Changed since it was published',
+      changed: 'Has changes',
     },
     changes: 'What changed',
     changesDrafted: 'Your changes since it was last published are saved and wait to be published.',

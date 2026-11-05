@@ -9,6 +9,8 @@ const FRESH: Omit<SongsHome, 'view'> = {
   stage: 'any',
   key: '',
   favourites: false,
+  folder: 'any',
+  learned: 'any',
   cat: 'all',
   shelf: '',
 }

@@ -662,7 +662,7 @@ export const editor: LocaleResources['editor'] = {
     standing: {
       unpublished: 'Не опубликовано',
       published: 'Опубликовано',
-      changed: 'Изменено после публикации',
+      changed: 'Есть изменения',
     },
     changes: 'Что изменилось',
     changesDrafted: 'Изменения с последней публикации сохранены и ждут публикации.',

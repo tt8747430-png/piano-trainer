@@ -1,0 +1,379 @@
+<meta charset="utf-8">
+<title>Songs, Round 31</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Noto+Music&family=Onest:wght@400;500;600&display=swap">
+<style>
+/* Layout: a reading column of numbered questions; each draws whole app screens (phone 393×852, laptop 1710×904, scaled)
+   in Piano Trainer's own tokens, with a feedback box under every screen. */
+:root {
+  --paper: #f7f3ee; --card: #fefdfb; --sand: #eee9e2; --line: #dad1c8; --ink: #332921; --ink-soft: #685e56;
+  --honey: #edc684; --honey-ink: #5a4214; --grass: #d9ebd5; --grass-ink: #44684a; --sky: #e0effa; --sky-ink: #356890;
+  --lilac: #e6dff6; --lilac-ink: #6a5988; --sandw: #f5e0cf; --sand-ink: #7d5b40; --yellow: #f6ebc9; --yellow-ink: #7a5c18;
+  --bad: #f3d6d2; --bad-ink: #8a3a2e; --scrim: rgba(51, 41, 33, .32); --frame: #1d1916;
+  --display: 'Literata', Georgia, serif; --sans: 'Onest', system-ui, sans-serif; --music: 'Noto Music', serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #191512; --card: #24201c; --sand: #2e2924; --line: #453e38; --ink: #ede9e1; --ink-soft: #b5aca1;
+  --honey: #d4b176; --honey-ink: #2a1f0a; --grass: #2c3d2c; --grass-ink: #b5d6ae; --sky: #22344a; --sky-ink: #a9cdec;
+  --lilac: #352d47; --lilac-ink: #cfc2ec; --sandw: #3d2f24; --sand-ink: #e4c4a6; --yellow: #3a321d; --yellow-ink: #e6cf93;
+  --bad: #45251f; --bad-ink: #f0b9ae; --scrim: rgba(0,0,0,.5); --frame: #000; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #191512; --card: #24201c; --sand: #2e2924; --line: #453e38; --ink: #ede9e1; --ink-soft: #b5aca1;
+  --honey: #d4b176; --honey-ink: #2a1f0a; --grass: #2c3d2c; --grass-ink: #b5d6ae; --sky: #22344a; --sky-ink: #a9cdec;
+  --lilac: #352d47; --lilac-ink: #cfc2ec; --sandw: #3d2f24; --sand-ink: #e4c4a6; --yellow: #3a321d; --yellow-ink: #e6cf93;
+  --bad: #45251f; --bad-ink: #f0b9ae; --scrim: rgba(0,0,0,.5); --frame: #000; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); margin: 0 }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 28px 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0 }
+h1 { font-size: 30px } h2 { font-size: 22px } h3 { font-size: 16px }
+p { margin: 0; max-width: 65ch } .soft { color: var(--ink-soft) }
+.intro { display: grid; gap: 10px; margin-bottom: 8px }
+.toc { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); padding-block: 8px; display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--line) }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper) }
+.toc a { font-size: 13px; color: var(--ink); text-decoration: none; background: var(--sand); border-radius: 999px; padding: 4px 10px }
+.toc a.done { background: var(--grass); color: var(--grass-ink) }
+.toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-left: auto }
+.toolbar button { font: 500 13px var(--sans); border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 4px 11px; cursor: pointer }
+section.q { border-top: 1px solid var(--line); padding-block: 30px; display: grid; gap: 14px }
+section.q:first-of-type { border-top: 0 }
+.qhead { display: flex; gap: 10px; align-items: baseline } .qnum { font: 600 13px var(--sans); color: var(--ink-soft); white-space: nowrap }
+.where { font-size: 13px; color: var(--ink-soft) }
+.rec { background: var(--sky); color: var(--sky-ink); border-radius: 12px; padding: 10px 14px; max-width: 80ch }
+.screens { display: flex; flex-wrap: wrap; gap: 26px; align-items: flex-start }
+figure { margin: 0; display: grid; gap: 8px; min-width: 0; max-width: 100% }
+figcaption { font-size: 13.5px; color: var(--ink-soft); max-width: 46ch } figcaption b { color: var(--ink); display: block; font-size: 14px }
+.opt { display: inline-block; font: 600 12px var(--sans); background: var(--honey); color: var(--honey-ink); border-radius: 6px; padding: 1px 7px; margin-right: 6px }
+.opt.b { background: var(--sand); color: var(--ink) }
+table.map { border-collapse: collapse; font-size: 13.5px; width: 100%; max-width: 920px }
+.tablewrap { overflow-x: auto; max-width: 100% }
+table.map th, table.map td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+table.map th { font-weight: 600; color: var(--ink-soft); font-size: 12.5px }
+/* feedback */
+.fb { display: flex; gap: 6px; flex-wrap: wrap }
+.fb button { font: 500 12.5px var(--sans); border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 5px 11px; cursor: pointer }
+.fb button[aria-pressed="true"][data-v="ok"] { background: var(--grass); color: var(--grass-ink); border-color: var(--grass-ink) }
+.fb button[aria-pressed="true"][data-v="change"] { background: var(--honey); color: var(--honey-ink); border-color: var(--honey) }
+.fb button[aria-pressed="true"][data-v="remove"] { background: var(--bad); color: var(--bad-ink); border-color: var(--bad-ink) }
+button:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--sky-ink); outline-offset: 2px }
+figure textarea, .qfb textarea { width: 100%; min-height: 40px; font: 13px var(--sans); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 7px 9px; resize: vertical }
+:is(figure, .qfb) textarea::placeholder { color: var(--ink-soft) }
+.saved { font-size: 12px; color: var(--ink-soft); min-height: 1em }
+
+/* ——— device frames (true sizes, scaled) ——— */
+.dev { position: relative; overflow: hidden; border-radius: 34px; background: var(--frame); padding: 9px }
+.dev.phone { width: calc(393px * var(--s) + 18px); height: calc(852px * var(--s) + 18px); --s: .74 }
+.dev.mac { width: calc(1710px * var(--s) + 22px); height: calc(904px * var(--s) + 34px); --s: .55; border-radius: 16px; padding: 11px 11px 23px }
+.dev > .scr { width: 393px; height: 852px; transform: scale(var(--s)); transform-origin: 0 0; border-radius: 26px }
+.dev.mac > .scr { width: 1710px; height: 904px; border-radius: 4px }
+@media (max-width: 720px) { .dev.mac { --s: .42 } .dev.phone { --s: .7 } }
+.scrollx { overflow-x: auto; max-width: 100% }
+@media (max-width: 720px) { .scrollx:has(.mac)::after { content: "Scroll sideways for the whole screen →"; display: block; font-size: 12px; color: var(--ink-soft); padding-top: 4px } }
+@media (min-width: 721px) and (max-width: 1100px) { .dev.mac { --s: .38 } }
+
+/* ——— the app ——— */
+.scr { position: relative; overflow: hidden; background: var(--paper); color: var(--ink); font: 16px/1.4 var(--sans); display: flex; flex-direction: column }
+.scr.mac { flex-direction: row }
+.sb { width: 256px; flex: none; background: var(--card); border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: 0 12px 16px }
+.sb .brand { height: 80px; display: flex; align-items: center; justify-content: space-between; padding-left: 12px; font: 600 24px var(--display) }
+.sb .it { height: 44px; display: flex; gap: 12px; align-items: center; padding: 0 12px; border-radius: 12px; font-weight: 600; color: var(--ink-soft); font-size: 16px }
+.sb .it.on { background: var(--sand); color: var(--ink) }
+.sb .foot { margin-top: auto; display: grid; gap: 4px }
+.sb .acc { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 12px }
+.main { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative }
+.pad { padding: 0 16px } .mac .pad { padding: 0 40px }
+.bar { min-height: 56px; display: flex; align-items: center; gap: 8px; padding: 4px 16px; flex: none }
+.mac .bar { padding: 8px 40px; min-height: 72px }
+.bar .t { font: 600 20px/1.2 var(--display); min-width: 0; display: flex; align-items: center; gap: 6px }
+.bar .t > span:first-child { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.bar .t.lg { font-size: 24px } .mac .bar .t { font-size: 22px } .mac .bar .t.lg { font-size: 26px }
+.bar .tools { margin-left: auto; display: flex; gap: 6px; flex: none }
+.rb { width: 44px; height: 44px; border-radius: 999px; background: var(--sand); display: grid; place-items: center; flex: none; color: var(--ink) }
+.rb.plain { background: transparent } .rb.on { background: var(--grass); color: var(--grass-ink) }
+.rb.sm { width: 36px; height: 36px; background: transparent; color: var(--ink-soft) }
+.edit-pen { color: var(--ink-soft) }
+.seg { display: inline-flex; justify-self: start; align-self: start; width: max-content; background: var(--sand); border-radius: 999px; padding: 3px; gap: 2px; font: 600 14px var(--sans) }
+.seg span { padding: 7px 14px; border-radius: 999px; color: var(--ink-soft) } .seg span.on { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08) }
+.field { display: flex; align-items: center; gap: 8px; height: 44px; border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 0 12px; color: var(--ink-soft); font-size: 15px; flex: 1; min-width: 0 }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); font-size: 14px; white-space: nowrap }
+.chip b { font-family: var(--display) } .chip.on { background: var(--sand); border-color: var(--sand) }
+.h2 { font: 600 13px var(--sans); color: var(--ink-soft); padding: 18px 4px 8px; display: flex; justify-content: space-between }
+.h2 a { color: var(--sky-ink); font-weight: 500; text-decoration: none }
+.group { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden }
+.row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; min-height: 60px; border-top: 1px solid var(--line) }
+.row:first-child { border-top: 0 }
+.tile { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex: none }
+.p-yellow { background: var(--yellow); color: var(--yellow-ink) } .p-sky { background: var(--sky); color: var(--sky-ink) }
+.p-grass { background: var(--grass); color: var(--grass-ink) } .p-lilac { background: var(--lilac); color: var(--lilac-ink) }
+.p-sand { background: var(--sandw); color: var(--sand-ink) }
+.row .txt { flex: 1; min-width: 0 } .row .n { font-weight: 600; font-size: 16px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere }
+.row .d { font-size: 13.5px; color: var(--ink-soft); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.key { font: 600 16px var(--display); min-width: 26px; text-align: center }
+.lvl { display: inline-flex; gap: 2px; align-items: flex-end; height: 12px } .lvl i { width: 3px; background: var(--line); border-radius: 1px } .lvl i.f { background: var(--ink-soft) }
+.tick { color: var(--grass-ink) }
+.fab { position: absolute; right: 20px; bottom: 100px; width: 56px; height: 56px; border-radius: 999px; background: var(--honey); color: var(--honey-ink); display: grid; place-items: center; box-shadow: 0 6px 16px rgba(0,0,0,.18) }
+.mac .fab { bottom: 32px; right: 40px }
+.fab.wide { width: auto; padding: 0 22px; gap: 8px; display: flex; align-items: center; font-weight: 600 }
+.tabs { position: absolute; left: 0; right: 0; bottom: 0; height: 84px; background: var(--card); border-top: 1px solid var(--line); display: flex; padding: 6px 8px 0; gap: 4px }
+.tabs div { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; font: 600 12px var(--sans); color: var(--ink-soft); padding-top: 6px; border-radius: 12px; height: 54px }
+.tabs div.on { background: var(--sand); color: var(--ink) }
+.status { height: 47px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; font: 600 15px var(--sans) }
+.scroll { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0 }
+.scroll > * { flex-shrink: 0 }
+.cards { display: flex; gap: 10px }
+.scard { width: 150px; flex: none; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 10px; display: grid; gap: 6px }
+.scard .cv { height: 70px; border-radius: 10px; display: grid; place-items: center }
+.scard .n { font-weight: 600; font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.scard .d { font-size: 12.5px; color: var(--ink-soft) }
+/* laptop library */
+.lib { display: flex; flex: 1; min-height: 0 }
+.tree { width: 300px; flex: none; border-right: 1px solid var(--line); padding: 8px 16px 16px 40px; display: grid; align-content: start; gap: 2px }
+.tree .ti { height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 10px; border-radius: 10px; font-size: 15px; font-weight: 500 }
+.tree .ti.on { background: var(--sand); font-weight: 600 } .tree .ti .c { margin-left: auto; color: var(--ink-soft); font-size: 13px; font-weight: 400 }
+.tree .ti.ind { padding-left: 32px } .tree .lab { font: 600 12px var(--sans); color: var(--ink-soft); padding: 14px 10px 4px; text-transform: none }
+.tree .ti .sw { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center }
+.list { flex: 1; min-width: 0; padding: 8px 40px 16px 32px; display: flex; flex-direction: column }
+.thead, .trow { display: grid; grid-template-columns: minmax(0, 3fr) 70px minmax(0, 2fr) 70px 70px 110px 40px; gap: 12px; align-items: center; padding: 0 12px }
+.thead { font: 600 12.5px var(--sans); color: var(--ink-soft); height: 36px; border-bottom: 1px solid var(--line) }
+.trow { height: 58px; border-bottom: 1px solid var(--line); font-size: 15px } .trow .n { font-weight: 600 } .trow .d { font-size: 13px; color: var(--ink-soft) }
+.trow .chs { font-family: var(--display); color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--card); border-radius: 22px 22px 0 0; box-shadow: 0 -8px 30px rgba(0,0,0,.18); padding: 8px 16px 34px; display: grid; gap: 10px }
+.sheet .grip { width: 36px; height: 5px; background: var(--line); border-radius: 9px; margin: 0 auto 4px }
+.scrimm { position: absolute; inset: 0; background: var(--scrim) }
+.btn { height: 48px; border-radius: 12px; background: var(--honey); color: var(--honey-ink); display: grid; place-items: center; font-weight: 600 }
+.btn.ghost { background: var(--sand); color: var(--ink) }
+.check { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--line); display: grid; place-items: center; flex: none }
+.check.on { background: var(--honey); border-color: var(--honey); color: var(--honey-ink) }
+.pill { font-size: 12.5px; padding: 2px 9px; border-radius: 999px; background: var(--sand); color: var(--ink-soft); white-space: nowrap }
+.fieldline { border-bottom: 1px dashed var(--line); padding-bottom: 2px }
+.editing { outline: 2px solid var(--honey); outline-offset: 2px; border-radius: 6px; -webkit-line-clamp: unset !important; overflow: visible !important }
+.cover { border-radius: 16px; display: grid; place-items: center }
+.kbd { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; width: 74px; height: 38px; position: relative; background: var(--line); border: 1px solid var(--line); border-radius: 3px; overflow: hidden }
+.kbd i { background: #fbf9f6 } .kbd b { position: absolute; top: 0; width: 7px; height: 22px; background: #2a231d }
+.kbd u { position: absolute; bottom: 4px; width: 5px; height: 5px; border-radius: 9px; background: #2a231d }
+.staff { color: var(--ink) }
+.toast { position: absolute; left: 50%; bottom: 110px; transform: translateX(-50%); background: var(--ink); color: var(--paper); border-radius: 999px; padding: 9px 16px; font-size: 14px; white-space: nowrap }
+.dot { width: 8px; height: 8px; border-radius: 9px; background: var(--honey); display: inline-block }
+.av { width: 32px; height: 32px; border-radius: 999px; display: grid; place-items: center; font: 600 15px var(--display); flex: none }
+
+/* R30 Practice: the type ramp and 44px targets (critique round 1) */
+.rb.sm { width: 44px; height: 44px }
+.h2 { font-size: 14px } .h2 a.all { display: inline-flex; align-items: center; min-height: 44px; margin: -14px 0 }
+.row .d { font-size: 14px } .thead { font-size: 14px } .trow .d { font-size: 14px }
+.tree .lab { font-size: 14px } .pill { font-size: 14px }
+.lvl i { background: color-mix(in oklab, var(--ink-soft) 35%, transparent) }
+.kbd { width: 64px }
+
+/* R31: the installed app's home indicator, 14px soft text */
+.tabs { padding: 6px 8px 34px } .tabs div { height: 44px; justify-content: center; padding-top: 0 }
+.row .d, .h2 { font-size: 14px }
+</style>
+
+<div class="wrap">
+  <div class="intro">
+    <h1>Songs, finished · Round 31</h1>
+    <p class="soft">What is left of Songs, drawn on the iPhone as the installed app (393 × 852, with its status bar and home indicator) and the MacBook Air 15″ (1710 × 904), scaled down. Each screen has a box: <b>Looks right</b>, <b>Change it</b> or <b>Not needed</b>, and a note.</p>
+    <p class="soft" id="storeNote">Connecting the feedback store…</p>
+  </div>
+  <nav class="toc" aria-label="Questions">
+    <a href="#q1">1 My songs · Explore</a><a href="#q2">2 Filters</a><a href="#q3">3 Card style</a><a href="#q4">4 Song page and Settings</a><a href="#q5">5 Menus</a>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button></span>
+  </nav>
+  <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>The view switch</h2></div>
+    <p class="where">Where: Songs (My songs · Explore) and Learn (Lessons · Courses), the same control.</p>
+    <p>What changes: the small switch under the bar, which left half its row empty, becomes the bar's title: two tabs, the current one in ink.</p>
+    <div class="screens" id="s1"></div>
+    <div class="rec">Recommendation: <b>A</b>. The App Store’s Today · Games, and Spotify and Instagram’s tabs, put a place’s views where its title stands; nothing extra is drawn, and the row is full.</div>
+  </section>
+  <section class="q" id="q2"><div class="qhead"><span class="qnum">2</span><h2>Filters, and songs not in a folder</h2></div>
+    <p class="where">Where: Songs › Filter, and the laptop’s tree.</p>
+    <p>What changes: Filter gains Folder (Not in a folder) and Progress (Learned, Not learned yet). What is on shows as chips under the search; the tree gains Not in a folder.</p>
+    <div class="screens" id="s2"></div>
+  </section>
+  <section class="q" id="q3"><div class="qhead"><span class="qnum">3</span><h2>Card style</h2></div>
+    <p class="where">Where: a folder’s ⋯ › Card style, and Songs’ More › Card style. A lesson block’s style uses the same editor.</p>
+    <p>What changes: the preview no longer hangs over the controls. On a phone it has its own pane at the top and the controls scroll beneath it; on a laptop it has its own column. Corners, Border and Shadow are one row each of choices, not five words in a cramped switch or a − + stepper.</p>
+    <div class="screens" id="s3"></div>
+  </section>
+  <section class="q" id="q4"><div class="qhead"><span class="qnum">4</span><h2>The song page and its Settings</h2></div>
+    <p class="where">Where: a song’s page, its ⚙ Settings, and Export.</p>
+    <p>What changes: ✎ beside the title opens the score editor. The song page itself (cover, details, about, tags) is edited from Settings › Edit song page. Settings are grouped: the song, Library, Share, Progress, and Delete apart. Share link appears once.</p>
+    <div class="screens" id="s4"></div>
+  </section>
+  <section class="q" id="q5"><div class="qhead"><span class="qnum">5</span><h2>Menus</h2></div>
+    <p class="where">Where: a song’s ⋯ and a folder’s ⋯ (and the same as a swipe and on the laptop’s table).</p>
+    <p>What changes: each menu starts with what you open, then what you change, then sharing, then what removes; groups with separators.</p>
+    <div class="screens" id="s5"></div>
+  </section>
+</div>
+
+<script>
+// ——— icons (lucide shapes) ———
+const P = {
+  back: '<path d="m15 18-6-6 6-6"/>', pen: '<path d="M21.2 6.8a2.8 2.8 0 0 0-4-4L3.8 16.2 3 21l4.8-.8Z"/><path d="m15 5 4 4"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',
+  more: '<circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', select: '<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8M13 12h8M13 18h8"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', music: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+  grad: '<path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>', metro: '<path d="M12 11.4V9.1"/><path d="m12 17 6.6-6.6"/><path d="M19.2 16.5 16.4 4.6A2 2 0 0 0 14.4 3H9.6a2 2 0 0 0-2 1.6L4.8 16.5A2.5 2.5 0 0 0 7.2 19.5h9.6a2.5 2.5 0 0 0 2.4-3Z"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/>', heart: '<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>', checkc: '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>', play: '<path d="M6 3v18l15-9Z" fill="currentColor"/>',
+  folder: '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9l-.8-1.2A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>',
+  archive: '<rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8M10 12h4"/>', clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+  share: '<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4M12 2v13"/>', link: '<path d="M9 17H7A5 5 0 0 1 7 7h2M15 7h2a5 5 0 1 1 0 10h-2M8 12h8"/>',
+  church: '<path d="M10 9h4M12 7v5M14 22v-4a2 2 0 0 0-4 0v4M18 22V5l-6-3-6 3v17M2 22h20"/>', heartsm: '<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/>',
+  book: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>', piano: '<path d="M18.5 8c-1.4 0-2.6-.8-3.2-2A6.9 6.9 0 0 0 2 9v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-8.5C22 9.6 20.4 8 18.5 8"/><path d="M2 14h20M6 14v4M10 14v4M14 14v4M18 14v4"/>',
+  chev: '<path d="m9 18 6-6-6-6"/>', down: '<path d="m6 9 6 6 6-6"/>', sort: '<path d="m3 16 4 4 4-4M7 20V4M21 8l-4-4-4 4M17 4v16"/>', filter: '<path d="M3 6h18M7 12h10M10 18h4"/>',
+  panel: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M16 15l-3-3 3-3"/>', copy: '<rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2"/>',
+  info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>', lock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  grip: '<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>',
+  mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4"/>',
+  wifi: '<path d="M12 20h.01M8.5 16.4a5 5 0 0 1 7 0M2 8.8a15 15 0 0 1 20 0M5 12.9a10 10 0 0 1 14 0"/><path d="M2 2l20 20"/>', star: '<path d="M12 2l3 7 7 .6-5.3 4.7 1.6 7.2L12 17.8 5.7 21.5l1.6-7.2L2 9.6 9 9z" fill="currentColor" stroke="none"/>',
+  image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>', trash: '<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+  door: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+};
+const ic = (n, s = 22, w = 1.9) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]}</svg>`;
+const rb = (n, cls = '') => `<span class="rb ${cls}">${ic(n, 20)}</span>`;
+const lvl = n => `<span style="display:inline-flex;gap:4px;align-items:center;font-size:13px;color:var(--ink-soft)" aria-label="Level ${n}"><span class="lvl">${[5, 8, 11, 14].map((h, i) => `<i style="height:${h}px" class="${i < n ? 'f' : ''}"></i>`).join('')}</span>${n}</span>`;
+const status = () => `<div class="status"><span>9:41</span><span>●●● ▮</span></div>`;
+const tabs = (on) => `<div class="tabs">${[['grad', 'Learn'], ['music', 'Songs'], ['metro', 'Practice'], ['user', 'Profile']].map(([i, l]) => `<div class="${l === on ? 'on' : ''}">${ic(i, 24)}${l}</div>`).join('')}</div>`;
+const sidebar = (on) => `<aside class="sb"><div class="brand">Piano Trainer <span style="color:var(--ink-soft)">${ic('panel', 20)}</span></div>
+  ${[['grad', 'Learn'], ['music', 'Songs'], ['metro', 'Practice']].map(([i, l]) => `<div class="it ${l === on ? 'on' : ''}">${ic(i, 20)}${l}</div>`).join('')}
+  <div class="foot"><div class="it">${ic('search', 20)}Search</div><div class="it">${ic('gear', 20)}Settings</div><div class="acc"><div class="it"><span class="av p-yellow" style="width:22px;height:22px;font-size:12px">K</span>Profile</div></div></div></aside>`;
+const phone = (inner, tab) => `<div class="dev phone"><div class="scr">${status()}${inner}${tab ? tabs(tab) : ''}</div></div>`;
+const mac = (inner, on = 'Songs') => `<div class="dev mac"><div class="scr mac">${sidebar(on)}<div class="main">${inner}</div></div></div>`;
+const fig = (id, title, body, dev) => `<figure data-fb="${id}" data-title="${title}"><div class="scrollx">${dev}</div><figcaption><b>${id} ${title}</b>${body}</figcaption></figure>`;
+const kb = (dots) => `<span class="kbd">${Array(7).fill('<i></i>').join('')}${[9, 20, 41, 52, 63].map(x => `<b style="left:${x}%"></b>`).join('')}${dots.map(x => `<u style="left:${x}%"></u>`).join('')}</span>`;
+const SONGS = [
+  ['Amazing Grace', 'John Newton · tune New Britain', 'G', 'G  G7  C  D', 2, true, 'Today'],
+  ['Silent Night', 'Joseph Mohr · Franz Gruber', 'C', 'C  G7  F', 2, true, 'Yesterday'],
+  ['Ode to Joy', 'Ludwig van Beethoven', 'C', 'C  G', 1, false, '3 Nov'],
+  ['Our Father in Heaven', 'О наш Отец на небесах', 'Fm', 'Fm  G°  C7  E♭', 3, false, '1 Nov'],
+  ['Wonderful Grace of Jesus', 'Haldor Lillenas', 'D♭', 'D♭  E°7  A♭7  F7', 4, false, '28 Oct'],
+];
+const songRow = ([n, by, k, , l, learned]) => `<div class="row"><div class="txt"><div class="n">${n}</div><div class="d">${by}</div></div><span class="key">${k}</span>${lvl(l)}<span class="tick" style="width:22px">${learned ? ic('checkc', 20) : ''}</span><span class="rb sm">${ic('more', 20)}</span></div>`;
+const FOLDERS = [['p-yellow', 'music', 'Songs to learn', '23 songs'], ['p-sand', 'heartsm', '«Боже, спасибо»', '20 songs'], ['p-sky', 'piano', 'Called to Play', '40 songs · 1 folder'], ['p-grass', 'church', 'Hymns', '5 songs']];
+const folderRow = ([p, i, n, d], extra = '') => `<div class="row"><span class="tile ${p}">${ic(i, 22)}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div>${extra}<span class="rb sm">${ic('more', 20)}</span></div>`;
+
+Object.assign(P, {
+  x: '<path d="M18 6 6 18M6 6l12 12"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/>',
+  dl: '<path d="M12 15V3M7 10l5 5 5-5M5 21h14"/>',
+  rotate: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+  sliders: '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+  fileup: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M12 18v-6M9 15l3-3 3 3"/>',
+});
+// The installed app: the status bar's 59 and the home indicator's 34 are the page's.
+const status2 = () => `<div style="height:47px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 30px 6px;font:600 15px var(--sans)"><span>9:41</span><span style="letter-spacing:2px">••• ▮</span></div>`;
+const app = (inner, tab) => `<div class="dev phone"><div class="scr" style="display:flex;flex-direction:column">${status2()}${inner}${tab ? tabs(tab) : ''}</div></div>`;
+const titleTabs = (a, b, on) => `<div class="bar" role="tablist">${[a, b].map((l) => `<span role="tab" aria-selected="${l === on}" style="font:600 22px/1.2 var(--sans);color:${l === on ? 'var(--ink)' : 'var(--ink-soft)'};min-height:44px;display:flex;align-items:center;box-shadow:${l === on ? 'inset 0 -2.5px 0 var(--ink)' : 'none'}">${l}</span>`).join('<span style="width:18px"></span>')}<div class="tools">${rb('select')}${rb('more')}</div></div>`;
+const search = (filters = 0) => `<div style="display:flex;gap:8px"><div class="field">${ic('search', 18)}Search songs<span style="margin-left:auto;display:flex;gap:4px;align-items:center;color:var(--ink)">${ic('sort', 16)}Manual</span></div><span class="rb" style="position:relative">${ic('filter', 20)}${filters ? `<b style="position:absolute;top:-2px;right:-2px;background:var(--honey);color:var(--honey-ink);border-radius:9px;font:700 12px var(--sans);padding:1px 6px">${filters}</b>` : ''}</span></div>`;
+const FOLD = [['p-yellow', 'music', 'Songs to learn', '23 songs'], ['p-sand', 'heartsm', '«Боже, спасибо»', '20 songs'], ['p-sky', 'piano', 'Called to Play', '15 songs']];
+const fRow = ([p, i, n, d]) => `<div class="row"><span class="tile ${p}">${ic(i, 22)}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div><span class="rb sm">${ic('more', 20)}</span></div>`;
+const sRow = ([n, d, k, l]) => `<div class="row"><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div><span class="key">${k}</span>${lvl(l)}<span class="rb sm">${ic('more', 20)}</span></div>`;
+const SONGS2 = [['Hot Cross Buns', '2 chords · C G', 'C', 1], ['Wonderful Grace of Jesus', 'Haldor Lillenas · 4 chords', 'D♭', 4], ['Silent Night', 'Joseph Mohr · 3 chords', 'C', 2], ['Our Father in Heaven', 'О наш Отец на небесах', 'Fm', 3]];
+const songsA = app(`${titleTabs('My songs', 'Explore', 'My songs')}<div class="pad" style="display:grid;gap:10px">${search()}</div><div class="scroll pad"><div class="h2"><span>Folders</span></div><div class="group">${FOLD.map(fRow).join('')}</div><div class="h2"><span>All songs</span><a class="all">Show all 63</a></div><div class="group">${SONGS2.slice(0, 3).map(sRow).join('')}</div></div><span class="fab" style="bottom:108px">${ic('plus', 24)}</span>`, 'Songs');
+const songsB = app(`<div class="bar"><div class="t lg">Songs</div><div class="tools">${rb('select')}${rb('more')}</div></div><div class="pad" style="display:grid;gap:10px"><div class="seg" style="width:100%;display:grid;grid-template-columns:1fr 1fr;text-align:center"><span class="on">My songs</span><span>Explore</span></div>${search()}</div><div class="scroll pad"><div class="h2"><span>Folders</span></div><div class="group">${FOLD.map(fRow).join('')}</div></div><span class="fab" style="bottom:108px">${ic('plus', 24)}</span>`, 'Songs');
+const learnA = app(`${titleTabs('Lessons', 'Courses', 'Lessons').replace(rb('select'), '').replace(rb('more'), rb('pen'))}<div class="scroll pad"><div class="h2"><span>Beginner</span></div><div class="group">${[['p-grass', 'grad', 'Your first notes', '12 lessons · 4 done'], ['p-sky', 'piano', 'Both hands', '10 lessons']].map(fRow).join('')}</div></div>`, 'Learn');
+const macTabs = mac(`<div class="bar">${['My songs', 'Explore'].map((l, i) => `<span role="tab" style="font:600 24px/1.2 var(--sans);color:${i ? 'var(--ink-soft)' : 'var(--ink)'};margin-right:22px;min-height:44px;display:inline-flex;align-items:center;box-shadow:${i ? 'none' : 'inset 0 -2.5px 0 var(--ink)'}">${l}</span>`).join('')}<div class="tools">${rb('select')}${rb('archive')}${rb('more')}</div></div><div class="lib"><div class="tree">${[['music', 'All songs', 63], ['heart', 'Favourites', 4], ['folder', 'Not in a folder', 9]].map(([i, l, c], k) => `<div class="ti ${k ? '' : 'on'}">${ic(i, 18)}${l}<span class="c">${c}</span></div>`).join('')}<div class="lab">Folders</div>${FOLD.map(([p, i, n, d]) => `<div class="ti"><span class="sw ${p}">${ic(i, 14)}</span>${n}<span class="c">${parseInt(d)}</span></div>`).join('')}</div><div class="list"><div style="display:flex;gap:10px;margin-bottom:10px">${search().replace('display:flex;gap:8px', 'display:flex;gap:8px;flex:1')}</div><div class="thead" style="grid-template-columns:minmax(0,3fr) 70px 120px 44px"><span>Title ${ic('down', 14)}</span><span>Key</span><span>Level</span><span></span></div>${SONGS2.map(([n, d, k, l]) => `<div class="trow" style="grid-template-columns:minmax(0,3fr) 70px 120px 44px"><span><div class="n">${n}</div><div class="d">${d}</div></span><span class="key">${k}</span>${lvl(l)}<span class="rb sm">${ic('more', 20)}</span></div>`).join('')}</div></div>`);
+document.getElementById('s1').innerHTML = [
+  fig('1.1', 'A · Phone, title tabs', 'My songs and Explore are the bar’s title; tap Explore and it takes the ink. Select and More stay at the bar’s end.', songsA),
+  fig('1.2', 'A · Phone, Learn', 'Lessons and Courses, the same tabs.', learnA),
+  fig('1.3', 'A · Laptop', 'The same tabs where the title stands.', macTabs),
+  fig('1.4', 'B · Phone, a full-width switch', 'The switch under the bar, its two halves filling the row.', songsB),
+].join('');
+
+// ——— 2 filters ———
+const segRow = (items, on) => `<div class="seg" style="width:100%;display:grid;grid-template-columns:repeat(${items.length},1fr);text-align:center">${items.map((x, i) => `<span class="${i === on ? 'on' : ''}" style="min-height:44px;display:grid;place-items:center;padding:4px">${x}</span>`).join('')}</div>`;
+const radio = (l, on) => `<div class="row" style="min-height:48px"><span style="width:22px;height:22px;border-radius:99px;border:2px solid ${on ? 'var(--honey-ink)' : 'var(--line)'};display:grid;place-items:center">${on ? '<i style="width:10px;height:10px;border-radius:9px;background:var(--honey-ink)"></i>' : ''}</span><div class="txt"><div style="font-size:16px">${l}</div></div></div>`;
+const filterSheet = app(`${titleTabs('My songs', 'Explore', 'My songs')}<div class="pad" style="opacity:.35">${search()}</div><div style="position:absolute;inset:0;background:rgba(0,0,0,.18)"></div><div class="sheet" style="top:110px;overflow:hidden;align-content:start;gap:6px"><div class="grip"></div><div style="display:flex;align-items:center"><b style="font:600 22px var(--display)">Filter</b><span class="rb plain" style="margin-left:auto">${ic('x', 20)}</span></div><div class="h2"><span>Folder</span></div>${segRow(['Any', 'Not in a folder'], 1)}<div class="h2"><span>Progress</span></div>${segRow(['Any', 'Learned', 'Not learned yet'], 2)}<div class="h2"><span>Level</span></div><div style="display:flex;gap:8px;flex-wrap:wrap">${['Any', 'Beginner', 'Intermediate', 'Advanced', 'Professional'].map((l, i) => `<span class="chip ${i ? '' : 'on'}" style="height:44px">${l}</span>`).join('')}</div><div class="h2"><span>Key</span></div><div style="display:flex;gap:8px;flex-wrap:wrap">${['Any key', 'C · 21', 'G · 9', 'F · 6', 'D♭ · 2'].map((l, i) => `<span class="chip ${i ? '' : 'on'}" style="height:44px">${l}</span>`).join('')}</div><div class="group" style="margin-top:12px"><div class="row" style="border-top:0;min-height:52px"><div class="txt"><div style="font-size:16px">Favourites only</div></div><span style="width:48px;height:30px;border-radius:99px;background:var(--line);position:relative"><i style="position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:99px;background:#fff"></i></span></div></div><div style="height:90px"></div><div style="display:flex;gap:10px;position:absolute;left:0;right:0;bottom:0;padding:10px 16px 34px;background:var(--card);border-top:1px solid var(--line)"><span class="chip" style="height:48px;flex:1;justify-content:center">Clear</span><span class="chip on" style="height:48px;flex:2;justify-content:center;background:var(--honey);border-color:var(--honey);color:var(--honey-ink);font-weight:600">Show 4 songs</span></div></div>`);
+const chipsOn = app(`${titleTabs('My songs', 'Explore', 'My songs')}<div class="pad" style="display:grid;gap:10px">${search(2)}<div style="display:flex;gap:8px">${['Not in a folder', 'Not learned yet'].map((l) => `<span class="chip on" style="height:44px">${l} ${ic('x', 16)}</span>`).join('')}</div></div><div class="scroll pad"><div class="h2"><span>4 songs</span></div><div class="group">${[['Lightly Row', '3 chords · C F G', 'C', 1], ['Brother John', 'Frère Jacques · 2 chords', 'C', 1], ['Amazing Grace', 'John Newton · 4 chords', 'G', 2], ['Ode to Joy', 'Beethoven · 2 chords', 'C', 1]].map(sRow).join('')}</div></div>`, 'Songs');
+document.getElementById('s2').innerHTML = [
+  fig('2.1', 'Phone, Filter', 'Folder and Progress first, then Level, Key and Favourites further down; Show n songs says what you will see.', filterSheet),
+  fig('2.2', 'Phone, filters on', 'Each filter that is on is a chip under the search; ✕ takes it off. The list says how many match.', chipsOn),
+  fig('2.3', 'Laptop, the tree', 'Not in a folder is a place of its own under Favourites, with its count (see 1.3).', macTabs),
+].join('');
+
+// ——— 3 card style ———
+const card = (p, i, n, d, st = '') => `<div style="display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;${st}"><span class="tile ${p}">${ic(i, 22)}</span><div style="min-width:0;flex:1"><div style="font-weight:600">${n}</div><div style="font-size:14px;color:var(--ink-soft)">${d}</div></div>${ic('chev', 18)}</div>`;
+const preview = `<div style="background:var(--sand);border-radius:18px;padding:12px;display:grid;gap:8px">${card('p-yellow', 'music', 'Songs to learn', '23 songs · Hot Cross Buns')}${card('p-sand', 'heartsm', '«Боже, спасибо»', '20 songs · Thank you, God')}</div>`;
+const segs = (label, items, on) => `<div style="display:grid;gap:6px"><b style="font-size:15px">${label}</b><div class="seg" style="width:100%;display:grid;grid-template-columns:repeat(${items.length},1fr);text-align:center">${items.map((x, i) => `<span class="${i === on ? 'on' : ''}" style="padding:9px 4px;min-height:44px;display:grid;place-items:center">${x}</span>`).join('')}</div></div>`;
+const corner = (r) => `<svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M4 20V${4 + r}${r ? `Q4 4 ${4 + r} 4` : ''}H20"/></svg>`;
+const presets = `<div style="display:grid;gap:6px"><b style="font-size:15px">Style</b><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">${[['Plain', 'var(--card)', 12, 1], ['Soft', '#cfe3f5', 16, 0], ['Bold', '#f6e7bf', 6, 0], ['Paper', '#fbf8f1', 2, 0], ['Night', '#1f2333', 14, 0], ['Custom', 'conic-gradient(#f3dfd0,#cfe3f5,#d8ead2,#f6e7bf,#f3dfd0)', 12, 0]].map(([n, c, r, on]) => `<div style="display:grid;gap:4px;padding:6px;border-radius:14px;${on ? 'background:var(--sand);' : ''}"><span style="height:40px;background:${c};border-radius:${r}px;border:1px solid var(--line)"></span><span style="font-size:14px;text-align:center;${on ? 'font-weight:600' : ''}">${n}</span></div>`).join('')}</div></div>`;
+const inks = (label) => `<div style="display:grid;gap:6px"><b style="font-size:15px">${label}</b><div style="display:flex;gap:10px">${['var(--ink)', 'var(--ink-soft)', 'var(--sky-ink)', 'var(--grass-ink)', 'var(--bad-ink)', 'var(--lilac-ink)'].map((c, i) => `<span style="width:44px;height:44px;border-radius:99px;display:grid;place-items:center;${i ? '' : 'outline:2.5px solid var(--ink);outline-offset:2px'}"><i style="width:36px;height:36px;border-radius:99px;background:${c}"></i></span>`).join('')}</div></div>`;
+const swatches = (label) => `<div style="display:grid;gap:6px"><b style="font-size:15px">${label}</b><div style="display:flex;gap:10px">${['var(--card)', '#f3dfd0', '#cfe3f5', '#d8ead2', '#f6e7bf', '#e4dcf3'].map((c, i) => `<span style="width:44px;height:44px;border-radius:99px;display:grid;place-items:center;${i ? '' : 'outline:2.5px solid var(--ink);outline-offset:2px'}"><i style="width:36px;height:36px;border-radius:99px;background:${c};border:1px solid var(--line)"></i></span>`).join('')}</div></div>`;
+const controls = `<div class="group" style="padding:14px;display:grid;gap:16px">${presets}${segs('Corners', [0, 3, 6, 10, 16].map(corner), 2)}${segs('Border', ['None', 'Thin', 'Thick'], 1)}${segs('Shadow', ['None', 'Low', 'High'], 0)}</div><div class="group" style="padding:14px;display:grid;gap:16px;margin-top:12px">${swatches('Fill')}${inks('Text colour')}</div>`;
+const csPhone = app(`<div class="bar">${rb('back')}<div class="t">Card style</div></div><div style="padding:4px 16px 10px;border-bottom:1px solid var(--line)">${preview}</div><div class="scroll pad">${controls}</div><div style="display:flex;gap:10px;padding:10px 16px 34px;border-top:1px solid var(--line);background:var(--paper)"><span class="chip" style="height:48px;flex:1;justify-content:center">Reset</span><span class="chip" style="height:48px;flex:2;justify-content:center;background:var(--honey);border-color:var(--honey);color:var(--honey-ink);font-weight:600">Apply</span></div>`);
+const csPhone2 = app(`<div class="bar">${rb('back')}<div class="t">Card style</div></div><div style="padding:4px 16px 10px;border-bottom:1px solid var(--line)">${preview}</div><div class="scroll pad"><div class="group" style="padding:14px;display:grid;gap:16px">${inks('Text colour')}${segs('Spacing', ['Compact', 'Normal', 'Roomy'], 1)}${segs('Layout', [`${'<i style="display:block;width:34px;height:4px;margin:2px auto;background:currentColor;border-radius:2px"></i>'.repeat(3)}List`, `<span style="display:grid;grid-template-columns:1fr 1fr;gap:3px;width:30px;margin:0 auto 2px">${'<i style="height:9px;background:currentColor;border-radius:2px"></i>'.repeat(4)}</span>Cards`], 1)}</div><div class="h2"><span>On each card</span></div><div class="group">${['Picture', 'Song count', 'First songs'].map((l) => `<div class="row" style="min-height:52px"><div class="txt"><div style="font-size:16px">${l}</div></div><span style="width:48px;height:30px;border-radius:99px;background:var(--grass-ink);position:relative"><i style="position:absolute;right:3px;top:3px;width:24px;height:24px;border-radius:99px;background:#fff"></i></span></div>`).join('')}</div><div class="h2"><span>Apply to</span></div><div class="group">${radio('Home only', true)}${radio('Home and every folder (12)', false)}</div></div><div style="display:flex;gap:10px;padding:10px 16px 34px;border-top:1px solid var(--line);background:var(--paper)"><span class="chip" style="height:48px;flex:1;justify-content:center">Reset</span><span class="chip" style="height:48px;flex:2;justify-content:center;background:var(--honey);border-color:var(--honey);color:var(--honey-ink);font-weight:600">Apply</span></div>`);
+const csMac = mac(`<div class="bar">${rb('back')}<div class="t lg">Card style</div><div class="tools"><span class="chip" style="height:44px">Reset</span><span class="chip" style="height:44px;background:var(--honey);border-color:var(--honey);color:var(--honey-ink);font-weight:600">Apply</span></div></div><div class="pad" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;max-width:1150px;align-items:start"><div style="display:grid;gap:8px"><div class="h2" style="padding-top:0"><span>Preview · Home</span></div><div style="background:var(--sand);border-radius:18px;padding:16px;display:grid;gap:10px">${card('p-yellow', 'music', 'Songs to learn', '23 songs · Hot Cross Buns')}${card('p-sand', 'heartsm', '«Боже, спасибо»', '20 songs · Thank you, God')}${card('p-sky', 'piano', 'Called to Play', '15 songs · How Great Thou Art')}</div></div><div>${controls}<div class="h2"><span>Apply to</span></div><div class="group">${radio('Home only', true)}${radio('Home and every folder (12)', false)}</div></div></div>`);
+document.getElementById('s3').innerHTML = [
+  fig('3.1', 'Phone, Card style', 'The preview in its own pane at the top; the controls scroll beneath it and never under it; Reset and Apply docked at the foot.', csPhone),
+  fig('3.2', 'Phone, scrolled', 'Further down: Text colour, Spacing, Layout, what each card shows, and Apply to; the preview still shows the change.', csPhone2),
+  fig('3.3', 'Laptop', 'The preview in its own column; the controls in the other.', csMac),
+].join('');
+
+// ——— 4 song page and settings ———
+const songPage = app(`<div class="bar">${rb('back')}<div class="t"><span>Wonderful Grace of Jesus</span><span class="rb sm" style="color:var(--ink)">${ic('pen', 20)}</span></div><div class="tools">${rb('checkc')}${rb('gear')}</div></div><div class="scroll pad" style="gap:12px"><div style="display:flex;gap:14px;align-items:center"><span class="tile p-yellow" style="width:84px;height:84px;font:600 34px var(--display);display:grid;place-items:center">D♭</span><div><div style="color:var(--ink-soft)">Haldor Lillenas · 1918</div><div style="display:flex;gap:6px;margin-top:6px"><span style="color:var(--ink-soft)">Hymn · D♭ major · </span>${lvl(4)}</div></div></div><div class="h2"><span>Sections</span></div><div class="group">${[['p-sky', 'music', 'Verse 1', '4 lessons · 1 done'], ['p-grass', 'music', 'Chorus', '4 lessons']].map(fRow).join('')}</div><div class="h2"><span>Chords</span></div><div class="group" style="padding:12px;display:flex;gap:14px">${['D♭', 'E°7', 'A♭7', 'F7'].map((c) => `<div style="display:grid;justify-items:center;gap:4px"><b style="font-family:var(--display)">${c}</b><span style="width:56px;height:30px;border:1px solid var(--line);border-radius:4px;background:repeating-linear-gradient(90deg,transparent 0 7px,var(--line) 7px 8px)"></span></div>`).join('')}</div><div class="h2"><span>Your practice</span></div><div class="group"><div class="row"><div class="txt"><div class="n">Played today</div><div class="d">2 takes this week</div></div>${ic('chev', 18)}</div></div></div><span class="fab wide" style="bottom:40px">${ic('play', 20)} Play</span>`);
+const head = `<div class="group"><div class="row" style="border-top:0;min-height:84px"><span class="tile p-yellow" style="width:56px;height:56px;font:600 22px var(--display);display:grid;place-items:center">D♭</span><div class="txt"><div class="n" style="font-family:var(--display);font-size:19px">Wonderful Grace of Jesus</div><div class="d">Haldor Lillenas</div></div></div><div class="row"><span class="tile p-sand">${ic('pen', 20)}</span><div class="txt"><div class="n">Edit song page</div><div class="d">Cover, details, about, tags</div></div>${ic('chev', 18)}</div><div class="row"><span class="tile p-sky">${ic('music', 20)}</span><div class="txt"><div class="n">Edit score</div></div>${ic('chev', 18)}</div></div>`;
+const libGroup = `<div class="h2"><span>Library</span></div><div class="group"><div class="row" style="border-top:0"><span class="tile p-grass">${ic('folder', 20)}</span><div class="txt"><div class="n">Move to folder…</div></div><span style="color:var(--ink-soft)">Hymns</span>${ic('chev', 18)}</div><div class="row"><span class="tile p-yellow">${ic('copy', 20)}</span><div class="txt"><div class="n">Duplicate</div></div></div><div class="row"><span class="tile p-lilac">${ic('archive', 20)}</span><div class="txt"><div class="n">Archive</div></div></div></div>`;
+const shareGroup = `<div class="h2"><span>Share</span></div><div class="group"><div class="row" style="border-top:0"><span class="tile p-lilac">${ic('globe', 20)}</span><div class="txt"><div class="n">Publish</div></div><span style="color:var(--ink-soft);white-space:nowrap">Changed</span>${ic('chev', 18)}</div><div class="row"><span class="tile p-grass">${ic('link', 20)}</span><div class="txt"><div class="n">Share link</div></div></div><div class="row"><span class="tile p-sky">${ic('dl', 20)}</span><div class="txt"><div class="n">Export</div><div class="d">MusicXML, MIDI</div></div></div></div>`;
+const settings1 = app(`<div class="bar">${rb('back')}<div class="t">Settings</div></div><div class="scroll pad">${head}${libGroup}</div>`);
+const settings2 = app(`<div class="bar">${rb('back')}<div class="t">Settings</div></div><div class="scroll pad">${shareGroup}<div class="h2"><span>Progress</span></div><div class="group"><div class="row" style="border-top:0"><span class="tile p-sand">${ic('rotate', 20)}</span><div class="txt"><div class="n">Reset progress</div><div class="d">It is no longer marked learned; its music stays.</div></div></div></div><div class="group" style="margin-top:28px"><div class="row" style="border-top:0"><div class="txt"><div class="n" style="color:var(--bad-ink)">Delete song</div><div class="d">Your own song and its takes, asked first.</div></div></div></div></div>`);
+const exportSheet = app(`<div class="bar" style="opacity:.3">${rb('back')}<div class="t">Settings</div></div><div style="position:absolute;inset:0;background:rgba(0,0,0,.18);backdrop-filter:blur(3px)"></div><div class="sheet" style="top:440px;align-content:start"><div class="grip"></div><div style="display:flex;align-items:center"><div><b style="font:600 22px var(--display)">Export</b><div style="color:var(--ink-soft)">Wonderful Grace of Jesus</div></div><span class="rb plain" style="margin-left:auto">${ic('x', 20)}</span></div><div class="group">${[['p-sky', 'MusicXML', 'For MuseScore, Dorico, Flat'], ['p-sky', 'Compressed MusicXML (.mxl)', 'The same, smaller'], ['p-lilac', 'MIDI', 'The notes for any music app']].map(([p, n, d], i) => `<div class="row" style="${i ? '' : 'border-top:0'}"><span class="tile ${p}">${ic('fileup', 20)}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div></div>`).join('')}</div></div>`);
+const editPage = app(`<div class="bar">${rb('back')}<div class="t"><span>Wonderful Grace of Jesus</span><span class="chip on" style="height:44px;font-weight:600">Done</span></div></div><div class="scroll pad" style="gap:12px"><div class="group" style="padding:14px;display:grid;gap:12px"><b>Cover</b><div style="display:flex;gap:10px">${['p-yellow', 'p-sky', 'p-grass', 'p-sand', 'p-lilac'].map((p, i) => `<span class="tile ${p}" style="width:44px;height:44px;${i ? '' : 'outline:2.5px solid var(--ink);outline-offset:2px'}"></span>`).join('')}</div></div><div class="group" style="padding:14px;display:grid;gap:12px"><b>Details</b>${[['Genre', 'Hymn'], ['Language', 'English'], ['Level', 'Professional']].map(([l, v]) => `<div style="display:flex;justify-content:space-between;min-height:44px;align-items:center;border-top:1px solid var(--line)"><span>${l}</span><span style="color:var(--ink-soft)">${v} ›</span></div>`).join('')}</div><div class="group" style="padding:14px;display:grid;gap:8px"><b>About</b><div class="field" style="height:88px;align-items:flex-start;padding-top:10px">A hymn of grace, written in 1918…</div></div><div class="group" style="padding:14px;display:grid;gap:8px"><b>Tags</b><div style="display:flex;gap:8px">${['grace', 'chorus'].map((x) => `<span class="chip" style="height:44px">${x} ${ic('x', 14)}</span>`).join('')}<span class="chip" style="height:44px">${ic('plus', 14)} Tag</span></div></div></div>`);
+document.getElementById('s4').innerHTML = [
+  fig('4.1', 'Phone, the song page', '✎ beside the title opens the score editor; Learned and ⚙ at the bar’s end; Play floats.', songPage),
+  fig('4.2', 'Phone, Settings', 'The song at the head with Edit song page and Edit score; Library: Move to folder (its folder as the value), Duplicate, Archive. Favourite is the ♡ on the song’s cover and in its ⋯.', settings1),
+  fig('4.3', 'Phone, Settings further down', 'Share: Publish (its state in a word), Share link, Export; Progress: Reset progress with its line in the card; Delete apart.', settings2),
+  fig('4.5', 'Phone, Edit song page', 'From Settings › Edit song page: the page in Edit with Done beside the title — its cover, details, about and tags. Who wrote it is the score’s, edited there.', editPage),
+  fig('4.4', 'Phone, Export', 'The files only: Share link is Settings’ own row. The backdrop covers the whole page.', exportSheet),
+].join('');
+
+// ——— 5 menus ———
+const menu = (title, groups, top, rows) => app(`${title === 'tabs' ? titleTabs('My songs', 'Explore', 'My songs') : `<div class="bar">${rb('back')}<div class="t">${title}</div><div class="tools">${rb('more')}</div></div>`}<div class="scroll pad" style="opacity:.35">${rows}</div><div style="position:absolute;inset:0;background:rgba(0,0,0,.12)"></div><div style="position:absolute;right:16px;top:${top}px;width:250px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,.18);overflow:hidden">${groups.map((g, gi) => `<div style="${gi ? 'border-top:6px solid var(--sand)' : ''}">${g.map(([i, l, red], k) => `<div style="display:flex;gap:12px;align-items:center;min-height:46px;padding:0 14px;${k ? 'border-top:1px solid var(--line)' : ''};${red ? 'color:var(--bad-ink)' : ''}">${ic(i, 18)}<span style="font-size:16px">${l}</span></div>`).join('')}</div>`).join('')}</div>`);
+const newDial = app(`${titleTabs('My songs', 'Explore', 'My songs')}<div class="scroll pad" style="opacity:.35"><div class="group">${FOLD.map(fRow).join('')}</div></div><div style="position:absolute;inset:0;background:rgba(0,0,0,.12)"></div><div style="position:absolute;right:20px;bottom:180px;display:grid;gap:10px;justify-items:end">${[['users', 'New group'], ['fileup', 'Import'], ['folder', 'New folder'], ['mic', 'Record'], ['music', 'New song']].map(([i, l]) => `<div style="display:flex;gap:10px;align-items:center"><span style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-weight:600">${l}</span><span class="rb" style="background:var(--card);border:1px solid var(--line)">${ic(i, 20)}</span></div>`).join('')}</div><span class="fab" style="bottom:108px">${ic('x', 24)}</span>`, 'Songs');
+document.getElementById('s5').innerHTML = [
+  fig('5.1', 'A song’s ⋯', 'Play, Edit score, Settings; Add to favourites, Move to folder; Share link, Export; Archive, Delete (your own songs). Duplicate is Settings’ alone, asked first.', menu('Songs to learn', [[['play', 'Play'], ['music', 'Edit score'], ['gear', 'Settings']], [['heart', 'Add to favourites'], ['folder', 'Move to folder…']], [['link', 'Share link'], ['dl', 'Export…']], [['archive', 'Archive'], ['trash', 'Delete', 1]]], 160, `<div class="group">${SONGS2.map(sRow).join('')}</div>`)),
+  fig('5.2', 'A folder’s ⋯', 'Edit folder (its name and look), Card style; Share with a group; Move to folder; Archive, Delete. A tap on the row opens it.', menu('tabs', [[['pen', 'Edit folder'], ['sliders', 'Card style']], [['users', 'Share with a group']], [['folder', 'Move to folder…']], [['archive', 'Archive'], ['trash', 'Delete', 1]]], 210, `<div class="group">${FOLD.map(fRow).join('')}</div>`)),
+  fig('5.3', 'New (+)', 'Unchanged in order: New song nearest the thumb, then Record, New folder, Import, New group.', newDial),
+].join('');
+
+// ——— strips: the frame takes the scaled height of what it holds ———
+document.querySelectorAll('.dev[data-fit]').forEach(d => { const sc = d.firstElementChild; const k = parseFloat(getComputedStyle(d).getPropertyValue('--s')); d.style.height = (sc.offsetHeight * k + 18) + 'px' });
+window.addEventListener('resize', () => document.querySelectorAll('.dev[data-fit]').forEach(d => { const sc = d.firstElementChild; const k = parseFloat(getComputedStyle(d).getPropertyValue('--s')); d.style.height = (sc.offsetHeight * k + 18) + 'px' }));
+
+// ——— theme toggle ———
+document.getElementById('themeBtn').onclick = () => { const r = document.documentElement; const dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; r.dataset.theme = dark ? 'light' : 'dark' };
+
+// ——— feedback under every screen ———
+(function () {
+  const figs = Array.from(document.querySelectorAll('figure[data-fb]')); const answers = {}; let db = null, local = {};
+  try { local = JSON.parse(localStorage.getItem('r31-songs-feedback') || '{}') } catch (e) {}
+  const key = n => 's' + n.replace(/\./g, '-');
+  function render(id) { const f = document.querySelector('[data-key="' + id + '"]'); if (!f) return; const a = answers[id] || {};
+    f.querySelectorAll('.fb button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === a.verdict)));
+    const ta = f.querySelector('textarea'); if (ta && document.activeElement !== ta) ta.value = a.note || '';
+    const link = document.querySelector('.toc a[href="#' + f.closest('section').id + '"]');
+    if (link) link.classList.toggle('done', Array.from(f.closest('section').querySelectorAll('figure[data-key]')).some(x => (answers[x.dataset.key] || {}).verdict)) }
+  async function save(id, patch) { answers[id] = Object.assign({}, answers[id], patch, { at: new Date().toISOString() }); render(id);
+    const st = document.querySelector('[data-key="' + id + '"] .saved');
+    try { local[id] = answers[id]; localStorage.setItem('r31-songs-feedback', JSON.stringify(local)) } catch (e) {}
+    if (!db) { st.textContent = 'Kept in this browser only.'; return }
+    try { await db.doc('feedback/' + id).set(answers[id]); st.textContent = 'Saved.' } catch (e) { st.textContent = 'Could not save; kept in this browser.' } }
+  figs.forEach(f => { const id = key(f.dataset.fb); f.dataset.key = id;
+    const box = document.createElement('div'); box.className = 'fb';
+    [['ok', 'Looks right'], ['change', 'Change it'], ['remove', 'Not needed']].forEach(([v, l]) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.v = v; b.textContent = l; b.setAttribute('aria-pressed', 'false'); b.onclick = () => save(id, { verdict: v, screen: f.dataset.fb + ' ' + f.dataset.title }); box.appendChild(b) });
+    const ta = document.createElement('textarea'); ta.id = 'fb-' + id; ta.placeholder = 'What to change on ' + f.dataset.fb + '…'; ta.setAttribute('aria-label', 'Feedback on screen ' + f.dataset.fb);
+    let t; ta.oninput = () => { clearTimeout(t); t = setTimeout(() => save(id, { note: ta.value, screen: f.dataset.fb + ' ' + f.dataset.title }), 700) };
+    const st = document.createElement('span'); st.className = 'saved'; f.append(box, ta, st); if (local[id]) { answers[id] = local[id]; render(id) } });
+  const note = document.getElementById('storeNote');
+  const timer = setTimeout(() => { if (!db) note.textContent = 'Your feedback is kept in this browser; tell me in the chat when you are done.' }, 10000);
+  (window.claude && window.claude.use ? window.claude.use('db') : Promise.resolve(null)).then(d => { clearTimeout(timer); db = d;
+    if (!db) { note.textContent = 'Your feedback is kept in this browser; tell me in the chat when you are done.'; return }
+    note.textContent = 'Your feedback is saved with this page; I read it from here.';
+    db.collection('feedback').onSnapshot(snap => (snap.docs || snap).forEach(doc => { answers[doc.id] = doc.data ? doc.data() : doc; render(doc.id) }), () => {}) }).catch(() => {});
+})();
+</script>
