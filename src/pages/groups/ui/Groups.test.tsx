@@ -6,6 +6,7 @@ import { LIBRARY_STORAGE_KEY, LIBRARY_VERSION } from '@/entities/library'
 import { createFakeAuth } from '@/shared/api/auth'
 import { createFakeGroups } from '@/shared/api/groups'
 import { createMemoryStorage } from '@/shared/lib'
+import { confirmAsked } from '@/shared/test/confirm'
 
 async function signedIn() {
   const auth = createFakeAuth({
@@ -60,9 +61,10 @@ describe('groups and the folders shared with them (R30 S6)', () => {
     await user.click(within(sheet).getByRole('button', { name: 'Create group' }))
     await waitFor(() => expect(router.state.location.pathname).toMatch(/^\/songs\/groups\/group-/))
     expect(await screen.findByRole('heading', { level: 1, name: 'Choir' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /^Invite by link/ })).toBeInTheDocument()
-    const members = await screen.findByRole('region', { name: '1 member' })
-    expect(within(members).getByText('Owner')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /^Share invite link/ })).toBeInTheDocument()
+    const members = await screen.findByRole('region', { name: 'Members (1)' })
+    expect(await within(members).findByText('Owner')).toBeInTheDocument()
+    expect(within(members).getByText('(You)')).toBeInTheDocument()
   })
 
   it('shares a folder with a group from its Settings, the row counting the groups', async () => {
@@ -152,9 +154,83 @@ describe('groups and the folders shared with them (R30 S6)', () => {
       groups,
     })
     expect(await screen.findByText('Join Choir')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Join' }))
+    await user.click(screen.getByRole('button', { name: 'Join group' }))
     await waitFor(() =>
       expect(router.state.location.pathname).toBe(`/songs/groups/${choir.value.id}`),
     )
+  })
+
+  it('opens an invite pasted into Join with a link, and says when a text is no invite (R32-C)', async () => {
+    const user = userEvent.setup()
+    let me = 'mihai'
+    const groups = createFakeGroups({ who: () => me })
+    const choir = await groups.create('Choir')
+    if (!choir.ok) throw new Error('made')
+    me = 'ana'
+    const { router } = await renderApp('/songs/groups', { auth: await signedIn(), groups })
+    expect(await screen.findByText('No groups yet')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Join with a link' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Join with a link' })
+    const field = within(sheet).getByRole('textbox', { name: 'Invite link' })
+    await user.type(field, 'join my choir{Enter}')
+    expect(within(sheet).getByRole('alert')).toHaveTextContent(
+      'This isn’t a Piano Trainer invite link.',
+    )
+    await user.clear(field)
+    await user.type(
+      field,
+      `https://piano.app/songs/groups/join?code=${choir.value.inviteCode}{Enter}`,
+    )
+    await waitFor(() => expect(router.state.location.pathname).toBe('/songs/groups/join'))
+    expect(await screen.findByText('Join Choir')).toBeInTheDocument()
+  })
+
+  it('lists a group with its members counted and Owner, and shares a folder from its page (R32-C)', async () => {
+    const user = userEvent.setup()
+    const groups = createFakeGroups()
+    await groups.create('Choir')
+    await renderApp('/songs/groups', { auth: await signedIn(), groups, storage: sunday() })
+    await user.click(await screen.findByRole('link', { name: /^Choir/ }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Choir' })).toBeInTheDocument()
+    expect(screen.getByText('No folders have been shared with this group yet.')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Share a folder…' }))
+    const choose = await screen.findByRole('dialog', { name: 'Choose a folder' })
+    await user.click(within(choose).getByRole('button', { name: /^Sunday/ }))
+    const sheet = await screen.findByRole('dialog', { name: 'Share with a group' })
+    await user.click(await within(sheet).findByRole('checkbox', { name: 'Choir' }))
+    await user.click(within(sheet).getByRole('button', { name: 'Done' }))
+    await waitFor(() => expect(groups.store.shares).toHaveLength(1))
+    expect(await screen.findByRole('link', { name: /^Sunday/ })).toBeInTheDocument()
+  })
+
+  it('names a member without a profile name Member (R32-C)', async () => {
+    let me = 'mihai'
+    const groups = createFakeGroups({ who: () => me, names: { ana: 'Ana', mihai: '' } })
+    const choir = await groups.create('Choir')
+    if (!choir.ok) throw new Error('made')
+    me = 'ana'
+    await groups.join(choir.value.inviteCode)
+    await renderApp(`/songs/groups/${choir.value.id}`, { auth: await signedIn(), groups })
+    const members = await screen.findByRole('region', { name: 'Members (2)' })
+    expect(await within(members).findByText('Member')).toBeInTheDocument()
+    expect(within(members).getByText('Ana')).toBeInTheDocument()
+  })
+
+  it('stops sharing the learner’s own folder, asked first (R32-C)', async () => {
+    const user = userEvent.setup()
+    const groups = createFakeGroups()
+    const choir = await groups.create('Choir')
+    if (!choir.ok) throw new Error('made')
+    await groups.share(
+      choir.value.id,
+      { folderKey: 'folder-1', name: 'Sunday', picture: 'church', paint: 'sky', songs: [] },
+      true,
+    )
+    const shared = groups.store.shares[0]?.id ?? ''
+    await renderApp(`/songs/shared-folders/${shared}`, { auth: await signedIn(), groups })
+    expect(await screen.findByText('Shared by you · Choir')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Stop sharing' }))
+    await confirmAsked(user, 'Stop sharing')
+    await waitFor(() => expect(groups.store.shares).toHaveLength(0))
   })
 })
