@@ -76,6 +76,14 @@ describe('the Profile', () => {
     expect(await screen.findByRole('link', { name: /Scale Master/ })).toBeVisible()
   })
 
+  it("names a locked badge's goal over its meter, the count said once", async () => {
+    await renderApp('/profile')
+    const badges = await screen.findByRole('region', { name: 'Badges' })
+    const streak = within(badges).getByRole('link', { name: /Streak Keeper/ })
+    expect(streak).toHaveTextContent('3 days in a row')
+    expect(streak.textContent?.match(/0 of 3/g)).toHaveLength(1)
+  })
+
   it('opens the bell with its unread count', async () => {
     const { notificationsStore } = await renderApp('/profile')
     act(() =>

@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { selectSidebar, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setSidebar } from '@/features/set-preference'
 import { cn, OPEN_PLAINLY, useMediaQuery } from '@/shared/lib'
-import { useAccount } from '@/shared/lib/account'
+import { useAccount, useLearnerProfile } from '@/shared/lib/account'
 import { keyHint, useShortcutsPlatform, useShortcuts, type Combo } from '@/shared/lib/shortcuts'
 import { Avatar } from '@/shared/ui'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
@@ -42,11 +42,24 @@ interface Place {
  */
 function ProfileIcon({ className }: { className?: string }) {
   const { account } = useAccount()
+  const { state } = useLearnerProfile()
+  const picture = state.kind === 'ready' ? state.profile.avatar : null
   return account ? (
-    <Avatar name={account.name || account.email} size="icon" />
+    <Avatar name={account.name || account.email} picture={picture} size="icon" />
   ) : (
     <UserRound aria-hidden className={className} />
   )
+}
+
+/** The learner's place: the phone's last tab, the sidebar's foot (under Search and Settings). */
+const PROFILE: Place = {
+  to: '/profile',
+  label: 'nav.profile',
+  icon: ProfileIcon,
+  exact: false,
+  also: ['/account'],
+  alsoWithoutSidebar: ['/settings'],
+  key: { code: 'Digit4', alt: true },
 }
 
 /**
@@ -77,15 +90,7 @@ const PLACES: readonly Place[] = [
     exact: false,
     key: { code: 'Digit3', alt: true },
   },
-  {
-    to: '/profile',
-    label: 'nav.profile',
-    icon: ProfileIcon,
-    exact: false,
-    also: ['/account'],
-    alsoWithoutSidebar: ['/settings'],
-    key: { code: 'Digit4', alt: true },
-  },
+  PROFILE,
 ]
 /** The sidebar, open or collapsed: the platform's modifier and B. */
 const SIDEBAR_KEY: Combo = { code: 'KeyB', mod: true }
@@ -235,6 +240,9 @@ export function AppNav() {
   // the way out, and the screen has the whole height.
   const pathname = useRouterState({ select: (state) => state.location.pathname })
   const away = !PLACES.some(({ to }) => to === pathname)
+  // A laptop's sidebar puts the learner at its foot, under Search and Settings; a phone's bar keeps
+  // the Profile as its last tab.
+  const sidebarShown = useMediaQuery(SIDEBAR_SHOWN)
   return (
     <nav
       aria-label={t('nav.label')}
@@ -262,23 +270,29 @@ export function AppNav() {
         </button>
       </div>
       <ul className="mx-auto flex max-w-md gap-1 px-2 pt-1.5 landscape-phone:mx-0 landscape-phone:w-full landscape-phone:flex-col landscape-phone:px-1 landscape-phone:pt-0 lg:mx-0 lg:max-w-none lg:flex-1 lg:flex-col lg:px-3 lg:pt-0">
-        {PLACES.map((place) => (
+        {(sidebarShown ? PLACES.filter((place) => place !== PROFILE) : PLACES).map((place) => (
           <li key={place.to} className="flex-1 landscape-phone:flex-none lg:flex-none">
             <PlaceLink place={place} collapsed={collapsed} />
           </li>
         ))}
-        <li className="hidden lg:mt-auto lg:block lg:pb-4">
-          <ul className="flex flex-col gap-1">
-            <li>
-              <SearchItem collapsed={collapsed} />
-            </li>
-            {FOOT.map((place) => (
-              <li key={place.to}>
-                <PlaceLink place={place} collapsed={collapsed} />
+        {sidebarShown && (
+          <li className="mt-auto pb-4">
+            <ul className="flex flex-col gap-1">
+              <li>
+                <SearchItem collapsed={collapsed} />
               </li>
-            ))}
-          </ul>
-        </li>
+              {FOOT.map((place) => (
+                <li key={place.to}>
+                  <PlaceLink place={place} collapsed={collapsed} />
+                </li>
+              ))}
+              {/* The learner, last in the sidebar as an app's account is (memory-palaces', Linear's, Slack's). */}
+              <li className="mt-2 border-t border-border pt-3">
+                <PlaceLink place={PROFILE} collapsed={collapsed} />
+              </li>
+            </ul>
+          </li>
+        )}
       </ul>
     </nav>
   )

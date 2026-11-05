@@ -336,7 +336,8 @@ on a phone, 24px from 640px, 40px beside the sidebar.
   chord buttons in `grid-chords`, tiles in `grid-tiles`. Rows and grids stay even on wide screens.
 - **Rhythm:** 24px between a screen's parts, 32px between sections, 16–20px inside a group, with `gap`.
 - **The shell:** four places in a bar docked at the foot of a phone, a rail down the left of a phone on its side, a
-  256px sidebar from 1024px (72px collapsed) with Search and Settings at its foot. The phone's bar shows on the places
+  256px sidebar from 1024px (72px collapsed): Learn, Songs and Practice at its top; Search, Settings and, under a
+  line, the learner's Profile at its foot. The phone's bar keeps the Profile as its last tab. The phone's bar shows on the places
   alone; what a place opens has the whole height.
 - **Full screens** (the Player, the score editor, the Check) have no navigation: the viewport's height, scrolling
   inside.

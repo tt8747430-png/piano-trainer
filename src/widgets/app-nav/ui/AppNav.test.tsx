@@ -8,7 +8,7 @@ import { createMemoryStorage } from '@/shared/lib'
 const nav = () => screen.findByRole('navigation', { name: 'Main navigation' })
 
 describe('AppNav', () => {
-  it('lists the four places, the Profile last, then Search, which opens the palette, and Settings', async () => {
+  it('lists the four places on a phone, the Profile last, with Search and Settings in the places', async () => {
     await renderApp('/songs')
     const bar = within(await nav())
     expect(bar.getAllByRole('link').map((link) => link.textContent)).toEqual([
@@ -16,7 +16,21 @@ describe('AppNav', () => {
       'Songs',
       'Practice',
       'Profile',
+    ])
+    expect(bar.queryByRole('button', { name: 'Search' })).not.toBeInTheDocument()
+  })
+
+  it("puts the Profile at the sidebar's foot on a laptop, under Search and Settings", async () => {
+    // Every media query matches: the sidebar's among them.
+    stubMatchMedia({ dark: true })
+    await renderApp('/songs')
+    const bar = within(await nav())
+    expect(bar.getAllByRole('link').map((link) => link.textContent)).toEqual([
+      'Learn',
+      'Songs',
+      'Practice',
       'Settings',
+      'Profile',
     ])
     expect(bar.getByRole('button', { name: 'Search' })).toBeInTheDocument()
   })

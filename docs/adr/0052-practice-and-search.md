@@ -13,7 +13,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
 
 - **Three places and the Profile**: Learn (ADR 0053), Songs (ADR 0106) and Practice, then the Profile as the fourth
   tab (memory-palaces', Noji's), its icon the learner's initial. A bar docked at the foot on a phone, a rail down the
-  left on a phone on its side, a sidebar from 1024px that collapses to its icons, Search and Settings at its foot (a phone opens Settings from the Profile); the phone's bar on the places alone. Alt with 1–4
+  left on a phone on its side, a sidebar from 1024px that collapses to its icons, Search, Settings and the learner's Profile (under a line) at its foot (a phone keeps the Profile as its last tab and opens Settings from it); the phone's bar on the places alone. Alt with 1–4
   goes to them. A place's bar on a phone has Search. Settings opens from the Profile (the gear in its bar and a row
   under its hero); the Profile's tab stays current under Settings and the account pages on a phone; on a laptop Settings is current alone. Every screen below a place
   has Back.
@@ -149,3 +149,5 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
 - r29 — Settings holds only the app's own pages (account, General, Storage and backup, On-screen piano with Computer keys inside on a computer, Connect a piano, Help); General's choices as cards; lessons read as chosen on a lesson's Settings (2026-11-03).
 - r29 (Practice redesign) — Bars one row: a page's views a Segmented in its content (Scales' Scale · Chords · Key, each with a live line: "7 notes", "i–vii°", "3 flats"), Accompaniment's sources a Source menu; the key picker Flat's key-signature grid everywhere, one name per key; Scales' heading the Tonic and Scale menus, its run 1–4 octaves and a Direction, its formula's altered degrees marked, a mode named by its colour; Chords' head card, Play · Arpeggio named, Top note for a chord between the hands, the hand drawn over its keys; Intervals' Play as (Ascending · Descending · Harmonic) and each interval's meaning; the Key view's circle a picture (2026-11-04).
 - r29 — Back amended (the owner's report, research in `.scratch/r29/research/back-navigation.md`): to the screen the learner came from in the app, as iOS's Back and Android's in-app Up and Back; up the parents table only where the screen was opened directly (Android's synthetic back stack); a deleted thing's screens stepped past (`useForgetScreens`) (2026-11-04).
+- r30 — On a laptop the Profile sits at the sidebar's foot under Search and Settings, as an app's account does; a locked
+  badge names its goal over its meter instead of the count twice (2026-11-05).
