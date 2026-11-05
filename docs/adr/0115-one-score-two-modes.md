@@ -21,15 +21,16 @@ edit, and a learner practising should not change the music by accident.
   piece can be edited: a song written in degrees opens as its chart in its key (`asChartPiece`). While a take records
   the switch waits for Stop.
 - **One bar** (`ScoreBar`): one band of card paper to the screen's edges with one hairline under it. Its buttons are a
-  toolbar's (the button's `tool` variant: no frame at rest, the muted fill on hover, while open and pressed, 44px).
-  Close and Practise · Edit lead; each mode's buttons end it (the Player's MIDI · Setup · More, the editor's
-  MIDI · Undo · Redo · Settings, the score's Settings a gear as a song page's); the tools stand between. Two rows on a phone held upright and on a tablet, one row from 1024px
-  and on a phone on its side. The same height in both modes, so the sheet never moves as the mode switches.
-- **One tools row** (`PlayerTools`): the Player's View · Transpose · Simplify; the editor's View · Transpose, then
-  Delete · Copy · Cut · Paste. On a phone held upright a tool with a value shows its value alone after its icon.
+  toolbar's (the button's `tool` variant: round, no frame at rest, the muted fill on hover, while open and pressed,
+  44px). Close and Practise · Edit lead; each mode's buttons end it (the Player's Piano keys · MIDI · gear, the
+  editor's Piano keys · MIDI · Play · Undo · Redo · gear, R31-E). One row at every size, the same height in both
+  modes, so the sheet never moves as the mode switches.
+- **No tools row** (R31-E): the Player's View is its Settings', Transpose its More's; the editor's View and
+  Transpose are its gear's first page, Delete · Copy · Cut · Paste float by what is chosen.
 - **One Transpose** (`widgets/transpose`): its trigger the key as printed, in the accent once moved; inside, − the key
   it lands in +, how far in semitones, and Reset. The Player's moves the key it plays in at once (ADR 0105); the
-  editor's adds Apply to key, Apply to chords, the first line moved as a preview, and Transpose, one Undo step.
+  editor's, a page of its gear (`TransposeFields`), adds the first line moved as a preview, and Transpose, one Undo
+  step.
 - **One transport** (`Transport`), one pill floating along the sheet's foot at every size: the tempo, ‹, Play, ›, then
   the mode's three: the Player's loop, metronome and hands; the editor's Record, Takes and Sound (rows to the Player's
   settings and to Sound and recording). Play

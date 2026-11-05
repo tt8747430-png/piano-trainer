@@ -740,7 +740,6 @@ export const editor: LocaleResources['editor'] = {
       recording: 'Запись',
     },
     title: 'Настройки партитуры',
-    open: 'Настройки…',
     score: 'Партитура',
     acts: {
       view: 'Вид',

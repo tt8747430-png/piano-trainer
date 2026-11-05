@@ -106,11 +106,15 @@
     }
   }
   // 4. A backdrop that leaves a band of the page uncovered while a dialog is open.
+  // A panel from the side, beside the page (a laptop's Settings, the music in sight by design), asks
+  // no backdrop.
   const dialog = document.querySelector('[role="dialog"], [role="alertdialog"]')
-  if (dialog && visible(dialog)) {
+  const beside = dialog?.closest('[data-swipe-axis="x"]') ?? dialog?.querySelector('[data-swipe-axis="x"]')
+  if (dialog && visible(dialog) && !beside) {
     for (const y of [2, innerHeight * 0.25, innerHeight * 0.5]) {
       const top = document.elementFromPoint(innerWidth / 2, y)
-      if (top && !dialog.contains(top) && !top.closest('[data-backdrop], [class*="backdrop"], [class*="overlay"]')) {
+      // The dialog's own frame (a drawer's viewport round it) is the dialog's.
+      if (top && !dialog.contains(top) && !top.contains(dialog) && !top.closest('[data-backdrop], [class*="backdrop"], [class*="overlay"]')) {
         const cs = getComputedStyle(top)
         if (!/blur/.test(cs.backdropFilter ?? '') && !top.closest('header')) found.push(`UNCOVERED page at y=${Math.round(y)} beside an open dialog: ${name(top)}`)
       }

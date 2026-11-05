@@ -808,7 +808,6 @@ export const editor = {
       recording: 'Recording',
     },
     title: 'Score settings',
-    open: 'Settings…',
     score: 'Score',
     // The gear's first page (R31-E, Flat's one menu): the score's acts, then its Settings.
     acts: {

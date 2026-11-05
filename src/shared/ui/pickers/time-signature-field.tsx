@@ -63,30 +63,40 @@ export function TimeSignatureField({
   const symbolOf = meterSymbol(value.meter)
   const choose = (meter: Meter | undefined) =>
     meter ? onChange({ meter, symbol: value.symbol && meterSymbol(meter) !== null }) : undefined
-  const tiles = (
+  const row = usePickerLayout() === 'row'
+  const cells = TILES.map((meter) => (
+    <PickerCell
+      key={meter}
+      label={meter}
+      pressed={meter === value.meter}
+      disabled={barred(meter)}
+      onClick={() => choose(meter)}
+    >
+      <TimeSignatureTile value={{ meter, symbol: false }} />
+    </PickerCell>
+  ))
+  // In a grid each tile draws its lines at its right and its foot, the last column's and row's
+  // under the grid's own border: a short last row keeps its lines, with no grey band after it.
+  const tiles = row ? (
     <div
       role="group"
       aria-label={t('timeField.label')}
-      className={
-        usePickerLayout() === 'row'
-          ? 'flex shrink-0 items-center gap-0.5'
-          : 'grid grid-cols-[repeat(auto-fill,minmax(2.75rem,1fr))] gap-px overflow-hidden rounded-control border border-hairline bg-hairline'
-      }
+      className="flex shrink-0 items-center gap-0.5"
     >
-      {TILES.map((meter) => (
-        <PickerCell
-          key={meter}
-          label={meter}
-          pressed={meter === value.meter}
-          disabled={barred(meter)}
-          onClick={() => choose(meter)}
-        >
-          <TimeSignatureTile value={{ meter, symbol: false }} />
-        </PickerCell>
-      ))}
+      {cells}
+    </div>
+  ) : (
+    <div className="overflow-hidden rounded-control border border-hairline bg-card">
+      <div
+        role="group"
+        aria-label={t('timeField.label')}
+        className="-me-px -mb-px grid grid-cols-[repeat(auto-fill,minmax(2.75rem,1fr))] [&>button]:shadow-[inset_-1px_-1px_0_var(--color-hairline)]"
+      >
+        {cells}
+      </div>
     </div>
   )
-  if (usePickerLayout() === 'row') return tiles
+  if (row) return tiles
   const most = count - 1
   return (
     <div className="flex flex-col gap-4">
