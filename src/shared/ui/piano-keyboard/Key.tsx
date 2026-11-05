@@ -141,7 +141,9 @@ function KeyButton({
           {description}
         </span>
       ) : null}
-      {look.letter ? <Glyph text={look.letter} className="relative key-cap font-semibold" /> : null}
+      {look.letter ? (
+        <Glyph text={look.letter} className="relative key-cap rounded-key-black font-semibold" />
+      ) : null}
       {look.label ? (
         <span
           aria-hidden
