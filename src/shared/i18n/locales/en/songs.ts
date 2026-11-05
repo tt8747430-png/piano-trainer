@@ -58,7 +58,10 @@ export const songs = {
     },
   },
   // The library (ADR 0106): a song's actions, and the toasts that say what was done.
+  // Songs' Continue (R30 S3): the last songs played.
+  continue: { title: 'Continue', today: 'Today', yesterday: 'Yesterday' },
   library: {
+    showAll: 'Show all {{count}}',
     // Archive asks first (R17), then says it with Undo.
     archiving: {
       one: 'Archive “{{title}}”?',

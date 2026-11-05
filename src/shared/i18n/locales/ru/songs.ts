@@ -52,7 +52,9 @@ export const songs: LocaleResources['songs'] = {
       key: 'Тональность',
     },
   },
+  continue: { title: 'Продолжить', today: 'Сегодня', yesterday: 'Вчера' },
   library: {
+    showAll: 'Показать все {{count}}',
     archiving: {
       one: 'Убрать «{{title}}» в архив?',
       folder: 'Убрать папку «{{name}}» в архив?',

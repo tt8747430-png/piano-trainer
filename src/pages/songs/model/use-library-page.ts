@@ -91,10 +91,12 @@ export function useLibraryPage(
         opened: byLastOpened(practised),
         compare,
         home: t('library.home'),
+        allSongs: t('tree.all'),
       },
-      { tree },
+      // Every song at Home while browsing; Select drags in the library's own places.
+      { tree, everySong: !tree && !selecting },
     )
-  }, [layout, folder, filter, sort, repertoire, locale, folderName, favourites, practised, t, tree])
+  }, [layout, folder, filter, sort, repertoire, locale, folderName, favourites, practised, t, tree, selecting])
 
   // Every row on screen, in order: what Select all chooses.
   const rows: Chosen[] = [

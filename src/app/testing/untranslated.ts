@@ -9,15 +9,22 @@ function leaves(value: unknown, path = ''): [string, string][] {
   )
 }
 
-/** The English interface strings whose Russian differs: one of them on a Russian screen was left in English. */
+/**
+ * The English interface strings whose Russian differs: one of them on a Russian screen was left in
+ * English. A word some key keeps the same in both (a language's own name, English in its picker) is
+ * meant as it is wherever it shows.
+ */
 function englishOnly(): ReadonlySet<string> {
   const english = new Set<string>()
+  const kept = new Set<string>()
   for (const ns of i18n.options.ns ?? []) {
     const ru = new Map(leaves(i18n.getResourceBundle('ru', ns)))
     for (const [key, text] of leaves(i18n.getResourceBundle('en', ns))) {
-      if (ru.get(key) !== text && !text.includes('{{') && /[a-z]{3}/i.test(text)) english.add(text)
+      if (ru.get(key) === text) kept.add(text)
+      else if (!text.includes('{{') && /[a-z]{3}/i.test(text)) english.add(text)
     }
   }
+  for (const text of kept) english.delete(text)
   return english
 }
 

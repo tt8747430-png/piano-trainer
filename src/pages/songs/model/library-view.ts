@@ -54,6 +54,8 @@ export interface ViewLookups {
   readonly compare: (a: string, b: string) => number
   /** Home's name, over its songs while the filters look through the library. */
   readonly home: string
+  /** Every song's heading at Home, under the folders (a phone's All songs). */
+  readonly allSongs: string
 }
 
 /** How many first songs a folder's row names. */
@@ -108,7 +110,8 @@ export function sortSongs(
  * (its own last, under its name), and the folders whose names match the search.
  *
  * Beside the library's tree (`tree`, a laptop's two panes) the folders are the tree's: Home lists every
- * song in one list (All songs), a folder its own songs, each narrowed by the filters in one list.
+ * song in one list (All songs: Home's own first, then the folders'), a folder its own songs, each
+ * narrowed by the filters in one list.
  */
 export function libraryView(
   layout: LibraryLayout,
@@ -116,7 +119,14 @@ export function libraryView(
   filter: SongsFilter,
   sort: LibrarySort,
   lookups: ViewLookups,
-  { tree = false }: { tree?: boolean } = {},
+  {
+    tree = false,
+    everySong = false,
+  }: {
+    tree?: boolean
+    /** At Home, every song under the folders as one list, All songs (a phone's Home). */
+    everySong?: boolean
+  } = {},
 ): LibraryView {
   const keeps = (entry: Entry) =>
     (filter.stage === 'any' || pieceStage(entry.id) === filter.stage) &&
@@ -150,28 +160,37 @@ export function libraryView(
       .map(lookups.folderName)
       .join(' › ')
 
-  const lists = tree
+  const all = everySong && place === null && !filtering && !tree
+  const lists = all
     ? [
         {
-          folder: here ?? null,
-          heading: null,
-          songs: place === null ? [...nested.flatMap((folder) => folder.songs), ...own] : own,
+          folder: null,
+          heading: lookups.allSongs,
+          songs: [...own, ...nested.flatMap((f) => f.songs)],
         },
       ]
-    : filtering
+    : tree
       ? [
-          ...nested.map((folder) => ({ folder, heading: pathOf(folder), songs: folder.songs })),
           {
             folder: here ?? null,
-            heading: here ? lookups.folderName(here) : lookups.home,
-            songs: own,
+            heading: null,
+            songs: place === null ? [...own, ...nested.flatMap((folder) => folder.songs)] : own,
           },
         ]
-      : [{ folder: here ?? null, heading: null, songs: own }]
-  const named = !tree && filtering && nested.length > 0
+      : filtering
+        ? [
+            ...nested.map((folder) => ({ folder, heading: pathOf(folder), songs: folder.songs })),
+            {
+              folder: here ?? null,
+              heading: here ? lookups.folderName(here) : lookups.home,
+              songs: own,
+            },
+          ]
+        : [{ folder: here ?? null, heading: null, songs: own }]
+  const named = all || (!tree && filtering && nested.length > 0)
   const groups = lists
     .map((list): SongGroup => ({
-      key: list.folder?.id ?? 'home',
+      key: all ? 'all' : (list.folder?.id ?? 'home'),
       heading: named ? list.heading : null,
       folder: list.folder?.id ?? null,
       entries: sortSongs(entries(list.songs).filter(keeps), sort, lookups),

@@ -83,3 +83,5 @@ A study, practised on Practice, is in no library. A folder played song after son
   (Title, Key, Last played; again, the learner's order) and whose columns follow the place's Card style. Home lists
   every song there (`libraryView`'s `tree`), a folder its own; the folders are the tree's. A phone keeps the list
   (2026-11-05).
+- r30 (S3) — A phone's Home: Continue (the last two songs played, whole cards), Folders, then All songs (Home's own
+  first, then every folder's), folded after ten with Show all n; Select keeps the library's own places (2026-11-05).

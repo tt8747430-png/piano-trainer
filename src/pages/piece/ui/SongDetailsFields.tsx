@@ -157,7 +157,7 @@ export function SongDetailsFields({ id }: { id: PieceId }) {
             }
           }}
           onBlur={add}
-          className="h-11 w-full max-w-64 rounded-control border border-input bg-card px-3 text-base outline-none placeholder:text-muted-foreground focus-visible:border-ring"
+          className="h-11 w-full max-w-64 rounded-control border border-input bg-card px-3 text-base placeholder:text-muted-foreground"
         />
       </div>
     </div>

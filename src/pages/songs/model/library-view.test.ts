@@ -45,6 +45,7 @@ const lookups: ViewLookups = {
   opened: ['silent', 'bz5'],
   compare: (a, b) => a.localeCompare(b, 'en'),
   home: 'Home',
+  allSongs: 'All songs',
 }
 const view = (filter: Partial<SongsFilter> = {}, folder: string | null = null, at = layout) =>
   libraryView(at, folder as never, { ...NONE, ...filter }, 'manual', lookups)
@@ -53,6 +54,15 @@ const ids = (groups: ReturnType<typeof view>['groups']) =>
 const songsOf = (id: string) => SONG_COLLECTIONS.find((c) => c.id === id)?.entries ?? []
 
 describe('libraryView', () => {
+  it('at Home lists every song under the folders, in one list headed All songs', () => {
+    const home = libraryView(layout, null, NONE, 'manual', lookups, { everySong: true })
+    expect(home.folders.map((each) => each.folder.id)).toEqual(SONG_COLLECTIONS.map((c) => c.id))
+    expect(home.groups).toHaveLength(1)
+    expect(home.groups[0]?.key).toBe('all')
+    expect(home.groups[0]?.heading).toBe('All songs')
+    expect(ids(home.groups)).toEqual(SONG_COLLECTIONS.flatMap((c) => c.entries.map((e) => e.id)))
+  })
+
   it('on a laptop lists every song at Home in one list, the tree holding the folders', () => {
     const all = libraryView(layout, null, NONE, 'manual', lookups, { tree: true })
     expect(all.folders).toEqual([])

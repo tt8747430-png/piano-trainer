@@ -17,6 +17,7 @@ import { useSongDrop, useSongImport } from '@/features/song-files'
 import { useMediaQuery, useSetSearch } from '@/shared/lib'
 import type { FolderSearch, SongsFilter } from '../model/songs-filter'
 import { useLibraryPage } from '../model/use-library-page'
+import { ContinueShelf } from './ContinueShelf'
 import { LibraryBrowse } from './LibraryBrowse'
 import { LibraryDialogs } from './LibraryDialogs'
 import { LibraryEmpty } from './LibraryEmpty'
@@ -110,7 +111,11 @@ export function LibraryScreen({
           <SelectionBar page={page} folder={folder} />
         </LibrarySelect>
       ) : (
-        <LibraryBrowse page={page} place={folder?.id ?? 'home'} table={wide} onClear={clear} />
+        <>
+          {/* A phone's Home opens with what was played last (R30 S3); a laptop's tree has its place. */}
+          {folder === null && !wide && view.shown === view.scope.length ? <ContinueShelf /> : null}
+          <LibraryBrowse page={page} place={folder?.id ?? 'home'} table={wide} onClear={clear} />
+        </>
       )}
       {folder && archived > 0 && !page.select.on ? (
         <div className="card">
