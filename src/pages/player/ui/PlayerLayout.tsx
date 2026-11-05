@@ -33,7 +33,7 @@ import { retireTip } from '@/features/set-preference'
 import { BAR_ICONS } from '@/widgets/bar-editor'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { isMidiConnected, MidiButton, useMidiConnection } from '@/features/connect-midi'
-import { LiveKeyboard } from '@/features/live-keyboard'
+import { KeyboardSettingsFields, LiveKeyboard } from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Recording } from '@/shared/lib/schedule'
 import type { MenuAction } from '@/shared/ui'
@@ -299,6 +299,14 @@ export function PlayerLayout({
         icon: LayoutGrid,
         content: <PlayerToolbar />,
       },
+      // The piano's own page, here in the sheet (R31-P): the app's On-screen piano page, the
+      // same fields, never a second set; opened from the piano's ⚙ too.
+      {
+        id: 'piano',
+        label: t('settingsPage.onScreenPiano'),
+        icon: Piano,
+        content: <KeyboardSettingsFields />,
+      },
       {
         id: 'display',
         label: t('settingsPage.display'),
@@ -313,14 +321,6 @@ export function PlayerLayout({
       },
     ],
     acts: [
-      // Its one home is Settings' (rule 18): a way there, never a second control.
-      {
-        key: 'on-screen-piano',
-        group: 'play',
-        label: t('settingsPage.onScreenPiano'),
-        icon: Piano,
-        onSelect: () => void navigate({ to: '/settings/on-screen-piano' }),
-      },
       ...more.flatMap(({ icon, ...act }) =>
         icon ? [{ ...act, icon, group: 'song' as const }] : [],
       ),

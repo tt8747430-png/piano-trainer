@@ -335,8 +335,8 @@ describe('Player', () => {
       'Audio playback',
       'Playback',
       'Tool bar',
-      'Display',
       'On-screen piano',
+      'Display',
     ])
     expect(rows('This song')).toEqual(['Sections', 'Song information'])
     expect(rows('Share')).toEqual(['Share link', 'Export…'])
