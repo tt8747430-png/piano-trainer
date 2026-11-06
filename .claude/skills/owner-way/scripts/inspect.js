@@ -103,8 +103,9 @@
     if (edged && at !== 'only' && ((low && at !== 'end') || (!low && at !== 'top'))) continue
     for (const el of texts) {
       if (layer.contains(el) || el.contains(layer)) continue
-      const t = el.getBoundingClientRect()
-      if (!cross(r, t, 4)) continue
+      // As drawn: text its own pane has scrolled out of sight is not under the layer beside the pane.
+      const t = shown(el)
+      if (t.right - t.left < 2 || t.bottom - t.top < 2 || !cross(r, t, 4)) continue
       const top = document.elementFromPoint((t.left + t.right) / 2, (t.top + t.bottom) / 2)
       if (top && layer.contains(top))
         found.push(`COVERED ${name(el)} under ${name(layer)}`)
