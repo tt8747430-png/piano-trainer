@@ -459,7 +459,7 @@ describe('the acts on the music in the foot’s More (R31-P)', () => {
     if (!file) throw new Error('a file is saved')
     const text = new TextDecoder().decode(await file.arrayBuffer())
     // Silent Night's staff of no name of its own, by its place; then the hands.
-    for (const name of ['Нотоносец 1', 'Правая рука', 'Левая рука']) expect(text).toContain(name)
+    for (const name of ['Мелодия', 'Правая рука', 'Левая рука']) expect(text).toContain(name)
     expect(text).not.toContain('Right hand')
   })
 

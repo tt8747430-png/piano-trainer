@@ -11,6 +11,13 @@ import type { Hands, PracticeRhythm, RunDirection } from '@/shared/lib/schedule'
 
 /** The views of a scale, in the order their tabs stand. */
 export const SCALE_SHOWS = ['scale', 'chords', 'key'] as const
+
+/**
+ * The one layer of labels the run's staff shows (R34, D3), chosen in place: the playing hand's
+ * fingers, each note's degree, or the whole and half steps between the notes.
+ */
+export const STAFF_MARKS = ['fingers', 'degrees', 'steps'] as const
+export type StaffMarks = (typeof STAFF_MARKS)[number]
 export type ScaleShow = (typeof SCALE_SHOWS)[number]
 
 /** The views a scale has: its run always, its chords with seven notes, its key where it is one's scale. */
@@ -36,6 +43,8 @@ export interface ScaleView {
   readonly show: ScaleShow
   /** The degree the run starts on, 1 the tonic (Scale view). */
   readonly start: number
+  /** The staff's one layer of labels (Scale view). */
+  readonly marks: StaffMarks
   /** How many octaves the run climbs (Scale view): one to four. */
   readonly octaves: RunOctaves
   /** Which way the run goes (Scale view); absent, up and back down. */

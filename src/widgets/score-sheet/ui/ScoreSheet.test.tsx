@@ -6,6 +6,7 @@ import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { PieceMusic } from '@/entities/piece'
 import { createEditorStore, placesIn, readDraft, tapsIn, type Layer } from '@/features/score-editor'
 import { stubBox } from '@/shared/test/layout'
+import { stubMatchMedia } from '@/shared/test/match-media'
 import { loadScoreView } from '@/shared/ui'
 import type { EditPrinted, Printed } from '../model/printed'
 import { ScoreSheet } from './ScoreSheet'
@@ -101,7 +102,7 @@ describe('ScoreSheet', () => {
     },
   )
 
-  it('names the staves at the first line’s head alone, a nameless one by its place, muted (ADR 0114, 0097)', async () => {
+  it('names the staves at the first line’s head alone, a nameless one by its role or place, muted (ADR 0114, 0097, R34)', async () => {
     sheet('staff0')
     const names = (line: Element | undefined) =>
       [...(line?.querySelectorAll('[data-slot="score"] g.label') ?? [])]
@@ -110,12 +111,12 @@ describe('ScoreSheet', () => {
     await waitFor(() => {
       const lines = [...document.querySelectorAll('[data-slot="sheet-line"]')]
       expect(lines).toHaveLength(3)
-      expect(names(lines[0])).toEqual(['Piano', 'Staff 1'])
+      expect(names(lines[0])).toEqual(['Melody', 'Piano'])
       expect(lines.slice(1).map(names)).toEqual([[], []])
     })
     // The staff of no name shows its place's in italics, as an empty score's placeholder.
     const placeholder = document.querySelector('[data-slot="score"] g.label [font-style="italic"]')
-    expect(placeholder?.textContent?.trim()).toBe('Staff 1')
+    expect(placeholder?.textContent?.trim()).toBe('Melody')
   })
 
   it('names each staff by its own name, over the piano (ADR 0097)', async () => {
@@ -160,7 +161,7 @@ describe('ScoreSheet', () => {
     const user = userEvent.setup()
     const edited = vi.fn()
     sheet('staff0', vi.fn(), true, edited)
-    await user.click(await screen.findByRole('button', { name: 'Staff 1' }))
+    await user.click(await screen.findByRole('button', { name: 'Melody' }))
     expect(edited).toHaveBeenLastCalledWith({ kind: 'staff', staves: 'staff0' })
     await user.click(screen.getByRole('button', { name: 'Piano staves' }))
     expect(edited).toHaveBeenLastCalledWith({ kind: 'staff', staves: 'piano' })
@@ -428,6 +429,8 @@ describe('ScoreSheet', () => {
   })
 
   it('puts a button over the tempo mark and each clef, key and time signature, edited there (ADR 0114)', async () => {
+    // A computer's pointer: each sign its own target.
+    stubMatchMedia({ dark: false, pointer: 'fine' })
     const user = userEvent.setup()
     const edited = vi.fn()
     sheet('staff0', vi.fn(), true, edited)
@@ -446,12 +449,36 @@ describe('ScoreSheet', () => {
     await user.click(screen.getByRole('button', { name: 'Clef, Lower staff, bar 3' }))
     expect(edited).toHaveBeenLastCalledWith({ kind: 'clef', bar: 2, staff: 'bass' })
     // A single staff's clef is a target too, the whole staff's (ADR 0097).
-    await user.click(screen.getAllByRole('button', { name: 'Clef, Staff 1, bar 1' })[0]!)
+    await user.click(screen.getAllByRole('button', { name: 'Clef, Melody, bar 1' })[0]!)
     expect(edited).toHaveBeenLastCalledWith({ kind: 'clef', bar: 0, staff: 'staff0' })
     expect(screen.getAllByRole('button', { name: /^Clef, Upper staff/ })).toHaveLength(3)
   })
 
+  it('makes a line’s head signs one target on a touch screen, too narrow to tap apart (R34, D1)', async () => {
+    stubMatchMedia({ dark: false, pointer: 'coarse' })
+    const user = userEvent.setup()
+    const edited = vi.fn()
+    sheet('staff0', vi.fn(), true, edited)
+    const [head] = await screen.findAllByRole('button', {
+      name: 'Clef, key and time, Upper staff, bar 1',
+    })
+    if (!head) throw new Error('no line head')
+    await user.click(head)
+    expect(edited).toHaveBeenLastCalledWith({
+      kind: 'signs',
+      bar: 0,
+      staff: 'treble',
+      signs: [
+        { kind: 'clef', bar: 0, staff: 'treble' },
+        { kind: 'key', bar: 0 },
+        { kind: 'time', bar: 0 },
+      ],
+    })
+    expect(screen.queryByRole('button', { name: 'Key signature, bar 1' })).not.toBeInTheDocument()
+  })
+
   it('stands what is printed over the grip of the caret’s notes, a tap on a sign beside them opening it', async () => {
+    stubMatchMedia({ dark: false, pointer: 'fine' })
     render(
       <ScoreSheet
         draft={draft}
@@ -473,7 +500,7 @@ describe('ScoreSheet', () => {
     const grip = document.querySelector('[data-slot="note-grip"]')
     if (!time || !grip) throw new Error('the first note is a grip, the time signature a button')
     // On one layer, what comes later in the page is drawn over what comes before: the grip first.
-    for (const printed of [time, screen.getByRole('button', { name: 'Staff 1' })]) {
+    for (const printed of [time, screen.getByRole('button', { name: 'Melody' })]) {
       expect(grip.compareDocumentPosition(printed) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     }
   })

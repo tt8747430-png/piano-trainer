@@ -61,7 +61,7 @@ const DEFAULTS = {
   chordPlayer: DEFAULT_CHORD_PLAYER,
   bars: DEFAULT_BARS,
   tuner: { a4: 440 },
-  scaleStaff: { degrees: true, steps: true, tonic: false, tetrachords: false },
+  scaleStaff: { tonic: false, tetrachords: false },
 }
 
 describe('createSettingsStore', () => {
@@ -187,7 +187,7 @@ describe('createSettingsStore', () => {
       },
       bars: { ...DEFAULT_BARS, 'select.songs': ['delete', 'move'] },
       tuner: { a4: 442 },
-      scaleStaff: { degrees: false, steps: true, tonic: true, tetrachords: false },
+      scaleStaff: { tonic: true, tetrachords: false },
       scoreView: {
         layout: 'vertical',
         music: 'grid',
@@ -355,9 +355,9 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('starts afresh over a save of the version before the piano’s lateness (R34)', () => {
-    expect(SETTINGS_VERSION).toBe(35)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 34)).toEqual(
+  it('starts afresh over a save of the version before the staff’s one layer of labels (R34)', () => {
+    expect(SETTINGS_VERSION).toBe(36)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 35)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

@@ -258,6 +258,8 @@ export const music = {
     // The piano's name at a score's first line's head (ADR 0114), as a printed score names it; a
     // single staff's is its own (ADR 0097), else, in the editor and the View, its place's.
     staves: { piano: 'Piano' },
+    // A single staff of no name of its own: the top one the tune's (R34), the rest by place.
+    melody: 'Melody',
     staff: 'Staff {{n}}',
     // Pages floating on a canvas (ADR 0096): dragged to move, pinched or Ctrl-wheeled to zoom.
     canvas: {

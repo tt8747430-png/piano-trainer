@@ -16,7 +16,13 @@ import { PRACTICE_RHYTHM_IDS, RUN_DIRECTIONS, runSounds } from '@/shared/lib/sch
 import { Dropdown, Labelled, MenuPicker, Segmented, Stepper } from '@/shared/ui'
 import { runStaff } from '../model/run-staff'
 import { runShown, scaleRunOf } from '../model/scale-run'
-import { MAX_OCTAVES, MIN_OCTAVES, type RunOctaves, type ScaleView } from '../model/scale-view'
+import {
+  MAX_OCTAVES,
+  MIN_OCTAVES,
+  STAFF_MARKS,
+  type RunOctaves,
+  type ScaleView,
+} from '../model/scale-view'
 import { ModeVamp } from './ModeVamp'
 import { PlayUpDown } from './PlayUpDown'
 import { ScaleExercises } from './ScaleExercises'
@@ -30,8 +36,9 @@ const MOST_STARTS = 8
 
 /**
  * Scale view: the run from its start note, its keys marked by degree with the playing hand's fingers
- * (the right hand's when both play), played up and down; on the staff with its hands' fingers; and its
- * exercises in the Player.
+ * (the right hand's when both play), played up and down; on the staff first, under the choice of its
+ * one layer of labels (fingers, degrees or steps, R34), then its choices; and its exercises in the
+ * Player.
  */
 export function RunView({
   scale,
@@ -47,7 +54,7 @@ export function RunView({
   facts: ReactNode
 }) {
   const { t } = useTranslation(['practice', 'common'])
-  const { root, kind, start, octaves, fingering, rhythm, hands, direction, compare } = scale
+  const { root, kind, start, octaves, fingering, rhythm, hands, direction, compare, marks } = scale
   const scaleName = useScaleName()
   const run = useMemo(
     () => scaleRunOf({ root, kind, start, octaves, fingering, rhythm, hands, direction }),
@@ -74,6 +81,7 @@ export function RunView({
       music,
       hands === 'lh' ? 'lh' : 'rh',
       [...placed, ...down.placed],
+      marks,
       layers,
       {
         whole: t('practice:scaleStaff.whole'),
@@ -88,13 +96,28 @@ export function RunView({
       at === undefined ? undefined : own[at]?.degree,
       compared,
     )
-  }, [music, placed, down, hands, layers, t, root, kind, compare])
+  }, [music, placed, down, hands, marks, layers, t, root, kind, compare])
   return (
     <ScaleLayout
       keyboard={<PinnedKeyboard shown={runShown(run, hands)} />}
       heading={choice}
       facts={facts}
       action={<PlayUpDown sounds={runSounds(run.music, scale.tempo)} />}
+      music={
+        <div className="flex flex-col gap-3">
+          {/* One layer of labels on the staff at a time, chosen in place (R34, D3). */}
+          <Segmented
+            label={t('practice:scales.marks.label')}
+            value={marks}
+            options={STAFF_MARKS.map((value) => ({
+              value,
+              label: t(`practice:scales.marks.${value}`),
+            }))}
+            onChange={(next) => onChange({ marks: next })}
+          />
+          <ScaleSheet music={written} hands={hands} fingers={marks === 'fingers'} />
+        </div>
+      }
       fields={
         <>
           <Labelled label={t('practice:hands')}>
@@ -194,7 +217,6 @@ export function RunView({
         </>
       }
     >
-      <ScaleSheet music={written} hands={hands} fingers />
       <ModeVamp root={tonic} kind={kind} />
       <ScaleFingering run={run} standard={hasStandardFingering(kind)} />
       <ScaleExercises root={tonic} kind={kind} />

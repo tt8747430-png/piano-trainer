@@ -168,6 +168,7 @@ export const practice = {
     moreOctaves: 'More octaves',
     direction: { label: 'Direction', both: 'Up and down', up: 'Up', down: 'Down' },
     octaves: 'Octaves',
+    marks: { label: 'On the staff', fingers: 'Fingers', degrees: 'Degrees', steps: 'Steps' },
     startOn: 'Start on',
     openChord: 'Open {{chord}} in Chords',
     // What the run's keys carry: its notes, or a hand's fingers.
@@ -432,10 +433,6 @@ export const practice = {
   scaleStaff: {
     characteristic: 'Characteristic',
     group: 'On the staff',
-    degrees: 'Degree numbers',
-    degreesDetail: 'Each note’s place in the scale, under it: 1 for the tonic, ♭3 for a minor 3rd.',
-    steps: 'Whole and half steps',
-    stepsDetail: 'W for a whole step and H for a half step, between the notes they join.',
     tonic: 'Tonic and leading note',
     tetrachords: 'Tetrachords',
     tetrachordsDetail:

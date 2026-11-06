@@ -2,12 +2,9 @@ import { useSettingsStoreApi } from '@/entities/settings'
 import { useFoldKeys } from '@/features/live-keyboard'
 import { barsOf, staffLayer } from '@/features/score-editor'
 import { setPaletteCategory, setPaletteFolded } from '@/features/set-preference'
-import type { Printed } from '@/widgets/score-sheet'
+import type { PrintedSign } from '@/widgets/score-sheet'
 import { useScoreEditorContext } from './editor-context'
 import { usePalettePanel } from './use-palette-panel'
-
-/** A sign printed on the score that the palette sets: a key or time signature, a clef. */
-export type PrintedSign = Extract<Printed, { kind: 'key' | 'time' | 'clef' }>
 
 /**
  * What a sign printed on the score does when tapped (R32-B, Flat's): its bar is chosen (a clef's on

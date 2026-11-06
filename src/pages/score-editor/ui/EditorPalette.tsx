@@ -1,6 +1,6 @@
 import { ChevronDown, LayoutGrid, List, SquareChevronDown, SquareChevronUp } from 'lucide-react'
 import { MotionConfig, motion } from 'motion/react'
-import { useEffect, useRef, useState, type ReactNode, type Ref, type RefObject } from 'react'
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   selectPaletteCategory,
@@ -434,8 +434,8 @@ function ToolRow({ category }: { category: PaletteCategory }) {
 }
 
 /**
- * The palette floating at the screen's foot on a phone (R31-E, R32-C, Flat's): a rounded card above
- * the foot. Folded (as it first opens), the chosen category's tools in one row over the strip of
+ * The palette docked under the sheet on a phone (R31-E, R32-C, R34, Flat's), over the keys as they
+ * dock, the sheet ending above it. Folded (as it first opens), the chosen category's tools in one row over the strip of
  * categories; unfolded, every section in one scroll, up to half the screen, the strip lighting the
  * section in sight and scrolling to the one tapped, and Flat's list view a tap away. With the keys
  * shown it unfolds over them only once they fold away.
@@ -443,11 +443,9 @@ function ToolRow({ category }: { category: PaletteCategory }) {
 export function PaletteSheet({
   folded,
   onFold,
-  ref,
 }: {
   folded: boolean
   onFold: (folded: boolean) => void
-  ref?: Ref<HTMLElement>
 }) {
   const { t } = useTranslation('editor')
   const { takes } = useScoreEditorContext()
@@ -467,9 +465,8 @@ export function PaletteSheet({
   return (
     <MotionConfig reducedMotion="user">
       <section
-        ref={ref}
         aria-label={t('panel.label')}
-        className="pointer-events-auto flex max-h-[50dvh] min-h-0 flex-col gap-1.5 rounded-sheet border border-border bg-card px-2.5 pb-2.5 shadow-lg"
+        className="mr-[calc(-1*max(var(--gutter),env(safe-area-inset-right)))] ml-[calc(-1*max(var(--gutter),env(safe-area-inset-left)))] flex max-h-[50dvh] min-h-0 shrink-0 flex-col gap-1.5 border-y border-hairline bg-card px-[max(var(--gutter),env(safe-area-inset-left))] pb-2.5"
       >
         <fieldset disabled={takes.stage !== 'idle'} className="contents">
           <Grip folded={!unfolded} onFold={(next) => unfold(!next)} />

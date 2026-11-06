@@ -19,9 +19,10 @@ import { useKeyName } from '@/shared/i18n'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { BackButton, RowButton, RowTrigger, SettingsGroup, Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { PRINTED_PARTS, SheetViewFields } from '@/widgets/score-view-menu'
+import { PRINTED_PARTS, SheetLayoutTools, SheetViewFields } from '@/widgets/score-view-menu'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { gearBack, type GearPage } from '../model/gear-pages'
+import { usePalettePanel } from '../model/use-palette-panel'
 import { useRecordTake } from '../model/use-record-take'
 import { TAKES_PAGE } from '../model/use-editor-takes'
 import { CreditsPage } from './CreditsPage'
@@ -54,10 +55,22 @@ function useTitle(page: GearPage): string {
   }
 }
 
-/** The View's page: the sheet music's layout and what it shows. */
+/**
+ * The View's page: the sheet music's layout and what it shows. On a phone held upright the layout is
+ * chosen here, the sheet's foot left to the music (R34); elsewhere it is the sheet's pill's.
+ */
 function ViewPage() {
+  const { t } = useTranslation('music')
+  const panel = usePalettePanel()
   return (
     <div className="flex flex-col gap-5">
+      {panel ? null : (
+        <SettingsGroup title={t('sheet.layout.label')}>
+          <div className="flex justify-center px-3 py-3">
+            <SheetLayoutTools />
+          </div>
+        </SettingsGroup>
+      )}
       <SheetViewFields parts={PRINTED_PARTS} />
     </div>
   )

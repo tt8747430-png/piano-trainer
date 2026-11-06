@@ -71,7 +71,8 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     its arpeggio and chromatic walk into the Player; Arpeggio and Play one floating capsule (R29);
   - Scales and keys, its tabs saying what is in them, **Notes · Harmony · Key** (A32; the URL's `show=scale|chords|key`
     kept): Notes (a run from any start; what its keys carry, Notes · Left hand · Right hand, `onKeys=`;
-    on a staff; its fingering hand by hand, each hand drawn with its fingers numbered beside the run's notes and
+    on a staff, the music first, one layer of labels on it, **Fingers · Degrees · Steps** (`marks=`, fingers by
+    default); its fingering hand by hand, each hand drawn with its fingers numbered beside the run's notes and
     fingers; its exercises), Harmony (the scale's chords to 13ths on the seven-degree spine, a column a degree, each
     its symbol, numeral and, in a key, its degree's name (the degrees table gone into them), in an inversion, walked,
     each a tap to play and opening in Chords, in the key, from its card's corner: no second row of links) and Key
@@ -207,3 +208,4 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
   sheets that say what is included and why; the Chord player's equal tiles and one drag context (memory-palaces'
   fix); the libraries arranged like Songs, the built-in books included, Accompaniment patterns only; the laptop
   sidebar as Claude's (2026-11-05; research, spec and mockup in `.scratch/r32/`).
+- r34 (R34-3) — Scales' staff carries one layer of labels, Fingers · Degrees · Steps, chosen over the music; the degrees and steps toggles leave Settings (2026-11-06).

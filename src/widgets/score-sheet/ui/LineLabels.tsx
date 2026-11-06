@@ -4,9 +4,12 @@ import type { TimedMusic } from '@/shared/lib/notation'
 import { LabelRow, type BarLabel, type PrintLabel, type ScoreLayout } from '@/shared/ui/score'
 import type { EditPrinted } from '../model/printed'
 
-/** A printed part's button, over the bars' own (which reach into the row) where it is printed. */
+/**
+ * A printed part's button, over the bars' own (which reach into the row) where it is printed; its tap
+ * reaches a touch target each way about it, past the small type (R34, D2).
+ */
 const PART =
-  'relative z-30 cursor-pointer rounded-control transition-colors duration-200 ease-out hover:bg-foreground/5 hover:text-foreground focus-visible:-outline-offset-3'
+  'relative z-30 cursor-pointer rounded-control transition-colors duration-200 ease-out before:absolute before:top-1/2 before:left-1/2 before:size-full before:min-h-11 before:min-w-11 before:-translate-1/2 before:content-[""] hover:bg-foreground/5 hover:text-foreground focus-visible:-outline-offset-3'
 
 /**
  * Over a line's staff, the labels' row the Player prints too (ADR 0087, 0097): the number of its

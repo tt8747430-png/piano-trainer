@@ -55,3 +55,4 @@ The selection and the playhead read the same in every layout of both screens; a 
 - r29 (P16) — A selection's band runs by the bar's beats, from a bar line or a beat to the next (`beatGrid`, `snapRange`, `beatsBand`); no padding round the notes (2026-11-04).
 - r34 (R34) — The layout and the page view's zoom in one pill at the score's corner, always in sight (Songscription's view pill); the Layout tiles leave Display and the editor's View (2026-11-05).
 - r34 (R34) — A shape beside each judged head, one table for the sheet, the summary and the keys (2026-11-06).
+- r34 (R34-3) — On a phone the layout pill gives way to the gear's View page in the editor; the Player keeps the pill (2026-11-06).

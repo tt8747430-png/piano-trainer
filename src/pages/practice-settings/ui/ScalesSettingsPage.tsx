@@ -1,11 +1,14 @@
-import { Anchor, Brackets, Hash } from 'lucide-react'
+import { Anchor, Brackets } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { selectScaleStaff, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setScaleStaff } from '@/features/set-preference'
 import { SettingRows, SettingsGroup, SwitchRow } from '@/shared/ui'
 import { PracticeSettingsScreen } from './PracticeSettingsScreen'
 
-/** Scales and keys' Settings (A24, A43): the theory written on its staff. */
+/**
+ * Scales and keys' Settings (A24, A43): the theory written on its staff besides its one layer of
+ * labels, which the page chooses in place (R34).
+ */
 export function ScalesSettingsPage() {
   const { t } = useTranslation('practice')
   const store = useSettingsStoreApi()
@@ -14,22 +17,6 @@ export function ScalesSettingsPage() {
     <PracticeSettingsScreen title={t('pages.scales')}>
       <SettingsGroup title={t('scaleStaff.group')}>
         <SettingRows>
-          <SwitchRow
-            setting="scaleStaff.degrees"
-            icon={<Hash />}
-            label={t('scaleStaff.degrees')}
-            info={t('scaleStaff.degreesDetail')}
-            checked={layers.degrees}
-            onCheckedChange={(degrees) => setScaleStaff(store, { degrees })}
-          />
-          <SwitchRow
-            setting="scaleStaff.steps"
-            icon={<span className="font-display text-sm font-semibold">W H</span>}
-            label={t('scaleStaff.steps')}
-            info={t('scaleStaff.stepsDetail')}
-            checked={layers.steps}
-            onCheckedChange={(steps) => setScaleStaff(store, { steps })}
-          />
           <SwitchRow
             setting="scaleStaff.tonic"
             icon={<Anchor />}

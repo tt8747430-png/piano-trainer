@@ -683,7 +683,7 @@ describe('Player', () => {
     const user = userEvent.setup()
     const { router } = await renderApp(`/play/${withTune.id}`)
     await openMusicPage(user, 'Staves')
-    await user.click(await screen.findByRole('switch', { name: 'Show Staff 1' }))
+    await user.click(await screen.findByRole('switch', { name: 'Show Melody' }))
     expect(router.state.location.search).toMatchObject({ staves: 't01s0' })
     await user.click(screen.getByRole('switch', { name: 'Play Lower staff' }))
     expect(router.state.location.search).toMatchObject({ staves: 't01s0,l0s1' })

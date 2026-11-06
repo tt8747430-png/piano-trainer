@@ -1,6 +1,7 @@
 import type { ScaleStaffSettings } from '@/entities/settings'
 import type { Hand, Midi, PlacedTone } from '@/shared/lib/music'
 import type { TimedMusic, TimedNote } from '@/shared/lib/notation'
+import type { StaffMarks } from './scale-view'
 
 /** The words the staff's theory is written in, in the learner's language. */
 export interface RunStaffWords {
@@ -25,14 +26,16 @@ function stepName(semitones: number, words: RunStaffWords): string | undefined {
 }
 
 /**
- * The run with its theory written on one hand's staff (A43): each note's degree under it, the step to
- * the next named over the gap, the tonic and leading note named, and the tetrachords' first notes
+ * The run with its theory written on one hand's staff (A43): its one layer of labels (R34), each
+ * note's degree under it or the step to the next named under the gap, the tonic and leading note named, and the tetrachords' first notes
  * named, as the learner's switches say; a mode's characteristic note always named. Degrees come from the run's keys, up and down.
  */
 export function runStaff(
   music: TimedMusic,
   hand: Hand,
   placed: readonly PlacedTone[],
+  /** The staff's one layer of labels (R34): degrees and steps written here, fingers by the sheet. */
+  marks: StaffMarks,
   layers: ScaleStaffSettings,
   words: RunStaffWords,
   /** A mode's degree that sets it apart (`characteristicDegree`), as its tone writes it: always named. */
@@ -40,7 +43,7 @@ export function runStaff(
   /** The scale compared with (A43): by this scale's degree, the other's note written over it. */
   compared?: ReadonlyMap<string, string>,
 ): TimedMusic {
-  const any = layers.degrees || layers.steps || layers.tonic || layers.tetrachords
+  const any = marks !== 'fingers' || layers.tonic || layers.tetrachords
   if (!any && characteristic === undefined && !compared?.size) return music
   const degrees = new Map<Midi, string>(placed.map((key) => [key.midi, key.tone.degree]))
   // Tetrachords split a seven-note scale in two: the 1st to 4th and the 5th to the octave.
@@ -76,8 +79,8 @@ export function runStaff(
       ...note,
       marks: {
         ...note.marks,
-        ...(layers.degrees && degree ? { numeral: degree } : {}),
-        ...(layers.steps && step ? { step } : {}),
+        ...(marks === 'degrees' && degree ? { numeral: degree } : {}),
+        ...(marks === 'steps' && step ? { step } : {}),
         ...(text ? { text } : {}),
       },
     }

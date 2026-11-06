@@ -660,6 +660,9 @@ export const editor = {
     keyAt: 'Key signature, bar {{bar}}',
     timeAt: 'Time signature, bar {{bar}}',
     clefAt: 'Clef, {{staff}}, bar {{bar}}',
+    // A line's head on a touch screen, its signs too narrow to tap apart: one target, a menu of the three.
+    signsAt: 'Clef, key and time, {{staff}}, bar {{bar}}',
+    signs: { clef: 'Clef', key: 'Key signature', time: 'Time signature' },
     // The tempo's popover: the beats a minute, a beat less or more (the song's tempo words its own).
     bpm: 'Beats per minute',
     slower: 'Decrease tempo',

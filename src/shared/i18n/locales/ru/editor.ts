@@ -603,6 +603,8 @@ export const editor: LocaleResources['editor'] = {
     keyAt: 'Ключевые знаки, такт {{bar}}',
     timeAt: 'Размер, такт {{bar}}',
     clefAt: 'Ключ, {{staff}}, такт {{bar}}',
+    signsAt: 'Ключ, знаки и размер, {{staff}}, такт {{bar}}',
+    signs: { clef: 'Ключ', key: 'Ключевые знаки', time: 'Размер' },
     bpm: 'Ударов в минуту',
     slower: 'Уменьшить темп',
     faster: 'Увеличить темп',

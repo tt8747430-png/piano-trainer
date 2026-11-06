@@ -33,10 +33,14 @@ export function useStaffNames(
 }
 
 /**
- * A single staff named for a reader (ADR 0097): its own name, else its place's, "Staff 2": the
- * View's switch, the editor's placeholder at the head of a staff with no name of its own.
+ * A single staff named for a reader (ADR 0097): its own name, else its role's, the top one the
+ * tune's ("Melody", R34), else its place's, "Staff 2": the View's switch, the editor's placeholder
+ * at the head of a staff with no name of its own.
  */
 export function useStaffTitle(): (name: string | undefined, place: number) => string {
   const { t } = useTranslation('music')
-  return useCallback((name, place) => name ?? t('sheet.staff', { n: place + 1 }), [t])
+  return useCallback(
+    (name, place) => name ?? (place === 0 ? t('sheet.melody') : t('sheet.staff', { n: place + 1 })),
+    [t],
+  )
 }

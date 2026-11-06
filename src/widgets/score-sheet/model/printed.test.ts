@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ScoreLayout } from '@/shared/ui/score'
-import { signTargets } from './printed'
+import { headTargets, signTargets, TOUCH_TARGET } from './printed'
 
 /** A line of two measures over a single staff and the grand staff, its head's signs drawn. */
 const layout: ScoreLayout = {
@@ -80,5 +80,51 @@ describe('signTargets (ADR 0114)', () => {
     expect(key?.box.right).toBeGreaterThan(key?.box.left ?? Infinity)
     // A key with its signature takes no place besides it.
     expect(signTargets(layout, [0, 1], true)).toEqual(signTargets(layout, [0, 1]))
+  })
+})
+
+describe('headTargets (R34, D1)', () => {
+  it('makes a staff’s narrow head signs one target over them, a touch target wide at least', () => {
+    const targets = headTargets(signTargets(layout, [8, 9]), 8)
+    expect(targets.map((target) => target.printed)).toEqual([
+      {
+        kind: 'signs',
+        bar: 8,
+        staff: 'staff0',
+        signs: [
+          { kind: 'clef', bar: 8, staff: 'staff0' },
+          { kind: 'key', bar: 8 },
+          { kind: 'time', bar: 8 },
+        ],
+      },
+      {
+        kind: 'signs',
+        bar: 8,
+        staff: 'treble',
+        signs: [
+          { kind: 'clef', bar: 8, staff: 'treble' },
+          { kind: 'key', bar: 8 },
+          { kind: 'time', bar: 8 },
+        ],
+      },
+      // A clef past the head stands alone.
+      { kind: 'clef', bar: 9, staff: 'bass' },
+    ])
+    const [first] = targets
+    if (!first) throw new Error('the single staff’s head')
+    expect(first.box.left).toBe(10)
+    expect(first.box.right - first.box.left).toBeGreaterThanOrEqual(TOUCH_TARGET)
+    expect(first.box.bottom - first.box.top).toBeGreaterThanOrEqual(TOUCH_TARGET)
+  })
+
+  it('leaves a head whose signs are each wide enough, or alone, as it is', () => {
+    const wide = signTargets(layout, [0, 1]).map((target) => ({
+      ...target,
+      box: { ...target.box, right: target.box.left + TOUCH_TARGET },
+    }))
+    expect(headTargets(wide, 0)).toHaveLength(wide.length)
+    const [clef] = signTargets(layout, [0, 1])
+    if (!clef) throw new Error('a clef')
+    expect(headTargets([clef], 0)).toEqual([clef])
   })
 })

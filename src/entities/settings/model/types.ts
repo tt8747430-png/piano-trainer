@@ -395,15 +395,15 @@ export interface SettingsState {
  * The theory written on the Scales page's staff (A43): each note's degree under it, the whole and
  * half steps between the notes, the tonic and leading note named, and the two tetrachords bracketed.
  */
+/**
+ * The theory the Scales page writes on its staff besides its one layer of labels (R34: fingers,
+ * degrees or steps, the page's own, in its URL): the tonic and leading note, the tetrachords.
+ */
 export interface ScaleStaffSettings {
-  readonly degrees: boolean
-  readonly steps: boolean
   readonly tonic: boolean
   readonly tetrachords: boolean
 }
 export const DEFAULT_SCALE_STAFF: ScaleStaffSettings = {
-  degrees: true,
-  steps: true,
   tonic: false,
   tetrachords: false,
 }

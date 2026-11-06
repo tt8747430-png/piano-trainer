@@ -47,7 +47,10 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
     tempo words, the note it counts chosen under it;
   - a key signature, the time signature, a clef, and a key's place where it prints none, each choosing its bar (a
     clef's on its staff) and opening the palette at its category (`useOpenCategory`): the panel on a laptop, the
-    palette unfolded on a phone, the keys folding for it;
+    palette unfolded on a phone, the keys folding for it. On touch the signs at a line's start, too close to tell
+    apart, are one target at least 44 px a side (`headTargets`), opening a menu of Clef · Key signature · Time
+    signature; a fine pointer keeps one target a sign;
+  - the tempo mark and a section's name each reach at least 44 px for a finger, their print unchanged;
   - a section's name, opening its menu (named as a song's part, or joined to the one before);
   - a staff's name, opening its menu: Rename, Add a staff over or under, Remove (its notes with it; Undo brings them
     back), Hide or Show the piano. The last staff in sight is never removed or hidden;
@@ -71,7 +74,8 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   - **A panel** at the sheet's side from 48rem (`usePalettePanel`), left or right as Note input says, as Flat's web
     panel: every section stacked, each folding by its title (`foldedSections`); no strip. A sign tapped on the score
     unfolds its section and scrolls to it.
-  - **A card floating** over the sheet's foot on a phone held upright, the sheet keeping room to scroll above it.
+  - **Docked** under the sheet on a phone held upright, edge to edge above the keys, the sheet scrolling above it
+    (Flat's and forScore's input bar); never over the music.
     Folded (`paletteFolded`, as it opens): the chosen category's tools in one row over the strip of categories;
     unfolded: every section in one scroll, up to half the screen, the strip lighting the section in sight and
     scrolling to the one tapped; Flat's **Show as list** (`paletteList`) turns the cells into named rows, two to a
@@ -181,3 +185,4 @@ reader hears the caret's place in a polite live line (`CaretLine`).
   panel folding by titles), Show as list; Time signature as Flat's six tiles and Customize with its wheels; Key
   signature and Clef as bare tables, Switch to natural, a range of bars chosen for a clef; Tempo and the tempo words in
   Measures (2026-11-05).
+- r34 (R34-3) — The line's head signs one touch target with a menu; the tempo mark and section names padded to 44 px; the phone's palette docked under the sheet, its Layout chosen in the gear's View page, the sheet's pill left to the laptop (2026-11-06).

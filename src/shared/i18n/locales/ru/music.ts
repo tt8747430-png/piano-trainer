@@ -242,6 +242,7 @@ export const music: LocaleResources['music'] = {
     loopStart: 'Начало повтора',
     loopEnd: 'Конец повтора',
     staves: { piano: 'Фортепиано' },
+    melody: 'Мелодия',
     staff: 'Нотоносец {{n}}',
     canvas: {
       label: 'Страницы: перетащите, чтобы сдвинуть; сведите пальцы или Ctrl с колёсиком — масштаб',

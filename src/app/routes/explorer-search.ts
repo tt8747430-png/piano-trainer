@@ -36,7 +36,7 @@ import type { ChordView } from '@/widgets/chord-explorer'
 import { INTERVAL_WAYS, type IntervalWay } from '@/shared/lib/schedule'
 import type { IntervalView } from '@/widgets/interval-explorer'
 import type { ProgressionSearch, ProgressionsView } from '@/widgets/progression-explorer'
-import type { ScaleShow, ScaleView } from '@/widgets/scale-explorer'
+import { STAFF_MARKS, type ScaleShow, type ScaleView } from '@/widgets/scale-explorer'
 import {
   C_MAJOR_PARAM,
   type Input,
@@ -109,6 +109,7 @@ export const SCALES_DEFAULTS: ScalesSearch = {
   kind: 'major',
   show: 'scale',
   start: 1,
+  marks: 'fingers',
   octaves: 1,
   rhythm: 'even',
   tempo: 80,
@@ -153,6 +154,7 @@ export function readScalesSearch(raw: Raw): ScalesSearch {
     kind,
     show: valueOr(isOneOf(scaleShows(kind)), raw.show, SCALES_DEFAULTS.show),
     start,
+    marks: valueOr(isOneOf(STAFF_MARKS), raw.marks, SCALES_DEFAULTS.marks),
     octaves: raw.octaves === 2 || raw.octaves === 3 || raw.octaves === 4 ? raw.octaves : 1,
     ...(raw.direction === 'up' || raw.direction === 'down' ? { direction: raw.direction } : {}),
     ...(isComparedScale(raw.compare) && raw.compare !== kind && scaleIntervals(kind).length === 7

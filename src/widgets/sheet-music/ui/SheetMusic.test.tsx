@@ -80,17 +80,19 @@ describe('SheetMusic', () => {
   )
 
   it.each(['panorama', 'vertical', 'page'] as const)(
-    'names the piano’s staves at the first line’s head, %s (ADR 0114)',
+    'names no staff of a piano alone, one instrument, %s (ADR 0114, R34)',
     async (layout) => {
       renderSheet({
         shown: { layout, chordNames: true, lyrics: true, hidden: [] },
       })
+      // Engraved first, then read: no name at its head.
+      await waitFor(() => expect(document.querySelector('[data-slot="score"] svg')).not.toBeNull())
       await waitFor(() =>
         expect(
           [...document.querySelectorAll('[data-slot="score"] g.label')].map((label) =>
             label.textContent?.trim(),
           ),
-        ).toEqual(['Piano']),
+        ).toEqual([]),
       )
     },
   )
@@ -114,7 +116,8 @@ describe('SheetMusic', () => {
       staffNames: ['Voice'],
       shown: shown(['staff0']),
     })
-    await waitFor(() => expect(labels()).toEqual(['Piano']))
+    // The piano left alone is one instrument: named no more.
+    await waitFor(() => expect(labels()).toEqual([]))
   })
 
   it('names each bar by its chords, the cursor’s marked', async () => {

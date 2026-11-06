@@ -205,6 +205,7 @@ export function ScoreSheet({
     own.map((name, place) =>
       name === undefined ? { text: title(undefined, place), placeholder: true } : { text: name },
     ),
+    true,
   )
   const layerName = useLayerName(draft.staves)
   const headings = useHeadings(draft)

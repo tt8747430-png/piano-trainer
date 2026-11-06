@@ -156,6 +156,7 @@ export const practice: LocaleResources['practice'] = {
     moreOctaves: 'Больше октав',
     direction: { label: 'Направление', both: 'Вверх и вниз', up: 'Вверх', down: 'Вниз' },
     octaves: 'Октавы',
+    marks: { label: 'На нотоносце', fingers: 'Пальцы', degrees: 'Ступени', steps: 'Тоны' },
     startOn: 'Начать с',
     openChord: 'Открыть {{chord}} в «Аккордах»',
     byHand: {
@@ -410,10 +411,6 @@ export const practice: LocaleResources['practice'] = {
   scaleStaff: {
     characteristic: 'Характерная',
     group: 'На нотоносце',
-    degrees: 'Номера ступеней',
-    degreesDetail: 'Место каждой ноты в гамме, под ней: 1 — тоника, ♭3 — малая терция.',
-    steps: 'Тоны и полутоны',
-    stepsDetail: 'Т — тон, П — полутон, между нотами, которые они соединяют.',
     tonic: 'Тоника и вводный тон',
     tetrachords: 'Тетрахорды',
     tetrachordsDetail:

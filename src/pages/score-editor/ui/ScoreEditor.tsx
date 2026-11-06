@@ -54,9 +54,9 @@ const PANEL_EDGE_RIGHT =
  * The score editor (ADR 0096, 0114, R31-E), laid out as Flat's, one screen that never scrolls as a
  * whole: the bar (Close, Done, Play, Undo, Redo and the gear), then the work. From 48rem across (a
  * laptop, a tablet, a phone on its side) the palette is a panel at the sheet's side; on a phone held
- * upright it floats as a rounded card over the sheet's foot, the sheet keeping room to scroll its
- * last line above it; a field typed in (a chord symbol, the lyrics, the fingering) takes its place,
- * slim, over the phone's own keyboard. The keys dock under all of it, or under the bar, as the
+ * upright it docks under the sheet, over the keys (R34), the sheet ending above it, and the layout
+ * is chosen in the gear's View, the sheet's foot left to the music; a field typed in (a chord symbol,
+ * the lyrics, the fingering) takes its place, slim, over the phone's own keyboard. The keys dock under all of it, or under the bar, as the
  * keyboard settings say. What is done to the notes chosen floats over the sheet's foot, stepping
  * aside while the music is read; while a take records, its strip stands there.
  */
@@ -98,17 +98,13 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
   // strip), measured: the sheet has room to scroll past it.
   const sheet = useRef<HTMLDivElement>(null)
   const foot = useRef<HTMLDivElement>(null)
-  const palette = useRef<HTMLElement>(null)
   const { height } = useElementSize(sheet)
   const { height: floated } = useElementSize(foot)
-  const { height: paletteHeight } = useElementSize(palette)
   // Where the field open over the sheet stands: the place the caret's line draws for it (ADR 0096);
   // on a phone, the slim bar over its own keyboard, in the palette's place.
   const [anchor, setAnchor] = useState<HTMLDivElement | null>(null)
   const [docked, setDocked] = useState<HTMLDivElement | null>(null)
   const typing = !panel && editor.view.field !== null
-  // The floating palette's room at the sheet's foot: none while a field takes its place.
-  const paletteRoom = panel || typing || paletteHeight === 0 ? 0 : paletteHeight + GAP
   // While a field types over the phone's keyboard, the sheet's foot is covered by the keyboard and
   // the slim bar standing on it: measured, so the caret's line scrolls clear of both (ADR 0061).
   const keyboard = useKeyboardHeight()
@@ -120,7 +116,7 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
     const barTop = docked.getBoundingClientRect().top - bar - DOCKED_GAP
     setTypedOver(Math.max(0, Math.round(box.getBoundingClientRect().bottom - barTop)))
   }, [typing, keyboard, docked])
-  const below = Math.max(floated + paletteRoom, typedOver)
+  const below = Math.max(floated, typedOver)
   // The sheet never leaves the caret under what floats at its foot (or the phone's keyboard): its
   // staff scrolls into the room above it.
   useEffect(() => {
@@ -198,11 +194,12 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
           ) : null}
           <div className="relative flex min-h-0 flex-1 flex-col">
             {/* The sheet's one pill at its foot, clear of what floats there (R34, Songscription's):
-                the layout, and in Page view the canvas's zoom beside it. */}
-            <SheetToolsContext value={<SheetLayoutTools />}>
+                the layout, and in Page view the canvas's zoom beside it; on a phone held upright
+                the layout is the gear's View's, the zoom alone. */}
+            <SheetToolsContext value={panel ? <SheetLayoutTools /> : null}>
               <div className="min-h-0 flex-1">{music}</div>
             </SheetToolsContext>
-            {editor.view.layout === 'page' ? null : (
+            {editor.view.layout === 'page' || !panel ? null : (
               <SheetPill covered={{ bottom: below + GAP }}>
                 <SheetLayoutTools />
               </SheetPill>
@@ -219,10 +216,8 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
                 ref={foot}
                 data-hidden={footShown ? undefined : true}
                 inert={!footShown}
-                style={{ bottom: paletteRoom }}
-                // The selection's commands, or a take's strip, at the sheet's foot (ADR 0115),
-                // over the floating palette on a phone.
-                className="absolute inset-x-0 flex justify-center px-1 pb-2 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:pb-1"
+                // The selection's commands, or a take's strip, at the sheet's foot (ADR 0115).
+                className="absolute inset-x-0 bottom-0 flex justify-center px-1 pb-2 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:pb-1"
               >
                 <div className="flex shrink-0 flex-col items-center gap-2">
                   <SelectionActions />
@@ -233,14 +228,12 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
                   )}
                 </div>
               </div>
-              {panel || typing ? null : (
-                // The palette floating over the sheet's foot (R31-E, Flat's), clear of its edges.
-                <div className="absolute inset-x-0 bottom-2 px-0.5">
-                  <PaletteSheet ref={palette} folded={folded} onFold={fold} />
-                </div>
-              )}
             </div>
           </div>
+          {panel || typing ? null : (
+            // The palette docked under the sheet, over the keys (R34, as the keys dock).
+            <PaletteSheet folded={folded} onFold={fold} />
+          )}
           {typing ? (
             // The field's slim bar stands over the phone's own keyboard, where the palette was.
             <KeyboardAnchor ref={setDocked} />

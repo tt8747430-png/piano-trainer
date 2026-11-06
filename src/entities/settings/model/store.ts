@@ -92,7 +92,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 35
+export const SETTINGS_VERSION = 36
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -482,8 +482,6 @@ function scaleStaffSettings(value: unknown): ScaleStaffSettings {
   const on = (key: keyof ScaleStaffSettings) =>
     typeof saved[key] === 'boolean' ? saved[key] : DEFAULT_SCALE_STAFF[key]
   return {
-    degrees: on('degrees'),
-    steps: on('steps'),
     tonic: on('tonic'),
     tetrachords: on('tetrachords'),
   }

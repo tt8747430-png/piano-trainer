@@ -1,15 +1,17 @@
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { staffLayer } from '@/features/score-editor'
+import { hasFinePointer } from '@/shared/lib'
 import type { ScoreLayout } from '@/shared/ui/score'
-import { signTargets, type EditPrinted, type Printed } from '../model/printed'
+import { headTargets, signTargets, type EditPrinted, type Printed } from '../model/printed'
 import { useSheetLayerName } from '../model/use-layer-name'
 
 /**
  * A button over each clef, key and time signature printed on a line (ADR 0114), as Flat's: a tap on
  * one opens what changes it there (`edit`); a key printing no sharps or flats has its place after
  * the line's clefs. A pointer's target, as a bar's: the keyboard has the palette's Clef, Key
- * signature and Time signature.
+ * signature and Time signature. On a touch screen a staff's head signs too narrow to tap are one
+ * target whose menu names each (R34, D1).
  */
 export function PrintedSigns({
   layout,
@@ -26,13 +28,18 @@ export function PrintedSigns({
 }) {
   const { t } = useTranslation('editor')
   const layerName = useSheetLayerName()
+  const [touch] = useState(() => !hasFinePointer())
   const name = (printed: Printed) => {
     const bar = 'bar' in printed ? printed.bar + 1 : 1
     if (printed.kind === 'clef')
       return t('printed.clefAt', { staff: layerName(staffLayer(printed.staff)), bar })
+    if (printed.kind === 'signs')
+      return t('printed.signsAt', { staff: layerName(staffLayer(printed.staff)), bar })
     return printed.kind === 'time' ? t('printed.timeAt', { bar }) : t('printed.keyAt', { bar })
   }
-  return signTargets(layout, bars, keyless).map(({ printed, box, staff }) => (
+  const signs = signTargets(layout, bars, keyless)
+  const targets = touch && bars[0] !== undefined ? headTargets(signs, bars[0]) : signs
+  return targets.map(({ printed, box, staff }) => (
     <Fragment key={`${printed.kind} ${staff} ${'bar' in printed ? printed.bar : ''}`}>
       {edit(
         printed,

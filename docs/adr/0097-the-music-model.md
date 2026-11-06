@@ -107,3 +107,4 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
 - r28 — The music's `header` (credits under the title) and `layout` (staff size, bars per line) (2026-11-01).
 - r29 — The sustain pedal leaves the note marks: a piece's pedal line of events at beats (down, up, change), the
   Performance's `pedal`, `pt-pieces` version 9; no Melody source (2026-11-03).
+- r34 (R34-3) — An unnamed first staff is the Melody, the rest Staff 2, 3…; the piano is named only beside other staves, or alone in the editor (2026-11-06).
