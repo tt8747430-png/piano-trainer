@@ -21,7 +21,7 @@ describe('Settings › Connect a piano › Calibrate timing (R34)', () => {
     const start = await screen.findByRole('button', { name: 'Start' })
     await waitFor(() => expect(start).toBeEnabled())
     await user.click(start)
-    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Count in: 1'))
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Count-in: 1'))
     // Each of the sixteen clicks after the count-in tapped 40 ms late.
     for (let click = 0; click < 16; click++) {
       act(() => {

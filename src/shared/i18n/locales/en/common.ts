@@ -281,7 +281,7 @@ export const common = {
       start: 'Start',
       stop: 'Stop',
       again: 'Measure again',
-      counting: 'Count in: {{beat}}',
+      counting: 'Count-in: {{beat}}',
       tapping: 'Click {{click}} of {{count}}',
       measured: 'Your piano is heard {{latency}} ms late. Your takes now allow for it.',
       unclear: 'Too few taps came with a click. Try again, a key with each one.',

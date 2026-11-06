@@ -114,3 +114,4 @@ The score editor's Play and its recorder's click keep their own switches. A reco
 - r34 — The recording plays in any key, shifted with Transpose; its own-key ⓘ and the Staves row's reason gone.
 - r34 — Staves › Recording has Sync under its volume: Earlier and Later in 10 ms steps, kept with the song.
 - r34 — The switch is Smooth voice leading, the term for the nearest inversion (2026-11-06).
+- r35 — Count-in, the noun, names the Player's row and the calibration's count, as it does the editor's (2026-11-06).

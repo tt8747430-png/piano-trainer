@@ -386,7 +386,7 @@ export const player = {
   /** The transport's Sound (ADR 0105): the count-in, the click, and each part's volume. */
   sound: {
     title: 'Sound',
-    countIn: 'Count in',
+    countIn: 'Count-in',
     countInInfo: 'A bar of clicks before the music starts, its beats counted down on the screen.',
     click: 'Metronome',
     clickInfo: 'A click on every beat while the music plays.',
