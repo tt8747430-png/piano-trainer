@@ -6,8 +6,7 @@ Tone.js for practising with a MIDI keyboard.
 
 **Licence: AGPL-3.0.** Copying its code would put our app under the AGPL (source to every user, including over the
 network). So we take ideas and behaviour only and write our own code. Its Salamander piano samples are the same set we
-already use (CC-BY), not theirs. webmscore (MuseScore in WebAssembly) is MIT-licensed separately, so that one could be
-used directly.
+already use (CC-BY), not theirs. webmscore (MuseScore in WebAssembly) is GPL, so using it is the owner's licensing call.
 
 ## What it has, against ours
 
@@ -38,7 +37,7 @@ used directly.
 3. **Hand role per staff, per song** (Right hand, Left hand, Accompaniment, Ignore), in the Player's Staves page.
 4. **A scored play-along mode at tempo** (their Realtime): Listen's sound, with marks and a live accuracy.
 5. **Loop gate and count-in per pass**, if ours lacks them.
-6. **MuseScore import** through webmscore (MIT; a large WebAssembly file, loaded only when such a file is opened).
+6. **MuseScore import** through webmscore, only if the owner accepts its GPL licence (a large WebAssembly file, loaded only when such a file is opened).
 7. Metronome on MIDI channel 10, and fullscreen.
 
 Left out: WLED and LED strips (hardware we cannot test), Guitar Pro (not a piano format), their library merge
