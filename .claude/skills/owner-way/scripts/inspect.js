@@ -75,13 +75,18 @@
       if (!top || !(a.contains(top) || b.contains(top) || top.contains(a) || top.contains(b))) continue
       found.push(`OVERLAP ${name(a)} × ${name(b)} at ${Math.round(x)},${Math.round(y)}`)
     }
+  // The layers a tap opens and the next tap closes, drawn over the page by design.
+  const OPENED =
+    '[data-slot="popover-content"], [data-slot="dropdown-menu-content"], [data-slot="select-content"], [data-slot="tooltip-content"]'
   // 3. A floating layer (fixed or sticky) over text that is not its own: a pill over a title.
   const layers = [...document.querySelectorAll('body *')].filter((el) => {
     const cs = getComputedStyle(el)
     const p = cs.position
     // Bars and floating pills: fixed or sticky, or placed absolutely above the page (a z-index).
     const floats = p === 'fixed' || p === 'sticky' || (p === 'absolute' && Number(cs.zIndex) >= 10)
-    return floats && visible(el) && !hidden(el)
+    // A popover, a menu, a select's list or a tooltip a step opened covers the page on purpose.
+    const asked = el.closest(OPENED) || el.querySelector(OPENED)
+    return floats && !asked && visible(el) && !hidden(el)
   })
   for (const layer of layers) {
     const r = layer.getBoundingClientRect()
@@ -108,7 +113,8 @@
   // 4. A backdrop that leaves a band of the page uncovered while a dialog is open.
   // A panel from the side, beside the page (a laptop's Settings, the music in sight by design), asks
   // no backdrop.
-  const dialog = document.querySelector('[role="dialog"], [role="alertdialog"]')
+  // A popover is a dialog to a screen reader but holds nothing back: it asks no backdrop.
+  const dialog = document.querySelector('[role="dialog"]:not([data-slot="popover-content"]), [role="alertdialog"]')
   const beside = dialog?.closest('[data-swipe-axis="x"]') ?? dialog?.querySelector('[data-swipe-axis="x"]')
   if (dialog && visible(dialog) && !beside) {
     for (const y of [2, innerHeight * 0.25, innerHeight * 0.5]) {
@@ -120,11 +126,26 @@
       }
     }
   }
-  // 5. Touch targets.
+  // 5. Touch targets, each as far as it reaches: its box, grown by a ::before or ::after placed round
+  // it (an ⓘ drawn 20px reaches 44px).
+  const reach = (el) => {
+    const r = el.getBoundingClientRect()
+    let { left, top, right, bottom } = r
+    for (const part of ['::before', '::after']) {
+      const cs = getComputedStyle(el, part)
+      if (cs.content === 'none' || cs.position !== 'absolute') continue
+      const px = (value) => (value.endsWith('px') ? parseFloat(value) : 0)
+      left = Math.min(left, r.left + px(cs.left))
+      top = Math.min(top, r.top + px(cs.top))
+      right = Math.max(right, r.right - px(cs.right))
+      bottom = Math.max(bottom, r.bottom - px(cs.bottom))
+    }
+    return { width: right - left, height: bottom - top }
+  }
   if (matchMedia('(pointer: coarse)').matches)
     for (const el of document.querySelectorAll('button, a[href], [role="button"], [role="tab"], [role="radio"]')) {
       if (!visible(el) || hidden(el) || isKey(el) || inScore(el)) continue
-      const r = el.getBoundingClientRect()
+      const r = reach(el)
       if (r.width < 40 || r.height < 40) found.push(`SMALL ${name(el)}: ${Math.round(r.width)}×${Math.round(r.height)}`)
     }
   return [...new Set(found)]
