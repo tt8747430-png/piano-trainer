@@ -4,7 +4,7 @@ import { VerdictShapes } from './VerdictShapes'
 
 const head = (id: string, left: number) => ({
   id,
-  staff: 'rh' as const,
+  staff: 'treble' as const,
   tick: 0,
   index: 0,
   left,

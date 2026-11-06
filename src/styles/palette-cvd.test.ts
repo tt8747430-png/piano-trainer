@@ -1,34 +1,36 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import {
+  type Color,
   differenceCiede2000,
   filterDeficiencyDeuter,
   filterDeficiencyProt,
   filterDeficiencyTrit,
+  parse,
 } from 'culori'
 import { describe, expect, it } from 'vitest'
 
 /** The light theme's primitives (`--p-*: #hex`), read from the tokens. */
 const TOKENS = readFileSync(resolve(import.meta.dirname, 'tokens.css'), 'utf8')
-const primitive = (name: string): string => {
-  const found = new RegExp(`--p-${name}:\\s*(#[0-9a-f]{6})`).exec(TOKENS)?.[1]
+const primitive = (name: string): Color => {
+  const found = parse(new RegExp(`--p-${name}:\\s*(#[0-9a-f]{6})`).exec(TOKENS)?.[1] ?? '')
   if (!found) throw new Error(`no --p-${name} in tokens.css`)
   return found
 }
 
 /** Under each kind of colour blindness, and as seen with full colour vision. */
-const SIGHTS = {
-  full: (colour: string) => colour,
+const SIGHTS: Readonly<Record<string, (colour: Color) => Color>> = {
+  full: (colour: Color) => colour,
   protanopia: filterDeficiencyProt(1),
   deuteranopia: filterDeficiencyDeuter(1),
   tritanopia: filterDeficiencyTrit(1),
-} as const
+}
 
 /** Two colours a reader tells apart at a glance: CIEDE2000 above this. */
 const APART = 10
 
 const dE = differenceCiede2000()
-const apart = (a: string, b: string) =>
+const apart = (a: Color, b: Color) =>
   Object.values(SIGHTS).every((sight) => dE(sight(a), sight(b)) > APART)
 
 /**
