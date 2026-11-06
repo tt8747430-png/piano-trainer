@@ -1,11 +1,9 @@
 import { useTranslation } from 'react-i18next'
-import { FOLDER_PICTURE_ICONS, useLibrary } from '@/entities/library'
-import { entryTitles, PieceLink, pieceKey, useRepertoire } from '@/entities/piece'
+import { useLibrary } from '@/entities/library'
+import { entryTitles, PieceLink, useRepertoire } from '@/entities/piece'
 import { byLastOpened, selectPractised, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
-import { keySymbol, printedSymbol } from '@/shared/lib/music'
-import { PAINT } from '@/shared/ui'
+import { PieceCover } from '@/widgets/piece-cover'
 
 /** How many songs Continue shows: two whole cards across a phone. */
 const SHOWN = 2
@@ -36,7 +34,6 @@ export function ContinueShelf() {
   const locale = useLocale()
   const repertoire = useRepertoire()
   const practised = useProgress(selectPractised)
-  const looks = useLibrary((state) => state.songLooks)
   const archived = useLibrary((state) => state.archive)
   const dayOf = useDayWords()
   const gone = new Set(archived.flatMap((entry) => (entry.kind === 'song' ? [entry.id] : [])))
@@ -55,9 +52,6 @@ export function ContinueShelf() {
       </h2>
       <ul className="grid grid-cols-2 gap-3">
         {recent.map((entry) => {
-          const look = looks[entry.id]
-          const Icon = look ? FOLDER_PICTURE_ICONS[look.picture] : null
-          const paint = PAINT[look?.paint ?? 'yellow']
           const at = practised[entry.id]
           return (
             <li key={entry.id}>
@@ -65,16 +59,11 @@ export function ContinueShelf() {
                 entry={entry}
                 className="flex h-full flex-col gap-2 card p-3 transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3"
               >
-                <span
-                  aria-hidden
-                  className={cn(
-                    'grid h-20 place-items-center rounded-control font-display text-3xl font-semibold',
-                    paint.fill,
-                    paint.ink,
-                  )}
-                >
-                  {Icon ? <Icon className="size-7" /> : printedSymbol(keySymbol(pieceKey(entry)))}
-                </span>
+                <PieceCover
+                  entry={entry}
+                  decorative
+                  className="aspect-auto h-20 w-full rounded-control text-3xl"
+                />
                 <span className="line-clamp-2 font-semibold text-balance">
                   {entryTitles(entry, locale).primary}
                 </span>

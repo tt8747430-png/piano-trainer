@@ -9,6 +9,7 @@ import {
   type Piece,
 } from '@/entities/piece'
 import { pieceStepId } from '@/entities/step'
+import { FavouriteButton } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { OPEN_PLAINLY, useMediaQuery } from '@/shared/lib'
@@ -27,8 +28,7 @@ import { YourPractice } from './YourPractice'
 
 /**
  * A song's page (R32-C; Apple Music's album page, MuseScore's score page): its bar (Back, the title
- * with ✎, which opens the score editor, Learned, Settings); the song (its cover, a tap changing it,
- * with its ♡; who wrote it; one line of facts; what is said of it); its music (its sections, the
+ * with ✎, which opens the score editor, ♡, Learned, Settings); the song (its cover, a tap changing it; who wrote it; one line of facts; what is said of it); its music (its sections, the
  * learner's practice, its chords and progressions); and its Details, every property a row edited
  * where it stands (Notion's). From a laptop's width the song and its Details are the left column and
  * the music the right; on a phone Details follow the music. Play floats, the Player as it was left.
@@ -50,7 +50,12 @@ export function PieceView({ piece }: { piece: Piece }) {
     <div className="flex flex-col gap-6 pb-24">
       <PieceHeader
         entry={piece}
-        tools={<LearnedButton step={step} bar />}
+        tools={
+          <>
+            {piece.kind === 'study' ? null : <FavouriteButton piece={piece.id} />}
+            <LearnedButton step={step} bar />
+          </>
+        }
         settings={
           <RoundLink
             label={t('settings.open')}
@@ -82,12 +87,12 @@ export function PieceView({ piece }: { piece: Piece }) {
           {laptop ? details : null}
         </section>
         <div className="flex min-w-0 flex-col gap-8">
-          <div className="grid gap-6 xl:grid-cols-2 xl:items-start">
+          <div className="grid gap-6 empty:hidden xl:grid-cols-2 xl:items-start">
             {/* A song of one section has no section machinery: its chords are all it needs. */}
             {sections.length > 1 ? (
               <SectionRows piece={piece} headings={headings} sections={sections} />
             ) : null}
-            <YourPractice id={piece.id} />
+            <YourPractice piece={piece} performance={performance} />
           </div>
           <PieceChords performance={performance}>
             <PieceProgressions piece={piece} />

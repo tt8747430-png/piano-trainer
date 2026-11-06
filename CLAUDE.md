@@ -83,7 +83,7 @@ a Performance becomes a Score (`notation`) or sounds (`schedule`).
   the learner's own, in the same editors on the device. `pages/learn`, `course`, `lesson`, `lesson-editor`;
   `widgets/curriculum`, `lesson-view`; `features/manage-own-lessons`; `entities/own-lessons`.
 - **Songs** (`/songs`): My songs · Explore. One library of folders, favourites and an archive; a song's page, Settings and
-  Publish; MusicXML and MIDI in and out. `pages/songs`, `piece`, `public-library`; `widgets/song-library`;
+  Publish; MusicXML and MIDI in and out. `pages/songs`, `piece`, `public-library`; `widgets/song-library`, `piece-cover`;
   `features/manage-library`, `song-files`, `publish`, `share-folder`; `entities/library`, `piece`. Groups and
   folders shared with them: `pages/groups`, `shared/api/groups`.
 - **Practice** (`/practice`): Up next, then Chords, Scales and keys, Intervals, Progressions, Accompaniment, the Chord

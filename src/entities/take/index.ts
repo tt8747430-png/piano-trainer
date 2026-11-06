@@ -16,6 +16,13 @@ export {
   type TakesState,
   type TakesStore,
 } from './model/store'
+export {
+  barShares,
+  nextStep,
+  practiceSummary,
+  type NextStep,
+  type PracticeSummary,
+} from './model/practice-summary'
 export { selectRoomLeft, selectTake, selectTakesOf } from './model/selectors'
 export { TakesStoreProvider, useTakes, useTakesStoreApi } from './model/context'
 export { takeSounds, takeSoundsFrom } from './model/sounds'

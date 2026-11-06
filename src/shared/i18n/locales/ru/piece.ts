@@ -165,6 +165,17 @@ export const piece: LocaleResources['piece'] = {
     takeCount_few: '{{count}} записи',
     takeCount_many: '{{count}} записей',
     takeCount_other: '{{count}} записи',
+    lastTake: 'Последняя запись',
+    bestTake: 'Лучшая запись',
+    share: 'верно {{percent}}',
+    bars: 'По тактам',
+    barSaid: 'Такт {{bar}}: верно {{percent}}',
+    barNone: 'Такт {{bar}}: не сыгран',
+    next: {
+      loop: 'Повторять такты {{bars}} в темпе {{speed}}',
+      loopOne: 'Повторять такт {{bar}} в темпе {{speed}}',
+      tempo: 'Сыграть в темпе {{speed}}',
+    },
   },
   settings: {
     exportLine: 'MusicXML, MIDI',

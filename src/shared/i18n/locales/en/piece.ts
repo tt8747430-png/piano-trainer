@@ -167,6 +167,17 @@ export const piece = {
     takes: 'Takes',
     takeCount_one: '{{count}} recording',
     takeCount_other: '{{count}} recordings',
+    lastTake: 'Last take',
+    bestTake: 'Best take',
+    share: '{{percent}} right',
+    bars: 'Bar by bar',
+    barSaid: 'Bar {{bar}}: {{percent}} right',
+    barNone: 'Bar {{bar}}: not played',
+    next: {
+      loop: 'Loop bars {{bars}} at {{speed}} speed',
+      loopOne: 'Loop bar {{bar}} at {{speed}} speed',
+      tempo: 'Play at {{speed}} speed',
+    },
   },
   settings: {
     exportLine: 'MusicXML, MIDI',

@@ -44,9 +44,9 @@ import {
   SwitchRow,
 } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
+import { PieceCover } from '@/widgets/piece-cover'
 import { useSongPublish } from '../model/use-song-publish'
 import { OwnMusicAsk } from './OwnMusicAsk'
-import { SongCover } from './SongCover'
 
 /** The route's song, or the way back where it is gone (an own song deleted in another tab). */
 export function SongSettingsPage() {
@@ -133,7 +133,7 @@ function SongSettings({ piece }: { piece: Piece }) {
         {/* The song at the head: what these settings are for (R32-C). */}
         <SettingsGroup flush>
           <div className="flex min-h-20 items-center gap-4 px-4 py-3">
-            <SongCover piece={piece} className="w-14 shrink-0 text-xl" />
+            <PieceCover entry={piece} className="w-14 shrink-0 text-xl" />
             <div className="flex min-w-0 flex-col gap-0.5">
               <p className="font-display text-lg leading-tight font-semibold text-balance">
                 {title}

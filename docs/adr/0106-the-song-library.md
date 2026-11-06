@@ -57,6 +57,14 @@ details.
 - **Saved: `pt-library` holds only what the learner changed**, read over the catalog and writing nothing as it reads.
   A built-in folder the store does not hold stands after the others; a built-in song placed nowhere stands last in
   its collection's folder; an own song placed nowhere, or whose folder is gone, stands at Home.
+- **A song's cover** (`widgets/piece-cover`, R34): the picture and paint the learner chose; else the song's first two
+  bars engraved on the soft yellow (`incipitScore`: the tune's staff alone, plain, no tempo mark), so a song is known by
+  its music; a listing with no chart its key letter. The song page, its Settings and Continue draw it. Its ♡ is the
+  page's bar's, beside Learned, never over the cover.
+- **Your practice** on a song's page, once played: the day played last and the takes; with a take, the last and best
+  take's share right as meters in ink, the last take bar by bar, and one next step as a quiet button into the Player
+  (`nextStep`: the weakest bar or pair under 80 % looped at 70 % speed, else the tempo climbed 50 → 75 → 100 %). Play
+  stays the page's one honey control.
 - **Not taken:** setlists, a sort per folder, a 30-day expiry (the app's songs never vanish), tags, Recently played at
   Home's top (Learn shows the songs played last).
 
@@ -111,3 +119,4 @@ A study, practised on Practice, is in no library. A folder played song after son
   picture and paint, members and folders counted; Join with a link (a pasted invite link or its code); a group's
   page holds its invite link, its shared folders with Share a folder…, and its members (Member for one without a
   name, a failure with Try again); a shared folder of the learner's own has Stop sharing (2026-11-05).
+- r34 (R34) — Covers engraved from the song's first bars; Your practice says the last and best take, the bars one by one and one next step; the ♡ moves into the bar (2026-11-06).

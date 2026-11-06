@@ -227,13 +227,14 @@ describe('Piece', () => {
     expect(`${link.pathname}${link.search}`).toBe('/play/bz5?transpose=2&version=simple')
   })
 
-  it('keeps Learned and Settings in its bar, ✎ beside the title, ♡ on the cover and Play floating (R30 S4)', async () => {
+  it('keeps ♡, Learned and Settings in its bar, ✎ beside the title and Play floating (R30 S4, R34)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs/bz5')
-    const song = await screen.findByRole('region', { name: 'The song' })
-    expect(within(song).getByRole('button', { name: 'Add to favourites' })).toBeInTheDocument()
+    await screen.findByRole('region', { name: 'The song' })
     expect(screen.getByRole('link', { name: 'Practise' })).toHaveAttribute('href', '/play/bz5')
     const bar = screen.getByRole('banner')
+    // ♡ moved off the cover, whose tap changes it (R34).
+    expect(within(bar).getByRole('button', { name: 'Add to favourites' })).toBeInTheDocument()
     expect(within(bar).getByRole('button', { name: 'Learned' })).toBeInTheDocument()
     expect(within(bar).getByRole('link', { name: 'Settings' })).toHaveAttribute(
       'href',
