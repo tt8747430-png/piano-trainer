@@ -73,7 +73,8 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   the category chosen (`paletteCategory`, kept) is the section kept in sight:
   - **A panel** at the sheet's side from 48rem (`usePalettePanel`), left or right as Note input says, as Flat's web
     panel: every section stacked, each folding by its title (`foldedSections`); no strip. A sign tapped on the score
-    unfolds its section and scrolls to it.
+    unfolds its section and scrolls to it. It reaches the screen's edge under the bar's hairline, its tools clear of
+    the safe area (the notch of a phone on its side).
   - **Docked** under the sheet on a phone held upright, edge to edge above the keys, the sheet scrolling above it
     (Flat's and forScore's input bar); never over the music.
     Folded (`paletteFolded`, as it opens): the chosen category's tools in one row over the strip of categories;
@@ -186,3 +187,5 @@ reader hears the caret's place in a polite live line (`CaretLine`).
   signature and Clef as bare tables, Switch to natural, a range of bars chosen for a clef; Tempo and the tempo words in
   Measures (2026-11-05).
 - r34 (R34-3) — The line's head signs one touch target with a menu; the tempo mark and section names padded to 44 px; the phone's palette docked under the sheet, its Layout chosen in the gear's View page, the sheet's pill left to the laptop (2026-11-06).
+- r36 (R36-3) — The side panel meets the bar as the score's rows meet, its tools clear of the notch of a phone on
+  its side (2026-11-06).

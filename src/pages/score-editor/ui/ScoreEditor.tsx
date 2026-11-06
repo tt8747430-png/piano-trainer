@@ -43,12 +43,15 @@ const GAP = 8
 /** How far the slim bar stands over the phone's keyboard (`SheetField`'s docked offset). */
 const DOCKED_GAP = 6
 
-/** The panel reaches the screen's left edge and the bar's hairline, past the screen's gutter and gap. */
+/**
+ * The panel reaches the screen's left edge past its gutter, under the bar's hairline as the rows meet,
+ * its tools kept clear of the safe area (the notch of a phone on its side).
+ */
 const PANEL_EDGE =
-  '-mt-3 ml-[calc(-1*max(var(--gutter),env(safe-area-inset-left)))] landscape-phone:-mt-2'
+  'ml-[calc(-1*max(var(--gutter),env(safe-area-inset-left)))] pl-[env(safe-area-inset-left)]'
 /** Docked at the right (Note input's Palette side): the screen's right edge, the sheet in the first column. */
 const PANEL_EDGE_RIGHT =
-  'col-start-2 row-start-1 -mt-3 mr-[calc(-1*max(var(--gutter),env(safe-area-inset-right)))] landscape-phone:-mt-2'
+  'col-start-2 row-start-1 mr-[calc(-1*max(var(--gutter),env(safe-area-inset-right)))] pr-[env(safe-area-inset-right)]'
 
 /**
  * The score editor (ADR 0096, 0114, R31-E), laid out as Flat's, one screen that never scrolls as a

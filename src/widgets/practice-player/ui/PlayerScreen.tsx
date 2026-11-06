@@ -6,11 +6,12 @@ import { dockTap } from '../model/tap-on-screen'
 
 /**
  * The score's screen, the Player's and the score editor's one frame (ADR 0115): the `player-screen`
- * grid with the same gaps and padding, so the bar, the tools row, the sheet, the transport and the
- * keys stand in the same places in both modes.
+ * grid with the same gaps and padding, so the bar, the sheet, the transport and the keys stand in
+ * the same places in both modes. Its rows meet: the music follows the bar, the keys the music (or
+ * the editor's palette) and the transport the keys, no band between them (R32).
  */
 export const SCORE_SCREEN =
-  'player-screen min-h-0 flex-1 gap-3 py-2 max-sm:gap-x-2 landscape-phone:gap-2 landscape-phone:py-0 landscape-phone:data-[keys=top]:pb-2'
+  'player-screen min-h-0 flex-1 gap-x-3 py-2 max-sm:gap-x-2 landscape-phone:gap-x-2 landscape-phone:py-0 landscape-phone:data-[keys=top]:pb-2'
 
 /** Whether an event happened on the music (`data-area="sheet"`). */
 const onSheet = (event: SyntheticEvent) =>
@@ -68,9 +69,8 @@ export function PlayerScreen({
       className={cn(
         SCORE_SCREEN,
         'data-panel:pe-[min(28rem,100vw)]',
-        // Docked, its rows meet: the keys follow the music and the transport the keys, no band
-        // between them (R32).
-        docked && '[--float-room:0px] gap-y-0 landscape-phone:gap-y-0',
+        // Docked, nothing floats over the music's foot: no room kept under its last line (R31-P).
+        docked && '[--float-room:0px]',
       )}
       onPointerDown={onMusic(reading.onPointerDown)}
       onPointerMove={onMusic(reading.onPointerMove)}
@@ -78,7 +78,7 @@ export function PlayerScreen({
       onTouchMove={onMusic(reading.onTouchMove)}
       onWheel={onMusic(reading.onWheel)}
       onClick={(event) => {
-        const tap = dockTap(event.target as Element)
+        const tap = event.target instanceof Element ? dockTap(event.target) : 'none'
         if (tap === 'show') show()
         else if (tap === 'toggle' && aside) {
           setBack(!bar)

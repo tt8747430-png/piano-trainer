@@ -22,7 +22,8 @@ function lineOf(feedback: WaitFeedback, t: TFunction<'player'>): string {
 
 /**
  * Wait mode's one line: what to play, a wrong key, Right, or Finished. A pass finished
- * says how many slips it had, offers Again, and the loop of the bars that had the most.
+ * says how many slips it had, offers Again, and the loop of the bars that had the most. With nothing
+ * to say (stopped) it takes no room, its live region kept for what it says next (R32).
  */
 export function WaitLine({
   feedback,
@@ -36,7 +37,12 @@ export function WaitLine({
   const { t } = useTranslation('player')
   const hardest = feedback?.kind === 'finished' ? feedback.hardest : null
   return (
-    <div className="flex min-h-11 flex-wrap items-center justify-center gap-x-3 gap-y-2">
+    <div
+      className={cn(
+        'flex flex-wrap items-center justify-center gap-x-3 gap-y-2',
+        feedback && 'min-h-11',
+      )}
+    >
       <p
         aria-live="polite"
         className={cn('text-lg font-semibold', feedback?.kind === 'not' && 'text-destructive')}

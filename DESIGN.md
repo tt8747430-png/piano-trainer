@@ -353,7 +353,8 @@ on a phone, 24px from 640px, 40px beside the sidebar.
   panes: a sidebar of tree rows (17rem, a painted swatch each, sticky under the bar and scrolling on its own) beside
   the page (44rem), which scrolls with the window. Never two columns of unequal groups.
 - **The editor's palette docks:** from 48rem a panel at the sheet's left with the note-entry toolbar over the sheet; on a
-  phone held upright a sheet at the foot.
+  phone held upright a sheet at the foot, meeting the keys. The score's screen keeps no gap between its rows in either
+  mode: the music under the bar at one height as Practise · Edit switches, and a status row only while it speaks.
 - **Equal columns:** a chart's lines are grids of equal beats; a score's lines are justified to their share of the
   longest line. Layouts are named Page view, Vertical scroll and Panorama.
 

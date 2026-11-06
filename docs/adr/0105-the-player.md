@@ -133,3 +133,5 @@ The score editor's Play and its recorder's click keep their own switches. A reco
   › Hands (Skin, the other hand) between Playback and Staves (2026-11-06).
 - r36 (R36-3) — Pace fits every phone: a 44px target under 390px, its menu as wide as the screen allows and tighter
   on a phone on its side, the transport's gutter 12px under 360px (2026-11-06).
+- r36 (R36-3) — The status row only while it speaks, as r32 has it: Share's word only while said, Wait mode's line
+  taking no room before Play (2026-11-06).

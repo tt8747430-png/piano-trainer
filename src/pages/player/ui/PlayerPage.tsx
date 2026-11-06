@@ -231,7 +231,7 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
         more={more}
         musicXml={files.musicXml}
         share={share}
-        status={<ShareSaid said={shared.said} />}
+        status={shared.said ? <ShareSaid said={shared.said} /> : null}
         // Chordify's "Show this when opening a song" (ADR 0108): the View, to choose how it shows.
         openView={askView}
         display={

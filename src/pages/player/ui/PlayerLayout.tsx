@@ -39,6 +39,7 @@ import {
   KeysPlace,
   LiveKeyboard,
 } from '@/features/live-keyboard'
+import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
@@ -180,7 +181,7 @@ export function PlayerLayout({
   musicXml?: ((format?: MusicXmlFormat) => void) | undefined
   /** Share link: a piece's, as its page shares it; its own act, never Export's row (R31-S). */
   share?: { readonly onSelect: () => void } | undefined
-  /** What the screen says beside Wait mode's line: what a piece's Share said. */
+  /** What the screen says beside Wait mode's line, only while it says something: what a piece's Share said. */
   status?: ReactNode
   /** Display's own choices after the View's: a single-staff song's Clef (R29 B7). */
   display?: ReactNode
@@ -561,12 +562,16 @@ export function PlayerLayout({
           />
         )}
       </PlayerArea>
-      {/* Wait mode's line and what the screen says: a row only while there is something to say,
-          so nothing reserves a band between the music and the keys (R32). */}
+      {/* Wait mode's line and what the screen says: room only while there is something to say,
+          so nothing reserves a band between the music and the keys (R32). Before Play, Wait mode's
+          line is kept for a screen reader, taking no room until it speaks. */}
       {view.mode !== 'listen' || status ? (
         <PlayerArea
           area="status"
-          className="py-1 text-center landscape-phone:max-w-[45vw] landscape-phone:self-center landscape-phone:py-0"
+          className={cn(
+            'text-center landscape-phone:max-w-[45vw] landscape-phone:self-center',
+            (player.feedback !== null || Boolean(status)) && 'py-1 landscape-phone:py-0',
+          )}
         >
           {view.mode !== 'listen' ? (
             <WaitLine feedback={player.feedback} onAgain={practice.play} onLoop={player.setLoop} />
