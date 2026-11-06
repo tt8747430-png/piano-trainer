@@ -108,10 +108,10 @@ describe('the fake’s recordings', () => {
   it('records what it loads and each play of a recording', () => {
     const audio = createFakeAudio()
     audio.loadRecording('vocal.m4a')
-    audio.playRecording('vocal.m4a', { at: 1, offset: 2, rate: 1, until: 9 })
+    audio.playRecording('vocal.m4a', { at: 1, offset: 2, rate: 1, until: 9, semitones: 0 })
     expect(audio.loadedRecordings).toEqual(['vocal.m4a'])
     expect(audio.recordings).toEqual([
-      { src: 'vocal.m4a', play: { at: 1, offset: 2, rate: 1, until: 9 } },
+      { src: 'vocal.m4a', play: { at: 1, offset: 2, rate: 1, until: 9, semitones: 0 } },
     ])
   })
 })

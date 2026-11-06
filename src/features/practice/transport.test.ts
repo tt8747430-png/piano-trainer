@@ -56,7 +56,7 @@ describe('startTransport', () => {
         fromTick: 8 * B,
       },
       IGNORED,
-      { recording: VOCAL, mix: FULL },
+      { recording: { recording: VOCAL, semitones: 0 }, mix: FULL },
     )
     // The first pass from the cursor (bar 3: 8 seconds in), the second from the loop's first bar (bar 2).
     expect(audio.recordings.map(({ play }) => play.offset)).toEqual([10])
@@ -79,7 +79,7 @@ describe('startTransport', () => {
     const audio = createFakeAudio()
     let mix: Mix = { ...FULL_MIX, bass: 0.25, recording: 0.5 }
     const transport = startTransport(audio, performance, WHOLE, IGNORED, {
-      recording: VOCAL,
+      recording: { recording: VOCAL, semitones: -2 },
       mix: () => mix,
     })
     const [pass] = audio.played
@@ -90,6 +90,8 @@ describe('startTransport', () => {
     }
     expect([gainOf('rh'), gainOf('lh')]).toEqual([1, 0.25])
     expect(audio.recordings[0]?.volume?.()).toBe(0.5)
+    // Shifted with the music: transposed down a tone, the singer comes down with it (R34).
+    expect(audio.recordings[0]?.play.semitones).toBe(-2)
     // Turned up as it plays: the sounds still to come and the recording follow it.
     mix = { ...mix, bass: 0.81, recording: 0.09 }
     expect(gainOf('lh')).toBe(0.81)

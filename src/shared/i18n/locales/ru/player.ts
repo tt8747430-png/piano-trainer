@@ -330,7 +330,6 @@ export const player: LocaleResources['player'] = {
     'minor-thirds': 'По малым терциям',
     'major-thirds': 'По большим терциям',
   },
-  recordingOnlyIn: 'Запись звучит только в своей тональности — {{key}}.',
   /** Why a pattern or figure, or a view of the music (ADR 0108), is closed to the music. */
   needs: {
     tune: 'Нужен нотоносец мелодии',

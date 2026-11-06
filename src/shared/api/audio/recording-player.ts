@@ -1,166 +1,116 @@
 import type { RecordingPlay } from '@/shared/lib/schedule'
 
-/** What the recording player needs of an audio element. */
-export interface Media {
-  currentTime: number
-  playbackRate: number
-  muted: boolean
-  /** How loud it plays, 0 to 1. */
-  volume: number
-  readonly paused: boolean
-  readonly seeking: boolean
-  play(): Promise<void>
-  pause(): void
+/**
+ * A recording's voice on the audio clock (a signalsmith-stretch node's, ADR 0034): it plays the file
+ * from a place, at a speed and shifted in pitch apart, from a moment on that clock, and falls silent
+ * at another; as loud as told.
+ */
+export interface RecordingVoice {
+  /** From `output` on the audio clock: the file from `input` seconds, at `rate`, `semitones` higher. */
+  play(change: {
+    readonly output: number
+    readonly input: number
+    readonly rate: number
+    readonly semitones: number
+  }): void
+  /** Silent from `output` on the audio clock. */
+  pause(output: number): void
+  /** How loud, 0 to 1. */
+  volume(level: number): void
 }
 
 interface RecordingPlayer {
-  /** Makes the recording's element, so a play can start it at once. */
+  /** Readies a recording, so a play can start it at once. */
   load(src: string): void
-  /** Queues a play; it starts when the clock reaches its `at`, as loud as `volume` says as it plays. */
+  /** Plays it on the audio clock as `play` says, as loud as `volume` says as it plays. */
   play(src: string, play: RecordingPlay, volume?: () => number): void
-  /**
-   * Inside a gesture: plays each loaded recording not yet primed muted and pauses it, so it may play
-   * later without one. A play that starts meanwhile keeps the element going.
-   */
-  prime(): void
-  /** Pauses every recording and forgets what is queued. */
+  /** Silences every recording now and forgets what is queued. */
   stop(): void
 }
 
-/** How often the player looks at the clock, and how far a recording may drift before it is sought back. */
-const TICK_MS = 20
-const DRIFT = 0.04
-/**
- * How long a seek is given to settle before drift is measured again: an element reports its new time
- * at once but moves on only once it has its data, so measuring sooner would seek it again and again.
- * The longest seek it can learn.
- */
-const SETTLE = 0.3
+/** How often the player looks at the clock: a play's volume, and its end. */
+const TICK_MS = 50
 
 interface Queued extends RecordingPlay {
   readonly src: string
   readonly volume: (() => number) | undefined
 }
 
-/** A play's volume now, as an element takes one: 0 to 1, at full where it says none. */
+/** A play's volume now: 0 to 1, at full where it says none. */
 const volumeOf = (play: Queued): number => Math.min(1, Math.max(0, play.volume?.() ?? 1))
 
 /**
- * Recordings kept on the clock: each queued play starts as the clock reaches it (sought to its
- * offset, at its rate), is sought back whenever it drifts, is started again when something pauses it
- * (an interruption, a prime that finished late), and is paused at its end unless another play follows,
- * which only seeks it. A seek aims as far ahead as the element stands still after one. It plays as
- * loud as its play's volume says, looked at with the clock (ADR 0105).
+ * Recordings on the audio clock (R34, ADR 0034): each play is scheduled on its file's voice as it is
+ * queued (or as the voice is ready, a file that has to be fetched first starting late and in place),
+ * the voice stretching it to the play's rate and shifting it by its semitones, so a slow pass keeps
+ * its pitch and a transposed one follows the music. The latest play falls silent at its end; one that
+ * follows takes over where the last left off. A voice that cannot be made leaves the recording silent.
  */
 export function createRecordingPlayer({
   now,
-  createMedia,
+  voiceFor,
 }: {
-  /** The time being heard, on the notes' clock. */
+  /** The audio clock. */
   now: () => number
-  createMedia: (src: string) => Media
+  /** A recording's voice, made once (null where it cannot be: no audio, no file). */
+  voiceFor: (src: string) => Promise<RecordingVoice | null>
 }): RecordingPlayer {
-  const elements = new Map<string, Media>()
-  // Safari lets an element play without a gesture once one gesture has played it.
-  const primed = new WeakSet<Media>()
-  let queue: readonly Queued[] = []
-  let current: Queued | null = null
-  let settledAt = 0
-  /**
-   * How long the element stands still after a seek before it moves on (WebKit's about 0.1 s,
-   * Chrome's under DRIFT), learnt from each seek once it settles. Sought back to where it should be,
-   * a slow element would be as far behind again, and sought again and again, the voice stuttering.
-   */
-  let seekLag = 0
-  /** A seek not yet measured. */
-  let measuring = false
+  const voices = new Map<string, Promise<RecordingVoice | null>>()
+  const ready = new Map<string, RecordingVoice>()
+  let latest: Queued | null = null
   let timer: ReturnType<typeof setInterval> | null = null
 
-  const element = (src: string): Media => {
-    const existing = elements.get(src)
-    if (existing) return existing
-    const made = createMedia(src)
-    elements.set(src, made)
+  const voice = (src: string) => {
+    const known = voices.get(src)
+    if (known) return known
+    const made = voiceFor(src).then((each) => {
+      if (each) ready.set(src, each)
+      return each
+    })
+    voices.set(src, made)
     return made
   }
-  // A play the browser refuses (no gesture yet) stays silent. One that takes over a prime is heard.
-  const start = (media: Media) => {
-    media.muted = false
-    if (media.paused) media.play().catch(() => undefined)
+  /** A play on its voice: from where it should be by now, where it starts late. */
+  const schedule = (target: RecordingVoice, play: Queued) => {
+    const output = Math.max(play.at, now())
+    target.play({
+      output,
+      input: play.offset + (output - play.at) * play.rate,
+      rate: play.rate,
+      semitones: play.semitones,
+    })
+    target.volume(volumeOf(play))
   }
-  const playing = (media: Media) => current !== null && elements.get(current.src) === media
-  const expected = (play: Queued, time: number) => play.offset + (time - play.at) * play.rate
-  const seek = (media: Media, play: Queued, time: number) => {
-    media.currentTime = expected(play, time + seekLag)
-    settledAt = time + SETTLE
-    measuring = true
-  }
-
   const tick = () => {
-    const time = now()
-    const next = queue.filter((play) => play.at <= time).at(-1)
-    if (next) {
-      queue = queue.filter((play) => play.at > time)
-      if (current && current.src !== next.src) element(current.src).pause()
-      const media = element(next.src)
-      media.playbackRate = next.rate
-      media.volume = volumeOf(next)
-      seek(media, next, time)
-      start(media)
-      current = next
-    } else if (current) {
-      const media = element(current.src)
-      const volume = volumeOf(current)
-      if (media.volume !== volume) media.volume = volume
-      if (time >= current.until) {
-        media.pause()
-        current = null
-      } else if (media.paused) {
-        seek(media, current, time)
-        start(media)
-      } else if (!media.seeking && time >= settledAt) {
-        const drift = media.currentTime - expected(current, time)
-        if (measuring) {
-          // Behind by this much though sought `seekLag` ahead: the seek took that much longer.
-          seekLag = Math.min(SETTLE, Math.max(0, seekLag - drift / current.rate))
-          measuring = false
-        }
-        if (Math.abs(drift) > DRIFT) seek(media, current, time)
-      }
-    }
-    if (!current && queue.length === 0 && timer !== null) {
+    const play = latest
+    if (!play) return
+    const target = ready.get(play.src)
+    if (target && now() >= play.until) {
+      target.pause(play.until)
+      latest = null
+    } else target?.volume(volumeOf(play))
+    if (!latest && timer !== null) {
       clearInterval(timer)
       timer = null
     }
   }
 
   return {
-    load: (src) => void element(src),
+    load: (src) => void voice(src),
     play(src, play, volume) {
-      element(src)
-      queue = [...queue, { ...play, src, volume }].sort((a, b) => a.at - b.at)
+      const queued: Queued = { ...play, src, volume }
+      const before = latest
+      latest = queued
+      if (before && before.src !== src) ready.get(before.src)?.pause(play.at)
+      void voice(src).then((target) => {
+        if (target && latest === queued) schedule(target, queued)
+      })
       timer ??= setInterval(tick, TICK_MS)
     },
-    prime() {
-      for (const media of elements.values()) {
-        if (primed.has(media) || !media.paused) continue
-        media.muted = true
-        media
-          .play()
-          .then(() => {
-            primed.add(media)
-            if (!playing(media)) media.pause()
-          })
-          .catch(() => undefined)
-          .finally(() => {
-            media.muted = false
-          })
-      }
-    },
     stop() {
-      queue = []
-      current = null
-      for (const media of elements.values()) media.pause()
+      latest = null
+      const time = now()
+      for (const target of ready.values()) target.pause(time)
       if (timer !== null) clearInterval(timer)
       timer = null
     },

@@ -54,6 +54,7 @@ export {
   STANDARD_TUNING,
   tuningOf,
   type Recording,
+  type RecordingAlong,
   type RecordingPlay,
 } from './recording'
 export { recorderClicks, type ClickPlan } from './recorder-clicks'

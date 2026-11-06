@@ -23,6 +23,13 @@ export const STANDARD_TUNING = 440
 export const tuningOf = (recording: Recording | undefined): number =>
   recording?.tuning ?? STANDARD_TUNING
 
+/** A recording as it plays along: shifted by the semitones the music is transposed by (R34). */
+export interface RecordingAlong {
+  readonly recording: Recording
+  /** −5 to +6: the short way from the piece's own key to the key it is played in. */
+  readonly semitones: number
+}
+
 /** Where in a recording one pass plays from, when on the audio clock, how fast, and until when. */
 export interface RecordingPlay {
   /** When it starts on the audio clock: the pass's first tick, or earlier during a count-in. */
@@ -33,13 +40,16 @@ export interface RecordingPlay {
   readonly rate: number
   /** When the pass is over, on the audio clock. */
   readonly until: number
+  /** How far its pitch is shifted, in semitones: the key the music is transposed to (R34). */
+  readonly semitones: number
 }
 
 /**
  * The recording under one pass: from the pass's first tick at its tempo, and during its count-in what
- * leads into it (a singer's pickup), though never from before the file's start.
+ * leads into it (a singer's pickup), though never from before the file's start; shifted by the
+ * semitones the music is transposed by.
  */
-export function recordingPlay(recording: Recording, pass: Pass): RecordingPlay {
+export function recordingPlay({ recording, semitones }: RecordingAlong, pass: Pass): RecordingPlay {
   const rate = pass.tempo / recording.tempo
   const first = recording.start + (pass.fromTick * 60) / (recording.tempo * TICKS_PER_BEAT)
   const lead = Math.min(pass.musicStart, first / rate)
@@ -48,5 +58,6 @@ export function recordingPlay(recording: Recording, pass: Pass): RecordingPlay {
     offset: first - lead * rate,
     rate,
     until: pass.start + pass.end,
+    semitones,
   }
 }

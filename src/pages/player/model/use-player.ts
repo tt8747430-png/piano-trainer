@@ -2,7 +2,7 @@ import { usePatternBook } from '@/entities/pattern'
 import { useEffect, useEffectEvent, useMemo } from 'react'
 import {
   hasWrittenStaves,
-  isOwnKey,
+  keyShift,
   pieceFit,
   usePieceHeadings,
   type Piece,
@@ -34,8 +34,6 @@ export interface PiecePlayerOf extends WalkingPlayerOf<PracticeChoice, SetupChan
   readonly controls: ReadonlySet<PlayerControl>
   /** Which tracks play and show (A35). */
   readonly staves: PlayerStaves
-  /** Whether the recording plays in the key chosen: in its own alone. */
-  readonly recordingInKey: boolean
   /** Whether Simplified changes the piece as chosen: where it would not, it is greyed. */
   readonly simplifies: boolean
   /** The version played (R29 B8). */
@@ -99,11 +97,14 @@ export function usePlayer(
   )
   const headings = usePieceHeadings(piece)
   useEffect(() => recordPractised(progress, piece.id, new Date()), [progress, piece.id])
-  // The recording plays along in the piece's own key only: another would put the voice over other
-  // chords. Its track's Play turns it on or off (A35).
-  const recordingInKey = isOwnKey(piece, choice.tonic)
-  const recording =
-    recordingInKey && trackOf(staves, 'recording').play ? (piece.recording ?? null) : null
+  // The recording plays along in any key, shifted as far as the music is (R34): stretched, the singer
+  // moves with the chords. Its track's Play turns it on or off (A35).
+  const semitones = keyShift(piece, choice.tonic)
+  const playsRecording = trackOf(staves, 'recording').play
+  const recording = useMemo(
+    () => (playsRecording && piece.recording ? { recording: piece.recording, semitones } : null),
+    [playsRecording, piece.recording, semitones],
+  )
   const player = usePracticePlayer(performance, search, setSearch, piece.tempo, recording, staves)
   // A pass played through in Wait mode is a lesson done: its loop's bars, or the whole piece's
   // (ADR 0111). Read as it is counted, never a reason to record again.
@@ -128,7 +129,6 @@ export function usePlayer(
     headings,
     controls,
     staves,
-    recordingInKey,
     simplifies: simplified,
     changeSetup: (change) => setSearch(searchPatch(piece, change)),
     setVersion: (next) => setSearch({ version: next }),

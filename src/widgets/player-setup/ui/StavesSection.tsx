@@ -13,19 +13,16 @@ import type { ScoreTrack } from '@/widgets/practice-player'
  * The Setup's first section (A35, Flat's Audio playback): the music's tracks top down, each staff by
  * its name and its clef, a song's recording by a microphone; each with Play and Show (the recording
  * Play alone), both on until switched off, and how loud it plays while it does (R31-P: the volumes
- * here, one page for a track). The last staff in sight keeps Show; a recording that plays only in its
- * own key says so where the song is moved to another. Only the chords turns a recording right down.
+ * here, one page for a track). The last staff in sight keeps Show. Only the chords turns a recording
+ * right down.
  */
 export function StavesSection({
   tracks,
   staves,
-  recordingWhy,
   onChange,
 }: {
   tracks: readonly ScoreTrack[]
   staves: PlayerStaves
-  /** Why the recording cannot play now (another key), where it cannot. */
-  recordingWhy?: string | undefined
   onChange: (id: TrackId, change: Partial<TrackChoice>) => void
 }) {
   const { t } = useTranslation(['player', 'music'])
@@ -51,7 +48,6 @@ export function StavesSection({
         <ul className="divide-y divide-hairline">
           {tracks.map((track) => {
             const { play, show } = trackOf(staves, track.id)
-            const why = track.id === 'recording' ? recordingWhy : undefined
             const last = track.drawn && show && inSight === 1
             return (
               <li
@@ -73,16 +69,12 @@ export function StavesSection({
                   </span>
                   <span className="min-w-0">
                     <span className="block truncate text-base font-semibold">{track.label}</span>
-                    {why ? (
-                      <span className="block text-sm text-pretty text-muted-foreground">{why}</span>
-                    ) : null}
                   </span>
                 </span>
                 <span className="grid place-items-center">
                   <Switch
                     aria-label={t('staves.playOf', { track: track.label })}
-                    checked={play && why === undefined}
-                    disabled={why !== undefined}
+                    checked={play}
                     onCheckedChange={(on) => onChange(track.id, { play: on })}
                   />
                 </span>
@@ -97,7 +89,7 @@ export function StavesSection({
                     />
                   ) : null}
                 </span>
-                {play && why === undefined ? (
+                {play ? (
                   <div className="col-span-full ps-11">
                     <VolumeSlider
                       label={t('staves.volumeOf', { track: track.label })}

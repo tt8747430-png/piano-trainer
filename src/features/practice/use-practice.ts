@@ -17,7 +17,7 @@ import {
   untilNextBeatGroup,
   type ClickVoicing,
   type Hands,
-  type Recording,
+  type RecordingAlong,
   type SwingFeel,
 } from '@/shared/lib/schedule'
 import { useServices } from '@/shared/lib/services'
@@ -58,8 +58,8 @@ export interface PracticeSetup {
   readonly speedStep?: number
   /** Beats of rest, each a click, before each repeat of the passage. */
   readonly rest: number
-  /** The piece's recording, played along in Listen; null plays none. */
-  readonly recording: Recording | null
+  /** The piece's recording, played along in Listen in the key played; null plays none. */
+  readonly recording: RecordingAlong | null
   /** How loud each part plays (ADR 0105): each staff, the recording and the click. */
   readonly mix: Mix
   /**
@@ -315,10 +315,11 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     [midi, audio],
   )
 
-  // Loaded while the Player is open, so the first Play starts it at once and the tap primes it.
+  // Loaded while the Player is open, so the first Play starts it at once.
+  const src = recording?.recording.src
   useEffect(() => {
-    if (recording) audio.loadRecording(recording.src)
-  }, [audio, recording])
+    if (src) audio.loadRecording(src)
+  }, [audio, src])
 
   useEffect(() => () => audio.stop(), [audio])
 

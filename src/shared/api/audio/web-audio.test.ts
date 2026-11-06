@@ -5,7 +5,8 @@ import { SOFT_GAIN, velocityGain, type Sound } from '@/shared/lib/schedule'
 import type { LoadSound } from './recorded-sounds'
 import { createSampleLoader, type SampleLoader } from './sample-loader'
 import { kitSet, loaderOver, pitchedSet, SamplerContext, sampleNameOf } from './sample-fakes'
-import { createWebAudioOutput, wholeFileMedia } from './web-audio'
+import { createWebAudioOutput } from './web-audio'
+import type { RecordingVoice } from './recording-player'
 
 /** Just enough of an AudioContext to see what the adapter builds. */
 class FakeContext {
@@ -531,86 +532,53 @@ describe('the live voice', () => {
 })
 
 describe('a recording', () => {
-  it('plays by its own element on the clock of what is heard: the notes’ clock less the output’s latency', async () => {
-    vi.useFakeTimers()
+  /** A voice the test reads, made for the adapter's own context. */
+  const voiced = () => {
     const context = new FakeContext()
-    context.outputLatency = 0.1
-    const media = {
-      currentTime: 0,
-      playbackRate: 1,
-      muted: false,
-      paused: true,
-      seeking: false,
-      volume: 1,
-      play: vi.fn(async () => {
-        media.paused = false
-      }),
-      pause: vi.fn(),
+    const plays: Parameters<RecordingVoice['play']>[0][] = []
+    const volumes: number[] = []
+    const voice = {
+      plays,
+      volumes,
+      play: (change: (typeof plays)[number]) => void plays.push(change),
+      pause: () => undefined,
+      volume: (level: number) => void volumes.push(level),
     }
+    const makeVoice = vi.fn(async () => voice)
     const audio = createWebAudioOutput({
       createContext: () => context as unknown as AudioContext,
       frame: () => undefined,
-      createMedia: () => media,
+      makeVoice,
     })
+    return { context, voice, makeVoice, audio }
+  }
+
+  it('schedules it on the notes’ own clock, stretched and shifted as its play says (ADR 0034)', async () => {
+    const { context, voice, makeVoice, audio } = voiced()
+    context.outputLatency = 0.1
     audio.play([A4], 1)
-    audio.playRecording('vocal.m4a', { at: 1, offset: 3.26, rate: 1, until: 60 })
-    // The notes' clock has reached bar 1, but its first note is heard only 0.1 s later.
-    context.currentTime = 1.05
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.play).not.toHaveBeenCalled()
-    context.currentTime = 1.1
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.play).toHaveBeenCalledOnce()
-    expect(media.currentTime).toBeCloseTo(3.26)
-    vi.useRealTimers()
+    audio.playRecording('vocal.m4a', {
+      at: 1,
+      offset: 3.26,
+      rate: 0.75,
+      until: 60,
+      semitones: 2,
+    })
+    await vi.waitFor(() => expect(voice.plays).toHaveLength(1))
+    // The node goes out through the same output as the notes: its latency is theirs.
+    expect(voice.plays[0]).toEqual({ output: 1, input: 3.26, rate: 0.75, semitones: 2 })
+    expect(makeVoice).toHaveBeenCalledWith(context, 'vocal.m4a')
   })
 
   it('plays a recording as loud as its volume says (ADR 0105)', async () => {
-    vi.useFakeTimers()
-    const context = new FakeContext()
-    const media = {
-      currentTime: 0,
-      playbackRate: 1,
-      muted: false,
-      paused: true,
-      seeking: false,
-      volume: 1,
-      play: vi.fn(async () => {
-        media.paused = false
-      }),
-      pause: vi.fn(),
-    }
-    const audio = createWebAudioOutput({
-      createContext: () => context as unknown as AudioContext,
-      frame: () => undefined,
-      createMedia: () => media,
-    })
+    const { voice, audio } = voiced()
     audio.play([A4], 0)
-    audio.playRecording('vocal.m4a', { at: 0, offset: 3.26, rate: 1, until: 60 }, () => 0.36)
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.volume).toBe(0.36)
-    vi.useRealTimers()
-  })
-})
-
-describe('wholeFileMedia', () => {
-  it('plays a recording from the whole file in memory, never streamed, so it can always seek', async () => {
-    // Streamed, the element asks for byte ranges, and the service worker's precache answers with the
-    // whole file: the element could not seek, and each seek landed back at 0 s.
-    const fetchFile = vi.fn(async () => new Response('m4a'))
-    vi.stubGlobal('fetch', fetchFile)
-    // jsdom has no object URLs.
-    vi.stubGlobal(
-      'URL',
-      class extends URL {
-        static override createObjectURL = () => 'blob:vocal'
-      },
+    audio.playRecording(
+      'vocal.m4a',
+      { at: 0, offset: 3.26, rate: 1, until: 60, semitones: 0 },
+      () => 0.36,
     )
-    const media = wholeFileMedia('/assets/vocal.m4a')
-    expect(media.getAttribute('src')).toBeNull()
-    await vi.waitFor(() => expect(media.src).toBe('blob:vocal'))
-    expect(fetchFile).toHaveBeenCalledWith('/assets/vocal.m4a')
-    expect(media.preload).toBe('auto')
+    await vi.waitFor(() => expect(voice.volumes[0]).toBe(0.36))
   })
 })
 

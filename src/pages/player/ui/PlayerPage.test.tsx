@@ -465,19 +465,15 @@ describe('Player', () => {
     expect(audio.recordings[0]?.play.rate).toBe(36 / 73)
   })
 
-  it('plays no recording in another key, and says why in the Setup', async () => {
+  it('plays the recording in another key, shifted as far as the music (R34)', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/romashki?transpose=2')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
-    expect(audio.recordings).toEqual([])
+    expect(audio.recordings[0]?.play.semitones).toBe(2)
     await openMusicPage(user, 'Staves')
     const recording = await screen.findByRole('switch', { name: 'Play Recording' })
-    expect(recording).not.toBeChecked()
-    expect(recording).toHaveAttribute('data-disabled')
-    // Its row says why.
-    expect(screen.getByRole('group', { name: 'Staves' })).toHaveTextContent(
-      'The recording plays only in D minor, its own key.',
-    )
+    expect(recording).toBeChecked()
+    expect(recording).not.toHaveAttribute('data-disabled')
   })
 
   it('plays no recording in Wait mode', async () => {

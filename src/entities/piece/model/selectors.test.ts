@@ -5,7 +5,7 @@ import {
   choosableChordSize,
   entriesInKey,
   entryById,
-  isOwnKey,
+  keyShift,
   pieceById,
   piecesPlaying,
   selectHasVersion,
@@ -75,10 +75,11 @@ describe('choosableChordSize', () => {
   })
 })
 
-describe('isOwnKey', () => {
-  it('holds for the piece’s tonic, however it is spelled', () => {
-    expect(isOwnKey(piece('bz5'), note('G'))).toBe(true)
-    expect(isOwnKey(piece('bz5'), note('A'))).toBe(false)
+describe('keyShift', () => {
+  it('is how far the music moves from the piece’s own key, the short way', () => {
+    expect(keyShift(piece('bz5'), note('G'))).toBe(0)
+    expect(keyShift(piece('bz5'), note('A'))).toBe(2)
+    expect(keyShift(piece('bz5'), note('E'))).toBe(-3)
   })
 })
 

@@ -11,7 +11,7 @@ import {
   tickAt,
   type LoopOptions,
   type Pass,
-  type Recording,
+  type RecordingAlong,
 } from '@/shared/lib/schedule'
 import { mixGain, partGain, type Mix } from './mix'
 
@@ -40,8 +40,8 @@ interface TransportEvents {
 
 /** What plays along with the music, and how loud. */
 interface Along {
-  /** The piece's recording, played with every pass; null for none. */
-  readonly recording: Recording | null
+  /** The piece's recording, played with every pass in the key played; null for none. */
+  readonly recording: RecordingAlong | null
   /** How loud each part plays (ADR 0105), read as each sounds: a change is heard from then on. */
   readonly mix: () => Mix
 }
@@ -56,13 +56,13 @@ export function startTransport(
   performance: Performance,
   options: LoopOptions,
   on: TransportEvents,
-  { recording, mix }: Along,
+  { recording: along, mix }: Along,
 ): Transport {
   const gain = mixGain(mix)
   const play = (pass: Pass) => {
     audio.play(pass.sounds, pass.start, gain)
-    if (recording)
-      audio.playRecording(recording.src, recordingPlay(recording, pass), () =>
+    if (along)
+      audio.playRecording(along.recording.src, recordingPlay(along, pass), () =>
         partGain(mix(), 'recording'),
       )
   }

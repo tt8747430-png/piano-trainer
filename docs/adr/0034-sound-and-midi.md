@@ -63,12 +63,12 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   eight taps up, to 5 ms and at most 300 ms (`shared/lib/latency.ts`), is kept as `midi.latency` and taken off
   every take's keys and pedals (ADR 0028). Fewer taps say so and keep what was kept.
 - **A piece's recording plays along** (`Recording`: its file, where bar 1 begins, one steady tempo, its tuning). It
-  is an AAC file beside the piece's content, precached, so it must fit the precache limit. It plays in Listen only
-  and in the piece's own key only, its rate the tempo's ratio with its pitch kept. It plays by its own audio element,
-  not through the AudioContext (WebKit stalls a routed element after each seek), loaded whole as a Blob (Workbox
-  answers a range request with the whole file, so a streamed element cannot seek). It starts on the heard clock, is
-  sought back past 40 ms of drift, learns the element's seek lag and seeks that far ahead, and is primed muted on the
-  Play tap so Safari lets it start later.
+  is an AAC file beside the piece's content, precached, so it must fit the precache limit. It plays in Listen only,
+  in any key: its rate the tempo's ratio, its pitch shifted as far as Transpose moves the music, the short way
+  (`RecordingAlong`, `keyShift`). It plays through one signalsmith-stretch AudioWorklet node per file (MIT, loaded
+  only once a song with a recording plays), the file fetched once and decoded whole, scheduled on the AudioContext's
+  own clock like the notes, so it never drifts and needs no seeking; a phone runs the node's cheaper preset. A play
+  whose node is not ready yet starts late, where it should be by then.
 - **Recorded instruments, played by our own sampler** (R29 SND, A27). The piano, the band's two basses and its
   drum kit play from sample sets the app hosts itself, under `public/samples/<set>/`, each folder with its
   `manifest.json` (the set, its licence, its velocity layers from the softest with the velocity each plays
@@ -136,3 +136,5 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   under `public/samples/`, played by our own sampler through one loader under 80 MB decoded; the grand cached at
   runtime and downloadable for offline, every other set precached. Replaces "every sound is synthesised".
 - r34 — Calibrate timing: the piano's lateness tapped with a click, kept as `midi.latency`, taken off every take.
+- r34 — Recordings through signalsmith-stretch on the audio clock, in any key: the media element, its drift
+  seeking and its priming gone.

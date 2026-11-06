@@ -1,5 +1,11 @@
 import { keptContent } from '@/shared/api/content'
-import { pitchClassOf, type ChordSize, type Key, type SpelledNote } from '@/shared/lib/music'
+import {
+  pitchClassOf,
+  transposition,
+  type ChordSize,
+  type Key,
+  type SpelledNote,
+} from '@/shared/lib/music'
 import type { PatternId } from '@/entities/pattern'
 import { COLLECTIONS, SONG_COLLECTIONS } from '../content'
 import { readsAsMadeSong, updatesPiece, type MadeSong } from './content-record'
@@ -128,9 +134,12 @@ export const selectOwnSong = (state: Pick<PiecesState, 'songs'>, id: string): Ow
 export const choosableChordSize = (piece: Piece): ChordSize | null =>
   isDegreePiece(piece) && piece.chordSize.choosable ? piece.chordSize.default : null
 
-/** Whether `tonic` is the piece's own key's, however spelled: its recording plays along only there. */
-export const isOwnKey = (piece: Piece, tonic: SpelledNote): boolean =>
-  pitchClassOf(tonic) === pitchClassOf(pieceKey(piece).tonic)
+/**
+ * How far the music moves from the piece's own key to `tonic`, in semitones, the short way its notes
+ * move (−5 to +6): what its recording is shifted by to play along (R34).
+ */
+export const keyShift = (piece: Piece, tonic: SpelledNote): number =>
+  transposition(pieceKey(piece).tonic, tonic)
 
 /** The songs, listings and studies in a key, in catalog order. */
 export function entriesInKey(key: Key): Entry[] {

@@ -253,14 +253,17 @@ describe('usePractice: the mix (ADR 0105)', () => {
 
   it('plays the recording at its volume, and none turned right down', () => {
     const heard = renderPractice(ONE_BAR, {
-      recording: VOCAL,
+      recording: { recording: VOCAL, semitones: 0 },
       mix: { ...FULL_MIX, recording: 0.49 },
     })
     act(() => heard.result.current.play())
     expect(audio.recordings[0]?.volume?.()).toBe(0.49)
     heard.unmount()
     audio = createFakeAudio()
-    const silent = renderPractice(ONE_BAR, { recording: VOCAL, mix: { ...FULL_MIX, recording: 0 } })
+    const silent = renderPractice(ONE_BAR, {
+      recording: { recording: VOCAL, semitones: 0 },
+      mix: { ...FULL_MIX, recording: 0 },
+    })
     act(() => silent.result.current.play())
     expect(audio.recordings).toEqual([])
   })

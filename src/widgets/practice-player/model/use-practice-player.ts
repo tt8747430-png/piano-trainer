@@ -38,7 +38,7 @@ import {
   volumeGain,
   withPedal,
   type Hands,
-  type Recording,
+  type RecordingAlong,
   type SwingFeel,
 } from '@/shared/lib/schedule'
 import { useWakeLock } from '@/shared/lib'
@@ -127,7 +127,7 @@ export function usePracticePlayer(
   view: PracticeView,
   setView: (patch: Partial<PracticeView>) => void,
   ownTempo: number,
-  recording: Recording | null = null,
+  recording: RecordingAlong | null = null,
   staves: PlayerStaves = NO_CHANGE,
 ): PracticePlayer {
   // The screen stays on while this screen is open: a phone on the stand does not lock mid-song.

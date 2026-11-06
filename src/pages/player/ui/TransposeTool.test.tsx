@@ -150,16 +150,11 @@ describe('Transpose (ADR 0105)', () => {
     expect(screen.getByRole('button', { name: 'Transpose: C major' })).toBeInTheDocument()
   })
 
-  it('says beside its heading where the recording falls silent, and nowhere in the song’s key', async () => {
+  it('moves a song with a recording to any key, saying nothing of it: the recording follows', async () => {
     const user = userEvent.setup()
     await renderApp('/play/romashki?transpose=2')
     const popover = await openTranspose(user)
     expect(popover).toHaveTextContent('E minor')
-    await user.click(within(popover).getByRole('button', { name: 'About Transpose' }))
-    const about = await screen.findAllByRole('dialog', { name: 'Transpose' })
-    expect(about.at(-1)).toHaveTextContent('The recording plays only in D minor, its own key.')
-    await user.keyboard('{Escape}')
-    await user.click(within(popover).getByRole('button', { name: 'Reset' }))
     expect(within(popover).queryByRole('button', { name: 'About Transpose' })).toBeNull()
   })
 

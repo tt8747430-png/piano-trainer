@@ -39,8 +39,8 @@ what they changed.
     fits, the left an octave or two below); the tempo; the metronome; and **Ticks between loops** (`rest=`, none to 4
     beats): each repeat of the loop after the first waits that many beats, a click on each where the click sounds,
     counted down as a count-in is (`LoopOptions.rest`).
-- **Transpose** (ADR 0115) moves a piece −5 to +6 semitones, into its simplest key; the recording falls silent outside
-  its own key, an ⓘ saying so. **Simplify**, a switch, plays and shows each chord as its plain triad on its root
+- **Transpose** (ADR 0115) moves a piece −5 to +6 semitones, into its simplest key; the recording moves with it,
+  stretched (ADR 0034). **Simplify**, a switch, plays and shows each chord as its plain triad on its root
   (`simplifyChart`): a slash chord's bass and added notes dropped, a chord held on where the next simplifies to it, a
   bar of no chord and written notes left as they are. It changes the music, so every view, Wait mode and the MIDI
   export follow; the song's page and its lessons read the piece as written. It is greyed where nothing would change.
@@ -111,3 +111,4 @@ The score editor's Play and its recorder's click keep their own switches. A reco
   keyboard's settings — each row with its line and value, each option with its line. `/settings/player` is gone: the
   Player's gear is its settings' home. MIDI shows only while connected; the tempo reads ♩ = 92; a laptop's dock is one
   row from 80rem (2026-11-05).
+- r34 — The recording plays in any key, shifted with Transpose; its own-key ⓘ and the Staves row's reason gone.

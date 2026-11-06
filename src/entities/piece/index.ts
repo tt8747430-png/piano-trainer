@@ -123,7 +123,7 @@ export {
   entriesInKey,
   entryById,
   hasEditableOriginal,
-  isOwnKey,
+  keyShift,
   pieceById,
   piecesPlaying,
   selectHasVersion,

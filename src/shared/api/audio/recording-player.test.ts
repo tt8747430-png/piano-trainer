@@ -1,275 +1,127 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { createRecordingPlayer, type Media } from './recording-player'
+import type { RecordingPlay } from '@/shared/lib/schedule'
+import { createRecordingPlayer, type RecordingVoice } from './recording-player'
 
-/** A media element the test drives: it records seeks, rates, plays and pauses; its time moves only when told. */
-function fakeMedia(refuse = false) {
-  const media = {
-    currentTime: 0,
-    playbackRate: 1,
-    muted: false,
-    paused: true,
-    seeking: false,
-    volume: 1,
-    seeks: [] as number[],
-    plays: 0,
-    pauses: 0,
-    play: vi.fn(async () => {
-      media.plays++
-      if (refuse) throw new Error('NotAllowedError')
-      media.paused = false
-    }),
-    pause: vi.fn(() => {
-      media.pauses++
-      media.paused = true
-    }),
+type Change = Parameters<RecordingVoice['play']>[0]
+
+/** A voice the test reads: every play, pause and volume it was told. */
+function fakeVoice() {
+  const plays: Change[] = []
+  const pauses: number[] = []
+  const volumes: number[] = []
+  return {
+    plays,
+    pauses,
+    volumes,
+    play: (change: Change) => void plays.push(change),
+    pause: (output: number) => void pauses.push(output),
+    volume: (level: number) => void volumes.push(level),
   }
-  return new Proxy(media, {
-    set(target, key, value) {
-      if (key === 'currentTime') target.seeks.push(value)
-      return Reflect.set(target, key, value)
-    },
-  })
 }
 
-/**
- * An element that, as WebKit's does, stands still for `cost` seconds after each seek or play before
- * it moves on at its rate.
- */
-function slowMedia(cost: number, now: () => number) {
-  let position = 0
-  let movesFrom = 0
-  const media = {
-    seeks: 0,
-    playbackRate: 1,
-    muted: false,
-    paused: true,
-    seeking: false,
-    volume: 1,
-    get currentTime() {
-      return media.paused
-        ? position
-        : position + Math.max(0, now() - movesFrom) * media.playbackRate
-    },
-    set currentTime(value: number) {
-      media.seeks++
-      position = value
-      movesFrom = now() + cost
-    },
-    play: vi.fn(async () => {
-      if (!media.paused) return
-      movesFrom = Math.max(movesFrom, now() + cost)
-      media.paused = false
-    }),
-    pause: vi.fn(() => {
-      position = media.currentTime
-      media.paused = true
-    }),
-  }
-  return media
-}
-
-/**
- * An element whose file is still loading: as a real one, `play()` takes it out of pause at once and
- * resolves only once the file is in (`loaded()`).
- */
-function loadingMedia() {
-  let loaded = () => {}
-  const media = {
-    currentTime: 0,
-    playbackRate: 1,
-    muted: false,
-    paused: true,
-    seeking: false,
-    volume: 1,
-    plays: 0,
-    play() {
-      media.plays++
-      media.paused = false
-      return new Promise<void>((resolve) => {
-        loaded = resolve
-      })
-    },
-    pause() {
-      media.paused = true
-    },
-    loaded: () => loaded(),
-  }
-  return media
-}
+const PLAY: RecordingPlay = { at: 10, offset: 2, rate: 1, until: 14, semitones: 0 }
 
 describe('createRecordingPlayer', () => {
   let clock = 0
-  let media = fakeMedia()
-  const player = () => createRecordingPlayer({ now: () => clock, createMedia: (): Media => media })
   beforeEach(() => {
     vi.useFakeTimers()
     clock = 0
-    media = fakeMedia()
   })
   afterEach(() => vi.useRealTimers())
 
-  it('starts a play when the clock reaches it, at its offset and rate', async () => {
-    const recordings = player()
-    recordings.load('vocal.m4a')
-    recordings.play('vocal.m4a', { at: 1, offset: 2.74, rate: 0.5, until: 20 })
-    await vi.advanceTimersByTimeAsync(40)
-    expect(media.plays).toBe(0)
-    clock = 1
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.plays).toBe(1)
-    expect(media.currentTime).toBeCloseTo(2.74)
-    expect(media.playbackRate).toBe(0.5)
-  })
-
-  it('seeks back when it drifts past 40 ms, and leaves it within', async () => {
-    const recordings = player()
-    recordings.play('vocal.m4a', { at: 0, offset: 10, rate: 1, until: 60 })
-    await vi.advanceTimersByTimeAsync(20)
-    const seeks = media.seeks.length
-    clock = 2
-    media.currentTime = 12.03
-    media.seeks.pop()
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.seeks).toHaveLength(seeks)
-    media.currentTime = 12.1
-    media.seeks.pop()
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.currentTime).toBeCloseTo(12)
-  })
-
-  it('lets a seek settle before it measures drift again, and leaves a seeking element alone', async () => {
-    const recordings = player()
-    recordings.play('vocal.m4a', { at: 0, offset: 10, rate: 1, until: 60 })
-    await vi.advanceTimersByTimeAsync(20)
-    const started = media.seeks.length
-    // Just after the start, still settling: an element behind the clock is not sought again.
-    clock = 0.2
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.seeks).toHaveLength(started)
-    // Settled but still seeking: left alone.
-    clock = 1
-    media.seeking = true
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.seeks).toHaveLength(started)
-    // Settled and playing: sought to where it should be, then left to settle again.
-    media.seeking = false
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.seeks).toHaveLength(started + 1)
-    clock = 1.1
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.seeks).toHaveLength(started + 1)
-  })
-
-  it('learns how long its element takes to seek and seeks that far ahead, so a slow one settles in sync', async () => {
-    // WebKit's element stands still about 0.1 s after a seek: sought back to where it should be, it
-    // was as far behind again, and was sought again and again, the voice stuttering.
-    const slow = slowMedia(0.1, () => clock)
-    const recordings = createRecordingPlayer({ now: () => clock, createMedia: () => slow })
-    recordings.play('vocal.m4a', { at: 0, offset: 10, rate: 1, until: 60 })
-    for (let step = 0; step < 250; step++) {
-      clock += 0.02
-      await vi.advanceTimersByTimeAsync(20)
+  /** A player over `voices`, its clock moved by `advance`. */
+  const player = (voices: Record<string, RecordingVoice | null>) => {
+    const voiceFor = vi.fn(async (src: string) => voices[src] ?? null)
+    const made = createRecordingPlayer({ now: () => clock, voiceFor })
+    const advance = async (seconds: number) => {
+      clock += seconds
+      await vi.advanceTimersByTimeAsync(seconds * 1000)
     }
-    // The start, then one seek that allows for the element's lag.
-    expect(slow.seeks).toBe(2)
-    expect(slow.currentTime - (10 + clock)).toBeCloseTo(0, 2)
-  })
+    return { made, voiceFor, advance }
+  }
 
-  it('pauses at a play’s end when nothing follows, and seeks without pausing when one does', async () => {
-    const recordings = player()
-    recordings.play('vocal.m4a', { at: 0, offset: 10, rate: 1, until: 4 })
-    recordings.play('vocal.m4a', { at: 4, offset: 10, rate: 1, until: 8 })
-    await vi.advanceTimersByTimeAsync(20)
-    clock = 4
-    media.currentTime = 14
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.pauses).toBe(0)
-    expect(media.currentTime).toBeCloseTo(10)
-    clock = 8
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.pauses).toBe(1)
-  })
-
-  it('stops: pauses and forgets what is queued', async () => {
-    const recordings = player()
-    recordings.play('vocal.m4a', { at: 0, offset: 0, rate: 1, until: 30 })
-    recordings.play('vocal.m4a', { at: 30, offset: 0, rate: 1, until: 60 })
-    await vi.advanceTimersByTimeAsync(20)
-    recordings.stop()
-    expect(media.paused).toBe(true)
-    clock = 30
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.plays).toBe(1)
-  })
-
-  it('primes a loaded recording inside a gesture: plays it muted and pauses it', async () => {
-    const recordings = player()
-    recordings.load('vocal.m4a')
-    recordings.prime()
+  it('schedules a play on its voice, at its time, offset, rate and shift', async () => {
+    const voice = fakeVoice()
+    const { made } = player({ a: voice })
+    made.play('a', { ...PLAY, rate: 0.5, semitones: -3 })
     await vi.advanceTimersByTimeAsync(0)
-    expect(media.plays).toBe(1)
-    expect(media.paused).toBe(true)
-    expect(media.muted).toBe(false)
+    expect(voice.plays).toEqual([{ output: 10, input: 2, rate: 0.5, semitones: -3 }])
+    expect(voice.volumes).toEqual([1])
   })
 
-  it('keeps a play going that starts while the Play tap’s prime is still loading the file', async () => {
-    const loading = loadingMedia()
-    const recordings = createRecordingPlayer({ now: () => clock, createMedia: () => loading })
-    recordings.load('vocal.m4a')
-    recordings.prime()
-    recordings.play('vocal.m4a', { at: 0.1, offset: 2.74, rate: 1, until: 20 })
-    clock = 0.1
-    await vi.advanceTimersByTimeAsync(20)
-    loading.loaded()
-    clock = 0.2
-    await vi.advanceTimersByTimeAsync(20)
-    expect(loading.paused).toBe(false)
-    expect(loading.muted).toBe(false)
-  })
-
-  it('starts its element again when something pauses it under a play, as an interruption does', async () => {
-    const recordings = player()
-    recordings.play('vocal.m4a', { at: 0, offset: 10, rate: 1, until: 60 })
-    await vi.advanceTimersByTimeAsync(20)
-    media.pause()
-    clock = 2
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.paused).toBe(false)
-    expect(media.currentTime).toBeCloseTo(12)
-  })
-
-  it('primes each recording once: a later tap leaves a primed one alone', async () => {
-    const recordings = player()
-    recordings.load('vocal.m4a')
-    recordings.prime()
+  it('makes each voice once, a load readying it before a play', async () => {
+    const { made, voiceFor } = player({ a: fakeVoice() })
+    made.load('a')
+    made.play('a', PLAY)
+    made.play('a', { ...PLAY, at: 14, offset: 6 })
     await vi.advanceTimersByTimeAsync(0)
-    recordings.prime()
+    expect(voiceFor).toHaveBeenCalledTimes(1)
+  })
+
+  it('starts a play whose voice comes late from where it should be by then', async () => {
+    const voice = fakeVoice()
+    let ready: (each: RecordingVoice) => void = () => undefined
+    const made = createRecordingPlayer({
+      now: () => clock,
+      voiceFor: () => new Promise((resolve) => (ready = resolve)),
+    })
+    made.play('a', { ...PLAY, rate: 0.5 })
+    clock = 12
+    ready(voice)
     await vi.advanceTimersByTimeAsync(0)
-    expect(media.plays).toBe(1)
+    expect(voice.plays).toEqual([{ output: 12, input: 3, rate: 0.5, semitones: 0 }])
+  })
+
+  it('falls silent at the latest play’s end, a following play taking over without a pause', async () => {
+    const voice = fakeVoice()
+    const { made, advance } = player({ a: voice })
+    made.play('a', PLAY)
+    made.play('a', { ...PLAY, at: 14, offset: 6, until: 18 })
+    await advance(5)
+    expect(voice.pauses).toEqual([])
+    await advance(14)
+    expect(voice.pauses).toEqual([18])
+  })
+
+  it('silences the last recording where another one takes over', async () => {
+    const first = fakeVoice()
+    const second = fakeVoice()
+    const { made } = player({ a: first, b: second })
+    made.play('a', PLAY)
+    await vi.advanceTimersByTimeAsync(0)
+    made.play('b', { ...PLAY, at: 14 })
+    await vi.advanceTimersByTimeAsync(0)
+    expect(first.pauses).toEqual([14])
+    expect(second.plays).toHaveLength(1)
+  })
+
+  it('stops: silences every voice now and forgets what is queued', async () => {
+    const voice = fakeVoice()
+    const { made, advance } = player({ a: voice })
+    made.play('a', PLAY)
+    await advance(1)
+    made.stop()
+    expect(voice.pauses).toEqual([1])
+    await advance(20)
+    expect(voice.pauses).toEqual([1])
   })
 
   it('plays as loud as its volume says, from its start and as it changes (ADR 0105)', async () => {
-    const recordings = player()
-    let level = 0.25
-    recordings.play('vocal.m4a', { at: 0, offset: 0, rate: 1, until: 30 }, () => level)
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.volume).toBe(0.25)
-    level = 0.64
-    clock = 0.5
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.volume).toBe(0.64)
-    // A play that says no volume plays at full.
-    recordings.play('vocal.m4a', { at: 1, offset: 1, rate: 1, until: 30 })
-    clock = 1
-    await vi.advanceTimersByTimeAsync(20)
-    expect(media.volume).toBe(1)
+    const voice = fakeVoice()
+    const { made, advance } = player({ a: voice })
+    let level = 0.4
+    made.play('a', PLAY, () => level)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(voice.volumes).toEqual([0.4])
+    level = 2
+    await advance(0.05)
+    expect(voice.volumes.at(-1)).toBe(1)
   })
 
-  it('stays silent when the browser refuses to play', async () => {
-    media = fakeMedia(true)
-    const recordings = player()
-    recordings.play('vocal.m4a', { at: 0, offset: 0, rate: 1, until: 30 })
-    await expect(vi.advanceTimersByTimeAsync(20)).resolves.not.toThrow()
-    expect(media.plays).toBe(1)
+  it('stays silent where no voice can be made', async () => {
+    const { made, advance } = player({})
+    made.play('a', PLAY)
+    await advance(10)
+    made.stop()
   })
 })

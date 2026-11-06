@@ -9,7 +9,6 @@ import {
   isOwnSongId,
   isPiece,
   musicOf,
-  pieceKey,
   selectHasVersion,
   usePieces,
   usePiecesStoreApi,
@@ -31,7 +30,7 @@ import {
 import { singleStaff } from '@/shared/lib/notation'
 import { ShareSaid, useShareSong, type SongToShare } from '@/features/share-song'
 import { useSongExport } from '@/features/song-files'
-import { useKeyName, useLocale } from '@/shared/i18n'
+import { useLocale } from '@/shared/i18n'
 import { useUp, useSetSearch } from '@/shared/lib'
 import { isCompound } from '@/shared/lib/music'
 import { ButtonLink, NotFound, type MenuAction } from '@/shared/ui'
@@ -68,7 +67,6 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
     headings,
     controls,
     staves,
-    recordingInKey,
     simplifies,
     changeSetup,
     changeTrack,
@@ -104,7 +102,6 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
       staves: group === 'own' ? search.staves : stavesParam(next),
     })
   }
-  const keyName = useKeyName()
   // The tracks the Setup lists: each staff by its name and clef, the piano's, the recording (A35).
   const tracks = useScoreTracks({
     staves: (performance.staves ?? []).map(({ clef }, place) => ({
@@ -206,11 +203,6 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
             simple={choice.version === 'simple' && simplifies}
             tracks={tracks}
             staves={staves}
-            recordingWhy={
-              recordingInKey
-                ? undefined
-                : t('player:recordingOnlyIn', { key: keyName(pieceKey(piece)) })
-            }
             onChange={changeSetup}
             onStaves={changeTrack}
             onSwing={player.setSwing}

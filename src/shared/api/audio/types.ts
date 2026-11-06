@@ -34,8 +34,8 @@ export interface NoteOutput {
 /** Where the app's sound goes. Built once in app/composition-root.ts, reached through useServices(). */
 export interface AudioOutput {
   /**
-   * On a user gesture: resumes audio a browser started or put back in suspension (iOS after a call),
-   * and primes each loaded recording once. Does nothing once audio runs and every recording is primed.
+   * On a user gesture: resumes audio a browser started or put back in suspension (iOS after a call).
+   * Does nothing once audio runs.
    */
   unlock(): Promise<void>
   /**

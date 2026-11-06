@@ -31,7 +31,6 @@ export function PieceSetup({
   simple,
   tracks,
   staves,
-  recordingWhy,
   onChange,
   onStaves,
   onSwing,
@@ -48,17 +47,13 @@ export function PieceSetup({
   simple: boolean
   tracks: readonly ScoreTrack[]
   staves: PlayerStaves
-  /** Why the recording cannot play now, where it cannot. */
-  recordingWhy?: string | undefined
   onChange: (change: SetupChange) => void
   onStaves: (id: TrackId, change: Partial<TrackChoice>) => void
   onSwing: (feel: SwingFeel) => void
 }) {
   const { t } = useTranslation(['player', 'music'])
   const chordSize = controls.has('chordSize') ? choosableChordSize(piece) : null
-  const playing = tracks
-    .filter((track) => track.id !== 'recording' || recordingWhy === undefined)
-    .filter((track) => trackOf(staves, track.id).play)
+  const playing = tracks.filter((track) => trackOf(staves, track.id).play)
   const pages: MusicPage[] = [
     {
       id: 'staves',
@@ -71,14 +66,7 @@ export function PieceSetup({
           : playing.length === tracks.length
             ? t('staves.all')
             : playing.map((track) => track.label).join(', '),
-      content: (
-        <StavesSection
-          tracks={tracks}
-          staves={staves}
-          recordingWhy={recordingWhy}
-          onChange={onStaves}
-        />
-      ),
+      content: <StavesSection tracks={tracks} staves={staves} onChange={onStaves} />,
     },
   ]
   if (controls.has('accompaniment'))

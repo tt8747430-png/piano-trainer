@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { asChartPiece, isDegreePiece, pieceKey, type Piece } from '@/entities/piece'
 import { firstLine, readDraft, transpose } from '@/features/score-editor'
-import { useKeyName } from '@/shared/i18n'
 import { transposedKey, transposition, type SpelledNote } from '@/shared/lib/music'
 import { Button } from '@/shared/ui/primitives/button'
 import { PreviewLine, TransposeTool as Transpose } from '@/widgets/transpose'
@@ -41,7 +40,6 @@ export function TransposeTool({
   onChange: (change: TransposeChange) => void
 }) {
   const { t } = useTranslation(['player', 'editor'])
-  const keyName = useKeyName()
   const own = pieceKey(piece)
   const key = { tonic, minor: own.minor }
   const played = transposition(own.tonic, tonic)
@@ -80,8 +78,6 @@ export function TransposeTool({
       landing={transposedKey(own, by)}
       by={by}
       home={t(`transpose.own.${piece.kind}`)}
-      // The recording plays along in the piece's own key alone.
-      info={piece.recording && by !== 0 ? t('recordingOnlyIn', { key: keyName(own) }) : undefined}
       onBy={setBy}
       signature={applies.key}
       chordSymbols={applies.chords}

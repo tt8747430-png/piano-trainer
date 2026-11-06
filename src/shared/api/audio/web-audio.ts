@@ -1,3 +1,4 @@
+import { hasFinePointer } from '@/shared/lib/fine-pointer'
 import type { Midi } from '@/shared/lib/music'
 import {
   SOFT_GAIN,
@@ -12,7 +13,7 @@ import { createInstruments, type Instruments } from './instruments'
 import { createLiveVoice } from './live-voice'
 import { createLookahead } from './lookahead'
 import { createMidiSoundOutput, type MidiSoundOutput } from './midi-sound-output'
-import { createRecordingPlayer, type Media } from './recording-player'
+import { createRecordingPlayer, type RecordingVoice } from './recording-player'
 import { createSampleLoader, type SampleLoader } from './sample-loader'
 import type { SamplerVoice } from './sampler'
 import { createSoundingKeys, NOTHING_PLAYED } from './sounding'
@@ -402,23 +403,58 @@ function within(promise: Promise<void>, ms: number): Promise<void> {
 const heldBack = (context: AudioContext) =>
   context.state === 'suspended' || context.state === 'interrupted'
 
+/** A recording's file, fetched once: its bytes, or null where it cannot be had (it stays silent). */
+const recordingFiles = new Map<string, Promise<ArrayBuffer | null>>()
+const fetchRecording = (src: string): Promise<ArrayBuffer | null> => {
+  const known = recordingFiles.get(src)
+  if (known) return known
+  const fetched = fetch(src)
+    .then((response) => (response.ok ? response.arrayBuffer() : null))
+    .catch(() => null)
+  recordingFiles.set(src, fetched)
+  return fetched
+}
+
+/** Whether this is a phone: the stretch runs its cheaper preset there. */
+const onPhone = () => !hasFinePointer()
+
 /**
- * A recording's element, playing the whole file from memory. Streamed, an element asks for byte
- * ranges, and the service worker's precache answers with the whole file: the element could not seek,
- * so each seek landed back at 0 s and was made again and again (ADR 0034). Until the file is in, the
- * element has no source: a play waits for it.
+ * A recording's voice through signalsmith-stretch (R34, ADR 0034): the file decoded whole and handed
+ * to one Stretch node, loaded only once a song with a recording plays, which keeps it on the audio
+ * clock, slows it without smearing and shifts its pitch with Transpose; a gain after it for its
+ * volume. Null where the file or the node cannot be had.
  */
-export function wholeFileMedia(src: string): HTMLAudioElement {
-  const media = new Audio()
-  media.preload = 'auto'
-  // A file that cannot be had leaves the recording silent, as a missing one would.
-  void fetch(src)
-    .then((response) => (response.ok ? response.blob() : Promise.reject(new Error(src))))
-    .then((file) => {
-      media.src = URL.createObjectURL(file)
-    })
-    .catch(() => undefined)
-  return media
+export async function stretchVoice(
+  context: AudioContext,
+  src: string,
+): Promise<RecordingVoice | null> {
+  const [{ default: SignalsmithStretch }, bytes] = await Promise.all([
+    import('signalsmith-stretch'),
+    fetchRecording(src),
+  ])
+  if (!bytes) return null
+  const file = await context.decodeAudioData(bytes.slice(0)).catch(() => null)
+  if (!file) return null
+  const node = await SignalsmithStretch(context, {
+    numberOfInputs: 0,
+    numberOfOutputs: 1,
+    outputChannelCount: [file.numberOfChannels],
+  }).catch(() => null)
+  if (!node) return null
+  if (onPhone()) await node.configure({ blockMs: null, preset: 'cheaper' })
+  await node.addBuffers(
+    Array.from({ length: file.numberOfChannels }, (_, channel) => file.getChannelData(channel)),
+  )
+  const gain = context.createGain()
+  node.connect(gain).connect(context.destination)
+  return {
+    play: ({ output, input, rate, semitones }) =>
+      void node.schedule({ output, input, rate, semitones, active: true }),
+    pause: (output) => void node.schedule({ output, active: false }),
+    volume: (level) => {
+      gain.gain.value = level
+    },
+  }
 }
 
 /**
@@ -429,7 +465,7 @@ export function wholeFileMedia(src: string): HTMLAudioElement {
 export function createWebAudioOutput({
   createContext = browserContext,
   frame = animationFrame,
-  createMedia = wholeFileMedia,
+  makeVoice = stretchVoice,
   pageNow = () => performance.now(),
   activated = browserActivated,
   loadSound = fetchSound,
@@ -437,7 +473,8 @@ export function createWebAudioOutput({
 }: {
   createContext?: () => AudioContext | null
   frame?: (look: () => void) => void
-  createMedia?: (src: string) => Media
+  /** A recording's voice in a context. */
+  makeVoice?: (context: AudioContext, src: string) => Promise<RecordingVoice | null>
   /** The page's clock, in milliseconds. */
   pageNow?: () => number
   /** Whether a gesture has let the page start audio. */
@@ -547,9 +584,13 @@ export function createWebAudioOutput({
   }
   const lookahead = createLookahead({ now, render })
   const keys = createSoundingKeys({ now, frame })
-  // By its own element, not through the AudioContext: WebKit's tap into it stalls the element about
-  // 0.45 s after every seek, play or change of rate, so the recording could never be kept in time.
-  const recordings = createRecordingPlayer({ now: heard, createMedia })
+  const recordings = createRecordingPlayer({
+    now,
+    voiceFor: (src) => {
+      const audio = openContext()
+      return audio ? makeVoice(audio, src) : Promise.resolve(null)
+    },
+  })
   const voice = createLiveVoice({
     strike(key, gain, soft) {
       const audio = openContext()
@@ -576,7 +617,6 @@ export function createWebAudioOutput({
 
   return {
     async unlock() {
-      recordings.prime()
       const audio = openContext()
       // With no gesture behind it (a sound as a screen opens), resuming could only fail.
       if (audio && heldBack(audio) && activated()) await audio.resume()
@@ -633,7 +673,7 @@ export function createWebAudioOutput({
           })
         : null
     },
-    loadRecording: (src) => recordings.load(src),
+    loadRecording: (src) => void fetchRecording(src),
     playRecording: (src, play, volume) => recordings.play(src, play, volume),
     now,
     // What is heard now, moved by how long before or after now the page's moment was.
