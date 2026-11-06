@@ -21,14 +21,16 @@ import {
   entryTitles,
   type ChartPiece,
   type Piece,
+  type PieceId,
 } from '@/entities/piece'
 import { selectView } from '@/entities/views'
 import { useOriginalDraft } from '@/features/edit-original'
 import { duplicateSong } from '@/features/edit-piece'
-import { toggleFavourite, useSongActions } from '@/features/manage-library'
+import { toggleFavourite, useLibraryActs, useSongActions } from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { SongExportSheet } from '@/features/song-files'
 import { useLocale } from '@/shared/i18n'
+import { useForgetScreens } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   BackButton,
@@ -46,7 +48,7 @@ import {
 import { PublishRow } from '@/widgets/content-editor'
 import { PieceCover } from '@/widgets/piece-cover'
 import { useSongPublish } from '../model/use-song-publish'
-import { OwnMusicAsk } from './OwnMusicAsk'
+import { ResetVersionAsk } from './ResetVersionAsk'
 
 /** The route's song, or the way back where it is gone (an own song deleted in another tab). */
 export function SongSettingsPage() {
@@ -95,7 +97,14 @@ function SongSettings({ piece }: { piece: Piece }) {
     const id = duplicateSong(piecesStore, piece, t('settings.copyTitle', { title }))
     void navigate({ to: '/songs/$pieceId', params: { pieceId: id } })
   }
-  // Where the focus goes back once a Delete or Reset is not wanted: the row that asked.
+  const acts = useLibraryActs()
+  const forget = useForgetScreens()
+  /** The learner's own song deleted (R34): the page left first, then into the Trash, with Undo. */
+  const trash = (id: PieceId) => {
+    forget(`/songs/${id}`, `/play/${id}`, `/edit/${id}`)
+    void navigate({ to: '/songs', replace: true }).then(() => acts.trash([id]))
+  }
+  // Where the focus goes back once a Reset is not wanted: the row that asked.
   const danger = useRef<HTMLDivElement>(null)
   const inLibrary = piece.kind !== 'study'
   const place = placeIn(layout, piece.id)
@@ -220,7 +229,7 @@ function SongSettings({ piece }: { piece: Piece }) {
             >
               <DangerRow
                 title={t(ownMusic.kind === 'song' ? 'settings.deleteSong' : 'reset')}
-                onClick={() => setAsking(true)}
+                onClick={() => (ownMusic.kind === 'song' ? trash(ownMusic.id) : setAsking(true))}
               />
             </DangerGroup>
           </div>
@@ -237,8 +246,13 @@ function SongSettings({ piece }: { piece: Piece }) {
         destructive={false}
         onConfirm={duplicate}
       />
-      {ownMusic ? (
-        <OwnMusicAsk piece={ownMusic} open={asking} onOpenChange={setAsking} returnTo={danger} />
+      {ownMusic?.kind === 'version' ? (
+        <ResetVersionAsk
+          piece={ownMusic}
+          open={asking}
+          onOpenChange={setAsking}
+          returnTo={danger}
+        />
       ) : null}
     </div>
   )

@@ -3,23 +3,14 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, type ShelvedFolder } from '@/entities/library'
 import { cn, useLongPress } from '@/shared/lib'
-import {
-  menuOf,
-  OpensMark,
-  ROW_BODY,
-  ROW_CARD,
-  RowMore,
-  swipeOf,
-  SwipeRow,
-  type RowAction,
-} from '@/shared/ui'
+import { menuOf, ROW_BODY, ROW_CARD, RowMore, swipeOf, SwipeRow, type RowAction } from '@/shared/ui'
 import { FolderFace, type FolderHolds } from './FolderFace'
 
 /** A folder's swipe (ADR 0106): to the right Edit; to the left Move, then Archive at the edge. */
 
 /**
  * A folder of the library as a row (Mindscape's `FolderRow`): its tile, name and what it holds, a
- * link to its page with its chevron; its More (Edit, Move to…, Archive, Delete); a swipe for Edit,
+ * link to its page on a tap anywhere, with no chevron beside its More (R34: one affordance a row); its More (Edit, Move to…, Archive, Delete); a swipe for Edit,
  * Move and Archive;
  * a long press starts Select with it chosen.
  */
@@ -55,7 +46,6 @@ export function FolderRow({
             {...press}
           >
             <FolderFace folder={folder} holds={holds} />
-            <OpensMark />
           </Link>
           <RowMore
             label={t('library.moreOf', { name: nameOf(folder) })}

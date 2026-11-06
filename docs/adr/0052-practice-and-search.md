@@ -90,10 +90,11 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     library's shape and its own parts (the kit's `FilterSheet`, `FilterChips`, `SortChoice`, `RowMore`,
     `FavouriteMark`, `TreeItem`, `SortHeading`): the search with Sort (Book or Style, Name, Level) and Filter (Level;
     Style for Progressions, the tree's own place); on a phone Favourites while there are some, each book (or style) a
-    run of rows folded after five with Show all n, Mine last, a row its picture, name, line and level (pips and its
+    run of rows folded after five with Show all n, Mine last, a row its picture (a progression's its chords as tiles
+    tinted by role, `ProgressionTiles`, R34), name, line and level (pips and its
     number), ♡ in its ⋯ and on a swipe; from 64rem the tree (All, Favourites, the books, Mine, Hidden; a count of
     none hidden; 44px rows) beside a table its headings sort (Name, Book, Level; Accompaniment's Hands, each figure's
-    name; Progressions' Numerals). Its view (`q`, `sort`, `place`, `stage`) is the URL's; `place` and `sort` are
+    name; Progressions' chords). Its view (`q`, `sort`, `place`, `stage`) is the URL's; `place` and `sort` are
     remembered. Creating is the floating honey +. A level is the content's: an exercise's own, a pattern's its book's
     course's, a study's its own; the rhythm styles, the learner's patterns and every progression have none, so
     Progressions shows, sorts and filters by no level;
@@ -209,3 +210,4 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
   fix); the libraries arranged like Songs, the built-in books included, Accompaniment patterns only; the laptop
   sidebar as Claude's (2026-11-05; research, spec and mockup in `.scratch/r32/`).
 - r34 (R34-3) — Scales' staff carries one layer of labels, Fingers · Degrees · Steps, chosen over the music; the degrees and steps toggles leave Settings (2026-11-06).
+- r34 (R34-4) — A progression's row shows its chords as tiles tinted by role, in the library, a key's progressions and the editor's preview, in place of a list icon and a plain line (2026-11-06).

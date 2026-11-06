@@ -514,7 +514,9 @@ describe('Practice → Scales and keys', () => {
     expect(walk.getAttribute('href')).toContain('root=D')
     expect(walk.getAttribute('href')).toContain('chordSize=sevenths')
     const inKey = screen.getByRole('region', { name: 'Progressions in this key' })
-    const cadence = within(inKey).getByRole('link', { name: 'Complete cadence I–IV–V–I' })
+    const cadence = within(inKey).getByRole('link', {
+      name: 'Complete cadence Firm and final, the textbook ending I–IV–V–I',
+    })
     expect(cadence.getAttribute('href')).toBe(
       '/practice/progressions/line?key=D&p=I-IV-V-I&size=sevenths',
     )

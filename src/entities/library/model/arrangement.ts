@@ -7,6 +7,7 @@ import {
   type FolderId,
   type SavedFolder,
   type SongPlace,
+  type TrashedSong,
 } from './types'
 import { reachableFolders } from './tree'
 
@@ -45,6 +46,8 @@ export interface LibraryLayout {
   readonly folders: readonly ShelvedFolder[]
   readonly home: readonly PieceId[]
   readonly archive: readonly ShelvedEntry[]
+  /** The learner's own songs deleted, the newest first (R34): in no list until restored. */
+  readonly trash: readonly TrashedSong[]
 }
 
 /**
@@ -56,7 +59,7 @@ export interface LibraryLayout {
  * folder is; an own song it places nowhere stands at Home.
  */
 export function arrangeLibrary(
-  state: Pick<LibraryState, 'folders' | 'home' | 'archive'>,
+  state: Pick<LibraryState, 'folders' | 'home' | 'archive' | 'trash'>,
   catalog: LibraryCatalog,
 ): LibraryLayout {
   const collectionOf = new Map<PieceId, SongCollectionId>()
@@ -74,6 +77,8 @@ export function arrangeLibrary(
     songs: take(folder.songs),
   })
 
+  // The Trash first: a song in it stands in no list, and only the learner's own are ever in it.
+  const trash = state.trash.filter((entry) => own.has(entry.id) && take([entry.id]).length > 0)
   const folders = reachableFolders(state.folders.map(shelve))
   const home = take(state.home)
   const archived: Shelving[] = []
@@ -110,7 +115,7 @@ export function arrangeLibrary(
         folderOf.get(collection.id)?.songs.push(song)
       }
   home.push(...catalog.ownSongs.filter((id) => !placed.has(id)))
-  return { folders, home, archive }
+  return { folders, home, archive, trash }
 }
 
 const savedFolder = ({ builtIn: _, ...folder }: ShelvedFolder): SavedFolder => folder
@@ -118,10 +123,11 @@ const savedFolder = ({ builtIn: _, ...folder }: ShelvedFolder): SavedFolder => f
 /** A layout as the store saves it: every folder held, with every song it holds. */
 export function savedLayout(
   layout: LibraryLayout,
-): Pick<LibraryState, 'folders' | 'home' | 'archive'> {
+): Pick<LibraryState, 'folders' | 'home' | 'archive' | 'trash'> {
   return {
     folders: layout.folders.map(savedFolder),
     home: layout.home,
+    trash: layout.trash,
     archive: layout.archive.map((entry): ArchiveEntry =>
       entry.kind === 'song'
         ? entry
@@ -134,7 +140,7 @@ export function savedLayout(
   }
 }
 
-/** Where a song stands in the library: its folder or Home and its place; `archived`; or nowhere. */
+/** Where a song stands in the library: its folder or Home and its place; `archived`; or nowhere (the Trash too). */
 export function placeIn(layout: LibraryLayout, id: PieceId): SongPlace | 'archived' | null {
   const atHome = layout.home.indexOf(id)
   if (atHome >= 0) return { folder: null, index: atHome }

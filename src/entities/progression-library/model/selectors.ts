@@ -1,5 +1,5 @@
 import { keptContent } from '@/shared/api/content'
-import { numeralsLine, numeralsParam, parseNumerals } from '@/shared/lib/music'
+import { numeralsLine, numeralsParam, parseNumerals, type Numeral } from '@/shared/lib/music'
 import { PROGRESSION_LIBRARY, type ProgressionId } from '../content/library'
 import {
   PROGRESSION_STYLES,
@@ -19,16 +19,17 @@ export const progressionMode = (progression: LibraryProgression, minor: boolean)
 const lineIn = (progression: LibraryProgression, minor: boolean): string =>
   (progressionMode(progression, minor) ? progression.minor : progression.major) ?? ''
 
-const numeralsOf = (progression: LibraryProgression, minor: boolean) =>
+/** A library progression's numerals in the mode it is shown in. */
+export const libraryNumerals = (progression: LibraryProgression, minor: boolean): Numeral[] =>
   parseNumerals(lineIn(progression, minor)) ?? []
 
 /** A library progression's numerals as a URL holds them (`I-V-vi-IV`), in the mode it is shown in. */
 export const libraryParam = (progression: LibraryProgression, minor: boolean): string =>
-  numeralsParam(numeralsOf(progression, minor))
+  numeralsParam(libraryNumerals(progression, minor))
 
 /** A library progression's numerals as a line to read (`I–V–vi–IV`), in the mode it is shown in. */
 export const libraryLine = (progression: LibraryProgression, minor: boolean): string =>
-  numeralsLine(numeralsOf(progression, minor))
+  numeralsLine(libraryNumerals(progression, minor))
 
 const modeLine = (param: string, minor: boolean) => `${minor ? 'minor' : 'major'} ${param}`
 

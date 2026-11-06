@@ -486,7 +486,7 @@ describe('Piece: the learner’s own music', () => {
     })
   })
 
-  it('deletes an own song once asked, out of the favourites too, back on Songs', async () => {
+  it('moves an own song to the Trash, back on Songs, Undo bringing it back', async () => {
     const user = userEvent.setup()
     const song = { id: 'my-1', title: 'Morning', ...MUSIC }
     const { router, piecesStore, libraryStore } = await renderApp('/songs/my-1', {
@@ -499,10 +499,12 @@ describe('Piece: the learner’s own music', () => {
     expect(libraryStore.getState().favourites).toEqual(['my-1'])
     await openSettings(user)
     await user.click(await screen.findByRole('button', { name: 'Delete song' }))
-    await user.click(await screen.findByRole('button', { name: 'Delete permanently' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs'))
-    expect(piecesStore.getState().songs).toEqual([])
-    expect(libraryStore.getState().favourites).toEqual([])
+    expect(await screen.findByText('“Morning” moved to the Trash')).toBeInTheDocument()
+    expect(libraryStore.getState().trash.map((each) => each.id)).toEqual(['my-1'])
+    expect(piecesStore.getState().songs).toHaveLength(1)
+    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    expect(libraryStore.getState().trash).toEqual([])
   })
 
   it('writes a listing’s chart in the editor', async () => {

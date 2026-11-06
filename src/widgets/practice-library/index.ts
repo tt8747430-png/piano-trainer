@@ -6,6 +6,7 @@ export {
   PRACTICE_SORTS,
   type LibraryGroup,
   type LibraryItem,
+  type LibraryPicture,
   type LibrarySection,
   type PracticeLibraryView,
   type PracticeSort,

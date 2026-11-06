@@ -75,6 +75,15 @@ export type ArchiveEntry =
       readonly index: number
     }
 
+/**
+ * A song in the Trash (R34, StemDeck's): the learner's own, deleted, saying where it stood; gone for
+ * good, with its recordings, only once the Trash is emptied.
+ */
+export interface TrashedSong {
+  readonly id: PieceId
+  readonly from: SongPlace
+}
+
 /** How the library's songs are listed: as the learner dragged them, by name, played last first, or by key. */
 export const LIBRARY_SORTS = ['manual', 'name', 'recent', 'key'] as const
 export type LibrarySort = (typeof LIBRARY_SORTS)[number]

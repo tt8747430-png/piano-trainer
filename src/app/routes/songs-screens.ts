@@ -49,7 +49,7 @@ export function folderOf(pieces: PiecesState, library: LibraryState, id: string)
   return place && place !== 'archived' ? place.folder : null
 }
 export { PiecePage, PublishPage, SectionPage, SongSettingsPage } from '@/pages/piece'
-export { ArchivePage, FolderArchivedPage } from '@/pages/song-archive'
+export { ArchivePage, FolderArchivedPage, TrashPage } from '@/pages/song-archive'
 export { SharedSongPage } from '@/pages/shared-song'
 export {
   FolderCardStylePage,

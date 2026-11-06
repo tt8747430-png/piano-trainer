@@ -53,7 +53,7 @@ export function useExerciseLibrary(): {
         detail: localText(exercise.trains, locale),
         group,
         stage: exercise.stage,
-        ...BOOKS[group],
+        picture: BOOKS[group],
         link: <Link to="/practice/exercises/$exerciseId" params={{ exerciseId: exercise.id }} />,
         favourite,
         actions: [

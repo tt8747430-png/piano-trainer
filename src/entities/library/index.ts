@@ -15,6 +15,7 @@ export {
   type LibrarySort,
   type OwnFolderId,
   type SongPlace,
+  type TrashedSong,
 } from './model/types'
 export { CARD_SHOWS, DEFAULT_CARD_LOOK, type CardLook, type CardShow } from './model/card-look'
 export {

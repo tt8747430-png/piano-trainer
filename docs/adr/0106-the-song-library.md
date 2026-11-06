@@ -22,7 +22,7 @@ details.
   song, New folder and Import, and only these (it adds; the Public library is a place, Home's first row), and a
   file dropped on the library imports it (ADR 0107).
 - **The actions**, at every size:
-  - a song's row: More (Favourite, Move to…, Archive, and Delete for the learner's own song, asked first), a swipe
+  - a song's row: More (Favourite, Move to…, Archive, and Delete for the learner's own song, to the Trash with Undo), a swipe
     (right Favourite; left Move, then Archive), a long press starting Select;
   - a folder's row counts its folders and songs and names its first songs; its More edits, moves, archives or deletes
     it;
@@ -41,10 +41,15 @@ details.
     Export…, one sheet of MusicXML, MIDI and Share link (ADR 0107).
 - **Every move, archive and favourite toasts with Undo**, which puts it back exactly where it stood.
 - **Deleting a folder deletes its songs and folders**, but the app's content is never destroyed: what the learner
-  made goes for good (their songs with their takes); what the app brought goes to the archive (a built-in folder
-  whole, an app song on its own). The ask names the folder, counts its songs and says which happens.
+  made goes (an own folder for good, their songs to the Trash); what the app brought goes to the archive (a built-in
+  folder whole, an app song on its own). The ask names the folder, counts its songs and says which happens.
+- **The Trash** (`/songs/trash`, R34, StemDeck's): Delete on the learner's own song moves it there with no ask and a
+  toast with Undo, as nothing is lost yet; it is gone, with its recordings, only once deleted permanently from the
+  Trash or the Trash emptied, each asked first. Restore puts it back where it stood (`trash`, `pt-library` version 6;
+  `trashSongs`, `restoreTrashed`, `emptyTrash`). Home's bar holds one button for both, a menu of Archive · Trash, its
+  count both; the laptop tree lists Trash under Archive.
 - **The archive is a place** (`/songs/archive`, its button with its count in Home's bar): archived songs and folders,
-  newest first, each with Restore; Restore all; Delete for good of the learner's own. Restore puts a song back where
+  newest first, each with Restore; Restore all; Delete of the learner's own (a song to the Trash, a folder asked). Restore puts a song back where
   it stood while that folder is in the library, else at Home, last; a folder back with everything under it. An
   archived song still opens by its link, from Learn and from Search, which says it is archived.
 - **One search with its sort and filters** (in the URL, never remembered): the sort joined to the search's end
@@ -120,3 +125,4 @@ A study, practised on Practice, is in no library. A folder played song after son
   page holds its invite link, its shared folders with Share a folder…, and its members (Member for one without a
   name, a failure with Try again); a shared folder of the learner's own has Stop sharing (2026-11-05).
 - r34 (R34) — Covers engraved from the song's first bars; Your practice says the last and best take, the bars one by one and one next step; the ♡ moves into the bar (2026-11-06).
+- r34 (R34-4) — The Trash beside the archive; Delete of an own song to it with Undo; a folder row opens on a tap anywhere with no chevron beside its More (2026-11-06).

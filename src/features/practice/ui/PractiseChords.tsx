@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Footprints } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { commonProgressions, libraryLine, libraryParam } from '@/entities/progression-library'
+import { commonProgressions, libraryNumerals, libraryParam } from '@/entities/progression-library'
 import { localText, useLocale } from '@/shared/i18n'
 import {
   circleKey,
@@ -16,7 +16,7 @@ import {
   type ScaleKind,
   type SpelledNote,
 } from '@/shared/lib/music'
-import { PAGE_TILES, RowGroup, RowLink } from '@/shared/ui'
+import { ProgressionTiles, RowGroup, RowLink } from '@/shared/ui'
 import { WALK } from '../walk'
 
 /**
@@ -70,8 +70,7 @@ export function PractiseChords({
             <li key={progression.id}>
               <RowLink
                 title={localText(progression.name, locale)}
-                detail={libraryLine(progression, minor)}
-                {...PAGE_TILES.progressions}
+                detail={localText(progression.character, locale)}
                 render={
                   <Link
                     to="/practice/progressions/line"
@@ -82,7 +81,9 @@ export function PractiseChords({
                     }}
                   />
                 }
-              />
+              >
+                <ProgressionTiles numerals={libraryNumerals(progression, minor)} minor={minor} />
+              </RowLink>
             </li>
           ))}
         </RowGroup>

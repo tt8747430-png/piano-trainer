@@ -14,7 +14,9 @@ import { confirm, say } from '@/shared/ui'
 import { archiveFolder, restoreFolder } from '../archive-folder'
 import { archiveSongs, restoreSongs } from '../archive-songs'
 import { moveTo, undoMove, type Moving } from '../move-to'
+import { restoreTrashed } from '../restore-song'
 import { setFavourites } from '../toggle-favourite'
+import { trashSongs } from '../trash-song'
 
 /**
  * The library's acts as a screen does them (ADR 0106): each command over the catalog as the learner
@@ -144,6 +146,32 @@ export function useLibraryActs() {
           restoreSongs(store, catalog(), archived)
         }),
       )
+    },
+    /**
+     * The learner's own songs deleted (R34): into the Trash with no ask, as nothing is lost until it
+     * is emptied; said by title or count, with Undo, which puts each back where it stood.
+     */
+    trash: (ids: readonly PieceId[]) => {
+      const trashed = trashSongs(store, catalog(), ids)
+      const [only] = trashed
+      if (!only) return
+      say(
+        trashed.length === 1
+          ? t('library.trashed', { title: titleOf(only) })
+          : t('library.trashedMany', { count: trashed.length }),
+        undo(() => restoreTrashed(store, catalog(), trashed)),
+      )
+    },
+    /** Songs out of the Trash, said by title or count. */
+    untrash: (ids: readonly PieceId[]) => {
+      restoreTrashed(store, catalog(), ids)
+      const [only] = ids
+      if (only)
+        say(
+          ids.length === 1
+            ? t('library.restored', { title: titleOf(only) })
+            : t('library.restoredMany', { count: ids.length }),
+        )
     },
     restore: (ids: readonly PieceId[]) => {
       restoreSongs(store, catalog(), ids)

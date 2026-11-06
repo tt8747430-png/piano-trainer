@@ -1,9 +1,9 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { Link2, ListMusic } from 'lucide-react'
+import { Link2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   blankProgression,
-  libraryLine,
+  libraryNumerals,
   progressionById,
   progressionMode,
   shipsWithApp,
@@ -13,7 +13,14 @@ import { RemoveGroup, useProgressionDraft } from '@/features/edit-original'
 import { localText, useLocale } from '@/shared/i18n'
 import { shareLink, useForgetScreens } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { BackButton, RowButton, say, ScreenHeader, SettingsGroup, TileMark } from '@/shared/ui'
+import {
+  BackButton,
+  ProgressionTiles,
+  RowButton,
+  say,
+  ScreenHeader,
+  SettingsGroup,
+} from '@/shared/ui'
 import { DraftPublishScreen, NotOpen, PublishRow } from '@/widgets/content-editor'
 
 /** The route's progression: the library's, or one an editor made and has not published. */
@@ -129,14 +136,12 @@ function ProgressionPublish({ progression }: { progression: LibraryProgression }
       removable={!shipsWithApp(progression.id)}
       preview={
         <div className="card flex min-h-16 items-center gap-3 p-2">
-          <TileMark icon={ListMusic} paint="lilac" />
-          <span className="flex min-w-0 flex-col">
+          <span className="flex min-w-0 flex-col gap-1">
             <span className="text-lg font-semibold text-balance">{title}</span>
-            <span className="text-sm text-muted-foreground">
-              {(written.major ?? written.minor)
-                ? libraryLine(written, progressionMode(written, false))
-                : ''}
-            </span>
+            <ProgressionTiles
+              numerals={libraryNumerals(written, progressionMode(written, false))}
+              minor={progressionMode(written, false)}
+            />
           </span>
         </div>
       }

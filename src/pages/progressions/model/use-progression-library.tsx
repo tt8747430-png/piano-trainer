@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Heart, HeartOff, List, UserRound } from 'lucide-react'
+import { Heart, HeartOff } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   selectFavouritesOf,
@@ -10,38 +10,26 @@ import {
 import {
   libraryByStyle,
   libraryLine,
+  libraryNumerals,
   progressionMode,
-  type ProgressionStyle,
 } from '@/entities/progression-library'
 import { togglePracticeFavourite } from '@/features/manage-practice-library'
 import { localText, useLocale } from '@/shared/i18n'
 import { numeralsLine, parseNumerals } from '@/shared/lib/music'
-import type { Paint, RowAction } from '@/shared/ui'
+import { ProgressionTiles, type RowAction } from '@/shared/ui'
 import { MINE, type LibraryGroup, type LibraryItem } from '@/widgets/practice-library'
-
-/** Each style's paint on its rows' picture, one picture for every style: a list of progressions. */
-const STYLE_PAINT: Readonly<Record<ProgressionStyle, Paint>> = {
-  pop: 'sky',
-  rock: 'sand',
-  jazz: 'lilac',
-  blues: 'sky',
-  classical: 'sand',
-  soul: 'yellow',
-  gospel: 'yellow',
-  modal: 'lilac',
-  theory: 'grass',
-}
 
 /**
  * The Progressions library's styles and rows (R30-4): each style of the library a place, each
- * progression its name, how it sounds and its numerals (in its major line where it has one); Mine the
+ * progression its name, how it sounds and its chords as tiles tinted by role (R34; in its major line
+ * where it has one); Mine the
  * progressions the learner keeps. The library has no levels, so it shows, sorts and filters by none.
  */
 export function useProgressionLibrary(): {
   groups: readonly LibraryGroup[]
   items: readonly LibraryItem[]
 } {
-  const { t } = useTranslation(['practice', 'common'])
+  const { t } = useTranslation(['practice', 'common', 'music'])
   const locale = useLocale()
   const favourites = usePracticeLibrary(selectFavouritesOf('progressions'))
   const own = usePracticeLibrary(selectOwnProgressions)
@@ -59,18 +47,19 @@ export function useProgressionLibrary(): {
   )
   const library = styles.flatMap(({ style, progressions }) =>
     progressions.map((progression): LibraryItem => {
-      const numerals = libraryLine(progression, progressionMode(progression, false))
+      const minor = progressionMode(progression, false)
+      const numerals = libraryLine(progression, minor)
       const favourite = favourites.includes(progression.id)
       return {
         id: progression.id,
         name: localText(progression.name, locale),
         detail: localText(progression.character, locale),
-        phoneDetail: numerals,
         extra: numerals,
         group: style,
         words: [progression.name.en, progression.name.ru],
-        icon: List,
-        paint: STYLE_PAINT[style],
+        picture: {
+          chords: <ProgressionTiles numerals={libraryNumerals(progression, minor)} minor={minor} />,
+        },
         link: link(progression.id),
         favourite,
         actions: [favouriteAction(progression.id, favourite)],
@@ -78,16 +67,17 @@ export function useProgressionLibrary(): {
     }),
   )
   const mine = own.map((progression): LibraryItem => {
-    const numerals = numeralsLine(parseNumerals(progression.line) ?? [])
+    const parsed = parseNumerals(progression.line) ?? []
     const favourite = favourites.includes(progression.id)
     return {
       id: progression.id,
       name: progression.name,
-      detail: numerals,
-      extra: numerals,
+      detail: progression.mode
+        ? t(`music:scaleKind.${progression.mode}`)
+        : t(progression.minor ? 'music:key.minorMode' : 'music:key.majorMode'),
+      extra: numeralsLine(parsed),
       group: MINE,
-      icon: UserRound,
-      paint: 'sand',
+      picture: { chords: <ProgressionTiles numerals={parsed} minor={progression.minor} /> },
       link: link(progression.id),
       favourite,
       actions: [favouriteAction(progression.id, favourite)],

@@ -26,17 +26,18 @@ const kept = (state: object) => {
 const SAD = { id: 'mine-1', name: 'Sunday loop', line: 'vi-IV-I-V', minor: false }
 
 describe('Practice → Progressions, the library (R30-4)', () => {
-  it('opens on the library: each style a run of rows, its numerals the line, no tabs', async () => {
+  it('opens on the library: each style a run of rows, each its line and its chords as tiles, no tabs (R34)', async () => {
     await renderApp('/practice/progressions')
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Progressions' }),
     ).toBeInTheDocument()
     expect(screen.queryByRole('radiogroup', { name: 'Progressions' })).not.toBeInTheDocument()
     const jazz = screen.getByRole('region', { name: 'Jazz' })
-    expect(within(jazz).getByRole('link', { name: /^Jazz cadence ii–V–I/ })).toHaveAttribute(
-      'href',
-      '/practice/progressions/jazz-cadence',
-    )
+    expect(
+      within(jazz).getByRole('link', {
+        name: 'Jazz cadence Smooth and certain, jazz’s way home ii–V–I',
+      }),
+    ).toHaveAttribute('href', '/practice/progressions/jazz-cadence')
     expect(screen.getAllByRole('link', { name: /^Jazz cadence / })).toHaveLength(1)
   })
 

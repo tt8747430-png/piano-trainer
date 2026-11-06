@@ -45,15 +45,20 @@ export interface LibrarySection {
   readonly name: string
 }
 
+/**
+ * A row's picture: its kind's icon on a painted tile, or a progression's chords as tiles tinted by
+ * role (R34), under its name on a phone and in the table's column for them.
+ */
+export type LibraryPicture =
+  { readonly icon: LucideIcon; readonly paint: Paint } | { readonly chords: ReactNode }
+
 /** One row of a practice library: an exercise, a pattern, a study, a progression. */
 export interface LibraryItem {
   /** Unique in its library. */
   readonly id: string
   readonly name: string
-  /** Its line under its name in the table, and on a phone unless `phoneDetail` says another. */
+  /** Its line under its name. */
   readonly detail: string
-  /** Its line on a phone's row where the table has a column for it (a progression's numerals). */
-  readonly phoneDetail?: string
   /** Its place in the tree: a book's or a style's id, `mine` or `hidden`. */
   readonly group: string
   /** Its run on a phone where its book has more than one (Called to Play's songs); its group's else. */
@@ -64,8 +69,7 @@ export interface LibraryItem {
   readonly extra?: string
   /** Words a search finds it by besides its name and lines. */
   readonly words?: readonly string[]
-  readonly icon: LucideIcon
-  readonly paint: Paint
+  readonly picture: LibraryPicture
   /** Its page: a router `Link`. */
   readonly link: ReactElement
   readonly favourite: boolean
@@ -142,10 +146,7 @@ export function libraryShown(
   const scoped = items.filter(inPlace)
   const keeps = (item: LibraryItem) =>
     (view.stage === 'any' || item.stage === view.stage) &&
-    matchesQuery(
-      [item.name, item.detail, item.phoneDetail ?? '', item.extra ?? '', ...(item.words ?? [])],
-      view.q,
-    )
+    matchesQuery([item.name, item.detail, item.extra ?? '', ...(item.words ?? [])], view.q)
   const order = new Map(places.map((id, at) => [id, at]))
   const groupAt = (item: LibraryItem) => order.get(item.group) ?? places.length
   const sorted = (list: readonly LibraryItem[]): LibraryItem[] => {

@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Archive, ChevronDown, Heart, Music, type LucideIcon } from 'lucide-react'
+import { Archive, ChevronDown, Heart, Music, Trash2, type LucideIcon } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -31,7 +31,7 @@ function Place({
   count,
   current,
 }: {
-  to: '/songs' | '/songs/archive'
+  to: '/songs' | '/songs/archive' | '/songs/trash'
   favourites?: boolean
   icon: LucideIcon
   label: string
@@ -165,6 +165,13 @@ export function LibraryTree({ current, extra }: { current: TreePlace; extra?: Re
           icon={Archive}
           label={t('archive.title')}
           count={layout.archive.length}
+          current={false}
+        />
+        <Place
+          to="/songs/trash"
+          icon={Trash2}
+          label={t('trash.title')}
+          count={layout.trash.length}
           current={false}
         />
       </TreeList>

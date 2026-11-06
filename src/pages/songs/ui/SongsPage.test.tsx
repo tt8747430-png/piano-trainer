@@ -492,7 +492,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     expect(rowNames(folders)[0]).toBe('Sunday 2 songs')
   })
 
-  it('deletes an own folder from its Settings, asked first: its own songs for good, the app’s to the archive', async () => {
+  it('deletes an own folder from its Settings, asked first: its own songs to the Trash, the app’s to the archive', async () => {
     const user = userEvent.setup()
     const { libraryStore, piecesStore } = await renderApp('/songs/folders/folder-1', {
       storage: saved({
@@ -520,13 +520,14 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     await user.click(screen.getByRole('button', { name: 'Delete folder' }))
     const ask = await screen.findByRole('alertdialog', { name: 'Delete “Sunday”?' })
     expect(ask).toHaveTextContent(
-      'The folder will be permanently deleted. Your songs in it (1) and their recordings will be permanently deleted. Built-in songs in it (1) will be moved to the archive.',
+      'The folder will be permanently deleted. Your songs in it (1) will be moved to the Trash. Built-in songs in it (1) will be moved to the archive.',
     )
     await user.click(within(ask).getByRole('button', { name: 'Delete' }))
     await waitFor(() =>
       expect(screen.getByRole('heading', { level: 1, name: 'Songs' })).toBeInTheDocument(),
     )
-    expect(piecesStore.getState().songs).toEqual([])
+    expect(piecesStore.getState().songs).toEqual([SONG])
+    expect(libraryStore.getState().trash.map((each) => each.id)).toEqual(['my-1'])
     expect(libraryStore.getState().folders.some((folder) => folder.id === 'folder-1')).toBe(false)
     expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived')
   })
@@ -863,17 +864,19 @@ describe('Songs: Select (ADR 0106)', () => {
     expect(await screen.findByText(`${title} put down at place 2 of 5.`)).toBeInTheDocument()
   })
 
-  it('offers Delete where every song chosen is the learner’s own, asked first', async () => {
+  it('offers Delete where every song chosen is the learner’s own, to the Trash with Undo', async () => {
     const user = userEvent.setup()
-    const { piecesStore } = await renderApp('/songs', {
+    const { piecesStore, libraryStore } = await renderApp('/songs', {
       storage: saved({ pieces: { songs: [SONG], nextSong: 2 } }),
     })
     await user.click(await screen.findByRole('button', { name: 'Select' }))
     await user.click(screen.getByRole('checkbox', { name: 'Select Morning' }))
     await user.click(screen.getByRole('button', { name: 'Delete' }))
-    const ask = await screen.findByRole('alertdialog', { name: 'Delete “Morning”?' })
-    await user.click(within(ask).getByRole('button', { name: 'Delete' }))
-    expect(piecesStore.getState().songs).toEqual([])
+    expect(await screen.findByText('“Morning” moved to the Trash')).toBeInTheDocument()
+    expect(libraryStore.getState().trash.map((each) => each.id)).toEqual(['my-1'])
+    expect(piecesStore.getState().songs).toEqual([SONG])
+    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    expect(libraryStore.getState().trash).toEqual([])
   })
 })
 
@@ -1095,30 +1098,34 @@ describe('Songs: your own', () => {
   })
 })
 
-describe('Songs: the archive’s way in (ADR 0106)', () => {
-  it('stands Archive in Home’s bar, counting what it holds', async () => {
+describe('Songs: the archive’s and the Trash’s way in (ADR 0106)', () => {
+  it('stands Archive and Trash in Home’s bar, a menu counting what each holds', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs', {
       storage: saved({
         library: { archive: [{ kind: 'song', id: 'silent', from: { folder: 'hymns', index: 0 } }] },
       }),
     })
-    const archive = await screen.findByRole('link', { name: 'Archive: 1' })
-    expect(archive).toHaveAttribute('title', 'Archive: 1')
+    const stored = await screen.findByRole('button', { name: 'Archive and Trash' })
     expect(document.querySelector('[data-slot="archive-count"]')).toHaveTextContent('1')
-    expect(archive).toHaveAttribute('href', '/songs/archive')
     // A folder's bar stays short: Back, its name, Select and its More.
     await user.click(screen.getByRole('link', { name: /^Hymns/ }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Hymns' })).toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: 'Archive: 1' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Archive and Trash' })).toBeNull()
     await user.click(screen.getByRole('button', { name: 'Back to Songs' }))
-    await user.click(await screen.findByRole('link', { name: 'Archive: 1' }))
+    expect(stored).not.toBeInTheDocument()
+    await user.click(await screen.findByRole('button', { name: 'Archive and Trash' }))
+    expect(await screen.findByRole('menuitem', { name: 'Trash' })).toBeInTheDocument()
+    await user.click(screen.getByRole('menuitem', { name: 'Archive: 1' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/archive'))
   })
 
-  it('names Archive alone, with no count, while it is empty', async () => {
+  it('names each alone, with no count, while both are empty', async () => {
+    const user = userEvent.setup()
     await renderApp('/songs')
-    expect(await screen.findByRole('link', { name: 'Archive' })).toBeInTheDocument()
+    await user.click(await screen.findByRole('button', { name: 'Archive and Trash' }))
+    expect(await screen.findByRole('menuitem', { name: 'Archive' })).toBeInTheDocument()
+    expect(screen.getByRole('menuitem', { name: 'Trash' })).toBeInTheDocument()
     expect(document.querySelector('[data-slot="archive-count"]')).toBeNull()
   })
 })

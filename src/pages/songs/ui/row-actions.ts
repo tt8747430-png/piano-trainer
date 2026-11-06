@@ -125,7 +125,7 @@ export function songActions(
             icon: Trash2,
             paint: 'sand' as const,
             destructive: true,
-            onSelect: () => page.open({ kind: 'delete-songs', songs: [entry.id] }),
+            onSelect: () => page.trash([entry.id]),
           },
         ]
       : []),

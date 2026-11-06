@@ -17,7 +17,7 @@ import {
   archiveFolder,
   archiveSongs,
   deleteFolder,
-  deleteOwnSongs,
+  emptyTrash,
   editFolder,
   makeFolder,
   moveTo,
@@ -26,9 +26,11 @@ import {
   restoreAll,
   restoreFolder,
   restoreSongs,
+  restoreTrashed,
   setFavourites,
   setSort,
   toggleFavourite,
+  trashSongs,
   undoMove,
 } from './index'
 
@@ -232,7 +234,7 @@ describe('deleting', () => {
     ownSongs: pieces.getState().songs.map((song) => song.id),
   })
 
-  it('deletes an own folder: its own songs for good with their takes, the app’s each to the archive', () => {
+  it('deletes an own folder: its own songs to the Trash, the app’s each to the archive; emptied, the Trash takes them for good with their takes', () => {
     const { library, pieces, takes, song } = stores()
     const [mine, kept] = [song('Mine'), song('Kept')]
     saveTake(takes, {
@@ -256,11 +258,15 @@ describe('deleting', () => {
         songs: ['h2', mine, 'a1'],
       },
     )
-    deleteFolder({ library, pieces, takes }, catalog, folder ?? 'folder-0')
+    deleteFolder(library, catalog, folder ?? 'folder-0')
+    expect(layout(library, catalog).trash.map((each) => each.id)).toEqual([mine])
+    expect(shelves(library, catalog).home).toEqual([kept])
+    emptyTrash({ library, pieces, takes }, catalog)
     expect(pieces.getState().songs.map((each) => each.id)).toEqual([kept])
     expect(takes.getState().takes).toEqual([])
     expect(library.getState().favourites).toEqual([])
     const after = catalogOf(pieces)
+    expect(layout(library, after).trash).toEqual([])
     expect(layout(library, after).folders.map((each) => each.id)).toEqual([
       'learning-songs',
       'hymns',
@@ -277,12 +283,13 @@ describe('deleting', () => {
   })
 
   it('deletes a built-in folder to the archive whole with the app’s songs, and restores it whole', () => {
-    const { library, pieces, takes, song } = stores()
+    const { library, pieces, song } = stores()
     const mine = song('Mine')
     const catalog = catalogOf(pieces)
     moveTo(library, catalog, { songs: [mine], folders: [] }, 'hymns')
-    deleteFolder({ library, pieces, takes }, catalog, 'hymns')
-    expect(pieces.getState().songs).toEqual([])
+    deleteFolder(library, catalog, 'hymns')
+    expect(pieces.getState().songs.map((each) => each.id)).toEqual([mine])
+    expect(layout(library, catalog).trash.map((each) => each.id)).toEqual([mine])
     const after = catalogOf(pieces)
     expect(archived(library, after)).toEqual(['hymns[h1 h2]'])
     restoreFolder(library, after, 'hymns')
@@ -294,25 +301,41 @@ describe('deleting', () => {
   })
 
   it('deletes an own folder from the archive, its app’s songs staying there', () => {
-    const { library, pieces, takes } = stores()
+    const { library } = stores()
     const folder =
       makeFolder(library, CATALOG, { name: 'Sunday', ...LOOK }, { songs: ['h1'] }) ?? 'folder-0'
     archiveSongs(library, CATALOG, ['a2'])
     archiveFolder(library, CATALOG, folder)
-    deleteFolder({ library, pieces, takes }, CATALOG, folder)
+    deleteFolder(library, CATALOG, folder)
     expect(archived(library)).toEqual(['h1', 'a2'])
   })
 
-  it('deletes the learner’s own songs for good, never the app’s', () => {
-    const { library, pieces, takes, song } = stores()
+  it('deletes the learner’s own songs to the Trash, never the app’s, and restores each where it stood', () => {
+    const { library, pieces, song } = stores()
     const [one, two] = [song('One'), song('Two')]
     const catalog = catalogOf(pieces)
     archiveSongs(library, catalog, [two])
-    deleteOwnSongs({ library, pieces, takes }, catalog, [one, two, 'a1'])
-    expect(pieces.getState().songs).toEqual([])
-    const after = catalogOf(pieces)
-    expect(archived(library, after)).toEqual([])
-    expect(shelves(library, after)['learning-songs']).toEqual(['a1', 'a2', 'a3'])
+    expect(trashSongs(library, catalog, [one, two, 'a1'])).toEqual([one, two])
+    expect(layout(library, catalog).trash.map((each) => each.id)).toEqual([one, two])
+    expect(archived(library, catalog)).toEqual([])
+    expect(shelves(library, catalog)).toEqual({
+      'learning-songs': ['a1', 'a2', 'a3'],
+      hymns: ['h1', 'h2'],
+      home: [],
+    })
+    restoreTrashed(library, catalog, [one, two])
+    expect(layout(library, catalog).trash).toEqual([])
+    expect(shelves(library, catalog).home).toEqual([one, two])
+  })
+
+  it('empties one song of the Trash for good, the rest kept', () => {
+    const { library, pieces, takes, song } = stores()
+    const [one, two] = [song('One'), song('Two')]
+    const catalog = catalogOf(pieces)
+    trashSongs(library, catalog, [one, two])
+    emptyTrash({ library, pieces, takes }, catalog, [one, 'a1'])
+    expect(pieces.getState().songs.map((each) => each.id)).toEqual([two])
+    expect(layout(library, catalogOf(pieces)).trash.map((each) => each.id)).toEqual([two])
   })
 })
 
@@ -399,9 +422,7 @@ describe('folders in folders', () => {
 
   it('deletes a folder with every folder under it, each by its rule', () => {
     const { store, sunday } = nested()
-    const pieces = createPiecesStore(saving())
-    const takes = createTakesStore(saving())
-    deleteFolder({ library: store, pieces, takes }, CATALOG, sunday)
+    deleteFolder(store, CATALOG, sunday)
     expect(tree(store)).toEqual(['home/learning-songs'])
     // Advent's app song to the archive on its own, Hymns whole.
     expect(archived(store)).toEqual(['a2', 'hymns[h1 h2]'])

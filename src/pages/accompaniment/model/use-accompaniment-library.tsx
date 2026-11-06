@@ -129,8 +129,10 @@ export function useAccompanimentLibrary(): {
       ...(stage ? { stage } : {}),
       extra: hands(pattern),
       words: [shelf],
-      icon: group === MINE ? UserRound : AudioWaveform,
-      paint: group === MINE ? 'sand' : 'yellow',
+      picture:
+        group === MINE
+          ? { icon: UserRound, paint: 'sand' }
+          : { icon: AudioWaveform, paint: 'yellow' },
       link: (
         <Link
           to="/practice/accompaniment/patterns/$patternRef"

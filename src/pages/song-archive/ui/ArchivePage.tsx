@@ -8,13 +8,12 @@ import {
   type ShelvedEntry,
   type ShelvedFolder,
 } from '@/entities/library'
-import { isOwnSongId, useRepertoire, type PieceId } from '@/entities/piece'
+import { isOwnSongId, useRepertoire } from '@/entities/piece'
 import { DeleteFolderAsk, restoreAll, useLibraryActs } from '@/features/manage-library'
 import { ActionMenu, BackButton, say, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { ArchiveEmpty } from './ArchiveEmpty'
 import { ArchivedRow } from './ArchivedRow'
-import { DeleteSongAsk } from './DeleteSongAsk'
 
 /** An entry's key: a song's or a folder's, by its id. */
 const keyOf = (entry: ShelvedEntry) =>
@@ -23,8 +22,8 @@ const keyOf = (entry: ShelvedEntry) =>
 /**
  * The archive (ADR 0106, Mindscape's `ArchivedDecksPage` and its ADR 0038, the archive is a place):
  * Back and Restore all in its bar; what was archived, the newest first, folders with their songs
- * counted and songs, each with Restore, and its More with Delete, asked first, for the learner's own
- * song or folder; empty, it says what it is for.
+ * counted and songs, each with Restore, and its More with Delete for the learner's own song (to the
+ * Trash, with Undo, R34) or folder (asked first); empty, it says what it is for.
  */
 export function ArchivePage() {
   const { t } = useTranslation('songs')
@@ -32,7 +31,6 @@ export function ArchivePage() {
   const store = useLibraryStoreApi()
   const repertoire = useRepertoire()
   const acts = useLibraryActs()
-  const [deletingSong, setDeletingSong] = useState<PieceId | null>(null)
   const [deletingFolder, setDeletingFolder] = useState<ShelvedFolder | null>(null)
   const { archive } = layout
   return (
@@ -93,7 +91,7 @@ export function ArchivePage() {
                           destructive: true,
                           onSelect: () =>
                             entry.kind === 'song'
-                              ? setDeletingSong(entry.id)
+                              ? acts.trash([entry.id])
                               : setDeletingFolder(entry.folder),
                         },
                       ]}
@@ -105,10 +103,6 @@ export function ArchivePage() {
           })}
         </ul>
       )}
-      <DeleteSongAsk
-        song={deletingSong}
-        onOpenChange={(open) => (open ? undefined : setDeletingSong(null))}
-      />
       <DeleteFolderAsk
         folder={deletingFolder}
         onOpenChange={(open) => (open ? undefined : setDeletingFolder(null))}

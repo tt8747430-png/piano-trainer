@@ -31,7 +31,7 @@ import {
 } from '@/entities/practice-library'
 import { arrangeLibrary } from '@/features/manage-practice-library'
 import { cn, useMediaQuery } from '@/shared/lib'
-import { ActionMenu, confirm, PAINT } from '@/shared/ui'
+import { ActionMenu, confirm, TileMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   arrangeDrop,
@@ -329,19 +329,10 @@ export function ArrangeList({
 
 /** A row in hand, drawn as itself, lifted. */
 function EditRowFace({ item }: { item: LibraryItem }) {
-  const Icon = item.icon
+  const { picture } = item
   return (
     <div className="flex min-h-14 min-w-0 flex-1 items-center gap-3 rounded-card bg-card px-3">
-      <span
-        aria-hidden
-        className={cn(
-          'grid size-10 shrink-0 place-items-center rounded-control',
-          PAINT[item.paint].fill,
-          PAINT[item.paint].ink,
-        )}
-      >
-        <Icon className="size-5" />
-      </span>
+      {'chords' in picture ? null : <TileMark icon={picture.icon} paint={picture.paint} />}
       <span className="min-w-0 flex-1 font-semibold">{item.name}</span>
     </div>
   )

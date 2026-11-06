@@ -2,17 +2,25 @@ import { useTranslation } from 'react-i18next'
 import { libraryCatalog, useLibraryStoreApi } from '@/entities/library'
 import { entryTitles, usePiecesStoreApi, useRepertoire, type PieceId } from '@/entities/piece'
 import { useTakesStoreApi } from '@/entities/take'
-import { deleteOwnSongs } from '@/features/manage-library'
+import { emptyTrash } from '@/features/manage-library'
 import { useLocale } from '@/shared/i18n'
 import { ConfirmDialog } from '@/shared/ui'
 
-/** An archived song of the learner's own deleted for good, asked first: its takes go with it. */
+/**
+ * One song in the Trash deleted for good, asked first (R34): its takes go with it; the whole Trash
+ * emptied where `song` is `'all'`.
+ */
 export function DeleteSongAsk({
   song,
+  count,
   onOpenChange,
+  onDeleted,
 }: {
-  song: PieceId | null
+  song: PieceId | 'all' | null
+  /** The songs the Trash holds, said when it is emptied. */
+  count: number
   onOpenChange: (open: boolean) => void
+  onDeleted?: () => void
 }) {
   const { t } = useTranslation('songs')
   const locale = useLocale()
@@ -20,17 +28,24 @@ export function DeleteSongAsk({
   const pieces = usePiecesStoreApi()
   const takes = useTakesStoreApi()
   const repertoire = useRepertoire()
-  const entry = song ? repertoire.entry(song) : undefined
+  const entry = song && song !== 'all' ? repertoire.entry(song) : undefined
+  const all = song === 'all'
   return (
     <ConfirmDialog
       open={song !== null}
       onOpenChange={onOpenChange}
-      title={t('deleting.one', { title: entry ? entryTitles(entry, locale).primary : '' })}
-      body={t('deleting.songs', { count: 1 })}
-      action={t('deleting.confirm')}
-      cancel={t('deleting.cancel')}
+      title={
+        all
+          ? t('trash.emptying.title')
+          : t('trash.deletingOne.title', { title: entry ? entryTitles(entry, locale).primary : '' })
+      }
+      body={all ? t('trash.emptying.body', { count }) : t('trash.deletingOne.body')}
+      action={all ? t('trash.emptying.confirm') : t('trash.deletingOne.confirm')}
+      cancel={t('trash.cancel')}
       onConfirm={() => {
-        if (song) deleteOwnSongs({ library, pieces, takes }, libraryCatalog(repertoire), [song])
+        if (song === null) return
+        emptyTrash({ library, pieces, takes }, libraryCatalog(repertoire), all ? undefined : [song])
+        onDeleted?.()
       }}
     />
   )

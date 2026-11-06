@@ -5,14 +5,13 @@ import {
   useLibraryStoreApi,
   type ShelvedFolder,
 } from '@/entities/library'
-import { isOwnSongId, usePiecesStoreApi, useRepertoire } from '@/entities/piece'
-import { useTakesStoreApi } from '@/entities/take'
+import { isOwnSongId, useRepertoire } from '@/entities/piece'
 import { ConfirmDialog } from '@/shared/ui'
 import { deleteFolder } from '../delete-folder'
 
 /**
  * Delete folder, asked first (ADR 0106): it names the folder, counts its songs and says what happens
- * to them: the learner's own deleted for good with their takes, the app's to the archive, a built-in
+ * to them: the learner's own to the Trash (R34), the app's to the archive, a built-in
  * folder whole with them. `onDeleted` hears it went (its page leaves first).
  */
 export function DeleteFolderAsk({
@@ -27,8 +26,6 @@ export function DeleteFolderAsk({
 }) {
   const { t } = useTranslation('songs')
   const library = useLibraryStoreApi()
-  const pieces = usePiecesStoreApi()
-  const takes = useTakesStoreApi()
   const repertoire = useRepertoire()
   const nameOf = useFolderName()
   const own = folder?.songs.filter(isOwnSongId).length ?? 0
@@ -51,7 +48,7 @@ export function DeleteFolderAsk({
       onConfirm={() => {
         if (!folder) return
         onDeleted?.()
-        deleteFolder({ library, pieces, takes }, libraryCatalog(repertoire), folder.id)
+        deleteFolder(library, libraryCatalog(repertoire), folder.id)
       }}
     />
   )

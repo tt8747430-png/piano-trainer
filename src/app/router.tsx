@@ -533,6 +533,12 @@ const archiveRoute = createRoute({
   path: '/songs/archive',
   component: lazyRouteComponent(songsScreens, 'ArchivePage'),
 })
+// The Trash (R34): the learner's own songs deleted, to restore or delete for good.
+const trashRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/trash',
+  component: lazyRouteComponent(songsScreens, 'TrashPage'),
+})
 // A section of a song, learned step by step (ADR 0111); a study's is on its shelf, below.
 const sectionRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -1106,6 +1112,7 @@ const routeTree = rootRoute.addChildren([
     folderCardStyleRoute,
     homeCardStyleRoute,
     archiveRoute,
+    trashRoute,
     folderArchivedRoute,
     sectionRoute,
     courseRoute,

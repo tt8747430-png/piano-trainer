@@ -41,7 +41,6 @@ export type Pending =
   | { readonly kind: 'move'; readonly moving: Moving; readonly what: string }
   | { readonly kind: 'folder'; readonly target: FolderSheetTarget }
   | { readonly kind: 'delete-folder'; readonly folder: ShelvedFolder }
-  | { readonly kind: 'delete-songs'; readonly songs: readonly PieceId[] }
   | { readonly kind: 'delete-chosen' }
   | { readonly kind: 'new-song'; readonly record?: boolean }
   | { readonly kind: 'move-in' }
@@ -214,6 +213,8 @@ export function useLibraryPage(
     mayDelete,
     /** Songs archived, asked first: in a folder, hidden from it (D10), brought back from its Archived. */
     archive: (ids: readonly PieceId[]) => acts.archive(ids, folder !== null),
+    /** The learner's own songs deleted: into the Trash, with Undo (R34). */
+    trash: (ids: readonly PieceId[]) => acts.trash(ids),
     setSort: (next: LibrarySort) => setSort(store, next),
     /** Whether a drag may move the rows: only in the order the learner drags, with nothing hidden. */
     sortable: sort === 'manual' && !view.filtering,
@@ -303,7 +304,15 @@ export function useLibraryPage(
         inSight.length > 0 &&
         chosenSongs.every(mayDelete) &&
         chosenFolders.every((each) => mayOnFolder('deleteFolder', each)),
-      delete: () => setPending({ kind: 'delete-chosen' }),
+      /** Songs alone go to the Trash at once, with Undo (R34); with folders, asked first. */
+      delete: () => {
+        if (chosenFolders.length > 0) {
+          setPending({ kind: 'delete-chosen' })
+          return
+        }
+        acts.trash(chosenSongs)
+        exit()
+      },
     },
     /** Leaves a folder's page for the place it stands in: it was deleted or archived. */
     leave: () => {

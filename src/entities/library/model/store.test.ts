@@ -21,14 +21,14 @@ const SUNDAY = {
 } as const
 
 describe('createLibraryStore', () => {
-  it('starts holding nothing the learner changed, saved as pt-library version 5', () => {
+  it('starts holding nothing the learner changed, saved as pt-library version 6', () => {
     const storage = createMemoryStorage()
     const store = createLibraryStore({ storage, otherTabs: new EventTarget() })
     expect(store.getState()).toEqual(INITIAL_LIBRARY)
     store.setState({ favourites: ['bz5'] })
     expect(JSON.parse(storage.getItem('pt-library') ?? 'null')).toEqual({
       state: { ...INITIAL_LIBRARY, favourites: ['bz5'] },
-      version: 5,
+      version: 6,
     })
   })
 
@@ -65,6 +65,7 @@ describe('createLibraryStore', () => {
           index: 2,
         },
       ],
+      trash: [{ id: 'my-5', from: { folder: null, index: 0 } }],
       sort: 'recent',
       nextFolder: 4,
       songLooks: { bz5: { picture: 'piano', paint: 'grass' } },

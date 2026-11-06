@@ -167,6 +167,8 @@ export const songs = {
     movedMany: 'Moved to {{place}}: {{count}}',
     archived: '“{{title}}” archived',
     archivedMany: 'Archived: {{count}}',
+    trashed: '“{{title}}” moved to the Trash',
+    trashedMany: 'Moved to the Trash: {{count}}',
     folderArchived: '“{{name}}” archived with its songs',
     restored: '“{{title}}” restored to the library',
     restoredMany: 'Restored to the library: {{count}}',
@@ -249,7 +251,7 @@ export const songs = {
       title: 'Delete “{{name}}”?',
       builtIn: 'The folder and its built-in songs ({{count}}) will be moved to the archive.',
       own: 'The folder will be permanently deleted.',
-      ownSongs: 'Your songs in it ({{count}}) and their recordings will be permanently deleted.',
+      ownSongs: 'Your songs in it ({{count}}) will be moved to the Trash.',
       appSongs: 'Built-in songs in it ({{count}}) will be moved to the archive.',
       confirm: 'Delete',
       cancel: 'Cancel',
@@ -276,9 +278,9 @@ export const songs = {
   deleting: {
     one: 'Delete “{{title}}”?',
     many: 'Delete {{count}} selected items?',
-    songs: 'Your songs ({{count}}) and their recordings will be permanently deleted.',
+    songs: 'Your songs ({{count}}) will be moved to the Trash.',
     folders:
-      'Folders ({{count}}) will be deleted. Your songs in them are removed permanently; built-in songs are moved to the archive.',
+      'Folders ({{count}}) will be deleted. Your songs in them are moved to the Trash; built-in songs to the archive.',
     confirm: 'Delete',
     cancel: 'Cancel',
   },
@@ -333,6 +335,33 @@ export const songs = {
       description: 'Songs and folders you archive wait here, to be restored whenever you like.',
     },
   },
+  // The Trash (R34, StemDeck's): the learner's own songs deleted, gone for good once it is emptied.
+  trash: {
+    title: 'Trash',
+    openCount: 'Trash: {{count}}',
+    emptyAll: 'Empty Trash',
+    emptied: 'Trash emptied',
+    restoreNamed: 'Restore {{name}}',
+    deleteForGood: 'Delete permanently',
+    emptying: {
+      title: 'Empty the Trash?',
+      body: 'Songs ({{count}}) and their recordings will be permanently deleted.',
+      confirm: 'Empty Trash',
+    },
+    deletingOne: {
+      title: 'Delete “{{title}}” permanently?',
+      body: 'The song and its recordings will be permanently deleted.',
+      confirm: 'Delete permanently',
+    },
+    cancel: 'Cancel',
+    empty: {
+      title: 'The Trash is empty',
+      description:
+        'Songs you delete wait here until you empty the Trash. Restore one to put it back where it was.',
+    },
+  },
+  // Where the archive and the Trash are reached from Songs' bar.
+  stored: 'Archive and Trash',
   new: 'New',
   newSong: 'New song',
   recordSong: 'Record',

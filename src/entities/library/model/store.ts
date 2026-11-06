@@ -13,6 +13,7 @@ import {
   MOST_PIECES,
   ownFolderNumber,
   type ArchiveEntry,
+  type TrashedSong,
   type FolderId,
   type FolderLook,
   type LibrarySort,
@@ -26,7 +27,7 @@ import { isEmptyDetails, sanitiseSongDetails, type SongDetails } from './song-de
 export type CardPlace = FolderId | 'home'
 
 export const LIBRARY_STORAGE_KEY = 'pt-library'
-export const LIBRARY_VERSION = 5
+export const LIBRARY_VERSION = 6
 
 /**
  * The learner's library (ADR 0106), only what they changed: read over the catalog
@@ -41,6 +42,8 @@ export interface LibraryState {
   readonly favourites: readonly PieceId[]
   /** What was archived, the newest first, each saying where it stood. */
   readonly archive: readonly ArchiveEntry[]
+  /** The learner's own songs deleted, the newest first, each saying where it stood (R34). */
+  readonly trash: readonly TrashedSong[]
   readonly sort: LibrarySort
   /** The next own folder's number: a deleted folder's id is never given again. */
   readonly nextFolder: number
@@ -59,6 +62,7 @@ export const INITIAL_LIBRARY: LibraryState = {
   home: [],
   favourites: [],
   archive: [],
+  trash: [],
   sort: 'manual',
   nextFolder: 1,
   cardLooks: {},
@@ -171,6 +175,11 @@ function sanitize(persisted: unknown): LibraryState {
       return [{ kind: 'folder', folder, subfolders, index: indexOf(value.index) }]
     },
   )
+  const trash = (Array.isArray(saved.trash) ? saved.trash : []).flatMap((value): TrashedSong[] => {
+    if (!isRecord(value)) return []
+    const [id] = songsOf([value.id], songs)
+    return id ? [{ id, from: placeOf(value.from) }] : []
+  })
   // Past every own folder read: none is given again.
   const past =
     Math.max(0, ...[...folderIds].filter(isOwnFolderId).map((id) => ownFolderNumber(id))) + 1
@@ -183,6 +192,7 @@ function sanitize(persisted: unknown): LibraryState {
     home,
     favourites: songsOf(saved.favourites, new Set()),
     archive: archive.slice(0, MOST_PIECES),
+    trash: trash.slice(0, MOST_PIECES),
     sort: isSort(saved.sort) ? saved.sort : 'manual',
     nextFolder: Math.max(next, past, 1),
     songLooks: songLooksOf(saved.songLooks),

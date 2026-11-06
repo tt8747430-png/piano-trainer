@@ -10,6 +10,7 @@ export {
   commonProgressions,
   libraryByStyle,
   libraryLine,
+  libraryNumerals,
   libraryParam,
   libraryProgression,
   libraryProgressions,

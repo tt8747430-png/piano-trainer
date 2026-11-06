@@ -64,6 +64,7 @@ export { PitchPicker } from './pickers/PitchPicker'
 export { usualName } from './pickers/usual-name'
 
 export { PAINT, ROLE_PAINT, type Paint } from './paint'
+export { ProgressionTiles } from './ProgressionTiles'
 export { MoveArrow, RoleChip, RoleChips, RoleLegend } from './RoleChips'
 export { Docked } from './Docked'
 export { Pinned } from './Pinned'

@@ -87,10 +87,11 @@ function folderPlace(folders: readonly ShelvedFolder[], id: FolderId): FolderMov
   return { id, parent: folder.parent, index: childFolders(folders, folder.parent).indexOf(folder) }
 }
 
-/** The layout with these songs taken out of wherever they stand: a folder, Home or the archive. */
+/** The layout with these songs taken out of wherever they stand: a folder, Home, the archive or the Trash. */
 export function without(layout: LibraryLayout, ids: ReadonlySet<PieceId>): LibraryLayout {
   const keep = (songs: readonly PieceId[]) => songs.filter((id) => !ids.has(id))
   return {
+    trash: layout.trash.filter((entry) => !ids.has(entry.id)),
     folders: layout.folders.map((folder) => ({ ...folder, songs: keep(folder.songs) })),
     home: keep(layout.home),
     archive: layout.archive.flatMap((entry): ShelvedEntry[] => {
@@ -239,6 +240,35 @@ export function restoreSongs(layout: LibraryLayout, ids: readonly PieceId[]): Li
 }
 
 /**
+ * Songs into the Trash (R34), the newest first, each saying where it stood: in a list, its place; in
+ * the archive, the place it was archived from; in an archived folder, that folder.
+ */
+export function trashSongs(layout: LibraryLayout, ids: readonly PieceId[]): LibraryLayout {
+  const wanted = new Set(ids)
+  const archived = layout.archive.flatMap((entry): Moved[] =>
+    entry.kind === 'song'
+      ? wanted.has(entry.id)
+        ? [{ id: entry.id, from: entry.from }]
+        : []
+      : [entry.folder, ...entry.subfolders].flatMap((folder) =>
+          folder.songs
+            .filter((id) => wanted.has(id))
+            .map((id) => ({ id, from: { folder: folder.id, index: LAST } })),
+        ),
+  )
+  const moved = [...placesOf(layout, ids), ...archived]
+  const rest = without(layout, new Set(moved.map((each) => each.id)))
+  return { ...rest, trash: [...moved, ...rest.trash] }
+}
+
+/** Songs out of the Trash, back where each stood (`putBack`). */
+export const untrashSongs = (layout: LibraryLayout, ids: readonly PieceId[]): LibraryLayout =>
+  putBack(
+    layout,
+    layout.trash.filter((entry) => ids.includes(entry.id)),
+  )
+
+/**
  * A folder, with its songs and every folder under it, out of the library into the archive, saying
  * where it stood: the folder it stood in, and its place among those there.
  */
@@ -307,13 +337,13 @@ export function changeFolder(
  * what the learner made goes for good, what the app brought to the archive. A built-in folder goes
  * to the archive whole with the app's songs in it (Restore puts it at Home); an own folder goes, the
  * app's songs in it each to the archive, to be restored to its collection's folder. The learner's own
- * songs in any of them are named, for their caller to delete with their takes.
+ * songs in any of them go to the Trash (R34), to be restored at Home.
  */
 export function dropFolder(
   layout: LibraryLayout,
   id: FolderId,
   catalog: LibraryCatalog,
-): { layout: LibraryLayout; ownSongs: PieceId[] } {
+): LibraryLayout {
   const own = new Set(catalog.ownSongs)
   const collectionOf = new Map(
     catalog.collections.flatMap((collection) =>
@@ -329,7 +359,7 @@ export function dropFolder(
     entry?.kind === 'folder'
       ? [entry.folder, ...entry.subfolders]
       : layout.folders.filter((folder) => under.has(folder.id))
-  if (dropping.length === 0) return { layout, ownSongs: [] }
+  if (dropping.length === 0) return layout
   const ownSongs = dropping.flatMap((folder) => folder.songs.filter((song) => own.has(song)))
   const kept = dropping.flatMap((folder): ShelvedEntry[] => {
     const songs = folder.songs.filter((song) => !own.has(song))
@@ -351,17 +381,16 @@ export function dropFolder(
   const gone = new Set(dropping.map((folder) => folder.id))
   const rest = without(layout, new Set(ownSongs))
   const archive = rest.archive.filter((each) => each.kind !== 'folder' || !gone.has(each.folder.id))
+  const trashed = ownSongs.map((song) => ({ id: song, from: { folder: null, index: LAST } }))
   return {
-    layout: {
-      ...rest,
-      folders: rest.folders.filter((folder) => !gone.has(folder.id)),
-      archive: insert(archive, entry ? archivedAt : 0, kept),
-    },
-    ownSongs,
+    ...rest,
+    folders: rest.folders.filter((folder) => !gone.has(folder.id)),
+    archive: insert(archive, entry ? archivedAt : 0, kept),
+    trash: [...trashed, ...rest.trash],
   }
 }
 
-/** Songs gone for good (the learner's own, deleted): out of every list. */
+/** Songs gone for good (the learner's own, the Trash emptied): out of every list. */
 export const dropSongs = (layout: LibraryLayout, ids: readonly PieceId[]): LibraryLayout =>
   without(layout, new Set(ids))
 

@@ -275,7 +275,9 @@ Brick, yellow, grass, sky, lilac, sand and teal, each with a pale wash; five hav
   progression lilac; a song's sections are intro and ending sand, verse sky, chorus grass, bridge lilac, the rest
   yellow. Brick and teal never appear on the chrome.
 - **A progression's roles** (`RoleChips`): home grass, away sand, tension lilac; its wash at rest, full paint with ink
-  while its chord sounds. These paints mean a role on that row and its legend alone.
+  while its chord sounds. These paints mean a role on that row and its legend alone. A progression's row draws its
+  chords the same way, small tiles in their wash with their numerals (`ProgressionTiles`), its picture in place of an
+  icon.
 
 ### Named Rules
 
@@ -450,6 +452,8 @@ square at the top.
   destroys (`DangerRow`, red, in a `DangerGroup`, last on its page and alone). A row that opens a sheet is a `RowButton`.
 - **Navigation marks** (`NavMarks` alone): ‹ for Back, › at a row's edge, ⌃⌄ by a picker's value, ⌄ on a fold. Arrows
   only for movement.
+- **One affordance a row** (R34): a library row with a More (a folder, a song, a practice item) opens on a tap
+  anywhere and carries no ›; its row is picture, name, one line, ⋯.
 - **Sheet** (`Sheet`): card paper, the sheet corner on top, a grab handle, a Literata title with Close, an optional
   footer. It stands on the phone's keyboard. Never a sheet over a sheet.
 - **Properties** (a song's Details): a `RowTrigger` per property, its name and value, the value "Not set" in soft ink

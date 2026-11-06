@@ -21,9 +21,10 @@ export function LibraryRow({ item }: { item: LibraryItem }) {
       children: (
         <RowFace
           title={item.name}
-          detail={item.phoneDetail ?? item.detail}
-          icon={item.icon}
-          paint={item.paint}
+          detail={item.detail}
+          {...('chords' in item.picture
+            ? { children: item.picture.chords }
+            : { icon: item.picture.icon, paint: item.picture.paint })}
           trailing={
             item.trailing || item.stage ? (
               <span className="flex shrink-0 items-center gap-2">

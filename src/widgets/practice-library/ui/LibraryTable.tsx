@@ -20,7 +20,9 @@ function NameCell({ item }: { item: LibraryItem }) {
         'flex min-h-11 min-w-0 items-center gap-3 rounded-control py-1 focus-visible:-outline-offset-3',
       children: (
         <>
-          <TileMark icon={item.icon} paint={item.paint} />
+          {'chords' in item.picture ? null : (
+            <TileMark icon={item.picture.icon} paint={item.picture.paint} />
+          )}
           <span className="min-w-0">
             <span className="block font-semibold text-foreground">{item.name}</span>
             <span className="block truncate text-sm text-muted-foreground">{item.detail}</span>
@@ -100,7 +102,9 @@ export function LibraryTable({
               <td className={TABLE_CELL}>{item.stage ? <LevelMark stage={item.stage} /> : null}</td>
             ) : null}
             {extra ? (
-              <td className={cn(TABLE_CELL, 'truncate text-muted-foreground')}>{item.extra}</td>
+              <td className={cn(TABLE_CELL, 'truncate text-muted-foreground')}>
+                {'chords' in item.picture ? item.picture.chords : item.extra}
+              </td>
             ) : null}
             <td className={cn(TABLE_CELL, 'pe-0')}>
               <span className="flex items-center justify-end gap-1">

@@ -73,10 +73,7 @@ export const piece = {
   shareFailed: 'The link could not be made here.',
   shareTooLong: 'This song is too long to fit in a link.',
   deleting: {
-    title: 'Delete {{title}}?',
-    says: 'The song, its music and its recordings will be permanently deleted.',
-    confirm: 'Delete permanently',
-    cancel: 'Cancel',
+    says: 'The song moves to the Trash in Songs, to be restored until the Trash is emptied.',
   },
   scaleOf: 'Scale: {{scale}}',
   // What is said of a song or study, behind its ⓘ.

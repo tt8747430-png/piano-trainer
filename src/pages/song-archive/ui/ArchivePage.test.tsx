@@ -1,4 +1,4 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -94,18 +94,21 @@ describe('The archive (ADR 0106)', () => {
     expect(screen.queryByRole('button', { name: 'Restore all' })).toBeNull()
   })
 
-  it('deletes the learner’s own song for good, asked first; the app’s has no Delete', async () => {
+  it('moves the learner’s own song to the Trash; the app’s has no Delete', async () => {
     const user = userEvent.setup()
-    const { piecesStore } = await renderApp('/songs/archive', { storage: archived() })
+    const { piecesStore, libraryStore } = await renderApp('/songs/archive', { storage: archived() })
     const rows = within(await screen.findByRole('list', { name: 'Archive' })).getAllByRole(
       'listitem',
     )
     expect(within(rows[0] as HTMLElement).queryByRole('button', { name: 'More' })).toBeNull()
     await user.click(within(rows[1] as HTMLElement).getByRole('button', { name: 'More' }))
     await user.click(await screen.findByRole('menuitem', { name: 'Delete' }))
-    const ask = await screen.findByRole('alertdialog', { name: 'Delete “Morning”?' })
-    await user.click(within(ask).getByRole('button', { name: 'Delete' }))
-    await waitFor(() => expect(piecesStore.getState().songs).toEqual([]))
+    expect(await screen.findByText('“Morning” moved to the Trash')).toBeInTheDocument()
+    expect(libraryStore.getState().trash.map((each) => each.id)).toEqual(['my-1'])
+    expect(
+      libraryStore.getState().archive.some((each) => each.kind === 'song' && each.id === 'my-1'),
+    ).toBe(false)
+    expect(piecesStore.getState().songs).toHaveLength(1)
   })
 
   it('says what it is for while it is empty, and goes Back to Songs', async () => {
