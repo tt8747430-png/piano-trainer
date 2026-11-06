@@ -122,7 +122,7 @@ function ExampleScore({
   return (
     <ScoreEditor
       target={target}
-      done={<EditToggle editing variant="tool" onEdit={() => undefined} onDone={back} />}
+      done={<EditToggle editing onEdit={() => undefined} onDone={back} />}
     />
   )
 }

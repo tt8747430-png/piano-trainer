@@ -90,7 +90,8 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
   of commands that act at once, grouped with a label, the destructive last after a separator, a choice ticked; a
   sheet is one focused task; a pop-up button chooses one value, shown in words; a page holds content or settings in
   more than one group (a song's Settings, Publish in library, Settings › Keyboard). A switch row is a toggle. Edit is
-  a pencil at the bar's end; editing, it is the word Done.
+  a quiet pencil right after the title (`ScreenHeader`'s `edit`, an `EditAction`); editing, Done in its place, so it never moves between modes.
+  The score's toolbar keeps its own Edit · Done at its end (`EditToggle`, ADR 0115).
 
 ## Consequences
 
@@ -114,3 +115,8 @@ A new option has one obvious form by this rule. A test reaches a folded action b
 - r28 — The floating buttons' place and names are no longer settings (a developer's words in General): they stand in the middle, icons named by their tooltips; the settings store's version 17 (2026-11-01).
 - r29 — The Choosing Rule's table (menu, segmented, switch, stepper, chips for filters) and four shared pickers: pitch, spelled note, key (the circle of fifths), keys checklist; the step strips go (decided 2026-11-02, built in round 29; spec `.scratch/r29/key-picker/spec.md`).
 - r29 — A Settings page's choices are `ChoiceCard`s, every choice in sight with its example (the owner's answer, part 2 of the mockups, 2026-11-03).
+- r30 — Edit sits beside the title on every screen; `ScreenHeader` draws the pencil and, in its place, Done from one
+  `EditAction`; Select's Done takes the More slot (2026-11-05).
+- r31 (R31-P) — Nothing floats over the Player's music: the transport is docked in its own row (Loop, Restart, ‹ ▶ ›,
+  Tempo, Click) over the foot (View, Key, Version, Mode, More). The Tools sheet and the tools capsule leave the Player;
+  More holds the music's acts, the gear its settings; tips are remembered once put away (2026-11-05).

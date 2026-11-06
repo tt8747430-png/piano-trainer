@@ -75,7 +75,7 @@ describe('The archive (ADR 0106)', () => {
     const { libraryStore } = await renderApp('/songs/archive', { storage: archived() })
     await user.click(await screen.findByRole('button', { name: 'Restore Silent Night' }))
     expect(placeOf(libraryStore.getState(), 'silent')).toEqual({ folder: 'hymns', index: 2 })
-    expect(await screen.findByText('“Silent Night” is back in the library')).toBeInTheDocument()
+    expect(await screen.findByText('“Silent Night” restored to the library')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Restore Gorshkov’s songs' }))
     const { folders } = arrangeLibrary(
       libraryStore.getState(),

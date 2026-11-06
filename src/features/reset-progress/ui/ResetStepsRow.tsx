@@ -1,13 +1,16 @@
+import { RotateCcw } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
 import type { StepId } from '@/entities/step'
-import { ConfirmDialog, DangerGroup, DangerRow, say } from '@/shared/ui'
+import { ConfirmDialog, RowButton, SettingsGroup, say } from '@/shared/ui'
 import { resetSteps } from '../reset-steps'
 
 /**
- * A lesson's or a course's Reset progress (round 28, R25): a red row alone in its page's last group,
- * what it does in the footnote under it; asking in the one dialog first, then forgetting these steps
- * (not learned, no section read) and saying so.
+ * A song's, a lesson's or a course's Progress (R31-S): its own group, one row, Reset progress, with
+ * what it does on the row's line; asking in the one dialog first, then forgetting these steps (not
+ * learned, no section read) and saying so. It loses no music, so it is no red row: the page's Delete
+ * stands apart after it.
  */
 export function ResetStepsRow({
   steps,
@@ -24,11 +27,18 @@ export function ResetStepsRow({
     readonly done: string
   }
 }) {
+  const { t } = useTranslation('common')
   const store = useProgressStoreApi()
   const [asking, setAsking] = useState(false)
   return (
-    <DangerGroup footnote={words.body}>
-      <DangerRow title={words.row} onClick={() => setAsking(true)} />
+    <SettingsGroup flush title={t('progressGroup')}>
+      <RowButton
+        title={words.row}
+        detail={words.body}
+        icon={RotateCcw}
+        paint="sand"
+        onClick={() => setAsking(true)}
+      />
       <ConfirmDialog
         open={asking}
         onOpenChange={setAsking}
@@ -41,6 +51,6 @@ export function ResetStepsRow({
           say(words.done)
         }}
       />
-    </DangerGroup>
+    </SettingsGroup>
   )
 }

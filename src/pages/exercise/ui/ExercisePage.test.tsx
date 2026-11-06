@@ -13,9 +13,9 @@ describe('An exercise’s page', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Five-finger position' }),
     ).toBeInTheDocument()
-    const trains = screen.getByRole('region', { name: 'What it trains' })
+    const trains = screen.getByRole('region', { name: 'Focus' })
     expect(trains).toHaveTextContent('One finger on each of a key’s first five notes')
-    const how = screen.getByRole('region', { name: 'How to play it' })
+    const how = screen.getByRole('region', { name: 'Technique' })
     // The fingering's picture: the right hand's first position, a finger on each key.
     expect(within(how).getByRole('img', { name: /^Right hand: C 1, D 2, E 3, F 4, G 5$/ }))
     await user.click(screen.getByRole('button', { name: 'Key: C major' }))
@@ -48,6 +48,17 @@ describe('An exercise’s page', () => {
     expect(start.getAttribute('href')).toContain('hanon=3')
     expect(start.getAttribute('href')).toContain('rhythm=dotted')
     expect(start.getAttribute('href')).toContain('order=chromatic')
+  })
+
+  it('is made a favourite from the ♡ in its bar, as its row’s More does (R30-4)', async () => {
+    const user = userEvent.setup()
+    const { practiceLibraryStore } = await renderApp('/practice/exercises/hanon')
+    await user.click(await screen.findByRole('button', { name: 'Add to favourites' }))
+    expect(practiceLibraryStore.getState().favourites.exercises).toEqual(['hanon'])
+    expect(screen.getByRole('button', { name: 'Remove from favourites' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
   })
 
   it('a one-key exercise has no Key', async () => {

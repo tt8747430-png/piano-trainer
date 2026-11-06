@@ -1,12 +1,11 @@
 export { shownRows } from './model/rows'
-export { clefAt, type ClefScope } from './model/clefs'
+export { clefAt } from './model/clefs'
 export {
   BARLINE_CHOICES,
   JUMP_CHOICES,
   REPEAT_BAR_CHOICES,
   type BarMarkChoice,
 } from './model/bar-marks'
-export { barLengths } from './model/bars'
 export { copyTarget, whyNoPaste } from './model/clip-edits'
 export { chordSuggestions } from './model/chords'
 export {
@@ -39,7 +38,7 @@ export {
   type EditorAction,
   type EditorState,
 } from './model/state'
-export { carriesAccidental, notesAt, notesOf, startNear } from './model/notes'
+export { canTie, carriesAccidental, notesAt, notesOf, startNear } from './model/notes'
 export { meterBar, sameKind, type TimeChoice } from './model/meters'
 export { createEditorStore, type EditorStore } from './model/store'
 export { takeParts, type TakeInto } from './model/take-edits'

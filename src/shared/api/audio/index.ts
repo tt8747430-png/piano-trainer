@@ -7,7 +7,7 @@ export {
   type SoundGain,
 } from './types'
 export { createWebAudioOutput } from './web-audio'
-export { createFakeAudio, type FakeAudio, type FakeDrone } from './fake-audio'
+export { createFakeAudio, type FakeAudio } from './fake-audio'
 export {
   createPianoDownload,
   PIANO_CACHE,

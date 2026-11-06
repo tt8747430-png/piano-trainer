@@ -1,5 +1,5 @@
 import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { ArrowUpDown, Drum, Info, Layers, ListTree, PenLine } from 'lucide-react'
+import { Drum, Info, ListTree, PenLine } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -36,7 +36,7 @@ import { useUp, useSetSearch } from '@/shared/lib'
 import { isCompound } from '@/shared/lib/music'
 import { ButtonLink, NotFound, type MenuAction } from '@/shared/ui'
 import { ScoreEditToggle } from '@/widgets/mode-switch'
-import { useScoreTracks } from '@/widgets/practice-player'
+import { SwingField, useScoreTracks } from '@/widgets/practice-player'
 import type { PlayerSearch } from '../model/player-search'
 import { sectionAt, sectionStarts } from '../model/section-starts'
 import { usePlayer } from '../model/use-player'
@@ -244,7 +244,11 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
             <ClefChoice value={choice.clef} onChange={(clef) => changeSetup({ clef })} />
           ) : undefined
         }
-        tracks={tracks}
+        playback={
+          !controls.has('accompaniment') && controls.has('swing') && !isCompound(piece.meter) ? (
+            <SwingField swing={search.swing} onSwing={player.setSwing} />
+          ) : undefined
+        }
         takes={takes}
         annotations={marksShown || annotating ? marks : undefined}
         annotating={
@@ -258,50 +262,23 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
             />
           ) : null
         }
-        // The Tools sheet's ways to the tools row's Transpose and the Version sheet (R29 B8).
-        toolRows={[
-          {
-            key: 'transpose',
-            group: 'more',
-            kind: 'act',
-            label: t('player:transpose.name'),
-            icon: ArrowUpDown,
-            paint: 'lilac',
-            onSelect: () => setTransposing(true),
-          },
+        // The music's own acts in the foot's More (R31-P): Annotate, and the Rhythm game.
+        moreActs={[
           {
             key: 'annotations',
-            group: 'score',
-            kind: 'act',
+            part: 'practice',
             label: t('player:annotate.label'),
             icon: PenLine,
-            paint: 'lilac',
             onSelect: () => setAnnotating(true),
           },
           {
             key: 'rhythm',
-            group: 'listening',
-            kind: 'switch',
+            part: 'listening',
             label: t('player:rhythm.label'),
             icon: Drum,
-            paint: 'sand',
             checked: rhythm,
-            onCheckedChange: setRhythm,
+            onSelect: () => setRhythm(!rhythm),
           },
-          ...(controls.has('simplify')
-            ? [
-                {
-                  key: 'version',
-                  group: 'more' as const,
-                  kind: 'act' as const,
-                  label: t('player:version.change'),
-                  icon: Layers,
-                  paint: 'yellow' as const,
-                  value: t(`player:version.level.${choice.version}`),
-                  onSelect: () => setVersionOpen(true),
-                },
-              ]
-            : []),
         ]}
       />
       <SongInfo piece={piece} performance={performance} {...sheetOf('info')} />

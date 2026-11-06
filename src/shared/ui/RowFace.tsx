@@ -87,7 +87,7 @@ export function RowFace({
       {value ? (
         <>
           {' '}
-          <span data-slot="row-value" className="min-w-min text-end text-muted-foreground">
+          <span data-slot="row-value" className="ms-auto min-w-min text-end text-muted-foreground">
             {value}
           </span>
         </>

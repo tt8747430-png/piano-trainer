@@ -2,6 +2,7 @@ export {
   FOLDER_NAME_MAX,
   FOLDER_PAINTS,
   FOLDER_PICTURES,
+  isFolderPicture,
   folderName,
   LIBRARY_SORTS,
   MOST_FOLDERS,
@@ -15,14 +16,7 @@ export {
   type OwnFolderId,
   type SongPlace,
 } from './model/types'
-export {
-  CARD_DENSITIES,
-  CARD_SHOWS,
-  DEFAULT_CARD_LOOK,
-  type CardDensity,
-  type CardLook,
-  type CardShow,
-} from './model/card-look'
+export { CARD_SHOWS, DEFAULT_CARD_LOOK, type CardLook, type CardShow } from './model/card-look'
 export {
   type CardPlace,
   createLibraryStore,
@@ -68,3 +62,16 @@ export { useLibraryLayout } from './model/use-library-layout'
 export { FolderTile } from './ui/FolderTile'
 export { FOLDER_PICTURE_ICONS } from './ui/folder-pictures'
 export { useFolderName } from './ui/use-folder-name'
+export {
+  MOST_TAGS,
+  NO_DETAILS,
+  SONG_GENRES,
+  SONG_LANGUAGES,
+  TAG_MAX,
+  tagOf,
+  tagsOf,
+  tagSuggestions,
+  type SongDetails,
+  type SongGenre,
+  type SongLanguage,
+} from './model/song-details'

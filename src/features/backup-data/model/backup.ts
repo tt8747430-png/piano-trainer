@@ -3,8 +3,10 @@ import {
   DIAGRAM_INVERSIONS_STORAGE_KEY,
   DIAGRAM_INVERSIONS_VERSION,
 } from '@/entities/diagram-inversion'
+import { OWN_LESSONS_STORAGE_KEY, OWN_LESSONS_VERSION } from '@/entities/own-lessons'
 import { PATTERNS_STORAGE_KEY, PATTERNS_VERSION } from '@/entities/pattern'
 import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
+import { PRACTICE_LIBRARY_STORAGE_KEY, PRACTICE_LIBRARY_VERSION } from '@/entities/practice-library'
 import { PROGRESS_STORAGE_KEY, PROGRESS_VERSION } from '@/entities/progress'
 import { SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from '@/entities/settings'
 import { TAKES_STORAGE_KEY, TAKES_VERSION } from '@/entities/take'
@@ -21,6 +23,8 @@ const STORES = {
   [VIEWS_STORAGE_KEY]: VIEWS_VERSION,
   [LIBRARY_STORAGE_KEY]: LIBRARY_VERSION,
   [DIAGRAM_INVERSIONS_STORAGE_KEY]: DIAGRAM_INVERSIONS_VERSION,
+  [PRACTICE_LIBRARY_STORAGE_KEY]: PRACTICE_LIBRARY_VERSION,
+  [OWN_LESSONS_STORAGE_KEY]: OWN_LESSONS_VERSION,
 } as const
 export const SAVE_KEYS = Object.keys(STORES) as (keyof typeof STORES)[]
 

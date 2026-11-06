@@ -36,7 +36,6 @@ colors:
   lilac-deep: '#6A5988'
   sand-deep: '#7D5B40'
   key-bed: '#CBC2B9'
-  key-rail: '#DFD8CF'
   key-black: '#332C28'
   dusk-ground: '#191512'
   dusk-card: '#24201C'
@@ -49,7 +48,6 @@ colors:
   dusk-key-white: '#D4D0CB'
   dusk-key-black: '#171310'
   dusk-key-bed: '#787069'
-  dusk-key-rail: '#332C27'
   dusk-sand: '#3C3026'
   dusk-yellow: '#3E3420'
   dusk-grass: '#2B3728'
@@ -336,14 +334,17 @@ on a phone, 24px from 640px, 40px beside the sidebar.
   chord buttons in `grid-chords`, tiles in `grid-tiles`. Rows and grids stay even on wide screens.
 - **Rhythm:** 24px between a screen's parts, 32px between sections, 16–20px inside a group, with `gap`.
 - **The shell:** four places in a bar docked at the foot of a phone, a rail down the left of a phone on its side, a
-  256px sidebar from 1024px (72px collapsed) with Search and Settings at its foot. The phone's bar shows on the places
+  256px sidebar from 1024px (72px collapsed), as Claude's: the name and its toggle, Search as a field, Learn, Songs
+  and Practice, Recents (the songs opened last), and under a line the learner (picture and name, opening the
+  Profile) with Settings' gear beside it. The phone's bar keeps the Profile as its last tab. The phone's bar shows on the places
   alone; what a place opens has the whole height.
 - **Full screens** (the Player, the score editor, the Check) have no navigation: the viewport's height, scrolling
   inside.
 - **A page that shows a thing on the keys** reads top to bottom: the keys pinned, what it is with its one Play, its
   choices, then its titled sections. No page splits into two columns of unrelated things.
-- **Settings:** one column of grouped cards on a phone; from 64rem two panes, the list (20rem, sticky) beside the page
-  (44rem). Never two columns of unequal groups.
+- **Settings:** one column of grouped cards on a phone, each page pushed with Back; from 64rem the libraries' two
+  panes: a sidebar of tree rows (17rem, a painted swatch each, sticky under the bar and scrolling on its own) beside
+  the page (44rem), which scrolls with the window. Never two columns of unequal groups.
 - **The editor's palette docks:** from 48rem a panel at the sheet's left with the note-entry toolbar over the sheet; on a
   phone held upright a sheet at the foot.
 - **Equal columns:** a chart's lines are grids of equal beats; a score's lines are justified to their share of the
@@ -370,8 +371,8 @@ with sand. Shadows belong to what floats over the page, and they are soft, layer
 
 Sheets rise over a page dimmed to 10% black and need no shadow.
 
-**The Piano Exception Rule.** The rail's 8px shade, a white key's lip and a black key's slope draw a piano and appear
-nowhere else.
+**The Piano Exception Rule.** The keys' light and shade (`key-face-*`), the felt strip, the case's shade, a white key's
+lip and a black key's slope draw a piano and appear nowhere else.
 
 ## Shapes
 
@@ -389,10 +390,15 @@ square at the top.
 ### Placement
 
 - **A detail page** reads title, facts, sections; its one primary action floats at the foot.
-- **The bar** (`ScreenHeader`) is one row of one height on every screen: Back, the title, then at its end, in this order
-  whatever the page passes: tools, Settings (the gear), More, Edit ⇄ Done. A place's or a detail page's title is larger
+- **The bar** (`ScreenHeader`) is one row of one height on every screen: Back, the title with its Edit (a quiet pencil;
+  Done in its place while editing) right after it, then at its end, in this order whatever the page passes: tools,
+  Settings (the gear), More. A place's or a detail page's title is larger
   in the same row and may take two lines. Nothing hangs under the bar: a status goes in it or in its menu, and a page's
-  views sit in its content. It slides away while reading down and returns as the page turns up.
+  views sit in its content. A place's views (Learn's Lessons · Courses, Songs' My songs · Explore) are its title
+  (`TitleTabs`): their words where the title stands, in Onest at the large title's size, the one shown in ink with an
+  ink line under it, the other in soft ink; the place's name stays the page's heading, unseen. A pane kept in sight
+  under the bar (a style's preview) is `Pinned`: solid, edge to edge, moving with the bar; never a card floating over
+  the controls. What is docked at the foot (`Docked`) owns the ground down to the screen's edge. It slides away while reading down and returns as the page turns up.
 - **Page, sheet or menu:** a page for settings and many fields; a sheet for creating one thing or one focused choice; a
   menu for one-tap commands. A sheet never holds a second sheet; a menu never holds a setting.
 - **An act on an item is a button, never a switch:** Favourite and Learned on the item's card and in its menus. An item's
@@ -444,6 +450,11 @@ square at the top.
   only for movement.
 - **Sheet** (`Sheet`): card paper, the sheet corner on top, a grab handle, a Literata title with Close, an optional
   footer. It stands on the phone's keyboard. Never a sheet over a sheet.
+- **Properties** (a song's Details): a `RowTrigger` per property, its name and value, the value "Not set" in soft ink
+  where empty; a tap opens its editor beside it (a popover on a laptop, a sheet on a phone), titled with its name.
+- **A place's card style** (`StyleEditor`): the preview is a pinned pane on the muted fill, of fixed height, never over a
+  control; presets lead as a strip of drawn tiles, the chosen ringed in ink. Styles are made of the paints, so the dark
+  theme redraws them; Night alone is a dark card in both themes.
 - **Popover and ⓘ:** an `InfoTip` is a 16px ⓘ in soft ink beside a name; no line of explanation stands under a control.
 - **Toast** (`say`): a card over the screen's foot, clear of all that floats there, with Undo and ✕; gone in five
   seconds.
@@ -457,14 +468,50 @@ time. The learner is their initial on the yellow paint (`Avatar`).
 
 ### The keyboard
 
-The whole piano, A0 to C8, hung from a wooden rail and scrolling sideways with no bar.
+The whole piano, A0 to C8, and nothing else (R34, Songscription's): slim, edge to edge at the foot of the screen (or
+under the bar where Position is Top), nothing above or under its keys; no rail, no chord caption, no buttons, no
+pedals, no finger numbers. Every control is the screen's bar's; nothing about the keyboard floats.
 
-- **Proportion:** a key is 4.4 times as long as a white key is wide, at least 96px and at most 32% of the screen's height
-  (22% on a phone on its side).
-- **Keys:** white keys are card paper, softer by night; black keys a warm black; a 1px bed parts them.
+- **Key size** (Settings › On-screen piano): **All keys** (the default) fit the width and never scroll; **Fit to
+  music** and **Large** show fewer, larger keys that scroll to follow the music.
+- **The divider** between the music and the keys (Songscription's "Resize score and piano roll"): a 12px bar on the
+  keys' edge facing the music, a hairline on its outer edge and a 36×4 grip in its middle, its 44px reach over the
+  music. Dragged, the keys grow taller or shorter (56px to half the screen), their widths unchanged; Arrow Up and
+  Down step 16px, Home and End go to the ends, a double click or Enter returns to the piano's proportion. The height
+  is kept for a phone upright, a phone on its side and a wider screen apart. A splitter to a screen reader.
+- **In the bar** (`KeyboardTools`), before the gear: the chord held (from 40rem: a small soft label "Chord held" then
+  the symbol in Literata, 20px), **Sustain** while the keys show, and **Keyboard** (the piano icon, pressed while
+  they show). Sustain wears a pedal drawn as a line icon; down from anywhere (a finger, Space, a MIDI foot, the
+  score's pedal while music plays) it fills `--key-down`, as a key held down, never a second honey control. Held it
+  holds; a tap latches it until the next. With Pedals: All three, a ⌄ beside it opens Soft and Sostenuto, worked the
+  same way; a dot on the ⌄ while either is down.
+- **Settings:** the screen's gear: the Player's sheet and the editor's gear each hold the On-screen piano page;
+  a Practice page's Settings end with its row.
+- **Hidden** (the bar's Keyboard), the keys fold into a 44px strip where they stood, the screen's width, in the
+  sunken fill with a hairline on its music side: the piano icon, **Keyboard**, ↗; a tap brings them back
+  (Songscription's Score only). Nothing floats.
+- **Names on narrow keys:** with All keys on a phone (a white key under 12px), only middle C keeps its name, 8px on
+  one line over its neighbours, and a mark's note name goes; a mark's degree stays.
+- **The editor's bar** on a phone held upright keeps Keyboard; its Sustain stands from 40rem.
+
+### The sheet's pill
+
+One small floating control at the score's bottom-right in the Player and the editor (Songscription's view pill): a
+card-paper capsule with a hairline ring and a soft shadow, 8px from the sheet's edges and clear of what floats there.
+**Layout** as three 44px icon radios (Page view · Vertical scroll · Panorama, the chosen one in the chosen fill, each
+naming what it does when pointed at), then in Page view the canvas's zoom (− n % + Fit). Always in sight, so it never
+appears under a finger; the layout's one control.
+
+- **Proportion:** until the divider sets a height, a key is 4.4 times as long as a white key is wide, at least 56px and
+  at most 32% of the screen's height (22% on a phone on its side).
+- **Keys** (R33, a real piano's): ivory white keys (card paper, softer by night) lit from the player's side, deeper
+  under the felt, an edge in light and one in shade, a front lip, a soft cast shadow; ebony black keys bevelled, a
+  sheen towards the player, a sloped front, their shadow on the ivory; a 1px bed parts them; the key slip's red felt
+  (`--key-felt`) along their far end. The light and shade lie over each key's fill, so marks keep their colour. A
+  computer letter sits on its key as a small key cap.
 - **Marks:** a role, a hand or a scale's note is its wash at rest and full paint while it sounds, ink on it. A scale's
   notes are sky, its tonic yellow.
-- **Down:** a plain key turns sky, drops 2px in 80ms and stays down at least 150ms. A quiz's chosen keys are honey, a wrong
+- **Down:** a plain key turns sky, sinks 2px in 80ms (its far end darker under the felt, its shadow gone) and stays down at least 150ms. A quiz's chosen keys are honey, a wrong
   key crimson with ✕, a missing key a deep-sky ring.
 - **Focus:** a two-tone ring, ink outside and white inside, so it shows on any key.
 - **Access:** keys are buttons named by note, one in the tab order, the arrows walking the rest.

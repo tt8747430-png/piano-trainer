@@ -7,14 +7,9 @@ const title = (name: string) => screen.findByRole('heading', { level: 1, name })
 
 describe('Practice pages’ Settings (A24, R18)', () => {
   it.each([
-    ['/practice/chords', 'Chords', '/settings/chords'],
     ['/practice/scales', 'Scales and keys', '/settings/scales'],
-    ['/practice/intervals', 'Intervals', '/settings/intervals'],
     ['/practice/progressions', 'Progressions', '/settings/progressions'],
-    ['/practice/accompaniment', 'Accompaniment', '/settings/accompaniment'],
     ['/practice/chord-finder', 'Chord finder', '/settings/chord-finder'],
-    ['/practice/exercises', 'Exercises', '/settings/exercises-and-quiz'],
-    ['/practice/quiz', 'Quiz', '/settings/exercises-and-quiz'],
   ])(
     'opens %s’s Settings from the gear in its bar, and Back returns to it',
     async (path, name, to) => {
@@ -61,24 +56,28 @@ describe('Practice pages’ Settings (A24, R18)', () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings/chord-finder')
     await title('Chord finder')
-    await user.click(screen.getByRole('switch', { name: /Remember the chords/ }))
-    await user.click(screen.getByRole('switch', { name: /Scale on the keys/ }))
+    await user.click(screen.getByRole('switch', { name: /Keep chord history/ }))
+    await user.click(screen.getByRole('switch', { name: /Key’s scale on the keyboard/ }))
     expect(settingsStore.getState().chordFinder).toMatchObject({ remember: true, scale: true })
   })
 
-  it('goes on to the next question by itself where asked, on Exercises and Quiz’s Settings', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings/exercises-and-quiz')
-    await title('Exercises and Quiz')
-    await user.click(screen.getByRole('switch', { name: /Go on automatically/ }))
-    expect(settingsStore.getState().trainer.autoNext).toBe(true)
+  it.each([
+    ['/practice/chords', 'Chords'],
+    ['/practice/intervals', 'Intervals'],
+    ['/practice/exercises', 'Exercises'],
+    ['/practice/quiz', 'Quiz'],
+    ['/practice/accompaniment', 'Accompaniment'],
+  ])('gives %s no gear: nothing of its own to set on a page (R32)', async (path, name) => {
+    await renderApp(path)
+    await title(name)
+    expect(screen.queryByRole('link', { name: `${name} settings` })).toBeNull()
   })
 
-  it('hides an Accompaniment source from its tabs, and shows it again', async () => {
+  it('goes on to the next question by itself where asked, set in the drill’s setup (R32)', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings/accompaniment')
-    await title('Accompaniment')
-    await user.click(screen.getByRole('switch', { name: 'Styles' }))
-    expect(settingsStore.getState().accompaniment.hidden).toEqual(['styles'])
+    const { settingsStore } = await renderApp('/practice/quiz/chords')
+    await screen.findByRole('heading', { level: 1 })
+    await user.click(screen.getByRole('switch', { name: /Advance automatically/ }))
+    expect(settingsStore.getState().trainer.autoNext).toBe(true)
   })
 })

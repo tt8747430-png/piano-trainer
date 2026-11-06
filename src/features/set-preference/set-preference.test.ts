@@ -4,8 +4,8 @@ import { createSettingsStore, defaultKeyboard } from '@/entities/settings'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import {
+  notePracticeOpened,
   rememberChords,
-  setAccompaniment,
   setAutoNext,
   setChordFinder,
   setProgressions,
@@ -19,7 +19,8 @@ import {
   setRecorderTune,
   setSectionFolded,
   setPaletteFolded,
-  setPaletteSections,
+  setPaletteCategory,
+  setEditorMode,
   setSidebar,
   setSound,
   setStaffVolume,
@@ -45,15 +46,6 @@ describe('set-preference', () => {
     })
   })
 
-  it('setAccompaniment hides a source once and shows it again (A24)', () => {
-    const { store } = setUp()
-    setAccompaniment(store, 'styles', false)
-    setAccompaniment(store, 'styles', false)
-    expect(store.getState().accompaniment.hidden).toEqual(['styles'])
-    setAccompaniment(store, 'styles', true)
-    expect(store.getState().accompaniment.hidden).toEqual([])
-  })
-
   it('setTheme changes and saves the theme', () => {
     const { storage, store } = setUp()
     setTheme(store, 'dark')
@@ -71,19 +63,25 @@ describe('set-preference', () => {
     expect(store.getState().foldedSections).toEqual(['progressions.between'])
   })
 
-  it('setPaletteSections keeps the panel’s open sections, and saves them', () => {
+  it('setPaletteCategory keeps the palette’s category chosen, and saves it', () => {
     const { storage, store } = setUp()
-    setPaletteSections(store, ['notes', 'dynamics'])
-    expect(store.getState().paletteSections).toEqual(['notes', 'dynamics'])
-    expect(saved(storage).paletteSections).toEqual(['notes', 'dynamics'])
+    setPaletteCategory(store, 'dynamics')
+    expect(store.getState().paletteCategory).toBe('dynamics')
+    expect(saved(storage).paletteCategory).toBe('dynamics')
+  })
+
+  it('setEditorMode keeps the mode the editor writes in, and saves it', () => {
+    const { storage, store } = setUp()
+    setEditorMode(store, 'insert')
+    expect(store.getState().editorMode).toBe('insert')
+    expect(saved(storage).editorMode).toBe('insert')
   })
 
   it('setPaletteFolded folds the editor’s palette where it stands, and saves it', () => {
     const { storage, store } = setUp()
-    setPaletteFolded(store, 'panel', true)
-    expect(store.getState().paletteFolded).toEqual({ panel: true })
-    setPaletteFolded(store, 'sheet', false)
-    expect(saved(storage).paletteFolded).toEqual({ panel: true, sheet: false })
+    setPaletteFolded(store, false)
+    expect(store.getState().paletteFolded).toBe(false)
+    expect(saved(storage).paletteFolded).toBe(false)
   })
 
   it('setSidebar collapses the sidebar and saves it', () => {
@@ -214,5 +212,12 @@ describe('set-preference', () => {
       slash: false,
       chords: [],
     })
+  })
+
+  it('keeps Practice’s pages opened, the latest first, each once, eight at most (R30-4)', () => {
+    const store = createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] })
+    for (const page of ['tuner', 'chords', 'tuner', 'a', 'b', 'c', 'd', 'e', 'f', 'g'])
+      notePracticeOpened(store, page)
+    expect(store.getState().practiceRecent).toEqual(['g', 'f', 'e', 'd', 'c', 'b', 'a', 'tuner'])
   })
 })

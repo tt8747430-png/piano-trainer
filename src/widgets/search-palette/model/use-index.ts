@@ -1,7 +1,9 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { archivedSongs, useFolderName, useLibraryLayout } from '@/entities/library'
+import { selectOwnCourses, selectOwnLessons, useOwnLessons } from '@/entities/own-lessons'
 import { PATTERN_IDS, usePatternBook } from '@/entities/pattern'
+import { selectOwnProgressions, usePracticeLibrary } from '@/entities/practice-library'
 import { allCollections, useRepertoire } from '@/entities/piece'
 import { useKeyName, useLocale } from '@/shared/i18n'
 import { usePageWords } from '@/widgets/practice-pages'
@@ -30,7 +32,8 @@ export function useIndexNames(): IndexNames {
 
 /**
  * The index as this learner has it: every song in their version and their own (those archived said
- * so), the library's folders, every pattern of their book, in their language.
+ * so), the library's folders, every pattern of their book, their own lessons and courses, in their
+ * language.
  */
 export function useIndex(names: IndexNames): IndexEntry[] {
   const locale = useLocale()
@@ -38,6 +41,9 @@ export function useIndex(names: IndexNames): IndexEntry[] {
   const book = usePatternBook()
   const library = useLibraryLayout()
   const folderName = useFolderName()
+  const progressions = usePracticeLibrary(selectOwnProgressions)
+  const ownLessons = useOwnLessons(selectOwnLessons)
+  const ownCourses = useOwnLessons(selectOwnCourses)
   return useMemo(
     () =>
       indexEntries({
@@ -60,7 +66,10 @@ export function useIndex(names: IndexNames): IndexEntry[] {
           ),
         ),
         patterns: [...book.own, ...PATTERN_IDS.map((id) => book.require(id))],
+        progressions,
+        ownLessons,
+        ownCourses,
       }),
-    [locale, names, repertoire, library, folderName, book],
+    [locale, names, repertoire, library, folderName, book, progressions, ownLessons, ownCourses],
   )
 }

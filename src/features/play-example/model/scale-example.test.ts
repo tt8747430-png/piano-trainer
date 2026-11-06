@@ -20,12 +20,10 @@ describe('scaleExample', () => {
     expect(new Set(music.notes.map((n) => n.hand))).toEqual(new Set(['rh']))
   })
 
-  it('fingers the right hand as the scale is taught, on the keys and each note of the run', () => {
+  it('fingers the right hand on each note of the run, the keys carrying degrees alone (R34)', () => {
     const { shown, music } = scaleExample(note('C'), 'major')
-    expect(shown.keys.map((key) => shown.marks.get(key)?.finger).join('')).toBe('12312345')
     expect(music.notes.map((n) => n.finger).join('')).toBe('123123454321321')
-    const bare = scaleExample(note('C'), 'major', false).shown
-    expect(bare.keys.some((key) => bare.marks.get(key)?.finger !== undefined)).toBe(false)
+    expect(shown.keys.map((key) => shown.marks.get(key)?.label).join('')).toBe('12345671')
   })
 
   it('brings melodic minor back down as natural minor', () => {

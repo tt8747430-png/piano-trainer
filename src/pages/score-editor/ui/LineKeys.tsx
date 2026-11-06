@@ -4,24 +4,22 @@ import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { isTool } from '../model/shortcuts'
 import { PaletteKey } from './palette-keys'
 import { LineIcon } from './palette-icons'
-import { usePaletteReason } from './palette-reason'
 
 /**
  * A line's key (ADR 0114): drawn in one go over the notes chosen, else from the note at the caret to
- * its bar's end; pressed where it is drawn there already (tapped again, taken away); greyed where no
- * note starts. Each line's shortcut is Flat's (`TOOL_SHORTCUTS`), named in its tooltip.
+ * its bar's end; pressed where it is drawn there already (tapped again, taken away); left out where
+ * no note starts (R32-B). Each line's shortcut is Flat's (`TOOL_SHORTCUTS`), named in its tooltip.
  */
 function LineKey({ line }: { line: Line }) {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const drawn = useEditorState((state) => lineDrawn(state, line))
+  if (drawn === null) return null
   return (
     <PaletteKey
       label={t(`lines.${line}`)}
       tool={isTool(line) ? line : undefined}
-      reason={usePaletteReason()}
-      pressed={drawn === true}
-      disabled={drawn === null}
+      pressed={drawn}
       onClick={() => actions.dispatch({ type: 'line', line })}
     >
       <span aria-hidden className="size-7">

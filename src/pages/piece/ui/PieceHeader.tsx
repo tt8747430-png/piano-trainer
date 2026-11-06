@@ -1,19 +1,22 @@
 import type { ReactNode } from 'react'
 import { entryTitles, type Entry } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
-import { BackButton, ScreenHeader } from '@/shared/ui'
+import { BackButton, ScreenHeader, type EditAction } from '@/shared/ui'
 
 /**
- * A song's or listing's bar: its title, Back up to the entry's shelf (rule 26), its Settings and its Edit (A3: in that order, the bar's end).
+ * A song's or listing's bar: its title with its Edit beside it, Back up to the entry's shelf (rule 26),
+ * and its Settings at the bar's end.
  */
 export function PieceHeader({
   entry,
+  tools,
   settings,
   edit,
 }: {
   entry: Entry
+  tools?: ReactNode
   settings?: ReactNode
-  edit?: ReactNode
+  edit?: EditAction
 }) {
   const locale = useLocale()
   return (
@@ -22,6 +25,7 @@ export function PieceHeader({
       // A song's name in full over its page, as a deck's in Noji's: the bar echoes it once scrolled.
       large
       back={<BackButton />}
+      tools={tools}
       settings={settings}
       edit={edit}
     />

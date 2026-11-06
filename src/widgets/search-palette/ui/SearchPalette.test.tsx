@@ -1,3 +1,4 @@
+import { stubMatchMedia } from '@/shared/test/match-media'
 import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
@@ -36,15 +37,22 @@ describe('the Search palette', () => {
     expect(at(router)).toEqual({ path: '/songs', entry: 0 })
   })
 
-  it('opens from the sidebar’s Search and a place’s search button', async () => {
+  it('opens from a place’s search button on a phone', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice')
+    await user.click(
+      within(await screen.findByRole('main')).getByRole('button', { name: 'Search' }),
+    )
+    expect(await palette()).toBeInTheDocument()
+  })
+
+  it('opens from the sidebar’s Search on a laptop', async () => {
+    // Every media query matches: the sidebar's among them.
+    stubMatchMedia({ dark: true })
     const user = userEvent.setup()
     await renderApp('/practice')
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
     await user.click(within(nav).getByRole('button', { name: 'Search' }))
-    await palette()
-    await user.keyboard('{Escape}')
-    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
-    await user.click(within(screen.getByRole('main')).getByRole('button', { name: 'Search' }))
     expect(await palette()).toBeInTheDocument()
   })
 
@@ -54,7 +62,7 @@ describe('the Search palette', () => {
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
     await user.keyboard('{Control>}k{/Control}')
     const suggested = await rowsOf('Suggestions')
-    expect(suggested[0]).toHaveTextContent(/^Metronome/)
+    expect(suggested[0]).toHaveTextContent(/^Chords/)
     expect(screen.queryByRole('group', { name: 'Recent searches' })).toBeNull()
   })
 

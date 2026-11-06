@@ -5,24 +5,14 @@ import { ChromeShownContext } from '../model/chrome-shown'
 const GROUP = 'flex min-w-0 items-center gap-1 sm:gap-2'
 
 /**
- * The score's bar (ADR 0115), the Player's and the score editor's one surface: Close and Practise ·
- * Edit at its start (`lead`), the screen's own three buttons at its end (`actions`: the Player's MIDI
- * · Setup · More, the editor's MIDI · Undo · Redo), and its tools between (`tools`, a `PlayerTools`
- * row): under the buttons on a phone held upright and a tablet, in their row from a laptop's width
- * and on a phone on its side (the `score-bar` utility). One band of the card's paper with one
- * hairline under the whole, every button a toolbar's (`variant="tool"`), so the two modes' bars are
- * the same height and switching moves nothing. While the music is read in Diagrams it steps aside
- * whole (ADR 0108), its room kept.
+ * The score's bar (ADR 0115), the Player's and the score editor's one surface: Close, the title and
+ * Practise · Edit at its start (`lead`), the screen's own buttons at its end (`actions`: the
+ * Player's Piano keys, MIDI and gear, the editor's Play, Undo, Redo and gear, R31-E). One band of
+ * the card's paper with one hairline under the whole, every button a toolbar's round one
+ * (`variant="tool"`), so the two modes' bars are the same height and switching moves nothing. While
+ * the music is read in Diagrams it steps aside whole (ADR 0108), its room kept.
  */
-export function ScoreBar({
-  lead,
-  actions,
-  tools,
-}: {
-  lead: ReactNode
-  actions: ReactNode
-  tools: ReactNode
-}) {
+export function ScoreBar({ lead, actions }: { lead: ReactNode; actions: ReactNode }) {
   const { bar } = use(ChromeShownContext)
   return (
     <header
@@ -36,9 +26,6 @@ export function ScoreBar({
       </div>
       <div data-area="actions" className={`${GROUP} justify-end`}>
         {actions}
-      </div>
-      <div data-area="tools" className="min-w-0">
-        {tools}
       </div>
     </header>
   )

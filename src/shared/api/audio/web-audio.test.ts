@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest'
 import { midi } from '@/shared/lib/music'
-import type { Sound } from '@/shared/lib/schedule'
+import { SOFT_GAIN, velocityGain, type Sound } from '@/shared/lib/schedule'
 import type { LoadSound } from './recorded-sounds'
 import { createSampleLoader, type SampleLoader } from './sample-loader'
 import { kitSet, loaderOver, pitchedSet, SamplerContext, sampleNameOf } from './sample-fakes'
@@ -66,8 +66,12 @@ class FakeContext {
     return node
   }
 
+  readonly filters: { readonly frequency: { value: number } }[] = []
+
   createBiquadFilter() {
-    return this.node({ type: 'lowpass', frequency: this.param(), Q: this.param() })
+    const filter = this.node({ type: 'lowpass', frequency: this.param(), Q: this.param() })
+    this.filters.push(filter)
+    return filter
   }
 
   createBuffer(_channels: number, length: number) {
@@ -501,6 +505,29 @@ describe('the live voice', () => {
     expect(context.oscillators.every((o) => o.stop === 0.25)).toBe(true)
     expect(audio.live().size).toBe(0)
   })
+
+  it('strikes a key under the soft pedal quieter and through a darker filter', () => {
+    const plain = setUp()
+    plain.audio.press(midi(69), 100)
+    const soft = setUp()
+    soft.audio.pedal('soft', true)
+    soft.audio.press(midi(69), 100)
+    const peak = (context: FakeContext) => context.gains.flatMap((gain) => gain.ramps)[0]?.value
+    expect(peak(plain.context)).toBeCloseTo(velocityGain(100))
+    expect(peak(soft.context)).toBeCloseTo(velocityGain(100) * SOFT_GAIN)
+    // The tone's own filter, and the soft pedal's low-pass under A4's sixth partial.
+    expect(soft.context.filters).toHaveLength(plain.context.filters.length + 1)
+    expect(soft.context.filters[0]?.frequency.value).toBe(2640)
+  })
+
+  it('plays the keys as loud as the piano’s volume, the square of its share', () => {
+    const { context, audio } = setUp()
+    audio.pianoVolume(0.5)
+    audio.press(midi(69), 100)
+    expect(context.gains.flatMap((gain) => gain.ramps)[0]?.value).toBeCloseTo(
+      velocityGain(100) * 0.25,
+    )
+  })
 })
 
 describe('a recording', () => {
@@ -666,26 +693,5 @@ describe('the recorded instruments (R29 SND)', () => {
     context.currentTime = 2
     audio.release(midi(69))
     expect(context.noises.at(-1)?.stop).toBeCloseTo(2.29375)
-  })
-})
-
-describe('a drone (R29 B11)', () => {
-  it('holds its keys as one sustained tone, swelling in, through a stop of the music', () => {
-    const { context, audio } = setUp()
-    audio.drone([midi(57), midi(64)], 0.6)
-    expect(context.oscillators.map((o) => Math.round(o.frequency))).toEqual([220, 440, 330, 659])
-    expect(context.oscillators.every((o) => o.stop === -1)).toBe(true)
-    expect(context.gains[0]?.ramps.at(-1)?.at).toBeCloseTo(0.4)
-    audio.stop()
-    expect(context.oscillators.every((o) => o.stop === -1)).toBe(true)
-  })
-
-  it('fades out on its stop, and its oscillators end once it is silent', () => {
-    const { context, audio } = setUp()
-    const stop = audio.drone([midi(57)], 0.6)
-    context.currentTime = 3
-    stop()
-    expect(context.gains[0]?.ramps.at(-1)).toEqual({ value: 0.0001, at: 3.4 })
-    for (const oscillator of context.oscillators) expect(oscillator.stop).toBeCloseTo(3.45)
   })
 })

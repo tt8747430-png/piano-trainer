@@ -36,15 +36,24 @@ const nestedLayout = arrangeLibrary(
   },
   CATALOG,
 )
-const NONE: SongsFilter = { q: '', stage: 'any', key: '', favourites: false }
+const NONE: SongsFilter = {
+  q: '',
+  stage: 'any',
+  key: '',
+  favourites: false,
+  folder: 'any',
+  learned: 'any',
+}
 const lookups: ViewLookups = {
   entryOf: entryById,
   titleOf: (entry) => entry.title,
   folderName: (folder) => folder.name ?? folder.id,
   favourites: new Set(['bz5', 'silent']),
+  learned: new Set(['silent']),
   opened: ['silent', 'bz5'],
   compare: (a, b) => a.localeCompare(b, 'en'),
   home: 'Home',
+  allSongs: 'All songs',
 }
 const view = (filter: Partial<SongsFilter> = {}, folder: string | null = null, at = layout) =>
   libraryView(at, folder as never, { ...NONE, ...filter }, 'manual', lookups)
@@ -53,6 +62,52 @@ const ids = (groups: ReturnType<typeof view>['groups']) =>
 const songsOf = (id: string) => SONG_COLLECTIONS.find((c) => c.id === id)?.entries ?? []
 
 describe('libraryView', () => {
+  it('Not in a folder keeps Home’s own songs alone, through the whole library (R31-S)', () => {
+    // A song moved out of its collection stands at Home, in no folder; filtering looks through all.
+    const at = arrangeLibrary({ ...INITIAL_LIBRARY, home: ['bz5'] }, CATALOG)
+    expect(ids(view({ folder: 'none' }, null, at).groups)).toEqual(['bz5'])
+    expect(filtersOn({ ...NONE, folder: 'none' })).toBe(1)
+  })
+
+  it('Progress keeps the songs learned, or those not learned yet (R31-S)', () => {
+    expect(ids(view({ learned: 'yes' }).groups)).toEqual(['silent'])
+    const notYet = ids(view({ learned: 'no' }).groups)
+    expect(notYet).not.toContain('silent')
+    expect(notYet).toContain('bz5')
+    expect(filtersOn({ ...NONE, learned: 'no' })).toBe(1)
+  })
+
+  it('at Home lists every song under the folders, in one list headed All songs', () => {
+    const home = libraryView(layout, null, NONE, 'manual', lookups, { everySong: true })
+    expect(home.folders.map((each) => each.folder.id)).toEqual(SONG_COLLECTIONS.map((c) => c.id))
+    expect(home.groups).toHaveLength(1)
+    expect(home.groups[0]?.key).toBe('all')
+    expect(home.groups[0]?.heading).toBe('All songs')
+    expect(ids(home.groups)).toEqual(SONG_COLLECTIONS.flatMap((c) => c.entries.map((e) => e.id)))
+  })
+
+  it('on a laptop lists every song at Home in one list, the tree holding the folders', () => {
+    const all = libraryView(layout, null, NONE, 'manual', lookups, { tree: true })
+    expect(all.folders).toEqual([])
+    expect(all.groups).toHaveLength(1)
+    expect(ids(all.groups)).toEqual(SONG_COLLECTIONS.flatMap((c) => c.entries.map((e) => e.id)))
+    expect(all.hidden).toBe(0)
+  })
+
+  it('on a laptop lists a folder’s own songs, its folders in the tree', () => {
+    const inHymns = libraryView(nestedLayout, 'hymns', NONE, 'manual', lookups, { tree: true })
+    expect(inHymns.folders).toEqual([])
+    expect(ids(inHymns.groups)).toEqual(songsOf('hymns').map((e) => e.id))
+  })
+
+  it('on a laptop narrows every song at Home, in one list', () => {
+    const found = libraryView(layout, null, { ...NONE, favourites: true }, 'manual', lookups, {
+      tree: true,
+    })
+    expect(found.groups).toHaveLength(1)
+    expect(ids(found.groups).toSorted()).toEqual(['bz5', 'silent'])
+  })
+
   it('shows Home’s folders, then its own songs, hiding nothing while nothing filters', () => {
     const home = view()
     expect(home.folders.map((each) => each.folder.id)).toEqual(SONG_COLLECTIONS.map((c) => c.id))

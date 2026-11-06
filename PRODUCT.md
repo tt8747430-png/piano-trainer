@@ -41,14 +41,15 @@ Four places, **Learn · Songs · Practice · Profile**, plus Search and Settings
   answered on the keys, links into Practice and the Player. Continue picks up where the learner left off.
 - **Songs:** one library of nested folders, favourites and an archive, with search, sort and filters. A song's page
   has its key, chords as diagrams, its progressions and its sections, each with short lessons. Songs can be shared as a
-  link, printed, and exported or imported as MusicXML and MIDI.
+  link, printed, and exported or imported as MusicXML and MIDI. With an account, any folder can be shared with a
+  group (a class, a choir, a band) the learner invites by a link, each group able to view or to edit.
 - **The Player:** the music as sheet music, chords over lyrics, animated chord diagrams or a grid. Four modes (Listen,
   Sight-read, Practice, Interpret), three versions (Original, Simple, Easy), a loop, tempo, transpose and the sound mix.
   It also plays scales, progressions and exercises.
 - **The score editor:** the Player's score in Edit mode. Any song can be edited and the learner can write their own:
   notes, chords, lyrics, fingering, staves, key, time, clef and tempo, all edited where they print. Takes are recorded
   from a MIDI keyboard and keep what was played: each key's timing and velocity, and the pedals.
-- **Practice:** Tools (Metronome, Chord finder, Circle of fifths, Tap tempo, Recorder, Drone, Tuner), then Chords, Scales
+- **Practice:** Tools (Metronome, Chord finder, Circle of fifths, Tuner), then Chords, Scales
   and keys, Intervals, Progressions, Accompaniment, the Chord player, Exercises and Quiz (trainers with levels; My gaps
   across them).
 - **Public library:** Explore, in Songs, holds what learners publish. A learner's own song is private until they publish

@@ -1,7 +1,4 @@
-import { Outlet, useChildMatches } from '@tanstack/react-router'
-import { PanelLeftOpen, PanelRightOpen } from 'lucide-react'
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
-import { useTranslation } from 'react-i18next'
 import {
   selectEditing,
   selectKeyboard,
@@ -9,7 +6,6 @@ import {
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
-import { useFoldKeys } from '@/features/live-keyboard'
 import { setPaletteFolded } from '@/features/set-preference'
 import {
   cn,
@@ -20,20 +16,21 @@ import {
   useKeyboardTop,
   useMediaQuery,
 } from '@/shared/lib'
-import { Button } from '@/shared/ui/primitives/button'
+import { SheetPill, SheetToolsContext } from '@/shared/ui'
 import { PlayerArea, SCORE_SCREEN, ScoreBar } from '@/widgets/practice-player'
+import { SheetLayoutTools } from '@/widgets/score-view-menu'
 import { ScoreEditorContext, useScoreEditorContext } from '../model/editor-context'
 import type { EditorTarget } from '../model/editor-target'
 import { useEditorShortcutList } from '../model/use-editor-shortcut-list'
 import { usePalettePanel } from '../model/use-palette-panel'
 import { useScoreEditor } from '../model/use-score-editor'
+import { useAnswerRecord } from '../model/use-record-take'
 import { CaretLine } from './CaretLine'
-import { EditorDock } from './EditorDock'
+import { EditorGear, type EditorDraft } from './EditorGear'
 import { SelectionActions } from './SelectionActions'
 import { EditorActions, EditorLead } from './EditorHeader'
-import { EditorToolsRow } from './EditorToolsRow'
 import { EditorKeyboard } from './EditorKeyboard'
-import { NoteToolbar, EditorPanel, PaletteSheet } from './EditorPalette'
+import { EditorPanel, PaletteSheet } from './EditorPalette'
 import { EditorSheet } from './EditorSheet'
 import { FieldDocked } from './field-docked'
 import { OpenField } from './OpenField'
@@ -52,22 +49,16 @@ const PANEL_EDGE =
 /** Docked at the right (Note input's Palette side): the screen's right edge, the sheet in the first column. */
 const PANEL_EDGE_RIGHT =
   'col-start-2 row-start-1 -mt-3 mr-[calc(-1*max(var(--gutter),env(safe-area-inset-right)))] landscape-phone:-mt-2'
-/** The sheet at the foot reaches the screen's side edges. */
-const SHEET_EDGES = 'mx-[calc(-1*max(var(--gutter),env(safe-area-inset-left)))]'
 
 /**
- * The score editor (ADR 0096, 0114), laid out as Flat's, one screen that never scrolls as a whole:
- * the bar, saying where the caret is; then the work. On a laptop, a tablet and a phone on its side
- * (`usePalettePanel`), the palette is a panel docked at the left, hidden whole by its « and brought
- * back from the note-entry toolbar, which stands over the sheet with the everyday tools and the
- * Keys; the sheet takes the rest, nothing over its music. On a phone held upright the palette is a
- * sheet docked at the foot, compact or expanded, shrinking the sheet rather than covering it; a field
- * typed in (a chord symbol, the lyrics, the fingering) takes its place, slim, over the phone's own
- * keyboard. The keys dock under all of it, or under the bar, as the keyboard settings say. The
- * transport floats over the sheet's foot, the Player's in shape and place (ADR 0115), stepping aside
- * while the music is read; the sheet has room to scroll its last line above it. While a take records,
- * its strip stands where the transport was. An editor's draft of a song's original says where it
- * stands, with its menu (Publish first), in the bar by Done (`draft`), never over the music.
+ * The score editor (ADR 0096, 0114, R31-E), laid out as Flat's, one screen that never scrolls as a
+ * whole: the bar (Close, Done, Play, Undo, Redo and the gear), then the work. From 48rem across (a
+ * laptop, a tablet, a phone on its side) the palette is a panel at the sheet's side; on a phone held
+ * upright it floats as a rounded card over the sheet's foot, the sheet keeping room to scroll its
+ * last line above it; a field typed in (a chord symbol, the lyrics, the fingering) takes its place,
+ * slim, over the phone's own keyboard. The keys dock under all of it, or under the bar, as the
+ * keyboard settings say. What is done to the notes chosen floats over the sheet's foot, stepping
+ * aside while the music is read; while a take records, its strip stands there.
  */
 export function ScoreEditor({
   target,
@@ -77,47 +68,47 @@ export function ScoreEditor({
 }: {
   target: EditorTarget
   bar?: number | undefined
-  draft?: ReactNode
+  /** An editor's draft of a song's original (ADR 0116): its state and acts, in the gear. */
+  draft?: EditorDraft
   /** Done in its own place (a lesson's example's, back to its lesson). */
   done?: ReactNode
 }) {
   const editor = useScoreEditor(target, bar)
-  // The score's Settings (`/edit/$pieceId/settings`, round 28) in the editor's place, on the same
-  // draft: what it changes is undone in the editor as any edit.
-  const inSettings = useChildMatches().length > 0
   return (
     <ScoreEditorContext value={editor}>
-      {inSettings ? <Outlet /> : <EditorScreen draft={draft} done={done} />}
+      <EditorScreen draft={draft} done={done} />
     </ScoreEditorContext>
   )
 }
 
 /** The editor's screen over its context's draft (`ScoreEditor`). */
-function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) {
-  const { t } = useTranslation('editor')
+function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?: ReactNode }) {
   const editor = useScoreEditorContext()
   useEditorShortcutList()
+  useAnswerRecord()
   const onSide = useMediaQuery(LANDSCAPE_PHONE)
   const panel = usePalettePanel()
   const right = useSettings((state) => selectEditing(state).paletteSide) === 'right'
   const idle = editor.takes.stage === 'idle'
   const dock = useSettings((state) => selectKeyboard(state).dock)
-  const keysFolded = useFoldKeys().folded
   const settings = useSettingsStoreApi()
-  // The panel shown, the sheet compact, until the learner chooses (ADR 0114).
-  const place = panel ? 'panel' : 'sheet'
-  const folded = useSettings(selectPaletteFolded(place))
-  const fold = (next: boolean) => setPaletteFolded(settings, place, next)
-  // The transport floating over the sheet's foot, measured: the sheet has room to scroll past it.
+  const folded = useSettings(selectPaletteFolded)
+  const fold = (next: boolean) => setPaletteFolded(settings, next)
+  // What floats over the sheet's foot (the palette on a phone, the selection's commands, a take's
+  // strip), measured: the sheet has room to scroll past it.
   const sheet = useRef<HTMLDivElement>(null)
   const foot = useRef<HTMLDivElement>(null)
+  const palette = useRef<HTMLElement>(null)
   const { height } = useElementSize(sheet)
-  const { height: transport } = useElementSize(foot)
+  const { height: floated } = useElementSize(foot)
+  const { height: paletteHeight } = useElementSize(palette)
   // Where the field open over the sheet stands: the place the caret's line draws for it (ADR 0096);
-  // on a phone, the slim bar over its own keyboard, in the palette sheet's place.
+  // on a phone, the slim bar over its own keyboard, in the palette's place.
   const [anchor, setAnchor] = useState<HTMLDivElement | null>(null)
   const [docked, setDocked] = useState<HTMLDivElement | null>(null)
   const typing = !panel && editor.view.field !== null
+  // The floating palette's room at the sheet's foot: none while a field takes its place.
+  const paletteRoom = panel || typing || paletteHeight === 0 ? 0 : paletteHeight + GAP
   // While a field types over the phone's keyboard, the sheet's foot is covered by the keyboard and
   // the slim bar standing on it: measured, so the caret's line scrolls clear of both (ADR 0061).
   const keyboard = useKeyboardHeight()
@@ -129,9 +120,9 @@ function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) 
     const barTop = docked.getBoundingClientRect().top - bar - DOCKED_GAP
     setTypedOver(Math.max(0, Math.round(box.getBoundingClientRect().bottom - barTop)))
   }, [typing, keyboard, docked])
-  const below = Math.max(transport, typedOver)
-  // The sheet never leaves the caret under the transport (or the phone's keyboard): its staff
-  // scrolls into the room above it.
+  const below = Math.max(floated + paletteRoom, typedOver)
+  // The sheet never leaves the caret under what floats at its foot (or the phone's keyboard): its
+  // staff scrolls into the room above it.
   useEffect(() => {
     const box = sheet.current
     const caret = box?.querySelector('[data-slot="caret"]')
@@ -141,12 +132,10 @@ function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) 
     const foot = view.bottom - below - GAP
     if (mark.bottom > foot) box.scrollTop += Math.min(mark.bottom - foot + GAP, mark.top - view.top)
   }, [below])
-  // The transport steps aside while the music is read; a tap on the sheet brings it back.
+  // What floats at the foot steps aside while the music is read; a tap on the sheet brings it back.
   const floating = useHiddenWhileReading()
-  // The phone's sheet expanded is the editing's: the transport steps aside for the music it leaves.
-  const expanded = !panel && !folded && keysFolded
   // A take's strip, with its Stop, never steps aside.
-  const footShown = (floating.shown && !expanded) || !idle
+  const footShown = floating.shown || !idle
   const music =
     editor.view.layout === 'page' ? (
       // Pages on their canvas (ADR 0096): it moves and zooms them itself, the area never scrolls.
@@ -166,25 +155,21 @@ function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) 
         ref={sheet}
         data-area="sheet"
         style={{ scrollPaddingBottom: below + GAP }}
-        className="h-full min-h-0 scroll-pt-(--tools-room) overflow-y-auto overscroll-contain pt-(--tools-room)"
+        className="h-full min-h-0 overflow-y-auto overscroll-contain"
         {...floating.reading}
         onClickCapture={floating.show}
       >
         <EditorSheet room={onSide ? height : undefined} onAnchor={setAnchor} />
-        {/* Room past the last line, so it scrolls clear of the transport over the sheet's foot. */}
+        {/* Room past the last line, so it scrolls clear of what floats over the sheet's foot. */}
         <div aria-hidden style={{ height: below + GAP }} />
       </div>
     )
   return (
     <>
-      {/* The Player's frame (ADR 0115): its bar's two groups, its tools row, the work and the keys
-          in the Player's places, so the bar and the keys stand still as Practise · Edit switches. */}
+      {/* The Player's frame (ADR 0115): its bar's two groups, the work and the keys in the Player's
+          places, so the bar and the keys stand still as Practise · Edit switches. */}
       <div data-keys={dock} className={SCORE_SCREEN}>
-        <ScoreBar
-          lead={<EditorLead done={done} />}
-          actions={<EditorActions draft={draft} />}
-          tools={<EditorToolsRow />}
-        />
+        <ScoreBar lead={<EditorLead done={done} />} actions={<EditorActions />} />
         {/* Where the caret is, a screen reader's alone, in the Player's status line's place. */}
         <PlayerArea area="status">{idle ? <CaretLine /> : null}</PlayerArea>
         <div
@@ -192,48 +177,36 @@ function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) 
           className={
             panel
               ? cn(
-                  'grid min-h-0 grid-rows-[auto_minmax(0,1fr)] gap-x-3 gap-y-2',
-                  folded
-                    ? 'grid-cols-[minmax(0,1fr)]'
-                    : right
-                      ? 'grid-cols-[minmax(0,1fr)_18rem] landscape-phone:grid-cols-[minmax(0,1fr)_15rem] xl:grid-cols-[minmax(0,1fr)_20rem]'
-                      : 'grid-cols-[18rem_minmax(0,1fr)] landscape-phone:grid-cols-[15rem_minmax(0,1fr)] xl:grid-cols-[20rem_minmax(0,1fr)]',
+                  'grid min-h-0 gap-x-3',
+                  right
+                    ? 'grid-cols-[minmax(0,1fr)_20rem] landscape-phone:grid-cols-[minmax(0,1fr)_17rem] xl:grid-cols-[minmax(0,1fr)_22.5rem]'
+                    : 'grid-cols-[20rem_minmax(0,1fr)] landscape-phone:grid-cols-[17rem_minmax(0,1fr)] xl:grid-cols-[22.5rem_minmax(0,1fr)]',
                 )
               : 'flex min-h-0 flex-col'
           }
         >
-          {panel && !folded ? (
+          {panel ? (
             <aside
               data-side={right ? 'right' : 'left'}
               className={cn(
-                'row-span-2 flex min-h-0 flex-col border-hairline bg-card',
+                'flex min-h-0 flex-col border-hairline bg-card',
                 right ? cn('border-l', PANEL_EDGE_RIGHT) : cn('border-r', PANEL_EDGE),
               )}
             >
-              <EditorPanel side={right ? 'right' : 'left'} onHide={() => fold(true)} />
+              <EditorPanel />
             </aside>
           ) : null}
-          {panel ? (
-            <NoteToolbar
-              pill
-              start={
-                folded ? (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label={t('palette.show')}
-                    title={t('palette.show')}
-                    className="size-10 shrink-0 rounded-control text-muted-foreground hover:text-foreground"
-                    onClick={() => fold(false)}
-                  >
-                    {right ? <PanelRightOpen aria-hidden /> : <PanelLeftOpen aria-hidden />}
-                  </Button>
-                ) : null
-              }
-            />
-          ) : null}
           <div className="relative flex min-h-0 flex-1 flex-col">
-            <div className="min-h-0 flex-1">{music}</div>
+            {/* The sheet's one pill at its foot, clear of what floats there (R34, Songscription's):
+                the layout, and in Page view the canvas's zoom beside it. */}
+            <SheetToolsContext value={<SheetLayoutTools />}>
+              <div className="min-h-0 flex-1">{music}</div>
+            </SheetToolsContext>
+            {editor.view.layout === 'page' ? null : (
+              <SheetPill covered={{ bottom: below + GAP }}>
+                <SheetLayoutTools />
+              </SheetPill>
+            )}
             {/* What floats over the music (ADR 0115): above it, only its own controls taking a touch. */}
             <div className="pointer-events-none absolute inset-0 z-30">
               {/* A change that could not be saved, said at the sheet's head. */}
@@ -246,33 +219,32 @@ function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) 
                 ref={foot}
                 data-hidden={footShown ? undefined : true}
                 inert={!footShown}
-                // The transport at the sheet's foot where the Player's stands (ADR 0115).
-                className="absolute inset-x-0 bottom-0 flex justify-center px-1 pb-2 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:pb-1"
+                style={{ bottom: paletteRoom }}
+                // The selection's commands, or a take's strip, at the sheet's foot (ADR 0115),
+                // over the floating palette on a phone.
+                className="absolute inset-x-0 flex justify-center px-1 pb-2 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:pb-1"
               >
                 <div className="flex shrink-0 flex-col items-center gap-2">
                   <SelectionActions />
-                  <div className="pointer-events-auto">
-                    {idle ? <EditorDock /> : <RecordingBar />}
-                  </div>
+                  {idle ? null : (
+                    <div className="pointer-events-auto">
+                      <RecordingBar />
+                    </div>
+                  )}
                 </div>
               </div>
+              {panel || typing ? null : (
+                // The palette floating over the sheet's foot (R31-E, Flat's), clear of its edges.
+                <div className="absolute inset-x-0 bottom-2 px-0.5">
+                  <PaletteSheet ref={palette} folded={folded} onFold={fold} />
+                </div>
+              )}
             </div>
           </div>
-          {panel ? null : typing ? (
-            // The field's slim bar stands over the phone's own keyboard, where the sheet was.
+          {typing ? (
+            // The field's slim bar stands over the phone's own keyboard, where the palette was.
             <KeyboardAnchor ref={setDocked} />
-          ) : (
-            <div
-              className={cn(
-                'shrink-0',
-                SHEET_EDGES,
-                // Down to the keys under it, or to the screen's foot.
-                dock === 'bottom' && !keysFolded ? '-mb-3' : '-mb-2',
-              )}
-            >
-              <PaletteSheet folded={folded} onFold={fold} />
-            </div>
-          )}
+          ) : null}
         </div>
         <EditorKeyboard />
       </div>
@@ -280,6 +252,7 @@ function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) 
         <OpenField anchor={typing ? docked : anchor} />
       </FieldDocked>
       <TakesSheet />
+      <EditorGear draft={draft} />
     </>
   )
 }

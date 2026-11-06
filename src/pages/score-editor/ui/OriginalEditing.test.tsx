@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { confirmAsked } from '@/shared/test/confirm'
 import { tickAndPublish } from '@/shared/test/publish'
+import { openGear } from '@/app/testing/editor-gear'
 import { renderApp } from '@/app/testing/render-app'
 import { isDegreePiece, isPiece, PIECES, pieceRecordBody, type ChartPiece } from '@/entities/piece'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
@@ -43,9 +44,10 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
   })
 
   it('is an editor’s alone: a learner edits their own version, with no draft', async () => {
+    const user = userEvent.setup()
     await renderApp(`/edit/${SONG.id}`, { auth: await signedInAs('learner') })
-    await screen.findByRole('button', { name: 'Undo' })
-    expect(screen.queryByRole('button', { name: 'Publishing' })).not.toBeInTheDocument()
+    const gear = await openGear(user)
+    expect(within(gear).queryByRole('button', { name: /^Publish/ })).not.toBeInTheDocument()
   })
 
   it('saves a change to the draft, never the learner’s version, then publishes it', async () => {
@@ -55,27 +57,28 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await screen.findByRole('button', { name: 'Publishing' })
-    const strip = document.body
-    // Nothing is said of the draft while the song is as published (round 28).
-    expect(within(strip).queryByRole('status', { name: /published/i })).not.toBeInTheDocument()
-    // Publish is the draft menu's first command (round 26), the way to the song's Publish page.
-    await user.click(screen.getByRole('button', { name: 'Publishing' }))
-    expect(await screen.findByRole('menuitem', { name: 'Publish' })).toBeInTheDocument()
-    await user.keyboard('{Escape}')
+    // The gear's last group (R31-E): Publish…, the way to the song's Publish page; nothing said of
+    // the draft while the song is as published (round 28).
+    const gear = await openGear(user)
+    expect(within(gear).getByRole('button', { name: 'Publish…' })).toBeInTheDocument()
+    expect(within(gear).queryByRole('status')).not.toBeInTheDocument()
+    await user.click(within(gear).getByRole('button', { name: 'Close' }))
 
     await writeChord(user, 'Dm7')
-    await within(strip).findByText('Saved · not published', {}, { timeout: 3000 })
+    // Where the draft stands, beside the gear's title.
+    const again = await openGear(user)
+    await within(again).findByText('Saved · not published', {}, { timeout: 3000 })
     const draft = await content.draft('piece', SONG.id)
     expect(JSON.stringify(draft.ok && draft.value?.body)).toContain('Dm7')
     expect(piecesStore.getState().versions).toEqual({})
 
     // Its Publish page (R29 B6): the rights ticked, then Publish new version.
-    await user.click(screen.getByRole('button', { name: 'Publishing' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Publish' }))
+    await user.click(within(again).getByRole('button', { name: 'Publish…' }))
     await tickAndPublish(user)
     expect(
-      await screen.findByText('Published. Learners get it the next time the app starts.'),
+      await screen.findByText(
+        'Published. Learners will receive it the next time they open the app.',
+      ),
     ).toBeInTheDocument()
     expect(JSON.stringify(content.body('piece', SONG.id))).toContain('Dm7')
     expect(await content.draft('piece', SONG.id)).toEqual({ ok: true, value: null })
@@ -90,13 +93,9 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await screen.findByRole('button', { name: 'Publishing' })
-    const strip = document.body
-    expect(within(strip).getByText('Not published')).toBeInTheDocument()
-
-    await user.click(within(strip).getByRole('button', { name: 'Publishing' }))
-    // On a narrow screen the menu is a sheet of buttons.
-    await user.click(await screen.findByRole('menuitem', { name: 'Discard changes' }))
+    const gear = await openGear(user)
+    expect(await within(gear).findByText('Not published')).toBeInTheDocument()
+    await user.click(within(gear).getByRole('button', { name: 'Discard changes' }))
     const asked = await screen.findByRole('alertdialog')
     await user.click(within(asked).getByRole('button', { name: 'Discard changes' }))
     expect(await screen.findByText('Changes discarded')).toBeInTheDocument()
@@ -123,7 +122,9 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
     await user.click(within(versions).getByRole('button', { name: 'Restore' }))
     await confirmAsked(user, 'Restore', 'Restore this version?')
     expect(
-      await screen.findByText('Restored. Learners get it the next time the app starts.'),
+      await screen.findByText(
+        'Restored. Learners will receive it the next time they open the app.',
+      ),
     ).toBeInTheDocument()
     expect(content.body('piece', SONG.id)).toEqual(pieceRecordBody(SONG))
   })
@@ -135,7 +136,7 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
       contentEditing: content,
     })
     expect(
-      await screen.findByText('You’re offline: it opens once you’re back online.'),
+      await screen.findByText('You’re offline. It will open when you reconnect.'),
     ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument()
   })

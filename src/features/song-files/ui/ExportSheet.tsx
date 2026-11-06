@@ -1,4 +1,4 @@
-import { FileArchive, FileCode, FileMusic, Link2, type LucideIcon } from 'lucide-react'
+import { FileArchive, FileCode, FileMusic, type LucideIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { entryTitles, type Piece } from '@/entities/piece'
@@ -7,18 +7,15 @@ import { RowButton, Sheet, SheetContent, type Paint } from '@/shared/ui'
 import { useSongExport } from './use-song-export'
 import type { MusicXmlFormat } from '../model/export-music-xml'
 
-/** What the screen shares, as its own Share does it. */
-export type ExportShare = { readonly onSelect: () => void }
-
 /**
  * The ways out of a piece of music: its score as MusicXML (a piece's alone), its music as played as
- * MIDI, timed to its recording where one plays along, and its link where the screen shares.
+ * MIDI, timed to its recording where one plays along. Its link is the screen's own Share link, never
+ * a row here (R31-S): one way to each action.
  */
 export type ExportFiles = {
   readonly musicXml?: ((format?: MusicXmlFormat) => void) | undefined
   readonly midi: () => void
   readonly midiAligned?: (() => void) | undefined
-  readonly share?: ExportShare | undefined
 }
 
 type Row = {
@@ -82,17 +79,6 @@ export function ExportSheet({
           },
         ]
       : []),
-    ...(files.share
-      ? [
-          {
-            key: 'share',
-            title: t('export.share'),
-            icon: Link2,
-            paint: 'grass' as const,
-            onSelect: files.share.onSelect,
-          },
-        ]
-      : []),
   ]
   return (
     <Sheet open={subject !== null} onOpenChange={onOpenChange}>
@@ -126,29 +112,25 @@ export function ExportSheet({
 export function SongExportSheet({
   piece,
   onOpenChange,
-  share,
 }: {
   piece: Piece | null
   onOpenChange: (open: boolean) => void
-  share?: ExportShare | undefined
 }) {
   const [last, setLast] = useState(piece)
   if (piece && piece !== last) setLast(piece)
   const shown = piece ?? last
   return shown ? (
-    <SongExport piece={shown} open={piece !== null} share={share} onOpenChange={onOpenChange} />
+    <SongExport piece={shown} open={piece !== null} onOpenChange={onOpenChange} />
   ) : null
 }
 
 function SongExport({
   piece,
   open,
-  share,
   onOpenChange,
 }: {
   piece: Piece
   open: boolean
-  share: ExportShare | undefined
   onOpenChange: (open: boolean) => void
 }) {
   const locale = useLocale()
@@ -156,7 +138,7 @@ function SongExport({
   return (
     <ExportSheet
       subject={open ? entryTitles(piece, locale).primary : null}
-      files={{ ...files, share }}
+      files={files}
       onOpenChange={onOpenChange}
     />
   )

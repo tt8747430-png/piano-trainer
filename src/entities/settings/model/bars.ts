@@ -9,29 +9,11 @@ export const BAR_SURFACES = [
   'swipe.songs.trailing',
   'swipe.folders.leading',
   'swipe.folders.trailing',
-  'bar.player',
 ] as const
 export type BarSurface = (typeof BAR_SURFACES)[number]
 
 /** Every act a bar may hold, across surfaces. */
-export const BAR_ACTS = [
-  'favourite',
-  'edit',
-  'move',
-  'export',
-  'archive',
-  'delete',
-  'recordings',
-  'loop',
-  'tempo',
-  'feedback',
-  'modes',
-  'metronome',
-  'tuner',
-  'transpose',
-  'version',
-  'annotations',
-] as const
+export const BAR_ACTS = ['favourite', 'edit', 'move', 'export', 'archive', 'delete'] as const
 export type BarAct = (typeof BAR_ACTS)[number]
 
 /** Each surface's acts, in the order its page lists them. */
@@ -41,21 +23,9 @@ export const BAR_CATALOG: Readonly<Record<BarSurface, readonly BarAct[]>> = {
   'swipe.songs.trailing': ['favourite', 'move', 'archive', 'delete'],
   'swipe.folders.leading': ['edit', 'move', 'archive', 'delete'],
   'swipe.folders.trailing': ['edit', 'move', 'archive', 'delete'],
-  'bar.player': [
-    'recordings',
-    'loop',
-    'tempo',
-    'feedback',
-    'modes',
-    'metronome',
-    'tuner',
-    'transpose',
-    'version',
-    'annotations',
-  ],
 }
 
-/** How many acts each surface holds: Select 1–4, a swipe's side 0–2, the Player's bar 4–5 (D9). */
+/** How many acts each surface holds: Select 1–4, a swipe's side 0–2. */
 export const BAR_LIMITS: Readonly<
   Record<BarSurface, { readonly min: number; readonly max: number }>
 > = {
@@ -64,7 +34,6 @@ export const BAR_LIMITS: Readonly<
   'swipe.songs.trailing': { min: 0, max: 2 },
   'swipe.folders.leading': { min: 0, max: 2 },
   'swipe.folders.trailing': { min: 0, max: 2 },
-  'bar.player': { min: 4, max: 5 },
 }
 
 /** What each surface holds until the learner changes it: today's. */
@@ -74,7 +43,6 @@ export const DEFAULT_BARS: Readonly<Record<BarSurface, readonly BarAct[]>> = {
   'swipe.songs.trailing': ['move', 'archive'],
   'swipe.folders.leading': ['edit'],
   'swipe.folders.trailing': ['move', 'archive'],
-  'bar.player': ['recordings', 'loop', 'tempo', 'feedback', 'modes'],
 }
 
 /** The learner's bars: a surface left out holds its default. */

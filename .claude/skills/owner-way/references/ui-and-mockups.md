@@ -13,7 +13,8 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 5. **Write the test first,** then the screen.
 6. **Every state:** loading, empty, error, offline; every control's hover, focus, disabled.
 7. **Both languages,** in the musician's terms, the Russian written rather than translated word for word.
-8. **Two passes** ([testing](testing.md)), then `impeccable audit` at the round's end.
+8. **Two passes** ([testing](testing.md)), each with an `impeccable` check of this page (`critique` or `audit`, then
+   again after the fixes), page by page as it is built, never only at the round's end.
 
 ## Rules for every screen
 
@@ -73,7 +74,11 @@ question about a screen is always a drawing of that screen.
 One published artifact per area (the song page, the Player, the editor), with every page and option in it:
 
 - **The whole screen, never the control alone:** bar, toolbar, content, floating actions, tab bar.
-- **Phone and laptop side by side** for every option: an iPhone frame at 393×852 and a MacBook frame at 1710×904.
+- **Phone and laptop side by side** for every option: the owner's real iPhone 17 Pro frame (`.scratch/r30/mockups/iphone-17-pro.png`,
+  its screen at 24,23 in a 450×920 frame) at 402×874, a switch beside Light / dark redrawing every phone at the smaller
+  393×852 in the same frame, a third mode the iPhone 17 Pro in Safari (`iphone-safari.png`, its floating bottom bar
+  over the page), and the owner's MacBook Air with a macOS Safari window (`macbook-air.png`, `safari-light.png`,
+  `safari-dark.png`) around the 1710×904 page.
 - **Real parts:** `DESIGN.md`'s tokens copied in as CSS variables, Literata and Onest, the app's real 44px sizes, corners,
   icons and honey. It must read as our app.
 - **Real content:** a real song, real chords, the exact English label each control will carry, one Russian check of the
@@ -108,7 +113,8 @@ screen, every font loaded, every toggle and box works.
 page alone? Does each option look like our app beside a real screenshot? Is any word internal? Does any option break a rule
 above or an earlier ruling in `feedback-log.md`? Is the difference between options visible at a glance?
 
-A change after Check 2 means running it again.
+Each check includes an `impeccable critique` of the mockup itself, so every mockup is checked by impeccable at least
+twice. A change after Check 2 means running it again.
 
 ### Reading the answers
 

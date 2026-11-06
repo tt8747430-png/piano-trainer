@@ -1,6 +1,4 @@
 export { ChordFinderPage } from '@/pages/chord-finder'
 export { CircleOfFifthsPage } from '@/pages/circle-of-fifths'
-export { DronePage } from '@/pages/drone'
-export { MetronomePage, MetronomeSettingsPage, TapTempoPage } from '@/pages/metronome'
-export { RecorderPage } from '@/pages/recorder'
-export { TunerPage, TunerSettingsPage } from '@/pages/tuner'
+export { MetronomePage } from '@/pages/metronome'
+export { TunerPage } from '@/pages/tuner'

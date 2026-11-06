@@ -11,6 +11,7 @@ import {
   type BarSurface,
 } from '@/entities/settings'
 import { cn, useSortableList } from '@/shared/lib'
+import { ActionRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { BAR_ICONS } from '../model/bar-icons'
 
@@ -41,12 +42,12 @@ function Tile({
       <button
         type="button"
         aria-label={t('bars.move', { act: label })}
-        className="flex min-h-16 w-18 touch-none flex-col items-center justify-center gap-1 rounded-control border border-hairline bg-card px-1 text-xs"
+        className="flex min-h-16 min-w-18 touch-none flex-col items-center justify-center gap-1 rounded-control border border-hairline bg-card px-2 text-xs"
         {...attributes}
         {...listeners}
       >
         <Icon aria-hidden className="size-5" />
-        <span className="max-w-full truncate">{label}</span>
+        <span className="whitespace-nowrap">{label}</span>
       </button>
       <button
         type="button"
@@ -54,7 +55,7 @@ function Tile({
         title={canRemove ? undefined : t('bars.keepOne')}
         disabled={!canRemove}
         onClick={onRemove}
-        className="absolute -top-2 -right-2 grid size-6 place-items-center rounded-pill bg-destructive text-destructive-foreground disabled:opacity-40"
+        className="absolute -top-2 -right-2 grid size-6 place-items-center rounded-pill bg-destructive text-destructive-foreground after:absolute after:-inset-2.5 disabled:opacity-40"
       >
         <Minus aria-hidden className="size-3.5" />
       </button>
@@ -65,7 +66,8 @@ function Tile({
 /**
  * The bar editor (R29 B10, memory-palaces' Select toolbar): the bar live at the top as tiles, dragged
  * to reorder, each − badge taking one off (the last kept where the bar needs one); under it Available,
- * every act not on the bar, a tap adding it, or saying the bar is full; Reset at the foot.
+ * every act not on the bar, a tap adding it, or saying the bar is full; Restore defaults, the card's
+ * last row. Each − badge reaches 44px beyond its drawn circle.
  */
 export function BarEditor({
   surface,
@@ -108,7 +110,9 @@ export function BarEditor({
       </DndContext>
       {available.length > 0 ? (
         <section aria-label={t('bars.available')} className="flex flex-col gap-2">
-          <h3 className="text-sm font-semibold text-muted-foreground">{t('bars.available')}</h3>
+          <h3 className="font-sans text-sm font-semibold text-muted-foreground">
+            {t('bars.available')}
+          </h3>
           {room ? null : <p className="text-sm text-muted-foreground">{t('bars.full')}</p>}
           <ul className="flex flex-wrap gap-2">
             {available.map((act) => {
@@ -131,9 +135,9 @@ export function BarEditor({
           </ul>
         </section>
       ) : null}
-      <Button variant="ghost" className="self-start" onClick={() => onChange(null)}>
-        {t('bars.reset')}
-      </Button>
+      <div className="-mx-4 -mb-4 overflow-hidden rounded-b-card border-t border-hairline [&>button]:rounded-none">
+        <ActionRow title={t('bars.reset')} onClick={() => onChange(null)} />
+      </div>
     </div>
   )
 }

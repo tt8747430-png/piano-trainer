@@ -30,10 +30,6 @@ const within = ({ clientWidth, scrollWidth }: ScrollMetrics, left: number) =>
 export const scrollToCentre = (metrics: ScrollMetrics, point: number): number =>
   within(metrics, point * metrics.scrollWidth - metrics.clientWidth / 2)
 
-/** The scroll position an octave (seven of the keyboard's `whites` white keys) down or up. */
-export const scrollByOctave = (metrics: ScrollMetrics, whites: number, by: -1 | 1): number =>
-  within(metrics, metrics.scrollLeft + (by * 7 * metrics.scrollWidth) / whites)
-
 /** The first and last white keys wholly in view; none where the view is narrower than a key. */
 export function keysInView(keys: readonly KeyGeometry[], frame: ViewFrame): KeyRange | null {
   const from = frame.left * 100 - EDGE

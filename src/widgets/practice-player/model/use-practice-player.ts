@@ -86,9 +86,9 @@ export interface PracticePlayer {
   readonly cursor: Cursor
   /** The music as played: its pedal as the settings say (A27). */
   readonly performance: Performance
-  /** The pedal at the cursor (A27, Show it): none where the music plays none, else down or up. */
-  readonly pedal: 'none' | 'down' | 'up'
   /** The keys sounding only under the pedal at the cursor, drawn apart from a hand's (A27). */
+  /** The score's sustain pedal at the cursor: down where a pedal mark holds it (A27). */
+  readonly pedalDown: boolean
   readonly pedalKeys: ReadonlySet<Midi>
   /** The keys out: this visit's (ADR 0111), else the View's saved ones. */
   readonly keys: boolean
@@ -199,10 +199,9 @@ export function usePracticePlayer(
     () =>
       practiceMarks(performance, state.beatGroup, {
         hands,
-        fingers: toggles.fingerNumbers,
         ...(received ? { received } : {}),
       }),
-    [performance, state.beatGroup, hands, toggles.fingerNumbers, received],
+    [performance, state.beatGroup, hands, received],
   )
   const inView = useMemo(() => rangeOf([...marks.keys()]), [marks])
   const wrong = useMemo(
@@ -221,13 +220,6 @@ export function usePracticePlayer(
     () => pedalKeys(performance, state.beatGroup),
     [performance, state.beatGroup],
   )
-  const groupTick = performance.beatGroups[state.beatGroup]?.tick ?? 0
-  const pedalNow =
-    performance.pedal.length === 0
-      ? 'none'
-      : pedalSpanAt(performance.pedal, groupTick)
-        ? 'down'
-        : 'up'
   // The staves out of sight: the Staves' Show, and the other hand's where it is hidden (A35).
   const other = otherHand.look === 'hide' ? MUTED[practisedHand] : undefined
   const hidden = useMemo(() => {
@@ -256,7 +248,8 @@ export function usePracticePlayer(
     click,
     cursor: playback.cursor,
     performance,
-    pedal: pedalNow,
+    pedalDown:
+      pedalSpanAt(performance.pedal, performance.beatGroups[state.beatGroup]?.tick ?? 0) !== null,
     pedalKeys: heldByPedal,
     keys: view.keys ?? savedKeys,
     setClick: (on) =>

@@ -1,0 +1,444 @@
+<meta charset="utf-8">
+<title>Your Lessons, Round 30</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Noto+Music&family=Onest:wght@400;500;600&display=swap">
+<style>
+/* Layout: a reading column of numbered questions; each draws whole app screens (phone 393×852, laptop 1710×904, scaled)
+   in Piano Trainer's own tokens, with a feedback box under every screen. */
+:root {
+  --paper: #f7f3ee; --card: #fefdfb; --sand: #eee9e2; --line: #dad1c8; --ink: #332921; --ink-soft: #685e56;
+  --honey: #edc684; --honey-ink: #5a4214; --grass: #d9ebd5; --grass-ink: #44684a; --sky: #e0effa; --sky-ink: #356890;
+  --lilac: #e6dff6; --lilac-ink: #6a5988; --sandw: #f5e0cf; --sand-ink: #7d5b40; --yellow: #f6ebc9; --yellow-ink: #7a5c18;
+  --bad: #f3d6d2; --bad-ink: #8a3a2e; --scrim: rgba(51, 41, 33, .32); --frame: #1d1916;
+  --display: 'Literata', Georgia, serif; --sans: 'Onest', system-ui, sans-serif; --music: 'Noto Music', serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #191512; --card: #24201c; --sand: #2e2924; --line: #453e38; --ink: #ede9e1; --ink-soft: #b5aca1;
+  --honey: #d4b176; --honey-ink: #2a1f0a; --grass: #2c3d2c; --grass-ink: #b5d6ae; --sky: #22344a; --sky-ink: #a9cdec;
+  --lilac: #352d47; --lilac-ink: #cfc2ec; --sandw: #3d2f24; --sand-ink: #e4c4a6; --yellow: #3a321d; --yellow-ink: #e6cf93;
+  --bad: #45251f; --bad-ink: #f0b9ae; --scrim: rgba(0,0,0,.5); --frame: #000; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #191512; --card: #24201c; --sand: #2e2924; --line: #453e38; --ink: #ede9e1; --ink-soft: #b5aca1;
+  --honey: #d4b176; --honey-ink: #2a1f0a; --grass: #2c3d2c; --grass-ink: #b5d6ae; --sky: #22344a; --sky-ink: #a9cdec;
+  --lilac: #352d47; --lilac-ink: #cfc2ec; --sandw: #3d2f24; --sand-ink: #e4c4a6; --yellow: #3a321d; --yellow-ink: #e6cf93;
+  --bad: #45251f; --bad-ink: #f0b9ae; --scrim: rgba(0,0,0,.5); --frame: #000; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); margin: 0 }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 28px 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0 }
+h1 { font-size: 30px } h2 { font-size: 22px } h3 { font-size: 16px }
+p { margin: 0; max-width: 65ch } .soft { color: var(--ink-soft) }
+.intro { display: grid; gap: 10px; margin-bottom: 8px }
+.toc { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); padding-block: 8px; display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--line) }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper) }
+.toc a { font-size: 13px; color: var(--ink); text-decoration: none; background: var(--sand); border-radius: 999px; padding: 4px 10px }
+.toc a.done { background: var(--grass); color: var(--grass-ink) }
+.toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-left: auto }
+.toolbar button { font: 500 13px var(--sans); border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 4px 11px; cursor: pointer }
+section.q { border-top: 1px solid var(--line); padding-block: 30px; display: grid; gap: 14px }
+section.q:first-of-type { border-top: 0 }
+.qhead { display: flex; gap: 10px; align-items: baseline } .qnum { font: 600 13px var(--sans); color: var(--ink-soft); white-space: nowrap }
+.where { font-size: 13px; color: var(--ink-soft) }
+.rec { background: var(--sky); color: var(--sky-ink); border-radius: 12px; padding: 10px 14px; max-width: 80ch }
+.screens { display: flex; flex-wrap: wrap; gap: 26px; align-items: flex-start }
+figure { margin: 0; display: grid; gap: 8px; min-width: 0; max-width: 100% }
+figcaption { font-size: 13.5px; color: var(--ink-soft); max-width: 46ch } figcaption b { color: var(--ink); display: block; font-size: 14px }
+.opt { display: inline-block; font: 600 12px var(--sans); background: var(--honey); color: var(--honey-ink); border-radius: 6px; padding: 1px 7px; margin-right: 6px }
+.opt.b { background: var(--sand); color: var(--ink) }
+table.map { border-collapse: collapse; font-size: 13.5px; width: 100%; max-width: 920px }
+.tablewrap { overflow-x: auto; max-width: 100% }
+table.map th, table.map td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+table.map th { font-weight: 600; color: var(--ink-soft); font-size: 12.5px }
+/* feedback */
+.fb { display: flex; gap: 6px; flex-wrap: wrap }
+.fb button { font: 500 12.5px var(--sans); border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 5px 11px; cursor: pointer }
+.fb button[aria-pressed="true"][data-v="ok"] { background: var(--grass); color: var(--grass-ink); border-color: var(--grass-ink) }
+.fb button[aria-pressed="true"][data-v="change"] { background: var(--honey); color: var(--honey-ink); border-color: var(--honey) }
+.fb button[aria-pressed="true"][data-v="remove"] { background: var(--bad); color: var(--bad-ink); border-color: var(--bad-ink) }
+button:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--sky-ink); outline-offset: 2px }
+figure textarea, .qfb textarea { width: 100%; min-height: 40px; font: 13px var(--sans); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 7px 9px; resize: vertical }
+:is(figure, .qfb) textarea::placeholder { color: var(--ink-soft) }
+.saved { font-size: 12px; color: var(--ink-soft); min-height: 1em }
+
+/* ——— device frames (true sizes, scaled) ——— */
+.dev { position: relative; overflow: hidden; border-radius: 34px; background: var(--frame); padding: 9px }
+.dev.phone { --fw: 450px; --fh: 920px; --sx: 24px; --sy: 23px; --sw: 402px; --sh: 874px; --sr: 62px; --sb: 62px; --s: .74; width: calc(var(--fw) * var(--s)); height: calc(var(--fh) * var(--s)); padding: 0; border-radius: 0; background: none; overflow: visible }
+body.small .dev.phone { --fw: 440px; --fh: 899px; --sx: 23.5px; --sy: 22.5px; --sw: 393px; --sh: 852px; --sr: 60px; --sb: 54px }
+.dev.phone::after { content: ''; position: absolute; inset: 0; background: url(iphone-17-pro.png) 0 0 / 100% 100% no-repeat; pointer-events: none; z-index: 3 }
+body.safari .dev.phone::after { background-image: url(iphone-safari.png) }
+body.safari .dev.phone > .scr::after { content: ''; position: absolute; left: 34px; right: 34px; bottom: 33px; height: 48px; z-index: 50; background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27334%27%20height%3D%2748%27%3E%3Cg%20fill%3D%27rgba%28250%2C250%2C250%2C.86%29%27%20stroke%3D%27rgba%280%2C0%2C0%2C.1%29%27%3E%3Ccircle%20cx%3D%2724%27%20cy%3D%2724%27%20r%3D%2723.5%27/%3E%3Crect%20x%3D%2756.5%27%20y%3D%27.5%27%20width%3D%27221%27%20height%3D%2747%27%20rx%3D%2723.5%27/%3E%3Ccircle%20cx%3D%27310%27%20cy%3D%2724%27%20r%3D%2723.5%27/%3E%3C/g%3E%3Cpath%20d%3D%27M27%2016l-8%208%208%208%27%20fill%3D%27none%27%20stroke%3D%27%231c1c1e%27%20stroke-width%3D%272.4%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27/%3E%3Ctext%20x%3D%27167%27%20y%3D%2729%27%20font-family%3D%27-apple-system%2Csystem-ui%2Csans-serif%27%20font-size%3D%2715%27%20font-weight%3D%27500%27%20text-anchor%3D%27middle%27%20fill%3D%27%231c1c1e%27%3Epiano-trainer%3C/text%3E%3Cg%20fill%3D%27%231c1c1e%27%3E%3Ccircle%20cx%3D%27302%27%20cy%3D%2724%27%20r%3D%272%27/%3E%3Ccircle%20cx%3D%27310%27%20cy%3D%2724%27%20r%3D%272%27/%3E%3Ccircle%20cx%3D%27318%27%20cy%3D%2724%27%20r%3D%272%27/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat; filter: drop-shadow(0 4px 12px rgba(0,0,0,.18)) }
+.dev.mac { --s: .45; --mx: 217.7px; --my: 36.6px; width: calc(2143px * var(--s)); height: calc(1299px * var(--s)); padding: 0; border-radius: 0; overflow: visible;
+  background: linear-gradient(rgba(255,255,255,.28), rgba(255,255,255,.28)) calc(var(--mx) * var(--s)) calc(var(--my) * var(--s)) / calc(1710px * var(--s)) calc(37px * var(--s)) no-repeat,
+    url(macbook-wallpaper.jpg) calc(var(--mx) * var(--s)) calc(var(--my) * var(--s)) / calc(1710px * var(--s)) calc(1112px * var(--s)) no-repeat }
+.dev.mac::before { content: 'piano-trainer'; position: absolute; z-index: 2; left: calc(var(--mx) * var(--s)); top: calc((var(--my) + 37px) * var(--s)); width: calc(1710px * var(--s)); height: calc(51px * var(--s)); background: url(safari-light.png) 0 0 / 100% 100%; border-radius: calc(16px * var(--s)) calc(16px * var(--s)) 0 0; font: 500 calc(14px * var(--s)) / calc(51px * var(--s)) -apple-system, system-ui, sans-serif; color: #3c3c43; text-align: center }
+:root[data-theme="dark"] .dev.mac::before { background-image: url(safari-dark.png); color: #ebebf5 }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dev.mac::before { background-image: url(safari-dark.png); color: #ebebf5 } }
+.dev.mac::after { content: ''; position: absolute; inset: 0; z-index: 3; background: url(macbook-air.png) 0 0 / 100% 100% no-repeat; pointer-events: none }
+.dev > .scr { width: 393px; height: 852px; transform: scale(var(--s)); transform-origin: 0 0; border-radius: 26px }
+.dev.phone > .scr { position: absolute; left: calc(var(--sx) * var(--s)); top: calc(var(--sy) * var(--s)); width: var(--sw); height: var(--sh); border-radius: var(--sr) }
+.dev.mac > .scr { position: absolute; left: calc(var(--mx) * var(--s)); top: calc((var(--my) + 88px) * var(--s)); width: 1710px; height: 904px; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,.35) }
+@media (max-width: 720px) { .dev.mac { --s: .3 } .dev.phone { --s: .7 } }
+.scrollx { overflow-x: auto; max-width: 100% }
+@media (max-width: 720px) { .scrollx:has(.mac)::after { content: "Scroll sideways for the whole screen →"; display: block; font-size: 12px; color: var(--ink-soft); padding-top: 4px } }
+@media (min-width: 721px) and (max-width: 1100px) { .dev.mac { --s: .32 } }
+
+/* ——— the app ——— */
+.scr { position: relative; overflow: hidden; background: var(--paper); color: var(--ink); font: 16px/1.4 var(--sans); display: flex; flex-direction: column }
+.scr.mac { flex-direction: row }
+.sb { width: 256px; flex: none; background: var(--card); border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: 0 12px 16px }
+.sb .brand { height: 80px; display: flex; align-items: center; justify-content: space-between; padding-left: 12px; font: 600 24px var(--display) }
+.sb .it { height: 44px; display: flex; gap: 12px; align-items: center; padding: 0 12px; border-radius: 12px; font-weight: 600; color: var(--ink-soft); font-size: 16px }
+.sb .it.on { background: var(--sand); color: var(--ink) }
+.sb .foot { margin-top: auto; display: grid; gap: 4px }
+.sb .acc { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 12px }
+.main { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative }
+.pad { padding: 0 16px } .mac .pad { padding: 0 40px }
+.bar { min-height: 56px; display: flex; align-items: center; gap: 8px; padding: 4px 16px; flex: none }
+.mac .bar { padding: 8px 40px; min-height: 72px }
+.bar .t { font: 600 20px/1.2 var(--display); min-width: 0; display: flex; align-items: center; gap: 6px }
+.bar .t > span:first-child { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.bar .t.lg { font-size: 24px } .mac .bar .t { font-size: 22px } .mac .bar .t.lg { font-size: 26px }
+.bar .tools { margin-left: auto; display: flex; gap: 6px; flex: none }
+.rb { width: 44px; height: 44px; border-radius: 999px; background: var(--sand); display: grid; place-items: center; flex: none; color: var(--ink) }
+.rb.plain { background: transparent } .rb.on { background: var(--grass); color: var(--grass-ink) }
+.rb.sm { width: 36px; height: 36px; background: transparent; color: var(--ink-soft) }
+.edit-pen { color: var(--ink-soft) }
+.seg { display: inline-flex; justify-self: start; align-self: start; width: max-content; background: var(--sand); border-radius: 999px; padding: 3px; gap: 2px; font: 600 14px var(--sans) }
+.seg span { padding: 7px 14px; border-radius: 999px; color: var(--ink-soft) } .seg span.on { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08) }
+.field { display: flex; align-items: center; gap: 8px; height: 44px; border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 0 12px; color: var(--ink-soft); font-size: 15px; flex: 1; min-width: 0 }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); font-size: 14px; white-space: nowrap }
+.chip b { font-family: var(--display) } .chip.on { background: var(--sand); border-color: var(--sand) }
+.h2 { font: 600 13px var(--sans); color: var(--ink-soft); padding: 18px 4px 8px; display: flex; justify-content: space-between }
+.h2 a { color: var(--sky-ink); font-weight: 500; text-decoration: none }
+.group { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden }
+.row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; min-height: 60px; border-top: 1px solid var(--line) }
+.row:first-child { border-top: 0 }
+.tile { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex: none }
+.p-yellow { background: var(--yellow); color: var(--yellow-ink) } .p-sky { background: var(--sky); color: var(--sky-ink) }
+.p-grass { background: var(--grass); color: var(--grass-ink) } .p-lilac { background: var(--lilac); color: var(--lilac-ink) }
+.p-sand { background: var(--sandw); color: var(--sand-ink) }
+.row .txt { flex: 1; min-width: 0 } .row .n { font-weight: 600; font-size: 16px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere }
+.row .d { font-size: 13.5px; color: var(--ink-soft); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.key { font: 600 16px var(--display); min-width: 26px; text-align: center }
+.lvl { display: inline-flex; gap: 2px; align-items: flex-end; height: 12px } .lvl i { width: 3px; background: var(--line); border-radius: 1px } .lvl i.f { background: var(--ink-soft) }
+.tick { color: var(--grass-ink) }
+.fab { position: absolute; right: 20px; bottom: 100px; width: 56px; height: 56px; border-radius: 999px; background: var(--honey); color: var(--honey-ink); display: grid; place-items: center; box-shadow: 0 6px 16px rgba(0,0,0,.18) }
+.mac .fab { bottom: 32px; right: 40px }
+.fab.wide { width: auto; padding: 0 22px; gap: 8px; display: flex; align-items: center; font-weight: 600 }
+.tabs { position: absolute; left: 0; right: 0; bottom: 0; height: 84px; background: var(--card); border-top: 1px solid var(--line); display: flex; padding: 6px 8px 0; gap: 4px }
+.tabs div { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; font: 600 12px var(--sans); color: var(--ink-soft); padding-top: 6px; border-radius: 12px; height: 54px }
+.tabs div.on { background: var(--sand); color: var(--ink) }
+.status { height: var(--sb, 47px); flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; font: 600 15px var(--sans) }
+.scroll { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0 }
+.scroll > * { flex-shrink: 0 }
+.cards { display: flex; gap: 10px }
+.scard { width: 150px; flex: none; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 10px; display: grid; gap: 6px }
+.scard .cv { height: 70px; border-radius: 10px; display: grid; place-items: center }
+.scard .n { font-weight: 600; font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.scard .d { font-size: 12.5px; color: var(--ink-soft) }
+/* laptop library */
+.lib { display: flex; flex: 1; min-height: 0 }
+.tree { width: 300px; flex: none; border-right: 1px solid var(--line); padding: 8px 16px 16px 40px; display: grid; align-content: start; gap: 2px }
+.tree .ti { height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 10px; border-radius: 10px; font-size: 15px; font-weight: 500 }
+.tree .ti.on { background: var(--sand); font-weight: 600 } .tree .ti .c { margin-left: auto; color: var(--ink-soft); font-size: 13px; font-weight: 400 }
+.tree .ti.ind { padding-left: 32px } .tree .lab { font: 600 12px var(--sans); color: var(--ink-soft); padding: 14px 10px 4px; text-transform: none }
+.tree .ti .sw { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center }
+.list { flex: 1; min-width: 0; padding: 8px 40px 16px 32px; display: flex; flex-direction: column }
+.thead, .trow { display: grid; grid-template-columns: minmax(0, 3fr) 70px minmax(0, 2fr) 70px 70px 110px 40px; gap: 12px; align-items: center; padding: 0 12px }
+.thead { font: 600 12.5px var(--sans); color: var(--ink-soft); height: 36px; border-bottom: 1px solid var(--line) }
+.trow { height: 58px; border-bottom: 1px solid var(--line); font-size: 15px } .trow .n { font-weight: 600 } .trow .d { font-size: 13px; color: var(--ink-soft) }
+.trow .chs { font-family: var(--display); color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--card); border-radius: 22px 22px 0 0; box-shadow: 0 -8px 30px rgba(0,0,0,.18); padding: 8px 16px 34px; display: grid; gap: 10px }
+.sheet .grip { width: 36px; height: 5px; background: var(--line); border-radius: 9px; margin: 0 auto 4px }
+.scrimm { position: absolute; inset: 0; background: var(--scrim) }
+.btn { height: 48px; border-radius: 12px; background: var(--honey); color: var(--honey-ink); display: grid; place-items: center; font-weight: 600 }
+.btn.ghost { background: var(--sand); color: var(--ink) }
+.check { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--line); display: grid; place-items: center; flex: none }
+.check.on { background: var(--honey); border-color: var(--honey); color: var(--honey-ink) }
+.pill { font-size: 12.5px; padding: 2px 9px; border-radius: 999px; background: var(--sand); color: var(--ink-soft); white-space: nowrap }
+.fieldline { border-bottom: 1px dashed var(--line); padding-bottom: 2px }
+.editing { outline: 2px solid var(--honey); outline-offset: 2px; border-radius: 6px; -webkit-line-clamp: unset !important; overflow: visible !important }
+.cover { border-radius: 16px; display: grid; place-items: center }
+.kbd { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; width: 74px; height: 38px; position: relative; background: var(--line); border: 1px solid var(--line); border-radius: 3px; overflow: hidden }
+.kbd i { background: #fbf9f6 } .kbd b { position: absolute; top: 0; width: 7px; height: 22px; background: #2a231d }
+.kbd u { position: absolute; bottom: 4px; width: 5px; height: 5px; border-radius: 9px; background: #2a231d }
+.staff { color: var(--ink) }
+.toast { position: absolute; left: 50%; bottom: 110px; transform: translateX(-50%); background: var(--ink); color: var(--paper); border-radius: 999px; padding: 9px 16px; font-size: 14px; white-space: nowrap }
+.dot { width: 8px; height: 8px; border-radius: 9px; background: var(--honey); display: inline-block }
+.av { width: 32px; height: 32px; border-radius: 999px; display: grid; place-items: center; font: 600 15px var(--display); flex: none }
+
+/* R30 Practice: the type ramp and 44px targets (critique round 1) */
+.rb.sm { width: 44px; height: 44px }
+.h2 { font-size: 14px } .h2 a.all { display: inline-flex; align-items: center; min-height: 44px; margin: -14px 0 }
+.row .d { font-size: 14px } .thead { font-size: 14px } .trow .d { font-size: 14px }
+.tree .lab { font-size: 14px } .pill { font-size: 14px }
+.lvl i { background: color-mix(in oklab, var(--ink-soft) 35%, transparent) }
+.kbd { width: 64px }
+
+/* R30 Practice: critique round 2 */
+.homeind { position: absolute; left: 50%; bottom: 8px; width: 134px; height: 5px; border-radius: 999px; background: var(--ink); transform: translateX(-50%); z-index: 4 }
+.tree .ti { height: 44px }
+.tree .gap { height: 12px }
+.dd { display: inline-flex; align-items: center; gap: 6px; height: 44px; padding: 0 10px 0 12px; border: 1px solid var(--line); background: var(--card); border-radius: 12px; font-size: 15px; white-space: nowrap }
+.dd .l { color: var(--ink-soft) } .dd .v { color: var(--ink); font-weight: 500 } .dd svg { color: var(--ink-soft) }
+.obtn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 44px; padding: 0 16px; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 12px; font-weight: 600; font-size: 15px; white-space: nowrap; flex: none }
+.kbd.lg { width: 112px; height: 60px } .kbd.lg b { width: 12px; height: 36px } .kbd.lg u { width: 8px; height: 8px; bottom: 7px }
+.trow .tile { width: 36px; height: 36px }
+</style>
+
+<style>
+/* R30-5: Learn's own parts, drawn from the real screens (bar tabs, chips, Continue, rows with rings) */
+.ttabs { display: flex; gap: 22px; align-items: flex-end; font: 600 24px/1.2 var(--sans) }
+.mac .ttabs { font-size: 26px }
+.ttabs span { color: var(--ink-soft); padding-bottom: 6px; border-bottom: 2px solid transparent }
+.ttabs span.on { color: var(--ink); border-bottom-color: var(--ink) }
+.contc { border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(180deg, var(--sky), var(--card) 70%); padding: 12px 16px; display: flex; align-items: center; gap: 12px }
+.contc .l { font-size: 14px; color: var(--ink-soft) } .contc .n { font: 600 18px/1.25 var(--display) }
+.contc .bar2 { height: 5px; border-radius: 9px; background: var(--sand); margin-top: 8px }
+.chips { display: flex; gap: 8px; overflow: hidden }
+.chip2 { height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); display: inline-flex; align-items: center; gap: 6px; font-weight: 500; white-space: nowrap; flex: none }
+.chip2.on { background: var(--sand); border-color: var(--ink-soft); font-weight: 600 }
+.ring { width: 44px; height: 44px; border-radius: 999px; display: grid; place-items: center; flex: none; position: relative }
+.ring.arc { box-shadow: inset 0 0 0 2px var(--line) } .ring.arc::before { content: ''; position: absolute; inset: 0; border-radius: 999px; background: conic-gradient(var(--sand-ink) var(--a), transparent 0); -webkit-mask: radial-gradient(circle, transparent 19px, #000 20px); mask: radial-gradient(circle, transparent 19px, #000 20px) }
+.ring .in { width: 38px; height: 38px; border-radius: 999px; display: grid; place-items: center }
+.learned { background: var(--grass); color: var(--grass-ink) }
+.row.add { color: var(--ink); font-weight: 600 } .row.add .tile { background: var(--sand); color: var(--ink) }
+.lhead { display: grid; gap: 2px; padding: 4px 12px 0 } .lhead h4 { margin: 0; font: 600 22px/1.25 var(--display) } .lhead p { color: var(--ink-soft); font-size: 15px }
+.setrow { display: flex; align-items: center; gap: 12px; padding: 8px 12px; min-height: 60px; border-top: 1px solid var(--line) } .setrow:first-child { border-top: 0 }
+.setrow .n { font-weight: 600; font-size: 17px; flex: none } .setrow .v { margin-left: auto; color: var(--ink-soft); text-align: right; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.setrow.bad .n { color: var(--bad-ink) } .tile.bad { background: var(--bad); color: var(--bad-ink) }
+.radio { display: flex; align-items: center; gap: 12px; min-height: 44px; font-size: 17px } .radio i { width: 20px; height: 20px; border-radius: 99px; border: 2px solid var(--ink-soft); display: grid; place-items: center } .radio i.on { border-color: var(--honey-ink); background: var(--honey) } .radio i.on::after { content: ''; width: 8px; height: 8px; border-radius: 9px; background: var(--ink) }
+.pgroup { display: grid; gap: 6px } .plabel { font: 600 14px var(--sans); color: var(--ink-soft); padding: 0 4px }
+.done { height: 44px; padding: 0 18px; border-radius: 999px; background: var(--honey); color: var(--honey-ink); display: grid; place-items: center; font-weight: 600; flex: none }
+.doct { font: 600 30px/1.2 var(--display) } .docs { color: var(--ink-soft); font-size: 17px }
+.props { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 4px 0 }
+.prop { display: flex; align-items: center; min-height: 52px; gap: 12px } .prop .k { width: 110px; color: var(--ink-soft); flex: none } .prop .val { display: flex; align-items: center; gap: 10px; font-weight: 500 }
+.erow { display: flex; align-items: center; gap: 6px; min-height: 60px; border-top: 1px solid var(--line); padding: 0 4px } .erow:first-child { border-top: 0 }
+.erow .g { width: 44px; height: 44px; display: grid; place-items: center; color: var(--ink-soft); flex: none }
+.num { width: 36px; height: 36px; border-radius: 999px; display: grid; place-items: center; font: 600 16px var(--display); flex: none }
+.erow .txt { flex: 1; min-width: 0; padding-left: 6px } .erow .n { font-weight: 600 } .erow .d { font-size: 14px; color: var(--ink-soft) }
+.pop { position: absolute; background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 12px 32px rgba(0,0,0,.18); padding: 8px; display: grid; gap: 2px; z-index: 6 }
+.pop .pl { font: 600 13px var(--sans); color: var(--ink-soft); padding: 8px 10px 2px } .pop .pi { min-height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 10px; border-radius: 10px } .pop .pi.hi { background: var(--sand) }
+.lookgrid { display: flex; flex-wrap: wrap; gap: 8px } .lookgrid span { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; border: 2px solid transparent } .lookgrid span.on { border-color: var(--ink) }
+.dots { display: flex; gap: 8px } .dots span { width: 44px; height: 44px; border-radius: 999px; border: 2px solid transparent } .dots span.on { border-color: var(--ink) }
+</style>
+<div class="wrap">
+  <div class="intro">
+    <h1>Your lessons and courses, Round 30</h1>
+    <p class="soft">Learners write their own lessons and courses. Drawn as whole screens on the phone (iPhone 17 Pro, 402 × 874) and the laptop (MacBook Air 15″, 1710 × 904), scaled down, with the app’s real lessons and courses around them. Each screen has a box: <b>Looks right</b>, <b>Change it</b> or <b>Not needed</b>, and a note.</p>
+    <p class="soft" id="storeNote">Connecting the feedback store…</p>
+  </div>
+  <nav class="toc" aria-label="Questions">
+    <a href="#q1">1 Your lessons</a><a href="#q2">2 Your courses</a><a href="#q3">3 A lesson’s Settings</a><a href="#q4">4 Editing your course</a>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="ptSize(1)">iPhone 17 Pro · app</button><script>var PT_SIZES=[['pro','iPhone 17 Pro · app'],['safari','iPhone 17 Pro · Safari'],['small','Smaller iPhone · app']];function ptSize(step){var k=0;try{k=Math.max(0,PT_SIZES.findIndex(function(x){return x[0]===localStorage.getItem('pt-mock-size')}))}catch(e){}k=(k+step)%PT_SIZES.length;document.body.classList.remove('small','safari');if(PT_SIZES[k][0]!=='pro')document.body.classList.add(PT_SIZES[k][0]);document.getElementById('sizeBtn').textContent=PT_SIZES[k][1];try{localStorage.setItem('pt-mock-size',PT_SIZES[k][0])}catch(e){}}ptSize(0)</script></span>
+  </nav>
+
+  <section class="q" id="q1">
+    <div class="qhead"><span class="qnum">1</span><h2>Your lessons, after the levels</h2></div>
+    <p class="where">Where: Learn › Lessons, the chip after Professional (/?journey=own).</p>
+    <p>What changes: a fifth chip, <b>Your lessons</b>, lists the lessons you wrote, with how far you read each, and <b>New lesson</b> as the last row. New lesson asks a name and opens the lesson editor, the same one the app’s lessons are written in. Your lessons never count towards a level.</p>
+    <div class="screens" id="s1"></div>
+    <div class="rec">Recommendation: as drawn. A chip keeps your lessons one tap away without lengthening a level’s page; Practice’s libraries put Mine last the same way.</div>
+  </section>
+
+  <section class="q" id="q2">
+    <div class="qhead"><span class="qnum">2</span><h2>Your courses, after the shelves</h2></div>
+    <p class="where">Where: Learn › Courses, at the end.</p>
+    <p>What changes: <b>Your courses</b> follows the Method books, each course on its cover (a picture on a paint, as a Songs folder has), its lessons and how many are learned. <b>New course</b> asks a name and opens the course editor.</p>
+    <div class="screens" id="s2"></div>
+  </section>
+
+  <section class="q" id="q3">
+    <div class="qhead"><span class="qnum">3</span><h2>Your lesson’s Settings</h2></div>
+    <p class="where">Where: /lessons/own-lesson-1/settings, from the gear in the lesson’s bar.</p>
+    <p>What changes: the same page as an app lesson’s, with what you can do to your own: Rename, Duplicate, Reset progress, and Delete last, asked first. Share link is left out until sharing is built: the lesson lives on your devices.</p>
+    <div class="screens" id="s3"></div>
+  </section>
+
+  <section class="q" id="q4">
+    <div class="qhead"><span class="qnum">4</span><h2>Editing your course</h2></div>
+    <p class="where">Where: /courses/own-course-1/edit, the pencil on your course’s page.</p>
+    <p>What changes: the course editor the app’s courses are written in, with your course’s own parts: its title and line written in place, its <b>Cover</b>, and its lessons dragged into order. <b>Add lesson</b> finds one of yours or one of the app’s (added by reference: it stays the app’s, and its progress is the same wherever you read it), or makes a new one. Done saves; there is no Publish.</p>
+    <div class="screens" id="s4"></div>
+  </section>
+</div>
+
+<script>
+// ——— icons (lucide shapes) ———
+const P = {
+  back: '<path d="m15 18-6-6 6-6"/>', pen: '<path d="M21.2 6.8a2.8 2.8 0 0 0-4-4L3.8 16.2 3 21l4.8-.8Z"/><path d="m15 5 4 4"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',
+  more: '<circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', select: '<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8M13 12h8M13 18h8"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', music: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+  grad: '<path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>', metro: '<path d="M12 11.4V9.1"/><path d="m12 17 6.6-6.6"/><path d="M19.2 16.5 16.4 4.6A2 2 0 0 0 14.4 3H9.6a2 2 0 0 0-2 1.6L4.8 16.5A2.5 2.5 0 0 0 7.2 19.5h9.6a2.5 2.5 0 0 0 2.4-3Z"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/>', heart: '<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>', checkc: '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>', play: '<path d="M6 3v18l15-9Z" fill="currentColor"/>',
+  folder: '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9l-.8-1.2A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>',
+  archive: '<rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8M10 12h4"/>', clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+  share: '<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4M12 2v13"/>', link: '<path d="M9 17H7A5 5 0 0 1 7 7h2M15 7h2a5 5 0 1 1 0 10h-2M8 12h8"/>',
+  church: '<path d="M10 9h4M12 7v5M14 22v-4a2 2 0 0 0-4 0v4M18 22V5l-6-3-6 3v17M2 22h20"/>', heartsm: '<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/>',
+  book: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>', piano: '<path d="M18.5 8c-1.4 0-2.6-.8-3.2-2A6.9 6.9 0 0 0 2 9v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-8.5C22 9.6 20.4 8 18.5 8"/><path d="M2 14h20M6 14v4M10 14v4M14 14v4M18 14v4"/>',
+  chev: '<path d="m9 18 6-6-6-6"/>', down: '<path d="m6 9 6 6 6-6"/>', sort: '<path d="m3 16 4 4 4-4M7 20V4M21 8l-4-4-4 4M17 4v16"/>', filter: '<path d="M3 6h18M7 12h10M10 18h4"/>',
+  panel: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M16 15l-3-3 3-3"/>', copy: '<rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2"/>',
+  info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>', lock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  grip: '<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>',
+  mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4"/>',
+  wifi: '<path d="M12 20h.01M8.5 16.4a5 5 0 0 1 7 0M2 8.8a15 15 0 0 1 20 0M5 12.9a10 10 0 0 1 14 0"/><path d="M2 2l20 20"/>', star: '<path d="M12 2l3 7 7 .6-5.3 4.7 1.6 7.2L12 17.8 5.7 21.5l1.6-7.2L2 9.6 9 9z" fill="currentColor" stroke="none"/>',
+  image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>', trash: '<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+  door: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+};
+const ic = (n, s = 22, w = 1.9) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]}</svg>`;
+const rb = (n, cls = '') => `<span class="rb ${cls}">${ic(n, 20)}</span>`;
+const lvl = n => `<span style="display:inline-flex;gap:4px;align-items:center;font-size:13px;color:var(--ink-soft)" aria-label="Level ${n}"><span class="lvl">${[5, 8, 11, 14].map((h, i) => `<i style="height:${h}px" class="${i < n ? 'f' : ''}"></i>`).join('')}</span>${n}</span>`;
+const status = () => `<div class="status"><span>9:41</span><span>●●● ▮</span></div>`;
+const tabs = (on) => `<div class="tabs">${[['grad', 'Learn'], ['music', 'Songs'], ['metro', 'Practice'], ['user', 'Profile']].map(([i, l]) => `<div class="${l === on ? 'on' : ''}">${ic(i, 24)}${l}</div>`).join('')}</div>`;
+const sidebar = (on) => `<aside class="sb"><div class="brand">Piano Trainer <span style="color:var(--ink-soft)">${ic('panel', 20)}</span></div>
+  ${[['grad', 'Learn'], ['music', 'Songs'], ['metro', 'Practice']].map(([i, l]) => `<div class="it ${l === on ? 'on' : ''}">${ic(i, 20)}${l}</div>`).join('')}
+  <div class="foot"><div class="it">${ic('search', 20)}Search</div><div class="it">${ic('gear', 20)}Settings</div><div class="acc"><div class="it"><span class="av p-yellow" style="width:22px;height:22px;font-size:12px">K</span>Profile</div></div></div></aside>`;
+const phone = (inner, tab) => `<div class="dev phone"><div class="scr">${status()}${inner}${tab ? tabs(tab) : ''}<span class="homeind" aria-hidden="true"></span></div></div>`;
+const mac = (inner, on = 'Songs') => `<div class="dev mac"><div class="scr mac">${sidebar(on)}<div class="main">${inner}</div></div></div>`;
+const fig = (id, title, body, dev) => `<figure data-fb="${id}" data-title="${title}"><div class="scrollx">${dev}</div><figcaption><b>${id} ${title}</b>${body}</figcaption></figure>`;
+const kb = (dots) => `<span class="kbd">${Array(7).fill('<i></i>').join('')}${[9, 20, 41, 52, 63].map(x => `<b style="left:${x}%"></b>`).join('')}${dots.map(x => `<u style="left:${x}%"></u>`).join('')}</span>`;
+const SONGS = [
+  ['Amazing Grace', 'John Newton · tune New Britain', 'G', 'G  G7  C  D', 2, true, 'Today'],
+  ['Silent Night', 'Joseph Mohr · Franz Gruber', 'C', 'C  G7  F', 2, true, 'Yesterday'],
+  ['Ode to Joy', 'Ludwig van Beethoven', 'C', 'C  G', 1, false, '3 Nov'],
+  ['Our Father in Heaven', 'О наш Отец на небесах', 'Fm', 'Fm  G°  C7  E♭', 3, false, '1 Nov'],
+  ['Wonderful Grace of Jesus', 'Haldor Lillenas', 'D♭', 'D♭  E°7  A♭7  F7', 4, false, '28 Oct'],
+];
+const songRow = ([n, by, k, , l, learned]) => `<div class="row"><div class="txt"><div class="n">${n}</div><div class="d">${by}</div></div><span class="key">${k}</span>${lvl(l)}<span class="tick" style="width:22px">${learned ? ic('checkc', 20) : ''}</span><span class="rb sm">${ic('more', 20)}</span></div>`;
+const FOLDERS = [['p-yellow', 'music', 'Songs to learn', '23 songs'], ['p-sand', 'heartsm', '«Боже, спасибо»', '20 songs'], ['p-sky', 'piano', 'Called to Play', '40 songs · 1 folder'], ['p-grass', 'church', 'Hymns', '5 songs']];
+const folderRow = ([p, i, n, d], extra = '') => `<div class="row"><span class="tile ${p}">${ic(i, 22)}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div>${extra}<span class="rb sm">${ic('more', 20)}</span></div>`;
+
+// R30-5 screens: the app's own lessons and courses as they are, the learner's beside them.
+Object.assign(P, {
+  bookopen: '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+  pencil: '<path d="M21.2 6.8a2.8 2.8 0 0 0-4-4L3.8 16.2 3 21l4.8-.8Z"/>',
+  feet: '<path d="M4 16v-2.4C4 11.5 3 10.5 3 8c0-2.7 1.5-6 4.5-6C9.4 2 10 3.8 10 5.5c0 3.1-2 5.7-2 8.7V16a2 2 0 1 1-4 0Z"/><path d="M20 20v-2.4c0-2.1 1-3.1 1-5.6 0-2.7-1.5-6-4.5-6C14.6 6 14 7.8 14 9.5c0 3.1 2 5.7 2 8.7V20a2 2 0 1 0 4 0Z"/>',
+  rename: '<path d="M12 20h9"/><path d="M16.4 3.6a2 2 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+  reset: '<path d="M3 12a9 9 0 1 0 9-9 9.8 9.8 0 0 0-6.7 2.7L3 8"/><path d="M3 3v5h5"/>',
+});
+const bookT = (paint, a) => a === 1
+  ? `<span class="ring"><span class="in learned">${ic('check', 20, 3)}</span></span>`
+  : `<span class="ring${a ? ' arc' : ''}" style="--a:${Math.round((a || 0) * 360)}deg"><span class="in ${paint}">${ic('bookopen', 20)}</span></span>`;
+const learnBar = (on, macy) => `<div class="bar"><div class="ttabs"><span class="${on === 'lessons' ? 'on' : ''}">Lessons</span><span class="${on === 'courses' ? 'on' : ''}">Courses</span></div><div class="tools">${macy ? '' : rb('search')}</div></div>`;
+const contCard = `<div class="contc"><div style="flex:1;min-width:0"><div class="l">Continue · Foundations</div><div class="n">Finding your way on the keys</div><div style="display:flex;gap:10px;align-items:center"><div class="bar2" style="flex:1"></div><span style="font-size:14px;color:var(--ink-soft);margin-top:8px">0/13</span></div></div><span class="rb" style="background:var(--honey);color:var(--honey-ink);width:48px;height:48px">${ic('bookopen', 22)}</span></div>`;
+const levelChips = `<div class="chips"><span class="chip2">Beginner</span><span class="chip2">Intermediate</span><span class="chip2">Advanced</span><span class="chip2">Professional</span><span class="chip2 on">Your lessons</span></div>`;
+const levelChipsPhone = `<div class="chips" style="margin-right:-16px"><span class="chip2" style="margin-left:-60px">Advanced</span><span class="chip2">Professional</span><span class="chip2 on">Your lessons</span></div>`;
+// The learner's own lessons: name, sections, how far read (0..1, 1 learned).
+const OWN = [
+  ['Hymn intros in G', '3 sections', 1],
+  ['Left-hand patterns for “Amazing Grace”', '4 sections · 2 read', 0.5],
+  ['Reading the alto line', '2 sections', 0],
+];
+const ownRow = ([n, d, a]) => `<div class="row">${bookT('p-sand', a)}<div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div>${ic('chev', 18)}</div>`;
+const addRow = (label) => `<div class="row add"><span class="tile">${ic('plus', 22)}</span><div class="txt"><div class="n">${label}</div></div></div>`;
+const ownHead = `<div class="lhead"><h4>Your lessons</h4><p>1 of 3 learned</p></div>`;
+const ownList = `<div style="display:grid;gap:12px">${ownHead}<div class="group">${OWN.map(ownRow).join('')}${addRow('New lesson')}</div></div>`;
+const lessonsPhone = phone(`${learnBar('lessons')}<div class="scroll pad" style="gap:18px;padding-top:8px">${contCard}${levelChipsPhone}${ownList}</div>`, 'Learn');
+const lessonsMac = mac(`${learnBar('lessons', true)}<div style="width:784px;margin:0 auto;display:grid;gap:22px;padding-top:8px">${contCard}${levelChips}${ownList}</div>`, 'Learn');
+const newSheet = phone(`${learnBar('lessons')}<div class="scroll pad" style="gap:18px;padding-top:8px">${contCard}${levelChipsPhone}<div style="display:grid;gap:12px"><div class="lhead"><h4>Your lessons</h4><p>No lessons of your own yet.</p></div><div class="group">${addRow('New lesson')}</div></div></div><div class="scrimm"></div><div class="sheet" style="padding-bottom:40px"><div class="grip"></div><div style="font:600 20px var(--display);padding:4px 4px 6px">New lesson</div><div style="display:grid;gap:6px"><span style="font-size:14px;color:var(--ink-soft);padding-left:4px">Name</span><div class="field" style="color:var(--ink);border-color:var(--ink-soft)">Hymn intros in G<span style="width:1.5px;height:20px;background:var(--ink)"></span></div></div><div class="btn" style="margin-top:6px">Create lesson</div></div>`, null);
+document.getElementById('s1').innerHTML = [
+  fig('1.1', 'Phone, Your lessons', 'The chips scrolled to their end, Your lessons chosen: a row a lesson (a check once learned, an arc as it is read), New lesson last.', lessonsPhone),
+  fig('1.2', 'Laptop, Your lessons', 'The same column as a level’s, the five chips in one row.', lessonsMac),
+  fig('1.3', 'Phone, none yet, New lesson', 'With no lessons of your own: the line says so, and New lesson opens its sheet: a name, then Create lesson.', newSheet),
+].join('');
+
+// ——— 2: Your courses ———
+const shelfRow = (p, i, n, d) => `<div class="row"><span class="tile ${p}">${ic(i, 22)}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div>${ic('chev', 18)}</div>`;
+const OWNC = [['p-sky', 'church', 'Sunday hymn playing', '4 lessons · 1 learned'], ['p-lilac', 'book', 'Reading four voices', '2 lessons']];
+const ownCourses = `<div style="display:grid;gap:8px"><div class="h2">Your courses</div><div class="group">${OWNC.map(([p, i, n, d]) => shelfRow(p, i, n, d)).join('')}${addRow('New course')}</div></div>`;
+const chordShelf = `<div style="display:grid;gap:8px"><div class="h2">Chords and improvisation</div><div class="group">${shelfRow('p-lilac', 'piano', 'Mastering Chords', '6 lessons · 3 songs · 6 weeks')}${shelfRow('p-lilac', 'star', 'Improvising with Chords', '5 lessons · 2 songs · 5 weeks')}</div></div>`;
+const methodShelf = `<div style="display:grid;gap:8px"><div class="h2">Method books</div><div class="group">${shelfRow('p-sand', 'book', 'Called to Play', '17 lessons · 40 songs · 20 weeks')}${shelfRow('p-sand', 'book', 'Called to Play 2', '15 lessons · 22 songs · 16 weeks')}</div></div>`;
+const coursesPhone = phone(`${learnBar('courses')}<div class="scroll pad" style="gap:22px;padding-top:8px;justify-content:flex-end;padding-bottom:100px">${chordShelf}${methodShelf}${ownCourses}</div>`, 'Learn');
+const coursesMac = mac(`${learnBar('courses', true)}<div style="width:784px;margin:0 auto;display:grid;gap:22px;padding-top:8px;align-content:end;flex:1;padding-bottom:40px">${chordShelf}${methodShelf}${ownCourses}</div>`, 'Learn');
+document.getElementById('s2').innerHTML = [
+  fig('2.1', 'Phone, Courses at their end', 'Scrolled past the shelves: Method books, then Your courses, each on its cover, then New course.', coursesPhone),
+  fig('2.2', 'Laptop, Courses at their end', 'The same, in the Courses’ one column.', coursesMac),
+].join('');
+
+// ——— 3: an own lesson's Settings ———
+const setBody = (gap) => `<div style="display:grid;gap:${gap}px">
+  <div style="font:600 24px/1.25 var(--display);padding:0 4px">Reading the alto line</div>
+  <div class="group" style="padding:14px 18px;display:grid;gap:2px"><div style="font-weight:600;font-size:17px;margin-bottom:4px">Lessons read as</div><div class="radio"><i class="on"></i>One page</div><div class="radio"><i></i>A section at a time</div></div>
+  <div class="pgroup"><div class="plabel">The lesson</div><div class="group"><div class="setrow"><span class="tile p-sky">${ic('rename', 20)}</span><span class="n">Rename</span></div><div class="setrow"><span class="tile p-grass">${ic('copy', 20)}</span><span class="n">Duplicate</span></div></div></div>
+  <div class="pgroup"><div class="plabel">Progress</div><div class="group"><div class="setrow"><span class="tile p-sand">${ic('reset', 20)}</span><span style="display:grid"><span class="n">Reset progress</span><span style="color:var(--ink-soft);font-size:15px">It is marked not learned and its sections unread. Nothing else changes.</span></span></div></div></div>
+  <div class="group"><div class="setrow bad"><span class="tile bad">${ic('trash', 20)}</span><span class="n">Delete lesson</span></div></div>
+</div>`;
+const setBar = `<div class="bar">${rb('back')}<div class="t">Settings</div></div>`;
+const settingsPhone = phone(`${setBar}<div class="scroll pad" style="padding-top:10px">${setBody(22)}</div>`, null);
+const settingsMac = mac(`${setBar}<div style="width:672px;margin:0 auto;padding-top:8px">${setBody(26)}</div>`, 'Learn');
+const deleteAsk = phone(`${setBar}<div class="scroll pad" style="padding-top:10px">${setBody(22)}</div><div class="scrimm"></div><div class="sheet" style="padding-bottom:40px"><div class="grip"></div><div style="font:600 20px var(--display);padding:4px">Delete “Reading the alto line”?</div><p style="color:var(--ink-soft);padding:0 4px">It leaves Your lessons and every course of yours that has it. Its progress goes too.</p><div class="btn" style="background:var(--bad);color:var(--bad-ink)">Delete</div><div class="btn ghost">Cancel</div></div>`, null);
+document.getElementById('s3').innerHTML = [
+  fig('3.1', 'Phone, Settings', 'Reading as every lesson’s; The lesson: Rename (a sheet with its name) and Duplicate (“… copy”, opened); Progress; Delete last.', settingsPhone),
+  fig('3.2', 'Laptop, Settings', 'The same rows in the settings column.', settingsMac),
+  fig('3.3', 'Phone, Delete asked first', 'Delete asks, naming what goes with it.', deleteAsk),
+].join('');
+
+// ——— 4: the course editor on an own course ———
+const ROWS = [
+  ['p-sky', 'Hymn intros in G', 'Your lesson'],
+  ['p-sky', 'The bass clef and the grand staff', 'Foundations'],
+  ['p-sky', 'Left-hand patterns for “Amazing Grace”', 'Your lesson'],
+  ['p-sky', 'Inversions', 'Fluency'],
+];
+const erow = ([p, n, d], i) => `<div class="erow"><span class="g">${ic('grip', 18)}</span><span class="num ${p}">${i + 1}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div><span class="rb sm">${ic('more', 20)}</span></div>`;
+const editBody = `<div style="display:grid;gap:18px">
+  <div style="display:grid;gap:6px"><div class="doct">Sunday hymn playing</div><div class="docs">Intros, left-hand patterns and four-part reading for the hymns we play on Sunday.</div></div>
+  <div class="props"><div class="prop"><span class="k">Cover</span><span class="val"><span class="tile p-sky" style="width:36px;height:36px">${ic('church', 20)}</span>Church · Sky ${ic('down', 16)}</span></div></div>
+  <div style="font:600 24px var(--display)">Lessons</div>
+  <div>${ROWS.map(erow).join('')}<div class="erow" style="color:var(--ink);font-weight:600"><span class="g">${ic('plus', 20)}</span>Add lesson</div></div>
+</div>`;
+// As built: Done stands beside the title's place (the app's one Edit spot); the bar names the course only once its title scrolls away.
+const editBar = `<div class="bar">${rb('back')}<div class="done" style="background:var(--sand);color:var(--ink)">Done</div></div>`;
+const editPhone = phone(`${editBar}<div class="scroll pad" style="padding-top:8px">${editBody}</div>`, null);
+const editMac = mac(`${editBar}<div style="width:768px;margin:0 auto;padding-top:8px">${editBody}</div>`, 'Learn');
+const addPop = phone(`${editBar}<div class="scroll pad" style="padding-top:8px">${editBody}</div><div class="pop" style="left:16px;right:16px;bottom:40px"><div class="field" style="color:var(--ink);border-color:var(--ink-soft)">${ic('search', 18)}chord</div><div class="pl">Your lessons</div><div class="pi">${ic('bookopen', 18)}Reading the alto line</div><div class="pl">The app’s lessons</div><div class="pi hi">${ic('bookopen', 18)}<span style="display:grid;line-height:1.25">Chord functions: tonic, subdominant, dominant<span style="font-size:13px;color:var(--ink-soft)">Fluency</span></span></div><div class="pi">${ic('bookopen', 18)}<span style="display:grid;line-height:1.25">Your first chords<span style="font-size:13px;color:var(--ink-soft)">Foundations</span></span></div><div class="pi" style="font-weight:600">${ic('plus', 18)}New lesson “chord”</div></div>`, null);
+const coverPop = phone(`${editBar}<div class="scroll pad" style="padding-top:8px">${editBody}</div><div class="pop" style="left:16px;right:16px;top:330px;padding:14px;gap:12px"><div class="pl" style="padding:0">Picture</div><div class="lookgrid" style="max-width:316px">${['music', 'piano', 'mic', 'grad', 'clock', 'metro', 'church', 'book', 'heart', 'star', 'image', 'users'].map((i, k) => `<span class="p-sky${k === 6 ? ' on' : ''}">${ic(i, 20)}</span>`).join('')}</div><div class="pl" style="padding:0">Paint</div><div class="dots">${['sandw', 'sky', 'grass', 'yellow', 'lilac'].map((p, k) => `<span style="background:var(--${p})" class="${k === 1 ? 'on' : ''}"></span>`).join('')}</div></div>`, null);
+document.getElementById('s4').innerHTML = [
+  fig('4.1', 'Phone, editing your course', 'Title and line written in place; Cover; the lessons as rows, each held by its handle to move, its ⋯ to remove; Add lesson last. Done saves and reads the course.', editPhone),
+  fig('4.2', 'Laptop, editing your course', 'The same document in the editor’s column.', editMac),
+  fig('4.3', 'Phone, Add lesson', 'Typing finds your lessons first, then the app’s with their level; or a new lesson of that name.', addPop),
+  fig('4.4', 'Phone, Cover', 'A picture and a paint, as a Songs folder’s.', coverPop),
+].join('');
+
+// ——— strips: the frame takes the scaled height of what it holds ———
+document.querySelectorAll('.dev[data-fit]').forEach(d => { const sc = d.firstElementChild; const k = parseFloat(getComputedStyle(d).getPropertyValue('--s')); d.style.height = (sc.offsetHeight * k + 18) + 'px' });
+window.addEventListener('resize', () => document.querySelectorAll('.dev[data-fit]').forEach(d => { const sc = d.firstElementChild; const k = parseFloat(getComputedStyle(d).getPropertyValue('--s')); d.style.height = (sc.offsetHeight * k + 18) + 'px' }));
+
+// ——— theme toggle ———
+document.getElementById('themeBtn').onclick = () => { const r = document.documentElement; const dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; r.dataset.theme = dark ? 'light' : 'dark' };
+
+// ——— feedback under every screen ———
+(function () {
+  const figs = Array.from(document.querySelectorAll('figure[data-fb]')); const answers = {}; let db = null, local = {};
+  try { local = JSON.parse(localStorage.getItem('r30-own-lessons-feedback') || '{}') } catch (e) {}
+  const key = n => 's' + n.replace(/\./g, '-');
+  function render(id) { const f = document.querySelector('[data-key="' + id + '"]'); if (!f) return; const a = answers[id] || {};
+    f.querySelectorAll('.fb button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === a.verdict)));
+    const ta = f.querySelector('textarea'); if (ta && document.activeElement !== ta) ta.value = a.note || '';
+    const link = document.querySelector('.toc a[href="#' + f.closest('section').id + '"]');
+    if (link) link.classList.toggle('done', Array.from(f.closest('section').querySelectorAll('figure[data-key]')).some(x => (answers[x.dataset.key] || {}).verdict)) }
+  async function save(id, patch) { answers[id] = Object.assign({}, answers[id], patch, { at: new Date().toISOString() }); render(id);
+    const st = document.querySelector('[data-key="' + id + '"] .saved');
+    try { local[id] = answers[id]; localStorage.setItem('r30-own-lessons-feedback', JSON.stringify(local)) } catch (e) {}
+    if (!db) { st.textContent = 'Kept in this browser only.'; return }
+    try { await db.doc('feedback/' + id).set(answers[id]); st.textContent = 'Saved.' } catch (e) { st.textContent = 'Could not save; kept in this browser.' } }
+  figs.forEach(f => { const id = key(f.dataset.fb); f.dataset.key = id;
+    const box = document.createElement('div'); box.className = 'fb';
+    [['ok', 'Looks right'], ['change', 'Change it'], ['remove', 'Not needed']].forEach(([v, l]) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.v = v; b.textContent = l; b.setAttribute('aria-pressed', 'false'); b.onclick = () => save(id, { verdict: v, screen: f.dataset.fb + ' ' + f.dataset.title }); box.appendChild(b) });
+    const ta = document.createElement('textarea'); ta.id = 'fb-' + id; ta.placeholder = 'What to change on ' + f.dataset.fb + '…'; ta.setAttribute('aria-label', 'Feedback on screen ' + f.dataset.fb);
+    let t; ta.oninput = () => { clearTimeout(t); t = setTimeout(() => save(id, { note: ta.value, screen: f.dataset.fb + ' ' + f.dataset.title }), 700) };
+    const st = document.createElement('span'); st.className = 'saved'; f.append(box, ta, st); if (local[id]) { answers[id] = local[id]; render(id) } });
+  const note = document.getElementById('storeNote');
+  const timer = setTimeout(() => { if (!db) note.textContent = 'Your feedback is kept in this browser; tell me in the chat when you are done.' }, 10000);
+  (window.claude && window.claude.use ? window.claude.use('db') : Promise.resolve(null)).then(d => { clearTimeout(timer); db = d;
+    if (!db) { note.textContent = 'Your feedback is kept in this browser; tell me in the chat when you are done.'; return }
+    note.textContent = 'Your feedback is saved with this page; I read it from here.';
+    db.collection('feedback').onSnapshot(snap => (snap.docs || snap).forEach(doc => { answers[doc.id] = doc.data ? doc.data() : doc; render(doc.id) }), () => {}) }).catch(() => {});
+})();
+</script>

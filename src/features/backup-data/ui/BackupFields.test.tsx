@@ -69,7 +69,9 @@ describe('BackupFields', () => {
       backupFile({ kind: 'piano-trainer-backup', format: 1, saves: { 'pt-settings': SETTINGS } }),
     )
     await user.click(await screen.findByRole('button', { name: 'Restore' }))
-    expect(await screen.findByRole('alert')).toHaveTextContent('This browser keeps nothing')
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'This browser keeps no data once the app is closed',
+    )
     expect(memory.getItem('pt-settings')).toBeNull()
     expect(onRestored).not.toHaveBeenCalled()
   })
@@ -109,7 +111,7 @@ describe('BackupFields', () => {
       }),
     )
     expect(await screen.findByRole('alertdialog')).toHaveTextContent(
-      'Some of it was saved by another version of the app',
+      'Part of it was saved by another version of the app',
     )
   })
 
@@ -137,7 +139,7 @@ describe('BackupFields', () => {
       }),
     )
     await user.click(await screen.findByRole('button', { name: 'Restore' }))
-    expect(await screen.findByRole('alert')).toHaveTextContent('this device has no room for it')
+    expect(await screen.findByRole('alert')).toHaveTextContent('this device is out of space')
     expect(JSON.parse(storage.getItem('pt-settings') ?? 'null')).toEqual(SETTINGS)
     expect(onRestored).not.toHaveBeenCalled()
   })

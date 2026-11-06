@@ -29,11 +29,14 @@ type Orientation = keyof typeof ORIENTATION
 export function FloatingBar({
   label,
   orientation = 'along',
+  docked = false,
   className,
   children,
 }: {
   label: string
   orientation?: Orientation
+  /** Docked in its screen's own row (the Player's transport, R31-P): flat, its row's width. */
+  docked?: boolean
   className?: string
   children?: ReactNode
 }) {
@@ -43,7 +46,10 @@ export function FloatingBar({
       aria-label={label}
       aria-orientation={orientation === 'column' ? 'vertical' : 'horizontal'}
       className={cn(
-        'flex items-center gap-0.5 rounded-pill border border-border bg-raised elevation-2',
+        'flex items-center gap-0.5',
+        docked
+          ? 'w-full justify-between'
+          : 'rounded-pill border border-border bg-raised elevation-2',
         ORIENTATION[orientation],
         className,
       )}

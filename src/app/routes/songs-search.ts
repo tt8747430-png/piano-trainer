@@ -1,5 +1,5 @@
 import { isStage } from '@/entities/step'
-import type { ExploreCategory, SongsFilter, SongsHome } from '@/pages/songs'
+import type { ExploreCategory, FolderSearch, SongsFilter, SongsHome } from '@/pages/songs'
 import { readText } from '@/shared/lib'
 import { keyParam, parseKey } from '@/shared/lib/music'
 import { routeSearch, type Raw } from './read-search'
@@ -10,6 +10,8 @@ export const SONGS_DEFAULTS: SongsFilter = {
   stage: 'any',
   key: '',
   favourites: false,
+  folder: 'any',
+  learned: 'any',
 }
 /** A key as a song is written in, spelled as written (a song in G♭ is not one in F♯); none if none reads. */
 function readSongKey(raw: unknown): SongsFilter['key'] {
@@ -22,9 +24,20 @@ function readSongsSearch(raw: Raw): SongsFilter {
     stage: isStage(raw.stage) ? raw.stage : SONGS_DEFAULTS.stage,
     key: readSongKey(raw.key),
     favourites: raw.favourites === true,
+    folder: raw.folder === 'none' ? 'none' : 'any',
+    learned: raw.learned === 'yes' || raw.learned === 'no' ? raw.learned : 'any',
   }
 }
-export const songsSearch = routeSearch(readSongsSearch, SONGS_DEFAULTS)
+// A folder's: the filters, and its Edit (the folder's name and look in place), entered from its ✎ or
+// a folder row's Edit.
+export const FOLDER_DEFAULTS: FolderSearch = { ...SONGS_DEFAULTS, edit: false }
+const readFolderSearch = (raw: Raw): FolderSearch => ({
+  ...readSongsSearch(raw),
+  edit: raw.edit === true,
+})
+export const folderSearch = routeSearch(readFolderSearch, FOLDER_DEFAULTS)
+
+// A song's page (R30 S4): in Edit or not, entered from its ✎.
 
 // Songs' Home (D1): My songs or Explore, remembered as Learn's view is; Explore's category chip
 // and a shelf's See all in the URL beside the library's filters.
@@ -61,4 +74,9 @@ export const SONGS_KEPT = ['view'] as const satisfies readonly (keyof SongsHome)
 // A shared song: its link's text, only read as text here, so the router carries no decoder.
 export const validateSharedSongSearch = (raw: Raw): { song: string } => ({
   song: readText(raw.song, ''),
+})
+
+// An invite link to a group (R30 S6): its code, only read as text.
+export const validateJoinGroupSearch = (raw: Raw): { code: string } => ({
+  code: readText(raw.code, ''),
 })

@@ -3,6 +3,7 @@ import { DEFAULT_BARS } from './bars'
 import {
   selectChordFinder,
   selectKeyboard,
+  selectKeysHeight,
   selectOtherHand,
   selectMetronome,
   selectMidi,
@@ -28,7 +29,6 @@ import {
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
   DEFAULT_CHORD_PLAYER,
-  DEFAULT_ACCOMPANIMENT,
   defaultKeyboard,
   type SettingsState,
 } from './types'
@@ -42,14 +42,19 @@ describe('settings selectors', () => {
       sound: DEFAULT_SOUND,
       trainer: DEFAULT_TRAINER,
       keyboard: defaultKeyboard(false),
+      keysHeight: { phone: 120, side: null, wide: null },
       recorder: DEFAULT_RECORDER,
       editing: DEFAULT_EDITING,
       foldedSections: ['chords.tensions'],
       welcomed: true,
+      tipsSeen: [],
+      practiceRecent: [],
       lessonReading: 'sections',
       sidebar: 'collapsed',
-      paletteFolded: {},
-      paletteSections: null,
+      paletteFolded: true,
+      paletteList: false,
+      paletteCategory: null,
+      editorMode: 'replace',
       midi: DEFAULT_MIDI,
       chordFinder: DEFAULT_CHORD_FINDER,
       scoreView: DEFAULT_SCORE_VIEW,
@@ -58,10 +63,8 @@ describe('settings selectors', () => {
       metronome: DEFAULT_METRONOME,
       progressions: DEFAULT_PROGRESSIONS,
       chordPlayer: DEFAULT_CHORD_PLAYER,
-      accompaniment: DEFAULT_ACCOMPANIMENT,
       bars: DEFAULT_BARS,
       tuner: { a4: 440 },
-      drone: { root: 0, kind: 'fifth', octave: 3, volume: 60 },
       scaleStaff: { degrees: true, steps: true, tonic: false, tetrachords: false },
     }
     expect(selectPractice(state)).toBe(DEFAULT_PRACTICE)
@@ -70,19 +73,16 @@ describe('settings selectors', () => {
     expect(selectOtherHand(state)).toBe(DEFAULT_OTHER_HAND)
     expect(selectTrainer(state)).toBe(DEFAULT_TRAINER)
     expect(selectKeyboard(state)).toBe(state.keyboard)
+    expect(selectKeysHeight(state)).toEqual({ phone: 120, side: null, wide: null })
     expect(selectRecorder(state)).toBe(DEFAULT_RECORDER)
     expect(selectSidebar(state)).toBe('collapsed')
     expect(selectMidi(state)).toBe(DEFAULT_MIDI)
     expect(selectChordFinder(state)).toBe(DEFAULT_CHORD_FINDER)
   })
 
-  it('keeps the palette’s panel shown and its sheet compact, until the learner chooses', () => {
-    const unset = { paletteFolded: {} } as unknown as SettingsState
-    expect(selectPaletteFolded('sheet')(unset)).toBe(true)
-    expect(selectPaletteFolded('panel')(unset)).toBe(false)
-    const chosen = { paletteFolded: { panel: true, sheet: false } } as unknown as SettingsState
-    expect(selectPaletteFolded('sheet')(chosen)).toBe(false)
-    expect(selectPaletteFolded('panel')(chosen)).toBe(true)
+  it('keeps the floating palette as the learner left it, folded or not (R31-E)', () => {
+    const chosen = { paletteFolded: false } as unknown as SettingsState
+    expect(selectPaletteFolded(chosen)).toBe(false)
   })
 
   it('says whether a section is folded away', () => {

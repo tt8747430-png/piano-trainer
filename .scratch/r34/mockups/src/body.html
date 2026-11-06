@@ -1,0 +1,64 @@
+<div class="wrap">
+  <div class="intro">
+    <h1>The keyboard · Round 34</h1>
+    <p class="soft">The on-screen keyboard as Songscription’s: all 88 keys slim and edge to edge at the foot, nothing attached to them, every control in the screen’s bar, a divider to make the keys taller or shorter. The keys stay Round 33’s ivory and ebony, and the pedals sound as before. No falling notes and no finger numbers on or under the keys. Phones in the iPhone 17 Pro frame, laptops in the MacBook Air with Safari.</p>
+    <p class="soft">Each screen has <b>Approve</b>, <b>Revise</b> or <b>Remove</b> and a note; your answers stay in this browser.</p>
+  </div>
+  <nav class="toc" aria-label="Questions">
+    <a href="#q1">1 Keys at the foot</a><a href="#q2">2 The bar</a><a href="#q3">3 Pedals</a><a href="#q4">4 Divider and key size</a><a href="#q5">5 Pages</a><a href="#q6">6 Settings</a><a href="#q7">7 Before and after</a><a href="#q8">8 The sheet’s pill</a>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="ptSize(1)">iPhone 17 Pro · app</button><script>var PT_SIZES=[['pro','iPhone 17 Pro · app'],['safari','iPhone 17 Pro · Safari'],['small','Smaller iPhone · app']];function ptSize(step){var k=0;try{k=Math.max(0,PT_SIZES.findIndex(function(x){return x[0]===localStorage.getItem('pt-mock-size')}))}catch(e){}k=(k+step)%PT_SIZES.length;document.body.classList.remove('small','safari');if(PT_SIZES[k][0]!=='pro')document.body.classList.add(PT_SIZES[k][0]);document.getElementById('sizeBtn').textContent=PT_SIZES[k][1];try{localStorage.setItem('pt-mock-size',PT_SIZES[k][0])}catch(e){}}ptSize(0)</script></span>
+  </nav>
+
+  <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>All 88 keys, slim and edge to edge at the foot</h2></div>
+    <p class="where">Where: the Player (/play/hot-cross-buns), the score editor, and every page that shows keys.</p>
+    <p>What changes: the strip under the keys goes — no chord name, no − +, no ⚙, no pedals under them. The keys reach both edges of the screen, at a piano’s proportion: all 88 across a laptop, the same 88 tiny keys on a phone, right above the transport. Only every C is named (your Note names setting). The music sounds and lights the keys as before.</p>
+    <div class="screens" id="s1"></div>
+    <div class="rec">Recommendation: as drawn, Songscription’s keyboard. The Player’s transport stays in its own row under the keys (Songscription’s phone bar), so Play keeps its place.</div>
+  </section>
+
+  <section class="q" id="q2"><div class="qhead"><span class="qnum">2</span><h2>The keyboard’s controls in the bar</h2></div>
+    <p class="where">Where: the bar of the Player, the editor and each page with keys.</p>
+    <p>What changes: the bar holds, before the ⚙, the chord you hold (on a laptop or tablet; a phone has no room, so it shows nowhere), <b>Sustain</b> (only while the keys show) and <b>Keyboard</b>, which shows or hides the keys and replaces Piano keys. The piano’s settings are in the screen’s ⚙: the Player’s own sheet at On-screen piano, the editor’s ⚙ › On-screen piano, a Practice page’s Settings › On-screen piano.</p>
+    <div class="screens" id="s2"></div>
+    <div class="rec">Recommendation: as drawn. Songscription puts Keyboard among the bar’s buttons and its settings under Settings; nothing about the keys floats.</div>
+  </section>
+
+  <section class="q" id="q3"><div class="qhead"><span class="qnum">3</span><h2>The pedals: Sustain in the bar, soft and sostenuto in its menu</h2></div>
+    <p class="where">Where: the bar, beside Keyboard.</p>
+    <p>What changes: Sustain lights blue — the colour of a key held down — while the pedal is down from anywhere — your finger on it, the space bar, a MIDI pedal, or the score’s pedal while the music plays. Hold it to hold; a quick tap latches it until the next tap. With Pedals: All three (On-screen piano), a ⌄ beside it opens Soft and Sostenuto, each held or latched the same way; a latched one stays down when the menu closes, and a dot on the ⌄ says so. The sound is Round 33’s exactly.</p>
+    <div class="screens" id="s3"></div>
+    <div class="rec">Recommendation: as drawn. OnlinePianist’s lit Sustain toggle, now in the bar; the soft and sostenuto pedals, rarely used, a tap away.</div>
+  </section>
+
+  <section class="q" id="q4"><div class="qhead"><span class="qnum">4</span><h2>A divider to resize the keys; key size in the settings</h2></div>
+    <p class="where">Where: between the music and the keys, everywhere the keys sit at the screen’s edge.</p>
+    <p>What changes: drag the divider up for taller keys or down for slimmer ones (from 56 px up to half the screen); a double click returns to the piano’s proportion. The height is remembered for a phone upright, a phone on its side, and a larger screen apart. Key size (On-screen piano) chooses how wide: <b>All keys</b> (the default) fit the width and never scroll; <b>Fit to music</b> and <b>Large</b> show fewer, larger keys that scroll to follow the music.</p>
+    <div class="screens" id="s4"></div>
+    <div class="rec">Recommendation: as drawn. Songscription’s “Resize score and piano roll”; Key depth goes from the settings, since the divider sets the height.</div>
+  </section>
+
+  <section class="q" id="q5"><div class="qhead"><span class="qnum">5</span><h2>Pages with keys: the Chord finder, Chords and the rest</h2></div>
+    <p class="where">Where: /practice/chord-finder, /practice/chords, Scales, Intervals, a progression, the Chord player, a lesson, a song’s preview.</p>
+    <p>What changes: the same keys, edge to edge at the foot, under their divider. Hidden from the bar’s Keyboard, they leave no floating Keys button: Keyboard in the bar brings them back. Chords marks a chord’s keys by role as before, without the circled finger numbers under them; the fingering stays in the page’s hand drawings and table.</p>
+    <div class="screens" id="s5"></div>
+    <div class="rec">Recommendation: as drawn. One keyboard, the same on every screen.</div>
+  </section>
+
+  <section class="q" id="q6"><div class="qhead"><span class="qnum">6</span><h2>On-screen piano settings</h2></div>
+    <p class="where">Where: Settings › On-screen piano, and the same page inside the Player’s and the editor’s ⚙.</p>
+    <p>What changes: Key size starts on All keys; Pedals says where the extra pedals are; Key depth and Collapse keyboard go (the divider and Keyboard do their jobs).</p>
+    <div class="screens" id="s6"></div>
+  </section>
+
+  <section class="q" id="q7"><div class="qhead"><span class="qnum">7</span><h2>Before and after</h2></div>
+    <p class="where">Where: the Player on the iPhone 17 Pro; Chords on the MacBook.</p>
+    <div class="screens" id="s7"></div>
+  </section>
+
+  <section class="q" id="q8"><div class="qhead"><span class="qnum">8</span><h2>The sheet’s one pill: layout and zoom together</h2></div>
+    <p class="where">Where: the Player and the score editor, at the score’s bottom-right corner.</p>
+    <p>What changes: as Songscription’s view pill (Page · Infinite width · Infinite height · Smaller · 100% · Larger), one small floating control at the score’s corner: the layout’s three choices, and in Page view the zoom beside them. The Layout tiles leave Display and the editor’s View, so the layout has one place. The zoom no longer fades in and out.</p>
+    <div class="screens" id="s8"></div>
+    <div class="rec">Recommendation: as drawn: one control for how the score looks, where your eyes are.</div>
+  </section>
+</div>

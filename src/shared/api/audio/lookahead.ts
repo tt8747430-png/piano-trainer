@@ -47,8 +47,12 @@ export function createLookahead({
 
   const renderDue = () => {
     const time = now()
-    const due = queue.filter((queued) => queued.at < time + horizon)
-    queue = queue.slice(due.length)
+    // The queue is in time order: what is due is its head, found without reading the rest (R32: a
+    // whole piece queued was read in full forty times a second).
+    const ahead = queue.findIndex((queued) => queued.at >= time + horizon)
+    if (ahead === 0) return
+    const due = ahead === -1 ? queue : queue.slice(0, ahead)
+    queue = ahead === -1 ? [] : queue.slice(ahead)
     for (const { sound, at, gain } of due)
       if (at >= time - STALE) render(sound, at, gain ? gain(sound) : 1)
     if (queue.length === 0) stopTimer()

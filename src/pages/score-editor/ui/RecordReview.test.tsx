@@ -1,6 +1,7 @@
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { recordFromGear } from '@/app/testing/editor-gear'
 import { renderApp } from '@/app/testing/render-app'
 import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { TAKES_STORAGE_KEY, TAKES_VERSION } from '@/entities/take'
@@ -56,7 +57,6 @@ const withTake = () => {
             bars: [0, 2000],
           },
         ],
-        free: [],
         nextTake: 2,
       },
       version: TAKES_VERSION,
@@ -129,19 +129,19 @@ describe('Review your recording (A40)', () => {
       takesStore,
     } = await renderApp('/edit/my-1', { storage: withTake() })
     act(() => keyboard.setStatus({ state: 'connected', devices: ['Keyboard'] }))
-    await user.click(await screen.findByRole('button', { name: 'Record' }))
+    await recordFromGear(user)
     const bar = await screen.findByRole('region', { name: 'Recording' })
     // Its countdown chosen Off while the take counts in: from the next take.
     expect(within(bar).getByRole('switch', { name: 'Metronome' })).toBeChecked()
     expect(within(bar).getByText('♩ = 120')).toBeInTheDocument()
     await user.click(within(bar).getByRole('button', { name: 'Stop' }))
     act(() => settingsStore.setState((state) => ({ recorder: { ...state.recorder, countIn: 0 } })))
-    await user.click(await screen.findByRole('button', { name: 'Record' }))
+    await recordFromGear(user)
     const waiting = await screen.findByRole('region', { name: 'Recording' })
     expect(within(waiting).getByRole('radio', { name: 'Off' })).toBeChecked()
     await waitFor(() =>
       expect(within(waiting).getByRole('status')).toHaveTextContent(
-        'Play to start recording. The take starts on your first note.',
+        'Start playing to begin recording. The take begins with your first note.',
       ),
     )
     // Nothing sounds until the first note: the take starts on it.

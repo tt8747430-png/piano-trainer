@@ -1,10 +1,11 @@
-import { useRouter } from '@tanstack/react-router'
+import { useNavigate, useRouter } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ShelvedFolder } from '@/entities/library'
 import { entryTitles, isSongCollectionId, useRepertoire } from '@/entities/piece'
 import { selectView } from '@/entities/views'
 import { DeleteFolderAsk, FolderSheet, MoveSheet } from '@/features/manage-library'
+import { NewGroupSheet } from '@/features/share-folder'
 import { songToShare, useShareSong } from '@/features/share-song'
 import { ExportSheet, SongExportSheet, useSongFiles, type ExportFiles } from '@/features/song-files'
 import { useLocale } from '@/shared/i18n'
@@ -39,19 +40,25 @@ export function LibraryDialogs({
   const repertoire = useRepertoire()
   const locale = useLocale()
   const router = useRouter()
+  const navigate = useNavigate()
   const shared = useShareSong()
   const said = shared.said
   useEffect(() => {
     if (said) say(t(`piece:${SAID[said]}`))
   }, [said, t])
   const exported = pending?.kind === 'export' ? (repertoire.piece(pending.song) ?? null) : null
-  const toShare = exported
-    ? songToShare(
-        exported,
-        entryTitles(exported, locale).primary,
-        selectView(router.options.context.views.getState(), `/play/${exported.id}`),
-      )
-    : null
+  // Share link, from a row's ⋯ (R31-S): shared at once, as the song's Settings shares it.
+  const sharing = pending?.kind === 'share' ? (repertoire.piece(pending.song) ?? null) : null
+  useEffect(() => {
+    if (!sharing) return
+    page.close()
+    const what = songToShare(
+      sharing,
+      entryTitles(sharing, locale).primary,
+      selectView(router.options.context.views.getState(), `/play/${sharing.id}`),
+    )
+    if (what) shared.share(what)
+  }, [sharing, page, locale, router, shared])
   // The songs Select chose, each one's file in turn.
   const filesOf = useSongFiles()
   const chosen =
@@ -97,6 +104,14 @@ export function LibraryDialogs({
         }}
       />
       <DeleteAsk page={page} />
+      <NewGroupSheet
+        open={pending?.kind === 'new-group'}
+        onOpenChange={shut}
+        onMade={(group) => {
+          page.close()
+          void navigate({ to: '/songs/groups/$groupId', params: { groupId: group.id } })
+        }}
+      />
       <NewSongSheet
         open={pending?.kind === 'new-song'}
         onOpenChange={shut}
@@ -109,17 +124,7 @@ export function LibraryDialogs({
         files={chosenFiles}
         onOpenChange={shut}
       />
-      <SongExportSheet
-        piece={exported}
-        onOpenChange={shut}
-        share={
-          toShare
-            ? {
-                onSelect: () => shared.share(toShare),
-              }
-            : undefined
-        }
-      />
+      <SongExportSheet piece={exported} onOpenChange={shut} />
       {folder ? (
         <MoveInSheet
           page={page}

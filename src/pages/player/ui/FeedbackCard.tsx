@@ -25,7 +25,7 @@ export function FeedbackCard({ feedback, onClose }: { feedback: Feedback; onClos
   return (
     <div
       role="status"
-      className="card absolute top-[calc(var(--tools-room,0px)+0.5rem)] right-0 z-20 flex max-w-full items-center gap-1 py-1 pr-1 pl-3 text-sm shadow-md"
+      className="card absolute top-2 right-0 z-20 flex max-w-full items-center gap-1 py-1 pr-1 pl-3 text-sm shadow-md"
     >
       <span className="min-w-0">{parts.join(' · ')}</span>
       <Button

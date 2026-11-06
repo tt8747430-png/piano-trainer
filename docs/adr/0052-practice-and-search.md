@@ -13,27 +13,43 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
 
 - **Three places and the Profile**: Learn (ADR 0053), Songs (ADR 0106) and Practice, then the Profile as the fourth
   tab (memory-palaces', Noji's), its icon the learner's initial. A bar docked at the foot on a phone, a rail down the
-  left on a phone on its side, a sidebar from 1024px that collapses to its icons, Search and Settings at its foot (a phone opens Settings from the Profile); the phone's bar on the places alone. Alt with 1–4
+  left on a phone on its side, a sidebar from 1024px as Claude's (R32): the name and its collapse toggle, Search as a field (the modifier and K), the places, Recents (the five songs opened last), the learner at its foot (their picture and name, or Guest, opening the Profile) with Settings' gear beside it; collapsed, a rail of icons with tooltips (a phone keeps the Profile as its last tab and opens Settings from it); the phone's bar on the places alone. Alt with 1–4
   goes to them. A place's bar on a phone has Search. Settings opens from the Profile (the gear in its bar and a row
   under its hero); the Profile's tab stays current under Settings and the account pages on a phone; on a laptop Settings is current alone. Every screen below a place
   has Back.
 - **The Profile** is the learner at a glance: their name as its title, their initial, email (or a guest's Sign in),
   one row of three figures (days in a row, days practised, songs played); rows to Settings and the Account; Activity
   (the month's calendar, whether today kept the run in its header); the rest of the record as a short list; badges.
-- **Settings** is one grouped list (R20): the account card (the learner's initial, name, email and one line of the
-  sync), General (General, Storage and backup), Piano (On-screen piano, with Computer keys inside it where a mouse
-  or trackpad hovers, and Connect a piano), Help; only what concerns the whole app (R29: the Player's, the editor's,
-  Sound and recording's and each Practice page's settings are behind their own gear; how lessons read is a lesson's
-  Settings'), and an admin's Admin area, each row its icon in a coloured square; one column on a phone, two
-  panes from 64rem (the list beside the page, General first, neither with Back). **The Account** reads as an edit
-  profile: the initial; Profile (the name, Save once changed, the email, Change password); Sync (where it stands, Sync
-  now, what syncs: its one home); then Sign out and Delete account…, each red in a group of its own at the foot, a
-  footnote under it, asking through the one confirm dialog (the email typed for Delete).
-- **Practice lists its pages and remembers nothing**, in three headed groups as the reference app and memory-palaces
-  list theirs: **Theory** (Chords, Scales and keys, Intervals, Progressions: the things a page shows on the keys),
-  **Playing** (Accompaniment, the Chord finder: what the hands play) and **Training** (Exercises, Quiz, Metronome).
-  Each row is its tile, its name and one short line of its own, the same in Search. A page's URL sits under its
-  page's.
+- **Settings** (R32, iOS's Settings and macOS's System Settings; `widgets/settings-screen`, its groups one model in
+  `model/sections.ts`): the account first (the learner's initial, name, email and one line of the sync, or Sign in),
+  then **App** (General: Appearance and Language; Storage and backup), **Piano** (On-screen piano, with Computer
+  keyboard inside it where a mouse or trackpad hovers; MIDI devices, its connection as its value), **Library**
+  (Selection toolbar, Swipe actions: memory-palaces' and iOS Mail's, pages of Settings' own), **Support** (User guide,
+  Report a problem: a page with its field in sight, greyed offline; About, the version or a waiting update as its
+  value), and for an administrator **Administration**. Only what concerns the whole app (R29: the Player's, the
+  editor's and each Practice page's settings are behind their own gear; how lessons read is a lesson's Settings').
+  **On a phone** one grouped list, each row its icon in a coloured square, each page pushed with Back (to Settings,
+  or to the page it is under). **On a laptop** (from 64rem) the two panes of the libraries (Songs' tree and list): the
+  sidebar (17rem, `TreeItem` rows with a painted swatch, the account first, the groups headed) stands sticky under the
+  bar with its own height and scroll, so the page beside it (44rem) scrolls with the window and never drags it; the
+  page shown is marked, a page under a page marking its parent (Edit profile the account, the legal pages About, the
+  MIDI log MIDI devices) and keeping its Back; a top-level page has none. A page Settings does not list (a Practice
+  page's Settings) stands alone in one column with Back. **About** is a Settings page: the app's icon, name, version
+  and build; Software update (its status the value, a tap checks, Install and restart under it when one waits) and
+  the licence; Legal (Privacy Policy, Terms of Service, each a row; their pages go up to About); Acknowledgements.
+  **The Account** reads as an edit profile: the initial; Profile (the name, Save once changed, the email, Change
+  password); for an editor or administrator **Editorial access** (the role, and Preview as learner: the app as a
+  learner sees it for the session, its one home); Sync (where it stands, Sync now, what syncs: its one home); then
+  Sign out and Delete account…, each red in a group of its own at the foot, a footnote under it, asking through the
+  one confirm dialog (the email typed for Delete).
+- **Practice is ordered by relevance** (R32, as Yousician, Simply Piano, Flowkey and musictheory.net order a practice
+  home): its purpose in one line; **Up next**, up to three cards the learner's record proves are next (skills due in
+  My gaps, the exercise last played through, the Practice page last opened, however reached: the shell notes every
+  visit, `usePracticeVisits`), each saying why, or **Start here** (the first exercise, Chords) for a new learner; then
+  **Theory** (Chords, Scales and keys, Intervals, Progressions), **Playing** (Accompaniment, the Chord player) and
+  **Training** (Exercises, Quiz), each a card of rows (its tile, name and one line, the same in Search), Theory beside
+  Playing and Training on a laptop; the **Tools** last, four tiles each showing what it is set to (the Metronome's
+  tempo and meter, the Tuner's A4). A page's URL sits under its page's.
 - **Choosing a root, a quality or a scale** is one row of pickers at the top of the page (`PickerRow`, ADR 0061):
   the root's value with ⌃⌄ opening an octave of twelve keys (`NotePicker`, a black key split "C♯ | D♭"; a pitch alone
   `PitchPicker`), a quality, a voicing or a scale's kind a menu (`MenuPicker`), a key the circle of fifths
@@ -69,26 +85,57 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     buttons), beside **Play all** (each interval in turn) and Stop (A22). Within the octave each row's ⓘ names songs
     that open with it, rising and falling (the unison once, the tritone under both spellings), each language its own
     list of titles; ear training a row into the Quiz, which owns it. The cards with a staff are the lessons';
-  - Progressions: its typed line and Between (ADR 0112);
-  - Accompaniment: a tab for each method book (named in the interface's script: Bobrova, Боброва), Styles and Yours,
-    those hidden on its Settings left out; a pattern's page and the editor of the learner's own;
-    a study's page.
+  - **Exercises, Accompaniment and Progressions are one library** (`widgets/practice-library`, R30-4), the Songs
+    library's shape and its own parts (the kit's `FilterSheet`, `FilterChips`, `SortChoice`, `RowMore`,
+    `FavouriteMark`, `TreeItem`, `SortHeading`): the search with Sort (Book or Style, Name, Level) and Filter (Level;
+    Style for Progressions, the tree's own place); on a phone Favourites while there are some, each book (or style) a
+    run of rows folded after five with Show all n, Mine last, a row its picture, name, line and level (pips and its
+    number), ♡ in its ⋯ and on a swipe; from 64rem the tree (All, Favourites, the books, Mine, Hidden; a count of
+    none hidden; 44px rows) beside a table its headings sort (Name, Book, Level; Accompaniment's Hands, each figure's
+    name; Progressions' Numerals). Its view (`q`, `sort`, `place`, `stage`) is the URL's; `place` and `sort` are
+    remembered. Creating is the floating honey +. A level is the content's: an exercise's own, a pattern's its book's
+    course's, a study's its own; the rhythm styles, the learner's patterns and every progression have none, so
+    Progressions shows, sorts and filters by no level;
+  - Exercises: its three books; an exercise's page has the ♡ in its bar;
+  - Accompaniment: each method book (named in the interface's script: Bobrova, Боброва) and the rhythm styles a
+    place of its **patterns only** (R32: content kinds apart), with links to the book's course in Learn and its songs
+    in Songs; Mine the learner's patterns, Hidden the built-ins they hid (through `pt-patterns`, so the Player's
+    picker agrees). A pattern's ♡ is `pt-patterns`'. Back from a pattern goes to its book's place; a study goes up
+    to its method book's course;
+  - **Every library is the learner's to arrange** (R32, Songs' acts, the built-in books included, as an overlay in
+    `pt-practice-library` version 2): each row's More has Rename…, Move to… (a book, a style, a folder of their own),
+    Hide (Show under Hidden) and Restore original name; the pencil in the bar opens Edit, every place and row with
+    its handle in one drag context (memory-palaces' engine and overlay), a place's More renaming, hiding or (their
+    own folder) deleting it, asking first, its rows going home; New folder. The sort's first choice is Manual;
+  - Progressions opens on its library (each style a place, Mine the learner's own). A progression's page
+    (`/practice/progressions/$id`, the library's or `mine-n`) has its ♡, its Key and Chords (size), approach chords, its
+    chords with their roles and bass moves, the Player's diagrams and staff, Play it in the Chord player, practising in
+    all 12 keys, Passing chords as its section and the songs it is in (a second column on a laptop), Play floating. A
+    line typed anywhere opens `/practice/progressions/line` (named where the library has it), kept in Mine from its
+    bar; the learner's own is changed on its page, renamed by Edit, deleted asked first (ADR 0112). Favourites of
+    exercises and progressions and the learner's progressions are `pt-practice-library` (version 1, synced);
+    a pattern's page and the editor of the learner's own; a study's page.
 - **The Chord finder** (`/practice/chord-finder?keys=&key=`) is the one tool at the keys: the chord a MIDI keyboard
   plays (as its keys went down, read on once they are let go), else the keys tapped (kept in the URL, a link to send).
   One stage in the middle: the chord named as large as the page allows in every reading, over its grand staff, the
   chords played logged on it in turn, then the keys that hold it; the key it spells in, its picker over the stage.
-  Its Settings (remember the chords, over the bass, the keys it is in, the key's scale on every octave of the keys)
-  are its own page, not a sheet.
-- **Each Practice page has a Settings page** (A24, R18) at `/settings/<page>` (chords, scales, intervals,
-  progressions, accompaniment, chord-finder, exercises-and-quiz): how the page sounds and looks every time, then rows
-  to the on-screen piano and a connected piano. The page's gear opens it (`?from=` names the page, so Back returns
+  The key picker reads Spelled in, its ⓘ saying why. Empty (R32), the stage says in one line what to do and offers
+  three chords to try (C major, A minor 7th, D dominant 7th); the staff waits for a chord. Its Settings are grouped
+  (Chord names: slash chords for inversions; Analysis: the keys that contain it, the key's scale on the keyboard;
+  History: keep the last chords) on their own page, not a sheet.
+- **A Practice page has a Settings page only where it holds several settings of its own** (A24, R18, R32) at
+  `/settings/<page>` (scales, progressions, chord-finder; the Chord player's its own): how the page sounds and looks
+  every time, then rows to the on-screen piano and a connected piano. A single setting stays in place (the Tuner's A4,
+  a drill's Advance automatically in its setup); the piano's are the keyboard strip's ⚙; so Chords, Intervals,
+  Accompaniment, Exercises and the Quiz have no gear, and nothing redirects to the app's Settings. The page's gear opens it (`?from=` names the page, so Back returns
   there); Settings does not list them (R29). The page keeps what you look at.
 - **A key size chosen** says on the keys' rail for a moment what it shows ("Showing 36 keys (C3–B5)").
 - **The Metronome** (`/practice/metronome`), its face in Chordify's order: the BPM large between −10 −1 +1 +10, a
   slider and Tap tempo (the average of the last five taps), a square a beat (the first larger, the one sounding
-  filled, a tap cycling accent · beat · silent), one honey Play. Under it, beside it on a laptop, labelled rows: Sound
-  (Clicks, Beeps, Drum beat), Time signature, Between beats (the subdivision); then Practice, the two trainers, each a
-  switch whose rows read as a sentence. A click's and a beep's accent is an octave up; the drum grooves are A39's (rock in 4:
+  filled, a tap cycling accent · beat · silent), one honey Play. Every setting is in place, as Chordify's (R32; no
+  gear, no settings page): under it, beside it on a laptop, Rhythm (Time signature, Sound: Click, Beep, Drum kit;
+  Subdivision: None, Eighth notes, Triplets, Sixteenth notes, Swung eighths), then Practice aids, the speed trainer
+  and silent bars, each a switch whose rows open in place and read as a sentence. A click's and a beep's accent is an octave up; the drum grooves are A39's (rock in 4:
   kick 1 and 3, snare 2 and 4; a waltz: kick 1, snare 2 and 3; 6/8: kick 1, snare 4; odd meters by their groups), the
   hat on the subdivision, the kick and snare one loudness.
   Beats are planned on the audio clock a second and a half ahead and topped up by a timer; a change while it plays
@@ -101,7 +148,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
 - **Musical terms** are one list each in the kernel: the tempo words with their ranges (`TEMPO_TERMS`, larghissimo
   to prestissimo; ten name a tempo, the shades between only describe), the editor's expression text in three groups
   (`EXPRESSION_GROUPS`: character, tempo changes, technique), each meaning in both languages.
-- **How to use** is Settings' Help: six folding parts in the order a learner meets them, each step beside the icon
+- **User guide** is Settings' Support: six folding parts in the order a learner meets them, each step beside the icon
   its control wears.
 - **Search** (`/search?q=`) lists every named thing by kind, each a row to its page: Practice's pages, songs and
   folders, lessons, chord qualities, scale kinds, progressions, patterns, exercises and trainers. It is one projection
@@ -149,3 +196,14 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
 - r29 — Settings holds only the app's own pages (account, General, Storage and backup, On-screen piano with Computer keys inside on a computer, Connect a piano, Help); General's choices as cards; lessons read as chosen on a lesson's Settings (2026-11-03).
 - r29 (Practice redesign) — Bars one row: a page's views a Segmented in its content (Scales' Scale · Chords · Key, each with a live line: "7 notes", "i–vii°", "3 flats"), Accompaniment's sources a Source menu; the key picker Flat's key-signature grid everywhere, one name per key; Scales' heading the Tonic and Scale menus, its run 1–4 octaves and a Direction, its formula's altered degrees marked, a mode named by its colour; Chords' head card, Play · Arpeggio named, Top note for a chord between the hands, the hand drawn over its keys; Intervals' Play as (Ascending · Descending · Harmonic) and each interval's meaning; the Key view's circle a picture (2026-11-04).
 - r29 — Back amended (the owner's report, research in `.scratch/r29/research/back-navigation.md`): to the screen the learner came from in the app, as iOS's Back and Android's in-app Up and Back; up the parents table only where the screen was opened directly (Android's synthetic back stack); a deleted thing's screens stepped past (`useForgetScreens`) (2026-11-04).
+- r30 — On a laptop the Profile sits at the sidebar's foot under Search and Settings, as an app's account does; a locked
+  badge names its goal over its meter instead of the count twice (2026-11-05).
+- r30 — Drone, Tap tempo and the Recorder leave Practice: the Metronome has its Tap, and recording is the score editor's (Songs' + › Record) (2026-11-05).
+- r30-4 — Exercises, Accompaniment and Progressions are one library, the Songs library's shape (`widgets/practice-library`); the Source menu, Progressions' three tabs and the fixed grids go; a progression has its own page; favourites and the learner's progressions in `pt-practice-library` (2026-11-05).
+- r32 — Settings rebuilt (the owner's report, `.scratch/r32/plan/settings.md`): on a laptop the sidebar scrolls on its own beside the page (it had scrolled with it, its foot out of reach), compact tree rows, the page shown marked; Selection toolbar and Swipe actions a Library group of their own (they had no Back under General); About a Settings page with Software update, Legal and Acknowledgements (its Back was dead on a laptop, its column apart); Privacy and Terms under About; Report a problem a page; Preview as learner on the Account; Administration in Settings' sidebar; the words made professional, en and ru (2026-11-05).
+- r32 — Practice by relevance with Up next (Continue gone); every tool's settings in place (the Metronome's as
+  Chordify's, the Tuner's A4), no one-option page, no gear that opens only the piano's rows; the header's Tools a real
+  menu in place (the Metronome live, the Tuner under its switch, the Chord finder and the Circle of fifths); selection
+  sheets that say what is included and why; the Chord player's equal tiles and one drag context (memory-palaces'
+  fix); the libraries arranged like Songs, the built-in books included, Accompaniment patterns only; the laptop
+  sidebar as Claude's (2026-11-05; research, spec and mockup in `.scratch/r32/`).

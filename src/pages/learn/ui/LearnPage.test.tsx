@@ -76,14 +76,14 @@ describe('Learn', () => {
       )
     })
 
-    it('offer the four levels as chips, the level’s steps learned under its name', async () => {
+    it('offer the four levels as chips, then Your lessons, the level’s steps learned under its name', async () => {
       await renderApp('/')
       const levels = await screen.findByRole('radiogroup', { name: 'Level' })
       expect(
         within(levels)
           .getAllByRole('radio')
           .map((chip) => chip.textContent),
-      ).toEqual(['Beginner', 'Intermediate', 'Advanced', 'Professional'])
+      ).toEqual(['Beginner', 'Intermediate', 'Advanced', 'Professional', 'Your lessons'])
       expect(within(levels).getByRole('radio', { name: 'Beginner' })).toBeChecked()
       const steps = JOURNEYS[0]!.chapters.flatMap((chapter) => chapter.steps).length
       expect(screen.getByRole('region', { name: 'Foundations' })).toHaveTextContent(
@@ -122,7 +122,7 @@ describe('Learn', () => {
     it('come up from the header’s toggle, shelf by shelf', async () => {
       const user = userEvent.setup()
       const { router } = await renderApp('/')
-      // In the bar's one row, in the title's place (R29-P1).
+      // Its views are the bar's title (R31-S): Lessons · Courses where the title stands.
       const toggle = await screen.findByRole('radiogroup', { name: 'What Learn shows' })
       expect(screen.getByRole('banner')).toContainElement(toggle)
       expect(within(toggle).getByRole('radio', { name: 'Lessons' })).toBeChecked()

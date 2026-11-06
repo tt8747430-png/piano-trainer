@@ -1,8 +1,8 @@
 import { Link, useParams } from '@tanstack/react-router'
+import { Check, Layers, RotateCcw } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  CARD_DENSITIES,
   CARD_SHOWS,
   DEFAULT_CARD_LOOK,
   childFolders,
@@ -15,27 +15,45 @@ import {
   type ShelvedFolder,
 } from '@/entities/library'
 import { resetCardLook, setCardLook } from '@/features/manage-library'
+import { cn, useMediaQuery } from '@/shared/lib'
+import { sameStyle } from '@/shared/lib/style'
 import {
+  ActionMenu,
   BackButton,
   ButtonLink,
-  ChoiceCard,
   ConfirmDialog,
+  Docked,
+  LIBRARY_PANES,
   NotFound,
+  RoundButton,
   ScreenHeader,
+  Segmented,
   SettingsGroup,
   SwitchRow,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { CardLookProvider, cardLookProps, FolderRow, SongRow } from '@/widgets/song-library'
 import { StyleEditor } from '@/widgets/style-editor'
-import { useLibraryPage } from '../model/use-library-page'
+import { useLibraryPage, type LibraryPage } from '../model/use-library-page'
+import { SongTable } from './SongTable'
 
-/** Where Apply to… keeps the look: this place, it with its subfolders, or every folder. */
-type Reach = 'this' | 'below' | 'every'
+/** Which device the preview draws the rows on. */
+type Device = 'phone' | 'laptop'
 
-const NO_FILTER = { q: '', stage: 'any', key: '', favourites: false } as const
+const NO_FILTER = {
+  q: '',
+  stage: 'any',
+  key: '',
+  favourites: false,
+  folder: 'any',
+  learned: 'any',
+} as const
 
-/** A folder's Card style (R29 B9), reached from its Settings › Appearance. */
+/** Whether two looks draw the same. */
+const sameLook = (a: CardLook, b: CardLook) =>
+  sameStyle(a.style, b.style) && CARD_SHOWS.every((show) => a.show[show] === b.show[show])
+
+/** A folder's Card style (R29 B9), from its ⋯. */
 export function FolderCardStylePage() {
   const { t } = useTranslation('songs')
   const { folderId } = useParams({ from: '/shell/songs/folders/$folderId/card-style' })
@@ -50,25 +68,27 @@ export function FolderCardStylePage() {
   return <CardStyle key={folder.id} folder={folder} />
 }
 
-/** Home's Card style (R29 B9): the library's own rows, reached from Songs' Card style. */
+/** The library home's Card style (R29 B9), from Songs' More. */
 export function HomeCardStylePage() {
   return <CardStyle folder={null} />
 }
 
 /**
- * Card style (R29 B9, memory-palaces' deck card style): the place's look edited on a live preview of
- * its first rows: the style editor, What cards show, Density; Reset, and Apply to… this place, it
- * and its subfolders, or every folder (asked first). Kept only on Apply.
+ * Card style (R32-C, memory-palaces' deck card style): the place's look, edited on a pinned preview
+ * of its own rows as a phone or a laptop draws them; the style editor, then Card contents. Reset to
+ * default in the bar; at the foot Apply to… (this place, it with its subfolders, or every folder,
+ * asked first) and Apply, which keeps the draft for this place. Nothing is kept until then.
  */
 function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
   const { t } = useTranslation('songs')
   const nameOf = useFolderName()
   const store = useLibraryStoreApi()
   const layout = useLibraryLayout()
+  const laptop = useMediaQuery(LIBRARY_PANES)
   const place: CardPlace = folder?.id ?? 'home'
-  const saved = useLibrary((state) => state.cardLooks[place])
-  const [draft, setDraft] = useState<CardLook>(saved ?? DEFAULT_CARD_LOOK)
-  const [reach, setReach] = useState<Reach>('this')
+  const saved = useLibrary((state) => state.cardLooks[place]) ?? DEFAULT_CARD_LOOK
+  const [draft, setDraft] = useState<CardLook>(saved)
+  const [device, setDevice] = useState<Device>(laptop ? 'laptop' : 'phone')
   const [asking, setAsking] = useState(false)
   const [said, setSaid] = useState<string | null>(null)
   const page = useLibraryPage(folder, NO_FILTER)
@@ -80,126 +100,117 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
   }
   const subfolders = below(place)
   const everyFolder: CardPlace[] = ['home', ...layout.folders.map((each) => each.id)]
+  // The app's own look is kept as none: the place reads the default again.
   const apply = (places: readonly CardPlace[]) => {
-    setCardLook(store, places, draft)
+    if (sameLook(draft, DEFAULT_CARD_LOOK)) for (const each of places) resetCardLook(store, each)
+    else setCardLook(store, places, draft)
     setSaid(t('cardStyle.applied', { count: places.length }))
   }
-  const onApply = () =>
-    reach === 'every'
-      ? setAsking(true)
-      : apply(reach === 'below' ? [place, ...subfolders] : [place])
-
-  const rows = [
-    ...page.view.folders
-      .slice(0, 3)
-      .map(({ folder: each, ...holds }) => (
-        <FolderRow
-          key={each.id}
-          folder={each}
-          holds={holds}
-          actions={[]}
-          onSelect={() => undefined}
-        />
-      )),
-    ...page.view.groups
-      .flatMap((group) => group.entries)
-      .map((entry) => (
-        <SongRow
-          key={entry.id}
-          entry={entry}
-          favourite={page.favourites.includes(entry.id)}
-          actions={[]}
-          onSelect={() => undefined}
-        />
-      )),
-  ].slice(0, 3)
-
-  const preview = (
-    <CardLookProvider value={draft}>
-      {/* Seen, never used: its rows lead nowhere while the look is edited. */}
-      <div inert>
-        {rows.length > 0 ? (
-          <ul className="grid-cards auto-rows-fr gap-2" {...cardLookProps(draft)}>
-            {rows}
-          </ul>
-        ) : (
-          <p className="px-1 text-muted-foreground">{t('cardStyle.empty')}</p>
-        )}
-      </div>
-    </CardLookProvider>
-  )
+  const change = (next: CardLook) => {
+    setDraft(next)
+    setSaid(null)
+  }
+  const name = folder ? nameOf(folder) : t('library.home')
 
   return (
-    <div className="flex flex-col gap-6 pb-8">
-      <ScreenHeader title={t('cardStyle.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <p className="px-1 font-display text-2xl font-semibold text-balance">
-          {folder ? nameOf(folder) : t('library.home')}
-        </p>
-        <StyleEditor
-          value={draft.style}
-          onChange={(style) => setDraft({ ...draft, style })}
-          preview={preview}
-        />
+    <div className="flex flex-col gap-6 pb-docked-8">
+      <ScreenHeader
+        title={t('cardStyle.title')}
+        back={<BackButton />}
+        tools={
+          <RoundButton
+            label={t('cardStyle.reset')}
+            icon={RotateCcw}
+            disabled={sameLook(draft, DEFAULT_CARD_LOOK)}
+            onClick={() => change(DEFAULT_CARD_LOOK)}
+          />
+        }
+      />
+      <StyleEditor
+        value={draft.style}
+        onChange={(style) => change({ ...draft, style })}
+        preview={
+          <div className="flex h-full flex-col gap-3">
+            <div className="flex min-h-11 items-center justify-between gap-3">
+              <p className="min-w-0 flex-1 truncate font-display text-lg font-semibold">{name}</p>
+              <div className="w-48 shrink-0">
+                <Segmented<Device>
+                  label={t('cardStyle.previewOn')}
+                  value={device}
+                  options={[
+                    { value: 'phone', label: t('cardStyle.phone') },
+                    { value: 'laptop', label: t('cardStyle.laptop') },
+                  ]}
+                  onChange={setDevice}
+                />
+              </div>
+            </div>
+            <StylePreview look={draft} page={page} device={device} />
+          </div>
+        }
+      >
         <SettingsGroup title={t('cardStyle.shows')}>
           {CARD_SHOWS.map((show) => (
             <SwitchRow
               key={show}
               label={t(`cardStyle.show.${show}`)}
               checked={draft.show[show]}
-              onCheckedChange={(on) => setDraft({ ...draft, show: { ...draft.show, [show]: on } })}
+              onCheckedChange={(on) => change({ ...draft, show: { ...draft.show, [show]: on } })}
             />
           ))}
         </SettingsGroup>
-        <ChoiceCard
-          title={t('cardStyle.density')}
-          value={draft.density}
-          options={CARD_DENSITIES.map((density) => ({
-            value: density,
-            label: t(`cardStyle.densities.${density}.label`),
-            example: t(`cardStyle.densities.${density}.example`),
-          }))}
-          onChange={(density) => setDraft({ ...draft, density })}
-        />
-        <ChoiceCard<Reach>
-          title={t('cardStyle.applyTo')}
-          value={reach}
-          options={[
-            { value: 'this', label: t(folder ? 'cardStyle.thisFolder' : 'cardStyle.homeOnly') },
-            ...(subfolders.length > 0
-              ? [
-                  {
-                    value: 'below' as const,
-                    label: t('cardStyle.withSubfolders', { count: subfolders.length }),
-                  },
-                ]
-              : []),
-            {
-              value: 'every',
-              label: t('cardStyle.everyFolder', { count: everyFolder.length }),
-            },
-          ]}
-          onChange={setReach}
-        />
-        <div className="flex flex-wrap items-center justify-end gap-3">
+      </StyleEditor>
+      {/* Apply to… and Apply at the foot, always in reach: never under a long page's end. */}
+      <Docked className="pt-3">
+        <div className="flex w-full flex-wrap items-center justify-end gap-3">
           {said ? (
-            <p role="status" className="mr-auto text-sm text-muted-foreground">
+            <p role="status" className="me-auto text-sm text-muted-foreground">
               {said}
             </p>
           ) : null}
+          <ActionMenu
+            label={t('cardStyle.applyToTitle')}
+            align="end"
+            trigger={
+              <>
+                <Layers aria-hidden />
+                {t('cardStyle.applyTo')}
+              </>
+            }
+            render={<Button variant="soft" size="lg" className="flex-1 sm:flex-none" />}
+            actions={[
+              {
+                key: 'this',
+                label: t(folder ? 'cardStyle.thisFolder' : 'cardStyle.homeOnly'),
+                onSelect: () => apply([place]),
+              },
+              ...(subfolders.length > 0
+                ? [
+                    {
+                      key: 'below',
+                      label: t('cardStyle.withSubfolders', { count: subfolders.length }),
+                      onSelect: () => apply([place, ...subfolders]),
+                    },
+                  ]
+                : []),
+              {
+                key: 'every',
+                label: t('cardStyle.everyFolder', { count: everyFolder.length }),
+                onSelect: () => setAsking(true),
+              },
+            ]}
+          />
           <Button
-            variant="ghost"
-            onClick={() => {
-              resetCardLook(store, place)
-              setDraft(DEFAULT_CARD_LOOK)
-              setSaid(t('cardStyle.resetDone'))
-            }}
+            size="lg"
+            className="flex-1 sm:flex-none"
+            disabled={sameLook(draft, saved)}
+            onClick={() => apply([place])}
           >
-            {t('cardStyle.reset')}
+            <Check aria-hidden />
+            {t('cardStyle.apply')}
           </Button>
-          <Button onClick={onApply}>{t('cardStyle.apply')}</Button>
         </div>
-      </div>
+      </Docked>
       <ConfirmDialog
         open={asking}
         onOpenChange={setAsking}
@@ -210,5 +221,65 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
         onConfirm={() => apply(everyFolder)}
       />
     </div>
+  )
+}
+
+/**
+ * The place's first rows in the look, as `device` draws them: a phone's list or cards; a laptop's
+ * right pane, its songs a table inside a card in the style for List, the style's cards for Cards and
+ * Grid (R32-C). Seen, never used: they lead nowhere while the look is edited.
+ */
+function StylePreview({
+  look,
+  page,
+  device,
+}: {
+  look: CardLook
+  page: LibraryPage
+  device: Device
+}) {
+  const { t } = useTranslation('songs')
+  const songs = page.view.groups.flatMap((group) => group.entries)
+  // What the pane holds whole: two rows on a phone, a page's worth on a laptop.
+  const folders = device === 'phone' ? page.view.folders.slice(0, 2) : []
+  if (songs.length === 0 && folders.length === 0)
+    return <p className="text-muted-foreground">{t('cardStyle.empty')}</p>
+  const table = device === 'laptop' && look.style.layout === 'list'
+  return (
+    <CardLookProvider value={look}>
+      <div inert className="min-h-0 flex-1 overflow-hidden">
+        {table ? (
+          <div {...cardLookProps(look)}>
+            <div className="card overflow-hidden px-2">
+              <SongTable entries={songs.slice(0, 5)} page={page} />
+            </div>
+          </div>
+        ) : (
+          <ul
+            className={cn('grid-cards auto-rows-fr gap-2', device === 'laptop' && 'grid-cols-2')}
+            {...cardLookProps(look)}
+          >
+            {folders.map(({ folder: each, ...holds }) => (
+              <FolderRow
+                key={each.id}
+                folder={each}
+                holds={holds}
+                actions={[]}
+                onSelect={() => undefined}
+              />
+            ))}
+            {songs.slice(0, device === 'laptop' ? 6 : 2 - folders.length).map((entry) => (
+              <SongRow
+                key={entry.id}
+                entry={entry}
+                favourite={page.favourites.includes(entry.id)}
+                actions={[]}
+                onSelect={() => undefined}
+              />
+            ))}
+          </ul>
+        )}
+      </div>
+    </CardLookProvider>
   )
 }

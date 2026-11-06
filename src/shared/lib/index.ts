@@ -13,19 +13,14 @@ export { OPEN_PLAINLY } from './open-plainly'
 export { isOneOf } from './is-one-of'
 export {
   KEY_DOCKS,
-  KEY_LENGTHS,
   KEY_SIZES,
   NAMED_KEYS,
-  nextNamedKeys,
-  RAIL_CONTROLS,
-  railControls,
+  PEDALS_SHOWN,
   SWIPES,
-  zoomKeySize,
   type KeyDock,
-  type KeyLength,
   type KeySize,
   type NamedKeys,
-  type RailControl,
+  type PedalsShown,
   type Swipe,
 } from './keyboard-choices'
 export { OCTAVE_SHIFTS, PEDAL_WAYS, type OctaveShift, type PedalWay } from './midi-choices'
@@ -43,7 +38,6 @@ export {
   scrollToReveal,
   scrollToShow,
   keysInView,
-  scrollByOctave,
   scrollToCentre,
   viewFrame,
   type ScrollMetrics,
@@ -97,6 +91,7 @@ export { tapTempo } from './tap-tempo'
 export { useScrollMotion } from './use-scroll-motion'
 export { useRovingFocus } from './use-roving-focus'
 export { SHORTEST_PRESS_MS, usePresses } from './use-presses'
+export { useLatestCallback } from './use-latest-callback'
 export { useSetSearch } from './use-set-search'
 export { mergeVisibleOrder } from './order'
 export { nameFrom } from './name-from'
@@ -142,3 +137,4 @@ export { contentHash } from './content-hash'
 export { plainText } from './plain-text'
 export { slug } from './slug'
 export { AVATAR_BYTES, AVATAR_SIDE, avatarOf, centreSquare } from './image'
+export { REST_MS, useRestingSave } from './use-resting-save'

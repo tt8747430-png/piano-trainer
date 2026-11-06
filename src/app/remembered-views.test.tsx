@@ -36,8 +36,8 @@ describe('Remembered views', () => {
     const first = await renderApp('/play/lightly-row', { storage })
     await user.click(await screen.findByRole('button', { name: /^Transpose/ }))
     await user.click(await screen.findByRole('button', { name: 'Down a semitone' }))
-    await user.keyboard('{Escape}')
-    await user.click(screen.getByRole('button', { name: 'Version: Original' }))
+    await user.click(screen.getByRole('button', { name: /^Transpose$/ }))
+    await user.click(await screen.findByRole('button', { name: 'Version: Original' }))
     const simplified = await screen.findAllByRole('button', { name: /^Simplified/ })
     // Piano and voice, the group it plays in.
     await user.click(simplified.at(-1) as HTMLElement)
@@ -97,7 +97,7 @@ describe('Remembered views', () => {
       '/play/progression?p=ii-V-I&key=D&chordSize=ninths&pattern=jazz&walk=fifths',
       storage,
     )
-    const { router } = await renderApp('/practice/progressions?p=I-IV-V&key=G', { storage })
+    const { router } = await renderApp('/practice/progressions/line?p=I-IV-V&key=G', { storage })
     await user.click(await screen.findByRole('link', { name: 'In G major' }))
     await waitFor(() =>
       expect(router.state.location.search).toEqual({

@@ -5,7 +5,6 @@ import { isStaffId } from '@/shared/lib/notation'
 import {
   createSavedStore,
   isOneOf,
-  railControls,
   SHEET_VIEWS,
   readKeyList,
   savedObject,
@@ -27,6 +26,8 @@ import {
   DEFAULT_RECORDER,
   RECORDER_COUNT_INS,
   DEFAULT_SIDEBAR,
+  DEFAULT_KEYS_HEIGHT,
+  KEYS_HEIGHT_MOST,
   DEFAULT_OTHER_HAND,
   DEFAULT_PLAYBACK,
   FOLLOW_RETURNS,
@@ -36,7 +37,6 @@ import {
   DEFAULT_PROGRESSIONS,
   DEFAULT_CHORD_PLAYER,
   type ChordPlayerSettings,
-  DEFAULT_ACCOMPANIMENT,
   isProgressionNames,
   isProgressionVoicing,
   DEVICE_NAME_MAX,
@@ -47,7 +47,6 @@ import {
   defaultKeyboard,
   detectLocale,
   isKeyDock,
-  isKeyLength,
   isDiagramsMode,
   isTextSize,
   isOtherHandLook,
@@ -65,19 +64,17 @@ import {
   isOctaveShift,
   isPedalWay,
   isSidebar,
-  PALETTE_PLACES,
   isSwipe,
   isTheme,
   isTouch,
-  type AccompanimentSettings,
   type ChordFinderSettings,
   type ProgressionsSettings,
   type KeyboardSettings,
+  type KeysHeight,
   type MetronomeSettings,
   type MidiSettings,
   type OtherHandSettings,
   type PlaybackSettings,
-  type PaletteFolds,
   type PracticeToggles,
   type EditingSettings,
   type RecorderSettings,
@@ -86,11 +83,7 @@ import {
   type SoundSettings,
   type TrainerSettings,
   A4_RANGE,
-  DEFAULT_DRONE,
   DEFAULT_TUNER,
-  DRONE_OCTAVES,
-  isDroneKind,
-  type DroneSettings,
   DEFAULT_SCALE_STAFF,
   type ScaleStaffSettings,
   type TunerSettings,
@@ -98,7 +91,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 24
+export const SETTINGS_VERSION = 34
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -121,11 +114,14 @@ export function createSettingsStore({
         sound: DEFAULT_SOUND,
         trainer: DEFAULT_TRAINER,
         keyboard: defaultKeyboard(finePointer),
+        keysHeight: DEFAULT_KEYS_HEIGHT,
         recorder: DEFAULT_RECORDER,
         editing: DEFAULT_EDITING,
         sidebar: DEFAULT_SIDEBAR,
-        paletteFolded: {},
-        paletteSections: null,
+        paletteFolded: true,
+        paletteList: false,
+        paletteCategory: null,
+        editorMode: 'replace',
         midi: DEFAULT_MIDI,
         chordFinder: DEFAULT_CHORD_FINDER,
         scoreView: DEFAULT_SCORE_VIEW,
@@ -134,13 +130,13 @@ export function createSettingsStore({
         metronome: DEFAULT_METRONOME,
         foldedSections: [],
         welcomed: false,
+        tipsSeen: [],
+        practiceRecent: [],
         lessonReading: 'page',
         progressions: DEFAULT_PROGRESSIONS,
         chordPlayer: DEFAULT_CHORD_PLAYER,
-        accompaniment: DEFAULT_ACCOMPANIMENT,
         bars: DEFAULT_BARS,
         tuner: DEFAULT_TUNER,
-        drone: DEFAULT_DRONE,
         scaleStaff: DEFAULT_SCALE_STAFF,
       },
       read: sanitize,
@@ -205,19 +201,9 @@ function otherHandSettings(value: unknown): OtherHandSettings {
 }
 
 /** Each place's fold as saved where it is a boolean; a place never chosen stays unset. */
-/** The panel's open sections: names, or none chosen. */
-const paletteSections = (value: unknown): readonly string[] | null =>
-  Array.isArray(value) && value.every((name) => typeof name === 'string') ? value : null
-
-function paletteFolds(value: unknown): PaletteFolds {
-  const saved = savedObject<PaletteFolds>(value)
-  return Object.fromEntries(
-    PALETTE_PLACES.flatMap((place) => {
-      const folded: unknown = saved[place]
-      return typeof folded === 'boolean' ? [[place, folded]] : []
-    }),
-  )
-}
+/** The palette's category: a name, or none chosen. */
+const paletteCategory = (value: unknown): string | null =>
+  typeof value === 'string' && value !== '' ? value : null
 
 /** A trainer setting keeps what was saved; one never saved, or not valid, takes its default. */
 function trainerSettings(value: unknown): TrainerSettings {
@@ -245,7 +231,6 @@ function editingSettings(value: unknown): EditingSettings {
   const saved = savedObject<EditingSettings>(value)
   return {
     hearNotes: typeof saved.hearNotes === 'boolean' ? saved.hearNotes : DEFAULT_EDITING.hearNotes,
-    startMode: isStartMode(saved.startMode) ? saved.startMode : DEFAULT_EDITING.startMode,
     paletteSide: isPaletteSide(saved.paletteSide) ? saved.paletteSide : DEFAULT_EDITING.paletteSide,
   }
 }
@@ -309,16 +294,6 @@ function chordPlayerSettings(value: unknown): ChordPlayerSettings {
   return {
     names: isProgressionNames(saved.names) ? saved.names : DEFAULT_CHORD_PLAYER.names,
     voicing: isProgressionVoicing(saved.voicing) ? saved.voicing : DEFAULT_CHORD_PLAYER.voicing,
-  }
-}
-
-/** Accompaniment's hidden sources: ids, each once. */
-function accompanimentSettings(value: unknown): AccompanimentSettings {
-  const hidden: unknown = savedObject<AccompanimentSettings>(value).hidden
-  return {
-    hidden: Array.isArray(hidden)
-      ? [...new Set(hidden.filter((id): id is string => typeof id === 'string'))]
-      : DEFAULT_ACCOMPANIMENT.hidden,
   }
 }
 
@@ -398,6 +373,16 @@ function foldedSections(value: unknown): string[] {
   return [...new Set(ids)].slice(-FOLDED_MAX)
 }
 
+/** Each size's height kept where it is a whole number of px a screen could hold, else none. */
+function keysHeight(value: unknown): KeysHeight {
+  const saved = savedObject<KeysHeight>(value)
+  const height = (each: unknown) =>
+    Number.isInteger(each) && typeof each === 'number' && each > 0 && each <= KEYS_HEIGHT_MOST
+      ? each
+      : null
+  return { phone: height(saved.phone), side: height(saved.side), wide: height(saved.wide) }
+}
+
 /** Each saved choice that is still one of its values stands; anything else takes the current one. */
 function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSettings {
   const saved = savedObject<KeyboardSettings>(value)
@@ -413,8 +398,8 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
     folded: typeof saved.folded === 'boolean' ? saved.folded : current.folded,
     foldedLandscape:
       typeof saved.foldedLandscape === 'boolean' ? saved.foldedLandscape : current.foldedLandscape,
-    keyLength: isKeyLength(saved.keyLength) ? saved.keyLength : current.keyLength,
-    railControls: railControls(saved.railControls, current.railControls),
+    pedals: saved.pedals === 'all' || saved.pedals === 'sustain' ? saved.pedals : current.pedals,
+    volume: isVolume(saved.volume) ? saved.volume : current.volume,
   }
 }
 
@@ -440,11 +425,15 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     sound: soundSettings(saved.sound),
     trainer: trainerSettings(saved.trainer),
     keyboard: keyboardSettings(saved.keyboard, current.keyboard),
+    keysHeight: keysHeight(saved.keysHeight),
     recorder: recorderSettings(saved.recorder),
     editing: editingSettings(saved.editing),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,
-    paletteFolded: paletteFolds(saved.paletteFolded),
-    paletteSections: paletteSections(saved.paletteSections),
+    paletteFolded:
+      typeof saved.paletteFolded === 'boolean' ? saved.paletteFolded : current.paletteFolded,
+    paletteList: typeof saved.paletteList === 'boolean' ? saved.paletteList : current.paletteList,
+    paletteCategory: paletteCategory(saved.paletteCategory),
+    editorMode: isStartMode(saved.editorMode) ? saved.editorMode : current.editorMode,
     midi: midiSettings(saved.midi),
     chordFinder: chordFinderSettings(saved.chordFinder),
     scoreView: scoreViewSettings(saved.scoreView),
@@ -453,13 +442,22 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     metronome: metronomeSettings(saved.metronome),
     foldedSections: foldedSections(saved.foldedSections),
     welcomed: saved.welcomed === true,
+    practiceRecent: Array.isArray(saved.practiceRecent)
+      ? [
+          ...new Set(saved.practiceRecent.filter((id): id is string => typeof id === 'string')),
+        ].slice(0, 8)
+      : [],
+    tipsSeen: Array.isArray(saved.tipsSeen)
+      ? [...new Set(saved.tipsSeen.filter((id): id is string => typeof id === 'string'))].slice(
+          0,
+          64,
+        )
+      : [],
     lessonReading: isLessonReading(saved.lessonReading) ? saved.lessonReading : 'page',
     progressions: progressionsSettings(saved.progressions),
     chordPlayer: chordPlayerSettings(saved.chordPlayer),
-    accompaniment: accompanimentSettings(saved.accompaniment),
     bars: barsSettings(saved.bars),
     tuner: tunerSettings(saved.tuner),
-    drone: droneSettings(saved.drone),
     scaleStaff: scaleStaffSettings(saved.scaleStaff),
   }
 }
@@ -474,17 +472,6 @@ const wholeWithin = (value: unknown, { min, max }: { min: number; max: number })
 function tunerSettings(value: unknown): TunerSettings {
   const saved = savedObject<TunerSettings>(value)
   return { a4: wholeWithin(saved.a4, A4_RANGE) ?? DEFAULT_TUNER.a4 }
-}
-
-/** The Drone's root, kind, octave and volume, each as saved where valid. */
-function droneSettings(value: unknown): DroneSettings {
-  const saved = savedObject<DroneSettings>(value)
-  return {
-    root: wholeWithin(saved.root, { min: 0, max: 11 }) ?? DEFAULT_DRONE.root,
-    kind: isDroneKind(saved.kind) ? saved.kind : DEFAULT_DRONE.kind,
-    octave: wholeWithin(saved.octave, DRONE_OCTAVES) ?? DEFAULT_DRONE.octave,
-    volume: wholeWithin(saved.volume, { min: 0, max: 100 }) ?? DEFAULT_DRONE.volume,
-  }
 }
 
 /** The Scales staff's layers, each as saved where it is a switch's value. */

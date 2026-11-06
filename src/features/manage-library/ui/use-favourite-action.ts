@@ -7,12 +7,12 @@ import { toggleFavourite } from '../toggle-favourite'
 
 /** A song's favourite as a menu's action (the Player's More): named by what it does now. */
 export function useFavouriteAction(piece: PieceId): MenuAction {
-  const { t } = useTranslation('songs')
+  const { t } = useTranslation(['songs', 'common'])
   const store = useLibraryStoreApi()
   const favourite = useLibrary(selectIsFavourite(piece))
   return {
     key: 'favourite',
-    label: t(favourite ? 'library.unfavourite' : 'library.favourite'),
+    label: t(favourite ? 'common:library.unfavourite' : 'common:library.favourite'),
     icon: favourite ? HeartOff : Heart,
     onSelect: () => toggleFavourite(store, piece),
   }

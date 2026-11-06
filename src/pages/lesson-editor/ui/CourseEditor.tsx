@@ -1,21 +1,18 @@
 import { Link, useNavigate } from '@tanstack/react-router'
+import { Undo2 } from 'lucide-react'
 import { useRef, useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { COURSE_WEEKS, SHELVES, type Course, type CourseRecord } from '@/entities/course'
+import type { OwnCourse } from '@/entities/own-lessons'
 import { hasAbout } from '@/entities/lesson'
 import { STAGES } from '@/entities/step'
 import { useAddLesson, useCourseDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
-import { Dropdown } from '@/shared/ui'
+import { Dropdown, type EditAction } from '@/shared/ui'
 import { AboutDocument } from '@/widgets/lesson-document'
-import {
-  AddRow,
-  DocText,
-  DraftScreen,
-  Properties,
-  PropertyRow,
-  RowGroups,
-} from '@/widgets/content-editor'
+import { DraftScreen, Properties, PropertyRow } from '@/widgets/content-editor'
+import { CourseParts } from './CourseParts'
+import { OwnCourseEditor } from './OwnCourseEditor'
 
 /**
  * The course as one document in one language (round 21): its title as the page's heading and its
@@ -55,24 +52,37 @@ function CourseDocument({
     return lesson ? localText(lesson.title, locale) : id
   }
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <DocText
-          size="title"
-          label={t('learn:edit.kinds.title')}
-          value={record.title}
-          locale={locale}
-          placeholder={words('edit.doc.courseTitle')}
-          onChange={(title) => change({ ...record, title })}
-        />
-        <DocText
-          label={t('learn:edit.kinds.summary')}
-          value={record.summary}
-          locale={locale}
-          placeholder={words('edit.doc.courseSummary')}
-          onChange={(summary) => change({ ...record, summary })}
-        />
-      </div>
+    <CourseParts
+      locale={locale}
+      title={record.title}
+      summary={record.summary}
+      onTitle={(title) => change({ ...record, title })}
+      onSummary={(summary) => change({ ...record, summary })}
+      summaryPlaceholder={words('edit.doc.courseSummary')}
+      rows={ids.map((id) => ({
+        key: id,
+        title: titleOf(id),
+        detail: lessons.has(id) ? undefined : t('learn:edit.order.unpublished'),
+        link: (
+          <Link
+            to="/courses/$courseId/$lessonId/edit"
+            params={{ courseId: course.id, lessonId: id }}
+          />
+        ),
+      }))}
+      found={[
+        {
+          title: t('learn:edit.order.addBack'),
+          icon: Undo2,
+          items: course.lessons
+            .filter((lesson) => !ids.includes(lesson.id))
+            .map((lesson) => ({ key: lesson.id, title: localText(lesson.title, locale) })),
+        },
+      ]}
+      onPick={(id) => change({ ...record, lessons: [...ids, id] })}
+      onCreate={(name) => onAdd(name, { ...record, lessons: ids })}
+      onOrder={(order) => change({ ...record, lessons: order })}
+    >
       <Properties label={t('learn:edit.doc.properties')}>
         <PropertyRow name={t('learn:edit.course.shelf')}>
           <Dropdown
@@ -126,42 +136,33 @@ function CourseDocument({
           }}
         />
       </section>
-      <RowGroups
-        groups={[
-          {
-            key: 'lessons',
-            label: t('learn:edit.course.lessonList'),
-            head: <h2 className="font-display text-2xl">{t('learn:edit.course.lessonList')}</h2>,
-            empty: t('learn:edit.course.noLessons'),
-            rows: ids.map((id) => ({
-              key: id,
-              title: titleOf(id),
-              detail: lessons.has(id) ? undefined : t('learn:edit.order.unpublished'),
-              link: (
-                <Link
-                  to="/courses/$courseId/$lessonId/edit"
-                  params={{ courseId: course.id, lessonId: id }}
-                />
-              ),
-            })),
-            foot: (
-              <AddRow
-                label={t('learn:edit.order.addLesson')}
-                title={t('learn:edit.order.newLesson')}
-                createLabel={t('learn:edit.order.createLesson')}
-                failed={t('learn:edit.order.addFailed')}
-                found={course.lessons
-                  .filter((lesson) => !ids.includes(lesson.id))
-                  .map((lesson) => ({ key: lesson.id, title: localText(lesson.title, locale) }))}
-                onPick={(id) => change({ ...record, lessons: [...ids, id] })}
-                onCreate={(name) => onAdd(name, { ...record, lessons: ids })}
-              />
-            ),
-          },
-        ]}
-        onChange={([group]) => change({ ...record, lessons: group?.rows ?? [] })}
-      />
-    </div>
+    </CourseParts>
+  )
+}
+
+/** Where the course editor writes: an editor's draft of one of the app's courses, or the learner's own. */
+export type CourseSource =
+  | { readonly kind: 'draft'; readonly course: Course }
+  | { readonly kind: 'own'; readonly course: OwnCourse }
+
+interface EditorProps {
+  /** The screen's Back (`BackButton`). */
+  back: ReactNode
+  /** A router `Link` to the course's page. */
+  toCourse: ReactElement
+  /** Its Edit, in Edit: Done at the bar's end. */
+  edit?: EditAction | undefined
+}
+
+/**
+ * The course editor (round 21): the course as one document. The same editor for an editor's draft of
+ * the app's course (`source` `draft`) and for the learner's own (`own`, R30-5).
+ */
+export function CourseEditor({ source, ...props }: EditorProps & { source: CourseSource }) {
+  return source.kind === 'own' ? (
+    <OwnCourseEditor {...props} course={source.course} />
+  ) : (
+    <DraftCourseEditor {...props} course={source.course} />
   )
 }
 
@@ -170,20 +171,7 @@ function CourseDocument({
  * at a time (the bar's choice); each lesson is edited on its own page; the draft's status, Publish
  * and menu in the bar.
  */
-export function CourseEditor({
-  course,
-  back,
-  toCourse,
-  modes,
-}: {
-  course: Course
-  /** The screen's Back (`BackButton`). */
-  back: ReactNode
-  /** A router `Link` to the course's page. */
-  toCourse: ReactElement
-  /** Its Read · Edit switch, set to Edit. */
-  modes?: ReactNode
-}) {
+function DraftCourseEditor({ course, back, toCourse, edit }: EditorProps & { course: Course }) {
   const { t } = useTranslation('learn')
   const shown = useLocale()
   const [locale, setLocale] = useState<Locale>(shown)
@@ -219,7 +207,7 @@ export function CourseEditor({
       draft={draft}
       // The course's own name over it, as it reads: the page in Edit, not another page.
       heading={title}
-      modes={modes}
+      edit={edit}
       title={title}
       back={back}
       backTo={{ link: toCourse, label: t('edit.course.back') }}

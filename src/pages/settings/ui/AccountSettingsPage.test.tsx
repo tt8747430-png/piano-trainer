@@ -69,7 +69,7 @@ describe('Settings › Account', () => {
     const { router } = await renderApp('/settings/account', { auth })
     await user.click(await screen.findByRole('button', { name: 'Sign out' }))
     const dialog = await screen.findByRole('alertdialog', { name: 'Sign out?' })
-    expect(dialog).toHaveTextContent('Your songs and progress stay on this device.')
+    expect(dialog).toHaveTextContent('Your songs and progress stay on this device')
     await user.click(within(dialog).getByRole('button', { name: 'Sign out' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/settings'))
     expect(await auth.current()).toBeNull()
@@ -94,13 +94,13 @@ describe('Settings › Account', () => {
     expect(await auth.current()).toBeNull()
   })
 
-  it('offers a guest Sign in and Create an account', async () => {
+  it('offers a guest Sign in and Create account', async () => {
     await renderApp('/settings/account')
     expect(await screen.findByRole('link', { name: 'Sign in' })).toHaveAttribute(
       'href',
       '/account/sign-in',
     )
-    expect(screen.getByRole('link', { name: 'Create an account' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Create account' })).toHaveAttribute(
       'href',
       '/account/create',
     )
@@ -112,9 +112,9 @@ describe('Settings › Account', () => {
     await auth.requestDeletion()
     await auth.signIn(ANA.email, ANA.password)
     await renderApp('/settings', { auth })
-    const gate = await screen.findByRole('alertdialog', { name: 'Your account is to be deleted' })
+    const gate = await screen.findByRole('alertdialog', { name: 'Account scheduled for deletion' })
     expect(gate).toHaveTextContent('It will be deleted on November 28, 2026.')
-    await user.click(within(gate).getByRole('button', { name: 'Keep my account' }))
+    await user.click(within(gate).getByRole('button', { name: 'Keep account' }))
     await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull())
     expect(await auth.pendingDeletion()).toEqual({ ok: true, value: null })
   })

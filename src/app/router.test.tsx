@@ -37,7 +37,7 @@ const ROUTES = [
   ['/search?q=dorian', '/search'],
   ['/check?of=chords:tri', '/check'],
   ['/practice', '/practice'],
-  ['/practice/accompaniment?show=seven-types', '/practice/accompaniment'],
+  ['/practice/accompaniment?place=seven-types', '/practice/accompaniment'],
   ['/practice/accompaniment/patterns/M1', '/practice/accompaniment/patterns/$patternRef'],
   ['/practice/accompaniment/studies/ex3', '/practice/accompaniment/studies/$pieceId'],
   ['/songs/bz5/sections/2', '/songs/$pieceId/sections/$section'],
@@ -141,7 +141,7 @@ describe('the app shell', () => {
   it('puts the focus on a screen’s heading as a link opens it', async () => {
     const user = userEvent.setup()
     await renderApp('/practice')
-    await user.click(await screen.findByRole('link', { name: /^Chords/ }))
+    await user.click(await screen.findByRole('link', { name: /^Chords Triads/ }))
     const heading = await screen.findByRole('heading', { level: 1, name: 'Chords' })
     await waitFor(() => expect(heading).toHaveFocus())
   })
@@ -176,15 +176,8 @@ describe('the app shell', () => {
     await renderApp('/songs')
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
     const links = within(nav).getAllByRole('link')
-    expect(links.map((link) => link.textContent)).toEqual([
-      'Learn',
-      'Songs',
-      'Practice',
-      'Profile',
-      'Settings',
-    ])
-    // Search is the palette's: a button, never a place of its own (rule 27).
-    expect(within(nav).getByRole('button', { name: 'Search' })).toBeInTheDocument()
+    // A phone's bar: the four places; Search and Settings are the sidebar's, on a laptop.
+    expect(links.map((link) => link.textContent)).toEqual(['Learn', 'Songs', 'Practice', 'Profile'])
     expect(within(nav).getByRole('link', { name: 'Songs' })).toHaveAttribute('aria-current', 'page')
   })
 
@@ -400,12 +393,11 @@ describe('shelves', () => {
     )
   })
 
-  it('goes back from a study opened directly to Accompaniment, on the page of its studies', async () => {
+  it('goes back from a study opened directly to its method book’s course (R32)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/accompaniment/studies/ex3')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.href).toBe('/practice/accompaniment'))
-    expect(await screen.findByRole('region', { name: 'Studies' })).toBeInTheDocument()
+    await waitFor(() => expect(router.state.location.pathname).toBe('/courses/called-to-play'))
   })
 
   it('closes the Player of a song written in degrees, opened directly, to its page on Songs', async () => {

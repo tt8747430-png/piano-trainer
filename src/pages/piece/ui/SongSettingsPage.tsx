@@ -1,18 +1,15 @@
-import { Link, useNavigate, useParams, useRouter, useSearch } from '@tanstack/react-router'
-import {
-  Archive,
-  ArchiveRestore,
-  Copy,
-  Download,
-  FileText,
-  FolderInput,
-  Globe,
-  Link2,
-  Palette,
-} from 'lucide-react'
+import { Link, useNavigate, useParams, useRouter } from '@tanstack/react-router'
+import { Archive, ArchiveRestore, Copy, Download, FolderInput, Globe, Link2 } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { placeIn, useFolderName, useLibraryLayout } from '@/entities/library'
+import {
+  placeIn,
+  selectIsFavourite,
+  useFolderName,
+  useLibrary,
+  useLibraryLayout,
+  useLibraryStoreApi,
+} from '@/entities/library'
 import {
   hasEditableOriginal,
   isDegreePiece,
@@ -21,16 +18,17 @@ import {
   usePieces,
   usePiecesStoreApi,
   useRepertoire,
+  entryTitles,
   type ChartPiece,
   type Piece,
 } from '@/entities/piece'
 import { selectView } from '@/entities/views'
 import { useOriginalDraft } from '@/features/edit-original'
 import { duplicateSong } from '@/features/edit-piece'
-import { useSongActions } from '@/features/manage-library'
+import { toggleFavourite, useSongActions } from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { SongExportSheet } from '@/features/song-files'
-import { useSetSearch } from '@/shared/lib'
+import { useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   BackButton,
@@ -43,14 +41,12 @@ import {
   RowLink,
   ScreenHeader,
   SettingsGroup,
+  SwitchRow,
 } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
-import { ResetStepsRow } from '@/features/reset-progress'
-import { pieceStepId } from '@/entities/step'
 import { useSongPublish } from '../model/use-song-publish'
 import { OwnMusicAsk } from './OwnMusicAsk'
-import { SongLookSheet } from './SongLookSheet'
-import { OriginalSongDetails, OwnSongDetails } from './SongDetails'
+import { SongCover } from './SongCover'
 
 /** The route's song, or the way back where it is gone (an own song deleted in another tab). */
 export function SongSettingsPage() {
@@ -67,12 +63,11 @@ export function SongSettingsPage() {
 }
 
 /**
- * A song's Settings (round 26, Noji's deck settings, memory-palaces' deck settings): one list of
- * grouped rows, each a setting with its value at its end or a way on, a sheet or a page. Its music,
- * edited on the score; its place in the library (Favourite, its folder, Archive or Restore); its ways
- * out (Export…, Share link, Publish in library, a page); an editor's unpublished changes, their status and
- * menu (Publish, Versions, Discard); and last, apart, the learner's own music given up: Delete, or
- * Reset to the original, asked first.
+ * A song's Settings (R32-C; Noji's and memory-palaces' deck settings): how the song lives in the
+ * library and how it leaves it, the page editing what it says of itself. The song at the head; its
+ * Library (Folder, Favourite, Duplicate, Archive or Restore); Share (Publish with its state, Share
+ * link, Export…); and last, apart, the learner's own music given up: Delete, or Reset to the
+ * original, asked first.
  */
 function SongSettings({ piece }: { piece: Piece }) {
   const { t } = useTranslation(['piece', 'songs', 'editor'])
@@ -80,15 +75,18 @@ function SongSettings({ piece }: { piece: Piece }) {
   const own = isOwnSongId(piece.id) ? piece.id : null
   const hasVersion = usePieces((state) => selectHasVersion(state, piece.id))
   const { item, title, publishing } = useSongPublish(piece)
+  // Its other name (as the other language writes it), in a line under the title.
+  const subtitle = entryTitles(piece, useLocale()).secondary
   const shared = useShareSong()
   const router = useRouter()
   const layout = useLibraryLayout()
   const folderName = useFolderName()
   const library = useSongActions(piece)
+  const libraryStore = useLibraryStoreApi()
+  const favourite = useLibrary(selectIsFavourite(piece.id))
   const [exporting, setExporting] = useState(false)
   const [asking, setAsking] = useState(false)
   const [copying, setCopying] = useState(false)
-  const [looking, setLooking] = useState(false)
   const piecesStore = usePiecesStoreApi()
   const navigate = useNavigate()
   const copyable = !isDegreePiece(piece)
@@ -127,64 +125,27 @@ function SongSettings({ piece }: { piece: Piece }) {
   const archived = place === 'archived'
   const original =
     editsContent(account) && hasEditableOriginal(piece.id) && !isDegreePiece(piece) ? piece : null
-  // What the song says of itself (title, who wrote it, about), where it is the learner's or an
-  // editor's to write: Settings › Details (R29 1.2), a step in the address.
-  const ownChart = own && !isDegreePiece(piece) ? piece : null
-  const details = ownChart !== null || original !== null
-  const { page } = useSearch({ strict: false }) as { page?: string }
-  const setSearch = useSetSearch<{ page: string | undefined }>()
-  if (details && page === 'details')
-    return (
-      <div className="flex flex-col gap-6 pb-8">
-        <ScreenHeader
-          title={t('settings.details')}
-          back={<BackButton onClick={() => setSearch({ page: undefined })} />}
-        />
-        {ownChart && own ? (
-          <OwnSongDetails piece={ownChart} id={own} />
-        ) : original ? (
-          <OriginalSongDetails piece={original} />
-        ) : null}
-      </div>
-    )
   return (
     <div className="flex flex-col gap-6 pb-8">
       <ScreenHeader title={t('settings.title')} back={<BackButton />} />
       <ShareSaid said={shared.said} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <p className="px-1 font-display text-2xl font-semibold text-balance">{title}</p>
-        {details ? (
-          <SettingsGroup flush>
-            <RowButton
-              title={t('settings.details')}
-              icon={FileText}
-              paint="sky"
-              onClick={() => setSearch({ page: 'details' })}
-            />
-          </SettingsGroup>
-        ) : null}
-        {/* Its row's colour and picture (R29 B9, Appearance), the learner's own. */}
-        {inLibrary ? (
-          <SettingsGroup flush title={t('settings.appearance')}>
-            <RowButton
-              title={t('settings.look')}
-              icon={Palette}
-              paint="sky"
-              onClick={() => setLooking(true)}
-            />
-          </SettingsGroup>
-        ) : null}
+        {/* The song at the head: what these settings are for (R32-C). */}
+        <SettingsGroup flush>
+          <div className="flex min-h-20 items-center gap-4 px-4 py-3">
+            <SongCover piece={piece} className="w-14 shrink-0 text-xl" />
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <p className="font-display text-lg leading-tight font-semibold text-balance">
+                {title}
+              </p>
+              {subtitle ? (
+                <p className="truncate text-sm text-muted-foreground">{subtitle}</p>
+              ) : null}
+            </div>
+          </div>
+        </SettingsGroup>
         {inLibrary ? (
           <SettingsGroup flush title={t('settings.library')}>
-            {/* Duplicate (R29 B9): a copy as the learner's own, a song in degrees aside. */}
-            {copyable ? (
-              <RowButton
-                title={t('settings.duplicate')}
-                icon={Copy}
-                paint="yellow"
-                onClick={() => setCopying(true)}
-              />
-            ) : null}
             {/* Where it may leave its folder (R29 B4): one of the app's songs in its folder stays. */}
             {archived || !library.actions.some((each) => each.key === 'move') ? null : (
               <RowButton
@@ -195,6 +156,21 @@ function SongSettings({ piece }: { piece: Piece }) {
                 onClick={() => library.actions.find((each) => each.key === 'move')?.onSelect()}
               />
             )}
+            <SwitchRow
+              label={t('settings.favourite')}
+              className="min-h-16 border-b-0 pr-3 pl-4"
+              checked={favourite}
+              onCheckedChange={() => toggleFavourite(libraryStore, piece.id)}
+            />
+            {/* Duplicate (R29 B9): a copy as the learner's own, a song in degrees aside. */}
+            {copyable ? (
+              <RowButton
+                title={t('settings.duplicate')}
+                icon={Copy}
+                paint="yellow"
+                onClick={() => setCopying(true)}
+              />
+            ) : null}
             <RowButton
               title={t(archived ? 'songs:library.restore' : 'songs:library.archive')}
               icon={archived ? ArchiveRestore : Archive}
@@ -207,7 +183,7 @@ function SongSettings({ piece }: { piece: Piece }) {
             />
           </SettingsGroup>
         ) : null}
-        {/* Publish…, Share link, then Delete last (R29 B6), as every item's Settings. */}
+        {/* Publish, Share link and Export, each once: Export holds the files alone (R31-S). */}
         <SettingsGroup flush title={t('settings.share')}>
           {item ? (
             <RowLink
@@ -231,30 +207,19 @@ function SongSettings({ piece }: { piece: Piece }) {
           ) : null}
           <RowButton
             title={t('songs:export.action')}
+            detail={t('settings.exportLine')}
             icon={Download}
             paint="sky"
             onClick={() => setExporting(true)}
           />
         </SettingsGroup>
-        {/* Reset progress (R29 B9): the song's Learned mark, kept apart from its music. */}
-        <ResetStepsRow
-          steps={[pieceStepId(piece.id)]}
-          words={{
-            row: t('settings.resetProgress'),
-            title: t('settings.resetProgressTitle'),
-            body: t('settings.resetProgressBody'),
-            cancel: t('settings.resetProgressCancel'),
-            confirm: t('settings.resetProgressConfirm'),
-            done: t('settings.resetProgressDone'),
-          }}
-        />
         {ownMusic ? (
           <div ref={danger}>
             <DangerGroup
               footnote={t(ownMusic.kind === 'song' ? 'deleting.says' : 'resetting.says')}
             >
               <DangerRow
-                title={t(ownMusic.kind === 'song' ? 'delete' : 'reset')}
+                title={t(ownMusic.kind === 'song' ? 'settings.deleteSong' : 'reset')}
                 onClick={() => setAsking(true)}
               />
             </DangerGroup>
@@ -262,18 +227,7 @@ function SongSettings({ piece }: { piece: Piece }) {
         ) : null}
       </div>
       {inLibrary ? library.sheet : null}
-      <SongExportSheet
-        piece={exporting ? piece : null}
-        onOpenChange={setExporting}
-        share={
-          shareable
-            ? {
-                onSelect: share,
-              }
-            : undefined
-        }
-      />
-      {inLibrary ? <SongLookSheet id={piece.id} open={looking} onOpenChange={setLooking} /> : null}
+      <SongExportSheet piece={exporting ? piece : null} onOpenChange={setExporting} />
       <ConfirmDialog
         open={copying}
         onOpenChange={setCopying}

@@ -8,17 +8,17 @@ import { midi as key } from '@/shared/lib/music'
 
 const midiRow = () =>
   within(screen.getByRole('region', { name: 'Piano' })).getByRole('link', {
-    name: /^Connect a piano/,
+    name: /^MIDI devices/,
   })
 
-describe('Settings › Connect a piano', () => {
+describe('Settings › MIDI devices', () => {
   it('is a row of Settings’ Piano group that shows its state at its right and opens the MIDI screen', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/settings')
     await screen.findByRole('region', { name: 'Piano' })
-    expect(midiRow()).toHaveTextContent(/Connect a piano\s*Off/)
+    expect(midiRow()).toHaveTextContent(/MIDI devices\s*Off/)
     await user.click(midiRow())
-    expect(await screen.findByRole('heading', { level: 1, name: 'Connect a piano' })).toBeVisible()
+    expect(await screen.findByRole('heading', { level: 1, name: 'MIDI devices' })).toBeVisible()
     expect(router.state.location.pathname).toBe('/settings/connect-piano')
   })
 
@@ -26,7 +26,7 @@ describe('Settings › Connect a piano', () => {
     const { midi } = await renderApp('/settings')
     await screen.findByRole('region', { name: 'Piano' })
     await act(() => midi.connect())
-    expect(midiRow()).toHaveTextContent(/Connect a piano\s*Keyboard/)
+    expect(midiRow()).toHaveTextContent(/MIDI devices\s*Keyboard/)
   })
 
   it('turns MIDI input on, lists the keyboard, and sets it up', async () => {

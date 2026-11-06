@@ -54,6 +54,47 @@ export const learn = {
   // A course's page: its facts, its one way in, its lessons and its guided songs.
   // The Courses' own document over their shelves (R29 B9), an editor's.
   coursesAbout: 'About the courses',
+  // The learner's own lessons and courses (R30-5): Learn's Your lessons and Your courses, their
+  // Settings, and the course editor's on an own course.
+  own: {
+    lessons: 'Your lessons',
+    lessonsLearned: '{{learned}} of {{total}} learned',
+    noLessons: 'No lessons of your own yet.',
+    newLesson: 'New lesson',
+    createLesson: 'Create lesson',
+    lessonFailed: 'A name needs 1 to 80 characters.',
+    sectionCount_one: '{{count}} section',
+    sectionCount_other: '{{count}} sections',
+    courses: 'Your courses',
+    noCourses: 'No courses of your own yet.',
+    newCourse: 'New course',
+    createCourse: 'Create course',
+    learnedCount: '{{count}} learned',
+    yourLesson: 'Your lesson',
+    appLessons: 'The app’s lessons',
+    line: 'What the course is for',
+    cover: 'Cover',
+    coverValue: '{{picture}} · {{paint}}',
+    noCourseLessons: 'No lessons yet. Add the first one in Edit.',
+    copyName: '{{name}} copy',
+    rename: 'Rename',
+    renameLesson: 'Rename lesson',
+    renameCourse: 'Rename course',
+    renamed: 'Renamed',
+    duplicate: 'Duplicate',
+    duplicated: 'Duplicated',
+    deleteLesson: 'Delete lesson',
+    deleteLessonTitle: 'Delete “{{title}}”?',
+    deleteLessonBody:
+      'It leaves Your lessons and every course of yours that has it. Its progress goes too.',
+    deleteCourse: 'Delete course',
+    deleteCourseTitle: 'Delete “{{title}}”?',
+    deleteCourseBody: 'The course goes. Its lessons stay, yours in Your lessons.',
+    delete: 'Delete',
+    deleted: 'Deleted',
+    footnote: 'Deleting it can’t be undone.',
+    toOwn: 'Back to Your lessons',
+  },
   course: {
     start: 'Start course',
     continue: 'Continue',
@@ -134,6 +175,8 @@ export const learn = {
     resetCourse: 'Reset this course’s progress?',
     resetCourseBody:
       'Its lessons and guided songs are marked not learned and their sections unread. Nothing else changes.',
+    resetOwnCourseBody:
+      'Its lessons are marked not learned and their sections unread, wherever they are read. Nothing else changes.',
     resetDone: 'Progress reset',
     cancel: 'Cancel',
     confirm: 'Reset',

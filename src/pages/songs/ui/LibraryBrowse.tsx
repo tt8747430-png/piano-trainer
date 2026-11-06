@@ -1,14 +1,15 @@
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DEFAULT_CARD_LOOK, useFolderName, useLibrary, type CardPlace } from '@/entities/library'
-import {
-  CardLookProvider,
-  cardLookProps,
-  FilteredNotice,
-  FolderRow,
-  SongRow,
-} from '@/widgets/song-library'
+import { CardLookProvider, cardLookProps, FolderRow, SongRow } from '@/widgets/song-library'
 import { folderKey, songKey, type LibraryPage } from '../model/use-library-page'
 import { folderActions, songActions } from './row-actions'
+import { SongTable } from './SongTable'
+import { FilteredNotice } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
+
+/** How many of Home's every song show before Show all. */
+const FOLDED = 10
 
 /**
  * The library as it is read (Mindscape's browse): the place's folders, each a row to its page, then
@@ -18,24 +19,45 @@ import { folderActions, songActions } from './row-actions'
 export function LibraryBrowse({
   page,
   place,
+  table = false,
+  afterFolders,
   onClear,
 }: {
   page: LibraryPage
   /** Where it is: its look is this place's Card style (R29 B9). */
   place: CardPlace
+  /** A laptop's right pane (R30 S2), the folders the tree's: its songs a table in the List layout. */
+  table?: boolean
+  /** What stands between the folders and the songs: a phone's Home's Shared with me (R30 S6). */
+  afterFolders?: ReactNode
   onClear: () => void
 }) {
-  const { t } = useTranslation('songs')
+  const { t } = useTranslation(['songs', 'common'])
   const nameOf = useFolderName()
   const look = useLibrary((state) => state.cardLooks[place])
   const { view } = page
   const styled = cardLookProps(look)
+  // A laptop's pane draws its songs as a table in List, as the style's cards in Cards and Grid.
+  const asTable = table && (look?.style.layout ?? 'list') === 'list'
+  // Home's every song folds after its first (a calm page, never thousands of pixels): Show all n.
+  const [unfolded, setUnfolded] = useState(false)
+  const headed = view.groups.some((group) => group.key === 'all')
   return (
     <CardLookProvider value={look ?? DEFAULT_CARD_LOOK}>
       <div className="flex flex-col gap-6">
         <FilteredNotice shown={view.shown} hidden={view.hidden} onClear={onClear} />
         {view.folders.length > 0 ? (
-          <section aria-label={t('folder.list')}>
+          <section
+            aria-label={headed ? undefined : t('folder.list')}
+            aria-labelledby={headed ? 'songs-folders' : undefined}
+            className="flex flex-col gap-3"
+          >
+            {/* Headed beside Continue and All songs, a phone's Home's sections (R30 S3). */}
+            {headed ? (
+              <h2 id="songs-folders" className="text-2xl">
+                {t('folder.list')}
+              </h2>
+            ) : null}
             <ul className="grid-cards auto-rows-fr gap-2" {...styled}>
               {view.folders.map(({ folder, ...holds }) => (
                 <FolderRow
@@ -49,7 +71,20 @@ export function LibraryBrowse({
             </ul>
           </section>
         ) : null}
-        {view.groups.map((group) =>
+        {afterFolders}
+        {asTable ? (
+          // List on a laptop is the table, inside one card in the place's style (R32-C).
+          look ? (
+            <div {...styled}>
+              <div className="card overflow-hidden px-2">
+                <SongTable entries={view.groups.flatMap((group) => group.entries)} page={page} />
+              </div>
+            </div>
+          ) : (
+            <SongTable entries={view.groups.flatMap((group) => group.entries)} page={page} />
+          )
+        ) : null}
+        {(asTable ? [] : view.groups).map((group) =>
           group.entries.length === 0 ? null : (
             <section
               key={group.key}
@@ -63,7 +98,10 @@ export function LibraryBrowse({
                 </h2>
               ) : null}
               <ul className="grid-cards auto-rows-fr gap-2" {...styled}>
-                {group.entries.map((entry) => (
+                {(group.key === 'all' && !unfolded
+                  ? group.entries.slice(0, FOLDED)
+                  : group.entries
+                ).map((entry) => (
                   <SongRow
                     key={entry.id}
                     entry={entry}
@@ -73,6 +111,11 @@ export function LibraryBrowse({
                   />
                 ))}
               </ul>
+              {group.key === 'all' && !unfolded && group.entries.length > FOLDED ? (
+                <Button variant="soft" className="self-start" onClick={() => setUnfolded(true)}>
+                  {t('library.showAll', { count: group.entries.length })}
+                </Button>
+              ) : null}
             </section>
           ),
         )}

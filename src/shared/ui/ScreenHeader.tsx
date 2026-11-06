@@ -1,7 +1,25 @@
+import { PencilLine } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
+import { Button } from './primitives/button'
 import { NO_BAR_SIZE, useScreenBar } from './screen-bar'
 import { usePageHeading } from './use-page-heading'
+
+/**
+ * A screen's Edit (iOS's Edit · Done, Notion's in-place edit): the pencil right after the title, so it
+ * reads as "edit this"; while editing, Done in its place, so the control never moves between modes.
+ * The screen enters Edit in place; it passes only the acts that apply while editing.
+ */
+export interface EditAction {
+  readonly editing: boolean
+  readonly onEdit: () => void
+  readonly onDone: () => void
+  /** Done waits (a take recording, a save under way). */
+  readonly disabled?: boolean
+  /** What ✎ edits, where Edit alone would not say: a song's page edits its score (R31-S). */
+  readonly label?: string
+}
 
 type ScreenHeaderProps = {
   /** The screen's name: its title and the page's. */
@@ -10,12 +28,13 @@ type ScreenHeaderProps = {
   /**
    * The bar's end, always in this order whatever order they are given (A3, DESIGN.md Placement): the
    * screen's tools (Search, MIDI, an act on the item such as a lesson's Learned), its Settings (the
-   * gear), More (⋯, commands only) and Edit ⇄ Done at the very end.
+   * gear) and More (⋯, commands only).
    */
   tools?: ReactNode
   settings?: ReactNode
   more?: ReactNode
-  edit?: ReactNode
+  /** The screen's Edit: its pencil beside the title, Done in its place while editing. */
+  edit?: EditAction
   /** The page shows its title itself, large under the bar (a document in Edit): on a phone the bar
    * keeps it for a screen reader alone and leaves its room to the bar's tools. */
   titleOnPage?: boolean
@@ -23,10 +42,13 @@ type ScreenHeaderProps = {
   | {
       /** A place's title, set larger in the same row. */
       large: true
-      /** A place's views, in the title's place (a `Segmented`): only a place has them in its bar. */
-      switcher?: ReactNode
+      /**
+       * A place's views (R31-S): its title's place in the bar taken by their words (a `TitleTabs`), on
+       * a phone and a laptop alike; the title is still the page's heading, to a screen reader.
+       */
+      views?: ReactNode
     }
-  | { large?: false; switcher?: never }
+  | { large?: false; views?: never }
 )
 
 /**
@@ -34,9 +56,9 @@ type ScreenHeaderProps = {
  * ellipsis) and at most two actions, More holding the rest; never a second row (R29-P1: a page's
  * views are a segmented control in its content). A place (Learn, Songs, Practice) or a detail page (a
  * song, a course) is `large`: the same one row, its title set larger and allowed a second line; a
- * place's views (`switcher`, Learn's Lessons · Courses) take the title's place, the title kept for a
- * screen reader. A hairline marks the bar
- * once the page runs under it. It stays at the top, clear of the notch, slides away while reading down
+ * place's views (`views`, Learn's Lessons · Courses, Songs' My songs · Explore) stand as its title, a
+ * tab each (R31-S). A hairline marks the bar once the page runs
+ * under it. It stays at the top, clear of the notch, slides away while reading down
  * and comes back as soon as the page turns up; it stays while focus is inside it.
  *
  * It must be a child of the page's root: a sticky bar goes no further than its parent does.
@@ -48,7 +70,7 @@ export function ScreenHeader({
   settings,
   more,
   edit,
-  switcher,
+  views,
   large = false,
   titleOnPage = false,
 }: ScreenHeaderProps) {
@@ -73,7 +95,7 @@ export function ScreenHeader({
       hold(false)
     }
   }, [report, hold])
-  return (
+  const header = (
     <header
       ref={bar}
       data-slot="screen-bar"
@@ -93,31 +115,74 @@ export function ScreenHeader({
     >
       <div className="flex min-h-14 items-center gap-2 py-1">
         {back ? <div className="shrink-0 print:hidden">{back}</div> : null}
-        {switcher ? <div className="flex min-w-0 flex-1 items-center">{switcher}</div> : null}
-        <h1
-          {...pageHeading}
-          className={cn(
-            'min-w-0 flex-1 font-display font-semibold outline-none',
-            // A name takes a second line rather than be cut (a lesson's, a song's): never an ellipsis
-            // on a phone where two lines say it all.
-            'line-clamp-2 leading-tight text-balance wrap-break-word',
-            large ? 'text-[1.375rem] sm:text-2xl' : 'text-lg sm:text-xl',
-            titleOnPage && 'max-sm:sr-only',
-            switcher && 'sr-only',
-          )}
-        >
-          {title}
-        </h1>
-        {tools || settings || more || edit ? (
+        <div className="flex min-w-0 flex-1 items-center gap-0.5">
+          <h1
+            {...pageHeading}
+            className={cn(
+              'min-w-0 font-display font-semibold outline-none',
+              // A name takes a second line rather than be cut (a lesson's, a song's): never an ellipsis
+              // on a phone where two lines say it all.
+              'line-clamp-2 leading-tight text-balance wrap-break-word',
+              large ? 'text-[1.375rem] sm:text-2xl' : 'text-lg sm:text-xl',
+              titleOnPage && 'max-sm:sr-only',
+              // A place's views say where it is: its name stays the page's heading, unseen.
+              views && 'sr-only',
+            )}
+          >
+            {title}
+          </h1>
+          {views}
+          {edit ? (
+            edit.editing ? (
+              <EditDone action={edit} />
+            ) : (
+              <EditPencil onEdit={edit.onEdit} label={edit.label} />
+            )
+          ) : null}
+        </div>
+        {tools || settings || more ? (
           <div className="ms-auto flex shrink-0 items-center gap-1.5 print:hidden">
             {tools}
             {settings}
             {more}
-            {edit}
           </div>
         ) : null}
       </div>
     </header>
+  )
+  return header
+}
+
+/** The pencil beside the title: quiet, the title's own act, a 44px target. */
+function EditPencil({ onEdit, label: named }: { onEdit: () => void; label?: string }) {
+  const { t } = useTranslation('common')
+  const label = named ?? t('editMode.edit')
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      aria-label={label}
+      title={label}
+      className="shrink-0 text-muted-foreground print:hidden"
+      onClick={onEdit}
+    >
+      <PencilLine aria-hidden />
+    </Button>
+  )
+}
+
+/** Done, in the pencil's place beside the title while the screen is in Edit. */
+function EditDone({ action }: { action: EditAction }) {
+  const { t } = useTranslation('common')
+  return (
+    <Button
+      variant="bar"
+      disabled={action.disabled}
+      className="ms-1 shrink-0 rounded-pill px-4 font-semibold"
+      onClick={action.onDone}
+    >
+      {t('editMode.done')}
+    </Button>
   )
 }
 

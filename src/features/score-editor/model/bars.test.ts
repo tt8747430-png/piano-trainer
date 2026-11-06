@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest'
 import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { draftOf, form, lengths, shape, staffNotes } from '../testing/test-draft'
 import {
-  barLengths,
   copyBars,
   deleteBars,
   insertBar,
@@ -222,11 +221,6 @@ describe('setBarTicks', () => {
     const longer = setBarTicks(draftOf({ staves: [{ notes: 'B4/4 | G4/4' }] }), 0, 6 * B)
     expect(lengths(longer)).toEqual([6, 4])
     expect(shape(staffNotes(longer))).toEqual(['B4@0/4', 'G4@6/4'])
-  })
-
-  it('offers lengths from an eighth to the meter’s bar', () => {
-    expect(barLengths('3/4')).toEqual([0.5, 1, 1.5, 2, 2.5, 3].map((beats) => beats * B))
-    expect(barLengths('6/8')).toEqual([1, 2, 3, 4, 5, 6].map((eighths) => (eighths * B) / 3))
   })
 })
 

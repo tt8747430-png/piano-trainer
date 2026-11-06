@@ -14,14 +14,14 @@ import type { DiagramChord } from './chord-diagram'
 
 /**
  * The Player's keyboard: the beat group's notes in the hands asked for (the ones heard, or in Wait
- * mode the ones practised), by hand, a staff's heard over the piano (ADR 0097) under them.
+ * mode the ones practised), by hand, a staff's heard over the piano (ADR 0097) under them; no finger
+ * numbers on the keys (R34): the score prints them.
  */
 export function practiceMarks(
   performance: Performance,
   beatGroup: number,
   options: {
     readonly hands: Audible
-    readonly fingers: boolean
     readonly received?: readonly PitchClass[]
   },
 ): Map<Midi, KeyMark> {
@@ -35,11 +35,7 @@ export function practiceMarks(
     const label = options.received?.includes(pitchClass(played.midi))
       ? '✓'
       : noteName(played.spelled)
-    marks.set(played.midi, {
-      tone: played.hand,
-      label,
-      ...(options.fingers && played.finger ? { finger: played.finger } : {}),
-    })
+    marks.set(played.midi, { tone: played.hand, label })
   }
   return marks
 }

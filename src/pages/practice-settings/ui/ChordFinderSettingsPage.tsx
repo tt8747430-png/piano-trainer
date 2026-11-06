@@ -11,9 +11,10 @@ import { SettingRows, SettingsGroup, SwitchRow } from '@/shared/ui'
 import { PracticeSettingsScreen } from './PracticeSettingsScreen'
 
 /**
- * The Chord finder's Settings (A24): whether it remembers the chords played, names an inversion over
- * its bass, shows the keys a chord is in, and paints the key's scale on the keys. The key it spells
- * in is what the page shows, so it stays there.
+ * The Chord finder's Settings (A24), grouped by what each changes (R32): Chord names (an inversion
+ * written as a slash chord), Analysis (the keys that contain the chord, the key's scale marked on the
+ * keyboard), History (the chords played kept on the staff). The key it spells in is what the page
+ * shows, so it stays there.
  */
 export function ChordFinderSettingsPage() {
   const { t } = useTranslation('practice')
@@ -21,16 +22,8 @@ export function ChordFinderSettingsPage() {
   const finder = useSettings(selectChordFinder)
   return (
     <PracticeSettingsScreen title={t('pages.chordFinder')}>
-      <SettingsGroup>
+      <SettingsGroup title={t('chordFinder.groups.names')}>
         <SettingRows>
-          <SwitchRow
-            setting="chordFinder.remember"
-            icon={<History />}
-            label={t('chordFinder.remember')}
-            info={t('chordFinder.rememberDetail', { count: REMEMBERED_CHORDS })}
-            checked={finder.remember}
-            onCheckedChange={(remember) => setChordFinder(store, { remember })}
-          />
           <SwitchRow
             setting="chordFinder.slash"
             icon={<span className="font-display text-sm font-semibold">C/E</span>}
@@ -38,6 +31,10 @@ export function ChordFinderSettingsPage() {
             checked={finder.slash}
             onCheckedChange={(slash) => setChordFinder(store, { slash })}
           />
+        </SettingRows>
+      </SettingsGroup>
+      <SettingsGroup title={t('chordFinder.groups.analysis')}>
+        <SettingRows>
           <SwitchRow
             setting="chordFinder.inKeys"
             icon={<KeyRound />}
@@ -52,6 +49,18 @@ export function ChordFinderSettingsPage() {
             info={t('chordFinder.scaleShownDetail')}
             checked={finder.scale}
             onCheckedChange={(scale) => setChordFinder(store, { scale })}
+          />
+        </SettingRows>
+      </SettingsGroup>
+      <SettingsGroup title={t('chordFinder.groups.history')}>
+        <SettingRows>
+          <SwitchRow
+            setting="chordFinder.remember"
+            icon={<History />}
+            label={t('chordFinder.remember')}
+            info={t('chordFinder.rememberDetail', { count: REMEMBERED_CHORDS })}
+            checked={finder.remember}
+            onCheckedChange={(remember) => setChordFinder(store, { remember })}
           />
         </SettingRows>
       </SettingsGroup>

@@ -16,13 +16,7 @@ import { PRACTICE_RHYTHM_IDS, RUN_DIRECTIONS, runSounds } from '@/shared/lib/sch
 import { Dropdown, Labelled, MenuPicker, Segmented, Stepper } from '@/shared/ui'
 import { runStaff } from '../model/run-staff'
 import { runShown, scaleRunOf } from '../model/scale-run'
-import {
-  MAX_OCTAVES,
-  MIN_OCTAVES,
-  runKeyShow,
-  type RunOctaves,
-  type ScaleView,
-} from '../model/scale-view'
+import { MAX_OCTAVES, MIN_OCTAVES, type RunOctaves, type ScaleView } from '../model/scale-view'
 import { ModeVamp } from './ModeVamp'
 import { PlayUpDown } from './PlayUpDown'
 import { ScaleExercises } from './ScaleExercises'
@@ -97,7 +91,7 @@ export function RunView({
   }, [music, placed, down, hands, layers, t, root, kind, compare])
   return (
     <ScaleLayout
-      keyboard={<PinnedKeyboard shown={runShown(run, hands, runKeyShow(scale))} />}
+      keyboard={<PinnedKeyboard shown={runShown(run, hands)} />}
       heading={choice}
       facts={facts}
       action={<PlayUpDown sounds={runSounds(run.music, scale.tempo)} />}

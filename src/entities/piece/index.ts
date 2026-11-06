@@ -87,7 +87,16 @@ export {
   type OwnSong,
   type OwnSongId,
 } from './model/own'
-export { shownCredits, songFacts, withSongFacts, type SongFacts } from './model/song-facts'
+export {
+  SONG_CREDITS,
+  shownCredits,
+  songCredit,
+  songFacts,
+  withSongCredit,
+  withSongFacts,
+  type SongCredit,
+  type SongFacts,
+} from './model/song-facts'
 export {
   createPiecesStore,
   PIECES_STORAGE_KEY,
@@ -135,6 +144,7 @@ export {
 } from './model/content-record'
 export { entryTitles, entryWords } from './model/titles'
 export { Credits } from './ui/Credits'
+export { useCreditNames } from './ui/use-credit-names'
 export { PieceFactCards, PieceFactLine } from './ui/PieceFactCards'
 export { PieceLink } from './ui/PieceLink'
 export { SourceLine } from './ui/SourceLine'
@@ -150,3 +160,4 @@ export {
   type Annotation,
   type AnnotationKind,
 } from './model/annotations'
+export { asChartPiece } from './model/degree-chart'

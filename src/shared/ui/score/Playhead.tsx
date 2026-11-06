@@ -6,6 +6,17 @@ import type { ScoreLayout } from './layout'
 import { followScroll, playheadSpan, playheadX } from './playhead-place'
 import { MARK_CLASS } from './selection'
 
+/** Whether a line is its sheet's first: nothing but the title and the credits above it. */
+const firstLine = (line: Element): boolean =>
+  line.parentElement?.querySelector('[data-slot="sheet-line"]') === line
+
+/** The nearest box that scrolls the music up and down. */
+function scrollerOf(element: Element): Element | null {
+  for (let box = element.parentElement; box; box = box.parentElement)
+    if (/auto|scroll/.test(getComputedStyle(box).overflowY)) return box
+  return null
+}
+
 /**
  * The playhead (ADR 0096), the Player's and the editor's alike in every layout: one thin line across
  * the system at the time that sounds, from its highest staff's top line to its lowest's foot, the
@@ -66,11 +77,13 @@ export function Playhead({
 
   const reveal = useCanvasReveal()
   const motion = useScrollMotion()
-  // Its line into sight as it comes onto it, as the Player's line playing always came.
+  // Its line into sight as it comes onto it, as the Player's line playing always came; on the first
+  // line, the score from its top, its title in sight above it.
   const bring = useEffectEvent(() => {
     const shown = line.current?.closest('[data-slot="sheet-line"]')
     if (!shown) return
     if (reveal) reveal(shown)
+    else if (firstLine(shown)) scrollerOf(shown)?.scrollTo({ top: 0, behavior: motion })
     else shown.scrollIntoView({ block: 'nearest', behavior: motion })
   })
   useEffect(() => bring(), [])

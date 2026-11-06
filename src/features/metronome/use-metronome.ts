@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { selectMetronome, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import type { MetronomeSettings } from '@/entities/settings'
 import { setMetronome } from '@/features/set-preference'
@@ -7,7 +7,6 @@ import { useWakeLock } from '@/shared/lib'
 import {
   beatHeard,
   beatSounds,
-  clampBpm,
   goOnFrom,
   mutedBar,
   plannedBeats,
@@ -21,7 +20,6 @@ import {
   type MetronomeTime,
 } from '@/shared/lib/schedule'
 import { useServices } from '@/shared/lib/services'
-import { quickTime, type SongTime } from './metronome-engine'
 import { useTapTempo } from './use-tap-tempo'
 
 /** How far ahead of the audio clock the beats are queued, in seconds: past a hidden page's timer. */
@@ -79,39 +77,19 @@ export interface Metronome extends MetronomeSettings {
   setTrainer(change: Partial<MetronomeSettings['trainer']>): void
   /** A tap in time: from the second, the tempo the taps keep. */
   tap(): void
-  /** Whether it follows a song's tempo and time: its tempo is then the visit's, never saved. */
-  readonly following: boolean
 }
 
 /**
  * The Metronome (ADR 0052, R29 B11's one engine): its tempo, meter and sound as saved, and its beats
  * played on the audio clock. The beats are queued ahead of the clock, each at its time; a timer only
  * tops the queue up. A change while it plays goes on from the beat heard, at once. The screen stays on
- * while it plays. Over a song (`song`, the quick metronome in a song's Tools) it counts the song's
- * tempo and time in the Metronome's voice, its trainers off, and its tempo steps are the visit's:
- * the Metronome's own tempo is written only where no song's applies.
+ * while it plays. The Metronome's page and the quick metronome in a screen's Tools share it. A song's
+ * own click is its transport's (R31-P: no screen with a song opens the Tools sheet).
  */
-export function useMetronome(song: SongTime | null = null): Metronome {
+export function useMetronome(): Metronome {
   const { audio } = useServices()
   const store = useSettingsStoreApi()
-  const saved = useSettings(selectMetronome)
-  // Over a song: its tempo, stepped for the visit from where the song stands.
-  const [stepped, setStepped] = useState<{ readonly from: number; readonly bpm: number } | null>(
-    null,
-  )
-  const songBpm = song ? (stepped?.from === song.bpm ? stepped.bpm : song.bpm) : null
-  const songMeter = song?.meter ?? null
-  const settings = useMemo<MetronomeSettings>(() => {
-    if (songBpm === null || songMeter === null) return saved
-    const { voice } = quickTime(saved, { bpm: songBpm, meter: songMeter })
-    return {
-      ...saved,
-      ...voice,
-      bpm: songBpm,
-      trainer: { ...saved.trainer, on: false },
-      speed: { ...saved.speed, on: false },
-    }
-  }, [saved, songBpm, songMeter])
+  const settings = useSettings(selectMetronome)
   const latest = useRef(settings)
   const run = useRef<Run | null>(null)
   const tapper = useTapTempo()
@@ -195,12 +173,8 @@ export function useMetronome(song: SongTime | null = null): Metronome {
     (change: Partial<MetronomeSettings>) => setMetronome(store, change),
     [store],
   )
-  // While the speed trainer is on, the tempo set is the one it starts at; over a song, the visit's.
+  // While the speed trainer is on, the tempo set is the one it starts at.
   const setTempo = (bpm: number) => {
-    if (song) {
-      setStepped({ from: song.bpm, bpm: clampBpm(bpm) })
-      return
-    }
     const now = store.getState().metronome
     save(now.speed.on ? { speed: { ...now.speed, from: bpm } } : { bpm })
   }
@@ -211,7 +185,7 @@ export function useMetronome(song: SongTime | null = null): Metronome {
     bar: playing && bar !== null ? bar + 1 : null,
     muted: playing && bar !== null && mutedBar(bar, trainerOf(settings.trainer)),
     toggle: () => (run.current ? stop() : void start()),
-    nudge: (step) => setTempo((songBpm ?? tempoSet(store.getState().metronome)) + step),
+    nudge: (step) => setTempo(tempoSet(store.getState().metronome) + step),
     setBpm: (bpm) => setTempo(bpm),
     // A new meter starts its squares afresh.
     setMeter: (meter) => save({ meter, levels: null }),
@@ -231,7 +205,6 @@ export function useMetronome(song: SongTime | null = null): Metronome {
       playing && bar !== null && settings.speed.on
         ? speedAt(bar, settings.speed)
         : tempoSet(settings),
-    following: song !== null,
     tap() {
       const bpm = tapper.tap()
       if (bpm !== null) setTempo(bpm)

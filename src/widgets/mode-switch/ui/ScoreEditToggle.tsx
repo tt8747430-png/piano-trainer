@@ -25,7 +25,6 @@ export function ScoreEditToggle({
   return (
     <EditToggle
       editing={editing}
-      variant="tool"
       disabled={disabled}
       onEdit={() =>
         void navigate({ to: '/edit/$pieceId', params: { pieceId }, search: at, replace: true })

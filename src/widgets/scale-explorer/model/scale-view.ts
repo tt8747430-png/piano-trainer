@@ -25,13 +25,6 @@ export const MIN_OCTAVES = 1
 export const MAX_OCTAVES = 4
 export type RunOctaves = 1 | 2 | 3 | 4
 
-/** What the run's keys carry: its notes, or a hand's fingers. */
-export type RunKeyShow = 'notes' | 'lh' | 'rh'
-
-/** What the run's keys carry: the playing hand's fingers, the right for both (the piano's toolbar names notes). */
-export const runKeyShow = (view: Pick<ScaleView, 'hands'>): RunKeyShow =>
-  view.hands === 'lh' ? 'lh' : 'rh'
-
 /** What the Scales explorer shows: the scale, what its keys carry, and how it is practised. */
 export interface ScaleView {
   readonly root: NoteParam

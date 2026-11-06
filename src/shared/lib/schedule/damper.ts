@@ -58,8 +58,13 @@ function pedalled(damper: Damper, pedal: PedalKind, down: boolean): Damped {
   if (damper.pedals[pedal] === down) return { damper, stopped: [] }
   const changed = { ...damper, pedals: { ...damper.pedals, [pedal]: down } }
   if (pedal === 'soft' || (pedal === 'sustain' && down)) return { damper: changed, stopped: [] }
+  // The sostenuto catches every damper raised as it goes down: the keys held, and with the sustain
+  // down every key sounding (the sustain raised them all).
   if (pedal === 'sostenuto' && down)
-    return { damper: { ...changed, caught: damper.held }, stopped: [] }
+    return {
+      damper: { ...changed, caught: damper.pedals.sustain ? damper.sounding : damper.held },
+      stopped: [],
+    }
   const { sounding, stopped } =
     pedal === 'sostenuto'
       ? stopping(
@@ -77,7 +82,8 @@ function pedalled(damper: Damper, pedal: PedalKind, down: boolean): Damped {
  * The damper after `event`, and the keys whose dampers fell: they stop
  * sounding now. A key let go stops unless the sustain is down or the sostenuto caught it; the
  * sustain's up stops every key no hand holds and the sostenuto did not catch; the sostenuto catches
- * the keys held as it goes down and lets them go as it comes up. The soft pedal stops nothing.
+ * the keys whose dampers are raised as it goes down (those held, or with the sustain down every key
+ * sounding) and lets them go as it comes up. The soft pedal stops nothing.
  */
 export function damp(damper: Damper, event: DamperEvent): Damped {
   if (event.kind === 'pedal') return pedalled(damper, event.pedal, event.down)

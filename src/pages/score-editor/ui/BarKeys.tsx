@@ -1,15 +1,7 @@
 import { useTranslation } from 'react-i18next'
-import {
-  barAt,
-  barLengths,
-  meterAt,
-  REPEAT_BAR_CHOICES,
-  type BarMarkChoice,
-} from '@/features/score-editor'
-import { TICKS_PER_BEAT, timeSignature, timeSignatureText } from '@/shared/lib/music'
-import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { REPEAT_BAR_CHOICES, type BarMarkChoice } from '@/features/score-editor'
+import { useScoreEditorContext } from '../model/editor-context'
 import { BarIcon, type BarKeyEdit } from './palette-icons'
-import { TimeFigures } from './sign-pictures'
 import type { Tool } from '../model/shortcuts'
 import { GroupName, KeyGrid, PaletteKey } from './palette-keys'
 
@@ -31,19 +23,17 @@ const BAR_TOOLS: Readonly<Partial<Record<BarKeyEdit, Tool>>> = {
 }
 
 /**
- * Bar: what acts on the bars chosen, else the caret's: a bar added before or after,
- * the bars deleted, a line or a section begun there or the lines joined; their length (a pickup, or a
- * bar of another length, as the ⓘ beside its name says), each saying what it does.
+ * Measures (R31-E, Flat's): what acts on the bars chosen, else the caret's: a bar added before or
+ * after, the bars deleted, a line or a section (its rehearsal mark) begun there or the lines joined,
+ * a page begun there; then the multi-bar rests and the bar repeats. A bar's length is its time
+ * signature's: no key changes it here.
  */
 export function BarKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
-  // The caret's section's meter, its own or the song's (ADR 0097).
-  const meter = useEditorState((state) => meterAt(state.draft, state.caret))
-  const barTicks = useEditorState((state) => barAt(state.draft, state.caret).bar.ticks)
   return (
     <>
-      <KeyGrid>
+      <KeyGrid label={t('palette.groups.bars')}>
         {BAR_KEYS.map((edit) => (
           <PaletteKey
             key={edit}
@@ -75,22 +65,6 @@ export function BarKeys() {
             <path d="M15 11v4h-6 M11 13l-2 2 2 2" />
           </svg>
         </PaletteKey>
-      </KeyGrid>
-      <GroupName name={t('bars.length')} info={t('bars.lengthInfo')} />
-      <KeyGrid label={t('bars.length')}>
-        {barLengths(meter).map((ticks) => {
-          const time = timeSignature(ticks / TICKS_PER_BEAT, meter)
-          return (
-            <PaletteKey
-              key={ticks}
-              label={t('bars.lengthOf', { time: timeSignatureText(time) })}
-              pressed={ticks === barTicks}
-              onClick={() => actions.dispatch({ type: 'barLength', ticks })}
-            >
-              <TimeFigures meter={time} />
-            </PaletteKey>
-          )
-        })}
       </KeyGrid>
       <GroupName name={t('bars.repeats')} info={t('bars.repeatsInfo')} />
       <KeyGrid label={t('bars.repeats')}>

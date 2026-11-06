@@ -9,13 +9,19 @@ export function useAccount(): Pick<AccountContext, 'account' | 'ready' | 'auth'>
 }
 
 /**
- * Learner view (R29 B5): whether it is on, whether this account may turn it on (an editor's or an
- * admin's), and its switch. For the session only.
+ * Learner preview (R29 B5): whether it is on, the account's real role, whether it may turn it on (an
+ * editor's or an administrator's), and its switch. For the session only.
  */
-export function useLearnerView(): { on: boolean; can: boolean; set: (on: boolean) => void } {
+export function useLearnerView(): {
+  on: boolean
+  role: AccountContext['realRole']
+  can: boolean
+  set: (on: boolean) => void
+} {
   const { learnerView, setLearnerView, realRole } = useAccountContext()
   return {
     on: learnerView,
+    role: realRole,
     can: realRole === 'editor' || realRole === 'admin',
     set: setLearnerView,
   }

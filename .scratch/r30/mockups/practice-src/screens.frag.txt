@@ -1,0 +1,115 @@
+// R30 Practice mockup screens, every count worked out from the app's own content.
+Object.assign(P, {
+  circle: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/>',
+  gauge: '<path d="m12 14 4-4"/><path d="M3.3 19a10 10 0 1 1 17.4 0"/>',
+  bars: '<path d="M6 20V10M12 20V4M18 20v-6"/>',
+  ruler: '<path d="m15 4 5 5L9 20l-5-5Z"/><path d="m8 12 2 2M11 9l2 2M14 6l2 2"/>',
+  wave: '<path d="M2 12h2l3-7 4 14 4-10 3 6 2-3h2"/>',
+  dumbbell: '<path d="M6 7v10M18 7v10M3 9v6M21 9v6M6 12h12"/>',
+  list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+  hand: '<path d="M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.9-6-2.4l-3.6-3.6a2 2 0 0 1 2.8-2.8L7 15"/>',
+  updown: '<path d="m7 15 5 5 5-5M7 9l5-5 5 5"/>',
+});
+// A real keyboard: black keys between C–D, D–E, F–G, G–A, A–B.
+const kb2 = (dots, big = false) => `<span class="kbd${big ? ' lg' : ''}">${Array(7).fill('<i></i>').join('')}${[14.3, 28.6, 57.1, 71.4, 85.7].map(x => `<b style="left:calc(${x}% - ${big ? 6 : 3.5}px)"></b>`).join('')}${dots.map(x => `<u style="left:calc(${x}% - ${big ? 4 : 2.5}px)"></u>`).join('')}</span>`;
+const stage = (n) => lvl(n);
+const STAGE = { beginner: 1, intermediate: 2, advanced: 3, professional: 4 };
+const dd = (l, v) => `<span class="dd"><span class="l">${l}</span><span class="v">${v}</span>${ic('updown', 16)}</span>`;
+const homeFab = (icon, mac) => `<span class="fab" style="bottom:${mac ? 32 : 34}px" aria-label="${icon === 'play' ? 'Play' : 'New'}">${ic(icon, icon === 'play' ? 22 : 24)}</span>`;
+
+const PAGES = {
+  tools: [['p-grass', 'metro', 'Metronome', 'Clicks or drums, any tempo; tap it in'], ['p-sky', 'search', 'Chord finder', 'Play a chord, see its name'], ['p-lilac', 'circle', 'Circle of fifths', 'Every key, its signature and chords'], ['p-grass', 'gauge', 'Tuner', 'How in tune a note is']],
+  theory: [['p-sand', 'piano', 'Chords', 'Triads to 13ths, inversions'], ['p-sky', 'bars', 'Scales and keys', 'Scales, their chords, keys'], ['p-yellow', 'ruler', 'Intervals', 'Every interval on the keys'], ['p-grass', 'list', 'Progressions', '54 known progressions, any key']],
+  playing: [['p-lilac', 'play', 'Chord player', 'A chord sheet played by a band'], ['p-yellow', 'wave', 'Accompaniment', '48 patterns for both hands']],
+  training: [['p-sand', 'dumbbell', 'Exercises', '12 drills for the fingers'], ['p-lilac', 'select', 'Quiz', 'Chords, keys, ear, reading']],
+};
+const pageRow = ([p, i, n, d]) => `<div class="row"><span class="tile ${p}">${ic(i, 22)}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div>${ic('chev', 18)}</div>`;
+const group = (title, rows) => `<div class="h2">${title}</div><div class="group">${rows.map(pageRow).join('')}</div>`;
+const CONT = [['p-grass', 'metro', 'Metronome', 'Today'], ['p-sand', 'piano', 'Chords', 'Yesterday']];
+const cont = (gap) => `<div class="h2">Continue</div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:${gap}px">${CONT.map(([p, i, n, d]) => `<div class="group" style="padding:10px 12px;display:flex;gap:10px;align-items:center;min-height:64px"><span class="tile ${p}">${ic(i, 22)}</span><div style="min-width:0"><div style="font-weight:600">${n}</div><div style="font-size:14px;color:var(--ink-soft)">${d}</div></div></div>`).join('')}</div>`;
+const practiceBody = `${cont(10)}${group('Tools', PAGES.tools)}${group('Theory', PAGES.theory)}${group('Playing', PAGES.playing)}${group('Training', PAGES.training)}`;
+const practicePhone = phone(`<div class="bar"><div class="t lg">Practice</div><div class="tools">${rb('search')}</div></div><div class="scroll pad" style="padding-bottom:100px">${practiceBody}</div>`, 'Practice');
+const practicePhoneEnd = phone(`<div class="bar"><div class="t lg">Practice</div><div class="tools">${rb('search')}</div></div><div class="scroll pad" style="justify-content:flex-end;padding-bottom:100px">${practiceBody}</div>`, 'Practice');
+const practiceMac = mac(`<div class="bar"><div class="t lg">Practice</div></div><div class="pad" style="display:grid;gap:6px">${cont(28)}<div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start"><div>${group('Tools', PAGES.tools)}${group('Playing', PAGES.playing)}</div><div>${group('Theory', PAGES.theory)}${group('Training', PAGES.training)}</div></div></div>`, 'Practice');
+document.getElementById('s1').innerHTML = [
+  fig('1.1', 'Phone, Practice', 'Continue (the last two pages opened), then Tools: four now, Drone, Tap tempo and the Recorder gone; Theory, Playing and Training below (1.3).', practicePhone),
+  fig('1.2', 'Laptop, Practice', 'Continue across the top, its two cards on the columns’ edges; two columns of six rows each: Tools and Playing, Theory and Training.', practiceMac),
+  fig('1.3', 'Phone, Practice scrolled to the end', 'The same page at its foot: Playing and Training, clear of the tab bar.', practicePhoneEnd),
+].join('');
+
+// ——— the library: one shape for all three ———
+// item: [name, line, cols{...}, tile[paint, icon]]
+const more = `<span class="rb sm">${ic('more', 20)}</span>`;
+const itemRow = ([n, d, c, tile]) => `<div class="row">${tile ? `<span class="tile ${tile[0]}">${ic(tile[1], 22)}</span>` : ''}<div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div>${c.level ? stage(c.level) : ''}${more}</div>`;
+const section = (title, rows, fold = 5) => `<div class="h2"><span>${title}</span>${rows.length > fold ? `<a class="all">Show all ${rows.length}</a>` : ''}</div><div class="group">${rows.slice(0, fold).map(itemRow).join('')}</div>`;
+const searchBar = (title, sortBy, filter) => `<div style="display:flex;gap:8px"><div class="field">${ic('search', 18)}<span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Search ${title.toLowerCase()}</span><span style="margin-left:auto;display:flex;gap:4px;align-items:center;color:var(--ink);flex:none">${ic('sort', 16)}${sortBy}</span></div>${filter ? `<span class="rb" aria-label="Filter">${ic('filter', 20)}</span>` : ''}</div>`;
+const libPhone = ({ title, sections, sortBy, filter, fab }) => phone(`<div class="bar">${rb('back')}<div class="t">${title}</div><div class="tools">${rb('gear')}</div></div><div class="pad" style="display:grid;gap:10px;padding-top:8px">${searchBar(title, sortBy, filter)}</div><div class="scroll pad">${sections.map(([t, rows]) => section(t, rows)).join('')}</div>${fab ? `<span class="fab" style="bottom:96px" aria-label="New">${ic('plus', 24)}</span>` : ''}`, 'Practice');
+const cnt = (c) => (c ? `<span class="c">${c}</span>` : '');
+const nameCell = (cell) => `<span style="min-width:0;display:flex;gap:12px;align-items:center">${cell[2] ? `<span class="tile ${cell[2][0]}">${ic(cell[2][1], 18)}</span>` : ''}<span style="min-width:0"><div class="n">${cell[0]}</div><div class="d" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${cell[1]}</div></span></span>`;
+const libMac = ({ title, places, label, sel, cols, rows, filter, fab, sortBy, folders, empty }) => mac(`<div class="bar">${rb('back')}<div class="t lg">${title}</div><div class="tools">${rb('gear')}</div></div><div class="lib"><div class="tree">${places.top.map(([i, l, c]) => `<div class="ti ${l === sel ? 'on' : ''}">${ic(i, 18)}${l}${cnt(c)}</div>`).join('')}<div class="lab">${label}</div>${places.books.map(([b, c, i]) => `<div class="ti ${b === sel ? 'on' : ''}">${ic(i || 'book', 18)}${b}${cnt(c)}</div>`).join('')}${places.mine ? `<div class="gap"></div><div class="ti ${sel === 'Mine' ? 'on' : ''}">${ic('pen', 18)}Mine${cnt(places.mine)}</div>` : ''}${folders || ''}</div><div class="list"><div style="display:flex;gap:10px;margin-bottom:10px;align-items:center">${searchBar(title, sortBy, filter).replace('display:flex;gap:8px', 'display:flex;gap:8px;flex:1')}</div>${empty || `<div class="thead" style="grid-template-columns:${cols.map((c) => c[1]).join(' ')} 44px">${cols.map(([c]) => `<span>${c}${c === sortBy ? ' ' + ic('down', 14) : ''}</span>`).join('')}<span></span></div>${rows.map((r) => `<div class="trow" style="grid-template-columns:${cols.map((c) => c[1]).join(' ')} 44px">${r.map((cell, i) => i === 0 ? nameCell(cell) : typeof cell === 'number' ? stage(cell) : `<span style="color:var(--ink-soft);font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${cell}</span>`).join('')}${more}</div>`).join('')}`}</div></div>${fab ? homeFab('plus', true) : ''}`, 'Practice');
+
+// Exercises: the three books the page lists, 12 in all.
+const EXB = [
+  ['Finger technique', 'hand', 'p-yellow', [['Five-finger position', 'One finger on each of a key’s first five notes', 'beginner'], ['Hanon', 'Nos. 1 to 20 of The Virtuoso Pianist', 'intermediate']]],
+  ['Barry Harris', 'book', 'p-lilac', [['6th-diminished scale', 'Eight notes to the octave', 'advanced'], ['6th-diminished chords', 'A chord under each note of the scale', 'professional'], ['Dominant scale down', 'The V7’s scale, the chord’s notes on the beats', 'advanced'], ['Arpeggios from the 3rd', 'Each chord’s 3-5-7-9 over a ii–V–I', 'professional'], ['Drop-2 7ths', 'The key’s 7th chords, one note in the left hand', 'professional']]],
+  ['Piano With Jonny', 'book', 'p-sky', [['2-5-1 scale', 'The scale in swung 8ths over a ii–V–I', 'beginner'], ['Inner voice', 'The 3rd held on top, the 7th steps down', 'intermediate'], ['Modes', 'The scale from each of its notes, Ionian to Locrian', 'advanced'], ['Rapid switch', 'One line through all twelve keys', 'professional'], ['Pattern shifting', 'A short figure on each degree in turn', 'professional']]],
+];
+const exItems = (b) => b[3].map(([n, d, s]) => [n, d, { level: STAGE[s] }, [b[2], b[1]]]);
+const EX_FAV = [exItems(EXB[0])[1], exItems(EXB[2])[0]];
+const exPlaces = { top: [['music', 'All', 12], ['heart', 'Favourites', 2]], books: EXB.map((b) => [b[0], b[3].length]) };
+const exRows = (books) => books.flatMap((b) => b[3].map(([n, d, s]) => [[n, d, [b[2], b[1]]], b[0], STAGE[s]]));
+const exCols = [['Name', 'minmax(0,3fr)'], ['Book', 'minmax(0,1.3fr)'], ['Level', '110px']];
+document.getElementById('s2').innerHTML = [
+  fig('2.1', 'Phone, Exercises', 'Search with Sort (Book, Name, Level) and Filter (Level); Favourites first, then each book, folded after five with Show all; the level as its bars and number; ⋯ holds Favourite, as a swipe does.', libPhone({ title: 'Exercises', sortBy: 'Book', filter: true, sections: [['Favourites', EX_FAV], ...EXB.map((b) => [b[0], exItems(b)])] })),
+  fig('2.2', 'Laptop, Exercises', 'The tree: All, Favourites, each book. The table sorts by its headings (here Book, as the field says); Filter is the same button as the phone’s.', libMac({ title: 'Exercises', places: exPlaces, label: 'Books', sel: 'All', cols: exCols, rows: exRows(EXB), filter: true, sortBy: 'Book' })),
+].join('');
+
+// Accompaniment: each book’s patterns and studies, the rhythm styles, Mine; 48 patterns + 43 studies.
+const AC_BOOKS = [['Called to Play', 26], ['Called to Play, level 2', 28], ['The seven types', 13], ['Gorshkov', 10], ['Rhythm styles', 14]];
+const pat = (n, d, l) => [n, d, { level: l }, ['p-yellow', 'wave']];
+const study = (n, d, l) => [n, d, { level: l }, ['p-grass', 'music']];
+const CTP = [pat('1 · Bass + chords', 'The chord on every beat over a held octave', 1), pat('2 · Broken chords', 'Rocks between the chord’s notes over the octave', 1), pat('3 · Arpeggio', 'The 3rd, then the 5th and octave', 2), pat('Chord, then octave jumps', 'The chord, then its root up one octave and two', 2), pat('Arpeggio up two octaves', 'Over a held bass', 3), ...Array(16).fill(pat('…', '', 2))];
+const CTP_SONGS = [study('Lesson 3', 'C – Dm – G – C – F – C – G – C', 1), ...Array(4).fill(study('…', '', 1))];
+const AC_SECTIONS = [['Called to Play', CTP], ['Called to Play: songs', CTP_SONGS], ['Called to Play, level 2', [pat('Octaves', 'The right hand climbs 1–2–3–5 in octaves', 2), pat('Octaves (scale)', 'The right hand climbs the scale in octaves', 3), pat('Chords in octaves', 'The chord in both hands, an octave apart', 3)]], ['Mine', [[`Waltz bass`, 'Left 1–5–5 · right on 2 and 3', { level: 1 }, ['p-sand', 'pen']]]]];
+const AC_ROWS = [[['1 · Bass + chords', 'The chord on every beat over a held octave', ['p-yellow', 'wave']], 'Called to Play', 1, 'LH octave · RH chord'], [['2 · Broken chords', 'Rocks between the chord’s notes', ['p-yellow', 'wave']], 'Called to Play', 1, 'LH octave · RH broken'], [['3 · Arpeggio', 'The 3rd, then the 5th and octave', ['p-yellow', 'wave']], 'Called to Play', 2, 'LH arpeggio'], [['Chord, then octave jumps', 'Its root up one octave and two', ['p-yellow', 'wave']], 'Called to Play', 2, 'Both hands'], [['Arpeggio up two octaves', 'Over a held bass', ['p-yellow', 'wave']], 'Called to Play', 3, 'LH arpeggio · RH held'], [['Lesson 3', 'C – Dm – G – C – F – C – G – C', ['p-grass', 'music']], 'Called to Play', 1, 'Both hands'], [['Lesson 3: a new way on each chord', 'In C', ['p-grass', 'music']], 'Called to Play', 2, 'Both hands']];
+document.getElementById('s3').innerHTML = [
+  fig('3.1', 'Phone, Accompaniment', 'No Source menu: each book is a section of its patterns, then one of the songs they’re practised on, each folded after five; Mine last, + makes a pattern. Filter by level or style.', libPhone({ title: 'Accompaniment', sortBy: 'Book', filter: true, fab: true, sections: AC_SECTIONS })),
+  fig('3.2', 'Laptop, Accompaniment', 'The books in the tree, Rhythm styles with them, Mine under them. The table: Name, Book, Level and Hands; a song (the note picture) opens its page. + makes a pattern.', libMac({ title: 'Accompaniment', places: { top: [['music', 'All', 92], ['heart', 'Favourites', 0]], books: AC_BOOKS, mine: 1 }, label: 'Books', sel: 'Called to Play', cols: [['Name', 'minmax(0,3fr)'], ['Book', 'minmax(0,1.3fr)'], ['Level', '110px'], ['Hands', 'minmax(0,1.6fr)']], rows: AC_ROWS, filter: true, fab: true, sortBy: 'Name' })),
+].join('');
+
+// Progressions: 54 in nine styles; Mine for those you saved.
+// One icon, one meaning: every style is a list of progressions, told apart by its paint.
+const PR_STYLES = [['Pop', 10, 'list', 'p-sky'], ['Jazz', 11, 'list', 'p-lilac'], ['Classical', 10, 'list', 'p-sand'], ['Blues', 6, 'list', 'p-sky'], ['Gospel', 5, 'list', 'p-yellow'], ['Rock', 4, 'list', 'p-sand'], ['Modal', 4, 'list', 'p-lilac'], ['Theory', 3, 'list', 'p-grass'], ['Soul', 1, 'list', 'p-yellow']];
+const PT = Object.fromEntries(PR_STYLES.map(([s, , i, p]) => [s, [p, i]]));
+const pr = (n, line, style, l) => [n, line, { level: l }, PT[style]];
+const POP = [pr('Axis of Awesome', 'I – V – vi – IV', 'Pop', 1), pr('Let It Be', 'I – V – vi – IV – I – V – IV – I', 'Pop', 1), pr('Yesterday', 'I – V/vi – vi – IV – V – I', 'Pop', 3), pr('Clocks', 'I – v – v – ii', 'Pop', 2), pr('50s doo-wop', 'I – vi – IV – V', 'Pop', 1), ...Array(5).fill(pr('…', '', 'Pop', 1))];
+const JAZZ = [pr('Major ii–V–I', 'ii7 – V7 – I maj7', 'Jazz', 2), pr('Rhythm changes', 'I – vi – ii – V', 'Jazz', 3), pr('Turnaround', 'iii – vi – ii – V', 'Jazz', 2), pr('Minor ii–V–i', 'iiø7 – V7 – i', 'Jazz', 3), pr('Tritone sub', 'ii7 – ♭II7 – I maj7', 'Jazz', 4), ...Array(6).fill(pr('…', '', 'Jazz', 2))];
+const CHORDS = [['I', 'C', 'Home', 'p-grass', [7.1, 35.7, 64.3]], ['V', 'G', 'Pull', 'p-lilac', [64.3, 92.9, 21.4]], ['vi', 'Am', 'Soft home', 'p-sky', [78.6, 7.1, 35.7]], ['IV', 'F', 'Away', 'p-sand', [50, 78.6, 7.1]]];
+const PASSING = [['Before G (V)', 'Dm7 (ii7): a step that leans in'], ['Before Am (vi)', 'E7: the chord that leads to Am'], ['Before F (IV)', 'C7: makes F feel like home for a beat']];
+const chordsCard = (big) => `<div class="group" style="padding:${big ? 20 : 12}px;display:grid;grid-template-columns:repeat(4,1fr);gap:${big ? 12 : 8}px;text-align:center">${CHORDS.map(([n, c, r, p, d]) => `<div style="display:grid;gap:${big ? 8 : 6}px;justify-items:center"><span class="${p}" style="border-radius:12px;padding:4px ${big ? 12 : 10}px;font:600 ${big ? 18 : 17}px var(--display)">${n}</span><b style="font-family:var(--display);font-size:${big ? 22 : 18}px">${c}</b>${kb2(d, big)}<span style="font-size:14px;color:var(--ink-soft)">${r}</span></div>`).join('')}</div>`;
+const chordPlayerRow = `<div class="group"><div class="row"><span class="tile p-lilac">${ic('play', 20)}</span><div class="txt"><div class="n">Play it in the Chord player</div><div class="d">With a band, in any style</div></div>${ic('chev', 18)}</div></div>`;
+const bass = `<div class="h2"><span>The bass</span></div><div class="group" style="padding:12px 14px;font-size:15px">C → G down a 4th · G → A up a step · A → F down a 3rd</div>`;
+const passing = `<div class="h2"><span>Passing chords</span></div><div class="group">${PASSING.map(([n, d]) => `<div class="row"><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div><span class="obtn">Add</span></div>`).join('')}</div>`;
+const inSongs = `<div class="h2"><span>In your songs</span></div><div class="group"><div class="row"><span class="tile p-yellow">${ic('music', 22)}</span><div class="txt"><div class="n">Amazing Grace</div><div class="d">Bars 9–12</div></div>${ic('chev', 18)}</div></div>`;
+const progBar = (lg) => `<div class="bar">${rb('back')}<div class="t${lg ? ' lg' : ''}">Axis of Awesome</div><div class="tools">${rb('heart')}${rb('gear')}</div></div>`;
+const progPhone = phone(`${progBar(false)}<div class="scroll pad" style="gap:12px;padding-bottom:100px"><p style="color:var(--ink-soft);margin:0">Bright and singable · Pop</p><div style="display:flex;gap:8px">${dd('Key', 'C major')}${dd('Chords', 'Triads')}</div>${chordsCard(false)}${chordPlayerRow}<div>${bass}</div><div>${passing}</div><div>${inSongs}</div></div>${homeFab('play', false)}`);
+const progMac = mac(`${progBar(true)}<div class="pad" style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:28px;align-items:start"><div style="display:grid;gap:12px"><p style="color:var(--ink-soft);margin:0">Bright and singable · Pop</p><div style="display:flex;gap:8px">${dd('Key', 'C major')}${dd('Chords', 'Triads')}</div>${chordsCard(true)}${chordPlayerRow}<div>${bass}</div></div><div>${passing}${inSongs}</div></div>${homeFab('play', true)}`, 'Practice');
+const prPlaces = { top: [['music', 'All', 55], ['heart', 'Favourites', 3]], books: PR_STYLES.map(([s, c, i]) => [s, c, i]), mine: 1 };
+const PR_ROWS = [['Axis of Awesome', 'Bright and singable', 'I – V – vi – IV', 'Pop', 1], ['Let It Be', 'Calm and hymn-like', 'I – V – vi – IV – I – V – IV – I', 'Pop', 1], ['Yesterday', 'Wistful, it leans elsewhere', 'I – V/vi – vi – IV – V – I', 'Pop', 3], ['Clocks', 'Restless and dark', 'I – v – v – ii', 'Pop', 2], ['50s doo-wop', 'Sweet and nostalgic', 'I – vi – IV – V', 'Pop', 1], ['Major ii–V–I', 'The sound of jazz', 'ii7 – V7 – I maj7', 'Jazz', 2], ['Rhythm changes', 'Gershwin’s turnaround', 'I – vi – ii – V', 'Jazz', 3]].map(([n, d, num, s, l]) => [[n, d, PT[s]], num, s, l]);
+document.getElementById('s4').innerHTML = [
+  fig('4.1', 'Phone, Progressions', 'The library is the page, no tabs and no chips: each style a section with its picture, the numerals as each row’s line; Filter by level or style; Mine comes last, after the nine styles; + types a new one.', libPhone({ title: 'Progressions', sortBy: 'Style', filter: true, fab: true, sections: [['Favourites', [POP[0], JAZZ[0], pr('Sad loop', 'vi – IV – I – V', 'Pop', 1)]], ['Pop', POP], ['Jazz', JAZZ]] })),
+  fig('4.2', 'Phone, a progression', 'Its own page: ♡ in the bar; the key and chord size; each chord with its numeral, its role and its keys; Play it in the Chord player; the bass’s moves; Passing chords, each named for the chord it leads into; the songs it is in. Play floats.', progPhone),
+  fig('4.3', 'Laptop, Progressions', 'The styles in the tree, Mine under them; the table: Name, Numerals, Style, Level; + types a new one.', libMac({ title: 'Progressions', places: prPlaces, label: 'Styles', sel: 'All', cols: [['Name', 'minmax(0,2fr)'], ['Numerals', 'minmax(0,2.4fr)'], ['Style', '110px'], ['Level', '110px']], rows: PR_ROWS, filter: true, fab: true, sortBy: 'Style' })),
+  fig('4.4', 'Laptop, a progression', 'The same page in two columns: the chords, the Chord player row and the bass on the left; Passing chords and the songs it is in on the right; Play floats as on the phone.', progMac),
+].join('');
+
+// States, drawn once on Exercises (the same for all three).
+const emptyFavBlock = `<div style="display:grid;justify-items:center;gap:10px;text-align:center;padding-top:120px"><span class="tile p-sand" style="width:56px;height:56px">${ic('heart', 28)}</span><b style="font:600 19px var(--display)">No favourites yet</b><p style="color:var(--ink-soft);margin:0;max-width:320px">Click ⋯ on an exercise, then Favourite, and it waits here.</p><span class="obtn">All exercises</span></div>`;
+const emptyFav = libMac({ title: 'Exercises', places: { top: [['music', 'All', 12], ['heart', 'Favourites', 0]], books: exPlaces.books }, label: 'Books', sel: 'Favourites', cols: exCols, rows: [], filter: true, sortBy: 'Book', empty: emptyFavBlock });
+const noMatch = phone(`<div class="bar">${rb('back')}<div class="t">Exercises</div><div class="tools">${rb('gear')}</div></div><div class="pad" style="display:grid;gap:10px;padding-top:8px"><div style="display:flex;gap:8px"><div class="field">${ic('search', 18)}<span style="color:var(--ink)">zzz</span></div><span class="rb">${ic('filter', 20)}</span></div></div><div class="scroll pad" style="text-align:center;padding-top:60px"><div style="display:grid;justify-items:center;gap:10px"><b style="font:600 19px var(--display)">No exercises match “zzz”</b><span class="obtn">Clear</span></div></div>`, 'Practice');
+document.getElementById('s5').innerHTML = [
+  fig('5.1', 'A · Books, Favourites, Mine', 'As 2.2: what is built in is sorted by book; what you made is Mine.', libMac({ title: 'Exercises', places: exPlaces, label: 'Books', sel: 'Barry Harris', cols: exCols, rows: exRows([EXB[1]]), filter: true, sortBy: 'Book' })),
+  fig('5.2', 'B · Your own folders too', '5.1 with one thing added: a Folders group under the books, with New folder; an exercise dragged into a folder, or ⋯ › Add to folder.', libMac({ title: 'Exercises', places: exPlaces, label: 'Books', sel: 'Barry Harris', cols: exCols, rows: exRows([EXB[1]]), filter: true, sortBy: 'Book', folders: `<div class="lab">Folders</div><div class="ti">${ic('folder', 18)}Morning warm-up<span class="c">4</span></div><div class="ti">${ic('folder', 18)}Before the service<span class="c">3</span></div><div class="ti" style="color:var(--sky-ink)">${ic('plus', 18)}New folder</div>` })),
+  fig('5.3', 'Laptop, no favourites yet', 'Favourites chosen in the tree when nothing is starred. On a phone the Favourites section simply isn’t shown until something is.', emptyFav),
+  fig('5.4', 'Phone, nothing matches', 'A search with no match says so and offers Clear. Offline changes nothing: everything here is built in or yours.', noMatch),
+].join('');

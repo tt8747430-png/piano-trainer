@@ -1,10 +1,10 @@
 import { useSearch } from '@tanstack/react-router'
+import { PageKeyboardTools } from '@/features/live-keyboard'
 import { useTranslation } from 'react-i18next'
 import { useSetSearch } from '@/shared/lib'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { ChordExplorer, type ChordView } from '@/widgets/chord-explorer'
 import { StepPanel } from '@/widgets/step-panel'
-import { SettingsGear } from '@/widgets/practice-pages'
 import { ToolsButton } from '@/widgets/tools-sheet'
 
 /** Chords: any chord built on any root, with its path step's panel when opened from one. */
@@ -17,8 +17,12 @@ export function ChordsPage() {
       <ScreenHeader
         title={t('pages.chords')}
         back={<BackButton />}
-        tools={<ToolsButton />}
-        settings={<SettingsGear page="chords" />}
+        tools={
+          <>
+            <PageKeyboardTools />
+            <ToolsButton />
+          </>
+        }
       />
       {step ? <StepPanel step={step} /> : null}
       <ChordExplorer chord={chord} onChange={onChange} />

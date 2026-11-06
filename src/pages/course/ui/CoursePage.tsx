@@ -2,6 +2,7 @@ import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { BookOpenText, Check, Play, RotateCcw, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { courseById, CourseIcon, courseStepIds, type Course } from '@/entities/course'
+import { selectOwnCourse, useOwnLessons } from '@/entities/own-lessons'
 import { PieceLink, pieceById } from '@/entities/piece'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { STAGE_PAINT, stepOf } from '@/entities/step'
@@ -10,7 +11,6 @@ import { cn } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, FabLink, FloatingActions, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
 import { AboutView } from '@/widgets/lesson-view'
-import { EditToggle } from '@/widgets/mode-switch'
 import {
   CourseFacts,
   courseProgress,
@@ -20,6 +20,7 @@ import {
   LearnedMeter,
   openCourseStep,
 } from '@/widgets/curriculum'
+import { OwnCoursePage } from './OwnCoursePage'
 
 /**
  * The course's one way in, its floating action: Start course, or Continue onto the step to take;
@@ -63,12 +64,18 @@ function CourseAction({ course }: { course: Course }) {
  * A course's page (ADR 0053, 0061): one card, its icon on its level's paint beside what it teaches
  * and its facts in words, and along its foot how much is learned; its About, where an editor wrote
  * one (R29 B9); then its lessons numbered as taught, the next ringed, and its guided songs. Its one
- * way in floats.
+ * way in floats. A course of the learner's own (R30-5) reads as `OwnCoursePage`.
  */
 export function CoursePage() {
+  const { courseId } = useParams({ from: '/shell/courses/$courseId' })
+  const own = useOwnLessons(selectOwnCourse(courseId))
+  return own ? <OwnCoursePage key={courseId} course={own} /> : <AppCourse courseId={courseId} />
+}
+
+/** One of the app's courses. */
+function AppCourse({ courseId }: { courseId: string }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const { courseId } = useParams({ from: '/shell/courses/$courseId' })
   const learned = useProgress(selectLearned)
   const { account } = useAccount()
   const navigate = useNavigate()
@@ -93,19 +100,18 @@ export function CoursePage() {
           />
         }
         edit={
-          editsContent(account) ? (
-            <EditToggle
-              editing={false}
-              onDone={() => undefined}
-              onEdit={() =>
-                void navigate({
-                  to: '/courses/$courseId/edit',
-                  params: { courseId },
-                  replace: true,
-                })
+          editsContent(account)
+            ? {
+                editing: false,
+                onEdit: () =>
+                  void navigate({
+                    to: '/courses/$courseId/edit',
+                    params: { courseId },
+                    replace: true,
+                  }),
+                onDone: () => undefined,
               }
-            />
-          ) : null
+            : undefined
         }
       />
       {/* One card: what it is, its facts and progress, and its one way in along its foot. */}

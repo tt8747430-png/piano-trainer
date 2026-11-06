@@ -2,7 +2,6 @@ import type { Midi } from '@/shared/lib/music'
 import {
   damp,
   QUIET_DAMPER,
-  SOFT_GAIN,
   velocityGain,
   type Damper,
   type DamperEvent,
@@ -17,9 +16,12 @@ interface LiveVoice {
   pedals(): Readonly<Record<PedalKind, boolean>>
 }
 
-/** How an adapter sounds the live voice: `strike` a key at a gain, `silence` it; `changed` after each change. */
+/**
+ * How an adapter sounds the live voice: `strike` a key at its velocity's gain, under the soft pedal
+ * (`soft`: quieter and darker, the adapter's to voice) or not; `silence` it; `changed` after each change.
+ */
 interface LiveRender {
-  strike(key: Midi, gain: number): void
+  strike(key: Midi, gain: number, soft: boolean): void
   silence(key: Midi): void
   changed(damper: Damper): void
 }
@@ -48,7 +50,7 @@ export function createLiveVoice(render: LiveRender): LiveVoice {
       holds.set(key, (holds.get(key) ?? 0) + 1)
       if (damper.sounding.has(key)) render.silence(key)
       apply({ kind: 'press', midi: key })
-      render.strike(key, velocityGain(velocity) * (damper.pedals.soft ? SOFT_GAIN : 1))
+      render.strike(key, velocityGain(velocity), damper.pedals.soft)
       render.changed(damper)
     },
     release(key) {

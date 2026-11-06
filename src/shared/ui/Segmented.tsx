@@ -69,7 +69,7 @@ export function Segmented<V extends OptionValue>({
                 ? 'first-of-type:rounded-s-pill last-of-type:rounded-e-pill'
                 : 'first-of-type:rounded-s-control last-of-type:rounded-e-control',
               compact &&
-                'relative min-h-8 py-0.5 text-sm before:absolute before:-inset-y-1.5 before:inset-x-0 before:content-[""]',
+                'relative min-h-8 py-0.5 text-sm whitespace-nowrap before:absolute before:-inset-y-1.5 before:inset-x-0 before:content-[""]',
             )}
           >
             {option.icon}

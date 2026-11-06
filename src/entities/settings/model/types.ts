@@ -4,21 +4,18 @@ import type { Inversion } from '@/shared/lib/music'
 import {
   isOneOf,
   KEY_DOCKS,
-  KEY_LENGTHS,
   KEY_SIZES,
   NAMED_KEYS,
   OCTAVE_SHIFTS,
   PEDAL_WAYS,
-  RAIL_CONTROLS,
   SWIPES,
   type KeyDock,
   type SheetView,
-  type KeyLength,
   type KeySize,
   type NamedKeys,
   type OctaveShift,
   type PedalWay,
-  type RailControl,
+  type PedalsShown,
   type Swipe,
 } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
@@ -125,14 +122,14 @@ export interface TrainerSettings {
 }
 
 /** How every lesson shows its examples. */
-/** The keyboard settings: the same on every screen, set in Settings or from the keys' rail. */
+/** The keyboard settings: the same on every screen, set in Settings › On-screen piano. */
 export interface KeyboardSettings {
   readonly keySize: KeySize
   readonly swipe: Swipe
   readonly namedKeys: NamedKeys
   /** A key a page marks (a chord's, a scale's) names its note under its degree. */
   readonly markNotes: boolean
-  /** The rail names the chord a hand holds. */
+  /** The bar names the chord a hand holds. */
   readonly chordNames: boolean
   /** The computer keyboard plays the keys. */
   readonly typing: boolean
@@ -140,29 +137,27 @@ export interface KeyboardSettings {
   readonly autoplay: boolean
   /** Where a page's keys stay while it scrolls. */
   readonly dock: KeyDock
-  /** A page's keys folded away to a button that brings them back. */
+  /** A page's keys hidden from its bar's Keyboard (R34): the screen as the learner left it. */
   readonly folded: boolean
   /**
    * On a phone on its side, a reading page's keys (a lesson's, an explorer's, a song's) folded away,
    * apart from `folded`: the screen is too short for the page and the keys both (ADR 0062).
    */
   readonly foldedLandscape: boolean
-  readonly keyLength: KeyLength
-  /** The controls the keys' rail holds, in its order. */
-  readonly railControls: readonly RailControl[]
+  /** The pedals the bar's Sustain works (R34): sustain alone, or with soft and sostenuto in its menu. */
+  readonly pedals: PedalsShown
+  /** How loud the keys a hand plays sound (the live voice), a whole percent from 0 to 100 (R33). */
+  readonly volume: number
 }
 
-/**
- * Where the score editor's palette stands (ADR 0114, Flat's): a panel docked at the sheet's left
- * (a laptop, a tablet, a phone on its side), or a sheet docked at its foot (a phone held upright).
- */
-export const PALETTE_PLACES = ['panel', 'sheet'] as const
-export type PalettePlace = (typeof PALETTE_PLACES)[number]
-/**
- * Whether the palette is folded, as the learner last left it in each place; a place never chosen
- * takes its default (ADR 0114): the panel shown, the sheet compact (its quick row and its tabs).
- */
-export type PaletteFolds = Readonly<Partial<Record<PalettePlace, boolean>>>
+/** The sizes of screen the keys' height is kept for (R34): a phone upright, on its side, a wider screen. */
+export const KEYS_SCREEN_SIZES = ['phone', 'side', 'wide'] as const
+export type KeysScreenSize = (typeof KEYS_SCREEN_SIZES)[number]
+/** The keys' height the divider set, in px, for each size of screen; null: a piano's proportion. */
+export type KeysHeight = Readonly<Record<KeysScreenSize, number | null>>
+export const DEFAULT_KEYS_HEIGHT: KeysHeight = { phone: null, side: null, wide: null }
+/** The tallest height kept: no screen has keys taller. */
+export const KEYS_HEIGHT_MOST = 2000
 
 const SIDEBARS = ['open', 'collapsed'] as const
 /** A laptop's sidebar: its places named, or their icons alone. */
@@ -186,13 +181,14 @@ export interface RecorderSettings {
 export interface EditingSettings {
   /** A note sounds as it is chosen on the score or its pitch is changed (the keys sound themselves). */
   readonly hearNotes: boolean
-  /** How the editor writes when it opens (Dorico's Insert default): the toolbar still switches it. */
-  readonly startMode: EditorStartMode
   /** Which side of the sheet the palette docks on, from 48rem wide. */
   readonly paletteSide: PaletteSide
 }
 
-/** The modes the editor may open in: Chord is chosen for a moment, never a way to start. */
+/**
+ * The modes the editor opens in, as it was left (R31-E): Chord is chosen for a moment, never a way
+ * to start.
+ */
 export const EDITOR_START_MODES = ['replace', 'insert'] as const
 export type EditorStartMode = (typeof EDITOR_START_MODES)[number]
 
@@ -346,17 +342,23 @@ export interface SettingsState {
   sound: SoundSettings
   trainer: TrainerSettings
   keyboard: KeyboardSettings
+  /** The keys' height the divider set, per size of screen (R34): the screen as the learner left it. */
+  keysHeight: KeysHeight
   recorder: RecorderSettings
   /** How the score editor writes (round 28). */
   editing: EditingSettings
   sidebar: Sidebar
-  /** Whether the score editor's palette is folded to its quick row and categories, by where it stands. */
-  paletteFolded: PaletteFolds
   /**
-   * The editor's panel's sections open, by name, as the learner left them (ADR 0114); null until
-   * they open or fold one, the panel then opening its first ones.
+   * Whether the score editor's palette floating on a phone is folded to its category's row and the
+   * categories (R31-E), as the learner left it; folded as it first opens.
    */
-  paletteSections: readonly string[] | null
+  paletteFolded: boolean
+  /** Whether the palette shows its tools as named rows, Flat's list view, rather than as cells (R32-C). */
+  paletteList: boolean
+  /** The palette's category chosen, by name, as the learner left it (R31-E); null until chosen. */
+  paletteCategory: string | null
+  /** The mode the score editor writes in, as it was left (R31-E). */
+  editorMode: EditorStartMode
   midi: MidiSettings
   chordFinder: ChordFinderSettings
   scoreView: ScoreViewSettings
@@ -369,20 +371,20 @@ export interface SettingsState {
   foldedSections: readonly string[]
   /** Whether the welcome was seen: the app's first run shows it once. */
   welcomed: boolean
+  /** The tips put away or done (R31-P), by their ids (`coach.listen`): a tip shows until then. */
+  tipsSeen: readonly string[]
+  /** Practice's pages opened from its list, the latest first (R30-4): its Continue's two. */
+  practiceRecent: readonly string[]
   /** How a lesson reads (round 26): one page of its sections, or a section at a time. */
   lessonReading: LessonReading
   /** How Progressions writes and voices every progression (A24). */
   progressions: ProgressionsSettings
   /** How the Chord player writes its chords and voices its piano (R29 CP6). */
   chordPlayer: ChordPlayerSettings
-  /** What Accompaniment shows (A24). */
-  accompaniment: AccompanimentSettings
   /** The bars the learner arranged (R29 B10): a surface left out holds its default. */
   bars: Bars
   /** The Tuner's reference pitch (R29 B11). */
   tuner: TunerSettings
-  /** The Drone as left (R29 B11). */
-  drone: DroneSettings
   /** What the Scales page writes on its staff (A43). */
   scaleStaff: ScaleStaffSettings
 }
@@ -412,25 +414,6 @@ export interface TunerSettings {
 }
 export const DEFAULT_TUNER: TunerSettings = { a4: 440 }
 
-/** What the Drone holds over its root: the root alone, with its fifth, or its major or minor triad. */
-export const DRONE_KINDS = ['note', 'fifth', 'major', 'minor'] as const
-export type DroneKind = (typeof DRONE_KINDS)[number]
-export const isDroneKind = isOneOf(DRONE_KINDS)
-/** The octaves a drone's root sits in: C1 (the piano's low end) to C5. */
-export const DRONE_OCTAVES = { min: 1, max: 5 } as const
-
-/**
- * The Drone (R29 B11): its root (a pitch class, 0 C to 11 B), what it holds over it, the octave its
- * root sits in, and how loud it is (0–100).
- */
-export interface DroneSettings {
-  readonly root: number
-  readonly kind: DroneKind
-  readonly octave: number
-  readonly volume: number
-}
-export const DEFAULT_DRONE: DroneSettings = { root: 0, kind: 'fifth', octave: 3, volume: 60 }
-
 /** How a lesson reads: one page of its sections (the plain page), or a section at a time. */
 export const LESSON_READINGS = ['page', 'sections'] as const
 export type LessonReading = (typeof LESSON_READINGS)[number]
@@ -455,7 +438,6 @@ export const DEFAULT_RECORDER: RecorderSettings = { click: true, tune: false, co
 /** A note heard as it is edited, as notation software does by default. */
 export const DEFAULT_EDITING: EditingSettings = {
   hearNotes: true,
-  startMode: 'replace',
   paletteSide: 'left',
 }
 
@@ -520,16 +502,9 @@ export interface ChordPlayerSettings {
 }
 export const DEFAULT_CHORD_PLAYER: ChordPlayerSettings = { names: 'chords', voicing: 'led' }
 
-/** Accompaniment's sources the learner hid from its tabs, by their ids (A24). */
-export interface AccompanimentSettings {
-  readonly hidden: readonly string[]
-}
-
-export const DEFAULT_ACCOMPANIMENT: AccompanimentSettings = { hidden: [] }
-
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
-  keySize: 'fit',
+  keySize: 'piano',
   swipe: 'scroll',
   namedKeys: 'c',
   markNotes: true,
@@ -539,15 +514,14 @@ export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
   dock: 'bottom',
   folded: false,
   foldedLandscape: true,
-  keyLength: 'long',
-  railControls: RAIL_CONTROLS,
+  pedals: 'sustain',
+  volume: 100,
 })
 
 export const isTheme = isOneOf(THEMES)
 export const isKeySize = isOneOf(KEY_SIZES)
 export const isSwipe = isOneOf(SWIPES)
 export const isKeyDock = isOneOf(KEY_DOCKS)
-export const isKeyLength = isOneOf(KEY_LENGTHS)
 export const isNamedKeys = isOneOf(NAMED_KEYS)
 export const isSidebar = isOneOf(SIDEBARS)
 export const isOctaveShift = isOneOf(OCTAVE_SHIFTS)

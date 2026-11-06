@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { BLOCK_PRESETS, DEFAULT_STYLE, sanitiseStyle, styleVars } from './style'
+import { BLOCK_PRESETS, DEFAULT_STYLE, presetOf, sanitiseStyle, styleVars } from './style'
 
 describe('the block style (R29 B9)', () => {
   it('drops unknown keys, values out of range and any url() or free text', () => {
@@ -19,6 +19,13 @@ describe('the block style (R29 B9)', () => {
       DEFAULT_STYLE.surface,
     )
     expect(sanitiseStyle('not a style')).toEqual(DEFAULT_STYLE)
+    // Three steps of border and shadow (R32-C): a fourth reads as the default.
+    expect(sanitiseStyle({ border: 3, shadow: 3 })).toEqual(DEFAULT_STYLE)
+  })
+
+  it('names the preset a style is, none for a style of the learner’s own', () => {
+    expect(presetOf(BLOCK_PRESETS.paper)).toBe('paper')
+    expect(presetOf({ ...BLOCK_PRESETS.paper, radius: 4 })).toBeNull()
   })
 
   it('keeps a paint by its name and a colour only as #rrggbb', () => {
@@ -41,5 +48,12 @@ describe('the block style (R29 B9)', () => {
     expect(vars['--block-surface']).toBe('var(--paint-sky)')
     expect(vars['--block-text']).toBe('#102030')
     expect(vars['--block-radius']).toBe('var(--block-radius-3)')
+  })
+
+  it('writes a paint chosen as text in its ink, never its pale wash (R31-S)', () => {
+    const vars = styleVars({ ...DEFAULT_STYLE, surface: 'sky', text: 'sky' })
+    expect(vars['--block-surface']).toBe('var(--paint-sky)')
+    expect(vars['--block-text']).toBe('var(--on-paint-sky)')
+    expect(styleVars(DEFAULT_STYLE)['--block-text']).toBe('var(--foreground)')
   })
 })

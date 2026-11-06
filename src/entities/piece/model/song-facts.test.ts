@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { readNote, shownCredits, songFacts, withSongFacts } from './song-facts'
+import {
+  readNote,
+  shownCredits,
+  songCredit,
+  songFacts,
+  withSongCredit,
+  withSongFacts,
+} from './song-facts'
 import type { Credit } from './types'
 
 type FactsOf = Parameters<typeof withSongFacts>[0]
@@ -15,30 +22,17 @@ const piece = {
 }
 
 describe('songFacts', () => {
-  it('reads the title, who wrote the music and the words, and what is said about it', () => {
-    expect(songFacts(piece, 'en')).toEqual({
-      title: 'Abide with me',
-      music: 'W. H. Monk',
-      words: 'H. F. Lyte',
-      about: 'A hymn',
-    })
+  it('reads the title and what is said about it: who wrote it is the score’s', () => {
+    expect(songFacts(piece, 'en')).toEqual({ title: 'Abide with me', about: 'A hymn' })
     expect(songFacts(piece, 'ru').about).toBe('Гимн')
-  })
-
-  it('reads words and music written by the same names into both', () => {
-    const facts = songFacts(
-      { title: 'T', credits: [{ role: 'words-and-music', names: 'X' }] },
-      'en',
-    )
-    expect(facts).toEqual({ title: 'T', music: 'X', words: 'X', about: '' })
   })
 })
 
 describe('withSongFacts', () => {
-  it('writes who wrote it as its score’s composer and lyricist, its credits as they were', () => {
+  it('writes its title and about, its score’s credits as they were', () => {
     const next = withSongFacts(
-      piece as FactsOf,
-      { title: ' Abide ', music: 'Monk', words: '', about: 'Evening hymn' },
+      { ...piece, header: { composer: 'Monk' } } as FactsOf,
+      { title: ' Abide ', about: 'Evening hymn' },
       'en',
     )
     expect(next.title).toBe('Abide')
@@ -47,30 +41,14 @@ describe('withSongFacts', () => {
     expect(next.note).toEqual({ en: 'Evening hymn', ru: 'Гимн' })
   })
 
-  it('reads its score’s names first, then the content’s credits', () => {
-    expect(songFacts({ ...piece, header: { lyricist: 'Me' } } as FactsOf, 'en')).toMatchObject({
-      music: 'W. H. Monk',
-      words: 'Me',
-    })
-  })
-
-  it('keeps the score’s other lines, and drops an empty about', () => {
-    const next = withSongFacts(
-      { title: 'T', header: { subtitle: 'Op. 1', composer: 'X' } } as FactsOf,
-      { title: 'T', music: '', words: 'Y', about: ' ' },
-      'ru',
-    )
-    expect(next.header).toEqual({ subtitle: 'Op. 1', lyricist: 'Y' })
+  it('drops an empty about', () => {
+    const next = withSongFacts({ title: 'T' } as FactsOf, { title: 'T', about: ' ' }, 'ru')
     expect(next.note).toBeUndefined()
   })
 
   it('writes a first about in both languages, and the same in both for a song of one language', () => {
     expect(
-      withSongFacts(
-        { title: 'T' } as FactsOf,
-        { title: 'T', music: '', words: '', about: 'Hi' },
-        'ru',
-      ).note,
+      withSongFacts({ title: 'T' } as FactsOf, { title: 'T', about: 'Hi' }, 'ru').note,
     ).toEqual({ en: 'Hi', ru: 'Hi' })
     const next = withSongFacts(piece, { ...songFacts(piece, 'en'), about: 'Mine' }, 'en', true)
     expect(next.note).toEqual({ en: 'Mine', ru: 'Mine' })
@@ -103,6 +81,44 @@ describe('shownCredits', () => {
     expect(shownCredits({ title: 'T', header: { composer: 'C', subtitle: 'S' } })).toEqual([
       { role: 'music', names: 'C' },
     ])
+  })
+})
+
+describe('a song’s credits as properties (R32-C)', () => {
+  it('reads Music, Words and Arranger from the score’s lines, else from its credits', () => {
+    expect(songCredit(piece, 'composer')).toBe('W. H. Monk')
+    expect(songCredit(piece, 'lyricist')).toBe('H. F. Lyte')
+    expect(songCredit(piece, 'arranger')).toBe('A. Bobrova')
+    expect(songCredit({ ...piece, header: { arranger: 'K' } } as FactsOf, 'arranger')).toBe('K')
+    expect(songCredit({ title: 'T' }, 'composer')).toBe('')
+  })
+
+  it('writes one line of the score, the credit it stands for gone, and shows it in its place', () => {
+    const next = withSongCredit<FactsOf>(piece, 'arranger', ' Mary Smith ')
+    expect(next.header).toEqual({ arranger: 'Mary Smith' })
+    expect(shownCredits(next)).toEqual([
+      { role: 'words', names: 'H. F. Lyte' },
+      { role: 'music', names: 'W. H. Monk' },
+      { role: 'harmony', names: 'Mary Smith' },
+    ])
+    expect(songCredit(next, 'arranger')).toBe('Mary Smith')
+  })
+
+  it('takes a credit away when its line is emptied', () => {
+    const next = withSongCredit(piece, 'composer', '  ')
+    expect(songCredit(next, 'composer')).toBe('')
+    expect(shownCredits(next)).toEqual([
+      { role: 'words', names: 'H. F. Lyte' },
+      { role: 'harmony', names: 'A. Bobrova' },
+    ])
+  })
+
+  it('splits Words and music into its two lines before one of them changes', () => {
+    const shared = { title: 'T', credits: [{ role: 'words-and-music', names: 'X' }] as const }
+    const next = withSongCredit<FactsOf>(shared, 'lyricist', 'Y')
+    expect(next.header).toEqual({ composer: 'X', lyricist: 'Y' })
+    expect(songCredit(next, 'composer')).toBe('X')
+    expect(songCredit(next, 'lyricist')).toBe('Y')
   })
 })
 

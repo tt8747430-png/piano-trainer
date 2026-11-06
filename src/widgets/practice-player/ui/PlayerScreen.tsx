@@ -1,6 +1,6 @@
 import { useState, type ReactNode, type SyntheticEvent } from 'react'
 import type { KeyboardSettings } from '@/entities/settings'
-import { useHiddenWhileReading } from '@/shared/lib'
+import { cn, useHiddenWhileReading } from '@/shared/lib'
 import { ChromeShownContext } from '../model/chrome-shown'
 import { dockTap } from '../model/tap-on-screen'
 
@@ -28,10 +28,19 @@ const onSheet = (event: SyntheticEvent) =>
 export function PlayerScreen({
   keys,
   aside = false,
+  panel = false,
+  docked = false,
   children,
 }: {
   keys: KeyboardSettings['dock']
   aside?: boolean
+  /** A panel at the right is open (a laptop's Settings): the screen ends where it starts. */
+  panel?: boolean
+  /**
+   * Nothing floats over the music (the Player's docked transport and foot, R31-P): no scroll room
+   * kept for a transport floating at its foot.
+   */
+  docked?: boolean
   children: ReactNode
 }) {
   const { shown, setShown, show, reading } = useHiddenWhileReading()
@@ -55,7 +64,14 @@ export function PlayerScreen({
     // a phone held upright the bar's two groups closer, so a phone from 320px has its buttons in a row.
     <div
       data-keys={keys}
-      className={SCORE_SCREEN}
+      data-panel={panel || undefined}
+      className={cn(
+        SCORE_SCREEN,
+        'data-panel:pe-[min(28rem,100vw)]',
+        // Docked, its rows meet: the keys follow the music and the transport the keys, no band
+        // between them (R32).
+        docked && '[--float-room:0px] gap-y-0 landscape-phone:gap-y-0',
+      )}
       onPointerDown={onMusic(reading.onPointerDown)}
       onPointerMove={onMusic(reading.onPointerMove)}
       onTouchStart={onMusic(reading.onTouchStart)}

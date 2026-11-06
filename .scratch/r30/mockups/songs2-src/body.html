@@ -1,0 +1,37 @@
+<div class="wrap">
+  <div class="intro">
+    <h1>Songs, finished · Round 31</h1>
+    <p class="soft">What is left of Songs, drawn on the iPhone as the installed app (393 × 852, with its status bar and home indicator) and the MacBook Air 15″ (1710 × 904), scaled down. Each screen has a box: <b>Looks right</b>, <b>Change it</b> or <b>Not needed</b>, and a note.</p>
+    <p class="soft" id="storeNote">Connecting the feedback store…</p>
+  </div>
+  <nav class="toc" aria-label="Questions">
+    <a href="#q1">1 My songs · Explore</a><a href="#q2">2 Filters</a><a href="#q3">3 Card style</a><a href="#q4">4 Song page and Settings</a><a href="#q5">5 Menus</a>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="ptSize(1)">iPhone 17 Pro · app</button><script>var PT_SIZES=[['pro','iPhone 17 Pro · app'],['safari','iPhone 17 Pro · Safari'],['small','Smaller iPhone · app']];function ptSize(step){var k=0;try{k=Math.max(0,PT_SIZES.findIndex(function(x){return x[0]===localStorage.getItem('pt-mock-size')}))}catch(e){}k=(k+step)%PT_SIZES.length;document.body.classList.remove('small','safari');if(PT_SIZES[k][0]!=='pro')document.body.classList.add(PT_SIZES[k][0]);document.getElementById('sizeBtn').textContent=PT_SIZES[k][1];try{localStorage.setItem('pt-mock-size',PT_SIZES[k][0])}catch(e){}}ptSize(0)</script></span>
+  </nav>
+  <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>The view switch</h2></div>
+    <p class="where">Where: Songs (My songs · Explore) and Learn (Lessons · Courses), the same control.</p>
+    <p>What changes: the small switch under the bar, which left half its row empty, becomes the bar's title: two tabs, the current one in ink.</p>
+    <div class="screens" id="s1"></div>
+    <div class="rec">Recommendation: <b>A</b>. The App Store’s Today · Games, and Spotify and Instagram’s tabs, put a place’s views where its title stands; nothing extra is drawn, and the row is full.</div>
+  </section>
+  <section class="q" id="q2"><div class="qhead"><span class="qnum">2</span><h2>Filters, and songs not in a folder</h2></div>
+    <p class="where">Where: Songs › Filter, and the laptop’s tree.</p>
+    <p>What changes: Filter gains Folder (Not in a folder) and Progress (Learned, Not learned yet). What is on shows as chips under the search; the tree gains Not in a folder.</p>
+    <div class="screens" id="s2"></div>
+  </section>
+  <section class="q" id="q3"><div class="qhead"><span class="qnum">3</span><h2>Card style</h2></div>
+    <p class="where">Where: a folder’s ⋯ › Card style, and Songs’ More › Card style. A lesson block’s style uses the same editor.</p>
+    <p>What changes: the preview no longer hangs over the controls. On a phone it has its own pane at the top and the controls scroll beneath it; on a laptop it has its own column. Corners, Border and Shadow are one row each of choices, not five words in a cramped switch or a − + stepper.</p>
+    <div class="screens" id="s3"></div>
+  </section>
+  <section class="q" id="q4"><div class="qhead"><span class="qnum">4</span><h2>The song page and its Settings</h2></div>
+    <p class="where">Where: a song’s page, its ⚙ Settings, and Export.</p>
+    <p>What changes: ✎ beside the title opens the score editor. The song page itself (cover, details, about, tags) is edited from Settings › Edit song page. Settings are grouped: the song, Library, Share, Progress, and Delete apart. Share link appears once.</p>
+    <div class="screens" id="s4"></div>
+  </section>
+  <section class="q" id="q5"><div class="qhead"><span class="qnum">5</span><h2>Menus</h2></div>
+    <p class="where">Where: a song’s ⋯ and a folder’s ⋯ (and the same as a swipe and on the laptop’s table).</p>
+    <p>What changes: each menu starts with what you open, then what you change, then sharing, then what removes; groups with separators.</p>
+    <div class="screens" id="s5"></div>
+  </section>
+</div>

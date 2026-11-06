@@ -1,17 +1,20 @@
 import { MicVocal } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { selectSound, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { trackOf, type PlayerStaves, type TrackChoice, type TrackId } from '@/features/practice'
+import { onlyTheChords, setSound, setStaffVolume } from '@/features/set-preference'
 import { clefGlyph } from '@/shared/lib/music'
-import { MenuSection } from '@/shared/ui'
+import { MenuSection, VolumeSlider } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 import { Switch } from '@/shared/ui/primitives/switch'
 import type { ScoreTrack } from '@/widgets/practice-player'
 
 /**
  * The Setup's first section (A35, Flat's Audio playback): the music's tracks top down, each staff by
  * its name and its clef, a song's recording by a microphone; each with Play and Show (the recording
- * Play alone), both on until switched off. The last staff in sight keeps Show; a recording that plays
- * only in its own key says so where the song is moved to another. How loud each plays is the
- * Player's settings page's.
+ * Play alone), both on until switched off, and how loud it plays while it does (R31-P: the volumes
+ * here, one page for a track). The last staff in sight keeps Show; a recording that plays only in its
+ * own key says so where the song is moved to another. Only the chords turns a recording right down.
  */
 export function StavesSection({
   tracks,
@@ -27,6 +30,13 @@ export function StavesSection({
 }) {
   const { t } = useTranslation(['player', 'music'])
   const inSight = tracks.filter((track) => track.drawn && trackOf(staves, track.id).show).length
+  const settings = useSettingsStoreApi()
+  const sound = useSettings(selectSound)
+  const volume = (id: TrackId) => (id === 'recording' ? sound.recording : (sound.staves[id] ?? 100))
+  const setVolume = (id: TrackId, percent: number) =>
+    id === 'recording'
+      ? setSound(settings, { recording: percent })
+      : setStaffVolume(settings, id, percent)
   return (
     <MenuSection title={t('staves.title')} info={t('staves.about')}>
       <div role="group" aria-label={t('staves.title')} className="overflow-hidden card">
@@ -46,7 +56,7 @@ export function StavesSection({
             return (
               <li
                 key={track.id}
-                className="grid min-h-14 grid-cols-[minmax(0,1fr)_4rem_4rem] items-center px-3 py-1.5"
+                className="grid min-h-14 grid-cols-[minmax(0,1fr)_4rem_4rem] items-center gap-y-1 px-3 py-1.5"
               >
                 <span className="flex min-w-0 items-center gap-3">
                   <span
@@ -87,11 +97,30 @@ export function StavesSection({
                     />
                   ) : null}
                 </span>
+                {play && why === undefined ? (
+                  <div className="col-span-full ps-11">
+                    <VolumeSlider
+                      label={t('staves.volumeOf', { track: track.label })}
+                      setting={track.id === 'recording' ? 'sound.recording' : 'sound.staves'}
+                      value={volume(track.id)}
+                      onChange={(percent) => setVolume(track.id, percent)}
+                    />
+                  </div>
+                ) : null}
               </li>
             )
           })}
         </ul>
       </div>
+      {tracks.some((track) => track.id === 'recording') ? (
+        <Button
+          variant="outline"
+          className="min-h-11 self-start rounded-pill px-4 text-base"
+          onClick={() => onlyTheChords(settings)}
+        >
+          {t('sound.onlyChords')}
+        </Button>
+      ) : null}
     </MenuSection>
   )
 }

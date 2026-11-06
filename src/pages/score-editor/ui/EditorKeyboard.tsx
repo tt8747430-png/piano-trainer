@@ -1,13 +1,10 @@
-import { ChevronDown, ChevronUp } from 'lucide-react'
 import { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import { keysRange } from '@/features/practice'
 import { notesAt, type EditorState } from '@/features/score-editor'
 import { selectKeyboard, useSettings } from '@/entities/settings'
-import { LiveKeyboard, useFoldKeys } from '@/features/live-keyboard'
+import { KeyboardStrip, LiveKeyboard, useFoldKeys } from '@/features/live-keyboard'
 import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
-import { RailButton, RailGroup } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /** The keys of the notes at the caret. */
@@ -36,43 +33,38 @@ function scoreSpan({ draft }: EditorState): KeyRange {
 /**
  * The keyboard: a key played is written at the caret; the notes there are chosen keys. While a take
  * records, Space stops it rather than holding the pedal. Docked where the keyboard settings dock
- * every screen's keys, under the palette at the foot or under the bar at the top; folded from its
- * rail, it leaves its room to the sheet and comes back from the palette's row of tabs or the View
- * menu, staying folded until unfolded (ADR 0062). On a phone on its
+ * every screen's keys, under the palette at the foot or under the bar at the top; hidden from the
+ * bar's Keyboard (R34), it folds into a thin strip that brings it back at a tap, as the bar does,
+ * staying hidden until shown (ADR 0062). On a phone on its
  * side, too short for the keys and a grand staff, it opens folded, its fold kept apart there (ADR 0062).
  */
 export function EditorKeyboard() {
-  const { t } = useTranslation('common')
   const { actions, takes } = useScoreEditorContext()
   const here = useEditorState(useShallow(caretKeys))
   const range = useEditorState(useShallow(scoreSpan))
   const hands = useEditorState(useShallow(handsHere))
   const inView = useMemo(() => rangeOf([...here, ...hands]), [here, hands])
   const selected = useMemo(() => new Set(here), [here])
-  const dock = useSettings((state) => selectKeyboard(state).dock)
   const { folded, fold } = useFoldKeys()
-  if (folded) return null
+  const dock = useSettings((state) => selectKeyboard(state).dock)
+  const edge = dock === 'bottom' ? 'above' : 'below'
   return (
-    <div data-area="keys" className="vt-keys min-w-0 shrink-0">
-      <LiveKeyboard
-        range={range}
-        // The caret's keys in sight with both hands' there, narrowing to hold them as the Player's
-        // keys narrow to hold its chords, so the keys stand as long in both modes (ADR 0115).
-        inView={inView}
-        fitInView
-        selected={selected}
-        onKeyPress={actions.play}
-        spacePedal={takes.stage === 'idle'}
-        railEnd={
-          <RailGroup>
-            <RailButton
-              label={t('rail.fold')}
-              icon={dock === 'bottom' ? ChevronDown : ChevronUp}
-              onClick={() => fold(true)}
-            />
-          </RailGroup>
-        }
-      />
+    <div data-area="keys" className="vt-keys -mx-gutter min-w-0 shrink-0">
+      {folded ? (
+        <KeyboardStrip edge={edge} onShow={() => fold(false)} />
+      ) : (
+        <LiveKeyboard
+          range={range}
+          // The caret's keys in sight with both hands' there, narrowing to hold them as the Player's
+          // keys narrow to hold its chords, so the keys stand as long in both modes (ADR 0115).
+          inView={inView}
+          fitInView
+          selected={selected}
+          onKeyPress={actions.play}
+          spacePedal={takes.stage === 'idle'}
+          divider={edge}
+        />
+      )}
     </div>
   )
 }

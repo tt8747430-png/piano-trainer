@@ -30,8 +30,10 @@ describe('New song (A34)', () => {
       'step',
     )
     // Its fields by their names, Flat's.
-    for (const name of ['Time signature', 'Key signature', 'Tempo', 'Pickup bar', 'Number of bars'])
+    for (const name of ['Time signature', 'Key signature', 'Tempo', 'Number of bars'])
       expect(within(sheet).getByRole('heading', { name })).toBeInTheDocument()
+    // The pickup is the time signature's own wheel, beside Current (R31-E).
+    expect(within(sheet).getByRole('spinbutton', { name: 'Pickup beats' })).toBeInTheDocument()
   })
 
   it('one way to add an instrument', async () => {

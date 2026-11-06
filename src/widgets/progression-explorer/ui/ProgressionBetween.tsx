@@ -15,7 +15,7 @@ import { changesOf } from '../model/between'
 import { SuggestionCard } from './SuggestionCard'
 
 /**
- * Passing chords, Progressions' third tab (ADR 0052, A23): the chords that lead from one chord of
+ * Passing chords, a section of a progression's page (ADR 0052, A23, R30-4): the chords that lead from one chord of
  * the row to the next, the pair chosen from the row's changes, by category, each way voice-led and
  * played on the keys pinned above; with In the key only, the ways whose chords are all the key's.
  */
@@ -41,13 +41,24 @@ export function ProgressionBetween({
   const chosen = at !== undefined && changes.includes(at) ? at : changes[0]
   const from = chosen === undefined ? undefined : chords[chosen]
   const to = chosen === undefined ? undefined : chords[chosen + 1]
+  const heading = (
+    <h2 id={`${id}-title`} className="px-3 font-sans text-sm font-semibold text-muted-foreground">
+      {t('progressions.between.title')}
+    </h2>
+  )
   if (chosen === undefined || !from || !to)
-    return <p className="text-muted-foreground">{t('progressions.between.none')}</p>
+    return (
+      <section aria-labelledby={`${id}-title`} className="flex flex-col gap-3">
+        {heading}
+        <p className="text-muted-foreground">{t('progressions.between.none')}</p>
+      </section>
+    )
   const allInKey = (way: PassingChords) => way.chords.every((chord) => chordInKey(chord, musicKey))
   const ways = passingChords(from, to, musicKey).filter((way) => !inKey || allInKey(way))
   return (
-    <section aria-label={t('progressions.between.title')} className="flex flex-col gap-4">
-      <p className="text-lg text-muted-foreground">{t('progressions.between.line')}</p>
+    <section aria-labelledby={`${id}-title`} className="flex flex-col gap-4">
+      {heading}
+      <p className="text-muted-foreground">{t('progressions.between.line')}</p>
       <div className="grid-fields gap-x-10 gap-y-5">
         <Labelled label={t('progressions.between.pair')}>
           <Dropdown
@@ -80,7 +91,7 @@ export function ProgressionBetween({
             aria-labelledby={`${id}-${category}`}
             className="flex flex-col gap-3"
           >
-            <h3 id={`${id}-${category}`} className="text-xl">
+            <h3 id={`${id}-${category}`} className="text-lg">
               {t(`passingChords.category.${category}`)}
             </h3>
             <div className="grid-fields gap-4">

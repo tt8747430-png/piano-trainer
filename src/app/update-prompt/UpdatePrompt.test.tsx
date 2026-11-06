@@ -13,13 +13,15 @@ describe('UpdatePrompt', () => {
   it('offers a waiting version and installs it only when asked', async () => {
     const { skipWaiting } = stubServiceWorker({ waiting: true })
     const user = userEvent.setup()
-    render(<UpdatePrompt offer />)
+    render(<UpdatePrompt offer reload={vi.fn()} />)
     expect(screen.getByRole('status')).toHaveTextContent('A new version is ready')
     expect(skipWaiting).not.toHaveBeenCalled()
     await user.click(screen.getByRole('button', { name: 'Update' }))
     await waitFor(() =>
       expect(skipWaiting).toHaveBeenCalledExactlyOnceWith({ type: 'SKIP_WAITING' }),
     )
+    expect(screen.getByRole('button', { name: 'Restarting…' })).toBeDisabled()
+    expect(screen.queryByRole('button', { name: 'Later' })).not.toBeInTheDocument()
   })
 
   it('reloads onto a version another tab took only once it may offer it again', () => {

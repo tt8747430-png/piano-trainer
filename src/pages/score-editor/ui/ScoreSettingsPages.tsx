@@ -1,10 +1,5 @@
-import { Milestone } from 'lucide-react'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useShallow } from 'zustand/react/shallow'
-import { useSectionHeading } from '@/entities/piece'
 import {
-  EDITOR_START_MODES,
   PALETTE_SIDES,
   RECORDER_COUNT_INS,
   selectEditing,
@@ -14,130 +9,30 @@ import {
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { MetronomeSwitch, TuneSwitch } from '@/features/record-take'
-import { barsOf, MOST_BARS } from '@/features/score-editor'
 import { setEditing, setRecorderCountIn } from '@/features/set-preference'
-import {
-  ChoiceCard,
-  ChoiceRow,
-  Dropdown,
-  SettingRows,
-  SettingsGroup,
-  Stepper,
-  SwitchRow,
-} from '@/shared/ui'
+import { ChoiceCard, SettingRows, SettingsGroup, SwitchRow } from '@/shared/ui'
 import { InstrumentsPanel } from './InstrumentsPanel'
 import { LayoutPanel } from './LayoutPanel'
-import { useEditorState } from '../model/editor-context'
-import { KeyPicker } from './KeyPicker'
-import { TempoPicker } from './TempoPopover'
-import { TimePicker } from './TimePicker'
-import type { ScorePage } from '../model/score-pages'
+import type { GearPage } from '../model/gear-pages'
+
+/** The gear's Settings' own pages (R32-B): what the score does not print. */
+export type SettingsPage = Extract<GearPage, 'instruments' | 'layout' | 'input' | 'recording'>
 
 /**
- * The Key signature's or Time signature's page (R29, 3.5): From — the start, or a section, by its
- * first bar — then the picker the printed sign opens, changing it from there on.
+ * A page of the gear's Settings (R32-B, Flat's document menu): Instruments (Flat's Manage
+ * instruments), Layout, Note input and Recording. The key, time, tempo, bars and title are set where
+ * they print (ADR 0114), never here. Note input keeps Play notes while editing and the Palette side.
  */
-function SignaturePage({ sign }: { sign: 'key' | 'time' }) {
-  const { t } = useTranslation('editor')
-  const named = useSectionHeading()
-  const sections = useEditorState((state) => state.draft.sections)
-  const starts = useEditorState(
-    useShallow((state) => {
-      const firsts: number[] = []
-      for (const placed of barsOf(state.draft))
-        if (firsts[placed.section] === undefined) firsts[placed.section] = placed.index
-      return firsts
-    }),
-  )
-  const [from, setFrom] = useState(0)
-  return (
-    <>
-      {starts.length > 1 ? (
-        <SettingsGroup flush>
-          <ChoiceRow title={t('signature.from')} icon={Milestone} paint="sky">
-            <Dropdown
-              label={t('signature.from')}
-              bare
-              align="end"
-              value={String(from)}
-              options={starts.map((bar, section) => ({
-                value: String(bar),
-                label:
-                  section === 0
-                    ? t('signature.start')
-                    : t('signature.sectionAt', {
-                        section: named({
-                          ...(sections[section]?.heading ?? { kind: 'verse' }),
-                          lines: [],
-                        }),
-                        bar: bar + 1,
-                      }),
-              }))}
-              onChange={(bar) => setFrom(Number(bar))}
-            />
-          </ChoiceRow>
-        </SettingsGroup>
-      ) : null}
-      <div className="card p-4">
-        {sign === 'key' ? (
-          <KeyPicker key={from} bar={from} />
-        ) : (
-          <TimePicker key={from} bar={from} />
-        )}
-      </div>
-    </>
-  )
-}
-
-/**
- * A page of the score's Settings: its Staves (Flat's Manage instruments), Key signature, Time
- * signature and Tempo (the pickers the printed marks open), Bars, Layout, Note input and Recording.
- */
-export function ScorePageBody({
-  page,
-  bars,
-  onBars,
-  onDone,
-}: {
-  page: ScorePage
-  bars: number
-  onBars: (count: number) => void
-  onDone: () => void
-}) {
-  const { t } = useTranslation(['editor', 'songs', 'common'])
+export function ScorePageBody({ page }: { page: SettingsPage }) {
+  const { t } = useTranslation(['editor', 'common'])
   const settings = useSettingsStoreApi()
   const editing = useSettings(selectEditing)
   const recorder = useSettings(selectRecorder)
   switch (page) {
-    case 'staves':
+    case 'instruments':
       return (
         <SettingsGroup bare info={t('scoreSettings.instrumentsInfo')}>
           <InstrumentsPanel />
-        </SettingsGroup>
-      )
-    case 'key':
-    case 'time':
-      return <SignaturePage sign={page} />
-    case 'tempo':
-      return (
-        <div className="card p-4">
-          <TempoPicker onDone={onDone} />
-        </div>
-      )
-    case 'bars':
-      return (
-        <SettingsGroup info={t('scoreSettings.barsInfo')} title={t('scoreSettings.pages.bars')}>
-          <Stepper
-            label={t('scoreSettings.pages.bars')}
-            typed
-            value={bars}
-            min={1}
-            max={MOST_BARS}
-            format={(value) => t('songs:setup.barsValue', { count: value })}
-            onChange={onBars}
-            decrease={t('songs:setup.fewerBars')}
-            increase={t('songs:setup.moreBars')}
-          />
         </SettingsGroup>
       )
     case 'layout':
@@ -154,19 +49,7 @@ export function ScorePageBody({
               onCheckedChange={(hearNotes) => setEditing(settings, { hearNotes })}
             />
           </SettingsGroup>
-          <ChoiceCard
-            setting="editing.startMode"
-            title={t('scoreSettings.startMode')}
-            info={t('scoreSettings.startModeInfo')}
-            value={editing.startMode}
-            options={EDITOR_START_MODES.map((mode) => ({
-              value: mode,
-              label: t(`scoreSettings.startModes.${mode}`),
-              example: t(`scoreSettings.startModeExamples.${mode}`),
-            }))}
-            onChange={(startMode) => setEditing(settings, { startMode })}
-          />
-          {/* The palette docks beside the sheet from 48rem wide; a phone's is a sheet at the foot. */}
+          {/* The palette docks beside the sheet from 48rem wide; a phone's floats at the foot. */}
           <div className="hidden md:contents">
             <ChoiceCard
               setting="editing.paletteSide"

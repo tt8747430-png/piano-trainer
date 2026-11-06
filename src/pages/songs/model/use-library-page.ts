@@ -17,7 +17,7 @@ import {
   type ShelvedFolder,
 } from '@/entities/library'
 import { entryTitles, isOwnSongId, useRepertoire, type PieceId } from '@/entities/piece'
-import { byLastOpened, selectPractised, useProgress } from '@/entities/progress'
+import { byLastOpened, selectLearned, selectPractised, useProgress } from '@/entities/progress'
 import {
   orderFolders,
   orderSongs,
@@ -45,7 +45,9 @@ export type Pending =
   | { readonly kind: 'delete-chosen' }
   | { readonly kind: 'new-song'; readonly record?: boolean }
   | { readonly kind: 'move-in' }
+  | { readonly kind: 'new-group' }
   | { readonly kind: 'export'; readonly song: PieceId }
+  | { readonly kind: 'share'; readonly song: PieceId }
   | { readonly kind: 'export-chosen'; readonly songs: readonly PieceId[]; readonly what: string }
 
 /**
@@ -53,7 +55,12 @@ export type Pending =
  * what it shows under the filters and the sort, Select and what it does to the rows chosen, the
  * order dragged, and what the page has open over it.
  */
-export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter) {
+export function useLibraryPage(
+  folder: ShelvedFolder | null,
+  filter: SongsFilter,
+  /** Beside the library's tree (a laptop's two panes): the folders are the tree's. */
+  { tree = false }: { tree?: boolean } = {},
+) {
   const { t } = useTranslation('songs')
   const locale = useLocale()
   const store = useLibraryStoreApi()
@@ -62,6 +69,7 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
   const favourites = useLibrary(selectFavourites)
   const sort = useLibrary(selectSort)
   const practised = useProgress(selectPractised)
+  const learnedSteps = useProgress(selectLearned)
   const folderName = useFolderName()
   const acts = useLibraryActs()
   const permits = usePermissions()
@@ -73,16 +81,45 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
 
   const view = useMemo(() => {
     const compare = new Intl.Collator(locale).compare
-    return libraryView(layout, folder?.id ?? null, filter, sort, {
-      entryOf: (id) => repertoire.entry(id),
-      titleOf: (entry) => entryTitles(entry, locale).primary,
-      folderName,
-      favourites: new Set(favourites),
-      opened: byLastOpened(practised),
-      compare,
-      home: t('library.home'),
-    })
-  }, [layout, folder, filter, sort, repertoire, locale, folderName, favourites, practised, t])
+    return libraryView(
+      layout,
+      folder?.id ?? null,
+      filter,
+      sort,
+      {
+        entryOf: (id) => repertoire.entry(id),
+        titleOf: (entry) => entryTitles(entry, locale).primary,
+        folderName,
+        favourites: new Set(favourites),
+        // A song is learned as its step is (ADR 0053): `piece:<id>`.
+        learned: new Set(
+          Object.keys(learnedSteps).flatMap((step) =>
+            step.startsWith('piece:') ? [step.slice('piece:'.length)] : [],
+          ),
+        ),
+        opened: byLastOpened(practised),
+        compare,
+        home: t('library.home'),
+        allSongs: t('tree.all'),
+      },
+      // Every song at Home while browsing; Select drags in the library's own places.
+      { tree, everySong: !tree && !selecting },
+    )
+  }, [
+    layout,
+    folder,
+    filter,
+    sort,
+    repertoire,
+    locale,
+    folderName,
+    favourites,
+    learnedSteps,
+    practised,
+    t,
+    tree,
+    selecting,
+  ])
 
   // Every row on screen, in order: what Select all chooses.
   const rows: Chosen[] = [
@@ -149,6 +186,27 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
     pending,
     open: setPending,
     close: () => setPending(null),
+    /** A folder opened in Edit, its name and look in place (a folder row's Edit, as its ✎). */
+    editFolder: (id: FolderId) =>
+      void navigate({
+        to: '/songs/folders/$folderId',
+        params: { folderId: id },
+        search: { edit: true },
+      }),
+    /** A folder's Card style, from its row's ⋯ (R31-S). */
+    openCardStyle: (id: FolderId) =>
+      void navigate({ to: '/songs/folders/$folderId/card-style', params: { folderId: id } }),
+    /** A song opened where its row's ⋯ says: played, its score edited, or its Settings (R31-S). */
+    openSong: (id: PieceId, where: 'play' | 'edit' | 'settings') =>
+      void navigate(
+        where === 'play'
+          ? { to: '/play/$pieceId', params: { pieceId: id } }
+          : where === 'edit'
+            ? { to: '/edit/$pieceId', params: { pieceId: id } }
+            : { to: '/songs/$pieceId/settings', params: { pieceId: id } },
+      ),
+    /** At Home, where the folders are: Filter asks for the songs in none (R31-S). */
+    atHome: folder === null,
     acts,
     titleOf,
     may,

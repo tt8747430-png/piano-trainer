@@ -1,0 +1,318 @@
+{
+ "commits": 142,
+ "rendered": 0,
+ "frames": 474,
+ "p50": 17,
+ "p95": 50,
+ "worst": 600,
+ "over50": 22,
+ "longTasks": 9,
+ "longTaskMs": 734,
+ "engravedAtStart": 22,
+ "redrawn": [
+  [
+   60,
+   1
+  ],
+  [
+   0,
+   1
+  ],
+  [
+   1,
+   1
+  ],
+  [
+   3,
+   1
+  ],
+  [
+   7,
+   1
+  ],
+  [
+   11,
+   1
+  ],
+  [
+   15,
+   1
+  ],
+  [
+   17,
+   1
+  ],
+  [
+   21,
+   1
+  ],
+  [
+   23,
+   1
+  ],
+  [
+   24,
+   1
+  ],
+  [
+   25,
+   1
+  ],
+  [
+   26,
+   1
+  ],
+  [
+   27,
+   1
+  ],
+  [
+   28,
+   1
+  ],
+  [
+   30,
+   1
+  ],
+  [
+   31,
+   1
+  ],
+  [
+   32,
+   1
+  ],
+  [
+   33,
+   1
+  ],
+  [
+   34,
+   1
+  ],
+  [
+   35,
+   1
+  ],
+  [
+   38,
+   1
+  ],
+  [
+   42,
+   1
+  ],
+  [
+   46,
+   1
+  ],
+  [
+   50,
+   1
+  ],
+  [
+   52,
+   1
+  ],
+  [
+   56,
+   1
+  ],
+  [
+   57,
+   1
+  ],
+  [
+   58,
+   1
+  ],
+  [
+   61,
+   1
+  ],
+  [
+   62,
+   1
+  ],
+  [
+   63,
+   1
+  ],
+  [
+   6,
+   1
+  ],
+  [
+   12,
+   1
+  ],
+  [
+   14,
+   1
+  ],
+  [
+   20,
+   1
+  ],
+  [
+   29,
+   1
+  ],
+  [
+   37,
+   1
+  ],
+  [
+   41,
+   1
+  ],
+  [
+   47,
+   1
+  ],
+  [
+   49,
+   1
+  ],
+  [
+   55,
+   1
+  ]
+ ],
+ "muts": [
+  [
+   "attributes:playhead@style",
+   504
+  ],
+  [
+   "attributes:BUTTON@class",
+   375
+  ],
+  [
+   "childList:BUTTON",
+   196
+  ],
+  [
+   "childList:BUTTON+1",
+   195
+  ],
+  [
+   "attributes:BUTTON@aria-describedby",
+   194
+  ],
+  [
+   "childList:DIV+1",
+   157
+  ],
+  [
+   "attributes:DIV@style",
+   135
+  ],
+  [
+   "attributes:SPAN@class",
+   105
+  ],
+  [
+   "attributes:BUTTON@data-down",
+   99
+  ],
+  [
+   "childList:DIV",
+   45
+  ],
+  [
+   "childList:score+2",
+   42
+  ],
+  [
+   "attributes:BUTTON@aria-current",
+   12
+  ],
+  [
+   "attributes:SPAN@data-glyph",
+   5
+  ],
+  [
+   "attributes:DIV@aria-valuenow",
+   4
+  ],
+  [
+   "attributes:playhead@class",
+   1
+  ],
+  [
+   "attributes:rect@y",
+   1
+  ],
+  [
+   "attributes:rect@height",
+   1
+  ],
+  [
+   "attributes:rect@class",
+   1
+  ],
+  [
+   "attributes:path@d",
+   1
+  ],
+  [
+   "attributes:path@class",
+   1
+  ],
+  [
+   "attributes:svg@data-down",
+   1
+  ],
+  [
+   "attributes:pedal@aria-pressed",
+   1
+  ],
+  [
+   "childList:button",
+   1
+  ],
+  [
+   "childList:button+1",
+   1
+  ],
+  [
+   "attributes:button@aria-label",
+   1
+  ]
+ ],
+ "top": [],
+ "hottest": [
+  "  4384ms (program) :0",
+  "  3488ms (idle) :0",
+  "   656ms exports.jsxDEV react_jsx-dev-runtime.js:192",
+  "   224ms drawn draw.ts:33",
+  "   121ms (garbage collector) :0",
+  "   112ms ReactElement react_jsx-dev-runtime.js:105",
+  "   103ms exports.createElement react-CIvdkyUs.js:624",
+  "    93ms isElementHiddenForAria :3568",
+  "    64ms run :0",
+  "    51ms measure :0",
+  "    41ms propagateParentContextChanges react-dom_client.js:3316",
+  "    40ms fetch :0",
+  "    37ms getBoundingClientRect :0",
+  "    36ms react_stack_bottom_frame react-dom_client.js:14136",
+  "    36ms decodeAudioData :0",
+  "    35ms RecordingsSheet RecordingsSheet.tsx:14",
+  "    34ms scrollIntoView :0",
+  "    33ms createTask :0",
+  "    32ms runWithFiberInDEV react-dom_client.js:938",
+  "    28ms addObjectDiffToProperties react-dom_client.js:2559",
+  "    27ms createWorkInProgress react-dom_client.js:2877",
+  "    26ms querySelectorAll :0",
+  "    26ms (anon) rolldown-runtime-SbdDWaPq.js:22",
+  "    26ms translate i18next.js:461",
+  "    26ms now :0",
+  "    25ms exports.jsx jsx-runtime-D40CfFAp.js:192",
+  "    24ms logComponentRender react-dom_client.js:2631",
+  "    23ms checkVisibility :0",
+  "    22ms ReactElement react-CIvdkyUs.js:133",
+  "    22ms areHookInputsEqual react-dom_client.js:4379"
+ ],
+ "errs": []
+}

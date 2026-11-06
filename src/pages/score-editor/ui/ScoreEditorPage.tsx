@@ -13,7 +13,7 @@ import {
   type ChartPiece,
 } from '@/entities/piece'
 import {
-  DraftActions,
+  DraftRows,
   DraftStatus,
   draftWithMusic,
   useMadeSong,
@@ -79,18 +79,16 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
       key={draft.opened}
       target={target}
       bar={bar}
-      draft={
-        // Where the draft stands and its menu (Publish first), in the score's bar by Done: never
-        // over the music (round 26).
-        <>
-          <DraftStatus draft={draft} className="px-1 max-[359px]:sr-only" />
-          <DraftActions
+      // Where the draft stands, beside the gear's title, and its acts, the gear's last group (R31-E):
+      // never over the music, never beside Done.
+      draft={{
+        status: <DraftStatus draft={draft} compact={false} />,
+        rows: (
+          <DraftRows
             draft={draft}
             title={entryTitles(piece, locale).primary}
             unreadable={t('original.unreadable')}
             onReset={draft.reopen}
-            publishInMenu
-            variant="tool"
             // Its Publish page (R29 B6), the rights ticked there each time.
             publishPage={{
               link: <Link to="/songs/$pieceId/publish" params={{ pieceId: piece.id }} />,
@@ -102,8 +100,8 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
                   ),
             }}
           />
-        </>
-      }
+        ),
+      }}
     />
   )
 }

@@ -6,4 +6,6 @@ export {
   ProgressionSettingsPage,
 } from '@/pages/progression-editor'
 export { ProgressionsPage } from '@/pages/progressions'
+export { ProgressionLinePage, ProgressionPage } from '@/pages/progression'
+export { isProgressionThere, progressionPlace } from './progression-place'
 export { ScalesPage } from '@/pages/scales'

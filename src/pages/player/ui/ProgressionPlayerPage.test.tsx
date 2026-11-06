@@ -109,12 +109,20 @@ describe('A progression in the Player', () => {
     expect(await screen.findByRole('heading', { name: 'I–V–vi–IV in C major' })).toBeInTheDocument()
   })
 
-  it('closes to the Progressions tool on the same numerals and key when opened directly', async () => {
+  it('closes to the progression’s page in the same key when opened directly (R30-4)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/progression?p=ii-V-I&key=Bb')
     await user.click(await screen.findByRole('button', { name: 'Close' }))
-    expect(router.state.location.pathname).toBe('/practice/progressions')
-    expect(router.state.location.search).toMatchObject({ p: 'ii-V-I', key: 'Bb' })
+    expect(router.state.location.pathname).toBe('/practice/progressions/jazz-cadence')
+    expect(router.state.location.search).toMatchObject({ key: 'Bb' })
+  })
+
+  it('closes to a line typed on its own page, the library has none like it', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/play/progression?p=I-I-IV&key=Bb')
+    await user.click(await screen.findByRole('button', { name: 'Close' }))
+    expect(router.state.location.pathname).toBe('/practice/progressions/line')
+    expect(router.state.location.search).toMatchObject({ p: 'I-I-IV', key: 'Bb' })
   })
 
   describe('its pattern picker', () => {

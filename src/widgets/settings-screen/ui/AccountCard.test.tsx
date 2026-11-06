@@ -9,7 +9,7 @@ const ANA = { id: 'ana', email: 'ana@example.com', name: 'Ana', role: 'learner' 
 describe('the account card (A15)', () => {
   it.each<[SyncLine, string]>([
     [{ kind: 'synced', ago: { value: -2, unit: 'minute' } }, 'Synced 2 min. ago'],
-    [{ kind: 'waiting', count: 3 }, '3 changes waiting'],
+    [{ kind: 'waiting', count: 3 }, '3 changes pending'],
     [{ kind: 'offline' }, 'Offline'],
     [{ kind: 'failed' }, 'Last sync failed'],
     [{ kind: 'syncing' }, 'Syncing…'],
@@ -23,7 +23,7 @@ describe('the account card (A15)', () => {
   it('asks a learner signed out to sign in, and says why', async () => {
     await renderRouted(<AccountCardFace account={null} line={{ kind: 'idle' }} />)
     const card = await screen.findByRole('link', { name: /Sign in/ })
-    expect(card).toHaveTextContent('Sign in to sync your songs on every device')
+    expect(card).toHaveTextContent('Sync your library across your devices')
     expect(card).toHaveAttribute('href', '/account/sign-in')
   })
 })

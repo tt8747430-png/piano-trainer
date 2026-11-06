@@ -5,7 +5,7 @@ import { useCan } from '@/entities/library'
 import { journeyById } from '@/entities/lesson'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { useSetSearch } from '@/shared/lib'
-import { ScreenHeader, Segmented } from '@/shared/ui'
+import { ScreenHeader, TitleTabs } from '@/shared/ui'
 import { PlaceActions } from '@/widgets/app-nav'
 import { ContinueAction } from '@/widgets/continue-action'
 import {
@@ -13,10 +13,10 @@ import {
   currentJourney,
   JourneyLibrary,
   LevelEditor,
+  OWN_LESSONS,
   ShelfEditor,
   type LearnView,
 } from '@/widgets/curriculum'
-import { EditToggle } from '@/widgets/mode-switch'
 
 /**
  * Learn (ADR 0053), the app's first place, a library: its bar's switch (in the title's place) between
@@ -29,17 +29,16 @@ export function LearnPage() {
   const { t } = useTranslation(['learn', 'common'])
   const { view, journey: journeyId, edit } = useSearch({ from: '/shell/' })
   const learned = useProgress(selectLearned)
+  const own = view === 'lessons' && journeyId === OWN_LESSONS
   const journey = journeyById(journeyId) ?? currentJourney(learned)
   const show = useSetSearch<LearnView>()
   const editable = useCan('reorder', { curriculum: view === 'lessons' ? 'level' : 'shelf' })
-  const editing = edit && editable
-  const toggle = editable ? (
-    <EditToggle
-      editing={editing}
-      onEdit={() => show({ edit: true })}
-      onDone={() => show({ edit: false })}
-    />
-  ) : null
+  // Your lessons have no Edit mode: each is edited on its own page.
+  const editing = edit && editable && !own
+  const toggle =
+    editable && !own
+      ? { editing, onEdit: () => show({ edit: true }), onDone: () => show({ edit: false }) }
+      : undefined
   const bar = (actions: ReactNode) => (
     <ScreenHeader
       title={t('learn:title')}
@@ -51,8 +50,8 @@ export function LearnPage() {
         </>
       }
       edit={toggle}
-      switcher={
-        <Segmented
+      views={
+        <TitleTabs
           label={t('learn:views.label')}
           value={view}
           options={(['lessons', 'courses'] as const).map((shown) => ({
@@ -60,7 +59,6 @@ export function LearnPage() {
             label: t(`learn:views.${shown}`),
           }))}
           onChange={(shown) => show({ view: shown, journey: '' })}
-          compact
         />
       }
     />
@@ -82,7 +80,11 @@ export function LearnPage() {
           Profile's. */}
       <div className="mx-auto mt-4 flex w-full max-w-2xl min-w-0 flex-col gap-8">
         <ContinueAction />
-        {view === 'lessons' ? <JourneyLibrary journey={journey} /> : <CourseShelves />}
+        {view === 'lessons' ? (
+          <JourneyLibrary journey={own ? OWN_LESSONS : journey} />
+        ) : (
+          <CourseShelves />
+        )}
       </div>
     </div>
   )

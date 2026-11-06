@@ -1,0 +1,101 @@
+import { Copy, PencilLine } from 'lucide-react'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { OWN_NAME_MAX } from '@/entities/own-lessons'
+import {
+  ConfirmDialog,
+  DangerGroup,
+  DangerRow,
+  NewSheet,
+  RowButton,
+  say,
+  SettingsGroup,
+} from '@/shared/ui'
+
+/** What the rows say of the item: a lesson's words or a course's. */
+export interface OwnItemWords {
+  /** Its group's name: The lesson, The course. */
+  readonly group: string
+  /** Rename's sheet: Rename lesson. */
+  readonly rename: string
+  /** Delete's row: Delete lesson. */
+  readonly delete: string
+  readonly deleteTitle: string
+  readonly deleteBody: string
+}
+
+/**
+ * A lesson's or a course's of the learner's own (R30-5), on its Settings: its group, Rename (in the
+ * New sheet's shape, its name filled in) and Duplicate.
+ */
+export function OwnItemRows({
+  title,
+  words,
+  onRename,
+  onDuplicate,
+}: {
+  /** The item's name now. */
+  title: string
+  words: Pick<OwnItemWords, 'group' | 'rename'>
+  /** Renames it; false where the name is not kept. */
+  onRename: (name: string) => boolean
+  onDuplicate: () => void
+}) {
+  const { t } = useTranslation('learn')
+  const [renaming, setRenaming] = useState(false)
+  const [name, setName] = useState(title)
+  const [failed, setFailed] = useState(false)
+  const open = (next: boolean) => {
+    setRenaming(next)
+    setName(title)
+    setFailed(false)
+  }
+  return (
+    <SettingsGroup flush title={words.group}>
+      <RowButton title={t('own.rename')} icon={PencilLine} paint="sky" onClick={() => open(true)} />
+      <RowButton title={t('own.duplicate')} icon={Copy} paint="grass" onClick={onDuplicate} />
+      <NewSheet
+        open={renaming}
+        onOpenChange={open}
+        title={words.rename}
+        nameLabel={t('edit.order.name')}
+        name={name}
+        onName={setName}
+        maxLength={OWN_NAME_MAX}
+        createLabel={t('own.rename')}
+        failed={failed ? t('own.lessonFailed') : null}
+        onCreate={() => {
+          if (!onRename(name)) return setFailed(true)
+          setRenaming(false)
+          say(t('own.renamed'))
+        }}
+      />
+    </SettingsGroup>
+  )
+}
+
+/** Its Delete, the Settings page's last group alone (R25), asked first. */
+export function OwnDeleteGroup({
+  words,
+  onDelete,
+}: {
+  words: Pick<OwnItemWords, 'delete' | 'deleteTitle' | 'deleteBody'>
+  onDelete: () => void
+}) {
+  const { t } = useTranslation('learn')
+  const [asked, setAsked] = useState(false)
+  return (
+    <DangerGroup footnote={t('own.footnote')}>
+      <DangerRow title={words.delete} onClick={() => setAsked(true)} />
+      <ConfirmDialog
+        open={asked}
+        onOpenChange={setAsked}
+        title={words.deleteTitle}
+        body={words.deleteBody}
+        action={t('own.delete')}
+        cancel={t('settings.cancel')}
+        onConfirm={onDelete}
+      />
+    </DangerGroup>
+  )
+}

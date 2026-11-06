@@ -1,72 +1,54 @@
-import { useNavigate } from '@tanstack/react-router'
 import { LayoutGrid } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isMidiConnected, useMidiConnection } from '@/features/connect-midi'
-import { useMetronome, type SongTime } from '@/features/metronome'
-import { useFreeRecorder } from '@/features/record-take'
-import { TunerSheet } from '@/widgets/tuner'
-import { QuickTools } from './QuickTools'
-import { ToolsSheet } from './ToolsSheet'
+import { useMetronome } from '@/features/metronome'
+import { useMediaQuery } from '@/shared/lib'
+import { Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
+import { ToolsPanel } from './ToolsPanel'
+
+/** From this width the Tools open as a popover under their button; narrower, a sheet. */
+const POPOVER_WIDTH = '(min-width: 48rem)'
 
 /**
- * The Tools button in a screen's bar (R29 B11): a lesson's, each explorer's. It opens the Tools sheet
- * over the page, which stays as it was: the quick Metronome (the Metronome's own tempo and time), the
- * Recorder (a free recording) and the Tuner, then All tools, Practice's Tools group. The Metronome and
- * the Recorder run on with the sheet closed, until the page is left.
+ * The Tools button in a screen's bar (R29 B11, R32): a lesson's, each explorer's, the Chord
+ * player's. It opens the Tools in place over the page, which stays as it was: a popover under the
+ * button on a laptop, a sheet on a phone (`ToolsPanel`). The Metronome runs on with them closed,
+ * until the page is left.
  */
-export function ToolsButton({
-  song = null,
-}: {
-  /** The song's tempo and time, where the screen holds one (the score editor): the quick Metronome's. */
-  song?: SongTime | null
-} = {}) {
-  const { t } = useTranslation(['practice', 'player'])
-  const navigate = useNavigate()
+export function ToolsButton() {
+  const { t } = useTranslation('practice')
   const [open, setOpen] = useState(false)
-  const [tuner, setTuner] = useState(false)
-  const metronome = useMetronome(song)
-  const recorder = useFreeRecorder()
-  const { connection } = useMidiConnection()
-  const piano = isMidiConnected(connection)
+  const metronome = useMetronome()
+  const popover = useMediaQuery(POPOVER_WIDTH)
+  const label = t('tools.sheet.open')
+  const trigger = (
+    <Button variant="bar" size="icon" className="rounded-pill" aria-label={label} title={label} />
+  )
+  const panel = <ToolsPanel metronome={metronome} close={() => setOpen(false)} />
+  if (popover)
+    return (
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger render={trigger}>
+          <LayoutGrid aria-hidden />
+        </PopoverTrigger>
+        <PopoverContent
+          aria-label={label}
+          align="end"
+          className="max-h-(--available-height) w-[min(26rem,calc(100vw-2rem))] overflow-y-auto"
+        >
+          <h2 className="px-1 pb-2 font-display text-xl font-semibold">{label}</h2>
+          {panel}
+        </PopoverContent>
+      </Popover>
+    )
   return (
-    <>
-      <ToolsSheet
-        bar
-        open={open}
-        onOpenChange={setOpen}
-        quick={
-          <QuickTools
-            metronome={metronome}
-            recorder={{
-              ...recorder,
-              unavailable: piano ? undefined : t('practice:tools.recorder.needsPiano'),
-            }}
-            onTuner={() => {
-              setOpen(false)
-              setTuner(true)
-            }}
-          />
-        }
-        groups={[
-          {
-            key: 'more',
-            title: t('player:toolsSheet.more'),
-            rows: [
-              {
-                key: 'all',
-                kind: 'act',
-                label: t('practice:tools.sheet.all'),
-                icon: LayoutGrid,
-                paint: 'sky',
-                opens: true,
-                onSelect: () => void navigate({ to: '/practice' }),
-              },
-            ],
-          },
-        ]}
-      />
-      <TunerSheet open={tuner} onOpenChange={setTuner} />
-    </>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger render={trigger}>
+        <LayoutGrid aria-hidden />
+      </SheetTrigger>
+      <SheetContent title={label}>{panel}</SheetContent>
+    </Sheet>
   )
 }

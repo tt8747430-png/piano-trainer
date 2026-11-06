@@ -3,7 +3,9 @@ import { ChordSheetsStoreProvider } from '@/entities/chord-sheet'
 import { DiagramInversionsStoreProvider } from '@/entities/diagram-inversion'
 import { LibraryStoreProvider } from '@/entities/library'
 import { NotificationsStoreProvider } from '@/entities/notification'
+import { OwnLessonsStoreProvider } from '@/entities/own-lessons'
 import { PatternsStoreProvider } from '@/entities/pattern'
+import { PracticeLibraryStoreProvider } from '@/entities/practice-library'
 import { PiecesStoreProvider } from '@/entities/piece'
 import { ProgressStoreProvider } from '@/entities/progress'
 import { SettingsStoreProvider } from '@/entities/settings'
@@ -12,7 +14,9 @@ import type { AdminPort, FeaturesPort } from '@/shared/api/admin'
 import type { AuthGateway } from '@/shared/api/auth'
 import type { ContentEditingPort } from '@/shared/api/content-editing'
 import type { ErrorReporter } from '@/shared/api/errors'
+import type { GroupsPort } from '@/shared/api/groups'
 import type { ProfilePort } from '@/shared/api/profile'
+import { GroupsProvider } from '@/shared/lib/groups'
 import type { PublicLibrary } from '@/shared/api/public-library'
 import { AccountProvider, ProfileProvider } from '@/shared/lib/account'
 import { AdminProvider } from '@/shared/lib/admin'
@@ -29,6 +33,7 @@ import { ErrorListener } from './providers/ErrorListener'
 import { LocaleSync } from './providers/LocaleSync'
 import { MidiReconnect } from './providers/MidiReconnect'
 import { MidiSync } from './providers/MidiSync'
+import { PianoVolume } from './providers/PianoVolume'
 import { ThemeProvider } from './providers/ThemeProvider'
 import type { Stores } from './composition-root'
 import type { AppRouter } from './router'
@@ -40,6 +45,7 @@ export function App({
   sync,
   publicLibrary,
   profile,
+  groups,
   admin,
   features,
   contentEditing,
@@ -52,6 +58,7 @@ export function App({
   sync: SyncRunner
   publicLibrary: PublicLibrary
   profile: ProfilePort
+  groups: GroupsPort
   admin: AdminPort
   features: FeaturesPort
   contentEditing: ContentEditingPort
@@ -63,45 +70,54 @@ export function App({
       <ErrorListener />
       <AccountProvider auth={auth} sync={sync}>
         <ProfileProvider port={profile}>
-          <PublicLibraryProvider library={publicLibrary}>
-            <AdminProvider admin={admin}>
-              <FeaturesProvider features={features}>
-                <ContentEditingProvider editing={contentEditing}>
-                  <SettingsStoreProvider store={stores.settings}>
-                    <ProgressStoreProvider store={stores.progress}>
-                      <PatternsStoreProvider store={stores.patterns}>
-                        <PiecesStoreProvider store={stores.pieces}>
-                          <TakesStoreProvider store={stores.takes}>
-                            <LibraryStoreProvider store={stores.library}>
-                              <DiagramInversionsStoreProvider store={stores.diagramInversions}>
-                                <ChordSheetsStoreProvider store={stores.chordSheets}>
-                                  <NotificationsStoreProvider store={stores.notifications}>
-                                    <ServicesProvider services={services}>
-                                      <LocaleSync />
-                                      <AudioUnlock />
-                                      <MidiReconnect />
-                                      <MidiSync />
-                                      <ThemeProvider>
-                                        <ShortcutsProvider>
-                                          <RouterProvider router={router} />
-                                          <Toaster />
-                                          <Confirmer />
-                                        </ShortcutsProvider>
-                                      </ThemeProvider>
-                                    </ServicesProvider>
-                                  </NotificationsStoreProvider>
-                                </ChordSheetsStoreProvider>
-                              </DiagramInversionsStoreProvider>
-                            </LibraryStoreProvider>
-                          </TakesStoreProvider>
-                        </PiecesStoreProvider>
-                      </PatternsStoreProvider>
-                    </ProgressStoreProvider>
-                  </SettingsStoreProvider>
-                </ContentEditingProvider>
-              </FeaturesProvider>
-            </AdminProvider>
-          </PublicLibraryProvider>
+          <GroupsProvider groups={groups}>
+            <PublicLibraryProvider library={publicLibrary}>
+              <AdminProvider admin={admin}>
+                <FeaturesProvider features={features}>
+                  <ContentEditingProvider editing={contentEditing}>
+                    <SettingsStoreProvider store={stores.settings}>
+                      <ProgressStoreProvider store={stores.progress}>
+                        <PatternsStoreProvider store={stores.patterns}>
+                          <PracticeLibraryStoreProvider store={stores.practiceLibrary}>
+                            <OwnLessonsStoreProvider store={stores.ownLessons}>
+                              <PiecesStoreProvider store={stores.pieces}>
+                                <TakesStoreProvider store={stores.takes}>
+                                  <LibraryStoreProvider store={stores.library}>
+                                    <DiagramInversionsStoreProvider
+                                      store={stores.diagramInversions}
+                                    >
+                                      <ChordSheetsStoreProvider store={stores.chordSheets}>
+                                        <NotificationsStoreProvider store={stores.notifications}>
+                                          <ServicesProvider services={services}>
+                                            <LocaleSync />
+                                            <AudioUnlock />
+                                            <MidiReconnect />
+                                            <MidiSync />
+                                            <PianoVolume />
+                                            <ThemeProvider>
+                                              <ShortcutsProvider>
+                                                <RouterProvider router={router} />
+                                                <Toaster />
+                                                <Confirmer />
+                                              </ShortcutsProvider>
+                                            </ThemeProvider>
+                                          </ServicesProvider>
+                                        </NotificationsStoreProvider>
+                                      </ChordSheetsStoreProvider>
+                                    </DiagramInversionsStoreProvider>
+                                  </LibraryStoreProvider>
+                                </TakesStoreProvider>
+                              </PiecesStoreProvider>
+                            </OwnLessonsStoreProvider>
+                          </PracticeLibraryStoreProvider>
+                        </PatternsStoreProvider>
+                      </ProgressStoreProvider>
+                    </SettingsStoreProvider>
+                  </ContentEditingProvider>
+                </FeaturesProvider>
+              </AdminProvider>
+            </PublicLibraryProvider>
+          </GroupsProvider>
         </ProfileProvider>
       </AccountProvider>
     </ErrorReportsProvider>

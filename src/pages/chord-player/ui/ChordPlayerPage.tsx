@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { PageKeyboardTools } from '@/features/live-keyboard'
 import { FilePlus2, Link2, Save, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { SHEET_NAME_MAX } from '@/entities/chord-sheet'
@@ -20,7 +21,12 @@ export function ChordPlayerPage() {
       <ScreenHeader
         title={t('pages.chordPlayer')}
         back={<BackButton />}
-        tools={<ToolsButton />}
+        tools={
+          <>
+            <PageKeyboardTools />
+            <ToolsButton />
+          </>
+        }
         more={
           <MoreMenu
             label={t('chordPlayer.more')}

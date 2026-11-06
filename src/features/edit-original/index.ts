@@ -1,5 +1,4 @@
 export {
-  DRAFT_SAVE_DELAY_MS,
   useContentDraft,
   type ContentDraft,
   type DraftLoad,
@@ -16,6 +15,6 @@ export { useLessonDraft } from './model/use-lesson-draft'
 export { useMadeSong, type MadeSongLoad } from './model/use-made-song'
 export { draftWithMusic, useOriginalDraft } from './model/use-original-draft'
 export { useProgressionDraft } from './model/use-progression-draft'
-export { DraftActions, DraftStatus } from './ui/DraftBar'
+export { DraftActions, DraftRows, DraftStatus } from './ui/DraftBar'
 export { RemoveGroup } from './ui/RemoveGroup'
 export { VersionsDialog } from './ui/VersionsDialog'

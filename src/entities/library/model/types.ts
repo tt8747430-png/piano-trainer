@@ -1,4 +1,5 @@
 import type { PieceId, SongCollectionId } from '@/entities/piece'
+import { isOneOf } from '@/shared/lib'
 import type { Paint } from '@/shared/ui'
 
 /** A folder the learner made: `folder-` and its number, never given twice. */
@@ -23,6 +24,8 @@ export const FOLDER_PICTURES = [
   'leaf',
 ] as const
 export type FolderPicture = (typeof FOLDER_PICTURES)[number]
+/** Whether a value names one of the folders' pictures (one read from the server, a shared folder's). */
+export const isFolderPicture = isOneOf(FOLDER_PICTURES)
 
 /** The theme's paints a folder's tile is painted in. */
 export const FOLDER_PAINTS = [

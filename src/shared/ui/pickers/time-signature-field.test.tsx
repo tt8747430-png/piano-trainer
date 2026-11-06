@@ -1,24 +1,117 @@
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { TimeSignatureField } from './time-signature-field'
+import { PickerLayoutContext } from './picker-layout'
+import { TimeSignatureField, TimeSignatureTiles } from './time-signature-field'
 
-describe('TimeSignatureField (A34)', () => {
-  it('any n/unit; tiles; pickup; apply to', async () => {
+describe('TimeSignatureField (R31-E, the owner’s ruling)', () => {
+  it('has the common meters as tiles, the one in force pressed, none the song cannot take (R32-B)', async () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
-    const onPickup = vi.fn()
-    const onApply = vi.fn()
     render(
       <TimeSignatureField
         value={{ meter: '4/4', symbol: false }}
         onChange={onChange}
-        barred={(meter) => meter === '3/2'}
-        pickup={{ beats: 0, most: 3, onChange: onPickup }}
-        applyTo={{ value: 'from', onChange: onApply }}
+        barred={(meter) => meter === '6/8'}
       />,
     )
-    // Flat's tiles, engraved, C and ¢ among them; the one in force pressed; one the song cannot take greyed.
+    const tiles = within(screen.getByRole('group', { name: 'Time signature' })).getAllByRole(
+      'button',
+    )
+    expect(tiles.map((tile) => tile.getAttribute('aria-label'))).toEqual([
+      '2/2',
+      '2/4',
+      '3/4',
+      '4/4',
+      '9/8',
+      '12/8',
+    ])
+    expect(tiles[0]?.querySelectorAll('[data-smufl]')).toHaveLength(2)
+    expect(screen.getByRole('button', { name: '4/4' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.queryByRole('button', { name: '6/8' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: '9/8' }))
+    expect(onChange).toHaveBeenLastCalledWith({ meter: '9/8', symbol: false })
+  })
+
+  it('turns Current’s figures as wheels: any count of one to sixteen over a whole to a sixteenth', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    render(<TimeSignatureField value={{ meter: '7/8', symbol: false }} onChange={onChange} />)
+    const current = screen.getByRole('group', { name: 'Current' })
+    const beats = within(current).getByRole('spinbutton', { name: 'Beats' })
+    const unit = within(current).getByRole('spinbutton', { name: 'Beat unit' })
+    expect(beats).toHaveAttribute('aria-valuenow', '7')
+    expect(beats).toHaveAttribute('aria-valuemax', '16')
+    expect(unit).toHaveAttribute('aria-valuenow', '8')
+    expect(unit).toHaveAttribute('aria-valuemin', '1')
+    expect(unit).toHaveAttribute('aria-valuemax', '16')
+    beats.focus()
+    await user.keyboard('{ArrowUp}')
+    expect(onChange).toHaveBeenLastCalledWith({ meter: '8/8', symbol: false })
+    await user.keyboard('{End}')
+    expect(onChange).toHaveBeenLastCalledWith({ meter: '16/8', symbol: false })
+    unit.focus()
+    await user.keyboard('{ArrowUp}')
+    expect(onChange).toHaveBeenLastCalledWith({ meter: '7/16', symbol: false })
+    await user.keyboard('{Home}')
+    expect(onChange).toHaveBeenLastCalledWith({ meter: '7/1', symbol: false })
+    // A drag down brings the faded figure above into place: the one before.
+    fireEvent.pointerDown(beats, { clientY: 100, pointerId: 1 })
+    fireEvent.pointerMove(beats, { clientY: 130, pointerId: 1 })
+    expect(onChange).toHaveBeenLastCalledWith({ meter: '6/8', symbol: false })
+    fireEvent.pointerUp(beats, { clientY: 130, pointerId: 1 })
+  })
+
+  it('has a pickup wheel of a beat short of a bar at most, and none where the caller has none', async () => {
+    const user = userEvent.setup()
+    const onPickup = vi.fn()
+    const { unmount } = render(
+      <TimeSignatureField
+        value={{ meter: '3/4', symbol: false }}
+        onChange={vi.fn()}
+        pickup={{ beats: 0, onChange: onPickup }}
+      />,
+    )
+    const pickup = within(screen.getByRole('group', { name: 'Pickup' })).getByRole('spinbutton', {
+      name: 'Pickup beats',
+    })
+    expect(pickup).toHaveAttribute('aria-valuemax', '2')
+    expect(pickup).toHaveAttribute('aria-valuetext', '–')
+    pickup.focus()
+    await user.keyboard('{ArrowUp}')
+    expect(onPickup).toHaveBeenLastCalledWith(1)
+    unmount()
+    render(<TimeSignatureField value={{ meter: '6/8', symbol: false }} onChange={vi.fn()} />)
+    expect(screen.queryByRole('group', { name: 'Pickup' })).not.toBeInTheDocument()
+  })
+
+  it('writes 4/4 and 2/2 as common or cut time from its switch, shown for those alone (R32-B)', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    const { rerender } = render(
+      <TimeSignatureField value={{ meter: '2/2', symbol: false }} onChange={onChange} />,
+    )
+    await user.click(screen.getByRole('switch', { name: 'Write as common or cut time' }))
+    expect(onChange).toHaveBeenLastCalledWith({ meter: '2/2', symbol: true })
+    rerender(<TimeSignatureField value={{ meter: '5/4', symbol: false }} onChange={onChange} />)
+    expect(screen.queryByRole('switch')).not.toBeInTheDocument()
+  })
+})
+
+describe('TimeSignatureTiles (R32-C, Flat’s palette)', () => {
+  it('has Flat’s tiles, common and cut time among them, then Customize; none the song cannot take', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    render(
+      <PickerLayoutContext value="palette">
+        <TimeSignatureTiles
+          value={{ meter: '4/4', symbol: true }}
+          onChange={onChange}
+          barred={(meter) => meter === '6/8'}
+          customize={<button type="button">Customize</button>}
+        />
+      </PickerLayoutContext>,
+    )
     const tiles = within(screen.getByRole('group', { name: 'Time signature' })).getAllByRole(
       'button',
     )
@@ -28,40 +121,17 @@ describe('TimeSignatureField (A34)', () => {
       '4/4',
       'Common time, C',
       'Cut time, ¢',
-      '3/8',
-      '6/8',
-      '9/8',
-      '12/8',
-      '5/4',
-      '7/8',
-      '3/2',
-      '2/2',
     ])
-    expect(screen.getByRole('button', { name: '4/4' })).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByRole('button', { name: '3/2' })).toBeDisabled()
-    expect(tiles[0]?.querySelectorAll('[data-smufl]')).toHaveLength(2)
-    await user.click(screen.getByRole('button', { name: 'Common time, C' }))
-    expect(onChange).toHaveBeenLastCalledWith({ meter: '4/4', symbol: true })
-    // Other: any count over any unit the score counts in.
-    await user.click(screen.getByRole('button', { name: 'One beat more' }))
-    expect(onChange).toHaveBeenLastCalledWith({ meter: '5/4', symbol: false })
-    const beats = screen.getByRole('textbox', { name: 'Beats' })
-    await user.clear(beats)
-    await user.type(beats, '11{Enter}')
-    expect(onChange).toHaveBeenLastCalledWith({ meter: '11/4', symbol: false })
-    // The pickup in beats, none at 0.
-    expect(screen.getByRole('textbox', { name: 'Pickup' })).toHaveValue('0')
-    await user.click(screen.getByRole('button', { name: 'Longer pickup' }))
-    expect(onPickup).toHaveBeenLastCalledWith(1)
-    // Apply to: from this bar or the whole song.
-    await user.click(screen.getByRole('radio', { name: 'Whole song' }))
-    expect(onApply).toHaveBeenLastCalledWith('whole')
-  })
-
-  it('leaves Pickup and Apply to out where the caller has none', () => {
-    render(<TimeSignatureField value={{ meter: '6/8', symbol: false }} onChange={vi.fn()} />)
-    expect(screen.queryByRole('textbox', { name: 'Pickup' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('radiogroup', { name: 'Apply to' })).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '6/8' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('button', { name: 'Common time, C' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(screen.getByRole('button', { name: '4/4' })).toHaveAttribute('aria-pressed', 'false')
+    await user.click(screen.getByRole('button', { name: 'Cut time, ¢' }))
+    expect(onChange).toHaveBeenLastCalledWith({ meter: '2/2', symbol: true })
+    expect(screen.getByRole('button', { name: 'Customize' })).toBeInTheDocument()
+    // No wheels and no switch inline: they are Customize's.
+    expect(screen.queryByRole('spinbutton')).not.toBeInTheDocument()
+    expect(screen.queryByRole('switch')).not.toBeInTheDocument()
   })
 })

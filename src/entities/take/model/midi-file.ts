@@ -13,7 +13,7 @@ import {
   timeSignature,
 } from '@/shared/lib/music'
 import type { PedalKind } from '@/shared/lib/schedule'
-import type { FreeTake } from './types'
+import type { Take } from './types'
 
 /** Each pedal's controller. */
 const PEDAL_CONTROLLER: Readonly<Record<PedalKind, number>> = {
@@ -23,7 +23,7 @@ const PEDAL_CONTROLLER: Readonly<Record<PedalKind, number>> = {
 }
 
 /** The beats each whole bar of a take holds, from its barlines: a pickup's, a short bar's, the meter's. */
-function barBeats(take: FreeTake): { readonly ms: number; readonly beats: number }[] {
+function barBeats(take: Take): { readonly ms: number; readonly beats: number }[] {
   const beatMs = 60_000 / take.tempo
   // To the nearest eighth of the meter (a third of a compound beat, half a simple one): the barlines
   // are where the click fell, in milliseconds.
@@ -44,7 +44,7 @@ function barBeats(take: FreeTake): { readonly ms: number; readonly beats: number
  * DAW's bars are the piece's; each key on and off with its velocity as played, and the pedals as
  * their controllers: the sustain 64, the sostenuto 66, the soft 67.
  */
-export function midiFile(take: FreeTake): Uint8Array<ArrayBuffer> {
+export function midiFile(take: Take): Uint8Array<ArrayBuffer> {
   // A compound meter's beat, its click, is a dotted quarter.
   const click = isCompound(take.meter) ? 1.5 : 1
   const quartersPerMinute = take.tempo * click

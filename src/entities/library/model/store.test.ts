@@ -21,14 +21,14 @@ const SUNDAY = {
 } as const
 
 describe('createLibraryStore', () => {
-  it('starts holding nothing the learner changed, saved as pt-library version 4', () => {
+  it('starts holding nothing the learner changed, saved as pt-library version 5', () => {
     const storage = createMemoryStorage()
     const store = createLibraryStore({ storage, otherTabs: new EventTarget() })
     expect(store.getState()).toEqual(INITIAL_LIBRARY)
     store.setState({ favourites: ['bz5'] })
     expect(JSON.parse(storage.getItem('pt-library') ?? 'null')).toEqual({
       state: { ...INITIAL_LIBRARY, favourites: ['bz5'] },
-      version: 4,
+      version: 5,
     })
   })
 
@@ -68,9 +68,15 @@ describe('createLibraryStore', () => {
       sort: 'recent',
       nextFolder: 4,
       songLooks: { bz5: { picture: 'piano', paint: 'grass' } },
+      songDetails: {
+        silent: { level: 'beginner', genre: 'christmas', language: 'en', tags: ['advent'] },
+      },
       cardLooks: {
         home: DEFAULT_CARD_LOOK,
-        'folder-3': { ...DEFAULT_CARD_LOOK, density: 'large' },
+        'folder-3': {
+          ...DEFAULT_CARD_LOOK,
+          style: { ...DEFAULT_CARD_LOOK.style, padding: 'roomy' },
+        },
       },
     }
     expect(restored(saved)).toEqual(saved)
@@ -157,7 +163,10 @@ describe('createLibraryStore', () => {
     const store = createLibraryStore({ storage, otherTabs })
     storage.setItem(
       LIBRARY_STORAGE_KEY,
-      JSON.stringify({ state: { ...INITIAL_LIBRARY, favourites: ['silent'] }, version: 4 }),
+      JSON.stringify({
+        state: { ...INITIAL_LIBRARY, favourites: ['silent'] },
+        version: LIBRARY_VERSION,
+      }),
     )
     otherTabs.dispatchEvent(
       new StorageEvent('storage', {

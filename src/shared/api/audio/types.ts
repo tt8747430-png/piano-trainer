@@ -56,6 +56,11 @@ export interface AudioOutput {
   press(key: Midi, velocity: number): void
   release(key: Midi): void
   /**
+   * How loud the live voice plays, 0 to 1 (the On-screen piano's Volume): a share of each key's
+   * loudness, heard from the next key struck. At full until set.
+   */
+  pianoVolume(share: number): void
+  /**
    * A source puts `pedal` down or lets it up: each down is paired with its own up, and the pedal is
    * down while any source holds it.
    */
@@ -74,12 +79,6 @@ export interface AudioOutput {
    * `play.until`, as loud as `volume` says as it plays (0 to 1; at full where none is given).
    */
   playRecording(src: string, play: RecordingPlay, volume?: () => number): void
-  /**
-   * A drone (R29 B11): `keys` held as one sustained, synthesised tone at `gain` (0 to 1), faded in,
-   * until the stop it returns fades it out. Apart from `stop()`, as the live voice is: a click or a
-   * song stopping leaves it sounding.
-   */
-  drone(keys: readonly Midi[], gain: number): () => void
   /** The audio clock in seconds; 0 before there is any. */
   now(): number
   /**

@@ -23,21 +23,16 @@ const KEYS = {
 
 /**
  * The palette's one key for a field typed where it is printed (ADR 0096): it opens the field at the
- * caret; greyed where the field cannot open there, its tooltip saying why.
+ * caret; left out where the field cannot open there (R32-B).
  */
 export function FieldKey({ field }: { field: Kind }) {
   const { t } = useTranslation('editor')
   const { view } = useScoreEditorContext()
   const why = useFieldReason(field)
   const key = KEYS[field]
+  if (why !== undefined) return null
   return (
-    <PaletteKey
-      label={t(key.label)}
-      tool={key.tool}
-      reason={why}
-      disabled={why !== undefined}
-      onClick={() => view.openField(fieldOf(field))}
-    >
+    <PaletteKey label={t(key.label)} tool={key.tool} onClick={() => view.openField(fieldOf(field))}>
       <span aria-hidden className="grid size-7 place-items-center [&_svg]:size-6">
         {key.picture}
       </span>

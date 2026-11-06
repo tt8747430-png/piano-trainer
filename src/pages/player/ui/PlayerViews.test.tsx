@@ -556,8 +556,9 @@ describe('Diagrams (ADR 0108)', () => {
     const { router, diagramInversionsStore } = await inView('diagrams', '/play/bz5')
     const view = screen.getByRole('region', { name: 'Diagrams' })
     // Its sheet from Song information's chords: a diagram of the view is the music's to go to.
-    await user.click(screen.getByRole('button', { name: 'Player settings' }))
-    await user.click(await screen.findByRole('button', { name: 'Song information' }))
+    const foot = await screen.findByRole('toolbar', { name: 'Practice tools' })
+    await user.click(within(foot).getByRole('button', { name: 'More' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Song information' }))
     const info = await screen.findByRole('dialog', { name: 'Song information' })
     await user.click(within(info).getByRole('button', { name: 'G: G B D' }))
     const sheet = await screen.findByRole('dialog', { name: 'G chord' })
@@ -591,8 +592,8 @@ describe('Diagrams (ADR 0108)', () => {
     const user = userEvent.setup()
     await inView('diagrams', '/play/silent')
     await user.click(await screen.findByRole('button', { name: 'Player settings' }))
-    await user.click(await screen.findByRole('button', { name: 'Display' }))
-    const menu = await screen.findByRole('dialog', { name: 'Display' })
+    await user.click(await screen.findByRole('button', { name: /^Score view/ }))
+    const menu = await screen.findByRole('dialog', { name: 'Score view' })
     const mode = within(within(menu).getByRole('region', { name: 'Diagrams' })).getByRole(
       'radiogroup',
       { name: 'Mode' },

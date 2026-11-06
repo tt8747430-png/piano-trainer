@@ -1,14 +1,14 @@
 import type { Locale } from '@/shared/i18n/locale'
 import type {
-  AccompanimentSettings,
+  EditorStartMode,
   ChordFinderSettings,
   ProgressionsSettings,
   ChordPlayerSettings,
-  DroneSettings,
   ScaleStaffSettings,
   TunerSettings,
   ScoreViewSettings,
   KeyboardSettings,
+  KeysHeight,
   OtherHandSettings,
   PlaybackSettings,
   MetronomeSettings,
@@ -16,7 +16,6 @@ import type {
   PracticeToggles,
   RecorderSettings,
   EditingSettings,
-  PalettePlace,
   SettingsState,
   Sidebar,
   SoundSettings,
@@ -31,17 +30,19 @@ export const selectPractice = (state: SettingsState): PracticeToggles => state.p
 export const selectSound = (state: SettingsState): SoundSettings => state.sound
 export const selectTrainer = (state: SettingsState): TrainerSettings => state.trainer
 export const selectKeyboard = (state: SettingsState): KeyboardSettings => state.keyboard
+/** The keys' height the divider set, per size of screen (R34). */
+export const selectKeysHeight = (state: SettingsState): KeysHeight => state.keysHeight
 export const selectRecorder = (state: SettingsState): RecorderSettings => state.recorder
 export const selectEditing = (state: SettingsState): EditingSettings => state.editing
 export const selectSidebar = (state: SettingsState): Sidebar => state.sidebar
 /** Whether the palette is folded where it stands: as the learner left it there, else the panel shown and the sheet compact. */
-export const selectPaletteFolded =
-  (place: PalettePlace) =>
-  (state: SettingsState): boolean =>
-    state.paletteFolded[place] ?? place === 'sheet'
-/** The editor's panel's open sections, by name; null until the learner chooses. */
-export const selectPaletteSections = (state: SettingsState): readonly string[] | null =>
-  state.paletteSections
+export const selectPaletteFolded = (state: SettingsState): boolean => state.paletteFolded
+/** Whether the palette shows its tools as named rows (R32-C, Flat's list view). */
+export const selectPaletteList = (state: SettingsState): boolean => state.paletteList
+/** The palette's category chosen, by name; null until the learner chooses. */
+export const selectPaletteCategory = (state: SettingsState): string | null => state.paletteCategory
+/** The mode the score editor writes in, as it was left. */
+export const selectEditorMode = (state: SettingsState): EditorStartMode => state.editorMode
 export const selectMidi = (state: SettingsState): MidiSettings => state.midi
 /** Whether the section `id` is folded away. */
 export const selectSectionFolded =
@@ -57,6 +58,11 @@ export const selectPlayback = (state: SettingsState): PlaybackSettings => state.
 export const selectMetronome = (state: SettingsState): MetronomeSettings => state.metronome
 
 export const selectWelcomed = (state: SettingsState): boolean => state.welcomed
+/** Whether a tip was put away or done (R31-P): it shows no more. */
+export const selectTipSeen =
+  (id: string) =>
+  (state: SettingsState): boolean =>
+    state.tipsSeen.includes(id)
 
 /** How a lesson reads (round 26): one page, or a section at a time. */
 export const selectLessonReading = (state: SettingsState): LessonReading => state.lessonReading
@@ -65,9 +71,5 @@ export const selectLessonReading = (state: SettingsState): LessonReading => stat
 export const selectProgressions = (state: SettingsState): ProgressionsSettings => state.progressions
 /** How the Chord player writes its chords and voices its piano (R29 CP6). */
 export const selectTuner = (state: SettingsState): TunerSettings => state.tuner
-export const selectDrone = (state: SettingsState): DroneSettings => state.drone
 export const selectScaleStaff = (state: SettingsState): ScaleStaffSettings => state.scaleStaff
 export const selectChordPlayer = (state: SettingsState): ChordPlayerSettings => state.chordPlayer
-/** Accompaniment's sources the learner hid (A24). */
-export const selectAccompaniment = (state: SettingsState): AccompanimentSettings =>
-  state.accompaniment

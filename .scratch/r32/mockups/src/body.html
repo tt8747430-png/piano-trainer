@@ -1,0 +1,86 @@
+<style>
+/* R32-E Settings: the laptop's Settings sidebar (Songs' tree), choice cards, switches, fields */
+.lib2 { display: flex; flex: 1; min-height: 0; padding: 0 40px; gap: 40px }
+.snav { width: 272px; flex: none; display: flex; flex-direction: column; gap: 2px; overflow: hidden; padding-bottom: 16px; position: relative }
+.snav .nh { font: 600 14px var(--sans); color: var(--ink-soft); padding: 16px 8px 4px }
+.snav .ni { min-height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 8px; border-radius: 12px; font-size: 15px; font-weight: 500 }
+.snav .ni.on { background: var(--sand); font-weight: 600 }
+.snav .ni .v { margin-left: auto; color: var(--ink-soft); font-size: 14px; font-weight: 400 }
+.sq { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; flex: none }
+.snav .acct { min-height: 60px; gap: 12px }
+.snav .acct .av { width: 36px; height: 36px; font-size: 17px }
+.snav .acct small { display: block; font-size: 13.5px; color: var(--ink-soft); font-weight: 400 }
+.snav::after { content: ''; position: absolute; right: -2px; top: 8px; width: 4px; height: 38%; border-radius: 4px; background: color-mix(in oklab, var(--ink-soft) 35%, transparent) }
+.snav.noscroll::after { display: none }
+.page2 { flex: 1; min-width: 0; max-width: 704px; display: flex; flex-direction: column; gap: 4px; overflow: hidden; padding-bottom: 24px }
+.cc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 14px }
+.cc .o { border: 1px solid var(--line); border-radius: 12px; padding: 8px; display: grid; gap: 8px; justify-items: center; font-size: 14px; font-weight: 500 }
+.cc .o.on { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); font-weight: 600 }
+.cc .pv { width: 100%; height: 54px; border-radius: 8px; border: 1px solid var(--line) }
+.tg { width: 51px; height: 31px; border-radius: 99px; background: var(--line); position: relative; flex: none }
+.tg::after { content: ''; position: absolute; left: 2px; top: 2px; width: 27px; height: 27px; border-radius: 99px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25) }
+.tg.on { background: var(--grass-ink) } .tg.on::after { left: 22px }
+.val { color: var(--ink-soft); font-size: 15px; white-space: nowrap }
+.chev { color: var(--ink-soft); flex: none }
+.danger { color: var(--bad-ink); font-weight: 600; justify-content: center }
+.foot2 { font-size: 14px; color: var(--ink-soft); padding: 6px 12px 0 }
+.ta { min-height: 120px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); padding: 12px; color: var(--ink-soft); font-size: 15px }
+.btacts { display: flex; gap: 10px; flex-wrap: wrap; padding: 14px }
+.act { width: 74px; height: 64px; border: 1px solid var(--line); border-radius: 12px; display: grid; place-items: center; font-size: 12.5px; position: relative; padding-top: 6px }
+.act .x { position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; border-radius: 99px; background: var(--bad-ink); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 15px; line-height: 1 }
+.addb { height: 44px; border: 1px dashed var(--line); border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; padding: 0 14px; font-weight: 500; color: var(--ink) }
+.appmark { width: 64px; height: 64px; border-radius: 16px; background: var(--honey); color: var(--honey-ink); display: grid; place-items: center; font: 600 30px var(--display) }
+.dialog { position: absolute; left: 24px; right: 24px; top: 34%; background: var(--card); border-radius: 20px; padding: 20px; display: grid; gap: 10px; box-shadow: 0 12px 40px rgba(0,0,0,.25); z-index: 5 }
+.dialog .btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px }
+.btn.red { background: var(--bad); color: var(--bad-ink) }
+.fig-row { display: flex; gap: 10px; flex-wrap: wrap }
+.stat { flex: 1 1 30%; display: grid; justify-items: center; gap: 2px; padding: 10px 0 }
+.stat b { font: 600 26px var(--display) } .stat span { font-size: 13.5px; color: var(--ink-soft); text-align: center }
+.mono { font-family: ui-monospace, Menlo, monospace; font-size: 13.5px; color: var(--ink-soft) }
+.segw { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; width: 100% }
+.banner { background: var(--yellow); color: var(--yellow-ink); font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: space-between; padding: 6px 16px }
+</style>
+
+<div class="wrap">
+  <div class="intro">
+    <h1>Settings and Administration · Round 32</h1>
+    <p class="soft">Settings rebuilt end to end: two panes on the MacBook Air that scroll on their own (as Songs’ tree and list do), every page pushed with a working Back on the iPhone, preferences moved to where they belong, About and the legal pages fixed, the Administration area folded into Settings, and every word rewritten. Each screen has a box: <b>Looks right</b>, <b>Change it</b> or <b>Not needed</b>, and a note.</p>
+    <p class="soft" id="storeNote">Connecting the feedback store…</p>
+  </div>
+  <nav class="toc" aria-label="Questions">
+    <a href="#q1">1 The list and the sidebar</a><a href="#q2">2 Library pages</a><a href="#q3">3 About and legal</a><a href="#q4">4 Account and feedback</a><a href="#q5">5 Administration</a><a href="#q6">6 Words</a>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="ptSize(1)">iPhone 17 Pro · app</button><script>var PT_SIZES=[['pro','iPhone 17 Pro · app'],['safari','iPhone 17 Pro · Safari'],['small','Smaller iPhone · app']];function ptSize(step){var k=0;try{k=Math.max(0,PT_SIZES.findIndex(function(x){return x[0]===localStorage.getItem('pt-mock-size')}))}catch(e){}k=(k+step)%PT_SIZES.length;document.body.classList.remove('small','safari');if(PT_SIZES[k][0]!=='pro')document.body.classList.add(PT_SIZES[k][0]);document.getElementById('sizeBtn').textContent=PT_SIZES[k][1];try{localStorage.setItem('pt-mock-size',PT_SIZES[k][0])}catch(e){}}ptSize(0)</script></span>
+  </nav>
+  <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>The list and the sidebar</h2></div>
+    <p class="where">Where: Settings (<code>/settings</code>) on the iPhone, and every Settings page on the MacBook.</p>
+    <p>What changes: on the iPhone, Settings is one grouped list — General, Piano, Library, Support, and Administration for an administrator — each row pushing its page with Back. On the MacBook, the list becomes a compact sidebar that stays in place and scrolls on its own; the page beside it scrolls with the window, and the page shown is highlighted. View as a learner leaves the list (question 4).</p>
+    <div class="screens" id="s1"></div>
+    <div class="rec">Built: macOS System Settings’ sidebar and this app’s Songs tree (17rem, sticky under the bar, its own scroll). The heavy phone cards no longer stand in for a sidebar.</div>
+  </section>
+  <section class="q" id="q2"><div class="qhead"><span class="qnum">2</span><h2>Selection toolbar and Swipe actions</h2></div>
+    <p class="where">Where: Settings › Library › Selection toolbar, Swipe actions (were General › Select toolbar, Swipe actions).</p>
+    <p>What changes: both become Settings pages of their own in a Library group, as memory-palaces and iOS Mail keep them, so the sidebar marks them and Back works; their editors gain a heading, a one-line footnote and room to breathe.</p>
+    <div class="screens" id="s2"></div>
+  </section>
+  <section class="q" id="q3"><div class="qhead"><span class="qnum">3</span><h2>About, Privacy Policy and Terms of Service</h2></div>
+    <p class="where">Where: Settings › Support › About, and the legal pages it opens.</p>
+    <p>What changes: About is a Settings page like the rest (the sidebar beside it on the MacBook, Back on the iPhone). It opens with the app and its version, then Software update and the licence, then Legal (Privacy Policy, Terms of Service as full rows), then Acknowledgements. The legal pages go back to About.</p>
+    <div class="screens" id="s3"></div>
+  </section>
+  <section class="q" id="q4"><div class="qhead"><span class="qnum">4</span><h2>Preview as learner, and Report a problem</h2></div>
+    <p class="where">Where: Settings › Account (editors and administrators), and Settings › Support › Report a problem.</p>
+    <p>What changes: the learner preview moves from the foot of Help to the account it depends on (A), and the Administration bar’s graduation-cap button goes, so there is one way to it. Report a problem becomes a page with its field in sight.</p>
+    <div class="screens" id="s4"></div>
+    <div class="rec">Recommendation: <b>A</b>. The preview exists because of the account’s role; Notion and Linear keep role-bound tools with the account and the administration area, never among Help.</div>
+  </section>
+  <section class="q" id="q5"><div class="qhead"><span class="qnum">5</span><h2>Administration</h2></div>
+    <p class="where">Where: Settings › Administration (<code>/admin</code>, each section <code>/admin/…</code>), administrators only.</p>
+    <p>What changes: the pop-up of nine sections becomes ten pages: a list on the iPhone, the sidebar’s Administration group on the MacBook. Feedback is split from the error log. Removing an administrator, deleting a group or a flag and suspending a publisher all ask first in the app’s one confirmation.</p>
+    <div class="screens" id="s5"></div>
+  </section>
+  <section class="q" id="q6"><div class="qhead"><span class="qnum">6</span><h2>Words</h2></div>
+    <p class="where">Where: every page above, in English and Russian.</p>
+    <div class="tablewrap" id="s6"></div>
+    <div class="qfb"><figure data-fb="6.1" data-title="Words"></figure></div>
+  </section>
+</div>

@@ -28,8 +28,17 @@ const MIDDLE_C = 60
  * the kit. Each `play` is null where its set has nothing loaded for it: the caller plays its stand-in.
  */
 export interface Instruments {
-  /** A piano key from the grand, else from the light piano. */
-  piano(key: Midi, velocity: number, at: number, gain: number): SamplerVoice | null
+  /**
+   * A piano key from the grand, else from the light piano; `through` a node of its own on its way out
+   * (the soft pedal's darker tone), else straight out.
+   */
+  piano(
+    key: Midi,
+    velocity: number,
+    at: number,
+    gain: number,
+    through?: AudioNode,
+  ): SamplerVoice | null
   /** A bass note from its set. */
   bass(
     instrument: Exclude<PitchedInstrument, 'piano'>,
@@ -75,9 +84,9 @@ export function createInstruments(
     }))
 
   return {
-    piano: (key, velocity, at, gain) =>
-      grand.start(key, velocity, at, gain * LEVEL.piano, destination) ??
-      light.start(key, velocity, at, gain * LEVEL.pianoLight, destination),
+    piano: (key, velocity, at, gain, through = destination) =>
+      grand.start(key, velocity, at, gain * LEVEL.piano, through) ??
+      light.start(key, velocity, at, gain * LEVEL.pianoLight, through),
     bass: (instrument, key, velocity, at, gain) =>
       bassOf(instrument).start(key, velocity, at, gain * LEVEL.bass, destination),
     drum: (piece, velocity, at, gain) =>

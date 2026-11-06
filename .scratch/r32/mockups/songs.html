@@ -1,0 +1,464 @@
+<meta charset="utf-8">
+<title>Songs, Round 32</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Noto+Music&family=Onest:wght@400;500;600&display=swap">
+<style>
+/* Layout: a reading column of numbered questions; each draws whole app screens (phone 393×852, laptop 1710×904, scaled)
+   in Piano Trainer's own tokens, with a feedback box under every screen. */
+:root {
+  --paper: #f7f3ee; --card: #fefdfb; --sand: #eee9e2; --line: #dad1c8; --ink: #332921; --ink-soft: #685e56;
+  --honey: #edc684; --honey-ink: #5a4214; --grass: #d9ebd5; --grass-ink: #44684a; --sky: #e0effa; --sky-ink: #356890;
+  --lilac: #e6dff6; --lilac-ink: #6a5988; --sandw: #f5e0cf; --sand-ink: #7d5b40; --yellow: #f6ebc9; --yellow-ink: #7a5c18;
+  --bad: #f3d6d2; --bad-ink: #8a3a2e; --scrim: rgba(51, 41, 33, .32); --frame: #1d1916;
+  --display: 'Literata', Georgia, serif; --sans: 'Onest', system-ui, sans-serif; --music: 'Noto Music', serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #191512; --card: #24201c; --sand: #2e2924; --line: #453e38; --ink: #ede9e1; --ink-soft: #b5aca1;
+  --honey: #d4b176; --honey-ink: #2a1f0a; --grass: #2c3d2c; --grass-ink: #b5d6ae; --sky: #22344a; --sky-ink: #a9cdec;
+  --lilac: #352d47; --lilac-ink: #cfc2ec; --sandw: #3d2f24; --sand-ink: #e4c4a6; --yellow: #3a321d; --yellow-ink: #e6cf93;
+  --bad: #45251f; --bad-ink: #f0b9ae; --scrim: rgba(0,0,0,.5); --frame: #000; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #191512; --card: #24201c; --sand: #2e2924; --line: #453e38; --ink: #ede9e1; --ink-soft: #b5aca1;
+  --honey: #d4b176; --honey-ink: #2a1f0a; --grass: #2c3d2c; --grass-ink: #b5d6ae; --sky: #22344a; --sky-ink: #a9cdec;
+  --lilac: #352d47; --lilac-ink: #cfc2ec; --sandw: #3d2f24; --sand-ink: #e4c4a6; --yellow: #3a321d; --yellow-ink: #e6cf93;
+  --bad: #45251f; --bad-ink: #f0b9ae; --scrim: rgba(0,0,0,.5); --frame: #000; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); margin: 0 }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 28px 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0 }
+h1 { font-size: 30px } h2 { font-size: 22px } h3 { font-size: 16px }
+p { margin: 0; max-width: 65ch } .soft { color: var(--ink-soft) }
+.intro { display: grid; gap: 10px; margin-bottom: 8px }
+.toc { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); padding-block: 8px; display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--line) }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper) }
+.toc a { font-size: 13px; color: var(--ink); text-decoration: none; background: var(--sand); border-radius: 999px; padding: 4px 10px }
+.toc a.done { background: var(--grass); color: var(--grass-ink) }
+.toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-left: auto }
+.toolbar button { font: 500 13px var(--sans); border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 4px 11px; cursor: pointer }
+section.q { border-top: 1px solid var(--line); padding-block: 30px; display: grid; gap: 14px }
+section.q:first-of-type { border-top: 0 }
+.qhead { display: flex; gap: 10px; align-items: baseline } .qnum { font: 600 13px var(--sans); color: var(--ink-soft); white-space: nowrap }
+.where { font-size: 13px; color: var(--ink-soft) }
+.rec { background: var(--sky); color: var(--sky-ink); border-radius: 12px; padding: 10px 14px; max-width: 80ch }
+.screens { display: flex; flex-wrap: wrap; gap: 26px; align-items: flex-start }
+figure { margin: 0; display: grid; gap: 8px; min-width: 0; max-width: 100% }
+figcaption { font-size: 13.5px; color: var(--ink-soft); max-width: 46ch } figcaption b { color: var(--ink); display: block; font-size: 14px }
+.opt { display: inline-block; font: 600 12px var(--sans); background: var(--honey); color: var(--honey-ink); border-radius: 6px; padding: 1px 7px; margin-right: 6px }
+.opt.b { background: var(--sand); color: var(--ink) }
+table.map { border-collapse: collapse; font-size: 13.5px; width: 100%; max-width: 920px }
+.tablewrap { overflow-x: auto; max-width: 100% }
+table.map th, table.map td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+table.map th { font-weight: 600; color: var(--ink-soft); font-size: 12.5px }
+/* feedback */
+.fb { display: flex; gap: 6px; flex-wrap: wrap }
+.fb button { font: 500 12.5px var(--sans); border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 5px 11px; cursor: pointer }
+.fb button[aria-pressed="true"][data-v="ok"] { background: var(--grass); color: var(--grass-ink); border-color: var(--grass-ink) }
+.fb button[aria-pressed="true"][data-v="change"] { background: var(--honey); color: var(--honey-ink); border-color: var(--honey) }
+.fb button[aria-pressed="true"][data-v="remove"] { background: var(--bad); color: var(--bad-ink); border-color: var(--bad-ink) }
+button:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--sky-ink); outline-offset: 2px }
+figure textarea, .qfb textarea { width: 100%; min-height: 40px; font: 13px var(--sans); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 7px 9px; resize: vertical }
+:is(figure, .qfb) textarea::placeholder { color: var(--ink-soft) }
+.saved { font-size: 12px; color: var(--ink-soft); min-height: 1em }
+
+/* ——— device frames (true sizes, scaled) ——— */
+.dev { position: relative; overflow: hidden; border-radius: 34px; background: var(--frame); padding: 9px }
+.dev.phone { --fw: 450px; --fh: 920px; --sx: 24px; --sy: 23px; --sw: 402px; --sh: 874px; --sr: 62px; --sb: 62px; --s: .74; width: calc(var(--fw) * var(--s)); height: calc(var(--fh) * var(--s)); padding: 0; border-radius: 0; background: none; overflow: visible }
+body.small .dev.phone { --fw: 440px; --fh: 899px; --sx: 23.5px; --sy: 22.5px; --sw: 393px; --sh: 852px; --sr: 60px; --sb: 54px }
+.dev.phone::after { content: ''; position: absolute; inset: 0; background: url(iphone-17-pro.png) 0 0 / 100% 100% no-repeat; pointer-events: none; z-index: 3 }
+body.safari .dev.phone::after { background-image: url(iphone-safari.png) }
+body.safari .dev.phone > .scr::after { content: ''; position: absolute; left: 34px; right: 34px; bottom: 33px; height: 48px; z-index: 50; background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27334%27%20height%3D%2748%27%3E%3Cg%20fill%3D%27rgba%28250%2C250%2C250%2C.86%29%27%20stroke%3D%27rgba%280%2C0%2C0%2C.1%29%27%3E%3Ccircle%20cx%3D%2724%27%20cy%3D%2724%27%20r%3D%2723.5%27/%3E%3Crect%20x%3D%2756.5%27%20y%3D%27.5%27%20width%3D%27221%27%20height%3D%2747%27%20rx%3D%2723.5%27/%3E%3Ccircle%20cx%3D%27310%27%20cy%3D%2724%27%20r%3D%2723.5%27/%3E%3C/g%3E%3Cpath%20d%3D%27M27%2016l-8%208%208%208%27%20fill%3D%27none%27%20stroke%3D%27%231c1c1e%27%20stroke-width%3D%272.4%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27/%3E%3Ctext%20x%3D%27167%27%20y%3D%2729%27%20font-family%3D%27-apple-system%2Csystem-ui%2Csans-serif%27%20font-size%3D%2715%27%20font-weight%3D%27500%27%20text-anchor%3D%27middle%27%20fill%3D%27%231c1c1e%27%3Epiano-trainer%3C/text%3E%3Cg%20fill%3D%27%231c1c1e%27%3E%3Ccircle%20cx%3D%27302%27%20cy%3D%2724%27%20r%3D%272%27/%3E%3Ccircle%20cx%3D%27310%27%20cy%3D%2724%27%20r%3D%272%27/%3E%3Ccircle%20cx%3D%27318%27%20cy%3D%2724%27%20r%3D%272%27/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat; filter: drop-shadow(0 4px 12px rgba(0,0,0,.18)) }
+.dev.mac { --s: .45; --mx: 217.7px; --my: 36.6px; width: calc(2143px * var(--s)); height: calc(1299px * var(--s)); padding: 0; border-radius: 0; overflow: visible;
+  background: linear-gradient(rgba(255,255,255,.28), rgba(255,255,255,.28)) calc(var(--mx) * var(--s)) calc(var(--my) * var(--s)) / calc(1710px * var(--s)) calc(37px * var(--s)) no-repeat,
+    url(macbook-wallpaper.jpg) calc(var(--mx) * var(--s)) calc(var(--my) * var(--s)) / calc(1710px * var(--s)) calc(1112px * var(--s)) no-repeat }
+.dev.mac::before { content: 'piano-trainer'; position: absolute; z-index: 2; left: calc(var(--mx) * var(--s)); top: calc((var(--my) + 37px) * var(--s)); width: calc(1710px * var(--s)); height: calc(51px * var(--s)); background: url(safari-light.png) 0 0 / 100% 100%; border-radius: calc(16px * var(--s)) calc(16px * var(--s)) 0 0; font: 500 calc(14px * var(--s)) / calc(51px * var(--s)) -apple-system, system-ui, sans-serif; color: #3c3c43; text-align: center }
+:root[data-theme="dark"] .dev.mac::before { background-image: url(safari-dark.png); color: #ebebf5 }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dev.mac::before { background-image: url(safari-dark.png); color: #ebebf5 } }
+.dev.mac::after { content: ''; position: absolute; inset: 0; z-index: 3; background: url(macbook-air.png) 0 0 / 100% 100% no-repeat; pointer-events: none }
+.dev > .scr { width: 393px; height: 852px; transform: scale(var(--s)); transform-origin: 0 0; border-radius: 26px }
+.dev.phone > .scr { position: absolute; left: calc(var(--sx) * var(--s)); top: calc(var(--sy) * var(--s)); width: var(--sw); height: var(--sh); border-radius: var(--sr) }
+.dev.mac > .scr { position: absolute; left: calc(var(--mx) * var(--s)); top: calc((var(--my) + 88px) * var(--s)); width: 1710px; height: 904px; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,.35) }
+@media (max-width: 720px) { .dev.mac { --s: .3 } .dev.phone { --s: .7 } }
+.scrollx { overflow-x: auto; max-width: 100% }
+@media (max-width: 720px) { .scrollx:has(.mac)::after { content: "Scroll sideways for the whole screen →"; display: block; font-size: 12px; color: var(--ink-soft); padding-top: 4px } }
+@media (min-width: 721px) and (max-width: 1100px) { .dev.mac { --s: .32 } }
+
+/* ——— the app ——— */
+.scr { position: relative; overflow: hidden; background: var(--paper); color: var(--ink); font: 16px/1.4 var(--sans); display: flex; flex-direction: column }
+.scr.mac { flex-direction: row }
+.sb { width: 256px; flex: none; background: var(--card); border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: 0 12px 16px }
+.sb .brand { height: 80px; display: flex; align-items: center; justify-content: space-between; padding-left: 12px; font: 600 24px var(--display) }
+.sb .it { height: 44px; display: flex; gap: 12px; align-items: center; padding: 0 12px; border-radius: 12px; font-weight: 600; color: var(--ink-soft); font-size: 16px }
+.sb .it.on { background: var(--sand); color: var(--ink) }
+.sb .foot { margin-top: auto; display: grid; gap: 4px }
+.sb .acc { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 12px }
+.main { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative }
+.pad { padding: 0 16px } .mac .pad { padding: 0 40px }
+.bar { min-height: 56px; display: flex; align-items: center; gap: 8px; padding: 4px 16px; flex: none }
+.mac .bar { padding: 8px 40px; min-height: 72px }
+.bar .t { font: 600 20px/1.2 var(--display); min-width: 0; display: flex; align-items: center; gap: 6px }
+.bar .t > span:first-child { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.bar .t.lg { font-size: 24px } .mac .bar .t { font-size: 22px } .mac .bar .t.lg { font-size: 26px }
+.bar .tools { margin-left: auto; display: flex; gap: 6px; flex: none }
+.rb { width: 44px; height: 44px; border-radius: 999px; background: var(--sand); display: grid; place-items: center; flex: none; color: var(--ink) }
+.rb.plain { background: transparent } .rb.on { background: var(--grass); color: var(--grass-ink) }
+.rb.sm { width: 36px; height: 36px; background: transparent; color: var(--ink-soft) }
+.edit-pen { color: var(--ink-soft) }
+.seg { display: inline-flex; justify-self: start; align-self: start; width: max-content; background: var(--sand); border-radius: 999px; padding: 3px; gap: 2px; font: 600 14px var(--sans) }
+.seg span { padding: 7px 14px; border-radius: 999px; color: var(--ink-soft) } .seg span.on { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08) }
+.field { display: flex; align-items: center; gap: 8px; height: 44px; border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 0 12px; color: var(--ink-soft); font-size: 15px; flex: 1; min-width: 0 }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); font-size: 14px; white-space: nowrap }
+.chip b { font-family: var(--display) } .chip.on { background: var(--sand); border-color: var(--sand) }
+.h2 { font: 600 13px var(--sans); color: var(--ink-soft); padding: 18px 4px 8px; display: flex; justify-content: space-between }
+.h2 a { color: var(--sky-ink); font-weight: 500; text-decoration: none }
+.group { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden }
+.row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; min-height: 60px; border-top: 1px solid var(--line) }
+.row:first-child { border-top: 0 }
+.tile { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex: none }
+.p-yellow { background: var(--yellow); color: var(--yellow-ink) } .p-sky { background: var(--sky); color: var(--sky-ink) }
+.p-grass { background: var(--grass); color: var(--grass-ink) } .p-lilac { background: var(--lilac); color: var(--lilac-ink) }
+.p-sand { background: var(--sandw); color: var(--sand-ink) }
+.row .txt { flex: 1; min-width: 0 } .row .n { font-weight: 600; font-size: 16px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere }
+.row .d { font-size: 13.5px; color: var(--ink-soft); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.key { font: 600 16px var(--display); min-width: 26px; text-align: center }
+.lvl { display: inline-flex; gap: 2px; align-items: flex-end; height: 12px } .lvl i { width: 3px; background: var(--line); border-radius: 1px } .lvl i.f { background: var(--ink-soft) }
+.tick { color: var(--grass-ink) }
+.fab { position: absolute; right: 20px; bottom: 100px; width: 56px; height: 56px; border-radius: 999px; background: var(--honey); color: var(--honey-ink); display: grid; place-items: center; box-shadow: 0 6px 16px rgba(0,0,0,.18) }
+.mac .fab { bottom: 32px; right: 40px }
+.fab.wide { width: auto; padding: 0 22px; gap: 8px; display: flex; align-items: center; font-weight: 600 }
+.tabs { position: absolute; left: 0; right: 0; bottom: 0; height: 84px; background: var(--card); border-top: 1px solid var(--line); display: flex; padding: 6px 8px 0; gap: 4px }
+.tabs div { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; font: 600 12px var(--sans); color: var(--ink-soft); padding-top: 6px; border-radius: 12px; height: 54px }
+.tabs div.on { background: var(--sand); color: var(--ink) }
+.status { height: var(--sb, 47px); flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; font: 600 15px var(--sans) }
+.scroll { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0 }
+.scroll > * { flex-shrink: 0 }
+.cards { display: flex; gap: 10px }
+.scard { width: 150px; flex: none; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 10px; display: grid; gap: 6px }
+.scard .cv { height: 70px; border-radius: 10px; display: grid; place-items: center }
+.scard .n { font-weight: 600; font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.scard .d { font-size: 12.5px; color: var(--ink-soft) }
+/* laptop library */
+.lib { display: flex; flex: 1; min-height: 0 }
+.tree { width: 300px; flex: none; border-right: 1px solid var(--line); padding: 8px 16px 16px 40px; display: grid; align-content: start; gap: 2px }
+.tree .ti { height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 10px; border-radius: 10px; font-size: 15px; font-weight: 500 }
+.tree .ti.on { background: var(--sand); font-weight: 600 } .tree .ti .c { margin-left: auto; color: var(--ink-soft); font-size: 13px; font-weight: 400 }
+.tree .ti.ind { padding-left: 32px } .tree .lab { font: 600 12px var(--sans); color: var(--ink-soft); padding: 14px 10px 4px; text-transform: none }
+.tree .ti .sw { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center }
+.list { flex: 1; min-width: 0; padding: 8px 40px 16px 32px; display: flex; flex-direction: column }
+.thead, .trow { display: grid; grid-template-columns: minmax(0, 3fr) 70px minmax(0, 2fr) 70px 70px 110px 40px; gap: 12px; align-items: center; padding: 0 12px }
+.thead { font: 600 12.5px var(--sans); color: var(--ink-soft); height: 36px; border-bottom: 1px solid var(--line) }
+.trow { height: 58px; border-bottom: 1px solid var(--line); font-size: 15px } .trow .n { font-weight: 600 } .trow .d { font-size: 13px; color: var(--ink-soft) }
+.trow .chs { font-family: var(--display); color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--card); border-radius: 22px 22px 0 0; box-shadow: 0 -8px 30px rgba(0,0,0,.18); padding: 8px 16px 34px; display: grid; gap: 10px }
+.sheet .grip { width: 36px; height: 5px; background: var(--line); border-radius: 9px; margin: 0 auto 4px }
+.scrimm { position: absolute; inset: 0; background: var(--scrim) }
+.btn { height: 48px; border-radius: 12px; background: var(--honey); color: var(--honey-ink); display: grid; place-items: center; font-weight: 600 }
+.btn.ghost { background: var(--sand); color: var(--ink) }
+.check { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--line); display: grid; place-items: center; flex: none }
+.check.on { background: var(--honey); border-color: var(--honey); color: var(--honey-ink) }
+.pill { font-size: 12.5px; padding: 2px 9px; border-radius: 999px; background: var(--sand); color: var(--ink-soft); white-space: nowrap }
+.fieldline { border-bottom: 1px dashed var(--line); padding-bottom: 2px }
+.editing { outline: 2px solid var(--honey); outline-offset: 2px; border-radius: 6px; -webkit-line-clamp: unset !important; overflow: visible !important }
+.cover { border-radius: 16px; display: grid; place-items: center }
+.kbd { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; width: 74px; height: 38px; position: relative; background: var(--line); border: 1px solid var(--line); border-radius: 3px; overflow: hidden }
+.kbd i { background: #fbf9f6 } .kbd b { position: absolute; top: 0; width: 7px; height: 22px; background: #2a231d }
+.kbd u { position: absolute; bottom: 4px; width: 5px; height: 5px; border-radius: 9px; background: #2a231d }
+.staff { color: var(--ink) }
+.toast { position: absolute; left: 50%; bottom: 110px; transform: translateX(-50%); background: var(--ink); color: var(--paper); border-radius: 999px; padding: 9px 16px; font-size: 14px; white-space: nowrap }
+.dot { width: 8px; height: 8px; border-radius: 9px; background: var(--honey); display: inline-block }
+.av { width: 32px; height: 32px; border-radius: 999px; display: grid; place-items: center; font: 600 15px var(--display); flex: none }
+
+/* R30 Practice: the type ramp and 44px targets (critique round 1) */
+.rb.sm { width: 44px; height: 44px }
+.h2 { font-size: 14px } .h2 a.all { display: inline-flex; align-items: center; min-height: 44px; margin: -14px 0 }
+.row .d { font-size: 14px } .thead { font-size: 14px } .trow .d { font-size: 14px }
+.tree .lab { font-size: 14px } .pill { font-size: 14px }
+.lvl i { background: color-mix(in oklab, var(--ink-soft) 35%, transparent) }
+.kbd { width: 64px }
+
+/* R31: the installed app's home indicator, 14px soft text, raised segments in dark */
+.tabs { height: 85px; padding: 6px 8px 34px } .tabs div { height: 44px; justify-content: center; padding-top: 0 }
+.row .d, .h2, .tree .ti .c { font-size: 14px }
+span[aria-label^="Level"] { font-size: 14px !important }
+.seg span.on { background: var(--card); box-shadow: 0 1px 3px rgba(0,0,0,.25) }
+
+/* R32: code in a line, the frames' titles */
+code { font-size: 13px; background: var(--sand); border-radius: 6px; padding: 1px 5px }
+
+</style>
+
+<div class="wrap">
+  <div class="intro">
+    <h1>The song page, its details, card style, groups · Round 32</h1>
+    <p class="soft">Drawn on the iPhone 17 Pro as the installed app (402 × 874) and the MacBook Air 15″ in Safari (1710 × 904), scaled down. Under each screen: <b>Looks right</b>, <b>Change it</b> or <b>Not needed</b>, and a note.</p>
+    <p class="soft" id="storeNote">Connecting the feedback store…</p>
+  </div>
+  <nav class="toc" aria-label="Questions">
+    <a href="#q1">1 Song page</a><a href="#q2">2 Editing details</a><a href="#q3">3 Settings</a><a href="#q4">4 Card style</a><a href="#q5">5 Groups</a><a href="#q6">6 Your choice</a>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="ptSize(1)">iPhone 17 Pro · app</button><script>var PT_SIZES=[['pro','iPhone 17 Pro · app'],['safari','iPhone 17 Pro · Safari'],['small','Smaller iPhone · app']];function ptSize(step){var k=0;try{k=Math.max(0,PT_SIZES.findIndex(function(x){return x[0]===localStorage.getItem('pt-mock-size')}))}catch(e){}k=(k+step)%PT_SIZES.length;document.body.classList.remove('small','safari');if(PT_SIZES[k][0]!=='pro')document.body.classList.add(PT_SIZES[k][0]);document.getElementById('sizeBtn').textContent=PT_SIZES[k][1];try{localStorage.setItem('pt-mock-size',PT_SIZES[k][0])}catch(e){}}ptSize(0)</script></span>
+  </nav>
+  <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>The song page</h2></div>
+    <p class="where">Where: Songs › a song (<code>/songs/hot-cross-buns</code>), phone and laptop.</p>
+    <p>What changes: the top says what the song is in one glance (cover, who wrote it, one line of facts, the about), the music follows, and <b>Details</b> lists everything about the song as properties: Composer, Lyricist, Arranger, Level, Genre, Language, Tags. On a laptop the song fills the left column and its music the right, so the screen is full.</p>
+    <div class="screens" id="s1"></div>
+    <div class="rec">Recommendation: Apple Music’s album page for the top (cover, byline, a facts line, the about clamped with More) and MuseScore’s score page for Details (a plain list of property and value under the music).</div>
+  </section>
+  <section class="q" id="q2"><div class="qhead"><span class="qnum">2</span><h2>Editing the details</h2></div>
+    <p class="where">Where: the song page’s Details, and its cover.</p>
+    <p>What changes: there is no Edit mode and no Edit song page. A tap on a property edits that one, as in Notion: a sheet on a phone, a popover beside it on a laptop, kept as you choose. Composer, Lyricist and Arranger are properties too and write the lines the score prints, so you never leave for the score to change who wrote it. A tap on the cover changes its picture and paint.</p>
+    <div class="screens" id="s2"></div>
+  </section>
+  <section class="q" id="q3"><div class="qhead"><span class="qnum">3</span><h2>The song’s Settings</h2></div>
+    <p class="where">Where: the song’s ⚙.</p>
+    <p>What changes: Settings only holds how the song lives in your library and how it leaves it: Folder, Favourite (a switch), Duplicate, Archive; Publish, Share link, Export; Delete apart. Edit song page goes, since the page edits itself.</p>
+    <div class="screens" id="s3"></div>
+  </section>
+  <section class="q" id="q4"><div class="qhead"><span class="qnum">4</span><h2>Card style</h2></div>
+    <p class="where">Where: Songs’ More › Card style, a folder’s ⋯ › Card style. A lesson block’s style is the same editor.</p>
+    <p>What changes, as in memory-palaces: <b>presets first</b>, in one strip; the preview is <b>pinned</b>, a pane of its own between the bar and the controls that never moves and never covers them; a <b>Phone · Laptop</b> switch shows the rows as each will draw them; Reset in the bar, <b>Apply to…</b> and <b>Apply</b> at the foot. On a laptop the library now follows the style: List is the table inside a card in the style, Cards and Grid draw the cards.</p>
+    <div class="screens" id="s4"></div>
+  </section>
+  <section class="q" id="q5"><div class="qhead"><span class="qnum">5</span><h2>Groups</h2></div>
+    <p class="where">Where: Songs › Groups (the tree on a laptop, Shared with me on a phone), a group, an invite link, a shared folder.</p>
+    <p>What changes: groups could not be made (a server rule refused every new group; fixed). Groups are rows with their picture and paint; a group’s page has its invite card, what is shared with it with Share a folder…, and its members; Join with a link takes a link someone sent you.</p>
+    <div class="screens" id="s5"></div>
+  </section>
+  <section class="q" id="q6"><div class="qhead"><span class="qnum">6</span><h2>Where Details stands on a phone</h2></div>
+    <p class="where">Where: the song page on a phone.</p>
+    <p>What changes for you: where you find Level, Genre, Tags and who wrote it.</p>
+    <div class="screens" id="s6"></div>
+    <div class="rec">Recommendation: <b>A</b>, Details at the foot, as Apple Music puts an album’s information under its songs: you open a song to play it, so its music comes first.</div>
+  </section>
+</div>
+
+<script>
+// ——— icons (lucide shapes) ———
+const P = {
+  back: '<path d="m15 18-6-6 6-6"/>', pen: '<path d="M21.2 6.8a2.8 2.8 0 0 0-4-4L3.8 16.2 3 21l4.8-.8Z"/><path d="m15 5 4 4"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',
+  more: '<circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', select: '<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8M13 12h8M13 18h8"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', music: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+  grad: '<path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>', metro: '<path d="M12 11.4V9.1"/><path d="m12 17 6.6-6.6"/><path d="M19.2 16.5 16.4 4.6A2 2 0 0 0 14.4 3H9.6a2 2 0 0 0-2 1.6L4.8 16.5A2.5 2.5 0 0 0 7.2 19.5h9.6a2.5 2.5 0 0 0 2.4-3Z"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/>', heart: '<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>', checkc: '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>', play: '<path d="M6 3v18l15-9Z" fill="currentColor"/>',
+  folder: '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9l-.8-1.2A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>',
+  archive: '<rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8M10 12h4"/>', clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+  share: '<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4M12 2v13"/>', link: '<path d="M9 17H7A5 5 0 0 1 7 7h2M15 7h2a5 5 0 1 1 0 10h-2M8 12h8"/>',
+  church: '<path d="M10 9h4M12 7v5M14 22v-4a2 2 0 0 0-4 0v4M18 22V5l-6-3-6 3v17M2 22h20"/>', heartsm: '<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/>',
+  book: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>', piano: '<path d="M18.5 8c-1.4 0-2.6-.8-3.2-2A6.9 6.9 0 0 0 2 9v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-8.5C22 9.6 20.4 8 18.5 8"/><path d="M2 14h20M6 14v4M10 14v4M14 14v4M18 14v4"/>',
+  chev: '<path d="m9 18 6-6-6-6"/>', down: '<path d="m6 9 6 6 6-6"/>', sort: '<path d="m3 16 4 4 4-4M7 20V4M21 8l-4-4-4 4M17 4v16"/>', filter: '<path d="M3 6h18M7 12h10M10 18h4"/>',
+  panel: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M16 15l-3-3 3-3"/>', copy: '<rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2"/>',
+  info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>', lock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  grip: '<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>',
+  mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4"/>',
+  wifi: '<path d="M12 20h.01M8.5 16.4a5 5 0 0 1 7 0M2 8.8a15 15 0 0 1 20 0M5 12.9a10 10 0 0 1 14 0"/><path d="M2 2l20 20"/>', star: '<path d="M12 2l3 7 7 .6-5.3 4.7 1.6 7.2L12 17.8 5.7 21.5l1.6-7.2L2 9.6 9 9z" fill="currentColor" stroke="none"/>',
+  image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>', trash: '<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+  door: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+};
+const ic = (n, s = 22, w = 1.9) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]}</svg>`;
+const rb = (n, cls = '') => `<span class="rb ${cls}">${ic(n, 20)}</span>`;
+const lvl = n => `<span style="display:inline-flex;gap:4px;align-items:center;font-size:13px;color:var(--ink-soft)" aria-label="Level ${n}"><span class="lvl">${[5, 8, 11, 14].map((h, i) => `<i style="height:${h}px" class="${i < n ? 'f' : ''}"></i>`).join('')}</span>${n}</span>`;
+const status = () => `<div class="status"><span>9:41</span><span>●●● ▮</span></div>`;
+const tabs = (on) => `<div class="tabs">${[['grad', 'Learn'], ['music', 'Songs'], ['metro', 'Practice'], ['user', 'Profile']].map(([i, l]) => `<div class="${l === on ? 'on' : ''}">${ic(i, 24)}${l}</div>`).join('')}</div>`;
+const sidebar = (on) => `<aside class="sb"><div class="brand">Piano Trainer <span style="color:var(--ink-soft)">${ic('panel', 20)}</span></div>
+  ${[['grad', 'Learn'], ['music', 'Songs'], ['metro', 'Practice']].map(([i, l]) => `<div class="it ${l === on ? 'on' : ''}">${ic(i, 20)}${l}</div>`).join('')}
+  <div class="foot"><div class="it">${ic('search', 20)}Search</div><div class="it">${ic('gear', 20)}Settings</div><div class="acc"><div class="it"><span class="av p-yellow" style="width:22px;height:22px;font-size:12px">K</span>Profile</div></div></div></aside>`;
+const phone = (inner, tab) => `<div class="dev phone"><div class="scr">${status()}${inner}${tab ? tabs(tab) : ''}</div></div>`;
+const mac = (inner, on = 'Songs') => `<div class="dev mac"><div class="scr mac">${sidebar(on)}<div class="main">${inner}</div></div></div>`;
+const fig = (id, title, body, dev) => `<figure data-fb="${id}" data-title="${title}"><div class="scrollx">${dev}</div><figcaption><b>${id} ${title}</b>${body}</figcaption></figure>`;
+const kb = (dots) => `<span class="kbd">${Array(7).fill('<i></i>').join('')}${[9, 20, 41, 52, 63].map(x => `<b style="left:${x}%"></b>`).join('')}${dots.map(x => `<u style="left:${x}%"></u>`).join('')}</span>`;
+const SONGS = [
+  ['Amazing Grace', 'John Newton · tune New Britain', 'G', 'G  G7  C  D', 2, true, 'Today'],
+  ['Silent Night', 'Joseph Mohr · Franz Gruber', 'C', 'C  G7  F', 2, true, 'Yesterday'],
+  ['Ode to Joy', 'Ludwig van Beethoven', 'C', 'C  G', 1, false, '3 Nov'],
+  ['Our Father in Heaven', 'О наш Отец на небесах', 'Fm', 'Fm  G°  C7  E♭', 3, false, '1 Nov'],
+  ['Wonderful Grace of Jesus', 'Haldor Lillenas', 'D♭', 'D♭  E°7  A♭7  F7', 4, false, '28 Oct'],
+];
+const songRow = ([n, by, k, , l, learned]) => `<div class="row"><div class="txt"><div class="n">${n}</div><div class="d">${by}</div></div><span class="key">${k}</span>${lvl(l)}<span class="tick" style="width:22px">${learned ? ic('checkc', 20) : ''}</span><span class="rb sm">${ic('more', 20)}</span></div>`;
+const FOLDERS = [['p-yellow', 'music', 'Songs to learn', '23 songs'], ['p-sand', 'heartsm', '«Боже, спасибо»', '20 songs'], ['p-sky', 'piano', 'Called to Play', '40 songs · 1 folder'], ['p-grass', 'church', 'Hymns', '5 songs']];
+const folderRow = ([p, i, n, d], extra = '') => `<div class="row"><span class="tile ${p}">${ic(i, 22)}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div>${extra}<span class="rb sm">${ic('more', 20)}</span></div>`;
+
+Object.assign(P, {
+  x: '<path d="M18 6 6 18M6 6l12 12"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/>',
+  dl: '<path d="M12 15V3M7 10l5 5 5-5M5 21h14"/>',
+  rotate: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+  sliders: '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+  fileup: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M12 18v-6M9 15l3-3 3 3"/>',
+});
+// The installed app: the status bar's 59 and the home indicator's 34 are the page's.
+const status2 = () => `<div style="height:var(--sb, 47px);display:flex;align-items:center;justify-content:space-between;padding:0 30px 6px;font:600 15px var(--sans)"><span>9:41</span><span style="letter-spacing:2px">••• ▮</span></div>`;
+const app = (inner, tab) => `<div class="dev phone"><div class="scr" style="display:flex;flex-direction:column">${status2()}${inner}${tab ? tabs(tab) : ''}</div></div>`;
+const titleTabs = (a, b, on) => `<div class="bar" role="tablist">${[a, b].map((l) => `<span role="tab" aria-selected="${l === on}" style="font:600 22px/1.2 var(--sans);color:${l === on ? 'var(--ink)' : 'var(--ink-soft)'};min-height:44px;display:flex;align-items:center;box-shadow:${l === on ? 'inset 0 -2.5px 0 var(--ink)' : 'none'}">${l}</span>`).join('<span style="width:18px"></span>')}<div class="tools">${rb('select')}${rb('more')}</div></div>`;
+const search = (filters = 0) => `<div style="display:flex;gap:8px"><div class="field">${ic('search', 18)}Search songs<span style="margin-left:auto;display:flex;gap:4px;align-items:center;color:var(--ink)">${ic('sort', 16)}Manual</span></div><span class="rb" style="position:relative">${ic('filter', 20)}${filters ? `<b style="position:absolute;top:-2px;right:-2px;background:var(--honey);color:var(--honey-ink);border-radius:9px;font:700 12px var(--sans);padding:1px 6px">${filters}</b>` : ''}</span></div>`;
+const FOLD = [['p-yellow', 'music', 'Songs to learn', '23 songs'], ['p-sand', 'heartsm', '«Боже, спасибо»', '20 songs'], ['p-sky', 'piano', 'Called to Play', '15 songs']];
+const fRow = ([p, i, n, d]) => `<div class="row"><span class="tile ${p}">${ic(i, 22)}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div><span class="rb sm">${ic('more', 20)}</span></div>`;
+const sRow = ([n, d, k, l]) => `<div class="row"><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div><span class="key">${k}</span>${lvl(l)}<span class="rb sm">${ic('more', 20)}</span></div>`;
+const SONGS2 = [['Hot Cross Buns', '2 chords · C G', 'C', 1], ['Wonderful Grace of Jesus', 'Haldor Lillenas · 4 chords', 'D♭', 4], ['Silent Night', 'Joseph Mohr · 3 chords', 'C', 2], ['Our Father in Heaven', 'О наш Отец на небесах', 'Fm', 3]];
+Object.assign(P, {
+  tag: '<path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4Z"/><circle cx="7.5" cy="7.5" r="1"/>',
+  laptop: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/>',
+  phonei: '<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>',
+  layers: '<path d="m12 2 10 5-10 5L2 7Z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/>',
+  paste: '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',
+  stop: '<path d="M18 6 6 18M6 6l12 12"/>',
+});
+
+// ——— shared parts ———
+const learnedBtn = `<span class="rb" style="background:var(--grass);color:var(--grass-ink)">${ic('check', 20)}</span>`;
+const songBar = (t = 'Hot Cross Buns') => `<div class="bar">${rb('back')}<div class="t lg"><span>${t}</span><span class="rb sm edit-pen" title="Edit score">${ic('pen', 20)}</span></div><div class="tools">${learnedBtn}${rb('gear')}</div></div>`;
+const coverTile = (size, fs, heart = true) => `<span class="cover p-yellow" style="position:relative;width:${size}px;height:${size}px;font:600 ${fs}px var(--display);flex:none">C${heart ? `<span class="rb" style="position:absolute;right:-10px;bottom:-10px;background:var(--card);border:1px solid var(--line);width:40px;height:40px">${ic('heart', 18)}</span>` : ''}</span>`;
+const facts = `<div style="display:flex;flex-wrap:wrap;gap:8px">${[['Key', '<b>C</b>'], ['Time', '<b style="font-family:var(--sans)">4/4</b>'], ['Tempo', '<b style="font-family:var(--sans)">92 BPM</b>']].map(([k, v]) => `<span class="chip" style="height:36px"><span class="soft">${k}</span>${v}</span>`).join('')}<span class="chip" style="height:36px">${lvl(1).replace('>1<', '><')}Beginner</span><span class="chip" style="height:36px">Children’s</span><span class="chip" style="height:36px">English</span></div>`;
+const byline = `<div style="display:grid;gap:4px;min-width:0"><div class="soft" style="font-size:15px">Music: <span style="color:var(--ink)">Traditional</span></div><div class="soft" style="font-size:15px">Words: <span style="color:var(--ink)">English nursery rhyme</span></div><div class="soft" style="font-size:14px">The Royal Conservatory, Prep A · No. 3</div></div>`;
+const about = `<div style="display:grid;gap:2px"><p style="color:var(--ink-soft);font-size:15.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">A London street cry sold with the Good Friday buns, then a nursery rhyme: three notes, E D C, the first tune many pianists play with three fingers.</p><span style="color:var(--sky-ink);font-weight:600;min-height:44px;display:flex;align-items:center">More</span></div>`;
+const chordsBlock = `<div style="display:grid;gap:10px"><h3 style="font:600 22px var(--display)">Chords</h3><div style="display:flex;gap:18px;align-items:end">${['C', 'G'].map((c, i) => `<div style="display:grid;gap:4px;justify-items:center">${kb(i ? [36, 50, 64] : [7, 21, 36])}<b style="font:600 18px var(--display)">${c}</b></div>`).join('')}</div><div style="display:flex;gap:10px;align-items:center"><span class="soft">Progressions</span><span class="chip" style="height:44px">Authentic cadence <span class="soft" style="font-family:var(--display)">I–V–I</span></span></div></div>`;
+const practiceCard = `<div style="display:grid;gap:8px"><h3 style="font:600 22px var(--display)">Your practice</h3><div class="group"><div class="row" style="border-top:0;min-height:52px"><div class="txt"><div class="n" style="font-weight:500">Played last</div></div><span class="soft">Today</span></div><div class="row" style="min-height:52px"><div class="txt"><div class="n" style="font-weight:500">Takes</div></div><span class="soft">2 recordings</span>${ic('chev', 18)}</div></div></div>`;
+const prop = (name, value, edit = true, soft = false) => `<div class="row" style="min-height:52px;gap:10px"><span style="width:96px;flex:none;color:var(--ink-soft);font-size:15px">${name}</span><span style="flex:1;min-width:0;text-align:right;${soft ? 'color:var(--ink-soft)' : ''};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${value}</span>${edit ? `<span style="color:var(--ink-soft);display:grid">${ic('chev', 18)}</span>` : '<span style="width:18px"></span>'}</div>`;
+const tagChips = (tags) => tags.map((t) => `<span class="pill" style="background:var(--sand);color:var(--ink)">${t}</span>`).join(' ');
+const details = (own = true) => `<div style="display:grid;gap:8px"><h3 style="font:600 22px var(--display)">Details</h3><div class="group">${own ? prop('Title', 'Hot Cross Buns') : ''}${own ? prop('Description', 'A London street cry…') : ''}${prop('Composer', 'Traditional', own)}${prop('Lyricist', 'English nursery rhyme', own)}${prop('Arranger', 'Not set', own, true)}${prop('Level', `${lvl(1).replace('>1<', '><')} Beginner`, own)}${prop('Genre', 'Children’s')}${prop('Language', 'English')}${prop('Tags', tagChips(['warm-up', 'three notes']))}</div></div>`;
+const playFab = `<div class="fab" style="bottom:${'110px'}">${ic('play', 24)}</div>`;
+
+// ——— 1 song page ———
+const songHead = `<div style="display:flex;gap:16px;align-items:center">${coverTile(112, 46)}${byline}</div>${facts}${about}`;
+const songTop = app(`${songBar()}<div class="scroll pad" style="gap:18px;padding-top:6px">${songHead}${practiceCard}${chordsBlock}</div>${playFab}`, 'Songs');
+const songEnd = app(`${songBar()}<div class="scroll pad" style="gap:18px;padding-top:6px">${chordsBlock}${details(true)}</div>${playFab}`, 'Songs');
+const songMac = mac(`${songBar()}<div style="display:grid;grid-template-columns:400px 1fr;gap:56px;padding:8px 40px;min-height:0;flex:1"><div style="display:grid;gap:18px;align-content:start">${coverTile(240, 92)}${byline}${facts}${about}${details(true).replace('<h3', '<h3 style="font:600 22px var(--display)"').replace('Details</h3>', 'Details</h3>')}</div><div style="display:grid;gap:26px;align-content:start;padding-top:4px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">${practiceCard}<div style="display:grid;gap:8px"><h3 style="font:600 22px var(--display)">Sections</h3><div class="group">${[['p-yellow', 'Verse', 'Bars 1–8'], ['p-sky', 'Repeat', 'Bars 9–16']].map(([p, n, d], i) => `<div class="row" style="${i ? '' : 'border-top:0'}"><span class="tile ${p}">${ic('music', 20)}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div>${ic('chev', 18)}</div>`).join('')}</div></div></div>${chordsBlock}</div></div><div class="fab" style="left:50%;right:auto;bottom:28px;transform:translateX(-50%)">${ic('play', 24)}</div>`);
+document.getElementById('s1').innerHTML = [
+  fig('1.1', 'Phone, the song page', 'The bar: Back, the title with ✎ (Edit score), Learned and ⚙. Then the cover (♡ on its corner) beside who wrote it and the book; one line of facts (key, time, tempo, level, genre, language); the about in two lines with More; your practice and the chords. Play floats.', songTop),
+  fig('1.2', 'Phone, scrolled to Details', 'Details at the foot: each property a row with its value at the right and a chevron where it can be edited. Your own songs also list Title and Description; on built-in songs the credits and a course’s level are read-only.', songEnd),
+  fig('1.3', 'Laptop', 'The song in the left column (cover 240px, who wrote it, facts, about, Details), its music on the right (your practice and the sections side by side, then the chords). Play floats at the foot.', songMac),
+].join('');
+
+// ——— 2 editing ———
+const dim = (inner) => `<div style="opacity:.35;display:flex;flex-direction:column;flex:1;min-height:0">${inner}</div><div style="position:absolute;inset:0;background:var(--scrim)"></div>`;
+const sheetHead = (title, action = 'Done') => `<div class="grip"></div><div style="display:flex;align-items:center;gap:8px"><b style="font:600 22px var(--display)">${title}</b><span style="margin-left:auto;${action === 'Done' ? 'background:var(--honey);color:var(--honey-ink)' : 'background:var(--sand)'};border-radius:999px;padding:0 18px;min-height:44px;display:grid;place-items:center;font-weight:600">${action}</span></div>`;
+const optRow = (label, on, extra = '') => `<div class="row" style="min-height:52px">${extra}<div class="txt"><div class="n" style="font-weight:${on ? 600 : 500}">${label}</div></div>${on ? `<span style="color:var(--ink)">${ic('check', 20)}</span>` : ''}</div>`;
+const pageUnder = `${songBar()}<div class="scroll pad" style="gap:18px">${chordsBlock}${details(true)}</div>`;
+const genreSheet = app(`${dim(pageUnder)}<div class="sheet" style="top:auto">${sheetHead('Genre', 'Close')}<div class="group">${['None', 'Hymn', 'Worship', 'Christmas', 'Folk', 'Classical', 'Pop', 'Jazz', 'Children’s', 'Study'].map((g) => optRow(g, g === 'Children’s')).join('')}</div></div>`);
+const tagsSheet = app(`${dim(pageUnder)}<div class="sheet" style="top:auto">${sheetHead('Tags')}<div style="display:flex;flex-wrap:wrap;gap:8px">${['warm-up', 'three notes'].map((t) => `<span class="chip on" style="height:36px;padding-right:2px">${t}<span class="rb sm" style="width:32px;height:32px">${ic('x', 16)}</span></span>`).join('')}</div><div class="field" style="color:var(--ink)">thr<span style="width:1.5px;height:20px;background:var(--ink)"></span></div><div class="group">${optRow(`${ic('tag', 18)} three hands`, false)}${optRow(`${ic('plus', 18)} Create “thr”`, false)}</div><div style="height:270px;margin:0 -16px -34px;background:var(--sand);display:grid;place-items:center;color:var(--ink-soft)">keyboard</div></div>`);
+const textSheet = app(`${dim(pageUnder)}<div class="sheet" style="top:auto">${sheetHead('Arranger')}<div class="field" style="color:var(--ink);border-color:var(--ink)">Mary Smith<span style="width:1.5px;height:20px;background:var(--ink)"></span></div><p class="soft" style="font-size:14px">Printed on the score beneath the title.</p><div style="height:270px;margin:0 -16px -34px;background:var(--sand);display:grid;place-items:center;color:var(--ink-soft)">keyboard</div></div>`);
+const coverSheet = app(`${dim(pageUnder)}<div class="sheet" style="top:auto">${sheetHead('Cover', 'Close')}<b style="font-size:15px">Picture</b><div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">${['music', 'heartsm', 'piano', 'church', 'book', 'star', 'users', 'mic', 'globe', 'folder', 'image', 'clock'].map((i, k) => `<span class="tile ${k ? '' : 'p-yellow'}" style="width:auto;height:48px;${k ? 'background:var(--sand)' : 'outline:2.5px solid var(--ink);outline-offset:1px'}">${ic(i, 20)}</span>`).join('')}</div><b style="font-size:15px">Paint</b><div style="display:flex;gap:10px">${['p-yellow', 'p-sky', 'p-grass', 'p-sand', 'p-lilac'].map((p, i) => `<span class="tile ${p}" style="width:48px;height:48px;border-radius:999px;${i ? '' : 'outline:2.5px solid var(--ink);outline-offset:2px'}"></span>`).join('')}</div><span style="color:var(--bad-ink);font-weight:600;min-height:44px;display:flex;align-items:center">Remove the cover</span></div>`);
+const levelPopover = mac(`${songBar()}<div style="display:grid;grid-template-columns:400px 1fr;gap:56px;padding:8px 40px;min-height:0;flex:1"><div style="display:grid;gap:18px;align-content:start">${coverTile(240, 92)}${byline}${details(true)}</div><div style="opacity:.6">${chordsBlock}</div></div><div style="position:absolute;left:440px;top:600px;width:300px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 34px rgba(0,0,0,.2);padding:8px;display:grid;gap:2px"><b style="padding:8px 10px;font-size:14px;color:var(--ink-soft)">Level</b>${['None', 'Beginner', 'Elementary', 'Intermediate', 'Advanced', 'Professional'].map((l, i) => `<div style="min-height:44px;display:flex;align-items:center;gap:10px;padding:0 10px;border-radius:10px;${i === 1 ? 'background:var(--sand);font-weight:600' : ''}">${i ? lvl(Math.min(i, 4)).replace(/>\d</, '><') : '<span style="width:18px"></span>'}${l}${i === 1 ? `<span style="margin-left:auto">${ic('check', 18)}</span>` : ''}</div>`).join('')}</div>`);
+document.getElementById('s2').innerHTML = [
+  fig('2.1', 'Phone, Genre', 'A tap on Genre: its options in a sheet, the chosen one checked; a tap keeps it and closes. Level and Language work the same way.', genreSheet),
+  fig('2.2', 'Phone, Tags', 'As Notion’s tags: the song’s tags with ×; typing shows the tags your other songs have, and Create for a new one; Enter adds. Done closes.', tagsSheet),
+  fig('2.3', 'Phone, Arranger', 'Composer, Lyricist and Arranger: one field, focused, with Done. It writes the line the score prints, so the score shows it too. Title and Description work the same way.', textSheet),
+  fig('2.4', 'Phone, Cover', 'A tap on the cover: its picture and paint, kept as you tap; Remove the cover puts its key back.', coverSheet),
+  fig('2.5', 'Laptop, Level', 'On a laptop the same list opens beside the row, as a popover.', levelPopover),
+].join('');
+
+// ——— 3 settings ———
+const sRowI = (p, i, n, value = '', chev = true, sw = null) => `<div class="row"><span class="tile ${p}">${ic(i, 20)}</span><div class="txt"><div class="n">${n}</div></div>${value ? `<span class="soft" style="white-space:nowrap">${value}</span>` : ''}${sw === null ? (chev ? ic('chev', 18) : '') : `<span style="width:51px;height:31px;border-radius:99px;background:${sw ? 'var(--grass-ink)' : 'var(--line)'};position:relative;flex:none"><i style="position:absolute;top:2px;${sw ? 'right' : 'left'}:2px;width:27px;height:27px;border-radius:99px;background:#fff"></i></span>`}</div>`;
+const settingsPhone = app(`<div class="bar">${rb('back')}<div class="t">Settings</div></div><div class="scroll pad" style="gap:4px"><div class="group"><div class="row" style="border-top:0;min-height:84px">${coverTile(56, 22, false)}<div class="txt"><div class="n" style="font-family:var(--display);font-size:19px">Hot Cross Buns</div><div class="d">Traditional</div></div></div></div><div class="h2"><span>Library</span></div><div class="group">${sRowI('p-grass', 'folder', 'Folder', 'Songs to learn')}${sRowI('p-sand', 'heart', 'Favourite', '', false, true)}${sRowI('p-yellow', 'copy', 'Duplicate', '', false)}${sRowI('p-lilac', 'archive', 'Archive', '', false)}</div><div class="h2"><span>Share</span></div><div class="group">${sRowI('p-lilac', 'globe', 'Publish', 'Not published')}${sRowI('p-grass', 'link', 'Share link', '', false)}${sRowI('p-sky', 'dl', 'Export…', 'MusicXML, MIDI', false)}</div></div>`);
+const settingsOwn = app(`<div class="bar">${rb('back')}<div class="t">Settings</div></div><div class="scroll pad" style="gap:4px"><div class="h2"><span>Share</span></div><div class="group">${sRowI('p-lilac', 'globe', 'Publish', 'Changed')}${sRowI('p-grass', 'link', 'Share link', '', false)}${sRowI('p-sky', 'dl', 'Export…', 'MusicXML, MIDI', false)}</div><div class="group" style="margin-top:28px"><div class="row" style="border-top:0"><div class="txt"><div class="n" style="color:var(--bad-ink)">Delete song</div></div></div></div><p class="soft" style="font-size:14px;padding:8px 4px">The song, its music and its recordings will be permanently deleted.</p></div>`);
+document.getElementById('s3').innerHTML = [
+  fig('3.1', 'Phone, Settings', 'The song at the head. Library: Folder (its folder), Favourite (a switch), Duplicate, Archive. Share: Publish with its state, Share link, Export….', settingsPhone),
+  fig('3.2', 'Phone, Settings, an own song, scrolled', 'Delete song apart and red, its line under it; asked first.', settingsOwn),
+].join('');
+
+// ——— 4 card style ———
+const STY = {
+  plain: 'background:var(--card);border:1px solid var(--line);border-radius:14px',
+  soft: 'background:var(--sky);border:0;border-radius:22px;box-shadow:0 2px 6px rgba(0,0,0,.08)',
+  bold: 'background:var(--yellow);border:2px solid var(--ink);border-radius:8px;box-shadow:0 6px 14px rgba(0,0,0,.14)',
+  paper: 'background:var(--sandw);border:1px solid var(--line);border-radius:0;box-shadow:0 2px 6px rgba(0,0,0,.08)',
+  night: 'background:#1d2130;color:#f2efe6;border:0;border-radius:18px;box-shadow:0 6px 14px rgba(0,0,0,.2)',
+};
+const styled = (st, p, i, n, d, k = '') => `<div style="display:flex;gap:12px;align-items:center;padding:10px 12px;${STY[st]}"><span class="tile ${p}" style="width:40px;height:40px">${ic(i, 20)}</span><div style="min-width:0;flex:1"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n}</div><div style="font-size:13.5px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d}</div></div>${k ? `<span class="key">${k}</span>` : ''}${ic('more', 18)}</div>`;
+const paneSwitch = (on) => `<div class="seg" style="font-size:13px">${['Phone', 'Laptop'].map((l) => `<span class="${l === on ? 'on' : ''}" style="padding:5px 12px;min-height:32px;display:flex;align-items:center;gap:5px">${ic(l === 'Phone' ? 'phonei' : 'laptop', 14)}${l}</span>`).join('')}</div>`;
+const pane = (st, on = 'Phone', h = 250) => `<div style="height:${h}px;flex:none;background:var(--sand);border-bottom:1px solid var(--line);padding:10px 16px;display:grid;grid-template-rows:auto 1fr;gap:8px;overflow:hidden"><div style="display:flex;align-items:center;justify-content:space-between"><b style="font:600 16px var(--display)">Home</b>${paneSwitch(on)}</div>${on === 'Phone' ? `<div style="display:grid;gap:8px;align-content:start">${styled(st, 'p-yellow', 'music', 'Songs to learn', '23 songs · Hot Cross Buns')}${styled(st, 'p-sky', 'piano', 'Called to Play', '15 songs')}${styled(st, 'p-yellow', 'music', 'Hot Cross Buns', 'Traditional', 'C')}</div>` : `<div style="${STY[st]};overflow:hidden;font-size:12px;align-self:start"><div style="display:grid;grid-template-columns:1fr 34px 60px 54px;gap:6px;padding:7px 10px;border-bottom:1px solid var(--line);font-weight:600;opacity:.7"><span>Title</span><span>Key</span><span>Level</span><span>Played</span></div>${[['Hot Cross Buns', 'C', 1, 'Today'], ['Silent Night', 'C', 2, '3 Nov'], ['Ode to Joy', 'C', 1, '—'], ['Amazing Grace', 'G', 2, '1 Nov']].map(([n, k, l, d]) => `<div style="display:grid;grid-template-columns:1fr 34px 60px 54px;gap:6px;padding:8px 10px;border-bottom:1px solid var(--line);align-items:center"><b style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n}</b><span class="key" style="font-size:13px">${k}</span>${lvl(l).replace(/>\d</, '><')}<span>${d}</span></div>`).join('')}</div>`}</div>`;
+const strip = (on) => `<div style="display:grid;gap:8px"><b style="font-size:15px">Presets</b><div style="display:flex;gap:10px;overflow:hidden;margin-right:-16px">${['plain', 'soft', 'bold', 'paper', 'night'].map((s) => `<div style="width:96px;flex:none;display:grid;gap:4px;justify-items:center"><div style="width:96px;height:72px;border-radius:14px;background:var(--sand);display:grid;place-items:center;${s === on ? 'outline:2.5px solid var(--ink);outline-offset:1px' : ''}"><div style="width:70px;height:46px;display:grid;place-items:center;font:600 18px var(--display);${STY[s]}">Aa</div></div><span style="font-size:14px;${s === on ? 'font-weight:600' : ''}">${s[0].toUpperCase() + s.slice(1)}</span></div>`).join('')}</div></div>`;
+const seg = (label, items, on, icons = false) => `<div style="display:grid;gap:6px"><b style="font-size:15px">${label}</b><div class="seg" style="width:100%;display:grid;grid-template-columns:repeat(${items.length},1fr);text-align:center">${items.map((x, i) => `<span class="${i === on ? 'on' : ''}" style="min-height:44px;display:grid;place-items:center;${icons ? 'padding:0' : ''}">${x}</span>`).join('')}</div></div>`;
+const corner = (r) => `<svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M4 20V${4 + r}${r ? `Q4 4 ${4 + r} 4` : ''}H20"/></svg>`;
+const layoutTiles = (on) => `<div style="display:grid;gap:6px"><b style="font-size:15px">Layout</b><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">${[['List', 'grid-template-rows:repeat(3,1fr)', 3], ['Cards', 'grid-template-columns:1fr 1fr', 2], ['Grid', 'grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr', 4]].map(([l, g, n]) => `<div style="border:1px solid var(--line);border-radius:14px;padding:10px;display:grid;gap:6px;justify-items:center;${l === on ? 'background:var(--sand);border-color:var(--sand);font-weight:600' : 'background:var(--card)'}"><span style="display:grid;${g};gap:3px;width:40px;height:26px">${'<i style="background:var(--ink-soft);border-radius:3px;opacity:.6"></i>'.repeat(n)}</span>${l}</div>`).join('')}</div></div>`;
+const swatch = (label, colors, on) => `<div style="display:grid;gap:6px"><b style="font-size:15px">${label}</b><div style="display:flex;gap:10px">${colors.map((c, i) => `<span style="width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:${c};display:grid;place-items:center">${i === on ? ic('check', 16) : ''}</span>`).join('')}<span style="width:44px;height:44px;border-radius:999px;background:conic-gradient(red,yellow,lime,aqua,blue,magenta,red);opacity:.8"></span></div></div>`;
+const foot = `<div style="position:absolute;left:0;right:0;bottom:0;padding:12px 16px 40px;background:var(--paper);border-top:1px solid var(--line);display:flex;gap:10px"><span class="btn ghost" style="flex:1;display:flex;gap:8px;align-items:center;justify-content:center">${ic('layers', 18)}Apply to…</span><span class="btn" style="flex:1;display:flex;gap:8px;align-items:center;justify-content:center">${ic('check', 18)}Apply</span></div>`;
+const csBar = `<div class="bar">${rb('back')}<div class="t">Card style</div><div class="tools">${rb('rotate')}</div></div>`;
+const cs1 = app(`${csBar}${pane('soft')}<div class="scroll pad" style="gap:18px;padding-top:14px">${strip('soft')}${layoutTiles('List')}${seg('Spacing', ['Compact', 'Standard', 'Spacious'], 2)}</div>${foot}`);
+const cs2 = app(`${csBar}${pane('soft')}<div class="scroll pad" style="gap:18px;padding-top:14px">${seg('Corner radius', [0, 3, 6, 10, 16].map(corner), 4, true)}${seg('Border', ['None', 'Thin', 'Thick'], 0)}${seg('Shadow', ['None', 'Subtle', 'Strong'], 1)}${swatch('Background', ['var(--card)', 'var(--sandw)', 'var(--sky)', 'var(--grass)', 'var(--yellow)'], 2)}</div>${foot}`);
+const cs3 = app(`${csBar}${pane('bold', 'Laptop')}<div class="scroll pad" style="gap:18px;padding-top:14px">${strip('bold')}${layoutTiles('List')}</div>${foot}`);
+const csMenu = app(`${csBar}${pane('soft')}<div class="scroll pad" style="gap:18px;padding-top:14px;opacity:.35">${strip('soft')}</div><div style="position:absolute;inset:0;background:var(--scrim)"></div><div class="sheet" style="top:auto">${sheetHead('Apply style to', 'Close')}<div class="group">${optRow('Library home only', false)}${optRow('Library home and its 4 folders', false)}${optRow('All folders (12)', false)}</div><p class="soft" style="font-size:14px">All folders asks for confirmation first.</p></div>`);
+const macPane = (st) => `<div style="display:grid;gap:12px;align-content:start;position:sticky;top:0"><div style="background:var(--sand);border-radius:18px;padding:16px;display:grid;gap:12px;height:480px;align-content:start"><div style="display:flex;align-items:center;justify-content:space-between"><b style="font:600 18px var(--display)">Hymns</b>${paneSwitch('Laptop')}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">${styled(st, 'p-yellow', 'music', 'Amazing Grace', 'John Newton', 'G')}${styled(st, 'p-yellow', 'music', 'Silent Night', 'Joseph Mohr', 'C')}${styled(st, 'p-yellow', 'music', 'Holy, Holy, Holy', 'Reginald Heber', 'D')}${styled(st, 'p-yellow', 'music', 'It Is Well', 'Horatio Spafford', 'C')}</div></div></div>`;
+const csMac = mac(`${csBar.replace('class="t"', 'class="t lg"')}<div style="display:grid;grid-template-columns:minmax(0,1fr) 520px;gap:48px;padding:8px 40px 110px">${macPane('soft')}<div style="display:grid;gap:20px;align-content:start">${strip('soft')}${layoutTiles('Cards')}${seg('Spacing', ['Compact', 'Standard', 'Spacious'], 1)}${seg('Corner radius', [0, 3, 6, 10, 16].map(corner), 4, true)}${seg('Border', ['None', 'Thin', 'Thick'], 0)}</div></div><div style="position:absolute;left:0;right:0;bottom:0;padding:14px 40px;background:var(--paper);border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end"><span class="btn ghost" style="padding:0 22px;display:flex;gap:8px;align-items:center">${ic('layers', 18)}Apply to…</span><span class="btn" style="padding:0 28px;display:flex;gap:8px;align-items:center">${ic('check', 18)}Apply</span></div>`);
+const libMac = (layout) => mac(`<div class="bar"><div class="t lg">Hymns</div><div class="tools">${rb('select')}${rb('more')}</div></div><div class="lib"><div class="tree"><div class="ti">${ic('music', 18)}All songs<span class="c">64</span></div><div class="ti">${ic('heart', 18)}Favourites<span class="c">5</span></div><div class="lab">Folders</div><div class="ti on"><span class="sw p-grass">${ic('church', 14)}</span>Hymns<span class="c">12</span></div><div class="ti"><span class="sw p-yellow">${ic('music', 14)}</span>Songs to learn<span class="c">23</span></div></div><div class="list">${layout === 'table' ? `<div style="${STY.soft};padding:6px 4px">${'<div class="thead"><span>Title</span><span>Key</span><span>Chords</span><span>Level</span><span>Learned</span><span>Last played</span><span></span></div>'}${[['Amazing Grace', 'John Newton', 'G', 'G  G7  C  D', 2, 'Today'], ['Silent Night', 'Joseph Mohr', 'C', 'C  G7  F', 2, '3 Nov'], ['Holy, Holy, Holy', 'Reginald Heber', 'D', 'D  G  A', 3, '—'], ['It Is Well', 'Horatio Spafford', 'C', 'C  F  G', 2, '1 Nov']].map(([n, d, k, c, l, p]) => `<div class="trow" style="height:64px"><div><div class="n">${n}</div><div class="d">${d}</div></div><span class="key">${k}</span><span class="chs">${c}</span>${lvl(l)}<span class="tick">${ic('checkc', 18)}</span><span class="soft">${p}</span>${ic('more', 18)}</div>`).join('')}</div>` : `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">${[['Amazing Grace', 'John Newton', 'G'], ['Silent Night', 'Joseph Mohr', 'C'], ['Holy, Holy, Holy', 'Reginald Heber', 'D'], ['It Is Well', 'Horatio Spafford', 'C'], ['Abide With Me', 'Henry Lyte', 'E♭'], ['Be Thou My Vision', 'Irish', 'E♭']].map(([n, d, k]) => styled('soft', 'p-yellow', 'music', n, d, k)).join('')}</div>`}</div></div>`);
+document.getElementById('s4').innerHTML = [
+  fig('4.1', 'Phone, Card style', 'The preview pinned under the bar, on its own sand pane: Home’s first rows in the style. Below, presets first (one strip, sideways), then Layout and Spacing. Reset (↺) in the bar; Apply to… and Apply at the foot.', cs1),
+  fig('4.2', 'Phone, scrolled', 'The controls scroll under the pane, never behind it: Corners, Border, Shadow, Fill, Text, then On each card (Key, Chords, Level and progress).', cs2),
+  fig('4.3', 'Phone, the Laptop preview', 'Laptop shows the rows as the laptop draws them: in List, the table inside a card in the style.', cs3),
+  fig('4.4', 'Phone, Apply to…', 'Where the style goes: this place, it and its folders, or every folder (asked first).', csMenu),
+  fig('4.5', 'Laptop, Card style', 'The preview the left column (sticky, the laptop’s rows), the controls the right; Apply to… and Apply docked at the foot.', csMac),
+  fig('4.6', 'Laptop, the library in Cards', 'Applied: a folder in Cards shows its songs as the style’s cards on the laptop too.', libMac('cards')),
+  fig('4.7', 'Laptop, the library in List', 'In List the table stands inside one card drawn in the style (Soft here: round, no border, a low shadow, sky fill); Spacing sets the rows’ height.', libMac('table')),
+].join('');
+
+// ——— 5 groups ———
+const gRow = (p, i, n, d, owner = false) => `<div class="row"><span class="tile ${p}">${ic(i, 22)}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div>${owner ? '<span class="pill">Owner</span>' : ''}${ic('chev', 18)}</div>`;
+const groupsList = app(`<div class="bar">${rb('back')}<div class="t">Groups</div><div class="tools">${rb('more')}</div></div><div class="scroll pad" style="gap:12px"><div class="group">${gRow('p-lilac', 'users', 'Sunday choir', '6 members · 2 folders', true)}${gRow('p-sky', 'piano', 'Piano class 3B', '14 members · 1 folder')}${gRow('p-grass', 'church', 'Worship team', '4 members')}</div><span class="btn ghost" style="justify-self:start;padding:0 20px">New group</span></div>`, 'Songs');
+const groupsEmpty = app(`<div class="bar">${rb('back')}<div class="t">Groups</div><div class="tools">${rb('more')}</div></div><div class="scroll pad" style="justify-content:center;align-items:center;text-align:center;gap:12px"><span class="tile p-lilac" style="width:64px;height:64px">${ic('users', 30)}</span><b style="font:600 22px var(--display)">No groups yet</b><p class="soft">Create a group for your class or choir, or join one with an invite link.</p><div style="display:flex;gap:10px"><span class="btn" style="padding:0 20px">New group</span><span class="btn ghost" style="padding:0 20px">Join with a link</span></div></div>`, 'Songs');
+const memberRow = (n, me, owner, p) => `<div class="row" style="min-height:56px"><span class="av ${p}">${n[0]}</span><div class="txt"><div class="n" style="font-weight:500">${n}${me ? ' <span class="soft" style="font-weight:400">(you)</span>' : ''}</div></div>${owner ? '<span class="pill">Owner</span>' : `<span class="rb sm">${ic('more', 20)}</span>`}</div>`;
+const groupHead = `<div style="display:flex;gap:14px;align-items:center"><span class="tile p-lilac" style="width:64px;height:64px">${ic('users', 30)}</span><div><div class="soft">6 members · Owner</div></div></div>`;
+const inviteCard = `<div class="group" style="padding:14px;display:grid;gap:10px"><div style="display:flex;gap:10px;align-items:center"><span class="tile p-sky">${ic('link', 20)}</span><div class="txt"><div class="n">Invite link</div><div class="d">Anyone with the link can join.</div></div></div><span class="btn ghost" style="display:flex;gap:8px;align-items:center;justify-content:center">${ic('share', 18)}Share invite link</span><div style="display:flex;align-items:center;min-height:44px;border-top:1px solid var(--line);padding-top:8px"><span style="flex:1">Invite link on</span><span style="width:51px;height:31px;border-radius:99px;background:var(--grass-ink);position:relative"><i style="position:absolute;top:2px;right:2px;width:27px;height:27px;border-radius:99px;background:#fff"></i></span></div></div>`;
+const sharedRows = `<div class="h2"><span>Shared folders</span></div><div class="group">${gRow('p-yellow', 'music', 'Advent', 'Can edit · 12 songs · Shared by you')}${gRow('p-grass', 'church', 'Sunday hymns', 'View only · 8 songs · Shared by Mihai')}<div class="row" style="color:var(--sky-ink);font-weight:600">${ic('plus', 20)}Share a folder…</div></div>`;
+const groupPhone = app(`<div class="bar">${rb('back')}<div class="t lg"><span>Sunday choir</span><span class="rb sm edit-pen">${ic('pen', 20)}</span></div><div class="tools">${rb('more')}</div></div><div class="scroll pad" style="gap:12px">${groupHead}${inviteCard}${sharedRows}</div>`);
+const groupPhone2 = app(`<div class="bar">${rb('back')}<div class="t lg"><span>Sunday choir</span><span class="rb sm edit-pen">${ic('pen', 20)}</span></div><div class="tools">${rb('more')}</div></div><div class="scroll pad" style="gap:4px">${sharedRows}<div class="h2"><span>Members (6)</span></div><div class="group">${memberRow('Kateryna', true, true, 'p-yellow')}${memberRow('Mihai', false, false, 'p-sky')}${memberRow('Ira', false, false, 'p-grass')}${memberRow('Member', false, false, 'p-sand')}</div></div>`);
+const joinSheet = app(`${dim(`<div class="bar">${rb('back')}<div class="t">Groups</div></div><div class="scroll pad"><div class="group">${gRow('p-lilac', 'users', 'Sunday choir', '6 members', true)}</div></div>`)}<div class="sheet" style="top:auto">${sheetHead('Join with a link', 'Close')}<div class="field" style="color:var(--ink)">https://piano-trainer.app/songs/groups/join?code=8f2c…</div><span class="btn">Open</span><div style="height:250px;margin:0 -16px -34px;background:var(--sand);display:grid;place-items:center;color:var(--ink-soft)">keyboard</div></div>`);
+const invitePage = app(`<div class="bar">${rb('back')}<div class="t">Groups</div></div><div class="scroll pad" style="justify-content:center"><div class="group" style="padding:24px;display:grid;gap:12px;justify-items:center;text-align:center"><span class="tile p-lilac" style="width:72px;height:72px">${ic('users', 34)}</span><b style="font:600 24px var(--display)">Join Sunday choir</b><span class="soft">6 members</span><span class="btn" style="width:100%">Join group</span></div></div>`);
+const sharedFolder = app(`<div class="bar">${rb('back')}<div class="t lg">Sunday hymns</div><div class="tools">${rb('more')}</div></div><div class="scroll pad" style="gap:12px"><div style="display:flex;gap:14px;align-items:center"><span class="tile p-grass" style="width:64px;height:64px">${ic('church', 30)}</span><div><div>Shared by Mihai · Sunday choir</div><div class="soft" style="display:flex;gap:6px;align-items:center">${ic('lock', 16)}View only</div></div></div><div class="group">${[['Amazing Grace', 'John Newton', 'G', 2], ['Silent Night', 'Joseph Mohr', 'C', 2], ['Abide With Me', 'Henry Lyte', 'E♭', 3], ['My own arrangement', 'Mihai’s song · Save to my songs', 'F', 2]].map(([n, d, k, l]) => `<div class="row"><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div><span class="key">${k}</span>${lvl(l)}${ic('chev', 18)}</div>`).join('')}</div></div>`);
+const groupMac = mac(`<div class="bar">${rb('back')}<div class="t lg"><span>Sunday choir</span><span class="rb sm edit-pen">${ic('pen', 20)}</span></div><div class="tools">${rb('more')}</div></div><div style="display:grid;grid-template-columns:420px 1fr;gap:48px;padding:8px 40px"><div style="display:grid;gap:16px;align-content:start">${groupHead}${inviteCard}</div><div style="display:grid;gap:4px;align-content:start">${sharedRows}<div class="h2"><span>Members (6)</span></div><div class="group">${memberRow('Kateryna', true, true, 'p-yellow')}${memberRow('Mihai', false, false, 'p-sky')}${memberRow('Ira', false, false, 'p-grass')}</div></div></div>`);
+document.getElementById('s5').innerHTML = [
+  fig('5.1', 'Phone, Groups', 'Each group with its picture and paint, how many members and folders, Owner where it is yours. New group under the list; More holds Join with a link.', groupsList),
+  fig('5.2', 'Phone, no groups yet', 'New group and Join with a link. Signed out it says groups need an account, with Sign in.', groupsEmpty),
+  fig('5.3', 'Phone, a group', 'Its head; the invite link card (Share invite link: the phone’s share sheet, or copied on a laptop; for its owner Invite link on); what is shared here, with Share a folder….', groupPhone),
+  fig('5.4', 'Phone, a group, scrolled', 'Members: you first, the owner marked; a member without a profile name is “Member”; the owner’s ⋯ removes (asked first).', groupPhone2),
+  fig('5.5', 'Phone, Join with a link', 'Paste a link (or only its code) and Open: the invite’s page.', joinSheet),
+  fig('5.6', 'Phone, an invite', 'The group’s picture, Join Sunday choir, its members, Join. Signed out: Sign in, and back here after.', invitePage),
+  fig('5.7', 'Phone, a shared folder', 'Who shared it and for which group, View only or Can edit, its songs as song rows; a member’s own song opens to Save to my songs.', sharedFolder),
+  fig('5.8', 'Laptop, a group', 'The head and the invite on the left, what is shared and the members on the right.', groupMac),
+].join('');
+
+// ——— 6 the question ———
+const detailsUp = app(`${songBar()}<div class="scroll pad" style="gap:18px;padding-top:6px">${songHead}${details(true)}</div>${playFab}`, 'Songs');
+document.getElementById('s6').innerHTML = [
+  fig('6.A', 'A · Details at the foot', 'The music first (your practice, sections, chords), Details under it: 1.1 and 1.2.', songTop),
+  fig('6.B', 'B · Details under About', 'Details right after the about, the music under it.', detailsUp),
+].join('');
+
+// ——— strips: the frame takes the scaled height of what it holds ———
+document.querySelectorAll('.dev[data-fit]').forEach(d => { const sc = d.firstElementChild; const k = parseFloat(getComputedStyle(d).getPropertyValue('--s')); d.style.height = (sc.offsetHeight * k + 18) + 'px' });
+window.addEventListener('resize', () => document.querySelectorAll('.dev[data-fit]').forEach(d => { const sc = d.firstElementChild; const k = parseFloat(getComputedStyle(d).getPropertyValue('--s')); d.style.height = (sc.offsetHeight * k + 18) + 'px' }));
+
+// ——— theme toggle ———
+document.getElementById('themeBtn').onclick = () => { const r = document.documentElement; const dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; r.dataset.theme = dark ? 'light' : 'dark' };
+
+// ——— feedback under every screen ———
+(function () {
+  const figs = Array.from(document.querySelectorAll('figure[data-fb]')); const answers = {}; let db = null, local = {};
+  try { local = JSON.parse(localStorage.getItem('r32-songs-feedback') || '{}') } catch (e) {}
+  const key = n => 's' + n.replace(/\./g, '-');
+  function render(id) { const f = document.querySelector('[data-key="' + id + '"]'); if (!f) return; const a = answers[id] || {};
+    f.querySelectorAll('.fb button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === a.verdict)));
+    const ta = f.querySelector('textarea'); if (ta && document.activeElement !== ta) ta.value = a.note || '';
+    const link = document.querySelector('.toc a[href="#' + f.closest('section').id + '"]');
+    if (link) link.classList.toggle('done', Array.from(f.closest('section').querySelectorAll('figure[data-key]')).some(x => (answers[x.dataset.key] || {}).verdict)) }
+  async function save(id, patch) { answers[id] = Object.assign({}, answers[id], patch, { at: new Date().toISOString() }); render(id);
+    const st = document.querySelector('[data-key="' + id + '"] .saved');
+    try { local[id] = answers[id]; localStorage.setItem('r32-songs-feedback', JSON.stringify(local)) } catch (e) {}
+    if (!db) { st.textContent = 'Kept in this browser only.'; return }
+    try { await db.doc('feedback/' + id).set(answers[id]); st.textContent = 'Saved.' } catch (e) { st.textContent = 'Could not save; kept in this browser.' } }
+  figs.forEach(f => { const id = key(f.dataset.fb); f.dataset.key = id;
+    const box = document.createElement('div'); box.className = 'fb';
+    [['ok', 'Looks right'], ['change', 'Change it'], ['remove', 'Not needed']].forEach(([v, l]) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.v = v; b.textContent = l; b.setAttribute('aria-pressed', 'false'); b.onclick = () => save(id, { verdict: v, screen: f.dataset.fb + ' ' + f.dataset.title }); box.appendChild(b) });
+    const ta = document.createElement('textarea'); ta.id = 'fb-' + id; ta.placeholder = 'What to change on ' + f.dataset.fb + '…'; ta.setAttribute('aria-label', 'Feedback on screen ' + f.dataset.fb);
+    let t; ta.oninput = () => { clearTimeout(t); t = setTimeout(() => save(id, { note: ta.value, screen: f.dataset.fb + ' ' + f.dataset.title }), 700) };
+    const st = document.createElement('span'); st.className = 'saved'; f.append(box, ta, st); if (local[id]) { answers[id] = local[id]; render(id) } });
+  const note = document.getElementById('storeNote');
+  const timer = setTimeout(() => { if (!db) note.textContent = 'Your feedback is kept in this browser; tell me in the chat when you are done.' }, 10000);
+  (window.claude && window.claude.use ? window.claude.use('db') : Promise.resolve(null)).then(d => { clearTimeout(timer); db = d;
+    if (!db) { note.textContent = 'Your feedback is kept in this browser; tell me in the chat when you are done.'; return }
+    note.textContent = 'Your feedback is saved with this page; I read it from here.';
+    db.collection('feedback').onSnapshot(snap => (snap.docs || snap).forEach(doc => { answers[doc.id] = doc.data ? doc.data() : doc; render(doc.id) }), () => {}) }).catch(() => {});
+})();
+</script>

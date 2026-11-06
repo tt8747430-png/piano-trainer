@@ -10,6 +10,7 @@ import { SettingField } from './SettingField'
  */
 export function PictureChoice<V extends string>({
   label,
+  description,
   info,
   setting,
   value,
@@ -17,6 +18,8 @@ export function PictureChoice<V extends string>({
   onChange,
 }: {
   label: string
+  /** What it does, in one line under its name (R32). */
+  description?: string | undefined
   info?: ReactNode
   /** The preference it sets (`data-setting`), as every settings row carries it. */
   setting?: string
@@ -25,7 +28,7 @@ export function PictureChoice<V extends string>({
   onChange: (value: V) => void
 }) {
   return (
-    <SettingField label={label} info={info} setting={setting}>
+    <SettingField label={label} description={description} info={info} setting={setting}>
       <PictureTiles
         label={label}
         value={value}

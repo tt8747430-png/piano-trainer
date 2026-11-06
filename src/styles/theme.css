@@ -83,11 +83,9 @@
   --color-key-white: var(--key-white);
   --color-key-black: var(--key-black);
   --color-key-bed: var(--key-bed);
-  --color-key-rail: var(--key-rail);
-  --color-on-key-rail: var(--on-key-rail);
   --color-key-shade: var(--key-shade);
-  --color-key-lip: var(--key-lip);
   --color-key-sheen: var(--key-sheen);
+  --color-key-felt: var(--key-felt);
   --color-on-key-white: var(--on-key-white);
   --color-on-key-black: var(--on-key-black);
   --color-key-down: var(--key-down);
@@ -109,7 +107,7 @@
    * chord symbols only; every control reads in Onest.
    */
   --font-display: 'Literata Variable', 'Text Accidentals', 'Noto Music', Georgia, serif;
-  /* A music sign that stands alone (the rail's pedal mark): set by the music font's own metrics. */
+  /* A music sign that stands alone: set by the music font's own metrics. */
   --font-music: 'Noto Music', serif;
 
   --color-role-root: var(--role-root);
@@ -199,7 +197,7 @@
     }
   }
   /* The keys' greatest height, a share of the screen's: a phone on its side keeps room for the music,
-     its keys, their rail and their foot together under half its height. */
+     its keys and their divider together under half its height. */
   :root {
     --keys-most: 32dvh;
     @variant landscape-phone {
@@ -303,11 +301,11 @@
     outline-offset: 2px;
   }
   /* A focused control scrolls clear of what stays over the page (WCAG 2.4.11): the pinned keyboard at
-     its tallest (the notch, the rail, keys at --keys-most, the finger row, its foot), and at the foot the
+     its tallest (the notch, its divider, keys at --keys-most), and at the foot the
      phone's tab bar and the keys docked over it. */
   html:has([data-slot='pinned']) {
     scroll-padding-top: calc(
-      var(--keys-most) + --spacing(23) + max(--spacing(4), env(safe-area-inset-top))
+      var(--keys-most) + --spacing(6) + max(--spacing(4), env(safe-area-inset-top))
     );
   }
   html:has([data-slot='app-nav']) {
@@ -342,7 +340,6 @@
   --block-shadow-0: none;
   --block-shadow-1: var(--elevation-1);
   --block-shadow-2: var(--elevation-2);
-  --block-shadow-3: var(--elevation-3);
   --block-padding-compact: --spacing(2);
   --block-padding-normal: --spacing(4);
   --block-padding-roomy: --spacing(6);
@@ -363,11 +360,15 @@
   color: var(--block-text);
   padding: var(--block-padding);
 }
-[data-card-look][data-density='compact'] {
+/* Spacing is the rows' height too (R32-C): a table's rows on a laptop, a card's on a phone. */
+[data-card-look][data-spacing='compact'] {
   --row-min: --spacing(12);
 }
-[data-card-look][data-density='large'] {
+[data-card-look][data-spacing='roomy'] {
   --row-min: --spacing(20);
+}
+[data-card-look] tbody tr {
+  height: var(--row-min, --spacing(16));
 }
 [data-card-look][data-layout='list'] {
   grid-template-columns: 1fr;
@@ -473,6 +474,10 @@
 @utility top-screen-bar {
   top: var(--screen-bar, 0px);
 }
+/* What is pinned under the bar keeps the notch's room only while the bar is away (\`Pinned\`). */
+@utility pt-pinned {
+  padding-top: calc(env(safe-area-inset-top) * var(--screen-bar-away, 0));
+}
 @utility pb-safe {
   padding-bottom: env(safe-area-inset-bottom);
 }
@@ -569,8 +574,94 @@
 @utility min-w-longest-word {
   min-width: min(100%, min-content);
 }
+/* Drawn only in sight (R32): a long score's lines out of view cost no style, layout, paint or hit
+   test. Its height while skipped is the screen's to give (`contain-intrinsic-size` in `style`). */
+@utility drawn-in-sight {
+  content-visibility: auto;
+}
 /* What floats over the page casts a soft shade (`tokens.css`' `--elevation-*`): resting second
    actions, the main action and the transport, a pointer over either. */
+/*
+ * A key's face as a real piano's (R33), drawn as light and shade over whatever fill the key has, so a
+ * mark keeps its colour: an ivory key lit from the player's side, deeper under the felt, its edges
+ * catching the light and the shade, casting a little shadow; sunk, the far end goes darker.
+ */
+@utility key-face-white {
+  background-image: linear-gradient(
+    to bottom,
+    var(--key-far) 0,
+    transparent 16%,
+    transparent 80%,
+    var(--key-near) 100%
+  );
+  box-shadow:
+    inset 1px 0 0 var(--key-edge-light),
+    inset -1px 0 0 var(--key-edge-shade),
+    0 1px 2px var(--key-cast);
+}
+@utility key-face-white-down {
+  background-image: linear-gradient(to bottom, var(--key-cast) 0, transparent 28%);
+  box-shadow:
+    inset 1px 0 0 var(--key-edge-light),
+    inset -1px 0 0 var(--key-edge-shade);
+}
+/* An ebony key: bevelled sides, a sheen along its top towards the player, its shadow on the ivory. */
+@utility key-face-black {
+  background-image: linear-gradient(
+    to bottom,
+    var(--key-cast) 0,
+    transparent 10%,
+    var(--key-sheen) 84%,
+    transparent 100%
+  );
+  box-shadow:
+    inset 2px 0 0 var(--key-sheen),
+    inset -2px 0 0 var(--key-cast),
+    1px 3px 4px var(--key-cast);
+}
+@utility key-face-black-down {
+  background-image: linear-gradient(
+    to bottom,
+    var(--key-cast) 0,
+    transparent 14%,
+    var(--key-sheen) 90%
+  );
+  box-shadow:
+    inset 2px 0 0 var(--key-sheen),
+    inset -2px 0 0 var(--key-cast),
+    0 1px 2px var(--key-cast);
+}
+/* A white key's front lip catching the light; a black key's sloped front. */
+@utility key-lip-white {
+  background-image: linear-gradient(to bottom, var(--key-edge-light), var(--key-far));
+}
+@utility key-front-black {
+  background-image: linear-gradient(to bottom, var(--key-sheen), var(--key-cast));
+}
+/* A computer key's cap printed on a key: the letter that plays it. */
+@utility key-cap {
+  display: grid;
+  place-items: center;
+  min-width: 1rem;
+  height: 1rem;
+  padding-inline: 0.1875rem;
+  font-size: 0.625rem;
+  line-height: 1;
+  text-transform: uppercase;
+  background-color: color-mix(in oklab, currentColor 12%, transparent);
+  box-shadow: inset 0 -1px 0 color-mix(in oklab, currentColor 22%, transparent);
+}
+/* The key slip's felt along the keys' far end, its shadow on them. */
+@utility key-felt {
+  height: 0.25rem;
+  background-image: linear-gradient(
+    to bottom,
+    var(--key-felt),
+    color-mix(in oklab, var(--key-felt) 70%, black)
+  );
+  box-shadow: 0 2px 3px var(--key-cast);
+}
+
 @utility elevation-1 {
   box-shadow: var(--elevation-1);
 }
@@ -666,11 +757,8 @@
     --spacing(--value(integer)) + var(--nav-bar) + var(--docked, 0px) + var(--floating-foot)
   );
 }
-/* The keys and the button they fold into share one name, so folding morphs one into the other
-   (`morph`); the page under them changes at once. The two are never stretched into each other's
-   shape: each keeps its own size in a frame that grows or shrinks from the corner they share (the
-   foot's right, or the top's), rounding as it nears the button, while the one leaving fades out
-   first and the one coming fades in after it. */
+/* The keys shown or hidden from the bar's Keyboard (R34) leave and come as one, fading, while the
+   page under them takes or gives their room at once; the screen's floating actions ride with them. */
 @utility vt-keys {
   view-transition-name: keys;
 }
@@ -711,12 +799,6 @@
 :root[data-morph$='-top']::view-transition-new(keys) {
   object-position: right top;
 }
-:root[data-morph^='keys-unfold']::view-transition-image-pair(keys) {
-  animation: keys-square 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-:root[data-morph^='keys-fold']::view-transition-image-pair(keys) {
-  animation: keys-square 340ms cubic-bezier(0.22, 1, 0.36, 1) reverse both;
-}
 :root[data-morph^='keys-unfold']::view-transition-old(keys) {
   animation: keys-leave 120ms ease-out both;
 }
@@ -728,14 +810,6 @@
 }
 :root[data-morph^='keys-fold']::view-transition-new(keys) {
   animation: keys-come 180ms 160ms ease-out both;
-}
-@keyframes keys-square {
-  from {
-    border-radius: 1.75rem;
-  }
-  to {
-    border-radius: 0;
-  }
 }
 @keyframes keys-leave {
   to {
@@ -765,11 +839,10 @@
 /* The Player's screen, and the score editor's (widgets/practice-player, ADR 0061, 0115):
    its parts placed by `data-area`.
    At every size a column: the bar (its lead and actions in columns of their own, so neither squeezes
-   the other), the tools row under it (ADR 0108), the sheet taking what is left, Wait mode's line and
-   the keys at the foot, the transport floating over the sheet's foot. On a phone on its side the
-   tools and Wait mode's line join the bar's row, between its lead and its actions, so the sheet keeps
-   the height their rows would take. Where the keyboard settings dock the keys at the top
-   (`data-keys='top'`), they sit under the tools row, or under the bar on a phone on its side. */
+   the other), the sheet taking what is left, Wait mode's line and the keys at the foot. On a phone on
+   its side Wait mode's line joins the bar's row, between its lead and its actions, so the sheet keeps
+   the height its row would take. Where the keyboard settings dock the keys at the top
+   (`data-keys='top'`), they sit under the bar. */
 @utility player-screen {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -782,15 +855,6 @@
   /* The music's scroll room under the transport floating over its foot: room to scroll into, never a
      row kept empty. */
   --float-room: 5.5rem;
-  /* The music's scroll room under the tools floating at its head on a phone held upright and a tablet
-     (the score bar's capsule): room to scroll from, never a row kept empty. */
-  --tools-room: 4.25rem;
-  @variant md {
-    --tools-room: 0px;
-  }
-  @variant landscape-phone {
-    --tools-room: 0px;
-  }
   /* How far the screen's top padding lies above the bar: its band reaches the screen's top edge. */
   --bar-above: calc(--spacing(2) + max(--spacing(4), env(safe-area-inset-top)));
   & > [data-area='bar'] {
@@ -849,9 +913,63 @@
       'status'
       'foot';
   }
-  /* On a phone on its side the bar is one row, Wait mode's line in it beside its end group: the line
-     keeps its words, and the tools the room left, their names cut short where it is not enough (ADR
-     0108, 0105, 0115). The bar's columns are the screen's, so the line stands in its own. */
+  /* The Player's transport in its own row (R31-P), over the foot: nothing floats over the music. */
+  & > [data-area='transport'] {
+    grid-area: transport;
+  }
+  &:has(> [data-area='transport']) {
+    grid-template-rows: auto minmax(0, 1fr) auto auto auto auto;
+    grid-template-areas:
+      'bar'
+      'sheet'
+      'status'
+      'keys'
+      'transport'
+      'foot';
+  }
+  &[data-keys='top']:has(> [data-area='transport']) {
+    grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
+    grid-template-areas:
+      'bar'
+      'keys'
+      'sheet'
+      'status'
+      'transport'
+      'foot';
+  }
+  /* A laptop's dock is one row (R32): the song tools at its start, the transport centred over it,
+     More at its end. */
+  @media (width >= 80rem) {
+    &:has(> [data-area='transport']):has(> [data-area='foot']) {
+      grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+      grid-template-areas:
+        'bar'
+        'sheet'
+        'status'
+        'keys'
+        'dock';
+    }
+    &[data-keys='top']:has(> [data-area='transport']):has(> [data-area='foot']) {
+      grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+      grid-template-areas:
+        'bar'
+        'keys'
+        'sheet'
+        'status'
+        'dock';
+    }
+    &:has(> [data-area='foot']) > :is([data-area='transport'], [data-area='foot']) {
+      grid-area: dock;
+    }
+    &:has(> [data-area='foot']) > [data-area='transport'] {
+      z-index: 1;
+      justify-self: center;
+      align-self: center;
+    }
+  }
+  /* On a phone on its side the bar is one row, Wait mode's line in it beside its end group, keeping
+     its words (ADR 0108, 0105, 0115). The bar's columns are the screen's, so the line stands in its
+     own. */
   @variant landscape-phone {
     grid-template-columns: auto minmax(0, 1fr) minmax(0, max-content) auto;
     grid-template-rows: auto minmax(0, 1fr) auto;
@@ -893,19 +1011,35 @@
         'sheet sheet sheet sheet'
         'foot foot foot foot';
     }
+    &:has(> [data-area='transport']) {
+      grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+      grid-template-areas:
+        'bar bar bar bar'
+        'sheet sheet sheet sheet'
+        'keys keys keys keys'
+        'transport transport transport transport'
+        'foot foot foot foot';
+    }
+    &[data-keys='top']:has(> [data-area='transport']) {
+      grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+      grid-template-areas:
+        'bar bar bar bar'
+        'keys keys keys keys'
+        'sheet sheet sheet sheet'
+        'transport transport transport transport'
+        'foot foot foot foot';
+    }
   }
 }
 
-/* The score's bar, the Player's and the editor's one surface (ADR 0115): Close and Practise · Edit
-   at its start, the screen's own buttons at its end, its tools between. Two rows on a phone held
-   upright and a tablet (the tools under the buttons), one from a laptop's width and on a phone on its
-   side. Its band, the card's paper with one hairline under the whole, reaches the screen's edges
-   (the gutters and the top), drawn behind it. */
+/* The score's bar, the Player's and the editor's one surface (ADR 0115, R31-E): Close, the title
+   and Practise · Edit at its start, the screen's own buttons at its end, one row at every size. Its
+   band, the card's paper with one hairline under the whole, reaches the screen's edges (the gutters
+   and the top), drawn behind it; its buttons are round and stand inside it, clear of its hairline. */
 @utility score-bar {
   position: relative;
   isolation: isolate;
-  /* Over the music, whose area is positioned for what floats on it (R29 B8): the tools' capsule
-     hanging under the bar on a phone held upright stays above the sheet and takes its taps. */
+  /* Over the music, whose area is positioned for what floats on it. */
   z-index: 25;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -930,73 +1064,26 @@
   & > [data-area='actions'] {
     grid-area: actions;
   }
-  /* Below 360px (a phone with Display Zoom, its CSS pixels physically larger): each icon button 36px
-     wide, still 44px tall, and Done's padding tighter, so Close, Done and the end's buttons keep one
-     row and none covers another (R29). */
-  @media (max-width: 359.98px) {
-    & :is([data-area='lead'], [data-area='actions']) [class~='size-11'] {
-      width: --spacing(9);
-    }
-    & [data-area='lead'] [data-slot='button']:not([class~='size-11']) {
-      padding-inline: --spacing(2);
-    }
-  }
-  /* Where the bar is one row too narrow for them (a phone held upright), the tools float under it as
-     a capsule over the music, in its middle as the transport floats in the middle of its foot (ADR
-     0115, round 27): they act on what is shown, not on where the learner is, and take no room from
-     the sheet. From a tablet up they sit in the bar, so the editor's note toolbar has the music's
-     head to itself. */
-  & > [data-area='tools'] {
-    position: absolute;
-    top: calc(100% + --spacing(2));
-    /* In the middle of the music, as the transport floats at its foot (round 27): never pinned left. */
-    left: 50%;
-    translate: -50% 0;
-    z-index: 20;
-    width: fit-content;
-    max-width: 100%;
-    /* Its tools fill it to its edges, each a pill as the capsule is (R15): a chosen tool's fill meets
-       the capsule's line, never a box inside it. */
-    padding: 0;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-pill);
-    & [data-slot='button'] {
-      border-radius: var(--radius-pill);
-    }
-    background: var(--color-raised);
-    box-shadow: var(--elevation-2);
-  }
   @variant max-sm {
     column-gap: --spacing(1);
   }
-  /* A 320px phone (round 28): the editor's six (MIDI, Undo, Redo, Settings, Done) and Close fit in a
-     row with their gaps closed and each button a little narrower, still 40px to touch. */
+  /* A 320px phone, or one with Display Zoom (round 28, R31-E): Close, Done and the end's buttons keep
+     one row with their gaps closed, each icon button 40px wide (still 44px tall) and Done's padding
+     tighter, so none covers another. */
   @media (width < 360px) {
     & > [data-area='actions'] {
       gap: 0;
     }
-    & > [data-area] > [data-slot='button'] {
+    & > [data-area] > [data-slot='button'][class~='size-11'] {
       min-width: 2.5rem;
       width: 2.5rem;
     }
+    & > [data-area='lead'] > [data-slot='button']:not([class~='size-11']) {
+      padding-inline: --spacing(2.5);
+    }
   }
   @variant md {
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    grid-template-areas: 'lead tools actions';
     column-gap: --spacing(3);
-    & > [data-area='tools'] {
-      position: static;
-      translate: none;
-      grid-area: tools;
-      width: auto;
-      padding: 0;
-      border: 0;
-      background: none;
-      box-shadow: none;
-      & [data-slot='button'] {
-        border-radius: var(--radius-control);
-      }
-    }
   }
   @variant landscape-phone {
     grid-template-columns: subgrid;
@@ -1004,16 +1091,6 @@
     padding-bottom: 0;
     & > [data-area='lead'] {
       grid-area: 1 / 1;
-    }
-    & > [data-area='tools'] {
-      position: static;
-      translate: none;
-      grid-area: 1 / 2;
-      width: auto;
-      padding: 0;
-      border: 0;
-      background: none;
-      box-shadow: none;
     }
     & > [data-area='actions'] {
       grid-area: 1 / 4;

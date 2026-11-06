@@ -18,23 +18,23 @@ describe('KeepOnDeviceFields', () => {
   it('says how much the device keeps, and keeps it safe when asked', async () => {
     const user = userEvent.setup()
     await renderWithSettings(<KeepOnDeviceFields storage={device(false, true)} />)
-    expect(await screen.findByText('12.3 MB kept on this device')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Keep them safe' }))
+    expect(await screen.findByText('12.3 MB used on this device')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Protect from clearing' }))
     expect(
-      await screen.findByText('Kept safe: the browser won’t clear them to make room'),
+      await screen.findByText('Protected: the browser will not clear this data to free up space'),
     ).toBeInTheDocument()
   })
 
   it('says when the browser decides for itself', async () => {
     const user = userEvent.setup()
     await renderWithSettings(<KeepOnDeviceFields storage={device(false, false)} />)
-    await user.click(await screen.findByRole('button', { name: 'Keep them safe' }))
-    expect(await screen.findByText(/This browser decides for itself/)).toBeInTheDocument()
+    await user.click(await screen.findByRole('button', { name: 'Protect from clearing' }))
+    expect(await screen.findByText(/This browser manages storage itself/)).toBeInTheDocument()
   })
 
   it('says it is kept safe already', async () => {
     await renderWithSettings(<KeepOnDeviceFields storage={device(true, true)} />)
-    expect(await screen.findByRole('status')).toHaveTextContent('Kept safe')
-    expect(screen.queryByRole('button', { name: 'Keep them safe' })).not.toBeInTheDocument()
+    expect(await screen.findByRole('status')).toHaveTextContent('Protected')
+    expect(screen.queryByRole('button', { name: 'Protect from clearing' })).not.toBeInTheDocument()
   })
 })

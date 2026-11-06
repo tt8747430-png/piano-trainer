@@ -1,10 +1,17 @@
-import { useChildMatches } from '@tanstack/react-router'
 import { useStore } from 'zustand'
 import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import { entryTitles, sameMusic, usePiecesStoreApi } from '@/entities/piece'
-import { selectEditing, selectPractice, selectScoreView, useSettings } from '@/entities/settings'
+import {
+  selectEditing,
+  selectEditorMode,
+  selectPractice,
+  selectScoreView,
+  useSettings,
+  useSettingsStoreApi,
+} from '@/entities/settings'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { saveMusic } from '@/features/edit-piece'
+import { setEditorMode } from '@/features/set-preference'
 import { hiddenStaves } from '@/features/practice'
 import {
   barAt,
@@ -21,7 +28,6 @@ import type { Midi } from '@/shared/lib/music'
 import { audibleHands, chordSounds, schedule, type Scheduled } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
 import { inPopUp, isTyping } from '@/shared/lib/shortcuts'
-import { speedTempo } from '@/widgets/practice-player'
 import { arrangeDraft } from './arrange-draft'
 import type { ScoreEditorValue } from './editor-context'
 import type { EditSearch } from './edit-search'
@@ -29,6 +35,7 @@ import { savedMusic, savingTo, type EditorTarget } from './editor-target'
 import { layerInSight, rowsInSight } from './rows-in-sight'
 import { shortcutOf } from './shortcuts'
 import { fieldOf } from './fields'
+import type { GearPage } from './gear-pages'
 import { heardEdit } from './heard-edit'
 import { useEditorTakes } from './use-editor-takes'
 import { useEditorStaves } from './use-editor-staves'
@@ -70,8 +77,9 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   // A change the song's music cannot be written with: said so, the music last saved kept, until a
   // change saves or the notice is closed.
   const [unsaved, setUnsaved] = useState(false)
-  // The mode the learner opens in (Note input's Input mode on opening); the toolbar switches it after.
-  const startMode = useSettings((state) => selectEditing(state).startMode)
+  // The mode the editor writes in, as it was left (R31-E): the palette's Input mode switches it.
+  const settings = useSettingsStoreApi()
+  const [startMode] = useState(() => selectEditorMode(settings.getState()))
   const [store] = useState(() =>
     createEditorStore(
       readDraft(target.music),
@@ -85,6 +93,14 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
       },
       startMode,
     ),
+  )
+  // The mode kept as it is left (R31-E): Chord is chosen for a moment, never a way to open.
+  useEffect(
+    () =>
+      store.subscribe(({ mode }, was) => {
+        if (mode !== was.mode && mode !== 'chord') setEditorMode(settings, mode)
+      }),
+    [store, settings],
   )
   // The same music changed in another tab: the editor opens on it, so its next change does not
   // write over what was written there.
@@ -113,8 +129,8 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   // The staves heard and in sight (A40): the Instruments' All, S and eye, the Player's `staves`.
   const [staves] = useEditorStaves()
   const hidden = useMemo(() => hiddenStaves(staves), [staves])
-  // The learner's speed for Play, a share of the song's tempo: this visit's, never saved.
-  const [speed, setSpeed] = useState(1)
+  // The gear's sheet (R31-E), at its page, or shut (null).
+  const [gear, setGear] = useState<GearPage | null>(null)
   // The field open over the sheet, typing a chord symbol, a syllable or fingers where they print
   // (ADR 0096), each where the View shows it.
   const fieldsShown = useMemo(
@@ -131,9 +147,9 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   const takes = useEditorTakes(target.id, store, title)
   const recording = takes.stage !== 'idle'
 
-  // The score's Settings open in the editor's place (round 28): its fields and switches have the keys,
-  // and nothing is written at a caret out of sight.
-  const away = useChildMatches().length > 0
+  // The gear's sheet open (R31-E): its fields and switches have the keys, and nothing is written at
+  // a caret under it.
+  const away = gear !== null
   // A note heard as it is chosen or its pitch moved (round 28), the editor's preference; never over
   // Play, which it would cut off.
   const hearNotes = useSettings((state) => selectEditing(state).hearNotes)
@@ -171,7 +187,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     playback.toggle('piece', () => {
       const { draft, caret } = store.getState()
       const played = schedule(arrangeDraft(draft), {
-        tempo: speedTempo(draft.tempo, speed),
+        tempo: draft.tempo,
         hands: audibleHands('both'),
         fromTick: barAt(draft, caret).start,
       })
@@ -248,8 +264,8 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
       chordNames: shown.chordNames,
       lyrics: shown.lyrics,
       fingers,
-      speed,
-      setSpeed,
+      gear,
+      setGear,
       layout: shown.layout,
       hidden,
       field,

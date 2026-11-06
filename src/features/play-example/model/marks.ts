@@ -1,12 +1,9 @@
 import {
-  fingerCrossings,
   noteName,
   pitchClass,
   rangeOf,
   spellChord,
   type Chord,
-  type Finger,
-  type Hand,
   type KeyRange,
   type Midi,
   type PlacedScaleChord,
@@ -20,31 +17,19 @@ export const chordShown = (placed: readonly PlacedTone[]): ShownKeys => ({
   marks: new Map(placed.map((key) => [key.midi, toneMark(key.tone)])),
 })
 
-/** A scale's keys: the tonic in its own colour, every note with its degree and, given one, a hand's finger. */
-export function scaleShown(
-  placed: readonly PlacedTone[],
-  fingering?: readonly Finger[],
-  hand?: Hand,
-): ShownKeys {
-  const keys = placed.map((key) => key.midi)
-  const crossings = fingering && hand ? fingerCrossings(keys, fingering, hand) : []
-  return {
-    keys,
-    marks: new Map(
-      placed.map((key, i) => {
-        const finger = fingering?.[i]
-        return [
-          key.midi,
-          {
-            ...toneMark(key.tone, key.tone.role === 'root' ? 'tonic' : 'scale'),
-            ...(finger === undefined ? {} : { finger }),
-            ...(crossings[i] ? { crossing: true } : {}),
-          },
-        ]
-      }),
-    ),
-  }
-}
+/**
+ * A scale's keys: the tonic in its own colour, every note with its degree; no finger numbers on the
+ * keys (R34): the staff and the hand drawings carry them.
+ */
+export const scaleShown = (placed: readonly PlacedTone[]): ShownKeys => ({
+  keys: placed.map((key) => key.midi),
+  marks: new Map(
+    placed.map((key) => [
+      key.midi,
+      toneMark(key.tone, key.tone.role === 'root' ? 'tonic' : 'scale'),
+    ]),
+  ),
+})
 
 /** Every key the chords play, from the tonic up: the keyboard fills its width with them. */
 export const chordsRange = (chords: readonly PlacedScaleChord[]): KeyRange | undefined =>

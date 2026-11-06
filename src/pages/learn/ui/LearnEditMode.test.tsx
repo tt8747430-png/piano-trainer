@@ -33,7 +33,7 @@ async function publish(user: ReturnType<typeof userEvent.setup>) {
   await user.click(
     within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
   )
-  await screen.findByText('Published. Learners get it the next time the app starts.')
+  await screen.findByText('Published. Learners will receive it the next time they open the app.')
 }
 
 describe('a level’s Edit mode, in place on the Lessons (R29 B4)', () => {
@@ -164,9 +164,14 @@ describe('the Courses’ shelves in Edit mode, in place (R29 B4)', () => {
       auth: await signedInAs('editor'),
       contentEditing: createFakeContentEditing(),
     })
-    // No floating + outside Edit mode: an editor sees the page a learner sees.
+    // No shelf's New course outside Edit mode: an editor sees the page a learner sees, Your courses'
+    // own New course (R30-5) with it.
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
-    expect(screen.queryByRole('button', { name: 'New course' })).toBeNull()
+    expect(
+      within(screen.getByRole('region', { name: 'Beginner courses' })).queryByRole('button', {
+        name: 'New course',
+      }),
+    ).toBeNull()
     await user.click(screen.getByRole('button', { name: 'Edit' }))
     const beginner = await screen.findByRole('region', { name: 'Beginner courses' })
     const rows = within(within(beginner).getByRole('list')).getAllByRole('listitem')
@@ -248,7 +253,7 @@ describe('the Courses’ About (R29 B9)', () => {
     const words = within(about).getByText('Begin with the beginner’s shelf.')
     expect(
       words.closest<HTMLElement>('[data-block-style]')?.style.getPropertyValue('--block-border'),
-    ).toBe('3px')
+    ).toBe('2px')
   })
 })
 

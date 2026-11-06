@@ -54,18 +54,15 @@ const accountUp: Parent = ({ signedIn }) =>
 
 const toPractice: Parent = () => up({ to: '/practice' })
 const toSettings: Parent = () => up({ to: '/settings' })
-/** A page of Settings: up to its list on a phone; on a laptop the list stands beside it (R20). */
+/** A page of Settings: up to its list on a phone; on a laptop its sidebar stands beside it (R32). */
 const settingsPage: Parent = ({ wide }) => (wide ? null : up({ to: '/settings' }))
+/** A legal page: up to About, where Settings opens it (R32). */
+const toAbout: Parent = () => up({ to: '/settings/about' })
 /** Each Practice page, where its gear opens its Settings from. */
 const PRACTICE_PAGES: Readonly<Record<PracticeSettingsFrom, Up>> = {
-  chords: up({ to: '/practice/chords' }),
   scales: up({ to: '/practice/scales' }),
-  intervals: up({ to: '/practice/intervals' }),
   progressions: up({ to: '/practice/progressions' }),
-  accompaniment: up({ to: '/practice/accompaniment' }),
   'chord-finder': up({ to: '/practice/chord-finder' }),
-  exercises: up({ to: '/practice/exercises' }),
-  quiz: up({ to: '/practice/quiz' }),
 }
 /** A Practice page's Settings (A24): up to the page its gear was pressed on, else to Practice (R29:
  * Settings no longer lists them). */
@@ -91,20 +88,17 @@ const toPattern: Parent = (from) =>
     params: { patternRef: param(from, 'patternRef') },
   })
 const toAccompaniment: Parent = () => up({ to: '/practice/accompaniment' })
-/** A pattern up to the page of Accompaniment that lists it. */
-const toPatternPart: Parent = async (from) => {
-  const { patternPart } = await import('./accompaniment-screens')
-  const show = patternPart(from.context.patterns.getState(), param(from, 'patternRef'))
-  return up({ to: '/practice/accompaniment', search: { show } })
+/** A pattern up to the place of Accompaniment's library that lists it. */
+const toPatternPlace: Parent = async (from) => {
+  const { patternPlace } = await import('./accompaniment-screens')
+  const place = patternPlace(from.context.patterns.getState(), param(from, 'patternRef'))
+  return up({ to: '/practice/accompaniment', search: { place } })
 }
 const toStudy: Parent = (from) =>
   up({
     to: '/practice/accompaniment/studies/$pieceId',
     params: { pieceId: param(from, 'pieceId') },
   })
-/** The score editor, at the bar its Settings were opened from. */
-const toEditor: Parent = (from) =>
-  up({ to: '/edit/$pieceId', params: { pieceId: param(from, 'pieceId') }, search: true })
 
 export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   // The places: Learn, Songs, Practice, the Profile; on a laptop Settings and Search at the
@@ -127,27 +121,24 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/settings/account/password': () => up({ to: '/settings/account' }),
   '/shell/settings/privacy': () => up({ to: '/settings/account' }),
   '/shell/settings/general': settingsPage,
-  '/shell/settings/select-toolbar': () => up({ to: '/settings/general' }),
-  '/shell/settings/swipe-actions': () => up({ to: '/settings/general' }),
+  '/shell/settings/select-toolbar': settingsPage,
+  '/shell/settings/swipe-actions': settingsPage,
+  '/shell/settings/feedback': settingsPage,
   '/shell/settings/on-screen-piano': settingsPage,
   '/shell/settings/computer-keys': settingsPage,
-  '/shell/settings/player': settingsPage,
   '/shell/settings/storage': settingsPage,
   '/shell/settings/account': settingsPage,
   '/shell/settings/how-to-use': settingsPage,
   '/shell/settings/about': settingsPage,
   '/shell/settings/connect-piano': settingsPage,
-  '/shell/settings/chords': practiceSettings,
   '/shell/settings/scales': practiceSettings,
-  '/shell/settings/intervals': practiceSettings,
   '/shell/settings/progressions': practiceSettings,
-  '/shell/settings/accompaniment': practiceSettings,
   '/shell/settings/chord-finder': practiceSettings,
-  '/shell/settings/exercises-and-quiz': practiceSettings,
   '/shell/settings/connect-piano/log': () => up({ to: '/settings/connect-piano' }),
   '/shell/admin': toSettings,
-  '/shell/legal/privacy': () => up({ to: '/settings/how-to-use' }),
-  '/shell/legal/terms': () => up({ to: '/settings/how-to-use' }),
+  '/shell/admin/$section': ({ wide }) => (wide ? null : up({ to: '/admin' })),
+  '/shell/legal/privacy': toAbout,
+  '/shell/legal/terms': toAbout,
   '/shell/account/sign-in': accountUp,
   '/shell/account/create': accountUp,
   '/shell/account/forgot': accountUp,
@@ -164,6 +155,11 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
       : up({ to: '/songs' })
   },
   '/shell/songs/$pieceId/settings': pieceHome,
+  // Groups (R30 S6): from Songs; a group and an invite link up to Groups; a shared folder up to its group.
+  '/shell/songs/groups': toSongs,
+  '/shell/songs/groups/join': () => up({ to: '/songs/groups' }),
+  '/shell/songs/groups/$groupId': () => up({ to: '/songs/groups' }),
+  '/shell/songs/shared-folders/$sharedId': toSongs,
   '/shell/songs/$pieceId/publish': pieceHome,
   '/shell/songs/$pieceId/sections/$section': (from) =>
     up({ to: '/songs/$pieceId', params: { pieceId: param(from, 'pieceId') } }),
@@ -190,7 +186,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   // to the editor.
   '/full-screen/play/$pieceId': pieceHome,
   '/full-screen/edit/$pieceId': pieceHome,
-  '/full-screen/edit/$pieceId/settings': toEditor,
   '/shell/edit/$pieceId/takes/$takeId': (from) =>
     up({
       to: '/edit/$pieceId',
@@ -203,11 +198,19 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
       search: readScalesSearch({ root: search.root, kind: search.kind, show: 'chords' }),
     }),
   '/full-screen/play/chromatic': toPractice,
-  '/full-screen/play/progression': ({ search }) =>
-    up({
-      to: '/practice/progressions',
-      search: readProgressionsSearch({ p: search.p, key: search.key }),
-    }),
+  // The Player of a progression: up to its page, the library's where the line is the library's.
+  '/full-screen/play/progression': async ({ search }) => {
+    const line = readProgressionsSearch({ p: search.p, key: search.key })
+    const { libraryLineId } = await import('./progression-place')
+    const progressionId = libraryLineId(line.p, line.key)
+    return progressionId
+      ? up({
+          to: '/practice/progressions/$progressionId',
+          params: { progressionId },
+          search: { key: line.key },
+        })
+      : up({ to: '/practice/progressions/line', search: line })
+  },
   '/full-screen/play/exercise/$exerciseId': (from) =>
     up({
       to: '/practice/exercises/$exerciseId',
@@ -231,9 +234,16 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
 
   // Learn: a lesson up to its level, a course's lesson up to the course, the course up to the
   // Courses; Settings and Edit up to what they set or edit.
+  // A lesson read in a course of the learner's goes up to that course; one of their own to Your
+  // lessons (R30-5).
   '/shell/lessons/$lessonId': async (from) => {
-    const { lessonPlace } = await import('./learn-screens')
-    const journey = lessonPlace(param(from, 'lessonId'))?.journey.id
+    const { isOwnCourseId, isOwnLessonId, lessonPlace, OWN_LESSONS } =
+      await import('./learn-screens')
+    const course = text(from.search.course)
+    if (course && isOwnCourseId(course))
+      return up({ to: '/courses/$courseId', params: { courseId: course } })
+    const lessonId = param(from, 'lessonId')
+    const journey = isOwnLessonId(lessonId) ? OWN_LESSONS : lessonPlace(lessonId)?.journey.id
     return up({ to: '/', search: { view: 'lessons', ...(journey ? { journey } : {}) } })
   },
   '/shell/lessons/$lessonId/settings': toLesson,
@@ -262,7 +272,20 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/practice/scales': toPractice,
   '/shell/practice/intervals': toPractice,
   '/shell/practice/progressions': toPractice,
-  '/shell/practice/progressions/$progressionId/edit': () => up({ to: '/practice/progressions' }),
+  '/shell/practice/progressions/line': () => up({ to: '/practice/progressions' }),
+  '/shell/practice/progressions/$progressionId': async (from) => {
+    const { progressionPlace } = await import('./progression-place')
+    const place = progressionPlace(param(from, 'progressionId'))
+    return up({ to: '/practice/progressions', search: { place } })
+  },
+  // An editor's editor: up to the progression's page where the library has it, else the library.
+  '/shell/practice/progressions/$progressionId/edit': async (from) => {
+    const { progressionPlace } = await import('./progression-place')
+    const progressionId = param(from, 'progressionId')
+    return progressionPlace(progressionId) === 'all'
+      ? up({ to: '/practice/progressions' })
+      : up({ to: '/practice/progressions/$progressionId', params: { progressionId } })
+  },
   '/shell/practice/progressions/$progressionId/settings': (from) =>
     up({
       to: '/practice/progressions/$progressionId/edit',
@@ -275,13 +298,8 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
     }),
   '/shell/practice/chord-finder': toPractice,
   '/shell/practice/metronome': toPractice,
-  '/shell/practice/metronome/settings': () => up({ to: '/practice/metronome' }),
   '/shell/practice/circle-of-fifths': toPractice,
-  '/shell/practice/tap-tempo': toPractice,
-  '/shell/practice/recorder': toPractice,
-  '/shell/practice/drone': toPractice,
   '/shell/practice/tuner': toPractice,
-  '/shell/practice/tuner/settings': () => up({ to: '/practice/tuner' }),
   '/shell/practice/chord-player': toPractice,
   '/shell/practice/chord-player/settings': ({ search }) => {
     const sheet = text(search.sheet)
@@ -293,10 +311,17 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/practice/exercises/$exerciseId': () => up({ to: '/practice/exercises' }),
   '/shell/practice/accompaniment': toPractice,
   '/shell/practice/accompaniment/patterns/new': toAccompaniment,
-  '/shell/practice/accompaniment/patterns/$patternRef': toPatternPart,
+  '/shell/practice/accompaniment/patterns/$patternRef': toPatternPlace,
   '/shell/practice/accompaniment/patterns/$patternRef/edit': toPattern,
   '/shell/practice/accompaniment/patterns/$patternRef/publish': toPattern,
-  '/shell/practice/accompaniment/studies/$pieceId': toAccompaniment,
+  // A study is its method book's course's (R32: Accompaniment lists patterns only).
+  '/shell/practice/accompaniment/studies/$pieceId': async (from) => {
+    const { studyPlace } = await import('./accompaniment-screens')
+    const book = studyPlace(param(from, 'pieceId'))
+    return book === 'all'
+      ? up({ to: '/practice/accompaniment' })
+      : up({ to: '/courses/$courseId', params: { courseId: book } })
+  },
   '/shell/practice/accompaniment/studies/$pieceId/sections/$section': toStudy,
 }
 

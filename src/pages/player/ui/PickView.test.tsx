@@ -45,17 +45,17 @@ function withSongOfNoChords(): Storage {
   return storage
 }
 
-/** Opens Pick your view from the tools row, named by the view shown. */
+/** Opens Pick your view from the foot bar, named by the view shown. */
 async function openView(user: User, shown: string) {
   await user.click(await screen.findByRole('button', { name: `View: ${shown}` }))
   return screen.findByRole('dialog', { name: 'Pick your view' })
 }
 
 /** Opens the Player's Settings › Display: the view shown's own. */
-async function openDisplay(user: User, settings = 'Player settings', display = 'Display') {
+async function openDisplay(user: User, settings = 'Player settings', display = 'Score view') {
   await user.click(await screen.findByRole('button', { name: settings }))
   const sheet = await screen.findByRole('dialog', { name: settings })
-  await user.click(within(sheet).getByRole('button', { name: display }))
+  await user.click(within(sheet).getByRole('button', { name: new RegExp(`^${display}`) }))
   return screen.findByRole('dialog', { name: display })
 }
 
@@ -82,12 +82,12 @@ function chipsAre(part: HTMLElement, ...names: string[]) {
 /** A chip of the menu, by its name. */
 const chip = (part: HTMLElement, name: string) => within(part).getByRole('button', { name })
 
-describe('the tools row (ADR 0108)', () => {
-  it('stands under the bar and names the view shown, opening Pick your view from there (R29)', async () => {
+describe('the foot bar’s View (ADR 0108, R31-P)', () => {
+  it('stands in the foot bar and names the view shown, opening Pick your view from there (R29)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/silent')
-    const tools = await screen.findByRole('toolbar', { name: 'Tools' })
-    expect(tools.closest('[data-area="tools"]')).toBeInTheDocument()
+    const tools = await screen.findByRole('toolbar', { name: 'Practice tools' })
+    expect(tools.closest('[data-area="foot"]')).toBeInTheDocument()
     const view = within(tools).getByRole('button', { name: 'View: Sheet' })
     expect(view).toHaveTextContent('Sheet')
     expect(view).toHaveAttribute('aria-haspopup')
@@ -109,34 +109,34 @@ describe('the tools row (ADR 0108)', () => {
 })
 
 describe('while Diagrams plays (ADR 0108)', () => {
-  /** The bar's two groups and the tools row. */
-  // The score's bar, one surface holding its buttons and its tools (ADR 0115).
+  // The score's bar, one surface holding its buttons (ADR 0115, R31-P).
   const bar = () => {
     const found = document.querySelector('header[data-area="bar"]')
     if (!found) throw new Error('bar')
-    expect(found.querySelector('[data-area="tools"]')).toBeInTheDocument()
     return [found]
   }
 
-  it('steps the bar with its tools aside, back at a tap on the free room or once it stops', async () => {
+  it('steps the bar aside, the transport and foot staying, back at a tap on the free room or once it stops', async () => {
     const user = userEvent.setup()
     await savedAs('diagrams', '/play/bz5')
     const transport = screen.getByRole('toolbar', { name: 'Playback' })
-    const dock = transport.closest('[data-area="dock"]')
+    // The transport is docked in its own row, never floating: it does not step aside (R31-P).
+    const dock = transport.closest('[data-area="transport"]')
+    expect(dock).toBeInTheDocument()
     await user.click(within(transport).getByRole('button', { name: 'Play' }))
     for (const area of bar()) {
       expect(area).toHaveAttribute('data-hidden')
       expect(area).toHaveAttribute('inert')
     }
     expect(dock).not.toHaveAttribute('data-hidden')
-    // A tap on the free room brings them back, and the next sends them aside with the transport.
+    // A tap on the free room brings the bar back, and the next sends it aside again.
     const title = screen.getByRole('heading', { level: 1 })
     await user.click(title)
     for (const area of bar()) expect(area).not.toHaveAttribute('data-hidden')
     await user.click(title)
     for (const area of bar()) expect(area).toHaveAttribute('data-hidden')
-    expect(dock).toHaveAttribute('data-hidden')
-    // Stopped (Space, the transport aside too), everything is back.
+    expect(dock).not.toHaveAttribute('data-hidden')
+    // Stopped (Space), everything is back.
     await user.keyboard(' ')
     for (const area of bar()) expect(area).not.toHaveAttribute('data-hidden')
     expect(dock).not.toHaveAttribute('data-hidden')
@@ -226,17 +226,13 @@ describe('Pick your view greys a view the music cannot show (ADR 0108)', () => {
 })
 
 describe('Settings › Display, the view shown’s own (ADR 0108, R29)', () => {
-  it('holds the sheet music’s own: its Layout first, then what it shows', async () => {
+  it('holds the sheet music’s own: what it shows, its layout the sheet’s pill’s (R34)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/silent')
     const page = await openDisplay(user)
     expect(groupsOf(page)).toEqual(['Sheet music'])
     const sheet = within(page).getByRole('region', { name: 'Sheet music' })
-    const layout = within(sheet).getByRole('radiogroup', { name: 'Layout' })
-    expect(segmentsOf(layout)).toEqual(['Page view', 'Vertical scroll', 'Panorama'])
-    expect(within(layout).getByRole('radio', { name: 'Vertical scroll' })).toBeChecked()
-    await user.click(within(layout).getByRole('radio', { name: 'Panorama' }))
-    expect(settingsStore.getState().scoreView.layout).toBe('panorama')
+    expect(within(sheet).queryByRole('radiogroup', { name: 'Layout' })).not.toBeInTheDocument()
     expect(within(sheet).queryByRole('radiogroup', { name: 'Mode' })).not.toBeInTheDocument()
     chipsAre(
       within(sheet).getByRole('group', { name: 'Show' }),
@@ -246,10 +242,17 @@ describe('Settings › Display, the view shown’s own (ADR 0108, R29)', () => {
       'Finger numbers',
       'Note names',
     )
-    await user.click(within(sheet).getByRole('button', { name: 'About Layout' }))
-    expect(await screen.findByRole('dialog', { name: 'Layout' })).toHaveTextContent(
-      'Panorama: the whole song in one line, scrolled across.',
-    )
+    await user.keyboard('{Escape}')
+    const pill = document.querySelector<HTMLElement>('[data-slot="sheet-pill"]')!
+    const layout = within(pill).getByRole('radiogroup', { name: 'Layout' })
+    expect(
+      within(layout)
+        .getAllByRole('radio')
+        .map((radio) => radio.ariaLabel),
+    ).toEqual(['Page view', 'Vertical scroll', 'Panorama'])
+    expect(within(layout).getByRole('radio', { name: 'Vertical scroll' })).toBeChecked()
+    await user.click(within(layout).getByRole('radio', { name: 'Panorama' }))
+    expect(settingsStore.getState().scoreView.layout).toBe('panorama')
   })
 
   it('holds Diagrams’ own: its Mode, then its Lyrics, and nothing of the sheet music’s', async () => {
@@ -328,14 +331,19 @@ describe('Settings › Display, the view shown’s own (ADR 0108, R29)', () => {
   it('reads in Russian', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await savedAs('lyrics', '/play/silent', { locale: 'ru' })
-    const page = await openDisplay(user, 'Настройки плеера', 'Отображение')
+    const page = await openDisplay(user, 'Настройки плеера', 'Вид нот')
     expect(within(page).getByRole('group', { name: 'Размер текста' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
     act(() => setScoreView(settingsStore, { music: 'grid' }))
     expect(chip(page, 'Текст')).toHaveAttribute('aria-pressed')
     act(() => setScoreView(settingsStore, { music: 'sheet' }))
-    const layout = within(page).getByRole('radiogroup', { name: 'Расположение' })
-    expect(segmentsOf(layout)).toEqual(['Страницы', 'Прокрутка вниз', 'Панорама'])
+    const pill = document.querySelector<HTMLElement>('[data-slot="sheet-pill"]')!
+    const layout = within(pill).getByRole('radiogroup', { name: 'Расположение', hidden: true })
+    expect(
+      within(layout)
+        .getAllByRole('radio', { hidden: true })
+        .map((radio) => radio.ariaLabel),
+    ).toEqual(['Страницы', 'Прокрутка вниз', 'Панорама'])
     expect(untranslated(document.body)).toEqual([])
   })
 })

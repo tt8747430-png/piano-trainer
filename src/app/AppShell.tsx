@@ -5,6 +5,7 @@ import { selectSidebar, useSettings } from '@/entities/settings'
 import { FloatingHost, ScreenBarProvider } from '@/shared/ui'
 import { TooltipProvider } from '@/shared/ui/primitives/tooltip'
 import { AppNav } from '@/widgets/app-nav'
+import { usePracticeVisits } from '@/widgets/practice-pages'
 import { SearchPaletteProvider } from '@/widgets/search-palette'
 
 /**
@@ -20,6 +21,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const { t } = useTranslation('common')
   const sidebar = useSettings(selectSidebar)
   const screen = useRouterState({ select: (state) => state.location.pathname })
+  usePracticeVisits()
   return (
     <SearchPaletteProvider>
       <ScreenBarProvider>

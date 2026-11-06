@@ -17,6 +17,7 @@ export interface CardOption<V extends string> {
  */
 export function ChoiceCard<V extends string>({
   title,
+  description,
   setting,
   info,
   options,
@@ -24,6 +25,8 @@ export function ChoiceCard<V extends string>({
   onChange,
 }: {
   title: string
+  /** What it does, in one line under its title (R32). */
+  description?: string | undefined
   /** The preference it sets (`data-setting`): the one page drawing it is its home (R18). */
   setting?: string
   info?: ReactNode
@@ -40,8 +43,14 @@ export function ChoiceCard<V extends string>({
         </h2>
         {info ? <InfoTip name={title}>{info}</InfoTip> : null}
       </div>
+      {description ? (
+        <p id={`${id}-description`} className="-mt-2 text-sm text-muted-foreground">
+          {description}
+        </p>
+      ) : null}
       <RadioGroup
         aria-labelledby={id}
+        aria-describedby={description ? `${id}-description` : undefined}
         value={value}
         onValueChange={(next) => onChange(next as V)}
         className="gap-3"

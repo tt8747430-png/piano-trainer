@@ -1,0 +1,630 @@
+<meta charset="utf-8">
+<title>The Keyboard, Round 34</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Noto+Music&family=Onest:wght@400;500;600&display=swap">
+<style>
+/* Layout: a reading column of numbered questions; each draws whole app screens (phone 393×852, laptop 1710×904, scaled)
+   in Piano Trainer's own tokens, with a feedback box under every screen. */
+:root {
+  --paper: #f7f3ee; --card: #fefdfb; --sand: #eee9e2; --line: #dad1c8; --ink: #332921; --ink-soft: #685e56;
+  --honey: #edc684; --honey-ink: #5a4214; --grass: #d9ebd5; --grass-ink: #44684a; --sky: #e0effa; --sky-ink: #356890;
+  --lilac: #e6dff6; --lilac-ink: #6a5988; --sandw: #f5e0cf; --sand-ink: #7d5b40; --yellow: #f6ebc9; --yellow-ink: #7a5c18;
+  --bad: #f3d6d2; --bad-ink: #8a3a2e; --scrim: rgba(51, 41, 33, .32); --frame: #1d1916;
+  --display: 'Literata', Georgia, serif; --sans: 'Onest', system-ui, sans-serif; --music: 'Noto Music', serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #191512; --card: #24201c; --sand: #2e2924; --line: #453e38; --ink: #ede9e1; --ink-soft: #b5aca1;
+  --honey: #d4b176; --honey-ink: #2a1f0a; --grass: #2c3d2c; --grass-ink: #b5d6ae; --sky: #22344a; --sky-ink: #a9cdec;
+  --lilac: #352d47; --lilac-ink: #cfc2ec; --sandw: #3d2f24; --sand-ink: #e4c4a6; --yellow: #3a321d; --yellow-ink: #e6cf93;
+  --bad: #45251f; --bad-ink: #f0b9ae; --scrim: rgba(0,0,0,.5); --frame: #000; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #191512; --card: #24201c; --sand: #2e2924; --line: #453e38; --ink: #ede9e1; --ink-soft: #b5aca1;
+  --honey: #d4b176; --honey-ink: #2a1f0a; --grass: #2c3d2c; --grass-ink: #b5d6ae; --sky: #22344a; --sky-ink: #a9cdec;
+  --lilac: #352d47; --lilac-ink: #cfc2ec; --sandw: #3d2f24; --sand-ink: #e4c4a6; --yellow: #3a321d; --yellow-ink: #e6cf93;
+  --bad: #45251f; --bad-ink: #f0b9ae; --scrim: rgba(0,0,0,.5); --frame: #000; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); margin: 0 }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 28px 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0 }
+h1 { font-size: 30px } h2 { font-size: 22px } h3 { font-size: 16px }
+p { margin: 0; max-width: 65ch } .soft { color: var(--ink-soft) }
+.intro { display: grid; gap: 10px; margin-bottom: 8px }
+.toc { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); padding-block: 8px; display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--line) }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper) }
+.toc a { font-size: 13px; color: var(--ink); text-decoration: none; background: var(--sand); border-radius: 999px; padding: 4px 10px }
+.toc a.done { background: var(--grass); color: var(--grass-ink) }
+.toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-left: auto }
+.toolbar button { font: 500 13px var(--sans); border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 4px 11px; cursor: pointer }
+section.q { border-top: 1px solid var(--line); padding-block: 30px; display: grid; gap: 14px }
+section.q:first-of-type { border-top: 0 }
+.qhead { display: flex; gap: 10px; align-items: baseline } .qnum { font: 600 13px var(--sans); color: var(--ink-soft); white-space: nowrap }
+.where { font-size: 13px; color: var(--ink-soft) }
+.rec { background: var(--sky); color: var(--sky-ink); border-radius: 12px; padding: 10px 14px; max-width: 80ch }
+.screens { display: flex; flex-wrap: wrap; gap: 26px; align-items: flex-start }
+figure { margin: 0; display: grid; gap: 8px; min-width: 0; max-width: 100% }
+figcaption { font-size: 13.5px; color: var(--ink-soft); max-width: 46ch } figcaption b { color: var(--ink); display: block; font-size: 14px }
+.opt { display: inline-block; font: 600 12px var(--sans); background: var(--honey); color: var(--honey-ink); border-radius: 6px; padding: 1px 7px; margin-right: 6px }
+.opt.b { background: var(--sand); color: var(--ink) }
+table.map { border-collapse: collapse; font-size: 13.5px; width: 100%; max-width: 920px }
+.tablewrap { overflow-x: auto; max-width: 100% }
+table.map th, table.map td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+table.map th { font-weight: 600; color: var(--ink-soft); font-size: 12.5px }
+/* feedback */
+.fb { display: flex; gap: 6px; flex-wrap: wrap }
+.fb button { font: 500 12.5px var(--sans); border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 5px 11px; cursor: pointer }
+.fb button[aria-pressed="true"][data-v="ok"] { background: var(--grass); color: var(--grass-ink); border-color: var(--grass-ink) }
+.fb button[aria-pressed="true"][data-v="change"] { background: var(--honey); color: var(--honey-ink); border-color: var(--honey) }
+.fb button[aria-pressed="true"][data-v="remove"] { background: var(--bad); color: var(--bad-ink); border-color: var(--bad-ink) }
+button:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--sky-ink); outline-offset: 2px }
+figure textarea, .qfb textarea { width: 100%; min-height: 40px; font: 13px var(--sans); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 7px 9px; resize: vertical }
+:is(figure, .qfb) textarea::placeholder { color: var(--ink-soft) }
+.saved { font-size: 12px; color: var(--ink-soft); min-height: 1em }
+
+/* ——— device frames (true sizes, scaled) ——— */
+.dev { position: relative; overflow: hidden; border-radius: 34px; background: var(--frame); padding: 9px }
+.dev.phone { --fw: 450px; --fh: 920px; --sx: 24px; --sy: 23px; --sw: 402px; --sh: 874px; --sr: 62px; --sb: 62px; --s: .74; width: calc(var(--fw) * var(--s)); height: calc(var(--fh) * var(--s)); padding: 0; border-radius: 0; background: none; overflow: visible }
+body.small .dev.phone { --fw: 440px; --fh: 899px; --sx: 23.5px; --sy: 22.5px; --sw: 393px; --sh: 852px; --sr: 60px; --sb: 54px }
+.dev.phone::after { content: ''; position: absolute; inset: 0; background: url(iphone-17-pro.png) 0 0 / 100% 100% no-repeat; pointer-events: none; z-index: 3 }
+body.safari .dev.phone::after { background-image: url(iphone-safari.png) }
+body.safari .dev.phone > .scr::after { content: ''; position: absolute; left: 34px; right: 34px; bottom: 33px; height: 48px; z-index: 50; background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27334%27%20height%3D%2748%27%3E%3Cg%20fill%3D%27rgba%28250%2C250%2C250%2C.86%29%27%20stroke%3D%27rgba%280%2C0%2C0%2C.1%29%27%3E%3Ccircle%20cx%3D%2724%27%20cy%3D%2724%27%20r%3D%2723.5%27/%3E%3Crect%20x%3D%2756.5%27%20y%3D%27.5%27%20width%3D%27221%27%20height%3D%2747%27%20rx%3D%2723.5%27/%3E%3Ccircle%20cx%3D%27310%27%20cy%3D%2724%27%20r%3D%2723.5%27/%3E%3C/g%3E%3Cpath%20d%3D%27M27%2016l-8%208%208%208%27%20fill%3D%27none%27%20stroke%3D%27%231c1c1e%27%20stroke-width%3D%272.4%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27/%3E%3Ctext%20x%3D%27167%27%20y%3D%2729%27%20font-family%3D%27-apple-system%2Csystem-ui%2Csans-serif%27%20font-size%3D%2715%27%20font-weight%3D%27500%27%20text-anchor%3D%27middle%27%20fill%3D%27%231c1c1e%27%3Epiano-trainer%3C/text%3E%3Cg%20fill%3D%27%231c1c1e%27%3E%3Ccircle%20cx%3D%27302%27%20cy%3D%2724%27%20r%3D%272%27/%3E%3Ccircle%20cx%3D%27310%27%20cy%3D%2724%27%20r%3D%272%27/%3E%3Ccircle%20cx%3D%27318%27%20cy%3D%2724%27%20r%3D%272%27/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat; filter: drop-shadow(0 4px 12px rgba(0,0,0,.18)) }
+.dev.mac { --s: .45; --mx: 217.7px; --my: 36.6px; width: calc(2143px * var(--s)); height: calc(1299px * var(--s)); padding: 0; border-radius: 0; overflow: visible;
+  background: linear-gradient(rgba(255,255,255,.28), rgba(255,255,255,.28)) calc(var(--mx) * var(--s)) calc(var(--my) * var(--s)) / calc(1710px * var(--s)) calc(37px * var(--s)) no-repeat,
+    url(macbook-wallpaper.jpg) calc(var(--mx) * var(--s)) calc(var(--my) * var(--s)) / calc(1710px * var(--s)) calc(1112px * var(--s)) no-repeat }
+.dev.mac::before { content: 'piano-trainer'; position: absolute; z-index: 2; left: calc(var(--mx) * var(--s)); top: calc((var(--my) + 37px) * var(--s)); width: calc(1710px * var(--s)); height: calc(51px * var(--s)); background: url(safari-light.png) 0 0 / 100% 100%; border-radius: calc(16px * var(--s)) calc(16px * var(--s)) 0 0; font: 500 calc(14px * var(--s)) / calc(51px * var(--s)) -apple-system, system-ui, sans-serif; color: #3c3c43; text-align: center }
+:root[data-theme="dark"] .dev.mac::before { background-image: url(safari-dark.png); color: #ebebf5 }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dev.mac::before { background-image: url(safari-dark.png); color: #ebebf5 } }
+.dev.mac::after { content: ''; position: absolute; inset: 0; z-index: 3; background: url(macbook-air.png) 0 0 / 100% 100% no-repeat; pointer-events: none }
+.dev > .scr { width: 393px; height: 852px; transform: scale(var(--s)); transform-origin: 0 0; border-radius: 26px }
+.dev.phone > .scr { position: absolute; left: calc(var(--sx) * var(--s)); top: calc(var(--sy) * var(--s)); width: var(--sw); height: var(--sh); border-radius: var(--sr) }
+.dev.mac > .scr { position: absolute; left: calc(var(--mx) * var(--s)); top: calc((var(--my) + 88px) * var(--s)); width: 1710px; height: 904px; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,.35) }
+@media (max-width: 720px) { .dev.mac { --s: .3 } .dev.phone { --s: .7 } }
+.scrollx { overflow-x: auto; max-width: 100% }
+@media (max-width: 720px) { .scrollx:has(.mac)::after { content: "Scroll sideways for the whole screen →"; display: block; font-size: 12px; color: var(--ink-soft); padding-top: 4px } }
+@media (min-width: 721px) and (max-width: 1100px) { .dev.mac { --s: .32 } }
+
+/* ——— the app ——— */
+.scr { position: relative; overflow: hidden; background: var(--paper); color: var(--ink); font: 16px/1.4 var(--sans); display: flex; flex-direction: column }
+.scr.mac { flex-direction: row }
+.sb { width: 256px; flex: none; background: var(--card); border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: 0 12px 16px }
+.sb .brand { height: 80px; display: flex; align-items: center; justify-content: space-between; padding-left: 12px; font: 600 24px var(--display) }
+.sb .it { height: 44px; display: flex; gap: 12px; align-items: center; padding: 0 12px; border-radius: 12px; font-weight: 600; color: var(--ink-soft); font-size: 16px }
+.sb .it.on { background: var(--sand); color: var(--ink) }
+.sb .foot { margin-top: auto; display: grid; gap: 4px }
+.sb .acc { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 12px }
+.main { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative }
+.pad { padding: 0 16px } .mac .pad { padding: 0 40px }
+.bar { min-height: 56px; display: flex; align-items: center; gap: 8px; padding: 4px 16px; flex: none }
+.mac .bar { padding: 8px 40px; min-height: 72px }
+.bar .t { font: 600 20px/1.2 var(--display); min-width: 0; display: flex; align-items: center; gap: 6px }
+.bar .t > span:first-child { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.bar .t.lg { font-size: 24px } .mac .bar .t { font-size: 22px } .mac .bar .t.lg { font-size: 26px }
+.bar .tools { margin-left: auto; display: flex; gap: 6px; flex: none }
+.rb { width: 44px; height: 44px; border-radius: 999px; background: var(--sand); display: grid; place-items: center; flex: none; color: var(--ink) }
+.rb.plain { background: transparent } .rb.on { background: var(--grass); color: var(--grass-ink) }
+.rb.sm { width: 36px; height: 36px; background: transparent; color: var(--ink-soft) }
+.edit-pen { color: var(--ink-soft) }
+.seg { display: inline-flex; justify-self: start; align-self: start; width: max-content; background: var(--sand); border-radius: 999px; padding: 3px; gap: 2px; font: 600 14px var(--sans) }
+.seg span { padding: 7px 14px; border-radius: 999px; color: var(--ink-soft) } .seg span.on { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08) }
+.field { display: flex; align-items: center; gap: 8px; height: 44px; border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 0 12px; color: var(--ink-soft); font-size: 15px; flex: 1; min-width: 0 }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); font-size: 14px; white-space: nowrap }
+.chip b { font-family: var(--display) } .chip.on { background: var(--sand); border-color: var(--sand) }
+.h2 { font: 600 13px var(--sans); color: var(--ink-soft); padding: 18px 4px 8px; display: flex; justify-content: space-between }
+.h2 a { color: var(--sky-ink); font-weight: 500; text-decoration: none }
+.group { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden }
+.row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; min-height: 60px; border-top: 1px solid var(--line) }
+.row:first-child { border-top: 0 }
+.tile { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex: none }
+.p-yellow { background: var(--yellow); color: var(--yellow-ink) } .p-sky { background: var(--sky); color: var(--sky-ink) }
+.p-grass { background: var(--grass); color: var(--grass-ink) } .p-lilac { background: var(--lilac); color: var(--lilac-ink) }
+.p-sand { background: var(--sandw); color: var(--sand-ink) }
+.row .txt { flex: 1; min-width: 0 } .row .n { font-weight: 600; font-size: 16px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere }
+.row .d { font-size: 13.5px; color: var(--ink-soft); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.key { font: 600 16px var(--display); min-width: 26px; text-align: center }
+.lvl { display: inline-flex; gap: 2px; align-items: flex-end; height: 12px } .lvl i { width: 3px; background: var(--line); border-radius: 1px } .lvl i.f { background: var(--ink-soft) }
+.tick { color: var(--grass-ink) }
+.fab { position: absolute; right: 20px; bottom: 100px; width: 56px; height: 56px; border-radius: 999px; background: var(--honey); color: var(--honey-ink); display: grid; place-items: center; box-shadow: 0 6px 16px rgba(0,0,0,.18) }
+.mac .fab { bottom: 32px; right: 40px }
+.fab.wide { width: auto; padding: 0 22px; gap: 8px; display: flex; align-items: center; font-weight: 600 }
+.tabs { position: absolute; left: 0; right: 0; bottom: 0; height: 84px; background: var(--card); border-top: 1px solid var(--line); display: flex; padding: 6px 8px 0; gap: 4px }
+.tabs div { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; font: 600 12px var(--sans); color: var(--ink-soft); padding-top: 6px; border-radius: 12px; height: 54px }
+.tabs div.on { background: var(--sand); color: var(--ink) }
+.status { height: var(--sb, 47px); flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; font: 600 15px var(--sans) }
+.scroll { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0 }
+.scroll > * { flex-shrink: 0 }
+.cards { display: flex; gap: 10px }
+.scard { width: 150px; flex: none; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 10px; display: grid; gap: 6px }
+.scard .cv { height: 70px; border-radius: 10px; display: grid; place-items: center }
+.scard .n { font-weight: 600; font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.scard .d { font-size: 12.5px; color: var(--ink-soft) }
+/* laptop library */
+.lib { display: flex; flex: 1; min-height: 0 }
+.tree { width: 300px; flex: none; border-right: 1px solid var(--line); padding: 8px 16px 16px 40px; display: grid; align-content: start; gap: 2px }
+.tree .ti { height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 10px; border-radius: 10px; font-size: 15px; font-weight: 500 }
+.tree .ti.on { background: var(--sand); font-weight: 600 } .tree .ti .c { margin-left: auto; color: var(--ink-soft); font-size: 13px; font-weight: 400 }
+.tree .ti.ind { padding-left: 32px } .tree .lab { font: 600 12px var(--sans); color: var(--ink-soft); padding: 14px 10px 4px; text-transform: none }
+.tree .ti .sw { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center }
+.list { flex: 1; min-width: 0; padding: 8px 40px 16px 32px; display: flex; flex-direction: column }
+.thead, .trow { display: grid; grid-template-columns: minmax(0, 3fr) 70px minmax(0, 2fr) 70px 70px 110px 40px; gap: 12px; align-items: center; padding: 0 12px }
+.thead { font: 600 12.5px var(--sans); color: var(--ink-soft); height: 36px; border-bottom: 1px solid var(--line) }
+.trow { height: 58px; border-bottom: 1px solid var(--line); font-size: 15px } .trow .n { font-weight: 600 } .trow .d { font-size: 13px; color: var(--ink-soft) }
+.trow .chs { font-family: var(--display); color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--card); border-radius: 22px 22px 0 0; box-shadow: 0 -8px 30px rgba(0,0,0,.18); padding: 8px 16px 34px; display: grid; gap: 10px }
+.sheet .grip { width: 36px; height: 5px; background: var(--line); border-radius: 9px; margin: 0 auto 4px }
+.scrimm { position: absolute; inset: 0; background: var(--scrim) }
+.btn { height: 48px; border-radius: 12px; background: var(--honey); color: var(--honey-ink); display: grid; place-items: center; font-weight: 600 }
+.btn.ghost { background: var(--sand); color: var(--ink) }
+.check { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--line); display: grid; place-items: center; flex: none }
+.check.on { background: var(--honey); border-color: var(--honey); color: var(--honey-ink) }
+.pill { font-size: 12.5px; padding: 2px 9px; border-radius: 999px; background: var(--sand); color: var(--ink-soft); white-space: nowrap }
+.fieldline { border-bottom: 1px dashed var(--line); padding-bottom: 2px }
+.editing { outline: 2px solid var(--honey); outline-offset: 2px; border-radius: 6px; -webkit-line-clamp: unset !important; overflow: visible !important }
+.cover { border-radius: 16px; display: grid; place-items: center }
+.kbd { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; width: 74px; height: 38px; position: relative; background: var(--line); border: 1px solid var(--line); border-radius: 3px; overflow: hidden }
+.kbd i { background: #fbf9f6 } .kbd b { position: absolute; top: 0; width: 7px; height: 22px; background: #2a231d }
+.kbd u { position: absolute; bottom: 4px; width: 5px; height: 5px; border-radius: 9px; background: #2a231d }
+.staff { color: var(--ink) }
+.toast { position: absolute; left: 50%; bottom: 110px; transform: translateX(-50%); background: var(--ink); color: var(--paper); border-radius: 999px; padding: 9px 16px; font-size: 14px; white-space: nowrap }
+.dot { width: 8px; height: 8px; border-radius: 9px; background: var(--honey); display: inline-block }
+.av { width: 32px; height: 32px; border-radius: 999px; display: grid; place-items: center; font: 600 15px var(--display); flex: none }
+
+/* R30 Practice: the type ramp and 44px targets (critique round 1) */
+.rb.sm { width: 44px; height: 44px }
+.h2 { font-size: 14px } .h2 a.all { display: inline-flex; align-items: center; min-height: 44px; margin: -14px 0 }
+.row .d { font-size: 14px } .thead { font-size: 14px } .trow .d { font-size: 14px }
+.tree .lab { font-size: 14px } .pill { font-size: 14px }
+.lvl i { background: color-mix(in oklab, var(--ink-soft) 35%, transparent) }
+.kbd { width: 64px }
+
+/* R31: the installed app's home indicator, 14px soft text, raised segments in dark */
+.tabs { height: 85px; padding: 6px 8px 34px } .tabs div { height: 44px; justify-content: center; padding-top: 0 }
+.row .d, .h2, .tree .ti .c { font-size: 14px }
+span[aria-label^="Level"] { font-size: 14px !important }
+.seg span.on { background: var(--card); box-shadow: 0 1px 3px rgba(0,0,0,.25) }
+/* R33: the keys as a real piano's, its rail, its pedals and its settings sheet. */
+:root {
+  --ivory: #fefdfb; --ivory-far: #ebe5dc; --ivory-lip: #ddd5ca; --ebony: #2a2420; --ebony-top: #3d3530; --ebony-front: #5a504a;
+  --felt: #7c302c; --bed: #cbc2b9; --rail: #dfd8cf; --keydown: #b9dbf4; --lyre: #332c28; --brass: #d4ae58; --brass-dn: #a8822f;
+  --brass-shank: #8a6a28; --led: #f2b53c; --rh: #e7a99c; --lh: #c9b8ea; --rh-wash: #f4d9d2; --wrong: #e7826f;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --ivory: #d4d0cb; --ivory-far: #aaa49c; --ivory-lip: #a39b91; --ebony: #120f0d; --ebony-top: #221d1a; --ebony-front: #3d3631;
+  --felt: #5a2422; --bed: #787069; --rail: #332c27; --keydown: #6fa6d2; --lyre: #1d1916; --brass: #c69f4c; --brass-dn: #8f6c26;
+  --brass-shank: #a07c32; --rh: #c27a6c; --lh: #9a87c4; --rh-wash: #b6928a } }
+:root[data-theme="dark"] {
+  --ivory: #d4d0cb; --ivory-far: #aaa49c; --ivory-lip: #a39b91; --ebony: #120f0d; --ebony-top: #221d1a; --ebony-front: #3d3631;
+  --felt: #5a2422; --bed: #787069; --rail: #332c27; --keydown: #6fa6d2; --lyre: #1d1916; --brass: #c69f4c; --brass-dn: #8f6c26;
+  --brass-shank: #a07c32; --rh: #c27a6c; --lh: #9a87c4; --rh-wash: #b6928a }
+code { font-size: 13px; background: var(--sand); border-radius: 6px; padding: 1px 5px }
+.pk { position: relative; display: flex; gap: 1px; background: var(--bed); padding-top: 4px; overflow: hidden }
+.pk .felt { position: absolute; inset: 0 0 auto; height: 5px; background: linear-gradient(var(--felt), color-mix(in oklab, var(--felt) 70%, #000)); z-index: 3; box-shadow: 0 2px 3px rgba(0,0,0,.25) }
+.pk .w { --fill: var(--ivory); position: relative; flex: 1; border-radius: 0 0 5px 5px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; padding-bottom: 12px; font: 600 11px var(--sans); color: #3a322b;
+  background: linear-gradient(to bottom, color-mix(in oklab, var(--fill) 80%, #000) 0, var(--fill) 16%, var(--fill) 78%, color-mix(in oklab, var(--fill) 94%, #000) 100%);
+  box-shadow: inset 1px 0 0 rgba(255,255,255,.55), inset -1px 0 0 rgba(0,0,0,.10), 0 1px 2px rgba(0,0,0,.18); transition: transform .08s }
+.pk .w::after { content: ""; position: absolute; inset: auto 0 0; height: 7px; border-radius: 0 0 5px 5px; background: linear-gradient(color-mix(in oklab, var(--fill) 96%, #000), color-mix(in oklab, var(--fill) 82%, #000)); border-top: 1px solid rgba(255,255,255,.6) }
+.pk .w.dn { transform: translateY(1.5px); background: linear-gradient(to bottom, color-mix(in oklab, var(--fill) 62%, #000) 0, var(--fill) 26%, var(--fill) 100%) }
+.pk .w.dn::after { height: 3px }
+.pk .w.lit { --fill: var(--keydown) } .pk .w.rh { --fill: var(--rh) } .pk .w.lh { --fill: var(--lh) } .pk .w.wash { --fill: var(--rh-wash) } .pk .w.bad { --fill: var(--wrong) }
+.pk .w.held { box-shadow: inset 0 0 0 3px var(--sky-ink), 0 1px 2px rgba(0,0,0,.18) }
+.pk .b { --fill: var(--ebony); position: absolute; top: 4px; height: 60%; z-index: 2; border-radius: 0 0 3px 3px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 14%; font: 600 10px var(--sans); color: #f3eee7;
+  background: linear-gradient(to bottom, color-mix(in oklab, var(--fill) 70%, #000) 0, var(--fill) 10%, color-mix(in oklab, var(--fill) 88%, #fff) 82%, var(--fill) 100%);
+  box-shadow: inset 2px 0 0 rgba(255,255,255,.10), inset -2px 0 0 rgba(0,0,0,.45), 1px 3px 4px rgba(0,0,0,.4) }
+.pk .b::after { content: ""; position: absolute; inset: auto 2px 0; height: 11%; border-radius: 0 0 2px 2px; background: linear-gradient(var(--ebony-front), color-mix(in oklab, var(--ebony-front) 60%, #000)) }
+.pk .b.dn { transform: translateY(1.5px); box-shadow: inset 2px 0 0 rgba(255,255,255,.10), inset -2px 0 0 rgba(0,0,0,.45), 0 1px 2px rgba(0,0,0,.35) }
+.pk .b.dn::after { height: 5% }
+.pk .b.lit { --fill: #3f78a5 } .pk .b.rh { --fill: #b2584a }
+.pk .cap { display: inline-grid; place-items: center; min-width: 16px; height: 16px; padding: 0 3px; border-radius: 4px; font: 600 10px var(--sans); text-transform: uppercase; background: rgba(0,0,0,.07); box-shadow: inset 0 -1px 0 rgba(0,0,0,.15) }
+.pk .b .cap { background: rgba(255,255,255,.14); box-shadow: inset 0 -1px 0 rgba(0,0,0,.4) }
+.pk .shade { position: absolute; inset: 4px 0 auto; height: 10px; background: linear-gradient(rgba(0,0,0,.22), transparent); z-index: 2; pointer-events: none }
+/* the rail beneath the keys */
+.rail { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(max-content,1fr); align-items: center; min-height: 56px; padding: 0 6px; background: var(--rail); box-shadow: inset 0 1px 0 rgba(0,0,0,.08) }
+.rail .end { display: flex; justify-content: flex-end; align-items: center }
+.rail .chord { font: 600 18px var(--display); padding: 0 8px; white-space: nowrap }
+.lyre { position: relative; display: flex; align-items: flex-end; gap: 4px; height: 56px; padding: 4px 8px 0; background: var(--lyre); border-radius: 10px 10px 0 0 }
+.lyre .led { position: absolute; top: 6px; right: 8px; width: 7px; height: 7px; border-radius: 9px; background: #5b4e40 }
+.lyre .led.on { background: var(--led); box-shadow: 0 0 6px 2px color-mix(in oklab, var(--led) 70%, transparent) }
+.pedal { display: grid; justify-items: center; align-content: end; gap: 1px; min-width: 48px; min-height: 48px; padding-bottom: 2px }
+.pedal span { font: 600 11px var(--sans); color: #cbbfae } .pedal.dn span { color: #f3dea4 }
+/* option B: a lit Sustain toggle in the strip */
+.sus { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: 999px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line); font: 600 14px var(--sans) }
+.sus i { width: 8px; height: 8px; border-radius: 9px; background: var(--line) }
+.sus.on { background: var(--honey); color: var(--honey-ink); box-shadow: none } .sus.on i { background: #fff6dc; box-shadow: 0 0 6px 2px rgba(255,240,200,.9) }
+/* the Piano sheet */
+.psheet { position: absolute; inset: auto 0 0; background: var(--card); border-radius: 24px 24px 0 0; padding: 8px 16px 34px; box-shadow: 0 -8px 30px rgba(0,0,0,.18); display: grid; gap: 10px; z-index: 6 }
+.psheet .grip { width: 36px; height: 5px; border-radius: 9px; background: var(--line); margin: 0 auto 2px }
+.psheet .row2 { display: grid; gap: 8px; padding: 10px 0; border-top: 1px solid var(--line) }
+.psheet .row2:first-of-type { border-top: 0 }
+.psheet .lbl { font-weight: 600 } .psheet .sub { font-size: 13px; color: var(--ink-soft) }
+.slider { height: 6px; border-radius: 9px; background: linear-gradient(90deg, var(--ink) 100%, var(--line) 100%); position: relative }
+.slider::after { content: ""; position: absolute; left: calc(100% - 22px); top: -8px; width: 22px; height: 22px; border-radius: 99px; background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,.3) }
+.pop { position: absolute; width: 380px; background: var(--card); border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,.22), 0 0 0 1px var(--line); padding: 12px 16px; display: grid; gap: 4px; z-index: 6 }
+
+/* R34: slim keys edge to edge at the foot, the divider, the bar's Sustain and Keyboard. */
+.pk.slim { padding-top: 3px; gap: 0.5px }
+.pk.slim .felt { height: 3px }
+.pk.slim .w { border-radius: 0 0 2px 2px; padding-bottom: 3px; font-size: 8px; box-shadow: inset 1px 0 0 rgba(255,255,255,.5), inset -.5px 0 0 rgba(0,0,0,.18) }
+.pk.slim .w::after { height: 3px; border-radius: 0 0 2px 2px }
+.pk.slim .b { top: 3px; border-radius: 0 0 1.5px 1.5px; box-shadow: inset 1px 0 0 rgba(255,255,255,.10), inset -1px 0 0 rgba(0,0,0,.45), .5px 1.5px 2px rgba(0,0,0,.4) }
+.mac .pk.slim .w { font-size: 10px; padding-bottom: 6px }
+/* the divider: a slim bar on the keys' edge facing the music, its grip in the middle */
+.divider { position: relative; height: 12px; flex: none; display: grid; place-items: center; background: var(--card); border-top: 1px solid var(--line); cursor: row-resize }
+.divider i { width: 36px; height: 4px; border-radius: 9px; background: var(--line) }
+.divider.drag { background: var(--sand) } .divider.drag i { background: var(--ink-soft) }
+.divider.drag::before { content: ""; position: absolute; left: 50%; top: -32px; height: 44px; width: 120px; transform: translateX(-50%); border: 1.5px dashed var(--sky-ink); border-radius: 12px }
+/* the bar's keyboard tools */
+.held { font: 600 20px var(--display); padding: 0 8px; white-space: nowrap; display: flex; align-items: center; height: 44px }
+.held small { font: 500 12px var(--sans); color: var(--ink-soft); margin-right: 6px }
+.rb.lit { background: var(--keydown); color: var(--sky-ink); box-shadow: inset 0 0 0 1.5px var(--sky-ink) }
+.rb.pressed { background: color-mix(in oklab, var(--sand) 70%, var(--ink) 12%); color: var(--ink) }
+.split { display: flex; border-radius: 999px; background: var(--sand) }
+.split .rb { background: transparent } .split .rb.lit { background: var(--keydown) }
+.split .rb.more { width: 44px; border-radius: 0 999px 999px 0; position: relative }
+.split .rb.more.on::after { content: ""; position: absolute; top: 9px; right: 6px; width: 6px; height: 6px; border-radius: 9px; background: var(--sky-ink) }
+.menu { position: absolute; z-index: 7; background: var(--card); border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,.22), 0 0 0 1px var(--line); padding: 6px; display: grid; gap: 2px; min-width: 210px }
+.menu .it { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: 10px; font-weight: 500 }
+.menu .it.lit { background: var(--keydown); color: var(--sky-ink) }
+.menu .it small { margin-left: auto; font-size: 12px; color: var(--ink-soft) } .menu .it.lit small { color: var(--sky-ink) }
+.menu .cap2 { font-size: 12px; color: var(--ink-soft); padding: 4px 12px 2px }
+.note { position: absolute; z-index: 8; background: var(--ink); color: var(--paper); font: 600 12px var(--sans); border-radius: 8px; padding: 4px 8px; white-space: nowrap }
+/* the folded keys' strip, and the sheet's one pill */
+.kstrip { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; flex: none; background: var(--sand); color: var(--ink-soft); border-top: 1px solid var(--line); font: 500 14px var(--sans) }
+.spill { position: absolute; right: 10px; bottom: 10px; z-index: 4; display: flex; align-items: center; border-radius: 999px; background: var(--card); box-shadow: 0 4px 14px rgba(0,0,0,.14), 0 0 0 1px var(--line) }
+.spill .rb { background: transparent } .spill .rb.on { background: color-mix(in oklab, var(--sand) 70%, var(--ink) 12%) }
+.spill .sep { width: 1px; height: 24px; background: var(--line); margin: 0 2px }
+.spill .pct { font: 500 13px var(--sans); min-width: 44px; text-align: center }
+
+</style>
+<div class="wrap">
+  <div class="intro">
+    <h1>The keyboard · Round 34</h1>
+    <p class="soft">The on-screen keyboard as Songscription’s: all 88 keys slim and edge to edge at the foot, nothing attached to them, every control in the screen’s bar, a divider to make the keys taller or shorter. The keys stay Round 33’s ivory and ebony, and the pedals sound as before. No falling notes and no finger numbers on or under the keys. Phones in the iPhone 17 Pro frame, laptops in the MacBook Air with Safari.</p>
+    <p class="soft">Each screen has <b>Approve</b>, <b>Revise</b> or <b>Remove</b> and a note; your answers stay in this browser.</p>
+  </div>
+  <nav class="toc" aria-label="Questions">
+    <a href="#q1">1 Keys at the foot</a><a href="#q2">2 The bar</a><a href="#q3">3 Pedals</a><a href="#q4">4 Divider and key size</a><a href="#q5">5 Pages</a><a href="#q6">6 Settings</a><a href="#q7">7 Before and after</a><a href="#q8">8 The sheet’s pill</a>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="ptSize(1)">iPhone 17 Pro · app</button><script>var PT_SIZES=[['pro','iPhone 17 Pro · app'],['safari','iPhone 17 Pro · Safari'],['small','Smaller iPhone · app']];function ptSize(step){var k=0;try{k=Math.max(0,PT_SIZES.findIndex(function(x){return x[0]===localStorage.getItem('pt-mock-size')}))}catch(e){}k=(k+step)%PT_SIZES.length;document.body.classList.remove('small','safari');if(PT_SIZES[k][0]!=='pro')document.body.classList.add(PT_SIZES[k][0]);document.getElementById('sizeBtn').textContent=PT_SIZES[k][1];try{localStorage.setItem('pt-mock-size',PT_SIZES[k][0])}catch(e){}}ptSize(0)</script></span>
+  </nav>
+
+  <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>All 88 keys, slim and edge to edge at the foot</h2></div>
+    <p class="where">Where: the Player (/play/hot-cross-buns), the score editor, and every page that shows keys.</p>
+    <p>What changes: the strip under the keys goes — no chord name, no − +, no ⚙, no pedals under them. The keys reach both edges of the screen, at a piano’s proportion: all 88 across a laptop, the same 88 tiny keys on a phone, right above the transport. Only every C is named (your Note names setting). The music sounds and lights the keys as before.</p>
+    <div class="screens" id="s1"></div>
+    <div class="rec">Recommendation: as drawn, Songscription’s keyboard. The Player’s transport stays in its own row under the keys (Songscription’s phone bar), so Play keeps its place.</div>
+  </section>
+
+  <section class="q" id="q2"><div class="qhead"><span class="qnum">2</span><h2>The keyboard’s controls in the bar</h2></div>
+    <p class="where">Where: the bar of the Player, the editor and each page with keys.</p>
+    <p>What changes: the bar holds, before the ⚙, the chord you hold (on a laptop or tablet; a phone has no room, so it shows nowhere), <b>Sustain</b> (only while the keys show) and <b>Keyboard</b>, which shows or hides the keys and replaces Piano keys. The piano’s settings are in the screen’s ⚙: the Player’s own sheet at On-screen piano, the editor’s ⚙ › On-screen piano, a Practice page’s Settings › On-screen piano.</p>
+    <div class="screens" id="s2"></div>
+    <div class="rec">Recommendation: as drawn. Songscription puts Keyboard among the bar’s buttons and its settings under Settings; nothing about the keys floats.</div>
+  </section>
+
+  <section class="q" id="q3"><div class="qhead"><span class="qnum">3</span><h2>The pedals: Sustain in the bar, soft and sostenuto in its menu</h2></div>
+    <p class="where">Where: the bar, beside Keyboard.</p>
+    <p>What changes: Sustain lights blue — the colour of a key held down — while the pedal is down from anywhere — your finger on it, the space bar, a MIDI pedal, or the score’s pedal while the music plays. Hold it to hold; a quick tap latches it until the next tap. With Pedals: All three (On-screen piano), a ⌄ beside it opens Soft and Sostenuto, each held or latched the same way; a latched one stays down when the menu closes, and a dot on the ⌄ says so. The sound is Round 33’s exactly.</p>
+    <div class="screens" id="s3"></div>
+    <div class="rec">Recommendation: as drawn. OnlinePianist’s lit Sustain toggle, now in the bar; the soft and sostenuto pedals, rarely used, a tap away.</div>
+  </section>
+
+  <section class="q" id="q4"><div class="qhead"><span class="qnum">4</span><h2>A divider to resize the keys; key size in the settings</h2></div>
+    <p class="where">Where: between the music and the keys, everywhere the keys sit at the screen’s edge.</p>
+    <p>What changes: drag the divider up for taller keys or down for slimmer ones (from 56 px up to half the screen); a double click returns to the piano’s proportion. The height is remembered for a phone upright, a phone on its side, and a larger screen apart. Key size (On-screen piano) chooses how wide: <b>All keys</b> (the default) fit the width and never scroll; <b>Fit to music</b> and <b>Large</b> show fewer, larger keys that scroll to follow the music.</p>
+    <div class="screens" id="s4"></div>
+    <div class="rec">Recommendation: as drawn. Songscription’s “Resize score and piano roll”; Key depth goes from the settings, since the divider sets the height.</div>
+  </section>
+
+  <section class="q" id="q5"><div class="qhead"><span class="qnum">5</span><h2>Pages with keys: the Chord finder, Chords and the rest</h2></div>
+    <p class="where">Where: /practice/chord-finder, /practice/chords, Scales, Intervals, a progression, the Chord player, a lesson, a song’s preview.</p>
+    <p>What changes: the same keys, edge to edge at the foot, under their divider. Hidden from the bar’s Keyboard, they leave no floating Keys button: Keyboard in the bar brings them back. Chords marks a chord’s keys by role as before, without the circled finger numbers under them; the fingering stays in the page’s hand drawings and table.</p>
+    <div class="screens" id="s5"></div>
+    <div class="rec">Recommendation: as drawn. One keyboard, the same on every screen.</div>
+  </section>
+
+  <section class="q" id="q6"><div class="qhead"><span class="qnum">6</span><h2>On-screen piano settings</h2></div>
+    <p class="where">Where: Settings › On-screen piano, and the same page inside the Player’s and the editor’s ⚙.</p>
+    <p>What changes: Key size starts on All keys; Pedals says where the extra pedals are; Key depth and Collapse keyboard go (the divider and Keyboard do their jobs).</p>
+    <div class="screens" id="s6"></div>
+  </section>
+
+  <section class="q" id="q7"><div class="qhead"><span class="qnum">7</span><h2>Before and after</h2></div>
+    <p class="where">Where: the Player on the iPhone 17 Pro; Chords on the MacBook.</p>
+    <div class="screens" id="s7"></div>
+  </section>
+
+  <section class="q" id="q8"><div class="qhead"><span class="qnum">8</span><h2>The sheet’s one pill: layout and zoom together</h2></div>
+    <p class="where">Where: the Player and the score editor, at the score’s bottom-right corner.</p>
+    <p>What changes: as Songscription’s view pill (Page · Infinite width · Infinite height · Smaller · 100% · Larger), one small floating control at the score’s corner: the layout’s three choices, and in Page view the zoom beside them. The Layout tiles leave Display and the editor’s View, so the layout has one place. The zoom no longer fades in and out.</p>
+    <div class="screens" id="s8"></div>
+    <div class="rec">Recommendation: as drawn: one control for how the score looks, where your eyes are.</div>
+  </section>
+</div>
+
+<script>
+// ——— icons (lucide shapes) ———
+const P = {
+  back: '<path d="m15 18-6-6 6-6"/>', pen: '<path d="M21.2 6.8a2.8 2.8 0 0 0-4-4L3.8 16.2 3 21l4.8-.8Z"/><path d="m15 5 4 4"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',
+  more: '<circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', select: '<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8M13 12h8M13 18h8"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', music: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+  grad: '<path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>', metro: '<path d="M12 11.4V9.1"/><path d="m12 17 6.6-6.6"/><path d="M19.2 16.5 16.4 4.6A2 2 0 0 0 14.4 3H9.6a2 2 0 0 0-2 1.6L4.8 16.5A2.5 2.5 0 0 0 7.2 19.5h9.6a2.5 2.5 0 0 0 2.4-3Z"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/>', heart: '<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>', checkc: '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>', play: '<path d="M6 3v18l15-9Z" fill="currentColor"/>',
+  folder: '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9l-.8-1.2A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>',
+  archive: '<rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8M10 12h4"/>', clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+  share: '<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4M12 2v13"/>', link: '<path d="M9 17H7A5 5 0 0 1 7 7h2M15 7h2a5 5 0 1 1 0 10h-2M8 12h8"/>',
+  church: '<path d="M10 9h4M12 7v5M14 22v-4a2 2 0 0 0-4 0v4M18 22V5l-6-3-6 3v17M2 22h20"/>', heartsm: '<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/>',
+  book: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>', piano: '<path d="M18.5 8c-1.4 0-2.6-.8-3.2-2A6.9 6.9 0 0 0 2 9v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-8.5C22 9.6 20.4 8 18.5 8"/><path d="M2 14h20M6 14v4M10 14v4M14 14v4M18 14v4"/>',
+  chev: '<path d="m9 18 6-6-6-6"/>', down: '<path d="m6 9 6 6 6-6"/>', sort: '<path d="m3 16 4 4 4-4M7 20V4M21 8l-4-4-4 4M17 4v16"/>', filter: '<path d="M3 6h18M7 12h10M10 18h4"/>',
+  panel: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M16 15l-3-3 3-3"/>', copy: '<rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2"/>',
+  info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>', lock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  grip: '<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>',
+  mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4"/>',
+  wifi: '<path d="M12 20h.01M8.5 16.4a5 5 0 0 1 7 0M2 8.8a15 15 0 0 1 20 0M5 12.9a10 10 0 0 1 14 0"/><path d="M2 2l20 20"/>', star: '<path d="M12 2l3 7 7 .6-5.3 4.7 1.6 7.2L12 17.8 5.7 21.5l1.6-7.2L2 9.6 9 9z" fill="currentColor" stroke="none"/>',
+  image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>', trash: '<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+  door: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+};
+const ic = (n, s = 22, w = 1.9) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]}</svg>`;
+const rb = (n, cls = '') => `<span class="rb ${cls}">${ic(n, 20)}</span>`;
+const lvl = n => `<span style="display:inline-flex;gap:4px;align-items:center;font-size:13px;color:var(--ink-soft)" aria-label="Level ${n}"><span class="lvl">${[5, 8, 11, 14].map((h, i) => `<i style="height:${h}px" class="${i < n ? 'f' : ''}"></i>`).join('')}</span>${n}</span>`;
+const status = () => `<div class="status"><span>9:41</span><span>●●● ▮</span></div>`;
+const tabs = (on) => `<div class="tabs">${[['grad', 'Learn'], ['music', 'Songs'], ['metro', 'Practice'], ['user', 'Profile']].map(([i, l]) => `<div class="${l === on ? 'on' : ''}">${ic(i, 24)}${l}</div>`).join('')}</div>`;
+const sidebar = (on) => `<aside class="sb"><div class="brand">Piano Trainer <span style="color:var(--ink-soft)">${ic('panel', 20)}</span></div>
+  ${[['grad', 'Learn'], ['music', 'Songs'], ['metro', 'Practice']].map(([i, l]) => `<div class="it ${l === on ? 'on' : ''}">${ic(i, 20)}${l}</div>`).join('')}
+  <div class="foot"><div class="it">${ic('search', 20)}Search</div><div class="it">${ic('gear', 20)}Settings</div><div class="acc"><div class="it"><span class="av p-yellow" style="width:22px;height:22px;font-size:12px">K</span>Profile</div></div></div></aside>`;
+const phone = (inner, tab) => `<div class="dev phone"><div class="scr">${status()}${inner}${tab ? tabs(tab) : ''}</div></div>`;
+const mac = (inner, on = 'Songs') => `<div class="dev mac"><div class="scr mac">${sidebar(on)}<div class="main">${inner}</div></div></div>`;
+const fig = (id, title, body, dev) => `<figure data-fb="${id}" data-title="${title}"><div class="scrollx">${dev}</div><figcaption><b>${id} ${title}</b>${body}</figcaption></figure>`;
+const kb = (dots) => `<span class="kbd">${Array(7).fill('<i></i>').join('')}${[9, 20, 41, 52, 63].map(x => `<b style="left:${x}%"></b>`).join('')}${dots.map(x => `<u style="left:${x}%"></u>`).join('')}</span>`;
+const SONGS = [
+  ['Amazing Grace', 'John Newton · tune New Britain', 'G', 'G  G7  C  D', 2, true, 'Today'],
+  ['Silent Night', 'Joseph Mohr · Franz Gruber', 'C', 'C  G7  F', 2, true, 'Yesterday'],
+  ['Ode to Joy', 'Ludwig van Beethoven', 'C', 'C  G', 1, false, '3 Nov'],
+  ['Our Father in Heaven', 'О наш Отец на небесах', 'Fm', 'Fm  G°  C7  E♭', 3, false, '1 Nov'],
+  ['Wonderful Grace of Jesus', 'Haldor Lillenas', 'D♭', 'D♭  E°7  A♭7  F7', 4, false, '28 Oct'],
+];
+const songRow = ([n, by, k, , l, learned]) => `<div class="row"><div class="txt"><div class="n">${n}</div><div class="d">${by}</div></div><span class="key">${k}</span>${lvl(l)}<span class="tick" style="width:22px">${learned ? ic('checkc', 20) : ''}</span><span class="rb sm">${ic('more', 20)}</span></div>`;
+const FOLDERS = [['p-yellow', 'music', 'Songs to learn', '23 songs'], ['p-sand', 'heartsm', '«Боже, спасибо»', '20 songs'], ['p-sky', 'piano', 'Called to Play', '40 songs · 1 folder'], ['p-grass', 'church', 'Hymns', '5 songs']];
+const folderRow = ([p, i, n, d], extra = '') => `<div class="row"><span class="tile ${p}">${ic(i, 22)}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div>${extra}<span class="rb sm">${ic('more', 20)}</span></div>`;
+
+Object.assign(P, {
+  x: '<path d="M18 6 6 18M6 6l12 12"/>',
+  rotate: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+  loop: '<path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',
+  prev: '<path d="m15 18-6-6 6-6"/>', next: '<path d="m9 18 6-6-6-6"/>',
+  timer: '<path d="M10 2h4M12 14l3-3"/><circle cx="12" cy="14" r="8"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
+  layers: '<path d="m12 2 10 5-10 5L2 7Z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/>',
+  ear: '<path d="M6 8.5a6.5 6.5 0 1 1 13 0c0 6-6 6-6 10a3.5 3.5 0 1 1-7 0"/><path d="M15 8.5a2.5 2.5 0 0 0-5 0v1a2 2 0 1 1 0 4"/>',
+  keys: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M8 4v10M16 4v10M12 14v6M6 14h4M14 14h4"/>',
+  updown: '<path d="m7 15 5 5 5-5M7 9l5-5 5 5"/>',
+  minus: '<path d="M5 12h14"/>',
+  metro: '<path d="M9 3h6l4 18H5Z"/><path d="m12 15 5-9"/><path d="M8 17h8"/>',
+  dl: '<path d="M12 15V3M7 10l5 5 5-5M5 21h14"/>',
+  msg: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/>',
+  lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  pause: '<path d="M8 5v14M16 5v14"/>',
+});
+const app = (inner) => `<div class="dev phone"><div class="scr" style="display:flex;flex-direction:column"><div style="height:var(--sb, 47px);display:flex;align-items:center;justify-content:space-between;padding:0 30px 6px;font:600 15px var(--sans)"><span>9:41</span><span>••• ▮</span></div>${inner}</div></div>`;
+// a score system: staff lines and note heads, in ink
+const sys = (y, w = 361, notes = 8, chords = ['C', 'G']) => `<svg width="${w}" height="120" viewBox="0 0 ${w} 120" style="display:block;color:var(--ink)" aria-hidden="true">${chords.map((c, i) => `<text x="${50 + i * (w - 60) / chords.length}" y="12" font-family="Literata,serif" font-size="14" font-weight="600" fill="currentColor">${c}</text>`).join('')}${[0, 1].map((s) => [0, 1, 2, 3, 4].map((l) => `<line x1="6" x2="${w - 4}" y1="${22 + s * 52 + l * 7}" y2="${22 + s * 52 + l * 7}" stroke="currentColor" stroke-width=".7" opacity=".7"/>`).join('')).join('')}<line x1="6" x2="6" y1="22" y2="102" stroke="currentColor"/><line x1="${w - 4}" x2="${w - 4}" y1="22" y2="102" stroke="currentColor"/><line x1="${w / 2}" x2="${w / 2}" y1="22" y2="102" stroke="currentColor" stroke-width=".7"/><text x="10" y="50" font-size="30" fill="currentColor">𝄞</text><text x="10" y="94" font-size="24" fill="currentColor">𝄢</text>${Array.from({ length: notes }, (_, i) => `<ellipse cx="${48 + i * (w - 60) / notes}" cy="${29 + ((i * 5) % 4) * 3.5}" rx="4.4" ry="3.3" fill="currentColor" transform="rotate(-20 ${48 + i * (w - 60) / notes} ${29 + ((i * 5) % 4) * 3.5})"/>`).join('')}${Array.from({ length: notes / 2 }, (_, i) => `<ellipse cx="${48 + i * 2 * (w - 60) / notes}" cy="${88 - (i % 2) * 7}" rx="4.4" ry="3.3" fill="none" stroke="currentColor" stroke-width="1.4"/>`).join('')}</svg>`;
+const title = `<div style="text-align:center;font:600 20px var(--display);padding:8px 0 2px">Hot Cross Buns</div><div style="font-size:14px;color:var(--ink-soft);padding:0 16px">1 · Verse · ♩ = 92</div>`;
+const bar = `<div class="bar">${rb('x').replace('class="rb ', 'class="rb plain ')}<div class="t"><span>Hot Cross Buns</span><span class="rb sm" style="color:var(--ink)">${ic('pen', 20)}</span></div><div class="tools">${rb('keys', 'on')}${rb('gear')}</div></div>`;
+const tbtn = (i, l, on = '') => `<div style="display:grid;justify-items:center;align-content:center;gap:1px;min-width:44px;min-height:44px;font:600 12px var(--sans);color:${on ? 'var(--ink)' : 'var(--ink-soft)'}">${ic(i, 22)}<span>${l}</span></div>`;
+// R33 screens, after the R32 helpers (icons, frames, the score system, the bar).
+Object.assign(P, {
+  hide: '<path d="m6 9 6 6 6-6"/>',
+  plusc: '<path d="M12 5v14M5 12h14"/>',
+  minus: '<path d="M5 12h14"/>',
+})
+
+const LETTERS = 'CDEFGAB'
+const WHITE_CAPS = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', '’']
+const BLACK_CAPS = { 0: 'W', 1: 'E', 3: 'T', 4: 'Y', 5: 'U', 7: 'O', 8: 'P' }
+/**
+ * The keys as R33 draws them. `w`: white marks by index ('lit', 'rh', 'lh', 'wash', 'bad', 'held'), `dn`: the white keys
+ * down, `b`: black marks by the white key they follow, `names`: 'c' | 'all' | 'none', `caps`: computer letters from
+ * `capsFrom` (the white index of the C the letters start on).
+ */
+const piano = ({ whites = 15, octave = 3, w = {}, dn = [], b = {}, bdn = [], names = 'c', caps = false, capsFrom = 7, h = 150 } = {}) => {
+  const bw = 58 / whites
+  const white = Array.from({ length: whites }, (_, i) => {
+    const letter = LETTERS[i % 7]
+    const name = names === 'all' || (names === 'c' && letter === 'C') ? `${letter}${letter === 'C' || names === 'all' ? (letter === 'C' ? octave + Math.floor(i / 7) : '') : ''}` : ''
+    const cap = caps && i >= capsFrom && i - capsFrom < WHITE_CAPS.length ? `<span class="cap">${WHITE_CAPS[i - capsFrom]}</span>` : ''
+    const cls = [w[i] ?? '', dn.includes(i) ? 'dn' : ''].join(' ')
+    return `<div class="w ${cls}">${cap}<span>${name}</span></div>`
+  }).join('')
+  const black = Array.from({ length: whites - 1 }, (_, i) => {
+    if (![0, 1, 3, 4, 5].includes(i % 7)) return ''
+    const at = i - capsFrom
+    const cap = caps && BLACK_CAPS[at] ? `<span class="cap">${BLACK_CAPS[at]}</span>` : ''
+    return `<div class="b ${b[i] ?? ''} ${bdn.includes(i) ? 'dn' : ''}" style="left:calc(${((i + 1) * 100) / whites}% - ${bw / 2}%);width:${bw}%">${cap}</div>`
+  }).join('')
+  return `<div class="pk" style="height:${h}px"><div class="felt"></div>${white}${black}</div>`
+}
+
+/** One brass pedal on the lyre: sinks while down. */
+const pedal = (name, down = false) => `<span class="pedal ${down ? 'dn' : ''}" role="button" aria-pressed="${down}" aria-label="${name} pedal">
+  <svg width="44" height="30" viewBox="0 0 44 30" aria-hidden="true" style="overflow:visible;transform:translateY(${down ? 3 : 0}px)">
+    <rect x="18" y="0" width="8" height="${down ? 7 : 10}" rx="1.5" fill="var(--brass-shank)"/>
+    <path d="M4 ${down ? 8 : 10}h36l3 11a6 6 0 0 1-6 7H7a6 6 0 0 1-6-7Z" fill="${down ? 'var(--brass-dn)' : 'var(--brass)'}" stroke="#6b4f18" stroke-width="1.2"/>
+    <path d="M7 ${down ? 12 : 14}h30" stroke="#f3dea4" stroke-width="1.4" opacity="${down ? 0.35 : 0.8}"/>
+  </svg><span>${name}</span></span>`
+
+/** A: the rail with the pedals on their lyre; the latch's light on the lyre. */
+const railA = ({ chord = '', three = false, sus = false, soft = false, latched = false, wide = false, hide = false } = {}) => `<div class="rail" style="padding:0 ${wide ? 20 : 6}px">
+  <span class="chord">${chord}</span>
+  <span class="lyre">${latched ? '<i class="led on" title="Sustain latched"></i>' : ''}${three ? pedal('Soft', soft) + pedal('Sost.') : ''}${pedal('Sustain', sus || latched)}</span>
+  <span class="end">${wide ? rb('prev', 'plain') + rb('next', 'plain') : ''}${rb('minus', 'plain')}${rb('plusc', 'plain')}${rb('gear', 'plain')}${hide ? rb('hide', 'plain') : ''}</span></div>`
+
+/** B: a strip with a lit Sustain toggle, the controls at its end. */
+const railB = ({ chord = '', sus = false, wide = false, hide = false } = {}) => `<div class="rail" style="grid-template-columns:auto minmax(0,1fr) max-content;gap:8px;padding:0 ${wide ? 20 : 8}px">
+  <span class="sus ${sus ? 'on' : ''}"><i></i>Sustain</span><span class="chord">${chord}</span>
+  <span class="end">${wide ? rb('prev', 'plain') + rb('next', 'plain') : ''}${rb('minus', 'plain')}${rb('plusc', 'plain')}${rb('gear', 'plain')}${hide ? rb('hide', 'plain') : ''}</span></div>`
+
+// R34 screens, after the R32/R33 helpers (icons, frames, the score system, the bar, the keys).
+// R32's transport, tools row and score, as the Player draws them.
+const tempo = `<span class="chip" style="height:44px;justify-content:center;font-weight:600"><span style="font-family:var(--music);font-size:18px">♩</span>&nbsp;= 92</span>`
+const transportRow = (playing) => `<div style="display:flex;align-items:center;justify-content:space-between;min-height:60px;padding:2px 10px">${rb('loop', 'plain')}${rb('rotate', 'plain')}${rb('prev', 'plain')}<span style="width:56px;height:56px;border-radius:99px;background:var(--honey);color:var(--honey-ink);display:grid;place-items:center">${playing ? ic('pause', 26, 2.6) : ic('play', 26)}</span>${rb('next', 'plain')}${tempo}${rb('metro', 'plain')}</div>`
+const tools = (safe = true) => `<div style="display:flex;justify-content:space-around;align-items:center;min-height:56px;padding:0 8px ${safe ? 34 : 0}px;border-top:1px solid var(--line)">${tbtn('eye', 'Sheet ⌄')}${tbtn('updown', 'Key C')}${tbtn('layers', 'Original')}${tbtn('ear', 'Listen')}${tbtn('more', 'More')}</div>`
+const score = (lines = 3) => `<div style="flex:1;min-height:0;overflow:hidden;background:var(--paper);padding:0 16px">${title}${sys(0)}${lines > 1 ? sys(0, 361, 8, ['C', 'G', 'C']) : ''}${lines > 2 ? sys(0) : ''}${lines > 3 ? sys(0, 361, 8, ['G', 'C']) : ''}</div>`
+Object.assign(P, {
+  sustain: '<path d="M10.5 3h3v7h-3z"/><path d="M3 12h18l-1.2 6.2A3 3 0 0 1 16.9 21H7.1a3 3 0 0 1-2.9-2.8Z"/><path d="M6 15.5h12"/>',
+  chevd: '<path d="m7 10 5 5 5-5"/>',
+  hand: '<path d="M18 11V6a2 2 0 0 0-4 0v5M14 10V4a2 2 0 0 0-4 0v6M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.9-6-2.4l-3.6-3.6a2 2 0 0 1 2.8-2.8L7 15"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  file: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h6M8 13h8M8 17h8"/>',
+  rows: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18"/>',
+  pano: '<path d="M2 7v10M6 5v14"/><rect x="10" y="3" width="12" height="18" rx="2"/>',
+  zout: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M8 11h6"/>',
+  zin: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/>',
+  fit: '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',
+  cable: '<path d="M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1M19 15V6.5a3.5 3.5 0 0 0-7 0v11a3.5 3.5 0 0 1-7 0V9M21 21v-2h-4M3 5h4V3M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3"/>',
+})
+
+// The 88 keys from A0, slim: `w` marks white keys by index (C4 is 23), `b` black keys by the white key before them.
+const WH88 = 'ABCDEFG'
+const piano88 = ({ h = 56, w = {}, dn = [], b = {}, bdn = [], names = 'c', from = 0, to = 52 } = {}) => {
+  const count = to - from
+  const bw = 58 / count
+  const white = Array.from({ length: count }, (_, k) => {
+    const i = from + k
+    const letter = WH88[i % 7]
+    const oct = Math.floor((i + 5) / 7)
+    const name = names === 'c' && letter === 'C' ? `C${oct}` : names === 'c4' && i === 23 ? 'C4' : ''
+    return `<div class="w ${w[i] ?? ''} ${dn.includes(i) ? 'dn' : ''}"><span>${name}</span></div>`
+  }).join('')
+  const black = Array.from({ length: count - 1 }, (_, k) => {
+    const i = from + k
+    if (!['C', 'D', 'F', 'G', 'A'].includes(WH88[i % 7])) return ''
+    return `<div class="b ${b[i] ?? ''} ${bdn.includes(i) ? 'dn' : ''}" style="left:calc(${((k + 1) * 100) / count}% - ${bw / 2}%);width:${bw}%"></div>`
+  }).join('')
+  return `<div class="pk slim" style="height:${h}px;flex:none"><div class="felt"></div>${white}${black}</div>`
+}
+const strip = () => `<div class="kstrip">${ic('keys', 16)}Keyboard${ic('fit', 14)}</div>`
+const pill = (layout = 'vertical') => `<div class="spill"><span class="rb ${layout === 'page' ? 'on' : ''}" title="Page view">${ic('file', 20)}</span><span class="rb ${layout === 'vertical' ? 'on' : ''}" title="Vertical scroll">${ic('rows', 20)}</span><span class="rb ${layout === 'panorama' ? 'on' : ''}" title="Panorama">${ic('pano', 20)}</span>${layout === 'page' ? `<span class="sep"></span><span class="rb">${ic('zout', 20)}</span><span class="pct">100 %</span><span class="rb">${ic('zin', 20)}</span><span class="rb">${ic('fit', 18)}</span>` : ''}</div>`
+const divider = (drag = false) => `<div class="divider ${drag ? 'drag' : ''}" role="separator" aria-label="Resize keyboard"><i></i></div>`
+
+// The bar's keyboard tools: the chord held (laptop), Sustain (+ ⌄ with All three), Keyboard.
+const susBtn = ({ lit = false, three = false, latchedMore = false } = {}) =>
+  three
+    ? `<span class="split"><span class="rb ${lit ? 'lit' : ''}" title="Sustain pedal">${ic('sustain', 20)}</span><span class="rb more ${latchedMore ? 'on' : ''}" title="Soft and sostenuto pedals">${ic('chevd', 18)}</span></span>`
+    : `<span class="rb ${lit ? 'lit' : ''}" title="Sustain pedal">${ic('sustain', 20)}</span>`
+const kbdBtn = (shown = true) => `<span class="rb ${shown ? 'pressed' : ''}" title="Keyboard">${ic('keys', 20)}</span>`
+const held = (chord) => (chord ? `<span class="held"><small>Chord held</small>${chord}</span>` : '')
+const kTools = ({ chord = '', lit = false, three = false, shown = true, latchedMore = false } = {}) =>
+  `${held(chord)}${shown ? susBtn({ lit, three, latchedMore }) : ''}${kbdBtn(shown)}`
+
+// The Player
+const playerBar = (o = {}, wide = false) => `<div class="bar">${rb('x', 'plain')}<div class="t ${wide ? 'lg' : ''}"><span>Hot Cross Buns</span><span class="rb sm" style="color:var(--ink)">${ic('pen', 20)}</span></div><div class="tools">${kTools(o)}${rb('gear')}</div></div>`
+const PLAY_MARKS = { w: { 25: 'rh', 16: 'lh', 18: 'lh', 20: 'lh' }, dn: [25, 16, 18, 20] }
+const phonePlayer = ({ keys = true, h = 56, drag = false, lit = false, three = false, marks = PLAY_MARKS, overlay = '' } = {}) =>
+  app(`${playerBar({ lit, three, shown: keys })}<div style="position:relative;flex:1;min-height:0;display:flex;flex-direction:column">${score(4)}${pill()}${overlay}</div>
+  ${keys ? divider(drag) + piano88({ h, ...marks }) : strip()}<div style="background:var(--card);border-top:1px solid var(--line)">${transportRow(true)}${tools()}</div>`)
+const macPlayer = ({ keys = true, h = 145, chord = 'C', lit = false, three = false, overlay = '', latchedMore = false, size = 'all' } = {}) =>
+  mac(`${playerBar({ chord, lit, three, shown: keys, latchedMore }, true)}
+  <div style="display:flex;flex-direction:column;height:calc(100% - 88px)">
+    <div style="position:relative;flex:1;min-height:0;overflow:hidden;display:flex;justify-content:center;background:var(--sand);padding-top:16px"><div style="width:640px;background:var(--card);box-shadow:0 2px 10px rgba(0,0,0,.08);padding:20px 40px">${title}${sys(0, 560)}${sys(0, 560, 8, ['C', 'G', 'C'])}${sys(0, 560)}</div>${pill(size === 'pagepill' ? 'page' : 'vertical')}${overlay}</div>
+    ${keys ? divider() + (size !== 'large' ? piano88({ h, ...PLAY_MARKS }) : piano({ whites: 22, octave: 2, h, w: { 16: 'rh', 0: 'lh', 2: 'lh', 4: 'lh' }, dn: [16, 0, 2, 4] })) : ''}
+    <div style="display:flex;align-items:center;justify-content:space-between;min-height:64px;padding:0 40px;background:var(--card);border-top:1px solid var(--line)"><span style="display:flex;gap:4px">${tbtn('eye', 'Sheet ⌄')}${tbtn('layers', 'Original')}${tbtn('ear', 'Listen')}</span><span style="display:flex;align-items:center;gap:8px">${rb('loop', 'plain')}${rb('prev', 'plain')}<span style="width:56px;height:56px;border-radius:99px;background:var(--honey);color:var(--honey-ink);display:grid;place-items:center">${ic('pause', 26, 2.6)}</span>${rb('next', 'plain')}<span class="chip" style="height:44px">♩ = 92</span>${rb('metro', 'plain')}</span>${tbtn('more', 'More')}</div>
+  </div>`)
+
+// A Practice page: the Chord finder, Chords
+const finderBody = (chord) => `<div style="flex:1;min-height:0;display:grid;align-content:start;justify-items:center;gap:14px;padding:18px 16px;background:var(--paper)">
+  <span class="chip" style="height:44px">Spelled in <b>C major</b></span>
+  <div style="width:100%;min-height:340px;align-content:center;border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:22px 16px;display:grid;justify-items:center;gap:6px">
+  ${chord ? `<div style="font:600 44px var(--display)">${chord}</div><div style="color:var(--ink-soft)">C major · root position</div><div style="display:flex;gap:6px;margin-top:6px"><span class="chip">C</span><span class="chip">E</span><span class="chip">G</span></div>` : `<div style="font:600 26px var(--display)">Play or tap a chord</div><div style="color:var(--ink-soft);text-align:center">Hold three or more keys; the chord is named as you play.</div>`}</div></div>`
+const finderBar = (o) => `<div class="bar">${rb('back')}<div class="t"><span>Chord finder</span></div><div class="tools">${kTools(o)}${rb('cable')}${rb('gear')}</div></div>`
+const C_MAJOR = { w: { 23: 'lit', 25: 'lit', 27: 'lit' }, dn: [23, 25, 27] }
+const finder = ({ keys = true, chord = 'C', lit = false } = {}) =>
+  app(`${finderBar({ lit, shown: keys })}${finderBody(keys ? chord : '')}${keys ? divider() + piano88({ h: 56, ...C_MAJOR }) : strip()}<div style="height:34px;background:var(--card)"></div>`)
+
+const chordsMain = `<div style="flex:1;min-height:0;overflow:hidden;padding:20px 40px;background:var(--paper)"><div style="background:var(--card);border-radius:20px;box-shadow:inset 0 0 0 1px var(--line);padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:20px">
+  <div style="display:grid;gap:12px;align-content:start"><div style="font:600 64px/1 var(--display)">C</div><div class="soft">Major triad</div>
+  <div style="display:flex;gap:8px"><span class="chip" style="height:44px">Root <b>C</b></span><span class="chip" style="height:44px">Chord <b>C</b></span><span class="chip" style="height:44px">Voicing <b>Close</b></span></div>
+  <div class="soft" style="font-size:14px">Chord size</div><div class="seg" style="display:grid;grid-template-columns:repeat(5,1fr);text-align:center"><span class="on" style="min-height:44px;display:grid;place-items:center">Triad</span><span style="display:grid;place-items:center">7th</span><span style="display:grid;place-items:center">9th</span><span style="display:grid;place-items:center">11th</span><span style="display:grid;place-items:center">13th</span></div></div>
+  <div style="display:grid;place-items:center">${sys(0, 300, 2, ['C'])}</div></div></div>`
+const CHORD_ROLES = { w: { 23: 'rh', 25: 'lh', 27: 'wash' }, dn: [] }
+const macChords = ({ keys = true } = {}) =>
+  mac(`<div class="bar">${rb('back', 'plain')}<div class="t lg">Chords</div><div class="tools">${kTools({ shown: keys })}${rb('grid')}</div></div>
+  <div style="display:flex;flex-direction:column;height:calc(100% - 88px)">${chordsMain}${keys ? divider() + piano88({ h: 145, ...CHORD_ROLES }) : ''}</div>`, 'Practice')
+
+const menuAt = (pos, items) => `<div class="menu" style="${pos}"><div class="cap2">Pedals</div>${items.map(([name, small, on]) => `<div class="it ${on ? 'lit' : ''}">${ic('sustain', 18)}${name}<small>${small}</small></div>`).join('')}</div>`
+const callout = (pos, text) => `<span class="note" style="${pos}">${text}</span>`
+
+document.getElementById('s1').innerHTML = [
+  fig('1.1', 'Phone, the Player playing', 'The 88 keys edge to edge right above the transport, 56 px tall; the right hand’s E and the left hand’s chord lit in their colours. Under the score, the divider.', phonePlayer()),
+  fig('1.2', 'Laptop, the Player playing', 'All 88 keys across the window at a piano’s proportion (about 145 px), under the divider, over the transport. The chord held and Sustain in the bar.', macPlayer()),
+].join('')
+
+document.getElementById('s2').innerHTML = [
+  fig('2.1', 'Phone bar', 'Close, the title and ✎; then Sustain, Keyboard (pressed: the keys show) and ⚙. No chord on a phone.', phonePlayer()),
+  fig('2.2', 'Phone, keys hidden', 'Keyboard tapped: the keys fold into a thin “Keyboard” strip at the foot that brings them back at a tap (Songscription’s Score only); Sustain leaves the bar with them.', phonePlayer({ keys: false })),
+  fig('2.3', 'Laptop bar, a chord held', '“Chord held C” as you hold C–E–G on the keys or a MIDI keyboard; gone when you let go.', macPlayer({ chord: 'C' })),
+].join('')
+
+document.getElementById('s3').innerHTML = [
+  fig('3.1', 'Sustain down', 'Held by a finger, Space, a MIDI pedal or the score’s pedal while it plays: Sustain lit blue, as a key held down. A tap latches it the same way.', phonePlayer({ lit: true })),
+  fig('3.2', 'All three: the menu', 'With Pedals: All three, ⌄ beside Sustain opens Soft and Sostenuto. Here the soft pedal is latched; it stays down when the menu closes, the dot on ⌄ showing it.', macPlayer({ three: true, latchedMore: true, overlay: menuAt('top:4px;right:120px', [['Soft', 'Latched', true], ['Sostenuto', 'Hold or tap', false]]) })),
+].join('')
+
+document.getElementById('s4').innerHTML = [
+  fig('4.1', 'Dragging the divider', 'Drag it up: the keys grow taller (here 120 px), the score shorter. Remembered for this phone held upright.', phonePlayer({ h: 120, drag: true })),
+  fig('4.2', 'Key size: Large', 'Larger keys scroll to follow the music; All keys never scroll.', macPlayer({ size: 'large', h: 170 })),
+].join('')
+
+document.getElementById('s5').innerHTML = [
+  fig('5.1', 'Chord finder, phone', 'C major tapped on the keys; the stage names it. Sustain, Keyboard, MIDI and ⚙ in the bar.', finder()),
+  fig('5.2', 'Chord finder, keys hidden', 'The stage takes the screen; the strip at the foot or the bar’s Keyboard brings the keys back. Nothing floats.', finder({ keys: false })),
+  fig('5.3', 'Chords, laptop', 'The chord’s keys marked by role, no finger numbers under them.', macChords()),
+].join('')
+
+const pic = (label, svg, on) => `<div style="display:grid;justify-items:center;gap:4px;padding:8px 4px;border-radius:12px;border:1.5px solid ${on ? 'var(--ink)' : 'var(--line)'};background:${on ? 'var(--sand)' : 'var(--card)'};font-size:13px;font-weight:600;text-align:center">${svg}<span>${label}</span></div>`
+const tiny = (n) => `<span style="display:block;width:64px;height:22px">${piano({ whites: n, h: 22, names: 'none' }).replace('class="pk"', 'class="pk slim"')}</span>`
+const row = (name, line, control) => `<div style="display:grid;gap:8px;padding:12px 14px;border-top:1px solid var(--line)"><div><div style="font-weight:600">${name}</div><div style="font-size:14px;color:var(--ink-soft)">${line}</div></div>${control}</div>`
+const tilesRow = (items) => `<div style="display:grid;grid-template-columns:repeat(${items.length},1fr);gap:8px">${items.join('')}</div>`
+const settingsPage = app(`<div class="bar">${rb('back')}<div class="t"><span>On-screen piano</span></div></div><div style="flex:1;overflow:hidden;padding:4px 16px;background:var(--paper)">
+  <div class="h2" style="padding:6px 0;font-weight:600">Keys and sound</div><div class="group" style="background:var(--card);border-radius:16px;box-shadow:inset 0 0 0 1px var(--line)">
+  ${row('Key size', 'All keys fit the width; a larger size scrolls to follow the music.', tilesRow([pic('All keys', tiny(28), true), pic('Fit to music', tiny(12)), pic('Large', tiny(6))])).replace('border-top:1px solid var(--line)', 'border-top:0')}
+  ${row('Note names', 'Which keys carry their note name.', tilesRow([pic('On every C', '', true), pic('On every key', ''), pic('Hidden', '')]))}
+  ${row('Volume', 'How loud the keys you play sound.', '<div class="slider"></div>')}
+  ${row('Pedals', 'Adds the soft and sostenuto pedals to the Sustain button’s menu.', tilesRow([pic('Sustain only', ic('sustain', 22), true), pic('All three', ic('sustain', 22).repeat(3))]))}
+  </div></div>`)
+document.getElementById('s6').innerHTML = [fig('6.1', 'Settings › On-screen piano', 'Key size first, All keys chosen. Further down: Chord symbol (“Names the chord you hold in the bar”), names on highlighted keys, Swipe, Play on selection, Position. Key depth and Collapse keyboard are gone.', settingsPage)].join('')
+
+const shot = (src, alt, kind) => kind === 'phone'
+  ? `<div class="dev phone"><div class="scr"><img src="${src}" alt="${alt}" style="width:100%;height:100%;object-fit:cover;object-position:top"></div></div>`
+  : `<div class="dev mac"><div class="scr mac"><img src="${src}" alt="${alt}" style="width:100%;height:100%;object-fit:cover;object-position:top"></div></div>`
+document.getElementById('s7').innerHTML = [
+  fig('7.1', 'Player today', 'Keys inset under a rail: the pedal, − + and the sliders.', shot('before-player-phone.png', 'The Player today', 'phone')),
+  fig('7.2', 'Player, this design', 'Slim 88 keys edge to edge; Sustain and Keyboard in the bar.', phonePlayer()),
+  fig('7.3', 'Chords today', 'Finger circles under the keys and the rail with ‹ › − + ⚙ Hide.', shot('before-chords-laptop.png', 'Chords today', 'mac')),
+  fig('7.4', 'Chords, this design', 'The keys alone, at the foot, under the divider.', macChords()),
+].join('')
+
+const pagePlayer = macPlayer({ size: 'pagepill' })
+document.getElementById('s8').innerHTML = [
+  fig('8.1', 'Phone, Vertical scroll', 'The sheet’s one pill at its foot’s right: Page view · Vertical scroll · Panorama, the one chosen filled.', phonePlayer()),
+  fig('8.2', 'Laptop, Page view', 'In Page view the zoom joins the same pill: − 100 % + and Fit the page to the width. Always in sight, so it never appears under a finger.', pagePlayer),
+].join('')
+
+// ——— theme and feedback (kept in this browser) ———
+document.getElementById('themeBtn').onclick = () => { const r = document.documentElement; const dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; r.dataset.theme = dark ? 'light' : 'dark' }
+let saved = {}
+try { saved = JSON.parse(localStorage.getItem('r34-keyboard-feedback') || '{}') } catch (e) { saved = {} }
+const keep = () => { try { localStorage.setItem('r34-keyboard-feedback', JSON.stringify(saved)) } catch (e) { /* private window */ } }
+document.querySelectorAll('figure[data-fb]').forEach((f) => {
+  const id = f.dataset.fb
+  const box = document.createElement('div')
+  box.innerHTML = `<div class="fb">${[['ok', 'Approve'], ['change', 'Revise'], ['remove', 'Remove']].map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${saved[id]?.v === v}">${l}</button>`).join('')}</div><textarea aria-label="Note on ${id}" placeholder="Note on ${id}…"></textarea>`
+  f.append(box)
+  const ta = box.querySelector('textarea')
+  ta.value = saved[id]?.note || ''
+  ta.oninput = () => { saved[id] = { ...saved[id], note: ta.value }; keep() }
+  box.querySelectorAll('button').forEach((b) => (b.onclick = () => { box.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); saved[id] = { ...saved[id], v: b.dataset.v }; keep() }))
+})
+
+</script>

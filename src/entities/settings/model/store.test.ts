@@ -18,7 +18,6 @@ import {
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
   DEFAULT_CHORD_PLAYER,
-  DEFAULT_ACCOMPANIMENT,
   defaultKeyboard,
   TEXT_SIZES,
 } from './types'
@@ -39,11 +38,14 @@ const DEFAULTS = {
   sound: DEFAULT_SOUND,
   trainer: DEFAULT_TRAINER,
   keyboard: defaultKeyboard(false),
+  keysHeight: { phone: null, side: null, wide: null },
   recorder: DEFAULT_RECORDER,
   editing: DEFAULT_EDITING,
   sidebar: DEFAULT_SIDEBAR,
-  paletteFolded: {},
-  paletteSections: null,
+  paletteFolded: true,
+  paletteList: false,
+  paletteCategory: null,
+  editorMode: 'replace',
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
   scoreView: DEFAULT_SCORE_VIEW,
@@ -52,13 +54,13 @@ const DEFAULTS = {
   metronome: DEFAULT_METRONOME,
   foldedSections: [],
   welcomed: false,
+  tipsSeen: [],
+  practiceRecent: [],
   lessonReading: 'page',
   progressions: DEFAULT_PROGRESSIONS,
   chordPlayer: DEFAULT_CHORD_PLAYER,
-  accompaniment: DEFAULT_ACCOMPANIMENT,
   bars: DEFAULT_BARS,
   tuner: { a4: 440 },
-  drone: { root: 0, kind: 'fifth', octave: 3, volume: 60 },
   scaleStaff: { degrees: true, steps: true, tonic: false, tetrachords: false },
 }
 
@@ -151,14 +153,17 @@ describe('createSettingsStore', () => {
         dock: 'top',
         folded: true,
         foldedLandscape: false,
-        keyLength: 'short',
-        railControls: ['zoom', 'pedal'],
+        pedals: 'all',
+        volume: 70,
       },
+      keysHeight: { phone: 140, side: null, wide: 210 },
       recorder: { click: false, tune: true, countIn: 2 },
-      editing: { hearNotes: false, startMode: 'insert', paletteSide: 'right' },
+      editing: { hearNotes: false, paletteSide: 'right' },
       sidebar: 'collapsed',
-      paletteFolded: { panel: true, sheet: false },
-      paletteSections: ['notes', 'clef'],
+      paletteFolded: false,
+      paletteList: true,
+      paletteCategory: 'clef',
+      editorMode: 'insert',
       midi: {
         input: false,
         device: 'Piano',
@@ -180,7 +185,6 @@ describe('createSettingsStore', () => {
       },
       bars: { ...DEFAULT_BARS, 'select.songs': ['delete', 'move'] },
       tuner: { a4: 442 },
-      drone: { root: 9, kind: 'note', octave: 2, volume: 80 },
       scaleStaff: { degrees: false, steps: true, tonic: true, tetrachords: false },
       scoreView: {
         layout: 'vertical',
@@ -205,10 +209,11 @@ describe('createSettingsStore', () => {
       },
       foldedSections: ['chords.tensions'],
       welcomed: true,
+      tipsSeen: ['coach.listen'],
+      practiceRecent: ['tuner', 'chords'],
       lessonReading: 'sections',
       progressions: { names: 'chords', voicing: 'block', inversion: 1 },
       chordPlayer: { names: 'nashville', voicing: 'block' },
-      accompaniment: { hidden: ['yours'] },
     }
     expect(restored(saved)).toEqual(saved)
   })
@@ -227,13 +232,6 @@ describe('createSettingsStore', () => {
   it('paints the key’s scale on the Chord finder’s keys only where that was saved (A24)', () => {
     expect(restored({ chordFinder: { scale: true } }).chordFinder.scale).toBe(true)
     expect(restored({ chordFinder: { scale: 'yes' } }).chordFinder.scale).toBe(false)
-  })
-
-  it('shows every Accompaniment source until one is hidden, each hidden once (A24)', () => {
-    expect(DEFAULT_ACCOMPANIMENT).toEqual({ hidden: [] })
-    expect(
-      restored({ accompaniment: { hidden: ['styles', 'styles', 3, 'gorshkov'] } }).accompaniment,
-    ).toEqual({ hidden: ['styles', 'gorshkov'] })
   })
 
   it('keeps each chord remembered that is still the keys of one, the newest at most', () => {
@@ -283,20 +281,14 @@ describe('createSettingsStore', () => {
 
   it('opens a sidebar saved as anything but open or collapsed', () => {
     expect(restored({ sidebar: 'wide' }).sidebar).toBe('open')
-    expect(restored({ paletteFolded: true }).paletteFolded).toEqual({})
-    expect(restored({ paletteFolded: { panel: 'yes', sheet: false } }).paletteFolded).toEqual({
-      sheet: false,
-    })
+    expect(restored({ paletteFolded: false }).paletteFolded).toBe(false)
+    expect(restored({ paletteFolded: { sheet: false } }).paletteFolded).toBe(true)
   })
 
-  it('keeps the palette panel’s open sections by name, and none chosen where they are not names', () => {
-    expect(restored({ paletteSections: ['notes', 'bar'] }).paletteSections).toEqual([
-      'notes',
-      'bar',
-    ])
-    expect(restored({ paletteSections: [] }).paletteSections).toEqual([])
-    expect(restored({ paletteSections: 'notes' }).paletteSections).toBeNull()
-    expect(restored({ paletteSections: ['notes', 3] }).paletteSections).toBeNull()
+  it('keeps the palette’s category by name, and none chosen where it is not a name (R31-E)', () => {
+    expect(restored({ paletteCategory: 'clef' }).paletteCategory).toBe('clef')
+    expect(restored({ paletteCategory: '' }).paletteCategory).toBeNull()
+    expect(restored({ paletteCategory: ['clef'] }).paletteCategory).toBeNull()
   })
 
   it('hears notes as they are edited unless the learner saved otherwise (round 28)', () => {
@@ -308,15 +300,15 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('opens the editor in Replace, its palette at the left, unless saved otherwise (R29 B7)', () => {
-    expect(DEFAULT_EDITING).toMatchObject({ startMode: 'replace', paletteSide: 'left' })
-    expect(restored({ editing: { startMode: 'chord', paletteSide: 'top' } }).editing).toEqual(
-      DEFAULT_EDITING,
-    )
-    expect(restored({ editing: { startMode: 'insert', paletteSide: 'right' } }).editing).toEqual({
-      ...DEFAULT_EDITING,
-      startMode: 'insert',
-      paletteSide: 'right',
+  it('opens the editor in Replace, its palette at the left, unless left otherwise (R29 B7, R31-E)', () => {
+    expect(DEFAULT_EDITING).toMatchObject({ paletteSide: 'left' })
+    expect(restored({ editorMode: 'chord', editing: { paletteSide: 'top' } })).toMatchObject({
+      editorMode: 'replace',
+      editing: DEFAULT_EDITING,
+    })
+    expect(restored({ editorMode: 'insert', editing: { paletteSide: 'right' } })).toMatchObject({
+      editorMode: 'insert',
+      editing: { ...DEFAULT_EDITING, paletteSide: 'right' },
     })
   })
 
@@ -350,7 +342,6 @@ describe('createSettingsStore', () => {
       restored({
         bars: {
           'select.songs': ['move', 'delete', 'tuner', 'move'],
-          'bar.player': ['loop'],
           'swipe.songs.leading': [],
           nowhere: ['move'],
         },
@@ -362,28 +353,29 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('starts afresh over a save of the version before, which had no Tuner or Drone (R29 B11)', () => {
-    expect(SETTINGS_VERSION).toBe(24)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 23)).toEqual(
+  it('starts afresh over a save of the version before the keys’ height (R34)', () => {
+    expect(SETTINGS_VERSION).toBe(34)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 33)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })
 
-  it('keeps the Tuner’s A and the Drone where they read, their defaults otherwise (R29 B11)', () => {
+  it('keeps the keys’ height per screen size where it is whole px a screen holds, else none (R34)', () => {
+    expect(restored({ keysHeight: { phone: 120, side: 4.5, wide: -3 } }).keysHeight).toEqual({
+      phone: 120,
+      side: null,
+      wide: null,
+    })
+    expect(restored({ keysHeight: 'tall' }).keysHeight).toEqual({
+      phone: null,
+      side: null,
+      wide: null,
+    })
+  })
+
+  it('keeps the Tuner’s A where it reads, 440 otherwise (R29 B11)', () => {
     expect(restored({ tuner: { a4: 432 } }).tuner).toEqual({ a4: 432 })
     expect(restored({ tuner: { a4: 500 } }).tuner).toEqual({ a4: 440 })
-    expect(restored({ drone: { root: 7, kind: 'minor', octave: 9, volume: 30 } }).drone).toEqual({
-      root: 7,
-      kind: 'minor',
-      octave: 3,
-      volume: 30,
-    })
-    expect(restored({ drone: { root: 12, kind: 'cluster' } }).drone).toEqual({
-      root: 0,
-      kind: 'fifth',
-      octave: 3,
-      volume: 60,
-    })
   })
 
   it('starts the Metronome at 120 in 4/4 with a click, each part saved kept where valid (A39)', () => {
@@ -448,7 +440,7 @@ describe('createSettingsStore', () => {
         finePointer,
       }).getState().keyboard
     expect(keyboard(true)).toEqual({
-      keySize: 'fit',
+      keySize: 'piano',
       swipe: 'scroll',
       namedKeys: 'c',
       markNotes: true,
@@ -458,8 +450,8 @@ describe('createSettingsStore', () => {
       dock: 'bottom',
       folded: false,
       foldedLandscape: true,
-      keyLength: 'long',
-      railControls: ['zoom', 'noteNames', 'chordNames', 'midiSound', 'glissando', 'pedal'],
+      pedals: 'sustain',
+      volume: 100,
     })
     expect(keyboard(false).typing).toBe(false)
   })
@@ -476,11 +468,11 @@ describe('createSettingsStore', () => {
       dock: 'top',
       folded: true,
       foldedLandscape: 'no',
-      keyLength: 'tiny',
-      railControls: ['pedal', 'pedal', 'nope'],
+      pedals: 'three',
+      volume: 140,
     }
     expect(restored({ theme: 'light', locale: 'en', keyboard }).keyboard).toEqual({
-      keySize: 'fit',
+      keySize: 'piano',
       swipe: 'glissando',
       namedKeys: 'all',
       markNotes: true,
@@ -490,8 +482,8 @@ describe('createSettingsStore', () => {
       dock: 'top',
       folded: true,
       foldedLandscape: true,
-      keyLength: 'long',
-      railControls: ['pedal'],
+      pedals: 'sustain',
+      volume: 100,
     })
   })
 

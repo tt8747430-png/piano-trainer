@@ -1,44 +1,31 @@
-import {
-  ChevronsLeft,
-  ChevronsRight,
-  LayoutGrid,
-  List,
-  SquareChevronDown,
-  SquareChevronUp,
-} from 'lucide-react'
+import { ChevronDown, LayoutGrid, List, SquareChevronDown, SquareChevronUp } from 'lucide-react'
 import { MotionConfig, motion } from 'motion/react'
-import {
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-  type RefObject,
-} from 'react'
+import { useEffect, useRef, useState, type ReactNode, type Ref, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
-import { chosenNotes, EDIT_MODES } from '@/features/score-editor'
+import {
+  selectPaletteCategory,
+  selectPaletteList,
+  selectSectionFolded,
+  useSettings,
+  useSettingsStoreApi,
+} from '@/entities/settings'
+import { chosenNotes } from '@/features/score-editor'
 import { useFoldKeys } from '@/features/live-keyboard'
+import { setPaletteCategory, setPaletteList, setSectionFolded } from '@/features/set-preference'
 import { cn, useRovingFocus, useScrollMotion } from '@/shared/lib'
-import { Segmented } from '@/shared/ui'
+import { PickerLayoutContext } from '@/shared/ui/pickers/picker-layout'
 import { Button } from '@/shared/ui/primitives/button'
-import { EDITOR_PANELS, type EditorPanelTab } from '../model/edit-search'
-import { useEditorPanel } from '../model/use-editor-panel'
-import { InstrumentsPanel } from './InstrumentsPanel'
-import { LayoutPanel } from './LayoutPanel'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { gripRelease } from '../model/grip'
 import {
-  closedBy,
-  greyedBy,
   isPaletteCategory,
-  PALETTE_CATEGORIES,
+  needsNote,
+  openCategories,
   type PaletteCategory,
 } from '../model/palette-categories'
-import { selectPaletteSections, useSettings, useSettingsStoreApi } from '@/entities/settings'
-import { setPaletteSections } from '@/features/set-preference'
 import { BarKeys } from './BarKeys'
 import { FieldKey } from './FieldKey'
+import { KeyPicker } from './KeyPicker'
 import { LineKeys } from './LineKeys'
 import {
   SwingKeys,
@@ -48,353 +35,288 @@ import {
   PedalKeys,
   TwoNoteTremoloKeys,
 } from './MarkKeys'
-import { NoteBar, NoteKeys, PitchKeys } from './NoteKeys'
-import {
-  PaletteTipSide,
-  PaletteDockContext,
-  PaletteFormContext,
-  PanelSections,
-  type PaletteDock,
-  type PaletteForm,
-} from './palette-form'
+import { NoteKeys, PitchKeys } from './NoteKeys'
+import { PaletteFormContext, type PaletteForm } from './palette-form'
 import { CategoryIcon } from './palette-icons'
-import { GroupName, KeyGrid, PaletteSection } from './palette-keys'
-import { PaletteReason } from './palette-reason'
-import { ClefKeys, KeySignatureKeys, RepeatKeys, TextKeys, TimeSignatureKeys } from './ScoreKeys'
+import { GroupName, KeyGrid, PaletteHint, PaletteSection } from './palette-keys'
+import { ClefKeys, RepeatKeys, TempoKeys, TextKeys } from './ScoreKeys'
+import { TimePicker } from './TimePicker'
 
 /** The app's one ease-out (DESIGN.md's Motion). */
 const EASE = [0.22, 1, 0.36, 1] as const
 /** How long the category's mark takes to slide, in seconds. */
 const SLIDE = 0.22
 
-/** Why a category's tools are greyed where the caret writes, or nothing where they work. */
-function useReason(category: PaletteCategory): string | undefined {
-  const { t } = useTranslation('editor')
-  const layer = useEditorState((state) => state.layer)
-  const chosen = useEditorState((state) => chosenNotes(state).length > 0)
-  const why = greyedBy(category, { layer, chosen })
-  return why ? t(`reason.${why}`) : undefined
-}
+/** A palette section's fold, kept with the screen's other folds. */
+const foldId = (category: PaletteCategory) => `palette-${category}`
 
-/** The categories whose tools say more than their names: the editing modes. */
-const EXPLAINED: readonly PaletteCategory[] = ['modes']
-
-/** What a key played does in each editing mode (ADR 0114), where their names alone do not say. */
-function About() {
-  const { t } = useTranslation('editor')
-  return (
-    <dl className="flex flex-col gap-2">
-      {EDIT_MODES.map((mode) => (
-        <div key={mode}>
-          <dt className="font-semibold">{t(`mode.${mode}`)}</dt>
-          <dd className="text-muted-foreground">{t(`mode.${mode}Detail`)}</dd>
-        </div>
-      ))}
-    </dl>
-  )
+/**
+ * The palette's category (R31-E, R32-C): the tab lit in the strip and the section the palette keeps
+ * in sight, as the learner left it, else Notes, Flat's first; where it does not act (the chord row's
+ * notes), the first that does.
+ */
+function useCategory(): readonly [PaletteCategory, (category: PaletteCategory) => void] {
+  const settings = useSettingsStoreApi()
+  const saved = useSettings(selectPaletteCategory)
+  const open = openCategories(useEditorState((state) => state.layer))
+  const wanted = isPaletteCategory(saved) ? saved : 'notes'
+  const category = open.includes(wanted) ? wanted : (open[0] ?? 'measures')
+  return [category, (next) => setPaletteCategory(settings, next)] as const
 }
 
 /**
- * One category's tools under its name, with what its tools do and why they are greyed, where they
- * are, in the ⓘ beside it (ADR 0096). Each greyed key says why in its tooltip.
+ * A category's section (ADR 0114, R32-C, Flat's): its title, then its tools as titled grids (or,
+ * in Flat's list view, named rows); in the folded row, its keys alone. On a laptop its title folds
+ * it, as Flat's web panel does (`foldable`). Only the tools that act on what is chosen are drawn
+ * (R32-B); a category whose every tool changes notes asks for one while none is chosen.
  */
-function Section({ category, children }: { category: PaletteCategory; children: ReactNode }) {
+function Category({
+  category,
+  foldable = false,
+}: {
+  category: PaletteCategory
+  foldable?: boolean
+}) {
   const { t } = useTranslation('editor')
-  const reason = useReason(category)
-  const explained = EXPLAINED.includes(category)
+  const settings = useSettingsStoreApi()
+  const folded = useSettings(selectSectionFolded(foldId(category))) && foldable
+  const waits = useEditorState((state) => needsNote(category, chosenNotes(state).length > 0))
+  const title = t(`palette.category.${category}`)
   return (
-    <PaletteSection
-      category={category}
-      title={t(`palette.category.${category}`)}
-      info={
-        reason || explained ? (
-          <>
-            {reason ? <p>{reason}</p> : null}
-            {explained ? <About /> : null}
-          </>
-        ) : undefined
-      }
-    >
-      <PaletteReason value={reason}>{children}</PaletteReason>
+    <PaletteSection category={category} title={title}>
+      {foldable ? (
+        <button
+          type="button"
+          aria-expanded={!folded}
+          onClick={() => setSectionFolded(settings, foldId(category), !folded)}
+          className="-mx-1 flex min-h-11 items-center justify-between gap-2 rounded-control px-1 text-start hover:bg-muted/60"
+        >
+          <h3 className="text-[0.9375rem] leading-tight font-semibold">{title}</h3>
+          <ChevronDown
+            aria-hidden
+            className={cn(
+              'size-5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out motion-reduce:transition-none',
+              !folded && 'rotate-180',
+            )}
+          />
+        </button>
+      ) : category === 'notes' ? null : (
+        // Notes titles its own sections: its input modes, then Notation.
+        <GroupName name={title} />
+      )}
+      {folded ? null : waits ? (
+        <PaletteHint>{t('palette.chooseNote')}</PaletteHint>
+      ) : (
+        <Tools category={category} />
+      )}
     </PaletteSection>
   )
 }
 
-/**
- * Every category's tools in Flat's order (ADR 0114), the panel's and the sheet's alike: one tree,
- * laid out as the dock and the form say.
- */
-function Tools() {
+/** A category's tools in Flat's order, laid out as the form says. */
+function Tools({ category }: { category: PaletteCategory }) {
   const { t } = useTranslation('editor')
-  return (
-    <>
-      <Section category="modes">
-        <NoteKeys />
-      </Section>
-      <Section category="pitch">
-        <PitchKeys />
-      </Section>
-      <Section category="articulations">
+  switch (category) {
+    case 'notes':
+      return <NoteKeys />
+    case 'pitch':
+      return <PitchKeys />
+    case 'articulations':
+      return (
         <KeyGrid>
           <ArticulationKeys />
           <LineKeys lines={['slur']} />
           {/* The notes' fingers, typed over them (ADR 0096): no tap on the sheet opens them. */}
           <FieldKey field="fingering" />
         </KeyGrid>
-      </Section>
-      <Section category="ornaments">
-        <KeyGrid>
-          <OrnamentKeys />
-        </KeyGrid>
-        <GroupName name={t('marks.twoNoteTremolo')} info={t('marks.twoNoteTremoloInfo')} />
-        <KeyGrid label={t('marks.twoNoteTremolo')}>
-          <TwoNoteTremoloKeys />
-        </KeyGrid>
-      </Section>
-      <Section category="dynamics">
-        <KeyGrid>
-          <DynamicKeys />
-          <LineKeys lines={['cresc', 'dim']} />
-        </KeyGrid>
-        <GroupName name={t('pedal')} />
-        <KeyGrid label={t('pedal')}>
-          <PedalKeys />
-        </KeyGrid>
-      </Section>
-      <Section category="measures">
-        <BarKeys />
-        {/* Flat's Measure: swing from the note (ADR 0097). */}
-        <GroupName name={t('words.swing')} />
-        <KeyGrid label={t('words.swing')}>
-          <SwingKeys />
-        </KeyGrid>
-      </Section>
-      <Section category="clef">
-        <ClefKeys />
-      </Section>
-      <Section category="key">
-        <KeySignatureKeys />
-      </Section>
-      <Section category="time">
-        <TimeSignatureKeys />
-      </Section>
-      <Section category="repeats">
-        <RepeatKeys />
-      </Section>
-      <Section category="text">
-        <TextKeys />
-      </Section>
-    </>
-  )
-}
-
-/** The palette's tools laid out where it docks and in its form. */
-function Laid({
-  dock,
-  form,
-  children,
-}: {
-  dock: PaletteDock
-  form: PaletteForm
-  children: ReactNode
-}) {
-  return (
-    <PaletteDockContext value={dock}>
-      <PaletteFormContext value={form}>{children}</PaletteFormContext>
-    </PaletteDockContext>
-  )
-}
-
-/**
- * The panel's tabs (A40, Flat's Notation · Instruments · Layout), a segmented control over the panel
- * and at the top of the phone's sheet, the tab in the URL.
- */
-function PanelTabs() {
-  const { t } = useTranslation('editor')
-  const [tab, setTab] = useEditorPanel()
-  return (
-    <Segmented
-      label={t('panel.label')}
-      compact
-      value={tab}
-      options={EDITOR_PANELS.map((each) => ({ value: each, label: t(`panel.tabs.${each}`) }))}
-      onChange={setTab}
-    />
-  )
-}
-
-/** The Instruments and Layout tabs' content, the score's Settings' own (one implementation). */
-function TabBody({ tab }: { tab: Exclude<EditorPanelTab, 'notation'> }) {
-  return tab === 'instruments' ? (
-    <div className="flex flex-col gap-3 py-3">
-      <InstrumentsPanel />
-    </div>
-  ) : (
-    <div className="flex flex-col gap-4 py-3">
-      <LayoutPanel />
-    </div>
-  )
-}
-
-/** Flat's default: the notes and their pitch open, the rest folded until opened. */
-const FIRST_OPEN: readonly PaletteCategory[] = ['modes', 'pitch']
-
-/**
- * The editor's panel docked at the sheet's left, or its right as chosen (A40, ADR 0114, Flat's): its
- * head with Notation · Instruments · Layout and «; under Notation every category an accordion row,
- * several open at once, scrolling on its own; Instruments the score's staves, Layout its layout. «
- * hides it whole, the sheet taking its room, the note-entry toolbar bringing it back. Never over the
- * music.
- */
-export function EditorPanel({
-  side = 'left',
-  onHide,
-}: {
-  side?: 'left' | 'right'
-  onHide: () => void
-}) {
-  const { t } = useTranslation('editor')
-  const { takes } = useScoreEditorContext()
-  const settings = useSettingsStoreApi()
-  // As the learner left them, remembered (ADR 0114); Flat's first ones until they choose.
-  const saved = useSettings(selectPaletteSections)
-  const open = useMemo(() => new Set(saved ? saved.filter(isPaletteCategory) : FIRST_OPEN), [saved])
-  const toggle = (category: PaletteCategory) => {
-    const next = new Set(open)
-    if (!next.delete(category)) next.add(category)
-    setPaletteSections(
-      settings,
-      PALETTE_CATEGORIES.filter((each) => next.has(each)),
-    )
+      )
+    case 'ornaments':
+      return (
+        <>
+          <KeyGrid>
+            <OrnamentKeys />
+          </KeyGrid>
+          <GroupName name={t('marks.twoNoteTremolo')} info={t('marks.twoNoteTremoloInfo')} />
+          <KeyGrid label={t('marks.twoNoteTremolo')}>
+            <TwoNoteTremoloKeys />
+          </KeyGrid>
+        </>
+      )
+    case 'dynamics':
+      return (
+        <>
+          <KeyGrid>
+            <DynamicKeys />
+            <LineKeys lines={['cresc', 'dim']} />
+          </KeyGrid>
+          <GroupName name={t('pedal')} />
+          <KeyGrid label={t('pedal')}>
+            <PedalKeys />
+          </KeyGrid>
+        </>
+      )
+    case 'measures':
+      return (
+        <>
+          <BarKeys />
+          {/* Flat's Measure: Tempo and the tempo words, then swing from the note (ADR 0097). */}
+          <TempoKeys />
+          <GroupName name={t('words.swing')} />
+          <KeyGrid label={t('words.swing')}>
+            <SwingKeys />
+          </KeyGrid>
+        </>
+      )
+    case 'clef':
+      return <ClefKeys />
+    case 'key':
+      return <KeyPicker />
+    case 'time':
+      return <TimePicker />
+    case 'repeats':
+      return <RepeatKeys />
+    case 'text':
+      return <TextKeys />
   }
-  const [tab] = useEditorPanel()
+}
+
+/** The palette's keys laid out in a form: the row's pickers their signs alone, else Flat's tables. */
+function Laid({ form, children }: { form: PaletteForm; children: ReactNode }) {
   return (
-    <section aria-label={t('panel.label')} className="flex min-h-0 flex-col">
-      <div className="flex h-12 shrink-0 items-center gap-2 border-b border-hairline px-3">
-        <div className="min-w-0 flex-1">
-          <PanelTabs />
-        </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label={t('palette.hide')}
-          title={t('palette.hide')}
-          className="size-9 text-muted-foreground hover:text-foreground"
-          onClick={onHide}
-        >
-          {side === 'right' ? <ChevronsRight aria-hidden /> : <ChevronsLeft aria-hidden />}
-        </Button>
-      </div>
-      <fieldset
-        disabled={takes.stage !== 'idle'}
-        className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4"
-      >
-        {tab === 'notation' ? (
-          <PanelSections value={{ open, toggle }}>
-            <Laid dock="panel" form="grid">
-              <Tools />
-            </Laid>
-          </PanelSections>
-        ) : (
-          <TabBody tab={tab} />
-        )}
-      </fieldset>
-    </section>
+    <PaletteFormContext value={form}>
+      <PickerLayoutContext value={form === 'bar' ? 'row' : 'palette'}>
+        {children}
+      </PickerLayoutContext>
+    </PaletteFormContext>
   )
 }
 
 /**
- * The note-entry toolbar (ADR 0114, Flat's quick toolbar), the everyday tools in one row: over the
- * sheet on a laptop, the sheet's quick row on a phone. It scrolls sideways where the room is short.
+ * Every category that acts where the caret writes, one section after another (R32-C, Flat's): the
+ * phone's palette unfolded and the laptop's panel scroll through them all.
  */
-export function NoteToolbar({
-  start,
-  end,
-  pill = false,
-}: {
-  start?: ReactNode
-  end?: ReactNode
-  /** In a sand pill, as Flat's toolbar groups them over the sheet. */
-  pill?: boolean
-}) {
-  const { t } = useTranslation('editor')
-  const row = useRef<HTMLDivElement>(null)
-  const roving = useRovingFocus(row)
-  return (
-    <div className="flex min-w-0 items-center gap-1">
-      {start}
-      <div
-        ref={row}
-        role="toolbar"
-        aria-label={t('palette.toolbar')}
-        {...roving}
-        className={cn(
-          'flex min-w-0 items-center gap-0.5 overflow-x-auto overscroll-x-contain scrollbar-none',
-          pill ? 'rounded-control bg-muted px-1' : 'flex-1',
-        )}
-      >
-        <PaletteTipSide value={pill ? 'bottom' : 'top'}>
-          <Laid dock="sheet" form="bar">
-            <NoteBar />
-          </Laid>
-        </PaletteTipSide>
-      </div>
-      {pill ? <span className="flex-1" /> : null}
-      {end}
-    </div>
-  )
+function Sections({ foldable = false }: { foldable?: boolean }) {
+  const categories = openCategories(useEditorState((state) => state.layer))
+  return categories.map((category) => (
+    <Category key={category} category={category} foldable={foldable} />
+  ))
 }
 
-/** A category's place in the sheet's scroller: its section's top. */
-const placeOf = (box: HTMLElement, category: PaletteCategory) =>
-  box.querySelector<HTMLElement>(`[data-category="${category}"]`)?.offsetTop ?? null
-
-/** The last category whose section has come to the scroller's top. */
-function categoryAt(box: HTMLElement): PaletteCategory | undefined {
-  return PALETTE_CATEGORIES.filter((category) => {
-    const place = placeOf(box, category)
-    return place !== null && place <= box.scrollTop + 8
-  }).at(-1)
+/** A section's place in its scroller: its top, measured from the scroller's own. */
+const sectionTop = (box: HTMLElement, category: PaletteCategory): number | null => {
+  const section = box.querySelector<HTMLElement>(`[data-category="${category}"]`)
+  return section ? section.offsetTop - box.offsetTop : null
 }
 
 /**
- * The bar of categories (Flat's tab bar): a picture each in a sand pill, scrolling sideways where the
- * screen is narrow, the category in sight on a card-paper thumb that slides to the one tapped or
- * scrolled to.
+ * Keeps the category chosen in sight in a scroller of every section (R32-C, Flat's): a tab tapped or
+ * a sign tapped on the score scrolls to its section; scrolled by hand, the section at the top becomes
+ * the category (the strip's lit tab), without scrolling again.
  */
-function CategoryBar({
+function useSectionInSight(
+  box: RefObject<HTMLElement | null>,
+  category: PaletteCategory,
+  choose: (category: PaletteCategory) => void,
+) {
+  const motionOf = useScrollMotion()
+  const spied = useRef<PaletteCategory | null>(null)
+  const categories = openCategories(useEditorState((state) => state.layer))
+  useEffect(() => {
+    const element = box.current
+    if (!element || spied.current === category) return
+    const top = sectionTop(element, category)
+    if (top !== null) element.scrollTo?.({ top, behavior: motionOf })
+  }, [box, category, motionOf])
+  const onScroll = () => {
+    const element = box.current
+    if (!element) return
+    const atTop = categories.findLast((each) => {
+      const top = sectionTop(element, each)
+      return top !== null && top <= element.scrollTop + 8
+    })
+    if (atTop && atTop !== category) {
+      spied.current = atTop
+      choose(atTop)
+    }
+  }
+  return onScroll
+}
+
+/** Whether a sideways scroller has more past its start and past its end: where it fades. */
+function useScrollEdges(box: RefObject<HTMLDivElement | null>) {
+  const [edges, setEdges] = useState({ before: false, after: false })
+  useEffect(() => {
+    const element = box.current
+    if (!element) return
+    const measure = () => {
+      const before = element.scrollLeft > 1
+      const after = element.scrollLeft + element.clientWidth < element.scrollWidth - 1
+      setEdges((was) => (was.before === before && was.after === after ? was : { before, after }))
+    }
+    measure()
+    element.addEventListener('scroll', measure, { passive: true })
+    const watch = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure)
+    watch?.observe(element)
+    return () => {
+      element.removeEventListener('scroll', measure)
+      watch?.disconnect()
+    }
+  }, [box])
+  return edges
+}
+
+/** The fade at a scroller's edge with more past it (R31-E, the mockup's strip). */
+const FADES = {
+  none: '',
+  before: 'mask-l-from-85%',
+  after: 'mask-r-from-85%',
+  both: 'mask-x-from-85%',
+} as const
+
+const fadeOf = ({ before, after }: { before: boolean; after: boolean }) =>
+  FADES[before && after ? 'both' : before ? 'before' : after ? 'after' : 'none']
+
+/**
+ * The strip of categories (R31-E, R32-C, Flat's tab bar): a picture each in a sand pill, the one in
+ * sight on a card-paper thumb that slides to the one tapped; only those that act where the caret
+ * writes (R32-B). It scrolls sideways in its own box, the lit one kept in view, fading only at an
+ * edge with more past it.
+ */
+function CategoryStrip({
   current,
   onChoose,
 }: {
-  current: PaletteCategory | null
+  current: PaletteCategory
   onChoose: (category: PaletteCategory) => void
 }) {
   const { t } = useTranslation('editor')
-  const layer = useEditorState((state) => state.layer)
-  const bar = useRef<HTMLDivElement>(null)
-  const roving = useRovingFocus(bar)
+  const categories = openCategories(useEditorState((state) => state.layer))
+  const strip = useRef<HTMLDivElement>(null)
+  const roving = useRovingFocus(strip)
   const motionOf = useScrollMotion()
-  // The category chosen kept in sight in its bar, centred.
+  const edges = useScrollEdges(strip)
+  // The category lit kept in sight in its strip, in the middle.
   useEffect(() => {
-    const box = bar.current
-    const button = current ? box?.querySelector<HTMLElement>(`[data-for="${current}"]`) : null
+    const box = strip.current
+    const button = box?.querySelector<HTMLElement>(`[data-for="${current}"]`)
     if (!box || !button) return
     const left = button.offsetLeft - box.offsetLeft - (box.clientWidth - button.offsetWidth) / 2
     box.scrollTo?.({ left, behavior: motionOf })
   }, [current, motionOf])
   return (
     <motion.div
-      ref={bar}
+      ref={strip}
       layoutScroll
       role="toolbar"
       aria-label={t('palette.categories')}
       {...roving}
-      className="flex min-w-0 flex-1 overflow-x-auto rounded-control border border-input bg-card scrollbar-none"
+      className={cn(
+        'flex min-w-0 overflow-x-auto rounded-card bg-muted p-0.5 scrollbar-none',
+        fadeOf(edges),
+      )}
     >
-      {PALETTE_CATEGORIES.map((category) => {
+      {categories.map((category) => {
         const name = t(`palette.category.${category}`)
-        // Greyed where the caret writes, its tooltip says why under its name (ADR 0096).
-        const closed = closedBy(category, layer)
         const chosen = current === category
         return (
           <button
@@ -402,17 +324,16 @@ function CategoryBar({
             data-for={category}
             type="button"
             aria-label={name}
-            title={closed ? `${name}\n${t(`reason.${closed}`)}` : name}
+            title={name}
             aria-current={chosen ? 'true' : undefined}
-            data-off={closed ? true : undefined}
             onClick={() => onChoose(category)}
-            className="relative grid h-10 w-11 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out select-none hover:bg-muted hover:text-foreground focus-visible:-outline-offset-3 aria-[current=true]:text-foreground data-off:opacity-40 [&_svg]:relative [&_svg]:size-6"
+            className="relative grid size-11 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground focus-visible:-outline-offset-3 aria-[current=true]:text-foreground [&_svg]:relative [&_svg]:size-6"
           >
             {chosen ? (
               <motion.span
                 layoutId="palette-category-mark"
                 transition={{ duration: SLIDE, ease: EASE }}
-                className="absolute inset-0 rounded-control bg-chosen"
+                className="absolute inset-0 rounded-control bg-card shadow-sm"
               />
             ) : null}
             <CategoryIcon category={category} />
@@ -423,55 +344,39 @@ function CategoryBar({
   )
 }
 
-/** The expanded sheet's sections, stacked and scrolling, room after the last so it too can stand at the top. */
-function Sections({
-  scroller,
-  list,
-  onScroll,
-  onHand,
-}: {
-  scroller: RefObject<HTMLDivElement | null>
-  list: boolean
-  onScroll: () => void
-  onHand: () => void
-}) {
-  const sections = useRef<HTMLDivElement>(null)
-  const [room, setRoom] = useState(0)
-  // As much room after the last section as the scroller shows over it.
-  useLayoutEffect(() => {
-    const box = scroller.current
-    const all = sections.current
-    if (!box || !all || typeof ResizeObserver === 'undefined') return
-    const measure = () => {
-      const last = all.lastElementChild as HTMLElement | null
-      setRoom(last ? Math.max(0, box.clientHeight - last.offsetHeight - 8) : 0)
-    }
-    const watch = new ResizeObserver(measure)
-    watch.observe(box)
-    watch.observe(all)
-    return () => watch.disconnect()
-  }, [scroller])
+/**
+ * The editor's panel at the sheet's side from 48rem (ADR 0114, R32-C, Flat's web panel), its left or
+ * right as Note input says: every section stacked in one scroll, each folding by its title; a sign
+ * tapped on the score unfolds its section and scrolls to it. Never over the music.
+ */
+export function EditorPanel() {
+  const { t } = useTranslation('editor')
+  const { takes } = useScoreEditorContext()
+  const settings = useSettingsStoreApi()
+  const [category, choose] = useCategory()
+  const box = useRef<HTMLFieldSetElement>(null)
+  const onScroll = useSectionInSight(box, category, choose)
+  // The category chosen from the score is open where the panel scrolls to it.
+  useEffect(() => setSectionFolded(settings, foldId(category), false), [settings, category])
   return (
-    <div
-      ref={scroller}
-      onScroll={onScroll}
-      onPointerDown={onHand}
-      onWheel={onHand}
-      onTouchStart={onHand}
-      onScrollEnd={onHand}
-      className="relative h-[min(38dvh,22rem)] min-h-0 overflow-y-auto overscroll-contain px-0.5"
-    >
-      <div ref={sections}>
-        <Laid dock="sheet" form={list ? 'list' : 'grid'}>
-          <Tools />
-        </Laid>
-      </div>
-      <div aria-hidden style={{ height: room }} />
-    </div>
+    <MotionConfig reducedMotion="user">
+      <section aria-label={t('panel.label')} className="flex min-h-0 flex-col">
+        <fieldset
+          ref={box}
+          disabled={takes.stage !== 'idle'}
+          onScroll={onScroll}
+          className="relative flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-3 py-2"
+        >
+          <Laid form="grid">
+            <Sections foldable />
+          </Laid>
+        </fieldset>
+      </section>
+    </MotionConfig>
   )
 }
 
-/** The sheet's grab handle (Flat's): dragged up it expands, down it goes compact; a tap toggles. */
+/** The sheet's grab handle (Flat's): dragged up it unfolds, down it folds; a tap toggles. */
 function Grip({ folded, onFold }: { folded: boolean; onFold: (folded: boolean) => void }) {
   const start = useRef<number | null>(null)
   const [dragging, setDragging] = useState(false)
@@ -504,110 +409,96 @@ function Grip({ folded, onFold }: { folded: boolean; onFold: (folded: boolean) =
   )
 }
 
+/** The folded palette's row of its category's tools, scrolling sideways in its own box. */
+function ToolRow({ category }: { category: PaletteCategory }) {
+  const { t } = useTranslation('editor')
+  const row = useRef<HTMLDivElement>(null)
+  const roving = useRovingFocus(row)
+  const edges = useScrollEdges(row)
+  return (
+    <div
+      ref={row}
+      role="toolbar"
+      aria-label={t('palette.toolbar')}
+      {...roving}
+      className={cn(
+        'flex min-w-0 items-center overflow-x-auto overscroll-x-contain scrollbar-none',
+        fadeOf(edges),
+      )}
+    >
+      <Laid form="bar">
+        <Category category={category} />
+      </Laid>
+    </div>
+  )
+}
+
 /**
- * The palette docked at the sheet's foot on a phone (ADR 0114, Flat's bottom sheet), shrinking the
- * sheet rather than covering it. Compact (`folded`, as it opens): the quick row of everyday tools over
- * the bar of categories. Expanded: every category's section stacked and scrolling over the bar, a
- * category tapped scrolling to its own and the bar following the sections; its keys a table, or a list
- * naming each (list mode). With the keys shown it stays compact, the keys standing where its sections
- * would: expanded again, it folds the keys away. A category tapped while compact expands it there.
+ * The palette floating at the screen's foot on a phone (R31-E, R32-C, Flat's): a rounded card above
+ * the foot. Folded (as it first opens), the chosen category's tools in one row over the strip of
+ * categories; unfolded, every section in one scroll, up to half the screen, the strip lighting the
+ * section in sight and scrolling to the one tapped, and Flat's list view a tap away. With the keys
+ * shown it unfolds over them only once they fold away.
  */
 export function PaletteSheet({
   folded,
   onFold,
+  ref,
 }: {
   folded: boolean
   onFold: (folded: boolean) => void
+  ref?: Ref<HTMLElement>
 }) {
   const { t } = useTranslation('editor')
   const { takes } = useScoreEditorContext()
-  const layer = useEditorState((state) => state.layer)
+  const settings = useSettingsStoreApi()
   const keys = useFoldKeys()
-  const [tab] = useEditorPanel()
-  const motionOf = useScrollMotion()
-  const scroller = useRef<HTMLDivElement>(null)
-  const [list, setList] = useState(false)
-  // Opened at what the caret's row writes: the chord row's first open category is Bar.
-  const [current, setCurrent] = useState<PaletteCategory>(layer === 'chords' ? 'measures' : 'modes')
-  // A category to open at, scrolled to at once once the sections are in.
-  const pending = useRef<PaletteCategory | null>(null)
-  // While the sections scroll to a category tapped, the bar keeps it; a hand on them lets it follow.
-  const following = useRef(true)
-  // The keys stand where the sections would: shown, the sheet is compact.
-  const expanded = !folded && keys.folded
-
-  const scrollTo = (category: PaletteCategory, behavior: ScrollBehavior) => {
-    const box = scroller.current
-    const top = box ? placeOf(box, category) : null
-    if (box && top !== null) box.scrollTo?.({ top, behavior })
-  }
-  useLayoutEffect(() => {
-    if (!expanded || !pending.current) return
-    scrollTo(pending.current, 'instant')
-    pending.current = null
-  })
-  const expand = (open: boolean, at?: PaletteCategory) => {
-    if (open) {
-      pending.current = at ?? current
-      if (!keys.folded) keys.fold(true)
-    }
+  const list = useSettings(selectPaletteList)
+  const [category, choose] = useCategory()
+  const box = useRef<HTMLDivElement>(null)
+  const onScroll = useSectionInSight(box, category, choose)
+  // The keys stand where the sections would: shown, the sheet stays folded.
+  const unfolded = !folded && keys.folded
+  const unfold = (open: boolean) => {
+    if (open && !keys.folded) keys.fold(true)
     onFold(!open)
   }
-  const [, setTab] = useEditorPanel()
-  const choose = (category: PaletteCategory) => {
-    if (tab !== 'notation') setTab('notation')
-    setCurrent(category)
-    if (!expanded) {
-      expand(true, category)
-      return
-    }
-    following.current = false
-    scrollTo(category, motionOf)
-  }
-  const followScroll = () => {
-    const box = scroller.current
-    if (!box || !following.current) return
-    const shown = categoryAt(box)
-    if (shown && shown !== current) setCurrent(shown)
-  }
-
-  const barButton = 'size-10 shrink-0 rounded-control text-muted-foreground hover:text-foreground'
+  const listLabel = t(list ? 'palette.asGrid' : 'palette.asList')
   return (
     <MotionConfig reducedMotion="user">
       <section
+        ref={ref}
         aria-label={t('panel.label')}
-        className="pointer-events-auto flex min-h-0 flex-col gap-1.5 rounded-t-card border border-b-0 border-border bg-card px-3 pb-1 shadow-[0_-6px_20px_-8px] shadow-foreground/15"
+        className="pointer-events-auto flex max-h-[50dvh] min-h-0 flex-col gap-1.5 rounded-sheet border border-border bg-card px-2.5 pb-2.5 shadow-lg"
       >
         <fieldset disabled={takes.stage !== 'idle'} className="contents">
-          <Grip folded={!expanded} onFold={(next) => expand(!next)} />
-          {expanded ? <PanelTabs /> : null}
-          {expanded && tab !== 'notation' ? (
-            <div className="h-[min(38dvh,22rem)] min-h-0 overflow-y-auto overscroll-contain">
-              <TabBody tab={tab} />
+          <Grip folded={!unfolded} onFold={(next) => unfold(!next)} />
+          {unfolded ? (
+            <div
+              ref={box}
+              onScroll={onScroll}
+              className="relative flex min-h-0 flex-col gap-4 overflow-y-auto overscroll-contain"
+            >
+              <Laid form={list ? 'list' : 'grid'}>
+                <Sections />
+              </Laid>
             </div>
-          ) : expanded ? (
-            <Sections
-              scroller={scroller}
-              list={list}
-              onScroll={followScroll}
-              onHand={() => (following.current = true)}
-            />
           ) : (
-            <NoteToolbar />
+            <ToolRow category={category} />
           )}
           <div className="flex shrink-0 items-center gap-1">
-            <CategoryBar
-              current={expanded && tab === 'notation' ? current : null}
-              onChoose={choose}
-            />
-            {expanded && tab === 'notation' ? (
+            <div className="min-w-0 flex-1">
+              <CategoryStrip current={category} onChoose={choose} />
+            </div>
+            {unfolded ? (
               <Button
                 variant="ghost"
                 size="icon"
-                aria-label={t(list ? 'palette.grid' : 'palette.list')}
-                title={t(list ? 'palette.grid' : 'palette.list')}
-                className={barButton}
-                onClick={() => setList(!list)}
+                aria-label={listLabel}
+                title={listLabel}
+                aria-pressed={list}
+                className="rounded-control text-muted-foreground hover:text-foreground"
+                onClick={() => setPaletteList(settings, !list)}
               >
                 {list ? <LayoutGrid aria-hidden /> : <List aria-hidden />}
               </Button>
@@ -615,13 +506,13 @@ export function PaletteSheet({
             <Button
               variant="ghost"
               size="icon"
-              aria-label={t(expanded ? 'palette.close' : 'palette.open')}
-              title={t(expanded ? 'palette.close' : 'palette.open')}
-              aria-expanded={expanded}
-              className={barButton}
-              onClick={() => expand(!expanded)}
+              aria-label={t(unfolded ? 'palette.close' : 'palette.open')}
+              title={t(unfolded ? 'palette.close' : 'palette.open')}
+              aria-expanded={unfolded}
+              className="rounded-control text-muted-foreground hover:text-foreground"
+              onClick={() => unfold(!unfolded)}
             >
-              {expanded ? <SquareChevronDown aria-hidden /> : <SquareChevronUp aria-hidden />}
+              {unfolded ? <SquareChevronDown aria-hidden /> : <SquareChevronUp aria-hidden />}
             </Button>
           </div>
         </fieldset>

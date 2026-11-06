@@ -2,10 +2,78 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { useRef, useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
+import { useOwnLessonsStoreApi, type OwnLesson } from '@/entities/own-lessons'
 import { useLessonDraft } from '@/features/edit-original'
+import { saveOwnLesson } from '@/features/manage-own-lessons'
 import { localText, useLocale, type Locale } from '@/shared/i18n'
-import { DraftScreen } from '@/widgets/content-editor'
-import { LessonDocument, OpenScore } from '@/widgets/lesson-document'
+import { useRestingSave } from '@/shared/lib'
+import type { EditAction } from '@/shared/ui'
+import { DraftScreen, LocalScreen } from '@/widgets/content-editor'
+import { inBothLanguages, LessonDocument, OpenScore } from '@/widgets/lesson-document'
+
+/**
+ * Where the lesson editor writes: an editor's draft of one of the app's lessons, the database's by
+ * `id` (a course's as `<course>/<lesson>`, ADR 0116), or the learner's own lesson on their device
+ * (R30-5).
+ */
+export type LessonSource =
+  | { readonly kind: 'draft'; readonly id: string; readonly course?: string }
+  | { readonly kind: 'own'; readonly lesson: OwnLesson }
+
+interface EditorProps {
+  lesson: Lesson
+  /** The screen's Back (`BackButton`). */
+  back: ReactNode
+  /** A router `Link` to the lesson's own page. */
+  toLesson: ReactElement
+  /** Its Edit, in Edit: Done at the bar's end. */
+  edit?: EditAction | undefined
+}
+
+/**
+ * The lesson editor (round 21): the lesson as one document, written where it reads. The same editor
+ * for an editor's draft of the app's lesson (`source` `draft`) and for the learner's own (`own`).
+ */
+export function LessonEditor({ source, ...props }: EditorProps & { source: LessonSource }) {
+  return source.kind === 'own' ? (
+    <OwnLessonEditor {...props} lesson={source.lesson} />
+  ) : (
+    <DraftLessonEditor {...props} id={source.id} course={source.course} />
+  )
+}
+
+/**
+ * The learner's own lesson (R30-5): the same document, written in the learner's language and read the
+ * same in the other; each change kept on the device once the editor rests, Done keeping what waits
+ * and reading it. No draft and no Publish: it is theirs. An example of notes is written as text in
+ * place (the score editor's Edit music is the app's lessons').
+ */
+function OwnLessonEditor({
+  lesson,
+  back,
+  edit,
+}: Omit<EditorProps, 'lesson'> & { lesson: OwnLesson }) {
+  const locale = useLocale()
+  const store = useOwnLessonsStoreApi()
+  // The lesson as it opened: the document is written from it once, then holds what is written.
+  const [initial] = useState(lesson)
+  const saving = useRestingSave((next: Lesson) =>
+    saveOwnLesson(store, { ...inBothLanguages(next, locale), id: lesson.id }),
+  )
+  const done: EditAction = {
+    editing: true,
+    onEdit: () => undefined,
+    onDone: () => {
+      saving.flush()
+      edit?.onDone()
+    },
+  }
+  return (
+    <LocalScreen heading={localText(lesson.title, locale)} back={back} edit={done}>
+      <LessonDocument locale={locale} initial={initial} onChange={saving.save} />
+    </LocalScreen>
+  )
+}
 
 /**
  * An editor's lesson editor (ADR 0116, round 21): the lesson's draft opened (else the lesson as
@@ -13,25 +81,18 @@ import { LessonDocument, OpenScore } from '@/widgets/lesson-document'
  * each change saved to the draft once the editor rests; the draft's status, Publish and menu in the
  * bar.
  */
-export function LessonEditor({
+function DraftLessonEditor({
   lesson,
   id,
   back,
   toLesson,
-  modes,
+  edit,
   course,
-}: {
-  lesson: Lesson
+}: EditorProps & {
   /** The lesson's id in the database (a course's as `<course>/<lesson>`). */
   id: string
-  /** The screen's Back (`BackButton`). */
-  back: ReactNode
-  /** A router `Link` to the lesson's own page. */
-  toLesson: ReactElement
-  /** Its Edit toggle, set to Done. */
-  modes?: ReactNode
   /** The course whose lesson it is, where it is a course's: an example's score opens under it. */
-  course?: string
+  course: string | undefined
 }) {
   const { t } = useTranslation('learn')
   const shown = useLocale()
@@ -62,7 +123,7 @@ export function LessonEditor({
       draft={draft}
       // The lesson's own title over it, as it reads: the page in Edit, not another page.
       heading={title}
-      modes={modes}
+      edit={edit}
       title={title}
       back={back}
       backTo={{ link: toLesson, label: t('edit.back') }}

@@ -1,0 +1,57 @@
+/* R33: the keys as a real piano's, its rail, its pedals and its settings sheet. */
+:root {
+  --ivory: #fefdfb; --ivory-far: #ebe5dc; --ivory-lip: #ddd5ca; --ebony: #2a2420; --ebony-top: #3d3530; --ebony-front: #5a504a;
+  --felt: #7c302c; --bed: #cbc2b9; --rail: #dfd8cf; --keydown: #b9dbf4; --lyre: #332c28; --brass: #d4ae58; --brass-dn: #a8822f;
+  --brass-shank: #8a6a28; --led: #f2b53c; --rh: #e7a99c; --lh: #c9b8ea; --rh-wash: #f4d9d2; --wrong: #e7826f;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --ivory: #d4d0cb; --ivory-far: #aaa49c; --ivory-lip: #a39b91; --ebony: #120f0d; --ebony-top: #221d1a; --ebony-front: #3d3631;
+  --felt: #5a2422; --bed: #787069; --rail: #332c27; --keydown: #6fa6d2; --lyre: #1d1916; --brass: #c69f4c; --brass-dn: #8f6c26;
+  --brass-shank: #a07c32; --rh: #c27a6c; --lh: #9a87c4; --rh-wash: #b6928a } }
+:root[data-theme="dark"] {
+  --ivory: #d4d0cb; --ivory-far: #aaa49c; --ivory-lip: #a39b91; --ebony: #120f0d; --ebony-top: #221d1a; --ebony-front: #3d3631;
+  --felt: #5a2422; --bed: #787069; --rail: #332c27; --keydown: #6fa6d2; --lyre: #1d1916; --brass: #c69f4c; --brass-dn: #8f6c26;
+  --brass-shank: #a07c32; --rh: #c27a6c; --lh: #9a87c4; --rh-wash: #b6928a }
+code { font-size: 13px; background: var(--sand); border-radius: 6px; padding: 1px 5px }
+.pk { position: relative; display: flex; gap: 1px; background: var(--bed); padding-top: 4px; overflow: hidden }
+.pk .felt { position: absolute; inset: 0 0 auto; height: 5px; background: linear-gradient(var(--felt), color-mix(in oklab, var(--felt) 70%, #000)); z-index: 3; box-shadow: 0 2px 3px rgba(0,0,0,.25) }
+.pk .w { --fill: var(--ivory); position: relative; flex: 1; border-radius: 0 0 5px 5px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; padding-bottom: 12px; font: 600 11px var(--sans); color: #3a322b;
+  background: linear-gradient(to bottom, color-mix(in oklab, var(--fill) 80%, #000) 0, var(--fill) 16%, var(--fill) 78%, color-mix(in oklab, var(--fill) 94%, #000) 100%);
+  box-shadow: inset 1px 0 0 rgba(255,255,255,.55), inset -1px 0 0 rgba(0,0,0,.10), 0 1px 2px rgba(0,0,0,.18); transition: transform .08s }
+.pk .w::after { content: ""; position: absolute; inset: auto 0 0; height: 7px; border-radius: 0 0 5px 5px; background: linear-gradient(color-mix(in oklab, var(--fill) 96%, #000), color-mix(in oklab, var(--fill) 82%, #000)); border-top: 1px solid rgba(255,255,255,.6) }
+.pk .w.dn { transform: translateY(1.5px); background: linear-gradient(to bottom, color-mix(in oklab, var(--fill) 62%, #000) 0, var(--fill) 26%, var(--fill) 100%) }
+.pk .w.dn::after { height: 3px }
+.pk .w.lit { --fill: var(--keydown) } .pk .w.rh { --fill: var(--rh) } .pk .w.lh { --fill: var(--lh) } .pk .w.wash { --fill: var(--rh-wash) } .pk .w.bad { --fill: var(--wrong) }
+.pk .w.held { box-shadow: inset 0 0 0 3px var(--sky-ink), 0 1px 2px rgba(0,0,0,.18) }
+.pk .b { --fill: var(--ebony); position: absolute; top: 4px; height: 60%; z-index: 2; border-radius: 0 0 3px 3px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 14%; font: 600 10px var(--sans); color: #f3eee7;
+  background: linear-gradient(to bottom, color-mix(in oklab, var(--fill) 70%, #000) 0, var(--fill) 10%, color-mix(in oklab, var(--fill) 88%, #fff) 82%, var(--fill) 100%);
+  box-shadow: inset 2px 0 0 rgba(255,255,255,.10), inset -2px 0 0 rgba(0,0,0,.45), 1px 3px 4px rgba(0,0,0,.4) }
+.pk .b::after { content: ""; position: absolute; inset: auto 2px 0; height: 11%; border-radius: 0 0 2px 2px; background: linear-gradient(var(--ebony-front), color-mix(in oklab, var(--ebony-front) 60%, #000)) }
+.pk .b.dn { transform: translateY(1.5px); box-shadow: inset 2px 0 0 rgba(255,255,255,.10), inset -2px 0 0 rgba(0,0,0,.45), 0 1px 2px rgba(0,0,0,.35) }
+.pk .b.dn::after { height: 5% }
+.pk .b.lit { --fill: #3f78a5 } .pk .b.rh { --fill: #b2584a }
+.pk .cap { display: inline-grid; place-items: center; min-width: 16px; height: 16px; padding: 0 3px; border-radius: 4px; font: 600 10px var(--sans); text-transform: uppercase; background: rgba(0,0,0,.07); box-shadow: inset 0 -1px 0 rgba(0,0,0,.15) }
+.pk .b .cap { background: rgba(255,255,255,.14); box-shadow: inset 0 -1px 0 rgba(0,0,0,.4) }
+.pk .shade { position: absolute; inset: 4px 0 auto; height: 10px; background: linear-gradient(rgba(0,0,0,.22), transparent); z-index: 2; pointer-events: none }
+/* the rail beneath the keys */
+.rail { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(max-content,1fr); align-items: center; min-height: 56px; padding: 0 6px; background: var(--rail); box-shadow: inset 0 1px 0 rgba(0,0,0,.08) }
+.rail .end { display: flex; justify-content: flex-end; align-items: center }
+.rail .chord { font: 600 18px var(--display); padding: 0 8px; white-space: nowrap }
+.lyre { position: relative; display: flex; align-items: flex-end; gap: 4px; height: 56px; padding: 4px 8px 0; background: var(--lyre); border-radius: 10px 10px 0 0 }
+.lyre .led { position: absolute; top: 6px; right: 8px; width: 7px; height: 7px; border-radius: 9px; background: #5b4e40 }
+.lyre .led.on { background: var(--led); box-shadow: 0 0 6px 2px color-mix(in oklab, var(--led) 70%, transparent) }
+.pedal { display: grid; justify-items: center; align-content: end; gap: 1px; min-width: 48px; min-height: 48px; padding-bottom: 2px }
+.pedal span { font: 600 11px var(--sans); color: #cbbfae } .pedal.dn span { color: #f3dea4 }
+/* option B: a lit Sustain toggle in the strip */
+.sus { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: 999px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line); font: 600 14px var(--sans) }
+.sus i { width: 8px; height: 8px; border-radius: 9px; background: var(--line) }
+.sus.on { background: var(--honey); color: var(--honey-ink); box-shadow: none } .sus.on i { background: #fff6dc; box-shadow: 0 0 6px 2px rgba(255,240,200,.9) }
+/* the Piano sheet */
+.psheet { position: absolute; inset: auto 0 0; background: var(--card); border-radius: 24px 24px 0 0; padding: 8px 16px 34px; box-shadow: 0 -8px 30px rgba(0,0,0,.18); display: grid; gap: 10px; z-index: 6 }
+.psheet .grip { width: 36px; height: 5px; border-radius: 9px; background: var(--line); margin: 0 auto 2px }
+.psheet .row2 { display: grid; gap: 8px; padding: 10px 0; border-top: 1px solid var(--line) }
+.psheet .row2:first-of-type { border-top: 0 }
+.psheet .lbl { font-weight: 600 } .psheet .sub { font-size: 13px; color: var(--ink-soft) }
+.slider { height: 6px; border-radius: 9px; background: linear-gradient(90deg, var(--ink) 100%, var(--line) 100%); position: relative }
+.slider::after { content: ""; position: absolute; left: calc(100% - 22px); top: -8px; width: 22px; height: 22px; border-radius: 99px; background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,.3) }
+.pop { position: absolute; width: 380px; background: var(--card); border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,.22), 0 0 0 1px var(--line); padding: 12px 16px; display: grid; gap: 4px; z-index: 6 }

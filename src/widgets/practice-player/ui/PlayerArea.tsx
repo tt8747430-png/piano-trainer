@@ -2,7 +2,7 @@ import { use, type ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 import { ChromeShownContext } from '../model/chrome-shown'
 
-type PlayerAreaName = 'keys' | 'sheet' | 'status' | 'dock'
+type PlayerAreaName = 'keys' | 'sheet' | 'status' | 'dock' | 'transport'
 
 /** How the transport steps aside: down towards the foot. */
 const ASIDE =

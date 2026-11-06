@@ -17,3 +17,12 @@ export function readLearnSearch(raw: Raw): LearnView {
 }
 export const learnSearch = routeSearch(readLearnSearch, LEARN_DEFAULTS)
 export const LEARN_KEPT = ['view', 'journey'] as const satisfies readonly (keyof LearnView)[]
+
+/** A lesson's page (R30-5): the learner's course it is read in, where it is read in one. */
+export interface LessonSearch {
+  readonly course?: string
+}
+export const LESSON_DEFAULTS: LessonSearch = {}
+const readLessonSearch = (raw: Raw): LessonSearch =>
+  typeof raw.course === 'string' && raw.course !== '' ? { course: raw.course } : {}
+export const lessonSearch = routeSearch(readLessonSearch, LESSON_DEFAULTS)

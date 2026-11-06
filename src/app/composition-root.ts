@@ -15,6 +15,16 @@ import {
   type NotificationsStore,
 } from '@/entities/notification'
 import { createPatternsStore, PATTERNS_STORAGE_KEY, type PatternsStore } from '@/entities/pattern'
+import {
+  createOwnLessonsStore,
+  OWN_LESSONS_STORAGE_KEY,
+  type OwnLessonsStore,
+} from '@/entities/own-lessons'
+import {
+  createPracticeLibraryStore,
+  PRACTICE_LIBRARY_STORAGE_KEY,
+  type PracticeLibraryStore,
+} from '@/entities/practice-library'
 import { createPiecesStore, PIECES_STORAGE_KEY, type PiecesStore } from '@/entities/piece'
 import { createProgressStore, PROGRESS_STORAGE_KEY, type ProgressStore } from '@/entities/progress'
 import { createSettingsStore, SETTINGS_STORAGE_KEY, type SettingsStore } from '@/entities/settings'
@@ -40,6 +50,7 @@ import {
 } from '@/shared/api/content'
 import { createWebMidi, hasWebMidi } from '@/shared/api/midi'
 import { lazyBackend, type Backend } from '@/shared/api/supabase'
+import { createSupabaseGroups, type GroupsPort } from '@/shared/api/groups'
 import { createSupabaseProfile, type ProfilePort } from '@/shared/api/profile'
 import { createSupabasePublicLibrary, type PublicLibrary } from '@/shared/api/public-library'
 import { createSupabaseCloud, type CloudSync } from '@/shared/api/sync'
@@ -67,6 +78,8 @@ export interface Stores {
   readonly diagramInversions: DiagramInversionsStore
   readonly chordSheets: ChordSheetsStore
   readonly notifications: NotificationsStore
+  readonly practiceLibrary: PracticeLibraryStore
+  readonly ownLessons: OwnLessonsStore
 }
 
 /**
@@ -88,6 +101,8 @@ export function createStores(
     diagramInversions: createDiagramInversionsStore(saving),
     chordSheets: createChordSheetsStore(saving),
     notifications: createNotificationsStore(saving),
+    practiceLibrary: createPracticeLibraryStore(saving),
+    ownLessons: createOwnLessonsStore(saving),
   }
 }
 
@@ -127,6 +142,8 @@ export const SYNCED_SAVES: readonly SyncedSave[] = [
   { table: 'diagram_inversions', key: DIAGRAM_INVERSIONS_STORAGE_KEY },
   { table: 'chord_sheets', key: CHORD_SHEETS_STORAGE_KEY },
   { table: 'notifications', key: NOTIFICATIONS_STORAGE_KEY },
+  { table: 'practice_library', key: PRACTICE_LIBRARY_STORAGE_KEY },
+  { table: 'own_lessons', key: OWN_LESSONS_STORAGE_KEY },
 ]
 
 /**
@@ -156,6 +173,8 @@ export const createPublicLibrary = (backend: Backend): PublicLibrary =>
 
 /** The learner's profile: the project's `learner_profiles` and `avatars` (B1). */
 export const createProfile = (backend: Backend): ProfilePort => createSupabaseProfile(backend)
+/** The learner's groups and shared folders: the project's `learner_groups` and `shared_folders` (R30 S6). */
+export const createGroups = (backend: Backend): GroupsPort => createSupabaseGroups(backend)
 
 /** The admin's tools: the project's `admin` function and tables (ADR 0116). */
 export const createAdmin = (backend: Backend): AdminPort => createSupabaseAdmin(backend)

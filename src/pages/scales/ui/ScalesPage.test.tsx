@@ -18,6 +18,13 @@ const pressed = (voice: readonly LiveEvent[]) =>
 const wedgesOf = (circle: HTMLElement) =>
   [...circle.querySelectorAll('[data-wedge]')].map((wedge) => wedge.textContent ?? '')
 
+/** A hand's fingers in the run's fingering table, a crossing's words left out. */
+const fingerRow = (hand: 'Right hand' | 'Left hand') =>
+  within(screen.getByRole('table', { name: hand }))
+    .getAllByRole('row')[1]
+    ?.textContent?.replace('Fingers', '')
+    .replaceAll(' (crossing)', '')
+
 describe('Practice → Scales and keys', () => {
   it('spells E♭ harmonic minor with its C♭ and names its structure', async () => {
     await renderApp('/practice/scales?root=Eb&kind=harmonic')
@@ -35,16 +42,16 @@ describe('Practice → Scales and keys', () => {
     expect(within(keyboard).getByRole('button', { name: 'D4' })).toHaveClass('bg-key-scale')
   })
 
-  it('puts the playing hand’s fingers under the keys, which keep their degrees', async () => {
+  it('keeps the degrees on the keys and the playing hand’s fingers in its table, none on the keys (R34)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
     expect(shownText(within(keyboard).getByRole('button', { name: 'F4' }))).toContain('4')
-    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('12312345')
+    expect(fingerRow('Right hand')).toBe('12312345')
     const hands = screen.getByRole('radiogroup', { name: 'Hands' })
     await user.click(within(hands).getByRole('radio', { name: 'Left' }))
     expect(router.state.location.search).toMatchObject({ hands: 'lh' })
-    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('54321321')
+    expect(fingerRow('Left hand')).toBe('54321321')
     expect(screen.queryByRole('radiogroup', { name: 'Fingers' })).not.toBeInTheDocument()
   })
 
@@ -61,14 +68,6 @@ describe('Practice → Scales and keys', () => {
     expect(await screen.findByText('Dm – G')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Play the vamp: Dm – G' }))
     expect(audio.played.length).toBeGreaterThan(0)
-  })
-
-  it('opens the Drone on the mode’s tonic', async () => {
-    const user = userEvent.setup()
-    const { router, settingsStore } = await renderApp('/practice/scales?root=D&kind=dorian')
-    await user.click(await screen.findByRole('link', { name: 'Drone on D' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/practice/drone'))
-    expect(settingsStore.getState().drone.root).toBe(2)
   })
 
   it('opens the scale’s exercises in the Player, each on this scale', async () => {
@@ -307,7 +306,7 @@ describe('Practice → Scales and keys', () => {
   it('fingers a scale with no taught fingering from the thumb', async () => {
     await renderApp('/practice/scales?kind=mpent&root=A')
     await screen.findByRole('group', { name: 'Keyboard' })
-    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent(/^1/)
+    expect(fingerRow('Right hand')).toMatch(/^1/)
   })
 
   it('writes each hand’s fingering under the run’s notes, beside the hand drawn with its fingers numbered', async () => {
@@ -339,7 +338,7 @@ describe('Practice → Scales and keys', () => {
     const more = await screen.findByRole('button', { name: 'More octaves' })
     await user.click(more)
     expect(router.state.location.search).toMatchObject({ octaves: 2 })
-    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('123123412312345')
+    expect(fingerRow('Right hand')).toBe('123123412312345')
     await user.click(more)
     await user.click(more)
     expect(router.state.location.search).toMatchObject({ octaves: 4 })
@@ -441,7 +440,7 @@ describe('Practice → Scales and keys', () => {
       'aria-checked',
       'true',
     )
-    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('12312345')
+    expect(fingerRow('Right hand')).toBe('12312345')
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(shownText(within(keyboard).getByRole('button', { name: 'E4' }))).toContain('3')
     await user.click(screen.getByRole('button', { name: 'Play up and down' }))
@@ -454,14 +453,14 @@ describe('Practice → Scales and keys', () => {
     const fingering = await screen.findByRole('radiogroup', { name: 'Fingering' })
     await user.click(within(fingering).getByRole('radio', { name: 'As the scale' }))
     expect(router.state.location.search).toMatchObject({ start: 3, fingering: 'scale' })
-    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('31234123')
+    expect(fingerRow('Right hand')).toBe('31234123')
   })
 
   it('offers the blues no choice of fingering: as taught from its tonic', async () => {
     await renderApp('/practice/scales?kind=blues&fingers=rh')
     await screen.findByRole('group', { name: 'Keyboard' })
     expect(screen.queryByRole('group', { name: 'Fingering' })).not.toBeInTheDocument()
-    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('1234123')
+    expect(fingerRow('Right hand')).toBe('1234123')
   })
 
   it('writes the run on a staff, the other hand’s staff muted', async () => {
@@ -517,7 +516,7 @@ describe('Practice → Scales and keys', () => {
     const inKey = screen.getByRole('region', { name: 'Progressions in this key' })
     const cadence = within(inKey).getByRole('link', { name: 'Complete cadence I–IV–V–I' })
     expect(cadence.getAttribute('href')).toBe(
-      '/practice/progressions?key=D&p=I-IV-V-I&size=sevenths',
+      '/practice/progressions/line?key=D&p=I-IV-V-I&size=sevenths',
     )
     expect(within(inKey).getAllByRole('link')).toHaveLength(4)
   })

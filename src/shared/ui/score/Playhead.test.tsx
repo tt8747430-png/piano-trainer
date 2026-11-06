@@ -142,14 +142,6 @@ describe('Playhead (ADR 0096)', () => {
   })
 
   it('brings its line into sight as it comes onto it, on a page canvas by the canvas', async () => {
-    const scrolled = vi.mocked(Element.prototype.scrollIntoView)
-    scrolled.mockClear()
-    await renderPlayhead({ tick: 0 })
-    // It scrolls once the line is placed, a frame after the engraving: later under the whole suite.
-    await vi.waitFor(() =>
-      expect(scrolled).toHaveBeenCalledWith(expect.objectContaining({ block: 'nearest' })),
-    )
-    expect(scrolled.mock.contexts.at(-1)).toBe(document.querySelector('[data-slot="sheet-line"]'))
     const reveal = vi.fn()
     render(
       <Sheet
@@ -157,9 +149,32 @@ describe('Playhead (ADR 0096)', () => {
         around={(sheet) => <RevealContext value={reveal}>{sheet}</RevealContext>}
       />,
     )
-    // The second sheet engraves in the worker: under the whole suite that can take past a second.
+    // The sheet engraves in the worker: under the whole suite that can take past a second.
     await vi.waitFor(() => expect(reveal).toHaveBeenCalled(), { timeout: 5000 })
     expect(reveal.mock.calls[0]?.[0]).toHaveAttribute('data-slot', 'sheet-line')
+  })
+
+  it('on its sheet’s first line, shows the score from its top, its title in sight (R31-P)', async () => {
+    const scrolled = vi.mocked(Element.prototype.scrollIntoView)
+    scrolled.mockClear()
+    const scrollTo = vi.fn()
+    render(
+      <div
+        style={{ overflowY: 'auto' }}
+        ref={(box) => {
+          if (box) box.scrollTo = scrollTo
+        }}
+      >
+        <Sheet props={{ tick: 0 }} />
+      </div>,
+    )
+    await vi.waitFor(
+      () => expect(scrollTo).toHaveBeenCalledWith(expect.objectContaining({ top: 0 })),
+      {
+        timeout: 5000,
+      },
+    )
+    expect(scrolled).not.toHaveBeenCalled()
   })
 
   it('keeps itself in the middle half of a line wider than its scroller', async () => {

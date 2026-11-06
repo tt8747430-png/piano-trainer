@@ -25,7 +25,7 @@ Sizes come from the device, never from what a browser's emulator reports. Measur
 | `iphone-app`     | 393×852  | iPhone 14 Pro, the installed app                 | published spec, the whole screen                           |
 | `iphone-safari`  | 393×695  | iPhone 14 Pro in Safari, bars showing            | measured in Safari on a simulated 393×852 phone            |
 | `iphone-side`    | 852×393  | on its side, the installed app                   | published spec; Safari's side size is **not measured**     |
-| `iphone-402`     | 402×874  | the owner's larger phone size                    | the owner's list                                           |
+| `iphone-17-pro`  | 402×874  | iPhone 17 Pro, the installed app                 | the owner's frame (status bar 62, home indicator 34)       |
 | `macbook-safari` | 1710×904 | MacBook Air M3 15-inch, Safari filling the screen | measured in Safari on the owner's Mac                      |
 | `macbook-app`    | 1710×984 | the same Mac, the most an app window can take    | macOS's usable screen, measured; a title bar takes some    |
 
@@ -45,8 +45,27 @@ VITE_SUPABASE_URL=http://localhost:54321 VITE_SUPABASE_PUBLISHABLE_KEY=local-che
 node .claude/skills/owner-way/scripts/shots.mjs http://localhost:5191 <scratchpad>/shots /practice/metronome /songs
 ```
 
-It shoots each route at all six sizes, both themes and both languages (24 shots a route) as a returning learner, and prints
-`PROBLEM` for a page wider than its screen or a page error. The Claude-in-Chrome tab is no substitute: it reports as hidden,
+It shoots each step at all six sizes, both themes and both languages (24 shots a step) as a returning learner. The phones run
+as the installed app: the status bar and the home indicator are emulated as safe-area insets (59 and 34 on a 393×852), and
+`navigator.standalone` is true. It waits for a score to be engraved before shooting. A step can act first:
+`"/play/hot-cross-buns >> click=Version >> scroll"` taps by accessible name and then shoots the top, the middle and the end; `type=<text>` types into the field focused (a New sheet's name).
+`inspect.js` checks every shot and prints a `PROBLEM` line for:
+- text cut with no ellipsis (`CUT`);
+- two controls or texts drawn over each other (`OVERLAP`);
+- a fixed or sticky layer over text that isn't its own (`COVERED`);
+- a band of the page left bare beside an open dialog (`UNCOVERED`);
+- a target under 40px on a touch screen (`SMALL`);
+- a page wider than its screen, or a page error.
+
+**A page is shot only once fully loaded** (the owner's rule): every capture, the app's and a reference site's, waits on
+`scripts/settle.mjs` (load, network quiet, fonts, images, no busy region or spinner, a still layout) and reports a
+part that never settles instead of shooting past it. **Nothing that only greets or interrupts is shot** (the owner's
+rule): `clearOnboarding` dismisses the app's welcome, sign-in or sign-up prompts, product tours and cookie or newsletter
+banners by their gentlest way out as each page loads, before any act (so a sheet a step opens is kept), and reports what it dismissed; `ONBOARDING=1` keeps them, only when
+the check is of them or the owner asks. The harness also seeds a returning learner from the served app's own settings
+version, so run it from the checkout that serves the app.
+
+`SIZES`, `THEMES` and `LANGUAGES` narrow it while iterating; a pass is the whole matrix. The Claude-in-Chrome tab is no substitute: it reports as hidden,
 so lazy staves stay blank and sheets never finish opening.
 
 ## Pass 1: as the builder
@@ -77,6 +96,18 @@ last pass found nothing. A quick request, a late hour or a green suite changes n
 | "Only one component changed"                | That component is on every screen that uses it.                    |
 | "Pass 1 was clean, Pass 2 is a formality"   | Pass 2 is a different walk, in a fresh state, against the request. |
 | "The owner wants it quick"                  | A round sent back costs more than two passes.                      |
+
+## The shots a pass must include
+
+The owner's phone found what a shot of a page at its top never shows (`.scratch/r30/plan/owner-shots-compared.md`):
+
+- **Scrolled.** Every screen with more than one screenful, part way and at the end: sticky previews and bars cover what
+  scrolls under them.
+- **Every sheet, menu and dialog opened,** over a scrolled page: a backdrop that stops short leaves a band bare.
+- **Real content:** the longest title, an imported score with pedal marks and many staves (Fantaisie-Impromptu in
+  `piano-data`), a folder of many songs, signed in (the save mark beside Done).
+- **The score engraved,** then the floating pills and transport checked against its title and staves.
+- **After playing:** play a few bars and stop; nothing stays lit or held.
 
 ## What to drive by hand
 

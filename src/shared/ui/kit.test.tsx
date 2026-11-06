@@ -7,6 +7,7 @@ import { ChordSizeField } from './ChordSizeField'
 import { Dropdown } from './Dropdown'
 import { FactCard } from './FactCard'
 import { InversionChoice } from './InversionChoice'
+import { TitleTabs } from './TitleTabs'
 import { RankMark } from './RankMark'
 import { NamedSegmented } from './NamedSegmented'
 import { Labelled } from './Labelled'
@@ -43,43 +44,82 @@ describe('ScreenHeader', () => {
     expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
   })
 
-  it('sets a place’s views in the title’s place, in the bar’s one row, the title kept for a screen reader', () => {
+  it('sets a place’s views as its title, its name still the page’s heading (R31-S)', async () => {
+    const user = userEvent.setup()
+    const shown: string[] = []
     render(
-      <ScreenHeader title="Learn" large switcher={<div role="radiogroup" aria-label="Views" />} />,
+      <ScreenHeader
+        title="Songs"
+        large
+        views={
+          <TitleTabs
+            label="Views"
+            value="mine"
+            options={[
+              { value: 'mine', label: 'My songs' },
+              { value: 'explore', label: 'Explore' },
+            ]}
+            onChange={(view) => shown.push(view)}
+          />
+        }
+        tools={<button type="button">Select</button>}
+      />,
     )
     const bar = screen.getByRole('banner')
-    const views = within(bar).getByRole('radiogroup', { name: 'Views' })
-    expect(within(bar).getByRole('heading', { level: 1, name: 'Learn' })).toHaveClass('sr-only')
-    // One row: the switcher and the heading share it, nothing under it.
-    expect(views.parentElement?.parentElement).toBe(bar.firstElementChild)
-    expect(bar.children).toHaveLength(1)
+    expect(within(bar).getByRole('heading', { level: 1, name: 'Songs' })).toHaveClass('sr-only')
+    expect(within(bar).getByRole('radio', { name: 'My songs' })).toBeChecked()
+    await user.click(within(bar).getByRole('radio', { name: 'Explore' }))
+    expect(shown).toEqual(['explore'])
+    // One row: the views where the title stands, nothing under the bar.
+    expect(bar.nextElementSibling).toBeNull()
+    expect(within(bar).getByRole('button', { name: 'Select' })).toBeInTheDocument()
   })
 
-  it('gives only a place a switcher', () => {
+  it('gives only a place its views', () => {
     // @ts-expect-error: a page under a place shows its views in its content (R29-P1)
-    render(<ScreenHeader title="Chords" switcher={<div />} />)
+    render(<ScreenHeader title="Chords" views={<div />} />)
   })
 
-  it('draws tools, Settings, More and Edit in that order, whatever order they are given (A3)', () => {
+  it('puts Edit beside the title and tools, Settings and More at the bar’s end, in that order (A3)', () => {
     render(
       <ScreenHeader
         title="Song"
-        edit={<button type="button">Edit</button>}
+        edit={{ editing: false, onEdit: () => undefined, onDone: () => undefined }}
         more={<button type="button">More</button>}
         settings={<button type="button">Settings</button>}
         tools={<button type="button">MIDI</button>}
       />,
     )
+    const buttons = within(screen.getByRole('banner')).getAllByRole('button')
     expect(
-      within(screen.getByRole('banner'))
-        .getAllByRole('button')
-        .map((button) => button.textContent),
-    ).toEqual(['MIDI', 'Settings', 'More', 'Edit'])
+      buttons.map((button) => button.getAttribute('aria-label') ?? button.textContent),
+    ).toEqual(['Edit', 'MIDI', 'Settings', 'More'])
+    // The pencil follows the title in the same group, so it wraps with the title's last line.
+    expect(screen.getByRole('heading', { level: 1 }).nextElementSibling).toBe(buttons[0])
+  })
+
+  it('shows Done in the pencil’s place beside the title while editing', async () => {
+    const onDone = vi.fn()
+    render(
+      <ScreenHeader
+        title="Song"
+        edit={{ editing: true, onEdit: () => undefined, onDone }}
+        settings={<button type="button">Settings</button>}
+      />,
+    )
+    const buttons = within(screen.getByRole('banner')).getAllByRole('button')
+    expect(buttons.map((button) => button.textContent)).toEqual(['Done', 'Settings'])
+    expect(screen.getByRole('heading', { level: 1 }).nextElementSibling).toBe(buttons[0])
+    await userEvent.click(screen.getByRole('button', { name: 'Done' }))
+    expect(onDone).toHaveBeenCalledOnce()
   })
 
   it('keeps a screen’s title in the bar, a long one on two lines rather than cut', () => {
     render(
-      <ScreenHeader title="Wonderful Grace of Jesus" edit={<button type="button">Edit</button>} />,
+      <ScreenHeader
+        title="Wonderful Grace of Jesus"
+        edit={{ editing: false, onEdit: () => undefined, onDone: () => undefined }}
+      />,
     )
     const title = screen.getByRole('heading', { level: 1 })
     expect(within(screen.getByRole('banner')).getByRole('heading', { level: 1 })).toBe(title)

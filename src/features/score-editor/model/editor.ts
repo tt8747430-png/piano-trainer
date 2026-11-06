@@ -1,8 +1,8 @@
 import { savedLayout, songTitle, withHeaderLine } from '@/entities/piece'
+import { addNoteKey } from './add-note'
 import { markBars } from './bar-marks'
 import { setClefIn } from './clefs'
 import { shownRows, staffLeftFor } from './rows'
-import { setBarTicks } from './bars'
 import { chosenNotes, chosenSpan, fingerPlace, shownValue, takenAway } from './chosen'
 import { moveCaret, placeCaret, placed, selectionSpan, stepOf } from './caret-moves'
 import { clipEdited } from './clip-edits'
@@ -215,6 +215,15 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
       return chordNoteStep(state, action.direction)
     case 'key':
       return keyPlayed(state, action.key, action.time)
+    case 'addNote':
+      // Never struck with a key played a moment before: a note of its own.
+      return layer === 'chords'
+        ? state
+        : keyPlayed(
+            { ...state, struck: null },
+            addNoteKey(draft, layer, state.caret),
+            Number.NEGATIVE_INFINITY,
+          )
     case 'rest': {
       if (layer === 'chords') return state
       // The notes chosen made rests, still chosen.
@@ -441,16 +450,9 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
       return commit(
         state,
         isHandLayer(action.staff)
-          ? setClefIn(draft, action.bar, action.staff, action.clef, action.scope ?? 'end')
+          ? setClefIn(draft, action.bar, action.staff, action.clef, action.to)
           : setStaffClef(draft, staffPlace(action.staff), action.clef),
       )
-    // Each bar chosen, else the caret's.
-    case 'barLength': {
-      const { from, to } = chosenBars(state)
-      let next = draft
-      for (let index = from; index <= to; index++) next = setBarTicks(next, index, action.ticks)
-      return commit(state, next)
-    }
     case 'sectionKind':
       return commit(state, setSectionKind(draft, action.section, action.kind))
     case 'joinSection':

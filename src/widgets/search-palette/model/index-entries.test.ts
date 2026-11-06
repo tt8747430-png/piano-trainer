@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { EXERCISES } from '@/entities/exercise'
 import { COURSES } from '@/entities/course'
-import { LESSONS } from '@/entities/lesson'
+import { blankLesson, LESSONS } from '@/entities/lesson'
 import { BUILT_IN_PATTERNS, PATTERN_IDS } from '@/entities/pattern'
 import { COLLECTIONS } from '@/entities/piece'
 import { libraryByStyle } from '@/entities/progression-library'
@@ -41,6 +41,24 @@ const sources = (locale: IndexSources['locale'] = 'en'): IndexSources => ({
   folders,
   archived,
   patterns,
+  progressions: [{ id: 'mine-1', name: 'Sunday loop', line: 'vi-IV-I-V', minor: false }],
+  ownLessons: [
+    {
+      ...blankLesson('own-lesson-1'),
+      id: 'own-lesson-1',
+      title: { en: 'Hymn intros', ru: 'Hymn intros' },
+      summary: { en: 'Four bars before the verse', ru: 'Four bars before the verse' },
+    },
+  ],
+  ownCourses: [
+    {
+      id: 'own-course-1',
+      title: 'Sunday hymn playing',
+      line: 'Intros and the alto line',
+      look: { picture: 'church', paint: 'sky' },
+      lessons: ['own-lesson-1'],
+    },
+  ],
 })
 const all = indexEntries(sources())
 const ofKind = (kind: IndexEntry['kind'], entries = all) =>
@@ -56,14 +74,14 @@ describe('indexEntries', () => {
     expect(ofKind('pages')).toHaveLength(PRACTICE_PAGE_IDS.length)
     expect(ofKind('songs')).toHaveLength(pieces.length)
     expect(ofKind('folders')).toHaveLength(folders.length)
-    expect(ofKind('lessons')).toHaveLength(LESSONS.length)
+    expect(ofKind('lessons')).toHaveLength(LESSONS.length + 1)
     expect(ofKind('courses')).toHaveLength(
-      COURSES.length + COURSES.reduce((sum, course) => sum + course.lessons.length, 0),
+      1 + COURSES.length + COURSES.reduce((sum, course) => sum + course.lessons.length, 0),
     )
     expect(ofKind('chords')).toHaveLength(CHORD_QUALITIES.length)
     expect(ofKind('scales')).toHaveLength(SCALE_KINDS.length)
     expect(ofKind('progressions')).toHaveLength(
-      libraryByStyle().flatMap((style) => style.progressions).length,
+      libraryByStyle().flatMap((style) => style.progressions).length + 1,
     )
     expect(ofKind('patterns')).toHaveLength(PATTERN_IDS.length)
     expect(ofKind('exercises')).toHaveLength(EXERCISES.length)
@@ -110,17 +128,34 @@ describe('indexEntries', () => {
     expect(titled(triads.title.ru, indexEntries(sources('ru'))).words).toContain(triads.title.en)
   })
 
-  it('shows a library progression by its line, opened in the mode it has', () => {
+  it('shows a library progression by its line, opening its own page (R30-4)', () => {
     const axis = ofKind('progressions').find((entry) => entry.id === 'progressions:axis')
     expect(axis).toMatchObject({
       title: 'Axis of Awesome',
       detail: 'I–V–vi–IV',
-      target: { opens: 'progression', p: 'I-V-vi-IV', minor: false },
+      target: { opens: 'progression', id: 'axis' },
     })
-    const minorOnly = ofKind('progressions').filter(
-      (entry) => entry.target.opens === 'progression' && entry.target.minor,
-    )
-    expect(minorOnly.length).toBeGreaterThan(0)
+  })
+
+  it('finds the learner’s own lessons and courses, by their names (R30-5)', () => {
+    expect(titled('Hymn intros')).toMatchObject({
+      kind: 'lessons',
+      detail: 'Four bars before the verse',
+      target: { opens: 'lesson', lesson: 'own-lesson-1' },
+    })
+    expect(titled('Sunday hymn playing')).toMatchObject({
+      kind: 'courses',
+      detail: 'Intros and the alto line',
+      target: { opens: 'course', course: 'own-course-1' },
+    })
+  })
+
+  it('finds the progressions the learner keeps, by their names', () => {
+    expect(titled('Sunday loop')).toMatchObject({
+      kind: 'progressions',
+      detail: 'vi–IV–I–V',
+      target: { opens: 'progression', id: 'mine-1' },
+    })
   })
 
   it('names a pattern, an exercise and a trainer with a line on what each is', () => {

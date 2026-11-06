@@ -25,7 +25,7 @@ describe('the progression editor (content as data)', () => {
   it('is not in a learner’s', async () => {
     await renderApp('/practice/progressions', { auth: await signedInAs('learner') })
     await screen.findByRole('heading', { level: 1 })
-    expect(screen.queryByRole('button', { name: 'New progression' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'New in the library' })).not.toBeInTheDocument()
   })
 
   it('edits a progression’s words and lines, and publishes it', async () => {
@@ -41,7 +41,7 @@ describe('the progression editor (content as data)', () => {
     await user.clear(major)
     await user.type(major, 'I vi ii V')
     await publishOnItsPage(user)
-    await screen.findByText('Published. Learners get it the next time the app starts.')
+    await screen.findByText('Published. Learners will receive it the next time they open the app.')
     expect(content.body('progression', DOO_WOP.id)).toMatchObject({ major: 'I vi ii V' })
   })
 
@@ -53,7 +53,8 @@ describe('the progression editor (content as data)', () => {
       contentEditing: content,
     })
     await user.click(await screen.findByRole('button', { name: 'New progression' }))
-    const sheet = await screen.findByRole('dialog', { name: 'New progression' })
+    await user.click(await screen.findByRole('button', { name: 'New in the library' }))
+    const sheet = await screen.findByRole('dialog', { name: 'New in the library' })
     await user.type(within(sheet).getByRole('textbox', { name: 'Name' }), 'Gospel walk')
     await user.click(within(sheet).getByRole('button', { name: 'Create progression' }))
     await waitFor(() =>

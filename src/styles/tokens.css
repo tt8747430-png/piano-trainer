@@ -19,7 +19,6 @@
   --p-ink-soft: #685e56;
   --p-umber: #4b4038;
   --p-bed: #cbc2b9;
-  --p-rail: #dfd8cf;
   --p-black-key: #332c28;
   /* The paints, faded to one lightness: full, the wash of each, and the deep shade of some. */
   --p-brick: #e19e8c;
@@ -60,7 +59,6 @@
   --p-dusk-key: #d4d0cb;
   --p-dusk-black-key: #171310;
   --p-dusk-bed: #787069;
-  --p-dusk-rail: #332c27;
   --p-dusk-sand: #3c3026;
   --p-dusk-yellow: #3e3420;
   --p-dusk-grass: #2b3728;
@@ -193,17 +191,25 @@
   --hand-staff-wash: color-mix(in oklab, var(--p-grass) var(--mark-wash), var(--key-white));
 
   /*
-   * The keys: paper keys parted by a soft line, a warm black, hung from a light wooden rail. By
+   * The keys: paper keys parted by a soft line, a warm black, on their bed. By
    * night their paper softens, so the keys never glare in a dim hall.
    */
   --key-white: var(--p-paper-card);
   --key-black: var(--p-black-key);
   --key-bed: var(--p-bed);
-  --key-rail: var(--p-rail);
-  --on-key-rail: var(--p-ink);
   --key-shade: color-mix(in oklab, var(--p-ink) 7%, transparent);
-  --key-lip: color-mix(in oklab, var(--p-ink) 5%, transparent);
   --key-sheen: color-mix(in oklab, var(--p-white) 12%, transparent);
+  /*
+   * A real piano's keys (R33): the felt strip along their far end; light falling from the player's
+   * side, deepening under the felt; an ivory key's edges, one catching the light and one in shade; the
+   * shadow a key casts.
+   */
+  --key-felt: #7c302c;
+  --key-far: color-mix(in oklab, var(--p-ink) 16%, transparent);
+  --key-near: color-mix(in oklab, var(--p-ink) 6%, transparent);
+  --key-edge-light: color-mix(in oklab, var(--p-white) 60%, transparent);
+  --key-edge-shade: color-mix(in oklab, var(--p-ink) 12%, transparent);
+  --key-cast: color-mix(in oklab, var(--p-ink) 22%, transparent);
   --on-key-white: var(--p-ink);
   --on-key-black: var(--p-white);
   /* A mark is its wash at rest and its full colour when its key sounds; a plain key down turns sky. */
@@ -273,8 +279,9 @@
     --key-white: var(--p-dusk-key);
     --key-black: var(--p-dusk-black-key);
     --key-bed: var(--p-dusk-bed);
-    --key-rail: var(--p-dusk-rail);
-    --on-key-rail: var(--p-dusk-ink);
+    --key-felt: #5a2422;
+    --key-edge-light: color-mix(in oklab, var(--p-white) 22%, transparent);
+    --key-cast: color-mix(in oklab, #000 45%, transparent);
     --mark-wash: 50%;
   }
 }

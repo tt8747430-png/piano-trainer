@@ -1,8 +1,10 @@
 import { useNavigate } from '@tanstack/react-router'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectLocale, selectWelcomed, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setLocale, setWelcomed } from '@/features/set-preference'
 import { LOCALES } from '@/shared/i18n'
+import { useAccount } from '@/shared/lib/account'
 import { Segmented } from '@/shared/ui'
 import {
   AlertDialog,
@@ -17,7 +19,8 @@ import { Button } from '@/shared/ui/primitives/button'
 /**
  * The welcome, once, on the app's first run: what the app is for, its language, and that an account
  * is optional; Start playing, or Sign in. Not over the account pages, where a link from an email
- * lands.
+ * lands, and never to a learner signed in: their account says they have been here (an update that
+ * starts the settings afresh would otherwise ask them again), so it is marked seen.
  */
 export function Welcome({ shown }: { shown: boolean }) {
   const { t } = useTranslation(['account', 'settings'])
@@ -25,12 +28,17 @@ export function Welcome({ shown }: { shown: boolean }) {
   const welcomed = useSettings(selectWelcomed)
   const locale = useSettings(selectLocale)
   const navigate = useNavigate()
+  const { account, ready } = useAccount()
+  const signedIn = account !== null
+  useEffect(() => {
+    if (signedIn && !welcomed) setWelcomed(settings)
+  }, [signedIn, welcomed, settings])
   const signIn = () => {
     setWelcomed(settings)
     void navigate({ to: '/account/sign-in' })
   }
   return (
-    <AlertDialog open={shown && !welcomed}>
+    <AlertDialog open={shown && ready && !signedIn && !welcomed}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="font-display text-2xl">

@@ -270,8 +270,6 @@ const readEditSearch = (raw: Raw): EditSearch => ({
   takes: raw.takes === true,
   record: raw.record === true,
   bar: bar(raw),
-  // The panel's tab (A40): Notation, its first, written as none.
-  ...(raw.panel === 'instruments' || raw.panel === 'layout' ? { panel: raw.panel } : {}),
   // Which staves play and show (A40), the Player's own `staves` (A35).
   ...(isStavesParam(raw.staves) ? { staves: raw.staves } : {}),
 })

@@ -20,6 +20,7 @@ import {
 } from '@/entities/settings'
 import { setLessonReading } from '@/features/set-preference'
 import { courseLessonStepId, lessonStepId, type StepId } from '@/entities/step'
+import { selectOwnLesson, useOwnLessons } from '@/entities/own-lessons'
 import { RemoveGroup, useLessonDraft } from '@/features/edit-original'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
@@ -38,6 +39,7 @@ import {
   TileMark,
 } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
+import { OwnLessonSettings } from './OwnLessonSettings'
 
 /** Where a lesson stands: a level's chapter, or a course. */
 type Where =
@@ -49,10 +51,12 @@ type Where =
     }
   | { readonly kind: 'course'; readonly course: string; readonly link: ReactElement }
 
-/** A level's lesson's Settings (`/lessons/$lessonId/settings`). */
+/** A level's lesson's Settings (`/lessons/$lessonId/settings`), or one of the learner's own (R30-5). */
 export function LessonSettingsPage() {
   const locale = useLocale()
   const { lessonId } = useParams({ from: '/shell/lessons/$lessonId/settings' })
+  const own = useOwnLessons(selectOwnLesson(lessonId))
+  if (own) return <OwnLessonSettings key={lessonId} lesson={own} reading={<ReadingChoice />} />
   const lesson = lessonById(lessonId)
   const place = lessonPlace(lessonId)
   // The route finds no lesson that no level has.
@@ -131,8 +135,6 @@ function LessonSettings({
   const locale = useLocale()
   const { account } = useAccount()
   const navigate = useNavigate()
-  const reading = useSettings(selectLessonReading)
-  const settings = useSettingsStoreApi()
   const title = localText(lesson.title, locale)
   const share = async () => {
     const shared = await shareLink({ title, path })
@@ -152,13 +154,7 @@ function LessonSettings({
       <ScreenHeader title={t('settings.title')} back={back} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <p className="px-1 font-display text-2xl font-semibold text-balance">{title}</p>
-        <ChoiceCard
-          title={t('reading.title')}
-          setting="lessonReading"
-          value={reading}
-          options={LESSON_READINGS.map((value) => ({ value, label: t(`reading.${value}`) }))}
-          onChange={(value) => setLessonReading(settings, value)}
-        />
+        <ReadingChoice />
         {editsContent(account) ? (
           <EditorRows
             lesson={lesson}
@@ -307,5 +303,21 @@ function EditorRows({
         {shareRow}
       </SettingsGroup>
     </>
+  )
+}
+
+/** How lessons read (round 26), its one home: every lesson's Settings, the learner's own too. */
+function ReadingChoice() {
+  const { t } = useTranslation('learn')
+  const reading = useSettings(selectLessonReading)
+  const settings = useSettingsStoreApi()
+  return (
+    <ChoiceCard
+      title={t('reading.title')}
+      setting="lessonReading"
+      value={reading}
+      options={LESSON_READINGS.map((value) => ({ value, label: t(`reading.${value}`) }))}
+      onChange={(value) => setLessonReading(settings, value)}
+    />
   )
 }

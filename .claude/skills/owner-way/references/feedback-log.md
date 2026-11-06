@@ -5,7 +5,22 @@ was either built or is still open. Add a ruling here the same day it is given, r
 owner's, typos fixed.
 
 ## Score editor
+- **One home for each thing; only what applies shown:** "we can at the same time edit the time signature from the
+  settings and from the palette which is strange"; "show only the actions relevant at that time like the write as common
+  in the 5/4 is not relevant and is weird that it is shown but is disabled"; the palette and menus as Flat's; the piano
+  shown on a phone from the editor itself, never only from Settings (2026-11-05).
 
+- **One home each, as Flat (2026-11-05):** "we can at the same time edit the time signature from the settings and from
+  the palette which is strange". The time signature, key and clef are set in the palette's category, which their
+  printed signs open; the title opens Title and credits; the gear holds only what the score does not print.
+- **Only what applies (2026-11-05):** "show only the actions relevant at that time like the write as common in the 5/4
+  is not relevant and is weird that it is shown but is disabled". Hidden, never greyed.
+- **The palette as Flat's, its menus too (2026-11-05):** "this menu in the palette doesn't follow how the flat editor
+  does this … as close as possible as the flat editor and its ui and its management and features". Every section in
+  one scroll; Time signature as Flat's tiles with Customize; Key signature and Clef bare tables; Tempo in Measure.
+- **Piano keys on a phone (2026-11-05):** a button in the editor's bar, never only in the gear.
+- **Professional wording (2026-11-05):** "write professionally, not plain words": precise notation terms and concise
+  sentences, as Apple, Flat, MuseScore and Dorico write them, in English and Russian.
 - **A real notation app:** "proper scores, proper functions like a real music notation software". Like Flat's: "the same
   features and same music notation and same icons and styles". No hand separation, pattern adding or verse adding inside it.
 - **Laptop:** a docked side panel and a note-entry toolbar, never a folded bar at the foot ("annoying and not movable").
@@ -60,6 +75,21 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **Settings a learner understands, ordered by what matters to them;** the sheet's View settings usable; nothing reserves
+  a band above the keyboard, nor a tip; proper pedals, not a lever at the keys' corner (piano sites as the reference);
+  the Player smooth with many notes (the Fantaisie hung). Build the approved mockup whole, "not only half" (2026-11-05).
+  Built in R32-A: pedals centred beneath the keys on the piano's rail; the On-screen piano's page the one home of the
+  keys' settings, the Player's gear a link to it; `/settings/player` gone, the gear the Player's settings' home.
+- **Proper pianos, proper pedals (2026-11-05):** "i need proper pianos with proper pedal and implementations" (musicca,
+  piano.org). Built in R33: ivory and ebony keys with felt and depth everywhere; the sustain held, latched (a lit
+  indicator) or the score's, every key under it released together with a real damper; soft quieter and darker,
+  sostenuto as a piano's; the rail's ⚙ a Piano sheet in place (Key size, Note names, Volume, Pedals); the Player's
+  piano settings stay in its sheet. Record and Mark not repeated on the keys (the editor's Record, the Chord finder).
+- **Songscription's keyboard (2026-11-05):** "it doesn't still look good with these, and this rail at the bottom, look
+  at the songscription piano implementation"; "i don't want finger number under the keyboard and no piano roll yet".
+  Built in R34: the rail gone, the keys slim and edge to edge (All keys the default), the chord held, Sustain and
+  Keyboard in the bar, a divider resizing the keys, hidden keys a "Keyboard" strip, the sheet's layout and zoom in one
+  pill; no finger numbers on or under the keys; no piano roll.
 
 - Every Chordify feature but guitar. Plain which view a setting belongs to; Layout is the sheet music's alone.
 - **Diagrams** animate; strip and diagrams swipe by themselves, the page never moves; no odd scroll bar; a swipe goes to the
@@ -70,6 +100,9 @@ owner's, typos fixed.
 - **Drum grooves:** Chordify's.
 
 ## Song page
+- **The song page, its settings and its editing redone,** on phone and laptop: details (words, music and harmony, level,
+  genre, language, tags) edited as properties, not the inline editor; card styles intuitive, showing what they change in
+  the real list, as memory-palaces' pinned cards and presets; the groups pages work and look right (2026-11-05).
 
 - **Calm:** too much at once is wrong. Play in the floating actions, Edit beside the title, Learned at the header's right.
 - No "Learn the song step by step" card. A song with no sections must not look odd. Descriptions short or behind ⓘ.
@@ -100,6 +133,11 @@ owner's, typos fixed.
   prerequisites, SATB on voicings. More content: rootless voicings, locked hands, modulation, slash chords, cadences.
 
 ## Practice
+- **Practice ordered by relevance,** learning before tools, with a clear purpose; the Metronome's settings in place as
+  Chordify's; the header's Tools a real menu, never a redirect; tools' settings never a single-option page or a redirect
+  to app Settings; the Chord player simple, Apple-like, its drag and drop working (memory-palaces' fix); selection popups
+  that say what is selected and why; the libraries editable like Songs, the built-in ones too; content kinds never
+  mixed (patterns, method-book lessons, songs); Continue useful or gone; the sidebar like Claude's (2026-11-05).
 
 - Grouped rows with a picture, a name and a line. **No strip hides options:** a key picker and menus.
 - **Every Practice page has its own Settings page;** the app's Settings holds only what is app-wide.
@@ -151,6 +189,10 @@ are reference only, but progressions are facts.
 - **One icon, one meaning.** **One home per idea:** the page shows what you look at, its Settings how it always behaves.
 
 ## Profile and Settings
+- **Settings refactored and audited:** a Back on every page (Customise select toolbar, About had none or a broken one);
+  on a laptop the section list and the page scroll apart, as the libraries' panes; each preference checked for whether
+  it belongs in app Settings or its screen's gear, View as a learner placed where it belongs; professional wording
+  (2026-11-05).
 
 - memory-palaces' Profile: the initial, three figures, Activity, badges. The Account is Settings' first row; Sign out and
   Delete are rows asking in a dialog.
@@ -158,15 +200,26 @@ are reference only, but progressions are facts.
   visual choices ("these are very heavy to read").
 
 ## Words
+- **Professional wording, everywhere:** "refactor all the text and string and all names and write professionally, not
+  plain words. write professional wording and sentences and not plain like you did before" — labels, settings, tips and
+  empty states read like Apple, Chordify, Flat or MuseScore, in en and ru; this replaces the earlier "plain words" (2026-11-05).
 
 - **The term a musician uses:** "check all the strings … use professional terms". Failed: Move smoothly, Between two chords,
   Starting position, Who wrote it, Through the keys, Hear notes as you edit, Tune, First chord.
 - No ubiquitous-language glossary (2026-11-05): "i dont want the ubiquitous language anymore".
 
 ## Process
+- **No unintended shots of sign-in prompts, welcomes or tours** (2026-11-05): dismissed before every shot
+  (`clearOnboarding`), shot only when needed or asked for (`ONBOARDING=1`).
+- **Never a screenshot before the page has fully loaded** (2026-11-05): `scripts/settle.mjs` before every shot.
+- **Mockups in the owner's frames:** the real iPhone 17 Pro (app, Safari, and the smaller iPhone) and the MacBook Air
+  with a macOS Safari window; inspired by the example apps and sites the owner sends (2026-11-05).
+- **A signed-in learner is never asked to sign in again** after an update (2026-11-05).
 
 - **Mockups and questions:** text questions failed; whole-page mockups with a feedback box each worked.
 - **Test every UI at least twice** (2026-11-05).
+- **Impeccable twice on each page and each mockup,** as it is made, never only at the round's end: "each page and each
+  mockup and not only at the end" (2026-11-05).
 - **Plan before building:** generic descriptions led to wrong builds. "Did you read it every time you implement something."
 - **"Why did you stop?"** three times: keep going until the list is empty. A message is not a stop.
 - **The maximum principle:** "this spawns too many agents and eats up all the usage".

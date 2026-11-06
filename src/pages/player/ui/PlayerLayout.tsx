@@ -1,38 +1,39 @@
 import { useLocale } from '@/shared/i18n'
-import { useNavigate } from '@tanstack/react-router'
 import {
-  Cable,
-  CircleCheck,
-  Disc,
   Download,
+  Link2,
   Ellipsis,
-  LayoutGrid,
+  Gauge,
   ListMusic,
+  MessageSquareText,
   Mic,
   MonitorCog,
   Piano,
   Printer,
   SlidersHorizontal,
-  Volume2,
 } from 'lucide-react'
-import { Fragment, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
 import {
-  BAR_CATALOG,
-  barOf,
   selectKeyboard,
+  selectPlayback,
   selectScoreView,
+  selectTipSeen,
   useSettings,
-  type BarAct,
+  useSettingsStoreApi,
 } from '@/entities/settings'
-import { BAR_ICONS } from '@/widgets/bar-editor'
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
+import { retireTip } from '@/features/set-preference'
 import { isMidiConnected, MidiButton, useMidiConnection } from '@/features/connect-midi'
-import { LiveKeyboard } from '@/features/live-keyboard'
+import {
+  KeyboardSettingsFields,
+  KeyboardStrip,
+  KeyboardTools,
+  LiveKeyboard,
+} from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Recording } from '@/shared/lib/schedule'
-import type { MenuAction } from '@/shared/ui'
+import { ActionMenu, SheetPill, SheetToolsContext, type MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
   ClickButton,
@@ -42,14 +43,11 @@ import {
   MODE_LOOK,
   ModesSheet,
   PlayerFoot,
-  PedalLamp,
   PlayerArea,
   PlayerScreen,
   BarTitle,
-  KeysToggle,
   PlayerClose,
   PlayerDock,
-  PlayerTools,
   ScoreBar,
   TempoButton,
   usePlayerShortcuts,
@@ -60,27 +58,19 @@ import {
   type PracticeView,
 } from '@/widgets/practice-player'
 import { SheetMusic } from '@/widgets/sheet-music'
-import { QuickTools, ToolsSheet, type ToolGroup, type ToolRow } from '@/widgets/tools-sheet'
 import { SongPrint } from '@/widgets/song-print'
-import {
-  PlayerDisplay,
-  PlayerToolbar,
-  PlayerPlayback,
-  PlayerVolumes,
-  type VolumeTrack,
-} from '@/widgets/player-settings'
-import { ViewSection } from '@/widgets/score-view-menu'
+import { PlayerDisplay, PlayerPlayback } from '@/widgets/player-settings'
+import { SheetLayoutTools, ViewSection } from '@/widgets/score-view-menu'
 import { SettingsExtrasContext, type SettingsExtras } from '@/widgets/player-setup'
 import { useChordKeys } from '../model/use-chord-keys'
 import { PlayerExport } from './PlayerExport'
-import type { ExportShare, MusicXmlFormat } from '@/features/song-files'
+import type { MusicXmlFormat } from '@/features/song-files'
 import { PickView } from './PickView'
 import { CoachLine } from './CoachLine'
 import { FeedbackCard } from './FeedbackCard'
 import { RecordingsSheet } from './RecordingsSheet'
 import type { PlayerTakes } from '../model/use-player-takes'
 import { TunerSheet } from '@/widgets/tuner'
-import { useMetronome } from '@/features/metronome'
 import { notePlace, type ScoreAnnotation } from '@/shared/lib/notation'
 
 /** A walk or a progression: one section, named nowhere. */
@@ -90,10 +80,11 @@ const NO_STAVES: readonly { readonly name?: StaffName }[] = []
 /** A walk or a progression: no acts of its own. */
 const NO_ACTS: readonly MenuAction[] = []
 /** A walk or a progression: no tools of its own. */
-const NO_TOOLS: readonly PlacedToolRow[] = []
+const NO_ACTS_MORE: readonly MoreAct[] = []
 
 /** A row of the Tools sheet a screen adds, and the group it joins. */
-export type PlacedToolRow = ToolRow & { readonly group: 'quick' | 'score' | 'listening' | 'more' }
+/** One of the music's acts in the foot's More (R31-P), in its part: practice, tools or listening. */
+export type MoreAct = MenuAction & { readonly part: 'practice' | 'tools' | 'listening' }
 
 /**
  * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar (`ScoreBar`, ADR
@@ -129,8 +120,8 @@ export function PlayerLayout({
   status,
   openView = false,
   display,
-  tracks,
-  toolRows = NO_TOOLS,
+  playback,
+  moreActs = NO_ACTS_MORE,
   takes,
   annotations,
   annotating,
@@ -139,15 +130,12 @@ export function PlayerLayout({
   annotations?: readonly ScoreAnnotation[] | undefined
   /** The Annotate bar over the score while it is on (R29 B8). */
   annotating?: ReactNode
-  /**
-   * The music's own rows of the Tools sheet (R29 B8), each in its group: a piece's Transpose and
-   * Change version, the Rhythm game.
-   */
-  toolRows?: readonly PlacedToolRow[]
+  /** The music's own acts in the foot's More (R31-P): a piece's Annotate, the Rhythm game. */
+  moreActs?: readonly MoreAct[]
   /** A song's takes (R29 B8): the Recorder, My recordings and Feedback; none for a walk. */
   takes?: PlayerTakes | undefined
-  /** The volumes the Settings' Audio playback lists: a piece's tracks; none for a walk. */
-  tracks?: readonly VolumeTrack[] | undefined
+  /** The music's own on the Settings' Playback page (R31-P): a score's Swing. */
+  playback?: ReactNode
   /**
    * Whether the sheet writes the piano's staves: not for a song that hides them, a lead sheet (ADR
    * 0114). The keys and what plays are the same.
@@ -181,8 +169,8 @@ export function PlayerLayout({
   more?: readonly MenuAction[] | undefined
   /** Export…'s MusicXML: a piece's music as written (ADR 0107). */
   musicXml?: ((format?: MusicXmlFormat) => void) | undefined
-  /** Export…'s link: a piece's, as its page shares it. */
-  share?: ExportShare | undefined
+  /** Share link: a piece's, as its page shares it; its own act, never Export's row (R31-S). */
+  share?: { readonly onSelect: () => void } | undefined
   /** What the screen says beside Wait mode's line: what a piece's Share said. */
   status?: ReactNode
   /** Display's own choices after the View's: a single-staff song's Clef (R29 B7). */
@@ -190,10 +178,11 @@ export function PlayerLayout({
   /** The View open as the screen opens: a piece's, where the learner asks each time (ADR 0108). */
   openView?: boolean
 }) {
-  const { t } = useTranslation(['player', 'songs', 'settings'])
-  const navigate = useNavigate()
+  const { t } = useTranslation(['player', 'songs', 'settings', 'music', 'common'])
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
+  const keySize = useSettings((state) => selectKeyboard(state).keySize)
+  const countdown = useSettings((state) => selectPlayback(state).countdown)
   const scoreView = useSettings(selectScoreView)
   const { hidden } = player
   const sheetView = useMemo(() => ({ ...scoreView, hidden }), [scoreView, hidden])
@@ -220,15 +209,18 @@ export function PlayerLayout({
   // Print (ADR 0107): the music printed as the View shows it, while its render stands.
   const [printing, setPrinting] = useState(false)
   const [exporting, setExporting] = useState(false)
-  // The Tools sheet (R29 B8), and Settings opened at a page from it.
-  const [toolsOpen, setToolsOpen] = useState(false)
-  const [settingsAt, setSettingsAt] = useState<{ readonly page: string } | null>(null)
+  // The Settings open as a panel beside the music (a laptop): the screen ends where it starts.
+  const [panel, setPanel] = useState(false)
   const [tunerOpen, setTunerOpen] = useState(false)
-  // The quick metronome (R29 B11): the song's tempo and time in the Metronome's voice, on with the
-  // sheet closed.
-  const quickMetronome = useMetronome({ bpm: player.tempo, meter: performance.meter })
-  // The coach's line (R29 B8), put away for the visit by its ×.
-  const [coached, setCoached] = useState(false)
+  // The coach's line (R29 B8, R31-P): shown until put away by its × or done (Play pressed in
+  // Listen), remembered for good.
+  const settingsStore = useSettingsStoreApi()
+  const tip = `coach.${view.mode}`
+  const coached = useSettings(selectTipSeen(tip))
+  const playing = practice.state.playing
+  useEffect(() => {
+    if (playing && view.mode === 'listen') retireTip(settingsStore, tip)
+  }, [playing, view.mode, settingsStore, tip])
   // Voice commands (R29 B8), on for the visit where the browser hears speech.
   const [voice, setVoice] = useState(false)
   const locale = useLocale()
@@ -261,37 +253,24 @@ export function PlayerLayout({
         : undefined,
     [feedback],
   )
-  const inGroup = (group: PlacedToolRow['group']) => toolRows.filter((row) => row.group === group)
   // The Player's one Settings (R29, Flat's one menu): how the Player works, then the acts on this
   // music: its own (a piece's Sections and Song information), Export… and Print.
   const extras: SettingsExtras = {
     pages: [
-      ...(tracks
-        ? [
-            {
-              id: 'audio',
-              label: t('settingsPage.audio'),
-              icon: Volume2,
-              content: <PlayerVolumes tracks={tracks} />,
-            },
-          ]
-        : []),
       {
         id: 'playback',
         label: t('settingsPage.playback'),
         icon: SlidersHorizontal,
-        content: <PlayerPlayback />,
-      },
-      {
-        id: 'toolbar',
-        label: t('settings:bars.playerToolbar'),
-        icon: LayoutGrid,
-        content: <PlayerToolbar />,
+        description: t('settingsPage.about.playback'),
+        value: `${t('settingsPage.countdown.label')}: ${t(`settingsPage.countdown.${countdown}`)}`,
+        content: <PlayerPlayback>{playback}</PlayerPlayback>,
       },
       {
         id: 'display',
         label: t('settingsPage.display'),
         icon: MonitorCog,
+        description: t('settingsPage.about.display'),
+        value: shown === 'sheet' ? t(`music:sheet.layout.${scoreView.layout}`) : undefined,
         content: (
           <>
             <ViewSection view={shown} words={needs.lyrics !== 'words'} />
@@ -300,19 +279,88 @@ export function PlayerLayout({
           </>
         ),
       },
-    ],
-    acts: [
-      // Its one home is Settings' (rule 18): a way there, never a second control.
+      // The on-screen piano's page in the Player's own sheet (the owner's ruling, R31-P: the
+      // piano's ⚙ never leaves the Player): the app's On-screen piano fields, one implementation.
       {
-        key: 'on-screen-piano',
-        group: 'play',
+        id: 'piano',
         label: t('settingsPage.onScreenPiano'),
         icon: Piano,
-        onSelect: () => void navigate({ to: '/settings/on-screen-piano' }),
+        description: t('settingsPage.about.piano'),
+        value: t(`common:keyboardSettings.keySize.${keySize}`),
+        content: <KeyboardSettingsFields />,
       },
-      ...more.flatMap(({ icon, ...act }) =>
-        icon ? [{ ...act, icon, group: 'song' as const }] : [],
-      ),
+    ],
+    // Its acts are More's (R31-P): the sheet holds how the Player works, never what it does.
+    acts: [],
+    onPanel: setPanel,
+  }
+  // The foot's More (R31-P): the music's acts only, in parts: the song's, practice's, the tools,
+  // listening, sharing. Every setting is the gear's.
+  const moreMenu: MenuAction[] = (
+    [
+      ...more.map((act) => ({ ...act, group: 'song' })),
+      ...(takes
+        ? [
+            {
+              key: 'recordings',
+              group: 'practice',
+              label: t('recordings.title'),
+              icon: ListMusic,
+              onSelect: () => setRecordingsOpen(true),
+            },
+            {
+              key: 'feedback',
+              group: 'practice',
+              label: t('feedback.howDidIPlay'),
+              icon: MessageSquareText,
+              disabled: takes.list.length === 0,
+              ...(takes.list.length === 0 ? { reason: t('feedback.none') } : {}),
+              onSelect: () => takes.show(takes.list[0]?.id ?? null),
+            },
+          ]
+        : []),
+      ...moreActs
+        .filter((act) => act.part === 'practice')
+        .map((act) => ({ ...act, group: 'practice' })),
+      {
+        key: 'print',
+        group: 'tools',
+        label: t('print'),
+        icon: Printer,
+        onSelect: () => setPrinting(true),
+      },
+      {
+        key: 'tuner',
+        group: 'tools',
+        label: t('tuner.title'),
+        icon: Gauge,
+        onSelect: () => setTunerOpen(true),
+      },
+      ...moreActs.filter((act) => act.part === 'tools').map((act) => ({ ...act, group: 'tools' })),
+      {
+        key: 'voice',
+        group: 'listening',
+        label: t('voice.label'),
+        icon: Mic,
+        checked: voice,
+        disabled: !hasVoiceCommands(),
+        ...(hasVoiceCommands() ? {} : { reason: t('voice.unavailable') }),
+        onSelect: () => setVoice(!voice),
+      },
+      ...moreActs
+        .filter((act) => act.part === 'listening')
+        .map((act) => ({ ...act, group: 'listening' })),
+      ...(share
+        ? [
+            {
+              key: 'share-link',
+              group: 'share',
+              label: t('songs:library.shareLink'),
+              icon: Link2,
+              onSelect: share.onSelect,
+            },
+          ]
+        : []),
       {
         key: 'export',
         group: 'share',
@@ -320,166 +368,8 @@ export function PlayerLayout({
         icon: Download,
         onSelect: () => setExporting(true),
       },
-    ],
-    request: settingsAt,
-  }
-  // The foot bar's tools (R29 B8, B10): each act that works here, drawn from the catalog; the
-  // learner's bar in their order, the rest under More (Settings › Tool bar).
-  const rowOf = (key: string) => toolRows.find((row) => row.key === key)
-  const actTool = (act: BarAct, row: ToolRow | undefined) =>
-    row && row.kind === 'act' ? (
-      <FootTool
-        icon={BAR_ICONS[act]}
-        label={t(`settings:bars.act.${act}`)}
-        onClick={row.onSelect}
-      />
-    ) : null
-  const footTools: Partial<Record<BarAct, ReactNode>> = {
-    ...(takes
-      ? {
-          recordings: (
-            <FootTool
-              icon={Disc}
-              label={t('recordings.short')}
-              aria-haspopup="dialog"
-              aria-pressed={takes.stage !== 'idle' ? true : undefined}
-              onClick={() => setRecordingsOpen(true)}
-            />
-          ),
-          feedback: (
-            <FootTool
-              icon={CircleCheck}
-              label={t('feedback.label')}
-              aria-pressed={takes.shown !== null}
-              disabled={takes.list.length === 0}
-              title={takes.list.length === 0 ? t('feedback.none') : t('feedback.about')}
-              onClick={() => takes.show(takes.shown ? null : (takes.list[0]?.id ?? null))}
-            />
-          ),
-        }
-      : {}),
-    loop: <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />,
-    tempo: (
-      <TempoButton
-        look="foot"
-        mode={view.mode}
-        tempo={player.tempo}
-        shownTempo={player.shownTempo}
-        ownTempo={player.ownTempo}
-        speedTraining={view.speedTraining}
-        onTempo={player.setTempo}
-        onSpeedTraining={player.setSpeedTraining}
-      />
-    ),
-    modes: (
-      <FootTool
-        icon={MODE_LOOK[view.mode].icon}
-        label={t('modes.open')}
-        aria-haspopup="dialog"
-        onClick={() => setModesOpen(true)}
-      />
-    ),
-    metronome: (
-      <FootTool
-        icon={BAR_ICONS.metronome}
-        label={t('toolsSheet.metronome')}
-        onClick={() => void navigate({ to: '/practice/metronome' })}
-      />
-    ),
-    tuner: (
-      <FootTool
-        icon={BAR_ICONS.tuner}
-        label={t('tuner.title')}
-        onClick={() => setTunerOpen(true)}
-      />
-    ),
-    transpose: actTool('transpose', rowOf('transpose')),
-    version: actTool('version', rowOf('version')),
-    annotations: actTool('annotations', rowOf('annotations')),
-  }
-  const chosenFoot = useSettings((state) => barOf(state.bars, 'bar.player'))
-  const footShown = chosenFoot.filter((act) => footTools[act])
-  const footRest = BAR_CATALOG['bar.player'].filter(
-    (act) => !chosenFoot.includes(act) && footTools[act],
-  )
-  // The Tools sheet's groups (R29 B8, B11): the quick tools, the score's, then ways to the Player's
-  // other places. Metronome and Print are its own, no longer Settings' acts (one way to each).
-  const toolGroups: readonly ToolGroup[] = [
-    {
-      key: 'quick',
-      title: t('toolsSheet.quick'),
-      rows: [...inGroup('quick')],
-    },
-    {
-      key: 'score',
-      title: t('toolsSheet.score'),
-      rows: [
-        {
-          key: 'print',
-          kind: 'act',
-          label: t('print'),
-          icon: Printer,
-          paint: 'sky',
-          onSelect: () => setPrinting(true),
-        },
-        ...(takes
-          ? [
-              {
-                key: 'recordings',
-                kind: 'act' as const,
-                label: t('recordings.title'),
-                icon: ListMusic,
-                paint: 'yellow' as const,
-                onSelect: () => setRecordingsOpen(true),
-              },
-            ]
-          : []),
-        ...inGroup('score'),
-      ],
-    },
-    {
-      key: 'listening',
-      title: t('toolsSheet.listening'),
-      rows: [
-        {
-          key: 'voice',
-          kind: 'switch',
-          label: t('voice.label'),
-          icon: Mic,
-          paint: 'sky',
-          checked: voice,
-          disabled: hasVoiceCommands() ? undefined : t('voice.unavailable'),
-          onCheckedChange: setVoice,
-        },
-        ...inGroup('listening'),
-      ],
-    },
-    {
-      key: 'more',
-      title: t('toolsSheet.more'),
-      rows: [
-        {
-          key: 'audio-midi',
-          kind: 'act',
-          label: t('toolsSheet.audioMidi'),
-          icon: Cable,
-          paint: 'grass',
-          opens: true,
-          onSelect: () => void navigate({ to: '/settings/connect-piano' }),
-        },
-        ...inGroup('more'),
-        {
-          key: 'display',
-          kind: 'act',
-          label: t('settingsPage.display'),
-          icon: MonitorCog,
-          paint: 'sky',
-          opens: true,
-          onSelect: () => setSettingsAt({ page: 'display' }),
-        },
-      ],
-    },
-  ]
+    ] satisfies MenuAction[]
+  ).map((act): MenuAction => ({ ...act, unnamed: true }))
   // A chord view's keys in Listen: the chord sounding as its diagram draws it (ADR 0108); a pattern
   // lesson's, each note as it sounds, whatever the view (ADR 0111).
   const chordKeys = useChordKeys(
@@ -487,8 +377,17 @@ export function PlayerLayout({
     practice.state,
     shown !== 'sheet' && view.keys !== true,
   )
-  const keys = !player.keys ? null : (
-    <PlayerArea area="keys">
+  const keys = !player.keys ? (
+    // Hidden, a thin strip where they stood brings them back at a tap (R34, Songscription's).
+    <PlayerArea area="keys" className="-mx-gutter">
+      <KeyboardStrip
+        edge={dock === 'top' ? 'below' : 'above'}
+        onShow={() => player.setKeys(true)}
+      />
+    </PlayerArea>
+  ) : (
+    // Edge to edge (R34, Songscription's): the keys reach both sides of the screen.
+    <PlayerArea area="keys" className="-mx-gutter">
       <LiveKeyboard
         range={player.range}
         inView={chordKeys ? chordKeys.inView : player.inView}
@@ -496,18 +395,24 @@ export function PlayerLayout({
         fitInView
         marks={chordKeys?.marks ?? player.marks}
         wrong={player.wrong}
-        // Keys the pedal alone holds, ringed apart from a hand's (A27); the lamp at the rail's end.
-        outlined={chordKeys ? undefined : player.pedalKeys}
-        railEnd={player.pedal === 'none' ? undefined : <PedalLamp down={player.pedal === 'down'} />}
+        // Keys the pedal alone holds, ringed apart from a hand's (A27): the score's pedal and the keys
+        // it holds while the music sounds; stopped, nothing hangs (R31-P).
+        outlined={chordKeys || !playing ? undefined : player.pedalKeys}
         onKeyPress={player.tapKey}
-        // Space is Play here: the pedal is the rail's, or a MIDI keyboard's.
+        // Space is Play here: the pedal is the bar's Sustain, or a MIDI keyboard's.
         spacePedal={false}
+        divider={dock === 'top' ? 'below' : 'above'}
       />
     </PlayerArea>
   )
   return (
     // While Diagrams plays, the bar and the tools row step aside (ADR 0108).
-    <PlayerScreen keys={dock} aside={shown === 'diagrams' && practice.state.playing}>
+    <PlayerScreen
+      keys={dock}
+      aside={shown === 'diagrams' && practice.state.playing}
+      panel={panel}
+      docked
+    >
       {/* The score's bar, the editor's in shape (ADR 0115): Close, then Practise · Edit;
           Piano keys, MIDI and Settings; the View and the music's tools. The loop is the transport's (ADR
           0108). */}
@@ -521,49 +426,29 @@ export function PlayerLayout({
         }
         actions={
           <>
-            <KeysToggle shown={player.keys} onShow={player.setKeys} />
-            <MidiButton variant="tool" />
-            <ToolsSheet
-              quick={
-                <QuickTools
-                  metronome={quickMetronome}
-                  recorder={
-                    takes
-                      ? {
-                          stage: takes.stage,
-                          unavailable: playable ? undefined : t('recordings.needsPiano'),
-                          record: takes.record,
-                          stop: takes.stop,
-                        }
-                      : {
-                          stage: 'idle',
-                          unavailable: t('recordings.needsPiano'),
-                          record: () => {},
-                          stop: () => {},
-                        }
-                  }
-                  onTuner={() => {
-                    setToolsOpen(false)
-                    setTunerOpen(true)
-                  }}
-                />
-              }
-              groups={toolGroups}
-              open={toolsOpen}
-              onOpenChange={setToolsOpen}
+            {/* The keyboard's controls (R34, Songscription's): the chord held, Sustain, lit with
+                the score's pedal while the music plays, and Keyboard. */}
+            <KeyboardTools
+              variant="tool"
+              shown={player.keys}
+              onShow={player.setKeys}
+              sustained={playing && player.pedalDown}
             />
+            {/* MIDI only while a keyboard is connected or connecting (R31-P, R32); it is
+                connected from Settings › Connect a piano. */}
+            {isMidiConnected(connection) || connection.kind === 'connecting' ? (
+              <MidiButton variant="tool" />
+            ) : null}
             <SettingsExtrasContext value={extras}>{setup}</SettingsExtrasContext>
           </>
-        }
-        tools={
-          <PlayerTools>
-            <PickView shown={shown} needs={needs} openAtStart={openView} />
-            {tools}
-          </PlayerTools>
         }
       />
       {dock === 'top' ? keys : null}
       <PlayerArea area="sheet" className="relative">
+        {/* The tip floats over the music's foot, taking no row and covering no control (R32). */}
+        {!coached && !practice.state.playing && !annotating && !takes?.shown ? (
+          <CoachLine mode={view.mode} onClose={() => retireTip(settingsStore, tip)} />
+        ) : null}
         {/* How far through the music the cursor is: a thin line along the score's head. */}
         <div
           role="progressbar"
@@ -580,30 +465,39 @@ export function PlayerLayout({
           <FeedbackCard feedback={feedback} onClose={() => takes.show(null)} />
         ) : null}
         {shown === 'sheet' ? (
-          <SheetMusic
-            view={sheetView}
-            piano={piano}
-            staffNames={names}
-            title={title}
-            credits={credits}
-            layout={layout}
-            // The pedal as it plays (A27): its Ped. marks the ones heard, lit as they pass.
-            performance={player.performance}
-            headings={headings}
-            current={practice.state.beatGroup}
-            clock={player.cursor === 'continuous' ? practice.clock : null}
-            cursor={player.cursor !== 'none'}
-            loop={player.loop}
-            fingers={player.fingers}
-            names={player.names}
-            positions={player.positions}
-            muted={player.muted}
-            onJump={practice.jumpToBeatGroup}
-            playing={practice.state.playing}
-            onLoopChange={player.setLoop}
-            verdicts={verdicts}
-            annotations={annotations}
-          />
+          // The sheet's one pill at its foot (R34, Songscription's): the layout, and in Page view the
+          // canvas's zoom beside it.
+          <SheetToolsContext value={<SheetLayoutTools />}>
+            <SheetMusic
+              view={sheetView}
+              piano={piano}
+              staffNames={names}
+              title={title}
+              credits={credits}
+              layout={layout}
+              // The pedal as it plays (A27): its Ped. marks the ones heard, lit as they pass.
+              performance={player.performance}
+              headings={headings}
+              current={practice.state.beatGroup}
+              clock={player.cursor === 'continuous' ? practice.clock : null}
+              cursor={player.cursor !== 'none'}
+              loop={player.loop}
+              fingers={player.fingers}
+              names={player.names}
+              positions={player.positions}
+              muted={player.muted}
+              onJump={practice.jumpToBeatGroup}
+              playing={practice.state.playing}
+              onLoopChange={player.setLoop}
+              verdicts={verdicts}
+              annotations={annotations}
+            />
+            {scoreView.layout === 'page' ? null : (
+              <SheetPill>
+                <SheetLayoutTools />
+              </SheetPill>
+            )}
+          </SheetToolsContext>
         ) : (
           <ChordView
             view={shown}
@@ -619,49 +513,61 @@ export function PlayerLayout({
           />
         )}
       </PlayerArea>
-      <PlayerArea
-        area="status"
-        className="text-center landscape-phone:max-w-[45vw] landscape-phone:self-center"
-      >
-        {!coached && !practice.state.playing && !annotating && !takes?.shown ? (
-          <CoachLine mode={view.mode} onClose={() => setCoached(true)} />
-        ) : null}
-        {view.mode !== 'listen' ? (
-          <WaitLine feedback={player.feedback} onAgain={practice.play} onLoop={player.setLoop} />
-        ) : null}
-        {status}
-      </PlayerArea>
-      {/* On a phone held upright the transport may stand into the gutters: it floats over the
-          sheet, its five controls the screen's width at most. */}
-      <PlayerArea
-        area="dock"
-        className="flex justify-center max-sm:-mx-gutter landscape-phone:items-center"
-      >
-        <PlayerDock
-          practice={practice}
-          sound={<ClickButton on={player.click} onChange={player.setClick} />}
-        />
-      </PlayerArea>
+      {/* Wait mode's line and what the screen says: a row only while there is something to say,
+          so nothing reserves a band between the music and the keys (R32). */}
+      {view.mode !== 'listen' || status ? (
+        <PlayerArea
+          area="status"
+          className="py-1 text-center landscape-phone:max-w-[45vw] landscape-phone:self-center landscape-phone:py-0"
+        >
+          {view.mode !== 'listen' ? (
+            <WaitLine feedback={player.feedback} onAgain={practice.play} onLoop={player.setLoop} />
+          ) : null}
+          {status}
+        </PlayerArea>
+      ) : null}
       {dock === 'top' ? null : keys}
+      {/* The transport in its own row at the foot (R31-P): never floating over the music. */}
+      <PlayerArea
+        area="transport"
+        className="-mx-gutter border-t border-hairline px-gutter xl:border-t-0"
+      >
+        <div className="mx-auto w-full max-w-xl">
+          <PlayerDock
+            practice={practice}
+            loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
+            tempo={
+              <TempoButton
+                mode={view.mode}
+                tempo={player.tempo}
+                shownTempo={player.shownTempo}
+                ownTempo={player.ownTempo}
+                speedTraining={view.speedTraining}
+                onTempo={player.setTempo}
+                onSpeedTraining={player.setSpeedTraining}
+              />
+            }
+            sound={<ClickButton on={player.click} onChange={player.setClick} />}
+          />
+        </div>
+      </PlayerArea>
+      {/* The song's tools (R31-P): View, the music's own (Key, Version), Mode, then More. */}
       <PlayerFoot>
-        {footShown.map((act) => (
-          <Fragment key={act}>{footTools[act]}</Fragment>
-        ))}
-        {footRest.length > 0 ? (
-          <Popover>
-            <PopoverTrigger render={<FootTool icon={Ellipsis} label={t('settings:bars.more')} />} />
-            <PopoverContent
-              aria-label={t('settings:bars.more')}
-              side="top"
-              align="end"
-              className="grid w-72 grid-cols-3 gap-1 p-2"
-            >
-              {footRest.map((act) => (
-                <Fragment key={act}>{footTools[act]}</Fragment>
-              ))}
-            </PopoverContent>
-          </Popover>
-        ) : null}
+        <PickView shown={shown} needs={needs} openAtStart={openView} />
+        {tools}
+        <FootTool
+          icon={MODE_LOOK[view.mode].icon}
+          label={t(`modes.${view.mode}.name`)}
+          aria-haspopup="dialog"
+          onClick={() => setModesOpen(true)}
+        />
+        <ActionMenu
+          label={t('settings:bars.more')}
+          align="end"
+          trigger={null}
+          render={<FootTool icon={Ellipsis} label={t('settings:bars.more')} />}
+          actions={moreMenu}
+        />
       </PlayerFoot>
       <ModesSheet
         open={modesOpen}
@@ -690,7 +596,6 @@ export function PlayerLayout({
         recording={recording}
         staves={names}
         musicXml={musicXml}
-        share={share}
       />
       {printing ? (
         <SongPrint

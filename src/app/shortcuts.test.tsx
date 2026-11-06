@@ -67,7 +67,7 @@ describe('the shell’s shortcuts', () => {
     expect(within(sheet).queryByText('Songs')).not.toBeInTheDocument()
   })
 
-  it.each(['/practice/chords', '/practice/scales', '/practice/progressions'])(
+  it.each(['/practice/chords', '/practice/scales', '/practice/progressions/line?p=I-IV-V&key=C'])(
     'plays %s’s one Play on Enter, and stops it',
     async (path) => {
       const user = userEvent.setup()

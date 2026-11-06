@@ -1,13 +1,18 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Play, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { PieceFactLine, type Piece } from '@/entities/piece'
+import {
+  hasEditableOriginal,
+  isDegreePiece,
+  isOwnSongId,
+  PieceFactLine,
+  type Piece,
+} from '@/entities/piece'
 import { pieceStepId } from '@/entities/step'
-import { FavouriteButton } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
-import { OPEN_PLAINLY } from '@/shared/lib'
-import { ButtonLink, RoundLink } from '@/shared/ui'
-import { EditToggle } from '@/widgets/mode-switch'
+import { editsContent, useAccount } from '@/shared/lib/account'
+import { OPEN_PLAINLY, useMediaQuery } from '@/shared/lib'
+import { FabLink, FloatingActions, LIBRARY_PANES, RoundLink } from '@/shared/ui'
 import { useSongLessons } from '../model/use-song-lessons'
 import { PieceAbout, ScaleLink } from './PieceAbout'
 import { PieceByline } from './PieceByline'
@@ -15,84 +20,89 @@ import { PieceChords } from './PieceChords'
 import { PieceHeader } from './PieceHeader'
 import { PieceProgressions } from './PieceProgressions'
 import { SectionRows } from './SectionRows'
+import { SongCoverPicker } from './SongCover'
+import { SongDetailChips } from './SongDetailChips'
+import { SongDetails } from './SongDetails'
+import { YourPractice } from './YourPractice'
 
 /**
- * A song's page (round 26, Noji's and memory-palaces' deck page), in one calm column. Its bar: Back,
- * the title, then Settings (a gear: everything else it can be set to or done with, a page of its own)
- * and ✎ at its end: its score in the editor (R29 1.2; what the song says of itself is written on its
- * Settings › Details). Under the title its
- * byline; the overview card, its key, time and tempo, its way to its key's scale, Practise (the Player
- * as it was left), Learned and Favourite; what is said of it behind an ⓘ; its chords as diagrams,
- * each opening its sheet; and, where it has more than one, its sections, each a row to its page of
- * lessons.
+ * A song's page (R32-C; Apple Music's album page, MuseScore's score page): its bar (Back, the title
+ * with ✎, which opens the score editor, Learned, Settings); the song (its cover, a tap changing it,
+ * with its ♡; who wrote it; one line of facts; what is said of it); its music (its sections, the
+ * learner's practice, its chords and progressions); and its Details, every property a row edited
+ * where it stands (Notion's). From a laptop's width the song and its Details are the left column and
+ * the music the right; on a phone Details follow the music. Play floats, the Player as it was left.
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation(['piece', 'songs'])
   const { performance, headings, sections } = useSongLessons(piece)
-  const step = pieceStepId(piece.id)
-  // A study, on Practice, is in no library (ADR 0106): no favourite.
-  const inLibrary = piece.kind !== 'study'
+  const { account } = useAccount()
   const navigate = useNavigate()
-  const settings = (
-    <RoundLink
-      label={t('settings.open')}
-      icon={Settings}
-      render={<Link to="/songs/$pieceId/settings" params={{ pieceId: piece.id }} />}
-    />
-  )
+  const laptop = useMediaQuery(LIBRARY_PANES)
+  const step = pieceStepId(piece.id)
+  // What the song says of itself is the learner's on an own song, an editor's on the app's original.
+  const chart = isDegreePiece(piece) ? null : piece
+  const own = chart && isOwnSongId(piece.id) ? { piece: chart, id: piece.id } : null
+  const original =
+    chart && !own && editsContent(account) && hasEditableOriginal(piece.id) ? chart : null
+  const details = <SongDetails piece={piece} own={own} original={original} />
   return (
-    <div className="flex flex-col gap-6 pb-4">
+    <div className="flex flex-col gap-6 pb-24">
       <PieceHeader
         entry={piece}
-        settings={settings}
-        // The pencil opens the score in the editor (R29 1.2): a learner's edit of a built-in
-        // song is their version, an editor's the song everyone sees (A38, ADR 0115).
-        edit={
-          <EditToggle
-            editing={false}
-            onEdit={() => void navigate({ to: '/edit/$pieceId', params: { pieceId: piece.id } })}
-            onDone={() => undefined}
+        tools={<LearnedButton step={step} bar />}
+        settings={
+          <RoundLink
+            label={t('settings.open')}
+            icon={Settings}
+            render={<Link to="/songs/$pieceId/settings" params={{ pieceId: piece.id }} />}
           />
         }
+        edit={{
+          editing: false,
+          label: t('piece:editScore'),
+          onEdit: () => void navigate({ to: '/edit/$pieceId', params: { pieceId: piece.id } }),
+          onDone: () => undefined,
+        }}
       />
-      {/* From a laptop's width two columns (A28): the head, the about and the overview card at a
-          reading width on the left; the chords and sections on the right. One column below. */}
-      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:items-start lg:gap-x-10">
-        <div className="flex min-w-0 flex-col gap-6 lg:sticky lg:top-6">
-          <PieceByline piece={piece} />
-          <PieceAbout entry={piece} />
-          <section aria-label={t('settings.overview')} className="flex flex-col gap-4 card p-4">
+      <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:items-start lg:gap-x-12">
+        <section aria-label={t('piece:song')} className="flex min-w-0 flex-col gap-5">
+          <div className="flex items-center gap-5 lg:flex-col lg:items-start">
+            <SongCoverPicker piece={piece} className="w-28 text-5xl lg:w-60 lg:text-8xl" />
+            <PieceByline piece={piece} />
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
             <PieceFactLine
               piece={piece}
               keyLink={(key) => <ScaleLink entry={piece}>{key}</ScaleLink>}
             />
-            {/* The one thing to do first: play it (ADR 0111, amended), the Player as it was left. */}
-            <ButtonLink
-              size="lg"
-              className="w-full"
-              render={
-                <Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />
-              }
-            >
-              <Play data-icon="inline-start" aria-hidden className="fill-current" />
-              {t('practise')}
-            </ButtonLink>
-            <div className="flex items-center gap-2">
-              <LearnedButton step={step} className="h-11 flex-1" />
-              {inLibrary ? <FavouriteButton piece={piece.id} /> : null}
-            </div>
-          </section>
-        </div>
-        <div className="flex min-w-0 flex-col gap-6">
+            <SongDetailChips id={piece.id} />
+          </div>
+          <PieceAbout entry={piece} />
+          {laptop ? details : null}
+        </section>
+        <div className="flex min-w-0 flex-col gap-8">
+          <div className="grid gap-6 xl:grid-cols-2 xl:items-start">
+            {/* A song of one section has no section machinery: its chords are all it needs. */}
+            {sections.length > 1 ? (
+              <SectionRows piece={piece} headings={headings} sections={sections} />
+            ) : null}
+            <YourPractice id={piece.id} />
+          </div>
           <PieceChords performance={performance}>
             <PieceProgressions piece={piece} />
           </PieceChords>
-          {/* A song of one section has no section machinery: its chords above are all it needs. */}
-          {sections.length > 1 ? (
-            <SectionRows piece={piece} headings={headings} sections={sections} />
-          ) : null}
+          {laptop ? null : details}
         </div>
       </div>
+      {/* The one thing to do first: play it (ADR 0111), the Player as it was left. */}
+      <FloatingActions>
+        <FabLink
+          label={t('practise')}
+          icon={Play}
+          render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />}
+        />
+      </FloatingActions>
     </div>
   )
 }

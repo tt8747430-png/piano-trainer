@@ -2,10 +2,8 @@ import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
 import type { ContentKind } from '@/shared/api/content'
 import type { KeptVersion } from '@/shared/api/content-editing'
 import type { NetFailed, NetResult } from '@/shared/api/network'
+import { REST_MS } from '@/shared/lib'
 import { useContentEditing } from '@/shared/lib/content-editing'
-
-/** How long an edit rests before it is saved to the draft. */
-export const DRAFT_SAVE_DELAY_MS = 800
 
 /** Where an item's draft stands as its editor opens: read, or not to be read. */
 export type DraftLoad<T> =
@@ -98,7 +96,7 @@ export function useContentDraft<T>(spec: DraftSpec<T>) {
       if (pending.current) window.clearTimeout(pending.current.timer)
       pending.current = {
         value,
-        timer: window.setTimeout(() => void flush(), DRAFT_SAVE_DELAY_MS),
+        timer: window.setTimeout(() => void flush(), REST_MS),
       }
     },
     [flush],

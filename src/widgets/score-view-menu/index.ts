@@ -1,5 +1,5 @@
-export { PartChips } from './ui/PartChip'
 export { ScoreViewMenu } from './ui/ScoreViewMenu'
+export { SheetLayoutTools } from './ui/SheetLayoutTools'
 export { SheetViewFields } from './ui/SheetViewFields'
 export { ViewSection } from './ui/ViewSection'
 export { PRINTED_PARTS } from './model/score-parts'

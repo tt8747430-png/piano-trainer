@@ -1,126 +1,57 @@
-import { useNavigate } from '@tanstack/react-router'
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { TITLE_MAX } from '@/entities/piece'
 import { cn } from '@/shared/lib'
 import { hasCredits, SheetCredits, SheetTitle, type TitlePlace } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
-/** The title: at the line's head across, else centred, its field as wide as the sheet. */
+/** The title: at the line's head across, else centred. */
 const PLACED = { across: '', centred: 'text-center' } as const
+
+/** A printed part of the score's head that opens Title and credits: a light wash on hover. */
+const OPENS = 'rounded-control px-1 transition-colors duration-200 ease-out hover:bg-foreground/5'
+
 /**
- * The title printed at the sheet's head (ADR 0114), edited where it is, as Flat's: a click turns it
- * into a field in its place, the title chosen; Enter or leaving the field saves what it holds with the
- * music (an own song's title, or a version's in place of the catalog's), Escape keeps the title it
- * had, and an empty field changes nothing. Nothing is printed under it the learner did not write: a
- * version says it is theirs on the song's page (ADR 0096).
+ * The title printed at the sheet's head and the credits under it (ADR 0114, R32-B), as Flat's: a
+ * click on either opens Title and credits, the one place the title and every credit are typed.
+ * Nothing is printed under it the learner did not write. A lesson's example has no credits: its
+ * title is printed alone, named for its lesson.
  */
 export function TitleField({ place }: { place: TitlePlace }) {
   const { t } = useTranslation('editor')
-  const { actions, meta } = useScoreEditorContext()
-  // What the field holds while it is open; null while the title is printed.
-  const [typed, setTyped] = useState<string | null>(null)
-  const editing = typed !== null
-  const field = useRef<HTMLInputElement>(null)
-  const button = useRef<HTMLButtonElement>(null)
-  // Closed by Enter or Escape: the title takes the focus back, and the field's blur saves nothing.
-  const settled = useRef(false)
-  useEffect(() => {
-    if (editing) {
-      field.current?.focus()
-      field.current?.select()
-    } else if (settled.current) button.current?.focus()
-  }, [editing])
-  const close = (save: boolean) => {
-    if (typed === null) return
-    // The title as it was is no title of the learner's own: a catalog song keeps no version for it.
-    if (save && typed.trim() !== meta.title) actions.dispatch({ type: 'title', title: typed })
-    setTyped(null)
-  }
-  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter' && event.key !== 'Escape') return
-    event.preventDefault()
-    settled.current = true
-    close(event.key === 'Enter')
-  }
+  const { meta, view } = useScoreEditorContext()
+  const credits = useEditorState((state) => state.draft.header)
+  const example = meta.kind === 'example'
+  const open = () => view.setGear('credits')
   return (
-    <div className={place === 'across' ? PLACED.across : PLACED.centred}>
+    <div className={PLACED[place === 'across' ? 'across' : 'centred']}>
       <SheetTitle title={meta.title} place={place}>
-        {editing ? (
-          // In place, at the title's size, as wide as what it holds (a copy of it, unseen, sizes
-          // the cell the field fills): no box round it, its line under it, so a phone's handles
-          // stay on the text and nothing under the title is covered (ADR 0115).
-          <span className="inline-grid max-w-full align-top">
-            <span aria-hidden className="invisible col-start-1 row-start-1 px-1 whitespace-pre">
-              {typed === '' ? ' ' : typed}
-            </span>
-            <input
-              ref={field}
-              aria-label={t('song.title')}
-              value={typed}
-              maxLength={TITLE_MAX}
-              // Its own width the copy's, never the browser's twenty characters.
-              size={1}
-              autoComplete="off"
-              autoCorrect="off"
-              spellCheck={false}
-              enterKeyHint="done"
-              onChange={(event) => setTyped(event.target.value)}
-              onKeyDown={onKeyDown}
-              onBlur={() => {
-                if (!settled.current) close(true)
-              }}
-              className={cn(
-                'col-start-1 row-start-1 w-full min-w-0 rounded-none border-0 bg-transparent px-1 font-[inherit] leading-[inherit] text-inherit shadow-[inset_0_-2px_0_var(--color-ring)] outline-none',
-                place !== 'across' && 'text-center',
-              )}
-            />
-          </span>
+        {example ? (
+          meta.title
         ) : (
           <button
-            ref={button}
             type="button"
-            title={t('printed.rename')}
-            onClick={() => {
-              settled.current = false
-              setTyped(meta.title)
-            }}
-            className="max-w-full cursor-text rounded-control px-1 text-balance wrap-break-word transition-colors duration-200 ease-out hover:bg-foreground/5"
+            title={t('scoreSettings.credits')}
+            onClick={open}
+            className={cn(
+              'inline-flex min-h-11 max-w-full items-center justify-center text-balance wrap-break-word',
+              OPENS,
+            )}
           >
             {meta.title}
           </button>
         )}
       </SheetTitle>
-      {place === 'across' ? null : <CreditsField />}
+      {place === 'across' || !hasCredits(credits) ? null : example ? (
+        <SheetCredits credits={credits} />
+      ) : (
+        <button
+          type="button"
+          title={t('scoreSettings.credits')}
+          onClick={open}
+          className={cn('block w-full text-start', OPENS)}
+        >
+          <SheetCredits credits={credits} />
+        </button>
+      )}
     </div>
-  )
-}
-
-/**
- * What prints under the title (round 28, Flat's credits): a click opens the score's Settings at its
- * names, as Flat's title opens its credits. A lesson's example has no Settings: printed alone.
- */
-function CreditsField() {
-  const { t } = useTranslation('editor')
-  const { meta } = useScoreEditorContext()
-  const credits = useEditorState((state) => state.draft.header)
-  const navigate = useNavigate()
-  if (!hasCredits(credits)) return null
-  if (meta.kind === 'example') return <SheetCredits credits={credits} />
-  return (
-    <button
-      type="button"
-      title={t('scoreSettings.title')}
-      onClick={() =>
-        void navigate({
-          to: '/edit/$pieceId/settings',
-          params: { pieceId: meta.id },
-          search: (prev) => prev,
-        })
-      }
-      className="block w-full rounded-control px-1 text-start transition-colors duration-200 ease-out hover:bg-foreground/5"
-    >
-      <SheetCredits credits={credits} />
-    </button>
   )
 }

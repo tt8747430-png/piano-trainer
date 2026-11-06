@@ -1,24 +1,26 @@
+import { Music2, Rows3 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { choosableChordSize, type Piece } from '@/entities/piece'
 import type { PatternFit } from '@/entities/pattern'
 import type { PlayerStaves, PracticeChoice, TrackChoice, TrackId } from '@/features/practice'
 import type { SwingFeel } from '@/shared/lib/schedule'
 import { ChordSizeField, Labelled } from '@/shared/ui'
-import { PatternCard, PlayerSetup, StavesSection, type SetupChange } from '@/widgets/player-setup'
 import {
-  PlayingSection,
-  SwingField,
-  type PlayerControl,
-  type ScoreTrack,
-} from '@/widgets/practice-player'
+  PatternCard,
+  PlayerSetup,
+  StavesSection,
+  type MusicPage,
+  type SetupChange,
+} from '@/widgets/player-setup'
+import { SwingField, type PlayerControl, type ScoreTrack } from '@/widgets/practice-player'
+import { trackOf } from '@/features/practice'
 
 /**
- * A piece's Setup (A35): its Staves first, each track played and shown or not; then, for a chord
- * chart alone, the Accompaniment from the chords: its chord size (a song's written in degrees, greyed
- * while Simplify plays every chord as its triad, its ⓘ saying so), the pattern and its two hands, the
- * right hand's first chord and voice leading, and Swing. A score plays its staves as written: nothing
- * of a pattern's is offered it (`controls`), its Swing How it plays. Its key is the tools row's
- * Transpose (ADR 0105).
+ * A piece's own pages of the Player's Settings (A35, R31-P): Staves, each track played, shown and how
+ * loud; then, for a chord chart alone, Accompaniment: its chord size (a song's written in degrees,
+ * greyed while Simplify plays every chord as its triad, its ⓘ saying so), the pattern and its two
+ * hands, and Swing. A score plays its staves as written: nothing of a pattern's is offered it
+ * (`controls`), its Swing is on Playback. Its key is the foot's Transpose (ADR 0105).
  */
 export function PieceSetup({
   piece,
@@ -54,14 +56,70 @@ export function PieceSetup({
 }) {
   const { t } = useTranslation(['player', 'music'])
   const chordSize = controls.has('chordSize') ? choosableChordSize(piece) : null
+  const playing = tracks
+    .filter((track) => track.id !== 'recording' || recordingWhy === undefined)
+    .filter((track) => trackOf(staves, track.id).play)
+  const pages: MusicPage[] = [
+    {
+      id: 'staves',
+      label: t('staves.title'),
+      icon: Rows3,
+      description: t('settingsPage.about.staves'),
+      value:
+        playing.length === 0
+          ? t('staves.none')
+          : playing.length === tracks.length
+            ? t('staves.all')
+            : playing.map((track) => track.label).join(', '),
+      content: (
+        <StavesSection
+          tracks={tracks}
+          staves={staves}
+          recordingWhy={recordingWhy}
+          onChange={onStaves}
+        />
+      ),
+    },
+  ]
+  if (controls.has('accompaniment'))
+    pages.push({
+      id: 'accompaniment',
+      label: t('settingsPage.accompaniment'),
+      icon: Music2,
+      description: t('settingsPage.about.accompaniment'),
+      content: (
+        <Accompaniment
+          chordSize={chordSize}
+          choice={choice}
+          simple={simple}
+          swing={controls.has('swing') ? swing : null}
+          onChange={onChange}
+          onSwing={onSwing}
+        />
+      ),
+    })
+  return <PlayerSetup figures={choice} fit={fit} onFigures={onChange} pages={pages} />
+}
+
+/** A chord chart's Accompaniment page: its chord size, the pattern and its hands, its Swing. */
+function Accompaniment({
+  chordSize,
+  choice,
+  simple,
+  swing,
+  onChange,
+  onSwing,
+}: {
+  chordSize: ReturnType<typeof choosableChordSize>
+  choice: PracticeChoice
+  simple: boolean
+  swing: SwingFeel | null
+  onChange: (change: SetupChange) => void
+  onSwing: (feel: SwingFeel) => void
+}) {
+  const { t } = useTranslation(['player', 'music'])
   return (
-    <PlayerSetup figures={choice} fit={fit} onFigures={onChange}>
-      <StavesSection
-        tracks={tracks}
-        staves={staves}
-        recordingWhy={recordingWhy}
-        onChange={onStaves}
-      />
+    <>
       {chordSize ? (
         <Labelled
           label={t('music:chordSize.label')}
@@ -74,16 +132,9 @@ export function PieceSetup({
           />
         </Labelled>
       ) : null}
-      {/* A chart's swing is its accompaniment's; a score's, how its written notes play. */}
-      {controls.has('accompaniment') ? (
-        <PatternCard>
-          {controls.has('swing') && swing !== null ? (
-            <SwingField swing={swing} onSwing={onSwing} />
-          ) : null}
-        </PatternCard>
-      ) : controls.has('swing') ? (
-        <PlayingSection swing={swing} onSwing={onSwing} />
-      ) : null}
-    </PlayerSetup>
+      <PatternCard>
+        {swing === null ? null : <SwingField swing={swing} onSwing={onSwing} />}
+      </PatternCard>
+    </>
   )
 }

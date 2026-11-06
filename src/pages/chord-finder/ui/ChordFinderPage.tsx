@@ -2,17 +2,25 @@ import { Link, useSearch } from '@tanstack/react-router'
 import { Eraser, ListX, Music2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
-import { PinnedKeyboard, useFoldKeys } from '@/features/live-keyboard'
+import { PageKeyboardTools, PinnedKeyboard, useFoldKeys } from '@/features/live-keyboard'
 import { partsParams, useSetSearch } from '@/shared/lib'
 import { keyFromParam, keyParam, noteParam } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { KeyPicker, SpeedDial, SpeedDialAction, usePlayKey } from '@/shared/ui'
+import { InfoTip, KeyPicker, SpeedDial, SpeedDialAction, usePlayKey } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 import { ToolPage } from '@/widgets/tool-page'
 import { scaleOverlay } from '../model/scale-overlay'
 import { ChordKeys, ChordName, ChordTrail, readingAt, readingMarks } from '@/widgets/chord-finder'
 import type { ChordFinderView } from '../model/chord-finder-view'
 import { useChordFinder } from '../model/use-chord-finder'
+
+/** The chords an empty Chord finder offers to try (R32), as its URL writes keys: C, Am7, D7. */
+const TRY = [
+  ['major', '60-64-67'],
+  ['minor7', '57-60-64-67'],
+  ['dominant7', '62-66-69-72'],
+] as const
 
 /**
  * The Chord finder (ADR 0052), a tool on Practice's Tools on their one layout (R29 B11): a chord played on a MIDI keyboard or tapped on the
@@ -20,7 +28,9 @@ import { useChordFinder } from '../model/use-chord-finder'
  * degree, in the middle of one stage over the grand staff that writes it, spelled in the key chosen,
  * and where the chords are remembered those played before it; then the keys that hold it. What the learner turns off is
  * gone. Play, floating in the thumb's reach, hears it; the dial beside it opens it in Chords or
- * clears the keys. The key it spells in is over the stage; its settings are a page off its gear (A24).
+ * clears the keys. The key it spells in is over the stage ("Spelled in", its ⓘ saying why); its
+ * settings are a page off its gear (A24). Empty (R32), the stage says what to do in one line and offers
+ * three chords to try, each put on the keys at a tap; the staff waits for a chord.
  */
 export function ChordFinderPage() {
   const { t } = useTranslation(['practice', 'music'])
@@ -39,7 +49,13 @@ export function ChordFinderPage() {
   return (
     <ToolPage
       title={t('practice:pages.chordFinder')}
-      actions={<MidiButton />}
+      actions={
+        <>
+          {/* The stage names the chord held: the bar does not name it again. */}
+          <PageKeyboardTools screen="playing" namesChords={false} />
+          <MidiButton />
+        </>
+      }
       settings={<Link to="/settings/chord-finder" search={{ from: 'chord-finder' }} />}
       keys={
         <PinnedKeyboard
@@ -109,11 +125,16 @@ export function ChordFinderPage() {
       }
     >
       {/* The key it spells in: what the page shows, so here, over the stage. */}
-      <KeyPicker
-        value={keyFromParam(view.key)}
-        onChange={(key) => change({ key: keyParam(key) })}
-        className="mx-auto"
-      />
+      <div className="mx-auto flex items-center gap-1">
+        <KeyPicker
+          label={t('practice:chordFinder.spelledIn')}
+          value={keyFromParam(view.key)}
+          onChange={(key) => change({ key: keyParam(key) })}
+        />
+        <InfoTip name={t('practice:chordFinder.spelledIn')}>
+          {t('practice:chordFinder.spelledInInfo')}
+        </InfoTip>
+      </div>
       {/* One stage, in the middle: the chord's name over the grand staff that writes it. */}
       <div
         aria-live="polite"
@@ -128,13 +149,28 @@ export function ChordFinderPage() {
           slash={finder.slash}
           keysFolded={folded}
         />
-        <ChordTrail
-          chords={finder.staff}
-          musicKey={finder.musicKey}
-          remember={finder.remember}
-          slash={finder.slash}
-          chosen={{ keys, at: finder.reading }}
-        />
+        {finding.kind === 'empty' && finder.staff.length === 0 ? (
+          <ul
+            aria-label={t('practice:chordFinder.tryLabel')}
+            className="flex flex-wrap justify-center gap-2"
+          >
+            {TRY.map(([name, chord]) => (
+              <li key={name}>
+                <Button variant="outline" onClick={() => change({ keys: chord })}>
+                  {t(`practice:chordFinder.try.${name}`)}
+                </Button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <ChordTrail
+            chords={finder.staff}
+            musicKey={finder.musicKey}
+            remember={finder.remember}
+            slash={finder.slash}
+            chosen={{ keys, at: finder.reading }}
+          />
+        )}
       </div>
     </ToolPage>
   )

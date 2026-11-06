@@ -1,7 +1,9 @@
 import { Link } from '@tanstack/react-router'
+import { ScrollText, ShieldCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { APP_BUILD, APP_VERSION } from '@/shared/config/build'
-import { BackButton, ScreenHeader, SettingsGroup } from '@/shared/ui'
+import { APP_BUILD, APP_VERSION } from '@/shared/config'
+import { RowLink, SettingsGroup } from '@/shared/ui'
+import { SettingsScreen, UpdateRows } from '@/widgets/settings-screen'
 
 /** What the app is made with, each under its own licence (R29 B9): who made it and where it is from. */
 const CREDITS = [
@@ -27,27 +29,48 @@ const CREDITS = [
 ] as const
 
 /**
- * About (R29 B9, Help's last page): the app's version and build, its licence, and the credits for
- * everything it is made with, then its Terms and Privacy.
+ * Settings › Support › About (R29 B9, R32; iOS's About, memory-palaces'): a Settings page like the
+ * rest (the sidebar beside it on a laptop, Back on a phone). The app, its version and build; Software
+ * update (where the next version stands, a tap checks) and the licence; Legal, the Privacy Policy and
+ * the Terms of Service as full rows; then the acknowledgements for everything it is made with.
  */
 export function AboutPage() {
   const { t } = useTranslation('settings')
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 pb-8">
-      <ScreenHeader title={t('aboutPage.title')} back={<BackButton />} />
+    <SettingsScreen title={t('aboutPage.title')}>
+      <div className="flex flex-col items-center gap-2 pt-2 text-center">
+        <img
+          src="/pwa-192x192.png"
+          alt=""
+          width={64}
+          height={64}
+          className="size-16 rounded-card"
+        />
+        <p className="font-display text-2xl font-semibold">Piano Trainer</p>
+        <p className="text-muted-foreground tabular-nums">
+          {t('aboutPage.version', { version: APP_VERSION, build: APP_BUILD })}
+        </p>
+      </div>
       <SettingsGroup flush>
-        <dl className="flex flex-col divide-y divide-hairline">
-          {[
-            [t('about.version'), APP_VERSION],
-            [t('aboutPage.build'), APP_BUILD],
-            [t('aboutPage.licence'), t('aboutPage.allRights')],
-          ].map(([term, value]) => (
-            <div key={term} className="flex items-center justify-between gap-4 px-4 py-3">
-              <dt>{term}</dt>
-              <dd className="text-muted-foreground tabular-nums">{value}</dd>
-            </div>
-          ))}
+        <UpdateRows />
+        <dl className="flex min-h-16 items-center justify-between gap-4 px-4 py-2">
+          <dt className="text-lg font-semibold">{t('aboutPage.licence')}</dt>
+          <dd className="text-end text-muted-foreground">{t('aboutPage.allRights')}</dd>
         </dl>
+      </SettingsGroup>
+      <SettingsGroup flush title={t('aboutPage.legal')}>
+        <RowLink
+          title={t('help.privacy')}
+          icon={ShieldCheck}
+          paint="grass"
+          render={<Link to="/legal/privacy" />}
+        />
+        <RowLink
+          title={t('help.terms')}
+          icon={ScrollText}
+          paint="sand"
+          render={<Link to="/legal/terms" />}
+        />
       </SettingsGroup>
       <SettingsGroup flush title={t('aboutPage.credits')}>
         <ul className="flex flex-col divide-y divide-hairline">
@@ -71,14 +94,6 @@ export function AboutPage() {
           ))}
         </ul>
       </SettingsGroup>
-      <nav className="flex gap-4 px-1">
-        <Link to="/legal/terms" className="text-link underline-offset-2 hover:underline">
-          {t('help.terms')}
-        </Link>
-        <Link to="/legal/privacy" className="text-link underline-offset-2 hover:underline">
-          {t('help.privacy')}
-        </Link>
-      </nav>
-    </div>
+    </SettingsScreen>
   )
 }

@@ -4,6 +4,9 @@ import { keyParam, note, numeralText, type ChordSize } from '@/shared/lib/music'
 import {
   changedView,
   chosenView,
+  keptView,
+  libraryView,
+  progressionSearch,
   playedNumerals,
   playerSearch,
   rowPosition,
@@ -196,5 +199,52 @@ describe('a progression in a mode', () => {
     })
     const dorian = { ...view(minor('D'), 'i-IV', 'triads'), mode: 'dorian' as const }
     expect(chosenView(dorian, library('axis')).mode).toBeUndefined()
+  })
+})
+
+describe('libraryView', () => {
+  it('shows a library progression in the key’s mode, at its own chord size unless the URL names one', () => {
+    expect(libraryView({ key: minor('A') }, library('jazz-cadence'))).toEqual({
+      key: minor('A'),
+      p: 'ii°-V-i',
+      size: 'sevenths',
+    })
+    expect(libraryView({ key: major('C'), size: 'ninths' }, library('jazz-cadence')).size).toBe(
+      'ninths',
+    )
+  })
+
+  it('shows a progression of one mode in the key of the same tonic and that mode', () => {
+    expect(libraryView({ key: major('A') }, library('andalusian'))).toMatchObject({
+      key: minor('A'),
+      p: 'i-VII-VI-V',
+    })
+  })
+})
+
+describe('keptView', () => {
+  it('shows the learner’s own line in a key of its mode, on the URL’s tonic, in its church mode', () => {
+    expect(keptView({ key: minor('D') }, { line: 'I-IV', minor: false })).toEqual({
+      key: major('D'),
+      p: 'I-IV',
+      size: 'triads',
+    })
+    expect(
+      keptView({ key: minor('D'), lead: 'v' }, { line: 'i-IV', minor: true, mode: 'dorian' }),
+    ).toEqual({ key: minor('D'), p: 'i-IV', size: 'triads', lead: 'v', mode: 'dorian' })
+  })
+})
+
+describe('progressionSearch', () => {
+  it('writes a view as a progression page’s URL, leaving its line and mode to the progression', () => {
+    expect(
+      progressionSearch({
+        key: major('G'),
+        p: 'I-V',
+        size: 'sevenths',
+        mode: 'lydian',
+        between: 1,
+      }),
+    ).toEqual({ key: major('G'), size: 'sevenths', lead: undefined, between: 1, inKey: undefined })
   })
 })

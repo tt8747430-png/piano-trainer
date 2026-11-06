@@ -172,19 +172,17 @@ export const music = {
     label: 'Time signature',
     common: 'Common time, C',
     cut: 'Cut time, ¢',
-    other: 'Other',
+    // The time signature's wheels (R31-E): the meter in force, and the pickup before the first bar.
+    current: 'Current',
     beats: 'Beats',
-    fewerBeats: 'One beat fewer',
-    moreBeats: 'One beat more',
     beatUnit: 'Beat unit',
-    barred: 'The song cannot change to this here',
+    barred: 'This time signature isn’t available at this position',
     pickup: 'Pickup',
-    noPickup: 'None',
-    shorterPickup: 'Shorter pickup',
-    longerPickup: 'Longer pickup',
-    applyTo: 'Apply to',
-    fromBar: 'From this bar',
-    wholeSong: 'Whole song',
+    pickupBeats: 'Pickup beats',
+    symbol: 'Write as common or cut time',
+    // Flat's Customize (R32-C): any meter and the pickup, on wheels.
+    customize: 'Customize',
+    customizeTitle: 'Customize time signature',
   },
   key: {
     label: 'Key',
@@ -195,6 +193,10 @@ export const music = {
     mode: 'Major or minor',
     majorMode: 'Major',
     minorMode: 'Minor',
+    // The palette's Key signature (R32-C, Flat's): its two rows, and its way back to no signature.
+    sharps: 'Sharps',
+    flats: 'Flats',
+    toNatural: 'Switch to natural',
   },
   // The Intervals reference's cards: each interval's name and short name.
   interval: {
@@ -235,8 +237,12 @@ export const music = {
       page: 'Page view',
       vertical: 'Vertical scroll',
       panorama: 'Panorama',
-      about:
-        'Page view: on A4 pages, as it prints. Vertical scroll: line under line, scrolled down. Panorama: the whole song in one line, scrolled across.',
+      // The layout chosen, said in one line under the tiles (R32).
+      describe: {
+        page: 'Printed A4 pages, as the score will print.',
+        vertical: 'Systems down the screen at full width.',
+        panorama: 'One continuous system that scrolls sideways.',
+      },
     },
     // A staff's own options, inline on its card (ADR 0061).
     fingers: 'Fingers',
@@ -291,7 +297,7 @@ export const music = {
   // A list of patterns, Accompaniment's and the Setup's: the learner's shelves round the groups.
   patternShelf: { favourites: 'Favourites', own: 'Your patterns', hidden: 'Hidden' },
   // Accompaniment's parts after its method books', which their books name.
-  patternPart: { styles: 'Styles', yours: 'Yours' },
+  patternPart: { styles: 'Rhythm styles', yours: 'Mine' },
   // What plays on a page's keys, a lesson's and an explorer's alike: its Play, a line's and a bar's.
   play: 'Play',
   playNotes: 'Play {{notes}}',

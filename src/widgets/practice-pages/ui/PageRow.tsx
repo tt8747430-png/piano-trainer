@@ -7,7 +7,7 @@ import { usePageWords } from './use-page-words'
 
 /**
  * A page of Practice as a row, wherever it is listed (Practice, Search): its name, what it says of
- * itself, its tile. It opens as it was left.
+ * itself, its tile. It opens as it was left; the shell notes it opened (`usePracticeVisits`).
  */
 export function PageRow({ page, trailing }: { page: PracticePageId; trailing?: ReactNode }) {
   const words = usePageWords()

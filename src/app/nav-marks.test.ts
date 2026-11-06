@@ -9,13 +9,12 @@ const MARKS = ['ChevronRight', 'ChevronLeft', 'ArrowLeft', 'ArrowRight']
 
 /**
  * Where they may be drawn: the shared marks (`NavMarks`, Back), and the controls that move rather
- * than navigate (R23): an octave down and up, the transport's bar back and on, a lesson's previous
+ * than navigate (R23): the transport's bar back and on, a lesson's previous
  * and next section, a lesson's previous and next lesson.
  */
 const ALLOWED = [
   'shared/ui/NavMarks.tsx',
   'shared/ui/BackButton.tsx',
-  'shared/ui/piano-keyboard/KeyRail.tsx',
   'widgets/practice-player/ui/Transport.tsx',
   'widgets/lesson-view/ui/LessonView.tsx',
   'pages/lesson/ui/LessonLayout.tsx',
