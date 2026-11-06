@@ -490,10 +490,11 @@ pedals, no finger numbers. Every control is the screen's bar's; nothing about th
   is kept for a phone upright, a phone on its side and a wider screen apart. A splitter to a screen reader.
 - **In the bar** (`KeyboardTools`), before the gear: the chord held (from 40rem: a small soft label "Chord held" then
   the symbol in Literata, 20px), **Sustain** while the keys show, and **Keyboard** (the piano icon, pressed while
-  they show). Sustain wears a pedal drawn as a line icon; down from anywhere (a finger, Space, a MIDI foot, the
-  score's pedal while music plays) it fills `--key-down`, as a key held down, never a second honey control. Held it
-  holds; a tap latches it until the next. With Pedals: All three, a ⌄ beside it opens Soft and Sostenuto, worked the
-  same way; a dot on the ⌄ while either is down.
+  they show); in the Player **Hands at the keys** (a hand) before it, the keys' place showing the one pressed and
+  folding when it is pressed again. Sustain wears a pedal drawn as a line icon; down from anywhere (a finger, Space,
+  a MIDI foot, the score's pedal while music plays) it fills `--key-down`, as a key held down, never a second honey
+  control. Held it holds; a tap latches it until the next. With Pedals: All three, a ⌄ beside it opens Soft and
+  Sostenuto, worked the same way; a dot on the ⌄ while either is down.
 - **Settings:** the screen's gear: the Player's sheet and the editor's gear each hold the On-screen piano page;
   a Practice page's Settings end with its row.
 - **Hidden** (the bar's Keyboard), the keys fold into a 44px strip where they stood, the screen's width, in the
@@ -502,14 +503,6 @@ pedals, no finger numbers. Every control is the screen's bar's; nothing about th
 - **Names on narrow keys:** with All keys on a phone (a white key under 12px), only middle C keeps its name, 8px on
   one line over its neighbours, and a mark's note name goes; a mark's degree stays.
 - **The editor's bar** on a phone held upright keeps Keyboard; its Sustain stands from 40rem.
-
-### The sheet's pill
-
-One small floating control at the score's bottom-right in the Player and the editor (Songscription's view pill): a
-card-paper capsule with a hairline ring and a soft shadow, 8px from the sheet's edges and clear of what floats there.
-**Layout** as three 44px icon radios (Page view · Vertical scroll · Panorama, the chosen one in the chosen fill, each
-naming what it does when pointed at), then in Page view the canvas's zoom (− n % + Fit). Always in sight, so it never
-appears under a finger; the layout's one control.
 
 - **Proportion:** until the divider sets a height, a key is 4.4 times as long as a white key is wide, at least 56px and
   at most 32% of the screen's height (22% on a phone on its side).
@@ -524,6 +517,33 @@ appears under a finger; the layout's one control.
   key crimson with ✕, a missing key a deep-sky ring.
 - **Focus:** a two-tone ring, ink outside and white inside, so it shows on any key.
 - **Access:** keys are buttons named by note, one in the tab order, the arrows walking the rest.
+
+### The hands at the keys
+
+Two hands play the music on a real piano seen from the seat (R36, as flowkey films a pianist's hands), in the keys'
+place: edge to edge, as tall as the divider sets the keys, nothing over them and no finger numbers. The keys are the
+default; the bar's **Hands at the keys** shows the hands instead.
+
+- **The piano:** the 88 keys at their real sizes in the keys' paints, on their bed, the felt along their far end, the
+  case behind them and its cheeks at the ends in the black keys' ebony, lit from the player's side with soft shadows.
+- **The hands:** a real hand's shape (the WebXR hand) in the skin chosen in Settings › Hands (four tones), each finger
+  pressing its key. A key a finger presses sinks into its hand's colour, brick right and lilac left; the notes
+  awaited wear their hand's wash and a key the learner holds its down paint, as on the flat keys. The hand not chosen
+  is drawn at a third.
+- **The camera:** steeply down from the seat, the hands coming in from the bottom edge; the music's range in view, or
+  following the hands where a white key would draw under 22px.
+- **Motion:** the hands glide with the fingering as the music plays; a step eases in 60 ms, the camera in 400 ms; with
+  reduced motion both land at once.
+- **States:** the keys' bed while the hands load; where they cannot be drawn, the panel's line over `--background` at
+  90 % with **Show the keys** (and **Try again** where they failed to load).
+
+### The sheet's pill
+
+One small floating control at the score's bottom-right in the Player and the editor (Songscription's view pill): a
+card-paper capsule with a hairline ring and a soft shadow, 8px from the sheet's edges and clear of what floats there.
+**Layout** as three 44px icon radios (Page view · Vertical scroll · Panorama, the chosen one in the chosen fill, each
+naming what it does when pointed at), then in Page view the canvas's zoom (− n % + Fit). Always in sight, so it never
+appears under a finger; the layout's one control.
 
 ### The music
 

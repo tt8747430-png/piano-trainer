@@ -23,6 +23,7 @@ citation still leads to the right one (`git log -- docs/adr` reads the old recor
 | [0115](0115-one-score-two-modes.md)         | One score in two modes                             | the Player's and editor's bar and transport   |
 | [0114](0114-the-score-editor.md)            | The score editor                                   | editing, the palette, fields, sign pickers    |
 | [0105](0105-the-player.md)                  | The Player                                         | modes, Setup, Transpose, Simplify, Sound      |
+| [0117](0117-the-hands-at-the-keys.md)       | The hands at the keys                              | the 3D hands, their camera and choreography   |
 | [0108](0108-the-view.md)                    | The View                                           | the four views, chord diagrams                |
 | [0028](0028-takes.md)                       | Takes                                              | recording from a MIDI keyboard                |
 | [0111](0111-learning-a-song.md)             | Learning a song                                    | a song's page, its sections' lessons          |

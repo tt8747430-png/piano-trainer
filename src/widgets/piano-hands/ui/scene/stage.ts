@@ -272,12 +272,17 @@ export function createStage(
     sun.shadow.camera.updateProjectionMatrix()
   }
 
+  // With less motion asked for, a step, the hands' fading and the camera land at once; the hands
+  // playing still play, as a film of them would.
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)')
+  const eased = (dt: number, tau: number) => (still.matches ? 1 : 1 - Math.exp(-dt / tau))
+
   /** One frame: the hands and keys eased toward where the music has them; whether they settled. */
   const step = (dt: number): boolean => {
     let moving = false
     const tick = now.now()
-    const k = 1 - Math.exp(-dt / (now.playing ? EASE.playing : EASE.stepping))
-    const kPlace = now.playing ? k : 1 - Math.exp(-dt / EASE.place)
+    const k = now.playing ? 1 - Math.exp(-dt / EASE.playing) : eased(dt, EASE.stepping)
+    const kPlace = now.playing ? k : eased(dt, EASE.place)
     const pressedBy = new Map<Midi, { side: Side; press: number }>()
     const centres: number[] = []
     for (const side of ['rh', 'lh'] as const) {
@@ -287,7 +292,7 @@ export function createStage(
       const target = music ? pressHeld(handPose(music, tick, now.perSecond), now.held) : null
       hand.rig.root.visible = target !== null
       const fadeTo = target === null ? 0 : now.faded === side ? 1 / 3 : 1
-      const kFade = 1 - Math.exp(-dt / EASE.fade)
+      const kFade = eased(dt, EASE.fade)
       hand.opacity = approach(hand.opacity, fadeTo, kFade)
       if (hand.opacity !== fadeTo) moving = true
       for (const material of [hand.skin, hand.nail]) {
@@ -375,7 +380,7 @@ export function createStage(
     const handsX =
       centres.length === 0 ? framing.x : centres.reduce((sum, x) => sum + x, 0) / centres.length
     const toX = followed(framing, handsX)
-    cameraX = approach(cameraX, toX, 1 - Math.exp(-dt / EASE.camera))
+    cameraX = approach(cameraX, toX, eased(dt, EASE.camera))
     if (cameraX !== toX) moving = true
     camera.position.set(cameraX, framing.y, framing.z)
     aim()
