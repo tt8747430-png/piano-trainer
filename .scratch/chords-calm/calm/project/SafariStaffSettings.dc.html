@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Staff settings in Safari</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="position: relative; width: 450px; height: 920px; overflow: hidden">
+<div style="position: absolute; left: 24px; top: 23px; width: 402px; height: 874px; border-radius: 62px; overflow: hidden; background: #F7F3EE">
+  <div style="position: absolute; left: 0; top: 62px; width: 402px; height: 714px"><dc-import name="AppSafari" overlay="staffSettings" page="staff" root="7" chord="7" staff-fingers="true" hint-size="402px,714px"></dc-import></div>
+  <svg xmlns="http://www.w3.org/2000/svg" width="334" height="48" style="position: absolute; left: 34px; bottom: 34px; filter: drop-shadow(0 4px 12px rgba(0,0,0,.18))" aria-hidden="true"><g fill="rgba(250,250,250,.86)" stroke="rgba(0,0,0,.1)"><circle cx="24" cy="24" r="23.5"></circle><rect x="56.5" y=".5" width="221" height="47" rx="23.5"></rect><circle cx="310" cy="24" r="23.5"></circle></g><path d="M27 16l-8 8 8 8" fill="none" stroke="#1c1c1e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path><text x="167" y="29" font-family="-apple-system,system-ui,sans-serif" font-size="15" font-weight="500" text-anchor="middle" fill="#1c1c1e">piano-trainer</text><g fill="#1c1c1e"><circle cx="302" cy="24" r="2"></circle><circle cx="310" cy="24" r="2"></circle><circle cx="318" cy="24" r="2"></circle></g></svg>
+</div>
+<img src="frames/iphone-safari.png" alt="" style="position: absolute; left: 0; top: 0; width: 450px; height: 920px; pointer-events: none">
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":450,"height":920}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

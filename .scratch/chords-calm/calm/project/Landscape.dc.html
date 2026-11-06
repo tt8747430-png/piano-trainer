@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>On its side</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="position: relative; width: 920px; height: 450px; overflow: hidden">
+<div style="position: absolute; left: 23px; top: 24px; width: 874px; height: 402px; border-radius: 62px; overflow: hidden; background: #F7F3EE"><dc-import name="SideApp" root="2" chord="m7" hint-size="874px,402px"></dc-import></div>
+<img src="frames/iphone-17-pro.png" alt="" style="position: absolute; left: 235px; top: -235px; width: 450px; height: 920px; transform: rotate(-90deg); pointer-events: none">
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":920,"height":450}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

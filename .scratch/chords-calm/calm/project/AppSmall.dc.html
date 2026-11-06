@@ -1,0 +1,1028 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chords on the smaller iPhone</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Music&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="position: relative; width: 393px; height: 852px; overflow: hidden; background: {{c.page}}; color: {{c.ink}}; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Noto Music', sans-serif">
+  <div style="position: absolute; left: 8px; right: 8px; top: 54px; display: flex; justify-content: space-between">
+    <button type="button" aria-label="Back" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; display: grid; place-items: center"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+    <button type="button" aria-label="More" onClick="{{toMore}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; display: grid; place-items: center"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg></button>
+  </div>
+  <div style="position: absolute; left: 16px; right: 16px; top: 104px; height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center">
+    <div style="font-size: {{nameSize}}px; line-height: 108px; height: 108px; font-weight: 600; letter-spacing: -0.03em; white-space: nowrap">{{symbol}}</div>
+    <div style="font-size: 17px; line-height: 24px; color: {{c.soft}}">{{nameLine}}</div>
+  </div>
+  <div style="position: absolute; left: 16px; top: 268px; width: 361px; height: 262px">
+      <sc-if value="{{isKeys}}" hint-placeholder-val="{{ true }}">
+        <sc-if value="{{twoRows}}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; gap: 4px">
+            <div style="font-size: 13px; line-height: 18px; color: {{c.soft}}">Right hand</div>
+            <div style="position: relative; height: {{splitH}}px; border-radius: 12px; overflow: hidden; background: {{c.line}}; box-shadow: 0 0 0 1px {{c.line}}">
+              <sc-for list="{{rhWhites}}" as="k" hint-placeholder-count="12"><button type="button" aria-label="{{k.name}}" style="position: absolute; left: {{k.left}}px; top: {{k.top}}px; width: {{k.w}}px; height: {{splitH}}px; box-sizing: border-box; padding: 0 0 6px; border: 0; border-right: 1px solid rgba(51,41,33,.16); background: {{k.bg}}; color: #332921; font: inherit; font-size: 13px; font-weight: 600; display: flex; align-items: flex-end; justify-content: center">{{k.label}}</button></sc-for>
+              <sc-for list="{{rhBlacks}}" as="k" hint-placeholder-count="8"><button type="button" aria-label="{{k.name}}" style="position: absolute; left: {{k.left}}px; top: 0; width: {{k.w}}px; height: {{splitBlackH}}px; box-sizing: border-box; padding: 0 0 4px; border: 0; border-radius: 0 0 5px 5px; background: {{k.bg}}; color: #332921; font: inherit; font-size: 11px; font-weight: 600; display: flex; align-items: flex-end; justify-content: center">{{k.label}}</button></sc-for>
+              <div style="position: absolute; left: 0; right: 0; top: 0; height: 3px; background: {{c.felt}}"></div>
+            </div>
+            <div style="font-size: 13px; line-height: 18px; margin-top: 4px; color: {{c.soft}}">Left hand</div>
+            <div style="position: relative; height: {{splitH}}px; border-radius: 12px; overflow: hidden; background: {{c.line}}; box-shadow: 0 0 0 1px {{c.line}}">
+              <sc-for list="{{lhWhites}}" as="k" hint-placeholder-count="12"><button type="button" aria-label="{{k.name}}" style="position: absolute; left: {{k.left}}px; top: {{k.top}}px; width: {{k.w}}px; height: {{splitH}}px; box-sizing: border-box; padding: 0 0 6px; border: 0; border-right: 1px solid rgba(51,41,33,.16); background: {{k.bg}}; color: #332921; font: inherit; font-size: 13px; font-weight: 600; display: flex; align-items: flex-end; justify-content: center">{{k.label}}</button></sc-for>
+              <sc-for list="{{lhBlacks}}" as="k" hint-placeholder-count="8"><button type="button" aria-label="{{k.name}}" style="position: absolute; left: {{k.left}}px; top: 0; width: {{k.w}}px; height: {{splitBlackH}}px; box-sizing: border-box; padding: 0 0 4px; border: 0; border-radius: 0 0 5px 5px; background: {{k.bg}}; color: #332921; font: inherit; font-size: 11px; font-weight: 600; display: flex; align-items: flex-end; justify-content: center">{{k.label}}</button></sc-for>
+              <div style="position: absolute; left: 0; right: 0; top: 0; height: 3px; background: {{c.felt}}"></div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{singleKeys}}" hint-placeholder-val="{{ true }}">
+        <div style="position: absolute; left: 0; right: 0; top: {{keysTop}}px; height: {{keysH}}px; border-radius: 14px; overflow: hidden; background: {{c.line}}; box-shadow: 0 0 0 1px {{c.line}}">
+          <sc-for list="{{whites}}" as="k" hint-placeholder-count="10">
+            <button type="button" aria-label="{{k.name}}" style="position: absolute; left: {{k.left}}px; top: {{k.top}}px; width: {{k.w}}px; height: {{keysH}}px; box-sizing: border-box; padding: 0 0 14px; border: 0; border-right: 1px solid rgba(51,41,33,.16); background: {{k.bg}}; color: {{k.ink}}; font: inherit; font-size: {{k.size}}px; font-weight: {{k.weight}}; display: flex; align-items: flex-end; justify-content: center">{{k.label}}</button>
+          </sc-for>
+          <sc-for list="{{blacks}}" as="k" hint-placeholder-count="7">
+            <button type="button" aria-label="{{k.name}}" style="position: absolute; left: {{k.left}}px; top: 0; width: {{k.w}}px; height: {{blackH}}px; box-sizing: border-box; padding: 0 0 8px; border: 0; border-radius: 0 0 6px 6px; background: {{k.bg}}; color: #332921; font: inherit; font-size: 12px; font-weight: 600; display: flex; align-items: flex-end; justify-content: center">{{k.label}}</button>
+          </sc-for>
+          <div style="position: absolute; left: 0; right: 0; top: 0; height: 3px; background: {{c.felt}}"></div>
+          <sc-if value="{{handsShown}}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; left: {{palmLeft}}px; top: {{palmTop}}px; width: {{palmW}}px; height: {{palmH}}px; box-sizing: border-box; border: 1px solid {{c.handLine}}; border-radius: 26px 26px 0 0; background: {{c.hand}}"></div>
+            <sc-for list="{{handFingers}}" as="f" hint-placeholder-count="5">
+              <div style="position: absolute; left: {{f.left}}px; top: {{f.top}}px; width: 18px; height: {{f.height}}px; box-sizing: border-box; border: 1px solid {{c.handLine}}; border-radius: 9px 9px 0 0; background: {{c.hand}}"></div>
+            </sc-for>
+            <sc-for list="{{handFingers}}" as="f" hint-placeholder-count="5">
+              <sc-if value="{{f.badge}}" hint-placeholder-val="{{ true }}">
+                <div style="position: absolute; left: {{f.badgeLeft}}px; top: {{f.badgeTop}}px; width: 22px; height: 22px; border-radius: 11px; background: #332921; color: #FEFDFB; font-size: 13px; font-weight: 600; line-height: 22px; text-align: center">{{f.number}}</div>
+              </sc-if>
+            </sc-for>
+          </sc-if>
+        </div>
+        </sc-if>
+        <sc-if value="{{showStrip}}" hint-placeholder-val="{{ false }}">
+          <div aria-label="Where the keys are on the piano" style="position: absolute; left: 0; right: 0; bottom: 0; height: 12px; border-radius: 6px; background: {{c.fill}}">
+            <div style="position: absolute; left: {{stripLeft}}; top: 0; width: 16%; height: 12px; border-radius: 6px; background: {{c.band}}"></div>
+          </div>
+        </sc-if>
+      </sc-if>
+      <sc-if value="{{isStaff}}" hint-placeholder-val="{{ false }}">
+        <button type="button" aria-label="Staff settings" onClick="{{toStaffSettings}}" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 2; padding: 0; border: 0; background: transparent; cursor: pointer"></button>
+        <sc-if value="{{chordOverStaff}}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; left: 60px; top: {{chordLabelY}}px; font-size: 19px; font-weight: 600; white-space: nowrap">{{symbol}}</div>
+        </sc-if>
+        <sc-if value="{{positionUnderStaff}}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; left: 60px; top: {{positionLabelY}}px; font-size: 13px; color: {{c.soft}}; white-space: nowrap">{{inversionLabel}}</div>
+        </sc-if>
+        <sc-for list="{{staffLines}}" as="l" hint-placeholder-count="5">
+          <div style="position: absolute; left: 0; right: 0; top: {{l.y}}px; height: 1px; background: {{c.ink}}; opacity: .55"></div>
+        </sc-for>
+        <div style="position: absolute; left: 10px; top: {{clefY}}px; font-family: 'Noto Music', serif; font-size: {{clefSize}}px; line-height: {{clefSize}}px; color: {{c.ink}}">𝄞</div>
+        <sc-for list="{{bassLines}}" as="l" hint-placeholder-count="0">
+          <div style="position: absolute; left: 0; right: 0; top: {{l.y}}px; height: 1px; background: {{c.ink}}; opacity: .55"></div>
+        </sc-for>
+        <sc-if value="{{splitOn}}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; left: 12px; top: {{bassClefY}}px; font-family: 'Noto Music', serif; font-size: {{bassSize}}px; line-height: {{bassLine}}px; color: {{c.ink}}">𝄢</div>
+        </sc-if>
+        <sc-for list="{{ledgers}}" as="l" hint-placeholder-count="1">
+          <div style="position: absolute; left: {{l.x}}px; top: {{l.y}}px; width: {{ledgerW}}px; height: 1px; background: {{c.ink}}; opacity: .55"></div>
+        </sc-for>
+        <sc-for list="{{staffNotes}}" as="n" hint-placeholder-count="3">
+          <div style="position: absolute; left: {{n.x}}px; top: {{n.y}}px; width: {{noteW}}px; height: {{noteH}}px; border-radius: 50%; transform: rotate(-18deg); background: {{c.ink}}"></div>
+        </sc-for>
+        <sc-for list="{{staffSigns}}" as="n" hint-placeholder-count="0">
+          <div style="position: absolute; left: {{n.x}}px; top: {{n.y}}px; font-family: 'Noto Music', serif; font-size: 24px; line-height: 28px; color: {{c.ink}}">{{n.sign}}</div>
+        </sc-for>
+        <sc-for list="{{staffLabels}}" as="n" hint-placeholder-count="3">
+          <div style="position: absolute; left: {{n.x}}px; top: {{n.y}}px; padding: 0 3px; background: {{c.page}}; font-size: {{labelSize}}px; line-height: {{labelSize}}px; font-weight: {{n.weight}}; color: {{n.ink}}; white-space: nowrap">{{n.text}}</div>
+        </sc-for>
+      </sc-if>
+      <sc-if value="{{isBuilt}}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; gap: 10px">
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <div style="font-size: 13px; color: {{c.soft}}">{{toneCaption}}</div>
+            <div style="display: flex; gap: 6px">
+              <sc-for list="{{toneChips}}" as="t" hint-placeholder-count="3">
+                <button type="button" onClick="{{t.pick}}" style="flex: 1; max-width: 72px; min-width: 0; height: 52px; padding: 0; border: 0; border-radius: 12px; background: {{t.bg}}; box-shadow: {{t.ring}}; color: #332921; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15"><span style="font-size: 16px; font-weight: 600">{{t.text}}</span><span style="font-size: 12px">{{t.degree}}</span></button>
+              </sc-for>
+            </div>
+          </div>
+          <sc-if value="{{hasTensions}}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <div style="font-size: 13px; color: {{c.soft}}">Tensions: tap to add</div>
+              <div style="display: flex; gap: 6px">
+                <sc-for list="{{tensions}}" as="t" hint-placeholder-count="3">
+                  <button type="button" onClick="{{t.pick}}" style="flex: 1; max-width: 72px; min-width: 0; height: 52px; padding: 0; border: 0; border-radius: 12px; background: {{t.bg}}; color: {{t.ink}}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15"><span style="font-size: 16px; font-weight: 600">{{t.note}}</span><span style="font-size: 12px">{{t.text}}</span></button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{hasAvoid}}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: {{c.soft}}">Avoid
+              <sc-for list="{{avoid}}" as="t" hint-placeholder-count="1">
+                <span style="color: {{c.ink}}; font-weight: 600">{{t.note}} ({{t.text}})</span>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+  </div>
+  <div style="position: absolute; left: 16px; right: 16px; top: 536px">
+      <div style="display: flex; align-items: center; justify-content: center; height: 44px">
+        <div role="tablist" aria-label="View" style="display: flex; gap: 2px">
+          <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+            <button type="button" role="tab" aria-selected="{{t.chosen}}" onClick="{{t.pick}}" style="height: 44px; padding: 0 10px; border: 0; background: transparent; color: {{t.ink}}; font: inherit; font-size: 15px; font-weight: {{t.weight}}">{{t.name}}</button>
+          </sc-for>
+        </div>
+      </div>
+  </div>
+  <div style="position: absolute; left: 16px; right: 16px; top: 586px">
+      <div style="box-sizing: border-box; padding: 0 0 0 0; border-radius: 14px; background: {{c.fill}}"><div style="display: flex; align-items: center; height: 48px; box-sizing: border-box; padding: 0 4px 0 14px; border-bottom: 1px solid {{c.line}}; background: transparent">
+        <div style="flex: 1; font-size: 17px">{{inversionLabel}}</div>
+        <button type="button" aria-label="Previous inversion" onClick="{{prevInversion}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; display: grid; place-items: center"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+        <button type="button" aria-label="Change chord" onClick="{{toChange}}" style="min-width: 64px; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; font-weight: 600; white-space: nowrap">{{slash}}</button>
+        <button type="button" aria-label="Next inversion" onClick="{{nextInversion}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; display: grid; place-items: center"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+      </div><div style="padding: 0 14px"><button type="button" onClick="{{toVoicing}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left"><span style="flex: 1">Voicing</span><span style="color: {{c.soft}}">{{voicingName}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span></button><button type="button" onClick="{{toPractise}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left"><span style="flex: 1">Practise</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span></button></div></div>
+  </div>
+  <sc-if value="{{noOverlay}}" hint-placeholder-val="{{ true }}">
+    <div role="toolbar" aria-label="Chord" style="position: absolute; left: 16px; right: 16px; bottom: 34px; height: 68px; box-sizing: border-box; padding: 0 8px; border-radius: 34px; background: {{c.glass}}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {{c.line}}, {{c.shadow}}; display: flex; align-items: center; gap: 8px">
+      <button type="button" onClick="{{toChange}}" style="flex: 1; min-width: 0; height: 52px; padding: 0 0 0 14px; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; font-weight: 600; text-align: left; display: flex; align-items: center; gap: 6px; white-space: nowrap">Change chord<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"></path></svg></button>
+      <button type="button" aria-pressed="{{arpOn}}" onClick="{{arpeggio}}" style="flex: none; height: 52px; padding: 0 18px; border: 0; border-radius: 26px; background: {{arpBg}}; color: {{arpInk}}; font: inherit; font-size: 15px; font-weight: 600">{{arpLabel}}</button>
+        <button type="button" aria-label="Play" aria-pressed="{{chordOn}}" onClick="{{play}}" style="flex: none; width: 52px; height: 52px; padding: 0; border: 0; border-radius: 26px; background: {{accent}}; color: {{c.onAccent}}; display: grid; place-items: center">
+          <sc-if value="{{chordOn}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"></rect></svg></sc-if>
+          <sc-if value="{{chordOff}}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M7 4.8a1.6 1.6 0 0 1 2.4-1.4l11 6.8a2.1 2.1 0 0 1 0 3.6l-11 6.8A1.6 1.6 0 0 1 7 19.2z"></path></svg></sc-if>
+        </button>
+    </div>
+  </sc-if>
+  <sc-if value="{{scrimOn}}" hint-placeholder-val="{{ false }}">
+    <button type="button" aria-label="Close" onClick="{{close}}" style="position: absolute; left: 0; right: 0; top: 0px; bottom: 0px; padding: 0; border: 0; background: {{c.scrim}}"></button>
+  </sc-if>
+  <sc-if value="{{isChange}}" hint-placeholder-val="{{ false }}"><div role="dialog" style="position: absolute; left: 0; right: 0; bottom: 0px; height: 300px; box-sizing: border-box; padding: 8px 16px 24px; overflow-y: auto; border-radius: 28px 28px 0 0; background: {{c.sheet}}; box-shadow: {{c.shadow}}; display: flex; flex-direction: column; gap: 10px"><div style="display: flex; align-items: center; justify-content: space-between; height: 44px"><button type="button" onClick="{{flip}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px">{{spelling}}</button><button type="button" onClick="{{close}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; font-weight: 600; white-space: nowrap">Done</button></div><div style="position: relative; height: {{wheelH}}px; display: grid; grid-template-columns: 2fr 3fr 3fr; column-gap: 4px; overflow: hidden">
+          <div style="position: absolute; left: 0; right: 0; top: {{bandTop}}px; height: 44px; border-radius: 12px; background: {{c.band}}"></div>
+          <div role="listbox" aria-label="Root" style="position: relative">
+            <sc-for list="{{rootWheel}}" as="w" hint-placeholder-count="5">
+              <button type="button" onClick="{{w.pick}}" style="position: absolute; left: 0; right: 0; top: {{w.y}}px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; opacity: {{w.opacity}}; font: inherit; font-size: {{w.size}}px; font-weight: {{w.weight}}; white-space: nowrap">{{w.text}}</button>
+            </sc-for>
+          </div>
+          <div role="listbox" aria-label="Family" style="position: relative">
+            <sc-for list="{{familyWheel}}" as="w" hint-placeholder-count="5">
+              <button type="button" onClick="{{w.pick}}" style="position: absolute; left: 0; right: 0; top: {{w.y}}px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; opacity: {{w.opacity}}; font: inherit; font-size: {{w.size}}px; font-weight: {{w.weight}}; white-space: nowrap">{{w.text}}</button>
+            </sc-for>
+          </div>
+          <div role="listbox" aria-label="Chord" style="position: relative">
+            <sc-for list="{{typeWheel}}" as="w" hint-placeholder-count="5">
+              <button type="button" onClick="{{w.pick}}" style="position: absolute; left: 0; right: 0; top: {{w.y}}px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; opacity: {{w.opacity}}; font: inherit; font-size: {{w.size}}px; font-weight: {{w.weight}}; white-space: nowrap">{{w.text}}</button>
+            </sc-for>
+          </div>
+        </div></div></sc-if>
+<sc-if value="{{isVoicing}}" hint-placeholder-val="{{ false }}"><div role="dialog" style="position: absolute; left: 0; right: 0; bottom: 0px; height: 300px; box-sizing: border-box; padding: 8px 16px 24px; overflow-y: auto; border-radius: 28px 28px 0 0; background: {{c.sheet}}; box-shadow: {{c.shadow}}; display: flex; flex-direction: column; gap: 10px"><div style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 44px">
+          <div style="justify-self: start"></div>
+          <div style="font-size: 17px; font-weight: 600">Voicing</div>
+          <div style="justify-self: end"><button type="button" onClick="{{close}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; font-weight: 600; white-space: nowrap">Done</button></div>
+        </div><div style="display: grid; grid-template-columns: 150px minmax(0, 1fr); column-gap: 16px; align-items: center">
+          <div style="position: relative; height: {{wheelH}}px; display: grid; overflow: hidden">
+            <div style="position: absolute; left: 0; right: 0; top: {{bandTop}}px; height: 44px; border-radius: 12px; background: {{c.band}}"></div>
+            <div role="listbox" aria-label="Voicing" style="position: relative">
+            <sc-for list="{{voicingWheel}}" as="w" hint-placeholder-count="5">
+              <button type="button" onClick="{{w.pick}}" style="position: absolute; left: 0; right: 0; top: {{w.y}}px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; opacity: {{w.opacity}}; font: inherit; font-size: {{w.size}}px; font-weight: {{w.weight}}; white-space: nowrap; text-decoration: {{w.dim}}">{{w.text}}</button>
+            </sc-for>
+          </div>
+          </div>
+          <div style="font-size: 15px; line-height: 21px; color: {c.soft}">{{voicingAbout}}</div>
+        </div></div></sc-if>
+<sc-if value="{{isMore}}" hint-placeholder-val="{{ false }}"><div role="dialog" style="position: absolute; left: 0; right: 0; bottom: 0px; height: 318px; box-sizing: border-box; padding: 8px 16px 24px; overflow-y: auto; border-radius: 28px 28px 0 0; background: {{c.sheet}}; box-shadow: {{c.shadow}}; display: flex; flex-direction: column; gap: 10px"><div style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 44px">
+          <div style="justify-self: start"></div>
+          <div style="font-size: 17px; font-weight: 600">{{symbol}}</div>
+          <div style="justify-self: end"><button type="button" onClick="{{close}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; font-weight: 600; white-space: nowrap">Done</button></div>
+        </div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><button type="button" onClick="{{nextPlayHands}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Hands</span><span style="color: {{c.soft}}">{{playHandsValue}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button><button type="button" onClick="{{toKeyboard}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left"><span style="flex: 1">Keyboard</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span></button><button type="button" onClick="{{toStaffSettings}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left"><span style="flex: 1">Staff</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span></button><button type="button" onClick="{{toTools}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left"><span style="flex: 1">Tools</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span></button></div><sc-if value="{{hasAlso}}" hint-placeholder-val="{{ true }}"><div style="padding: 0 14px; font-size: 13px; color: {{c.soft}}">Also written {{alsoWritten}}</div></sc-if></div></sc-if>
+<sc-if value="{{isKeyboard}}" hint-placeholder-val="{{ false }}"><div role="dialog" style="position: absolute; left: 0; right: 0; bottom: 0px; height: 690px; box-sizing: border-box; padding: 8px 16px 24px; overflow-y: auto; border-radius: 28px 28px 0 0; background: {{c.sheet}}; box-shadow: {{c.shadow}}; display: flex; flex-direction: column; gap: 10px"><div style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 44px">
+          <div style="justify-self: start"><button type="button" onClick="{{toMore}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; display: flex; align-items: center; margin-left: -6px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>Back</button></div>
+          <div style="font-size: 17px; font-weight: 600">Keyboard</div>
+          <div style="justify-self: end"><button type="button" onClick="{{close}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; font-weight: 600; white-space: nowrap">Done</button></div>
+        </div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><button type="button" onClick="{{nextKeySize}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Key size</span><span style="color: {{c.soft}}">{{keySizeValue}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px"><span style="flex: 1">Hands at the keys</span><button type="button" role="switch" aria-label="Hands at the keys" onClick="{{flipShowHands}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{showHandsLook.bg}}"><span style="position: absolute; left: {{showHandsLook.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div></div><div style="margin: 6px 0 -4px 14px; font-size: 13px; color: {{c.soft}}">Names</div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><button type="button" onClick="{{nextNoteNames}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Note names</span><span style="color: {{c.soft}}">{{noteNamesValue}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">On highlighted keys</span><button type="button" role="switch" aria-label="On highlighted keys" onClick="{{flipMarkNotes}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{markNotes.bg}}"><span style="position: absolute; left: {{markNotes.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px"><span style="flex: 1">Chord symbol</span><button type="button" role="switch" aria-label="Chord symbol" onClick="{{flipChordSymbol}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{chordSymbol.bg}}"><span style="position: absolute; left: {{chordSymbol.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div></div><div style="margin: 6px 0 -4px 14px; font-size: 13px; color: {{c.soft}}">Playing</div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><button type="button" onClick="{{nextSwipe}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Swipe gesture</span><span style="color: {{c.soft}}">{{swipeValue}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button><button type="button" onClick="{{toPedals}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left"><span style="flex: 1">Pedals</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span></button><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px"><span style="flex: 1">Play on selection</span><button type="button" role="switch" aria-label="Play on selection" onClick="{{flipAutoplay}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{autoplay.bg}}"><span style="position: absolute; left: {{autoplay.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div></div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><button type="button" onClick="{{close}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left"><span style="flex: 1">MIDI keyboard</span><span style="color: {{c.soft}}">Not connected</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span></button></div></div></sc-if>
+<sc-if value="{{isPractise}}" hint-placeholder-val="{{ false }}"><div role="dialog" style="position: absolute; left: 0; right: 0; bottom: 0px; height: 270px; box-sizing: border-box; padding: 8px 16px 24px; overflow-y: auto; border-radius: 28px 28px 0 0; background: {{c.sheet}}; box-shadow: {{c.shadow}}; display: flex; flex-direction: column; gap: 10px"><div style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 44px">
+          <div style="justify-self: start"></div>
+          <div style="font-size: 17px; font-weight: 600">Practise</div>
+          <div style="justify-self: end"><button type="button" onClick="{{close}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; font-weight: 600; white-space: nowrap">Done</button></div>
+        </div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><button type="button" onClick="{{close}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left"><span style="flex: 1">Arpeggio</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span></button><button type="button" onClick="{{close}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left"><span style="flex: 1">Inversions</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span></button><button type="button" onClick="{{close}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left"><span style="flex: 1">Chromatic walk</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span></button></div><div style="padding: 0 14px; font-size: 13px; color: {{c.soft}}">Opens this chord in the Player.</div></div></sc-if>
+<sc-if value="{{isTools}}" hint-placeholder-val="{{ false }}"><div role="dialog" style="position: absolute; left: 0; right: 0; bottom: 0px; height: 440px; box-sizing: border-box; padding: 8px 16px 24px; overflow-y: auto; border-radius: 28px 28px 0 0; background: {{c.sheet}}; box-shadow: {{c.shadow}}; display: flex; flex-direction: column; gap: 10px"><div style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 44px">
+          <div style="justify-self: start"><button type="button" onClick="{{toMore}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; display: flex; align-items: center; margin-left: -6px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>Back</button></div>
+          <div style="font-size: 17px; font-weight: 600">Tools</div>
+          <div style="justify-self: end"><button type="button" onClick="{{close}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; font-weight: 600; white-space: nowrap">Done</button></div>
+        </div><div role="group" aria-label="Metronome" style="box-sizing: border-box; padding: 10px 14px; border-radius: 14px; background: {{c.fill}}; display: flex; flex-direction: column; gap: 6px"><div style="display: flex; align-items: center; gap: 12px"><span style="flex: none; width: 40px; height: 40px; border-radius: 10px; background: {{c.toolFill}}; color: {{c.toolInk}}; display: grid; place-items: center"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2h4"></path><path d="M12 14l3-3"></path><circle cx="12" cy="14" r="8"></circle></svg></span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 17px; font-weight: 600">Metronome</span><span style="font-size: 14px; color: {{c.soft}}; font-variant-numeric: tabular-nums">{{metroDetail}}</span></span><button type="button" aria-label="{{metroLabel}}" aria-pressed="{{metroOn}}" onClick="{{flipMetro}}" style="flex: none; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 22px; background: {{accent}}; color: {{c.onAccent}}; display: grid; place-items: center"><sc-if value="{{metroOff}}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M7 4.8a1.6 1.6 0 0 1 2.4-1.4l11 6.8a2.1 2.1 0 0 1 0 3.6l-11 6.8A1.6 1.6 0 0 1 7 19.2z"></path></svg></sc-if><sc-if value="{{metroOn}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"></rect></svg></sc-if></button></div><input type="range" min="30" max="300" value="{{tempo}}" aria-label="Tempo" onInput="{{slideTempo}}" style="width: 100%; height: 32px; margin: 0; accent-color: {{accent}}">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+  <div role="group" aria-label="Beats" style="display: flex; gap: 2px; flex-wrap: wrap; margin-left: -3px">
+    <sc-for list="{{beatSquares}}" as="b" hint-placeholder-count="4"><button type="button" aria-label="{{b.name}}" onClick="{{b.pick}}" style="width: 22px; height: 44px; padding: 0; border: 0; background: transparent; display: flex; align-items: center; justify-content: center"><span style="position: relative; width: 16px; height: 26px; box-sizing: border-box; border-radius: 4px; box-shadow: inset 0 0 0 1px {{c.line}}; overflow: hidden"><span style="position: absolute; left: 0; right: 0; bottom: 0; height: {{b.fillH}}px; background: {{b.bg}}"></span></span></button></sc-for>
+  </div>
+  <button type="button" onClick="{{tapTempo}}" style="flex: none; height: 44px; padding: 0 18px; border: 0; border-radius: 22px; background: {{c.band}}; color: {{c.ink}}; font: inherit; font-size: 15px; font-weight: 600">Tap tempo</button>
+</div>
+<button type="button" onClick="{{toMetroSettings}}" style="align-self: flex-start; height: 36px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 2px">Metronome settings<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+</div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><button type="button" onClick="{{toTuner}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left"><span style="flex: 1">Tuner</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span></button><button type="button" onClick="{{close}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left"><span style="flex: 1">Chord finder</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span></button><button type="button" onClick="{{close}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left"><span style="flex: 1">Circle of fifths</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span></button></div></div></sc-if>
+<sc-if value="{{isTuner}}" hint-placeholder-val="{{ false }}"><div role="dialog" style="position: absolute; left: 0; right: 0; bottom: 0px; height: 420px; box-sizing: border-box; padding: 8px 16px 24px; overflow-y: auto; border-radius: 28px 28px 0 0; background: {{c.sheet}}; box-shadow: {{c.shadow}}; display: flex; flex-direction: column; gap: 10px"><div style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 44px">
+          <div style="justify-self: start"><button type="button" onClick="{{toTools}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; display: flex; align-items: center; margin-left: -6px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>Back</button></div>
+          <div style="font-size: 17px; font-weight: 600">Tuner</div>
+          <div style="justify-self: end"><button type="button" onClick="{{close}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; font-weight: 600; white-space: nowrap">Done</button></div>
+        </div><sc-if value="{{tunerWorks}}" hint-placeholder-val="{{ true }}">
+  <div aria-live="polite" style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 8px 14px 4px">
+    <div style="font-size: 72px; line-height: 80px; font-weight: 600; letter-spacing: -0.02em">A4</div>
+    <div style="font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums">{{tunerReading}}</div>
+    <div style="position: relative; width: 100%; height: 36px"><div style="position: absolute; left: 0; right: 0; top: 18px; height: 1px; background: {{c.soft}}; opacity: .5"></div><div style="position: absolute; left: 50%; top: 6px; width: 1px; height: 25px; background: {{c.soft}}"></div><div style="position: absolute; left: {{needleLeft}}%; top: 0; width: 4px; height: 36px; margin-left: -2px; border-radius: 2px; background: {{needleInk}}"></div></div>
+    <div style="width: 100%; display: flex; justify-content: space-between; font-size: 13px; color: {{c.soft}}; font-variant-numeric: tabular-nums"><span>−50</span><span>{{tunerHz}}</span><span>+50</span></div>
+  </div>
+</sc-if>
+<sc-if value="{{tunerRefused}}" hint-placeholder-val="{{ false }}"><div role="status" style="padding: 40px 14px; text-align: center; font-size: 17px; line-height: 24px; color: {{c.soft}}">The microphone is not available. Allow it in the browser to use the tuner.</div></sc-if><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px"><span style="flex: 1">A4 tuning</span><button type="button" aria-label="A4 tuning −" onClick="{{a4Down}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{a4Text}}</span><button type="button" aria-label="A4 tuning +" onClick="{{a4Up}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div></div><div style="padding: 0 14px; font-size: 14px; line-height: 19px; color: {{c.soft}}">The microphone stops when you close this.</div></div></sc-if>
+<sc-if value="{{metroPlain}}" hint-placeholder-val="{{ false }}"><div role="dialog" style="position: absolute; left: 0; right: 0; bottom: 0px; height: 430px; box-sizing: border-box; padding: 8px 16px 24px; overflow-y: auto; border-radius: 28px 28px 0 0; background: {{c.sheet}}; box-shadow: {{c.shadow}}; display: flex; flex-direction: column; gap: 10px"><div style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 44px">
+          <div style="justify-self: start"><button type="button" onClick="{{toTools}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; display: flex; align-items: center; margin-left: -6px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>Back</button></div>
+          <div style="font-size: 17px; font-weight: 600">Metronome</div>
+          <div style="justify-self: end"><button type="button" onClick="{{close}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; font-weight: 600; white-space: nowrap">Done</button></div>
+        </div><div style="margin: 6px 0 -4px 14px; font-size: 13px; color: {{c.soft}}">Rhythm</div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><button type="button" onClick="{{nextMeter}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Time signature</span><span style="color: {{c.soft}}">{{meter}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button><button type="button" onClick="{{nextClickSound}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Click sound</span><span style="color: {{c.soft}}">{{clickSound}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button><button type="button" onClick="{{nextSubdivision}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Clicks per beat</span><span style="color: {{c.soft}}">{{subdivision}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button></div><div style="margin: 6px 0 -4px 14px; font-size: 13px; color: {{c.soft}}">Timing practice</div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px"><span style="flex: 1">Speed up gradually</span><button type="button" role="switch" aria-label="Speed up gradually" onClick="{{flipRamp}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{rampLook.bg}}"><span style="position: absolute; left: {{rampLook.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div><sc-if value="{{rampOn}}" hint-placeholder-val="{{ false }}"><div style="padding: 0 0 8px; font-size: 14px; line-height: 19px; color: {{c.soft}}; border-bottom: 1px solid {{c.line}}">The tempo rises step by step, then holds at the target.</div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Start tempo</span><button type="button" aria-label="Start tempo −" onClick="{{rampFromDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampFrom}}</span><button type="button" aria-label="Start tempo +" onClick="{{rampFromUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Target tempo</span><button type="button" aria-label="Target tempo −" onClick="{{rampToDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampTo}}</span><button type="button" aria-label="Target tempo +" onClick="{{rampToUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Raise by</span><button type="button" aria-label="Raise by −" onClick="{{rampStepDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampStep}}</span><button type="button" aria-label="Raise by +" onClick="{{rampStepUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px"><span style="flex: 1">Every</span><button type="button" aria-label="Every −" onClick="{{rampEveryDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampEvery}}</span><button type="button" aria-label="Every +" onClick="{{rampEveryUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div></sc-if></div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px"><span style="flex: 1">Mute some bars</span><button type="button" role="switch" aria-label="Mute some bars" onClick="{{flipGap}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{gapLook.bg}}"><span style="position: absolute; left: {{gapLook.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div><sc-if value="{{gapOn}}" hint-placeholder-val="{{ false }}"><div style="padding: 0 0 8px; font-size: 14px; line-height: 19px; color: {{c.soft}}; border-bottom: 1px solid {{c.line}}">The click goes quiet for some bars while you keep time, then comes back.</div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Click for</span><button type="button" aria-label="Click for −" onClick="{{gapPlayDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{gapPlay}}</span><button type="button" aria-label="Click for +" onClick="{{gapPlayUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px"><span style="flex: 1">Mute for</span><button type="button" aria-label="Mute for −" onClick="{{gapMuteDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{gapMute}}</span><button type="button" aria-label="Mute for +" onClick="{{gapMuteUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div></sc-if></div></div></sc-if>
+<sc-if value="{{metroRamp}}" hint-placeholder-val="{{ false }}"><div role="dialog" style="position: absolute; left: 0; right: 0; bottom: 0px; height: 660px; box-sizing: border-box; padding: 8px 16px 24px; overflow-y: auto; border-radius: 28px 28px 0 0; background: {{c.sheet}}; box-shadow: {{c.shadow}}; display: flex; flex-direction: column; gap: 10px"><div style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 44px">
+          <div style="justify-self: start"><button type="button" onClick="{{toTools}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; display: flex; align-items: center; margin-left: -6px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>Back</button></div>
+          <div style="font-size: 17px; font-weight: 600">Metronome</div>
+          <div style="justify-self: end"><button type="button" onClick="{{close}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; font-weight: 600; white-space: nowrap">Done</button></div>
+        </div><div style="margin: 6px 0 -4px 14px; font-size: 13px; color: {{c.soft}}">Rhythm</div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><button type="button" onClick="{{nextMeter}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Time signature</span><span style="color: {{c.soft}}">{{meter}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button><button type="button" onClick="{{nextClickSound}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Click sound</span><span style="color: {{c.soft}}">{{clickSound}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button><button type="button" onClick="{{nextSubdivision}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Clicks per beat</span><span style="color: {{c.soft}}">{{subdivision}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button></div><div style="margin: 6px 0 -4px 14px; font-size: 13px; color: {{c.soft}}">Timing practice</div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px"><span style="flex: 1">Speed up gradually</span><button type="button" role="switch" aria-label="Speed up gradually" onClick="{{flipRamp}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{rampLook.bg}}"><span style="position: absolute; left: {{rampLook.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div><sc-if value="{{rampOn}}" hint-placeholder-val="{{ false }}"><div style="padding: 0 0 8px; font-size: 14px; line-height: 19px; color: {{c.soft}}; border-bottom: 1px solid {{c.line}}">The tempo rises step by step, then holds at the target.</div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Start tempo</span><button type="button" aria-label="Start tempo −" onClick="{{rampFromDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampFrom}}</span><button type="button" aria-label="Start tempo +" onClick="{{rampFromUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Target tempo</span><button type="button" aria-label="Target tempo −" onClick="{{rampToDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampTo}}</span><button type="button" aria-label="Target tempo +" onClick="{{rampToUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Raise by</span><button type="button" aria-label="Raise by −" onClick="{{rampStepDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampStep}}</span><button type="button" aria-label="Raise by +" onClick="{{rampStepUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px"><span style="flex: 1">Every</span><button type="button" aria-label="Every −" onClick="{{rampEveryDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampEvery}}</span><button type="button" aria-label="Every +" onClick="{{rampEveryUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div></sc-if></div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px"><span style="flex: 1">Mute some bars</span><button type="button" role="switch" aria-label="Mute some bars" onClick="{{flipGap}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{gapLook.bg}}"><span style="position: absolute; left: {{gapLook.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div><sc-if value="{{gapOn}}" hint-placeholder-val="{{ false }}"><div style="padding: 0 0 8px; font-size: 14px; line-height: 19px; color: {{c.soft}}; border-bottom: 1px solid {{c.line}}">The click goes quiet for some bars while you keep time, then comes back.</div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Click for</span><button type="button" aria-label="Click for −" onClick="{{gapPlayDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{gapPlay}}</span><button type="button" aria-label="Click for +" onClick="{{gapPlayUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px"><span style="flex: 1">Mute for</span><button type="button" aria-label="Mute for −" onClick="{{gapMuteDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{gapMute}}</span><button type="button" aria-label="Mute for +" onClick="{{gapMuteUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div></sc-if></div></div></sc-if>
+<sc-if value="{{metroGap}}" hint-placeholder-val="{{ false }}"><div role="dialog" style="position: absolute; left: 0; right: 0; bottom: 0px; height: 560px; box-sizing: border-box; padding: 8px 16px 24px; overflow-y: auto; border-radius: 28px 28px 0 0; background: {{c.sheet}}; box-shadow: {{c.shadow}}; display: flex; flex-direction: column; gap: 10px"><div style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 44px">
+          <div style="justify-self: start"><button type="button" onClick="{{toTools}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; display: flex; align-items: center; margin-left: -6px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>Back</button></div>
+          <div style="font-size: 17px; font-weight: 600">Metronome</div>
+          <div style="justify-self: end"><button type="button" onClick="{{close}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; font-weight: 600; white-space: nowrap">Done</button></div>
+        </div><div style="margin: 6px 0 -4px 14px; font-size: 13px; color: {{c.soft}}">Rhythm</div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><button type="button" onClick="{{nextMeter}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Time signature</span><span style="color: {{c.soft}}">{{meter}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button><button type="button" onClick="{{nextClickSound}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Click sound</span><span style="color: {{c.soft}}">{{clickSound}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button><button type="button" onClick="{{nextSubdivision}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Clicks per beat</span><span style="color: {{c.soft}}">{{subdivision}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button></div><div style="margin: 6px 0 -4px 14px; font-size: 13px; color: {{c.soft}}">Timing practice</div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px"><span style="flex: 1">Speed up gradually</span><button type="button" role="switch" aria-label="Speed up gradually" onClick="{{flipRamp}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{rampLook.bg}}"><span style="position: absolute; left: {{rampLook.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div><sc-if value="{{rampOn}}" hint-placeholder-val="{{ false }}"><div style="padding: 0 0 8px; font-size: 14px; line-height: 19px; color: {{c.soft}}; border-bottom: 1px solid {{c.line}}">The tempo rises step by step, then holds at the target.</div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Start tempo</span><button type="button" aria-label="Start tempo −" onClick="{{rampFromDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampFrom}}</span><button type="button" aria-label="Start tempo +" onClick="{{rampFromUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Target tempo</span><button type="button" aria-label="Target tempo −" onClick="{{rampToDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampTo}}</span><button type="button" aria-label="Target tempo +" onClick="{{rampToUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Raise by</span><button type="button" aria-label="Raise by −" onClick="{{rampStepDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampStep}}</span><button type="button" aria-label="Raise by +" onClick="{{rampStepUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px"><span style="flex: 1">Every</span><button type="button" aria-label="Every −" onClick="{{rampEveryDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampEvery}}</span><button type="button" aria-label="Every +" onClick="{{rampEveryUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div></sc-if></div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px"><span style="flex: 1">Mute some bars</span><button type="button" role="switch" aria-label="Mute some bars" onClick="{{flipGap}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{gapLook.bg}}"><span style="position: absolute; left: {{gapLook.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div><sc-if value="{{gapOn}}" hint-placeholder-val="{{ false }}"><div style="padding: 0 0 8px; font-size: 14px; line-height: 19px; color: {{c.soft}}; border-bottom: 1px solid {{c.line}}">The click goes quiet for some bars while you keep time, then comes back.</div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Click for</span><button type="button" aria-label="Click for −" onClick="{{gapPlayDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{gapPlay}}</span><button type="button" aria-label="Click for +" onClick="{{gapPlayUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px"><span style="flex: 1">Mute for</span><button type="button" aria-label="Mute for −" onClick="{{gapMuteDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{gapMute}}</span><button type="button" aria-label="Mute for +" onClick="{{gapMuteUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div></sc-if></div></div></sc-if>
+<sc-if value="{{metroBoth}}" hint-placeholder-val="{{ false }}"><div role="dialog" style="position: absolute; left: 0; right: 0; bottom: 0px; height: 790px; box-sizing: border-box; padding: 8px 16px 24px; overflow-y: auto; border-radius: 28px 28px 0 0; background: {{c.sheet}}; box-shadow: {{c.shadow}}; display: flex; flex-direction: column; gap: 10px"><div style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 44px">
+          <div style="justify-self: start"><button type="button" onClick="{{toTools}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; display: flex; align-items: center; margin-left: -6px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>Back</button></div>
+          <div style="font-size: 17px; font-weight: 600">Metronome</div>
+          <div style="justify-self: end"><button type="button" onClick="{{close}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; font-weight: 600; white-space: nowrap">Done</button></div>
+        </div><div style="margin: 6px 0 -4px 14px; font-size: 13px; color: {{c.soft}}">Rhythm</div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><button type="button" onClick="{{nextMeter}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Time signature</span><span style="color: {{c.soft}}">{{meter}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button><button type="button" onClick="{{nextClickSound}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; border-bottom: 1px solid {{c.line}}; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Click sound</span><span style="color: {{c.soft}}">{{clickSound}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button><button type="button" onClick="{{nextSubdivision}}" style="width: 100%; min-height: 48px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 17px; display: flex; align-items: center; gap: 6px; text-align: left"><span style="flex: 1">Clicks per beat</span><span style="color: {{c.soft}}">{{subdivision}}</span><span style="color: {{c.soft}}; display: grid"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></span></button></div><div style="margin: 6px 0 -4px 14px; font-size: 13px; color: {{c.soft}}">Timing practice</div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px"><span style="flex: 1">Speed up gradually</span><button type="button" role="switch" aria-label="Speed up gradually" onClick="{{flipRamp}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{rampLook.bg}}"><span style="position: absolute; left: {{rampLook.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div><sc-if value="{{rampOn}}" hint-placeholder-val="{{ false }}"><div style="padding: 0 0 8px; font-size: 14px; line-height: 19px; color: {{c.soft}}; border-bottom: 1px solid {{c.line}}">The tempo rises step by step, then holds at the target.</div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Start tempo</span><button type="button" aria-label="Start tempo −" onClick="{{rampFromDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampFrom}}</span><button type="button" aria-label="Start tempo +" onClick="{{rampFromUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Target tempo</span><button type="button" aria-label="Target tempo −" onClick="{{rampToDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampTo}}</span><button type="button" aria-label="Target tempo +" onClick="{{rampToUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Raise by</span><button type="button" aria-label="Raise by −" onClick="{{rampStepDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampStep}}</span><button type="button" aria-label="Raise by +" onClick="{{rampStepUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px"><span style="flex: 1">Every</span><button type="button" aria-label="Every −" onClick="{{rampEveryDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{rampEvery}}</span><button type="button" aria-label="Every +" onClick="{{rampEveryUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div></sc-if></div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px"><span style="flex: 1">Mute some bars</span><button type="button" role="switch" aria-label="Mute some bars" onClick="{{flipGap}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{gapLook.bg}}"><span style="position: absolute; left: {{gapLook.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div><sc-if value="{{gapOn}}" hint-placeholder-val="{{ false }}"><div style="padding: 0 0 8px; font-size: 14px; line-height: 19px; color: {{c.soft}}; border-bottom: 1px solid {{c.line}}">The click goes quiet for some bars while you keep time, then comes back.</div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Click for</span><button type="button" aria-label="Click for −" onClick="{{gapPlayDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{gapPlay}}</span><button type="button" aria-label="Click for +" onClick="{{gapPlayUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div><div style="min-height: 48px; display: flex; align-items: center; font-size: 17px"><span style="flex: 1">Mute for</span><button type="button" aria-label="Mute for −" onClick="{{gapMuteDown}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">−</button><span style="min-width: 76px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums">{{gapMute}}</span><button type="button" aria-label="Mute for +" onClick="{{gapMuteUp}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {{c.ink}}; font: inherit; font-size: 22px">+</button></div></sc-if></div></div></sc-if>
+<sc-if value="{{isPedals}}" hint-placeholder-val="{{ false }}"><div role="dialog" style="position: absolute; left: 0; right: 0; bottom: 0px; height: 310px; box-sizing: border-box; padding: 8px 16px 24px; overflow-y: auto; border-radius: 28px 28px 0 0; background: {{c.sheet}}; box-shadow: {{c.shadow}}; display: flex; flex-direction: column; gap: 10px"><div style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 44px">
+          <div style="justify-self: start"><button type="button" onClick="{{toKeyboard}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; display: flex; align-items: center; margin-left: -6px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>Back</button></div>
+          <div style="font-size: 17px; font-weight: 600">Pedals</div>
+          <div style="justify-self: end"><button type="button" onClick="{{close}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; font-weight: 600; white-space: nowrap">Done</button></div>
+        </div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}">
+          <sc-for list="{{pedalRows}}" as="r" hint-placeholder-count="3">
+            <div style="min-height: 60px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid {{c.line}}">
+              <div style="flex: 1; display: flex; flex-direction: column"><span style="font-size: 17px">{{r.name}}</span><span style="font-size: 13px; color: {{c.soft}}">{{r.detail}}</span></div>
+              <button type="button" role="switch" aria-label="{{r.name}}" onClick="{{r.pick}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{r.bg}}"><span style="position: absolute; left: {{r.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button>
+            </div>
+          </sc-for>
+        </div></div></sc-if>
+<sc-if value="{{isStaffSettings}}" hint-placeholder-val="{{ false }}"><div role="dialog" style="position: absolute; left: 0; right: 0; bottom: 0px; height: 320px; box-sizing: border-box; padding: 8px 16px 24px; overflow-y: auto; border-radius: 28px 28px 0 0; background: {{c.sheet}}; box-shadow: {{c.shadow}}; display: flex; flex-direction: column; gap: 10px"><div style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 44px">
+          <div style="justify-self: start"></div>
+          <div style="font-size: 17px; font-weight: 600">Staff</div>
+          <div style="justify-self: end"><button type="button" onClick="{{close}}" style="height: 44px; padding: 0; border: 0; background: transparent; color: {{c.link}}; font: inherit; font-size: 17px; font-weight: 600; white-space: nowrap">Done</button></div>
+        </div><div style="margin: 6px 0 -4px 14px; font-size: 13px; color: {{c.soft}}">Show on the staff</div><div style="box-sizing: border-box; padding: 0 14px; border-radius: 14px; background: {{c.fill}}"><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Chord</span><button type="button" role="switch" aria-label="Chord" onClick="{{flipChordShown}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{chordShown.bg}}"><span style="position: absolute; left: {{chordShown.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Position</span><button type="button" role="switch" aria-label="Position" onClick="{{flipPositionShown}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{positionShown.bg}}"><span style="position: absolute; left: {{positionShown.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px; border-bottom: 1px solid {{c.line}}"><span style="flex: 1">Fingers</span><button type="button" role="switch" aria-label="Fingers" onClick="{{flipFingersShown}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{fingersShown.bg}}"><span style="position: absolute; left: {{fingersShown.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div><div style="min-height: 48px; display: flex; align-items: center; gap: 8px; font-size: 17px"><span style="flex: 1">Note names</span><button type="button" role="switch" aria-label="Note names" onClick="{{flipNotesShown}}" style="position: relative; flex: none; width: 50px; height: 32px; padding: 0; border: 0; border-radius: 16px; background: {{notesShown.bg}}"><span style="position: absolute; left: {{notesShown.knob}}px; top: 2px; width: 28px; height: 28px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 1px 3px rgba(0,0,0,.25)"></span></button></div></div></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["day","night"],"default":"day","section":"Look"},"accent":{"editor":"color","options":["#EDC684","#85B8DC","#9BC093"],"default":"#EDC684","section":"Look"},"page":{"editor":"enum","options":["keys","staff","fingers","built"],"default":"keys","section":"State"},"overlay":{"editor":"enum","options":["none","change","voicing","more","keyboard","practise","tools","pedals"],"default":"none","section":"State"},"view":{"editor":"enum","options":["rest","chord","arpeggio"],"default":"rest","section":"State"},"keySize":{"editor":"enum","options":["fit","large","all"],"default":"fit","section":"State"},"root":{"editor":null},"flats":{"editor":null},"chord":{"editor":null},"inversion":{"editor":null},"voicing":{"editor":null},"held":{"editor":null},"showHands":{"editor":null},"staffFingers":{"editor":null},"metroOn":{"editor":null},"tunerRefused":{"editor":null},"rampOn":{"editor":null},"gapOn":{"editor":null},"$preview":{"width":393,"height":852}}'>
+class Component extends DCLogic {
+  music() {
+const FAMILIES = [
+  ['Triads', [
+    ['maj', '', '1 3 5', 'Major triad'], ['m', 'm', '1 b3 5', 'Minor triad'], ['aug', 'aug', '1 3 #5', 'Augmented triad'],
+    ['dim', 'dim', '1 b3 b5', 'Diminished triad'], ['sus2', 'sus2', '1 2 5', 'Suspended second'], ['sus4', 'sus4', '1 4 5', 'Suspended fourth'],
+    ['♭5', '(♭5)', '1 3 b5', 'Major, flat five'],
+  ]],
+  ['Major', [
+    ['maj7', 'maj7', '1 3 5 7', 'Major seventh'], ['maj9', 'maj9', '1 3 5 7 9', 'Major ninth'], ['maj11', 'maj11', '1 3 5 7 9 11', 'Major eleventh'],
+    ['maj13', 'maj13', '1 3 5 7 9 13', 'Major thirteenth'], ['maj9♯11', 'maj9♯11', '1 3 5 7 9 #11', 'Major ninth, sharp eleven'], ['maj7♯5', 'maj7♯5', '1 3 #5 7', 'Major seventh, sharp five'],
+  ]],
+  ['Minor', [
+    ['m7', 'm7', '1 b3 5 b7', 'Minor seventh'], ['m9', 'm9', '1 b3 5 b7 9', 'Minor ninth'], ['m11', 'm11', '1 b3 5 b7 9 11', 'Minor eleventh'],
+    ['m13', 'm13', '1 b3 5 b7 9 13', 'Minor thirteenth'], ['m6', 'm6', '1 b3 5 6', 'Minor sixth'], ['m6/9', 'm6/9', '1 b3 5 6 9', 'Minor six nine'],
+    ['m7♭5', 'm7♭5', '1 b3 b5 b7', 'Half-diminished seventh'], ['m(maj7)', 'm(maj7)', '1 b3 5 7', 'Minor major seventh'], ['m(maj9)', 'm(maj9)', '1 b3 5 7 9', 'Minor major ninth'],
+    ['m7♭9', 'm7♭9', '1 b3 5 b7 b9', 'Minor seventh, flat nine'], ['m6♯5', 'm6♯5', '1 b3 #5 6', 'Minor sixth, sharp five'], ['m7sus4', 'm7sus4', '1 4 5 b7', 'Minor seventh, suspended fourth'],
+    ['madd9', 'madd9', '1 b3 5 9', 'Minor added ninth'], ['madd4', 'madd4', '1 b3 4 5', 'Minor added fourth'],
+  ]],
+  ['Dominant', [
+    ['7', '7', '1 3 5 b7', 'Dominant seventh'], ['9', '9', '1 3 5 b7 9', 'Dominant ninth'], ['11', '11', '1 3 5 b7 9 11', 'Dominant eleventh'],
+    ['13', '13', '1 3 5 b7 9 13', 'Dominant thirteenth'], ['7♭5', '7♭5', '1 3 b5 b7', 'Seventh, flat five'], ['7♭9', '7♭9', '1 3 5 b7 b9', 'Seventh, flat nine'],
+    ['7♯9', '7♯9', '1 3 5 b7 #9', 'Seventh, sharp nine'], ['7♯11', '7♯11', '1 3 5 b7 #11', 'Seventh, sharp eleven'], ['7♭5♯9', '7♭5♯9', '1 3 b5 b7 #9', 'Seventh, flat five, sharp nine'],
+    ['13♭9', '13♭9', '1 3 5 b7 b9 13', 'Thirteenth, flat nine'], ['aug7', 'aug7', '1 3 #5 b7', 'Augmented seventh'], ['7sus4', '7sus4', '1 4 5 b7', 'Seventh, suspended fourth'],
+    ['7sus2', '7sus2', '1 2 5 b7', 'Seventh, suspended second'], ['9sus4', '9sus4', '1 4 5 b7 9', 'Ninth, suspended fourth'],
+  ]],
+  ['Dim & added', [
+    ['dim7', 'dim7', '1 b3 b5 bb7', 'Diminished seventh'], ['add2', 'add2', '1 2 3 5', 'Added second'], ['add9', 'add9', '1 3 5 9', 'Added ninth'],
+    ['add4', 'add4', '1 3 4 5', 'Added fourth'], ['6', '6', '1 3 5 6', 'Major sixth'], ['6/9', '6/9', '1 3 5 6 9', 'Six nine'],
+  ]],
+];
+const LETTERS = 'CDEFGAB';
+const NATURAL = [0, 2, 4, 5, 7, 9, 11];
+const SHARP_NAMES = [[0, 0], [0, 1], [1, 0], [1, 1], [2, 0], [3, 0], [3, 1], [4, 0], [4, 1], [5, 0], [5, 1], [6, 0]];
+const FLAT_NAMES = [[0, 0], [1, -1], [1, 0], [2, -1], [2, 0], [3, 0], [4, -1], [4, 0], [5, -1], [5, 0], [6, -1], [6, 0]];
+const SIGN = { '-2': '𝄫', '-1': '♭', 0: '', 1: '♯', 2: '𝄪' };
+const TONE = {
+  1: ['#F4DFB2', null], 3: ['#CFE6F6', '#8CC4EC'], 5: ['#D8EED4', '#A6D9A0'], 7: ['#E3DAF4', '#BBA9E0'],
+  2: ['#F7D9D5', '#EBA6A0'], 9: ['#F7D9D5', '#EBA6A0'], 4: ['#EFDFCE', '#D8B48F'], 11: ['#EFDFCE', '#D8B48F'],
+  6: ['#CDEBE8', '#83CFC8'], 13: ['#CDEBE8', '#83CFC8'],
+};
+const spell = (letter, sign) => LETTERS[letter] + (SIGN[sign] ?? '');
+function buildChord(rootPc, flats, formula, inversion) {
+  const [rootLetter] = (flats ? FLAT_NAMES : SHARP_NAMES)[rootPc];
+  const tones = formula.split(' ').map((token) => {
+    const number = Number(token.replace(/[b#]/g, ''));
+    const shift = (token.match(/#/g) || []).length - (token.match(/b/g) || []).length;
+    const semis = NATURAL[(number - 1) % 7] + 12 * Math.floor((number - 1) / 7) + shift;
+    const letter = (rootLetter + number - 1) % 7;
+    const pc = (rootPc + semis) % 12;
+    const sign = ((pc - NATURAL[letter] + 18) % 12) - 6;
+    return { number, degree: token.replace(/b/g, '♭').replace(/#/g, '♯'), semis, letter, sign, name: spell(letter, sign) };
+  }).sort((a, b) => a.semis - b.semis);
+  return tones
+    .map((tone, i) => ({ ...tone, pitch: 60 + rootPc + tone.semis + (i < inversion ? 12 : 0) }))
+    .sort((a, b) => a.pitch - b.pitch);
+}
+    return { FAMILIES, LETTERS, NATURAL, SHARP_NAMES, FLAT_NAMES, SIGN, TONE, spell, buildChord };
+  }
+  rampTempo(st, bar) {
+    const from = st.rampFrom ?? 80;
+    const to = st.rampTo ?? 120;
+    const rise = (st.rampStep ?? 5) * Math.floor(bar / (st.rampEvery ?? 4));
+    return from <= to ? Math.min(to, from + rise) : Math.max(to, from - rise);
+  }
+  runMetronome(bpm, beats) {
+    clearInterval(this.metroTimer);
+    this.metroTimer = setInterval(() => {
+      const st = this.state ?? {};
+      const next = ((st.beat ?? -1) + 1) % beats;
+      const bar = (st.bar ?? 0) + (next === 0 && st.beat !== -1 ? 1 : 0);
+      this.setState({ beat: next, bar });
+      const ramped = st.rampOn ? this.rampTempo(st, bar) : bpm;
+      if (next === 0 && ramped !== bpm) this.runMetronome(ramped, beats);
+    }, 60000 / bpm);
+  }
+  componentWillUnmount() {
+    this.stopTimers();
+  }
+  stopTimers() {
+    clearTimeout(this.timer);
+    clearInterval(this.ticker);
+    clearInterval(this.metroTimer);
+    clearInterval(this.tunerTimer);
+  }
+  renderVals() {
+    const { FAMILIES, LETTERS, NATURAL, SHARP_NAMES, FLAT_NAMES, SIGN, spell, buildChord } = this.music();
+    const STAGE_W = 361;
+    const STAGE_H = 262;
+    const REACH = 2;
+    const s = this.state || {};
+    const p = this.props;
+    const yes = (value) => value === true || value === 'true';
+    const night = (p.theme ?? 'day') === 'night';
+    const accent = p.accent ?? (night ? '#D4B176' : '#EDC684');
+    const c = night
+      ? { toolFill: '#2F3B2C', toolInk: '#A9CDA0', page: '#191512', sheet: '#24201C', ink: '#EDE9E1', soft: '#BBB3A8', fill: '#2E2924', line: '#453E38', glass: 'rgba(55,50,45,.8)', white: '#D4D0CB', black: '#171310', band: '#453E38', link: '#89B7DE', onAccent: '#191512', felt: '#5A2422', scrim: 'rgba(0,0,0,.5)', on: '#8FC090', hand: '#CDB39B', handLine: 'rgba(25,21,18,.35)', shadow: '0 1px 3px rgba(10,7,5,.45), 0 6px 14px -4px rgba(10,7,5,.5), 0 14px 28px -8px rgba(10,7,5,.5)' }
+      : { toolFill: '#DCE9D6', toolInk: '#3F6B45', page: '#F7F3EE', sheet: '#FEFDFB', ink: '#332921', soft: '#685E56', fill: '#EEE9E2', line: '#DAD1C8', glass: 'rgba(254,253,251,.82)', white: '#FEFDFB', black: '#332C28', band: '#DAD1C8', link: '#356890', onAccent: '#332921', felt: '#7C302C', scrim: 'rgba(51,41,33,.28)', on: '#44684A', hand: '#E3CBB4', handLine: 'rgba(51,41,33,.28)', shadow: '0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)' };
+    const ROLE = { 1: '#E19E8C', 3: '#85B8DC', 5: '#9BC093', 7: '#E8C67D', 2: '#B8A8D8', 9: '#B8A8D8', 4: '#D3AC8A', 11: '#D3AC8A', 6: '#82C2C1', 13: '#82C2C1' };
+
+    const rootPc = s.root ?? Number(p.root ?? 0);
+    const flats = s.flats ?? yes(p.flats);
+    const chordKey = s.chord ?? p.chord ?? 'maj';
+    const familyAt = FAMILIES.findIndex(([, list]) => list.some((each) => each[0] === chordKey));
+    const type = FAMILIES[familyAt][1].find((each) => each[0] === chordKey);
+    const names = flats ? FLAT_NAMES : SHARP_NAMES;
+    const rootName = spell(...names[rootPc]);
+    const baseFormula = type[2];
+    const degreesOf = baseFormula.split(' ');
+    const minorish = degreesOf.includes('b3');
+    const dominant = degreesOf.includes('b7') && degreesOf.includes('3');
+    const tensionList = dominant ? ['b9', '9', '#9', '#11', '13'] : minorish ? ['9', '11', '13'] : ['9', '#11', '13'];
+    const added = (s.added ?? []).filter((each) => tensionList.includes(each) && !degreesOf.includes(each));
+    const formula = [baseFormula, ...added].join(' ');
+    const count = formula.split(' ').length;
+    const pretty = (token) => token.replace(/b/g, '♭').replace(/#/g, '♯');
+    const ordered = buildChord(rootPc, flats, formula, 0);
+    const addedText = added.length ? `(add ${added.map(pretty).join(', ')})` : '';
+    const symbol = rootName + type[1];
+
+    const hasThird = degreesOf.some((d) => d.endsWith('3') && d.length <= 2);
+    const hasSeventh = degreesOf.some((d) => d.endsWith('7') || d === '6');
+    const FOUR = `Made from a close chord of four notes. This one has ${count}.`;
+    const NO3 = 'Needs the chord’s 3rd, and this chord has none.';
+    const NO7 = 'Needs a 7th, and this chord has none.';
+    const VOICINGS = [
+      ['close', 'Close', 'Every note packed as close together as it goes.', ''],
+      ['drop2', 'Drop 2', 'The second note from the top moves down an octave.', count === 4 ? '' : FOUR],
+      ['drop3', 'Drop 3', 'The third note from the top moves down an octave.', count === 4 ? '' : FOUR],
+      ['shell', 'Shell', 'Only the root, 3rd and 7th: the notes that say what the chord is.', !hasThird ? NO3 : !hasSeventh ? NO7 : ''],
+      ['rootlessA', 'Rootless A', 'The 3rd, 5th, 7th and 9th, leaving the root to the bass.', !hasThird ? NO3 : !hasSeventh ? NO7 : ''],
+      ['rootlessB', 'Rootless B', 'The 7th, 9th, 3rd and 5th: type A from the other end.', !hasThird ? NO3 : !hasSeventh ? NO7 : ''],
+      ['locked', 'Locked hands', 'Four notes in the right hand, the top note doubled below.', count === 4 ? '' : FOUR],
+    ];
+    const voicingWanted = s.voicing ?? p.voicing ?? 'close';
+    const voicingRow = VOICINGS.find((each) => each[0] === voicingWanted);
+    const voicingAt = VOICINGS.indexOf(voicingRow);
+    const voicing = voicingRow[3] ? 'close' : voicingWanted;
+
+    // A chord of five notes or more is shared between the hands: the left takes the root and the
+    // 7th (or 5th) an octave down, the right the rest, and its top note replaces the inversion.
+    const splitOn = count >= 5 && voicing === 'close';
+    const lhList = [ordered[0], ordered.find((t) => t.number === 7 || t.number === 6) ?? ordered.find((t) => t.number === 5)].filter(Boolean);
+    const rhBase = ordered.filter((t) => !lhList.includes(t));
+    const inversionCount = splitOn ? rhBase.length : Math.min(count, 4);
+    const inversion = Math.min(s.inversion ?? Number(p.inversion ?? 0), inversionCount - 1);
+    const rhTones = rhBase.map((t, i) => ({ ...t, pitch: t.pitch + (i < inversion ? 12 : 0) })).sort((a, b) => a.pitch - b.pitch);
+    const lhTones = lhList.map((t) => ({ ...t, pitch: t.pitch - 12 }));
+    const slash = splitOn ? rhTones[rhTones.length - 1].name : inversion === 0 ? symbol : `${symbol}/${ordered[inversion].name}`;
+
+    const voiced = (list) => {
+      const notes = list.map((tone) => ({ ...tone }));
+      const pick = (test) => notes.filter((tone) => test(tone.number));
+      if (voicing === 'drop2') notes[notes.length - 2].pitch -= 12;
+      if (voicing === 'drop3') notes[notes.length - 3].pitch -= 12;
+      if (voicing === 'shell') return pick((n) => n === 1 || n === 3 || n === 7 || n === 6).sort((a, b) => a.pitch - b.pitch);
+      if (voicing === 'rootlessA' || voicing === 'rootlessB') {
+        const ninth = buildChord(rootPc, flats, '9', 0)[0];
+        const set = [...pick((n) => n === 3 || n === 5 || n === 7 || n === 6), ninth];
+        if (voicing === 'rootlessB') set.forEach((tone) => { if (tone.number === 3 || tone.number === 5) tone.pitch += 12; });
+        return set.sort((a, b) => a.pitch - b.pitch);
+      }
+      if (voicing === 'locked') {
+        const top = notes[notes.length - 1];
+        return [{ ...top, pitch: top.pitch - 12 }, ...notes].sort((a, b) => a.pitch - b.pitch);
+      }
+      return notes.sort((a, b) => a.pitch - b.pitch);
+    };
+    const tones = splitOn ? [...lhTones, ...rhTones].sort((a, b) => a.pitch - b.pitch) : voiced(buildChord(rootPc, flats, formula, inversion));
+
+    const page = s.page ?? p.page ?? 'keys';
+    const overlay = s.overlay ?? p.overlay ?? 'none';
+    const view = p.view ?? 'rest';
+    const mode = s.mode ?? view;
+    const step = s.step ?? 1;
+    const chordOn = mode === 'chord';
+    const arpOn = mode === 'arpeggio';
+    const hand = s.hand ?? 'right';
+    const set = {
+      keySize: s.keySize ?? p.keySize ?? 'fit',
+      noteNames: s.noteNames ?? 'c',
+      markNotes: s.markNotes ?? true,
+      chordSymbol: s.chordSymbol ?? true,
+      swipe: s.swipe ?? 'scroll',
+      pedalSet: s.pedalSet ?? 'sustain',
+      autoplay: s.autoplay ?? true,
+      showHands: s.showHands ?? yes(p.showHands),
+      playHands: s.playHands ?? 'both',
+    };
+    const change = (next) => {
+      this.stopTimers();
+      this.setState({ mode: 'rest', step: 0, ...next });
+    };
+
+    const lowest = tones[0].pitch;
+    const highest = tones[tones.length - 1].pitch;
+    const allKeys = set.keySize === 'all';
+    const large = set.keySize === 'large';
+    let startPitch = allKeys ? 21 : Math.min(lowest, 60 + rootPc) - 1;
+    while (!NATURAL.includes(startPitch % 12)) startPitch -= 1;
+    const range = highest - startPitch;
+    const keyCount = allKeys ? 52 : large ? 8 : range <= 15 ? 10 : range <= 19 ? 12 : 15;
+    const whitePitches = [];
+    for (let at = startPitch; whitePitches.length < keyCount; at += 1) {
+      if (NATURAL.includes(at % 12)) whitePitches.push(at);
+    }
+    const fingersShown = page === 'fingers';
+    const handsShown = set.showHands && !fingersShown && !splitOn;
+    const numbersShown = fingersShown || (splitOn && set.showHands);
+    const keysTop = 0;
+    const keysH = STAGE_H - keysTop - (large ? 22 : 0);
+    const keyW = STAGE_W / keyCount;
+    const blackW = keyW * 0.58;
+    const byPitch = new Map(tones.map((tone, at) => [tone.pitch, { tone, at }]));
+    const look = (hit) => {
+      if (!hit) return null;
+      const lit = !arpOn || hit.at <= step;
+      const role = ROLE[hit.tone.number] ?? ROLE[7];
+      return {
+        bg: lit ? role : `${role}59`,
+        label: numbersShown ? hit.finger ?? '' : handsShown || allKeys || !set.markNotes ? '' : hit.tone.name,
+        top: chordOn || (arpOn && hit.at <= step) ? 2 : 0,
+      };
+    };
+    const letterOf = (pitch) => LETTERS[NATURAL.indexOf(pitch % 12)];
+    const plainName = (pitch) => {
+      if (allKeys || set.noteNames === 'none') return '';
+      if (set.noteNames === 'all') return letterOf(pitch);
+      return pitch % 12 === 0 ? `C${Math.floor(pitch / 12) - 1}` : '';
+    };
+    const centres = new Map();
+    const whites = whitePitches.map((pitch, i) => {
+      const hit = look(byPitch.get(pitch));
+      centres.set(pitch, i * keyW + keyW / 2);
+      return {
+        name: `${letterOf(pitch)}${Math.floor(pitch / 12) - 1}`,
+        left: i * keyW,
+        w: keyW,
+        top: hit ? hit.top : 0,
+        bg: hit ? hit.bg : c.white,
+        ink: hit ? '#332921' : '#685E56',
+        weight: hit ? 600 : 500,
+        size: hit ? 15 : 11,
+        label: hit ? hit.label : plainName(pitch),
+      };
+    });
+    const blacks = [];
+    whitePitches.forEach((pitch, i) => {
+      const next = pitch + 1;
+      if (i < keyCount - 1 && !NATURAL.includes(next % 12)) {
+        const hit = look(byPitch.get(next));
+        centres.set(next, (i + 1) * keyW);
+        blacks.push({
+          name: `Black key ${i + 1}`,
+          left: (i + 1) * keyW - blackW / 2,
+          w: blackW,
+          bg: hit ? hit.bg : c.black,
+          label: hit ? hit.label : '',
+        });
+      }
+    });
+
+    const SPLIT_KEYS = 12;
+    const splitW = STAGE_W / SPLIT_KEYS;
+    const rowH = Math.floor((STAGE_H - 2 * 22 - 8) );
+    const splitH = Math.floor(rowH / 2);
+    const rowKeys = (list, fingers) => {
+      const hits = new Map(list.map((tone, i) => [tone.pitch, {
+        tone,
+        finger: String(fingers[i] ?? ''),
+        at: Math.max(tones.findIndex((each) => each.pitch === tone.pitch || each.pitch === tone.pitch + 12), 0),
+      }]));
+      const own = (pitch) => hits.get(pitch);
+      let start = list[0].pitch - 1;
+      while (!NATURAL.includes(start % 12)) start -= 1;
+      const pitches = [];
+      for (let at = start; pitches.length < SPLIT_KEYS; at += 1) if (NATURAL.includes(at % 12)) pitches.push(at);
+      const rowWhites = pitches.map((pitch, i) => {
+        const hit = look(own(pitch));
+        return { name: `${letterOf(pitch)}${Math.floor(pitch / 12) - 1}`, left: i * splitW, w: splitW, top: hit ? hit.top : 0, bg: hit ? hit.bg : c.white, label: hit ? hit.label : '' };
+      });
+      const rowBlacks = [];
+      pitches.forEach((pitch, i) => {
+        const next = pitch + 1;
+        if (i < SPLIT_KEYS - 1 && !NATURAL.includes(next % 12)) {
+          const hit = look(own(next));
+          rowBlacks.push({ name: `Black key ${i + 1}`, left: (i + 1) * splitW - splitW * 0.29, w: splitW * 0.58, bg: hit ? hit.bg : c.black, label: hit ? hit.label : '' });
+        }
+      });
+      return [rowWhites, rowBlacks];
+    };
+    // Fingering always shows both hands, as the left and right play it. A chord one hand can hold
+    // is played by each hand an octave apart; a bigger one is shared between them.
+    const twoRows = splitOn || fingersShown;
+    const handSets = { 1: [1], 2: [1, 5], 3: [1, 3, 5], 4: [1, 2, 3, 5], 5: [1, 2, 3, 4, 5] };
+    const rightList = splitOn ? rhTones : tones;
+    const leftList = splitOn ? lhTones : tones.map((tone) => ({ ...tone, pitch: tone.pitch - 12 }));
+    const rightFingers = handSets[Math.min(rightList.length, 5)];
+    const leftFingers = splitOn ? [5, 1] : handSets[Math.min(leftList.length, 5)].slice().reverse();
+    const [rhWhites, rhBlacks] = rowKeys(rightList, rightFingers);
+    const [lhWhites, lhBlacks] = rowKeys(leftList, leftFingers);
+
+    const played = tones.slice(-5);
+    const fingerSets = { 1: [1], 2: [1, 5], 3: [1, 3, 5], 4: [1, 2, 3, 5], 5: [1, 2, 3, 4, 5] };
+    const fingerNumbers = fingerSets[played.length].slice();
+    const orderInHand = hand === 'right' ? fingerNumbers : fingerNumbers.slice().reverse();
+    const slotX = {};
+    played.forEach((tone, i) => { slotX[orderInHand[i]] = centres.get(tone.pitch) ?? 0; });
+    const known = Object.keys(slotX).map(Number).sort((a, b) => a - b);
+    const fingerX = (n) => {
+      if (slotX[n] !== undefined) return slotX[n];
+      const below = known.filter((k) => k < n).pop();
+      const above = known.find((k) => k > n);
+      if (below === undefined) return slotX[above] + (above - n) * (hand === 'right' ? -keyW : keyW);
+      if (above === undefined) return slotX[below] + (n - below) * (hand === 'right' ? keyW : -keyW);
+      return slotX[below] + ((slotX[above] - slotX[below]) * (n - below)) / (above - below);
+    };
+    const handFingers = [1, 2, 3, 4, 5].map((n) => {
+      const down = slotX[n] !== undefined;
+      const x = fingerX(n);
+      const thumb = n === 1;
+      return {
+        left: x - 9,
+        top: keysH * (down ? (thumb ? 0.62 : 0.5) : thumb ? 0.76 : 0.68),
+        height: keysH,
+        badge: down,
+        badgeLeft: x - 11,
+        badgeTop: keysH * (thumb ? 0.62 : 0.5) + 2,
+        number: String(n),
+      };
+    });
+    const xs = handFingers.map((f) => f.left);
+    const palmLeft = Math.min(...xs) - 8;
+    const palmW = Math.max(...xs) + 26 - palmLeft;
+
+    const WIDE = STAGE_H >= 400;
+    const U = (splitOn ? 6 : 8) * (WIDE ? 1.9 : 1);
+    const LABEL_SIZE = WIDE ? 18 : 12;
+    const STAFF_BOTTOM = splitOn ? STAGE_H * 0.47 : STAGE_H * 0.68;
+    const BASS_BOTTOM = STAGE_H * 0.95;
+    const leftPitches = splitOn ? lhTones.map((tone) => tone.pitch) : [];
+    const noteX = STAGE_W / 2 + 10;
+    const staffLines = [0, 1, 2, 3, 4].map((i) => ({ y: STAFF_BOTTOM - i * U * 2 }));
+    const staffNotes = [];
+    const staffSigns = [];
+    const staffLabels = [];
+    const show = {
+      chord: s.showChord ?? false,
+      position: s.showPosition ?? false,
+      fingers: s.showFingers ?? yes(p.staffFingers),
+      notes: s.showNotes ?? true,
+    };
+    const fingerOf = new Map([...rightList.map((tone, i) => [tone.pitch, rightFingers[i]]), ...(splitOn ? leftList.map((tone, i) => [tone.pitch, leftFingers[i]]) : [])]);
+    const labelRows = [];
+    const ledgerSteps = new Set();
+    let lastStep = null;
+    let shifted = false;
+    tones.forEach((tone, i) => {
+      const octave = Math.floor((tone.pitch - tone.sign) / 12) - 1;
+      const inBass = leftPitches.includes(tone.pitch);
+      const stepUp = tone.letter + octave * 7 - (2 + 4 * 7) + (inBass ? 12 : 0);
+      const bottom = inBass ? BASS_BOTTOM : STAFF_BOTTOM;
+      shifted = lastStep !== null && stepUp - lastStep === 1 && !shifted;
+      lastStep = stepUp;
+      const x = noteX + (shifted ? U * 2.75 : 0);
+      const y = bottom - stepUp * U;
+      staffNotes.push({ x, y: y - U * 0.95 });
+      labelRows.push({ y: y - LABEL_SIZE / 2, inBass, name: tone.name, finger: String(fingerOf.get(tone.pitch) ?? '') });
+      if (tone.sign !== 0) staffSigns.push({ x: noteX - 22 - (i % 2) * 18, y: y - 15, sign: SIGN[tone.sign] });
+      if (stepUp <= -2) for (let at = -2; at >= stepUp; at -= 2) ledgerSteps.add(`${bottom - at * U}:${x}`);
+      if (stepUp >= 10) for (let at = 10; at <= stepUp; at += 2) ledgerSteps.add(`${bottom - at * U}:${x}`);
+    });
+    const LABEL_GAP = LABEL_SIZE + 3;
+    const labelX = noteX + Math.max(54, U * 6.5);
+    [false, true].forEach((bass) => {
+      const rows = labelRows.filter((row) => row.inBass === bass).sort((a, b) => a.y - b.y);
+      const spread = rows.reduce((placed, row) => [...placed, Math.max(row.y, (placed.at(-1) ?? -Infinity) + LABEL_GAP)], []);
+      const lift = rows.length ? (spread.at(-1) - rows.at(-1).y) / 2 : 0;
+      rows.forEach((row, i) => {
+        const y = spread[i] - lift;
+        if (show.notes) staffLabels.push({ x: labelX, y, text: row.name, weight: 600, ink: c.ink });
+        if (show.fingers) staffLabels.push({ x: labelX + (show.notes ? LABEL_SIZE * 2 : 0), y, text: row.finger, weight: 500, ink: c.soft });
+      });
+    });
+    const ledgers = [...ledgerSteps].map((key) => {
+      const [y, x] = key.split(':').map(Number);
+      return { x: x - U, y };
+    });
+
+    const INTERVALS = {
+      1: 'Root', 2: 'Major second', '♭3': 'Minor third', 3: 'Major third', 4: 'Perfect fourth', '♭5': 'Diminished fifth',
+      5: 'Perfect fifth', '♯5': 'Augmented fifth', 6: 'Major sixth', '♭♭7': 'Diminished seventh', '♭7': 'Minor seventh',
+      7: 'Major seventh', '♭9': 'Minor ninth', 9: 'Major ninth', '♯9': 'Augmented ninth', 11: 'Perfect eleventh',
+      '♯11': 'Augmented eleventh', 13: 'Major thirteenth',
+    };
+    const toneAt = Math.min(s.toneAt ?? 0, ordered.length - 1);
+    const toneChips = ordered.map((tone, i) => ({
+      text: tone.name,
+      degree: tone.degree,
+      bg: ROLE[tone.number] ?? ROLE[7],
+      ring: i === toneAt ? `0 0 0 2px ${c.ink}` : 'none',
+      pick: () => this.setState({ toneAt: i }),
+    }));
+    const toneCaption = `${ordered[toneAt].name}: ${INTERVALS[ordered[toneAt].degree] ?? ordered[toneAt].degree}`;
+    const tensions = tensionList.filter((each) => !degreesOf.includes(each)).map((token) => {
+      const on = added.includes(token);
+      return {
+        text: pretty(token),
+        note: buildChord(rootPc, flats, `1 ${token}`, 0).find((tone) => tone.number !== 1).name,
+        bg: on ? ROLE[Number(token.replace(/[b#]/g, ''))] : c.fill,
+        ink: on ? '#332921' : c.ink,
+        pick: () => change({ added: on ? added.filter((each) => each !== token) : [...added, token] }),
+      };
+    });
+    const avoidToken = minorish ? 'b13' : dominant ? '' : '11';
+    const avoid = avoidToken && !degreesOf.includes(avoidToken) ? [{
+      text: pretty(avoidToken),
+      note: buildChord(rootPc, flats, `1 ${avoidToken}`, 0).find((tone) => tone.number !== 1).name,
+    }] : [];
+
+    const tabs = [['keys', 'Keys'], ['staff', 'Staff'], ['fingers', 'Fingering'], ['built', 'Notes']].map(([id, name]) => ({
+      name,
+      chosen: id === page,
+      ink: id === page ? c.ink : c.soft,
+      weight: id === page ? 600 : 400,
+      pick: () => this.setState({ page: id }),
+    }));
+    const wheel = (items, at) => items.map((item, i) => {
+      const distance = Math.abs(i - at);
+      return {
+        ...item,
+        y: (REACH + i - at) * 44,
+        show: distance <= REACH,
+        opacity: distance === 0 ? 1 : Math.max(0.72 - (distance - 1) * 0.22, 0.28),
+        weight: distance === 0 ? 600 : 400,
+        size: distance === 0 ? 19 : 17,
+      };
+    }).filter((item) => item.show);
+    const rootWheel = wheel(names.map(([letter, sign], pc) => ({ text: spell(letter, sign), pick: () => change({ root: pc }) })), rootPc);
+    const familyWheel = wheel(FAMILIES.map(([name, list]) => ({ text: name, pick: () => change({ chord: list[0][0], added: [] }) })), familyAt);
+    const typeList = FAMILIES[familyAt][1];
+    const typeWheel = wheel(typeList.map(([key, suffix]) => ({ text: rootName + suffix, pick: () => change({ chord: key, added: [] }) })), typeList.findIndex((each) => each[0] === chordKey));
+    const voicingWheel = wheel(VOICINGS.map(([id, name, , bar]) => ({ text: name, dim: bar ? 'line-through' : 'none', pick: () => change({ voicing: id }) })), voicingAt);
+
+    const cycle = (key, list) => () => {
+      const now = set[key];
+      this.setState({ [key]: list[(list.indexOf(now) + 1) % list.length] });
+    };
+    const KEY_SIZE = { fit: 'Fit to music', large: 'Large', all: 'All keys' };
+    const NOTE_NAMES = { c: 'On every C', all: 'On every key', none: 'Hidden' };
+    const SWIPE = { scroll: 'Scroll', glissando: 'Glissando' };
+    const PEDALS = { sustain: 'Sustain only', all: 'All three' };
+    const PLAY_HANDS = { both: 'Both', right: 'Right' };
+    const toggle = (key) => () => this.setState({ [key]: !set[key] });
+    const nextOf = (list, now) => list[(list.indexOf(now) + 1) % list.length];
+    const METERS = ['2/4','3/4','4/4','5/4','6/4','2/2','3/8','5/8','6/8','7/8','9/8','12/8'];
+    const tempo = s.tempo ?? 92;
+    const meter = s.meter ?? '4/4';
+    const beatCount = parseInt(meter, 10);
+    const metroOn = s.metronome ?? yes(p.metroOn);
+    const rampOn = s.rampOn ?? yes(p.rampOn);
+    const gapOn = s.gapOn ?? yes(p.gapOn);
+    const barNow = s.bar ?? 0;
+    const gapPlay = s.gapPlay ?? 2;
+    const gapMute = s.gapMute ?? 2;
+    const gapSilent = gapOn && metroOn && barNow % (gapPlay + gapMute) >= gapPlay;
+    const barsText = (count) => `${count} ${count === 1 ? 'bar' : 'bars'}`;
+    const tempoNow = rampOn && metroOn ? this.rampTempo({ ...s, rampOn }, barNow) : tempo;
+    const a4 = s.a4 ?? 440;
+    const cents = s.cents ?? 6;
+    const inTune = Math.abs(cents) <= 5;
+    const beatNow = s.beat ?? (metroOn ? 1 : -1);
+    const levels = s.levels ?? {};
+    const LEVEL_NAMES = ['Accent', 'Beat', 'Silent'];
+    const beatSquares = Array.from({ length: beatCount }, (_, i) => {
+      const level = levels[i] ?? (i === 0 ? 0 : 1);
+      return {
+        name: `Beat ${i + 1}: ${LEVEL_NAMES[level]}`,
+        fillH: [26, 15, 0][level],
+        bg: gapSilent ? c.line : beatNow === i && level < 2 ? accent : c.soft,
+        pick: () => this.setState({ levels: { ...levels, [i]: (level + 1) % 3 } }),
+      };
+    });
+    const setTempo = (bpm) => {
+      const next = Math.min(300, Math.max(30, bpm));
+      this.setState({ tempo: next });
+      if (metroOn && !rampOn) this.runMetronome(next, beatCount);
+    };
+    const nudge = (key, now, by, min, max) => () => this.setState({ [key]: Math.min(max, Math.max(min, now + by)) });
+    const switchLook = (on) => ({ bg: on ? c.on : c.band, knob: on ? 20 : 2 });
+
+    const go = (name) => () => {
+      clearInterval(this.tunerTimer);
+      this.setState({ overlay: name });
+    };
+    const pedal = s.pedal ?? {};
+    const pedalRows = [['sustain', 'Sustain', 'Hold, or tap to latch'], ['sostenuto', 'Sostenuto', 'Sustains only the notes held'], ['soft', 'Soft', 'Softens the tone while held']].map(([id, name, detail]) => ({
+      name,
+      detail,
+      ...switchLook(Boolean(pedal[id])),
+      pick: () => this.setState({ pedal: { ...pedal, [id]: !pedal[id] } }),
+    }));
+    const latched = Boolean(pedal.sustain);
+
+    const play = () => {
+      this.stopTimers();
+      if (mode === 'chord') {
+        this.setState({ mode: 'rest', step: 0 });
+        return;
+      }
+      this.setState({ mode: 'chord', step: 0 });
+      this.timer = setTimeout(() => this.setState({ mode: 'rest', step: 0 }), 1800);
+    };
+    const arpeggio = () => {
+      this.stopTimers();
+      if (mode === 'arpeggio') {
+        this.setState({ mode: 'rest', step: 0 });
+        return;
+      }
+      let at = 0;
+      this.setState({ mode: 'arpeggio', step: at });
+      this.ticker = setInterval(() => {
+        at += 1;
+        if (at >= tones.length) {
+          clearInterval(this.ticker);
+          this.timer = setTimeout(() => this.setState({ mode: 'rest', step: 0 }), 900);
+          return;
+        }
+        this.setState({ mode: 'arpeggio', step: at });
+      }, 340);
+    };
+    const heldLine = yes(p.held) ? 'You’re holding this on your MIDI keyboard' : '';
+
+    return {
+      c,
+      accent,
+      symbol,
+      nameLine: heldLine || (voicing === 'close' ? [type[3], addedText].filter(Boolean).join(' ') : `${type[3]}, ${voicingRow[1]}`),
+      nameSize: symbol.length <= 2 ? 96 : symbol.length <= 4 ? 80 : symbol.length <= 6 ? 60 : symbol.length <= 8 ? 46 : 38,
+      slash,
+      staffLabels,
+      chordOverStaff: show.chord,
+      positionUnderStaff: show.position,
+      chordLabelY: STAFF_BOTTOM - U * 8 - 30,
+      positionLabelY: STAFF_BOTTOM + 12,
+      chordShown: switchLook(show.chord),
+      flipChordShown: () => this.setState({ showChord: !show.chord }),
+      positionShown: switchLook(show.position),
+      flipPositionShown: () => this.setState({ showPosition: !show.position }),
+      fingersShown: switchLook(show.fingers),
+      flipFingersShown: () => this.setState({ showFingers: !show.fingers }),
+      notesShown: switchLook(show.notes),
+      flipNotesShown: () => this.setState({ showNotes: !show.notes }),
+      inversionLabel: splitOn ? 'Top note' : ['Root position', '1st inversion', '2nd inversion', '3rd inversion'][inversion],
+      prevInversion: () => change({ inversion: (inversion + inversionCount - 1) % inversionCount }),
+      nextInversion: () => change({ inversion: (inversion + 1) % inversionCount }),
+      isKeys: page === 'keys' || page === 'fingers',
+      splitOn,
+      twoRows,
+      singleKeys: !twoRows,
+      splitH,
+      splitBlackH: splitH * 0.6,
+      rhWhites,
+      rhBlacks,
+      lhWhites,
+      lhBlacks,
+      bassLines: splitOn ? [0, 1, 2, 3, 4].map((i) => ({ y: BASS_BOTTOM - i * U * 2 })) : [],
+      bassClefY: BASS_BOTTOM - U * 10.3,
+      bassSize: U * 7.7,
+      bassLine: U * 10.3,
+      ledgerW: U * 4.75,
+      labelSize: LABEL_SIZE,
+      handsShown,
+      isStaff: page === 'staff',
+      isBuilt: page === 'built',
+      showPedal: page === 'keys' || page === 'fingers',
+      keysH,
+      keysTop,
+      whites,
+      blacks,
+      blackH: keysH * 0.6,
+      handFingers,
+      palmLeft,
+      palmW,
+      palmTop: keysH * 0.86,
+      palmH: keysH * 0.3,
+      showStrip: large,
+      stripLeft: `${Math.max(((startPitch - 21) / 87) * 100, 0)}%`,
+      staffLines,
+      staffNotes,
+      staffSigns,
+      ledgers,
+      clefY: STAFF_BOTTOM - U * 7.75,
+      clefSize: U * 10.25,
+      noteW: U * 2.75,
+      noteH: U * 1.9,
+      toneChips,
+      toneCaption,
+      tensions,
+      hasTensions: tensions.length > 0,
+      avoid,
+      hasAvoid: avoid.length > 0,
+      tabs,
+      rootWheel,
+      familyWheel,
+      typeWheel,
+      voicingWheel,
+      voicingName: voicingRow[1],
+      voicingAbout: voicingRow[3] || voicingRow[2],
+      wheelH: (REACH * 2 + 1) * 44,
+      bandTop: REACH * 44,
+      noOverlay: overlay === 'none',
+      isChange: overlay === 'change',
+      isVoicing: overlay === 'voicing',
+      isMore: overlay === 'more',
+      isKeyboard: overlay === 'keyboard',
+      isPractise: overlay === 'practise',
+      isTools: overlay === 'tools',
+      isPedals: overlay === 'pedals',
+      isStaffSettings: overlay === 'staffSettings',
+      scrimOn: ['more', 'keyboard', 'practise', 'tools', 'pedals', 'staffSettings', 'metroSettings', 'tuner'].includes(overlay),
+      close: go('none'),
+      toChange: go('change'),
+      toVoicing: go('voicing'),
+      toMore: go('more'),
+      toKeyboard: go('keyboard'),
+      toPractise: go('practise'),
+      toTools: go('tools'),
+      toPedals: go('pedals'),
+      toStaffSettings: go('staffSettings'),
+      pressPedal: set.pedalSet === 'all' ? go('pedals') : () => this.setState({ pedal: { ...pedal, sustain: !pedal.sustain } }),
+      pedalBg: latched ? accent : c.fill,
+      pedalInk: latched ? c.onAccent : c.ink,
+      pedalRows,
+      keySizeValue: KEY_SIZE[set.keySize],
+      nextKeySize: cycle('keySize', ['fit', 'large', 'all']),
+      noteNamesValue: NOTE_NAMES[set.noteNames],
+      nextNoteNames: cycle('noteNames', ['c', 'all', 'none']),
+      swipeValue: SWIPE[set.swipe],
+      nextSwipe: cycle('swipe', ['scroll', 'glissando']),
+      pedalSetValue: PEDALS[set.pedalSet],
+      nextPedalSet: cycle('pedalSet', ['sustain', 'all']),
+      playHandsValue: PLAY_HANDS[set.playHands],
+      nextPlayHands: cycle('playHands', ['both', 'right']),
+      markNotes: switchLook(set.markNotes),
+      flipMarkNotes: toggle('markNotes'),
+      chordSymbol: switchLook(set.chordSymbol),
+      flipChordSymbol: toggle('chordSymbol'),
+      autoplay: switchLook(set.autoplay),
+      flipAutoplay: toggle('autoplay'),
+      showHandsLook: switchLook(set.showHands),
+      flipShowHands: toggle('showHands'),
+      alsoWritten: ({ '': ['M', 'maj'], m: ['−', 'min'], maj7: ['M7', 'Δ7'], m7: ['−7', 'min7'], dim: ['°'], aug: ['+'], dim7: ['°7'], 'm7♭5': ['ø7'] }[type[1]] ?? []).map((each) => rootName + each).join(' · '),
+      hasAlso: ['', 'm', 'maj7', 'm7', 'dim', 'aug', 'dim7', 'm7♭5'].includes(type[1]),
+      spelling: flats ? 'Show sharps' : 'Show flats',
+      flip: () => this.setState({ flats: !flats }),
+      tempo: tempoNow,
+      slideTempo: (event) => setTempo(Number(event.target.value)),
+      tapTempo: () => {
+        const now = Date.now();
+        const taps = [...(this.taps ?? []).filter((at) => now - at < 2500), now].slice(-5);
+        this.taps = taps;
+        if (taps.length > 1) setTempo(Math.round(60000 / ((taps.at(-1) - taps[0]) / (taps.length - 1))));
+      },
+      metroOn,
+      metroOff: !metroOn,
+      metroDetail: gapSilent ? 'Keep counting' : rampOn && metroOn ? `Now ${tempoNow} BPM, bar ${barNow + 1}` : `${tempoNow} BPM · ${meter}`,
+      metroLabel: metroOn ? 'Stop metronome' : 'Start metronome',
+      flipMetro: () => {
+        if (metroOn) {
+          clearInterval(this.metroTimer);
+          this.setState({ metronome: false, beat: -1 });
+        } else {
+          const start = rampOn ? this.rampTempo({ ...s, rampOn }, 0) : tempo;
+          this.setState({ metronome: true, beat: 0, bar: 0, rampOn });
+          this.runMetronome(start, beatCount);
+        }
+      },
+      beatSquares,
+      meter,
+      nextMeter: () => {
+        const next = nextOf(METERS, meter);
+        this.setState({ meter: next, levels: {}, beat: metroOn ? 0 : -1 });
+        if (metroOn) this.runMetronome(tempoNow, parseInt(next, 10));
+      },
+      clickSound: s.clickSound ?? 'Click',
+      nextClickSound: () => this.setState({ clickSound: nextOf(['Click', 'Beep', 'Drum kit'], s.clickSound ?? 'Click') }),
+      subdivision: s.subdivision ?? '1',
+      nextSubdivision: () => this.setState({ subdivision: nextOf(['1', '2', '3 (triplets)', '4', 'Swing'], s.subdivision ?? '1') }),
+      rampLook: switchLook(rampOn),
+      flipRamp: () => this.setState({ rampOn: !rampOn }),
+      rampStatus: rampOn && metroOn ? `Now ${tempoNow} BPM, bar ${barNow + 1}` : '',
+      rampLive: rampOn && metroOn,
+      rampOn,
+      rampFrom: `${s.rampFrom ?? 80} BPM`,
+      rampFromDown: nudge('rampFrom', s.rampFrom ?? 80, -1, 30, 300),
+      rampFromUp: nudge('rampFrom', s.rampFrom ?? 80, 1, 30, 300),
+      rampTo: `${s.rampTo ?? 120} BPM`,
+      rampToDown: nudge('rampTo', s.rampTo ?? 120, -1, 30, 300),
+      rampToUp: nudge('rampTo', s.rampTo ?? 120, 1, 30, 300),
+      rampStep: `${s.rampStep ?? 5} BPM`,
+      rampStepDown: nudge('rampStep', s.rampStep ?? 5, -1, 1, 20),
+      rampStepUp: nudge('rampStep', s.rampStep ?? 5, 1, 1, 20),
+      rampEvery: barsText(s.rampEvery ?? 4),
+      rampEveryDown: nudge('rampEvery', s.rampEvery ?? 4, -1, 1, 16),
+      rampEveryUp: nudge('rampEvery', s.rampEvery ?? 4, 1, 1, 16),
+      gapLook: switchLook(gapOn),
+      flipGap: () => this.setState({ gapOn: !gapOn }),
+      gapOn,
+      gapPlay: barsText(gapPlay),
+      gapPlayDown: nudge('gapPlay', gapPlay, -1, 1, 8),
+      gapPlayUp: nudge('gapPlay', gapPlay, 1, 1, 8),
+      gapMute: barsText(gapMute),
+      gapMuteDown: nudge('gapMute', gapMute, -1, 1, 8),
+      gapMuteUp: nudge('gapMute', gapMute, 1, 1, 8),
+      tunerReading: inTune ? 'In tune' : `${Math.abs(cents)} cents ${cents > 0 ? 'sharp' : 'flat'}`,
+      tunerHz: `${(a4 * 2 ** (cents / 1200)).toFixed(1)} Hz`,
+      needleLeft: 50 + cents,
+      needleInk: inTune ? c.toolInk : c.ink,
+      tunerWorks: !yes(p.tunerRefused),
+      tunerRefused: yes(p.tunerRefused),
+      a4Text: `${a4} Hz`,
+      a4Down: nudge('a4', a4, -1, 415, 466),
+      a4Up: nudge('a4', a4, 1, 415, 466),
+      isTuner: overlay === 'tuner',
+      toTuner: () => {
+        this.setState({ overlay: 'tuner', cents: 6 });
+        clearInterval(this.tunerTimer);
+        this.tunerTimer = setInterval(() => {
+          const now = this.state?.cents ?? 6;
+          this.setState({ cents: Math.max(-30, Math.min(30, Math.round(now * 0.8 + Math.random() * 12 - 6))) });
+        }, 400);
+      },
+      metroPlain: overlay === 'metroSettings' && !rampOn && !gapOn,
+      metroRamp: overlay === 'metroSettings' && rampOn && !gapOn,
+      metroGap: overlay === 'metroSettings' && !rampOn && gapOn,
+      metroBoth: overlay === 'metroSettings' && rampOn && gapOn,
+      isMetroSettings: overlay === 'metroSettings',
+      toMetroSettings: go('metroSettings'),
+      chordOn,
+      chordOff: !chordOn,
+      arpOn,
+      arpBg: arpOn ? accent : c.fill,
+      arpInk: arpOn ? c.onAccent : c.ink,
+      arpLabel: arpOn ? 'Stop' : 'Arpeggio',
+      play,
+      arpeggio,
+    };
+  }
+}
+</script>
+</body>
+</html>
