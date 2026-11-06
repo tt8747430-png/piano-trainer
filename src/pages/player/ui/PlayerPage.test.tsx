@@ -240,7 +240,15 @@ describe('Player', () => {
     const names = within(dock)
       .getAllByRole('button')
       .map((button) => button.getAttribute('aria-label'))
-    expect(names).toEqual(['Loop', 'Restart', 'Back', 'Play', 'Next', 'Pace: 100%', 'Metronome'])
+    expect(names).toEqual([
+      'Loop',
+      'Restart',
+      'Back',
+      'Play',
+      'Next',
+      expect.stringMatching(/^Pace: 100%/),
+      'Metronome',
+    ])
     expect(within(dock).getByRole('button', { name: 'Loop' })).toHaveAttribute(
       'aria-pressed',
       'false',
@@ -525,7 +533,7 @@ describe('Player', () => {
     ).toBeInTheDocument()
     expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1)
     expect(screen.getByRole('button', { name: 'Close' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Pace: 100%' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /^Pace: 100%/ })).toBeInTheDocument()
     expect(await screen.findByRole('button', { name: 'Bar 1: G' })).toBeInTheDocument()
     expect(progressStore.getState().practised.bz5).toBeDefined()
   })
@@ -534,7 +542,7 @@ describe('Player', () => {
     const { router } = await renderApp(
       '/play/bz5?transpose=9&tempo=999&mode=step&loop=9-3&swing=yes',
     )
-    expect(await screen.findByRole('button', { name: 'Pace: 100%' })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: /^Pace: 100%/ })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Loop' })).toHaveAttribute('aria-pressed', 'false')
     expect(router.state.location.search).toEqual({})
   })
@@ -594,7 +602,7 @@ describe('Player', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
     const entries = router.history.length
-    await user.click(await screen.findByRole('button', { name: 'Pace: 100%' }))
+    await user.click(await screen.findByRole('button', { name: /^Pace: 100%/ }))
     await user.click(await screen.findByRole('option', { name: /^Wait mode/ }))
     expect(router.state.location.search).toMatchObject({ mode: 'wait' })
     expect(router.history.length).toBe(entries)
@@ -604,7 +612,7 @@ describe('Player', () => {
     ).toBeInTheDocument()
     await user.click(screen.getByRole('option', { name: '50% speed' }))
     expect(router.state.location.search).toEqual({ tempo: 36 })
-    expect(await screen.findByRole('button', { name: 'Pace: 50%' })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: /^Pace: 50%/ })).toBeInTheDocument()
   })
 
   it('waits for the notes in Wait mode once playing, says a wrong key, and takes the right ones from MIDI', async () => {

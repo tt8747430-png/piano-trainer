@@ -79,7 +79,9 @@ export function PaceButton({
         render={
           <Button
             variant="ghost"
-            aria-label={t('pace.of', { value })}
+            aria-label={
+              listening ? t('pace.ofTempo', { value, tempo: shownTempo }) : t('pace.of', { value })
+            }
             title={t('pace.title')}
             className={TRIGGER}
           />

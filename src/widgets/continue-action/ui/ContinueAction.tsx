@@ -60,13 +60,12 @@ export function ContinueAction() {
       {step.kind === 'piece' ? (
         <PieceLink
           entry={pieceById(step.pieceId) ?? { id: step.pieceId, kind: 'song' }}
-          aria-label={`${t('continue')} ${title}`}
           className={className}
         >
           {face}
         </PieceLink>
       ) : (
-        <StepLink step={step} aria-label={`${t('continue')} ${title}`} className={className}>
+        <StepLink step={step} className={className}>
           {face}
         </StepLink>
       )}

@@ -113,7 +113,6 @@ function UpNextLink({ face, first }: { face: Face; first: boolean }) {
     defaultTagName: 'a',
     render: face.link,
     props: {
-      'aria-label': `${face.title}. ${face.why}`,
       className: cn(
         'group flex min-h-19 w-full items-center gap-3 card px-4 py-3 transition-colors duration-200 ease-out hover:border-input',
         first && 'bg-gradient-to-b from-secondary/60 to-card',
@@ -130,11 +129,12 @@ function UpNextLink({ face, first }: { face: Face; first: boolean }) {
           >
             <Icon className="size-5" />
           </span>
-          <span className="flex min-w-0 flex-1 flex-col">
-            <span className="text-sm text-muted-foreground">{face.why}</span>
+          {/* Its title read first, its reason shown above it. */}
+          <span className="flex min-w-0 flex-1 flex-col-reverse">
             <span className="font-display text-lg leading-tight font-semibold text-balance">
               {face.title}
             </span>
+            <span className="text-sm text-muted-foreground">{face.why}</span>
           </span>
           <OpensMark />
         </>

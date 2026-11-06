@@ -25,7 +25,8 @@ export function SidebarAccount({ collapsed }: { collapsed: boolean }) {
     <Link
       to="/profile"
       state={OPEN_PLAINLY}
-      aria-label={t('nav.profile')}
+      // Collapsed, the link is its picture alone and its name is said; open, its words name it.
+      aria-label={collapsed ? t('nav.profile') : undefined}
       {...current(under(['/profile', '/account']))}
       className={cn(
         'flex min-h-12 min-w-0 items-center gap-3 rounded-control choice focus-visible:-outline-offset-3',

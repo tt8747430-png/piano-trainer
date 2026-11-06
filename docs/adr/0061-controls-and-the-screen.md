@@ -64,7 +64,8 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
   that opens it; a greyed control says why in its tooltip; a term's meaning is its key's tooltip. No sentence repeats
   what a label, an icon or the layout already says.
 - **The same at every size.** A control has the same name and does the same thing on a phone and a laptop. A size
-  changes where it stands, never what it is or says. An icon button is named by its tooltip and its accessible name.
+  changes where it stands, never what it is or says. An icon button is named by its tooltip and its accessible name. A control with words is named by
+  them: an `aria-label` only adds to its visible text, never replaces it (WCAG 2.5.3, axe in the e2e).
 - **Secondary sections fold** from their headings (`FoldSection` over `FoldBody`, sliding, inert while folded); what
   is folded is saved by section id (`foldedSections`) and stays folded on every visit.
 - **The screen's bar** (`ScreenHeader`) is a child of the page's root, a page's tabs its second row; it hides while
@@ -132,3 +133,5 @@ A new option has one obvious form by this rule. A test reaches a folded action b
   the hands' colours (2026-11-06).
 - r36 (R36-2) — The Player's Hands is the foot's, for every mode; its transport's Tempo is Pace (2026-11-06).
 - r36 (R36-3) — Popovers, menus, a select's list and tooltips keep inside the safe area (2026-11-06).
+- r36 (R36-3) — A control's name holds its visible words: the sidebar's Profile, Continue, Up next's tiles,
+  and Pace's metronome mark while it listens (2026-11-06).

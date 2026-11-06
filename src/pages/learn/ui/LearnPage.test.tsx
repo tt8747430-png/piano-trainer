@@ -13,7 +13,7 @@ describe('Learn', () => {
     await renderApp('/')
     expect(await screen.findByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
     expect(
-      await screen.findByRole('link', { name: 'Continue Finding your way on the keys' }),
+      await screen.findByRole('link', { name: /^Continue.*Finding your way on the keys/ }),
     ).toHaveAttribute('href', '/lessons/finding-home')
   })
 
@@ -27,7 +27,10 @@ describe('Learn', () => {
     )
     const second = courseById('gorshkov')?.lessons[1]
     expect(
-      await screen.findByRole('link', { name: `Continue ${second?.title.en}` }),
+      await screen.findByRole('link', {
+        name: (name) =>
+          second !== undefined && name.startsWith('Continue') && name.includes(second.title.en),
+      }),
     ).toHaveAttribute('href', `/courses/gorshkov/${second?.id}`)
   })
 

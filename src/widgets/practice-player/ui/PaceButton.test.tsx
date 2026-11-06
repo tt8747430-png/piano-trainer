@@ -25,7 +25,7 @@ function renderPace(props: Partial<Parameters<typeof PaceButton>[0]> = {}) {
 describe('PaceButton', () => {
   it('reads as a metronome mark in Listen, its share of the piece’s tempo in its name (R32)', () => {
     renderPace({ tempo: 54, shownTempo: 54 })
-    expect(screen.getByRole('button', { name: 'Pace: 75%' })).toHaveTextContent(/= 54$/)
+    expect(screen.getByRole('button', { name: /^Pace: 75%/ })).toHaveTextContent(/= 54$/)
   })
 
   it('names the mode played at the learner’s own pace (R36)', () => {
@@ -36,7 +36,7 @@ describe('PaceButton', () => {
   it('offers Wait mode and Interpret at your own pace, then the speeds to listen and play along at (R36, flowkey’s)', async () => {
     const user = userEvent.setup()
     renderPace()
-    await user.click(screen.getByRole('button', { name: 'Pace: 100%' }))
+    await user.click(screen.getByRole('button', { name: /^Pace: 100%/ }))
     expect(await screen.findByRole('dialog', { name: 'Pace' })).toBeInTheDocument()
     const own = screen.getByRole('group', { name: 'At your own pace' })
     expect(
@@ -61,7 +61,7 @@ describe('PaceButton', () => {
   it('chooses a mode at the learner’s own pace, and closes', async () => {
     const user = userEvent.setup()
     const { onMode } = renderPace()
-    await user.click(screen.getByRole('button', { name: 'Pace: 100%' }))
+    await user.click(screen.getByRole('button', { name: /^Pace: 100%/ }))
     await user.click(await screen.findByRole('option', { name: /^Interpret/ }))
     expect(onMode).toHaveBeenCalledWith('follow')
     expect(screen.queryByRole('dialog', { name: 'Pace' })).not.toBeInTheDocument()
@@ -84,14 +84,14 @@ describe('PaceButton', () => {
   it('says Wait mode and Interpret need a piano where none is there to play', async () => {
     const user = userEvent.setup()
     renderPace({ piano: false })
-    await user.click(screen.getByRole('button', { name: 'Pace: 100%' }))
+    await user.click(screen.getByRole('button', { name: /^Pace: 100%/ }))
     expect(await screen.findAllByText('Connect a piano or show the Keyboard.')).toHaveLength(2)
   })
 
   it('sets the speed in 5% steps of the piece’s tempo, from 50% to 200%, listening at it (ADR 0105)', async () => {
     const user = userEvent.setup()
     const { onListen } = renderPace()
-    await user.click(screen.getByRole('button', { name: 'Pace: 100%' }))
+    await user.click(screen.getByRole('button', { name: /^Pace: 100%/ }))
     await screen.findByRole('dialog', { name: 'Pace' })
     // Base UI shows a thumb once it has measured the track, which jsdom never lays out.
     const speed = screen.getByRole('slider', { hidden: true })
@@ -113,7 +113,7 @@ describe('PaceButton', () => {
   it('says a tempo at 200% and its beats a minute, its slider at its end', async () => {
     const user = userEvent.setup()
     renderPace({ tempo: 144, shownTempo: 144 })
-    await user.click(screen.getByRole('button', { name: 'Pace: 200%' }))
+    await user.click(screen.getByRole('button', { name: /^Pace: 200%/ }))
     await screen.findByRole('dialog', { name: 'Pace' })
     expect(screen.getByRole('slider', { hidden: true })).toHaveAttribute('aria-valuenow', '200')
     expect(screen.getByText('200% · 144 BPM')).toBeInTheDocument()
@@ -122,7 +122,7 @@ describe('PaceButton', () => {
   it('puts a tempo between two steps on the nearer, saying its own share', async () => {
     const user = userEvent.setup()
     renderPace({ tempo: 60, shownTempo: 60 })
-    await user.click(screen.getByRole('button', { name: 'Pace: 83%' }))
+    await user.click(screen.getByRole('button', { name: /^Pace: 83%/ }))
     await screen.findByRole('dialog', { name: 'Pace' })
     expect(screen.getByRole('slider', { hidden: true })).toHaveAttribute('aria-valuenow', '85')
     expect(screen.getByText('83% · 60 BPM')).toBeInTheDocument()
@@ -131,7 +131,7 @@ describe('PaceButton', () => {
   it('scrolls within the screen’s height where the screen is short (a phone on its side)', async () => {
     const user = userEvent.setup()
     renderPace()
-    await user.click(screen.getByRole('button', { name: 'Pace: 100%' }))
+    await user.click(screen.getByRole('button', { name: /^Pace: 100%/ }))
     const dialog = await screen.findByRole('dialog', { name: 'Pace' })
     expect(dialog).toHaveClass('max-h-(--available-height)', 'overflow-y-auto')
   })
@@ -139,7 +139,7 @@ describe('PaceButton', () => {
   it('offers speed training only below the piece’s tempo, in Listen', async () => {
     const user = userEvent.setup()
     renderPace({ tempo: 54, shownTempo: 54 })
-    await user.click(screen.getByRole('button', { name: 'Pace: 75%' }))
+    await user.click(screen.getByRole('button', { name: /^Pace: 75%/ }))
     expect(await screen.findByRole('switch', { name: /Speed training/ })).toBeInTheDocument()
   })
 
@@ -155,7 +155,7 @@ describe('PaceButton', () => {
     const user = userEvent.setup()
     act(() => void i18n.changeLanguage('ru'))
     renderPace({ tempo: 54, shownTempo: 54 })
-    await user.click(screen.getByRole('button', { name: 'Темп: 75 %' }))
+    await user.click(screen.getByRole('button', { name: /^Темп: 75\s%/ }))
     expect(await screen.findByRole('option', { name: 'Скорость 50 %' })).toBeInTheDocument()
     expect(screen.getByRole('option', { name: /^Режим ожидания/ })).toBeInTheDocument()
   })

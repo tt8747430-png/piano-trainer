@@ -427,6 +427,8 @@ export const player = {
   pace: {
     title: 'Pace',
     of: 'Pace: {{value}}',
+    // Listening, the button shows the tempo as a metronome mark: its name says it too (WCAG 2.5.3).
+    ofTempo: 'Pace: {{value}}, ♩ = {{tempo}}',
     ownPace: 'At your own pace',
     playAlong: 'Listen and play along',
     needsPiano: 'Connect a piano or show the Keyboard.',

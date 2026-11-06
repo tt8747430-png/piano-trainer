@@ -395,6 +395,7 @@ export const player: LocaleResources['player'] = {
   pace: {
     title: 'Темп',
     of: 'Темп: {{value}}',
+    ofTempo: 'Темп: {{value}}, ♩ = {{tempo}}',
     ownPace: 'В своём темпе',
     playAlong: 'Слушать и подыгрывать',
     needsPiano: 'Подключите пианино или включите клавиатуру.',

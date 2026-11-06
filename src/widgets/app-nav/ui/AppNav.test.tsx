@@ -27,9 +27,9 @@ describe('AppNav', () => {
     const bar = within(await nav())
     expect(
       bar.getAllByRole('link').map((link) => link.getAttribute('aria-label') ?? link.textContent),
-    ).toEqual(['Learn', 'Songs', 'Practice', 'Profile', 'Settings'])
+    ).toEqual(['Learn', 'Songs', 'Practice', expect.stringMatching(/Profile$/), 'Settings'])
     expect(bar.getByRole('button', { name: 'Search' })).toBeInTheDocument()
-    expect(bar.getByRole('link', { name: 'Profile' })).toHaveTextContent('Guest')
+    expect(bar.getByRole('link', { name: /Profile$/ })).toHaveTextContent('Guest')
     // Recents: the songs opened last, none until one is.
     expect(bar.queryByRole('region', { name: 'Recents' })).toBeNull()
     act(() =>
@@ -48,7 +48,7 @@ describe('AppNav', () => {
     await renderApp('/settings')
     const links = within(await nav())
     expect(links.getByRole('link', { name: 'Settings' })).toHaveAttribute('aria-current', 'page')
-    expect(links.getByRole('link', { name: 'Profile' })).not.toHaveAttribute('aria-current')
+    expect(links.getByRole('link', { name: /Profile$/ })).not.toHaveAttribute('aria-current')
   })
 
   it('collapses to its icons, each place still named, and opens again', async () => {

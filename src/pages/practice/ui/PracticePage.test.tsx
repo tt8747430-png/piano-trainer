@@ -65,11 +65,8 @@ describe('Practice', () => {
     expect(
       within(start)
         .getAllByRole('link')
-        .map((link) => link.getAttribute('aria-label')),
-    ).toEqual([
-      'Five-finger position. Recommended first step',
-      'Chords. Build any chord from its root',
-    ])
+        .map((link) => link.textContent),
+    ).toEqual(['Five-finger positionRecommended first step', 'ChordsBuild any chord from its root'])
   })
 
   it('puts the skills due and the page last opened, however reached, under Up next (R32)', async () => {
@@ -83,8 +80,8 @@ describe('Practice', () => {
     expect(
       within(next)
         .getAllByRole('link')
-        .map((link) => link.getAttribute('aria-label')),
-    ).toEqual(['Quiz review. 1 skill due for review', 'Progressions. Last opened in Practice'])
+        .map((link) => link.textContent),
+    ).toEqual(['Quiz review1 skill due for review', 'ProgressionsLast opened in Practice'])
   })
 
   it('has no tabs: a page is reached one way', async () => {

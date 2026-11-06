@@ -203,7 +203,7 @@ describe('the app shell', () => {
     const user = userEvent.setup()
     await renderApp('/')
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
-    await user.click(within(nav).getByRole('link', { name: 'Profile' }))
+    await user.click(within(nav).getByRole('link', { name: /Profile$/ }))
     await screen.findByRole('heading', { level: 1, name: 'Profile' })
     await user.click(
       within(screen.getByRole('main')).getAllByRole('link', { name: 'Settings' })[0]!,
