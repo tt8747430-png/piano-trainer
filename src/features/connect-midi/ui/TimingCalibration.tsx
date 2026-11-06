@@ -7,8 +7,10 @@ import { Button } from '@/shared/ui/primitives/button'
 import { isMidiConnected, useMidiConnection } from '../use-midi-connection'
 import { useTimingCalibration, type Calibration } from '../use-timing-calibration'
 
-/** The clicks to tap with, each a dot: struck once passed, ringed while it sounds. */
+/** The clicks to tap with, each a dot: struck once passed, ringed while it sounds; in bars of four. */
 const DOTS = Array.from({ length: CALIBRATION_CLICKS }, (_, click) => click)
+const BEATS = 4
+const BARS = Array.from({ length: CALIBRATION_CLICKS / BEATS }, (_, bar) => bar)
 
 /**
  * Calibrate timing (R34, ADR 0028): what it does, the clicks as dots, what the calibration says as it
@@ -33,16 +35,20 @@ export function TimingCalibration() {
   return (
     <div className="card flex flex-col gap-5 px-5 py-5">
       <p className="text-pretty text-muted-foreground">{t('midiSettings.timing.how')}</p>
-      <ol className="flex flex-wrap gap-2" aria-hidden>
-        {DOTS.map((click) => (
-          <li
-            key={click}
-            className={cn(
-              'size-4 rounded-full border-2 border-muted-foreground/40 transition-colors motion-reduce:transition-none',
-              click < passed && 'border-foreground bg-foreground',
-              click === passed && running && 'border-foreground ring-2 ring-foreground/30',
-            )}
-          />
+      <ol className="flex flex-wrap gap-x-5 gap-y-3" aria-hidden>
+        {BARS.map((bar) => (
+          <li key={bar} className="flex gap-2">
+            {DOTS.slice(bar * BEATS, (bar + 1) * BEATS).map((click) => (
+              <span
+                key={click}
+                className={cn(
+                  'size-4 rounded-pill border-2 border-muted-foreground/40 transition-colors motion-reduce:transition-none',
+                  click < passed && 'border-foreground bg-foreground',
+                  click === passed && running && 'border-foreground ring-2 ring-foreground/30',
+                )}
+              />
+            ))}
+          </li>
         ))}
       </ol>
       <p role="status" aria-live="polite" className="min-h-6 font-medium tabular-nums">

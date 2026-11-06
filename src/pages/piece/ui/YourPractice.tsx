@@ -67,8 +67,8 @@ export function YourPractice({ piece, performance }: { piece: Piece; performance
                       key={bar}
                       className={
                         share === null
-                          ? 'h-1 min-w-0 flex-1 rounded-sm bg-muted'
-                          : 'min-w-0 flex-1 rounded-sm bg-muted-foreground'
+                          ? 'h-1 min-w-0 flex-1 bg-muted'
+                          : 'min-w-0 flex-1 bg-muted-foreground'
                       }
                       style={
                         share === null ? undefined : { height: `${Math.max(12, share * 100)}%` }
