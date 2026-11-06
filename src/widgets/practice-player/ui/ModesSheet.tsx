@@ -6,11 +6,8 @@ import { PRACTICE_MODES, type PracticeMode } from '@/features/practice'
 import { setOtherHand } from '@/features/set-preference'
 import { cn } from '@/shared/lib'
 import type { Hands } from '@/shared/lib/schedule'
-import { PAINT, Segmented, Sheet, SheetContent, SwitchRow } from '@/shared/ui'
+import { HandsSegmented, PAINT, Sheet, SheetContent, SwitchRow } from '@/shared/ui'
 import { RadioGroup, RadioGroupItem } from '@/shared/ui/primitives/radio-group'
-
-/** Practice's hands, left to right as they sit at the keys. */
-const HANDS: readonly Hands[] = ['lh', 'both', 'rh']
 
 /**
  * The Modes sheet (R29 B8, "What would you like to do?"): four cards, each its picture, its name, one
@@ -86,15 +83,7 @@ export function ModesSheet({
                 {each === 'practice' && chosen ? (
                   <div className="flex flex-col gap-1 border-t border-hairline pt-3">
                     {twoHands ? (
-                      <Segmented
-                        label={t('hands')}
-                        value={hands}
-                        options={HANDS.map((value) => ({
-                          value,
-                          label: t(`modes.hands.${value}`),
-                        }))}
-                        onChange={onHands}
-                      />
+                      <HandsSegmented label={t('hands')} value={hands} onChange={onHands} painted />
                     ) : null}
                     <SwitchRow
                       setting="otherHand.play"

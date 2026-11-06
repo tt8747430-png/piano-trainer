@@ -18,13 +18,14 @@ import { localText, useLocale } from '@/shared/i18n'
 import { useSetSearch } from '@/shared/lib'
 import { HANON_NUMBERS, HANON_RHYTHMS } from '@/shared/lib/exercise'
 import { noteParam, printedNote, type Hand } from '@/shared/lib/music'
-import { HANDS, TEMPO_RANGE } from '@/shared/lib/schedule'
+import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import {
   BackButton,
   Dropdown,
   FabLink,
   FloatingActions,
   HandCard,
+  HandsSegmented,
   Labelled,
   NamedSegmented,
   KeyPicker,
@@ -166,14 +167,12 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
           />
         )}
         {exercise.options.bothHands ? null : (
-          <NamedSegmented
+          <HandsSegmented
             label={t('practice:exercisePage.hands')}
             value={hands}
-            options={HANDS.map((each) => ({
-              value: each,
-              label: t(`player:modes.hands.${each}`),
-            }))}
             onChange={(each) => setSearch({ hands: each })}
+            named
+            painted
           />
         )}
         {exercise.fields.octaves ? (

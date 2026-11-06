@@ -148,7 +148,6 @@ export const player = {
     practice: { name: 'Practice', line: 'One hand at a time, the other heard or not.' },
     follow: { name: 'Interpret', line: 'The cursor follows your tempo.' },
     needsPiano: 'Connect a piano or show the Keyboard.',
-    hands: { lh: 'Left', both: 'Both', rh: 'Right' },
   },
   tools: 'Tools',
   // The tools row's Transpose (ADR 0105): the key the music is in, moved a semitone at a time.

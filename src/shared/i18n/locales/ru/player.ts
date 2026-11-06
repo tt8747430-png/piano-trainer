@@ -135,7 +135,6 @@ export const player: LocaleResources['player'] = {
     practice: { name: 'Разучивать', line: 'Одна рука за раз, другая звучит или молчит.' },
     follow: { name: 'Играть в своём темпе', line: 'Курсор следует за вашим темпом.' },
     needsPiano: 'Подключите пианино или включите клавиатуру.',
-    hands: { lh: 'Левая', both: 'Обе', rh: 'Правая' },
   },
   tools: 'Инструменты',
   transpose: {

@@ -13,7 +13,7 @@ import {
   printedNote,
 } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, RUN_DIRECTIONS, runSounds } from '@/shared/lib/schedule'
-import { Dropdown, Labelled, MenuPicker, Segmented, Stepper } from '@/shared/ui'
+import { Dropdown, HandsSegmented, Labelled, MenuPicker, Segmented, Stepper } from '@/shared/ui'
 import { runStaff } from '../model/run-staff'
 import { runShown, scaleRunOf } from '../model/scale-run'
 import {
@@ -121,14 +121,9 @@ export function RunView({
       fields={
         <>
           <Labelled label={t('practice:hands')}>
-            <Segmented
+            <HandsSegmented
               label={t('practice:hands')}
               value={hands}
-              options={[
-                { value: 'rh', label: t('common:handsShort.rh') },
-                { value: 'lh', label: t('common:handsShort.lh') },
-                { value: 'both', label: t('common:handsShort.both') },
-              ]}
               onChange={(next) => onChange({ hands: next })}
             />
           </Labelled>
