@@ -61,7 +61,7 @@ as the installed app: the status bar and the home indicator are emulated as safe
 `scripts/settle.mjs` (load, network quiet, fonts, images, no busy region or spinner, a still layout) and reports a
 part that never settles instead of shooting past it. **Nothing that only greets or interrupts is shot** (the owner's
 rule): `clearOnboarding` dismisses the app's welcome, sign-in or sign-up prompts, product tours and cookie or newsletter
-banners by their gentlest way out as each page loads, before any act (so a sheet a step opens is kept), and reports what it dismissed; `ONBOARDING=1` keeps them, only when
+banners by their gentlest way out as each page loads, before any act (so a sheet a step opens is kept), and reports what it dismissed. It presses Escape only for a layer left open with no way out: on a bare screen Escape is the screen's own key, and the Player closes on it. `ONBOARDING=1` keeps them, only when
 the check is of them or the owner asks. The harness also seeds a returning learner from the served app's own settings
 version, so run it from the checkout that serves the app.
 

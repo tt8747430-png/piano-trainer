@@ -118,6 +118,16 @@ export async function clearOnboarding(page, { rounds = 6 } = {}) {
     await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {})
     dismissed.push(way)
   }
-  if (dismissed.length < rounds) await page.keyboard.press('Escape').catch(() => {})
+  // Escape only for a layer still open that offered no way out: with nothing over the screen, Escape is the
+  // screen's own key, and the Player closes on it.
+  const open = await page.evaluate(
+    (selector) =>
+      [...document.querySelectorAll(selector)].some((element) => {
+        const box = element.getBoundingClientRect()
+        return box.width > 0 && box.height > 0 && getComputedStyle(element).visibility !== 'hidden'
+      }),
+    INTERRUPTIONS,
+  )
+  if (open) await page.keyboard.press('Escape').catch(() => {})
   return dismissed
 }
