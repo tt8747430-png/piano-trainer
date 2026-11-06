@@ -18,4 +18,5 @@ export {
 export { resetVersion } from './reset-version'
 export { saveMusic, type MusicTarget } from './save-music'
 export { setSongCredit, setSongFacts } from './set-song-facts'
+export { syncRecording } from './sync-recording'
 export { useCreateBuiltInSong, type BuiltInSongDraft } from './create-built-in-song'

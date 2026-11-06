@@ -70,6 +70,8 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
     simplifies,
     changeSetup,
     changeTrack,
+    recordingSync,
+    syncRecording,
   } = usePlayer(piece, search, setSearch)
   // The Version sheet (R29 B8): the learner's version or the app's, the voice's staves heard and
   // shown or not, at a level.
@@ -205,6 +207,7 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
             staves={staves}
             onChange={changeSetup}
             onStaves={changeTrack}
+            sync={piece.recording ? { ms: recordingSync, onChange: syncRecording } : undefined}
             onSwing={player.setSwing}
           />
         }

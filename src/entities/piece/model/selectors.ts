@@ -126,6 +126,12 @@ export const selectVersion = (
 export const selectHasVersion = (state: Pick<PiecesState, 'versions'>, id: string): boolean =>
   selectVersion(state, id) !== undefined
 
+/** How far the learner moved this song's recording against its music, in milliseconds (R34). */
+export const selectRecordingSync = (
+  state: Pick<PiecesState, 'recordingSync'>,
+  id: string,
+): number => state.recordingSync[id] ?? 0
+
 /** The learner's own song with this id. */
 export const selectOwnSong = (state: Pick<PiecesState, 'songs'>, id: string): OwnSong | undefined =>
   state.songs.find((song) => song.id === id)

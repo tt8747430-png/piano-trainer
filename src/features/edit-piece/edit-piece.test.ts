@@ -12,6 +12,7 @@ import {
   saveMusic,
   setSongCredit,
   SINGLE_STAVES_MAX,
+  syncRecording,
 } from './index'
 
 const fresh = () =>
@@ -250,5 +251,17 @@ describe('setSongCredit (R32-C)', () => {
     expect(store.getState().songs[0]?.header).toEqual({ arranger: 'Mary Smith' })
     setSongCredit(store, id, 'arranger', '')
     expect(store.getState().songs[0]?.header).toEqual({})
+  })
+})
+
+describe('syncRecording', () => {
+  it('moves a song’s recording on a step within its range, and forgets it once in time', () => {
+    const store = fresh()
+    syncRecording(store, 'romashki', 24)
+    expect(store.getState().recordingSync).toEqual({ romashki: 20 })
+    syncRecording(store, 'romashki', -900)
+    expect(store.getState().recordingSync).toEqual({ romashki: -500 })
+    syncRecording(store, 'romashki', 0)
+    expect(store.getState().recordingSync).toEqual({})
   })
 })

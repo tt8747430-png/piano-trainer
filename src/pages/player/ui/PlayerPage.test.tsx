@@ -458,6 +458,24 @@ describe('Player', () => {
     expect(first?.play.offset).toBe(pieceById('romashki')?.recording?.start)
   })
 
+  it('moves the recording by its Sync, kept with the song (R34)', async () => {
+    const user = userEvent.setup()
+    const { audio, piecesStore } = await renderApp('/play/romashki')
+    await openMusicPage(user, 'Staves')
+    const sync = await screen.findByRole('group', { name: 'Sync' })
+    expect(sync).toHaveTextContent('In time')
+    await user.click(within(sync).getByRole('button', { name: 'Later' }))
+    await user.click(within(sync).getByRole('button', { name: 'Later' }))
+    expect(sync).toHaveTextContent('20 ms later')
+    expect(piecesStore.getState().recordingSync).toEqual({ romashki: 20 })
+    await user.keyboard('{Escape}')
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    // Heard 20 ms later: the file's bar 1 is reached 20 ms after the music's.
+    expect(audio.recordings[0]?.play.offset).toBeCloseTo(
+      (pieceById('romashki')?.recording?.start ?? 0) - 0.02,
+    )
+  })
+
   it('plays the recording at half the chart’s tempo at 50%', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/romashki?tempo=36')

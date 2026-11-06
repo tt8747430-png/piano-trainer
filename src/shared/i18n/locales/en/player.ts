@@ -239,6 +239,13 @@ export const player = {
     show: 'Show',
     playOf: 'Play {{track}}',
     volumeOf: '{{track}} volume',
+    // A recording moved against the music where a device hears it off the notes (R34).
+    sync: 'Sync',
+    inTime: 'In time',
+    earlierBy: '{{ms}} ms earlier',
+    laterBy: '{{ms}} ms later',
+    earlier: 'Earlier',
+    later: 'Later',
     showOf: 'Show {{track}}',
   },
   playing: 'How it plays',

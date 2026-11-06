@@ -40,7 +40,7 @@ import {
 } from './types'
 
 export const PIECES_STORAGE_KEY = 'pt-pieces'
-export const PIECES_VERSION = 11
+export const PIECES_VERSION = 12
 
 /** The learner's pieces. */
 export interface PiecesState {
@@ -52,17 +52,40 @@ export interface PiecesState {
   readonly nextSong: number
   /** The learner's typed marks on each song, by its id (R29 B8): its copy of the song carries them. */
   readonly annotations: Readonly<Record<string, readonly Annotation[]>>
+  /**
+   * How far the learner moved each song's recording against its music, in milliseconds, by its id
+   * (R34): later where positive, −500 to +500 in steps of 10; a song in time is left out.
+   */
+  readonly recordingSync: Readonly<Record<string, number>>
 }
 
 export type PiecesStore = StoreApi<PiecesState>
 
-const INITIAL: PiecesState = { versions: {}, songs: [], nextSong: 1, annotations: {} }
+const INITIAL: PiecesState = {
+  versions: {},
+  songs: [],
+  nextSong: 1,
+  annotations: {},
+  recordingSync: {},
+}
 
 export const createPiecesStore = (saving: SavingOptions = {}): PiecesStore =>
   createSavedStore(
     { key: PIECES_STORAGE_KEY, version: PIECES_VERSION, initial: INITIAL, read: sanitize },
     saving,
   )
+
+/** How far a recording may be moved against its music, in milliseconds, and by how much a step. */
+export const RECORDING_SYNC = { min: -500, max: 500, step: 10 } as const
+
+/** A sync as kept: on a step, within its range; 0 where it is no number. */
+export const syncOf = (ms: number): number =>
+  Number.isFinite(ms)
+    ? Math.min(
+        RECORDING_SYNC.max,
+        Math.max(RECORDING_SYNC.min, Math.round(ms / RECORDING_SYNC.step) * RECORDING_SYNC.step),
+      ) || 0
+    : 0
 
 const KEY_TEXT = /^[A-G][#b]?m?$/
 /** A key as a song's text names it, one a signature writes (no A# major, with its ten sharps). */
@@ -298,5 +321,18 @@ function sanitize(persisted: unknown, current: PiecesState): PiecesState {
       if (read.length > 0) annotations[id] = read
     }
   }
-  return { versions, songs, nextSong: Math.max(next, past, 1), annotations }
+  const recordingSync: Record<string, number> = {}
+  if (isRecord(saved.recordingSync)) {
+    for (const [id, ms] of Object.entries(saved.recordingSync)) {
+      const kept = typeof ms === 'number' ? syncOf(ms) : 0
+      if (kept !== 0) recordingSync[id] = kept
+    }
+  }
+  return {
+    versions,
+    songs,
+    nextSong: Math.max(next, past, 1),
+    annotations,
+    recordingSync,
+  }
 }

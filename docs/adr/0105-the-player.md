@@ -112,3 +112,4 @@ The score editor's Play and its recorder's click keep their own switches. A reco
   Player's gear is its settings' home. MIDI shows only while connected; the tempo reads ♩ = 92; a laptop's dock is one
   row from 80rem (2026-11-05).
 - r34 — The recording plays in any key, shifted with Transpose; its own-key ⓘ and the Staves row's reason gone.
+- r34 — Staves › Recording has Sync under its volume: Earlier and Later in 10 ms steps, kept with the song.

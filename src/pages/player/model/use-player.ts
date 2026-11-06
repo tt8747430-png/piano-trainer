@@ -4,7 +4,10 @@ import {
   hasWrittenStaves,
   keyShift,
   pieceFit,
+  selectRecordingSync,
   usePieceHeadings,
+  usePieces,
+  usePiecesStoreApi,
   type Piece,
 } from '@/entities/piece'
 import { useProgressStoreApi } from '@/entities/progress'
@@ -21,6 +24,7 @@ import {
   type TrackChoice,
   type TrackId,
 } from '@/features/practice'
+import { syncRecording } from '@/features/edit-piece'
 import { recordPass } from '@/features/record-lesson'
 import { recordPractised, usePracticeClock } from '@/features/record-practised'
 import type { SetupChange } from '@/widgets/player-setup'
@@ -40,6 +44,10 @@ export interface PiecePlayerOf extends WalkingPlayerOf<PracticeChoice, SetupChan
   setVersion(version: SongVersion): void
   /** A track played or shown, or not. */
   changeTrack(id: TrackId, change: Partial<TrackChoice>): void
+  /** How far the learner moved the recording against the music, in milliseconds (R34). */
+  readonly recordingSync: number
+  /** Moves it: later where positive. */
+  syncRecording(ms: number): void
 }
 
 /** The piece as the Player plays it: its URL's choices arranged, practised from the widget's hook. */
@@ -99,11 +107,20 @@ export function usePlayer(
   useEffect(() => recordPractised(progress, piece.id, new Date()), [progress, piece.id])
   // The recording plays along in any key, shifted as far as the music is (R34): stretched, the singer
   // moves with the chords. Its track's Play turns it on or off (A35).
+  // Moved by the learner's Sync where a device hears it off the notes: later, its bar 1 comes later.
   const semitones = keyShift(piece, choice.tonic)
   const playsRecording = trackOf(staves, 'recording').play
+  const pieces = usePiecesStoreApi()
+  const sync = usePieces((state) => selectRecordingSync(state, piece.id))
   const recording = useMemo(
-    () => (playsRecording && piece.recording ? { recording: piece.recording, semitones } : null),
-    [playsRecording, piece.recording, semitones],
+    () =>
+      playsRecording && piece.recording
+        ? {
+            recording: { ...piece.recording, start: piece.recording.start - sync / 1000 },
+            semitones,
+          }
+        : null,
+    [playsRecording, piece.recording, semitones, sync],
   )
   const player = usePracticePlayer(performance, search, setSearch, piece.tempo, recording, staves)
   // A pass played through in Wait mode is a lesson done: its loop's bars, or the whole piece's
@@ -133,5 +150,7 @@ export function usePlayer(
     changeSetup: (change) => setSearch(searchPatch(piece, change)),
     setVersion: (next) => setSearch({ version: next }),
     changeTrack: (id, change) => setSearch({ staves: stavesParam(withTrack(staves, id, change)) }),
+    recordingSync: sync,
+    syncRecording: (ms) => syncRecording(pieces, piece.id, ms),
   }
 }

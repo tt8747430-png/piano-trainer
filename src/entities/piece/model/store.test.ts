@@ -25,17 +25,44 @@ describe('createPiecesStore', () => {
   it('starts with no versions and no songs, and saves under pt-pieces', () => {
     const storage = createMemoryStorage()
     const store = createPiecesStore({ storage, otherTabs: new EventTarget() })
-    expect(store.getState()).toEqual({ versions: {}, songs: [], nextSong: 1, annotations: {} })
+    expect(store.getState()).toEqual({
+      versions: {},
+      songs: [],
+      nextSong: 1,
+      annotations: {},
+      recordingSync: {},
+    })
     store.setState({ versions: { bz1: MUSIC } })
     expect(JSON.parse(storage.getItem('pt-pieces') ?? 'null')).toEqual({
-      state: { versions: { bz1: MUSIC }, songs: [], nextSong: 1, annotations: {} },
+      state: {
+        versions: { bz1: MUSIC },
+        songs: [],
+        nextSong: 1,
+        annotations: {},
+        recordingSync: {},
+      },
       version: PIECES_VERSION,
     })
   })
 
   it('restores what was saved', () => {
-    const saved = { versions: { bz1: MUSIC }, songs: [SONG], nextSong: 2, annotations: {} }
+    const saved = {
+      versions: { bz1: MUSIC },
+      songs: [SONG],
+      nextSong: 2,
+      annotations: {},
+      recordingSync: { romashki: -30 },
+    }
     expect(restored(saved)).toEqual(saved)
+  })
+
+  it('keeps each recording’s Sync on a step within its range, and none that is in time', () => {
+    expect(
+      restored({ recordingSync: { a: 24, b: 9000, c: 0, d: 'x', e: -4 } }).recordingSync,
+    ).toEqual({
+      a: 20,
+      b: 500,
+    })
   })
 
   describe('annotations (R29 B8)', () => {
@@ -276,7 +303,13 @@ describe('createPiecesStore', () => {
 
   it('reads nothing of a save from before the pedal was a line of its own', () => {
     const saved = { versions: { bz1: MUSIC }, songs: [SONG], nextSong: 2 }
-    expect(restored(saved, 8)).toEqual({ versions: {}, songs: [], nextSong: 1, annotations: {} })
+    expect(restored(saved, 8)).toEqual({
+      versions: {},
+      songs: [],
+      nextSong: 1,
+      annotations: {},
+      recordingSync: {},
+    })
   })
 
   it('drops a single staff longer than its chart', () => {

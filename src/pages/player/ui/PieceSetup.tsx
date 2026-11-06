@@ -9,6 +9,7 @@ import {
   PatternCard,
   PlayerSetup,
   StavesSection,
+  type RecordingSync,
   type MusicPage,
   type SetupChange,
 } from '@/widgets/player-setup'
@@ -33,6 +34,7 @@ export function PieceSetup({
   staves,
   onChange,
   onStaves,
+  sync,
   onSwing,
 }: {
   piece: Piece
@@ -49,6 +51,8 @@ export function PieceSetup({
   staves: PlayerStaves
   onChange: (change: SetupChange) => void
   onStaves: (id: TrackId, change: Partial<TrackChoice>) => void
+  /** The recording's Sync, where the piece has one. */
+  sync?: RecordingSync | undefined
   onSwing: (feel: SwingFeel) => void
 }) {
   const { t } = useTranslation(['player', 'music'])
@@ -66,7 +70,7 @@ export function PieceSetup({
           : playing.length === tracks.length
             ? t('staves.all')
             : playing.map((track) => track.label).join(', '),
-      content: <StavesSection tracks={tracks} staves={staves} onChange={onStaves} />,
+      content: <StavesSection tracks={tracks} staves={staves} sync={sync} onChange={onStaves} />,
     },
   ]
   if (controls.has('accompaniment'))

@@ -4,10 +4,17 @@ import { selectSound, useSettings, useSettingsStoreApi } from '@/entities/settin
 import { trackOf, type PlayerStaves, type TrackChoice, type TrackId } from '@/features/practice'
 import { onlyTheChords, setSound, setStaffVolume } from '@/features/set-preference'
 import { clefGlyph } from '@/shared/lib/music'
-import { MenuSection, VolumeSlider } from '@/shared/ui'
+import { RECORDING_SYNC } from '@/entities/piece'
+import { MenuSection, Stepper, VolumeSlider } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Switch } from '@/shared/ui/primitives/switch'
 import type { ScoreTrack } from '@/widgets/practice-player'
+
+/** A recording's Sync (R34): how far it is moved against the music, in milliseconds, later where positive. */
+export interface RecordingSync {
+  readonly ms: number
+  readonly onChange: (ms: number) => void
+}
 
 /**
  * The Setup's first section (A35, Flat's Audio playback): the music's tracks top down, each staff by
@@ -19,10 +26,13 @@ import type { ScoreTrack } from '@/widgets/practice-player'
 export function StavesSection({
   tracks,
   staves,
+  sync,
   onChange,
 }: {
   tracks: readonly ScoreTrack[]
   staves: PlayerStaves
+  /** The recording's Sync, under its volume while it plays. */
+  sync?: RecordingSync | undefined
   onChange: (id: TrackId, change: Partial<TrackChoice>) => void
 }) {
   const { t } = useTranslation(['player', 'music'])
@@ -97,6 +107,28 @@ export function StavesSection({
                       value={volume(track.id)}
                       onChange={(percent) => setVolume(track.id, percent)}
                     />
+                    {track.id === 'recording' && sync ? (
+                      <div className="mt-2 flex flex-col gap-1">
+                        <span className="text-sm text-muted-foreground">{t('staves.sync')}</span>
+                        <Stepper
+                          label={t('staves.sync')}
+                          value={sync.ms}
+                          min={RECORDING_SYNC.min}
+                          max={RECORDING_SYNC.max}
+                          step={RECORDING_SYNC.step}
+                          format={(ms) =>
+                            ms === 0
+                              ? t('staves.inTime')
+                              : t(ms < 0 ? 'staves.earlierBy' : 'staves.laterBy', {
+                                  ms: Math.abs(ms),
+                                })
+                          }
+                          decrease={t('staves.earlier')}
+                          increase={t('staves.later')}
+                          onChange={sync.onChange}
+                        />
+                      </div>
+                    ) : null}
                   </div>
                 ) : null}
               </li>

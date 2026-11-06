@@ -68,7 +68,10 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   (`RecordingAlong`, `keyShift`). It plays through one signalsmith-stretch AudioWorklet node per file (MIT, loaded
   only once a song with a recording plays), the file fetched once and decoded whole, scheduled on the AudioContext's
   own clock like the notes, so it never drifts and needs no seeking; a phone runs the node's cheaper preset. A play
-  whose node is not ready yet starts late, where it should be by then.
+  whose node is not ready yet starts late, where it should be by then. The learner's **Sync** (Staves › Recording,
+  −500 to +500 ms in 10 ms steps, kept per song in the pieces store as `recordingSync`) moves its bar 1 where a
+  device hears it off the notes; the click and the cursor stay on the chart. No beat detector: every recording's
+  start and tempo are measured by hand, and one is added only once learners bring their own audio.
 - **Recorded instruments, played by our own sampler** (R29 SND, A27). The piano, the band's two basses and its
   drum kit play from sample sets the app hosts itself, under `public/samples/<set>/`, each folder with its
   `manifest.json` (the set, its licence, its velocity layers from the softest with the velocity each plays
@@ -138,3 +141,4 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
 - r34 — Calibrate timing: the piano's lateness tapped with a click, kept as `midi.latency`, taken off every take.
 - r34 — Recordings through signalsmith-stretch on the audio clock, in any key: the media element, its drift
   seeking and its priming gone.
+- r34 — A recording's Sync, nudged per song; the pieces store at version 12.
