@@ -22,6 +22,11 @@ editor each had their own cursor, box and gestures, different again in each layo
 - **The playhead is a line**: one thin line across the system's staves in sight, the same height wherever it stands,
   just before what sounds. In Listen and the editor's Play it moves with the audio clock between the notes; in Wait
   mode it stands at the notes awaited; the sheet follows it. In the editor it is apart from the caret and the choice.
+- **The heads sounding are lit, in the Player only** (R35, after Ivory's Dual View and Piano Forte): on each staff the
+  heads of the latest onset at the playhead (a rest silencing that staff) take their hand's colour as their keys below
+  do, deep enough for a notehead (`--hand-rh-ink` brick, `--hand-lh-ink` lilac, `--hand-staff-ink` grass), stems and
+  beams staying ink. Stopped, they are the notes awaited. Not on a muted hand's staff, not with the playhead hidden; a
+  chosen note keeps the selection colour; the editor lights nothing, its colour being the selection.
 - **What is chosen is coloured**, both sheets, every layout: a note's head, accidental, stem, flag and dots, a chord
   whole or one key of it, a rest. A range is a light band over the staves it takes, from its first note to its last.
   The caret is a thin line on its staff, the note it stands on coloured. The Player's loop is a band over every staff,
@@ -56,3 +61,4 @@ The selection and the playhead read the same in every layout of both screens; a 
 - r34 (R34) — The layout and the page view's zoom in one pill at the score's corner, always in sight (Songscription's view pill); the Layout tiles leave Display and the editor's View (2026-11-05).
 - r34 (R34) — A shape beside each judged head, one table for the sheet, the summary and the keys (2026-11-06).
 - r34 (R34-3) — On a phone the layout pill gives way to the gear's View page in the editor; the Player keeps the pill (2026-11-06).
+- r35 (R35-1) — The heads sounding lit in their hand's colour, in step with the keys (2026-11-06).

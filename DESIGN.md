@@ -35,6 +35,7 @@ colors:
   yellow-deep: '#7A5B22'
   lilac-deep: '#6A5988'
   sand-deep: '#7D5B40'
+  brick-deep: '#9A4B3A'
   key-bed: '#CBC2B9'
   key-black: '#332C28'
   dusk-ground: '#191512'
@@ -528,6 +529,9 @@ appears under a finger; the layout's one control.
   a staff not practised in soft ink.
 - **What is chosen is coloured, never boxed:** notes in the selection colour, a range or loop a light band of it, tight
   to the notes. The playhead is one thin line across the staves in sight. Empty staff chooses nothing.
+- **What sounds is lit, in the Player:** the heads at the playhead take their hand's colour, as their keys do: the right
+  hand deep brick, the left deep lilac, a single staff deep grass (by Night, the full paints). Heads only; the rest of the
+  engraving stays ink.
 - **Chord views:** beat cells on card paper, the beat sounding filled with ink; a chord diagram (`KeyDiagram`) draws a dot
   on each key held.
 

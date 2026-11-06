@@ -34,10 +34,27 @@
 [data-slot='score'][data-muted='bass'] g.staff[data-staff='bass'] {
   color: var(--muted-foreground);
 }
+/* The heads sounding at the Player's playhead (R35), in their hand's colour as the keys below light:
+   the right hand's treble brick, the left hand's bass lilac, a single staff grass. Not on a muted
+   hand's staff; a chosen note keeps the selection colour, below. */
+[data-slot='score'] g.staff[data-staff='treble'] .note-sounding {
+  color: var(--hand-rh-ink);
+}
+[data-slot='score'] g.staff[data-staff='bass'] .note-sounding {
+  color: var(--hand-lh-ink);
+}
+[data-slot='score'] g.staff:not([data-staff='treble'], [data-staff='bass']) .note-sounding {
+  color: var(--hand-staff-ink);
+}
+[data-slot='score'][data-muted='treble'] g.staff[data-staff='treble'] .note-sounding,
+[data-slot='score'][data-muted='bass'] g.staff[data-staff='bass'] .note-sounding {
+  color: inherit;
+}
 /* What is chosen, in the editor and the Player (ADR 0096): drawn in the selection colour, as a
    notation app draws a selection: a note (its head, accidental, stem and flag), a chord whole with
    its dots, one key's dot, a rest, the ledger lines out to a head chosen. */
-[data-slot='score'] .note-chosen {
+[data-slot='score'] .note-chosen,
+[data-slot='score'] g.staff .note-sounding.note-chosen {
   color: var(--ring);
 }
 /* A named head (Named notes): a black note's in ink, its letter in the page's colour; an open one's

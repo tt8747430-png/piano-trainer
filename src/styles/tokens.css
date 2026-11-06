@@ -22,6 +22,7 @@
   --p-black-key: #332c28;
   /* The paints, faded to one lightness: full, the wash of each, and the deep shade of some. */
   --p-brick: #e19e8c;
+  --p-brick-deep: #9a4b3a;
   --p-yellow: #e8c67d;
   --p-yellow-wash: #f7e8c4;
   --p-yellow-deep: #7a5b22;
@@ -189,6 +190,10 @@
   --hand-rh-wash: color-mix(in oklab, var(--p-brick) var(--mark-wash), var(--key-white));
   --hand-lh-wash: color-mix(in oklab, var(--p-lilac) var(--mark-wash), var(--key-white));
   --hand-staff-wash: color-mix(in oklab, var(--p-grass) var(--mark-wash), var(--key-white));
+  /* A sounding head on the staff (R35): its hand's colour, deep enough for a notehead on the page. */
+  --hand-rh-ink: var(--p-brick-deep);
+  --hand-lh-ink: var(--p-lilac-deep);
+  --hand-staff-ink: var(--p-grass-deep);
 
   /*
    * The keys: paper keys parted by a soft line, a warm black, on their bed. By
@@ -238,6 +243,9 @@
     /* By night the action is a step lower, so it never glares in a dim hall. */
     --primary: var(--p-honey-night);
     --primary-foreground: var(--p-dusk-950);
+    --hand-rh-ink: var(--p-brick);
+    --hand-lh-ink: var(--p-lilac-light);
+    --hand-staff-ink: var(--p-grass-light);
     --selected: var(--p-dusk-muted);
     --selected-foreground: var(--p-dusk-950);
     --secondary: var(--p-sky-night);

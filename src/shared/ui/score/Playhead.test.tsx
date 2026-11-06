@@ -222,3 +222,41 @@ describe('Playhead (ADR 0096)', () => {
     expect(line).toHaveClass('invisible')
   })
 })
+
+describe('Playhead lighting the heads sounding (R35)', () => {
+  const lit = () =>
+    [...document.querySelectorAll('[data-slot="score"] .note-sounding')]
+      .map((head) => head.id)
+      .sort()
+
+  it('lights each staff’s heads at it, the bass held while the treble moves on', async () => {
+    const { rerender } = await renderPlayhead({ tick: 0, lights: true })
+    expect(lit()).toEqual(['n-bass-0-0', 'n-treble-0-0'])
+    rerender(<Sheet props={{ tick: 2 * B, lights: true }} />)
+    expect(lit()).toEqual(['n-bass-0-0', `n-treble-${2 * B}-0`])
+  })
+
+  it('follows the music’s clock while it plays', async () => {
+    const { rerender } = await renderPlayhead({ tick: 0, lights: true })
+    let heard: Tick | null = 1.5 * B
+    vi.useFakeTimers()
+    rerender(<Sheet props={{ tick: 0, clock: () => heard, lights: true }} />)
+    expect(lit()).toEqual(['n-bass-0-0', `n-treble-${B}-0`])
+    heard = 4 * B
+    act(() => vi.advanceTimersToNextFrame())
+    expect(lit()).toEqual([`n-bass-${4 * B}-0`, `n-treble-${4 * B}-0`])
+    vi.useRealTimers()
+  })
+
+  it('lights nothing hidden, nor in the editor, nor once it is gone', async () => {
+    const { rerender, unmount } = await renderPlayhead({ tick: 0 })
+    expect(lit()).toEqual([])
+    rerender(<Sheet props={{ tick: 0, lights: true, hidden: true }} />)
+    expect(lit()).toEqual([])
+    rerender(<Sheet props={{ tick: 0, lights: true }} />)
+    expect(lit()).toHaveLength(2)
+    const score = document.querySelector('[data-slot="score"]')
+    unmount()
+    expect(score?.querySelectorAll('.note-sounding')).toHaveLength(0)
+  })
+})

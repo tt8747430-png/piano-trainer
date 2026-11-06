@@ -5,6 +5,7 @@ import { useCanvasReveal } from '../canvas-reveal'
 import type { ScoreLayout } from './layout'
 import { followScroll, playheadSpan, playheadX } from './playhead-place'
 import { MARK_CLASS } from './selection'
+import { soundingHeads } from './sounding'
 
 /** Whether a line is its sheet's first: nothing but the title and the credits above it. */
 const firstLine = (line: Element): boolean =>
@@ -25,7 +26,8 @@ function scrollerOf(element: Element): Element | null {
  * round it one picture, which Safari scales blurry when they are zoomed. The sheet follows it: its
  * line comes into sight as it comes onto it (on a page canvas, the canvas moves to it); a line wider
  * than its `scroller` scrolls to keep it in its middle half, and a page zoomed wider than the screen
- * moves to put it a quarter in once it passes three quarters.
+ * moves to put it a quarter in once it passes three quarters. With `lights` (the Player's), the heads
+ * sounding at it are drawn in their hand's colour (R35), as the keys light below.
  */
 export function Playhead({
   layout,
@@ -33,6 +35,7 @@ export function Playhead({
   clock,
   scroller,
   hidden = false,
+  lights = false,
 }: {
   layout: ScoreLayout
   /** Where it stands, in the layout's ticks: the notes awaited, where Play starts or stopped. */
@@ -47,6 +50,8 @@ export function Playhead({
   scroller?: RefObject<HTMLElement | null> | undefined
   /** Out of sight, the sheet still following it (the Player's, while its loop stands chosen). */
   hidden?: boolean
+  /** The heads sounding at it lit in their hand's colour: the Player's, never the editor's. */
+  lights?: boolean
 }) {
   const line = useRef<HTMLDivElement>(null)
   const first = layout.measures[0]
@@ -59,11 +64,25 @@ export function Playhead({
     const at = clock?.() ?? null
     return at === null || at < start ? null : Math.min(at, end)
   })
+  const lit = useRef('')
   useLayoutEffect(() => {
     const element = line.current
     if (!element) return
+    const score = element.parentElement?.querySelector(':scope > [data-slot="score"]')
+    const light = (at: Tick) => {
+      if (!score) return
+      const ids = lights && !hidden ? soundingHeads(layout, at) : []
+      const key = ids.join(' ')
+      // An engraving drawn again (a note chosen) drops the marks: then they are put back.
+      if (key === lit.current && (ids.length === 0 || score.querySelector('.note-sounding'))) return
+      lit.current = key
+      for (const head of score.querySelectorAll('.note-sounding'))
+        head.classList.remove('note-sounding')
+      for (const id of ids) score.querySelector(`[id="${id}"]`)?.classList.add('note-sounding')
+    }
     const place = (at: Tick) => {
       element.style.left = `${playheadX(layout, at)}px`
+      light(at)
     }
     place(heard() ?? tick)
     if (!moving) return
@@ -73,7 +92,16 @@ export function Playhead({
       frame = requestAnimationFrame(follow)
     })
     return () => cancelAnimationFrame(frame)
-  }, [layout, tick, moving])
+  }, [layout, tick, moving, lights, hidden])
+  // Gone (another line now plays, or the Player closes), it leaves no head lit.
+  useEffect(() => {
+    const score = line.current?.parentElement?.querySelector(':scope > [data-slot="score"]')
+    return () => {
+      lit.current = ''
+      for (const head of score?.querySelectorAll('.note-sounding') ?? [])
+        head.classList.remove('note-sounding')
+    }
+  }, [])
 
   const reveal = useCanvasReveal()
   const motion = useScrollMotion()

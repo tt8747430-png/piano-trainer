@@ -85,6 +85,7 @@ export function SheetOverlay({
           clock={clock}
           scroller={scroller}
           hidden={!playheadShown}
+          lights
         />
       ) : null}
       <BarTargets
