@@ -2,7 +2,7 @@
 
 Source: the owner's saved page `Voi cânta bunătatea Ta – Songscription.webarchive` (2026-11-06), a song in View mode with
 the editor loaded. Read from the page's DOM (labels, text) and its 143 scripts (about 2,700 interface sentences, kept
-uncommitted in `songscription-strings.txt`). Earlier live captures: `.scratch/r33/ref/songscription-*.png`.
+outside the repo, since they are Songscription's own text). Earlier live captures: `.scratch/r33/ref/songscription-*.png`.
 
 ## 1. The screen
 
