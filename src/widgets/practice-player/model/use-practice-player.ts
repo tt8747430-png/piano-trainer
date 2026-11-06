@@ -16,7 +16,6 @@ import {
   pedalKeys,
   playerRange,
   practiceMarks,
-  handsIn,
   practisedHands,
   readLoop,
   waitsForNotes,
@@ -71,7 +70,7 @@ export interface PracticePlayer {
   readonly inView: KeyRange | undefined
   readonly wrong: ReadonlySet<Midi> | undefined
   readonly feedback: WaitFeedback | null
-  /** The other hand's staff dimmed, where one hand is practised and its look is Dim (A35). */
+  /** The other hand's staff dimmed, where one hand is chosen and its look is Dim (A35). */
   readonly muted: StaffId | undefined
   /** The staves out of sight: the Staves' Show, and the other hand's where its look is Hide (A35). */
   readonly hidden: readonly StaffId[]
@@ -92,7 +91,7 @@ export interface PracticePlayer {
   readonly pedalKeys: ReadonlySet<Midi>
   /** The keys out: this visit's (ADR 0111), else the View's saved ones. */
   readonly keys: boolean
-  /** The hand practised, or both: the hands at the keys fade the other (R36). */
+  /** The hands chosen: the hands at the keys fade the other (R36). */
   readonly practised: Hands
   /** The click on or off: this visit's where it has its own, else the saved one. */
   setClick(on: boolean): void
@@ -167,8 +166,9 @@ export function usePracticePlayer(
     () => readLoop(view.loop, performance.bars.length),
     [view.loop, performance.bars.length],
   )
-  // One hand at a time is Practice mode's alone (R29 B8): every other mode plays and waits for both.
-  const practisedHand = handsIn(view.mode, view.hands)
+  // The hands chosen count in every mode (R36): Wait mode waits for them, Interpret follows them,
+  // Listen plays them, and the other hand where it is heard.
+  const practisedHand = view.hands
   const practice = usePractice(performance, {
     mode: view.mode,
     hands: practisedHand,

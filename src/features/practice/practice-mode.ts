@@ -1,14 +1,14 @@
 /**
- * What the Player does with the learner (R29 B8, the Modes sheet): Listen, the app plays; Sight-read
- * (`wait`), the cursor waits for the right notes; Practice, the same for one hand at a time; Interpret
- * (`follow`), the cursor follows the learner's tempo.
+ * What the Player does with the learner (R36, flowkey's Pace): Listen, the app plays at a speed the
+ * learner plays along at; Wait mode (`wait`), the music waits for the right notes; Interpret
+ * (`follow`), the music follows the learner's tempo. The hands chosen count in every mode.
  */
-export const PRACTICE_MODES = ['listen', 'wait', 'practice', 'follow'] as const
+export const PRACTICE_MODES = ['listen', 'wait', 'follow'] as const
 export type PracticeMode = (typeof PRACTICE_MODES)[number]
 
-/** Whether the mode waits for the learner's notes: every mode but Listen. */
-export const waitsForNotes = (mode: PracticeMode): boolean => mode !== 'listen'
+/** The modes played at the learner's own pace: the ones that wait for the learner's notes. */
+export type OwnPaceMode = Exclude<PracticeMode, 'listen'>
+export const OWN_PACE_MODES: readonly OwnPaceMode[] = ['wait', 'follow']
 
-/** The hands a mode practises: Practice its chosen hand, every other mode both (R29 B8). */
-export const handsIn = <H extends string>(mode: PracticeMode, hands: H): H | 'both' =>
-  mode === 'practice' ? hands : 'both'
+/** Whether the mode waits for the learner's notes: every mode but Listen. */
+export const waitsForNotes = (mode: PracticeMode): mode is OwnPaceMode => mode !== 'listen'

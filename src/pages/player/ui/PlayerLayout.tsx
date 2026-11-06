@@ -48,9 +48,9 @@ import {
   ClickButton,
   CountInBeat,
   FootTool,
+  HandsSheet,
   LoopButton,
-  MODE_LOOK,
-  ModesSheet,
+  PaceButton,
   PlayerFoot,
   PlayerArea,
   PlayerScreen,
@@ -58,7 +58,6 @@ import {
   PlayerClose,
   PlayerDock,
   ScoreBar,
-  TempoButton,
   usePlayerShortcuts,
   hasVoiceCommands,
   useVoiceCommands,
@@ -103,7 +102,7 @@ export type MoreAct = MenuAction & { readonly part: 'practice' | 'tools' | 'list
  * named by the view shown, then the music's own tools, a piece's Transpose and Simplify, ADR 0105);
  * the music under its title (ADR 0114) as the View
  * shows it (ADR 0108: the sheet music, Chords over lyrics, Diagrams or the Grid), Wait mode's line,
- * the transport floating under it (the tempo, ‹ ▶ ›, the loop, the metronome and the hands), the
+ * the transport under it (the loop, Restart, ‹ ▶ ›, Pace and the metronome, R36), the
  * count-in's beat large over it all while Listen counts in (ADR 0105), and the keys at the
  * foot, or under the tools row where the keyboard settings dock them at the top; the computer's keys
  * drive it (`usePlayerShortcuts`). Settings' Print puts the music as the View shows it in print
@@ -214,8 +213,8 @@ export function PlayerLayout({
     if (!twoHands && chosenHands !== 'both') setHands('both')
   }, [twoHands, chosenHands, setHands])
   usePlayerShortcuts(player, view, onClose)
-  // The Modes sheet (R29 B8), from the foot bar's Modes.
-  const [modesOpen, setModesOpen] = useState(false)
+  // The Hands sheet (R36), from the foot bar's Hands.
+  const [handsOpen, setHandsOpen] = useState(false)
   const { connection } = useMidiConnection()
   // The keys play at a tap; the hands at the keys are watched (R36).
   const playable = isMidiConnected(connection) || (player.keys && !scoreView.hands)
@@ -586,13 +585,15 @@ export function PlayerLayout({
             practice={practice}
             loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
             tempo={
-              <TempoButton
+              <PaceButton
                 mode={view.mode}
                 tempo={player.tempo}
                 shownTempo={player.shownTempo}
                 ownTempo={player.ownTempo}
                 speedTraining={view.speedTraining}
-                onTempo={player.setTempo}
+                piano={playable}
+                onMode={player.setMode}
+                onListen={player.listenAt}
                 onSpeedTraining={player.setSpeedTraining}
               />
             }
@@ -600,16 +601,20 @@ export function PlayerLayout({
           />
         </div>
       </PlayerArea>
-      {/* The song's tools (R31-P): View, the music's own (Key, Version), Mode, then More. */}
+      {/* The song's tools (R31-P): View, the music's own (Key, Version), the Hands where the music
+          has both (R36), then More. */}
       <PlayerFoot>
         <PickView shown={shown} needs={needs} openAtStart={openView} />
         {tools}
-        <FootTool
-          icon={MODE_LOOK[view.mode].icon}
-          label={t(`modes.${view.mode}.name`)}
-          aria-haspopup="dialog"
-          onClick={() => setModesOpen(true)}
-        />
+        {twoHands ? (
+          <FootTool
+            icon={Hand}
+            label={t(`common:handsShort.${view.hands}`)}
+            aria-label={t('handsOf', { hands: t(`common:handsShort.${view.hands}`) })}
+            aria-haspopup="dialog"
+            onClick={() => setHandsOpen(true)}
+          />
+        ) : null}
         <ActionMenu
           label={t('settings:bars.more')}
           align="end"
@@ -618,14 +623,10 @@ export function PlayerLayout({
           actions={moreMenu}
         />
       </PlayerFoot>
-      <ModesSheet
-        open={modesOpen}
-        onOpenChange={setModesOpen}
-        mode={view.mode}
+      <HandsSheet
+        open={handsOpen}
+        onOpenChange={setHandsOpen}
         hands={view.hands}
-        twoHands={twoHands}
-        piano={playable}
-        onMode={player.setMode}
         onHands={player.setHands}
       />
       <CountInBeat count={practice.counting} />

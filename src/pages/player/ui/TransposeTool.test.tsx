@@ -33,7 +33,7 @@ describe('Transpose (ADR 0105)', () => {
       'View: Sheet',
       'Transpose: C major',
       'Version: Original',
-      'Listen',
+      'Hands: Both',
       'More',
     ])
     expect(shownText(tools[1] ?? document.body)).toContain('C')

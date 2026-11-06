@@ -51,7 +51,7 @@ describe('the Player’s foot bar and Feedback (R29 B8, R31-P)', () => {
       within(foot)
         .getAllByRole('button')
         .map((tool) => tool.getAttribute('aria-label') ?? tool.textContent),
-    ).toEqual(['View: Sheet', 'Transpose: G major', 'Version: Original', 'Listen', 'More'])
+    ).toEqual(['View: Sheet', 'Transpose: G major', 'Version: Original', 'Hands: Both', 'More'])
     const menu = await openMore(user)
     const feedback = within(menu).getByRole('menuitem', { name: /How did I play\?/ })
     expect(feedback).toHaveAttribute('aria-disabled', 'true')

@@ -28,7 +28,7 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
   one-line example under it, longer help in its ⓘ. On or off stays a `SwitchRow`; a choice with a picture stays
   `PictureChoice`. **The hands** (R35, after Ivory's parts) are one control everywhere, `HandsSegmented`, in the
   keys' order Left · Both · Right with the words of `common:handsShort`; where the keys wear the hands' colours (the
-  Player's Practice mode, an exercise, a scale run in the Player) each segment carries its hand's dot over its word,
+  Player's Hands, an exercise, a scale run in the Player) each segment carries its hand's dot over its word,
   the right a brick dot, the left a lilac ring, Both the two; in the explorers, whose keys wear a chord's tones, none.
   A row of controls on a screen (not a Settings page) keeps the table above.
 
@@ -127,3 +127,4 @@ A new option has one obvious form by this rule. A test reaches a folded action b
   More holds the music's acts, the gear its settings; tips are remembered once put away (2026-11-05).
 - r35 (R35-2) — One Hands control, `HandsSegmented`, in the keys' order, with each hand's dot where the keys wear
   the hands' colours (2026-11-06).
+- r36 (R36-2) — The Player's Hands is the foot's, for every mode; its transport's Tempo is Pace (2026-11-06).

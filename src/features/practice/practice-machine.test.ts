@@ -328,11 +328,17 @@ describe('the practice machine', () => {
   })
 })
 
-describe('Practice mode', () => {
-  it('waits for the practised hand as Sight-read waits for both', () => {
-    const state = run(initialPractice(ONE_BAR, 'practice', 'lh'), { type: 'play' })
+describe('one hand chosen (R36)', () => {
+  it('waits for that hand in Wait mode as it waits for both', () => {
+    const state = run(initialPractice(ONE_BAR, 'wait', 'lh'), { type: 'play' })
     expect(state.expected).toEqual([0])
     expect(run(state, ...press(48)).outcome).toBe('correct')
+  })
+
+  it('follows that hand in Interpret, moving on at its onset', () => {
+    const state = run(initialPractice(ONE_BAR, 'follow', 'lh'), { type: 'play' })
+    expect(state.expected).toEqual([0])
+    expect(run(state, ...press(48))).toMatchObject({ beatGroup: 1, matched: { beatGroup: 0 } })
   })
 })
 
@@ -354,7 +360,7 @@ describe('Interpret (follow)', () => {
     expect(onset(moved, 0.5).beatGroup).toBe(2)
   })
 
-  it('takes a wrong key as Sight-read does, and stays', () => {
+  it('takes a wrong key as Wait mode does, and stays', () => {
     const wrong = run(following(), { type: 'noteOn', midi: midi(62), at: 0 })
     expect(wrong).toMatchObject({ outcome: 'wrong', beatGroup: 0 })
   })

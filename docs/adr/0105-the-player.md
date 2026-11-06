@@ -1,4 +1,4 @@
-# ADR 0105 — The Player: Listen and Wait mode, a plain Setup, Transpose and Simplify, the transport's Sound
+# ADR 0105 — The Player: Pace and Hands, a plain Setup, Transpose and Simplify, the transport's Sound
 
 - **Status:** accepted · **Date:** 2026-09-27 · consolidated 2026-10-27
 
@@ -11,11 +11,22 @@ what they changed.
 
 ## Decision
 
-- **It plays any Performance** (`usePractice` over a pure practice machine): **Listen**, the app playing passes
-  queued on the audio clock, and **Wait mode**, the app waiting for the practised hand's notes from MIDI or the keys
-  and playing the other. Play in both; ‹ › step in either. A loop over bars, each lap played in Wait mode with nothing
-  skipped; a Wait-mode pass finished is recorded (ADR 0111). Speed training. The tempo runs from 50% to 200% of the
-  piece's, in 5% steps, beside its presets.
+- **It plays any Performance** (`usePractice` over a pure practice machine) in three modes: **Listen**, the app
+  playing passes queued on the audio clock at a speed the learner plays along at; **Wait mode**, the app waiting for
+  the chosen hands' notes from MIDI or the keys and playing the other; **Interpret**, the music following the
+  learner's tempo, the other hand sounding at each onset. Play in all; ‹ › step in any. A loop over bars, each lap
+  played in Wait mode with nothing skipped; a Wait-mode pass finished is recorded (ADR 0111).
+- **Pace** (R36, flowkey's Tempo menu), the transport's: **At your own pace**, Wait mode ("The music waits for the
+  right notes.") and Interpret ("The music follows your tempo."), each saying "Connect a piano or show the
+  Keyboard." where none is there to play; then **Listen and play along**, 50 % · 75 % · Original tempo and the
+  slider (50 % to 200 % of the piece's tempo in 5 % steps, with the beats a minute), each choosing Listen at that
+  speed; Speed training below the piece's tempo, in Listen. The button reads ♩ = 92 in Listen (the pass's tempo
+  while speed training climbs), else the mode's picture, its name beside it from 640px; its name says the pace.
+- **Hands** (R36, flowkey's hands menu): the foot's Hands, where the music has both, says the hands played (Both ·
+  Right · Left) and opens "Which hands do you play?": `HandsSegmented`, and with one hand chosen **Hear the other
+  hand**, its one home. The hands count in every mode: Wait mode waits for them, Interpret follows them, Listen plays
+  them and the other only where it is heard; the keys mark them, the music shows the other hand as Settings › Hands
+  says (Show · Dim · Hide), the hands at the keys fade it (ADR 0117).
 - **Keys** (`PLAYER_KEYS`): Space Play, the arrows, R the loop, Home; Shift with ← → Home End the loop's far end;
   Escape lets go of the loop, then closes.
 - **Two kinds of song** (`hasWrittenStaves`): a **score**, whose piano staves are written out in every bar, plays its
@@ -55,7 +66,7 @@ what they changed.
   for each staff (by place, saved for every song, `sound.staves`), the recording and the metronome, and Only the
   chords; a row to the **Metronome's** sound and beats; **Playback speed** (speed training's step, 2 · 5 · 10%);
   the Count-in (None · Audible · Visual) with Playback; **Display** (Cursor None · Beats · Continuous, the
-  layout, the keys, finger numbers); **One hand** (the other hand Show · Dim · Hide, and Play the other hand, Wait mode's accompaniment);
+  layout, the keys, finger numbers); **Hands** (the hands at the keys' Skin, the other hand Show · Dim · Hide);
   **Pedal** As written · Off · Automatic (`withPedal`, A27). A volume is a gain of its share squared, asked as each
   sound renders; a staff's Play off is a gain of 0. The View's chips for the layout, the keys and finger numbers stay
   as quick toggles over the music, as the transport keeps the metronome's. Clef (the reference's "Original or
@@ -68,16 +79,17 @@ what they changed.
   tuning as fact cards), Sections (each by name and its first bar, a tap taking the cursor there), Share, Print and
   Export to MIDI (ADR 0107).
 - **The screen's frame (R31-P):** the bar (Close · title · Edit score | Piano keys · MIDI · Settings) over the score;
-  nothing floats over the music. At the foot a docked transport (Loop · ‹ · Play · › · Tempo · Sound) over a foot bar
-  of fixed order: the View, the song tools (Transpose, Version), Mode and **More**. More holds the music's acts only
-  (Sections, Song information | My recordings, How did I play?, Annotate | Print, Tuner, Voice commands, the Rhythm
-  game | Export, Share); every setting is the gear's. The customisable Tool bar is gone.
-- **The Settings sheet (R31-P)** is a page of rows, each opening a subpage with Back: the music's own first —
-  **Staves** (each track's Play, Show and volume together; Only the chords where a recording plays) and, for a chart,
-  **Accompaniment** (chord size, the pattern and its hands, Swing) — then While you play: **Playback** (a score's
-  Swing, the pedal, the count-in, the Metronome's page and volume, speed training's step, the other hand),
-  **On-screen piano** (the app's own fields) and **Display** (Pick your view on opening, annotations, the cursor,
-  following). A pattern or figure list closes back to the page it was opened from.
+  nothing floats over the music. At the foot a docked transport (Loop · Restart · ‹ · Play · › · Pace · Metronome)
+  over a foot bar of fixed order: the View, the song tools (Transpose, Version), **Hands** where the music has both,
+  and **More**. More holds the music's acts only (Sections, Song information | My recordings, How did I play?,
+  Annotate | Print, Tuner, Voice commands, the Rhythm game | Export, Share); every setting is the gear's. The
+  customisable Tool bar is gone.
+- **The Settings sheet (R31-P, R32, R36)** is one list of rows ranked by what matters, each opening a subpage with
+  Back: **Score view** (Pick your view on opening, annotations, the cursor, following), **Playback** (a score's
+  Swing, the pedal, the count-in, the Metronome's page and volume, speed training's step), **Hands** (the hands at
+  the keys' Skin, the other hand Show · Dim · Hide), **Staves** (each track's Play, Show and volume together; Only
+  the chords where a recording plays), a chart's **Accompaniment** (chord size, the pattern and its hands, Swing) and
+  **On-screen piano** (the app's own fields). A pattern or figure list closes back to the page it was opened from.
 - **Version (R31-P):** titled Version; the Arrangement (Your version · Piano solo · Piano and voice) a segmented
   switch at its head, changed at once; then Original, Simplified, Easy, each with its difficulty and a plain line.
   Where Simplified changes nothing, its line says "Its chords are already simple" and it cannot be chosen.
@@ -115,3 +127,7 @@ The score editor's Play and its recorder's click keep their own switches. A reco
 - r34 — Staves › Recording has Sync under its volume: Earlier and Later in 10 ms steps, kept with the song.
 - r34 — The switch is Smooth voice leading, the term for the nearest inversion (2026-11-06).
 - r35 — Count-in, the noun, names the Player's row and the calibration's count, as it does the editor's (2026-11-06).
+- r36 (R36-2) — Pace, flowkey's Tempo menu, in the transport: Wait mode (Sight-read renamed, flowkey's term) and
+  Interpret at your own pace, then Listen and play along at 50 % · 75 % · Original tempo or the slider. Practice mode
+  and the Modes sheet go: the foot's Hands chooses the hands for every mode, Hear the other hand its one home; Settings
+  › Hands (Skin, the other hand) between Playback and Staves (2026-11-06).

@@ -63,8 +63,9 @@ export interface PracticeSetup {
   /** How loud each part plays (ADR 0105): each staff, the recording and the click. */
   readonly mix: Mix
   /**
-   * Whether Wait mode plays the hand not practised along (A35, "Play the other hand"); true unless
-   * said. The staves over the piano play either way.
+   * Whether the app plays the hand not chosen (A35, R36: Hear the other hand): along with the learner
+   * in Wait mode and Interpret, with the chosen one in Listen and a step; true unless said. The
+   * staves over the piano play either way.
    */
   readonly accompany?: boolean
 }
@@ -155,7 +156,8 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     accompanyAll.current = setup.accompany !== false
   })
   const gain = useCallback<SoundGain>((sound) => mixGain(() => mixed.current)(sound), [])
-  const heard = heardIn(audibleHands(state.hands), mix)
+  // Listen plays the hand chosen, and the other where it is heard (R36).
+  const heard = heardIn(audibleHands(setup.accompany === false ? state.hands : 'both'), mix)
   const { rh, lh, staff } = heard
   const clicks = partGain(mix, 'click') > 0
   const recording = partGain(mix, 'recording') > 0 ? setup.recording : null
@@ -332,7 +334,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     dispatch(event)
     if (moved === state) return
     if (!state.playing) {
-      const hands = heardIn(audibleHands(moved.hands), mix)
+      const hands = heardIn(audibleHands(accompanyAll.current ? 'both' : moved.hands), mix)
       audio.play(
         beatGroupSounds(moved.performance, moved.beatGroup, { tempo, hands }),
         undefined,

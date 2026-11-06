@@ -37,10 +37,10 @@ describe('the Player’s shortcuts', () => {
   it('takes the tempo 5% down and up, and loops the bar on R', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
-    await screen.findByRole('button', { name: 'Tempo: 100%' })
+    await screen.findByRole('button', { name: 'Pace: 100%' })
     // The song goes at 72: 90% is 65, 95% is 68.
     await user.keyboard('{ArrowDown}{ArrowDown}')
-    expect(screen.getByRole('button', { name: 'Tempo: 90%' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Pace: 90%' })).toBeInTheDocument()
     expect(router.state.location.search).toMatchObject({ tempo: 65 })
     await user.keyboard('{ArrowUp}')
     expect(router.state.location.search).toMatchObject({ tempo: 68 })

@@ -43,9 +43,10 @@ Four places, **Learn · Songs · Practice · Profile**, plus Search and Settings
   has its key, chords as diagrams, its progressions and its sections, each with short lessons. Songs can be shared as a
   link, printed, and exported or imported as MusicXML and MIDI. With an account, any folder can be shared with a
   group (a class, a choir, a band) the learner invites by a link, each group able to view or to edit.
-- **The Player:** the music as sheet music, chords over lyrics, animated chord diagrams or a grid. Four modes (Listen,
-  Sight-read, Practice, Interpret), three versions (Original, Simple, Easy), a loop, tempo, transpose and the sound mix.
-  It also plays scales, progressions and exercises.
+- **The Player:** the music as sheet music, chords over lyrics, animated chord diagrams or a grid, with two 3D hands
+  playing it at the keys. Its Pace: Listen and play along at a speed, Wait mode or Interpret; the hands the learner
+  plays, in every mode; three versions (Original, Simple, Easy), a loop, transpose and the sound mix. It also plays
+  scales, progressions and exercises.
 - **The score editor:** the Player's score in Edit mode. Any song can be edited and the learner can write their own:
   notes, chords, lyrics, fingering, staves, key, time, clef and tempo, all edited where they print. Takes are recorded
   from a MIDI keyboard and keep what was played: each key's timing and velocity, and the pedals.

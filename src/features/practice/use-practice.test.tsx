@@ -239,6 +239,23 @@ describe('usePractice: the mix (ADR 0105)', () => {
     expect(partsOf(audio.played[1]?.sounds)).toEqual(['lh', 'rh'])
   })
 
+  it('plays the hand chosen, and the other where it is heard (R36)', () => {
+    const heard = renderPractice(ONE_BAR, { hands: 'rh' })
+    act(() => heard.result.current.play())
+    expect(partsOf(audio.played[0]?.sounds)).toEqual(['lh', 'rh'])
+    heard.unmount()
+    audio = createFakeAudio()
+    const alone = renderPractice(ONE_BAR, { hands: 'rh', accompany: false })
+    act(() => alone.result.current.play())
+    expect(partsOf(audio.played[0]?.sounds)).toEqual(['rh'])
+  })
+
+  it('sounds a step with the hand chosen alone where the other is not heard (R36)', () => {
+    const { result } = renderPractice(ONE_BAR, { hands: 'lh', accompany: false })
+    act(() => result.current.jumpToBeatGroup(2))
+    expect(partsOf(audio.played[0]?.sounds)).toEqual(['lh'])
+  })
+
   it('clicks as loud as the click’s volume, and not at all turned right down', () => {
     const clicked = renderPractice(ONE_BAR, { metronome: true, mix: { ...FULL_MIX, click: 0.36 } })
     act(() => clicked.result.current.play())
@@ -314,13 +331,13 @@ describe('usePractice: the mix (ADR 0105)', () => {
 })
 
 describe('usePractice: moving', () => {
-  it('sounds every beat group moved to, in the audible hands', () => {
+  it('sounds every beat group moved to, the other hand too where it is heard (R36)', () => {
     const { result } = renderPractice(TWO_BARS, { hands: 'lh' })
     act(() => result.current.jumpToBeatGroup(4))
     act(() => result.current.jumpToBeatGroup(0))
     expect(audio.played.map((play) => keysOf(play.sounds))).toEqual([
-      [31, 43],
-      [36, 48],
+      [31, 43, 59, 62, 67],
+      [36, 48, 60, 64, 67],
     ])
   })
 })
@@ -477,8 +494,8 @@ describe('usePractice: a loop and speed training', () => {
     expect(result.current.passTempo).toBe(70)
   })
 
-  it('starts again from the cursor, the climb carried on, when the hands change mid-training', () => {
-    const training = { ...LISTEN, tempo: 60, ownTempo: 120, speedTraining: true }
+  it('starts again from the cursor, the climb carried on, when the hands heard change mid-training', () => {
+    const training = { ...LISTEN, tempo: 60, ownTempo: 120, speedTraining: true, accompany: false }
     const { result, rerender } = renderPractice(ONE_BAR, training)
     act(() => result.current.play())
     clockTo(0.1 + 3.5)
@@ -492,6 +509,15 @@ describe('usePractice: a loop and speed training', () => {
     expect(ONE_BAR.beatGroups[beatGroup]?.tick).toBe(B)
     clockTo(5.3 + 0.1 + 0.5)
     expect(result.current.passTempo).toBe(66)
+  })
+
+  it('starts nothing again when the hands change while the other is heard (R36)', () => {
+    const { result, rerender } = renderPractice(ONE_BAR)
+    act(() => result.current.play())
+    clockTo(0.1 + 1)
+    rerender({ performance: ONE_BAR, setup: { ...LISTEN, hands: 'rh' } })
+    expect(audio.played).toHaveLength(1)
+    expect(partsOf(audio.played[0]?.sounds)).toEqual(['lh', 'rh'])
   })
 
   it('carries the climb on when the learner moves while training plays', () => {

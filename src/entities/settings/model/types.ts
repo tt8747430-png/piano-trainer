@@ -60,7 +60,7 @@ export interface SoundSettings {
 }
 
 /**
- * With one hand practised (A35, the reference's Practice mode): how the other hand's staff looks
+ * With one hand chosen (A35, R36: the foot's Hands, in every mode): how the other hand's staff looks
  * (shown as it is, dimmed, or hidden, only the chosen hand's staff left), and whether it is heard.
  */
 export const OTHER_HAND_LOOKS = ['show', 'dim', 'hide'] as const
@@ -69,7 +69,7 @@ export interface OtherHandSettings {
   readonly look: OtherHandLook
   readonly play: boolean
 }
-/** The other hand dimmed, and played along in Wait mode, as the Player always did. */
+/** The other hand dimmed, and heard, as the Player always did. */
 export const DEFAULT_OTHER_HAND: OtherHandSettings = { look: 'dim', play: true }
 
 /** The hands at the keys (R36): the skin they are drawn in, four tones from light to dark. */

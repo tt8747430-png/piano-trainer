@@ -129,7 +129,6 @@ export const player = {
   coach: {
     listen: 'Press Play to hear the song.',
     wait: 'Press Play, then play each highlighted note.',
-    practice: 'Press Play, then play each highlighted note with the chosen hand.',
     follow: 'Play the highlighted notes; the accompaniment follows your tempo.',
     close: 'Dismiss tip',
   },
@@ -137,17 +136,10 @@ export const player = {
     label: 'Voice commands',
     unavailable: 'Not available in this browser',
   },
+  // The modes at the learner's own pace, in the transport's Pace (R36, flowkey's).
   modes: {
-    title: 'What would you like to do?',
-    open: 'Modes',
-    listen: { name: 'Listen', line: 'The app plays; follow the score.' },
-    wait: {
-      name: 'Sight-read',
-      line: 'The cursor waits for the right note or chord from your piano.',
-    },
-    practice: { name: 'Practice', line: 'One hand at a time, the other heard or not.' },
-    follow: { name: 'Interpret', line: 'The cursor follows your tempo.' },
-    needsPiano: 'Connect a piano or show the Keyboard.',
+    wait: { name: 'Wait mode', line: 'The music waits for the right notes.' },
+    follow: { name: 'Interpret', line: 'The music follows your tempo.' },
   },
   tools: 'Tools',
   // The tools row's Transpose (ADR 0105): the key the music is in, moved a semitone at a time.
@@ -210,6 +202,8 @@ export const player = {
   tempo: 'Tempo',
   hands: 'Hands',
   handsOf: 'Hands: {{hands}}',
+  // The foot's Hands (R36, flowkey's hands menu): the hands the learner plays, in every mode.
+  handsChoice: 'Which hands do you play?',
   pattern: 'Pattern',
   // The Setup's section of what a chord chart's hands play (A35): the pattern, the position, swing.
   accompaniment: 'Accompaniment from the chords',
@@ -306,7 +300,7 @@ export const player = {
     },
     about: {
       display: 'Layout, cursor and what appears on the score',
-      hands: 'The hands at the keys, and the hand you are not practising',
+      hands: 'The hands at the keys, and the hand you don’t play',
       playback: 'Count-in, pedalling, metronome and practice tempo',
       staves: 'Which staves sound and appear, and their levels',
       accompaniment: 'Pattern, chord voicing and swing',
@@ -329,18 +323,16 @@ export const player = {
       continuous: 'Continuous',
     },
     keys: 'Show the keyboard',
-    practice: 'One hand',
-    practiceInfo: 'When you practise one hand (Hands: Left or Right).',
     otherHand: {
-      label: 'Other hand in practice',
-      detail: 'How the hand you are not practising appears.',
+      label: 'The other hand',
+      detail: 'How the hand you don’t play shows in the music.',
       info: 'Show: its staff as written. Dim: its notes greyed. Hide: only your hand’s staff remains.',
       show: 'Show',
       dim: 'Dim',
       hide: 'Hide',
     },
     playOther: 'Hear the other hand',
-    playOtherInfo: 'In Wait mode the app plays the hand you are not practising as you play yours.',
+    playOtherInfo: 'The app plays the hand you don’t play, in every mode.',
     pedal: {
       label: 'Pedalling',
       detail: 'How the sustain pedal is played back.',
@@ -430,10 +422,14 @@ export const player = {
     medium: 'Medium',
     hard: 'Hard',
   },
+  // The transport's Pace (R36, flowkey's Tempo menu): the modes at the learner's own pace, then the
+  // speeds to listen and play along at.
   pace: {
-    of: 'Tempo: {{value}}',
-    playback: 'Playback speed',
-    playAlong: 'Tempo',
+    title: 'Pace',
+    of: 'Pace: {{value}}',
+    ownPace: 'At your own pace',
+    playAlong: 'Listen and play along',
+    needsPiano: 'Connect a piano or show the Keyboard.',
     speed: '{{percent}} speed',
     // The popover's slider: a share of the piece's tempo, 50% to 200% in 5% steps (ADR 0105).
     speedLabel: 'Speed',
