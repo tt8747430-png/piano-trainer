@@ -131,3 +131,5 @@ The score editor's Play and its recorder's click keep their own switches. A reco
   Interpret at your own pace, then Listen and play along at 50 % · 75 % · Original tempo or the slider. Practice mode
   and the Modes sheet go: the foot's Hands chooses the hands for every mode, Hear the other hand its one home; Settings
   › Hands (Skin, the other hand) between Playback and Staves (2026-11-06).
+- r36 (R36-3) — Pace fits every phone: a 44px target under 390px, its menu as wide as the screen allows and tighter
+  on a phone on its side, the transport's gutter 12px under 360px (2026-11-06).

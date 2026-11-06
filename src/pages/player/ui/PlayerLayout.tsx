@@ -575,10 +575,11 @@ export function PlayerLayout({
         </PlayerArea>
       ) : null}
       {dock === 'top' ? null : keys}
-      {/* The transport in its own row at the foot (R31-P): never floating over the music. */}
+      {/* The transport in its own row at the foot (R31-P): never floating over the music. Under
+          360px its gutter is 12px, so Pace's three-digit tempo fits beside the other six. */}
       <PlayerArea
         area="transport"
-        className="-mx-gutter border-t border-hairline px-gutter xl:border-t-0"
+        className="-mx-gutter border-t border-hairline px-gutter narrow-phone:px-3 xl:border-t-0"
       >
         <div className="mx-auto w-full max-w-xl">
           <PlayerDock

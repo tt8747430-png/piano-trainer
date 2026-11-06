@@ -458,7 +458,7 @@ export const player = {
   next: 'Next',
   play: 'Play',
   stop: 'Stop',
-  /** The floating bar of ‹ Play › with the tempo and the hands, as a screen reader names it. */
+  /** The transport (Loop, Restart, ‹ Play ›, Pace, the metronome), as a screen reader names it. */
   transport: 'Playback',
   playThese: 'Play {{notes}}',
   right: 'Correct',

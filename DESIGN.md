@@ -374,7 +374,8 @@ with sand. Shadows belong to what floats over the page, and they are soft, layer
 - **Elevation 1** (`elevation-1`): resting second actions.
 - **Elevation 2** (`elevation-2`): the main action and the transport.
 - **Elevation 3** (`elevation-3`): under a pointer, or an open dial.
-- **Popover** (`shadow-md` with a 1px ring of ink at 10%): popovers and menus.
+- **Popover** (`shadow-md` with a 1px ring of ink at 10%): popovers and menus, opening 5px inside the safe area, clear
+  of the notch, the status bar and the home indicator.
 
 Sheets rise over a page dimmed to 10% black and need no shadow.
 

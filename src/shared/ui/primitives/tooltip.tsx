@@ -1,5 +1,6 @@
 import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip'
 import { cn } from 'cn'
+import { useLayerPadding } from '@/shared/lib/safe-area'
 
 function TooltipProvider({ delay = 300, ...props }: TooltipPrimitive.Provider.Props) {
   return <TooltipPrimitive.Provider data-slot="tooltip-provider" delay={delay} {...props} />
@@ -23,9 +24,12 @@ function TooltipContent({
   ...props
 }: TooltipPrimitive.Popup.Props &
   Pick<TooltipPrimitive.Positioner.Props, 'align' | 'alignOffset' | 'side' | 'sideOffset'>) {
+  // Clear of the notch, the status bar and the home indicator (R36).
+  const padding = useLayerPadding()
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Positioner
+        collisionPadding={padding}
         align={align}
         alignOffset={alignOffset}
         side={side}

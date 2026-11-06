@@ -97,6 +97,9 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
   more than one group (a song's Settings, Publish in library, Settings › Keyboard). A switch row is a toggle. Edit is
   a quiet pencil right after the title (`ScreenHeader`'s `edit`, an `EditAction`); editing, Done in its place, so it never moves between modes.
   The score's toolbar keeps its own Edit · Done at its end (`EditToggle`, ADR 0115).
+- **What floats keeps clear of the screen's edges:** a popover, a menu, a select's list and a tooltip open 5px
+  inside the safe area (`useLayerPadding`), never under the notch or the status bar nor in the home indicator's
+  strip, read again as the phone turns; one taller than the room left scrolls inside itself.
 
 ## Consequences
 
@@ -128,3 +131,4 @@ A new option has one obvious form by this rule. A test reaches a folded action b
 - r35 (R35-2) — One Hands control, `HandsSegmented`, in the keys' order, with each hand's dot where the keys wear
   the hands' colours (2026-11-06).
 - r36 (R36-2) — The Player's Hands is the foot's, for every mode; its transport's Tempo is Pace (2026-11-06).
+- r36 (R36-3) — Popovers, menus, a select's list and tooltips keep inside the safe area (2026-11-06).

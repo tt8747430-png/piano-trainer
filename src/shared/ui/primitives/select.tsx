@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Select as SelectPrimitive } from '@base-ui/react/select'
 import { cn } from 'cn'
+import { useLayerPadding } from '@/shared/lib/safe-area'
 import { CheckIcon, ChevronDownIcon, ChevronsUpDownIcon, ChevronUpIcon } from 'lucide-react'
 
 const Select = SelectPrimitive.Root
@@ -57,9 +58,12 @@ function SelectContent({
     SelectPrimitive.Positioner.Props,
     'align' | 'alignOffset' | 'side' | 'sideOffset' | 'alignItemWithTrigger'
   >) {
+  // Clear of the notch, the status bar and the home indicator (R36).
+  const padding = useLayerPadding()
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Positioner
+        collisionPadding={padding}
         side={side}
         sideOffset={sideOffset}
         align={align}

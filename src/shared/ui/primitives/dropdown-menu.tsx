@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Menu as MenuPrimitive } from '@base-ui/react/menu'
 import { cn } from 'cn'
+import { useLayerPadding } from '@/shared/lib/safe-area'
 import { ChevronRightIcon, CheckIcon } from 'lucide-react'
 
 function DropdownMenu({ ...props }: MenuPrimitive.Root.Props) {
@@ -24,9 +25,12 @@ function DropdownMenuContent({
   ...props
 }: MenuPrimitive.Popup.Props &
   Pick<MenuPrimitive.Positioner.Props, 'align' | 'alignOffset' | 'side' | 'sideOffset'>) {
+  // Clear of the notch, the status bar and the home indicator (R36).
+  const padding = useLayerPadding()
   return (
     <MenuPrimitive.Portal>
       <MenuPrimitive.Positioner
+        collisionPadding={padding}
         className="isolate z-50 outline-none"
         align={align}
         alignOffset={alignOffset}

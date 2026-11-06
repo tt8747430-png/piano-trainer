@@ -20,7 +20,7 @@ const PERCENT = { style: 'unit', unit: 'percent' } as const
  * its side, so the transport fits at every size (ADR 0114).
  */
 const TRIGGER =
-  'h-12 rounded-pill px-3 small-phone:h-11 small-phone:px-2 narrow-phone:gap-1 narrow-phone:px-1 landscape-phone:h-10'
+  'h-12 min-w-12 rounded-pill px-3 small-phone:h-11 small-phone:min-w-11 small-phone:px-2 narrow-phone:gap-1 narrow-phone:px-1 landscape-phone:h-10 landscape-phone:min-w-10'
 
 /** The picture of each mode at the learner's own pace, which the button wears while it plays. */
 const OWN_PACE_ICON: Readonly<Record<OwnPaceMode, LucideIcon>> = {
@@ -96,15 +96,16 @@ export function PaceButton({
           <OwnPace mode={mode} name={value} />
         )}
       </PopoverTrigger>
+      {/* Tighter on a phone on its side, so all of it fits above the home indicator. */}
       <PopoverContent
         aria-label={t('pace.title')}
         side={side}
         align="start"
-        className="max-h-(--available-height) w-80 gap-4 overflow-y-auto overscroll-contain p-4"
+        className="max-h-(--available-height) w-80 gap-4 overflow-y-auto overscroll-contain p-4 landscape-phone:gap-2 landscape-phone:p-3"
       >
         <Listbox
           label={t('pace.title')}
-          className="gap-4"
+          className="gap-4 landscape-phone:gap-2"
           optionClassName="min-h-11 rounded-control px-2 text-base"
           groups={[
             {
@@ -113,7 +114,7 @@ export function PaceButton({
                 key: each,
                 selected: mode === each,
                 content: (
-                  <span className="flex min-w-0 flex-col py-1.5">
+                  <span className="flex min-w-0 flex-col py-1.5 landscape-phone:py-0.5">
                     <span>{t(`modes.${each}.name`)}</span>
                     <span className="text-sm break-words text-muted-foreground">
                       {piano ? t(`modes.${each}.line`) : t('pace.needsPiano')}
