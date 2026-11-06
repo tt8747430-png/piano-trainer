@@ -29,7 +29,7 @@ export function SidebarAccount({ collapsed }: { collapsed: boolean }) {
       aria-label={collapsed ? t('nav.profile') : undefined}
       {...current(under(['/profile', '/account']))}
       className={cn(
-        'flex min-h-12 min-w-0 items-center gap-3 rounded-control choice focus-visible:-outline-offset-3',
+        'group flex min-h-12 min-w-0 items-center gap-3 rounded-control choice focus-visible:-outline-offset-3',
         collapsed ? 'size-11 justify-center' : 'flex-1 px-2',
       )}
     >
@@ -46,7 +46,10 @@ export function SidebarAccount({ collapsed }: { collapsed: boolean }) {
       {collapsed ? null : (
         <span className="flex min-w-0 flex-col leading-tight">
           <span className="truncate font-semibold text-foreground">{name}</span>
-          <span className="text-sm text-muted-foreground">{t('nav.profile')}</span>
+          {/* On the chosen wash, current, the muted grey loses its contrast: it reads in ink there. */}
+          <span className="text-sm text-muted-foreground group-aria-[current=page]:text-foreground">
+            {t('nav.profile')}
+          </span>
         </span>
       )}
     </Link>

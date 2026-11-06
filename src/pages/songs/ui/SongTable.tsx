@@ -20,6 +20,8 @@ const SORTED_BY: Partial<Record<'title' | 'key' | 'played', LibrarySort>> = {
 }
 
 const CELL = TABLE_CELL
+/** The chords stand only where the pane has room for them beside the rest (48rem). */
+const CHORDS = cn(CELL, 'hidden @3xl:table-cell')
 
 /** A heading of a column the library sorts by: tapped while sorted, back to the learner's own order. */
 function SongSortHeading({
@@ -60,12 +62,12 @@ function SongTableRow({ entry, page }: { entry: Entry; page: LibraryPage }) {
   const favourite = page.favourites.includes(entry.id)
   return (
     <tr className="border-b border-hairline transition-colors hover:bg-muted/60">
-      <th scope="row" className={cn(CELL, 'font-normal')}>
+      <th scope="row" className={cn(CELL, 'w-full max-w-0 font-normal')}>
         <PieceLink
           entry={entry}
           className="block min-w-0 rounded-control focus-visible:-outline-offset-3"
         >
-          <span className="block font-semibold text-foreground">{primary}</span>
+          <span className="block truncate font-semibold text-foreground">{primary}</span>
           {secondary ? (
             <span className="block truncate text-sm text-muted-foreground">{secondary}</span>
           ) : null}
@@ -78,7 +80,7 @@ function SongTableRow({ entry, page }: { entry: Entry; page: LibraryPage }) {
       ) : null}
       {show.chords ? (
         <td
-          className={cn(CELL, 'max-w-64 truncate font-display text-muted-foreground')}
+          className={cn(CHORDS, 'max-w-64 truncate font-display text-muted-foreground')}
           aria-hidden
         >
           {pieceChords(entry).join('  ')}
@@ -119,46 +121,49 @@ function SongTableRow({ entry, page }: { entry: Entry; page: LibraryPage }) {
  * A place's songs as a table, the laptop's right pane (R30 S2, Apple Music's songs list): the title
  * and its line, then the columns the place's Card style shows (key, chords, level and Learned), the
  * day it was played last, and its More. A heading sorts by its column; the sorted one again returns
- * to the learner's own order.
+ * to the learner's own order. Narrower than 48rem, the pane leaves the chords out, so the table never
+ * spills past it.
  */
 export function SongTable({ entries, page }: { entries: readonly Entry[]; page: LibraryPage }) {
   const { t } = useTranslation(['songs', 'common', 'music'])
   const { show } = useCardLook()
   return (
-    <table className="w-full border-collapse">
-      <caption className="sr-only">{t('songs:title')}</caption>
-      <thead className="border-b border-border text-sm text-muted-foreground">
-        <tr>
-          <SongSortHeading column="title" label={t('songs:table.title')} page={page} />
-          {show.key ? (
-            <SongSortHeading column="key" label={t('music:key.label')} page={page} />
-          ) : null}
-          {show.chords ? (
-            <th scope="col" className={cn(CELL, 'font-semibold')}>
-              {t('songs:table.chords')}
+    <div className="@container">
+      <table className="w-full border-collapse">
+        <caption className="sr-only">{t('songs:title')}</caption>
+        <thead className="border-b border-border text-sm text-muted-foreground">
+          <tr>
+            <SongSortHeading column="title" label={t('songs:table.title')} page={page} />
+            {show.key ? (
+              <SongSortHeading column="key" label={t('music:key.label')} page={page} />
+            ) : null}
+            {show.chords ? (
+              <th scope="col" className={cn(CHORDS, 'font-semibold')}>
+                {t('songs:table.chords')}
+              </th>
+            ) : null}
+            {show.progress ? (
+              <th scope="col" className={cn(CELL, 'font-semibold')}>
+                {t('songs:table.level')}
+              </th>
+            ) : null}
+            {show.progress ? (
+              <th scope="col" className={cn(CELL, 'font-semibold')}>
+                {t('common:learned.done')}
+              </th>
+            ) : null}
+            <SongSortHeading column="played" label={t('songs:table.played')} page={page} />
+            <th scope="col" className={CELL}>
+              <span className="sr-only">{t('songs:table.actions')}</span>
             </th>
-          ) : null}
-          {show.progress ? (
-            <th scope="col" className={cn(CELL, 'font-semibold')}>
-              {t('songs:table.level')}
-            </th>
-          ) : null}
-          {show.progress ? (
-            <th scope="col" className={cn(CELL, 'font-semibold')}>
-              {t('common:learned.done')}
-            </th>
-          ) : null}
-          <SongSortHeading column="played" label={t('songs:table.played')} page={page} />
-          <th scope="col" className={CELL}>
-            <span className="sr-only">{t('songs:table.actions')}</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {entries.map((entry) => (
-          <SongTableRow key={entry.id} entry={entry} page={page} />
-        ))}
-      </tbody>
-    </table>
+          </tr>
+        </thead>
+        <tbody>
+          {entries.map((entry) => (
+            <SongTableRow key={entry.id} entry={entry} page={page} />
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }

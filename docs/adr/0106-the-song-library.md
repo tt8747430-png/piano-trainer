@@ -21,6 +21,8 @@ details.
   pictures and one of 5 paints. A new song is made where the learner is, and so is an imported one: New offers New
   song, New folder and Import, and only these (it adds; the Public library is a place, Home's first row), and a
   file dropped on the library imports it (ADR 0107).
+- **The laptop's table** (`SongTable`, from 64rem) fits its pane at every width: the title takes the room the other
+  columns leave and is cut short, and a pane narrower than 48rem leaves the Chords out.
 - **The actions**, at every size:
   - a song's row: More (Favourite, Move to…, Archive, and Delete for the learner's own song, to the Trash with Undo), a swipe
     (right Favourite; left Move, then Archive), a long press starting Select;
@@ -126,3 +128,4 @@ A study, practised on Practice, is in no library. A folder played song after son
   name, a failure with Try again); a shared folder of the learner's own has Stop sharing (2026-11-05).
 - r34 (R34) — Covers engraved from the song's first bars; Your practice says the last and best take, the bars one by one and one next step; the ♡ moves into the bar (2026-11-06).
 - r34 (R34-4) — The Trash beside the archive; Delete of an own song to it with Undo; a folder row opens on a tap anywhere with no chevron beside its More (2026-11-06).
+- r36 (R36-3) — The songs table fits its pane: the title cut short, the Chords only from 48rem (2026-11-06).
