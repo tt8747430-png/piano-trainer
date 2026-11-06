@@ -3,6 +3,7 @@ import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Midi, Tick } from '@/shared/lib/music'
 import type { StaffId, StaffLabels } from '@/shared/lib/notation'
+import type { VerdictMark } from '@/shared/ui'
 import { ScoreView, type Picked } from '@/shared/ui/score'
 import type { ScoreLine } from '../model/score-lines'
 import { SheetOverlay } from './SheetOverlay'
@@ -43,6 +44,8 @@ interface SheetLineProps {
   readonly clock: (() => Tick | null) | null | undefined
   readonly loop: BarRange | null
   readonly playheadShown: boolean
+  /** A take's verdicts, by each judged head's engraved id. */
+  readonly verdicts?: ReadonlyMap<string, VerdictMark> | undefined
   readonly onJump: (beatGroup: number) => void
   readonly onPick: (picked: Picked) => void
   readonly onLoopChange: (loop: BarRange) => void

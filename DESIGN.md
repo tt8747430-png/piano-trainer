@@ -286,9 +286,11 @@ soft: card paper in the control line.
 meaning something. The navigation is monochrome for the same reason.
 
 **The Palette Law.** Role colours sit on chord tones, hand colours in the Player, chrome paints as washes naming a place
-or a kind. Brick means the root and the right hand, nothing else.
+or a kind. Brick means the root and the right hand, nothing else. The right hand is filled, the left outlined in
+lilac, so the hands part by shape as well as colour.
 
-**The Second Cue Rule.** Colour is never the only cue: a coloured key always shows its degree, finger or note.
+**The Second Cue Rule.** Colour is never the only cue: a coloured key always shows its degree, finger or note, and a
+judged note its verdict's shape beside its head (● right, ◂ early, ▸ late, ○ missed, × wrong).
 
 ## Typography
 

@@ -2,10 +2,12 @@ import type { RefObject } from 'react'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
+import type { VerdictMark } from '@/shared/ui'
 import { Playhead, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { BarTargets } from './BarTargets'
 import { LoopBand } from './LoopBand'
 import { SheetLabels } from './SheetLabels'
+import { VerdictShapes } from './VerdictShapes'
 
 /** What lies over the engraving, placed by its layout: labels, the loop, the playhead, the bars. */
 export function SheetOverlay({
@@ -26,7 +28,10 @@ export function SheetOverlay({
   tempos = [],
   firstBar = 0,
   labelSize = 1,
+  verdicts,
 }: {
+  /** A take's verdicts, each judged head's by its engraved id: a shape beside each (R34). */
+  verdicts?: ReadonlyMap<string, VerdictMark> | undefined
   /** The size its labels are drawn at: the line's, smaller with a staff drawn smaller. */
   labelSize?: number
   chordNames?: boolean
@@ -69,6 +74,7 @@ export function SheetOverlay({
         firstBar={firstBar}
         size={labelSize}
       />
+      {verdicts ? <VerdictShapes layout={layout} heads={verdicts} /> : null}
       {loop ? (
         <LoopBand layout={layout} loop={loop} onChange={onLoopChange} firstBar={firstBar} />
       ) : null}

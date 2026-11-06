@@ -22,7 +22,8 @@ const REST: Readonly<Record<KeyFill, string>> = {
   '11th': cn(ROLE_WASH['11th'], LABEL_INK),
   '13th': cn(ROLE_WASH['13th'], LABEL_INK),
   rh: cn('bg-hand-rh-wash', LABEL_INK),
-  lh: cn('bg-hand-lh-wash', LABEL_INK),
+  // The left hand is outlined, the right filled (DESIGN.md, Palette Law; R34): they part by shape too.
+  lh: cn('bg-hand-lh-wash outline-1 -outline-offset-1 outline-hand-lh', LABEL_INK),
   staff: cn('bg-hand-staff-wash', LABEL_INK),
   tonic: 'bg-key-tonic text-on-key-tonic',
   scale: 'bg-key-scale text-on-key-scale',
@@ -41,7 +42,7 @@ const DOWN: Readonly<Record<KeyFill, string>> = {
   '11th': cn(ROLE_BG['11th'], LABEL_INK),
   '13th': cn(ROLE_BG['13th'], LABEL_INK),
   rh: cn('bg-hand-rh', LABEL_INK),
-  lh: cn('bg-hand-lh', LABEL_INK),
+  lh: cn('bg-hand-lh/50 outline-2 -outline-offset-2 outline-hand-lh', LABEL_INK),
   staff: cn('bg-hand-staff', LABEL_INK),
   tonic: 'bg-key-tonic-down text-on-key-tonic',
   scale: 'bg-key-scale-down text-on-key-scale',

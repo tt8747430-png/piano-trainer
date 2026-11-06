@@ -64,7 +64,10 @@ describe('the Player’s foot bar and Feedback (R29 B8, R31-P)', () => {
     const menu = await openMore(user)
     await user.click(within(menu).getByRole('menuitem', { name: 'How did I play?' }))
     const summary = await screen.findByText(/% right/)
-    expect(summary).toHaveTextContent(/^\d+ ?% right( · \d+ (wrong|early|late))* · \d+ missed$/)
+    // Each count after its verdict's shape, as the score marks it (R34).
+    expect(summary).toHaveTextContent(
+      /^●\d+ ?% right( · [×◂▸]\d+ (wrong|early|late))* · ○\d+ missed$/,
+    )
     expect(document.querySelector('[data-slot="note-verdicts"]')?.textContent).toContain('n-')
     await user.click(screen.getByRole('button', { name: 'Hide feedback' }))
     expect(screen.queryByRole('button', { name: 'Hide feedback' })).not.toBeInTheDocument()

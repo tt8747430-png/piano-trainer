@@ -1,4 +1,5 @@
 import type { NamedKeys } from '@/shared/lib'
+import { VERDICT_SHAPE } from '../verdict-shape'
 import {
   isBlackKey,
   noteName,
@@ -52,7 +53,7 @@ export interface KeyText {
 
 export type KeyFill = 'white' | 'black' | 'lit' | 'selected' | 'wrong' | KeyTone
 
-/** A key's label: a mark's own (a degree, ✓, a note the Player spells), ✕ on a wrong key, or its note's name, drawn smaller. */
+/** A key's label: a mark's own (a degree, ✓, a note the Player spells), × on a wrong key, or its note's name, drawn smaller. */
 export interface KeyLabel {
   readonly kind: 'mark' | 'name'
   readonly text: string
@@ -89,8 +90,8 @@ function nameOf(key: Midi, namedKeys: NamedKeys): string | undefined {
   return namedKeys === 'all' ? noteName(plainSpelling(pc, true)) : undefined
 }
 
-/** A wrong key's own mark where nothing else labels it: crimson is never its only cue. */
-const WRONG_MARK = '✕'
+/** A wrong key's own mark where nothing else labels it, the score's wrong shape: crimson is never its only cue. */
+const WRONG_MARK = VERDICT_SHAPE.wrong
 
 function labelOf(
   key: Midi,

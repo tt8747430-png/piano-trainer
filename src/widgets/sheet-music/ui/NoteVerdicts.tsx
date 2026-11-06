@@ -1,21 +1,10 @@
 import { useMemo } from 'react'
 import { noteIds, type Score, type ScoreAnnotation } from '@/shared/lib/notation'
-
-/** A played note's verdict, as the sheet colours its head (R29 B8, Feedback). */
-export type NoteVerdictMark = 'right' | 'wrong' | 'missed' | 'early' | 'late'
-
-/** Each verdict's ink: right grass, wrong rose, early or late honey, missed faded. */
-const INK: Readonly<Record<NoteVerdictMark, string>> = {
-  right: 'var(--paint-full-grass)',
-  wrong: 'var(--destructive)',
-  early: 'var(--paint-full-yellow)',
-  late: 'var(--paint-full-yellow)',
-  missed: 'var(--muted-foreground)',
-}
+import { VERDICT_INK, type VerdictMark } from '@/shared/ui'
 
 /**
  * A take's verdicts on the score (R29 B8): each judged note's head in its verdict's ink, found by the
- * engraving's ids (`noteIds`), whatever the layout draws.
+ * engraving's ids (`noteIds`), whatever the layout draws. Its shape beside it is `VerdictShapes`' (R34).
  */
 export function NoteVerdicts({
   score,
@@ -23,7 +12,7 @@ export function NoteVerdicts({
 }: {
   score: Score
   /** Each judged note's verdict, by where it is played (`notePlace`). */
-  verdicts: ReadonlyMap<string, NoteVerdictMark>
+  verdicts: ReadonlyMap<string, VerdictMark>
 }) {
   const ids = useMemo(() => noteIds(score), [score])
   const css = useMemo(
@@ -31,7 +20,8 @@ export function NoteVerdicts({
       [...verdicts]
         .flatMap(([place, verdict]) =>
           (ids.get(place) ?? []).map(
-            (id) => `[data-slot="score"] [id="${id}"]{color:${INK[verdict]};fill:${INK[verdict]}}`,
+            (id) =>
+              `[data-slot="score"] [id="${id}"]{color:${VERDICT_INK[verdict]};fill:${VERDICT_INK[verdict]}}`,
           ),
         )
         .join(''),

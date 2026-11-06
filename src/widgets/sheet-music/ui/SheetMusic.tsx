@@ -4,16 +4,17 @@ import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { useElementSize, useLatestCallback, type SheetView } from '@/shared/lib'
 import type { Tick } from '@/shared/lib/music'
-import type { ScoreAnnotation, StaffId } from '@/shared/lib/notation'
+import { noteIds, type ScoreAnnotation, type StaffId } from '@/shared/lib/notation'
 import type { PieceLayout, ScoreHeader } from '@/entities/piece'
-import { SheetTitle } from '@/shared/ui'
+import { SheetTitle, type VerdictMark } from '@/shared/ui'
 import { labelRow, ScoreView, scoreHeight, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { engravedHeight, FINGERS, fitScale, widestBar } from '../model/fit-scale'
 import { groupOfTick } from '../model/group-of-tick'
 import { keepsLoop } from '../model/keeps-loop'
+import { verdictHeads } from '../model/verdict-heads'
 import { SheetLines } from './SheetLines'
 import { PedalMarks } from './PedalMarks'
-import { CircledNotes, NoteVerdicts, type NoteVerdictMark } from './NoteVerdicts'
+import { CircledNotes, NoteVerdicts } from './NoteVerdicts'
 import { SheetOverlay } from './SheetOverlay'
 import { useSheetScore } from './use-sheet-score'
 
@@ -150,7 +151,7 @@ export function SheetMusic({
   /** The loop chosen, or let go of (a note clicked, Escape). */
   onLoopChange: (loop: BarRange | null) => void
   /** A take's verdicts, each judged note's head in its ink (R29 B8, Feedback); none without. */
-  verdicts?: ReadonlyMap<string, NoteVerdictMark> | undefined
+  verdicts?: ReadonlyMap<string, VerdictMark> | undefined
   /** The learner's typed marks (R29 B8), written on the score, its circled notes ringed. */
   annotations?: readonly ScoreAnnotation[] | undefined
 }) {
@@ -233,6 +234,11 @@ export function SheetMusic({
   const [resting, setResting] = useState({ loop: loopKey, at: current })
   if (resting.loop !== loopKey) setResting({ loop: loopKey, at: current })
   const playheadShown = cursor && (!loop || playing || current !== resting.at)
+  // Each judged head's verdict by its engraved id: a shape beside each (R34, Second Cue Rule).
+  const heads = useMemo(
+    () => (verdicts ? verdictHeads(noteIds(score), verdicts) : undefined),
+    [score, verdicts],
+  )
   const pedalMarks = (
     <>
       <PedalMarks performance={performance} current={current} />
@@ -269,6 +275,7 @@ export function SheetMusic({
           onChoose={onChoose}
           selected={selected}
           playheadShown={playheadShown}
+          verdicts={heads}
         />
       </>
     )
@@ -318,6 +325,7 @@ export function SheetMusic({
                   onPick={onPick}
                   onLoopChange={onLoopChange}
                   onChoose={onChoose}
+                  verdicts={heads}
                 />
               </>
             )}

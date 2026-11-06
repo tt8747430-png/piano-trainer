@@ -72,6 +72,8 @@ swung and re-zoomed as a page showed other keys. Each screen that wanted a compu
   corda) strikes a key two thirds as loud through a low-pass of its own; the sostenuto (CC66) catches the dampers
   raised as it goes down (the keys held, or every key sounding under the sustain) and lets them go as it lifts. The
   keys a hand plays sound as loud as the piano's Volume (`keyboard.volume`, its square a gain).
+- **The hands differ by shape:** a right-hand key is filled brick, a left-hand key a lilac wash with a lilac outline,
+  1 px at rest and 2 px while it sounds (R34, DESIGN.md's Palette Law).
 
 ## Consequences
 
@@ -104,3 +106,4 @@ give the keys a box (`stubBox`) and the scroller its metrics (`stubScrolling`).
   resizes the keys, kept per screen size; hidden keys fold into a Keyboard strip; the sheet's layout and zoom in one
   pill; the editor's gear holds On-screen piano; the floating Keys button, Key depth and Collapse keyboard go
   (2026-11-05).
+- r34 (R34) — The left hand outlined, the right filled, so the hands part without colour (2026-11-06).

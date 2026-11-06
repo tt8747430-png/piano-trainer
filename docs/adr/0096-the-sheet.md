@@ -34,6 +34,9 @@ editor each had their own cursor, box and gestures, different again in each layo
     lets go of the loop; Shift-click or a held finger sets the loop; Shift with ← → moves its far end a bar, with Home
     or End to an end; Escape lets go of it, then closes.
 - **No caret inside a range**, and no playhead while a loop stands chosen and stopped.
+- **A take's verdicts** colour each judged head (`NoteVerdicts`) and draw its shape beside it (`VerdictShapes`, from
+  `shared/ui/verdict-shape.ts`): ● right, ◂ early, ▸ late, ○ missed, × wrong. The take's summary leads each count with
+  the same shape, and a wrong key on the piano shows the same ×, so colour is never the only cue (R34).
 
 ## Consequences
 
@@ -51,3 +54,4 @@ The selection and the playhead read the same in every layout of both screens; a 
 - 0115 — The layouts renamed Page view · Vertical scroll · Panorama (2026-10-27).
 - r29 (P16) — A selection's band runs by the bar's beats, from a bar line or a beat to the next (`beatGrid`, `snapRange`, `beatsBand`); no padding round the notes (2026-11-04).
 - r34 (R34) — The layout and the page view's zoom in one pill at the score's corner, always in sight (Songscription's view pill); the Layout tiles leave Display and the editor's View (2026-11-05).
+- r34 (R34) — A shape beside each judged head, one table for the sheet, the summary and the keys (2026-11-06).

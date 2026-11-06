@@ -5,7 +5,7 @@ import type { Performance } from '@/shared/lib/arrangement'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { LANDSCAPE_PHONE, PAGE, PRINT_SCALE, useElementSize, useMediaQuery } from '@/shared/lib'
 import { staffScale, type PieceLayout, type ScoreHeader } from '@/entities/piece'
-import { hasCredits, PageCanvas, SheetCredits, SheetTitle } from '@/shared/ui'
+import { hasCredits, PageCanvas, SheetCredits, SheetTitle, type VerdictMark } from '@/shared/ui'
 import {
   lineLead,
   measureWidths,
@@ -56,7 +56,10 @@ export function SheetLines({
   onChoose,
   selected,
   playheadShown,
+  verdicts,
 }: {
+  /** A take's verdicts, by each judged head's engraved id (R34). */
+  verdicts: ReadonlyMap<string, VerdictMark> | undefined
   score: Score
   performance: Performance
   staves: readonly StaffId[]
@@ -163,6 +166,7 @@ export function SheetLines({
         clock={here ? clock : null}
         loop={loop}
         playheadShown={playheadShown}
+        verdicts={verdicts}
         onJump={onJump}
         onPick={onPick}
         onLoopChange={onLoopChange}
