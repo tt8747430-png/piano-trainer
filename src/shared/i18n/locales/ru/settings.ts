@@ -212,6 +212,8 @@ export const settings: LocaleResources['settings'] = {
     publicDomain: 'Общественное достояние',
     for: {
       scores: 'Нотная графика',
+      threeD: 'Трёхмерное фортепиано',
+      hands: 'Руки на клавишах',
       piano: 'Сэмплы фортепиано',
       lightPiano: 'Сэмплы фортепиано без сети',
       drums: 'Сэмплы ударных',

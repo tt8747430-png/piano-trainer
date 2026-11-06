@@ -218,6 +218,8 @@ export const settings = {
     publicDomain: 'Public domain',
     for: {
       scores: 'Music engraving',
+      threeD: 'The 3D piano',
+      hands: 'The hands at the keys',
       piano: 'Piano samples',
       lightPiano: 'Offline piano samples',
       drums: 'Drum samples',

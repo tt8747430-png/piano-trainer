@@ -295,8 +295,18 @@ export const player = {
     accompaniment: 'Accompaniment',
     playback: 'Playback',
     display: 'Score view',
+    hands: 'Hands',
+    skin: {
+      label: 'Skin',
+      detail: 'The tone the hands at the keys are drawn in.',
+      light: 'Light',
+      'medium-light': 'Medium light',
+      'medium-dark': 'Medium dark',
+      dark: 'Dark',
+    },
     about: {
       display: 'Layout, cursor and what appears on the score',
+      hands: 'The hands at the keys, and the hand you are not practising',
       playback: 'Count-in, pedalling, metronome and practice tempo',
       staves: 'Which staves sound and appear, and their levels',
       accompaniment: 'Pattern, chord voicing and swing',
@@ -339,6 +349,17 @@ export const player = {
       off: 'Off',
       automatic: 'Automatic',
     },
+  },
+  /** The hands at the keys (R36): a piano seen from the seat, two hands playing the music on it. */
+  handsAtKeys: {
+    label: 'Hands at the keys',
+    description:
+      'A piano seen from the seat. Two hands play the music, each note pressed by its finger.',
+    loading: 'Getting the hands ready…',
+    unsupported: 'This device can’t draw the hands.',
+    failed: 'The hands didn’t load.',
+    showKeys: 'Show the keys',
+    retry: 'Try again',
   },
   /** The picker's way to the Patterns page, where they are explained, starred, hidden and made. */
   allPatterns: 'All patterns',

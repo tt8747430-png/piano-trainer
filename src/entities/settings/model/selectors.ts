@@ -9,6 +9,7 @@ import type {
   ScoreViewSettings,
   KeyboardSettings,
   KeysHeight,
+  HandsViewSettings,
   OtherHandSettings,
   PlaybackSettings,
   MetronomeSettings,
@@ -53,6 +54,7 @@ export const selectChordFinder = (state: SettingsState): ChordFinderSettings => 
 export const selectScoreView = (state: SettingsState): ScoreViewSettings => state.scoreView
 /** With one hand practised, how the other looks and whether it is heard (A35). */
 export const selectOtherHand = (state: SettingsState): OtherHandSettings => state.otherHand
+export const selectHandsView = (state: SettingsState): HandsViewSettings => state.handsView
 /** How the Player always plays (B7). */
 export const selectPlayback = (state: SettingsState): PlaybackSettings => state.playback
 export const selectMetronome = (state: SettingsState): MetronomeSettings => state.metronome

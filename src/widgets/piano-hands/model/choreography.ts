@@ -137,13 +137,38 @@ export function choreograph(notes: readonly PerformanceNote[]): Choreography {
   return { rh: partOf('rh', notes), lh: partOf('lh', notes) }
 }
 
+/**
+ * How far apart the hands stand at their widest, in metres between their places (their middle
+ * fingers), each where its last onset put it; none where one hand has nothing to play. The camera
+ * keeps both hands in view by it.
+ */
+export function handsApart({ rh, lh }: Choreography): number {
+  if (!rh || !lh) return 0
+  const standing = (part: HandPart, tick: number) =>
+    part.places[
+      Math.max(
+        0,
+        lastAtOrBefore(part.places, (place) => place.tick, tick),
+      )
+    ]?.x ?? 0
+  let widest = 0
+  for (const { tick } of [...rh.places, ...lh.places])
+    widest = Math.max(widest, standing(rh, tick) - standing(lh, tick))
+  return widest
+}
+
+/** A finger's aim, and the key it plays or is about to: none while it rests. */
+export interface FingerAt extends FingerAim {
+  readonly key: Midi | null
+}
+
 /** A hand at a moment: its place and lift, and each finger's aim, thumb first. */
 export interface HandPose {
   readonly x: number
   readonly depth: number
   /** How high the hand is lifted off the keys as it travels, in metres. */
   readonly lift: number
-  readonly fingers: readonly FingerAim[]
+  readonly fingers: readonly FingerAt[]
   /** The keys its fingers hold down now, and how far down (0–1). */
   readonly keys: ReadonlyMap<Midi, number>
 }
@@ -213,7 +238,7 @@ function placeAt(part: HandPart, tick: number, perSecond: number) {
 export function handPose(part: HandPart, tick: number, perSecond: number): HandPose {
   const { x, depth, lift } = placeAt(part, tick, perSecond)
   const keys = new Map<Midi, number>()
-  const fingers = part.fingers.map(({ finger, notes }): FingerAim => {
+  const fingers = part.fingers.map(({ finger, notes }): FingerAt => {
     const resting = x + restingPlace(part.side, finger) * KEY.width
     const toward = (key: Midi) => ({ dx: keyX(key) - resting, black: isBlackKey(key) ? 1 : 0 })
     const i = lastAtOrBefore(notes, (note) => note.start, tick)
@@ -224,7 +249,7 @@ export function handPose(part: HandPart, tick: number, perSecond: number): HandP
       const release = Math.min(MOTION.release * perSecond, length * 0.4)
       const press = Math.min(1, (tick - now.start) / attack, (now.end - tick) / release)
       keys.set(now.key, Math.max(keys.get(now.key) ?? 0, press))
-      return { ...toward(now.key), press }
+      return { ...toward(now.key), press, key: now.key }
     }
     // Hovering: from the key it last played back to rest, then on to the key it plays next.
     const rest = { dx: 0, black: 0 }
@@ -232,9 +257,25 @@ export function handPose(part: HandPart, tick: number, perSecond: number): HandP
     const from = now && after < 1 ? mix(toward(now.key), rest, after) : rest
     const next = notes[i + 1]
     const before = next ? smooth(1 - (next.start - tick) / (MOTION.approach * perSecond)) : 0
-    return { ...(next && before > 0 ? mix(from, toward(next.key), before) : from), press: 0 }
+    const key = next && before > 0 ? next.key : now && after < 1 ? now.key : null
+    return { ...(next && before > 0 ? mix(from, toward(next.key), before) : from), press: 0, key }
   })
   return { x, depth, lift, fingers, keys }
+}
+
+/**
+ * A hand standing on the notes awaited, pressing those the learner holds (Wait mode, Interpret): the
+ * music does not play them, the learner does, on a piano or the keys.
+ */
+export function pressHeld(pose: HandPose, held: ReadonlySet<Midi>): HandPose {
+  if (held.size === 0) return pose
+  const keys = new Map(pose.keys)
+  const fingers = pose.fingers.map((finger) => {
+    if (finger.key === null || !held.has(finger.key)) return finger
+    keys.set(finger.key, 1)
+    return { ...finger, press: 1 }
+  })
+  return { ...pose, fingers, keys }
 }
 
 const mix = (

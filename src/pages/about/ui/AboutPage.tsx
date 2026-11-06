@@ -8,6 +8,8 @@ import { SettingsScreen, UpdateRows } from '@/widgets/settings-screen'
 /** What the app is made with, each under its own licence (R29 B9): who made it and where it is from. */
 const CREDITS = [
   { name: 'Verovio', what: 'scores', licence: 'LGPL-3.0' },
+  { name: 'three.js', what: 'threeD', by: 'three.js authors', licence: 'MIT' },
+  { name: 'WebXR generic hand', what: 'hands', by: 'Amazon.com', licence: 'MIT' },
   {
     name: 'Salamander Grand Piano',
     what: 'piano',

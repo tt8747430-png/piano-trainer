@@ -8,16 +8,23 @@ import {
   FOLLOW_RETURNS,
   type FollowReturn,
   OTHER_HAND_LOOKS,
+  SKIN_TONES,
   SPEED_STEPS,
+  selectHandsView,
   selectOtherHand,
   selectPlayback,
   selectScoreView,
   selectSound,
-  type SpeedStep,
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
-import { setOtherHand, setPlayback, setScoreView, setSound } from '@/features/set-preference'
+import {
+  setHandsView,
+  setOtherHand,
+  setPlayback,
+  setScoreView,
+  setSound,
+} from '@/features/set-preference'
 import { formatPercent, useLocale } from '@/shared/i18n'
 import { PEDAL_PLAYS } from '@/shared/lib/schedule'
 import { RowLink, ChoiceCard, SettingsGroup, SwitchRow, VolumeSlider } from '@/shared/ui'
@@ -25,14 +32,13 @@ import { RowLink, ChoiceCard, SettingsGroup, SwitchRow, VolumeSlider } from '@/s
 /**
  * How the Player plays, every song (the Player's Settings › Playback, R31-P, R32): the music's own
  * first (`children`: a score's Swing), then the count-in, the pedalling, the metronome (its page and
- * its level), speed training's step and the other hand's look; each choice a card with its line.
+ * its level) and speed training's step; each choice a card with its line.
  */
 export function PlayerPlayback({ children }: { children?: ReactNode }) {
   const { t } = useTranslation(['player', 'music'])
   const locale = useLocale()
   const settings = useSettingsStoreApi()
   const playback = useSettings(selectPlayback)
-  const otherHand = useSettings(selectOtherHand)
   const click = useSettings((state) => selectSound(state).click)
   return (
     <>
@@ -84,7 +90,34 @@ export function PlayerPlayback({ children }: { children?: ReactNode }) {
           value: String(step),
           label: formatPercent(locale, step),
         }))}
-        onChange={(step) => setPlayback(settings, { speedStep: Number(step) as SpeedStep })}
+        onChange={(step) =>
+          setPlayback(settings, {
+            speedStep: SPEED_STEPS.find((each) => String(each) === step) ?? playback.speedStep,
+          })
+        }
+      />
+    </>
+  )
+}
+
+/**
+ * The hands (the Player's Settings › Hands, R36): the skin the hands at the keys are drawn in, and how
+ * the hand not practised looks on the music.
+ */
+export function PlayerHands() {
+  const { t } = useTranslation('player')
+  const settings = useSettingsStoreApi()
+  const otherHand = useSettings(selectOtherHand)
+  const skin = useSettings((state) => selectHandsView(state).skin)
+  return (
+    <>
+      <ChoiceCard
+        title={t('settingsPage.skin.label')}
+        description={t('settingsPage.skin.detail')}
+        setting="handsView.skin"
+        value={skin}
+        options={SKIN_TONES.map((value) => ({ value, label: t(`settingsPage.skin.${value}`) }))}
+        onChange={(tone) => setHandsView(settings, { skin: tone })}
       />
       <ChoiceCard
         title={t('settingsPage.otherHand.label')}

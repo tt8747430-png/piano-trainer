@@ -92,6 +92,8 @@ export interface PracticePlayer {
   readonly pedalKeys: ReadonlySet<Midi>
   /** The keys out: this visit's (ADR 0111), else the View's saved ones. */
   readonly keys: boolean
+  /** The hand practised, or both: the hands at the keys fade the other (R36). */
+  readonly practised: Hands
   /** The click on or off: this visit's where it has its own, else the saved one. */
   setClick(on: boolean): void
   /** The keys out or put away: this visit's where it has its own, else the View's. */
@@ -252,6 +254,7 @@ export function usePracticePlayer(
       pedalSpanAt(performance.pedal, performance.beatGroups[state.beatGroup]?.tick ?? 0) !== null,
     pedalKeys: heldByPedal,
     keys: view.keys ?? savedKeys,
+    practised: practisedHand,
     setClick: (on) =>
       view.click === undefined
         ? setPracticeToggle(settings, 'metronome', on)

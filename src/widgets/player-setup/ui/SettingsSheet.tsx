@@ -14,14 +14,23 @@ import { SetupTrigger } from './SetupTrigger'
 import { useSettingsExtras, type SettingsAct, type SettingsRow } from './setup-extras'
 
 /**
- * Where each page's row stands (R32): by what a pianist reaches for most, the score's look first,
- * then how it plays, its staves, its accompaniment, the on-screen piano. A page unlisted goes last.
+ * Where each page's row stands (R32, R36): by what a pianist reaches for most, the score's look
+ * first, then how it plays, the hands at the keys, its staves, its accompaniment, the on-screen
+ * piano. A page unlisted goes last.
  */
-const PAGE_ORDER: readonly string[] = ['display', 'playback', 'staves', 'accompaniment', 'piano']
-/** Each page's tile, one colour a page. */
+const PAGE_ORDER: readonly string[] = [
+  'display',
+  'playback',
+  'hands',
+  'staves',
+  'accompaniment',
+  'piano',
+]
+/** Each page's tile, one colour a page; the hands at the keys in the piano's sand. */
 const PAGE_PAINT: Readonly<Record<string, Paint>> = {
   display: 'lilac',
   playback: 'grass',
+  hands: 'sand',
   staves: 'sky',
   accompaniment: 'yellow',
   piano: 'sand',

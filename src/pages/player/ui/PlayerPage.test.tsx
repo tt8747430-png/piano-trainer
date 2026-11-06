@@ -63,8 +63,8 @@ describe('Player', () => {
   const pageTitles = (sheet: HTMLElement) =>
     [...sheet.querySelectorAll('button, a')]
       .map((row) =>
-        ['Score view', 'Playback', 'Staves', 'Accompaniment', 'On-screen piano'].find((title) =>
-          row.textContent?.startsWith(title),
+        ['Score view', 'Playback', 'Hands', 'Staves', 'Accompaniment', 'On-screen piano'].find(
+          (title) => row.textContent?.startsWith(title),
         ),
       )
       .filter((title) => title !== undefined)
@@ -78,8 +78,8 @@ describe('Player', () => {
       sizedAs(query)
       await renderApp('/play/bz5')
       await screen.findByRole('button', { name: 'Player settings' })
-      // Close, the title and Edit, then Sustain and Keyboard (R34) and the one gear (R31-P); MIDI
-      // only with a keyboard connected (R32); the View is the foot bar's (ADR 0108).
+      // Close, the title and Edit, then Sustain, the Hands and the Keys (R34, R36) and the one gear
+      // (R31-P); MIDI only with a keyboard connected (R32); the View is the foot bar's (ADR 0108).
       const controls = [
         ...document.querySelectorAll(
           ':is([data-area="lead"], [data-area="actions"]) :is(button, a)',
@@ -89,6 +89,7 @@ describe('Player', () => {
         'Close',
         'Edit',
         'Sustain pedal — hold, or tap to latch',
+        'Hands at the keys',
         'Keyboard',
         'Player settings',
       ])
@@ -369,6 +370,7 @@ describe('Player', () => {
     expect(pageTitles(sheet)).toEqual([
       'Score view',
       'Playback',
+      'Hands',
       'Staves',
       'Accompaniment',
       'On-screen piano',

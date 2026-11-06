@@ -25,6 +25,7 @@ export function renderLiveKeyboard({
   sustained = false,
   divider,
   onShow = () => undefined,
+  hands,
 }: {
   onKeyPress?: (key: Midi) => void
   keyPlays?: (key: Midi) => readonly Midi[]
@@ -33,6 +34,8 @@ export function renderLiveKeyboard({
   sustained?: boolean
   divider?: 'above' | 'below'
   onShow?: (shown: boolean) => void
+  /** The Player's Hands beside Keyboard (R36). */
+  hands?: { shown: boolean; onShow: (shown: boolean) => void }
 } = {}) {
   const audio = createFakeAudio()
   const midiKeyboard = createFakeMidi()
@@ -45,7 +48,7 @@ export function renderLiveKeyboard({
   const { unmount } = render(
     <SettingsStoreProvider store={settingsStore}>
       <ServicesProvider services={{ audio, midi: midiKeyboard }}>
-        <KeyboardTools shown onShow={onShow} sustained={sustained} />
+        <KeyboardTools shown onShow={onShow} sustained={sustained} hands={hands} />
         <LiveKeyboard
           range={ONE_OCTAVE}
           spotlight={spotlight}

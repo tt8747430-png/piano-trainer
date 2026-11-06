@@ -39,6 +39,36 @@ describe('the keyboard’s controls in the bar (R34)', () => {
     expect(onShow).toHaveBeenCalledWith(false)
   })
 
+  it('shows the hands at the keys in the keys’ place from Hands, one of the two pressed (R36)', async () => {
+    const user = userEvent.setup()
+    const onShow = vi.fn()
+    const onHands = vi.fn()
+    setUp({ onShow, hands: { shown: false, onShow: onHands } })
+    const hands = screen.getByRole('button', { name: 'Hands at the keys' })
+    expect(hands).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByRole('button', { name: 'Keyboard' })).toHaveAttribute('aria-pressed', 'true')
+    await user.click(hands)
+    expect(onHands).toHaveBeenCalledWith(true)
+    expect(onShow).toHaveBeenLastCalledWith(true)
+  })
+
+  it('puts the place away when the one showing is tapped again', async () => {
+    const user = userEvent.setup()
+    const onShow = vi.fn()
+    const onHands = vi.fn()
+    setUp({ onShow, hands: { shown: true, onShow: onHands } })
+    expect(screen.getByRole('button', { name: 'Keyboard' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    )
+    await user.click(screen.getByRole('button', { name: 'Hands at the keys' }))
+    expect(onShow).toHaveBeenCalledWith(false)
+    expect(onHands).not.toHaveBeenCalled()
+    await user.click(screen.getByRole('button', { name: 'Keyboard' }))
+    expect(onHands).toHaveBeenCalledWith(false)
+    expect(onShow).toHaveBeenLastCalledWith(true)
+  })
+
   it('holds nothing else of the keyboard: no zoom, no settings, no octave buttons', () => {
     setUp()
     for (const name of [/keys$/i, /settings/i, /^Octave/]) {

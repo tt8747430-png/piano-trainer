@@ -4,6 +4,7 @@ import {
   Link2,
   Ellipsis,
   Gauge,
+  Hand,
   ListMusic,
   MessageSquareText,
   Mic,
@@ -17,21 +18,29 @@ import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
 import {
   selectKeyboard,
+  selectHandsView,
   selectPlayback,
   selectScoreView,
   selectTipSeen,
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
-import { retireTip } from '@/features/set-preference'
-import { isMidiConnected, MidiButton, useMidiConnection } from '@/features/connect-midi'
+import { retireTip, setScoreView } from '@/features/set-preference'
+import {
+  isMidiConnected,
+  MidiButton,
+  useHeldKeys,
+  useMidiConnection,
+} from '@/features/connect-midi'
 import {
   KeyboardSettingsFields,
   KeyboardStrip,
   KeyboardTools,
+  KeysPlace,
   LiveKeyboard,
 } from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
 import { ActionMenu, SheetPill, SheetToolsContext, type MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
@@ -59,7 +68,8 @@ import {
 } from '@/widgets/practice-player'
 import { SheetMusic } from '@/widgets/sheet-music'
 import { SongPrint } from '@/widgets/song-print'
-import { PlayerDisplay, PlayerPlayback } from '@/widgets/player-settings'
+import { PianoHands } from '@/widgets/piano-hands'
+import { PlayerDisplay, PlayerHands, PlayerPlayback } from '@/widgets/player-settings'
 import { SheetLayoutTools, ViewSection } from '@/widgets/score-view-menu'
 import { SettingsExtrasContext, type SettingsExtras } from '@/widgets/player-setup'
 import { useChordKeys } from '../model/use-chord-keys'
@@ -184,6 +194,8 @@ export function PlayerLayout({
   const keySize = useSettings((state) => selectKeyboard(state).keySize)
   const countdown = useSettings((state) => selectPlayback(state).countdown)
   const scoreView = useSettings(selectScoreView)
+  const skin = useSettings((state) => selectHandsView(state).skin)
+  const held = useHeldKeys()
   const { hidden } = player
   const sheetView = useMemo(() => ({ ...scoreView, hidden }), [scoreView, hidden])
   const names = useStaffNames(staves)
@@ -205,7 +217,8 @@ export function PlayerLayout({
   // The Modes sheet (R29 B8), from the foot bar's Modes.
   const [modesOpen, setModesOpen] = useState(false)
   const { connection } = useMidiConnection()
-  const playable = isMidiConnected(connection) || player.keys
+  // The keys play at a tap; the hands at the keys are watched (R36).
+  const playable = isMidiConnected(connection) || (player.keys && !scoreView.hands)
   // Print (ADR 0107): the music printed as the View shows it, while its render stands.
   const [printing, setPrinting] = useState(false)
   const [exporting, setExporting] = useState(false)
@@ -264,6 +277,14 @@ export function PlayerLayout({
         description: t('settingsPage.about.playback'),
         value: `${t('settingsPage.countdown.label')}: ${t(`settingsPage.countdown.${countdown}`)}`,
         content: <PlayerPlayback>{playback}</PlayerPlayback>,
+      },
+      {
+        id: 'hands',
+        label: t('settingsPage.hands'),
+        icon: Hand,
+        description: t('settingsPage.about.hands'),
+        value: t(`settingsPage.skin.${skin}`),
+        content: <PlayerHands />,
       },
       {
         id: 'display',
@@ -377,6 +398,8 @@ export function PlayerLayout({
     practice.state,
     shown !== 'sheet' && view.keys !== true,
   )
+  // Where the music stands: the notes awaited, or where Listen stopped.
+  const cursorTick = performance.beatGroups[practice.state.beatGroup]?.tick ?? 0
   const keys = !player.keys ? (
     // Hidden, a thin strip where they stood brings them back at a tap (R34, Songscription's).
     <PlayerArea area="keys" className="-mx-gutter">
@@ -384,6 +407,28 @@ export function PlayerLayout({
         edge={dock === 'top' ? 'below' : 'above'}
         onShow={() => player.setKeys(true)}
       />
+    </PlayerArea>
+  ) : scoreView.hands ? (
+    // The hands at the keys in the keys' place (R36, flowkey's), edge to edge: watched, never tapped.
+    <PlayerArea area="keys" className="-mx-gutter">
+      <KeysPlace divider={dock === 'top' ? 'below' : 'above'}>
+        {(height) => (
+          <PianoHands
+            height={height}
+            notes={performance.notes}
+            perSecond={(player.shownTempo * TICKS_PER_BEAT) / 60}
+            now={() => practice.clock?.() ?? cursorTick}
+            playing={practice.clock !== null}
+            held={held}
+            marks={player.marks}
+            wrong={player.wrong}
+            faded={player.practised === 'both' ? null : player.practised === 'rh' ? 'lh' : 'rh'}
+            skin={skin}
+            range={{ low: player.range.from, high: player.range.to }}
+            onShowKeys={() => setScoreView(settingsStore, { hands: false })}
+          />
+        )}
+      </KeysPlace>
     </PlayerArea>
   ) : (
     // Edge to edge (R34, Songscription's): the keys reach both sides of the screen.
@@ -433,6 +478,10 @@ export function PlayerLayout({
               shown={player.keys}
               onShow={player.setKeys}
               sustained={playing && player.pedalDown}
+              hands={{
+                shown: scoreView.hands,
+                onShow: (hands) => setScoreView(settingsStore, { hands }),
+              }}
             />
             {/* MIDI only while a keyboard is connected or connecting (R31-P, R32); it is
                 connected from Settings › Connect a piano. */}

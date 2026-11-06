@@ -13,6 +13,8 @@ describe('About (R29 B9, R32)', () => {
       'All rights reserved',
       'Acknowledgements',
       'Verovio',
+      'three.js',
+      'WebXR generic hand',
       'Salamander Grand Piano',
       'Splendid Grand Piano',
       'Virtuosity Drums',

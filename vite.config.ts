@@ -56,8 +56,8 @@ function requireBackendEnv(): Plugin {
  * grand's files are cached as each is first fetched, or all at once from Settings › Storage and backup.
  */
 export const workbox = {
-  // The pieces' recordings too, so a recording plays offline.
-  globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,m4a,wav}'],
+  // The pieces' recordings and the hands at the keys' models too, so both work offline (R36).
+  globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,m4a,wav,glb}'],
   // The engraver's worker is the largest file; the recordings are held to less by a test.
   maximumFileSizeToCacheInBytes: PRECACHE_ENGRAVER_LIMIT,
   // Only the fonts' subsets the app's text reaches: a browser fetches a subset when a glyph in

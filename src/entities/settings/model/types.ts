@@ -72,6 +72,14 @@ export interface OtherHandSettings {
 /** The other hand dimmed, and played along in Wait mode, as the Player always did. */
 export const DEFAULT_OTHER_HAND: OtherHandSettings = { look: 'dim', play: true }
 
+/** The hands at the keys (R36): the skin they are drawn in, four tones from light to dark. */
+export const SKIN_TONES = ['light', 'medium-light', 'medium-dark', 'dark'] as const
+export type SkinTone = (typeof SKIN_TONES)[number]
+export interface HandsViewSettings {
+  readonly skin: SkinTone
+}
+export const DEFAULT_HANDS_VIEW: HandsViewSettings = { skin: 'medium-light' }
+
 /**
  * How the Player's count-in goes (B7, the reference's Countdown): none; a bar of clicks counted down
  * on the screen; or counted down on the screen alone, unheard.
@@ -280,6 +288,11 @@ export interface ScoreViewSettings {
   readonly textSize: TextSize
   /** The keys under the score: off, the score has the screen. */
   readonly keys: boolean
+  /**
+   * In the keys' place, the hands at the keys (R36): a piano seen from the seat, two hands playing
+   * the music on it; off, the keys, which a tap plays.
+   */
+  readonly hands: boolean
   /** The learner's typed marks on the score (R29 B8). */
   readonly annotations: boolean
 }
@@ -299,6 +312,7 @@ export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   pinned: true,
   textSize: 100,
   keys: true,
+  hands: false,
   annotations: true,
 }
 
@@ -366,6 +380,7 @@ export interface SettingsState {
   scoreView: ScoreViewSettings
   /** With one hand practised, how the other looks and whether it is heard (A35). */
   otherHand: OtherHandSettings
+  handsView: HandsViewSettings
   /** How the Player always plays: count-in, cursor, pedal, speed training's step (B7). */
   playback: PlaybackSettings
   metronome: MetronomeSettings
@@ -534,6 +549,7 @@ export const isMusicView = isOneOf(MUSIC_VIEWS)
 export const isDiagramsMode = isOneOf(DIAGRAMS_MODES)
 export const isTextSize = isOneOf(TEXT_SIZES)
 export const isOtherHandLook = isOneOf(OTHER_HAND_LOOKS)
+export const isSkinTone = isOneOf(SKIN_TONES)
 export const isCountdown = isOneOf(COUNTDOWNS)
 export const isCursor = isOneOf(CURSORS)
 export const isPedalPlay = isOneOf(PEDAL_PLAYS)

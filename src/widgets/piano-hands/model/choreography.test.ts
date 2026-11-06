@@ -1,7 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import type { PerformanceNote } from '@/shared/lib/arrangement'
 import { midi, pitchClass, plainSpelling, TICKS_PER_BEAT, type Finger } from '@/shared/lib/music'
-import { choreograph, handPlace, handPose, MOTION, type HandPart } from './choreography'
+import {
+  choreograph,
+  handPlace,
+  handPose,
+  handsApart,
+  MOTION,
+  pressHeld,
+  type HandPart,
+} from './choreography'
 import { handIn, KEY, keyX } from './keys'
 
 const BEAT = TICKS_PER_BEAT
@@ -61,6 +69,20 @@ describe('choreograph (R36, the hands at the keys)', () => {
     for (const place of rh.places) expect(place.x).toBeCloseTo(keyX(midi(64)), 6)
     const lh = partOf(choreograph(fiveUp(48, 'lh')).lh)
     for (const place of lh.places) expect(place.x).toBeCloseTo(keyX(midi(52)), 6)
+  })
+})
+
+describe('handsApart', () => {
+  it('measures the hands at their widest apart, each where its last onset stood it', () => {
+    const together = [...fiveUp(48, 'lh'), ...fiveUp(72, 'rh')]
+    expect(handsApart(choreograph(together))).toBeCloseTo(keyX(midi(76)) - keyX(midi(52)), 6)
+    // The right hand moves up an octave for its last notes while the left hand holds its place.
+    const later = [...together, ...[0, 2, 4].map((step, i) => note(84 + step, 5 + i, 1, 'rh'))]
+    expect(handsApart(choreograph(later))).toBeGreaterThan(handsApart(choreograph(together)))
+  })
+
+  it('is none where one hand has nothing to play', () => {
+    expect(handsApart(choreograph(fiveUp(60, 'rh')))).toBe(0)
   })
 })
 
@@ -151,6 +173,20 @@ describe('handPose', () => {
       choreograph([note(60, 0, 1, 'rh', { finger: 1 }), note(72, 1, 1, 'rh', { finger: 1 })]).rh,
     )
     expect(handPose(held, midway, PER_SECOND).lift).toBe(0)
+  })
+
+  it('stands on the notes awaited and presses those the learner holds', () => {
+    const awaiting = handPose(rh, 1 * BEAT, PER_SECOND)
+    expect(awaiting.fingers[1]?.key).toBe(midi(62))
+    // The thumb just off C is still over it, held legato; the 5th, far from its G, over none.
+    expect(awaiting.fingers[0]?.key).toBe(midi(60))
+    expect(awaiting.fingers[4]?.key).toBeNull()
+    const played = pressHeld(awaiting, new Set([midi(62), midi(70)]))
+    expect(played.fingers[1]?.press).toBe(1)
+    expect(played.keys.get(midi(62))).toBe(1)
+    // A key no finger stands on is the learner's own: no finger goes to it.
+    expect(played.keys.has(midi(70))).toBe(false)
+    expect(pressHeld(awaiting, new Set())).toBe(awaiting)
   })
 
   it('waits at its first place before the music starts, and stays at its last after', () => {

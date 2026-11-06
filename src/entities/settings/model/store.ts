@@ -29,6 +29,7 @@ import {
   DEFAULT_SIDEBAR,
   DEFAULT_KEYS_HEIGHT,
   KEYS_HEIGHT_MOST,
+  DEFAULT_HANDS_VIEW,
   DEFAULT_OTHER_HAND,
   DEFAULT_PLAYBACK,
   FOLLOW_RETURNS,
@@ -51,6 +52,7 @@ import {
   isDiagramsMode,
   isTextSize,
   isOtherHandLook,
+  isSkinTone,
   isCountdown,
   isCursor,
   isPedalPlay,
@@ -74,6 +76,7 @@ import {
   type KeysHeight,
   type MetronomeSettings,
   type MidiSettings,
+  type HandsViewSettings,
   type OtherHandSettings,
   type PlaybackSettings,
   type PracticeToggles,
@@ -92,7 +95,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 36
+export const SETTINGS_VERSION = 37
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -127,6 +130,7 @@ export function createSettingsStore({
         chordFinder: DEFAULT_CHORD_FINDER,
         scoreView: DEFAULT_SCORE_VIEW,
         otherHand: DEFAULT_OTHER_HAND,
+        handsView: DEFAULT_HANDS_VIEW,
         playback: DEFAULT_PLAYBACK,
         metronome: DEFAULT_METRONOME,
         foldedSections: [],
@@ -199,6 +203,12 @@ function otherHandSettings(value: unknown): OtherHandSettings {
     look: isOtherHandLook(saved.look) ? saved.look : DEFAULT_OTHER_HAND.look,
     play: typeof saved.play === 'boolean' ? saved.play : DEFAULT_OTHER_HAND.play,
   }
+}
+
+/** The hands at the keys as saved, each where still valid. */
+function handsViewSettings(value: unknown): HandsViewSettings {
+  const saved = savedObject<HandsViewSettings>(value)
+  return { skin: isSkinTone(saved.skin) ? saved.skin : DEFAULT_HANDS_VIEW.skin }
 }
 
 /** Each place's fold as saved where it is a boolean; a place never chosen stays unset. */
@@ -308,7 +318,7 @@ const isSheetView = isOneOf(SHEET_VIEWS)
 function scoreViewSettings(value: unknown): ScoreViewSettings {
   const saved = savedObject<ScoreViewSettings>(value)
   const switched = (
-    key: 'askOnOpen' | 'chordNames' | 'lyrics' | 'pinned' | 'keys' | 'annotations',
+    key: 'askOnOpen' | 'chordNames' | 'lyrics' | 'pinned' | 'keys' | 'hands' | 'annotations',
   ) => (typeof saved[key] === 'boolean' ? saved[key] : DEFAULT_SCORE_VIEW[key])
   return {
     layout: isSheetView(saved.layout) ? saved.layout : DEFAULT_SCORE_VIEW.layout,
@@ -320,6 +330,7 @@ function scoreViewSettings(value: unknown): ScoreViewSettings {
     pinned: switched('pinned'),
     textSize: isTextSize(saved.textSize) ? saved.textSize : DEFAULT_SCORE_VIEW.textSize,
     keys: switched('keys'),
+    hands: switched('hands'),
     annotations: switched('annotations'),
   }
 }
@@ -440,6 +451,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     chordFinder: chordFinderSettings(saved.chordFinder),
     scoreView: scoreViewSettings(saved.scoreView),
     otherHand: otherHandSettings(saved.otherHand),
+    handsView: handsViewSettings(saved.handsView),
     playback: playbackSettings(saved.playback),
     metronome: metronomeSettings(saved.metronome),
     foldedSections: foldedSections(saved.foldedSections),

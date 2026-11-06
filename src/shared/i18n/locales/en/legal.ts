@@ -64,7 +64,7 @@ export const legal = {
       },
       thirdParty: {
         heading: 'Other people’s work in the app',
-        text: 'The app is built with other people’s work, each under its own licence: Verovio draws the scores, the Noto fonts set the text, Salamander Grand Piano (by Alexander Holm, CC BY 3.0) and Splendid Grand Piano (by AKAI, public domain) are the piano’s sound. Settings › About lists them.',
+        text: 'The app is built with other people’s work, each under its own licence: Verovio draws the scores, three.js and the WebXR generic hand (by Amazon.com, MIT) draw the hands at the keys, the Noto fonts set the text, Salamander Grand Piano (by Alexander Holm, CC BY 3.0) and Splendid Grand Piano (by AKAI, public domain) are the piano’s sound. Settings › About lists them.',
       },
       contact: {
         heading: 'Questions',

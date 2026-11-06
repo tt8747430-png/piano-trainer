@@ -13,6 +13,7 @@ import {
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
   DEFAULT_OTHER_HAND,
+  DEFAULT_HANDS_VIEW,
   DEFAULT_PLAYBACK,
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
@@ -50,6 +51,7 @@ const DEFAULTS = {
   chordFinder: DEFAULT_CHORD_FINDER,
   scoreView: DEFAULT_SCORE_VIEW,
   otherHand: DEFAULT_OTHER_HAND,
+  handsView: DEFAULT_HANDS_VIEW,
   playback: DEFAULT_PLAYBACK,
   metronome: DEFAULT_METRONOME,
   foldedSections: [],
@@ -198,8 +200,10 @@ describe('createSettingsStore', () => {
         pinned: false,
         textSize: 130,
         keys: false,
+        hands: true,
         annotations: false,
       },
+      handsView: { skin: 'dark' },
       metronome: {
         bpm: 72,
         meter: '6/8',
@@ -276,9 +280,19 @@ describe('createSettingsStore', () => {
       pinned: true,
       textSize: 100,
       keys: true,
+      hands: false,
       annotations: true,
     })
     expect(restored({ scoreView: { layout: 'paper' } }).scoreView).toEqual(DEFAULT_SCORE_VIEW)
+  })
+
+  it('shows the keys, not the hands, until the learner turns the hands on, in a skin tone it knows (R36)', () => {
+    expect(DEFAULT_SCORE_VIEW.hands).toBe(false)
+    expect(DEFAULT_HANDS_VIEW).toEqual({ skin: 'medium-light' })
+    expect(restored({ scoreView: { hands: 'yes' } }).scoreView.hands).toBe(false)
+    expect(restored({ handsView: { skin: 'dark' } }).handsView).toEqual({ skin: 'dark' })
+    expect(restored({ handsView: { skin: 'green' } }).handsView).toEqual(DEFAULT_HANDS_VIEW)
+    expect(restored({ handsView: 'dark' }).handsView).toEqual(DEFAULT_HANDS_VIEW)
   })
 
   it('opens a sidebar saved as anything but open or collapsed', () => {
@@ -355,9 +369,9 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('starts afresh over a save of the version before the staff’s one layer of labels (R34)', () => {
-    expect(SETTINGS_VERSION).toBe(36)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 35)).toEqual(
+  it('starts afresh over a save of the version before the hands at the keys (R36)', () => {
+    expect(SETTINGS_VERSION).toBe(37)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 36)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

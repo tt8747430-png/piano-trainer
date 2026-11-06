@@ -64,7 +64,7 @@ export const legal: LocaleResources['legal'] = {
       },
       thirdParty: {
         heading: 'Чужие работы в приложении',
-        text: 'Приложение сделано с использованием чужих работ, каждая под своей лицензией: Verovio рисует ноты, шрифты Noto набирают текст, Salamander Grand Piano (Alexander Holm, CC BY 3.0) и Splendid Grand Piano (AKAI, общественное достояние) дают звук фортепиано. Их список — в Настройки › О приложении.',
+        text: 'Приложение сделано с использованием чужих работ, каждая под своей лицензией: Verovio рисует ноты, three.js и модель руки WebXR generic hand (Amazon.com, MIT) рисуют руки на клавишах, шрифты Noto набирают текст, Salamander Grand Piano (Alexander Holm, CC BY 3.0) и Splendid Grand Piano (AKAI, общественное достояние) дают звук фортепиано. Их список — в Настройки › О приложении.',
       },
       contact: {
         heading: 'Вопросы',

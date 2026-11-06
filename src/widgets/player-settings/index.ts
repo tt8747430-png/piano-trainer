@@ -1,1 +1,1 @@
-export { PlayerDisplay, PlayerPlayback } from './ui/PlayerSettings'
+export { PlayerDisplay, PlayerHands, PlayerPlayback } from './ui/PlayerSettings'

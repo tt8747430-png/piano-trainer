@@ -18,8 +18,15 @@ export const VIEW = {
    * the hand moved in for a black key (35 mm) and lifted (12 mm).
    */
   bottom: { z: 0.06, y: 0.066 },
-  /** The smallest a white key is drawn, in CSS pixels; past it the camera follows the hands. */
-  minKey: 16,
+  /**
+   * The smallest a white key is drawn, in CSS pixels; past it the camera follows the hands. A phone
+   * held upright shows two and a half octaves, the hands close enough to see each finger.
+   */
+  minKey: 22,
+  /** Smaller, down to this, where it keeps in view two hands playing far apart. */
+  leastKey: 14,
+  /** A hand's room beside its middle finger: two keys to its 5th, the 5th's own and a little more. */
+  hand: 3 * KEY.width,
   /** Room beside the music's outer keys for the hands. */
   margin: KEY.width,
 } as const
@@ -64,6 +71,29 @@ const heightFor = (depth: number) =>
   (depth - (VIEW.bottom.z - VIEW.bottom.y * below) * Math.cos(VIEW.pitch)) /
   (Math.sin(VIEW.pitch) + below * Math.cos(VIEW.pitch))
 
+/**
+ * How much further the keys' back end is from the camera than their front edge, along its gaze: the
+ * view is widest there, at its top edge.
+ */
+const BACK = -VIEW.top.z * Math.cos(VIEW.pitch) - VIEW.top.y * Math.sin(VIEW.pitch)
+
+/** The keyboard's ends: A0's and C8's outer edges. */
+const ENDS = {
+  from: keyX(KEYBOARD.low) - KEY.width / 2,
+  to: keyX(KEYBOARD.high) + KEY.width / 2,
+} as const
+
+/**
+ * `x` moved, as far as `needed` lets it, so a view `across` wide at its top edge stays on the
+ * keyboard; over its middle where the view is wider than the keyboard.
+ */
+function onTheKeys(x: number, across: number, needed: { from: number; to: number }): number {
+  const from = ENDS.from + across / 2
+  const to = ENDS.to - across / 2
+  const kept = from > to ? (ENDS.from + ENDS.to) / 2 : Math.min(to, Math.max(from, x))
+  return Math.min(needed.to, Math.max(needed.from, kept))
+}
+
 /** The span of keys from `low` to `high`, their outer edges and the hands' room, in metres. */
 const spanOf = ({ low, high }: { readonly low: Midi; readonly high: Midi }) => ({
   from: keyX(low) - KEY.width / 2 - VIEW.margin,
@@ -71,24 +101,41 @@ const spanOf = ({ low, high }: { readonly low: Midi; readonly high: Midi }) => (
 })
 
 /**
- * The camera for a view of `size` over music from `range.low` to `range.high` (R36): as near as it
- * comes, its top edge at the keys' back end; back as far as the music's range needs, its bottom edge
- * held across the hands; and where the range would leave a white key smaller than `VIEW.minKey`, as
- * far back as that and following the hands. Without music, middle C's octaves.
+ * The camera for a view of `size` over music from `range.low` to `range.high` (R36), the hands at
+ * most `apart` (`handsApart`): as near as it comes, its top edge at the keys' back end; back as far
+ * as the music's range needs, its bottom edge held across the hands; and where the range would leave
+ * a white key smaller than `VIEW.minKey`, as far back as that, or further where two hands far apart
+ * need it, and following the hands. Music it shows whole it stands over, moved toward the middle
+ * where its view would run past the keyboard's end. Without music, middle C's octaves.
  */
-export function frame(size: ViewSize, range: { low: Midi; high: Midi } | null): Framing {
+export function frame(
+  size: ViewSize,
+  range: { low: Midi; high: Midi } | null,
+  apart: number,
+): Framing {
   const aspect = size.width / Math.max(1, size.height)
   const span = spanOf(range ?? MIDDLE)
   const keyboard = spanOf(KEYBOARD)
   const wide = Math.min(span.to - span.from, keyboard.to - keyboard.from)
   // The front edge `depth` away shows 2·depth·tan(fov/2)·aspect across; a white key is that much of the width.
   const fits = wide / (2 * half * aspect)
-  const smallest = (KEY.width * size.height) / (2 * half * VIEW.minKey)
+  // A white key's least size: both hands' room filling the width, between the least and the smallest.
+  const hands = (size.width * KEY.width) / (apart + 2 * VIEW.hand)
+  const least = Math.min(VIEW.minKey, Math.max(VIEW.leastKey, hands))
+  const smallest = (KEY.width * size.height) / (2 * half * least)
   const depth = Math.max(depthAt(NEAREST), Math.min(fits, smallest))
   const y = Math.max(NEAREST, heightFor(depth))
   const shown = 2 * depthAt(y) * half * aspect
   const middle = (span.from + span.to) / 2
-  if (shown >= span.to - span.from - 1e-9) return { x: middle, y, z: zAt(y), follow: null }
+  if (shown >= span.to - span.from - 1e-9) {
+    // The music's outer keys stay in view; the hands' room beside them gives way to the piano's end.
+    const top = 2 * (depthAt(y) + BACK) * half * aspect
+    const needed = {
+      from: span.to - VIEW.margin - shown / 2,
+      to: span.from + VIEW.margin + shown / 2,
+    }
+    return { x: onTheKeys(middle, top, needed), y, z: zAt(y), follow: null }
+  }
   const from = span.from + shown / 2
   const to = span.to - shown / 2
   return { x: Math.min(to, Math.max(from, middle)), y, z: zAt(y), follow: { from, to } }

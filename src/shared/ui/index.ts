@@ -80,8 +80,10 @@ export {
   NO_KEYS,
   MIN_KEYS_PX,
   PianoKeyboard,
+  keyFill,
   toneMark,
   unmarked,
+  type KeyFill,
   type KeyMark,
   type ShownKeys,
 } from './piano-keyboard'

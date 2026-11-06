@@ -74,7 +74,8 @@ export interface KeyLook {
   readonly letter?: string
 }
 
-function fillOf(key: Midi, states: KeyStates, mark: KeyMark | undefined): KeyFill {
+/** A key's fill: a wrong key over a lit one, a lit one over a mark, a mark over a selection. */
+export function keyFill(key: Midi, states: KeyStates, mark = states.marks?.get(key)): KeyFill {
   if (states.wrong?.has(key)) return 'wrong'
   if (states.lit?.has(key)) return 'lit'
   if (mark && !mark.ghost) return mark.tone
@@ -139,7 +140,7 @@ export function keyLook(key: Midi, states: KeyStates, text: KeyText): KeyLook {
   const letter = text.letters?.get(key)
   const shown = label ? atMostTwo(label, letter !== undefined) : undefined
   return {
-    fill: fillOf(key, states, mark),
+    fill: keyFill(key, states, mark),
     down: states.down?.has(key) ?? false,
     outlined: states.outlined?.has(key) ?? false,
     ...(shown ? { label: shown } : {}),

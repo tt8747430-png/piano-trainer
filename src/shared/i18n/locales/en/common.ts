@@ -129,6 +129,7 @@ export const common = {
   // The on-screen keyboard's controls in the screen's bar (R34).
   keyboardTools: {
     keyboard: 'Keyboard',
+    hands: 'Hands at the keys',
     show: 'Show the keyboard',
     chord: 'Chord held',
     morePedals: 'Soft and sostenuto pedals',

@@ -1,4 +1,4 @@
-import { useMemo, useRef, type ComponentProps } from 'react'
+import { useMemo, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings } from '@/entities/settings'
 import { useHeldKeys } from '@/features/connect-midi'
@@ -6,11 +6,11 @@ import { rangeOf, type Midi } from '@/shared/lib/music'
 import { hasFinePointer } from '@/shared/lib'
 import { useLiveVoice, useSoundingKeys } from '@/shared/lib/services'
 import { useShortcuts } from '@/shared/lib/shortcuts'
-import { MIN_KEYS_PX, PianoKeyboard } from '@/shared/ui'
-import { useKeysHeight } from '../model/use-keys-height'
+import { PianoKeyboard } from '@/shared/ui'
 import { useSpacePedal } from '../model/use-space-pedal'
 import { useTyping } from '../model/use-typing'
-import { KeysDivider, type DividerEdge } from './KeysDivider'
+import type { DividerEdge } from './KeysDivider'
+import { KeysPlace } from './KeysPlace'
 
 /** A key plays itself unless the screen says otherwise. */
 const ALONE = (key: Midi): readonly Midi[] => [key]
@@ -108,15 +108,7 @@ export function LiveKeyboard({
         : new Set([...sounding, ...live, ...held, ...[...typed.held].flatMap(plays)]),
     [sounding, live, held, typed.held, plays],
   )
-  const keysHeight = useKeysHeight()
-  const box = useRef<HTMLDivElement>(null)
-  // Half the screen at most, a saved height cut down to it on a shorter screen.
-  const most = Math.max(MIN_KEYS_PX, Math.round(window.innerHeight / 2))
-  const height =
-    divider === undefined || keysHeight.height === null
-      ? undefined
-      : Math.min(most, Math.max(MIN_KEYS_PX, keysHeight.height))
-  const keys = (
+  const keys = (height: number | undefined) => (
     <PianoKeyboard
       {...keyboard}
       {...settings}
@@ -129,22 +121,5 @@ export function LiveKeyboard({
       onKeyRelease={letGo}
     />
   )
-  if (divider === undefined) return keys
-  const resize = (
-    <KeysDivider
-      edge={divider}
-      height={height ?? null}
-      least={MIN_KEYS_PX}
-      most={most}
-      measure={() => box.current?.getBoundingClientRect().height ?? MIN_KEYS_PX}
-      onResize={keysHeight.set}
-    />
-  )
-  return (
-    <div className="flex flex-col">
-      {divider === 'above' ? resize : null}
-      <div ref={box}>{keys}</div>
-      {divider === 'below' ? resize : null}
-    </div>
-  )
+  return divider === undefined ? keys(undefined) : <KeysPlace divider={divider}>{keys}</KeysPlace>
 }
