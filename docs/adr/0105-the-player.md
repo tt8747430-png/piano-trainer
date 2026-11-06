@@ -30,7 +30,7 @@ what they changed.
     the recording's Play is greyed, with why, in another key. Melody is gone: staves are staves (ADR 0097).
   - **Accompaniment from the chords**, a chart's alone: the pattern over its two hands, each hand's figure drawn as
     a small piano roll (changing a hand makes it the learner's mix, with Back to the pattern), the first chord's
-    **Inversion** and **Voice leading** (ADR 0047), and **Swing**, four feels as tiles. A score's Swing stands alone
+    **Inversion** and **Smooth voice leading** (ADR 0047), and **Swing**, four feels as tiles. A score's Swing stands alone
     under How it plays (the schedule swings its written 8ths too).
   - The song's key is not in the Setup: it is Transpose.
   - **A scale run's practice** (the Scale exercise, `ScalePracticeFields`), as the reference app's Practice Scale
@@ -113,3 +113,4 @@ The score editor's Play and its recorder's click keep their own switches. A reco
   row from 80rem (2026-11-05).
 - r34 — The recording plays in any key, shifted with Transpose; its own-key ⓘ and the Staves row's reason gone.
 - r34 — Staves › Recording has Sync under its volume: Earlier and Later in 10 ms steps, kept with the song.
+- r34 — The switch is Smooth voice leading, the term for the nearest inversion (2026-11-06).

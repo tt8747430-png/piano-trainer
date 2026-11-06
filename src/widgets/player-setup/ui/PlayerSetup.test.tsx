@@ -121,10 +121,10 @@ describe('PlayerSetup', () => {
   it('starts the first chord in root position, moving smoothly after it, by default', async () => {
     const { user, onFigures } = await renderSetup()
     expect(screen.getByRole('radio', { name: 'Root' })).toBeChecked()
-    expect(screen.getByRole('switch', { name: /Voice leading/ })).toBeChecked()
+    expect(screen.getByRole('switch', { name: /Smooth voice leading/ })).toBeChecked()
     await user.click(screen.getByRole('radio', { name: '1st' }))
     expect(onFigures).toHaveBeenCalledWith({ inversion: 1 })
-    await user.click(screen.getByRole('switch', { name: /Voice leading/ }))
+    await user.click(screen.getByRole('switch', { name: /Smooth voice leading/ }))
     expect(onFigures).toHaveBeenCalledWith({ nearest: false })
   })
 
@@ -140,7 +140,7 @@ describe('PlayerSetup', () => {
   it('fades the position From the chart only where no pattern the chart plays follows it, saying why beside it', async () => {
     const fromChart = { pattern: 'chart' } as const
     const { user, unmount } = await renderSetup({ methodCodes: true, chart: ['flow'] }, fromChart)
-    expect(screen.getByRole('switch', { name: 'Voice leading' })).toHaveAttribute(
+    expect(screen.getByRole('switch', { name: 'Smooth voice leading' })).toHaveAttribute(
       'aria-disabled',
       'true',
     )
@@ -150,16 +150,16 @@ describe('PlayerSetup', () => {
     )
     unmount()
     await renderSetup({ methodCodes: true, chart: ['flow', 'block'] }, fromChart)
-    expect(screen.getByRole('switch', { name: 'Voice leading' })).not.toHaveAttribute(
+    expect(screen.getByRole('switch', { name: 'Smooth voice leading' })).not.toHaveAttribute(
       'aria-disabled',
     )
   })
 
-  it('turns Voice leading back on, the URL’s own', async () => {
+  it('turns Smooth voice leading back on, the URL’s own', async () => {
     const { user, onFigures } = await renderSetup({}, { inversion: 2, nearest: false })
     expect(screen.getByRole('radio', { name: '2nd' })).toBeChecked()
-    expect(screen.getByRole('switch', { name: 'Voice leading' })).not.toBeChecked()
-    await user.click(screen.getByRole('switch', { name: /Voice leading/ }))
+    expect(screen.getByRole('switch', { name: 'Smooth voice leading' })).not.toBeChecked()
+    await user.click(screen.getByRole('switch', { name: /Smooth voice leading/ }))
     expect(onFigures).toHaveBeenCalledWith({ nearest: undefined })
   })
 

@@ -14,10 +14,12 @@ const AVOIDED = [
   'Начальное положение', // обращение
   'Lead into each chord', // approach chords
   'Подвести к каждому аккорду', // подводящие аккорды
-  'Root motion', // root movement
   'Function', // harmonic function
   'Pulsing chords', // repeated chords
   'Who wrote it', // credits, composer, lyricist
+  'Arrows: how the bass moves', // root movement: the arrows follow the root, not the bass
+  'Стрелки: как идёт бас', // движение основных тонов
+  'Вторичные доминанты', // побочные доминанты
 ]
 
 const escaped = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')

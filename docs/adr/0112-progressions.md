@@ -31,7 +31,7 @@ use one.
 - **Why it works is drawn on the chords** (layout B, Decided 14), always, no switch: each chord a chip over its
   role in one word, **home · away · tension**, and the colour a chord brings (**sad** for the relative minor, **soft**
   for ii and iii, **bright** for a major chord in a minor key), in DESIGN.md's Harmony paints; between each two an
-  arrow with how the bass moves (`↓5 ↓3 ↑2`, the strong moves bold, the ones that step back soft), its meaning in its
+  arrow with the root movement (`↓5 ↓3 ↑2`, the strong moves bold, the ones that step back soft), its meaning in its
   name, a tap playing the two chords. One legend line, the terms (tonic, subdominant, dominant, relative minor, each
   move) behind its ⓘ, and Test yourself to the Quiz's Chord roles. The kernel reads both (`chordRole` over
   `harmonicFunction`, `rootMove`): a chord's role by its degree in the key (borrowed and applied chords as their
@@ -106,3 +106,4 @@ is saved: views remember numerals, and the Player's `bar` and `loop` open a piec
 - r29 — Three tabs; the roles and moves drawn on the chords; the library a list; Written as and Voicing on
   Progressions' Settings (2026-11-03).
 - r29 — The Chord player: chord sheets of sections, styles with a band, My chord sheets synced (2026-11-04).
+- r34 — The musician's terms: arrows name the root movement, not the bass; in Russian Отклонения with Побочные доминанты (2026-11-06).

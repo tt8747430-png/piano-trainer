@@ -26,7 +26,7 @@ export const music = {
     // The position a row's chords start in, and whether they move smoothly from it (ADR 0115).
     first: 'Inversion',
     startAbout: 'Which note of the first chord sits lowest. Here is C major in each inversion:',
-    nearest: 'Voice leading',
+    nearest: 'Smooth voice leading',
     nearestInfo:
       'On, each chord after the first takes the inversion nearest the one before, so the voices move the least. Off, every chord keeps the first chord’s inversion.',
   },
@@ -324,12 +324,12 @@ export const music = {
       third: 'two notes shared',
       second: 'fresh, no note shared',
       back: 'a step back',
-      same: 'the bass stays',
+      same: 'the root stays',
     },
-    playMove: 'Play {{from}} to {{to}}: the bass moves {{move}}',
+    playMove: 'Play {{from}} to {{to}}: the root moves {{move}}',
     legend: {
       name: 'Home, away, tension',
-      arrows: 'Arrows: how the bass moves',
+      arrows: 'Arrows: root movement',
       terms: {
         home: { name: 'Home', text: 'The tonic and the chords that stand in for it: at rest.' },
         away: { name: 'Away', text: 'The subdominant family (IV, ii): moving off from home.' },

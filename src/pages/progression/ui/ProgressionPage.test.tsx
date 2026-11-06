@@ -138,7 +138,7 @@ describe('Practice → Progressions', () => {
     expect(screen.queryByRole('radiogroup', { name: 'Chord size' })).not.toBeInTheDocument()
   })
 
-  it('draws why it works on its chords: each one’s role, and how the bass moves to the next (A23)', async () => {
+  it('draws why it works on its chords: each one’s role, and how the root moves to the next (A23)', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/practice/progressions/line')
     const roles = await screen.findByRole('list', { name: 'What each chord does' })
@@ -150,7 +150,7 @@ describe('Practice → Progressions', () => {
     const arrows = within(roles).getAllByRole('button', { name: /^Play / })
     expect(arrows.map((arrow) => arrow.textContent)).toEqual(['↑5→', '↑2→', '↓3→'])
     expect(arrows[1]).toHaveAccessibleName(
-      'Play V to vi: the bass moves up a 2nd, fresh, no note shared',
+      'Play V to vi: the root moves up a 2nd, fresh, no note shared',
     )
     await user.click(arrows[1] ?? document.body)
     expect(onsets(audio.played.at(-1)?.sounds)).toBe(2)

@@ -113,7 +113,7 @@ const dominantSevenths: Lesson = {
           kind: 'link',
           title: {
             en: 'Approach chords in Progressions',
-            ru: 'Подводящие аккорды в последовательностях',
+            ru: 'Отклонения в последовательностях',
           },
           target: { opens: 'progressions', numerals: 'I IV V vi', key: C_MAJOR },
         },

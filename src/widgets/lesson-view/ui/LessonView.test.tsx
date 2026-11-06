@@ -538,7 +538,7 @@ describe('LessonView’s accompaniment', () => {
     )
   })
 
-  it('shows a progression’s root motion on its arrows, played as a chain', async () => {
+  it('shows a progression’s root movement on its arrows, played as a chain', async () => {
     await renderLesson({
       ...ACCOMPANIMENT,
       sections: [

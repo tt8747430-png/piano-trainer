@@ -13,7 +13,7 @@ import { PAINT, ROLE_PAINT } from './paint'
 
 /**
  * A progression with why it works drawn on its chords (A23, layout B): each chord a chip, its role
- * in one word under it, an arrow between each two with how the bass moves. Wraps on a narrow screen,
+ * in one word under it, an arrow between each two with how the root moves. Wraps on a narrow screen,
  * each arrow staying with the chord it leads to.
  */
 export function RoleChips({ label, children }: { label: string; children: ReactNode }) {
@@ -75,7 +75,7 @@ export function RoleChip({
 }
 
 /**
- * The arrow between two chords: how the bass moves (↓5, ↑2), the strong moves bold and the ones that
+ * The arrow between two chords: how the root moves (↓5, ↑2), the strong moves bold and the ones that
  * step back soft; its meaning in its name. A tap plays the two chords. Where the bass keeps its
  * letter, a plain arrow.
  */

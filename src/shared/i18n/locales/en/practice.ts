@@ -980,9 +980,9 @@ export const practice = {
         nashville: 'Nashville numbers',
       },
       voicing: 'Voicing',
-      voicings: { led: 'Voice leading', block: 'Block chords' },
+      voicings: { led: 'Smooth voice leading', block: 'Block chords' },
       voicingInfo:
-        'Voice leading moves each chord to the nearest notes of the one before; block chords play each in root position.',
+        'Smooth voice leading moves each chord to the nearest notes of the one before; block chords play each in root position.',
       relaid: 'Laid out in {{meter}}',
       onScreenPiano: 'On-screen piano',
       connectPiano: 'Connect a piano',
