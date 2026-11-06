@@ -49,3 +49,10 @@ MIT. Two octaves from C4, touch, mouse and computer keys, a PWA. Captures: `ffpi
 - Each key carries its **computer key in a small keycap** and its note name under it; C4 and C5 in the accent colour;
   keycaps hidden on touch screens (`hover: none`).
 - On an upright phone, **one octave only, full height**, with "Turn your phone sideways to play both octaves."
+
+## freeappstore-online/piano (MIT), read 2026-11-06
+
+A FreeAppStore template app: two octaves of oscillator keys (a triangle wave through a low-pass filter), an Octave
+−/+ pair, a Sustain toggle, and computer keys (A–\ white, W–= black). Each key is a `<button>` with a CSS gradient and
+an inset shadow while down. It has no glide (pointer up and leave only), no samples and no notation. **Nothing to port:** our keyboard
+(`shared/ui/piano-keyboard`) already has key depth, glissando, sampled sound, pedals and letters.
