@@ -4,9 +4,12 @@ import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 import { PAINT, type Paint } from './paint'
 
-/** A tree row's look: a link or button the width of the pane, the place open marked by `aria-current`. */
+/**
+ * A tree row's look: a link or button the width of the pane, the place open marked by `aria-current`
+ * in the one selected style (`choice`).
+ */
 export const TREE_ITEM =
-  'flex min-h-11 min-w-0 flex-1 items-center gap-2.5 rounded-control px-2 text-[0.9375rem] font-medium text-foreground transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3 aria-[current=page]:bg-chosen aria-[current=page]:font-semibold'
+  'flex min-h-11 min-w-0 flex-1 items-center gap-2.5 rounded-control px-2 text-[0.9375rem] font-medium text-foreground choice focus-visible:-outline-offset-3'
 
 /** A count at a tree row's end, in soft ink. */
 export const TreeCount = ({ n }: { n: number }) => (
