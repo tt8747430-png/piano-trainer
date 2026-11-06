@@ -108,6 +108,7 @@ describe('createSettingsStore', () => {
       octaveShift: 0,
       touch: 'normal',
       pedal: 'normal',
+      latency: 0,
     })
   })
 
@@ -172,6 +173,7 @@ describe('createSettingsStore', () => {
         octaveShift: 1,
         touch: 'light',
         pedal: 'normal',
+        latency: 45,
       },
       chordFinder: {
         remember: true,
@@ -353,9 +355,9 @@ describe('createSettingsStore', () => {
     })
   })
 
-  it('starts afresh over a save of the version before the keys’ height (R34)', () => {
-    expect(SETTINGS_VERSION).toBe(34)
-    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 33)).toEqual(
+  it('starts afresh over a save of the version before the piano’s lateness (R34)', () => {
+    expect(SETTINGS_VERSION).toBe(35)
+    expect(restored({ theme: 'dark', editing: { hearNotes: false } }, 34)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })
@@ -529,11 +531,20 @@ describe('createSettingsStore', () => {
       octaveShift: -2,
       touch: 'heavy',
       pedal: 'reversed',
+      latency: 120,
     }
     expect(restored({ midi }).midi).toEqual(midi)
     expect(
       restored({
-        midi: { ...midi, input: 1, octaveShift: 3, touch: 'soft', device: '', sound: 'yes' },
+        midi: {
+          ...midi,
+          input: 1,
+          octaveShift: 3,
+          touch: 'soft',
+          device: '',
+          sound: 'yes',
+          latency: 42,
+        },
       }).midi,
     ).toEqual({
       ...midi,
@@ -542,6 +553,7 @@ describe('createSettingsStore', () => {
       touch: 'normal',
       device: null,
       sound: false,
+      latency: 0,
     })
     expect(restored({ midi: { device: 'x'.repeat(101) } }).midi.device).toBeNull()
   })

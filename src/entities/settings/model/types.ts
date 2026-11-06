@@ -210,6 +210,8 @@ export interface MidiSettings {
   /** How loud the app hears its velocities. */
   readonly touch: Touch
   readonly pedal: PedalWay
+  /** How late the piano is heard, in milliseconds, measured by Calibrate timing; taken off every take. */
+  readonly latency: number
 }
 
 /** The Chord finder's own settings (ADR 0052), and the chords it remembers. */
@@ -450,6 +452,7 @@ export const DEFAULT_MIDI: MidiSettings = {
   octaveShift: 0,
   touch: 'normal',
   pedal: 'normal',
+  latency: 0,
 }
 
 /** The longest keyboard name kept: the longest the MIDI port names one. */

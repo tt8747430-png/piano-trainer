@@ -96,6 +96,7 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'midi.octaveShift': 'connect-piano',
   'midi.touch': 'connect-piano',
   'midi.pedal': 'connect-piano',
+  'midi.latency': 'connect-piano',
   'chordFinder.remember': 'chord-finder',
   'chordFinder.inKeys': 'chord-finder',
   'chordFinder.slash': 'chord-finder',

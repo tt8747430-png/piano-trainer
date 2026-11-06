@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { selectMidi, useSettings } from '@/entities/settings'
 import type { Played } from '@/entities/take'
 import { useServices } from '@/shared/lib/services'
 import {
@@ -32,7 +33,8 @@ interface Recorder {
   readonly stage: RecorderStage
   readonly progress: RecorderProgressSource
   /** Records a take to `plan`; nothing where there is no MIDI keyboard or a take records already. */
-  readonly start: (plan: RecorderPlan) => void
+  /** Records to the plan, the piano's lateness taken off as Calibrate timing measured it. */
+  readonly start: (plan: Omit<RecorderPlan, 'late'>) => void
   readonly stop: () => void
   /** The click and the tune under the take on or off from now on; nothing while none records. */
   readonly along: (along: Along) => void
@@ -66,6 +68,7 @@ export function useRecorder(
   onTake: (played: Played, plan: RecorderPlan, ending: TakeEnding) => void,
 ): Recorder {
   const { audio, midi } = useServices()
+  const latency = useSettings((state) => selectMidi(state).latency)
   const [stage, setStage] = useState<RecorderStage>('idle')
   const [progress] = useState(createProgressSource)
   const session = useRef<RecorderSession | null>(null)
@@ -89,8 +92,9 @@ export function useRecorder(
     }
   }, [])
 
-  const start = (plan: RecorderPlan) => {
+  const start = (asked: Omit<RecorderPlan, 'late'>) => {
     if (session.current || !midi) return
+    const plan: RecorderPlan = { ...asked, late: latency / 1000 }
     setStage('counting')
     progress.set({ stage: 'counting', beat: 1 })
     session.current = startRecorder(audio, midi, plan, {

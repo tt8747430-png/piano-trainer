@@ -135,6 +135,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/settings/progressions': practiceSettings,
   '/shell/settings/chord-finder': practiceSettings,
   '/shell/settings/connect-piano/log': () => up({ to: '/settings/connect-piano' }),
+  '/shell/settings/connect-piano/timing': () => up({ to: '/settings/connect-piano' }),
   '/shell/admin': toSettings,
   '/shell/admin/$section': ({ wide }) => (wide ? null : up({ to: '/admin' })),
   '/shell/legal/privacy': toAbout,

@@ -19,7 +19,7 @@ export {
   ScalesSettingsPage,
 } from '@/pages/practice-settings'
 export { MidiLogPage } from '@/pages/midi-log'
-export { MidiSettingsPage } from '@/pages/midi-settings'
+export { MidiSettingsPage, TimingCalibrationPage } from '@/pages/midi-settings'
 export {
   AuthCallbackPage,
   ForgotPasswordPage,

@@ -34,6 +34,15 @@ export {
   type KeySpan,
 } from './keyboard-layout'
 export {
+  calibratedLatency,
+  CALIBRATION_BPM,
+  CALIBRATION_CLICKS,
+  CALIBRATION_COUNT_IN,
+  CALIBRATION_FEWEST,
+  isLatency,
+  LATENCY_MAX_MS,
+} from './latency'
+export {
   keepCentre,
   scrollToReveal,
   scrollToShow,

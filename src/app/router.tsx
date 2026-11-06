@@ -353,6 +353,12 @@ const midiLogRoute = createRoute({
   path: '/settings/connect-piano/log',
   component: lazyRouteComponent(settingsScreens, 'MidiLogPage'),
 })
+// Calibrate timing (R34): the piano's lateness, tapped with a click, taken off every take.
+const timingRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/connect-piano/timing',
+  component: lazyRouteComponent(settingsScreens, 'TimingCalibrationPage'),
+})
 // The account pages (ADR 0116): signing in, a new account, a forgotten password, a new one.
 const signInRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -1075,6 +1081,7 @@ const routeTree = rootRoute.addChildren([
     aboutRoute,
     midiSettingsRoute,
     midiLogRoute,
+    timingRoute,
     scalesSettingsRoute,
     progressionsSettingsRoute,
     chordFinderSettingsRoute,

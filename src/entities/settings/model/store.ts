@@ -4,6 +4,7 @@ import { isLocale } from '@/shared/i18n/locale'
 import { isStaffId } from '@/shared/lib/notation'
 import {
   createSavedStore,
+  isLatency,
   isOneOf,
   SHEET_VIEWS,
   readKeyList,
@@ -91,7 +92,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 34
+export const SETTINGS_VERSION = 35
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -251,6 +252,7 @@ function midiSettings(value: unknown): MidiSettings {
     octaveShift: isOctaveShift(saved.octaveShift) ? saved.octaveShift : DEFAULT_MIDI.octaveShift,
     touch: isTouch(saved.touch) ? saved.touch : DEFAULT_MIDI.touch,
     pedal: isPedalWay(saved.pedal) ? saved.pedal : DEFAULT_MIDI.pedal,
+    latency: isLatency(saved.latency) ? saved.latency : DEFAULT_MIDI.latency,
   }
 }
 

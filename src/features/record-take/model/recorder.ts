@@ -27,6 +27,8 @@ export interface RecorderPlan extends Omit<ClickPlan, 'longest' | 'click'> {
   /** The song's tune from the take's downbeat (seconds from it); empty where it has none. */
   readonly tune: readonly NoteSound[]
   readonly along: Along
+  /** How late the piano is heard, in seconds (Calibrate timing): taken off every key and pedal. */
+  readonly late: number
 }
 
 /** A take recording: Stop, and what sounds along with it changed from now on. */
@@ -119,8 +121,10 @@ export function startRecorder(
     on.ended(at > downbeat ? takeOf(heard, { ...timing(), stop: at }) : null)
   }
 
+  /** When a key or pedal sounded on the piano: as heard, less the piano's own lateness. */
+  const played = (time: number) => audio.audioTimeAt(time) - plan.late
   const stopNotes = midi.onNote((event) => {
-    const at = audio.audioTimeAt(event.time)
+    const at = played(event.time)
     if (start === Infinity) {
       // Waiting: the first key struck is the take's downbeat; what sounds along starts from it.
       if (!event.on) return
@@ -139,7 +143,7 @@ export function startRecorder(
       kind: 'pedal',
       pedal: event.pedal,
       down: event.down,
-      at: audio.audioTimeAt(event.time),
+      at: played(event.time),
     })
   })
 

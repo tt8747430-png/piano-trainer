@@ -57,6 +57,11 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
 
 - **Time is placed where it was heard.** A MIDI event carries its own time stamp, and the audio port answers which
   audio-clock time was heard at a moment (`audioTimeAt`: the context's time less its output latency).
+  The piano's own lateness (its MIDI, a cable, Bluetooth most) is measured once by **Calibrate timing**
+  (Connect a piano › Playing, `/settings/connect-piano/timing`, R34): four clicks count in, then sixteen at 80 BPM
+  are tapped with any key; the median of each tap's lateness against its nearest click within half a beat, from
+  eight taps up, to 5 ms and at most 300 ms (`shared/lib/latency.ts`), is kept as `midi.latency` and taken off
+  every take's keys and pedals (ADR 0028). Fewer taps say so and keep what was kept.
 - **A piece's recording plays along** (`Recording`: its file, where bar 1 begins, one steady tempo, its tuning). It
   is an AAC file beside the piece's content, precached, so it must fit the precache limit. It plays in Listen only
   and in the piece's own key only, its rate the tempo's ratio with its pitch kept. It plays by its own audio element,
@@ -130,3 +135,4 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
 - r29 SND — Recorded instruments (2026-11-04): the grand, a light piano, two basses and a drum kit, all self-hosted
   under `public/samples/`, played by our own sampler through one loader under 80 MB decoded; the grand cached at
   runtime and downloadable for offline, every other set precached. Replaces "every sound is synthesised".
+- r34 — Calibrate timing: the piano's lateness tapped with a click, kept as `midi.latency`, taken off every take.

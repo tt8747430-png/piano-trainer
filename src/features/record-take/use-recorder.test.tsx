@@ -1,14 +1,16 @@
 import { act, renderHook } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { createFakeAudio } from '@/shared/api/audio'
 import { createFakeMidi } from '@/shared/api/midi'
+import { createMemoryStorage } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
 import type { RecorderPlan } from './model/recorder'
 import { useRecorder } from './use-recorder'
 
-const PLAN: RecorderPlan = {
+const PLAN: Omit<RecorderPlan, 'late'> = {
   bars: [{ startTick: 0, beats: 4 }],
   meter: '4/4',
   from: 0,
@@ -22,19 +24,43 @@ function renderRecorder({ webMidi = true }: { webMidi?: boolean } = {}) {
   const audio = createFakeAudio()
   const keyboard = createFakeMidi()
   const onTake = vi.fn()
+  const settingsStore = createSettingsStore({
+    storage: createMemoryStorage(),
+    languages: ['en'],
+    finePointer: false,
+  })
   const wrapper = ({ children }: { children: ReactNode }) => (
-    <ServicesProvider services={{ audio, midi: webMidi ? keyboard : null }}>
-      {children}
-    </ServicesProvider>
+    <SettingsStoreProvider store={settingsStore}>
+      <ServicesProvider services={{ audio, midi: webMidi ? keyboard : null }}>
+        {children}
+      </ServicesProvider>
+    </SettingsStoreProvider>
   )
   const view = renderHook(() => useRecorder(onTake), { wrapper })
-  return { audio, keyboard, onTake, ...view }
+  return { audio, keyboard, onTake, settingsStore, ...view }
 }
 
 beforeEach(() => vi.useFakeTimers())
 afterEach(() => vi.useRealTimers())
 
 describe('useRecorder', () => {
+  it('places each key the piano’s lateness earlier, as Calibrate timing measured it (R34)', () => {
+    const { audio, keyboard, onTake, result, settingsStore } = renderRecorder()
+    act(() => settingsStore.setState((state) => ({ midi: { ...state.midi, latency: 40 } })))
+    act(() => result.current.start(PLAN))
+    act(() => {
+      audio.setNow(2.2)
+      vi.advanceTimersByTime(25)
+    })
+    act(() => keyboard.press(midi(60)))
+    act(() => {
+      audio.setNow(2.6)
+      result.current.stop()
+    })
+    expect(onTake.mock.calls[0]?.[0].notes[0]?.at).toBe(60)
+    expect(onTake.mock.calls[0]?.[1].late).toBe(0.04)
+  })
+
   it('counts in, records, and hands on the take at Stop with what it was recorded to', () => {
     // The stage is the screen's; where the take is, beat by beat, only the part that shows it reads.
     const { audio, keyboard, onTake, result } = renderRecorder()
@@ -59,7 +85,7 @@ describe('useRecorder', () => {
     expect(onTake.mock.calls[0]?.[0].notes).toEqual([
       { midi: 60, at: 100, held: 400, velocity: 100 },
     ])
-    expect(onTake.mock.calls[0]?.[1]).toBe(PLAN)
+    expect(onTake.mock.calls[0]?.[1]).toEqual({ ...PLAN, late: 0 })
     expect(onTake.mock.calls[0]?.[2]).toBe('stopped')
   })
 

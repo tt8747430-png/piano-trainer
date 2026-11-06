@@ -20,6 +20,7 @@ const PLAN: RecorderPlan = {
   tune: [],
   along: { click: true, tune: false },
   countIn: 1,
+  late: 0,
 }
 
 function setUp(plan: RecorderPlan = PLAN) {

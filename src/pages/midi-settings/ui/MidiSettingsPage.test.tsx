@@ -68,6 +68,7 @@ describe('Settings › MIDI devices', () => {
       octaveShift: 1,
       touch: 'light',
       pedal: 'reversed',
+      latency: 0,
     })
   })
 

@@ -18,7 +18,9 @@ back gets a score they did not ask for.
   way. A take changes only when it is named or cut to fewer of its bars (Keep bars, asked first).
 - **It is played to the song's click**: a bar's count-in, then the click if the Click switch is on, and Play melody
   (the song's top single staff) under it if that is on. Both may change while it records. The take's beats are the
-  piece's, so writing it needs no tempo found from the playing.
+  piece's, so writing it needs no tempo found from the playing. Each key and pedal is placed where it was heard less
+  the piano's own lateness, as Calibrate timing measured it (ADR 0034); how did I play judges at ±80 ms, early or
+  late beyond that within half a beat (`feedbackOf`), so the windows need no setting of their own.
 - **MIDI only.** Record needs a connected MIDI keyboard; without one its popover says so and how to connect one. The
   on-screen keys and the computer's keys are not recorded: their timing is the input's lag.
 - **In the editor's transport** (ADR 0115): Record, Takes (greyed until the song has one) and the recording's
@@ -41,3 +43,4 @@ without Web MIDI, cannot record.
 - 0034 — A take keeps all three pedals and its first bar, and may be named and cut to its bars (2026-10-09).
 - 0096 — Record is the transport's (2026-10-24).
 - 0110 — Record, Takes and the recording's settings in the one transport (2026-10-26).
+- r34 — A take is placed less the piano's calibrated lateness (Calibrate timing, ADR 0034).
