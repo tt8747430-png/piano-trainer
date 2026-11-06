@@ -437,9 +437,9 @@ square at the top.
 - **The control for each choice:** one among many a menu showing its value with ⌃⌄; two to five, all in sight, a
   `Segmented`; on or off a switch; a number a `Stepper`; chips only for a few filters. A picture wherever it says it
   faster. Never a strip hiding options behind ‹ ›, and no strip fades at its edges.
-- **One selected style** (the `choice` utility): every chosen thing wears the chosen fill to its own edges, in ink. Hover
-  is the lighter muted fill. Line and weight stay as they were, so nothing reflows. Exceptions carry their own meaning:
-  a switch's grass, a swatch's ring, what sounds now.
+- **One selected style** (the `choice` utility): every chosen thing wears the chosen fill to its own edges, in ink, its
+  muted words too. Hover is the lighter muted fill. Line and weight stay as they were, so nothing reflows. Exceptions
+  carry their own meaning: a switch's grass, a swatch's ring, what sounds now.
 - **Pop-up button** (`Dropdown`): 44px, card paper in the control line, label in soft ink, value in ink.
 - **Pickers** (`shared/ui/pickers`) open a popover, or a bottom sheet below 30rem. A pitch or a note is an octave grid
   drawn as keys. A key is the key-signature grid (`KeyPicker`, `KeySignaturePicker`): Major · Minor, sharps over flats,

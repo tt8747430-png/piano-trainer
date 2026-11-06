@@ -380,7 +380,8 @@
 /*
  * One selected style (R15, DESIGN.md Choices): every chosen thing (a segment, a chip, a toggle, a
  * tab, a place, a toolbar's tool, a picker's cell) wears the one chosen fill to its own edges, in
- * ink, its line and weight unchanged; hover is the lighter muted fill. One highlight, never two.
+ * ink, its line and weight unchanged, its muted words in ink too; hover is the lighter muted fill. One
+ * highlight, never two.
  * `chosen:` styles the state where a control needs more (an icon's fill).
  */
 @custom-variant chosen (&:is([aria-pressed='true'], [aria-checked='true'], [data-checked], [aria-current='page'], [aria-selected='true'], [data-status='active'], [data-active]));
@@ -411,6 +412,19 @@
       [data-active]
     ):hover {
     background-color: var(--color-chosen);
+    color: var(--color-foreground);
+  }
+  /* On the chosen fill a muted line (a count, a subtitle) loses its contrast: it reads in ink there. */
+  &:is(
+      [aria-pressed='true'],
+      [aria-checked='true'],
+      [data-checked],
+      [aria-current='page'],
+      [aria-selected='true'],
+      [data-status='active'],
+      [data-active]
+    )
+    .text-muted-foreground {
     color: var(--color-foreground);
   }
 }
