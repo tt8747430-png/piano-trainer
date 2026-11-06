@@ -24,6 +24,25 @@ export function loopedBars(performance: Performance, loop: BarRange | null): Rea
 }
 
 /**
+ * The bar played a loop's end goes to when it is dragged to a bar as written (ADR 0115): of that
+ * bar's passes between `min` and `max`, the one nearest `near`, the end's bar before; none outside.
+ */
+export function playedOf(
+  performance: Performance,
+  written: number,
+  near: number,
+  min: number,
+  max: number,
+): number | null {
+  let best: number | null = null
+  for (let played = min; played <= max; played++) {
+    if (writtenBarOf(performance, played) !== written) continue
+    if (best === null || Math.abs(played - near) < Math.abs(best - near)) best = played
+  }
+  return best
+}
+
+/**
  * The beat sounding as ticks (ADR 0108): where it is played, and where the chord views write it, its
  * bar's first pass (a repeat's second time is written once). `played` is every bar as played, in
  * beats (`playedBeatCells`).

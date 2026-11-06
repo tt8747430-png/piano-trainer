@@ -43,6 +43,7 @@ export function ChordDiagrams({
   words,
   mode,
   onGo,
+  onLoop,
 }: {
   title: string
   performance: Performance
@@ -59,6 +60,8 @@ export function ChordDiagrams({
   /** The View's mode for Diagrams (ADR 0108's `scoreView.diagrams`). */
   mode: DiagramsMode
   onGo: (at: Tick) => void
+  /** The loop dragged by a strip's grip to other bars. */
+  onLoop: (loop: BarRange) => void
 }) {
   const { t } = useTranslation('player')
   const chosen = usePieceInversions()?.chosen
@@ -71,7 +74,7 @@ export function ChordDiagrams({
     ? sungPlace(performance, lines, { bar: beat.bar, played: span.played }, loop)
     : null
   const strip = (
-    <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} />
+    <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} onLoop={onLoop} />
   )
   const sung = place ? <SungLines place={place} written={span.written} /> : null
   if (mode === 'summary') {

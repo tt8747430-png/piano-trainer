@@ -47,6 +47,7 @@ export function ChordsOverLyrics({
   textSize,
   playing,
   onGo,
+  onLoop,
   onSymbol,
 }: {
   title: string
@@ -65,6 +66,8 @@ export function ChordsOverLyrics({
   /** Whether the music plays: a scroll by hand then pauses following (A37). */
   playing: boolean
   onGo: (at: Tick) => void
+  /** The loop dragged by a strip's grip to other bars. */
+  onLoop: (loop: BarRange) => void
   /** A pinned diagram tapped, by its symbol: the cursor taken to it. */
   onSymbol: (symbol: string) => void
 }) {
@@ -124,7 +127,7 @@ export function ChordsOverLyrics({
         ref={strip}
         className="sticky top-0 z-20 -mx-gutter bg-background py-2 landscape-phone:mx-0"
       >
-        <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} />
+        <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} onLoop={onLoop} />
         {pinned ? (
           <div className="mx-auto mt-1 w-full max-w-2xl px-gutter landscape-phone:px-0">
             <ChordSummary chords={summary} sounding={sounding} onChord={onSymbol} />

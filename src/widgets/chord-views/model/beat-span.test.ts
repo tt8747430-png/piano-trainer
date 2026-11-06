@@ -3,7 +3,7 @@ import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
 import { arrangePiece, ownChoice, playedBeatCells } from '@/features/practice'
-import { beatSpan, loopedBars } from './beat-span'
+import { beatSpan, loopedBars, playedOf } from './beat-span'
 
 const B = TICKS_PER_BEAT
 
@@ -41,5 +41,14 @@ describe('loopedBars', () => {
     expect([...loopedBars(performance, { first: 3, last: 4 })]).toEqual([1, 2])
     expect([...loopedBars(performance, { first: 0, last: 3 })]).toEqual([0, 1])
     expect([...loopedBars(performance, null)]).toEqual([])
+  })
+})
+
+describe('playedOf', () => {
+  it('is the pass of a bar as written nearest the loop’s end, inside its reach', () => {
+    // Played C F C F G Am Dm: F is played as bars 1 and 3.
+    expect(playedOf(performance, 1, 4, 0, 6)).toBe(3)
+    expect(playedOf(performance, 1, 0, 0, 6)).toBe(1)
+    expect(playedOf(performance, 2, 4, 0, 3)).toBeNull()
   })
 })

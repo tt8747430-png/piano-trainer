@@ -52,6 +52,7 @@ function renderSummary(bar: number) {
         headings={[]}
         practice={practice}
         loop={null}
+        onLoopChange={vi.fn()}
         words={false}
         pinned={false}
         textSize={100}
@@ -138,6 +139,7 @@ function renderPair(bar: number) {
         headings={[]}
         practice={practice}
         loop={null}
+        onLoopChange={vi.fn()}
         words={false}
         pinned={false}
         textSize={100}
@@ -262,6 +264,7 @@ function renderView(
         headings={[]}
         practice={practice}
         loop={null}
+        onLoopChange={vi.fn()}
         words={words}
         pinned={pinned}
         textSize={textSize}
@@ -348,5 +351,50 @@ describe('the Grid’s words (ADR 0108)', () => {
     renderView('grid', { words: false })
     expect(screen.getByRole('button', { name: 'Bar 1: C' })).toBeInTheDocument()
     expect(document.querySelector('[data-verse]')).toBeNull()
+  })
+})
+
+describe('the loop’s grips (R37)', () => {
+  function renderLooped(view: 'grid' | 'diagrams') {
+    const onLoopChange = vi.fn()
+    renderWithSettings(
+      <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
+        <ChordView
+          view={view}
+          mode="animated"
+          title="Morning"
+          performance={performance}
+          headings={[]}
+          practice={{
+            state: { ...initialPractice(performance, 'listen', 'both'), beatGroup: barGroup(1) },
+            clock: null,
+            jumpToBeatGroup: vi.fn(),
+          }}
+          loop={{ first: 1, last: 2 }}
+          onLoopChange={onLoopChange}
+          words={false}
+          pinned={false}
+          textSize={100}
+        />
+      </ServicesProvider>,
+    )
+    return onLoopChange
+  }
+
+  it('moves the Grid’s loop a bar at a time from its grips', () => {
+    const onLoopChange = renderLooped('grid')
+    fireEvent.keyDown(screen.getByRole('slider', { name: 'Loop end' }), { key: 'ArrowRight' })
+    expect(onLoopChange).toHaveBeenLastCalledWith({ first: 1, last: 3 })
+    fireEvent.keyDown(screen.getByRole('slider', { name: 'Loop start' }), { key: 'Home' })
+    expect(onLoopChange).toHaveBeenLastCalledWith({ first: 0, last: 2 })
+  })
+
+  it('puts a grip at each end of the strip’s loop, out of a screen reader’s way', () => {
+    renderLooped('diagrams')
+    const strip = document.querySelector('[data-slot="beat-strip"]') as HTMLElement
+    expect(
+      [...strip.querySelectorAll('[data-grip]')].map((grip) => grip.getAttribute('data-grip')),
+    ).toEqual(['start', 'end'])
+    expect(screen.queryByRole('slider', { name: 'Loop end' })).not.toBeInTheDocument()
   })
 })

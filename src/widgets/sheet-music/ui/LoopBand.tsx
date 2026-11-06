@@ -1,7 +1,7 @@
-import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
+import { LoopGrip } from '@/shared/ui'
 import { barsBand, loopEnds, ScoreMark, type ScoreLayout } from '@/shared/ui/score'
-import { LoopGrip } from './LoopGrip'
+import { barAt } from '../model/bar-at'
 
 /**
  * The loop, the Player's bars chosen (ADR 0096): one light band of the selection colour over every
@@ -20,7 +20,6 @@ export function LoopBand({
   /** The piece's bar the layout's first measure is: a line of a score laid out in lines. */
   firstBar?: number
 }) {
-  const { t } = useTranslation('music')
   const lastBar = firstBar + layout.measures.length - 1
   // On a line, the part of the loop it holds, a grip where the loop ends there.
   if (loop.last < firstBar || loop.first > lastBar) return null
@@ -32,37 +31,38 @@ export function LoopBand({
   })
   // Each grip on its barline, down the band's edge.
   const ends = loopEnds(layout, from - firstBar, to - firstBar)
-  // The grips move bars of this line: their measures, offset to the piece's bars.
-  const along = (bar: number) => bar - firstBar
+  // The bar of this line under a point on the screen, in the layout's px however the sheet is
+  // zoomed (a page canvas's zoom): its measures, offset to the piece's bars.
+  const onLine = (x: number, grip: HTMLElement) => {
+    const sheet = grip.parentElement
+    const frame = sheet?.getBoundingClientRect()
+    if (!sheet || !frame) return null
+    const zoom = sheet.offsetWidth > 0 && frame.width > 0 ? frame.width / sheet.offsetWidth : 1
+    return barAt(layout.measures, (x - frame.left) / zoom) + firstBar
+  }
   return (
     <>
       <ScoreMark slot="loop" kind="band" box={box} />
       {from === loop.first ? (
         <LoopGrip
-          label={t('sheet.loopStart')}
-          x={ends.start}
-          top={box.top}
-          height={box.height}
-          bar={along(loop.first)}
-          min={0}
-          max={Math.min(loop.last, lastBar) - firstBar}
-          measures={layout.measures}
-          firstBar={firstBar}
-          onMove={(bar) => onChange({ first: bar + firstBar, last: loop.last })}
+          end="start"
+          bar={loop.first}
+          min={firstBar}
+          max={Math.min(loop.last, lastBar)}
+          barAt={(x, _, grip) => onLine(x, grip)}
+          style={{ left: ends.start, top: box.top, height: box.height }}
+          onMove={(bar) => onChange({ first: bar, last: loop.last })}
         />
       ) : null}
       {to === loop.last ? (
         <LoopGrip
-          label={t('sheet.loopEnd')}
-          x={ends.end}
-          top={box.top}
-          height={box.height}
-          bar={along(loop.last)}
-          min={Math.max(loop.first, firstBar) - firstBar}
-          max={layout.measures.length - 1}
-          measures={layout.measures}
-          firstBar={firstBar}
-          onMove={(bar) => onChange({ first: loop.first, last: bar + firstBar })}
+          end="end"
+          bar={loop.last}
+          min={Math.max(loop.first, firstBar)}
+          max={lastBar}
+          barAt={(x, _, grip) => onLine(x, grip)}
+          style={{ left: ends.end, top: box.top, height: box.height }}
+          onMove={(bar) => onChange({ first: loop.first, last: bar })}
         />
       ) : null}
     </>

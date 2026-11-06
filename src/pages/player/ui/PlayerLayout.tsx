@@ -555,6 +555,7 @@ export function PlayerLayout({
             headings={headings}
             practice={practice}
             loop={player.loop}
+            onLoopChange={player.setLoop}
             words={scoreView.lyrics}
             mode={scoreView.diagrams}
             pinned={scoreView.pinned}

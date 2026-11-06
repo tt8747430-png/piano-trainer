@@ -78,6 +78,7 @@ export function BarButton({
       {...(tap === 'play'
         ? { 'aria-pressed': marked }
         : { 'aria-current': marked ? ('step' as const) : undefined, tabIndex: -1 })}
+      data-bar={number - 1}
       onClick={(event) => onTap(beatTapped(event.target))}
       className={cn(
         BAR,

@@ -1,8 +1,9 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { BarRange, CellBar, PlayedBeat } from '@/features/practice'
-import { cn, useElementSize } from '@/shared/lib'
+import { barUnder, cn, useElementSize } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
+import { LoopGrip } from '@/shared/ui'
 import { CellChords } from '@/widgets/chord-chart'
 import { firstBeats } from '../model/strip-place'
 import { stripNames } from '../model/strip-names'
@@ -15,7 +16,7 @@ const REST = '\u{1D13D}'
  * The beat strip (ADR 0108, R29: Chordify's): the music's beats as played, a page at a time, the
  * repeats taken, a barline before each bar, a chord named only in the beat where it changes and a
  * rest where the music turns to none (`stripNames`), the beat sounding a black box, the loop's beats
- * on its band. The strip stands still: the box moves beat by beat, and when it leaves the page the
+ * on its band, a grip at each of its ends dragging it bar by bar (`onLoop`). The strip stands still: the box moves beat by beat, and when it leaves the page the
  * strip turns to the next (`stripPages`: each line of the chart a page, split where the room is
  * short). A loop inside a page never turns it. A beat tapped takes the cursor there (`onBeat`, the
  * tick it is played at). It is a picture of where the music is, hidden from a screen reader, its
@@ -27,6 +28,7 @@ export function BeatStrip({
   beat,
   loop,
   onBeat,
+  onLoop,
   className,
 }: {
   performance: Performance
@@ -35,6 +37,8 @@ export function BeatStrip({
   beat: PlayedBeat
   loop: BarRange | null
   onBeat: (at: Tick) => void
+  /** The loop dragged by a grip to other bars. */
+  onLoop?: (loop: BarRange) => void
   className?: string
 }) {
   const firsts = useMemo(() => firstBeats(bars), [bars])
@@ -74,7 +78,8 @@ export function BeatStrip({
           return (
             <div
               key={played}
-              className="flex border-y border-l-2 border-y-border border-l-foreground bg-card last:border-r-2 last:border-r-foreground"
+              data-bar={played}
+              className="relative flex border-y border-l-2 border-y-border border-l-foreground bg-card last:border-r-2 last:border-r-foreground"
             >
               {cells.map((_, at) => {
                 const cell = (firsts[index] ?? 0) + at
@@ -107,6 +112,30 @@ export function BeatStrip({
                   </button>
                 )
               })}
+              {loop && onLoop && played === loop.first ? (
+                <LoopGrip
+                  pointerOnly
+                  end="start"
+                  bar={loop.first}
+                  min={0}
+                  max={loop.last}
+                  barAt={barUnder}
+                  style={{ left: 0, top: 0, height: '100%' }}
+                  onMove={(first) => onLoop({ first, last: loop.last })}
+                />
+              ) : null}
+              {loop && onLoop && played === loop.last ? (
+                <LoopGrip
+                  pointerOnly
+                  end="end"
+                  bar={loop.last}
+                  min={loop.first}
+                  max={performance.bars.length - 1}
+                  barAt={barUnder}
+                  style={{ left: '100%', top: 0, height: '100%' }}
+                  onMove={(last) => onLoop({ first: loop.first, last })}
+                />
+              ) : null}
             </div>
           )
         })}

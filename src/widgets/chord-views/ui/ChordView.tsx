@@ -31,6 +31,7 @@ export function ChordView({
   headings,
   practice,
   loop,
+  onLoopChange,
   words,
   mode,
   pinned,
@@ -43,6 +44,8 @@ export function ChordView({
   headings: readonly string[]
   practice: Pick<Practice, 'state' | 'clock' | 'jumpToBeatGroup'>
   loop: BarRange | null
+  /** The loop dragged by a grip to other bars. */
+  onLoopChange: (loop: BarRange) => void
   /** The View's Lyrics: the Diagrams view's line sung, the Grid's words under its beats. */
   words: boolean
   /** How Diagrams shows the chords: the one sounding and the next, or the song's all at once. */
@@ -75,6 +78,7 @@ export function ChordView({
       words={words}
       playing={practice.state.playing}
       onBeat={go}
+      onLoop={onLoopChange}
     />
   ) : view === 'lyrics' ? (
     <ChordsOverLyrics
@@ -89,6 +93,7 @@ export function ChordView({
       textSize={textSize}
       playing={practice.state.playing}
       onGo={go}
+      onLoop={onLoopChange}
       onSymbol={goToChord}
     />
   ) : (
@@ -103,6 +108,7 @@ export function ChordView({
       mode={mode}
       clock={practice.clock}
       onGo={go}
+      onLoop={onLoopChange}
     />
   )
 }
