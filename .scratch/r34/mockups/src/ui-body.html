@@ -1,0 +1,71 @@
+<div class="wrap">
+  <div class="intro">
+    <h1>UI sketches · Round 34</h1>
+    <p class="soft">What the references taught us (Piano Forte, Hookpad, StemDeck, Songscription, PianoBooster), drawn on our own screens. Each question shows today beside the change where it helps (A today, B the change), on the iPhone 17 Pro and the MacBook Air with Safari, with real songs and the exact labels.</p>
+    <p class="soft">Each screen has <b>Approve</b>, <b>Revise</b> or <b>Remove</b> and a note; your answers stay in this browser.</p>
+  </div>
+  <nav class="toc" aria-label="Questions">
+    <a href="#q1">1 Shapes for verdicts</a><a href="#q2">2 Hands filled and outlined</a><a href="#q3">3 Engraved covers</a><a href="#q4">4 The song page</a><a href="#q5">5 Timing calibration</a><a href="#q6">6 Editor on a phone</a><a href="#q7">7 Scales</a><a href="#q8">8 Progression tiles</a><a href="#q9">9 Songs: Trash</a><a href="#q10">10 The recording</a>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="ptSize(1)">iPhone 17 Pro · app</button><script>var PT_SIZES=[['pro','iPhone 17 Pro · app'],['safari','iPhone 17 Pro · Safari'],['small','Smaller iPhone · app']];function ptSize(step){var k=0;try{k=Math.max(0,PT_SIZES.findIndex(function(x){return x[0]===localStorage.getItem('pt-mock-size')}))}catch(e){}k=(k+step)%PT_SIZES.length;document.body.classList.remove('small','safari');if(PT_SIZES[k][0]!=='pro')document.body.classList.add(PT_SIZES[k][0]);document.getElementById('sizeBtn').textContent=PT_SIZES[k][1];try{localStorage.setItem('pt-mock-size',PT_SIZES[k][0])}catch(e){}}ptSize(0)</script></span>
+  </nav>
+  <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>Shapes beside every judged note, not colour alone</h2></div>
+    <p class="where">Where: the Player's score after a Sight-read or Practice run, and its summary.</p>
+    <p>What changes: today a note you played is only tinted, and early and late share the same honey. Each judged note now gets a small shape beside its head: ● on time, ◂ early, ▸ late, ○ missed, × wrong. The summary carries the same legend, so the colour is never the only cue.</p>
+    <div class="screens" id="s1"></div>
+    <div class="rec">Recommendation: B, after Piano Forte's Word And Shape Rule. It is what DESIGN.md's Second Cue Rule asks for.</div>
+  </section>
+  <section class="q" id="q2"><div class="qhead"><span class="qnum">2</span><h2>The left hand outlined, the right hand filled</h2></div>
+    <p class="where">Where: every on-screen keyboard showing hands (Player, editor, lessons).</p>
+    <p>What changes: the right hand stays a solid brick key; the left hand becomes a lilac wash with a lilac edge. The hands differ by fill as well as colour, so they still read apart for colour-blind players.</p>
+    <div class="screens" id="s2"></div>
+    <div class="rec">Recommendation: B, Piano Forte's hand fills.</div>
+  </section>
+  <section class="q" id="q3"><div class="qhead"><span class="qnum">3</span><h2>A cover engraved from the song's first bars</h2></div>
+    <p class="where">Where: Songs (rows and cards), the song page, Explore.</p>
+    <p>What changes: the big key letter on yellow becomes the song's first two bars, engraved small on paper. A picture you chose still wins over it. A song with no notes yet shows an empty staff with its key and time signature.</p>
+    <div class="screens" id="s3"></div>
+    <div class="rec">Recommendation: B, Piano Forte's covers. Songs become recognisable at a glance.</div>
+  </section>
+  <section class="q" id="q4"><div class="qhead"><span class="qnum">4</span><h2>The song page: your practice and one next step</h2></div>
+    <p class="where">Where: a song's page (/songs/$id), phone and laptop.</p>
+    <p>What changes: on a phone the cover, title and Play come first, then your practice: last run, best run and a bar-by-bar strip, then one next step as a quiet button, so Play stays the only honey. Details fold below. On a laptop the empty right column holds the same practice card. “Change cover” moves into the cover's own menu, so it no longer overlaps the favourite.</p>
+    <div class="screens" id="s4"></div>
+    <div class="rec">Recommendation: as drawn. The next step follows Piano Forte's pace rules: loop the weakest bars at 70%, then 75% → 100%, then hands together.</div>
+  </section>
+  <section class="q" id="q5"><div class="qhead"><span class="qnum">5</span><h2>Timing calibration</h2></div>
+    <p class="where">Where: Settings › On-screen piano and MIDI › Calibrate timing.</p>
+    <p>What changes: play middle C along with 16 clicks. The app measures how late your setup sounds (Bluetooth speakers, USB keyboards) and corrects every judgement by it. It needs 8 good taps; Try again otherwise.</p>
+    <div class="screens" id="s5"></div>
+    <div class="rec">Recommendation: as drawn, Piano Forte's calibration (the median of your taps, to 5 ms).</div>
+  </section>
+  <section class="q" id="q6"><div class="qhead"><span class="qnum">6</span><h2>Editor on a phone: one target at the start of a line</h2></div>
+    <p class="where">Where: the score editor (/edit/$id) on a phone.</p>
+    <p>What changes: the clef, key and time signature at a line's start are too narrow to tap (7–24 px). On a phone they become one target that opens Clef · Key signature · Time signature; each opens what it opens today. The note-entry panel docks above the keys instead of floating over the score, and the view choice (Page, Rows, Horizontal) moves into the gear. A staff added over the piano is named by its part (Melody), not “Staff 1”.</p>
+    <div class="screens" id="s6"></div>
+    <div class="rec">Recommendation: as drawn, Flat for iPhone's line-start menu.</div>
+  </section>
+  <section class="q" id="q7"><div class="qhead"><span class="qnum">7</span><h2>Scales: the music first, one layer of labels</h2></div>
+    <p class="where">Where: Practice › Scales and keys (/practice/scales), laptop and phone.</p>
+    <p>What changes: the grid of eight controls moves into the gear; the heading keeps the key and scale. Above the staff, one choice says what the staff shows: Fingers · Degrees · Steps. With Steps, W and H sit between the notes, never on them, so nothing collides.</p>
+    <div class="screens" id="s7"></div>
+    <div class="rec">Recommendation: as drawn. Music first, as Hooktheory's key pages.</div>
+  </section>
+  <section class="q" id="q8"><div class="qhead"><span class="qnum">8</span><h2>Progressions as chord tiles coloured by role</h2></div>
+    <p class="where">Where: Practice › Progressions (list and a progression's page).</p>
+    <p>What changes: each row shows its chords as small tiles tinted by role: home green, away sand, tension lilac. They replace the identical list icon and the plain “I–V–vi–IV”. On a progression's page the tiles are large and playable, and the one sounding is ringed in ink. Absolute or relative names are one switch in place.</p>
+    <div class="screens" id="s8"></div>
+    <div class="rec">Recommendation: B. Hookpad's tiles, but coloured by role, as our Palette Law asks, not by scale degree.</div>
+  </section>
+  <section class="q" id="q9"><div class="qhead"><span class="qnum">9</span><h2>Songs: a Trash, and rows with one action</h2></div>
+    <p class="where">Where: Songs (/songs).</p>
+    <p>What changes: Delete moves a song to Trash, and nothing is gone until you empty it. The archive button becomes a menu: Archive · Trash. Folder rows drop the chevron: tap the row to open it, and its ⋯ button for the menu.</p>
+    <div class="screens" id="s9"></div>
+    <div class="rec">Recommendation: as drawn, StemDeck's Trash. Your decision: keep Archive beside Trash (drawn), or merge them.</div>
+  </section>
+  <section class="q" id="q10"><div class="qhead"><span class="qnum">10</span><h2>The recording follows Transpose and slows cleanly</h2></div>
+    <p class="where">Where: the Player with a song's recording (Original).</p>
+    <p>What changes: today Transpose silences the recording. It now shifts the recording's pitch too, and slowing down keeps the pitch (0.5–1×, without the chipmunk or the drag). The waveform shows the recording's beat grid, found once, which you can nudge, so the click and the score's cursor stay with it.</p>
+    <div class="screens" id="s10"></div>
+    <div class="rec">Recommendation: as drawn, with Signalsmith Stretch (MIT) and web-audio-beat-detector (MIT).</div>
+  </section>
+</div>

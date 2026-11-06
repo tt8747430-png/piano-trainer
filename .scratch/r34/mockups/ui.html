@@ -1,0 +1,890 @@
+<meta charset="utf-8">
+<title>UI Sketches, Round 34</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Noto+Music&family=Onest:wght@400;500;600&display=swap">
+<style>
+/* Layout: a reading column of numbered questions; each draws whole app screens (phone 393×852, laptop 1710×904, scaled)
+   in Piano Trainer's own tokens, with a feedback box under every screen. */
+:root {
+  --paper: #f7f3ee; --card: #fefdfb; --sand: #eee9e2; --line: #dad1c8; --ink: #332921; --ink-soft: #685e56;
+  --honey: #edc684; --honey-ink: #5a4214; --grass: #d9ebd5; --grass-ink: #44684a; --sky: #e0effa; --sky-ink: #356890;
+  --lilac: #e6dff6; --lilac-ink: #6a5988; --sandw: #f5e0cf; --sand-ink: #7d5b40; --yellow: #f6ebc9; --yellow-ink: #7a5c18;
+  --bad: #f3d6d2; --bad-ink: #8a3a2e; --scrim: rgba(51, 41, 33, .32); --frame: #1d1916;
+  --display: 'Literata', Georgia, serif; --sans: 'Onest', system-ui, sans-serif; --music: 'Noto Music', serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #191512; --card: #24201c; --sand: #2e2924; --line: #453e38; --ink: #ede9e1; --ink-soft: #b5aca1;
+  --honey: #d4b176; --honey-ink: #2a1f0a; --grass: #2c3d2c; --grass-ink: #b5d6ae; --sky: #22344a; --sky-ink: #a9cdec;
+  --lilac: #352d47; --lilac-ink: #cfc2ec; --sandw: #3d2f24; --sand-ink: #e4c4a6; --yellow: #3a321d; --yellow-ink: #e6cf93;
+  --bad: #45251f; --bad-ink: #f0b9ae; --scrim: rgba(0,0,0,.5); --frame: #000; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #191512; --card: #24201c; --sand: #2e2924; --line: #453e38; --ink: #ede9e1; --ink-soft: #b5aca1;
+  --honey: #d4b176; --honey-ink: #2a1f0a; --grass: #2c3d2c; --grass-ink: #b5d6ae; --sky: #22344a; --sky-ink: #a9cdec;
+  --lilac: #352d47; --lilac-ink: #cfc2ec; --sandw: #3d2f24; --sand-ink: #e4c4a6; --yellow: #3a321d; --yellow-ink: #e6cf93;
+  --bad: #45251f; --bad-ink: #f0b9ae; --scrim: rgba(0,0,0,.5); --frame: #000; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); margin: 0 }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 28px 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0 }
+h1 { font-size: 30px } h2 { font-size: 22px } h3 { font-size: 16px }
+p { margin: 0; max-width: 65ch } .soft { color: var(--ink-soft) }
+.intro { display: grid; gap: 10px; margin-bottom: 8px }
+.toc { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); padding-block: 8px; display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--line) }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper) }
+.toc a { font-size: 13px; color: var(--ink); text-decoration: none; background: var(--sand); border-radius: 999px; padding: 4px 10px }
+.toc a.done { background: var(--grass); color: var(--grass-ink) }
+.toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-left: auto }
+.toolbar button { font: 500 13px var(--sans); border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 4px 11px; cursor: pointer }
+section.q { border-top: 1px solid var(--line); padding-block: 30px; display: grid; gap: 14px }
+section.q:first-of-type { border-top: 0 }
+.qhead { display: flex; gap: 10px; align-items: baseline } .qnum { font: 600 13px var(--sans); color: var(--ink-soft); white-space: nowrap }
+.where { font-size: 13px; color: var(--ink-soft) }
+.rec { background: var(--sky); color: var(--sky-ink); border-radius: 12px; padding: 10px 14px; max-width: 80ch }
+.screens { display: flex; flex-wrap: wrap; gap: 26px; align-items: flex-start }
+figure { margin: 0; display: grid; gap: 8px; min-width: 0; max-width: 100% }
+figcaption { font-size: 13.5px; color: var(--ink-soft); max-width: 46ch } figcaption b { color: var(--ink); display: block; font-size: 14px }
+.opt { display: inline-block; font: 600 12px var(--sans); background: var(--honey); color: var(--honey-ink); border-radius: 6px; padding: 1px 7px; margin-right: 6px }
+.opt.b { background: var(--sand); color: var(--ink) }
+table.map { border-collapse: collapse; font-size: 13.5px; width: 100%; max-width: 920px }
+.tablewrap { overflow-x: auto; max-width: 100% }
+table.map th, table.map td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+table.map th { font-weight: 600; color: var(--ink-soft); font-size: 12.5px }
+/* feedback */
+.fb { display: flex; gap: 6px; flex-wrap: wrap }
+.fb button { font: 500 12.5px var(--sans); border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 5px 11px; cursor: pointer }
+.fb button[aria-pressed="true"][data-v="ok"] { background: var(--grass); color: var(--grass-ink); border-color: var(--grass-ink) }
+.fb button[aria-pressed="true"][data-v="change"] { background: var(--honey); color: var(--honey-ink); border-color: var(--honey) }
+.fb button[aria-pressed="true"][data-v="remove"] { background: var(--bad); color: var(--bad-ink); border-color: var(--bad-ink) }
+button:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--sky-ink); outline-offset: 2px }
+figure textarea, .qfb textarea { width: 100%; min-height: 40px; font: 13px var(--sans); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 7px 9px; resize: vertical }
+:is(figure, .qfb) textarea::placeholder { color: var(--ink-soft) }
+.saved { font-size: 12px; color: var(--ink-soft); min-height: 1em }
+
+/* ——— device frames (true sizes, scaled) ——— */
+.dev { position: relative; overflow: hidden; border-radius: 34px; background: var(--frame); padding: 9px }
+.dev.phone { --fw: 450px; --fh: 920px; --sx: 24px; --sy: 23px; --sw: 402px; --sh: 874px; --sr: 62px; --sb: 62px; --s: .74; width: calc(var(--fw) * var(--s)); height: calc(var(--fh) * var(--s)); padding: 0; border-radius: 0; background: none; overflow: visible }
+body.small .dev.phone { --fw: 440px; --fh: 899px; --sx: 23.5px; --sy: 22.5px; --sw: 393px; --sh: 852px; --sr: 60px; --sb: 54px }
+.dev.phone::after { content: ''; position: absolute; inset: 0; background: url(iphone-17-pro.png) 0 0 / 100% 100% no-repeat; pointer-events: none; z-index: 3 }
+body.safari .dev.phone::after { background-image: url(iphone-safari.png) }
+body.safari .dev.phone > .scr::after { content: ''; position: absolute; left: 34px; right: 34px; bottom: 33px; height: 48px; z-index: 50; background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27334%27%20height%3D%2748%27%3E%3Cg%20fill%3D%27rgba%28250%2C250%2C250%2C.86%29%27%20stroke%3D%27rgba%280%2C0%2C0%2C.1%29%27%3E%3Ccircle%20cx%3D%2724%27%20cy%3D%2724%27%20r%3D%2723.5%27/%3E%3Crect%20x%3D%2756.5%27%20y%3D%27.5%27%20width%3D%27221%27%20height%3D%2747%27%20rx%3D%2723.5%27/%3E%3Ccircle%20cx%3D%27310%27%20cy%3D%2724%27%20r%3D%2723.5%27/%3E%3C/g%3E%3Cpath%20d%3D%27M27%2016l-8%208%208%208%27%20fill%3D%27none%27%20stroke%3D%27%231c1c1e%27%20stroke-width%3D%272.4%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27/%3E%3Ctext%20x%3D%27167%27%20y%3D%2729%27%20font-family%3D%27-apple-system%2Csystem-ui%2Csans-serif%27%20font-size%3D%2715%27%20font-weight%3D%27500%27%20text-anchor%3D%27middle%27%20fill%3D%27%231c1c1e%27%3Epiano-trainer%3C/text%3E%3Cg%20fill%3D%27%231c1c1e%27%3E%3Ccircle%20cx%3D%27302%27%20cy%3D%2724%27%20r%3D%272%27/%3E%3Ccircle%20cx%3D%27310%27%20cy%3D%2724%27%20r%3D%272%27/%3E%3Ccircle%20cx%3D%27318%27%20cy%3D%2724%27%20r%3D%272%27/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat; filter: drop-shadow(0 4px 12px rgba(0,0,0,.18)) }
+.dev.mac { --s: .45; --mx: 217.7px; --my: 36.6px; width: calc(2143px * var(--s)); height: calc(1299px * var(--s)); padding: 0; border-radius: 0; overflow: visible;
+  background: linear-gradient(rgba(255,255,255,.28), rgba(255,255,255,.28)) calc(var(--mx) * var(--s)) calc(var(--my) * var(--s)) / calc(1710px * var(--s)) calc(37px * var(--s)) no-repeat,
+    url(macbook-wallpaper.jpg) calc(var(--mx) * var(--s)) calc(var(--my) * var(--s)) / calc(1710px * var(--s)) calc(1112px * var(--s)) no-repeat }
+.dev.mac::before { content: 'piano-trainer'; position: absolute; z-index: 2; left: calc(var(--mx) * var(--s)); top: calc((var(--my) + 37px) * var(--s)); width: calc(1710px * var(--s)); height: calc(51px * var(--s)); background: url(safari-light.png) 0 0 / 100% 100%; border-radius: calc(16px * var(--s)) calc(16px * var(--s)) 0 0; font: 500 calc(14px * var(--s)) / calc(51px * var(--s)) -apple-system, system-ui, sans-serif; color: #3c3c43; text-align: center }
+:root[data-theme="dark"] .dev.mac::before { background-image: url(safari-dark.png); color: #ebebf5 }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dev.mac::before { background-image: url(safari-dark.png); color: #ebebf5 } }
+.dev.mac::after { content: ''; position: absolute; inset: 0; z-index: 3; background: url(macbook-air.png) 0 0 / 100% 100% no-repeat; pointer-events: none }
+.dev > .scr { width: 393px; height: 852px; transform: scale(var(--s)); transform-origin: 0 0; border-radius: 26px }
+.dev.phone > .scr { position: absolute; left: calc(var(--sx) * var(--s)); top: calc(var(--sy) * var(--s)); width: var(--sw); height: var(--sh); border-radius: var(--sr) }
+.dev.mac > .scr { position: absolute; left: calc(var(--mx) * var(--s)); top: calc((var(--my) + 88px) * var(--s)); width: 1710px; height: 904px; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,.35) }
+@media (max-width: 720px) { .dev.mac { --s: .3 } .dev.phone { --s: .7 } }
+.scrollx { overflow-x: auto; max-width: 100% }
+@media (max-width: 720px) { .scrollx:has(.mac)::after { content: "Scroll sideways for the whole screen →"; display: block; font-size: 12px; color: var(--ink-soft); padding-top: 4px } }
+@media (min-width: 721px) and (max-width: 1100px) { .dev.mac { --s: .32 } }
+
+/* ——— the app ——— */
+.scr { position: relative; overflow: hidden; background: var(--paper); color: var(--ink); font: 16px/1.4 var(--sans); display: flex; flex-direction: column }
+.scr.mac { flex-direction: row }
+.sb { width: 256px; flex: none; background: var(--card); border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: 0 12px 16px }
+.sb .brand { height: 80px; display: flex; align-items: center; justify-content: space-between; padding-left: 12px; font: 600 24px var(--display) }
+.sb .it { height: 44px; display: flex; gap: 12px; align-items: center; padding: 0 12px; border-radius: 12px; font-weight: 600; color: var(--ink-soft); font-size: 16px }
+.sb .it.on { background: var(--sand); color: var(--ink) }
+.sb .foot { margin-top: auto; display: grid; gap: 4px }
+.sb .acc { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 12px }
+.main { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative }
+.pad { padding: 0 16px } .mac .pad { padding: 0 40px }
+.bar { min-height: 56px; display: flex; align-items: center; gap: 8px; padding: 4px 16px; flex: none }
+.mac .bar { padding: 8px 40px; min-height: 72px }
+.bar .t { font: 600 20px/1.2 var(--display); min-width: 0; display: flex; align-items: center; gap: 6px }
+.bar .t > span:first-child { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.bar .t.lg { font-size: 24px } .mac .bar .t { font-size: 22px } .mac .bar .t.lg { font-size: 26px }
+.bar .tools { margin-left: auto; display: flex; gap: 6px; flex: none }
+.rb { width: 44px; height: 44px; border-radius: 999px; background: var(--sand); display: grid; place-items: center; flex: none; color: var(--ink) }
+.rb.plain { background: transparent } .rb.on { background: var(--grass); color: var(--grass-ink) }
+.rb.sm { width: 36px; height: 36px; background: transparent; color: var(--ink-soft) }
+.edit-pen { color: var(--ink-soft) }
+.seg { display: inline-flex; justify-self: start; align-self: start; width: max-content; background: var(--sand); border-radius: 999px; padding: 3px; gap: 2px; font: 600 14px var(--sans) }
+.seg span { padding: 7px 14px; border-radius: 999px; color: var(--ink-soft) } .seg span.on { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08) }
+.field { display: flex; align-items: center; gap: 8px; height: 44px; border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 0 12px; color: var(--ink-soft); font-size: 15px; flex: 1; min-width: 0 }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); font-size: 14px; white-space: nowrap }
+.chip b { font-family: var(--display) } .chip.on { background: var(--sand); border-color: var(--sand) }
+.h2 { font: 600 13px var(--sans); color: var(--ink-soft); padding: 18px 4px 8px; display: flex; justify-content: space-between }
+.h2 a { color: var(--sky-ink); font-weight: 500; text-decoration: none }
+.group { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden }
+.row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; min-height: 60px; border-top: 1px solid var(--line) }
+.row:first-child { border-top: 0 }
+.tile { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex: none }
+.p-yellow { background: var(--yellow); color: var(--yellow-ink) } .p-sky { background: var(--sky); color: var(--sky-ink) }
+.p-grass { background: var(--grass); color: var(--grass-ink) } .p-lilac { background: var(--lilac); color: var(--lilac-ink) }
+.p-sand { background: var(--sandw); color: var(--sand-ink) }
+.row .txt { flex: 1; min-width: 0 } .row .n { font-weight: 600; font-size: 16px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere }
+.row .d { font-size: 13.5px; color: var(--ink-soft); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.key { font: 600 16px var(--display); min-width: 26px; text-align: center }
+.lvl { display: inline-flex; gap: 2px; align-items: flex-end; height: 12px } .lvl i { width: 3px; background: var(--line); border-radius: 1px } .lvl i.f { background: var(--ink-soft) }
+.tick { color: var(--grass-ink) }
+.fab { position: absolute; right: 20px; bottom: 100px; width: 56px; height: 56px; border-radius: 999px; background: var(--honey); color: var(--honey-ink); display: grid; place-items: center; box-shadow: 0 6px 16px rgba(0,0,0,.18) }
+.mac .fab { bottom: 32px; right: 40px }
+.fab.wide { width: auto; padding: 0 22px; gap: 8px; display: flex; align-items: center; font-weight: 600 }
+.tabs { position: absolute; left: 0; right: 0; bottom: 0; height: 84px; background: var(--card); border-top: 1px solid var(--line); display: flex; padding: 6px 8px 0; gap: 4px }
+.tabs div { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; font: 600 12px var(--sans); color: var(--ink-soft); padding-top: 6px; border-radius: 12px; height: 54px }
+.tabs div.on { background: var(--sand); color: var(--ink) }
+.status { height: var(--sb, 47px); flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; font: 600 15px var(--sans) }
+.scroll { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0 }
+.scroll > * { flex-shrink: 0 }
+.cards { display: flex; gap: 10px }
+.scard { width: 150px; flex: none; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 10px; display: grid; gap: 6px }
+.scard .cv { height: 70px; border-radius: 10px; display: grid; place-items: center }
+.scard .n { font-weight: 600; font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.scard .d { font-size: 12.5px; color: var(--ink-soft) }
+/* laptop library */
+.lib { display: flex; flex: 1; min-height: 0 }
+.tree { width: 300px; flex: none; border-right: 1px solid var(--line); padding: 8px 16px 16px 40px; display: grid; align-content: start; gap: 2px }
+.tree .ti { height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 10px; border-radius: 10px; font-size: 15px; font-weight: 500 }
+.tree .ti.on { background: var(--sand); font-weight: 600 } .tree .ti .c { margin-left: auto; color: var(--ink-soft); font-size: 13px; font-weight: 400 }
+.tree .ti.ind { padding-left: 32px } .tree .lab { font: 600 12px var(--sans); color: var(--ink-soft); padding: 14px 10px 4px; text-transform: none }
+.tree .ti .sw { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center }
+.list { flex: 1; min-width: 0; padding: 8px 40px 16px 32px; display: flex; flex-direction: column }
+.thead, .trow { display: grid; grid-template-columns: minmax(0, 3fr) 70px minmax(0, 2fr) 70px 70px 110px 40px; gap: 12px; align-items: center; padding: 0 12px }
+.thead { font: 600 12.5px var(--sans); color: var(--ink-soft); height: 36px; border-bottom: 1px solid var(--line) }
+.trow { height: 58px; border-bottom: 1px solid var(--line); font-size: 15px } .trow .n { font-weight: 600 } .trow .d { font-size: 13px; color: var(--ink-soft) }
+.trow .chs { font-family: var(--display); color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--card); border-radius: 22px 22px 0 0; box-shadow: 0 -8px 30px rgba(0,0,0,.18); padding: 8px 16px 34px; display: grid; gap: 10px }
+.sheet .grip { width: 36px; height: 5px; background: var(--line); border-radius: 9px; margin: 0 auto 4px }
+.scrimm { position: absolute; inset: 0; background: var(--scrim) }
+.btn { height: 48px; border-radius: 12px; background: var(--honey); color: var(--honey-ink); display: grid; place-items: center; font-weight: 600 }
+.btn.ghost { background: var(--sand); color: var(--ink) }
+.check { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--line); display: grid; place-items: center; flex: none }
+.check.on { background: var(--honey); border-color: var(--honey); color: var(--honey-ink) }
+.pill { font-size: 12.5px; padding: 2px 9px; border-radius: 999px; background: var(--sand); color: var(--ink-soft); white-space: nowrap }
+.fieldline { border-bottom: 1px dashed var(--line); padding-bottom: 2px }
+.editing { outline: 2px solid var(--honey); outline-offset: 2px; border-radius: 6px; -webkit-line-clamp: unset !important; overflow: visible !important }
+.cover { border-radius: 16px; display: grid; place-items: center }
+.kbd { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; width: 74px; height: 38px; position: relative; background: var(--line); border: 1px solid var(--line); border-radius: 3px; overflow: hidden }
+.kbd i { background: #fbf9f6 } .kbd b { position: absolute; top: 0; width: 7px; height: 22px; background: #2a231d }
+.kbd u { position: absolute; bottom: 4px; width: 5px; height: 5px; border-radius: 9px; background: #2a231d }
+.staff { color: var(--ink) }
+.toast { position: absolute; left: 50%; bottom: 110px; transform: translateX(-50%); background: var(--ink); color: var(--paper); border-radius: 999px; padding: 9px 16px; font-size: 14px; white-space: nowrap }
+.dot { width: 8px; height: 8px; border-radius: 9px; background: var(--honey); display: inline-block }
+.av { width: 32px; height: 32px; border-radius: 999px; display: grid; place-items: center; font: 600 15px var(--display); flex: none }
+
+/* R30 Practice: the type ramp and 44px targets (critique round 1) */
+.rb.sm { width: 44px; height: 44px }
+.h2 { font-size: 14px } .h2 a.all { display: inline-flex; align-items: center; min-height: 44px; margin: -14px 0 }
+.row .d { font-size: 14px } .thead { font-size: 14px } .trow .d { font-size: 14px }
+.tree .lab { font-size: 14px } .pill { font-size: 14px }
+.lvl i { background: color-mix(in oklab, var(--ink-soft) 35%, transparent) }
+.kbd { width: 64px }
+
+/* R31: the installed app's home indicator, 14px soft text, raised segments in dark */
+.tabs { height: 85px; padding: 6px 8px 34px } .tabs div { height: 44px; justify-content: center; padding-top: 0 }
+.row .d, .h2, .tree .ti .c { font-size: 14px }
+span[aria-label^="Level"] { font-size: 14px !important }
+.seg span.on { background: var(--card); box-shadow: 0 1px 3px rgba(0,0,0,.25) }
+/* R33: the keys as a real piano's, its rail, its pedals and its settings sheet. */
+:root {
+  --ivory: #fefdfb; --ivory-far: #ebe5dc; --ivory-lip: #ddd5ca; --ebony: #2a2420; --ebony-top: #3d3530; --ebony-front: #5a504a;
+  --felt: #7c302c; --bed: #cbc2b9; --rail: #dfd8cf; --keydown: #b9dbf4; --lyre: #332c28; --brass: #d4ae58; --brass-dn: #a8822f;
+  --brass-shank: #8a6a28; --led: #f2b53c; --rh: #e7a99c; --lh: #c9b8ea; --rh-wash: #f4d9d2; --wrong: #e7826f;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --ivory: #d4d0cb; --ivory-far: #aaa49c; --ivory-lip: #a39b91; --ebony: #120f0d; --ebony-top: #221d1a; --ebony-front: #3d3631;
+  --felt: #5a2422; --bed: #787069; --rail: #332c27; --keydown: #6fa6d2; --lyre: #1d1916; --brass: #c69f4c; --brass-dn: #8f6c26;
+  --brass-shank: #a07c32; --rh: #c27a6c; --lh: #9a87c4; --rh-wash: #b6928a } }
+:root[data-theme="dark"] {
+  --ivory: #d4d0cb; --ivory-far: #aaa49c; --ivory-lip: #a39b91; --ebony: #120f0d; --ebony-top: #221d1a; --ebony-front: #3d3631;
+  --felt: #5a2422; --bed: #787069; --rail: #332c27; --keydown: #6fa6d2; --lyre: #1d1916; --brass: #c69f4c; --brass-dn: #8f6c26;
+  --brass-shank: #a07c32; --rh: #c27a6c; --lh: #9a87c4; --rh-wash: #b6928a }
+code { font-size: 13px; background: var(--sand); border-radius: 6px; padding: 1px 5px }
+.pk { position: relative; display: flex; gap: 1px; background: var(--bed); padding-top: 4px; overflow: hidden }
+.pk .felt { position: absolute; inset: 0 0 auto; height: 5px; background: linear-gradient(var(--felt), color-mix(in oklab, var(--felt) 70%, #000)); z-index: 3; box-shadow: 0 2px 3px rgba(0,0,0,.25) }
+.pk .w { --fill: var(--ivory); position: relative; flex: 1; border-radius: 0 0 5px 5px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; padding-bottom: 12px; font: 600 11px var(--sans); color: #3a322b;
+  background: linear-gradient(to bottom, color-mix(in oklab, var(--fill) 80%, #000) 0, var(--fill) 16%, var(--fill) 78%, color-mix(in oklab, var(--fill) 94%, #000) 100%);
+  box-shadow: inset 1px 0 0 rgba(255,255,255,.55), inset -1px 0 0 rgba(0,0,0,.10), 0 1px 2px rgba(0,0,0,.18); transition: transform .08s }
+.pk .w::after { content: ""; position: absolute; inset: auto 0 0; height: 7px; border-radius: 0 0 5px 5px; background: linear-gradient(color-mix(in oklab, var(--fill) 96%, #000), color-mix(in oklab, var(--fill) 82%, #000)); border-top: 1px solid rgba(255,255,255,.6) }
+.pk .w.dn { transform: translateY(1.5px); background: linear-gradient(to bottom, color-mix(in oklab, var(--fill) 62%, #000) 0, var(--fill) 26%, var(--fill) 100%) }
+.pk .w.dn::after { height: 3px }
+.pk .w.lit { --fill: var(--keydown) } .pk .w.rh { --fill: var(--rh) } .pk .w.lh { --fill: var(--lh) } .pk .w.wash { --fill: var(--rh-wash) } .pk .w.bad { --fill: var(--wrong) }
+.pk .w.held { box-shadow: inset 0 0 0 3px var(--sky-ink), 0 1px 2px rgba(0,0,0,.18) }
+.pk .b { --fill: var(--ebony); position: absolute; top: 4px; height: 60%; z-index: 2; border-radius: 0 0 3px 3px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 14%; font: 600 10px var(--sans); color: #f3eee7;
+  background: linear-gradient(to bottom, color-mix(in oklab, var(--fill) 70%, #000) 0, var(--fill) 10%, color-mix(in oklab, var(--fill) 88%, #fff) 82%, var(--fill) 100%);
+  box-shadow: inset 2px 0 0 rgba(255,255,255,.10), inset -2px 0 0 rgba(0,0,0,.45), 1px 3px 4px rgba(0,0,0,.4) }
+.pk .b::after { content: ""; position: absolute; inset: auto 2px 0; height: 11%; border-radius: 0 0 2px 2px; background: linear-gradient(var(--ebony-front), color-mix(in oklab, var(--ebony-front) 60%, #000)) }
+.pk .b.dn { transform: translateY(1.5px); box-shadow: inset 2px 0 0 rgba(255,255,255,.10), inset -2px 0 0 rgba(0,0,0,.45), 0 1px 2px rgba(0,0,0,.35) }
+.pk .b.dn::after { height: 5% }
+.pk .b.lit { --fill: #3f78a5 } .pk .b.rh { --fill: #b2584a }
+.pk .cap { display: inline-grid; place-items: center; min-width: 16px; height: 16px; padding: 0 3px; border-radius: 4px; font: 600 10px var(--sans); text-transform: uppercase; background: rgba(0,0,0,.07); box-shadow: inset 0 -1px 0 rgba(0,0,0,.15) }
+.pk .b .cap { background: rgba(255,255,255,.14); box-shadow: inset 0 -1px 0 rgba(0,0,0,.4) }
+.pk .shade { position: absolute; inset: 4px 0 auto; height: 10px; background: linear-gradient(rgba(0,0,0,.22), transparent); z-index: 2; pointer-events: none }
+/* the rail beneath the keys */
+.rail { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(max-content,1fr); align-items: center; min-height: 56px; padding: 0 6px; background: var(--rail); box-shadow: inset 0 1px 0 rgba(0,0,0,.08) }
+.rail .end { display: flex; justify-content: flex-end; align-items: center }
+.rail .chord { font: 600 18px var(--display); padding: 0 8px; white-space: nowrap }
+.lyre { position: relative; display: flex; align-items: flex-end; gap: 4px; height: 56px; padding: 4px 8px 0; background: var(--lyre); border-radius: 10px 10px 0 0 }
+.lyre .led { position: absolute; top: 6px; right: 8px; width: 7px; height: 7px; border-radius: 9px; background: #5b4e40 }
+.lyre .led.on { background: var(--led); box-shadow: 0 0 6px 2px color-mix(in oklab, var(--led) 70%, transparent) }
+.pedal { display: grid; justify-items: center; align-content: end; gap: 1px; min-width: 48px; min-height: 48px; padding-bottom: 2px }
+.pedal span { font: 600 11px var(--sans); color: #cbbfae } .pedal.dn span { color: #f3dea4 }
+/* option B: a lit Sustain toggle in the strip */
+.sus { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: 999px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line); font: 600 14px var(--sans) }
+.sus i { width: 8px; height: 8px; border-radius: 9px; background: var(--line) }
+.sus.on { background: var(--honey); color: var(--honey-ink); box-shadow: none } .sus.on i { background: #fff6dc; box-shadow: 0 0 6px 2px rgba(255,240,200,.9) }
+/* the Piano sheet */
+.psheet { position: absolute; inset: auto 0 0; background: var(--card); border-radius: 24px 24px 0 0; padding: 8px 16px 34px; box-shadow: 0 -8px 30px rgba(0,0,0,.18); display: grid; gap: 10px; z-index: 6 }
+.psheet .grip { width: 36px; height: 5px; border-radius: 9px; background: var(--line); margin: 0 auto 2px }
+.psheet .row2 { display: grid; gap: 8px; padding: 10px 0; border-top: 1px solid var(--line) }
+.psheet .row2:first-of-type { border-top: 0 }
+.psheet .lbl { font-weight: 600 } .psheet .sub { font-size: 13px; color: var(--ink-soft) }
+.slider { height: 6px; border-radius: 9px; background: linear-gradient(90deg, var(--ink) 100%, var(--line) 100%); position: relative }
+.slider::after { content: ""; position: absolute; left: calc(100% - 22px); top: -8px; width: 22px; height: 22px; border-radius: 99px; background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,.3) }
+.pop { position: absolute; width: 380px; background: var(--card); border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,.22), 0 0 0 1px var(--line); padding: 12px 16px; display: grid; gap: 4px; z-index: 6 }
+
+/* R34: slim keys edge to edge at the foot, the divider, the bar's Sustain and Keyboard. */
+.pk.slim { padding-top: 3px; gap: 0.5px }
+.pk.slim .felt { height: 3px }
+.pk.slim .w { border-radius: 0 0 2px 2px; padding-bottom: 3px; font-size: 8px; box-shadow: inset 1px 0 0 rgba(255,255,255,.5), inset -.5px 0 0 rgba(0,0,0,.18) }
+.pk.slim .w::after { height: 3px; border-radius: 0 0 2px 2px }
+.pk.slim .b { top: 3px; border-radius: 0 0 1.5px 1.5px; box-shadow: inset 1px 0 0 rgba(255,255,255,.10), inset -1px 0 0 rgba(0,0,0,.45), .5px 1.5px 2px rgba(0,0,0,.4) }
+.mac .pk.slim .w { font-size: 10px; padding-bottom: 6px }
+/* the divider: a slim bar on the keys' edge facing the music, its grip in the middle */
+.divider { position: relative; height: 12px; flex: none; display: grid; place-items: center; background: var(--card); border-top: 1px solid var(--line); cursor: row-resize }
+.divider i { width: 36px; height: 4px; border-radius: 9px; background: var(--line) }
+.divider.drag { background: var(--sand) } .divider.drag i { background: var(--ink-soft) }
+.divider.drag::before { content: ""; position: absolute; left: 50%; top: -32px; height: 44px; width: 120px; transform: translateX(-50%); border: 1.5px dashed var(--sky-ink); border-radius: 12px }
+/* the bar's keyboard tools */
+.held { font: 600 20px var(--display); padding: 0 8px; white-space: nowrap; display: flex; align-items: center; height: 44px }
+.held small { font: 500 12px var(--sans); color: var(--ink-soft); margin-right: 6px }
+.rb.lit { background: var(--keydown); color: var(--sky-ink); box-shadow: inset 0 0 0 1.5px var(--sky-ink) }
+.rb.pressed { background: color-mix(in oklab, var(--sand) 70%, var(--ink) 12%); color: var(--ink) }
+.split { display: flex; border-radius: 999px; background: var(--sand) }
+.split .rb { background: transparent } .split .rb.lit { background: var(--keydown) }
+.split .rb.more { width: 44px; border-radius: 0 999px 999px 0; position: relative }
+.split .rb.more.on::after { content: ""; position: absolute; top: 9px; right: 6px; width: 6px; height: 6px; border-radius: 9px; background: var(--sky-ink) }
+.menu { position: absolute; z-index: 7; background: var(--card); border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,.22), 0 0 0 1px var(--line); padding: 6px; display: grid; gap: 2px; min-width: 210px }
+.menu .it { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: 10px; font-weight: 500 }
+.menu .it.lit { background: var(--keydown); color: var(--sky-ink) }
+.menu .it small { margin-left: auto; font-size: 12px; color: var(--ink-soft) } .menu .it.lit small { color: var(--sky-ink) }
+.menu .cap2 { font-size: 12px; color: var(--ink-soft); padding: 4px 12px 2px }
+.note { position: absolute; z-index: 8; background: var(--ink); color: var(--paper); font: 600 12px var(--sans); border-radius: 8px; padding: 4px 8px; white-space: nowrap }
+/* the folded keys' strip, and the sheet's one pill */
+.kstrip { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; flex: none; background: var(--sand); color: var(--ink-soft); border-top: 1px solid var(--line); font: 500 14px var(--sans) }
+.spill { position: absolute; right: 10px; bottom: 10px; z-index: 4; display: flex; align-items: center; border-radius: 999px; background: var(--card); box-shadow: 0 4px 14px rgba(0,0,0,.14), 0 0 0 1px var(--line) }
+.spill .rb { background: transparent } .spill .rb.on { background: color-mix(in oklab, var(--sand) 70%, var(--ink) 12%) }
+.spill .sep { width: 1px; height: 24px; background: var(--line); margin: 0 2px }
+.spill .pct { font: 500 13px var(--sans); min-width: 44px; text-align: center }
+
+/* R34 UI round: verdict shapes, covers, meters, tiles, menus, calibration. */
+:root { --brick: #c9624f; --lilac-edge: #8a76b8; --rose: #c8164b; --good: #3e8f69; --meter: #685e56; }
+:root[data-theme="dark"] { --brick: #e08a76; --lilac-edge: #b9a6e6; --rose: #ff6b8a; --good: #8fd1ad; --meter: #b5aca1; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --brick: #e08a76; --lilac-edge: #b9a6e6; --rose: #ff6b8a; --good: #8fd1ad; --meter: #b5aca1; } }
+.vs { font: 700 11px var(--sans); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--ink-soft) }
+.legend b { font-size: 13px; margin-right: 4px }
+.meter { height: 10px; border-radius: 999px; background: var(--line); overflow: hidden }
+.meter i { display: block; height: 100%; border-radius: 999px; background: var(--meter); min-width: 4px }
+.meter.solid i { background: var(--ink) }
+.cells { display: flex; gap: 3px; align-items: end; height: 34px }
+.cells i { flex: 1; border-radius: 3px; background: var(--meter); min-height: 3px }
+.cells i.e { background: var(--line) }
+.cv-inc { background: #fbf8f1; color: #161513; border-radius: 6px; overflow: hidden; display: block }
+.ptile { display: inline-grid; place-items: center; height: 28px; min-width: 32px; padding: 0 6px; border-radius: 8px; font: 650 14px var(--sans); font-variant-numeric: tabular-nums }
+.ptile.lg { height: 64px; min-width: 72px; font-size: 22px; border-radius: 14px; font-family: var(--display) }
+.ptile.home { background: var(--grass); color: var(--grass-ink) }
+.ptile.away { background: var(--sandw); color: var(--sand-ink) }
+.ptile.tension { background: var(--lilac); color: var(--lilac-ink) }
+.ptile.now { box-shadow: 0 0 0 3px var(--ink) }
+.menu2 { position: absolute; z-index: 30; background: var(--card); border-radius: 14px; box-shadow: 0 0 0 1px var(--line), 0 12px 32px rgba(0,0,0,.16); padding: 6px; min-width: 220px }
+.menu2 .mi { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: 10px; font-size: 16px }
+.menu2 .mi.on { background: var(--sand) }
+.menu2 .cap3 { font-size: 13px; color: var(--ink-soft); padding: 8px 12px 4px }
+.hit { position: absolute; border: 2px dashed var(--sky-ink); border-radius: 8px; background: color-mix(in srgb, var(--sky) 50%, transparent) }
+.tag { display: inline-block; font: 600 12px var(--sans); padding: 2px 8px; border-radius: 999px; background: var(--sand); color: var(--ink-soft) }
+.honeybtn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 20px; border-radius: 999px; background: var(--honey); color: var(--honey-ink); font: 650 16px var(--sans) }
+.ghostbtn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 12px; box-shadow: inset 0 0 0 1px var(--line); background: var(--card); font: 600 15px var(--sans) }
+.cardx { background: var(--card); border-radius: 20px; box-shadow: inset 0 0 0 1px var(--line); padding: 16px }
+.lbl2 { font-size: 13px; color: var(--ink-soft) }
+.ba { display: grid; grid-template-columns: auto auto; gap: 24px; align-items: start }
+.wave { display: flex; align-items: center; gap: 2px; height: 48px }
+.wave i { flex: 1; background: var(--ink-soft); border-radius: 2px; opacity: .55 }
+.wave i.in { background: var(--sky-ink); opacity: .9 }
+.beats { position: relative; height: 14px; overflow: hidden }
+.beats .bt { position: absolute; top: 0; display: block; width: 1.5px; height: 14px; background: var(--ink) }
+.beats .bt.bar { width: 2.5px; background: var(--honey-ink) }
+.pk.slim .w.lho { background: var(--lilac) !important; box-shadow: inset 0 0 0 2px var(--lilac-edge) }
+.pk.slim .w.rhs { background: var(--brick) !important }
+.pk.slim .w.rhs span, .pk.slim .w.lho span { color: var(--ink) }
+
+</style>
+<div class="wrap">
+  <div class="intro">
+    <h1>UI sketches · Round 34</h1>
+    <p class="soft">What the references taught us (Piano Forte, Hookpad, StemDeck, Songscription, PianoBooster), drawn on our own screens. Each question shows today beside the change where it helps (A today, B the change), on the iPhone 17 Pro and the MacBook Air with Safari, with real songs and the exact labels.</p>
+    <p class="soft">Each screen has <b>Approve</b>, <b>Revise</b> or <b>Remove</b> and a note; your answers stay in this browser.</p>
+  </div>
+  <nav class="toc" aria-label="Questions">
+    <a href="#q1">1 Shapes for verdicts</a><a href="#q2">2 Hands filled and outlined</a><a href="#q3">3 Engraved covers</a><a href="#q4">4 The song page</a><a href="#q5">5 Timing calibration</a><a href="#q6">6 Editor on a phone</a><a href="#q7">7 Scales</a><a href="#q8">8 Progression tiles</a><a href="#q9">9 Songs: Trash</a><a href="#q10">10 The recording</a>
+    <span class="toolbar"><button type="button" id="themeBtn">Light / dark</button><button type="button" id="sizeBtn" onclick="ptSize(1)">iPhone 17 Pro · app</button><script>var PT_SIZES=[['pro','iPhone 17 Pro · app'],['safari','iPhone 17 Pro · Safari'],['small','Smaller iPhone · app']];function ptSize(step){var k=0;try{k=Math.max(0,PT_SIZES.findIndex(function(x){return x[0]===localStorage.getItem('pt-mock-size')}))}catch(e){}k=(k+step)%PT_SIZES.length;document.body.classList.remove('small','safari');if(PT_SIZES[k][0]!=='pro')document.body.classList.add(PT_SIZES[k][0]);document.getElementById('sizeBtn').textContent=PT_SIZES[k][1];try{localStorage.setItem('pt-mock-size',PT_SIZES[k][0])}catch(e){}}ptSize(0)</script></span>
+  </nav>
+  <section class="q" id="q1"><div class="qhead"><span class="qnum">1</span><h2>Shapes beside every judged note, not colour alone</h2></div>
+    <p class="where">Where: the Player's score after a Sight-read or Practice run, and its summary.</p>
+    <p>What changes: today a note you played is only tinted, and early and late share the same honey. Each judged note now gets a small shape beside its head: ● on time, ◂ early, ▸ late, ○ missed, × wrong. The summary carries the same legend, so the colour is never the only cue.</p>
+    <div class="screens" id="s1"></div>
+    <div class="rec">Recommendation: B, after Piano Forte's Word And Shape Rule. It is what DESIGN.md's Second Cue Rule asks for.</div>
+  </section>
+  <section class="q" id="q2"><div class="qhead"><span class="qnum">2</span><h2>The left hand outlined, the right hand filled</h2></div>
+    <p class="where">Where: every on-screen keyboard showing hands (Player, editor, lessons).</p>
+    <p>What changes: the right hand stays a solid brick key; the left hand becomes a lilac wash with a lilac edge. The hands differ by fill as well as colour, so they still read apart for colour-blind players.</p>
+    <div class="screens" id="s2"></div>
+    <div class="rec">Recommendation: B, Piano Forte's hand fills.</div>
+  </section>
+  <section class="q" id="q3"><div class="qhead"><span class="qnum">3</span><h2>A cover engraved from the song's first bars</h2></div>
+    <p class="where">Where: Songs (rows and cards), the song page, Explore.</p>
+    <p>What changes: the big key letter on yellow becomes the song's first two bars, engraved small on paper. A picture you chose still wins over it. A song with no notes yet shows an empty staff with its key and time signature.</p>
+    <div class="screens" id="s3"></div>
+    <div class="rec">Recommendation: B, Piano Forte's covers. Songs become recognisable at a glance.</div>
+  </section>
+  <section class="q" id="q4"><div class="qhead"><span class="qnum">4</span><h2>The song page: your practice and one next step</h2></div>
+    <p class="where">Where: a song's page (/songs/$id), phone and laptop.</p>
+    <p>What changes: on a phone the cover, title and Play come first, then your practice: last run, best run and a bar-by-bar strip, then one next step as a quiet button, so Play stays the only honey. Details fold below. On a laptop the empty right column holds the same practice card. “Change cover” moves into the cover's own menu, so it no longer overlaps the favourite.</p>
+    <div class="screens" id="s4"></div>
+    <div class="rec">Recommendation: as drawn. The next step follows Piano Forte's pace rules: loop the weakest bars at 70%, then 75% → 100%, then hands together.</div>
+  </section>
+  <section class="q" id="q5"><div class="qhead"><span class="qnum">5</span><h2>Timing calibration</h2></div>
+    <p class="where">Where: Settings › On-screen piano and MIDI › Calibrate timing.</p>
+    <p>What changes: play middle C along with 16 clicks. The app measures how late your setup sounds (Bluetooth speakers, USB keyboards) and corrects every judgement by it. It needs 8 good taps; Try again otherwise.</p>
+    <div class="screens" id="s5"></div>
+    <div class="rec">Recommendation: as drawn, Piano Forte's calibration (the median of your taps, to 5 ms).</div>
+  </section>
+  <section class="q" id="q6"><div class="qhead"><span class="qnum">6</span><h2>Editor on a phone: one target at the start of a line</h2></div>
+    <p class="where">Where: the score editor (/edit/$id) on a phone.</p>
+    <p>What changes: the clef, key and time signature at a line's start are too narrow to tap (7–24 px). On a phone they become one target that opens Clef · Key signature · Time signature; each opens what it opens today. The note-entry panel docks above the keys instead of floating over the score, and the view choice (Page, Rows, Horizontal) moves into the gear. A staff added over the piano is named by its part (Melody), not “Staff 1”.</p>
+    <div class="screens" id="s6"></div>
+    <div class="rec">Recommendation: as drawn, Flat for iPhone's line-start menu.</div>
+  </section>
+  <section class="q" id="q7"><div class="qhead"><span class="qnum">7</span><h2>Scales: the music first, one layer of labels</h2></div>
+    <p class="where">Where: Practice › Scales and keys (/practice/scales), laptop and phone.</p>
+    <p>What changes: the grid of eight controls moves into the gear; the heading keeps the key and scale. Above the staff, one choice says what the staff shows: Fingers · Degrees · Steps. With Steps, W and H sit between the notes, never on them, so nothing collides.</p>
+    <div class="screens" id="s7"></div>
+    <div class="rec">Recommendation: as drawn. Music first, as Hooktheory's key pages.</div>
+  </section>
+  <section class="q" id="q8"><div class="qhead"><span class="qnum">8</span><h2>Progressions as chord tiles coloured by role</h2></div>
+    <p class="where">Where: Practice › Progressions (list and a progression's page).</p>
+    <p>What changes: each row shows its chords as small tiles tinted by role: home green, away sand, tension lilac. They replace the identical list icon and the plain “I–V–vi–IV”. On a progression's page the tiles are large and playable, and the one sounding is ringed in ink. Absolute or relative names are one switch in place.</p>
+    <div class="screens" id="s8"></div>
+    <div class="rec">Recommendation: B. Hookpad's tiles, but coloured by role, as our Palette Law asks, not by scale degree.</div>
+  </section>
+  <section class="q" id="q9"><div class="qhead"><span class="qnum">9</span><h2>Songs: a Trash, and rows with one action</h2></div>
+    <p class="where">Where: Songs (/songs).</p>
+    <p>What changes: Delete moves a song to Trash, and nothing is gone until you empty it. The archive button becomes a menu: Archive · Trash. Folder rows drop the chevron: tap the row to open it, and its ⋯ button for the menu.</p>
+    <div class="screens" id="s9"></div>
+    <div class="rec">Recommendation: as drawn, StemDeck's Trash. Your decision: keep Archive beside Trash (drawn), or merge them.</div>
+  </section>
+  <section class="q" id="q10"><div class="qhead"><span class="qnum">10</span><h2>The recording follows Transpose and slows cleanly</h2></div>
+    <p class="where">Where: the Player with a song's recording (Original).</p>
+    <p>What changes: today Transpose silences the recording. It now shifts the recording's pitch too, and slowing down keeps the pitch (0.5–1×, without the chipmunk or the drag). The waveform shows the recording's beat grid, found once, which you can nudge, so the click and the score's cursor stay with it.</p>
+    <div class="screens" id="s10"></div>
+    <div class="rec">Recommendation: as drawn, with Signalsmith Stretch (MIT) and web-audio-beat-detector (MIT).</div>
+  </section>
+</div>
+
+<script>
+// ——— icons (lucide shapes) ———
+const P = {
+  back: '<path d="m15 18-6-6 6-6"/>', pen: '<path d="M21.2 6.8a2.8 2.8 0 0 0-4-4L3.8 16.2 3 21l4.8-.8Z"/><path d="m15 5 4 4"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',
+  more: '<circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', select: '<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8M13 12h8M13 18h8"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', music: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+  grad: '<path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>', metro: '<path d="M12 11.4V9.1"/><path d="m12 17 6.6-6.6"/><path d="M19.2 16.5 16.4 4.6A2 2 0 0 0 14.4 3H9.6a2 2 0 0 0-2 1.6L4.8 16.5A2.5 2.5 0 0 0 7.2 19.5h9.6a2.5 2.5 0 0 0 2.4-3Z"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/>', heart: '<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>', checkc: '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>', play: '<path d="M6 3v18l15-9Z" fill="currentColor"/>',
+  folder: '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9l-.8-1.2A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>',
+  archive: '<rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8M10 12h4"/>', clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+  share: '<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4M12 2v13"/>', link: '<path d="M9 17H7A5 5 0 0 1 7 7h2M15 7h2a5 5 0 1 1 0 10h-2M8 12h8"/>',
+  church: '<path d="M10 9h4M12 7v5M14 22v-4a2 2 0 0 0-4 0v4M18 22V5l-6-3-6 3v17M2 22h20"/>', heartsm: '<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/>',
+  book: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>', piano: '<path d="M18.5 8c-1.4 0-2.6-.8-3.2-2A6.9 6.9 0 0 0 2 9v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-8.5C22 9.6 20.4 8 18.5 8"/><path d="M2 14h20M6 14v4M10 14v4M14 14v4M18 14v4"/>',
+  chev: '<path d="m9 18 6-6-6-6"/>', down: '<path d="m6 9 6 6 6-6"/>', sort: '<path d="m3 16 4 4 4-4M7 20V4M21 8l-4-4-4 4M17 4v16"/>', filter: '<path d="M3 6h18M7 12h10M10 18h4"/>',
+  panel: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M16 15l-3-3 3-3"/>', copy: '<rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2"/>',
+  info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>', lock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  grip: '<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>',
+  mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4"/>',
+  wifi: '<path d="M12 20h.01M8.5 16.4a5 5 0 0 1 7 0M2 8.8a15 15 0 0 1 20 0M5 12.9a10 10 0 0 1 14 0"/><path d="M2 2l20 20"/>', star: '<path d="M12 2l3 7 7 .6-5.3 4.7 1.6 7.2L12 17.8 5.7 21.5l1.6-7.2L2 9.6 9 9z" fill="currentColor" stroke="none"/>',
+  image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>', trash: '<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+  door: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+};
+const ic = (n, s = 22, w = 1.9) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]}</svg>`;
+const rb = (n, cls = '') => `<span class="rb ${cls}">${ic(n, 20)}</span>`;
+const lvl = n => `<span style="display:inline-flex;gap:4px;align-items:center;font-size:13px;color:var(--ink-soft)" aria-label="Level ${n}"><span class="lvl">${[5, 8, 11, 14].map((h, i) => `<i style="height:${h}px" class="${i < n ? 'f' : ''}"></i>`).join('')}</span>${n}</span>`;
+const status = () => `<div class="status"><span>9:41</span><span>●●● ▮</span></div>`;
+const tabs = (on) => `<div class="tabs">${[['grad', 'Learn'], ['music', 'Songs'], ['metro', 'Practice'], ['user', 'Profile']].map(([i, l]) => `<div class="${l === on ? 'on' : ''}">${ic(i, 24)}${l}</div>`).join('')}</div>`;
+const sidebar = (on) => `<aside class="sb"><div class="brand">Piano Trainer <span style="color:var(--ink-soft)">${ic('panel', 20)}</span></div>
+  ${[['grad', 'Learn'], ['music', 'Songs'], ['metro', 'Practice']].map(([i, l]) => `<div class="it ${l === on ? 'on' : ''}">${ic(i, 20)}${l}</div>`).join('')}
+  <div class="foot"><div class="it">${ic('search', 20)}Search</div><div class="it">${ic('gear', 20)}Settings</div><div class="acc"><div class="it"><span class="av p-yellow" style="width:22px;height:22px;font-size:12px">K</span>Profile</div></div></div></aside>`;
+const phone = (inner, tab) => `<div class="dev phone"><div class="scr">${status()}${inner}${tab ? tabs(tab) : ''}</div></div>`;
+const mac = (inner, on = 'Songs') => `<div class="dev mac"><div class="scr mac">${sidebar(on)}<div class="main">${inner}</div></div></div>`;
+const fig = (id, title, body, dev) => `<figure data-fb="${id}" data-title="${title}"><div class="scrollx">${dev}</div><figcaption><b>${id} ${title}</b>${body}</figcaption></figure>`;
+const kb = (dots) => `<span class="kbd">${Array(7).fill('<i></i>').join('')}${[9, 20, 41, 52, 63].map(x => `<b style="left:${x}%"></b>`).join('')}${dots.map(x => `<u style="left:${x}%"></u>`).join('')}</span>`;
+const SONGS = [
+  ['Amazing Grace', 'John Newton · tune New Britain', 'G', 'G  G7  C  D', 2, true, 'Today'],
+  ['Silent Night', 'Joseph Mohr · Franz Gruber', 'C', 'C  G7  F', 2, true, 'Yesterday'],
+  ['Ode to Joy', 'Ludwig van Beethoven', 'C', 'C  G', 1, false, '3 Nov'],
+  ['Our Father in Heaven', 'О наш Отец на небесах', 'Fm', 'Fm  G°  C7  E♭', 3, false, '1 Nov'],
+  ['Wonderful Grace of Jesus', 'Haldor Lillenas', 'D♭', 'D♭  E°7  A♭7  F7', 4, false, '28 Oct'],
+];
+const songRow = ([n, by, k, , l, learned]) => `<div class="row"><div class="txt"><div class="n">${n}</div><div class="d">${by}</div></div><span class="key">${k}</span>${lvl(l)}<span class="tick" style="width:22px">${learned ? ic('checkc', 20) : ''}</span><span class="rb sm">${ic('more', 20)}</span></div>`;
+const FOLDERS = [['p-yellow', 'music', 'Songs to learn', '23 songs'], ['p-sand', 'heartsm', '«Боже, спасибо»', '20 songs'], ['p-sky', 'piano', 'Called to Play', '40 songs · 1 folder'], ['p-grass', 'church', 'Hymns', '5 songs']];
+const folderRow = ([p, i, n, d], extra = '') => `<div class="row"><span class="tile ${p}">${ic(i, 22)}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div>${extra}<span class="rb sm">${ic('more', 20)}</span></div>`;
+
+Object.assign(P, {
+  x: '<path d="M18 6 6 18M6 6l12 12"/>',
+  rotate: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+  loop: '<path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',
+  prev: '<path d="m15 18-6-6 6-6"/>', next: '<path d="m9 18 6-6-6-6"/>',
+  timer: '<path d="M10 2h4M12 14l3-3"/><circle cx="12" cy="14" r="8"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
+  layers: '<path d="m12 2 10 5-10 5L2 7Z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/>',
+  ear: '<path d="M6 8.5a6.5 6.5 0 1 1 13 0c0 6-6 6-6 10a3.5 3.5 0 1 1-7 0"/><path d="M15 8.5a2.5 2.5 0 0 0-5 0v1a2 2 0 1 1 0 4"/>',
+  keys: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M8 4v10M16 4v10M12 14v6M6 14h4M14 14h4"/>',
+  updown: '<path d="m7 15 5 5 5-5M7 9l5-5 5 5"/>',
+  minus: '<path d="M5 12h14"/>',
+  metro: '<path d="M9 3h6l4 18H5Z"/><path d="m12 15 5-9"/><path d="M8 17h8"/>',
+  dl: '<path d="M12 15V3M7 10l5 5 5-5M5 21h14"/>',
+  msg: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/>',
+  lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  pause: '<path d="M8 5v14M16 5v14"/>',
+});
+const app = (inner) => `<div class="dev phone"><div class="scr" style="display:flex;flex-direction:column"><div style="height:var(--sb, 47px);display:flex;align-items:center;justify-content:space-between;padding:0 30px 6px;font:600 15px var(--sans)"><span>9:41</span><span>••• ▮</span></div>${inner}</div></div>`;
+// a score system: staff lines and note heads, in ink
+const sys = (y, w = 361, notes = 8, chords = ['C', 'G']) => `<svg width="${w}" height="120" viewBox="0 0 ${w} 120" style="display:block;color:var(--ink)" aria-hidden="true">${chords.map((c, i) => `<text x="${50 + i * (w - 60) / chords.length}" y="12" font-family="Literata,serif" font-size="14" font-weight="600" fill="currentColor">${c}</text>`).join('')}${[0, 1].map((s) => [0, 1, 2, 3, 4].map((l) => `<line x1="6" x2="${w - 4}" y1="${22 + s * 52 + l * 7}" y2="${22 + s * 52 + l * 7}" stroke="currentColor" stroke-width=".7" opacity=".7"/>`).join('')).join('')}<line x1="6" x2="6" y1="22" y2="102" stroke="currentColor"/><line x1="${w - 4}" x2="${w - 4}" y1="22" y2="102" stroke="currentColor"/><line x1="${w / 2}" x2="${w / 2}" y1="22" y2="102" stroke="currentColor" stroke-width=".7"/><text x="10" y="50" font-size="30" fill="currentColor">𝄞</text><text x="10" y="94" font-size="24" fill="currentColor">𝄢</text>${Array.from({ length: notes }, (_, i) => `<ellipse cx="${48 + i * (w - 60) / notes}" cy="${29 + ((i * 5) % 4) * 3.5}" rx="4.4" ry="3.3" fill="currentColor" transform="rotate(-20 ${48 + i * (w - 60) / notes} ${29 + ((i * 5) % 4) * 3.5})"/>`).join('')}${Array.from({ length: notes / 2 }, (_, i) => `<ellipse cx="${48 + i * 2 * (w - 60) / notes}" cy="${88 - (i % 2) * 7}" rx="4.4" ry="3.3" fill="none" stroke="currentColor" stroke-width="1.4"/>`).join('')}</svg>`;
+const title = `<div style="text-align:center;font:600 20px var(--display);padding:8px 0 2px">Hot Cross Buns</div><div style="font-size:14px;color:var(--ink-soft);padding:0 16px">1 · Verse · ♩ = 92</div>`;
+const bar = `<div class="bar">${rb('x').replace('class="rb ', 'class="rb plain ')}<div class="t"><span>Hot Cross Buns</span><span class="rb sm" style="color:var(--ink)">${ic('pen', 20)}</span></div><div class="tools">${rb('keys', 'on')}${rb('gear')}</div></div>`;
+const tbtn = (i, l, on = '') => `<div style="display:grid;justify-items:center;align-content:center;gap:1px;min-width:44px;min-height:44px;font:600 12px var(--sans);color:${on ? 'var(--ink)' : 'var(--ink-soft)'}">${ic(i, 22)}<span>${l}</span></div>`;
+// R33 screens, after the R32 helpers (icons, frames, the score system, the bar).
+Object.assign(P, {
+  hide: '<path d="m6 9 6 6 6-6"/>',
+  plusc: '<path d="M12 5v14M5 12h14"/>',
+  minus: '<path d="M5 12h14"/>',
+})
+
+const LETTERS = 'CDEFGAB'
+const WHITE_CAPS = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', '’']
+const BLACK_CAPS = { 0: 'W', 1: 'E', 3: 'T', 4: 'Y', 5: 'U', 7: 'O', 8: 'P' }
+/**
+ * The keys as R33 draws them. `w`: white marks by index ('lit', 'rh', 'lh', 'wash', 'bad', 'held'), `dn`: the white keys
+ * down, `b`: black marks by the white key they follow, `names`: 'c' | 'all' | 'none', `caps`: computer letters from
+ * `capsFrom` (the white index of the C the letters start on).
+ */
+const piano = ({ whites = 15, octave = 3, w = {}, dn = [], b = {}, bdn = [], names = 'c', caps = false, capsFrom = 7, h = 150 } = {}) => {
+  const bw = 58 / whites
+  const white = Array.from({ length: whites }, (_, i) => {
+    const letter = LETTERS[i % 7]
+    const name = names === 'all' || (names === 'c' && letter === 'C') ? `${letter}${letter === 'C' || names === 'all' ? (letter === 'C' ? octave + Math.floor(i / 7) : '') : ''}` : ''
+    const cap = caps && i >= capsFrom && i - capsFrom < WHITE_CAPS.length ? `<span class="cap">${WHITE_CAPS[i - capsFrom]}</span>` : ''
+    const cls = [w[i] ?? '', dn.includes(i) ? 'dn' : ''].join(' ')
+    return `<div class="w ${cls}">${cap}<span>${name}</span></div>`
+  }).join('')
+  const black = Array.from({ length: whites - 1 }, (_, i) => {
+    if (![0, 1, 3, 4, 5].includes(i % 7)) return ''
+    const at = i - capsFrom
+    const cap = caps && BLACK_CAPS[at] ? `<span class="cap">${BLACK_CAPS[at]}</span>` : ''
+    return `<div class="b ${b[i] ?? ''} ${bdn.includes(i) ? 'dn' : ''}" style="left:calc(${((i + 1) * 100) / whites}% - ${bw / 2}%);width:${bw}%">${cap}</div>`
+  }).join('')
+  return `<div class="pk" style="height:${h}px"><div class="felt"></div>${white}${black}</div>`
+}
+
+/** One brass pedal on the lyre: sinks while down. */
+const pedal = (name, down = false) => `<span class="pedal ${down ? 'dn' : ''}" role="button" aria-pressed="${down}" aria-label="${name} pedal">
+  <svg width="44" height="30" viewBox="0 0 44 30" aria-hidden="true" style="overflow:visible;transform:translateY(${down ? 3 : 0}px)">
+    <rect x="18" y="0" width="8" height="${down ? 7 : 10}" rx="1.5" fill="var(--brass-shank)"/>
+    <path d="M4 ${down ? 8 : 10}h36l3 11a6 6 0 0 1-6 7H7a6 6 0 0 1-6-7Z" fill="${down ? 'var(--brass-dn)' : 'var(--brass)'}" stroke="#6b4f18" stroke-width="1.2"/>
+    <path d="M7 ${down ? 12 : 14}h30" stroke="#f3dea4" stroke-width="1.4" opacity="${down ? 0.35 : 0.8}"/>
+  </svg><span>${name}</span></span>`
+
+/** A: the rail with the pedals on their lyre; the latch's light on the lyre. */
+const railA = ({ chord = '', three = false, sus = false, soft = false, latched = false, wide = false, hide = false } = {}) => `<div class="rail" style="padding:0 ${wide ? 20 : 6}px">
+  <span class="chord">${chord}</span>
+  <span class="lyre">${latched ? '<i class="led on" title="Sustain latched"></i>' : ''}${three ? pedal('Soft', soft) + pedal('Sost.') : ''}${pedal('Sustain', sus || latched)}</span>
+  <span class="end">${wide ? rb('prev', 'plain') + rb('next', 'plain') : ''}${rb('minus', 'plain')}${rb('plusc', 'plain')}${rb('gear', 'plain')}${hide ? rb('hide', 'plain') : ''}</span></div>`
+
+/** B: a strip with a lit Sustain toggle, the controls at its end. */
+const railB = ({ chord = '', sus = false, wide = false, hide = false } = {}) => `<div class="rail" style="grid-template-columns:auto minmax(0,1fr) max-content;gap:8px;padding:0 ${wide ? 20 : 8}px">
+  <span class="sus ${sus ? 'on' : ''}"><i></i>Sustain</span><span class="chord">${chord}</span>
+  <span class="end">${wide ? rb('prev', 'plain') + rb('next', 'plain') : ''}${rb('minus', 'plain')}${rb('plusc', 'plain')}${rb('gear', 'plain')}${hide ? rb('hide', 'plain') : ''}</span></div>`
+
+// R34 screens, after the R32/R33 helpers (icons, frames, the score system, the bar, the keys).
+// R32's transport, tools row and score, as the Player draws them.
+const tempo = `<span class="chip" style="height:44px;justify-content:center;font-weight:600"><span style="font-family:var(--music);font-size:18px">♩</span>&nbsp;= 92</span>`
+const transportRow = (playing) => `<div style="display:flex;align-items:center;justify-content:space-between;min-height:60px;padding:2px 10px">${rb('loop', 'plain')}${rb('rotate', 'plain')}${rb('prev', 'plain')}<span style="width:56px;height:56px;border-radius:99px;background:var(--honey);color:var(--honey-ink);display:grid;place-items:center">${playing ? ic('pause', 26, 2.6) : ic('play', 26)}</span>${rb('next', 'plain')}${tempo}${rb('metro', 'plain')}</div>`
+const tools = (safe = true) => `<div style="display:flex;justify-content:space-around;align-items:center;min-height:56px;padding:0 8px ${safe ? 34 : 0}px;border-top:1px solid var(--line)">${tbtn('eye', 'Sheet ⌄')}${tbtn('updown', 'Key C')}${tbtn('layers', 'Original')}${tbtn('ear', 'Listen')}${tbtn('more', 'More')}</div>`
+const score = (lines = 3) => `<div style="flex:1;min-height:0;overflow:hidden;background:var(--paper);padding:0 16px">${title}${sys(0)}${lines > 1 ? sys(0, 361, 8, ['C', 'G', 'C']) : ''}${lines > 2 ? sys(0) : ''}${lines > 3 ? sys(0, 361, 8, ['G', 'C']) : ''}</div>`
+Object.assign(P, {
+  sustain: '<path d="M10.5 3h3v7h-3z"/><path d="M3 12h18l-1.2 6.2A3 3 0 0 1 16.9 21H7.1a3 3 0 0 1-2.9-2.8Z"/><path d="M6 15.5h12"/>',
+  chevd: '<path d="m7 10 5 5 5-5"/>',
+  hand: '<path d="M18 11V6a2 2 0 0 0-4 0v5M14 10V4a2 2 0 0 0-4 0v6M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.9-6-2.4l-3.6-3.6a2 2 0 0 1 2.8-2.8L7 15"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  file: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h6M8 13h8M8 17h8"/>',
+  rows: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18"/>',
+  pano: '<path d="M2 7v10M6 5v14"/><rect x="10" y="3" width="12" height="18" rx="2"/>',
+  zout: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M8 11h6"/>',
+  zin: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/>',
+  fit: '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',
+  cable: '<path d="M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1M19 15V6.5a3.5 3.5 0 0 0-7 0v11a3.5 3.5 0 0 1-7 0V9M21 21v-2h-4M3 5h4V3M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3"/>',
+})
+
+// The 88 keys from A0, slim: `w` marks white keys by index (C4 is 23), `b` black keys by the white key before them.
+const WH88 = 'ABCDEFG'
+const piano88 = ({ h = 56, w = {}, dn = [], b = {}, bdn = [], names = 'c', from = 0, to = 52 } = {}) => {
+  const count = to - from
+  const bw = 58 / count
+  const white = Array.from({ length: count }, (_, k) => {
+    const i = from + k
+    const letter = WH88[i % 7]
+    const oct = Math.floor((i + 5) / 7)
+    const name = names === 'c' && letter === 'C' ? `C${oct}` : names === 'c4' && i === 23 ? 'C4' : ''
+    return `<div class="w ${w[i] ?? ''} ${dn.includes(i) ? 'dn' : ''}"><span>${name}</span></div>`
+  }).join('')
+  const black = Array.from({ length: count - 1 }, (_, k) => {
+    const i = from + k
+    if (!['C', 'D', 'F', 'G', 'A'].includes(WH88[i % 7])) return ''
+    return `<div class="b ${b[i] ?? ''} ${bdn.includes(i) ? 'dn' : ''}" style="left:calc(${((k + 1) * 100) / count}% - ${bw / 2}%);width:${bw}%"></div>`
+  }).join('')
+  return `<div class="pk slim" style="height:${h}px;flex:none"><div class="felt"></div>${white}${black}</div>`
+}
+const strip = () => `<div class="kstrip">${ic('keys', 16)}Keyboard${ic('fit', 14)}</div>`
+const pill = (layout = 'vertical') => `<div class="spill"><span class="rb ${layout === 'page' ? 'on' : ''}" title="Page view">${ic('file', 20)}</span><span class="rb ${layout === 'vertical' ? 'on' : ''}" title="Vertical scroll">${ic('rows', 20)}</span><span class="rb ${layout === 'panorama' ? 'on' : ''}" title="Panorama">${ic('pano', 20)}</span>${layout === 'page' ? `<span class="sep"></span><span class="rb">${ic('zout', 20)}</span><span class="pct">100 %</span><span class="rb">${ic('zin', 20)}</span><span class="rb">${ic('fit', 18)}</span>` : ''}</div>`
+const divider = (drag = false) => `<div class="divider ${drag ? 'drag' : ''}" role="separator" aria-label="Resize keyboard"><i></i></div>`
+
+// The bar's keyboard tools: the chord held (laptop), Sustain (+ ⌄ with All three), Keyboard.
+const susBtn = ({ lit = false, three = false, latchedMore = false } = {}) =>
+  three
+    ? `<span class="split"><span class="rb ${lit ? 'lit' : ''}" title="Sustain pedal">${ic('sustain', 20)}</span><span class="rb more ${latchedMore ? 'on' : ''}" title="Soft and sostenuto pedals">${ic('chevd', 18)}</span></span>`
+    : `<span class="rb ${lit ? 'lit' : ''}" title="Sustain pedal">${ic('sustain', 20)}</span>`
+const kbdBtn = (shown = true) => `<span class="rb ${shown ? 'pressed' : ''}" title="Keyboard">${ic('keys', 20)}</span>`
+const held = (chord) => (chord ? `<span class="held"><small>Chord held</small>${chord}</span>` : '')
+const kTools = ({ chord = '', lit = false, three = false, shown = true, latchedMore = false } = {}) =>
+  `${held(chord)}${shown ? susBtn({ lit, three, latchedMore }) : ''}${kbdBtn(shown)}`
+
+// The Player
+const playerBar = (o = {}, wide = false) => `<div class="bar">${rb('x', 'plain')}<div class="t ${wide ? 'lg' : ''}"><span>Hot Cross Buns</span><span class="rb sm" style="color:var(--ink)">${ic('pen', 20)}</span></div><div class="tools">${kTools(o)}${rb('gear')}</div></div>`
+const PLAY_MARKS = { w: { 25: 'rh', 16: 'lh', 18: 'lh', 20: 'lh' }, dn: [25, 16, 18, 20] }
+const phonePlayer = ({ keys = true, h = 56, drag = false, lit = false, three = false, marks = PLAY_MARKS, overlay = '' } = {}) =>
+  app(`${playerBar({ lit, three, shown: keys })}<div style="position:relative;flex:1;min-height:0;display:flex;flex-direction:column">${score(4)}${pill()}${overlay}</div>
+  ${keys ? divider(drag) + piano88({ h, ...marks }) : strip()}<div style="background:var(--card);border-top:1px solid var(--line)">${transportRow(true)}${tools()}</div>`)
+const macPlayer = ({ keys = true, h = 145, chord = 'C', lit = false, three = false, overlay = '', latchedMore = false, size = 'all' } = {}) =>
+  mac(`${playerBar({ chord, lit, three, shown: keys, latchedMore }, true)}
+  <div style="display:flex;flex-direction:column;height:calc(100% - 88px)">
+    <div style="position:relative;flex:1;min-height:0;overflow:hidden;display:flex;justify-content:center;background:var(--sand);padding-top:16px"><div style="width:640px;background:var(--card);box-shadow:0 2px 10px rgba(0,0,0,.08);padding:20px 40px">${title}${sys(0, 560)}${sys(0, 560, 8, ['C', 'G', 'C'])}${sys(0, 560)}</div>${pill(size === 'pagepill' ? 'page' : 'vertical')}${overlay}</div>
+    ${keys ? divider() + (size !== 'large' ? piano88({ h, ...PLAY_MARKS }) : piano({ whites: 22, octave: 2, h, w: { 16: 'rh', 0: 'lh', 2: 'lh', 4: 'lh' }, dn: [16, 0, 2, 4] })) : ''}
+    <div style="display:flex;align-items:center;justify-content:space-between;min-height:64px;padding:0 40px;background:var(--card);border-top:1px solid var(--line)"><span style="display:flex;gap:4px">${tbtn('eye', 'Sheet ⌄')}${tbtn('layers', 'Original')}${tbtn('ear', 'Listen')}</span><span style="display:flex;align-items:center;gap:8px">${rb('loop', 'plain')}${rb('prev', 'plain')}<span style="width:56px;height:56px;border-radius:99px;background:var(--honey);color:var(--honey-ink);display:grid;place-items:center">${ic('pause', 26, 2.6)}</span>${rb('next', 'plain')}<span class="chip" style="height:44px">♩ = 92</span>${rb('metro', 'plain')}</span>${tbtn('more', 'More')}</div>
+  </div>`)
+
+// A Practice page: the Chord finder, Chords
+const finderBody = (chord) => `<div style="flex:1;min-height:0;display:grid;align-content:start;justify-items:center;gap:14px;padding:18px 16px;background:var(--paper)">
+  <span class="chip" style="height:44px">Spelled in <b>C major</b></span>
+  <div style="width:100%;min-height:340px;align-content:center;border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:22px 16px;display:grid;justify-items:center;gap:6px">
+  ${chord ? `<div style="font:600 44px var(--display)">${chord}</div><div style="color:var(--ink-soft)">C major · root position</div><div style="display:flex;gap:6px;margin-top:6px"><span class="chip">C</span><span class="chip">E</span><span class="chip">G</span></div>` : `<div style="font:600 26px var(--display)">Play or tap a chord</div><div style="color:var(--ink-soft);text-align:center">Hold three or more keys; the chord is named as you play.</div>`}</div></div>`
+const finderBar = (o) => `<div class="bar">${rb('back')}<div class="t"><span>Chord finder</span></div><div class="tools">${kTools(o)}${rb('cable')}${rb('gear')}</div></div>`
+const C_MAJOR = { w: { 23: 'lit', 25: 'lit', 27: 'lit' }, dn: [23, 25, 27] }
+const finder = ({ keys = true, chord = 'C', lit = false } = {}) =>
+  app(`${finderBar({ lit, shown: keys })}${finderBody(keys ? chord : '')}${keys ? divider() + piano88({ h: 56, ...C_MAJOR }) : strip()}<div style="height:34px;background:var(--card)"></div>`)
+
+const chordsMain = `<div style="flex:1;min-height:0;overflow:hidden;padding:20px 40px;background:var(--paper)"><div style="background:var(--card);border-radius:20px;box-shadow:inset 0 0 0 1px var(--line);padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:20px">
+  <div style="display:grid;gap:12px;align-content:start"><div style="font:600 64px/1 var(--display)">C</div><div class="soft">Major triad</div>
+  <div style="display:flex;gap:8px"><span class="chip" style="height:44px">Root <b>C</b></span><span class="chip" style="height:44px">Chord <b>C</b></span><span class="chip" style="height:44px">Voicing <b>Close</b></span></div>
+  <div class="soft" style="font-size:14px">Chord size</div><div class="seg" style="display:grid;grid-template-columns:repeat(5,1fr);text-align:center"><span class="on" style="min-height:44px;display:grid;place-items:center">Triad</span><span style="display:grid;place-items:center">7th</span><span style="display:grid;place-items:center">9th</span><span style="display:grid;place-items:center">11th</span><span style="display:grid;place-items:center">13th</span></div></div>
+  <div style="display:grid;place-items:center">${sys(0, 300, 2, ['C'])}</div></div></div>`
+const CHORD_ROLES = { w: { 23: 'rh', 25: 'lh', 27: 'wash' }, dn: [] }
+const macChords = ({ keys = true } = {}) =>
+  mac(`<div class="bar">${rb('back', 'plain')}<div class="t lg">Chords</div><div class="tools">${kTools({ shown: keys })}${rb('grid')}</div></div>
+  <div style="display:flex;flex-direction:column;height:calc(100% - 88px)">${chordsMain}${keys ? divider() + piano88({ h: 145, ...CHORD_ROLES }) : ''}</div>`, 'Practice')
+
+const menuAt = (pos, items) => `<div class="menu" style="${pos}"><div class="cap2">Pedals</div>${items.map(([name, small, on]) => `<div class="it ${on ? 'lit' : ''}">${ic('sustain', 18)}${name}<small>${small}</small></div>`).join('')}</div>`
+const callout = (pos, text) => `<span class="note" style="${pos}">${text}</span>`
+
+// R34 UI round's screens, after R33's and R34's helpers (icons, frames, the score, the slim keys, the Player's bar).
+Object.assign(P, {
+  trash: '<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',
+  restore: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+  wave: '<path d="M2 12h2M6 8v8M10 5v14M14 8v8M18 10v4M22 12h0"/>',
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>',
+  undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+  redo: '<path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/>',
+  select: '<path d="m3 6 2 2 4-4M3 14l2 2 4-4M13 6h8M13 14h8M13 20h8"/>',
+  filter: '<path d="M3 6h18M7 12h10M10 18h4"/>',
+  hash: '<path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/>',
+  sliders: '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+})
+
+const shot = (src, alt, kind) => kind === 'phone'
+  ? `<div class="dev phone"><div class="scr"><img src="${src}" alt="${alt}" style="width:100%;height:100%;object-fit:cover;object-position:top"></div></div>`
+  : `<div class="dev mac"><div class="scr mac"><img src="${src}" alt="${alt}" style="width:100%;height:100%;object-fit:cover;object-position:top"></div></div>`
+
+// ——— a staff drawn note by note: steps from E4 (the bottom line) ———
+const VERD = {
+  right: ['●', 'var(--good)'],
+  early: ['◂', 'var(--honey-ink)'],
+  late: ['▸', 'var(--honey-ink)'],
+  missed: ['○', 'var(--ink-soft)'],
+  wrong: ['×', 'var(--rose)'],
+}
+const TINT = { right: 'var(--good)', early: '#c99a2e', late: '#c99a2e', missed: 'var(--ink-soft)', wrong: 'var(--rose)' }
+/**
+ * One treble staff. `notes`: [{ s: step from E4, d: 'q' | 'h' | 'e' }], `bars`: note indexes a bar line follows,
+ * `v`: verdict per note, `shapes`: draw the verdict's shape, `under`: a label under each note, `between`: labels in the
+ * gaps after each note (Steps), `over`: a label over each note.
+ */
+const staff = ({ k = 1.4, w: outer = 340, notes, bars = [], v = {}, shapes = false, under = null, between = null, over = null, clef = true, h = 96, time = '4' } = {}) => {
+  const w = outer / k
+  const top = 26, gap = 7, bottom = top + 4 * gap
+  const y = (s) => bottom - s * (gap / 2)
+  const x0 = clef ? 58 : 14
+  const step = (w - x0 - 14) / notes.length
+  const xs = notes.map((_, i) => x0 + step * (i + 0.5))
+  const lines = [0, 1, 2, 3, 4].map((l) => `<line x1="4" x2="${w - 4}" y1="${top + l * gap}" y2="${top + l * gap}" stroke="currentColor" stroke-width=".8" opacity=".75"/>`).join('')
+  const head = clef ? `<text x="6" y="${bottom + 3}" font-size="38" fill="currentColor" font-family="serif">𝄞</text><text x="36" y="${top + 13}" font-size="15" font-weight="700" fill="currentColor" font-family="serif">${time}</text><text x="36" y="${top + 27}" font-size="15" font-weight="700" fill="currentColor" font-family="serif">4</text>` : ''
+  const barLines = bars.map((i) => `<line x1="${(xs[i] + (xs[i + 1] ?? w - 4)) / 2}" x2="${(xs[i] + (xs[i + 1] ?? w - 4)) / 2}" y1="${top}" y2="${bottom}" stroke="currentColor"/>`).join('') + `<line x1="${w - 4}" x2="${w - 4}" y1="${top}" y2="${bottom}" stroke="currentColor"/>`
+  const heads = notes.map((n, i) => {
+    const cx = xs[i], cy = y(n.s)
+    const ink = v[i] && !shapes ? TINT[v[i]] : v[i] ? TINT[v[i]] : 'currentColor'
+    const ledger = n.s <= -2 ? `<line x1="${cx - 8}" x2="${cx + 8}" y1="${y(-2)}" y2="${y(-2)}" stroke="currentColor" stroke-width=".9"/>` : ''
+    const fill = n.d === 'h' ? 'none' : ink
+    const stem = `<line x1="${cx + 4.3}" x2="${cx + 4.3}" y1="${cy - 1}" y2="${cy - 25}" stroke="${ink}" stroke-width="1.1"/>`
+    const flag = n.d === 'e' ? `<path d="M${cx + 4.3} ${cy - 25}q6 6 5 13" fill="none" stroke="${ink}" stroke-width="1.3"/>` : ''
+    const shape = shapes && v[i] ? `<text x="${cx + 9}" y="${cy + 4}" font-size="12" font-weight="800" fill="${VERD[v[i]][1]}" font-family="Onest,sans-serif">${VERD[v[i]][0]}</text>` : ''
+    const u = under ? `<text x="${cx}" y="${bottom + 30}" font-size="13" font-weight="700" text-anchor="middle" fill="currentColor" font-family="Onest,sans-serif">${under[i] ?? ''}</text>` : ''
+    const o = over ? `<text x="${cx}" y="${top - 30 > 0 ? top - 30 : 10}" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor" font-family="Onest,sans-serif">${over[i] ?? ''}</text>` : ''
+    const b = between && i < notes.length - 1 ? `<text x="${(cx + xs[i + 1]) / 2}" y="${bottom + 30}" font-size="12" font-style="italic" text-anchor="middle" fill="var(--ink-soft)" font-family="Literata,serif">${between[i] ?? ''}</text>` : ''
+    return `${ledger}<ellipse cx="${cx}" cy="${cy}" rx="4.6" ry="3.4" fill="${fill}" stroke="${ink}" stroke-width="${n.d === 'h' ? 1.5 : 0}" transform="rotate(-20 ${cx} ${cy})"/>${stem}${flag}${shape}${u}${o}${b}`
+  }).join('')
+  return `<svg width="${outer}" height="${h * k}" viewBox="0 0 ${w} ${h}" style="display:block;color:var(--ink);overflow:visible" aria-hidden="true">${lines}${head}${barLines}${heads}</svg>`
+}
+const N = (s, d = 'q') => ({ s, d })
+const HCB = [N(0), N(-1), N(-2, 'h'), N(0), N(-1), N(-2, 'h')]
+const HCB2 = [N(-2, 'e'), N(-2, 'e'), N(-2, 'e'), N(-2, 'e'), N(-1, 'e'), N(-1, 'e'), N(-1, 'e'), N(-1, 'e'), N(0), N(-1), N(-2, 'h')]
+const RUN = { 0: 'right', 1: 'right', 2: 'early', 3: 'right', 4: 'late', 5: 'missed' }
+const RUN2 = { 0: 'right', 1: 'right', 2: 'wrong', 3: 'right', 4: 'right', 5: 'late', 6: 'right', 7: 'right', 8: 'right', 9: 'early', 10: 'right' }
+
+// ——— the Player with a judged run ———
+const runScore = (shapes, w = 361) => `<div style="flex:1;min-height:0;overflow:hidden;background:var(--paper);padding:0 16px">${title}
+  <div style="padding-top:8px">${staff({ w, notes: HCB, bars: [2], v: RUN, shapes })}</div>
+  <div style="font-size:13px;color:var(--ink-soft);padding:6px 0 0">3</div>
+  ${staff({ w, notes: HCB2, bars: [7], v: RUN2, shapes, clef: false })}</div>`
+const legend = `<div class="legend">${Object.entries({ right: 'On time', early: 'Early', late: 'Late', missed: 'Missed', wrong: 'Wrong note' }).map(([k, l]) => `<span><b style="color:${VERD[k][1]}">${VERD[k][0]}</b>${l}</span>`).join('')}</div>`
+const summary = `<div class="cardx" style="margin:0 12px 10px;display:grid;gap:10px"><div style="display:flex;justify-content:space-between;align-items:baseline"><b style="font:600 18px var(--display)">Run finished</b><span style="font:650 18px var(--sans)">82%</span></div>
+  <div style="display:flex;gap:16px;font-size:14px"><span><b style="color:${VERD.right[1]}">●</b> 12 on time</span><span><b style="color:${VERD.early[1]}">◂</b> 2 early</span><span><b style="color:${VERD.late[1]}">▸</b> 2 late</span><span><b style="color:${VERD.missed[1]}">○</b> 1</span><span><b style="color:${VERD.wrong[1]}">×</b> 1</span></div></div>`
+const judgedPhone = (shapes) => app(`${playerBar({ shown: true })}<div style="position:relative;flex:1;min-height:0;display:flex;flex-direction:column">${runScore(shapes)}${shapes ? summary : ''}</div>
+  ${divider() + piano88({ h: 56, ...PLAY_MARKS })}<div style="background:var(--card);border-top:1px solid var(--line)">${transportRow(false)}${tools()}</div>`)
+const judgedMac = mac(`${playerBar({ chord: 'C', shown: true }, true)}
+  <div style="display:flex;flex-direction:column;height:calc(100% - 88px)"><div style="position:relative;flex:1;min-height:0;overflow:hidden;display:flex;justify-content:center;gap:24px;background:var(--sand);padding-top:16px">
+  <div style="width:640px;background:var(--card);box-shadow:0 2px 10px rgba(0,0,0,.08);padding:20px 40px">${title}<div style="padding-top:12px">${staff({ w: 560, notes: HCB, bars: [2], v: RUN, shapes: true })}</div>${staff({ w: 560, notes: HCB2, bars: [7], v: RUN2, shapes: true, clef: false })}</div>
+  <div class="cardx" style="width:300px;align-self:start;display:grid;gap:12px"><b style="font:600 20px var(--display)">Run finished · 82%</b>${legend}<div class="lbl2">Bar 1, beat 3, right hand: C was 140 ms early.</div><span class="ghostbtn">Next: loop bars 3–4 at 70%</span></div></div>
+  ${divider() + piano88({ h: 120, ...PLAY_MARKS })}</div>`, 'Songs')
+document.getElementById('s1').innerHTML = [
+  fig('1.A', 'Today, phone', 'Notes tinted only; early and late are the same honey.', judgedPhone(false)),
+  fig('1.B', 'Shapes, phone', 'Each judged note gets its shape; the summary counts them.', judgedPhone(true)),
+  fig('1.C', 'Shapes, laptop', 'The summary beside the score, with the legend, the worst note in words and the next step.', judgedMac),
+].join('')
+
+// ——— 2. hands ———
+const handsMarks = (b) => ({ w: { 23: b ? 'rhs' : 'rh', 25: b ? 'rhs' : 'rh', 27: b ? 'rhs' : 'rh', 16: b ? 'lho' : 'lh', 18: b ? 'lho' : 'lh', 20: b ? 'lho' : 'lh' }, dn: [] })
+const handsPhone = (b) => app(`${playerBar({ shown: true })}<div style="position:relative;flex:1;min-height:0;display:flex;flex-direction:column">${score(3)}</div>
+  ${divider()}<div style="position:relative">${piano88({ h: 110, from: 14, to: 31, names: 'c', ...handsMarks(b) })}</div>
+  <div style="display:flex;gap:16px;justify-content:center;padding:8px;font-size:13px;color:var(--ink-soft);background:var(--card)"><span><i style="display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;background:${b ? 'var(--brick)' : 'var(--rh)'}"></i> Right hand</span><span><i style="display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;background:var(--lilac);${b ? 'box-shadow:inset 0 0 0 2px var(--lilac-edge)' : 'background:var(--lh)'}"></i> Left hand</span></div>
+  <div style="background:var(--card);border-top:1px solid var(--line)">${transportRow(false)}${tools()}</div>`)
+const handsMac = mac(`${playerBar({ chord: 'C', shown: true }, true)}<div style="display:flex;flex-direction:column;height:calc(100% - 88px)"><div style="flex:1;min-height:0;background:var(--sand);display:flex;justify-content:center;padding-top:16px"><div style="width:640px;background:var(--card);padding:20px 40px">${title}${sys(0, 560)}${sys(0, 560, 8, ['C', 'G', 'C'])}</div></div>${divider()}${piano88({ h: 150, ...handsMarks(true) })}</div>`, 'Songs')
+document.getElementById('s2').innerHTML = [
+  fig('2.A', 'Today', 'Both hands are a fill; only the hue tells them apart.', handsPhone(false)),
+  fig('2.B', 'Filled and outlined', 'Right hand solid brick; left hand a lilac wash with an edge.', handsPhone(true)),
+  fig('2.C', 'Laptop', 'The same on all 88 keys.', handsMac),
+].join('')
+
+// ——— 3. covers ———
+const INC = {
+  'Hot Cross Buns': [N(0), N(-1), N(-2, 'h'), N(0), N(-1), N(-2, 'h')],
+  'Mary Had a Little Lamb': [N(0), N(-1), N(-2), N(-1), N(0), N(0), N(0, 'h')],
+  'Ode to Joy': [N(0), N(0), N(1), N(2), N(2), N(1), N(0), N(-1)],
+  'Twinkle, Twinkle': [N(-2), N(-2), N(2), N(2), N(3), N(3), N(2, 'h')],
+  'Amazing Grace': [N(-1), N(3, 'h'), N(5, 'e'), N(3, 'e'), N(5, 'h'), N(4)],
+}
+const BY = { 'Hot Cross Buns': ['Traditional', 'C'], 'Mary Had a Little Lamb': ['Lowell Mason', 'C'], 'Ode to Joy': ['Beethoven', 'C'], 'Twinkle, Twinkle': ['Traditional', 'C'], 'Amazing Grace': ['John Newton', 'G'] }
+const incipit = (name, w, h, _scale, clef = w > 100) => {
+  const iw = clef ? 190 : 120
+  const notes = INC[name].slice(0, clef ? 7 : 4)
+  const sc = w / iw
+  return `<span class="cv-inc" style="width:${w}px;height:${h}px;display:grid;align-items:center"><span style="display:block;transform:scale(${sc});transform-origin:0 0;width:${iw}px;height:${96 * sc}px;color:#161513;margin-top:${(h - 96 * sc) / 2 - 2 * sc}px">${staff({ k: 1, w: iw, notes, bars: [], clef, h: 96 }).replace('color:var(--ink)', 'color:#161513')}</span></span>`
+}
+const letter = (k, w, h) => `<span style="display:grid;place-items:center;width:${w}px;height:${h}px;border-radius:6px;background:var(--yellow);color:var(--yellow-ink);font:600 ${h * 0.5}px var(--display)">${k}</span>`
+const coverRow = (name, b) => `<div class="row" style="gap:12px">${b ? incipit(name, 72, 54) : letter(BY[name][1], 48, 48)}<div class="txt"><div class="n">${name}</div><div class="d">${BY[name][0]}</div></div>${rb('more', 'plain')}</div>`
+const songsList = (b) => app(`<div class="bar">${rb('back')}<div class="t"><span>Songs to learn</span></div><div class="tools">${rb('search')}${rb('more')}</div></div>
+  <div style="flex:1;overflow:hidden;padding:4px 16px;background:var(--paper)"><div class="group">${Object.keys(INC).map((n) => coverRow(n, b)).join('')}</div></div>${tabs('Songs')}`)
+const card = (name) => `<div style="display:grid;gap:8px">${incipit(name, 180, 120, 0.62)}<div><div style="font:600 16px var(--display)">${name}</div><div class="lbl2">${BY[name][0]}</div></div></div>`
+const songsMac = mac(`<div class="bar"><div class="t lg">Songs to learn</div><div class="tools">${rb('search')}${rb('more')}</div></div><div style="padding:16px 32px;display:grid;grid-template-columns:repeat(5,180px);gap:24px;align-content:start;background:var(--paper);height:100%">${Object.keys(INC).map(card).join('')}</div>`, 'Songs')
+document.getElementById('s3').innerHTML = [
+  fig('3.A', 'Today', 'Every cover is the key letter on yellow.', songsList(false)),
+  fig('3.B', 'Engraved covers', 'The first bars of each song, small, on paper.', songsList(true)),
+  fig('3.C', 'Laptop, cards', 'Larger covers on the grid; a chosen picture still wins.', songsMac),
+].join('')
+
+// ——— 4. the song page ———
+const cells = (vals) => `<div class="cells">${vals.map((v) => (v === null ? '<i class="e"></i>' : `<i style="height:${Math.max(10, v)}%"></i>`)).join('')}</div>`
+const practiceCard = `<div class="cardx" style="display:grid;gap:12px">
+  <div style="display:flex;justify-content:space-between;align-items:baseline"><b style="font:600 18px var(--display)">Your practice</b><span class="lbl2">3 runs</span></div>
+  <div style="display:grid;grid-template-columns:auto 1fr auto;gap:8px 12px;align-items:center;font-size:15px"><span class="lbl2">Last run</span><div class="meter"><i style="width:82%"></i></div><b>82%</b><span class="lbl2">Best run</span><div class="meter solid"><i style="width:91%"></i></div><b>91%</b></div>
+  <div><div class="lbl2" style="margin-bottom:4px">Bar by bar</div>${cells([95, 100, 62, 70, 100, 90, null, null])}<div style="display:flex;justify-content:space-between" class="lbl2"><span>1</span><span>8</span></div></div>
+  <span class="ghostbtn" style="justify-self:stretch">${ic('loop', 20)}Next: loop bars 3–4 at 70%</span>
+  <div class="lbl2" style="text-align:center">Then 75% → 100%, then hands together</div></div>`
+const chips = `<div style="display:flex;flex-wrap:wrap;gap:8px">${[['Key', 'C'], ['Time', '4/4'], ['Tempo', '92 BPM']].map(([a, b]) => `<span class="chip">${a} <b>${b}</b></span>`).join('')}<span class="chip">${lvl(1)} Beginner</span></div>`
+const chordsBlock = `<div style="display:grid;gap:8px"><b style="font:600 20px var(--display)">Chords</b><div style="display:flex;gap:24px">${['C', 'G'].map((c) => `<div style="display:grid;justify-items:center;gap:4px"><span style="width:76px">${piano({ whites: 7, h: 34, names: 'none' })}</span><b style="font-family:var(--display)">${c}</b></div>`).join('')}</div><div style="display:flex;align-items:center;gap:8px"><span class="lbl2">Progressions</span><span class="chip">Authentic cadence <b>I–V–I</b></span></div></div>`
+const details = `<div class="cardx" style="display:flex;justify-content:space-between;align-items:center;min-height:52px;padding:0 16px"><b style="font-weight:600">Details</b><span class="lbl2">Traditional · C major · 4/4 ${ic('down', 16)}</span></div>`
+const songPhone = app(`<div class="bar">${rb('back')}<div class="t"></div><div class="tools">${rb('heart')}${rb('share')}${rb('more')}</div></div>
+  <div style="flex:1;overflow:hidden;padding:4px 16px 16px;display:grid;gap:14px;align-content:start;background:var(--paper)">
+  <div style="display:flex;gap:14px;align-items:center">${incipit('Hot Cross Buns', 112, 84, 0.6)}<div><div style="font:600 24px var(--display)">Hot Cross Buns</div><div class="lbl2">Traditional · Level 1</div></div></div>
+  ${chips}<span class="honeybtn">${ic('play', 20)}Play</span>${practiceCard}${chordsBlock}${details}</div>${tabs('Songs')}`)
+const songMac = mac(`<div class="bar">${rb('back', 'plain')}<div class="t lg"></div><div class="tools">${rb('heart')}${rb('share')}${rb('more')}</div></div>
+  <div style="display:grid;grid-template-columns:1fr 380px;gap:32px;padding:16px 40px;background:var(--paper);height:100%;align-content:start">
+  <div style="display:grid;gap:18px;align-content:start"><div style="display:flex;gap:24px;align-items:end"><span style="position:relative">${incipit('Hot Cross Buns', 240, 180, 0.9)}<span class="rb" style="position:absolute;right:8px;bottom:8px;background:var(--card)">${ic('image', 18)}</span></span><div style="display:grid;gap:10px"><div style="font:600 36px var(--display)">Hot Cross Buns</div><div class="lbl2" style="font-size:16px">Traditional · C major · 4/4 · Level 1</div><span class="honeybtn" style="justify-self:start">${ic('play', 20)}Play</span></div></div>
+  ${chips}${chordsBlock}${details}</div>
+  <div style="display:grid;gap:16px;align-content:start">${practiceCard}</div></div>`, 'Songs')
+document.getElementById('s4').innerHTML = [
+  fig('4.A', 'Today, phone', 'Your practice is one row (“Played last”); at the end Play floats over Details.', shot('now-play-hot-cross-buns-iphone-17-pro.png', 'The song page today', 'phone')),
+  fig('4.B', 'Phone', 'Cover, title, the facts, Play (the one honey); your practice and its next step; Chords as today; Details folded.', songPhone),
+  fig('4.C', 'Today, laptop', 'An empty right column; “Change cover” over the favourite.', shot('now-play-hot-cross-buns-macbook-app.png', 'The song page today, laptop', 'mac')),
+  fig('4.D', 'Laptop', 'Practice fills the right column; the cover\'s picture button sits inside the cover.', songMac),
+].join('')
+
+// ——— 5. calibration ———
+const clicks = (done) => `<div style="display:grid;grid-template-columns:repeat(8,1fr);gap:8px">${Array.from({ length: 16 }, (_, i) => `<i style="display:block;height:12px;border-radius:99px;background:${i < done ? 'var(--ink)' : 'var(--line)'}"></i>`).join('')}</div>`
+const calib = (done, result) => `<div style="display:grid;gap:18px;padding:20px 16px;align-content:start">
+  <div style="font:600 22px var(--display)">Calibrate timing</div>
+  ${result ? `<div class="cardx" style="display:grid;gap:8px"><div class="lbl2">Your setup sounds</div><div style="font:650 32px var(--sans)">35 ms late</div><div class="lbl2">Measured over 14 of 16 notes. Every judgement is corrected by it.</div></div>
+  <div style="display:flex;gap:12px"><span class="ghostbtn" style="flex:1">Try again</span><span class="honeybtn" style="flex:1">Apply</span></div>`
+    : `<div class="lbl2" style="font-size:16px">Play middle C with each click.</div>${clicks(done)}<div style="display:grid;place-items:center;padding:10px"><span style="font:650 64px var(--sans)">${done}</span><span class="lbl2">of 16</span></div><span class="ghostbtn">Cancel</span>`}</div>`
+const calibPhone = (done, result) => app(`<div class="bar">${rb('back')}<div class="t"><span>Piano and MIDI</span></div></div><div style="flex:1;background:var(--paper)">${calib(done, result)}</div>${piano88({ h: 90, from: 16, to: 30, names: 'c', w: result ? {} : { 23: 'lit' }, dn: result ? [] : [23] })}<div style="height:34px;background:var(--card)"></div>`)
+const settingsRow = (n, d, ctl) => `<div style="display:flex;justify-content:space-between;align-items:center;min-height:56px;padding:6px 16px;border-top:1px solid var(--line)"><div><div style="font-weight:600">${n}</div>${d ? `<div class="lbl2">${d}</div>` : ''}</div>${ctl}</div>`
+const calibMac = mac(`<div class="bar"><div class="t lg">Settings</div></div><div style="display:grid;grid-template-columns:300px 1fr;height:100%;background:var(--paper)">
+  <div style="padding:8px 16px;border-right:1px solid var(--line)">${['General', 'Appearance', 'Piano and MIDI', 'Sound', 'Account'].map((s) => `<div class="it" style="min-height:44px;display:flex;align-items:center;padding:0 12px;border-radius:10px;${s === 'Piano and MIDI' ? 'background:var(--sand);font-weight:600' : ''}">${s}</div>`).join('')}</div>
+  <div style="padding:16px 32px;display:grid;gap:16px;align-content:start;max-width:720px"><div class="cardx" style="padding:0">${settingsRow('MIDI input', 'Yamaha P-125 connected', '<span class="lbl2">Automatic ›</span>')}${settingsRow('Calibrate timing', 'Your setup sounds 35 ms late', '<span class="ghostbtn">Calibrate</span>')}${settingsRow('Touch', 'Soft below 45, hard above 86', '<span class="lbl2">›</span>')}</div></div></div>`, 'Settings')
+document.getElementById('s5').innerHTML = [
+  fig('5.A', 'Playing along', 'Middle C lit; each tap fills a dot.', calibPhone(9, false)),
+  fig('5.B', 'The result', 'Apply saves it for this device.', calibPhone(16, true)),
+  fig('5.C', 'Where it lives, laptop', 'A row in Piano and MIDI, with today\'s value.', calibMac),
+].join('')
+
+// ——— 6. the editor on a phone ———
+const editBar = `<div class="bar">${rb('x', 'plain')}<div class="t"><span>Done</span></div><div class="tools">${rb('keys', 'pressed')}<span class="rb" style="background:var(--honey);color:var(--honey-ink)">${ic('play', 20)}</span>${rb('undo')}${rb('redo')}${rb('gear')}</div></div>`
+const staffName = (n) => `<div style="font:italic 13px var(--display);color:var(--ink-soft);padding:6px 0 0 4px">${n}</div>`
+const editScore = (menu) => `<div style="position:relative;flex:1;min-height:0;overflow:hidden;background:var(--paper);padding:0 16px">${title}
+  <div style="position:relative">${staffName('Melody')}${staff({ w: 361, notes: HCB, bars: [2], h: 80 })}${menu ? `<span class="hit" style="left:0;top:34px;width:62px;height:56px"></span>` : ''}</div>
+  ${staffName('Piano')}${sys(0, 361, 4, ['C', 'C'])}
+  ${menu ? `<div class="menu2" style="left:24px;top:170px"><div class="cap3">Bar 1 · Melody</div><div class="mi">${ic('music', 20)}Clef</div><div class="mi">${ic('hash', 20)}Key signature</div><div class="mi"><b style="font:700 15px serif;width:20px;text-align:center">4/4</b>Time signature</div></div>` : ''}</div>`
+const durations = `<div style="display:flex;justify-content:space-around;align-items:center;min-height:52px;padding:0 6px">${['𝅝', '𝅗𝅥', '♩', '♪', '𝅘𝅥𝅯', '·', '𝄽'].map((g, i) => `<span style="display:grid;place-items:center;width:44px;height:44px;border-radius:10px;font:22px serif;${i === 2 ? 'background:var(--sand)' : ''}">${g}</span>`).join('')}</div>`
+const editTools = `<div style="display:flex;justify-content:space-around;align-items:center;min-height:48px;border-top:1px solid var(--line)">${['♯ ♭', 'Tie', 'Dots', 'Dyn.', 'Text', 'More'].map((t) => `<span style="font:600 13px var(--sans);color:var(--ink-soft);min-width:44px;text-align:center">${t}</span>`).join('')}</div>`
+const editPhone = (menu) => app(`${editBar}${editScore(menu)}<div style="background:var(--card);border-top:1px solid var(--line)">${durations}${editTools}</div>${piano88({ h: 56, names: 'c4' })}<div style="height:34px;background:var(--card)"></div>`)
+document.getElementById('s6').innerHTML = [
+  fig('6.A', 'Today', 'Small targets; the panel and the view pill float over the score.', shot('now-edit-hot-cross-buns-iphone-17-pro.png', 'The editor today', 'phone')),
+  fig('6.B', 'Docked panel', 'The note panel sits above the keys; the score scrolls clear of it. “Staff 1” is named by its part, Melody.', editPhone(false)),
+  fig('6.C', 'The line\'s start tapped', 'One 62 × 52 px target opens Clef, Key signature, Time signature.', editPhone(true)),
+].join('')
+
+// ——— 7. Scales ———
+const SCALE = [N(-2, 'e'), N(-1, 'e'), N(0, 'e'), N(1, 'e'), N(2, 'e'), N(3, 'e'), N(4, 'e'), N(5, 'e')]
+const seg = (items, on) => `<div class="seg" style="display:inline-flex">${items.map((x) => `<span class="${x === on ? 'on' : ''}">${x}</span>`).join('')}</div>`
+const scalesHead = (big) => `<div style="display:flex;align-items:baseline;gap:${big ? 18 : 10}px"><span style="font:600 ${big ? 40 : 30}px var(--display)">C ${ic('updown', 16)}</span><span style="font:600 ${big ? 40 : 30}px var(--display)">Major ${ic('updown', 16)}</span></div>`
+const layerStaff = (layer, w) => staff({ w, notes: SCALE, bars: [], h: 112, under: layer === 'Fingers' ? ['1', '2', '3', '1', '2', '3', '4', '5'] : layer === 'Degrees' ? ['1', '2', '3', '4', '5', '6', '7', '1'] : null, between: layer === 'Steps' ? ['W', 'W', 'H', 'W', 'W', 'W', 'H'] : null })
+const scalesPhone = (layer) => app(`<div class="bar">${rb('back')}<div class="t"><span>Scales and keys</span></div><div class="tools">${rb('keys', 'pressed')}${rb('gear')}</div></div>
+  <div style="flex:1;overflow:hidden;padding:8px 16px;display:grid;gap:14px;align-content:start;background:var(--paper)">${seg(['Scale', 'Chords', 'Key'], 'Scale')}${scalesHead(false)}
+  <div class="lbl2">Right hand · 1 octave · Up · 80 BPM</div>${seg(['Fingers', 'Degrees', 'Steps'], layer)}<div style="padding-top:10px">${layerStaff(layer, 361)}</div></div>
+  ${piano88({ h: 96, from: 21, to: 31, names: 'c', w: { 23: 'lit', 24: 'wash', 25: 'wash', 26: 'wash', 27: 'wash', 28: 'wash', 29: 'wash', 30: 'lit' } })}
+  <div style="display:flex;justify-content:center;padding:10px 0 34px;background:var(--card)"><span style="width:56px;height:56px;border-radius:99px;background:var(--honey);color:var(--honey-ink);display:grid;place-items:center">${ic('play', 26)}</span></div>`)
+const gearSheet = `<div class="menu2" style="right:24px;top:-6px;width:300px;padding:10px"><div class="cap3">Scale settings</div>${[['Hands', 'Right'], ['Octaves', '1'], ['Direction', 'Up and down'], ['Start on', 'C'], ['Rhythm', 'Even'], ['Tempo', '80 BPM'], ['Fingering', 'As the scale'], ['Compare with', 'None']].map(([a, b]) => `<div class="mi" style="justify-content:space-between"><span>${a}</span><span class="lbl2">${b} ›</span></div>`).join('')}</div>`
+const scalesMac = mac(`<div class="bar">${rb('back', 'plain')}<div class="t lg">Scales and keys</div><div class="tools">${rb('keys', 'pressed')}${rb('gear')}</div></div>
+  <div style="position:relative;padding:12px 40px;display:grid;gap:14px;align-content:start;background:var(--paper);height:calc(100% - 230px)">${seg(['Scale · 7 notes', 'Chords · I–vii°', 'Key · No sharps or flats'], 'Scale · 7 notes')}
+  <div style="display:flex;justify-content:space-between;align-items:end">${scalesHead(true)}<span></span></div>
+  <div style="display:grid;grid-template-columns:110px 1fr;gap:10px 16px;align-items:center;font-size:15px"><span class="lbl2">Formula</span><span style="display:flex;gap:10px">${['1 Tonic', '2 Supertonic', '3 Mediant', '4 Subdominant', '5 Dominant', '6 Submediant', '7 Leading tone'].map((d) => `<span class="lbl2"><b style="color:var(--ink)">${d.split(' ')[0]}</b> ${d.split(' ').slice(1).join(' ')}</span>`).join('')}</span><span class="lbl2">Structure</span><b>W W H W W W H</b></div>
+  <div style="display:flex;align-items:center;gap:12px"><span class="lbl2">On the staff</span>${seg(['Fingers', 'Degrees', 'Steps'], 'Steps')}</div>
+  <div class="cardx" style="display:flex;justify-content:center;padding:28px">${layerStaff('Steps', 760)}</div>${gearSheet}</div>
+  ${piano88({ h: 150, w: { 23: 'lit', 24: 'wash', 25: 'wash', 26: 'wash', 27: 'wash', 28: 'wash', 29: 'wash', 30: 'lit' } })}`, 'Practice')
+document.getElementById('s7').innerHTML = [
+  fig('7.A', 'Today, laptop', 'Eight controls before the music; W/H, degrees and fingers on the staff at once.', shot('now-practice-scales-macbook-app.png', 'Scales today', 'mac')),
+  fig('7.B', 'Laptop, gear open', 'The music first; the settings in the gear; Steps between the notes.', scalesMac),
+  fig('7.C', 'Phone, Fingers', 'One summary line says what is set; Fingers under the notes.', scalesPhone('Fingers')),
+  fig('7.D', 'Phone, Degrees', 'Degrees under the notes, nothing else on the staff.', scalesPhone('Degrees')),
+].join('')
+
+// ——— 8. progressions ———
+const PROGS = [
+  ['Axis of Awesome', 'Bright and singable', [['I', 'home'], ['V', 'away'], ['vi', 'home'], ['IV', 'away']]],
+  ['Let It Be', 'Calm and hymn-like', [['I', 'home'], ['V', 'away'], ['vi', 'home'], ['IV', 'away'], ['I', 'home'], ['V', 'away'], ['IV', 'away'], ['I', 'home']]],
+  ['50s doo-wop', 'Sweet and nostalgic', [['I', 'home'], ['vi', 'home'], ['IV', 'away'], ['V', 'away']]],
+  ['ii–V–I', 'The jazz cadence', [['ii7', 'away'], ['V7', 'tension'], ['Imaj7', 'home']]],
+  ['Twelve-bar blues', 'The blues in three chords', [['I7', 'home'], ['IV7', 'away'], ['I7', 'home'], ['V7', 'tension'], ['IV7', 'away'], ['I7', 'home']]],
+  ['Minor line cliché', 'Brooding, one voice sliding down', [['i', 'home'], ['iMaj7', 'tension'], ['i7', 'tension'], ['i6', 'home']]],
+]
+const tiles = (cs, lg = false, now = -1) => `<span style="display:inline-flex;flex-wrap:wrap;gap:${lg ? 10 : 4}px">${cs.map(([n, r], i) => `<span class="ptile ${r} ${lg ? 'lg' : ''} ${i === now ? 'now' : ''}">${n}</span>`).join('')}</span>`
+const progRowPhone = ([n, d, cs], b) => b
+  ? `<div class="row" style="display:grid;grid-template-columns:1fr auto;gap:6px 8px"><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div>${rb('more', 'plain')}<div style="grid-column:1/-1">${tiles(cs)}</div></div>`
+  : `<div class="row"><span class="tile p-sky">${ic('rows', 22)}</span><div class="txt"><div class="n">${n}</div><div class="d">${cs.map((c) => c[0]).join('–')}</div></div>${rb('more', 'plain')}</div>`
+const progPhone = (b) => app(`<div class="bar">${rb('back')}<div class="t"><span>Progressions</span></div><div class="tools">${rb('search')}${rb('gear')}</div></div><div style="flex:1;overflow:hidden;padding:4px 16px;background:var(--paper)"><div class="group">${PROGS.map((p) => progRowPhone(p, b)).join('')}</div></div>${tabs('Practice')}`)
+const legendRoles = `<span class="legend"><span><span class="ptile home" style="height:20px;min-width:20px;font-size:11px">I</span> Home</span><span><span class="ptile away" style="height:20px;min-width:20px;font-size:11px">IV</span> Away</span><span><span class="ptile tension" style="height:20px;min-width:20px;font-size:11px">V7</span> Tension</span></span>`
+const progPage = mac(`<div class="bar">${rb('back', 'plain')}<div class="t lg">Let It Be ${ic('pen', 18)}</div><div class="tools">${rb('heart')}${rb('gear')}</div></div>
+  <div style="padding:16px 40px;display:grid;gap:22px;align-content:start;background:var(--paper);height:calc(100% - 200px)">
+  <div style="display:flex;justify-content:space-between;align-items:center"><div class="lbl2" style="font-size:16px">Calm and hymn-like, it settles home twice · Pop</div>${seg(['I V vi IV', 'C G Am F'], 'I V vi IV')}</div>
+  <div class="cardx" style="padding:28px;display:grid;gap:18px">${tiles(PROGS[1][2], true, 2)}${legendRoles}</div>
+  <div style="display:flex;gap:12px;align-items:center"><span class="honeybtn">${ic('pause', 20)}Pause</span><span class="ghostbtn">Key C ${ic('down', 14)}</span><span class="ghostbtn">♩ = 76</span><span class="ghostbtn">Pattern: Ballad ${ic('down', 14)}</span></div></div>
+  ${piano88({ h: 140, w: { 21: 'lh', 23: 'rh', 25: 'rh', 26: 'rh' }, dn: [21, 23, 25, 26] })}`, 'Practice')
+document.getElementById('s8').innerHTML = [
+  fig('8.A', 'Today', 'The same blue icon on every row; the numerals as plain text.', progPhone(false)),
+  fig('8.B', 'Tiles by role', 'Each row shows its chords; green home, sand away, lilac tension.', progPhone(true)),
+  fig('8.C', 'A progression\'s page, laptop', 'Large tiles, the one sounding ringed in ink; I V vi IV or C G Am F in place.', progPage),
+].join('')
+
+// ——— 9. Songs ———
+const FOLD = [['p-yellow', 'music', 'Songs to learn', '23 songs'], ['p-sand', 'heartsm', '«Боже, спасибо»', '20 songs'], ['p-sky', 'piano', 'Called to Play', '15 songs'], ['p-grass', 'church', 'Hymns', '5 songs']]
+const foldRow = ([p, i, n, d]) => `<div class="row"><span class="tile ${p}">${ic(i, 22)}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div>${rb('more', 'plain')}</div>`
+const songsHome = (menu) => app(`<div style="display:flex;align-items:center;gap:16px;padding:8px 16px"><span style="font:600 24px var(--sans);border-bottom:2px solid var(--ink);white-space:nowrap">My songs</span><span style="font:600 24px var(--sans);color:var(--ink-soft)">Explore</span><span style="flex:1"></span>${rb('select')}${rb('archive', menu ? 'pressed' : '')}${rb('more')}</div>
+  <div style="display:flex;gap:10px;padding:4px 16px 0"><span class="field" style="flex:1;display:flex;align-items:center;gap:8px;min-height:48px;padding:0 14px;border-radius:14px;box-shadow:inset 0 0 0 1px var(--line);background:var(--card);color:var(--ink-soft)">${ic('search', 20)}Search</span><span class="ghostbtn">Manual ${ic('updown', 14)}</span><span class="ghostbtn" style="padding:0 12px">${ic('filter', 20)}</span></div>
+  <div style="position:relative;flex:1;overflow:visible;padding:4px 16px;background:var(--paper)"><div style="font:600 24px var(--display);padding:12px 0 8px">Folders</div><div class="group">${FOLD.map(foldRow).join('')}</div>
+  ${menu ? `<div class="menu2" style="right:60px;top:-58px"><div class="mi">${ic('archive', 20)}Archive<span class="lbl2" style="margin-left:auto">4</span></div><div class="mi">${ic('trash', 20)}Trash<span class="lbl2" style="margin-left:auto">2</span></div></div>` : ''}</div>${tabs('Songs')}`)
+const trashRow = (n, d) => `<div class="row"><span class="tile p-sand">${ic('music', 22)}</span><div class="txt"><div class="n">${n}</div><div class="d">${d}</div></div><span class="rb plain" title="Restore">${ic('restore', 20)}</span></div>`
+const trashPhone = app(`<div class="bar">${rb('back')}<div class="t"><span>Trash</span><span class="rb sm" title="Songs here are gone for good only when you empty the Trash.">${ic('info', 18)}</span></div><div class="tools"><span class="ghostbtn" style="color:var(--rose)">Empty</span></div></div>
+  <div style="flex:1;overflow:hidden;padding:4px 16px;background:var(--paper);display:grid;gap:10px;align-content:start"><div class="group">${trashRow('Old waltz draft', 'Deleted today')}${trashRow('Scale study in G', 'Deleted 3 days ago')}</div></div>`)
+document.getElementById('s9').innerHTML = [
+  fig('9.A', 'Rows with one action', 'The chevron goes: tap the row to open it, ⋯ for the menu.', songsHome(false)),
+  fig('9.B', 'Archive · Trash', 'The archive button opens both, with their counts.', songsHome(true)),
+  fig('9.C', 'Trash', 'Restore one song, or Empty asks first, then removes them all.', trashPhone),
+].join('')
+
+// ——— 10. the recording ———
+const waveform = (from, to) => `<div class="wave">${Array.from({ length: 90 }, (_, i) => `<i class="${i >= from && i < to ? 'in' : ''}" style="height:${18 + Math.abs(Math.sin(i * 0.7) * 60 + Math.sin(i * 0.23) * 22)}%"></i>`).join('')}</div>`
+const beatRow = `<div class="beats">${Array.from({ length: 24 }, (_, i) => `<span class="bt ${i % 4 === 0 ? 'bar' : ''}" style="left:${2 + i * 4.1}%"></span>`).join('')}</div>`
+const recPanel = (w) => `<div class="cardx" style="display:grid;gap:10px;${w ? 'width:' + w + 'px' : ''}"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-weight:600">Original recording</b><span class="tag">Beat found · ♩ = 92</span></div>${waveform(30, 52)}${beatRow}
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="ghostbtn">◂ Nudge</span><span class="lbl2">Loop bars 3–4</span><span class="ghostbtn">Nudge ▸</span></div></div>`
+const recControls = `<div style="display:flex;gap:10px;flex-wrap:wrap"><span class="ghostbtn">Key D (+2) ${ic('down', 14)}</span><span class="ghostbtn">Speed 0.75× ${ic('down', 14)}</span><span class="tag" style="align-self:center">Pitch kept</span></div>`
+const recPhone = app(`${playerBar({ shown: false })}<div style="flex:1;min-height:0;overflow:hidden;padding:8px 16px;display:grid;gap:12px;align-content:start;background:var(--paper)">${title}${seg(['Score', 'Original'], 'Original')}${recPanel()}${recControls}<div class="lbl2">The recording plays in D, at 0.75×, its pitch kept. The click and the score's cursor follow its beats.</div></div>
+  <div style="background:var(--card);border-top:1px solid var(--line)">${transportRow(true)}${tools()}</div>`)
+const recMac = mac(`${playerBar({ chord: 'D', shown: true }, true)}<div style="display:grid;grid-template-columns:1fr 420px;gap:24px;padding:16px 32px;background:var(--sand);height:calc(100% - 88px);align-content:start">
+  <div style="background:var(--card);padding:20px 40px">${title}${sys(0, 560)}${sys(0, 560, 8, ['D', 'A', 'D'])}</div><div style="display:grid;gap:14px;align-content:start">${recPanel()}${recControls}</div></div>`, 'Songs')
+document.getElementById('s10').innerHTML = [
+  fig('10.A', 'Phone', 'Transpose and Speed keep the recording playing, its pitch kept; the beat grid can be nudged.', recPhone),
+  fig('10.B', 'Laptop', 'The recording\'s panel beside the score, the loop shaded on the waveform.', recMac),
+].join('')
+
+// ——— theme and feedback (kept in this browser) ———
+document.getElementById('themeBtn').onclick = () => { const r = document.documentElement; const dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; r.dataset.theme = dark ? 'light' : 'dark' }
+let saved = {}
+try { saved = JSON.parse(localStorage.getItem('r34-ui-feedback') || '{}') } catch (e) { saved = {} }
+const keep = () => { try { localStorage.setItem('r34-ui-feedback', JSON.stringify(saved)) } catch (e) { /* private window */ } }
+document.querySelectorAll('figure[data-fb]').forEach((f) => {
+  const id = f.dataset.fb
+  const box = document.createElement('div')
+  box.innerHTML = `<div class="fb">${[['ok', 'Approve'], ['change', 'Revise'], ['remove', 'Remove']].map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${saved[id]?.v === v}">${l}</button>`).join('')}</div><textarea aria-label="Note on ${id}" placeholder="Note on ${id}…"></textarea>`
+  f.append(box)
+  const ta = box.querySelector('textarea')
+  ta.value = saved[id]?.note || ''
+  ta.oninput = () => { saved[id] = { ...saved[id], note: ta.value }; keep() }
+  box.querySelectorAll('button').forEach((b) => (b.onclick = () => { box.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); saved[id] = { ...saved[id], v: b.dataset.v }; keep() }))
+})
+
+</script>
