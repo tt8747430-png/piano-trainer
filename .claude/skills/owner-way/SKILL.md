@@ -18,6 +18,7 @@ sometimes German, and send phone screenshots of our app and of apps they admire.
 | Session start, and after a compaction | this file, [practices](references/practices.md)                        |
 | Before touching any area              | that area's section of [feedback-log](references/feedback-log.md)      |
 | Any screen, or a question to draw     | [ui-and-mockups](references/ui-and-mockups.md), `impeccable`           |
+| Polish, motion, the small details     | [craft-details](references/craft-details.md)                           |
 | Refactoring a whole screen or its settings | `redesigning-a-screen`                                            |
 | Before saying a screen is done        | [testing](references/testing.md)                                       |
 | Reviewing a screen                    | [ux-principles](references/ux-principles.md)                           |

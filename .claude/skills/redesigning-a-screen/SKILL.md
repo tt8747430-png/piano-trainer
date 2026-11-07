@@ -61,6 +61,9 @@ whole screen. `CLAUDE.md` still binds every change.
 | A drawing is the whole screen, never a control alone | `owner-way/references/ui-and-mockups.md` |
 | No finger numbers on or under keys | |
 
+The small details (numbers, corners, icons, hit areas, motion) are `owner-way/references/craft-details.md`; check the
+canvas against it before each publish.
+
 ## Reporting
 
 Answer first, in the owner's words for things. Then what changed (bullets), the checks run, the canvas link and
