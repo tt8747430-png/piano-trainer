@@ -275,3 +275,25 @@ don't work for the other sounds")
 - Both the clicks and the count-in sound with the chosen sound at the chosen volume, the first beat higher. Canvas
   check: a choice plays its sound (square, sine, noise), and while playing Drum is heard for the count-in and every
   beat.
+
+## A professional metronome (owner, 2026-11-07: "still not good and make professional names ... research now how a
+metronome should look and what options should it have")
+- Research:
+  - **Logic Pro:** "Click while playing" turns the metronome on in playback, and the count-in can be the only click.
+    Volume and Tone (a short click up to a wood block or claves).
+  - **Dorico:** a Click page with Count-in in bars (1 bar by default) and the sounds click, beep and wood block.
+  - **Metronome apps** (Soundbrenner, Pro Metronome): the face shows the bar's beats lighting in time, the accented
+    first beat larger, the tempo large with tap tempo. The deeper options sit behind it.
+  - **Tempo markings** (Largo … Presto) name the tempo in the musician's term.
+- Names (UX copy, the musician's term winning): **Click while playing** (Logic), **Count-in** with **1 bar** ·
+  **2 bars** (Dorico), sounds named for the instruments they imitate: **Wood block** · **Claves** · **Beep**.
+- Will build, the Metronome group:
+  1. **The face**: the score's meter (3/4) and a light for each beat of the bar (beat 1 larger), lighting in time
+     while playing. Under it: − · the BPM large with "BPM · Andante" · + · **Tap**.
+  2. **Click while playing**, a switch (off).
+  3. **Count-in**: Off · 1 bar · 2 bars (1 bar).
+  4. **Sound**: Wood block · Claves · Beep (Wood block). Choosing one plays it.
+  5. **Volume**.
+- The meter and accent come from the score. Tempo markings: Largo < 60, Larghetto < 66, Adagio < 76,
+  Andante < 108, Moderato < 120, Allegro < 156, Vivace < 176, else Presto.
+- In the app the sounds are recorded samples (VCSL, CC0): a wood block, claves and an electronic beep.
