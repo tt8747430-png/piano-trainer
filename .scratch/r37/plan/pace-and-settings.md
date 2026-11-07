@@ -99,6 +99,38 @@ examples and research more")
 these settings")
 - Today: Speed · Count-in · Metronome showed only under Play along, though Follow me runs at a tempo too: it starts at
   the speed set and follows the learner within 40–200 % of it (`followTempo`).
-- Will build: a **Tempo** group after the modes, for Follow me and Play along: **Speed** (Follow me: **Starting
-  speed**), **Count-in**, **Metronome** (in Follow me it ticks at the learner's tempo as it follows). Wait for me has no
-  tempo: nothing moves until the learner plays, so the group is not shown.
+- Will build: a **Tempo** group after the modes, for every mode: **Speed** (Follow me: **Starting speed**),
+  **Count-in**, **Speed up each pass**, **Metronome** (in Follow me it ticks at the learner's tempo as it follows).
+
+## Wait for me keeps its settings; the metronome is the learner's (owner, 2026-11-07: "why the wait for me doesn't have
+the setting and why they disappear and also make the metronome customizable")
+- Today (canvas v113): choosing Wait for me hid the whole Tempo group. The app's Wait mode does pace the other hand,
+  the accompaniment and the rests at `tempo` (`features/practice`), so Speed matters there too.
+- Ruling: a control that cannot act now is shown disabled, not hidden, so the panel keeps its shape between modes and
+  the learner sees what another mode offers (Apple HIG: hidden controls make people wonder where they went; disable
+  one that is temporarily unavailable).
+- Will build:
+  - **Wait for me:** Speed enabled; Count-in, Speed up each pass and Metronome dimmed (nothing keeps time while the
+    music waits).
+  - **Follow me:** Starting speed, Count-in and Metronome enabled; Speed up each pass dimmed (the learner sets the
+    pace).
+  - **Play along:** all enabled.
+  - Metronome on shows a **Metronome** group: **Sound** Click · Beep · Drum; **Accents**, one dot a beat, a tap
+    cycling Downbeat · Accent · Normal · Silent (default the first beat accented); **Clicks per beat** 1 · 2 · 3 · 4;
+    **Volume**, a slider (70 %). These are the Metronome tool's own settings (`shared/lib` metronome sounds, beat
+    levels, subdivisions), one implementation.
+
+## The Sheet's own settings (found while checking)
+- Today (canvas): tapping the Sheet pill while it showed turned pages ↔ line; it had no settings panel, though every
+  other view's pill opens one.
+- Will build: the showing Sheet's pill opens **Sheet**: **Layout** Page · Line; **Cursor** Off · By note · Smooth
+  (default By note); **Follow the music** (on); **Your marks** (on).
+
+## Player settings still to port into the canvas homes
+| Setting (app today)                 | Home in the canvas                                   |
+| ----------------------------------- | ---------------------------------------------------- |
+| Staves and recording volumes        | Hands menu, beside each hand's volume                |
+| Accompaniment pattern and swing     | Pace, a group shown for accompaniment pieces only    |
+| Show on open (first view)           | the view's settings: "Open with this view"           |
+| Piano skin                          | app Settings, Sound and piano                        |
+| Pedalling marks                     | dropped: the score's own pedal marks show            |
