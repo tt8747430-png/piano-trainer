@@ -19,6 +19,7 @@ sometimes German, and send phone screenshots of our app and of apps they admire.
 | Before touching any area              | that area's section of [feedback-log](references/feedback-log.md)      |
 | Any screen, or a question to draw     | [ui-and-mockups](references/ui-and-mockups.md), `impeccable`           |
 | Polish, motion, the small details     | [craft-details](references/craft-details.md)                           |
+| Any outside design skill (`stageshow`, `emil-design-eng`, `baseline-ui`…) | `.claude/skills/INSTALLED-FROM-VIDEOS.md`; `CLAUDE.md`, `DESIGN.md` and the rulings win over it |
 | Refactoring a whole screen or its settings | `redesigning-a-screen`                                            |
 | Before saying a screen is done        | [testing](references/testing.md)                                       |
 | Reviewing a screen                    | [ux-principles](references/ux-principles.md)                           |
