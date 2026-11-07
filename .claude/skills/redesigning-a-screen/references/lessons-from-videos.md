@@ -170,6 +170,56 @@ build the practice habit, under the honesty rule below.
 - **Name the responsive layout exactly:** for example a bento grid that becomes one column on a phone. "Responsive"
   alone isn't enough.
 
+## A UI-design channel: dashboards, slop pages, motion and depth
+
+Four videos (the channel's sponsor code reads "sided").
+
+- **Fix where things go before how they look.** The numbers the learner came for come first. Each filter sits beside
+  the thing it changes, never in a block above it.
+- **One product:** every control uses the page's type, no browser-default control is left showing, there is one
+  radius for controls and a larger one for cards, and the greys are tinted towards the accent.
+- **Grey first, then colour for a job:** the data and whatever is switched on. A button, a tab or a page number is
+  not accent-coloured just because it can be.
+- **A number needs something to compare with:**
+  - The number stays the largest thing on its card.
+  - Under it, the change since last week, with an arrow for its direction.
+  - Good or bad is shown by emphasis, not by red and green.
+  - Everything around the number is played down.
+- **A chart answers a question in a second:**
+  - an axis and soft grid lines;
+  - a tooltip with the real value;
+  - last period as a dashed grey line to compare against;
+  - a line in a colour that has contrast in each theme.
+- **Cut every control that duplicates another,** and update live; no Apply button. Pick the right kind of control:
+  a switch for on and off, checkboxes when several can be chosen, a slider whose two ends are labelled with what is
+  being traded.
+- **What real apps have:**
+  - A hover state on everything that can be pressed, and on table rows.
+  - Numbers in a table aligned right.
+  - Icons and logos where they speed spotting.
+  - A way to tell where you are.
+  - Profile and Settings where people look for them.
+  - The system theme followed, with the accent changed per theme where it would lose contrast.
+- **Slop is a page made of defaults; premium is a page of decisions.** Six steps, the same for any product:
+  1. A typeface with a job.
+  2. An axis off the centre.
+  3. Grey plus one chosen accent; never a purple gradient.
+  4. Specific words and real proof instead of made-up logos and numbers.
+  5. **A centrepiece that demonstrates the product working** (for us: a real score playing, the keys lighting).
+  6. The same care carried down the page, with every motion showing something true.
+- **Motion technique:**
+  - One highlight slides to the chosen item rather than each item lighting up on its own.
+  - What is added flies to where it went, and the count changes when it lands.
+  - A failed field shakes.
+  - A shape morphs only between paths with the same number of points.
+  - The video's `transition: all` is not used here: name the properties.
+- **Depth from shades of one colour:**
+  - Three or four steps of lightness, the lighter one on top.
+  - A "small shadow" made of a light inset line at the top and a soft dark shadow below.
+  - A recessed track (a progress bar) gets an inner shadow.
+  - To play something down, set it a step darker.
+  - Average to good costs far less than good to excellent; depth is a cheap step there.
+
 (A data-structures video, sponsored by InsForge, has nothing for design and is not used.)
 
 ## Rulings the videos led to
@@ -178,4 +228,5 @@ build the practice habit, under the honesty rule below.
   first". Only what can't be undone, or reaches other people, still asks. The port is `.scratch/r38/plan/undo-and-loss.md`.
 - **A loss is shown as a loss** (owner: "i don't like your rejection"): UX Peak's loss framing is adopted, kept true:
   the learner's own things named, the way out naming its cost, never an invented countdown or scarcity.
-- **Shadows for depth** stay out: `DESIGN.md` parts cards by surface and a 1px line.
+- **Shadows for depth** (the depth video's small shadow and inset tracks) differ from `DESIGN.md`, which parts cards
+  by surface and a 1px line and keeps shadows for what floats. Open with the owner; layering by lightness already fits.

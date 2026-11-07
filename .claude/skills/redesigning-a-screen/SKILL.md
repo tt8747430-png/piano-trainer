@@ -126,6 +126,7 @@ source; installing one is the owner's decision.
 | Kole Jain: mobile UI, intent, a site's look, learning design (transcripts) | one screen one thing, one direction per section, sheets, two empty states, intent and undo, release to commit |
 | Tim Gabe: progression that keeps people coming back (transcript) | one visible measure of progress, compounding streaks, no done state, controlled surprise, progress others can see; always true |
 | Kole Jain: beginner mistakes (transcript) | plan the flow (Skip, other, way back), identical components, icons by area, no redundancy, feedback at once, readable charts |
+| A UI-design channel ("sided"): a dashboard, slop pages, motion, depth (transcripts) | placement before looks, colour only for data and what is on, numbers with a comparison, charts that answer, no duplicate controls or Apply, a centrepiece that shows the product working |
 | An AI-coding channel: AI-built sites that look designed (transcript) | a design system not adjectives, proven components, named motion, named responsive layouts |
 | UX Peak: psychology, a product page's 15 mistakes, advanced tips (transcripts) | smart defaults, never start at zero, value over label, input by frequency, search that starts with help |
 | John (Meta engineer): shipping a vibe-coded app (transcript) | QA by breaking it, the non-functional list |

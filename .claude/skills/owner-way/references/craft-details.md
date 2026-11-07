@@ -42,6 +42,10 @@ beside `ui-and-mockups.md` and `impeccable`.
 | Feedback | A press shows at once: the button dims, a spinner for a longer wait; what was saved marks where it went (a dot on its tab). |
 | Charts | A value axis, flat bar ends, one bar per thing counted; read before admired. |
 | Choices | Every choice offers Skip, an "other" with search, and a way back. |
+| Colour | Grey first; the accent only for data and what is switched on. |
+| Context | A number carries its comparison (since last week, with an arrow); good or bad by emphasis, not red and green. |
+| Tables | Numbers aligned right; rows show hover; what can be pressed shows hover. |
+| Controls | No duplicates, no Apply: changes take effect live; a switch for on/off, checkboxes for several, a slider labelled at both ends. |
 | Phone | Type and targets are no smaller than on a laptop; one direction of scroll per section; no card in a card. |
 
 ## Motion
