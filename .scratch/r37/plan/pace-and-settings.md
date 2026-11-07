@@ -68,7 +68,6 @@ range. but refactor more")
 - Today: 2D had **Range** Song · All 88, a choice with no reason given.
 - Will build: the row **Keys** Song · 61 · 76 · 88, the sizes pianos are sold in (Synthesia sets the keyboard to the
   learner's): Song (default) fits the song's notes with a key's margin; a number draws that piano, 61 C2–C7, 76 E1–G7,
-  88 A0–C8. When the song
-  goes past the chosen piano, an orange tab at that edge names its furthest note (‹ G1), and the keys' description says
-  so.
+  88 A0–C8.
 - Owner, 2026-11-07: "I dont need this greyed piano not used keys": every key is drawn alike; no shading.
+- Owner, 2026-11-07: "I dont need this note showing": no tab for notes past the chosen piano.
