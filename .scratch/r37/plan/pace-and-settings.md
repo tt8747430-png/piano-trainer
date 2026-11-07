@@ -235,3 +235,28 @@ beats are chosen and the sound and the count in and how are they ordered for the
   4. **Metronome sound ›**, a link row to its one home, the Metronome tool's settings (Click · Beep · Drum).
 - Gone from the Player: the Beats squares, the Count-in bars choice, the Sound choice, the separate on/off switch.
   Before each repeat of a loop, the count-in is still the loop's "Between repeats: Count-in".
+
+## Independent settings, none disabled by another (owner, 2026-11-07: "now it is not understandable how the
+metronome is enabled and in what mode and why it is disabled in the wait mode ... research how a feature can disable
+another feature or how it shouldn't and how each feature relates to another")
+- Principles:
+  - **Modes cause slips.** A setting whose meaning changes with another state is a mode, and people err when they
+    cannot see which mode is on (NN/g, Modes in user interfaces). An Off · Count-in · Always control is a three-state
+    mode in which "on" is hidden inside a word.
+  - **Disabled controls explain nothing.** They look usable, do nothing and give no reason (NN/g, Why disabled buttons
+    hurt UX; USWDS research, 2023: keep controls enabled and give feedback). Disable a control only when it truly
+    cannot work, and then say why where the learner can see it.
+  - **Dependencies are shown by structure.** A child setting sits under the parent it depends on (Apple HIG,
+    Toggles: a primary switch with subordinate ones). Two settings that do not depend on each other are siblings.
+  - **Orthogonality.** Each control does one thing in every mode. Combinations are made by the learner, never
+    implied by the app.
+- Ruling, how the pieces relate: the metronome and the count-in are parts of the music, so they behave like the
+  music in every mode. In Play they keep the tempo. In Wait the clicks go on while the music moves, at the tempo, and
+  stop when it stops to wait for the learner, as the accompaniment does. Nothing in Pace disables anything else. Both
+  play the same click, so the click's volume and sound are named for the click and apply to both.
+- Will build, Pace after the Wait · Play tiles, one group:
+  1. **Tempo**: − · the BPM large · + · Tap.
+  2. **Metronome**, a switch (off): clicks with the music.
+  3. **Count-in**, a switch (on): one bar of clicks before the music starts.
+  4. **Click volume**. 5. **Click sound ›**, a link to its home in the Metronome tool.
+  - In a loop, **Between repeats** offers None · Count-in · Rest, and **Speed up each pass** works in both modes.
