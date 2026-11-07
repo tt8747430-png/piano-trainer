@@ -1,5 +1,64 @@
 # R37 — Pace and Settings, simplified (canvas)
 
+## The rulings as they stand (read first; the sections below are the history, and where they disagree, this wins)
+Canvas v130, https://claude.ai/artifact/HezkVS2MXdwz7uJ14KDGgp. Each line names the owner's words it rests on.
+
+**Modes (Pace).**
+- Two tiles, **Wait** and **Play**, no group headers ("i don't like the mods titles").
+- **No Follow mode.** In-time and Follow "sound the same", and "no follow my tempo". The app's `follow` mode and
+  `followTempo` go in R37-1.
+- Pace never disables or hides one setting because of another; each works in both modes ("why it is disabled in the
+  wait mode"). In Wait the metronome clicks while the music moves and stops when it waits.
+
+**The metronome**, one group under the tiles headed Metronome; the tempo belongs to it ("the tempo belongs to the
+metronome").
+1. The face: the score's meter (3/4) and one light per beat lighting in time, beat 1 larger; − · BPM large · + · Tap;
+   "BPM · Andante" (the tempo marking). **Score tempo: 80 BPM** appears only when the tempo differs, to go back.
+2. **Play metronome**, a switch (MuseScore's name).
+3. **Count-in** Off · 1 bar · 2 bars.
+4. **Sound** Wood block · Claves · Beep; a choice plays itself. 5. **Volume**.
+- The meter and accents come from the score: no beat squares, no accent dots, no clicks per beat or subdivision in the
+  Player ("i don't like how the time signature or beats are chosen"; "it is not understandable what subdivision is";
+  "does this make sense?"). They stay in the Metronome tool.
+- No Speed slider and no speed %: the tempo is BPM. No modes like Off · Count-in · Always ("not understandable how the
+  metronome is enabled"). Nothing on a separate page ("make it easier to enable").
+- References come from sheet-music players (forScore, MuseScore, Soundslice, Flat, flowkey), **never recording
+  software** like Logic or Dorico's recording ("use examples for music and sheets and not for recording").
+- Names are the musician's and professional ("make professional names"); never a name that fits one choice only
+  ("the names don't work for the other sounds"); every sound must really play ("the metronome sounds don't work").
+
+**Loop** (shown while a loop is set): Repeats · Between repeats (None · Count-in · Rest) · Speed up each pass (a
+switch, +5 % a pass).
+
+**The pedal: no pedal setting anywhere in the Player** (2026-11-07: "what is the purpose of this pedalling thing";
+then "remove it"). Playback pedals as the score marks it, or by `autoPedal` where it has no marks. The learner's own
+pedal (MIDI or the bar's Sustain) always sounds. The score shows its Ped. marks as engraved. (Canvas v129 put a Pedal
+row back by mistake; v130 removed it.)
+
+**Song settings (the gear):** versions as tiles like the modes, Easy · Medium · Original, easiest first ("make the
+versions switch like the mods switch"), no "Difficulty" label and no explanation line; Transpose; Edit score · Export.
+
+**Keyboard** (its own transport button): tiles Off · 3D · 2D; 3D Angle Seat · Above; for both Keys Song · 61 · 76 · 88
+and Note names. No Show hands (one home for a hand: the Hands menu). No grey shading of unused keys, no tab for notes
+past the keys, no finger numbers on or under the keys. Skin tone goes to app Settings.
+
+**Hands menu:** each hand's switch, Dim, and volume; a switched-off hand is off the score, keys, sound and 3D hand.
+
+**Views:** a tap on the showing view's pill opens its settings; each view has one.
+- **Sheet:** Layout Page · Line; **Show** chips Chord symbols · Chord positions · Lyrics · Finger numbers · Note
+  names (the app's own names, ADR 0115); Scroll with the music; Your marks. No Cursor setting: the cursor moves by
+  note ("i dont like the cursor settings").
+
+**Still to place, proposals awaiting the owner:**
+
+| App setting today                         | Proposal                                              |
+| ----------------------------------------- | ----------------------------------------------------- |
+| Recording volume (songs with a recording) | Hands menu, under the two hands                       |
+| Accompaniment pattern                     | Pace, a group for accompaniment pieces                |
+| Ask which view on open                    | dropped: the Player opens the last view (`pt-views`)  |
+| Hands skin tone                           | app Settings                                          |
+| Resume following after a scroll           | dropped: following resumes on its own                 |
+
 ## Source
 - Owner, 2026-11-07: "research and look at all the resources and app examples and improve the other settings like
   the pace and the main player settings. what order should be how they are made, how should they be simplified and
@@ -133,7 +192,7 @@ the setting and why they disappear and also make the metronome customizable")
 | Accompaniment pattern and swing     | Pace, a group shown for accompaniment pieces only    |
 | Show on open (first view)           | the view's settings: "Open with this view"           |
 | Piano skin                          | app Settings, Sound and piano                        |
-| Pedalling marks                     | dropped: the score's own pedal marks show            |
+| Pedalling (playback's pedal)        | removed, no setting (see The pedal above)            |
 
 ## Simple Pace, supersedes the three sections above (owner, 2026-11-07: "i don't like the mods titles and the tempo
 settings, also i dont like the cursor settings ... make good and simple ui")

@@ -91,6 +91,16 @@ owner's, typos fixed.
   Keyboard in the bar, a divider resizing the keys, hidden keys a "Keyboard" strip, the sheet's layout and zoom in one
   pill; no finger numbers on or under the keys; no piano roll.
 
+- **The Player's Pace and metronome (2026-11-07, canvas R37):**
+  - Modes are Wait and Play only, no Follow, no group titles.
+  - The tempo belongs to the metronome, in BPM with − + Tap and its marking, Score tempo to go back.
+  - Play metronome and Count-in (bars) are plain controls. One setting never disables another.
+  - The meter and accents come from the score: no beat squares, no subdivision in the Player.
+  - Sounds named for what they are, and every one plays.
+  - References are sheet-music players, never recording software.
+  - No pedal setting: "remove it". Playback pedals as marked or automatically.
+  - Versions are tiles like the modes. The sheet's Show chips are the app's names. No cursor setting.
+  - The full list is in `.scratch/r37/plan/pace-and-settings.md`, "The rulings as they stand".
 - Every Chordify feature but guitar. Plain which view a setting belongs to; Layout is the sheet music's alone.
 - **Diagrams** animate; strip and diagrams swipe by themselves, the page never moves; no odd scroll bar; a swipe goes to the
   next chord.
