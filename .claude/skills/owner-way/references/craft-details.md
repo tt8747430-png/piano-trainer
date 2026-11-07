@@ -1,6 +1,7 @@
 # Craft details
 
-Distilled 2026-11-07 from the design-engineering skills shown in Tim Gabe's "Why People Trust Products That Look Made
+Distilled 2026-11-07 from the video transcripts in `redesigning-a-screen/references/lessons-from-videos.md` and the
+design-engineering skills shown in Tim Gabe's "Why People Trust Products That Look Made
 With Care": ibelick/ui-skills `baseline-ui` (MIT), jakubkrehel/make-interfaces-feel-better (MIT), emilkowalski/skills
 `emil-design-eng` and `ui-cheatsheet` (MIT), benjitaylor/skills `stageshow` (MIT). Only what fits Piano Trainer is kept.
 `DESIGN.md` and the owner's rulings win where they differ; the differences are listed at the end. Read before any screen,
@@ -30,6 +31,13 @@ beside `ui-and-mockups.md` and `impeccable`.
 | Empty | Every empty state has one clear next action. |
 | Errors | Shown beside the action that failed. |
 | Loss | Destructive actions ask first through `ConfirmDialog`. |
+| Hierarchy | The value outranks its label (120, then "BPM" quieter), never a column of "label: value" rows. |
+| Over a picture | An icon on a cover or photo gets a backing, so it reads on a light picture as well as a dark one. |
+| Lines | Dividers are soft hairlines; closer spacing, not a line, says two things belong together. |
+| Labels | No redundant label ("Tempo: 120 BPM" is "120 BPM"); a badge is one or two words. |
+| Inputs | Chosen by frequency: a wheel or slider for a one-time value in a known range, a stepper or field for frequent or precise entry. |
+| Defaults | Every choice starts on the usual answer; the button says what it will do ("Show 12 patterns"). |
+| Phone | Type and targets are no smaller than on a laptop; one direction of scroll per section; no card in a card. |
 
 ## Motion
 
