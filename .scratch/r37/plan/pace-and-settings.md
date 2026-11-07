@@ -180,3 +180,8 @@ metronome")
     Subdivision and Volume.
 - (owner, 2026-11-07: "it is not understandable what subdivision is") The row is **Clicks per beat**, 1 · 2 · 3 · 4
   (the metronome's `none` · `8ths` · `triplets` · `16ths`).
+- (owner, 2026-11-07: "but does this make sense?") No: playing several clicks per beat and setting a level for each
+  beat are drills for the Practice Metronome tool. Piano apps give the player's metronome one click a beat (flowkey,
+  Simply Piano). The Player's page becomes **Metronome sound** (reached from Pace's **Sound** row, which shows the
+  sound): **Sound** Click · Beep · Drum; **Accent the first beat**, a switch (on); **Volume**. Clicks per beat and the
+  per-beat accent dots are dropped from the Player. The Metronome tool keeps both.
