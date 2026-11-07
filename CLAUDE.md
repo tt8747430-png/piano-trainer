@@ -110,7 +110,8 @@ a Performance becomes a Score (`notation`) or sounds (`schedule`).
   view, tab or step written into the URL replaces the entry (`useSetSearch`).
 - **Settings:** each preference has one home (`entities/settings/model/registry.ts`, held by `settings-homes.test.ts`);
   elsewhere a link row to it, never a second control.
-- **A loss asks first** through `ConfirmDialog`. **A key or root** is one of `shared/ui/pickers`. **A bar** is `ScreenHeader`.
+- **A loss that can be undone** happens at once, with Undo in its toast (`say`); one that cannot, or that reaches
+  other people, asks first through `ConfirmDialog`. A loss is named as one, truly (R38). **A key or root** is one of `shared/ui/pickers`. **A bar** is `ScreenHeader`.
 - **Keys:** a shortcut is one `useShortcuts` call beside what it drives. A letter alone is the piano's.
 - **Theme:** `index.html`'s `#theme-boot` paints before first paint and `theme-boot.test.ts` holds it to the store.
 - **Installed app:** `#standalone-boot` locks zoom when installed; `theme.css` keeps text unselectable outside fields.

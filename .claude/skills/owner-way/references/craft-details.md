@@ -30,7 +30,8 @@ beside `ui-and-mockups.md` and `impeccable`.
 | Fixed things | `dvh`, never `vh`/`h-screen`; fixed bars add the safe-area insets. |
 | Empty | Every empty state has one clear next action. |
 | Errors | Shown beside the action that failed. |
-| Loss | Destructive actions ask first through `ConfirmDialog`. |
+| Loss | What can be undone happens at once with Undo in its toast; only what can't, or reaches other people, asks first through `ConfirmDialog`. |
+| Framing | A loss is named as one: "Your 12 songs live only on this phone"; the way out names its cost ("Keep on this phone only"); always true. |
 | Hierarchy | The value outranks its label (120, then "BPM" quieter), never a column of "label: value" rows. |
 | Over a picture | An icon on a cover or photo gets a backing, so it reads on a light picture as well as a dark one. |
 | Lines | Dividers are soft hairlines; closer spacing, not a line, says two things belong together. |

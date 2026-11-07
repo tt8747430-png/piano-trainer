@@ -213,7 +213,10 @@ are reference only, but progressions are facts.
 - **Short menu items.** **Change it everywhere:** "and not just in one place".
 - **Floating buttons:** the main action a honey 56px circle, a second a raised 48px; a dial opens as a card of rows.
 - **Cards whole:** "don't you see how bad this looks with these cut borders".
-- **Confirm before losing or hiding work,** with Undo where possible.
+- **Undo instead of asking** (2026-11-07, "adopt also this"): a loss that can be undone happens at once with Undo in its
+  toast; only what can't be undone, or reaches other people, asks first. Replaces "confirm before losing or hiding work".
+- **A loss is shown as a loss** (2026-11-07, "i don't like your rejection", of leaving out loss framing): name what goes,
+  by name or count, and let the way out name its cost; always true, never a fake countdown.
 - **Only what works here:** "only the relevant actions and ui should be shown and not ui that doesn't work". A choice never
   moves you to another tab.
 - **One icon, one meaning.** **One home per idea:** the page shows what you look at, its Settings how it always behaves.

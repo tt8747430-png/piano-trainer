@@ -25,7 +25,8 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 - Creating anything is a New sheet: a name, a few properties, one Create at the foot.
 - Reorder by dragging a handle, by mouse and held finger, never Move up or Move down.
 - Menu items are short ("Remove"); the menu's label names the thing.
-- Confirm before losing or hiding work, with Undo where it can be undone.
+- Undo instead of asking: a loss that can be undone happens at once with Undo in its toast; only what can't be undone, or
+  reaches other people, asks first. A loss is named as one, truly.
 - One icon, one meaning. Two acts kept together get two buttons or two distinct icons.
 - Show only what works here. A control that does nothing for what is shown goes.
 - If a control's effect cannot be seen or heard, it is wrong.

@@ -80,6 +80,8 @@ care shows in a hundred small things done the same way.
 | A collection is a library in the app's library shape | search; place chips on top; a Sort and filter page with its count on the button, removable chips and Show n; folders that fold with counts; Recently used and Favourites first; a heart, not a star |
 | A drawing is the whole screen, never a control alone | `owner-way/references/ui-and-mockups.md` |
 | No finger numbers on or under keys | |
+| Undo, not a question, for what can be undone | delete a pattern: gone at once, "Pattern deleted · Undo"; Empty Trash still asks |
+| A loss named as one, always true | "Your 12 songs live only on this phone" · Keep on this phone only |
 
 The small details (numbers, corners, icons, hit areas, motion) are `owner-way/references/craft-details.md`; check the
 canvas against it before each publish.

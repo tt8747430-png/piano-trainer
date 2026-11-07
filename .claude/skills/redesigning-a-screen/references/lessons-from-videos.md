@@ -120,11 +120,10 @@ Three videos: "made with care", "the commodity ceiling", and the Undertone case 
 - **The non-functional list:** performance (no dropped frames, images no larger than their space), accessibility at
   maximum text size, reliability across background and restore, security.
 
-## Where these differ from our rules (the owner's decision)
+## Rulings the videos led to
 
-- **Undo instead of asking first:** Kole Jain deletes at once and offers Undo, asking first only when it can't be
-  undone. `CLAUDE.md` says "a loss asks first through `ConfirmDialog`". The rule stands until the owner says
-  otherwise.
-- **Loss-aversion framing** (UX Peak's "I'll risk it", countdowns of what you'll lose): not adopted. It pressures the
-  learner, and the app is calm.
-- **Shadows for depth:** `DESIGN.md` parts cards by surface and a 1px line, never a shadow.
+- **Undo instead of asking** (owner: "adopt also this"): Kole Jain's act first and offer Undo replaces "a loss asks
+  first". Only what can't be undone, or reaches other people, still asks. The port is `.scratch/r38/plan/undo-and-loss.md`.
+- **A loss is shown as a loss** (owner: "i don't like your rejection"): UX Peak's loss framing is adopted, kept true:
+  the learner's own things named, the way out naming its cost, never an invented countdown or scarcity.
+- **Shadows for depth** stay out: `DESIGN.md` parts cards by surface and a 1px line.

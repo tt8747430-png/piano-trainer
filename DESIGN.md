@@ -468,7 +468,8 @@ square at the top.
   theme redraws them; Night alone is a dark card in both themes.
 - **Popover and ⓘ:** an `InfoTip` is a 16px ⓘ in soft ink beside a name; no line of explanation stands under a control.
 - **Toast** (`say`): a card over the screen's foot, clear of all that floats there, with Undo and ✕; gone in five
-  seconds.
+  seconds. A loss that can be undone happens at once and toasts with Undo instead of asking; only what can't be undone,
+  or reaches other people, asks first in the dialog, naming what goes.
 - **Marks:** learned a grass disc with a check (`LearnedBadge`); a gap a 10px ochre dot; progress a 6px grass bar on a
   sand track (`ProgressMeter`), or an arc round a lesson's number (`ProgressRing`).
 
