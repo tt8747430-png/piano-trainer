@@ -304,7 +304,13 @@ Export…) and Version · Transpose as foot tools.
 Stale lines in the rulings above, superseded later and to be read so: Song settings' "versions as tiles" and Placed's
 "Accompaniment goes in Practice" gave way to the Arrangement · Accompaniment cards (row 8).
 
-Open for the owner: keep Annotations (row 20), and which acts stay in ··· (row 21).
+Ruled (owner, 2026-11-07: "i want the sections, the print, and share links to be ported. what else"): the Song gear
+ends with two groups, **Sections ›** · **My recordings ›** (each take with its feedback, so How did I play goes into
+it), then **Edit score ›** · **Print ›** · **Share link ›** · **Export ›**. Recommended, drawn, for the owner to confirm:
+**Annotations** become a Sheet Show chip, **Your annotations**, on by default (row 20); **Song information** goes (the
+score's title block and the song's page carry it); **Tuner** goes from the Player (its home is the Tools menu);
+**Voice commands** move to app Settings, a preference with one home. Keyboard shortcuts stay on `?`. Drawings:
+`.scratch/r37/drawings/song-settings-acts.png`, `sheet-show-annotations.png`.
 
 ## Simple Pace, supersedes the three sections above (owner, 2026-11-07: "i don't like the mods titles and the tempo
 settings, also i dont like the cursor settings ... make good and simple ui")
