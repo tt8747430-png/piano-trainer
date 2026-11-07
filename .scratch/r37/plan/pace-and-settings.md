@@ -200,3 +200,19 @@ is related to this and how it behaves while the metronome is disabled ... look a
   3. **Metronome**, a group: **Metronome** (switch, off); **Count-in** Off · 1 bar · 2 bars (1 bar); **Sound** Click ·
      Beep · Drum; **Accent the first beat** (on); **Volume**. In Wait the group is dimmed, because nothing keeps time.
   4. **Loop bars a–b**, while a loop is set.
+
+## The Player's metronome is the Metronome tool's (owner, 2026-11-07: "but the tempo belongs to the metronome and i
+still don't like the metronome settings")
+- Reference: the owner's own ruling for the Metronome tool (feedback log): a large BPM with steps, Tap tempo, sound,
+  beats as squares, and one engine for the tool page, the Player and the quick metronome. The Player shows a compact
+  form of the same controls (`pages/metronome` TempoSteps, `features/metronome` BeatSquares).
+- Will build, Pace after the Wait · Play tiles, one group with no header:
+  1. **Metronome**, a switch (off; dimmed in Wait).
+  2. The tempo: **−** (1 BPM slower), the BPM large with "BPM" under it, **+**, **Tap** (sets the tempo from the
+     learner's taps). It works in Wait too: the rests and the other hand play at it.
+  3. **Beats**: one square for each beat of the bar, numbered. A tap cycles Accent (filled) · Normal · Silent
+     (dashed); by default beat 1 is accented.
+  4. **Count-in**: Off · 1 bar · 2 bars (dimmed in Wait). It plays the metronome's clicks whether or not the
+     metronome is on.
+  5. **Sound**: Click · Beep · Drum. 6. **Volume**.
+- Gone: the Tempo slider and the "Accent the first beat" switch, which the Beats squares replace.
