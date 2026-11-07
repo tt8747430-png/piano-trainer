@@ -54,15 +54,22 @@ patterns in our app, and how should they be organized like a library"; the two-a
 - References: Band-in-a-Box's StylePicker (favourites, a genre/feel filter, a double-click preview; pgmusic.com
   manuals), Yamaha arranger keyboards' style list (styles under family headings, a Favourites family), Logic Pro's
   Keyboard Session Player (Block, Broken, Arpeggiated styles with presets, user presets saved; support.apple.com).
-- Will build: Back · **Pattern**; filter chips **All · Favourites · Yours · Methods · Styles** (Methods the books'
-  groups, Styles the Rhythm styles); then the shelves, each under its heading with its book's credit (The seven types
-  of accompaniment · Bobrova; The five ways (lesson 3) · Bobrova, Called to play; Rhythm styles). A row: the
-  pattern's bar as a small two-hand roll (the app's `FigureRoll`, right hand above in its colour, left below), its
-  name, **Listen** (plays the bar), **Favourite** (a star; Favourites lists them first). The one playing is
-  highlighted and bold; a tap chooses it and goes back to Song. Last, **Manage patterns ›** opens Practice ›
-  Accompaniment, where patterns are made, renamed, hidden and arranged: the Player only chooses, listens and stars.
-  A pattern that cannot play this song's meter or chords is left out (`fit.ts`). Drawing:
-  `.scratch/r37/drawings/pattern-library.png`.
+- Second pass ("research more and improve this"): the page now takes the shape of the app's own library
+  (`widgets/practice-library`, the Songs library's shape), so the Player and Practice › Accompaniment read alike;
+  Smart Pianist's pattern list (Block · Arpeggio families, one list) and forScore's searchable lists agree.
+- Will build: Back · **Pattern**; a **Search patterns** field (name and both hands' figures) and **Filter**, which
+  opens a Level choice **All levels · Beginner · Intermediate · Advanced** (the button then reads the level and is
+  outlined). Then the shelves, as the app names them: **Favourites**, **Called to Play · The five ways (lesson 3)**,
+  **Called to Play · Right-hand techniques**, **Called to Play 2 · Octaves and chords (level 2)**, **Bobrova · The
+  seven types of accompaniment**, **Gorshkov · Arranging the accompaniment**, **Rhythm styles**, **Mine** last; each a
+  grouped card folded after five with **Show all n** (a search shows every match). A row: the bar as a small two-hand
+  roll (`FigureRoll`), the name over its hands line (**LH: Octave, whole note · RH: Chord on every beat**, the
+  figures' own names), the level mark (the book's stage, the app's `LevelMark` pips), **Listen** ▶ and **Favourite**
+  ♡ (the app's heart, not a star). The one playing is highlighted and bold; a tap chooses it and goes back to Song.
+  Nothing matches: **No patterns match**. Last, **Manage patterns ›** opens Practice › Accompaniment, where patterns
+  are made, renamed, hidden and arranged: the Player only chooses, listens and favourites. A pattern that cannot play
+  this song's meter or chords is left out (`fit.ts`). Drawings: `.scratch/r37/drawings/pattern-library.png`,
+  `pattern-library-filter.png`.
 - **No Voicing and no Swing** ("what are these swings and chords options"). Voicing (Close · Drop 2) is how far the
   chord's notes are spread, Drop 2 a jazz spacing; Swing plays pairs of 8ths long-short. Both are arranger's
   choices: each pattern carries its own spacing and feel, and the swung patterns are patterns of their own.
