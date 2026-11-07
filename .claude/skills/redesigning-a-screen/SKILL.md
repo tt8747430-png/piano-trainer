@@ -14,20 +14,27 @@ whole screen. `CLAUDE.md` still binds every change.
 
 ## The loop
 
-1. **Read before touching anything:** the area's section of `owner-way/references/feedback-log.md`, its ADR, and, if
-   the area has a spec, its **"The rulings as they stand"** section. A thing a ruling removed is never redrawn.
+1. **Read before touching anything:** the area's section of `owner-way/references/feedback-log.md` (find it by the
+   area's words; Songs is "Library, adding, publishing"), its ADR (`docs/adr/README.md`), and every earlier spec for
+   the area (`grep -ril <area> .scratch/*/plan`), above all a **"The rulings as they stand"** section. A thing a
+   ruling removed is never redrawn.
 2. **Audit today, in the code:** list every control on the screen and in its settings, with its file, exact label,
-   values and default (`grep` the area's `ui/` and its `en` strings). Shoot the screen. Never say where something
-   lives, or that it exists, without the file in front of you.
+   values and default (`grep` the area's `ui/` and its `en` strings). Shoot the screen at phone 393 and laptop 1710
+   wide, as `owner-way/references/testing.md` does. Never say where something lives, or that it exists, without the
+   file in front of you.
 3. **Research:** the area's reference apps (`owner-way`'s table), read in their manuals and help pages (web-fetch),
    sheet-music and learning apps only (Flat, forScore, MuseScore, Soundslice, flowkey, Smart Pianist, Band-in-a-Box,
    Yamaha, Chordify), never recording software. First check whether the app already has the same thing elsewhere
    (a library, a filter sheet, a picker): reuse its shape, one implementation. Cite every source in the spec.
-4. **Spec:** `.scratch/<round>/plan/<area>.md`. Top: **The rulings as they stand**, one bullet each, the owner's words
+4. **Spec:** `.scratch/<round>/plan/<area>.md`, the round being the next free `rN` after the newest in `.scratch`
+   and `git log`, unless the owner named one. An area with older specs carries their standing rulings over. Top: **The rulings as they stand**, one bullet each, the owner's words
    quoted, the decision, its references. Below: the history, newest last. When a later ruling replaces a line, fix or
    mark that line in the same edit.
-5. **Canvas:** one Design artifact per area, phone and laptop, real song, real labels, every panel and page reachable
-   and working (taps, sounds, filters). Publish to the same URL each time.
+5. **Canvas:** one Design artifact per area (Artifact `quickstart`, intent `design`), phone and laptop, drawn from
+   the screenshots of step 2 with the real songs and the exact labels, every panel and page reachable and working
+   (taps, sounds, filters). It may leave the app's design system where the owner asks for the ideal design. Publish
+   to the same URL each time. A vague complaint ("cluttered", "the filters are weird") is answered by the audit and
+   the research: draw the recommended fix, then ask about what is still open.
 6. **Each reaction from the owner** is one turn of this loop, in this order: re-read the rulings; change the canvas;
    run its browser test and look at the screenshots at both sizes; publish; write the ruling into the spec and a
    bullet into the feedback log; save the drawing to `.scratch/<round>/drawings/`; commit those files by path and
@@ -35,7 +42,9 @@ whole screen. `CLAUDE.md` still binds every change.
 7. **When asked what is left to port:** a table in the spec, `# | canvas ruling | app today (files) | port`. Then list
    the stale lines found, and ask about what the canvas has no place for (acts, menus, old features), each with
    your recommendation. Record each answer as a ruling: kept with its home, or removed with no home elsewhere.
-8. **Build** only after the owner's "ok": the port table's order, one item per commit, `owner-way`'s gate.
+8. **Build** only after the owner's "ok": the port table's order, one item per commit, `owner-way`'s gate. In
+   autonomous mode ("continue with all") the canvas and spec are still made first, then built without waiting, the
+   open questions drawn at the end of the report.
 
 ## The owner's taste, held across screens
 
@@ -60,8 +69,10 @@ the owner answers with a question gets the facts from the code, the choices, and
 
 ## The canvas tools
 
-The R37 Player canvas's generator is in `.scratch/r37/canvas/` (its `README.md` says how to run it). Copy its parts
-for a new area rather than starting over.
+The R37 Player canvas's generator is in `.scratch/r37/canvas/` (its `README.md` says how to run it): a base page per
+size, patched by one script per part, and a Playwright test that taps through it and shoots it. For a new area, copy
+the folder to `.scratch/<round>/canvas/`, keep the test and the helpers (`group`, `row`, `seg`, `link`, `valrow`,
+`backtitle`, `CARD`), and draw new base pages from that area's screenshots.
 
 ## Common mistakes
 
