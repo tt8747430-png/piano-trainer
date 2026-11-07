@@ -309,5 +309,5 @@ sheets and not for recording")
 - Changes from the section above: the switch is **Play metronome** (MuseScore's name, replacing Logic's "Click while
   playing"). When the tempo differs from the score's, a **Score tempo: 80 BPM** button under it brings it back
   (forScore keeps the score's own tempo). The face's beat lights are the metronome seen, the switch the metronome
-  heard. Count-in stays Off · 1 bar · 2 bars (Soundslice, forScore). Sound stays Wood block · Claves · Beep, the
-  sounds MuseScore and forScore-style players use for tick and tock.
+  heard. Count-in stays Off · 1 bar · 2 bars (Soundslice, forScore). Sound stays Wood block · Claves · Beep. forScore
+  plays a tick and a tock, which the learner can replace. Which sounds the other players offer was not found.
