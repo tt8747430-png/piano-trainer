@@ -57,19 +57,28 @@ patterns in our app, and how should they be organized like a library"; the two-a
 - Second pass ("research more and improve this"): the page now takes the shape of the app's own library
   (`widgets/practice-library`, the Songs library's shape), so the Player and Practice › Accompaniment read alike;
   Smart Pianist's pattern list (Block · Arpeggio families, one list) and forScore's searchable lists agree.
-- Will build: Back · **Pattern**; a **Search patterns** field (name and both hands' figures) and **Filter**, which
-  opens a Level choice **All levels · Beginner · Intermediate · Advanced** (the button then reads the level and is
-  outlined). Then the shelves, as the app names them: **Favourites**, **Called to Play · The five ways (lesson 3)**,
-  **Called to Play · Right-hand techniques**, **Called to Play 2 · Octaves and chords (level 2)**, **Bobrova · The
-  seven types of accompaniment**, **Gorshkov · Arranging the accompaniment**, **Rhythm styles**, **Mine** last; each a
-  grouped card folded after five with **Show all n** (a search shows every match). A row: the bar as a small two-hand
-  roll (`FigureRoll`), the name over its hands line (**LH: Octave, whole note · RH: Chord on every beat**, the
-  figures' own names), the level mark (the book's stage, the app's `LevelMark` pips), **Listen** ▶ and **Favourite**
-  ♡ (the app's heart, not a star). The one playing is highlighted and bold; a tap chooses it and goes back to Song.
-  Nothing matches: **No patterns match**. Last, **Manage patterns ›** opens Practice › Accompaniment, where patterns
-  are made, renamed, hidden and arranged: the Player only chooses, listens and favourites. A pattern that cannot play
-  this song's meter or chords is left out (`fit.ts`). Drawings: `.scratch/r37/drawings/pattern-library.png`,
-  `pattern-library-filter.png`.
+- Third pass ("make more like a library and better filtering and better structure, research properly"):
+  Band-in-a-Box's StylePicker filters by genre, feel, time signature and tempo, keeps Favorites and Recently Played,
+  previews on a double-click, sorts by any column (pgmusic.com manuals, chapter 5; the 2024 MultiPicker); forScore
+  sorts by title, rating, difficulty or key and filters by rules over composer, genre and tag (forscore.co,
+  Sorting Scores, menu search and filters); flowkey filters its library by level (Beginner to Pro) and category;
+  the app's own library holds Sort (book order, name, level) and a Filter sheet (Level, Book or style) with its
+  count and removable chips (`widgets/practice-library`, `LibrarySearch`).
+- Will build: Back · **Pattern**; **Search patterns** (name and both hands' figures) and the **Sort and filter**
+  button beside it, with the number of filters on it. It opens a page, Back · **Sort and filter**: **Sort by** Book ·
+  Name · Level; **Level** All · Beginner · Intermediate · Advanced; **Book** All · Called to Play · Called to Play 2 ·
+  Bobrova · Gorshkov · Rhythm styles · Mine; **Texture** All · Block chords · Broken chords · Arpeggio · Melody ·
+  Lines and runs (what the right hand plays, Smart Pianist's Block and Arpeggio families); **Feel** All · Straight ·
+  Swing; the foot **Reset** and **Show n patterns**. Each filter on shows as a chip under the search with ×.
+- The list by Book: **Recently used** (the last three chosen, the playing one first) and **Favourites** while nothing
+  narrows, then each book's shelf as Practice names it (Called to Play · The five ways (lesson 3), … Rhythm styles,
+  Mine last), its count at the heading's end, folded after five with **Show all n**. By Name one A–Z list; by Level
+  Beginner, Intermediate, Advanced, Not graded. A row: the two-hand roll, the name over its hands line (LH: … · RH:
+  …), the level mark, **Listen** ▶, **Favourite** ♡; the playing one highlighted and bold; a tap chooses it and goes
+  back to Song. Nothing matches: **No patterns match**. Last **Manage patterns ›** to Practice › Accompaniment, where
+  patterns are made, renamed and hidden. A pattern that cannot play the song's meter or chords is left out
+  (`fit.ts`). The app's Filter sheet gains Texture and Feel, so both read alike. Drawings:
+  `.scratch/r37/drawings/pattern-library.png`, `pattern-library-filter.png`, `pattern-library-filtered.png`.
 - **No Voicing and no Swing** ("what are these swings and chords options"). Voicing (Close · Drop 2) is how far the
   chord's notes are spread, Drop 2 a jazz spacing; Swing plays pairs of 8ths long-short. Both are arranger's
   choices: each pattern carries its own spacing and feel, and the swung patterns are patterns of their own.
