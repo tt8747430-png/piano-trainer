@@ -334,5 +334,6 @@ make marketing video, not app screens, and some run large local models. The less
   first". Only what can't be undone, or reaches other people, still asks. The port is `.scratch/r38/plan/undo-and-loss.md`.
 - **A loss is shown as a loss** (owner: "i don't like your rejection"): UX Peak's loss framing is adopted, kept true:
   the learner's own things named, the way out naming its cost, never an invented countdown or scarcity.
-- **Shadows for depth** (the depth video's small shadow and inset tracks) differ from `DESIGN.md`, which parts cards
-  by surface and a 1px line and keeps shadows for what floats. Open with the owner; layering by lightness already fits.
+- **Shadows for depth: yes** (owner, 2026-11-07, "yes to shadows"). A card is a lighter surface on a darker sand
+  panel with a small layered shadow (a 1px ring at 5%, a 1–2px shadow, a soft 10px one); progress and slider tracks are
+  inset. Drawn on the Player canvas (v148); `DESIGN.md` changes when it is built.

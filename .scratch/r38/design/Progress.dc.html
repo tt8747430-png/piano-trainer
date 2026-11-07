@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Practice record</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#B4541A}a:hover{color:#8C3F12}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; overflow: hidden; background: #F3EEE7; color: #1A1612; font-family: Inter, system-ui, sans-serif; display: flex; flex-direction: column; gap: 12px; padding: 54px 16px 24px">
+  <h1 style="margin: 0 4px 2px; font-size: 28px; font-weight: 700; letter-spacing: -0.01em">Practice</h1>
+
+  <section aria-label="This week" style="flex: none; border-radius: 14px; background: #FFFFFF; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px">
+      <div style="display: flex; align-items: baseline; gap: 6px">
+        <span style="font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em">2 h 05</span>
+        <span style="font-size: 14px; color: #6B6259">this week</span>
+      </div>
+      <span style="font-size: 13px; font-weight: 600; color: #1A1612; font-variant-numeric: tabular-nums">↑ 25 min <span style="font-weight: 400; color: #6B6259">on last week</span></span>
+    </div>
+    <div style="display: grid; grid-template-columns: 24px repeat(7, minmax(0, 1fr)); gap: 6px; align-items: end; height: 120px">
+      <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: #8A8178; font-variant-numeric: tabular-nums"><span>40</span><span>20</span><span>0</span></div>
+      <sc-for list="{{days}}" as="d" hint-placeholder-count="7">
+        <div style="height: 100%; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; align-items: stretch">
+          <div style="height: {{d.h}}; background: {{d.c}}; border-radius: 3px 3px 0 0"></div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display: grid; grid-template-columns: 24px repeat(7, minmax(0, 1fr)); gap: 6px; font-size: 11px; color: #6B6259; text-align: center">
+      <span></span><sc-for list="{{days}}" as="d" hint-placeholder-count="7"><span style="font-weight: {{d.w}}">{{d.l}}</span></sc-for>
+    </div>
+    <p style="margin: 0; font-size: 13px; line-height: 1.45; color: #4A433C">Most time on <b>Für Elise</b> (48 min) and <b>Scales in G</b> (22 min). Every song, exercise and quiz counts here once.</p>
+  </section>
+
+  <section aria-label="Streak" style="flex: none; border-radius: 14px; background: #FFFFFF; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <span style="font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em">23</span>
+      <span style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 15px; font-weight: 600">days in a row</span>
+        <span style="font-size: 13px; color: #6B6259">7 more to a month</span>
+      </span>
+      <span title="Rest days" style="flex: none; display: flex; align-items: center; gap: 6px; height: 32px; padding: 0 10px; border-radius: 9999px; background: #EEF3F8; color: #2F5576; font-size: 13px; font-weight: 600">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M2 12h20M5 5l14 14M19 5 5 19"></path></svg>2 rest days
+      </span>
+    </div>
+    <div aria-label="Milestones" style="position: relative; height: 34px">
+      <div style="position: absolute; left: 6px; right: 6px; top: 15px; height: 4px; border-radius: 9999px; background: #ECE6DE; box-shadow: inset 0 1px 1px rgba(26,22,18,0.08)"></div>
+      <div style="position: absolute; left: 6px; width: 62%; top: 15px; height: 4px; border-radius: 9999px; background: #E8762F"></div>
+      <sc-for list="{{marks}}" as="m" hint-placeholder-count="4">
+        <span style="position: absolute; left: {{m.x}}; top: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 4px">
+          <span style="width: 12px; height: 12px; margin-top: 11px; border-radius: 9999px; background: {{m.c}}; box-shadow: 0 0 0 2px #FFFFFF"></span>
+        </span>
+      </sc-for>
+    </div>
+    <div style="display: flex; justify-content: space-between; font-size: 11px; color: #6B6259; font-variant-numeric: tabular-nums"><span>7</span><span>14</span><span>30</span><span>100</span></div>
+    <p style="margin: 0; font-size: 13px; line-height: 1.45; color: #4A433C">A rest day keeps the streak through a missed day. You earn one for every 7 days practised, two at most.</p>
+  </section>
+
+  <section aria-label="Group" style="flex: none; border-radius: 14px; background: #FFFFFF; overflow: hidden; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)">
+    <div style="padding: 12px 16px 6px; display: flex; justify-content: space-between; align-items: baseline">
+      <span style="font-size: 15px; font-weight: 700">Tuesday class</span>
+      <span style="font-size: 12px; color: #6B6259">this week</span>
+    </div>
+    <sc-for list="{{group}}" as="p" hint-placeholder-count="3">
+      <div style="min-height: 48px; box-sizing: border-box; padding: 6px 16px; display: flex; align-items: center; gap: 12px; border-top: 1px solid #E9E2D8">
+        <span aria-hidden="true" style="flex: none; width: 30px; height: 30px; border-radius: 9999px; background: {{p.bg}}; color: #1A1612; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700">{{p.i}}</span>
+        <span style="flex: 1; font-size: 15px; font-weight: {{p.w}}">{{p.name}}</span>
+        <span style="font-size: 14px; color: #4A433C; font-variant-numeric: tabular-nums">{{p.t}}</span>
+      </div>
+    </sc-for>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const mins = [[ 'M', 18 ], [ 'T', 32 ], [ 'W', 0 ], [ 'T', 25 ], [ 'F', 14 ], [ 'S', 36 ], [ 'S', 0 ]];
+    const days = mins.map(([l, m], i) => ({ l, h: Math.max(m / 40 * 100, m ? 4 : 1.5) + '%', c: i === 5 ? '#E8762F' : m ? '#C9BFB2' : '#ECE6DE', w: i === 5 ? 700 : 500 }));
+    const marks = [['0%', 1], ['33%', 1], ['70%', 0], ['100%', 0]].map(([x, on]) => ({ x, c: on ? '#E8762F' : '#D9D1C6' }));
+    const group = [
+      { i: 'MK', name: 'Masha', t: '2 h 40', bg: '#E9D8C4', w: 500 },
+      { i: 'You', name: 'You', t: '2 h 05', bg: '#FDE3CF', w: 700 },
+      { i: 'DL', name: 'Dmitri', t: '1 h 10', bg: '#D6DDE3', w: 500 }
+    ];
+    return { days, marks, group };
+  }
+}
+</script>
+</body>
+</html>

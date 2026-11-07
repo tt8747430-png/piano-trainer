@@ -73,7 +73,9 @@ place, before, after, why.
 
 - **Press:** the skills scale a pressed button to 0.96. `DESIGN.md`: buttons and chips change colour alone and never move;
   only the floating actions keep their press (`active:scale-96`).
-- **Depth:** the skills prefer shadows to borders. `DESIGN.md`: cards are parted by surface and a 1px line, never a shadow.
+- **Depth:** ruled 2026-11-07, "yes to shadows": cards are white on a darker sand panel with a small layered shadow
+  (`0 0 0 1px` ink at 5%, `0 1px 2px` at 6%, `0 3px 10px -4px` at 10%); tracks are inset. `DESIGN.md` still says
+  surface and line until it is built.
 - **Letter-spacing:** `baseline-ui` forbids changing it; `DESIGN.md` sets it per type role, and that stands.
 
 ## Not adopted

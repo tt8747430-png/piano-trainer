@@ -70,3 +70,16 @@ Strings in en and ru, each with its plural forms.
 2. Build rows 1–15, one commit each, with tests.
 3. Losses shown as losses.
 4. Two passes in the browser, the full suite, the build, then merge.
+
+## Drawn (2026-11-07)
+
+The design https://claude.ai/artifact/Mjgkmv51aAdGadFAP6KB9j (files in `.scratch/r38/design/`):
+
+- **Undo, not a question:** a song goes at once; the toast names it, "“Für Elise” moved to Trash", with Undo.
+- **A loss named as one:** Erase asks, in numbers ("Your 12 songs, 4 lessons and 41 days of practice go for good"),
+  "Keep them" first, "Erase 12 songs" in red; the backup sheet says "Your 12 songs live only on this phone" with
+  "Back up with an account" and "Keep on this phone only".
+- **Progress:** one practice record, a streak with milestones and earned rest days, the week in a group.
+- **Agentation:** how its toolbar would sit over a dev build. Not installed: PolyForm Shield, the owner's decision.
+
+The Player canvas v148 has the card shadows and the filter chips' counts.

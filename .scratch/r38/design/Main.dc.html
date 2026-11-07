@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Undo, not a question</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#B4541A}a:hover{color:#8C3F12}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: #F3EEE7; color: #1A1612; font-family: Inter, system-ui, sans-serif; display: flex; flex-direction: column">
+  <header style="flex: none; padding: 54px 20px 12px; display: flex; align-items: center; justify-content: space-between">
+    <h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.01em">My songs</h1>
+    <span style="font-size: 13px; color: #6B6259; font-variant-numeric: tabular-nums">{{countLabel}}</span>
+  </header>
+  <p style="margin: 0 20px 12px; font-size: 13px; line-height: 1.45; color: #6B6259">Tap the bin. The song goes at once; Undo brings it back. No “Are you sure?”.</p>
+  <div style="flex: none; margin: 0 16px; border-radius: 12px; background: #FFFFFF; overflow: hidden; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)">
+    <sc-for list="{{songs}}" as="s" hint-placeholder-count="5">
+      <div style="min-height: 64px; box-sizing: border-box; padding: 8px 6px 8px 14px; display: flex; align-items: center; gap: 12px; border-top: 1px solid #E9E2D8; margin-top: -1px">
+        <span aria-hidden="true" style="flex: none; width: 40px; height: 40px; border-radius: 8px; background: {{s.tint}}; box-shadow: inset 0 0 0 1px rgba(26,22,18,0.10)"></span>
+        <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{s.name}}</span>
+          <span style="font-size: 13px; color: #6B6259">{{s.by}}</span>
+        </span>
+        <button type="button" aria-label="Move to Trash" onClick="{{s.del}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: transparent; color: #6B6259; display: flex; align-items: center; justify-content: center">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M19 6l-1 14H6L5 6"></path></svg>
+        </button>
+      </div>
+    </sc-for>
+  </div>
+  <div style="flex: 1"></div>
+  <sc-if value="{{toastOn}}" hint-placeholder-val="{{true}}">
+    <div role="status" style="position: absolute; left: 16px; right: 16px; bottom: 34px; min-height: 52px; box-sizing: border-box; padding: 6px 6px 6px 16px; border-radius: 14px; background: #1A1612; color: #FBF8F3; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(26,22,18,0.14), 0 18px 40px -12px rgba(26,22,18,0.40)">
+      <span style="flex: 1; min-width: 0; font-size: 14px; line-height: 1.35">{{toastText}}</span>
+      <button type="button" onClick="{{undo}}" style="flex: none; height: 40px; padding: 0 14px; border: 0; border-radius: 10px; background: transparent; color: #F5A66B; font-size: 15px; font-weight: 700; font-family: inherit">Undo</button>
+    </div>
+  </sc-if>
+  <sc-if value="{{restoredOn}}" hint-placeholder-val="{{false}}">
+    <p style="position: absolute; left: 0; right: 0; bottom: 44px; margin: 0; text-align: center; font-size: 13px; color: #6B6259">Back where it was.</p>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const all = [
+      { id: 'elise', name: 'Für Elise', by: 'Beethoven · Easy', tint: '#E9D8C4' },
+      { id: 'gymno', name: 'Gymnopédie No. 1', by: 'Satie · Original', tint: '#D6DDE3' },
+      { id: 'prelude', name: 'Prelude in C', by: 'Bach · Simple', tint: '#E3DCCB' },
+      { id: 'minuet', name: 'Minuet in G', by: 'Petzold · Easy', tint: '#DCE3D6' },
+      { id: 'canon', name: 'Canon in D', by: 'Pachelbel · Simple', tint: '#E6D6D6' }
+    ];
+    const gone = this.state?.gone ?? 'elise';
+    const restored = this.state?.restored ?? false;
+    const songs = all.filter((s) => s.id !== gone).map((s) => ({ ...s, del: () => this.setState({ gone: s.id, restored: false }) }));
+    const g = all.find((s) => s.id === gone);
+    return {
+      songs,
+      countLabel: songs.length + ' songs',
+      toastOn: !!g,
+      toastText: g ? '“' + g.name + '” moved to Trash' : '',
+      undo: () => this.setState({ gone: null, restored: true }),
+      restoredOn: restored && !g
+    };
+  }
+}
+</script>
+</body>
+</html>
