@@ -265,14 +265,46 @@ the setting and why they disappear and also make the metronome customizable")
 - Will build: the showing Sheet's pill opens **Sheet**: **Layout** Page · Line; **Cursor** Off · By note · Smooth
   (default By note); **Follow the music** (on); **Your marks** (on).
 
-## Player settings still to port into the canvas homes
-| Setting (app today)                 | Home in the canvas                                   |
-| ----------------------------------- | ---------------------------------------------------- |
-| Staves and recording volumes        | Hands menu, beside each hand's volume                |
-| Accompaniment pattern and swing     | Pace, a group shown for accompaniment pieces only    |
-| Show on open (first view)           | the view's settings: "Open with this view"           |
-| Piano skin                          | app Settings, Sound and piano                        |
-| Pedalling (playback's pedal)        | removed, no setting (see The pedal above)            |
+## R37-1: what the app still has to port (audit of `main` b98aea88, 2026-11-07)
+The app today: the transport's **Pace** popover (`PaceButton`: At your own pace Wait mode · Interpret, Listen and play
+along at a speed, a Speed slider, Speed training), the bar's **Click** (`ClickButton`) and **Loop** (`LoopButton`, the
+grips done in 40d8e643), the foot's **Hands** sheet (`HandsSheet`: Hands, Play the other hand), the gear's one
+**Settings** sheet (`SettingsSheet` from `PlayerLayout` extras): Playback (Count-in Off · Audible · Silent, Pedal,
+Metronome sound and beats › the Metronome tool, click volume, Speed training step), Hands (Skin, The other hand),
+Score view (each view's fields, Cursor, Follow the music, Return to the playhead, Show on open, Annotations),
+On-screen piano (`KeyboardSettingsFields`: key size, named keys, volume, pedals, chord names, marked notes, swipe),
+Staves, Accompaniment (`PlayerSetup`: the Pattern list page, right and left hand figures, Chord size, Swing), then
+the acts (Sections, Song information, Recordings, How did I play, Print, Tuner, Voice commands, Share link,
+Export…) and Version · Transpose as foot tools.
+
+| # | Canvas ruling | App today | Port |
+| - | ------------- | --------- | ---- |
+| 1 | Practice menu, two tiles Wait · Play | Pace: Wait mode · Interpret · Listen | rename; drop `follow` (Interpret); Listen becomes Play |
+| 2 | Tempo face: meter lights, − BPM + Tap | Speed slider in % | BPM stepper and Tap, the score's meter |
+| 3 | Metronome Off · Count-in · On | Click button + Count-in Off · Audible · Silent | one three-way choice; Silent goes |
+| 4 | Metronome sound › page (Wood block · Claves · Beep, Volume) | a link to the Metronome tool, click volume | its own page in Practice, the tool's sounds |
+| 5 | Speed training | Speed training switch + step in Playback | stays as Loop's Speed up each pass |
+| 6 | Loop group: Repeats · Between repeats · Speed up each pass | grips only | build the group, shown while a loop is set |
+| 7 | No pedal setting | Playback › Pedal | remove; score marks or `autoPedal` |
+| 8 | Song gear: Arrangement (Level Beginner · Intermediate · Advanced) or Accompaniment (Pattern ›) as radio cards | Version foot tool (Original · Simple · Easy) and an Accompaniment page | one radio group in the gear; Version tool goes |
+| 9 | Pattern page: search, place chips, Sort and filter (Sort by, Level, Texture, Feel), folders, rows with roll, hands line, level, Listen, heart | a flat Listbox of patterns with its idea, From the chart, Own pattern › All patterns › | rebuild on `widgets/practice-library`'s parts; Texture and Feel added to Practice's filter too |
+| 10 | No Voicing, no Swing, no hand-figure pages | Chord size, Swing, RH and LH figure pages | remove from the Player (figures stay in Practice's pattern editor) |
+| 11 | Transpose in the Song gear | foot tool | move |
+| 12 | Hands menu: each hand's switch, Dim, volume | Hands segmented, Play the other hand; The other hand in Settings | rebuild; one home |
+| 13 | No skin tone | Hands › Skin | remove, one neutral hand |
+| 14 | Staves and their levels | Settings › Staves | into Hands, beside each hand's volume |
+| 15 | Keyboard button: Off · 3D · 2D, Angle Seat · Above, Keys Song · 61 · 76 · 88, Note names, Connect a piano ›, All piano settings › | Show the keyboard, the On-screen piano page inline | a transport button and panel; key size, pedals, volume, swipe stay on the piano's page |
+| 16 | Each view's settings from its pill (Sheet: Layout, Show chips) | Score view page with every view's fields | per-view panel |
+| 17 | No cursor or scroll settings | Cursor, Follow the music, Return to the playhead | remove; follow always, Back to the music pill |
+| 18 | Show on open dropped | Show on open switch | remove; `pt-views` opens the last view |
+| 19 | No recording settings | `sound.recording`, `recordingSync` | remove; the recording plays a little under the piano |
+| 20 | Annotations | Score view › Annotations | not in the canvas: owner's call (below) |
+| 21 | ··· acts | Sections, Song information, Recordings, How did I play, Print, Tuner, Voice, Share link, Export | the canvas gear keeps Edit score · Export; the rest stay in ··· (owner's call) |
+
+Stale lines in the rulings above, superseded later and to be read so: Song settings' "versions as tiles" and Placed's
+"Accompaniment goes in Practice" gave way to the Arrangement · Accompaniment cards (row 8).
+
+Open for the owner: keep Annotations (row 20), and which acts stay in ··· (row 21).
 
 ## Simple Pace, supersedes the three sections above (owner, 2026-11-07: "i don't like the mods titles and the tempo
 settings, also i dont like the cursor settings ... make good and simple ui")
