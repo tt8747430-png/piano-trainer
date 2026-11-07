@@ -65,11 +65,14 @@ patterns in our app, and how should they be organized like a library"; the two-a
   the app's own library holds Sort (book order, name, level) and a Filter sheet (Level, Book or style) with its
   count and removable chips (`widgets/practice-library`, `LibrarySearch`).
 - Will build: Back · **Pattern**; **Search patterns** (name and both hands' figures) and the **Sort and filter**
-  button beside it, with the number of filters on it. It opens a page, Back · **Sort and filter**: **Sort by** Book ·
-  Name · Level; **Level** All · Beginner · Intermediate · Advanced; **Book** All · Called to Play · Called to Play 2 ·
-  Bobrova · Gorshkov · Rhythm styles · Mine; **Texture** All · Block chords · Broken chords · Arpeggio · Melody ·
+  button beside it, with the number of filters on it. Under them a row of chips that scrolls sideways (owner: "i like
+  also the chips at the top to filter"), one on at a time: **All · Favourites · Recently used · Called to Play ·
+  Called to Play 2 · Bobrova · Gorshkov · Rhythm styles · Mine**, the places of the app's library tree; a chosen
+  book shows its shelves unfolded. The button opens a page, Back · **Sort and filter**: **Sort by** Book · Name ·
+  Level; **Level** All · Beginner · Intermediate · Advanced; **Texture** All · Block chords · Broken chords · Arpeggio · Melody ·
   Lines and runs (what the right hand plays, Smart Pianist's Block and Arpeggio families); **Feel** All · Straight ·
-  Swing; the foot **Reset** and **Show n patterns**. Each filter on shows as a chip under the search with ×.
+  Swing; the foot **Reset** (the place chip stays) and **Show n patterns**. Each filter on shows as a chip under the
+  place chips with ×. The book is chosen only by its chip, never in the page too.
 - The list by Book: **Recently used** (the last three chosen, the playing one first) and **Favourites** while nothing
   narrows, then each book's shelf as Practice names it (Called to Play · The five ways (lesson 3), … Rhythm styles,
   Mine last), its count at the heading's end, folded after five with **Show all n**. By Name one A–Z list; by Level
