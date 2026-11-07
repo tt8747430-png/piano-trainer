@@ -97,8 +97,8 @@ owner's, typos fixed.
   - The transport's menu is Practice, never Pace. It holds Wait · Play, the metronome, the accompaniment (Pattern,
     Voicing, Swing) and the loop. A song's recording has no settings anywhere in the Player: it
     plays along, and a wrong start is fixed in the content.
-  - The Song gear starts with As written · From the chords, one cancelling the other: versions under the first,
-    pattern cards (a little two-hand roll each) under the second. No Voicing or Swing; the accompaniment is not in
+  - The Song gear starts with one list, Easy · Medium · Original · Accompaniment from the chords, one checked;
+    Pattern › (cards with a two-hand roll) only while the accompaniment is. A switch over version tiles was rejected. No Voicing or Swing; the accompaniment is not in
     Practice.
   - The metronome is Flat's: one Off · Count-in · On choice under the tempo, and Metronome sound › opens a page
     (sound list with a check, Volume, Back). A choice with its own list opens a page, as Flat's Playback options do.

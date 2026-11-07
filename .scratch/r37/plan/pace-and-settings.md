@@ -32,13 +32,14 @@ then "remove it"). Playback pedals as the score marks it, or by `autoPedal` wher
 pedal (MIDI or the bar's Sustain) always sounds. The score shows its Ped. marks as engraved. (Canvas v129 put a Pedal
 row back by mistake; v130 removed it.)
 
-**What you play, As written or From the chords** (owner, 2026-11-07: "the user must know that it either has the
-score as written or the accompaniment and one cancels another"). The Song gear opens with one two-way switch,
-**As written · From the chords**, a segmented control so choosing one plainly turns the other off. As written shows
-the versions (Easy · Medium · Original); From the chords shows the patterns as cards, two a row, each a little
-two-hand roll of its bar (right hand above in its colour, left below) and its name: Bass + chords, Broken chords,
-Chord pulse, Arpeggio, Dotted bass. The accompaniment leaves Practice: it is what you play, not how you practise.
-Shown only for a song that has both a score and chord symbols; a chord chart alone has no As written.
+**What you play: one list, the accompaniment one of its choices** (owner, 2026-11-07: "one cancels another"; the
+two-way switch over version tiles of v137: "i don't like it"). The Song gear opens with one list, a check on the one
+played: Easy · Medium · Original · **Accompaniment from the chords** (Flat's Metronome list). Choosing the
+accompaniment unchecks the version, and back. Only while it is checked, **Pattern ›** shows the pattern's name and
+opens its page (Back): the patterns as cards, two a row, each a little two-hand roll of its bar and its name (Bass +
+chords, Broken chords, Chord pulse, Arpeggio, Dotted bass); a choice closes back to Song. The accompaniment is not in
+Practice. The accompaniment row shows only for a song with chord symbols. Drawn too (owner to choose): the same four
+as tiles, Easy · Medium · Original · Chords (`.scratch/r37/drawings/song-B-tiles.png`).
 - **No Voicing and no Swing** ("what are these swings and chords options"). Voicing (Close · Drop 2) is how far the
   chord's notes are spread, Drop 2 a jazz spacing; Swing plays pairs of 8ths long-short. Both are arranger's
   choices: each pattern carries its own spacing and feel, and the swung patterns are patterns of their own.
