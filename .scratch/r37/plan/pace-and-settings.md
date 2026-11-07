@@ -216,3 +216,22 @@ still don't like the metronome settings")
      metronome is on.
   5. **Sound**: Click · Beep · Drum. 6. **Volume**.
 - Gone: the Tempo slider and the "Accent the first beat" switch, which the Beats squares replace.
+
+## Metronome by relevance, its beats from the score (owner, 2026-11-07: "i don't like how the time signature or
+beats are chosen and the sound and the count in and how are they ordered for the relevance. research more")
+- Research:
+  - Flat's metronome is one control by the Play button with three modes: **Count-in** (it plays only before
+    playback, Flat's default), **Always on** and **Off**.
+  - MuseScore's count-in plays one full bar of the time signature where playback starts, filling a pickup bar.
+  - Score players take the beats from the notation; none asks the learner for a meter.
+  - The sound is a preference that is set once.
+- Ruling: in the Player the meter and its accent come from the score (beat 1 accented, the bar's own beats), so
+  nothing is chosen. Count-in and the metronome are one control with three states. The order follows how often each
+  is touched: tempo, then the metronome's mode, then volume, then sound.
+- Will build, Pace after the Wait · Play tiles, one group:
+  1. **Tempo**: − · the BPM large · + · Tap (it works in Wait).
+  2. **Metronome**: Off · **Count-in** (one bar before playing, the default) · Always (dimmed in Wait).
+  3. **Volume** (dimmed when Off or in Wait).
+  4. **Metronome sound ›**, a link row to its one home, the Metronome tool's settings (Click · Beep · Drum).
+- Gone from the Player: the Beats squares, the Count-in bars choice, the Sound choice, the separate on/off switch.
+  Before each repeat of a loop, the count-in is still the loop's "Between repeats: Count-in".
