@@ -31,3 +31,12 @@
 - Will build (owner, "remove it"): no pedal setting at all. Playback always pedals as the score marks it, and where
   the score has no marks, as `autoPedal` adds (`withPedal` loses its choice). The learner's own pedal (MIDI CC64, or the bar's
   Sustain held or latched) always sounds and is never graded. Ped. marks show on the score as engraved.
+
+## The song's versions (owner, 2026-11-07: "make the song versions more understandable … why is it so important")
+- Today: Version Original · Simple · Easy (`arrangePiece`): Original the chords as written; Simple each chord its
+  plain triad (`simplifyChart`); Easy the tune over each chord's root (`easyChart`). "Simple" and "Easy" read alike,
+  and the order runs hardest first.
+- Why it matters: the same song at the learner's level (flowkey's Beginner · Intermediate · Pro arrangements,
+  Chordify's Simplify).
+- Will build: **Difficulty**: Easy · Medium · Original, easiest first, and one line for the one chosen: "The tune,
+  over one bass note per chord" · "The whole song, with plain chords" · "The whole song, as written".
