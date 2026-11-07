@@ -92,6 +92,13 @@ examples and research more")
 - Will build: Pace in two groups with headers, no other text:
   - **At your own pace:** **Wait for me** (`wait`: the music stops until the right notes), **Follow me** (`follow`: the
     music takes the learner's tempo).
-  - **With the music:** **Play along** (`listen`: the music plays at the speed set), and only under it Speed · Count-in
-    · Metronome.
+  - **With the music:** **Play along** (`listen`: the music plays at the speed set).
   - The transport's Pace button names the mode the same way. Internal ids stay.
+
+## Tempo for every mode that moves (owner, 2026-11-07: "make more understandable options, why only the play along has
+these settings")
+- Today: Speed · Count-in · Metronome showed only under Play along, though Follow me runs at a tempo too: it starts at
+  the speed set and follows the learner within 40–200 % of it (`followTempo`).
+- Will build: a **Tempo** group after the modes, for Follow me and Play along: **Speed** (Follow me: **Starting
+  speed**), **Count-in**, **Metronome** (in Follow me it ticks at the learner's tempo as it follows). Wait for me has no
+  tempo: nothing moves until the learner plays, so the group is not shown.
