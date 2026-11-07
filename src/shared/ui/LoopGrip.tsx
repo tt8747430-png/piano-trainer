@@ -94,7 +94,7 @@ export function LoopGrip({
       <span aria-hidden className="h-full w-1 rounded-pill bg-ring" />
       <span
         aria-hidden
-        className="absolute top-1/2 left-1/2 flex h-10 max-h-full w-5 -translate-1/2 items-center justify-center rounded-control bg-card text-ring shadow-sm ring-1 ring-foreground/10 transition-transform duration-200 ease-out group-hover:scale-110 group-focus-visible:ring-2 group-focus-visible:ring-ring"
+        className="absolute top-1/2 left-1/2 flex h-10 max-h-full w-5 -translate-1/2 items-center justify-center rounded-control bg-card text-ring shadow-sm ring-1 ring-foreground/10 transition-transform duration-200 ease-out group-hover:scale-110"
       >
         <Chevron className="size-4" strokeWidth={3} />
       </span>

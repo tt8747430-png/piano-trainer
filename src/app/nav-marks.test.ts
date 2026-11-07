@@ -20,6 +20,8 @@ const ALLOWED = [
   'pages/lesson/ui/LessonLayout.tsx',
   // The Streak calendar's month back and on.
   'widgets/practice-days/ui/PracticeCalendar.tsx',
+  // The loop's grips, ‹ at its start and › at its end, which move the loop.
+  'shared/ui/LoopGrip.tsx',
 ]
 
 function sources(dir: string): string[] {
