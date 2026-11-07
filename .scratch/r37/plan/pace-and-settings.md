@@ -46,6 +46,23 @@ accompaniment", "use professional names", "one cancels another"; v137's switch a
   Arrangement, a pattern or the Accompaniment's radio picks the Accompaniment. Each keeps its own choice while the
   other plays. The Accompaniment card shows only for a song with chord symbols; a chord chart alone has only it.
   Drawings: `.scratch/r37/drawings/song-arrangement.png`, `song-accompaniment.png`, `song-pattern-page.png`.
+**The Pattern page is the app's accompaniment library** (owner: "from where are they taken, like from our own
+patterns in our app, and how should they be organized like a library"; the two-a-row cards were rejected).
+- Source: the app's own patterns, one implementation with Practice › Accompaniment: `entities/pattern` (53 built-in
+  patterns in six groups from four books, credited, and Rhythm styles; `pt-patterns` keeps the learner's
+  favourites, hidden and own patterns) laid out by `shelves.ts` (Favourites, Yours, each built-in group, Hidden).
+- References: Band-in-a-Box's StylePicker (favourites, a genre/feel filter, a double-click preview; pgmusic.com
+  manuals), Yamaha arranger keyboards' style list (styles under family headings, a Favourites family), Logic Pro's
+  Keyboard Session Player (Block, Broken, Arpeggiated styles with presets, user presets saved; support.apple.com).
+- Will build: Back · **Pattern**; filter chips **All · Favourites · Yours · Methods · Styles** (Methods the books'
+  groups, Styles the Rhythm styles); then the shelves, each under its heading with its book's credit (The seven types
+  of accompaniment · Bobrova; The five ways (lesson 3) · Bobrova, Called to play; Rhythm styles). A row: the
+  pattern's bar as a small two-hand roll (the app's `FigureRoll`, right hand above in its colour, left below), its
+  name, **Listen** (plays the bar), **Favourite** (a star; Favourites lists them first). The one playing is
+  highlighted and bold; a tap chooses it and goes back to Song. Last, **Manage patterns ›** opens Practice ›
+  Accompaniment, where patterns are made, renamed, hidden and arranged: the Player only chooses, listens and stars.
+  A pattern that cannot play this song's meter or chords is left out (`fit.ts`). Drawing:
+  `.scratch/r37/drawings/pattern-library.png`.
 - **No Voicing and no Swing** ("what are these swings and chords options"). Voicing (Close · Drop 2) is how far the
   chord's notes are spread, Drop 2 a jazz spacing; Swing plays pairs of 8ths long-short. Both are arranger's
   choices: each pattern carries its own spacing and feel, and the swung patterns are patterns of their own.

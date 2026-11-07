@@ -101,6 +101,9 @@ owner's, typos fixed.
     (Pattern ›). Versions and accompaniment are separate, one plays. Rejected: "As written", a switch over version
     tiles, one mixed list. Names are the trade's: flowkey's levels, Smart Pianist's Accompaniment and Pattern. No Voicing or Swing; the accompaniment is not in
     Practice.
+  - The Player's Pattern page is the app's own accompaniment library: chips All · Favourites · Yours · Methods ·
+    Styles, shelves by book (credited), rows with a two-hand roll, Listen and a star, Manage patterns › to Practice.
+    Never cards two a row.
   - The metronome is Flat's: one Off · Count-in · On choice under the tempo, and Metronome sound › opens a page
     (sound list with a check, Volume, Back). A choice with its own list opens a page, as Flat's Playback options do.
   - No cursor or scrolling settings at all, neither a switch nor choices (rejected twice). The cursor moves by
