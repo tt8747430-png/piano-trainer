@@ -260,3 +260,18 @@ another feature or how it shouldn't and how each feature relates to another")
   3. **Count-in**, a switch (on): one bar of clicks before the music starts.
   4. **Click volume**. 5. **Click sound ›**, a link to its home in the Metronome tool.
   - In a loop, **Between repeats** offers None · Count-in · Rest, and **Speed up each pass** works in both modes.
+
+## One Metronome group, sounds that work (owner, 2026-11-07: "but now the metronome sounds don't work and the names
+don't work for the other sounds")
+- Fault: Click sound was a link that led nowhere, and the canvas played one fixed tone whatever the sound and volume.
+  "Click volume" and "Click sound" also named one of the three sounds as the whole.
+- Will build: under the Wait · Play tiles, a **Metronome** group holding everything the metronome does, so the
+  header names the device and each row says when or how it sounds:
+  1. The tempo: − · BPM · + · Tap.
+  2. **While playing**, a switch (off): clicks with the music.
+  3. **Count-in**, a switch (on): one bar of clicks before the music starts.
+  4. **Sound**: Click · Beep · Drum. Choosing one plays it once.
+  5. **Volume**.
+- Both the clicks and the count-in sound with the chosen sound at the chosen volume, the first beat higher. Canvas
+  check: a choice plays its sound (square, sine, noise), and while playing Drum is heard for the count-in and every
+  beat.
