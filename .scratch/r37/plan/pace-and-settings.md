@@ -309,9 +309,11 @@ my recordings, my how did i do, voice commands"): the Song gear ends with **Sect
 **Print ›** · **Share link ›** · **Export ›**. R37-1 removes from the Player, code and strings with them: My
 recordings (`RecordingsSheet`, the Player's takes), How did I play (`FeedbackCard`, the take's verdicts on the score)
 and Voice commands (`useVoiceCommands`, its act), with no home elsewhere. The score editor's Record (`record-take`) is
-another thing and stays. Recommended, drawn, for the owner to confirm: **Annotations** become a Sheet Show chip,
-**Your annotations**, on by default (row 20); **Song information** goes (the score's title block and the song's page
-carry it); **Tuner** goes from the Player (its home is the Tools menu). Keyboard shortcuts stay on `?`. Drawings:
+another thing and stays. **Annotations** become a Sheet Show chip, **Your annotations**, on by default (row 20;
+owner: "ok"). Still for the owner: **Song information** goes (the score's title block and the song's page carry it);
+**Tuner**: the Tools menu (`widgets/tools-sheet`, the bar's Metronome · Tuner · Chord finder · Circle of fifths) is on
+Chords, Scales, Intervals, the Chord player and a lesson, not the Player, so without the Player's Tuner it is reached
+from Practice › Tools or those pages. Keyboard shortcuts stay on `?`. Drawings:
 `.scratch/r37/drawings/song-settings-acts.png`, `sheet-show-annotations.png`.
 
 ## Simple Pace, supersedes the three sections above (owner, 2026-11-07: "i don't like the mods titles and the tempo
