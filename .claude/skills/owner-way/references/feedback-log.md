@@ -95,8 +95,8 @@ owner's, typos fixed.
   - Modes are Wait and Play only, no Follow, no group titles.
   - Sheet settings have no Your marks switch: the learner's own marks always show, and are removed by deleting them.
   - The transport's menu is Practice, never Pace. It holds Wait · Play, the metronome, the accompaniment (Pattern,
-    Voicing, Swing) and the loop. The recording (Play, Volume, Sync) is a group in the Song gear,
-    only for a song with a recording, never in the Hands menu.
+    Voicing, Swing) and the loop. A song's recording has no settings anywhere in the Player: it
+    plays along, and a wrong start is fixed in the content.
   - No cursor or scrolling settings at all, neither a switch nor choices (rejected twice). The cursor moves by
     note and the score scrolls when needed; a scroll by hand shows a Back to the music pill.
   - No ask-on-open, no skin tone (one neutral hand), no resume-following setting.

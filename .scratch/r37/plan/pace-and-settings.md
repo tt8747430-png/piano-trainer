@@ -36,9 +36,12 @@ pedal (MIDI or the bar's Sustain) always sounds. The score shows its Ped. marks 
 row back by mistake; v130 removed it.)
 
 **Song settings (the gear):** versions as tiles like the modes, Easy · Medium · Original, easiest first ("make the
-versions switch like the mods switch"), no "Difficulty" label and no explanation line; Transpose; **Recording**, only for a song with its own recording: Play the recording (a switch),
-Volume, Sync (− 0 ms +, 10 ms a step, ±500 ms: the app's `RECORDING_SYNC`); Edit score · Export. The recording
-belongs to the song, not to a hand, so it is not in the Hands menu (owner: "i dont like the recording volume").
+versions switch like the mods switch"), no "Difficulty" label and no explanation line; Transpose; Edit score · Export. **No recording settings** (owner: "how are they relevant to our
+app?"). Only built-in songs carry a recording (today one, Gorshkov's Romashki, ADR 0034): it plays along in Play,
+stretched to the tempo and shifted with Transpose, a little under the piano, like the backing in flowkey or Simply
+Piano, with no switch, volume or Sync. Sync only made up for a start measured by hand: the recording and the notes
+leave through the same audio clock, so a device can't move one against the other; a wrong start is the content's to
+fix, measured again before it ships. `sound.recording` and `recordingSync` go in R37-1.
 
 **Keyboard** (its own transport button): tiles Off · 3D · 2D; 3D Angle Seat · Above; for both Keys Song · 61 · 76 · 88
 and Note names. No Show hands (one home for a hand: the Hands menu). No grey shading of unused keys, no tab for notes
@@ -67,9 +70,7 @@ pages: **Connect a piano ›** and **All piano settings ›** (key size, pedals,
   bar button still shows the mode itself (Wait or Play), so the word Practice is only the menu's title.
 - **Accompaniment** goes in Practice, after the metronome, for a song played from its chords: Pattern (a row with the
   pattern's name, opening the pattern list), Voicing (Close · Drop 2), Swing (Straight · Light · Medium · Hard).
-- **Recording volume is kept**, only for a song with its own recording: a Recording group (Play, Volume, Sync) in the
-  Song gear (moved there from the Hands menu, see above). Without it the learner can't hear the piano over the take,
-  the mix Soundslice gives between its recording and its synth.
+- **Recording: no settings** (later ruling, see Song settings above).
 - **Ask which view on open: dropped** ("ok"). The Player opens the view used last (`pt-views`).
 - **Hands skin tone: dropped** ("do we need this"). The 3D hands are a guide to where the fingers go, not a portrait of
   the learner: they are drawn in one neutral, stylised tone, as Meta Quest's default hands are, so no choice is
