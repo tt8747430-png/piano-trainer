@@ -134,3 +134,21 @@ the setting and why they disappear and also make the metronome customizable")
 | Show on open (first view)           | the view's settings: "Open with this view"           |
 | Piano skin                          | app Settings, Sound and piano                        |
 | Pedalling marks                     | dropped: the score's own pedal marks show            |
+
+## Simple Pace, supersedes the three sections above (owner, 2026-11-07: "i don't like the mods titles and the tempo
+settings, also i dont like the cursor settings ... make good and simple ui")
+- Research: flowkey offers Wait mode and three speeds, and that is all. Soundslice keeps speed on the transport and
+  puts count-in and its other metronome options inside the metronome's own menu; speeding up a little each pass
+  ("speed training") belongs to the loop. None of these apps lets the learner choose a cursor style.
+- Will build, Pace:
+  - **Mode:** three tiles with an icon and one word each: **Wait** (`wait`), **Follow** (`follow`), **In time**
+    (`listen`). No group headers. The transport's Pace button shows the same word, plus the speed when it is not 100 %.
+  - One group: **Speed**, a slider from 40 to 120 % in steps of 5 with its value; **Count-in**, a switch;
+    **Metronome**, a row showing On or Off that opens its own page. In Wait, Count-in and Metronome are dimmed.
+  - **Loop bars a–b** (only while a loop is set): Repeats, Between repeats, and **Speed up each pass**, a switch
+    adding 5 % a pass, dimmed outside In time.
+  - **Metronome page** (Back to Pace): the Metronome switch, then Sound (Click · Beep · Drum), Accents (a dot per beat),
+    Subdivision (Off · 8ths · Triplets · 16ths), Volume.
+- Will build, Sheet: Layout (Page · Line), **Scroll with the music**, Your marks. There is no Cursor setting: the
+  cursor always moves note by note.
+- Gone: the three-way Count-in (Off · Clicks · Silent), the Speed stepper, the ramp choice of +2/+5/+10 %, and Cursor.
