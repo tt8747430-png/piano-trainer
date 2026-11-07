@@ -311,3 +311,9 @@ sheets and not for recording")
   (forScore keeps the score's own tempo). The face's beat lights are the metronome seen, the switch the metronome
   heard. Count-in stays Off · 1 bar · 2 bars (Soundslice, forScore). Sound stays Wood block · Claves · Beep. forScore
   plays a tick and a tock, which the learner can replace. Which sounds the other players offer was not found.
+
+## Versions chosen like the modes (owner, 2026-11-07: "make the versions switch like the mods switch")
+- Will build: the song's versions in Settings are the same tile control as Pace's Wait · Play: three tiles, each an
+  icon and a word, **Easy** (one bar), **Medium** (two bars), **Original** (three bars), the chosen one outlined.
+  There is no "Difficulty" label, because the tiles say it. One component serves both (`tiles`). Transpose follows in
+  its own group.
