@@ -22,3 +22,12 @@
 - **Settings:** Song (Version · Transpose · Pedalling) first, then Keyboard (Keys Off · 3D · 2D, then only what that
   kind uses; Skin tone only while hands show), then Edit score · Export. The Volume row goes: the device's volume,
   and each hand's in Hands.
+
+## The pedal (owner, 2026-11-07: "what is the purpose of this pedalling thing it is very weird")
+- Today: Settings › Pedalling As marked · Off · Auto chose how *playback* uses the sustain pedal (`withPedal`):
+  the score's Ped. marks, none, or `autoPedal`'s. A learner can't tell the three apart.
+- Research: Synthesia, flowkey, Skoove, Simply Piano expose no pedal setting in their players; a connected MIDI
+  keyboard's pedal simply sustains (Synthesia 0.7.1). Soundslice shows Ped. marks but its synth ignores them.
+- Will build: one switch, **Sustain pedal** (on): playback pedals as the score marks it, and where the score has no
+  marks, as `autoPedal` adds; off, every note stops when it ends. The learner's own pedal (MIDI CC64, or the bar's
+  Sustain held or latched) always sounds and is never graded. Ped. marks show on the score as engraved.
