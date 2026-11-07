@@ -32,14 +32,20 @@ then "remove it"). Playback pedals as the score marks it, or by `autoPedal` wher
 pedal (MIDI or the bar's Sustain) always sounds. The score shows its Ped. marks as engraved. (Canvas v129 put a Pedal
 row back by mistake; v130 removed it.)
 
-**What you play: one list, the accompaniment one of its choices** (owner, 2026-11-07: "one cancels another"; the
-two-way switch over version tiles of v137: "i don't like it"). The Song gear opens with one list, a check on the one
-played: Easy · Medium · Original · **Accompaniment from the chords** (Flat's Metronome list). Choosing the
-accompaniment unchecks the version, and back. Only while it is checked, **Pattern ›** shows the pattern's name and
-opens its page (Back): the patterns as cards, two a row, each a little two-hand roll of its bar and its name (Bass +
-chords, Broken chords, Chord pulse, Arpeggio, Dotted bass); a choice closes back to Song. The accompaniment is not in
-Practice. The accompaniment row shows only for a song with chord symbols. Drawn too (owner to choose): the same four
-as tiles, Easy · Medium · Original · Chords (`.scratch/r37/drawings/song-B-tiles.png`).
+**What you play: Arrangement or Accompaniment** (owner, 2026-11-07: "the songs versions should be separate from the
+accompaniment", "use professional names", "one cancels another"; v137's switch and v138's single list rejected).
+- References: flowkey sells each song in arrangements by level, Beginner · Intermediate · Advanced · Pro
+  (flowkey's magazine); Playground Sessions in Rookie · Intermediate · Advanced (its blog); Yamaha's Smart Pianist
+  builds a piano accompaniment from a song's chords and picks it under Song Setting › Arrangement › Accompaniment
+  Score Pattern, its patterns grouped Block (Basic, 8Beat, 16Beat) and Arpeggio (Easy Arpeggio, 8Beat Arpeggio)
+  (manual.yamaha.com, sandsoftwaresound.net).
+- Will build: the Song gear holds two cards, a radio group: **Arrangement** with **Level** Beginner · Intermediate ·
+  Advanced (our easy · simple · original; Advanced is the piece as composed), and **Accompaniment** with **Pattern ›**
+  (its name; the page of pattern cards, each a little two-hand roll: Bass and chords, Broken chords, Block chords,
+  Arpeggio, Dotted bass). The card played has its radio filled and an orange outline; choosing a level picks the
+  Arrangement, a pattern or the Accompaniment's radio picks the Accompaniment. Each keeps its own choice while the
+  other plays. The Accompaniment card shows only for a song with chord symbols; a chord chart alone has only it.
+  Drawings: `.scratch/r37/drawings/song-arrangement.png`, `song-accompaniment.png`, `song-pattern-page.png`.
 - **No Voicing and no Swing** ("what are these swings and chords options"). Voicing (Close · Drop 2) is how far the
   chord's notes are spread, Drop 2 a jazz spacing; Swing plays pairs of 8ths long-short. Both are arranger's
   choices: each pattern carries its own spacing and feel, and the swung patterns are patterns of their own.
