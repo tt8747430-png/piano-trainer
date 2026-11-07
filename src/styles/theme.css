@@ -705,7 +705,7 @@
     animation-delay: 130ms;
   }
   &[data-closing] {
-    animation: dial-card-out 120ms ease-in both;
+    animation: dial-card-out 120ms var(--ease-out) both;
   }
   &[data-closing] > li {
     animation: none;
