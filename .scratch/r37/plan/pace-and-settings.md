@@ -52,6 +52,13 @@ the bottom as the most right button with proper icon")
 is most relevant")
 - Will build: the choice of keyboard as three picture tiles, **Off · 3D · 2D** (Chordify's "Pick your view"), the
   chosen one outlined in orange; the panel's title names it, so no "Keys" label. Then only what changes that one:
-  3D **Angle** Seat · Above, **Show hands**; 2D **Note names**, **Range** Song · All 88.
+  3D **Angle** Seat · Above; 2D **Note names**, **Range** Song · All 88.
 - Goes: **Finger numbers** (the standing ruling: no finger numbers on or under the keys); **Skin tone** to the app's
   Settings (set once, app-wide appearance).
+
+## One home for a hand (owner, 2026-11-07: "I can disable the hand in the keyboard settings and also in the hands
+settings right or left")
+- Today: Keyboard › **Show hands** hid both 3D hands; Hands › a hand's switch takes that hand off the score, the keys,
+  the sound and the 3D hand. Two controls over the same hands.
+- Will build: **Show hands** goes. The 3D hands follow the Hands panel alone: an enabled hand is drawn, a dimmed hand
+  fades, a switched-off hand is gone (Flowkey and Synthesia set hands in one place). Keys without hands is 2D.
