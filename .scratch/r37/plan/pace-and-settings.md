@@ -46,8 +46,10 @@ past the keys, no finger numbers on or under the keys. Skin tone goes to app Set
 
 **Views:** a tap on the showing view's pill opens its settings; each view has one.
 - **Sheet:** Layout Page · Line; **Show** chips Chord symbols · Chord positions · Lyrics · Finger numbers · Note
-  names (the app's own names, ADR 0115); Scroll with the music; Your marks. No Cursor setting: the cursor moves by
-  note ("i dont like the cursor settings").
+  names (the app's own names, ADR 0115); Scroll with the music. No Cursor setting: the cursor moves by
+  note ("i dont like the cursor settings"). No Your marks switch (owner, "do we need this"): the learner's own
+  marks always show, as in forScore and MuseScore, where annotations are part of the page; one is hidden by deleting
+  it in Edit, and `scoreView.annotations` goes.
 
 **Still to place, proposals awaiting the owner:**
 
@@ -208,7 +210,7 @@ settings, also i dont like the cursor settings ... make good and simple ui")
     adding 5 % a pass, dimmed outside In time.
   - **Metronome page** (Back to Pace): the Metronome switch, then Sound (Click · Beep · Drum), Accents (a dot per beat),
     Subdivision (Off · 8ths · Triplets · 16ths), Volume.
-- Will build, Sheet: Layout (Page · Line), **Scroll with the music**, Your marks. There is no Cursor setting: the
+- Will build, Sheet: Layout (Page · Line), **Scroll with the music**. (Your marks later removed, see the rulings.) There is no Cursor setting: the
   cursor always moves note by note.
 - Gone: the three-way Count-in (Off · Clicks · Silent), the Speed stepper, the ramp choice of +2/+5/+10 %, and Cursor.
 
