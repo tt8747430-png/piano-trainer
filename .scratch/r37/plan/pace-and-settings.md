@@ -36,18 +36,24 @@ pedal (MIDI or the bar's Sustain) always sounds. The score shows its Ped. marks 
 row back by mistake; v130 removed it.)
 
 **Song settings (the gear):** versions as tiles like the modes, Easy · Medium · Original, easiest first ("make the
-versions switch like the mods switch"), no "Difficulty" label and no explanation line; Transpose; Edit score · Export.
+versions switch like the mods switch"), no "Difficulty" label and no explanation line; Transpose; **Recording**, only for a song with its own recording: Play the recording (a switch),
+Volume, Sync (− 0 ms +, 10 ms a step, ±500 ms: the app's `RECORDING_SYNC`); Edit score · Export. The recording
+belongs to the song, not to a hand, so it is not in the Hands menu (owner: "i dont like the recording volume").
 
 **Keyboard** (its own transport button): tiles Off · 3D · 2D; 3D Angle Seat · Above; for both Keys Song · 61 · 76 · 88
 and Note names. No Show hands (one home for a hand: the Hands menu). No grey shading of unused keys, no tab for notes
-past the keys, no finger numbers on or under the keys. Skin tone goes to app Settings.
+past the keys, no finger numbers on or under the keys. No skin tone (one neutral hand). Last, links to the piano's own
+pages: **Connect a piano ›** and **All piano settings ›** (key size, pedals, volume, MIDI stay in their one home).
 
 **Hands menu:** each hand's switch, Dim, and volume; a switched-off hand is off the score, keys, sound and 3D hand.
 
 **Views:** a tap on the showing view's pill opens its settings; each view has one.
 - **Sheet:** Layout Page · Line; **Show** chips Chord symbols · Chord positions · Lyrics · Finger numbers · Note
-  names (the app's own names, ADR 0115); Scroll with the music. No Cursor setting: the cursor moves by
-  note ("i dont like the cursor settings"). No Your marks switch (owner, "do we need this"): the learner's own
+  names (the app's own names, ADR 0115). Then **While playing**: **Cursor** Smooth · By note · Off (the app's
+  `playback.cursor` continuous · beats · none) and **Follow** Scroll · Page turn · Off (Page turn puts the next system
+  at the top at once, as forScore turns a page; Scroll glides; Off leaves the score where you put it). The cursor
+  setting is back ("no cursor settings" was a complaint), as two clear choices in place of the old switch "Scroll
+  with the music" ("i don't like how the scroll with music is made"). No Your marks switch (owner, "do we need this"): the learner's own
   marks always show, as in forScore and MuseScore, where annotations are part of the page; one is hidden by deleting
   it in Edit, and `scoreView.annotations` goes.
 
@@ -57,9 +63,9 @@ past the keys, no finger numbers on or under the keys. Skin tone goes to app Set
   bar button still shows the mode itself (Wait or Play), so the word Practice is only the menu's title.
 - **Accompaniment** goes in Practice, after the metronome, for a song played from its chords: Pattern (a row with the
   pattern's name, opening the pattern list), Voicing (Close · Drop 2), Swing (Straight · Light · Medium · Hard).
-- **Recording volume is kept**, only for a song with its own recording: one Recording row with a volume slider in the
-  Hands menu, under the two hands. Without it the learner can't hear the piano over the take, the mix Soundslice
-  gives between its recording and its synth.
+- **Recording volume is kept**, only for a song with its own recording: a Recording group (Play, Volume, Sync) in the
+  Song gear (moved there from the Hands menu, see above). Without it the learner can't hear the piano over the take,
+  the mix Soundslice gives between its recording and its synth.
 - **Ask which view on open: dropped** ("ok"). The Player opens the view used last (`pt-views`).
 - **Hands skin tone: dropped** ("do we need this"). The 3D hands are a guide to where the fingers go, not a portrait of
   the learner: they are drawn in one neutral, stylised tone, as Meta Quest's default hands are, so no choice is

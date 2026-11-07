@@ -95,7 +95,10 @@ owner's, typos fixed.
   - Modes are Wait and Play only, no Follow, no group titles.
   - Sheet settings have no Your marks switch: the learner's own marks always show, and are removed by deleting them.
   - The transport's menu is Practice, never Pace. It holds Wait · Play, the metronome, the accompaniment (Pattern,
-    Voicing, Swing) and the loop. Recording volume is a row in the Hands menu, only for a song with a recording.
+    Voicing, Swing) and the loop. The recording (Play, Volume, Sync) is a group in the Song gear,
+    only for a song with a recording, never in the Hands menu.
+  - The Sheet's While playing: Cursor Smooth · By note · Off and Follow Scroll · Page turn · Off, never a lone
+    "Scroll with the music" switch and never no cursor setting at all.
   - No ask-on-open, no skin tone (one neutral hand), no resume-following setting.
   - The tempo belongs to the metronome, in BPM with − + Tap and its marking, Score tempo to go back.
   - Play metronome and Count-in (bars) are plain controls. One setting never disables another.
