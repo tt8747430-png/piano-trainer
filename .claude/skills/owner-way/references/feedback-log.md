@@ -80,7 +80,8 @@ owner's, typos fixed.
   At the end of the song only, not after a loop ("song only").
 - **No Song information and no Song page row in the Player** ("no song information", "no song page in the settings").
 - **The first settings stand out** ("the first two three settings should be more distinctive"): the song's settings
-  are cards; its acts a quiet row of icon buttons under a hairline.
+  are cards; its acts a quiet list under More, rows with a leading icon. Never a row of icon buttons in a drawer: "it
+  feels like a bottom bar and not like settings drawer".
 - **Settings a learner understands, ordered by what matters to them;** the sheet's View settings usable; nothing reserves
   a band above the keyboard, nor a tip; proper pedals, not a lever at the keys' corner (piano sites as the reference);
   the Player smooth with many notes (the Fantaisie hung). Build the approved mockup whole, "not only half" (2026-11-05).

@@ -143,9 +143,11 @@ The song's page still gains Tuning.
 
 **The song's settings stand apart from its acts** (owner, 2026-11-07: "the first two three settings should be more
 distinctive than the other ones"): Arrangement · Accompaniment (radio cards) and **Transpose** (a card, its label
-bold) are white cards with shadows; under a hairline, the acts are one quiet row of five icon buttons, icon over a
-12px label, no card: **Sections · Edit score · Print · Share link · Export**. The eye lands on what changes the music;
-the acts read as tools. Canvas v150; drawings `song-settings-acts.png`, `song-settings-acts-laptop.png`.
+bold) are white cards with shadows. The acts follow under the caption **More** as a quiet list: rows with a leading
+icon and ›, on the drawer's sand, parted by hairlines, no card and no shadow: **Sections · Edit score · Print · Share
+link · Export**. (v150's single row of icon buttons was rejected, 2026-11-07: "i like the icons, but now it feels like a
+bottom bar and not like settings drawer".) Canvas v151; drawings `song-settings-acts.png`,
+`song-settings-acts-laptop.png`.
 
 **Placed (owner, 2026-11-07, on the five proposals):**
 - **Practice, not Pace** ("i don't like that it is called pace"): the transport's menu is titled Practice, the

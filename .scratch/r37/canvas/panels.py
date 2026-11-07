@@ -109,9 +109,11 @@ ACT_ICONS = [('Sections', 'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01'),
     ('Print', 'M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z'),
     ('Share link', 'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'),
     ('Export', 'M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13')]
-# the song's settings are cards; its acts a quiet row of icon buttons under a hairline, so the eye lands on the first
-ACTS = ('<div role="group" aria-label="Song actions" style="flex: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; margin-top: 4px; padding-top: 12px; border-top: 1px solid #E2DACE">'
-    + ''.join('<button type="button" style="min-height: 60px; padding: 6px 2px; border: 0; border-radius: 12px; background: transparent; color: #4A433C; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 12px; font-weight: 500; line-height: 1.2; text-align: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="%s"></path></svg>%s</button>' % (d, n) for n, d in ACT_ICONS)
+# the song's settings are white cards with shadows; its acts a quieter list under their own heading: rows with a
+# leading icon on the drawer's sand, parted by hairlines, no card and no shadow, so they read as the drawer's, not a bar
+ACT_ROW = 'min-height: 48px; box-sizing: border-box; padding: 6px 4px 6px 6px; display: flex; align-items: center; gap: 14px; width: 100%; border: 0; border-top: 1px solid #E2DACE; background: transparent; color: #1A1612; font-size: 15px; text-align: left'
+ACTS = (caption('More') + '\n' + '<div role="group" aria-label="Song actions" style="flex: none; display: flex; flex-direction: column; margin: 0 8px; border-bottom: 1px solid #E2DACE">'
+    + ''.join('<button type="button" style="%s"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B6259" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="%s"></path></svg><span style="flex: 1">%s</span><span aria-hidden="true" style="color: #A39A90; font-size: 18px">›</span></button>' % (ACT_ROW, d, n) for n, d in ACT_ICONS)
     + '</div>')
 def bodies(segw):
     # the view's own settings: its panel, and the head of the keys' one while the keys show
