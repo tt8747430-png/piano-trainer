@@ -77,6 +77,8 @@ owner's, typos fixed.
 ## Player views and settings
 - **The end of a run says what happened and what next** (2026-11-07, the redesign skill's evidence of care): Played
   through, the score with its comparison, each bar's slips, Practise bars n–m, Play again, the next step. Drawn (v149).
+  At the end of the song only, not after a loop ("song only").
+- **No Song information in the Player** ("no song information"): the song's facts live on its page, Song page ›.
 - **Settings a learner understands, ordered by what matters to them;** the sheet's View settings usable; nothing reserves
   a band above the keyboard, nor a tip; proper pedals, not a lever at the keys' corner (piano sites as the reference);
   the Player smooth with many notes (the Fantaisie hung). Build the approved mockup whole, "not only half" (2026-11-05).
