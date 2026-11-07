@@ -106,8 +106,8 @@ owner's, typos fixed.
     Reset · Show n) with its count on the button and removable chips; folders that fold by their header (Recently
     used and Favourites open, each book closed, its groups inside, Mine's own folders), Close all / Open all; rows with roll, hands line, level, Listen, heart. Never chips by
     kind, stars or cards two a row.
-  - The Player keeps Sections, Print and Share link (owner's words); the Song gear ends Sections · My recordings,
-    then Edit score · Print · Share link · Export.
+  - The Player keeps Sections, Print and Share link; the Song gear ends Sections, then Edit score · Print · Share
+    link · Export. No My recordings, no How did I play, no Voice commands, anywhere.
   - The metronome is Flat's: one Off · Count-in · On choice under the tempo, and Metronome sound › opens a page
     (sound list with a check, Volume, Back). A choice with its own list opens a page, as Flat's Playback options do.
   - No cursor or scrolling settings at all, neither a switch nor choices (rejected twice). The cursor moves by
