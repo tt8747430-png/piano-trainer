@@ -10,22 +10,22 @@ Canvas v130, https://claude.ai/artifact/HezkVS2MXdwz7uJ14KDGgp. Each line names 
 - Practice never disables or hides one setting because of another; each works in both modes ("why it is disabled in the
   wait mode"). In Wait the metronome clicks while the music moves and stops when it waits.
 
-**The metronome**, one group under the tiles headed Metronome; the tempo belongs to it ("the tempo belongs to the
-metronome").
+**Tempo and the metronome** (owner's Flat screenshots, 2026-11-07: Playback options › Metronome is one list,
+Metronome Count-in · On · Off; each choice opens a page with a Back arrow). One group under the tiles, headed Tempo:
 1. The face: the score's meter (3/4) and one light per beat lighting in time, beat 1 larger; − · BPM large · + · Tap;
    "BPM · Andante" (the tempo marking). **Score tempo: 80 BPM** appears only when the tempo differs, to go back.
-2. **Play metronome**, a switch (MuseScore's name).
-3. **Count-in** Off · 1 bar · 2 bars.
-4. **Sound** Wood block · Claves · Beep; a choice plays itself. 5. **Volume**.
-- The meter and accents come from the score: no beat squares, no accent dots, no clicks per beat or subdivision in the
-  Player ("i don't like how the time signature or beats are chosen"; "it is not understandable what subdivision is";
-  "does this make sense?"). They stay in the Metronome tool.
-- No Speed slider and no speed %: the tempo is BPM. No modes like Off · Count-in · Always ("not understandable how the
-  metronome is enabled"). Nothing on a separate page ("make it easier to enable").
-- References come from sheet-music players (forScore, MuseScore, Soundslice, Flat, flowkey), **never recording
-  software** like Logic or Dorico's recording ("use examples for music and sheets and not for recording").
-- Names are the musician's and professional ("make professional names"); never a name that fits one choice only
-  ("the names don't work for the other sounds"); every sound must really play ("the metronome sounds don't work").
+2. **Metronome** Off · Count-in · On, one tap (Flat's three). Count-in clicks one bar before the music; On counts in
+   and keeps clicking. This replaces the Play metronome switch and the Count-in row (Off · 1 bar · 2 bars): it
+   supersedes the earlier "no modes like Off · Count-in · Always" line, since the owner brought Flat's as the model.
+3. **Metronome sound ›** shows the sound's name and opens its page (Flat's drill-in): Wood block · Claves · Beep, a
+   list with a check, each choice playing itself, then Volume; Back returns to Practice.
+- The meter and accents come from the score: no beat squares, no accent dots, no subdivision in the Player. They stay
+  in the Metronome tool. No Speed slider and no speed %: the tempo is BPM.
+- References come from sheet-music players (Flat, forScore, MuseScore, Soundslice, flowkey), never recording
+  software. Names are the musician's; every sound must really play.
+
+**Accompaniment** (for a song played from its chords): **Pattern ›** opens the pattern list (a check, Back), then
+Voicing Close · Drop 2, Swing Straight · Light · Medium · Hard.
 
 **Loop** (shown while a loop is set): Repeats · Between repeats (None · Count-in · Rest) · Speed up each pass (a
 switch, +5 % a pass).
