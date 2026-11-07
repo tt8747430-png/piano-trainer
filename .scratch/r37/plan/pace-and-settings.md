@@ -305,14 +305,17 @@ Stale lines in the rulings above, superseded later and to be read so: Song setti
 "Accompaniment goes in Practice" gave way to the Arrangement · Accompaniment cards (row 8).
 
 Ruled (owner, 2026-11-07: "i want the sections, the print, and share links to be ported. what else", then "remove
-my recordings, my how did i do, voice commands"): the Song gear ends with **Sections ›**, then **Edit score ›** ·
+my recordings, my how did i do, voice commands"): the Song gear ends with **Sections ›** · **Song page ›**, then **Edit score ›** ·
 **Print ›** · **Share link ›** · **Export ›**. R37-1 removes from the Player, code and strings with them: My
 recordings (`RecordingsSheet`, the Player's takes), How did I play (`FeedbackCard`, the take's verdicts on the score)
 and Voice commands (`useVoiceCommands`, its act), with no home elsewhere. The score editor's Record (`record-take`) is
 another thing and stays. **Annotations** become a Sheet Show chip, **Your annotations**, on by default (row 20;
 owner: "ok"). **Tuner** leaves the Player (owner: "drop from the player"); it stays in Practice › Tools
-and the Tools menu of Chords, Scales, Intervals, the Chord player and a lesson. Still for the owner: **Song
-information** goes (the score's title block and the song's page carry it). Keyboard shortcuts stay on `?`. Drawings:
+and the Tools menu of Chords, Scales, Intervals, the Chord player and a lesson. **Song information** (owner: "i am not sure … we have
+song overview page, should we refactor this?"): the Player's sheet (`SongInfo`: chord summary, the facts, the
+recording's tuning, credits) repeats the song's page, so it goes, and the gear's first group is **Sections ›** ·
+**Song page ›** (`/songs/$pieceId`). The song's page gains the one fact only the sheet had, **Tuning** (A n Hz, with
+its tip), among its fact cards while the recording is not at 440 Hz. Recommended, drawn, for the owner to confirm. Keyboard shortcuts stay on `?`. Drawings:
 `.scratch/r37/drawings/song-settings-acts.png`, `sheet-show-annotations.png`.
 
 ## Simple Pace, supersedes the three sections above (owner, 2026-11-07: "i don't like the mods titles and the tempo
