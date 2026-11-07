@@ -178,3 +178,5 @@ metronome")
   - **Count-in:** a switch, dimmed in Wait.
   - **Sound and accents:** a row showing the sound, which opens a page (Back to Pace) holding Sound, Accents,
     Subdivision and Volume.
+- (owner, 2026-11-07: "it is not understandable what subdivision is") The row is **Clicks per beat**, 1 · 2 · 3 · 4
+  (the metronome's `none` · `8ths` · `triplets` · `16ths`).
