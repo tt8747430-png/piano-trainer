@@ -239,6 +239,59 @@ Four videos (the channel's sponsor code reads "sided").
 - For us, `stageshow` is the tool for the Explore and landing pages, and for any picture of the app in Learn or in
   the store.
 
+## The same UI-design channel: colour, components, "don't make me think", typography
+
+- **Colour is neutrals, one brand colour and the state colours,** each as a set of shades. Shades come from
+  lightness, in a format where the numbers mean something (OKLCH here, as in Tailwind 4).
+  - A neutral background has three steps: base, surface and raised. The lighter one sits on top and is used only
+    for what matters.
+  - Text has two shades, a sharp one and a muted one, never pure white on black.
+  - For light mode, start from 100 minus the lightness, then correct by eye: the top layer is still the lightest.
+  - In dark mode, a lighter top edge reads as light falling from above. In light mode the edge matches the card,
+    and depth comes from a short dark shadow mixed with a long light one.
+- **Components with props, built once:** the same card or section with different content is one component, never a
+  copy. Colours and spacing are variables, never a literal.
+- **Don't make me think:**
+  - Conventions win: a button looks like a button, and search is a magnifying glass.
+  - One obvious next step. Where the way splits, say exactly which way and show it.
+  - Simple is not bare: everything needed to decide is there, and nothing that competes with it.
+  - Scannable text: people click the first reasonable option, so make the right one the most obvious.
+  - Map the flow for one named person before drawing it.
+  - To settle an argument, watch a first-time user try the task here and in a rival app.
+- **Typography:**
+  - Group and separate with size, colour, spacing and weight, as a reader sees them.
+  - To make one thing stand out, play the others down: lower their lightness rather than raising the one.
+  - One base size (14 or 16px) and two pixels either side covers almost everything; weight and colour do the rest.
+  - Line height is the gap below text, and sizes are in rem.
+  - The heading level in the code is for document order; the size on screen is for importance.
+  - A number that changes is designed at its longest value.
+
+## AI Labs: eight skills for making videos
+
+Hashu Motion, Ross Arc Motion, Take One, Reanimate, Argo, ExplainRoo, Video Director and Earshot. They make launch
+films, character animation, copied motion, recorded app demos, explainers and soundtracks. None is installed: they
+make marketing video, not app screens, and some run large local models. The lessons that carry over:
+
+- **A reviewer that never saw the work scores it,** and the work goes back until it passes (up to three rounds).
+- **Copying motion from a reference:** record both frame by frame, compare them side by side, and fix whatever is
+  furthest off first.
+- **An animated character keeps a notes file** of what it can and can't do, and every part of it moves on one
+  timing.
+- **A demo of the real app** is recorded by clicking through it, with labels and highlights steering the eye; the
+  app's own screens, never a template.
+
+## Ben (AI agency founder): keep the setup clean ("detox")
+
+- Every skill description, connector and line in `CLAUDE.md` loads into each session, so unused skills cost context
+  and can fire by accident.
+- A skill that should run only when asked for gets `disable-model-invocation: true`.
+- Rules go stale and contradict each other; when a better model arrives, try removing instructions first.
+- Audit regularly: skills unused or overlapping, `CLAUDE.md` pointing to places that moved, rules that contradict.
+- Applied here (2026-11-07): ten of the installed skills now run only when called by name. They are `stageshow`,
+  `agentation`, `agentation-self-driving`, `ask-sonner`, `animation-vocabulary`, `fixing-metadata`,
+  `create-canvas`, `component-canvas`, `create-design-md` and `ui-skills-root`. `prototype-variants` and
+  `pick-ui-library` were already so.
+
 (A data-structures video, sponsored by InsForge, has nothing for design and is not used.)
 
 ## Rulings the videos led to

@@ -5,6 +5,7 @@ license: MIT
 metadata:
   author: ibelick
   version: "1.0.0"
+disable-model-invocation: true
 ---
 
 # UI Skills Root

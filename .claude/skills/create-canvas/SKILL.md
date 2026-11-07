@@ -1,6 +1,7 @@
 ---
 name: create-canvas
 description: Build a freeform canvas to explore, compare, and iterate on anything.
+disable-model-invocation: true
 ---
 
 # Create canvas

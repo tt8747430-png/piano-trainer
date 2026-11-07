@@ -19,3 +19,7 @@ keeps its licence. `CLAUDE.md`, `DESIGN.md` and the owner's rulings win over any
 - `stageshow` has its own `package.json` for its playground. Run `npm install` inside its folder only when using the
   playground; it never joins the app's dependencies.
 - `agentation` needs its npm package and its toolbar on the page. Adding them to the app is a separate change.
+- Run only when called by name (`disable-model-invocation: true`, added here to save context and to stop them firing
+  during the redesign canvases): `stageshow`, `agentation`, `agentation-self-driving`, `ask-sonner` (the app does not
+  use Sonner), `animation-vocabulary`, `fixing-metadata`, `create-canvas`, `component-canvas`, `create-design-md`
+  (`DESIGN.md` exists) and `ui-skills-root` (needs its CLI).

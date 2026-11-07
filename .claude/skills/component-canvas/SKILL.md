@@ -1,6 +1,7 @@
 ---
 name: component-canvas
 description: Build a full-screen, interactive canvas to explore existing UI components and their variants with pan and zoom.
+disable-model-invocation: true
 ---
 
 # Component canvas
