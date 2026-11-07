@@ -40,3 +40,10 @@
   Chordify's Simplify).
 - Will build: **Difficulty**: Easy · Medium · Original, easiest first, no explanation line (owner: "remove this
   weird explanation").
+
+## The keyboard's own button (owner, 2026-11-07: "make the keyboard settings more accessible like in the toolbar at
+the bottom as the most right button with proper icon")
+- Will build: the transport's last button, **Keyboard** (Lucide Piano, the app's keyboard icon; on a phone the icon
+  alone, on a laptop icon and word). It opens the Keyboard panel: Keys Off · 3D · 2D, then only what that kind uses
+  (3D: Camera, Show hands, Skin tone while hands show; 2D: Note names, Finger numbers, Keys shown). The keyboard's
+  rows leave Settings, which keeps the song (Difficulty · Transpose) and Edit score · Export.
