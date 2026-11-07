@@ -49,11 +49,15 @@ pages: **Connect a piano ›** and **All piano settings ›** (key size, pedals,
 
 **Views:** a tap on the showing view's pill opens its settings; each view has one.
 - **Sheet:** Layout Page · Line; **Show** chips Chord symbols · Chord positions · Lyrics · Finger numbers · Note
-  names (the app's own names, ADR 0115). Then **While playing**: **Cursor** Smooth · By note · Off (the app's
-  `playback.cursor` continuous · beats · none) and **Follow** Scroll · Page turn · Off (Page turn puts the next system
-  at the top at once, as forScore turns a page; Scroll glides; Off leaves the score where you put it). The cursor
-  setting is back ("no cursor settings" was a complaint), as two clear choices in place of the old switch "Scroll
-  with the music" ("i don't like how the scroll with music is made"). No Your marks switch (owner, "do we need this"): the learner's own
+  names (the app's own names, ADR 0115). That is all.
+- **No cursor or scrolling settings** (owner, twice: "i dont like the cursor settings"; v133's Cursor and Follow rows
+  were rejected too). Reference apps: flowkey, Simply Piano and Skoove have none; forScore has no playback cursor;
+  MuseScore has one toolbar toggle, "Pan score automatically"; only Soundslice has them, tucked in its advanced
+  settings (playhead shape Line · Small rectangle · Wide rectangle · Hidden; five scrolling options). So the
+  Player's behaviour is fixed, Soundslice's defaults: a thin line moving note by note, the notes it plays coloured,
+  the score scrolling only when the line nears the edge. A scroll by hand stops following and shows a **Back to the
+  music** pill (Maps' recenter); a tap on it, or Play, follows again. `playback.cursor`, `playback.follow` and
+  `playback.followReturn` go in R37-1. No Your marks switch (owner, "do we need this"): the learner's own
   marks always show, as in forScore and MuseScore, where annotations are part of the page; one is hidden by deleting
   it in Edit, and `scoreView.annotations` goes.
 
