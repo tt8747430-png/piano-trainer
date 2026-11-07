@@ -170,3 +170,11 @@ metronome")
 - Metronome page: **Tempo**, a slider from 40 to 120 % of the song's tempo, shown in BPM (the speed every mode plays
   at, Wait included for rests and the other hand), and the **Metronome** switch (dimmed in Wait). Below them: Sound,
   Accents, Subdivision and Volume.
+
+## The metronome one tap away (owner, 2026-11-07: "refactor the metronome settings and make it easier to enable")
+- Supersedes the Metronome page above. Will build, Pace's group under the tiles, in order:
+  - **Metronome:** a switch, dimmed in Wait.
+  - **Tempo:** the BPM slider.
+  - **Count-in:** a switch, dimmed in Wait.
+  - **Sound and accents:** a row showing the sound, which opens a page (Back to Pace) holding Sound, Accents,
+    Subdivision and Volume.
