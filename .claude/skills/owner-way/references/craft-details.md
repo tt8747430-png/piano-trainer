@@ -38,6 +38,10 @@ beside `ui-and-mockups.md` and `impeccable`.
 | Labels | No redundant label ("Tempo: 120 BPM" is "120 BPM"); a badge is one or two words. |
 | Inputs | Chosen by frequency: a wheel or slider for a one-time value in a known range, a stepper or field for frequent or precise entry. |
 | Defaults | Every choice starts on the usual answer; the button says what it will do ("Show 12 patterns"). |
+| Same part, same look | Two search fields differ only in placeholder; small controls share one radius; Back and Skip match. |
+| Feedback | A press shows at once: the button dims, a spinner for a longer wait; what was saved marks where it went (a dot on its tab). |
+| Charts | A value axis, flat bar ends, one bar per thing counted; read before admired. |
+| Choices | Every choice offers Skip, an "other" with search, and a way back. |
 | Phone | Type and targets are no smaller than on a laptop; one direction of scroll per section; no card in a card. |
 
 ## Motion

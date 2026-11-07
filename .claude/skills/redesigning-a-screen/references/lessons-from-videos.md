@@ -120,6 +120,58 @@ Three videos: "made with care", "the commodity ceiling", and the Undertone case 
 - **The non-functional list:** performance (no dropped frames, images no larger than their space), accessibility at
   maximum text size, reliability across background and restore, security.
 
+## Tim Gabe: progression that keeps people coming back
+
+Tim says himself that these mechanics are morally complicated: they can build a habit or trap someone. We use them to
+build the practice habit, under the honesty rule below.
+
+- **Mostly predictable rewards, with a little controlled surprise:** an unexpected bonus, or a milestone that arrives
+  early. Never a slot machine: nothing is random by design to keep the learner chasing.
+- **One visible measure of total progress** draws more than twenty scattered badges (Finch's six traits, League's
+  points). For us that could be one practice record: pieces learned, minutes at the piano, the streak.
+- **Streaks that compound into something worth keeping,** not a counter that just resets: milestones at 7 and 42
+  days, a freeze that is earned.
+- **No "done" state:** totals that never cap (classes, miles, output), so there is always a next milestone.
+- **Progress others can see** (Strava segments, Peloton's leaderboard): when progress is visible to others, a goal
+  becomes part of who the learner is. Here that means groups and the public profile, and only where the learner
+  chooses to show it.
+- **Human connection makes the score matter:** a teacher, or a group calling out progress.
+
+## Kole Jain: beginner mistakes, fixed one at a time
+
+- **Plan the flow before drawing it:** every choice has a Skip, an "other" with search, and a way back. The pieces
+  people miss are navigation links, hidden states, hover and pressed states, and micro-interactions.
+- **Effects sparingly:** no two-hue gradients (one hue at most, usually none); soft shadows or none; less visual
+  noise is better design.
+- **A grid and room to breathe:** align to columns, give stacked content more vertical space than seems needed on a
+  phone, and lay groups out with one consistent gap.
+- **Identical components:** two search fields differ only in their placeholder; small controls share one radius;
+  Back and Skip match in size, radius and style. Styles for colours, variables for measures, components for parts.
+- **Icons:**
+  - An icon on a card saves reading.
+  - Icons in one area share fill, stroke and style.
+  - A rare icon gets a label or a tooltip.
+  - Separate areas may use different icon styles: the bar, the content and the badges.
+- **Remove what is redundant:** an arrow where a swipe does the job, a stroke that adds nothing, a second way to the
+  same place.
+- **Feedback at once:** a pressed button dims, or shows a spinner when the wait is long; saving something puts a dot
+  on the tab where it went.
+- **Charts are read, not admired:** a value axis, flat bar ends, and one bar per thing counted (seven days, seven
+  bars).
+
+## An AI-coding channel: getting AI-built sites to look designed
+
+- **Give the model a design system,** not "make it beautiful". Ours is `DESIGN.md` and the theme tokens. The canvas
+  works from screenshots of the screen itself and of the reference apps.
+- **Proven components over generated ones,** where a library does the job well (shadcn here).
+- **Animate sparingly, and name the exact effect wanted.** "Make it animated" gets everything moving.
+- **Type carries the feel:** a face chosen for the subject. Ours is Literata for what is named and Onest for what is
+  read and pressed.
+- **Name the responsive layout exactly:** for example a bento grid that becomes one column on a phone. "Responsive"
+  alone isn't enough.
+
+(A data-structures video, sponsored by InsForge, has nothing for design and is not used.)
+
 ## Rulings the videos led to
 
 - **Undo instead of asking** (owner: "adopt also this"): Kole Jain's act first and offer Undo replaces "a loss asks
