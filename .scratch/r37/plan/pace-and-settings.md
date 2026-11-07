@@ -160,3 +160,13 @@ understand them")
   on, Play is `follow`, so the music speeds up and slows down with the learner; off, it is `listen`, at the speed
   set. The switch is remembered when the learner goes to Wait and back, and is dimmed in Wait. The Pace button reads
   Wait · Play · Play, following you.
+
+## No Follow; the tempo is the metronome's (owner, 2026-11-07: "no follow my tempo, the tempo can be set from
+metronome")
+- Follow mode is dropped (the app's `follow` mode and `followTempo` go in R37-1).
+- Will build, Pace: the **Wait** and **Play** tiles, then one group: **Count-in** (a switch, dimmed in Wait) and
+  **Metronome**, a row reading "Off · 80 BPM" that opens the Metronome page. The Pace button reads Wait or Play, plus
+  the tempo when it is not the song's.
+- Metronome page: **Tempo**, a slider from 40 to 120 % of the song's tempo, shown in BPM (the speed every mode plays
+  at, Wait included for rests and the other hand), and the **Metronome** switch (dimmed in Wait). Below them: Sound,
+  Accents, Subdivision and Volume.
