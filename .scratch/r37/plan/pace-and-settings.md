@@ -38,5 +38,5 @@
   and the order runs hardest first.
 - Why it matters: the same song at the learner's level (flowkey's Beginner · Intermediate · Pro arrangements,
   Chordify's Simplify).
-- Will build: **Difficulty**: Easy · Medium · Original, easiest first, and one line for the one chosen: "The tune,
-  over one bass note per chord" · "The whole song, with plain chords" · "The whole song, as written".
+- Will build: **Difficulty**: Easy · Medium · Original, easiest first, no explanation line (owner: "remove this
+  weird explanation").
