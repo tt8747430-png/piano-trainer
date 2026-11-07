@@ -80,3 +80,18 @@ also on the 3d piano")
   the score moving up into the room left (Song keeps today's height).
 - Note names on 3D: each C named on its key's front (C2, C3…), the notes being played named in bold, as on 2D. A name a
   hand covers is not drawn over the hand; names on keys narrower than 14 px are left out.
+
+## Modes named for what happens (owner, 2026-11-07: "make more understandable and useful modes. look at all the
+examples and research more")
+- Today: Pace lists Wait mode · Interpret · Listen in one group. "Interpret" says nothing of what it does, and "Listen"
+  hides that the learner plays along.
+- Research: flowkey groups its menu "Learn at your own pace" (Wait Mode) and "Listen and play along" (50 % · 75 % ·
+  Original). Synthesia: Melody Practice (waits) · Song Recital (keeps going) · Watch and Listen. Skoove: Listen · Learn
+  (waits) · Play (in time). Piano Marvel: Practice (waits) · Assess (in time, scored). Every one splits *the music waits
+  for you* from *you keep up with the music*, and names each by what the learner does.
+- Will build: Pace in two groups with headers, no other text:
+  - **At your own pace:** **Wait for me** (`wait`: the music stops until the right notes), **Follow me** (`follow`: the
+    music takes the learner's tempo).
+  - **With the music:** **Play along** (`listen`: the music plays at the speed set), and only under it Speed · Count-in
+    · Metronome.
+  - The transport's Pace button names the mode the same way. Internal ids stay.
