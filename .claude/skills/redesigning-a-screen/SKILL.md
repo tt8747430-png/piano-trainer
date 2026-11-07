@@ -128,6 +128,7 @@ source; installing one is the owner's decision.
 | Kole Jain: beginner mistakes (transcript) | plan the flow (Skip, other, way back), identical components, icons by area, no redundancy, feedback at once, readable charts |
 | A UI-design channel ("sided"): a dashboard, slop pages, motion, depth (transcripts) | placement before looks, colour only for data and what is on, numbers with a comparison, charts that answer, no duplicate controls or Apply, a centrepiece that shows the product working |
 | AI Labs: Benji Taylor's stageshow (transcript) | a demo is a stripped copy of one screen with one story; film the motion and check frame by frame; feed fixes back into the skill |
+| UX Peak: a list and its filters, junior to staff (transcript) | pictures big enough to want, one shape language, chips plus Filter and Sort, counts, a cards/list switch, filters in one scroll with counts per option and "Show n" |
 | The UI-design channel: colour, components, "don't make me think", typography (transcripts) | shades by lightness, play down rather than play up, one base size, conventions and one obvious next step |
 | AI Labs: eight video skills (transcript) | a reviewer that never saw the work; motion copied frame by frame; not installed |
 | Ben: the "detox" of a Claude setup (transcript) | unused skills cost context; run-on-call skills; prune stale rules |

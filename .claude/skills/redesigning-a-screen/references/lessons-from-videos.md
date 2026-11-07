@@ -239,6 +239,40 @@ Four videos (the channel's sponsor code reads "sided").
 - For us, `stageshow` is the tool for the Explore and landing pages, and for any picture of the app in Learn or in
   the store.
 
+## UX Peak: junior, mid, senior and staff (a list, then its filters)
+
+- **A list:**
+  - **The picture is of the thing, big enough to want it.** 56px only identifies; appetite needs real space.
+    "Above the fold" is a myth: everyone scrolls, so what matters is whether the first thing seen makes them go on.
+  - **One shape language** across a screen: the same rounding everywhere, not square corners beside circles.
+  - **Hierarchy you can scan:** the name, then the rating, everything else quieter.
+  - **Quick filters visible as chips,** with a Filter button for the rest and Sort beside it.
+  - **A count of what is being looked through** ("640 places").
+  - **A cards or list switch,** where no single default suits everyone: big pictures invite, a list compares.
+  - **A search placeholder that says what can be searched** ("Places, dishes or cuisines").
+  - **Details off the picture,** so every card looks the same whatever its picture; a "best match" label where the
+    app knows the person.
+  - **Category icons drawn for the app,** quieter than the content, rather than stock photos competing with the
+    items below them.
+- **Filters (four versions of one filter screen):**
+  - A filter helps people narrow down while they are still working out what they want, so connected choices are
+    shown together: one sheet over the results, in one scroll. Never a page for each filter, where every choice is
+    made blind to the others.
+  - A range gets a slider for quick exploring plus fields for an exact value.
+  - A known small number gets a row of options (1 · 2 · 3+ · 4+), not a stepper. "3+" means at least three, and a
+    range can be chosen by tapping two options.
+  - The button says what it will return: "Show 41 homes".
+  - The senior version puts a histogram behind the range, showing where the choices cluster. The staff version
+    adds:
+    - how many fit the current filters ("459 of 1,557");
+    - each option's count before it is chosen;
+    - the person's own limit drawn on that histogram, worked out from what they actually know (a deposit and a
+      monthly payment, not a maximum price).
+  - The cost is a busier screen: keep only what helps the decision.
+- **For us:** the Pattern page's Sort and filter could show each chip's count before it is chosen ("Advanced 6"),
+  and the Songs filter the same. Our ruling opens Sort and filter as a page with Back (Flat), where these filters
+  use a sheet over the results; both keep every choice in one scroll with "Show n" at the foot.
+
 ## The same UI-design channel: colour, components, "don't make me think", typography
 
 - **Colour is neutrals, one brand colour and the state colours,** each as a set of shades. Shades come from
