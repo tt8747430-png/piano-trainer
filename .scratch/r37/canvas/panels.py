@@ -104,6 +104,15 @@ FACE = ('<div style="%s; flex-direction: column; align-items: stretch; gap: 12px
 # what the sheet shows, each a chip that turns on or off (the app's Show, ADR 0115)
 CHIPS = ('<div style="%s; flex-direction: column; align-items: stretch; gap: 10px; padding: 12px 14px"><span>Show</span><div role="group" aria-label="Show" style="display: flex; flex-wrap: wrap; gap: 8px">'
     '<sc-for list="{{showChips}}" as="c" hint-placeholder-count="5"><button type="button" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="height: 34px; padding: 0 14px; border-radius: 9999px; border: 1px solid {{c.line}}; background: {{c.bg}}; color: {{c.fg}}; font-size: 13px; font-weight: 600">{{c.name}}</button></sc-for></div></div>') % ROW
+ACT_ICONS = [('Sections', 'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01'),
+    ('Edit score', 'M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z'),
+    ('Print', 'M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z'),
+    ('Share link', 'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'),
+    ('Export', 'M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13')]
+# the song's settings are cards; its acts a quiet row of icon buttons under a hairline, so the eye lands on the first
+ACTS = ('<div role="group" aria-label="Song actions" style="flex: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; margin-top: 4px; padding-top: 12px; border-top: 1px solid #E2DACE">'
+    + ''.join('<button type="button" style="min-height: 60px; padding: 6px 2px; border: 0; border-radius: 12px; background: transparent; color: #4A433C; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 12px; font-weight: 500; line-height: 1.2; text-align: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="%s"></path></svg>%s</button>' % (d, n) for n, d in ACT_ICONS)
+    + '</div>')
 def bodies(segw):
     # the view's own settings: its panel, and the head of the keys' one while the keys show
     VIEWSEC = (sif('isSheet', group(row('Layout', seg('layoutOpts', 2, segw['layout'])), CHIPS), 'true') + '\n'
@@ -139,9 +148,8 @@ def bodies(segw):
     # the actions last; no volume of its own (the device's, and each hand's in Hands)
     'isMore': ('Settings', title('Song') + '\n'
         + '<div role="radiogroup" aria-label="Score" style="display: flex; flex-direction: column; gap: 8px">' + CARD('arr', 'Arrangement', row('Level', seg('levelOpts', 3, 270))) + CARD('acc', 'Accompaniment', valrow('Pattern', '{{patternName}}', 'openPattern')) + '</div>\n'
-        + group(row('Transpose', STEP)) + '\n'
-        + group(link('Sections'), link('Song page')) + '\n'
-        + group(link('Edit score'), link('Print'), link('Share link'), link('Export'))),
+        + group(row('<span style="font-weight: 600">Transpose</span>', STEP)) + '\n'
+        + ACTS),
     # the keyboard: its own button at the transport's right end, Keys first, then only what that kind uses
     # the keyboard: which one, as pictures (Chordify's "Pick your view"), then only what changes that one
     'isKeys': ('Keyboard', title('Keyboard') + '\n' + TILES + '\n'

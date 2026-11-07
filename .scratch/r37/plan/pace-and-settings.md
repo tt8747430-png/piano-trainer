@@ -137,8 +137,15 @@ last "4 min added to today's practice · 23 days in a row ›" to the practice r
 Piano end a song on a result screen too; ours leads to practice, not a grade. Drawings:
 `.scratch/r37/drawings/played-through-*.png`. Canvas v149.
 
-**No Song information** (owner, 2026-11-07: "no song information"): the Player's `SongInfo` sheet goes; its facts are the
-song's page, reached by the gear's **Song page ›**, which gains Tuning.
+**No Song information and no Song page row** (owner, 2026-11-07: "no song information", then "no song page in the
+settings"): the Player's `SongInfo` sheet goes, and the gear has no link to the song's page (it is reached from Songs).
+The song's page still gains Tuning.
+
+**The song's settings stand apart from its acts** (owner, 2026-11-07: "the first two three settings should be more
+distinctive than the other ones"): Arrangement · Accompaniment (radio cards) and **Transpose** (a card, its label
+bold) are white cards with shadows; under a hairline, the acts are one quiet row of five icon buttons, icon over a
+12px label, no card: **Sections · Edit score · Print · Share link · Export**. The eye lands on what changes the music;
+the acts read as tools. Canvas v150; drawings `song-settings-acts.png`, `song-settings-acts-laptop.png`.
 
 **Placed (owner, 2026-11-07, on the five proposals):**
 - **Practice, not Pace** ("i don't like that it is called pace"): the transport's menu is titled Practice, the
@@ -319,7 +326,7 @@ Stale lines in the rulings above, superseded later and to be read so: Song setti
 "Accompaniment goes in Practice" gave way to the Arrangement · Accompaniment cards (row 8).
 
 Ruled (owner, 2026-11-07: "i want the sections, the print, and share links to be ported. what else", then "remove
-my recordings, my how did i do, voice commands"): the Song gear ends with **Sections ›** · **Song page ›**, then **Edit score ›** ·
+my recordings, my how did i do, voice commands"): the Song gear ends with **Sections ›** · ~~Song page ›~~ (removed, see the rulings), then **Edit score ›** ·
 **Print ›** · **Share link ›** · **Export ›**. R37-1 removes from the Player, code and strings with them: My
 recordings (`RecordingsSheet`, the Player's takes), How did I play (`FeedbackCard`, the take's verdicts on the score)
 and Voice commands (`useVoiceCommands`, its act), with no home elsewhere. The score editor's Record (`record-take`) is
