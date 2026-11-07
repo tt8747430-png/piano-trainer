@@ -3,11 +3,11 @@
 ## The rulings as they stand (read first; the sections below are the history, and where they disagree, this wins)
 Canvas v130, https://claude.ai/artifact/HezkVS2MXdwz7uJ14KDGgp. Each line names the owner's words it rests on.
 
-**Modes (Pace).**
+**Modes (Practice, once Pace).**
 - Two tiles, **Wait** and **Play**, no group headers ("i don't like the mods titles").
 - **No Follow mode.** In-time and Follow "sound the same", and "no follow my tempo". The app's `follow` mode and
   `followTempo` go in R37-1.
-- Pace never disables or hides one setting because of another; each works in both modes ("why it is disabled in the
+- Practice never disables or hides one setting because of another; each works in both modes ("why it is disabled in the
   wait mode"). In Wait the metronome clicks while the music moves and stops when it waits.
 
 **The metronome**, one group under the tiles headed Metronome; the tempo belongs to it ("the tempo belongs to the
@@ -51,15 +51,20 @@ past the keys, no finger numbers on or under the keys. Skin tone goes to app Set
   marks always show, as in forScore and MuseScore, where annotations are part of the page; one is hidden by deleting
   it in Edit, and `scoreView.annotations` goes.
 
-**Still to place, proposals awaiting the owner:**
-
-| App setting today                         | Proposal                                              |
-| ----------------------------------------- | ----------------------------------------------------- |
-| Recording volume (songs with a recording) | Hands menu, under the two hands                       |
-| Accompaniment pattern                     | Pace, a group for accompaniment pieces                |
-| Ask which view on open                    | dropped: the Player opens the last view (`pt-views`)  |
-| Hands skin tone                           | app Settings                                          |
-| Resume following after a scroll           | dropped: following resumes on its own                 |
+**Placed (owner, 2026-11-07, on the five proposals):**
+- **Practice, not Pace** ("i don't like that it is called pace"): the transport's menu is titled Practice, the
+  musician's word for what it holds (how you play along: Wait · Play, the metronome, the accompaniment, the loop). Its
+  bar button still shows the mode itself (Wait or Play), so the word Practice is only the menu's title.
+- **Accompaniment** goes in Practice, after the metronome, for a song played from its chords: Pattern (a row with the
+  pattern's name, opening the pattern list), Voicing (Close · Drop 2), Swing (Straight · Light · Medium · Hard).
+- **Recording volume is kept**, only for a song with its own recording: one Recording row with a volume slider in the
+  Hands menu, under the two hands. Without it the learner can't hear the piano over the take, the mix Soundslice
+  gives between its recording and its synth.
+- **Ask which view on open: dropped** ("ok"). The Player opens the view used last (`pt-views`).
+- **Hands skin tone: dropped** ("do we need this"). The 3D hands are a guide to where the fingers go, not a portrait of
+  the learner: they are drawn in one neutral, stylised tone, as Meta Quest's default hands are, so no choice is
+  needed. `handsView.skin` goes; the canvas's 3D hands keep their current tone until R37-1 changes the material.
+- **Resume following after a scroll: dropped** ("ok"). Following resumes on its own.
 
 ## Source
 - Owner, 2026-11-07: "research and look at all the resources and app examples and improve the other settings like

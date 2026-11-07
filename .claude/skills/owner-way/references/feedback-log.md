@@ -94,6 +94,9 @@ owner's, typos fixed.
 - **The Player's Pace and metronome (2026-11-07, canvas R37):**
   - Modes are Wait and Play only, no Follow, no group titles.
   - Sheet settings have no Your marks switch: the learner's own marks always show, and are removed by deleting them.
+  - The transport's menu is Practice, never Pace. It holds Wait · Play, the metronome, the accompaniment (Pattern,
+    Voicing, Swing) and the loop. Recording volume is a row in the Hands menu, only for a song with a recording.
+  - No ask-on-open, no skin tone (one neutral hand), no resume-following setting.
   - The tempo belongs to the metronome, in BPM with − + Tap and its marking, Score tempo to go back.
   - Play metronome and Count-in (bars) are plain controls. One setting never disables another.
   - The meter and accents come from the score: no beat squares, no subdivision in the Player.
