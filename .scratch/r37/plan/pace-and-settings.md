@@ -24,9 +24,6 @@ Metronome Count-in · On · Off; each choice opens a page with a Back arrow). On
 - References come from sheet-music players (Flat, forScore, MuseScore, Soundslice, flowkey), never recording
   software. Names are the musician's; every sound must really play.
 
-**Accompaniment** (for a song played from its chords): **Pattern ›** opens the pattern list (a check, Back), then
-Voicing Close · Drop 2, Swing Straight · Light · Medium · Hard.
-
 **Loop** (shown while a loop is set): Repeats · Between repeats (None · Count-in · Rest) · Speed up each pass (a
 switch, +5 % a pass).
 
@@ -34,6 +31,22 @@ switch, +5 % a pass).
 then "remove it"). Playback pedals as the score marks it, or by `autoPedal` where it has no marks. The learner's own
 pedal (MIDI or the bar's Sustain) always sounds. The score shows its Ped. marks as engraved. (Canvas v129 put a Pedal
 row back by mistake; v130 removed it.)
+
+**What you play, As written or From the chords** (owner, 2026-11-07: "the user must know that it either has the
+score as written or the accompaniment and one cancels another"). The Song gear opens with one two-way switch,
+**As written · From the chords**, a segmented control so choosing one plainly turns the other off. As written shows
+the versions (Easy · Medium · Original); From the chords shows the patterns as cards, two a row, each a little
+two-hand roll of its bar (right hand above in its colour, left below) and its name: Bass + chords, Broken chords,
+Chord pulse, Arpeggio, Dotted bass. The accompaniment leaves Practice: it is what you play, not how you practise.
+Shown only for a song that has both a score and chord symbols; a chord chart alone has no As written.
+- **No Voicing and no Swing** ("what are these swings and chords options"). Voicing (Close · Drop 2) is how far the
+  chord's notes are spread, Drop 2 a jazz spacing; Swing plays pairs of 8ths long-short. Both are arranger's
+  choices: each pattern carries its own spacing and feel, and the swung patterns are patterns of their own.
+- **Flat, for parts** (piano-data `flat-score-editor`, 04 and the owner's screenshots): Flat keeps showing a part
+  (the Instruments sheet: All, each part's Solo and eye, Edit instruments) apart from hearing it (Audio playback:
+  Master, each part's mute, solo, Volume, Reverb). Our Hands menu is that list for a piano song: each hand's switch
+  (shown and heard), Dim (shown faint), Volume. A song with its own melody staff gets a **Melody** row the same way
+  (R37-1). No Master (the device's volume), Reverb or Solo (with two hands, the other hand's switch is the solo).
 
 **Song settings (the gear):** versions as tiles like the modes, Easy · Medium · Original, easiest first ("make the
 versions switch like the mods switch"), no "Difficulty" label and no explanation line; Transpose; Edit score · Export. **No recording settings** (owner: "how are they relevant to our
