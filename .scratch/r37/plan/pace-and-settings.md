@@ -185,3 +185,18 @@ metronome")
   Simply Piano). The Player's page becomes **Metronome sound** (reached from Pace's **Sound** row, which shows the
   sound): **Sound** Click · Beep · Drum; **Accent the first beat**, a switch (on); **Volume**. Clicks per beat and the
   per-beat accent dots are dropped from the Player. The Metronome tool keeps both.
+
+## Pace in a musician's order (owner, 2026-11-07: "the order in the settings doesn't make sense and how the count in
+is related to this and how it behaves while the metronome is disabled ... look also at the example")
+- References: Flat's recording bar has one Metronome control (♩ = 84 and a switch) and Start countdown beside it.
+  Soundslice keeps count-in inside the metronome's menu (1, 2 or 3 bars; at the start, before each loop, or both).
+- Ruling: the tempo comes first because everything plays at it. The metronome and the count-in are one sound, so they
+  share one group: Count-in plays the metronome's clicks before the music starts, **whether or not the metronome is
+  on**. Sound, accent and volume therefore apply to both, and they dim only when both are off. Before each repeat of
+  a loop, the count-in is the loop's **Between repeats: Count-in**.
+- Will build, Pace, replacing the Sound page:
+  1. **Wait · Play**, the tiles.
+  2. **Tempo**, the BPM slider, its own group (Wait included: the rests and the other hand play at it).
+  3. **Metronome**, a group: **Metronome** (switch, off); **Count-in** Off · 1 bar · 2 bars (1 bar); **Sound** Click ·
+     Beep · Drum; **Accent the first beat** (on); **Volume**. In Wait the group is dimmed, because nothing keeps time.
+  4. **Loop bars a–b**, while a loop is set.
