@@ -47,3 +47,11 @@ the bottom as the most right button with proper icon")
   alone, on a laptop icon and word). It opens the Keyboard panel: Keys Off · 3D · 2D, then only what that kind uses
   (3D: Camera, Show hands, Skin tone while hands show; 2D: Note names, Finger numbers, Keys shown). The keyboard's
   rows leave Settings, which keeps the song (Difficulty · Transpose) and Edit score · Export.
+
+## The Keyboard panel, by what matters (owner, 2026-11-07: "refactor them properly and how they should look and what
+is most relevant")
+- Will build: the choice of keyboard as three picture tiles, **Off · 3D · 2D** (Chordify's "Pick your view"), the
+  chosen one outlined in orange; the panel's title names it, so no "Keys" label. Then only what changes that one:
+  3D **Angle** Seat · Above, **Show hands**; 2D **Note names**, **Range** Song · All 88.
+- Goes: **Finger numbers** (the standing ruling: no finger numbers on or under the keys); **Skin tone** to the app's
+  Settings (set once, app-wide appearance).
