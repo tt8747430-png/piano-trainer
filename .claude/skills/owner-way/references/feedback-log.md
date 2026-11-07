@@ -103,8 +103,8 @@ owner's, typos fixed.
     Practice.
   - The Player's Pattern page is a library: Search; place chips at the top (All, Favourites, Recently used, each
     book, Mine; the owner likes them); a Sort and filter page (Sort by, Level, Texture, Feel,
-    Reset · Show n) with its count on the button and removable chips; Recently used and Favourites first, then the
-    books' shelves with counts, folded after five; rows with roll, hands line, level, Listen, heart. Never chips by
+    Reset · Show n) with its count on the button and removable chips; folders that fold by their header (Recently
+    used and Favourites open, each book closed, its groups inside, Mine's own folders), Close all / Open all; rows with roll, hands line, level, Listen, heart. Never chips by
     kind, stars or cards two a row.
   - The metronome is Flat's: one Off · Count-in · On choice under the tempo, and Metronome sound › opens a page
     (sound list with a check, Volume, Back). A choice with its own list opens a page, as Flat's Playback options do.

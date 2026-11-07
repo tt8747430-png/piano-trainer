@@ -73,15 +73,21 @@ patterns in our app, and how should they be organized like a library"; the two-a
   Lines and runs (what the right hand plays, Smart Pianist's Block and Arpeggio families); **Feel** All · Straight ·
   Swing; the foot **Reset** (the place chip stays) and **Show n patterns**. Each filter on shows as a chip under the
   place chips with ×. The book is chosen only by its chip, never in the page too.
-- The list by Book: **Recently used** (the last three chosen, the playing one first) and **Favourites** while nothing
-  narrows, then each book's shelf as Practice names it (Called to Play · The five ways (lesson 3), … Rhythm styles,
-  Mine last), its count at the heading's end, folded after five with **Show all n**. By Name one A–Z list; by Level
-  Beginner, Intermediate, Advanced, Not graded. A row: the two-hand roll, the name over its hands line (LH: … · RH:
+- The list by Book is folders (owner: "but what about foldable sections or folders"), each a card whose header
+  folds it: a chevron, its icon, its name and its count. **Recently used** (the last three chosen, the playing one
+  first) and **Favourites** first and open while nothing narrows; then one folder per book, closed at first, so the
+  page opens as an overview: **Called to Play** (16; inside, The five ways (lesson 3) and Right-hand techniques under
+  their headings), **Called to Play 2**, **Bobrova**, **Gorshkov**, **Rhythm styles**, **Mine** (the learner's own
+  folders, made in Practice, under their headings). What is open is remembered. A search, a filter or a place chip
+  opens every folder that holds a match, and folding then is for that view only. **Close all** / **Open all** above
+  the list. By Name one A–Z list; by Level Beginner, Intermediate, Advanced, Not graded, each a folder too.
+  Folding replaces "Show all n". A row: the two-hand roll, the name over its hands line (LH: … · RH:
   …), the level mark, **Listen** ▶, **Favourite** ♡; the playing one highlighted and bold; a tap chooses it and goes
   back to Song. Nothing matches: **No patterns match**. Last **Manage patterns ›** to Practice › Accompaniment, where
   patterns are made, renamed and hidden. A pattern that cannot play the song's meter or chords is left out
   (`fit.ts`). The app's Filter sheet gains Texture and Feel, so both read alike. Drawings:
-  `.scratch/r37/drawings/pattern-library.png`, `pattern-library-filter.png`, `pattern-library-filtered.png`.
+  `.scratch/r37/drawings/pattern-library.png`, `pattern-library-folder-open.png`, `pattern-library-filter.png`,
+  `pattern-library-filtered.png`.
 - **No Voicing and no Swing** ("what are these swings and chords options"). Voicing (Close · Drop 2) is how far the
   chord's notes are spread, Drop 2 a jazz spacing; Swing plays pairs of 8ths long-short. Both are arranger's
   choices: each pattern carries its own spacing and feel, and the swung patterns are patterns of their own.
