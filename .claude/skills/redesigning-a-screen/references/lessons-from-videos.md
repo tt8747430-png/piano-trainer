@@ -220,6 +220,25 @@ Four videos (the channel's sponsor code reads "sided").
   - To play something down, set it a step darker.
   - Average to good costs far less than good to excellent; depth is a cheap step there.
 
+## AI Labs: Benji Taylor's stageshow
+
+- **Taste is mostly small decisions, written down,** so the agent can follow them. `stageshow` is Benji Taylor's
+  process for landing-page demos, now installed.
+- **A screenshot on a landing page is too much to read; a generated demo is generic.** A demo is a stripped-down
+  working copy of one screen:
+  - three to seven real words, bars for the rest;
+  - one story in three to five beats, over 10 to 16 seconds;
+  - a cursor that curves like a hand;
+  - a loop whose last frame matches its first.
+- **The phone gets its own design,** not a shrunk copy.
+- **Start from the closest real example and copy it,** rather than working from rules alone.
+- **Check the motion, not only the still:** film it, lay the frames side by side, and look for text that doesn't fit
+  and anything that jumps. Fix the worst first and film again. A check finds mistakes but not a boring idea, so watch
+  it yourself.
+- **Feedback goes back into the skill,** so the next demo doesn't repeat the mistake.
+- For us, `stageshow` is the tool for the Explore and landing pages, and for any picture of the app in Learn or in
+  the store.
+
 (A data-structures video, sponsored by InsForge, has nothing for design and is not used.)
 
 ## Rulings the videos led to
