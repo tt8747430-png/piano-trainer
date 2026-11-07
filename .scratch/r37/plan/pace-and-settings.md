@@ -152,3 +152,11 @@ settings, also i dont like the cursor settings ... make good and simple ui")
 - Will build, Sheet: Layout (Page · Line), **Scroll with the music**, Your marks. There is no Cursor setting: the
   cursor always moves note by note.
 - Gone: the three-way Count-in (Off · Clicks · Silent), the Speed stepper, the ramp choice of +2/+5/+10 %, and Cursor.
+
+## Two modes, Wait and Play (owner, 2026-11-07: "for me the in time and follow mode sounds the same or i don't
+understand them")
+- Both keep the music moving and differ only in who sets the tempo, so they become one mode with a switch.
+- Will build: two tiles, **Wait** (`wait`) and **Play**. The group under them starts with **Follow my tempo**, a switch:
+  on, Play is `follow`, so the music speeds up and slows down with the learner; off, it is `listen`, at the speed
+  set. The switch is remembered when the learner goes to Wait and back, and is dimmed in Wait. The Pace button reads
+  Wait · Play · Play, following you.
