@@ -126,6 +126,17 @@ pages: **Connect a piano ›** and **All piano settings ›** (key size, pedals,
   marks always show, as in forScore and MuseScore, where annotations are part of the page; one is hidden by deleting
   it in Edit, and `scoreView.annotations` goes.
 
+**The end of a run: Played through** (2026-11-07, the redesign skill's "evidence of care": what happened, how to
+take it back, what next; the song used to rewind to bar 1 in silence). When the song ends, a sheet (a card above the
+transport on a laptop): **Played through**, "Amazing Grace · both verses · Wait · 2:24"; two figures, the value over
+its label with a comparison: **94%** notes right first time (Wait) or notes in time (Play), "↑ 6 on last time", and
+the tempo played, "80 BPM, Andante"; **Each bar**, one cell per bar shaded by its slips (none is sand, more is deeper
+honey; no red or green), the weakest four outlined, a tap on a bar loops its four and plays; **Practise bars 5–8**
+(honey, the main act), **Play again**, and the next step: **Try it in Play** from Wait, **Play at 85 BPM** from Play;
+last "4 min added to today's practice · 23 days in a row ›" to the practice record. × closes it. Flowkey and Simply
+Piano end a song on a result screen too; ours leads to practice, not a grade. Drawings:
+`.scratch/r37/drawings/played-through-*.png`. Canvas v149.
+
 **Placed (owner, 2026-11-07, on the five proposals):**
 - **Practice, not Pace** ("i don't like that it is called pace"): the transport's menu is titled Practice, the
   musician's word for what it holds (how you play along: Wait · Play, the metronome, the accompaniment, the loop). Its
