@@ -52,7 +52,7 @@ the bottom as the most right button with proper icon")
 is most relevant")
 - Will build: the choice of keyboard as three picture tiles, **Off · 3D · 2D** (Chordify's "Pick your view"), the
   chosen one outlined in orange; the panel's title names it, so no "Keys" label. Then only what changes that one:
-  3D **Angle** Seat · Above; 2D **Keys** Song · 61 · 76 · 88, **Note names**.
+  3D **Angle** Seat · Above, then for 3D and 2D alike **Keys** Song · 61 · 76 · 88 and **Note names**.
 - Goes: **Finger numbers** (the standing ruling: no finger numbers on or under the keys); **Skin tone** to the app's
   Settings (set once, app-wide appearance).
 
@@ -71,3 +71,12 @@ range. but refactor more")
   88 A0–C8.
 - Owner, 2026-11-07: "I dont need this greyed piano not used keys": every key is drawn alike; no shading.
 - Owner, 2026-11-07: "I dont need this note showing": no tab for notes past the chosen piano.
+
+## Note names and Keys on the 3D piano too (owner, 2026-11-07: "I want to be able to show the notes and change size
+also on the 3d piano")
+- Will build: under 3D, after Angle, the same **Keys** and **Note names** rows as 2D, one setting each for both kinds.
+- Keys on 3D: the camera frames the chosen piano instead of the song, as `frame()` already does for a range, without
+  its least key size (the learner chose the size). The band is as tall as the keys need: a wider piano, a shorter band,
+  the score moving up into the room left (Song keeps today's height).
+- Note names on 3D: each C named on its key's front (C2, C3…), the notes being played named in bold, as on 2D. A name a
+  hand covers is not drawn over the hand; names on keys narrower than 14 px are left out.
