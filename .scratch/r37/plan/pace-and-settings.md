@@ -297,3 +297,17 @@ metronome should look and what options should it have")
 - The meter and accent come from the score. Tempo markings: Largo < 60, Larghetto < 66, Adagio < 76,
   Andante < 108, Moderato < 120, Allegro < 156, Vivace < 176, else Presto.
 - In the app the sounds are recorded samples (VCSL, CC0): a wood block, claves and an electronic beep.
+
+## References from sheet-music players, not recording software (owner, 2026-11-07: "but use examples for music and
+sheets and not for recording")
+- **forScore:** each score keeps its own BPM and time signature, used whenever it is opened. BPM by + and −, a wheel
+  or two taps. Count In for a set number of measures. The metronome can be heard, seen or both.
+- **MuseScore** (Play panel): **Play metronome** and **Count-in** are separate toggles. The count-in is one measure,
+  with extra beats to fill a pickup bar.
+- **Soundslice:** the count-in is in the metronome menu, 1, 2 or 3 bars, before playback and before each loop.
+- **Flat:** the metronome beside Play.
+- Changes from the section above: the switch is **Play metronome** (MuseScore's name, replacing Logic's "Click while
+  playing"). When the tempo differs from the score's, a **Score tempo: 80 BPM** button under it brings it back
+  (forScore keeps the score's own tempo). The face's beat lights are the metronome seen, the switch the metronome
+  heard. Count-in stays Off · 1 bar · 2 bars (Soundslice, forScore). Sound stays Wood block · Claves · Beep, the
+  sounds MuseScore and forScore-style players use for tick and tock.
