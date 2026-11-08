@@ -58,9 +58,97 @@
       "title": "Score editor, phone",
       "is_interactive": true
     },
-    "Laptop.dc.html": {
+    "PlayerLaptop.dc.html": {
       "x": 0,
       "y": 2359,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, laptop",
+      "is_interactive": true
+    },
+    "Player.dc.html": {
+      "x": 2223,
+      "y": 2738,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, phone",
+      "is_interactive": true
+    },
+    "PlayerLaptopLoop.dc.html": {
+      "x": 2913,
+      "y": 2359,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, Practice with a loop, laptop",
+      "is_interactive": true
+    },
+    "PlayerLoop.dc.html": {
+      "x": 5136,
+      "y": 2738,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Practice with a loop, phone",
+      "is_interactive": true
+    },
+    "PlayerLaptopKeyboard.dc.html": {
+      "x": 5826,
+      "y": 2359,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, Keyboard, laptop",
+      "is_interactive": true
+    },
+    "PlayerKeyboard.dc.html": {
+      "x": 8049,
+      "y": 2738,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Keyboard, phone",
+      "is_interactive": true
+    },
+    "PlayerPractice.dc.html": {
+      "x": 0,
+      "y": 4018,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Practice: Wait · Play, the tempo, the metronome, phone",
+      "is_interactive": true
+    },
+    "PlayerHands.dc.html": {
+      "x": 530,
+      "y": 4018,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Hands, phone",
+      "is_interactive": true
+    },
+    "PlayerSettings.dc.html": {
+      "x": 1060,
+      "y": 4018,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Song settings: Arrangement or Accompaniment, phone",
+      "is_interactive": true
+    },
+    "PlayerDone.dc.html": {
+      "x": 1590,
+      "y": 4018,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Played through, phone",
+      "is_interactive": true
+    },
+    "PlayerDiagrams.dc.html": {
+      "x": 2120,
+      "y": 4018,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Diagrams, phone",
+      "is_interactive": true
+    },
+    "Laptop.dc.html": {
+      "x": 0,
+      "y": 5538,
       "w": 2143,
       "h": 1299,
       "title": "Practice, laptop",
@@ -68,7 +156,7 @@
     },
     "Main.dc.html": {
       "x": 2223,
-      "y": 2738,
+      "y": 5917,
       "w": 450,
       "h": 920,
       "title": "Practice, phone",
@@ -76,7 +164,7 @@
     },
     "ChordsLaptop.dc.html": {
       "x": 2913,
-      "y": 2359,
+      "y": 5538,
       "w": 2143,
       "h": 1299,
       "title": "Chords, laptop",
@@ -84,7 +172,7 @@
     },
     "Chords.dc.html": {
       "x": 5136,
-      "y": 2738,
+      "y": 5917,
       "w": 450,
       "h": 920,
       "title": "Chords, phone",
@@ -92,7 +180,7 @@
     },
     "ScalesLaptop.dc.html": {
       "x": 5826,
-      "y": 2359,
+      "y": 5538,
       "w": 2143,
       "h": 1299,
       "title": "Scales and keys, laptop",
@@ -100,7 +188,7 @@
     },
     "Scales.dc.html": {
       "x": 8049,
-      "y": 2738,
+      "y": 5917,
       "w": 450,
       "h": 920,
       "title": "Scales and keys, phone",
@@ -108,7 +196,7 @@
     },
     "IntervalsLaptop.dc.html": {
       "x": 0,
-      "y": 3918,
+      "y": 7097,
       "w": 2143,
       "h": 1299,
       "title": "Intervals, laptop",
@@ -116,7 +204,7 @@
     },
     "Intervals.dc.html": {
       "x": 2223,
-      "y": 4297,
+      "y": 7476,
       "w": 450,
       "h": 920,
       "title": "Intervals, phone",
@@ -124,7 +212,7 @@
     },
     "ProgressionsLaptop.dc.html": {
       "x": 2913,
-      "y": 3918,
+      "y": 7097,
       "w": 2143,
       "h": 1299,
       "title": "Progressions, laptop",
@@ -132,7 +220,7 @@
     },
     "Progressions.dc.html": {
       "x": 5136,
-      "y": 4297,
+      "y": 7476,
       "w": 450,
       "h": 920,
       "title": "Progressions, phone",
@@ -140,7 +228,7 @@
     },
     "ProgressionLaptop.dc.html": {
       "x": 5826,
-      "y": 3918,
+      "y": 7097,
       "w": 2143,
       "h": 1299,
       "title": "A progression, laptop",
@@ -148,7 +236,7 @@
     },
     "Progression.dc.html": {
       "x": 8049,
-      "y": 4297,
+      "y": 7476,
       "w": 450,
       "h": 920,
       "title": "A progression, phone",
@@ -156,7 +244,7 @@
     },
     "AccompanimentLaptop.dc.html": {
       "x": 0,
-      "y": 5477,
+      "y": 8656,
       "w": 2143,
       "h": 1299,
       "title": "Accompaniment, laptop",
@@ -164,7 +252,7 @@
     },
     "Accompaniment.dc.html": {
       "x": 2223,
-      "y": 5856,
+      "y": 9035,
       "w": 450,
       "h": 920,
       "title": "Accompaniment, phone",
@@ -172,7 +260,7 @@
     },
     "ChordPlayerLaptop.dc.html": {
       "x": 2913,
-      "y": 5477,
+      "y": 8656,
       "w": 2143,
       "h": 1299,
       "title": "Chord player, laptop",
@@ -180,7 +268,7 @@
     },
     "ChordPlayer.dc.html": {
       "x": 5136,
-      "y": 5856,
+      "y": 9035,
       "w": 450,
       "h": 920,
       "title": "Chord player, phone",
@@ -188,7 +276,7 @@
     },
     "ExercisesLaptop.dc.html": {
       "x": 5826,
-      "y": 5477,
+      "y": 8656,
       "w": 2143,
       "h": 1299,
       "title": "Exercises, laptop",
@@ -196,7 +284,7 @@
     },
     "Exercises.dc.html": {
       "x": 8049,
-      "y": 5856,
+      "y": 9035,
       "w": 450,
       "h": 920,
       "title": "Exercises, phone",
@@ -204,7 +292,7 @@
     },
     "ExerciseLaptop.dc.html": {
       "x": 0,
-      "y": 7036,
+      "y": 10215,
       "w": 2143,
       "h": 1299,
       "title": "An exercise, laptop",
@@ -212,7 +300,7 @@
     },
     "Exercise.dc.html": {
       "x": 2223,
-      "y": 7415,
+      "y": 10594,
       "w": 450,
       "h": 920,
       "title": "An exercise, phone",
@@ -220,7 +308,7 @@
     },
     "QuizLaptop.dc.html": {
       "x": 2913,
-      "y": 7036,
+      "y": 10215,
       "w": 2143,
       "h": 1299,
       "title": "Quiz, laptop",
@@ -228,7 +316,7 @@
     },
     "Quiz.dc.html": {
       "x": 5136,
-      "y": 7415,
+      "y": 10594,
       "w": 450,
       "h": 920,
       "title": "Quiz, phone",
@@ -236,7 +324,7 @@
     },
     "QuizRunLaptop.dc.html": {
       "x": 5826,
-      "y": 7036,
+      "y": 10215,
       "w": 2143,
       "h": 1299,
       "title": "A quiz run, laptop",
@@ -244,7 +332,7 @@
     },
     "QuizRun.dc.html": {
       "x": 8049,
-      "y": 7415,
+      "y": 10594,
       "w": 450,
       "h": 920,
       "title": "A quiz run, phone",
@@ -252,7 +340,7 @@
     },
     "MetronomeLaptop.dc.html": {
       "x": 0,
-      "y": 8595,
+      "y": 11774,
       "w": 2143,
       "h": 1299,
       "title": "Metronome, laptop",
@@ -260,7 +348,7 @@
     },
     "Metronome.dc.html": {
       "x": 2223,
-      "y": 8974,
+      "y": 12153,
       "w": 450,
       "h": 920,
       "title": "Metronome, phone",
@@ -268,7 +356,7 @@
     },
     "TunerLaptop.dc.html": {
       "x": 2913,
-      "y": 8595,
+      "y": 11774,
       "w": 2143,
       "h": 1299,
       "title": "Tuner, laptop",
@@ -276,7 +364,7 @@
     },
     "Tuner.dc.html": {
       "x": 5136,
-      "y": 8974,
+      "y": 12153,
       "w": 450,
       "h": 920,
       "title": "Tuner, phone",
@@ -284,7 +372,7 @@
     },
     "ChordFinderLaptop.dc.html": {
       "x": 5826,
-      "y": 8595,
+      "y": 11774,
       "w": 2143,
       "h": 1299,
       "title": "Chord finder, laptop",
@@ -292,7 +380,7 @@
     },
     "ChordFinder.dc.html": {
       "x": 8049,
-      "y": 8974,
+      "y": 12153,
       "w": 450,
       "h": 920,
       "title": "Chord finder, phone",
@@ -300,7 +388,7 @@
     },
     "CircleOfFifthsLaptop.dc.html": {
       "x": 0,
-      "y": 10154,
+      "y": 13333,
       "w": 2143,
       "h": 1299,
       "title": "Circle of fifths, laptop",
@@ -308,7 +396,7 @@
     },
     "CircleOfFifths.dc.html": {
       "x": 2223,
-      "y": 10533,
+      "y": 13712,
       "w": 450,
       "h": 920,
       "title": "Circle of fifths, phone",
@@ -322,6 +410,17 @@
     "Song.dc.html",
     "EditorLaptop.dc.html",
     "Editor.dc.html",
+    "PlayerLaptop.dc.html",
+    "Player.dc.html",
+    "PlayerLaptopLoop.dc.html",
+    "PlayerLoop.dc.html",
+    "PlayerLaptopKeyboard.dc.html",
+    "PlayerKeyboard.dc.html",
+    "PlayerPractice.dc.html",
+    "PlayerHands.dc.html",
+    "PlayerSettings.dc.html",
+    "PlayerDone.dc.html",
+    "PlayerDiagrams.dc.html",
     "Laptop.dc.html",
     "Main.dc.html",
     "ChordsLaptop.dc.html",
@@ -363,9 +462,16 @@
       "kind": "title1",
       "maxW": 8739
     },
-    "practice": {
+    "player": {
       "x": 0,
       "y": 2059,
+      "text": "The Player",
+      "kind": "title1",
+      "maxW": 8739
+    },
+    "practice": {
+      "x": 0,
+      "y": 5238,
       "text": "Practice",
       "kind": "title1",
       "maxW": 8739
