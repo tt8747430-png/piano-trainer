@@ -57,6 +57,22 @@
    "h": 1299,
    "is_interactive": true,
    "title": "MacBook Air: Scales and keys in three columns: the choices on the left, the scale and its tab in the middle, Play with tempo and Practise this scale on the right"
+  },
+  "Intervals.dc.html": {
+   "x": 0,
+   "y": 4257,
+   "w": 450,
+   "h": 920,
+   "is_interactive": true,
+   "title": "iPhone 17 Pro: Intervals. From (a root) and Play as; the interval chosen as the page's hero (its name, semitones, the staff, what it sounds like, songs that open with it); Simple · Compound; every interval a row to tap; Play and Play all over the keys"
+  },
+  "IntervalsLaptop.dc.html": {
+   "x": 530,
+   "y": 4257,
+   "w": 2143,
+   "h": 1299,
+   "is_interactive": true,
+   "title": "MacBook Air: Intervals. The list on the left, the interval chosen on the right with Play, Play all and Train your ear; the keys across the foot"
   }
  },
  "order": [
@@ -65,7 +81,9 @@
   "Chords.dc.html",
   "ChordsLaptop.dc.html",
   "Scales.dc.html",
-  "ScalesLaptop.dc.html"
+  "ScalesLaptop.dc.html",
+  "Intervals.dc.html",
+  "IntervalsLaptop.dc.html"
  ],
  "notes": {},
  "designSystems": []

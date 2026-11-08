@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Intervals, phone</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&amp;family=Instrument+Serif&amp;family=Noto+Music&amp;display=swap">
+<style>
+body{margin:0}
+button{font:inherit;cursor:pointer}
+.nos{scrollbar-width:none}.nos::-webkit-scrollbar{display:none}
+main>*{flex:none}
+</style>
+</helmet>
+<div style="width: 450px; height: 920px; position: relative; font-family: 'Instrument Sans', system-ui, sans-serif">
+<div style="position: absolute; left: 24px; top: 23px; width: 402px; height: 874px; overflow: hidden; border-radius: 62px; background: #F7F3EE; color: #1A1612; display: flex; flex-direction: column">
+<div style="flex: none; height: 54px; position: relative"><div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 402px; height: 54px; z-index: 50; background: #F7F3EE; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; padding: 6px 34px 0 50px; font: 600 17px -apple-system, system-ui, sans-serif"><span>9:41</span><span style="display: flex; align-items: center; gap: 6px"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"></rect><rect x="5" y="5.5" width="3" height="6.5" rx="1"></rect><rect x="10" y="3" width="3" height="9" rx="1"></rect><rect x="15" y="0" width="3" height="12" rx="1"></rect></svg><svg width="27" height="13" viewBox="0 0 27 13" fill="none"><rect x="0.5" y="0.5" width="23" height="12" rx="3.5" stroke="currentColor" opacity="0.4"></rect><rect x="2" y="2" width="20" height="9" rx="2" fill="currentColor"></rect><rect x="25" y="4.5" width="1.5" height="4" rx="0.75" fill="currentColor" opacity="0.4"></rect></svg></span></div></div>
+<header style="flex: none; height: 52px; display: flex; align-items: center; gap: 10px; padding: 0 12px"><button type="button" aria-label="Back to Practice" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: #EFE8DF; color: #1A1612; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"></path></svg></button><h1 style="flex: 1; margin: 0; font-size: 20px; font-weight: 700">Intervals</h1><button type="button" aria-label="Interval settings" onClick="{{openSettings}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: #EFE8DF; color: #1A1612; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"></path><circle cx="15" cy="6" r="2"></circle><circle cx="9" cy="12" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg></button></header>
+<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 6px 16px 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; gap: 10px"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; font-weight: 600; color: #6B6259">From</span><button type="button" aria-haspopup="dialog" aria-expanded="{{rootOn}}" onClick="{{openRoot}}" style="height: 48px; border: 0; border-radius: 12px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10); display: flex; align-items: center; gap: 8px; padding: 0 12px 0 14px; color: #1A1612; text-align: left"><span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; font-weight: 400">{{rootLabel}}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B6259" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 10 5 5 5-5"></path></svg></button></div><div style="flex: 3.2; min-width: 0; display: flex"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; font-weight: 600; color: #6B6259">Play as</span><div role="radiogroup" aria-label="Play as" style="display: flex; gap: 2px; padding: 3px; border-radius: 12px; background: #EFE8DF"><sc-for list="{{waySeg}}" as="s" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{s.on}}" onClick="{{s.pick}}" style="flex: 1; min-width: 0; height: 48px; border: 0; border-radius: 9px; background: {{s.bg}}; box-shadow: {{s.sh}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #1A1612; font-size: 14px; font-weight: {{s.w}}; white-space: nowrap">{{s.l}}</button></sc-for></div></div></div></div>
+<div style="border-radius: 16px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10); padding: 16px 12px 14px 18px; display: flex; flex-direction: column; gap: 10px"><div style="display: flex; align-items: center; gap: 8px"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 34px; line-height: 1">{{name}}</span><span style="font-size: 15px; font-weight: 600">{{abbr}} · {{semis}}</span><span style="font-size: 14px; color: #6B6259">{{pair}}</span></div><svg viewBox="0 0 170 110" width="150" height="97" role="img" aria-label="{{name}} on the staff" style="flex: none"><path d="M6 28H164M6 37H164M6 46H164M6 55H164M6 64H164M6 28V64M164 28V64" stroke="#1A1612" stroke-width="0.8" fill="none"></path><text x="9" y="72" font-family="Noto Music" font-size="46" fill="#1A1612">𝄞</text><sc-for list="{{ledgers}}" as="l" hint-placeholder-count="0"><line x1="{{l.x1}}" x2="{{l.x2}}" y1="{{l.y}}" y2="{{l.y}}" stroke="#1A1612" stroke-width="0.9"></line></sc-for><sc-for list="{{notes}}" as="n" hint-placeholder-count="2"><ellipse cx="{{n.x}}" cy="{{n.y}}" rx="5.6" ry="4" transform="rotate(-20 {{n.x}} {{n.y}})" fill="none" stroke="#1A1612" stroke-width="1.6"></ellipse><text x="{{n.ax}}" y="{{n.ay}}" font-family="Noto Music" font-size="15" text-anchor="middle" fill="#1A1612">{{n.acc}}</text></sc-for></svg></div><span style="font-size: 15px; color: #4A433C">{{meaning}}</span><sc-if value="{{hasSongs}}" hint-placeholder-val="{{true}}"><div style="display: flex; flex-direction: column; gap: 6px; padding-top: 10px; box-shadow: inset 0 1px 0 #F1EBE3"><div style="display: flex; gap: 10px; font-size: 14px"><span style="flex: none; width: 46px; font-weight: 700; color: #6B6259">Up</span><span>{{up}}</span></div><sc-if value="{{down}}" hint-placeholder-val="{{true}}"><div style="display: flex; gap: 10px; font-size: 14px"><span style="flex: none; width: 46px; font-weight: 700; color: #6B6259">Down</span><span>{{down}}</span></div></sc-if></div></sc-if></div>
+<div style="display: flex"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; font-weight: 600; color: #6B6259">Intervals</span><div role="radiogroup" aria-label="Intervals" style="display: flex; gap: 2px; padding: 3px; border-radius: 12px; background: #EFE8DF"><sc-for list="{{setSeg}}" as="s" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{s.on}}" onClick="{{s.pick}}" style="flex: 1; min-width: 0; height: 40px; border: 0; border-radius: 9px; background: {{s.bg}}; box-shadow: {{s.sh}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #1A1612; font-size: 14px; font-weight: {{s.w}}; white-space: nowrap">{{s.l}}</button></sc-for></div></div></div>
+<div role="listbox" aria-label="Intervals" style="border-radius: 14px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10); overflow: hidden"><sc-for list="{{rows}}" as="r" hint-placeholder-count="14"><button type="button" role="option" aria-selected="{{r.on}}" onClick="{{r.pick}}" style="width: 100%; min-height: 54px; border: 0; background: {{r.bg}}; box-shadow: {{r.ring}}; display: flex; align-items: center; gap: 12px; padding: 0 14px; color: #1A1612; text-align: left"><span style="flex: none; width: 40px; font-size: 16px; font-weight: 700; color: #4A433C">{{r.abbr}}</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">{{r.name}}</span><span style="font-size: 13px; color: #6B6259">{{r.semis}}</span></span><span style="font-size: 14px; color: #4A433C; font-variant-numeric: tabular-nums">{{r.to}}</span></button></sc-for></div>
+<section style="display: flex; flex-direction: column; gap: 8px"><h2 style="margin: 0 2px; display: flex; align-items: center; gap: 6px; font-size: 17px; font-weight: 700">Train your ear</h2><div style="border-radius: 14px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10); overflow: hidden"><button type="button" style="width: 100%; min-height: 60px; border: 0; background: transparent; display: flex; align-items: center; gap: 12px; padding: 8px 14px; color: #1A1612; text-align: left"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">Intervals by ear</span><span style="font-size: 13px; color: #6B6259">Hear one, name it · in the Quiz</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A8178" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></button></div></section>
+</main>
+<div style="flex: none; padding: 10px 16px; background: #F7F3EE; box-shadow: 0 -1px 0 #E9E2D8"><div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px"><button type="button" aria-pressed="{{sounding}}" onClick="{{togglePlay}}" style="height: 48px; border: 0; border-radius: 12px; background: #1A1612; color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 16px; font-weight: 700"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5Z"></path></svg>{{playLabel}}</button><button type="button" style="height: 48px; border: 0; border-radius: 12px; background: #FFFFFF; box-shadow: 0 0 0 1px #E2DACF; color: #1A1612; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 16px; font-weight: 600"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M4 12h10M4 18h7M17 14v6l4-3Z"></path></svg>Play all</button></div></div>
+<div style="flex: none"><div role="group" aria-label="The keys: {{fullName}}" style="position: relative; height: 108px; background: #2A1F18; border-top: 4px solid #8E2A22">
+<sc-for list="{{whites}}" as="k" hint-placeholder-count="26"><span style="position: absolute; left: {{k.x}}; width: {{k.w}}; top: 0; bottom: 0; box-sizing: border-box; border: 1px solid #CFC6BA; border-top: 0; border-radius: 0 0 5px 5px; background: {{k.fill}}; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; font-size: 10px; font-weight: 600; color: #8A8178">{{k.lab}}</span></sc-for>
+<sc-for list="{{blacks}}" as="k" hint-placeholder-count="18"><span style="position: absolute; left: {{k.x}}; width: {{k.w}}; top: 0; height: 60%; border-radius: 0 0 3px 3px; background: {{k.fill}}"></span></sc-for>
+</div></div>
+<div aria-hidden="true" style="flex: none; height: 26px; background: #2A1F18"></div>
+<div aria-hidden="true" style="position: absolute; left: 134px; bottom: 8px; width: 134px; height: 5px; border-radius: 9999px; background: #FFFFFF; z-index: 90"></div>
+<sc-if value="{{rootOn}}" hint-placeholder-val="{{false}}"><div onClick="{{closeAll}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(26,22,18,0.32)"></div><section role="dialog" aria-label="From" class="nos" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 680px; overflow-y: auto; border-radius: 22px 22px 0 0; background: #F7F3EE; padding: 8px 16px 34px; display: flex; flex-direction: column; gap: 10px"><div aria-hidden="true" style="width: 36px; height: 5px; margin: 0 auto; border-radius: 9999px; background: #D9D1C6"></div><h2 style="margin: 0 4px; font-size: 20px; font-weight: 700">From</h2><div role="radiogroup" aria-label="From" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{roots}}" as="r" hint-placeholder-count="12"><button type="button" role="radio" aria-checked="{{r.on}}" onClick="{{r.pick}}" style="height: 52px; border: 0; border-radius: 12px; background: {{r.bg}}; color: {{r.fg}}; box-shadow: 0 0 0 1px #E2DACF; font-family: 'Instrument Serif', Georgia, serif; font-size: 24px">{{r.r}}</button></sc-for></div></section></sc-if>
+<sc-if value="{{settingsOn}}" hint-placeholder-val="{{false}}"><section aria-label="Interval settings" style="position: absolute; inset: 0; z-index: 70; background: #F7F3EE; display: flex; flex-direction: column"><div style="flex: none; height: 54px; position: relative"><div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 402px; height: 54px; z-index: 50; background: #F7F3EE; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; padding: 6px 34px 0 50px; font: 600 17px -apple-system, system-ui, sans-serif"><span>9:41</span><span style="display: flex; align-items: center; gap: 6px"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"></rect><rect x="5" y="5.5" width="3" height="6.5" rx="1"></rect><rect x="10" y="3" width="3" height="9" rx="1"></rect><rect x="15" y="0" width="3" height="12" rx="1"></rect></svg><svg width="27" height="13" viewBox="0 0 27 13" fill="none"><rect x="0.5" y="0.5" width="23" height="12" rx="3.5" stroke="currentColor" opacity="0.4"></rect><rect x="2" y="2" width="20" height="9" rx="2" fill="currentColor"></rect><rect x="25" y="4.5" width="1.5" height="4" rx="0.75" fill="currentColor" opacity="0.4"></rect></svg></span></div></div><header style="flex: none; height: 52px; display: flex; align-items: center; gap: 10px; padding: 0 12px"><button type="button" aria-label="Back to Intervals" onClick="{{closeSettings}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: #EFE8DF; color: #1A1612; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"></path></svg></button><h1 style="flex: 1; margin: 0; font-size: 20px; font-weight: 700">Interval settings</h1></header><div style="padding: 10px 16px"><div style="display: flex; flex-direction: column; gap: 18px"><div style="display: flex"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; font-weight: 600; color: #6B6259">Play all</span><div role="radiogroup" aria-label="Play all" style="display: flex; gap: 2px; padding: 3px; border-radius: 12px; background: #EFE8DF"><sc-for list="{{orderSeg}}" as="s" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{s.on}}" onClick="{{s.pick}}" style="flex: 1; min-width: 0; height: 40px; border: 0; border-radius: 9px; background: {{s.bg}}; box-shadow: {{s.sh}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #1A1612; font-size: 14px; font-weight: {{s.w}}; white-space: nowrap">{{s.l}}</button></sc-for></div></div></div><div style="display: flex"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; font-weight: 600; color: #6B6259">Speed</span><div role="radiogroup" aria-label="Speed" style="display: flex; gap: 2px; padding: 3px; border-radius: 12px; background: #EFE8DF"><sc-for list="{{speedSeg}}" as="s" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{s.on}}" onClick="{{s.pick}}" style="flex: 1; min-width: 0; height: 40px; border: 0; border-radius: 9px; background: {{s.bg}}; box-shadow: {{s.sh}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #1A1612; font-size: 14px; font-weight: {{s.w}}; white-space: nowrap">{{s.l}}</button></sc-for></div></div></div><div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; font-weight: 600; color: #6B6259">On-screen piano</span><div style="border-radius: 14px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10); overflow: hidden"><button type="button" style="width: 100%; min-height: 52px; border: 0; background: transparent; display: flex; align-items: center; gap: 10px; padding: 0 14px; color: #1A1612; text-align: left; box-shadow: inset 0 -1px 0 #F1EBE3"><span style="flex: 1; font-size: 16px">All piano settings</span><span style="font-size: 15px; color: #6B6259"></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A8178" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></button></div></div></div></div></section></sc-if>
+</div>
+<img src="/_blob/2fd798458923e267dd22b7a996a98294" alt="" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 450px; height: 920px; pointer-events: none; z-index: 100">
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":450,"height":920}}'>
+const SH = '0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)';
+
+const ROOTS = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
+const ROOTL = [0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6];
+const LET = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+const NAT = [0, 2, 4, 5, 7, 9, 11];
+const ACC = { '-2': '𝄫', '-1': '♭', '0': '', '1': '♯', '2': '𝄪' };
+// abbr, name, semitones, letter steps, meaning, up songs, down songs
+const IV = [
+  ['P1', 'Unison', 0, 0, 'The same note twice.', 'Jingle Bells · Happy Birthday', ''],
+  ['m2', 'Minor second', 1, 1, 'A half step: the tightest clash, the leading note to the tonic.', 'Jaws (theme) · White Christmas', 'Für Elise · Joy to the World'],
+  ['M2', 'Major second', 2, 1, 'A whole step: one step of the scale.', 'Frère Jacques · Silent Night', 'Mary Had a Little Lamb · Yesterday'],
+  ['m3', 'Minor third', 3, 2, 'The 3rd of a minor chord: darker.', 'Greensleeves · Smoke on the Water', 'Hey Jude · The Star-Spangled Banner'],
+  ['M3', 'Major third', 4, 2, 'The 3rd of a major chord: brighter.', 'When the Saints Go Marching In', 'Beethoven’s Fifth Symphony'],
+  ['P4', 'Perfect fourth', 5, 3, 'Open and stable: the subdominant over the tonic.', 'Here Comes the Bride · Amazing Grace', 'Eine kleine Nachtmusik'],
+  ['A4', 'Augmented fourth', 6, 3, 'The tritone: three whole steps, the tension in a dominant 7th.', 'The Simpsons (theme) · Maria', 'Black Sabbath'],
+  ['d5', 'Diminished fifth', 6, 4, 'The tritone spelled as a 5th: the 5th of a diminished chord.', 'The Simpsons (theme) · Maria', 'Black Sabbath'],
+  ['P5', 'Perfect fifth', 7, 4, 'The most open consonance: the root and 5th of every triad.', 'Twinkle, Twinkle, Little Star · Star Wars', 'The Flintstones · Minuet in G'],
+  ['m6', 'Minor sixth', 8, 5, 'Soft and sad: a major 3rd turned upside down.', 'The Entertainer (chorus)', 'Love Story (theme)'],
+  ['M6', 'Major sixth', 9, 5, 'Warm and open: a minor 3rd turned upside down.', 'My Bonnie Lies over the Ocean', 'Nobody Knows the Trouble I’ve Seen'],
+  ['m7', 'Minor seventh', 10, 6, 'The 7th of a dominant chord: it wants to resolve.', 'Somewhere (West Side Story) · Star Trek', 'Watermelon Man · An American in Paris'],
+  ['M7', 'Major seventh', 11, 6, 'A half step under the octave: the 7th of a major 7th chord.', 'Take On Me (chorus) · Bali Ha’i', 'I Love You (Cole Porter)'],
+  ['P8', 'Octave', 12, 7, 'The same note an octave higher.', 'Over the Rainbow · Singin’ in the Rain', 'Willow Weep for Me']
+];
+const IVC = [
+  ['m9', 'Minor ninth', 13, 8, 'A minor 2nd an octave higher: the ♭9 of a dominant chord.'],
+  ['M9', 'Major ninth', 14, 8, 'A major 2nd an octave higher: the 9th of a chord.'],
+  ['A9', 'Augmented ninth', 15, 8, 'An augmented 2nd an octave higher: the ♯9 of a blues dominant.'],
+  ['P11', 'Perfect eleventh', 17, 10, 'A 4th an octave higher: the 11th of a chord.'],
+  ['A11', 'Augmented eleventh', 18, 10, 'An augmented 4th an octave higher: the ♯11 of a Lydian chord.'],
+  ['m13', 'Minor thirteenth', 20, 12, 'A minor 6th an octave higher: the ♭13 of a dominant chord.'],
+  ['M13', 'Major thirteenth', 21, 12, 'A major 6th an octave higher: the 13th of a chord.']
+].map((x) => x.concat(['', '']));
+function spell(m, letter) {
+  let best = null;
+  for (let o = 1; o < 9; o++) { const n = 12 * (o + 1) + NAT[letter]; if (best === null || Math.abs(m - n) < Math.abs(best.d)) best = { o, d: m - n }; }
+  return { letter, oct: best.o, acc: best.d, steps: best.o * 7 + letter, name: LET[letter] + ACC[String(best.d)] };
+}
+const LO = 48, HI = 84;
+function keyboard(a, b, sounding) {
+  const whites = [];
+  for (let m = LO; m <= HI; m++) { if (NAT.includes(m % 12)) whites.push(m); }
+  const W = 100 / whites.length;
+  const col = (m) => m === a ? (sounding ? '#C9561A' : '#E8762F') : m === b ? (sounding ? '#E8762F' : '#F7C9A5') : '';
+  const ws = whites.map((m, i) => ({ x: (i * W).toFixed(3) + '%', w: W.toFixed(3) + '%', fill: col(m) || '#FFFFFF', lab: m === 60 ? 'C4' : '' }));
+  const bs = [];
+  for (let m = LO; m <= HI; m++) { if (NAT.includes(m % 12)) continue; const i = whites.indexOf(m - 1); bs.push({ x: ((i + 1) * W - W * 0.3).toFixed(3) + '%', w: (W * 0.6).toFixed(3) + '%', fill: col(m) || '#1A1612' }); }
+  return { whites: ws, blacks: bs };
+}
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const set = (o) => this.setState(o);
+    const root = st.root ?? 0, way = st.way ?? 'up', set2 = st.set ?? 'simple', sel = st.sel ?? 'P5', sheet = st.sheet || null, page = st.page || null, sounding = st.sounding ?? false, order = st.order ?? 'list', speed = st.speed ?? 'medium';
+    const list = set2 === 'simple' ? IV : IVC;
+    const cur = list.find((x) => x[0] === sel) || list[0];
+    const a = 60 + root, b = a + cur[2];
+    const sa = spell(a, ROOTL[root]), sb = spell(b, (ROOTL[root] + cur[3]) % 7);
+    if (cur[3] >= 7) sb.steps = sa.steps + cur[3];
+    const low = way === 'down' ? sb : sa, high = way === 'down' ? sa : sb;
+    // staff: treble, E4 = steps 30 on y 64, 4.5 per step
+    const y = (s) => 64 - (s - 30) * 4.5;
+    const notesOn = way === 'together' ? [{ s: sa, x: 96 }, { s: sb, x: cur[2] <= 2 && cur[2] > 0 ? 107 : 96 }] : (way === 'up' ? [{ s: sa, x: 82 }, { s: sb, x: 132 }] : [{ s: sb, x: 82 }, { s: sa, x: 132 }]);
+    const notes = notesOn.map((n) => ({ x: n.x, y: y(n.s.steps), acc: ACC[String(n.s.acc)], ax: n.x - 15, ay: y(n.s.steps) + 4 }));
+    const ledgers = [];
+    notesOn.forEach((n) => { for (let q = 28; q >= n.s.steps; q -= 2) ledgers.push({ x1: n.x - 9, x2: n.x + 9, y: y(q) }); for (let q = 40; q <= n.s.steps; q += 2) ledgers.push({ x1: n.x - 9, x2: n.x + 9, y: y(q) }); });
+    const kb = keyboard(a, b, sounding);
+    const seg = (on) => ({ bg: on ? '#FFFFFF' : 'transparent', sh: on ? '0 0 0 1px rgba(26,22,18,0.06), 0 1px 3px rgba(26,22,18,0.12)' : 'none', w: on ? 700 : 500 });
+    const semis = (n) => n + (n === 1 ? ' semitone' : ' semitones');
+    return {
+      SH, rootLabel: ROOTS[root], name: cur[1], abbr: cur[0], semis: semis(cur[2]), meaning: cur[4], pair: sa.name + ' to ' + sb.name,
+      up: cur[5], down: cur[6], hasSongs: !!cur[5], noSongs: !cur[5],
+      notes, ledgers,
+      rows: list.map((x) => { const on = x[0] === cur[0]; const s2 = spell(a + x[2], (ROOTL[root] + x[3]) % 7); return { abbr: x[0], name: x[1], semis: semis(x[2]), to: ROOTS[root] + '–' + s2.name, on, bg: on ? '#FDF1E8' : '#FFFFFF', ring: on ? 'inset 0 0 0 1.5px #E8762F' : 'inset 0 -1px 0 #F1EBE3', pick: () => set({ sel: x[0], sounding: true }) }; }),
+      waySeg: [['up', 'Ascending'], ['down', 'Descending'], ['together', 'Harmonic']].map(([id, l]) => ({ l, on: way === id, ...seg(way === id), pick: () => set({ way: id }) })),
+      setSeg: [['simple', 'Simple'], ['compound', 'Compound']].map(([id, l]) => ({ l, on: set2 === id, ...seg(set2 === id), pick: () => set({ set: id, sel: id === 'simple' ? 'P5' : 'M9' }) })),
+      whites: kb.whites, blacks: kb.blacks, fullName: cur[1] + ' from ' + ROOTS[root],
+      sounding, playLabel: sounding ? 'Stop' : 'Play ' + cur[0], togglePlay: () => set({ sounding: !sounding }),
+      rootOn: sheet === 'root', anyOn: !!sheet, openRoot: () => set({ sheet: sheet === 'root' ? null : 'root' }), closeAll: () => set({ sheet: null }),
+      roots: ROOTS.map((r, i) => ({ r, on: i === root, bg: i === root ? '#1A1612' : '#FFFFFF', fg: i === root ? '#FFFFFF' : '#1A1612', pick: () => set({ root: i, sheet: null }) })),
+      settingsOn: page === 'settings', openSettings: () => set({ page: 'settings', sheet: null }), closeSettings: () => set({ page: null }),
+      orderSeg: [['list', 'In order'], ['shuffle', 'Shuffled']].map(([id, l]) => ({ l, on: order === id, ...seg(order === id), pick: () => set({ order: id }) })),
+      speedSeg: [['slow', 'Slow'], ['medium', 'Medium'], ['fast', 'Fast']].map(([id, l]) => ({ l, on: speed === id, ...seg(speed === id), pick: () => set({ speed: id }) }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

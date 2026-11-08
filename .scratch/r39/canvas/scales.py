@@ -256,7 +256,7 @@ const SH = '{SH}';
 """
 open(OUT + 'Scales.dc.html', 'w').write(phone)
 
-laptop = HEAD % 'Scales and keys, laptop' + LAPFRAME_TOP + f"""<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: #F7F3EE; color: #1A1612; display: grid; grid-template-columns: 248px minmax(0, 1fr)">
+laptop = HEAD % 'Scales and keys, laptop' + LAPFRAME_TOP + f"""<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: #F7F3EE; color: #1A1612; display: grid; grid-template-columns: 248px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr)">
 {SIDE}
 <div style="position: relative; min-width: 0; display: flex; flex-direction: column">
 <header style="flex: none; height: 72px; display: flex; align-items: center; gap: 12px; padding: 0 40px">{BAR}</header>
