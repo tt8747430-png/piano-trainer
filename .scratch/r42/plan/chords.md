@@ -5,6 +5,16 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v34: checked in the canvas's own runtime.** Owner: "the settings arent working and the fingering still doesn't
+  work and where are its settings". Two faults the local renderer hid:
+  - A value inside SVG `<text>` is drawn by the canvas as an HTML span, which SVG does not show: the finger numbers,
+    the staff's sharps and flats, and the Circle of fifths' key names were missing. Each is now literal text (one
+    `sc-if` per value), or HTML over the drawing.
+  - Show the keyboard's condition was written with single braces, so it was always true. Fixed.
+  - Every board is now checked with `.scratch/r39/canvas/realrt.mjs`, the canvas's own runtime (read from the
+    artifact, `RT=` its path), before a publish.
+  - The fingering has no settings: it is shown, as in printed music.
+
 - **v33: one grand staff, one hand, the fingering engraved.** Owner: "the fingering doesn't work, and the both clefs
   and treble clef setting are weird, why do we need them. and the bass in the left hand, how does this work, this
   setting is also weird".
@@ -212,3 +222,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: Tensions as Add a note; Both clefs | Treble on the staff; Practise on the page; one prominent Play (v31).
 - 2026-11-08: no gear, Share or More; a Keyboard button; Bass in the left hand inside Voicing; fingering on the staff (v32).
 - 2026-11-08: the clef choice and Bass in the left hand go; fingering stacked as engraved (v33).
+- 2026-11-08: fingering, accidentals, Show the keyboard and the circle's names fixed in the real runtime (v34).

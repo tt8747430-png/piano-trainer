@@ -274,6 +274,9 @@ owner's, typos fixed.
   is also weird". Piano gets the grand staff with no clef choice. A switch whose effect contradicts the page (a left-hand
   root under a slash chord) goes. Fingering is a stacked column over the chord (under it when low), never a loose
   column beside it.
+- **Test a canvas in its own runtime, not a look-alike (R42, v34):** "the settings arent working and the fingering
+  still doesn't work". A local renderer showed both working; the canvas did not. Tap every control in
+  `.scratch/r39/canvas/realrt.mjs` before saying it works.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple
