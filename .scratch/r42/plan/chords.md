@@ -5,6 +5,13 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v46: the chosen letter opens into its spellings.** Owner: "the chord root switch looks interesting but you could
+  improve it and make more clear".
+  - Still one row, C to B. The chosen letter widens into a raised capsule holding its spellings, flat to sharp, each
+    a button: **D♭ D D♯**, **G♭ G G♯**, **C C♯**, **E♭ E**, **F F♯**, **A♭ A A♯**, **B♭ B**; the one in use on honey.
+    Another letter is one tap (natural); its spellings open with it. Nothing hidden: no tap-again, no marks to decode.
+  - Widths: the capsule takes 1.1 a letter per spelling, so the other letters keep 37px on a 393 phone (48 tall).
+  - Replaces v43's tap-again and v44's ♮ ♯ ♭ marks.
 - **v45: every root starts in the octave from middle C.** Owner: "why some chords like the f sharp are shown one
   octave lower".
   - Before, roots F♯ to B started an octave down (F♯3 to B3) to keep the chord near the middle; the jump between F
@@ -331,3 +338,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: a chord's root as one row of letters, tap again for ♯ then ♭ (v43).
 - 2026-11-08: the chosen root letter shows its ♮ ♯ ♭, the current one marked (v44).
 - 2026-11-08: every root from middle C; no octave drop from F♯ (v45).
+- 2026-11-08: the chosen root letter opens into its spellings, D♭ D D♯ (v46).
