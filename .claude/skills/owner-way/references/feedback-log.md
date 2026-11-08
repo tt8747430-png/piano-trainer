@@ -207,6 +207,8 @@ owner's, typos fixed.
   and Play as, Simple · Compound, rows to tap, Play and Play all over the keys, Train your ear to the Quiz. Waiting.
 - **Quiz:** one setup and four drills for every trainer; a cadence trainer.
 - **Harmony:** draw the roles and moves on the chords (the Function · Root motion switch changed only letters).
+  **Drawn (R39-8, 2026-11-08):** Progressions as a library like Songs; a progression's chords as tiles coloured by role
+  with the root's move between them, in any key, voice-led or block. Waiting for the owner's word.
 - **Chord player:** Musicca's controls and options, with the best free sounds.
 - **Metronome:** BPM large with −10 −1 +1 +10, a slider, Tap tempo, sound and meter, one Play, beats as squares; beats you set
   (accent, normal, silent), any meter, subdivisions, recorded sounds; one engine for the page, the Player and the quick

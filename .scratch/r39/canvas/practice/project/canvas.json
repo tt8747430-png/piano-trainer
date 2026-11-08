@@ -73,6 +73,38 @@
    "h": 1299,
    "is_interactive": true,
    "title": "MacBook Air: Intervals. The list on the left, the interval chosen on the right with Play, Play all and Train your ear; the keys across the foot"
+  },
+  "Progressions.dc.html": {
+   "x": 0,
+   "y": 5676,
+   "w": 450,
+   "h": 920,
+   "is_interactive": true,
+   "title": "iPhone 17 Pro: Progressions as a library in the app's library shape: search with Sort and filter, place chips (All, Favourites, Recently played, Mine), what the colours mean, styles that fold with counts, every row's numerals coloured by role, a heart; + adds"
+  },
+  "ProgressionsLaptop.dc.html": {
+   "x": 530,
+   "y": 5676,
+   "w": 2143,
+   "h": 1299,
+   "is_interactive": true,
+   "title": "MacBook Air: Progressions with the library tree (places and styles with counts) and a table of name and chords; Add in the bar"
+  },
+  "Progression.dc.html": {
+   "x": 0,
+   "y": 7095,
+   "w": 450,
+   "h": 920,
+   "is_interactive": true,
+   "title": "iPhone 17 Pro: a progression's page. Its style, name and sound; Key, Numerals of, Voicing; the chords as tiles coloured by role with the root's move between them; About, Practise it, More like it; Play with tempo over the keys"
+  },
+  "ProgressionLaptop.dc.html": {
+   "x": 530,
+   "y": 7095,
+   "w": 2143,
+   "h": 1299,
+   "is_interactive": true,
+   "title": "MacBook Air: a progression's page with the chords on the left and About, Practise it and More like it on the right"
   }
  },
  "order": [
@@ -83,7 +115,11 @@
   "Scales.dc.html",
   "ScalesLaptop.dc.html",
   "Intervals.dc.html",
-  "IntervalsLaptop.dc.html"
+  "IntervalsLaptop.dc.html",
+  "Progressions.dc.html",
+  "ProgressionsLaptop.dc.html",
+  "Progression.dc.html",
+  "ProgressionLaptop.dc.html"
  ],
  "notes": {},
  "designSystems": []

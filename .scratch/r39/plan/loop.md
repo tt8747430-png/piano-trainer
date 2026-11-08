@@ -33,7 +33,7 @@ after compacting"
 | 5 | Chords (`/practice/chords`) | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 2 | drawn, waiting for the owner |
 | 6 | Scales and keys | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 3 | drawn, waiting for the owner |
 | 7 | Intervals | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 4 | drawn, waiting for the owner |
-| 8 | Progressions (and a progression's page) | | |
+| 8 | Progressions (and a progression's page) | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), rows 5 and 6 | drawn, waiting for the owner |
 | 9 | Accompaniment | | |
 | 10 | Chord player | | |
 | 11 | Exercises and Quiz | | |

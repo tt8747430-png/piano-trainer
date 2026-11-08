@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A progression, phone</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&amp;family=Instrument+Serif&amp;family=Noto+Music&amp;display=swap">
+<style>
+body{margin:0}
+button{font:inherit;cursor:pointer}
+.nos{scrollbar-width:none}.nos::-webkit-scrollbar{display:none}
+main>*{flex:none}
+</style>
+</helmet>
+<div style="width: 450px; height: 920px; position: relative; font-family: 'Instrument Sans', system-ui, sans-serif">
+<div style="position: absolute; left: 24px; top: 23px; width: 402px; height: 874px; overflow: hidden; border-radius: 62px; background: #F7F3EE; color: #1A1612; display: flex; flex-direction: column">
+<div style="flex: none; height: 54px; position: relative"><div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 402px; height: 54px; z-index: 50; background: #F7F3EE; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; padding: 6px 34px 0 50px; font: 600 17px -apple-system, system-ui, sans-serif"><span>9:41</span><span style="display: flex; align-items: center; gap: 6px"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"></rect><rect x="5" y="5.5" width="3" height="6.5" rx="1"></rect><rect x="10" y="3" width="3" height="9" rx="1"></rect><rect x="15" y="0" width="3" height="12" rx="1"></rect></svg><svg width="27" height="13" viewBox="0 0 27 13" fill="none"><rect x="0.5" y="0.5" width="23" height="12" rx="3.5" stroke="currentColor" opacity="0.4"></rect><rect x="2" y="2" width="20" height="9" rx="2" fill="currentColor"></rect><rect x="25" y="4.5" width="1.5" height="4" rx="0.75" fill="currentColor" opacity="0.4"></rect></svg></span></div></div>
+<header style="flex: none; height: 52px; display: flex; align-items: center; gap: 8px; padding: 0 12px"><button type="button" aria-label="Back to Progressions" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: #EFE8DF; color: #1A1612; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"></path></svg></button><div style="flex: 1"></div><button type="button" aria-label="Favourite" aria-pressed="{{heart}}" onClick="{{toggleHeart}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: #EFE8DF; color: #1A1612; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="{{hfill}}" stroke="{{hstroke}}" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"></path></svg></button><button type="button" aria-label="More" aria-expanded="{{menuOn}}" onClick="{{toggleMenu}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: #EFE8DF; color: #1A1612; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg></button></header>
+<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 20px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6B6259">{{styleName}}</span><h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 38px; line-height: 1">{{name}}</h1><span style="font-size: 16px; color: #4A433C">{{line}}</span></div><div style="display: flex; flex-wrap: wrap; gap: 12px 10px; align-items: flex-end"><div style="flex: 1 1 150px; min-width: 0; display: flex"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; font-weight: 600; color: #6B6259">Key</span><button type="button" aria-haspopup="dialog" aria-expanded="{{keyOn}}" onClick="{{openKey}}" style="height: 48px; border: 0; border-radius: 12px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10); display: flex; align-items: center; gap: 8px; padding: 0 12px 0 14px; color: #1A1612; text-align: left"><span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 16px; font-weight: 600">{{keyLabel}}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B6259" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 10 5 5 5-5"></path></svg></button></div></div><sc-if value="{{hasModes}}" hint-placeholder-val="{{false}}"><div style="flex: 1 1 170px; min-width: 0; display: flex"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; font-weight: 600; color: #6B6259">Numerals of</span><div role="radiogroup" aria-label="Numerals of" style="display: flex; gap: 2px; padding: 3px; border-radius: 12px; background: #EFE8DF"><sc-for list="{{modeSeg}}" as="s" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{s.on}}" onClick="{{s.pick}}" style="flex: 1; min-width: 0; height: 42px; border: 0; border-radius: 9px; background: {{s.bg}}; box-shadow: {{s.sh}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #1A1612; font-size: 14px; font-weight: {{s.w}}; white-space: nowrap">{{s.l}}</button></sc-for></div></div></div></sc-if><div style="flex: 1 1 200px; min-width: 0; display: flex"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; font-weight: 600; color: #6B6259">Voicing</span><div role="radiogroup" aria-label="Voicing" style="display: flex; gap: 2px; padding: 3px; border-radius: 12px; background: #EFE8DF"><sc-for list="{{voiceSeg}}" as="s" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{s.on}}" onClick="{{s.pick}}" style="flex: 1; min-width: 0; height: 42px; border: 0; border-radius: 9px; background: {{s.bg}}; box-shadow: {{s.sh}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #1A1612; font-size: 14px; font-weight: {{s.w}}; white-space: nowrap">{{s.l}}</button></sc-for></div></div></div></div><div style="display: grid; grid-template-columns: {{cols}}; gap: 16px 22px"><sc-for list="{{tiles}}" as="t" hint-placeholder-count="10"><div style="position: relative; min-width: 0"><button type="button" aria-pressed="{{t.on}}" onClick="{{t.pick}}" style="width: 100%; height: 76px; border: 0; border-radius: 14px; background: {{t.bg}}; color: {{t.fg}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px"><span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 26px; line-height: 1">{{t.rn}}</span><span style="font-size: 15px; font-weight: 700">{{t.sym}}</span></button><sc-if value="{{t.arrow}}" hint-placeholder-val="{{true}}"><span aria-hidden="true" style="position: absolute; right: -22px; top: 18px; width: 22px; display: flex; flex-direction: column; align-items: center; font-size: 9.5px; line-height: 1.15; color: #6B6259; font-weight: 600"><svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="#8A8178" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h11M8 1.5 12 5 8 8.5"></path></svg><span>{{t.m1}}</span><span>{{t.m2}}</span></span></sc-if></div></sc-for></div><div style="display: flex; flex-direction: column; gap: 8px"><span aria-live="polite" style="font-size: 15px; font-weight: 600">{{selLine}}</span><div style="display: flex; flex-wrap: wrap; gap: 6px 12px"><sc-for list="{{used}}" as="l" hint-placeholder-count="3"><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #4A433C"><span style="width: 12px; height: 12px; border-radius: 4px; background: {{l.bg}}; box-shadow: inset 0 0 0 1px {{l.fg}}"></span>{{l.l}}</span></sc-for></div></div><section style="display: flex; flex-direction: column; gap: 8px"><h2 style="margin: 0 2px; display: flex; align-items: center; gap: 6px; font-size: 17px; font-weight: 700">About this progression</h2><p style="margin: 0 2px; font-size: 15px; line-height: 1.5; color: #4A433C; max-width: 62ch">{{about}}</p></section><section style="display: flex; flex-direction: column; gap: 8px"><h2 style="margin: 0 2px; display: flex; align-items: center; gap: 6px; font-size: 17px; font-weight: 700">Practise it</h2><div style="border-radius: 14px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10); overflow: hidden"><button type="button" style="width: 100%; min-height: 60px; border: 0; background: transparent; display: flex; align-items: center; gap: 12px; padding: 8px 14px; color: #1A1612; text-align: left; box-shadow: inset 0 -1px 0 #F1EBE3"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">In all 12 keys</span><span style="font-size: 13px; color: #6B6259">Round the circle of fifths, one key at a time</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A8178" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></button><button type="button" style="width: 100%; min-height: 60px; border: 0; background: transparent; display: flex; align-items: center; gap: 12px; padding: 8px 14px; color: #1A1612; text-align: left"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">In the Chord player</span><span style="font-size: 13px; color: #6B6259">With a band, in any style</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A8178" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></button></div></section><section style="display: flex; flex-direction: column; gap: 8px"><h2 style="margin: 0 2px; display: flex; align-items: center; gap: 6px; font-size: 17px; font-weight: 700">More like it</h2><div style="border-radius: 14px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10); overflow: hidden"><sc-for list="{{similar}}" as="s" hint-placeholder-count="4"><button type="button" onClick="{{s.pick}}" style="width: 100%; min-height: 58px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 #F1EBE3; display: flex; align-items: center; gap: 12px; padding: 8px 14px; color: #1A1612; text-align: left"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{s.name}}</span><span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 16px; color: #6B6259">{{s.line}}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A8178" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></button></sc-for></div></section>
+</main>
+<div style="flex: none; padding: 10px 16px; background: #F7F3EE; box-shadow: 0 -1px 0 #E9E2D8"><div style="display: flex; gap: 10px"><button type="button" aria-pressed="{{sounding}}" onClick="{{togglePlay}}" style="flex: 1; min-width: 0; height: 48px; border: 0; border-radius: 12px; background: #1A1612; color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 16px; font-weight: 700"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5Z"></path></svg>{{playLabel}}</button><div role="group" aria-label="Tempo" style="flex: none; height: 48px; display: flex; align-items: center; border-radius: 12px; background: #FFFFFF; box-shadow: 0 0 0 1px #E2DACF"><button type="button" aria-label="Slower" onClick="{{bpmDown}}" style="width: 42px; height: 48px; border: 0; background: transparent; font-size: 20px; color: #1A1612">−</button><span style="width: 62px; text-align: center; display: flex; flex-direction: column; line-height: 1.1"><span style="font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums">{{bpm}}</span><span style="font-size: 11px; color: #6B6259">BPM</span></span><button type="button" aria-label="Faster" onClick="{{bpmUp}}" style="width: 42px; height: 48px; border: 0; background: transparent; font-size: 20px; color: #1A1612">+</button></div></div></div>
+<div style="flex: none"><div role="group" aria-label="The keys: {{fullName}}" style="position: relative; height: 108px; background: #2A1F18; border-top: 4px solid #8E2A22">
+<sc-for list="{{whites}}" as="k" hint-placeholder-count="26"><span style="position: absolute; left: {{k.x}}; width: {{k.w}}; top: 0; bottom: 0; box-sizing: border-box; border: 1px solid #CFC6BA; border-top: 0; border-radius: 0 0 5px 5px; background: {{k.fill}}; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; font-size: 10px; font-weight: 600; color: #8A8178">{{k.lab}}</span></sc-for>
+<sc-for list="{{blacks}}" as="k" hint-placeholder-count="18"><span style="position: absolute; left: {{k.x}}; width: {{k.w}}; top: 0; height: 60%; border-radius: 0 0 3px 3px; background: {{k.fill}}"></span></sc-for>
+</div></div>
+<div aria-hidden="true" style="flex: none; height: 26px; background: #2A1F18"></div>
+<div aria-hidden="true" style="position: absolute; left: 134px; bottom: 8px; width: 134px; height: 5px; border-radius: 9999px; background: #FFFFFF; z-index: 90"></div>
+<sc-if value="{{keyOn}}" hint-placeholder-val="{{false}}"><div onClick="{{closeAll}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(26,22,18,0.32)"></div><section role="dialog" aria-label="Key" class="nos" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 680px; overflow-y: auto; border-radius: 22px 22px 0 0; background: #F7F3EE; padding: 8px 16px 34px; display: flex; flex-direction: column; gap: 10px"><div aria-hidden="true" style="width: 36px; height: 5px; margin: 0 auto; border-radius: 9999px; background: #D9D1C6"></div><h2 style="margin: 0 4px; font-size: 20px; font-weight: 700">Key</h2><div role="radiogroup" aria-label="Key" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{roots}}" as="r" hint-placeholder-count="12"><button type="button" role="radio" aria-checked="{{r.on}}" onClick="{{r.pick}}" style="height: 52px; border: 0; border-radius: 12px; background: {{r.bg}}; color: {{r.fg}}; box-shadow: 0 0 0 1px #E2DACF; font-family: 'Instrument Serif', Georgia, serif; font-size: 24px">{{r.r}}</button></sc-for></div></section></sc-if>
+<sc-if value="{{menuOn}}" hint-placeholder-val="{{false}}"><div onClick="{{closeAll}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="menu" style="position: absolute; right: 12px; top: 104px; z-index: 61; width: 240px; border-radius: 14px; background: #FFFFFF; padding: 6px; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 2px 4px rgba(26,22,18,0.08), 0 18px 40px -12px rgba(26,22,18,0.28); display: flex; flex-direction: column"><sc-for list="{{['Edit a copy', 'Add to folder', 'Share', 'Hide from the library']}}" as="m" hint-placeholder-count="4"><button type="button" style="height: 44px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; padding: 0 12px; font-size: 16px; color: #1A1612; text-align: left">{{m}}</button></sc-for></div></sc-if>
+</div>
+<img src="/_blob/2fd798458923e267dd22b7a996a98294" alt="" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 450px; height: 920px; pointer-events: none; z-index: 100">
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":450,"height":920}}'>
+const SH = '0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)';
+
+const LIB = [
+  ['axis', 'pop', 'Axis of Awesome', 'Bright and singable, the sound of a thousand hits', 'I V vi IV', 'i VI III VII', 'The four chords of a thousand hits: the tonic, the dominant, the relative minor and the subdominant, each the key’s own.'],
+  ['let-it-be', 'pop', 'Let It Be', 'Calm and hymn-like, it settles home twice', 'I V vi IV I V IV I', '', 'Only the key’s own chords. Most pop songs need no others.'],
+  ['yesterday', 'pop', 'Yesterday', 'Wistful, with chords that lean somewhere else', 'I V/vi vi IV V I vi V/V IV I', '', 'Two secondary dominants: chords that act as the V of a chord other than I. In C, E7 pulls to Am, and D7 pulls to G, which never comes.'],
+  ['clocks', 'pop', 'Clocks', 'Restless and dark, it never quite lands', 'I v v ii', '', 'The v is borrowed from the parallel minor, the minor key on the same tonic. In C that is Gm, from C minor, and it darkens the sound.'],
+  ['doo-wop', 'pop', '50s doo-wop', 'Sweet and nostalgic, the 1950s slow dance', 'I vi IV V', 'i VI VII III', 'Tonic, relative minor, subdominant, dominant: the slow-dance loop of the 1950s.'],
+  ['royal-road', 'pop', 'Royal Road', 'Yearning, always about to arrive', 'IV V iii vi', '', 'A favourite of Japanese pop, where it is called the Royal Road.'],
+  ['creep', 'pop', 'Creep', 'Bittersweet: a bright turn, then a shadow', 'I III IV iv', '', 'A major III where the key has a minor iii, then IV turning minor: the iv is borrowed from the parallel minor.'],
+  ['rock-shuffle', 'rock', 'Rock shuffle', 'Driving and plain, home in three chords', 'I V IV', '', 'Down from the dominant through the subdominant to the tonic. This V–IV–I ending closes rock and gospel songs alike.'],
+  ['wild-thing', 'rock', 'Wild Thing', 'Loud and simple, back and forth', 'I IV V IV', '', 'The three primary chords, rocking between IV and V.'],
+  ['mixolydian', 'rock', 'Mixolydian rock', 'Open and bluesy, a stadium ending', 'I ♭VII IV I', '', 'The ♭VII is borrowed from the Mixolydian mode: a major chord a whole tone below the tonic.'],
+  ['ii-v-i', 'jazz', 'ii–V–I', 'The jazz cadence: tension, then home', 'ii7 V7 Imaj7', 'iiø7 V7 i', 'The predominant, the dominant and the tonic, each a 5th apart: the cadence at the heart of jazz.'],
+  ['rhythm', 'jazz', 'Rhythm changes', 'Swinging round and round', 'I vi ii V', 'i VI ii° V', 'Gershwin’s turnaround: the tonic and three chords that circle back by 5ths.'],
+  ['backdoor', 'jazz', 'Backdoor ii–V', 'Home from the other side', 'iv7 ♭VII7 Imaj7', '', 'A ii–V that comes home from a whole tone below: iv7 and ♭VII7 are borrowed from the parallel minor.'],
+  ['ragtime', 'jazz', 'Ragtime progression', 'Rolling round the circle to home', 'III7 VI7 II7 V7 I', '', 'Dominant 7ths round the circle of fifths, each the V of the next, until the last lands on I.'],
+  ['twelve-bar', 'blues', '12-bar blues', 'The blues: three chords, twelve bars', 'I7 I7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7', '', 'Four bars on the tonic, two on the subdominant and back, then the dominant, the subdominant and home, with a turnaround to start again.'],
+  ['perfect-cadence', 'classical', 'Perfect cadence', 'The full stop of classical music', 'I IV V I', 'i iv V i', 'The subdominant, the dominant, then the tonic: the cadence that ends a classical phrase.'],
+  ['picardy', 'classical', 'Picardy third', 'Minor, ending in light', '', 'i iv V I', 'A minor piece that ends on the major tonic chord: the third of the last chord is raised.'],
+  ['neo-soul', 'soul', 'Neo-soul', 'Warm and floating, never landing', 'vi V IV V', 'i VII VI VII', 'Round the relative minor without touching the tonic.'],
+  ['gospel', 'gospel', 'Gospel standard', 'Rising and glad, Sunday morning', 'I iii IV V', '', 'Up the key by step from the tonic to the dominant.'],
+  ['dorian', 'modal', 'Dorian vamp', 'Cool and minor, with a bright lift', '', 'i IV', 'A minor chord and the major chord a 4th above it: the major IV holds the Dorian mode’s raised 6th.']
+];
+const STYLES = [['pop', 'Pop'], ['rock', 'Rock'], ['jazz', 'Jazz'], ['blues', 'Blues'], ['classical', 'Classical'], ['soul', 'Soul'], ['gospel', 'Gospel'], ['modal', 'Modal']];
+const MAJ = [0, 2, 4, 5, 7, 9, 11], MIN = [0, 2, 3, 5, 7, 8, 10];
+const RN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
+const EXP_MAJ = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii'], EXP_MIN = ['i', 'ii', 'III', 'iv', 'v', 'VI', 'VII'];
+function parseRN(tok) {
+  const m = tok.match(/^([♭♯]?)([iIvV]+)(.*)$/);
+  if (!m) return null;
+  const up = m[2] === m[2].toUpperCase();
+  return { acc: m[1] === '♭' ? -1 : m[1] === '♯' ? 1 : 0, deg: RN.indexOf(m[2].toUpperCase()), up, raw: m[2], suf: m[3] };
+}
+function role(tok, minor) {
+  if (tok.indexOf('/') > 0 && !/\/\d$/.test(tok)) return 'sec';
+  const p = parseRN(tok); if (!p) return 'col';
+  if (p.acc) return 'bor';
+  const exp = (minor ? EXP_MIN : EXP_MAJ)[p.deg];
+  const caseOk = exp === p.raw || exp.toLowerCase() === p.raw.toLowerCase() && (exp === exp.toUpperCase()) === p.up || (minor && p.deg === 4 && p.up) || (minor && p.deg === 6 && !p.up) || (p.deg === 6 && !minor && p.raw === 'vii');
+  if (!caseOk) return 'bor';
+  if (p.deg === 4 || p.deg === 6) return 'dom';
+  if (p.deg === 1 || p.deg === 3) return 'pre';
+  if (p.deg === 0) return 'ton';
+  return minor ? (p.deg === 5 || p.deg === 2 ? 'ton' : 'ton') : 'ton';
+}
+const ROLE = {
+  ton: ['Tonic', '#E3EEDF', '#2E6B3A'], pre: ['Predominant', '#F8E3D0', '#9A4A10'], dom: ['Dominant', '#E6E0F4', '#55468A'],
+  bor: ['Borrowed', '#EEE8DF', '#5A5048'], sec: ['Secondary dominant', '#F3DDE3', '#8E2F4A'], col: ['Colour', '#EEE8DF', '#5A5048']
+};
+
+const ROOTS = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
+const ROOTS_MIN = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'B♭', 'B'];
+const ROOTL = [0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6], ROOTL_MIN = [0, 0, 1, 2, 2, 3, 3, 4, 4, 5, 6, 6];
+const LET = ['C', 'D', 'E', 'F', 'G', 'A', 'B'], NAT = [0, 2, 4, 5, 7, 9, 11];
+const ACC = { '-2': '𝄫', '-1': '♭', '0': '', '1': '♯', '2': '𝄪' };
+const nameOf = (pc, letter) => { let d = ((pc - NAT[letter]) % 12 + 12) % 12; if (d > 6) d -= 12; return LET[letter] + ACC[String(d)]; };
+function chordOf(tok, tonic, tl, minor) {
+  let target = 0, tLetter = 0, secondary = false, body = tok;
+  if (tok.indexOf('/') > 0 && !/\/\d$/.test(tok)) { const [a, b] = tok.split('/'); const pb = parseRN(b); target = (minor ? MIN : MAJ)[pb.deg] + pb.acc; tLetter = pb.deg; body = a; secondary = true; }
+  body = body.replace(/\/\d$/, '');
+  const p = parseRN(body);
+  const scale = minor ? MIN : MAJ;
+  let rootPc, letter;
+  if (secondary) { rootPc = (tonic + target + scale[p.deg]) % 12; letter = (tl + tLetter + p.deg) % 7; }
+  else { rootPc = (tonic + scale[p.deg] + p.acc + 12) % 12; letter = (tl + p.deg) % 7; }
+  const s = p.suf;
+  let q, suf, ivs;
+  if (s.startsWith('ø')) { q = 'm7♭5'; ivs = [0, 3, 6, 10]; }
+  else if (s.startsWith('°')) { q = s.includes('7') ? 'dim7' : 'dim'; ivs = s.includes('7') ? [0, 3, 6, 9] : [0, 3, 6]; }
+  else if (/maj7|Maj7/.test(s)) { q = p.up ? 'maj7' : 'm(maj7)'; ivs = p.up ? [0, 4, 7, 11] : [0, 3, 7, 11]; }
+  else if (s.startsWith('7♭9')) { q = '7♭9'; ivs = [0, 4, 7, 10, 13]; }
+  else if (s.startsWith('7')) { q = p.up ? '7' : 'm7'; ivs = p.up ? [0, 4, 7, 10] : [0, 3, 7, 10]; }
+  else if (s.startsWith('6')) { q = p.up ? '6' : 'm6'; ivs = p.up ? [0, 4, 7, 9] : [0, 3, 7, 9]; }
+  else { q = p.up ? '' : 'm'; ivs = p.up ? [0, 4, 7] : [0, 3, 7]; }
+  if (secondary && !s) { q = ''; ivs = [0, 4, 7]; }
+  if (secondary && s.startsWith('7')) { q = '7'; ivs = [0, 4, 7, 10]; }
+  return { sym: nameOf(rootPc, letter) + q, root: rootPc, ivs };
+}
+const MOTION = { 0: ['same', 'root'], 1: ['½ step', 'up'], 2: ['step', 'up'], 3: ['3rd', 'up'], 4: ['3rd', 'up'], 5: ['5th', 'down'], 6: ['tritone', ''], 7: ['5th', 'up'], 8: ['3rd', 'down'], 9: ['3rd', 'down'], 10: ['step', 'down'], 11: ['½ step', 'down'] };
+const LO = 41, HI = 84;
+function keyboard(lh, rh, sounding) {
+  const whites = []; for (let m = LO; m <= HI; m++) { if (NAT.includes(m % 12)) whites.push(m); }
+  const W = 100 / whites.length;
+  const col = (m, black) => rh.includes(m) ? (black ? '#C9561A' : (sounding ? '#E8762F' : '#F7C9A5')) : lh.includes(m) ? (black ? '#55468A' : (sounding ? '#7E6BB8' : '#D5CCEC')) : '';
+  const ws = whites.map((m, i) => ({ x: (i * W).toFixed(3) + '%', w: W.toFixed(3) + '%', fill: col(m) || '#FFFFFF', lab: m === 60 ? 'C4' : '' }));
+  const bs = []; for (let m = LO; m <= HI; m++) { if (NAT.includes(m % 12)) continue; const i = whites.indexOf(m - 1); bs.push({ x: ((i + 1) * W - W * 0.3).toFixed(3) + '%', w: (W * 0.6).toFixed(3) + '%', fill: col(m, true) || '#1A1612' }); }
+  return { whites: ws, blacks: bs };
+}
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const set = (o) => this.setState(o);
+    const id = st.id ?? 'yesterday', tonic = st.tonic ?? 0, sheet = st.sheet || null, sounding = st.sounding ?? false, at = st.at ?? 0, bpm = st.bpm ?? 84, voicing = st.voicing ?? 'led', heart = st.heart ?? true, menu = st.menu ?? false;
+    const p = LIB.find((x) => x[0] === id);
+    const hasMaj = !!p[4], hasMin = !!p[5];
+    const minor = st.minor ?? !hasMaj;
+    const line = (minor ? p[5] : p[4]) || p[4] || p[5];
+    const isMinor = minor && hasMin || !hasMaj;
+    const tl = (isMinor ? ROOTL_MIN : ROOTL)[tonic], tName = (isMinor ? ROOTS_MIN : ROOTS)[tonic];
+    const toks = line.split(' ');
+    const chords = toks.map((t) => ({ t, ...chordOf(t, tonic, tl, isMinor), r: role(t, isMinor) }));
+    // voicing: right hand close chord, block from the root above C4, or led to the nearest
+    let prev = null;
+    const rhs = chords.map((c) => {
+      const base = c.ivs.slice(0, 4).map((iv) => ((c.root + iv) % 12));
+      if (voicing === 'block' || !prev) { let r = 60 + c.root; if (r > 66) r -= 12; const out = c.ivs.slice(0, 4).map((iv) => r + iv); prev = out; return out; }
+      let best = null;
+      for (let inv = 0; inv < base.length; inv++) { const rot = base.slice(inv).concat(base.slice(0, inv)); for (let o = 55; o <= 67; o++) { if (rot[0] !== o % 12) continue; let m = o; const out = rot.map((pc) => { while (m % 12 !== pc) m++; const v = m; m++; return v; }); const cost = out.reduce((a, v, i) => a + Math.abs(v - (prev[i] ?? prev[prev.length - 1])), 0); if (!best || cost < best.cost) best = { out, cost }; } }
+      prev = best.out; return best.out;
+    });
+    const cur = chords[Math.min(at, chords.length - 1)];
+    const kb = keyboard([48 + cur.root - (cur.root > 7 ? 12 : 0)], rhs[Math.min(at, chords.length - 1)], sounding);
+    const cols = Math.min(4, chords.length);
+    const tiles = chords.map((c, i) => {
+      const R = ROLE[c.r];
+      const nx = chords[i + 1];
+      const d = nx ? ((nx.root - c.root) % 12 + 12) % 12 : null;
+      const rowEnd = (i + 1) % cols === 0 || !nx;
+      return { rn: c.t, sym: c.sym, role: R[0], bg: i === at ? R[2] : R[1], fg: i === at ? '#FFFFFF' : '#1A1612', rfg: i === at ? 'rgba(255,255,255,0.8)' : R[2], on: i === at, pick: () => set({ at: i, sounding: true }), arrow: !rowEnd, m1: d === null ? '' : MOTION[d][0], m2: d === null ? '' : MOTION[d][1] };
+    });
+    const selLine = cur.t + ' · ' + cur.sym + ' · ' + ROLE[cur.r][0];
+    const used = [...new Set(chords.map((c) => c.r))].map((k) => ({ l: ROLE[k][0], bg: ROLE[k][1], fg: ROLE[k][2] }));
+    const seg = (on) => ({ bg: on ? '#FFFFFF' : 'transparent', sh: on ? '0 0 0 1px rgba(26,22,18,0.06), 0 1px 3px rgba(26,22,18,0.12)' : 'none', w: on ? 700 : 500 });
+    const styleName = STYLES.find((s) => s[0] === p[1])[1];
+    const similar = LIB.filter((x) => x[1] === p[1] && x[0] !== id).slice(0, 3).concat(LIB.filter((x) => x[1] !== p[1]).slice(0, 1));
+    return {
+      SH, name: p[2], line: p[3], about: p[6], styleName, keyLabel: tName + (isMinor ? ' minor' : ' major'), numerals: line.replace(/ /g, ' · '),
+      selLine, tiles, cols: 'repeat(' + cols + ', minmax(0, 1fr))', used,
+      modeSeg: hasMaj && hasMin ? [[false, 'Major'], [true, 'Minor']].map(([v, l]) => ({ l, on: isMinor === v, ...seg(isMinor === v), pick: () => set({ minor: v, at: 0 }) })) : [],
+      hasModes: hasMaj && hasMin,
+      voiceSeg: [['led', 'Voice-led'], ['block', 'Block']].map(([v, l]) => ({ l, on: voicing === v, ...seg(voicing === v), pick: () => set({ voicing: v }) })),
+      whites: kb.whites, blacks: kb.blacks, fullName: cur.sym,
+      sounding, playLabel: sounding ? 'Stop' : 'Play', togglePlay: () => set({ sounding: !sounding }),
+      bpm: String(bpm), bpmDown: () => set({ bpm: Math.max(40, bpm - 4) }), bpmUp: () => set({ bpm: Math.min(200, bpm + 4) }),
+      heart, hfill: heart ? '#E8762F' : 'none', hstroke: heart ? '#E8762F' : '#1A1612', toggleHeart: () => set({ heart: !heart }),
+      menuOn: menu, toggleMenu: () => set({ menu: !menu, sheet: null }),
+      keyOn: sheet === 'key', anyOn: !!sheet || menu, openKey: () => set({ sheet: sheet === 'key' ? null : 'key', menu: false }), closeAll: () => set({ sheet: null, menu: false }),
+      roots: (isMinor ? ROOTS_MIN : ROOTS).map((r, i) => ({ r, on: i === tonic, bg: i === tonic ? '#1A1612' : '#FFFFFF', fg: i === tonic ? '#FFFFFF' : '#1A1612', pick: () => set({ tonic: i, sheet: null }) })),
+      similar: similar.map((x) => ({ name: x[2], line: (x[4] || x[5]).replace(/ /g, ' · '), pick: () => set({ id: x[0], at: 0, minor: undefined }) }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>
