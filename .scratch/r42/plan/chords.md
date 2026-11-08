@@ -5,11 +5,21 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v41: a chord's root is a letter and an accidental, so D♭ and C♯ are both there.** Owner: "how can we though
+  get chords like d flat or sharp or g flat or a sharp etc".
+  - The Chord sheet's Root is two tracks: the letters **C D E F G A B**, then **♭ Flat · ♮ Natural · ♯ Sharp**.
+    Every written root is reachable (D♭, C♯, G♭, F♯, A♯, also E♯, C♭), and the chord is spelled from it:
+    A♯maj7 is A♯ C𝄪 E♯ G𝄪; G♭maj7 is G♭ B♭ D♭ F; D♭m7 is D♭ F♭ A♭ C♭. Letter and accidental keep each other.
+  - Why: two names for one black key are two different chords on paper, and a learner reading a song in F♯ meets
+    A♯m, in G♭ meets E♭m. The way a chord chart app takes a root is the letter, then ♭ or ♯ (iReal Pro's chord
+    keyboard).
+  - A key is not a root: Scales' Tonic, a progression's and an exercise's Key, Intervals' From keep v40's two rows
+    of six, the twelve keys.
 - **v40: the root picker is two rows of six, as GarageBand's Key Signature.** Owner (with a GarageBand screenshot):
   "look at these notes grid , but i dont think we need  the major minor switch here and the follow songs key".
   - The 4 × 3 grid of boxed buttons becomes two segmented tracks, C to F and F♯ to B, the chosen note a raised
-    thumb on the track. One implementation (`ROOTGRID` in `r41_kit.py`): Chords' Root, Scales' Tonic, Intervals'
-    From, a progression's and an exercise's Key.
+    thumb on the track. One implementation (`ROOTGRID` in `r41_kit.py`): Scales' Tonic, Intervals' From, a
+    progression's and an exercise's Key. *(Chords' Root: letter and accidental since v41.)*
   - Not taken from GarageBand: the major | minor switch (the chord or scale list already says which) and Follow Song
     Key (a recording setting; no recordings here), nor the explanation lines under them.
   - The spelling stays C♯, E♭, F♯, A♭, B♭ (GarageBand writes D♭): C♯ minor is a key, D♭ minor is not.
@@ -295,3 +305,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: Labels Names · Fingers · None on the keys; the gear: Hand, Staff › Finger numbers (v38).
 - 2026-11-08: Add a note removed; Extended gains maj7♯11; a new Altered group, 7♭9 · 7♯9 · 7♯11 · 7♭13 (v39).
 - 2026-11-08: the root picker as two rows of six, used on every Practice page (v40).
+- 2026-11-08: a chord's root as letter and ♭ · ♮ · ♯, every spelling (v41).

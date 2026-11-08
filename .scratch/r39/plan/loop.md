@@ -76,3 +76,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v38 (2026-11-08):** Chords: Labels Names · Fingers · None on the keys; gear: Hand, Staff › Finger numbers.
 **R42 v39 (2026-11-08):** Chords: Add a note gone; the Chord list gains maj7♯11 and an Altered group.
 **R42 v40 (2026-11-08):** Root picker as two rows of six (GarageBand), on every Practice page.
+**R42 v41 (2026-11-08):** Chords: root as letter + ♭ · ♮ · ♯, every spelling (D♭ and C♯, G♭, A♯).
