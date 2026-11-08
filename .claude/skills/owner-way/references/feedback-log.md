@@ -297,7 +297,8 @@ owner's, typos fixed.
   "but i dont think we need the major minor switch here and the follow songs key". The picker only picks the note.
 - **A chord root is spelled, a key is one of twelve (R42, v41):** "how can we though get chords like d flat or sharp
   or g flat or a sharp". The chord is spelled from the written root. v42: "some options are weird like c flat or e
-  sharp": the 17 roots as three tracks, naturals · sharps · flats, never a letter-plus-accidental builder.
+  sharp". v43: "make just one row and when clicking multiple time on one note it will change": one row C to B;
+  tapping the chosen letter again steps ♮ → ♯ → ♭, only the spellings a chart writes. Never extra rows for ♯ and ♭.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

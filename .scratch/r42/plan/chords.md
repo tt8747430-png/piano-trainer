@@ -5,7 +5,13 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
-- **v42: the root is one of 17 written notes: naturals, sharps, flats.** Owner: "but some options are weird like c
+- **v43: the root is one row of letters; tapping the chosen one again changes its spelling.** Owner: "no. make
+  just one row and when clicking multiple time on one note it will change. like c and then C sharp for example."
+  - Root: **C D E F G A B** on one track. A tap on another letter picks it natural; a tap on the chosen letter steps
+    natural → sharp → flat → natural, skipping what no chart writes: C → C♯ → C; D → D♯ → D♭; E → E♭; F → F♯;
+    G → G♯ → G♭; A → A♯ → A♭; B → B♭. The button reads the spelling (C♯), the chord is spelled from it and sounds.
+  - Replaces v41's accidental row and v42's three tracks.
+- **v42 (replaced by v43's one row): the root is one of 17 written notes: naturals, sharps, flats.** Owner: "but some options are weird like c
   flat or e sharp etc."
   - Three tracks in the Chord sheet's Root: **C D E F G A B**, then **C♯ D♯ F♯ G♯ A♯**, then **D♭ E♭ G♭ A♭ B♭**. One
     tap a root, one choice across the three. C♭, F♭, E♯ and B♯ are gone: no chord chart writes them as a root.
@@ -312,3 +318,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: the root picker as two rows of six, used on every Practice page (v40).
 - 2026-11-08: a chord's root as letter and ♭ · ♮ · ♯, every spelling (v41).
 - 2026-11-08: a chord's root as 17 notes, naturals · sharps · flats; no C♭, F♭, E♯, B♯ (v42).
+- 2026-11-08: a chord's root as one row of letters, tap again for ♯ then ♭ (v43).

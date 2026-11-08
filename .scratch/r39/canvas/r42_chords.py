@@ -25,6 +25,8 @@ const CROOTS = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B
 // the root as written: a letter and an accidental, so D♭ and C♯ are two roots on one key
 let RL = 0;
 const rootPc = (l, a) => (NATPC[l] + a + 12) % 12;
+// no chord chart writes these as a root
+const SKIP = ['C-1', 'F-1', 'E1', 'B1'];
 const LET = 'CDEFGAB', NATPC = [0, 2, 4, 5, 7, 9, 11];
 const QS = [
   { g: 'Triads', k: '', n: 'major triad', t: [[0, 1], [4, 3], [7, 5]] },
@@ -211,8 +213,11 @@ return {
   handSeg: seg(['Right', 'Left', 'Both'], hands, (l) => change({ hand: l })),
   keyLabelSeg: seg(['Names', 'Fingers', 'None'], keyLabel, (l) => set({ keyLabel: l })),
   rootName: RN, qName: q.n[0].toUpperCase() + q.n.slice(1), qSym: RN + q.k, voicing, invLabel: INV[inv], handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand', soundWord: arp ? 'Arpeggio' : 'Block',
-  roots: (() => { const it = ([l, a]) => { const on = l === rLet && a === rAcc; return { l: LET[l] + ACC[String(a)], on, bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: on ? 700 : 500, pick: () => { RL = l; change({ rl: l, ra: a, root: rootPc(l, a) }); } }; };
-    return { a: [0, 1, 2, 3, 4, 5, 6].map((l) => it([l, 0])), b: [0, 1, 3, 4, 5].map((l) => it([l, 1])), c: [1, 2, 4, 5, 6].map((l) => it([l, -1])) }; })(),
+  // one row of letters; tapping the chosen letter again steps through its spellings: C, C♯, C (D, D♯, D♭ …)
+  roots: { a: [0, 1, 2, 3, 4, 5, 6].map((l) => { const on = l === rLet, ways = [0, 1, -1].filter((a) => !SKIP.includes(LET[l] + a));
+    const a = on ? rAcc : 0, next = on ? ways[(ways.indexOf(rAcc) + 1) % ways.length] : 0;
+    return { l: LET[l] + ACC[String(a)], on, bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: on ? 700 : 500,
+      pick: () => { RL = l; change({ rl: l, ra: next, root: rootPc(l, next) }); } }; }) },
   playTiles: [['Block', 'Block chord'], ['Up', 'Arpeggio up'], ['Up and down', 'Arpeggio up and down']].map(([v, l]) => ({ l, on: v === playAs, bg: v === playAs ? '#FBF1DD' : '#FEFDFB', ring: v === playAs ? '0 0 0 2px #B07A2A' : '0 0 0 1px ' + C.line, pick: () => { set({ playAs: v }); sound(ms, v !== 'Block', v === 'Up and down' ? 'Up and down' : 'Up'); } })),
   qSymFs: (RN + q.k).length > 7 ? 12 : ((RN + q.k).length > 5 ? 13.5 : 15), blockOn: !arp, soundShort: arp ? 'Arpeggio' : 'Block',
   soundLabel: playAs === 'Block' ? 'Block chord' : (playAs === 'Up' ? 'Arpeggio up' : 'Up and down'),
@@ -314,7 +319,7 @@ def BACKHEAD(title, act):
 
 def _track(lst, n, label):
     return (f'<div role="radiogroup" aria-label="{label}" style="display: grid; grid-template-columns: repeat({n}, minmax(0, 1fr)); gap: 2px; padding: 3px; border-radius: 14px; background: {FILL}"><sc-for list="{{{{roots.{lst}}}}}" as="r" hint-placeholder-count="{n}"><button type="button" role="radio" aria-checked="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" style="height: 44px; min-width: 0; padding: 0; border: 0; border-radius: 11px; background: {{{{r.bg}}}}; box-shadow: {{{{r.sh}}}}; color: {INK}; font: inherit; font-size: 18px; font-weight: {{{{r.fw}}}}">{{{{r.l}}}}</button></sc-for></div>')
-NOTEPICK = '<div role="group" aria-label="Root" style="display: flex; flex-direction: column; gap: 6px">' + _track('a', 7, 'Natural') + _track('b', 5, 'Sharp') + _track('c', 5, 'Flat') + '</div>'
+NOTEPICK = _track('a', 7, 'Root')
 B_CHORD = (CAPS('Root') + NOTEPICK + GROUP(('link', 'Chord', '{{qName}}', 'openList'), ('link', 'Voicing', '{{voicingLabel}}', 'openVoicing'), bg="#FEFDFB"))
 B_LIST = (BACKHEAD('Chord', 'backChord') + f'<sc-for list="{{{{groups}}}}" as="g" hint-placeholder-count="4"><div style="display: flex; flex-direction: column; gap: 6px"><h3 style="margin: 6px 0 0 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{{{{g.g}}}}</h3><div style="border-radius: 12px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{g.rows}}}}" as="r" hint-placeholder-count="5"><button type="button" aria-pressed="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" style="width: 100%; min-height: 48px; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: {{{{r.bg}}}}; padding: 0 14px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 76px; font-size: 16px; font-weight: {{{{r.fw}}}}">{{{{r.s}}}}</span><span style="flex: 1; min-width: 0; font-size: 15px; color: {SOFT}">{{{{r.n}}}}</span></button></sc-for></div></div></sc-for>')
 B_VOICING = (BACKHEAD('Voicing', 'backChord') + f'<div style="border-radius: 12px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{vlist}}}}" as="v" hint-placeholder-count="6"><button type="button" aria-pressed="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="width: 100%; min-height: 56px; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: transparent; padding: 6px 14px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left; opacity: {{{{v.op}}}}"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{v.v}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{v.f}}}}</span></span><span style="font-size: 18px; font-weight: 700; color: #7A5418">{{{{v.mark}}}}</span></button></sc-for></div>')
