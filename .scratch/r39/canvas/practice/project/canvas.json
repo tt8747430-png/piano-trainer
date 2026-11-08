@@ -170,24 +170,8 @@
       "title": "Accompaniment, phone",
       "is_interactive": true
     },
-    "PatternLaptop.dc.html": {
-      "x": 2913,
-      "y": 5477,
-      "w": 2143,
-      "h": 1299,
-      "title": "A pattern, laptop",
-      "is_interactive": true
-    },
-    "Pattern.dc.html": {
-      "x": 5136,
-      "y": 5856,
-      "w": 450,
-      "h": 920,
-      "title": "A pattern, phone",
-      "is_interactive": true
-    },
     "ChordPlayerLaptop.dc.html": {
-      "x": 5826,
+      "x": 2913,
       "y": 5477,
       "w": 2143,
       "h": 1299,
@@ -195,7 +179,7 @@
       "is_interactive": true
     },
     "ChordPlayer.dc.html": {
-      "x": 8049,
+      "x": 5136,
       "y": 5856,
       "w": 450,
       "h": 920,
@@ -203,23 +187,23 @@
       "is_interactive": true
     },
     "ExercisesLaptop.dc.html": {
-      "x": 0,
-      "y": 7036,
+      "x": 5826,
+      "y": 5477,
       "w": 2143,
       "h": 1299,
       "title": "Exercises, laptop",
       "is_interactive": true
     },
     "Exercises.dc.html": {
-      "x": 2223,
-      "y": 7415,
+      "x": 8049,
+      "y": 5856,
       "w": 450,
       "h": 920,
       "title": "Exercises, phone",
       "is_interactive": true
     },
     "ExerciseLaptop.dc.html": {
-      "x": 2913,
+      "x": 0,
       "y": 7036,
       "w": 2143,
       "h": 1299,
@@ -227,7 +211,7 @@
       "is_interactive": true
     },
     "Exercise.dc.html": {
-      "x": 5136,
+      "x": 2223,
       "y": 7415,
       "w": 450,
       "h": 920,
@@ -235,7 +219,7 @@
       "is_interactive": true
     },
     "QuizLaptop.dc.html": {
-      "x": 5826,
+      "x": 2913,
       "y": 7036,
       "w": 2143,
       "h": 1299,
@@ -243,7 +227,7 @@
       "is_interactive": true
     },
     "Quiz.dc.html": {
-      "x": 8049,
+      "x": 5136,
       "y": 7415,
       "w": 450,
       "h": 920,
@@ -251,23 +235,23 @@
       "is_interactive": true
     },
     "QuizRunLaptop.dc.html": {
-      "x": 0,
-      "y": 8595,
+      "x": 5826,
+      "y": 7036,
       "w": 2143,
       "h": 1299,
       "title": "A quiz run, laptop",
       "is_interactive": true
     },
     "QuizRun.dc.html": {
-      "x": 2223,
-      "y": 8974,
+      "x": 8049,
+      "y": 7415,
       "w": 450,
       "h": 920,
       "title": "A quiz run, phone",
       "is_interactive": true
     },
     "MetronomeLaptop.dc.html": {
-      "x": 2913,
+      "x": 0,
       "y": 8595,
       "w": 2143,
       "h": 1299,
@@ -275,7 +259,7 @@
       "is_interactive": true
     },
     "Metronome.dc.html": {
-      "x": 5136,
+      "x": 2223,
       "y": 8974,
       "w": 450,
       "h": 920,
@@ -283,7 +267,7 @@
       "is_interactive": true
     },
     "TunerLaptop.dc.html": {
-      "x": 5826,
+      "x": 2913,
       "y": 8595,
       "w": 2143,
       "h": 1299,
@@ -291,7 +275,7 @@
       "is_interactive": true
     },
     "Tuner.dc.html": {
-      "x": 8049,
+      "x": 5136,
       "y": 8974,
       "w": 450,
       "h": 920,
@@ -299,23 +283,23 @@
       "is_interactive": true
     },
     "ChordFinderLaptop.dc.html": {
-      "x": 0,
-      "y": 10154,
+      "x": 5826,
+      "y": 8595,
       "w": 2143,
       "h": 1299,
       "title": "Chord finder, laptop",
       "is_interactive": true
     },
     "ChordFinder.dc.html": {
-      "x": 2223,
-      "y": 10533,
+      "x": 8049,
+      "y": 8974,
       "w": 450,
       "h": 920,
       "title": "Chord finder, phone",
       "is_interactive": true
     },
     "CircleOfFifthsLaptop.dc.html": {
-      "x": 2913,
+      "x": 0,
       "y": 10154,
       "w": 2143,
       "h": 1299,
@@ -323,7 +307,7 @@
       "is_interactive": true
     },
     "CircleOfFifths.dc.html": {
-      "x": 5136,
+      "x": 2223,
       "y": 10533,
       "w": 450,
       "h": 920,
@@ -352,8 +336,6 @@
     "Progression.dc.html",
     "AccompanimentLaptop.dc.html",
     "Accompaniment.dc.html",
-    "PatternLaptop.dc.html",
-    "Pattern.dc.html",
     "ChordPlayerLaptop.dc.html",
     "ChordPlayer.dc.html",
     "ExercisesLaptop.dc.html",

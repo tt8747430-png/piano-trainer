@@ -223,9 +223,11 @@ owner's, typos fixed.
   **Drawn (R39-12, 2026-11-08):** the Metronome, Tuner, Chord finder and Circle of fifths each one instrument on one
   screen, the reading large, their settings behind their own gear. Waiting.
 
-- **Calm everywhere (R40, drawn):** "refactor the practices pages like we refactored the chords pages": every Practice and
-  Songs page is one subject large, one picture, quiet tabs, two or three rows and one floating bar (main change ⌃, one
-  control, Play); libraries are calm lists. Spec `.scratch/r40/plan/calm.md`.
+- **Calm is a language, not a layout (R41, drawn):** "i meant this minimalistic not that all the pages should look like
+  it, refactor them properly and look at the example apps": the calm Chords page gives the tokens, the bare bar, grouped
+  rows and the floating bar; each page keeps its own layout from its reference (iReal Pro's chart, Tenuto's answers,
+  Soundbrenner's beats, Cleartune's needle, muted.io's circle, Flat's palette). Never one layout for every page.
+  Spec `.scratch/r41/plan/songs-and-practice.md`.
 
 ## Sounds
 

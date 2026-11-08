@@ -1,0 +1,302 @@
+# R41 Practice: each page to its own reference, in the calm language, holding R39's rulings (every control labelled,
+# a gear for the page's settings, a key or root from the root grid, fingering never on the keys, libraries in the one
+# library shape).
+
+def PROW(p, t, s, v='', href='#'):
+    return (f'<a href="{href}" style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}">{pic(p)}'
+            f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{s}</span></span>'
+            f'<span style="font-size: 14px; color: {SOFT}; white-space: nowrap">{v}</span><span style="display: flex; color: {SOFT}">{CHEV_R}</span></a>')
+PLIST = lambda rows: f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">' + ''.join(PROW(*r) for r in rows) + '</div>'
+def PCARD(p, t, s, v, href):
+    return f'<a href="{href}" style="border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 14px; display: flex; flex-direction: column; gap: 10px; color: {INK}; text-decoration: none">{pic(p, 96)}<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 700">{t}</span><span style="font-size: 14px; color: {SOFT}">{s}</span></span><span style="font-size: 13px; color: {SOFT}">{v}</span></a>'
+def L(href, lap):  # a phone board's laptop twin
+    return href.replace('.dc.html', 'Laptop.dc.html') if lap and href != '#' else href
+def body(top, inner, dock='', pad_bottom=118):
+    return f'{top}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px {pad_bottom}px; display: flex; flex-direction: column; gap: 14px">{inner}</main>{DOCK(dock) if dock else ""}'
+def lapbody(top, left, right, dock=''):
+    return f'{top}<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 40px; padding: 0 40px 28px 56px"><div style="min-width: 0; min-height: 0; display: flex; flex-direction: column; gap: 18px">{left}{DOCK_L(dock) if dock else ""}</div><div class="nos" style="min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding-top: 4px">{right}</div></div>'
+SPACER = '<span style="flex: 1"></span>'
+
+# ═════ Practice overview (R39-4: relevance first, pictures that show the content) ═════
+HARMONY = [('keys', 'Chords', 'Every chord, its inversions and fingering', '12 of 48', 'Chords.dc.html'), ('staff', 'Scales and keys', 'Scales as the books finger them', '5 of 24', 'Scales.dc.html'),
+           ('arc', 'Intervals', 'Every interval, seen and heard', '', 'Intervals.dc.html'), ('roman', 'Progressions', 'Known progressions in any key', '', 'Progressions.dc.html')]
+PLAYING = [('roll', 'Accompaniment', 'Left-hand and right-hand patterns', '', 'Accompaniment.dc.html'), ('chart', 'Chord player', 'Your chord sheet, played by a band', '', 'ChordPlayer.dc.html'),
+           ('drill', 'Exercises', 'Hanon, Barry Harris, Piano With Jonny', '', 'Exercises.dc.html'), ('quiz', 'Quiz', 'Name chords, keys and intervals', '7 to check', 'Quiz.dc.html')]
+TOOLS = [('metro', 'Metronome', '120 BPM · 4/4', '', 'Metronome.dc.html'), ('needle', 'Tuner', 'How in tune a note is', '', 'Tuner.dc.html'), ('lens', 'Chord finder', 'Names any chord you play', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Every key and its chords', '', 'CircleOfFifths.dc.html')]
+def upnext(lap):
+    return CARD(f'<div style="display: flex; gap: 14px; align-items: center">{pic("keys", 64)}<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 13px; font-weight: 600; color: #A8551F">From Amazing Grace</span><span style="font-size: 20px; font-weight: 700">D7 and its inversions</span><span style="font-size: 14px; color: {SOFT}">The chord before bar 12 · about 5 minutes</span></div></div>'
+                f'<div style="display: flex; margin-top: 14px">{BTN(PLAY.replace("22", "18") + " Start", href=L("Chords.dc.html", lap))}</div>')
+NEXTROWS = lambda lap: PLIST([('staff', 'G major scale, hands together', 'Step 3 of the tempo ladder · 72 BPM', '', L('Scales.dc.html', lap)), ('quiz', 'Name the triad', 'Yesterday 14 of 20 · five minutes', '', L('QuizRun.dc.html', lap))])
+TOOLSBTN = f'<button type="button" onClick="{{{{openTools}}}}" style="height: 36px; padding: 0 14px; border: 0; border-radius: 18px; background: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">Tools</button>'
+MAIN = js(r"    return { ...common(st, set), toolsOn: st.sheet === 'tools', openTools: () => set({ sheet: 'tools' }) };")
+ph = f'''{TOP('', '', TOOLSBTN + IB('Search', SEARCH.replace('18', '22'), href='#'))}{LARGE('Practice')}
+<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 130px; display: flex; flex-direction: column; gap: 14px">
+{H2('Up next')}{upnext(False)}{NEXTROWS(False)}{H2('Harmony')}{PLIST(HARMONY)}{H2('Playing')}{PLIST(PLAYING)}{H2('Tools')}{PLIST(TOOLS)}</main>{TABBAR('Practice')}'''
+grid = lambda rows: '<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px">' + ''.join(PCARD(p, t, s, v, L(h, True)) for p, t, s, v, h in rows) + '</div>'
+lm = f'''{LTOP('', TOOLSBTN)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">
+<h1 style="margin: 0; font-size: 34px; font-weight: 700">Practice</h1>{H2('Up next')}<div style="display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; align-items: start">{upnext(True)}{NEXTROWS(True)}</div>
+{H2('Harmony')}{grid(HARMONY)}{H2('Playing')}{grid(PLAYING)}{H2('Tools')}{grid(TOOLS)}</main>'''
+TOOLSHEET = PLIST(TOOLS)
+detail('Main', 'Practice', MAIN, ph, lm, '', SHEET('toolsOn', 'Tools', TOOLSHEET), POPOVER('toolsOn', 'Tools', PLIST([(p, t, s, v, L(h, True)) for p, t, s, v, h in TOOLS]), 'right: 40px; top: 60px', 400))
+
+# ═════ Scales and keys (Piano Companion: the staff, then the chords that fit; R39 rulings) ═════
+def scale_staff(w, fingers):
+    sp = 7; top = 30; base = top + 4 * sp
+    o = ''.join(f'<path d="M4 {top + i * sp}H{w - 4}" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
+    o += f'<text x="6" y="{base + 6}" font-size="44" font-family="Noto Music, serif" fill="{INK}">𝄞</text><text x="38" y="{top + 2}" font-size="18" font-family="Noto Music, serif" fill="{INK}">♯</text>'
+    x0, dx = 68, (w - 84) / 8
+    for i in range(8):
+        x = x0 + i * dx; y = base - (2 + i) * sp / 2
+        o += f'<ellipse cx="{x:.1f}" cy="{y}" rx="5" ry="3.7" transform="rotate(-20 {x:.1f} {y})" fill="{INK}"></ellipse><path d="M{x + 4.6:.1f} {y}V{y - 24}" stroke="{INK}" stroke-width="1.1"></path>'
+        o += f'<text x="{x:.1f}" y="{min(top - 10, y - 30)}" text-anchor="middle" font-size="12" font-weight="700" fill="#5A4C8C">{fingers[i]}</text>'
+    return f'<svg viewBox="0 0 {w} 96" width="100%" role="img" aria-label="G major, up one octave, right-hand fingering over the notes" style="display: block">{o}</svg>'
+SC = js(r'''
+    const KINDS = ['Major', 'Natural minor', 'Harmonic minor', 'Melodic minor', 'Dorian', 'Mixolydian', 'Major pentatonic', 'Minor pentatonic', 'Blues'];
+    const IV = [[0,2,4,5,7,9,11],[0,2,3,5,7,8,10],[0,2,3,5,7,8,11],[0,2,3,5,7,9,11],[0,2,3,5,7,9,10],[0,2,4,5,7,9,10],[0,2,4,7,9],[0,3,5,7,10],[0,3,5,6,7,10]];
+    const SIG = ['no sharps or flats', '5 flats', '2 sharps', '3 flats', '4 sharps', '1 flat', '6 sharps', '1 sharp, F♯', '4 flats', '3 sharps', '2 flats', '5 sharps'];
+    const root = st.root ?? 7, kind = st.kind ?? 0, tab = st.tab ?? 'Scale', hands = st.hands ?? 'Both', oct = st.oct ?? 1;
+    const ivs = IV[kind], marks = {}, lo = 48 + root - (root > 6 ? 12 : 0) + 12;
+    ivs.concat([12]).forEach((iv, i) => { const m = lo + iv; marks[m] = [i % 7 === 0 ? ROLE[1] : '#F3D9A8', NN[(root + iv) % 12]]; });
+    const deg = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'], q = ['', 'm', 'm', '', '', 'm', '°'];
+    return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), rootOn: st.sheet === 'root', openRoot: () => set({ sheet: 'root' }), kindOn: st.sheet === 'kind', openKind: () => set({ sheet: 'kind' }),
+      name: NN[root] + ' ' + KINDS[kind].toLowerCase(), sub: KINDS[kind] + ' scale · ' + (kind === 0 ? SIG[root] : ivs.length + ' notes'), rootL: NN[root], kindL: KINDS[kind],
+      roots: rootGrid(root, (i) => set({ root: i, sheet: null })), kinds: KINDS.map((k, i) => ({ k, on: i === kind, mark: i === kind ? '✓' : '', pick: () => set({ kind: i, sheet: null }) })),
+      tabs: seg(['Scale', 'Chords', 'Key'], tab, (l) => set({ tab: l })), isScale: tab === 'Scale', isChords: tab === 'Chords', isKey: tab === 'Key',
+      kb: calmKeys(lo - 5, lo + 19, marks, 370, 120), kbL: calmKeys(lo - 12, lo + 24, marks, 840, 170),
+      handsSeg: seg(['Left', 'Both', 'Right'], hands, (l) => set({ hands: l })), oct: oct + (oct === 1 ? ' octave' : ' octaves'), octDn: () => set({ oct: Math.max(1, oct - 1) }), octUp: () => set({ oct: Math.min(4, oct + 1) }),
+      chords: deg.map((d, i) => ({ d, c: NN[(root + ivs[i % ivs.length]) % 12] + q[i] })) };''')
+SC_PIC = lambda k, w, kh: f'''<sc-if value="{{{{isScale}}}}" hint-placeholder-val="{{{{true}}}}">{CARD(scale_staff(w, '12312345') + f'<div style="height: 10px"></div>' + KEYS(kh).replace('kb.', k + '.'), '12px 12px 12px')}</sc-if>
+<sc-if value="{{{{isChords}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{chords}}}}" as="c" hint-placeholder-count="7"><button type="button" style="height: 78px; border: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: {INK}"><span style="font-size: 22px; font-weight: 700">{{{{c.c}}}}</span><span style="font-family: {SERIF}; font-size: 15px; color: {SOFT}">{{{{c.d}}}}</span></button></sc-for></div></sc-if>
+<sc-if value="{{{{isKey}}}}" hint-placeholder-val="{{{{false}}}}">{CARD(scale_staff(w, '        ').replace('aria-label="G major, up one octave, right-hand fingering over the notes"', 'aria-label="The key signature"'))}{GROUP(('link', 'Relative minor', 'E minor', 'Scales.dc.html'), ('link', 'On the circle', 'Between C and D', 'CircleOfFifths.dc.html'), bg=SHEET)}</sc-if>'''
+SC_ROWS = GROUP(('link', 'Tonic', '{{rootL}}', 'openRoot'), ('link', 'Scale', '{{kindL}}', 'openKind'), ('seg', 'Hands', 'handsSeg', 190), ('step', 'Octaves', 'oct', 'octDn', 'octUp'))
+SC_SET = GROUP(('seg', 'Fingering', 'fingSeg', 200), ('link', 'Rhythm', 'Even', ''), ('link', 'Count-in', '1 bar', ''), ('link', 'All piano settings', '', ''))
+SC = SC.replace("chords: deg.map", "fingSeg: seg(['As the scale', 'From the thumb'], st.fing ?? 'As the scale', (l) => set({ fing: l })), chords: deg.map")
+KINDLIST = f'<div style="border-radius: 12px; background: {SHEET}; overflow: hidden"><sc-for list="{{{{kinds}}}}" as="k" hint-placeholder-count="9"><button type="button" onClick="{{{{k.pick}}}}" style="width: 100%; height: 48px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {LINE}; padding: 0 16px; display: flex; align-items: center; color: {INK}; font: inherit; font-size: 16px; text-align: left"><span style="flex: 1">{{{{k.k}}}}</span><span style="color: {LINK}; font-weight: 700">{{{{k.mark}}}}</span></button></sc-for></div>'
+SC_SHEETS = SHEET('rootOn', 'Tonic', ROOTGRID()) + SHEET('kindOn', 'Scale', KINDLIST) + SHEET('setOn', 'Scale settings', SC_SET)
+ph = body(TOP('Main.dc.html', 'Scales and keys', GEAR()), SUBJECT('{{name}}', '{{sub}}', 34) + SEGC('tabs') + SC_PIC('kb', 340, 120) + SC_ROWS,
+          BTN('Practise this scale', href='Exercise.dc.html', kind='quiet') + PLAYBTN())
+lm = lapbody(LTOP('Laptop.dc.html', GEAR()), SUBJECT('{{name}}', '{{sub}}', 44) + f'<div style="width: 420px">{SEGC("tabs")}</div>' + SC_PIC('kbL', 860, 170),
+             SC_ROWS + GROUP(('link', 'Practise this scale', 'Hanon and the tempo ladder', 'ExerciseLaptop.dc.html')), BTN('Practise this scale', href='ExerciseLaptop.dc.html', kind='quiet') + PLAYBTN())
+SC_POPS = POPOVER('rootOn', 'Tonic', ROOTGRID(), 'right: 40px; top: 70px') + POPOVER('kindOn', 'Scale', KINDLIST, 'right: 40px; top: 120px') + POPOVER('setOn', 'Scale settings', SC_SET)
+detail('Scales', 'Scales and keys', SC, ph, lm, '', SC_SHEETS, SC_POPS)
+
+# ═════ Intervals (Tenuto's named answers, Perfect Ear's staff and keys; R39 rulings) ═════
+IV = js(r'''
+    const AB = ['P1', 'm2', 'M2', 'm3', 'M3', 'P4', 'TT', 'P5', 'm6', 'M6', 'm7', 'M7', 'P8'];
+    const NAMES = ['Perfect unison', 'Minor 2nd', 'Major 2nd', 'Minor 3rd', 'Major 3rd', 'Perfect 4th', 'Tritone', 'Perfect 5th', 'Minor 6th', 'Major 6th', 'Minor 7th', 'Major 7th', 'Octave'];
+    const SONG = { 7: 'Twinkle, Twinkle, Little Star', 5: 'Here Comes the Bride', 4: 'When the Saints', 3: 'Greensleeves', 12: 'Somewhere over the Rainbow', 2: 'Happy Birthday', 9: 'My Bonnie', 1: 'Jaws', 10: 'Star Trek', 11: 'Take On Me', 6: 'The Simpsons', 8: 'The Entertainer', 0: 'Any repeated note' };
+    const n = st.n ?? 7, from = st.from ?? 0, way = st.way ?? 'Ascending', lo = 60 + from, hi = lo + n;
+    return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), rootOn: st.sheet === 'root', openRoot: () => set({ sheet: 'root' }),
+      name: NAMES[n], sub: n + (n === 1 ? ' semitone' : ' semitones') + ' · ' + NN[lo % 12] + ' up to ' + NN[hi % 12], song: SONG[n],
+      ivs: AB.map((a, i) => ({ a, s: String(i), bg: i === n ? '#EDC684' : '#FEFDFB', pick: () => set({ n: i }) })),
+      kb: calmKeys(57, 81, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], NN[hi % 12]] }, 370, 120), kbL: calmKeys(53, 84, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], NN[hi % 12]] }, 840, 170),
+      fromL: NN[from], roots: rootGrid(from, (i) => set({ from: i, sheet: null })), waySeg: seg(['Ascending', 'Descending', 'Harmonic'], way, (l) => set({ way: l })), sizeSeg: seg(['Simple', 'Compound'], st.size ?? 'Simple', (l) => set({ size: l })),
+      allSeg: seg(['In order', 'Shuffled'], st.all ?? 'In order', (l) => set({ all: l })), speedSeg: seg(['Slow', 'Medium', 'Fast'], st.speed ?? 'Medium', (l) => set({ speed: l })) };''')
+IVGRID = f'<div role="radiogroup" aria-label="Interval" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px"><sc-for list="{{{{ivs}}}}" as="i" hint-placeholder-count="13"><button type="button" onClick="{{{{i.pick}}}}" style="height: 50px; border: 0; border-radius: 11px; background: {{{{i.bg}}}}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0"><span style="font-size: 16px; font-weight: 700">{{{{i.a}}}}</span><span style="font-size: 11px; color: {SOFT}">{{{{i.s}}}}</span></button></sc-for></div>'
+IV_PIC = lambda k, kh: CARD(KEYS(kh).replace('kb.', k + '.') + f'<div style="display: flex; align-items: center; gap: 10px; margin-top: 12px"><span style="flex: 1; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 13px; color: {SOFT}">Sounds like</span><span style="font-size: 16px; font-weight: 600">{{{{song}}}}</span></span><button type="button" aria-label="Hear it" style="width: 40px; height: 40px; border: 0; border-radius: 20px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLAY.replace("22", "16")}</button></div>', '12px')
+IV_ROWS = GROUP(('link', 'From', '{{fromL}}', 'openRoot'), ('seg', 'Play as', 'waySeg', 250), ('seg', 'Intervals', 'sizeSeg', 180))
+IV_SET = GROUP(('seg', 'Play all', 'allSeg', 190), ('seg', 'Speed', 'speedSeg', 200), ('link', 'All piano settings', '', ''))
+ph = body(TOP('Main.dc.html', 'Intervals', GEAR()), SUBJECT('{{name}}', '{{sub}}', 34) + IV_PIC('kb', 120) + IVGRID + IV_ROWS, BTN('Train your ear', href='QuizRun.dc.html', kind='quiet') + PLAYBTN())
+lm = lapbody(LTOP('Laptop.dc.html', GEAR()), SUBJECT('{{name}}', '{{sub}}', 44) + IV_PIC('kbL', 190) + IVGRID, IV_ROWS + GROUP(('link', 'Train your ear', 'Intervals by ear', 'QuizRunLaptop.dc.html')), BTN('Train your ear', href='QuizRunLaptop.dc.html', kind='quiet') + PLAYBTN())
+detail('Intervals', 'Intervals', IV, ph, lm, '', SHEET('rootOn', 'From', ROOTGRID()) + SHEET('setOn', 'Interval settings', IV_SET), POPOVER('rootOn', 'From', ROOTGRID()) + POPOVER('setOn', 'Interval settings', IV_SET))
+
+# ═════ The libraries: Progressions, Accompaniment, Exercises (one shape) ═════
+def Rw(t, s, v, i, c, href, places=(), tags=(), ic=INK):
+    return {'t': t, 's': s, 'v': v, 'i': i, 'c': c, 'ic': ic, 'href': href, 'places': list(places), 'tags': list(tags)}
+library('Progressions', 'Progressions', {'places': ['All', 'Favourites', 'Recently played', 'Mine'], 'sorts': ['As arranged', 'Name', 'Recently played'], 'favs': ['Axis of Awesome'], 'open': {},
+  'filters': [{'name': 'Key', 'opts': [['Major key', 18], ['Minor key', 8]]}],
+  'sections': [{'g': 'Pop', 'rows': [Rw('Axis of Awesome', 'I – V – vi – IV', '', 'I V', HONEY, 'Progression.dc.html', ('Recently played',), ('Major key',)), Rw('50s doo-wop', 'I – vi – IV – V', '', 'I vi', HONEY, 'Progression.dc.html', (), ('Major key',)), Rw('Royal Road', 'IV – V – iii – vi', '', 'IV', HONEY, 'Progression.dc.html', (), ('Major key',))]},
+               {'g': 'Jazz', 'rows': [Rw('ii–V–I', 'ii7 – V7 – Imaj7', '', 'ii', SKY, 'Progression.dc.html', ('Recently played',), ('Major key',)), Rw('Rhythm changes', 'I – vi – ii – V', '', 'I vi', SKY, 'Progression.dc.html', (), ('Major key',))]},
+               {'g': 'Classical', 'rows': [Rw('Pachelbel', 'I – V – vi – iii – IV – I – IV – V', '', 'I V', SAGE, 'Progression.dc.html', (), ('Major key',)), Rw('Andalusian cadence', 'i – ♭VII – ♭VI – V', '', 'i', SAGE, 'Progression.dc.html', (), ('Minor key',))]},
+               {'g': 'Mine', 'rows': [Rw('Verse of my song', 'I – iii – IV – V', '', 'I', FILL, 'Progression.dc.html', ('Mine',), ('Major key',))]}]},
+  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Name', 't', 2), ('Numerals', 's', 3), ('', 'v', .4)),
+  add_items=(('Type numerals or chords', '#'), ('Build from chords', '#'), ('New folder', '#')))
+library('Accompaniment', 'Accompaniment', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': ['Broken chords'], 'open': {'Called to Play, level 2': False, 'Rhythm styles': False},
+  'filters': [{'name': 'Level', 'opts': [['Level 1', 9], ['Level 2', 6], ['Level 3', 4]]}, {'name': 'Texture', 'opts': [['Block', 5], ['Broken', 7], ['Arpeggio', 4]]}, {'name': 'Feel', 'opts': [['Straight', 12], ['Swing', 3], ['Waltz', 2]]}],
+  'sections': [{'g': 'Recently used', 'rows': [Rw('Bass + chords', 'Left: octave held · Right: chord on each beat', 'Level 1', '♩♩', LILAC, '#', ('Recently used',), ('Level 1', 'Block', 'Straight')), Rw('Broken chords', 'Right hand rocks in 8ths', 'Level 1', '♫', LILAC, '#', ('Recently used',), ('Level 1', 'Broken', 'Straight'))]},
+               {'g': 'Called to Play', 'rows': [Rw('Waltz', 'Left: root on 1 · Right: chord on 2 and 3', 'Level 1', '♩♪', LILAC, '#', (), ('Level 1', 'Block', 'Waltz')), Rw('Arpeggio 1–5–8', 'One arpeggio through both hands', 'Level 2', '♬', LILAC, '#', (), ('Level 2', 'Arpeggio', 'Straight'))]},
+               {'g': 'Called to Play, level 2', 'rows': [Rw('Runs down to the root', 'The 2nd and 5th, then 3–2–1', 'Level 3', '♬', LILAC, '#', (), ('Level 3', 'Broken', 'Straight'))]},
+               {'g': 'Rhythm styles', 'rows': [Rw('Ballad', 'Root and 5th, chords on 2 and 4', 'Level 1', '♩', LILAC, '#', (), ('Level 1', 'Block', 'Straight')), Rw('Swing comping', 'Short chords off the beat', 'Level 3', '♪', LILAC, '#', (), ('Level 3', 'Block', 'Swing'))]}]},
+  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Pattern', 't', 2), ('Hands', 's', 3.4), ('Level', 'v', .8)),
+  add_items=(('New pattern', '#'), ('New folder', '#')))
+library('Exercises', 'Exercises', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': ['Hanon'], 'open': {},
+  'filters': [{'name': 'Level', 'opts': [['Beginner', 3], ['Intermediate', 1], ['Advanced', 1], ['Professional', 2]]}],
+  'sections': [{'g': 'Finger technique', 'rows': [Rw('Hanon', 'Nos. 1 to 20 of The Virtuoso Pianist', 'Intermediate', '1–20', SAGE, 'Exercise.dc.html', ('Recently used',), ('Intermediate',)), Rw('Five-finger position', "A key's first five notes, up and down", 'Beginner', '1–5', SAGE, 'Exercise.dc.html', (), ('Beginner',))]},
+               {'g': 'Barry Harris', 'rows': [Rw('6th-diminished scale', 'Eight notes to the octave', 'Advanced', '6°', SKY, 'Exercise.dc.html', (), ('Advanced',)), Rw('Drop-2 7ths', "The key's 7th chords up and down", 'Professional', 'D2', SKY, 'Exercise.dc.html', (), ('Professional',))]},
+               {'g': 'Piano With Jonny', 'rows': [Rw('2-5-1 scale', 'Swung 8ths over a ii–V–I', 'Beginner', '251', HONEY, 'Exercise.dc.html', (), ('Beginner',)), Rw('Rapid switch', 'One line through all twelve keys', 'Professional', '12', HONEY, 'Exercise.dc.html', (), ('Professional',))]}]},
+  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Exercise', 't', 2), ('', 's', 3), ('Level', 'v', 1)), add_items=(('New exercise', '#'), ('New folder', '#')))
+
+# ═════ A progression (Hooktheory: the chords coloured by function, the moves drawn) ═════
+PR = js(r'''
+    const P = ['I', 'V', 'vi', 'IV'], DEG = { I: 0, ii: 2, iii: 4, IV: 5, V: 7, vi: 9 };
+    const FN = { I: ['Tonic', '#F3D2C8'], vi: ['Tonic', '#F3D2C8'], iii: ['Tonic', '#F3D2C8'], IV: ['Predominant', '#D3E5F2'], ii: ['Predominant', '#D3E5F2'], V: ['Dominant', '#DCE9D6'] };
+    const MOVE = ['5th up', '3rd down', '3rd down', '4th down'];
+    const key = st.key ?? 0, at = st.at ?? 1, loop = st.loop ?? true;
+    const ch = (n) => NN[(key + DEG[n]) % 12] + (n === n.toLowerCase() ? 'm' : '');
+    const cur = P[at], r = (key + DEG[cur]) % 12, minor = cur === cur.toLowerCase(), marks = {};
+    [0, minor ? 3 : 4, 7].forEach((iv, i) => { marks[60 + ((r + iv) % 12)] = [[ROLE[1], ROLE[3], ROLE[5]][i], NN[(r + iv) % 12]]; }); marks[48 + r] = [ROLE[1], NN[r]];
+    return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), rootOn: st.sheet === 'root', openRoot: () => set({ sheet: 'root' }),
+      tiles: P.map((n, i) => ({ n, c: ch(n), bg: FN[n][1], ring: i === at ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', move: i < P.length - 1 ? MOVE[i] : '', pick: () => set({ at: i }) })),
+      keyL: NN[key] + ' major', roots: rootGrid(key, (i) => set({ key: i, sheet: null })), voiceSeg: seg(['Voice-led', 'Block'], st.voice ?? 'Voice-led', (l) => set({ voice: l })),
+      bpm: (st.bpm ?? 96) + ' BPM', bpmDn: () => set({ bpm: (st.bpm ?? 96) - 4 }), bpmUp: () => set({ bpm: (st.bpm ?? 96) + 4 }),
+      kb: calmKeys(48, 76, marks, 370, 110), kbL: calmKeys(41, 84, marks, 860, 160), loop, loopBg: loop ? '#332921' : '#EEE9E2', loopFg: loop ? '#FEFDFB' : '#332921', toggleLoop: () => set({ loop: !loop }) };''')
+TILES = (f'<div style="display: flex; align-items: stretch; gap: 0"><sc-for list="{{{{tiles}}}}" as="t" hint-placeholder-count="4"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px"><button type="button" onClick="{{{{t.pick}}}}" style="width: calc(100% - 8px); height: 96px; border: 0; border-radius: 14px; background: {{{{t.bg}}}}; box-shadow: {{{{t.ring}}}}; color: {INK}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px"><span style="font-family: {SERIF}; font-size: 26px">{{{{t.n}}}}</span><span style="font-size: 15px; font-weight: 700">{{{{t.c}}}}</span></button><span style="font-size: 12px; color: {SOFT}; height: 14px">{{{{t.move}}}} →</span></div></sc-for></div>'
+         f'<div style="display: flex; gap: 14px; font-size: 13px; color: {SOFT}">' + ''.join(f'<span style="display: flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 5px; background: {c}; box-shadow: 0 0 0 1px {LINE}"></span>{l}</span>' for l, c in (('Tonic', PEACH), ('Predominant', SKY), ('Dominant', SAGE))) + '</div>')
+PR_ROWS = GROUP(('link', 'Key', '{{keyL}}', 'openRoot'), ('seg', 'Voicing', 'voiceSeg', 200), ('step', 'Tempo', 'bpm', 'bpmDn', 'bpmUp'))
+LOOPB = f'<button type="button" aria-pressed="{{{{loop}}}}" onClick="{{{{toggleLoop}}}}" style="flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {{{{loopBg}}}}; color: {{{{loopFg}}}}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px">{LOOP.replace("20", "18")} Loop</button>'
+PR_MORE = GROUP(('link', 'Edit a copy', '', ''), ('link', 'Open in the Chord player', '', 'ChordPlayer.dc.html'), ('link', 'Songs with it', 'Let It Be, and 11 more', 'Songs.dc.html'))
+PR_SET = GROUP(('seg', 'Numerals of', 'voiceSeg', 200), ('link', 'Chord sound', 'Grand piano', ''), ('link', 'All piano settings', '', ''))
+PR_SET = PR_SET.replace("Numerals of", "Voicing")
+ph = body(TOP('Progressions.dc.html', 'Progression', GEAR() + DOTS()), SUBJECT('Axis of Awesome', 'Pop · in {{keyL}}', 34) + TILES + KEYS(110) + PR_ROWS, LOOPB + SPACER + BTN('Practise in the Player', href='#', kind='quiet', grow=False, h=44) + PLAYBTN())
+lm = lapbody(LTOP('ProgressionsLaptop.dc.html', GEAR() + DOTS()), SUBJECT('Axis of Awesome', 'Pop · in {{keyL}}', 44) + TILES.replace('height: 96px', 'height: 150px').replace('font-size: 26px', 'font-size: 40px') + KEYS(160).replace('kb.', 'kbL.'), PR_ROWS + GROUP(('link', 'Practise in the Player', '', '#'), ('link', 'Open in the Chord player', '', 'ChordPlayerLaptop.dc.html')), LOOPB + SPACER + PLAYBTN())
+detail('Progression', 'A progression', PR, ph, lm, '', SHEET('rootOn', 'Key', ROOTGRID()) + SHEET('moreOn', 'Axis of Awesome', PR_MORE) + SHEET('setOn', 'Progression settings', PR_SET),
+       POPOVER('rootOn', 'Key', ROOTGRID()) + POPOVER('moreOn', 'Axis of Awesome', PR_MORE.replace('ChordPlayer.dc.html', 'ChordPlayerLaptop.dc.html').replace('Songs.dc.html', 'SongsLaptop.dc.html')) + POPOVER('setOn', 'Progression settings', PR_SET))
+
+# ═════ Chord player (iReal Pro: the chart fills the page, the player bar at the foot) ═════
+CP = js(r'''
+    const SECS = [['A', 'Verse', 2, [['C'], ['G'], ['Am'], ['F'], ['C'], ['G'], ['F', 'G'], ['C']]], ['B', 'Chorus', 1, [['F'], ['G'], ['C', 'C/E'], ['F', 'G7'], ['Am'], ['F'], ['G7'], ['C']]], ['C', 'Bridge', 1, [['Dm7'], ['G7'], ['Em7', 'A7'], ['Dm7', 'G7']]]];
+    const play = st.playing ? (st.at ?? [0, 2]) : [-1, -1], STY = ['Pop 1', 'Pop ballad', 'Rock 8ths', 'Worship', 'Swing', 'Bossa nova'], s = st.style ?? 0, bpm = st.bpm ?? 96;
+    const secs = SECS.map(([m, name, rep, bars], si) => ({ m, name, rep: '× ' + rep, bars: bars.map((cs, bi) => ({ cs: cs.map((c) => ({ c })), bg: play[0] === si && play[1] === bi ? '#EDC684' : 'transparent', edge: bi % 4 === 3 ? '0' : '1px', pick: () => set({ sheet: 'chord', sel: [si, bi] }) })) }));
+    return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), chordOn: st.sheet === 'chord', styleOn: st.sheet === 'style', openStyle: () => set({ sheet: 'style' }), secs,
+      styleL: STY[s], bpmL: String(bpm), wStyle: wheel(STY, s, (i) => set({ style: i })), wRoot: wheel(NN, 0, () => {}), wQual: wheel(['', 'm', '7', 'maj7', 'm7', 'sus4', 'dim'], 0, () => {}), wLen: wheel(['1 beat', '2 beats', '3 beats', '4 beats'], 3, () => {}),
+      keyTiles: ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B°', 'G7'].map((c) => ({ c })) };''')
+CHART = (f'<div style="border-radius: 6px; background: #FFFFFF; box-shadow: 0 0 0 1px {LINE}, 0 10px 24px -18px rgba(51,41,33,.45); padding: 16px 14px 18px; display: flex; flex-direction: column; gap: 16px">'
+         f'<div style="text-align: center; font-family: {SERIF}; font-size: 20px">My verse and chorus</div>'
+         f'<sc-for list="{{{{secs}}}}" as="x" hint-placeholder-count="2"><section style="display: flex; flex-direction: column; gap: 4px"><div style="display: flex; align-items: center; gap: 8px"><span style="width: 22px; height: 22px; box-sizing: border-box; border: 1.5px solid {INK}; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">{{{{x.m}}}}</span><span style="font-size: 14px; font-weight: 600">{{{{x.name}}}}</span>{SPACER}<span style="font-size: 13px; color: {SOFT}">{{{{x.rep}}}}</span><span style="display: flex; color: {SOFT}">{GRIP}</span></div>'
+         f'<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-left: 2px solid {INK}; border-right: 2px solid {INK}"><sc-for list="{{{{x.bars}}}}" as="b" hint-placeholder-count="8"><button type="button" onClick="{{{{b.pick}}}}" style="height: {{{{CH}}}}px; border: 0; border-right: {{{{b.edge}}}} solid {INK}; background: {{{{b.bg}}}}; padding: 0 6px; display: flex; align-items: center; justify-content: space-around; color: {INK}; font-family: {SERIF}; font-size: {{{{CF}}}}px; font-weight: 700"><sc-for list="{{{{b.cs}}}}" as="c" hint-placeholder-count="1"><span>{{{{c.c}}}}</span></sc-for></button></sc-for></div></section></sc-for>'
+         f'<button type="button" style="align-self: flex-start; height: 36px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">+ Add section</button></div>')
+def PBTN(label, val, act):
+    return f'<button type="button" onClick="{{{{{act}}}}}" style="flex: 1; min-width: 0; height: 52px; border: 0; border-radius: 14px; background: transparent; color: {INK}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; font: inherit"><span style="font-size: 11px; color: {SOFT}">{label}</span><span style="font-size: 16px; font-weight: 700; white-space: nowrap">{val}</span></button>'
+CP_DOCK = PBTN('Style', '{{styleL}}', 'openStyle') + PBTN('Key', 'C', 'openStyle') + PBTN('Tempo', '{{bpmL}}', 'openStyle') + PBTN('Repeats', '× 3', 'openStyle') + PLAYBTN()
+CP_CHORD = WHEEL([('wRoot', 1), ('wQual', 1), ('wLen', 1.4)]) + f'<button type="button" onClick="{{{{closeSheet}}}}" style="height: 48px; border: 0; border-radius: 12px; background: {SHEET}; color: #B3261E; font: inherit; font-size: 16px; font-weight: 600">Delete chord</button>'
+CP_SET = GROUP(('link', 'Instruments', 'Piano, bass, drums', ''), ('seg', 'Chord names', 'namesSeg', 200), ('link', 'Count-in', '1 bar', ''))
+CP = CP.replace("keyTiles:", "namesSeg: seg(['Letters', 'Numerals'], st.names ?? 'Letters', (l) => set({ names: l })), keyTiles:")
+UNDOB = IB('Undo', UNDO)
+ph = body(TOP('Main.dc.html', 'Chord player', UNDOB + GEAR() + DOTS()), CHART.replace('{{CH}}', '50').replace('{{CF}}', '17'), CP_DOCK, 118)
+DRAG = f'{H2("C major chords")}<p style="margin: -8px 4px 0; font-size: 14px; color: {SOFT}">Drag one into a bar.</p><div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{keyTiles}}}}" as="k" hint-placeholder-count="8"><span draggable="true" style="height: 56px; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: 20px; font-weight: 700; cursor: grab">{{{{k.c}}}}</span></sc-for></div>'
+lm = lapbody(LTOP('Laptop.dc.html', UNDOB + GEAR() + DOTS(), 'Chord player'), f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto">{CHART.replace("{{CH}}", "64").replace("{{CF}}", "22")}</div>', DRAG + H2('Style') + WHEEL([('wStyle', 1)]), CP_DOCK)
+CP_MORE = GROUP(('link', 'Chord sheets', '', ''), ('link', 'Save as my chord sheet', '', ''), ('link', 'Open in Progressions', '', 'Progressions.dc.html'), ('link', 'Share link', '', ''))
+detail('ChordPlayer', 'Chord player', CP, ph, lm, '', SHEET('chordOn', 'Bar 3', CP_CHORD) + SHEET('styleOn', 'Style', WHEEL([('wStyle', 1)])) + SHEET('setOn', 'Chord player settings', CP_SET) + SHEET('moreOn', 'Chord sheet', CP_MORE),
+       POPOVER('chordOn', 'Bar 3', CP_CHORD, 'left: 140px; top: 220px', 440) + POPOVER('styleOn', 'Style', WHEEL([('wStyle', 1)]), 'left: 200px; bottom: 110px') + POPOVER('setOn', 'Chord player settings', CP_SET) + POPOVER('moreOn', 'Chord sheet', CP_MORE.replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html')))
+
+# ═════ An exercise (Hanon Pro: the page, Listen, a metronome and a target tempo) ═════
+_h = open('/home/user/piano-trainer/.scratch/r39/canvas/calm.py').read(); exec('def hanon' + _h.split('def hanon')[1].split('EX_STAGE =')[0])
+EX = js(r'''
+    const no = st.no ?? 1, key = st.key ?? 0, bpm = st.bpm ?? 60, target = 108;
+    return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), rootOn: st.sheet === 'root', openRoot: () => set({ sheet: 'root' }),
+      noL: 'No. ' + no, noDn: () => set({ no: Math.max(1, no - 1) }), noUp: () => set({ no: Math.min(20, no + 1) }), keyL: NN[key] + ' major', roots: rootGrid(key, (i) => set({ key: i, sheet: null })),
+      handsSeg: seg(['Left', 'Both', 'Right'], st.hands ?? 'Both', (l) => set({ hands: l })), rhythmSeg: seg(['Even', 'Dotted', 'Reverse dotted'], st.rhythm ?? 'Even', (l) => set({ rhythm: l })),
+      bpmL: bpm + ' BPM', bpmDn: () => set({ bpm: bpm - 4 }), bpmUp: () => set({ bpm: bpm + 4 }), pctW: Math.min(100, Math.round(bpm / target * 100)) + '%', ladder: bpm + ' of ' + target + ' BPM',
+      fav: st.fav ?? true, heartFill: (st.fav ?? true) ? '#B84A3E' : 'none', heartStroke: (st.fav ?? true) ? '#B84A3E' : '#332921', toggleFav: () => set({ fav: !(st.fav ?? true) }) };''')
+LADDER = f'<div style="display: flex; flex-direction: column; gap: 6px; padding: 10px 16px 12px"><div style="display: flex; justify-content: space-between; font-size: 14px"><span>Tempo ladder</span><span style="color: {SOFT}">{{{{ladder}}}}</span></div><div style="height: 6px; border-radius: 3px; background: {SHEET}"><div style="width: {{{{pctW}}}}; height: 6px; border-radius: 3px; background: #44684A"></div></div></div>'
+EX_ROWS = GROUP(('step', 'Number', 'noL', 'noDn', 'noUp'), ('link', 'Key', '{{keyL}}', 'openRoot'), ('seg', 'Hands', 'handsSeg', 190), ('seg', 'Rhythm', 'rhythmSeg', 262), ('step', 'Tempo', 'bpmL', 'bpmDn', 'bpmUp', 80), ('raw', LADDER))
+EX_PIC = lambda w: CARD(hanon(w) + hanon(w).replace('bars 1 and 2', 'bars 3 and 4') + f'<div style="display: flex; justify-content: space-between; font-size: 13px; color: {SOFT}; margin-top: 6px"><span>Bars 1–4 of 28</span><span>The left hand an octave lower</span></div>', '12px')
+EX_SET = GROUP(('link', 'Count-in', '1 bar', ''), ('link', 'Wait for the right note', 'On', ''), ('link', 'Next key', 'Circle of fifths', ''), ('link', 'All piano settings', '', ''))
+ph = body(TOP('Exercises.dc.html', 'Hanon', HEARTB + GEAR()), SUBJECT('Hanon No. 1', 'The Virtuoso Pianist · finger technique', 32) + EX_PIC(340) + EX_ROWS, BTN(SPEAKER + ' Listen', kind='quiet', grow=False) + BTN(PLAY.replace('22', '18') + ' Start'))
+lm = lapbody(LTOP('ExercisesLaptop.dc.html', HEARTB + GEAR()), SUBJECT('Hanon No. 1', 'The Virtuoso Pianist · finger technique', 44) + EX_PIC(880), EX_ROWS, BTN(SPEAKER + ' Listen', kind='quiet', grow=False) + BTN(PLAY.replace('22', '18') + ' Start'))
+detail('Exercise', 'An exercise', EX, ph, lm, '', SHEET('rootOn', 'Key', ROOTGRID()) + SHEET('setOn', 'Exercise settings', EX_SET), POPOVER('rootOn', 'Key', ROOTGRID()) + POPOVER('setOn', 'Exercise settings', EX_SET))
+
+# ═════ Quiz: the list, its setup, a run (Tenuto's named answers, Duolingo's verdict bar) ═════
+def ring(p):
+    c = 2 * 3.1416 * 15; return f'<svg viewBox="0 0 36 36" width="40" height="40" aria-hidden="true" style="flex: none"><circle cx="18" cy="18" r="15" fill="none" stroke="{FILL}" stroke-width="4"></circle><circle cx="18" cy="18" r="15" fill="none" stroke="#44684A" stroke-width="4" stroke-dasharray="{c * p / 100:.1f} {c:.1f}" transform="rotate(-90 18 18)" stroke-linecap="round"></circle><text x="18" y="21.5" text-anchor="middle" font-size="9.5" font-weight="700" fill="{INK}">{p if p else "–"}</text></svg>'
+def QROW(t, s, p):
+    return f'<button type="button" onClick="{{{{openSetup}}}}" style="width: 100%; min-height: 64px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {LINE}; padding: 8px 12px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left">{ring(p)}<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 14px; color: {SOFT}">{s}</span></span><span style="display: flex; color: {SOFT}">{CHEV_R}</span></button>'
+QG = lambda rows: f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">' + ''.join(QROW(*r) for r in rows) + '</div>'
+QZ = js(r'''
+    return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), setupOn: st.sheet === 'setup', openSetup: () => set({ sheet: 'setup' }),
+      drillSeg: seg(['Name it', 'Build it', 'Hear it', 'Play it'], st.drill ?? 'Name it', (l) => set({ drill: l })), rounds: String(st.rounds ?? 10), rDn: () => set({ rounds: Math.max(5, (st.rounds ?? 10) - 5) }), rUp: () => set({ rounds: (st.rounds ?? 10) + 5 }),
+      timed: !!st.timed, timedBg: st.timed ? '#44684A' : '#DAD1C8', timedX: st.timed ? 22 : 2, toggleTimed: () => set({ timed: !st.timed }) };''')
+GAPS = CARD(f'<div style="display: flex; align-items: center; gap: 12px"><span style="width: 44px; height: 44px; border-radius: 12px; background: {ACCENT}; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700">7</span><span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 700">My gaps</span><span style="font-size: 14px; color: {SOFT}">F♯ minor, B♭7, D Dorian and 4 more you missed</span></span>{BTN("Start", href="{RUN}", grow=False, h=40)}</div>')
+QLISTS = f'''{H2('Chords and intervals')}{QG([('Chords', 'Best 92% · 14 runs', 92), ('Intervals', 'Best 78% · 6 runs', 78), ('Chord roles', 'Not tried yet', 0)])}
+{H2('Scales and keys')}{QG([('Scale building', 'Best 85% · 3 runs', 85), ('Key signatures', 'Best 100% · 9 runs', 100), ('Key degrees', 'Not tried yet', 0)])}
+{H2('By ear')}{QG([('Scales by ear', 'Best 64% · 2 runs', 64), ('Cadences', 'Best 70% · 1 run', 70)])}'''
+SETUP = lambda run: f'{CAPS("Drill")}{SEGC("drillSeg", 34, 13)}' + GROUP(('link', 'Level', 'The main chords of C', ''), ('step', 'Rounds', 'rounds', 'rDn', 'rUp'), ('toggle', 'Time limit', 'timed', 'toggleTimed')) + f'<div style="display: flex">{BTN("Start", href=run)}</div>'
+QSET = GROUP(('link', 'Advance automatically', 'After the sound', ''), ('link', 'Note names', 'C D E', ''), ('link', 'All piano settings', '', ''))
+ph = f'''{TOP('Main.dc.html', '', GEAR())}{LARGE('Quiz')}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 40px; display: flex; flex-direction: column; gap: 14px">{GAPS.replace('{RUN}', 'QuizRun.dc.html')}{QLISTS}</main>'''
+lm = f'''{LTOP('Laptop.dc.html', GEAR())}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 32px; align-content: start"><h1 style="grid-column: 1 / -1; margin: 0; font-size: 34px; font-weight: 700">Quiz</h1><div style="grid-column: 1 / -1">{GAPS.replace('{RUN}', 'QuizRunLaptop.dc.html')}</div>
+<div style="display: flex; flex-direction: column; gap: 14px">{QLISTS.split("{H2('Scales")[0] if False else QLISTS.split('<h2')[0]}</div></main>'''
+lm = f'''{LTOP('Laptop.dc.html', GEAR())}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 14px; max-width: 900px"><h1 style="margin: 0; font-size: 34px; font-weight: 700">Quiz</h1>{GAPS.replace('{RUN}', 'QuizRunLaptop.dc.html')}{QLISTS}</main>'''
+detail('Quiz', 'Quiz', QZ, ph, lm, '', SHEET('setupOn', 'Chords', SETUP('QuizRun.dc.html')) + SHEET('setOn', 'Quiz settings', QSET), POPOVER('setupOn', 'Chords', SETUP('QuizRunLaptop.dc.html'), 'right: 60px; top: 160px', 420) + POPOVER('setOn', 'Quiz settings', QSET))
+
+QR = js(r'''
+    const picked = st.picked ?? null, ANS = ['F major', 'F minor', 'F diminished', 'F augmented'], right = picked === 0;
+    return { ...common(st, set), answers: ANS.map((a, i) => ({ a, pick: () => picked === null && set({ picked: i }), bg: picked !== null && i === 0 ? '#DCE9D6' : picked === i ? '#F5D6D0' : '#FEFDFB', ring: picked !== null && i === 0 ? '0 0 0 2px #44684A' : picked === i ? '0 0 0 2px #B3261E' : '0 0 0 1px #DAD1C8', mark: picked !== null && i === 0 ? ' ✓' : picked === i ? ' ✕' : '' })),
+      answered: picked !== null, waiting: picked === null, verdict: right ? 'Right' : 'Not quite', why: right ? 'F major, 1st inversion: A is lowest.' : 'It is F major, 1st inversion: A is lowest.', vbg: right ? '#DCE9D6' : '#F5D6D0', vink: right ? '#2F5A35' : '#8E2A20', next: () => set({ picked: null }) };''')
+GRAND = f'<svg viewBox="0 0 300 150" width="100%" role="img" aria-label="F major in 1st inversion on the grand staff" style="display: block; ">' + ''.join(f'<path d="M20 {y}H290" stroke="{INK}" stroke-width=".9"></path>' for y in (20, 30, 40, 50, 60, 90, 100, 110, 120, 130)) + f'<path d="M20 20V130M290 20V130" stroke="{INK}" stroke-width="1.2"></path><text x="24" y="64" font-size="58" font-family="Noto Music, serif" fill="{INK}">𝄞</text><text x="24" y="114" font-size="38" font-family="Noto Music, serif" fill="{INK}">𝄢</text>' + ''.join(f'<ellipse cx="160" cy="{y}" rx="6.4" ry="4.6" transform="rotate(-20 160 {y})" fill="{INK}"></ellipse>' for y in (55, 45, 35)) + '</svg>'
+QR_BODY = lambda lap: (f'<div style="display: flex; align-items: center; gap: 12px"><a href="{"QuizLaptop.dc.html" if lap else "Quiz.dc.html"}" aria-label="End the run" style="width: 44px; height: 44px; margin-left: -10px; display: flex; align-items: center; justify-content: center; color: {INK}">{CLOSE}</a><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: 25%; height: 8px; border-radius: 4px; background: #44684A"></div></div><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">3 of 10</span></div>'
+                       f'<h1 style="margin: 8px 0 0; font-size: {30 if lap else 24}px; font-weight: 700">Which chord is this?</h1>{CARD(GRAND + "<div style=\"display: flex; justify-content: center; margin-top: 4px\">" + BTN(SPEAKER + " Hear it", kind="quiet", grow=False, h=40) + "</div>", "14px")}'
+                       f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px"><sc-for list="{{{{answers}}}}" as="a" hint-placeholder-count="4"><button type="button" onClick="{{{{a.pick}}}}" style="height: 64px; border: 0; border-radius: 16px; background: {{{{a.bg}}}}; box-shadow: {{{{a.ring}}}}; color: {INK}; font: inherit; font-size: 18px; font-weight: 600">{{{{a.a}}}}{{{{a.mark}}}}</button></sc-for></div>')
+VERDICT = f'<sc-if value="{{{{answered}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 40; background: {{{{vbg}}}}; padding: 18px 20px 40px; display: flex; flex-direction: column; gap: 12px"><span style="font-size: 20px; font-weight: 700; color: {{{{vink}}}}">{{{{verdict}}}}</span><span style="font-size: 16px; color: {{{{vink}}}}; margin-top: -6px">{{{{why}}}}</span><div style="display: flex">{BTN("Continue", "next")}</div></div></sc-if>'
+ph = f'<main style="flex: 1; min-height: 0; padding: 0 16px; display: flex; flex-direction: column; gap: 16px">{QR_BODY(False)}</main>{VERDICT}'
+lm = f'<main style="flex: 1; min-height: 0; padding: 24px 0; display: flex; justify-content: center"><div style="width: 640px; display: flex; flex-direction: column; gap: 18px">{QR_BODY(True)}</div></main>{VERDICT.replace("padding: 18px 20px 40px", "padding: 20px calc(50% - 320px) 28px")}'
+detail('QuizRun', 'A quiz run', QR, ph, lm, '')
+
+# ═════ Metronome (Soundbrenner's accents, the ruling's −10 −1 +1 +10, one Start) ═════
+ME = js(r'''
+    const MARK = [[60, 'Largo'], [76, 'Adagio'], [108, 'Andante'], [120, 'Moderato'], [168, 'Allegro'], [999, 'Presto']];
+    const bpm = st.bpm ?? 120, meter = st.meter ?? 4, lv = st.lv || ['accent', 'beat', 'beat', 'beat'], cyc = { accent: 'beat', beat: 'silent', silent: 'accent' }, H = { accent: 100, beat: 58, silent: 0 };
+    return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), subOn: st.sheet === 'sub', openSub: () => set({ sheet: 'sub' }),
+      bpm: String(bpm), mark: MARK.find(([t]) => bpm < t)[1], pos: ((bpm - 20) / 280 * 100).toFixed(1) + '%',
+      d10: () => set({ bpm: bpm - 10 }), d1: () => set({ bpm: bpm - 1 }), u1: () => set({ bpm: bpm + 1 }), u10: () => set({ bpm: bpm + 10 }),
+      beats: Array.from({ length: meter }, (_, i) => { const l = lv[i] || 'beat'; return { n: i + 1, h: H[l] + '%', bg: l === 'accent' ? '#332921' : '#A49A90', ring: st.playing && i === 0 ? '0 0 0 3px #EDC684' : '0 0 0 1px #DAD1C8', pick: () => set({ lv: Array.from({ length: meter }, (_, j) => j === i ? cyc[l] : (lv[j] || 'beat')) }) }; }),
+      meterL: meter + '/4', mDn: () => set({ meter: Math.max(1, meter - 1) }), mUp: () => set({ meter: Math.min(12, meter + 1) }), subL: st.sub ?? 'None',
+      subs: ['None', 'Eighths', 'Triplets', 'Sixteenths', 'Swung eighths'].map((s) => ({ k: s, mark: (st.sub ?? 'None') === s ? '✓' : '', pick: () => set({ sub: s, sheet: null }) })), startL: st.playing ? 'Stop' : 'Start' };''')
+NUDGE = lambda l, a: f'<button type="button" onClick="{{{{{a}}}}}" style="width: 52px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">{l}</button>'
+TEMPO = lambda big: (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 2px"><span style="font-size: 15px; color: {SOFT}">{{{{mark}}}} · BPM</span><div style="display: flex; align-items: center; gap: 8px">{NUDGE("−10", "d10")}{NUDGE("−1", "d1")}<span style="min-width: {big * 1.9:.0f}px; text-align: center; font-size: {big}px; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums">{{{{bpm}}}}</span>{NUDGE("+1", "u1")}{NUDGE("+10", "u10")}</div></div>'
+                     f'<div role="slider" aria-label="Tempo" style="position: relative; height: 28px; display: flex; align-items: center"><div style="width: 100%; height: 4px; border-radius: 2px; background: {LINE}"></div><div style="position: absolute; left: 0; width: {{{{pos}}}}; height: 4px; border-radius: 2px; background: {INK}"></div><span style="position: absolute; left: calc({{{{pos}}}} - 14px); width: 28px; height: 28px; border-radius: 14px; background: {SHEET}; box-shadow: 0 1px 4px rgba(51,41,33,.3)"></span></div>')
+BEATS = lambda h: f'<div role="group" aria-label="Beats: tap one for accent, normal or silent" style="display: flex; gap: 8px; height: {h}px"><sc-for list="{{{{beats}}}}" as="b" hint-placeholder-count="4"><button type="button" aria-label="Beat {{{{b.n}}}}" onClick="{{{{b.pick}}}}" style="position: relative; flex: 1; min-width: 0; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: {{{{b.ring}}}}; overflow: hidden; padding: 0"><span style="position: absolute; left: 0; right: 0; bottom: 0; height: {{{{b.h}}}}; background: {{{{b.bg}}}}"></span><span style="position: absolute; left: 8px; top: 6px; font-size: 12px; color: {SOFT}">{{{{b.n}}}}</span></button></sc-for></div>'
+ME_ROWS = GROUP(('step', 'Time signature', 'meterL', 'mDn', 'mUp'), ('link', 'Subdivision', '{{subL}}', 'openSub'), ('link', 'Sound', 'Woodblock', ''), ('link', 'Speed trainer', 'Off', ''), ('link', 'Silent bars', 'Off', ''))
+SUBLIST = f'<div style="border-radius: 12px; background: {SHEET}; overflow: hidden"><sc-for list="{{{{subs}}}}" as="k" hint-placeholder-count="5"><button type="button" onClick="{{{{k.pick}}}}" style="width: 100%; height: 48px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {LINE}; padding: 0 16px; display: flex; align-items: center; color: {INK}; font: inherit; font-size: 16px; text-align: left"><span style="flex: 1">{{{{k.k}}}}</span><span style="color: {LINK}; font-weight: 700">{{{{k.mark}}}}</span></button></sc-for></div>'
+ME_SET = GROUP(('link', 'Flash on the beat', 'Off', ''), ('link', 'Count-in', '1 bar', ''), ('link', 'Volume', '80%', ''))
+STARTB = f'<button type="button" onClick="{{{{togglePlay}}}}" style="flex: 1; height: 52px; border: 0; border-radius: 26px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 17px; font-weight: 700">{{{{startL}}}}</button>'
+ph = body(TOP('Main.dc.html', 'Metronome', GEAR()), TEMPO(72) + BEATS(110) + ME_ROWS, BTN('Tap tempo', kind='quiet', grow=False) + STARTB)
+lm = lapbody(LTOP('Laptop.dc.html', GEAR(), 'Metronome'), '<div style="flex: 1"></div>' + TEMPO(120) + BEATS(220) + '<div style="flex: 1"></div>', ME_ROWS, BTN('Tap tempo', kind='quiet', grow=False) + STARTB)
+detail('Metronome', 'Metronome', ME, ph, lm, '', SHEET('subOn', 'Subdivision', SUBLIST) + SHEET('setOn', 'Metronome settings', ME_SET), POPOVER('subOn', 'Subdivision', SUBLIST, 'right: 40px; top: 160px') + POPOVER('setOn', 'Metronome settings', ME_SET))
+
+# ═════ Tuner (Cleartune and Pano: the note, the needle, cents and Hz) ═════
+TU = js(r'''
+    const cents = st.cents ?? -6, a4 = st.a4 ?? 440, mic = st.mic ?? true, ok = Math.abs(cents) <= 3;
+    const ticks = Array.from({ length: 21 }, (_, i) => { const c = -50 + i * 5, a = (c / 50) * 60 * Math.PI / 180, l = c % 25 === 0; return { d: 'M' + (160 + Math.sin(a) * (l ? 110 : 120)).toFixed(1) + ' ' + (170 - Math.cos(a) * (l ? 110 : 120)).toFixed(1) + 'L' + (160 + Math.sin(a) * 134).toFixed(1) + ' ' + (170 - Math.cos(a) * 134).toFixed(1) }; });
+    return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), ticks, needle: 'rotate(' + (cents / 50 * 60) + ' 160 170)', nc: ok ? '#44684A' : '#C26A2E',
+      state: ok ? 'In tune' : cents < 0 ? Math.abs(cents) + ' cents flat' : cents + ' cents sharp', hz: (a4 * Math.pow(2, cents / 1200)).toFixed(1) + ' Hz', sc: ok ? '#44684A' : '#A8551F',
+      micOn: mic, micOff: !mic, allow: () => set({ mic: true }), a4L: a4 + ' Hz', aDn: () => set({ a4: a4 - 1 }), aUp: () => set({ a4: a4 + 1 }) };''')
+GAUGE = lambda w: f'<svg viewBox="0 0 320 180" width="{w}" aria-hidden="true" style="display: block; max-width: 100%; margin: 0 auto"><path d="M43.9 104A134 134 0 0 1 276.1 104" fill="none" stroke="{FILL}" stroke-width="22"></path><path d="M149.5 36.4A134 134 0 0 1 170.5 36.4" fill="none" stroke="#9BC093" stroke-width="22"></path><sc-for list="{{{{ticks}}}}" as="t" hint-placeholder-count="21"><path d="{{{{t.d}}}}" stroke="{SOFT}" stroke-width="1.6"></path></sc-for><g transform="{{{{needle}}}}"><path d="M160 170L160 44" stroke="{{{{nc}}}}" stroke-width="4" stroke-linecap="round"></path></g><circle cx="160" cy="170" r="8" fill="{INK}"></circle><text x="36" y="178" font-size="12" fill="{SOFT}">−50</text><text x="266" y="178" font-size="12" fill="{SOFT}">+50</text></svg>'
+NOTE = lambda s: f'<div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><span style="font-size: {s}px; line-height: 1; font-weight: 700">A<sub style="font-size: {s // 3}px; font-weight: 600">4</sub></span><span style="font-size: 18px; font-weight: 600; color: {{{{sc}}}}">{{{{state}}}}</span><span style="font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{hz}}}}</span></div>'
+MICOFF = f'<sc-if value="{{{{micOff}}}}" hint-placeholder-val="{{{{false}}}}"><div style="padding: 40px 16px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center"><span style="font-size: 17px; color: {SOFT}">Play a note and the tuner shows how far it is from in tune. It needs the microphone.</span>{BTN("Allow the microphone", "allow", grow=False)}</div></sc-if>'
+TU_ROWS = GROUP(('step', 'A4', 'a4L', 'aDn', 'aUp', 80), ('link', 'Temperament', 'Equal', ''))
+TU_SET = GROUP(('link', 'Show', 'Cents and Hz', ''), ('link', 'Note names', 'C D E', ''))
+LISTEN = f'<span style="flex: 1; padding-left: 12px; display: flex; align-items: center; gap: 8px; font-size: 15px; color: {SOFT}"><span style="width: 8px; height: 8px; border-radius: 4px; background: #44684A"></span>Listening</span>'
+ph = body(TOP('Main.dc.html', 'Tuner', GEAR()), f'<sc-if value="{{{{micOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="height: 30px"></div>{NOTE(96)}<div style="height: 10px"></div>{GAUGE(360)}</sc-if>{MICOFF}<div style="flex: 1"></div>' + TU_ROWS, LISTEN + BTN(SPEAKER + ' Play A4', kind='quiet', grow=False, h=44))
+lm = lapbody(LTOP('Laptop.dc.html', GEAR(), 'Tuner'), f'<sc-if value="{{{{micOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: 1"></div>{NOTE(140)}{GAUGE(620)}<div style="flex: 1"></div></sc-if>{MICOFF}', TU_ROWS, LISTEN + BTN(SPEAKER + ' Play A4', kind='quiet', grow=False, h=44))
+detail('Tuner', 'Tuner', TU, ph, lm, '', SHEET('setOn', 'Tuner settings', TU_SET), POPOVER('setOn', 'Tuner settings', TU_SET))
+
+# ═════ Chord finder (you play, it names: the keys are the input) ═════
+CF = js(r'''
+    const held = st.held ?? [52, 60, 67, 71], empty = held.length === 0;
+    const R = { 52: [ROLE[3], 'E'], 60: [ROLE[1], 'C'], 67: [ROLE[5], 'G'], 71: [ROLE[7], 'B'] }, marks = {}; held.forEach((m) => { marks[m] = R[m] || ['#EDC684', NN[m % 12]]; });
+    return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), empty, found: !empty, name: empty ? 'Play a chord' : 'Cmaj7/E', sub: empty ? 'Hold three or more keys, here or on your piano' : 'C major 7th, 1st inversion · Imaj7 in C major',
+      notes: [['E', '3rd · bass'], ['C', 'root'], ['G', '5th'], ['B', '7th']].map(([n, d]) => ({ n, d })), alts: ['Em(♭6)', 'G6/E (no 3rd)'].map((a) => ({ a })), played: ['G7', 'Am7', 'Dm7'].map((p) => ({ p })),
+      kb: calmKeys(48, 76, marks, 370, 170), kbL: calmKeys(36, 84, marks, 860, 200), clear: () => set({ held: [] }) };''')
+CHIPL = lambda lst, k: f'<div style="display: flex; flex-wrap: wrap; gap: 6px"><sc-for list="{{{{{lst}}}}}" as="x" hint-placeholder-count="2"><span style="height: 32px; padding: 0 12px; border-radius: 16px; background: {FILL}; display: flex; align-items: center; font-size: 15px; font-weight: 600">{{{{x.{k}}}}}</span></sc-for></div>'
+CF_NOTES = f'<sc-if value="{{{{found}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{notes}}}}" as="n" hint-placeholder-count="4"><span style="height: 64px; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; display: flex; flex-direction: column; align-items: center; justify-content: center"><span style="font-size: 22px; font-weight: 700">{{{{n.n}}}}</span><span style="font-size: 12px; color: {SOFT}">{{{{n.d}}}}</span></span></sc-for></div></sc-if>'
+CF_ROWS = GROUP(('link', 'Spelled in', 'C major', ''), ('raw', f'<div style="padding: 10px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Also read as</span>{CHIPL("alts", "a")}</div>'), ('raw', f'<div style="padding: 10px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Played</span>{CHIPL("played", "p")}</div>'))
+CF_SET = GROUP(('link', 'Connect a piano', 'Not connected', ''), ('link', 'Spell chords in', 'The key they suit', ''))
+ph = body(TOP('Main.dc.html', 'Chord finder', GEAR()), SUBJECT('{{name}}', '{{sub}}', 44) + CF_NOTES + CF_ROWS + '<div style="flex: 1"></div>' + KEYS(170), BTN('Clear the keys', 'clear', kind='quiet', grow=False) + BTN('Open in Chords', href='Chords.dc.html'))
+lm = lapbody(LTOP('Laptop.dc.html', GEAR(), 'Chord finder'), SUBJECT('{{name}}', '{{sub}}', 64) + CF_NOTES + '<div style="flex: 1"></div>' + KEYS(200).replace('kb.', 'kbL.'), CF_ROWS, BTN('Clear the keys', 'clear', kind='quiet', grow=False) + BTN('Open in Chords', href='ChordsLaptop.dc.html'))
+detail('ChordFinder', 'Chord finder', CF, ph, lm, '', SHEET('setOn', 'Chord finder settings', CF_SET), POPOVER('setOn', 'Chord finder settings', CF_SET))
+
+# ═════ Circle of fifths (muted.io: the circle, then the key's signature and chords) ═════
+_c = open('/home/user/piano-trainer/.scratch/r39/canvas/calm.py').read()
+CO_LOGIC = _c.split("CO_JS = RB_JS(r'''")[1].split("''')")[0]
+CO = js(CO_LOGIC.replace("return { ...common(st, set),", "const DIA = [[0, ''], [2, 'm'], [4, 'm'], [5, ''], [7, ''], [9, 'm'], [11, '°']], FIFTH = [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5], root = FIFTH[sel];\n    return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), dia: DIA.map(([iv, q], i) => ({ c: NN[(root + iv) % 12] + q, d: ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'][i] })), modeSeg: seg(['Major', 'Minor'], st.mode ?? 'Major', (l) => set({ mode: l })),"))
+CIRCLE = lambda w: f'<svg viewBox="0 0 400 400" width="{w}" height="{w}" role="radiogroup" aria-label="Keys" style="display: block; margin: 0 auto; max-width: 100%"><sc-for list="{{{{segs}}}}" as="g" hint-placeholder-count="12"><g onClick="{{{{g.pick}}}}" style="cursor: pointer"><path d="{{{{g.o}}}}" fill="{{{{g.fo}}}}" stroke="{LINE}" stroke-width="1.2"></path><path d="{{{{g.n}}}}" fill="{{{{g.fi}}}}" stroke="{LINE}" stroke-width="1.2"></path><text x="{{{{g.mx}}}}" y="{{{{g.my}}}}" text-anchor="middle" font-size="24" font-weight="700" fill="{INK}">{{{{g.m}}}}</text><text x="{{{{g.nx}}}}" y="{{{{g.ny}}}}" text-anchor="middle" font-size="15" fill="{SOFT}">{{{{g.mn}}}}</text></g></sc-for><circle cx="200" cy="200" r="74" fill="{PAGE}" stroke="{LINE}" stroke-width="1.2"></circle></svg>'
+DIA = f'<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px"><sc-for list="{{{{dia}}}}" as="d" hint-placeholder-count="7"><span style="height: 54px; border-radius: 10px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="font-size: 15px; font-weight: 700">{{{{d.c}}}}</span><span style="font-family: {SERIF}; font-size: 12px; color: {SOFT}">{{{{d.d}}}}</span></span></sc-for></div>'
+CO_SET = GROUP(('link', 'Key signatures on the circle', 'On', ''), ('link', 'Minor keys inside', 'On', ''))
+ph = body(TOP('Main.dc.html', 'Circle of fifths', GEAR()), CIRCLE(350) + SUBJECT('{{name}}', '{{sub}}', 30) + f'{CAPS("Chords in the key")}' + DIA, SEGC('modeSeg', 36, 14).replace('flex: none;', 'flex: 1;') + BTN('Scales and keys', href='Scales.dc.html', kind='quiet', grow=False, h=44) + PLAYBTN())
+lm = lapbody(LTOP('Laptop.dc.html', GEAR(), 'Circle of fifths'), f'<div style="flex: 1; min-height: 0; display: flex; align-items: center">{CIRCLE(600)}</div>', SUBJECT('{{name}}', '{{sub}}', 40) + CARD(scale_staff(360, '        ').replace('aria-label="G major, up one octave, right-hand fingering over the notes"', 'aria-label="The key signature"')) + CAPS('Chords in the key') + DIA + GROUP(('link', 'Relative minor', 'E minor', ''), ('link', 'Open in Scales and keys', '', 'ScalesLaptop.dc.html')), SEGC('modeSeg', 36, 14).replace('flex: none;', 'flex: 1;') + PLAYBTN())
+detail('CircleOfFifths', 'Circle of fifths', CO, ph, lm, '', SHEET('setOn', 'Circle settings', CO_SET), POPOVER('setOn', 'Circle settings', CO_SET))
+
+# ═════ Chords: the calm Chords page itself (the example), unchanged ═════
+_cs = _c.split('# The calm Chords page itself')[1].split("print('practice ok')")[0]
+exec(_cs.split('\n', 1)[1])
+print('practice ok')

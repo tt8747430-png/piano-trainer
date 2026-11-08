@@ -51,3 +51,6 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R40, calm (2026-11-08):** every Songs and Practice page redrawn in the calm Chords page's language (spec
 `.scratch/r40/plan/calm.md`), canvas v13. `canvas/calm.py` and `calm_songs.py` draw the pages, `index.py` lays them out;
 `link.py` is retired.
+
+**R41 (2026-11-08):** R40's one layout withdrawn; each page refactored to its reference in the calm language (spec
+`.scratch/r41/plan/songs-and-practice.md`), canvas v14, generator `canvas/r41.py`.

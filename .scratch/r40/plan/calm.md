@@ -5,6 +5,8 @@ Canvas: [The ideal Piano Trainer](https://claude.ai/artifact/9J6uVajsp9EDULa5zsK
 
 ## The rulings as they stand
 
+**Withdrawn by R41** (`.scratch/r41/plan/songs-and-practice.md`): the calm page is a language, not a layout for every page.
+
 - "refactor further the editor and the songs overview and the songs library, and not just some little tweaks"; "refactor
   the practices pages like we refactored the chords pages in other session artifact": every Songs and Practice page takes
   the shape of the calm Chords page (the other session's "Calm Chords page"). Premium means Apple Music and the Calm
