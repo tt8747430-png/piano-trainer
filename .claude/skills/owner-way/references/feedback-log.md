@@ -286,6 +286,10 @@ owner's, typos fixed.
   two in one sheet.
 - **A label on a key is one type step above its neighbour, not a headline (R42, v37):** "why the fingers numbers
   look so big". 14px on a white key over a 12px name.
+- **A setting lives with the picture it changes; one label per key (R42, v38):** "I dont like these fingering
+  settings … where can we put them". What a key reads is one choice (Synthesia's Key Labels: Names · Fingers ·
+  None), in the Keyboard panel; the staff's finger numbers under Staff (Roland's notation settings); the hand that
+  plays is its own row, not a fingering option.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

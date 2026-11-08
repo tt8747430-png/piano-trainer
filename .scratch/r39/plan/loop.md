@@ -73,3 +73,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v35 (2026-11-08):** Chords: Fingering settings (Show, Hand, On the keys); numbers beside the notes; by inversion (Vita Piano).
 **R42 v36 (2026-11-08):** Chords: Keyboard panel as the Player's on the bar; gear keeps Fingering; finger numbers on the keys as Vita Piano.
 **R42 v37 (2026-11-08):** Chords: finger numbers on the keys 14px over a 12px name.
+**R42 v38 (2026-11-08):** Chords: Labels Names · Fingers · None on the keys; gear: Hand, Staff › Finger numbers.

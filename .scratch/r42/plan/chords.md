@@ -5,6 +5,19 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v38: fingering where each picture is set; the hand on its own.** Owner: "I dont like these fingering settings.
+  refactor them. where can we put them?. research more and how this should be done and where to put them."
+  - Research. Synthesia: "To open the label controls menu, click the La icon on the toolbar"; its Key Labels list
+    (Octaves, Finger Hint Numbers, English Note Names, Scale Number, Fixed-Do, Movable-Do …) is what a key reads
+    (synthesia.app/support/guide/labels). Playground Sessions: finger numbers are switched on "on the toolbar above
+    the interactive sheet music". Roland HPi pianos: **Finger Numbers** sits in the notation view's settings. So the
+    keys' fingering belongs with the keys' labels, the staff's with the staff, and the hand is not a fingering setting:
+    it changes what is played.
+  - Keyboard panel: **Labels** Names · Fingers · None, one label on a key at a time (replaces Note names and Finger
+    numbers, two switches over one spot).
+  - Gear: **Hand** Right · Left · Both, then **Staff › Finger numbers** (on).
+  - (v36's Fingering group and the Keyboard panel's two switches are replaced by this.)
+
 - **v36: the piano's settings as the Player's; the gear keeps the rest; finger numbers on the keys as Vita Piano's.**
   Owner: "but on the keys look how other do this. and also I dont like the keboard settings, this looks not good
   structured and mixed things. and I want like a piano settings like the player does. and in the header remain all
@@ -256,3 +269,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: Fingering settings (Show, Hand, On the keys); numbers beside the notes; fingering by inversion (v35).
 - 2026-11-08: Keyboard panel as the Player's, on the bar; the gear keeps Fingering; numbers on the keys as Vita Piano (v36).
 - 2026-11-08: finger numbers on the keys one step above the name (v37).
+- 2026-11-08: Labels Names · Fingers · None on the keys; the gear: Hand, Staff › Finger numbers (v38).

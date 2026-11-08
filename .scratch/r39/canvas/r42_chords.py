@@ -164,9 +164,9 @@ const root = st.root ?? D.root, qi = st.q ?? D.q, q = QS[qi];
 const voicing = VOICINGS.find((v) => v.v === (st.voicing || 'Close')).ok(q) ? 'Close' : (st.voicing || 'Close');
 const invN = Math.min(4, voicing === 'Shell' ? 3 : (voicing.startsWith('Rootless') ? 4 : q.t.length));
 const inv = Math.min(st.inv ?? 0, invN - 1);
-const bassOn = false, hands = st.hand || 'Right', fingOn = st.fing ?? true, fingKeys = st.fingKeys ?? false, kbShow = st.kbShow ?? true, keys = st.keys || 'Chord', fam = family(q);
+const bassOn = false, hands = st.hand || 'Right', fingOn = st.fing ?? true, kbShow = st.kbShow ?? true, keys = st.keys || 'Chord', fam = family(q);
 const tens = (st.tens || []).filter((t) => TENS[fam].includes(t));
-const playAs = 'Block', arp = false, dir = 'Up', names = st.names ?? true, treble = false, auto = true;
+const playAs = 'Block', arp = false, dir = 'Up', keyLabel = st.keyLabel || 'Names', names = keyLabel === 'Names', fingKeys = keyLabel === 'Fingers', treble = false, auto = true;
 const ns = voice(root, q, inv, voicing, hands, tens);
 const ms = ns.map((x) => x.m);
 const sym = ROOTS[root] + q.k + (tens.length ? '(' + tens.join(', ') + ')' : '');
@@ -211,6 +211,7 @@ return {
   fingOnBg: fingOn ? '#7FB685' : C.line, fingOnX: fingOn ? 22 : 2, toggleFing: () => set({ fing: !fingOn }), fingOn,
   fingKeysOn: fingKeys, fingKeysOnBg: fingKeys ? '#7FB685' : C.line, fingKeysOnX: fingKeys ? 22 : 2, toggleFingKeys: () => set({ fingKeys: !fingKeys }),
   handSeg: seg(['Right', 'Left', 'Both'], hands, (l) => change({ hand: l })),
+  keyLabelSeg: seg(['Names', 'Fingers', 'None'], keyLabel, (l) => set({ keyLabel: l })),
   rootName: ROOTS[root], qName: q.n[0].toUpperCase() + q.n.slice(1), qSym: ROOTS[root] + q.k, voicing, invLabel: INV[inv], handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand', soundWord: arp ? 'Arpeggio' : 'Block',
   roots: rootGrid(root, (i) => change({ root: i })),
   playTiles: [['Block', 'Block chord'], ['Up', 'Arpeggio up'], ['Up and down', 'Arpeggio up and down']].map(([v, l]) => ({ l, on: v === playAs, bg: v === playAs ? '#FBF1DD' : '#FEFDFB', ring: v === playAs ? '0 0 0 2px #B07A2A' : '0 0 0 1px ' + C.line, pick: () => { set({ playAs: v }); sound(ms, v !== 'Block', v === 'Up and down' ? 'Up and down' : 'Up'); } })),
@@ -324,10 +325,10 @@ KBTILES = ('<div role="group" aria-label="Keyboard" style="display: grid; grid-t
     '<sc-if value="{{o.is2d}}" hint-placeholder-val="{{false}}"><g><rect x="2" y="4" width="44" height="20" rx="2"></rect><path d="M8.3 4v20M14.6 4v20M20.9 4v20M27.1 4v20M33.4 4v20M39.7 4v20"></path><path d="M6.5 4h3.6v11H6.5zM12.8 4h3.6v11h-3.6zM25.3 4h3.6v11h-3.6zM31.6 4h3.6v11h-3.6zM37.9 4h3.6v11h-3.6z" fill="currentColor"></path></g></sc-if>'
     '<sc-if value="{{o.isOff}}" hint-placeholder-val="{{false}}"><g opacity="0.55"><rect x="2" y="4" width="44" height="20" rx="2"></rect><path d="M14.6 4v20M27.1 4v20M39.7 4v20"></path><path d="M4 26 44 2" stroke-width="2"></path></g></sc-if>'
     '</svg>{{o.name}}</button></sc-for></div>')
-B_KEYS = (KBTILES + '<sc-if value="{{kbShow}}" hint-placeholder-val="{{true}}">' + GROUP(('seg', 'Keys', 'keysSeg', 230), ('toggle', 'Note names', 'namesOn', 'toggleNames'), ('toggle', 'Finger numbers', 'fingKeysOn', 'toggleFingKeys'), bg="#FEFDFB") + '</sc-if>'
+B_KEYS = (KBTILES + '<sc-if value="{{kbShow}}" hint-placeholder-val="{{true}}">' + GROUP(('seg', 'Keys', 'keysSeg', 230), ('seg', 'Labels', 'keyLabelSeg', 230), bg="#FEFDFB") + '</sc-if>'
           + GROUP(('link', 'Connect a piano', '', '#'), ('link', 'All piano settings', '', '#'), bg="#FEFDFB"))
 # the gear: the page's other settings
-B_SET = CAPS('Fingering') + GROUP(('seg', 'Hand', 'handSeg', 220), ('toggle', 'On the staff', 'fingOn', 'toggleFing'), bg="#FEFDFB")
+B_SET = GROUP(('seg', 'Hand', 'handSeg', 220), bg="#FEFDFB") + CAPS('Staff') + GROUP(('toggle', 'Finger numbers', 'fingOn', 'toggleFing'), bg="#FEFDFB")
 B_SOUND = f'<div role="radiogroup" style="display: flex; flex-direction: column; gap: 8px"><sc-for list="{{{{playTiles}}}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 60px; border: 0; border-radius: 14px; background: {{{{o.bg}}}}; box-shadow: {{{{o.ring}}}}; padding: 8px 16px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; color: {INK}; font: inherit; text-align: left"><span style="font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for></div>'
 def SHEETS_PHONE(player):
     out = ''
