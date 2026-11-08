@@ -29,7 +29,7 @@ after compacting"
 | 1 | Songs library (`/songs`, My songs · Explore) | [The ideal Songs](https://claude.ai/artifact/Ana84hFnmzQCBFuvNZRmXB) | drawn, waiting for the owner |
 | 2 | Song's page (`/songs/$pieceId`) | [The ideal Songs](https://claude.ai/artifact/Ana84hFnmzQCBFuvNZRmXB), row 2 | drawn, waiting for the owner |
 | 3 | Score editor (`/edit/$pieceId`) | [The ideal Songs](https://claude.ai/artifact/Ana84hFnmzQCBFuvNZRmXB), row 3 | drawn, waiting for the owner |
-| 4 | Practice overview (`/practice`) | | |
+| 4 | Practice overview (`/practice`) | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH) | drawn, waiting for the owner |
 | 5 | Chords | | |
 | 6 | Scales and keys | | |
 | 7 | Intervals | | |

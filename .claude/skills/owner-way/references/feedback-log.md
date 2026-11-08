@@ -191,6 +191,8 @@ owner's, typos fixed.
   mixed (patterns, method-book lessons, songs); Continue useful or gone; the sidebar like Claude's (2026-11-05).
 
 - Grouped rows with a picture, a name and a line. **No strip hides options:** a key picker and menus.
+- **Overview drawn (R39-4, 2026-11-08):** Up next first, then Harmony, Playing and the Tools last; each picture shows
+  its content (a chord on keys, a scale on a staff, a tuner's needle), never a pastel icon. Waiting for the owner's word.
 - **Every Practice page has its own Settings page;** the app's Settings holds only what is app-wide.
 - Every control says what it belongs to; "Root B" says of which scale; octaves are a stepper; formulas are computed; hands
   drawn as real hands; no half-empty top.

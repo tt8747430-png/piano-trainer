@@ -1,0 +1,14 @@
+{
+ "v": 3,
+ "createdOnFiles": {"v": 1, "at": "2026-11-08T12:00:00Z"},
+ "title": "The ideal Practice",
+ "launch": {"view": "canvas"},
+ "pages": [],
+ "boards": {
+  "Main.dc.html": {"x": 0, "y": 0, "w": 450, "h": 920, "is_interactive": true, "title": "iPhone 17 Pro: Practice. Up next first (one thing to start, two after it), then Harmony, Playing and the Tools last, each row with a picture of what it holds; Tools is a real menu in the bar"},
+  "Laptop.dc.html": {"x": 530, "y": 0, "w": 2143, "h": 1299, "is_interactive": true, "title": "MacBook Air: Practice. Up next across the top, then each group as four cards with a large picture"}
+ },
+ "order": ["Main.dc.html", "Laptop.dc.html"],
+ "notes": {},
+ "designSystems": []
+}
