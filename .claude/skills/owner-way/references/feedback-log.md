@@ -284,6 +284,8 @@ owner's, typos fixed.
   the player does. and in the header remain all other settings". The keyboard's button at the bar's end opens the
   tiles, Keys, Note names, Finger numbers and the piano's links; the gear keeps the page's own settings. Never mix the
   two in one sheet.
+- **A label on a key is one type step above its neighbour, not a headline (R42, v37):** "why the fingers numbers
+  look so big". 14px on a white key over a 12px name.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple
