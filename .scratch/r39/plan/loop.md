@@ -79,3 +79,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v41 (2026-11-08):** Chords: root as letter + ♭ · ♮ · ♯, every spelling (D♭ and C♯, G♭, A♯).
 **R42 v42 (2026-11-08):** Chords: root as 17 notes in three tracks, naturals · sharps · flats.
 **R42 v43 (2026-11-08):** Chords: root as one row C to B; tap the chosen letter again for ♯, then ♭.
+**R42 v44 (2026-11-08):** Chords: the chosen root letter shows ♮ ♯ ♭ under it, the one in use dotted.

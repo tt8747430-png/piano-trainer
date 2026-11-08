@@ -5,6 +5,11 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v44: the chosen letter shows its spellings, so tapping again is seen.** Owner: "but make it more clear for the
+  user that such thing exist".
+  - Under the chosen letter, small marks ♮ ♯ ♭ (only the ones that letter has: C shows ♮ ♯, E shows ♮ ♭), the one in
+    use on a honey dot. Like a page indicator, they say there is more behind the button and where the next tap goes.
+  - The button's spoken name says it too: "D flat. Tap again for D". No explanation line (the rule holds).
 - **v43: the root is one row of letters; tapping the chosen one again changes its spelling.** Owner: "no. make
   just one row and when clicking multiple time on one note it will change. like c and then C sharp for example."
   - Root: **C D E F G A B** on one track. A tap on another letter picks it natural; a tap on the chosen letter steps
@@ -319,3 +324,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: a chord's root as letter and ♭ · ♮ · ♯, every spelling (v41).
 - 2026-11-08: a chord's root as 17 notes, naturals · sharps · flats; no C♭, F♭, E♯, B♯ (v42).
 - 2026-11-08: a chord's root as one row of letters, tap again for ♯ then ♭ (v43).
+- 2026-11-08: the chosen root letter shows its ♮ ♯ ♭, the current one marked (v44).
