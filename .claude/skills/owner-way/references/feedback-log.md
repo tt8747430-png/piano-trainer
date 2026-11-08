@@ -147,6 +147,9 @@ owner's, typos fixed.
 
 - **Calm:** too much at once is wrong. Play in the floating actions, Edit beside the title, Learned at the header's right.
 - No "Learn the song step by step" card. A song with no sections must not look odd. Descriptions short or behind ⓘ.
+- **Drawn (R39-2, 2026-11-08):** the first bars as the cover; Edit beside the title; Learned, the heart and ··· at the bar's
+  right; credits once; Key · Time · Tempo as one row; Chords to tap; Your practice; Details; Continue and Play float.
+  Waiting for the owner's word.
 
 ## Library, adding, publishing
 
