@@ -5,6 +5,12 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v53: the keyboard button stands apart from the bar.** Owner: "but now the keyboard settings should be like
+  separate from this play chord".
+  - The bar holds only the sound: **Cmaj7 ⌃ · [▶ Play chord | ⌄]**. Beside it, 10 apart, a round glass button
+    of the bar's height (68) with the keys icon opens **Keyboard** (Off · 2D, Keys, Labels, Connect a piano ›, All
+    piano settings ›). Two shapes, two subjects (Common Region): what you hear, and what the page shows.
+  - Laptop: the bar 440 wide and the round button, centred together; Keyboard's popover ends over its button.
 - **v52: the inversion is its own stepper; one Play, its ⌄ choosing Block chord or Arpeggio.** Owner: "the inversions
   can be interpreted as go to next chord like from c to c sharp, it is good but we should refactor them and make
   more clear. and also the toolbar it not that clear. I'd put the play together with the arpeggiate like merge them
@@ -382,3 +388,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: the tap-again pointer is a tip, gone after the first tap-again (v50).
 - 2026-11-08: no ⌄ beside the big chord; the chord itself opens the sheet (v51).
 - 2026-11-08: inversion stepper under the name; Play and Arpeggio merged into one split button (v52).
+- 2026-11-08: the keyboard button out of the bar, a round glass button beside it (v53).

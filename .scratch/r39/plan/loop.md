@@ -88,3 +88,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v50 (2026-11-08):** Chords: the tap-again pointer is a one-time tip.
 **R42 v51 (2026-11-08):** Chords: no ⌄ beside the big chord.
 **R42 v52 (2026-11-08):** Chords: ‹ 1st inversion › stepper; one Play split button, ⌄ Block chord · Arpeggio.
+**R42 v53 (2026-11-08):** Chords: Keyboard a round button beside the bar, not in it.

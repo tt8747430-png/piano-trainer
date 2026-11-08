@@ -322,13 +322,15 @@ PLAYSPLIT = (f'<div style="flex: 1 1 0; min-width: 0; height: 56px; border-radiu
   f'<button type="button" onClick="{{{{playMain}}}}" aria-pressed="{{{{playing}}}}" style="flex: 1; min-width: 0; height: 56px; padding: 0 4px 0 16px; border: 0; border-radius: 28px 0 0 28px; background: transparent; color: {INK}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap"><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOPI}</sc-if><sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAYI}</sc-if><span style="overflow: hidden; text-overflow: ellipsis">{{{{playWord}}}}</span></button>'
   f'<span aria-hidden="true" style="flex: none; width: 1px; height: 28px; background: rgba(51,41,33,.22)"></span>'
   f'<button type="button" aria-label="Play as: block chord or arpeggio" aria-haspopup="menu" onClick="{{{{openPlayAs}}}}" style="flex: none; width: 48px; height: 56px; border: 0; border-radius: 0 28px 28px 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_D}</button></div>')
-ACTS = CHORDACT + PLAYSPLIT + KBACT
+ACTS = CHORDACT + PLAYSPLIT
+# the keyboard is the page's picture, not the sound: its own round glass button beside the bar, as the header's gear
+KBROUND = f'<button type="button" aria-label="Keyboard" onClick="{{{{openKeys}}}}" style="flex: none; width: 68px; height: 68px; box-sizing: border-box; border: 0; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; color: {INK}; display: flex; align-items: center; justify-content: center">{KEYSI}</button>'
 def PLAYASMENU(pos):
     return (f'<sc-if value="{{{{isPlayAs}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
       f'<div role="menu" aria-label="Play as" style="position: absolute; {pos}; z-index: 61; width: 220px; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column">'
       f'<sc-for list="{{{{playAsList}}}}" as="o" hint-placeholder-count="2"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px; display: flex; align-items: center; gap: 10px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span><span style="flex: 1; font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for></div></sc-if>')
-DOCK_PHONE = f'<div role="toolbar" aria-label="Play" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; {BAR_CSS}">{ACTS}</div>'
-DOCK_LAPTOP = f'<div role="toolbar" aria-label="Play" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; width: 520px; {BAR_CSS}">{ACTS}</div>'
+DOCK_PHONE = f'<div style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; display: flex; gap: 10px"><div role="toolbar" aria-label="Play" style="flex: 1; min-width: 0; {BAR_CSS}">{ACTS}</div>{KBROUND}</div>'
+DOCK_LAPTOP = f'<div style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; display: flex; gap: 12px"><div role="toolbar" aria-label="Play" style="width: 440px; {BAR_CSS}">{ACTS}</div>{KBROUND}</div>'
 
 # ── the sheets' bodies, the same on both sizes ──
 def BACKHEAD(title, act):
@@ -356,7 +358,7 @@ B_SET = GROUP(('seg', 'Hand', 'handSeg', 220), bg="#FEFDFB") + CAPS('Staff') + G
 B_SOUND = f'<div role="radiogroup" style="display: flex; flex-direction: column; gap: 8px"><sc-for list="{{{{playTiles}}}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 60px; border: 0; border-radius: 14px; background: {{{{o.bg}}}}; box-shadow: {{{{o.ring}}}}; padding: 8px 16px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; color: {INK}; font: inherit; text-align: left"><span style="font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for></div>'
 def SHEETS_PHONE(player):
     out = ''
-    out += PLAYASMENU('right: 76px; bottom: 106px')
+    out += PLAYASMENU('right: 98px; bottom: 106px')
     for cond, title, body in (('isChord', 'Chord', B_CHORD), ('isKeys', 'Keyboard', B_KEYS), ('isSet', 'Settings', B_SET)):
         out += BSHEET(cond, title, body)
     for cond, body in (('isList', B_LIST), ('isVoicing', B_VOICING)):
@@ -365,8 +367,8 @@ def SHEETS_PHONE(player):
 
 def POPS_LAPTOP(player):
     dockpos = 'left: calc(50% - 260px); bottom: 104px'
-    out = PLAYASMENU('left: calc(50% + 0px); bottom: 104px')
-    for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isKeys', 'Keyboard', B_KEYS, 'left: calc(50% + 140px); bottom: 104px'), ('isSet', 'Settings', B_SET, 'right: 24px; top: 76px')):
+    out = PLAYASMENU('left: calc(50% - 60px); bottom: 104px')
+    for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isKeys', 'Keyboard', B_KEYS, 'left: calc(50% - 140px); bottom: 104px'), ('isSet', 'Settings', B_SET, 'right: 24px; top: 76px')):
         out += POPOVER(cond, title, body, pos, 400)
     for cond, body, pos in (('isList', B_LIST, dockpos), ('isVoicing', B_VOICING, dockpos)):
         out += f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" class="nos" style="position: absolute; {pos}; z-index: 61; width: 400px; max-height: 700px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 12px 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">{body}</div></sc-if>'
