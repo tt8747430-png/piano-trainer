@@ -156,3 +156,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: every control in words, the inversion stepper under the name (v21).
 - 2026-11-08: the inversion in the name as a slash chord; the bar grouped by subject (v22).
 - 2026-11-08: the page restructured: chosen on the chord, played by the bar, shown by the gear (v26).
+- 2026-11-08: the builder (v27) undone, owner: "no, the previous layout directions were better"; v26's layout stands (v28).
