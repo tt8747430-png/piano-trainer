@@ -240,6 +240,9 @@ owner's, typos fixed.
 - **An icon alone is not enough (R42, v18):** "not all icons are very clear". A switch of views is words; a bar's
   buttons carry a caption under the icon; an icon draws what it does (stacked notes for a block chord, rising notes for
   an arpeggio). Only ‹ ›, Play and Back stand alone.
+- **Corners nest; a chosen tab contrasts (R42, v19):** "the inner corners doesn't match the roundness of the outer
+  corners". An inner corner is the outer radius less the inset (a pill in a pill is a pill). The chosen item of a
+  switch is filled in ink with white text, never a faint tint; tabs are named for what they show.
 
 ## Sounds
 

@@ -59,11 +59,18 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     preference has one home; elsewhere a link row to it, never a second control".
 
 - **Every control says what it is** (owner, 2026-11-08: "not all icons are very clear"). On a phone the views are
-  words (Staff · Inversions · Fingering · Tones) as on a laptop; the bar's buttons carry a caption under the icon:
+  words (Staff · Inversions · Fingering · Tensions, R42 v19) as on a laptop; the bar's buttons carry a caption under the icon:
   the chord's symbol over **Chord**, **Block** or **Arpeggio**, **Hands**, **Keyboard**. The icons are redrawn as
   what they show: a block chord is three notes stacked on one stem, an arpeggio three notes rising, the keyboard
   white keys with three black keys. ‹ › and Play stay icons alone, as on every player. A long chord symbol shrinks
   rather than being cut off (C♯m(maj7)).
+
+- **Corners nest, and the chosen view stands out** (owner, 2026-11-08: "the inner corners doesn't match the
+  roundness of the outer corners, and the toolbars names at the top aren't also very clear"). Every inner shape takes
+  the outer radius less the inset: the bar is 68 tall with radius 34, so its buttons (56 tall, 6 in) are full pills
+  at 28; on a laptop the 48 buttons are pills at 24; an inversion card's piano (12 in from a 16 corner) is 4. The
+  views are named for what they show, Staff · Inversions · Fingering · Tensions (Tones read as a sound); the chosen
+  one is ink with white text, the others ink on the sheet, so which view is on is seen at a glance.
 
 ## Fixed on the way
 
@@ -75,3 +82,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: drawn (v16). Replaces the calm Chords page (big symbol, keys card, Change chord bar).
 - 2026-11-08: duplicates removed (v17).
 - 2026-11-08: words on the views, captions on the bar, clearer icons (v18).
+- 2026-11-08: concentric corners, Tensions, the chosen view in ink (v19).

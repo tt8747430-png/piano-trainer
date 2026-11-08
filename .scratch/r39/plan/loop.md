@@ -56,3 +56,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R41 v15 (2026-11-08):** the Player merged into the one canvas (spec `.scratch/r41/plan/songs-and-practice.md`, "The Player, merged in").
 **R42 (2026-11-08):** Chords in the Player's shape (v16, `.scratch/r42/plan/chords.md`); the kit's SHEET name clash fixed on every page.
 `.scratch/r41/plan/songs-and-practice.md`), canvas v14, generator `canvas/r41.py`.
+**R42 v19 (2026-11-08):** Chords' corners concentric, views Staff · Inversions · Fingering · Tensions with the chosen one in ink.
