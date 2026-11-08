@@ -231,6 +231,9 @@ owner's, typos fixed.
 - **One canvas holds every place (v15):** "did you merge also the song player". The Player is a section of The ideal
   Piano Trainer, brought in whole with its R37 rulings, in the calm colours, opened by the song page's Continue and
   From the start; its Close goes back to the song. A place drawn elsewhere is merged, not left in its own canvas.
+- **A practice page can take the Player's shape (R42, v16):** "refactor the chords page from practice in the style of
+  the songs player": Back · views · gear at the top, the keys edge to edge, the subject as the title, one floating bar
+  (Chord ▴, Arpeggio, ‹ Play ›, Hands, Keyboard), sheets like the Player's. Spec `.scratch/r42/plan/chords.md`.
 
 ## Sounds
 

@@ -6,3 +6,4 @@ exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r41_songs.py').read())
 import os
 if os.path.exists('/home/user/piano-trainer/.scratch/r39/canvas/r41_practice.py'):
     exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r41_practice.py').read())
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r42_chords.py').read())

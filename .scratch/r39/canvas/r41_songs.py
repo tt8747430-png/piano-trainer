@@ -63,7 +63,7 @@ ph = f'''{TOP('Songs.dc.html', '', LEARNED + HEARTB + DOTS())}
 <section style="display: flex; flex-direction: column; gap: 10px">{H2('Chords', f'<span style="font-size: 14px; color: {SOFT}">Tap one to hear it</span>')}{CHORDS_ROW}{PROGS}</section>
 <section style="display: flex; flex-direction: column; gap: 10px">{H2('Details')}{DETAILS}</section>
 </main>'''
-sh = SHEET('moreOn', 'Amazing Grace', SONG_MORE) + SHEET('setOn', 'Song settings', SONG_SET) + SHEET('creditsOn', 'Title and credits', CREDITS)
+sh = BSHEET('moreOn', 'Amazing Grace', SONG_MORE) + BSHEET('setOn', 'Song settings', SONG_SET) + BSHEET('creditsOn', 'Title and credits', CREDITS)
 lm = f'''{LTOP('SongsLaptop.dc.html', LEARNED + HEARTB + DOTS())}
 <div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: 520px minmax(0, 1fr); gap: 48px; padding: 4px 56px 40px; align-items: start">
 <div style="display: flex; flex-direction: column; gap: 18px">{COVER_BIG(480, 22)}{TITLE}{FACTS}{ACTS_L}</div>
@@ -109,5 +109,5 @@ elm = f'''<header style="flex: none; height: 64px; display: flex; align-items: c
 <div class="nos" style="min-height: 0; overflow-y: auto; padding: 8px 48px 24px; display: flex; justify-content: center"><div style="width: 760px">{SCOREPAGE(720, 1.25, '32px 40px 16px')}</div></div>
 <aside class="nos" aria-label="Palette" style="min-height: 0; overflow-y: auto; background: {SHEET}; box-shadow: -1px 0 0 {LINE}; padding: 20px 18px; display: flex; flex-direction: column; gap: 12px"><sc-for list="{{{{all}}}}" as="a" hint-placeholder-count="6">{CAPS("{{a.c}}")}<div style="display: flex; flex-wrap: wrap; gap: 6px"><sc-for list="{{{{a.tools}}}}" as="t" hint-placeholder-count="6">{TILE}</sc-for></div></sc-for></aside>
 </div>{PIANO('kbL', 150).replace('padding: 0 0 26px', 'padding: 0; box-shadow: 0 -1px 0 ' + LINE)}'''
-detail('Editor', 'Score editor', ED, eph, elm, '', SHEET('moreOn', 'Score settings', ED_MORE), POPOVER('moreOn', 'Score settings', ED_MORE), 'Songs')
+detail('Editor', 'Score editor', ED, eph, elm, '', BSHEET('moreOn', 'Score settings', ED_MORE), POPOVER('moreOn', 'Score settings', ED_MORE), 'Songs')
 print('songs ok')
