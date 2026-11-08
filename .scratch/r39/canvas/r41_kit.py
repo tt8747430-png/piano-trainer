@@ -111,28 +111,31 @@ def LTOP(back='', right='', title=''):
 _s = open('/home/user/piano-trainer/.scratch/r39/canvas/calm_songs.py').read()
 exec(_s[:_s.index('LINKPILL')])
 PEACH, SKY, SAGE, HONEY, LILAC = '#F3D2C8', '#D3E5F2', '#DCE9D6', '#F6E7C8', '#E4DCF1'
-# The app's tab bar, as Apple's: each tab a symbol over its word (the app's own Lucide icons, AppNav.tsx); the place
-# you are in sits in a lens, ink, the others soft. 64 tall (radius 32), the lens 52 inside 6 (radius 26). A fade
-# under it (Apple's scroll-edge effect) so the list never shows through below the bar.
-_TI = 'viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"'
+# The app's tab bar, as Apple's HIG "Tab bars": "Include tab labels … single words"; icons "above tab labels in
+# compact views"; "Prefer filled symbols or icons"; on iOS it "floats above content … on a Liquid Glass background that
+# allows content beneath to peek through", softened by the scroll-edge effect; monochrome when the content is
+# colourful. The app's own Lucide icons (AppNav.tsx), filled; the place you are in in ink on a lens, the others soft.
+# 64 tall (radius 32), the lens 52 inside 6 (radius 26).
+_TI = 'viewBox="0 0 24 24" width="25" height="25" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"'
+_BG = '#FBF8F4'
 TAB_ICONS = {
-    'Learn': '<path d="M21.42 10.92a1 1 0 0 0-.02-1.84L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.83l8.57 3.91a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>',
-    'Songs': '<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>',
-    'Practice': '<path d="M12 11.4V9.1"></path><path d="m12 17 6.6-6.6"></path><path d="m15.05 5.7-.22-.69a3 3 0 0 0-5.66 0L4.42 19.7A1 1 0 0 0 5.37 21h13.25a1 1 0 0 0 .95-1.31L18.45 16.2"></path><circle cx="20" cy="9" r="2"></circle>',
-    'Profile': '<circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path>',
+    'Learn': '<path fill="currentColor" d="M21.42 10.92a1 1 0 0 0-.02-1.84L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.83l8.57 3.91a2 2 0 0 0 1.66 0z"></path><path fill="none" d="M22 10v6"></path><path fill="currentColor" d="M6 12.9V16a6 3 0 0 0 12 0v-3.1l-4.4 2a3.8 3.8 0 0 1-3.2 0z" stroke="none"></path>',
+    'Songs': '<path fill="none" stroke-width="2" d="M9 18V5l12-2v13"></path><circle fill="currentColor" cx="6" cy="18" r="3"></circle><circle fill="currentColor" cx="18" cy="16" r="3"></circle>',
+    'Practice': f'<path fill="currentColor" d="M9.17 5.01a3 3 0 0 1 5.66 0L19.58 19.7A1 1 0 0 1 18.62 21H5.37a1 1 0 0 1-.95-1.3z"></path><path fill="none" stroke="{_BG}" stroke-width="1.7" d="M12 17 15.5 13.5"></path><path fill="none" stroke-width="1.7" d="m15.5 13.5 3.1-3.1"></path><circle fill="currentColor" cx="20" cy="9" r="2.1" stroke="none"></circle><path fill="none" stroke="{_BG}" stroke-width="1.6" d="M8.2 18h7.6"></path>',
+    'Profile': '<circle fill="currentColor" cx="12" cy="8" r="5" stroke="none"></circle><path fill="currentColor" stroke="none" d="M3.5 21a8.5 7.5 0 0 1 17 0z"></path>',
 }
 def TABBAR(cur):
     items = [('Learn', '#'), ('Songs', 'Songs.dc.html'), ('Practice', 'Main.dc.html'), ('Profile', '#')]
     def one(l, h):
         on = l == cur
-        svg = f'<svg {_TI.format(w="2.1" if on else "1.8")}>{TAB_ICONS[l]}</svg>'
+        svg = f'<svg {_TI}>{TAB_ICONS[l]}</svg>'
         return (f'<a href="{h}" {("aria-current=\"page\"") if on else ""} style="flex: 1 1 0; min-width: 0; height: 52px; border-radius: 26px; '
                 f'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; '
-                f'color: {INK if on else SOFT}; background: {FILL if on else "transparent"}">{svg}'
+                f'color: {INK if on else "#8A7F76"}; background: {FILL if on else "transparent"}">{svg}'
                 f'<span style="font-size: 11px; font-weight: {700 if on else 550}; line-height: 1">{l}</span></a>')
     a = ''.join(one(l, h) for l, h in items)
-    fade = f'<div aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 132px; z-index: 39; pointer-events: none; background: linear-gradient(to bottom, rgba(247,243,238,0), {PAGE} 62%)"></div>'
-    return fade + f'<nav aria-label="Main" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; height: 64px; box-sizing: border-box; padding: 6px; border-radius: 32px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; gap: 2px">{a}</nav>'
+    edge = f'<div aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 120px; z-index: 39; pointer-events: none; background: linear-gradient(to bottom, rgba(247,243,238,0), rgba(247,243,238,.7)); backdrop-filter: blur(2px); -webkit-mask-image: linear-gradient(to bottom, transparent, #000 60%); mask-image: linear-gradient(to bottom, transparent, #000 60%)"></div>'
+    return edge + f'<nav aria-label="Main" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; height: 64px; box-sizing: border-box; padding: 6px; border-radius: 32px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; gap: 2px">{a}</nav>'
 
 # small pictures that show the content (Practice's rows and cards)
 def pic(kind, s=44):

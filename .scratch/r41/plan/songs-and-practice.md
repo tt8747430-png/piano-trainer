@@ -68,3 +68,12 @@ Now each tab is the app's own symbol over its word (11px); the place you are in 
 stroke), the others soft; 64 tall (radius 32), the lens 52 inside 6 (radius 26). A fade rises under the bar (Apple's
 scroll-edge effect), so the list no longer shows through below it. The laptop keeps the sidebar.
 
+v25 (owner: "did you research the apple guidelines"): v24 had quoted one line of Apple's HIG "Tab bars"; the
+whole page read now (developer.apple.com/design/human-interface-guidelines/tab-bars, and SF Symbols: "an iOS tab
+bar prefers the fill variant"). Taken: "Include tab labels … Use single words"; icons "above tab labels in compact
+views"; "Prefer filled symbols or icons"; on iOS the bar "floats above content … on a Liquid Glass background that
+allows content beneath to peek through"; "prefer a monochromatic appearance" when the content is colourful; badges
+only for critical news; never hide or disable a tab. So: the app's four icons filled (soft when not chosen, ink on
+the lens when chosen); v24's solid fade replaced by a light scroll-edge blur, so the list shows softly under the
+glass. Not taken yet, asked: a Search tab at the trailing end (Apple's option), and minimising the bar on scroll.
+

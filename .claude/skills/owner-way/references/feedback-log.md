@@ -256,7 +256,9 @@ owner's, typos fixed.
   inversion is written in its name as a slash chord (Cmaj7/E), stepped by arrows on either side.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
-  content never shows below it.
+  content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple
+  guidelines"): filled icons, and content peeks softly through the glass (scroll-edge blur), not a solid fade.
+  Read a guideline in full before citing it.
 
 ## Sounds
 

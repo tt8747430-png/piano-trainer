@@ -61,3 +61,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v21 (2026-11-08):** Chords: every control in words, the inversion stepper under the chord's name.
 **R42 v22 (2026-11-08):** Chords: the inversion as a slash chord in the name, the bar in three subject groups.
 **R42 v24 (2026-11-08):** the app's tab bar: the app's icons over their words, the place in a lens, a fade under it; Chords' v23 undone (the owner meant the app's bar).
+**R42 v25 (2026-11-08):** the tab bar to Apple's HIG read in full: filled icons, content peeking through the glass.
