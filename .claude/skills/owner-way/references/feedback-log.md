@@ -228,6 +228,9 @@ owner's, typos fixed.
   rows and the floating bar; each page keeps its own layout from its reference (iReal Pro's chart, Tenuto's answers,
   Soundbrenner's beats, Cleartune's needle, muted.io's circle, Flat's palette). Never one layout for every page.
   Spec `.scratch/r41/plan/songs-and-practice.md`.
+- **One canvas holds every place (v15):** "did you merge also the song player". The Player is a section of The ideal
+  Piano Trainer, brought in whole with its R37 rulings, in the calm colours, opened by the song page's Continue and
+  From the start; its Close goes back to the song. A place drawn elsewhere is merged, not left in its own canvas.
 
 ## Sounds
 

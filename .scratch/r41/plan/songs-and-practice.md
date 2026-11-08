@@ -38,3 +38,23 @@ Canvas: [The ideal Piano Trainer](https://claude.ai/artifact/9J6uVajsp9EDULa5zsK
 - R40 (2026-11-08): every page drawn in the calm Chords layout. Withdrawn the same day by the ruling above.
 - R41 (2026-11-08): each page refactored to its reference, in the calm language; the R39 rulings restored; the R40
   "A pattern" board removed (Accompaniment is a library; a pattern is heard from its row).
+
+## The Player, merged in (v15, 2026-11-08)
+
+Owner: "did you merge also the song player the in this artifact". It had not been: the Player lived only in its own
+canvas, The ideal Player (https://claude.ai/artifact/HezkVS2MXdwz7uJ14KDGgp, R37). Now it is a section of the one
+canvas, between Songs and Practice.
+
+- The R37 Player is brought in whole, with every ruling in `.scratch/r37/plan/pace-and-settings.md` ("The rulings as
+  they stand"): Close · the four views · the gear; the floating transport (Wait, Loop, ‹ Play ›, Hands, Keyboard);
+  Practice (Wait · Play, the tempo with Tap, Metronome Off · Count-in · On, Metronome sound ›, the loop's Repeats,
+  Between repeats, Speed up each pass); the Song gear (Arrangement or Accompaniment, Transpose, Sections); Hands;
+  Keyboard Off · 3D · 2D; Played through. Nothing in it was redrawn, so no removed thing comes back.
+- In the calm colours: the orange accent becomes the honey of the rest of the canvas (Play, the chosen tile, Practise
+  bars 5–8), with ink on it; deep honey for outlines and icons; the calm ink and soft text.
+- Linked: the song page's Continue from bar 9 and From the start open the Player (phone and laptop); the song's More ›
+  All Player settings opens the Player's song settings; the Player's Close goes back to the song's page.
+- The 3D keyboard pictures are the R37 ones, copied into the one canvas's asset store.
+- Generator: `.scratch/r39/canvas/player/merge_player.py` (reads the R37 base pages, maps the pictures with
+  `player/blobmap.txt`, writes `PlayerApp`, `PlayerDesk` and one board per state); `index.py` lays out the section.
+- Drawings: `.scratch/r41/drawings/player-*.png` (blank keys there: the pictures load only on the artifact).

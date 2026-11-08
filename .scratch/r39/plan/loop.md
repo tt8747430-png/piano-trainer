@@ -53,4 +53,5 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 `link.py` is retired.
 
 **R41 (2026-11-08):** R40's one layout withdrawn; each page refactored to its reference in the calm language (spec
+**R41 v15 (2026-11-08):** the Player merged into the one canvas (spec `.scratch/r41/plan/songs-and-practice.md`, "The Player, merged in").
 `.scratch/r41/plan/songs-and-practice.md`), canvas v14, generator `canvas/r41.py`.
