@@ -311,6 +311,8 @@ owner's, typos fixed.
   v49: "now it can be interpreted as the c can be called c sharp": a pointer under the chosen letter reads "Tap
   again for C♯". Name a hidden gesture's action in words; a glyph or "or" is read as something else.
   v50: "is this a permanent or just a tooltip": a tip, gone for good once the gesture is used.
+- **The title is the button, without a ⌄ (R42, v51):** "remove the arrow on the big chord. it just works but without
+  this arrow down".
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

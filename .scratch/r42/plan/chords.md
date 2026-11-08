@@ -5,6 +5,10 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v51: no arrow beside the big chord.** Owner: "and also remove the arrow on the big chord. it just works but
+  without this arrow down".
+  - The ⌄ disc after the chord symbol is gone; tapping the big chord still opens the Chord sheet, ‹ › still step
+    the inversions.
 - **v50: the pointer is a one-time tip, gone once the gesture is used.** Owner: "but is this a permanent or just a
   tooltip".
   - It shows under the chosen letter until the learner taps a chosen letter again once; then it never shows again
@@ -364,3 +368,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: the chip reads "or C♯"; the turn arrow read as reset (v48).
 - 2026-11-08: "Tap again for C♯" on a pointer under the chosen letter; "or C♯" read as a second name (v49).
 - 2026-11-08: the tap-again pointer is a tip, gone after the first tap-again (v50).
+- 2026-11-08: no ⌄ beside the big chord; the chord itself opens the sheet (v51).
