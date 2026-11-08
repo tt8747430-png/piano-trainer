@@ -151,9 +151,11 @@ settings drawer"; v151's icon list "still not good. research more and look also 
   Settings panel holds transposition, count-in, zoom and nothing to act on (soundslice.com/help, Transposing); Apple's
   HIG groups settings in lists under headers and puts an object's acts in a menu.
 - Will build: the drawer's head is the song, as a sheet in Chordify or Apple Music: a cover tile, **Amazing Grace**,
-  "G major · 3/4 · 80 BPM" (the key follows Transpose), and at its right two round buttons, **Share link** and **More**
-  (···), whose menu holds **Edit score · Print · Export**. Below, settings only, under headers: **What you play**, the
-  Arrangement · Accompaniment cards; **Song**, Transpose and Sections ›. No acts among the settings. Canvas v152;
+  "G major · 3/4 · 80 BPM" (the key follows Transpose); under it one row of buttons: **Edit score** (ink, filling the
+  row, its pencil and its name: owner, 2026-11-08, "i don't like that the edit button is too hidden"), **Share link**,
+  and **More** (···) with **Print · Export**. Below, settings only, with **no section headings** (owner: "i don't like
+  the headings or titles of the settings sections"): the Arrangement · Accompaniment cards, then Transpose and
+  Sections ›, the groups parted by space alone. No acts among the settings. Canvas v153 (v152 had the acts in ···);
   drawings `song-settings-acts.png`, `song-settings-more-menu.png`, `song-settings-acts-laptop.png`.
 
 **Placed (owner, 2026-11-07, on the five proposals):**
