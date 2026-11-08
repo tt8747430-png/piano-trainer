@@ -119,6 +119,28 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     hands that play it) · **its sound** (Play, and how it plays: Block or Arpeggio, right beside it) · **the
     keyboard**. Play leaves its lone spot and sits with the choice that changes what it plays.
 
+- **The page in three places: the chord is chosen on the chord, the bar plays it, the gear shows it** (owner,
+  2026-11-08: "i dont like the bottom bar of the chords page, research more and improve the bottom bar. refactor
+  the options properly and remove all the redundant things"). Replaces v18–v22's bars.
+  - Research: Apple's toolbar items "act on content in the view"; "only specify one primary action"; a tab bar is
+    for navigation, "not to provide actions"; segmented controls switch "closely related subviews". Laws of UX:
+    proximity (a choice beside what it changes), Hick (fewer choices, faster), Fitts (two big targets in the thumb's
+    reach). Piano Companion: "play a chord in the loop or arpeggio" (two ways of hearing, not a setting).
+  - Audit of v22, what was said twice or lived in the wrong place: the inversion (‹ › on the name and the Inversions
+    view's cards); the chord (the bar's chord button and the name); Play plus a Play-as setting with its own sheet
+    (Block, Arpeggio up, Arpeggio up and down); Hands, a setting of the voicing, on the bar; the keyboard's settings on
+    the bar and the page's own settings behind the gear.
+  - Now, top to bottom: Back · **Chords** · gear; the keys; the chord's name with ⌄, the button that opens Chord
+    (Root, Chord ›, Voicing ›, **Hands** Both · Right · Left); its full name; the inversion, **Root · 1st · 2nd · 3rd**
+    (triads three), an equal-width segmented control; "E in the bass · Close voicing"; the notes; the views
+    **Staff · Fingering · Tensions** right above what they switch; the view.
+  - The bar: two buttons, both actions: **▶ Play chord** (the one filled, honey) and **Arpeggio** (up), each turning
+    to ■ while it sounds. No setting is on the bar.
+  - The gear, **Settings**: the chord with Share link and ···, Practise in the Player, then Keyboard (Keys Chord · 61 ·
+    88, Note names), Staff (Grand staff · Treble only), Connect a piano ›, All piano settings ›.
+  - Gone: the Inversions view (the segmented control holds the choice; the keys show the shape), ‹ ›, the Play-as
+    sheet and "Arpeggio up and down", the Hands and Keyboard buttons and sheets, the bar's chord button.
+
 ## Fixed on the way
 
 The kit's sheet function had taken the name of the sheet colour, so every card on the R41 pages was drawn with no
@@ -133,3 +155,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: Apple's toolbar groups and segmented control (v20).
 - 2026-11-08: every control in words, the inversion stepper under the name (v21).
 - 2026-11-08: the inversion in the name as a slash chord; the bar grouped by subject (v22).
+- 2026-11-08: the page restructured: chosen on the chord, played by the bar, shown by the gear (v26).

@@ -161,7 +161,7 @@ const invN = Math.min(4, voicing === 'Shell' ? 3 : (voicing.startsWith('Rootless
 const inv = Math.min(st.inv ?? 0, invN - 1);
 const hands = st.hands || 'Both', view = st.view || 'Staff', keys = st.keys || 'Chord', fam = family(q);
 const tens = (st.tens || []).filter((t) => TENS[fam].includes(t));
-const playAs = st.playAs || 'Block', arp = playAs !== 'Block', dir = playAs === 'Up and down' ? 'Up and down' : 'Up', names = st.names ?? true, treble = st.staff === 'Treble only', auto = true;
+const playAs = 'Block', arp = false, dir = 'Up', names = st.names ?? true, treble = st.staff === 'Treble only', auto = true;
 const ns = voice(root, q, inv, voicing, hands, tens);
 const ms = ns.map((x) => x.m);
 const sym = ROOTS[root] + q.k + (tens.length ? '(' + tens.join(', ') + ')' : '');
@@ -170,7 +170,7 @@ const slash = bassName ? '/' + bassName : '';
 const symLen = (sym + slash).length;
 const symScale = symLen <= 6 ? 1 : (symLen <= 9 ? 0.78 : 0.6);
 const full = ROOTS[root] + ' ' + q.n + (tens.length ? ', add ' + tens.join(', ') : '');
-const play = () => { set({ playing: true }); const t = sound(ms, arp, dir); clearTimeout(this._t); this._t = setTimeout(() => set({ playing: false }), t); };
+const play = (a) => { set({ playing: a ? 'arp' : 'chord' }); const t = sound(ms, a, 'Up'); clearTimeout(this._t); this._t = setTimeout(() => set({ playing: false }), t); };
 const change = (o) => { set(o); if (auto) { const r = o.root ?? root, qq = QS[o.q ?? qi], iv = o.inv ?? inv; const vv = o.voicing || voicing; const hh = o.hands || hands; sound(voice(r, qq, Math.min(iv, qq.t.length - 1), VOICINGS.find((v) => v.v === vv).ok(qq) ? 'Close' : vv, hh, (o.tens || tens).filter((t) => TENS[family(qq)].includes(t))).map((x) => x.m), false, dir); } };
 const [lo, hi] = range(ms, keys, ''' + str(minOct) + r''');
 const marks = {}; ns.forEach((x) => { marks[x.m] = [ROLE[x.deg] || C.accent, names ? x.name : '']; });
@@ -191,16 +191,16 @@ const tenChips = TENS[fam].filter((t) => !q.t.some((x) => x[1] === TEN[t][1] && 
 const avoid = AVOID[fam].filter((t) => !q.t.some((x) => x[0] === TEN[t][0])).map((t) => ({ l: t, n: spell(root, TEN[t][0] % 12, TEN[t][1]).name }));
 const groups = ['Triads', 'Added notes', 'Sevenths', 'Extended'].map((g) => ({ g, rows: QS.map((x, i) => [x, i]).filter(([x]) => x.g === g).map(([x, i]) => ({ s: ROOTS[root] + x.k, n: ROOTS[root] + ' ' + x.n, on: i === qi, bg: i === qi ? '#F6E3BC' : 'transparent', fw: i === qi ? 700 : 500, pick: () => change({ q: i, sheet: 'chord' }) })) }));
 const vlist = VOICINGS.map((v) => { const why = v.ok(q); return { v: v.v, f: why || v.f, op: why ? 0.42 : 1, on: v.v === voicing, mark: v.v === voicing ? '✓' : '', pick: () => { if (!why) change({ voicing: v.v, sheet: 'chord' }); } }; });
-const VIEWS = ['Staff', 'Inversions', 'Fingering', 'Tensions'];
+const VIEWS = ['Staff', 'Fingering', 'Tensions'];
 const views = VIEWS.map((v) => ({ v, on: v === view, bg: v === view ? C.ink : 'transparent', fg: v === view ? C.sheet : C.ink, sh: v === view ? '0 1px 3px rgba(51,41,33,.18)' : 'none', fw: 600, pick: () => set({ view: v }) }));
 const sh = st.sheet || '';
 const handsBadge = hands === 'Both' ? '2' : (hands === 'Right' ? 'R' : 'L');
 const hB = hands === 'Both', hR = hands === 'Right', hL = hands === 'Left';
 return {
-  sym, full, shape, kb, sv, fing, invCards, tones, tenChips, avoid, groups, vlist, views, handsBadge, hB, hR, hL, slash, hasSlash: !!slash, symFsP: Math.round(44 * symScale), symFsL: Math.round(64 * symScale), invLine: INV[inv] + (slash ? ', ' + bassName + ' in the bass' : '') + ' · ' + voicing + ' voicing',
+  sym, full, shape, kb, sv, fing, invCards, tones, tenChips, avoid, groups, vlist, views, handsBadge, hB, hR, hL, slash, hasSlash: !!slash, symFsP: Math.round(44 * symScale), symFsL: Math.round(64 * symScale), invLine: (slash ? bassName + ' in the bass · ' : 'Root in the bass · ') + voicing + ' voicing' + (hands === 'Both' ? '' : ' · ' + hands + ' hand'),
   chips: ns.filter((x, i, a) => a.findIndex((y) => y.name === x.name) === i).sort((a, b) => ORD.indexOf(a.deg) - ORD.indexOf(b.deg)).map((x) => ({ n: x.name, c: ROLE[x.deg] || C.accent })),
   hasTens: tenChips.length > 0, hasAvoid: avoid.length > 0,
-  isStaff: view === 'Staff', isInv: view === 'Inversions', isFing: view === 'Fingering', isTones: view === 'Tensions',
+  isStaff: view === 'Staff' || view === 'Inversions', isInv: false, isFing: view === 'Fingering', isTones: view === 'Tensions',
   rootName: ROOTS[root], qName: q.n[0].toUpperCase() + q.n.slice(1), qSym: ROOTS[root] + q.k, voicing, invLabel: INV[inv], handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand', soundWord: arp ? 'Arpeggio' : 'Block',
   roots: rootGrid(root, (i) => change({ root: i })),
   playTiles: [['Block', 'Block chord'], ['Up', 'Arpeggio up'], ['Up and down', 'Arpeggio up and down']].map(([v, l]) => ({ l, on: v === playAs, bg: v === playAs ? '#FBF1DD' : '#FEFDFB', ring: v === playAs ? '0 0 0 2px #B07A2A' : '0 0 0 1px ' + C.line, pick: () => { set({ playAs: v }); sound(ms, v !== 'Block', v === 'Up and down' ? 'Up and down' : 'Up'); } })),
@@ -214,7 +214,11 @@ return {
   toggleLH: () => change({ hands: hands === 'Right' ? 'Both' : (hands === 'Both' ? 'Right' : 'Right') }),
   namesOn: names, namesOnBg: names ? '#7FB685' : C.line, namesOnX: names ? 22 : 2, toggleNames: () => set({ names: !names }),
   arpOn: arp, arpBg: arp ? '#F6E3BC' : 'transparent', arpInk: arp ? '#7A5418' : C.ink, openSound: () => set({ sheet: 'sound' }), isSound: sh === 'sound',
-  playing: !!st.playing, notPlaying: !st.playing, playLabel: st.playing ? 'Stop' : 'Play', togglePlay: () => st.playing ? set({ playing: false }) : play(),
+  playing: !!st.playing, notPlaying: !st.playing, playLabel: st.playing ? 'Stop' : 'Play', togglePlay: () => st.playing ? set({ playing: false }) : play(false),
+  chordOn: st.playing === 'chord', chordOff: st.playing !== 'chord', arpOnP: st.playing === 'arp', arpOffP: st.playing !== 'arp',
+  playChord: () => st.playing === 'chord' ? set({ playing: false }) : play(false), playArp: () => st.playing === 'arp' ? set({ playing: false }) : play(true),
+  invSeg: Array.from({ length: invN }, (_, i) => i).map((i) => ({ l: ['Root', '1st', '2nd', '3rd'][i], on: i === inv, bg: i === inv ? C.ink : 'transparent', fg: i === inv ? C.sheet : C.ink, sh: i === inv ? '0 1px 3px rgba(51,41,33,.18)' : 'none', pick: () => change({ inv: i }) })),
+  handsSeg: seg(['Both', 'Right', 'Left'], hands, (l) => change({ hands: l })),
   prev: () => change({ inv: (inv + invN - 1) % invN }), next: () => change({ inv: (inv + 1) % invN }),
   closeSheet: () => set({ sheet: null }),
   isChord: sh === 'chord', isList: sh === 'list', isVoicing: sh === 'voicing', isHands: sh === 'hands', isKeys: sh === 'keys', isSet: sh === 'set', isView: sh === 'view', isMore: sh === 'more', isPractise: sh === 'practise',
@@ -238,14 +242,18 @@ def VIEWPILL(labelled):
     return f'<nav aria-label="View" style="{box} display: flex; height: 40px; box-sizing: border-box; padding: 3px; border-radius: 20px; background: {FILL}">{'<sc-for list="{{views}}" as="v" hint-placeholder-count="4">'}{item}</sc-for></nav>'
 
 def TITLEBLOCK(size):
-    # the inversion lives in the name: ‹ Cmaj7/E › (the bass after the slash), its words under it
+    # The chord is chosen where it is read: the name is the button (Chord sheet); its inversion right under it,
+    # an equal-width segmented control (Root · 1st · 2nd · 3rd), the bass named below. Proximity: each choice sits
+    # beside what it changes.
     fs = '{{symFsP}}' if size < 50 else '{{symFsL}}'
-    arrow = lambda lab, svg, act: f'<button type="button" aria-label="{lab}" onClick="{{{{{act}}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{svg}</button>'
-    return f'''<div style="flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
-<div role="group" aria-label="Inversion" style="{'align-self: stretch; justify-content: space-between; gap: 8px' if size < 50 else 'justify-content: center; gap: 28px'}; display: flex; align-items: center">{arrow('Previous inversion', CHEV_LS, 'prev')}<h1 style="{'flex: 1; min-width: 0;' if size < 50 else 'flex: none;'} margin: 0; font-family: {SERIF}; font-size: {fs}px; line-height: 1.05; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap">{{{{sym}}}}<span style="color: #B07A2A">{{{{slash}}}}</span></h1>{arrow('Next inversion', CHEV_RS, 'next')}</div>
-<p style="margin: 0; font-size: 15px; color: {SOFT}">{{{{full}}}}</p>
-<p style="margin: 0; font-size: 14px; font-weight: 600; color: {INK}">{{{{invLine}}}}</p>
-<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding-top: 4px"><sc-for list="{{{{chips}}}}" as="c" hint-placeholder-count="4"><span style="height: 28px; min-width: 28px; box-sizing: border-box; padding: 0 10px; border-radius: 14px; background: {{{{c.c}}}}; color: {INK}; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{c.n}}}}</span></sc-for></div>
+    segw = 'align-self: stretch;' if size < 50 else 'width: 360px;'
+    seg = f'<div role="radiogroup" aria-label="Inversion" style="{segw} display: flex; height: 40px; box-sizing: border-box; padding: 3px; border-radius: 20px; background: {FILL}"><sc-for list="{{{{invSeg}}}}" as="s" hint-placeholder-count="4"><button type="button" role="radio" aria-checked="{{{{s.on}}}}" onClick="{{{{s.pick}}}}" style="flex: 1 1 0; min-width: 0; height: 34px; border: 0; border-radius: 17px; background: {{{{s.bg}}}}; box-shadow: {{{{s.sh}}}}; color: {{{{s.fg}}}}; font: inherit; font-size: 15px; font-weight: 600">{{{{s.l}}}}</button></sc-for></div>'
+    return f'''<div style="flex: none; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">
+<button type="button" aria-label="Change the chord: {{{{sym}}}}{{{{slash}}}}" onClick="{{{{openChord}}}}" style="max-width: 100%; border: 0; border-radius: 16px; background: transparent; padding: 2px 10px; color: {INK}; font: inherit; display: flex; align-items: center; gap: 6px"><span style="min-width: 0; font-family: {SERIF}; font-size: {fs}px; line-height: 1.05; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap">{{{{sym}}}}<span style="color: #B07A2A">{{{{slash}}}}</span></span><span style="flex: none; width: 28px; height: 28px; border-radius: 14px; background: {FILL}; display: flex; align-items: center; justify-content: center">{CHEV_U2.replace('m18 15-6-6-6 6', 'm6 9 6 6 6-6')}</span></button>
+<p style="margin: -4px 0 0; font-size: 15px; color: {SOFT}">{{{{full}}}}</p>
+{seg}
+<p style="margin: 0; font-size: 14px; color: {SOFT}">{{{{invLine}}}}</p>
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 6px"><sc-for list="{{{{chips}}}}" as="c" hint-placeholder-count="4"><span style="height: 28px; min-width: 28px; box-sizing: border-box; padding: 0 10px; border-radius: 14px; background: {{{{c.c}}}}; color: {INK}; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{c.n}}}}</span></sc-for></div>
 </div>'''
 
 def STAFFSVG(w):
@@ -271,35 +279,25 @@ HANDL = HANDI.replace('<svg ', '<svg style="transform: scaleX(-1)" ', 1)
 HANDS2 = '<span style="display: flex; gap: 0; margin: 0 -3px">' + HANDL.replace('width="22" height="22"', 'width="17" height="17"') + HANDI.replace('width="22" height="22"', 'width="17" height="17"') + '</span>'
 HANDSI = '<sc-if value="{{hB}}" hint-placeholder-val="{{true}}">' + HANDS2 + '</sc-if><sc-if value="{{hR}}" hint-placeholder-val="{{false}}">' + HANDI + '</sc-if><sc-if value="{{hL}}" hint-placeholder-val="{{false}}">' + HANDL + '</sc-if>'
 
-# The bar, grouped by what each control changes (proximity, common region): the chord (which chord, which hands
-# play it) · its sound (Play, and how it plays: block or arpeggio) · the keyboard. Each group one capsule 68 tall
-# (radius 34); items 56, 6 in (radius 28); every item a symbol or the chord's name over its value in words.
-GROUP_CSS = f'flex: none; height: 68px; box-sizing: border-box; padding: 6px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 2px'
-def TGROUP(label, inner):
-    return f'<div role="group" aria-label="{label}" style="{GROUP_CSS}">{inner}</div>'
-def TABBTN(label, svg, word, act, pressed='', w=60):
-    pr = f'aria-pressed="{{{{{pressed}}}}}" ' if pressed else ''
-    bg = 'background: {{arpBg}}; color: {{arpInk}};' if pressed else f'background: transparent; color: {INK};'
-    return f'<button type="button" aria-label="{label}" {pr}onClick="{{{{{act}}}}}" style="flex: none; width: {w}px; height: 56px; padding: 0; border: 0; border-radius: 28px; {bg} font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px">{svg}<span style="font-size: 11px; font-weight: 600; line-height: 1; white-space: nowrap">{word}</span></button>'
-CHORDITEM_P = f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{{openChord}}}}" style="flex: none; width: 82px; height: 56px; padding: 0 6px; border: 0; border-radius: 28px; background: {FILL}; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px"><span style="max-width: 100%; font-size: {{{{qSymFs}}}}px; font-weight: 700; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{qSym}}}}</span><span style="display: flex; align-items: center; gap: 2px; font-size: 11px; font-weight: 600; line-height: 1; color: {SOFT}">Chord{CHEV_U2.replace('width="16" height="16"', 'width="11" height="11"')}</span></button>'
-
-DOCK_PHONE = f'<div role="toolbar" aria-label="Chord" style="position: absolute; left: 12px; right: 12px; bottom: 30px; z-index: 40; display: flex; align-items: center; justify-content: space-between; gap: 4px">' + \
-    TGROUP('The chord', CHORDITEM_P + TABBTN('Hands: {{handsLabel}}', HANDSI, '{{handsLabel}}', 'openHands')) + \
-    TGROUP('Sound', PLAYBTN(56) + TABBTN('Play as: {{soundLabel}}', SOUNDI, '{{soundWord}}', 'openSound', 'arpOn')) + \
-    TGROUP('Keyboard', TABBTN('Keyboard', PIANOI, 'Keyboard', 'openKeys')) + '</div>'
-
-LBTN = lambda label, svg, act, pressed='': f'<button type="button" {("aria-pressed=\"{{" + pressed + "}}\"") if pressed else ""} onClick="{{{{{act}}}}}" style="flex: none; height: 56px; padding: 0 18px 0 14px; border: 0; border-radius: 28px; {"background: {{arpBg}}; color: {{arpInk}};" if pressed else "background: transparent; color: " + INK + ";"} font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">{svg}{label}</button>'
-CHORDITEM_L = f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{{openChord}}}}" style="flex: none; height: 56px; padding: 0 14px 0 20px; border: 0; border-radius: 28px; background: {FILL}; color: {INK}; font: inherit; font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 6px; white-space: nowrap">{{{{qSym}}}}{CHEV_U2}</button>'
-DOCK_LAPTOP = f'<div role="toolbar" aria-label="Chord" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; display: flex; align-items: center; gap: 16px">' + \
-    TGROUP('The chord', CHORDITEM_L + LBTN('{{handsLabel}}', HANDSI, 'openHands')) + \
-    TGROUP('Sound', PLAYBTN(56) + LBTN('{{soundLabel}}', SOUNDI, 'openSound', 'arpOn')) + \
-    TGROUP('Keyboard', LBTN('Keyboard', PIANOI, 'openKeys')) + '</div>'
+# The bar holds only the page's actions (Apple: a toolbar's items "act on content"; "only specify one primary
+# action"): hear the chord together, hear it note by note. Everything chosen sits on the chord itself; everything
+# shown is behind the gear. One capsule 68 (radius 34), two buttons 56 inside 6 (radius 28), side by side.
+STOPI = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>'
+PLAYI = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor"></path></svg>'
+def ACT(label, act, on, off, icon, primary):
+    bg = f'background: {ACCENT}; color: {INK};' if primary else f'background: {FILL}; color: {INK};'
+    return (f'<button type="button" onClick="{{{{{act}}}}}" aria-pressed="{{{{{on}}}}}" style="flex: 1 1 0; min-width: 0; height: 56px; border: 0; border-radius: 28px; {bg} font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap">'
+            f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}">{STOPI}</sc-if><sc-if value="{{{{{off}}}}}" hint-placeholder-val="{{{{true}}}}">{icon}</sc-if>{label}</button>')
+BAR_CSS = f'height: 68px; box-sizing: border-box; padding: 6px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 6px'
+ACTS = ACT('Play chord', 'playChord', 'chordOn', 'chordOff', PLAYI, True) + ACT('Arpeggio', 'playArp', 'arpOnP', 'arpOffP', ARPI.replace('width="24" height="24"', 'width="20" height="20"'), False)
+DOCK_PHONE = f'<div role="toolbar" aria-label="Play" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; {BAR_CSS}">{ACTS}</div>'
+DOCK_LAPTOP = f'<div role="toolbar" aria-label="Play" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; width: 420px; {BAR_CSS}">{ACTS}</div>'
 
 # ── the sheets' bodies, the same on both sizes ──
 def BACKHEAD(title, act):
     return f'<div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 40px"><button type="button" aria-label="Back" onClick="{{{{{act}}}}}" style="position: absolute; left: -8px; width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L}</button><span style="font-size: 17px; font-weight: 600">{title}</span></div>'
 
-B_CHORD = (CAPS('Root') + ROOTGRID('roots') + GROUP(('link', 'Chord', '{{qName}}', 'openList'), ('link', 'Voicing', '{{voicing}}', 'openVoicing'), bg="#FEFDFB"))
+B_CHORD = (CAPS('Root') + ROOTGRID('roots') + GROUP(('link', 'Chord', '{{qName}}', 'openList'), ('link', 'Voicing', '{{voicing}}', 'openVoicing'), ('seg', 'Hands', 'handsSeg', 210), bg="#FEFDFB"))
 B_LIST = (BACKHEAD('Chord', 'backChord') + f'<sc-for list="{{{{groups}}}}" as="g" hint-placeholder-count="4"><div style="display: flex; flex-direction: column; gap: 6px"><h3 style="margin: 6px 0 0 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{{{{g.g}}}}</h3><div style="border-radius: 12px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{g.rows}}}}" as="r" hint-placeholder-count="5"><button type="button" aria-pressed="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" style="width: 100%; min-height: 48px; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: {{{{r.bg}}}}; padding: 0 14px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 76px; font-size: 16px; font-weight: {{{{r.fw}}}}">{{{{r.s}}}}</span><span style="flex: 1; min-width: 0; font-size: 15px; color: {SOFT}">{{{{r.n}}}}</span></button></sc-for></div></div></sc-for>')
 B_VOICING = (BACKHEAD('Voicing', 'backChord') + f'<div style="border-radius: 12px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{vlist}}}}" as="v" hint-placeholder-count="6"><button type="button" aria-pressed="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="width: 100%; min-height: 56px; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: transparent; padding: 6px 14px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left; opacity: {{{{v.op}}}}"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{v.v}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{v.f}}}}</span></span><span style="font-size: 18px; font-weight: 700; color: #7A5418">{{{{v.mark}}}}</span></button></sc-for></div>')
 B_HANDS = GROUP(('toggle', 'Right hand', 'rhOn', 'toggleRH'), ('toggle', 'Left hand', 'lhOn', 'toggleLH'), bg="#FEFDFB")
@@ -309,24 +307,23 @@ B_SOUND = f'<div role="radiogroup" style="display: flex; flex-direction: column;
 def B_SET(player):
     head = f'''<div style="display: flex; align-items: center; gap: 12px"><span style="flex: none; width: 48px; height: 48px; border-radius: 12px; background: {FILL}; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: 17px; font-weight: 700">{{{{rootName}}}}</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 18px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{sym}}}}</span><span style="font-size: 13px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{full}}}}</span></span><button type="button" aria-label="Share link" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 20px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{LINKI}</button><button type="button" aria-label="More" onClick="{{{{openMore}}}}" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 20px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div>
 <button type="button" onClick="{{{{openPractise}}}}" style="height: 48px; border: 0; border-radius: 14px; background: {INK}; color: #FEFDFB; font: inherit; font-size: 16px; font-weight: 700">Practise in the Player</button>'''
-    return head + GROUP(('seg', 'Staff', 'staffSeg', 220), bg="#FEFDFB")
+    return head + CAPS('Keyboard') + GROUP(('seg', 'Keys', 'keysSeg', 200), ('toggle', 'Note names', 'namesOn', 'toggleNames'), bg="#FEFDFB") + CAPS('Staff') + GROUP(('seg', 'Staff', 'staffSeg', 220), bg="#FEFDFB") + GROUP(('link', 'Connect a piano', '', '#'), ('link', 'All piano settings', '', '#'), bg="#FEFDFB")
 def B_PRACTISE(player):
     return BACKHEAD('Practise in the Player', 'backSet') + GROUP(('link', 'Arpeggio, up and down', '', player), ('link', 'Inversions, one after another', '', player), ('link', 'Chromatic walk, every root', '', player), bg="#FEFDFB")
 B_MORE = BACKHEAD('More', 'backSet') + GROUP(('link', 'Add to a progression', '', '#'), ('link', 'Open in the Chord player', '', '#'), ('link', 'Open in the Chord finder', '', '#'), bg="#FEFDFB")
 
 def SHEETS_PHONE(player):
     out = ''
-    for cond, title, body in (('isChord', 'Chord', B_CHORD), ('isHands', 'Hands', B_HANDS), ('isKeys', 'Keyboard', B_KEYS), ('isSet', 'Chord settings', B_SET(player)), ('isSound', 'Play the chord', B_SOUND)):
+    for cond, title, body in (('isChord', 'Chord', B_CHORD), ('isSet', 'Settings', B_SET(player))):
         out += BSHEET(cond, title, body)
     for cond, body in (('isList', B_LIST), ('isVoicing', B_VOICING), ('isPractise', B_PRACTISE(player)), ('isMore', B_MORE)):
         out += f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" class="nos" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 12px"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>{body}</section></sc-if>'
     return out
 
 def POPS_LAPTOP(player):
-    dockpos = 'left: calc(50% - 330px); bottom: 104px'
+    dockpos = 'left: calc(50% - 200px); top: 330px'
     out = ''
-    for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isHands', 'Hands', B_HANDS, 'left: calc(50% + 60px); bottom: 104px'), ('isKeys', 'Keyboard', B_KEYS, 'left: calc(50% + 120px); bottom: 104px'),
-                                   ('isSet', 'Chord settings', B_SET(player), 'right: 24px; top: 76px'), ('isSound', 'Play the chord', B_SOUND, 'left: calc(50% - 250px); bottom: 104px')):
+    for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isSet', 'Settings', B_SET(player), 'right: 24px; top: 76px')):
         out += POPOVER(cond, title, body, pos, 400)
     for cond, body, pos in (('isList', B_LIST, dockpos), ('isVoicing', B_VOICING, dockpos), ('isPractise', B_PRACTISE(player), 'right: 24px; top: 76px'), ('isMore', B_MORE, 'right: 24px; top: 76px')):
         out += f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" class="nos" style="position: absolute; {pos}; z-index: 61; width: 400px; max-height: 700px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 12px 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">{body}</div></sc-if>'
@@ -336,17 +333,17 @@ def ch_js(D, W, KH, minOct, mini_w):
     return CH_JS + '\n' + js('const D = ' + json.dumps(D) + ';\n' + CH_BODY(D, W, KH, minOct, mini_w))
 
 # ── phone ──
-PH_BODY = f'''<div style="flex: none; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px">{GLASSBTN('Back to Practice', CHEV_L, href='Main.dc.html')}<h1 style="margin: 0; font-size: 17px; font-weight: 600">Chords</h1>{GLASSBTN('Chord settings', COG, 'openSet')}</div>
+PH_BODY = f'''<div style="flex: none; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px">{GLASSBTN('Back to Practice', CHEV_L, href='Main.dc.html')}<h1 style="margin: 0; font-size: 17px; font-weight: 600">Chords</h1>{GLASSBTN('Settings', COG, 'openSet')}</div>
 {KEYBAND(168)}
-<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; display: flex">{VIEWPILL(False)}</div>{TITLEBLOCK(44)}{VIEWBODY(330, 2, 150)}</main>
+<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px 120px; display: flex; flex-direction: column; gap: 16px">{TITLEBLOCK(44)}<div style="flex: none; display: flex; padding-top: 6px">{VIEWPILL(False)}</div>{VIEWBODY(330, 2, 150)}</main>
 {DOCK_PHONE}'''
 phone('Chords', 'Chords', PH_BODY, ch_js({'root': 0, 'q': 12}, 402, 168, 2, 150), SHEETS_PHONE('Player.dc.html'))
 
 # ── laptop: the whole screen, as the Player's ──
 LP_INNER = f'''<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: flex; flex-direction: column">
-<div style="flex: none; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px"><div style="display: flex; align-items: center; gap: 14px">{GLASSBTN('Back to Practice', CHEV_L, href='Laptop.dc.html')}<h1 style="margin: 0; font-size: 18px; font-weight: 600">Chords</h1></div>{GLASSBTN('Chord settings', COG, 'openSet')}</div>
+<div style="flex: none; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px"><div style="display: flex; align-items: center; gap: 14px">{GLASSBTN('Back to Practice', CHEV_L, href='Laptop.dc.html')}<h1 style="margin: 0; font-size: 18px; font-weight: 600">Chords</h1></div>{GLASSBTN('Settings', COG, 'openSet')}</div>
 {KEYBAND(220)}
-<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 26px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 820px; max-width: 100%; display: flex; flex-direction: column; gap: 20px"><div style="flex: none; display: flex; justify-content: center">{VIEWPILL(True)}</div>{TITLEBLOCK(56)}{VIEWBODY(440, 4, 170)}</div></main>
+<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 26px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 820px; max-width: 100%; display: flex; flex-direction: column; gap: 20px">{TITLEBLOCK(56)}<div style="flex: none; display: flex; justify-content: center; padding-top: 8px">{VIEWPILL(True)}</div>{VIEWBODY(440, 4, 170)}</div></main>
 {DOCK_LAPTOP}
 {POPS_LAPTOP('PlayerLaptop.dc.html')}
 </div>'''

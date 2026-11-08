@@ -254,6 +254,10 @@ owner's, typos fixed.
   separate groups". A bar's capsules are subjects (the chord · its sound · the keyboard); a choice sits in the same
   capsule as the action it changes (Play beside Block or Arpeggio). Proximity, common region, similarity. A chord's
   inversion is written in its name as a slash chord (Cmaj7/E), stepped by arrows on either side.
+- **A page's bar holds its actions, not its settings (R42, v26):** "i dont like the bottom bar of the chords page …
+  remove all the redundant things". Chords' bar is Play chord and Arpeggio only. What you choose sits on the thing
+  it changes (the chord's name opens the chord; the inversion is a segmented control under it); what changes the
+  display is behind the gear. Two ways of hearing are two buttons, not a mode setting. One control per choice.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple
