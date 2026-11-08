@@ -252,7 +252,7 @@ const tenChips = TENS[fam].filter((t) => !q.t.some((x) => x[1] === TEN[t][1] && 
 const avoid = AVOID[fam].filter((t) => !q.t.some((x) => x[0] === TEN[t][0])).map((t) => ({ l: t, n: spell(root, TEN[t][0] % 12, TEN[t][1]).name }));
 const groups = ['Triads', 'Added notes', 'Sevenths', 'Extended'].map((g) => ({ g, rows: QS.map((x, i) => [x, i]).filter(([x]) => x.g === g).map(([x, i]) => ({ s: ROOTS[root] + x.k, n: ROOTS[root] + ' ' + x.n, on: i === qi, bg: i === qi ? '#F6E3BC' : 'transparent', fw: i === qi ? 700 : 500, pick: () => change({ q: i, sheet: 'chord' }) })) }));
 const vlist = VOICINGS.map((v) => { const why = v.ok(q); return { v: v.v, f: why || v.f, op: why ? 0.42 : 1, on: v.v === voicing, mark: v.v === voicing ? '✓' : '', pick: () => { if (!why) change({ voicing: v.v, sheet: 'chord' }); } }; });
-const VIEWS = ['Staff', 'Inversions', 'Fingering', 'Tensions'];
+const VIEWS = ['Staff', 'Fingering', 'Tensions'];
 const views = VIEWS.map((v) => ({ v, on: v === view, bg: v === view ? C.ink : 'transparent', fg: v === view ? C.sheet : C.ink, sh: v === view ? '0 1px 3px rgba(51,41,33,.18)' : 'none', fw: 600, pick: () => set({ view: v }) }));
 const sh = st.sheet || '';
 const handsBadge = hands === 'Both' ? '2' : (hands === 'Right' ? 'R' : 'L');
@@ -261,7 +261,7 @@ return {
   sym, full, shape, kb, sv, fing, invCards, tones, tenChips, avoid, groups, vlist, views, handsBadge, hB, hR, hL, slash, hasSlash: !!slash, symFsP: Math.round(44 * symScale), symFsL: Math.round(64 * symScale), invLine: INV[inv] + (slash ? ', ' + bassName + ' in the bass' : '') + ' · ' + voicing + ' voicing' + (hands === 'Both' ? '' : ' · ' + hands + ' hand'),
   chips: ns.filter((x, i, a) => a.findIndex((y) => y.name === x.name) === i).sort((a, b) => ORD.indexOf(a.deg) - ORD.indexOf(b.deg)).map((x) => ({ n: x.name, c: ROLE[x.deg] || C.accent })),
   hasTens: tenChips.length > 0, hasAvoid: avoid.length > 0,
-  isStaff: view === 'Staff', isInv: view === 'Inversions', isFing: view === 'Fingering', isTones: view === 'Tensions',
+  isStaff: view === 'Staff' || view === 'Inversions', isInv: false, isFing: view === 'Fingering', isTones: view === 'Tensions',
   rootName: ROOTS[root], qName: q.n[0].toUpperCase() + q.n.slice(1), qSym: ROOTS[root] + q.k, voicing, invLabel: INV[inv], handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand', soundWord: arp ? 'Arpeggio' : 'Block',
   roots: rootGrid(root, (i) => change({ root: i })),
   playTiles: [['Block', 'Block chord'], ['Up', 'Arpeggio up'], ['Up and down', 'Arpeggio up and down']].map(([v, l]) => ({ l, on: v === playAs, bg: v === playAs ? '#FBF1DD' : '#FEFDFB', ring: v === playAs ? '0 0 0 2px #B07A2A' : '0 0 0 1px ' + C.line, pick: () => { set({ playAs: v }); sound(ms, v !== 'Block', v === 'Up and down' ? 'Up and down' : 'Up'); } })),

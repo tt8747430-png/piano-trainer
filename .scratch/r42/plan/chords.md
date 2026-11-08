@@ -151,6 +151,10 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     the thumb is.
   - The bar: **Cmaj7 ⌃** · **▶ Play** · **Arpeggio**. The gear keeps Keyboard and Staff (v26).
 
+- **No Inversions view** (owner, 2026-11-08: "do we need this inversions when we already have them on piano?"). The
+  big keys show the inversion you are on and ‹ › steps it; the view only added four small keyboards side by side.
+  Views: **Staff · Fingering · Tensions**.
+
 ## Fixed on the way
 
 The kit's sheet function had taken the name of the sheet colour, so every card on the R41 pages was drawn with no
@@ -168,3 +172,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: the page restructured: chosen on the chord, played by the bar, shown by the gear (v26).
 - 2026-11-08: the builder (v27) undone, owner: "no, the previous layout directions were better"; v26's layout stands (v28).
 - 2026-11-08: inversions back to ‹ › and the Inversions view; the chord chosen from the name and the bar (v29).
+- 2026-11-08: the Inversions view goes; the keys and ‹ › show it (v30).
