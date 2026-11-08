@@ -208,6 +208,9 @@ owner's, typos fixed.
 - **Accompaniment drawn (R39-9, 2026-11-08):** the Pattern library itself (books as places, folders, rolls, Listen,
   heart), a pattern opening in a sheet with its roll, hands and Practise in the Player. Waiting for the owner's word.
 - **Quiz:** one setup and four drills for every trainer; a cadence trainer.
+  **Drawn (R39-11, 2026-11-08):** Quiz with My gaps first and each trainer's best score ringed, one setup per
+  trainer (Drill, Level, Options, Rounds, Timing), a run with four answers and the verdict; Exercises as the shared
+  library and an exercise's page with its bars engraved, Listen and Start above the keys. Waiting.
 - **Harmony:** draw the roles and moves on the chords (the Function · Root motion switch changed only letters).
   **Drawn (R39-8, 2026-11-08):** Progressions as a library like Songs; a progression's chords as tiles coloured by role
   with the root's move between them, in any key, voice-led or block. Waiting for the owner's word.

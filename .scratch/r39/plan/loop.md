@@ -36,7 +36,7 @@ after compacting"
 | 8 | Progressions (and a progression's page) | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), rows 5 and 6 | drawn, waiting for the owner |
 | 9 | Accompaniment | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 7 | drawn, waiting for the owner |
 | 10 | Chord player | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 8 | drawn, waiting for the owner |
-| 11 | Exercises and Quiz | | |
+| 11 | Exercises and Quiz | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), rows 9 and 10 | drawn, waiting for the owner |
 | 12 | Tools: Metronome, Tuner, Chord finder, Circle of fifths | | |
 
 Standing rules: design only, no app code until the owner's "ok"; the owner's rulings in each area's specs and the

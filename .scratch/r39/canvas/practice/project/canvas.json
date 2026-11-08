@@ -137,6 +137,38 @@
       "h": 1299,
       "is_interactive": true,
       "title": "MacBook Air: the Chord player with the sheet on the left and Style, Key, Tempo, Instruments and Chord names on the right; the key's chords below to drag into a bar; a chord opens in a popover; Play and Loop above the keys"
+    },
+    "Exercise.dc.html": {
+      "x": 0,
+      "y": 11352,
+      "w": 450,
+      "h": 920,
+      "is_interactive": true,
+      "title": "iPhone 17 Pro: an exercise's page (Hanon): its book, what it trains, its first bars engraved; Number, Key (root grid and Next key), Hands, Rhythm, Tempo and Target tempo with how near you are; Completed today; Technique; Listen and Start above the keys. The Exercises library is Accompaniment's (row 7), one implementation"
+    },
+    "ExercisesLaptop.dc.html": {
+      "x": 530,
+      "y": 11352,
+      "w": 2143,
+      "h": 1299,
+      "is_interactive": true,
+      "title": "MacBook Air: Exercises as the library on the left (place chips by book, folders, the heart) and the exercise chosen on the right, Listen and Start above the keys"
+    },
+    "Quiz.dc.html": {
+      "x": 0,
+      "y": 12771,
+      "w": 450,
+      "h": 920,
+      "is_interactive": true,
+      "title": "iPhone 17 Pro: Quiz: My gaps first, then the trainers by what they ask, each with its best score ringed and its runs; a trainer opens its setup (Drill: Flashcards · Name it · Play it · By ear with ⓘ, Level, Options, Rounds, Timing, Start); a run: Round 3 of 10, the chord on the staff and the keys, four answers, the verdict and Next"
+    },
+    "QuizLaptop.dc.html": {
+      "x": 530,
+      "y": 12771,
+      "w": 2143,
+      "h": 1299,
+      "is_interactive": true,
+      "title": "MacBook Air: Quiz with the trainers on the left and the chosen trainer's setup on the right, Start at its foot"
     }
   },
   "order": [
@@ -155,7 +187,11 @@
     "Accompaniment.dc.html",
     "AccompanimentLaptop.dc.html",
     "ChordPlayer.dc.html",
-    "ChordPlayerLaptop.dc.html"
+    "ChordPlayerLaptop.dc.html",
+    "Exercise.dc.html",
+    "ExercisesLaptop.dc.html",
+    "Quiz.dc.html",
+    "QuizLaptop.dc.html"
   ],
   "notes": {},
   "designSystems": []
