@@ -47,3 +47,7 @@ feedback log win over any reference.
 title over each. In Play every page is linked: the tab bar and sidebar (Songs, Practice), Practice's cards to their
 pages, each Back, a song's row to its page, Edit score to the editor and Done back. `canvas/link.py` copies the Songs
 boards in and adds the links; run it after any generator. The old Songs canvas stays but is no longer updated.
+
+**R40, calm (2026-11-08):** every Songs and Practice page redrawn in the calm Chords page's language (spec
+`.scratch/r40/plan/calm.md`), canvas v13. `canvas/calm.py` and `calm_songs.py` draw the pages, `index.py` lays them out;
+`link.py` is retired.

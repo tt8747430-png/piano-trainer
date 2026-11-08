@@ -10,329 +10,383 @@
   },
   "pages": [],
   "boards": {
-    "Songs.dc.html": {
-      "x": 0,
-      "y": 0,
-      "w": 450,
-      "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: My songs. Continue first, then folders as rows, then every song with its engraved cover. Chips pick the place, search and Sort and filter narrow it, the heart favourites, + adds"
-    },
     "SongsLaptop.dc.html": {
-      "x": 530,
-      "y": 0,
+      "x": 0,
+      "y": 300,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: My songs. The library tree is the places; Continue as four covers; a table of only the columns that hold something; Add sits in the bar so nothing covers the table; Sort and filter opens in place"
+      "title": "My songs, laptop",
+      "is_interactive": true
     },
-    "Song.dc.html": {
-      "x": 0,
-      "y": 1419,
+    "Songs.dc.html": {
+      "x": 2223,
+      "y": 679,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: a song's page. The first bars as its cover, Edit beside the title, Learned and the heart at the bar's right, Key · Time · Tempo once, Chords to tap, Your practice, Details; Continue and Play float"
+      "title": "My songs, phone",
+      "is_interactive": true
     },
     "SongLaptop.dc.html": {
-      "x": 530,
-      "y": 1419,
+      "x": 2913,
+      "y": 300,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: a song's page in two columns: the song on the left, Chords, Your practice and Details on the right; Continue and Play float under them"
+      "title": "A song, laptop",
+      "is_interactive": true
     },
-    "Editor.dc.html": {
-      "x": 0,
-      "y": 2838,
+    "Song.dc.html": {
+      "x": 5136,
+      "y": 679,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: editing the score. One quiet bar (Done, Undo, Redo, the piano, Play, ···); the score; Flat's palette folded to one row of tools over its tabs, the grip opens every section in one scroll; the keys under it"
+      "title": "A song, phone",
+      "is_interactive": true
     },
     "EditorLaptop.dc.html": {
-      "x": 530,
-      "y": 2838,
+      "x": 5826,
+      "y": 300,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: editing the score. The page in the middle, the palette docked at the right with every section in one scroll, the piano from the bar"
+      "title": "Score editor, laptop",
+      "is_interactive": true
     },
-    "Main.dc.html": {
-      "x": 0,
-      "y": 4657,
+    "Editor.dc.html": {
+      "x": 8049,
+      "y": 679,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: Practice. Up next first (one thing to start, two after it), then Harmony, Playing and the Tools last, each row with a picture of what it holds; Tools is a real menu in the bar"
+      "title": "Score editor, phone",
+      "is_interactive": true
     },
     "Laptop.dc.html": {
-      "x": 530,
-      "y": 4657,
+      "x": 0,
+      "y": 2359,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: Practice. Up next across the top, then each group as four cards with a large picture"
+      "title": "Practice, laptop",
+      "is_interactive": true
     },
-    "Chords.dc.html": {
-      "x": 0,
-      "y": 6076,
+    "Main.dc.html": {
+      "x": 2223,
+      "y": 2738,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: Chords. The chord first (its name, how it is written, its notes, on the staff); Root, Chord and Voicing as pickers; Inversion and Hands; Fingering by hand; Colour notes to add; Practise this chord in the Player. Play and Arpeggio sit over the keys, which carry no finger numbers"
+      "title": "Practice, phone",
+      "is_interactive": true
     },
     "ChordsLaptop.dc.html": {
-      "x": 530,
-      "y": 6076,
+      "x": 2913,
+      "y": 2359,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: Chords in three columns: what you build on the left, the chord in the middle with Play and Arpeggio, Colour notes and Practise this chord on the right; the keys across the foot; the gear opens Chord settings"
+      "title": "Chords, laptop",
+      "is_interactive": true
     },
-    "Scales.dc.html": {
-      "x": 0,
-      "y": 7495,
+    "Chords.dc.html": {
+      "x": 5136,
+      "y": 2738,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: Scales and keys. Tonic and Scale as pickers; the scale engraved with its fingers (Degrees or Steps); Scale · Chords · Key tabs say what they hold; fingering by hand as the books print it; Play up and down with its tempo over the keys"
+      "title": "Chords, phone",
+      "is_interactive": true
     },
     "ScalesLaptop.dc.html": {
-      "x": 530,
-      "y": 7495,
+      "x": 5826,
+      "y": 2359,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: Scales and keys in three columns: the choices on the left, the scale and its tab in the middle, Play with tempo and Practise this scale on the right"
+      "title": "Scales and keys, laptop",
+      "is_interactive": true
     },
-    "Intervals.dc.html": {
-      "x": 0,
-      "y": 8914,
+    "Scales.dc.html": {
+      "x": 8049,
+      "y": 2738,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: Intervals. From (a root) and Play as; the interval chosen as the page's hero (its name, semitones, the staff, what it sounds like, songs that open with it); Simple · Compound; every interval a row to tap; Play and Play all over the keys"
+      "title": "Scales and keys, phone",
+      "is_interactive": true
     },
     "IntervalsLaptop.dc.html": {
-      "x": 530,
-      "y": 8914,
+      "x": 0,
+      "y": 3918,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: Intervals. The list on the left, the interval chosen on the right with Play, Play all and Train your ear; the keys across the foot"
+      "title": "Intervals, laptop",
+      "is_interactive": true
     },
-    "Progressions.dc.html": {
-      "x": 0,
-      "y": 10333,
+    "Intervals.dc.html": {
+      "x": 2223,
+      "y": 4297,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: Progressions as a library in the app's library shape: search with Sort and filter, place chips (All, Favourites, Recently played, Mine), what the colours mean, styles that fold with counts, every row's numerals coloured by role, a heart; + adds"
+      "title": "Intervals, phone",
+      "is_interactive": true
     },
     "ProgressionsLaptop.dc.html": {
-      "x": 530,
-      "y": 10333,
+      "x": 2913,
+      "y": 3918,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: Progressions with the library tree (places and styles with counts) and a table of name and chords; Add in the bar"
+      "title": "Progressions, laptop",
+      "is_interactive": true
     },
-    "Progression.dc.html": {
-      "x": 0,
-      "y": 11752,
+    "Progressions.dc.html": {
+      "x": 5136,
+      "y": 4297,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: a progression's page. Its style, name and sound; Key, Numerals of, Voicing; the chords as tiles coloured by role with the root's move between them; About, Practise it, More like it; Play with tempo over the keys"
+      "title": "Progressions, phone",
+      "is_interactive": true
     },
     "ProgressionLaptop.dc.html": {
-      "x": 530,
-      "y": 11752,
+      "x": 5826,
+      "y": 3918,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: a progression's page with the chords on the left and About, Practise it and More like it on the right"
+      "title": "A progression, laptop",
+      "is_interactive": true
     },
-    "Accompaniment.dc.html": {
-      "x": 0,
-      "y": 13171,
+    "Progression.dc.html": {
+      "x": 8049,
+      "y": 4297,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: Accompaniment as the Pattern library: search with Sort and filter (Sort by, Level, Texture) and removable chips; place chips for each book; folders that fold (Recently used and Favourites open), Open all; rows with the pattern's roll, hands, level, Listen and the heart; a tap opens the pattern"
+      "title": "A progression, phone",
+      "is_interactive": true
     },
     "AccompanimentLaptop.dc.html": {
-      "x": 530,
-      "y": 13171,
+      "x": 0,
+      "y": 5477,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: Accompaniment with the library on the left and the pattern chosen on the right: its roll, hands, how to play it, Listen, Practise in the Player"
+      "title": "Accompaniment, laptop",
+      "is_interactive": true
     },
-    "ChordPlayer.dc.html": {
-      "x": 0,
-      "y": 14590,
+    "Accompaniment.dc.html": {
+      "x": 2223,
+      "y": 5856,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: the Chord player: the sheet's title in the bar with Undo, its gear and ···; Style, Key and Tempo; sections that move by their grip, repeat × n, bars four to a row (a bar can hold two chords); a tap on a chord opens it (the key's chords, root, chord, length, bass note, Delete with Undo); Play and Loop above the keys, which show the chord sounding"
+      "title": "Accompaniment, phone",
+      "is_interactive": true
+    },
+    "PatternLaptop.dc.html": {
+      "x": 2913,
+      "y": 5477,
+      "w": 2143,
+      "h": 1299,
+      "title": "A pattern, laptop",
+      "is_interactive": true
+    },
+    "Pattern.dc.html": {
+      "x": 5136,
+      "y": 5856,
+      "w": 450,
+      "h": 920,
+      "title": "A pattern, phone",
+      "is_interactive": true
     },
     "ChordPlayerLaptop.dc.html": {
-      "x": 530,
-      "y": 14590,
+      "x": 5826,
+      "y": 5477,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: the Chord player with the sheet on the left and Style, Key, Tempo, Instruments and Chord names on the right; the key's chords below to drag into a bar; a chord opens in a popover; Play and Loop above the keys"
+      "title": "Chord player, laptop",
+      "is_interactive": true
     },
-    "Exercise.dc.html": {
-      "x": 0,
-      "y": 16009,
+    "ChordPlayer.dc.html": {
+      "x": 8049,
+      "y": 5856,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: an exercise's page (Hanon): its book, what it trains, its first bars engraved; Number, Key (root grid and Next key), Hands, Rhythm, Tempo and Target tempo with how near you are; Completed today; Technique; Listen and Start above the keys. The Exercises library is Accompaniment's (row 7), one implementation"
+      "title": "Chord player, phone",
+      "is_interactive": true
     },
     "ExercisesLaptop.dc.html": {
-      "x": 530,
-      "y": 16009,
+      "x": 0,
+      "y": 7036,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: Exercises as the library on the left (place chips by book, folders, the heart) and the exercise chosen on the right, Listen and Start above the keys"
+      "title": "Exercises, laptop",
+      "is_interactive": true
     },
-    "Quiz.dc.html": {
-      "x": 0,
-      "y": 17428,
+    "Exercises.dc.html": {
+      "x": 2223,
+      "y": 7415,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: Quiz: My gaps first, then the trainers by what they ask, each with its best score ringed and its runs; a trainer opens its setup (Drill: Flashcards · Name it · Play it · By ear with ⓘ, Level, Options, Rounds, Timing, Start); a run: Round 3 of 10, the chord on the staff and the keys, four answers, the verdict and Next"
+      "title": "Exercises, phone",
+      "is_interactive": true
+    },
+    "ExerciseLaptop.dc.html": {
+      "x": 2913,
+      "y": 7036,
+      "w": 2143,
+      "h": 1299,
+      "title": "An exercise, laptop",
+      "is_interactive": true
+    },
+    "Exercise.dc.html": {
+      "x": 5136,
+      "y": 7415,
+      "w": 450,
+      "h": 920,
+      "title": "An exercise, phone",
+      "is_interactive": true
     },
     "QuizLaptop.dc.html": {
-      "x": 530,
-      "y": 17428,
+      "x": 5826,
+      "y": 7036,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: Quiz with the trainers on the left and the chosen trainer's setup on the right, Start at its foot"
+      "title": "Quiz, laptop",
+      "is_interactive": true
     },
-    "Metronome.dc.html": {
-      "x": 0,
-      "y": 18847,
+    "Quiz.dc.html": {
+      "x": 8049,
+      "y": 7415,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: Metronome: the tempo large with −10 −1 +1 +10 and its Italian mark, a slider and Tap tempo; the beats as squares, tapped round Accent · Beat · Silent; Time signature, Sound, Subdivision; Speed trainer and Silent bars as pages; one Start"
+      "title": "Quiz, phone",
+      "is_interactive": true
+    },
+    "QuizRunLaptop.dc.html": {
+      "x": 0,
+      "y": 8595,
+      "w": 2143,
+      "h": 1299,
+      "title": "A quiz run, laptop",
+      "is_interactive": true
+    },
+    "QuizRun.dc.html": {
+      "x": 2223,
+      "y": 8974,
+      "w": 450,
+      "h": 920,
+      "title": "A quiz run, phone",
+      "is_interactive": true
     },
     "MetronomeLaptop.dc.html": {
-      "x": 530,
-      "y": 18847,
+      "x": 2913,
+      "y": 8595,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: Metronome, the same, laid out across the screen"
+      "title": "Metronome, laptop",
+      "is_interactive": true
     },
-    "Tuner.dc.html": {
-      "x": 0,
-      "y": 20266,
+    "Metronome.dc.html": {
+      "x": 5136,
+      "y": 8974,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: Tuner: a gauge from −50 to +50 cents, the note large, In tune · Flat · Sharp, cents and Hz; the keys show the note heard; the microphone asked for in place; Reference pitch in its settings"
+      "title": "Metronome, phone",
+      "is_interactive": true
     },
     "TunerLaptop.dc.html": {
-      "x": 530,
-      "y": 20266,
+      "x": 5826,
+      "y": 8595,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: Tuner, the same, laid out across the screen"
+      "title": "Tuner, laptop",
+      "is_interactive": true
     },
-    "ChordFinder.dc.html": {
-      "x": 0,
-      "y": 21685,
+    "Tuner.dc.html": {
+      "x": 8049,
+      "y": 8974,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: Chord finder: Spelled in a key (root grid); the chord named large with Play, in words and as a numeral; its notes with their degrees and which is in the bass; Also read as; the chords played; In these keys; Clear the keys and Open in Chords above the keys; Try a chord when empty"
+      "title": "Tuner, phone",
+      "is_interactive": true
     },
     "ChordFinderLaptop.dc.html": {
-      "x": 530,
-      "y": 21685,
+      "x": 0,
+      "y": 10154,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: Chord finder, the same, laid out across the screen"
+      "title": "Chord finder, laptop",
+      "is_interactive": true
     },
-    "CircleOfFifths.dc.html": {
-      "x": 0,
-      "y": 23104,
+    "ChordFinder.dc.html": {
+      "x": 2223,
+      "y": 10533,
       "w": 450,
       "h": 920,
-      "is_interactive": true,
-      "title": "iPhone 17 Pro: Circle of fifths: the circle with major keys outside, minors inside and each signature; a tap chooses a key and lights its neighbours; the key's signature, relative minor and diatonic chords by role; Open in Scales and keys"
+      "title": "Chord finder, phone",
+      "is_interactive": true
     },
     "CircleOfFifthsLaptop.dc.html": {
-      "x": 530,
-      "y": 23104,
+      "x": 2913,
+      "y": 10154,
       "w": 2143,
       "h": 1299,
-      "is_interactive": true,
-      "title": "MacBook Air: Circle of fifths, the same, laid out across the screen"
+      "title": "Circle of fifths, laptop",
+      "is_interactive": true
+    },
+    "CircleOfFifths.dc.html": {
+      "x": 5136,
+      "y": 10533,
+      "w": 450,
+      "h": 920,
+      "title": "Circle of fifths, phone",
+      "is_interactive": true
     }
   },
   "order": [
-    "Songs.dc.html",
     "SongsLaptop.dc.html",
-    "Song.dc.html",
+    "Songs.dc.html",
     "SongLaptop.dc.html",
-    "Editor.dc.html",
+    "Song.dc.html",
     "EditorLaptop.dc.html",
-    "Main.dc.html",
+    "Editor.dc.html",
     "Laptop.dc.html",
-    "Chords.dc.html",
+    "Main.dc.html",
     "ChordsLaptop.dc.html",
-    "Scales.dc.html",
+    "Chords.dc.html",
     "ScalesLaptop.dc.html",
-    "Intervals.dc.html",
+    "Scales.dc.html",
     "IntervalsLaptop.dc.html",
-    "Progressions.dc.html",
+    "Intervals.dc.html",
     "ProgressionsLaptop.dc.html",
-    "Progression.dc.html",
+    "Progressions.dc.html",
     "ProgressionLaptop.dc.html",
-    "Accompaniment.dc.html",
+    "Progression.dc.html",
     "AccompanimentLaptop.dc.html",
-    "ChordPlayer.dc.html",
+    "Accompaniment.dc.html",
+    "PatternLaptop.dc.html",
+    "Pattern.dc.html",
     "ChordPlayerLaptop.dc.html",
-    "Exercise.dc.html",
+    "ChordPlayer.dc.html",
     "ExercisesLaptop.dc.html",
-    "Quiz.dc.html",
+    "Exercises.dc.html",
+    "ExerciseLaptop.dc.html",
+    "Exercise.dc.html",
     "QuizLaptop.dc.html",
-    "Metronome.dc.html",
+    "Quiz.dc.html",
+    "QuizRunLaptop.dc.html",
+    "QuizRun.dc.html",
     "MetronomeLaptop.dc.html",
-    "Tuner.dc.html",
+    "Metronome.dc.html",
     "TunerLaptop.dc.html",
-    "ChordFinder.dc.html",
+    "Tuner.dc.html",
     "ChordFinderLaptop.dc.html",
-    "CircleOfFifths.dc.html",
-    "CircleOfFifthsLaptop.dc.html"
+    "ChordFinder.dc.html",
+    "CircleOfFifthsLaptop.dc.html",
+    "CircleOfFifths.dc.html"
   ],
   "notes": {
     "songs": {
       "x": 0,
-      "y": -300,
+      "y": 0,
       "text": "Songs",
       "kind": "title1",
-      "maxW": 2673
+      "maxW": 8739
     },
     "practice": {
       "x": 0,
-      "y": 4357,
+      "y": 2059,
       "text": "Practice",
       "kind": "title1",
-      "maxW": 2673
+      "maxW": 8739
     }
   },
   "designSystems": []

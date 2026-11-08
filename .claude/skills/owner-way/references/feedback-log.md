@@ -223,6 +223,10 @@ owner's, typos fixed.
   **Drawn (R39-12, 2026-11-08):** the Metronome, Tuner, Chord finder and Circle of fifths each one instrument on one
   screen, the reading large, their settings behind their own gear. Waiting.
 
+- **Calm everywhere (R40, drawn):** "refactor the practices pages like we refactored the chords pages": every Practice and
+  Songs page is one subject large, one picture, quiet tabs, two or three rows and one floating bar (main change ⌃, one
+  control, Play); libraries are calm lists. Spec `.scratch/r40/plan/calm.md`.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
