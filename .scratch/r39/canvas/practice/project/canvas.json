@@ -105,6 +105,22 @@
    "h": 1299,
    "is_interactive": true,
    "title": "MacBook Air: a progression's page with the chords on the left and About, Practise it and More like it on the right"
+  },
+  "Accompaniment.dc.html": {
+   "x": 0,
+   "y": 8514,
+   "w": 450,
+   "h": 920,
+   "is_interactive": true,
+   "title": "iPhone 17 Pro: Accompaniment as the Pattern library: search with Sort and filter (Sort by, Level, Texture) and removable chips; place chips for each book; folders that fold (Recently used and Favourites open), Open all; rows with the pattern's roll, hands, level, Listen and the heart; a tap opens the pattern"
+  },
+  "AccompanimentLaptop.dc.html": {
+   "x": 530,
+   "y": 8514,
+   "w": 2143,
+   "h": 1299,
+   "is_interactive": true,
+   "title": "MacBook Air: Accompaniment with the library on the left and the pattern chosen on the right: its roll, hands, how to play it, Listen, Practise in the Player"
   }
  },
  "order": [
@@ -119,7 +135,9 @@
   "Progressions.dc.html",
   "ProgressionsLaptop.dc.html",
   "Progression.dc.html",
-  "ProgressionLaptop.dc.html"
+  "ProgressionLaptop.dc.html",
+  "Accompaniment.dc.html",
+  "AccompanimentLaptop.dc.html"
  ],
  "notes": {},
  "designSystems": []

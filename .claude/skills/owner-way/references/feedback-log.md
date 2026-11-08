@@ -205,6 +205,8 @@ owner's, typos fixed.
   fingering by hand, Practise this scale; Play up and down with its tempo over the keys; the bar's four icons gone.
 - **Intervals drawn (R39-7, 2026-11-08):** the interval chosen as the hero (name, staff, sound, songs up and down), From
   and Play as, Simple · Compound, rows to tap, Play and Play all over the keys, Train your ear to the Quiz. Waiting.
+- **Accompaniment drawn (R39-9, 2026-11-08):** the Pattern library itself (books as places, folders, rolls, Listen,
+  heart), a pattern opening in a sheet with its roll, hands and Practise in the Player. Waiting for the owner's word.
 - **Quiz:** one setup and four drills for every trainer; a cadence trainer.
 - **Harmony:** draw the roles and moves on the chords (the Function · Root motion switch changed only letters).
   **Drawn (R39-8, 2026-11-08):** Progressions as a library like Songs; a progression's chords as tiles coloured by role

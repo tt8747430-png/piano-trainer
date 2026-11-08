@@ -1,0 +1,182 @@
+# Accompaniment: the pattern library and a pattern opened, phone and laptop, on the Practice canvas.
+# Reuses chords.py's and progressions.py's helpers. Run: python3 -I accompaniment.py
+G = {}
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/chords.py').read(), G)
+OUT, HEAD, STATUS, SIDE, LAPFRAME_TOP, SH, POP = G['OUT'], G['HEAD'], G['STATUS'], G['SIDE'], G['LAPFRAME_TOP'], G['SH'], G['POP']
+PICK, SEGBAR, LAB, H2, PROW, SROW, RB, BACK, GEAR, KEYS, sheet_phone, pop = (G[k] for k in 'PICK SEGBAR LAB H2 PROW SROW RB BACK GEAR KEYS sheet_phone pop'.split())
+PHONE_FRAME, LAPTOP_FRAME = G['PHONE_FRAME'], G['LAPTOP_FRAME']
+P = None
+
+HEART = '<svg width="20" height="20" viewBox="0 0 24 24" fill="{{FILL}}" stroke="{{STROKE}}" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"></path></svg>'
+MORE = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg>'
+SEARCH = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B6259" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m20 20-4-4"></path></svg>'
+FILT = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M7 12h10M10 17h4"></path></svg>'
+CHEVR = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A8178" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: {{g.rot}}"><path d="m9 6 6 6-6 6"></path></svg>'
+PLAYI = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5Z"></path></svg>'
+
+JS = r'''
+// id, book, group, name, hands, level, texture, feel, roll kind, how
+const PAT = [
+  ['w1', 'ctp', 'The five ways (lesson 3)', '1 · Bass + chords', 'Left: an octave, held · Right: the chord on every beat', 1, 'Block chords', 'Straight', 'block', 'The left hand plays the bass note as an octave and holds it through the bar. The right hand plays the full chord on every beat.'],
+  ['w2', 'ctp', 'The five ways (lesson 3)', '2 · Broken chords', 'Left: an octave, held · Right: rocks in 8ths', 1, 'Broken chords', 'Straight', 'broken', 'The left hand holds the octave. The right hand keeps its chord under the fingers and rocks in 8ths: the upper notes together, then the lowest.'],
+  ['w3', 'ctp', 'The five ways (lesson 3)', '3 · Arpeggio (3rd, then 5th + octave)', 'Left: 1–5–8 · Right: the 3rd, then the 5th and octave', 1, 'Arpeggio', 'Straight', 'arp', 'One arpeggio shared by both hands. The left hand plays the root, the 5th and the octave with fingers 5, 2 and 1.'],
+  ['w4', 'ctp', 'The five ways (lesson 3)', '4 · Arpeggio 1–5–8 · 3–5–8–5–3', 'Both hands: one arpeggio in 8ths, up and back', 2, 'Arpeggio', 'Straight', 'arp2', 'The left hand plays 1–5–8 and the right hand carries on with 3–5–8–5–3, so the arpeggio rises through both hands and comes back.'],
+  ['w5', 'ctp', 'The five ways (lesson 3)', '5 · Bass + chords (dotted bass)', 'Left: octaves, long, short · Right: the chord on every beat', 2, 'Block chords', 'Dotted', 'dotted', 'The right hand plays as in way 1. The left hand plays octaves in a dotted rhythm.'],
+  ['t1', 'ctp', 'Right-hand techniques', '♪♩ Chord, then octave jumps', 'Right: the chord, then its root an octave and two higher', 2, 'Broken chords', 'Dotted', 'jumps', 'Play the chord as a dotted quarter. Then play its root alone: an octave higher as an 8th, two octaves higher as a quarter.'],
+  ['t2', 'ctp', 'Right-hand techniques', '♪♪♪♪ Arpeggio up two octaves', 'Left: a held bass · Right: up the chord two octaves', 2, 'Arpeggio', 'Straight', 'arpup', 'The right hand plays the arpeggio 1–3–5–8 with fingers 1–2–3–5, then the same an octave higher.'],
+  ['t3', 'ctp', 'Right-hand techniques', '♬ Runs down to the root', 'Right: the 2nd and 5th, then 3–2–1 down', 3, 'Runs', 'Straight', 'rundown', 'Play the 2nd and the 5th together with fingers 2 and 5. Then run down the 3rd, the 2nd and the root.'],
+  ['t4', 'ctp', 'Right-hand techniques', '♫ Run up 1–2–3–5', 'Right: 1–2–3–5 in 8ths, two octaves', 2, 'Runs', 'Straight', 'runup', 'Play the root, the 2nd, the 3rd and the 5th with fingers 1, 2, 3 and 5. Then play the same four notes an octave higher.'],
+  ['t11', 'ctp', 'Right-hand techniques', 'Rising sixths', 'Left: 1–5–8–5 · Right: sixths in 8ths, climbing', 3, 'Runs', 'Straight', 'sixths', 'The right hand plays sixths in 8ths, moving up the scale from the 3rd under the root.'],
+  ['o1', 'ctp2', 'Octaves and chords (level 2)', 'Octaves', 'Left: a held octave · Right: 1–2–3–5 in octaves', 3, 'Octaves', 'Straight', 'octaves', 'Play octaves in 8ths with a loose wrist. On black keys the top note is usually played with the 4th finger.'],
+  ['o2', 'ctp2', 'Octaves and chords (level 2)', '5.2 · Falling line 1–7–♭7–6', 'Right: the 3rd and 5th held, the root falling', 2, 'Block chords', 'Straight', 'cliche', 'The 3rd and the 5th stay. Under them the root falls a semitone at a time, one note per beat: 1, 7, ♭7, 6.'],
+  ['g1', 'styles', 'Rhythm styles', 'Ballad', 'Left: root and 5th · Right: chords on 2 and 4', 1, 'Block chords', 'Straight', 'ballad', 'A soft root and 5th in the left hand, the chord answering on the backbeat.'],
+  ['g2', 'styles', 'Rhythm styles', 'Waltz', 'Left: the root on 1 · Right: the chord on 2 and 3', 1, 'Block chords', 'Straight', 'waltz', 'Oom-pah-pah: the bass on the downbeat, the chord twice after it.'],
+  ['g3', 'styles', 'Rhythm styles', 'Swing comping', 'Left: 1 and 5 · Right: short chords off the beat', 3, 'Block chords', 'Swing', 'swing', 'Short chords on the “and” of 2 and on 4, over a two-feel bass.']
+];
+const BOOKS = [['ctp', 'Called to Play'], ['ctp2', 'Called to Play 2'], ['styles', 'Rhythm styles']];
+// a roll: [start in 8ths, pitch 0..24 from C3, length in 8ths, hand]
+const C = { r: 0, t: 4, f: 7, o: 12, t2: 16, f2: 19, o2: 24 };
+function roll(kind) {
+  const L = (s, p, l) => [s, p, l, 'l'], R = (s, p, l) => [s, p, l, 'r'];
+  const chord = (s, l) => [R(s, 12 + 4, l), R(s, 12 + 7, l), R(s, 24, l)];
+  switch (kind) {
+    case 'block': return [L(0, 0, 8), L(0, 12, 8)].concat(chord(0, 2), chord(2, 2), chord(4, 2), chord(6, 2));
+    case 'broken': return [L(0, 0, 8), L(0, 12, 8)].concat(...[0, 2, 4, 6].map((s) => [R(s, 19, 1), R(s, 24, 1), R(s + 1, 16, 1)]));
+    case 'arp': return [L(0, 0, 2), L(2, 7, 2), L(4, 12, 4), R(4, 16, 4), R(6, 19, 2), R(6, 24, 2)];
+    case 'arp2': return [L(0, 0, 1), L(1, 7, 1), L(2, 12, 1), R(3, 16, 1), R(4, 19, 1), R(5, 24, 1), R(6, 19, 1), R(7, 16, 1)];
+    case 'dotted': return [L(0, 0, 3), L(0, 12, 3), L(3, 0, 1), L(3, 12, 1), L(4, 0, 3), L(4, 12, 3), L(7, 0, 1), L(7, 12, 1)].concat(chord(0, 2), chord(2, 2), chord(4, 2), chord(6, 2));
+    case 'jumps': return [L(0, 0, 8)].concat(chord(0, 3), [R(3, 12, 1), R(4, 24, 2)]);
+    case 'arpup': return [L(0, 0, 8)].concat([12, 16, 19, 24, 16 + 12, 19 + 12, 24, 19].slice(0, 8).map((p, i) => R(i, Math.min(p, 24), 1)));
+    case 'rundown': return [L(0, 0, 8), R(0, 14, 2), R(0, 19, 2), R(2, 16, 1), R(3, 14, 1), R(4, 12, 4)];
+    case 'runup': return [L(0, 0, 8)].concat([12, 14, 16, 19, 24, 14 + 12 > 24 ? 24 : 26, 16, 19].map((p, i) => R(i, Math.min(p, 24), 1)));
+    case 'sixths': return [L(0, 0, 2), L(2, 7, 2), L(4, 12, 2), L(6, 7, 2)].concat([[4, 12 + 4], [5, 14 + 3], [7, 19 - 3]].flatMap(([a, b], i) => [R(i * 2 + 1, a + 4, 1), R(i * 2 + 1, b + 4, 1)]));
+    case 'octaves': return [L(0, 0, 8), L(0, 12, 8)].concat([12, 14, 16, 19].flatMap((p, i) => [R(i * 2, p, 2), R(i * 2, Math.min(p + 12, 24), 2)]));
+    case 'cliche': return [L(0, 0, 8)].concat([12, 11, 10, 9].flatMap((p, i) => [R(i * 2, p + 4, 2), R(i * 2, 16, 2), R(i * 2, 19, 2)]).map((n, j) => j % 3 === 0 ? R(n[0], [12, 11, 10, 9][j / 3], 2) : n));
+    case 'ballad': return [L(0, 0, 4), L(4, 7, 4)].concat(chord(2, 2), chord(6, 2));
+    case 'waltz': return [L(0, 0, 2)].concat(chord(2, 2), chord(4, 2));
+    default: return [L(0, 0, 2), L(4, 7, 2)].concat(chord(3, 1), chord(6, 1));
+  }
+}
+function rollSvg(kind, w, h) {
+  const ns = roll(kind);
+  const len = kind === 'waltz' ? 6 : 8;
+  return ns.map(([s, p, l, hand]) => ({ x: (s / len * w + 1).toFixed(1), y: (h - 3 - (p / 24) * (h - 7)).toFixed(1), w: Math.max(2, l / len * w - 2).toFixed(1), c: hand === 'l' ? '#7E6BB8' : '#E8762F' }));
+}
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const set = (o) => this.setState(o);
+    const place = st.place ?? 'all', q = st.q ?? '', hearts = st.hearts ?? ['w2', 'g2'], sheet = st.sheet || null, open = st.open ?? ['recent', 'fav'], listen = st.listen ?? null, sel = st.sel ?? null;
+    const levels = st.levels ?? [], textures = st.textures ?? [], sort = st.sort ?? 'book', menu = st.menu ?? false;
+    const recent = ['w1', 'g2', 't2'];
+    const mine = [['my1', 'mine', 'Mine', 'Sunday', 'Left: walking 8ths · Right: jazz chords off the beat', 2, 'Block chords', 'Swing', 'swing', 'Your own: a walking left hand under offbeat chords.']];
+    const all = PAT.concat(mine);
+    const match = (p) => (!q || p[3].toLowerCase().includes(q.toLowerCase()) || p[4].toLowerCase().includes(q.toLowerCase())) && (!levels.length || levels.includes(p[5])) && (!textures.length || textures.includes(p[6]));
+    const row = (p) => ({ id: p[0], name: p[3], hands: p[4], lv: [1, 2, 3].map((i) => ({ c: i <= p[5] ? '#1A1612' : '#D9D1C6', h: 5 + i * 3 })), lvl: 'Level ' + p[5], roll: rollSvg(p[8], 72, 40), rollL: rollSvg(p[8], 120, 56),
+      heart: hearts.includes(p[0]), hfill: hearts.includes(p[0]) ? '#E8762F' : 'none', hstroke: hearts.includes(p[0]) ? '#E8762F' : '#8A8178',
+      toggle: () => set({ hearts: hearts.includes(p[0]) ? hearts.filter((h) => h !== p[0]) : hearts.concat([p[0]]) }),
+      listening: listen === p[0], lbg: listen === p[0] ? '#1A1612' : '#EFE8DF', lfg: listen === p[0] ? '#FFFFFF' : '#1A1612', llabel: listen === p[0] ? 'Stop' : 'Listen',
+      listen: () => set({ listen: listen === p[0] ? null : p[0] }), open: () => set({ sel: p[0], sheet: null }), on: sel === p[0], rbg: sel === p[0] ? '#FDF1E8' : 'transparent' });
+    const folder = (id, name, items, sub) => { const isOpen = open.includes(id); return { id, name, count: String(items.length), isOpen, rot: isOpen ? 'rotate(90deg)' : 'none', items: isOpen && !sub ? items.map(row) : [], subs: isOpen && sub ? sub : [], hasSubs: !!sub, toggle: () => set({ open: isOpen ? open.filter((o) => o !== id) : open.concat([id]) }) }; };
+    const groupsOf = (b) => [...new Set(PAT.filter((p) => p[1] === b).map((p) => p[2]))];
+    let folders;
+    const only = place !== 'all' ? place : null;
+    const pick = (ids) => ids.map((id) => all.find((p) => p[0] === id)).filter(match);
+    if (q) folders = [folder('res', 'Results', all.filter(match))];
+    else folders = [
+      (!only || only === 'recent') && folder('recent', 'Recently used', pick(recent)),
+      (!only || only === 'fav') && folder('fav', 'Favourites', pick(hearts)),
+      ...BOOKS.filter(([b]) => !only || only === b).map(([b, name]) => { const items = PAT.filter((p) => p[1] === b && match(p)); const subs = groupsOf(b).map((g) => ({ g, items: items.filter((p) => p[2] === g).map(row) })).filter((s) => s.items.length); return folder(b, name, items, subs); }),
+      (!only || only === 'mine') && folder('mine', 'Mine', mine.filter(match))
+    ].filter(Boolean);
+    folders = folders.map((f) => ({ ...f, empty: f.count === '0' }));
+    const places = [['all', 'All'], ['fav', 'Favourites'], ['recent', 'Recently used'], ['ctp', 'Called to Play'], ['ctp2', 'Called to Play 2'], ['styles', 'Rhythm styles'], ['mine', 'Mine']].map(([id, l]) => ({ l, on: place === id, bg: place === id ? '#1A1612' : '#FFFFFF', fg: place === id ? '#FFFFFF' : '#1A1612', sh: place === id ? 'none' : '0 0 0 1px #E2DACF', pick: () => set({ place: id }) }));
+    const nF = levels.length + textures.length + (sort !== 'book' ? 1 : 0);
+    const removable = levels.map((l) => ({ l: 'Level ' + l, x: () => set({ levels: levels.filter((v) => v !== l) }) })).concat(textures.map((t) => ({ l: t, x: () => set({ textures: textures.filter((v) => v !== t) }) })));
+    const selP = all.find((p) => p[0] === sel);
+    const allOpen = ['recent', 'fav', 'ctp', 'ctp2', 'styles', 'mine'].every((i) => open.includes(i));
+    return {
+      SH, places, folders, q, setQ: (e) => set({ q: e.target.value }),
+      nFilt: String(nF), hasFilt: nF > 0, removable, hasRemovable: removable.length > 0,
+      filtOn: sheet === 'filter', openFilt: () => set({ sheet: 'filter', menu: false }), closeAll: () => set({ sheet: null, menu: false }),
+      addOn: sheet === 'add', openAdd: () => set({ sheet: sheet === 'add' ? null : 'add', menu: false }), menuOn: menu, toggleMenu: () => set({ menu: !menu }),
+      foldLabel: allOpen ? 'Close all' : 'Open all', foldAll: () => set({ open: allOpen ? [] : ['recent', 'fav', 'ctp', 'ctp2', 'styles', 'mine'] }),
+      sorts: [['book', 'As in the book'], ['name', 'Name'], ['level', 'Level']].map(([id, l]) => ({ l, mark: sort === id ? '✓' : '', pick: () => set({ sort: id }) })),
+      lvChips: [1, 2, 3].map((l) => ({ l: 'Level ' + l + ' · ' + PAT.filter((p) => p[5] === l).length, bg: levels.includes(l) ? '#1A1612' : '#FFFFFF', fg: levels.includes(l) ? '#FFFFFF' : '#1A1612', pick: () => set({ levels: levels.includes(l) ? levels.filter((v) => v !== l) : levels.concat([l]) }) })),
+      txChips: ['Block chords', 'Broken chords', 'Arpeggio', 'Runs', 'Octaves'].map((t) => ({ l: t + ' · ' + PAT.filter((p) => p[6] === t).length, bg: textures.includes(t) ? '#1A1612' : '#FFFFFF', fg: textures.includes(t) ? '#FFFFFF' : '#1A1612', pick: () => set({ textures: textures.includes(t) ? textures.filter((v) => v !== t) : textures.concat([t]) }) })),
+      showN: 'Show ' + all.filter(match).length, reset: () => set({ levels: [], textures: [], sort: 'book' }),
+      selOn: !!selP, selOff: !selP, closeSel: () => set({ sel: null }),
+      sName: selP ? selP[3] : '', sBook: selP ? (BOOKS.find((b) => b[0] === selP[1]) || [0, 'Mine'])[1] + ' · ' + selP[2] : '', sHands: selP ? selP[4].split(' · ') : [], sHow: selP ? selP[9] : '', sMeta: selP ? 'Level ' + selP[5] + ' · ' + selP[6] + ' · ' + selP[7] : '',
+      sRoll: selP ? rollSvg(selP[8], 320, 110) : [], sRollL: selP ? rollSvg(selP[8], 420, 130) : [],
+      sListen: selP && listen === selP[0], sLabel: selP && listen === selP[0] ? 'Stop' : 'Listen', sToggle: () => set({ listen: listen === (selP && selP[0]) ? null : selP && selP[0] })
+    };
+  }
+}
+'''
+
+ROLLSVG = lambda lst, w, h: f"""<svg viewBox="0 0 {w} {h}" width="{w}" height="{h}" aria-hidden="true" style="flex: none; border-radius: 8px; background: #FBF8F3; box-shadow: inset 0 0 0 1px #EFE8DF"><path d="M{w/4} 0V{h}M{w/2} 0V{h}M{3*w/4} 0V{h}" stroke="#EFE8DF"></path><sc-for list="{{{{{lst}}}}}" as="n" hint-placeholder-count="8"><rect x="{{{{n.x}}}}" y="{{{{n.y}}}}" width="{{{{n.w}}}}" height="3.4" rx="1.4" fill="{{{{n.c}}}}"></rect></sc-for></svg>"""
+LV = """<span aria-label="{{r.lvl}}" style="display: inline-flex; align-items: flex-end; gap: 2px; height: 14px"><sc-for list="{{r.lv}}" as="b" hint-placeholder-count="3"><span style="width: 3px; height: {{b.h}}px; border-radius: 2px; background: {{b.c}}"></span></sc-for></span>"""
+ROW = f"""<div style="display: flex; align-items: center; gap: 10px; padding: 10px 4px 10px 12px; background: {{{{r.rbg}}}}; box-shadow: inset 0 -1px 0 #F1EBE3"><button type="button" onClick="{{{{r.open}}}}" style="flex: 1; min-width: 0; border: 0; background: transparent; padding: 0; display: flex; align-items: center; gap: 12px; color: #1A1612; text-align: left">{ROLLSVG('r.roll', 72, 40)}<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="font-size: 15px; font-weight: 600; line-height: 1.25">{{{{r.name}}}}</span><span style="font-size: 12.5px; color: #6B6259; line-height: 1.3">{{{{r.hands}}}}</span>{LV}</span></button><button type="button" aria-pressed="{{{{r.listening}}}}" onClick="{{{{r.listen}}}}" aria-label="{{{{r.llabel}}}}" style="flex: none; width: 40px; height: 40px; border: 0; border-radius: 9999px; background: {{{{r.lbg}}}}; color: {{{{r.lfg}}}}; display: flex; align-items: center; justify-content: center">{PLAYI}</button><button type="button" aria-label="Favourite" aria-pressed="{{{{r.heart}}}}" onClick="{{{{r.toggle}}}}" style="flex: none; width: 40px; height: 44px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center">{HEART.replace('{{FILL}}', '{{r.hfill}}').replace('{{STROKE}}', '{{r.hstroke}}')}</button></div>"""
+FOLDERS = f"""<div style="border-radius: 16px; background: #FFFFFF; box-shadow: {SH}; overflow: hidden"><sc-for list="{{{{folders}}}}" as="g" hint-placeholder-count="6"><button type="button" aria-expanded="{{{{g.isOpen}}}}" onClick="{{{{g.toggle}}}}" style="width: 100%; height: 50px; border: 0; background: #FBF8F3; box-shadow: inset 0 -1px 0 #F1EBE3; display: flex; align-items: center; gap: 10px; padding: 0 14px; color: #1A1612; text-align: left">{CHEVR}<span style="flex: 1; font-size: 16px; font-weight: 700">{{{{g.name}}}}</span><span style="font-size: 14px; color: #6B6259; font-variant-numeric: tabular-nums">{{{{g.count}}}}</span></button><sc-for list="{{{{g.items}}}}" as="r" hint-placeholder-count="2">{ROW}</sc-for><sc-for list="{{{{g.subs}}}}" as="s" hint-placeholder-count="0"><div style="padding: 10px 14px 4px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6B6259">{{{{s.g}}}}</div><sc-for list="{{{{s.items}}}}" as="r" hint-placeholder-count="2">{ROW}</sc-for></sc-for></sc-for></div>"""
+SEARCHROW = f"""<div style="display: flex; gap: 8px"><label style="flex: 1; min-width: 0; height: 46px; border-radius: 12px; background: #FFFFFF; box-shadow: {SH}; display: flex; align-items: center; gap: 8px; padding: 0 12px">{SEARCH}<input value="{{{{q}}}}" onInput="{{{{setQ}}}}" placeholder="Search accompaniment" aria-label="Search accompaniment" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 16px; color: #1A1612"></label><button type="button" aria-label="Sort and filter" onClick="{{{{openFilt}}}}" style="position: relative; flex: none; width: 46px; height: 46px; border: 0; border-radius: 12px; background: #FFFFFF; box-shadow: {SH}; color: #1A1612; display: flex; align-items: center; justify-content: center">{FILT}<sc-if value="{{{{hasFilt}}}}" hint-placeholder-val="{{{{false}}}}"><span style="position: absolute; top: -5px; right: -5px; min-width: 18px; height: 18px; border-radius: 9999px; background: #E8762F; color: #FFFFFF; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{nFilt}}}}</span></sc-if></button></div>"""
+PLACES = """<div class="nos" role="radiogroup" aria-label="Show" style="display: flex; gap: 6px; overflow-x: auto; margin: 0 -16px; padding: 0 16px"><sc-for list="{{places}}" as="p" hint-placeholder-count="5"><button type="button" role="radio" aria-checked="{{p.on}}" onClick="{{p.pick}}" style="flex: none; height: 36px; padding: 0 14px; border: 0; border-radius: 9999px; background: {{p.bg}}; color: {{p.fg}}; box-shadow: {{p.sh}}; font-size: 15px; font-weight: 600; white-space: nowrap">{{p.l}}</button></sc-for></div>"""
+CHIPS = """<sc-if value="{{hasRemovable}}" hint-placeholder-val="{{false}}"><div style="display: flex; flex-wrap: wrap; gap: 6px"><sc-for list="{{removable}}" as="c" hint-placeholder-count="1"><button type="button" onClick="{{c.x}}" aria-label="Remove {{c.l}}" style="height: 32px; padding: 0 8px 0 12px; border: 0; border-radius: 9999px; background: #1A1612; color: #FFFFFF; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600">{{c.l}}<span aria-hidden="true" style="font-size: 16px">×</span></button></sc-for></div></sc-if>"""
+FOLDROW = """<div style="display: flex; justify-content: flex-end; margin-top: -4px"><button type="button" onClick="{{foldAll}}" style="height: 32px; border: 0; background: transparent; color: #6B6259; font-size: 14px; font-weight: 600">{{foldLabel}}</button></div>"""
+def CH(lst):
+    return f"""<div style="display: flex; gap: 8px; flex-wrap: wrap"><sc-for list="{{{{{lst}}}}}" as="k" hint-placeholder-count="3"><button type="button" onClick="{{{{k.pick}}}}" style="height: 40px; padding: 0 14px; border: 0; border-radius: 9999px; background: {{{{k.bg}}}}; color: {{{{k.fg}}}}; box-shadow: 0 0 0 1px #E2DACF; font-size: 15px; font-weight: 600">{{{{k.l}}}}</button></sc-for></div>"""
+FILTBODY = f"""<div style="display: flex; flex-direction: column; gap: 4px">{LAB('Sort by')}<sc-for list="{{{{sorts}}}}" as="s" hint-placeholder-count="3"><button type="button" onClick="{{{{s.pick}}}}" style="height: 46px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; padding: 0 8px; font-size: 16px; color: #1A1612; text-align: left"><span style="flex: 1">{{{{s.l}}}}</span><span style="color: #E8762F; font-weight: 700">{{{{s.mark}}}}</span></button></sc-for></div><div style="display: flex; flex-direction: column; gap: 8px">{LAB('Level')}{CH('lvChips')}</div><div style="display: flex; flex-direction: column; gap: 8px">{LAB('Texture')}{CH('txChips')}</div><div style="display: flex; gap: 10px; padding-top: 6px"><button type="button" onClick="{{{{reset}}}}" style="flex: 1; height: 48px; border: 0; border-radius: 12px; background: #EFE8DF; font-size: 16px; font-weight: 600; color: #1A1612">Reset</button><button type="button" onClick="{{{{closeAll}}}}" style="flex: 2; height: 48px; border: 0; border-radius: 12px; background: #1A1612; color: #FFFFFF; font-size: 16px; font-weight: 700">{{{{showN}}}}</button></div>"""
+ADDBODY = f"""<div style="border-radius: 14px; background: #FFFFFF; box-shadow: {SH}; overflow: hidden">{PROW('New pattern', 'Choose a left hand and a right hand')}{PROW('New folder', 'Arrange your patterns your way', True)}</div>"""
+BAR = f"""<button type="button" aria-label="Back to Practice" style="{RB}">{BACK}</button><h1 style="flex: 1; margin: 0; font-size: 20px; font-weight: 700">Accompaniment</h1><button type="button" aria-label="More" onClick="{{{{toggleMenu}}}}" style="{RB}">{MORE}</button>"""
+MENUBODY = """<sc-for list="{{['Select', 'Arrange', 'Hidden patterns']}}" as="m" hint-placeholder-count="3"><button type="button" style="height: 44px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; padding: 0 12px; font-size: 16px; color: #1A1612; text-align: left">{{m}}</button></sc-for>"""
+FAB = """<button type="button" aria-label="Add a pattern" onClick="{{openAdd}}" style="position: absolute; right: 20px; bottom: 34px; z-index: 50; width: 58px; height: 58px; border: 0; border-radius: 9999px; background: #1A1612; color: #FFFFFF; box-shadow: 0 8px 20px -6px rgba(26,22,18,0.45); display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>"""
+DETAIL = lambda rl, rw, rh: f"""<div style="display: flex; flex-direction: column; gap: 14px"><div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; font-weight: 700; letter-spacing: 0.04em; color: #6B6259">{{{{sBook}}}}</span><h2 style="margin: 0; font-size: 24px; font-weight: 700; line-height: 1.15; text-wrap: balance">{{{{sName}}}}</h2><span style="font-size: 14px; color: #4A433C">{{{{sMeta}}}}</span></div>{ROLLSVG(rl, rw, rh).replace('flex: none;', 'flex: none; max-width: 100%;')}<div style="display: flex; gap: 14px; font-size: 13px; color: #4A433C"><span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 14px; height: 4px; border-radius: 2px; background: #7E6BB8"></span>Left hand</span><span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 14px; height: 4px; border-radius: 2px; background: #E8762F"></span>Right hand</span></div><div style="border-radius: 14px; background: #FFFFFF; box-shadow: {SH}; padding: 4px 14px"><sc-for list="{{{{sHands}}}}" as="h" hint-placeholder-count="2"><div style="min-height: 40px; display: flex; align-items: center; font-size: 15px; box-shadow: inset 0 -1px 0 #F1EBE3">{{{{h}}}}</div></sc-for></div><p style="margin: 0; font-size: 15px; line-height: 1.5; color: #4A433C">{{{{sHow}}}}</p><div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px"><button type="button" aria-pressed="{{{{sListen}}}}" onClick="{{{{sToggle}}}}" style="height: 48px; border: 0; border-radius: 12px; background: #FFFFFF; box-shadow: 0 0 0 1px #E2DACF; color: #1A1612; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 16px; font-weight: 600">{PLAYI}{{{{sLabel}}}}</button><button type="button" style="height: 48px; border: 0; border-radius: 12px; background: #1A1612; color: #FFFFFF; font-size: 16px; font-weight: 700">Practise in the Player</button></div><div style="border-radius: 14px; background: #FFFFFF; box-shadow: {SH}; overflow: hidden">{PROW('Over a progression', 'Axis of Awesome in C · change it in the Player')}{PROW('In a song', 'Amazing Grace, with this pattern under its chords', True)}</div></div>"""
+
+phone = HEAD % 'Accompaniment, phone' + f"""<div style="width: 450px; height: 920px; position: relative; font-family: 'Instrument Sans', system-ui, sans-serif">
+<div style="position: absolute; left: 24px; top: 23px; width: 402px; height: 874px; overflow: hidden; border-radius: 62px; background: #F7F3EE; color: #1A1612; display: flex; flex-direction: column">
+<div style="flex: none; height: 54px; position: relative">{STATUS}</div>
+<header style="flex: none; height: 52px; display: flex; align-items: center; gap: 10px; padding: 0 12px">{BAR}</header>
+<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 6px 16px 110px; display: flex; flex-direction: column; gap: 12px">{SEARCHROW}{PLACES}{CHIPS}{FOLDROW}{FOLDERS}</main>
+{FAB}
+<div aria-hidden="true" style="position: absolute; left: 134px; bottom: 8px; width: 134px; height: 5px; border-radius: 9999px; background: #1A1612; z-index: 90"></div>
+{sheet_phone('filtOn', 'Sort and filter', FILTBODY)}
+{sheet_phone('addOn', 'Add', ADDBODY)}
+<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSel}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(26,22,18,0.32)"></div><section role="dialog" aria-label="Pattern" class="nos" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 760px; overflow-y: auto; border-radius: 22px 22px 0 0; background: #F7F3EE; padding: 8px 16px 34px"><div aria-hidden="true" style="width: 36px; height: 5px; margin: 0 auto 10px; border-radius: 9999px; background: #D9D1C6"></div>{DETAIL('sRoll', 320, 110)}</section></sc-if>
+<sc-if value="{{{{menuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeAll}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="menu" style="position: absolute; right: 12px; top: 104px; z-index: 61; width: 230px; border-radius: 14px; background: #FFFFFF; padding: 6px; box-shadow: {POP}; display: flex; flex-direction: column">{MENUBODY}</div></sc-if>
+</div>
+<img src="{PHONE_FRAME}" alt="" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 450px; height: 920px; pointer-events: none; z-index: 100">
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{{"$preview":{{"width":450,"height":920}}}}'>
+const SH = '{SH}';
+{JS}
+</script>
+</body>
+</html>
+"""
+open(OUT + 'Accompaniment.dc.html', 'w').write(phone)
+
+laptop = HEAD % 'Accompaniment, laptop' + LAPFRAME_TOP + f"""<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: #F7F3EE; color: #1A1612; display: grid; grid-template-columns: 248px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr)">
+{SIDE}
+<div style="position: relative; min-width: 0; display: flex; flex-direction: column">
+<header style="flex: none; height: 72px; display: flex; align-items: center; gap: 12px; padding: 0 40px">{BAR.replace('<h1 style="flex: 1;', '<h1 style="flex: none;')}<div style="flex: 1"></div><button type="button" onClick="{{{{openAdd}}}}" style="height: 44px; padding: 0 18px; border: 0; border-radius: 9999px; background: #1A1612; color: #FFFFFF; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add</button></header>
+<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 460px; grid-template-rows: minmax(0, 1fr); gap: 32px; padding: 0 40px">
+<main class="nos" style="min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-bottom: 30px">{SEARCHROW}{PLACES.replace('margin: 0 -16px; padding: 0 16px', 'margin: 0; flex-wrap: wrap')}{CHIPS}{FOLDROW}{FOLDERS}</main>
+<aside class="nos" style="min-height: 0; overflow-y: auto; padding-bottom: 30px"><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{true}}}}">{DETAIL('sRollL', 420, 130)}</sc-if><sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{false}}}}"><div style="margin-top: 60px; border-radius: 16px; box-shadow: inset 0 0 0 1.5px #E2DACF; padding: 28px; display: flex; flex-direction: column; gap: 8px; text-align: center; align-items: center"><span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 26px">Choose a pattern</span><span style="font-size: 15px; color: #6B6259">Its hands, how to play it, and where to practise it show here. Listen plays it from the row.</span></div></sc-if></aside>
+</div>
+<sc-if value="{{{{filtOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeAll}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="Sort and filter" style="position: absolute; left: 640px; top: 128px; z-index: 61; width: 380px; box-sizing: border-box; border-radius: 16px; background: #FFFFFF; padding: 14px; box-shadow: {POP}; display: flex; flex-direction: column; gap: 12px">{FILTBODY}</div></sc-if>
+<sc-if value="{{{{addOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeAll}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="Add" style="position: absolute; right: 40px; top: 74px; z-index: 61; width: 360px; box-sizing: border-box; border-radius: 16px; background: #F7F3EE; padding: 12px; box-shadow: {POP}">{ADDBODY}</div></sc-if>
+<sc-if value="{{{{menuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeAll}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="menu" style="position: absolute; left: 260px; top: 64px; z-index: 61; width: 230px; border-radius: 14px; background: #FFFFFF; padding: 6px; box-shadow: {POP}; display: flex; flex-direction: column">{MENUBODY}</div></sc-if>
+</div>
+</div>
+<img src="{LAPTOP_FRAME}" alt="" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 2143px; height: 1299px; pointer-events: none">
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{{"$preview":{{"width":2143,"height":1299}}}}'>
+const SH = '{SH}';
+{JS}
+</script>
+</body>
+</html>
+"""
+open(OUT + 'AccompanimentLaptop.dc.html', 'w').write(laptop)
+print('accompaniment ok')
