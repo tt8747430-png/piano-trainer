@@ -220,6 +220,8 @@ owner's, typos fixed.
 - **Metronome:** BPM large with −10 −1 +1 +10, a slider, Tap tempo, sound and meter, one Play, beats as squares; beats you set
   (accent, normal, silent), any meter, subdivisions, recorded sounds; one engine for the page, the Player and the quick
   metronome.
+  **Drawn (R39-12, 2026-11-08):** the Metronome, Tuner, Chord finder and Circle of fifths each one instrument on one
+  screen, the reading large, their settings behind their own gear. Waiting.
 
 ## Sounds
 

@@ -169,6 +169,70 @@
       "h": 1299,
       "is_interactive": true,
       "title": "MacBook Air: Quiz with the trainers on the left and the chosen trainer's setup on the right, Start at its foot"
+    },
+    "Metronome.dc.html": {
+      "x": 0,
+      "y": 14190,
+      "w": 450,
+      "h": 920,
+      "is_interactive": true,
+      "title": "iPhone 17 Pro: Metronome: the tempo large with −10 −1 +1 +10 and its Italian mark, a slider and Tap tempo; the beats as squares, tapped round Accent · Beat · Silent; Time signature, Sound, Subdivision; Speed trainer and Silent bars as pages; one Start"
+    },
+    "MetronomeLaptop.dc.html": {
+      "x": 530,
+      "y": 14190,
+      "w": 2143,
+      "h": 1299,
+      "is_interactive": true,
+      "title": "MacBook Air: Metronome, the same, laid out across the screen"
+    },
+    "Tuner.dc.html": {
+      "x": 0,
+      "y": 15609,
+      "w": 450,
+      "h": 920,
+      "is_interactive": true,
+      "title": "iPhone 17 Pro: Tuner: a gauge from −50 to +50 cents, the note large, In tune · Flat · Sharp, cents and Hz; the keys show the note heard; the microphone asked for in place; Reference pitch in its settings"
+    },
+    "TunerLaptop.dc.html": {
+      "x": 530,
+      "y": 15609,
+      "w": 2143,
+      "h": 1299,
+      "is_interactive": true,
+      "title": "MacBook Air: Tuner, the same, laid out across the screen"
+    },
+    "ChordFinder.dc.html": {
+      "x": 0,
+      "y": 17028,
+      "w": 450,
+      "h": 920,
+      "is_interactive": true,
+      "title": "iPhone 17 Pro: Chord finder: Spelled in a key (root grid); the chord named large with Play, in words and as a numeral; its notes with their degrees and which is in the bass; Also read as; the chords played; In these keys; Clear the keys and Open in Chords above the keys; Try a chord when empty"
+    },
+    "ChordFinderLaptop.dc.html": {
+      "x": 530,
+      "y": 17028,
+      "w": 2143,
+      "h": 1299,
+      "is_interactive": true,
+      "title": "MacBook Air: Chord finder, the same, laid out across the screen"
+    },
+    "CircleOfFifths.dc.html": {
+      "x": 0,
+      "y": 18447,
+      "w": 450,
+      "h": 920,
+      "is_interactive": true,
+      "title": "iPhone 17 Pro: Circle of fifths: the circle with major keys outside, minors inside and each signature; a tap chooses a key and lights its neighbours; the key's signature, relative minor and diatonic chords by role; Open in Scales and keys"
+    },
+    "CircleOfFifthsLaptop.dc.html": {
+      "x": 530,
+      "y": 18447,
+      "w": 2143,
+      "h": 1299,
+      "is_interactive": true,
+      "title": "MacBook Air: Circle of fifths, the same, laid out across the screen"
     }
   },
   "order": [
@@ -191,7 +255,15 @@
     "Exercise.dc.html",
     "ExercisesLaptop.dc.html",
     "Quiz.dc.html",
-    "QuizLaptop.dc.html"
+    "QuizLaptop.dc.html",
+    "Metronome.dc.html",
+    "MetronomeLaptop.dc.html",
+    "Tuner.dc.html",
+    "TunerLaptop.dc.html",
+    "ChordFinder.dc.html",
+    "ChordFinderLaptop.dc.html",
+    "CircleOfFifths.dc.html",
+    "CircleOfFifthsLaptop.dc.html"
   ],
   "notes": {},
   "designSystems": []
