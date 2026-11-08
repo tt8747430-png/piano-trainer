@@ -5,6 +5,22 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v35: fingering settings; the numbers beside the notes, per inversion.** Owner: "i want fingering settings, and
+  research more and look at the examples where the fingering should be".
+  - Reference: Vita Piano's chord pages (`piano-data/web-references/new_apps/The D Major Chord …webarchive`;
+    drawing `ref-vita-piano-d-major.png`). Each inversion has its own chart: the grand staff with the right hand's
+    chord on the treble and the same chord an octave lower in the left hand on the bass, a finger number beside each
+    note to the right of the chord; the keys carry the numbers too. Its table: root RH 1 3 5 / LH 5 3 1; 1st inversion
+    RH 1 2 5 / LH 5 3 1; 2nd inversion RH 1 3 5 / LH 5 2 1. Chordify, Journey's chord builder and Ultimate Piano show no
+    chord fingering (Ultimate Piano's numbers under the keys are scale degrees).
+  - **Fingering** is a group in the Keyboard sheet: **Show fingering** (on), **Hand** Right · Left · Both (Right),
+    **On the keys** (off). Both plays the chord in both hands, an octave apart, each hand on its own staff.
+  - On the staff each number stands beside its note, right of the chord. Triads take Vita Piano's table; four-note
+    chords put adjacent fingers on the 2nd (Cmaj7/E right hand 1 2 4 5); five notes 1 2 3 4 5.
+  - **On the keys** puts the number on the key in place of its name. The owner's earlier rule "No finger numbers on or
+    under keys" stands as the default (off); this switch is the owner's to keep or remove.
+  - (v33-v34's "stacked above the chord" and "no settings" are replaced by this.)
+
 - **v34: checked in the canvas's own runtime.** Owner: "the settings arent working and the fingering still doesn't
   work and where are its settings". Two faults the local renderer hid:
   - A value inside SVG `<text>` is drawn by the canvas as an HTML span, which SVG does not show: the finger numbers,
@@ -223,3 +239,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: no gear, Share or More; a Keyboard button; Bass in the left hand inside Voicing; fingering on the staff (v32).
 - 2026-11-08: the clef choice and Bass in the left hand go; fingering stacked as engraved (v33).
 - 2026-11-08: fingering, accidentals, Show the keyboard and the circle's names fixed in the real runtime (v34).
+- 2026-11-08: Fingering settings (Show, Hand, On the keys); numbers beside the notes; fingering by inversion (v35).

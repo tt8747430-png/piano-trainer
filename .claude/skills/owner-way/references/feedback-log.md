@@ -277,6 +277,9 @@ owner's, typos fixed.
 - **Test a canvas in its own runtime, not a look-alike (R42, v34):** "the settings arent working and the fingering
   still doesn't work". A local renderer showed both working; the canvas did not. Tap every control in
   `.scratch/r39/canvas/realrt.mjs` before saying it works.
+- **Fingering as printed charts set it (R42, v35):** "look at the examples where the fingering should be". Vita
+  Piano: a number beside each note, right of the chord, the left hand on the bass staff; fingering changes with the
+  inversion. Its settings: Show fingering, Hand Right · Left · Both, On the keys.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

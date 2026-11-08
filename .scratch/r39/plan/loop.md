@@ -70,3 +70,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v32 (2026-11-08):** Chords: gear gone; Keyboard button; Bass in the left hand in Voicing; fingering on the staff.
 **R42 v33 (2026-11-08):** Chords: clef choice and Bass in the left hand gone; fingering stacked as engraved.
 **R42 v34 (2026-11-08):** Chords: fingering, flats and Show the keyboard fixed in the canvas runtime; Circle of fifths names too.
+**R42 v35 (2026-11-08):** Chords: Fingering settings (Show, Hand, On the keys); numbers beside the notes; by inversion (Vita Piano).
