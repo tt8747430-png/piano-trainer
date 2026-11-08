@@ -234,6 +234,9 @@ owner's, typos fixed.
 - **A practice page can take the Player's shape (R42, v16):** "refactor the chords page from practice in the style of
   the songs player": Back · views · gear at the top, the keys edge to edge, the subject as the title, one floating bar
   (Chord ▴, Arpeggio, ‹ Play ›, Hands, Keyboard), sheets like the Player's. Spec `.scratch/r42/plan/chords.md`.
+- **No setting twice on a page (R42, v17):** "we have now duplicate settings". Before publishing, list every control
+  with its one home; a second control for the same choice goes (Chords: Inversion only on ‹ ›, block or arpeggio one
+  choice, the piano's settings only behind Keyboard).
 
 ## Sounds
 
