@@ -159,7 +159,6 @@ const root = st.root ?? D.root, qi = st.q ?? D.q, q = QS[qi];
 const voicing = VOICINGS.find((v) => v.v === (st.voicing || 'Close')).ok(q) ? 'Close' : (st.voicing || 'Close');
 const invN = Math.min(4, voicing === 'Shell' ? 3 : (voicing.startsWith('Rootless') ? 4 : q.t.length));
 const inv = Math.min(st.inv ?? 0, invN - 1);
-const famTab = st.fam || QS[qi].g;
 const hands = st.hands || 'Both', view = st.view || 'Staff', keys = st.keys || 'Chord', fam = family(q);
 const tens = (st.tens || []).filter((t) => TENS[fam].includes(t));
 const playAs = 'Block', arp = false, dir = 'Up', names = st.names ?? true, treble = st.staff === 'Treble only', auto = true;
@@ -220,14 +219,6 @@ return {
   playChord: () => st.playing === 'chord' ? set({ playing: false }) : play(false), playArp: () => st.playing === 'arp' ? set({ playing: false }) : play(true),
   invSeg: Array.from({ length: invN }, (_, i) => i).map((i) => ({ l: ['Root', '1st', '2nd', '3rd'][i], on: i === inv, bg: i === inv ? C.ink : 'transparent', fg: i === inv ? C.sheet : C.ink, sh: i === inv ? '0 1px 3px rgba(51,41,33,.18)' : 'none', pick: () => change({ inv: i }) })),
   handsSeg: seg(['Both', 'Right', 'Left'], hands, (l) => change({ hands: l })),
-  rootChips: ROOTS.map((l, i) => ({ l, on: i === root, bg: i === root ? C.ink : C.sheet, fg: i === root ? C.sheet : C.ink, pick: () => change({ root: i }) })),
-  famTabs: ['Triads', 'Added notes', 'Sevenths', 'Extended'].map((g) => ({ v: g, on: g === famTab, bg: g === famTab ? C.ink : 'transparent', fg: g === famTab ? C.sheet : C.ink, sh: 'none', fw: 600, pick: () => set({ fam: g }) })),
-  qChips: QS.map((x, i) => [x, i]).filter(([x]) => x.g === famTab).map(([x, i]) => ({ l: ROOTS[root] + x.k, on: i === qi, bg: i === qi ? C.ink : C.sheet, fg: i === qi ? C.sheet : C.ink, pick: () => change({ q: i, tens: [] }) })),
-  invChips: Array.from({ length: invN }, (_, i) => i).map((i) => ({ l: INV[i], on: i === inv, bg: i === inv ? C.ink : C.sheet, fg: i === inv ? C.sheet : C.ink, pick: () => change({ inv: i }) })),
-  vChips: VOICINGS.map((v) => { const why = v.ok(q); const on = v.v === voicing; return { l: v.v, on, op: why ? 0.4 : 1, bg: on ? C.ink : C.sheet, fg: on ? C.sheet : C.ink, pick: () => { if (!why) change({ voicing: v.v }); } }; }),
-  hChips: [['Both', 'Both hands'], ['Right', 'Right hand'], ['Left', 'Left hand']].map(([v, l]) => ({ l, on: v === hands, bg: v === hands ? C.ink : C.sheet, fg: v === hands ? C.sheet : C.ink, pick: () => change({ hands: v }) })),
-  addChips: tenChips.map((x) => ({ l: 'add ' + x.l, n: x.n, on: x.on, bg: x.on ? C.ink : C.sheet, fg: x.on ? C.sheet : C.ink, pick: x.pick })),
-  invName: INV[inv],
   prev: () => change({ inv: (inv + invN - 1) % invN }), next: () => change({ inv: (inv + 1) % invN }),
   closeSheet: () => set({ sheet: null }),
   isChord: sh === 'chord', isList: sh === 'list', isVoicing: sh === 'voicing', isHands: sh === 'hands', isKeys: sh === 'keys', isSet: sh === 'set', isView: sh === 'view', isMore: sh === 'more', isPractise: sh === 'practise',
@@ -323,69 +314,37 @@ B_MORE = BACKHEAD('More', 'backSet') + GROUP(('link', 'Add to a progression', ''
 
 def SHEETS_PHONE(player):
     out = ''
-    for cond, title, body in (('isSet', 'Settings', B_SET(player)),):
+    for cond, title, body in (('isChord', 'Chord', B_CHORD), ('isSet', 'Settings', B_SET(player))):
         out += BSHEET(cond, title, body)
-    for cond, body in (('isPractise', B_PRACTISE(player)), ('isMore', B_MORE)):
+    for cond, body in (('isList', B_LIST), ('isVoicing', B_VOICING), ('isPractise', B_PRACTISE(player)), ('isMore', B_MORE)):
         out += f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" class="nos" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 12px"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>{body}</section></sc-if>'
     return out
 
 def POPS_LAPTOP(player):
     dockpos = 'left: calc(50% - 200px); top: 330px'
     out = ''
-    for cond, title, body, pos in (('isSet', 'Settings', B_SET(player), 'right: 24px; top: 76px'),):
+    for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isSet', 'Settings', B_SET(player), 'right: 24px; top: 76px')):
         out += POPOVER(cond, title, body, pos, 400)
-    for cond, body, pos in (('isPractise', B_PRACTISE(player), 'right: 24px; top: 76px'), ('isMore', B_MORE, 'right: 24px; top: 76px')):
+    for cond, body, pos in (('isList', B_LIST, dockpos), ('isVoicing', B_VOICING, dockpos), ('isPractise', B_PRACTISE(player), 'right: 24px; top: 76px'), ('isMore', B_MORE, 'right: 24px; top: 76px')):
         out += f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" class="nos" style="position: absolute; {pos}; z-index: 61; width: 400px; max-height: 700px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 12px 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">{body}</div></sc-if>'
     return out
 
 def ch_js(D, W, KH, minOct, mini_w):
     return CH_JS + '\n' + js('const D = ' + json.dumps(D) + ';\n' + CH_BODY(D, W, KH, minOct, mini_w))
 
-# ── the page as a chord builder (Journey's Chord Builder, Chordify's chord card): the chord at the top, read and
-# heard; under it each part of the chord as a row of choices, in the order a musician names it (root, chord,
-# inversion, voicing, hands, added notes); then the chord on the staff and its fingering. No bar: Play sits with
-# the chord, as in Chordify's chord card. ──
-def CHIP(lst, extra=''):
-    return (f'<div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{{{{lst}}}}}" as="c" hint-placeholder-count="4">'
-            f'<button type="button" aria-pressed="{{{{c.on}}}}" onClick="{{{{c.pick}}}}" style="height: 40px; padding: 0 16px; border: 0; border-radius: 20px; background: {{{{c.bg}}}}; box-shadow: 0 0 0 1px {LINE}; color: {{{{c.fg}}}}; font: inherit; font-size: 15px; font-weight: 600; opacity: {{{{c.op}}}}{extra}">{{{{c.l}}}}</button></sc-for></div>')
-def ROW(title, body):
-    return f'<section style="display: flex; flex-direction: column; gap: 10px">{CAPS(title)}{body}</section>'
-ROOTROW = (f'<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{rootChips}}}}" as="c" hint-placeholder-count="12">'
-           f'<button type="button" aria-pressed="{{{{c.on}}}}" onClick="{{{{c.pick}}}}" style="min-width: 0; height: 44px; border: 0; border-radius: 22px; background: {{{{c.bg}}}}; box-shadow: 0 0 0 1px {LINE}; color: {{{{c.fg}}}}; font: inherit; font-size: 16px; font-weight: 600">{{{{c.l}}}}</button></sc-for></div>')
-FAMSEG = (f'<nav aria-label="Kind of chord" style="display: flex; height: 40px; box-sizing: border-box; padding: 3px; border-radius: 20px; background: {FILL}"><sc-for list="{{{{famTabs}}}}" as="v" hint-placeholder-count="4">'
-          f'<button type="button" aria-pressed="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="flex: 1 1 0; min-width: 0; height: 34px; padding: 0 4px; border: 0; border-radius: 17px; background: {{{{v.bg}}}}; color: {{{{v.fg}}}}; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{v.v}}}}</button></sc-for></nav>')
-ADDROW = (f'<sc-if value="{{{{hasTens}}}}" hint-placeholder-val="{{{{true}}}}">' + ROW('Add a note', f'<div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{{{addChips}}}}" as="c" hint-placeholder-count="3"><button type="button" aria-pressed="{{{{c.on}}}}" onClick="{{{{c.pick}}}}" style="height: 40px; padding: 0 16px; border: 0; border-radius: 20px; background: {{{{c.bg}}}}; box-shadow: 0 0 0 1px {LINE}; color: {{{{c.fg}}}}; font: inherit; font-size: 15px; font-weight: 600">{{{{c.l}}}} <span style="font-weight: 500; opacity: .7">{{{{c.n}}}}</span></button></sc-for><sc-for list="{{{{avoid}}}}" as="a" hint-placeholder-count="1"><span title="Avoid: it clashes with the chord" style="height: 40px; padding: 0 16px; border-radius: 20px; background: {FILL}; color: {SOFT}; font-size: 15px; font-weight: 600; text-decoration: line-through; display: flex; align-items: center">{{{{a.l}}}} {{{{a.n}}}}</span></sc-for></div>') + '</sc-if>')
-BUILDER = (ROW('Root', ROOTROW) + ROW('Chord', FAMSEG + CHIP('qChips')) + ROW('Inversion', CHIP('invChips')) +
-           ROW('Voicing', CHIP('vChips')) + ROW('Hands', CHIP('hChips')) + ADDROW)
-PLAYI2 = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor"></path></svg>'
-STOPI2 = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>'
-def PLAYS(w):
-    one = lambda label, act, on, off, icon, bg: (f'<button type="button" onClick="{{{{{act}}}}}" aria-pressed="{{{{{on}}}}}" style="flex: 1 1 0; min-width: 0; height: 48px; border: 0; border-radius: 24px; background: {bg}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap">'
-                                                 f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}">{STOPI2}</sc-if><sc-if value="{{{{{off}}}}}" hint-placeholder-val="{{{{true}}}}">{icon}</sc-if>{label}</button>')
-    return f'<div style="{w} display: flex; gap: 10px">' + one('Play', 'playChord', 'chordOn', 'chordOff', PLAYI2, ACCENT) + one('Arpeggio', 'playArp', 'arpOnP', 'arpOffP', ARPI.replace('width="24" height="24"', 'width="20" height="20"'), FILL) + '</div>'
-def RESULT(fs, w):
-    return f'''<div style="flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
-<h1 style="margin: 0; max-width: 100%; font-family: {SERIF}; font-size: {fs}px; line-height: 1.05; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap">{{{{sym}}}}<span style="color: #B07A2A">{{{{slash}}}}</span></h1>
-<p style="margin: 0; font-size: 15px; color: {SOFT}">{{{{full}}}} · {{{{invName}}}}</p>
-<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 4px 0 6px"><sc-for list="{{{{chips}}}}" as="c" hint-placeholder-count="4"><span style="height: 28px; min-width: 28px; box-sizing: border-box; padding: 0 10px; border-radius: 14px; background: {{{{c.c}}}}; color: {INK}; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{c.n}}}}</span></sc-for></div>
-{PLAYS(w)}</div>'''
-CARD = lambda title, body: f'<section style="flex: none; display: flex; flex-direction: column; gap: 10px">{CAPS(title)}<div style="border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; padding: 14px">{body}</div></section>'
-FINGBODY = f'<div style="display: flex; flex-direction: column; gap: 14px"><sc-for list="{{{{fing}}}}" as="h" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 15px; font-weight: 700">{{{{h.h}}}}</span><div style="display: flex; gap: 8px"><sc-for list="{{{{h.cells}}}}" as="x" hint-placeholder-count="3"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{x.f}}}}</span><span style="width: 100%; height: 6px; border-radius: 3px; background: {{{{x.c}}}}"></span><span style="font-size: 14px; color: {SOFT}">{{{{x.n}}}}</span></div></sc-for></div></div></sc-for></div>'
-
 # ── phone ──
 PH_BODY = f'''<div style="flex: none; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px">{GLASSBTN('Back to Practice', CHEV_L, href='Main.dc.html')}<h1 style="margin: 0; font-size: 17px; font-weight: 600">Chords</h1>{GLASSBTN('Settings', COG, 'openSet')}</div>
-{KEYBAND(150)}
-<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 48px; display: flex; flex-direction: column; gap: 22px">{RESULT('{{symFsP}}', 'align-self: stretch;')}{BUILDER}{CARD('Staff', STAFFSVG(320))}{CARD('Fingering', FINGBODY)}</main>'''
-phone('Chords', 'Chords', PH_BODY, ch_js({'root': 0, 'q': 12}, 402, 150, 2, 150), SHEETS_PHONE('Player.dc.html'))
+{KEYBAND(168)}
+<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px 120px; display: flex; flex-direction: column; gap: 16px">{TITLEBLOCK(44)}<div style="flex: none; display: flex; padding-top: 6px">{VIEWPILL(False)}</div>{VIEWBODY(330, 2, 150)}</main>
+{DOCK_PHONE}'''
+phone('Chords', 'Chords', PH_BODY, ch_js({'root': 0, 'q': 12}, 402, 168, 2, 150), SHEETS_PHONE('Player.dc.html'))
 
-# ── laptop: the keys across; the chord, its staff and fingering on the left; the builder on the right ──
+# ── laptop: the whole screen, as the Player's ──
 LP_INNER = f'''<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: flex; flex-direction: column">
 <div style="flex: none; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px"><div style="display: flex; align-items: center; gap: 14px">{GLASSBTN('Back to Practice', CHEV_L, href='Laptop.dc.html')}<h1 style="margin: 0; font-size: 18px; font-weight: 600">Chords</h1></div>{GLASSBTN('Settings', COG, 'openSet')}</div>
 {KEYBAND(220)}
-<div style="flex: 1; min-height: 0; display: flex; justify-content: center; gap: 48px; padding: 0 40px">
-<main class="nos" style="width: 600px; min-height: 0; overflow-y: auto; padding: 28px 0 40px; display: flex; flex-direction: column; gap: 22px">{RESULT('{{symFsL}}', 'width: 360px;')}{CARD('Staff', STAFFSVG(400))}{CARD('Fingering', FINGBODY)}</main>
-<aside class="nos" style="width: 460px; min-height: 0; overflow-y: auto; padding: 28px 0 40px; display: flex; flex-direction: column; gap: 22px">{BUILDER}</aside>
-</div>
+<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 26px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 820px; max-width: 100%; display: flex; flex-direction: column; gap: 20px">{TITLEBLOCK(56)}<div style="flex: none; display: flex; justify-content: center; padding-top: 8px">{VIEWPILL(True)}</div>{VIEWBODY(440, 4, 170)}</div></main>
+{DOCK_LAPTOP}
 {POPS_LAPTOP('PlayerLaptop.dc.html')}
 </div>'''
 open(OUT + 'ChordsLaptop.dc.html', 'w').write(HEAD % 'Chords, laptop' + LAPFRAME_TOP + LP_INNER + f"""
