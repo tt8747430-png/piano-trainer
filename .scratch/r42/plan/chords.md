@@ -5,6 +5,18 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v36: the piano's settings as the Player's; the gear keeps the rest; finger numbers on the keys as Vita Piano's.**
+  Owner: "but on the keys look how other do this. and also I dont like the keboard settings, this looks not good
+  structured and mixed things. and I want like a piano settings like the player does. and in the header remain all
+  other settings."
+  - **Keyboard** is the bar's last button, as the Player's transport (R37: "the transport's last button, Keyboard").
+    Its panel copies the Player's: the keyboard as picture tiles **Off · 2D** (the Player's Off · 3D · 2D; this page
+    has no 3D hands), then only what the keys use: **Keys** Chord · 61 · 76 · 88, **Note names**, **Finger numbers**;
+    then **Connect a piano ›**, **All piano settings ›**.
+  - The header's **gear** keeps the page's other settings: **Fingering**, Hand Right · Left · Both and On the staff.
+  - On the keys (Vita Piano's charts): the finger number large on the coloured key, the note name small under it.
+  - (v35's Keyboard sheet mixing the keys and the fingering is replaced by this.)
+
 - **v35: fingering settings; the numbers beside the notes, per inversion.** Owner: "i want fingering settings, and
   research more and look at the examples where the fingering should be".
   - Reference: Vita Piano's chord pages (`piano-data/web-references/new_apps/The D Major Chord …webarchive`;
@@ -240,3 +252,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: the clef choice and Bass in the left hand go; fingering stacked as engraved (v33).
 - 2026-11-08: fingering, accidentals, Show the keyboard and the circle's names fixed in the real runtime (v34).
 - 2026-11-08: Fingering settings (Show, Hand, On the keys); numbers beside the notes; fingering by inversion (v35).
+- 2026-11-08: Keyboard panel as the Player's, on the bar; the gear keeps Fingering; numbers on the keys as Vita Piano (v36).

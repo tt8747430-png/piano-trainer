@@ -280,6 +280,10 @@ owner's, typos fixed.
 - **Fingering as printed charts set it (R42, v35):** "look at the examples where the fingering should be". Vita
   Piano: a number beside each note, right of the chord, the left hand on the bass staff; fingering changes with the
   inversion. Its settings: Show fingering, Hand Right · Left · Both, On the keys.
+- **A keyboard's settings are the Player's Keyboard panel, everywhere (R42, v36):** "I want like a piano settings like
+  the player does. and in the header remain all other settings". The keyboard's button at the bar's end opens the
+  tiles, Keys, Note names, Finger numbers and the piano's links; the gear keeps the page's own settings. Never mix the
+  two in one sheet.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple
