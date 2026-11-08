@@ -4,15 +4,63 @@
     "v": 1,
     "at": "2026-11-08T12:00:00Z"
   },
-  "title": "The ideal Practice",
+  "title": "The ideal Piano Trainer",
   "launch": {
     "view": "canvas"
   },
   "pages": [],
   "boards": {
-    "Main.dc.html": {
+    "Songs.dc.html": {
       "x": 0,
       "y": 0,
+      "w": 450,
+      "h": 920,
+      "is_interactive": true,
+      "title": "iPhone 17 Pro: My songs. Continue first, then folders as rows, then every song with its engraved cover. Chips pick the place, search and Sort and filter narrow it, the heart favourites, + adds"
+    },
+    "SongsLaptop.dc.html": {
+      "x": 530,
+      "y": 0,
+      "w": 2143,
+      "h": 1299,
+      "is_interactive": true,
+      "title": "MacBook Air: My songs. The library tree is the places; Continue as four covers; a table of only the columns that hold something; Add sits in the bar so nothing covers the table; Sort and filter opens in place"
+    },
+    "Song.dc.html": {
+      "x": 0,
+      "y": 1419,
+      "w": 450,
+      "h": 920,
+      "is_interactive": true,
+      "title": "iPhone 17 Pro: a song's page. The first bars as its cover, Edit beside the title, Learned and the heart at the bar's right, Key · Time · Tempo once, Chords to tap, Your practice, Details; Continue and Play float"
+    },
+    "SongLaptop.dc.html": {
+      "x": 530,
+      "y": 1419,
+      "w": 2143,
+      "h": 1299,
+      "is_interactive": true,
+      "title": "MacBook Air: a song's page in two columns: the song on the left, Chords, Your practice and Details on the right; Continue and Play float under them"
+    },
+    "Editor.dc.html": {
+      "x": 0,
+      "y": 2838,
+      "w": 450,
+      "h": 920,
+      "is_interactive": true,
+      "title": "iPhone 17 Pro: editing the score. One quiet bar (Done, Undo, Redo, the piano, Play, ···); the score; Flat's palette folded to one row of tools over its tabs, the grip opens every section in one scroll; the keys under it"
+    },
+    "EditorLaptop.dc.html": {
+      "x": 530,
+      "y": 2838,
+      "w": 2143,
+      "h": 1299,
+      "is_interactive": true,
+      "title": "MacBook Air: editing the score. The page in the middle, the palette docked at the right with every section in one scroll, the piano from the bar"
+    },
+    "Main.dc.html": {
+      "x": 0,
+      "y": 4657,
       "w": 450,
       "h": 920,
       "is_interactive": true,
@@ -20,7 +68,7 @@
     },
     "Laptop.dc.html": {
       "x": 530,
-      "y": 0,
+      "y": 4657,
       "w": 2143,
       "h": 1299,
       "is_interactive": true,
@@ -28,7 +76,7 @@
     },
     "Chords.dc.html": {
       "x": 0,
-      "y": 1419,
+      "y": 6076,
       "w": 450,
       "h": 920,
       "is_interactive": true,
@@ -36,7 +84,7 @@
     },
     "ChordsLaptop.dc.html": {
       "x": 530,
-      "y": 1419,
+      "y": 6076,
       "w": 2143,
       "h": 1299,
       "is_interactive": true,
@@ -44,7 +92,7 @@
     },
     "Scales.dc.html": {
       "x": 0,
-      "y": 2838,
+      "y": 7495,
       "w": 450,
       "h": 920,
       "is_interactive": true,
@@ -52,7 +100,7 @@
     },
     "ScalesLaptop.dc.html": {
       "x": 530,
-      "y": 2838,
+      "y": 7495,
       "w": 2143,
       "h": 1299,
       "is_interactive": true,
@@ -60,7 +108,7 @@
     },
     "Intervals.dc.html": {
       "x": 0,
-      "y": 4257,
+      "y": 8914,
       "w": 450,
       "h": 920,
       "is_interactive": true,
@@ -68,7 +116,7 @@
     },
     "IntervalsLaptop.dc.html": {
       "x": 530,
-      "y": 4257,
+      "y": 8914,
       "w": 2143,
       "h": 1299,
       "is_interactive": true,
@@ -76,7 +124,7 @@
     },
     "Progressions.dc.html": {
       "x": 0,
-      "y": 5676,
+      "y": 10333,
       "w": 450,
       "h": 920,
       "is_interactive": true,
@@ -84,7 +132,7 @@
     },
     "ProgressionsLaptop.dc.html": {
       "x": 530,
-      "y": 5676,
+      "y": 10333,
       "w": 2143,
       "h": 1299,
       "is_interactive": true,
@@ -92,7 +140,7 @@
     },
     "Progression.dc.html": {
       "x": 0,
-      "y": 7095,
+      "y": 11752,
       "w": 450,
       "h": 920,
       "is_interactive": true,
@@ -100,7 +148,7 @@
     },
     "ProgressionLaptop.dc.html": {
       "x": 530,
-      "y": 7095,
+      "y": 11752,
       "w": 2143,
       "h": 1299,
       "is_interactive": true,
@@ -108,7 +156,7 @@
     },
     "Accompaniment.dc.html": {
       "x": 0,
-      "y": 8514,
+      "y": 13171,
       "w": 450,
       "h": 920,
       "is_interactive": true,
@@ -116,7 +164,7 @@
     },
     "AccompanimentLaptop.dc.html": {
       "x": 530,
-      "y": 8514,
+      "y": 13171,
       "w": 2143,
       "h": 1299,
       "is_interactive": true,
@@ -124,7 +172,7 @@
     },
     "ChordPlayer.dc.html": {
       "x": 0,
-      "y": 9933,
+      "y": 14590,
       "w": 450,
       "h": 920,
       "is_interactive": true,
@@ -132,7 +180,7 @@
     },
     "ChordPlayerLaptop.dc.html": {
       "x": 530,
-      "y": 9933,
+      "y": 14590,
       "w": 2143,
       "h": 1299,
       "is_interactive": true,
@@ -140,7 +188,7 @@
     },
     "Exercise.dc.html": {
       "x": 0,
-      "y": 11352,
+      "y": 16009,
       "w": 450,
       "h": 920,
       "is_interactive": true,
@@ -148,7 +196,7 @@
     },
     "ExercisesLaptop.dc.html": {
       "x": 530,
-      "y": 11352,
+      "y": 16009,
       "w": 2143,
       "h": 1299,
       "is_interactive": true,
@@ -156,7 +204,7 @@
     },
     "Quiz.dc.html": {
       "x": 0,
-      "y": 12771,
+      "y": 17428,
       "w": 450,
       "h": 920,
       "is_interactive": true,
@@ -164,7 +212,7 @@
     },
     "QuizLaptop.dc.html": {
       "x": 530,
-      "y": 12771,
+      "y": 17428,
       "w": 2143,
       "h": 1299,
       "is_interactive": true,
@@ -172,7 +220,7 @@
     },
     "Metronome.dc.html": {
       "x": 0,
-      "y": 14190,
+      "y": 18847,
       "w": 450,
       "h": 920,
       "is_interactive": true,
@@ -180,7 +228,7 @@
     },
     "MetronomeLaptop.dc.html": {
       "x": 530,
-      "y": 14190,
+      "y": 18847,
       "w": 2143,
       "h": 1299,
       "is_interactive": true,
@@ -188,7 +236,7 @@
     },
     "Tuner.dc.html": {
       "x": 0,
-      "y": 15609,
+      "y": 20266,
       "w": 450,
       "h": 920,
       "is_interactive": true,
@@ -196,7 +244,7 @@
     },
     "TunerLaptop.dc.html": {
       "x": 530,
-      "y": 15609,
+      "y": 20266,
       "w": 2143,
       "h": 1299,
       "is_interactive": true,
@@ -204,7 +252,7 @@
     },
     "ChordFinder.dc.html": {
       "x": 0,
-      "y": 17028,
+      "y": 21685,
       "w": 450,
       "h": 920,
       "is_interactive": true,
@@ -212,7 +260,7 @@
     },
     "ChordFinderLaptop.dc.html": {
       "x": 530,
-      "y": 17028,
+      "y": 21685,
       "w": 2143,
       "h": 1299,
       "is_interactive": true,
@@ -220,7 +268,7 @@
     },
     "CircleOfFifths.dc.html": {
       "x": 0,
-      "y": 18447,
+      "y": 23104,
       "w": 450,
       "h": 920,
       "is_interactive": true,
@@ -228,7 +276,7 @@
     },
     "CircleOfFifthsLaptop.dc.html": {
       "x": 530,
-      "y": 18447,
+      "y": 23104,
       "w": 2143,
       "h": 1299,
       "is_interactive": true,
@@ -236,6 +284,12 @@
     }
   },
   "order": [
+    "Songs.dc.html",
+    "SongsLaptop.dc.html",
+    "Song.dc.html",
+    "SongLaptop.dc.html",
+    "Editor.dc.html",
+    "EditorLaptop.dc.html",
     "Main.dc.html",
     "Laptop.dc.html",
     "Chords.dc.html",
@@ -265,6 +319,21 @@
     "CircleOfFifths.dc.html",
     "CircleOfFifthsLaptop.dc.html"
   ],
-  "notes": {},
+  "notes": {
+    "songs": {
+      "x": 0,
+      "y": -300,
+      "text": "Songs",
+      "kind": "title1",
+      "maxW": 2673
+    },
+    "practice": {
+      "x": 0,
+      "y": 4357,
+      "text": "Practice",
+      "kind": "title1",
+      "maxW": 2673
+    }
+  },
   "designSystems": []
 }

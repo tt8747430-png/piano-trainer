@@ -26,7 +26,7 @@ after compacting"
 
 | # | Page | Canvas | State |
 | - | ---- | ------ | ----- |
-| 1 | Songs library (`/songs`, My songs · Explore) | [The ideal Songs](https://claude.ai/artifact/Ana84hFnmzQCBFuvNZRmXB) | drawn, waiting for the owner |
+| 1 | Songs library (`/songs`, My songs · Explore) | [The ideal Piano Trainer](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH) (was The ideal Songs) | drawn, waiting for the owner |
 | 2 | Song's page (`/songs/$pieceId`) | [The ideal Songs](https://claude.ai/artifact/Ana84hFnmzQCBFuvNZRmXB), row 2 | drawn, waiting for the owner |
 | 3 | Score editor (`/edit/$pieceId`) | [The ideal Songs](https://claude.ai/artifact/Ana84hFnmzQCBFuvNZRmXB), row 3 | drawn, waiting for the owner |
 | 4 | Practice overview (`/practice`) | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH) | drawn, waiting for the owner |
@@ -41,3 +41,9 @@ after compacting"
 
 Standing rules: design only, no app code until the owner's "ok"; the owner's rulings in each area's specs and the
 feedback log win over any reference.
+
+**One canvas (2026-11-08, the owner: "connect all pages from one artifact"):** Songs and Practice are one canvas,
+[The ideal Piano Trainer](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH) (v11): Songs on top, Practice below, a
+title over each. In Play every page is linked: the tab bar and sidebar (Songs, Practice), Practice's cards to their
+pages, each Back, a song's row to its page, Edit score to the editor and Done back. `canvas/link.py` copies the Songs
+boards in and adds the links; run it after any generator. The old Songs canvas stays but is no longer updated.

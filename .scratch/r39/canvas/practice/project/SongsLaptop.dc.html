@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My songs, laptop</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&amp;family=Instrument+Serif&amp;display=swap">
+<style>
+body{margin:0}
+button{font:inherit;cursor:pointer}
+input{font:inherit}
+input::placeholder{color:#8A8178}
+.nos{scrollbar-width:none}.nos::-webkit-scrollbar{display:none}
+.row:hover{background:#FBF8F3}
+.tree:hover{background:#EFE8DF}
+</style>
+</helmet>
+<div style="width: 2143px; height: 1299px; position: relative; font-family: 'Instrument Sans', system-ui, sans-serif">
+<div aria-hidden="true" style="position: absolute; left: 217.7px; top: 36.6px; width: 1710px; height: 1112px; background: url(/_blob/ed0b7956b1adffb093fd2dfe432ce31f) 0 0 / 1710px 1112px no-repeat"></div>
+<div aria-hidden="true" style="position: absolute; left: 217.7px; top: 36.6px; width: 1710px; height: 37px; background: rgba(255,255,255,0.28)"></div>
+<div aria-hidden="true" style="position: absolute; left: 217.7px; top: 73.6px; width: 1710px; height: 51px; background: url(/_blob/b69935c630e1ca5d1d224dca4c0e9bc4) 0 0 / 100% 100%; border-radius: 16px 16px 0 0; font: 500 14px/51px -apple-system, system-ui, sans-serif; color: #3C3C43; text-align: center">pianotrainer.app</div>
+<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: #F7F3EE; color: #1A1612; display: grid; grid-template-columns: 248px 256px minmax(0, 1fr)">
+
+<nav aria-label="Main" style="background: #FBF8F3; box-shadow: 1px 0 0 #E9E2D8; padding: 24px 14px; display: flex; flex-direction: column; gap: 6px">
+<div style="height: 44px; display: flex; align-items: center; padding: 0 10px; font-family: 'Instrument Serif', Georgia, serif; font-size: 27px">Piano Trainer</div>
+<label style="margin: 10px 0 10px; height: 44px; box-sizing: border-box; padding: 0 12px; border-radius: 12px; background: #FFFFFF; box-shadow: 0 0 0 1px #E2DACF; display: flex; align-items: center; gap: 8px; color: #6B6259"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input aria-label="Search everything" placeholder="Search" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-size: 15px"><kbd style="font: 500 12px 'Instrument Sans', sans-serif; color: #8A8178; padding: 2px 6px; border-radius: 6px; background: #F3EEE7">Ctrl K</kbd></label>
+<a href="#" style="height: 44px; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #4A433C; text-decoration: none; font-size: 16px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5ZM6 12v5c3 2 9 2 12 0v-5"></path></svg>Learn</a>
+<a href="SongsLaptop.dc.html" aria-current="page" style="height: 44px; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 12px; background: #EAE2D7; color: #1A1612; text-decoration: none; font-size: 16px; font-weight: 600"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>Songs</a>
+<a href="Laptop.dc.html" style="height: 44px; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #4A433C; text-decoration: none; font-size: 16px; font-weight: 500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>Practice</a>
+<span style="flex: 1"></span>
+<a href="#" style="min-height: 52px; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 10px; color: #1A1612; text-decoration: none"><span aria-hidden="true" style="width: 32px; height: 32px; border-radius: 9999px; background: #E9D8C4; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">G</span><span style="display: flex; flex-direction: column"><span style="font-size: 15px; font-weight: 600">Guest</span><span style="font-size: 13px; color: #6B6259">Profile</span></span></a>
+</nav>
+
+<nav aria-label="Library" class="nos" style="overflow-y: auto; padding: 88px 12px 24px; display: flex; flex-direction: column; gap: 2px">
+<sc-for list="{{places}}" as="p" hint-placeholder-count="5">
+<button type="button" class="tree" aria-current="{{p.cur}}" onClick="{{p.pick}}" style="height: 40px; border: 0; border-radius: 10px; background: {{p.bg}}; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #1A1612; font-size: 15px; font-weight: {{p.w}}; text-align: left"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{p.d}}"></path></svg><span style="flex: 1">{{p.label}}</span><span style="font-size: 14px; color: #6B6259; font-weight: 500; font-variant-numeric: tabular-nums">{{p.n}}</span></button>
+</sc-for>
+<div style="margin: 18px 12px 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6B6259">Folders</div>
+<sc-for list="{{folders}}" as="f" hint-placeholder-count="6">
+<a href="#" class="tree" style="height: 40px; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #1A1612; text-decoration: none; font-size: 15px; font-weight: 500"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; border-radius: 7px; background: {{f.bg}}; color: {{f.fg}}; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="{{f.d}}"></path></svg></span><span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{f.n}}</span><span style="font-size: 14px; color: #6B6259; font-variant-numeric: tabular-nums">{{f.c}}</span></a>
+</sc-for>
+<button type="button" class="tree" style="height: 40px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #4A433C; font-size: 15px; font-weight: 600; text-align: left"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; border-radius: 7px; box-sizing: border-box; border: 1.5px dashed #C9BFB2; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></span>New folder</button>
+<div style="height: 1px; background: #E9E2D8; margin: 14px 12px"></div>
+<a href="#" class="tree" style="height: 40px; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #1A1612; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"></path></svg><span style="flex: 1">Groups</span></a>
+<a href="#" class="tree" style="height: 40px; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #1A1612; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8M10 12h4"></path></svg><span style="flex: 1">Archive</span><span style="font-size: 14px; color: #6B6259">3</span></a>
+<a href="#" class="tree" style="height: 40px; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #1A1612; text-decoration: none; font-size: 15px; font-weight: 500"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg><span style="flex: 1">Trash</span><span style="font-size: 14px; color: #6B6259">1</span></a>
+</nav>
+
+<main class="nos" style="position: relative; overflow-y: auto; padding: 28px 40px 120px 32px; display: flex; flex-direction: column; gap: 24px">
+<header style="flex: none; display: flex; align-items: center; gap: 12px; height: 44px">
+<div role="tablist" aria-label="Songs" style="flex: 1; display: flex; align-items: baseline; gap: 22px">
+<button type="button" role="tab" aria-selected="true" style="border: 0; background: none; padding: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.015em; color: #1A1612">My songs</button>
+<button type="button" role="tab" aria-selected="false" style="border: 0; background: none; padding: 0; font-size: 30px; font-weight: 600; letter-spacing: -0.015em; color: #9A9087">Explore</button>
+</div>
+<button type="button" aria-expanded="{{addOn}}" onClick="{{toggleAdd}}" style="flex: none; height: 44px; padding: 0 18px 0 14px; border: 0; border-radius: 9999px; background: #1A1612; color: #FFFFFF; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add</button>
+<button type="button" aria-label="More" aria-expanded="{{moreOn}}" onClick="{{toggleMore}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: #EFE8DF; color: #1A1612; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg></button>
+</header>
+
+<div style="flex: none; display: flex; gap: 10px">
+<label style="flex: 1; min-width: 0; height: 44px; box-sizing: border-box; padding: 0 14px; border-radius: 12px; background: #FFFFFF; box-shadow: {{SH}}; display: flex; align-items: center; gap: 10px; color: #6B6259">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+<input type="search" aria-label="Search songs" placeholder="Search songs" value="{{q}}" onChange="{{onQ}}" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-size: 16px; color: #1A1612">
+</label>
+<button type="button" aria-expanded="{{filterOn}}" onClick="{{toggleFilter}}" style="flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: 12px; background: #FFFFFF; box-shadow: {{SH}}; color: #1A1612; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"></path><circle cx="15" cy="6" r="2"></circle><circle cx="9" cy="12" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg>Sort and filter<sc-if value="{{filterCountOn}}" hint-placeholder-val="{{false}}"><span style="min-width: 20px; height: 20px; box-sizing: border-box; padding: 0 6px; border-radius: 9999px; background: #E8762F; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{filterCount}}</span></sc-if>
+</button>
+</div>
+
+<sc-if value="{{showShelves}}" hint-placeholder-val="{{true}}">
+<section aria-labelledby="cont" style="flex: none; display: flex; flex-direction: column; gap: 12px">
+<h2 id="cont" style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.01em">Continue</h2>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px">
+<sc-for list="{{cont}}" as="s" hint-placeholder-count="4">
+<a href="SongLaptop.dc.html" aria-label="{{s.aria}}" style="min-width: 0; display: flex; flex-direction: column; gap: 6px; color: inherit; text-decoration: none">
+<span style="height: 168px; border-radius: 12px; background: #FFFFFF; box-shadow: {{SH}}; display: flex; flex-direction: column; align-items: center; padding: 16px 16px 6px; box-sizing: border-box; overflow: hidden">
+<span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 20px; line-height: 1.1; text-align: center; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{s.t}}</span>
+<span style="font-size: 11px; color: #6B6259; margin-top: 3px">{{s.by}}</span>
+<svg viewBox="0 0 120 76" width="190" height="108" aria-hidden="true" style="margin-top: 2px">
+<path d="M4 20H116M4 28H116M4 36H116M4 44H116M4 52H116M116 20V52M4 20V52" stroke="#1A1612" stroke-width="0.6" fill="none"></path>
+<sc-for list="{{s.cv.ledgers}}" as="l" hint-placeholder-count="0"><line x1="{{l.x1}}" x2="{{l.x2}}" y1="60" y2="60" stroke="#1A1612" stroke-width="0.8"></line></sc-for>
+<sc-for list="{{s.cv.notes}}" as="n" hint-placeholder-count="6"><ellipse cx="{{n.cx}}" cy="{{n.cy}}" rx="4.4" ry="3.2" transform="{{n.rot}}" fill="#1A1612"></ellipse><line x1="{{n.sx}}" x2="{{n.sx}}" y1="{{n.cy}}" y2="{{n.sy}}" stroke="#1A1612" stroke-width="1"></line></sc-for>
+</svg>
+</span>
+<span style="display: flex; align-items: baseline; gap: 8px"><span style="flex: 1; min-width: 0; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{s.t}}</span><span style="font-size: 13px; color: #6B6259; font-variant-numeric: tabular-nums">{{s.barTxt}}</span></span>
+<span aria-hidden="true" style="height: 3px; border-radius: 9999px; background: #E6DDD1; overflow: hidden"><span style="display: block; height: 100%; width: {{s.pct}}; background: #E8762F; border-radius: 9999px"></span></span>
+</a>
+</sc-for>
+</div>
+</section>
+</sc-if>
+
+<section aria-labelledby="all" style="flex: none; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: baseline; gap: 8px"><h2 id="all" style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.01em">{{listTitle}}</h2><span style="font-size: 14px; color: #6B6259; font-variant-numeric: tabular-nums">{{listCount}}</span><span style="flex: 1"></span><span style="font-size: 13px; color: #6B6259">{{sortNote}}</span></div>
+<sc-if value="{{hasRows}}" hint-placeholder-val="{{true}}">
+<div role="table" aria-label="{{listTitle}}" style="border-radius: 14px; background: #FFFFFF; box-shadow: {{SH}}; overflow: hidden">
+<div role="row" style="display: grid; grid-template-columns: {{COLS}}; align-items: center; height: 40px; padding: 0 8px 0 14px; font-size: 13px; font-weight: 600; color: #6B6259; box-shadow: inset 0 -1px 0 #E9E2D8">
+<span role="columnheader" style="grid-column: span 2">Title</span><span role="columnheader">Key</span><span role="columnheader">Level</span><span role="columnheader">Progress</span><span role="columnheader">Last played</span><span role="columnheader"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%)">Favourite</span></span>
+</div>
+<sc-for list="{{rows}}" as="s" hint-placeholder-count="8">
+<div role="row" class="row" style="display: grid; grid-template-columns: {{COLS}}; align-items: center; min-height: 68px; padding: 0 8px 0 14px; border-top: {{s.line}}">
+<span role="cell" aria-hidden="true" style="width: 52px; height: 52px; border-radius: 8px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #E9E2D8; display: flex; align-items: center; justify-content: center; overflow: hidden"><svg viewBox="8 14 112 52" width="48" height="24"><path d="M4 20H118M4 28H118M4 36H118M4 44H118M4 52H118" stroke="#1A1612" stroke-width="1" fill="none"></path><sc-for list="{{s.cv.ledgers}}" as="l" hint-placeholder-count="0"><line x1="{{l.x1}}" x2="{{l.x2}}" y1="60" y2="60" stroke="#1A1612" stroke-width="1.2"></line></sc-for><sc-for list="{{s.cv.notes}}" as="n" hint-placeholder-count="6"><ellipse cx="{{n.cx}}" cy="{{n.cy}}" rx="4.8" ry="3.6" transform="{{n.rot}}" fill="#1A1612"></ellipse><line x1="{{n.sx}}" x2="{{n.sx}}" y1="{{n.cy}}" y2="{{n.sy}}" stroke="#1A1612" stroke-width="1.4"></line></sc-for></svg></span>
+<a role="cell" href="#" style="min-width: 0; display: flex; flex-direction: column; gap: 3px; color: inherit; text-decoration: none; padding-right: 16px"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{s.t}}</span><span style="font-size: 13px; color: #6B6259; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{s.byLine}}</span></a>
+<span role="cell" style="font-size: 15px">{{s.key}}</span>
+<span role="cell" style="font-size: 15px">{{s.lvl}}</span>
+<span role="cell" style="display: flex; align-items: center; gap: 10px; font-size: 14px; color: {{s.progFg}}; font-variant-numeric: tabular-nums">
+<sc-if value="{{s.learning}}" hint-placeholder-val="{{false}}"><span aria-hidden="true" style="width: 64px; height: 4px; border-radius: 9999px; background: #E6DDD1; overflow: hidden"><span style="display: block; height: 100%; width: {{s.pct}}; background: #E8762F"></span></span></sc-if>
+<sc-if value="{{s.learned}}" hint-placeholder-val="{{false}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1A1612" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></sc-if>{{s.progTxt}}</span>
+<span role="cell" style="font-size: 14px; color: {{s.lastFg}}">{{s.lastTxt}}</span>
+<span role="cell"><button type="button" aria-label="{{s.heartLabel}}" aria-pressed="{{s.fav}}" onClick="{{s.toggle}}" style="width: 44px; height: 44px; border: 0; border-radius: 9999px; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="{{s.heartFill}}" stroke="{{s.heartStroke}}" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"></path></svg></button></span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{noRows}}" hint-placeholder-val="{{false}}">
+<div style="border-radius: 14px; background: #FFFFFF; box-shadow: {{SH}}; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">
+<span style="font-size: 17px; font-weight: 600">{{emptyTitle}}</span>
+<span style="font-size: 15px; color: #6B6259">{{emptyText}}</span>
+<button type="button" onClick="{{resetAll}}" style="margin-top: 6px; height: 40px; padding: 0 16px; border: 0; border-radius: 10px; background: #F3EEE7; color: #1A1612; font-size: 15px; font-weight: 600">Show all songs</button>
+</div>
+</sc-if>
+</section>
+</main>
+
+<sc-if value="{{anyOpen}}" hint-placeholder-val="{{false}}">
+<div onClick="{{closeAll}}" style="position: absolute; inset: 0; z-index: 40"></div>
+</sc-if>
+
+<sc-if value="{{moreOn}}" hint-placeholder-val="{{false}}">
+<div role="menu" aria-label="More" style="position: absolute; right: 40px; top: 80px; z-index: 41; width: 220px; border-radius: 14px; background: #FFFFFF; padding: 6px; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 2px 4px rgba(26,22,18,0.08), 0 18px 40px -12px rgba(26,22,18,0.28)">
+<sc-for list="{{moreItems}}" as="m" hint-placeholder-count="2">
+<button type="button" role="menuitem" onClick="{{closeAll}}" style="width: 100%; height: 40px; border: 0; border-radius: 9px; background: transparent; display: flex; align-items: center; gap: 12px; padding: 0 10px; color: #1A1612; font-size: 15px; text-align: left"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{m.d}}"></path></svg>{{m.label}}</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{addOn}}" hint-placeholder-val="{{false}}">
+<div role="menu" aria-label="Add" style="position: absolute; right: 96px; top: 80px; z-index: 41; width: 300px; border-radius: 16px; background: #FFFFFF; padding: 6px; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 2px 4px rgba(26,22,18,0.08), 0 18px 40px -12px rgba(26,22,18,0.28)">
+<sc-for list="{{addItems}}" as="a" hint-placeholder-count="4">
+<button type="button" role="menuitem" onClick="{{closeAll}}" style="width: 100%; min-height: 56px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; gap: 12px; padding: 6px 8px; color: #1A1612; text-align: left">
+<span aria-hidden="true" style="flex: none; width: 36px; height: 36px; border-radius: 9px; background: #F3EEE7; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{a.d}}"></path></svg></span>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 600">{{a.label}}</span><span style="font-size: 13px; color: #6B6259">{{a.hint}}</span></span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{filterOn}}" hint-placeholder-val="{{false}}">
+<section role="dialog" aria-label="Sort and filter" style="position: absolute; right: 40px; top: 134px; z-index: 41; width: 380px; border-radius: 16px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 2px 4px rgba(26,22,18,0.08), 0 18px 40px -12px rgba(26,22,18,0.28); display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; padding: 14px 12px 6px 18px"><h2 style="flex: 1; margin: 0; font-size: 17px; font-weight: 700">Sort and filter</h2><button type="button" onClick="{{resetFilters}}" disabled="{{resetOff}}" style="height: 36px; padding: 0 8px; border: 0; background: transparent; color: {{resetFg}}; font-size: 15px; font-weight: 600">Reset</button></div>
+<div style="padding: 6px 18px 16px; display: flex; flex-direction: column; gap: 18px">
+<fieldset style="margin: 0; padding: 0; border: 0"><legend style="padding: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6B6259">Sort by</legend>
+<div role="radiogroup" aria-label="Sort by" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{sorts}}" as="o" hint-placeholder-count="5"><button type="button" role="radio" aria-checked="{{o.on}}" onClick="{{o.pick}}" style="height: 36px; padding: 0 12px; border: 0; border-radius: 9999px; background: {{o.bg}}; color: {{o.fg}}; box-shadow: {{o.sh}}; font-size: 14px; font-weight: 600">{{o.label}}</button></sc-for>
+</div></fieldset>
+<fieldset style="margin: 0; padding: 0; border: 0"><legend style="padding: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6B6259">Level</legend>
+<div role="radiogroup" aria-label="Level" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{levels}}" as="o" hint-placeholder-count="4"><button type="button" role="radio" aria-checked="{{o.on}}" disabled="{{o.off}}" onClick="{{o.pick}}" style="height: 36px; padding: 0 12px; border: 0; border-radius: 9999px; background: {{o.bg}}; color: {{o.fg}}; box-shadow: {{o.sh}}; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; opacity: {{o.op}}">{{o.label}}<span style="font-weight: 500; opacity: 0.7; font-variant-numeric: tabular-nums">{{o.n}}</span></button></sc-for>
+</div></fieldset>
+<fieldset style="margin: 0; padding: 0; border: 0"><legend style="padding: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6B6259">Key</legend>
+<div role="radiogroup" aria-label="Key" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{keys}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{o.on}}" disabled="{{o.off}}" onClick="{{o.pick}}" style="height: 36px; padding: 0 12px; border: 0; border-radius: 9999px; background: {{o.bg}}; color: {{o.fg}}; box-shadow: {{o.sh}}; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; opacity: {{o.op}}">{{o.label}}<span style="font-weight: 500; opacity: 0.7; font-variant-numeric: tabular-nums">{{o.n}}</span></button></sc-for>
+</div></fieldset>
+<button type="button" onClick="{{closeAll}}" style="height: 44px; border: 0; border-radius: 12px; background: #1A1612; color: #FFFFFF; font-size: 15px; font-weight: 700">{{showN}}</button>
+</div>
+</section>
+</sc-if>
+
+</div>
+<img src="/_blob/8f8bed506eb49168259dfa0ab9b04b28" alt="" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 2143px; height: 1299px; pointer-events: none">
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":2143,"height":1299}}'>
+const SH = '0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)';
+const COLS = '64px minmax(0, 1fr) 120px 130px 190px 140px 52px';
+const SONGS = [
+  { id: 'hcb', t: 'Hot Cross Buns', by: 'Traditional', key: 'C major', lvl: 'Beginner', mel: [0, -1, -2, 0, -1, -2], st: 'learned', lr: 6, last: '2 weeks ago' },
+  { id: 'mary', t: 'Mary Had a Little Lamb', by: 'Traditional', key: 'C major', lvl: 'Beginner', mel: [0, -1, -2, -1, 0, 0, 0], st: 'learned', lr: 5, last: 'Last week' },
+  { id: 'moon', t: 'By the Light of the Moon', alt: 'Au clair de la lune', by: 'French folk song', key: 'C major', lvl: 'Beginner', mel: [-2, -2, -2, -1, 0, -1], st: 'new' },
+  { id: 'row', t: 'Lightly Row', by: 'Traditional', key: 'C major', lvl: 'Beginner', mel: [2, 0, 0, 1, -1, -1], st: 'learning', bar: 12, bars: 16, lr: 4, last: 'Monday' },
+  { id: 'twinkle', t: 'Twinkle, Twinkle, Little Star', by: 'Traditional', key: 'C major', lvl: 'Beginner', mel: [-2, -2, 2, 2, 3, 3, 2], st: 'learning', bar: 5, bars: 12, lr: 2, last: 'Yesterday' },
+  { id: 'john', t: 'Brother John', alt: 'Frère Jacques', by: 'Traditional', key: 'C major', lvl: 'Beginner', mel: [-2, -1, 0, -2, -2, -1, 0, -2], st: 'new' },
+  { id: 'london', t: 'London Bridge', by: 'Traditional', key: 'C major', lvl: 'Beginner', mel: [2, 3, 2, 1, 0, 1, 2], st: 'new' },
+  { id: 'jingle', t: 'Jingle Bells', by: 'James Lord Pierpont', key: 'C major', lvl: 'Intermediate', mel: [0, 0, 0, 0, 0, 0, 0, 2], st: 'learning', bar: 3, bars: 16, lr: 3, last: 'Saturday' },
+  { id: 'saints', t: 'When the Saints Go Marching In', by: 'Traditional', key: 'C major', lvl: 'Beginner', mel: [-2, 0, 1, 2, -2, 0, 1, 2], st: 'new' },
+  { id: 'yankee', t: 'Yankee Doodle', by: 'Traditional', key: 'C major', lvl: 'Beginner', mel: [-2, -2, -1, 0, -2, 0, -1], st: 'new' },
+  { id: 'susanna', t: 'Oh! Susanna', by: 'Stephen Foster', key: 'C major', lvl: 'Intermediate', mel: [-2, -1, 0, 2, 2, 3, 2], st: 'new' },
+  { id: 'grace', t: 'Amazing Grace', by: 'John Newton', key: 'G major', lvl: 'Intermediate', mel: [-1, 2, 4, 2, 4, 3, 2], st: 'learning', bar: 9, bars: 16, lr: 1, last: 'Today' }
+];
+const D = {
+  note: 'M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM21 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z',
+  heart: 'M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z',
+  piano: 'M3 6h18v12H3ZM8 6v7M12 6v7M16 6v7',
+  book: 'M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2ZM22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8Z',
+  hymn: 'M12 2v4M10 4h4M6 21V11l6-5 6 5v10M10 21v-4a2 2 0 0 1 4 0v4M3 21h18',
+  mic: 'M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3ZM19 10v2a7 7 0 0 1-14 0v-2M12 19v3',
+  clock: 'M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+  half: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18ZM12 3v18',
+  check: 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM8 12l3 3 5-6'
+};
+const FOLDERS = [
+  { n: 'Songs to learn', c: 23, bg: '#F6E7C1', fg: '#7A5B12', d: D.note },
+  { n: '«Боже, спасибо»', c: 20, bg: '#F5DDD0', fg: '#8A4A2E', d: D.heart },
+  { n: 'Called to Play', c: 15, bg: '#D5E8F7', fg: '#2F5576', d: D.piano },
+  { n: 'Called to Play, level 2', c: 25, bg: '#E6E0F5', fg: '#55468A', d: D.book },
+  { n: 'Hymns', c: 5, bg: '#DCEBD9', fg: '#3D6B38', d: D.hymn },
+  { n: 'Gorshkov’s songs', c: 4, bg: '#F5DDD0', fg: '#8A4A2E', d: D.mic }
+];
+const PLACES = [['all', 'All songs', D.note], ['fav', 'Favourites', D.heart], ['recent', 'Recently played', D.clock], ['learning', 'Learning', D.half], ['learned', 'Learned', D.check]];
+const TITLES = { all: 'All songs', fav: 'Favourites', recent: 'Recently played', learning: 'Learning', learned: 'Learned' };
+const SORTS = [['manual', 'Manual'], ['name', 'Name'], ['recent', 'Recently played'], ['key', 'Key'], ['level', 'Level']];
+const LEVELS = ['Beginner', 'Intermediate', 'Advanced'];
+const KEYS = ['C major', 'G major', 'F major'];
+const LV = { Beginner: 0, Intermediate: 1, Advanced: 2 };
+function cover(mel) {
+  const x0 = 20, x1 = 108, step = mel.length > 1 ? (x1 - x0) / (mel.length - 1) : 0;
+  const notes = mel.map((p, i) => {
+    const cx = x0 + i * step, cy = 52 - 4 * p, up = p < 4;
+    return { cx: cx.toFixed(1), cy: cy, sx: (up ? cx + 4.1 : cx - 4.1).toFixed(1), sy: up ? cy - 22 : cy + 22, rot: 'rotate(-20 ' + cx.toFixed(1) + ' ' + cy + ')' };
+  });
+  const ledgers = [];
+  mel.forEach((p, i) => { if (p <= -2) { const cx = x0 + i * step; ledgers.push({ x1: (cx - 7).toFixed(1), x2: (cx + 7).toFixed(1) }); } });
+  return { notes, ledgers };
+}
+const COV = {};
+SONGS.forEach((s) => { COV[s.id] = cover(s.mel); });
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const place = st.place || 'all', q = st.q || '', sheet = st.sheet || null;
+    const sort = st.sort || 'manual', lvl = st.lvl || 'all', key = st.key || 'all';
+    const fav = st.fav || { grace: true, twinkle: true, saints: true };
+    const set = (o) => this.setState(o);
+    const ql = q.trim().toLowerCase();
+    const inPl = (s, p) => p === 'all' || (p === 'fav' && fav[s.id]) || (p === 'recent' && s.lr) || (p === 'learning' && s.st === 'learning') || (p === 'learned' && s.st === 'learned');
+    const base = SONGS.filter((s) => inPl(s, place) && (!ql || (s.t + ' ' + (s.alt || '') + ' ' + s.by).toLowerCase().includes(ql)));
+    const pass = (s, skip) => (skip === 'lvl' || lvl === 'all' || s.lvl === lvl) && (skip === 'key' || key === 'all' || s.key === key);
+    let list = base.filter((s) => pass(s));
+    if (sort === 'name') list = [...list].sort((a, b) => a.t.localeCompare(b.t));
+    if (sort === 'recent' || place === 'recent') list = [...list].sort((a, b) => (a.lr || 99) - (b.lr || 99));
+    if (sort === 'key') list = [...list].sort((a, b) => a.key.localeCompare(b.key));
+    if (sort === 'level') list = [...list].sort((a, b) => LV[a.lvl] - LV[b.lvl]);
+    const filterCount = (sort !== 'manual' ? 1 : 0) + (lvl !== 'all' ? 1 : 0) + (key !== 'all' ? 1 : 0);
+    const whole = place === 'all' && !ql && lvl === 'all' && key === 'all';
+    const rows = list.map((s, i) => ({
+      ...s, cv: COV[s.id], line: i ? '1px solid #E9E2D8' : '0',
+      byLine: s.alt ? s.alt + ' · ' + s.by : s.by,
+      learning: s.st === 'learning', learned: s.st === 'learned', pct: s.bar ? Math.round(s.bar / s.bars * 100) + '%' : '0%',
+      progTxt: s.st === 'learning' ? 'Bar ' + s.bar + ' of ' + s.bars : s.st === 'learned' ? 'Learned' : 'Not started',
+      progFg: s.st === 'new' ? '#8A8178' : '#1A1612',
+      lastTxt: s.last || 'Not yet', lastFg: s.last ? '#1A1612' : '#8A8178',
+      fav: !!fav[s.id], heartFill: fav[s.id] ? '#E8762F' : 'none', heartStroke: fav[s.id] ? '#E8762F' : '#8A8178',
+      heartLabel: fav[s.id] ? 'Remove ' + s.t + ' from Favourites' : 'Add ' + s.t + ' to Favourites',
+      toggle: () => set({ fav: { ...fav, [s.id]: !fav[s.id] } })
+    }));
+    const cont = SONGS.filter((s) => s.st === 'learning').sort((a, b) => a.lr - b.lr).map((s) => ({
+      ...s, cv: COV[s.id], barTxt: 'Bar ' + s.bar + ' of ' + s.bars, pct: Math.round(s.bar / s.bars * 100) + '%',
+      aria: s.t + ', continue from bar ' + s.bar + ' of ' + s.bars
+    }));
+    const chip = (on) => ({ bg: on ? '#1A1612' : '#FFFFFF', fg: on ? '#FFFFFF' : '#1A1612', sh: on ? 'none' : '0 0 0 1px #E2DACF' });
+    const optList = (vals, cur, skip, field) => {
+      const pool = base.filter((s) => pass(s, skip));
+      const all = { label: 'All', n: pool.length, on: cur === 'all', off: false, op: 1, ...chip(cur === 'all'), pick: () => set({ [field]: 'all' }) };
+      return [all].concat(vals.map((v) => {
+        const n = pool.filter((s) => s[field] === v).length;
+        return { label: v, n, on: cur === v, off: n === 0 && cur !== v, op: n === 0 && cur !== v ? 0.45 : 1, ...chip(cur === v), pick: () => set({ [field]: v }) };
+      }));
+    };
+    return {
+      SH, COLS, q, onQ: (e) => set({ q: e.target.value }),
+      places: PLACES.map(([id, label, d]) => ({ label, d, n: id === 'all' ? '92' : String(SONGS.filter((s) => inPl(s, id)).length), cur: place === id ? 'page' : 'false', bg: place === id ? '#EAE2D7' : 'transparent', w: place === id ? 600 : 500, pick: () => set({ place: id }) })),
+      folders: FOLDERS,
+      cont, rows, hasRows: rows.length > 0, noRows: rows.length === 0,
+      showShelves: place === 'all' && !ql,
+      listTitle: ql ? 'Results' : TITLES[place],
+      listCount: whole ? '92' : String(list.length),
+      sortNote: sort === 'manual' ? '' : 'By ' + SORTS.find((o) => o[0] === sort)[1].toLowerCase(),
+      emptyTitle: ql ? 'No songs match “' + q.trim() + '”' : 'Nothing here yet',
+      emptyText: place === 'fav' ? 'Click the heart on a song to keep it here.' : 'Try another word, or clear the filters.',
+      filterCount, filterCountOn: filterCount > 0,
+      sorts: SORTS.map(([id, label]) => ({ label, on: sort === id, ...chip(sort === id), pick: () => set({ sort: id }) })),
+      levels: optList(LEVELS, lvl, 'lvl', 'lvl'),
+      keys: optList(KEYS, key, 'key', 'key'),
+      showN: list.length === 1 ? 'Show 1 song' : 'Show ' + list.length + ' songs',
+      resetOff: filterCount === 0, resetFg: filterCount ? '#B4541A' : '#B3A99E',
+      resetFilters: () => set({ sort: 'manual', lvl: 'all', key: 'all' }),
+      resetAll: () => set({ place: 'all', q: '', lvl: 'all', key: 'all' }),
+      moreOn: sheet === 'more', addOn: sheet === 'add', filterOn: sheet === 'filter', anyOpen: !!sheet,
+      toggleMore: () => set({ sheet: sheet === 'more' ? null : 'more' }),
+      toggleAdd: () => set({ sheet: sheet === 'add' ? null : 'add' }),
+      toggleFilter: () => set({ sheet: sheet === 'filter' ? null : 'filter' }),
+      closeAll: () => set({ sheet: null }),
+      moreItems: [
+        { label: 'Select', d: 'M3 6l2 2 4-4M3 14l2 2 4-4M13 6h8M13 14h8M13 20h8' },
+        { label: 'Card style', d: 'M3 4h7v7H3ZM14 4h7v7h-7ZM3 15h7v5H3ZM14 15h7v5h-7Z' }
+      ],
+      addItems: [
+        { label: 'New song', hint: 'Write it in the score editor', d: 'M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z' },
+        { label: 'Record', hint: 'Play it in, on the screen or a keyboard', d: D.mic },
+        { label: 'Import', hint: 'MusicXML or MIDI', d: 'M12 3v12M7 10l5 5 5-5M5 21h14' },
+        { label: 'New folder', hint: 'Group songs your way', d: 'M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2ZM12 11v6M9 14h6' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
