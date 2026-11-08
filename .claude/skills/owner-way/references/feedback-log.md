@@ -258,6 +258,9 @@ owner's, typos fixed.
   remove all the redundant things". Chords' bar is Play chord and Arpeggio only. What you choose sits on the thing
   it changes (the chord's name opens the chord; the inversion is a segmented control under it); what changes the
   display is behind the gear. Two ways of hearing are two buttons, not a mode setting. One control per choice.
+- **Start from the owner's references, not from principles (R42, v27):** "look at the examples and references".
+  piano-data/reference-apps holds them (Journey's Chord Builder, Chordify, Ultimate Piano); open them before drawing.
+  Chords became a builder: the chord and Play on top, its parts as rows of choices, staff and fingering under; no bar.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

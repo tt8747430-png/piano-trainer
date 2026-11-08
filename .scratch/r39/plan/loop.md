@@ -63,3 +63,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v24 (2026-11-08):** the app's tab bar: the app's icons over their words, the place in a lens, a fade under it; Chords' v23 undone (the owner meant the app's bar).
 **R42 v25 (2026-11-08):** the tab bar to Apple's HIG read in full: filled icons, content peeking through the glass.
 **R42 v26 (2026-11-08):** Chords restructured: the chord chosen on its name, inversion segmented under it, the bar Play chord and Arpeggio, display settings behind the gear.
+**R42 v27 (2026-11-08):** Chords as a chord builder after Journey's Chord Builder and Chordify's chord card; no bottom bar.

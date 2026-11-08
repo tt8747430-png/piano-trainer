@@ -141,6 +141,25 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   - Gone: the Inversions view (the segmented control holds the choice; the keys show the shape), ‹ ›, the Play-as
     sheet and "Arpeggio up and down", the Hands and Keyboard buttons and sheets, the bar's chord button.
 
+- **Chords is a chord builder, with no bar** (owner, 2026-11-08: "i don't like the how you rebuilt it. research
+  more and improve. look at the examples and references and improve properly"). Replaces v26.
+  - References read (piano-data/reference-apps): Journey's **Chord Builder** (08-chord-builder 01–02): the chord's
+    parts as rows of choices on the page (root, quality, structure, Suspension, Add Tones, Root Position · 1st
+    Inversion · 2nd Inversion), then the staff and the keys with the name; no action bar. **Chordify**'s chord card
+    (IMG_4568): the diagram, the name, then Close · **▶ Play** under it; its chord strip shows each chord's diagram
+    with its name. **Ultimate Piano** (29–34): keys on top, staff under.
+  - Now, phone: Back · Chords · gear; the keys; the chord, **Cmaj7/E**, "C major seventh · 1st inversion", its notes,
+    and **▶ Play** · **Arpeggio** under it; then the builder, each row a caption and its choices, the chosen one in
+    ink: **Root** (12, two rows of six), **Chord** (Triads · Added notes · Sevenths · Extended, then that kind's
+    chords, written with the root: Cmaj7, C7, Cm7…), **Inversion** (Root position, 1st, 2nd, 3rd inversion),
+    **Voicing** (Close, Drop 2, Drop 3, Shell, Rootless A, B; one that does not fit the chord greyed), **Hands**
+    (Both hands, Right hand, Left hand), **Add a note** (add 9 D, add 11 F, add 13 A; an avoid note struck); then
+    **Staff** and **Fingering**, as cards, one scroll.
+  - Laptop: the keys across; the chord, Play, Staff and Fingering on the left; the builder on the right, both columns
+    scrolling apart.
+  - Gone: the bottom bar, the view switch (Staff and Fingering are both shown; Tensions became Add a note), the Chord
+    sheet and its pages. The gear (Settings) keeps Keyboard, Staff, Connect a piano, Share, Practise in the Player.
+
 ## Fixed on the way
 
 The kit's sheet function had taken the name of the sheet colour, so every card on the R41 pages was drawn with no
@@ -156,3 +175,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: every control in words, the inversion stepper under the name (v21).
 - 2026-11-08: the inversion in the name as a slash chord; the bar grouped by subject (v22).
 - 2026-11-08: the page restructured: chosen on the chord, played by the bar, shown by the gear (v26).
+- 2026-11-08: a chord builder after the owner's references, no bar (v27).
