@@ -5,7 +5,12 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
-- **v41: a chord's root is a letter and an accidental, so D♭ and C♯ are both there.** Owner: "how can we though
+- **v42: the root is one of 17 written notes: naturals, sharps, flats.** Owner: "but some options are weird like c
+  flat or e sharp etc."
+  - Three tracks in the Chord sheet's Root: **C D E F G A B**, then **C♯ D♯ F♯ G♯ A♯**, then **D♭ E♭ G♭ A♭ B♭**. One
+    tap a root, one choice across the three. C♭, F♭, E♯ and B♯ are gone: no chord chart writes them as a root.
+  - Each black key keeps both its names (C♯ and D♭ …), the chord spelled from the one picked.
+- **v41 (replaced by v42's three tracks): a chord's root is a letter and an accidental, so D♭ and C♯ are both there.** Owner: "how can we though
   get chords like d flat or sharp or g flat or a sharp etc".
   - The Chord sheet's Root is two tracks: the letters **C D E F G A B**, then **♭ Flat · ♮ Natural · ♯ Sharp**.
     Every written root is reachable (D♭, C♯, G♭, F♯, A♯, also E♯, C♭), and the chord is spelled from it:
@@ -306,3 +311,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: Add a note removed; Extended gains maj7♯11; a new Altered group, 7♭9 · 7♯9 · 7♯11 · 7♭13 (v39).
 - 2026-11-08: the root picker as two rows of six, used on every Practice page (v40).
 - 2026-11-08: a chord's root as letter and ♭ · ♮ · ♯, every spelling (v41).
+- 2026-11-08: a chord's root as 17 notes, naturals · sharps · flats; no C♭, F♭, E♯, B♯ (v42).
