@@ -141,6 +141,16 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   - Gone: the Inversions view (the segmented control holds the choice; the keys show the shape), ‹ ›, the Play-as
     sheet and "Arpeggio up and down", the Hands and Keyboard buttons and sheets, the bar's chord button.
 
+- **The inversions as v22 had them; the chord chosen in both places** (owner, 2026-11-08: "i don't like the
+  inversions how you refactored them and the chords choosing in both places was pretty good"). Amends v26.
+  - The inversion is stepped by ‹ › either side of the name (**‹ Cmaj7/E ›**), and the **Inversions** view (four
+    cards with their small keyboards) is back: Staff · Inversions · Fingering · Tensions. v26's Root · 1st · 2nd · 3rd
+    segmented control goes. Under the name: "1st inversion, E in the bass · Close voicing".
+  - The chord is chosen from the name (⌄) and from the bar's first button (Cmaj7 ⌃); both open the same Chord sheet
+    (Root, Chord ›, Voicing ›, Hands). This one doubling is the owner's choice: the name where the eye is, the bar where
+    the thumb is.
+  - The bar: **Cmaj7 ⌃** · **▶ Play** · **Arpeggio**. The gear keeps Keyboard and Staff (v26).
+
 ## Fixed on the way
 
 The kit's sheet function had taken the name of the sheet colour, so every card on the R41 pages was drawn with no
@@ -157,3 +167,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: the inversion in the name as a slash chord; the bar grouped by subject (v22).
 - 2026-11-08: the page restructured: chosen on the chord, played by the bar, shown by the gear (v26).
 - 2026-11-08: the builder (v27) undone, owner: "no, the previous layout directions were better"; v26's layout stands (v28).
+- 2026-11-08: inversions back to ‹ › and the Inversions view; the chord chosen from the name and the bar (v29).

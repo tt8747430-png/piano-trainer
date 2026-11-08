@@ -64,3 +64,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v25 (2026-11-08):** the tab bar to Apple's HIG read in full: filled icons, content peeking through the glass.
 **R42 v26 (2026-11-08):** Chords restructured: the chord chosen on its name, inversion segmented under it, the bar Play chord and Arpeggio, display settings behind the gear.
 **R42 v28 (2026-11-08):** the builder undone; Chords back to v26's layout.
+**R42 v29 (2026-11-08):** Chords: ‹ › and the Inversions view back; the chord chosen from the name and the bar.

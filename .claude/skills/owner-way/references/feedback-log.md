@@ -260,6 +260,9 @@ owner's, typos fixed.
   display is behind the gear. Two ways of hearing are two buttons, not a mode setting. One control per choice.
 - **Never: a practice page turned into a long builder of chip rows (R42, v27 undone):** "no, the previous layout
   directions were better". Chords keeps the keys, the chord, the views and a bar at the foot.
+- **The owner keeps some doubles (R42, v29):** "the chords choosing in both places was pretty good". Choosing the
+  chord from its name and from the bar's first button stays; the inversion is ‹ › on the name plus the Inversions
+  view's cards, never a Root · 1st · 2nd · 3rd segmented control. Ask before removing a double the owner liked.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

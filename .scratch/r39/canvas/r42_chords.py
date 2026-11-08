@@ -191,16 +191,16 @@ const tenChips = TENS[fam].filter((t) => !q.t.some((x) => x[1] === TEN[t][1] && 
 const avoid = AVOID[fam].filter((t) => !q.t.some((x) => x[0] === TEN[t][0])).map((t) => ({ l: t, n: spell(root, TEN[t][0] % 12, TEN[t][1]).name }));
 const groups = ['Triads', 'Added notes', 'Sevenths', 'Extended'].map((g) => ({ g, rows: QS.map((x, i) => [x, i]).filter(([x]) => x.g === g).map(([x, i]) => ({ s: ROOTS[root] + x.k, n: ROOTS[root] + ' ' + x.n, on: i === qi, bg: i === qi ? '#F6E3BC' : 'transparent', fw: i === qi ? 700 : 500, pick: () => change({ q: i, sheet: 'chord' }) })) }));
 const vlist = VOICINGS.map((v) => { const why = v.ok(q); return { v: v.v, f: why || v.f, op: why ? 0.42 : 1, on: v.v === voicing, mark: v.v === voicing ? '✓' : '', pick: () => { if (!why) change({ voicing: v.v, sheet: 'chord' }); } }; });
-const VIEWS = ['Staff', 'Fingering', 'Tensions'];
+const VIEWS = ['Staff', 'Inversions', 'Fingering', 'Tensions'];
 const views = VIEWS.map((v) => ({ v, on: v === view, bg: v === view ? C.ink : 'transparent', fg: v === view ? C.sheet : C.ink, sh: v === view ? '0 1px 3px rgba(51,41,33,.18)' : 'none', fw: 600, pick: () => set({ view: v }) }));
 const sh = st.sheet || '';
 const handsBadge = hands === 'Both' ? '2' : (hands === 'Right' ? 'R' : 'L');
 const hB = hands === 'Both', hR = hands === 'Right', hL = hands === 'Left';
 return {
-  sym, full, shape, kb, sv, fing, invCards, tones, tenChips, avoid, groups, vlist, views, handsBadge, hB, hR, hL, slash, hasSlash: !!slash, symFsP: Math.round(44 * symScale), symFsL: Math.round(64 * symScale), invLine: (slash ? bassName + ' in the bass · ' : 'Root in the bass · ') + voicing + ' voicing' + (hands === 'Both' ? '' : ' · ' + hands + ' hand'),
+  sym, full, shape, kb, sv, fing, invCards, tones, tenChips, avoid, groups, vlist, views, handsBadge, hB, hR, hL, slash, hasSlash: !!slash, symFsP: Math.round(44 * symScale), symFsL: Math.round(64 * symScale), invLine: INV[inv] + (slash ? ', ' + bassName + ' in the bass' : '') + ' · ' + voicing + ' voicing' + (hands === 'Both' ? '' : ' · ' + hands + ' hand'),
   chips: ns.filter((x, i, a) => a.findIndex((y) => y.name === x.name) === i).sort((a, b) => ORD.indexOf(a.deg) - ORD.indexOf(b.deg)).map((x) => ({ n: x.name, c: ROLE[x.deg] || C.accent })),
   hasTens: tenChips.length > 0, hasAvoid: avoid.length > 0,
-  isStaff: view === 'Staff' || view === 'Inversions', isInv: false, isFing: view === 'Fingering', isTones: view === 'Tensions',
+  isStaff: view === 'Staff', isInv: view === 'Inversions', isFing: view === 'Fingering', isTones: view === 'Tensions',
   rootName: ROOTS[root], qName: q.n[0].toUpperCase() + q.n.slice(1), qSym: ROOTS[root] + q.k, voicing, invLabel: INV[inv], handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand', soundWord: arp ? 'Arpeggio' : 'Block',
   roots: rootGrid(root, (i) => change({ root: i })),
   playTiles: [['Block', 'Block chord'], ['Up', 'Arpeggio up'], ['Up and down', 'Arpeggio up and down']].map(([v, l]) => ({ l, on: v === playAs, bg: v === playAs ? '#FBF1DD' : '#FEFDFB', ring: v === playAs ? '0 0 0 2px #B07A2A' : '0 0 0 1px ' + C.line, pick: () => { set({ playAs: v }); sound(ms, v !== 'Block', v === 'Up and down' ? 'Up and down' : 'Up'); } })),
@@ -242,18 +242,16 @@ def VIEWPILL(labelled):
     return f'<nav aria-label="View" style="{box} display: flex; height: 40px; box-sizing: border-box; padding: 3px; border-radius: 20px; background: {FILL}">{'<sc-for list="{{views}}" as="v" hint-placeholder-count="4">'}{item}</sc-for></nav>'
 
 def TITLEBLOCK(size):
-    # The chord is chosen where it is read: the name is the button (Chord sheet); its inversion right under it,
-    # an equal-width segmented control (Root · 1st · 2nd · 3rd), the bass named below. Proximity: each choice sits
-    # beside what it changes.
+    # ‹ Cmaj7/E › : the arrows step the inversion (the bass after the slash); the name itself, with ⌄, opens Chord
     fs = '{{symFsP}}' if size < 50 else '{{symFsL}}'
-    segw = 'align-self: stretch;' if size < 50 else 'width: 360px;'
-    seg = f'<div role="radiogroup" aria-label="Inversion" style="{segw} display: flex; height: 40px; box-sizing: border-box; padding: 3px; border-radius: 20px; background: {FILL}"><sc-for list="{{{{invSeg}}}}" as="s" hint-placeholder-count="4"><button type="button" role="radio" aria-checked="{{{{s.on}}}}" onClick="{{{{s.pick}}}}" style="flex: 1 1 0; min-width: 0; height: 34px; border: 0; border-radius: 17px; background: {{{{s.bg}}}}; box-shadow: {{{{s.sh}}}}; color: {{{{s.fg}}}}; font: inherit; font-size: 15px; font-weight: 600">{{{{s.l}}}}</button></sc-for></div>'
-    return f'''<div style="flex: none; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">
-<button type="button" aria-label="Change the chord: {{{{sym}}}}{{{{slash}}}}" onClick="{{{{openChord}}}}" style="max-width: 100%; border: 0; border-radius: 16px; background: transparent; padding: 2px 10px; color: {INK}; font: inherit; display: flex; align-items: center; gap: 6px"><span style="min-width: 0; font-family: {SERIF}; font-size: {fs}px; line-height: 1.05; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap">{{{{sym}}}}<span style="color: #B07A2A">{{{{slash}}}}</span></span><span style="flex: none; width: 28px; height: 28px; border-radius: 14px; background: {FILL}; display: flex; align-items: center; justify-content: center">{CHEV_U2.replace('m18 15-6-6-6 6', 'm6 9 6 6 6-6')}</span></button>
-<p style="margin: -4px 0 0; font-size: 15px; color: {SOFT}">{{{{full}}}}</p>
-{seg}
-<p style="margin: 0; font-size: 14px; color: {SOFT}">{{{{invLine}}}}</p>
-<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 6px"><sc-for list="{{{{chips}}}}" as="c" hint-placeholder-count="4"><span style="height: 28px; min-width: 28px; box-sizing: border-box; padding: 0 10px; border-radius: 14px; background: {{{{c.c}}}}; color: {INK}; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{c.n}}}}</span></sc-for></div>
+    arrow = lambda lab, svg, act: f'<button type="button" aria-label="{lab}" onClick="{{{{{act}}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{svg}</button>'
+    row = 'align-self: stretch; justify-content: space-between; gap: 6px' if size < 50 else 'justify-content: center; gap: 24px'
+    nb = 'flex: 1; min-width: 0;' if size < 50 else 'flex: none;'
+    return f'''<div style="flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
+<div role="group" aria-label="Inversion" style="{row}; display: flex; align-items: center">{arrow('Previous inversion', CHEV_LS, 'prev')}<button type="button" aria-label="Change the chord: {{{{sym}}}}{{{{slash}}}}" onClick="{{{{openChord}}}}" style="{nb} border: 0; border-radius: 16px; background: transparent; padding: 2px 4px; color: {INK}; font: inherit; display: flex; align-items: center; justify-content: center; gap: 6px"><span style="min-width: 0; font-family: {SERIF}; font-size: {fs}px; line-height: 1.05; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap">{{{{sym}}}}<span style="color: #B07A2A">{{{{slash}}}}</span></span><span style="flex: none; width: 26px; height: 26px; border-radius: 13px; background: {FILL}; display: flex; align-items: center; justify-content: center">{CHEV_U2.replace('m18 15-6-6-6 6', 'm6 9 6 6 6-6')}</span></button>{arrow('Next inversion', CHEV_RS, 'next')}</div>
+<p style="margin: 0; font-size: 15px; color: {SOFT}">{{{{full}}}}</p>
+<p style="margin: 0; font-size: 14px; font-weight: 600; color: {INK}">{{{{invLine}}}}</p>
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding-top: 4px"><sc-for list="{{{{chips}}}}" as="c" hint-placeholder-count="4"><span style="height: 28px; min-width: 28px; box-sizing: border-box; padding: 0 10px; border-radius: 14px; background: {{{{c.c}}}}; color: {INK}; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{c.n}}}}</span></sc-for></div>
 </div>'''
 
 def STAFFSVG(w):
@@ -289,9 +287,10 @@ def ACT(label, act, on, off, icon, primary):
     return (f'<button type="button" onClick="{{{{{act}}}}}" aria-pressed="{{{{{on}}}}}" style="flex: 1 1 0; min-width: 0; height: 56px; border: 0; border-radius: 28px; {bg} font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap">'
             f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}">{STOPI}</sc-if><sc-if value="{{{{{off}}}}}" hint-placeholder-val="{{{{true}}}}">{icon}</sc-if>{label}</button>')
 BAR_CSS = f'height: 68px; box-sizing: border-box; padding: 6px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 6px'
-ACTS = ACT('Play chord', 'playChord', 'chordOn', 'chordOff', PLAYI, True) + ACT('Arpeggio', 'playArp', 'arpOnP', 'arpOffP', ARPI.replace('width="24" height="24"', 'width="20" height="20"'), False)
+CHORDACT = f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{{openChord}}}}" style="flex: none; max-width: 112px; height: 56px; padding: 0 12px 0 16px; border: 0; border-radius: 28px; background: transparent; color: {INK}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 4px; white-space: nowrap; box-shadow: inset 0 0 0 1px {LINE}"><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis">{{{{qSym}}}}</span>{CHEV_U2}</button>'
+ACTS = CHORDACT + ACT('Play', 'playChord', 'chordOn', 'chordOff', PLAYI, True) + ACT('Arpeggio', 'playArp', 'arpOnP', 'arpOffP', ARPI.replace('width="24" height="24"', 'width="20" height="20"'), False)
 DOCK_PHONE = f'<div role="toolbar" aria-label="Play" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; {BAR_CSS}">{ACTS}</div>'
-DOCK_LAPTOP = f'<div role="toolbar" aria-label="Play" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; width: 420px; {BAR_CSS}">{ACTS}</div>'
+DOCK_LAPTOP = f'<div role="toolbar" aria-label="Play" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; width: 520px; {BAR_CSS}">{ACTS}</div>'
 
 # ── the sheets' bodies, the same on both sizes ──
 def BACKHEAD(title, act):
@@ -321,7 +320,7 @@ def SHEETS_PHONE(player):
     return out
 
 def POPS_LAPTOP(player):
-    dockpos = 'left: calc(50% - 200px); top: 330px'
+    dockpos = 'left: calc(50% - 260px); bottom: 104px'
     out = ''
     for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isSet', 'Settings', B_SET(player), 'right: 24px; top: 76px')):
         out += POPOVER(cond, title, body, pos, 400)
