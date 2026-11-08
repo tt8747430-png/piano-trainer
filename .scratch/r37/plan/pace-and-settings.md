@@ -141,13 +141,20 @@ Piano end a song on a result screen too; ours leads to practice, not a grade. Dr
 settings"): the Player's `SongInfo` sheet goes, and the gear has no link to the song's page (it is reached from Songs).
 The song's page still gains Tuning.
 
-**The song's settings stand apart from its acts** (owner, 2026-11-07: "the first two three settings should be more
-distinctive than the other ones"): Arrangement · Accompaniment (radio cards) and **Transpose** (a card, its label
-bold) are white cards with shadows. The acts follow under the caption **More** as a quiet list: rows with a leading
-icon and ›, on the drawer's sand, parted by hairlines, no card and no shadow: **Sections · Edit score · Print · Share
-link · Export**. (v150's single row of icon buttons was rejected, 2026-11-07: "i like the icons, but now it feels like a
-bottom bar and not like settings drawer".) Canvas v151; drawings `song-settings-acts.png`,
-`song-settings-acts-laptop.png`.
+**The song's drawer: the song at its head, settings only below** (owner, 2026-11-07/08: "the first two three settings
+should be more distinctive than the other ones"; v150's row of icon buttons "feels like a bottom bar and not like
+settings drawer"; v151's icon list "still not good. research more and look also at the example apps and websites").
+- Research: Chordify keeps a song's choices on the song (Transpose · Capo · Simplify tabs) and its acts in a separate
+  ⋮ action list (Add to setlist, Share chords, Export to PDF, Export to MIDI; `piano-data/reference-apps/chordify`);
+  Flat's Playback options is a titled sheet of settings rows only (`flat-score-editor/05`); forScore keeps a Tools menu
+  apart from the score's settings and Share there prints or sends (forscore.co/documentation/tools); Soundslice's
+  Settings panel holds transposition, count-in, zoom and nothing to act on (soundslice.com/help, Transposing); Apple's
+  HIG groups settings in lists under headers and puts an object's acts in a menu.
+- Will build: the drawer's head is the song, as a sheet in Chordify or Apple Music: a cover tile, **Amazing Grace**,
+  "G major · 3/4 · 80 BPM" (the key follows Transpose), and at its right two round buttons, **Share link** and **More**
+  (···), whose menu holds **Edit score · Print · Export**. Below, settings only, under headers: **What you play**, the
+  Arrangement · Accompaniment cards; **Song**, Transpose and Sections ›. No acts among the settings. Canvas v152;
+  drawings `song-settings-acts.png`, `song-settings-more-menu.png`, `song-settings-acts-laptop.png`.
 
 **Placed (owner, 2026-11-07, on the five proposals):**
 - **Practice, not Pace** ("i don't like that it is called pace"): the transport's menu is titled Practice, the
