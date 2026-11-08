@@ -5,6 +5,18 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v32: no gear; the keyboard's own button; Hands inside Voicing; the fingering on the staff.** Owner: "but you
+  didn't remove the old settings. and do we need share, and the keyboard settings in the header to hide and show the
+  and all its settings including connect a piano. and also the hands settings are weird. and do we need the fingering
+  or can be directly show this on the staff."
+  - The gear and its Settings sheet go, with Share and ··· (More). The header holds Back and a **Keyboard** button:
+    Show the keyboard, Keys (Chord · 61 · 88), Note names, Connect a piano ›, All piano settings ›.
+  - **Hands** goes. Voicing starts with one toggle, **Bass in the left hand** (on by default), then the right hand's
+    voicings. The Chord sheet's Voicing row reads "Close + bass".
+  - **Fingering** as a view goes: the finger numbers stand beside the notes on the staff, as printed music does. The
+    view switch goes with it; the page has one staff.
+  - (v31's line on Staff · Fingering views, and the gear's Practise and Staff, are replaced by this.)
+
 - **v31: Tensions go into the Chord sheet; the staff's choice sits on the staff; Practise is on the page; the bar
   per Apple.** Owner: "Shall I? yes and i don't like how the bottom bar looks. research more the apple guidelines. and
   also the staff settings are not very good. and the practice in the player are too hidden".
@@ -188,3 +200,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: inversions back to ‹ › and the Inversions view; the chord chosen from the name and the bar (v29).
 - 2026-11-08: the Inversions view goes; the keys and ‹ › show it (v30).
 - 2026-11-08: Tensions as Add a note; Both clefs | Treble on the staff; Practise on the page; one prominent Play (v31).
+- 2026-11-08: no gear, Share or More; a Keyboard button; Bass in the left hand inside Voicing; fingering on the staff (v32).
