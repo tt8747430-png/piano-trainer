@@ -58,3 +58,13 @@ canvas, between Songs and Practice.
 - Generator: `.scratch/r39/canvas/player/merge_player.py` (reads the R37 base pages, maps the pictures with
   `player/blobmap.txt`, writes `PlayerApp`, `PlayerDesk` and one board per state); `index.py` lays out the section.
 - Drawings: `.scratch/r41/drawings/player-*.png` (blank keys there: the pictures load only on the artifact).
+
+## The app's tab bar (R42, v24)
+
+Owner, 2026-11-08: "i don't like the bottom bar how you refactor … i mean the bottom bar of the app". The canvas's
+tab bar had only words in a pill, unlike the app (AppNav.tsx: GraduationCap, Music, Metronome, the learner's picture
+or UserRound). Apple's tab bar: "Supply a symbol and a text label for each tab"; icons above labels on a phone.
+Now each tab is the app's own symbol over its word (11px); the place you are in sits in a lens (fill, ink, bolder
+stroke), the others soft; 64 tall (radius 32), the lens 52 inside 6 (radius 26). A fade rises under the bar (Apple's
+scroll-edge effect), so the list no longer shows through below it. The laptop keeps the sidebar.
+
