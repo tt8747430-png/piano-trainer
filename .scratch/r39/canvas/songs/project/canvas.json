@@ -41,13 +41,31 @@
    "h": 1299,
    "is_interactive": true,
    "title": "MacBook Air: a song's page in two columns: the song on the left, Chords, Your practice and Details on the right; Continue and Play float under them"
+  },
+  "Editor.dc.html": {
+   "x": 0,
+   "y": 2838,
+   "w": 450,
+   "h": 920,
+   "is_interactive": true,
+   "title": "iPhone 17 Pro: editing the score. One quiet bar (Done, Undo, Redo, the piano, Play, ···); the score; Flat's palette folded to one row of tools over its tabs, the grip opens every section in one scroll; the keys under it"
+  },
+  "EditorLaptop.dc.html": {
+   "x": 530,
+   "y": 2838,
+   "w": 2143,
+   "h": 1299,
+   "is_interactive": true,
+   "title": "MacBook Air: editing the score. The page in the middle, the palette docked at the right with every section in one scroll, the piano from the bar"
   }
  },
  "order": [
   "Main.dc.html",
   "Laptop.dc.html",
   "Song.dc.html",
-  "SongLaptop.dc.html"
+  "SongLaptop.dc.html",
+  "Editor.dc.html",
+  "EditorLaptop.dc.html"
  ],
  "notes": {},
  "designSystems": []

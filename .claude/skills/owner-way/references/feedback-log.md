@@ -41,6 +41,9 @@ owner's, typos fixed.
   be a single staff.
 - **Every song is editable.** Where something cannot be, the learner is told why.
 - **Recording:** the learner chooses what plays along and what shows. The pedal prints one mark per press.
+- **Drawn (R39-3, 2026-11-08):** one quiet bar (Done, Undo, Redo, Piano keys, Play, ··· for what the score does not
+  print), no ✕; the palette's categories named, folded to one row, opened to every section in one scroll; docked on a
+  laptop. Waiting for the owner's word.
 
 ## Pickers and tempo
 
