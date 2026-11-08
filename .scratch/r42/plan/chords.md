@@ -103,6 +103,22 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   - Corners: groups 68 tall (radius 34), items 56 inside 6 (radius 28), the stepper 44 (radius 22) with 40-tall
     arrows 2 in (radius 20).
 
+- **The inversion is in the chord's name; the bar is grouped by what it changes** (owner, 2026-11-08: "can you embed
+  the inversions in the big chord name … how each element of the toolbar relates to each other is unclear: like the
+  block chords or arpeggios change the player but they are in separate groups … research more on laws of proximity
+  and other laws of ux ui"). Replaces v21's stepper under the name and its bar.
+  - Research (lawsofux.com, after NN/g's Gestalt articles): Proximity, "objects that are near … tend to be grouped
+    together … perceived to share similar functionality"; Common Region, "elements … sharing an area with a clearly
+    defined boundary" read as a group; Similarity, alike things read as related; Uniform Connectedness, "group
+    functions of a similar nature so they are visually connected"; Fitts, big, well-spaced targets; Jakob, the
+    musician's slash chord, read everywhere else.
+  - The name carries the inversion as a slash chord, the bass after the slash in deep honey: **‹ Cmaj7/E ›**, the
+    arrows either side of the name, 44 circles. Under it, in words: "1st inversion, E in the bass · Close voicing".
+    Root position has no slash. A long name shrinks rather than wraps (Cmaj9/E, C♯m(maj7)/G♯).
+  - The bar is three capsules, each one subject, its items alike inside it: **the chord** (the chord's name ⌃, the
+    hands that play it) · **its sound** (Play, and how it plays: Block or Arpeggio, right beside it) · **the
+    keyboard**. Play leaves its lone spot and sits with the choice that changes what it plays.
+
 ## Fixed on the way
 
 The kit's sheet function had taken the name of the sheet colour, so every card on the R41 pages was drawn with no
@@ -116,3 +132,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: concentric corners, Tensions, the chosen view in ink (v19).
 - 2026-11-08: Apple's toolbar groups and segmented control (v20).
 - 2026-11-08: every control in words, the inversion stepper under the name (v21).
+- 2026-11-08: the inversion in the name as a slash chord; the bar grouped by subject (v22).

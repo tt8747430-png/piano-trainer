@@ -250,6 +250,10 @@ owner's, typos fixed.
 - **Words beat symbols (R42, v21):** "make more clear", after a symbols-only bar. Every control shows a symbol and
   its current value in words (Block, Both hands), never a symbol alone except Play and Back. A stepper sits beside
   the thing it steps and names the step (‹ Root position ›), never in the transport where it reads as previous song.
+- **Group by what a control changes (R42, v22):** "block chords or arpeggios change the player but they are in
+  separate groups". A bar's capsules are subjects (the chord · its sound · the keyboard); a choice sits in the same
+  capsule as the action it changes (Play beside Block or Arpeggio). Proximity, common region, similarity. A chord's
+  inversion is written in its name as a slash chord (Cmaj7/E), stepped by arrows on either side.
 
 ## Sounds
 
