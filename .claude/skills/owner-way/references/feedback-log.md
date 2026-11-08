@@ -308,6 +308,8 @@ owner's, typos fixed.
   tap-again cycling and its marks. **Rejected:** "no I don't like this". v47: one row, tap again, the chosen letter
   naming the next spelling. Never widen a segment into sub-buttons. v48: "this icon look like reset and is
   misleading": the chip reads "or C♯"; no turn arrow for a choice (it means reset or reload).
+  v49: "now it can be interpreted as the c can be called c sharp": a pointer under the chosen letter reads "Tap
+  again for C♯". Name a hidden gesture's action in words; a glyph or "or" is read as something else.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

@@ -5,6 +5,14 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v49: a pointer under the chosen letter says "Tap again for C♯".** Owner on v48's "or C♯": "now it can be
+  interpreted as the c can be called c sharp".
+  - The chip inside the button is gone (the letter alone again, 48 tall). Under the row, a dark pointer whose tip
+    sits under the chosen letter reads the action: **Tap again for C♯**, **Tap again for G♭**, **Tap again for B**.
+    It follows the letter, kept inside the sheet at the row's ends.
+  - An exception to "no explanation line": it names the action of the control it points at, changes with it, and
+    is the only way a learner learns the gesture. The words, not a glyph, because a glyph and "or" were both
+    misread.
 - **v48: "or C♯", no arrow.** Owner: "this icon look like reset and is misleading".
   - The turn arrow is gone; the chip under the chosen letter reads **or C♯** (C♯ reads **or C**; G♯ reads **or G♭**).
     "Or" names the other spelling as a choice and invites the tap, without an icon that means reset or reload.
@@ -350,3 +358,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: the chosen root letter opens into its spellings, D♭ D D♯ (v46).
 - 2026-11-08: v46 rejected; tap again, the chosen letter shows "↻ C♯", the next spelling (v47).
 - 2026-11-08: the chip reads "or C♯"; the turn arrow read as reset (v48).
+- 2026-11-08: "Tap again for C♯" on a pointer under the chosen letter; "or C♯" read as a second name (v49).
