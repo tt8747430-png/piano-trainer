@@ -212,6 +212,8 @@ owner's, typos fixed.
   **Drawn (R39-8, 2026-11-08):** Progressions as a library like Songs; a progression's chords as tiles coloured by role
   with the root's move between them, in any key, voice-led or block. Waiting for the owner's word.
 - **Chord player:** Musicca's controls and options, with the best free sounds.
+  **Drawn (R39-10, 2026-11-08):** a lead sheet of sections and bars, a chord tapped to change it (the key's chords,
+  root, chord, length, bass), Style · Key · Tempo on top, Play and Loop above the keys, its own settings. Waiting.
 - **Metronome:** BPM large with −10 −1 +1 +10, a slider, Tap tempo, sound and meter, one Play, beats as squares; beats you set
   (accent, normal, silent), any meter, subdivisions, recorded sounds; one engine for the page, the Player and the quick
   metronome.

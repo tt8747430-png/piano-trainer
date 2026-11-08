@@ -1,0 +1,169 @@
+# The Chord player, phone and laptop, on the Practice canvas. Reuses chords.py's helpers. Run: python3 -I chordplayer.py
+G = {}
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/chords.py').read(), G)
+OUT, HEAD, STATUS, SIDE, LAPFRAME_TOP, SH, POP = G['OUT'], G['HEAD'], G['STATUS'], G['SIDE'], G['LAPFRAME_TOP'], G['SH'], G['POP']
+PICK, SEGBAR, LAB, H2, PROW, SROW, RB, BACK, GEAR, KEYS, sheet_phone, pop = (G[k] for k in 'PICK SEGBAR LAB H2 PROW SROW RB BACK GEAR KEYS sheet_phone pop'.split())
+PHONE_FRAME, LAPTOP_FRAME = G['PHONE_FRAME'], G['LAPTOP_FRAME']
+MORE = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg>'
+UNDO = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"></path><path d="M4 9h11a5 5 0 0 1 0 10h-3"></path></svg>'
+REDO = UNDO.replace('<path d="M9 14 4 9l5-5"></path><path d="M4 9h11a5 5 0 0 1 0 10h-3"></path>', '<path d="m15 14 5-5-5-5"></path><path d="M20 9H9a5 5 0 0 0 0 10h3"></path>')
+GRIP = '<svg width="16" height="16" viewBox="0 0 24 24" fill="#8A8178" aria-hidden="true"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg>'
+PLAYI = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5Z"></path></svg>'
+LOOPI = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2l3 3-3 3"></path><path d="M4 11V9a4 4 0 0 1 4-4h12"></path><path d="M7 22l-3-3 3-3"></path><path d="M20 13v2a4 4 0 0 1-4 4H4"></path></svg>'
+CHEV = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 10 5 5 5-5"></path></svg>'
+
+JS = r'''
+const ROOTS = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
+const QUAL = [['', 'maj'], ['m', 'm'], ['7', '7'], ['maj7', 'maj7'], ['m7', 'm7'], ['sus4', 'sus4'], ['sus2', 'sus2'], ['dim', 'dim'], ['add9', 'add9'], ['6', '6']];
+const IV = { '': [0, 4, 7], m: [0, 3, 7], '7': [0, 4, 7, 10], maj7: [0, 4, 7, 11], m7: [0, 3, 7, 10], sus4: [0, 5, 7], sus2: [0, 2, 7], dim: [0, 3, 6], add9: [0, 4, 7, 14], '6': [0, 4, 7, 9] };
+const DIAT = ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'Bdim'];
+const NUM = { C: 'I', Dm: 'ii', Em: 'iii', F: 'IV', G: 'V', Am: 'vi', Bdim: 'vii°', G7: 'V7', Fmaj7: 'IVmaj7', Am7: 'vi7', 'C/E': 'I/3' };
+const STYLES = [['Pop', ['Pop 1 · straight 8ths', 'Pop 2 · half-time', 'Pop ballad']], ['Rock', ['Rock 8ths', 'Power ballad']], ['Ballad', ['Piano ballad', '6/8 ballad']], ['Worship and gospel', ['Worship', 'Gospel shuffle']], ['Jazz', ['Swing', 'Bossa nova', 'Jazz waltz']], ['Latin', ['Salsa', 'Reggaeton']], ['Piano patterns', ['Broken chords', 'Alberti bass', 'Stride']]];
+const NAT = [0, 2, 4, 5, 7, 9, 11];
+const parse = (s) => { const m = s.match(/^([A-G][♭♯]?)(.*?)(?:\/([A-G][♭♯]?))?$/); const r = ROOTS.indexOf(m[1]); return { r, q: m[2], bass: m[3] ? ROOTS.indexOf(m[3]) : null }; };
+const LO = 36, HI = 84;
+function keyboard(lh, rh, sounding) {
+  const whites = []; for (let m = LO; m <= HI; m++) { if (NAT.includes(m % 12)) whites.push(m); }
+  const W = 100 / whites.length;
+  const col = (m, black) => rh.includes(m) ? (black ? '#C9561A' : (sounding ? '#E8762F' : '#F7C9A5')) : lh.includes(m) ? (black ? '#55468A' : (sounding ? '#7E6BB8' : '#D5CCEC')) : '';
+  const ws = whites.map((m, i) => ({ x: (i * W).toFixed(3) + '%', w: W.toFixed(3) + '%', fill: col(m) || '#FFFFFF', lab: m === 60 ? 'C4' : '' }));
+  const bs = []; for (let m = LO; m <= HI; m++) { if (NAT.includes(m % 12)) continue; const i = whites.indexOf(m - 1); bs.push({ x: ((i + 1) * W - W * 0.3).toFixed(3) + '%', w: (W * 0.6).toFixed(3) + '%', fill: col(m, true) || '#1A1612' }); }
+  return { whites: ws, blacks: bs };
+}
+const KEYROOTS = ROOTS;
+const START = [
+  { name: 'Verse', rep: 2, chords: [['C', 4], ['G', 4], ['Am', 4], ['F', 4]] },
+  { name: 'Chorus', rep: 1, chords: [['F', 4], ['G', 4], ['C', 2], ['C/E', 2], ['F', 2], ['G7', 2], ['C', 4]] }
+];
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const set = (o) => this.setState(o);
+    const secs = st.secs || START, sel = st.sel || null, sheet = st.sheet || null, sounding = st.sounding ?? false, at = st.at || [0, 0], bpm = st.bpm ?? 96, loop = st.loop ?? false, style = st.style ?? 'Pop 1 · straight 8ths', names = st.names ?? 'letters', menu = st.menu ?? false, page = st.page || null;
+    const inst = st.inst || { Piano: [true, 80], Bass: [true, 60], Drums: [true, 50] };
+    const upd = (fn) => { const c = JSON.parse(JSON.stringify(secs)); fn(c); set({ secs: c }); };
+    const label = (s) => names === 'numerals' ? (NUM[s] || s) : s;
+    const sections = secs.map((sec, si) => {
+      // flow chords into bars of 4 beats
+      const bars = []; let cur = [], beats = 0;
+      sec.chords.forEach(([s, b], ci) => { cur.push({ s, b, ci }); beats += b; if (beats >= 4) { bars.push(cur); cur = []; beats = 0; } });
+      if (cur.length) bars.push(cur);
+      const playingSec = sounding && at[0] === si;
+      return {
+        name: sec.name, rep: '× ' + sec.rep, barsN: bars.length + (bars.length === 1 ? ' bar' : ' bars'),
+        bars: bars.map((bar, bi) => ({ n: String(bi + 1), tiles: bar.map((c) => { const on = sel && sel[0] === si && sel[1] === c.ci; const play = playingSec && at[1] === c.ci; return { s: label(c.s), grow: String(c.b), bg: play ? '#E8762F' : on ? '#1A1612' : '#FFFFFF', fg: play || on ? '#FFFFFF' : '#1A1612', ring: on ? 'none' : '0 0 0 1px #E2DACF', pick: () => set({ sel: [si, c.ci], sheet: 'chord' }) }; }), short: bar.reduce((a, c) => a + c.b, 0) < 4 })),
+        addChord: () => upd((c) => { c[si].chords.push(['C', 4]); }), repDown: () => upd((c) => { c[si].rep = Math.max(1, c[si].rep - 1); }), repUp: () => upd((c) => { c[si].rep = Math.min(8, c[si].rep + 1); }),
+        looping: loop && at[0] === si
+      };
+    });
+    const selC = sel ? secs[sel[0]].chords[sel[1]] : null;
+    const pc = selC ? parse(selC[0]) : null;
+    const playC = secs[at[0]].chords[at[1]] || secs[0].chords[0];
+    const pp = parse(playC[0]);
+    const rh = (IV[pp.q] || [0, 4, 7]).map((iv) => { let m = 60 + pp.r + iv; if (pp.r > 6) m -= 12; return m; });
+    const lh = [36 + (pp.bass ?? pp.r) + (((pp.bass ?? pp.r) > 7) ? 0 : 12)];
+    const kb = keyboard(lh, rh, sounding);
+    const setChord = (s) => upd((c) => { c[sel[0]].chords[sel[1]][0] = s; });
+    const seg = (on) => ({ bg: on ? '#FFFFFF' : 'transparent', sh: on ? '0 0 0 1px rgba(26,22,18,0.06), 0 1px 3px rgba(26,22,18,0.12)' : 'none', w: on ? 700 : 500 });
+    return {
+      SH, sections, styleLabel: style, keyLabel: (st.keyRoot || 'C') + ' ' + (st.mode || 'major'), bpm: String(bpm), bpmDown: () => set({ bpm: Math.max(40, bpm - 2) }), bpmUp: () => set({ bpm: Math.min(220, bpm + 2) }),
+      whites: kb.whites, blacks: kb.blacks, fullName: playC[0],
+      sounding, notSounding: !sounding, playLabel: sounding ? 'Stop' : 'Play', togglePlay: () => set({ sounding: !sounding, at: sounding ? at : [0, 0] }),
+      loop, loopLabel: 'Loop ' + secs[at[0]].name, loopBg: loop ? '#1A1612' : '#FFFFFF', loopFg: loop ? '#FFFFFF' : '#1A1612', toggleLoop: () => set({ loop: !loop }),
+      nowLabel: sounding ? secs[at[0]].name + ' · bar ' + (Math.floor(secs[at[0]].chords.slice(0, at[1]).reduce((a, c) => a + c[1], 0) / 4) + 1) + ' · ' + playC[0] : secs.reduce((a, s) => a + Math.ceil(s.chords.reduce((x, c) => x + c[1], 0) / 4) * s.rep, 0) + ' bars, repeats played',
+      addSection: () => upd((c) => { c.push({ name: 'Bridge', rep: 1, chords: [['Am', 4], ['F', 4]] }); }),
+      chordOn: sheet === 'chord' && !!selC, styleOn: sheet === 'style', anyOn: !!sheet || menu, closeAll: () => set({ sheet: null, sel: null, menu: false }),
+      openStyle: () => set({ sheet: 'style', menu: false }), openKey: () => set({ sheet: 'key', menu: false }), keyOn: sheet === 'key',
+      keyRoots: ROOTS.map((r) => ({ r, bg: r === (st.keyRoot || 'C') ? '#1A1612' : '#FFFFFF', fg: r === (st.keyRoot || 'C') ? '#FFFFFF' : '#1A1612', pick: () => set({ keyRoot: r }) })),
+      modeSeg: [['major', 'Major'], ['minor', 'Minor']].map(([id, l]) => ({ l, on: (st.mode || 'major') === id, ...seg((st.mode || 'major') === id), pick: () => set({ mode: id }) })), menuOn: menu, toggleMenu: () => set({ menu: !menu, sheet: null }),
+      selName: selC ? selC[0] : '', selBass: pc && pc.bass !== null ? ROOTS[pc.bass] + ' in the bass' : 'Its root', selBeats: selC ? selC[1] + (selC[1] === 1 ? ' beat' : ' beats') : '',
+      shorter: () => upd((c) => { const x = c[sel[0]].chords[sel[1]]; x[1] = Math.max(1, x[1] - 1); }), longer: () => upd((c) => { const x = c[sel[0]].chords[sel[1]]; x[1] = Math.min(8, x[1] + 1); }),
+      remove: () => { upd((c) => { c[sel[0]].chords.splice(sel[1], 1); }); set({ sheet: null, sel: null, toast: 'Deleted ' + selC[0] }); },
+      toast: st.toast || '', hasToast: !!st.toast, undoToast: () => set({ secs: START, toast: '' }),
+      roots: ROOTS.map((r, i) => ({ r, on: pc && pc.r === i, bg: pc && pc.r === i ? '#1A1612' : '#FFFFFF', fg: pc && pc.r === i ? '#FFFFFF' : '#1A1612', pick: () => setChord(r + (pc ? pc.q : '')) })),
+      quals: QUAL.map(([q, l]) => ({ l, on: pc && pc.q === q, bg: pc && pc.q === q ? '#1A1612' : '#FFFFFF', fg: pc && pc.q === q ? '#FFFFFF' : '#1A1612', pick: () => setChord(ROOTS[pc.r] + q) })),
+      diat: DIAT.map((d) => ({ d, n: NUM[d], on: selC && selC[0] === d, bg: selC && selC[0] === d ? '#FDF1E8' : '#FFFFFF', pick: () => setChord(d) })),
+      styles: STYLES.map(([f, list]) => ({ f, items: list.map((s) => ({ s, mark: s === style ? '✓' : '', pick: () => set({ style: s, sheet: null }) })) })),
+      settingsOn: page === 'settings', openSettings: () => set({ page: 'settings', sheet: null, menu: false }), closeSettings: () => set({ page: null }),
+      inst: Object.entries(inst).map(([k, [on, lv]]) => ({ k, on, lv: String(lv), w: lv + '%', tbg: on ? '#2E7D4F' : '#D9D1C6', tx: on ? '20px' : '2px', op: on ? 1 : 0.45, toggle: () => set({ inst: { ...inst, [k]: [!on, lv] } }) })),
+      nameSeg: [['letters', 'Letters'], ['numerals', 'Numerals']].map(([id, l]) => ({ l, on: names === id, ...seg(names === id), pick: () => set({ names: id }) }))
+    };
+  }
+}
+'''
+
+PILL = lambda label, val, act: f"""<button type="button" onClick="{{{{{act}}}}}" style="flex: 1 1 auto; min-width: 0; height: 52px; border: 0; border-radius: 12px; background: #FFFFFF; box-shadow: {SH}; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 1px; padding: 0 12px; color: #1A1612; text-align: left"><span style="font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #6B6259">{label}</span><span style="max-width: 100%; display: flex; align-items: center; gap: 4px; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden"><span style="overflow: hidden; text-overflow: ellipsis">{{{{{val}}}}}</span>{CHEV}</span></button>"""
+TEMPO = f"""<div role="group" aria-label="Tempo" style="flex: none; height: 52px; border-radius: 12px; background: #FFFFFF; box-shadow: {SH}; display: flex; align-items: center"><button type="button" aria-label="Slower" onClick="{{{{bpmDown}}}}" style="width: 38px; height: 52px; border: 0; background: transparent; font-size: 20px; color: #1A1612">−</button><span style="width: 52px; display: flex; flex-direction: column; align-items: center; line-height: 1.1"><span style="font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{bpm}}}}</span><span style="font-size: 11px; color: #6B6259">BPM</span></span><button type="button" aria-label="Faster" onClick="{{{{bpmUp}}}}" style="width: 38px; height: 52px; border: 0; background: transparent; font-size: 20px; color: #1A1612">+</button></div>"""
+CONTROLS = f"""<div style="display: flex; gap: 8px">{PILL('Style', 'styleLabel', 'openStyle')}{PILL('Key', 'keyLabel', 'openKey').replace('flex: 1 1 auto', 'flex: 0 0 auto')}{TEMPO}</div>"""
+def SECTIONS(cols, th):
+    return f"""<sc-for list="{{{{sections}}}}" as="x" hint-placeholder-count="2"><section style="border-radius: 16px; background: #FBF8F3; box-shadow: {SH}; padding: 10px 10px 12px; display: flex; flex-direction: column; gap: 10px"><div style="display: flex; align-items: center; gap: 6px"><span aria-label="Move {{{{x.name}}}}" style="width: 28px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: grab">{GRIP}</span><button type="button" style="height: 36px; border: 0; border-radius: 9px; background: transparent; padding: 0 6px; display: flex; align-items: center; gap: 4px; font-size: 17px; font-weight: 700; color: #1A1612">{{{{x.name}}}}{CHEV}</button><span style="font-size: 13px; color: #6B6259">{{{{x.barsN}}}}</span><div style="flex: 1"></div><div role="group" aria-label="Repeat" style="height: 36px; display: flex; align-items: center; border-radius: 9999px; background: #FFFFFF; box-shadow: 0 0 0 1px #E2DACF"><button type="button" aria-label="Fewer times" onClick="{{{{x.repDown}}}}" style="width: 32px; height: 36px; border: 0; background: transparent; font-size: 17px; color: #1A1612">−</button><span style="min-width: 30px; text-align: center; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{x.rep}}}}</span><button type="button" aria-label="More times" onClick="{{{{x.repUp}}}}" style="width: 32px; height: 36px; border: 0; background: transparent; font-size: 17px; color: #1A1612">+</button></div><button type="button" aria-label="{{{{x.name}}}}: more" style="width: 36px; height: 36px; border: 0; border-radius: 9999px; background: transparent; color: #1A1612; display: flex; align-items: center; justify-content: center">{MORE}</button></div><div style="display: grid; grid-template-columns: repeat({cols}, minmax(0, 1fr)); gap: 6px"><sc-for list="{{{{x.bars}}}}" as="b" hint-placeholder-count="4"><div style="position: relative; height: {th}px; border-radius: 10px; background: #EFE8DF; padding: 3px; display: flex; gap: 3px; box-sizing: border-box"><span aria-hidden="true" style="position: absolute; left: 6px; top: 3px; font-size: 10px; font-weight: 700; color: #8A8178">{{{{b.n}}}}</span><sc-for list="{{{{b.tiles}}}}" as="t" hint-placeholder-count="1"><button type="button" onClick="{{{{t.pick}}}}" style="flex: {{{{t.grow}}}} 1 0; min-width: 0; border: 0; border-radius: 8px; background: {{{{t.bg}}}}; color: {{{{t.fg}}}}; box-shadow: {{{{t.ring}}}}; font-family: 'Instrument Serif', Georgia, serif; font-size: 21px; white-space: nowrap; overflow: hidden">{{{{t.s}}}}</button></sc-for></div></sc-for><button type="button" aria-label="Add a chord to {{{{x.name}}}}" onClick="{{{{x.addChord}}}}" style="height: {th}px; border: 0; border-radius: 10px; background: transparent; box-shadow: inset 0 0 0 1.5px #D9D1C6; color: #6B6259; font-size: 22px">+</button></div></section></sc-for><button type="button" onClick="{{{{addSection}}}}" style="height: 48px; border: 0; border-radius: 12px; background: transparent; box-shadow: inset 0 0 0 1.5px #D9D1C6; color: #1A1612; font-size: 16px; font-weight: 600">+ Add section</button>"""
+TRANSPORT = f"""<div style="display: flex; align-items: center; gap: 10px"><button type="button" aria-pressed="{{{{sounding}}}}" onClick="{{{{togglePlay}}}}" style="flex: none; width: 120px; height: 48px; border: 0; border-radius: 12px; background: #1A1612; color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 16px; font-weight: 700"><sc-if value="{{{{sounding}}}}" hint-placeholder-val="{{{{false}}}}"><span style="width: 13px; height: 13px; border-radius: 2px; background: #FFFFFF"></span></sc-if><sc-if value="{{{{notSounding}}}}" hint-placeholder-val="{{{{true}}}}">{PLAYI}</sc-if>{{{{playLabel}}}}</button><button type="button" aria-pressed="{{{{loop}}}}" onClick="{{{{toggleLoop}}}}" aria-label="{{{{loopLabel}}}}" style="flex: none; height: 48px; padding: 0 14px; border: 0; border-radius: 12px; background: {{{{loopBg}}}}; color: {{{{loopFg}}}}; box-shadow: 0 0 0 1px #E2DACF; display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600">{LOOPI}Loop</button><span aria-live="polite" style="flex: 1; min-width: 0; font-size: 13px; color: #6B6259; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{nowLabel}}}}</span></div>"""
+CHIPGRID = lambda lst, cols, f: f"""<div style="display: grid; grid-template-columns: repeat({cols}, minmax(0, 1fr)); gap: 6px"><sc-for list="{{{{{lst}}}}}" as="r" hint-placeholder-count="12"><button type="button" onClick="{{{{r.pick}}}}" style="height: 42px; border: 0; border-radius: 10px; background: {{{{r.bg}}}}; color: {{{{r.fg}}}}; box-shadow: 0 0 0 1px #E2DACF; {f}">{{{{r.{ 'r' if lst == 'roots' else 'l' }}}}}</button></sc-for></div>"""
+CHORDBODY = f"""<div style="display: flex; align-items: baseline; gap: 12px"><span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 44px; line-height: 1">{{{{selName}}}}</span><span style="font-size: 15px; color: #6B6259">{{{{selBeats}}}}</span></div><div style="display: flex; flex-direction: column; gap: 6px">{LAB('In the key')}<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px"><sc-for list="{{{{diat}}}}" as="d" hint-placeholder-count="7"><button type="button" onClick="{{{{d.pick}}}}" style="height: 54px; border: 0; border-radius: 10px; background: {{{{d.bg}}}}; box-shadow: 0 0 0 1px #E2DACF; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; color: #1A1612; padding: 0"><span style="font-size: 14px; font-weight: 700">{{{{d.d}}}}</span><span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 14px; color: #6B6259">{{{{d.n}}}}</span></button></sc-for></div></div><div style="display: flex; flex-direction: column; gap: 6px">{LAB('Root')}{CHIPGRID('roots', 6, "font-family: 'Instrument Serif', Georgia, serif; font-size: 20px")}</div><div style="display: flex; flex-direction: column; gap: 6px">{LAB('Chord')}{CHIPGRID('quals', 5, 'font-size: 14px; font-weight: 600')}</div><div style="display: flex; gap: 10px; align-items: flex-end"><div style="flex: 1; display: flex; flex-direction: column; gap: 6px">{LAB('Length')}<div style="height: 46px; display: flex; align-items: center; border-radius: 12px; background: #FFFFFF; box-shadow: 0 0 0 1px #E2DACF"><button type="button" aria-label="Shorter" onClick="{{{{shorter}}}}" style="width: 46px; height: 46px; border: 0; background: transparent; font-size: 20px; color: #1A1612">−</button><span style="flex: 1; text-align: center; font-size: 15px; font-weight: 600">{{{{selBeats}}}}</span><button type="button" aria-label="Longer" onClick="{{{{longer}}}}" style="width: 46px; height: 46px; border: 0; background: transparent; font-size: 20px; color: #1A1612">+</button></div></div><div style="flex: 1; display: flex; flex-direction: column; gap: 6px">{LAB('Bass note')}<button type="button" style="height: 46px; border: 0; border-radius: 12px; background: #FFFFFF; box-shadow: 0 0 0 1px #E2DACF; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; font-size: 15px; font-weight: 600; color: #1A1612">{{{{selBass}}}}{CHEV}</button></div></div><div style="display: flex; gap: 10px"><button type="button" onClick="{{{{remove}}}}" style="flex: 1; height: 48px; border: 0; border-radius: 12px; background: #EFE8DF; color: #B3261E; font-size: 16px; font-weight: 600">Delete chord</button><button type="button" onClick="{{{{closeAll}}}}" style="flex: 1; height: 48px; border: 0; border-radius: 12px; background: #1A1612; color: #FFFFFF; font-size: 16px; font-weight: 700">Done</button></div>"""
+STYLEBODY = f"""<sc-for list="{{{{styles}}}}" as="f" hint-placeholder-count="7"><section style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 6px 6px 2px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6B6259">{{{{f.f}}}}</h3><sc-for list="{{{{f.items}}}}" as="i" hint-placeholder-count="2"><div style="display: flex; align-items: center; gap: 8px"><button type="button" onClick="{{{{i.pick}}}}" style="flex: 1; height: 44px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; padding: 0 10px; font-size: 16px; color: #1A1612; text-align: left"><span style="flex: 1">{{{{i.s}}}}</span><span style="color: #E8762F; font-weight: 700">{{{{i.mark}}}}</span></button><button type="button" aria-label="Hear a bar of {{{{i.s}}}}" style="flex: none; width: 36px; height: 36px; border: 0; border-radius: 9999px; background: #EFE8DF; color: #1A1612; display: flex; align-items: center; justify-content: center">{PLAYI}</button></div></sc-for></section></sc-for>"""
+KEYBODY = f"""<div style="display: flex; flex-direction: column; gap: 6px">{LAB('Key')}<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px"><sc-for list="{{{{keyRoots}}}}" as="r" hint-placeholder-count="12"><button type="button" onClick="{{{{r.pick}}}}" style="height: 46px; border: 0; border-radius: 10px; background: {{{{r.bg}}}}; color: {{{{r.fg}}}}; box-shadow: 0 0 0 1px #E2DACF; font-family: 'Instrument Serif', Georgia, serif; font-size: 21px">{{{{r.r}}}}</button></sc-for></div></div><div style="display: flex">{SEGBAR('Mode', 'modeSeg', 42)}</div><div style="display: flex; gap: 10px"><button type="button" onClick="{{{{closeAll}}}}" style="flex: 1; height: 48px; border: 0; border-radius: 12px; background: #1A1612; color: #FFFFFF; font-size: 16px; font-weight: 700">Done</button></div>"""
+INSTR = f"""<div style="display: flex; flex-direction: column; gap: 6px">{LAB('Instruments')}<div style="border-radius: 14px; background: #FFFFFF; box-shadow: {SH}; overflow: hidden"><sc-for list="{{{{inst}}}}" as="i" hint-placeholder-count="3"><div style="display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 0 14px; box-shadow: inset 0 -1px 0 #F1EBE3"><span style="width: 56px; font-size: 16px; font-weight: 600">{{{{i.k}}}}</span><div aria-label="{{{{i.k}}}} level" style="flex: 1; height: 6px; border-radius: 9999px; background: #EFE8DF; opacity: {{{{i.op}}}}"><div style="width: {{{{i.w}}}}; height: 6px; border-radius: 9999px; background: #1A1612"></div></div><button type="button" role="switch" aria-checked="{{{{i.on}}}}" aria-label="{{{{i.k}}}}" onClick="{{{{i.toggle}}}}" style="position: relative; flex: none; width: 44px; height: 26px; border: 0; border-radius: 9999px; background: {{{{i.tbg}}}}"><span style="position: absolute; top: 2px; left: {{{{i.tx}}}}; width: 22px; height: 22px; border-radius: 9999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,0.2)"></span></button></div></sc-for></div></div>"""
+SETBODY = f"""<div style="display: flex; flex-direction: column; gap: 18px">{INSTR}<div style="display: flex">{SEGBAR('Chord names', 'nameSeg', 40)}</div><div style="display: flex; flex-direction: column; gap: 6px">{LAB('More')}<div style="border-radius: 14px; background: #FFFFFF; box-shadow: {SH}; overflow: hidden">{SROW('Count-in', '1 bar')}{SROW('All piano settings', '')}</div></div></div>"""
+MENUBODY = """<sc-for list="{{['Redo', 'New', 'Chord sheets…', 'Save as my chord sheet…', 'Randomize chords', 'Open in Progressions', 'Practise in the Player', 'Share link']}}" as="m" hint-placeholder-count="7"><button type="button" style="height: 44px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; padding: 0 12px; font-size: 16px; color: #1A1612; text-align: left">{{m}}</button></sc-for>"""
+TITLE = f"""<button type="button" style="flex: 1; min-width: 0; height: 44px; border: 0; background: transparent; display: flex; align-items: center; gap: 4px; padding: 0 4px; color: #1A1612; text-align: left"><span style="font-size: 18px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">My verse and chorus</span>{CHEV}</button>"""
+BAR = f"""<button type="button" aria-label="Back to Practice" style="{RB}">{BACK}</button>{TITLE}<button type="button" aria-label="Undo" style="{RB.replace('#EFE8DF', 'transparent')}">{UNDO}</button><button type="button" aria-label="Redo" disabled style="{RB.replace('#EFE8DF', 'transparent')}; opacity: 0.35">{REDO}</button><button type="button" aria-label="Chord player settings" onClick="{{{{openSettings}}}}" style="{RB}">{GEAR}</button><button type="button" aria-label="Chord sheet" onClick="{{{{toggleMenu}}}}" style="{RB}">{MORE}</button>"""
+TOAST = """<sc-if value="{{hasToast}}" hint-placeholder-val="{{false}}"><div role="status" style="position: absolute; left: 16px; right: 16px; bottom: 210px; z-index: 55; height: 50px; border-radius: 14px; background: #1A1612; color: #FFFFFF; display: flex; align-items: center; gap: 10px; padding: 0 8px 0 16px; font-size: 15px"><span style="flex: 1">{{toast}}</span><button type="button" onClick="{{undoToast}}" style="height: 36px; padding: 0 12px; border: 0; border-radius: 9px; background: transparent; color: #F7C9A5; font-size: 15px; font-weight: 700">Undo</button></div></sc-if>"""
+
+phone = HEAD % 'Chord player, phone' + f"""<div style="width: 450px; height: 920px; position: relative; font-family: 'Instrument Sans', system-ui, sans-serif">
+<div style="position: absolute; left: 24px; top: 23px; width: 402px; height: 874px; overflow: hidden; border-radius: 62px; background: #F7F3EE; color: #1A1612; display: flex; flex-direction: column">
+<div style="flex: none; height: 54px; position: relative">{STATUS}</div>
+<header style="flex: none; height: 52px; display: flex; align-items: center; gap: 2px; padding: 0 10px">{BAR.replace(BAR[BAR.index('<button type="button" aria-label="Redo"'):BAR.index('<button type="button" aria-label="Chord player settings"')], '')}</header>
+<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 6px 14px 20px; display: flex; flex-direction: column; gap: 12px">{CONTROLS}{SECTIONS(4, 58)}</main>
+<div style="flex: none; padding: 10px 16px; background: #F7F3EE; box-shadow: 0 -1px 0 #E9E2D8">{TRANSPORT}</div>
+<div style="flex: none">{KEYS(100, 10)}</div>
+<div aria-hidden="true" style="flex: none; height: 26px; background: #2A1F18"></div>
+<div aria-hidden="true" style="position: absolute; left: 134px; bottom: 8px; width: 134px; height: 5px; border-radius: 9999px; background: #FFFFFF; z-index: 90"></div>
+{TOAST}
+{sheet_phone('chordOn', 'Chord', CHORDBODY)}
+{sheet_phone('styleOn', 'Style', STYLEBODY)}
+{sheet_phone('keyOn', 'Key', KEYBODY)}
+<sc-if value="{{{{menuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeAll}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="menu" style="position: absolute; right: 10px; top: 104px; z-index: 61; width: 250px; border-radius: 14px; background: #FFFFFF; padding: 6px; box-shadow: {POP}; display: flex; flex-direction: column">{MENUBODY}</div></sc-if>
+<sc-if value="{{{{settingsOn}}}}" hint-placeholder-val="{{{{false}}}}"><section aria-label="Chord player settings" style="position: absolute; inset: 0; z-index: 70; background: #F7F3EE; display: flex; flex-direction: column"><div style="flex: none; height: 54px; position: relative">{STATUS}</div><header style="flex: none; height: 52px; display: flex; align-items: center; gap: 10px; padding: 0 12px"><button type="button" aria-label="Back to the Chord player" onClick="{{{{closeSettings}}}}" style="{RB}">{BACK}</button><h1 style="flex: 1; margin: 0; font-size: 20px; font-weight: 700">Chord player settings</h1></header><div style="padding: 10px 16px">{SETBODY}</div></section></sc-if>
+</div>
+<img src="{PHONE_FRAME}" alt="" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 450px; height: 920px; pointer-events: none; z-index: 100">
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{{"$preview":{{"width":450,"height":920}}}}'>
+const SH = '{SH}';
+{JS}
+</script>
+</body>
+</html>
+"""
+open(OUT + 'ChordPlayer.dc.html', 'w').write(phone)
+
+laptop = HEAD % 'Chord player, laptop' + LAPFRAME_TOP + f"""<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: #F7F3EE; color: #1A1612; display: grid; grid-template-columns: 248px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr)">
+{SIDE}
+<div style="position: relative; min-width: 0; display: flex; flex-direction: column">
+<header style="flex: none; height: 72px; display: flex; align-items: center; gap: 4px; padding: 0 36px">{BAR}</header>
+<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 360px; grid-template-rows: minmax(0, 1fr); gap: 28px; padding: 0 36px">
+<main class="nos" style="min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-bottom: 20px">{SECTIONS(4, 72)}<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px">{LAB('C major chords')}<div style="display: flex; gap: 8px"><sc-for list="{{{{diat}}}}" as="d" hint-placeholder-count="7"><span draggable="true" style="flex: 1; height: 64px; border-radius: 12px; background: #FFFFFF; box-shadow: {SH}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: grab"><span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 24px; line-height: 1">{{{{d.d}}}}</span><span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 15px; color: #6B6259">{{{{d.n}}}}</span></span></sc-for></div></div></main>
+<aside class="nos" style="min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding-bottom: 20px"><div style="display: flex; flex-direction: column; gap: 8px">{PILL('Style', 'styleLabel', 'openStyle')}<div style="display: flex; gap: 8px">{PILL('Key', 'keyLabel', 'openKey')}{TEMPO}</div></div>{INSTR}<div style="display: flex">{SEGBAR('Chord names', 'nameSeg', 40)}</div></aside>
+</div>
+<div style="flex: none; padding: 10px 36px; box-shadow: 0 -1px 0 #E9E2D8">{TRANSPORT}</div>
+<div style="flex: none">{KEYS(170, 13)}</div>
+{TOAST.replace('left: 16px; right: 16px; bottom: 210px', 'left: 36px; width: 420px; bottom: 250px')}
+<sc-if value="{{{{anyOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeAll}}}}" style="position: absolute; inset: 0; z-index: 60"></div></sc-if>
+{pop('chordOn', 'left: 300px; top: 120px', 440, 'Chord', CHORDBODY)}
+{pop('styleOn', 'right: 36px; top: 140px', 360, 'Style', STYLEBODY)}
+{pop('keyOn', 'right: 36px; top: 200px', 400, 'Key', KEYBODY)}
+<sc-if value="{{{{menuOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="menu" style="position: absolute; right: 36px; top: 64px; z-index: 61; width: 250px; border-radius: 14px; background: #FFFFFF; padding: 6px; box-shadow: {POP}; display: flex; flex-direction: column">{MENUBODY}</div></sc-if>
+</div>
+</div>
+<img src="{LAPTOP_FRAME}" alt="" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 2143px; height: 1299px; pointer-events: none">
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{{"$preview":{{"width":2143,"height":1299}}}}'>
+const SH = '{SH}';
+{JS}
+</script>
+</body>
+</html>
+"""
+open(OUT + 'ChordPlayerLaptop.dc.html', 'w').write(laptop)
+print('chord player ok')
