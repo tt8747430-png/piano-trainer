@@ -85,6 +85,7 @@ main>*{flex:none}
 
 
 
+
 <div style="width: 2143px; height: 1299px; position: relative; font-family: 'Instrument Sans', system-ui, sans-serif">
 <div aria-hidden="true" style="position: absolute; left: 217.7px; top: 36.6px; width: 1710px; height: 1112px; background: url(/_blob/f871bb10e202ef4d610c06d6f5fa0603) 0 0 / 1710px 1112px no-repeat"></div>
 <div aria-hidden="true" style="position: absolute; left: 217.7px; top: 36.6px; width: 1710px; height: 37px; background: rgba(255,255,255,0.28)"></div>
@@ -343,7 +344,7 @@ return {
   keyLabelSeg: seg(['Names', 'Fingers', 'None'], keyLabel, (l) => set({ keyLabel: l })),
   rootName: RN, qName: q.n[0].toUpperCase() + q.n.slice(1), qSym: RN + q.k, voicing, invLabel: INV[inv], handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand', soundWord: arp ? 'Arpeggio' : 'Block',
   // one row of letters; tapping the chosen letter again steps through its spellings: C, C♯, C (D, D♯, D♭ …)
-  rootHint: (() => { const ways = [0, 1, -1].filter((x) => !SKIP.includes(LET[rLet] + x)); if (ways.length < 2) return { on: false, t: '', box: '', tip: '' };
+  rootHint: (() => { const ways = [0, 1, -1].filter((x) => !SKIP.includes(LET[rLet] + x)); if (ways.length < 2 || st.tapUsed) return { on: false, t: '', box: '', tip: '' };
     const nx = ways[(ways.indexOf(rAcc) + 1) % ways.length], c = ((rLet + 0.5) / 7 * 100).toFixed(2);
     const box = rLet < 2 ? 'left: 0' : (rLet > 4 ? 'right: 0' : 'left: ' + c + '%; transform: translateX(-50%)');
     return { on: true, t: 'Tap again for ' + LET[rLet] + ACC[String(nx)], box, tip: 'left: calc(' + c + '% - 6px)' }; })(),
@@ -351,7 +352,7 @@ return {
     const a = on ? rAcc : 0, next = on ? ways[(ways.indexOf(rAcc) + 1) % ways.length] : 0;
     const NAME = { '0': '', '1': ' sharp', '-1': ' flat' }, more = on && ways.length > 1;
     return { more, nx: more ? LET[l] + ACC[String(next)] : '', aria: LET[l] + NAME[String(a)] + (more ? '. Tap again for ' + LET[l] + NAME[String(next)] : ''), l: LET[l] + ACC[String(a)], on, bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: on ? 700 : 500,
-      pick: () => { RL = l; change({ rl: l, ra: next, root: rootPc(l, next) }); } }; }) },
+      pick: () => { RL = l; change(Object.assign({ rl: l, ra: next, root: rootPc(l, next) }, on && ways.length > 1 ? { tapUsed: true } : {})); } }; }) },
   playTiles: [['Block', 'Block chord'], ['Up', 'Arpeggio up'], ['Up and down', 'Arpeggio up and down']].map(([v, l]) => ({ l, on: v === playAs, bg: v === playAs ? '#FBF1DD' : '#FEFDFB', ring: v === playAs ? '0 0 0 2px #B07A2A' : '0 0 0 1px ' + C.line, pick: () => { set({ playAs: v }); sound(ms, v !== 'Block', v === 'Up and down' ? 'Up and down' : 'Up'); } })),
   qSymFs: (RN + q.k).length > 7 ? 12 : ((RN + q.k).length > 5 ? 13.5 : 15), blockOn: !arp, soundShort: arp ? 'Arpeggio' : 'Block',
   soundLabel: playAs === 'Block' ? 'Block chord' : (playAs === 'Up' ? 'Arpeggio up' : 'Up and down'),
