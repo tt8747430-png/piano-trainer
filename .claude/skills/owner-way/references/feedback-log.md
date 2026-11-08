@@ -263,6 +263,9 @@ owner's, typos fixed.
 - **The owner keeps some doubles (R42, v29):** "the chords choosing in both places was pretty good". Choosing the
   chord from its name and from the bar's first button stays; the inversion is ‹ › on the name plus the Inversions
   view's cards, never a Root · 1st · 2nd · 3rd segmented control. Ask before removing a double the owner liked.
+- **A setting sits on what it changes; practice sits on the page (R42, v31):** "the staff settings are not very good
+  … the practice in the player are too hidden". The staff's clefs are a small control on the staff card, not in the gear;
+  the ways to practise a chord are rows on its page. A bar holds one prominent action, trailing (Apple HIG).
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

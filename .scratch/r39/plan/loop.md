@@ -66,3 +66,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v28 (2026-11-08):** the builder undone; Chords back to v26's layout.
 **R42 v29 (2026-11-08):** Chords: ‹ › and the Inversions view back; the chord chosen from the name and the bar.
 **R42 v30 (2026-11-08):** Chords: the Inversions view goes; views Staff · Fingering · Tensions.
+**R42 v31 (2026-11-08):** Chords: Add a note in the Chord sheet; clefs on the staff; Practise on the page; one prominent Play.

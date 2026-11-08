@@ -5,6 +5,20 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v31: Tensions go into the Chord sheet; the staff's choice sits on the staff; Practise is on the page; the bar
+  per Apple.** Owner: "Shall I? yes and i don't like how the bottom bar looks. research more the apple guidelines. and
+  also the staff settings are not very good. and the practice in the player are too hidden".
+  - Views: Staff · Fingering. The Chord sheet ends with **Add a note**: add 9 D, add ♯11 F♯, add 13 A; avoid notes
+    struck through.
+  - The staff card holds its own small segmented control, **Both clefs | Treble**, top right. The gear no longer has
+    Staff.
+  - **Practise Cmaj7 in the Player**, a card of three rows under the view: Arpeggio, up and down · Inversions, one
+    after another · Chromatic walk. The gear no longer has Practise.
+  - The bar: the chord (borderless, ⌃), Arpeggio (borderless), **▶ Play** prominent on the trailing side and filling
+    the rest. Apple HIG, Toolbars: "Prefer system-provided symbols without borders"; "use the .prominent style for key
+    actions … Only specify one primary action, and put it on the trailing side". Buttons: "Keep the number of prominent
+    buttons to one or two per view"; "Prefer buttons that span the width of the screen for primary actions".
+
 - "now refactor the chords page from practice in the style of the songs player" (2026-11-08): the Chords page takes
   the Player's shape, as drawn in R37 and merged in v15:
   - **At the top**, three glass controls: Back (to Practice) · the views · the gear (Chord settings). The views are
@@ -173,3 +187,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: the builder (v27) undone, owner: "no, the previous layout directions were better"; v26's layout stands (v28).
 - 2026-11-08: inversions back to ‹ › and the Inversions view; the chord chosen from the name and the bar (v29).
 - 2026-11-08: the Inversions view goes; the keys and ‹ › show it (v30).
+- 2026-11-08: Tensions as Add a note; Both clefs | Treble on the staff; Practise on the page; one prominent Play (v31).
