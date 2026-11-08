@@ -313,6 +313,9 @@ owner's, typos fixed.
   v50: "is this a permanent or just a tooltip": a tip, gone for good once the gesture is used.
 - **The title is the button, without a ⌄ (R42, v51):** "remove the arrow on the big chord. it just works but without
   this arrow down".
+- **Arrows sit beside the words they change; one action with a choice of how is one split button (R42, v52):** "the
+  inversions can be interpreted as go to next chord … I'd put the play together with the arpeggiate". ‹ 1st
+  inversion › as a pill; [▶ Play chord | ⌄] with Block chord · Arpeggio.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

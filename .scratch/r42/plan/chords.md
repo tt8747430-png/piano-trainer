@@ -5,6 +5,18 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v52: the inversion is its own stepper; one Play, its ⌄ choosing Block chord or Arpeggio.** Owner: "the inversions
+  can be interpreted as go to next chord like from c to c sharp, it is good but we should refactor them and make
+  more clear. and also the toolbar it not that clear. I'd put the play together with the arpeggiate like merge them
+  and we will have only the play button with this arrow to chose to play it in block or to arpeggiate it".
+  - Top to bottom: the big chord alone (**Cmaj7/E**, tap to change it); "C major seventh · Close voicing"; a pill
+    **‹ 1st inversion · E in the bass ›**, the arrows either side of the words they step, so they read as the
+    inversion's, not the next chord's (Proximity); the notes. Not v26's Root · 1st · 2nd · 3rd segmented control
+    (rejected), and the slash in the name stays (v22).
+  - The bar: **Cmaj7 ⌃** · **[▶ Play chord | ⌄]** · keyboard. One honey split button: the main part plays; ⌄ opens a
+    menu, **Block chord** ✓ · **Arpeggio**; picking one plays it and the button becomes **Play arpeggio**. Stop (■)
+    while it sounds. The separate Arpeggio button is gone. A split button is the convention for one action with
+    a choice of how (Apple's pull-down button; Material's split button).
 - **v51: no arrow beside the big chord.** Owner: "and also remove the arrow on the big chord. it just works but
   without this arrow down".
   - The ⌄ disc after the chord symbol is gone; tapping the big chord still opens the Chord sheet, ‹ › still step
@@ -369,3 +381,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: "Tap again for C♯" on a pointer under the chosen letter; "or C♯" read as a second name (v49).
 - 2026-11-08: the tap-again pointer is a tip, gone after the first tap-again (v50).
 - 2026-11-08: no ⌄ beside the big chord; the chord itself opens the sheet (v51).
+- 2026-11-08: inversion stepper under the name; Play and Arpeggio merged into one split button (v52).
