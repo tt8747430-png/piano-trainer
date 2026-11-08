@@ -258,6 +258,8 @@ owner's, typos fixed.
   remove all the redundant things". Chords' bar is Play chord and Arpeggio only. What you choose sits on the thing
   it changes (the chord's name opens the chord; the inversion is a segmented control under it); what changes the
   display is behind the gear. Two ways of hearing are two buttons, not a mode setting. One control per choice.
+- **Never: a practice page turned into a long builder of chip rows (R42, v27 undone):** "no, the previous layout
+  directions were better". Chords keeps the keys, the chord, the views and a bar at the foot.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple
