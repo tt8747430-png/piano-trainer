@@ -305,7 +305,8 @@ owner's, typos fixed.
   Root position starts in the octave from middle C for every root; no hidden register rule.
 - **Show the choices, don't hint at a gesture (R42, v46):** "the chord root switch looks interesting but you could
   improve it and make more clear". The chosen letter opens into its spellings (D♭ D D♯), each a tap; replaces
-  tap-again cycling and its marks.
+  tap-again cycling and its marks. **Rejected:** "no I don't like this". v47: one row, tap again, the chosen letter
+  naming the next spelling ("↻ C♯"). Never widen a segment into sub-buttons.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

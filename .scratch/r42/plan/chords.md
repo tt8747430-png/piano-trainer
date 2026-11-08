@@ -5,7 +5,13 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
-- **v46: the chosen letter opens into its spellings.** Owner: "the chord root switch looks interesting but you could
+- **v47: tap again, and the chosen letter says what the next tap gives.** Owner on v46's opened capsule: "no I don't
+  like this".
+  - Back to v43's one row and tap-again (C → C♯ → C; G → G♯ → G♭ → G). Under the chosen letter a small chip with a
+    turn arrow names the next spelling: **C ↻ C♯**, then **C♯ ↻ C**; **G♯ ↻ G♭**. No chip on a letter with one
+    spelling. The spoken name says it: "C. Tap again for C sharp".
+  - Replaces v44's ♮ ♯ ♭ marks and v46's capsule.
+- **v46 (rejected: "no I don't like this"; replaced by v47): the chosen letter opens into its spellings.** Owner: "the chord root switch looks interesting but you could
   improve it and make more clear".
   - Still one row, C to B. The chosen letter widens into a raised capsule holding its spellings, flat to sharp, each
     a button: **D♭ D D♯**, **G♭ G G♯**, **C C♯**, **E♭ E**, **F F♯**, **A♭ A A♯**, **B♭ B**; the one in use on honey.
@@ -339,3 +345,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: the chosen root letter shows its ♮ ♯ ♭, the current one marked (v44).
 - 2026-11-08: every root from middle C; no octave drop from F♯ (v45).
 - 2026-11-08: the chosen root letter opens into its spellings, D♭ D D♯ (v46).
+- 2026-11-08: v46 rejected; tap again, the chosen letter shows "↻ C♯", the next spelling (v47).
