@@ -285,4 +285,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: Keyboard panel as the Player's, on the bar; the gear keeps Fingering; numbers on the keys as Vita Piano (v36).
 - 2026-11-08: finger numbers on the keys one step above the name (v37).
 - 2026-11-08: Labels Names · Fingers · None on the keys; the gear: Hand, Staff › Finger numbers (v38).
-- v39 (2026-11-08): Add a note removed; Extended gains maj7♯11; new Altered group (7♭9, 7♯9, 7♯11, 7♭13).
+- 2026-11-08: Add a note removed; Extended gains maj7♯11; a new Altered group, 7♭9 · 7♯9 · 7♯11 · 7♭13 (v39).
