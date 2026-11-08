@@ -5,6 +5,21 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v39: no "Add a note"; every extra note is a named chord in the Chord list.** Owner: "I dont like this add a note
+  how this looks, and is not understandable and I would like you to refactor them. search more and refactor them
+  properly and make more clear".
+  - The chips (add 9 D, add ♯11 F♯, add 13 A, a struck-through 11 F) are gone, and so are the avoid notes. Two
+    reasons: a chip read "add 9 D" names neither a chord nor an action a musician says, and most of them made a
+    chord the list already had (Cmaj7 add 9 = Cmaj9), so they were a second way to the same thing.
+  - The Chord list gains what only the chips reached: **Extended** gains Cmaj7♯11; a new group, **Altered**, holds
+    C7♭9, C7♯9, C7♯11, C7♭13, each with its full name (C dominant seventh, flat ninth). The Chord sheet is Root,
+    Chord ›, Voicing ›, nothing else.
+  - Research: iReal Pro picks a chord as root plus one quality from a list in which 7♭9, 7♯9, 7♯11 and 7♭13 are
+    qualities of their own (irealpro.com/learn/chord-symbols). Piano Companion's chord dictionary is root, then a
+    chord type, which then shows its notes and fingering; an extra type is added to the list, never built from
+    add-ons (blog.songtive.com/?p=1272, ?p=858).
+  - Which note clashes (the avoid note) is theory for a lesson, not a control.
+  - Fixed on the way: the staff's finger digits 2 to 5 were centred, 1 was not; all now start beside the note.
 - **v38: fingering where each picture is set; the hand on its own.** Owner: "I dont like these fingering settings.
   refactor them. where can we put them?. research more and how this should be done and where to put them."
   - Research. Synthesia: "To open the label controls menu, click the La icon on the toolbar"; its Key Labels list
@@ -84,7 +99,7 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   per Apple.** Owner: "Shall I? yes and i don't like how the bottom bar looks. research more the apple guidelines. and
   also the staff settings are not very good. and the practice in the player are too hidden".
   - Views: Staff · Fingering. The Chord sheet ends with **Add a note**: add 9 D, add ♯11 F♯, add 13 A; avoid notes
-    struck through.
+    struck through. *(Replaced by v39: the Altered group of the Chord list.)*
   - The staff card holds its own small segmented control, **Both clefs | Treble**, top right. The gear no longer has
     Staff.
   - **Practise Cmaj7 in the Player**, a card of three rows under the view: Arpeggio, up and down · Inversions, one
@@ -270,3 +285,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: Keyboard panel as the Player's, on the bar; the gear keeps Fingering; numbers on the keys as Vita Piano (v36).
 - 2026-11-08: finger numbers on the keys one step above the name (v37).
 - 2026-11-08: Labels Names · Fingers · None on the keys; the gear: Hand, Staff › Finger numbers (v38).
+- v39 (2026-11-08): Add a note removed; Extended gains maj7♯11; new Altered group (7♭9, 7♯9, 7♯11, 7♭13).

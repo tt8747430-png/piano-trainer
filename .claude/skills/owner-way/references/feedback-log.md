@@ -290,6 +290,9 @@ owner's, typos fixed.
   settings … where can we put them". What a key reads is one choice (Synthesia's Key Labels: Names · Fingers ·
   None), in the Keyboard panel; the staff's finger numbers under Staff (Roland's notation settings); the hand that
   plays is its own row, not a fingering option.
+- **An extra note is a chord with a name, picked from the one list (R42, v39):** "I dont like this add a note how
+  this looks, and is not understandable". No add-on chips beside the chord list, no avoid notes struck through; C7♭9
+  is a row in Altered, as iReal Pro lists qualities.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple
