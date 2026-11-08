@@ -83,3 +83,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v45 (2026-11-08):** Chords: every root from middle C (F♯ to B no longer an octave down).
 **R42 v46 (2026-11-08):** Chords: the chosen root letter opens into its spellings, D♭ D D♯.
 **R42 v47 (2026-11-08):** v46 rejected; tap again, the chosen letter shows ↻ and the next spelling.
+**R42 v48 (2026-11-08):** Chords: the chip reads "or C♯"; the turn arrow read as reset.

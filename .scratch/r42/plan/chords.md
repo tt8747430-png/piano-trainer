@@ -5,6 +5,9 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v48: "or C♯", no arrow.** Owner: "this icon look like reset and is misleading".
+  - The turn arrow is gone; the chip under the chosen letter reads **or C♯** (C♯ reads **or C**; G♯ reads **or G♭**).
+    "Or" names the other spelling as a choice and invites the tap, without an icon that means reset or reload.
 - **v47: tap again, and the chosen letter says what the next tap gives.** Owner on v46's opened capsule: "no I don't
   like this".
   - Back to v43's one row and tap-again (C → C♯ → C; G → G♯ → G♭ → G). Under the chosen letter a small chip with a
@@ -346,3 +349,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: every root from middle C; no octave drop from F♯ (v45).
 - 2026-11-08: the chosen root letter opens into its spellings, D♭ D D♯ (v46).
 - 2026-11-08: v46 rejected; tap again, the chosen letter shows "↻ C♯", the next spelling (v47).
+- 2026-11-08: the chip reads "or C♯"; the turn arrow read as reset (v48).
