@@ -5,6 +5,16 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v33: one grand staff, one hand, the fingering engraved.** Owner: "the fingering doesn't work, and the both clefs
+  and treble clef setting are weird, why do we need them. and the bass in the left hand, how does this work, this
+  setting is also weird".
+  - The clef choice goes: piano is the grand staff, always.
+  - Bass in the left hand goes: it put the root under every chord, so Cmaj7/E had C in the bass, against the slash.
+    The chord is one hand's shape; the inversion is that shape. Voicing is the list alone.
+  - The fingering is stacked as engraved, the top number for the top note: above the treble staff when the chord
+    reaches it, under the bass staff when it sits low. The staff's height fits it.
+  - (v32's "Bass in the left hand" and v31's "Both clefs | Treble" are replaced by this.)
+
 - **v32: no gear; the keyboard's own button; Hands inside Voicing; the fingering on the staff.** Owner: "but you
   didn't remove the old settings. and do we need share, and the keyboard settings in the header to hide and show the
   and all its settings including connect a piano. and also the hands settings are weird. and do we need the fingering
@@ -201,3 +211,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: the Inversions view goes; the keys and ‹ › show it (v30).
 - 2026-11-08: Tensions as Add a note; Both clefs | Treble on the staff; Practise on the page; one prominent Play (v31).
 - 2026-11-08: no gear, Share or More; a Keyboard button; Bass in the left hand inside Voicing; fingering on the staff (v32).
+- 2026-11-08: the clef choice and Bass in the left hand go; fingering stacked as engraved (v33).

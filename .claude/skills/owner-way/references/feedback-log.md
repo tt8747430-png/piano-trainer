@@ -270,6 +270,10 @@ owner's, typos fixed.
   remove the old settings". The keyboard's settings sit behind a keyboard button over the keys; a gear left with one
   group goes. Musicians' terms over app switches: "Bass in the left hand", not Hands Both · Right · Left. Fingering
   belongs on the staff beside the notes, not in its own view.
+- **A setting must earn its place; draw notation as engravers do (R42, v33):** "why do we need them … this setting
+  is also weird". Piano gets the grand staff with no clef choice. A switch whose effect contradicts the page (a left-hand
+  root under a slash chord) goes. Fingering is a stacked column over the chord (under it when low), never a loose
+  column beside it.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

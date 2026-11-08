@@ -68,3 +68,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v30 (2026-11-08):** Chords: the Inversions view goes; views Staff · Fingering · Tensions.
 **R42 v31 (2026-11-08):** Chords: Add a note in the Chord sheet; clefs on the staff; Practise on the page; one prominent Play.
 **R42 v32 (2026-11-08):** Chords: gear gone; Keyboard button; Bass in the left hand in Voicing; fingering on the staff.
+**R42 v33 (2026-11-08):** Chords: clef choice and Bass in the left hand gone; fingering stacked as engraved.
