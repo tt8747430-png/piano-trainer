@@ -119,6 +119,11 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     hands that play it) · **its sound** (Play, and how it plays: Block or Arpeggio, right beside it) · **the
     keyboard**. Play leaves its lone spot and sits with the choice that changes what it plays.
 
+- **One bar again, grouped inside it** (owner, 2026-11-08: "i don't like the bottom bar how you refactor"). v22's
+  three capsules of three sizes go. The bar is one capsule as the Player's (68, radius 34; items 56 inside 6, radius
+  28), its subjects kept apart by space and a hairline: the chord ⌃ and its hands | Play and Block or Arpeggio |
+  Keyboard. Play sits near the middle, beside the choice that changes it. The grouping by subject (v22) stands.
+
 ## Fixed on the way
 
 The kit's sheet function had taken the name of the sheet colour, so every card on the R41 pages was drawn with no
@@ -133,3 +138,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: Apple's toolbar groups and segmented control (v20).
 - 2026-11-08: every control in words, the inversion stepper under the name (v21).
 - 2026-11-08: the inversion in the name as a slash chord; the bar grouped by subject (v22).
+- 2026-11-08: one bar again, the subjects apart by hairlines (v23).

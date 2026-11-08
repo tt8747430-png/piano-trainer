@@ -254,6 +254,8 @@ owner's, typos fixed.
   separate groups". A bar's capsules are subjects (the chord · its sound · the keyboard); a choice sits in the same
   capsule as the action it changes (Play beside Block or Arpeggio). Proximity, common region, similarity. A chord's
   inversion is written in its name as a slash chord (Cmaj7/E), stepped by arrows on either side.
+- **Never: a bar broken into separate capsules (R42, v23):** "i don't like the bottom bar how you refactor". One
+  bar, as the Player's; group inside it by space and a hairline, not by splitting it into pieces of different sizes.
 
 ## Sounds
 

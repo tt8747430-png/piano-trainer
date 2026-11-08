@@ -283,17 +283,21 @@ def TABBTN(label, svg, word, act, pressed='', w=60):
     return f'<button type="button" aria-label="{label}" {pr}onClick="{{{{{act}}}}}" style="flex: none; width: {w}px; height: 56px; padding: 0; border: 0; border-radius: 28px; {bg} font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px">{svg}<span style="font-size: 11px; font-weight: 600; line-height: 1; white-space: nowrap">{word}</span></button>'
 CHORDITEM_P = f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{{openChord}}}}" style="flex: none; width: 82px; height: 56px; padding: 0 6px; border: 0; border-radius: 28px; background: {FILL}; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px"><span style="max-width: 100%; font-size: {{{{qSymFs}}}}px; font-weight: 700; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{qSym}}}}</span><span style="display: flex; align-items: center; gap: 2px; font-size: 11px; font-weight: 600; line-height: 1; color: {SOFT}">Chord{CHEV_U2.replace('width="16" height="16"', 'width="11" height="11"')}</span></button>'
 
-DOCK_PHONE = f'<div role="toolbar" aria-label="Chord" style="position: absolute; left: 12px; right: 12px; bottom: 30px; z-index: 40; display: flex; align-items: center; justify-content: space-between; gap: 4px">' + \
-    TGROUP('The chord', CHORDITEM_P + TABBTN('Hands: {{handsLabel}}', HANDSI, '{{handsLabel}}', 'openHands')) + \
-    TGROUP('Sound', PLAYBTN(56) + TABBTN('Play as: {{soundLabel}}', SOUNDI, '{{soundWord}}', 'openSound', 'arpOn')) + \
-    TGROUP('Keyboard', TABBTN('Keyboard', PIANOI, 'Keyboard', 'openKeys')) + '</div>'
+# One bar, as the Player's: 68 tall (radius 34), items 56 inside 6 (radius 28). Inside it, the subjects sit apart by
+# space and a hairline (proximity): the chord and its hands · Play with how it plays · the keyboard.
+BAR_CSS = f'height: 68px; box-sizing: border-box; padding: 6px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center'
+HAIR = f'<span aria-hidden="true" style="flex: none; width: 1px; height: 32px; background: {LINE}"></span>'
+DOCK_PHONE = f'<div role="toolbar" aria-label="Chord" style="position: absolute; left: 12px; right: 12px; bottom: 30px; z-index: 40; {BAR_CSS}; justify-content: space-between">' + \
+    CHORDITEM_P + TABBTN('Hands: {{handsLabel}}', HANDSI, '{{handsLabel}}', 'openHands') + HAIR + \
+    PLAYBTN(56) + TABBTN('Play as: {{soundLabel}}', SOUNDI, '{{soundWord}}', 'openSound', 'arpOn') + HAIR + \
+    TABBTN('Keyboard', PIANOI, 'Keyboard', 'openKeys') + '</div>'
 
 LBTN = lambda label, svg, act, pressed='': f'<button type="button" {("aria-pressed=\"{{" + pressed + "}}\"") if pressed else ""} onClick="{{{{{act}}}}}" style="flex: none; height: 56px; padding: 0 18px 0 14px; border: 0; border-radius: 28px; {"background: {{arpBg}}; color: {{arpInk}};" if pressed else "background: transparent; color: " + INK + ";"} font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">{svg}{label}</button>'
 CHORDITEM_L = f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{{openChord}}}}" style="flex: none; height: 56px; padding: 0 14px 0 20px; border: 0; border-radius: 28px; background: {FILL}; color: {INK}; font: inherit; font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 6px; white-space: nowrap">{{{{qSym}}}}{CHEV_U2}</button>'
-DOCK_LAPTOP = f'<div role="toolbar" aria-label="Chord" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; display: flex; align-items: center; gap: 16px">' + \
-    TGROUP('The chord', CHORDITEM_L + LBTN('{{handsLabel}}', HANDSI, 'openHands')) + \
-    TGROUP('Sound', PLAYBTN(56) + LBTN('{{soundLabel}}', SOUNDI, 'openSound', 'arpOn')) + \
-    TGROUP('Keyboard', LBTN('Keyboard', PIANOI, 'openKeys')) + '</div>'
+DOCK_LAPTOP = f'<div role="toolbar" aria-label="Chord" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; {BAR_CSS}; gap: 4px">' + \
+    CHORDITEM_L + LBTN('{{handsLabel}}', HANDSI, 'openHands') + HAIR.replace('flex: none;', 'flex: none; margin: 0 6px;') + \
+    PLAYBTN(56) + LBTN('{{soundLabel}}', SOUNDI, 'openSound', 'arpOn') + HAIR.replace('flex: none;', 'flex: none; margin: 0 6px;') + \
+    LBTN('Keyboard', PIANOI, 'openKeys') + '</div>'
 
 # ── the sheets' bodies, the same on both sizes ──
 def BACKHEAD(title, act):
