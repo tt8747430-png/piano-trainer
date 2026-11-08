@@ -83,7 +83,8 @@ owner's, typos fixed.
   distinctive", "feels like a bottom bar and not like settings drawer", "still not good. research more"): the song at
   the drawer's head with Share link and ··· (Edit score · Print · Export), as Chordify's ⋮; settings under headers below.
   Never a row of icon buttons in a drawer, never acts listed among settings.
-  Edit score is a full button under the song's name, never inside ··· ("the edit button is too hidden"); no section
+  Edit score takes the whole row under the song's name, Share link and ··· beside the name, never Edit inside ···
+  ("the edit button is too hidden", "the edit button takes the whole row"); no section
   headings over the drawer's groups ("i don't like the headings or titles of the settings sections").
 - **Settings a learner understands, ordered by what matters to them;** the sheet's View settings usable; nothing reserves
   a band above the keyboard, nor a tip; proper pedals, not a lever at the keys' corner (piano sites as the reference);
