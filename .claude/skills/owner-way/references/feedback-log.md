@@ -301,6 +301,8 @@ owner's, typos fixed.
   tapping the chosen letter again steps ♮ → ♯ → ♭, only the spellings a chart writes. Never extra rows for ♯ and ♭.
 - **A hidden gesture shows itself on the control (R42, v44):** "make it more clear for the user that such thing
   exist". The chosen root letter carries its ♮ ♯ ♭ marks, the current one dotted; never a line of instructions.
+- **A chord sits where a chart puts it (R42, v45):** "why some chords like the f sharp are shown one octave lower".
+  Root position starts in the octave from middle C for every root; no hidden register rule.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

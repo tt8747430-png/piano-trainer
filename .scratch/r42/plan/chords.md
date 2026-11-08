@@ -5,6 +5,11 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v45: every root starts in the octave from middle C.** Owner: "why some chords like the f sharp are shown one
+  octave lower".
+  - Before, roots F♯ to B started an octave down (F♯3 to B3) to keep the chord near the middle; the jump between F
+    and F♯ read as a mistake. Now C4 to B4 holds every root, as chord charts draw root position; the chord climbs
+    with the root, and Both hands still adds the left hand an octave below.
 - **v44: the chosen letter shows its spellings, so tapping again is seen.** Owner: "but make it more clear for the
   user that such thing exist".
   - Under the chosen letter, small marks ♮ ♯ ♭ (only the ones that letter has: C shows ♮ ♯, E shows ♮ ♭), the one in
@@ -325,3 +330,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: a chord's root as 17 notes, naturals · sharps · flats; no C♭, F♭, E♯, B♯ (v42).
 - 2026-11-08: a chord's root as one row of letters, tap again for ♯ then ♭ (v43).
 - 2026-11-08: the chosen root letter shows its ♮ ♯ ♭, the current one marked (v44).
+- 2026-11-08: every root from middle C; no octave drop from F♯ (v45).

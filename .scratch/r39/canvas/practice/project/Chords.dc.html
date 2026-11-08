@@ -148,7 +148,7 @@ function sound(ms, arp, dir) {
 }
 // the chord as it sounds: [{m, deg, name, L, d, hand}]
 function voice(root, q, inv, voicing, hands) {
-  const base = (root <= 5 ? 60 : 48) + root;
+  const base = 60 + root; // every root in the octave from middle C, as a chord chart shows it
   const s = (deg) => (q.t.find((x) => x[1] === deg) || [null])[0];
   const third = s(3) ?? s(4) ?? s(2);
   let src;
