@@ -197,7 +197,7 @@ return {
   chips: ns.filter((x, i, a) => a.findIndex((y) => y.name === x.name) === i).sort((a, b) => ORD.indexOf(a.deg) - ORD.indexOf(b.deg)).map((x) => ({ n: x.name, c: ROLE[x.deg] || C.accent })),
   hasTens: tenChips.length > 0, hasAvoid: avoid.length > 0,
   isStaff: view === 'Staff', isInv: view === 'Inversions', isFing: view === 'Fingering', isTones: view === 'Tensions',
-  rootName: ROOTS[root], qName: q.n[0].toUpperCase() + q.n.slice(1), qSym: ROOTS[root] + q.k, voicing, invLabel: INV[inv], handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand',
+  rootName: ROOTS[root], qName: q.n[0].toUpperCase() + q.n.slice(1), qSym: ROOTS[root] + q.k, voicing, invLabel: INV[inv], handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand', soundWord: arp ? 'Arpeggio' : 'Block',
   roots: rootGrid(root, (i) => change({ root: i })),
   playTiles: [['Block', 'Block chord'], ['Up', 'Arpeggio up'], ['Up and down', 'Arpeggio up and down']].map(([v, l]) => ({ l, on: v === playAs, bg: v === playAs ? '#FBF1DD' : '#FEFDFB', ring: v === playAs ? '0 0 0 2px #B07A2A' : '0 0 0 1px ' + C.line, pick: () => { set({ playAs: v }); sound(ms, v !== 'Block', v === 'Up and down' ? 'Up and down' : 'Up'); } })),
   qSymFs: (ROOTS[root] + q.k).length > 7 ? 12 : ((ROOTS[root] + q.k).length > 5 ? 13.5 : 15), blockOn: !arp, soundShort: arp ? 'Arpeggio' : 'Block',
@@ -237,7 +237,8 @@ def TITLEBLOCK(size):
     return f'''<div style="flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
 <h1 style="margin: 0; font-family: {SERIF}; font-size: {size}px; line-height: 1.05; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap">{{{{sym}}}}</h1>
 <p style="margin: 0; font-size: 15px; color: {SOFT}">{{{{full}}}}</p>
-<p style="margin: 0; font-size: 13px; color: {SOFT}">{{{{shape}}}}</p>
+<div role="group" aria-label="Inversion" style="display: flex; align-items: center; height: 44px; border-radius: 22px; background: {FILL}; padding: 0 2px"><button type="button" aria-label="Previous inversion" onClick="{{{{prev}}}}" style="width: 44px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_LS}</button><span style="min-width: 128px; font-size: 15px; font-weight: 600; text-align: center">{{{{invLabel}}}}</span><button type="button" aria-label="Next inversion" onClick="{{{{next}}}}" style="width: 44px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_RS}</button></div>
+<p style="margin: 0; font-size: 13px; color: {SOFT}">{{{{voicing}}}} voicing</p>
 <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding-top: 4px"><sc-for list="{{{{chips}}}}" as="c" hint-placeholder-count="4"><span style="height: 28px; min-width: 28px; box-sizing: border-box; padding: 0 10px; border-radius: 14px; background: {{{{c.c}}}}; color: {INK}; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{c.n}}}}</span></sc-for></div>
 </div>'''
 
@@ -264,27 +265,28 @@ HANDL = HANDI.replace('<svg ', '<svg style="transform: scaleX(-1)" ', 1)
 HANDS2 = '<span style="display: flex; gap: 0; margin: 0 -3px">' + HANDL.replace('width="22" height="22"', 'width="17" height="17"') + HANDI.replace('width="22" height="22"', 'width="17" height="17"') + '</span>'
 HANDSI = '<sc-if value="{{hB}}" hint-placeholder-val="{{true}}">' + HANDS2 + '</sc-if><sc-if value="{{hR}}" hint-placeholder-val="{{false}}">' + HANDI + '</sc-if><sc-if value="{{hL}}" hint-placeholder-val="{{false}}">' + HANDL + '</sc-if>'
 
-# Apple's toolbar: at most three groups, each its own capsule 56 tall (radius 28); the items inside 44 (radius 22),
-# 6 in, so every corner is concentric; symbols without borders; one prominent action (Play).
-GROUP_CSS = f'flex: none; height: 56px; box-sizing: border-box; padding: 6px; border-radius: 28px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 2px'
+# The bar: three groups, each 68 tall (radius 34). Every item says what it is set to, a symbol over a word, as Apple's
+# tab bar items do (NN/g: icons without words are guessed). Items 56 tall, 6 in, radius 28: concentric. Play stands
+# alone as the one filled action. The inversion's ‹ › moved to the chord itself, in words.
+GROUP_CSS = f'flex: none; height: 68px; box-sizing: border-box; padding: 6px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 2px'
 def TGROUP(inner, extra=''):
     return f'<div style="{GROUP_CSS}{extra}">{inner}</div>'
-def ICONBTN(label, svg, act, pressed=''):
+def TABBTN(label, svg, word, act, pressed=''):
     pr = f'aria-pressed="{{{{{pressed}}}}}" ' if pressed else ''
     bg = 'background: {{arpBg}}; color: {{arpInk}};' if pressed else f'background: transparent; color: {INK};'
-    return f'<button type="button" aria-label="{label}" title="{label}" {pr}onClick="{{{{{act}}}}}" style="flex: none; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 22px; {bg} display: flex; align-items: center; justify-content: center">{svg}</button>'
-STEP = lambda label, svg, act: f'<button type="button" aria-label="{label}" title="{label}" onClick="{{{{{act}}}}}" style="flex: none; width: 36px; height: 44px; padding: 0; border: 0; border-radius: 22px; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{svg}</button>'
-CHORDBTN = lambda fs: f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{{openChord}}}}" style="flex: none; min-width: 56px; max-width: 104px; height: 56px; box-sizing: border-box; padding: 0 12px 0 16px; border: 0; border-radius: 28px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; color: {INK}; font: inherit; font-size: {fs}; font-weight: 700; display: flex; align-items: center; gap: 4px; white-space: nowrap"><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis">{{{{qSym}}}}</span>{CHEV_U2}</button>'
-TRANSPORT = TGROUP(STEP('Previous inversion', CHEV_LS, 'prev') + PLAYBTN(44) + STEP('Next inversion', CHEV_RS, 'next'))
+    return f'<button type="button" aria-label="{label}" {pr}onClick="{{{{{act}}}}}" style="flex: none; width: 64px; height: 56px; padding: 0; border: 0; border-radius: 28px; {bg} font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px">{svg}<span style="font-size: 11px; font-weight: 600; line-height: 1; white-space: nowrap">{word}</span></button>'
+CHORDBTN_P = f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{{openChord}}}}" style="flex: none; width: 92px; height: 68px; box-sizing: border-box; padding: 0 8px; border: 0; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px"><span style="max-width: 100%; font-size: {{{{qSymFs}}}}px; font-weight: 700; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{qSym}}}}</span><span style="display: flex; align-items: center; gap: 2px; font-size: 11px; font-weight: 600; line-height: 1; color: {SOFT}">Chord{CHEV_U2.replace('width="16" height="16"', 'width="11" height="11"')}</span></button>'
+PLAYALONE = lambda s: f'<div style="flex: none; width: {s}px; height: {s}px; border-radius: {s // 2}px; box-shadow: {SHADOW}; display: flex">{PLAYBTN(s)}</div>'
 
-DOCK_PHONE = f'<div role="toolbar" aria-label="Chord" style="position: absolute; left: 12px; right: 12px; bottom: 30px; z-index: 40; display: flex; align-items: center; justify-content: space-between; gap: 6px">' + \
-    CHORDBTN('{{qSymFs}}px') + TRANSPORT + \
-    TGROUP(ICONBTN('Play as: {{soundLabel}}', SOUNDI, 'openSound', 'arpOn') + ICONBTN('Hands: {{handsLabel}}', HANDSI, 'openHands') + ICONBTN('Keyboard', PIANOI, 'openKeys')) + '</div>'
+DOCK_PHONE = f'<div role="toolbar" aria-label="Chord" style="position: absolute; left: 12px; right: 12px; bottom: 30px; z-index: 40; display: flex; align-items: center; justify-content: space-between; gap: 4px">' + \
+    CHORDBTN_P + PLAYALONE(64) + \
+    TGROUP(TABBTN('Play as: {{soundLabel}}', SOUNDI, '{{soundWord}}', 'openSound', 'arpOn') + TABBTN('Hands: {{handsLabel}}', HANDSI, '{{handsLabel}}', 'openHands') + TABBTN('Keyboard', PIANOI, 'Keyboard', 'openKeys')) + '</div>'
 
-# a laptop has room for the words: the symbol, then its name (macOS's Icon and Text), each group apart
-LBTN = lambda label, svg, act, pressed='': f'<button type="button" {("aria-pressed=\"{{" + pressed + "}}\"") if pressed else ""} onClick="{{{{{act}}}}}" style="flex: none; height: 44px; padding: 0 16px 0 12px; border: 0; border-radius: 22px; {"background: {{arpBg}}; color: {{arpInk}};" if pressed else "background: transparent; color: " + INK + ";"} font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">{svg}{label}</button>'
+# a laptop: the same three groups, the symbol and its words side by side
+LBTN = lambda label, svg, act, pressed='': f'<button type="button" {("aria-pressed=\"{{" + pressed + "}}\"") if pressed else ""} onClick="{{{{{act}}}}}" style="flex: none; height: 56px; padding: 0 18px 0 14px; border: 0; border-radius: 28px; {"background: {{arpBg}}; color: {{arpInk}};" if pressed else "background: transparent; color: " + INK + ";"} font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">{svg}{label}</button>'
+CHORDBTN_L = f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{{openChord}}}}" style="flex: none; height: 68px; box-sizing: border-box; padding: 0 18px 0 24px; border: 0; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; color: {INK}; font: inherit; font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 6px; white-space: nowrap">{{{{qSym}}}}{CHEV_U2}</button>'
 DOCK_LAPTOP = f'<div role="toolbar" aria-label="Chord" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; display: flex; align-items: center; gap: 12px">' + \
-    CHORDBTN('16px') + TRANSPORT + \
+    CHORDBTN_L + PLAYALONE(68) + \
     TGROUP(LBTN('{{soundLabel}}', SOUNDI, 'openSound', 'arpOn') + LBTN('{{handsLabel}}', HANDSI, 'openHands') + LBTN('Keyboard', PIANOI, 'openKeys')) + '</div>'
 
 # ── the sheets' bodies, the same on both sizes ──

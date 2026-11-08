@@ -88,6 +88,21 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   - The views stay words (no symbol says Inversions or Tensions), as an equal-width segmented control on a track,
     right above what it switches, under the keys; the top bar is Back, the title **Chords**, the gear.
 
+- **Every control says, in words, what it is set to** (owner, 2026-11-08: "research more and refactor. make more
+  clear"). Replaces the symbols-only phone bar of v20.
+  - Research: NN/g's icon-usability study (Aurora Harley): "text labels are necessary to communicate the meaning and
+    reduce ambiguity"; only home, print and search are read the same by everyone. Apple's tab bar: "Supply a symbol
+    and a text label for each tab". Material 3's floating toolbar: actions icon-only or icon and label, stadium
+    corners, 8 inside. Piano Companion plays a chord as a loop or an arpeggio, a choice beside the chord.
+  - The phone's bar: the chord's name over **Chord ⌃**; Play alone, the one filled action; one capsule of three, each
+    a symbol over its current value: **Block** or **Arpeggio**, **Both hands**, **Right hand** or **Left hand**,
+    **Keyboard**. A laptop puts the value beside the symbol (Block chord, Both hands, Keyboard).
+  - ‹ › leave the transport, where they read as previous and next song, and become the chord's own stepper under its
+    name, in words: **‹ Root position ›**, then the voicing (Close voicing). The chord is now read top to bottom:
+    name, full name, inversion, voicing, notes.
+  - Corners: groups 68 tall (radius 34), items 56 inside 6 (radius 28), the stepper 44 (radius 22) with 40-tall
+    arrows 2 in (radius 20).
+
 ## Fixed on the way
 
 The kit's sheet function had taken the name of the sheet colour, so every card on the R41 pages was drawn with no
@@ -100,3 +115,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: words on the views, captions on the bar, clearer icons (v18).
 - 2026-11-08: concentric corners, Tensions, the chosen view in ink (v19).
 - 2026-11-08: Apple's toolbar groups and segmented control (v20).
+- 2026-11-08: every control in words, the inversion stepper under the name (v21).

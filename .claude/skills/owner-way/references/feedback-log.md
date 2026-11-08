@@ -247,6 +247,9 @@ owner's, typos fixed.
   groups, each a capsule with concentric items; symbols without captions on a phone, symbol and name on a laptop;
   text only where no symbol can say it (a chord's name); one tinted primary action. A switch of views is an
   equal-width segmented control of nouns, placed above what it switches.
+- **Words beat symbols (R42, v21):** "make more clear", after a symbols-only bar. Every control shows a symbol and
+  its current value in words (Block, Both hands), never a symbol alone except Play and Back. A stepper sits beside
+  the thing it steps and names the step (‹ Root position ›), never in the transport where it reads as previous song.
 
 ## Sounds
 

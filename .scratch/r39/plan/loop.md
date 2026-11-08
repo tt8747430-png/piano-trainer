@@ -58,3 +58,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 `.scratch/r41/plan/songs-and-practice.md`), canvas v14, generator `canvas/r41.py`.
 **R42 v19 (2026-11-08):** Chords' corners concentric, views Staff · Inversions · Fingering · Tensions with the chosen one in ink.
 **R42 v20 (2026-11-08):** Chords' bar as Apple's toolbar (three capsules, symbols), views an equal-width segmented control under the keys.
+**R42 v21 (2026-11-08):** Chords: every control in words, the inversion stepper under the chord's name.
