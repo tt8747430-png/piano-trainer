@@ -18,7 +18,7 @@ R41PRE = r'''
 const seg = (opts, cur, pick) => opts.map((l) => ({ l, on: l === cur, bg: l === cur ? '#FEFDFB' : 'transparent', sh: l === cur ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: l === cur ? 600 : 500, pick: () => pick(l) }));
 const chipsOf = (opts, cur, pick) => opts.map((l) => ({ l, bg: l === cur ? '#332921' : '#EEE9E2', fg: l === cur ? '#FEFDFB' : '#332921', pick: () => pick(l) }));
 const ROOTS = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
-const rootGrid = (cur, pick) => ROOTS.map((r, i) => ({ l: r, bg: i === cur ? '#EDC684' : '#FEFDFB', fw: i === cur ? 700 : 500, pick: () => pick(i) }));
+const rootGrid = (cur, pick) => { const all = ROOTS.map((r, i) => ({ l: r, on: i === cur, bg: i === cur ? '#FEFDFB' : 'transparent', sh: i === cur ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: i === cur ? 700 : 500, pick: () => pick(i) })); return { a: all.slice(0, 6), b: all.slice(6) }; };
 const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ sheet: null }), open: (n) => () => set({ sheet: n }), isSheet: (n) => st.sheet === n });
 '''
 
@@ -88,7 +88,11 @@ def DOCK_L(inner, w=560):
 def CARD(inner, pad='14px 16px', extra=''):
     return f'<div style="border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: {pad}; {extra}">{inner}</div>'
 def ROOTGRID(lst='roots'):
-    return f'<div role="radiogroup" aria-label="Root" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{{lst}}}}}" as="r" hint-placeholder-count="12"><button type="button" onClick="{{{{r.pick}}}}" style="height: 52px; border: 0; border-radius: 12px; background: {{{{r.bg}}}}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; font: inherit; font-size: 19px; font-weight: {{{{r.fw}}}}">{{{{r.l}}}}</button></sc-for></div>'
+    def track(half):
+        return (f'<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 2px; padding: 3px; border-radius: 14px; background: {FILL}">'
+                f'<sc-for list="{{{{{lst}.{half}}}}}" as="r" hint-placeholder-count="6"><button type="button" role="radio" aria-checked="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" '
+                f'style="height: 44px; min-width: 0; padding: 0; border: 0; border-radius: 11px; background: {{{{r.bg}}}}; box-shadow: {{{{r.sh}}}}; color: {INK}; font: inherit; font-size: 18px; font-weight: {{{{r.fw}}}}">{{{{r.l}}}}</button></sc-for></div>')
+    return f'<div role="radiogroup" aria-label="Root" style="display: flex; flex-direction: column; gap: 6px">{track("a")}{track("b")}</div>'
 def BSHEET(cond, title, body, done='Done'):
     return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" aria-label="{title}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 14px" class="nos"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div><div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 36px"><span style="font-size: 17px; font-weight: 600">{title}</span><button type="button" onClick="{{{{closeSheet}}}}" style="position: absolute; right: 0; height: 44px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">{done}</button></div>{body}</section></sc-if>'
 def POPOVER(cond, title, body, pos='right: 40px; top: 64px', w=380):

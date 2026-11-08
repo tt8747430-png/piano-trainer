@@ -5,6 +5,14 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v40: the root picker is two rows of six, as GarageBand's Key Signature.** Owner (with a GarageBand screenshot):
+  "look at these notes grid , but i dont think we need  the major minor switch here and the follow songs key".
+  - The 4 × 3 grid of boxed buttons becomes two segmented tracks, C to F and F♯ to B, the chosen note a raised
+    thumb on the track. One implementation (`ROOTGRID` in `r41_kit.py`): Chords' Root, Scales' Tonic, Intervals'
+    From, a progression's and an exercise's Key.
+  - Not taken from GarageBand: the major | minor switch (the chord or scale list already says which) and Follow Song
+    Key (a recording setting; no recordings here), nor the explanation lines under them.
+  - The spelling stays C♯, E♭, F♯, A♭, B♭ (GarageBand writes D♭): C♯ minor is a key, D♭ minor is not.
 - **v39: no "Add a note"; every extra note is a named chord in the Chord list.** Owner: "I dont like this add a note
   how this looks, and is not understandable and I would like you to refactor them. search more and refactor them
   properly and make more clear".
@@ -286,3 +294,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: finger numbers on the keys one step above the name (v37).
 - 2026-11-08: Labels Names · Fingers · None on the keys; the gear: Hand, Staff › Finger numbers (v38).
 - 2026-11-08: Add a note removed; Extended gains maj7♯11; a new Altered group, 7♭9 · 7♯9 · 7♯11 · 7♭13 (v39).
+- 2026-11-08: the root picker as two rows of six, used on every Practice page (v40).

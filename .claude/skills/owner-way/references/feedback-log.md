@@ -293,6 +293,8 @@ owner's, typos fixed.
 - **An extra note is a chord with a name, picked from the one list (R42, v39):** "I dont like this add a note how
   this looks, and is not understandable". No add-on chips beside the chord list, no avoid notes struck through; C7♭9
   is a row in Altered, as iReal Pro lists qualities.
+- **A note picker is two rows of six on a track, the chosen note raised (R42, v40):** GarageBand's Key Signature,
+  "but i dont think we need the major minor switch here and the follow songs key". The picker only picks the note.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple
