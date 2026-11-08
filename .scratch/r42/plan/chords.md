@@ -14,7 +14,9 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     has no 3D hands), then only what the keys use: **Keys** Chord · 61 · 76 · 88, **Note names**, **Finger numbers**;
     then **Connect a piano ›**, **All piano settings ›**.
   - The header's **gear** keeps the page's other settings: **Fingering**, Hand Right · Left · Both and On the staff.
-  - On the keys (Vita Piano's charts): the finger number large on the coloured key, the note name small under it.
+  - On the keys (Vita Piano's charts): the finger number on the coloured key, the note name under it. v37, owner:
+    "why the fingers numbers look so big": one step above the name, 14px bold on a white key (12px on a black), the
+    name 12px (10px).
   - (v35's Keyboard sheet mixing the keys and the fingering is replaced by this.)
 
 - **v35: fingering settings; the numbers beside the notes, per inversion.** Owner: "i want fingering settings, and
@@ -253,3 +255,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: fingering, accidentals, Show the keyboard and the circle's names fixed in the real runtime (v34).
 - 2026-11-08: Fingering settings (Show, Hand, On the keys); numbers beside the notes; fingering by inversion (v35).
 - 2026-11-08: Keyboard panel as the Player's, on the bar; the gear keeps Fingering; numbers on the keys as Vita Piano (v36).
+- 2026-11-08: finger numbers on the keys one step above the name (v37).
