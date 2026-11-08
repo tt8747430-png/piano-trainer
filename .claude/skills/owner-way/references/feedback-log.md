@@ -201,6 +201,8 @@ owner's, typos fixed.
   hand, Colour notes, Practise this chord; Play and Arpeggio above keys with no finger numbers; Chord settings behind the
   gear. Waiting for the owner's word.
 - **Scales:** fingerings as the printed books give them, more kinds, Hanon 1–20, a tempo ladder.
+  **Drawn (R39-6, 2026-11-08):** Tonic and Scale pickers, the run engraved with fingers, Scale · Chords · Key tabs,
+  fingering by hand, Practise this scale; Play up and down with its tempo over the keys; the bar's four icons gone.
 - **Quiz:** one setup and four drills for every trainer; a cadence trainer.
 - **Harmony:** draw the roles and moves on the chords (the Function · Root motion switch changed only letters).
 - **Chord player:** Musicca's controls and options, with the best free sounds.

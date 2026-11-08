@@ -41,13 +41,31 @@
    "h": 1299,
    "is_interactive": true,
    "title": "MacBook Air: Chords in three columns: what you build on the left, the chord in the middle with Play and Arpeggio, Colour notes and Practise this chord on the right; the keys across the foot; the gear opens Chord settings"
+  },
+  "Scales.dc.html": {
+   "x": 0,
+   "y": 2838,
+   "w": 450,
+   "h": 920,
+   "is_interactive": true,
+   "title": "iPhone 17 Pro: Scales and keys. Tonic and Scale as pickers; the scale engraved with its fingers (Degrees or Steps); Scale · Chords · Key tabs say what they hold; fingering by hand as the books print it; Play up and down with its tempo over the keys"
+  },
+  "ScalesLaptop.dc.html": {
+   "x": 530,
+   "y": 2838,
+   "w": 2143,
+   "h": 1299,
+   "is_interactive": true,
+   "title": "MacBook Air: Scales and keys in three columns: the choices on the left, the scale and its tab in the middle, Play with tempo and Practise this scale on the right"
   }
  },
  "order": [
   "Main.dc.html",
   "Laptop.dc.html",
   "Chords.dc.html",
-  "ChordsLaptop.dc.html"
+  "ChordsLaptop.dc.html",
+  "Scales.dc.html",
+  "ScalesLaptop.dc.html"
  ],
  "notes": {},
  "designSystems": []
