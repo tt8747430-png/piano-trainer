@@ -8,7 +8,7 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 - "now refactor the chords page from practice in the style of the songs player" (2026-11-08): the Chords page takes
   the Player's shape, as drawn in R37 and merged in v15:
   - **At the top**, three glass controls: Back (to Practice) · the views · the gear (Chord settings). The views are
-    **Staff · Inversions · Fingering · Tones**, icons on a phone and words on a laptop, as the Player's are. Staff's one setting is in the gear (v17).
+    **Staff · Inversions · Fingering · Tones**, words on both sizes (v18). Staff's one setting is in the gear (v17).
   - **The keys run edge to edge** under them, where the Player's keys are, the chord coloured by its role (root,
     3rd, 5th, 7th, tensions) and named on its keys; no finger numbers on the keys.
   - **The chord is the title**, as the song is: the symbol in serif, its full name, its inversion and voicing, its
@@ -58,6 +58,13 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     size) in its Settings and the chord's own choices on the chord page (App Store listing); CLAUDE.md, "each
     preference has one home; elsewhere a link row to it, never a second control".
 
+- **Every control says what it is** (owner, 2026-11-08: "not all icons are very clear"). On a phone the views are
+  words (Staff · Inversions · Fingering · Tones) as on a laptop; the bar's buttons carry a caption under the icon:
+  the chord's symbol over **Chord**, **Block** or **Arpeggio**, **Hands**, **Keyboard**. The icons are redrawn as
+  what they show: a block chord is three notes stacked on one stem, an arpeggio three notes rising, the keyboard
+  white keys with three black keys. ‹ › and Play stay icons alone, as on every player. A long chord symbol shrinks
+  rather than being cut off (C♯m(maj7)).
+
 ## Fixed on the way
 
 The kit's sheet function had taken the name of the sheet colour, so every card on the R41 pages was drawn with no
@@ -67,3 +74,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 
 - 2026-11-08: drawn (v16). Replaces the calm Chords page (big symbol, keys card, Change chord bar).
 - 2026-11-08: duplicates removed (v17).
+- 2026-11-08: words on the views, captions on the bar, clearer icons (v18).

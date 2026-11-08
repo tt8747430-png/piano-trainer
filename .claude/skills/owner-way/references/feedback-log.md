@@ -237,6 +237,9 @@ owner's, typos fixed.
 - **No setting twice on a page (R42, v17):** "we have now duplicate settings". Before publishing, list every control
   with its one home; a second control for the same choice goes (Chords: Inversion only on ‹ ›, block or arpeggio one
   choice, the piano's settings only behind Keyboard).
+- **An icon alone is not enough (R42, v18):** "not all icons are very clear". A switch of views is words; a bar's
+  buttons carry a caption under the icon; an icon draws what it does (stacked notes for a block chord, rising notes for
+  an arpeggio). Only ‹ ›, Play and Back stand alone.
 
 ## Sounds
 

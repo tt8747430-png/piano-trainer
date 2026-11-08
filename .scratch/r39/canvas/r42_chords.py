@@ -9,7 +9,10 @@ LAYERS = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="m12 2 10
 POINT = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M22 14a8 8 0 0 1-8 8"></path><path d="M18 11v-1a2 2 0 0 0-4 0"></path><path d="M14 10V9a2 2 0 0 0-4 0v1"></path><path d="M10 9.5V4a2 2 0 0 0-4 0v10"></path><path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-6-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"></path></svg>'
 TONESI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><circle cx="7" cy="12" r="3"></circle><circle cx="17" cy="6.5" r="3"></circle><circle cx="17" cy="17.5" r="3"></circle></svg>'
 HANDI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M18 11V6a2 2 0 0 0-4 0v5"></path><path d="M14 10V4a2 2 0 0 0-4 0v6"></path><path d="M10 10.5V6a2 2 0 0 0-4 0v8"></path><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-6-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"></path></svg>'
-ARPI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><circle cx="5" cy="18" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="6" r="2"></circle><path d="M6.5 16.5 10.5 13.5M13.5 10.5l4-3"></path></svg>'
+ARPI = f'<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><g fill="currentColor"><ellipse cx="5.5" cy="19" rx="2.8" ry="2.1" transform="rotate(-20 5.5 19)"></ellipse><ellipse cx="12" cy="14" rx="2.8" ry="2.1" transform="rotate(-20 12 14)"></ellipse><ellipse cx="18.5" cy="9" rx="2.8" ry="2.1" transform="rotate(-20 18.5 9)"></ellipse></g><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 18.4V7M14.5 13.4V3.5M21 8.4V2"></path></g></svg>'
+BLOCKI = f'<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><g fill="currentColor"><ellipse cx="10" cy="19" rx="2.8" ry="2.1" transform="rotate(-20 10 19)"></ellipse><ellipse cx="10" cy="14.2" rx="2.8" ry="2.1" transform="rotate(-20 10 14.2)"></ellipse><ellipse cx="10" cy="9.4" rx="2.8" ry="2.1" transform="rotate(-20 10 9.4)"></ellipse></g><path d="M12.6 18.4V2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>'
+SOUNDI = '<sc-if value="{{arpOn}}" hint-placeholder-val="{{false}}">' + ARPI + '</sc-if><sc-if value="{{blockOn}}" hint-placeholder-val="{{true}}">' + BLOCKI + '</sc-if>'
+PIANOI = f'<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"></rect><path d="M7.25 12.5V19M12 12.5V19M16.75 12.5V19" stroke="currentColor" stroke-width="1.4"></path><g fill="currentColor"><rect x="5.6" y="5" width="3.3" height="7.5" rx=".6"></rect><rect x="10.35" y="5" width="3.3" height="7.5" rx=".6"></rect><rect x="15.1" y="5" width="3.3" height="7.5" rx=".6"></rect></g></svg>'
 LINKI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>'
 CLOSEX = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M18 6 6 18M6 6l12 12"></path></svg>'
 CHEV_D2 = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="m6 9 6 6 6-6"></path></svg>'
@@ -196,6 +199,7 @@ return {
   rootName: ROOTS[root], qName: q.n[0].toUpperCase() + q.n.slice(1), qSym: ROOTS[root] + q.k, voicing, invLabel: INV[inv], handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand',
   roots: rootGrid(root, (i) => change({ root: i })),
   playTiles: [['Block', 'Block chord'], ['Up', 'Arpeggio up'], ['Up and down', 'Arpeggio up and down']].map(([v, l]) => ({ l, on: v === playAs, bg: v === playAs ? '#FBF1DD' : '#FEFDFB', ring: v === playAs ? '0 0 0 2px #B07A2A' : '0 0 0 1px ' + C.line, pick: () => { set({ playAs: v }); sound(ms, v !== 'Block', v === 'Up and down' ? 'Up and down' : 'Up'); } })),
+  qSymFs: (ROOTS[root] + q.k).length > 7 ? 12 : ((ROOTS[root] + q.k).length > 5 ? 13.5 : 15), blockOn: !arp, soundShort: arp ? 'Arpeggio' : 'Block',
   soundLabel: playAs === 'Block' ? 'Block chord' : (playAs === 'Up' ? 'Arpeggio up' : 'Up and down'),
   staffSeg: seg(['Grand staff', 'Treble only'], treble ? 'Treble only' : 'Grand staff', (l) => set({ staff: l })),
   keysSeg: seg(['Chord', '61', '88'], keys, (l) => set({ keys: l })),
@@ -226,9 +230,9 @@ def VIEWPILL(labelled):
     if labelled:
         item = f'<button type="button" aria-pressed="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="height: 36px; padding: 0 18px; border: 0; border-radius: 18px; background: {{{{v.bg}}}}; box-shadow: {{{{v.sh}}}}; color: {INK}; font: inherit; font-size: 15px; font-weight: {{{{v.fw}}}}">{{{{v.v}}}}</button>'
         return f'<nav aria-label="View" style="display: flex; gap: 2px; padding: 3px; border-radius: 22px; border: 1px solid {LINE}; background: {GLASS}; backdrop-filter: blur(12px)"><sc-for list="{{{{views}}}}" as="v" hint-placeholder-count="4">{item}</sc-for></nav>'
-    # phone: icons, one per view, fixed order
-    btns = ''.join(f'<button type="button" aria-label="{v}" aria-pressed="{{{{views.{i}.on}}}}" onClick="{{{{views.{i}.pick}}}}" style="width: 48px; height: 36px; border: 0; border-radius: 18px; background: {{{{views.{i}.bg}}}}; box-shadow: {{{{views.{i}.sh}}}}; color: {INK}; display: flex; align-items: center; justify-content: center">{icons[v]}</button>' for i, v in enumerate(['Staff', 'Inversions', 'Fingering', 'Tones']))
-    return f'<nav aria-label="View" style="display: flex; gap: 2px; padding: 3px; border-radius: 22px; border: 1px solid {LINE}; background: {GLASS}; backdrop-filter: blur(12px)">{btns}</nav>'
+    # phone: the same words, smaller
+    item = f'<button type="button" aria-pressed="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="height: 36px; padding: 0 9px; border: 0; border-radius: 18px; background: {{{{v.bg}}}}; box-shadow: {{{{v.sh}}}}; color: {INK}; font: inherit; font-size: 13px; font-weight: {{{{v.fw}}}}; white-space: nowrap">{{{{v.v}}}}</button>'
+    return f'<nav aria-label="View" style="display: flex; gap: 0; padding: 3px; border-radius: 22px; border: 1px solid {LINE}; background: {GLASS}; backdrop-filter: blur(12px)"><sc-for list="{{{{views}}}}" as="v" hint-placeholder-count="4">{item}</sc-for></nav>'
 
 def TITLEBLOCK(size):
     return f'''<div style="flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
@@ -257,25 +261,25 @@ def VIEWBODY(staff_w, inv_cols, mini_w):
 <sc-if value="{{{{hasAvoid}}}}" hint-placeholder-val="{{{{true}}}}">{CAPS("Avoid")}<div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{{{avoid}}}}" as="t" hint-placeholder-count="1"><span style="height: 44px; padding: 0 16px; border-radius: 22px; background: {FILL}; color: {SOFT}; font-size: 15px; font-weight: 600; text-decoration: line-through; display: flex; align-items: center">{{{{t.l}}}} {{{{t.n}}}}</span></sc-for></div></sc-if>
 </div></sc-if>'''
 
-def DOCKBTN(label, svg, act, pressed='', badge=''):
-    b = f'<span style="position: absolute; right: 0; top: 2px; min-width: 16px; height: 16px; padding: 0 3px; box-sizing: border-box; border-radius: 8px; background: {INK}; color: #FEFDFB; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{{badge}}}}}</span>' if badge else ''
+def DOCKBTN(label, svg, act, pressed='', badge='', cap=''):
+    b = f'<span style="position: absolute; right: 6px; top: 3px; min-width: 16px; height: 16px; padding: 0 3px; box-sizing: border-box; border-radius: 8px; background: {INK}; color: #FEFDFB; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{{badge}}}}}</span>' if badge else ''
     pr = f'aria-pressed="{{{{{pressed}}}}}" ' if pressed else ''
     bg = 'background: {{arpBg}}; color: {{arpInk}};' if pressed else f'background: transparent; color: {INK};'
-    return f'<button type="button" aria-label="{label}" {pr}onClick="{{{{{act}}}}}" style="position: relative; flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; {bg} display: flex; align-items: center; justify-content: center">{svg}{b}</button>'
+    return f'<button type="button" aria-label="{label}" {pr}onClick="{{{{{act}}}}}" style="position: relative; flex: none; width: 52px; height: 56px; padding: 0; border: 0; border-radius: 16px; {bg} font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px">{svg}<span style="font-size: 10.5px; font-weight: 600; line-height: 1; white-space: nowrap">{cap}</span>{b}</button>'
 
-STEP = lambda label, svg, act: f'<button type="button" aria-label="{label}" onClick="{{{{{act}}}}}" style="flex: none; width: 32px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{svg}</button>'
+STEP = lambda label, svg, act: f'<button type="button" aria-label="{label}" onClick="{{{{{act}}}}}" style="flex: none; width: 30px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{svg}</button>'
 
-DOCK_PHONE = f'<div role="toolbar" style="position: absolute; left: 12px; right: 12px; bottom: 30px; z-index: 40; height: 68px; box-sizing: border-box; padding: 0 6px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; justify-content: space-between">' + \
-    f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{{openChord}}}}" style="flex: none; max-width: 84px; height: 44px; padding: 0 6px 0 10px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 2px; white-space: nowrap; overflow: hidden"><span style="overflow: hidden; text-overflow: ellipsis">{{{{qSym}}}}</span>{CHEV_U2}</button>' + \
-    DOCKBTN('Play the chord: {{soundLabel}}', ARPI, 'openSound', 'arpOn') + STEP('Previous inversion', CHEV_LS, 'prev') + PLAYBTN(52) + STEP('Next inversion', CHEV_RS, 'next') + \
-    DOCKBTN('Hands', HANDI, 'openHands', badge='handsBadge') + DOCKBTN('Keyboard', KEYSI, 'openKeys') + '</div>'
+DOCK_PHONE = f'<div role="toolbar" style="position: absolute; left: 12px; right: 12px; bottom: 30px; z-index: 40; height: 68px; box-sizing: border-box; padding: 0 6px 0 8px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; justify-content: space-between">' + \
+    f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{{openChord}}}}" style="flex: none; min-width: 56px; max-width: 86px; height: 56px; padding: 0 8px; border: 0; border-radius: 16px; background: {FILL}; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; overflow: hidden"><span style="max-width: 100%; font-size: {{{{qSymFs}}}}px; font-weight: 700; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{qSym}}}}</span><span style="font-size: 10.5px; font-weight: 600; line-height: 1; color: {SOFT}">Chord</span></button>' + \
+    DOCKBTN('Play the chord: {{soundLabel}}', SOUNDI, 'openSound', 'arpOn', cap='{{soundShort}}') + STEP('Previous inversion', CHEV_LS, 'prev') + PLAYBTN(52) + STEP('Next inversion', CHEV_RS, 'next') + \
+    DOCKBTN('Hands: {{handsLabel}}', HANDI, 'openHands', badge='handsBadge', cap='Hands') + DOCKBTN('Keyboard', PIANOI, 'openKeys', cap='Keyboard') + '</div>'
 
 LBTN = lambda label, svg, act, pressed='': f'<button type="button" {("aria-pressed=\"{{" + pressed + "}}\"") if pressed else ""} onClick="{{{{{act}}}}}" style="flex: none; height: 48px; padding: 0 14px; border: 0; border-radius: 24px; {"background: {{arpBg}}; color: {{arpInk}};" if pressed else "background: transparent; color: " + INK + ";"} font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">{svg}{label}</button>'
 DIV = f'<span style="flex: none; width: 1px; height: 28px; background: {LINE}"></span>'
 DOCK_LAPTOP = f'<div role="toolbar" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; height: 68px; box-sizing: border-box; padding: 0 10px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 6px">' + \
     f'<button type="button" onClick="{{{{openChord}}}}" style="flex: none; height: 48px; padding: 0 12px 0 16px; border: 0; border-radius: 24px; background: {FILL}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 6px; white-space: nowrap">{{{{qSym}}}}{CHEV_U2}</button>' + \
-    LBTN('{{soundLabel}}', ARPI, 'openSound', 'arpOn') + DIV + STEP('Previous inversion', CHEV_LS, 'prev') + PLAYBTN(56) + STEP('Next inversion', CHEV_RS, 'next') + DIV + \
-    LBTN('{{handsLabel}}', HANDI, 'openHands') + LBTN('Keyboard', KEYSI, 'openKeys') + '</div>'
+    LBTN('{{soundLabel}}', SOUNDI, 'openSound', 'arpOn') + DIV + STEP('Previous inversion', CHEV_LS, 'prev') + PLAYBTN(56) + STEP('Next inversion', CHEV_RS, 'next') + DIV + \
+    LBTN('{{handsLabel}}', HANDI, 'openHands') + LBTN('Keyboard', PIANOI, 'openKeys') + '</div>'
 
 # ── the sheets' bodies, the same on both sizes ──
 def BACKHEAD(title, act):
