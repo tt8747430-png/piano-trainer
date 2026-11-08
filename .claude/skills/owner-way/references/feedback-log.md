@@ -243,6 +243,10 @@ owner's, typos fixed.
 - **Corners nest; a chosen tab contrasts (R42, v19):** "the inner corners doesn't match the roundness of the outer
   corners". An inner corner is the outer radius less the inset (a pill in a pill is a pill). The chosen item of a
   switch is filled in ink with white text, never a faint tint; tabs are named for what they show.
+- **A bar follows Apple's toolbar (R42, v20):** "apple guidelines provide more guides to toolbars". At most three
+  groups, each a capsule with concentric items; symbols without captions on a phone, symbol and name on a laptop;
+  text only where no symbol can say it (a chord's name); one tinted primary action. A switch of views is an
+  equal-width segmented control of nouns, placed above what it switches.
 
 ## Sounds
 

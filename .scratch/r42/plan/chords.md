@@ -72,6 +72,22 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   views are named for what they show, Staff · Inversions · Fingering · Tensions (Tones read as a sound); the chosen
   one is ink with white text, the others ink on the sheet, so which view is on is seen at a glance.
 
+- **Apple's toolbar and segmented control** (owner, 2026-11-08: "apple guidelines provide more guides to toolbars
+  and to corners and their radius and buttons inside the toolbar … names are still not very clear or should they be
+  icons instead"). Read: HIG Toolbars, Segmented controls, Buttons, Tab bars, SF Symbols
+  (developer.apple.com/design/human-interface-guidelines). Taken, in its words:
+  - "Prefer simple, recognizable symbols for items instead of text", "without borders"; "aim for a maximum of three"
+    groups; "Only specify one primary action"; "Keep actions with text labels separate"; standard items "have corner
+    radii that are concentric with bar corners"; a 44 by 44 hit region; capsules in a row.
+  - Segmented: "all segments are usually equal in width", "either text or images — not a mix", "nouns", "no more than
+    about five segments on iPhone"; it switches "closely related subviews".
+  - So the phone's bar is three capsules (each 56, radius 28; items 44, radius 22, 6 in): the chord's name (text, as
+    no symbol says Cmaj7) · ‹ Play › with Play the one tinted action · Play as, Hands, Keyboard as symbols only. Hands
+    draws which hands (two, a right, a left) instead of a badge, which Apple keeps for critical news. A laptop shows
+    the same three groups with each symbol's name beside it (macOS's Icon and Text). Captions under icons go.
+  - The views stay words (no symbol says Inversions or Tensions), as an equal-width segmented control on a track,
+    right above what it switches, under the keys; the top bar is Back, the title **Chords**, the gear.
+
 ## Fixed on the way
 
 The kit's sheet function had taken the name of the sheet colour, so every card on the R41 pages was drawn with no
@@ -83,3 +99,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: duplicates removed (v17).
 - 2026-11-08: words on the views, captions on the bar, clearer icons (v18).
 - 2026-11-08: concentric corners, Tensions, the chosen view in ink (v19).
+- 2026-11-08: Apple's toolbar groups and segmented control (v20).

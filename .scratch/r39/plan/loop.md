@@ -57,3 +57,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 (2026-11-08):** Chords in the Player's shape (v16, `.scratch/r42/plan/chords.md`); the kit's SHEET name clash fixed on every page.
 `.scratch/r41/plan/songs-and-practice.md`), canvas v14, generator `canvas/r41.py`.
 **R42 v19 (2026-11-08):** Chords' corners concentric, views Staff · Inversions · Fingering · Tensions with the chosen one in ink.
+**R42 v20 (2026-11-08):** Chords' bar as Apple's toolbar (three capsules, symbols), views an equal-width segmented control under the keys.
