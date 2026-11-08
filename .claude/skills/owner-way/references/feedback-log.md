@@ -318,6 +318,9 @@ owner's, typos fixed.
   inversion › as a pill; [▶ Play chord | ⌄] with Block chord · Arpeggio.
   v53: "the keyboard settings should be like separate from this play chord": the bar is the sound only; Keyboard
   is its own round button beside it.
+- **No filled button inside a bar; groups of glass, one tinted primary (R42, v54):** "I dont like how this yellow
+  button looks inside this toolbar. research the apple guidelines". Apple iOS 26: grouped glass items, the one
+  primary action prominent in its own group, trailing.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

@@ -5,6 +5,15 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v54: the bar becomes Apple's glass groups; Play the one tinted action, standing alone.** Owner: "I dont like how
+  this yellow button looks inside this toolbar. research the apple guidelines and improve".
+  - Research (Apple, iOS 26 Liquid Glass; WWDC25 "Get to know the new design system" and "Build a UIKit app with the
+    new design"; HIG Toolbars): items sit on glass in groups, a spacer starts a new group; only one primary action is
+    prominent, tinted glass, in its own group on the trailing side; "when every element is tinted, nothing stands
+    out". A filled button inside another capsule is the thing the guidelines avoid.
+  - Now three shapes, no capsule around them, 56 tall, 8 apart: **keyboard** (round glass) · **Cmaj7 ⌃** (glass) ·
+    **[▶ Play chord | ⌄]** (honey-tinted glass, a light top edge, the rest of the width). The ⌄ menu (Block chord ·
+    Arpeggio) and Keyboard's panel open over their own buttons.
 - **v53: the keyboard button stands apart from the bar.** Owner: "but now the keyboard settings should be like
   separate from this play chord".
   - The bar holds only the sound: **Cmaj7 ⌃ · [▶ Play chord | ⌄]**. Beside it, 10 apart, a round glass button
@@ -389,3 +398,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: no ⌄ beside the big chord; the chord itself opens the sheet (v51).
 - 2026-11-08: inversion stepper under the name; Play and Arpeggio merged into one split button (v52).
 - 2026-11-08: the keyboard button out of the bar, a round glass button beside it (v53).
+- 2026-11-08: the bar as three glass groups, Play the one tinted, on the trailing side (v54).
