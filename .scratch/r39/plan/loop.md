@@ -26,7 +26,7 @@ after compacting"
 
 | # | Page | Canvas | State |
 | - | ---- | ------ | ----- |
-| 1 | Songs library (`/songs`, My songs · Explore) | | |
+| 1 | Songs library (`/songs`, My songs · Explore) | [The ideal Songs](https://claude.ai/artifact/Ana84hFnmzQCBFuvNZRmXB) | drawn, waiting for the owner |
 | 2 | Song's page (`/songs/$pieceId`) | | |
 | 3 | Score editor (`/edit/$pieceId`) | | |
 | 4 | Practice overview (`/practice`) | | |

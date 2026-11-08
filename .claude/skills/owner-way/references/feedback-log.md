@@ -150,6 +150,10 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **The library, drawn (R39-1, 2026-11-08):** Continue first (big engraved covers, "Bar 9 of 16"), folders as compact
+  rows, then every song with its cover, "Composer · Key · Level" and a heart; one Sort and filter with its count. The
+  laptop's table shows only columns that hold something, and its Add sits in the bar, since a floating + covers the
+  table. Waiting for the owner's word.
 - **"A real library"** like Mindscape: built-in folders and the learner's, nested to any depth; a real archive in the header,
   folders archivable; deleting a folder deletes its songs. Move works at any depth.
 - **Filter by key.** No "Chords I know" or "With chords" chips. Swipe actions on rows. Drag into folders and onto the Archive,

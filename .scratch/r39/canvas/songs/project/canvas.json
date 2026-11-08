@@ -1,0 +1,14 @@
+{
+ "v": 3,
+ "createdOnFiles": {"v": 1, "at": "2026-11-08T10:00:00Z"},
+ "title": "The ideal Songs",
+ "launch": {"view": "canvas"},
+ "pages": [],
+ "boards": {
+  "Main.dc.html": {"x": 0, "y": 0, "w": 450, "h": 920, "is_interactive": true, "title": "iPhone 17 Pro: My songs. Continue first, then folders as rows, then every song with its engraved cover. Chips pick the place, search and Sort and filter narrow it, the heart favourites, + adds"},
+  "Laptop.dc.html": {"x": 530, "y": 0, "w": 2143, "h": 1299, "is_interactive": true, "title": "MacBook Air: My songs. The library tree is the places; Continue as four covers; a table of only the columns that hold something; Add sits in the bar so nothing covers the table; Sort and filter opens in place"}
+ },
+ "order": ["Main.dc.html", "Laptop.dc.html"],
+ "notes": {},
+ "designSystems": []
+}
