@@ -1,0 +1,360 @@
+# Builds the Chords page's phone and laptop artboards on the Practice canvas. Run: python3 -I chords.py
+import re
+OUT = '/home/user/piano-trainer/.scratch/r39/canvas/practice/project/'
+src = open(OUT + 'Main.dc.html').read()
+lap = open(OUT + 'Laptop.dc.html').read()
+STATUS = re.search(r'(<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 402px; height: 54px;.*?</span></div>)', src, re.S).group(1)
+SIDE = re.search(r'(<nav aria-label="Main" style="background: #FBF8F3.*?</nav>)', lap, re.S).group(1)
+LAPFRAME_TOP = lap.split('<div style="position: absolute; left: 217.7px; top: 124.6px;')[0].split('</helmet>', 1)[1]
+PHONE_FRAME, LAPTOP_FRAME = '/_blob/2fd798458923e267dd22b7a996a98294', '/_blob/0526d4830b1e952a0ab4ba3ffc2765fc'
+SH = '0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)'
+POP = '0 0 0 1px rgba(26,22,18,0.05), 0 2px 4px rgba(26,22,18,0.08), 0 18px 40px -12px rgba(26,22,18,0.28)'
+
+HEAD = '''<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>%s</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&amp;family=Instrument+Serif&amp;family=Noto+Music&amp;display=swap">
+<style>
+body{margin:0}
+button{font:inherit;cursor:pointer}
+.nos{scrollbar-width:none}.nos::-webkit-scrollbar{display:none}
+main>*{flex:none}
+</style>
+</helmet>
+'''
+
+JS = r'''
+const ROOTS = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
+const ROOTL = [0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6];
+const LET = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+const NAT = [0, 2, 4, 5, 7, 9, 11];
+const ACC = { '-2': '𝄫', '-1': '♭', '0': '', '1': '♯', '2': '𝄪' };
+// group, id, name, suffix, intervals, degrees, also written
+const TYPES = [
+  ['Triads', 'maj', 'major triad', '', [0, 4, 7], [1, 3, 5], ['M', 'maj']],
+  ['Triads', 'min', 'minor triad', 'm', [0, 3, 7], [1, 3, 5], ['min', '−']],
+  ['Triads', 'dim', 'diminished triad', 'dim', [0, 3, 6], [1, 3, 5], ['°']],
+  ['Triads', 'aug', 'augmented triad', 'aug', [0, 4, 8], [1, 3, 5], ['+']],
+  ['Triads', 'sus2', 'suspended second', 'sus2', [0, 2, 7], [1, 2, 5], []],
+  ['Triads', 'sus4', 'suspended fourth', 'sus4', [0, 5, 7], [1, 4, 5], ['sus']],
+  ['Added notes', 'add2', 'added second', 'add2', [0, 2, 4, 7], [1, 2, 3, 5], []],
+  ['Added notes', 'add9', 'added ninth', 'add9', [0, 4, 7, 14], [1, 3, 5, 9], []],
+  ['Added notes', 'madd9', 'minor added ninth', 'madd9', [0, 3, 7, 14], [1, 3, 5, 9], ['m(add9)']],
+  ['Added notes', '6', 'major sixth', '6', [0, 4, 7, 9], [1, 3, 5, 6], ['M6']],
+  ['Added notes', 'm6', 'minor sixth', 'm6', [0, 3, 7, 9], [1, 3, 5, 6], ['min6']],
+  ['Sevenths', 'dom7', 'dominant seventh', '7', [0, 4, 7, 10], [1, 3, 5, 7], ['dom7']],
+  ['Sevenths', 'maj7', 'major seventh', 'maj7', [0, 4, 7, 11], [1, 3, 5, 7], ['M7', 'Δ7']],
+  ['Sevenths', 'min7', 'minor seventh', 'm7', [0, 3, 7, 10], [1, 3, 5, 7], ['min7', '−7']],
+  ['Sevenths', 'mmaj7', 'minor major seventh', 'm(maj7)', [0, 3, 7, 11], [1, 3, 5, 7], ['mΔ7']],
+  ['Sevenths', 'hdim7', 'half-diminished seventh', 'm7♭5', [0, 3, 6, 10], [1, 3, 5, 7], ['ø7']],
+  ['Sevenths', 'dim7', 'diminished seventh', 'dim7', [0, 3, 6, 9], [1, 3, 5, 7], ['°7']],
+  ['Sevenths', '7sus4', 'dominant seventh, suspended fourth', '7sus4', [0, 5, 7, 10], [1, 4, 5, 7], []],
+  ['Extended', '9', 'dominant ninth', '9', [0, 4, 7, 10, 14], [1, 3, 5, 7, 9], []],
+  ['Extended', 'maj9', 'major ninth', 'maj9', [0, 4, 7, 11, 14], [1, 3, 5, 7, 9], ['Δ9']],
+  ['Extended', 'm9', 'minor ninth', 'm9', [0, 3, 7, 10, 14], [1, 3, 5, 7, 9], ['min9']],
+  ['Extended', '11', 'dominant eleventh', '11', [0, 7, 10, 14, 17], [1, 5, 7, 9, 11], []],
+  ['Extended', 'm11', 'minor eleventh', 'm11', [0, 3, 7, 10, 14, 17], [1, 3, 5, 7, 9, 11], []],
+  ['Extended', '13', 'dominant thirteenth', '13', [0, 4, 10, 14, 21], [1, 3, 7, 9, 13], []]
+];
+const VOICINGS = [
+  ['close', 'Close', 3, 'Every note packed as close as it goes'],
+  ['drop2', 'Drop 2', 4, 'The second note from the top down an octave'],
+  ['drop3', 'Drop 3', 4, 'The third note from the top down an octave'],
+  ['shell', 'Shell', 3, 'Root, 3rd and 7th in the left hand'],
+  ['rootlessA', 'Rootless A', 4, '3rd, 5th, 7th, 9th from the bottom'],
+  ['rootlessB', 'Rootless B', 4, '7th, 9th, 3rd, 5th from the bottom'],
+  ['locked', 'Locked hands', 4, 'Close chord, melody doubled below'],
+  ['soWhat', 'So What', 3, 'Three 4ths and a 3rd, from the 9th']
+];
+const INV = ['Root position', 'First inversion', 'Second inversion', 'Third inversion'];
+const INVS = ['Root', '1st', '2nd', '3rd'];
+const DEG = { 1: 'Root', 2: '2nd', 3: '3rd', 4: '4th', 5: '5th', 6: '6th', 7: '7th', 9: '9th', 11: '11th', 13: '13th' };
+function spell(m, letter) {
+  let best = null;
+  for (let o = 1; o < 8; o++) { const n = 12 * (o + 1) + NAT[letter]; if (best === null || Math.abs(m - n) < Math.abs(best.d)) best = { o, d: m - n }; }
+  return { letter, oct: best.o, acc: best.d, steps: best.o * 7 + letter, name: LET[letter] + ACC[String(best.d)] };
+}
+const DEGL = { 1: 0, 2: 1, 3: 2, 4: 3, 5: 4, 6: 5, 7: 6, 9: 1, 11: 3, 13: 5 };
+const LO = 41, HI = 84;
+function keyboard(rh, lh, sounding) {
+  const whites = [];
+  for (let m = LO; m <= HI; m++) { if (NAT.includes(m % 12)) whites.push(m); }
+  const W = 100 / whites.length;
+  const lit = (m) => rh.indexOf(m) >= 0 ? 'r' : lh.indexOf(m) >= 0 ? 'l' : '';
+  const ws = whites.map((m, i) => { const h = lit(m); return { x: (i * W).toFixed(3) + '%', w: W.toFixed(3) + '%', fill: h === 'r' ? (sounding ? '#E8762F' : '#F7C9A5') : h === 'l' ? (sounding ? '#7E6BB8' : '#D5CCEC') : '#FFFFFF', lab: m === 60 ? 'C4' : '' }; });
+  const bs = [];
+  for (let m = LO; m <= HI; m++) {
+    if (NAT.includes(m % 12)) continue;
+    const i = whites.indexOf(m - 1), h = lit(m);
+    bs.push({ x: ((i + 1) * W - W * 0.3).toFixed(3) + '%', w: (W * 0.6).toFixed(3) + '%', fill: h === 'r' ? (sounding ? '#C9561A' : '#E8762F') : h === 'l' ? (sounding ? '#55468A' : '#6F5BA7') : '#1A1612' });
+  }
+  return { whites: ws, blacks: bs };
+}
+function staffNotes(notes, treble) {
+  const base = treble ? 52 : 108, ref = treble ? 30 : 18, top = treble ? 38 : 26;
+  const out = [], ledgers = [];
+  let prev = null, off = false;
+  notes.slice().sort((a, b) => a.steps - b.steps).forEach((n) => {
+    const y = base - (n.steps - ref) * 4;
+    off = prev !== null && n.steps - prev <= 1 && !off;
+    prev = n.steps;
+    out.push({ x: off ? 89 : 80, y, acc: ACC[String(n.acc)], ay: y + 5 });
+    for (let s = ref - 2; s >= n.steps; s -= 2) ledgers.push({ y: base - (s - ref) * 4 });
+    for (let s = top + 2; s <= n.steps; s += 2) ledgers.push({ y: base - (s - ref) * 4 });
+  });
+  return { notes: out, ledgers };
+}
+const FR = { 1: [1], 2: [1, 5], 3: [1, 3, 5], 4: [1, 2, 3, 5], 5: [1, 2, 3, 4, 5], 6: [1, 2, 3, 4, 5] };
+const FL = { 1: [5], 2: [5, 1], 3: [5, 3, 1], 4: [5, 3, 2, 1], 5: [5, 4, 3, 2, 1] };
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const set = (o) => this.setState(o);
+    const root = st.root ?? 0, type = st.type ?? 'maj', inv0 = st.inv ?? 0, hands = st.hands ?? 'r', sheet = st.sheet || null, sounding = st.sounding ?? false;
+    const voicing0 = st.voicing ?? 'close', tens = st.tens || [], page = st.page || null, arp = st.arp ?? 'updown', staffSet = st.staff ?? 'grand';
+    const t = TYPES.find((x) => x[1] === type);
+    const size = t[4].length;
+    const has = (d) => t[5].indexOf(d) >= 0;
+    const vOk = (v) => v[2] <= size && !((v[0] === 'shell' || v[0].startsWith('rootless')) && !has(7)) && !(v[0] === 'soWhat' && !(t[4][1] === 3 || has(4) || has(2)));
+    const vRow = VOICINGS.find((v) => v[0] === voicing0);
+    const voicing = vOk(vRow) ? voicing0 : 'close';
+    const inv = Math.min(inv0, Math.min(size, 4) - 1);
+    // tones with degrees, tensions on top
+    let tones = t[4].map((iv, i) => ({ iv, deg: t[5][i] }));
+    tens.forEach((x) => { if (!tones.find((y) => (y.iv % 12) === (x.iv % 12))) tones.push({ iv: x.iv, deg: x.deg, tension: true }); });
+    const at = (deg) => tones.find((x) => x.deg === deg);
+    let upper = [], lower = [];
+    const r = 60 + root;
+    if (voicing === 'close') {
+      let c = tones.filter((x) => !x.tension).map((x) => ({ ...x, m: r + (x.iv % 12) }));
+      c.sort((a, b) => a.m - b.m);
+      for (let k = 0; k < inv; k++) { c[0].m += 12; c.sort((a, b) => a.m - b.m); }
+      const top = c[c.length - 1].m;
+      tones.filter((x) => x.tension).forEach((x) => { let m = r + (x.iv % 12); while (m <= top) m += 12; c.push({ ...x, m }); });
+      upper = c;
+    } else if (voicing === 'drop2' || voicing === 'drop3') {
+      let c = tones.slice(0, 4).map((x) => ({ ...x, m: r + (x.iv % 12) })).sort((a, b) => a.m - b.m);
+      for (let k = 0; k < inv; k++) { c[0].m += 12; c.sort((a, b) => a.m - b.m); }
+      const i = c.length - (voicing === 'drop2' ? 2 : 3);
+      const d = { ...c[i], m: c[i].m - 12 };
+      upper = c.filter((_, j) => j !== i); lower = [d];
+    } else if (voicing === 'shell') {
+      lower = [1, 3, 7].map((dg) => at(dg)).filter(Boolean).map((x, j) => ({ ...x, m: r - 12 + (x.iv % 12) }));
+      upper = tones.filter((x) => x.tension).map((x) => ({ ...x, m: r + (x.iv % 12) }));
+    } else if (voicing === 'rootlessA' || voicing === 'rootlessB') {
+      const order = voicing === 'rootlessA' ? [3, 5, 7, 9] : [7, 9, 3, 5];
+      let prev = r - 12 + (at(order[0]) ? at(order[0]).iv % 12 : 4) - 12;
+      lower = order.map((dg) => { const x = at(dg) || { iv: dg === 9 ? 14 : dg === 5 ? 7 : 4, deg: dg }; let m = r - 24 + (x.iv % 12); while (m <= prev) m += 12; prev = m; return { ...x, deg: dg, m }; });
+    } else if (voicing === 'locked') {
+      let c = tones.slice(0, 4).map((x) => ({ ...x, m: r + (x.iv % 12) })).sort((a, b) => a.m - b.m);
+      for (let k = 0; k < inv; k++) { c[0].m += 12; c.sort((a, b) => a.m - b.m); }
+      upper = c; lower = [{ ...c[c.length - 1], m: c[c.length - 1].m - 12 }];
+    } else {
+      const ivs = [2, 7, 12, 17, 21];
+      const deg = [9, 5, 1, 11, 7];
+      const all = ivs.map((iv, j) => ({ iv, deg: deg[j], m: r - 12 + iv }));
+      lower = all.slice(0, 2); upper = all.slice(2);
+    }
+    if (voicing !== 'close') {
+      const used = [...upper, ...lower].map((x) => x.m % 12);
+      const tgt = upper.length ? upper : lower;
+      tones.filter((x) => x.tension && used.indexOf((r + x.iv) % 12) < 0).forEach((x) => { let m = r + (x.iv % 12); const top = Math.max(...tgt.map((y) => y.m)); while (m <= top) m += 12; tgt.push({ ...x, m }); });
+    }
+    if (hands === 'l') { lower = lower.concat(upper).map((x) => ({ ...x, m: x.m - 12 })); upper = []; }
+    if (hands === 'b' && voicing === 'close') lower = [{ iv: 0, deg: 1, m: r - 24 }, { iv: 7, deg: 5, m: r - 17 }];
+    while ([...upper, ...lower].some((x) => x.m > HI)) { upper.forEach((x) => { x.m -= 12; }); lower.forEach((x) => { x.m -= 12; }); }
+    while ([...upper, ...lower].some((x) => x.m < LO)) { upper.forEach((x) => { x.m += 12; }); lower.forEach((x) => { x.m += 12; }); }
+    const sp = (x) => spell(x.m, (ROOTL[root] + DEGL[x.deg]) % 7);
+    const all = [...lower, ...upper].sort((a, b) => a.m - b.m);
+    const spelled = all.map(sp);
+    const trebleN = spelled.filter((s) => s.steps >= 28), bassN = spelled.filter((s) => s.steps < 28);
+    const tr = staffNotes(staffSet === 'treble' ? spelled : trebleN, true), bs = staffNotes(staffSet === 'treble' ? [] : bassN, false);
+    const kb = keyboard(upper.map((x) => x.m), lower.map((x) => x.m), sounding);
+    const fr = upper.length === 3 && voicing === 'close' && inv === 1 ? [1, 2, 5] : FR[Math.min(upper.length, 6)] || [];
+    const fl = FL[Math.min(lower.length, 5)] || [];
+    const rhLine = upper.length ? { h: 'Right hand', notes: upper.slice().sort((a, b) => a.m - b.m).map((x, j) => ({ n: sp(x).name, f: String(fr[j] ?? '') })) } : null;
+    const lhLine = lower.length ? { h: 'Left hand', notes: lower.slice().sort((a, b) => a.m - b.m).map((x, j) => ({ n: sp(x).name, f: String(fl[j] ?? '') })) } : null;
+    // colour notes
+    const pcs = tones.filter((x) => !x.tension).map((x) => x.iv % 12);
+    const dom = type === 'dom7' || type === '9' || type === '13' || type === '7sus4';
+    const cand = dom ? [[1, '♭9', 9], [2, '9', 9], [3, '♯9', 9], [6, '♯11', 11], [8, '♭13', 13], [9, '13', 13]] : [[2, '9', 9], [5, '11', 11], [9, '13', 13]];
+    const tensions = [], avoid = [];
+    cand.forEach(([iv, lab, deg]) => {
+      if (pcs.indexOf(iv) >= 0) return;
+      const isAvoid = pcs.indexOf((iv + 11) % 12) >= 0 && !(dom && (iv === 1 || iv === 8 || iv === 3));
+      const name = spell(60 + root + iv, (ROOTL[root] + DEGL[deg]) % 7).name;
+      const on = tens.some((x) => x.iv % 12 === iv);
+      const chip = { lab, name, on, bg: on ? '#1A1612' : '#FFFFFF', fg: on ? '#FFFFFF' : '#1A1612', sub: on ? '#D9D1C6' : '#6B6259', pick: () => set({ tens: on ? tens.filter((x) => x.iv % 12 !== iv) : tens.concat([{ iv: iv + 12, deg }]) }) };
+      (isAvoid ? avoid : tensions).push(chip);
+    });
+    const chordTones = t[4].map((iv, i) => ({ lab: DEG[t[5][i]], name: spell(60 + root + iv, (ROOTL[root] + DEGL[t[5][i]]) % 7).name }));
+    const groups = ['Triads', 'Added notes', 'Sevenths', 'Extended'].map((g) => ({ g, items: TYPES.filter((x) => x[0] === g).map((x) => ({ label: ROOTS[root] + x[3], name: x[2].charAt(0).toUpperCase() + x[2].slice(1), on: x[1] === type, bg: x[1] === type ? '#FDF1E8' : 'transparent', pick: () => set({ type: x[1], sheet: null, tens: [] }) })) }));
+    const seg = (on) => ({ bg: on ? '#FFFFFF' : 'transparent', sh: on ? '0 0 0 1px rgba(26,22,18,0.06), 0 1px 3px rgba(26,22,18,0.12)' : 'none', w: on ? 700 : 500 });
+    const nInv = Math.min(size, 4);
+    const dots = (n) => [0, 1, 2, 3].slice(0, nInv).map((j) => ({ c: j === (nInv - n) % nInv ? '#E8762F' : '#1A1612' }));
+    const sym = ROOTS[root];
+    return {
+      SH, sym, ext: t[3], fullName: sym + ' ' + t[2] + (tens.length ? ', with ' + tens.map((x) => cand.find((c) => c[0] === x.iv % 12)?.[1]).join(' and ') : ''),
+      invName: INV[inv] + (voicing !== 'close' ? ' · ' + vRow[1] : ''),
+      alsoWritten: t[6].length ? 'Also written ' + t[6].map((a) => sym + a).join(' · ') : '',
+      toneNames: spelled.map((s) => s.name).join(' · '),
+      rootLabel: sym, typeLabel: t[2].charAt(0).toUpperCase() + t[2].slice(1), voicingLabel: (VOICINGS.find((v) => v[0] === voicing) || vRow)[1],
+      invs: INVS.slice(0, nInv).map((l, i) => ({ l, on: i === inv, ...seg(i === inv), dots: dots(i).reverse(), pick: () => set({ inv: i }) })),
+      handsSeg: [['r', 'Right'], ['l', 'Left'], ['b', 'Both']].map(([id, l]) => ({ l, on: hands === id, ...seg(hands === id), pick: () => set({ hands: id }) })),
+      hands: [rhLine, lhLine].filter(Boolean),
+      tr, bs, whites: kb.whites, blacks: kb.blacks,
+      chordTones, tensions, avoid, hasAvoid: avoid.length > 0, hasTensions: tensions.length > 0,
+      sounding, playLabel: sounding ? 'Stop' : 'Play', togglePlay: () => set({ sounding: !sounding }),
+      rootOn: sheet === 'root', typeOn: sheet === 'type', voicingOn: sheet === 'voicing', anyOn: !!sheet,
+      openRoot: () => set({ sheet: sheet === 'root' ? null : 'root' }), openType: () => set({ sheet: sheet === 'type' ? null : 'type' }), openVoicing: () => set({ sheet: sheet === 'voicing' ? null : 'voicing' }), closeAll: () => set({ sheet: null }),
+      roots: ROOTS.map((rr, i) => ({ r: rr, on: i === root, bg: i === root ? '#1A1612' : '#FFFFFF', fg: i === root ? '#FFFFFF' : '#1A1612', pick: () => set({ root: i, sheet: null, tens: [] }) })),
+      groups,
+      voicings: VOICINGS.map((v) => { const ok = vOk(v); return { name: v[1], line: ok ? v[3] : (v[2] > size ? 'Needs a chord of ' + v[2] + ' notes' : v[0] === 'soWhat' ? 'Suits a minor or suspended chord' : 'Needs a 7th'), on: v[0] === voicing, ok, op: ok ? 1 : 0.45, bg: v[0] === voicing ? '#FDF1E8' : 'transparent', pick: () => { if (ok) set({ voicing: v[0], sheet: null }); } }; }),
+      settingsOn: page === 'settings', openSettings: () => set({ page: 'settings', sheet: null }), closeSettings: () => set({ page: null }),
+      arpSeg: [['up', 'Up'], ['updown', 'Up and down']].map(([id, l]) => ({ l, on: arp === id, ...seg(arp === id), pick: () => set({ arp: id }) })),
+      staffSeg: [['grand', 'Grand staff'], ['treble', 'Treble only']].map(([id, l]) => ({ l, on: staffSet === id, ...seg(staffSet === id), pick: () => set({ staff: id }) }))
+    };
+  }
+}
+'''
+
+STAFF = lambda w, h: f"""<svg viewBox="0 0 150 130" width="{w}" height="{h}" role="img" aria-label="{{{{fullName}}}} on the staff" style="flex: none">
+<path d="M14 20H140M14 28H140M14 36H140M14 44H140M14 52H140M14 76H140M14 84H140M14 92H140M14 100H140M14 108H140M14 20V108M140 20V108" stroke="#1A1612" stroke-width="0.8" fill="none"></path>
+<text x="17" y="57" font-family="Noto Music" font-size="38" fill="#1A1612">𝄞</text><text x="17" y="96" font-family="Noto Music" font-size="31" fill="#1A1612">𝄢</text>
+<sc-for list="{{{{tr.ledgers}}}}" as="l" hint-placeholder-count="1"><line x1="72" x2="98" y1="{{{{l.y}}}}" y2="{{{{l.y}}}}" stroke="#1A1612" stroke-width="0.9"></line></sc-for>
+<sc-for list="{{{{bs.ledgers}}}}" as="l" hint-placeholder-count="0"><line x1="72" x2="98" y1="{{{{l.y}}}}" y2="{{{{l.y}}}}" stroke="#1A1612" stroke-width="0.9"></line></sc-for>
+<sc-for list="{{{{tr.notes}}}}" as="n" hint-placeholder-count="3"><ellipse cx="{{{{n.x}}}}" cy="{{{{n.y}}}}" rx="5.2" ry="3.8" transform="rotate(-20 {{{{n.x}}}} {{{{n.y}}}})" fill="#1A1612"></ellipse><text x="62" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="15" fill="#1A1612">{{{{n.acc}}}}</text></sc-for>
+<sc-for list="{{{{bs.notes}}}}" as="n" hint-placeholder-count="0"><ellipse cx="{{{{n.x}}}}" cy="{{{{n.y}}}}" rx="5.2" ry="3.8" transform="rotate(-20 {{{{n.x}}}} {{{{n.y}}}})" fill="#1A1612"></ellipse><text x="62" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="15" fill="#1A1612">{{{{n.acc}}}}</text></sc-for>
+</svg>"""
+
+def KEYS(h, fs):
+    return f"""<div role="group" aria-label="The keys: {{{{fullName}}}}" style="position: relative; height: {h}px; background: #2A1F18; border-top: 4px solid #8E2A22">
+<sc-for list="{{{{whites}}}}" as="k" hint-placeholder-count="26"><span style="position: absolute; left: {{{{k.x}}}}; width: {{{{k.w}}}}; top: 0; bottom: 0; box-sizing: border-box; border: 1px solid #CFC6BA; border-top: 0; border-radius: 0 0 5px 5px; background: {{{{k.fill}}}}; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; font-size: {fs}px; font-weight: 600; color: #8A8178">{{{{k.lab}}}}</span></sc-for>
+<sc-for list="{{{{blacks}}}}" as="k" hint-placeholder-count="18"><span style="position: absolute; left: {{{{k.x}}}}; width: {{{{k.w}}}}; top: 0; height: 60%; border-radius: 0 0 3px 3px; background: {{{{k.fill}}}}"></span></sc-for>
+</div>"""
+
+CHEV = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B6259" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 10 5 5 5-5"></path></svg>'
+LAB = lambda t: f'<span style="font-size: 13px; font-weight: 600; color: #6B6259">{t}</span>'
+def PICK(label, val, act, on, flex=1, serif=False):
+    ff = "font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; font-weight: 400" if serif else 'font-size: 16px; font-weight: 600'
+    return f"""<div style="flex: {flex}; min-width: 0; display: flex; flex-direction: column; gap: 6px">{LAB(label)}<button type="button" aria-haspopup="dialog" aria-expanded="{{{{{on}}}}}" onClick="{{{{{act}}}}}" style="height: 48px; border: 0; border-radius: 12px; background: #FFFFFF; box-shadow: {SH}; display: flex; align-items: center; gap: 8px; padding: 0 12px 0 14px; color: #1A1612; text-align: left"><span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; {ff}">{{{{{val}}}}}</span>{CHEV}</button></div>"""
+
+def SEGBAR(label, lst, h):
+    inner = '<span aria-hidden="true" style="display: flex; flex-direction: column; gap: 2px"><sc-for list="{{s.dots}}" as="d" hint-placeholder-count="3"><span style="width: 8px; height: 5px; border-radius: 9999px; background: {{d.c}}"></span></sc-for></span>' if lst == 'invs' else ''
+    return f"""<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px">{LAB(label)}<div role="radiogroup" aria-label="{label}" style="display: flex; gap: 2px; padding: 3px; border-radius: 12px; background: #EFE8DF"><sc-for list="{{{{{lst}}}}}" as="s" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{s.on}}}}" onClick="{{{{s.pick}}}}" style="flex: 1; min-width: 0; height: {h}px; border: 0; border-radius: 9px; background: {{{{s.bg}}}}; box-shadow: {{{{s.sh}}}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #1A1612; font-size: 14px; font-weight: {{{{s.w}}}}; white-space: nowrap">{inner}{{{{s.l}}}}</button></sc-for></div></div>"""
+
+ACTIONS = """<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px"><button type="button" aria-pressed="{{sounding}}" onClick="{{togglePlay}}" style="height: 48px; border: 0; border-radius: 12px; background: #1A1612; color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 16px; font-weight: 700"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5Z"></path></svg>{{playLabel}}</button><button type="button" onClick="{{togglePlay}}" style="height: 48px; border: 0; border-radius: 12px; background: #FFFFFF; box-shadow: 0 0 0 1px #E2DACF; color: #1A1612; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 16px; font-weight: 600"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 18v-3M10 15V9M15 11V5M20 8V3"></path></svg>Arpeggio</button></div>"""
+
+ROOTGRID = """<div role="radiogroup" aria-label="Root" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{roots}}" as="r" hint-placeholder-count="12"><button type="button" role="radio" aria-checked="{{r.on}}" onClick="{{r.pick}}" style="height: 52px; border: 0; border-radius: 12px; background: {{r.bg}}; color: {{r.fg}}; box-shadow: 0 0 0 1px #E2DACF; font-family: 'Instrument Serif', Georgia, serif; font-size: 24px">{{r.r}}</button></sc-for></div>"""
+TYPELIST = """<sc-for list="{{groups}}" as="g" hint-placeholder-count="4"><section style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 6px 6px 2px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6B6259">{{g.g}}</h3><sc-for list="{{g.items}}" as="i" hint-placeholder-count="6"><button type="button" role="menuitemradio" aria-checked="{{i.on}}" onClick="{{i.pick}}" style="min-height: 44px; border: 0; border-radius: 10px; background: {{i.bg}}; display: flex; align-items: center; gap: 12px; padding: 0 10px; color: #1A1612; text-align: left"><span style="flex: none; width: 76px; font-family: 'Instrument Serif', Georgia, serif; font-size: 20px">{{i.label}}</span><span style="font-size: 15px">{{i.name}}</span></button></sc-for></section></sc-for>"""
+VOICELIST = """<div role="menu" style="display: flex; flex-direction: column; gap: 2px"><sc-for list="{{voicings}}" as="v" hint-placeholder-count="8"><button type="button" role="menuitemradio" aria-checked="{{v.on}}" aria-disabled="{{v.ok}}" onClick="{{v.pick}}" style="min-height: 56px; border: 0; border-radius: 10px; background: {{v.bg}}; opacity: {{v.op}}; display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 6px 12px; color: #1A1612; text-align: left"><span style="font-size: 16px; font-weight: 600">{{v.name}}</span><span style="font-size: 13px; color: #6B6259">{{v.line}}</span></button></sc-for></div>"""
+GEAR = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"></path><circle cx="15" cy="6" r="2"></circle><circle cx="9" cy="12" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg>'
+BACK = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"></path></svg>'
+RB = 'flex: none; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: #EFE8DF; color: #1A1612; display: flex; align-items: center; justify-content: center'
+BAR = f"""<button type="button" aria-label="Back to Practice" style="{RB}">{BACK}</button><h1 style="flex: 1; margin: 0; font-size: 20px; font-weight: 700">Chords</h1><button type="button" aria-label="Chord settings" onClick="{{{{openSettings}}}}" style="{RB}">{GEAR}</button>"""
+HERO = lambda fs: f"""<div style="display: flex; flex-direction: column; gap: 3px; min-width: 0"><span style="font-family: 'Instrument Serif', Georgia, serif; font-size: {fs}px; line-height: 0.95; white-space: nowrap">{{{{sym}}}}<span style="font-size: 0.5em; vertical-align: 0.8em; margin-left: 2px">{{{{ext}}}}</span></span><span style="margin-top: 4px; font-size: 16px; font-weight: 600; text-wrap: balance">{{{{fullName}}}}</span><span style="font-size: 14px; color: #6B6259">{{{{invName}}}}</span><span style="font-size: 14px; color: #6B6259">{{{{alsoWritten}}}}</span><span style="margin-top: 6px; font-size: 15px; font-weight: 600; letter-spacing: 0.02em">{{{{toneNames}}}}</span></div>"""
+H2 = lambda t, extra='': f'<h2 style="margin: 0 2px; display: flex; align-items: center; gap: 6px; font-size: 17px; font-weight: 700">{t}{extra}</h2>'
+INFO = '<button type="button" aria-label="About colour notes" style="width: 28px; height: 28px; border: 0; border-radius: 9999px; background: transparent; color: #6B6259; display: flex; align-items: center; justify-content: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg></button>'
+FINGER = f"""<section style="display: flex; flex-direction: column; gap: 8px">{H2('Fingering')}<div style="border-radius: 14px; background: #FFFFFF; box-shadow: {SH}; display: flex; flex-direction: column"><sc-for list="{{{{hands}}}}" as="h" hint-placeholder-count="1"><div style="display: flex; align-items: center; gap: 12px; padding: 10px 14px; box-shadow: inset 0 -1px 0 #F1EBE3"><span style="flex: none; width: 92px; font-size: 14px; font-weight: 600; color: #4A433C">{{{{h.h}}}}</span><div style="flex: 1; display: flex; gap: 6px; flex-wrap: wrap"><sc-for list="{{{{h.notes}}}}" as="n" hint-placeholder-count="3"><span style="min-width: 38px; display: flex; flex-direction: column; align-items: center; gap: 1px"><span style="font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{n.f}}}}</span><span style="font-size: 12px; color: #6B6259">{{{{n.n}}}}</span></span></sc-for></div></div></sc-for></div></section>"""
+CHIP_RO = """<span style="height: 52px; min-width: 52px; box-sizing: border-box; padding: 0 10px; border-radius: 12px; background: #EFE8DF; display: flex; flex-direction: column; align-items: center; justify-content: center"><span style="font-size: 16px; font-weight: 700">{{c.name}}</span><span style="font-size: 11px; color: #6B6259">{{c.lab}}</span></span>"""
+CHIP = """<button type="button" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="height: 52px; min-width: 52px; padding: 0 10px; border: 0; border-radius: 12px; background: {{c.bg}}; color: {{c.fg}}; box-shadow: 0 0 0 1px #E2DACF; display: flex; flex-direction: column; align-items: center; justify-content: center"><span style="font-size: 16px; font-weight: 700">{{c.name}}</span><span style="font-size: 11px; color: {{c.sub}}">{{c.lab}}</span></button>"""
+CHIP_AV = """<span style="height: 52px; min-width: 52px; box-sizing: border-box; padding: 0 10px; border-radius: 12px; box-shadow: inset 0 0 0 1px #E2DACF; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #8A8178"><span style="font-size: 16px; font-weight: 700; text-decoration: line-through">{{c.name}}</span><span style="font-size: 11px">{{c.lab}}</span></span>"""
+GROUPROW = lambda t, lst, chip, cnt: f'<div style="display: flex; flex-direction: column; gap: 6px">{LAB(t)}<div style="display: flex; gap: 8px; flex-wrap: wrap"><sc-for list="{{{{{lst}}}}}" as="c" hint-placeholder-count="{cnt}">{chip}</sc-for></div></div>'
+COLOUR = f"""<section style="display: flex; flex-direction: column; gap: 10px">{H2('Colour notes', INFO)}{GROUPROW('Chord tones', 'chordTones', CHIP_RO, 3)}<sc-if value="{{{{hasTensions}}}}" hint-placeholder-val="{{{{true}}}}">{GROUPROW('Tensions', 'tensions', CHIP, 3)}</sc-if><sc-if value="{{{{hasAvoid}}}}" hint-placeholder-val="{{{{true}}}}">{GROUPROW('Avoid', 'avoid', CHIP_AV, 1)}</sc-if></section>"""
+def PROW(title, line, last=False):
+    sep = '' if last else '; box-shadow: inset 0 -1px 0 #F1EBE3'
+    return f'<button type="button" style="width: 100%; min-height: 60px; border: 0; background: transparent; display: flex; align-items: center; gap: 12px; padding: 8px 14px; color: #1A1612; text-align: left{sep}"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{title}</span><span style="font-size: 13px; color: #6B6259">{line}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A8178" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></button>'
+PRACTISE = f"""<section style="display: flex; flex-direction: column; gap: 8px">{H2('Practise this chord')}<div style="border-radius: 14px; background: #FFFFFF; box-shadow: {SH}; overflow: hidden">{PROW('Arpeggio', 'Its notes one at a time across the octaves')}{PROW('Inversions', 'Up through its inversions to the octave and back')}{PROW('Chromatic walk', 'The same chord on every root, a half step at a time', True)}</div></section>"""
+
+def SROW(title, val):
+    return f'<button type="button" style="width: 100%; min-height: 52px; border: 0; background: transparent; display: flex; align-items: center; gap: 10px; padding: 0 14px; color: #1A1612; text-align: left; box-shadow: inset 0 -1px 0 #F1EBE3"><span style="flex: 1; font-size: 16px">{title}</span><span style="font-size: 15px; color: #6B6259">{val}</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A8178" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></button>'
+SETTINGS_BODY = f"""<div style="display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex">{SEGBAR('Arpeggio', 'arpSeg', 40)}</div>
+<div style="display: flex">{SEGBAR('Staff', 'staffSeg', 40)}</div>
+<div style="display: flex; flex-direction: column; gap: 6px">{LAB('On-screen piano')}<div style="border-radius: 14px; background: #FFFFFF; box-shadow: {SH}; overflow: hidden">{SROW('Play the chord when it changes', 'On')}{SROW('All piano settings', '')}</div></div>
+</div>"""
+
+def sheet_phone(cond, title, body):
+    return f"""<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeAll}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(26,22,18,0.32)"></div><section role="dialog" aria-label="{title}" class="nos" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 680px; overflow-y: auto; border-radius: 22px 22px 0 0; background: #F7F3EE; padding: 8px 16px 34px; display: flex; flex-direction: column; gap: 10px"><div aria-hidden="true" style="width: 36px; height: 5px; margin: 0 auto; border-radius: 9999px; background: #D9D1C6"></div><h2 style="margin: 0 4px; font-size: 20px; font-weight: 700">{title}</h2>{body}</section></sc-if>"""
+
+phone = HEAD % 'Chords, phone' + f"""<div style="width: 450px; height: 920px; position: relative; font-family: 'Instrument Sans', system-ui, sans-serif">
+<div style="position: absolute; left: 24px; top: 23px; width: 402px; height: 874px; overflow: hidden; border-radius: 62px; background: #F7F3EE; color: #1A1612; display: flex; flex-direction: column">
+<div style="flex: none; height: 54px; position: relative">{STATUS}</div>
+<header style="flex: none; height: 52px; display: flex; align-items: center; gap: 10px; padding: 0 12px">{BAR}</header>
+<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 6px 16px 20px; display: flex; flex-direction: column; gap: 16px">
+<div style="border-radius: 16px; background: #FFFFFF; box-shadow: {SH}; padding: 16px 10px 12px 18px; display: flex; align-items: center; gap: 6px"><div style="flex: 1; min-width: 0">{HERO(60)}</div>{STAFF(140, 122)}</div>
+<div style="display: flex; gap: 10px">{PICK('Root', 'rootLabel', 'openRoot', 'rootOn', 1, True)}{PICK('Chord', 'typeLabel', 'openType', 'typeOn', 2.4)}</div>
+<div style="display: flex; gap: 10px">{PICK('Voicing', 'voicingLabel', 'openVoicing', 'voicingOn')}</div>
+<div style="display: flex">{SEGBAR('Inversion', 'invs', 52)}</div>
+<div style="display: flex">{SEGBAR('Hands', 'handsSeg', 40)}</div>
+{FINGER}
+{COLOUR}
+{PRACTISE}
+</main>
+<div style="flex: none; padding: 10px 16px; background: #F7F3EE; box-shadow: 0 -1px 0 #E9E2D8">{ACTIONS}</div>
+<div style="flex: none">{KEYS(118, 10)}</div>
+<div aria-hidden="true" style="flex: none; height: 26px; background: #2A1F18"></div>
+<div aria-hidden="true" style="position: absolute; left: 134px; bottom: 8px; width: 134px; height: 5px; border-radius: 9999px; background: #FFFFFF; z-index: 90"></div>
+{sheet_phone('rootOn', 'Root', ROOTGRID)}
+{sheet_phone('typeOn', 'Chord', TYPELIST)}
+{sheet_phone('voicingOn', 'Voicing', VOICELIST)}
+<sc-if value="{{{{settingsOn}}}}" hint-placeholder-val="{{{{false}}}}"><section aria-label="Chord settings" style="position: absolute; inset: 0; z-index: 70; background: #F7F3EE; display: flex; flex-direction: column"><div style="flex: none; height: 54px; position: relative">{STATUS}</div><header style="flex: none; height: 52px; display: flex; align-items: center; gap: 10px; padding: 0 12px"><button type="button" aria-label="Back to Chords" onClick="{{{{closeSettings}}}}" style="{RB}">{BACK}</button><h1 style="flex: 1; margin: 0; font-size: 20px; font-weight: 700">Chord settings</h1></header><div style="padding: 10px 16px">{SETTINGS_BODY}</div></section></sc-if>
+</div>
+<img src="{PHONE_FRAME}" alt="" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 450px; height: 920px; pointer-events: none; z-index: 100">
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{{"$preview":{{"width":450,"height":920}}}}'>
+const SH = '{SH}';
+{JS}
+</script>
+</body>
+</html>
+"""
+open(OUT + 'Chords.dc.html', 'w').write(phone)
+
+pop = lambda cond, pos, w, title, body: f"""<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div role="dialog" aria-label="{title}" class="nos" style="position: absolute; {pos}; z-index: 61; width: {w}px; max-height: 600px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: #FFFFFF; padding: 12px; box-shadow: {POP}; display: flex; flex-direction: column; gap: 8px">{body}</div></sc-if>"""
+laptop = HEAD % 'Chords, laptop' + LAPFRAME_TOP + f"""<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: #F7F3EE; color: #1A1612; display: grid; grid-template-columns: 248px minmax(0, 1fr)">
+{SIDE}
+<div style="position: relative; min-width: 0; display: flex; flex-direction: column">
+<header style="flex: none; height: 72px; display: flex; align-items: center; gap: 12px; padding: 0 40px">{BAR}</header>
+<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 340px minmax(0, 1fr) 340px; gap: 28px; padding: 0 40px">
+<div class="nos" style="min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding-bottom: 20px">
+<div style="display: flex; gap: 10px">{PICK('Root', 'rootLabel', 'openRoot', 'rootOn', 1, True)}{PICK('Chord', 'typeLabel', 'openType', 'typeOn', 2.4)}</div>
+<div style="display: flex">{PICK('Voicing', 'voicingLabel', 'openVoicing', 'voicingOn')}</div>
+<div style="display: flex">{SEGBAR('Inversion', 'invs', 52)}</div>
+<div style="display: flex">{SEGBAR('Hands', 'handsSeg', 40)}</div>
+{FINGER}
+</div>
+<div style="min-height: 0; display: flex; flex-direction: column; gap: 16px; padding-bottom: 20px">
+<div style="flex: 1; min-height: 0; border-radius: 18px; background: #FFFFFF; box-shadow: {SH}; padding: 24px 36px; display: flex; align-items: center; gap: 24px; box-sizing: border-box"><div style="flex: 1; min-width: 0">{HERO(112)}</div>{STAFF(300, 260)}</div>
+<div style="display: flex; justify-content: center"><div style="width: 400px">{ACTIONS}</div></div>
+</div>
+<div class="nos" style="min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 22px; padding-bottom: 20px">{COLOUR}{PRACTISE}</div>
+</div>
+<div style="flex: none">{KEYS(230, 13)}</div>
+<sc-if value="{{{{anyOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeAll}}}}" style="position: absolute; inset: 0; z-index: 60"></div></sc-if>
+{pop('rootOn', 'left: 40px; top: 150px', 320, 'Root', ROOTGRID)}
+{pop('typeOn', 'left: 120px; top: 150px', 380, 'Chord', TYPELIST)}
+{pop('voicingOn', 'left: 40px; top: 230px', 380, 'Voicing', VOICELIST)}
+<sc-if value="{{{{settingsOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSettings}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="Chord settings" style="position: absolute; right: 40px; top: 66px; z-index: 61; width: 380px; box-sizing: border-box; border-radius: 16px; background: #F7F3EE; padding: 16px; box-shadow: {POP}; display: flex; flex-direction: column; gap: 12px"><h2 style="margin: 0 2px; font-size: 18px; font-weight: 700">Chord settings</h2>{SETTINGS_BODY}</div></sc-if>
+</div>
+</div>
+<img src="{LAPTOP_FRAME}" alt="" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 2143px; height: 1299px; pointer-events: none">
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{{"$preview":{{"width":2143,"height":1299}}}}'>
+const SH = '{SH}';
+{JS}
+</script>
+</body>
+</html>
+"""
+open(OUT + 'ChordsLaptop.dc.html', 'w').write(laptop)
+print('ok')

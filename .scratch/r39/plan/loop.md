@@ -30,7 +30,7 @@ after compacting"
 | 2 | Song's page (`/songs/$pieceId`) | [The ideal Songs](https://claude.ai/artifact/Ana84hFnmzQCBFuvNZRmXB), row 2 | drawn, waiting for the owner |
 | 3 | Score editor (`/edit/$pieceId`) | [The ideal Songs](https://claude.ai/artifact/Ana84hFnmzQCBFuvNZRmXB), row 3 | drawn, waiting for the owner |
 | 4 | Practice overview (`/practice`) | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH) | drawn, waiting for the owner |
-| 5 | Chords | | |
+| 5 | Chords (`/practice/chords`) | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 2 | drawn, waiting for the owner |
 | 6 | Scales and keys | | |
 | 7 | Intervals | | |
 | 8 | Progressions (and a progression's page) | | |

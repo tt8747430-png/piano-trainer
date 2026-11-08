@@ -197,6 +197,9 @@ owner's, typos fixed.
 - Every control says what it belongs to; "Root B" says of which scale; octaves are a stepper; formulas are computed; hands
   drawn as real hands; no half-empty top.
 - **Chords:** every chord type, fingering by hand and inversion, voicings to choose. Add, add2, add9 named as chords are.
+  **Drawn (R39-5, 2026-11-08):** the chord first, Root · Chord · Voicing as pickers, Inversion and Hands, Fingering by
+  hand, Colour notes, Practise this chord; Play and Arpeggio above keys with no finger numbers; Chord settings behind the
+  gear. Waiting for the owner's word.
 - **Scales:** fingerings as the printed books give them, more kinds, Hanon 1–20, a tempo ladder.
 - **Quiz:** one setup and four drills for every trainer; a cadence trainer.
 - **Harmony:** draw the roles and moves on the chords (the Function · Root motion switch changed only letters).
