@@ -112,3 +112,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v75 (2026-11-09):** Chords: proper 2D hand outlines (traced from the app's hand models), badges on fingertips.
 **R42 v76 (2026-11-09):** Chords: finger numbers upright in fingertip circles, per the teaching sources.
 **R42 v77 (2026-11-09):** Chords: hands at the keyboard, fingers reaching their keys; toggles only under the staff.
+**R42 v78 (2026-11-09):** Chords: the app's 3D hands live in the board (pthands bundle); Left · Both · Right; Off · 3D · 2D.

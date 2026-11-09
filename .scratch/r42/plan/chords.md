@@ -5,6 +5,20 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v78 (canvas Version 78): the app's own 3D hands play the chord; the hands control is the Player's.** Owner, of
+  v77's drawn hands: "DONT you see how awful this looks, can you make proper implementations like the 3d piano does
+  and the left and right hand settings refactored." Replaces every drawn hand (v72–v77) and the hand cards.
+  - **The piano at the top is the Player's 3D piano, live:** the app's stage itself (`createStage`,
+    src/widgets/piano-hands: its keyboard, hand models, pose table and choreography), bundled and run in the board,
+    so the hands are the real ones, each finger on its key by the chord's fingering; it follows root, chord,
+    inversion, voicing and hands. Keys under a hand take that hand's colour (right brick, left lilac), as in the
+    Player. One implementation: the app's Chords page mounts `PianoHands` with the chord's fingered notes.
+  - **Keyboard settings:** **Off · 3D · 2D** (the Player's own three); 3D is the default; 2D is the flat keys with
+    Keys and Labels; where 3D cannot be drawn the page falls to 2D.
+  - **Hands, refactored:** under the piano, the Player's control, **Left hand · Both hands · Right hand**, in the
+    keys' order (`HandsSegmented`, R36). With both hands, one more row: "Left hand plays the" **Chord | Root** (v73's
+    rule). The hand cards under the staff are gone; the staff card is the staff alone.
+  - **Fingering** is read off the hands and the staff's numbers; no numbers on keys (standing rule).
 - **v77 (canvas Version 77): the hands are at the keys.** Owner, of v76's separate hand drawings: "I dont like it,
   be creative and think outside of the box". Replaces the hand pictures under the staff (v72–v76); v76's numeral
   rules (upright, bold, in a fingertip circle) stand.
@@ -735,3 +749,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: proper 2D hand outlines traced from the app's hand models; note badges on the fingertips (v75).
 - 2026-11-09: finger numbers upright in fingertip circles, filled in the note's colour where the finger plays; from Faber, Hoffman, Pianote and others (v76).
 - 2026-11-09: the hands drawn at the keyboard, each playing finger reaching its key (v77).
+- 2026-11-09: the app's 3D hands live at the top of Chords; Left · Both · Right under the piano; Off · 3D · 2D (v78).

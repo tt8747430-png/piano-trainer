@@ -345,6 +345,10 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **Use the app's real thing, never a redrawing of it (R42, v78):** "DONT you see how awful this looks … proper
+  implementations like the 3d piano does": six rounds of drawn hands were rejected; the Player's 3D hands, run
+  live in the canvas, were the answer. When the app already has the component, the canvas runs it (bundle it with
+  Vite into the board), and its settings reuse the component's own control (Left · Both · Right).
 - **Hands belong at the keys (R42, v77):** "I dont like it, be creative and think outside of the box", of a hand
   diagram beside the staff, however correct its numerals: the hands lie under the keyboard and each finger reaches
   its key (flowkey, the courses app). When a correct drawing is still rejected, change where the thing lives, not
