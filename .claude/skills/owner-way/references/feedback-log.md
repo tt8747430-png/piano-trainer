@@ -345,6 +345,11 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **Hand settings are the hands themselves (R42, v72):** "I dont like the hand settings. make proper creative
+  controls, invent something new": a drawn left and right hand, each finger lit in its note's colour with the name
+  and finger number; tap a hand to use it; Bass only under the left. Never toolbars, cards or chips for the hands.
+- **A floating group is centred as one (R42, v72):** "why this is looking so not centered": a button beside a
+  centred button pulls the pair off centre; centre the group.
 - **Hands play the whole chord; Split is the bass and the upper chord (R42, v71):** "when I select the left hand I
   want all the notes … both then … c e g and c e g in both hands … gm9 the g in the left hand and the BbMaj7 in the
   right". Never thin a chord for a hand setting; the learner's courses (Gorshkov) before the web. Hands are a toolbar

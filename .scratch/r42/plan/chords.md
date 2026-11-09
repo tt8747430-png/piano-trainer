@@ -5,6 +5,20 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v72 (canvas Version 72): the hands drawn, each finger lit with its note; the dock centred as one group.** Owner:
+  "why this is looking so not centered. and I dont like the hand settings. make proper creative controls, invent
+  something new and improve it." Replaces v71's hands toolbar; v71's hand rules (whole chord per hand, Both in each
+  hand, Split) stand.
+  - **The hands, drawn** under the staff (beside it on a laptop, so the dock never covers them): a left and a right
+    hand as they lie on the keys, palm and five fingers. A finger that plays is filled in its note's role colour
+    (root, 3rd, 5th, 7th as on the keys and the staff), the note's name on the fingertip and the finger's number
+    below; fingers that rest are pale. The fingering is seen on the hand, not read as a number list.
+  - **Tap a hand** to add or drop it: on is solid, off is faded; the last hand on only plays.
+  - **Bass only** under the left hand (chords whose upper notes make a named chord): the left hand keeps just the
+    root on the 5th finger and the right hand plays the upper chord (Gm9: G | B♭maj7; Gorshkov, as v71). Replaces the
+    toolbar's Split.
+  - **The dock:** the chord and Play are centred together as one group; before, Play was centred and the chord hung
+    off its left, so the pair looked off-centre.
 - **v71 (canvas Version 71): a hands toolbar under the staff; Split; the chord list a checklist; Play covers every
   chord.** Owner: "I dont like it this at the top, make like a toolbar … under the staff and also I want to be able to
   add more chords also from the chords list like it would be a checklist … the play options dont fully support
@@ -631,3 +645,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: hands on the staff (R.H./L.H.), Left plays the chord, one fingering toggle, Next chord suggestions voice-led (v69).
 - 2026-11-09: hand cards over the staff, notes and fingers in each; fingering always shown (v70).
 - 2026-11-09: hands toolbar under the staff with Split (Gorshkov), full chord in each hand, checklist, Play all (v71).
+- 2026-11-09: drawn hands with lit fingers and Bass only; the chord and Play centred as one group (v72).

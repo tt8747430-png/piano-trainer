@@ -340,6 +340,22 @@ return {
   rhOn: hands !== 'Left', rhOnBg: hands !== 'Left' ? '#7FB685' : C.line, rhOnX: hands !== 'Left' ? 22 : 2,
   lhOn: hands !== 'Right', lhOnBg: hands !== 'Right' ? '#7FB685' : C.line, lhOnX: hands !== 'Right' ? 22 : 2,
   // the hands sit beside their staves: R.H. by the treble, L.H. by the bass; the last one on only plays
+  // the hands drawn as they lie on the keys, each finger lit in the colour of the note it plays, its name on the
+  // fingertip and its number below; tap a hand to add or drop it; Bass only leaves the root to the left hand (R42 v72)
+  handPics: ['L', 'R'].map((k) => { const on = k === 'L' ? hands !== 'Right' : hands !== 'Left';
+    const byF = {}; ns.filter((x) => x.hand === k).forEach((x) => { const f = fm[x.m]; if (f && !byF[f]) byF[f] = x; });
+    const FG = [{ f: 1, x: 6, top: 52, h: 44, rot: -22 }, { f: 2, x: 27, top: 10, h: 66 }, { f: 3, x: 53, top: 2, h: 74 }, { f: 4, x: 79, top: 10, h: 66 }, { f: 5, x: 105, top: 26, h: 52 }];
+    const fs = FG.map((g) => { const x = byF[g.f], lit = on && !!x;
+      return { f: String(g.f), n: lit ? x.name : '', bg: lit ? (ROLE[x.deg] || C.accent) : (on ? '#F3ECE1' : '#FEFDFB'), ring: lit ? '0 0 0 1.5px rgba(51,41,33,.35)' : '0 0 0 1.5px ' + C.line,
+        left: (k === 'R' ? g.x : 110 - g.x) + 'px', top: g.top + 'px', h: g.h + 'px', tf: 'rotate(' + (k === 'R' ? (g.rot || 0) : -(g.rot || 0)) + 'deg)', dw: lit ? 800 : 500, dc: lit ? C.ink : C.soft }; });
+    const used = fs.filter((g) => g.n).sort((a, b) => b.f - a.f);
+    const sole = on && hands !== 'Both' && hands !== 'Split';
+    const pick = () => { if (sole) { play(false); return; } if (on) { change({ hand: k === 'L' ? 'Right' : 'Left' }); return; } change({ hand: st.bassOnly && canSplit ? 'Split' : 'Both' }); };
+    const isSplit = hands === 'Split';
+    return { t: k === 'L' ? 'Left hand' : 'Right hand', on, fs, pick, op: on ? 1 : 0.55, pl: k === 'R' ? '22px' : '0px', palm: on ? '#F3ECE1' : '#FEFDFB', pr: '0 0 0 1.5px ' + C.line,
+      lw: on ? 700 : 500, lc: on ? C.ink : C.soft, canBass: k === 'L' && canSplit, bBg: isSplit ? '#F6E3BC' : 'transparent', bRing: isSplit ? 'none' : '0 0 0 1.5px ' + C.line, bassT: isSplit ? '✓ Bass only' : 'Bass only', bassOn: isSplit,
+      bassPick: () => (isSplit ? change({ hand: 'Both', bassOnly: false }) : change({ hand: 'Split', bassOnly: true })),
+      aria: (k === 'L' ? 'Left hand' : 'Right hand') + (on ? ', plays ' + fs.filter((g) => g.n).map((g) => g.n + ' with finger ' + g.f).join(', ') : ', not playing; tap to add it') }; }),
   handN: canSplit ? 4 : 3,
   handBar: [['Left', 'Left hand'], ['Right', 'Right hand'], ['Both', 'Both hands']].concat(canSplit ? [['Split', 'Split']] : []).map(([v, l]) => { const on = v === hands;
     return { l, on, isL: v === 'Left', isR: v === 'Right', isB: v === 'Both', isS: v === 'Split', sym: RN + ' | ' + upper, bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: on ? 700 : 500,
@@ -423,8 +439,9 @@ def STAFFSVG(w):
 <sc-for list="{{{{sv.digits}}}}" as="d" hint-placeholder-count="4"><sc-if value="{{{{d.f1}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">1</text></sc-if><sc-if value="{{{{d.f2}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">2</text></sc-if><sc-if value="{{{{d.f3}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">3</text></sc-if><sc-if value="{{{{d.f4}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">4</text></sc-if><sc-if value="{{{{d.f5}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">5</text></sc-if></sc-for>
 </svg></div></div>'''
 
-def VIEWBODY(staff_w, inv_cols, mini_w):
-    return f'''<sc-if value="{{{{isStaff}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: none; border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; padding: 10px 10px 14px; display: flex; flex-direction: column; gap: 10px">{STAFFSVG(staff_w)}{HANDBAR}</div></sc-if>
+def VIEWBODY(staff_w, inv_cols, mini_w, side=False):
+    inner = (f'<div style="display: flex; align-items: center; gap: 24px"><div style="flex: 1; min-width: 0">{STAFFSVG(staff_w)}</div>{HANDPICS}</div>' if side else f'{STAFFSVG(staff_w)}{HANDPICS}')
+    return f'''<sc-if value="{{{{isStaff}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: none; border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; padding: 10px 10px 14px; display: flex; flex-direction: column; gap: 10px">{inner}</div></sc-if>
 <sc-if value="{{{{isInv}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: none; display: grid; grid-template-columns: repeat({inv_cols}, minmax(0, 1fr)); gap: 10px"><sc-for list="{{{{invCards}}}}" as="c" hint-placeholder-count="4"><button type="button" onClick="{{{{c.pick}}}}" style="min-width: 0; border: 0; border-radius: 16px; background: #FEFDFB; box-shadow: {{{{c.ring}}}}; padding: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; color: {INK}; font: inherit; text-align: left"><span style="font-size: 16px; font-weight: 700">{{{{c.t}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{c.s}}}}</span>{MINIKEYS(mini_w)}</button></sc-for></div></sc-if>
 <sc-if value="{{{{isFing}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: none; display: flex; flex-direction: column; gap: 10px"><sc-for list="{{{{fing}}}}" as="h" hint-placeholder-count="2"><div style="border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px"><span style="font-size: 15px; font-weight: 700">{{{{h.h}}}}</span><div style="display: flex; gap: 8px"><sc-for list="{{{{h.cells}}}}" as="x" hint-placeholder-count="3"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{x.f}}}}</span><span style="width: 100%; height: 6px; border-radius: 3px; background: {{{{x.c}}}}"></span><span style="font-size: 14px; color: {SOFT}">{{{{x.n}}}}</span></div></sc-for></div></div></sc-for></div></sc-if>
 <sc-if value="{{{{isTones}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: none; display: flex; flex-direction: column; gap: 14px">
@@ -432,6 +449,11 @@ def VIEWBODY(staff_w, inv_cols, mini_w):
 </div></sc-if>'''
 
 HANDL = HANDI.replace('<svg ', '<svg style="transform: scaleX(-1)" ', 1)
+HANDPICS = ('<div role="group" aria-label="Hands" style="display: flex; justify-content: center; align-items: flex-start; gap: 44px; padding-top: 6px"><sc-for list="{{handPics}}" as="h" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; align-items: center; gap: 8px">'
+  '<button type="button" aria-pressed="{{h.on}}" aria-label="{{h.aria}}" onClick="{{h.pick}}" style="position: relative; width: 132px; height: 112px; border: 0; padding: 0; background: transparent; opacity: {{h.op}}"><span style="position: absolute; left: {{h.pl}}; top: 60px; width: 110px; height: 50px; border-radius: 14px 14px 30px 30px; background: {{h.palm}}; box-shadow: {{h.pr}}"></span>'
+  '<sc-for list="{{h.fs}}" as="g" hint-placeholder-count="5"><span style="position: absolute; left: {{g.left}}; top: {{g.top}}; width: 22px; height: {{g.h}}; box-sizing: border-box; border-radius: 11px; background: {{g.bg}}; box-shadow: {{g.ring}}; transform: {{g.tf}}; transform-origin: 50% 100%; padding: 5px 0 6px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; color: ' + INK + '"><span style="font-size: 11px; font-weight: 800; white-space: nowrap">{{g.n}}</span><span style="font-size: 11px; font-style: italic; font-weight: {{g.dw}}; color: {{g.dc}}">{{g.f}}</span></span></sc-for></button>'
+  '<span style="font-size: 14px; font-weight: {{h.lw}}; color: {{h.lc}}">{{h.t}}</span>'
+  '<sc-if value="{{h.canBass}}" hint-placeholder-val="{{false}}"><button type="button" aria-pressed="{{h.bassOn}}" onClick="{{h.bassPick}}" style="height: 34px; padding: 0 14px; border: 0; border-radius: 17px; background: {{h.bBg}}; box-shadow: {{h.bRing}}; color: ' + INK + '; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap">{{h.bassT}}</button></sc-if></div></sc-for></div>')
 # the hands, a toolbar under the staff: each a symbol over its name; Split shows the two chords it makes (R42 v71)
 HANDROW = ''
 HANDBAR = ('<div role="radiogroup" aria-label="Hands" style="width: 100%; max-width: 520px; align-self: center; box-sizing: border-box; display: grid; grid-template-columns: repeat({{handN}}, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 16px; background: ' + FILL + '"><sc-for list="{{handBar}}" as="o" hint-placeholder-count="3">'
@@ -460,8 +482,8 @@ GLASSGRP = f'height: 56px; box-sizing: border-box; border-radius: 28px; backgrou
 TINTGRP = f'height: 56px; box-sizing: border-box; border-radius: 28px; background: rgba(237,198,132,.82); backdrop-filter: blur(24px) saturate(1.8); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 0 0 1px rgba(176,122,42,.28), {SHADOW}'
 CHEV_D = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>'
 KBROUND = f'<button type="button" aria-label="Keyboard" onClick="{{{{openKeys}}}}" style="flex: none; width: 56px; border: 0; {GLASSGRP}; color: {INK}; display: flex; align-items: center; justify-content: center">{KEYSI}</button>'
-CHORDACT = f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{{openChord}}}}" style="justify-self: end; min-width: 56px; max-width: 100%; padding: 0 10px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; font-size: {{{{qSymFs}}}}px; font-weight: 700; display: flex; align-items: center; gap: 4px; white-space: nowrap"><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis">{{{{qSym}}}}</span></button>'
-PLAYSPLIT = (f'<div role="group" aria-label="Play" style="width: 176px; {TINTGRP}; display: flex; align-items: center">'
+CHORDACT = f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{{openChord}}}}" style="pointer-events: auto; flex: none; min-width: 56px; max-width: 100%; padding: 0 10px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; font-size: {{{{qSymFs}}}}px; font-weight: 700; display: flex; align-items: center; gap: 4px; white-space: nowrap"><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis">{{{{qSym}}}}</span></button>'
+PLAYSPLIT = (f'<div role="group" aria-label="Play" style="pointer-events: auto; flex: none; width: 176px; {TINTGRP}; display: flex; align-items: center">'
   f'<button type="button" onClick="{{{{playMain}}}}" aria-pressed="{{{{playing}}}}" style="flex: 1; min-width: 0; height: 56px; padding: 0 2px 0 14px; border: 0; border-radius: 28px 0 0 28px; background: transparent; color: {INK}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap"><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOPI}</sc-if><sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAYI}</sc-if><span style="overflow: hidden; text-overflow: ellipsis">{{{{playWord}}}}</span></button>'
   f'<span aria-hidden="true" style="flex: none; width: 1px; height: 26px; background: rgba(51,41,33,.2)"></span>'
   f'<button type="button" aria-label="Play as: block chord or arpeggio" aria-haspopup="menu" onClick="{{{{openPlayAs}}}}" style="flex: none; width: 40px; height: 56px; border: 0; border-radius: 0 28px 28px 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_D}</button></div>')
@@ -470,8 +492,9 @@ def PLAYASMENU(pos):
       f'<div role="menu" aria-label="Play as" style="position: absolute; {pos}; z-index: 61; width: 248px; white-space: nowrap; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column">'
       f'<sc-for list="{{{{playAsList}}}}" as="o" hint-placeholder-count="3"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px; display: flex; align-items: center; gap: 10px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span><span style="flex: 1; font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for>'
       f'<sc-if value="{{{{hasSeq}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="height: 1px; margin: 4px 8px; background: {LINE}"></span><sc-for list="{{{{scopeList}}}}" as="o" hint-placeholder-count="2"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px; display: flex; align-items: center; gap: 10px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span><span style="flex: 1; font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for></sc-if></div></sc-if>')
-DOCK_PHONE = f'<div role="toolbar" aria-label="Chord and sound" style="position: absolute; left: 12px; right: 12px; bottom: 30px; z-index: 40; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px">{CHORDACT}{PLAYSPLIT}</div>'
-DOCK_LAPTOP = f'<div role="toolbar" aria-label="Chord and sound" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; width: 560px; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 10px">{CHORDACT}{PLAYSPLIT}</div>'
+# the chord and Play are one group, centred together (R42 v72: "why this is looking so not centered")
+DOCK_PHONE = f'<div role="toolbar" aria-label="Chord and sound" style="position: absolute; left: 0; right: 0; bottom: 30px; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 8px; pointer-events: none"><div style="display: contents; pointer-events: auto">{CHORDACT}{PLAYSPLIT}</div></div>'
+DOCK_LAPTOP = f'<div role="toolbar" aria-label="Chord and sound" style="position: absolute; left: 0; right: 0; bottom: 24px; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 10px; pointer-events: none">{CHORDACT}{PLAYSPLIT}</div>'
 
 # ── the sheets' bodies, the same on both sizes ──
 def BACKHEAD(title, act):
@@ -494,7 +517,7 @@ B_SOUND = f'<div role="radiogroup" style="display: flex; flex-direction: column;
 TOAST = f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 50%; bottom: 100px; transform: translateX(-50%); z-index: 50; height: 48px; padding: 0 6px 0 18px; border-radius: 24px; background: {INK}; color: #FEFDFB; display: flex; align-items: center; gap: 8px; white-space: nowrap; box-shadow: {SHADOW}"><span style="font-size: 15px">{{{{toastT}}}}</span><button type="button" onClick="{{{{undoRemove}}}}" style="height: 40px; padding: 0 14px; border: 0; border-radius: 20px; background: transparent; color: #F2C987; font: inherit; font-size: 15px; font-weight: 700">Undo</button></div></sc-if>'
 def SHEETS_PHONE(player):
     out = ''
-    out += TOAST + PLAYASMENU('left: calc(50% - 102px); bottom: 96px')
+    out += TOAST + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: 96px')
     for cond, title, body in (('isChord', 'Chord', B_CHORD), ('isKeys', 'Keyboard', B_KEYS), ('isNext', 'Next chord', B_NEXT)):
         out += BSHEET(cond, title, body)
     for cond, body in (('isList', B_LIST), ('isVoicing', B_VOICING)):
@@ -503,7 +526,7 @@ def SHEETS_PHONE(player):
 
 def POPS_LAPTOP(player):
     dockpos = 'left: calc(50% - 200px); top: 424px'
-    out = TOAST + PLAYASMENU('left: calc(50% - 102px); bottom: 92px')
+    out = TOAST + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: 92px')
     for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isKeys', 'Keyboard', B_KEYS, 'right: 24px; top: 76px'), ('isNext', 'Next chord', B_NEXT, 'left: calc(50% + 420px); top: 330px')):
         out += POPOVER(cond, title, body, pos, 400)
     for cond, body, pos in (('isList', B_LIST, dockpos), ('isVoicing', B_VOICING, dockpos)):
@@ -524,7 +547,7 @@ phone('Chords', 'Chords', PH_BODY, ch_js({'root': 0, 'q': 12}, 402, 168, 2, 150)
 LP_INNER = f'''<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: flex; flex-direction: column">
 <div style="flex: none; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px"><div style="display: flex; align-items: center; gap: 14px">{GLASSBTN('Back to Practice', CHEV_L, href='Laptop.dc.html')}<h1 style="margin: 0; font-size: 18px; font-weight: 600">Chords</h1></div>{GLASSBTN('Keyboard', KEYSI, 'openKeys')}</div>
 <sc-if value="{{{{kbShow}}}}" hint-placeholder-val="{{{{true}}}}">{KEYBAND(220)}</sc-if>
-<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 26px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 820px; max-width: 100%; display: flex; flex-direction: column; gap: 20px">{TITLEBLOCK(56)}{VIEWBODY(440, 4, 170)}{PRACTISE('PlayerLaptop.dc.html')}</div></main>
+<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 26px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 820px; max-width: 100%; display: flex; flex-direction: column; gap: 20px">{TITLEBLOCK(56)}{VIEWBODY(440, 4, 170, True)}{PRACTISE('PlayerLaptop.dc.html')}</div></main>
 {DOCK_LAPTOP}
 {POPS_LAPTOP('PlayerLaptop.dc.html')}
 </div>'''
