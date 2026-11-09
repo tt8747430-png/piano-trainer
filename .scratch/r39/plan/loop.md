@@ -116,3 +116,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v79 (2026-11-09):** Chords: 3D hands parse inline models (no fetch); Hands menu button by Play; Root and chord a voicing.
 **R42 v80 (2026-11-09):** Chords: designs A (name is the control) and B (chord shelf) side by side; piano settings; per-tone 3D keys.
 **R42 v81 (2026-11-09):** Chords: design A chosen (B removed); the bar button reads Voicing; hand skin variants in progress.
+**R42 v82 (2026-11-09):** Chords: symmetric bar inside its margins, fade under it; layout check + a look before each publish.

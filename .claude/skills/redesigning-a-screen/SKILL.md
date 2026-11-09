@@ -90,6 +90,12 @@ canvas against it before each publish.
 
 Before every publish, and again before a port is called done:
 
+0. **Check, then look.** Run the board's layout check (`.scratch/r39/canvas/layout_check.js`, in the runtime test) in
+   every state that changed, at phone and laptop: controls inside the screen's margin, a floating bar's gaps equal
+   and its middle centred. Then open the whole-screen screenshots, never only a crop of the part changed, and look
+   at the edges, the floating bar and each open menu. A publish without both is the mistake that sent a button off
+   the screen's edge (R42 v81).
+
 1. **Walk every state** of what changed: rest, hover, focus, pressed, open, loading, empty, error, offline, a long
    title, Russian, phone and laptop, Day and Night. Replay any motion at 10% speed (the browser's Animations panel).
 2. **On the phone,** the screen does one thing, and each section scrolls in one direction. Type and targets are

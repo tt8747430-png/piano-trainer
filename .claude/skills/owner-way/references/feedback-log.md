@@ -345,6 +345,10 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **Look at it before it is sent (R42, v82):** "can you look at the websites before you send them … paddings and
+  voicing button placed weirdly": a bar's button ran off the screen's edge because only the changed part was
+  screenshotted. Every publish: the layout check in every changed state, then the eye on the whole screen, the
+  floating bar and the edges, phone and laptop. A floating group is symmetric around its main button.
 - **A button is named for what it opens, not its value (R42, v81):** "on the close voicing it looks like a close
   button": the bar's Voicing button showed "Close". Check every value a control can show for a word that reads as a
   command (Close, Open, Off, Back, Clear).

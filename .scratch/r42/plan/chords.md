@@ -5,6 +5,16 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v82 (canvas Version 83): the bar is symmetric and inside its margins; a board is looked at and checked before it
+  is sent.** Owner, of v81's bar (the Voicing pill ran off the left edge and sat against Play): "can you look at the
+  websites before you send them. use best design guidelines and skills we have to not run into such issues with
+  paddings and voicing button placed weirdly".
+  - **The bar:** Voicing · Play · Hands, the two side buttons the same width (68), each a symbol over its name, equal
+    gaps (10 on a phone, 12 on a laptop), Play at the screen's centre, 16 from the edges. The page fades out under
+    the bar so the staff never shows through it (the tab bar's rule, v24).
+  - **Before every publish** (now in `redesigning-a-screen`): run `.scratch/r39/canvas/layout_check.js` in the board
+    in every state changed (controls inside the screen's margin, tap targets, a toolbar's gaps equal and its middle
+    centred), then open the screenshots and look at the bar, the edges and each open menu, phone and laptop.
 - **v81 (canvas Version 81): design A is the Chords page; the bar's left button reads "Voicing".** Owner: "I like the
   design a with the tappable chord but I dont like how the voicing button looks because it is a little bit unclear
   especially on the close voicing it looks like a close button." And of the hands: "I like the third but make a
@@ -796,3 +806,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: 3D models parsed in place (no fetch); Hands a menu button beside Play; Root and chord a voicing (v79).
 - 2026-11-09: designs A and B drawn side by side; per-tone keys in 3D; piano settings with the range strip; fingering in words (v80).
 - 2026-11-09: design A chosen, B removed; the bar button reads Voicing; MakeHuman hand with a better skin chosen (v81).
+- 2026-11-09: the bar symmetric with labelled side buttons, a fade under it; layout check and a look before publishing (v82).
