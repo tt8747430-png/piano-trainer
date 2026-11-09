@@ -5,6 +5,31 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v68 (canvas Version 68): more voicings, each checked against the transcripts; Arpeggio up and down; Scales in
+  all 15 keys; no altered chord.** Owner: "1. dont understand the question. 2. yes I want more voicings and also
+  check that our current are correct are match the researches you did from the transcriptions 3. yes up and down.
+  yes for the scales. and leave out the alt"
+  - **Q1 answered, nothing changes:** C11 is already voiced 1-5-♭7-9-11 with no 3rd, as pianists play it, since
+    "avoid the 11th over a major 3rd" (watch-later/008 @05:24); m11 keeps its minor 3rd, which is fine.
+  - **The voicings we had, checked:** Close, Drop 2 (exercises/017), Drop 3 and Shell (exercises/148 @02:07,
+    exercises/116 @29:11) match. **Fixed:** Rootless A and B on a dominant now use the 13th in place of the 5th
+    (C9 A = E A B♭ D): "the 5th becomes the 13th on a dominant" (exercises/116 @31:17; jps-podcast/292 @02:10,
+    G7 = 7-9-3-13).
+  - **Four voicings added**, each for both hands (choosing one sets Hand to Both, root position):
+    - **Spread:** root and 7th low, 3rd, 5th (13th on a dominant) and 9th above (jps-podcast/245 @12:32; piano/369
+      @43:49).
+    - **So What:** three 4ths and a major 3rd on top; minor sevenths only. Dm7 = D3 G3 C4 | F4 A4
+      (watch-later/008 @07:00).
+    - **Kenny Barron:** 1-5-9 under ♭3-♭7-11; minor sevenths only (watch-later/008 @07:00).
+    - **Upper structure:** the major triad a tone up over 3rd and 7th; dominant sevenths only. C7 = E3 B♭3 | D4 F♯4
+      A4 (exercises/069, two stacked triads). Greyed in the list where the chord does not take it.
+  - **Play menu:** Block chord · Arpeggio · **Arpeggio up and down**; All chords, in order with two or more.
+  - **Altered chord (C7alt): left out**, at the owner's word.
+  - **Scales:** the tonic is a letter plus a tap-again accidental, offering only the 15 keys each scale has a key
+    signature for (G♭ major, F♯ minor; no D♯ major); the staff draws the key signature, accidentals only where the
+    key does not give them; note names spelled for the key (C♭ in G♭ major, E♯ in F♯ harmonic minor); the Chords
+    tab's triads built from the scale with roman numerals (i ii° III in minor; ♭III ♭VII in modes). One root picker,
+    shared by Chords and Scales.
 - **v67 (canvas Version 67): several chords on the staff; the hands voice a chord as pianists do.** Owner: "I want to
   be able to select more than one chord to be shown on the staff and read and research more about the voicing in
   the chords and what relevance have the hands settings in some chords like nineth chords and bigger like playing
@@ -172,7 +197,7 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 - **v50: the pointer is a one-time tip, gone once the gesture is used.** Owner: "but is this a permanent or just a
   tooltip".
   - It shows under the chosen letter until the learner taps a chosen letter again once; then it never shows again
-  (in the app, remembered as a seen tip, as the Player's tips are). Picking another letter before that keeps it.
+    (in the app, remembered as a seen tip, as the Player's tips are). Picking another letter before that keeps it.
 - **v49: a pointer under the chosen letter says "Tap again for C♯".** Owner on v48's "or C♯": "now it can be
   interpreted as the c can be called c sharp".
   - The chip inside the button is gone (the letter alone again, 48 tall). Under the row, a dark pointer whose tip
@@ -229,10 +254,10 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   - A key is not a root: Scales' Tonic, a progression's and an exercise's Key, Intervals' From keep v40's two rows
     of six, the twelve keys.
 - **v40: the root picker is two rows of six, as GarageBand's Key Signature.** Owner (with a GarageBand screenshot):
-  "look at these notes grid , but i dont think we need  the major minor switch here and the follow songs key".
+  "look at these notes grid , but i dont think we need the major minor switch here and the follow songs key".
   - The 4 × 3 grid of boxed buttons becomes two segmented tracks, C to F and F♯ to B, the chosen note a raised
     thumb on the track. One implementation (`ROOTGRID` in `r41_kit.py`): Scales' Tonic, Intervals' From, a
-    progression's and an exercise's Key. *(Chords' Root: letter and accidental since v41.)*
+    progression's and an exercise's Key. _(Chords' Root: letter and accidental since v41.)_
   - Not taken from GarageBand: the major | minor switch (the chord or scale list already says which) and Follow Song
     Key (a recording setting; no recordings here), nor the explanation lines under them.
   - The spelling stays C♯, E♭, F♯, A♭, B♭ (GarageBand writes D♭): C♯ minor is a key, D♭ minor is not.
@@ -330,7 +355,7 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   per Apple.** Owner: "Shall I? yes and i don't like how the bottom bar looks. research more the apple guidelines. and
   also the staff settings are not very good. and the practice in the player are too hidden".
   - Views: Staff · Fingering. The Chord sheet ends with **Add a note**: add 9 D, add ♯11 F♯, add 13 A; avoid notes
-    struck through. *(Replaced by v39: the Altered group of the Chord list.)*
+    struck through. _(Replaced by v39: the Altered group of the Chord list.)_
   - The staff card holds its own small segmented control, **Both clefs | Treble**, top right. The gear no longer has
     Staff.
   - **Practise Cmaj7 in the Player**, a card of three rows under the view: Arpeggio, up and down · Inversions, one
@@ -378,15 +403,15 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     Treble only (it was behind a second tap on the Staff view, which nothing told the learner).
   - Each home, in one table:
 
-    | Choice | Its one home |
-    | ------ | ------------ |
-    | Root, Chord, Voicing | the bar's Chord ▴ |
-    | Block or arpeggio | the bar's second button |
-    | Inversion | ‹ › on the bar (the Inversions view shows them) |
-    | Hands | the bar's Hands |
-    | Keys, Note names, the piano | the bar's Keyboard |
-    | Staff | the gear |
-    | Tensions | the Tones view |
+    | Choice                      | Its one home                                    |
+    | --------------------------- | ----------------------------------------------- |
+    | Root, Chord, Voicing        | the bar's Chord ▴                               |
+    | Block or arpeggio           | the bar's second button                         |
+    | Inversion                   | ‹ › on the bar (the Inversions view shows them) |
+    | Hands                       | the bar's Hands                                 |
+    | Keys, Note names, the piano | the bar's Keyboard                              |
+    | Staff                       | the gear                                        |
+    | Tensions                    | the Tones view                                  |
 
   - Research: the Player's own rulings (one gear, the transport's buttons each opening their own sheet, the
     piano's settings behind Keyboard, view by view); Piano Companion keeps only display choices (staff and keyboard
@@ -544,3 +569,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: the chord button back, left of the centred Play; "Arpeggiate" (v65).
 - 2026-11-09: bar names never cut: chord type steps with length, Play 176 (v66).
 - 2026-11-09: several chords on the staff (+, ×/Undo, All chords in order); hands voice as the transcripts teach (v67).
+- 2026-11-09: four voicings added, Rootless on a dominant takes the 13th, Arpeggio up and down; Scales in 15 keys with key signatures (v68).

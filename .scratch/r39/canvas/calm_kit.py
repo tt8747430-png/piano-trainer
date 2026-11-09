@@ -29,6 +29,17 @@ REDO = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="m15 14 5-5
 LOOP = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M17 2l3 3-3 3"></path><path d="M4 11V9a4 4 0 0 1 4-4h12"></path><path d="M7 22l-3-3 3-3"></path><path d="M20 13v2a4 4 0 0 1-4 4H4"></path></svg>'
 
 PRE = r'''
+// a root as its letter, the spelling stepped by tapping the letter again; ok(l, a) says which spellings exist (R42)
+function letterPick(rl, ra, ok, tapUsed, pick) {
+  const L7 = 'CDEFGAB', A7 = { '0': '', '1': '♯', '-1': '♭' }, NM = { '0': '', '1': ' sharp', '-1': ' flat' };
+  const waysOf = (l) => [0, 1, -1].filter((a) => ok(l, a));
+  const w0 = waysOf(rl); let rootHint = { on: false, t: '', box: '', tip: '' };
+  if (w0.length > 1 && !tapUsed) { const nx = w0[(w0.indexOf(ra) + 1) % w0.length], c = ((rl + 0.5) / 7 * 100).toFixed(2);
+    rootHint = { on: true, t: 'Tap again for ' + L7[rl] + A7[String(nx)], box: rl < 2 ? 'left: 0' : (rl > 4 ? 'right: 0' : 'left: ' + c + '%; transform: translateX(-50%)'), tip: 'left: calc(' + c + '% - 6px)' }; }
+  const a = [0, 1, 2, 3, 4, 5, 6].map((l) => { const on = l === rl, ws = waysOf(l), cur = on ? ra : 0, next = on ? ws[(ws.indexOf(ra) + 1) % ws.length] : 0, more = on && ws.length > 1;
+    return { l: L7[l] + A7[String(cur)], on, aria: L7[l] + NM[String(cur)] + (more ? '. Tap again for ' + L7[l] + NM[String(next)] : ''), bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: on ? 700 : 500, pick: () => pick(l, next, more) }; });
+  return { roots: { a }, rootHint };
+}
 const C = { page: '#F7F3EE', sheet: '#FEFDFB', ink: '#332921', soft: '#685E56', fill: '#EEE9E2', line: '#DAD1C8', link: '#356890', accent: '#EDC684' };
 const ROLE = { 1: '#E19E8C', 3: '#85B8DC', 5: '#9BC093', 7: '#E8C67D', 2: '#B8A8D8', 9: '#B8A8D8', 4: '#D3AC8A', 11: '#D3AC8A', 6: '#82C2C1', 13: '#82C2C1' };
 const NAT = [0, 2, 4, 5, 7, 9, 11];

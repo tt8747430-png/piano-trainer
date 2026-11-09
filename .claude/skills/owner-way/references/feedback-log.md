@@ -345,6 +345,10 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **Voicings checked against the owner's transcripts (R42, v68):** "check that our current are correct are match
+  the researches": every voicing cites a transcript; Rootless on a dominant takes the 13th, not the 5th. Added
+  Spread, So What, Kenny Barron, Upper structure, greyed where the chord does not take them. "leave out the alt".
+- **Scales in every key with a key signature (R42, v68):** 15 per scale, spelled for the key, never D♯ major.
 - **Several chords on one staff (R42, v67):** "select more than one chord to be shown on the staff": names over the
   staff, + to add, × with Undo, All chords in order in the Play menu.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a

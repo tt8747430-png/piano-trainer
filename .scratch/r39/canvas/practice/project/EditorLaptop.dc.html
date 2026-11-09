@@ -114,6 +114,11 @@ main>*{flex:none}
 
 
 
+
+
+
+
+
 <div style="width: 2143px; height: 1299px; position: relative; font-family: 'Instrument Sans', system-ui, sans-serif">
 <div aria-hidden="true" style="position: absolute; left: 217.7px; top: 36.6px; width: 1710px; height: 1112px; background: url(/_blob/f871bb10e202ef4d610c06d6f5fa0603) 0 0 / 1710px 1112px no-repeat"></div>
 <div aria-hidden="true" style="position: absolute; left: 217.7px; top: 36.6px; width: 1710px; height: 37px; background: rgba(255,255,255,0.28)"></div>
@@ -141,6 +146,17 @@ main>*{flex:none}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":2143,"height":1299}}'>
 
+// a root as its letter, the spelling stepped by tapping the letter again; ok(l, a) says which spellings exist (R42)
+function letterPick(rl, ra, ok, tapUsed, pick) {
+  const L7 = 'CDEFGAB', A7 = { '0': '', '1': '♯', '-1': '♭' }, NM = { '0': '', '1': ' sharp', '-1': ' flat' };
+  const waysOf = (l) => [0, 1, -1].filter((a) => ok(l, a));
+  const w0 = waysOf(rl); let rootHint = { on: false, t: '', box: '', tip: '' };
+  if (w0.length > 1 && !tapUsed) { const nx = w0[(w0.indexOf(ra) + 1) % w0.length], c = ((rl + 0.5) / 7 * 100).toFixed(2);
+    rootHint = { on: true, t: 'Tap again for ' + L7[rl] + A7[String(nx)], box: rl < 2 ? 'left: 0' : (rl > 4 ? 'right: 0' : 'left: ' + c + '%; transform: translateX(-50%)'), tip: 'left: calc(' + c + '% - 6px)' }; }
+  const a = [0, 1, 2, 3, 4, 5, 6].map((l) => { const on = l === rl, ws = waysOf(l), cur = on ? ra : 0, next = on ? ws[(ws.indexOf(ra) + 1) % ws.length] : 0, more = on && ws.length > 1;
+    return { l: L7[l] + A7[String(cur)], on, aria: L7[l] + NM[String(cur)] + (more ? '. Tap again for ' + L7[l] + NM[String(next)] : ''), bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: on ? 700 : 500, pick: () => pick(l, next, more) }; });
+  return { roots: { a }, rootHint };
+}
 const C = { page: '#F7F3EE', sheet: '#FEFDFB', ink: '#332921', soft: '#685E56', fill: '#EEE9E2', line: '#DAD1C8', link: '#356890', accent: '#EDC684' };
 const ROLE = { 1: '#E19E8C', 3: '#85B8DC', 5: '#9BC093', 7: '#E8C67D', 2: '#B8A8D8', 9: '#B8A8D8', 4: '#D3AC8A', 11: '#D3AC8A', 6: '#82C2C1', 13: '#82C2C1' };
 const NAT = [0, 2, 4, 5, 7, 9, 11];

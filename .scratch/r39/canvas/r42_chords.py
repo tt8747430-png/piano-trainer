@@ -62,6 +62,8 @@ const QS = [
   { g: 'Altered', k: '7♯11', n: 'dominant seventh, sharp eleventh', t: [[0, 1], [4, 3], [7, 5], [10, 7], [18, 11]] },
   { g: 'Altered', k: '7♭13', n: 'dominant seventh, flat thirteenth', t: [[0, 1], [4, 3], [10, 7], [20, 13]] },
 ];
+const isMin7 = (q) => q.t.some((x) => x[0] === 3 && x[1] === 3) && q.t.some((x) => x[0] === 10 && x[1] === 7);
+const isDom7 = (q) => q.t.some((x) => x[0] === 4 && x[1] === 3) && q.t.some((x) => x[0] === 10 && x[1] === 7);
 const VOICINGS = [
   { v: 'Close', f: 'The notes as close as they go', ok: () => '' },
   { v: 'Drop 2', f: 'Second from the top down an octave', ok: (q) => q.t.length === 4 ? '' : 'Needs a chord of 4 notes' },
@@ -69,7 +71,14 @@ const VOICINGS = [
   { v: 'Shell', f: 'Root, 3rd and 7th', ok: (q) => q.t.some((x) => x[1] === 7) ? '' : 'Needs a 7th' },
   { v: 'Rootless A', f: '3rd, 5th, 7th, 9th', ok: (q) => q.t.some((x) => x[1] === 7) ? '' : 'Needs a 7th' },
   { v: 'Rootless B', f: '7th, 9th, 3rd, 5th', ok: (q) => q.t.some((x) => x[1] === 7) ? '' : 'Needs a 7th' },
+  // two-hand voicings named in the owner's transcripts (R42 v68): the left hand's notes, then the right's
+  { v: 'Spread', f: 'Root and 7th low, 3rd, 5th and 9th above', ok: (q) => q.t.some((x) => x[1] === 7) ? '' : 'Needs a 7th' },
+  { v: 'So What', f: 'Three 4ths and a 3rd on top', ok: (q) => isMin7(q) ? '' : 'For minor sevenths' },
+  { v: 'Kenny Barron', f: '1, 5, 9 under ♭3, ♭7, 11', ok: (q) => isMin7(q) ? '' : 'For minor sevenths' },
+  { v: 'Upper structure', f: 'A major triad a tone up over 3rd and 7th', ok: (q) => isDom7(q) ? '' : 'For dominant sevenths' },
 ];
+// how many of a two-hand voicing's notes, from the bottom, the left hand plays
+const TWO = { 'Spread': 2, 'So What': 3, 'Kenny Barron': 3, 'Upper structure': 2 };
 const ORD = [1, 2, 3, 4, 5, 6, 7, 9, 11, 13];
 const INV = ['Root position', '1st inversion', '2nd inversion', '3rd inversion'];
 const INVS = ['Root', '1st', '2nd', '3rd'];
@@ -101,11 +110,20 @@ function sound(ms, arp, dir) {
 function voice(root, q, inv, voicing, hands) {
   const base = 60 + root; // every root in the octave from middle C, as a chord chart shows it
   const s = (deg) => (q.t.find((x) => x[1] === deg) || [null])[0];
-  const third = s(3) ?? s(4) ?? s(2);
+  const third = s(3) ?? s(4) ?? s(2); const dom = isDom7(q);
   let src;
   if (voicing === 'Shell') src = [[0, 1], [third, s(3) != null ? 3 : (s(4) != null ? 4 : 2)], [s(7), 7]];
-  else if (voicing === 'Rootless A') src = [[third, 3], [s(5) ?? 7, 5], [s(7), 7], [s(9) ?? 14, 9]];
-  else if (voicing === 'Rootless B') src = [[s(7) - 12, 7], [(s(9) ?? 14) - 12, 9], [third, 3], [s(5) ?? 7, 5]];
+  // rootless: 3-5-7-9 and 7-9-3-5; on a dominant the 13th takes the 5th's place (jps-podcast/292 @02:10, exercises/116 @30:16)
+  else if (voicing === 'Rootless A') src = [[third, 3], dom ? [9, 13] : [s(5) ?? 7, 5], [s(7), 7], [s(9) ?? 14, 9]];
+  else if (voicing === 'Rootless B') src = [[s(7) - 12, 7], [(s(9) ?? 14) - 12, 9], [third, 3], dom ? [9, 13] : [s(5) ?? 7, 5]];
+  // spread: LH 1-7, RH 3, 5 (13 on a dominant), 9 (exercises/116 @29:11, jps-podcast/245 @12:32)
+  else if (voicing === 'Spread') src = [[-12, 1], [s(7) - 12, 7], [third, 3], dom ? [9, 13] : [s(5) ?? 7, 5], [s(9) ?? 14, 9]];
+  // So What: three 4ths from the root, a major 3rd on top (watch-later/008 @07:00)
+  else if (voicing === 'So What') src = [[-12, 1], [-7, 11], [-2, 7], [3, 3], [7, 5]];
+  // Kenny Barron: 1-5-9 under b3-b7-11 (watch-later/008 @07:00)
+  else if (voicing === 'Kenny Barron') src = [[-12, 1], [-5, 5], [2, 9], [3, 3], [10, 7], [17, 11]];
+  // upper structure II: the tritone 3-7 low, a major triad a tone up (9, #11, 13) above (exercises/148 @04:14, 069)
+  else if (voicing === 'Upper structure') src = [[third - 12, 3], [s(7) - 12, 7], [2, 9], [6, 11], [9, 13]];
   else src = q.t.map((x) => x.slice());
   let ns = src.map(([semi, deg]) => ({ m: base + semi, semi, deg }));
   ns.sort((a, b) => a.m - b.m);
@@ -116,6 +134,9 @@ function voice(root, q, inv, voicing, hands) {
   if (voicing === 'Drop 3' && ns.length === 4) ns[1].m -= 12;
   ns.sort((a, b) => a.m - b.m);
   ns.forEach((x) => { x.hand = 'R'; });
+  if (TWO[voicing]) { const k = TWO[voicing]; ns.forEach((x, i) => { x.hand = i < k ? 'L' : 'R'; });
+    if (hands === 'Right') ns = ns.slice(k); if (hands === 'Left') ns = ns.slice(0, k);
+    const keep2 = []; ns.forEach((x) => { if (!keep2.some((y) => y.m === x.m)) keep2.push(x); }); return keep2.map((x) => Object.assign(x, spell(root, ((x.semi % 12) + 12) % 12, x.deg))); }
   // Hands as teachers voice them (piano-data/transcriptions; R42 v67): a ninth chord or bigger in one right hand is
   // rootless, the 5th the first note left out; the left hand alone plays a shell low (1-7, 1-3-7 from F up, 1-5-8
   // with no 7th), never close thirds under F3; both hands: the shell low, the rest of the chord above.
@@ -179,7 +200,7 @@ const rl0 = LET.indexOf(CROOTS[D.root][0]), ra0 = CROOTS[D.root].length > 1 ? (C
 const rLet = st.rl ?? rl0, rAcc = st.ra ?? ra0; RL = rLet;
 const root = rootPc(rLet, rAcc), RN = LET[rLet] + ACC[String(rAcc)], qi = st.q ?? D.q, q = QS[qi];
 const voicing = VOICINGS.find((v) => v.v === (st.voicing || 'Close')).ok(q) ? 'Close' : (st.voicing || 'Close');
-const invN = Math.min(4, voicing === 'Shell' ? 3 : (voicing.startsWith('Rootless') ? 4 : q.t.length));
+const invN = TWO[voicing] ? 1 : Math.min(4, voicing === 'Shell' ? 3 : (voicing.startsWith('Rootless') ? 4 : q.t.length));
 const inv = Math.min(st.inv ?? 0, invN - 1);
 const bassOn = false, hands = st.hand || 'Right', fingOn = st.fing ?? true, kbShow = st.kbShow ?? true, keys = st.keys || 'Chord';
 const playAs = 'Block', arp = false, dir = 'Up', keyLabel = st.keyLabel || 'Names', names = keyLabel === 'Names', fingKeys = keyLabel === 'Fingers', treble = false, auto = true;
@@ -192,7 +213,7 @@ const symLen = (sym + slash).length;
 const symScale = symLen <= 6 ? 1 : (symLen <= 9 ? 0.78 : 0.6);
 const full = RN + ' ' + q.n;
 const playMode = st.playMode || 'Block';
-const play = (a) => { set({ playing: a ? 'arp' : 'chord' }); const t = sound(ms, a, 'Up'); clearTimeout(this._t); this._t = setTimeout(() => set({ playing: false }), t); };
+const play = (a, d) => { set({ playing: a ? 'arp' : 'chord' }); const t = sound(ms, a, d || 'Up'); clearTimeout(this._t); this._t = setTimeout(() => set({ playing: false }), t); };
 const change = (o) => { set(o); if (auto) { const r = o.root ?? root, qq = QS[o.q ?? qi], iv = o.inv ?? inv; const vv = o.voicing || voicing; const hh = o.hand || hands; sound(voice(r, qq, Math.min(iv, qq.t.length - 1), VOICINGS.find((v) => v.v === vv).ok(qq) ? 'Close' : vv, hh).map((x) => x.m), false, dir); } };
 const [lo, hi] = range(ms, keys, ''' + str(minOct) + r''');
 const Rn = ns.filter((x) => x.hand === 'R'), Ln = ns.filter((x) => x.hand === 'L');
@@ -208,7 +229,7 @@ const snap = { rl: rLet, ra: rAcc, q: qi, inv, voicing: st.voicing || 'Close', h
 const cur0 = st.cur ?? 0;
 const seq = (st.seq || [snap]).map((c, i) => (i === cur0 ? snap : c));
 const cur = Math.min(cur0, seq.length - 1);
-const symOf = (c) => { RL = c.rl; const rt = rootPc(c.rl, c.ra), qq = QS[c.q]; const vv = VOICINGS.find((v) => v.v === c.voicing).ok(qq) ? 'Close' : c.voicing; const nI = Math.min(4, vv === 'Shell' ? 3 : (vv.startsWith('Rootless') ? 4 : qq.t.length)); const iv = Math.min(c.inv, nI - 1); const v = voice(rt, qq, iv, vv, c.hand); const bn = iv > 0 && qq.t[iv] ? spell(rt, ((qq.t[iv][0] % 12) + 12) % 12, qq.t[iv][1]).name : ''; const out = { v, iv, vv, s: LET[c.rl] + ACC[String(c.ra)] + qq.k + (bn ? '/' + bn : '') }; RL = rLet; return out; };
+const symOf = (c) => { RL = c.rl; const rt = rootPc(c.rl, c.ra), qq = QS[c.q]; const vv = VOICINGS.find((v) => v.v === c.voicing).ok(qq) ? 'Close' : c.voicing; const nI = TWO[vv] ? 1 : Math.min(4, vv === 'Shell' ? 3 : (vv.startsWith('Rootless') ? 4 : qq.t.length)); const iv = Math.min(c.inv, nI - 1); const v = voice(rt, qq, iv, vv, c.hand); const bn = iv > 0 && qq.t[iv] ? spell(rt, ((qq.t[iv][0] % 12) + 12) % 12, qq.t[iv][1]).name : ''; const out = { v, iv, vv, s: LET[c.rl] + ACC[String(c.ra)] + qq.k + (bn ? '/' + bn : '') }; RL = rLet; return out; };
 const SLOT = 78, X0 = 64, SW = Math.max(250, X0 + seq.length * SLOT + 48);
 const sv = (() => { const all = { notes: [], ledg: [], digits: [], cols: [] }; let vt = 4, vbot = 168;
   seq.forEach((c, i) => { const o = symOf(c); const cx = seq.length === 1 ? 140 : X0 + SLOT * (i + 0.5);
@@ -235,7 +256,7 @@ const invCards = Array.from({ length: invN }, (_, i) => {
 });
 const tones = ns.filter((x) => x.hand !== 'L' || hands === 'Left').filter((x, i, a) => a.findIndex((y) => y.deg === x.deg) === i).map((x) => ({ n: x.name, d: DEGL[x.deg], c: ROLE[x.deg] || C.accent }));
 const groups = ['Triads', 'Added notes', 'Sevenths', 'Extended', 'Altered'].map((g) => ({ g, rows: QS.map((x, i) => [x, i]).filter(([x]) => x.g === g).map(([x, i]) => ({ s: RN + x.k, n: RN + ' ' + x.n, on: i === qi, bg: i === qi ? '#F6E3BC' : 'transparent', fw: i === qi ? 700 : 500, pick: () => change({ q: i, sheet: 'chord' }) })) }));
-const vlist = VOICINGS.map((v) => { const why = v.ok(q); return { v: v.v, f: why || v.f, op: why ? 0.42 : 1, on: v.v === voicing, mark: v.v === voicing ? '✓' : '', pick: () => { if (!why) change({ voicing: v.v, sheet: 'chord' }); } }; });
+const vlist = VOICINGS.map((v) => { const why = v.ok(q); return { v: v.v, f: why || v.f, op: why ? 0.42 : 1, on: v.v === voicing, mark: v.v === voicing ? '✓' : '', pick: () => { if (!why) change(Object.assign({ voicing: v.v, sheet: 'chord', inv: 0 }, TWO[v.v] ? { hand: 'Both' } : {})); } }; });
 const sh = st.sheet || '';
 const handsBadge = hands === 'Both' ? '2' : (hands === 'Right' ? 'R' : 'L');
 const hB = hands === 'Both', hR = hands === 'Right', hL = hands === 'Left';
@@ -271,15 +292,7 @@ return {
   keyLabelSeg: seg(['Names', 'Fingers', 'None'], keyLabel, (l) => set({ keyLabel: l })),
   rootName: RN, qName: q.n[0].toUpperCase() + q.n.slice(1), qSym: RN + q.k, voicing, invLabel: INV[inv], handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand', soundWord: arp ? 'Arpeggio' : 'Block',
   // one row of letters; tapping the chosen letter again steps through its spellings: C, C♯, C (D, D♯, D♭ …)
-  rootHint: (() => { const ways = [0, 1, -1].filter((x) => !SKIP.includes(LET[rLet] + x)); if (ways.length < 2 || st.tapUsed) return { on: false, t: '', box: '', tip: '' };
-    const nx = ways[(ways.indexOf(rAcc) + 1) % ways.length], c = ((rLet + 0.5) / 7 * 100).toFixed(2);
-    const box = rLet < 2 ? 'left: 0' : (rLet > 4 ? 'right: 0' : 'left: ' + c + '%; transform: translateX(-50%)');
-    return { on: true, t: 'Tap again for ' + LET[rLet] + ACC[String(nx)], box, tip: 'left: calc(' + c + '% - 6px)' }; })(),
-  roots: { a: [0, 1, 2, 3, 4, 5, 6].map((l) => { const on = l === rLet, ways = [0, 1, -1].filter((a) => !SKIP.includes(LET[l] + a));
-    const a = on ? rAcc : 0, next = on ? ways[(ways.indexOf(rAcc) + 1) % ways.length] : 0;
-    const NAME = { '0': '', '1': ' sharp', '-1': ' flat' }, more = on && ways.length > 1;
-    return { more, nx: more ? LET[l] + ACC[String(next)] : '', aria: LET[l] + NAME[String(a)] + (more ? '. Tap again for ' + LET[l] + NAME[String(next)] : ''), l: LET[l] + ACC[String(a)], on, bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: on ? 700 : 500,
-      pick: () => { RL = l; change(Object.assign({ rl: l, ra: next, root: rootPc(l, next) }, on && ways.length > 1 ? { tapUsed: true } : {})); } }; }) },
+  ...letterPick(rLet, rAcc, (l, a) => !SKIP.includes(LET[l] + a), st.tapUsed, (l, next, more) => { RL = l; change(Object.assign({ rl: l, ra: next, root: rootPc(l, next) }, more ? { tapUsed: true } : {})); }),
   playTiles: [['Block', 'Block chord'], ['Up', 'Arpeggio up'], ['Up and down', 'Arpeggio up and down']].map(([v, l]) => ({ l, on: v === playAs, bg: v === playAs ? '#FBF1DD' : '#FEFDFB', ring: v === playAs ? '0 0 0 2px #B07A2A' : '0 0 0 1px ' + C.line, pick: () => { set({ playAs: v }); sound(ms, v !== 'Block', v === 'Up and down' ? 'Up and down' : 'Up'); } })),
   qSymFs: (RN + q.k).length > 7 ? 12 : ((RN + q.k).length > 5 ? 13.5 : 15), blockOn: !arp, soundShort: arp ? 'Arpeggio' : 'Block',
   soundLabel: playAs === 'Block' ? 'Block chord' : (playAs === 'Up' ? 'Arpeggio up' : 'Up and down'),
@@ -294,8 +307,8 @@ return {
   playing: !!st.playing, notPlaying: !st.playing, playLabel: st.playing ? 'Stop' : 'Play', togglePlay: () => st.playing ? set({ playing: false }) : play(false),
   playing: !!st.playing, notPlaying: !st.playing, playWord: playMode === 'Block' ? 'Play chord' : 'Arpeggiate',
   addChord, undoRemove, playAll, hasSeq: seq.length > 1, canAdd: seq.length < 8, seqCount: seq.length, toastOn: !!st.toast, toastT: st.toast ? st.toast.t : '',
-  playMain: () => st.playing ? set({ playing: false }) : play(playMode === 'Arpeggio'), openPlayAs: () => set({ sheet: st.sheet === 'playAs' ? null : 'playAs' }), isPlayAs: sh === 'playAs',
-  playAsList: [['Block', 'Block chord', 'All the notes at once'], ['Arpeggio', 'Arpeggio', 'One note after another, upwards']].map(([v, l, d]) => ({ l, d, on: v === playMode, mark: v === playMode ? '✓' : '', pick: () => { set({ playMode: v, sheet: null }); play(v === 'Arpeggio'); } })),
+  playMain: () => st.playing ? set({ playing: false }) : play(playMode !== 'Block', playMode === 'UpDown' ? 'Up and down' : 'Up'), openPlayAs: () => set({ sheet: st.sheet === 'playAs' ? null : 'playAs' }), isPlayAs: sh === 'playAs',
+  playAsList: [['Block', 'Block chord'], ['Arpeggio', 'Arpeggio'], ['UpDown', 'Arpeggio up and down']].map(([v, l]) => ({ l, on: v === playMode, mark: v === playMode ? '✓' : '', pick: () => { set({ playMode: v, sheet: null }); play(v !== 'Block', v === 'UpDown' ? 'Up and down' : 'Up'); } })),
   invStep: INV[inv] + (slash ? ' · ' + bassName + ' in the bass' : ''), fullLine: full + (inv ? ' · ' + INV[inv] : '') + ' · ' + voicing + ' voicing' + (hands === 'Right' ? '' : (hands === 'Both' ? ' · both hands' : ' · left hand')),
   chordOn: st.playing === 'chord', chordOff: st.playing !== 'chord', arpOnP: st.playing === 'arp', arpOffP: st.playing !== 'arp',
   playChord: () => st.playing === 'chord' ? set({ playing: false }) : play(false), playArp: () => st.playing === 'arp' ? set({ playing: false }) : play(true),
@@ -392,8 +405,8 @@ PLAYSPLIT = (f'<div role="group" aria-label="Play" style="width: 176px; {TINTGRP
   f'<button type="button" aria-label="Play as: block chord or arpeggio" aria-haspopup="menu" onClick="{{{{openPlayAs}}}}" style="flex: none; width: 40px; height: 56px; border: 0; border-radius: 0 28px 28px 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_D}</button></div>')
 def PLAYASMENU(pos):
     return (f'<sc-if value="{{{{isPlayAs}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
-      f'<div role="menu" aria-label="Play as" style="position: absolute; {pos}; z-index: 61; width: 220px; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column">'
-      f'<sc-for list="{{{{playAsList}}}}" as="o" hint-placeholder-count="2"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px; display: flex; align-items: center; gap: 10px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span><span style="flex: 1; font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for>'
+      f'<div role="menu" aria-label="Play as" style="position: absolute; {pos}; z-index: 61; width: 248px; white-space: nowrap; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column">'
+      f'<sc-for list="{{{{playAsList}}}}" as="o" hint-placeholder-count="3"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px; display: flex; align-items: center; gap: 10px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span><span style="flex: 1; font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for>'
       f'<sc-if value="{{{{hasSeq}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="height: 1px; margin: 4px 8px; background: {LINE}"></span><button type="button" role="menuitem" onClick="{{{{playAll}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px 6px 40px; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; text-align: left">All chords, in order</button></sc-if></div></sc-if>')
 DOCK_PHONE = f'<div role="toolbar" aria-label="Chord and sound" style="position: absolute; left: 12px; right: 12px; bottom: 30px; z-index: 40; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px">{CHORDACT}{PLAYSPLIT}</div>'
 DOCK_LAPTOP = f'<div role="toolbar" aria-label="Chord and sound" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; width: 560px; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 10px">{CHORDACT}{PLAYSPLIT}</div>'
@@ -402,12 +415,6 @@ DOCK_LAPTOP = f'<div role="toolbar" aria-label="Chord and sound" style="position
 def BACKHEAD(title, act):
     return f'<div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 40px"><button type="button" aria-label="Back" onClick="{{{{{act}}}}}" style="position: absolute; left: -8px; width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L}</button><span style="font-size: 17px; font-weight: 600">{title}</span></div>'
 
-def _track(lst, n, label):
-    return (f'<div role="radiogroup" aria-label="{label}" style="display: grid; grid-template-columns: repeat({n}, minmax(0, 1fr)); gap: 2px; padding: 3px; border-radius: 14px; background: {FILL}"><sc-for list="{{{{roots.{lst}}}}}" as="r" hint-placeholder-count="{n}"><button type="button" role="radio" aria-checked="{{{{r.on}}}}" aria-label="{{{{r.aria}}}}" onClick="{{{{r.pick}}}}" style="height: 48px; min-width: 0; padding: 0; border: 0; border-radius: 11px; background: {{{{r.bg}}}}; box-shadow: {{{{r.sh}}}}; color: {INK}; font: inherit; font-size: 19px; font-weight: {{{{r.fw}}}}">{{{{r.l}}}}</button></sc-for></div>')
-HINT = (f'<sc-if value="{{{{rootHint.on}}}}" hint-placeholder-val="{{{{true}}}}"><div aria-hidden="true" style="position: relative; height: 34px; margin-top: -4px">'
-        f'<span style="position: absolute; top: 0; {{{{rootHint.tip}}}}; width: 12px; height: 12px; background: {INK}; transform: translateY(2px) rotate(45deg); border-radius: 2px"></span>'
-        f'<span style="position: absolute; top: 6px; {{{{rootHint.box}}}}; height: 26px; padding: 0 10px; border-radius: 13px; background: {INK}; color: #FEFDFB; font-size: 13px; font-weight: 600; line-height: 26px; white-space: nowrap">{{{{rootHint.t}}}}</span></div></sc-if>')
-NOTEPICK = '<div style="display: flex; flex-direction: column; gap: 4px">' + _track('a', 7, 'Root') + HINT + '</div>'
 B_CHORD = (CAPS('Root') + NOTEPICK + GROUP(('link', 'Chord', '{{qName}}', 'openList'), ('link', 'Voicing', '{{voicingLabel}}', 'openVoicing'), ('seg', 'Hand', 'handSeg', 220), ('toggle', 'Fingering', 'fingOn', 'toggleFing'), bg="#FEFDFB"))
 B_LIST = (BACKHEAD('Chord', 'backChord') + f'<sc-for list="{{{{groups}}}}" as="g" hint-placeholder-count="4"><div style="display: flex; flex-direction: column; gap: 6px"><h3 style="margin: 6px 0 0 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{{{{g.g}}}}</h3><div style="border-radius: 12px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{g.rows}}}}" as="r" hint-placeholder-count="5"><button type="button" aria-pressed="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" style="width: 100%; min-height: 48px; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: {{{{r.bg}}}}; padding: 0 14px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 76px; font-size: 16px; font-weight: {{{{r.fw}}}}">{{{{r.s}}}}</span><span style="flex: 1; min-width: 0; font-size: 15px; color: {SOFT}">{{{{r.n}}}}</span></button></sc-for></div></div></sc-for>')
 B_VOICING = (BACKHEAD('Voicing', 'backChord') + f'<div style="border-radius: 12px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{vlist}}}}" as="v" hint-placeholder-count="6"><button type="button" aria-pressed="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="width: 100%; min-height: 56px; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: transparent; padding: 6px 14px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left; opacity: {{{{v.op}}}}"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{v.v}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{v.f}}}}</span></span><span style="font-size: 18px; font-weight: 700; color: #7A5418">{{{{v.mark}}}}</span></button></sc-for></div>')
@@ -423,7 +430,7 @@ B_SOUND = f'<div role="radiogroup" style="display: flex; flex-direction: column;
 TOAST = f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 50%; bottom: 100px; transform: translateX(-50%); z-index: 50; height: 48px; padding: 0 6px 0 18px; border-radius: 24px; background: {INK}; color: #FEFDFB; display: flex; align-items: center; gap: 8px; white-space: nowrap; box-shadow: {SHADOW}"><span style="font-size: 15px">{{{{toastT}}}}</span><button type="button" onClick="{{{{undoRemove}}}}" style="height: 40px; padding: 0 14px; border: 0; border-radius: 20px; background: transparent; color: #F2C987; font: inherit; font-size: 15px; font-weight: 700">Undo</button></div></sc-if>'
 def SHEETS_PHONE(player):
     out = ''
-    out += TOAST + PLAYASMENU('left: calc(50% - 88px); bottom: 96px')
+    out += TOAST + PLAYASMENU('left: calc(50% - 102px); bottom: 96px')
     for cond, title, body in (('isChord', 'Chord', B_CHORD), ('isKeys', 'Keyboard', B_KEYS)):
         out += BSHEET(cond, title, body)
     for cond, body in (('isList', B_LIST), ('isVoicing', B_VOICING)):
@@ -432,7 +439,7 @@ def SHEETS_PHONE(player):
 
 def POPS_LAPTOP(player):
     dockpos = 'left: calc(50% - 200px); top: 424px'
-    out = TOAST + PLAYASMENU('left: calc(50% - 88px); bottom: 92px')
+    out = TOAST + PLAYASMENU('left: calc(50% - 102px); bottom: 92px')
     for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isKeys', 'Keyboard', B_KEYS, 'right: 24px; top: 76px')):
         out += POPOVER(cond, title, body, pos, 400)
     for cond, body, pos in (('isList', B_LIST, dockpos), ('isVoicing', B_VOICING, dockpos)):

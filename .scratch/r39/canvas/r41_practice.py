@@ -50,34 +50,72 @@ def scale_staff(w, fingers):
         o += f'<ellipse cx="{x:.1f}" cy="{y}" rx="5" ry="3.7" transform="rotate(-20 {x:.1f} {y})" fill="{INK}"></ellipse><path d="M{x + 4.6:.1f} {y}V{y - 24}" stroke="{INK}" stroke-width="1.1"></path>'
         o += f'<text x="{x:.1f}" y="{min(top - 10, y - 30)}" text-anchor="middle" font-size="12" font-weight="700" fill="#5A4C8C">{fingers[i]}</text>'
     return f'<svg viewBox="0 0 {w} 96" width="100%" role="img" aria-label="G major, up one octave, right-hand fingering over the notes" style="display: block">{o}</svg>'
+def SCALESTAFF(label):
+    # the chosen scale up one octave on a treble staff with its own key signature (R42 v68); glyphs as literal text
+    o = ''.join(f'<path d="M4 {30 + i * 7}H356" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
+    o += f'<text x="6" y="64" font-size="44" font-family="Noto Music, serif" fill="{INK}">𝄞</text>'
+    gl = lambda key, ch, size=18: f'<sc-if value="{{{{{key}}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{z.ax}}}}" y="{{{{z.ay}}}}" font-size="{size}" font-family="Noto Music, serif" fill="{INK}">{ch}</text></sc-if>'
+    o += '<sc-for list="{{ss.sig}}" as="z" hint-placeholder-count="1">' + gl('z.s', '♯') + gl('z.f', '♭') + '</sc-for>'
+    o += f'<sc-for list="{{{{ss.led}}}}" as="l" hint-placeholder-count="0"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
+    o += (f'<sc-for list="{{{{ss.notes}}}}" as="z" hint-placeholder-count="8"><ellipse cx="{{{{z.x}}}}" cy="{{{{z.y}}}}" rx="5" ry="3.7" transform="rotate(-20 {{{{z.x}}}} {{{{z.y}}}})" fill="{INK}"></ellipse><path d="{{{{z.stem}}}}" stroke="{INK}" stroke-width="1.1"></path>'
+          + gl('z.a1', '♯', 16) + gl('z.a2', '♭', 16) + gl('z.a3', '♮', 16) + gl('z.a4', '𝄪', 16) + gl('z.a5', '𝄫', 16)
+          + ''.join(f'<sc-if value="{{{{z.f{d}}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{z.x}}}}" y="{{{{z.fy}}}}" text-anchor="middle" font-size="12" font-weight="700" fill="#5A4C8C">{d}</text></sc-if>' for d in range(1, 6))
+          + '</sc-for>')
+    return f'<svg viewBox="0 0 360 96" width="100%" role="img" aria-label="{label}" style="display: block">{o}</svg>'
 SC = js(r'''
     const KINDS = ['Major', 'Natural minor', 'Harmonic minor', 'Melodic minor', 'Dorian', 'Mixolydian', 'Major pentatonic', 'Minor pentatonic', 'Blues'];
     const IV = [[0,2,4,5,7,9,11],[0,2,3,5,7,8,10],[0,2,3,5,7,8,11],[0,2,3,5,7,9,11],[0,2,3,5,7,9,10],[0,2,4,5,7,9,10],[0,2,4,7,9],[0,3,5,7,10],[0,3,5,6,7,10]];
-    const SIG = ['no sharps or flats', '5 flats', '2 sharps', '3 flats', '4 sharps', '1 flat', '6 sharps', '1 sharp, F♯', '4 flats', '3 sharps', '2 flats', '5 sharps'];
-    const root = st.root ?? 7, kind = st.kind ?? 0, tab = st.tab ?? 'Scale', hands = st.hands ?? 'Both', oct = st.oct ?? 1;
+    // the tonic is a spelled note, one of the 15 keys of its kind: tap a letter again for its sharp or flat (R42 v68)
+    const L7 = 'CDEFGAB', NP = [0, 2, 4, 5, 7, 9, 11], A7 = { '-2': '𝄫', '-1': '♭', '0': '', '1': '♯', '2': '𝄪' };
+    const MODE = [0, -3, -3, -3, -2, -1, 0, -3, -3], FIF = [0, 2, 4, -1, 1, 3, 5];
+    const sigOf = (l, a, k) => FIF[l] + 7 * a + MODE[k], okFor = (k) => (l, a) => Math.abs(sigOf(l, a, k)) <= 7;
+    const DL = [[0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 4, 5], [0, 2, 3, 4, 6], [0, 2, 3, 4, 4, 6]];
+    const kind = st.kind ?? 0, rl = st.rl ?? 4, ra = st.ra ?? 0, root = (NP[rl] + ra + 12) % 12;
+    const spell = (i) => { const iv = IV[kind][i % IV[kind].length], L = (rl + DL[kind][i % DL[kind].length]) % 7, pc = (root + iv) % 12, d = ((pc - NP[L] + 18) % 12) - 6; return L7[L] + A7[String(d)]; };
+    const tonic = L7[rl] + A7[String(ra)], sg = sigOf(rl, ra, kind);
+    const SIGW = sg === 0 ? 'no sharps or flats' : (Math.abs(sg) + (sg > 0 ? (sg === 1 ? ' sharp' : ' sharps') : (sg === -1 ? ' flat' : ' flats')));
+    const enh = (k) => { if (okFor(k)(rl, ra)) return {}; for (let l = 0; l < 7; l++) for (const a of [0, 1, -1]) if ((NP[l] + a + 12) % 12 === root && okFor(k)(l, a)) return { rl: l, ra: a }; return {}; };
+    const tab = st.tab ?? 'Scale', hands = st.hands ?? 'Both', oct = st.oct ?? 1;
     const ivs = IV[kind], marks = {}, lo = 48 + root - (root > 6 ? 12 : 0) + 12;
-    ivs.concat([12]).forEach((iv, i) => { const m = lo + iv; marks[m] = [i % 7 === 0 ? ROLE[1] : '#F3D9A8', NN[(root + iv) % 12]]; });
-    const deg = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'], q = ['', 'm', 'm', '', '', 'm', '°'];
+    ivs.concat([12]).forEach((iv, i) => { const m = lo + iv; marks[m] = [i % 7 === 0 ? ROLE[1] : '#F3D9A8', i === ivs.length ? tonic : spell(i)]; });
+    // the triads on each degree, from the scale's own notes (a pentatonic or blues takes its parent scale's)
+    const PK = [0, 1, 2, 3, 4, 5, 0, 1, 1][kind], PIV = IV[PK], RN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
+    const tri = Array.from({ length: 7 }, (_, i) => { const t = (PIV[(i + 2) % 7] - PIV[i] + 12) % 12, f = (PIV[(i + 4) % 7] - PIV[i] + 12) % 12;
+      const qq = t === 4 && f === 7 ? '' : (t === 3 && f === 7 ? 'm' : (t === 3 && f === 6 ? '°' : (t === 4 && f === 8 ? '+' : ''))); const low = qq === 'm' || qq === '°';
+      const fl = PK < 4 ? '' : (PIV[i] < IV[0][i] ? '♭' : (PIV[i] > IV[0][i] ? '♯' : '')); // minor keys read i ii° III …, modes ♭III ♭VII
+      const L = (rl + i) % 7, pc = (root + PIV[i]) % 12, d = ((pc - NP[L] + 18) % 12) - 6;
+      return { d: fl + (low ? RN[i].toLowerCase() : RN[i]) + (qq === '°' ? '°' : (qq === '+' ? '+' : '')), c: L7[L] + A7[String(d)] + (qq === '°' ? '°' : (qq === 'm' ? 'm' : (qq === '+' ? '+' : ''))) }; });
+    // the staff: the key signature, then the scale up an octave, an accidental only where the key does not give it
+    const SHO = [8, 5, 9, 6, 3, 7, 4], FLO = [4, 7, 3, 6, 2, 5, 1], SHL = [3, 0, 4, 1, 5, 2, 6], FLL = [6, 2, 5, 1, 4, 0, 3];
+    const nS = Math.abs(sg), Y = (k) => 58 - k * 3.5, keyAcc = (L) => sg > 0 && SHL.slice(0, sg).includes(L) ? 1 : (sg < 0 && FLL.slice(0, -sg).includes(L) ? -1 : 0);
+    const sig = Array.from({ length: nS }, (_, i) => ({ s: sg > 0, f: sg < 0, ax: 34 + i * 8, ay: Y(sg > 0 ? SHO[i] : FLO[i]) + (sg > 0 ? 6 : 4) }));
+    const nN = ivs.length + 1, x0 = 34 + nS * 8 + 22, dx = (350 - x0) / nN, FG = '12312345', fingOk = ra === 0 && rl !== 3 && kind <= 5;
+    const led = [], notesS = Array.from({ length: nN }, (_, i) => { const dl = i === ivs.length ? 7 : DL[kind][i], L = (rl + dl) % 7, k = rl + dl - 2, x = +(x0 + dx * (i + 0.5)).toFixed(1), y = Y(k);
+      const pc = (root + (i === ivs.length ? 12 : ivs[i])) % 12, d = ((pc - NP[L] + 18) % 12) - 6, show = d !== keyAcc(L);
+      for (let j = -2; j >= k; j -= 2) led.push({ d: 'M' + (x - 9) + ' ' + Y(j) + 'H' + (x + 9) }); for (let j = 10; j <= k; j += 2) led.push({ d: 'M' + (x - 9) + ' ' + Y(j) + 'H' + (x + 9) });
+      const up = k < 4, f = fingOk && nN === 8 ? FG[i] : '';
+      return { x, y, stem: up ? 'M' + (x + 4.6) + ' ' + y + 'V' + (y - 24) : 'M' + (x - 4.6) + ' ' + y + 'V' + (y + 24), ax: x - 15, ay: y + 5, a1: show && d === 1, a2: show && d === -1, a3: show && d === 0, a4: show && d === 2, a5: show && d === -2,
+        fy: 16, f1: f === '1', f2: f === '2', f3: f === '3', f4: f === '4', f5: f === '5' }; });
     return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), rootOn: st.sheet === 'root', openRoot: () => set({ sheet: 'root' }), kindOn: st.sheet === 'kind', openKind: () => set({ sheet: 'kind' }),
-      name: NN[root] + ' ' + KINDS[kind].toLowerCase(), sub: KINDS[kind] + ' scale · ' + (kind === 0 ? SIG[root] : ivs.length + ' notes'), rootL: NN[root], kindL: KINDS[kind],
-      roots: rootGrid(root, (i) => set({ root: i, sheet: null })), kinds: KINDS.map((k, i) => ({ k, on: i === kind, mark: i === kind ? '✓' : '', pick: () => set({ kind: i, sheet: null }) })),
+      name: tonic + ' ' + KINDS[kind].toLowerCase(), sub: KINDS[kind] + ' scale · ' + (kind <= 5 ? SIGW : ivs.length + ' notes'), rootL: tonic, kindL: KINDS[kind],
+      ...letterPick(rl, ra, okFor(kind), st.tapUsed, (l, next, more) => set(Object.assign({ rl: l, ra: next }, more ? { tapUsed: true } : {}))), kinds: KINDS.map((k, i) => ({ k, on: i === kind, mark: i === kind ? '✓' : '', pick: () => set(Object.assign({ kind: i, sheet: null }, enh(i))) })),
       tabs: seg(['Scale', 'Chords', 'Key'], tab, (l) => set({ tab: l })), isScale: tab === 'Scale', isChords: tab === 'Chords', isKey: tab === 'Key',
       kb: calmKeys(lo - 5, lo + 19, marks, 370, 120), kbL: calmKeys(lo - 12, lo + 24, marks, 840, 170),
       handsSeg: seg(['Left', 'Both', 'Right'], hands, (l) => set({ hands: l })), oct: oct + (oct === 1 ? ' octave' : ' octaves'), octDn: () => set({ oct: Math.max(1, oct - 1) }), octUp: () => set({ oct: Math.min(4, oct + 1) }),
-      chords: deg.map((d, i) => ({ d, c: NN[(root + ivs[i % ivs.length]) % 12] + q[i] })) };''')
-SC_PIC = lambda k, w, kh: f'''<sc-if value="{{{{isScale}}}}" hint-placeholder-val="{{{{true}}}}">{CARD(scale_staff(w, '12312345') + f'<div style="height: 10px"></div>' + KEYS(kh).replace('kb.', k + '.'), '12px 12px 12px')}</sc-if>
+      chords: tri, ss: { sig, notes: notesS, led } };''')
+SC_PIC = lambda k, w, kh: f'''<sc-if value="{{{{isScale}}}}" hint-placeholder-val="{{{{true}}}}">{CARD(SCALESTAFF('The scale up one octave on the staff') + f'<div style="height: 10px"></div>' + KEYS(kh).replace('kb.', k + '.'), '12px 12px 12px')}</sc-if>
 <sc-if value="{{{{isChords}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{chords}}}}" as="c" hint-placeholder-count="7"><button type="button" style="height: 78px; border: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: {INK}"><span style="font-size: 22px; font-weight: 700">{{{{c.c}}}}</span><span style="font-family: {SERIF}; font-size: 15px; color: {SOFT}">{{{{c.d}}}}</span></button></sc-for></div></sc-if>
-<sc-if value="{{{{isKey}}}}" hint-placeholder-val="{{{{false}}}}">{CARD(scale_staff(w, '        ').replace('aria-label="G major, up one octave, right-hand fingering over the notes"', 'aria-label="The key signature"'))}{GROUP(('link', 'Relative minor', 'E minor', 'Scales.dc.html'), ('link', 'On the circle', 'Between C and D', 'CircleOfFifths.dc.html'), bg=SHEET)}</sc-if>'''
+<sc-if value="{{{{isKey}}}}" hint-placeholder-val="{{{{false}}}}">{CARD(SCALESTAFF('The key signature'))}{GROUP(('link', 'Relative minor', 'E minor', 'Scales.dc.html'), ('link', 'On the circle', 'Between C and D', 'CircleOfFifths.dc.html'), bg=SHEET)}</sc-if>'''
 SC_ROWS = GROUP(('link', 'Tonic', '{{rootL}}', 'openRoot'), ('link', 'Scale', '{{kindL}}', 'openKind'), ('seg', 'Hands', 'handsSeg', 190), ('step', 'Octaves', 'oct', 'octDn', 'octUp'))
 SC_SET = GROUP(('seg', 'Fingering', 'fingSeg', 200), ('link', 'Rhythm', 'Even', ''), ('link', 'Count-in', '1 bar', ''), ('link', 'All piano settings', '', ''))
 SC = SC.replace("chords: deg.map", "fingSeg: seg(['As the scale', 'From the thumb'], st.fing ?? 'As the scale', (l) => set({ fing: l })), chords: deg.map")
 KINDLIST = f'<div style="border-radius: 12px; background: {SHEET}; overflow: hidden"><sc-for list="{{{{kinds}}}}" as="k" hint-placeholder-count="9"><button type="button" onClick="{{{{k.pick}}}}" style="width: 100%; height: 48px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {LINE}; padding: 0 16px; display: flex; align-items: center; color: {INK}; font: inherit; font-size: 16px; text-align: left"><span style="flex: 1">{{{{k.k}}}}</span><span style="color: {LINK}; font-weight: 700">{{{{k.mark}}}}</span></button></sc-for></div>'
-SC_SHEETS = BSHEET('rootOn', 'Tonic', ROOTGRID()) + BSHEET('kindOn', 'Scale', KINDLIST) + BSHEET('setOn', 'Scale settings', SC_SET)
+SC_SHEETS = BSHEET('rootOn', 'Tonic', NOTEPICK) + BSHEET('kindOn', 'Scale', KINDLIST) + BSHEET('setOn', 'Scale settings', SC_SET)
 ph = body(TOP('Main.dc.html', 'Scales and keys', GEAR()), SUBJECT('{{name}}', '{{sub}}', 34) + SEGC('tabs') + SC_PIC('kb', 340, 120) + SC_ROWS,
           BTN('Practise this scale', href='Exercise.dc.html', kind='quiet') + PLAYBTN())
 lm = lapbody(LTOP('Laptop.dc.html', GEAR()), SUBJECT('{{name}}', '{{sub}}', 44) + f'<div style="width: 420px">{SEGC("tabs")}</div>' + SC_PIC('kbL', 860, 170),
              SC_ROWS + GROUP(('link', 'Practise this scale', 'Hanon and the tempo ladder', 'ExerciseLaptop.dc.html')), BTN('Practise this scale', href='ExerciseLaptop.dc.html', kind='quiet') + PLAYBTN())
-SC_POPS = POPOVER('rootOn', 'Tonic', ROOTGRID(), 'right: 40px; top: 70px') + POPOVER('kindOn', 'Scale', KINDLIST, 'right: 40px; top: 120px') + POPOVER('setOn', 'Scale settings', SC_SET)
+SC_POPS = POPOVER('rootOn', 'Tonic', NOTEPICK, 'right: 40px; top: 70px') + POPOVER('kindOn', 'Scale', KINDLIST, 'right: 40px; top: 120px') + POPOVER('setOn', 'Scale settings', SC_SET)
 detail('Scales', 'Scales and keys', SC, ph, lm, '', SC_SHEETS, SC_POPS)
 
 # ═════ Intervals (Tenuto's named answers, Perfect Ear's staff and keys; R39 rulings) ═════

@@ -102,3 +102,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v65 (2026-11-09):** Chords: chord button back, left of the centred Play; Arpeggiate.
 **R42 v66 (2026-11-09):** Chords: bar names never cut (chord type steps with length; Play 176).
 **R42 v67 (2026-11-09):** Chords: several chords on the staff; Right/Left/Both voiced from the owner's transcripts.
+**R42 v68 (2026-11-09):** Chords: 4 voicings, Rootless on a dominant fixed, Arpeggio up and down. Scales: 15 keys, key signatures.
