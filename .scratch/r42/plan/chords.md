@@ -5,16 +5,32 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v57 (canvas Version 57): every inversion one tap away; the notes as a theory table sets them.** Owner, with a
+  screenshot of v56's notes line: "make the inventions easier to switch and I dont like how this looks from the
+  image. and did you research more and looked at the examples and websites. not only ours piano data but also from
+  the internet. https://musictheorylessons.net https://worksheets.musictheorylessons.net/worksheets".
+  - The inversion: v56's pull-down took two taps and hid the choices. Now all of them sit under the name, side by
+    side on one track, each its position over its slash chord: **Root** Cmaj7 · **1st** Cmaj7/E · **2nd** Cmaj7/G ·
+    **3rd** Cmaj7/B (triads three). One tap plays and shows it; the current one raised. This amends v26's rejected
+    Root · 1st · 2nd · 3rd control: those were bare ordinals; here each choice names the chord it gives, so it reads
+    as this chord's shapes, never as the next chord (the slash chord is the musician's own name, v22).
+  - The notes: no dots, no inline role words. A row of columns, each note in bold over a short bar of its key colour
+    over its role (root, 3rd, 5th, 7th), in the order they sound from the bottom up, so an inversion visibly moves
+    the root: Cmaj7/E reads E G B C over 3rd 5th 7th root.
+  - Sources: musictheorylessons.net, Triads (a table of Triad, Formula "1 · 3 · 5", Notes "C–E–G") and Seventh
+    chords (Name, Symbol on C, Notes "C–E–G–B"; "the root, 3rd, 5th and 7th"); its worksheets FAQ names the
+    inversions as positions, "root position with 1st and 2nd inversions, and 3rd inversion for 7th chords". Apple
+    HIG, Segmented controls: equal widths, a few closely related choices, one tap.
 - **v56 (canvas Version 56): the heading reads as a lead sheet: name, what it is, its inversion, its notes.** Owner,
   with a screenshot of D♭maj7: "I dont like inversions and the chips how they look. I dont like how this section
   looks. improve and make it better. research and use all nedded guidelines and skills".
   - The name: the accidental drawn as music (Noto Music, raised, 0.78 of the letter), as a lead sheet sets D♭maj7;
     before, the serif had no ♭ and a fallback glyph stood apart from the D.
-  - The inversion: a pull-down (Apple's pop-up button: one choice among a few, its current value as the label),
+  - (Replaced by v57: inversions one tap each.) The inversion: a pull-down (Apple's pop-up button: one choice among a few, its current value as the label),
     **Root position ⌄**, a quiet outlined capsule. Its menu lists each inversion with its notes, Root position
     D♭ F A♭ C · 1st inversion F A♭ C D♭ …, ✓ on the current; a pick plays it. No ‹ › anywhere (read as the next
     chord), no Root · 1st · 2nd · 3rd control (v26, rejected), no pill.
-  - The notes: no filled chips. One line of text, each note in bold with its role beside it in grey and a small dot
+  - (Replaced by v57: note columns.) The notes: no filled chips. One line of text, each note in bold with its role beside it in grey and a small dot
     of its key colour: **● D♭** root **● F** 3rd **● A♭** 5th **● C** 7th. The role words teach what the colours
     mean (the keys use the same colours).
   - Skills applied: impeccable's craft floor (one type scale, no decoration without information), Apple's
@@ -415,3 +431,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: the keyboard button out of the bar, a round glass button beside it (v53).
 - 2026-11-08: the bar as three glass groups, Play the one tinted, on the trailing side (v54).
 - 2026-11-09: heading as a lead sheet: ♭ set as music, inversion pull-down, notes with roles (v56).
+- 2026-11-09: every inversion one tap (position over slash chord); notes as columns over their roles (v57).

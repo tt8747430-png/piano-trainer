@@ -324,6 +324,10 @@ owner's, typos fixed.
 - **A heading is text, not chips and pills (R42, v56):** "I dont like inversions and the chips how they look". The
   inversion a pull-down with its value as the label; the notes a line of text with their roles; the ♭ in a chord
   name set as music. Never ‹ › for the inversion, never filled note chips.
+- **Choices one tap away, named by what they give (R42, v57):** "make the inventions easier to switch". A pull-down
+  that hides a few related choices is two taps too many: show them side by side, each with its result (Root Cmaj7 ·
+  1st Cmaj7/E). Notes are set as a theory table sets them (note over role), not dots with words. Research outside
+  sites too (musictheorylessons.net), not only piano-data.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

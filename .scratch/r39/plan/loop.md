@@ -91,3 +91,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v53 (2026-11-08):** Chords: Keyboard a round button beside the bar, not in it.
 **R42 v54 (2026-11-08):** Chords: bar as three glass groups (keyboard · chord · tinted Play), per Apple.
 **R42 v56 (2026-11-09):** Chords: heading as a lead sheet; inversion pull-down; notes as text with roles.
+**R42 v57 (2026-11-09):** Chords: inversions one tap each (position over slash chord); notes as columns over roles.
