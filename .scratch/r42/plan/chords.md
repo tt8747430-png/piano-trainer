@@ -5,6 +5,14 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v63 (canvas Version 63): one quiet Play, centred; the chord is chosen from its name.** Owner: "the play button is
+  too appealing and I would like it to be centered , but dotn know what to make with the chords button".
+  - The bar is one glass capsule centred at the bottom, **▶ Play chord | ⌄**, in the same plain glass as the header's
+    buttons (no honey tint), 216 wide; its ⌄ menu (Block chord · Arpeggio) opens centred above it.
+  - The chords button leaves the bar (recommended, owner unsure): the big name already opens the Chord sheet (v51),
+    where the eye is, so the bar's copy only pushed Play off centre. On the laptop the Chord popover opens under the
+    name. This undoes v28's doubling ("the chords choosing in both places"); if the bar should keep a way to the
+    chord, the alternative is a small round Chord button left of Play with a Keyboard-sized twin on the right.
 - **v62 (canvas Version 62): no staffs or label over the notes; Hand and Fingering in the Chord sheet; the keyboard
   button in the header, no gear.** Owner: "I dont like the bass note header and the staffs above the notes. remove
   them . and also put the hand settings and fingering settings in the chords pill after the voicing and the keyboard
@@ -16,7 +24,7 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   - The header: Back · Chords · the keyboard button on the right (opens Keyboard: Off · 2D, Keys, Labels, Connect a
     piano ›, All piano settings ›; on the laptop a popover under it). The gear and its Settings sheet are gone; it
     held only Hand and Finger numbers, which now live in the Chord sheet.
-  - The bar: **Cmaj7 ⌃** · **[▶ Play chord | ⌄]**; the round keyboard button left it (laptop bar 400 wide).
+  - (Replaced by v63.) The bar: **Cmaj7 ⌃** · **[▶ Play chord | ⌄]**; the round keyboard button left it.
 - **v61 (canvas Version 61; the staffs and label removed in v62): each bass note shows the chord it makes, drawn as a textbook draws inversions.** Owner
   on v60: "better but still could be more creative and research more and improve it".
   - v60's still row stays (Bass note: C E G B in chord order, the bass filled, nothing moves). Above each note, a
@@ -492,3 +500,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: v59 moved too much; a still row of the chord's notes, the bass one filled, tap to choose (v60).
 - 2026-11-09: each bass note shows its chord on a small staff; the slash takes the bass note's colour (v61).
 - 2026-11-09: staffs and label removed; Hand and Fingering into the Chord sheet; keyboard to the header, gear gone (v62).
+- 2026-11-09: Play alone, centred, plain glass; the chord chosen from its name only (v63).

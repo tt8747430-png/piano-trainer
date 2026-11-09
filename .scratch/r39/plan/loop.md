@@ -97,3 +97,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v60 (2026-11-09):** Chords: stack moved too much; a still Bass row of the chord's notes, tap one.
 **R42 v61 (2026-11-09):** Chords: v60 "better"; each bass note shows its inversion on a small staff; slash in the bass note's colour.
 **R42 v62 (2026-11-09):** Chords: staffs and Bass note label gone; Hand, Fingering in the Chord sheet; keyboard in the header, no gear.
+**R42 v63 (2026-11-09):** Chords: Play alone, centred, plain glass; chord chosen from its name.
