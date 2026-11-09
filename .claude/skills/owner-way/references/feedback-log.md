@@ -345,6 +345,13 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **A hand alone plays the chord, fingered (R42, v69):** "I want to play the c major chord in left hand with its
+  fingerings and not c g c". A setting named for a hand plays the chord in that hand; reduce only past what a hand
+  holds. The hands sit beside their staves (R.H., L.H.); a setting lives where its effect shows.
+- **One home for fingering (R42, v69):** "set the fingerings in two places … make this more clear": the 123 toggle on
+  the staff; never finger numbers on keys.
+- **Adding a chord suggests the next one (R42, v69):** "you could improve it. be creative": the key's chords, likeliest
+  first, voice-led.
 - **Voicings checked against the owner's transcripts (R42, v68):** "check that our current are correct are match
   the researches": every voicing cites a transcript; Rootless on a dominant takes the 13th, not the 5th. Added
   Spread, So What, Kenny Barron, Upper structure, greyed where the chord does not take them. "leave out the alt".

@@ -5,6 +5,27 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v69 (canvas Version 69): the hands sit beside their staves; one home for fingering; + suggests the next chord.**
+  Owner: "when I choose c major chords and make the settings left hand, then I want to play the c major chord in left
+  hand with its fingerings and not c g c like now. improve the hands settings and make more clear and intuitive …
+  something wrong is with the staff and practice section now, like they overlap … adding a new one but you could
+  improve it. be creative … I dont quite like that we can set the fingerings in two places like in chord settings and
+  also in the piano settings."
+  - **Left hand alone plays the chord itself,** an octave down, with left-hand fingering: C = C3 E3 G3, 5-3-1; four
+    notes at most (the 5th, then the 11th, first out). Replaces v67's 1-5-8 shell for Left.
+  - **Both hands:** the root in octaves under a triad (C2 C3 | C4 E4 G4); the 1-7 shell under a seventh and bigger,
+    as v67; an inversion's bass alone in the left hand.
+  - **The hands are on the staff, as a score names them:** **R.H.** beside the treble, **L.H.** beside the bass, each
+    a toggle; on is honey, off is outlined; the last hand on only plays. The Hand row leaves the Chord sheet (it was
+    v61's home; this replaces it).
+  - **Fingering has one home:** the italic **123** above the hands, the same type as the digits it shows. Gone: the
+    Fingering row in the Chord sheet and the keys' **Fingers** label (no finger numbers on keys; Labels is Names ·
+    None).
+  - **+ opens Next chord:** "In C major", the key's six other chords as tiles, symbol over roman numeral (F IV, G V,
+    Am vi, Dm ii, Em iii, B° vii°), the likeliest after the current chord first and in honey; sevenths when the first
+    chord is a seventh (Dm7 ii7, G7 V7, Fø7 iiø7 in minor). Each is added in the inversion that moves least from the
+    chord before, so C, F, G read as C-E-G, C-F-A, B-D-G. **Any chord ›** adds one from the full list.
+  - **Fixed:** the staff's card left two wrappers open, so the Practise section drew inside it.
 - **v68 (canvas Version 68): more voicings, each checked against the transcripts; Arpeggio up and down; Scales in
   all 15 keys; no altered chord.** Owner: "1. dont understand the question. 2. yes I want more voicings and also
   check that our current are correct are match the researches you did from the transcriptions 3. yes up and down.
@@ -570,3 +591,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: bar names never cut: chord type steps with length, Play 176 (v66).
 - 2026-11-09: several chords on the staff (+, ×/Undo, All chords in order); hands voice as the transcripts teach (v67).
 - 2026-11-09: four voicings added, Rootless on a dominant takes the 13th, Arpeggio up and down; Scales in 15 keys with key signatures (v68).
+- 2026-11-09: hands on the staff (R.H./L.H.), Left plays the chord, one fingering toggle, Next chord suggestions voice-led (v69).
