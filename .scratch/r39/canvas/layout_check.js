@@ -12,6 +12,13 @@
     const r = el.getBoundingClientRect(); if (!r.width || !r.height || getComputedStyle(el).visibility === 'hidden') continue
     if (r.bottom < S.top || r.top > S.bottom) continue
     if (!scrolls(el) && (r.left < S.left + M - 0.5 || r.right > S.right - M + 0.5)) out.push(`outside the screen's ${M}px margin: "${name(el)}" (${Math.round(r.left - S.left)}…${Math.round(S.right - r.right)})`)
+    // a label never touches its control's edge: 6px at least, unless the control is a bare text button
+    if (getComputedStyle(el).backgroundColor !== 'rgba(0, 0, 0, 0)' || getComputedStyle(el).boxShadow !== 'none') {
+      const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); let n
+      while ((n = w.nextNode())) { if (!n.textContent.trim()) continue; const g = document.createRange(); g.selectNodeContents(n); const t = g.getBoundingClientRect(); if (!t.width) continue
+        const pad = Math.min(t.left - r.left, r.right - t.right)
+        if (pad < 5.5) { out.push(`label ${pad.toFixed(1)}px from its control's edge: "${name(el)}"`); break } }
+    }
     if (Math.min(r.width, r.height) < 30 && !el.closest('svg')) out.push(`small target ${Math.round(r.width)}×${Math.round(r.height)}: "${name(el)}"`)
   }
   for (const bar of screen.querySelectorAll('[role=toolbar]')) {

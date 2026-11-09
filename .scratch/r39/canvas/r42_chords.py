@@ -207,7 +207,7 @@ const voicing = VOICINGS.find((v) => v.v === (st.voicing || 'Close')).ok(q) ? 'C
 const invN = TWO[voicing] ? 1 : Math.min(4, voicing === 'Shell' ? 3 : (voicing.startsWith('Rootless') ? 4 : q.t.length));
 const inv = Math.min(st.inv ?? 0, invN - 1);
 const upper = (() => { const u = upperOf(root, q); RL = rLet; return u; })(), canSplit = !TWO[st.voicing || 'Close'];
-const bassOn = false, hands = st.hand === 'Split' ? 'Both' : (st.hand || 'Right'), fingOn = true, kbMode = st.kbMode || 'hands', kbShow = kbMode !== 'off', is3d = kbMode === 'hands' || kbMode === '3d', keys = st.keys || 'Chord';
+const bassOn = false, hands = st.hand === 'Split' ? 'Both' : (st.hand || 'Right'), fingOn = true, kbOnS = st.kbOn !== false, kbView = st.kbView || '3d', kbHands = st.kbHands !== false, kbMode = !kbOnS ? 'off' : (kbView === '2d' ? '2d' : (kbHands ? 'hands' : '3d')), kbShow = kbOnS, is3d = kbMode === 'hands' || kbMode === '3d', keys = st.keys || 'Chord';
 const playAs = 'Block', arp = false, dir = 'Up', keyLabel = st.keyLabel || 'Note names', names = keyLabel === 'Note names', fingKeys = false, treble = false, auto = true;
 const oct = st.oct || 0; // an added chord may sit an octave lower, to stay under the hand (voice leading)
 const ns = voice(root, q, inv, voicing, hands).map((x) => Object.assign(x, { m: x.m + 12 * oct }));
@@ -349,7 +349,12 @@ return {
   invItems: Array.from({ length: invN }, (_, i) => { const v = voice(root, q, i, voicing, 'Right'); RL = rLet; return { t: INV[i], s: v.map((x) => x.name).join(' '), on: i === inv, mark: i === inv ? '✓' : '', pick: () => change({ inv: i, sheet: null }) }; }),
   chips: ns.filter((x, i, a) => a.findIndex((y) => y.name === x.name) === i).sort((a, b) => ORD.indexOf(a.deg) - ORD.indexOf(b.deg)).map((x) => ({ n: x.name, c: ROLE[x.deg] || C.accent })),
   isStaff: true, isInv: false, isFing: false, isTones: false, voicingLabel: voicing,
-  kbShow, kbOn: kbShow, kbOnBg: kbShow ? '#7FB685' : C.line, kbOnX: kbShow ? 22 : 2, toggleKb: () => set({ kbMode: kbShow ? 'off' : 'hands' }),
+  kbShow, kbOn: kbShow, kbOnBg: kbShow ? '#7FB685' : C.line, kbOnX: kbShow ? 22 : 2, toggleKb: () => set({ kbOn: !kbOnS }),
+  // Piano settings (R42, canvas 85): a switch turns the piano on or off (Apple HIG, toggles: a switch for a pair of
+  // opposing states, in a list row); View is two radio cards, 3D holding its own Hands switch (the owner's radio-card rule)
+  kbHandsOn: kbHands, kbHandsOnBg: kbHands ? '#7FB685' : C.line, kbHandsOnX: kbHands ? 22 : 2, toggleKbHands: () => set({ kbHands: !kbHands }),
+  viewCards: [['3d', '3D piano'], ['2d', '2D keys']].map(([id, name]) => { const on = id === kbView; return { name, on, is3d: id === '3d', is2d: id === '2d', hasHands: id === '3d' && on, fw: on ? 700 : 500,
+    bg: on ? '#FBF1DD' : '#FEFDFB', ring: on ? '0 0 0 2px #B07A2A' : '0 0 0 1px ' + C.line, dotBg: on ? '#B07A2A' : 'transparent', dotRing: on ? 'none' : 'inset 0 0 0 2px ' + C.line, mark: on ? '✓' : '', pick: () => set({ kbView: id }) }; }),
   bassOnBg: bassOn ? '#7FB685' : C.line, bassOnX: bassOn ? 22 : 2, toggleBass: () => change({ bass: !bassOn }), bassOn,
   fingOnBg: fingOn ? '#7FB685' : C.line, fingOnX: fingOn ? 22 : 2, toggleFing: () => set({ fing: !fingOn }), fingOn,
   fingKeysOn: fingKeys, fingKeysOnBg: fingKeys ? '#7FB685' : C.line, fingKeysOnX: fingKeys ? 22 : 2, toggleFingKeys: () => set({ fingKeys: !fingKeys }),
@@ -685,12 +690,12 @@ PT_LIFE = r'''
           while (box.children.length > L.length) box.lastChild.remove();
           L.forEach((l, i) => { let el = box.children[i]; if (!el) { el = document.createElement('span'); el.style.cssText = 'position: absolute; transform: translate(-50%, -100%); min-width: 22px; height: 22px; box-sizing: border-box; padding: 0 5px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #332921; box-shadow: 0 0 0 1.5px rgba(51,41,33,.55), 0 1px 3px rgba(51,41,33,.3); white-space: nowrap'; box.append(el); }
             const p = proj(l.m, l.black); el.textContent = l.t; el.style.background = l.c; el.style.left = (p[0] * W).toFixed(1) + 'px'; el.style.top = Math.max(26, p[1] * H - 3).toFixed(1) + 'px'; }); };
-        this._stage = window.PTHands.createStage(cv, d, { onLoaded: () => {}, onFailed: () => this.setState({ kbMode: '2d' }) }); this._stageCv = cv;
+        this._stage = window.PTHands.createStage(cv, d, { onLoaded: () => {}, onFailed: () => this.setState({ kbView: '2d' }) }); this._stageCv = cv;
         const box = cv.parentElement, rs = () => { if (this._stage) this._stage.resize(box.clientWidth, box.clientHeight); };
         this._ro = new ResizeObserver(rs); this._ro.observe(box); rs();
       }
       this._stage.update(d); if (this._lb && !(this._labels3d || []).length) this._lb.replaceChildren();
-    } catch (e) { this._stage = null; this.setState({ kbMode: '2d' }); } // where 3D cannot be drawn, the flat keys
+    } catch (e) { this._stage = null; this.setState({ kbView: '2d' }); } // where 3D cannot be drawn, the flat keys
   }
 '''
 def ch_js(D, W, KH, minOct, mini_w):
@@ -736,7 +741,16 @@ HANDSBTN_A = SIDEBTN('Hands', 'Hands: {{handsLabel}}', 'openHandsMenu', HANDSI)
 RANGE = ('<div style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 10px"><div style="display: flex; align-items: center; justify-content: space-between; gap: 12px"><span style="font-size: 16px">Range</span><span style="font-size: 15px; color: ' + SOFT + '; font-variant-numeric: tabular-nums">{{rangeStrip.cap}}</span></div>'
          '<svg viewBox="0 0 340 26" role="img" aria-label="The part of the 88 keys shown" style="display: block; width: 100%; height: auto; border-radius: 4px; overflow: hidden"><rect width="340" height="26" fill="#FEFDFB" stroke="' + LINE + '"></rect><rect x="{{rangeStrip.x}}" y="0" width="{{rangeStrip.w}}" height="26" fill="#F6E3BC"></rect><path d="M6.54 0V26M13.08 0V26" stroke="none"></path><path d="{{rangeStrip.bl}}" fill="#332C28"></path><rect x="{{rangeStrip.x}}" y="0.75" width="{{rangeStrip.w}}" height="24.5" fill="none" stroke="#B07A2A" stroke-width="1.5"></rect></svg>'
          '<div>' + SEGC('keysSeg', 32, 13) + '</div></div>')
-B_PIANO = (KBTILES + GROUP(('raw', RANGE), bg="#FEFDFB") + GROUP(('seg', 'Labels', 'keyLabelSeg', 250), bg="#FEFDFB")
+PIC3D = '<g><path d="M9 6h30l7 18H2z"></path><path d="M14.5 6 11 24M20 6l-2 18M26 6v18M31.5 6l3 18M37 6l5 18"></path><path d="M12.6 6h3l-1.2 9h-3.4zM18.3 6h3l-.7 9h-3.3zM27.6 6h3l1 9h-3.3zM33.3 6h3l1.9 9h-3.4z" fill="currentColor"></path></g>'
+PIC2D = '<g><rect x="2" y="4" width="44" height="20" rx="2"></rect><path d="M8.3 4v20M14.6 4v20M20.9 4v20M27.1 4v20M33.4 4v20M39.7 4v20"></path><path d="M6.5 4h3.6v11H6.5zM12.8 4h3.6v11h-3.6zM25.3 4h3.6v11h-3.6zM31.6 4h3.6v11h-3.6zM37.9 4h3.6v11h-3.6z" fill="currentColor"></path></g>'
+# two radio cards; outer radius 16 = picture radius 6 + padding 10 (concentric); every row at least 48 high
+VIEWCARDS = ('<div role="radiogroup" aria-label="View" style="display: flex; flex-direction: column; gap: 8px"><sc-for list="{{viewCards}}" as="o" hint-placeholder-count="2"><div style="border-radius: 16px; background: {{o.bg}}; box-shadow: {{o.ring}}; overflow: hidden">'
+  '<button type="button" role="radio" aria-checked="{{o.on}}" onClick="{{o.pick}}" style="width: 100%; min-height: 64px; box-sizing: border-box; border: 0; background: transparent; padding: 10px 16px 10px 10px; display: flex; align-items: center; gap: 12px; color: ' + INK + '; font: inherit; text-align: left">'
+  '<span aria-hidden="true" style="flex: none; width: 68px; height: 44px; border-radius: 6px; background: #FEFDFB; box-shadow: 0 0 0 1px ' + LINE + '; display: flex; align-items: center; justify-content: center"><svg width="48" height="28" viewBox="0 0 48 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><sc-if value="{{o.is3d}}" hint-placeholder-val="{{true}}">' + PIC3D + '</sc-if><sc-if value="{{o.is2d}}" hint-placeholder-val="{{false}}">' + PIC2D + '</sc-if></svg></span>'
+  '<span style="flex: 1; min-width: 0; font-size: 16px; font-weight: {{o.fw}}">{{o.name}}</span>'
+  '<span aria-hidden="true" style="flex: none; width: 22px; height: 22px; border-radius: 11px; background: {{o.dotBg}}; box-shadow: {{o.dotRing}}; color: #FEFDFB; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center">{{o.mark}}</span></button>'
+  '<sc-if value="{{o.hasHands}}" hint-placeholder-val="{{true}}"><button type="button" onClick="{{toggleKbHands}}" style="width: 100%; min-height: 52px; box-sizing: border-box; border: 0; box-shadow: inset 0 1px 0 rgba(176,122,42,.3); background: transparent; padding: 8px 14px 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: ' + INK + '; font: inherit; text-align: left"><span style="font-size: 16px">Hands on the keys</span>' + TOGGLE('kbHandsOn') + '</button></sc-if></div></sc-for></div>')
+B_PIANO = (GROUP(('toggle', 'Piano', 'kbOn', 'toggleKb'), bg="#FEFDFB") + '<sc-if value="{{kbShow}}" hint-placeholder-val="{{true}}">' + VIEWCARDS + GROUP(('raw', RANGE), bg="#FEFDFB") + GROUP(('raw', '<div style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 10px"><span style="font-size: 16px">Labels</span><div>' + SEGC('keyLabelSeg', 34, 14) + '</div></div>'), bg="#FEFDFB") + '</sc-if>'
            + GROUP(('link', 'Sound', '', '#'), ('link', 'MIDI keyboard', '', '#'), bg="#FEFDFB"))
 PIANOBTN = lambda: GLASSBTN('Piano settings', KEYSI, 'openKeys')
 # content never shows through the bar: the page fades out under it (the tab bar's rule, v24)

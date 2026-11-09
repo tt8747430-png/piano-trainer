@@ -345,6 +345,13 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **Off is a switch; a sub-choice lives in its parent's card (R42, canvas 85):** "I dont want a fourth option I
+  want to be able to show them from the 3d keys options … research more how a off options should be made": never
+  "Off" as one more tile beside the views, and never a combination ("3D with hands") as its own option. A switch
+  turns the thing on or off (Apple HIG, NN/g); the chosen radio card holds its own switch.
+- **Text never touches its control's edge (R42, canvas 85):** "these piano table options still have padding
+  issues. use proper skills": the layout check fails any label under 6px from its control's edge; a row whose
+  segments do not fit beside its label puts the label above.
 - **A setting works in every view, and a tappable thing looks tappable (R42, canvas 84):** "I dont like the labels
   settings and that they are only available in 2d": Labels (Note names · Degrees · None) now draw on the 3D piano
   too; hiding the hands is a view (3D with hands · 3D keys · 2D keys · Off), not a switch that only works in 3D.

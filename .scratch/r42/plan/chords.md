@@ -5,6 +5,23 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 85: Piano settings rebuilt: a switch for on and off, two view cards, Hands inside 3D.** Owner: "I
+  dont want a fourth option I want to be able to show them from the 3d keys options. and these piano table options
+  still have padding issues. use proper skills to prevent such things. and research more how a off options should
+  be made." Replaces Version 84's four tiles (3D with hands · 3D keys · 2D keys · Off), not to be redrawn.
+  - **Off is a switch, not an option among pictures.** Top row: **Piano** with a switch. Apple HIG, Toggles: "A toggle
+    lets people choose between a pair of opposing states, like on and off"; "Use the switch toggle style only in a
+    list row"; a switch suits turning "on or off a group of settings". NN/g, Toggle-Switch Guidelines: toggles are
+    for on/off and "should take immediate effect". With the piano off, its view, range and labels are not shown,
+    since they have nothing to act on (iOS's own pattern); Sound and MIDI keyboard stay.
+  - **View is two radio cards,** each a picture, its name and a round check: **3D piano** · **2D keys**. The chosen
+    3D card holds its own switch, **Hands on the keys** (the owner's radio-card rule: a card holds its own control).
+  - **Range** and **Labels** each take a full-width row, the label over its control. Labels beside its segments left
+    "Note names" 2.6px outside its segment.
+  - **How it was checked:** the layout check now also fails a label closer than 6px to its control's edge; it found
+    the Labels overflow. Run in 11 states on the phone and 2 on the laptop, piano on and off, then looked at.
+    `baseline-ui` and `make-interfaces-feel-better` applied: concentric corners (card 16 = picture 6 + padding 10),
+    rows 48 high or more, tabular numerals in the range caption.
 - **Canvas Version 84: the hands can be hidden; labels in every view; the chord name reads as buttons.** Owner: "I
   want to be able to hide the hands from the 3d piano. make proper settings. and I dont like the labels settings and
   that they are only available in 2d and refactor them also properly how do we need them and are the options
@@ -824,3 +841,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: design A chosen, B removed; the bar button reads Voicing; MakeHuman hand with a better skin chosen (v81).
 - 2026-11-09: the bar symmetric with labelled side buttons, a fade under it; layout check and a look before publishing (v82).
 - 2026-11-09: View 3D with hands · 3D keys · 2D keys · Off; labels Note names · Degrees · None in every view; the name as pill buttons (Version 84).
+- 2026-11-09: Piano switch, View cards 3D piano · 2D keys with Hands on the keys inside 3D, full-width Range and Labels (Version 85).
