@@ -7,8 +7,8 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 - **v63 (canvas Version 63): one quiet Play, centred; the chord is chosen from its name.** Owner: "the play button is
   too appealing and I would like it to be centered , but dotn know what to make with the chords button".
-  - The bar is one glass capsule centred at the bottom, **▶ Play chord | ⌄**, in the same plain glass as the header's
-    buttons (no honey tint), 216 wide; its ⌄ menu (Block chord · Arpeggio) opens centred above it.
+  - The bar is one capsule centred at the bottom, **▶ Play chord | ⌄**, 216 wide, in its honey tint (v64: owner "no
+    revert the play button color"; v63's plain glass is undone); its ⌄ menu (Block chord · Arpeggio) opens centred above it.
   - The chords button leaves the bar (recommended, owner unsure): the big name already opens the Chord sheet (v51),
     where the eye is, so the bar's copy only pushed Play off centre. On the laptop the Chord popover opens under the
     name. This undoes v28's doubling ("the chords choosing in both places"); if the bar should keep a way to the
@@ -501,3 +501,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: each bass note shows its chord on a small staff; the slash takes the bass note's colour (v61).
 - 2026-11-09: staffs and label removed; Hand and Fingering into the Chord sheet; keyboard to the header, gear gone (v62).
 - 2026-11-09: Play alone, centred, plain glass; the chord chosen from its name only (v63).
+- 2026-11-09: Play's honey tint restored, still centred (v64).

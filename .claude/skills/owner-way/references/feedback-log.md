@@ -337,8 +337,8 @@ owner's, typos fixed.
   v62: the small staffs and the "Bass note" header rejected ("I dont like … remove them"); the plain row stays.
 - **Chords' settings live where they act (R42, v62):** Hand and Fingering in the Chord sheet after Voicing; the
   keyboard button at the header's right; no gear on Chords.
-- **A primary action need not shout (R42, v63):** "the play button is too appealing … centered". Play is one
-  plain glass capsule, centred; no tinted fill. The chord is chosen from its name, not a second bar button.
+- **Play centred, alone, honey kept (R42, v63–v64):** "the play button is too appealing … centered", then "no
+  revert the play button color": Play is one centred capsule in its honey tint; the chord is chosen from its name.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple
