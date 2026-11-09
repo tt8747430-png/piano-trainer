@@ -108,7 +108,7 @@ function sound(ms, arp, dir) {
 }
 // the chord as it sounds: [{m, deg, name, L, d, hand}]
 function voice(root, q, inv, voicing, hands) {
-  if (hands === 'Split' && (TWO[voicing] || !upperOf(root, q))) hands = 'Both';
+  if (hands === 'Split' && TWO[voicing]) hands = 'Both';
   const base = 60 + root; // every root in the octave from middle C, as a chord chart shows it
   const s = (deg) => (q.t.find((x) => x[1] === deg) || [null])[0];
   const third = s(3) ?? s(4) ?? s(2); const dom = isDom7(q);
@@ -143,7 +143,7 @@ function voice(root, q, inv, voicing, hands) {
   // Bass + upper chord: the root alone in the left hand and the rest in the right, as Gorshkov sets ninth chords, "с
   // басом в левой и в правой — септаккорд, оставшиеся 4 ноты" (courses/gorshkov/02-ninth-chords/theory.pdf, p. 4):
   // Gm9 = G | B♭maj7, Cmaj7 = C | Em.
-  if (hands === 'Split') { let up = q.t.filter((x) => x[1] !== 1).map(([semi, deg]) => ({ m: 60 + root + semi, semi, deg, hand: 'R' })).sort((x, y) => x.m - y.m);
+  if (hands === 'Split') { const whole = !upperOf(root, q); let up = q.t.filter((x) => whole || x[1] !== 1).map(([semi, deg]) => ({ m: 60 + root + semi, semi, deg, hand: 'R' })).sort((x, y) => x.m - y.m);
     for (let i = 0; i < Math.min(inv, up.length - 1); i++) up[i].m += 12; up.sort((x, y) => x.m - y.m);
     while (up[0].m - 12 >= 57) up.forEach((x) => { x.m -= 12; });
     ns = [{ m: 48 + root, semi: 0, deg: 1, hand: 'L' }].concat(up); }
@@ -203,7 +203,7 @@ const root = rootPc(rLet, rAcc), RN = LET[rLet] + ACC[String(rAcc)], qi = st.q ?
 const voicing = VOICINGS.find((v) => v.v === (st.voicing || 'Close')).ok(q) ? 'Close' : (st.voicing || 'Close');
 const invN = TWO[voicing] ? 1 : Math.min(4, voicing === 'Shell' ? 3 : (voicing.startsWith('Rootless') ? 4 : q.t.length));
 const inv = Math.min(st.inv ?? 0, invN - 1);
-const upper = (() => { const u = upperOf(root, q); RL = rLet; return u; })(), canSplit = !!upper && !TWO[st.voicing || 'Close'];
+const upper = (() => { const u = upperOf(root, q); RL = rLet; return u; })(), canSplit = !TWO[st.voicing || 'Close'];
 const bassOn = false, hands = st.hand === 'Split' && !canSplit ? 'Both' : (st.hand || 'Right'), fingOn = true, kbShow = st.kbShow ?? true, keys = st.keys || 'Chord';
 const playAs = 'Block', arp = false, dir = 'Up', keyLabel = st.keyLabel || 'Names', names = keyLabel === 'Names', fingKeys = false, treble = false, auto = true;
 const ns = voice(root, q, inv, voicing, hands);
@@ -274,6 +274,15 @@ const nearest = (c) => { const prev = symOf(seq[cur]).v.map((x) => x.m), qq = QS
   const nI = TWO[vv] ? 1 : Math.min(4, vv === 'Shell' ? 3 : (vv.startsWith('Rootless') ? 4 : qq.t.length)); let best = 0, bd = 1e9;
   for (let i = 0; i < nI; i++) { RL = c.rl; const v = voice(rootPc(c.rl, c.ra), qq, i, vv, c.hand); const d = v.reduce((t, x) => t + Math.min(...prev.map((p) => Math.abs(p - x.m))), 0); if (d < bd) { bd = d; best = i; } }
   RL = rLet; return best; };
+// transpose every chord on the staff at once, to a key or a half step; spelled as the new key spells (R42 v73)
+const SERIFF = "'Iowan Old Style', 'Palatino', Georgia, serif";
+const KEYSP = minorKey ? ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'B♭', 'B'] : ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
+const transposeTo = (pc2) => { const semi = ((pc2 - tpc) % 12 + 12) % 12; if (!semi) return; const dl = (LET.indexOf(KEYSP[pc2][0]) - tonic.rl + 7) % 7;
+  const s2 = seq.map((c) => { const pc = (rootPc(c.rl, c.ra) + semi) % 12; let l = (c.rl + dl) % 7, a = ((pc - NATPC[l] + 18) % 12) - 6;
+    if (Math.abs(a) > 1) { const o = [0, 1, 2, 3, 4, 5, 6].map((L) => ({ L, a: ((pc - NATPC[L] + 18) % 12) - 6 })).filter((o) => Math.abs(o.a) <= 1).sort((x, y) => Math.abs(x.a) - Math.abs(y.a))[0]; l = o.L; a = o.a; }
+    return Object.assign({}, c, { rl: l, ra: a }); });
+  set(Object.assign({ seq: s2, toast: null }, loadChord(s2[cur]))); soundOf(s2[cur]); };
+const keyTiles = KEYSP.map((n, pc) => ({ s: n + (minorKey ? 'm' : ''), on: pc === tpc, bg: pc === tpc ? '#F6E3BC' : '#FEFDFB', ring: pc === tpc ? 'none' : '0 0 0 1px ' + C.line, fw: pc === tpc ? 800 : 600, aria: 'Transpose to ' + n + (minorKey ? ' minor' : ' major'), pick: () => transposeTo(pc) }));
 const addNext = (c) => { const s2 = seq.concat([c]); set(Object.assign({ seq: s2, cur: s2.length - 1, sheet: null, toast: null }, loadChord(c))); soundOf(c); };
 const nextList = order.slice(0, 6).map((d, k) => { const pc = (tpc + STEPS[d]) % 12, l = (tonic.rl + d) % 7, a = ((pc - NATPC[l] + 18) % 12) - 6, q2 = QS.findIndex((x) => x.k === KQ[d]);
   const c = { rl: l, ra: a, q: q2, inv: 0, voicing: snap.voicing, hand: hands }; c.inv = nearest(c);
@@ -352,14 +361,12 @@ return {
     const sole = on && hands !== 'Both' && hands !== 'Split';
     const pick = () => { if (sole) { play(false); return; } if (on) { change({ hand: k === 'L' ? 'Right' : 'Left' }); return; } change({ hand: st.bassOnly && canSplit ? 'Split' : 'Both' }); };
     const isSplit = hands === 'Split';
+    const plays = !on ? 'Not playing' : (isSplit ? (k === 'L' ? RN : (upper || sym)) : sym + slash);
+    const lhOpts = k === 'L' && on && hands !== 'Left' && canSplit ? [['Chord', !isSplit], ['Root', isSplit]].map(([l, o]) => ({ l, on: o, bg: o ? '#FEFDFB' : 'transparent', sh: o ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: o ? 700 : 500, pick: () => change({ hand: l === 'Root' ? 'Split' : 'Both', bassOnly: l === 'Root' }) })) : [];
     return { t: k === 'L' ? 'Left hand' : 'Right hand', on, fs, pick, op: on ? 1 : 0.55, pl: k === 'R' ? '22px' : '0px', palm: on ? '#F3ECE1' : '#FEFDFB', pr: '0 0 0 1.5px ' + C.line,
-      lw: on ? 700 : 500, lc: on ? C.ink : C.soft, canBass: k === 'L' && canSplit, bBg: isSplit ? '#F6E3BC' : 'transparent', bRing: isSplit ? 'none' : '0 0 0 1.5px ' + C.line, bassT: isSplit ? '✓ Bass only' : 'Bass only', bassOn: isSplit,
+      lw: on ? 700 : 500, lc: on ? C.ink : C.soft, plays, pc: on ? C.ink : C.soft, pf: on ? SERIFF : 'inherit', ps: on ? '18px' : '14px', pw: on ? 700 : 500, lhOpts, hasOpts: lhOpts.length > 0, noOpts: !lhOpts.length, canBass: false, bBg: isSplit ? '#F6E3BC' : 'transparent', bRing: isSplit ? 'none' : '0 0 0 1.5px ' + C.line, bassT: isSplit ? '✓ Bass only' : 'Bass only', bassOn: isSplit,
       bassPick: () => (isSplit ? change({ hand: 'Both', bassOnly: false }) : change({ hand: 'Split', bassOnly: true })),
       aria: (k === 'L' ? 'Left hand' : 'Right hand') + (on ? ', plays ' + fs.filter((g) => g.n).map((g) => g.n + ' with finger ' + g.f).join(', ') : ', not playing; tap to add it') }; }),
-  handN: canSplit ? 4 : 3,
-  handBar: [['Left', 'Left hand'], ['Right', 'Right hand'], ['Both', 'Both hands']].concat(canSplit ? [['Split', 'Split']] : []).map(([v, l]) => { const on = v === hands;
-    return { l, on, isL: v === 'Left', isR: v === 'Right', isB: v === 'Both', isS: v === 'Split', sym: RN + ' | ' + upper, bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: on ? 700 : 500,
-      aria: v === 'Split' ? RN + ' in the left hand, ' + upper + ' in the right' : l, pick: () => change({ hand: v }) }; }),
   handCards: [['Left', 'L', hands !== 'Right'], ['Right', 'R', hands !== 'Left']].map(([h, k, on]) => {
     const list = ns.filter((x) => x.hand === k).filter((x, i, a) => a.findIndex((y) => y.m === x.m) === i).sort((a, b) => a.m - b.m);
     const notes = on ? list.map((x) => ({ n: x.name, f: String(fm[x.m] || ''), c: ROLE[x.deg] || C.accent })) : [];
@@ -377,7 +384,7 @@ return {
   arpOn: arp, arpBg: arp ? '#F6E3BC' : 'transparent', arpInk: arp ? '#7A5418' : C.ink, openSound: () => set({ sheet: 'sound' }), isSound: sh === 'sound',
   playing: !!st.playing, notPlaying: !st.playing, playLabel: st.playing ? 'Stop' : 'Play', togglePlay: () => st.playing ? set({ playing: false }) : play(false),
   playing: !!st.playing, notPlaying: !st.playing, playWord: scope === 'All' ? 'Play all' : (playMode === 'Block' ? 'Play chord' : 'Arpeggiate'),
-  addChord, undoRemove, playAll, nextList, keyName, openNext: () => set({ sheet: 'next' }), isNext: sh === 'next', hasSeq: seq.length > 1, canAdd: seq.length < 8, seqCount: seq.length, toastOn: !!st.toast, toastT: st.toast ? st.toast.t : '',
+  addChord, undoRemove, playAll, nextList, keyTiles, tKey: KEYSP[tpc] + (minorKey ? ' minor' : ' major'), openTr: () => set({ sheet: 'tr' }), isTr: sh === 'tr', trDown: () => transposeTo((tpc + 11) % 12), trUp: () => transposeTo((tpc + 1) % 12), keyName, openNext: () => set({ sheet: 'next' }), isNext: sh === 'next', hasSeq: seq.length > 1, canAdd: seq.length < 8, seqCount: seq.length, toastOn: !!st.toast, toastT: st.toast ? st.toast.t : '',
   playMain: () => st.playing ? stopAll() : (scope === 'All' ? playSeq() : play(playMode !== 'Block', playMode === 'UpDown' ? 'Up and down' : 'Up')),
   scopeList: [['All', 'All ' + seq.length + ' chords, in order'], ['One', 'Only ' + sym + slash]].map(([v, l]) => ({ l, on: v === scope, mark: v === scope ? '✓' : '', pick: () => { set({ scope: v, sheet: null }); if (v === 'All') playSeq(); else play(playMode !== 'Block', playMode === 'UpDown' ? 'Up and down' : 'Up'); } })), openPlayAs: () => set({ sheet: st.sheet === 'playAs' ? null : 'playAs' }), isPlayAs: sh === 'playAs',
   playAsList: [['Block', 'Block chord'], ['Arpeggio', 'Arpeggio'], ['UpDown', 'Arpeggio up and down']].map(([v, l]) => ({ l, on: v === playMode, mark: v === playMode ? '✓' : '', pick: () => { set({ playMode: v, sheet: null }); if (scope !== 'All') play(v !== 'Block', v === 'UpDown' ? 'Up and down' : 'Up'); } })),
@@ -428,7 +435,7 @@ def TITLEBLOCK(size):
 
 def STAFFSVG(w):
     return f'''<div class="nos" style="overflow-x: auto; margin: 0 -4px"><div style="position: relative; width: 100%; min-width: {{{{sv.minw}}}}; max-width: {{{{sv.maxw}}}}px; margin: 0 auto; padding-top: 40px">
-<div style="position: absolute; left: 0; right: 0; top: 0; height: 36px"><sc-for list="{{{{sv.cols}}}}" as="k" hint-placeholder-count="1"><div style="position: absolute; top: 0; left: {{{{k.left}}}}; transform: translateX(-50%); height: 34px; display: flex; align-items: center; border-radius: 17px; background: {{{{k.bg}}}}"><button type="button" aria-label="{{{{k.aria}}}}" onClick="{{{{k.pick}}}}" style="height: 34px; padding: 0 10px; border: 0; background: transparent; color: {{{{k.tc}}}}; font: inherit; font-size: 15px; font-weight: {{{{k.fw}}}}; white-space: nowrap">{{{{k.s}}}}</button><sc-if value="{{{{k.canRemove}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" aria-label="Remove {{{{k.s}}}}" onClick="{{{{k.remove}}}}" style="width: 30px; height: 34px; margin-left: -6px; padding: 0; border: 0; background: transparent; color: #7A5418; display: flex; align-items: center; justify-content: center">{XSM}</button></sc-if></div></sc-for><sc-if value="{{{{canAdd}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" aria-label="Add a chord to the staff" onClick="{{{{openNext}}}}" style="position: absolute; right: 2px; top: 0; width: 34px; height: 34px; padding: 0; border-radius: 17px; border: 0; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLUSI}</button></sc-if></div>
+<div style="position: absolute; left: 0; right: 0; top: 0; height: 36px"><sc-for list="{{{{sv.cols}}}}" as="k" hint-placeholder-count="1"><div style="position: absolute; top: 0; left: {{{{k.left}}}}; transform: translateX(-50%); height: 34px; display: flex; align-items: center; border-radius: 17px; background: {{{{k.bg}}}}"><button type="button" aria-label="{{{{k.aria}}}}" onClick="{{{{k.pick}}}}" style="height: 34px; padding: 0 10px; border: 0; background: transparent; color: {{{{k.tc}}}}; font: inherit; font-size: 15px; font-weight: {{{{k.fw}}}}; white-space: nowrap">{{{{k.s}}}}</button><sc-if value="{{{{k.canRemove}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" aria-label="Remove {{{{k.s}}}}" onClick="{{{{k.remove}}}}" style="width: 30px; height: 34px; margin-left: -6px; padding: 0; border: 0; background: transparent; color: #7A5418; display: flex; align-items: center; justify-content: center">{XSM}</button></sc-if></div></sc-for></div>
 <svg viewBox="{{{{sv.vb}}}}" style="display: block; width: 100%; height: auto" role="img" aria-label="The chords on the staff">
 <sc-for list="{{{{sv.hl}}}}" as="h" hint-placeholder-count="0"><rect x="{{{{h.x}}}}" y="{{{{h.y}}}}" width="{{{{h.w}}}}" height="{{{{h.h}}}}" rx="10" fill="{{{{h.f}}}}" opacity="{{{{h.o}}}}"></rect></sc-for>
 <path d="{{{{sv.path}}}}" stroke="{INK}" stroke-width="0.9"></path>
@@ -440,7 +447,7 @@ def STAFFSVG(w):
 </svg></div></div>'''
 
 def VIEWBODY(staff_w, inv_cols, mini_w, side=False):
-    inner = (f'<div style="display: flex; align-items: center; gap: 24px"><div style="flex: 1; min-width: 0">{STAFFSVG(staff_w)}</div>{HANDPICS}</div>' if side else f'{STAFFSVG(staff_w)}{HANDPICS}')
+    inner = (f'<div style="display: flex; align-items: center; gap: 24px"><div style="flex: 1; min-width: 0">{STAFFHEAD}{STAFFSVG(staff_w)}</div>{HANDPICS}</div>' if side else f'{STAFFHEAD}{STAFFSVG(staff_w)}{HANDPICS}')
     return f'''<sc-if value="{{{{isStaff}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: none; border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; padding: 10px 10px 14px; display: flex; flex-direction: column; gap: 10px">{inner}</div></sc-if>
 <sc-if value="{{{{isInv}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: none; display: grid; grid-template-columns: repeat({inv_cols}, minmax(0, 1fr)); gap: 10px"><sc-for list="{{{{invCards}}}}" as="c" hint-placeholder-count="4"><button type="button" onClick="{{{{c.pick}}}}" style="min-width: 0; border: 0; border-radius: 16px; background: #FEFDFB; box-shadow: {{{{c.ring}}}}; padding: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; color: {INK}; font: inherit; text-align: left"><span style="font-size: 16px; font-weight: 700">{{{{c.t}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{c.s}}}}</span>{MINIKEYS(mini_w)}</button></sc-for></div></sc-if>
 <sc-if value="{{{{isFing}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: none; display: flex; flex-direction: column; gap: 10px"><sc-for list="{{{{fing}}}}" as="h" hint-placeholder-count="2"><div style="border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px"><span style="font-size: 15px; font-weight: 700">{{{{h.h}}}}</span><div style="display: flex; gap: 8px"><sc-for list="{{{{h.cells}}}}" as="x" hint-placeholder-count="3"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{x.f}}}}</span><span style="width: 100%; height: 6px; border-radius: 3px; background: {{{{x.c}}}}"></span><span style="font-size: 14px; color: {SOFT}">{{{{x.n}}}}</span></div></sc-for></div></div></sc-for></div></sc-if>
@@ -452,7 +459,8 @@ HANDL = HANDI.replace('<svg ', '<svg style="transform: scaleX(-1)" ', 1)
 HANDPICS = ('<div role="group" aria-label="Hands" style="display: flex; justify-content: center; align-items: flex-start; gap: 44px; padding-top: 6px"><sc-for list="{{handPics}}" as="h" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; align-items: center; gap: 8px">'
   '<button type="button" aria-pressed="{{h.on}}" aria-label="{{h.aria}}" onClick="{{h.pick}}" style="position: relative; width: 132px; height: 112px; border: 0; padding: 0; background: transparent; opacity: {{h.op}}"><span style="position: absolute; left: {{h.pl}}; top: 60px; width: 110px; height: 50px; border-radius: 14px 14px 30px 30px; background: {{h.palm}}; box-shadow: {{h.pr}}"></span>'
   '<sc-for list="{{h.fs}}" as="g" hint-placeholder-count="5"><span style="position: absolute; left: {{g.left}}; top: {{g.top}}; width: 22px; height: {{g.h}}; box-sizing: border-box; border-radius: 11px; background: {{g.bg}}; box-shadow: {{g.ring}}; transform: {{g.tf}}; transform-origin: 50% 100%; padding: 5px 0 6px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; color: ' + INK + '"><span style="font-size: 11px; font-weight: 800; white-space: nowrap">{{g.n}}</span><span style="font-size: 11px; font-style: italic; font-weight: {{g.dw}}; color: {{g.dc}}">{{g.f}}</span></span></sc-for></button>'
-  '<span style="font-size: 14px; font-weight: {{h.lw}}; color: {{h.lc}}">{{h.t}}</span>'
+  '<span style="display: flex; flex-direction: column; align-items: center; gap: 1px"><span style="font-size: 13px; font-weight: 500; color: ' + SOFT + '">{{h.t}}</span><span style="font-family: {{h.pf}}; font-size: {{h.ps}}; font-weight: {{h.pw}}; color: {{h.pc}}; white-space: nowrap">{{h.plays}}</span></span>'
+  '<sc-if value="{{h.hasOpts}}" hint-placeholder-val="{{false}}"><div role="radiogroup" aria-label="The left hand plays" style="display: flex; gap: 2px; padding: 3px; border-radius: 17px; background: ' + FILL + '"><sc-for list="{{h.lhOpts}}" as="o" hint-placeholder-count="2"><button type="button" role="radio" aria-checked="{{o.on}}" onClick="{{o.pick}}" style="height: 30px; padding: 0 14px; border: 0; border-radius: 15px; background: {{o.bg}}; box-shadow: {{o.sh}}; color: ' + INK + '; font: inherit; font-size: 13px; font-weight: {{o.fw}}">{{o.l}}</button></sc-for></div></sc-if>'
   '<sc-if value="{{h.canBass}}" hint-placeholder-val="{{false}}"><button type="button" aria-pressed="{{h.bassOn}}" onClick="{{h.bassPick}}" style="height: 34px; padding: 0 14px; border: 0; border-radius: 17px; background: {{h.bBg}}; box-shadow: {{h.bRing}}; color: ' + INK + '; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap">{{h.bassT}}</button></sc-if></div></sc-for></div>')
 # the hands, a toolbar under the staff: each a symbol over its name; Split shows the two chords it makes (R42 v71)
 HANDROW = ''
@@ -468,6 +476,7 @@ HANDSI = '<sc-if value="{{hB}}" hint-placeholder-val="{{true}}">' + HANDS2 + '</
 # shown is behind the gear. One capsule 68 (radius 34), two buttons 56 inside 6 (radius 28), side by side.
 XSM = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>'
 PLUSI = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>'
+STAFFHEAD = ('<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><button type="button" aria-label="Key {{tKey}}, transpose" onClick="{{openTr}}" style="height: 36px; padding: 0 12px 0 10px; border-radius: 18px; border: 0; background: ' + FILL + '; color: ' + INK + '; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; white-space: nowrap"><span aria-hidden="true" style="font-family: Noto Music, serif; font-size: 15px">♯♭</span>{{tKey}}<span style="color: ' + SOFT + '; font-weight: 500">· Transpose</span></button><sc-if value="{{canAdd}}" hint-placeholder-val="{{true}}"><button type="button" aria-label="Add a chord to the staff" onClick="{{openNext}}" style="height: 36px; padding: 0 14px 0 10px; border-radius: 18px; border: 0; background: ' + FILL + '; color: ' + INK + '; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px; white-space: nowrap">' + PLUSI + 'Chord</button></sc-if></div>')
 STOPI = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>'
 PLAYI = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor"></path></svg>'
 def ACT(label, act, on, off, icon, primary):
@@ -505,6 +514,8 @@ B_LIST = (BACKHEAD('Chord', 'backChord') + f'<sc-for list="{{{{groups}}}}" as="g
 B_VOICING = (BACKHEAD('Voicing', 'backChord') + f'<div style="border-radius: 12px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{vlist}}}}" as="v" hint-placeholder-count="6"><button type="button" aria-pressed="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="width: 100%; min-height: 56px; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: transparent; padding: 6px 14px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left; opacity: {{{{v.op}}}}"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{v.v}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{v.f}}}}</span></span><span style="font-size: 18px; font-weight: 700; color: #7A5418">{{{{v.mark}}}}</span></button></sc-for></div>')
 B_NEXT = (CAPS('In {{keyName}}') + '<div role="group" aria-label="Next chord" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px"><sc-for list="{{nextList}}" as="o" hint-placeholder-count="6"><button type="button" aria-label="{{o.aria}}" onClick="{{o.pick}}" style="height: 72px; border: 0; border-radius: 14px; background: {{o.bg}}; box-shadow: {{o.ring}}; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: ' + INK + '; font: inherit"><span style="font-family: ' + SERIF + '; font-size: 22px; font-weight: 700; white-space: nowrap">{{o.s}}</span><span style="font-size: 14px; color: ' + SOFT + '">{{o.r}}</span></button></sc-for></div>'
           + GROUP(('link', 'Any chord', '', 'addChord'), bg="#FEFDFB"))
+B_TR = ('<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px"><button type="button" onClick="{{trDown}}" style="height: 56px; border: 0; border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px ' + LINE + '; color: ' + INK + '; font: inherit; font-size: 16px; font-weight: 600">− Half step</button><button type="button" onClick="{{trUp}}" style="height: 56px; border: 0; border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px ' + LINE + '; color: ' + INK + '; font: inherit; font-size: 16px; font-weight: 600">+ Half step</button></div>'
+  + CAPS('To the key of') + '<div role="radiogroup" aria-label="Key" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{keyTiles}}" as="o" hint-placeholder-count="12"><button type="button" role="radio" aria-checked="{{o.on}}" aria-label="{{o.aria}}" onClick="{{o.pick}}" style="height: 52px; min-width: 0; border: 0; border-radius: 12px; background: {{o.bg}}; box-shadow: {{o.ring}}; color: ' + INK + '; font-family: ' + SERIF + '; font-size: 18px; font-weight: {{o.fw}}; white-space: nowrap">{{o.s}}</button></sc-for></div>')
 B_HANDS = GROUP(('toggle', 'Right hand', 'rhOn', 'toggleRH'), ('toggle', 'Left hand', 'lhOn', 'toggleLH'), bg="#FEFDFB")
 KBTILES = ('<div role="group" aria-label="Keyboard" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px"><sc-for list="{{kbTiles}}" as="o" hint-placeholder-count="2"><button type="button" aria-pressed="{{o.on}}" onClick="{{o.pick}}" style="height: 84px; padding: 0; border-radius: 14px; border: 2px solid {{o.line}}; background: {{o.bg}}; box-shadow: 0 0 0 1px ' + LINE + ' ; color: ' + INK + '; font: inherit; font-size: 14px; font-weight: 600; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px">'
     '<svg width="48" height="28" viewBox="0 0 48 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">'
@@ -518,7 +529,7 @@ TOAST = f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><d
 def SHEETS_PHONE(player):
     out = ''
     out += TOAST + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: 96px')
-    for cond, title, body in (('isChord', 'Chord', B_CHORD), ('isKeys', 'Keyboard', B_KEYS), ('isNext', 'Next chord', B_NEXT)):
+    for cond, title, body in (('isChord', 'Chord', B_CHORD), ('isKeys', 'Keyboard', B_KEYS), ('isNext', 'Next chord', B_NEXT), ('isTr', 'Transpose', B_TR)):
         out += BSHEET(cond, title, body)
     for cond, body in (('isList', B_LIST), ('isVoicing', B_VOICING)):
         out += f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" class="nos" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 12px"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>{body}</section></sc-if>'
@@ -527,7 +538,7 @@ def SHEETS_PHONE(player):
 def POPS_LAPTOP(player):
     dockpos = 'left: calc(50% - 200px); top: 424px'
     out = TOAST + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: 92px')
-    for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isKeys', 'Keyboard', B_KEYS, 'right: 24px; top: 76px'), ('isNext', 'Next chord', B_NEXT, 'left: calc(50% + 420px); top: 330px')):
+    for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isKeys', 'Keyboard', B_KEYS, 'right: 24px; top: 76px'), ('isNext', 'Next chord', B_NEXT, 'left: calc(50% + 420px); top: 330px'), ('isTr', 'Transpose', B_TR, 'left: calc(50% - 420px); top: 330px')):
         out += POPOVER(cond, title, body, pos, 400)
     for cond, body, pos in (('isList', B_LIST, dockpos), ('isVoicing', B_VOICING, dockpos)):
         out += f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" class="nos" style="position: absolute; {pos}; z-index: 61; width: 400px; max-height: 700px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 12px 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">{body}</div></sc-if>'

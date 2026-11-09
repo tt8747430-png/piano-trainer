@@ -107,3 +107,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v70 (2026-11-09):** Chords: Left hand | Right hand cards with notes and fingers; fingering always shown.
 **R42 v71 (2026-11-09):** Chords: hands toolbar + Split (Gorshkov), full chords per hand, checklist, Play all.
 **R42 v72 (2026-11-09):** Chords: drawn hands with lit fingers, Bass only; dock centred as one group.
+**R42 v73 (2026-11-09):** Chords: hands name their chord, left hand Chord | Root, Transpose (half step, 12 keys).

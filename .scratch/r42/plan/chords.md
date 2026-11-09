@@ -5,6 +5,20 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v73 (canvas Version 73): each hand names the chord it plays; the left hand plays Chord or Root; Transpose.**
+  Owner: "I like it better, but it Is still not very good. what bass only means and such things, improve it, research
+  more. and I want to be able to transpose chords easier". Replaces v72's "Bass only".
+  - **Under each drawn hand:** its name, then the chord it plays, as a lead sheet writes it: Left hand **G**, Right
+    hand **B♭maj7**; off reads "Not playing". The learner reads what each hand does instead of decoding a setting.
+  - **Left hand: Chord | Root** (when both hands play): Chord plays the whole chord in each hand; Root leaves the left
+    hand the root alone and gives the right hand the rest, named: Gm9 = G + B♭maj7, Cmaj7 = C + Em, B♭7 = B♭ + D°;
+    a triad stays whole in the right hand (C + C). "Root" is the pianist's word ("left hand plays the root"); Gorshkov's
+    "бас в левой, септаккорд в правой" (02-ninth-chords/theory.pdf p. 4) and his two-triad building (pp. 2–3) are the
+    source.
+  - **Transpose:** the staff card's header row: **C major · Transpose** on the left, **+ Chord** on the right (moved
+    out of the names row, where it covered the first name). Transpose opens a sheet: **− Half step · + Half step**,
+    then **To the key of**, twelve keys (C D♭ D E♭ E F F♯ G A♭ A B♭ B; minor keys C♯ G♯ for D♭ A♭). Every chord on
+    the staff moves at once, qualities and inversions kept, spelled as the new key spells (Cmaj7 G7 → Dmaj7 A7).
 - **v72 (canvas Version 72): the hands drawn, each finger lit with its note; the dock centred as one group.** Owner:
   "why this is looking so not centered. and I dont like the hand settings. make proper creative controls, invent
   something new and improve it." Replaces v71's hands toolbar; v71's hand rules (whole chord per hand, Both in each
@@ -646,3 +660,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: hand cards over the staff, notes and fingers in each; fingering always shown (v70).
 - 2026-11-09: hands toolbar under the staff with Split (Gorshkov), full chord in each hand, checklist, Play all (v71).
 - 2026-11-09: drawn hands with lit fingers and Bass only; the chord and Play centred as one group (v72).
+- 2026-11-09: hands name their chords, left hand Chord | Root, Transpose all by key or half step (v73).
