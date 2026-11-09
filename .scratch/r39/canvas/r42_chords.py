@@ -240,14 +240,21 @@ const cur0 = st.cur ?? 0;
 const seq = (st.seq || [snap]).map((c, i) => (i === cur0 ? snap : c));
 const cur = Math.min(cur0, seq.length - 1);
 const symOf = (c) => { RL = c.rl; const rt = rootPc(c.rl, c.ra), qq = QS[c.q]; const vv = VOICINGS.find((v) => v.v === c.voicing).ok(qq) ? 'Close' : c.voicing; const nI = TWO[vv] ? 1 : Math.min(4, vv === 'Shell' ? 3 : (vv.startsWith('Rootless') ? 4 : qq.t.length)); const iv = Math.min(c.inv, nI - 1); const v = voice(rt, qq, iv, vv, c.hand).map((x) => Object.assign(x, { m: x.m + 12 * (c.oct || 0) })); const bn = iv > 0 && qq.t[iv] ? spell(rt, ((qq.t[iv][0] % 12) + 12) % 12, qq.t[iv][1]).name : ''; const out = { v, iv, vv, s: LET[c.rl] + ACC[String(c.ra)] + qq.k + (bn ? '/' + bn : '') }; RL = rLet; return out; };
-const SLOT = 78, X0 = 64, SW = Math.max(250, X0 + seq.length * SLOT + 48);
+const SLOT = 78, X0 = 64, SW = seq.length === 1 ? 206 : Math.max(250, X0 + seq.length * SLOT + 48); // one chord is drawn larger: the staff is the page's second picture
 const sv = (() => { const all = { notes: [], ledg: [], digits: [], cols: [] }, per = []; let vt = 4, vbot = 168;
-  seq.forEach((c, i) => { const o = symOf(c); const cx = seq.length === 1 ? 140 : X0 + SLOT * (i + 0.5);
+  seq.forEach((c, i) => { const o = symOf(c); const cx = seq.length === 1 ? 124 : X0 + SLOT * (i + 0.5);
     const R1 = o.v.filter((x) => x.hand === 'R'), L1 = o.v.filter((x) => x.hand === 'L'); const f1 = {};
     fingers(R1, 'R', o.iv, o.vv === 'Close').forEach((f, k) => { f1[R1[k].m] = f; }); fingers(L1, 'L', o.iv, o.vv === 'Close').forEach((f, k) => { f1[L1[k].m] = f; });
     const one = staff(o.v, treble, SW, fingOn && i === cur ? f1 : {}, cx, SW); per.push(one.notes); all.notes.push(...one.notes); all.ledg.push(...one.ledg); all.digits.push(...one.digits);
     vt = Math.min(vt, one.vt); vbot = Math.max(vbot, one.vbot);
     const on = i === cur; all.cols.push({ s: o.s, on, many: seq.length > 1, x: cx, left: (cx / SW * 100) + '%', fw: on ? 700 : 500, tc: on ? C.ink : C.soft, bg: on && seq.length > 1 ? '#F6E3BC' : 'transparent', aria: o.s + (on ? ', shown above' : ', show it'), pick: () => pickChord(i), canRemove: on && seq.length > 1, remove: () => removeChord() }); });
+  // only the staves in use are drawn (R42, canvas 87): a right-hand chord needs the treble staff alone, so the staff
+  // fits the first screen; both staves come back as soon as a left hand or a low note needs them
+  const hasT = all.notes.some((n) => n.T), hasB = all.notes.some((n) => !n.T), ysN = all.notes.map((n) => n.y).concat(all.digits.map((d) => d.y - 6));
+  if (!hasB) vbot = Math.max(84, Math.max(...ysN) + 14); if (!hasT) vt = Math.min(96, Math.min(...ysN) - 14);
+  // the Labels setting also names the current chord's notes on the staff, left of each notehead
+  const labs = keyLabel === 'None' || seq.length > 1 ? [] : (per[cur] || []).map((n) => { const x = ns.find((y) => y.m === n.m); if (!x) return null; const acc = n.a1 || n.a2 || n.a3 || n.a4;
+    return { t: names ? x.name : degOf(x), left: ((n.x - (acc ? 30 : 15)) / SW * 100).toFixed(2) + '%', top: ((n.y - vt) / (vbot - vt) * 100).toFixed(2) + '%', c: C.ink }; }).filter(Boolean);
   const hl = seq.length > 1 ? [{ x: X0 + SLOT * cur + 6, w: SLOT - 12, y: vt + 2, h: vbot - vt - 4, f: '#F6E3BC', o: 0.55 }] : [];
   if (st.playing === 'all' && st.sounding != null && st.sounding !== cur) hl.push({ x: X0 + SLOT * st.sounding + 6, w: SLOT - 12, y: vt + 2, h: vbot - vt - 4, f: '#EDC684', o: 0.5 });
   if (st.playing === 'all' && st.sounding === cur) hl[0] = Object.assign({}, hl[0], { f: '#EDC684', o: 0.7 });
@@ -260,8 +267,8 @@ const sv = (() => { const all = { notes: [], ledg: [], digits: [], cols: [] }, p
       if (same) { held += 'M' + (same.x + 10) + ' ' + (same.y + 3) + 'Q' + ((same.x + n.x) / 2) + ' ' + (same.y + 11) + ' ' + (n.x - 10) + ' ' + (n.y + 3); return; }
       const free = a.filter((p) => !b.some((q) => q.m === p.m)); if (!free.length) return; const from = free.slice().sort((p, q) => Math.abs(p.m - n.m) - Math.abs(q.m - n.m))[0];
       if (Math.abs(from.m - n.m) <= 4) moved += 'M' + (from.x + 11) + ' ' + from.y + 'L' + (n.x - 11) + ' ' + n.y; }); }); }
-  let path = ''; [30, 40, 50, 60, 70, 110, 120, 130, 140, 150].forEach((y) => { path += 'M14 ' + y + 'H' + (SW - 14); });
-  return { held: held || 'M0 0', moved: moved || 'M0 0', vt, vbot, notes: all.notes, ledg: all.ledg, digits: all.digits, cols: all.cols, hl, path, bars: 'M14 30V150M' + (SW - 14) + ' 30V150', vb: '0 ' + vt + ' ' + SW + ' ' + (vbot - vt), maxw: Math.round(SW * (seq.length === 1 ? 1.32 : 1.18)), minw: seq.length > 3 ? (seq.length * 70 + 80) + 'px' : '0' }; })();
+  let path = ''; (hasT ? [30, 40, 50, 60, 70] : []).concat(hasB ? [110, 120, 130, 140, 150] : []).forEach((y) => { path += 'M14 ' + y + 'H' + (SW - 14); });
+  return { held: held || 'M0 0', moved: moved || 'M0 0', vt, vbot, notes: all.notes, ledg: all.ledg, digits: all.digits, cols: all.cols, hl, path, bars: [14, SW - 14].map((x) => 'M' + x + ' ' + (hasT ? 30 : 110) + 'V' + (hasB ? 150 : 70)).join(''), hasT, hasB, labs, vb: '0 ' + vt + ' ' + SW + ' ' + (vbot - vt), maxw: seq.length === 1 ? 340 : Math.round(SW * 1.18), minw: seq.length > 3 ? (seq.length * 70 + 80) + 'px' : '0' }; })();
 const loadChord = (c) => ({ rl: c.rl, ra: c.ra, q: c.q, inv: c.inv, voicing: c.voicing, hand: c.hand, oct: c.oct || 0 });
 const soundOf = (c) => sound(symOf(c).v.map((x) => x.m), false, 'Up');
 const pickChord = (i) => { if (i === cur) { soundOf(seq[i]); return; } set(Object.assign({ seq, cur: i, toast: null }, loadChord(seq[i]))); soundOf(seq[i]); };
@@ -399,6 +406,7 @@ return {
   facts: [{ k: 'Notes', v: ns.filter((x, i, a) => a.findIndex((y) => y.name === x.name) === i).sort((a, b) => ORD.indexOf(a.deg) - ORD.indexOf(b.deg)).map((x) => x.name).join('  ') }]
     .concat(Rn.length ? [{ k: 'Right hand', v: Rn.slice().sort((a, b) => a.m - b.m).map((x) => fm[x.m]).join('  ') }] : [])
     .concat(Ln.length ? [{ k: 'Left hand', v: Ln.slice().sort((a, b) => a.m - b.m).map((x) => fm[x.m]).join('  ') }] : []),
+  handFacts: (Rn.length ? [{ k: 'Right hand', v: Rn.slice().sort((a, b) => a.m - b.m).map((x) => fm[x.m]).join(' ') }] : []).concat(Ln.length ? [{ k: 'Left hand', v: Ln.slice().sort((a, b) => a.m - b.m).map((x) => fm[x.m]).join(' ') }] : []),
   shelfOpen: st.shelf !== false, shelfShut: st.shelf === false, toggleShelf: () => set({ shelf: st.shelf === false }), shelfAria: st.shelf === false ? 'Open the chord shelf' : 'Close the chord shelf',
   symFull: sym + slash,
   handsList: [['Both', 'Both hands'], ['Right', 'Right hand'], ['Left', 'Left hand']].map(([v, l]) => ({ l, on: v === hands, mark: v === hands ? '✓' : '', isB: v === 'Both', isR: v === 'Right', isL: v === 'Left', pick: () => change({ hand: v, sheet: null }) })),
@@ -559,12 +567,12 @@ def STAFFSVG(w):
 <sc-for list="{{{{sv.hl}}}}" as="h" hint-placeholder-count="0"><rect x="{{{{h.x}}}}" y="{{{{h.y}}}}" width="{{{{h.w}}}}" height="{{{{h.h}}}}" rx="10" fill="{{{{h.f}}}}" opacity="{{{{h.o}}}}"></rect></sc-for>
 <path d="{{{{sv.path}}}}" stroke="{INK}" stroke-width="0.9"></path>
 <path d="{{{{sv.bars}}}}" stroke="{INK}" stroke-width="1"></path>
-<text x="18" y="69" font-family="Noto Music" font-size="42" fill="{INK}">𝄞</text><text x="18" y="141" font-family="Noto Music" font-size="34" fill="{INK}">𝄢</text>
+<sc-if value="{{{{sv.hasT}}}}" hint-placeholder-val="{{{{true}}}}"><text x="18" y="69" font-family="Noto Music" font-size="42" fill="{INK}">𝄞</text></sc-if><sc-if value="{{{{sv.hasB}}}}" hint-placeholder-val="{{{{false}}}}"><text x="18" y="141" font-family="Noto Music" font-size="34" fill="{INK}">𝄢</text></sc-if>
 <path d="{{{{sv.moved}}}}" fill="none" stroke="{SOFT}" stroke-width="1" stroke-dasharray="2 2.5" stroke-linecap="round"></path><path d="{{{{sv.held}}}}" fill="none" stroke="{INK}" stroke-width="1.3" stroke-linecap="round"></path>
 <sc-for list="{{{{sv.ledg}}}}" as="l" hint-placeholder-count="1"><path d="M{{{{l.x1}}}} {{{{l.y}}}}H{{{{l.x2}}}}" stroke="{INK}" stroke-width="1.1"></path></sc-for>
 <sc-for list="{{{{sv.notes}}}}" as="n" hint-placeholder-count="4"><ellipse cx="{{{{n.x}}}}" cy="{{{{n.y}}}}" rx="7.2" ry="5" transform="rotate(-18 {{{{n.x}}}} {{{{n.y}}}})" fill="{{{{n.c}}}}" stroke="{INK}" stroke-width="1.6"></ellipse><sc-if value="{{{{n.a1}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">♭</text></sc-if><sc-if value="{{{{n.a2}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">♯</text></sc-if><sc-if value="{{{{n.a3}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">𝄫</text></sc-if><sc-if value="{{{{n.a4}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">𝄪</text></sc-if></sc-for>
 <sc-for list="{{{{sv.digits}}}}" as="d" hint-placeholder-count="4"><sc-if value="{{{{d.f1}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">1</text></sc-if><sc-if value="{{{{d.f2}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">2</text></sc-if><sc-if value="{{{{d.f3}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">3</text></sc-if><sc-if value="{{{{d.f4}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">4</text></sc-if><sc-if value="{{{{d.f5}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">5</text></sc-if></sc-for>
-</svg></div></div>'''
+</svg><div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 40px; bottom: 0; pointer-events: none"><sc-for list="{{{{sv.labs}}}}" as="l" hint-placeholder-count="0"><span style="position: absolute; left: {{{{l.left}}}}; top: {{{{l.top}}}}; transform: translate(-100%, -50%); font-size: 13px; line-height: 1; font-weight: 700; color: {{{{l.c}}}}; white-space: nowrap">{{{{l.t}}}}</span></sc-for></div></div></div>'''
 
 def VIEWBODY(staff_w, inv_cols, mini_w, side=False):
     inner = (f'<div style="display: flex; align-items: center; gap: 24px"><div style="flex: 1; min-width: 0">{STAFFHEAD}{STAFFSVG(staff_w)}</div></div>' if side else f'{STAFFHEAD}{STAFFSVG(staff_w)}')
@@ -803,11 +811,12 @@ def write_laptop(stem, title, inner, D, concept):
 """)
 def PH_HEAD(title): return f'<div style="flex: none; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px">{GLASSBTN("Back to Practice", CHEV_L, href="Main.dc.html")}<h1 style="margin: 0; font-size: 17px; font-weight: 600">{title}</h1>{PIANOBTN()}</div>'
 def LP_HEAD(title): return f'<div style="flex: none; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px"><div style="display: flex; align-items: center; gap: 14px">{GLASSBTN("Back to Practice", CHEV_L, href="Laptop.dc.html")}<h1 style="margin: 0; font-size: 18px; font-weight: 600">{title}</h1></div>{PIANOBTN()}</div>'
-STAFFCARD = lambda w: f'<div style="flex: none; border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; padding: 10px 10px 14px; display: flex; flex-direction: column; gap: 10px">{STAFFHEAD}{STAFFSVG(w)}</div>'
+FINGLINE = f'<p style="margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 18px; font-size: 14px; color: {SOFT}"><sc-for list="{{{{handFacts}}}}" as="f" hint-placeholder-count="1"><span style="white-space: nowrap">{{{{f.k}}}} <b style="margin-left: 6px; color: {INK}; font-weight: 700; font-variant-numeric: tabular-nums; white-space: pre">{{{{f.v}}}}</b></span></sc-for></p>'
+STAFFCARD = lambda w: f'<div style="flex: none; border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; padding: 10px 10px 14px; display: flex; flex-direction: column; gap: 10px">{STAFFHEAD}{STAFFSVG(w)}{FINGLINE}</div>'
 # ── A, phone and laptop ──
-phone('Chords', 'Chords', PH_HEAD('Chords') + STAGE3D(250) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px 120px; display: flex; flex-direction: column; gap: 16px">{NAME_A(44)}{FACTS}{STAFFCARD(330)}{PRACTISE("Player.dc.html")}</main>' + DOCK_A_PHONE,
+phone('Chords', 'Chords', PH_HEAD('Chords') + STAGE3D(220) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px 120px; display: flex; flex-direction: column; gap: 16px">{NAME_A(44)}{STAFFCARD(330)}{PRACTISE("Player.dc.html")}</main>' + DOCK_A_PHONE,
       ch_js({'root': 0, 'q': 12}, 402, 168, 2, 150), LAYERS(True, 'A'))
-write_laptop('ChordsLaptop', 'Chords, laptop', LP_HEAD('Chords') + STAGE3D(330) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 22px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 820px; max-width: 100%; display: flex; flex-direction: column; gap: 18px">{NAME_A(56)}<div style="display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start">{STAFFCARD(440)}{FACTS}</div>{PRACTISE("PlayerLaptop.dc.html")}</div></main>' + DOCK_A_LAPTOP, {'root': 3, 'q': 14}, 'A')
+write_laptop('ChordsLaptop', 'Chords, laptop', LP_HEAD('Chords') + STAGE3D(330) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 22px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 820px; max-width: 100%; display: flex; flex-direction: column; gap: 18px">{NAME_A(56)}<div style="width: 620px; max-width: 100%; align-self: center">{STAFFCARD(440)}</div>{PRACTISE("PlayerLaptop.dc.html")}</div></main>' + DOCK_A_LAPTOP, {'root': 3, 'q': 14}, 'A')
 for f in ('ChordsApp', 'ChordsDesk', 'ChordsB', 'ChordsBLaptop'):  # B, the chord shelf, was drawn in v80 and not chosen
     if os.path.exists(OUT + f + '.dc.html'): os.remove(OUT + f + '.dc.html')
 print('r42 chords ok')

@@ -5,6 +5,19 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 87: the staff is on the first screen, larger, and names its notes.** Owner: "the staff is very
+  important and now the user needs to scroll to see it fully. how can we improve this and maybe make the staff have
+  more features and things to show".
+  - **It fits without scrolling on a phone,** in every hands setting: the piano is 220 high (was 250); the separate
+    Notes · Right hand card is gone; **only the staves in use are drawn** (a right-hand chord shows the treble staff
+    alone, a left-hand chord the bass alone, both hands the grand staff).
+  - **One chord is drawn larger** (the staff is the page's second picture after the piano).
+  - **The Labels setting names the notes on the staff too:** Note names (C E G B) or Degrees (1 3 5 7) left of each
+    notehead, the finger numbers on the right; one setting for the keys and the staff. With several chords on the
+    staff the labels step aside for the voice-leading lines.
+  - **Fingering in words** is one quiet line under the staff ("Right hand 1 2 3 5"), no longer a card of its own.
+  - **Open, the owner's to choose:** more for the staff to show (the chord as an arpeggio when Play is set to
+    Arpeggio; tapping a note to hear it; the chord's key signature; the intervals between its notes).
 - **Canvas Version 86: the chord's three edit options open real drawers; the hand is settled except the build.**
   Owner: "I want the chord edit options to get real drawers. use proper skills to do things and to prevent all the
   weird paddings and looks. also only the medium light as default. 2. yes enough. 3. not build yet".
@@ -860,3 +873,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: View 3D with hands · 3D keys · 2D keys · Off; labels Note names · Degrees · None in every view; the name as pill buttons (Version 84).
 - 2026-11-09: Piano switch, View cards 3D piano · 2D keys with Hands on the keys inside 3D, full-width Range and Labels (Version 85).
 - 2026-11-09: Root, Chord type and In the bass open drawers; medium-light the default tone; the hand not built yet (Version 86).
+- 2026-11-09: the staff on the first screen (staves in use only, piano 220, facts folded in), larger, with note labels (Version 87).

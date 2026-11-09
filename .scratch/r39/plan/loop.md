@@ -120,3 +120,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 canvas 84 (2026-11-09):** Chords: view with or without hands; labels in 3D and 2D (Degrees); name as pill buttons.
 **R42 canvas 85 (2026-11-09):** Chords: Piano switch, view cards with Hands inside 3D, full-width Range and Labels; label-padding check.
 **R42 canvas 86 (2026-11-09):** Chords: Root, Chord type, In the bass as drawers; hand S3 medium-light default, not built yet.
+**R42 canvas 87 (2026-11-09):** Chords: staff on the first screen (staves in use, larger, note labels); facts folded into the staff card.
