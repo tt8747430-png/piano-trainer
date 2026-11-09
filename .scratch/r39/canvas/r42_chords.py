@@ -178,7 +178,7 @@ function staff(notes, treble, W, fm, cx0, vw) {
   notes.forEach((x) => {
     const dn = dnOf(x), T = onT(x), y = T ? 70 - (dn - 30) * 5 : 150 - (dn - 18) * 5, key = T ? 'T' : 'B';
     const p = prev[key]; const shift = p && dn - p.dn === 1 && !p.shift; const nx = cx + (shift ? 14 : 0);
-    out.push({ T, m: x.m, f: fm[x.m] || '', x: nx, y, ay: y + 5, ax: cx - 22 - (shift ? 0 : 0), acc: ACC[String(x.d)], a1: x.d === -1, a2: x.d === 1, a3: x.d === -2, a4: x.d === 2, c: ROLE[x.deg] || C.ink });
+    out.push({ T, m: x.m, L: x.L, dn, d: x.d, a5: false, f: fm[x.m] || '', x: nx, y, ay: y + 5, ax: cx - 22 - (shift ? 0 : 0), acc: ACC[String(x.d)], a1: x.d === -1, a2: x.d === 1, a3: x.d === -2, a4: x.d === 2, c: ROLE[x.deg] || C.ink });
     prev[key] = { dn, shift };
     const lo = T ? 28 : 16, hi = T ? 40 : 28;
     if (T) { for (let k = 28; k >= dn; k -= 2) ledg.push({ y: 70 - (k - 30) * 5, x1: cx - 11, x2: nx + 11 }); for (let k = 40; k <= dn; k += 2) ledg.push({ y: 70 - (k - 30) * 5, x1: cx - 11, x2: nx + 11 }); }
@@ -208,7 +208,7 @@ const invN = TWO[voicing] ? 1 : Math.min(4, voicing === 'Shell' ? 3 : (voicing.s
 const inv = Math.min(st.inv ?? 0, invN - 1);
 const upper = (() => { const u = upperOf(root, q); RL = rLet; return u; })(), canSplit = !TWO[st.voicing || 'Close'];
 const bassOn = false, hands = st.hand === 'Split' ? 'Both' : (st.hand || 'Right'), fingOn = true, kbOnS = st.kbOn !== false, kbView = st.kbView || '3d', kbHands = st.kbHands !== false, kbMode = !kbOnS ? 'off' : (kbView === '2d' ? '2d' : (kbHands ? 'hands' : '3d')), kbShow = kbOnS, is3d = kbMode === 'hands' || kbMode === '3d', keys = st.keys || 'Chord';
-const playAs = 'Block', arp = false, dir = 'Up', keyLabel = st.keyLabel || 'Note names', names = keyLabel === 'Note names', fingKeys = false, treble = false, auto = true;
+const playAs = 'Block', arp = false, dir = 'Up', keyLabel = st.keyLabel || 'Notes', names = keyLabel === 'Notes', fingKeys = false, treble = false, auto = true;
 const oct = st.oct || 0; // an added chord may sit an octave lower, to stay under the hand (voice leading)
 const ns = voice(root, q, inv, voicing, hands).map((x) => Object.assign(x, { m: x.m + 12 * oct }));
 const ms = ns.map((x) => x.m);
@@ -228,7 +228,13 @@ const tonesL = keyLabel === 'Degrees';
 // a chord tone as its degree of the major scale, as chord symbols count them: 1 ♭3 5 ♭7 9 (Gorshkov, 01-seventh-chords)
 const MAJ = { 1: 0, 2: 2, 3: 4, 4: 5, 5: 7, 6: 9, 7: 11, 9: 14, 11: 17, 13: 21 };
 const degOf = (x) => { const d = ((((x.semi - MAJ[x.deg]) % 12) + 18) % 12) - 6; return (d === -1 ? '♭' : d === 1 ? '♯' : d === -2 ? '𝄫' : '') + x.deg; };
-const marks = {}; ns.forEach((x) => { marks[x.m] = [ROLE[x.deg] || C.accent, names ? x.name : (tonesL ? degOf(x) : '')]; });
+// an interval as musicians write it, from the notes' spelling: C to E♭ is m3, C to D♯ is A2
+const ivl = (a, b) => { const dn = (x) => (Math.floor((x.m - x.d) / 12) - 1) * 7 + LET.indexOf(x.L); const sd = dn(b) - dn(a), s7 = ((sd % 7) + 7) % 7, diff = b.m - a.m - [0, 2, 4, 5, 7, 9, 11][s7] - 12 * Math.floor(sd / 7);
+  return ([0, 3, 4].includes(s7) ? { '-1': 'd', 0: 'P', 1: 'A' } : { '-2': 'd', '-1': 'm', 0: 'M', 1: 'A' })[diff] + (sd + 1); };
+// Labels · Intervals: each hand's lowest note by name, every other note by its interval from the note under it
+const ivOn = keyLabel === 'Intervals', ivLab = {}; ['R', 'L'].forEach((h) => { ns.filter((x) => x.hand === h).sort((a, b) => a.m - b.m).forEach((x, i, a) => { ivLab[x.m] = i ? ivl(a[i - 1], x) : x.name; }); });
+const labOf = (x) => (names ? x.name : (ivOn ? ivLab[x.m] : degOf(x)));
+const marks = {}; ns.forEach((x) => { marks[x.m] = [ROLE[x.deg] || C.accent, keyLabel === 'None' ? '' : labOf(x)]; });
 const kb = calmKeys(lo, hi, marks, ''' + str(W) + ', ' + str(KH) + r''');
 { let wi = 0, bi = 0; for (let m = lo; m <= hi; m++) { const k = NAT.includes(m % 12) ? kb.whites[wi++] : kb.blacks[bi++]; if (k) k.fing = fingKeys && fm[m] ? String(fm[m]) : ''; } }
 const bass = ns[0];
@@ -240,20 +246,33 @@ const cur0 = st.cur ?? 0;
 const seq = (st.seq || [snap]).map((c, i) => (i === cur0 ? snap : c));
 const cur = Math.min(cur0, seq.length - 1);
 const symOf = (c) => { RL = c.rl; const rt = rootPc(c.rl, c.ra), qq = QS[c.q]; const vv = VOICINGS.find((v) => v.v === c.voicing).ok(qq) ? 'Close' : c.voicing; const nI = TWO[vv] ? 1 : Math.min(4, vv === 'Shell' ? 3 : (vv.startsWith('Rootless') ? 4 : qq.t.length)); const iv = Math.min(c.inv, nI - 1); const v = voice(rt, qq, iv, vv, c.hand).map((x) => Object.assign(x, { m: x.m + 12 * (c.oct || 0) })); const bn = iv > 0 && qq.t[iv] ? spell(rt, ((qq.t[iv][0] % 12) + 12) % 12, qq.t[iv][1]).name : ''; const out = { v, iv, vv, s: LET[c.rl] + ACC[String(c.ra)] + qq.k + (bn ? '/' + bn : '') }; RL = rLet; return out; };
-const SLOT = 78, X0 = 64, SW = seq.length === 1 ? 206 : Math.max(250, X0 + seq.length * SLOT + 48); // one chord is drawn larger: the staff is the page's second picture
-const sv = (() => { const all = { notes: [], ledg: [], digits: [], cols: [] }, per = []; let vt = 4, vbot = 168;
+// several chords are written in their key (the first chord's): its signature after the clef, and only the notes
+// that leave it carry an accidental, which holds to the end of the bar as in print (owner, canvas 89)
+const sigF = (() => { if (seq.length < 2) return 0; const c = seq[0], f = [0, 2, 4, -1, 1, 3, 5][c.rl] + 7 * c.ra - (QS[c.q].t.some((x) => x[0] === 3 && x[1] === 3) ? 3 : 0); return Math.abs(f) > 7 ? 0 : f; })();
+const sigOf = {}; (sigF > 0 ? [3, 0, 4, 1, 5, 2, 6] : [6, 2, 5, 1, 4, 0, 3]).slice(0, Math.abs(sigF)).forEach((l) => { sigOf[LET[l]] = sigF > 0 ? 1 : -1; });
+const sigW = sigF ? Math.abs(sigF) * 9 + 4 : 0;
+const SLOT = 86, X0 = 64 + sigW, SW = seq.length === 1 ? 206 : Math.max(250, X0 + seq.length * SLOT + 48); // one chord is drawn larger: the staff is the page's second picture
+const sv = (() => { const all = { notes: [], ledg: [], digits: [], cols: [] }, per = [], alt = {}; let vt = 4, vbot = 168;
   seq.forEach((c, i) => { const o = symOf(c); const cx = seq.length === 1 ? 124 : X0 + SLOT * (i + 0.5);
     const R1 = o.v.filter((x) => x.hand === 'R'), L1 = o.v.filter((x) => x.hand === 'L'); const f1 = {};
     fingers(R1, 'R', o.iv, o.vv === 'Close').forEach((f, k) => { f1[R1[k].m] = f; }); fingers(L1, 'L', o.iv, o.vv === 'Close').forEach((f, k) => { f1[L1[k].m] = f; });
-    const one = staff(o.v, treble, SW, fingOn && i === cur ? f1 : {}, cx, SW); per.push(one.notes); all.notes.push(...one.notes); all.ledg.push(...one.ledg); all.digits.push(...one.digits);
+    const one = staff(o.v, treble, SW, fingOn && i === cur ? f1 : {}, cx, SW);
+    if (seq.length > 1) one.notes.forEach((n) => { const k = (n.T ? 'T' : 'B') + n.dn, was = alt[k] ?? (sigOf[n.L] || 0), show = n.d !== was; alt[k] = n.d;
+      n.a1 = show && n.d === -1; n.a2 = show && n.d === 1; n.a3 = show && n.d === -2; n.a4 = show && n.d === 2; n.a5 = show && n.d === 0; });
+    per.push(one.notes); all.notes.push(...one.notes); all.ledg.push(...one.ledg); all.digits.push(...one.digits);
     vt = Math.min(vt, one.vt); vbot = Math.max(vbot, one.vbot);
-    const on = i === cur; all.cols.push({ s: o.s, on, many: seq.length > 1, x: cx, left: (cx / SW * 100) + '%', fw: on ? 700 : 500, tc: on ? C.ink : C.soft, bg: on && seq.length > 1 ? '#F6E3BC' : 'transparent', aria: o.s + (on ? ', shown above' : ', show it'), pick: () => pickChord(i), canRemove: on && seq.length > 1, remove: () => removeChord() }); });
+    const on = i === cur; all.cols.push({ s: o.s, on, many: seq.length > 1, fs: seq.length > 1 ? 13 : 15, px: seq.length > 1 ? 7 : 10, x: cx, left: (cx / SW * 100) + '%', fw: on ? 700 : 500, tc: on ? C.ink : C.soft, bg: on && seq.length > 1 ? '#F6E3BC' : 'transparent', aria: o.s + (on ? ', shown above' : ', show it'), pick: () => pickChord(i), canRemove: on && seq.length > 1, remove: () => removeChord() }); });
   // only the staves in use are drawn (R42, canvas 87): a right-hand chord needs the treble staff alone, so the staff
   // fits the first screen; both staves come back as soon as a left hand or a low note needs them
   const hasT = all.notes.some((n) => n.T), hasB = all.notes.some((n) => !n.T), ysN = all.notes.map((n) => n.y).concat(all.digits.map((d) => d.y - 6));
   if (!hasB) vbot = Math.max(84, Math.max(...ysN) + 14); if (!hasT) vt = Math.min(96, Math.min(...ysN) - 14);
   // the Labels setting also names the current chord's notes on the staff, left of each notehead
-  const labs = keyLabel === 'None' || seq.length > 1 ? [] : (per[cur] || []).map((n) => { const x = ns.find((y) => y.m === n.m); if (!x) return null; const acc = n.a1 || n.a2 || n.a3 || n.a4;
+  const sigY = sigF > 0 ? [30, 45, 25, 40, 55, 35, 50] : [50, 35, 55, 40, 60, 45, 65];
+  const sig = []; [hasT ? 0 : null, hasB ? 90 : null].filter((v) => v !== null).forEach((dy) => { for (let k = 0; k < Math.abs(sigF); k++) sig.push({ x: 46 + k * 9, y: sigY[k] + dy + 5, sharp: sigF > 0, flat: sigF < 0 }); });
+  // Intervals sit between the two notes they measure
+  const pairs = (per[cur] || []).slice().sort((a, b) => a.m - b.m);
+  const labs = keyLabel === 'None' || seq.length > 1 ? [] : ivOn ? pairs.map((n, i) => { const p = pairs[i - 1]; if (!p || p.T !== n.T) return null; const a = ns.find((y) => y.m === p.m), b = ns.find((y) => y.m === n.m); if (!a || !b) return null; const acc = [p, n].some((z) => z.a1 || z.a2 || z.a3 || z.a4);
+    return { t: ivl(a, b), left: ((n.x - (n.x !== p.x ? 14 : 0) - (acc ? 30 : 15)) / SW * 100).toFixed(2) + '%', top: (((n.y + p.y) / 2 - vt) / (vbot - vt) * 100).toFixed(2) + '%', c: C.soft }; }).filter(Boolean) : (per[cur] || []).map((n) => { const x = ns.find((y) => y.m === n.m); if (!x) return null; const acc = n.a1 || n.a2 || n.a3 || n.a4;
     return { t: names ? x.name : degOf(x), left: ((n.x - (acc ? 30 : 15)) / SW * 100).toFixed(2) + '%', top: ((n.y - vt) / (vbot - vt) * 100).toFixed(2) + '%', c: C.ink }; }).filter(Boolean);
   const hl = seq.length > 1 ? [{ x: X0 + SLOT * cur + 6, w: SLOT - 12, y: vt + 2, h: vbot - vt - 4, f: '#F6E3BC', o: 0.55 }] : [];
   if (st.playing === 'all' && st.sounding != null && st.sounding !== cur) hl.push({ x: X0 + SLOT * st.sounding + 6, w: SLOT - 12, y: vt + 2, h: vbot - vt - 4, f: '#EDC684', o: 0.5 });
@@ -268,7 +287,7 @@ const sv = (() => { const all = { notes: [], ledg: [], digits: [], cols: [] }, p
       const free = a.filter((p) => !b.some((q) => q.m === p.m)); if (!free.length) return; const from = free.slice().sort((p, q) => Math.abs(p.m - n.m) - Math.abs(q.m - n.m))[0];
       if (Math.abs(from.m - n.m) <= 4) moved += 'M' + (from.x + 11) + ' ' + from.y + 'L' + (n.x - 11) + ' ' + n.y; }); }); }
   let path = ''; (hasT ? [30, 40, 50, 60, 70] : []).concat(hasB ? [110, 120, 130, 140, 150] : []).forEach((y) => { path += 'M14 ' + y + 'H' + (SW - 14); });
-  return { held: held || 'M0 0', moved: moved || 'M0 0', vt, vbot, notes: all.notes, ledg: all.ledg, digits: all.digits, cols: all.cols, hl, path, bars: [14, SW - 14].map((x) => 'M' + x + ' ' + (hasT ? 30 : 110) + 'V' + (hasB ? 150 : 70)).join(''), hasT, hasB, labs, vb: '0 ' + vt + ' ' + SW + ' ' + (vbot - vt), maxw: seq.length === 1 ? 340 : Math.round(SW * 1.18), minw: seq.length > 3 ? (seq.length * 70 + 80) + 'px' : '0' }; })();
+  return { held: held || 'M0 0', moved: moved || 'M0 0', vt, vbot, notes: all.notes, ledg: all.ledg, digits: all.digits, cols: all.cols, hl, path, sig, bars: [14, SW - 14].map((x) => 'M' + x + ' ' + (hasT ? 30 : 110) + 'V' + (hasB ? 150 : 70)).join(''), hasT, hasB, labs, vb: '0 ' + vt + ' ' + SW + ' ' + (vbot - vt), maxw: seq.length === 1 ? 340 : Math.round(SW * 1.18), minw: seq.length > 3 ? (seq.length * 70 + 80 + sigW) + 'px' : '0' }; })();
 const loadChord = (c) => ({ rl: c.rl, ra: c.ra, q: c.q, inv: c.inv, voicing: c.voicing, hand: c.hand, oct: c.oct || 0 });
 const soundOf = (c) => sound(symOf(c).v.map((x) => x.m), false, 'Up');
 const pickChord = (i) => { if (i === cur) { soundOf(seq[i]); return; } set(Object.assign({ seq, cur: i, toast: null }, loadChord(seq[i]))); soundOf(seq[i]); };
@@ -366,7 +385,7 @@ return {
   fingOnBg: fingOn ? '#7FB685' : C.line, fingOnX: fingOn ? 22 : 2, toggleFing: () => set({ fing: !fingOn }), fingOn,
   fingKeysOn: fingKeys, fingKeysOnBg: fingKeys ? '#7FB685' : C.line, fingKeysOnX: fingKeys ? 22 : 2, toggleFingKeys: () => set({ fingKeys: !fingKeys }),
   handSeg: seg(['Right', 'Left', 'Both'], hands, (l) => change({ hand: l })),
-  keyLabelSeg: seg(['Note names', 'Degrees', 'None'], keyLabel, (l) => set({ keyLabel: l })),
+  keyLabelSeg: seg(['Notes', 'Degrees', 'Intervals', 'None'], keyLabel, (l) => set({ keyLabel: l })),
   rootName: RN, qName: q.n[0].toUpperCase() + q.n.slice(1), qSym: RN + q.k, voicing, invLabel: INV[inv], handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand', soundWord: arp ? 'Arpeggio' : 'Block',
   // one row of letters; tapping the chosen letter again steps through its spellings: C, C♯, C (D, D♯, D♭ …)
   ...letterPick(rLet, rAcc, (l, a) => !SKIP.includes(LET[l] + a), st.tapUsed, (l, next, more) => { RL = l; change(Object.assign({ rl: l, ra: next, root: rootPc(l, next) }, more ? { tapUsed: true } : {})); }),
@@ -420,7 +439,7 @@ return {
       perSecond: 960, now: () => 1, playing: false, held: new Set(ms), marks: new Map(ns.map((x) => [x.m, { tone: RN3[x.deg] || 'root' }])), wrong: undefined, faded: null, skin: 'light',
       range: keys === 'Chord' ? { low: Math.min(...ms), high: Math.max(...ms) } : { low: lo, high: hi } };
     // labels over the 3D keys: one over each sounding key's far end, where no hand covers it
-    this._labels3d = is3d && keyLabel !== 'None' ? ns.filter((x, i, a) => a.findIndex((y) => y.m === x.m) === i).map((x) => ({ m: x.m, black: !NAT.includes(((x.m % 12) + 12) % 12), t: names ? x.name : degOf(x), c: ROLE[x.deg] || C.accent })) : [];
+    this._labels3d = is3d && keyLabel !== 'None' ? ns.filter((x, i, a) => a.findIndex((y) => y.m === x.m) === i).map((x) => ({ m: x.m, black: !NAT.includes(((x.m % 12) + 12) % 12), t: labOf(x), c: ROLE[x.deg] || C.accent })) : [];
     return is3d; })(),
   labelsRef: (el) => { this._lb = el; },
   is2dKb: kbMode === '2d',
@@ -561,16 +580,17 @@ def TITLEBLOCK(size):
 </div>'''
 
 def STAFFSVG(w):
-    return f'''<div class="nos" style="overflow-x: auto; margin: 0 -4px"><div style="position: relative; width: 100%; min-width: {{{{sv.minw}}}}; max-width: {{{{sv.maxw}}}}px; margin: 0 auto; padding-top: 40px">
-<div style="position: absolute; left: 0; right: 0; top: 0; height: 36px"><sc-for list="{{{{sv.cols}}}}" as="k" hint-placeholder-count="1"><div style="position: absolute; top: 0; left: {{{{k.left}}}}; transform: translateX(-50%); height: 34px; display: flex; align-items: center; border-radius: 17px; background: {{{{k.bg}}}}"><button type="button" aria-label="{{{{k.aria}}}}" onClick="{{{{k.pick}}}}" style="height: 34px; padding: 0 10px; border: 0; background: transparent; color: {{{{k.tc}}}}; font: inherit; font-size: 15px; font-weight: {{{{k.fw}}}}; white-space: nowrap">{{{{k.s}}}}</button><sc-if value="{{{{k.canRemove}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" aria-label="Remove {{{{k.s}}}}" onClick="{{{{k.remove}}}}" style="width: 30px; height: 34px; margin-left: -6px; padding: 0; border: 0; background: transparent; color: #7A5418; display: flex; align-items: center; justify-content: center">{XSM}</button></sc-if></div></sc-for></div>
+    return f'''<div class="nos" data-staff style="overflow-x: auto; margin: 0 -4px"><div style="position: relative; width: 100%; min-width: {{{{sv.minw}}}}; max-width: {{{{sv.maxw}}}}px; margin: 0 auto; padding-top: 40px">
+<div style="position: absolute; left: 0; right: 0; top: 0; height: 36px"><sc-for list="{{{{sv.cols}}}}" as="k" hint-placeholder-count="1"><div style="position: absolute; top: 0; left: {{{{k.left}}}}; transform: translateX(-50%); height: 34px; display: flex; align-items: center; border-radius: 17px; background: {{{{k.bg}}}}"><button type="button" aria-label="{{{{k.aria}}}}" onClick="{{{{k.pick}}}}" style="height: 34px; padding: 0 {{{{k.px}}}}px; border: 0; background: transparent; color: {{{{k.tc}}}}; font: inherit; font-size: {{{{k.fs}}}}px; font-weight: {{{{k.fw}}}}; white-space: nowrap">{{{{k.s}}}}</button><sc-if value="{{{{k.canRemove}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" aria-label="Remove {{{{k.s}}}}" onClick="{{{{k.remove}}}}" style="width: 30px; height: 34px; margin-left: -6px; padding: 0; border: 0; background: transparent; color: #7A5418; display: flex; align-items: center; justify-content: center">{XSM}</button></sc-if></div></sc-for></div>
 <svg viewBox="{{{{sv.vb}}}}" style="display: block; width: 100%; height: auto" role="img" aria-label="The chords on the staff">
 <sc-for list="{{{{sv.hl}}}}" as="h" hint-placeholder-count="0"><rect x="{{{{h.x}}}}" y="{{{{h.y}}}}" width="{{{{h.w}}}}" height="{{{{h.h}}}}" rx="10" fill="{{{{h.f}}}}" opacity="{{{{h.o}}}}"></rect></sc-for>
 <path d="{{{{sv.path}}}}" stroke="{INK}" stroke-width="0.9"></path>
 <path d="{{{{sv.bars}}}}" stroke="{INK}" stroke-width="1"></path>
 <sc-if value="{{{{sv.hasT}}}}" hint-placeholder-val="{{{{true}}}}"><text x="18" y="69" font-family="Noto Music" font-size="42" fill="{INK}">𝄞</text></sc-if><sc-if value="{{{{sv.hasB}}}}" hint-placeholder-val="{{{{false}}}}"><text x="18" y="141" font-family="Noto Music" font-size="34" fill="{INK}">𝄢</text></sc-if>
+<sc-for list="{{{{sv.sig}}}}" as="g" hint-placeholder-count="0"><sc-if value="{{{{g.sharp}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{g.x}}}}" y="{{{{g.y}}}}" font-family="Noto Music" font-size="22" fill="{INK}">♯</text></sc-if><sc-if value="{{{{g.flat}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{g.x}}}}" y="{{{{g.y}}}}" font-family="Noto Music" font-size="22" fill="{INK}">♭</text></sc-if></sc-for>
 <path d="{{{{sv.moved}}}}" fill="none" stroke="{SOFT}" stroke-width="1" stroke-dasharray="2 2.5" stroke-linecap="round"></path><path d="{{{{sv.held}}}}" fill="none" stroke="{INK}" stroke-width="1.3" stroke-linecap="round"></path>
 <sc-for list="{{{{sv.ledg}}}}" as="l" hint-placeholder-count="1"><path d="M{{{{l.x1}}}} {{{{l.y}}}}H{{{{l.x2}}}}" stroke="{INK}" stroke-width="1.1"></path></sc-for>
-<sc-for list="{{{{sv.notes}}}}" as="n" hint-placeholder-count="4"><ellipse cx="{{{{n.x}}}}" cy="{{{{n.y}}}}" rx="7.2" ry="5" transform="rotate(-18 {{{{n.x}}}} {{{{n.y}}}})" fill="{{{{n.c}}}}" stroke="{INK}" stroke-width="1.6"></ellipse><sc-if value="{{{{n.a1}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">♭</text></sc-if><sc-if value="{{{{n.a2}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">♯</text></sc-if><sc-if value="{{{{n.a3}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">𝄫</text></sc-if><sc-if value="{{{{n.a4}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">𝄪</text></sc-if></sc-for>
+<sc-for list="{{{{sv.notes}}}}" as="n" hint-placeholder-count="4"><ellipse cx="{{{{n.x}}}}" cy="{{{{n.y}}}}" rx="7.2" ry="5" transform="rotate(-18 {{{{n.x}}}} {{{{n.y}}}})" fill="{{{{n.c}}}}" stroke="{INK}" stroke-width="1.6"></ellipse><sc-if value="{{{{n.a1}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">♭</text></sc-if><sc-if value="{{{{n.a2}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">♯</text></sc-if><sc-if value="{{{{n.a3}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">𝄫</text></sc-if><sc-if value="{{{{n.a4}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">𝄪</text></sc-if><sc-if value="{{{{n.a5}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">♮</text></sc-if></sc-for>
 <sc-for list="{{{{sv.digits}}}}" as="d" hint-placeholder-count="4"><sc-if value="{{{{d.f1}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">1</text></sc-if><sc-if value="{{{{d.f2}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">2</text></sc-if><sc-if value="{{{{d.f3}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">3</text></sc-if><sc-if value="{{{{d.f4}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">4</text></sc-if><sc-if value="{{{{d.f5}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">5</text></sc-if></sc-for>
 </svg><div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 40px; bottom: 0; pointer-events: none"><sc-for list="{{{{sv.labs}}}}" as="l" hint-placeholder-count="0"><span style="position: absolute; left: {{{{l.left}}}}; top: {{{{l.top}}}}; transform: translate(-100%, -50%); font-size: 13px; line-height: 1; font-weight: 700; color: {{{{l.c}}}}; white-space: nowrap">{{{{l.t}}}}</span></sc-for></div></div></div>'''
 
@@ -686,7 +706,9 @@ PT_BUNDLE = open('/home/user/piano-trainer/.scratch/r39/canvas/pthands.bundle.js
 assert '</script' not in PT_BUNDLE
 PT_LIFE = r'''
   componentDidMount() { this._hands3d(); }
-  componentDidUpdate() { this._hands3d(); }
+  componentDidUpdate() { this._hands3d();
+    // a long staff scrolls sideways: the chord being shown is always brought into view
+    const on = document.querySelector('[data-staff] [aria-label$="shown above"]'), sf = on && on.closest('[data-staff]'); if (sf) { const r = on.getBoundingClientRect(), b = sf.getBoundingClientRect(); if (r.right > b.right - 8) sf.scrollLeft += r.right - b.right + 40; else if (r.left < b.left + 8) sf.scrollLeft -= b.left + 8 - r.left; } }
   componentWillUnmount() { if (this._ro) this._ro.disconnect(); if (this._stage) this._stage.dispose(); this._stage = null; }
   _hands3d() {
     const cv = this._cv, d = this._handsIn; if (!cv || !d) { if (this._stage && !cv) { this._stage.dispose(); this._stage = null; this._stageCv = null; } return; }
@@ -697,7 +719,10 @@ PT_LIFE = r'''
         cv.__ptAfter = (proj) => { const box = this._lb; if (!box) return; const L = this._labels3d || [], W = box.clientWidth, H = box.clientHeight;
           while (box.children.length > L.length) box.lastChild.remove();
           L.forEach((l, i) => { let el = box.children[i]; if (!el) { el = document.createElement('span'); el.style.cssText = 'position: absolute; transform: translate(-50%, -100%); min-width: 22px; height: 22px; box-sizing: border-box; padding: 0 5px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #332921; box-shadow: 0 0 0 1.5px rgba(51,41,33,.55), 0 1px 3px rgba(51,41,33,.3); white-space: nowrap'; box.append(el); }
-            const p = proj(l.m, l.black); el.textContent = l.t; el.style.background = l.c; el.style.left = (p[0] * W).toFixed(1) + 'px'; el.style.top = Math.max(26, p[1] * H - 3).toFixed(1) + 'px'; }); };
+            const p = proj(l.m, l.black); el.textContent = l.t; el.style.background = l.c; l.x = p[0] * W; l.w = Math.max(22, l.t.length * 8 + 10); l.el = el; el.style.top = Math.max(26, p[1] * H - 3).toFixed(1) + 'px'; });
+          // labels over neighbouring keys (D and E♭) are moved apart until neither covers the other
+          const by = L.slice().sort((a, b) => a.x - b.x); for (let i = 1; i < by.length; i++) { const need = (by[i - 1].w + by[i].w) / 2 + 3 - (by[i].x - by[i - 1].x); if (need > 0) { by[i - 1].x -= need / 2; by[i].x += need / 2; } }
+          L.forEach((l) => { l.el.style.left = l.x.toFixed(1) + 'px'; }); };
         this._stage = window.PTHands.createStage(cv, d, { onLoaded: () => {}, onFailed: () => this.setState({ kbView: '2d' }) }); this._stageCv = cv;
         const box = cv.parentElement, rs = () => { if (this._stage) this._stage.resize(box.clientWidth, box.clientHeight); };
         this._ro = new ResizeObserver(rs); this._ro.observe(box); rs();

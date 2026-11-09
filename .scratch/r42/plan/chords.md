@@ -5,6 +5,20 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 89: Intervals is a fourth label, and several chords are written in their key.** Owner, answering
+  the staff questions: "3. intervals is good. .4. yes".
+  - **Labels: Notes · Degrees · Intervals · None** (one setting for the keys and the staff). Intervals are spelled
+    from the notes as written (C to E♭ is m3, C to D♯ is A2): on the staff each sits between the two notes it
+    measures; on the keys each hand's lowest note keeps its name and every other key shows its interval from the key
+    under it. "Note names" is now "Notes", so four choices fit the row on a phone.
+  - **A key signature only with several chords:** one chord keeps its accidentals beside the notes; from the second
+    chord on, the staff carries the signature of the key (the first chord's, as Transpose names it), only notes that
+    leave the key carry an accidental, and one holds to the end of the bar with a natural to cancel it, as in print.
+    A key past seven sharps or flats (D♯ major) is written with accidentals.
+  - **Fixed on the way:** labels over neighbouring keys (D and E♭) no longer cover each other; chord names over the
+    staff are smaller with several chords so they do not run together; a long staff scrolls to the chord shown.
+  - **Still open:** the chord as an arpeggio when Play is Arpeggio; tapping a note to hear it; the "show on staff"
+    circles in the Chord type drawer.
 - **Canvas Version 88, and the app's hands: a resting finger hangs between its neighbours.** Owner, of F♯maj7 on the
   3D piano: "something is not correct with the third finger in the model look here". The 3rd was right, on C♯; the
   4th, with nothing to play, hovered at its fixed five-finger place, which fell beside C♯, so two fingertips sat on
@@ -22,8 +36,8 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     notehead, the finger numbers on the right; one setting for the keys and the staff. With several chords on the
     staff the labels step aside for the voice-leading lines.
   - **Fingering in words** is one quiet line under the staff ("Right hand 1 2 3 5"), no longer a card of its own.
-  - **Open, the owner's to choose:** more for the staff to show (the chord as an arpeggio when Play is set to
-    Arpeggio; tapping a note to hear it; the chord's key signature; the intervals between its notes).
+  - **Open, the owner's to choose:** the chord as an arpeggio when Play is set to Arpeggio; tapping a note to hear
+    it. (Key signature and intervals: settled in Version 89.)
 - **Canvas Version 86: the chord's three edit options open real drawers; the hand is settled except the build.**
   Owner: "I want the chord edit options to get real drawers. use proper skills to do things and to prevent all the
   weird paddings and looks. also only the medium light as default. 2. yes enough. 3. not build yet".
