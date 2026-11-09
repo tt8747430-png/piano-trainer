@@ -1,0 +1,77 @@
+# Bill Evans Time Remembered Analysis Part 2
+
+- Channel: Jazz Piano School
+- Link: https://www.youtube.com/watch?v=M3Gh-Qbyrlo
+- Duration: 16:43
+- Published: 2018-08-28
+- Transcript: YouTube auto-captions (en)
+
+## Description
+
+Go to http://jazzpianoschool.com/billevans for more information about our upcoming Bill Evans Arranging Specialty Course!
+
+Here is Part 2 analysis of Bill Evans playing Time Remembered. Enjoy!
+
+## Transcript
+
+**[00:23]** welcome to the jazz piano school podcast where we have one mission that is to help you achieve jazz piano freedom so that you can express your true inner soul and emotions instead of having to copy what others have shown you now we do this by providing structured and organized jazz piano education on specific jazz piano tools that you can then take and use over any tune so that you have complete jazz piano freedom hi my name is Brendan Lowe and welcome to episode number 127 this is going to be the final eight measures of time remembered so thank you so much for
+
+**[00:53]** watching and just till a quick little point if you're looking for the full transcription of this please go to jazz piano school comm four slash podcast 127 we're doing all this Bill Evans content because we're gonna be releasing a guest specialty course by dr. Jill Gilman who has played with poppy hundreds in for a long long time he's incredible educator teaches at Indiana and all over the country in the world famous famous jazz pianist he's gonna be releasing his system of the Bill Evans style arranging method and he's gonna be releasing that we're gonna be releasing that in a couple weeks so if you're interested in
+
+**[01:24]** knowing more details about this short condensed Bill Evans arranging style process that dr. Joe Camel is going to be presenting and educating in our new course release go to jazz piano school comm /a Bill Evans jazz piano school comm forward slash Bill Evans and you will be able to sign up on our emailing list and get updates on the course release and get access to our significant launch discount of this course as well before the price bumps up to our regular price okay so with that being said let's dive right into this episode alright so on this last eight
+
+**[01:57]** measures we ended at the C minor so we have this let me turn the volume up here just a little bit we have this chord the C minor 11 9 chord which is very very standard right we have the 1 5 in the base 10 up top right in the third now he's Bill's adding the 11 the 7 and the 9 and again if you just take out the extensions right he's doing a very very common two hand style voicing set up which we teach in jazz piano school to one of the set up so it's 1 in 10 you're
+
+**[02:28]** gonna add the 7 and then from here you can fill in a any sort of extensions you can add the 5 if you want down in the foundation which he does and then that's the 11 sorry about that that's the 11 in the the 9 as well into the into the equation so from here now he goes up and has this fourth pattern going into the f-sharp minor 7 chord now if you're if you're kind of adding on I should say if you haven't listened to the first episode you should highly do that I highly recommend that but I'm continuing from where I left off so this
+
+**[02:59]** is this is about 3/4 down the page we're getting into the the last 8 measures of the tune here of the transcription ok so we're going into the F sharp minor here's this G sharp now bill goat jumps up here he has this little 4th voicing right that he excuse me 4th harmonization that he does and then moves into the right the F sharp minor 7 so it's kind of a segue or leading into the F sharp 7 ok so on this
+
+**[03:29]** F sharp minor 9 right he has 1 7 3 again a very very common set up in you know to hand voicing set up you can cover if you can stretch 1 7 9 then your right hand is left for all opportunities it can do whatever it wants which is really really nice thing to do even if you can't reach this you can still roll it which is really nice kind of feather the break out the voicing here again you don't have to keyboards doing them sorry you don't have to break out the whole thing
+
+**[04:01]** all at once right so you can just do it you know kind of feathered like that so and then in the right hand he has the 9 up here and again the 13 right here in for the f-sharp minor 7 chord ok now here is right hands continuing so it kind of has this movement here that goes like this right so it chops it drops from these extensions into just the standard 5 and 7 here right so he
+
+**[04:32]** actually moves he's creating movement into that type of position now after that he's just gonna drop up to this right a very nice kind of you know drop to ish voicing right so he has this he's taking this voicing over the f-sharp and he's using a drop too right combination for voicings so basically guess the the seven the nine eleven and the thirteen again but he's
+
+**[05:03]** taking the B and putting it down here so he's having a drop two and in the f-sharp in the bass right very very very nice thing here that he's doing right here now from here okay he moves down now what's going on here necessarily it took me a while to kind of figure out and look at a little bit more but here these are just inversions right so if I put this in root position we have a diminished triad moving down to a c-sharp root position chord okay so my analysis of this is he's just creating
+
+**[05:35]** movement down into the B minor seven right so the c-sharp is moving into the B minor 7 and this diminished chord is resolving to the C sharp moving down into the diminished excuse me into the B minor so instead of you know a lot of times in jazz we can lead into chords so for example in this B minor seven chord that we're leading into instead of just playing the B minor seven we can go C sharp and then down into the B minor or we could go right to lead into courts so again bill is going from the diminishe so he's
+
+**[06:06]** having more movement to lead into the C sharp which then leads into the the B minor 7 so it's kind of just a downward progressing movement but again out obviously he's doing in inversions here right okay instead of from a position chords right and then finally he moves into the B minor seven there now here's our there actually let me see he has one five nine three seven very very nice voicing again this is AB one I would put in your toolbox to write a lot of times we might
+
+**[06:37]** we might place this something like this and then have one in seven down here but what he does he's actually just has one in five he puts both the shells in his right hand and then he adds the nine here to create this nine three this half step which is very very beautiful combination for that B minor 7 okay so from the C minor I'll go back a little bit we have two C minor he has the fourth he's harmonizing his melody here and fourth
+
+**[07:10]** right and then he's harmonizing again the melody with this drop to okay and then he has this movement down into the B minor seven diminish seem much C sharp minor 7 and then into the excited not C sharp minor seven just C sharp minor without the seven and then B minor seven here with a nine okay now for once again he's doing so much so as you can see once he hits chords he's jumping up to do more so he hits the chords and then he's jumping up to actually you know add on more things to the to the measure
+
+**[07:40]** right so he hits this port now what he jumps up to here right he has the three five nine excuse me three five seven nine and then 13 again of the B minor seven so he has this so gorgeous just gorgeous gorgeous voices okay so he's adding on the 13 now from here he had the nine here before right and now he's jumping up to add the 13 he still has the nine here right and now we
+
+**[08:11]** walk down as we walk down this little this little path I guess of voicings right he moves to this so he has and you really need to kind of hold this out right in order to hear that bass note right how beautiful is that and again if you'll notice so many of his movements are symmetrical meaning if he shaped something like in fourths he's creating all fours now in this case he's shaping something with a try on the bottom in a fifth on the top now he
+
+**[08:43]** keeps this shape in movement as he flows down he does that so much throughout the tune like if he if he's harmonizing in fifths he does all fits if he's harmonizing in fourths he does all fourths right he creates a shape and then he takes that shape and he moves it down right so gorgeous so it sounds like this right and then finally leads into the digi minor 9 here which again he doesn't even have the route yet he's kind of feathering the cord so he adds it in on the third beat of the court he adds that
+
+**[09:16]** rudin you don't even hear the route yet you just hear the you know there's just the shells and the extensions of the cord so we have nine three eleven he has a nice little cluster here right look at this cluster here is a very good tool to put in your toolbox to these different types of clusters so nine eleven no sorry behind three eleven five and nine again right alright so from the B minor 7
+
+**[09:50]** gorgeous right he adds in the base note then again he takes this this kind of interval here just or excuse me octave here at this point but then he switches the octave okay and then he has this basically he's just harmonizing this his little melody here this time he actually does switch the intervals right so he has octave seventh right six and then finally into the e-flat major right so from the G minor seven again he has this one two three
+
+**[10:28]** sorry so again feathering the cord against weave leaves out the seven adds it in and then adds in the sharp eleven on top so one three five nine doesn't play the seven adds it in adds the sharp eleven it's a really really good trick to use in your harmonization is just kind of breaking out the cord in different types of ways you could have done it you know you could have done this going up you could have done you know but again it's based off the melody it's based off what you're looking to do so bill does this and then he has this this little third movement
+
+**[11:01]** pattern leading up here right so the sharp eleven with the six again just thirds here right he's just harmonies harmonizing in thirds up his major seven Lydian right so here's your Lydian scale he's just taking thirds from the Lydian scale just created a nice little movement here right which leads into our D minor seven beautiful right and then here's just a very simple one three seven nine and
+
+**[11:34]** then just the melody okay and then which leads into our C minor nine all right so one he has a he chooses to use a fourth here right puts the eleven down here this is more of a modal sound he creates right with that fourth voicing one this is all fourth stacked up right then he puts a 13 on top okay he actually doesn't have the nine in here at all even though that's kind of what you know real books and chord changes will say C minor nine here and he just goes back
+
+**[12:05]** and forth with that little melodic now finally this note in the left hand on the next measure moves down to the three but everything else stays the same so yes there's where the nine comes in on that change okay she doesn't have the nine in that first measure right and then he's got beautiful beautiful intervals like the use of the intervals throughout the entire tune is absolutely amazing right his second here going to the major
+
+**[12:36]** seventh right going into the sixth right listen to that right gorgeous gorgeous so going back and reviewing these measures again a lot of dense stuff happen and we're going to talk through this quickly again so from the C minor we have the force right then these movements here going down into the B minor seven right jumping up so again this stuff right so once you hit your chord you can jump up
+
+**[13:07]** this is so gorgeous I need to steal more of this and again this voicing here right 3 5 7 9 13 right I would recommend practicing this in all keys just take this voice and play your bass note right play this voicing exact voicing in all keys put the 9 here then 13 right then move to maybe inai team minor 7 right and then maybe a minor 7 right such a gorgeous forcing that 13 in a minor 7 chord is very pretty
+
+**[13:41]** right and then not putting the root in on the ferry found B to the cord you can feather it in he could have done that too you could have jumped down or it could've shown you know all the different types of bass notes and all the registers are gorgeous again feather right again feathered so 9 this is just the melody here absolutely absolutely gorgeous right so so much great stuff happening here with
+
+**[14:14]** this time remembered tuned again you know it's with these intricate little voicings in his ballads and things like that that really makes a harm on harmonic movements come to life right to study this study Keith Jarrett some I mean they I'm sure they got a lot of the stuff from Bill he was one of the main kind of influencers of this certain harmonic style movement of feathering and and kind of breaking up the melodies and creating these inner voices that move and flow into the next chord Brad got this and again it's a lot of it comes from classical music as well the
+
+**[14:45]** way the harmonies move inside the main foundation of the voices so go back through the entire tune right and I highly recommend a lot of the stuff that's billed bill is doing in here with different types of movements and creating this type of sound from a tune can be systematically broken down in the specialty course we're going to be releasing by dr. Joe Gilman who's gonna be educating you on this and again if you're interested in more information when we release this course we're gonna be coming up in a couple weeks again very specific very condensed it's
+
+**[15:16]** gonna allow you to take any tune and approach it in a a four note style of five note style and a free style to grab the essence of the Bill Evans style arranging style to create atmosphere and moods so your sound is like Bill right it's gonna create that same sound and atmosphere that you get when you're listening to Bill Evans play and dr. Joe Gilman is gonna give you his education on that his process that he's created and put together and again go to jazz piano school come forward slash Bill Evans to get on our mailing list to
+
+**[15:48]** receive details about that and again you'll get the launch discount when we do release this in a couple of weeks and again that's gonna be that the course is gonna be was filmed by a guest by dr. Joe Gilman who's an amazing pianist you can look him up on the Internet has tons of albums out I highly recommend a Stevie Wonder album and I played with Bobby Hutcherson for so long and fantastic fantastic pianist gorgeous pianist so that is the end of time remembered I hope you guys enjoyed this be sure to check out our blog post on Bill going over some block chord movements that he has before we released
+
+**[16:18]** a specialty course and again if you're looking for the transcription go to Espio school.com if you're looking for the transcription of time remembered go to check SPL squat column forward slash podcast 127 so thank you guys all for listening as always my name is Brennan Lo and happy practicing

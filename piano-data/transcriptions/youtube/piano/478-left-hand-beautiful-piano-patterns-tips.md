@@ -1,0 +1,11 @@
+# Left Hand Beautiful Piano Patterns tips #1
+
+- Channel: Echo Beatz
+- Link: https://www.youtube.com/watch?v=2eLpV_Srju0
+- Duration: 00:16
+- Published: 2025-01-19
+- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+
+## Transcript
+
+**[00:00]** Music
