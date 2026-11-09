@@ -5,6 +5,18 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 86: the chord's three edit options open real drawers; the hand is settled except the build.**
+  Owner: "I want the chord edit options to get real drawers. use proper skills to do things and to prevent all the
+  weird paddings and looks. also only the medium light as default. 2. yes enough. 3. not build yet".
+  - **Drawers, not floating menus:** tapping `C`, `maj7` or the bass part opens a bottom sheet on a phone (grabber,
+    title, Done) and a titled popover on a laptop: **Root** (17 spellings as tiles, six a row), **Chord type** (the
+    whole grouped list, Triads to Altered, each row its symbol, name and the staff's check), **In the bass** (Root
+    position · 1st inversion · G♭ in the bass …). A pick applies at once, the piano and name change behind the
+    drawer, and the drawer stays until Done. Replaces Version 80's floating menus and "More chord types…".
+  - **Checked:** the layout check in seven states on the phone and three on the laptop, then looked at; the chord
+    symbols got a wider column (96) so "E♭m(add9)" no longer runs into its name.
+  - **The hand:** S3; **medium-light (#d9a77f) is the default skin tone**; 53,774 triangles a hand is enough, with a
+    lighter level for slow phones; **not to be built yet**: no app code for the hand until the owner says so.
 - **The hand's look is chosen (2026-11-09):** owner, of `drawings/v84-hand-smooth-variants.png`: "I like the s3 medium
   light". S3: the MakeHuman hand (CC0) smoothed to 53,774 triangles, a painted skin with no photo (rosier tips and
   knuckles, plain lighter glossy nails), shown in the medium-light tone (#d9a77f). S4 and the photographic skins are
@@ -847,3 +859,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: the bar symmetric with labelled side buttons, a fade under it; layout check and a look before publishing (v82).
 - 2026-11-09: View 3D with hands · 3D keys · 2D keys · Off; labels Note names · Degrees · None in every view; the name as pill buttons (Version 84).
 - 2026-11-09: Piano switch, View cards 3D piano · 2D keys with Hands on the keys inside 3D, full-width Range and Labels (Version 85).
+- 2026-11-09: Root, Chord type and In the bass open drawers; medium-light the default tone; the hand not built yet (Version 86).

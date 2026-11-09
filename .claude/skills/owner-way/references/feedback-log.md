@@ -345,6 +345,9 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **A choice opens a real drawer (R42, canvas 86):** "I want the chord edit options to get real drawers": no
+  floating menu under a control on a phone; a bottom sheet with grabber, title and Done, the pick applied at once
+  behind it; a titled popover on a laptop.
 - **Off is a switch; a sub-choice lives in its parent's card (R42, canvas 85):** "I dont want a fourth option I
   want to be able to show them from the 3d keys options … research more how a off options should be made": never
   "Off" as one more tile beside the views, and never a combination ("3D with hands") as its own option. A switch
