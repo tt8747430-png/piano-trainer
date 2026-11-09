@@ -345,6 +345,10 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **Ask, then draw the choices side by side (R42, v80):** after 25 rounds of guesses on Chords, three rounds of
+  numbered questions (a recommendation with each, "yes" accepts) settled the page's job, the 3D piano, key colours,
+  fingering, hands and settings homes in minutes; the look, which talk cannot settle, went up as two working designs
+  to pick from. Research is capped at about 50 Firecrawl credits a round.
 - **A canvas feature is proven where the owner sees it (R42, v79):** "the 3d piano doenst work": it ran in the local
   runtime and failed in the published page. Test a board under a policy that allows no connection (CSP
   `connect-src 'none'`); inline assets are parsed, never fetched.

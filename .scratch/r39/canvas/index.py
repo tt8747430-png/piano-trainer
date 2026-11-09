@@ -8,7 +8,7 @@ PLAYER = [('Player', 'PlayerLaptop', 'The Player'), ('PlayerLoop', 'PlayerLaptop
 PLAYER_PHONES = [('PlayerPractice', 'Practice: Wait · Play, the tempo, the metronome'), ('PlayerHands', 'Hands'),
                  ('PlayerSettings', 'Song settings: Arrangement or Accompaniment'), ('PlayerDone', 'Played through'),
                  ('PlayerDiagrams', 'Diagrams')]
-PRACTICE = [('Main', 'Laptop', 'Practice'), ('Chords', 'ChordsLaptop', 'Chords'), ('Scales', 'ScalesLaptop', 'Scales and keys'),
+PRACTICE = [('Main', 'Laptop', 'Practice'), ('Chords', 'ChordsLaptop', 'Chords, design A: the name is the control'), ('ChordsB', 'ChordsBLaptop', 'Chords, design B: the chord shelf'), ('Scales', 'ScalesLaptop', 'Scales and keys'),
             ('Intervals', 'IntervalsLaptop', 'Intervals'), ('Progressions', 'ProgressionsLaptop', 'Progressions'), ('Progression', 'ProgressionLaptop', 'A progression'),
             ('Accompaniment', 'AccompanimentLaptop', 'Accompaniment'), ('ChordPlayer', 'ChordPlayerLaptop', 'Chord player'),
             ('Exercises', 'ExercisesLaptop', 'Exercises'), ('Exercise', 'ExerciseLaptop', 'An exercise'), ('Quiz', 'QuizLaptop', 'Quiz'),

@@ -5,6 +5,23 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v80 (canvas Version 80): the redesign as two working designs side by side, to be picked from.** After the owner's
+  answers to three rounds of questions (`chords-research.md` has them): "1. yes 2. yes 3. yes. 4. yes . yes" to
+  drawing both, the hand comparison, the piano settings, fingering in words and the research budget. **Open: A or B.**
+  - **Shared by both:** the 3D piano on top, pressed keys coloured per chord tone (the stage built with one
+    expression swapped, `pthands_vite.config.mjs`); fact rows **Notes · Right hand · Left hand** with the finger
+    numbers in words; the staff card; Practise; Play with the Hands button; the piano button top right.
+  - **A, "the name is the control"** (Chords, ChordsLaptop): the chord name is three pop-up buttons read as one
+    symbol, `C` `maj7` `/E`: **Root** (17 spellings as tiles), **Chord type** (Triads, Sevenths, then "More chord
+    types…" to the full list), **In the bass** (Root position · 1st inversion · E in the bass …). The bar: Voicing ·
+    Play · Hands. The note circles and the chord sheet are gone.
+  - **B, "the chord shelf"** (ChordsB, ChordsBLaptop): one docked panel is the chord's home, a bottom shelf on a
+    phone that folds to its head, a right-hand panel on a laptop: the name, Play and Hands; a strip of roots; every
+    chord type as a tile (symbol over name); **Inversions** as small keyboards named C, C/E, C/G; **Voicing** chips.
+  - **Piano settings** (the top-right button, both designs): **Off · 3D · 2D**; **Range**, the 88 keys as a strip with
+    the part shown lit and "C4 – B5 · 24 keys", Fit · 61 · 76 · 88; **Labels** None · Note names · Chord tones (2D);
+    links **Sound ›**, **MIDI keyboard ›**. No finger numbers among the labels (standing rule).
+  - **Firecrawl:** about 50 credits a research round; no PDF extraction unless asked.
 - **v79 (canvas Version 79): the 3D piano loads without the network; Hands is one button beside Play.** Owner: "the
   page still has bugs and the 3d piano doenst work and I dont like the hand controls and settings. research more and
   refactor and improve it". Replaces v78's Left · Both · Right row and the "Left hand plays the Chord | Root" row.
@@ -765,3 +782,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: the hands drawn at the keyboard, each playing finger reaching its key (v77).
 - 2026-11-09: the app's 3D hands live at the top of Chords; Left · Both · Right under the piano; Off · 3D · 2D (v78).
 - 2026-11-09: 3D models parsed in place (no fetch); Hands a menu button beside Play; Root and chord a voicing (v79).
+- 2026-11-09: designs A and B drawn side by side; per-tone keys in 3D; piano settings with the range strip; fingering in words (v80).

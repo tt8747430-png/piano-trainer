@@ -208,7 +208,7 @@ const invN = TWO[voicing] ? 1 : Math.min(4, voicing === 'Shell' ? 3 : (voicing.s
 const inv = Math.min(st.inv ?? 0, invN - 1);
 const upper = (() => { const u = upperOf(root, q); RL = rLet; return u; })(), canSplit = !TWO[st.voicing || 'Close'];
 const bassOn = false, hands = st.hand === 'Split' ? 'Both' : (st.hand || 'Right'), fingOn = true, kbMode = st.kbMode || '3d', kbShow = kbMode !== 'off', keys = st.keys || 'Chord';
-const playAs = 'Block', arp = false, dir = 'Up', keyLabel = st.keyLabel || 'Names', names = keyLabel === 'Names', fingKeys = false, treble = false, auto = true;
+const playAs = 'Block', arp = false, dir = 'Up', keyLabel = st.keyLabel || 'Note names', names = keyLabel === 'Note names', fingKeys = false, treble = false, auto = true;
 const oct = st.oct || 0; // an added chord may sit an octave lower, to stay under the hand (voice leading)
 const ns = voice(root, q, inv, voicing, hands).map((x) => Object.assign(x, { m: x.m + 12 * oct }));
 const ms = ns.map((x) => x.m);
@@ -224,7 +224,8 @@ const change = (o) => { set(o); if (auto) { const r = o.root ?? root, qq = QS[o.
 const [lo, hi] = range(ms, keys, ''' + str(minOct) + r''');
 const Rn = ns.filter((x) => x.hand === 'R'), Ln = ns.filter((x) => x.hand === 'L');
 const fm = {}; fingers(Rn, 'R', inv, voicing === 'Close').forEach((f, i) => { fm[Rn[i].m] = f; }); fingers(Ln, 'L', inv, voicing === 'Close').forEach((f, i) => { fm[Ln[i].m] = f; });
-const marks = {}; ns.forEach((x) => { marks[x.m] = [ROLE[x.deg] || C.accent, names ? x.name : '']; });
+const tonesL = keyLabel === 'Chord tones';
+const marks = {}; ns.forEach((x) => { marks[x.m] = [ROLE[x.deg] || C.accent, names ? x.name : (tonesL ? DEGL[x.deg] : '')]; });
 const kb = calmKeys(lo, hi, marks, ''' + str(W) + ', ' + str(KH) + r''');
 { let wi = 0, bi = 0; for (let m = lo; m <= hi; m++) { const k = NAT.includes(m % 12) ? kb.whites[wi++] : kb.blacks[bi++]; if (k) k.fing = fingKeys && fm[m] ? String(fm[m]) : ''; } }
 const bass = ns[0];
@@ -350,14 +351,19 @@ return {
   fingOnBg: fingOn ? '#7FB685' : C.line, fingOnX: fingOn ? 22 : 2, toggleFing: () => set({ fing: !fingOn }), fingOn,
   fingKeysOn: fingKeys, fingKeysOnBg: fingKeys ? '#7FB685' : C.line, fingKeysOnX: fingKeys ? 22 : 2, toggleFingKeys: () => set({ fingKeys: !fingKeys }),
   handSeg: seg(['Right', 'Left', 'Both'], hands, (l) => change({ hand: l })),
-  keyLabelSeg: seg(['Names', 'None'], keyLabel, (l) => set({ keyLabel: l })),
+  keyLabelSeg: seg(['None', 'Note names', 'Chord tones'], keyLabel, (l) => set({ keyLabel: l })),
   rootName: RN, qName: q.n[0].toUpperCase() + q.n.slice(1), qSym: RN + q.k, voicing, invLabel: INV[inv], handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand', soundWord: arp ? 'Arpeggio' : 'Block',
   // one row of letters; tapping the chosen letter again steps through its spellings: C, C♯, C (D, D♯, D♭ …)
   ...letterPick(rLet, rAcc, (l, a) => !SKIP.includes(LET[l] + a), st.tapUsed, (l, next, more) => { RL = l; change(Object.assign({ rl: l, ra: next, root: rootPc(l, next) }, more ? { tapUsed: true } : {})); }),
   playTiles: [['Block', 'Block chord'], ['Up', 'Arpeggio up'], ['Up and down', 'Arpeggio up and down']].map(([v, l]) => ({ l, on: v === playAs, bg: v === playAs ? '#FBF1DD' : '#FEFDFB', ring: v === playAs ? '0 0 0 2px #B07A2A' : '0 0 0 1px ' + C.line, pick: () => { set({ playAs: v }); sound(ms, v !== 'Block', v === 'Up and down' ? 'Up and down' : 'Up'); } })),
   qSymFs: (RN + q.k).length > 7 ? 12 : ((RN + q.k).length > 5 ? 13.5 : 15), blockOn: !arp, soundShort: arp ? 'Arpeggio' : 'Block',
   soundLabel: playAs === 'Block' ? 'Block chord' : (playAs === 'Up' ? 'Arpeggio up' : 'Up and down'),
-    keysSeg: seg(['Chord', '61', '76', '88'], keys, (l) => set({ keys: l })),
+    keysSeg: seg(['Fit', '61', '76', '88'], keys === 'Chord' ? 'Fit' : keys, (l) => set({ keys: l === 'Fit' ? 'Chord' : l })),
+  // the range as a strip of all 88 keys, the part shown lit (Ultimate Piano's Settings; "Showing 36 keys (C3 – B5)")
+  rangeStrip: (() => { const W = 340, n = 52, w = W / n; let i = 0, x0 = null, x1 = 0, bl = ''; const NN = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
+    for (let m = 21; m <= 108; m++) { if (NAT.includes(m % 12)) { if (m >= lo && m <= hi) { if (x0 === null) x0 = i * w; x1 = (i + 1) * w; } i++; } else bl += 'M' + (i * w - w * 0.3).toFixed(1) + ' 0h' + (w * 0.6).toFixed(1) + 'v15h-' + (w * 0.6).toFixed(1) + 'z'; }
+    const nm = (m) => NN[m % 12] + (Math.floor(m / 12) - 1);
+    return { bl, x: (x0 || 0).toFixed(1), w: (x1 - (x0 || 0)).toFixed(1), cap: nm(lo) + ' – ' + nm(hi) + ' · ' + (hi - lo + 1) + ' keys' }; })(),
   kbTiles: [['off', 'Off'], ['3d', '3D'], ['2d', '2D']].map(([id, name]) => { const on = id === kbMode; return { name, on, line: on ? '#B07A2A' : 'transparent', bg: on ? '#FBF1DD' : '#FEFDFB', isOff: id === 'off', is2d: id === '2d', is3d: id === '3d', pick: () => set({ kbMode: id }) }; }),
   rhOn: hands !== 'Left', rhOnBg: hands !== 'Left' ? '#7FB685' : C.line, rhOnX: hands !== 'Left' ? 22 : 2,
   lhOn: hands !== 'Right', lhOnBg: hands !== 'Right' ? '#7FB685' : C.line, lhOnX: hands !== 'Right' ? 22 : 2,
@@ -368,6 +374,25 @@ return {
   // courses-app/03): each hand lies under the keyboard and every playing finger reaches to its key, its number in a
   // circle on the fingertip in the note's colour; resting fingers stay curled at the palm.
   handsRef: (el) => { this._cv = el; },
+  // ── the redesign's two concepts (R42 v80) share these ──
+  // the name as three parts, each a pop-up button: root, chord type, the note in the bass
+  nmType: q.k || 'major', nmTypeFs: q.k ? '1em' : '0.5em', nmTypeC: q.k ? C.ink : C.soft, nmBass: slash || 'root position', nmBassFs: slash ? '1em' : '0.36em', nmBassC: slash ? (ROLE[ns.length ? voice(root, q, inv, voicing, 'Right')[0].deg : 1] || C.ink) : C.soft,
+  isMRoot: sh === 'mRoot', isMType: sh === 'mType', isMBass: sh === 'mBass', isVMenu: sh === 'vMenu',
+  openMRoot: () => set({ sheet: sh === 'mRoot' ? null : 'mRoot' }), openMType: () => set({ sheet: sh === 'mType' ? null : 'mType' }), openMBass: () => set({ sheet: sh === 'mBass' ? null : 'mBass' }), openVMenu: () => set({ sheet: 'vMenu' }),
+  rootTiles: [[0, 0], [0, 1], [1, -1], [1, 0], [1, 1], [2, -1], [2, 0], [3, 0], [3, 1], [4, -1], [4, 0], [4, 1], [5, -1], [5, 0], [5, 1], [6, -1], [6, 0]].map(([l, a]) => { const on = l === rLet && a === rAcc;
+    return { s: LET[l] + ACC[String(a)], on, bg: on ? '#F6E3BC' : '#FEFDFB', ring: on ? 'none' : '0 0 0 1px ' + C.line, fw: on ? 800 : 600, aria: 'Root ' + LET[l] + (a ? (a > 0 ? ' sharp' : ' flat') : ''), pick: () => { RL = l; change({ rl: l, ra: a, root: rootPc(l, a), oct: 0, sheet: sh === 'mRoot' ? null : sh }); } }; }),
+  typeGroups: [['Triads', ['', 'm', '°', '+', 'sus2', 'sus4']], ['Sevenths', ['maj7', '7', 'm7', 'ø7', '°7']]].map(([g, ks]) => ({ g, rows: ks.map((k) => { const i = QS.findIndex((x) => x.k === k), on = i === qi; return { s: RN + k, n: QS[i].n[0].toUpperCase() + QS[i].n.slice(1), on, mark: on ? '✓' : '', fw: on ? 700 : 500, pick: () => change({ q: i, sheet: null }) }; }) })),
+  typeTiles: QS.map((x, i) => ({ s: RN + x.k, n: x.n, on: i === qi, bg: i === qi ? '#F6E3BC' : '#FEFDFB', ring: i === qi ? 'none' : '0 0 0 1px ' + C.line, fw: i === qi ? 800 : 600, pick: () => change({ q: i }) })),
+  bassItems: Array.from({ length: invN }, (_, i) => { const v = voice(root, q, i, voicing, 'Right'); RL = rLet; const on = i === inv; return { l: i ? INV[i] + ' · ' + v[0].name + ' in the bass' : 'Root position', on, mark: on ? '✓' : '', fw: on ? 700 : 500, pick: () => change({ inv: i, sheet: null }) }; }),
+  invThumbs: Array.from({ length: invN }, (_, i) => { const v = voice(root, q, i, voicing, 'Right'); RL = rLet; const a = Math.floor(Math.min(...v.map((x) => x.m)) / 12) * 12; const mk = {}; v.forEach((x) => { mk[x.m] = [ROLE[x.deg] || C.accent, '']; }); const on = i === inv;
+    return { s: sym + (i ? '/' + v[0].name : ''), kb: calmKeys(a, Math.max(a + 23, Math.max(...v.map((x) => x.m))), mk, 112, 44), ring: on ? '0 0 0 2px #B07A2A' : '0 0 0 1px ' + C.line, bg: on ? '#FBF1DD' : '#FEFDFB', fw: on ? 800 : 600, aria: i ? INV[i] : 'Root position', pick: () => change({ inv: i }) }; }),
+  voiceChips: VOICINGS.filter((v) => !v.ok(q)).map((v) => { const on = v.v === voicing; return { l: v.v, on, bg: on ? '#F6E3BC' : '#FEFDFB', ring: on ? 'none' : '0 0 0 1px ' + C.line, fw: on ? 700 : 500, mark: on ? '✓' : '', f: v.f, pick: () => change(Object.assign({ voicing: v.v, inv: 0, sheet: sh === 'vMenu' ? null : sh }, TWO[v.v] ? { hand: 'Both' } : {})) }; }),
+  // fingering in words, each hand's notes and fingers low to high (pianochord.org: "Left hand: 5-3-1")
+  facts: [{ k: 'Notes', v: ns.filter((x, i, a) => a.findIndex((y) => y.name === x.name) === i).sort((a, b) => ORD.indexOf(a.deg) - ORD.indexOf(b.deg)).map((x) => x.name).join('  ') }]
+    .concat(Rn.length ? [{ k: 'Right hand', v: Rn.slice().sort((a, b) => a.m - b.m).map((x) => fm[x.m]).join('  ') }] : [])
+    .concat(Ln.length ? [{ k: 'Left hand', v: Ln.slice().sort((a, b) => a.m - b.m).map((x) => fm[x.m]).join('  ') }] : []),
+  shelfOpen: st.shelf !== false, shelfShut: st.shelf === false, toggleShelf: () => set({ shelf: st.shelf === false }), shelfAria: st.shelf === false ? 'Open the chord shelf' : 'Close the chord shelf',
+  symFull: sym + slash,
   handsList: [['Both', 'Both hands'], ['Right', 'Right hand'], ['Left', 'Left hand']].map(([v, l]) => ({ l, on: v === hands, mark: v === hands ? '✓' : '', isB: v === 'Both', isR: v === 'Right', isL: v === 'Left', pick: () => change({ hand: v, sheet: null }) })),
   openHandsMenu: () => set({ sheet: sh === 'hands' ? null : 'hands' }),
   handSeg3: seg(['Left hand', 'Both hands', 'Right hand'], hands === 'Split' || hands === 'Both' ? 'Both hands' : hands + ' hand', (l) => change({ hand: l === 'Both hands' ? (st.bassOnly && canSplit ? 'Split' : 'Both') : l.split(' ')[0] })),
@@ -377,7 +402,7 @@ return {
   h3d: (() => { const RN3 = { 1: 'root', 3: '3rd', 5: '5th', 7: '7th', 9: '9th', 2: '9th', 11: '11th', 4: '11th', 13: '13th', 6: '13th' };
     this._handsIn = kbMode !== '3d' ? null : { notes: ns.map((x) => ({ midi: x.m, spelled: {}, hand: x.hand === 'L' ? 'lh' : 'rh', finger: fm[x.m], startTick: 0, durationTicks: 1920, velocity: 80 })),
       perSecond: 960, now: () => 1, playing: false, held: new Set(ms), marks: new Map(ns.map((x) => [x.m, { tone: RN3[x.deg] || 'root' }])), wrong: undefined, faded: null, skin: 'light',
-      range: { low: Math.min(...ms), high: Math.max(...ms) } };
+      range: keys === 'Chord' ? { low: Math.min(...ms), high: Math.max(...ms) } : { low: lo, high: hi } };
     return kbMode === '3d'; })(),
   is2dKb: kbMode === '2d',
   kh: (() => { const KW = ''' + str(W) + r''', KH = ''' + str(KH) + r'''; const wsN = []; for (let m = lo; m <= hi; m++) if (NAT.includes(m % 12)) wsN.push(m);
@@ -661,32 +686,99 @@ def ch_js(D, W, KH, minOct, mini_w):
     out = 'const PT_BUNDLE = ' + json.dumps(PT_BUNDLE) + ';\n' + CH_JS + '\n' + js('const D = ' + json.dumps(D) + ';\nconst HART = ' + json.dumps({k: {'ar': v['ar'], 'f': v['f']} for k, v in HART.items()}) + ';\n' + CH_BODY(D, W, KH, minOct, mini_w))
     return out.replace('class Component extends DCLogic {\n', 'class Component extends DCLogic {' + PT_LIFE, 1)
 
-# ── phone ──
-PH_BODY = f'''<div style="flex: none; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px">{GLASSBTN('Back to Practice', CHEV_L, href='Main.dc.html')}<h1 style="margin: 0; font-size: 17px; font-weight: 600">Chords</h1>{GLASSBTN('Keyboard', KEYSI, 'openKeys')}</div>
-{STAGE3D(250)}
-<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px 120px; display: flex; flex-direction: column; gap: 16px">{TITLEBLOCK(44)}{VIEWBODY(330, 2, 150)}{PRACTISE('Player.dc.html')}</main>
-{DOCK_PHONE}'''
-phone('Chords', 'Chords', PH_BODY, ch_js({'root': 0, 'q': 12}, 402, 168, 2, 150), SHEETS_PHONE('Player.dc.html'))
+# ══ The redesign, two concepts side by side (R42 v80; research: .scratch/r42/plan/chords-research.md) ══
+PART = f'border: 0; background: transparent; margin: 0 1px; padding: 2px 5px 4px; border-radius: 10px; box-shadow: inset 0 -2px 0 {LINE}; color: {INK}; font: inherit; white-space: nowrap'
+# A: the name is the control: three pop-up buttons read as one chord symbol (chord-trainer's row; Apple's pop-up button)
+def NAME_A(fs):
+    return (f'<div style="flex: none; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">'
+      f'<div role="group" aria-label="Chord: {{{{symFull}}}}" style="display: flex; align-items: baseline; justify-content: center; font-family: {SERIF}; font-size: {fs}px; font-weight: 700; line-height: 1.1">'
+      f'<button type="button" aria-haspopup="menu" aria-label="Root: {{{{rootName}}}}" onClick="{{{{openMRoot}}}}" style="{PART}">{{{{rootName}}}}</button>'
+      f'<button type="button" aria-haspopup="menu" aria-label="Chord type: {{{{qName}}}}" onClick="{{{{openMType}}}}" style="{PART}"><span style="font-size: {{{{nmTypeFs}}}}; color: {{{{nmTypeC}}}}">{{{{nmType}}}}</span></button>'
+      f'<button type="button" aria-haspopup="menu" aria-label="In the bass: {{{{invLabel}}}}" onClick="{{{{openMBass}}}}" style="{PART}"><span style="font-size: {{{{nmBassFs}}}}; color: {{{{nmBassC}}}}">{{{{nmBass}}}}</span></button></div>'
+      f'<p style="margin: 0; font-size: 15px; color: {SOFT}">{{{{fullLine}}}}</p></div>')
+FACTS = (f'<dl style="flex: none; margin: 0; border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{facts}}}}" as="f" hint-placeholder-count="3">'
+         f'<div style="min-height: 46px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: inset 0 -1px 0 {LINE}"><dt style="font-size: 15px; color: {SOFT}">{{{{f.k}}}}</dt><dd style="margin: 0; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: pre">{{{{f.v}}}}</dd></div></sc-for></dl>')
+MROW = f'width: 100%; min-height: 46px; border: 0; border-radius: 12px; background: transparent; padding: 4px 12px; display: flex; align-items: center; gap: 10px; color: {INK}; font: inherit; text-align: left'
+MCHK = '<span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">'
+def MENUS_A(pos, w):
+    box = f'position: absolute; {pos}; z-index: 61; width: {w}; box-sizing: border-box; max-height: 430px; overflow-y: auto; padding: 8px; border-radius: 18px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 2px'
+    veil = '<div onClick="{{closeSheet}}" style="position: absolute; inset: 0; z-index: 60"></div>'
+    root = (f'<sc-if value="{{{{isMRoot}}}}" hint-placeholder-val="{{{{false}}}}">{veil}<div role="menu" aria-label="Root" class="nos" style="{box}"><div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px"><sc-for list="{{{{rootTiles}}}}" as="o" hint-placeholder-count="17">'
+            f'<button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" aria-label="{{{{o.aria}}}}" onClick="{{{{o.pick}}}}" style="height: 46px; min-width: 0; padding: 0; border: 0; border-radius: 12px; background: {{{{o.bg}}}}; box-shadow: {{{{o.ring}}}}; color: {INK}; font-family: {SERIF}; font-size: 18px; font-weight: {{{{o.fw}}}}">{{{{o.s}}}}</button></sc-for></div></div></sc-if>')
+    typ = (f'<sc-if value="{{{{isMType}}}}" hint-placeholder-val="{{{{false}}}}">{veil}<div role="menu" aria-label="Chord type" class="nos" style="{box}"><sc-for list="{{{{typeGroups}}}}" as="g" hint-placeholder-count="2"><div style="display: flex; flex-direction: column"><h3 style="margin: 6px 0 2px 12px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{{{{g.g}}}}</h3><sc-for list="{{{{g.rows}}}}" as="r" hint-placeholder-count="5">'
+           f'<button type="button" role="menuitemradio" aria-checked="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" style="{MROW}"><span style="flex: none; width: 74px; font-family: {SERIF}; font-size: 18px; font-weight: 700">{{{{r.s}}}}</span><span style="flex: 1; min-width: 0; font-size: 15px; font-weight: {{{{r.fw}}}}">{{{{r.n}}}}</span>{MCHK}{{{{r.mark}}}}</span></button></sc-for></div></sc-for>'
+           f'<span aria-hidden="true" style="height: 1px; margin: 4px 8px; background: {LINE}"></span><button type="button" role="menuitem" onClick="{{{{openList}}}}" style="{MROW}"><span style="flex: 1; font-size: 15px; font-weight: 600">More chord types…</span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></button></div></sc-if>')
+    bass = (f'<sc-if value="{{{{isMBass}}}}" hint-placeholder-val="{{{{false}}}}">{veil}<div role="menu" aria-label="In the bass" style="{box}"><sc-for list="{{{{bassItems}}}}" as="r" hint-placeholder-count="3">'
+            f'<button type="button" role="menuitemradio" aria-checked="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" style="{MROW}"><span style="flex: 1; min-width: 0; font-size: 16px; font-weight: {{{{r.fw}}}}">{{{{r.l}}}}</span>{MCHK}{{{{r.mark}}}}</span></button></sc-for></div></sc-if>')
+    return root + typ + bass
+VLIST = (f'<div role="radiogroup" aria-label="Voicing" style="border-radius: 12px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{voiceChips}}}}" as="v" hint-placeholder-count="6"><button type="button" role="radio" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="width: 100%; min-height: 54px; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: transparent; padding: 6px 14px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{v.l}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{v.f}}}}</span></span><span style="font-size: 18px; font-weight: 700; color: #7A5418">{{{{v.mark}}}}</span></button></sc-for></div>')
+VOICEBTN = f'<button type="button" aria-label="Voicing: {{{{voicing}}}}" aria-haspopup="dialog" onClick="{{{{openVMenu}}}}" style="pointer-events: auto; justify-self: end; flex: none; min-width: 56px; max-width: 100%; padding: 0 14px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{voicing}}}}</button>'
+# the piano settings: view, range, labels, then links to their one home (Ultimate Piano; OnlinePianist; Yamaha's Utility)
+RANGE = ('<div style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 10px"><div style="display: flex; align-items: center; justify-content: space-between; gap: 12px"><span style="font-size: 16px">Range</span><span style="font-size: 15px; color: ' + SOFT + '; font-variant-numeric: tabular-nums">{{rangeStrip.cap}}</span></div>'
+         '<svg viewBox="0 0 340 26" role="img" aria-label="The part of the 88 keys shown" style="display: block; width: 100%; height: auto; border-radius: 4px; overflow: hidden"><rect width="340" height="26" fill="#FEFDFB" stroke="' + LINE + '"></rect><rect x="{{rangeStrip.x}}" y="0" width="{{rangeStrip.w}}" height="26" fill="#F6E3BC"></rect><path d="M6.54 0V26M13.08 0V26" stroke="none"></path><path d="{{rangeStrip.bl}}" fill="#332C28"></path><rect x="{{rangeStrip.x}}" y="0.75" width="{{rangeStrip.w}}" height="24.5" fill="none" stroke="#B07A2A" stroke-width="1.5"></rect></svg>'
+         '<div>' + SEGC('keysSeg', 32, 13) + '</div></div>')
+B_PIANO = (KBTILES + GROUP(('raw', RANGE), bg="#FEFDFB") + '<sc-if value="{{is2dKb}}" hint-placeholder-val="{{false}}">' + GROUP(('seg', 'Labels', 'keyLabelSeg', 250), bg="#FEFDFB") + '</sc-if>'
+           + GROUP(('link', 'Sound', '', '#'), ('link', 'MIDI keyboard', '', '#'), bg="#FEFDFB"))
+PIANOBTN = lambda: GLASSBTN('Piano settings', KEYSI, 'openKeys')
+DOCK_A_PHONE = f'<div role="toolbar" aria-label="Voicing, sound and hands" style="position: absolute; left: 12px; right: 12px; bottom: 30px; z-index: 40; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; pointer-events: none">{VOICEBTN}{PLAYSPLIT}{HANDSBTN}</div>'
+DOCK_A_LAPTOP = f'<div role="toolbar" aria-label="Voicing, sound and hands" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; width: 600px; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 10px; pointer-events: none">{VOICEBTN}{PLAYSPLIT}{HANDSBTN}</div>'
+def LISTSHEET(cond, body, phone_like, pos='', back='closeSheet'):
+    b = body.replace('{{backChord}}', '{{' + back + '}}')
+    if phone_like:
+        return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" class="nos" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 12px"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>{b}</section></sc-if>'
+    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" class="nos" style="position: absolute; {pos}; z-index: 61; width: 400px; max-height: 620px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 12px 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">{b}</div></sc-if>'
+def LAYERS(phone_like, concept):
+    out = TOAST + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: ' + ('96px' if phone_like else '92px'))
+    if phone_like:
+        out += HANDSMENU('right: 12px; bottom: 96px' if concept == 'A' else 'right: 12px; bottom: 150px')
+        for cond, title, body in (('isKeys', 'Piano', B_PIANO), ('isNext', 'Next chord', B_NEXT), ('isTr', 'Transpose', B_TR), ('isVMenu', 'Voicing', VLIST)):
+            out += BSHEET(cond, title, body)
+        out += LISTSHEET('isList', B_LIST, True)
+        if concept == 'A': out += MENUS_A('left: 16px; right: 16px; top: 432px', 'auto')
+    else:
+        out += HANDSMENU('left: calc(50% + 80px); bottom: 92px')
+        for cond, title, body, pos in (('isKeys', 'Piano', B_PIANO, 'right: 24px; top: 76px'), ('isNext', 'Next chord', B_NEXT, 'left: calc(50% + 420px); top: 330px'), ('isTr', 'Transpose', B_TR, 'left: calc(50% - 420px); top: 330px'), ('isVMenu', 'Voicing', VLIST, 'left: calc(50% - 400px); bottom: 92px')):
+            out += POPOVER(cond, title, body, pos, 400)
+        out += LISTSHEET('isList', B_LIST, False, 'left: calc(50% - 200px); top: 200px')
+        if concept == 'A': out += MENUS_A('left: calc(50% - 210px); top: 500px', '420px')
+    return out
+# B: the chord shelf: one docked panel is the chord's home (new-app's root strip; pianochord.org's types and C/E pictures)
+STRIP = 'display: flex; gap: 6px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px'
+MINI = (f'<div aria-hidden="true" style="position: relative; width: 112px; height: 44px; border-radius: 4px; overflow: hidden; background: {LINE}; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{t.kb.whites}}}}" as="k" hint-placeholder-count="14"><span style="position: absolute; left: {{{{k.left}}}}px; top: 0; width: {{{{k.w}}}}px; height: 44px; box-sizing: border-box; border-right: 1px solid rgba(51,41,33,.14); background: {{{{k.bg}}}}"></span></sc-for><sc-for list="{{{{t.kb.blacks}}}}" as="k" hint-placeholder-count="10"><span style="position: absolute; left: {{{{k.left}}}}px; top: 0; width: {{{{k.w}}}}px; height: {{{{k.h}}}}px; border-radius: 0 0 3px 3px; background: {{{{k.bg}}}}"></span></sc-for></div>')
+SHELF_BODY = (
+  f'<div class="nos" role="radiogroup" aria-label="Root" style="{STRIP}"><sc-for list="{{{{rootTiles}}}}" as="o" hint-placeholder-count="17"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" aria-label="{{{{o.aria}}}}" onClick="{{{{o.pick}}}}" style="flex: none; width: 46px; height: 44px; padding: 0; border: 0; border-radius: 12px; background: {{{{o.bg}}}}; box-shadow: {{{{o.ring}}}}; color: {INK}; font-family: {SERIF}; font-size: 18px; font-weight: {{{{o.fw}}}}">{{{{o.s}}}}</button></sc-for></div>'
+  f'<div class="nos" role="radiogroup" aria-label="Chord type" style="display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, 54px); grid-auto-columns: 92px; gap: 6px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px"><sc-for list="{{{{typeTiles}}}}" as="o" hint-placeholder-count="12"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-width: 0; padding: 0 4px; border: 0; border-radius: 12px; background: {{{{o.bg}}}}; box-shadow: {{{{o.ring}}}}; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="font-family: {SERIF}; font-size: 17px; font-weight: {{{{o.fw}}}}; white-space: nowrap">{{{{o.s}}}}</span><span style="max-width: 100%; font-size: 10.5px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{o.n}}}}</span></button></sc-for></div>'
+  f'{CAPS("Inversions")}<div class="nos" role="radiogroup" aria-label="Inversions" style="{STRIP}"><sc-for list="{{{{invThumbs}}}}" as="t" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{t.on}}}}" aria-label="{{{{t.aria}}}}" onClick="{{{{t.pick}}}}" style="flex: none; border: 0; border-radius: 14px; background: {{{{t.bg}}}}; box-shadow: {{{{t.ring}}}}; padding: 8px; display: flex; flex-direction: column; align-items: center; gap: 6px; color: {INK}; font: inherit">{MINI}<span style="font-family: {SERIF}; font-size: 16px; font-weight: {{{{t.fw}}}}">{{{{t.s}}}}</span></button></sc-for></div>'
+  f'{CAPS("Voicing")}<div class="nos" role="radiogroup" aria-label="Voicing" style="{STRIP}"><sc-for list="{{{{voiceChips}}}}" as="v" hint-placeholder-count="6"><button type="button" role="radio" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="flex: none; height: 40px; padding: 0 14px; border: 0; border-radius: 20px; background: {{{{v.bg}}}}; box-shadow: {{{{v.ring}}}}; color: {INK}; font: inherit; font-size: 14px; font-weight: {{{{v.fw}}}}; white-space: nowrap">{{{{v.l}}}}</button></sc-for></div>')
+SHELF_HEAD = (f'<div style="display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 8px"><button type="button" aria-expanded="{{{{shelfOpen}}}}" aria-label="{{{{shelfAria}}}}" onClick="{{{{toggleShelf}}}}" style="min-width: 0; min-height: 56px; border: 0; background: transparent; padding: 0; display: flex; align-items: center; gap: 8px; color: {INK}; font: inherit; text-align: left"><span style="font-family: {SERIF}; font-size: 26px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{symFull}}}}</span><span style="flex: none; color: {SOFT}; display: flex">{CHEV_D}</span></button>'
+              + PLAYSPLIT.replace('width: 176px;', 'width: 168px;') + HANDSBTN + '</div>')
+SHELF_PHONE = (f'<section aria-label="Chord" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 40; border-radius: 24px 24px 0 0; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, 0 -8px 30px rgba(51,41,33,.12); padding: 8px 16px 26px; display: flex; flex-direction: column; gap: 10px"><div aria-hidden="true" style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>{SHELF_HEAD}'
+               f'<sc-if value="{{{{shelfOpen}}}}" hint-placeholder-val="{{{{true}}}}"><div class="nos" style="max-height: 300px; overflow-y: auto; overflow-x: hidden; margin: 0 -16px; padding: 0 16px 4px; display: flex; flex-direction: column; gap: 10px">{SHELF_BODY}</div></sc-if></section>')
+SHELF_LAPTOP = (f'<aside aria-label="Chord" class="nos" style="flex: none; width: 400px; box-sizing: border-box; overflow-y: auto; overflow-x: hidden; background: {PAGE}; box-shadow: -1px 0 0 {LINE}; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 12px">{SHELF_HEAD}{SHELF_BODY}</aside>')
 
-# ── laptop: the whole screen, as the Player's ──
-LP_INNER = f'''<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: flex; flex-direction: column">
-<div style="flex: none; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px"><div style="display: flex; align-items: center; gap: 14px">{GLASSBTN('Back to Practice', CHEV_L, href='Laptop.dc.html')}<h1 style="margin: 0; font-size: 18px; font-weight: 600">Chords</h1></div>{GLASSBTN('Keyboard', KEYSI, 'openKeys')}</div>
-{STAGE3D(330)}
-<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 26px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 820px; max-width: 100%; display: flex; flex-direction: column; gap: 20px">{TITLEBLOCK(56)}{VIEWBODY(440, 4, 170, True)}{PRACTISE('PlayerLaptop.dc.html')}</div></main>
-{DOCK_LAPTOP}
-{POPS_LAPTOP('PlayerLaptop.dc.html')}
-</div>'''
-open(OUT + 'ChordsLaptop.dc.html', 'w').write(HEAD % 'Chords, laptop' + LAPFRAME_TOP + LP_INNER + f"""
+def write_laptop(stem, title, inner, D, concept):
+    open(OUT + stem + '.dc.html', 'w').write(HEAD % title + LAPFRAME_TOP + f'<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: flex; flex-direction: column">{inner}{LAYERS(False, concept)}</div>' + f"""
 <img src="{LAPTOP_FRAME}" alt="" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 2143px; height: 1299px; pointer-events: none">
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{{"$preview":{{"width":2143,"height":1299}}}}'>
 {PRE}
-{ch_js({'root': 3, 'q': 14}, 1710, 180, 4, 170)}
+{ch_js(D, 1710, 180, 4, 170)}
 </script>
 </body>
 </html>
 """)
+def PH_HEAD(title): return f'<div style="flex: none; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px">{GLASSBTN("Back to Practice", CHEV_L, href="Main.dc.html")}<h1 style="margin: 0; font-size: 17px; font-weight: 600">{title}</h1>{PIANOBTN()}</div>'
+def LP_HEAD(title): return f'<div style="flex: none; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px"><div style="display: flex; align-items: center; gap: 14px">{GLASSBTN("Back to Practice", CHEV_L, href="Laptop.dc.html")}<h1 style="margin: 0; font-size: 18px; font-weight: 600">{title}</h1></div>{PIANOBTN()}</div>'
+STAFFCARD = lambda w: f'<div style="flex: none; border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; padding: 10px 10px 14px; display: flex; flex-direction: column; gap: 10px">{STAFFHEAD}{STAFFSVG(w)}</div>'
+# ── A, phone and laptop ──
+phone('Chords', 'Chords, design A', PH_HEAD('Chords') + STAGE3D(250) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px 120px; display: flex; flex-direction: column; gap: 16px">{NAME_A(44)}{FACTS}{STAFFCARD(330)}{PRACTISE("Player.dc.html")}</main>' + DOCK_A_PHONE,
+      ch_js({'root': 0, 'q': 12}, 402, 168, 2, 150), LAYERS(True, 'A'))
+write_laptop('ChordsLaptop', 'Chords, design A, laptop', LP_HEAD('Chords') + STAGE3D(330) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 22px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 820px; max-width: 100%; display: flex; flex-direction: column; gap: 18px">{NAME_A(56)}<div style="display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start">{STAFFCARD(440)}{FACTS}</div>{PRACTISE("PlayerLaptop.dc.html")}</div></main>' + DOCK_A_LAPTOP, {'root': 3, 'q': 14}, 'A')
+# ── B, phone and laptop ──
+phone('ChordsB', 'Chords, design B', PH_HEAD('Chords') + STAGE3D(230) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 12px 16px 470px; display: flex; flex-direction: column; gap: 14px"><p style="margin: 0; text-align: center; font-size: 15px; color: {SOFT}">{{{{fullLine}}}}</p>{FACTS}{STAFFCARD(330)}{PRACTISE("Player.dc.html")}</main>' + SHELF_PHONE,
+      ch_js({'root': 0, 'q': 12}, 402, 168, 2, 150), LAYERS(True, 'B'))
+write_laptop('ChordsBLaptop', 'Chords, design B, laptop', LP_HEAD('Chords') + f'<div style="flex: 1; min-height: 0; display: flex"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column">{STAGE3D(330)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 20px 32px 40px; display: flex; flex-direction: column; align-items: center; gap: 18px"><div style="width: 760px; max-width: 100%; display: flex; flex-direction: column; gap: 16px"><p style="margin: 0; text-align: center; font-size: 15px; color: {SOFT}">{{{{fullLine}}}}</p><div style="display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 16px; align-items: start">{STAFFCARD(440)}{FACTS}</div>{PRACTISE("PlayerLaptop.dc.html")}</div></main></div>{SHELF_LAPTOP}</div>', {'root': 3, 'q': 14}, 'B')
 for f in ('ChordsApp', 'ChordsDesk'):
     if os.path.exists(OUT + f + '.dc.html'): os.remove(OUT + f + '.dc.html')
 print('r42 chords ok')

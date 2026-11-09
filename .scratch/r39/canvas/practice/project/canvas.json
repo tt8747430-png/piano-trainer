@@ -167,7 +167,7 @@
       "y": 5538,
       "w": 2143,
       "h": 1299,
-      "title": "Chords, laptop",
+      "title": "Chords, design A: the name is the control, laptop",
       "is_interactive": true
     },
     "Chords.dc.html": {
@@ -175,27 +175,43 @@
       "y": 5917,
       "w": 450,
       "h": 920,
-      "title": "Chords, phone",
+      "title": "Chords, design A: the name is the control, phone",
+      "is_interactive": true
+    },
+    "ChordsBLaptop.dc.html": {
+      "x": 5826,
+      "y": 5538,
+      "w": 2143,
+      "h": 1299,
+      "title": "Chords, design B: the chord shelf, laptop",
+      "is_interactive": true
+    },
+    "ChordsB.dc.html": {
+      "x": 8049,
+      "y": 5917,
+      "w": 450,
+      "h": 920,
+      "title": "Chords, design B: the chord shelf, phone",
       "is_interactive": true
     },
     "ScalesLaptop.dc.html": {
-      "x": 5826,
-      "y": 5538,
+      "x": 0,
+      "y": 7097,
       "w": 2143,
       "h": 1299,
       "title": "Scales and keys, laptop",
       "is_interactive": true
     },
     "Scales.dc.html": {
-      "x": 8049,
-      "y": 5917,
+      "x": 2223,
+      "y": 7476,
       "w": 450,
       "h": 920,
       "title": "Scales and keys, phone",
       "is_interactive": true
     },
     "IntervalsLaptop.dc.html": {
-      "x": 0,
+      "x": 2913,
       "y": 7097,
       "w": 2143,
       "h": 1299,
@@ -203,7 +219,7 @@
       "is_interactive": true
     },
     "Intervals.dc.html": {
-      "x": 2223,
+      "x": 5136,
       "y": 7476,
       "w": 450,
       "h": 920,
@@ -211,7 +227,7 @@
       "is_interactive": true
     },
     "ProgressionsLaptop.dc.html": {
-      "x": 2913,
+      "x": 5826,
       "y": 7097,
       "w": 2143,
       "h": 1299,
@@ -219,7 +235,7 @@
       "is_interactive": true
     },
     "Progressions.dc.html": {
-      "x": 5136,
+      "x": 8049,
       "y": 7476,
       "w": 450,
       "h": 920,
@@ -227,23 +243,23 @@
       "is_interactive": true
     },
     "ProgressionLaptop.dc.html": {
-      "x": 5826,
-      "y": 7097,
+      "x": 0,
+      "y": 8656,
       "w": 2143,
       "h": 1299,
       "title": "A progression, laptop",
       "is_interactive": true
     },
     "Progression.dc.html": {
-      "x": 8049,
-      "y": 7476,
+      "x": 2223,
+      "y": 9035,
       "w": 450,
       "h": 920,
       "title": "A progression, phone",
       "is_interactive": true
     },
     "AccompanimentLaptop.dc.html": {
-      "x": 0,
+      "x": 2913,
       "y": 8656,
       "w": 2143,
       "h": 1299,
@@ -251,7 +267,7 @@
       "is_interactive": true
     },
     "Accompaniment.dc.html": {
-      "x": 2223,
+      "x": 5136,
       "y": 9035,
       "w": 450,
       "h": 920,
@@ -259,7 +275,7 @@
       "is_interactive": true
     },
     "ChordPlayerLaptop.dc.html": {
-      "x": 2913,
+      "x": 5826,
       "y": 8656,
       "w": 2143,
       "h": 1299,
@@ -267,7 +283,7 @@
       "is_interactive": true
     },
     "ChordPlayer.dc.html": {
-      "x": 5136,
+      "x": 8049,
       "y": 9035,
       "w": 450,
       "h": 920,
@@ -275,23 +291,23 @@
       "is_interactive": true
     },
     "ExercisesLaptop.dc.html": {
-      "x": 5826,
-      "y": 8656,
+      "x": 0,
+      "y": 10215,
       "w": 2143,
       "h": 1299,
       "title": "Exercises, laptop",
       "is_interactive": true
     },
     "Exercises.dc.html": {
-      "x": 8049,
-      "y": 9035,
+      "x": 2223,
+      "y": 10594,
       "w": 450,
       "h": 920,
       "title": "Exercises, phone",
       "is_interactive": true
     },
     "ExerciseLaptop.dc.html": {
-      "x": 0,
+      "x": 2913,
       "y": 10215,
       "w": 2143,
       "h": 1299,
@@ -299,7 +315,7 @@
       "is_interactive": true
     },
     "Exercise.dc.html": {
-      "x": 2223,
+      "x": 5136,
       "y": 10594,
       "w": 450,
       "h": 920,
@@ -307,7 +323,7 @@
       "is_interactive": true
     },
     "QuizLaptop.dc.html": {
-      "x": 2913,
+      "x": 5826,
       "y": 10215,
       "w": 2143,
       "h": 1299,
@@ -315,7 +331,7 @@
       "is_interactive": true
     },
     "Quiz.dc.html": {
-      "x": 5136,
+      "x": 8049,
       "y": 10594,
       "w": 450,
       "h": 920,
@@ -323,23 +339,23 @@
       "is_interactive": true
     },
     "QuizRunLaptop.dc.html": {
-      "x": 5826,
-      "y": 10215,
+      "x": 0,
+      "y": 11774,
       "w": 2143,
       "h": 1299,
       "title": "A quiz run, laptop",
       "is_interactive": true
     },
     "QuizRun.dc.html": {
-      "x": 8049,
-      "y": 10594,
+      "x": 2223,
+      "y": 12153,
       "w": 450,
       "h": 920,
       "title": "A quiz run, phone",
       "is_interactive": true
     },
     "MetronomeLaptop.dc.html": {
-      "x": 0,
+      "x": 2913,
       "y": 11774,
       "w": 2143,
       "h": 1299,
@@ -347,7 +363,7 @@
       "is_interactive": true
     },
     "Metronome.dc.html": {
-      "x": 2223,
+      "x": 5136,
       "y": 12153,
       "w": 450,
       "h": 920,
@@ -355,7 +371,7 @@
       "is_interactive": true
     },
     "TunerLaptop.dc.html": {
-      "x": 2913,
+      "x": 5826,
       "y": 11774,
       "w": 2143,
       "h": 1299,
@@ -363,7 +379,7 @@
       "is_interactive": true
     },
     "Tuner.dc.html": {
-      "x": 5136,
+      "x": 8049,
       "y": 12153,
       "w": 450,
       "h": 920,
@@ -371,23 +387,23 @@
       "is_interactive": true
     },
     "ChordFinderLaptop.dc.html": {
-      "x": 5826,
-      "y": 11774,
+      "x": 0,
+      "y": 13333,
       "w": 2143,
       "h": 1299,
       "title": "Chord finder, laptop",
       "is_interactive": true
     },
     "ChordFinder.dc.html": {
-      "x": 8049,
-      "y": 12153,
+      "x": 2223,
+      "y": 13712,
       "w": 450,
       "h": 920,
       "title": "Chord finder, phone",
       "is_interactive": true
     },
     "CircleOfFifthsLaptop.dc.html": {
-      "x": 0,
+      "x": 2913,
       "y": 13333,
       "w": 2143,
       "h": 1299,
@@ -395,7 +411,7 @@
       "is_interactive": true
     },
     "CircleOfFifths.dc.html": {
-      "x": 2223,
+      "x": 5136,
       "y": 13712,
       "w": 450,
       "h": 920,
@@ -425,6 +441,8 @@
     "Main.dc.html",
     "ChordsLaptop.dc.html",
     "Chords.dc.html",
+    "ChordsBLaptop.dc.html",
+    "ChordsB.dc.html",
     "ScalesLaptop.dc.html",
     "Scales.dc.html",
     "IntervalsLaptop.dc.html",
