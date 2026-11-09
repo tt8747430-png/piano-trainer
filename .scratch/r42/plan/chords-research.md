@@ -65,3 +65,16 @@ settings and the piano settings". Local paths are under `piano-data/reference-ap
 Material 3's menus page, pianochord.io, Scaler 2's manual (Scaler 3's guide was read through an extraction, 116
 Firecrawl credits in one call), flowkey's and Chordify's help centres (search snippets only), musicca's Settings
 pop-up. No source was blocked by a bot check.
+
+## The hand comparison (rendered 2026-11-09)
+
+`.scratch/r42/drawings/v80-hand-comparison.png`: the current hand beside MakeHuman's (MPFB 2.0.18, `bpy` 5.2.3,
+headless), from above and from the seat.
+
+- MakeHuman's hand: 3,374 triangles (current 2,314); 128 KB without its texture, 3.8 MB with the 2048² skin. The skin
+  `young_caucasian_male` says "explicitly released as CC0 in september 2020"; the base mesh's own licence file was
+  not read.
+- With the app's flat skin the two look close: better knuckles, taper and modelled nails, not a different class. The
+  gain is the skin texture (nails, veins, tone), which the app's four skin tones would have to replace or tint.
+- Its rig is 21 bones named `finger1-1.R` … `finger5-3.R`, no tip bones, a relaxed rest pose: every pose would be
+  retargeted and the pose table re-tuned.
