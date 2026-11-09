@@ -9,7 +9,7 @@ const passingChords: Lesson = {
     en: 'The ii – V – I, each chord’s own V, diminished passing chords, the 3–6–2–5 turnaround, sus and slash chords, and the tritone substitution.',
     ru: 'ii – V – I, своя доминанта к каждому аккорду, уменьшённые проходящие, оборот 3–6–2–5, sus и аккорды над басом, тритоновая замена.',
   },
-  after: ['voicings'],
+  after: ['diminished-chords'],
   sections: [
     {
       heading: { en: 'The ii – V – I', ru: 'ii – V – I' },

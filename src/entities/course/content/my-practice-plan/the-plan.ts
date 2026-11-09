@@ -8,7 +8,7 @@ const thePlan: Lesson = {
   id: 'the-plan',
   title: { en: 'How the plan works', ru: 'Как устроен план' },
   summary: {
-    en: 'Forty minutes a day in five parts, one key a week round the circle, slow first and then the metronome ladder.',
+    en: 'Forty minutes a day in five parts, technique first, one key a week round the circle, slow first and then the metronome ladder.',
     ru: 'Сорок минут в день в пяти частях, одна тональность в неделю по кругу, сначала медленно, потом лестница темпов.',
   },
   sections: [
@@ -19,11 +19,11 @@ const thePlan: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Warm up, 5 minutes: the week’s scale and chords.',
-              ru: 'Разминка, 5 минут: гамма и аккорды недели.',
+              en: 'Technique, 10 minutes: scale, arpeggio, inversions.',
+              ru: 'Техника, 10 минут: гамма, арпеджио, обращения.',
             },
             { en: 'Chords and voicings, 10 minutes.', ru: 'Аккорды и расположения, 10 минут.' },
-            { en: 'Rhythm and left hand, 10 minutes.', ru: 'Ритм и левая рука, 10 минут.' },
+            { en: 'Rhythm and left hand, 5 minutes.', ru: 'Ритм и левая рука, 5 минут.' },
             {
               en: 'A song, 10 minutes, with what you learned.',
               ru: 'Песня, 10 минут, с тем, что вы выучили.',
