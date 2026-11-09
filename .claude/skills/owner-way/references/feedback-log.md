@@ -345,6 +345,10 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **Research until the convention is known, then draw it (R42, v76):** "make proper implementation of the finger
+  numbers colors and research more", "you didn't research enough": one saved page was not research. Finger numbers
+  are upright bold numerals in fingertip circles (Hoffman, Faber, Pianote), never italic, never floating badges.
+  Before drawing a teaching diagram, view how at least three teaching sources draw it and cite them.
 - **Hands are proper 2D hands (R42, v75):** "use proper hands", "use proper 2d hands": a real hand's outline, flat
   fill and one line, never capsules or blobs, and not a 3D-shaded render on a 2D page.
 - **Research the owner's material first, then one decision (R42, v74):** "research more first and use the piano

@@ -363,15 +363,16 @@ return {
   // fingertip and its number below; tap a hand to add or drop it; Bass only leaves the root to the left hand (R42 v72)
   handPics: ['L', 'R'].map((k) => { const on = k === 'L' ? hands !== 'Right' : hands !== 'Left';
     const byF = {}; ns.filter((x) => x.hand === k).forEach((x) => { const f = fm[x.m]; if (f && !byF[f]) byF[f] = x; });
-    // a playing finger is filled whole in its note's colour, its number on the fingertip and the note's name past the tip,
-    // as fingering charts draw them (piano-data/web-references/new_apps: Vita Piano, 5-finger patterns; R42 v76)
+    // Fingering as the teaching sources draw it (R42 v76): hands from above, thumbs inward; an upright bold numeral in a
+    // circle on each fingertip (Hoffman Academy's finger-number sheet; Faber Primer p. 6; pianoscales.org), filled where
+    // the finger plays and empty where it rests; the note's name just past the tip (Faber, Pianote put labels there)
     const HW = 140, HP = 14, HT = 20, HH = HW * HART[k].ar;
     const fs = [1, 2, 3, 4, 5].map((f) => { const g = HART[k].f[f], x = byF[f], lit = on && !!x;
       const tx = g.tip[0] / 100 * HW, ty = g.tip[1] / 100 * HH, dx = g.dist[0] / 100 * HW, dy = g.dist[1] / 100 * HH;
       const ux = tx - dx, uy = ty - dy, ul = Math.hypot(ux, uy) || 1;
-      const nx = tx * 0.5 + dx * 0.5, ny = ty * 0.5 + dy * 0.5, lx = tx + ux / ul * 17, ly = ty + uy / ul * 15;
-      return { f: String(f), n: lit ? x.name : '', lit, bg: lit ? (ROLE[x.deg] || C.accent) : 'transparent', mask: 'url(' + HART[k].m[f] + ')',
-        nx: (nx - 9 + HP) + 'px', ny: (ny - 9 + HT) + 'px', lx: (lx - 14 + HP) + 'px', ly: (ly - 8 + HT) + 'px', dw: lit ? 800 : 600, dc: lit ? C.ink : 'rgba(51,41,33,.42)' }; });
+      const nx = tx * 0.42 + dx * 0.58, ny = ty * 0.42 + dy * 0.58, lx = tx + ux / ul * 19, ly = ty + uy / ul * 17;
+      return { f: String(f), n: lit ? x.name : '', lit, bg: lit ? (ROLE[x.deg] || C.accent) : '#FEFDFB', ring: lit ? '0 0 0 1.5px rgba(51,41,33,.7)' : '0 0 0 1.25px rgba(51,41,33,.28)',
+        nx: (nx - 10 + HP) + 'px', ny: (ny - 10 + HT) + 'px', lx: (lx - 14 + HP) + 'px', ly: (ly - 8 + HT) + 'px', dw: lit ? 800 : 600, dc: lit ? C.ink : 'rgba(51,41,33,.45)' }; });
     const used = fs.filter((g) => g.n).sort((a, b) => b.f - a.f);
     const sole = on && hands !== 'Both' && hands !== 'Split';
     const pick = () => { if (sole) { play(false); return; } if (on) { change({ hand: k === 'L' ? 'Right' : 'Left' }); return; } change({ hand: st.bassOnly && canSplit ? 'Split' : 'Both' }); };
@@ -483,9 +484,8 @@ HART = json.load(open('/home/user/piano-trainer/.scratch/r39/canvas/hands_art.js
 HANDPICS = ('<div role="group" aria-label="Hands" style="display: flex; justify-content: center; align-items: flex-start; gap: 2px; padding-top: 2px"><sc-for list="{{handPics}}" as="h" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; align-items: center; gap: 6px">'
   '<button type="button" aria-pressed="{{h.on}}" aria-label="{{h.aria}}" onClick="{{h.pick}}" style="position: relative; width: 168px; height: 186px; overflow: hidden; border: 0; padding: 0; background: transparent; opacity: {{h.op}}; -webkit-mask-image: linear-gradient(#000 84%, transparent); mask-image: linear-gradient(#000 84%, transparent)">'
   '<sc-if value="{{h.isL}}" hint-placeholder-val="{{true}}"><img alt="" src="' + HART['L']['uri'] + '" style="position: absolute; left: 14px; top: 20px; width: 140px; height: auto; display: block"></sc-if><sc-if value="{{h.isR}}" hint-placeholder-val="{{false}}"><img alt="" src="' + HART['R']['uri'] + '" style="position: absolute; left: 14px; top: 20px; width: 140px; height: auto; display: block"></sc-if>'
-  '<sc-for list="{{h.fs}}" as="g" hint-placeholder-count="5"><span style="position: absolute; left: 14px; top: 20px; width: 140px; height: {{h.hh}}; background: {{g.bg}}; -webkit-mask-image: {{g.mask}}; mask-image: {{g.mask}}; -webkit-mask-size: 100% 100%; mask-size: 100% 100%"></span></sc-for>'
   '<sc-if value="{{h.isL}}" hint-placeholder-val="{{true}}"><img alt="" src="' + HART['L']['line'] + '" style="position: absolute; left: 14px; top: 20px; width: 140px; height: auto; display: block"></sc-if><sc-if value="{{h.isR}}" hint-placeholder-val="{{false}}"><img alt="" src="' + HART['R']['line'] + '" style="position: absolute; left: 14px; top: 20px; width: 140px; height: auto; display: block"></sc-if>'
-  '<sc-for list="{{h.fs}}" as="g" hint-placeholder-count="5"><span style="position: absolute; left: {{g.nx}}; top: {{g.ny}}; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: {{g.dw}}; color: {{g.dc}}; font-variant-numeric: tabular-nums">{{g.f}}</span><span style="position: absolute; left: {{g.lx}}; top: {{g.ly}}; width: 28px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: ' + INK + '; white-space: nowrap">{{g.n}}</span></sc-for></button>'
+  '<sc-for list="{{h.fs}}" as="g" hint-placeholder-count="5"><span style="position: absolute; left: {{g.nx}}; top: {{g.ny}}; width: 20px; height: 20px; box-sizing: border-box; border-radius: 10px; background: {{g.bg}}; box-shadow: {{g.ring}}; display: flex; align-items: center; justify-content: center; font-size: 12.5px; line-height: 1; font-weight: {{g.dw}}; color: {{g.dc}}; font-variant-numeric: tabular-nums">{{g.f}}</span><span style="position: absolute; left: {{g.lx}}; top: {{g.ly}}; width: 28px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: ' + INK + '; white-space: nowrap">{{g.n}}</span></sc-for></button>'
   '<span style="display: flex; flex-direction: column; align-items: center; gap: 1px"><span style="font-size: 13px; font-weight: 500; color: ' + SOFT + '">{{h.t}}</span><span style="font-family: {{h.pf}}; font-size: {{h.ps}}; font-weight: {{h.pw}}; color: {{h.pc}}; white-space: nowrap">{{h.plays}}</span></span>'
   '<sc-if value="{{h.hasOpts}}" hint-placeholder-val="{{false}}"><div role="radiogroup" aria-label="The left hand plays" style="display: flex; gap: 2px; padding: 3px; border-radius: 17px; background: ' + FILL + '"><sc-for list="{{h.lhOpts}}" as="o" hint-placeholder-count="2"><button type="button" role="radio" aria-checked="{{o.on}}" onClick="{{o.pick}}" style="height: 30px; padding: 0 14px; border: 0; border-radius: 15px; background: {{o.bg}}; box-shadow: {{o.sh}}; color: ' + INK + '; font: inherit; font-size: 13px; font-weight: {{o.fw}}">{{o.l}}</button></sc-for></div></sc-if>'
   '<sc-if value="{{h.canBass}}" hint-placeholder-val="{{false}}"><button type="button" aria-pressed="{{h.bassOn}}" onClick="{{h.bassPick}}" style="height: 34px; padding: 0 14px; border: 0; border-radius: 17px; background: {{h.bBg}}; box-shadow: {{h.bRing}}; color: ' + INK + '; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap">{{h.bassT}}</button></sc-if></div></sc-for></div>')
@@ -572,7 +572,7 @@ def POPS_LAPTOP(player):
     return out
 
 def ch_js(D, W, KH, minOct, mini_w):
-    return CH_JS + '\n' + js('const D = ' + json.dumps(D) + ';\nconst HART = ' + json.dumps({k: {'ar': v['ar'], 'f': v['f'], 'm': v['m']} for k, v in HART.items()}) + ';\n' + CH_BODY(D, W, KH, minOct, mini_w))
+    return CH_JS + '\n' + js('const D = ' + json.dumps(D) + ';\nconst HART = ' + json.dumps({k: {'ar': v['ar'], 'f': v['f']} for k, v in HART.items()}) + ';\n' + CH_BODY(D, W, KH, minOct, mini_w))
 
 # ── phone ──
 PH_BODY = f'''<div style="flex: none; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px">{GLASSBTN('Back to Practice', CHEV_L, href='Main.dc.html')}<h1 style="margin: 0; font-size: 17px; font-weight: 600">Chords</h1>{GLASSBTN('Keyboard', KEYSI, 'openKeys')}</div>

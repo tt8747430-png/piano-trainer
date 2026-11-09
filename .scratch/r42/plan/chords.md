@@ -5,6 +5,26 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v76 (canvas Version 76): finger numbers as the teaching sources draw them.** Owner: "I dont like this, make proper
+  implementation of the finger numbers colors and research more for how to do it", then "but you didn't research
+  enough". Replaces v75's badges and floating italic numbers.
+  - **Research** (images viewed, URLs in the history line's sources): Faber Piano Adventures Primer p. 6
+    (primerguide.pianoadventures.com/units/finger-numbers), Hoffman Academy's Finger Numbers sheet, Pianote's
+    beginner pages, pianoscales.org/fingerings.html, pianochord.org, Yamaha Hub's keyboard-fingering page, Synthesia,
+    Soundslice and LilyPond's manuals, WCAG 1.4.1; and the owner's saved Vita Piano pages
+    (piano-data/web-references/new_apps) and reference apps (flowkey 08, courses-app 03). Not readable: Skoove,
+    Yousician, MuseScore's forum, Dorico's manual (403), Gould's _Behind Bars_.
+  - **What three or more agree on, and what we draw:** hands from above, thumbs inward (Faber, Hoffman, pianoscales,
+    Pianote); 1 is the thumb in both hands; the numeral **upright and bold, never italic**, about a finger wide, on or
+    just past the fingertip; Hoffman sets each in a **fingertip circle**, drawn only where a finger is used.
+  - **So:** each fingertip carries a circle with its upright number. A finger that plays: the circle filled in its
+    note's colour, bold ink numeral, the note's name just past the tip. A finger that rests: an empty, faint circle.
+    Fill, numeral and name carry the meaning besides the colour (WCAG 1.4.1).
+  - **Colour is per note, not per hand or per finger,** against the sources' habit (Hoffman, Synthesia, Soundslice
+    colour by hand; Faber by finger): this page already colours each chord tone the same on the keys and the staff,
+    so the fingertip takes that colour and the three pictures read as one.
+  - **Not taken:** every chord source prints the fingering on or under the keys (Pianote, Yamaha, pianochord.org);
+    the owner's standing rule is no finger numbers on keys, so the hands carry them.
 - **v75 (canvas Version 75): proper 2D hands.** Owner: "use proper hands", then "use proper 2d hands". Replaces v72's
   capsule fingers; v73's labels and Chord | Root stand.
   - **The hands are true hand outlines, flat:** a left and a right hand seen from above, as the player sees them on
@@ -693,3 +713,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: hands name their chords, left hand Chord | Root, Transpose all by key or half step (v73).
 - 2026-11-09: voice leading drawn (ties, traces, nearest inversion and octave); Practise rows from the transcripts and Chordify (v74).
 - 2026-11-09: proper 2D hand outlines traced from the app's hand models; note badges on the fingertips (v75).
+- 2026-11-09: finger numbers upright in fingertip circles, filled in the note's colour where the finger plays; from Faber, Hoffman, Pianote and others (v76).
