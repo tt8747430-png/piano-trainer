@@ -5,6 +5,31 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v71 (canvas Version 71): a hands toolbar under the staff; Split; the chord list a checklist; Play covers every
+  chord.** Owner: "I dont like it this at the top, make like a toolbar … under the staff and also I want to be able to
+  add more chords also from the chords list like it would be a checklist … the play options dont fully support
+  correctly the more chords on the staff … when I select the left hand I want all the notes in the chords like the c
+  e g and if I select both then I would have c e g and c e g in both hands … up to the seventh chords or also ninth
+  chords but to be able to have an option like to play the in the gm9 the g in the left hand and the BbMaj7 in the
+  right hand. check the cources and piano data and gorshkovs courses and the fingering". Replaces v70's hand cards
+  and v67/v69's hand rules.
+  - **Hands toolbar** under the staff, inside its card: **Left hand · Right hand · Both hands · Split**, each a
+    symbol over its name (the tab bar's shape, v24); Split's symbol is the two chords it makes, **G | B♭maj7**.
+  - **Hands:** one hand plays the whole chord as voiced, with its fingering (RH 1-3-5, 1-2-3-5; LH 5-3-1, 5-3-2-1),
+    five notes at most (the 5th, then the 11th, first out). Left is an octave below Right; **Both plays it in each
+    hand**, an octave apart: C3 E3 G3 | C4 E4 G4. No more rootless or shell by hand: those stay voicings.
+  - **Split** (chords of four notes or more whose upper notes make a named chord): the root alone in the left hand,
+    the rest as one chord in the right: Gm9 = G | B♭maj7, Cmaj7 = C | Em, C9 = C | Eø7. Source: Gorshkov,
+    02-ninth-chords/theory.pdf p. 4: "играть нонаккорды нужно с басом в левой и в правой — септаккорд, оставшиеся 4
+    ноты" (ninths with the bass in the left hand and the seventh chord, the other four notes, in the right); p. 2–3,
+    a ninth is two triads (Gm + Dm = Gm9); extra-jazz-voicings.pdf, Cm11 = Cm + B♭. Gorshkov's PDFs give no finger
+    numbers; the fingering is the standard chord fingering.
+  - **Chord list as a checklist:** each row has a check on the right: checked chords are on the staff; check to add
+    (in the inversion that moves least), uncheck to remove ("C7 removed · Undo"). Tapping the row still changes the
+    current chord.
+  - **Play with several chords:** the main button reads **Play all** and plays every chord in order in the chosen
+    mode (Block chord, Arpeggio, Arpeggio up and down); the chord sounding is lit on the staff. The menu's second part
+    chooses **All 3 chords, in order** or **Only Cmaj7**. Replaces v67's single "All chords, in order" item.
 - **v70 (canvas Version 70): two hand cards say what each hand plays, with which fingers.** Owner: "it is ok, but be
   more creative and clear and think outside of the box to make it more clear and understandable. research the correct
   guidelines and ux ui best principles". Replaces v69's R.H./L.H. chips and the 123 toggle.
@@ -605,3 +630,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: four voicings added, Rootless on a dominant takes the 13th, Arpeggio up and down; Scales in 15 keys with key signatures (v68).
 - 2026-11-09: hands on the staff (R.H./L.H.), Left plays the chord, one fingering toggle, Next chord suggestions voice-led (v69).
 - 2026-11-09: hand cards over the staff, notes and fingers in each; fingering always shown (v70).
+- 2026-11-09: hands toolbar under the staff with Split (Gorshkov), full chord in each hand, checklist, Play all (v71).
