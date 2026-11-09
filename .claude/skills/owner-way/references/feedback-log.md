@@ -345,6 +345,9 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **A control shows what it does (R42, v70):** "be more creative and clear … ux ui best principles": R.H./L.H.
+  chips and a 123 toggle were not understood; each hand is a card naming the notes it plays and their fingers,
+  left hand on the left. No abbreviation or bare icon where a word and the result fit.
 - **A hand alone plays the chord, fingered (R42, v69):** "I want to play the c major chord in left hand with its
   fingerings and not c g c". A setting named for a hand plays the chord in that hand; reduce only past what a hand
   holds. The hands sit beside their staves (R.H., L.H.); a setting lives where its effect shows.

@@ -5,6 +5,18 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v70 (canvas Version 70): two hand cards say what each hand plays, with which fingers.** Owner: "it is ok, but be
+  more creative and clear and think outside of the box to make it more clear and understandable. research the correct
+  guidelines and ux ui best principles". Replaces v69's R.H./L.H. chips and the 123 toggle.
+  - **Over the staff, Left hand | Right hand,** left on the left, as the hands sit at the keys (Norman's natural
+    mapping, _The Design of Everyday Things_). Each card: the hand's icon and name, then the notes it plays low to high,
+    each underlined in its role's colour with its finger under it (C 5 · E 3 · G 1). Off: outlined, "Not playing".
+    Tap a card to add or drop that hand; the last hand on only plays.
+  - **Why:** an abbreviation and an icon alone made the learner remember what they meant; the card shows it
+    (recognition rather than recall, Nielsen's heuristic 6; icons need a text label, NN/g). The state is visible
+    where the effect is, the notes and fingers (visibility of system status, heuristic 1).
+  - **Fingering is no setting:** the finger numbers are part of the answer, so they always show in the cards and
+    beside the current chord on the staff (fewer settings; one home, now none to find).
 - **v69 (canvas Version 69): the hands sit beside their staves; one home for fingering; + suggests the next chord.**
   Owner: "when I choose c major chords and make the settings left hand, then I want to play the c major chord in left
   hand with its fingerings and not c g c like now. improve the hands settings and make more clear and intuitive …
@@ -592,3 +604,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: several chords on the staff (+, ×/Undo, All chords in order); hands voice as the transcripts teach (v67).
 - 2026-11-09: four voicings added, Rootless on a dominant takes the 13th, Arpeggio up and down; Scales in 15 keys with key signatures (v68).
 - 2026-11-09: hands on the staff (R.H./L.H.), Left plays the chord, one fingering toggle, Next chord suggestions voice-led (v69).
+- 2026-11-09: hand cards over the staff, notes and fingers in each; fingering always shown (v70).
