@@ -338,7 +338,8 @@ owner's, typos fixed.
 - **Chords' settings live where they act (R42, v62):** Hand and Fingering in the Chord sheet after Voicing; the
   keyboard button at the header's right; no gear on Chords.
 - **Play centred, alone, honey kept (R42, v63–v64):** "the play button is too appealing … centered", then "no
-  revert the play button color": Play is one centred capsule in its honey tint; the chord is chosen from its name.
+  revert the play button color": Play is one centred capsule in its honey tint. v65, "I liked the chord button": it sits just
+  left of the centred Play, and the chord is chosen from the name and the bar.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

@@ -99,3 +99,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v62 (2026-11-09):** Chords: staffs and Bass note label gone; Hand, Fingering in the Chord sheet; keyboard in the header, no gear.
 **R42 v63 (2026-11-09):** Chords: Play alone, centred, plain glass; chord chosen from its name.
 **R42 v64 (2026-11-09):** Chords: Play's honey tint restored, still centred.
+**R42 v65 (2026-11-09):** Chords: chord button back, left of the centred Play; Arpeggiate.

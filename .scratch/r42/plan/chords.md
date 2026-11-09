@@ -5,7 +5,14 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
-- **v63 (canvas Version 63): one quiet Play, centred; the chord is chosen from its name.** Owner: "the play button is
+- **v65 (canvas Version 65): the chord button back, beside a centred Play.** Owner: "but I liked the chord button, but I
+  dont know where to put it know".
+  - The bar keeps Play exactly centred (188 wide, honey) and the chord button sits in the space to its left, close
+    against it: **Cmaj7** · **▶ Play chord | ⌄**. The right side stays empty so the centre holds. The chord button
+    drops its ⌃ to fit a phone (a glass capsule with the chord on it reads as a button; it opens the Chord sheet, as
+    the name does). The arpeggio label is **Arpeggiate**, the musician's verb, so it fits as "Play chord" does.
+  - The chord is chosen in both places again, as v28 ruled: the name where the eye is, the bar where the thumb is.
+- **v63 (canvas Version 63; the chord button returned in v65): one quiet Play, centred; the chord is chosen from its name.** Owner: "the play button is
   too appealing and I would like it to be centered , but dotn know what to make with the chords button".
   - The bar is one capsule centred at the bottom, **▶ Play chord | ⌄**, 216 wide, in its honey tint (v64: owner "no
     revert the play button color"; v63's plain glass is undone); its ⌄ menu (Block chord · Arpeggio) opens centred above it.
@@ -502,3 +509,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: staffs and label removed; Hand and Fingering into the Chord sheet; keyboard to the header, gear gone (v62).
 - 2026-11-09: Play alone, centred, plain glass; the chord chosen from its name only (v63).
 - 2026-11-09: Play's honey tint restored, still centred (v64).
+- 2026-11-09: the chord button back, left of the centred Play; "Arpeggiate" (v65).
