@@ -78,3 +78,15 @@ headless), from above and from the seat.
   gain is the skin texture (nails, veins, tone), which the app's four skin tones would have to replace or tint.
 - Its rig is 21 bones named `finger1-1.R` … `finger5-3.R`, no tip bones, a relaxed rest pose: every pose would be
   retargeted and the pose table re-tuned.
+
+## Skin variants for the MakeHuman hand (rendered 2026-11-09)
+
+`.scratch/r42/drawings/v82-hand-skin-variants.png`. All skins are from `makehuman_system_assets_cc0.zip`; each
+`.mhmat` says "explicitly released as CC0 in september 2020".
+
+- A the young male skin unchanged; B the same cleaned (blotches and veins reduced, even tone); C is B with a relief
+  map derived from the texture, sheen and glossy nails; D a young female skin, E a middle-aged male skin, F a dark
+  skin, each cleaned; T1–T4 one cleaned texture tinted to the app's four tones.
+- The UVs were re-mapped to a hand-only atlas, so a skin is 8–11 KB as WebP at 1024² (3–4 KB at 512², which holds
+  all the source's detail), not megabytes. The earlier 3.7 MB figure was the whole-body texture.
+- The tinted dark tone (T4) looks flat beside the real dark skin (F); tinted palms come out as dark as the backs.
