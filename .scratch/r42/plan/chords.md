@@ -5,6 +5,18 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v81 (canvas Version 81): design A is the Chords page; the bar's left button reads "Voicing".** Owner: "I like the
+  design a with the tappable chord but I dont like how the voicing button looks because it is a little bit unclear
+  especially on the close voicing it looks like a close button." And of the hands: "I like the third but make a
+  better and more beautiful skin texture."
+  - **A is chosen:** the chord name as three pop-up buttons (root, chord type, the note in the bass). B, the chord
+    shelf, is removed from the canvas and not to be redrawn.
+  - **The Voicing button** shows its name with the stacked-notes icon, never its value: "Close" read as a way to
+    close. The value is in the line under the chord name ("C major seventh · Close voicing") and checked in the list.
+    A button whose label can be mistaken for a command is named for what it opens.
+  - **Hands:** the MakeHuman hand (CC0) with a skin texture, the texture to be made calmer and more beautiful;
+    variants are being rendered for the owner to pick. Building it into the app (re-rigged to the app's joints, the
+    pose table re-tuned) is app code and follows the pick.
 - **v80 (canvas Version 80): the redesign as two working designs side by side, to be picked from.** After the owner's
   answers to three rounds of questions (`chords-research.md` has them): "1. yes 2. yes 3. yes. 4. yes . yes" to
   drawing both, the hand comparison, the piano settings, fingering in words and the research budget. **Open: A or B.**
@@ -783,3 +795,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: the app's 3D hands live at the top of Chords; Left · Both · Right under the piano; Off · 3D · 2D (v78).
 - 2026-11-09: 3D models parsed in place (no fetch); Hands a menu button beside Play; Root and chord a voicing (v79).
 - 2026-11-09: designs A and B drawn side by side; per-tone keys in 3D; piano settings with the range strip; fingering in words (v80).
+- 2026-11-09: design A chosen, B removed; the bar button reads Voicing; MakeHuman hand with a better skin chosen (v81).
