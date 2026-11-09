@@ -334,6 +334,9 @@ owner's, typos fixed.
   pull-down (v56), ring (v58: "not understandable how it moves"). v59's moving stack: "it still moves too much". The
   inversion is a still choice of the bass note (v60): controls stay put, only the selection changes. v61, "better": each choice
   shows its result (a small staff of the chord it makes), and the slash in the name wears the bass note's colour.
+  v62: the small staffs and the "Bass note" header rejected ("I dont like … remove them"); the plain row stays.
+- **Chords' settings live where they act (R42, v62):** Hand and Fingering in the Chord sheet after Voicing; the
+  keyboard button at the header's right; no gear on Chords.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

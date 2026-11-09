@@ -79,16 +79,6 @@ function spell(root, semi, deg) {
   const rl = RL; const pc = (root + semi) % 12; const L = LET[(rl + deg - 1) % 7];
   const d = ((pc - NATPC[LET.indexOf(L)] + 18) % 12) - 6; return { L, d, name: L + ACC[String(d)] };
 }
-// a chord drawn small on a treble staff (52 × 76): heads in their key colours, seconds side by side, ledger lines
-function miniStaff(v) {
-  const st = (x) => LET.indexOf(x.L) + 7 * Math.floor((x.m - x.d) / 12);
-  const Y = (k) => 58 - (k - 37) * 3.5; let prev = null, off = false; const heads = [];
-  v.forEach((x) => { const k = st(x); off = prev !== null && k - prev === 1 && !off; heads.push({ x: (off ? 27 : 18) + 'px', y: (Y(k) - 3.5) + 'px', c: ROLE[x.deg] || C.accent }); prev = k; });
-  const ks = v.map(st), lo = Math.min(...ks), hi = Math.max(...ks), led = [];
-  for (let k = 35; k >= lo; k -= 2) led.push({ y: Y(k) + 'px' });
-  for (let k = 47; k <= hi; k += 2) led.push({ y: Y(k) + 'px' });
-  return { heads, led };
-}
 let AC = null;
 function sound(ms, arp, dir) {
   try {
@@ -227,8 +217,7 @@ return {
     const seen = []; const tones = voice(root, q, 0, voicing, 'Right').filter((x) => { if (seen.includes(x.name)) return false; seen.push(x.name); return true; }); RL = rLet;
     const N = tones.length; const R = -inv * 360 / N;
     return tones.map((x, k) => { const pos = (k - inv + N) % N; const j = basses.indexOf(x.name); const on = j === inv; const can = j >= 0;
-      const g = miniStaff(can ? (() => { const v = voice(root, q, j, voicing, 'Right'); RL = rLet; return v; })() : []);
-      return { heads: g.heads, led: g.led, rw: on ? 700 : 400, rc: on ? C.ink : C.soft, y: ((N - 1 - pos) * 44) + 'px', z: pos === N - 1 ? 2 : 1, fill: on ? (ROLE[x.deg] || C.accent) : '#FEFDFB', bw: on ? '0' : '2.5px', n: x.name, d: ({ 1: 'root', 2: '2nd', 3: '3rd', 4: '4th', 5: '5th', 6: '6th', 7: '7th', 9: '9th', 11: '11th', 13: '13th' })[x.deg], c: ROLE[x.deg] || C.accent, on, can,
+      return { rw: on ? 700 : 400, rc: on ? C.ink : C.soft, y: ((N - 1 - pos) * 44) + 'px', z: pos === N - 1 ? 2 : 1, fill: on ? (ROLE[x.deg] || C.accent) : '#FEFDFB', bw: on ? '0' : '2.5px', n: x.name, d: ({ 1: 'root', 2: '2nd', 3: '3rd', 4: '4th', 5: '5th', 6: '6th', 7: '7th', 9: '9th', 11: '11th', 13: '13th' })[x.deg], c: ROLE[x.deg] || C.accent, on, can,
         aria: x.name + ', the ' + (({ 1: 'root' })[x.deg] || 'chord tone') + (can ? (on ? ', in the bass' : ', put it in the bass') : ''),
         bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', op: can ? 1 : 0.55,
         pick: () => { if (can) change({ inv: j }); } }; }); })(),
@@ -311,8 +300,7 @@ def TITLEBLOCK(size):
     return f'''<div style="flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center">
 <button type="button" aria-label="Change the chord: {{{{sym}}}}{{{{slash}}}}" onClick="{{{{openChord}}}}" style="max-width: 100%; border: 0; border-radius: 16px; background: transparent; padding: 0 8px; color: {INK}; font: inherit"><span style="font-family: {SERIF}; font-size: {fs}px; line-height: 1.1; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap">{{{{symL}}}}<sc-if value="{{{{hasSymA}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-family: 'Noto Music', serif; font-weight: 400; font-size: 0.78em; vertical-align: 0.22em; margin: 0 0.02em 0 0.04em; -webkit-text-stroke: 0.025em currentColor">{{{{symA}}}}</span></sc-if>{{{{symQ}}}}<span style="color: {{{{slashC}}}}">{{{{slash}}}}</span></span></button>
 <p style="margin: 0; font-size: 15px; color: {SOFT}">{{{{fullLine}}}}</p>
-<p aria-hidden="true" style="margin: 14px 0 0; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">Bass note</p>
-<div role="radiogroup" aria-label="Bass note" style="margin-top: 2px; display: flex; justify-content: center; gap: 6px"><sc-for list="{{{{noteCols}}}}" as="c" hint-placeholder-count="4"><button type="button" role="radio" aria-checked="{{{{c.on}}}}" aria-label="{{{{c.aria}}}}" onClick="{{{{c.pick}}}}" style="width: 68px; margin: 0; padding: 4px 0 6px; border: 0; border-radius: 16px; background: transparent; opacity: {{{{c.op}}}}; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; gap: 4px"><span aria-hidden="true" style="position: relative; width: 52px; height: 76px"><span style="position: absolute; left: 2px; right: 2px; top: 30px; height: 29px; box-sizing: border-box; border-top: 1px solid rgba(51,41,33,.35); border-bottom: 1px solid rgba(51,41,33,.35); background: linear-gradient(rgba(51,41,33,.35), rgba(51,41,33,.35)) 0 6px / 100% 1px no-repeat, linear-gradient(rgba(51,41,33,.35), rgba(51,41,33,.35)) 0 13px / 100% 1px no-repeat, linear-gradient(rgba(51,41,33,.35), rgba(51,41,33,.35)) 0 20px / 100% 1px no-repeat"></span><sc-for list="{{{{c.led}}}}" as="l" hint-placeholder-count="0"><span style="position: absolute; left: 14px; width: 26px; top: {{{{l.y}}}}; height: 1px; background: rgba(51,41,33,.5)"></span></sc-for><sc-for list="{{{{c.heads}}}}" as="h" hint-placeholder-count="4"><span style="position: absolute; left: {{{{h.x}}}}; top: {{{{h.y}}}}; width: 10px; height: 7px; border-radius: 50%; transform: rotate(-20deg); background: {{{{h.c}}}}; box-shadow: 0 0 0 0.75px rgba(51,41,33,.55)"></span></sc-for></span><span style="width: 44px; height: 44px; border-radius: 50%; box-sizing: border-box; border: {{{{c.bw}}}} solid {{{{c.c}}}}; background: {{{{c.fill}}}}; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{c.n}}}}</span><span style="font-size: 13px; font-weight: {{{{c.rw}}}}; color: {{{{c.rc}}}}">{{{{c.d}}}}</span></button></sc-for></div>
+<div role="radiogroup" aria-label="Bass note" style="margin-top: 14px; display: flex; justify-content: center; gap: 10px"><sc-for list="{{{{noteCols}}}}" as="c" hint-placeholder-count="4"><div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><button type="button" role="radio" aria-checked="{{{{c.on}}}}" aria-label="{{{{c.aria}}}}" onClick="{{{{c.pick}}}}" style="width: 48px; height: 48px; margin: 0; padding: 0; border-radius: 50%; border: {{{{c.bw}}}} solid {{{{c.c}}}}; background: {{{{c.fill}}}}; opacity: {{{{c.op}}}}; color: {INK}; font: inherit; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{c.n}}}}</button><span aria-hidden="true" style="font-size: 13px; font-weight: {{{{c.rw}}}}; color: {{{{c.rc}}}}">{{{{c.d}}}}</span></div></sc-for></div>
 
 </div>'''
 
@@ -364,8 +352,8 @@ def PLAYASMENU(pos):
     return (f'<sc-if value="{{{{isPlayAs}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
       f'<div role="menu" aria-label="Play as" style="position: absolute; {pos}; z-index: 61; width: 220px; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column">'
       f'<sc-for list="{{{{playAsList}}}}" as="o" hint-placeholder-count="2"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px; display: flex; align-items: center; gap: 10px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span><span style="flex: 1; font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for></div></sc-if>')
-DOCK_PHONE = f'<div role="toolbar" aria-label="Chord and sound" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; display: flex; align-items: center; gap: 8px">{KBROUND}{CHORDACT}{PLAYSPLIT}</div>'
-DOCK_LAPTOP = f'<div role="toolbar" aria-label="Chord and sound" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; width: 460px; display: flex; align-items: center; gap: 10px">{KBROUND}{CHORDACT}{PLAYSPLIT}</div>'
+DOCK_PHONE = f'<div role="toolbar" aria-label="Chord and sound" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; display: flex; align-items: center; gap: 8px">{CHORDACT}{PLAYSPLIT}</div>'
+DOCK_LAPTOP = f'<div role="toolbar" aria-label="Chord and sound" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; width: 400px; display: flex; align-items: center; gap: 10px">{CHORDACT}{PLAYSPLIT}</div>'
 
 # ── the sheets' bodies, the same on both sizes ──
 def BACKHEAD(title, act):
@@ -377,7 +365,7 @@ HINT = (f'<sc-if value="{{{{rootHint.on}}}}" hint-placeholder-val="{{{{true}}}}"
         f'<span style="position: absolute; top: 0; {{{{rootHint.tip}}}}; width: 12px; height: 12px; background: {INK}; transform: translateY(2px) rotate(45deg); border-radius: 2px"></span>'
         f'<span style="position: absolute; top: 6px; {{{{rootHint.box}}}}; height: 26px; padding: 0 10px; border-radius: 13px; background: {INK}; color: #FEFDFB; font-size: 13px; font-weight: 600; line-height: 26px; white-space: nowrap">{{{{rootHint.t}}}}</span></div></sc-if>')
 NOTEPICK = '<div style="display: flex; flex-direction: column; gap: 4px">' + _track('a', 7, 'Root') + HINT + '</div>'
-B_CHORD = (CAPS('Root') + NOTEPICK + GROUP(('link', 'Chord', '{{qName}}', 'openList'), ('link', 'Voicing', '{{voicingLabel}}', 'openVoicing'), bg="#FEFDFB"))
+B_CHORD = (CAPS('Root') + NOTEPICK + GROUP(('link', 'Chord', '{{qName}}', 'openList'), ('link', 'Voicing', '{{voicingLabel}}', 'openVoicing'), ('seg', 'Hand', 'handSeg', 220), ('toggle', 'Fingering', 'fingOn', 'toggleFing'), bg="#FEFDFB"))
 B_LIST = (BACKHEAD('Chord', 'backChord') + f'<sc-for list="{{{{groups}}}}" as="g" hint-placeholder-count="4"><div style="display: flex; flex-direction: column; gap: 6px"><h3 style="margin: 6px 0 0 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{{{{g.g}}}}</h3><div style="border-radius: 12px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{g.rows}}}}" as="r" hint-placeholder-count="5"><button type="button" aria-pressed="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" style="width: 100%; min-height: 48px; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: {{{{r.bg}}}}; padding: 0 14px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 76px; font-size: 16px; font-weight: {{{{r.fw}}}}">{{{{r.s}}}}</span><span style="flex: 1; min-width: 0; font-size: 15px; color: {SOFT}">{{{{r.n}}}}</span></button></sc-for></div></div></sc-for>')
 B_VOICING = (BACKHEAD('Voicing', 'backChord') + f'<div style="border-radius: 12px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{vlist}}}}" as="v" hint-placeholder-count="6"><button type="button" aria-pressed="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="width: 100%; min-height: 56px; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: transparent; padding: 6px 14px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left; opacity: {{{{v.op}}}}"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{v.v}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{v.f}}}}</span></span><span style="font-size: 18px; font-weight: 700; color: #7A5418">{{{{v.mark}}}}</span></button></sc-for></div>')
 B_HANDS = GROUP(('toggle', 'Right hand', 'rhOn', 'toggleRH'), ('toggle', 'Left hand', 'lhOn', 'toggleLH'), bg="#FEFDFB")
@@ -388,22 +376,20 @@ KBTILES = ('<div role="group" aria-label="Keyboard" style="display: grid; grid-t
     '</svg>{{o.name}}</button></sc-for></div>')
 B_KEYS = (KBTILES + '<sc-if value="{{kbShow}}" hint-placeholder-val="{{true}}">' + GROUP(('seg', 'Keys', 'keysSeg', 230), ('seg', 'Labels', 'keyLabelSeg', 230), bg="#FEFDFB") + '</sc-if>'
           + GROUP(('link', 'Connect a piano', '', '#'), ('link', 'All piano settings', '', '#'), bg="#FEFDFB"))
-# the gear: the page's other settings
-B_SET = GROUP(('seg', 'Hand', 'handSeg', 220), bg="#FEFDFB") + CAPS('Staff') + GROUP(('toggle', 'Finger numbers', 'fingOn', 'toggleFing'), bg="#FEFDFB")
 B_SOUND = f'<div role="radiogroup" style="display: flex; flex-direction: column; gap: 8px"><sc-for list="{{{{playTiles}}}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 60px; border: 0; border-radius: 14px; background: {{{{o.bg}}}}; box-shadow: {{{{o.ring}}}}; padding: 8px 16px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; color: {INK}; font: inherit; text-align: left"><span style="font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for></div>'
 def SHEETS_PHONE(player):
     out = ''
     out += PLAYASMENU('right: 16px; bottom: 96px')
-    for cond, title, body in (('isChord', 'Chord', B_CHORD), ('isKeys', 'Keyboard', B_KEYS), ('isSet', 'Settings', B_SET)):
+    for cond, title, body in (('isChord', 'Chord', B_CHORD), ('isKeys', 'Keyboard', B_KEYS)):
         out += BSHEET(cond, title, body)
     for cond, body in (('isList', B_LIST), ('isVoicing', B_VOICING)):
         out += f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" class="nos" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 12px"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>{body}</section></sc-if>'
     return out
 
 def POPS_LAPTOP(player):
-    dockpos = 'left: calc(50% - 230px); bottom: 92px'
-    out = PLAYASMENU('left: calc(50% + 10px); bottom: 92px')
-    for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isKeys', 'Keyboard', B_KEYS, 'left: calc(50% - 230px); bottom: 92px'), ('isSet', 'Settings', B_SET, 'right: 24px; top: 76px')):
+    dockpos = 'left: calc(50% - 200px); bottom: 92px'
+    out = PLAYASMENU('left: calc(50% - 20px); bottom: 92px')
+    for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isKeys', 'Keyboard', B_KEYS, 'right: 24px; top: 76px')):
         out += POPOVER(cond, title, body, pos, 400)
     for cond, body, pos in (('isList', B_LIST, dockpos), ('isVoicing', B_VOICING, dockpos)):
         out += f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" class="nos" style="position: absolute; {pos}; z-index: 61; width: 400px; max-height: 700px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 12px 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">{body}</div></sc-if>'
@@ -413,7 +399,7 @@ def ch_js(D, W, KH, minOct, mini_w):
     return CH_JS + '\n' + js('const D = ' + json.dumps(D) + ';\n' + CH_BODY(D, W, KH, minOct, mini_w))
 
 # ── phone ──
-PH_BODY = f'''<div style="flex: none; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px">{GLASSBTN('Back to Practice', CHEV_L, href='Main.dc.html')}<h1 style="margin: 0; font-size: 17px; font-weight: 600">Chords</h1>{GLASSBTN('Settings', COG, 'openSet')}</div>
+PH_BODY = f'''<div style="flex: none; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px">{GLASSBTN('Back to Practice', CHEV_L, href='Main.dc.html')}<h1 style="margin: 0; font-size: 17px; font-weight: 600">Chords</h1>{GLASSBTN('Keyboard', KEYSI, 'openKeys')}</div>
 <sc-if value="{{{{kbShow}}}}" hint-placeholder-val="{{{{true}}}}">{KEYBAND(168)}</sc-if>
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px 120px; display: flex; flex-direction: column; gap: 16px">{TITLEBLOCK(44)}{VIEWBODY(330, 2, 150)}{PRACTISE('Player.dc.html')}</main>
 {DOCK_PHONE}'''
@@ -421,7 +407,7 @@ phone('Chords', 'Chords', PH_BODY, ch_js({'root': 0, 'q': 12}, 402, 168, 2, 150)
 
 # ── laptop: the whole screen, as the Player's ──
 LP_INNER = f'''<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: flex; flex-direction: column">
-<div style="flex: none; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px"><div style="display: flex; align-items: center; gap: 14px">{GLASSBTN('Back to Practice', CHEV_L, href='Laptop.dc.html')}<h1 style="margin: 0; font-size: 18px; font-weight: 600">Chords</h1></div>{GLASSBTN('Settings', COG, 'openSet')}</div>
+<div style="flex: none; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px"><div style="display: flex; align-items: center; gap: 14px">{GLASSBTN('Back to Practice', CHEV_L, href='Laptop.dc.html')}<h1 style="margin: 0; font-size: 18px; font-weight: 600">Chords</h1></div>{GLASSBTN('Keyboard', KEYSI, 'openKeys')}</div>
 <sc-if value="{{{{kbShow}}}}" hint-placeholder-val="{{{{true}}}}">{KEYBAND(220)}</sc-if>
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 26px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 820px; max-width: 100%; display: flex; flex-direction: column; gap: 20px">{TITLEBLOCK(56)}{VIEWBODY(440, 4, 170)}{PRACTISE('PlayerLaptop.dc.html')}</div></main>
 {DOCK_LAPTOP}

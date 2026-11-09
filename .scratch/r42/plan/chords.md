@@ -5,7 +5,19 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
-- **v61 (canvas Version 61): each bass note shows the chord it makes, drawn as a textbook draws inversions.** Owner
+- **v62 (canvas Version 62): no staffs or label over the notes; Hand and Fingering in the Chord sheet; the keyboard
+  button in the header, no gear.** Owner: "I dont like the bass note header and the staffs above the notes. remove
+  them . and also put the hand settings and fingering settings in the chords pill after the voicing and the keyboard
+  button move in the right header and the gear icon button removed".
+  - The heading: name (the slash in the bass note's colour, v61), the line, then v60's still row of the chord's
+    notes, the bass filled, each with its role. No "Bass note" label, no small staffs.
+  - The Chord sheet (the bar's **Cmaj7 ⌃**): Root, then Chord ›, Voicing ›, **Hand** (Right · Left · Both),
+    **Fingering** (on/off: the finger numbers by the staff).
+  - The header: Back · Chords · the keyboard button on the right (opens Keyboard: Off · 2D, Keys, Labels, Connect a
+    piano ›, All piano settings ›; on the laptop a popover under it). The gear and its Settings sheet are gone; it
+    held only Hand and Finger numbers, which now live in the Chord sheet.
+  - The bar: **Cmaj7 ⌃** · **[▶ Play chord | ⌄]**; the round keyboard button left it (laptop bar 400 wide).
+- **v61 (canvas Version 61; the staffs and label removed in v62): each bass note shows the chord it makes, drawn as a textbook draws inversions.** Owner
   on v60: "better but still could be more creative and research more and improve it".
   - v60's still row stays (Bass note: C E G B in chord order, the bass filled, nothing moves). Above each note, a
     small treble staff draws the chord that note in the bass gives, its heads in the keys' colours: four little
@@ -479,3 +491,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: v58 ring not readable; the notes as a column, lowest at the bottom, "Bass up an octave" (v59).
 - 2026-11-09: v59 moved too much; a still row of the chord's notes, the bass one filled, tap to choose (v60).
 - 2026-11-09: each bass note shows its chord on a small staff; the slash takes the bass note's colour (v61).
+- 2026-11-09: staffs and label removed; Hand and Fingering into the Chord sheet; keyboard to the header, gear gone (v62).
