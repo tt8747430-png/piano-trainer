@@ -5,6 +5,14 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v75 (canvas Version 75): proper 2D hands.** Owner: "use proper hands", then "use proper 2d hands". Replaces v72's
+  capsule fingers; v73's labels and Chord | Root stand.
+  - **The hands are true hand outlines, flat:** a left and a right hand seen from above, as the player sees them on
+    the keys (thumbs inward), one pale fill and one ink line, no shading. They are traced from the app's own hand
+    models (src/widgets/piano-hands/assets, MIT) so the proportions are a real hand's; a 3D-shaded render was tried
+    first and was not what was asked.
+  - **On each finger its number** (1–5, italic); a finger that plays carries a round badge on its tip in the note's
+    role colour with the note's name. A hand that does not play is faded.
 - **v74 (canvas Version 74): the staff shows how the chords connect; Practise is what the teachers drill.** Owner:
   "improve the current chords page with the best practices and research more first and use the piano data and its
   transcriptions and examples". Research: 15 reference-app screens, the chord books, 4 transcripts read and the rest
@@ -684,3 +692,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: drawn hands with lit fingers and Bass only; the chord and Play centred as one group (v72).
 - 2026-11-09: hands name their chords, left hand Chord | Root, Transpose all by key or half step (v73).
 - 2026-11-09: voice leading drawn (ties, traces, nearest inversion and octave); Practise rows from the transcripts and Chordify (v74).
+- 2026-11-09: proper 2D hand outlines traced from the app's hand models; note badges on the fingertips (v75).
