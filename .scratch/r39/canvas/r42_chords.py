@@ -363,18 +363,22 @@ return {
   // fingertip and its number below; tap a hand to add or drop it; Bass only leaves the root to the left hand (R42 v72)
   handPics: ['L', 'R'].map((k) => { const on = k === 'L' ? hands !== 'Right' : hands !== 'Left';
     const byF = {}; ns.filter((x) => x.hand === k).forEach((x) => { const f = fm[x.m]; if (f && !byF[f]) byF[f] = x; });
-    const HW = 140, HP = 12, HH = HW * HART[k].ar;
+    // a playing finger is filled whole in its note's colour, its number on the fingertip and the note's name past the tip,
+    // as fingering charts draw them (piano-data/web-references/new_apps: Vita Piano, 5-finger patterns; R42 v76)
+    const HW = 140, HP = 14, HT = 20, HH = HW * HART[k].ar;
     const fs = [1, 2, 3, 4, 5].map((f) => { const g = HART[k].f[f], x = byF[f], lit = on && !!x;
-      const bx = (g.tip[0] * 0.35 + g.dist[0] * 0.65) / 100 * HW, by = (g.tip[1] * 0.35 + g.dist[1] * 0.65) / 100 * HH;
-      const nx = (g.dist[0] * 0.5 + g.prox[0] * 0.5) / 100 * HW, ny = (g.dist[1] * 0.5 + g.prox[1] * 0.5) / 100 * HH;
-      return { f: String(f), n: lit ? x.name : '', lit, bg: lit ? (ROLE[x.deg] || C.accent) : 'transparent', bx: (bx - 12 + HP) + 'px', by: (by - 12 + 4) + 'px', nx: (nx - 9 + HP) + 'px', ny: (ny - 9 + 4) + 'px', dw: lit ? 800 : 600, dc: lit ? C.ink : 'rgba(51,41,33,.45)' }; });
+      const tx = g.tip[0] / 100 * HW, ty = g.tip[1] / 100 * HH, dx = g.dist[0] / 100 * HW, dy = g.dist[1] / 100 * HH;
+      const ux = tx - dx, uy = ty - dy, ul = Math.hypot(ux, uy) || 1;
+      const nx = tx * 0.5 + dx * 0.5, ny = ty * 0.5 + dy * 0.5, lx = tx + ux / ul * 17, ly = ty + uy / ul * 15;
+      return { f: String(f), n: lit ? x.name : '', lit, bg: lit ? (ROLE[x.deg] || C.accent) : 'transparent', mask: 'url(' + HART[k].m[f] + ')',
+        nx: (nx - 9 + HP) + 'px', ny: (ny - 9 + HT) + 'px', lx: (lx - 14 + HP) + 'px', ly: (ly - 8 + HT) + 'px', dw: lit ? 800 : 600, dc: lit ? C.ink : 'rgba(51,41,33,.42)' }; });
     const used = fs.filter((g) => g.n).sort((a, b) => b.f - a.f);
     const sole = on && hands !== 'Both' && hands !== 'Split';
     const pick = () => { if (sole) { play(false); return; } if (on) { change({ hand: k === 'L' ? 'Right' : 'Left' }); return; } change({ hand: st.bassOnly && canSplit ? 'Split' : 'Both' }); };
     const isSplit = hands === 'Split';
     const plays = !on ? 'Not playing' : (isSplit ? (k === 'L' ? RN : (upper || sym)) : sym + slash);
     const lhOpts = k === 'L' && on && hands !== 'Left' && canSplit ? [['Chord', !isSplit], ['Root', isSplit]].map(([l, o]) => ({ l, on: o, bg: o ? '#FEFDFB' : 'transparent', sh: o ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: o ? 700 : 500, pick: () => change({ hand: l === 'Root' ? 'Split' : 'Both', bassOnly: l === 'Root' }) })) : [];
-    return { t: k === 'L' ? 'Left hand' : 'Right hand', on, fs, pick, op: on ? 1 : 0.42, isL: k === 'L', isR: k === 'R', pl: k === 'R' ? '22px' : '0px', palm: on ? '#F3ECE1' : '#FEFDFB', pr: '0 0 0 1.5px ' + C.line,
+    return { t: k === 'L' ? 'Left hand' : 'Right hand', on, fs, pick, op: on ? 1 : 0.42, isL: k === 'L', isR: k === 'R', hh: HH.toFixed(1) + 'px', pl: k === 'R' ? '22px' : '0px', palm: on ? '#F3ECE1' : '#FEFDFB', pr: '0 0 0 1.5px ' + C.line,
       lw: on ? 700 : 500, lc: on ? C.ink : C.soft, plays, pc: on ? C.ink : C.soft, pf: on ? SERIFF : 'inherit', ps: on ? '18px' : '14px', pw: on ? 700 : 500, lhOpts, hasOpts: lhOpts.length > 0, noOpts: !lhOpts.length, canBass: false, bBg: isSplit ? '#F6E3BC' : 'transparent', bRing: isSplit ? 'none' : '0 0 0 1.5px ' + C.line, bassT: isSplit ? '✓ Bass only' : 'Bass only', bassOn: isSplit,
       bassPick: () => (isSplit ? change({ hand: 'Both', bassOnly: false }) : change({ hand: 'Split', bassOnly: true })),
       aria: (k === 'L' ? 'Left hand' : 'Right hand') + (on ? ', plays ' + fs.filter((g) => g.n).map((g) => g.n + ' with finger ' + g.f).join(', ') : ', not playing; tap to add it') }; }),
@@ -476,10 +480,12 @@ def VIEWBODY(staff_w, inv_cols, mini_w, side=False):
 
 HANDL = HANDI.replace('<svg ', '<svg style="transform: scaleX(-1)" ', 1)
 HART = json.load(open('/home/user/piano-trainer/.scratch/r39/canvas/hands_art.json'))  # the app's hand models (src/widgets/piano-hands/assets, MIT), rendered from above
-HANDPICS = ('<div role="group" aria-label="Hands" style="display: flex; justify-content: center; align-items: flex-start; gap: 6px; padding-top: 6px"><sc-for list="{{handPics}}" as="h" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; align-items: center; gap: 6px">'
-  '<button type="button" aria-pressed="{{h.on}}" aria-label="{{h.aria}}" onClick="{{h.pick}}" style="position: relative; width: 164px; height: 170px; overflow: hidden; border: 0; padding: 0; background: transparent; opacity: {{h.op}}; -webkit-mask-image: linear-gradient(#000 82%, transparent); mask-image: linear-gradient(#000 82%, transparent)">'
-  '<sc-if value="{{h.isL}}" hint-placeholder-val="{{true}}"><img alt="" src="' + HART['L']['uri'] + '" style="position: absolute; left: 12px; top: 4px; width: 140px; height: auto; display: block"></sc-if><sc-if value="{{h.isR}}" hint-placeholder-val="{{false}}"><img alt="" src="' + HART['R']['uri'] + '" style="position: absolute; left: 12px; top: 4px; width: 140px; height: auto; display: block"></sc-if>'
-  '<sc-for list="{{h.fs}}" as="g" hint-placeholder-count="5"><span style="position: absolute; left: {{g.nx}}; top: {{g.ny}}; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-style: italic; font-weight: {{g.dw}}; color: {{g.dc}}">{{g.f}}</span><sc-if value="{{g.lit}}" hint-placeholder-val="{{false}}"><span style="position: absolute; left: {{g.bx}}; top: {{g.by}}; width: 24px; height: 24px; box-sizing: border-box; border-radius: 12px; background: {{g.bg}}; box-shadow: 0 0 0 1.5px rgba(51,41,33,.55), 0 1px 3px rgba(51,41,33,.25); display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 800; color: ' + INK + '; white-space: nowrap">{{g.n}}</span></sc-if></sc-for></button>'
+HANDPICS = ('<div role="group" aria-label="Hands" style="display: flex; justify-content: center; align-items: flex-start; gap: 2px; padding-top: 2px"><sc-for list="{{handPics}}" as="h" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; align-items: center; gap: 6px">'
+  '<button type="button" aria-pressed="{{h.on}}" aria-label="{{h.aria}}" onClick="{{h.pick}}" style="position: relative; width: 168px; height: 186px; overflow: hidden; border: 0; padding: 0; background: transparent; opacity: {{h.op}}; -webkit-mask-image: linear-gradient(#000 84%, transparent); mask-image: linear-gradient(#000 84%, transparent)">'
+  '<sc-if value="{{h.isL}}" hint-placeholder-val="{{true}}"><img alt="" src="' + HART['L']['uri'] + '" style="position: absolute; left: 14px; top: 20px; width: 140px; height: auto; display: block"></sc-if><sc-if value="{{h.isR}}" hint-placeholder-val="{{false}}"><img alt="" src="' + HART['R']['uri'] + '" style="position: absolute; left: 14px; top: 20px; width: 140px; height: auto; display: block"></sc-if>'
+  '<sc-for list="{{h.fs}}" as="g" hint-placeholder-count="5"><span style="position: absolute; left: 14px; top: 20px; width: 140px; height: {{h.hh}}; background: {{g.bg}}; -webkit-mask-image: {{g.mask}}; mask-image: {{g.mask}}; -webkit-mask-size: 100% 100%; mask-size: 100% 100%"></span></sc-for>'
+  '<sc-if value="{{h.isL}}" hint-placeholder-val="{{true}}"><img alt="" src="' + HART['L']['line'] + '" style="position: absolute; left: 14px; top: 20px; width: 140px; height: auto; display: block"></sc-if><sc-if value="{{h.isR}}" hint-placeholder-val="{{false}}"><img alt="" src="' + HART['R']['line'] + '" style="position: absolute; left: 14px; top: 20px; width: 140px; height: auto; display: block"></sc-if>'
+  '<sc-for list="{{h.fs}}" as="g" hint-placeholder-count="5"><span style="position: absolute; left: {{g.nx}}; top: {{g.ny}}; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: {{g.dw}}; color: {{g.dc}}; font-variant-numeric: tabular-nums">{{g.f}}</span><span style="position: absolute; left: {{g.lx}}; top: {{g.ly}}; width: 28px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: ' + INK + '; white-space: nowrap">{{g.n}}</span></sc-for></button>'
   '<span style="display: flex; flex-direction: column; align-items: center; gap: 1px"><span style="font-size: 13px; font-weight: 500; color: ' + SOFT + '">{{h.t}}</span><span style="font-family: {{h.pf}}; font-size: {{h.ps}}; font-weight: {{h.pw}}; color: {{h.pc}}; white-space: nowrap">{{h.plays}}</span></span>'
   '<sc-if value="{{h.hasOpts}}" hint-placeholder-val="{{false}}"><div role="radiogroup" aria-label="The left hand plays" style="display: flex; gap: 2px; padding: 3px; border-radius: 17px; background: ' + FILL + '"><sc-for list="{{h.lhOpts}}" as="o" hint-placeholder-count="2"><button type="button" role="radio" aria-checked="{{o.on}}" onClick="{{o.pick}}" style="height: 30px; padding: 0 14px; border: 0; border-radius: 15px; background: {{o.bg}}; box-shadow: {{o.sh}}; color: ' + INK + '; font: inherit; font-size: 13px; font-weight: {{o.fw}}">{{o.l}}</button></sc-for></div></sc-if>'
   '<sc-if value="{{h.canBass}}" hint-placeholder-val="{{false}}"><button type="button" aria-pressed="{{h.bassOn}}" onClick="{{h.bassPick}}" style="height: 34px; padding: 0 14px; border: 0; border-radius: 17px; background: {{h.bBg}}; box-shadow: {{h.bRing}}; color: ' + INK + '; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap">{{h.bassT}}</button></sc-if></div></sc-for></div>')
@@ -566,7 +572,7 @@ def POPS_LAPTOP(player):
     return out
 
 def ch_js(D, W, KH, minOct, mini_w):
-    return CH_JS + '\n' + js('const D = ' + json.dumps(D) + ';\nconst HART = ' + json.dumps({k: {'ar': v['ar'], 'f': v['f']} for k, v in HART.items()}) + ';\n' + CH_BODY(D, W, KH, minOct, mini_w))
+    return CH_JS + '\n' + js('const D = ' + json.dumps(D) + ';\nconst HART = ' + json.dumps({k: {'ar': v['ar'], 'f': v['f'], 'm': v['m']} for k, v in HART.items()}) + ';\n' + CH_BODY(D, W, KH, minOct, mini_w))
 
 # ── phone ──
 PH_BODY = f'''<div style="flex: none; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px">{GLASSBTN('Back to Practice', CHEV_L, href='Main.dc.html')}<h1 style="margin: 0; font-size: 17px; font-weight: 600">Chords</h1>{GLASSBTN('Keyboard', KEYSI, 'openKeys')}</div>
