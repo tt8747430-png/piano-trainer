@@ -331,8 +331,8 @@ owner's, typos fixed.
 - **No tab switch for the inversion; invent from the music (R42, v58):** "I dont like this tab switch, be more
   creative and think outside of the box". An inversion is a rotation, so it is a ring of the notes turned by tapping
   a note into the bass slot. Rejected for it so far: segmented track (v26, v57), ‹ › (v22), stepper pill (v52),
-  pull-down (v56), ring (v58: "not understandable how it moves"). Motion must show the music's own act: v59 stacks
-  the notes as they sound and lifts the bass up an octave.
+  pull-down (v56), ring (v58: "not understandable how it moves"). v59's moving stack: "it still moves too much". The
+  inversion is a still choice of the bass note (v60): controls stay put, only the selection changes.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

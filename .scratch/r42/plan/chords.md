@@ -5,7 +5,16 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
-- **v59 (canvas Version 59): the inversion is the notes stacked as they sound; the bass goes up an octave.** Owner
+- **v60 (canvas Version 60): choose the bass note; nothing moves.** Owner on v59's stack: "I dont like this. it
+  still moves too much and is not good. make something new that is more stable and more understandable".
+  - Under the name, one still row: **Bass** then the chord's notes as round buttons in chord order, always in the
+    same place (C E G B), each outlined in its key's colour with its role under it (root, 3rd, 5th, 7th). The bass
+    note is filled. Tapping another fills it instead, plays the chord with that note lowest, and the name and line
+    follow (Cmaj7/E, "1st inversion"). Nothing slides, turns or reorders; the keys and the staff show the new shape.
+    It asks the musician's own question, which note is in the bass, the one the slash chord answers.
+  - Gone: v59's stack and its arc. Never redrawn for the inversion: tabs or a segmented track (v26, v57), a
+    pull-down (v56), ‹ › (v22), a stepper pill (v52), a ring (v58), a moving stack (v59).
+- **v59 (replaced by v60) (canvas Version 59): the inversion is the notes stacked as they sound; the bass goes up an octave.** Owner
   on v58's ring: "interesting but it is not understandable how it moves. can we think outside of the box and make
   something new and understandable".
   - The chord's notes stand in a column under the name, lowest at the bottom, as on the staff and the keys: each a
@@ -454,3 +463,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: every inversion one tap (position over slash chord); notes as columns over their roles (v57).
 - 2026-11-09: v57 rejected ("tab switch"); the inversion a ring of the notes, turned by tapping a note into the bass (v58).
 - 2026-11-09: v58 ring not readable; the notes as a column, lowest at the bottom, "Bass up an octave" (v59).
+- 2026-11-09: v59 moved too much; a still row of the chord's notes, the bass one filled, tap to choose (v60).
