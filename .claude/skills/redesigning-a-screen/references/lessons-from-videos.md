@@ -354,7 +354,7 @@ How the work is run, not how a screen looks. The repo already carries most of th
   the owner's.
 - **Grill before building, when rounds keep bouncing.** After two rejections of the same part, stop drawing: put the
   open decisions to the owner with a recommended answer each, the parent decision first, and build only when they
-  are settled. This repo's `grilling` skill asks one at a time.
+  are settled. `grilling` (v1.3) asks every open question whose parent is settled in one numbered round.
 - **What cannot be settled by talking gets a prototype:** a few versions that look nothing alike, to click and pick
   from; the canvas is that, but with the variants side by side, not one guess per round.
 - **Keep the glossary:** one line per term and the words to avoid (`CLAUDE.md`'s "Words in code", the avoid-words
@@ -363,8 +363,8 @@ How the work is run, not how a screen looks. The repo already carries most of th
   and against the standards.
 - **Retro before the chat is cleared:** what the agent struggled with becomes a check where a machine can spot it,
   an instruction where it is a judgment; the owner picks which to keep (the feedback log is this).
-- **Not taken:** `implement spec` (one agent per ticket) against the owner's rule to work inline; nothing here is
-  installed beyond what the repo has.
+- **Installed 2026-11-09** at the owner's word: the v1.3 set (`INSTALLED-FROM-VIDEOS.md`). `implement-spec` (one agent
+  per ticket) runs only when the owner asks, since the standing rule is to work inline.
 
 ## Rulings the videos led to
 
