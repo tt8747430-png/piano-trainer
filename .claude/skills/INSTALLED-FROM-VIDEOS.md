@@ -11,7 +11,7 @@ keeps its licence. `CLAUDE.md`, `DESIGN.md` and the owner's rulings win over any
 | `make-interfaces-feel-better` | github.com/jakubkrehel/make-interfaces-feel-better (35545ea) | MIT |
 | `baseline-ui`, `improve-ui`, `fixing-accessibility`, `fixing-motion-performance`, `fixing-metadata`, `create-design-md`, `component-canvas`, `create-canvas`, `ui-skills-root` | github.com/ibelick/ui-skills (97dea9e) | MIT |
 | `emil-design-eng` (with `ui-cheatsheet.md`), `animate`, `animation-performance`, `animation-vocabulary`, `apple-design`, `ask-sonner`, `break-ui`, `choreograph`, `find-animation-opportunities`, `improve-animations`, `mobile-native`, `pick-ui-library`, `remove-animations`, `review-animations`, `prototype-variants` | github.com/emilkowalski/skills (c8a7962) | MIT |
-| `grill-me`, `grill-with-docs`, `wait-what`, `to-tickets`, `implement-spec`, `pr`, `retro`, `writing-for-agents` (new, 2026-11-09), and `grilling`, `code-review`, `implement`, `to-spec`, `tdd`, `prototype`, `research`, `domain-modeling`, `diagnosing-bugs`, `codebase-design`, `improve-codebase-architecture`, `triage`, `handoff` brought to v1.3 | github.com/mattpocock/skills (4ae2317) | MIT (`LICENSE-mattpocock-skills.txt`) |
+| `grill-me`, `grill-with-docs`, `wait-what`, `to-tickets`, `implement-spec`, `pr`, `retro`, `writing-for-agents` (new, 2026-11-09), and `grilling`, `code-review`, `implement`, `to-spec`, `tdd`, `prototype`, `research`, `domain-modeling`, `diagnosing-bugs`, `codebase-design`, `improve-codebase-architecture`, `triage`, `handoff` brought to v1.3.2; `wizard`, `ask-matt`, `wayfinder`, `setup-matt-pocock-skills`, `to-questionnaire`, `teach` added | github.com/mattpocock/skills v1.3.2 (4ae2317, the default branch's head on 2026-11-09) | MIT (`LICENSE-mattpocock-skills.txt`) |
 
 - Emil's `prototype` is installed as `prototype-variants`, since the repo already has a `prototype` skill.
 - Not installed: Emil's `write-swift` (Swift) and `animate-expo` (React Native and Expo), which are outside this
@@ -27,3 +27,5 @@ keeps its licence. `CLAUDE.md`, `DESIGN.md` and the owner's rulings win over any
 - Matt Pocock's set (the video on v1.3): `implement-spec` starts one agent per ticket, against the owner's rule to work
   inline, so it runs only at the owner's word; `to-issues` is the older name of `to-tickets` and stays for old plans.
 - The Firecrawl CLI's 32 skills are user-level, installed by the cloud environment's setup script, not in this folder.
+- Not installed from Matt Pocock's repository: its `misc/` (his own tooling: shoehorn, exercises, pre-commit, git
+  guardrails) and `in-progress/` (unfinished) folders.
