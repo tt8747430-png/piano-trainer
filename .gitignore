@@ -33,3 +33,6 @@ content-export/
 
 # The YouTube transcripts run's cache
 scripts/youtube-transcripts/state/
+
+# Firecrawl CLI cache
+.firecrawl/
