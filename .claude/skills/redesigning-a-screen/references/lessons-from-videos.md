@@ -364,7 +364,7 @@ How the work is run, not how a screen looks. The repo already carries most of th
 - **Retro before the chat is cleared:** what the agent struggled with becomes a check where a machine can spot it,
   an instruction where it is a judgment; the owner picks which to keep (the feedback log is this).
 - **Installed 2026-11-09** at the owner's word: the v1.3 set (`INSTALLED-FROM-VIDEOS.md`). `implement-spec` (one agent
-  per ticket) runs only when the owner asks, since the standing rule is to work inline.
+  per ticket) is an allowed exception to working inline when its job fits (`owner-way`).
 
 ## Rulings the videos led to
 

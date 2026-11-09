@@ -101,8 +101,11 @@ does not read first: write the spec, build it, and log it.
 - **A command over 10 seconds runs in the background,** so other work continues. That includes the suite and the build.
 - **Rounds:** a round closes with its items done, its report, an `impeccable` audit and the full gate, before the next
   starts. Keep the brief's order.
-- **Work inline.** Each agent costs about a session. Use one only when the work is hours long, splits by files, briefs in
-  under a page and parallel running saves the owner real time; two or three at most. Reading saved pages or a mechanical
+- **Work inline by default; make the exception when the work calls for it.** Each agent costs about a session, so one
+  is used when the work is hours long, splits by files, briefs in under a page and parallel running saves the owner
+  real time; two or three at most. A skill built on agents (`implement-spec`: one agent per ready ticket, each in its
+  own copy of the repo; `code-review`'s two reviewers; a research agent) may run without asking when its job fits:
+  say in the report that it ran and why, and check each agent's diff before trusting its report. Reading saved pages or a mechanical
   edit goes to a small model. An agent that stops is your work: check what it committed and continue until nothing is left.
   A stopped agent can be resumed, since it may have stopped by accident. A new one starts from its saved file, never from
   scratch.

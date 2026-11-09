@@ -24,8 +24,9 @@ keeps its licence. `CLAUDE.md`, `DESIGN.md` and the owner's rulings win over any
   during the redesign canvases): `stageshow`, `agentation`, `agentation-self-driving`, `ask-sonner` (the app does not
   use Sonner), `animation-vocabulary`, `fixing-metadata`, `create-canvas`, `component-canvas`, `create-design-md`
   (`DESIGN.md` exists) and `ui-skills-root` (needs its CLI).
-- Matt Pocock's set (the video on v1.3): `implement-spec` starts one agent per ticket, against the owner's rule to work
-  inline, so it runs only at the owner's word; `to-issues` is the older name of `to-tickets` and stays for old plans.
+- Matt Pocock's set (the video on v1.3): `implement-spec` starts one agent per ticket; the owner's rule is to work
+  inline by default with exceptions where the work calls for it (`owner-way`), so it may run when a spec's tickets are
+  ready and independent; `to-issues` is the older name of `to-tickets` and stays for old plans.
 - The Firecrawl CLI's 32 skills are user-level, installed by the cloud environment's setup script, not in this folder.
 - Not installed from Matt Pocock's repository: its `misc/` (his own tooling: shoehorn, exercises, pre-commit, git
   guardrails) and `in-progress/` (unfinished) folders.
