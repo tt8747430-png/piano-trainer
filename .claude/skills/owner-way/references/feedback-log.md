@@ -332,7 +332,8 @@ owner's, typos fixed.
   creative and think outside of the box". An inversion is a rotation, so it is a ring of the notes turned by tapping
   a note into the bass slot. Rejected for it so far: segmented track (v26, v57), ‹ › (v22), stepper pill (v52),
   pull-down (v56), ring (v58: "not understandable how it moves"). v59's moving stack: "it still moves too much". The
-  inversion is a still choice of the bass note (v60): controls stay put, only the selection changes.
+  inversion is a still choice of the bass note (v60): controls stay put, only the selection changes. v61, "better": each choice
+  shows its result (a small staff of the chord it makes), and the slash in the name wears the bass note's colour.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

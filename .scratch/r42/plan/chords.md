@@ -5,7 +5,21 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
-- **v60 (canvas Version 60): choose the bass note; nothing moves.** Owner on v59's stack: "I dont like this. it
+- **v61 (canvas Version 61): each bass note shows the chord it makes, drawn as a textbook draws inversions.** Owner
+  on v60: "better but still could be more creative and research more and improve it".
+  - v60's still row stays (Bass note: C E G B in chord order, the bass filled, nothing moves). Above each note, a
+    small treble staff draws the chord that note in the bass gives, its heads in the keys' colours: four little
+    chords side by side, root position, 1st, 2nd, 3rd inversion, as theory books and worksheets set inversions out
+    on the staff. The learner sees each choice's shape before tapping, and the chosen one's role is bold.
+  - The slash in the name takes the bass note's colour (Cmaj7/**E** in the 3rd's blue, /**G** in the 5th's green),
+    so the name, the chosen note, the keys and the staff all say the same thing.
+  - Research: musictheorylessons.net (inversions named by position, notes set out as a table; its worksheets mix
+    "root position with 1st and 2nd inversions, and 3rd inversion for 7th chords"); Chord Trainer's chord builder
+    (piano-data/reference-apps/chord-trainer 04–09: Root position · 1st inversion · 2nd inversion chips with the
+    inversion's pitches under them, G4 C5 F5, and the chord on a staff); the slash-chords lesson in
+    piano-data/transcriptions (005: "a slash chord … simply means there's a different note in the bass than the
+    root"). pianochord.org and scales-chords.com refused automated reading, so they were not used.
+- **v60 (built on by v61) (canvas Version 60): choose the bass note; nothing moves.** Owner on v59's stack: "I dont like this. it
   still moves too much and is not good. make something new that is more stable and more understandable".
   - Under the name, one still row: **Bass** then the chord's notes as round buttons in chord order, always in the
     same place (C E G B), each outlined in its key's colour with its role under it (root, 3rd, 5th, 7th). The bass
@@ -464,3 +478,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: v57 rejected ("tab switch"); the inversion a ring of the notes, turned by tapping a note into the bass (v58).
 - 2026-11-09: v58 ring not readable; the notes as a column, lowest at the bottom, "Bass up an octave" (v59).
 - 2026-11-09: v59 moved too much; a still row of the chord's notes, the bass one filled, tap to choose (v60).
+- 2026-11-09: each bass note shows its chord on a small staff; the slash takes the bass note's colour (v61).

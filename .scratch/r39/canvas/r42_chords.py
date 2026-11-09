@@ -79,6 +79,16 @@ function spell(root, semi, deg) {
   const rl = RL; const pc = (root + semi) % 12; const L = LET[(rl + deg - 1) % 7];
   const d = ((pc - NATPC[LET.indexOf(L)] + 18) % 12) - 6; return { L, d, name: L + ACC[String(d)] };
 }
+// a chord drawn small on a treble staff (52 × 76): heads in their key colours, seconds side by side, ledger lines
+function miniStaff(v) {
+  const st = (x) => LET.indexOf(x.L) + 7 * Math.floor((x.m - x.d) / 12);
+  const Y = (k) => 58 - (k - 37) * 3.5; let prev = null, off = false; const heads = [];
+  v.forEach((x) => { const k = st(x); off = prev !== null && k - prev === 1 && !off; heads.push({ x: (off ? 27 : 18) + 'px', y: (Y(k) - 3.5) + 'px', c: ROLE[x.deg] || C.accent }); prev = k; });
+  const ks = v.map(st), lo = Math.min(...ks), hi = Math.max(...ks), led = [];
+  for (let k = 35; k >= lo; k -= 2) led.push({ y: Y(k) + 'px' });
+  for (let k = 47; k <= hi; k += 2) led.push({ y: Y(k) + 'px' });
+  return { heads, led };
+}
 let AC = null;
 function sound(ms, arp, dir) {
   try {
@@ -217,10 +227,12 @@ return {
     const seen = []; const tones = voice(root, q, 0, voicing, 'Right').filter((x) => { if (seen.includes(x.name)) return false; seen.push(x.name); return true; }); RL = rLet;
     const N = tones.length; const R = -inv * 360 / N;
     return tones.map((x, k) => { const pos = (k - inv + N) % N; const j = basses.indexOf(x.name); const on = j === inv; const can = j >= 0;
-      return { y: ((N - 1 - pos) * 44) + 'px', z: pos === N - 1 ? 2 : 1, fill: on ? (ROLE[x.deg] || C.accent) : '#FEFDFB', bw: on ? '0' : '2.5px', n: x.name, d: ({ 1: 'root', 2: '2nd', 3: '3rd', 4: '4th', 5: '5th', 6: '6th', 7: '7th', 9: '9th', 11: '11th', 13: '13th' })[x.deg], c: ROLE[x.deg] || C.accent, on, can,
+      const g = miniStaff(can ? (() => { const v = voice(root, q, j, voicing, 'Right'); RL = rLet; return v; })() : []);
+      return { heads: g.heads, led: g.led, rw: on ? 700 : 400, rc: on ? C.ink : C.soft, y: ((N - 1 - pos) * 44) + 'px', z: pos === N - 1 ? 2 : 1, fill: on ? (ROLE[x.deg] || C.accent) : '#FEFDFB', bw: on ? '0' : '2.5px', n: x.name, d: ({ 1: 'root', 2: '2nd', 3: '3rd', 4: '4th', 5: '5th', 6: '6th', 7: '7th', 9: '9th', 11: '11th', 13: '13th' })[x.deg], c: ROLE[x.deg] || C.accent, on, can,
         aria: x.name + ', the ' + (({ 1: 'root' })[x.deg] || 'chord tone') + (can ? (on ? ', in the bass' : ', put it in the bass') : ''),
         bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', op: can ? 1 : 0.55,
         pick: () => { if (can) change({ inv: j }); } }; }); })(),
+  slashC: (() => { const v = voice(root, q, inv, voicing, 'Right'); RL = rLet; return ROLE[v[0].deg] ? 'color-mix(in srgb, ' + ROLE[v[0].deg] + ' 70%, #332921)' : '#B07A2A'; })(),
   symL: RN[0], symA: RN.slice(1), hasSymA: RN.length > 1, symQ: q.k,
   invName: INV[inv], isInvMenu: sh === 'inv', openInv: () => set({ sheet: sh === 'inv' ? null : 'inv' }),
   invItems: Array.from({ length: invN }, (_, i) => { const v = voice(root, q, i, voicing, 'Right'); RL = rLet; return { t: INV[i], s: v.map((x) => x.name).join(' '), on: i === inv, mark: i === inv ? '✓' : '', pick: () => change({ inv: i, sheet: null }) }; }),
@@ -297,9 +309,11 @@ def TITLEBLOCK(size):
     fs = '{{symFsP}}' if size < 50 else '{{symFsL}}'
     w = '100%' if size < 50 else '520px'
     return f'''<div style="flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center">
-<button type="button" aria-label="Change the chord: {{{{sym}}}}{{{{slash}}}}" onClick="{{{{openChord}}}}" style="max-width: 100%; border: 0; border-radius: 16px; background: transparent; padding: 0 8px; color: {INK}; font: inherit"><span style="font-family: {SERIF}; font-size: {fs}px; line-height: 1.1; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap">{{{{symL}}}}<sc-if value="{{{{hasSymA}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-family: 'Noto Music', serif; font-weight: 400; font-size: 0.78em; vertical-align: 0.22em; margin: 0 0.02em 0 0.04em; -webkit-text-stroke: 0.025em currentColor">{{{{symA}}}}</span></sc-if>{{{{symQ}}}}<span style="color: #B07A2A">{{{{slash}}}}</span></span></button>
+<button type="button" aria-label="Change the chord: {{{{sym}}}}{{{{slash}}}}" onClick="{{{{openChord}}}}" style="max-width: 100%; border: 0; border-radius: 16px; background: transparent; padding: 0 8px; color: {INK}; font: inherit"><span style="font-family: {SERIF}; font-size: {fs}px; line-height: 1.1; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap">{{{{symL}}}}<sc-if value="{{{{hasSymA}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-family: 'Noto Music', serif; font-weight: 400; font-size: 0.78em; vertical-align: 0.22em; margin: 0 0.02em 0 0.04em; -webkit-text-stroke: 0.025em currentColor">{{{{symA}}}}</span></sc-if>{{{{symQ}}}}<span style="color: {{{{slashC}}}}">{{{{slash}}}}</span></span></button>
 <p style="margin: 0; font-size: 15px; color: {SOFT}">{{{{fullLine}}}}</p>
-<div style="margin-top: 14px; display: flex; align-items: flex-start; justify-content: center; gap: 12px"><span style="height: 48px; display: flex; align-items: center; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">Bass</span><div role="radiogroup" aria-label="Bass note" style="display: flex; gap: 10px"><sc-for list="{{{{noteCols}}}}" as="c" hint-placeholder-count="4"><div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><button type="button" role="radio" aria-checked="{{{{c.on}}}}" aria-label="{{{{c.aria}}}}" onClick="{{{{c.pick}}}}" style="width: 48px; height: 48px; margin: 0; padding: 0; border-radius: 50%; border: {{{{c.bw}}}} solid {{{{c.c}}}}; background: {{{{c.fill}}}}; opacity: {{{{c.op}}}}; color: {INK}; font: inherit; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{c.n}}}}</button><span aria-hidden="true" style="font-size: 13px; color: {SOFT}">{{{{c.d}}}}</span></div></sc-for></div></div>
+<p aria-hidden="true" style="margin: 14px 0 0; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">Bass note</p>
+<div role="radiogroup" aria-label="Bass note" style="margin-top: 2px; display: flex; justify-content: center; gap: 6px"><sc-for list="{{{{noteCols}}}}" as="c" hint-placeholder-count="4"><button type="button" role="radio" aria-checked="{{{{c.on}}}}" aria-label="{{{{c.aria}}}}" onClick="{{{{c.pick}}}}" style="width: 68px; margin: 0; padding: 4px 0 6px; border: 0; border-radius: 16px; background: transparent; opacity: {{{{c.op}}}}; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; gap: 4px"><span aria-hidden="true" style="position: relative; width: 52px; height: 76px"><span style="position: absolute; left: 2px; right: 2px; top: 30px; height: 29px; box-sizing: border-box; border-top: 1px solid rgba(51,41,33,.35); border-bottom: 1px solid rgba(51,41,33,.35); background: linear-gradient(rgba(51,41,33,.35), rgba(51,41,33,.35)) 0 6px / 100% 1px no-repeat, linear-gradient(rgba(51,41,33,.35), rgba(51,41,33,.35)) 0 13px / 100% 1px no-repeat, linear-gradient(rgba(51,41,33,.35), rgba(51,41,33,.35)) 0 20px / 100% 1px no-repeat"></span><sc-for list="{{{{c.led}}}}" as="l" hint-placeholder-count="0"><span style="position: absolute; left: 14px; width: 26px; top: {{{{l.y}}}}; height: 1px; background: rgba(51,41,33,.5)"></span></sc-for><sc-for list="{{{{c.heads}}}}" as="h" hint-placeholder-count="4"><span style="position: absolute; left: {{{{h.x}}}}; top: {{{{h.y}}}}; width: 10px; height: 7px; border-radius: 50%; transform: rotate(-20deg); background: {{{{h.c}}}}; box-shadow: 0 0 0 0.75px rgba(51,41,33,.55)"></span></sc-for></span><span style="width: 44px; height: 44px; border-radius: 50%; box-sizing: border-box; border: {{{{c.bw}}}} solid {{{{c.c}}}}; background: {{{{c.fill}}}}; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{c.n}}}}</span><span style="font-size: 13px; font-weight: {{{{c.rw}}}}; color: {{{{c.rc}}}}">{{{{c.d}}}}</span></button></sc-for></div>
+
 </div>'''
 
 def STAFFSVG(w):
