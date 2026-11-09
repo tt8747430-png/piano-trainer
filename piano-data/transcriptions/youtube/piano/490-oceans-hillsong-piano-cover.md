@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=85E5InlzVXg
 - Duration: 05:57
 - Published: 2019-11-12
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -21,26 +21,4 @@ My piano cover of Oceans (Where Feet May Fail) by Hillsong United. A simple wors
 
 ## Transcript
 
-**[00:00]** The End of the Day
-
-**[00:30]** The End of the Day
-
-**[01:00]** The End of the Day
-
-**[01:30]** The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day
-
-**[02:00]** The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day
-
-**[02:30]** The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day
-
-**[03:02]** The End of the Day The End of the Day The End of the Day Thank you.
-
-**[03:38]** Thank you.
-
-**[04:08]** Thank you.
-
-**[04:38]** Thank you.
-
-**[05:08]** Thank you.
-
-**[05:38]** Thank you.
+_No speech: the video is music only._

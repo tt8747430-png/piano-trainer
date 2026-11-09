@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=2hhSV-sFhEs
 - Duration: 02:33
 - Published: 2026-07-22
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -46,12 +46,4 @@ Chapters:
 
 ## Transcript
 
-**[00:00]** The New Year of the Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day.
-
-**[00:32]** The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day.
-
-**[01:03]** The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day.
-
-**[01:33]** The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day.
-
-**[02:03]** The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. The New Year is a production of the New Year's Day. you
+_No speech: the video is music only._

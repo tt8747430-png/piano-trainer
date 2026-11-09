@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=9g_2B1Ji_CI
 - Duration: 36:44
 - Published: 2025-10-24
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -31,82 +31,4 @@ Track List:
 
 ## Transcript
 
-**[00:00]** The End
-
-**[00:30]** The End
-
-**[01:00]** The End
-
-**[01:30]** The End
-
-**[02:00]** The End
-
-**[02:30]** The End
-
-**[03:00]** The End The End
-
-**[03:59]** The End The End
-
-**[04:59]** The End The End
-
-**[05:59]** The End The End
-
-**[06:59]** The End The End
-
-**[07:59]** The End The End
-
-**[08:59]** The End The End
-
-**[09:59]** The End The End
-
-**[10:59]** The End The End
-
-**[11:59]** The End The End
-
-**[12:59]** The End The End
-
-**[13:59]** The End The End
-
-**[14:59]** The End The End
-
-**[15:59]** The End The End
-
-**[16:59]** The End The End
-
-**[17:59]** The End The End
-
-**[18:59]** The End The End
-
-**[19:59]** The End The End
-
-**[20:59]** The End The End
-
-**[21:59]** The End The End
-
-**[22:59]** The End The End
-
-**[23:59]** The End The End
-
-**[24:59]** The End The End
-
-**[25:59]** The End The End
-
-**[26:59]** The End The End
-
-**[27:59]** The End The End
-
-**[28:58]** The End The End
-
-**[29:58]** The End The End
-
-**[30:58]** The End The End
-
-**[31:58]** The End The End
-
-**[32:58]** The End The End
-
-**[33:58]** The End The End
-
-**[34:58]** The End The End
-
-**[35:58]** The End The End
+_No speech: the video is music only._

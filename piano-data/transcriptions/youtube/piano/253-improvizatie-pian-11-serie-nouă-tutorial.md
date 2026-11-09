@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=_DOEuQTBHTw
 - Duration: 01:47
 - Published: 2022-09-02
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -30,10 +30,4 @@ https://www.youtube.com/channel/UCXtqrWjyRRiZJGEfxG5kUcA/join
 
 ## Transcript
 
-**[00:00]** The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference.
-
-**[00:31]** The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference.
-
-**[01:02]** The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference.
-
-**[01:32]** The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference. The end of the day is a very difficult time to make a difference.
+_No speech: the video is music only._

@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=VgfHIdyt_i8
 - Duration: 05:50
 - Published: 2020-02-29
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -20,26 +20,4 @@ Video location: Pineville, LA
 
 ## Transcript
 
-**[00:00]** Transcribed by ESO, translated by —
-
-**[00:30]** Transcribed by —
-
-**[01:00]** Transcribed by —
-
-**[01:30]** Transcribed by —
-
-**[02:00]** Transcribed by —
-
-**[02:30]** Transcribed by —
-
-**[03:00]** Transcribed by —
-
-**[03:30]** Transcribed by —
-
-**[04:00]** Transcribed by — Transcribed by — Transcribed by — Transcribed by —
-
-**[04:40]** Transcribed by —
-
-**[05:10]** Transcribed by —
-
-**[05:40]** Transcribed by —
+_No speech: the video is music only._

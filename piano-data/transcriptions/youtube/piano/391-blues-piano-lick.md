@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=a-Beh3rGlDE
 - Duration: 00:20
 - Published: 2026-01-05
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (ja)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -15,4 +15,4 @@ https://pianowithjonny.com
 
 ## Transcript
 
-**[00:00]** うううううううううううう
+_No speech: the video is music only._

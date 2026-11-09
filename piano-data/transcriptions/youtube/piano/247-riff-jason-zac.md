@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=iNG_Zm6OupM
 - Duration: 02:17
 - Published: 2026-04-26
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -34,10 +34,4 @@ All our riffs are presented with a "performance" version and then followed by a 
 
 ## Transcript
 
-**[00:00]** Music by Ben Thede
-
-**[00:30]** Music by Ben Thede
-
-**[01:00]** Music by Ben Thede
-
-**[01:30]** Music by Ben Thede Music by Ben Thede
+_No speech: the video is music only._

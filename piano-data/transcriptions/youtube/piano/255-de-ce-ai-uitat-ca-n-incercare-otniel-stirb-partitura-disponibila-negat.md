@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=K8LnsxPOJsA
 - Duration: 03:15
 - Published: 2021-05-06
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -28,14 +28,4 @@ Sounds from Native Instruments, The Maverick
 
 ## Transcript
 
-**[00:00]** For more information visit www.fema.gov
-
-**[00:30]** For more information visit www.fema.gov
-
-**[01:00]** For more information visit www.fema.gov
-
-**[01:30]** For more information visit www.fema.gov
-
-**[02:00]** For more information visit www.fema.gov For more information visit www.fema.gov
-
-**[02:59]** For more information visit www.fema.gov
+_No speech: the video is music only._

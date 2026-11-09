@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=ef4Eo33NMWg
 - Duration: 12:00
 - Published: 2026-03-02
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -22,50 +22,4 @@ Thanks for watching!
 
 ## Transcript
 
-**[00:00]** The End of the World
-
-**[00:30]** The End of the World
-
-**[01:00]** The End of the World
-
-**[01:30]** The End of the World
-
-**[02:00]** The End of the World
-
-**[02:30]** The End of the World
-
-**[03:00]** The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World
-
-**[03:30]** The End of the World The End of the World The End of the World Thank you.
-
-**[04:06]** Thank you.
-
-**[04:36]** Thank you.
-
-**[05:06]** Thank you.
-
-**[05:36]** Thank you.
-
-**[06:06]** Thank you.
-
-**[06:36]** Thank you.
-
-**[07:06]** Thank you.
-
-**[07:36]** Thank you.
-
-**[08:06]** Thank you.
-
-**[08:36]** Thank you.
-
-**[09:06]** Thank you.
-
-**[09:36]** Thank you.
-
-**[10:06]** Thank you.
-
-**[10:36]** Thank you.
-
-**[11:06]** Thank you.
-
-**[11:36]** Thank you.
+_No speech: the video is music only._

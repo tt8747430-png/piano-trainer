@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=X7CwayN_eqk
 - Duration: 03:26
 - Published: 2020-04-06
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -21,16 +21,4 @@ As The Deer (목마른 사슴) Jazz Piano by Yohan Kim
 
 ## Transcript
 
-**[00:00]** The End of the Day
-
-**[00:30]** The End of the Day
-
-**[01:00]** The End of the Day
-
-**[01:30]** The End of the Day
-
-**[02:00]** The End of the Day
-
-**[02:30]** The End of the Day
-
-**[03:00]** The End of the Day
+_No speech: the video is music only._

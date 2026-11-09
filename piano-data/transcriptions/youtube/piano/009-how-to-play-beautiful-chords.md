@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=-RJQJ9CRTgM
 - Duration: 01:10
 - Published: 2022-11-18
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -16,8 +16,4 @@ TikTok:  Hello_Foe1
 
 ## Transcript
 
-**[00:00]** Thank you.
-
-**[00:30]** Thank you.
-
-**[01:00]** Thank you.
+_No speech: the video is music only._

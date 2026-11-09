@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=WWDcwrC7RtY
 - Duration: 00:35
 - Published: 2026-05-11
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (ja)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -33,6 +33,4 @@ Follow @PianoWithJonny for more piano tips!
 
 ## Transcript
 
-**[00:00]** 音楽
-
-**[00:30]** ご視聴ありがとうございました
+_No speech: the video is music only._

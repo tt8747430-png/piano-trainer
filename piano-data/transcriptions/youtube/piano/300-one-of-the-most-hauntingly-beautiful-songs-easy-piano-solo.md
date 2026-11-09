@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=j8hjJbNX1Wc
 - Duration: 02:21
 - Published: 2026-04-17
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -61,12 +61,4 @@ how silent is the world.
 
 ## Transcript
 
-**[00:00]** Thank you.
-
-**[00:30]** Thank you.
-
-**[01:00]** Thank you.
-
-**[01:30]** Thank you.
-
-**[02:00]** Thank you.
+_No speech: the video is music only._

@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=L-HgpAf-XRk
 - Duration: 05:05
 - Published: 2020-07-14
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -60,20 +60,4 @@ Website: https://hayatosum.com
 
 ## Transcript
 
-**[00:00]** The End
-
-**[00:30]** The End
-
-**[01:00]** The End
-
-**[01:30]** The End
-
-**[02:00]** The End
-
-**[02:30]** The End
-
-**[03:00]** The End The End
-
-**[03:59]** The End The End
-
-**[04:59]** The End
+**[00:05]** Thank you.

@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=RB3oqCMcac8
 - Duration: 03:17
 - Published: 2021-01-04
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -24,16 +24,4 @@ Sounds from Native Instruments, The Maverick
 
 ## Transcript
 
-**[00:00]** I'm going to take a look at this video. I'm going to take a look at the video. This is a video of the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video.
-
-**[00:32]** I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video.
-
-**[01:02]** I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video.
-
-**[01:32]** I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video.
-
-**[02:04]** I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video.
-
-**[02:34]** I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video.
-
-**[03:04]** I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video. I'm going to take a look at the video.
+_No speech: the video is music only._

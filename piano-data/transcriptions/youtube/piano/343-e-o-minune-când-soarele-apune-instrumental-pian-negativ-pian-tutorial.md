@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=JJT5Elytz5c
 - Duration: 02:46
 - Published: 2023-02-22
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -32,12 +32,4 @@ Tempo : 159 (optimea)
 
 ## Transcript
 
-**[00:00]** The End of the Day
-
-**[00:30]** The End of the Day
-
-**[01:00]** The End of the Day
-
-**[01:30]** The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day
-
-**[02:04]** The End of the Day The End of the Day Thank you.
+_No speech: the video is music only._

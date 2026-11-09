@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=XEme8lEugEQ
 - Duration: 03:00
 - Published: 2026-02-22
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -28,14 +28,4 @@ Experience a captivating instrumental piano performance 🎶 with an orchestra a
 
 ## Transcript
 
-**[00:00]** The End of the Day
-
-**[00:30]** The End of the Day
-
-**[01:00]** The End of the Day
-
-**[01:30]** The End of the Day
-
-**[02:00]** The End of the Day
-
-**[02:30]** The End of the Day Thank you.
+_No speech: the video is music only._

@@ -1,25 +1,26 @@
 # YouTube transcriptions
 
 Transcripts of the owner's piano videos on YouTube: every piano playlist they keep or saved, and the piano
-videos in Watch later and Liked videos. One file per video, numbered in playlist order, with the channel, link,
+videos in Cântări, Watch later and Liked videos. One file per video, numbered in playlist order, with the channel, link,
 description and the transcript in paragraphs stamped every 30 seconds. A video in two playlists has a file in
 each. The source line says whether the words are the uploader's captions, YouTube's auto-captions or Whisper
-(large-v3-turbo, run locally); auto-captions and Whisper can mishear names and musical terms.
+(large-v3-turbo, run locally, with Silero voice detection so music-only stretches are skipped); auto-captions
+and Whisper can mishear names and musical terms, and a music-only video says so.
 
 | Playlist                                                                             | Folder                                                       | Videos | Transcribed |
 | ------------------------------------------------------------------------------------ | ------------------------------------------------------------ | ------ | ----------- |
 | Piano (the owner's playlist)                                                         | [`piano/`](piano/)                                           | 567    | 567         |
 | Piano - Cantari (the owner's playlist)                                               | [`piano-cantari/`](piano-cantari/)                           | 122    | 122         |
 | Cântări (the piano videos only)                                                      | [`cantari/`](cantari/)                                       | 30     | 30          |
-| Exercises (the owner's playlist)                                                     | [`exercises/`](exercises/)                                   | 186    | 184         |
+| Exercises (the owner's playlist)                                                     | [`exercises/`](exercises/)                                   | 186    | 186         |
 | Technic (the owner's playlist)                                                       | [`technic/`](technic/)                                       | 47     | 47          |
 | Призван играть для Него - 2 уровень (saved, by Aleksandr Savchenko)                  | [`called-to-play-2/`](called-to-play-2/)                     | 10     | 10          |
 | Уроки импровизации (saved, by LaLa Lady)                                             | [`improvisation-lessons-lala/`](improvisation-lessons-lala/) | 9      | 9           |
 | Music Theory (saved, by Pianote)                                                     | [`pianote-music-theory/`](pianote-music-theory/)             | 27     | 27          |
-| Best Jazz Piano Improvisation Exercises & Practice Routines (saved, by mDecks Music) | [`mdecks-jazz-improvisation/`](mdecks-jazz-improvisation/)   | 83     | 82          |
-| JPS Podcast Episodes (saved, by Jazz Piano School)                                   | [`jps-podcast/`](jps-podcast/)                               | 346    | 343         |
-| Watch later (the piano videos only)                                                  | [`watch-later/`](watch-later/)                               | 66     | 63          |
-| Liked videos (the piano videos only)                                                 | [`liked/`](liked/)                                           | 121    | 92          |
+| Best Jazz Piano Improvisation Exercises & Practice Routines (saved, by mDecks Music) | [`mdecks-jazz-improvisation/`](mdecks-jazz-improvisation/)   | 83     | 83          |
+| JPS Podcast Episodes (saved, by Jazz Piano School)                                   | [`jps-podcast/`](jps-podcast/)                               | 346    | 346         |
+| Watch later (the piano videos only)                                                  | [`watch-later/`](watch-later/)                               | 66     | 66          |
+| Liked videos (the piano videos only)                                                 | [`liked/`](liked/)                                           | 121    | 121         |
 
 ## Piano
 
@@ -930,10 +931,10 @@ each. The source line says whether the words are the uploader's captions, YouTub
 177. [Polyphony in a SINGLE Hand 🫢 #piano #shorts](exercises/177-polyphony-in-a-single-hand.md) · [video](https://www.youtube.com/watch?v=LNjFlCej1g0)
 178. [Mezza Voce & Sotto Voce: Secret Dynamic Terms in Classical Music](exercises/178-mezza-voce-sotto-voce-secret-dynamic-terms-in-classical-music.md) · [video](https://www.youtube.com/watch?v=7isp83dHx0s)
 179. [Changing keys to make chords new](exercises/179-changing-keys-to-make-chords-new.md) · [video](https://www.youtube.com/watch?v=iyLtrvcFBs4)
-180. Jazz Piano Diminished Pattern in 7/8 with Minor 11th Chords · [video](https://www.youtube.com/watch?v=dkjw2bal4eY) · _not transcribed_
+180. [Jazz Piano Diminished Pattern in 7/8 with Minor 11th Chords](exercises/180-jazz-piano-diminished-pattern-in-78-with-minor-11th-chords.md) · [video](https://www.youtube.com/watch?v=dkjw2bal4eY)
 181. [Learn This Passing Progression To Get To The 6! 🎹](exercises/181-learn-this-passing-progression-to-get-to-the-6.md) · [video](https://www.youtube.com/watch?v=JW4XGcl1oaQ)
 182. [How to play modern 251 chord progressions on piano! #pianolessons #jazz #pianotutorial](exercises/182-how-to-play-modern-251-chord-progressions-on-piano.md) · [video](https://www.youtube.com/watch?v=ij2mowI23I4)
-183. Children - Beginner Piano Tutorial (TikTok Version) · [video](https://www.youtube.com/watch?v=jo1QaNCLov8) · _not transcribed_
+183. [Children - Beginner Piano Tutorial (TikTok Version)](exercises/183-children-beginner-piano-tutorial-tiktok-version.md) · [video](https://www.youtube.com/watch?v=jo1QaNCLov8)
 184. [315 Notes of Clair de Lune for 315 Subs #piano](exercises/184-315-notes-of-clair-de-lune-for-315-subs.md) · [video](https://www.youtube.com/watch?v=Uw4osZkSXcI)
 185. [What would you write over these chords? 🎹](exercises/185-what-would-you-write-over-these-chords.md) · [video](https://www.youtube.com/watch?v=_xyKr4q8a7Q)
 186. [Coordination exercise with arpeggiated chords🎶🎹](exercises/186-coordination-exercise-with-arpeggiated-chords.md) · [video](https://www.youtube.com/watch?v=4fW3PEHQr8w)
@@ -1115,7 +1116,7 @@ each. The source line says whether the words are the uploader's captions, YouTub
 68. [Jazz Harmony Mastery (no.1): Exploring The Jazz Standards Progression Book - Jazz Tutorial](mdecks-jazz-improvisation/068-jazz-harmony-mastery-no1-exploring-the-jazz-standards-progression-book.md) · [video](https://www.youtube.com/watch?v=vq6conPchuE)
 69. [Bebop Rhythmic Words 5&6: Easy Jazz Piano Improvisation through Rhythm. #jazzpianolessons](mdecks-jazz-improvisation/069-bebop-rhythmic-words-56-easy-jazz-piano-improvisation-through-rhythm.md) · [video](https://www.youtube.com/watch?v=00paMTHjj3k)
 70. [These Jazz Progressions Will Transform Your Playing](mdecks-jazz-improvisation/070-these-jazz-progressions-will-transform-your-playing.md) · [video](https://www.youtube.com/watch?v=2nc5aqJWgow)
-71. Mixolydian Practice Session 7-Step Exercise. Jazz Piano Tutorials. · [video](https://www.youtube.com/watch?v=cgHfo0ZR7HE) · _not transcribed_
+71. [Mixolydian Practice Session 7-Step Exercise. Jazz Piano Tutorials.](mdecks-jazz-improvisation/071-mixolydian-practice-session-7-step-exercise-jazz-piano-tutorials.md) · [video](https://www.youtube.com/watch?v=cgHfo0ZR7HE)
 72. [Jazz Piano Exercise - Scale Patterns - ALL THE THINGS YOU ARE #jazzimprovisation](mdecks-jazz-improvisation/072-jazz-piano-exercise-scale-patterns-all-the-things-you-are.md) · [video](https://www.youtube.com/watch?v=zyhC_NIa4u0)
 73. [Blues Piano Workout using Wynton Kelly's Ideas](mdecks-jazz-improvisation/073-blues-piano-workout-using-wynton-kellys-ideas.md) · [video](https://www.youtube.com/watch?v=s5J-0CRpKG4)
 74. [Fix Your Jazz Chords Fast - with this Simple Hack](mdecks-jazz-improvisation/074-fix-your-jazz-chords-fast-with-this-simple-hack.md) · [video](https://www.youtube.com/watch?v=ylLKkRUMvaY)
@@ -1154,11 +1155,11 @@ each. The source line says whether the words are the uploader's captions, YouTub
 21. [Jazz Piano School Podcast Ep 23: Jazz Piano Arranging For Beginners](jps-podcast/021-jazz-piano-school-podcast-ep-23-jazz-piano-arranging-for-beginners.md) · [video](https://www.youtube.com/watch?v=sWKtbCS4Yak)
 22. [Jazz Piano School Podcast Ep 24: How To Start Improvising For Beginners](jps-podcast/022-jazz-piano-school-podcast-ep-24-how-to-start-improvising-for-beginners.md) · [video](https://www.youtube.com/watch?v=2wnQZgZgfbw)
 23. [Learning Jazz Piano Standards](jps-podcast/023-learning-jazz-piano-standards.md) · [video](https://www.youtube.com/watch?v=VHyHRgyhhOM)
-24. Jazz Piano School Podcast Ep 26: Connecting Chord Tones (Beginner Improv) · [video](https://www.youtube.com/watch?v=YSuprTwAlG0) · _not transcribed_
+24. [Jazz Piano School Podcast Ep 26: Connecting Chord Tones (Beginner Improv)](jps-podcast/024-jazz-piano-school-podcast-ep-26-connecting-chord-tones-beginner-improv.md) · [video](https://www.youtube.com/watch?v=YSuprTwAlG0)
 25. [Jazz Piano School Podcast Ep 28: Diatonic Harmony Explained](jps-podcast/025-jazz-piano-school-podcast-ep-28-diatonic-harmony-explained.md) · [video](https://www.youtube.com/watch?v=1tamhmGfSyQ)
 26. [Jazz Piano School Podcast Ep 29: How To Use Modes To Improvise](jps-podcast/026-jazz-piano-school-podcast-ep-29-how-to-use-modes-to-improvise.md) · [video](https://www.youtube.com/watch?v=ogFxm2N-UbI)
 27. [JPS Podcast Ep 30: How To Use Diatonic Harmony](jps-podcast/027-jps-podcast-ep-30-how-to-use-diatonic-harmony.md) · [video](https://www.youtube.com/watch?v=QNbzFLml1Wo)
-28. Jazz Piano School Podcast Ep 31: Rootless Voicings #1 · [video](https://www.youtube.com/watch?v=mcD6mgfc5oM) · _not transcribed_
+28. [Jazz Piano School Podcast Ep 31: Rootless Voicings #1](jps-podcast/028-jazz-piano-school-podcast-ep-31-rootless-voicings.md) · [video](https://www.youtube.com/watch?v=mcD6mgfc5oM)
 29. [Jazz Piano School Podcast Ep 32 : Rootless Voicings #2](jps-podcast/029-jazz-piano-school-podcast-ep-32-rootless-voicings.md) · [video](https://www.youtube.com/watch?v=evqlg-o-5ws)
 30. [Jazz Piano School Podcast Ep 33: Beginner Ear Training](jps-podcast/030-jazz-piano-school-podcast-ep-33-beginner-ear-training.md) · [video](https://www.youtube.com/watch?v=OZrfftfS94o)
 31. [JPS Podcast Episode 34 - Rootless Voicing Textures](jps-podcast/031-jps-podcast-episode-34-rootless-voicing-textures.md) · [video](https://www.youtube.com/watch?v=y6O58gnwS4A)
@@ -1185,7 +1186,7 @@ each. The source line says whether the words are the uploader's captions, YouTub
 52. [JPS Podcast Ep 63 Ear Training For Progressions](jps-podcast/052-jps-podcast-ep-63-ear-training-for-progressions.md) · [video](https://www.youtube.com/watch?v=rt8BTvVsbdI)
 53. [JPS Podcast Ep 66 Voicing Pyramid & Comping](jps-podcast/053-jps-podcast-ep-66-voicing-pyramid-comping.md) · [video](https://www.youtube.com/watch?v=VfWR1x2D_FI)
 54. [JPS Podcast Ep 67 Double Time vs Double Time Feel](jps-podcast/054-jps-podcast-ep-67-double-time-vs-double-time-feel.md) · [video](https://www.youtube.com/watch?v=O89VkRF5NK0)
-55. JPS Podcast Ep 69 - Using The JPS System and Personal Assessment · [video](https://www.youtube.com/watch?v=8AkCpFn_PWM) · _not transcribed_
+55. [JPS Podcast Ep 69 - Using The JPS System and Personal Assessment](jps-podcast/055-jps-podcast-ep-69-using-the-jps-system-and-personal-assessment.md) · [video](https://www.youtube.com/watch?v=8AkCpFn_PWM)
 56. [JPS Podcast Ep 70 The 7 Step Arranging Process For Solo Piano](jps-podcast/056-jps-podcast-ep-70-the-7-step-arranging-process-for-solo-piano.md) · [video](https://www.youtube.com/watch?v=nfpHNNw6zLE)
 57. [JPS Podcast Ep 72 - Advanced Blues Solo Piano](jps-podcast/057-jps-podcast-ep-72-advanced-blues-solo-piano.md) · [video](https://www.youtube.com/watch?v=FB8M_dMvD4c)
 58. [JPS Podcast Ep 73 - Beginner Latin & Bossa](jps-podcast/058-jps-podcast-ep-73-beginner-latin-bossa.md) · [video](https://www.youtube.com/watch?v=6Nf3VeLNo94)
@@ -1486,7 +1487,7 @@ each. The source line says whether the words are the uploader's captions, YouTub
 4. [Here's Why You're NOT Growing as a Worship Keys Player (And What To Do About It)](watch-later/004-heres-why-youre-not-growing-as-a-worship-keys-player-and-what-to-do-ab.md) · [video](https://www.youtube.com/watch?v=gsCxaTccrn8)
 5. [New Pulse 8828 3-sensor long-throw piano keybed](watch-later/005-new-pulse-8828-3-sensor-long-throw-piano-keybed.md) · [video](https://www.youtube.com/watch?v=9vGVJYwKpoQ)
 6. [EVERY Major Chord Voicing You Need for Jazz Piano](watch-later/006-every-major-chord-voicing-you-need-for-jazz-piano.md) · [video](https://www.youtube.com/watch?v=YTF9rkCu6_E)
-7. Czardas (Piano Tutorial) · [video](https://www.youtube.com/watch?v=WpIL9S1Jtgs) · _not transcribed_
+7. [Czardas (Piano Tutorial)](watch-later/007-czardas-piano-tutorial.md) · [video](https://www.youtube.com/watch?v=WpIL9S1Jtgs)
 8. [How to Play Jazz Piano Chord Extensions - Fast and Easy](watch-later/008-how-to-play-jazz-piano-chord-extensions-fast-and-easy.md) · [video](https://www.youtube.com/watch?v=6u4Qmfc54nw)
 9. [THE THEORY TO MASTER ALL 12 KEYS - ONLY FOR SERIOUS MUSICIANS](watch-later/009-the-theory-to-master-all-12-keys-only-for-serious-musicians.md) · [video](https://www.youtube.com/watch?v=AXmh3xbmeAI)
 10. [How To Use Major 7th Chords](watch-later/010-how-to-use-major-7th-chords.md) · [video](https://www.youtube.com/watch?v=ZeWO9G6jBbA)
@@ -1536,12 +1537,12 @@ each. The source line says whether the words are the uploader's captions, YouTub
 54. [How to Layer Worship Pads Like a Pro](watch-later/054-how-to-layer-worship-pads-like-a-pro.md) · [video](https://www.youtube.com/watch?v=W7bqFbmOaF8)
 55. [Making 1 5 6 4 Chord Progression Interesting](watch-later/055-making-1-5-6-4-chord-progression-interesting.md) · [video](https://www.youtube.com/watch?v=sQnW5x2zmwk)
 56. [3 Essential Gospel Chord Progressions in C Major Every Musician Should Know](watch-later/056-3-essential-gospel-chord-progressions-in-c-major-every-musician-should.md) · [video](https://www.youtube.com/watch?v=xWUmk75fcHU)
-57. 10 Easy Piano Pieces that Touch the Heart Perfect for Beginners · [video](https://www.youtube.com/watch?v=6GYTi9zOiLE) · _not transcribed_
+57. [10 Easy Piano Pieces that Touch the Heart Perfect for Beginners](watch-later/057-10-easy-piano-pieces-that-touch-the-heart-perfect-for-beginners.md) · [video](https://www.youtube.com/watch?v=6GYTi9zOiLE)
 58. [Playing Keys at Church Just Got a lot Easier](watch-later/058-playing-keys-at-church-just-got-a-lot-easier.md) · [video](https://www.youtube.com/watch?v=6rb3378zi-A)
 59. [Find Jazz Piano Voicings You Never Knew Existed](watch-later/059-find-jazz-piano-voicings-you-never-knew-existed.md) · [video](https://www.youtube.com/watch?v=icCKJVu7nZs)
 60. [I Played Piano for 10 Years Before I Learned This](watch-later/060-i-played-piano-for-10-years-before-i-learned-this.md) · [video](https://www.youtube.com/watch?v=0rBJc8Inv7E)
 61. [3 Gorgeous Chord Voicings You’ll Use Forever](watch-later/061-3-gorgeous-chord-voicings-youll-use-forever.md) · [video](https://www.youtube.com/watch?v=kMOCgMUSf5M)
-62. "LIBERTANGO" FREE PIANO SHEET MUSIC - Astor Piazzolla arr. Mariano Statello · [video](https://www.youtube.com/watch?v=khWSkFkyJGc) · _not transcribed_
+62. ["LIBERTANGO" FREE PIANO SHEET MUSIC - Astor Piazzolla arr. Mariano Statello](watch-later/062-libertango-free-piano-sheet-music-astor-piazzolla-arr-mariano-statello.md) · [video](https://www.youtube.com/watch?v=khWSkFkyJGc)
 63. [Autumn Leaves (Gm) voicing and comping practice](watch-later/063-autumn-leaves-gm-voicing-and-comping-practice.md) · [video](https://www.youtube.com/watch?v=8Q0DizFlMRw)
 64. [8 Jazz Piano Voicings (Beginner to Expert)](watch-later/064-8-jazz-piano-voicings-beginner-to-expert.md) · [video](https://www.youtube.com/watch?v=rnQ9KqAmuPI)
 65. [20 Drills to Become a Music Theory Beast (the only video you need)](watch-later/065-20-drills-to-become-a-music-theory-beast-the-only-video-you-need.md) · [video](https://www.youtube.com/watch?v=fvwtclFZ7Uc)
@@ -1550,9 +1551,9 @@ each. The source line says whether the words are the uploader's captions, YouTub
 ## Liked videos
 
 1. [ONE TRIAD for EACH HAND!](liked/001-one-triad-for-each-hand.md) · [video](https://www.youtube.com/watch?v=BN-SoqkQSDI)
-2. Save This Easy Drop 2 Move In F · [video](https://www.youtube.com/watch?v=b_-Fi0XFy3g) · _not transcribed_
+2. [Save This Easy Drop 2 Move In F](liked/002-save-this-easy-drop-2-move-in-f.md) · [video](https://www.youtube.com/watch?v=b_-Fi0XFy3g)
 3. [Can Triads Sound Interesting?](liked/003-can-triads-sound-interesting.md) · [video](https://www.youtube.com/watch?v=o3OIyo3hugU)
-4. Relaxing Jazz Piano Chords (with fingering) #shorts · [video](https://www.youtube.com/watch?v=uGZSTmCSaRM) · _not transcribed_
+4. [Relaxing Jazz Piano Chords (with fingering) #shorts](liked/004-relaxing-jazz-piano-chords-with-fingering.md) · [video](https://www.youtube.com/watch?v=uGZSTmCSaRM)
 5. [HOW TO PLAY THIS SONG ON THE PIANO!? #1 PIANO BY NUMBERS #shorts](liked/005-how-to-play-this-song-on-the-piano-piano-by-numbers.md) · [video](https://www.youtube.com/watch?v=_Q6AG06ws8Y)
 6. [Playing Keys at Church Just Got a lot Easier](liked/006-playing-keys-at-church-just-got-a-lot-easier.md) · [video](https://www.youtube.com/watch?v=6rb3378zi-A)
 7. [Stop scrolling and listen to this song from 1965 #piano #pianomusic #music #sunny](liked/007-stop-scrolling-and-listen-to-this-song-from-1965.md) · [video](https://www.youtube.com/watch?v=3DvY9ZzhUKQ)
@@ -1563,7 +1564,7 @@ each. The source line says whether the words are the uploader's captions, YouTub
 12. [2-5-1 (Tritone Substitution) #chordprogression #reharmonization #harmonize](liked/012-2-5-1-tritone-substitution.md) · [video](https://www.youtube.com/watch?v=-MsjPhabUCQ)
 13. ["Cakewalk" 🎹 BLUES PIANO Tutorial Solo Instr (Sheet Music on PATREON)](liked/013-cakewalk-blues-piano-tutorial-solo-instr-sheet-music-on-patreon.md) · [video](https://www.youtube.com/watch?v=O35nt5vU6zc)
 14. [20 Years Of Music Theory in 2 Minutes](liked/014-20-years-of-music-theory-in-2-minutes.md) · [video](https://www.youtube.com/watch?v=h64STITg0m8)
-15. Chromatic piano ending for C major 🎹#piano #pianotutorial #jazzpiano #pianocover #pianoplayer · [video](https://www.youtube.com/watch?v=VlVjopOpfwY) · _not transcribed_
+15. [Chromatic piano ending for C major 🎹#piano #pianotutorial #jazzpiano #pianocover #pianoplayer](liked/015-chromatic-piano-ending-for-c-major.md) · [video](https://www.youtube.com/watch?v=VlVjopOpfwY)
 16. [How to add Volume to a chord #jazzpiano #keithjarrett #chordprogression #pianotutorial](liked/016-how-to-add-volume-to-a-chord.md) · [video](https://www.youtube.com/watch?v=b9XutAGM9RE)
 17. [Why Eb Blues Is Perfect for Beginner Improvisers](liked/017-why-eb-blues-is-perfect-for-beginner-improvisers.md) · [video](https://www.youtube.com/watch?v=YG9aVYzN0kE)
 18. [Getting From I to IV](liked/018-getting-from-i-to-iv.md) · [video](https://www.youtube.com/watch?v=QXa-g7HejZY)
@@ -1571,7 +1572,7 @@ each. The source line says whether the words are the uploader's captions, YouTub
 20. [Что можно выжать из пентатоники?](liked/020-что-можно-выжать-из-пентатоники.md) · [video](https://www.youtube.com/watch?v=2cvRhP2JzlU)
 21. [Dominant 7th Chords Explained Simply](liked/021-dominant-7th-chords-explained-simply.md) · [video](https://www.youtube.com/watch?v=mbOqEUgAKSs)
 22. [Top 5 must know jazz licks](liked/022-top-5-must-know-jazz-licks.md) · [video](https://www.youtube.com/watch?v=pR1GkHr0yBo)
-23. 382 notes of Clair de Lune for 382 subscribers · [video](https://www.youtube.com/watch?v=71KT85uX6xQ) · _not transcribed_
+23. [382 notes of Clair de Lune for 382 subscribers](liked/023-382-notes-of-clair-de-lune-for-382-subscribers.md) · [video](https://www.youtube.com/watch?v=71KT85uX6xQ)
 24. [ПРАВИЛО 2,5](liked/024-правило-25.md) · [video](https://www.youtube.com/watch?v=Ulqs_ML_ghs)
 25. [Шикарный приём для левой руки 🤚 🎹](liked/025-шикарный-приём-для-левой-руки.md) · [video](https://www.youtube.com/watch?v=8Dn99rS8lgc)
 26. [What would you write over these chords? 🎹](liked/026-what-would-you-write-over-these-chords.md) · [video](https://www.youtube.com/watch?v=vd08xTnH0pI)
@@ -1581,8 +1582,8 @@ each. The source line says whether the words are the uploader's captions, YouTub
 30. [When To Use The 4/5 Slash Chord](liked/030-when-to-use-the-45-slash-chord.md) · [video](https://www.youtube.com/watch?v=hF4FdFVG0Wo)
 31. [canon in D but it keeps getting jazzier](liked/031-canon-in-d-but-it-keeps-getting-jazzier.md) · [video](https://www.youtube.com/watch?v=lpc1lEJ-SRc)
 32. [some happiness going into the week! #jazzmusic #jazz #calmmusic #happymusic #pianomusic #piano](liked/032-some-happiness-going-into-the-week.md) · [video](https://www.youtube.com/watch?v=S1acQ5cMCcY)
-33. let yourself relax tonight with some jazz! 💜 #jazz #jazzpiano #pianomusic #calmmusic #calm #piano · [video](https://www.youtube.com/watch?v=Z56T4S9Nrao) · _not transcribed_
-34. "Love Story (Reimagined)" on Spotify/Apple Music🎶#lovestory #pianocover #lovesong #medievalfantasy · [video](https://www.youtube.com/watch?v=TIHE8gh5f6g) · _not transcribed_
+33. [let yourself relax tonight with some jazz! 💜 #jazz #jazzpiano #pianomusic #calmmusic #calm #piano](liked/033-let-yourself-relax-tonight-with-some-jazz.md) · [video](https://www.youtube.com/watch?v=Z56T4S9Nrao)
+34. ["Love Story (Reimagined)" on Spotify/Apple Music🎶#lovestory #pianocover #lovesong #medievalfantasy](liked/034-love-story-reimagined-on-spotifyapple-music.md) · [video](https://www.youtube.com/watch?v=TIHE8gh5f6g)
 35. [No problem bro. #fyp #piano](liked/035-no-problem-bro.md) · [video](https://www.youtube.com/watch?v=loqta8aRix4)
 36. [How people listen to jazz😅 #music #pianist #musician #jazz #musiclife #funny](liked/036-how-people-listen-to-jazz.md) · [video](https://www.youtube.com/watch?v=4u7kmntBWzg)
 37. [Difficult keys after C Maj!](liked/037-difficult-keys-after-c-maj.md) · [video](https://www.youtube.com/watch?v=HMe4Y7ZzobQ)
@@ -1592,29 +1593,29 @@ each. The source line says whether the words are the uploader's captions, YouTub
 41. [Dumnezeul meu nu e din lemn 🪾partitura disponibilă](liked/041-dumnezeul-meu-nu-e-din-lemn-partitura-disponibilă.md) · [video](https://www.youtube.com/watch?v=1cemCbFf3_o)
 42. [Don't Use Cookie Cutter Chords!](liked/042-dont-use-cookie-cutter-chords.md) · [video](https://www.youtube.com/watch?v=bw_PZWx52CY)
 43. [Jazz harmony isn't just about 7th chords. It's HOW you play those chords](liked/043-jazz-harmony-isnt-just-about-7th-chords-its-how-you-play-those-chords.md) · [video](https://www.youtube.com/watch?v=yDx_0QN3oXw)
-44. Left hand coordination exercise for pianists🎹 · [video](https://www.youtube.com/watch?v=lF1zZQd3qm4) · _not transcribed_
+44. [Left hand coordination exercise for pianists🎹](liked/044-left-hand-coordination-exercise-for-pianists.md) · [video](https://www.youtube.com/watch?v=lF1zZQd3qm4)
 45. [The Perfect Pentatonic Scales To Use With II V I Progressions!](liked/045-the-perfect-pentatonic-scales-to-use-with-ii-v-i-progressions.md) · [video](https://www.youtube.com/watch?v=3ZHhVFLbrHA)
 46. [My Favorite Passing Chord (for gospel and jazz)](liked/046-my-favorite-passing-chord-for-gospel-and-jazz.md) · [video](https://www.youtube.com/watch?v=7fSKt553xvo)
 47. [Arpeggios like a PRO](liked/047-arpeggios-like-a-pro.md) · [video](https://www.youtube.com/watch?v=jb9OPM1tUfk)
 48. [Whole Tone Min9 Pattern in 5/8 Time Signature Jazz Piano](liked/048-whole-tone-min9-pattern-in-58-time-signature-jazz-piano.md) · [video](https://www.youtube.com/watch?v=ILd--20q0G8)
 49. [🎷The Real Secret to Playing Chord Changes Like a Pro](liked/049-the-real-secret-to-playing-chord-changes-like-a-pro.md) · [video](https://www.youtube.com/watch?v=t7h9jA97vBU)
 50. [Chromatic Octave Coordination Exercise🔥](liked/050-chromatic-octave-coordination-exercise.md) · [video](https://www.youtube.com/watch?v=qWMK9Hhwhpw)
-51. Slow and steady wins the race with Kapustin’s “Raillery” #piano #jazzpiano #kapustin · [video](https://www.youtube.com/watch?v=M73q2u9nt70) · _not transcribed_
+51. [Slow and steady wins the race with Kapustin’s “Raillery” #piano #jazzpiano #kapustin](liked/051-slow-and-steady-wins-the-race-with-kapustins-raillery.md) · [video](https://www.youtube.com/watch?v=M73q2u9nt70)
 52. [How to Practice All 3 Minor Scales Without Getting Confused](liked/052-how-to-practice-all-3-minor-scales-without-getting-confused.md) · [video](https://www.youtube.com/watch?v=8OqHHgen_WU)
 53. [Spice up your chords](liked/053-spice-up-your-chords.md) · [video](https://www.youtube.com/watch?v=czm-Rc2KmrQ)
 54. [Practicing scales can be FUN](liked/054-practicing-scales-can-be-fun.md) · [video](https://www.youtube.com/watch?v=oRgkGhWJEnA)
 55. [Mixolydian mode explained. #musictheory #chords #mixolydian #musiclessons](liked/055-mixolydian-mode-explained.md) · [video](https://www.youtube.com/watch?v=LPhCmLgmexY)
 56. [5 technical jazz piano licks](liked/056-5-technical-jazz-piano-licks.md) · [video](https://www.youtube.com/watch?v=snXfv6ad5Nk)
-57. Love story x Golden brown🥀#lovestory #goldenbrown #pianocover #publicpiano · [video](https://www.youtube.com/watch?v=Er-nDab4LMg) · _not transcribed_
+57. [Love story x Golden brown🥀#lovestory #goldenbrown #pianocover #publicpiano](liked/057-love-story-x-golden-brown.md) · [video](https://www.youtube.com/watch?v=Er-nDab4LMg)
 58. [Crazy piano skills #minecraft #piano #shorts](liked/058-crazy-piano-skills.md) · [video](https://www.youtube.com/watch?v=MSjVp6fhqJg)
 59. [C Minor 7 Pentatonic Voicings in 3 Steps Jazz Piano Tutorial](liked/059-c-minor-7-pentatonic-voicings-in-3-steps-jazz-piano-tutorial.md) · [video](https://www.youtube.com/watch?v=QO85hn5__CQ)
 60. [My heart will always belong to you #davyjones #piano #darkacademia #classicalmusic](liked/060-my-heart-will-always-belong-to-you.md) · [video](https://www.youtube.com/watch?v=fGOmggH8PWg)
 61. [It's just 4 MINOR CHORDS](liked/061-its-just-4-minor-chords.md) · [video](https://www.youtube.com/watch?v=mfVyJoTxy2c)
 62. [Учим красивую мелодию из «Маленький принц» 🎹](liked/062-учим-красивую-мелодию-из-маленький-принц.md) · [video](https://www.youtube.com/watch?v=hoqFO63Cl8c)
-63. 7 Pro Chords (Gospel Piano Lessons for Beginners) · [video](https://www.youtube.com/watch?v=9KJbjM3HzBo) · _not transcribed_
+63. [7 Pro Chords (Gospel Piano Lessons for Beginners)](liked/063-7-pro-chords-gospel-piano-lessons-for-beginners.md) · [video](https://www.youtube.com/watch?v=9KJbjM3HzBo)
 64. [My favorite arpeggio - Ab major add2❤️🎶 #piano #pianolesson #pianotutorial #learnpiano #arpeggio](liked/064-my-favorite-arpeggio-ab-major-add2.md) · [video](https://www.youtube.com/watch?v=sUYkrJDy0gU)
 65. [How to build the Half Diminished (m7b5) chord #gospelpianist #pianoguy #adultpiano #gospelmusicians](liked/065-how-to-build-the-half-diminished-m7b5-chord.md) · [video](https://www.youtube.com/watch?v=5wutTokhwdg)
-66. О, как блажен, как счастлив я христианские песни аккомпанемент для левой руки · [video](https://www.youtube.com/watch?v=z2IwTToWTBQ) · _not transcribed_
+66. [О, как блажен, как счастлив я христианские песни аккомпанемент для левой руки](liked/066-о-как-блажен-как-счастлив-я-христианские-песни-аккомпанемент-для-левой.md) · [video](https://www.youtube.com/watch?v=z2IwTToWTBQ)
 67. [Piano Pathways 🛣️](liked/067-piano-pathways.md) · [video](https://www.youtube.com/watch?v=Bz-rzyFT8-k)
 68. [Learn these worship Piano chords in Ab #gospelpianist #gospelpiano #gospelmusicians #gospelmusic](liked/068-learn-these-worship-piano-chords-in-ab.md) · [video](https://www.youtube.com/watch?v=75duGmwCvTs)
 69. [Basic Stride Piano Exercise](liked/069-basic-stride-piano-exercise.md) · [video](https://www.youtube.com/watch?v=9EJaisPF6WM)
@@ -1628,45 +1629,45 @@ each. The source line says whether the words are the uploader's captions, YouTub
 77. [5 Levels of a 1-4-5-1 progression in C Major.](liked/077-5-levels-of-a-1-4-5-1-progression-in-c-major.md) · [video](https://www.youtube.com/watch?v=yj73KtrSSUA)
 78. [JUST THE TWO OF US 🎶🎹 #piano #jazz #billwithers #justthetwoofus](liked/078-just-the-two-of-us.md) · [video](https://www.youtube.com/watch?v=xpTjyB9-VGU)
 79. [Listen to one of my students arrange on the fly!](liked/079-listen-to-one-of-my-students-arrange-on-the-fly.md) · [video](https://www.youtube.com/watch?v=48NlUXU8Pns)
-80. Arpeggio Warm-Up with Both Hands🎹 #piano #pianolesson #pianotutorial #learnpiano #pianopractice · [video](https://www.youtube.com/watch?v=sQoHzLqMu1g) · _not transcribed_
-81. Don’t Know Why (Norah Jones) chord progression #piano o · [video](https://www.youtube.com/watch?v=BNF62zJGAdQ) · _not transcribed_
+80. [Arpeggio Warm-Up with Both Hands🎹 #piano #pianolesson #pianotutorial #learnpiano #pianopractice](liked/080-arpeggio-warm-up-with-both-hands.md) · [video](https://www.youtube.com/watch?v=sQoHzLqMu1g)
+81. [Don’t Know Why (Norah Jones) chord progression #piano o](liked/081-dont-know-why-norah-jones-chord-progression-o.md) · [video](https://www.youtube.com/watch?v=BNF62zJGAdQ)
 82. [Walking bass line for Blues #bluespiano](liked/082-walking-bass-line-for-blues.md) · [video](https://www.youtube.com/watch?v=b6MqA_TUNT4)
 83. [Арпеджио для аккомпанемента / Синее небо меня так манит / ноты](liked/083-арпеджио-для-аккомпанемента-синее-небо-меня-так-манит-ноты.md) · [video](https://www.youtube.com/watch?v=yBLCO2J0rt0)
 84. [Technique tip for the day: How to play FAST arpeggios](liked/084-technique-tip-for-the-day-how-to-play-fast-arpeggios.md) · [video](https://www.youtube.com/watch?v=KZ6xJ18p0Vw)
 85. [How to enhance your Gospel Piano Chords #gospelpianist #gospelpiano #gospelmusicians #gospelmusic](liked/085-how-to-enhance-your-gospel-piano-chords.md) · [video](https://www.youtube.com/watch?v=gr6W-0QZaGU)
-86. Come, Thou Fount of Every Blessing Advanced Piano Arrangement · [video](https://www.youtube.com/watch?v=Yp_5G3Lu7Ks) · _not transcribed_
-87. Come, Thou Fount of Every Blessing (Hymn) Piano Praise by Sangah Noona with Lyrics · [video](https://www.youtube.com/watch?v=bWa0dajHRjI) · _not transcribed_
+86. [Come, Thou Fount of Every Blessing Advanced Piano Arrangement](liked/086-come-thou-fount-of-every-blessing-advanced-piano-arrangement.md) · [video](https://www.youtube.com/watch?v=Yp_5G3Lu7Ks)
+87. [Come, Thou Fount of Every Blessing (Hymn) Piano Praise by Sangah Noona with Lyrics](liked/087-come-thou-fount-of-every-blessing-hymn-piano-praise-by-sangah-noona-wi.md) · [video](https://www.youtube.com/watch?v=bWa0dajHRjI)
 88. [Come Thou Fount of Every Blessing - piano instrumental hymn with lyrics](liked/088-come-thou-fount-of-every-blessing-piano-instrumental-hymn-with-lyrics.md) · [video](https://www.youtube.com/watch?v=g10AJN3KHns)
-89. Come Thou Fount of Every Blessing - Jason Tonioli Piano · [video](https://www.youtube.com/watch?v=vIQ1S29SkDE) · _not transcribed_
-90. Come Thou Fount of every blessing Piano cover · [video](https://www.youtube.com/watch?v=AOTWkssZnOI) · _not transcribed_
-91. Come Thou Fount of Every Blessing - piano instrumental hymn with lyrics · [video](https://www.youtube.com/watch?v=TkqV-zIVUWo) · _not transcribed_
+89. [Come Thou Fount of Every Blessing - Jason Tonioli Piano](liked/089-come-thou-fount-of-every-blessing-jason-tonioli-piano.md) · [video](https://www.youtube.com/watch?v=vIQ1S29SkDE)
+90. [Come Thou Fount of every blessing Piano cover](liked/090-come-thou-fount-of-every-blessing-piano-cover.md) · [video](https://www.youtube.com/watch?v=AOTWkssZnOI)
+91. [Come Thou Fount of Every Blessing - piano instrumental hymn with lyrics](liked/091-come-thou-fount-of-every-blessing-piano-instrumental-hymn-with-lyrics.md) · [video](https://www.youtube.com/watch?v=TkqV-zIVUWo)
 92. [Пример сильного аккомпанемента общинному пению](liked/092-пример-сильного-аккомпанемента-общинному-пению.md) · [video](https://www.youtube.com/watch?v=7fBZkFxdNMM)
 93. [How to practice Gospel piano syncopation](liked/093-how-to-practice-gospel-piano-syncopation.md) · [video](https://www.youtube.com/watch?v=PAHNaItOZHw)
 94. [Playing triplets over duplets (Rhythm exercise for piano)](liked/094-playing-triplets-over-duplets-rhythm-exercise-for-piano.md) · [video](https://www.youtube.com/watch?v=ZX0yb1gU7r4)
 95. [How to Play Triplets PERFECT Every Time #pianotutorial](liked/095-how-to-play-triplets-perfect-every-time.md) · [video](https://www.youtube.com/watch?v=9Ppl3dFBi1A)
 96. [12 Minor Pentatonic Scales](liked/096-12-minor-pentatonic-scales.md) · [video](https://www.youtube.com/watch?v=1DAarLvrDws)
 97. [Forget Boring Scale Practice! The Enclosure Practice Trick! #shorts](liked/097-forget-boring-scale-practice-the-enclosure-practice-trick.md) · [video](https://www.youtube.com/watch?v=Dif7W8d__9g)
-98. Why Didn’t Anyone Tell Me This Chord Exists Drop 2 Chords · [video](https://www.youtube.com/watch?v=vtzBa-kof6A) · _not transcribed_
+98. [Why Didn’t Anyone Tell Me This Chord Exists Drop 2 Chords](liked/098-why-didnt-anyone-tell-me-this-chord-exists-drop-2-chords.md) · [video](https://www.youtube.com/watch?v=vtzBa-kof6A)
 99. [The Circle of Fifths for Songwriting](liked/099-the-circle-of-fifths-for-songwriting.md) · [video](https://www.youtube.com/watch?v=kRRW8YNlRP8)
 100. [if this gets 500 comments I’ll finish it‼️ #interstellar #mashup #icarus #music #piano #song #sunset](liked/100-if-this-gets-500-comments-ill-finish-it.md) · [video](https://www.youtube.com/watch?v=5XRamfOsfwU)
 101. [PIANO CHALLENGE 🔥🔥 wait for LEVEL 3.. 😱👀 #piano #challenge #music #song #artist #workout #duet](liked/101-piano-challenge-wait-for-level-3.md) · [video](https://www.youtube.com/watch?v=8hLGtm66Y-A)
-102. Beethoven’s “moonlight” but happy... #shorts #piano #beethoven #moonlight #sonata · [video](https://www.youtube.com/watch?v=4pX3kQkIezM) · _not transcribed_
+102. [Beethoven’s “moonlight” but happy... #shorts #piano #beethoven #moonlight #sonata](liked/102-beethovens-moonlight-but-happy.md) · [video](https://www.youtube.com/watch?v=4pX3kQkIezM)
 103. [5 Easy Piano Exercises for Beginners LH Improve Your Technique & Playing Speed👉 Subscribe to IG](liked/103-5-easy-piano-exercises-for-beginners-lh-improve-your-technique-playing.md) · [video](https://www.youtube.com/watch?v=u_RezZIk3D0)
 104. [BASS LINES for better chords?](liked/104-bass-lines-for-better-chords.md) · [video](https://www.youtube.com/watch?v=BwTE85E9T-E)
-105. WAIT… These Chords Sound Like THIS? (YES!!!) The 7 PRO Chords · [video](https://www.youtube.com/watch?v=JcJE0NkneYA) · _not transcribed_
+105. [WAIT… These Chords Sound Like THIS? (YES!!!) The 7 PRO Chords](liked/105-wait-these-chords-sound-like-this-yes-the-7-pro-chords.md) · [video](https://www.youtube.com/watch?v=JcJE0NkneYA)
 106. [I Use To Play Like This Now I Play Like THIS PRO Chords](liked/106-i-use-to-play-like-this-now-i-play-like-this-pro-chords.md) · [video](https://www.youtube.com/watch?v=th1KVSa3L3Y)
 107. [Circle of 5th Chord builder Major, Minor, 7th chord & diminished melody maker #circleoffifths](liked/107-circle-of-5th-chord-builder-major-minor-7th-chord-diminished-melody-ma.md) · [video](https://www.youtube.com/watch?v=dmdr1WLiQsU)
 108. [Arrival of the Birds (Channel Trailer)](liked/108-arrival-of-the-birds-channel-trailer.md) · [video](https://www.youtube.com/watch?v=tk8TllngwH4)
 109. [Passacaglia – (Relaxing Piano Music)](liked/109-passacaglia-relaxing-piano-music.md) · [video](https://www.youtube.com/watch?v=_vwgcmfsefE)
-110. Mariage d'amour - Paul de Senneville (Relaxing Piano Music) · [video](https://www.youtube.com/watch?v=uShkw72Hphs) · _not transcribed_
+110. [Mariage d'amour - Paul de Senneville (Relaxing Piano Music)](liked/110-mariage-damour-paul-de-senneville-relaxing-piano-music.md) · [video](https://www.youtube.com/watch?v=uShkw72Hphs)
 111. [Я радуюсь](liked/111-я-радуюсь.md) · [video](https://www.youtube.com/watch?v=XqZvXvYl7DQ)
 112. [Sometimes the climax needs less](liked/112-sometimes-the-climax-needs-less.md) · [video](https://www.youtube.com/watch?v=3eZoYQLVaYg)
 113. [Пример вступления / Тебе пою, о мой Спаситель благой](liked/113-пример-вступления-тебе-пою-о-мой-спаситель-благой.md) · [video](https://www.youtube.com/watch?v=5_KiVdC0aUs)
 114. [Cîntarea "Când ești aproape"](liked/114-cîntarea-când-ești-aproape.md) · [video](https://www.youtube.com/watch?v=_wSGlXDxPB4)
-115. Cîntarea "Biblia" · [video](https://www.youtube.com/watch?v=67a57Oor1CU) · _not transcribed_
-116. Cîntarea "Nimeni nu ne poate spune" · [video](https://www.youtube.com/watch?v=VyiaOUUWcXk) · _not transcribed_
-117. Моя душа на Бога уповает (Acoustic Version) · [video](https://www.youtube.com/watch?v=2lVFPBqXoqU) · _not transcribed_
-118. В Руках Великого Мастера · [video](https://www.youtube.com/watch?v=xnVOHCtjtUI) · _not transcribed_
-119. Осенний лист · [video](https://www.youtube.com/watch?v=egZlklYda3g) · _not transcribed_
-120. Иду к Тебе · [video](https://www.youtube.com/watch?v=caCz_o8j4nk) · _not transcribed_
-121. Храни себя · [video](https://www.youtube.com/watch?v=eVygG--alOY) · _not transcribed_
+115. [Cîntarea "Biblia"](liked/115-cîntarea-biblia.md) · [video](https://www.youtube.com/watch?v=67a57Oor1CU)
+116. [Cîntarea "Nimeni nu ne poate spune"](liked/116-cîntarea-nimeni-nu-ne-poate-spune.md) · [video](https://www.youtube.com/watch?v=VyiaOUUWcXk)
+117. [Моя душа на Бога уповает (Acoustic Version)](liked/117-моя-душа-на-бога-уповает-acoustic-version.md) · [video](https://www.youtube.com/watch?v=2lVFPBqXoqU)
+118. [В Руках Великого Мастера](liked/118-в-руках-великого-мастера.md) · [video](https://www.youtube.com/watch?v=xnVOHCtjtUI)
+119. [Осенний лист](liked/119-осенний-лист.md) · [video](https://www.youtube.com/watch?v=egZlklYda3g)
+120. [Иду к Тебе](liked/120-иду-к-тебе.md) · [video](https://www.youtube.com/watch?v=caCz_o8j4nk)
+121. [Храни себя](liked/121-храни-себя.md) · [video](https://www.youtube.com/watch?v=eVygG--alOY)

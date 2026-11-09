@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=bxqsZfFTUlA
 - Duration: 00:30
 - Published: 2026-03-13
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -26,6 +26,4 @@ The patch used in this video is called "Upright and Drone" and from my Nord Stag
 
 ## Transcript
 
-**[00:00]** The End of the Day
-
-**[00:30]** you
+_No speech: the video is music only._

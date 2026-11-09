@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=6ekIvlwe-Pw
 - Duration: 04:01
 - Published: 2026-07-10
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -16,18 +16,4 @@ Performance by yours truly, Lisztopher.
 
 ## Transcript
 
-**[00:00]** The End of the World
-
-**[00:30]** The End of the World
-
-**[01:00]** The End of the World
-
-**[01:30]** The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World
-
-**[02:00]** The End of the World The End of the World The End of the World The End of the World The End of the World
-
-**[02:30]** The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World
-
-**[03:00]** The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World The End of the World
-
-**[03:30]** The End of the World The End of the World The End of the World The End of the World The End of the World
+_No speech: the video is music only._

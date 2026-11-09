@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=559HtyP9j5o
 - Duration: 03:10
 - Published: 2020-12-28
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -26,14 +26,4 @@ Sounds from Native Instruments, The Maverick
 
 ## Transcript
 
-**[00:00]** The End of the Day
-
-**[00:30]** The End of the Day
-
-**[01:00]** The End of the Day
-
-**[01:30]** The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day The End of the Day Thank you.
-
-**[02:18]** Thank you.
-
-**[02:48]** Thank you.
+**[00:00]** Oh

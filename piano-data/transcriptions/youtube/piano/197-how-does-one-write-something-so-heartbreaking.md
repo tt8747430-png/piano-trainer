@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=-YDzi7hkTr8
 - Duration: 02:11
 - Published: 2026-04-25
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -17,12 +17,4 @@ Recording(Gergiev): https://www.youtube.com/watch?v=8VswsTffasc
 
 ## Transcript
 
-**[00:00]** VIOLIN PLAYS
-
-**[00:30]** VIOLIN PLAYS
-
-**[01:00]** VIOLIN PLAYS VIOLIN PLAYS VIOLIN PLAYS VIOLIN PLAYS VIOLIN PLAYS
-
-**[01:30]** ¶¶
-
-**[02:00]** ¶¶
+**[00:01]** .

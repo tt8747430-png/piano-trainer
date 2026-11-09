@@ -4,8 +4,8 @@
 - Link: https://www.youtube.com/watch?v=NMyRlMnz7uY
 - Duration: 00:29
 - Published: 2026-04-12
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (en)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Transcript
 
-**[00:00]** Music
+_No speech: the video is music only._

@@ -4,7 +4,7 @@
 - Link: https://www.youtube.com/watch?v=6zi-78pDQ90
 - Duration: 02:46
 - Published: 2023-04-07
-- Transcript: Whisper (large-v3-turbo), transcribed from the audio (ja)
+- Transcript: Whisper (large-v3-turbo, speech detected by Silero VAD), transcribed from the audio (en)
 
 ## Description
 
@@ -20,14 +20,4 @@ https://www.youtube.com/@tonyannmusic
 
 ## Transcript
 
-**[00:00]** ご視聴ありがとうございました
-
-**[00:30]** ご視聴ありがとうございました
-
-**[01:00]** ご視聴ありがとうございました
-
-**[01:30]** ご視聴ありがとうございました
-
-**[02:00]** ご視聴ありがとうございました
-
-**[02:30]** ご視聴ありがとうございました
+_No speech: the video is music only._
