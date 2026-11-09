@@ -231,34 +231,68 @@ function placeAt(part: HandPart, tick: number, perSecond: number) {
 }
 
 /**
+ * Where a finger with nothing to play hangs: between the fingers either side of it that hold keys,
+ * as far along as it stands between them; beside one such finger only, half as far out as it, a
+ * half less for each finger farther; at rest where none holds a key. So the 4th goes with a 3rd and
+ * a 5th reaching right, instead of staying beside the 3rd's key.
+ */
+function hanging(
+  holding: readonly ({ dx: number; black: number } | null)[],
+  i: number,
+): { dx: number; black: number } {
+  let below = i - 1
+  while (below >= 0 && !holding[below]) below -= 1
+  let above = i + 1
+  while (above < holding.length && !holding[above]) above += 1
+  const low = holding[below]
+  const high = holding[above]
+  if (low && high) return mix(low, high, (i - below) / (above - below))
+  const one = low ?? high
+  if (!one) return { dx: 0, black: 0 }
+  return mix({ dx: 0, black: 0 }, one, 0.5 ** Math.abs(i - (low ? below : above)))
+}
+
+/**
  * A hand at `tick` (R36): where it stands and how high, each finger's aim and the keys it holds down.
  * A finger playing presses its key from its start and lets it up by its end; one about to play turns
- * to its key first; the others hover where they rest. `perSecond`: the music's ticks a second.
+ * to its key first; the others hang between the fingers that hold keys (`hanging`). `perSecond`: the
+ * music's ticks a second.
  */
 export function handPose(part: HandPart, tick: number, perSecond: number): HandPose {
   const { x, depth, lift } = placeAt(part, tick, perSecond)
   const keys = new Map<Midi, number>()
-  const fingers = part.fingers.map(({ finger, notes }): FingerAt => {
-    const resting = x + restingPlace(part.side, finger) * KEY.width
-    const toward = (key: Midi) => ({ dx: keyX(key) - resting, black: isBlackKey(key) ? 1 : 0 })
+  const toward = (finger: Finger, key: Midi) => ({
+    dx: keyX(key) - (x + restingPlace(part.side, finger) * KEY.width),
+    black: isBlackKey(key) ? 1 : 0,
+  })
+  const turns = part.fingers.map(({ finger, notes }) => {
     const i = lastAtOrBefore(notes, (note) => note.start, tick)
     const now = notes[i]
-    if (now && tick < now.end) {
+    return { finger, now, next: notes[i + 1], holds: now !== undefined && tick < now.end }
+  })
+  const holding = turns.map(({ finger, now, holds }) =>
+    holds && now ? toward(finger, now.key) : null,
+  )
+  const fingers = turns.map(({ finger, now, next, holds }, at): FingerAt => {
+    if (now && holds) {
       const length = now.end - now.start
       const attack = Math.min(MOTION.attack * perSecond, length * 0.5)
       const release = Math.min(MOTION.release * perSecond, length * 0.4)
       const press = Math.min(1, (tick - now.start) / attack, (now.end - tick) / release)
       keys.set(now.key, Math.max(keys.get(now.key) ?? 0, press))
-      return { ...toward(now.key), press, key: now.key }
+      return { ...toward(finger, now.key), press, key: now.key }
     }
-    // Hovering: from the key it last played back to rest, then on to the key it plays next.
-    const rest = { dx: 0, black: 0 }
+    // Hovering: from the key it last played back to where it hangs, then on to the key it plays next.
+    const rest = hanging(holding, at)
     const after = now ? smooth((tick - now.end) / (MOTION.relax * perSecond)) : 1
-    const from = now && after < 1 ? mix(toward(now.key), rest, after) : rest
-    const next = notes[i + 1]
+    const from = now && after < 1 ? mix(toward(finger, now.key), rest, after) : rest
     const before = next ? smooth(1 - (next.start - tick) / (MOTION.approach * perSecond)) : 0
     const key = next && before > 0 ? next.key : now && after < 1 ? now.key : null
-    return { ...(next && before > 0 ? mix(from, toward(next.key), before) : from), press: 0, key }
+    return {
+      ...(next && before > 0 ? mix(from, toward(finger, next.key), before) : from),
+      press: 0,
+      key,
+    }
   })
   return { x, depth, lift, fingers, keys }
 }

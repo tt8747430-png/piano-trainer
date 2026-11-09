@@ -141,6 +141,47 @@ describe('handPose', () => {
     expect(end.fingers[1]?.press).toBeLessThan(0.01)
   })
 
+  it('lets a finger with nothing to play hang between its neighbours, not at a fixed place beside them', () => {
+    // F♯maj7 with 1 2 3 5: the 3rd on C♯ and the 5th on F are both out to the right, so the 4th goes with them.
+    const chord = partOf(
+      choreograph(
+        [
+          [66, 1],
+          [70, 2],
+          [73, 3],
+          [77, 5],
+        ].map(([key = 60, finger = 1]) => note(key, 0, 4, 'rh', { finger: finger as Finger })),
+      ).rh,
+    )
+    const pose = handPose(chord, 2 * BEAT, PER_SECOND)
+    const [, , middle, ring, pinky] = pose.fingers
+    const at = (i: number, dx = 0) => pose.x + (i - 2) * KEY.width + dx
+    expect(ring?.key).toBeNull()
+    expect(ring?.press).toBe(0)
+    // Half-way between the fingers either side of it, a key's width from each or near it.
+    expect(ring?.dx).toBeCloseTo(((middle?.dx ?? 0) + (pinky?.dx ?? 0)) / 2, 6)
+    expect(at(3, ring?.dx) - at(2, middle?.dx)).toBeGreaterThan(0.9 * KEY.width)
+    expect(at(4, pinky?.dx) - at(3, ring?.dx)).toBeGreaterThan(0.9 * KEY.width)
+    // Over the black keys' zone it hovers part-way to a black key's height, between a black key and a white one.
+    expect(ring?.black).toBeCloseTo(0.5, 6)
+  })
+
+  it('leaves the fingers at rest where no neighbour is out of place', () => {
+    const triad = partOf(
+      choreograph(
+        [
+          [60, 1],
+          [64, 3],
+          [67, 5],
+        ].map(([key = 60, finger = 1]) => note(key, 0, 4, 'rh', { finger: finger as Finger })),
+      ).rh,
+    )
+    const pose = handPose(triad, 2 * BEAT, PER_SECOND)
+    expect(pose.fingers[1]?.dx).toBeCloseTo(0, 6)
+    expect(pose.fingers[3]?.dx).toBeCloseTo(0, 6)
+    expect(pose.fingers[1]?.black).toBe(0)
+  })
+
   it('turns a finger to its key before it plays it, and back to rest after', () => {
     // The thumb passes under to F after E: the hand moves on, the thumb goes ahead to F.
     const scale = partOf(
