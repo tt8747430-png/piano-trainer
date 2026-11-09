@@ -40,6 +40,9 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   - **Colour is per note, not per hand or per finger,** against the sources' habit (Hoffman, Synthesia, Soundslice
     colour by hand; Faber by finger): this page already colours each chord tone the same on the keys and the staff,
     so the fingertip takes that colour and the three pictures read as one.
+  - **Added with Firecrawl (2026-11-09):** pianoguidelessons.com/fingering-chords-on-piano confirms the triad
+    fingerings and gives the triad with its octave: LH 5-4-2-1, RH 1-2-3-5 (as Nikolaev's table). Seventh-chord
+    inversion fingering is still unsourced: the one page that might give it (music.stackexchange.com) refused (403).
   - **Not taken:** every chord source prints the fingering on or under the keys (Pianote, Yamaha, pianochord.org);
     the owner's standing rule is no finger numbers on keys, so the hands carry them.
 - **v75 (canvas Version 75): proper 2D hands.** Owner: "use proper hands", then "use proper 2d hands". Replaces v72's

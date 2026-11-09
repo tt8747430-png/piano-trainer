@@ -328,6 +328,22 @@ make marketing video, not app screens, and some run large local models. The less
 
 (A data-structures video, sponsored by InsForge, has nothing for design and is not used.)
 
+## A Firecrawl video: Scrape or Interact (transcript, with the scrape skill and the Interact snippet)
+
+A tool for research, not a design lesson. Kept for how this repo's sessions fetch pages.
+
+- **Scrape** reads one known page (markdown, JSON by schema, links, a screenshot); it renders JavaScript, and may
+  serve a cached copy unless `maxAge: 0`. **Interact** starts from a scrape and drives a real browser by prompt or
+  Playwright code across calls; it is billed by the browser minute, so stop the session when done.
+- **Use here:** when the Firecrawl connector is attached, `firecrawl_search` then `firecrawl_scrape` for reference
+  apps' manuals and teaching pages, before guessing a convention. Scrape to read, never `query` (five extra
+  credits) when the markdown answers it.
+- **The owner's rule stands over the tool:** a site's bot check is never got around. Pass `proxy: "basic"` on
+  every scrape (the default escalates to a stealth proxy on its own), never `stealth` or `enhanced`, and do not
+  use it to reach a site that refused this session. A 403 through it is a refusal: stop, name the page as unread.
+- **Not used:** Interact (logins, clicking through flows) has no place in reading public help pages; installing
+  the CLI skill or adding an API key is the owner's decision.
+
 ## Rulings the videos led to
 
 - **Undo instead of asking** (owner: "adopt also this"): Kole Jain's act first and offer Undo replaces "a loss asks
