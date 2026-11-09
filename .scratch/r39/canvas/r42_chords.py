@@ -207,7 +207,7 @@ const voicing = VOICINGS.find((v) => v.v === (st.voicing || 'Close')).ok(q) ? 'C
 const invN = TWO[voicing] ? 1 : Math.min(4, voicing === 'Shell' ? 3 : (voicing.startsWith('Rootless') ? 4 : q.t.length));
 const inv = Math.min(st.inv ?? 0, invN - 1);
 const upper = (() => { const u = upperOf(root, q); RL = rLet; return u; })(), canSplit = !TWO[st.voicing || 'Close'];
-const bassOn = false, hands = st.hand === 'Split' ? 'Both' : (st.hand || 'Right'), fingOn = true, kbMode = st.kbMode || '3d', kbShow = kbMode !== 'off', keys = st.keys || 'Chord';
+const bassOn = false, hands = st.hand === 'Split' ? 'Both' : (st.hand || 'Right'), fingOn = true, kbMode = st.kbMode || 'hands', kbShow = kbMode !== 'off', is3d = kbMode === 'hands' || kbMode === '3d', keys = st.keys || 'Chord';
 const playAs = 'Block', arp = false, dir = 'Up', keyLabel = st.keyLabel || 'Note names', names = keyLabel === 'Note names', fingKeys = false, treble = false, auto = true;
 const oct = st.oct || 0; // an added chord may sit an octave lower, to stay under the hand (voice leading)
 const ns = voice(root, q, inv, voicing, hands).map((x) => Object.assign(x, { m: x.m + 12 * oct }));
@@ -224,8 +224,11 @@ const change = (o) => { set(o); if (auto) { const r = o.root ?? root, qq = QS[o.
 const [lo, hi] = range(ms, keys, ''' + str(minOct) + r''');
 const Rn = ns.filter((x) => x.hand === 'R'), Ln = ns.filter((x) => x.hand === 'L');
 const fm = {}; fingers(Rn, 'R', inv, voicing === 'Close').forEach((f, i) => { fm[Rn[i].m] = f; }); fingers(Ln, 'L', inv, voicing === 'Close').forEach((f, i) => { fm[Ln[i].m] = f; });
-const tonesL = keyLabel === 'Chord tones';
-const marks = {}; ns.forEach((x) => { marks[x.m] = [ROLE[x.deg] || C.accent, names ? x.name : (tonesL ? DEGL[x.deg] : '')]; });
+const tonesL = keyLabel === 'Degrees';
+// a chord tone as its degree of the major scale, as chord symbols count them: 1 ♭3 5 ♭7 9 (Gorshkov, 01-seventh-chords)
+const MAJ = { 1: 0, 2: 2, 3: 4, 4: 5, 5: 7, 6: 9, 7: 11, 9: 14, 11: 17, 13: 21 };
+const degOf = (x) => { const d = ((((x.semi - MAJ[x.deg]) % 12) + 18) % 12) - 6; return (d === -1 ? '♭' : d === 1 ? '♯' : d === -2 ? '𝄫' : '') + x.deg; };
+const marks = {}; ns.forEach((x) => { marks[x.m] = [ROLE[x.deg] || C.accent, names ? x.name : (tonesL ? degOf(x) : '')]; });
 const kb = calmKeys(lo, hi, marks, ''' + str(W) + ', ' + str(KH) + r''');
 { let wi = 0, bi = 0; for (let m = lo; m <= hi; m++) { const k = NAT.includes(m % 12) ? kb.whites[wi++] : kb.blacks[bi++]; if (k) k.fing = fingKeys && fm[m] ? String(fm[m]) : ''; } }
 const bass = ns[0];
@@ -346,12 +349,12 @@ return {
   invItems: Array.from({ length: invN }, (_, i) => { const v = voice(root, q, i, voicing, 'Right'); RL = rLet; return { t: INV[i], s: v.map((x) => x.name).join(' '), on: i === inv, mark: i === inv ? '✓' : '', pick: () => change({ inv: i, sheet: null }) }; }),
   chips: ns.filter((x, i, a) => a.findIndex((y) => y.name === x.name) === i).sort((a, b) => ORD.indexOf(a.deg) - ORD.indexOf(b.deg)).map((x) => ({ n: x.name, c: ROLE[x.deg] || C.accent })),
   isStaff: true, isInv: false, isFing: false, isTones: false, voicingLabel: voicing,
-  kbShow, kbOn: kbShow, kbOnBg: kbShow ? '#7FB685' : C.line, kbOnX: kbShow ? 22 : 2, toggleKb: () => set({ kbMode: kbShow ? 'off' : '3d' }),
+  kbShow, kbOn: kbShow, kbOnBg: kbShow ? '#7FB685' : C.line, kbOnX: kbShow ? 22 : 2, toggleKb: () => set({ kbMode: kbShow ? 'off' : 'hands' }),
   bassOnBg: bassOn ? '#7FB685' : C.line, bassOnX: bassOn ? 22 : 2, toggleBass: () => change({ bass: !bassOn }), bassOn,
   fingOnBg: fingOn ? '#7FB685' : C.line, fingOnX: fingOn ? 22 : 2, toggleFing: () => set({ fing: !fingOn }), fingOn,
   fingKeysOn: fingKeys, fingKeysOnBg: fingKeys ? '#7FB685' : C.line, fingKeysOnX: fingKeys ? 22 : 2, toggleFingKeys: () => set({ fingKeys: !fingKeys }),
   handSeg: seg(['Right', 'Left', 'Both'], hands, (l) => change({ hand: l })),
-  keyLabelSeg: seg(['None', 'Note names', 'Chord tones'], keyLabel, (l) => set({ keyLabel: l })),
+  keyLabelSeg: seg(['Note names', 'Degrees', 'None'], keyLabel, (l) => set({ keyLabel: l })),
   rootName: RN, qName: q.n[0].toUpperCase() + q.n.slice(1), qSym: RN + q.k, voicing, invLabel: INV[inv], handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand', soundWord: arp ? 'Arpeggio' : 'Block',
   // one row of letters; tapping the chosen letter again steps through its spellings: C, C♯, C (D, D♯, D♭ …)
   ...letterPick(rLet, rAcc, (l, a) => !SKIP.includes(LET[l] + a), st.tapUsed, (l, next, more) => { RL = l; change(Object.assign({ rl: l, ra: next, root: rootPc(l, next) }, more ? { tapUsed: true } : {})); }),
@@ -364,7 +367,7 @@ return {
     for (let m = 21; m <= 108; m++) { if (NAT.includes(m % 12)) { if (m >= lo && m <= hi) { if (x0 === null) x0 = i * w; x1 = (i + 1) * w; } i++; } else bl += 'M' + (i * w - w * 0.3).toFixed(1) + ' 0h' + (w * 0.6).toFixed(1) + 'v15h-' + (w * 0.6).toFixed(1) + 'z'; }
     const nm = (m) => NN[m % 12] + (Math.floor(m / 12) - 1);
     return { bl, x: (x0 || 0).toFixed(1), w: (x1 - (x0 || 0)).toFixed(1), cap: nm(lo) + ' – ' + nm(hi) + ' · ' + (hi - lo + 1) + ' keys' }; })(),
-  kbTiles: [['off', 'Off'], ['3d', '3D'], ['2d', '2D']].map(([id, name]) => { const on = id === kbMode; return { name, on, line: on ? '#B07A2A' : 'transparent', bg: on ? '#FBF1DD' : '#FEFDFB', isOff: id === 'off', is2d: id === '2d', is3d: id === '3d', pick: () => set({ kbMode: id }) }; }),
+  kbTiles: [['hands', '3D with hands'], ['3d', '3D keys'], ['2d', '2D keys'], ['off', 'Off']].map(([id, name]) => { const on = id === kbMode; return { name, on, line: on ? '#B07A2A' : 'transparent', bg: on ? '#FBF1DD' : '#FEFDFB', isOff: id === 'off', is2d: id === '2d', is3d: id === '3d' || id === 'hands', isHands: id === 'hands', pick: () => set({ kbMode: id }) }; }),
   rhOn: hands !== 'Left', rhOnBg: hands !== 'Left' ? '#7FB685' : C.line, rhOnX: hands !== 'Left' ? 22 : 2,
   lhOn: hands !== 'Right', lhOnBg: hands !== 'Right' ? '#7FB685' : C.line, lhOnX: hands !== 'Right' ? 22 : 2,
   // the hands sit beside their staves: R.H. by the treble, L.H. by the bass; the last one on only plays
@@ -400,10 +403,13 @@ return {
   lhChoice: (hands === 'Both' || hands === 'Split') && canSplit,
   lhPlays: hands === 'Split' ? RN + ' + ' + (upper || sym) : sym + slash + ' in each hand',
   h3d: (() => { const RN3 = { 1: 'root', 3: '3rd', 5: '5th', 7: '7th', 9: '9th', 2: '9th', 11: '11th', 4: '11th', 13: '13th', 6: '13th' };
-    this._handsIn = kbMode !== '3d' ? null : { notes: ns.map((x) => ({ midi: x.m, spelled: {}, hand: x.hand === 'L' ? 'lh' : 'rh', finger: fm[x.m], startTick: 0, durationTicks: 1920, velocity: 80 })),
+    this._handsIn = !is3d ? null : { notes: kbMode === '3d' ? [] : ns.map((x) => ({ midi: x.m, spelled: {}, hand: x.hand === 'L' ? 'lh' : 'rh', finger: fm[x.m], startTick: 0, durationTicks: 1920, velocity: 80 })),
       perSecond: 960, now: () => 1, playing: false, held: new Set(ms), marks: new Map(ns.map((x) => [x.m, { tone: RN3[x.deg] || 'root' }])), wrong: undefined, faded: null, skin: 'light',
       range: keys === 'Chord' ? { low: Math.min(...ms), high: Math.max(...ms) } : { low: lo, high: hi } };
-    return kbMode === '3d'; })(),
+    // labels over the 3D keys: one over each sounding key's far end, where no hand covers it
+    this._labels3d = is3d && keyLabel !== 'None' ? ns.filter((x, i, a) => a.findIndex((y) => y.m === x.m) === i).map((x) => ({ m: x.m, black: !NAT.includes(((x.m % 12) + 12) % 12), t: names ? x.name : degOf(x), c: ROLE[x.deg] || C.accent })) : [];
+    return is3d; })(),
+  labelsRef: (el) => { this._lb = el; },
   is2dKb: kbMode === '2d',
   kh: (() => { const KW = ''' + str(W) + r''', KH = ''' + str(KH) + r'''; const wsN = []; for (let m = lo; m <= hi; m++) if (NAT.includes(m % 12)) wsN.push(m);
     const w = KW / wsN.length, sc = Math.max(1, Math.min(1.6, w / 27)), HS = Math.round(96 * sc), H = KH + HS;
@@ -493,7 +499,7 @@ def STAGE3D(h):
     vars3 = ("--key-white: #fefdfb; --key-black: #332c28; --key-bed: #cbc2b9; --key-felt: #7c302c; --key-down: #85b8dc; --primary: #edc684; --destructive: #c0392b; "
              "--hand-rh: #E19E8C; --hand-lh: #B8A8D8; --hand-rh-wash: #E19E8C; --hand-lh-wash: #B8A8D8; "
              + ''.join(f"--role-{n}: {c}; --role-{n}-wash: color-mix(in oklab, {c} 62%, #fefdfb); " for n, c in (('root', '#E19E8C'), ('3rd', '#85B8DC'), ('5th', '#9BC093'), ('7th', '#E8C67D'), ('9th', '#B8A8D8'), ('11th', '#D3AC8A'), ('13th', '#82C2C1'))))
-    return (f'<sc-if value="{{{{h3d}}}}" hint-placeholder-val="{{{{true}}}}"><figure aria-label="The hands at the keys, playing this chord" style="position: relative; flex: none; margin: 0; width: 100%; height: {h}px; overflow: hidden; background: #EDE6DC; {vars3}"><canvas ref="{{{{handsRef}}}}" style="display: block; width: 100%; height: 100%"></canvas></figure></sc-if>'
+    return (f'<sc-if value="{{{{h3d}}}}" hint-placeholder-val="{{{{true}}}}"><figure aria-label="The hands at the keys, playing this chord" style="position: relative; flex: none; margin: 0; width: 100%; height: {h}px; overflow: hidden; background: #EDE6DC; {vars3}"><canvas ref="{{{{handsRef}}}}" style="display: block; width: 100%; height: 100%"></canvas><div ref="{{{{labelsRef}}}}" aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none"></div></figure></sc-if>'
             f'<sc-if value="{{{{is2dKb}}}}" hint-placeholder-val="{{{{false}}}}">{KEYBAND(168)}</sc-if>')
 
 def HANDSROW(w):
@@ -632,10 +638,11 @@ B_NEXT = (CAPS('In {{keyName}}') + '<div role="group" aria-label="Next chord" st
 B_TR = ('<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px"><button type="button" onClick="{{trDown}}" style="height: 56px; border: 0; border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px ' + LINE + '; color: ' + INK + '; font: inherit; font-size: 16px; font-weight: 600">− Half step</button><button type="button" onClick="{{trUp}}" style="height: 56px; border: 0; border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px ' + LINE + '; color: ' + INK + '; font: inherit; font-size: 16px; font-weight: 600">+ Half step</button></div>'
   + CAPS('To the key of') + '<div role="radiogroup" aria-label="Key" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{keyTiles}}" as="o" hint-placeholder-count="12"><button type="button" role="radio" aria-checked="{{o.on}}" aria-label="{{o.aria}}" onClick="{{o.pick}}" style="height: 52px; min-width: 0; border: 0; border-radius: 12px; background: {{o.bg}}; box-shadow: {{o.ring}}; color: ' + INK + '; font-family: ' + SERIF + '; font-size: 18px; font-weight: {{o.fw}}; white-space: nowrap">{{o.s}}</button></sc-for></div>')
 B_HANDS = GROUP(('toggle', 'Right hand', 'rhOn', 'toggleRH'), ('toggle', 'Left hand', 'lhOn', 'toggleLH'), bg="#FEFDFB")
-KBTILES = ('<div role="group" aria-label="Keyboard" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px"><sc-for list="{{kbTiles}}" as="o" hint-placeholder-count="2"><button type="button" aria-pressed="{{o.on}}" onClick="{{o.pick}}" style="height: 84px; padding: 0; border-radius: 14px; border: 2px solid {{o.line}}; background: {{o.bg}}; box-shadow: 0 0 0 1px ' + LINE + ' ; color: ' + INK + '; font: inherit; font-size: 14px; font-weight: 600; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px">'
+KBTILES = ('<div role="group" aria-label="Keyboard" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px"><sc-for list="{{kbTiles}}" as="o" hint-placeholder-count="2"><button type="button" aria-pressed="{{o.on}}" onClick="{{o.pick}}" style="height: 84px; padding: 0; border-radius: 14px; border: 2px solid {{o.line}}; background: {{o.bg}}; box-shadow: 0 0 0 1px ' + LINE + ' ; color: ' + INK + '; font: inherit; font-size: 12.5px; font-weight: 600; line-height: 1.15; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px">'
     '<svg width="48" height="28" viewBox="0 0 48 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">'
     '<sc-if value="{{o.is2d}}" hint-placeholder-val="{{false}}"><g><rect x="2" y="4" width="44" height="20" rx="2"></rect><path d="M8.3 4v20M14.6 4v20M20.9 4v20M27.1 4v20M33.4 4v20M39.7 4v20"></path><path d="M6.5 4h3.6v11H6.5zM12.8 4h3.6v11h-3.6zM25.3 4h3.6v11h-3.6zM31.6 4h3.6v11h-3.6zM37.9 4h3.6v11h-3.6z" fill="currentColor"></path></g></sc-if>'
     '<sc-if value="{{o.is3d}}" hint-placeholder-val="{{false}}"><g><path d="M9 6h30l7 18H2z"></path><path d="M14.5 6 11 24M20 6l-2 18M26 6v18M31.500 6l3 18M37 6l5 18"></path><path d="M12.6 6h3l-1.200 9h-3.400zM18.300 6h3l-.700 9h-3.300zM27.600 6h3l1 9h-3.300zM33.300 6h3l1.900 9h-3.400z" fill="currentColor"></path></g></sc-if>'
+    '<sc-if value="{{o.isHands}}" hint-placeholder-val="{{false}}"><path d="M17 27c-2.500-3-3.500-6-3-9.500l1.200-5.500c.400-1.600 2.600-1.300 2.500.400l-.200 4.600 1.500-8c.400-1.700 2.700-1.400 2.600.400l-.400 7.600 2-8.400c.500-1.700 2.800-1.300 2.700.500l-1 8.400 2.700-6.400c.700-1.600 2.900-.800 2.400 1l-2.600 8.900 3.300-2.700c1.400-1.100 3 .700 1.800 2l-6 6.700z" fill="#F6ECDF" stroke="currentColor" stroke-width="1.400"></path></sc-if>'
     '<sc-if value="{{o.isOff}}" hint-placeholder-val="{{false}}"><g opacity="0.55"><rect x="2" y="4" width="44" height="20" rx="2"></rect><path d="M14.6 4v20M27.1 4v20M39.7 4v20"></path><path d="M4 26 44 2" stroke-width="2"></path></g></sc-if>'
     '</svg>{{o.name}}</button></sc-for></div>')
 B_KEYS = (KBTILES + '<sc-if value="{{is2dKb}}" hint-placeholder-val="{{false}}">' + GROUP(('seg', 'Keys', 'keysSeg', 230), ('seg', 'Labels', 'keyLabelSeg', 230), bg="#FEFDFB") + '</sc-if>'
@@ -674,11 +681,15 @@ PT_LIFE = r'''
       if (!window.PTHands) (0, eval)(PT_BUNDLE);
       if (!this._stage || this._stageCv !== cv) {
         if (this._stage) this._stage.dispose(); if (this._ro) this._ro.disconnect();
+        cv.__ptAfter = (proj) => { const box = this._lb; if (!box) return; const L = this._labels3d || [], W = box.clientWidth, H = box.clientHeight;
+          while (box.children.length > L.length) box.lastChild.remove();
+          L.forEach((l, i) => { let el = box.children[i]; if (!el) { el = document.createElement('span'); el.style.cssText = 'position: absolute; transform: translate(-50%, -100%); min-width: 22px; height: 22px; box-sizing: border-box; padding: 0 5px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #332921; box-shadow: 0 0 0 1.5px rgba(51,41,33,.55), 0 1px 3px rgba(51,41,33,.3); white-space: nowrap'; box.append(el); }
+            const p = proj(l.m, l.black); el.textContent = l.t; el.style.background = l.c; el.style.left = (p[0] * W).toFixed(1) + 'px'; el.style.top = Math.max(26, p[1] * H - 3).toFixed(1) + 'px'; }); };
         this._stage = window.PTHands.createStage(cv, d, { onLoaded: () => {}, onFailed: () => this.setState({ kbMode: '2d' }) }); this._stageCv = cv;
         const box = cv.parentElement, rs = () => { if (this._stage) this._stage.resize(box.clientWidth, box.clientHeight); };
         this._ro = new ResizeObserver(rs); this._ro.observe(box); rs();
       }
-      this._stage.update(d);
+      this._stage.update(d); if (this._lb && !(this._labels3d || []).length) this._lb.replaceChildren();
     } catch (e) { this._stage = null; this.setState({ kbMode: '2d' }); } // where 3D cannot be drawn, the flat keys
   }
 '''
@@ -687,14 +698,16 @@ def ch_js(D, W, KH, minOct, mini_w):
     return out.replace('class Component extends DCLogic {\n', 'class Component extends DCLogic {' + PT_LIFE, 1)
 
 # ══ The redesign, two concepts side by side (R42 v80; research: .scratch/r42/plan/chords-research.md) ══
-PART = f'border: 0; background: transparent; margin: 0 1px; padding: 2px 5px 4px; border-radius: 10px; box-shadow: inset 0 -2px 0 {LINE}; color: {INK}; font: inherit; white-space: nowrap'
+CHEV_UD = '<svg viewBox="0 0 12 18" width="10" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; align-self: center; opacity: .55"><path d="m2.500 6.500 3.500-3.500 3.500 3.500M2.500 11.500l3.500 3.500 3.500-3.500"></path></svg>'
+# each part is a pop-up button and looks like one: a filled pill with the up-down chevrons (Apple HIG, pop-up buttons)
+PART = f'border: 0; background: {FILL}; margin: 0; min-height: 48px; padding: 2px 9px 4px 12px; border-radius: 14px; color: {INK}; font: inherit; white-space: nowrap; display: inline-flex; align-items: baseline; gap: 6px'
 # A: the name is the control: three pop-up buttons read as one chord symbol (chord-trainer's row; Apple's pop-up button)
 def NAME_A(fs):
     return (f'<div style="flex: none; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">'
-      f'<div role="group" aria-label="Chord: {{{{symFull}}}}" style="display: flex; align-items: baseline; justify-content: center; font-family: {SERIF}; font-size: {fs}px; font-weight: 700; line-height: 1.1">'
-      f'<button type="button" aria-haspopup="menu" aria-label="Root: {{{{rootName}}}}" onClick="{{{{openMRoot}}}}" style="{PART}">{{{{rootName}}}}</button>'
-      f'<button type="button" aria-haspopup="menu" aria-label="Chord type: {{{{qName}}}}" onClick="{{{{openMType}}}}" style="{PART}"><span style="font-size: {{{{nmTypeFs}}}}; color: {{{{nmTypeC}}}}">{{{{nmType}}}}</span></button>'
-      f'<button type="button" aria-haspopup="menu" aria-label="In the bass: {{{{invLabel}}}}" onClick="{{{{openMBass}}}}" style="{PART}"><span style="font-size: {{{{nmBassFs}}}}; color: {{{{nmBassC}}}}">{{{{nmBass}}}}</span></button></div>'
+      f'<div role="group" aria-label="Chord: {{{{symFull}}}}" style="display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: 6px; font-family: {SERIF}; font-size: {fs}px; font-weight: 700; line-height: 1.1">'
+      f'<button type="button" aria-haspopup="menu" aria-label="Root: {{{{rootName}}}}" onClick="{{{{openMRoot}}}}" style="{PART}">{{{{rootName}}}}{CHEV_UD}</button>'
+      f'<button type="button" aria-haspopup="menu" aria-label="Chord type: {{{{qName}}}}" onClick="{{{{openMType}}}}" style="{PART}"><span style="font-size: {{{{nmTypeFs}}}}; color: {{{{nmTypeC}}}}; align-self: center">{{{{nmType}}}}</span>{CHEV_UD}</button>'
+      f'<button type="button" aria-haspopup="menu" aria-label="In the bass: {{{{invLabel}}}}" onClick="{{{{openMBass}}}}" style="{PART}"><span style="font-size: {{{{nmBassFs}}}}; color: {{{{nmBassC}}}}; align-self: center">{{{{nmBass}}}}</span>{CHEV_UD}</button></div>'
       f'<p style="margin: 0; font-size: 15px; color: {SOFT}">{{{{fullLine}}}}</p></div>')
 FACTS = (f'<dl style="flex: none; margin: 0; border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{facts}}}}" as="f" hint-placeholder-count="3">'
          f'<div style="min-height: 46px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: inset 0 -1px 0 {LINE}"><dt style="font-size: 15px; color: {SOFT}">{{{{f.k}}}}</dt><dd style="margin: 0; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: pre">{{{{f.v}}}}</dd></div></sc-for></dl>')
@@ -723,7 +736,7 @@ HANDSBTN_A = SIDEBTN('Hands', 'Hands: {{handsLabel}}', 'openHandsMenu', HANDSI)
 RANGE = ('<div style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 10px"><div style="display: flex; align-items: center; justify-content: space-between; gap: 12px"><span style="font-size: 16px">Range</span><span style="font-size: 15px; color: ' + SOFT + '; font-variant-numeric: tabular-nums">{{rangeStrip.cap}}</span></div>'
          '<svg viewBox="0 0 340 26" role="img" aria-label="The part of the 88 keys shown" style="display: block; width: 100%; height: auto; border-radius: 4px; overflow: hidden"><rect width="340" height="26" fill="#FEFDFB" stroke="' + LINE + '"></rect><rect x="{{rangeStrip.x}}" y="0" width="{{rangeStrip.w}}" height="26" fill="#F6E3BC"></rect><path d="M6.54 0V26M13.08 0V26" stroke="none"></path><path d="{{rangeStrip.bl}}" fill="#332C28"></path><rect x="{{rangeStrip.x}}" y="0.75" width="{{rangeStrip.w}}" height="24.5" fill="none" stroke="#B07A2A" stroke-width="1.5"></rect></svg>'
          '<div>' + SEGC('keysSeg', 32, 13) + '</div></div>')
-B_PIANO = (KBTILES + GROUP(('raw', RANGE), bg="#FEFDFB") + '<sc-if value="{{is2dKb}}" hint-placeholder-val="{{false}}">' + GROUP(('seg', 'Labels', 'keyLabelSeg', 250), bg="#FEFDFB") + '</sc-if>'
+B_PIANO = (KBTILES + GROUP(('raw', RANGE), bg="#FEFDFB") + GROUP(('seg', 'Labels', 'keyLabelSeg', 250), bg="#FEFDFB")
            + GROUP(('link', 'Sound', '', '#'), ('link', 'MIDI keyboard', '', '#'), bg="#FEFDFB"))
 PIANOBTN = lambda: GLASSBTN('Piano settings', KEYSI, 'openKeys')
 # content never shows through the bar: the page fades out under it (the tab bar's rule, v24)

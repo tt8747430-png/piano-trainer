@@ -345,6 +345,10 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **A setting works in every view, and a tappable thing looks tappable (R42, canvas 84):** "I dont like the labels
+  settings and that they are only available in 2d": Labels (Note names · Degrees · None) now draw on the 3D piano
+  too; hiding the hands is a view (3D with hands · 3D keys · 2D keys · Off), not a switch that only works in 3D.
+  "make the chord that it is editable more clear": the name's parts are filled pills with chevrons.
 - **Look at it before it is sent (R42, v82):** "can you look at the websites before you send them … paddings and
   voicing button placed weirdly": a bar's button ran off the screen's edge because only the changed part was
   screenshotted. Every publish: the layout check in every changed state, then the eye on the whole screen, the

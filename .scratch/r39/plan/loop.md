@@ -117,3 +117,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v80 (2026-11-09):** Chords: designs A (name is the control) and B (chord shelf) side by side; piano settings; per-tone 3D keys.
 **R42 v81 (2026-11-09):** Chords: design A chosen (B removed); the bar button reads Voicing; hand skin variants in progress.
 **R42 v82 (2026-11-09):** Chords: symmetric bar inside its margins, fade under it; layout check + a look before each publish.
+**R42 canvas 84 (2026-11-09):** Chords: view with or without hands; labels in 3D and 2D (Degrees); name as pill buttons.

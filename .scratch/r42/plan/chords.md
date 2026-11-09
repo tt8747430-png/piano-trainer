@@ -5,6 +5,22 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 84: the hands can be hidden; labels in every view; the chord name reads as buttons.** Owner: "I
+  want to be able to hide the hands from the 3d piano. make proper settings. and I dont like the labels settings and
+  that they are only available in 2d and refactor them also properly how do we need them and are the options
+  relevant or good. make the chord that it is editable more clear". Of the hand model: "I dont want such realistic
+  hand texture but it should feel real and have as many triangles as possible" (renders in progress).
+  - **Piano › View is four pictures, no dependent switch:** **3D with hands** (default) · **3D keys** · **2D keys** ·
+    **Off**. Replaces Off · 3D · 2D; a "Hands" switch that only works in 3D was not drawn (no setting hides another).
+  - **Labels work in every view:** **Note names · Degrees · None**. On the 3D piano each sounding key carries a small
+    round label at its far end, above the hands, in the key's colour; on the 2D keys the label is on the key.
+    **Degrees** counts chord tones as chord symbols do, 1 ♭3 5 ♭7 9 (Gorshkov, 01-seventh-chords), replacing "Chord
+    tones" (R 3 5 7), which hid the flat of a minor third or seventh. Finger numbers stay out (standing rule).
+  - **The chord name is three pop-up buttons that look like buttons:** each part a filled pill with the up-down
+    chevrons, 48 high, a gap between them: `C ⌃⌄` `maj7 ⌃⌄` `root position ⌃⌄` (Apple HIG, pop-up buttons). The
+    underline alone did not say "tap me".
+  - **App note:** labels over the 3D keys and keys coloured per chord tone are two small options the Player's stage
+    does not have yet; the canvas builds the stage with them patched in (`pthands_vite.config.mjs`).
 - **v82 (canvas Version 83): the bar is symmetric and inside its margins; a board is looked at and checked before it
   is sent.** Owner, of v81's bar (the Voicing pill ran off the left edge and sat against Play): "can you look at the
   websites before you send them. use best design guidelines and skills we have to not run into such issues with
@@ -807,3 +823,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: designs A and B drawn side by side; per-tone keys in 3D; piano settings with the range strip; fingering in words (v80).
 - 2026-11-09: design A chosen, B removed; the bar button reads Voicing; MakeHuman hand with a better skin chosen (v81).
 - 2026-11-09: the bar symmetric with labelled side buttons, a fade under it; layout check and a look before publishing (v82).
+- 2026-11-09: View 3D with hands · 3D keys · 2D keys · Off; labels Note names · Degrees · None in every view; the name as pill buttons (Version 84).
