@@ -116,9 +116,22 @@ function voice(root, q, inv, voicing, hands) {
   if (voicing === 'Drop 3' && ns.length === 4) ns[1].m -= 12;
   ns.sort((a, b) => a.m - b.m);
   ns.forEach((x) => { x.hand = 'R'; });
-  if (ns.length > 5) ns.slice(0, ns.length - 5).forEach((x) => { x.hand = 'L'; });
-  if (hands === 'Left') ns.forEach((x) => { x.m -= 12; x.hand = 'L'; });
-  if (hands === 'Both') { const lh = ns.map((x) => Object.assign({}, x, { m: x.m - 12, hand: 'L' })); ns = lh.concat(ns); }
+  // Hands as teachers voice them (piano-data/transcriptions; R42 v67): a ninth chord or bigger in one right hand is
+  // rootless, the 5th the first note left out; the left hand alone plays a shell low (1-7, 1-3-7 from F up, 1-5-8
+  // with no 7th), never close thirds under F3; both hands: the shell low, the rest of the chord above.
+  const big = q.t.length >= 5 && ['Close', 'Open', 'Drop 2', 'Drop 3'].includes(voicing);
+  if (big && (hands === 'Right' || hands === 'Both')) { ns = ns.filter((x) => x.deg !== 1); if (ns.length > 4) ns = ns.filter((x) => x.deg !== 5); }
+  const s7 = s(7), lb = 48 + root;
+  const shellL = (withThird) => { if (inv > 0 && voicing !== 'Shell' && !voicing.startsWith('Rootless')) { const t = q.t[Math.min(inv, q.t.length - 1)]; const b = { m: lb + (t[0] % 12), semi: t[0], deg: t[1], hand: 'L' }; return hands === 'Left' ? [b, Object.assign({}, b, { m: b.m + 12 })] : [b]; }
+    const out = [{ m: lb, semi: 0, deg: 1 }];
+    if (s7 != null) { out.push({ m: lb + s7, semi: s7, deg: 7 }); if (withThird && third != null && root >= 5) out.splice(1, 0, { m: lb + third, semi: third, deg: s(3) != null ? 3 : (s(4) != null ? 4 : 2) }); }
+    else { const f = s(5) ?? 7; out.push({ m: lb + f, semi: f, deg: 5 }, { m: lb + 12, semi: 12, deg: 1 }); }
+    return out.map((x) => Object.assign(x, { hand: 'L' })); };
+  if (hands === 'Left') ns = (voicing === 'Shell' || voicing.startsWith('Rootless')) ? ns.map((x) => Object.assign({}, x, { m: x.m - 12, hand: 'L' })) : shellL(true);
+  if (hands === 'Both') { const lh = (voicing.startsWith('Rootless') || voicing === 'Shell') ? [{ m: lb, semi: 0, deg: 1, hand: 'L' }] : shellL(false);
+    const lpc = lh.map((x) => ((x.semi % 12) + 12) % 12); const rh = ns.filter((x) => !lpc.includes(((x.semi % 12) + 12) % 12) || x.deg === 1 && false);
+    ns = lh.concat(rh.length >= 3 ? rh : ns); }
+  if (hands === 'Right' && ns.length > 5) ns.slice(0, ns.length - 5).forEach((x) => { x.hand = 'L'; });
   const keep = []; ns.forEach((x) => { if (!keep.some((y) => y.m === x.m)) keep.push(x); });
   return keep.map((x) => Object.assign(x, spell(root, ((x.semi % 12) + 12) % 12, x.deg)));
 }
@@ -132,8 +145,8 @@ function fingers(list, hand, inv, close) {
   return ({ 1: [5], 2: [5, 1], 3: [5, 3, 1], 5: [5, 4, 3, 2, 1] })[n] || [5, 4, 3, 2, 1].slice(0, n);
 }
 // the grand staff: y of each note, ledger lines, seconds side by side
-function staff(notes, treble, W, fm) {
-  const cx = W / 2; const out = [], ledg = [];
+function staff(notes, treble, W, fm, cx0, vw) {
+  const cx = cx0 ?? W / 2; const out = [], ledg = [];
   const dnOf = (x) => (Math.floor((x.m - x.d) / 12) - 1) * 7 + LET.indexOf(x.L);
   const onT = (x) => treble || (x.hand ? x.hand === 'R' : x.m >= 60);
   let prev = { T: null, B: null };
@@ -150,7 +163,7 @@ function staff(notes, treble, W, fm) {
   const shifted = out.some((n) => n.x !== cx), fx = cx + (shifted ? 30 : 17); const digits = [];
   [true, false].forEach((k) => { let last = null; out.filter((n) => n.T === k && n.f).sort((a, b) => b.y - a.y).forEach((n) => { let y = n.y + 4; if (last !== null && last - y < 10) y = last - 10; last = y; digits.push({ x: fx, y, f: n.f, f1: n.f === 1, f2: n.f === 2, f3: n.f === 3, f4: n.f === 4, f5: n.f === 5 }); }); });
   const ys = out.map((n) => n.y).concat(digits.map((d) => d.y - 8)), vt = Math.min(4, Math.min(...ys) - 12), vbot = Math.max(168, Math.max(...ys) + 12);
-  return { notes: out, ledg, digits, vb: '0 ' + vt + ' 250 ' + (vbot - vt) };
+  return { notes: out, ledg, digits, vb: '0 ' + vt + ' ' + (vw || 250) + ' ' + (vbot - vt), vt, vbot };
 }
 function range(ms, keys, minOct) {
   if (keys === '88') return [21, 108]; if (keys === '76') return [28, 103]; if (keys === '61') return [36, 96];
@@ -190,7 +203,30 @@ const kb = calmKeys(lo, hi, marks, ''' + str(W) + ', ' + str(KH) + r''');
 const bass = ns[0];
 const shape = INV[inv] + (inv ? ' · ' + bass.name + ' in the bass' : '') + ' · ' + voicing;
 const R = Rn, L = Ln; const fR = R.map((x) => fm[x.m]), fL = L.map((x) => fm[x.m]);
-const sv = staff(ns, treble, 280, fingOn ? fm : {});
+// the staff holds the chords the learner has gathered, in order; the current one is the page's chord
+const snap = { rl: rLet, ra: rAcc, q: qi, inv, voicing: st.voicing || 'Close', hand: hands };
+const cur0 = st.cur ?? 0;
+const seq = (st.seq || [snap]).map((c, i) => (i === cur0 ? snap : c));
+const cur = Math.min(cur0, seq.length - 1);
+const symOf = (c) => { RL = c.rl; const rt = rootPc(c.rl, c.ra), qq = QS[c.q]; const vv = VOICINGS.find((v) => v.v === c.voicing).ok(qq) ? 'Close' : c.voicing; const nI = Math.min(4, vv === 'Shell' ? 3 : (vv.startsWith('Rootless') ? 4 : qq.t.length)); const iv = Math.min(c.inv, nI - 1); const v = voice(rt, qq, iv, vv, c.hand); const bn = iv > 0 && qq.t[iv] ? spell(rt, ((qq.t[iv][0] % 12) + 12) % 12, qq.t[iv][1]).name : ''; const out = { v, iv, vv, s: LET[c.rl] + ACC[String(c.ra)] + qq.k + (bn ? '/' + bn : '') }; RL = rLet; return out; };
+const SLOT = 78, X0 = 64, SW = Math.max(250, X0 + seq.length * SLOT + 48);
+const sv = (() => { const all = { notes: [], ledg: [], digits: [], cols: [] }; let vt = 4, vbot = 168;
+  seq.forEach((c, i) => { const o = symOf(c); const cx = seq.length === 1 ? 140 : X0 + SLOT * (i + 0.5);
+    const R1 = o.v.filter((x) => x.hand === 'R'), L1 = o.v.filter((x) => x.hand === 'L'); const f1 = {};
+    fingers(R1, 'R', o.iv, o.vv === 'Close').forEach((f, k) => { f1[R1[k].m] = f; }); fingers(L1, 'L', o.iv, o.vv === 'Close').forEach((f, k) => { f1[L1[k].m] = f; });
+    const one = staff(o.v, treble, SW, fingOn && i === cur ? f1 : {}, cx, SW); all.notes.push(...one.notes); all.ledg.push(...one.ledg); all.digits.push(...one.digits);
+    vt = Math.min(vt, one.vt); vbot = Math.max(vbot, one.vbot);
+    const on = i === cur; all.cols.push({ s: o.s, on, many: seq.length > 1, x: cx, left: (cx / SW * 100) + '%', fw: on ? 700 : 500, tc: on ? C.ink : C.soft, bg: on && seq.length > 1 ? '#F6E3BC' : 'transparent', aria: o.s + (on ? ', shown above' : ', show it'), pick: () => pickChord(i), canRemove: on && seq.length > 1, remove: () => removeChord() }); });
+  const hl = seq.length > 1 ? [{ x: X0 + SLOT * cur + 6, w: SLOT - 12, y: vt + 2, h: vbot - vt - 4 }] : [];
+  let path = ''; [30, 40, 50, 60, 70, 110, 120, 130, 140, 150].forEach((y) => { path += 'M14 ' + y + 'H' + (SW - 14); });
+  return { notes: all.notes, ledg: all.ledg, digits: all.digits, cols: all.cols, hl, path, bars: 'M14 30V150M' + (SW - 14) + ' 30V150', vb: '0 ' + vt + ' ' + SW + ' ' + (vbot - vt), maxw: Math.round(SW * (seq.length === 1 ? 1.32 : 1.18)), minw: seq.length > 3 ? (seq.length * 70 + 80) + 'px' : '0' }; })();
+const loadChord = (c) => ({ rl: c.rl, ra: c.ra, q: c.q, inv: c.inv, voicing: c.voicing, hand: c.hand });
+const soundOf = (c) => sound(symOf(c).v.map((x) => x.m), false, 'Up');
+const pickChord = (i) => { if (i === cur) { soundOf(seq[i]); return; } set(Object.assign({ seq, cur: i, toast: null }, loadChord(seq[i]))); soundOf(seq[i]); };
+const addChord = () => { if (seq.length >= 8) return; const s2 = seq.concat([Object.assign({}, snap, { inv: 0 })]); set({ seq: s2, cur: s2.length - 1, inv: 0, sheet: 'chord', toast: null }); };
+const removeChord = () => { const gone = symOf(seq[cur]).s; const s2 = seq.filter((_, i) => i !== cur); const c2 = Math.max(0, cur - 1); clearTimeout(this._toast); this._toast = setTimeout(() => set({ toast: null }), 5000); set(Object.assign({ seq: s2, cur: c2, toast: { t: gone + ' removed', undo: { seq, cur } } }, loadChord(s2[c2]))); };
+const undoRemove = () => { const u = st.toast && st.toast.undo; if (!u) return; set(Object.assign({ seq: u.seq, cur: u.cur, toast: null }, loadChord(u.seq[u.cur]))); };
+const playAll = () => { set({ sheet: null, playing: 'all' }); clearTimeout(this._t); seq.forEach((c, i) => setTimeout(() => soundOf(c), i * 1100)); this._t = setTimeout(() => set({ playing: false }), seq.length * 1100 + 600); };
 const fing = [['Right hand', R, fR], ['Left hand', L, fL]].filter((h) => h[1].length).map(([h, list, f]) => ({ h, cells: list.map((x, i) => ({ n: x.name, f: f[i], c: ROLE[x.deg] || C.accent })) }));
 const invCards = Array.from({ length: invN }, (_, i) => {
   const v = voice(root, q, i, voicing, 'Right'); const [a, b] = [Math.floor(Math.min(...v.map((x) => x.m)) / 12) * 12, Math.floor(Math.min(...v.map((x) => x.m)) / 12) * 12 + 23];
@@ -213,8 +249,8 @@ return {
   ringTfUnused: 'rotate(' + (-inv * 360 / Math.max(1, (() => { const seen = []; voice(root, q, 0, voicing, 'Right').forEach((x) => { if (!seen.includes(x.name)) seen.push(x.name); }); RL = rLet; return seen.length; })())) + 'deg)',
   invWord: ['Root', '1st', '2nd', '3rd'][inv], invSub: inv ? 'inversion' : 'position', bassName: (() => { const v = voice(root, q, inv, voicing, 'Right'); RL = rLet; return v[0].name; })(),
   // the chord's notes in chord order (root, 3rd, 5th, 7th); tapping one puts it in the bass: that is the inversion
-  noteCols: (() => { const basses = Array.from({ length: invN }, (_, i) => { const v = voice(root, q, i, voicing, 'Right'); RL = rLet; return v[0].name; });
-    const seen = []; const tones = voice(root, q, 0, voicing, 'Right').filter((x) => { if (seen.includes(x.name)) return false; seen.push(x.name); return true; }); RL = rLet;
+  noteCols: (() => { const basses = Array.from({ length: invN }, (_, i) => { const v = voice(root, q, i, voicing, hands); RL = rLet; return v[0].name; });
+    const seen = []; const tones = (hands === 'Right' ? voice(root, q, 0, voicing, 'Right') : q.t.map(([semi, deg]) => Object.assign({ deg }, spell(root, ((semi % 12) + 12) % 12, deg)))).filter((x) => { if (seen.includes(x.name)) return false; seen.push(x.name); return true; }); RL = rLet;
     const N = tones.length; const R = -inv * 360 / N;
     return tones.map((x, k) => { const pos = (k - inv + N) % N; const j = basses.indexOf(x.name); const on = j === inv; const can = j >= 0;
       return { rw: on ? 700 : 400, rc: on ? C.ink : C.soft, y: ((N - 1 - pos) * 44) + 'px', z: pos === N - 1 ? 2 : 1, fill: on ? (ROLE[x.deg] || C.accent) : '#FEFDFB', bw: on ? '0' : '2.5px', n: x.name, d: ({ 1: 'root', 2: '2nd', 3: '3rd', 4: '4th', 5: '5th', 6: '6th', 7: '7th', 9: '9th', 11: '11th', 13: '13th' })[x.deg], c: ROLE[x.deg] || C.accent, on, can,
@@ -257,6 +293,7 @@ return {
   arpOn: arp, arpBg: arp ? '#F6E3BC' : 'transparent', arpInk: arp ? '#7A5418' : C.ink, openSound: () => set({ sheet: 'sound' }), isSound: sh === 'sound',
   playing: !!st.playing, notPlaying: !st.playing, playLabel: st.playing ? 'Stop' : 'Play', togglePlay: () => st.playing ? set({ playing: false }) : play(false),
   playing: !!st.playing, notPlaying: !st.playing, playWord: playMode === 'Block' ? 'Play chord' : 'Arpeggiate',
+  addChord, undoRemove, playAll, hasSeq: seq.length > 1, canAdd: seq.length < 8, seqCount: seq.length, toastOn: !!st.toast, toastT: st.toast ? st.toast.t : '',
   playMain: () => st.playing ? set({ playing: false }) : play(playMode === 'Arpeggio'), openPlayAs: () => set({ sheet: st.sheet === 'playAs' ? null : 'playAs' }), isPlayAs: sh === 'playAs',
   playAsList: [['Block', 'Block chord', 'All the notes at once'], ['Arpeggio', 'Arpeggio', 'One note after another, upwards']].map(([v, l, d]) => ({ l, d, on: v === playMode, mark: v === playMode ? '✓' : '', pick: () => { set({ playMode: v, sheet: null }); play(v === 'Arpeggio'); } })),
   invStep: INV[inv] + (slash ? ' · ' + bassName + ' in the bass' : ''), fullLine: full + (inv ? ' · ' + INV[inv] : '') + ' · ' + voicing + ' voicing' + (hands === 'Right' ? '' : (hands === 'Both' ? ' · both hands' : ' · left hand')),
@@ -305,9 +342,12 @@ def TITLEBLOCK(size):
 </div>'''
 
 def STAFFSVG(w):
-    return f'''<svg viewBox="{{{{sv.vb}}}}" width="{w}" style="display: block; max-width: 100%; margin: 0 auto" role="img" aria-label="The chord on the staff">
-<path d="M14 30H236M14 40H236M14 50H236M14 60H236M14 70H236M14 110H236M14 120H236M14 130H236M14 140H236M14 150H236" stroke="{INK}" stroke-width="0.9"></path>
-<path d="M14 30V150M236 30V150" stroke="{INK}" stroke-width="1"></path>
+    return f'''<div class="nos" style="overflow-x: auto; margin: 0 -4px"><div style="position: relative; width: 100%; min-width: {{{{sv.minw}}}}; max-width: {{{{sv.maxw}}}}px; margin: 0 auto; padding-top: 40px">
+<div style="position: absolute; left: 0; right: 0; top: 0; height: 36px"><sc-for list="{{{{sv.cols}}}}" as="k" hint-placeholder-count="1"><div style="position: absolute; top: 0; left: {{{{k.left}}}}; transform: translateX(-50%); height: 34px; display: flex; align-items: center; border-radius: 17px; background: {{{{k.bg}}}}"><button type="button" aria-label="{{{{k.aria}}}}" onClick="{{{{k.pick}}}}" style="height: 34px; padding: 0 10px; border: 0; background: transparent; color: {{{{k.tc}}}}; font: inherit; font-size: 15px; font-weight: {{{{k.fw}}}}; white-space: nowrap">{{{{k.s}}}}</button><sc-if value="{{{{k.canRemove}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" aria-label="Remove {{{{k.s}}}}" onClick="{{{{k.remove}}}}" style="width: 30px; height: 34px; margin-left: -6px; padding: 0; border: 0; background: transparent; color: #7A5418; display: flex; align-items: center; justify-content: center">{XSM}</button></sc-if></div></sc-for><sc-if value="{{{{canAdd}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" aria-label="Add a chord to the staff" onClick="{{{{addChord}}}}" style="position: absolute; right: 2px; top: 0; width: 34px; height: 34px; padding: 0; border-radius: 17px; border: 0; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLUSI}</button></sc-if></div>
+<svg viewBox="{{{{sv.vb}}}}" style="display: block; width: 100%; height: auto" role="img" aria-label="The chords on the staff">
+<sc-for list="{{{{sv.hl}}}}" as="h" hint-placeholder-count="0"><rect x="{{{{h.x}}}}" y="{{{{h.y}}}}" width="{{{{h.w}}}}" height="{{{{h.h}}}}" rx="10" fill="#F6E3BC" opacity="0.55"></rect></sc-for>
+<path d="{{{{sv.path}}}}" stroke="{INK}" stroke-width="0.9"></path>
+<path d="{{{{sv.bars}}}}" stroke="{INK}" stroke-width="1"></path>
 <text x="18" y="69" font-family="Noto Music" font-size="42" fill="{INK}">𝄞</text><text x="18" y="141" font-family="Noto Music" font-size="34" fill="{INK}">𝄢</text>
 <sc-for list="{{{{sv.ledg}}}}" as="l" hint-placeholder-count="1"><path d="M{{{{l.x1}}}} {{{{l.y}}}}H{{{{l.x2}}}}" stroke="{INK}" stroke-width="1.1"></path></sc-for>
 <sc-for list="{{{{sv.notes}}}}" as="n" hint-placeholder-count="4"><ellipse cx="{{{{n.x}}}}" cy="{{{{n.y}}}}" rx="7.2" ry="5" transform="rotate(-18 {{{{n.x}}}} {{{{n.y}}}})" fill="{{{{n.c}}}}" stroke="{INK}" stroke-width="1.6"></ellipse><sc-if value="{{{{n.a1}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">♭</text></sc-if><sc-if value="{{{{n.a2}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">♯</text></sc-if><sc-if value="{{{{n.a3}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">𝄫</text></sc-if><sc-if value="{{{{n.a4}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">𝄪</text></sc-if></sc-for>
@@ -329,6 +369,8 @@ HANDSI = '<sc-if value="{{hB}}" hint-placeholder-val="{{true}}">' + HANDS2 + '</
 # The bar holds only the page's actions (Apple: a toolbar's items "act on content"; "only specify one primary
 # action"): hear the chord together, hear it note by note. Everything chosen sits on the chord itself; everything
 # shown is behind the gear. One capsule 68 (radius 34), two buttons 56 inside 6 (radius 28), side by side.
+XSM = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>'
+PLUSI = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>'
 STOPI = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>'
 PLAYI = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor"></path></svg>'
 def ACT(label, act, on, off, icon, primary):
@@ -351,7 +393,8 @@ PLAYSPLIT = (f'<div role="group" aria-label="Play" style="width: 176px; {TINTGRP
 def PLAYASMENU(pos):
     return (f'<sc-if value="{{{{isPlayAs}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
       f'<div role="menu" aria-label="Play as" style="position: absolute; {pos}; z-index: 61; width: 220px; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column">'
-      f'<sc-for list="{{{{playAsList}}}}" as="o" hint-placeholder-count="2"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px; display: flex; align-items: center; gap: 10px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span><span style="flex: 1; font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for></div></sc-if>')
+      f'<sc-for list="{{{{playAsList}}}}" as="o" hint-placeholder-count="2"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px; display: flex; align-items: center; gap: 10px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span><span style="flex: 1; font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for>'
+      f'<sc-if value="{{{{hasSeq}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="height: 1px; margin: 4px 8px; background: {LINE}"></span><button type="button" role="menuitem" onClick="{{{{playAll}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px 6px 40px; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; text-align: left">All chords, in order</button></sc-if></div></sc-if>')
 DOCK_PHONE = f'<div role="toolbar" aria-label="Chord and sound" style="position: absolute; left: 12px; right: 12px; bottom: 30px; z-index: 40; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px">{CHORDACT}{PLAYSPLIT}</div>'
 DOCK_LAPTOP = f'<div role="toolbar" aria-label="Chord and sound" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; width: 560px; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 10px">{CHORDACT}{PLAYSPLIT}</div>'
 
@@ -377,9 +420,10 @@ KBTILES = ('<div role="group" aria-label="Keyboard" style="display: grid; grid-t
 B_KEYS = (KBTILES + '<sc-if value="{{kbShow}}" hint-placeholder-val="{{true}}">' + GROUP(('seg', 'Keys', 'keysSeg', 230), ('seg', 'Labels', 'keyLabelSeg', 230), bg="#FEFDFB") + '</sc-if>'
           + GROUP(('link', 'Connect a piano', '', '#'), ('link', 'All piano settings', '', '#'), bg="#FEFDFB"))
 B_SOUND = f'<div role="radiogroup" style="display: flex; flex-direction: column; gap: 8px"><sc-for list="{{{{playTiles}}}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 60px; border: 0; border-radius: 14px; background: {{{{o.bg}}}}; box-shadow: {{{{o.ring}}}}; padding: 8px 16px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; color: {INK}; font: inherit; text-align: left"><span style="font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for></div>'
+TOAST = f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 50%; bottom: 100px; transform: translateX(-50%); z-index: 50; height: 48px; padding: 0 6px 0 18px; border-radius: 24px; background: {INK}; color: #FEFDFB; display: flex; align-items: center; gap: 8px; white-space: nowrap; box-shadow: {SHADOW}"><span style="font-size: 15px">{{{{toastT}}}}</span><button type="button" onClick="{{{{undoRemove}}}}" style="height: 40px; padding: 0 14px; border: 0; border-radius: 20px; background: transparent; color: #F2C987; font: inherit; font-size: 15px; font-weight: 700">Undo</button></div></sc-if>'
 def SHEETS_PHONE(player):
     out = ''
-    out += PLAYASMENU('left: calc(50% - 88px); bottom: 96px')
+    out += TOAST + PLAYASMENU('left: calc(50% - 88px); bottom: 96px')
     for cond, title, body in (('isChord', 'Chord', B_CHORD), ('isKeys', 'Keyboard', B_KEYS)):
         out += BSHEET(cond, title, body)
     for cond, body in (('isList', B_LIST), ('isVoicing', B_VOICING)):
@@ -388,7 +432,7 @@ def SHEETS_PHONE(player):
 
 def POPS_LAPTOP(player):
     dockpos = 'left: calc(50% - 200px); top: 424px'
-    out = PLAYASMENU('left: calc(50% - 88px); bottom: 92px')
+    out = TOAST + PLAYASMENU('left: calc(50% - 88px); bottom: 92px')
     for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isKeys', 'Keyboard', B_KEYS, 'right: 24px; top: 76px')):
         out += POPOVER(cond, title, body, pos, 400)
     for cond, body, pos in (('isList', B_LIST, dockpos), ('isVoicing', B_VOICING, dockpos)):

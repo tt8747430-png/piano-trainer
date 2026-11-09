@@ -341,6 +341,12 @@ owner's, typos fixed.
   revert the play button color": Play is one centred capsule in its honey tint. v65, "I liked the chord button": it sits just
   left of the centred Play, and the chord is chosen from the name and the bar.
   v66: "now the names get cut off": a bar label is never truncated; measure the longest name in the runtime.
+- **The hand setting changes the voicing, as pianists do (R42, v67):** "what relevance have the hands settings in
+  … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
+  5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
+  low and the rest above. Research the owner's transcripts before the web.
+- **Several chords on one staff (R42, v67):** "select more than one chord to be shown on the staff": names over the
+  staff, + to add, × with Undo, All chords in order in the Play menu.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

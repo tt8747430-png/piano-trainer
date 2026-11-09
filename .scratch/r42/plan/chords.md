@@ -5,6 +5,35 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v67 (canvas Version 67): several chords on the staff; the hands voice a chord as pianists do.** Owner: "I want to
+  be able to select more than one chord to be shown on the staff and read and research more about the voicing in
+  the chords and what relevance have the hands settings in some chords like nineth chords and bigger like playing
+  only with left or right hand and such things. research the transcriptions that I gave you."
+  - **The staff holds a row of chords.** Over the staff, each chord's name; the current one in a honey pill with ×,
+    its column lightly shaded; **+** at the end adds a chord (a copy of the current one, which opens the Chord sheet
+    to be changed; up to 8). Tapping a name makes it the page's chord (heading, keys, row of notes follow) and plays
+    it. × removes at once with **"Fmaj7 removed · Undo"** (R38: undo, not a question). The Play menu gains **All
+    chords, in order** when there are two or more. Finger numbers show for the current chord only; past four chords
+    the staff scrolls sideways in its card.
+  - **Hands, from the transcripts** (piano-data/transcriptions/youtube):
+    - **Right** alone, ninth chords and bigger: rootless, the root left to the bass or left hand and the 5th the
+      first note left out: C9 = E G B♭ D. "rootless… when you have a bass player" (piano/080 @19:10); "my left hand
+      is pretending it's the bass player" (piano/400 @01:36); "the note that's the least needed in the chord is the
+      fifth" (piano/369 @21:13); jps-podcast/292 @02:10 (3-5-7-9). Triads and sevenths stay whole.
+    - **Left** alone: a shell, low, never close thirds in the muddy register. Sevenths and bigger: root and 7th
+      (C9 = C3 B♭3), adding the 3rd from F up (1-3-7); no 7th: root, 5th, octave. "Bud Powell" shells, root-7 can go
+      "really low" (exercises/148 @02:07); the muddy section from about the F below middle C (piano/312 @12:04); "the
+      lower you go… the less notes you need" (piano/115 @09:35); "1-3-7… more balance for the lower register"
+      (piano/312 @10:28). An inversion in the left hand plays its bass note and octave.
+    - **Both**: the left hand's shell low, the rest of the chord above, notes not doubled: C9 = LH C3 B♭3, RH E4 G4
+      D5; C13 RH 3-13-9. "root and seventh… with the right hand… the colour tones" (piano/369 @43:49); spreads,
+      exercises/116 @29:11, jps-podcast/245 @12:32. An inversion puts its bass note alone in the left hand (C9/E: LH
+      E, RH G B♭ D).
+    - The row of notes follows the hands: in Left and Both it lists the whole chord (root first); in Right, for a
+      ninth or bigger, the rootless notes.
+  - Read but not applied yet (open question): the 11th over a major 3rd is avoided (watch-later/008 @05:24), so the
+    11 chord would become 7sus or maj7♯11; Kenny Barron, So What and upper-structure voicings (008 @07:00,
+    exercises/069). Unusable transcripts noted: exercises/018 and 128 and most of 098 are Arabic captions.
 - **v65 (canvas Version 65): the chord button back, beside a centred Play.** Owner: "but I liked the chord button, but I
   dont know where to put it know".
   - The bar keeps Play exactly centred (188 wide, honey) and the chord button sits in the space to its left, close
@@ -514,3 +543,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: Play's honey tint restored, still centred (v64).
 - 2026-11-09: the chord button back, left of the centred Play; "Arpeggiate" (v65).
 - 2026-11-09: bar names never cut: chord type steps with length, Play 176 (v66).
+- 2026-11-09: several chords on the staff (+, ×/Undo, All chords in order); hands voice as the transcripts teach (v67).
