@@ -5,6 +5,28 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v74 (canvas Version 74): the staff shows how the chords connect; Practise is what the teachers drill.** Owner:
+  "improve the current chords page with the best practices and research more first and use the piano data and its
+  transcriptions and examples". Research: 15 reference-app screens, the chord books, 4 transcripts read and the rest
+  of the 1,616 grepped (paths under piano-data/).
+  - **Voice leading, drawn.** Between neighbouring chords a note both share is **tied**, as a held note is written;
+    every other note is traced by a dotted line to the note it moves to (moves of a third or less). An added chord
+    takes the inversion and octave nearest the chord before: C, F, G, C reads C · F/C · G/B · C. Sources: "the number
+    one principle in voice leading is that you're trying to move as little as possible… whenever there's a common
+    note… keep" it (transcriptions/youtube/watch-later/065 @14:18–16:58); "lift the top two notes" up a fourth, "drop
+    the bottom two notes" up a fifth, "annotate it… by using arrows" (exercises/081 @03:20, @08:44, @08:14).
+  - **Practise in the Player, by the chord.** One chord: **Blocked, through the inversions** · **Broken, with the
+    metronome** · **In all 12 keys** (piano/067 @12:41, @36:21, @44:19: blocked through the inversions, then broken
+    in eighths at 100–120; piano/519 @09:27: "move up in half steps", or the circle of fifths). Several chords:
+    **From C to F** for each change (up to four), **All 4 chords, looped**, **In all 12 keys** (reference-apps/chordify
+    IMG_4562 "Individual transitions: From E to C♯m", IMG_4566 count-in and loop; watch-later/003 @10:42: learn the
+    chord-to-chord moves). Replaces the three fixed rows.
+  - **Fingering, checked:** triads match Nikolaev's table (books/nikolaev/scales-chords-and-arpeggios-table.pdf p. 1:
+    RH 1-3-5, 1-2-5, 1-3-5; LH 5-3-1, 5-3-1, 5-2-1) and Pianote (watch-later/036 @01:04). **Open:** no source in
+    piano-data gives finger numbers for seventh-chord inversions (Pianote's guide draws them without fingers); ours
+    are the standard 1-2-3-5 / 5-3-2-1 with the second closed up.
+  - **Not taken, with reasons:** a chord quiz (chord-trainer 01) and a levels ladder (ultimate-piano 09) belong to
+    Quiz and Exercises, not this page.
 - **v73 (canvas Version 73): each hand names the chord it plays; the left hand plays Chord or Root; Transpose.**
   Owner: "I like it better, but it Is still not very good. what bass only means and such things, improve it, research
   more. and I want to be able to transpose chords easier". Replaces v72's "Bass only".
@@ -661,3 +683,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: hands toolbar under the staff with Split (Gorshkov), full chord in each hand, checklist, Play all (v71).
 - 2026-11-09: drawn hands with lit fingers and Bass only; the chord and Play centred as one group (v72).
 - 2026-11-09: hands name their chords, left hand Chord | Root, Transpose all by key or half step (v73).
+- 2026-11-09: voice leading drawn (ties, traces, nearest inversion and octave); Practise rows from the transcripts and Chordify (v74).

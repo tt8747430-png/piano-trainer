@@ -345,6 +345,10 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **Research the owner's material first, then one decision (R42, v74):** "research more first and use the piano
+  data and its transcriptions and examples": the staff ties the notes two chords share and traces the ones that
+  move; Practise rows are the teachers' drills (blocked, broken, 12 keys; each change, then the whole). Cite file and
+  timestamp; say what no source gives (seventh-chord inversion fingering).
 - **Name the result, not the mechanism (R42, v73):** "what bass only means": each hand shows the chord it plays
   (G + B♭maj7); the left hand's choice is Chord | Root, the pianist's words.
 - **Transpose is one tap away and moves everything (R42, v73):** "transpose chords easier": the key in the staff's

@@ -175,7 +175,7 @@ function staff(notes, treble, W, fm, cx0, vw) {
   notes.forEach((x) => {
     const dn = dnOf(x), T = onT(x), y = T ? 70 - (dn - 30) * 5 : 150 - (dn - 18) * 5, key = T ? 'T' : 'B';
     const p = prev[key]; const shift = p && dn - p.dn === 1 && !p.shift; const nx = cx + (shift ? 14 : 0);
-    out.push({ T, f: fm[x.m] || '', x: nx, y, ay: y + 5, ax: cx - 22 - (shift ? 0 : 0), acc: ACC[String(x.d)], a1: x.d === -1, a2: x.d === 1, a3: x.d === -2, a4: x.d === 2, c: ROLE[x.deg] || C.ink });
+    out.push({ T, m: x.m, f: fm[x.m] || '', x: nx, y, ay: y + 5, ax: cx - 22 - (shift ? 0 : 0), acc: ACC[String(x.d)], a1: x.d === -1, a2: x.d === 1, a3: x.d === -2, a4: x.d === 2, c: ROLE[x.deg] || C.ink });
     prev[key] = { dn, shift };
     const lo = T ? 28 : 16, hi = T ? 40 : 28;
     if (T) { for (let k = 28; k >= dn; k -= 2) ledg.push({ y: 70 - (k - 30) * 5, x1: cx - 11, x2: nx + 11 }); for (let k = 40; k <= dn; k += 2) ledg.push({ y: 70 - (k - 30) * 5, x1: cx - 11, x2: nx + 11 }); }
@@ -206,7 +206,8 @@ const inv = Math.min(st.inv ?? 0, invN - 1);
 const upper = (() => { const u = upperOf(root, q); RL = rLet; return u; })(), canSplit = !TWO[st.voicing || 'Close'];
 const bassOn = false, hands = st.hand === 'Split' && !canSplit ? 'Both' : (st.hand || 'Right'), fingOn = true, kbShow = st.kbShow ?? true, keys = st.keys || 'Chord';
 const playAs = 'Block', arp = false, dir = 'Up', keyLabel = st.keyLabel || 'Names', names = keyLabel === 'Names', fingKeys = false, treble = false, auto = true;
-const ns = voice(root, q, inv, voicing, hands);
+const oct = st.oct || 0; // an added chord may sit an octave lower, to stay under the hand (voice leading)
+const ns = voice(root, q, inv, voicing, hands).map((x) => Object.assign(x, { m: x.m + 12 * oct }));
 const ms = ns.map((x) => x.m);
 const sym = RN + q.k;
 const bassName = inv > 0 && q.t[inv] ? spell(root, ((q.t[inv][0] % 12) + 12) % 12, q.t[inv][1]).name : '';
@@ -227,25 +228,34 @@ const bass = ns[0];
 const shape = INV[inv] + (inv ? ' · ' + bass.name + ' in the bass' : '') + ' · ' + voicing;
 const R = Rn, L = Ln; const fR = R.map((x) => fm[x.m]), fL = L.map((x) => fm[x.m]);
 // the staff holds the chords the learner has gathered, in order; the current one is the page's chord
-const snap = { rl: rLet, ra: rAcc, q: qi, inv, voicing: st.voicing || 'Close', hand: hands };
+const snap = { rl: rLet, ra: rAcc, q: qi, inv, voicing: st.voicing || 'Close', hand: hands, oct };
 const cur0 = st.cur ?? 0;
 const seq = (st.seq || [snap]).map((c, i) => (i === cur0 ? snap : c));
 const cur = Math.min(cur0, seq.length - 1);
-const symOf = (c) => { RL = c.rl; const rt = rootPc(c.rl, c.ra), qq = QS[c.q]; const vv = VOICINGS.find((v) => v.v === c.voicing).ok(qq) ? 'Close' : c.voicing; const nI = TWO[vv] ? 1 : Math.min(4, vv === 'Shell' ? 3 : (vv.startsWith('Rootless') ? 4 : qq.t.length)); const iv = Math.min(c.inv, nI - 1); const v = voice(rt, qq, iv, vv, c.hand); const bn = iv > 0 && qq.t[iv] ? spell(rt, ((qq.t[iv][0] % 12) + 12) % 12, qq.t[iv][1]).name : ''; const out = { v, iv, vv, s: LET[c.rl] + ACC[String(c.ra)] + qq.k + (bn ? '/' + bn : '') }; RL = rLet; return out; };
+const symOf = (c) => { RL = c.rl; const rt = rootPc(c.rl, c.ra), qq = QS[c.q]; const vv = VOICINGS.find((v) => v.v === c.voicing).ok(qq) ? 'Close' : c.voicing; const nI = TWO[vv] ? 1 : Math.min(4, vv === 'Shell' ? 3 : (vv.startsWith('Rootless') ? 4 : qq.t.length)); const iv = Math.min(c.inv, nI - 1); const v = voice(rt, qq, iv, vv, c.hand).map((x) => Object.assign(x, { m: x.m + 12 * (c.oct || 0) })); const bn = iv > 0 && qq.t[iv] ? spell(rt, ((qq.t[iv][0] % 12) + 12) % 12, qq.t[iv][1]).name : ''; const out = { v, iv, vv, s: LET[c.rl] + ACC[String(c.ra)] + qq.k + (bn ? '/' + bn : '') }; RL = rLet; return out; };
 const SLOT = 78, X0 = 64, SW = Math.max(250, X0 + seq.length * SLOT + 48);
-const sv = (() => { const all = { notes: [], ledg: [], digits: [], cols: [] }; let vt = 4, vbot = 168;
+const sv = (() => { const all = { notes: [], ledg: [], digits: [], cols: [] }, per = []; let vt = 4, vbot = 168;
   seq.forEach((c, i) => { const o = symOf(c); const cx = seq.length === 1 ? 140 : X0 + SLOT * (i + 0.5);
     const R1 = o.v.filter((x) => x.hand === 'R'), L1 = o.v.filter((x) => x.hand === 'L'); const f1 = {};
     fingers(R1, 'R', o.iv, o.vv === 'Close').forEach((f, k) => { f1[R1[k].m] = f; }); fingers(L1, 'L', o.iv, o.vv === 'Close').forEach((f, k) => { f1[L1[k].m] = f; });
-    const one = staff(o.v, treble, SW, fingOn && i === cur ? f1 : {}, cx, SW); all.notes.push(...one.notes); all.ledg.push(...one.ledg); all.digits.push(...one.digits);
+    const one = staff(o.v, treble, SW, fingOn && i === cur ? f1 : {}, cx, SW); per.push(one.notes); all.notes.push(...one.notes); all.ledg.push(...one.ledg); all.digits.push(...one.digits);
     vt = Math.min(vt, one.vt); vbot = Math.max(vbot, one.vbot);
     const on = i === cur; all.cols.push({ s: o.s, on, many: seq.length > 1, x: cx, left: (cx / SW * 100) + '%', fw: on ? 700 : 500, tc: on ? C.ink : C.soft, bg: on && seq.length > 1 ? '#F6E3BC' : 'transparent', aria: o.s + (on ? ', shown above' : ', show it'), pick: () => pickChord(i), canRemove: on && seq.length > 1, remove: () => removeChord() }); });
   const hl = seq.length > 1 ? [{ x: X0 + SLOT * cur + 6, w: SLOT - 12, y: vt + 2, h: vbot - vt - 4, f: '#F6E3BC', o: 0.55 }] : [];
   if (st.playing === 'all' && st.sounding != null && st.sounding !== cur) hl.push({ x: X0 + SLOT * st.sounding + 6, w: SLOT - 12, y: vt + 2, h: vbot - vt - 4, f: '#EDC684', o: 0.5 });
   if (st.playing === 'all' && st.sounding === cur) hl[0] = Object.assign({}, hl[0], { f: '#EDC684', o: 0.7 });
+  // how the chords connect (R42 v74): a note both chords share is tied, as a held note is written; every other note is
+  // traced to the nearest note it moves to. "move as little as possible… whenever there's a common note… keep it"
+  // (transcriptions/youtube/watch-later/065 @14:18); "annotate it… by using arrows" (exercises/081 @08:14)
+  let held = '', moved = '';
+  for (let i = 1; i < per.length; i++) { const A = per[i - 1], B = per[i]; [true, false].forEach((T) => { const a = A.filter((n) => n.T === T), b = B.filter((n) => n.T === T);
+    b.forEach((n) => { const same = a.find((p) => p.m === n.m);
+      if (same) { held += 'M' + (same.x + 10) + ' ' + (same.y + 3) + 'Q' + ((same.x + n.x) / 2) + ' ' + (same.y + 11) + ' ' + (n.x - 10) + ' ' + (n.y + 3); return; }
+      const free = a.filter((p) => !b.some((q) => q.m === p.m)); if (!free.length) return; const from = free.slice().sort((p, q) => Math.abs(p.m - n.m) - Math.abs(q.m - n.m))[0];
+      if (Math.abs(from.m - n.m) <= 4) moved += 'M' + (from.x + 11) + ' ' + from.y + 'L' + (n.x - 11) + ' ' + n.y; }); }); }
   let path = ''; [30, 40, 50, 60, 70, 110, 120, 130, 140, 150].forEach((y) => { path += 'M14 ' + y + 'H' + (SW - 14); });
-  return { vt, vbot, notes: all.notes, ledg: all.ledg, digits: all.digits, cols: all.cols, hl, path, bars: 'M14 30V150M' + (SW - 14) + ' 30V150', vb: '0 ' + vt + ' ' + SW + ' ' + (vbot - vt), maxw: Math.round(SW * (seq.length === 1 ? 1.32 : 1.18)), minw: seq.length > 3 ? (seq.length * 70 + 80) + 'px' : '0' }; })();
-const loadChord = (c) => ({ rl: c.rl, ra: c.ra, q: c.q, inv: c.inv, voicing: c.voicing, hand: c.hand });
+  return { held: held || 'M0 0', moved: moved || 'M0 0', vt, vbot, notes: all.notes, ledg: all.ledg, digits: all.digits, cols: all.cols, hl, path, bars: 'M14 30V150M' + (SW - 14) + ' 30V150', vb: '0 ' + vt + ' ' + SW + ' ' + (vbot - vt), maxw: Math.round(SW * (seq.length === 1 ? 1.32 : 1.18)), minw: seq.length > 3 ? (seq.length * 70 + 80) + 'px' : '0' }; })();
+const loadChord = (c) => ({ rl: c.rl, ra: c.ra, q: c.q, inv: c.inv, voicing: c.voicing, hand: c.hand, oct: c.oct || 0 });
 const soundOf = (c) => sound(symOf(c).v.map((x) => x.m), false, 'Up');
 const pickChord = (i) => { if (i === cur) { soundOf(seq[i]); return; } set(Object.assign({ seq, cur: i, toast: null }, loadChord(seq[i]))); soundOf(seq[i]); };
 const addChord = () => { if (seq.length >= 8) return; const s2 = seq.concat([Object.assign({}, snap, { inv: 0 })]); set({ seq: s2, cur: s2.length - 1, inv: 0, sheet: 'chord', toast: null }); };
@@ -270,10 +280,10 @@ const NEXT = minorKey ? { 0: [3, 4, 5, 6], 1: [4, 0], 2: [5, 3], 3: [4, 0, 6], 4
 const tpc = rootPc(tonic.rl, tonic.ra), curDeg = STEPS.indexOf(((rootPc(seq[cur].rl, seq[cur].ra) - tpc) % 12 + 12) % 12);
 const order = (NEXT[curDeg] || NEXT[0]).concat([0, 1, 2, 3, 4, 5, 6]).filter((d, i, a) => a.indexOf(d) === i && d !== curDeg);
 const keyName = LET[tonic.rl] + ACC[String(tonic.ra)] + (minorKey ? ' minor' : ' major');
-const nearest = (c) => { const prev = symOf(seq[cur]).v.map((x) => x.m), qq = QS[c.q]; const vv = VOICINGS.find((v) => v.v === c.voicing).ok(qq) ? 'Close' : c.voicing;
+const nearest = (c) => { const prev = symOf(seq[seq.length - 1]).v.map((x) => x.m), qq = QS[c.q]; const vv = VOICINGS.find((v) => v.v === c.voicing).ok(qq) ? 'Close' : c.voicing;
   const nI = TWO[vv] ? 1 : Math.min(4, vv === 'Shell' ? 3 : (vv.startsWith('Rootless') ? 4 : qq.t.length)); let best = 0, bd = 1e9;
-  for (let i = 0; i < nI; i++) { RL = c.rl; const v = voice(rootPc(c.rl, c.ra), qq, i, vv, c.hand); const d = v.reduce((t, x) => t + Math.min(...prev.map((p) => Math.abs(p - x.m))), 0); if (d < bd) { bd = d; best = i; } }
-  RL = rLet; return best; };
+  let bo = 0; [0, -1, 1].forEach((o) => { for (let i = 0; i < nI; i++) { RL = c.rl; const v = voice(rootPc(c.rl, c.ra), qq, i, vv, c.hand); const d = v.reduce((t, x) => t + Math.min(...prev.map((p) => Math.abs(p - (x.m + 12 * o)))), 0); if (d < bd) { bd = d; best = i; bo = o; } } });
+  RL = rLet; c.oct = bo; return best; };
 // transpose every chord on the staff at once, to a key or a half step; spelled as the new key spells (R42 v73)
 const SERIFF = "'Iowan Old Style', 'Palatino', Georgia, serif";
 const KEYSP = minorKey ? ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'B♭', 'B'] : ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
@@ -384,6 +394,14 @@ return {
   arpOn: arp, arpBg: arp ? '#F6E3BC' : 'transparent', arpInk: arp ? '#7A5418' : C.ink, openSound: () => set({ sheet: 'sound' }), isSound: sh === 'sound',
   playing: !!st.playing, notPlaying: !st.playing, playLabel: st.playing ? 'Stop' : 'Play', togglePlay: () => st.playing ? set({ playing: false }) : play(false),
   playing: !!st.playing, notPlaying: !st.playing, playWord: scope === 'All' ? 'Play all' : (playMode === 'Block' ? 'Play chord' : 'Arpeggiate'),
+  // what teachers drill (R42 v74): blocked through the inversions, then broken with the metronome, then every key
+  // (piano/067 @12:41, @36:21; piano/519 @09:27); with several chords, each change on its own, then the whole
+  // progression (reference-apps/chordify IMG_4562 "Individual transitions: From E to C♯m")
+  practiseT: seq.length > 1 ? 'Practise these chords in the Player' : 'Practise ' + sym + ' in the Player',
+  practise: seq.length > 1
+    ? seq.slice(1).map((c, i) => ({ a: 'From ' + symOf(seq[i]).s + ' to ' + symOf(c).s, b: 'the change alone, looped, with a count-in' })).slice(0, 4)
+        .concat([{ a: 'All ' + seq.length + ' chords, looped', b: 'with the metronome' }, { a: 'In all 12 keys', b: 'up by half steps, or round the circle of fifths' }])
+    : [{ a: 'Blocked, through the inversions', b: (q.t.length > 3 ? 'root, 1st, 2nd, 3rd' : 'root, 1st, 2nd') + ' and back' }, { a: 'Broken, with the metronome', b: 'eighth notes, from 100 beats a minute' }, { a: 'In all 12 keys', b: 'up by half steps, or round the circle of fifths' }],
   addChord, undoRemove, playAll, nextList, keyTiles, tKey: KEYSP[tpc] + (minorKey ? ' minor' : ' major'), openTr: () => set({ sheet: 'tr' }), isTr: sh === 'tr', trDown: () => transposeTo((tpc + 11) % 12), trUp: () => transposeTo((tpc + 1) % 12), keyName, openNext: () => set({ sheet: 'next' }), isNext: sh === 'next', hasSeq: seq.length > 1, canAdd: seq.length < 8, seqCount: seq.length, toastOn: !!st.toast, toastT: st.toast ? st.toast.t : '',
   playMain: () => st.playing ? stopAll() : (scope === 'All' ? playSeq() : play(playMode !== 'Block', playMode === 'UpDown' ? 'Up and down' : 'Up')),
   scopeList: [['All', 'All ' + seq.length + ' chords, in order'], ['One', 'Only ' + sym + slash]].map(([v, l]) => ({ l, on: v === scope, mark: v === scope ? '✓' : '', pick: () => { set({ scope: v, sheet: null }); if (v === 'All') playSeq(); else play(playMode !== 'Block', playMode === 'UpDown' ? 'Up and down' : 'Up'); } })), openPlayAs: () => set({ sheet: st.sheet === 'playAs' ? null : 'playAs' }), isPlayAs: sh === 'playAs',
@@ -417,9 +435,8 @@ def VIEWPILL(labelled):
 def PRACTISE(player):
     # Practise in the Player, on the page: three ways to drill this chord, each opening the Player
     PLAYMINI = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor"></path></svg>'
-    rows = [('Arpeggio, up and down', 'with the metronome'), ('Inversions, one after another', 'root, 1st, 2nd, 3rd'), ('Chromatic walk', 'the same chord on every root')]
-    r = ''.join(f'<a href="{player}" style="min-height: 60px; padding: 8px 14px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}"><span style="flex: none; width: 36px; height: 36px; border-radius: 18px; background: {ACCENT}; display: flex; align-items: center; justify-content: center">{PLAYMINI}</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{a}</span><span style="font-size: 13px; color: {SOFT}">{b}</span></span>{CHEV_R}</a>' for a, b in rows)
-    return f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px">{CAPS("Practise {{qSym}} in the Player")}<div style="border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{r}</div></section>'
+    r = f'<sc-for list="{{{{practise}}}}" as="p" hint-placeholder-count="3"><a href="{player}" style="min-height: 60px; padding: 8px 14px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}"><span style="flex: none; width: 36px; height: 36px; border-radius: 18px; background: {ACCENT}; display: flex; align-items: center; justify-content: center">{PLAYMINI}</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{p.a}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{p.b}}}}</span></span>{CHEV_R}</a></sc-for>'
+    return f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px">{CAPS("{{practiseT}}")}<div style="border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{r}</div></section>'
 
 def TITLEBLOCK(size):
     # the name as a lead sheet writes it; what it is; its inversions side by side, one tap each (position over the
@@ -441,6 +458,7 @@ def STAFFSVG(w):
 <path d="{{{{sv.path}}}}" stroke="{INK}" stroke-width="0.9"></path>
 <path d="{{{{sv.bars}}}}" stroke="{INK}" stroke-width="1"></path>
 <text x="18" y="69" font-family="Noto Music" font-size="42" fill="{INK}">𝄞</text><text x="18" y="141" font-family="Noto Music" font-size="34" fill="{INK}">𝄢</text>
+<path d="{{{{sv.moved}}}}" fill="none" stroke="{SOFT}" stroke-width="1" stroke-dasharray="2 2.5" stroke-linecap="round"></path><path d="{{{{sv.held}}}}" fill="none" stroke="{INK}" stroke-width="1.3" stroke-linecap="round"></path>
 <sc-for list="{{{{sv.ledg}}}}" as="l" hint-placeholder-count="1"><path d="M{{{{l.x1}}}} {{{{l.y}}}}H{{{{l.x2}}}}" stroke="{INK}" stroke-width="1.1"></path></sc-for>
 <sc-for list="{{{{sv.notes}}}}" as="n" hint-placeholder-count="4"><ellipse cx="{{{{n.x}}}}" cy="{{{{n.y}}}}" rx="7.2" ry="5" transform="rotate(-18 {{{{n.x}}}} {{{{n.y}}}})" fill="{{{{n.c}}}}" stroke="{INK}" stroke-width="1.6"></ellipse><sc-if value="{{{{n.a1}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">♭</text></sc-if><sc-if value="{{{{n.a2}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">♯</text></sc-if><sc-if value="{{{{n.a3}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">𝄫</text></sc-if><sc-if value="{{{{n.a4}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{n.ax}}}}" y="{{{{n.ay}}}}" font-family="Noto Music" font-size="22" fill="{INK}">𝄪</text></sc-if></sc-for>
 <sc-for list="{{{{sv.digits}}}}" as="d" hint-placeholder-count="4"><sc-if value="{{{{d.f1}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">1</text></sc-if><sc-if value="{{{{d.f2}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">2</text></sc-if><sc-if value="{{{{d.f3}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">3</text></sc-if><sc-if value="{{{{d.f4}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">4</text></sc-if><sc-if value="{{{{d.f5}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{d.x}}}}" y="{{{{d.y}}}}" font-family="Instrument Sans, system-ui, sans-serif" font-size="11" font-weight="700" font-style="italic" fill="{INK}" text-anchor="start">5</text></sc-if></sc-for>
