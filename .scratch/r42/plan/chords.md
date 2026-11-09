@@ -5,6 +5,23 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v77 (canvas Version 77): the hands are at the keys.** Owner, of v76's separate hand drawings: "I dont like it,
+  be creative and think outside of the box". Replaces the hand pictures under the staff (v72–v76); v76's numeral
+  rules (upright, bold, in a fingertip circle) stand.
+  - **One picture instead of two:** under the page's keyboard lie the hands, drawn flat from above; every playing
+    finger reaches to the key it plays and ends in a circle with its number, filled in that key's colour; resting
+    fingers stay curled at the palm; **L.H.** / **R.H.** on the palm. Change the chord, the inversion or the hand and
+    the fingers move to their new keys. The learner sees which finger goes on which key, not a hand beside a keyboard
+    to be matched by eye.
+  - **Sources:** flowkey and the courses app film the hands on the keys with the note over the lit key
+    (piano-data/reference-apps/flowkey/08-player-hands-menu.png, courses-app/03-playing-with-both-hands/01.png);
+    Pianote's overhead photo puts the numerals at the fingertips on the keys; Hoffman repeats the fingertip circles
+    on the keys; Vita Piano draws the fingers over the keys they play (web-references/new_apps). Every chord source
+    read puts fingering at the keys (Pianote, Yamaha, pianochord.org).
+  - **The standing rule holds:** no finger numbers printed on or under keys; the number is on the fingertip, which
+    sits on the key.
+  - **Under the staff** only the two hand toggles remain, each naming its chord (Left hand **C**, Right hand **Em**),
+    and Chord | Root. On a laptop the keyboard is 180 tall with the hands below it.
 - **v76 (canvas Version 76): finger numbers as the teaching sources draw them.** Owner: "I dont like this, make proper
   implementation of the finger numbers colors and research more for how to do it", then "but you didn't research
   enough". Replaces v75's badges and floating italic numbers.
@@ -714,3 +731,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: voice leading drawn (ties, traces, nearest inversion and octave); Practise rows from the transcripts and Chordify (v74).
 - 2026-11-09: proper 2D hand outlines traced from the app's hand models; note badges on the fingertips (v75).
 - 2026-11-09: finger numbers upright in fingertip circles, filled in the note's colour where the finger plays; from Faber, Hoffman, Pianote and others (v76).
+- 2026-11-09: the hands drawn at the keyboard, each playing finger reaching its key (v77).

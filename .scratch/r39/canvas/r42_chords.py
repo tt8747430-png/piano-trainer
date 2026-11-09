@@ -361,6 +361,28 @@ return {
   // the hands sit beside their staves: R.H. by the treble, L.H. by the bass; the last one on only plays
   // the hands drawn as they lie on the keys, each finger lit in the colour of the note it plays, its name on the
   // fingertip and its number below; tap a hand to add or drop it; Bass only leaves the root to the left hand (R42 v72)
+  // The hands at the keys (R42 v77), as flowkey and the courses app show them (piano-data/reference-apps/flowkey/08,
+  // courses-app/03): each hand lies under the keyboard and every playing finger reaches to its key, its number in a
+  // circle on the fingertip in the note's colour; resting fingers stay curled at the palm.
+  kh: (() => { const KW = ''' + str(W) + r''', KH = ''' + str(KH) + r'''; const wsN = []; for (let m = lo; m <= hi; m++) if (NAT.includes(m % 12)) wsN.push(m);
+    const w = KW / wsN.length, sc = Math.max(1, Math.min(1.6, w / 27)), HS = Math.round(96 * sc), H = KH + HS;
+    const keyX = (m) => (NAT.includes(m % 12) ? (wsN.indexOf(m) + 0.5) * w : (wsN.indexOf(m - 1) + 1) * w);
+    const keyY = (m) => (NAT.includes(m % 12) ? KH - 44 : Math.round(KH * 0.62) - 32);
+    const OFF = [[-46, 4], [-23, -20], [-4, -27], [15, -22], [32, -11]];
+    const out = { h: H, hs: HS, vb: '0 0 ' + KW + ' ' + H, edge: '', skin: '', thumbE: '', palms: [], tips: [] };
+    ['L', 'R'].forEach((k) => { const on = k === 'L' ? hands !== 'Right' : hands !== 'Left'; if (!on) return;
+      const byF = {}; ns.filter((x) => x.hand === k).forEach((x) => { const f = fm[x.m]; if (f && !byF[f]) byF[f] = x; });
+      const used = Object.keys(byF).map(Number); if (!used.length) return; const xs = used.map((f) => keyX(byF[f].m)); const sp = Math.max(1, Math.min(1.55, (Math.max(...xs) - Math.min(...xs)) / (120 * sc)));
+      const off = OFF.map(([x, y]) => [(k === 'R' ? x : -x) * sc * sp, y * sc]);
+      let pcx = used.reduce((t, f) => t + keyX(byF[f].m) - off[f - 1][0], 0) / used.length; pcx = Math.max(52 * sc, Math.min(KW - 52 * sc, pcx)); const pcy = H - 38 * sc;
+      for (let f = 1; f <= 5; f++) { const kx = pcx + off[f - 1][0], ky = pcy + off[f - 1][1], x = byF[f];
+        const tx = x ? keyX(x.m) : kx + off[f - 1][0] * 0.22, ty = x ? keyY(x.m) : ky - (f === 1 ? 20 : 30) * sc;
+        const d = 'M' + kx.toFixed(1) + ' ' + ky.toFixed(1) + 'Q' + (tx + (kx - tx) * 0.22).toFixed(1) + ' ' + ((ky + ty) / 2).toFixed(1) + ' ' + tx.toFixed(1) + ' ' + ty.toFixed(1);
+        out.edge += d; out.skin += d;
+        out.tips.push({ x: tx, y: ty, ty: ty + 4.5, r: x ? 10.5 : 0, c: x ? (ROLE[x.deg] || C.accent) : 'transparent', f1: !!x && f === 1, f2: !!x && f === 2, f3: !!x && f === 3, f4: !!x && f === 4, f5: !!x && f === 5 }); }
+      out.palms.push({ cx: pcx, cy: pcy + 10 * sc, rx: 46 * sc * sp, ry: 36 * sc, wx: pcx - 30 * sc * sp, ww: 60 * sc * sp, wy: pcy + 22 * sc, wh: 60 * sc, lx: pcx, ly: H - 8, isL: k === 'L', isR: k === 'R' }); });
+    out.fw = (19 * sc).toFixed(1); out.ew = (19 * sc + 3).toFixed(1); out.edge = out.edge || 'M0 0'; out.skin = out.skin || 'M0 0';
+    return out; })(),
   handPics: ['L', 'R'].map((k) => { const on = k === 'L' ? hands !== 'Right' : hands !== 'Left';
     const byF = {}; ns.filter((x) => x.hand === k).forEach((x) => { const f = fm[x.m]; if (f && !byF[f]) byF[f] = x; });
     // Fingering as the teaching sources draw it (R42 v76): hands from above, thumbs inward; an upright bold numeral in a
@@ -379,7 +401,7 @@ return {
     const isSplit = hands === 'Split';
     const plays = !on ? 'Not playing' : (isSplit ? (k === 'L' ? RN : (upper || sym)) : sym + slash);
     const lhOpts = k === 'L' && on && hands !== 'Left' && canSplit ? [['Chord', !isSplit], ['Root', isSplit]].map(([l, o]) => ({ l, on: o, bg: o ? '#FEFDFB' : 'transparent', sh: o ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: o ? 700 : 500, pick: () => change({ hand: l === 'Root' ? 'Split' : 'Both', bassOnly: l === 'Root' }) })) : [];
-    return { t: k === 'L' ? 'Left hand' : 'Right hand', on, fs, pick, op: on ? 1 : 0.42, isL: k === 'L', isR: k === 'R', hh: HH.toFixed(1) + 'px', pl: k === 'R' ? '22px' : '0px', palm: on ? '#F3ECE1' : '#FEFDFB', pr: '0 0 0 1.5px ' + C.line,
+    return { t: k === 'L' ? 'Left hand' : 'Right hand', on, fs, pick, op: 1, isL: k === 'L', isR: k === 'R', cbg: on ? '#FBF1DD' : 'transparent', cring: on ? '0 0 0 2px #B07A2A' : '0 0 0 1.5px ' + C.line, pl: k === 'R' ? '22px' : '0px', palm: on ? '#F3ECE1' : '#FEFDFB', pr: '0 0 0 1.5px ' + C.line,
       lw: on ? 700 : 500, lc: on ? C.ink : C.soft, plays, pc: on ? C.ink : C.soft, pf: on ? SERIFF : 'inherit', ps: on ? '18px' : '14px', pw: on ? 700 : 500, lhOpts, hasOpts: lhOpts.length > 0, noOpts: !lhOpts.length, canBass: false, bBg: isSplit ? '#F6E3BC' : 'transparent', bRing: isSplit ? 'none' : '0 0 0 1.5px ' + C.line, bassT: isSplit ? '✓ Bass only' : 'Bass only', bassOn: isSplit,
       bassPick: () => (isSplit ? change({ hand: 'Both', bassOnly: false }) : change({ hand: 'Split', bassOnly: true })),
       aria: (k === 'L' ? 'Left hand' : 'Right hand') + (on ? ', plays ' + fs.filter((g) => g.n).map((g) => g.n + ' with finger ' + g.f).join(', ') : ', not playing; tap to add it') }; }),
@@ -425,6 +447,17 @@ return {
 
 def KEYBAND(h):
     return f'<div style="position: relative; flex: none; width: 100%; height: {h}px; overflow: hidden; background: {LINE}"><sc-for list="{{{{kb.whites}}}}" as="k" hint-placeholder-count="14"><span style="position: absolute; left: {{{{k.left}}}}px; top: 0; width: {{{{k.w}}}}px; height: {{{{k.h}}}}px; box-sizing: border-box; padding-bottom: 10px; border-right: 1px solid rgba(51,41,33,.16); background: {{{{k.bg}}}}; color: {{{{k.ink}}}}; font-size: 12px; font-weight: {{{{k.fw}}}}; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px"><span style="font-size: 14px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums">{{{{k.fing}}}}</span>{{{{k.label}}}}</span></sc-for><sc-for list="{{{{kb.blacks}}}}" as="k" hint-placeholder-count="10"><span style="position: absolute; left: {{{{k.left}}}}px; top: 0; width: {{{{k.w}}}}px; height: {{{{k.h}}}}px; box-sizing: border-box; padding-bottom: 6px; border-radius: 0 0 5px 5px; background: {{{{k.bg}}}}; color: {INK}; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px"><span style="font-size: 12px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums">{{{{k.fing}}}}</span>{{{{k.label}}}}</span></sc-for><div style="position: absolute; left: 0; right: 0; top: 0; height: 4px; background: #7C302C"></div><div style="position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: {LINE}"></div></div>'
+
+def KEYHANDS(h):
+    D = lambda n: f'<sc-if value="{{{{t.f{n}}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{t.x}}}}" y="{{{{t.ty}}}}" text-anchor="middle" font-family="Instrument Sans, system-ui, sans-serif" font-size="13" font-weight="800" fill="{INK}">{n}</text></sc-if>'
+    return (f'<div style="position: relative; flex: none; width: 100%">{KEYBAND(h)}<div aria-hidden="true" style="height: {{{{kh.hs}}}}px"></div>'
+      f'<svg viewBox="{{{{kh.vb}}}}" role="img" aria-label="The hands on the keys" style="position: absolute; left: 0; top: 0; width: 100%; height: {{{{kh.h}}}}px; pointer-events: none; overflow: hidden">'
+      f'<sc-for list="{{{{kh.palms}}}}" as="p" hint-placeholder-count="1"><rect x="{{{{p.wx}}}}" y="{{{{p.wy}}}}" width="{{{{p.ww}}}}" height="{{{{p.wh}}}}" fill="#F6ECDF" stroke="{INK}" stroke-width="1.5"></rect></sc-for>'
+      f'<path d="{{{{kh.edge}}}}" fill="none" stroke="{INK}" stroke-width="{{{{kh.ew}}}}" stroke-linecap="round"></path>'
+      f'<sc-for list="{{{{kh.palms}}}}" as="p" hint-placeholder-count="1"><ellipse cx="{{{{p.cx}}}}" cy="{{{{p.cy}}}}" rx="{{{{p.rx}}}}" ry="{{{{p.ry}}}}" fill="#F6ECDF" stroke="{INK}" stroke-width="1.5"></ellipse></sc-for>'
+      f'<path d="{{{{kh.skin}}}}" fill="none" stroke="#F6ECDF" stroke-width="{{{{kh.fw}}}}" stroke-linecap="round"></path>'
+      f'<sc-for list="{{{{kh.palms}}}}" as="p" hint-placeholder-count="1"><sc-if value="{{{{p.isL}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{p.lx}}}}" y="{{{{p.ly}}}}" text-anchor="middle" font-family="Instrument Sans, system-ui, sans-serif" font-size="12" font-weight="700" fill="{SOFT}">L.H.</text></sc-if><sc-if value="{{{{p.isR}}}}" hint-placeholder-val="{{{{true}}}}"><text x="{{{{p.lx}}}}" y="{{{{p.ly}}}}" text-anchor="middle" font-family="Instrument Sans, system-ui, sans-serif" font-size="12" font-weight="700" fill="{SOFT}">R.H.</text></sc-if></sc-for>'
+      f'<sc-for list="{{{{kh.tips}}}}" as="t" hint-placeholder-count="5"><circle cx="{{{{t.x}}}}" cy="{{{{t.y}}}}" r="{{{{t.r}}}}" fill="{{{{t.c}}}}" stroke="{INK}" stroke-width="1.5"></circle>{D(1)}{D(2)}{D(3)}{D(4)}{D(5)}</sc-for></svg></div>')
 
 def MINIKEYS(w):
     return f'<div style="position: relative; width: {w}px; max-width: 100%; height: 64px; border-radius: 4px; overflow: hidden; background: {LINE}; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{c.kb.whites}}}}" as="k" hint-placeholder-count="14"><span style="position: absolute; left: {{{{k.left}}}}px; top: 0; width: {{{{k.w}}}}px; height: 64px; box-sizing: border-box; border-right: 1px solid rgba(51,41,33,.14); background: {{{{k.bg}}}}"></span></sc-for><sc-for list="{{{{c.kb.blacks}}}}" as="k" hint-placeholder-count="10"><span style="position: absolute; left: {{{{k.left}}}}px; top: 0; width: {{{{k.w}}}}px; height: {{{{k.h}}}}px; border-radius: 0 0 3px 3px; background: {{{{k.bg}}}}"></span></sc-for></div>'
@@ -481,12 +514,8 @@ def VIEWBODY(staff_w, inv_cols, mini_w, side=False):
 
 HANDL = HANDI.replace('<svg ', '<svg style="transform: scaleX(-1)" ', 1)
 HART = json.load(open('/home/user/piano-trainer/.scratch/r39/canvas/hands_art.json'))  # the app's hand models (src/widgets/piano-hands/assets, MIT), rendered from above
-HANDPICS = ('<div role="group" aria-label="Hands" style="display: flex; justify-content: center; align-items: flex-start; gap: 2px; padding-top: 2px"><sc-for list="{{handPics}}" as="h" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; align-items: center; gap: 6px">'
-  '<button type="button" aria-pressed="{{h.on}}" aria-label="{{h.aria}}" onClick="{{h.pick}}" style="position: relative; width: 168px; height: 186px; overflow: hidden; border: 0; padding: 0; background: transparent; opacity: {{h.op}}; -webkit-mask-image: linear-gradient(#000 84%, transparent); mask-image: linear-gradient(#000 84%, transparent)">'
-  '<sc-if value="{{h.isL}}" hint-placeholder-val="{{true}}"><img alt="" src="' + HART['L']['uri'] + '" style="position: absolute; left: 14px; top: 20px; width: 140px; height: auto; display: block"></sc-if><sc-if value="{{h.isR}}" hint-placeholder-val="{{false}}"><img alt="" src="' + HART['R']['uri'] + '" style="position: absolute; left: 14px; top: 20px; width: 140px; height: auto; display: block"></sc-if>'
-  '<sc-if value="{{h.isL}}" hint-placeholder-val="{{true}}"><img alt="" src="' + HART['L']['line'] + '" style="position: absolute; left: 14px; top: 20px; width: 140px; height: auto; display: block"></sc-if><sc-if value="{{h.isR}}" hint-placeholder-val="{{false}}"><img alt="" src="' + HART['R']['line'] + '" style="position: absolute; left: 14px; top: 20px; width: 140px; height: auto; display: block"></sc-if>'
-  '<sc-for list="{{h.fs}}" as="g" hint-placeholder-count="5"><span style="position: absolute; left: {{g.nx}}; top: {{g.ny}}; width: 20px; height: 20px; box-sizing: border-box; border-radius: 10px; background: {{g.bg}}; box-shadow: {{g.ring}}; display: flex; align-items: center; justify-content: center; font-size: 12.5px; line-height: 1; font-weight: {{g.dw}}; color: {{g.dc}}; font-variant-numeric: tabular-nums">{{g.f}}</span><span style="position: absolute; left: {{g.lx}}; top: {{g.ly}}; width: 28px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: ' + INK + '; white-space: nowrap">{{g.n}}</span></sc-for></button>'
-  '<span style="display: flex; flex-direction: column; align-items: center; gap: 1px"><span style="font-size: 13px; font-weight: 500; color: ' + SOFT + '">{{h.t}}</span><span style="font-family: {{h.pf}}; font-size: {{h.ps}}; font-weight: {{h.pw}}; color: {{h.pc}}; white-space: nowrap">{{h.plays}}</span></span>'
+HANDPICS = ('<div role="group" aria-label="Hands" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; width: 100%; max-width: 420px; align-self: center; align-items: start"><sc-for list="{{handPics}}" as="h" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; align-items: center; gap: 8px">'
+  '<button type="button" aria-pressed="{{h.on}}" aria-label="{{h.aria}}" onClick="{{h.pick}}" style="width: 100%; min-height: 60px; border: 0; border-radius: 14px; background: {{h.cbg}}; box-shadow: {{h.cring}}; padding: 6px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; font: inherit"><span style="font-size: 13px; font-weight: 500; color: ' + SOFT + '">{{h.t}}</span><span style="font-family: {{h.pf}}; font-size: {{h.ps}}; font-weight: {{h.pw}}; color: {{h.pc}}; white-space: nowrap">{{h.plays}}</span></button>'
   '<sc-if value="{{h.hasOpts}}" hint-placeholder-val="{{false}}"><div role="radiogroup" aria-label="The left hand plays" style="display: flex; gap: 2px; padding: 3px; border-radius: 17px; background: ' + FILL + '"><sc-for list="{{h.lhOpts}}" as="o" hint-placeholder-count="2"><button type="button" role="radio" aria-checked="{{o.on}}" onClick="{{o.pick}}" style="height: 30px; padding: 0 14px; border: 0; border-radius: 15px; background: {{o.bg}}; box-shadow: {{o.sh}}; color: ' + INK + '; font: inherit; font-size: 13px; font-weight: {{o.fw}}">{{o.l}}</button></sc-for></div></sc-if>'
   '<sc-if value="{{h.canBass}}" hint-placeholder-val="{{false}}"><button type="button" aria-pressed="{{h.bassOn}}" onClick="{{h.bassPick}}" style="height: 34px; padding: 0 14px; border: 0; border-radius: 17px; background: {{h.bBg}}; box-shadow: {{h.bRing}}; color: ' + INK + '; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap">{{h.bassT}}</button></sc-if></div></sc-for></div>')
 # the hands, a toolbar under the staff: each a symbol over its name; Split shows the two chords it makes (R42 v71)
@@ -576,7 +605,7 @@ def ch_js(D, W, KH, minOct, mini_w):
 
 # ── phone ──
 PH_BODY = f'''<div style="flex: none; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px">{GLASSBTN('Back to Practice', CHEV_L, href='Main.dc.html')}<h1 style="margin: 0; font-size: 17px; font-weight: 600">Chords</h1>{GLASSBTN('Keyboard', KEYSI, 'openKeys')}</div>
-<sc-if value="{{{{kbShow}}}}" hint-placeholder-val="{{{{true}}}}">{KEYBAND(168)}</sc-if>
+<sc-if value="{{{{kbShow}}}}" hint-placeholder-val="{{{{true}}}}">{KEYHANDS(168)}</sc-if>
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px 120px; display: flex; flex-direction: column; gap: 16px">{TITLEBLOCK(44)}{VIEWBODY(330, 2, 150)}{PRACTISE('Player.dc.html')}</main>
 {DOCK_PHONE}'''
 phone('Chords', 'Chords', PH_BODY, ch_js({'root': 0, 'q': 12}, 402, 168, 2, 150), SHEETS_PHONE('Player.dc.html'))
@@ -584,7 +613,7 @@ phone('Chords', 'Chords', PH_BODY, ch_js({'root': 0, 'q': 12}, 402, 168, 2, 150)
 # ── laptop: the whole screen, as the Player's ──
 LP_INNER = f'''<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: flex; flex-direction: column">
 <div style="flex: none; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px"><div style="display: flex; align-items: center; gap: 14px">{GLASSBTN('Back to Practice', CHEV_L, href='Laptop.dc.html')}<h1 style="margin: 0; font-size: 18px; font-weight: 600">Chords</h1></div>{GLASSBTN('Keyboard', KEYSI, 'openKeys')}</div>
-<sc-if value="{{{{kbShow}}}}" hint-placeholder-val="{{{{true}}}}">{KEYBAND(220)}</sc-if>
+<sc-if value="{{{{kbShow}}}}" hint-placeholder-val="{{{{true}}}}">{KEYHANDS(180)}</sc-if>
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 26px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 820px; max-width: 100%; display: flex; flex-direction: column; gap: 20px">{TITLEBLOCK(56)}{VIEWBODY(440, 4, 170, True)}{PRACTISE('PlayerLaptop.dc.html')}</div></main>
 {DOCK_LAPTOP}
 {POPS_LAPTOP('PlayerLaptop.dc.html')}
@@ -595,7 +624,7 @@ open(OUT + 'ChordsLaptop.dc.html', 'w').write(HEAD % 'Chords, laptop' + LAPFRAME
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{{"$preview":{{"width":2143,"height":1299}}}}'>
 {PRE}
-{ch_js({'root': 3, 'q': 14}, 1710, 220, 4, 170)}
+{ch_js({'root': 3, 'q': 14}, 1710, 180, 4, 170)}
 </script>
 </body>
 </html>

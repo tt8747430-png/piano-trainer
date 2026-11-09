@@ -345,6 +345,10 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **Hands belong at the keys (R42, v77):** "I dont like it, be creative and think outside of the box", of a hand
+  diagram beside the staff, however correct its numerals: the hands lie under the keyboard and each finger reaches
+  its key (flowkey, the courses app). When a correct drawing is still rejected, change where the thing lives, not
+  its styling.
 - **Research until the convention is known, then draw it (R42, v76):** "make proper implementation of the finger
   numbers colors and research more", "you didn't research enough": one saved page was not research. Finger numbers
   are upright bold numerals in fingertip circles (Hoffman, Faber, Pianote), never italic, never floating badges.
