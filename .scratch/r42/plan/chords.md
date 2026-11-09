@@ -12,6 +12,9 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     drops its ⌃ to fit a phone (a glass capsule with the chord on it reads as a button; it opens the Chord sheet, as
     the name does). The arpeggio label is **Arpeggiate**, the musician's verb, so it fits as "Play chord" does.
   - The chord is chosen in both places again, as v28 ruled: the name where the eye is, the bar where the thumb is.
+  - v66, owner: "but now the names get cut off". No name is cut: the chord button's type steps down with the
+    name's length (15, 13.5, 12 px; the longest, C♯m(maj7), is 65 px at 12 against a 93 px space), Play is 176 wide
+    with its ⌄ 40, so "Play chord" and "Arpeggiate" both fit whole. Measured in the runtime.
 - **v63 (canvas Version 63; the chord button returned in v65): one quiet Play, centred; the chord is chosen from its name.** Owner: "the play button is
   too appealing and I would like it to be centered , but dotn know what to make with the chords button".
   - The bar is one capsule centred at the bottom, **▶ Play chord | ⌄**, 216 wide, in its honey tint (v64: owner "no
@@ -510,3 +513,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: Play alone, centred, plain glass; the chord chosen from its name only (v63).
 - 2026-11-09: Play's honey tint restored, still centred (v64).
 - 2026-11-09: the chord button back, left of the centred Play; "Arpeggiate" (v65).
+- 2026-11-09: bar names never cut: chord type steps with length, Play 176 (v66).
