@@ -3,15 +3,15 @@
 The owner's source material for Piano Trainer: the books its courses follow, reference apps' screens, scores and
 links. Nothing here ships with the app; content is written from it into `src/entities/*/content/`.
 
-| Folder                              | What it holds                                                                                                                        |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| [`method-books/`](method-books)     | The method books whose lessons, patterns and songs the app teaches as courses                                                        |
-| [`courses/`](courses)               | Courses taken as sheets: Vasily Gorshkov's accompaniment course, lesson by lesson                                                    |
-| [`books/`](books)                   | E-books and cheat sheets, by author or publisher                                                                                     |
-| [`scores/`](scores)                 | Sheet music; church songs under `hymns/`, by kind and (arrangements) by meter                                                        |
-| [`reference-apps/`](reference-apps) | Screenshots of other piano apps (and of this one), by app and by screen, numbered in viewing order                                   |
-| [`web-references/`](web-references) | Saved links (`links/`, Pianote's under `pianote/`), images (`images/`) and screenshots of web pages (`screenshots/`, by topic)       |
-| [`transcriptions/`](transcriptions) | Transcripts of the owner's piano videos on YouTube, one file per video, by playlist ([`youtube/`](transcriptions/youtube/README.md)) |
+| Folder                              | What it holds                                                                                                                                                               |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`method-books/`](method-books)     | The method books whose lessons, patterns and songs the app teaches as courses                                                                                               |
+| [`courses/`](courses)               | Courses taken as sheets: Vasily Gorshkov's accompaniment course, lesson by lesson                                                                                           |
+| [`books/`](books)                   | E-books and cheat sheets, by author or publisher                                                                                                                            |
+| [`scores/`](scores)                 | Sheet music; church songs under `hymns/`, by kind and (arrangements) by meter                                                                                               |
+| [`reference-apps/`](reference-apps) | Screenshots of other piano apps (and of this one), by app and by screen, numbered in viewing order                                                                          |
+| [`web-references/`](web-references) | Saved links (`links/`, Pianote's under `pianote/`), images (`images/`) and screenshots of web pages (`screenshots/`, by topic)                                              |
+| [`transcriptions/`](transcriptions) | Transcripts of the owner's piano videos on YouTube, one file per video, by playlist ([`youtube/`](transcriptions/youtube/README.md), made by `scripts/youtube-transcripts`) |
 
 ## Method books
 
