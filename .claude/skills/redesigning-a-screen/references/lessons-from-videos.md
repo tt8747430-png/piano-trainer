@@ -344,6 +344,28 @@ A tool for research, not a design lesson. Kept for how this repo's sessions fetc
 - **Not used:** Interact (logins, clicking through flows) has no place in reading public help pages; installing
   the CLI skill or adding an API key is the owner's decision.
 
+## Kevin (AI and tech explainers): Matt Pocock's agent skills, v1.3 (transcript)
+
+How the work is run, not how a screen looks. The repo already carries most of these skills (`grilling`, `prototype`,
+`tdd`, `code-review`, `domain-modeling`, `research`).
+
+- **The agent fills every gap with a guess.** One sentence from the owner ("improve the hands") hides a tree of
+  decisions; a longer prompt only holds the ones already thought of. Facts are the agent's to look up; decisions are
+  the owner's.
+- **Grill before building, when rounds keep bouncing.** After two rejections of the same part, stop drawing: put the
+  open decisions to the owner with a recommended answer each, the parent decision first, and build only when they
+  are settled. This repo's `grilling` skill asks one at a time.
+- **What cannot be settled by talking gets a prototype:** a few versions that look nothing alike, to click and pick
+  from; the canvas is that, but with the variants side by side, not one guess per round.
+- **Keep the glossary:** one line per term and the words to avoid (`CLAUDE.md`'s "Words in code", the avoid-words
+  test). "Wait, what?" means say it again plainly.
+- **Slices, a fresh head each; review at another desk:** a reviewer that never saw the work reads it against the spec
+  and against the standards.
+- **Retro before the chat is cleared:** what the agent struggled with becomes a check where a machine can spot it,
+  an instruction where it is a judgment; the owner picks which to keep (the feedback log is this).
+- **Not taken:** `implement spec` (one agent per ticket) against the owner's rule to work inline; nothing here is
+  installed beyond what the repo has.
+
 ## Rulings the videos led to
 
 - **Undo instead of asking** (owner: "adopt also this"): Kole Jain's act first and offer Undo replaces "a loss asks

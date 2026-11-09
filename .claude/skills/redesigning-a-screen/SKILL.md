@@ -141,6 +141,7 @@ source; installing one is the owner's decision.
 | benjitaylor/skills `stageshow` (MIT) | the five ways a canvas fails, the exacting designer's look |
 | benjitaylor/agentation (PolyForm Shield) | not adopted: the owner's screenshots do its job |
 | A Firecrawl video and its scrape skill (transcript) | search then scrape for research when the connector is attached; `proxy: "basic"`, never past a bot check; Interact not used |
+| Kevin: Matt Pocock's agent skills v1.3 (transcript) | grill the owner on the open decisions after two rejections of a part, recommendation with each; variants side by side for what talk cannot settle; retro into checks |
 
 ## Reporting
 
