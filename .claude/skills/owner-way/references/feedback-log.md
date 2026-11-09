@@ -321,6 +321,9 @@ owner's, typos fixed.
 - **No filled button inside a bar; groups of glass, one tinted primary (R42, v54):** "I dont like how this yellow
   button looks inside this toolbar. research the apple guidelines". Apple iOS 26: grouped glass items, the one
   primary action prominent in its own group, trailing.
+- **A heading is text, not chips and pills (R42, v56):** "I dont like inversions and the chips how they look". The
+  inversion a pull-down with its value as the label; the notes a line of text with their roles; the ♭ in a chord
+  name set as music. Never ‹ › for the inversion, never filled note chips.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple

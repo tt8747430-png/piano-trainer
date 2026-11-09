@@ -5,6 +5,21 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v56 (canvas Version 56): the heading reads as a lead sheet: name, what it is, its inversion, its notes.** Owner,
+  with a screenshot of D♭maj7: "I dont like inversions and the chips how they look. I dont like how this section
+  looks. improve and make it better. research and use all nedded guidelines and skills".
+  - The name: the accidental drawn as music (Noto Music, raised, 0.78 of the letter), as a lead sheet sets D♭maj7;
+    before, the serif had no ♭ and a fallback glyph stood apart from the D.
+  - The inversion: a pull-down (Apple's pop-up button: one choice among a few, its current value as the label),
+    **Root position ⌄**, a quiet outlined capsule. Its menu lists each inversion with its notes, Root position
+    D♭ F A♭ C · 1st inversion F A♭ C D♭ …, ✓ on the current; a pick plays it. No ‹ › anywhere (read as the next
+    chord), no Root · 1st · 2nd · 3rd control (v26, rejected), no pill.
+  - The notes: no filled chips. One line of text, each note in bold with its role beside it in grey and a small dot
+    of its key colour: **● D♭** root **● F** 3rd **● A♭** 5th **● C** 7th. The role words teach what the colours
+    mean (the keys use the same colours).
+  - Skills applied: impeccable's craft floor (one type scale, no decoration without information), Apple's
+    pop-up button and menus, Laws of UX (Proximity: the inversion sits with the name it changes; Jakob: the lead
+    sheet's symbol).
 - **v54: the bar becomes Apple's glass groups; Play the one tinted action, standing alone.** Owner: "I dont like how
   this yellow button looks inside this toolbar. research the apple guidelines and improve".
   - Research (Apple, iOS 26 Liquid Glass; WWDC25 "Get to know the new design system" and "Build a UIKit app with the
@@ -399,3 +414,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: inversion stepper under the name; Play and Arpeggio merged into one split button (v52).
 - 2026-11-08: the keyboard button out of the bar, a round glass button beside it (v53).
 - 2026-11-08: the bar as three glass groups, Play the one tinted, on the trailing side (v54).
+- 2026-11-09: heading as a lead sheet: ♭ set as music, inversion pull-down, notes with roles (v56).
