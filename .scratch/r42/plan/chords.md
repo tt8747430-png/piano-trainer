@@ -5,7 +5,16 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
-- **v57 (canvas Version 57): every inversion one tap away; the notes as a theory table sets them.** Owner, with a
+- **v58 (canvas Version 58): the inversion is a ring you turn.** Owner on v57: "I dont like this", then "I dont like
+  this tab switch, be more creative and think outside of the box and try to invent something new".
+  - An inversion is a rotation of the chord's notes, so the notes sit on a small ring under the name, in chord order
+    (C, E, G, B around it), each a disc in its key's colour. The slot at the bottom is the bass: its disc is filled
+    and larger, and the centre names the position (**Root** position, **1st** inversion). Tapping any note turns the
+    ring until that note sits at the bottom (420 ms, the labels stay upright), and the chord plays: tap E and the
+    name becomes Cmaj7/E, "E in the bass". Notes that cannot be a bass here (the 9th of a ninth chord) are dimmed.
+  - Gone: v57's track of positions (a tab switch, rejected), v57's note columns (the ring is the notes). Never
+    redrawn: a segmented or tab control, a pull-down, ‹ ›, a stepper pill for the inversion.
+- **v57 (replaced by v58) (canvas Version 57): every inversion one tap away; the notes as a theory table sets them.** Owner, with a
   screenshot of v56's notes line: "make the inventions easier to switch and I dont like how this looks from the
   image. and did you research more and looked at the examples and websites. not only ours piano data but also from
   the internet. https://musictheorylessons.net https://worksheets.musictheorylessons.net/worksheets".
@@ -432,3 +441,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-08: the bar as three glass groups, Play the one tinted, on the trailing side (v54).
 - 2026-11-09: heading as a lead sheet: ♭ set as music, inversion pull-down, notes with roles (v56).
 - 2026-11-09: every inversion one tap (position over slash chord); notes as columns over their roles (v57).
+- 2026-11-09: v57 rejected ("tab switch"); the inversion a ring of the notes, turned by tapping a note into the bass (v58).

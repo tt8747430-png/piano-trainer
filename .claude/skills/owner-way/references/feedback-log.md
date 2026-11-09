@@ -328,6 +328,10 @@ owner's, typos fixed.
   that hides a few related choices is two taps too many: show them side by side, each with its result (Root Cmaj7 ·
   1st Cmaj7/E). Notes are set as a theory table sets them (note over role), not dots with words. Research outside
   sites too (musictheorylessons.net), not only piano-data.
+- **No tab switch for the inversion; invent from the music (R42, v58):** "I dont like this tab switch, be more
+  creative and think outside of the box". An inversion is a rotation, so it is a ring of the notes turned by tapping
+  a note into the bass slot. Rejected for it so far: segmented track (v26, v57), ‹ › (v22), stepper pill (v52),
+  pull-down (v56).
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple
