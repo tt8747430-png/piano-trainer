@@ -93,3 +93,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 v56 (2026-11-09):** Chords: heading as a lead sheet; inversion pull-down; notes as text with roles.
 **R42 v57 (2026-11-09):** Chords: inversions one tap each (position over slash chord); notes as columns over roles.
 **R42 v58 (2026-11-09):** Chords: v57 tab switch rejected; inversion as a ring of the notes, tap one into the bass.
+**R42 v59 (2026-11-09):** Chords: ring unreadable; the notes stacked as they sound, "Bass up an octave" lifts the lowest.
