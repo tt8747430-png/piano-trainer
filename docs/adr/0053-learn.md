@@ -119,3 +119,4 @@ course.
   an editor's place, Read first, languages and changes. The lesson's ⋯ removed (2026-11-01).
 - r28 — An example of notes lays out as a sheet: its bars in rows as many as fit the card (`rowsOf`, by the notes struck), each row shrunk to fit, a later row printing its clef and bar number but not its time; Play marks the note sounding on its row; the note names and Play under the music on a phone (2026-11-02).
 - r30-5 — Learners make their own lessons and courses: Your lessons and Your courses, the same editors on the device, their Settings, Search (2026-11-05).
+- My Practice Plan — The owner's own course on the Chords shelf, ten lessons from what their saved piano videos teach most: the daily plan and tempo ladder, chord shapes, chords by number, rhythm, the left hand, shells and rootless voicings, passing chords, arranging a hymn, improvising and playing by ear (2026-11-09).

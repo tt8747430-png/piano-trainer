@@ -13,6 +13,7 @@ import majorScales from './major-scales'
 import masteringChords from './mastering-chords'
 import minorArpeggios from './minor-arpeggios'
 import minorScales from './minor-scales'
+import myPracticePlan from './my-practice-plan'
 import musicReadingTraining from './music-reading-training'
 import playingWithBothHands from './playing-with-both-hands'
 import rhythmBasics from './rhythm-basics'
@@ -36,6 +37,7 @@ export const COURSES: readonly Course[] = [
   minorArpeggios,
   masteringChords,
   improvisingWithChords,
+  myPracticePlan,
   calledToPlay,
   calledToPlayTwo,
   sevenTypes,
