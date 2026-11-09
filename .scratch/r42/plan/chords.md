@@ -5,6 +5,11 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **The hand's look is chosen (2026-11-09):** owner, of `drawings/v84-hand-smooth-variants.png`: "I like the s3 medium
+  light". S3: the MakeHuman hand (CC0) smoothed to 53,774 triangles, a painted skin with no photo (rosier tips and
+  knuckles, plain lighter glossy nails), shown in the medium-light tone (#d9a77f). S4 and the photographic skins are
+  not to be drawn again. **Open:** whether medium-light becomes the default tone, whether 53,774 triangles a hand is
+  enough, and the "ok" to build it into the app (re-rig to the app's joints, re-tune the poses).
 - **Canvas Version 85: Piano settings rebuilt: a switch for on and off, two view cards, Hands inside 3D.** Owner: "I
   dont want a fourth option I want to be able to show them from the 3d keys options. and these piano table options
   still have padding issues. use proper skills to prevent such things. and research more how a off options should
