@@ -72,13 +72,14 @@ const VOICINGS = [
   { v: 'Rootless A', f: '3rd, 5th, 7th, 9th', ok: (q) => q.t.some((x) => x[1] === 7) ? '' : 'Needs a 7th' },
   { v: 'Rootless B', f: '7th, 9th, 3rd, 5th', ok: (q) => q.t.some((x) => x[1] === 7) ? '' : 'Needs a 7th' },
   // two-hand voicings named in the owner's transcripts (R42 v68): the left hand's notes, then the right's
+  { v: 'Root and chord', f: 'Root in the left hand, the rest in the right', ok: (q) => '' },
   { v: 'Spread', f: 'Root and 7th low, 3rd, 5th and 9th above', ok: (q) => q.t.some((x) => x[1] === 7) ? '' : 'Needs a 7th' },
   { v: 'So What', f: 'Three 4ths and a 3rd on top', ok: (q) => isMin7(q) ? '' : 'For minor sevenths' },
   { v: 'Kenny Barron', f: '1, 5, 9 under ♭3, ♭7, 11', ok: (q) => isMin7(q) ? '' : 'For minor sevenths' },
   { v: 'Upper structure', f: 'A major triad a tone up over 3rd and 7th', ok: (q) => isDom7(q) ? '' : 'For dominant sevenths' },
 ];
 // how many of a two-hand voicing's notes, from the bottom, the left hand plays
-const TWO = { 'Spread': 2, 'So What': 3, 'Kenny Barron': 3, 'Upper structure': 2 };
+const TWO = { 'Root and chord': 1, 'Spread': 2, 'So What': 3, 'Kenny Barron': 3, 'Upper structure': 2 };
 const ORD = [1, 2, 3, 4, 5, 6, 7, 9, 11, 13];
 const INV = ['Root position', '1st inversion', '2nd inversion', '3rd inversion'];
 const INVS = ['Root', '1st', '2nd', '3rd'];
@@ -118,6 +119,8 @@ function voice(root, q, inv, voicing, hands) {
   else if (voicing === 'Rootless A') src = [[third, 3], dom ? [9, 13] : [s(5) ?? 7, 5], [s(7), 7], [s(9) ?? 14, 9]];
   else if (voicing === 'Rootless B') src = [[s(7) - 12, 7], [(s(9) ?? 14) - 12, 9], [third, 3], dom ? [9, 13] : [s(5) ?? 7, 5]];
   // spread: LH 1-7, RH 3, 5 (13 on a dominant), 9 (exercises/116 @29:11, jps-podcast/245 @12:32)
+  // root and chord: the bass alone under the rest (Gorshkov, 02-ninth-chords p. 4); a triad stays whole above its root
+  else if (voicing === 'Root and chord') src = [[-12, 1]].concat(upperOf(root, q) ? q.t.filter((x) => x[1] !== 1) : q.t.map((x) => x.slice()));
   else if (voicing === 'Spread') src = [[-12, 1], [s(7) - 12, 7], [third, 3], dom ? [9, 13] : [s(5) ?? 7, 5], [s(9) ?? 14, 9]];
   // So What: three 4ths from the root, a major 3rd on top (watch-later/008 @07:00)
   else if (voicing === 'So What') src = [[-12, 1], [-7, 11], [-2, 7], [3, 3], [7, 5]];
@@ -204,7 +207,7 @@ const voicing = VOICINGS.find((v) => v.v === (st.voicing || 'Close')).ok(q) ? 'C
 const invN = TWO[voicing] ? 1 : Math.min(4, voicing === 'Shell' ? 3 : (voicing.startsWith('Rootless') ? 4 : q.t.length));
 const inv = Math.min(st.inv ?? 0, invN - 1);
 const upper = (() => { const u = upperOf(root, q); RL = rLet; return u; })(), canSplit = !TWO[st.voicing || 'Close'];
-const bassOn = false, hands = st.hand === 'Split' && !canSplit ? 'Both' : (st.hand || 'Right'), fingOn = true, kbMode = st.kbMode || '3d', kbShow = kbMode !== 'off', keys = st.keys || 'Chord';
+const bassOn = false, hands = st.hand === 'Split' ? 'Both' : (st.hand || 'Right'), fingOn = true, kbMode = st.kbMode || '3d', kbShow = kbMode !== 'off', keys = st.keys || 'Chord';
 const playAs = 'Block', arp = false, dir = 'Up', keyLabel = st.keyLabel || 'Names', names = keyLabel === 'Names', fingKeys = false, treble = false, auto = true;
 const oct = st.oct || 0; // an added chord may sit an octave lower, to stay under the hand (voice leading)
 const ns = voice(root, q, inv, voicing, hands).map((x) => Object.assign(x, { m: x.m + 12 * oct }));
@@ -319,7 +322,7 @@ const sh = st.sheet || '';
 const handsBadge = hands === 'Both' ? '2' : (hands === 'Right' ? 'R' : 'L');
 const hB = hands === 'Both', hR = hands === 'Right', hL = hands === 'Left';
 return {
-  sym, full, shape, kb, sv, fing, invCards, tones, groups, vlist, handsBadge, hB, hR, hL, slash, hasSlash: !!slash, symFsP: Math.round(44 * symScale), symFsL: Math.round(64 * symScale), invLine: INV[inv] + (slash ? ', ' + bassName + ' in the bass' : '') + ' · ' + voicing + ' voicing' + (hands === 'Right' ? '' : (hands === 'Both' ? ' · both hands' : (hands === 'Split' ? ' · ' + RN + ' | ' + upper : ' · left hand'))),
+  sym, full, shape, kb, sv, fing, invCards, tones, groups, vlist, handsBadge, hB, hR, hL, slash, hasSlash: !!slash, symFsP: Math.round(44 * symScale), symFsL: Math.round(64 * symScale), invLine: INV[inv] + (slash ? ', ' + bassName + ' in the bass' : '') + ' · ' + (voicing === 'Root and chord' && upper && hands === 'Both' ? RN + ' | ' + upper : voicing + ' voicing') + (hands === 'Right' ? '' : (hands === 'Both' ? ' · both hands' : ' · left hand')),
   notes: ns.filter((x) => x.hand !== 'L' || hands === 'Left').filter((x, i, a) => a.findIndex((y) => y.name === x.name) === i).sort((a, b) => ORD.indexOf(a.deg) - ORD.indexOf(b.deg)).map((x) => ({ n: x.name, d: ({ 1: 'root', 2: '2nd', 3: '3rd', 4: '4th', 5: '5th', 6: '6th', 7: '7th', 9: '9th', 11: '11th', 13: '13th' })[x.deg], c: ROLE[x.deg] || C.accent })),
   // the chord's notes from the bottom up, as they sound, each with its role: the order changes with the inversion
   stackH: (() => { const seen = []; voice(root, q, 0, voicing, 'Right').forEach((x) => { if (!seen.includes(x.name)) seen.push(x.name); }); RL = rLet; return seen.length * 44 - 8; })() + 'px',
@@ -365,6 +368,8 @@ return {
   // courses-app/03): each hand lies under the keyboard and every playing finger reaches to its key, its number in a
   // circle on the fingertip in the note's colour; resting fingers stay curled at the palm.
   handsRef: (el) => { this._cv = el; },
+  handsList: [['Both', 'Both hands'], ['Right', 'Right hand'], ['Left', 'Left hand']].map(([v, l]) => ({ l, on: v === hands, mark: v === hands ? '✓' : '', isB: v === 'Both', isR: v === 'Right', isL: v === 'Left', pick: () => change({ hand: v, sheet: null }) })),
+  openHandsMenu: () => set({ sheet: sh === 'hands' ? null : 'hands' }),
   handSeg3: seg(['Left hand', 'Both hands', 'Right hand'], hands === 'Split' || hands === 'Both' ? 'Both hands' : hands + ' hand', (l) => change({ hand: l === 'Both hands' ? (st.bassOnly && canSplit ? 'Split' : 'Both') : l.split(' ')[0] })),
   lhSeg: seg(['Chord', 'Root'], hands === 'Split' ? 'Root' : 'Chord', (l) => change({ hand: l === 'Root' ? 'Split' : 'Both', bassOnly: l === 'Root' })),
   lhChoice: (hands === 'Both' || hands === 'Split') && canSplit,
@@ -445,7 +450,7 @@ return {
   playMain: () => st.playing ? stopAll() : (scope === 'All' ? playSeq() : play(playMode !== 'Block', playMode === 'UpDown' ? 'Up and down' : 'Up')),
   scopeList: [['All', 'All ' + seq.length + ' chords, in order'], ['One', 'Only ' + sym + slash]].map(([v, l]) => ({ l, on: v === scope, mark: v === scope ? '✓' : '', pick: () => { set({ scope: v, sheet: null }); if (v === 'All') playSeq(); else play(playMode !== 'Block', playMode === 'UpDown' ? 'Up and down' : 'Up'); } })), openPlayAs: () => set({ sheet: st.sheet === 'playAs' ? null : 'playAs' }), isPlayAs: sh === 'playAs',
   playAsList: [['Block', 'Block chord'], ['Arpeggio', 'Arpeggio'], ['UpDown', 'Arpeggio up and down']].map(([v, l]) => ({ l, on: v === playMode, mark: v === playMode ? '✓' : '', pick: () => { set({ playMode: v, sheet: null }); if (scope !== 'All') play(v !== 'Block', v === 'UpDown' ? 'Up and down' : 'Up'); } })),
-  invStep: INV[inv] + (slash ? ' · ' + bassName + ' in the bass' : ''), fullLine: full + (inv ? ' · ' + INV[inv] : '') + ' · ' + voicing + ' voicing' + (hands === 'Right' ? '' : (hands === 'Both' ? ' · both hands' : (hands === 'Split' ? ' · ' + RN + ' | ' + upper : ' · left hand'))),
+  invStep: INV[inv] + (slash ? ' · ' + bassName + ' in the bass' : ''), fullLine: full + (inv ? ' · ' + INV[inv] : '') + ' · ' + (voicing === 'Root and chord' && upper && hands === 'Both' ? RN + ' | ' + upper : voicing + ' voicing') + (hands === 'Right' ? '' : (hands === 'Both' ? ' · both hands' : ' · left hand')),
   chordOn: st.playing === 'chord', chordOff: st.playing !== 'chord', arpOnP: st.playing === 'arp', arpOffP: st.playing !== 'arp',
   playChord: () => st.playing === 'chord' ? set({ playing: false }) : play(false), playArp: () => st.playing === 'arp' ? set({ playing: false }) : play(true),
   invSeg: Array.from({ length: invN }, (_, i) => i).map((i) => ({ l: ['Root', '1st', '2nd', '3rd'][i], on: i === inv, bg: i === inv ? C.ink : 'transparent', fg: i === inv ? C.sheet : C.ink, sh: i === inv ? '0 1px 3px rgba(51,41,33,.18)' : 'none', pick: () => change({ inv: i }) })),
@@ -569,7 +574,7 @@ GLASSGRP = f'height: 56px; box-sizing: border-box; border-radius: 28px; backgrou
 TINTGRP = f'height: 56px; box-sizing: border-box; border-radius: 28px; background: rgba(237,198,132,.82); backdrop-filter: blur(24px) saturate(1.8); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 0 0 1px rgba(176,122,42,.28), {SHADOW}'
 CHEV_D = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>'
 KBROUND = f'<button type="button" aria-label="Keyboard" onClick="{{{{openKeys}}}}" style="flex: none; width: 56px; border: 0; {GLASSGRP}; color: {INK}; display: flex; align-items: center; justify-content: center">{KEYSI}</button>'
-CHORDACT = f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{{openChord}}}}" style="pointer-events: auto; flex: none; min-width: 56px; max-width: 100%; padding: 0 10px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; font-size: {{{{qSymFs}}}}px; font-weight: 700; display: flex; align-items: center; gap: 4px; white-space: nowrap"><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis">{{{{qSym}}}}</span></button>'
+CHORDACT = f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{{openChord}}}}" style="pointer-events: auto; justify-self: end; flex: none; min-width: 56px; max-width: 100%; padding: 0 10px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; font-size: {{{{qSymFs}}}}px; font-weight: 700; display: flex; align-items: center; gap: 4px; white-space: nowrap"><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis">{{{{qSym}}}}</span></button>'
 PLAYSPLIT = (f'<div role="group" aria-label="Play" style="pointer-events: auto; flex: none; width: 176px; {TINTGRP}; display: flex; align-items: center">'
   f'<button type="button" onClick="{{{{playMain}}}}" aria-pressed="{{{{playing}}}}" style="flex: 1; min-width: 0; height: 56px; padding: 0 2px 0 14px; border: 0; border-radius: 28px 0 0 28px; background: transparent; color: {INK}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap"><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOPI}</sc-if><sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAYI}</sc-if><span style="overflow: hidden; text-overflow: ellipsis">{{{{playWord}}}}</span></button>'
   f'<span aria-hidden="true" style="flex: none; width: 1px; height: 26px; background: rgba(51,41,33,.2)"></span>'
@@ -580,8 +585,15 @@ def PLAYASMENU(pos):
       f'<sc-for list="{{{{playAsList}}}}" as="o" hint-placeholder-count="3"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px; display: flex; align-items: center; gap: 10px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span><span style="flex: 1; font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for>'
       f'<sc-if value="{{{{hasSeq}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="height: 1px; margin: 4px 8px; background: {LINE}"></span><sc-for list="{{{{scopeList}}}}" as="o" hint-placeholder-count="2"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px; display: flex; align-items: center; gap: 10px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span><span style="flex: 1; font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for></sc-if></div></sc-if>')
 # the chord and Play are one group, centred together (R42 v72: "why this is looking so not centered")
-DOCK_PHONE = f'<div role="toolbar" aria-label="Chord and sound" style="position: absolute; left: 0; right: 0; bottom: 30px; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 8px; pointer-events: none"><div style="display: contents; pointer-events: auto">{CHORDACT}{PLAYSPLIT}</div></div>'
-DOCK_LAPTOP = f'<div role="toolbar" aria-label="Chord and sound" style="position: absolute; left: 0; right: 0; bottom: 24px; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 10px; pointer-events: none">{CHORDACT}{PLAYSPLIT}</div>'
+HANDSBTN = f'<button type="button" aria-label="Hands: {{{{handsLabel}}}}" aria-haspopup="menu" onClick="{{{{openHandsMenu}}}}" style="pointer-events: auto; justify-self: start; flex: none; width: 56px; padding: 0; border: 0; {GLASSGRP}; color: {INK}; display: flex; align-items: center; justify-content: center">{HANDSI}</button>'
+def HANDSMENU(pos):
+    ic = '<sc-if value="{{o.isB}}" hint-placeholder-val="{{false}}">' + HANDS2 + '</sc-if><sc-if value="{{o.isR}}" hint-placeholder-val="{{false}}">' + HANDI + '</sc-if><sc-if value="{{o.isL}}" hint-placeholder-val="{{false}}">' + HANDL + '</sc-if>'
+    return (f'<sc-if value="{{{{isHands}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
+      f'<div role="menu" aria-label="Hands" style="position: absolute; {pos}; z-index: 61; width: 216px; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column">'
+      f'<sc-for list="{{{{handsList}}}}" as="o" hint-placeholder-count="3"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px; display: flex; align-items: center; gap: 10px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 36px; display: flex; justify-content: center">' + ic + f'</span><span style="flex: 1; font-size: 16px; font-weight: 600; white-space: nowrap">{{{{o.l}}}}</span><span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span></button></sc-for></div></sc-if>')
+# the chord, Play and the hands: Play at the centre, one button each side (R42 v79)
+DOCK_PHONE = f'<div role="toolbar" aria-label="Chord, sound and hands" style="position: absolute; left: 12px; right: 12px; bottom: 30px; z-index: 40; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; pointer-events: none">{CHORDACT}{PLAYSPLIT}{HANDSBTN}</div>'
+DOCK_LAPTOP = f'<div role="toolbar" aria-label="Chord, sound and hands" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; width: 560px; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 10px; pointer-events: none">{CHORDACT}{PLAYSPLIT}{HANDSBTN}</div>'
 
 # ── the sheets' bodies, the same on both sizes ──
 def BACKHEAD(title, act):
@@ -607,7 +619,7 @@ B_SOUND = f'<div role="radiogroup" style="display: flex; flex-direction: column;
 TOAST = f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 50%; bottom: 100px; transform: translateX(-50%); z-index: 50; height: 48px; padding: 0 6px 0 18px; border-radius: 24px; background: {INK}; color: #FEFDFB; display: flex; align-items: center; gap: 8px; white-space: nowrap; box-shadow: {SHADOW}"><span style="font-size: 15px">{{{{toastT}}}}</span><button type="button" onClick="{{{{undoRemove}}}}" style="height: 40px; padding: 0 14px; border: 0; border-radius: 20px; background: transparent; color: #F2C987; font: inherit; font-size: 15px; font-weight: 700">Undo</button></div></sc-if>'
 def SHEETS_PHONE(player):
     out = ''
-    out += TOAST + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: 96px')
+    out += TOAST + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: 96px') + HANDSMENU('right: 12px; bottom: 96px')
     for cond, title, body in (('isChord', 'Chord', B_CHORD), ('isKeys', 'Keyboard', B_KEYS), ('isNext', 'Next chord', B_NEXT), ('isTr', 'Transpose', B_TR)):
         out += BSHEET(cond, title, body)
     for cond, body in (('isList', B_LIST), ('isVoicing', B_VOICING)):
@@ -616,7 +628,7 @@ def SHEETS_PHONE(player):
 
 def POPS_LAPTOP(player):
     dockpos = 'left: calc(50% - 200px); top: 424px'
-    out = TOAST + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: 92px')
+    out = TOAST + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: 92px') + HANDSMENU('left: calc(50% + 60px); bottom: 92px')
     for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isKeys', 'Keyboard', B_KEYS, 'right: 24px; top: 76px'), ('isNext', 'Next chord', B_NEXT, 'left: calc(50% + 420px); top: 330px'), ('isTr', 'Transpose', B_TR, 'left: calc(50% - 420px); top: 330px')):
         out += POPOVER(cond, title, body, pos, 400)
     for cond, body, pos in (('isList', B_LIST, dockpos), ('isVoicing', B_VOICING, dockpos)):
@@ -651,7 +663,7 @@ def ch_js(D, W, KH, minOct, mini_w):
 
 # ── phone ──
 PH_BODY = f'''<div style="flex: none; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px">{GLASSBTN('Back to Practice', CHEV_L, href='Main.dc.html')}<h1 style="margin: 0; font-size: 17px; font-weight: 600">Chords</h1>{GLASSBTN('Keyboard', KEYSI, 'openKeys')}</div>
-{STAGE3D(250)}{HANDSROW(420)}
+{STAGE3D(250)}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px 120px; display: flex; flex-direction: column; gap: 16px">{TITLEBLOCK(44)}{VIEWBODY(330, 2, 150)}{PRACTISE('Player.dc.html')}</main>
 {DOCK_PHONE}'''
 phone('Chords', 'Chords', PH_BODY, ch_js({'root': 0, 'q': 12}, 402, 168, 2, 150), SHEETS_PHONE('Player.dc.html'))
@@ -659,7 +671,7 @@ phone('Chords', 'Chords', PH_BODY, ch_js({'root': 0, 'q': 12}, 402, 168, 2, 150)
 # ── laptop: the whole screen, as the Player's ──
 LP_INNER = f'''<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: flex; flex-direction: column">
 <div style="flex: none; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px"><div style="display: flex; align-items: center; gap: 14px">{GLASSBTN('Back to Practice', CHEV_L, href='Laptop.dc.html')}<h1 style="margin: 0; font-size: 18px; font-weight: 600">Chords</h1></div>{GLASSBTN('Keyboard', KEYSI, 'openKeys')}</div>
-{STAGE3D(330)}{HANDSROW(420)}
+{STAGE3D(330)}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 26px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 820px; max-width: 100%; display: flex; flex-direction: column; gap: 20px">{TITLEBLOCK(56)}{VIEWBODY(440, 4, 170, True)}{PRACTISE('PlayerLaptop.dc.html')}</div></main>
 {DOCK_LAPTOP}
 {POPS_LAPTOP('PlayerLaptop.dc.html')}

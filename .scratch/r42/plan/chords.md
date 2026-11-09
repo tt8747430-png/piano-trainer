@@ -5,6 +5,20 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **v79 (canvas Version 79): the 3D piano loads without the network; Hands is one button beside Play.** Owner: "the
+  page still has bugs and the 3d piano doenst work and I dont like the hand controls and settings. research more and
+  refactor and improve it". Replaces v78's Left · Both · Right row and the "Left hand plays the Chord | Root" row.
+  - **The 3D piano:** the hand models were fetched from data URLs, which a published page may refuse; they are now
+    decoded and parsed in place, with no request. Checked under a policy that allows no connection at all. If 3D
+    still cannot be drawn the page shows the flat keys.
+  - **Hands:** one round button at the right of Play, its icon the hands that play; it opens **Both hands · Right
+    hand · Left hand**, each with its icon and a check: flowkey's "Select a Hand" ("Practice right and left hands
+    separately", flowkey.com; piano-data/reference-apps/flowkey/08-player-hands-menu.png: Right Hand · Left Hand ·
+    Both Hands). The dock reads chord · Play · hands, Play at the centre.
+  - **Root and chord is a voicing:** how a chord is shared between the hands lives in one place, the Voicing list,
+    beside Spread and So What: **Root and chord**, "Root in the left hand, the rest in the right" (Gm9 = G | B♭maj7;
+    Gorshkov). The heading's line names the two chords (C major seventh · C | Em · both hands).
+  - **Nothing under the piano** but the chord's name: no row of hand controls on the page.
 - **v78 (canvas Version 78): the app's own 3D hands play the chord; the hands control is the Player's.** Owner, of
   v77's drawn hands: "DONT you see how awful this looks, can you make proper implementations like the 3d piano does
   and the left and right hand settings refactored." Replaces every drawn hand (v72–v77) and the hand cards.
@@ -750,3 +764,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: finger numbers upright in fingertip circles, filled in the note's colour where the finger plays; from Faber, Hoffman, Pianote and others (v76).
 - 2026-11-09: the hands drawn at the keyboard, each playing finger reaching its key (v77).
 - 2026-11-09: the app's 3D hands live at the top of Chords; Left · Both · Right under the piano; Off · 3D · 2D (v78).
+- 2026-11-09: 3D models parsed in place (no fetch); Hands a menu button beside Play; Root and chord a voicing (v79).

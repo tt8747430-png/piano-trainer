@@ -345,6 +345,12 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **A canvas feature is proven where the owner sees it (R42, v79):** "the 3d piano doenst work": it ran in the local
+  runtime and failed in the published page. Test a board under a policy that allows no connection (CSP
+  `connect-src 'none'`); inline assets are parsed, never fetched.
+- **Hands is a menu button, not a row (R42, v79):** "I dont like the hand controls and settings": no segmented row
+  or cards on the page; one button by Play opens Both · Right · Left (flowkey). A choice about sharing notes between
+  hands is a voicing.
 - **Use the app's real thing, never a redrawing of it (R42, v78):** "DONT you see how awful this looks … proper
   implementations like the 3d piano does": six rounds of drawn hands were rejected; the Player's 3D hands, run
   live in the canvas, were the answer. When the app already has the component, the canvas runs it (bundle it with
