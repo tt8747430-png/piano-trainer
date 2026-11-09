@@ -90,3 +90,17 @@ headless), from above and from the seat.
 - The UVs were re-mapped to a hand-only atlas, so a skin is 8–11 KB as WebP at 1024² (3–4 KB at 512², which holds
   all the source's detail), not megabytes. The earlier 3.7 MB figure was the whole-body texture.
 - The tinted dark tone (T4) looks flat beside the real dark skin (F); tinted palms come out as dark as the backs.
+
+## Smooth, non-photographic hand variants (rendered 2026-11-09)
+
+`.scratch/r42/drawings/v84-hand-smooth-variants.png`, after the owner's "I dont want such realistic hand texture but
+it should feel real and have as many triangles as possible".
+
+- Subdivision levels of the MakeHuman hand, weights and UVs kept: level 0 is 3,374 triangles (129 KB), level 1
+  13,462 (465 KB), level 2 53,774 (1.78 MB; about 300 KB with meshopt and quantisation, estimated, not run), level 3
+  214,942 (8.3 MB, not rendered).
+- S2 is level 2 with a flat skin; S3 adds a painted map with no photo (rosier tips and knuckles, warm between the
+  fingers, plain lighter glossy nails, lighter palms on dark tones; 7–9 KB); S4 is flatter with deeper creases and
+  matte nails and reads more like a toy.
+- Two level-2 hands are about 108k triangles skinned; expected fine on a current phone, not measured on one.
+- The four tones render lighter than their swatches under the soft light.
