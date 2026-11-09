@@ -345,6 +345,9 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **A fault in the 3D hands is the app model's, fixed there with a test (R42, canvas 88):** "something is not
+  correct with the third finger in the model": reproduce at 3× in the runtime, find the finger at fault (it was the
+  resting 4th, not the 3rd), fix `piano-hands` and rebuild the canvas bundle; never patch the canvas copy alone.
 - **What matters is on the first screen (R42, canvas 87):** "the staff is very important and now the user needs to
   scroll to see it fully": before a publish, check that the page's main pictures are whole above the fold on a
   phone; make room by dropping what repeats them (a facts card beside a staff that says the same) and drawing only

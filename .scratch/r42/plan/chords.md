@@ -5,6 +5,12 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 88, and the app's hands: a resting finger hangs between its neighbours.** Owner, of F♯maj7 on the
+  3D piano: "something is not correct with the third finger in the model look here". The 3rd was right, on C♯; the
+  4th, with nothing to play, hovered at its fixed five-finger place, which fell beside C♯, so two fingertips sat on
+  one key. Fixed in the app's model (`src/widgets/piano-hands/model/choreography.ts`, ADR 0117), since the canvas
+  runs it: a finger with nothing to play goes half-way between the fingers either side of it that hold keys. The
+  Player gets the same fix.
 - **Canvas Version 87: the staff is on the first screen, larger, and names its notes.** Owner: "the staff is very
   important and now the user needs to scroll to see it fully. how can we improve this and maybe make the staff have
   more features and things to show".
@@ -874,3 +880,4 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: Piano switch, View cards 3D piano · 2D keys with Hands on the keys inside 3D, full-width Range and Labels (Version 85).
 - 2026-11-09: Root, Chord type and In the bass open drawers; medium-light the default tone; the hand not built yet (Version 86).
 - 2026-11-09: the staff on the first screen (staves in use only, piano 220, facts folded in), larger, with note labels (Version 87).
+- 2026-11-09: the hands model fixed, a resting finger hangs between its neighbours (Version 88; app code, ADR 0117).
