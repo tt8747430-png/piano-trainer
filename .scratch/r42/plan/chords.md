@@ -5,6 +5,23 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 92: the states nobody had drawn.** Owner: "continue with missing states". Found with
+  `state-expander`, each said in the app's own words where it has them (`common.midi`, `player.handsAtKeys`,
+  `settings.piano`).
+  - **The hands, in the piano's place:** "Getting the hands ready…" while they load; "The hands didn't load." with
+    Try again and Show the keys; "This device can't draw the hands." with Show the keys (which turns on 2D keys).
+  - **MIDI keyboard,** a second line on its row in Piano settings: "No MIDI keyboard found." · "Connected: Roland
+    FP-30X" · "This browser can't connect a MIDI keyboard." (an iPhone has no Web MIDI). Not asked yet: no line.
+  - **Offline,** on the Sound row: "Offline: a lighter sampled piano plays". Sound never fails outright: the grand's
+    samples download as each note is first played, and offline the lighter piano plays (Settings › Offline piano).
+    The wording of this one line is new and wants the owner's eye.
+  - **Eight chords, the most:** Add chord gives way to "8 of 8 chords"; tapping it says "The staff holds 8 chords.
+    Remove one to add another." It used to vanish without a word.
+  - **A toast with nothing to undo has no Undo,** and wraps inside the screen.
+  - **A States tool** (dashed, outside the screen, top left of each board) switches the board into each state; it is
+    the canvas's, not the app's.
+  - **Not drawn:** Russian, Night, large text; a MIDI keyboard lost mid-session ("{{device}} is not connected.");
+    keys played on a connected keyboard lighting the piano.
 - **Canvas Version 91: one spacing scale, one card radius.** Owner, after a consistency audit of the page against
   its own tokens: "fix all".
   - **Spacing is on 4/8 steps** (4, 8, 12, 16, 24): the 5, 6, 7, 9, 10, 14, 18 and 22 are gone. Kept: 2 inside
