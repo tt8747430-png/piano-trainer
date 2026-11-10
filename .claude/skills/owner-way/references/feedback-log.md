@@ -404,6 +404,12 @@ owner's, typos fixed.
   remain e and not e sharp disabled"; "the keys should change chromatically like on the keyboard". One Key drawer (− / +
   half steps, letters and ♭ ♮ ♯); Remove in the drawer that changes the chord. Never: a second layout for one chord, a
   disabled letter, a staff that scrolls on a tap, − / + round the circle of fifths.
+- **A chosen chord looks chosen, not pressed; a key carries the chords you pick (R42, canvas 112):** "clicking on the
+  chord, feels more like clicking on a button that on a chord and look how our real app does this"; "d remains d and
+  not d flat f for example must remain f and not f flat"; "this is a transpose for the key ... we need to find a way to
+  take the chords as well". On a staff, what is chosen is coloured in the ring as the app's score does, never a filled
+  bar; the clef opens Key where it prints; ♭ ♮ ♯ renames the letters (only where a key or root exists); Key lists the
+  chords to transpose. Never: a label over the clef, words explaining a signature, a switch for showing the key.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the

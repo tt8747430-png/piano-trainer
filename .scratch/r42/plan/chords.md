@@ -5,6 +5,32 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 112: a chosen chord is coloured as the score colours a selection; the key is its own and carries the
+  chords you choose.** Owner: "clicking on the chord, feels more like clicking on a button that on a chord and look how
+  our real app does this in the player or editor. and also i dont like how this c major label is there, and the
+  explanations for the staff with these 1 shar or this, i dont like this. and the switches between the shapr or flat
+  dont change the relevant keys, d remains d and not d flat f for example must remain f and not f flat. and also
+  signature on the key switch is not understandable. this is a transpose for the key so it should transpose naturally
+  the key. we need to find a way to take the chords as well, like a select section in this drawer or something else."
+  - Selection as the app's score draws it (ADR 0096, `shared/ui/score/selection.ts`, `score.css` `.note-chosen`): no
+    honey bar and no box. The chosen chord's noteheads and accidentals take the ring colour (sky-deep, Night sky-light)
+    over their chord-tone paints and its name is ring; the other chords are plain ink heads, so the painted chord is
+    the one on the keys. Nothing washes on hover; the name underlines on a pointer. While Play all runs, what sounds is
+    one thin ring line, apart from what is chosen.
+  - No label over the clef: the clef and its signature open Key where they print ("Key: C major" as its tooltip and
+    spoken name).
+  - The key is its own: C major at the start (the staff in C, v105), its signature always drawn, changed only in the
+    Key drawer. No "Key signature on the staff" switch, no "1 flat" words, no "Original key" line.
+  - The Key drawer: − [the signature drawn, "D major"] + (half steps) · Major | Minor · the letters and ♭ ♮ ♯ ·
+    **Chords to transpose**, every chord on the staff a tile with a check, all chosen at first, "Select all | Select
+    none". Changing the key moves the chosen chords with it, as MuseScore's Transpose to key with "Transpose chord
+    symbols" (handbook.musescore.org, Transposition); the others stay and are written against the new signature; with
+    none chosen only the key changes.
+  - ♭ ♮ ♯ is a switch that names the letters: ♭ reads C D♭ E♭ F G♭ A♭ B♭, ♯ reads C♯ D♯ E F♯ G♯ A♯ B, ♮ the white
+    keys. A letter whose ♭ or ♯ makes no root or key stays natural (F, E, D♯ major, G♭ minor), never greyed and never
+    C♭, F♭, E♯, B♯. Switching applies to the chosen letter. One picker, one implementation, for the chord's Root, Key
+    and Random chords' key.
+
 - **Canvas Version 111: a chord's name changes it, the bar plays it; one Key drawer; the same picker for every root and key.**
   Owner: "when I click on the chord name on the staff I will get this next chord drawer to change the chord but clicking
   anywhere else would just work as now and play the chord or separate notes of it and the clicking on the chords doesnt
@@ -16,22 +42,24 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   "research how the choosing sharp of flat applied to other chords like the e should remain e and not e sharp
   disabled. make more meaningful choices"; "the keys should change chromatically like on the keyboard and not how it
   works now with this button going up the circle of fifth".
-  - One chord and many are drawn alike: each chord is a bar after the clef, its name on top, the shown one honey. The
+  - _(Replaced in v112: the chosen chord is coloured in ring, no honey bar.)_ One chord and many are drawn alike: each
+    chord is a bar after the clef, its name on top, the shown one honey. The
     name (underlined, "Change Cmaj7") opens the drawer titled "Change Cmaj7"; the rest of the bar plays the chord, or a
     note where an arpeggio stands its notes apart. A lone chord no longer gets its own layout.
   - The drawer that changes a chord is Next chord's: Diatonic | Chromatic, a pick replaces that chord, All chords opens
     the whole picker for it, and "Remove Cmaj7" (crimson, the bin) is its last row, with Undo in the toast. Nothing
     sits in or under the bars any more.
-  - Transpose and Key signature are one **Key** drawer, opened from the key's name over the clef ("C major") or the
+  - _(Replaced in v112: no name over the clef, no signature switch, the key its own with Chords to transpose.)_
+    Transpose and Key signature are one **Key** drawer, opened from the key's name over the clef ("C major") or the
     clef: − / + move every chord a half step, chromatically as on the keyboard; the signature drawn; Major | Minor; the
     same letters and ♭ ♮ ♯ as the Root picker (D♭ major and C♯ major are both reached: D then ♭, C then ♯); "Key
     signature on the staff". The key is the first chord's. The card's foot keeps only the hand's fingers.
-  - Letters are never disabled: picking E keeps E (with ♭ if E♭ is a key, else ♮); only an accidental that makes no
+  - _(Replaced in v112: ♭ ♮ ♯ names the letters.)_ Letters are never disabled: picking E keeps E (with ♭ if E♭ is a key, else ♮); only an accidental that makes no
     key or root (F♭ major, E♯, B♯) is greyed. One picker in three places: the chord's Root, Key, Random chords' key.
   - The staff never scrolls when a chord is chosen; only when one is added, removed or played through. It runs the
     card's width (the laptop card is as wide as the list under it), a lone chord fits a phone, and its note names keep
     clear of the barline.
-  - The Key drawer's signature is drawn 100 units high, so a sharp at the top line is not cut (the layout check caught
+  - _(Replaced in v112: the signature sits between − and +, without words.)_ The Key drawer's signature is drawn 100 units high, so a sharp at the top line is not cut (the layout check caught
     it at F♯ minor).
 
 - **Canvas Version 110: each action beside what it acts on; keys by − / + and the keyboard; suggestions that
