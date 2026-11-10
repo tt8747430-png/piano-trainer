@@ -5,6 +5,25 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 90: the review's findings, the arpeggio on the staff, a note that sounds.** Owner, after two
+  reviews of the page (wording; accessibility, layout, type): "implement all you proposals".
+  - **Wording:** the Piano sheet's switch is "Show the piano" (it sat under the title "Piano" saying "Piano");
+    "+ Chord" is "Add chord"; Range's "Fit" is "Fit the chord"; Labels reads Note names · Degrees · Intervals · None
+    again, in two rows of two.
+  - **Targets 44 high:** key · Transpose, Add chord, the chord names over the staff, the Range and Labels segments.
+  - **Sheets and menus by keyboard:** focus moves into the sheet, Tab stays in it, Escape closes it, focus returns to
+    the button that opened it. A switch row is one control: the row is the switch and carries its name. The app's own
+    sheet and switch must do the same when this is ported; check them then.
+  - **Two hands fit the first screen on a phone:** the grand staff of one chord is drawn smaller, so the fingering
+    line is no longer behind the Play bar.
+  - **One type scale:** 11, 13, 14, 16 and the name's 44; 15 and 17 are gone from this page.
+  - **Play as Arpeggio writes the chord as an arpeggio** (up, or up and down): the notes in a row, right-hand finger
+    numbers over them, left-hand under, labels under each note (an interval under the step between two notes).
+  - **A note sounds when tapped,** where the notes stand apart (the arpeggio). Stacked in a block chord the notes are
+    17px apart, too close for a finger, so there the chord's name plays the chord. Owner's to say if that is enough.
+  - **The "show on staff" circles in the Chord type drawer stay.**
+  - **Flagged, not changed:** the page's spacing runs on 2, 6, 10, 14 as well as 4, 8, 12, 16 (measured: 6 and 10
+    and 14 recur everywhere). Moving it to a 4/8 grid is a page-wide change; ask first.
 - **Canvas Version 89: Intervals is a fourth label, and several chords are written in their key.** Owner, answering
   the staff questions: "3. intervals is good. .4. yes".
   - **Labels: Notes · Degrees · Intervals · None** (one setting for the keys and the staff). Intervals are spelled
@@ -17,8 +36,6 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     A key past seven sharps or flats (D♯ major) is written with accidentals.
   - **Fixed on the way:** labels over neighbouring keys (D and E♭) no longer cover each other; chord names over the
     staff are smaller with several chords so they do not run together; a long staff scrolls to the chord shown.
-  - **Still open:** the chord as an arpeggio when Play is Arpeggio; tapping a note to hear it; the "show on staff"
-    circles in the Chord type drawer.
 - **Canvas Version 88, and the app's hands: a resting finger hangs between its neighbours.** Owner, of F♯maj7 on the
   3D piano: "something is not correct with the third finger in the model look here". The 3rd was right, on C♯; the
   4th, with nothing to play, hovered at its fixed five-finger place, which fell beside C♯, so two fingertips sat on

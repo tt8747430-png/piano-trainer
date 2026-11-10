@@ -123,3 +123,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 canvas 87 (2026-11-09):** Chords: staff on the first screen (staves in use, larger, note labels); facts folded into the staff card.
 **R42 canvas 88 (2026-11-09):** Hands model: a resting finger hangs between its neighbours (app fix, ADR 0117); bundle rebuilt.
 **R42 canvas 89 (2026-11-09):** Chords: Labels gains Intervals (keys and staff); several chords carry their key signature; key labels no longer collide.
+**R42 canvas 90 (2026-11-10):** Chords: review findings applied (wording, 44px targets, sheet focus, type scale, two hands fit); arpeggio written on the staff; a note sounds when tapped.
