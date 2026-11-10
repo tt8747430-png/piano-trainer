@@ -529,14 +529,16 @@ return {
   ...(() => { const demo = st.demo || '';
     const eight = () => [0, 3, 4, 5, 1, 4, 0, 3].map((d) => { const pc = (tpc + STEPS[d]) % 12, l = (tonic.rl + d) % 7; return { rl: l, ra: ((pc - NATPC[l] + 18) % 12) - 6, q: QS.findIndex((x) => x.k === KQ[d]), inv: 0, voicing: snap.voicing, hand: hands, oct: 0 }; });
     const go = (v) => { if (v === 'eight') { const e = eight(); set(Object.assign({ demo: v, statesOpen: false, seq: e, cur: 7, sheet: null, toast: null }, loadChord(e[7]))); return; }
+      if (v === 'midiLost') { set({ demo: v, statesOpen: false, sheet: null, toast: { t: 'Roland FP-30X is not connected.' } }); return; }
       set({ demo: v, statesOpen: false, toast: null, kbOn: true, kbView: v.startsWith('hands') ? '3d' : kbView, sheet: v.startsWith('midi') || v === 'offline' ? 'keys' : null }); };
     const MSG = { handsLoading: 'Getting the hands ready…', handsFailed: 'The hands didn’t load.', handsUnsupported: 'This device can’t draw the hands.' };
-    const MIDI = { midiNone: 'No MIDI keyboard found.', midiOn: 'Connected: Roland FP-30X', midiUnsupported: 'This browser can’t connect a MIDI keyboard.' };
+    const MIDI = { midiNone: 'No MIDI keyboard found.', midiOn: 'Connected: Roland FP-30X', midiUnsupported: 'This browser can’t connect a MIDI keyboard.', midiLost: 'Roland FP-30X is not connected.' };
     return { statesOpen: !!st.statesOpen, toggleStates: () => set({ statesOpen: !st.statesOpen }),
-      stateList: [['', 'As designed'], ['handsLoading', 'Hands: loading'], ['handsFailed', 'Hands: did not load'], ['handsUnsupported', 'Hands: this device cannot draw them'], ['midiNone', 'MIDI keyboard: none found'], ['midiOn', 'MIDI keyboard: connected'], ['midiUnsupported', 'MIDI keyboard: this browser has none'], ['offline', 'Offline: the lighter piano'], ['eight', 'Staff: eight chords, the most']].map(([v, l]) => ({ l, mark: v === demo ? '✓' : '', fw: v === demo ? 700 : 500, pick: () => go(v) })),
+      stateList: [['', 'As designed'], ['handsLoading', 'Hands: loading'], ['handsFailed', 'Hands: did not load'], ['handsUnsupported', 'Hands: this device cannot draw them'], ['midiNone', 'MIDI keyboard: none found'], ['midiOn', 'MIDI keyboard: connected'], ['midiUnsupported', 'MIDI keyboard: this browser has none'], ['midiLost', 'MIDI keyboard: unplugged while playing'], ['large', 'Text: larger (130%)'], ['offline', 'Offline: the lighter piano'], ['eight', 'Staff: eight chords, the most']].map(([v, l]) => ({ l, mark: v === demo ? '✓' : '', fw: v === demo ? 700 : 500, pick: () => go(v) })),
       stageMsgOn: !!MSG[demo] && is3d, stageMsg: MSG[demo] || '', stageRetry: demo === 'handsFailed', stageKeys: demo === 'handsFailed' || demo === 'handsUnsupported',
       retryHands: () => set({ demo: 'handsLoading' }), showKeys: () => set({ demo: '', kbView: '2d' }),
       midiSub: MIDI[demo] || '', midiSubOn: !!MIDI[demo], soundSub: demo === 'offline' ? 'Offline: a lighter sampled piano plays' : '', soundSubOn: demo === 'offline',
+      textZoom: demo === 'large' ? 1.3 : 1, barZoom: demo === 'large' ? 1.1 : 1,
       atMost: seq.length >= 8, mostWord: seq.length + ' of 8 chords', sayMost: () => set({ toast: { t: 'The staff holds 8 chords. Remove one to add another.' } }) }; })(),
   playMain: () => st.playing ? stopAll() : (scope === 'All' ? playSeq() : play(playMode !== 'Block', playMode === 'UpDown' ? 'Up and down' : 'Up')),
   scopeList: [['All', 'All ' + seq.length + ' chords, in order'], ['One', 'Only ' + sym + slash]].map(([v, l]) => ({ l, on: v === scope, mark: v === scope ? '✓' : '', pick: () => { set({ scope: v, sheet: null }); if (v === 'All') playSeq(); else play(playMode !== 'Block', playMode === 'UpDown' ? 'Up and down' : 'Up'); } })), openPlayAs: () => set({ sheet: st.sheet === 'playAs' ? null : 'playAs' }), isPlayAs: sh === 'playAs',
@@ -594,7 +596,7 @@ def PRACTISE(player):
     # Practise in the Player, on the page: three ways to drill this chord, each opening the Player
     PLAYMINI = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor"></path></svg>'
     r = f'<sc-for list="{{{{practise}}}}" as="p" hint-placeholder-count="3"><a href="{player}" style="min-height: 60px; padding: 8px 14px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}"><span style="flex: none; width: 36px; height: 36px; border-radius: 18px; background: {ACCENT}; display: flex; align-items: center; justify-content: center">{PLAYMINI}</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{p.a}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{p.b}}}}</span></span>{CHEV_R}</a></sc-for>'
-    return f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px">{CAPS("{{practiseT}}")}<div style="border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{r}</div></section>'
+    return f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{{{{practiseT}}}}</h3><div style="border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{r}</div></section>'
 
 def TITLEBLOCK(size):
     # the name as a lead sheet writes it; what it is; its inversions side by side, one tap each (position over the
@@ -653,7 +655,7 @@ HANDSI = '<sc-if value="{{hB}}" hint-placeholder-val="{{true}}">' + HANDS2 + '</
 # shown is behind the gear. One capsule 68 (radius 34), two buttons 56 inside 6 (radius 28), side by side.
 XSM = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>'
 PLUSI = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>'
-STAFFHEAD = ('<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><button type="button" aria-label="Key {{tKey}}, transpose" onClick="{{openTr}}" style="height: 44px; padding: 0 14px 0 12px; border-radius: 22px; border: 0; background: ' + FILL + '; color: ' + INK + '; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; white-space: nowrap"><span aria-hidden="true" style="font-family: Noto Music, serif; font-size: 15px">♯♭</span>{{tKey}}<span style="color: ' + SOFT + '; font-weight: 500">· Transpose</span></button><sc-if value="{{canAdd}}" hint-placeholder-val="{{true}}"><button type="button" aria-label="Add a chord to the staff" onClick="{{openNext}}" style="height: 44px; padding: 0 16px 0 12px; border-radius: 22px; border: 0; background: ' + FILL + '; color: ' + INK + '; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px; white-space: nowrap">' + PLUSI + 'Add chord</button></sc-if><sc-if value="{{atMost}}" hint-placeholder-val="{{false}}"><button type="button" aria-disabled="true" aria-label="{{mostWord}}: the staff is full" onClick="{{sayMost}}" style="height: 44px; padding: 0 16px; border-radius: 22px; border: 0; background: transparent; box-shadow: inset 0 0 0 1px ' + LINE + '; color: ' + SOFT + '; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums">{{mostWord}}</button></sc-if></div>')
+STAFFHEAD = ('<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px"><button type="button" aria-label="Key {{tKey}}, transpose" onClick="{{openTr}}" style="height: 44px; padding: 0 14px 0 12px; border-radius: 22px; border: 0; background: ' + FILL + '; color: ' + INK + '; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; white-space: nowrap"><span aria-hidden="true" style="font-family: Noto Music, serif; font-size: 15px">♯♭</span>{{tKey}}<span style="color: ' + SOFT + '; font-weight: 500">· Transpose</span></button><sc-if value="{{canAdd}}" hint-placeholder-val="{{true}}"><button type="button" aria-label="Add a chord to the staff" onClick="{{openNext}}" style="height: 44px; padding: 0 16px 0 12px; border-radius: 22px; border: 0; background: ' + FILL + '; color: ' + INK + '; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px; white-space: nowrap">' + PLUSI + 'Add chord</button></sc-if><sc-if value="{{atMost}}" hint-placeholder-val="{{false}}"><button type="button" aria-disabled="true" aria-label="{{mostWord}}: the staff is full" onClick="{{sayMost}}" style="height: 44px; padding: 0 16px; border-radius: 22px; border: 0; background: transparent; box-shadow: inset 0 0 0 1px ' + LINE + '; color: ' + SOFT + '; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums">{{mostWord}}</button></sc-if></div>')
 STOPI = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>'
 PLAYI = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor"></path></svg>'
 def ACT(label, act, on, off, icon, primary):
@@ -911,5 +913,49 @@ for f in ('Chords', 'ChordsLaptop'):
     h = re.sub(r'((?:padding|gap|margin)(?:-[a-z]+)?: )([^;"\'{}]+)', _snap, h)
     h = h.replace('border-radius: 12px; background: #FEFDFB; overflow: hidden', 'border-radius: 16px; background: #FEFDFB; overflow: hidden')
     h = h.replace('background: #FFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)', 'background: #FEFDFB; box-shadow: 0 2px 4px rgba(51,41,33,.2)').replace('font-weight: 800', 'font-weight: 700')
+    # motion (seven questions, canvas 95): each layer comes from where it was asked for, short and eased out; it
+    # leaves at once. Menus grow from the bar, the phone's sheets rise from the edge, the laptop's popovers from their
+    # side, the toast slides up; nothing moves under reduced motion
+    MOTION = ('<style data-motion>'
+      '@keyframes pt-pop { from { opacity: 0; scale: .96 } } @keyframes pt-rise { from { translate: 0 100% } }'
+      '@keyframes pt-fade { from { opacity: 0 } } @keyframes pt-toast { from { opacity: 0; translate: 0 12px } }'
+      '[role=menu] { animation: pt-pop 160ms cubic-bezier(.22,1,.36,1); transform-origin: bottom center }'
+      '[role=menu][aria-label=States] { transform-origin: top left } [role=menu][aria-label=Hands] { transform-origin: bottom right }'
+      'section[role=dialog] { animation: pt-rise 280ms cubic-bezier(.32,.72,0,1) }'
+      'div[role=dialog] { animation: pt-pop 180ms cubic-bezier(.22,1,.36,1); transform-origin: top center }'
+      'div[role=dialog][style*="bottom:"] { transform-origin: bottom center } div[role=dialog][aria-label=Piano] { transform-origin: top right }'
+      ':has(+ [role=dialog]) { animation: pt-fade 200ms ease-out }'
+      'div[role=status][style*="bottom: 100px"] { animation: pt-toast 220ms cubic-bezier(.22,1,.36,1) }'
+      '@media (prefers-reduced-motion: reduce) { * { animation: none !important } }</style>')
+    h = h.replace('</style>', '</style>' + MOTION, 1)
+    # larger text (canvas 95): the reading and the layers scale with the learner's text size, as rem does in the app
+    h = h.replace('<main class="nos" style="', '<main class="nos" style="zoom: {{textZoom}}; ')
+    h = h.replace('<div role="toolbar" aria-label="Voicing, sound and hands" style="', '<div role="toolbar" aria-label="Voicing, sound and hands" style="zoom: {{barZoom}}; ')
+    h = re.sub(r'(<(?:section|div) role="dialog"[^>]*?style=")', r'\1zoom: {{textZoom}}; ', h)
     open(OUT + f + '.dc.html', 'w').write(h)
+# Night (canvas 95): each board again in the app's dark roles (src/styles/tokens.css, html[data-theme='dark']); the
+# chord paints stay, the keys take the dusk ivory, ink on honey stays dark, shadows deepen
+NIGHT_VARS = [('--key-white: #fefdfb', '--key-white: #d4d0cb'), ('--key-black: #332c28', '--key-black: #171310'),
+              ('--key-bed: #cbc2b9', '--key-bed: #787069'), ('--key-felt: #7c302c', '--key-felt: #5a2422'),
+              ('--primary: #edc684', '--primary: #d4b176'), ('62%, #fefdfb)', '62%, #d4d0cb)')]
+NIGHT = {'#F7F3EE': '#191512', '#FEFDFB': '#24201C', '#EEE9E2': '#2E2924', '#EDE6DC': '#2E2924', '#F3ECE1': '#2E2924',
+         '#DAD1C8': '#453E38', '#332921': '#EDE9E1', '#685E56': '#BBB3A8', '#8A8178': '#7D7368', '#F6E3BC': '#3E3420',
+         '#FBF1DD': '#352D1E', '#B07A2A': '#E0B26F', '#7A5418': '#E3C383', '#5E3F10': '#E3C383', '#EDC684': '#D4B176',
+         '#F2C987': '#D4B176', '#356890': '#89B7DE', '#332C28': '#171310', '#CBC2B9': '#787069', '#7C302C': '#5A2422',
+         '#FFFFFF': '#EDE9E1'}
+def night(h):
+    for a, b in NIGHT_VARS: h = h.replace(a, b)
+    h = re.sub(r'#[0-9A-Fa-f]{6}\b', lambda m: NIGHT.get(m.group(0).upper(), m.group(0)), h)
+    h = re.sub(r'rgba\(51, ?41, ?33, ?([\d.]+)\)', lambda m: 'rgba(10,7,5,%s)' % min(0.9, round(float(m.group(1)) * 3, 2)), h)
+    h = h.replace('rgba(254,253,251,.86)', 'rgba(36,32,28,.86)').replace('rgba(246,243,238,0)', 'rgba(25,21,18,0)')
+    # ink on honey stays dark, as primary-foreground does by night
+    h = re.sub(r'(style="[^"]*background: #D4B176[^"]*")', lambda m: m.group(1).replace('color: #EDE9E1', 'color: #191512'), h)
+    # honey Play keeps its dark ink; the switch knob is the light thumb; a chosen segment is raised, a step lighter
+    h = h.replace('rgba(237,198,132,.82)', 'rgba(212,177,118,.92)').replace('inset 0 1px 0 rgba(255,255,255,.55)', 'inset 0 1px 0 rgba(255,255,255,.25)')
+    h = re.sub(r'<div role="group" aria-label="Play".*?</button></div>', lambda m: m.group(0).replace('color: #EDE9E1', 'color: #191512'), h, flags=re.S)
+    h = h.replace('background: #24201C; box-shadow: 0 2px 4px', 'background: #EDE9E1; box-shadow: 0 2px 4px')
+    h = h.replace("'#24201C' : 'transparent'", "'#453E38' : 'transparent'")
+    return h.replace('<html', '<html data-theme="dark"', 1).replace('<x-dc', '<x-dc data-night', 1)
+for f in ('Chords', 'ChordsLaptop'):
+    open(OUT + f + 'Night.dc.html', 'w').write(night(open(OUT + f + '.dc.html').read()))
 print('r42 chords ok')

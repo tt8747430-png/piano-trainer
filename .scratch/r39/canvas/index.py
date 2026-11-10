@@ -30,6 +30,12 @@ for key, title, pages in (('songs', 'Songs', SONGS), ('player', 'The Player', PL
             boards[ph + '.dc.html'] = {'x': i * 530, 'y': y0 - 100, 'w': 450, 'h': 920, 'title': 'The Player, ' + name + ', phone', 'is_interactive': True}
             order.append(ph + '.dc.html')
         y0 += 920 + 200
+# Night (canvas 95): the Chords page by night, under Practice
+notes['night'] = {'x': 0, 'y': y0, 'text': 'Practice by night', 'kind': 'title1', 'maxW': CW * PER}
+for ph, lp, name in (('ChordsNight', 'ChordsLaptopNight', 'Chords, Night'),):
+    boards[lp + '.dc.html'] = {'x': 0, 'y': y0 + 300, 'w': 2143, 'h': 1299, 'title': name + ', laptop', 'is_interactive': True}
+    boards[ph + '.dc.html'] = {'x': 2143 + 80, 'y': y0 + 300 + 1299 - 920, 'w': 450, 'h': 920, 'title': name + ', phone', 'is_interactive': True}
+    order += [lp + '.dc.html', ph + '.dc.html']
 d.update(title='The ideal Piano Trainer', boards=boards, order=order, notes=notes)
 json.dump(d, open(P + 'canvas.json', 'w'), ensure_ascii=False, indent=2)
 missing = [b for b in boards if not os.path.exists(P + b)]

@@ -348,6 +348,10 @@ owner's, typos fixed.
 - **Missing states are drawn in the app’s own words (R42, canvas 94):** "continue with missing states". Read the
   `en` strings and the code first: sound never "fails" here (offline, a lighter piano plays), so that state was not
   invented. A state is reached from a dashed States tool outside the screen, never by a fake control in the product.
+- **Every screen answers the seven questions (R42, canvas 96):** "check this" (a video's seven things: one focal
+  point, a spacing scale, hierarchy by weight and colour, one accent, real content, matching details, motion from
+  where the user acted). Never set a chord symbol in capitals (E♭m7 becomes E♭M7, another chord). Every layer moves
+  from where it was asked for, eases out and leaves at once. Night is drawn from the app's dark roles, never inverted.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the

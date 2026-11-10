@@ -366,6 +366,26 @@ How the work is run, not how a screen looks. The repo already carries most of th
 - **Installed 2026-11-09** at the owner's word: the v1.3 set (`INSTALLED-FROM-VIDEOS.md`). `implement-spec` (one agent
   per ticket) is an allowed exception to working inline when its job fits (`owner-way`).
 
+## A UI-design channel: the seven things every good UI has (transcript, 2026-11-10)
+
+The same components look paid-for or AI-made by seven things. Ask each of every screen:
+
+- **One focal point:** what is the screen for, and is that the biggest, highest-contrast thing? Turn the rest down,
+  usually by removing it. On a settings page, the one action you came for is at the top.
+- **A spacing scale** (4 or 8): a label close to its field, items in a section closer than sections are to each
+  other, so grouping needs no line or box.
+- **Hierarchy by weight and colour,** not size: a title a little larger but darker and heavier, secondary text a
+  softer grey, one or two fonts, slightly tighter headings, short lines.
+- **Few colours:** neutrals tinted toward the brand, one accent where it matters (the main button, focus, a link).
+  Colour everywhere means nothing stands out.
+- **Real content:** real names, numbers and words for this product, never placeholders.
+- **Details:** one radius (nested a little smaller), 1px subtle borders, soft layered shadows, icons one size and
+  stroke, aligned to the text.
+- **Motion from where the user acted:** a menu grows from its button, opens a little slower than it closes, a toast
+  slides from the edge and stacks, a sheet follows the finger and settles. Short, eased out.
+
+Applied: the Chords page, canvas 96 (a chord symbol in capitals was wrong content; there was no motion).
+
 ## Rulings the videos led to
 
 - **Undo instead of asking** (owner: "adopt also this"): Kole Jain's act first and offer Undo replaces "a loss asks

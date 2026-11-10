@@ -141,6 +141,7 @@ source; installing one is the owner's decision.
 | An AI-coding channel: AI-built sites that look designed (transcript) | a design system not adjectives, proven components, named motion, named responsive layouts |
 | UX Peak: psychology, a product page's 15 mistakes, advanced tips (transcripts) | smart defaults, never start at zero, value over label, input by frequency, search that starts with help |
 | John (Meta engineer): shipping a vibe-coded app (transcript) | QA by breaking it, the non-functional list |
+| A UI-design channel: the seven things every good UI has (transcript) | the seven questions: focal point, spacing scale, weight and colour, one accent, real content, matching details, motion from where the user acted |
 | ibelick/ui-skills `baseline-ui` (MIT) | empty states with one action, errors by the action, `dvh`, motion limits |
 | jakubkrehel/make-interfaces-feel-better (MIT) | corners, optical alignment, icons, hit areas, 10% review, findings table |
 | emilkowalski/skills `emil-design-eng`, `ui-cheatsheet` (MIT) | whether to animate by frequency, durations, origin-aware popovers |

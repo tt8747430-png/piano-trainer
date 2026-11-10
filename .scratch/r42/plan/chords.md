@@ -5,6 +5,27 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 96: Night, larger text, a keyboard unplugged, and the seven questions.** Owner: "continue but I dont
+  need the russsian now and also check this", with a transcript of a video on the seven things every good UI has (focal
+  point, spacing scale, hierarchy by weight and colour, one accent, real content, matching details, motion from where
+  the user acted).
+  - **Night:** two new boards, "Chords, Night" phone and laptop, under "Practice by night". Every colour is the app's
+    dark role (`src/styles/tokens.css`, `html[data-theme='dark']`): dusk papers, dusk ink, the keys' dusk ivory and
+    felt, honey a step lower with its dark ink kept on Play, the switch knob the light thumb, a chosen segment raised a
+    step lighter, shadows deeper. The chord paints stay as they are.
+  - **Larger text (130%):** a States entry. The reading and every sheet scale as rem does in the app; the bar scales
+    less (110%) so Voicing, Play and Hands still fit a phone; the staff card's head wraps, Add chord under the key.
+  - **A MIDI keyboard unplugged while playing:** the toast "Roland FP-30X is not connected." (`common.midi.away`), and
+    the same line on its row in Piano settings.
+  - **Seven questions, answered on this page:** (1) one focal point: the chord's name over the hands, Play the one
+    honey control: kept. (2) spacing: on 4/8 since Version 91: kept. (3) hierarchy: kept. (4) one accent: honey only
+    on Play and what is chosen: kept. (5) **real content: fixed.** The caption over Practise was set in capitals, so
+    "E♭m7" read "E♭M7", a different chord; it is now sentence case, "Practise E♭m7 in the Player". A chord symbol is
+    never transformed. (6) details: 16 cards, one knob, one icon set: kept. (7) **motion: added.** There was none.
+    Menus grow from the bar (160ms), the phone's sheets rise from the edge (280ms), the laptop's popovers grow from
+    their side (180ms), the scrim fades, the toast slides up (220ms); all ease out, all leave at once, none under
+    reduced motion.
+  - **Not drawn:** Russian (not needed now, owner); keys played on a connected keyboard lighting the piano.
 - **Canvas Version 94: the states nobody had drawn.** Owner: "continue with missing states". Found with
   `state-expander`, each said in the app's own words where it has them (`common.midi`, `player.handsAtKeys`,
   `settings.piano`).
@@ -20,8 +41,8 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   - **A toast with nothing to undo has no Undo,** and wraps inside the screen.
   - **A States tool** (dashed, outside the screen, top left of each board) switches the board into each state; it is
     the canvas's, not the app's.
-  - **Not drawn:** Russian, Night, large text; a MIDI keyboard lost mid-session ("{{device}} is not connected.");
-    keys played on a connected keyboard lighting the piano.
+  - **Not drawn then:** Russian, Night, large text, a keyboard lost mid-session; Night, large text and the lost
+    keyboard are drawn in Version 96.
 - **Canvas Version 91: one spacing scale, one card radius.** Owner, after a consistency audit of the page against
   its own tokens: "fix all".
   - **Spacing is on 4/8 steps** (4, 8, 12, 16, 24): the 5, 6, 7, 9, 10, 14, 18 and 22 are gone. Kept: 2 inside

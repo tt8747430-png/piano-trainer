@@ -401,6 +401,22 @@
       "h": 920,
       "title": "Circle of fifths, phone",
       "is_interactive": true
+    },
+    "ChordsLaptopNight.dc.html": {
+      "x": 0,
+      "y": 15392,
+      "w": 2143,
+      "h": 1299,
+      "title": "Chords, Night, laptop",
+      "is_interactive": true
+    },
+    "ChordsNight.dc.html": {
+      "x": 2223,
+      "y": 15771,
+      "w": 450,
+      "h": 920,
+      "title": "Chords, Night, phone",
+      "is_interactive": true
     }
   },
   "order": [
@@ -452,7 +468,9 @@
     "ChordFinderLaptop.dc.html",
     "ChordFinder.dc.html",
     "CircleOfFifthsLaptop.dc.html",
-    "CircleOfFifths.dc.html"
+    "CircleOfFifths.dc.html",
+    "ChordsLaptopNight.dc.html",
+    "ChordsNight.dc.html"
   ],
   "notes": {
     "songs": {
@@ -473,6 +491,13 @@
       "x": 0,
       "y": 5238,
       "text": "Practice",
+      "kind": "title1",
+      "maxW": 8739
+    },
+    "night": {
+      "x": 0,
+      "y": 15092,
+      "text": "Practice by night",
       "kind": "title1",
       "maxW": 8739
     }
