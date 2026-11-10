@@ -398,6 +398,12 @@ owner's, typos fixed.
   this buttons ... relate to the chords"; "when I add a chord from the list it disappears ... like filter chips"; "I
   dont like how we need to switch these d flat of C sharp in written as row"; "+ or − buttons also in the key
   signature". Never: an enharmonic switch row, "First chord on", a wrapped list of chord symbols.
+- **A chord's name changes it, the rest plays it; one picker for every key and root (R42, canvas 111):** "when I click
+  on the chord name ... I will get this next chord drawer to change the chord but clicking anywhere else would just
+  work as now"; "it uses different controls with different features"; "I dont like how the staff jumps"; "the e should
+  remain e and not e sharp disabled"; "the keys should change chromatically like on the keyboard". One Key drawer (− / +
+  half steps, letters and ♭ ♮ ♯); Remove in the drawer that changes the chord. Never: a second layout for one chord, a
+  disabled letter, a staff that scrolls on a tap, − / + round the circle of fifths.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the

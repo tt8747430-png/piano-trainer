@@ -5,6 +5,35 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 111: a chord's name changes it, the bar plays it; one Key drawer; the same picker for every root and key.**
+  Owner: "when I click on the chord name on the staff I will get this next chord drawer to change the chord but clicking
+  anywhere else would just work as now and play the chord or separate notes of it and the clicking on the chords doesnt
+  work when only one chords it seams that it uses different controls with different features. fix this"; "I dont like
+  the spacing here like the half of the sections is just empty"; "the transpose buttons still isnt very good. refactor
+  it. I dont like how it sits there"; "I dont like how the staff jumps when clicking different chords"; "I would want to
+  be able to switch between the d flat or C sharp major. look at the root key picker and also other options ... so they
+  dont contradict each other ... I want more consistency"; "the remove buttons is ok but it could be better". Then:
+  "research how the choosing sharp of flat applied to other chords like the e should remain e and not e sharp
+  disabled. make more meaningful choices"; "the keys should change chromatically like on the keyboard and not how it
+  works now with this button going up the circle of fifth".
+  - One chord and many are drawn alike: each chord is a bar after the clef, its name on top, the shown one honey. The
+    name (underlined, "Change Cmaj7") opens the drawer titled "Change Cmaj7"; the rest of the bar plays the chord, or a
+    note where an arpeggio stands its notes apart. A lone chord no longer gets its own layout.
+  - The drawer that changes a chord is Next chord's: Diatonic | Chromatic, a pick replaces that chord, All chords opens
+    the whole picker for it, and "Remove Cmaj7" (crimson, the bin) is its last row, with Undo in the toast. Nothing
+    sits in or under the bars any more.
+  - Transpose and Key signature are one **Key** drawer, opened from the key's name over the clef ("C major") or the
+    clef: − / + move every chord a half step, chromatically as on the keyboard; the signature drawn; Major | Minor; the
+    same letters and ♭ ♮ ♯ as the Root picker (D♭ major and C♯ major are both reached: D then ♭, C then ♯); "Key
+    signature on the staff". The key is the first chord's. The card's foot keeps only the hand's fingers.
+  - Letters are never disabled: picking E keeps E (with ♭ if E♭ is a key, else ♮); only an accidental that makes no
+    key or root (F♭ major, E♯, B♯) is greyed. One picker in three places: the chord's Root, Key, Random chords' key.
+  - The staff never scrolls when a chord is chosen; only when one is added, removed or played through. It runs the
+    card's width (the laptop card is as wide as the list under it), a lone chord fits a phone, and its note names keep
+    clear of the barline.
+  - The Key drawer's signature is drawn 100 units high, so a sharp at the top line is not cut (the layout check caught
+    it at F♯ minor).
+
 - **Canvas Version 110: each action beside what it acts on; keys by − / + and the keyboard; suggestions that
   leave.** Owner: "should be made more clear how this buttons in the bottom of the staff relate to the chords"; "I like
   the key signature approach better with the d flat or c sharp with these major minor but I dont like how we need to
@@ -12,11 +41,11 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   from the list it disappears ... like filter chips"; "I would like such plus or minus buttons also in the key
   signature controls"; "I also dont like how this row with multiple chords looks"; "this first chord on is also not
   very understandable and clear".
-  - Remove is inside the chosen chord's own honey bar, under its notes ("Remove", the bin); the card's foot keeps what
+  - *(Replaced in v111: Remove is in the "Change" drawer, the foot holds only the fingers.)* Remove is inside the chosen chord's own honey bar, under its notes ("Remove", the bin); the card's foot keeps what
     is about every chord: the hand's fingers and "Transpose all".
   - No "Written as" anywhere. A black key reads its usual name (D♭ major, C♯ minor); the other spelling is reached by
     − / +: Key signature steps the circle of fifths (− one more flat, + one more sharp, to C♭ and C♯), Transpose steps
-    a half step and spells by the key.
+    a half step and spells by the key. *(Replaced in v111: one Key drawer, − / + a half step, letters and ♭ ♮ ♯.)*
   - Key signature: − name and count + · the signature drawn · Major | Minor · the keyboard.
   - Transpose names the key it moves to ("D♭ major", "Up a half step"), the keyboard is "Key" (was "First chord on"),
     and the chords run as one line of a lead sheet between barlines, scrolling sideways, never wrapped.
