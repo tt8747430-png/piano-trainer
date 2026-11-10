@@ -5,6 +5,37 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 103: the hands split as pianists play big chords; voicings by where they come from; the staff
+  without buttons.** Owner: "also I dont like that the voicings button is always the same and the user doesnt see
+  what voicing he has picked but be careful with the changing the name because it might look like close button when
+  choosing close voicing. and also the voicing still dont make very much sense how they are ordered and how should
+  they correctly be like what are my voicing or what are from the music theory and what from other cources. also the
+  two hands still dont work like it should like the cm11 chords are not correct and all other big chords. research
+  more and make correct chords and correct split for the hands. and also I dont like the transpose button and the
+  add chord buttons and that we have so much space left above the staff and chord name". With pianochord.org's
+  and Musicca's Cm11 pages.
+  - **One hand** plays every chord inside a ninth: past four notes the perfect 5th goes first ("the fifth (G) is
+    often omitted", Musicca), then the 9th under an 11th or 13th (Cm11(no9), pianochord.org), and a note still out
+    of reach comes down an octave. Cm11 = C E♭ F B♭, exactly pianochord.org's voicing; C13 = C E A B♭; C9 = C E B♭ D.
+  - **Both hands:** the left hand the bass, the right the chord. Up to four notes, root and 5th below and the whole
+    chord above (Cmaj7 = C3 G3 | C4 E4 G4 B4); more, root and 5th below and the rest above (Cm11 = C3 G3 | E♭4 F4 B♭4
+    D5, C9 = C3 G3 | E4 B♭4 D5); with a 13th the 7th goes below (C13 = C3 B♭3 | E4 A4 D5). Another bass is the left
+    hand's alone (C/E = E3 | E4 G4 C5). The left hand's root sits F2 to E3, never over middle C. Before, Both doubled
+    the whole chord an octave down, so Cm11 needed an eleventh in each hand. The left hand's Chord · Root choice is gone.
+  - **The voicing list in three groups by source:** Music theory (Close position, Drop 2, Drop 3), Jazz piano (Shell,
+    Rootless A and B, Spread, So What, Kenny Barron, Upper structure: Levine and the jazz transcripts), Gorshkov's
+    course, which is in Learn (Bass and chord: "с басом в левой и в правой — септаккорд", 02-ninth-chords p. 4; Two
+    triads, for m11: "состоит из двух простых — до минорного и си♭ мажорного трезвучий", extra-jazz-voicings p. 3;
+    his Cm11 in fifths is the Kenny Barron voicing). Only the voicings this chord takes are listed; each row's
+    second line is its formula for this chord, hands split by a bar (Spread on Cm7: 1 ♭7 | ♭3 5 9). Drop 2 and Drop 3
+    are two-handed: the dropped note is the left hand's.
+  - **The Voicing button names the voicing,** under a picture of its notes on a little staff. The default is called
+    **Close position**, the musician's name, so it never reads as a close button.
+  - **The staff has no buttons above it.** Add a chord is the empty place on the staff where the next chord will stand,
+    a dashed circle with a +; Transpose is the key's name over the clef, shown once the staff holds two chords (one
+    chord is transposed with its root picker). A single chord has no name above the staff: the pickers above say it.
+    The space above the top line is cut from 26 to 12 units.
+
 - **Canvas Version 102: no line under the chord's name.** Owner: "is it good that this text is there. I dont know if
   it is very good there: C major seventh · Close voicing". No: it repeated the pickers above it and the Voicing
   button below. Removed; the name in words ("C major seventh") is the chord type picker's tooltip and part of its

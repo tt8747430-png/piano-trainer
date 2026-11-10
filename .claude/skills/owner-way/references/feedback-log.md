@@ -365,6 +365,11 @@ owner's, typos fixed.
 - **No explanation line under a chord's name (R42, canvas 102):** "is it good that this text is there. I dont know if
   it is very good there: C major seventh · Close voicing". A line that repeats the pickers goes; the name in words is
   the type picker's tooltip and spoken name.
+- **A chord in two hands is split, never doubled (R42, canvas 103):** "the two hands still dont work like it should
+  like the cm11 chords are not correct". One hand stays inside a ninth (5th, then 9th left out; pianochord.org's Cm11
+  is C E♭ F B♭); Both is the bass below and the chord above. Voicings are grouped by source (Music theory, Jazz
+  piano, Gorshkov's course), the Voicing button names the chosen one ("Close position", never "Close"), and the
+  staff carries its own Add (an empty place) and Transpose (the key over the clef), with no buttons above it.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the

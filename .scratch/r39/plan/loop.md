@@ -133,3 +133,5 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **Canvas 101 (2026-11-10):** each page in four rows: phones, phones by Night, laptops, laptops by Night, in the flow's order.
 
 **Canvas 102 (2026-11-10):** Chords: the line "C major seventh · Close voicing" under the name removed; the full name is the type picker's tooltip.
+
+**Canvas 103 (2026-11-10):** Chords: one hand inside a ninth, both hands split (Cm11 C3 G3 | E♭4 F4 B♭4 D5), voicings in three groups by source, the Voicing button names the voicing, Add and Transpose on the staff.
