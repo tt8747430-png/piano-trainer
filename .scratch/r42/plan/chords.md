@@ -5,6 +5,12 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 99: the hidden UI.** Owner: three transcripts (the dashboard video's three tells, Tim Gabe on
+  looking human-made, the seven things again). Tooltips on the icon-only controls (Back to Practice, Piano settings,
+  Play as, Remove a chord), on a pointer only, after half a second, eased in; Back's starts at its own edge so it
+  stays inside the screen. Checked and kept: the data drives the form (fingering digits tabular, the staff for the
+  notes, chips for the voicings); rare actions low (Remove on the staff, Transpose in a sheet). The one decision only
+  Piano Trainer would make on this page: the hands at the keys, playing the chord shown, its tones in their paints.
 - **Canvas Version 98: scan first.** Owner: two transcripts from a UI-design channel ("weirdly perfect": edges,
   differentiated content, pictures over words, emphasis as a difference, no cards in cards; "every UI concept":
   signifiers, states, feedback, dark depth) and four Figma files, then "use the figma connector".

@@ -1,6 +1,6 @@
 ---
 name: scan-first
-description: Use in piano-trainer on every screen, canvas board or port, beside seven-questions: nobody reads a screen, they hunt for one thing, so check edges, differentiated content, pictures over words, signifiers and states, and emphasis as a difference from neighbours. Also when a card or settings sheet feels "off", "too dense", "a wall of text", or when a screen has cards inside cards.
+description: Use in piano-trainer on every screen, canvas board or port, beside seven-questions: nobody reads a screen, they hunt for one thing, so check edges, differentiated content, pictures over words, signifiers and states, emphasis as a difference from neighbours, data driving the form, and the hidden UI (tooltips, hover actions, a sequenced first run). Also when a card or settings sheet feels "off", "too dense", "a wall of text", or when a screen has cards inside cards.
 ---
 
 # Scan first
@@ -10,7 +10,8 @@ the answer turns up. Everything below makes a screen faster to scan without tell
 every screen with `seven-questions`, before each publish and each port; fix every "no" before publishing.
 
 Sources (transcripts, 2026-11-10; `redesigning-a-screen/references/lessons-from-videos.md`): a UI-design channel's
-"weirdly perfect" video (a receipt, a checklist, edges) and its "every UI concept in ten minutes". Their Figma
+"weirdly perfect" video (a receipt, a checklist, edges), its "every UI concept in ten minutes", and its "three tells
+you've never built a dashboard" (questions 7 and 8). Their Figma
 files were sent too; this session could see only their thumbnails.
 
 ## 1. Is every element held by at least two edges?
@@ -57,6 +58,23 @@ files were sent too; this session could see only their thumbnails.
   dissolve the cards into the screen; every row still stacks on the one above.
 - Cards or not, the aim is the same: a screen scanned in a second.
 
+## 7. Does the data drive the form?
+
+- Build around what the screen shows. A value from a short fixed set is a chip; numbers are right-aligned with
+  tabular digits so they line up by place; long text truncates; inactive rows are shaded.
+- Data with a time to it is a timeline or a chart, not a table sorted by time; a summary rolls it up.
+- Colour comes from the data (the urgent one in crimson, a person by their avatar), never sprinkled in to look nice.
+
+## 8. Is the right thing hidden until it is wanted, and is the hidden UI there?
+
+- Progressive disclosure: the spectrum of explicitness runs from a labelled button always on screen, to an icon,
+  to an icon on hover, to a swipe. Frequent and important sits high; rare and secondary sits low, revealed as soon
+  as the learner looks for it (a remove on hover with its tooltip, a swipe on a row). Never a new page for it.
+- The UI you cannot see is most of a finished product: tooltips on every icon-only control and every unclear label,
+  hover actions, a copy chip, the comment mark, a popover's states, the announcement of something new.
+- A first run is sequenced, never explained at once: one pointer at the most important action, then the next, or a
+  short checklist. Never six bullet points in a modal on arrival.
+
 ## On our canvas
 
 | Question | Where to look |
@@ -67,6 +85,8 @@ files were sent too; this session could see only their thumbnails.
 | 4 states | the board's `<style data-motion>` (hover, pressed, `:focus-visible`); the States tool for loading, error, offline |
 | 5 emphasis | value rows: grey at the default, ink once changed (Piano settings › Sound, MIDI keyboard) |
 | 6 cards | `system_measure.js` (radii, borders): nested surfaces |
+| 7 data | lists, tables, settings values: chips for fixed sets, digits aligned, time as a line or chart |
+| 8 hidden | `[data-tip]` on every icon-only control; hover and swipe actions; the first run's one pointer |
 
 ## Reporting
 

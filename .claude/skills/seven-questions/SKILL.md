@@ -65,6 +65,14 @@ Source: a UI-design channel's video, "the seven things every good UI has" (trans
 - Short (160 to 280ms), eased out; it opens a little slower than it closes, and closing gets out of the way at once.
 - Nothing fades in from nowhere, nothing snaps with no motion, and nothing moves under reduced motion.
 
+## Before the seven: what premium means here, and the one decision only we would make
+
+From Tim Gabe ("why people pay more for what looks human-made", transcript, 2026-11-10): fine is the floor, so it
+says nothing about care. Before drawing, say what premium and trustworthy mean to this learner (here: calm, warm,
+a real musician's instrument), feed real references, not adjectives, and name in the report one decision on the
+screen that only Piano Trainer would have made (the hands at the keys, the chord tones in their paints, a staff
+written as an engraver would). The website, when there is one, is built from the product's own parts.
+
 ## On our canvas
 
 | Question | Where to look | Tool |

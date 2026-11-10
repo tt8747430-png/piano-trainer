@@ -178,7 +178,7 @@ open(OUT + 'Editor.dc.html', 'w').write(phone)
 
 # ---------- laptop ----------
 lap = open(OUT + 'Laptop.dc.html').read()
-frame = lap.split('<div style="position: absolute; left: 217.7px; top: 124.6px;')[0].split('<x-dc>', 1)[1].split('</helmet>', 1)[1]
+frame = lap.split('<div style="position: absolute; left: 217.7px; top: 124.6px;')[0].split('<x-dc>', 1)[1].split('</helmet>', 1)[1].lstrip('\n')
 laptop = HEAD('Amazing Grace, editing, laptop') + frame + f'''<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: #F7F3EE; color: #1A1612; display: flex; flex-direction: column">
 <header style="flex: none; height: 60px; display: flex; align-items: center; gap: 6px; padding: 0 20px; background: #FBF8F3; box-shadow: 0 1px 0 #E9E2D8"><span style="font-size: 15px; color: #6B6259; margin-left: 4px; order: 0"></span>{bar()}</header>
 <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 360px">

@@ -932,10 +932,22 @@ for f in ('Chords', 'ChordsLaptop'):
       'button:active:not([aria-disabled=true]):not([role=group] > button), a[href]:active { scale: .96 }'
       '[role=group] > button:active { filter: brightness(.9) }'
       ':focus-visible { outline: 2px solid #356890; outline-offset: 2px }'
+      # tooltips (dashboard video, canvas 99): an icon-only control names itself on a pointer, after a short wait
+      '@media (hover: hover) { [data-tip]::after { content: attr(data-tip); position: absolute; left: 50%; top: calc(100% + 8px); z-index: 90;'
+      ' translate: -50% 4px; padding: 4px 8px; border-radius: 8px; background: #332921; color: #FEFDFB; font: 500 12px/16px Onest, system-ui, sans-serif;'
+      ' white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 120ms ease-out, translate 120ms ease-out }'
+      ' [data-tip-up]::after { top: auto; bottom: calc(100% + 8px); translate: -50% -4px }'
+      ' [data-tip-start]::after { left: 0; translate: 0 4px } [data-tip-start][data-tip]:hover::after { translate: 0 0 }'
+      ' [data-tip]:hover::after { opacity: 1; translate: -50% 0; transition-delay: 500ms } }'
+      '[data-tip]:not([style*="position: absolute"]) { position: relative } [data-tip]:hover { z-index: 95 }'
       '@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important } }</style>')
     h = h.replace('</style>', '</style>' + MOTION, 1)
     # larger text (canvas 95): the reading and the layers scale with the learner's text size, as rem does in the app
     h = h.replace('<main class="nos" style="', '<main class="nos" style="zoom: {{textZoom}}; ')
+    h = h.replace('aria-label="Back to Practice"', 'aria-label="Back to Practice" data-tip-start')
+    for lab, tip, up in (('Back to Practice', 'Back to Practice', False), ('Piano settings', 'Piano settings', False),
+                         ('Play as: block chord or arpeggio', 'Play as', True), ('Remove {{k.s}}', 'Remove {{k.s}}', True)):
+        h = h.replace('aria-label="%s"' % lab, 'aria-label="%s" data-tip="%s"%s' % (lab, tip, ' data-tip-up' if up else ''))
     h = h.replace('<div role="toolbar" aria-label="Voicing, sound and hands" style="', '<div role="toolbar" aria-label="Voicing, sound and hands" style="zoom: {{barZoom}}; ')
     h = re.sub(r'(<(?:section|div) role="dialog"[^>]*?style=")', r'\1zoom: {{textZoom}}; ', h)
     open(OUT + f + '.dc.html', 'w').write(h)

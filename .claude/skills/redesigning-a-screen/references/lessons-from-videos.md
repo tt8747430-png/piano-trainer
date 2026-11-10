@@ -403,6 +403,29 @@ Applied: the Chords page, canvas 96 (a chord symbol in capitals was wrong conten
   off and does not open.
 - Kept as the `scan-first` skill (and four lines in `seven-questions`). Applied: Chords, canvas 97.
 
+## The same UI-design channel: three tells you've never built a dashboard (transcript, 2026-11-10)
+
+- **The data drives the form:** chips for fixed sets, numbers right-aligned by place, long text truncated, inactive
+  rows shaded; time-ordered data as a timeline or chart; colour from the data, an avatar where a person is named.
+- **Progressive disclosure, the spectrum of explicitness:** always-visible labelled button, icon, icon on hover,
+  swipe (Apple's Reminders). Rare actions low, in a popover rather than a page; a first run sequenced one pointer
+  at a time, never a modal of six bullets.
+- **The UI you cannot see:** tooltips, hover actions, copy chips, comment marks, announcements. Beginner dashboards
+  miss tooltips above all.
+- Kept as `scan-first` questions 7 and 8. Applied: Chords canvas 99, tooltips on the icon-only controls.
+
+## Tim Gabe: why people pay more for what looks human-made (transcript, 2026-11-10)
+
+- High earners lean further toward paying more for human-made (68% against 54% overall, Segment OS 2026); a label
+  "AI-made" cuts the effort people see. In health, finance and law, looking the part is trust.
+- Fine is the floor: nine in ten AI-built homepages fell into six looks; AI screens score on ease, not originality.
+- Decide what premium means to the buyer before any prompt; feed real references and designers' rule files
+  (Emil Kowalski, Jakub Krehel, ibelick, all installed here); add one thing only you could have. The website is the
+  product's first preview, built from the product's own parts (Undertone, GameBlazers).
+- Kept as the opening of `seven-questions`. The earlier Tim Gabe lessons above already hold "premium, one decision".
+
+The seven-things video came again with these; it is the `seven-questions` skill.
+
 ## Rulings the videos led to
 
 - **Undo instead of asking** (owner: "adopt also this"): Kole Jain's act first and offer Undo replaces "a loss asks
