@@ -4,6 +4,22 @@
 
 Canvas v130, https://claude.ai/artifact/HezkVS2MXdwz7uJ14KDGgp. Each line names the owner's words it rests on.
 
+**Every sheet in the Chords page's kit (canvas Version 117, 2026-11-10).** Owner, of v116: "but you didnt do the
+proper refactoring of the settings of the buttons of the styles and so on". v116 had changed only the bar, the
+transport and Transpose; the sheets were still R37's. Now every Player sheet (Practice, Hands, Keyboard, the song's
+settings and its pages, Played through, Pattern, Sort and filter, Metronome sound) is built from the Chords kit:
+
+- the page's sand under the sheet, white groups with a hairline and no lift, rows of 16px text;
+- a phone sheet's title centred with **Done** at its right (sky-deep), a laptop popover's title at its left; a page
+  inside a sheet has Back as a chevron and its title centred; Played through ends with Done, not ✕;
+- the Chords switch (51 by 31, green when on), sentence-case captions ("Tempo", "Loop bars 5–8"), › as the chevron,
+  − and + as filled circles, the segmented tracks in the kit's fill;
+- **Wait** or **Play** as the Chords radio cards: the picture, the name, the check;
+- **Keyboard** as the Chords page's (R42 v85): Show the piano, then **3D piano** (its Angle inside the card) or
+  **2D keys**, then Keys and Note names, then Sound › and MIDI keyboard ›, all dimmed while the piano is hidden.
+  Off · 3D · 2D tiles, Connect a piano and All piano settings go.
+- the loop's word when on is deep honey, the old orange's last use gone.
+
 **The Chords page's language (canvas Version 116 of The ideal Piano Trainer, 2026-11-10).** Owner: "now read all
 the skills and instructions and update the player with the same style updates and instructions". Generator:
 `.scratch/r39/canvas/player/r43_player.py`, on the merged pages in `player/base/`.

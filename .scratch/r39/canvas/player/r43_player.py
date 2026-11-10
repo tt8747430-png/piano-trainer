@@ -172,8 +172,95 @@ def patch(t, phone):
     return t
 
 
+CHEV_R = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>'
+CHEV_L = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>'
+CARD = 'background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px rgba(51,41,33,.07)'
+ICON3D = '<svg width="40" height="24" viewBox="0 0 48 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M9 6h30l7 18H2z"></path><path d="M14.5 6 11 24M20 6l-2 18M26 6v18M31.5 6l3 18M37 6l5 18"></path><path d="M12.6 6h3l-1.2 9h-3.4zM18.3 6h3l-.7 9h-3.3zM27.6 6h3l1 9h-3.3zM33.3 6h3l1.9 9h-3.4z" fill="currentColor"></path></svg>'
+ICON2D = '<svg width="40" height="24" viewBox="0 0 48 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="2" y="4" width="44" height="20" rx="2"></rect><path d="M8.3 4v20M14.6 4v20M20.9 4v20M27.1 4v20M33.4 4v20M39.7 4v20"></path><path d="M6.5 4h3.6v11H6.5zM12.8 4h3.6v11h-3.6zM25.3 4h3.6v11h-3.6zM31.6 4h3.6v11h-3.6zM37.9 4h3.6v11h-3.6z" fill="currentColor"></path></svg>'
+ROW = 'min-height: 48px; box-sizing: border-box; padding: 6px 12px 6px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 16px; color: #332921'
+SEP = 'border-top: 1px solid #E9E2D8; margin-top: -1px'
+def SWITCH(v):  # the Chords page's switch (R42 v85): 51 by 31, green when on
+    return f'<span aria-hidden="true" style="position: relative; flex: none; width: 51px; height: 31px; border-radius: 16px; background: {{{{{v}.track}}}}"><span style="position: absolute; top: 2px; left: {{{{{v}.knob}}}}px; width: 27px; height: 27px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)"></span></span>'
+def VCARD(v, icon, name, inner=''):
+    dot = (f'<span aria-hidden="true" style="flex: none; width: 22px; height: 22px; border-radius: 11px; background: {{{{{v}.dot}}}}; box-shadow: {{{{{v}.dotRing}}}}; color: #FEFDFB; display: flex; align-items: center; justify-content: center">'
+           f'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{{{{v}.mk}}}}"><path d="m5 12 5 5 9-10"></path></svg></span>')
+    return (f'<div style="border-radius: 14px; background: {{{{{v}.bg}}}}; box-shadow: {{{{{v}.ring}}}}; overflow: hidden"><button type="button" role="radio" aria-checked="{{{{{v}.on}}}}" onClick="{{{{{v}.pick}}}}" style="{ROW}; width: 100%; padding: 8px 14px 8px 8px; border: 0; background: transparent; font: inherit; text-align: left">'
+            f'<span style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: none; width: 52px; height: 40px; border-radius: 9px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8; display: flex; align-items: center; justify-content: center">{icon}</span><span style="font-weight: 600">{name}</span></span>{dot}</button>{inner}</div>')
+def SEGROW(label, lst, w):
+    return (f'<div style="{ROW}; {SEP}"><span>{label}</span><div role="group" style="flex: none; width: {w}px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; padding: 2px; border-radius: 9px; background: #EEE9E2">'
+            f'<sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="2"><button type="button" aria-pressed="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="height: 30px; padding: 0 6px; border: 0; border-radius: 7px; background: {{{{o.bg}}}}; box-shadow: {{{{o.shadow}}}}; color: #332921; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap">{{{{o.name}}}}</button></sc-for></div></div>')
+def LINKROW(label, val, first=False):
+    return (f'<a href="#" style="{ROW}; {"" if first else SEP + "; "}text-decoration: none"><span>{label}</span><span style="display: flex; align-items: center; gap: 6px; color: #685E56">{val}<span style="display: flex; color: #685E56">{CHEV_R}</span></span></a>')
+KBBODY = ('<div style="border-radius: 12px; ' + CARD + '"><button type="button" role="switch" aria-checked="{{pianoSw.on}}" onClick="{{pianoSw.flip}}" style="' + ROW + '; width: 100%; border: 0; background: transparent; font: inherit; text-align: left"><span>Show the piano</span>' + SWITCH('pianoSw') + '</button></div>'
+          '<div role="radiogroup" aria-label="Keyboard" style="display: flex; flex-direction: column; gap: 8px; opacity: {{kbDimOp}}; pointer-events: {{kbPE}}">'
+          + VCARD('kb3c', ICON3D, '3D piano', '<sc-if value="{{kb3d}}" hint-placeholder-val="{{true}}">' + SEGROW('Angle', 'kbViewOpts', 150) + '</sc-if>')
+          + VCARD('kb2c', ICON2D, '2D keys') + '</div>'
+          '<div style="border-radius: 12px; ' + CARD + '; opacity: {{kbDimOp}}; pointer-events: {{kbPE}}">' + SEGROW('Keys', 'kbRangeOpts', 216).replace('; ' + SEP, '', 1)
+          + '<button type="button" role="switch" aria-checked="{{namesSw.on}}" onClick="{{namesSw.flip}}" style="' + ROW + '; ' + SEP + '; width: 100%; border-left: 0; border-right: 0; border-bottom: 0; background: transparent; font: inherit; text-align: left"><span>Note names</span>' + SWITCH('namesSw') + '</button></div>'
+          '<div style="border-radius: 12px; ' + CARD + '">' + LINKROW('Sound', 'Grand piano', True) + LINKROW('MIDI keyboard', 'None') + '</div>')
+KBVALS = ("pianoSw: { on: keys ? 'true' : 'false', track: keys ? '#7FB685' : '#DAD1C8', knob: keys ? 22 : 2, flip: () => this.setState({ keys: !keys }) }, "
+          "kbDimOp: keys ? 1 : 0.4, kbPE: keys ? 'auto' : 'none', "
+          "kb3c: ((on) => ({ on: on ? 'true' : 'false', bg: on ? '#FBF1DD' : '#FEFDFB', ring: on ? '0 0 0 2px #B07A2A' : '0 0 0 1px rgba(51,41,33,.07)', dot: on ? '#B07A2A' : 'transparent', dotRing: on ? 'none' : 'inset 0 0 0 2px #DAD1C8', mk: on ? 1 : 0, pick: () => this.setState({ keys: true, kbStyle: '3d' }) }))(kbStyle === '3d'), "
+          "kb2c: ((on) => ({ on: on ? 'true' : 'false', bg: on ? '#FBF1DD' : '#FEFDFB', ring: on ? '0 0 0 2px #B07A2A' : '0 0 0 1px rgba(51,41,33,.07)', dot: on ? '#B07A2A' : 'transparent', dotRing: on ? 'none' : 'inset 0 0 0 2px #DAD1C8', mk: on ? 1 : 0, pick: () => this.setState({ keys: true, kbStyle: '2d' }) }))(kbStyle === '2d'), ")
+
+
+def kit(t, phone):
+    """Every sheet in the Chords page's kit (R42 v85, v91): the page's sand, plain white groups with a hairline, rows of
+    16px text, the green switch, sentence-case captions, a centred title with Done, Back as a chevron."""
+    t = t.replace('background: #F3EEE7; box-shadow: 0 2px 4px rgba(26,22,18,0.10), 0 18px 40px -12px rgba(26,22,18,0.30)',
+                  'background: #F7F3EE; box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 -8px 30px -12px rgba(51,41,33,.28)')
+    t = t.replace('border-radius: 20px 20px 0 0;', 'border-radius: 22px 22px 0 0;')
+    t = t.replace('border-radius: 9999px; background: #D9D1C6"></div>', 'border-radius: 9999px; background: #DAD1C8"></div>')
+    t = t.replace('background: #FFFFFF; overflow: hidden; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)', CARD)
+    t = t.replace(', 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)', ', 0 0 0 1px rgba(51,41,33,.07)')
+    t = t.replace('padding: 6px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 15px; color: #332921',
+                  'padding: 6px 12px 6px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 16px; color: #332921')
+    t = t.replace('border-radius: 9px; background: #E7E0D6', 'border-radius: 9px; background: #EEE9E2')
+    t = t.replace('<p style="margin: 6px 14px -4px; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #685E56">',
+                  '<p style="margin: 6px 4px -4px; font-size: 13px; font-weight: 600; color: #685E56">')
+    t = t.replace('<span aria-hidden="true" style="color: #A39A90; font-size: 18px">›</span>', '<span aria-hidden="true" style="display: flex; color: #685E56">' + CHEV_R + '</span>')
+    # the switch
+    t = re.sub(r'width: 44px; height: 26px; (padding: 0; border: 0; )?border-radius: 9999px; background: \{\{([\w.]+)\}\}',
+               r'width: 51px; height: 31px; \1border-radius: 16px; background: {{\2}}', t)
+    t = re.sub(r'top: 3px; left: \{\{([\w.]+)\}\}px; width: 20px; height: 20px; border-radius: 9999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba\(26,22,18,0\.3\)',
+               r'top: 2px; left: {{\1}}px; width: 27px; height: 27px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)', t)
+    t = sub(t, r"track: ([^?,]+)\? '#B07A2A' : '#D9D1C6', knob: ([^?,]+)\? 21 : 3", r"track: \1? '#7FB685' : '#DAD1C8', knob: \2? 22 : 2", n=0)
+    # a sheet's title: centred, with Done on a phone (the Chords sheets); left on a laptop's popover
+    if phone:
+        t = re.sub(r'<h2 style="margin: 4px 14px 2px; font-size: 17px; font-weight: 700; line-height: 1.2">(.*?)</h2>',
+                   r'<div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 40px"><h2 style="margin: 0; font-size: 17px; font-weight: 600">\1</h2><button type="button" onClick="{{close}}" style="position: absolute; right: -4px; height: 44px; padding: 0 4px; border: 0; background: transparent; color: #356890; font: inherit; font-size: 17px; font-weight: 600">Done</button></div>', t)
+    else:
+        t = t.replace('<h2 style="margin: 4px 14px 2px; font-size: 17px; font-weight: 700; line-height: 1.2">', '<h2 style="margin: 2px 4px; font-size: 17px; font-weight: 600; line-height: 1.2">')
+    # a page inside a sheet: Back as the chevron, the title centred
+    t = re.sub(r'<div style="display: flex; align-items: center; gap: 6px; margin: 0 0 2px"><button type="button" aria-label="Back" onClick="\{\{(\w+)\}\}" style="[^"]*"><svg[^>]*><path d="M19 12H5M12 19l-7-7 7-7"></path></svg></button><h2 style="margin: 0; font-size: 17px; font-weight: 700; line-height: 1.2">(.*?)</h2></div>',
+               lambda m: f'<div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 40px"><button type="button" aria-label="Back" onClick="{{{{{m.group(1)}}}}}" style="position: absolute; left: -10px; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: #332921; display: flex; align-items: center; justify-content: center">{CHEV_L}</button><h2 style="margin: 0; font-size: 17px; font-weight: 600">{m.group(2)}</h2></div>', t)
+    # Keyboard as the Chords page's (v85): Show the piano, then 3D piano (its Angle inside) or 2D keys, Keys and Note names, Sound and MIDI
+    m = re.search(r'(<section role="dialog" aria-label="Keyboard" [^>]*>.*?</h2>(?:<button[^>]*>Done</button></div>)?\n)(.*?)(</section>)', t, flags=re.S)
+    assert m, 'keyboard sheet'
+    t = t[:m.start(2)] + KBBODY + '\n' + t[m.end(2):]
+    t = sub(t, r"(kb3d: keys && kbStyle === '3d', kb2d: keys && kbStyle === '2d',)", lambda mm: mm.group(1) + ' ' + KBVALS)
+    t = t.replace('#B4531A', '#7A5418')  # the old orange's last use: the loop's word when on
+    # the remaining white surfaces and lifted cards take the warm white and the hairline
+    t = t.replace('box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)', 'box-shadow: 0 0 0 1px rgba(51,41,33,.07)')
+    t = t.replace('background: #FFFFFF;', 'background: #FEFDFB;')
+    # − and + as the Chords page's filled circles
+    t = t.replace('border: 1px solid #DDD5CA; border-radius: 9999px; background: #FEFDFB;', 'border: 0; border-radius: 9999px; background: #EEE9E2;')
+    # Played through ends with Done, as every sheet does
+    t = sub(t, r'<button type="button" aria-label="Close" onClick="\{\{doneClose\}\}" style="[^"]*">.*?</button>',
+            '<button type="button" onClick="{{doneClose}}" style="flex: none; height: 44px; margin: -6px -4px 0 0; padding: 0 4px; border: 0; background: transparent; color: #356890; font: inherit; font-size: 17px; font-weight: 600">Done</button>', flags=re.S)
+    # Wait or Play as the Chords page's radio cards: a picture, the name, the check
+    m = re.search(r'<div role="group" aria-label="Mode" style="[^"]*"><sc-for list="\{\{modeTiles\}\}" as="o" hint-placeholder-count="2">.*?</sc-for></div>', t, flags=re.S)
+    assert m, 'mode tiles'
+    icon = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{o.d}}"></path></svg>'
+    card = VCARD('o', icon, '{{o.name}}').replace('width: 52px; height: 40px;', 'width: 44px; height: 40px;')
+    t = t[:m.start()] + '<div role="radiogroup" aria-label="Mode" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px"><sc-for list="{{modeTiles}}" as="o" hint-placeholder-count="2">' + card + '</sc-for></div>' + t[m.end():]
+    t = sub(t, r"line: on \? '#B07A2A' : 'transparent', bg: on \? '#FBF1DD' : '#FFFFFF', pick: \(\) => this\.setState\(\{ mode",
+            "line: on ? '#B07A2A' : 'transparent', bg: on ? '#FBF1DD' : '#FEFDFB', ring: on ? '0 0 0 2px #B07A2A' : '0 0 0 1px rgba(51,41,33,.07)', dot: on ? '#B07A2A' : 'transparent', dotRing: on ? 'none' : 'inset 0 0 0 2px #DAD1C8', mk: on ? 1 : 0, pick: () => this.setState({ mode")
+    return t
+
+
 for name, phone in (('PlayerApp', True), ('PlayerDesk', False)):
-    t = patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone)
+    t = kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone)
     (OUT / f'{name}.dc.html').write_text(t)
 # a board for the new page
 w = (OUT / 'PlayerSettings.dc.html').read_text()

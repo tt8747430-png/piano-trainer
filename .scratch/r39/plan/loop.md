@@ -157,3 +157,5 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **Canvas 115 (2026-11-10):** Chords: ♭ ♮ ♯ changes only the chosen letter (others plain, an impossible one dimmed); − / + spelled by direction (C → C♯, D → D♭, never D♯ major); transposed chords spelled from the new key's scale, no double accidentals or E♯/B♯/F♭/C♭ roots; chromatic suggestions spelled by direction.
 
 **Canvas 116 (2026-11-10):** The Player in the Chords page's language: light glass bar, the transport as three glass groups with values under the symbols, Transpose as the Chords Key page (spelled by direction, Back to G major); new board PlayerKey (`player/r43_player.py`).
+
+**Canvas 117 (2026-11-10):** Every Player sheet in the Chords kit: centred titles with Done, green switches, plain white groups, sentence-case captions, Wait · Play as radio cards, Keyboard rebuilt as the Chords page's (Show the piano, 3D piano with Angle, 2D keys, Keys, Note names, Sound, MIDI keyboard).
