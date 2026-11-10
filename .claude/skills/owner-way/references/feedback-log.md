@@ -394,6 +394,10 @@ owner's, typos fixed.
   the key"; "these are only suggestions and I dont want another chord picker beside the all chords page"; "the staff
   is clipped ... make sure this doenst happen". Never: a plain paraphrase of a musician's term, a second chord picker,
   a chord symbol in capitals, text or a drawing cut by its box, text showing through behind a floating bar.
+- **An action sits beside what it acts on; a chosen suggestion leaves its list (R42, canvas 110):** "make more clear how
+  this buttons ... relate to the chords"; "when I add a chord from the list it disappears ... like filter chips"; "I
+  dont like how we need to switch these d flat of C sharp in written as row"; "+ or − buttons also in the key
+  signature". Never: an enharmonic switch row, "First chord on", a wrapped list of chord symbols.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the
