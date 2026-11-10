@@ -102,11 +102,12 @@ Before every publish, and again before a port is called done:
    no smaller than on the laptop. There is no card in a card. A choice made in context is a bottom sheet; something
    new opens a page. Both empty states are drawn: the first run points at the main action, and no results says so,
    suggests and gives a way out.
-3. **Check it against `owner-way/references/craft-details.md`:** still numbers, wrapping, plurals, concentric
+3. **Answer the seven questions** (`seven-questions`), one line each in the report.
+4. **Check it against `owner-way/references/craft-details.md`:** still numbers, wrapping, plurals, concentric
    corners, optical centring, one icon set, 44px targets, one curve, nothing from scale 0.
-4. **Look as the most exacting designer you know would,** the one who screenshots the one wrong thing and sends it
+5. **Look as the most exacting designer you know would,** the one who screenshots the one wrong thing and sends it
    back with "what is this?". If you can picture that screenshot, fix it. Fix what you find before publishing.
-5. **A canvas fails five ways** (from `stageshow`): too much (every row full of real text), a wireframe (grey blobs),
+6. **A canvas fails five ways** (from `stageshow`): too much (every row full of real text), a wireframe (grey blobs),
    boxed (a screen shrunk into a card), flat (everything the same weight, nowhere for the eye to land), bland (the
    brief's look missing). Real songs and the app's labels where the eye goes; no empty corner, no void under a list.
 

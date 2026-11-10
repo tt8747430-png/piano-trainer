@@ -6,14 +6,15 @@ Piano Trainer is an offline-first PWA where a learner learns and writes music on
 TypeScript, Feature-Sliced Design (lint-enforced), English and Russian, Supabase behind optional accounts, deployed on
 Vercel.
 
-| Read                                                        | For                                                  |
-| ----------------------------------------------------------- | ---------------------------------------------------- |
-| [`owner-way`](.claude/skills/owner-way/SKILL.md)            | how the owner wants work run; at every session start |
-| [PRODUCT.md](PRODUCT.md)                                    | who it is for, what it claims, what stays true       |
-| [DESIGN.md](DESIGN.md)                                      | the look, before any screen                          |
-| [docs/CODE_STYLE.md](docs/CODE_STYLE.md)                    | how code is written, before any code                 |
-| [docs/CONTENT.md](docs/CONTENT.md)                          | a piece, pattern, lesson or course                   |
-| [docs/adr/](docs/adr/README.md)                             | why an area is the way it is                         |
+| Read                                                         | For                                                    |
+| ------------------------------------------------------------ | ------------------------------------------------------ |
+| [`owner-way`](.claude/skills/owner-way/SKILL.md)             | how the owner wants work run; at every session start   |
+| [`seven-questions`](.claude/skills/seven-questions/SKILL.md) | every screen, every time: before each publish and port |
+| [PRODUCT.md](PRODUCT.md)                                     | who it is for, what it claims, what stays true         |
+| [DESIGN.md](DESIGN.md)                                       | the look, before any screen                            |
+| [docs/CODE_STYLE.md](docs/CODE_STYLE.md)                     | how code is written, before any code                   |
+| [docs/CONTENT.md](docs/CONTENT.md)                           | a piece, pattern, lesson or course                     |
+| [docs/adr/](docs/adr/README.md)                              | why an area is the way it is                           |
 
 Design work on the canvas loads these, each when its moment comes ([`redesigning-a-screen`](.claude/skills/redesigning-a-screen/SKILL.md) runs the loop):
 
