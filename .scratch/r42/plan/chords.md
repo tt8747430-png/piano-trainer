@@ -5,7 +5,7 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
-- **Canvas Version 92: the states nobody had drawn.** Owner: "continue with missing states". Found with
+- **Canvas Version 94: the states nobody had drawn.** Owner: "continue with missing states". Found with
   `state-expander`, each said in the app's own words where it has them (`common.midi`, `player.handsAtKeys`,
   `settings.piano`).
   - **The hands, in the piano's place:** "Getting the hands ready…" while they load; "The hands didn't load." with

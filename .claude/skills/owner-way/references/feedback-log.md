@@ -345,7 +345,7 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
-- **Missing states are drawn in the app’s own words (R42, canvas 92):** "continue with missing states". Read the
+- **Missing states are drawn in the app’s own words (R42, canvas 94):** "continue with missing states". Read the
   `en` strings and the code first: sound never "fails" here (offline, a lighter piano plays), so that state was not
   invented. A state is reached from a dashed States tool outside the screen, never by a fake control in the product.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
