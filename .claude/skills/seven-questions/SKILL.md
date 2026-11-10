@@ -32,12 +32,16 @@ Source: a UI-design channel's video, "the seven things every good UI has" (trans
 - A title is only a little larger than the body, but darker and heavier; secondary text is Soft Ink.
 - One or two fonts (here a book serif for names, a sans for reading and acting). Headings slightly tighter.
 - Lines short enough to read. Five sizes on one card is the problem.
+- Large headings tighten: letter-spacing about -2 to -3%, line height 110 to 120%. An app screen rarely needs text
+  larger than 24px outside its one name; a dashboard never.
 
 ## 4. Is the accent used only where it matters?
 
 - Most of the screen is the warm neutrals; the one accent is on the main button, focus and a link.
 - No gradient on the background, headline, buttons and badges. Colour everywhere means nothing stands out.
 - Here: the paints mean one thing each, by where they appear (chord tones, the hands, the chrome as washes).
+- Semantic colour only where it means something: grass for learned and connected, crimson for wrong and
+  destructive, ochre for a gap. Colour for purpose, never decoration.
 
 ## 5. Is every piece of content real?
 
@@ -49,7 +53,10 @@ Source: a UI-design channel's video, "the seven things every good UI has" (trans
 
 - One radius per kind of surface; a nested element a little smaller, concentric with its container.
 - Borders 1px and subtle; shadows soft and layered, deeper by Night, never one heavy blur.
-- Icons one set, one size and stroke, sitting on the text's line (`make-interfaces-feel-better`).
+- Icons one set, one size and stroke, sitting on the text's line (`make-interfaces-feel-better`). An icon is as tall as its
+  text's line height (24px beside 16px text), rarely larger.
+- By Night there are no shadows to lift a card: a card is lighter than the page, its line lower in contrast, and a
+  chip's paint dimmed. If a shadow is the first thing you notice, it is too strong.
 
 ## 7. Does every animation come from where the user acted?
 

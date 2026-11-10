@@ -10,6 +10,7 @@ Vercel.
 | ------------------------------------------------------------ | ------------------------------------------------------ |
 | [`owner-way`](.claude/skills/owner-way/SKILL.md)             | how the owner wants work run; at every session start   |
 | [`seven-questions`](.claude/skills/seven-questions/SKILL.md) | every screen, every time: before each publish and port |
+| [`scan-first`](.claude/skills/scan-first/SKILL.md)           | every screen, with the seven: edges, states, emphasis  |
 | [PRODUCT.md](PRODUCT.md)                                     | who it is for, what it claims, what stays true         |
 | [DESIGN.md](DESIGN.md)                                       | the look, before any screen                            |
 | [docs/CODE_STYLE.md](docs/CODE_STYLE.md)                     | how code is written, before any code                   |

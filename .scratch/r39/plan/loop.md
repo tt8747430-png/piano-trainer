@@ -127,3 +127,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 canvas 91 (2026-11-10):** Chords: spacing on 4/8 steps, cards 16 round, switch knob and weights on the page tokens (Chords boards only).
 **R42 canvas 94 (2026-11-10):** Chords: missing states drawn (hands loading, failed, unsupported; MIDI; offline piano; eight chords) with a States tool on each board.
 **R42 canvas 96 (2026-11-10):** Chords: Night boards, larger text, a keyboard unplugged; the seven questions (chord symbols out of capitals, motion added).
+**R42 canvas 98 (2026-11-10):** Chords: values on Sound and MIDI rows (grey at default), hover, pressed and focus states; scan-first skill.

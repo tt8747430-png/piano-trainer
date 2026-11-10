@@ -386,6 +386,23 @@ The same components look paid-for or AI-made by seven things. Ask each of every 
 
 Applied: the Chords page, canvas 96 (a chord symbol in capitals was wrong content; there was no motion).
 
+## The same UI-design channel: "weirdly perfect" and "every UI concept" (transcripts, 2026-11-10)
+
+- **Edges:** a receipt is hard left and hard right, and only what nobody reads is centred. Every element on a
+  compact screen meets two edges or more; make a new edge rather than filling space or hiding buttons in a menu.
+- **Differentiate, not space out:** pictures where things are referenced, groups by what people hunt for.
+- **Show, not tell:** a stop sign has no words; a diagram or icon registers at once. Explaining harder (labels,
+  tooltips) makes a screen harder to read.
+- **Emphasis is a difference:** a checkbox is coloured only when on; defaults grey, the changed value in ink.
+- **Cards dissolve:** one line and a column edge do a card's work, without borders on borders.
+- **Every UI concept:** signifiers; hierarchy by size, position and colour; a 4-point grid that halves; one sans
+  font; headings at -2 to -3% tracking, 110-120% line height; one primary colour with its ramp, semantic colours
+  for meaning; by night lighter cards, softer lines, dimmer chips; soft shadows, stronger for what floats; icons as
+  tall as the line; buttons and fields with every state; feedback for every action; gradients under text on images.
+- The Figma files sent with them are binary; only their thumbnails could be seen here. `Swipe_Anims.fig` arrived cut
+  off and does not open.
+- Kept as the `scan-first` skill (and four lines in `seven-questions`). Applied: Chords, canvas 97.
+
 ## Rulings the videos led to
 
 - **Undo instead of asking** (owner: "adopt also this"): Kole Jain's act first and offer Undo replaces "a loss asks

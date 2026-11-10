@@ -352,6 +352,9 @@ owner's, typos fixed.
   point, a spacing scale, hierarchy by weight and colour, one accent, real content, matching details, motion from
   where the user acted). Never set a chord symbol in capitals (E♭m7 becomes E♭M7, another chord). Every layer moves
   from where it was asked for, eases out and leaves at once. Night is drawn from the app's dark roles, never inverted.
+- **Scan first (R42, canvas 98):** two transcripts on edges and emphasis. A value row shows its value grey at the
+  default and in ink once changed; every control has hover, pressed and focus. Kept as the `scan-first` skill, read
+  with `seven-questions` on every screen.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the

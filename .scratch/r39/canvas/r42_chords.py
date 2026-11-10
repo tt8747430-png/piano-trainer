@@ -537,7 +537,8 @@ return {
       stateList: [['', 'As designed'], ['handsLoading', 'Hands: loading'], ['handsFailed', 'Hands: did not load'], ['handsUnsupported', 'Hands: this device cannot draw them'], ['midiNone', 'MIDI keyboard: none found'], ['midiOn', 'MIDI keyboard: connected'], ['midiUnsupported', 'MIDI keyboard: this browser has none'], ['midiLost', 'MIDI keyboard: unplugged while playing'], ['large', 'Text: larger (130%)'], ['offline', 'Offline: the lighter piano'], ['eight', 'Staff: eight chords, the most']].map(([v, l]) => ({ l, mark: v === demo ? '✓' : '', fw: v === demo ? 700 : 500, pick: () => go(v) })),
       stageMsgOn: !!MSG[demo] && is3d, stageMsg: MSG[demo] || '', stageRetry: demo === 'handsFailed', stageKeys: demo === 'handsFailed' || demo === 'handsUnsupported',
       retryHands: () => set({ demo: 'handsLoading' }), showKeys: () => set({ demo: '', kbView: '2d' }),
-      midiSub: MIDI[demo] || '', midiSubOn: !!MIDI[demo], soundSub: demo === 'offline' ? 'Offline: a lighter sampled piano plays' : '', soundSubOn: demo === 'offline',
+      midiSub: MIDI[demo] || '', midiSubOn: !!MIDI[demo] && demo !== 'midiOn', midiSubVal: demo === 'midiOn' ? 'Roland FP-30X' : 'None', midiSubValC: demo === 'midiOn' ? C.ink : C.soft,
+      soundSubVal: demo === 'offline' ? 'Lighter piano' : 'Grand piano', soundSubValC: demo === 'offline' ? C.ink : C.soft, soundSub: demo === 'offline' ? 'Offline: a lighter sampled piano plays' : '', soundSubOn: demo === 'offline',
       textZoom: demo === 'large' ? 1.3 : 1, barZoom: demo === 'large' ? 1.1 : 1,
       atMost: seq.length >= 8, mostWord: seq.length + ' of 8 chords', sayMost: () => set({ toast: { t: 'The staff holds 8 chords. Remove one to add another.' } }) }; })(),
   playMain: () => st.playing ? stopAll() : (scope === 'All' ? playSeq() : play(playMode !== 'Block', playMode === 'UpDown' ? 'Up and down' : 'Up')),
@@ -822,7 +823,7 @@ def SWROW(html, on, act):
     assert html.count(a) == 1 and html.count(b) == 1, (on, html.count(a), html.count(b))
     return html.replace(a, '<button type="button" role="switch" aria-checked="{{' + on + '}}" onClick="{{' + act + '}}"').replace(b, '<span aria-hidden="true"')
 # a link row that says its state on a second line, in the app's own words (common.midi, settings.piano)
-def STATEROW(label, sub): return ('<a href="#" style="min-height: 48px; box-sizing: border-box; padding: 8px 12px 8px 16px; display: flex; align-items: center; gap: 12px; color: ' + INK + '; text-decoration: none"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px">' + label + '</span><sc-if value="{{' + sub + 'On}}" hint-placeholder-val="{{false}}"><span style="font-size: 13px; color: ' + SOFT + '">{{' + sub + '}}</span></sc-if></span><span style="color: ' + SOFT + '; display: flex">' + CHEV_R + '</span></a>')
+def STATEROW(label, sub): return ('<a href="#" style="min-height: 48px; box-sizing: border-box; padding: 8px 12px 8px 16px; display: flex; align-items: center; gap: 12px; color: ' + INK + '; text-decoration: none"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px">' + label + '</span><sc-if value="{{' + sub + 'On}}" hint-placeholder-val="{{false}}"><span style="font-size: 13px; color: ' + SOFT + '">{{' + sub + '}}</span></sc-if></span><span style="flex: none; font-size: 16px; color: {{' + sub + 'ValC}}">{{' + sub + 'Val}}</span><span style="color: ' + SOFT + '; display: flex">' + CHEV_R + '</span></a>')
 RANGE = ('<div style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 10px"><div style="display: flex; align-items: center; justify-content: space-between; gap: 12px"><span style="font-size: 16px">Range</span><span style="font-size: 14px; color: ' + SOFT + '; font-variant-numeric: tabular-nums">{{rangeStrip.cap}}</span></div>'
          '<svg viewBox="0 0 340 26" role="img" aria-label="The part of the 88 keys shown" style="display: block; width: 100%; height: auto; border-radius: 4px; overflow: hidden"><rect width="340" height="26" fill="#FEFDFB" stroke="' + LINE + '"></rect><rect x="{{rangeStrip.x}}" y="0" width="{{rangeStrip.w}}" height="26" fill="#F6E3BC"></rect><path d="M6.54 0V26M13.08 0V26" stroke="none"></path><path d="{{rangeStrip.bl}}" fill="#332C28"></path><rect x="{{rangeStrip.x}}" y="0.75" width="{{rangeStrip.w}}" height="24.5" fill="none" stroke="#B07A2A" stroke-width="1.5"></rect></svg>'
          '<div>' + SEGA('keysSeg') + '</div></div>')
@@ -926,7 +927,12 @@ for f in ('Chords', 'ChordsLaptop'):
       'div[role=dialog][style*="bottom:"] { transform-origin: bottom center } div[role=dialog][aria-label=Piano] { transform-origin: top right }'
       ':has(+ [role=dialog]) { animation: pt-fade 200ms ease-out }'
       'div[role=status][style*="bottom: 100px"] { animation: pt-toast 220ms cubic-bezier(.22,1,.36,1) }'
-      '@media (prefers-reduced-motion: reduce) { * { animation: none !important } }</style>')
+      'button, a[href] { transition: scale 120ms ease-out, filter 120ms ease-out }'
+      '@media (hover: hover) { button:hover:not([aria-disabled=true]), a[href]:hover { filter: brightness(.96) } }'
+      'button:active:not([aria-disabled=true]):not([role=group] > button), a[href]:active { scale: .96 }'
+      '[role=group] > button:active { filter: brightness(.9) }'
+      ':focus-visible { outline: 2px solid #356890; outline-offset: 2px }'
+      '@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important } }</style>')
     h = h.replace('</style>', '</style>' + MOTION, 1)
     # larger text (canvas 95): the reading and the layers scale with the learner's text size, as rem does in the app
     h = h.replace('<main class="nos" style="', '<main class="nos" style="zoom: {{textZoom}}; ')

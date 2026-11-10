@@ -102,7 +102,7 @@ Before every publish, and again before a port is called done:
    no smaller than on the laptop. There is no card in a card. A choice made in context is a bottom sheet; something
    new opens a page. Both empty states are drawn: the first run points at the main action, and no results says so,
    suggests and gives a way out.
-3. **Answer the seven questions** (`seven-questions`), one line each in the report.
+3. **Answer the seven questions and scan first** (`seven-questions`, `scan-first`), one line each in the report.
 4. **Check it against `owner-way/references/craft-details.md`:** still numbers, wrapping, plurals, concentric
    corners, optical centring, one icon set, 44px targets, one curve, nothing from scale 0.
 5. **Look as the most exacting designer you know would,** the one who screenshots the one wrong thing and sends it
@@ -142,6 +142,7 @@ source; installing one is the owner's decision.
 | An AI-coding channel: AI-built sites that look designed (transcript) | a design system not adjectives, proven components, named motion, named responsive layouts |
 | UX Peak: psychology, a product page's 15 mistakes, advanced tips (transcripts) | smart defaults, never start at zero, value over label, input by frequency, search that starts with help |
 | John (Meta engineer): shipping a vibe-coded app (transcript) | QA by breaking it, the non-functional list |
+| A UI-design channel: "weirdly perfect" and "every UI concept" (transcripts, Figma files seen as thumbnails only) | edges, differentiated content, pictures over words, states on every control, emphasis as a difference, no cards in cards; one font, tight headings, dark depth by lighter cards |
 | A UI-design channel: the seven things every good UI has (transcript) | the seven questions: focal point, spacing scale, weight and colour, one accent, real content, matching details, motion from where the user acted |
 | ibelick/ui-skills `baseline-ui` (MIT) | empty states with one action, errors by the action, `dvh`, motion limits |
 | jakubkrehel/make-interfaces-feel-better (MIT) | corners, optical alignment, icons, hit areas, 10% review, findings table |

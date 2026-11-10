@@ -5,6 +5,18 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 98: scan first.** Owner: two transcripts from a UI-design channel ("weirdly perfect": edges,
+  differentiated content, pictures over words, emphasis as a difference, no cards in cards; "every UI concept":
+  signifiers, states, feedback, dark depth) and four Figma files, then "use the figma connector".
+  - **Values on the rows:** Piano settings › Sound and MIDI keyboard show their value on the right: grey at the
+    default ("Grand piano", "None"), ink once changed ("Lighter piano" offline, "Roland FP-30X" connected, which
+    replaces the "Connected:" line).
+  - **Every control answers:** hover on a pointer, pressed at 0.96 (the split Play darkens instead), a 2px Deep Sky
+    focus ring for the keyboard (Night: Sky Light); nothing moves under reduced motion.
+  - **Kept, checked:** edges (centred only the chord's name, which is the screen's one thing); pictures do the reading
+    (staff, lit keys, hands); one honey control; by Night cards lighter than the page.
+  - **The Figma files:** the connector reads only files already in Figma, by link; the `.fig` files could not be
+    opened from here (`Swipe_Anims.fig` arrived cut off). Asked for their links.
 - **Canvas Version 96: Night, larger text, a keyboard unplugged, and the seven questions.** Owner: "continue but I dont
   need the russsian now and also check this", with a transcript of a video on the seven things every good UI has (focal
   point, spacing scale, hierarchy by weight and colour, one accent, real content, matching details, motion from where
