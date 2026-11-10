@@ -5,6 +5,32 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 108: the chords as a lead sheet, nothing that moves the screen.** Owner: "I dont like such
+  controls or options that change the ui so radically like when I click on the d flat or c sharp It changes the layout
+  and the whole piano keyboard is lifted up and this back to cmaj7 I also dont like very much. I also dont like how this
+  looks or interacts like only this pill is clickable and not the whole chord or note and also this chips I dont like
+  very much like better the whole chord with this name selected properly or maybe something else." And: "the key change
+  is not the clear and understandable and also the ordering of the option in the settings i dont like. this menu was for
+  the keyboard settings and now we have two mixed things there"; "I dont like how all the elements are disappearing
+  when disable the piano"; "alway check that the text is not exceeding its barrier"; the range strip "should also be
+  dragable"; the next chord "of its family like chromatically ... and maybe also diatonically"; "any chord is not very
+  good text".
+  - Each chord is a bar with a barline, its symbol above in serif; the whole bar, symbol to the bottom line, is one
+    button, the shown chord's bar tinted honey. No pills, no chips, no × on the staff.
+  - The card's foot holds the hand's fingers, then Remove (a bin, "Remove Cmaj7/B") and Transpose with its word; the
+    corner icon that covered the first chord is gone. Choosing the first chord scrolls the clef back into view.
+  - Nothing appears or vanishes under a finger: "Written as" keeps its row (hidden on a white key); "Back to Cmaj7" and
+    "No key signature" are gone (the original key is one tap on the keyboard picker; C major is the C key); the Next
+    chord sheet keeps one height across In the key | Chromatic.
+  - The Keyboard sheet holds only the keyboard (Show the piano; 3D piano with Hands on the keys, or 2D keys; Range;
+    Labels; Sound; MIDI keyboard). The key signature is the clef's own, chosen as a key with Major | Minor and drawn.
+  - Show the piano off dims the piano's settings in place (40 %, not tappable), never hides them.
+  - Range: a strip of the 88 keys, dragged or moved with the arrow keys, and Fit the chord | 2 octaves | 4 octaves; a
+    fixed range starts and ends on white keys ("C2 – B3"). The 3D camera draws a white key no smaller than 22 px, so a
+    phone shows about two and a half octaves and follows the hands past that; 4 octaves fits whole on a laptop.
+  - Next chord: In the key (Triads | Sevenths, by degree) or Chromatic (the same chord, a half step up and on), then
+    "All chords ›" (chosen over "Any chord", "More chords", "Other chord": it says it opens the whole picker).
+  - The layout check now fails any button whose text runs past its edge.
 - **Canvas Version 107: a letter and ♭ ♮ ♯ for a chord's root, the keyboard only for moving to a key, the key
   signature stepped like Transpose.** Owner: "it is interesting for transpose but not for picking a chords. and I dont
   like the split note between the C sharp and d flat. look at the examples and websites and make best decisions. and

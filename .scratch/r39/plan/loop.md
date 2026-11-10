@@ -143,3 +143,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **Canvas 106 (2026-11-10):** Chords: staff at one size, scrolling; the octave root picker (C♯ over D♭) for Root, Transpose and Random chords; Transpose reads as steps from the original with Back to.
 
 **Canvas 107 (2026-11-10):** Chords: Root is seven letters plus ♭ ♮ ♯; Transpose and Random chords keep the keyboard with one name per black key and "Written as"; Key signature is a ♭/♯ stepper with the signature drawn.
+**Canvas 108 (2026-11-10):** Chords: lead-sheet bars (the whole bar the target), Remove and Transpose in the card's foot, no layout shifts (Written as reserved, Back to and No key signature gone, Next chord one height), range on white keys; the layout check catches text past its edge.

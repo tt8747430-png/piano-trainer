@@ -385,6 +385,11 @@ owner's, typos fixed.
 - **A chord's root is a letter and ♭ ♮ ♯; a keyboard only for moving to a key (R42, canvas 107):** "it is interesting
   for transpose but not for picking a chords"; "I dont like the split note between the C sharp and d flat"; the key
   signature "like the transpose": a ♭/♯ stepper. Never: a black key split into two names.
+- **Nothing moves under the finger; the whole chord is the target (R42, canvas 108):** "I dont like such controls or
+  options that change the ui so radically"; "only this pill is clickable and not the whole chord". Chords on a staff
+  are bars of a lead sheet, each bar one button; a row that comes and goes keeps its place; no "Back to …" links.
+  Never: pills or chips for chords on a staff, a control that appears and pushes the layout, a disabled section hidden
+  rather than dimmed.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the

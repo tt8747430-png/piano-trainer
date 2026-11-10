@@ -19,6 +19,10 @@
         const pad = Math.min(t.left - r.left, r.right - t.right)
         if (pad < 5.5) { out.push(`label ${pad.toFixed(1)}px from its control's edge: "${name(el)}"`); break } }
     }
+    // no word runs past its control's edge, filled or bare (owner, v107: "alway check that the text is not exceeding its barrier")
+    { const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); let n
+      while ((n = w.nextNode())) { if (!n.textContent.trim()) continue; const g = document.createRange(); g.selectNodeContents(n); const t = g.getBoundingClientRect()
+        if (t.width && (t.left < r.left - 0.5 || t.right > r.right + 0.5)) { out.push(`text past its edge: "${name(el)}"`); break } } }
     if (Math.min(r.width, r.height) < 30 && !el.closest('svg')) out.push(`small target ${Math.round(r.width)}×${Math.round(r.height)}: "${name(el)}"`)
   }
   for (const bar of screen.querySelectorAll('[role=toolbar]')) {
