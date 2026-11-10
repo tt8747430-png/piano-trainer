@@ -41,11 +41,11 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   from the list it disappears ... like filter chips"; "I would like such plus or minus buttons also in the key
   signature controls"; "I also dont like how this row with multiple chords looks"; "this first chord on is also not
   very understandable and clear".
-  - *(Replaced in v111: Remove is in the "Change" drawer, the foot holds only the fingers.)* Remove is inside the chosen chord's own honey bar, under its notes ("Remove", the bin); the card's foot keeps what
+  - _(Replaced in v111: Remove is in the "Change" drawer, the foot holds only the fingers.)_ Remove is inside the chosen chord's own honey bar, under its notes ("Remove", the bin); the card's foot keeps what
     is about every chord: the hand's fingers and "Transpose all".
   - No "Written as" anywhere. A black key reads its usual name (D♭ major, C♯ minor); the other spelling is reached by
     − / +: Key signature steps the circle of fifths (− one more flat, + one more sharp, to C♭ and C♯), Transpose steps
-    a half step and spells by the key. *(Replaced in v111: one Key drawer, − / + a half step, letters and ♭ ♮ ♯.)*
+    a half step and spells by the key. _(Replaced in v111: one Key drawer, − / + a half step, letters and ♭ ♮ ♯.)_
   - Key signature: − name and count + · the signature drawn · Major | Minor · the keyboard.
   - Transpose names the key it moves to ("D♭ major", "Up a half step"), the keyboard is "Key" (was "First chord on"),
     and the chords run as one line of a lead sheet between barlines, scrolling sideways, never wrapped.

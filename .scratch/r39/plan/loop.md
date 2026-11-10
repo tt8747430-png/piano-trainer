@@ -24,20 +24,20 @@ after compacting"
 
 ## Order and state
 
-| # | Page | Canvas | State |
-| - | ---- | ------ | ----- |
-| 1 | Songs library (`/songs`, My songs · Explore) | [The ideal Piano Trainer](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH) (was The ideal Songs) | drawn, waiting for the owner |
-| 2 | Song's page (`/songs/$pieceId`) | [The ideal Songs](https://claude.ai/artifact/Ana84hFnmzQCBFuvNZRmXB), row 2 | drawn, waiting for the owner |
-| 3 | Score editor (`/edit/$pieceId`) | [The ideal Songs](https://claude.ai/artifact/Ana84hFnmzQCBFuvNZRmXB), row 3 | drawn, waiting for the owner |
-| 4 | Practice overview (`/practice`) | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH) | drawn, waiting for the owner |
-| 5 | Chords (`/practice/chords`) | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 2 | drawn, waiting for the owner |
-| 6 | Scales and keys | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 3 | drawn, waiting for the owner |
-| 7 | Intervals | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 4 | drawn, waiting for the owner |
-| 8 | Progressions (and a progression's page) | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), rows 5 and 6 | drawn, waiting for the owner |
-| 9 | Accompaniment | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 7 | drawn, waiting for the owner |
-| 10 | Chord player | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 8 | drawn, waiting for the owner |
-| 11 | Exercises and Quiz | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), rows 9 and 10 | drawn, waiting for the owner |
-| 12 | Tools: Metronome, Tuner, Chord finder, Circle of fifths | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), rows 11 to 14 | drawn, waiting for the owner |
+| #   | Page                                                    | Canvas                                                                                             | State                        |
+| --- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------- |
+| 1   | Songs library (`/songs`, My songs · Explore)            | [The ideal Piano Trainer](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH) (was The ideal Songs) | drawn, waiting for the owner |
+| 2   | Song's page (`/songs/$pieceId`)                         | [The ideal Songs](https://claude.ai/artifact/Ana84hFnmzQCBFuvNZRmXB), row 2                        | drawn, waiting for the owner |
+| 3   | Score editor (`/edit/$pieceId`)                         | [The ideal Songs](https://claude.ai/artifact/Ana84hFnmzQCBFuvNZRmXB), row 3                        | drawn, waiting for the owner |
+| 4   | Practice overview (`/practice`)                         | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH)                            | drawn, waiting for the owner |
+| 5   | Chords (`/practice/chords`)                             | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 2                     | drawn, waiting for the owner |
+| 6   | Scales and keys                                         | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 3                     | drawn, waiting for the owner |
+| 7   | Intervals                                               | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 4                     | drawn, waiting for the owner |
+| 8   | Progressions (and a progression's page)                 | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), rows 5 and 6              | drawn, waiting for the owner |
+| 9   | Accompaniment                                           | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 7                     | drawn, waiting for the owner |
+| 10  | Chord player                                            | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), row 8                     | drawn, waiting for the owner |
+| 11  | Exercises and Quiz                                      | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), rows 9 and 10             | drawn, waiting for the owner |
+| 12  | Tools: Metronome, Tuner, Chord finder, Circle of fifths | [The ideal Practice](https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH), rows 11 to 14             | drawn, waiting for the owner |
 
 Standing rules: design only, no app code until the owner's "ok"; the owner's rulings in each area's specs and the
 feedback log win over any reference.
