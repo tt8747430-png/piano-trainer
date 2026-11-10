@@ -4,6 +4,13 @@
 
 Canvas v130, https://claude.ai/artifact/HezkVS2MXdwz7uJ14KDGgp. Each line names the owner's words it rests on.
 
+**One picture per mode, the same in the toolbar and the Practice sheet (canvas Version 118, 2026-11-10).** Owner:
+"why the icons of the play mode differ in the drawer and in the toolbar". They came from two definitions: the toolbar
+still fell back to R36's speedometer (Listen at a speed) for Play, while the sheet's card drew a metronome. Now one map,
+`MODE_ICON = { wait: hourglass, listen: metronome }`, feeds both; Follow's waves are gone with Follow. In the app,
+`PaceButton.tsx`'s `OWN_PACE_ICON` (`follow: Waves`) becomes the same single map when R37-1 is ported (Lucide
+`Hourglass` and a metronome).
+
 **Every sheet in the Chords page's kit (canvas Version 117, 2026-11-10).** Owner, of v116: "but you didnt do the
 proper refactoring of the settings of the buttons of the styles and so on". v116 had changed only the bar, the
 transport and Transpose; the sheets were still R37's. Now every Player sheet (Practice, Hands, Keyboard, the song's

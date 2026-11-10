@@ -447,8 +447,8 @@ const layout = s.layout ?? p.layout ?? 'page';
 const pick = (patch) => () => this.setState(patch);
 const flip = (key, first) => () => this.setState({ [key]: !(s[key] ?? first) });
 const HOURGLASS = 'M5 22h14M5 2h14M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2';
-const WAVES = 'M2 5q2.5 2 5 0t5 0 5 0 5 0M2 12q2.5 2 5 0t5 0 5 0 5 0M2 19q2.5 2 5 0t5 0 5 0 5 0';
-const GAUGE = 'm12 14 4-4M3.34 19a10 10 0 1 1 17.32 0';
+const METRO = 'M9 3h6l4 18H5L9 3ZM12 15l6-9M7.5 15h9'
+const MODE_ICON = { wait: HOURGLASS, listen: METRO };
 const mode = s.mode ?? 'wait';
 const speed = s.speed ?? 100;
 const hands = (s.showR ?? 'show') === 'hide' ? ((s.showL ?? 'show') === 'hide' ? 'both' : 'lh') : (s.showL ?? 'show') === 'hide' ? 'rh' : 'both';
@@ -751,7 +751,7 @@ doneAgain: () => { togglePlayNow(); },
 doneStepLabel: mode === 'wait' ? 'Try it in Play' : 'Play at ' + (Math.round(80 * speed / 100) + 5) + ' BPM',
 doneStep: () => { if (mode === 'wait') this.setState({ mode: 'play', open: 'none' }); else this.setState({ speed: (Math.round(80 * speed / 100) + 5) / 0.8, open: 'none' }); },
 paceLabel: (mode === 'wait' ? 'Wait' : 'Play') + (speed === 100 ? '' : ' · ' + Math.round(80 * speed / 100) + ' BPM'),
-modeTiles: [['wait', 'Wait', HOURGLASS], ['play', 'Play', 'M9 3h6l4 18H5L9 3ZM12 15l6-9M7.5 15h9']].map(([id, name, d]) => { const on = id === 'wait' ? mode === 'wait' : mode !== 'wait'; return { name, d, on: on ? 'true' : 'false', line: on ? '#B07A2A' : 'transparent', bg: on ? '#FBF1DD' : '#FEFDFB', ring: on ? '0 0 0 2px #B07A2A' : '0 0 0 1px rgba(51,41,33,.07)', dot: on ? '#B07A2A' : 'transparent', dotRing: on ? 'none' : 'inset 0 0 0 2px #DAD1C8', mk: on ? 1 : 0, pick: () => this.setState({ mode: id === 'wait' ? 'wait' : 'listen' }) }; }),
+modeTiles: [['wait', 'Wait', MODE_ICON.wait], ['play', 'Play', MODE_ICON.listen]].map(([id, name, d]) => { const on = id === 'wait' ? mode === 'wait' : mode !== 'wait'; return { name, d, on: on ? 'true' : 'false', line: on ? '#B07A2A' : 'transparent', bg: on ? '#FBF1DD' : '#FEFDFB', ring: on ? '0 0 0 2px #B07A2A' : '0 0 0 1px rgba(51,41,33,.07)', dot: on ? '#B07A2A' : 'transparent', dotRing: on ? 'none' : 'inset 0 0 0 2px #DAD1C8', mk: on ? 1 : 0, pick: () => this.setState({ mode: id === 'wait' ? 'wait' : 'listen' }) }; }),
 rampSw: sw((s.ramp ?? 0) > 0, () => this.setState({ ramp: (s.ramp ?? 0) > 0 ? 0 : 5 })),
 speedOpts: [50, 75, 100].map((v) => ({ name: v + '%', on: v === speed ? 'true' : 'false', ...chip(v === speed), pick: pick({ speed: v }) })),
 loopSw: sw(loop, flip('loop', false)),
@@ -896,7 +896,7 @@ stepBack: pick({ start: false, bar: Math.max(1, bar - 1), beat: 1 }), stepOn: pi
 isPace: open === 'pace', isHands: open === 'hands', isMore: open === 'settings', anyOpen: open !== 'none',
 openPace: toggleOpen('pace'), openHands: toggleOpen('hands'), openMore: toggleOpen('settings'), close: pick({ open: 'none' }),
 playing, showControls: !playing, playLabel: playing ? 'Pause' : 'Play', playIcon: playing ? 'M7 4h4v16H7zM13 4h4v16h-4z' : 'M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z', togglePlay: togglePlayNow,
-paceIcon: mode === 'wait' ? HOURGLASS : mode === 'follow' ? WAVES : GAUGE,
+paceIcon: MODE_ICON[mode === 'wait' ? 'wait' : 'listen'],
 handsLabel: { lh: 'Left hand', both: 'Both hands', rh: 'Right hand' }[hands], handsCap: { lh: 'Left', both: 'Both', rh: 'Right' }[hands], hB: hands === 'both', hR: hands === 'rh', hL: hands === 'lh', paceCap: mode === 'wait' ? 'Wait' : 'Play', loopCap: loop ? loopA + '–' + loopB : 'Loop', kbCap: keys ? (kbStyle === '2d' ? '2D' : '3D') : 'Off', handsShort: { lh: 'L', both: '2', rh: 'R' }[hands],
 keyName: keyLabel(KEY), writtenKey: keyLabel(WRIT), keyMoved: KEY.l !== WRIT.l || KEY.a !== WRIT.a, keyBack: () => this.setState({ songKey: null }), openKey: pick({ open: 'key' }), isKey: open === 'key', trDown: () => stepKey(-1), trUp: () => stepKey(1), trPick: KEYPICK(KEY.l, KEY.a, setKey), keyMini: Array.from({ length: Math.abs(keyF) }, (_, k) => ({ x: 52 + k * 11, y: (keyF > 0 ? [30, 45, 25, 40, 55, 35, 50] : [50, 35, 55, 40, 60, 45, 65])[k] + 5, sharp: keyF > 0, flat: keyF < 0 })),
 };

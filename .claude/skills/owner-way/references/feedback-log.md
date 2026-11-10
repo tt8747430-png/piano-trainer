@@ -78,6 +78,9 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **One icon, one meaning, defined once (R43, canvas 118):** "why the icons of the play mode differ in the drawer and
+  in the toolbar". A mode's picture is one map read by every place that shows the mode; Play is a metronome, Wait an
+  hourglass, everywhere.
 - **A style carried over means every sheet and control, not the bar alone (R43, canvas 117):** "but you didnt do the
   proper refactoring of the settings of the buttons of the styles and so on". The Player's sheets now use the Chords
   kit throughout: centred title and Done, green switches, plain groups, radio cards with a check, Keyboard as Chords'.

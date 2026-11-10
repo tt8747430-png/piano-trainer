@@ -259,8 +259,25 @@ def kit(t, phone):
     return t
 
 
+def lit(t, a, b):  # a literal, exactly once
+    assert t.count(a) == 1, a[:60]
+    return t.replace(a, b)
+
+
+def icons(t):
+    # One picture per mode (owner, canvas 118): the toolbar and the Practice sheet read the same map.
+    t = lit(t, "const WAVES = 'M2 5q2.5 2 5 0t5 0 5 0 5 0M2 12q2.5 2 5 0t5 0 5 0 5 0M2 19q2.5 2 5 0t5 0 5 0 5 0';\n", '')  # Follow is gone (R37-1)
+    t = lit(t, "const GAUGE = 'm12 14 4-4M3.34 19a10 10 0 1 1 17.32 0';",
+            "const METRO = 'M9 3h6l4 18H5L9 3ZM12 15l6-9M7.5 15h9'\nconst MODE_ICON = { wait: HOURGLASS, listen: METRO };")
+    t = lit(t, "modeTiles: [['wait', 'Wait', HOURGLASS], ['play', 'Play', 'M9 3h6l4 18H5L9 3ZM12 15l6-9M7.5 15h9']]",
+            "modeTiles: [['wait', 'Wait', MODE_ICON.wait], ['play', 'Play', MODE_ICON.listen]]")
+    t = lit(t, "paceIcon: mode === 'wait' ? HOURGLASS : mode === 'follow' ? WAVES : GAUGE,",
+            "paceIcon: MODE_ICON[mode === 'wait' ? 'wait' : 'listen'],")
+    return t
+
+
 for name, phone in (('PlayerApp', True), ('PlayerDesk', False)):
-    t = kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone)
+    t = icons(kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone))
     (OUT / f'{name}.dc.html').write_text(t)
 # a board for the new page
 w = (OUT / 'PlayerSettings.dc.html').read_text()
