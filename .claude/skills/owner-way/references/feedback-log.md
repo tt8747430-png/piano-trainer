@@ -408,7 +408,7 @@ owner's, typos fixed.
   chord, feels more like clicking on a button that on a chord and look how our real app does this"; "d remains d and
   not d flat f for example must remain f and not f flat"; "this is a transpose for the key ... we need to find a way to
   take the chords as well". On a staff, what is chosen is coloured in the ring as the app's score does, never a filled
-  bar; the clef opens Key where it prints; ♭ ♮ ♯ renames the letters (only where a key or root exists); Key lists the
+  bar; the clef opens Key where it prints; Key lists the
   chords to transpose. Never: a label over the clef, words explaining a signature, a switch for showing the key.
 - **A name sits over its notes; the default is quiet, the exception marked (R42, canvas 113):** "the chord name and
   the chord alignment is still not correct. and the empty state is looking weird. and i dont like now that other
@@ -418,6 +418,11 @@ owner's, typos fixed.
   selection or grey tap box, and nothing in a scroller paints over a sheet.
 - **What is printed for one chord is printed for all (R42, canvas 114):** "why the fingers are only on the selected
   chord, it should be on all". Selection colours a chord; it never decides what the staff prints.
+- **An accidental belongs to one letter; a move is spelled the way it goes (R42, canvas 115):** "the selects flat or
+  sharp or natural only change the current key and not all of them"; "why when transposing from c i go to d flat and
+  not to c sharp, fix this and all such issues". Up in sharps, down in flats, unless that key does not exist; chords
+  spelled from the new key's scale, never a double accidental where an enharmonic root avoids it. Walk all twelve keys
+  both ways in the runtime before saying spelling works.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the

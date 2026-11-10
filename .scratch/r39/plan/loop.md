@@ -153,3 +153,5 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **Canvas 113 (2026-11-10):** Chords: name centred over its notes; all chords painted, the chosen ringed; no text selection or tap box on iOS; the + no longer shows through sheets; the chosen chord scrolled whole into view; Next chord empty state with "Chromatic chords"; Key drawer shorter (♭ ♮ ♯ beside Major | Minor, "Transpose with the key", "Stays"); laptop Key popover left of the staff.
 
 **Canvas 114 (2026-11-10):** Chords: finger numbers on every chord, not only the chosen one.
+
+**Canvas 115 (2026-11-10):** Chords: ♭ ♮ ♯ changes only the chosen letter (others plain, an impossible one dimmed); − / + spelled by direction (C → C♯, D → D♭, never D♯ major); transposed chords spelled from the new key's scale, no double accidentals or E♯/B♯/F♭/C♭ roots; chromatic suggestions spelled by direction.

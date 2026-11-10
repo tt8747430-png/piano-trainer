@@ -33,16 +33,22 @@ const LET = 'CDEFGAB', NATPC = [0, 2, 4, 5, 7, 9, 11];
 // for transpose but not for picking a chords. and I dont like the split note between the C sharp and d flat". Each
 // black key carries one name, the one its key is written with (D♭ major, C♯ minor); when a black key is chosen, its
 // other spelling is offered under the keys ("Written as C♯ | D♭").
-const KEYPICK = (curL, curA, pick, pre, ok, mode, setMode) => {
-  // owner, v112: "the switches between the sharp or flat dont change the relevant keys, d remains d and not d flat f for
-  // example must remain f and not f flat". ♭ ♮ ♯ is a switch that names the letters: ♭ reads C D♭ E♭ F G♭ A♭ B♭, ♯ reads
-  // C♯ D♯ E F♯ G♯ A♯ B; a letter whose ♭ or ♯ makes no key or root (F♭, E♯, D♯ major) stays natural, never greyed
-  const m = curA !== 0 ? curA : (mode && !ok(curL, mode) ? mode : 0);
-  return { lets: [0, 1, 2, 3, 4, 5, 6].map((l) => { const a2 = ok(l, m) ? m : 0, on = l === curL && a2 === curA;
-      return { s: LET[l] + ACC[String(a2)], on, dis: false, op: 1, bg: on ? '#F6E3BC' : '#FEFDFB', ring: on ? 'none' : '0 0 0 1px ' + C.line, fw: on ? 800 : 600, aria: (pre || '') + LET[l] + (a2 ? (a2 > 0 ? ' sharp' : ' flat') : ''), pick: () => pick(l, a2) }; }),
-    accs: [[-1, '♭', 'Flat'], [0, '♮', 'Natural'], [1, '♯', 'Sharp']].map(([a, g, w]) => { const on = a === m;
-      return { l: g, aria: w, on, dis: false, op: 1, bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', pick: () => { setMode(a); pick(curL, ok(curL, a) ? a : 0); } }; }) };
+const KEYPICK = (curL, curA, pick, pre, ok) => {
+  // owner, v115: "the selects flat or sharp or natural only change the current key and not all of them". The letters
+  // are always plain; the chosen one wears its accidental. ♭ ♮ ♯ changes the chosen letter alone; one that makes no
+  // root or key for it (E♯, F♭, D♯ major) is dimmed in place. A new letter starts natural.
+  return { lets: [0, 1, 2, 3, 4, 5, 6].map((l) => { const on = l === curL, a2 = on ? curA : 0;
+      return { s: LET[l] + ACC[String(a2)], on, dis: false, op: 1, bg: on ? '#F6E3BC' : '#FEFDFB', ring: on ? 'none' : '0 0 0 1px ' + C.line, fw: on ? 800 : 600, aria: (pre || '') + LET[l] + (a2 ? (a2 > 0 ? ' sharp' : ' flat') : ''), pick: () => { if (!on) pick(l, 0); } }; }),
+    accs: [[-1, '♭', 'Flat'], [0, '♮', 'Natural'], [1, '♯', 'Sharp']].map(([a, g, w]) => { const on = a === curA, good = ok(curL, a);
+      return { l: g, aria: w + ' ' + LET[curL], on, dis: !good, op: good ? 1 : 0.35, bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', pick: () => { if (good && !on) pick(curL, a); } }; }) };
 };
+// a pitch spelled the way it moves (owner, v115: "why when transposing from c i go to d flat and not to c sharp"):
+// a white key by its letter; a black key as a sharp going up and a flat going down, the other way when that spelling
+// makes no key (D♯ major is E♭ major); never E♯, B♯, F♭ or C♭ as a root
+const spellPc = (pc, dir, ok) => { const n = NATPC.indexOf(pc); if (n >= 0) return [n, 0];
+  const sh = [NATPC.indexOf((pc + 11) % 12), 1], fl = [NATPC.indexOf((pc + 1) % 12), -1], o = dir > 0 ? [sh, fl] : [fl, sh];
+  return o.find(([l, a]) => !ok || ok(l, a)) || o[0]; };
+const plainRoot = (l, a) => (SKIP.includes(LET[l] + a) ? [NATPC.indexOf((NATPC[l] + a + 12) % 12), 0] : [l, a]);
 // a ♭ or ♯ names a black key only: C♭, F♭, E♯ and B♯ are never offered for a key, as for a root
 const keyOk = (minorish) => (l, a) => !SKIP.includes(LET[l] + a) && Math.abs([0, 2, 4, -1, 1, 3, 5][l] + 7 * a - (minorish ? 3 : 0)) <= 7;
 
@@ -328,7 +334,6 @@ const KEY = st.key || { l: 0, a: 0, mi: false };
 const kMinor = KEY.mi;
 const keyF = KFIF[KEY.l] + 7 * KEY.a - (kMinor ? 3 : 0);
 const sigF = Math.abs(keyF) <= 7 ? keyF : 0;
-const accM = (k) => (st.accM || {})[k] || 0, setAccM = (k) => (a) => set({ accM: Object.assign({}, st.accM, { [k]: a }) });
 const sigOf = {}; (sigF > 0 ? [3, 0, 4, 1, 5, 2, 6] : [6, 2, 5, 1, 4, 0, 3]).slice(0, Math.abs(sigF)).forEach((l) => { sigOf[LET[l]] = sigF > 0 ? 1 : -1; });
 const sigW = sigF ? Math.abs(sigF) * 9 + 4 : 0;
 // Play as Arpeggio writes one chord as it is played: its notes in a row, up, or up and down (owner, canvas 90)
@@ -435,12 +440,19 @@ const SERIFF = "'Iowan Old Style', 'Palatino', Georgia, serif";
 // Transpose (To key, "Transpose chord symbols"): the chords chosen in the drawer move with the key, the others stay
 // and are written against the new signature; with none chosen only the key changes
 const trOff = (st.trOff || []).filter((i) => i < seq.length);
-const transposeTo = (l2, a2) => { const semi = ((rootPc(l2, a2) - tpc) % 12 + 12) % 12; if (!semi && l2 === KEY.l && a2 === KEY.a) return; const dl = (l2 - KEY.l + 7) % 7;
-  const s2 = seq.map((c, i) => { if (trOff.includes(i)) return c; const pc = (rootPc(c.rl, c.ra) + semi) % 12; let l = (c.rl + dl) % 7, a = ((pc - NATPC[l] + 18) % 12) - 6;
-    if (Math.abs(a) > 1) { const o = [0, 1, 2, 3, 4, 5, 6].map((L) => ({ L, a: ((pc - NATPC[L] + 18) % 12) - 6 })).filter((o) => Math.abs(o.a) <= 1).sort((x, y) => Math.abs(x.a) - Math.abs(y.a))[0]; l = o.L; a = o.a; }
-    return Object.assign({}, c, { rl: l, ra: a }); });
+// a chord moved into a key is spelled from that key's scale (C♯m7 in D major is F♯m7, not G♭m7); a chord outside the
+// scale takes the key's side (sharps in a sharp key) and the enharmonic root when its own spelling would need a double
+// sharp or flat (A♭maj7 in G♯ minor, not G♯maj7 with F𝄪), except on the fifth degree (D♯7 in G♯ minor, as written)
+const dbl = (l, a, q) => QS[q].t.some(([sx, d]) => { const L = (l + d - 1) % 7; return Math.abs(((NATPC[l] + a + sx - NATPC[L]) % 12 + 18) % 12 - 6) > 1; });
+const fitRoot = (l, a, q) => { if (!dbl(l, a, q)) return [l, a]; const o = a > 0 ? [(l + 1) % 7, -1] : a < 0 ? [(l + 6) % 7, 1] : null;
+  return o && rootPc(o[0], o[1]) === rootPc(l, a) && !SKIP.includes(LET[o[0]] + o[1]) && !dbl(o[0], o[1], q) ? o : [l, a]; };
+const inKey = (pc, l2, a2, q, dir) => { const k = STEPS.indexOf((pc - rootPc(l2, a2) + 12) % 12);
+  if (k >= 0) { const l = (l2 + k) % 7; const [L, A] = plainRoot(l, ((pc - NATPC[l] + 18) % 12) - 6); return k === 4 ? [L, A] : fitRoot(L, A, q); }
+  const f = KFIF[l2] + 7 * a2 - (kMinor ? 3 : 0); return fitRoot(...spellPc(pc, f > 0 ? 1 : f < 0 ? -1 : dir || 1, (L, A) => !SKIP.includes(LET[L] + A)), q); };
+const transposeTo = (l2, a2) => { const semi = ((rootPc(l2, a2) - tpc) % 12 + 12) % 12; if (!semi && l2 === KEY.l && a2 === KEY.a) return; const dir = semi && semi <= 6 ? 1 : -1;
+  const s2 = seq.map((c, i) => { if (trOff.includes(i)) return c; const [l, a] = inKey((rootPc(c.rl, c.ra) + semi) % 12, l2, a2, c.q, dir); return Object.assign({}, c, { rl: l, ra: a }); });
   set(Object.assign({ seq: s2, key: { l: l2, a: a2, mi: kMinor }, toast: null }, loadChord(s2[cur]))); if (!trOff.includes(cur)) soundOf(s2[cur]); };
-const stepTo = (pc) => { const n = KEYSP[pc]; transposeTo(LET.indexOf(n[0]), n.length > 1 ? (n[1] === '♯' ? 1 : -1) : 0); };
+const stepTo = (dir) => { const [l, a] = spellPc((tpc + dir + 12) % 12, dir, keyOk(minorKey)); transposeTo(l, a); };
 // adding keeps the sheet open, so a progression is built tap by tap; Done closes it (R42 v105)
 const editAt = st.sheet === 'next' && st.editAt != null && st.editAt < seq.length ? st.editAt : null;
 // from a chord's name the drawer changes that chord in place; from + it adds the next one (owner, v111)
@@ -448,10 +460,10 @@ const addNext = (c) => { const s2 = editAt != null ? seq.map((x, i) => (i === ed
 const nextMode = st.nextMode || 'key';
 const CHN = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'], IVN = ['', 'half step', 'whole step', 'minor 3rd', 'major 3rd', '4th', 'tritone', '5th', 'minor 6th', 'major 6th', 'minor 7th', 'major 7th'];
 const usedCh = seq.map((c) => rootPc(c.rl, c.ra) + ':' + c.q);
-const chromList = [1, -1, 2, -2, 3, -3].map((d) => { const pc = (root + d + 12) % 12, n = CHN[pc], l = LET.indexOf(n[0]), a = n.length > 1 ? (n[1] === '♯' ? 1 : -1) : 0;
+const chromList = [1, -1, 2, -2, 3, -3].map((d) => { const pc = (root + d + 12) % 12, [l, a] = fitRoot(...spellPc(pc, d), qi), n = LET[l] + ACC[String(a)];
   const c = { rl: l, ra: a, q: qi, inv: 0, voicing: snap.voicing, hand: hands }; c.inv = nearest(c); const r = IVN[Math.abs(d)] + (d > 0 ? ' up' : ' down');
   return { id: pc + ':' + qi, s: n + q.k, r, bg: '#FEFDFB', ring: '0 0 0 1px ' + C.line, aria: (editAt != null ? 'Change to ' : 'Add ') + n + q.k + ', a ' + r, pick: () => addNext(c) }; }).filter((o) => !usedCh.includes(o.id));
-const nextList = order.slice(0, 6).sort((a, b) => a - b).map((d, k) => { const pc = (tpc + STEPS[d]) % 12, l = (kl0 + d) % 7, a = ((pc - NATPC[l] + 18) % 12) - 6, q2 = QS.findIndex((x) => x.k === KQ[d]);
+const nextList = order.slice(0, 6).sort((a, b) => a - b).map((d, k) => { const pc = (tpc + STEPS[d]) % 12, [l, a] = plainRoot((kl0 + d) % 7, ((pc - NATPC[(kl0 + d) % 7] + 18) % 12) - 6), q2 = QS.findIndex((x) => x.k === KQ[d]);
   const c = { rl: l, ra: a, q: q2, inv: 0, voicing: snap.voicing, hand: hands }; c.inv = nearest(c);
   const r = sevKey ? ROM[d].replace('°', '') + ({ maj7: 'maj7', 'ø7': 'ø7', m7: '7', 7: '7' })[KQ[d]] : ROM[d];
   return { id: pc + ':' + q2, s: LET[l] + ACC[String(a)] + QS[q2].k, r, bg: '#FEFDFB', ring: '0 0 0 1px ' + C.line, aria: (editAt != null ? 'Change to ' : 'Add ') + LET[l] + ACC[String(a)] + QS[q2].k + ', ' + r, pick: () => addNext(c) }; }).filter((o) => !usedCh.includes(o.id));
@@ -543,7 +555,7 @@ return {
   isMRoot: sh === 'mRoot', isMType: sh === 'mType', isMBass: sh === 'mBass', isVMenu: sh === 'vMenu',
   openMRoot: () => set({ sheet: sh === 'mRoot' ? null : 'mRoot' }), openMType: () => set({ sheet: sh === 'mType' ? null : 'mType' }), openMBass: () => set({ sheet: sh === 'mBass' ? null : 'mBass' }), openVMenu: () => set({ sheet: 'vMenu' }),
   // the chord's root as a chart is written: its letter, then ♭ ♮ ♯ (R42 v107); E♯, F♭, B♯ and C♭ are never roots
-  rootPick: KEYPICK(rLet, rAcc, (l, a) => { RL = l; change({ rl: l, ra: a, root: rootPc(l, a), oct: 0 }); }, '', (l, a) => !SKIP.includes(LET[l] + a), accM('root'), setAccM('root')),
+  rootPick: KEYPICK(rLet, rAcc, (l, a) => { RL = l; change({ rl: l, ra: a, root: rootPc(l, a), oct: 0 }); }, '', (l, a) => !SKIP.includes(LET[l] + a)),
   rootTiles: [[0, 0], [0, 1], [1, -1], [1, 0], [1, 1], [2, -1], [2, 0], [3, 0], [3, 1], [4, -1], [4, 0], [4, 1], [5, -1], [5, 0], [5, 1], [6, -1], [6, 0]].map(([l, a]) => { const on = l === rLet && a === rAcc;
     return { s: LET[l] + ACC[String(a)], on, bg: on ? '#F6E3BC' : '#FEFDFB', ring: on ? 'none' : '0 0 0 1px ' + C.line, fw: on ? 800 : 600, aria: 'Root ' + LET[l] + (a ? (a > 0 ? ' sharp' : ' flat') : ''), pick: () => { RL = l; change({ rl: l, ra: a, root: rootPc(l, a), oct: 0 }); } }; }),
   typeGroups: [['Triads', ['', 'm', '°', '+', 'sus2', 'sus4']], ['Sevenths', ['maj7', '7', 'm7', 'ø7', '°7']]].map(([g, ks]) => ({ g, rows: ks.map((k) => { const i = QS.findIndex((x) => x.k === k), on = i === qi; return { s: RN + k, n: QS[i].n[0].toUpperCase() + QS[i].n.slice(1), on, mark: on ? '✓' : '', fw: on ? 700 : 500, pick: () => change({ q: i, sheet: null }) }; }) })),
@@ -669,7 +681,7 @@ return {
     const goal = st.rpGoal || '16 chords';
     return {
       rpFromSeg: seg(['A key', 'Chord types'], fromKey ? 'A key' : 'Chord types', (l) => set({ rpFrom: l === 'A key' ? 'key' : 'types' })), rpIsKey: fromKey, rpIsTypes: !fromKey,
-      rpKeyPick: KEYPICK(kL, kA, (l, a) => set({ rpKL: l, rpKA: a }), 'Key of ', keyOk(mn), accM('rp'), setAccM('rp')),
+      rpKeyPick: KEYPICK(kL, kA, (l, a) => set({ rpKL: l, rpKA: a }), 'Key of ', keyOk(mn)),
       rpModeSeg: seg(['Major', 'Minor'], mn ? 'Minor' : 'Major', (l) => set({ rpMinor: l === 'Minor' })),
       rpSevSeg: seg(['Triads', 'Sevenths'], sv ? 'Sevenths' : 'Triads', (l) => set({ rpSev: l === 'Sevenths' })),
       rpKeyChords: keyChords.map((c) => { RL = c.rl; const o = Object.assign({ s: LET[c.rl] + ACC[String(c.ra)] + QS[c.q].k, r: RM[c.d], aria: 'Practise ' + LET[c.rl] + ACC[String(c.ra)] + QS[c.q].k + ', ' + RM[c.d], pick: () => set({ rpDegs: tog(degs, c.d) }) }, chip(degs.includes(c.d))); RL = rLet; return o; }),
@@ -686,14 +698,14 @@ return {
   })(),
   nextModeSeg: seg(['Diatonic', 'Chromatic'], nextMode === 'key' ? 'Diatonic' : 'Chromatic', (l) => set({ nextMode: l === 'Diatonic' ? 'key' : 'chrom' })), isNextKey: nextMode === 'key', isNextChrom: nextMode !== 'key', chromList, chromNone: !chromList.length, chromHas: !!chromList.length, keyNone: !nextList.length, keyHas: !!nextList.length, toChrom: () => set({ nextMode: 'chrom' }), toKey: () => set({ nextMode: 'key' }), chromCap: 'From ' + sym,
   firstSym: symOf(seq[0]).s, sigName: keyName, openSig: () => set({ sheet: 'tr' }),
-  keyModeSeg: seg(['Major', 'Minor'], minorKey ? 'Minor' : 'Major', (l) => { const mi = l === 'Minor'; if (mi === minorKey) return; set({ key: { l: KEY.l, a: keyOk(mi)(KEY.l, KEY.a) ? KEY.a : 0, mi } }); }),
+  keyModeSeg: seg(['Major', 'Minor'], minorKey ? 'Minor' : 'Major', (l) => { const mi = l === 'Minor'; if (mi === minorKey) return; const [kl, ka] = keyOk(mi)(KEY.l, KEY.a) ? [KEY.l, KEY.a] : spellPc(tpc, -KEY.a, keyOk(mi)); set({ key: { l: kl, a: ka, mi } }); }),
   trChords: seq.map((c, i) => { const on = !trOff.includes(i), s = symOf(c).s; return { s, on, kept: !on, tc: on ? C.ink : C.soft, bg: on ? '#FEFDFB' : 'transparent', ring: on ? '0 0 0 1px ' + C.line : 'inset 0 0 0 1.5px ' + C.line, aria: 'Transpose ' + s, tip: on ? 'Keep ' + s + ' as it is' : 'Transpose ' + s, pick: () => set({ trOff: on ? trOff.concat([i]) : trOff.filter((x) => x !== i) }) }; }),
   keyMini: Array.from({ length: Math.abs(sigF) }, (_, k) => ({ x: 52 + k * 11, y: (sigF > 0 ? [30, 45, 25, 40, 55, 35, 50] : [50, 35, 55, 40, 60, 45, 65])[k] + 5, sharp: sigF > 0, flat: sigF < 0 })),
   trAllLab: trOff.length ? 'Transpose all' : 'Keep all', trAll: () => set({ trOff: trOff.length ? [] : seq.map((_, i) => i) }),
-  addChord, undoRemove, playAll, nextList, tKey: KEYSP[tpc] + (minorKey ? ' minor' : ' major'), openTr: () => set({ sheet: 'tr' }), isTr: sh === 'tr', trDown: () => stepTo((tpc + 11) % 12), trUp: () => stepTo((tpc + 1) % 12), trPick: KEYPICK(KEY.l, KEY.a, (l, a) => transposeTo(l, a), 'Key of ', keyOk(minorKey), accM('key'), setAccM('key')),
+  addChord, undoRemove, playAll, nextList, tKey: KEYSP[tpc] + (minorKey ? ' minor' : ' major'), openTr: () => set({ sheet: 'tr' }), isTr: sh === 'tr', trDown: () => stepTo(-1), trUp: () => stepTo(1), trPick: KEYPICK(KEY.l, KEY.a, (l, a) => transposeTo(l, a), 'Key of ', keyOk(minorKey)),
   keyName, openNext: () => set({ sheet: 'next', editAt: null }), nextTitle: editAt != null ? 'Change ' + sym : 'Next chord', isEdit: editAt != null, canRmEdit: editAt != null && seq.length > 1, rmEdit: () => removeChord(), rmEditLab: 'Remove ' + sym, isNext: sh === 'next', hasSeq: seq.length > 1, canAdd: seq.length < 8, seqCount: seq.length, toastOn: !!st.toast, toastT: st.toast ? st.toast.t : '', toastUndo: !!(st.toast && st.toast.undo), toastPad: st.toast && st.toast.undo ? '0' : '12px',
   ...(() => { const demo = st.demo || '';
-    const eight = () => [0, 3, 4, 5, 1, 4, 0, 3].map((d) => { const pc = (tpc + STEPS[d]) % 12, l = (kl0 + d) % 7; return { rl: l, ra: ((pc - NATPC[l] + 18) % 12) - 6, q: QS.findIndex((x) => x.k === KQ[d]), inv: 0, voicing: snap.voicing, hand: hands, oct: 0 }; });
+    const eight = () => [0, 3, 4, 5, 1, 4, 0, 3].map((d) => { const pc = (tpc + STEPS[d]) % 12, [l, a] = plainRoot((kl0 + d) % 7, ((pc - NATPC[(kl0 + d) % 7] + 18) % 12) - 6); return { rl: l, ra: a, q: QS.findIndex((x) => x.k === KQ[d]), inv: 0, voicing: snap.voicing, hand: hands, oct: 0 }; });
     const go = (v) => { if (v === 'eight') { const e = eight(); set(Object.assign({ demo: v, statesOpen: false, seq: e, cur: 7, sheet: null, toast: null }, loadChord(e[7]))); return; }
       if (v === 'midiLost') { set({ demo: v, statesOpen: false, sheet: null, toast: { t: 'Roland FP-30X is not connected.' } }); return; }
       set({ demo: v, statesOpen: false, toast: null, kbOn: true, kbView: v.startsWith('hands') ? '3d' : kbView, sheet: v.startsWith('midi') || v === 'offline' ? 'keys' : null }); };

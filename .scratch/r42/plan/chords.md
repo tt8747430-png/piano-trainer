@@ -5,6 +5,23 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 115: ♭ ♮ ♯ changes only the chosen letter; every move is spelled the way it goes.** Owner: "make
+  the root key select drawer the selects flat or sharp or natural only change the current key and not all of them.
+  and why when transposing from c i go to d flat and not to c sharp, fix this and all such issues".
+  - One picker (Root, Key, Random chords' key): the letters are always plain, the chosen one wears its accidental;
+    ♭ ♮ ♯ changes that letter alone, and one that makes no root or key for it (E♯, F♭, D♯ major, G♭ minor) is dimmed
+    in place. A new letter starts natural. Replaces v112's letters renamed by the switch.
+  - − / + spell the next key the way it moves: up in sharps (C → C♯ major), down in flats (D → D♭ major), the other
+    spelling where that one is no key (D♯ major is E♭ major). Major | Minor keeps the pitch (D♭ major → C♯ minor).
+  - Transposed chords are spelled from the new key's scale (C♯m7 in D major is F♯m7, not G♭m7); a chord outside the
+    scale takes the key's side, and its enharmonic root where its own would need a double sharp or flat (A♭maj7 in
+    G♯ minor, not G♯maj7 with F𝄪), except on the fifth degree (D♯7 in G♯ minor, as written). No chord takes E♯, B♯,
+    F♭ or C♭ for its root (E♯m7 in C♯ major is written Fm7). A bass that is a chord tone keeps its spelling
+    (C♯maj7/E♯).
+  - Chromatic suggestions are spelled the same way: a half step up from C is C♯, down from D is D♭.
+  - Checked in the runtime: + twelve times from C through all twelve major keys back to C, − three times, Minor, a
+    letter, ♯, and the Chromatic list.
+
 - **Canvas Version 114: fingering on every chord.** Owner: "why the fingers are only on the selected chord, it should
   be on all". Every chord on the staff carries its finger numbers beside its notes, as a printed progression does
   (Vita Piano, v35); they stay inside the chord's bar. The foot's "Right hand 1 2 4 5" stays the chosen chord's.
@@ -52,7 +69,7 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     none" _(replaced in v113: "Transpose with the key", a kept chord marked "Stays", "Keep all | Transpose all")_. Changing the key moves the chosen chords with it, as MuseScore's Transpose to key with "Transpose chord
     symbols" (handbook.musescore.org, Transposition); the others stay and are written against the new signature; with
     none chosen only the key changes.
-  - ♭ ♮ ♯ is a switch that names the letters: ♭ reads C D♭ E♭ F G♭ A♭ B♭, ♯ reads C♯ D♯ E F♯ G♯ A♯ B, ♮ the white
+  - _(Replaced in v115: ♭ ♮ ♯ changes only the chosen letter.)_ ♭ ♮ ♯ is a switch that names the letters: ♭ reads C D♭ E♭ F G♭ A♭ B♭, ♯ reads C♯ D♯ E F♯ G♯ A♯ B, ♮ the white
     keys. A letter whose ♭ or ♯ makes no root or key stays natural (F, E, D♯ major, G♭ minor), never greyed and never
     C♭, F♭, E♯, B♯. Switching applies to the chosen letter. One picker, one implementation, for the chord's Root, Key
     and Random chords' key.
