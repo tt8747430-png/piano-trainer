@@ -5,6 +5,24 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 109: the musician's words, suggestions only, nothing cut.** Owner: "use proper wordings like
+  diatonically is more clear than in the key I thing. research more of how you should write text in the ui in
+  professional way and read the skills and find contradictions in your instructions"; "I dont think triads or seventh
+  are relevant in the next chords options, these are only suggestions and I dont want another chord picker beside the
+  all chords page"; "I dont like the spacings between the close chord button and the chords name, they overlap"; "the
+  staff is clipped in the key signature. make sure this doenst happen in the future".
+  - Next chord: Diatonic | Chromatic (parallel, the musician's terms). Six suggestions each, of the shown chord's own
+    kind (a seventh chord suggests sevenths, a triad triads), in two columns: Diatonic by degree (ii7, iii7, IVmaj7 …),
+    Chromatic up on the left and down on the right (half step, whole step, minor 3rd). No Triads | Sevenths, no honey
+    "likeliest" tile, no 11-chord grid: the whole picker is "All chords ›" alone. Captions in sentence case ("In C
+    major", "From Cmaj7"); a chord symbol is never set in capitals.
+  - The floating bar (Close position · Play · Hands) sits on solid page: the page fades out above it and nothing reads
+    through behind its buttons.
+  - The key signature's staff shows its whole clef, 92px high, so the sheet still fits "Written as".
+  - The layout check now fails a drawing cut by its frame and text cut by a box that does not scroll; it caught the old
+    clef (proved by restoring the old frame) and a 3D note name half cut at the piano's edge, now hidden off the view.
+  - Why "In the key" was written: `ux-writing` said "prefer familiar and concrete words over jargon", which reads a
+    musician's term as jargon and contradicts `CLAUDE.md` ("the musician's term always wins"). `ux-writing` now says so.
 - **Canvas Version 108: the chords as a lead sheet, nothing that moves the screen.** Owner: "I dont like such
   controls or options that change the ui so radically like when I click on the d flat or c sharp It changes the layout
   and the whole piano keyboard is lifted up and this back to cmaj7 I also dont like very much. I also dont like how this

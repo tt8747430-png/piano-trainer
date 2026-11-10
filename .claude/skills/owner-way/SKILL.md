@@ -16,6 +16,7 @@ sometimes German, and send phone screenshots of our app and of apps they admire.
 | Moment                                | Read                                                                   |
 | ------------------------------------- | ---------------------------------------------------------------------- |
 | Session start, and after a compaction | this file, [practices](references/practices.md)                        |
+| After a compaction, before any screen | read again, never from the summary: [ui-and-mockups](references/ui-and-mockups.md), [craft-details](references/craft-details.md), `ux-writing`, `seven-questions`, `scan-first`, the area's rulings |
 | Before touching any area              | that area's section of [feedback-log](references/feedback-log.md)      |
 | Any screen, or a question to draw     | [ui-and-mockups](references/ui-and-mockups.md), `impeccable`           |
 | Polish, motion, the small details     | [craft-details](references/craft-details.md)                           |

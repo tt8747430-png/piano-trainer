@@ -390,6 +390,10 @@ owner's, typos fixed.
   are bars of a lead sheet, each bar one button; a row that comes and goes keeps its place; no "Back to …" links.
   Never: pills or chips for chords on a staff, a control that appears and pushes the layout, a disabled section hidden
   rather than dimmed.
+- **The musician's word, suggestions not pickers, nothing cut (R42, canvas 109):** "diatonically is more clear than in
+  the key"; "these are only suggestions and I dont want another chord picker beside the all chords page"; "the staff
+  is clipped ... make sure this doenst happen". Never: a plain paraphrase of a musician's term, a second chord picker,
+  a chord symbol in capitals, text or a drawing cut by its box, text showing through behind a floating bar.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the

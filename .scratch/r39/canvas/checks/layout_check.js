@@ -34,5 +34,19 @@
       if (Math.abs(kids[0].top - kids[2].top) > 1 || Math.abs(kids[0].height - kids[1].height) > 1) out.push('toolbar parts differ in height or baseline')
     }
   }
+  // nothing drawn is cut off (owner, v108: "the staff is clipped in the key signature. make sure this doenst happen"):
+  // every mark inside a clipping drawing stays within it, and no text is cut by a box that does not scroll
+  const vis = (el) => { const r = el.getBoundingClientRect(); return r.width && r.height && getComputedStyle(el).visibility !== 'hidden' && r.bottom > S.top && r.top < S.bottom }
+  for (const svg of screen.querySelectorAll('svg')) {
+    if (!vis(svg) || getComputedStyle(svg).overflow === 'visible') continue
+    const b = svg.getBoundingClientRect()
+    for (const g of svg.querySelectorAll('text, path, ellipse, circle, use, image')) { const r = g.getBoundingClientRect(); if (!r.width && !r.height) continue
+      if (r.left < b.left - 1.5 || r.right > b.right + 1.5 || r.top < b.top - 1.5 || r.bottom > b.bottom + 1.5) { out.push(`drawing clipped by its frame: "${svg.getAttribute('aria-label') || name(svg.parentElement)}" (${g.tagName} ${g.textContent || ''})`); break } }
+  }
+  { const w = document.createTreeWalker(screen, NodeFilter.SHOW_TEXT); let n; const seen = new Set()
+    while ((n = w.nextNode())) { if (!n.textContent.trim() || !n.parentElement || !vis(n.parentElement)) continue; const g = document.createRange(); g.selectNodeContents(n); const t = g.getBoundingClientRect(); if (!t.width) continue
+      for (let p = n.parentElement; p && p !== screen; p = p.parentElement) { const o = getComputedStyle(p), cx = /(hidden|clip)/.test(o.overflowX), cy = /(hidden|clip)/.test(o.overflowY); if (!cx && !cy) continue
+        // a strip that scrolls one way is only checked the other way
+        const r = p.getBoundingClientRect(); if ((cx && (t.left < r.left - 1 || t.right > r.right + 1)) || (cy && (t.top < r.top - 1 || t.bottom > r.bottom + 1))) { const k = n.textContent.trim().slice(0, 30); if (!seen.has(k)) { seen.add(k); out.push(`text cut by its box: "${k}"`) } } break } } }
   return out.length ? out : ['layout ok']
 })()

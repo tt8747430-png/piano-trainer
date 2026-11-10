@@ -157,6 +157,8 @@ Resolve the interaction or information problem before polishing the sentence. Do
 - Reuse the established product voice and terminology.
 - Keep a stable voice while adapting tone to the stakes: encouraging for low-risk onboarding, neutral for routine actions, calm for errors, and explicit for sensitive decisions.
 - Prefer familiar and concrete words over jargon, idioms, humor, or fashionable abstractions.
+  Here a musician's term is not jargon: it wins over a plain-language paraphrase (`CLAUDE.md`). "Diatonic | Chromatic",
+  not "In the key | Chromatic" (owner, canvas 109). Choices side by side are the same kind of word.
 - Use active constructions, one instruction at a time, and parallel structures for comparable choices.
 - Follow locale conventions for capitalization, punctuation, dates, numbers, and units.
 - Translate meaning and intent, not word order.
