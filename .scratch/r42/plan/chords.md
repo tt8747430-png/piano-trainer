@@ -5,6 +5,22 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 104: the left hand low on roots and fifths, the right hand moving least.** Owner: four
+  pianochord.org pages, no words (Chord Trainer, Chord Progression Explorer, PlayAlong Studio progressions and
+  arpeggios). Taken from the Explorer's "How should I play these on piano?": "left hand playing root–5th or
+  root–5th–octave in the low–mid register (about C2–A2) and right hand playing close voicings that feature the 3rd
+  and 7th… Use inversions to decrease the hand movements… Cmaj7 – Am7 – Dm7 – G7: right hand stacks [B E G], [G C
+  E], [C F A], [B F G]; left hand plays roots and fifths"; and for a slash chord, "the note after the slash in the
+  left hand as the bass and the chord before the slash in the right hand", as v103 already did.
+  - The left hand's root now sits C2 to B2 (was F2 to E3).
+  - A four-note chord in both hands leaves its root to the left hand: Cmaj7 = C2 G2 | E4 G4 B4.
+  - A chord added to the staff with both hands keeps the left hand on its root and starts the right hand on the note
+    that moves least from the chord before: Cmaj7 · Am7 · Dm7 · G7 is E G B, E G C, F A D, F B D over C, A, D, G.
+  - The key's name over the clef got its own room before the first chord, which it overlapped.
+  - Not taken: the Chord Trainer's info line ("Basic C major triad in close position"), since we never put an
+    explanation line under a control; its random Next with tags is the Quiz's, and PlayAlong's count-in and
+    highlighted bar are already the Player's.
+
 - **Canvas Version 103: the hands split as pianists play big chords; voicings by where they come from; the staff
   without buttons.** Owner: "also I dont like that the voicings button is always the same and the user doesnt see
   what voicing he has picked but be careful with the changing the name because it might look like close button when

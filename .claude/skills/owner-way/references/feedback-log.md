@@ -370,6 +370,9 @@ owner's, typos fixed.
   is C E♭ F B♭); Both is the bass below and the chord above. Voicings are grouped by source (Music theory, Jazz
   piano, Gorshkov's course), the Voicing button names the chosen one ("Close position", never "Close"), and the
   staff carries its own Add (an empty place) and Transpose (the key over the clef), with no buttons above it.
+- **Both hands follow pianochord.org's recipe (R42, canvas 104):** four of its pages sent without words. Left hand
+  root and 5th from C2 to B2; right hand the 3rd and 7th in close position, starting on the note that moves least
+  between chords; the bass of a slash chord in the left hand.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the
