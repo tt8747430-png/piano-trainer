@@ -5,6 +5,14 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 91: one spacing scale, one card radius.** Owner, after a consistency audit of the page against
+  its own tokens: "fix all".
+  - **Spacing is on 4/8 steps** (4, 8, 12, 16, 24): the 5, 6, 7, 9, 10, 14, 18 and 22 are gone. Kept: 2 inside
+    segmented rows (the hairline between segments, concentric with their 9-in-11 corners).
+  - **Cards are 16 round everywhere:** the sheet's groups were 12 beside 16 cards.
+  - **The switch knob** sits on the page's surface colour with an ink shadow; **no 800 weight;** "root position" in
+    the name is exactly 16.
+  - Applied to the Chords boards only; the other Practice boards still carry the shared kit's values.
 - **Canvas Version 90: the review's findings, the arpeggio on the staff, a note that sounds.** Owner, after two
   reviews of the page (wording; accessibility, layout, type): "implement all you proposals".
   - **Wording:** the Piano sheet's switch is "Show the piano" (it sat under the title "Piano" saying "Piano");
@@ -22,8 +30,6 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   - **A note sounds when tapped,** where the notes stand apart (the arpeggio). Stacked in a block chord the notes are
     17px apart, too close for a finger, so there the chord's name plays the chord. Owner's to say if that is enough.
   - **The "show on staff" circles in the Chord type drawer stay.**
-  - **Flagged, not changed:** the page's spacing runs on 2, 6, 10, 14 as well as 4, 8, 12, 16 (measured: 6 and 10
-    and 14 recur everywhere). Moving it to a 4/8 grid is a page-wide change; ask first.
 - **Canvas Version 89: Intervals is a fourth label, and several chords are written in their key.** Owner, answering
   the staff questions: "3. intervals is good. .4. yes".
   - **Labels: Notes · Degrees · Intervals · None** (one setting for the keys and the staff). Intervals are spelled

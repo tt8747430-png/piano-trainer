@@ -1,3 +1,4 @@
+import re
 # R42: the Chords page. Run after r41.py (it replaces the Chords boards r41 writes).
 # The keys run edge to edge at the top under Back and the Keyboard button (show or hide, Keys, Note names, Connect a
 # piano), the chord is the title beneath with ‹ › stepping the inversion, the staff with its fingering under it, Practise
@@ -267,7 +268,7 @@ const sv = (() => { const all = { notes: [], ledg: [], digits: [], cols: [] }, p
       n.a1 = show && n.d === -1; n.a2 = show && n.d === 1; n.a3 = show && n.d === -2; n.a4 = show && n.d === 2; n.a5 = show && n.d === 0; });
     per.push(one.notes); all.notes.push(...one.notes); all.ledg.push(...one.ledg); all.digits.push(...one.digits);
     vt = Math.min(vt, one.vt); vbot = Math.max(vbot, one.vbot);
-    const on = i === cur; all.cols.push({ s: o.s, on, many: seq.length > 1, fs: seq.length > 1 ? 13 : 16, px: seq.length > 1 ? 7 : 10, x: cx, left: ((arpOn ? SW / 2 : cx) / SW * 100) + '%', fw: on ? 700 : 500, tc: on ? C.ink : C.soft, bg: on && seq.length > 1 ? '#F6E3BC' : 'transparent', aria: o.s + (on ? ', shown above' : ', show it'), pick: () => pickChord(i), canRemove: on && seq.length > 1, remove: () => removeChord() }); });
+    const on = i === cur; all.cols.push({ s: o.s, on, many: seq.length > 1, fs: seq.length > 1 ? 13 : 16, px: seq.length > 1 ? 8 : 12, x: cx, left: ((arpOn ? SW / 2 : cx) / SW * 100) + '%', fw: on ? 700 : 500, tc: on ? C.ink : C.soft, bg: on && seq.length > 1 ? '#F6E3BC' : 'transparent', aria: o.s + (on ? ', shown above' : ', show it'), pick: () => pickChord(i), canRemove: on && seq.length > 1, remove: () => removeChord() }); });
   // only the staves in use are drawn (R42, canvas 87): a right-hand chord needs the treble staff alone, so the staff
   // fits the first screen; both staves come back as soon as a left hand or a low note needs them
   const hasT = all.notes.some((n) => n.T), hasB = all.notes.some((n) => !n.T), ysN = all.notes.map((n) => n.y).concat(all.digits.map((d) => d.y - 6));
@@ -425,7 +426,7 @@ return {
   handsRef: (el) => { this._cv = el; },
   // ── the redesign's two concepts (R42 v80) share these ──
   // the name as three parts, each a pop-up button: root, chord type, the note in the bass
-  nmType: q.k || 'major', nmTypeFs: q.k ? '1em' : '0.5em', nmTypeC: q.k ? C.ink : C.soft, nmBass: slash || 'root position', nmBassFs: slash ? '1em' : '0.364em', nmBassC: slash ? (ROLE[ns.length ? voice(root, q, inv, voicing, 'Right')[0].deg : 1] || C.ink) : C.soft,
+  nmType: q.k || 'major', nmTypeFs: q.k ? '1em' : '0.5em', nmTypeC: q.k ? C.ink : C.soft, nmBass: slash || 'root position', nmBassFs: slash ? '1em' : '16px', nmBassC: slash ? (ROLE[ns.length ? voice(root, q, inv, voicing, 'Right')[0].deg : 1] || C.ink) : C.soft,
   isMRoot: sh === 'mRoot', isMType: sh === 'mType', isMBass: sh === 'mBass', isVMenu: sh === 'vMenu',
   openMRoot: () => set({ sheet: sh === 'mRoot' ? null : 'mRoot' }), openMType: () => set({ sheet: sh === 'mType' ? null : 'mType' }), openMBass: () => set({ sheet: sh === 'mBass' ? null : 'mBass' }), openVMenu: () => set({ sheet: 'vMenu' }),
   rootTiles: [[0, 0], [0, 1], [1, -1], [1, 0], [1, 1], [2, -1], [2, 0], [3, 0], [3, 1], [4, -1], [4, 0], [4, 1], [5, -1], [5, 0], [5, 1], [6, -1], [6, 0]].map(([l, a]) => { const on = l === rLet && a === rAcc;
@@ -881,5 +882,13 @@ for f in ('ChordsApp', 'ChordsDesk', 'ChordsB', 'ChordsBLaptop'):  # B, the chor
 # one type scale on this page (review, canvas 90): 15 and 17, from the shared sheet kit, fold into 14 and 16
 for f in ('Chords', 'ChordsLaptop'):
     h = open(OUT + f + '.dc.html').read().replace('font-size: 17px', 'font-size: 16px').replace('font-size: 15px', 'font-size: 14px')
+    # one system on this page (consistency audit, canvas 91): spacing on 4/8 steps (2 stays, as the hairline inside
+    # segmented rows); cards 16 round everywhere; the switch knob on the page's surface and ink shadow; no 800 weight
+    STEP = {5: 4, 6: 8, 7: 8, 9: 8, 10: 12, 14: 16, 18: 16, 22: 24}
+    def _snap(m):
+        return m.group(1) + re.sub(r'(?<![\d.])(-?)(\d+)px', lambda n: n.group(1) + str(STEP.get(int(n.group(2)), int(n.group(2)))) + 'px', m.group(2))
+    h = re.sub(r'((?:padding|gap|margin)(?:-[a-z]+)?: )([^;"\'{}]+)', _snap, h)
+    h = h.replace('border-radius: 12px; background: #FEFDFB; overflow: hidden', 'border-radius: 16px; background: #FEFDFB; overflow: hidden')
+    h = h.replace('background: #FFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)', 'background: #FEFDFB; box-shadow: 0 2px 4px rgba(51,41,33,.2)').replace('font-weight: 800', 'font-weight: 700')
     open(OUT + f + '.dc.html', 'w').write(h)
 print('r42 chords ok')
