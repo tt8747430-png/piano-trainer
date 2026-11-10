@@ -378,6 +378,10 @@ owner's, typos fixed.
   page (a key or chord types, voicings, inversions, hands, a session goal), played in the Player's Wait mode. Never:
   ties between chords; a key signature the learner did not pick ("the staf is always in c"); Transpose that changes
   only the key name ("transpose is means to transpose the chords").
+- **A root is picked on an octave, both spellings on each black key (R42, canvas 106):** "there is not possibility to
+  switch between like the c sharp or d flat"; "it just lists all of this keys without good structure". One picker for
+  every root and key. Never: a staff that shrinks as chords are added ("getting smaller and smaller"); a list of tiles
+  that repeats the chord ("move cmaj7 to cmaj7").
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the

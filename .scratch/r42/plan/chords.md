@@ -5,6 +5,22 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 106: one staff size, one octave root picker, a Transpose that reads.** Owner, on the D♭ triad's
+  staff: "I dont like how it scales and the staff is getting smaller and smaller and it is clipped. and the transpose
+  buttons is not good and doenst make very much sense. like move cmaj7 to cmaj7 and other is not good and there is not
+  possibility to switch between like the c sharp or d flat and such things. and in the chords picker it just lists all
+  of this keys without good structure."
+  - The staff keeps one size (1.5× on a phone, 1.75× on a laptop): more chords make it scroll sideways, never shrink.
+    Nothing is clipped above the clef. The chord shown is scrolled into view, and the + with it when it is the last.
+  - One root picker everywhere a root or key is chosen (the chord's Root drawer, Transpose, Random chords' key): an
+    octave, the white keys below, each black key split into its two names, C♯ above D♭. The spelling is picked with the
+    key. Replaces the 17-tile grid and the 12 tiles of "Move Cmaj7 to".
+  - Transpose: − and + half steps around the first chord's name with what was done in words ("Up a whole step",
+    "Original key", "Same keys, spelled enharmonically"); the whole progression in one line under it; "First chord on"
+    with the octave picker; "Back to Cmaj7" once it has moved. The ⇅ button stays put at the card's top left while the
+    staff scrolls.
+  - A key is written as musicians write it: D♭m7 sits in C♯ minor for Next chord, never "D♭ minor" with B𝄫maj7.
+
 - **Canvas Version 105: no ties, the staff in C, Transpose moves the chords, adding stays open, Random chords is its
   own page.** Owner: "I dont like this ties that tie the chords. and improve the adding a chords and the transpose is
   means to transpose the chords no to transpose the key, the staf is always in c and there will be a setting to change
