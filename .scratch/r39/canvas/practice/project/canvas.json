@@ -2,63 +2,144 @@
   "v": 3,
   "attachments": {},
   "boards": {
-    "SongsLaptop.dc.html": {
-      "x": 0,
-      "y": 600,
-      "w": 2143,
-      "h": 1299,
-      "title": "My songs, laptop",
-      "is_interactive": true,
-      "page": "songs"
-    },
     "Songs.dc.html": {
-      "x": 2383,
-      "y": 979,
+      "x": 0,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "My songs, phone",
       "is_interactive": true,
       "page": "songs"
     },
-    "SongLaptop.dc.html": {
-      "x": 0,
-      "y": 2399,
-      "w": 2143,
-      "h": 1299,
-      "title": "A song, laptop",
-      "is_interactive": true,
-      "page": "songs"
-    },
     "Song.dc.html": {
-      "x": 2383,
-      "y": 2778,
+      "x": 530,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "A song, phone",
       "is_interactive": true,
       "page": "songs"
     },
-    "EditorLaptop.dc.html": {
-      "x": 0,
-      "y": 4198,
-      "w": 2143,
-      "h": 1299,
-      "title": "Score editor, laptop",
-      "is_interactive": true,
-      "page": "songs"
-    },
     "Editor.dc.html": {
-      "x": 2383,
-      "y": 4577,
+      "x": 1060,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "Score editor, phone",
       "is_interactive": true,
       "page": "songs"
     },
+    "SongsLaptop.dc.html": {
+      "x": 0,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "My songs, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SongLaptop.dc.html": {
+      "x": 2223,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A song, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "EditorLaptop.dc.html": {
+      "x": 4446,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Score editor, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Player.dc.html": {
+      "x": 0,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLoop.dc.html": {
+      "x": 530,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Practice with a loop, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerKeyboard.dc.html": {
+      "x": 1060,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Keyboard, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerPractice.dc.html": {
+      "x": 1590,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Practice: Wait · Play, the tempo, the metronome, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerHands.dc.html": {
+      "x": 2120,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Hands, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerSettings.dc.html": {
+      "x": 2650,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Song settings: Arrangement or Accompaniment, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerDone.dc.html": {
+      "x": 3180,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Played through, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerDiagrams.dc.html": {
+      "x": 3710,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Diagrams, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerApp.dc.html": {
+      "x": 4240,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, earlier draft, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
     "PlayerLaptop.dc.html": {
       "x": 0,
-      "y": 600,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "The Player, laptop",
@@ -67,7 +148,7 @@
     },
     "PlayerLaptopLoop.dc.html": {
       "x": 2223,
-      "y": 600,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "The Player, Practice with a loop, laptop",
@@ -76,406 +157,325 @@
     },
     "PlayerLaptopKeyboard.dc.html": {
       "x": 4446,
-      "y": 600,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "The Player, Keyboard, laptop",
       "is_interactive": true,
       "page": "player"
     },
-    "Player.dc.html": {
-      "x": 6829,
-      "y": 979,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerLoop.dc.html": {
-      "x": 7359,
-      "y": 979,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, Practice with a loop, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerKeyboard.dc.html": {
-      "x": 7889,
-      "y": 979,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, Keyboard, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerPractice.dc.html": {
-      "x": 6829,
-      "y": 2399,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, Practice: Wait · Play, the tempo, the metronome, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerHands.dc.html": {
-      "x": 7359,
-      "y": 2399,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, Hands, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerSettings.dc.html": {
-      "x": 7889,
-      "y": 2399,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, Song settings: Arrangement or Accompaniment, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerDone.dc.html": {
-      "x": 8419,
-      "y": 2399,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, Played through, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerDiagrams.dc.html": {
-      "x": 8949,
-      "y": 2399,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, Diagrams, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
     "PlayerDesk.dc.html": {
-      "x": 0,
-      "y": 3819,
+      "x": 6669,
+      "y": 1720,
       "w": 2143,
       "h": 1299,
       "title": "The Player, earlier draft, laptop",
       "is_interactive": true,
       "page": "player"
     },
-    "PlayerApp.dc.html": {
-      "x": 6829,
-      "y": 4198,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, earlier draft, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "Laptop.dc.html": {
-      "x": 0,
-      "y": 600,
-      "w": 2143,
-      "h": 1299,
-      "title": "Practice, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "Main.dc.html": {
-      "x": 4606,
-      "y": 979,
+      "x": 0,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "Practice, phone",
       "is_interactive": true,
       "page": "practice"
     },
-    "ChordsLaptop.dc.html": {
-      "x": 0,
-      "y": 2399,
-      "w": 2143,
-      "h": 1299,
-      "title": "Chords, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
-    "ChordsLaptopNight.dc.html": {
-      "x": 2223,
-      "y": 2399,
-      "w": 2143,
-      "h": 1299,
-      "title": "Chords, Night, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "Chords.dc.html": {
-      "x": 4606,
-      "y": 2778,
+      "x": 530,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "Chords, phone",
       "is_interactive": true,
       "page": "practice"
     },
-    "ChordsNight.dc.html": {
-      "x": 5136,
-      "y": 2778,
-      "w": 450,
-      "h": 920,
-      "title": "Chords, Night, phone",
-      "is_interactive": true,
-      "page": "practice"
-    },
-    "ScalesLaptop.dc.html": {
-      "x": 0,
-      "y": 4198,
-      "w": 2143,
-      "h": 1299,
-      "title": "Scales and keys, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "Scales.dc.html": {
-      "x": 4606,
-      "y": 4577,
+      "x": 1060,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "Scales and keys, phone",
       "is_interactive": true,
       "page": "practice"
     },
-    "IntervalsLaptop.dc.html": {
-      "x": 0,
-      "y": 5997,
-      "w": 2143,
-      "h": 1299,
-      "title": "Intervals, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "Intervals.dc.html": {
-      "x": 4606,
-      "y": 6376,
+      "x": 1590,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "Intervals, phone",
       "is_interactive": true,
       "page": "practice"
     },
-    "ProgressionsLaptop.dc.html": {
-      "x": 0,
-      "y": 7796,
-      "w": 2143,
-      "h": 1299,
-      "title": "Progressions, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "Progressions.dc.html": {
-      "x": 4606,
-      "y": 8175,
+      "x": 2120,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "Progressions, phone",
       "is_interactive": true,
       "page": "practice"
     },
-    "ProgressionLaptop.dc.html": {
-      "x": 0,
-      "y": 9595,
-      "w": 2143,
-      "h": 1299,
-      "title": "A progression, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "Progression.dc.html": {
-      "x": 4606,
-      "y": 9974,
+      "x": 2650,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "A progression, phone",
       "is_interactive": true,
       "page": "practice"
     },
-    "AccompanimentLaptop.dc.html": {
-      "x": 0,
-      "y": 11394,
-      "w": 2143,
-      "h": 1299,
-      "title": "Accompaniment, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "Accompaniment.dc.html": {
-      "x": 4606,
-      "y": 11773,
+      "x": 3180,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "Accompaniment, phone",
       "is_interactive": true,
       "page": "practice"
     },
-    "ChordPlayerLaptop.dc.html": {
-      "x": 0,
-      "y": 13193,
-      "w": 2143,
-      "h": 1299,
-      "title": "Chord player, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "ChordPlayer.dc.html": {
-      "x": 4606,
-      "y": 13572,
+      "x": 3710,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "Chord player, phone",
       "is_interactive": true,
       "page": "practice"
     },
-    "ExercisesLaptop.dc.html": {
-      "x": 0,
-      "y": 14992,
-      "w": 2143,
-      "h": 1299,
-      "title": "Exercises, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "Exercises.dc.html": {
-      "x": 4606,
-      "y": 15371,
+      "x": 4240,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "Exercises, phone",
       "is_interactive": true,
       "page": "practice"
     },
-    "ExerciseLaptop.dc.html": {
-      "x": 0,
-      "y": 16791,
-      "w": 2143,
-      "h": 1299,
-      "title": "An exercise, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "Exercise.dc.html": {
-      "x": 4606,
-      "y": 17170,
+      "x": 4770,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "An exercise, phone",
       "is_interactive": true,
       "page": "practice"
     },
-    "QuizLaptop.dc.html": {
-      "x": 0,
-      "y": 18590,
-      "w": 2143,
-      "h": 1299,
-      "title": "Quiz, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "Quiz.dc.html": {
-      "x": 4606,
-      "y": 18969,
+      "x": 5300,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "Quiz, phone",
       "is_interactive": true,
       "page": "practice"
     },
-    "QuizRunLaptop.dc.html": {
-      "x": 0,
-      "y": 20389,
-      "w": 2143,
-      "h": 1299,
-      "title": "A quiz run, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "QuizRun.dc.html": {
-      "x": 4606,
-      "y": 20768,
+      "x": 5830,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "A quiz run, phone",
       "is_interactive": true,
       "page": "practice"
     },
-    "MetronomeLaptop.dc.html": {
-      "x": 0,
-      "y": 22188,
-      "w": 2143,
-      "h": 1299,
-      "title": "Metronome, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "Metronome.dc.html": {
-      "x": 4606,
-      "y": 22567,
+      "x": 6360,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "Metronome, phone",
       "is_interactive": true,
       "page": "practice"
     },
-    "TunerLaptop.dc.html": {
-      "x": 0,
-      "y": 23987,
-      "w": 2143,
-      "h": 1299,
-      "title": "Tuner, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "Tuner.dc.html": {
-      "x": 4606,
-      "y": 24366,
+      "x": 6890,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "Tuner, phone",
       "is_interactive": true,
       "page": "practice"
     },
-    "ChordFinderLaptop.dc.html": {
-      "x": 0,
-      "y": 25786,
-      "w": 2143,
-      "h": 1299,
-      "title": "Chord finder, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "ChordFinder.dc.html": {
-      "x": 4606,
-      "y": 26165,
+      "x": 7420,
+      "y": 300,
       "w": 450,
       "h": 920,
       "title": "Chord finder, phone",
       "is_interactive": true,
       "page": "practice"
     },
-    "CircleOfFifthsLaptop.dc.html": {
+    "CircleOfFifths.dc.html": {
+      "x": 7950,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Circle of fifths, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ChordsNight.dc.html": {
       "x": 0,
-      "y": 27585,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Chords, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "Laptop.dc.html": {
+      "x": 0,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "Practice, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ChordsLaptop.dc.html": {
+      "x": 2223,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "Chords, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ScalesLaptop.dc.html": {
+      "x": 4446,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "Scales and keys, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "IntervalsLaptop.dc.html": {
+      "x": 6669,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "Intervals, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ProgressionsLaptop.dc.html": {
+      "x": 8892,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "Progressions, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ProgressionLaptop.dc.html": {
+      "x": 11115,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "A progression, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "AccompanimentLaptop.dc.html": {
+      "x": 13338,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "Accompaniment, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ChordPlayerLaptop.dc.html": {
+      "x": 15561,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "Chord player, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ExercisesLaptop.dc.html": {
+      "x": 17784,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "Exercises, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ExerciseLaptop.dc.html": {
+      "x": 20007,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "An exercise, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "QuizLaptop.dc.html": {
+      "x": 22230,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "Quiz, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "QuizRunLaptop.dc.html": {
+      "x": 24453,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "A quiz run, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "MetronomeLaptop.dc.html": {
+      "x": 26676,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "Metronome, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "TunerLaptop.dc.html": {
+      "x": 28899,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "Tuner, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ChordFinderLaptop.dc.html": {
+      "x": 31122,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "Chord finder, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "CircleOfFifthsLaptop.dc.html": {
+      "x": 33345,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "Circle of fifths, laptop",
       "is_interactive": true,
       "page": "practice"
     },
-    "CircleOfFifths.dc.html": {
-      "x": 4606,
-      "y": 27964,
-      "w": 450,
-      "h": 920,
-      "title": "Circle of fifths, phone",
+    "ChordsLaptopNight.dc.html": {
+      "x": 0,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Chords, Night, laptop",
       "is_interactive": true,
       "page": "practice"
     }
@@ -490,241 +490,78 @@
     "page": "practice"
   },
   "notes": {
-    "songs-laptop": {
-      "x": 0,
-      "y": 0,
-      "text": "Laptop",
-      "kind": "title1",
-      "maxW": 2143,
-      "page": "songs"
-    },
     "songs-phone": {
-      "x": 2383,
+      "x": 0,
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 4240,
+      "maxW": 1510,
       "page": "songs"
     },
-    "songs-0": {
+    "songs-laptop": {
       "x": 0,
-      "y": 300,
-      "text": "My songs",
-      "kind": "title1",
-      "maxW": 2913,
-      "page": "songs"
-    },
-    "songs-1": {
-      "x": 0,
-      "y": 2099,
-      "text": "A song",
-      "kind": "title1",
-      "maxW": 2913,
-      "page": "songs"
-    },
-    "songs-2": {
-      "x": 0,
-      "y": 3898,
-      "text": "Score editor",
-      "kind": "title1",
-      "maxW": 2913,
-      "page": "songs"
-    },
-    "player-laptop": {
-      "x": 0,
-      "y": 0,
+      "y": 1420,
       "text": "Laptop",
       "kind": "title1",
       "maxW": 6589,
-      "page": "player"
+      "page": "songs"
     },
     "player-phone": {
-      "x": 6829,
+      "x": 0,
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 4240,
+      "maxW": 4690,
       "page": "player"
     },
-    "player-0": {
+    "player-laptop": {
       "x": 0,
-      "y": 300,
-      "text": "The Player",
+      "y": 1420,
+      "text": "Laptop",
       "kind": "title1",
-      "maxW": 8419,
+      "maxW": 8812,
       "page": "player"
     },
-    "player-1": {
+    "practice-phone": {
       "x": 0,
-      "y": 2099,
-      "text": "The Player’s layers, phone",
+      "y": 0,
+      "text": "Phone",
       "kind": "title1",
-      "maxW": 9479,
-      "page": "player"
+      "maxW": 8400,
+      "page": "practice"
     },
-    "player-2": {
+    "practice-phone-night": {
       "x": 0,
-      "y": 3519,
-      "text": "Earlier drafts of the Player",
+      "y": 1420,
+      "text": "Phone, Night",
       "kind": "title1",
-      "maxW": 7359,
-      "page": "player"
+      "maxW": 450,
+      "page": "practice"
     },
     "practice-laptop": {
       "x": 0,
-      "y": 0,
+      "y": 2840,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 4366,
+      "maxW": 35488,
       "page": "practice"
     },
-    "practice-phone": {
-      "x": 4606,
-      "y": 0,
-      "text": "Phone",
-      "kind": "title1",
-      "maxW": 4240,
-      "page": "practice"
-    },
-    "practice-0": {
+    "practice-laptop-night": {
       "x": 0,
-      "y": 300,
-      "text": "Practice",
+      "y": 4639,
+      "text": "Laptop, Night",
       "kind": "title1",
-      "maxW": 5136,
-      "page": "practice"
-    },
-    "practice-1": {
-      "x": 0,
-      "y": 2099,
-      "text": "Chords",
-      "kind": "title1",
-      "maxW": 5666,
-      "page": "practice"
-    },
-    "practice-2": {
-      "x": 0,
-      "y": 3898,
-      "text": "Scales and keys",
-      "kind": "title1",
-      "maxW": 5136,
-      "page": "practice"
-    },
-    "practice-3": {
-      "x": 0,
-      "y": 5697,
-      "text": "Intervals",
-      "kind": "title1",
-      "maxW": 5136,
-      "page": "practice"
-    },
-    "practice-4": {
-      "x": 0,
-      "y": 7496,
-      "text": "Progressions",
-      "kind": "title1",
-      "maxW": 5136,
-      "page": "practice"
-    },
-    "practice-5": {
-      "x": 0,
-      "y": 9295,
-      "text": "A progression",
-      "kind": "title1",
-      "maxW": 5136,
-      "page": "practice"
-    },
-    "practice-6": {
-      "x": 0,
-      "y": 11094,
-      "text": "Accompaniment",
-      "kind": "title1",
-      "maxW": 5136,
-      "page": "practice"
-    },
-    "practice-7": {
-      "x": 0,
-      "y": 12893,
-      "text": "Chord player",
-      "kind": "title1",
-      "maxW": 5136,
-      "page": "practice"
-    },
-    "practice-8": {
-      "x": 0,
-      "y": 14692,
-      "text": "Exercises",
-      "kind": "title1",
-      "maxW": 5136,
-      "page": "practice"
-    },
-    "practice-9": {
-      "x": 0,
-      "y": 16491,
-      "text": "An exercise",
-      "kind": "title1",
-      "maxW": 5136,
-      "page": "practice"
-    },
-    "practice-10": {
-      "x": 0,
-      "y": 18290,
-      "text": "Quiz",
-      "kind": "title1",
-      "maxW": 5136,
-      "page": "practice"
-    },
-    "practice-11": {
-      "x": 0,
-      "y": 20089,
-      "text": "A quiz run",
-      "kind": "title1",
-      "maxW": 5136,
-      "page": "practice"
-    },
-    "practice-12": {
-      "x": 0,
-      "y": 21888,
-      "text": "Metronome",
-      "kind": "title1",
-      "maxW": 5136,
-      "page": "practice"
-    },
-    "practice-13": {
-      "x": 0,
-      "y": 23687,
-      "text": "Tuner",
-      "kind": "title1",
-      "maxW": 5136,
-      "page": "practice"
-    },
-    "practice-14": {
-      "x": 0,
-      "y": 25486,
-      "text": "Chord finder",
-      "kind": "title1",
-      "maxW": 5136,
-      "page": "practice"
-    },
-    "practice-15": {
-      "x": 0,
-      "y": 27285,
-      "text": "Circle of fifths",
-      "kind": "title1",
-      "maxW": 5136,
+      "maxW": 2143,
       "page": "practice"
     }
   },
   "order": [
-    "SongsLaptop.dc.html",
     "Songs.dc.html",
-    "SongLaptop.dc.html",
     "Song.dc.html",
-    "EditorLaptop.dc.html",
     "Editor.dc.html",
-    "PlayerLaptop.dc.html",
-    "PlayerLaptopLoop.dc.html",
-    "PlayerLaptopKeyboard.dc.html",
+    "SongsLaptop.dc.html",
+    "SongLaptop.dc.html",
+    "EditorLaptop.dc.html",
     "Player.dc.html",
     "PlayerLoop.dc.html",
     "PlayerKeyboard.dc.html",
@@ -733,42 +570,45 @@
     "PlayerSettings.dc.html",
     "PlayerDone.dc.html",
     "PlayerDiagrams.dc.html",
-    "PlayerDesk.dc.html",
     "PlayerApp.dc.html",
-    "Laptop.dc.html",
+    "PlayerLaptop.dc.html",
+    "PlayerLaptopLoop.dc.html",
+    "PlayerLaptopKeyboard.dc.html",
+    "PlayerDesk.dc.html",
     "Main.dc.html",
-    "ChordsLaptop.dc.html",
-    "ChordsLaptopNight.dc.html",
     "Chords.dc.html",
-    "ChordsNight.dc.html",
-    "ScalesLaptop.dc.html",
     "Scales.dc.html",
-    "IntervalsLaptop.dc.html",
     "Intervals.dc.html",
-    "ProgressionsLaptop.dc.html",
     "Progressions.dc.html",
-    "ProgressionLaptop.dc.html",
     "Progression.dc.html",
-    "AccompanimentLaptop.dc.html",
     "Accompaniment.dc.html",
-    "ChordPlayerLaptop.dc.html",
     "ChordPlayer.dc.html",
-    "ExercisesLaptop.dc.html",
     "Exercises.dc.html",
-    "ExerciseLaptop.dc.html",
     "Exercise.dc.html",
-    "QuizLaptop.dc.html",
     "Quiz.dc.html",
-    "QuizRunLaptop.dc.html",
     "QuizRun.dc.html",
-    "MetronomeLaptop.dc.html",
     "Metronome.dc.html",
-    "TunerLaptop.dc.html",
     "Tuner.dc.html",
-    "ChordFinderLaptop.dc.html",
     "ChordFinder.dc.html",
+    "CircleOfFifths.dc.html",
+    "ChordsNight.dc.html",
+    "Laptop.dc.html",
+    "ChordsLaptop.dc.html",
+    "ScalesLaptop.dc.html",
+    "IntervalsLaptop.dc.html",
+    "ProgressionsLaptop.dc.html",
+    "ProgressionLaptop.dc.html",
+    "AccompanimentLaptop.dc.html",
+    "ChordPlayerLaptop.dc.html",
+    "ExercisesLaptop.dc.html",
+    "ExerciseLaptop.dc.html",
+    "QuizLaptop.dc.html",
+    "QuizRunLaptop.dc.html",
+    "MetronomeLaptop.dc.html",
+    "TunerLaptop.dc.html",
+    "ChordFinderLaptop.dc.html",
     "CircleOfFifthsLaptop.dc.html",
-    "CircleOfFifths.dc.html"
+    "ChordsLaptopNight.dc.html"
   ],
   "pages": [
     {

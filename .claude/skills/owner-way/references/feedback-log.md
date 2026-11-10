@@ -359,9 +359,9 @@ owner's, typos fixed.
   tooltip on a pointer; rare actions sit low on the spectrum of explicitness, never on their own page; a first run
   is sequenced. Each report names the one decision only Piano Trainer would have made (Tim Gabe).
 - **A canvas is grouped by page and by device (canvas 100):** "group the screens by page and by device and not so
-  scattered". One canvas page per area; one row per screen with its name over it; every laptop board in the left
-  column, every phone board in the right, in step; a screen's variants (a state, Night) beside its main board.
-  `.scratch/r39/canvas/index.py` builds it.
+  scattered", then (canvas 101) "put them in a row like the all the flows screens pages in one row for phone then
+  the dark mode and after that the same for laptop". One canvas page per area; on it four rows: the flow's phone
+  screens in its order, their Night boards, the laptop screens, their Night boards. `.scratch/r39/canvas/index.py`.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the

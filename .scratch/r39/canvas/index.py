@@ -28,22 +28,22 @@ PAGES = [
                                 [L(ph, n + ', phone')] + ([L('ChordsNight', 'Chords, Night, phone')] if ph == 'Chords' else [])) for ph, lp, n in PRACTICE])]
 d = json.load(open(P + 'canvas.json'))
 boards, order, notes = {}, [], {}
+# canvas 101 (owner: "put them in a row like the all the flows screens pages in one row for phone then the dark mode
+# and after that the same for laptop"): on each page, the flow's phone screens in one row in the flow's order, then
+# their Night boards, then the laptop screens, then theirs
+def night(stem): return stem.endswith('Night')
 for pid, pname, rows in PAGES:
-    nl = max(len(r[1]) for r in rows); px = nl * (LW + GAP) - GAP + DEVGAP
-    notes[pid + '-laptop'] = {'x': 0, 'y': 0, 'text': 'Laptop', 'kind': 'title1', 'maxW': px - DEVGAP, 'page': pid}
-    notes[pid + '-phone'] = {'x': px, 'y': 0, 'text': 'Phone', 'kind': 'title1', 'maxW': 8 * (PW + GAP), 'page': pid}
-    y = TITLE
-    for k, (name, laps, phones) in enumerate(rows):
-        h = 1299 if laps else 920
-        notes['%s-%d' % (pid, k)] = {'x': 0, 'y': y, 'text': name, 'kind': 'title1', 'maxW': px + len(phones) * (PW + GAP), 'page': pid}
-        top = y + TITLE
-        for i, (stem, t) in enumerate(laps):
-            boards[stem + '.dc.html'] = {'x': i * (LW + GAP), 'y': top, 'w': LW, 'h': 1299, 'title': t, 'is_interactive': True, 'page': pid}
+    phones = [b for r in rows for b in r[2]]; laps = [b for r in rows for b in r[1]]
+    bands = [('Phone', [b for b in phones if not night(b[0])], PW, 920), ('Phone, Night', [b for b in phones if night(b[0])], PW, 920),
+             ('Laptop', [b for b in laps if not night(b[0])], LW, 1299), ('Laptop, Night', [b for b in laps if night(b[0])], LW, 1299)]
+    y = 0
+    for name, items, w, h in bands:
+        if not items: continue
+        notes['%s-%s' % (pid, name.lower().replace(', ', '-'))] = {'x': 0, 'y': y, 'text': name, 'kind': 'title1', 'maxW': len(items) * (w + GAP) - GAP, 'page': pid}
+        for i, (stem, t) in enumerate(items):
+            boards[stem + '.dc.html'] = {'x': i * (w + GAP), 'y': y + TITLE, 'w': w, 'h': h, 'title': t, 'is_interactive': True, 'page': pid}
             order.append(stem + '.dc.html')
-        for i, (stem, t) in enumerate(phones):
-            boards[stem + '.dc.html'] = {'x': px + i * (PW + GAP), 'y': top + h - 920, 'w': PW, 'h': 920, 'title': t, 'is_interactive': True, 'page': pid}
-            order.append(stem + '.dc.html')
-        y = top + h + ROWGAP
+        y += TITLE + h + ROWGAP
 d.update(title='The ideal Piano Trainer', boards=boards, order=order, notes=notes,
          pages=[{'id': pid, 'name': pname} for pid, pname, _ in PAGES], launch={'view': 'canvas', 'page': 'practice'})
 d.pop('noteOrder', None)
