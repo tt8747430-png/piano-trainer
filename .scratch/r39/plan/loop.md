@@ -149,3 +149,5 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **Canvas 111 (2026-11-10):** Chords: one bar shape for one chord and many, the name opens "Change Cmaj7" (Remove inside), the bar plays; Transpose and Key signature merged into one Key drawer with half-step − / + and the Root picker's letters and ♭ ♮ ♯; no scroll on a tap; the staff fills the card.
 
 **Canvas 112 (2026-11-10):** Chords: the chosen chord coloured in the ring like the app's score (no honey bar); no key name over the clef; the key its own state with its signature always drawn; Key drawer − signature + · Major | Minor · letters renamed by ♭ ♮ ♯ · Chords to transpose; one picker for Root, Key and Random chords.
+
+**Canvas 113 (2026-11-10):** Chords: name centred over its notes; all chords painted, the chosen ringed; no text selection or tap box on iOS; the + no longer shows through sheets; the chosen chord scrolled whole into view; Next chord empty state with "Chromatic chords"; Key drawer shorter (♭ ♮ ♯ beside Major | Minor, "Transpose with the key", "Stays"); laptop Key popover left of the staff.

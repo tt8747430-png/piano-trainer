@@ -410,6 +410,12 @@ owner's, typos fixed.
   take the chords as well". On a staff, what is chosen is coloured in the ring as the app's score does, never a filled
   bar; the clef opens Key where it prints; ♭ ♮ ♯ renames the letters (only where a key or root exists); Key lists the
   chords to transpose. Never: a label over the clef, words explaining a signature, a switch for showing the key.
+- **A name sits over its notes; the default is quiet, the exception marked (R42, canvas 113):** "the chord name and
+  the chord alignment is still not correct. and the empty state is looking weird. and i dont like now that other
+  chords are not colored"; the Key drawer "can be more intuitive and simple". Centre a symbol on its notehead, not its
+  hit area; keep every chord's paints and ring the chosen one; an empty state keeps its room and offers one way on;
+  in a multi-select where all are on by default, mark the one turned off. Test taps on iOS Safari's terms: no text
+  selection or grey tap box, and nothing in a scroller paints over a sheet.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the

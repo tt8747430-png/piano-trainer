@@ -5,6 +5,28 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 113: the name over its notes, every chord painted, nothing selected by a long press, an empty
+  state with a way on, a simpler Key.** Owner, with four phone screenshots: "the chord name and the chord alignment
+  is still not correct. and the empty state is looking weird. and i dont like now that other chords are not colored
+  like this. and also you could further improve the key transpose: i like it, but it can be more intuitive and simple
+  and use best practices and skills".
+  - Each chord's column is its bar, centred on the notehead, so the name sits over the notes for one chord as for
+    many (a lone chord's column had been widened left for its note names, pulling the name 8 units off).
+  - Every chord keeps its chord-tone paints; the chosen one is ringed (stroke and accidentals) and its name is ring.
+  - A tap never selects the name's text or flashes Safari's grey box (`-webkit-tap-highlight-color`, `user-select`,
+    `-webkit-touch-callout` on buttons). The staff's + is isolated inside its card, so Safari no longer paints it
+    over a sheet.
+  - The chosen chord is brought whole into view, by the least scroll, when a drawer closes or another chord is
+    chosen; it never sits cut at the card's edge.
+  - Next chord's empty state keeps the suggestions' 232px, its line keeps its spaces ("Every chord of C major is on
+    the staff") and offers the one way on: "Chromatic chords" (Chromatic's says "Diatonic chords").
+  - Key drawer, shorter: − [signature, "D major"] + · the letters · ♭ ♮ ♯ beside Major | Minor in one row ·
+    **Transpose with the key**: the chords as tiles, plain while they move (the default), "Stays" and dimmed when kept
+    (scan-first 5: the exception carries the emphasis, not seven checks that all say default); "Keep all" | "Transpose
+    all". On a phone the staff's top shows above the drawer.
+  - Laptop: the Key popover opens left of the staff card, so the whole staff, its signature and the kept chord stay in
+    sight while the key changes.
+
 - **Canvas Version 112: a chosen chord is coloured as the score colours a selection; the key is its own and carries the
   chords you choose.** Owner: "clicking on the chord, feels more like clicking on a button that on a chord and look how
   our real app does this in the player or editor. and also i dont like how this c major label is there, and the
@@ -14,8 +36,8 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   the key. we need to find a way to take the chords as well, like a select section in this drawer or something else."
   - Selection as the app's score draws it (ADR 0096, `shared/ui/score/selection.ts`, `score.css` `.note-chosen`): no
     honey bar and no box. The chosen chord's noteheads and accidentals take the ring colour (sky-deep, Night sky-light)
-    over their chord-tone paints and its name is ring; the other chords are plain ink heads, so the painted chord is
-    the one on the keys. Nothing washes on hover; the name underlines on a pointer. While Play all runs, what sounds is
+    over their chord-tone paints and its name is ring; _(replaced in v113: every chord keeps its paints)_ the other
+    chords are plain ink heads, so the painted chord is the one on the keys. Nothing washes on hover; the name underlines on a pointer. While Play all runs, what sounds is
     one thin ring line, apart from what is chosen.
   - No label over the clef: the clef and its signature open Key where they print ("Key: C major" as its tooltip and
     spoken name).
@@ -23,7 +45,7 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     Key drawer. No "Key signature on the staff" switch, no "1 flat" words, no "Original key" line.
   - The Key drawer: − [the signature drawn, "D major"] + (half steps) · Major | Minor · the letters and ♭ ♮ ♯ ·
     **Chords to transpose**, every chord on the staff a tile with a check, all chosen at first, "Select all | Select
-    none". Changing the key moves the chosen chords with it, as MuseScore's Transpose to key with "Transpose chord
+    none" _(replaced in v113: "Transpose with the key", a kept chord marked "Stays", "Keep all | Transpose all")_. Changing the key moves the chosen chords with it, as MuseScore's Transpose to key with "Transpose chord
     symbols" (handbook.musescore.org, Transposition); the others stay and are written against the new signature; with
     none chosen only the key changes.
   - ♭ ♮ ♯ is a switch that names the letters: ♭ reads C D♭ E♭ F G♭ A♭ B♭, ♯ reads C♯ D♯ E F♯ G♯ A♯ B, ♮ the white
