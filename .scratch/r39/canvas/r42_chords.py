@@ -348,7 +348,7 @@ const sv = (() => { const all = { notes: [], ledg: [], digits: [], cols: [] }, p
     const one = arpOn ? (() => { const a = { notes: [], ledg: [], digits: [], vt: 4, vbot: 168 };
       ['R', 'L'].forEach((h) => { const hn = o.v.filter((x) => x.hand === h).sort((p, q) => p.m - q.m); arpIdx.forEach((j, k) => { if (!hn[j]) return; const r = staff([hn[j]], treble, SW, {}, AX + k * ARP, SW); r.notes.forEach((n) => { n.k = k; const f = f1[n.m];
         if (fingOn && f) a.digits.push({ x: n.x - 3, y: n.T ? n.y - 11 : n.y + 20, f, f1: f === 1, f2: f === 2, f3: f === 3, f4: f === 4, f5: f === 5 }); }); a.notes.push(...r.notes); a.ledg.push(...r.ledg); a.vt = Math.min(a.vt, r.vt - 10); a.vbot = Math.max(a.vbot, r.vbot); }); });
-      return a; })() : staff(o.v, treble, SW, fingOn && i === cur ? f1 : {}, cx, SW);
+      return a; })() : staff(o.v, treble, SW, fingOn ? f1 : {}, cx, SW);
     if (seq.length > 1 || sigF) one.notes.forEach((n) => { const k = (n.T ? 'T' : 'B') + n.dn, was = alt[k] ?? (sigOf[n.L] || 0), show = n.d !== was; alt[k] = n.d;
       n.a1 = show && n.d === -1; n.a2 = show && n.d === 1; n.a3 = show && n.d === -2; n.a4 = show && n.d === 2; n.a5 = show && n.d === 0; });
     one.notes.forEach((n) => { n.st = i === cur && !arpOn ? '#356890' : C.ink; n.sw = i === cur && !arpOn ? 2.2 : 1.6; n.ac = i === cur && !arpOn ? '#356890' : C.ink; });

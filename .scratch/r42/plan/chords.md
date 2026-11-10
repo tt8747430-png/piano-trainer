@@ -5,6 +5,10 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 114: fingering on every chord.** Owner: "why the fingers are only on the selected chord, it should
+  be on all". Every chord on the staff carries its finger numbers beside its notes, as a printed progression does
+  (Vita Piano, v35); they stay inside the chord's bar. The foot's "Right hand 1 2 4 5" stays the chosen chord's.
+
 - **Canvas Version 113: the name over its notes, every chord painted, nothing selected by a long press, an empty
   state with a way on, a simpler Key.** Owner, with four phone screenshots: "the chord name and the chord alignment
   is still not correct. and the empty state is looking weird. and i dont like now that other chords are not colored

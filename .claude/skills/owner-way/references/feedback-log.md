@@ -416,6 +416,8 @@ owner's, typos fixed.
   hit area; keep every chord's paints and ring the chosen one; an empty state keeps its room and offers one way on;
   in a multi-select where all are on by default, mark the one turned off. Test taps on iOS Safari's terms: no text
   selection or grey tap box, and nothing in a scroller paints over a sheet.
+- **What is printed for one chord is printed for all (R42, canvas 114):** "why the fingers are only on the selected
+  chord, it should be on all". Selection colours a chord; it never decides what the staff prints.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the
