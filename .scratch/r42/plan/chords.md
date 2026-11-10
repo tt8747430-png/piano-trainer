@@ -5,6 +5,19 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 107: a letter and ♭ ♮ ♯ for a chord's root, the keyboard only for moving to a key, the key
+  signature stepped like Transpose.** Owner: "it is interesting for transpose but not for picking a chords. and I dont
+  like the split note between the C sharp and d flat. look at the examples and websites and make best decisions. and
+  the key change also doest make sense why you did like that. I want something like the transpose."
+  - The chord's Root drawer: seven letters in a row, then ♭ | ♮ | ♯ under them, as a chord chart is written and as
+    chart editors take a root (letter, then accidental). E♯, F♭, B♯ and C♭ are greyed out, never roots.
+  - Transpose and Random chords' key keep the octave keyboard, one name per black key: the one its key is written with
+    (D♭ E♭ F♯ A♭ B♭ for major, C♯ E♭ F♯ G♯ B♭ for minor). When a black key is chosen, "Written as F♯ | G♭" under the
+    keys switches the spelling. No split keys.
+  - Settings › Key signature: ♭ and ♯ step along the circle of fifths around the key's name ("E♭ major", "3 flats ·
+    C minor"), the signature drawn on a staff under them, and "Back to no key signature". Replaces the 15 tiles.
+  - Replaces v106's split black keys, and its octave picker in the Root drawer.
+
 - **Canvas Version 106: one staff size, one octave root picker, a Transpose that reads.** Owner, on the D♭ triad's
   staff: "I dont like how it scales and the staff is getting smaller and smaller and it is clipped. and the transpose
   buttons is not good and doenst make very much sense. like move cmaj7 to cmaj7 and other is not good and there is not

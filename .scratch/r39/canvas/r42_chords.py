@@ -29,15 +29,21 @@ const rootPc = (l, a) => (NATPC[l] + a + 12) % 12;
 // no chord chart writes these as a root
 const SKIP = ['C-1', 'F-1', 'E1', 'B1'];
 const LET = 'CDEFGAB', NATPC = [0, 2, 4, 5, 7, 9, 11];
-// One root picker for every place a root or key is chosen (R42 v106, owner: "it just lists all of this keys without
-// good structure"; "there is not possibility to switch between like the c sharp or d flat"): an octave of keys, the
-// white keys below, each black key split into its two names, C♯ above D♭, so the spelling is picked with the key.
-const KEYPICK = (curL, curA, pick, pre) => {
-  const tile = (l, a, dark) => { const on = l === curL && a === curA;
+// The octave picker for moving to a key (Transpose, Random chords' key; R42 v107). Owner on v106: "it is interesting
+// for transpose but not for picking a chords. and I dont like the split note between the C sharp and d flat". Each
+// black key carries one name, the one its key is written with (D♭ major, C♯ minor); when a black key is chosen, its
+// other spelling is offered under the keys ("Written as C♯ | D♭").
+const KEYPICK = (curL, curA, pick, pre, minorish) => {
+  const curPc = rootPc(curL, curA), BL = [1, 3, 6, 8, 10];
+  const DEF = minorish ? { 1: [0, 1], 3: [2, -1], 6: [3, 1], 8: [4, 1], 10: [6, -1] } : { 1: [1, -1], 3: [2, -1], 6: [3, 1], 8: [5, -1], 10: [6, -1] };
+  const tile = (l, a, dark) => { const on = rootPc(l, a) === curPc;
     return { s: LET[l] + ACC[String(a)], on, aria: (pre || '') + LET[l] + (a ? (a > 0 ? ' sharp' : ' flat') : ''), pick: () => pick(l, a),
       bg: on ? '#F6E3BC' : (dark ? C.ink : '#FEFDFB'), fg: on || !dark ? C.ink : C.sheet, fw: on ? 800 : 600 }; };
+  const isBlack = BL.includes(curPc), alt = curA > 0 ? [(curL + 1) % 7, -1] : [(curL + 6) % 7, 1];
+  const nm = (l, a) => LET[l] + ACC[String(a)], sp = curA > 0 ? [[curL, curA], alt] : [alt, [curL, curA]];
   return { whites: [0, 1, 2, 3, 4, 5, 6].map((l) => Object.assign(tile(l, 0, false), { col: (2 * l + 1) + ' / span 2' })),
-    blacks: [[0, 1], [1, 2], [3, 4], [4, 5], [5, 6]].map(([a, b]) => ({ col: (2 * a + 2) + ' / span 2', up: tile(a, 1, true), dn: tile(b, -1, true) })) };
+    blacks: BL.map((pc, k) => { const [l, a] = pc === curPc ? [curL, curA] : DEF[pc]; return Object.assign(tile(l, a, true), { col: [2, 4, 8, 10, 12][k] + ' / span 2' }); }),
+    isBlack, spell: isBlack ? sp.map(([l, a]) => { const on = l === curL && a === curA; return { l: nm(l, a), on, bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: on ? 600 : 500, pick: () => pick(l, a) }; }) : [] };
 };
 const QS = [
   { g: 'Triads', k: '', n: 'major triad', t: [[0, 1], [4, 3], [7, 5]] },
@@ -506,7 +512,13 @@ return {
   nmType: q.k || 'major', nmTypeFs: q.k ? '1em' : '0.5em', nmTypeC: q.k ? C.ink : C.soft, nmBass: slash || 'root position', nmBassFs: slash ? '1em' : '16px', nmBassC: slash ? (ROLE[ns.length ? voice(root, q, inv, voicing, 'Right')[0].deg : 1] || C.ink) : C.soft,
   isMRoot: sh === 'mRoot', isMType: sh === 'mType', isMBass: sh === 'mBass', isVMenu: sh === 'vMenu',
   openMRoot: () => set({ sheet: sh === 'mRoot' ? null : 'mRoot' }), openMType: () => set({ sheet: sh === 'mType' ? null : 'mType' }), openMBass: () => set({ sheet: sh === 'mBass' ? null : 'mBass' }), openVMenu: () => set({ sheet: 'vMenu' }),
-  rootPick: KEYPICK(rLet, rAcc, (l, a) => { RL = l; change({ rl: l, ra: a, root: rootPc(l, a), oct: 0 }); }, 'Root '),
+  // the chord's root as a chart is written: its letter, then ♭ ♮ ♯ (R42 v107); E♯, F♭, B♯ and C♭ are never roots
+  rootLet: [0, 1, 2, 3, 4, 5, 6].map((l) => { const on = l === rLet, ok = !SKIP.includes(LET[l] + rAcc);
+    return { s: LET[l], on, dis: !ok, op: ok ? 1 : 0.35, bg: on ? '#F6E3BC' : '#FEFDFB', ring: on ? 'none' : '0 0 0 1px ' + C.line, fw: on ? 800 : 600, aria: LET[l] + (rAcc ? (rAcc > 0 ? ' sharp' : ' flat') : ''),
+      pick: () => { if (!ok) return; RL = l; change({ rl: l, ra: rAcc, root: rootPc(l, rAcc), oct: 0 }); } }; }),
+  rootAcc: [[-1, '♭', 'Flat'], [0, '♮', 'Natural'], [1, '♯', 'Sharp']].map(([a, g, w]) => { const on = a === rAcc, ok = !SKIP.includes(LET[rLet] + a);
+    return { l: g, aria: w, on, dis: !ok, op: ok ? 1 : 0.35, bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none',
+      pick: () => { if (!ok) return; change({ rl: rLet, ra: a, root: rootPc(rLet, a), oct: 0 }); } }; }),
   rootTiles: [[0, 0], [0, 1], [1, -1], [1, 0], [1, 1], [2, -1], [2, 0], [3, 0], [3, 1], [4, -1], [4, 0], [4, 1], [5, -1], [5, 0], [5, 1], [6, -1], [6, 0]].map(([l, a]) => { const on = l === rLet && a === rAcc;
     return { s: LET[l] + ACC[String(a)], on, bg: on ? '#F6E3BC' : '#FEFDFB', ring: on ? 'none' : '0 0 0 1px ' + C.line, fw: on ? 800 : 600, aria: 'Root ' + LET[l] + (a ? (a > 0 ? ' sharp' : ' flat') : ''), pick: () => { RL = l; change({ rl: l, ra: a, root: rootPc(l, a), oct: 0 }); } }; }),
   typeGroups: [['Triads', ['', 'm', '°', '+', 'sus2', 'sus4']], ['Sevenths', ['maj7', '7', 'm7', 'ø7', '°7']]].map(([g, ks]) => ({ g, rows: ks.map((k) => { const i = QS.findIndex((x) => x.k === k), on = i === qi; return { s: RN + k, n: QS[i].n[0].toUpperCase() + QS[i].n.slice(1), on, mark: on ? '✓' : '', fw: on ? 700 : 500, pick: () => change({ q: i, sheet: null }) }; }) })),
@@ -632,7 +644,7 @@ return {
     const goal = st.rpGoal || '16 chords';
     return {
       rpFromSeg: seg(['A key', 'Chord types'], fromKey ? 'A key' : 'Chord types', (l) => set({ rpFrom: l === 'A key' ? 'key' : 'types' })), rpIsKey: fromKey, rpIsTypes: !fromKey,
-      rpKeyPick: KEYPICK(kL, kA, (l, a) => set({ rpKL: l, rpKA: a }), 'Key of '),
+      rpKeyPick: KEYPICK(kL, kA, (l, a) => set({ rpKL: l, rpKA: a }), 'Key of ', mn),
       rpModeSeg: seg(['Major', 'Minor'], mn ? 'Minor' : 'Major', (l) => set({ rpMinor: l === 'Minor' })),
       rpSevSeg: seg(['Triads', 'Sevenths'], sv ? 'Sevenths' : 'Triads', (l) => set({ rpSev: l === 'Sevenths' })),
       rpKeyChords: keyChords.map((c) => { RL = c.rl; const o = Object.assign({ s: LET[c.rl] + ACC[String(c.ra)] + QS[c.q].k, r: RM[c.d], aria: 'Practise ' + LET[c.rl] + ACC[String(c.ra)] + QS[c.q].k + ', ' + RM[c.d], pick: () => set({ rpDegs: tog(degs, c.d) }) }, chip(degs.includes(c.d))); RL = rLet; return o; }),
@@ -649,8 +661,13 @@ return {
   })(),
   nextSevSeg: seg(['Triads', 'Sevenths'], sevKey ? 'Sevenths' : 'Triads', (l) => set({ nextSev: l === 'Sevenths' })),
   firstSym: symOf(seq[0]).s, sigName: SIGS.find((x) => x[0] === sigF)[1] + ' major' + (sigF ? ' · ' + Math.abs(sigF) + (sigF > 0 ? '♯' : '♭') : ' · none'), openSig: () => set({ sheet: 'sig' }), isSig: sh === 'sig',
-  sigTiles: SIGS.map(([f, n]) => ({ s: n, sub: f ? Math.abs(f) + (f > 0 ? '♯' : '♭') : 'none', on: f === sigF, bg: f === sigF ? '#F6E3BC' : '#FEFDFB', ring: f === sigF ? 'none' : '0 0 0 1px ' + C.line, aria: n + ' major, ' + (f ? Math.abs(f) + (f > 0 ? ' sharps' : ' flats') : 'no sharps or flats'), pick: () => set({ sigF: f, sheet: 'keys' }) })),
-  addChord, undoRemove, playAll, nextList, tKey: KEYSP[tpc] + (minorKey ? ' minor' : ' major'), openTr: () => set({ sheet: 'tr' }), isTr: sh === 'tr', trDown: () => stepTo((tpc + 11) % 12), trUp: () => stepTo((tpc + 1) % 12), trPick: KEYPICK(tonic.rl, tonic.ra, (l, a) => transposeTo(l, a), 'First chord on '),
+  // the key signature steps like Transpose (R42 v107, owner: "I want something like the transpose"): − adds a flat,
+  // + adds a sharp, along the circle of fifths; the signature drawn on a staff between them
+  sigMain: SIGS.find((x) => x[0] === sigF)[1] + ' major', sigSub: (sigF ? Math.abs(sigF) + (sigF > 0 ? (Math.abs(sigF) > 1 ? ' sharps' : ' sharp') : (Math.abs(sigF) > 1 ? ' flats' : ' flat')) : 'No sharps or flats') + ' · ' + ({ 0: 'A', 1: 'E', 2: 'B', 3: 'F♯', 4: 'C♯', 5: 'G♯', 6: 'D♯', 7: 'A♯', '-1': 'D', '-2': 'G', '-3': 'C', '-4': 'F', '-5': 'B♭', '-6': 'E♭', '-7': 'A♭' })[sigF] + ' minor',
+  sigDown: () => { if (sigF > -7) set({ sigF: sigF - 1 }); }, sigUp: () => { if (sigF < 7) set({ sigF: sigF + 1 }); }, sigDownOp: sigF > -7 ? 1 : 0.35, sigUpOp: sigF < 7 ? 1 : 0.35,
+  sigMoved: sigF !== 0, sigBack: () => set({ sigF: 0 }),
+  sigMini: Array.from({ length: Math.abs(sigF) }, (_, k) => ({ x: 52 + k * 12, y: (sigF > 0 ? [30, 45, 25, 40, 55, 35, 50] : [50, 35, 55, 40, 60, 45, 65])[k] + 5, sharp: sigF > 0, flat: sigF < 0 })),
+  addChord, undoRemove, playAll, nextList, tKey: KEYSP[tpc] + (minorKey ? ' minor' : ' major'), openTr: () => set({ sheet: 'tr' }), isTr: sh === 'tr', trDown: () => stepTo((tpc + 11) % 12), trUp: () => stepTo((tpc + 1) % 12), trPick: KEYPICK(tonic.rl, tonic.ra, (l, a) => transposeTo(l, a), 'First chord on ', minorKey),
   trWhat: trSemi === 0 ? (tr0 && origL !== tonic.rl ? 'Same keys, spelled enharmonically' : 'Original key') : (trSemi > 0 ? 'Up ' : 'Down ') + IVW[Math.abs(trSemi)], trList: seq.map((c) => symOf(c).s).join('  ·  '), trMoved: !!tr0 && (trSemi !== 0 || origL !== tonic.rl), trBack: () => transposeTo(origL, origA), trOrig: LET[origL] + ACC[String(origA)] + tq.k, keyName, openNext: () => set({ sheet: 'next' }), isNext: sh === 'next', hasSeq: seq.length > 1, canAdd: seq.length < 8, seqCount: seq.length, toastOn: !!st.toast, toastT: st.toast ? st.toast.t : '', toastUndo: !!(st.toast && st.toast.undo), toastPad: st.toast && st.toast.undo ? '0' : '12px',
   ...(() => { const demo = st.demo || '';
     const eight = () => [0, 3, 4, 5, 1, 4, 0, 3].map((d) => { const pc = (tpc + STEPS[d]) % 12, l = (kl0 + d) % 7; return { rl: l, ra: ((pc - NATPC[l] + 18) % 12) - 6, q: QS.findIndex((x) => x.k === KQ[d]), inv: 0, voicing: snap.voicing, hand: hands, oct: 0 }; });
@@ -832,10 +849,12 @@ B_NEXT = (SEGGRID('nextSevSeg') + CAPS('In {{keyName}}') + '<div role="group" ar
           + GROUP(('link', 'Any chord', '', 'addChord'), bg="#FEFDFB"))
 def KEYPICK_HTML(v, label):
     btn = lambda o, extra: (f'<button type="button" role="radio" aria-checked="{{{{{o}.on}}}}" aria-label="{{{{{o}.aria}}}}" onClick="{{{{{o}.pick}}}}" style="{extra} min-width: 0; padding: 0; border: 0; '
-                            f'background: {{{{{o}.bg}}}}; color: {{{{{o}.fg}}}}; font-family: {SERIF}; font-size: 18px; font-weight: {{{{{o}.fw}}}}; display: flex; justify-content: center">{{{{{o}.s}}}}</button>')
-    return (f'<div role="radiogroup" aria-label="{label}" style="display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); grid-template-rows: 46px 46px 52px; column-gap: 4px">'
-            f'<sc-for list="{{{{{v}.whites}}}}" as="w" hint-placeholder-count="7">' + btn('w', 'grid-column: {{w.col}}; grid-row: 1 / span 3; z-index: 0; border-radius: 0 0 12px 12px; box-shadow: 0 0 0 1px ' + LINE + '; align-items: flex-end; padding-bottom: 14px;') + '</sc-for>'
-            f'<sc-for list="{{{{{v}.blacks}}}}" as="b" hint-placeholder-count="5">' + btn('b.up', 'grid-column: {{b.col}}; grid-row: 1; z-index: 1; margin: 0 4px; border-radius: 0; align-items: center; font-size: 16px;') + btn('b.dn', 'grid-column: {{b.col}}; grid-row: 2; z-index: 1; margin: 0 4px; border-radius: 0 0 9px 9px; border-top: 1px solid rgba(254,253,251,.22); align-items: center; font-size: 16px;') + '</sc-for></div>')
+                            f'background: {{{{{o}.bg}}}}; color: {{{{{o}.fg}}}}; font-family: {SERIF}; font-weight: {{{{{o}.fw}}}}; display: flex; justify-content: center">{{{{{o}.s}}}}</button>')
+    return (f'<div role="radiogroup" aria-label="{label}" style="display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); grid-template-rows: 84px 52px; column-gap: 4px">'
+            f'<sc-for list="{{{{{v}.whites}}}}" as="w" hint-placeholder-count="7">' + btn('w', 'grid-column: {{w.col}}; grid-row: 1 / span 2; z-index: 0; border-radius: 0 0 12px 12px; box-shadow: 0 0 0 1px ' + LINE + '; align-items: flex-end; padding-bottom: 14px; font-size: 18px;') + '</sc-for>'
+            f'<sc-for list="{{{{{v}.blacks}}}}" as="b" hint-placeholder-count="5">' + btn('b', 'grid-column: {{b.col}}; grid-row: 1; z-index: 1; margin: 0 4px; border-radius: 0 0 9px 9px; align-items: flex-end; padding-bottom: 10px; font-size: 16px;') + '</sc-for></div>'
+            f'<sc-if value="{{{{{v}.isBlack}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; align-items: center; gap: 12px"><span style="flex: none; font-size: 14px; color: {SOFT}">Written as</span><div style="flex: 1; min-width: 0">' + SEGGRID(f'{v}.spell') + '</div></div></sc-if>')
+
 B_TR = ('<div style="display: flex; align-items: center; gap: 12px"><button type="button" aria-label="Down a half step" onClick="{{trDown}}" style="flex: none; width: 52px; height: 52px; padding: 0; border: 0; border-radius: 26px; background: ' + FILL + '; color: ' + INK + '; font: inherit; font-size: 26px; font-weight: 500; line-height: 1">−</button>'
   + '<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 2px"><span style="font-family: ' + SERIF + '; font-size: 28px; font-weight: 700; line-height: 1.1; white-space: nowrap">{{firstSym}}</span><span style="font-size: 14px; color: ' + SOFT + '">{{trWhat}}</span></div>'
   + '<button type="button" aria-label="Up a half step" onClick="{{trUp}}" style="flex: none; width: 52px; height: 52px; padding: 0; border: 0; border-radius: 26px; background: ' + FILL + '; color: ' + INK + '; font: inherit; font-size: 26px; font-weight: 500; line-height: 1">+</button></div>'
@@ -935,7 +954,10 @@ MROW = f'width: 100%; min-height: 46px; border: 0; border-radius: 12px; backgrou
 MCHK = '<span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">'
 # The chord's three edit options open real drawers (R42, canvas 86): a bottom sheet on a phone with its grabber, title
 # and Done, a titled popover on a laptop; a pick applies at once and the drawer stays until Done.
-D_ROOT = KEYPICK_HTML('rootPick', 'Root')
+D_ROOT = (f'<div style="display: flex; flex-direction: column; gap: 12px"><div role="radiogroup" aria-label="Letter" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px"><sc-for list="{{{{rootLet}}}}" as="o" hint-placeholder-count="7">'
+          f'<button type="button" role="radio" aria-checked="{{{{o.on}}}}" aria-disabled="{{{{o.dis}}}}" aria-label="{{{{o.aria}}}}" onClick="{{{{o.pick}}}}" style="height: 56px; min-width: 0; padding: 0; border: 0; border-radius: 12px; background: {{{{o.bg}}}}; box-shadow: {{{{o.ring}}}}; opacity: {{{{o.op}}}}; color: {INK}; font-family: {SERIF}; font-size: 22px; font-weight: {{{{o.fw}}}}">{{{{o.s}}}}</button></sc-for></div>'
+          f'<div role="radiogroup" aria-label="Accidental" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; padding: 2px; border-radius: 12px; background: {FILL}"><sc-for list="{{{{rootAcc}}}}" as="o" hint-placeholder-count="3">'
+          f'<button type="button" role="radio" aria-checked="{{{{o.on}}}}" aria-disabled="{{{{o.dis}}}}" aria-label="{{{{o.aria}}}}" onClick="{{{{o.pick}}}}" style="height: 44px; min-width: 0; padding: 0; border: 0; border-radius: 10px; background: {{{{o.bg}}}}; box-shadow: {{{{o.sh}}}}; opacity: {{{{o.op}}}}; color: {INK}; font-family: {SERIF}; font-size: 26px; line-height: 1">{{{{o.l}}}}</button></sc-for></div></div>')
 D_TYPE = B_LIST[len(BACKHEAD('Chord', 'backChord')):]
 D_BASS = (f'<div role="radiogroup" aria-label="In the bass" style="border-radius: 12px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{bassItems}}}}" as="r" hint-placeholder-count="3">'
           f'<button type="button" role="radio" aria-checked="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" style="width: 100%; min-height: 52px; box-sizing: border-box; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: transparent; padding: 6px 14px 6px 16px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left"><span style="flex: 1; min-width: 0; font-size: 16px; font-weight: {{{{r.fw}}}}">{{{{r.l}}}}</span><span style="flex: none; width: 18px; font-size: 17px; font-weight: 700; color: #7A5418">{{{{r.mark}}}}</span></button></sc-for></div>')
@@ -977,7 +999,12 @@ VIEWCARDS = SWROW(VIEWCARDS, 'kbHandsOn', 'toggleKbHands')
 B_PIANO = (SWROW(GROUP(('toggle', 'Show the piano', 'kbOn', 'toggleKb'), bg="#FEFDFB"), 'kbOn', 'toggleKb') + '<sc-if value="{{kbShow}}" hint-placeholder-val="{{true}}">' + VIEWCARDS + GROUP(('raw', RANGE), bg="#FEFDFB") + GROUP(('raw', '<div style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 10px"><span style="font-size: 16px">Labels</span><div>' + SEGGRID('keyLabelSeg') + '</div></div>'), bg="#FEFDFB") + '</sc-if>'
            + GROUP(('raw', STATEROW('Sound', 'soundSub')), ('raw', STATEROW('MIDI keyboard', 'midiSub')), bg="#FEFDFB")
            + CAPS('Staff') + GROUP(('link', 'Key signature', '{{sigName}}', 'openSig'), bg="#FEFDFB"))
-B_SIG = ('<div role="radiogroup" aria-label="Key signature" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px"><sc-for list="{{sigTiles}}" as="o" hint-placeholder-count="15"><button type="button" role="radio" aria-checked="{{o.on}}" aria-label="{{o.aria}}" onClick="{{o.pick}}" style="height: 60px; min-width: 0; border: 0; border-radius: 12px; background: {{o.bg}}; box-shadow: {{o.ring}}; color: ' + INK + '; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px"><span style="font-family: ' + SERIF + '; font-size: 18px; font-weight: 700; white-space: nowrap">{{o.s}}</span><span style="font-size: 13px; color: ' + SOFT + '">{{o.sub}}</span></button></sc-for></div>')
+B_SIG = ('<div style="display: flex; align-items: center; gap: 12px"><button type="button" aria-label="One more flat" onClick="{{sigDown}}" style="flex: none; width: 52px; height: 52px; padding: 0; border: 0; border-radius: 26px; background: ' + FILL + '; opacity: {{sigDownOp}}; color: ' + INK + '; font-family: ' + SERIF + '; font-size: 28px; line-height: 1">♭</button>'
+  + '<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 2px"><span style="font-family: ' + SERIF + '; font-size: 26px; font-weight: 700; line-height: 1.1; white-space: nowrap">{{sigMain}}</span><span style="font-size: 14px; color: ' + SOFT + '; white-space: nowrap">{{sigSub}}</span></div>'
+  + '<button type="button" aria-label="One more sharp" onClick="{{sigUp}}" style="flex: none; width: 52px; height: 52px; padding: 0; border: 0; border-radius: 26px; background: ' + FILL + '; opacity: {{sigUpOp}}; color: ' + INK + '; font-family: ' + SERIF + '; font-size: 28px; line-height: 1">♯</button></div>'
+  + '<div style="border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px ' + LINE + '; padding: 8px 12px"><svg viewBox="0 14 200 66" style="display: block; width: 100%; max-width: 280px; height: auto; margin: 0 auto" role="img" aria-label="{{sigMain}}: {{sigSub}}"><path d="M4 30H196M4 40H196M4 50H196M4 60H196M4 70H196" stroke="' + INK + '" stroke-width="0.9"></path><text x="8" y="69" font-family="Noto Music" font-size="42" fill="' + INK + '">𝄞</text>'
+  + '<sc-for list="{{sigMini}}" as="g" hint-placeholder-count="0"><sc-if value="{{g.sharp}}" hint-placeholder-val="{{false}}"><text x="{{g.x}}" y="{{g.y}}" font-family="Noto Music" font-size="22" fill="' + INK + '">♯</text></sc-if><sc-if value="{{g.flat}}" hint-placeholder-val="{{false}}"><text x="{{g.x}}" y="{{g.y}}" font-family="Noto Music" font-size="22" fill="' + INK + '">♭</text></sc-if></sc-for></svg></div>'
+  + '<sc-if value="{{sigMoved}}" hint-placeholder-val="{{false}}"><button type="button" onClick="{{sigBack}}" style="align-self: center; height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: transparent; color: #7A5418; font: inherit; font-size: 15px; font-weight: 600">Back to no key signature</button></sc-if>')
 PIANOBTN = lambda: GLASSBTN('Settings', KEYSI, 'openKeys')
 # content never shows through the bar: the page fades out under it (the tab bar's rule, v24)
 DOCK_A_PHONE = f'<div aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 128px; z-index: 39; pointer-events: none; background: linear-gradient(to bottom, rgba(246,243,238,0), {PAGE} 62%)"></div><div role="toolbar" aria-label="Voicing, sound and hands" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 10px; pointer-events: none">{VOICEBTN}{PLAYSPLIT}{HANDSBTN_A}</div>'

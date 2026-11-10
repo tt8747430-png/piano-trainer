@@ -141,3 +141,5 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **Canvas 105 (2026-11-10):** Chords: ties gone, staff in C with Settings › Key signature, Transpose moves every chord, Next chord stays open with Triads | Sevenths; new Random chords page started in the Player.
 
 **Canvas 106 (2026-11-10):** Chords: staff at one size, scrolling; the octave root picker (C♯ over D♭) for Root, Transpose and Random chords; Transpose reads as steps from the original with Back to.
+
+**Canvas 107 (2026-11-10):** Chords: Root is seven letters plus ♭ ♮ ♯; Transpose and Random chords keep the keyboard with one name per black key and "Written as"; Key signature is a ♭/♯ stepper with the signature drawn.

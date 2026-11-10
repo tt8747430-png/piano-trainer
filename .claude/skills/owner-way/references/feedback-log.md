@@ -382,6 +382,9 @@ owner's, typos fixed.
   switch between like the c sharp or d flat"; "it just lists all of this keys without good structure". One picker for
   every root and key. Never: a staff that shrinks as chords are added ("getting smaller and smaller"); a list of tiles
   that repeats the chord ("move cmaj7 to cmaj7").
+- **A chord's root is a letter and ♭ ♮ ♯; a keyboard only for moving to a key (R42, canvas 107):** "it is interesting
+  for transpose but not for picking a chords"; "I dont like the split note between the C sharp and d flat"; the key
+  signature "like the transpose": a ♭/♯ stepper. Never: a black key split into two names.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the
