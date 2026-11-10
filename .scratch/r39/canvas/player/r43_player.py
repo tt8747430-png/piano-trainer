@@ -276,10 +276,69 @@ def icons(t):
     return t
 
 
+
+# R43 canvas 119: Hands becomes Parts (Yamaha's right-hand and left-hand parts, Synthesia's Parts, Flat's mixer),
+# each part a card in the Chords kit with its hand's picture, the same picture the toolbar wears.
+SPK_UP = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#685E56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"></path></svg>'
+ICOBTN = 'flex: none; width: 44px; height: 44px; margin: -6px; padding: 0; border: 0; border-radius: 9999px; background: transparent; display: flex; align-items: center; justify-content: center'
+def PART(H, name, icon, tile, ink):
+    low = name.lower()
+    return ('<div style="border-radius: 12px; ' + CARD + '">'
+            f'<button type="button" role="switch" aria-label="{name}" aria-checked="{{{{part{H}.on}}}}" aria-disabled="{{{{part{H}.lock}}}}" onClick="{{{{part{H}.flip}}}}" style="{ROW}; width: 100%; padding: 8px 12px 8px 8px; border: 0; background: transparent; font: inherit; text-align: left">'
+            f'<span style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: none; width: 40px; height: 40px; border-radius: 10px; background: {tile}; color: {ink}; display: flex; align-items: center; justify-content: center">{icon}</span>'
+            f'<span style="font-weight: 600">{name}</span></span>' + SWITCH(f'part{H}') + '</button>'
+            f'<div style="opacity: {{{{part{H}.op}}}}; pointer-events: {{{{part{H}.pe}}}}">'
+            f'<div style="{ROW}; {SEP}; gap: 10px"><button type="button" aria-label="{{{{vol{H}MuteLabel}}}}" data-tip="{{{{vol{H}MuteLabel}}}}" aria-pressed="{{{{vol{H}Muted}}}}" onClick="{{{{vol{H}Down}}}}" style="{ICOBTN}">'
+            f'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#685E56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{{{vol{H}Icon}}}}"></path></svg></button>'
+            f'<input type="range" aria-label="{name} volume" min="0" max="100" step="5" value="{{{{vol{H}}}}}" onChange="{{{{setVol{H}}}}}" style="flex: 1; min-width: 0; accent-color: #332921">'
+            f'<button type="button" aria-label="{name} louder" data-tip="Louder" onClick="{{{{vol{H}Up}}}}" style="{ICOBTN}">{SPK_UP}</button>'
+            f'<span style="min-width: 40px; text-align: right; font-size: 15px; font-variant-numeric: tabular-nums; color: #332921">{{{{vol{H}}}}}%</span></div>'
+            f'<button type="button" role="switch" aria-label="Dim the {low}" aria-checked="{{{{dim{H}.on}}}}" onClick="{{{{dim{H}.flip}}}}" style="{ROW}; {SEP}; width: 100%; border-left: 0; border-right: 0; border-bottom: 0; background: transparent; font: inherit; text-align: left"><span>Dim</span>' + SWITCH(f'dim{H}') + '</button>'
+            '</div></div>')
+HAND_R = HANDI.replace('width="20" height="20"', 'width="24" height="24"')
+HAND_L = HANDL.replace('width="20" height="20"', 'width="24" height="24"')
+PARTS_BODY = (PART('R', 'Right hand', HAND_R, '#F8E3DC', '#8E4532') + '\n' + PART('L', 'Left hand', HAND_L, '#ECE6F5', '#5B4B86') + '\n')
+PARTVALS = ("...(() => { const one = (H, O) => { const cur = s['show' + H] ?? 'show', other = s['show' + O] ?? 'show', st = showTurn('show' + H, cur), on = cur !== 'hide', lock = on && other === 'hide';"
+            " return { ['part' + H]: { on: on ? 'true' : 'false', lock: lock ? 'true' : 'false', track: !on ? '#DAD1C8' : lock ? '#B5D4B9' : '#7FB685', knob: on ? 22 : 2, flip: lock ? () => {} : st.flip, op: on ? 1 : 0.4, pe: on ? 'auto' : 'none' },"
+            " ['dim' + H]: { on: cur === 'dim' ? 'true' : 'false', track: cur === 'dim' ? '#7FB685' : '#DAD1C8', knob: cur === 'dim' ? 22 : 2, flip: st.dim } }; }; return { ...one('R', 'L'), ...one('L', 'R') }; })(), ")
+SHOWROWS = ('<div style="padding: 0 4px; font-size: 13px; color: #685E56">Show</div>'
+            '<div style="border-radius: 12px; ' + CARD + '"><sc-for list="{{showChips}}" as="c" hint-placeholder-count="6">'
+            '<button type="button" role="switch" aria-checked="{{c.on}}" onClick="{{c.pick}}" style="' + ROW + '; border-top: {{c.sep}}; width: 100%; border-left: 0; border-right: 0; border-bottom: 0; margin-top: -1px; background: transparent; font: inherit; text-align: left"><span>{{c.name}}</span>' + SWITCH('c') + '</button></sc-for></div>')
+
+
+def parts(t, phone):
+    i = t.index('<section role="dialog" aria-label="Hands"'); j = t.index('</section>', i)
+    sec = t[i:j]
+    k = sec.index('</h2>'); k = sec.index('\n', k) + 1
+    head = sec[:k].replace('aria-label="Hands"', 'aria-label="Parts"').replace('>Hands</h2>', '>Parts</h2>')
+    t = t[:i] + head + PARTS_BODY + t[j:]
+    t = lit(t, "...volOf('L', 60),", "...volOf('L', 60), " + PARTVALS)
+    # the toolbar's button names the menu it opens; it shows which hands sound
+    if 'aria-label="Hands: {{handsLabel}}"' in t:
+        t = lit(t, 'aria-label="Hands: {{handsLabel}}"', 'aria-label="Parts: {{handsLabel}}" data-tip="Parts"')
+    else:
+        t = lit(t, '<button type="button" aria-expanded="{{isHands}}" onClick="{{openHands}}"', '<button type="button" aria-label="Parts: {{handsLabel}}" data-tip="Parts" aria-expanded="{{isHands}}" onClick="{{openHands}}"')
+    # Sheet › Show: one switch row each, as every other on/off in the kit (no honey chips)
+    a = t.index('<span>Show</span><div role="group" aria-label="Show"'); a = t.rfind('<div style="', 0, a)
+    b = t.index('</sc-for></div></div>', a) + len('</sc-for></div></div>')
+    t = t[:a] + '</div>' + SHOWROWS + '<div style="display: none">' + t[b:]
+    t = lit(t, "return { name, on: on ? 'true' : 'false', line: on ? '#B07A2A' : '#DDD5CA', bg: on ? '#FBF1DD' : '#FFFFFF', fg: '#332921', pick:",
+            "return { name, on: on ? 'true' : 'false', track: on ? '#7FB685' : '#DAD1C8', knob: on ? 22 : 2, sep: id === 'chords' ? '0' : '1px solid #E9E2D8', pick:")
+    return t
+
+
 for name, phone in (('PlayerApp', True), ('PlayerDesk', False)):
-    t = icons(kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone))
+    t = parts(icons(kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone)), phone)
     (OUT / f'{name}.dc.html').write_text(t)
 # a board for the new page
 w = (OUT / 'PlayerSettings.dc.html').read_text()
 (OUT / 'PlayerKey.dc.html').write_text(w.replace('open="settings"', 'open="key"').replace('song settings</title>', 'Transpose</title>'))
+# R43 canvas 119: the view settings and Parts on boards of their own
+ph = (OUT / 'PlayerSettings.dc.html').read_text()
+(OUT / 'PlayerHands.dc.html').write_text(ph.replace('open="settings"', 'open="hands"').replace('song settings</title>', 'Parts</title>'))
+for v, name in (('sheet', 'Sheet'), ('diagrams', 'Diagrams'), ('grid', 'Grid'), ('lyrics', 'Lyrics')):
+    (OUT / f'PlayerView{name}.dc.html').write_text(ph.replace('view="sheet" open="settings"', f'view="{v}" open="view"').replace('song settings</title>', f'{name} settings</title>'))
+lk = (OUT / 'PlayerLaptopKeyboard.dc.html').read_text()
+(OUT / 'PlayerLaptopParts.dc.html').write_text(lk.replace('open="keys"', 'open="hands"').replace('Keyboard</title>', 'Parts</title>'))
+(OUT / 'PlayerLaptopSheet.dc.html').write_text(lk.replace('open="keys"', 'open="view"').replace('Keyboard</title>', 'Sheet settings</title>'))
 print('r43 player ok')

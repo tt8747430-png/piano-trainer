@@ -3,8 +3,10 @@ import json, re, os
 P = '/home/user/piano-trainer/.scratch/r39/canvas/practice/project/'
 SONGS = [('Songs', 'SongsLaptop', 'My songs'), ('Song', 'SongLaptop', 'A song'), ('Editor', 'EditorLaptop', 'Score editor')]
 PLAYER = [('Player', 'PlayerLaptop', 'The Player'), ('PlayerLoop', 'PlayerLaptopLoop', 'The Player, Practice with a loop'),
-          ('PlayerKeyboard', 'PlayerLaptopKeyboard', 'The Player, Keyboard')]
-PLAYER_PHONES = [('PlayerPractice', 'Practice: Wait · Play, the tempo, the metronome'), ('PlayerHands', 'Hands'),
+          ('PlayerKeyboard', 'PlayerLaptopKeyboard', 'The Player, Keyboard'),
+          ('PlayerHands', 'PlayerLaptopParts', 'The Player, Parts'), ('PlayerViewSheet', 'PlayerLaptopSheet', 'The Player, Sheet settings')]
+PLAYER_PHONES = [('PlayerPractice', 'Practice: Wait · Play, the tempo, the metronome'), ('PlayerViewDiagrams', 'Diagrams settings'),
+                 ('PlayerViewGrid', 'Grid settings'), ('PlayerViewLyrics', 'Lyrics settings'),
                  ('PlayerSettings', 'Song settings: Arrangement or Accompaniment'), ('PlayerKey', 'Transpose'), ('PlayerDone', 'Played through'),
                  ('PlayerDiagrams', 'Diagrams')]
 PRACTICE = [('Main', 'Laptop', 'Practice'), ('Chords', 'ChordsLaptop', 'Chords'), ('RandomChords', 'RandomChordsLaptop', 'Random chords'), ('Scales', 'ScalesLaptop', 'Scales and keys'),

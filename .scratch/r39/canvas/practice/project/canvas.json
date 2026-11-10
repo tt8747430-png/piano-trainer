@@ -83,8 +83,26 @@
       "is_interactive": true,
       "page": "player"
     },
-    "PlayerPractice.dc.html": {
+    "PlayerHands.dc.html": {
       "x": 1590,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Parts, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerViewSheet.dc.html": {
+      "x": 2120,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Sheet settings, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerPractice.dc.html": {
+      "x": 2650,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -92,17 +110,35 @@
       "is_interactive": true,
       "page": "player"
     },
-    "PlayerHands.dc.html": {
-      "x": 2120,
+    "PlayerViewDiagrams.dc.html": {
+      "x": 3180,
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "The Player, Hands, phone",
+      "title": "The Player, Diagrams settings, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerViewGrid.dc.html": {
+      "x": 3710,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Grid settings, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerViewLyrics.dc.html": {
+      "x": 4240,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Lyrics settings, phone",
       "is_interactive": true,
       "page": "player"
     },
     "PlayerSettings.dc.html": {
-      "x": 2650,
+      "x": 4770,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -111,7 +147,7 @@
       "page": "player"
     },
     "PlayerKey.dc.html": {
-      "x": 3180,
+      "x": 5300,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -120,7 +156,7 @@
       "page": "player"
     },
     "PlayerDone.dc.html": {
-      "x": 3710,
+      "x": 5830,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -129,7 +165,7 @@
       "page": "player"
     },
     "PlayerDiagrams.dc.html": {
-      "x": 4240,
+      "x": 6360,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -138,7 +174,7 @@
       "page": "player"
     },
     "PlayerApp.dc.html": {
-      "x": 4770,
+      "x": 6890,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -173,8 +209,26 @@
       "is_interactive": true,
       "page": "player"
     },
-    "PlayerDesk.dc.html": {
+    "PlayerLaptopParts.dc.html": {
       "x": 6669,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, Parts, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLaptopSheet.dc.html": {
+      "x": 8892,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, Sheet settings, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerDesk.dc.html": {
+      "x": 11115,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -538,7 +592,7 @@
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 5220,
+      "maxW": 7340,
       "page": "player"
     },
     "player-laptop": {
@@ -546,7 +600,7 @@
       "y": 1420,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 8812,
+      "maxW": 13258,
       "page": "player"
     },
     "practice-phone": {
@@ -592,8 +646,12 @@
     "Player.dc.html",
     "PlayerLoop.dc.html",
     "PlayerKeyboard.dc.html",
-    "PlayerPractice.dc.html",
     "PlayerHands.dc.html",
+    "PlayerViewSheet.dc.html",
+    "PlayerPractice.dc.html",
+    "PlayerViewDiagrams.dc.html",
+    "PlayerViewGrid.dc.html",
+    "PlayerViewLyrics.dc.html",
     "PlayerSettings.dc.html",
     "PlayerKey.dc.html",
     "PlayerDone.dc.html",
@@ -602,6 +660,8 @@
     "PlayerLaptop.dc.html",
     "PlayerLaptopLoop.dc.html",
     "PlayerLaptopKeyboard.dc.html",
+    "PlayerLaptopParts.dc.html",
+    "PlayerLaptopSheet.dc.html",
     "PlayerDesk.dc.html",
     "Main.dc.html",
     "Chords.dc.html",

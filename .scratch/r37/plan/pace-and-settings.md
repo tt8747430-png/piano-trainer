@@ -4,6 +4,38 @@
 
 Canvas v130, https://claude.ai/artifact/HezkVS2MXdwz7uJ14KDGgp. Each line names the owner's words it rests on.
 
+**Hands is now Parts; the view settings and Parts are in the Chords kit (canvas Version 119, 2026-11-10).** Owner:
+"also the view settings pages and the hands and the piano settings aren ported. and the hand settings should be more
+specified like Piano left hand or Piano left part. research and what professional terms should we use and dont take my
+advice as such". Research:
+
+- **Yamaha** (Clavinova CLP-825 manual; Smart Pianist guide, manual.yamaha.com): "the right-hand Part", "the
+  left-hand Part"; its Part buttons are Right, Left and Others, and you mute a part to practise it yourself.
+- **Synthesia** (synthesiagame.com, "First-time setup"): a song's tracks are **Parts**; each Part is given a hand
+  (Left, Right or Background), a colour or Hidden, and is Sounded or Muted.
+- **Flat** (piano-data `flat-score-editor`): the parts mixer, which already gave this menu its shape.
+- **flowkey** (flowkey.com, "4 tips"): the hand symbols choose "the right hand, left hand or both hands".
+
+The decision:
+
+- **The menu is Parts,** the word Yamaha, Synthesia and Flat use. The menu mixes each part (on, volume, dimmed). It is
+  not only "which hand", and a song with its own melody gets a **Melody** row (R37-1), which is not a hand.
+- **Each row is the hand's name:** Right hand, Left hand, as Yamaha and Synthesia name them. "Piano left hand" was
+  not chosen: every part of a piano song is the piano, so the word repeats itself, and in Russian it doubles the
+  row's length. "Left part" was not chosen: musicians say "left-hand part", and a row inside Parts needs only the
+  hand. In Russian: Партии · Правая рука · Левая рука · Мелодия.
+- **The toolbar button names what sounds** ("Both hands", "Right hand", "Left hand"; on a phone Both, Right, Left
+  under the picture). Its tooltip and label say Parts, as Practice's button shows Wait or Play and opens Practice.
+- **One picture per part, the same everywhere:** the toolbar's hands (two hands, a right hand, a left hand
+  mirrored) are the pictures on each part's row, in a tile of the hand's paint. Before, a dot stood in the menu and
+  hands stood in the bar.
+- **Each part is one card:** a row with the hand's tile, its name and the switch (on means shown and heard); then
+  volume (mute, the slider in ink, louder, the percent); then **Dim** as a switch, not a pill. A part that is off
+  fades its volume and Dim. The last part on can't be switched off; its switch shows pale.
+- **Sheet › Show is a card of switch rows,** like every other on/off in the kit: Chord symbols, Chord positions,
+  Lyrics, Finger numbers, Note names, Your annotations. The honey chips are gone; honey stays for the transport.
+- **New boards:** Parts and Sheet settings on both sizes; Diagrams, Grid and Lyrics settings on the phone.
+
 **One picture per mode, the same in the toolbar and the Practice sheet (canvas Version 118, 2026-11-10).** Owner:
 "why the icons of the play mode differ in the drawer and in the toolbar". They came from two definitions: the toolbar
 still fell back to R36's speedometer (Listen at a speed) for Play, while the sheet's card drew a metronome. Now one map,

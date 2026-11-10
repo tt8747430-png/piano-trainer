@@ -78,6 +78,10 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **A menu is named by what it holds, from the references, not the owner's draft word (R43, canvas 119):** "research
+  and what professional terms should we use and dont take my advice as such". Hands became **Parts** (Yamaha,
+  Synthesia, Flat). The rows are Right hand and Left hand, not "Piano left hand", and the hand's picture is the same in
+  the bar and the menu. Honey chips for on/off became switch rows.
 - **One icon, one meaning, defined once (R43, canvas 118):** "why the icons of the play mode differ in the drawer and
   in the toolbar". A mode's picture is one map read by every place that shows the mode; Play is a metronome, Wait an
   hourglass, everywhere.

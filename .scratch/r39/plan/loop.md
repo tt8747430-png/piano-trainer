@@ -161,3 +161,5 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **Canvas 117 (2026-11-10):** Every Player sheet in the Chords kit: centred titles with Done, green switches, plain white groups, sentence-case captions, Wait · Play as radio cards, Keyboard rebuilt as the Chords page's (Show the piano, 3D piano with Angle, 2D keys, Keys, Note names, Sound, MIDI keyboard).
 
 **Canvas 118 (2026-11-10):** Play mode wears one icon, a metronome, in the toolbar and the Practice sheet: one `MODE_ICON` map for both; the speedometer and Follow's waves gone.
+
+**Canvas 119 (2026-11-10):** Hands renamed Parts after the research (Yamaha, Synthesia, Flat, flowkey). Each part is a kit card with its hand's picture, a switch, volume and Dim; the last part on is locked on. Sheet › Show became switch rows. New boards: Parts and Sheet settings (both sizes), Diagrams, Grid and Lyrics settings (phone).
