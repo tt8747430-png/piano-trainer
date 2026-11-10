@@ -4,6 +4,35 @@
 
 Canvas v130, https://claude.ai/artifact/HezkVS2MXdwz7uJ14KDGgp. Each line names the owner's words it rests on.
 
+**Every padding and gap on the 4 scale, every target 44, the transport centred (canvas Version 120, 2026-11-10).**
+Owner: "did you check the paddings, the spacing and all other?" Not at v119: only screenshots were looked at. Now
+`checks/spacing_measure.js`, `layout_check.js` and a hit-area count ran on all 18 Player boards. What they found was
+fixed:
+
+- **Rows** 6px top and bottom and 12px right → 8 and 16, as the Chords page.
+- **Spacing:**
+  - The tempo card 14 → 16, its gaps 10 and 14 → 8 and 16.
+  - The captions' margin 6 → 8.
+  - The toolbar's icon-to-caption gap 3 → 4, and the laptop buttons' padding 14 → 16.
+  - Transpose's and Played through's gaps 6 and 10 → 8.
+  - The value labels' gap 6 → 4.
+  - The sliders' 2px margin and the laptop titles' 2px margin → 0.
+- **Corners** concentric: a part's hand tile 4 (card 12, inset 8); a keyboard card's picture 6 (card 14, inset 8).
+- **Targets:** a segment (30 in its 48 row), the views (36 in the bar), −, + and Tap (40) and the loop's grips (20
+  by 40) reach 44 with a pseudo-element; the arrows ‹ › are 44 wide; Repeats' four segments are 44 each.
+- **The transport's middle on the centre line:** three columns, so the wider "Both hands · Keyboard" no longer pushes
+  ‹ ▶ › 42px left on a laptop. Now 225 of 450 and 1073 of 2143, with equal 8px gaps.
+- **Arrangement · Accompaniment drawn as Wait · Play:** the card tints when chosen, with the check at its right. They
+  were the same choice drawn two ways (an open question, decided by the recommendation).
+
+Left as they are, and why:
+
+- The 2px inside a segmented track: the hairline the spacing-audit skill exempts.
+- The browser's default button padding (Share, More).
+- The score's own engraving margins.
+- Content targets, still open: the beat strip's cells (36), the lyrics' chord names (25 by 21) and Played through's
+  bars (18 by 34).
+
 **Hands is now Parts; the view settings and Parts are in the Chords kit (canvas Version 119, 2026-11-10).** Owner:
 "also the view settings pages and the hands and the piano settings aren ported. and the hand settings should be more
 specified like Piano left hand or Piano left part. research and what professional terms should we use and dont take my

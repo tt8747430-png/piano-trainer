@@ -34,6 +34,8 @@ HANDSI = ('<span style="height: 20px; display: flex; align-items: center"><sc-if
           + HANDL + '</sc-if></span>')
 
 MOTION = ('<style data-r43>'
+          'div[role=group] > sc-for > button, [aria-label="View"] button { position: relative }'
+          ' div[role=group] > sc-for > button::before { content: ""; position: absolute; inset: -7px -1px } [aria-label="View"] button::before { content: ""; position: absolute; inset: -4px 0 }'
   'button, a[href] { -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none }'
   ':focus-visible { outline: 2px solid #356890; outline-offset: 2px }'
   '@media (hover: hover) { [data-tip]::after { content: attr(data-tip); position: absolute; left: 50%; top: calc(100% + 8px); z-index: 90;'
@@ -121,7 +123,7 @@ def patch(t, phone):
         head = b[:b.index('>') + 1]
         return head.replace('<button ', '<button ' + extra, 1) + inner + '</button>'
     small = lambda s: re.sub(r'width="\d+" height="\d+"', 'width="20" height="20"', s, count=1)
-    arrow = 'width: 40px; height: 48px; padding: 0; border: 0; border-radius: 20px; background: transparent; color: ' + INK + '; display: flex; align-items: center; justify-content: center'
+    arrow = 'width: 44px; height: 48px; padding: 0; border: 0; border-radius: 22px; background: transparent; color: ' + INK + '; display: flex; align-items: center; justify-content: center'
     playst = 'width: 48px; height: 48px; padding: 0; border: 0; border-radius: 24px; background: transparent; color: ' + INK + '; display: flex; align-items: center; justify-content: center'
     back = restyle(back, arrow, svg(back), 'data-tip="A step back" data-tip-up ')
     fwd = restyle(fwd, arrow, svg(fwd), 'data-tip="A step forward" data-tip-up ')
@@ -177,20 +179,20 @@ CHEV_L = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="cu
 CARD = 'background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px rgba(51,41,33,.07)'
 ICON3D = '<svg width="40" height="24" viewBox="0 0 48 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M9 6h30l7 18H2z"></path><path d="M14.5 6 11 24M20 6l-2 18M26 6v18M31.5 6l3 18M37 6l5 18"></path><path d="M12.6 6h3l-1.2 9h-3.4zM18.3 6h3l-.7 9h-3.3zM27.6 6h3l1 9h-3.3zM33.3 6h3l1.9 9h-3.4z" fill="currentColor"></path></svg>'
 ICON2D = '<svg width="40" height="24" viewBox="0 0 48 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="2" y="4" width="44" height="20" rx="2"></rect><path d="M8.3 4v20M14.6 4v20M20.9 4v20M27.1 4v20M33.4 4v20M39.7 4v20"></path><path d="M6.5 4h3.6v11H6.5zM12.8 4h3.6v11h-3.6zM25.3 4h3.6v11h-3.6zM31.6 4h3.6v11h-3.6zM37.9 4h3.6v11h-3.6z" fill="currentColor"></path></svg>'
-ROW = 'min-height: 48px; box-sizing: border-box; padding: 6px 12px 6px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 16px; color: #332921'
+ROW = 'min-height: 48px; box-sizing: border-box; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 16px; color: #332921'
 SEP = 'border-top: 1px solid #E9E2D8; margin-top: -1px'
 def SWITCH(v):  # the Chords page's switch (R42 v85): 51 by 31, green when on
     return f'<span aria-hidden="true" style="position: relative; flex: none; width: 51px; height: 31px; border-radius: 16px; background: {{{{{v}.track}}}}"><span style="position: absolute; top: 2px; left: {{{{{v}.knob}}}}px; width: 27px; height: 27px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)"></span></span>'
 def VCARD(v, icon, name, inner=''):
     dot = (f'<span aria-hidden="true" style="flex: none; width: 22px; height: 22px; border-radius: 11px; background: {{{{{v}.dot}}}}; box-shadow: {{{{{v}.dotRing}}}}; color: #FEFDFB; display: flex; align-items: center; justify-content: center">'
            f'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{{{{v}.mk}}}}"><path d="m5 12 5 5 9-10"></path></svg></span>')
-    return (f'<div style="border-radius: 14px; background: {{{{{v}.bg}}}}; box-shadow: {{{{{v}.ring}}}}; overflow: hidden"><button type="button" role="radio" aria-checked="{{{{{v}.on}}}}" onClick="{{{{{v}.pick}}}}" style="{ROW}; width: 100%; padding: 8px 14px 8px 8px; border: 0; background: transparent; font: inherit; text-align: left">'
-            f'<span style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: none; width: 52px; height: 40px; border-radius: 9px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8; display: flex; align-items: center; justify-content: center">{icon}</span><span style="font-weight: 600">{name}</span></span>{dot}</button>{inner}</div>')
+    return (f'<div style="border-radius: 14px; background: {{{{{v}.bg}}}}; box-shadow: {{{{{v}.ring}}}}; overflow: hidden"><button type="button" role="radio" aria-checked="{{{{{v}.on}}}}" onClick="{{{{{v}.pick}}}}" style="{ROW}; width: 100%; padding: 8px 16px 8px 8px; border: 0; background: transparent; font: inherit; text-align: left">'
+            f'<span style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: none; width: 52px; height: 40px; border-radius: 6px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8; display: flex; align-items: center; justify-content: center">{icon}</span><span style="font-weight: 600">{name}</span></span>{dot}</button>{inner}</div>')
 def SEGROW(label, lst, w):
     return (f'<div style="{ROW}; {SEP}"><span>{label}</span><div role="group" style="flex: none; width: {w}px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; padding: 2px; border-radius: 9px; background: #EEE9E2">'
             f'<sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="2"><button type="button" aria-pressed="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="height: 30px; padding: 0 6px; border: 0; border-radius: 7px; background: {{{{o.bg}}}}; box-shadow: {{{{o.shadow}}}}; color: #332921; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap">{{{{o.name}}}}</button></sc-for></div></div>')
 def LINKROW(label, val, first=False):
-    return (f'<a href="#" style="{ROW}; {"" if first else SEP + "; "}text-decoration: none"><span>{label}</span><span style="display: flex; align-items: center; gap: 6px; color: #685E56">{val}<span style="display: flex; color: #685E56">{CHEV_R}</span></span></a>')
+    return (f'<a href="#" style="{ROW}; {"" if first else SEP + "; "}text-decoration: none"><span>{label}</span><span style="display: flex; align-items: center; gap: 4px; color: #685E56">{val}<span style="display: flex; color: #685E56">{CHEV_R}</span></span></a>')
 KBBODY = ('<div style="border-radius: 12px; ' + CARD + '"><button type="button" role="switch" aria-checked="{{pianoSw.on}}" onClick="{{pianoSw.flip}}" style="' + ROW + '; width: 100%; border: 0; background: transparent; font: inherit; text-align: left"><span>Show the piano</span>' + SWITCH('pianoSw') + '</button></div>'
           '<div role="radiogroup" aria-label="Keyboard" style="display: flex; flex-direction: column; gap: 8px; opacity: {{kbDimOp}}; pointer-events: {{kbPE}}">'
           + VCARD('kb3c', ICON3D, '3D piano', '<sc-if value="{{kb3d}}" hint-placeholder-val="{{true}}">' + SEGROW('Angle', 'kbViewOpts', 150) + '</sc-if>')
@@ -214,7 +216,7 @@ def kit(t, phone):
     t = t.replace('background: #FFFFFF; overflow: hidden; box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)', CARD)
     t = t.replace(', 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)', ', 0 0 0 1px rgba(51,41,33,.07)')
     t = t.replace('padding: 6px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 15px; color: #332921',
-                  'padding: 6px 12px 6px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 16px; color: #332921')
+                  'padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 16px; color: #332921')
     t = t.replace('border-radius: 9px; background: #E7E0D6', 'border-radius: 9px; background: #EEE9E2')
     t = t.replace('<p style="margin: 6px 14px -4px; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #685E56">',
                   '<p style="margin: 6px 4px -4px; font-size: 13px; font-weight: 600; color: #685E56">')
@@ -230,7 +232,7 @@ def kit(t, phone):
         t = re.sub(r'<h2 style="margin: 4px 14px 2px; font-size: 17px; font-weight: 700; line-height: 1.2">(.*?)</h2>',
                    r'<div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 40px"><h2 style="margin: 0; font-size: 17px; font-weight: 600">\1</h2><button type="button" onClick="{{close}}" style="position: absolute; right: -4px; height: 44px; padding: 0 4px; border: 0; background: transparent; color: #356890; font: inherit; font-size: 17px; font-weight: 600">Done</button></div>', t)
     else:
-        t = t.replace('<h2 style="margin: 4px 14px 2px; font-size: 17px; font-weight: 700; line-height: 1.2">', '<h2 style="margin: 2px 4px; font-size: 17px; font-weight: 600; line-height: 1.2">')
+        t = t.replace('<h2 style="margin: 4px 14px 2px; font-size: 17px; font-weight: 700; line-height: 1.2">', '<h2 style="margin: 0 4px; font-size: 17px; font-weight: 600; line-height: 1.2">')
     # a page inside a sheet: Back as the chevron, the title centred
     t = re.sub(r'<div style="display: flex; align-items: center; gap: 6px; margin: 0 0 2px"><button type="button" aria-label="Back" onClick="\{\{(\w+)\}\}" style="[^"]*"><svg[^>]*><path d="M19 12H5M12 19l-7-7 7-7"></path></svg></button><h2 style="margin: 0; font-size: 17px; font-weight: 700; line-height: 1.2">(.*?)</h2></div>',
                lambda m: f'<div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 40px"><button type="button" aria-label="Back" onClick="{{{{{m.group(1)}}}}}" style="position: absolute; left: -10px; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: #332921; display: flex; align-items: center; justify-content: center">{CHEV_L}</button><h2 style="margin: 0; font-size: 17px; font-weight: 600">{m.group(2)}</h2></div>', t)
@@ -284,13 +286,13 @@ ICOBTN = 'flex: none; width: 44px; height: 44px; margin: -6px; padding: 0; borde
 def PART(H, name, icon, tile, ink):
     low = name.lower()
     return ('<div style="border-radius: 12px; ' + CARD + '">'
-            f'<button type="button" role="switch" aria-label="{name}" aria-checked="{{{{part{H}.on}}}}" aria-disabled="{{{{part{H}.lock}}}}" onClick="{{{{part{H}.flip}}}}" style="{ROW}; width: 100%; padding: 8px 12px 8px 8px; border: 0; background: transparent; font: inherit; text-align: left">'
-            f'<span style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: none; width: 40px; height: 40px; border-radius: 10px; background: {tile}; color: {ink}; display: flex; align-items: center; justify-content: center">{icon}</span>'
+            f'<button type="button" role="switch" aria-label="{name}" aria-checked="{{{{part{H}.on}}}}" aria-disabled="{{{{part{H}.lock}}}}" onClick="{{{{part{H}.flip}}}}" style="{ROW}; width: 100%; padding: 8px 16px 8px 8px; border: 0; background: transparent; font: inherit; text-align: left">'
+            f'<span style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: none; width: 40px; height: 40px; border-radius: 4px; background: {tile}; color: {ink}; display: flex; align-items: center; justify-content: center">{icon}</span>'
             f'<span style="font-weight: 600">{name}</span></span>' + SWITCH(f'part{H}') + '</button>'
             f'<div style="opacity: {{{{part{H}.op}}}}; pointer-events: {{{{part{H}.pe}}}}">'
-            f'<div style="{ROW}; {SEP}; gap: 10px"><button type="button" aria-label="{{{{vol{H}MuteLabel}}}}" data-tip="{{{{vol{H}MuteLabel}}}}" aria-pressed="{{{{vol{H}Muted}}}}" onClick="{{{{vol{H}Down}}}}" style="{ICOBTN}">'
+            f'<div style="{ROW}; {SEP}"><button type="button" aria-label="{{{{vol{H}MuteLabel}}}}" data-tip="{{{{vol{H}MuteLabel}}}}" aria-pressed="{{{{vol{H}Muted}}}}" onClick="{{{{vol{H}Down}}}}" style="{ICOBTN}">'
             f'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#685E56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{{{vol{H}Icon}}}}"></path></svg></button>'
-            f'<input type="range" aria-label="{name} volume" min="0" max="100" step="5" value="{{{{vol{H}}}}}" onChange="{{{{setVol{H}}}}}" style="flex: 1; min-width: 0; accent-color: #332921">'
+            f'<input type="range" aria-label="{name} volume" min="0" max="100" step="5" value="{{{{vol{H}}}}}" onChange="{{{{setVol{H}}}}}" style="flex: 1; min-width: 0; margin: 0; accent-color: #332921">'
             f'<button type="button" aria-label="{name} louder" data-tip="Louder" onClick="{{{{vol{H}Up}}}}" style="{ICOBTN}">{SPK_UP}</button>'
             f'<span style="min-width: 40px; text-align: right; font-size: 15px; font-variant-numeric: tabular-nums; color: #332921">{{{{vol{H}}}}}%</span></div>'
             f'<button type="button" role="switch" aria-label="Dim the {low}" aria-checked="{{{{dim{H}.on}}}}" onClick="{{{{dim{H}.flip}}}}" style="{ROW}; {SEP}; width: 100%; border-left: 0; border-right: 0; border-bottom: 0; background: transparent; font: inherit; text-align: left"><span>Dim</span>' + SWITCH(f'dim{H}') + '</button>'
@@ -327,8 +329,66 @@ def parts(t, phone):
     return t
 
 
+
+def grid4(t, phone):
+    """R43 canvas 120 (owner: "did you check the paddings, the spacing and all other?"): every padding and gap in the
+    Player's sheets on the 4 scale, every target 44, the transport's middle on the centre line."""
+    def swap(a, b):
+        nonlocal t
+        assert a in t, a[:70]
+        t = t.replace(a, b)
+    swap('<p style="margin: 6px 4px -4px; font-size: 13px', '<p style="margin: 8px 4px -4px; font-size: 13px')
+    swap('padding: 12px 14px 10px; display: flex; flex-direction: column; gap: 6px;', 'padding: 12px 16px; display: flex; flex-direction: column; gap: 8px;')
+    swap('display: flex; align-items: center; justify-content: center; gap: 14px"', 'display: flex; align-items: center; justify-content: center; gap: 16px"')
+    swap('margin-top: 3px; font-size: 12px', 'margin-top: 4px; font-size: 12px')
+    swap('display: inline-flex; align-items: center; gap: 6px">{{c.name}}', 'display: inline-flex; align-items: center; gap: 4px">{{c.name}}')
+    # the transport: three columns, so the tinted middle sits on the centre line whatever the sides say
+    i = t.index('role="toolbar" aria-label="Transport" style="'); j = t.index('"', i + 46)
+    t = t[:i] + t[i:j].replace('display: flex; justify-content: center; align-items: center; gap: 8px;', 'display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px;') + t[j:]
+    assert 'grid-template-columns: minmax(0, 1fr) auto' in t[i:i + 400]
+    swap('<div role="group" aria-label="Practice and loop" style="', '<div role="group" aria-label="Practice and loop" style="justify-self: end; ')
+    swap('<div role="group" aria-label="Hands and keyboard" style="', '<div role="group" aria-label="Hands and keyboard" style="justify-self: start; ')
+    # targets: a segment (30 tall in its 48 row) and a 40 control reach 44 with a pseudo-element; the mark keeps its size
+    swap("<style data-r43>", "<style data-r43>button[style*=\"height: 30px\"], button[style*=\"height: 40px\"]:not([style*=\"position: absolute\"]) { position: relative }"
+         " button[style*=\"height: 30px\"]::before { content: \"\"; position: absolute; inset: -7px -1px }"
+         " button[style*=\"height: 40px\"]::before { content: \"\"; position: absolute; inset: -2px }")
+    # every remaining off-scale padding and gap inside a style attribute, to the nearest step of 4 (the score's own
+    # engraving margins, the negative margins that keep a mark small inside its 44px target, and the two hands'
+    # optical overlap stay as they are)
+    SNAP = {'gap: 3px': 'gap: 4px', 'gap: 6px': 'gap: 8px', 'gap: 10px': 'gap: 8px', 'padding: 0 6px': 'padding: 0 8px',
+            'padding: 0 14px': 'padding: 0 16px', 'padding: 12px 14px': 'padding: 12px 16px', 'padding: 14px': 'padding: 16px',
+            'padding: 28px 14px': 'padding: 28px 16px', 'padding: 0 18px': 'padding: 0 16px', 'padding: 0 14px 0 10px': 'padding: 0 16px 0 12px',
+            'padding: 0 14px 0 12px': 'padding: 0 16px 0 12px', 'padding: 8px 4px 8px 10px': 'padding: 8px 4px 8px 12px',
+            'padding-top: 6px': 'padding-top: 8px', 'margin-right: 6px': 'margin-right: 8px', 'margin-left: 6px': 'margin-left: 8px',
+            'padding: 3px': 'padding: 4px', 'padding: 0 6px 0 12px': 'padding: 0 8px 0 12px', 'padding: 2px 2px 0 6px': 'padding: 4px 4px 0 8px'}
+    def snap(m):
+        st = m.group(1)
+        st = re.sub(r'(?<![-\w])(gap|padding|padding-top|margin-right|margin-left): [^;"]*', lambda k: SNAP.get(k.group(0), k.group(0)), st)
+        return 'style="' + st + '"'
+    t = re.sub(r'style="([^"]*)"', snap, t)
+    # the loop's grips: a 24px handle reaches 44 to the side away from the bars it holds
+    t = t.replace("<style data-r43>", "<style data-r43>button[type][aria-label^=\"Loop starts\"]::before, button[type][aria-label^=\"Loop ends\"]::before { content: \"\"; position: absolute; inset: -2px -12px } ", 1)
+    swap('width: 170px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr))', 'width: 188px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr))')  # Repeats: 44 a segment
+    # Arrangement · Accompaniment drawn as Practice's Wait · Play: the card tints when chosen and its check sits at the
+    # right (owner, canvas 117: "Wait · Play as radio cards"; one choice, one drawing)
+    for v in ('arr', 'acc'):
+        swap(f"{v}: ((on) => ({{ on: on ? 'true' : 'false', line: on ? '#B07A2A' : 'transparent', ring: on ? '#B07A2A' : '#BDB3A7', dot: on ? 1 : 0,",
+             f"{v}: ((on) => ({{ on: on ? 'true' : 'false', line: on ? '#B07A2A' : 'transparent', ring: on ? '#B07A2A' : '#BDB3A7', dot: on ? 1 : 0, bg: on ? '#FBF1DD' : '#FEFDFB', fill: on ? '#B07A2A' : 'transparent', fRing: on ? 'none' : 'inset 0 0 0 2px #DAD1C8',")
+        a = t.index(f'role="radio" aria-checked="{{{{{v}.on}}}}"'); a = t.rfind('<div style="border-radius: 12px; background: #FEFDFB;', 0, a)
+        t = t[:a] + t[a:].replace('<div style="border-radius: 12px; background: #FEFDFB;', f'<div style="border-radius: 12px; background: {{{{{v}.bg}}}};', 1)
+        a = t.index(f'role="radio" aria-checked="{{{{{v}.on}}}}"'); b = t.index('</button>', a)
+        btn = t[a:b]
+        i = btn.index('<span aria-hidden="true" style="flex: none; width: 20px'); j = btn.index('</span></span>', i) + len('</span></span>')
+        name = btn[j:]
+        dot = (f'<span aria-hidden="true" style="flex: none; width: 22px; height: 22px; border-radius: 11px; background: {{{{{v}.fill}}}}; box-shadow: {{{{{v}.fRing}}}}; color: #FEFDFB; display: flex; align-items: center; justify-content: center">'
+               f'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{{{{v}.dot}}}}"><path d="m5 12 5 5 9-10"></path></svg></span>')
+        btn = btn[:i].replace('justify-content: flex-start; gap: 12px;', 'gap: 12px;') + '<span style="flex: 1; min-width: 0">' + name + '</span>' + dot
+        t = t[:a] + btn + t[b:]
+    return t
+
+
 for name, phone in (('PlayerApp', True), ('PlayerDesk', False)):
-    t = parts(icons(kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone)), phone)
+    t = grid4(parts(icons(kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone)), phone), phone)
     (OUT / f'{name}.dc.html').write_text(t)
 # a board for the new page
 w = (OUT / 'PlayerSettings.dc.html').read_text()

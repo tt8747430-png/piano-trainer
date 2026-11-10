@@ -78,6 +78,9 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **Measure before saying a turn is done (R43, canvas 120):** "did you check the paddings, the spacing and all other?".
+  A screenshot is not a check. Each publish runs `spacing_measure.js`, `layout_check.js` and the hit-area count on every
+  board the turn touched, and the report quotes the numbers.
 - **A menu is named by what it holds, from the references, not the owner's draft word (R43, canvas 119):** "research
   and what professional terms should we use and dont take my advice as such". Hands became **Parts** (Yamaha,
   Synthesia, Flat). The rows are Right hand and Left hand, not "Piano left hand", and the hand's picture is the same in
