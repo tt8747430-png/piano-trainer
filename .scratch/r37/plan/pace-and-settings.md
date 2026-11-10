@@ -1,9 +1,29 @@
 # R37 — Pace and Settings, simplified (canvas)
 
 ## The rulings as they stand (read first; the sections below are the history, and where they disagree, this wins)
+
 Canvas v130, https://claude.ai/artifact/HezkVS2MXdwz7uJ14KDGgp. Each line names the owner's words it rests on.
 
+**The Chords page's language (canvas Version 116 of The ideal Piano Trainer, 2026-11-10).** Owner: "now read all
+the skills and instructions and update the player with the same style updates and instructions". Generator:
+`.scratch/r39/canvas/player/r43_player.py`, on the merged pages in `player/base/`.
+
+- The bar's Close, views and gear are the Chords page's light glass on every view, the 3D keys included; the chosen
+  view is ink with light text; every icon-only control names itself in a tooltip.
+- The transport is the Chords bar's glass groups (Apple's toolbar, at most three groups, one primary): **Wait ·
+  Loop** · **‹ ▶ ›**, the one tinted group · **Hands · Keyboard**. On a phone each symbol stands over the word for
+  what it is set to (Wait or Play, Loop or 5–8, Both, Right or Left with the hands drawn, 3D, 2D or Off); on a laptop
+  the word sits beside it. The "2" badge goes. The menu is called Practice in its label too.
+- **Transpose** is the Chords page's Key, as a page of the song's settings: the row reads "Transpose G major ›"; the
+  page holds − [the signature, "A♭ major"] +, the seven letters, ♭ ♮ ♯ on the chosen letter only (one that makes no
+  key, A♯, dimmed), and **Back to G major** once it has moved. − / + spell the way they move (up in sharps, down in
+  flats, the other name where that one is no key: G up is A♭ major). Major keys only: transposing keeps the mode.
+- The chord names over the staff take the Chords page's book serif; taps leave no grey box and select no text; focus
+  is the sky-deep ring.
+- In the drawing the staff stays engraved in G; the key, the song's line and the lit keys follow Transpose.
+
 **Modes (Practice, once Pace).**
+
 - Two tiles, **Wait** and **Play**, no group headers ("i don't like the mods titles").
 - **No Follow mode.** In-time and Follow "sound the same", and "no follow my tempo". The app's `follow` mode and
   `followTempo` go in R37-1.
@@ -12,6 +32,7 @@ Canvas v130, https://claude.ai/artifact/HezkVS2MXdwz7uJ14KDGgp. Each line names 
 
 **Tempo and the metronome** (owner's Flat screenshots, 2026-11-07: Playback options › Metronome is one list,
 Metronome Count-in · On · Off; each choice opens a page with a Back arrow). One group under the tiles, headed Tempo:
+
 1. The face: the score's meter (3/4) and one light per beat lighting in time, beat 1 larger; − · BPM large · + · Tap;
    "BPM · Andante" (the tempo marking). **Score tempo: 80 BPM** appears only when the tempo differs, to go back.
 2. **Metronome** Off · Count-in · On, one tap (Flat's three). Count-in clicks one bar before the music; On counts in
@@ -19,6 +40,7 @@ Metronome Count-in · On · Off; each choice opens a page with a Back arrow). On
    supersedes the earlier "no modes like Off · Count-in · Always" line, since the owner brought Flat's as the model.
 3. **Metronome sound ›** shows the sound's name and opens its page (Flat's drill-in): Wood block · Claves · Beep, a
    list with a check, each choice playing itself, then Volume; Back returns to Practice.
+
 - The meter and accents come from the score: no beat squares, no accent dots, no subdivision in the Player. They stay
   in the Metronome tool. No Speed slider and no speed %: the tempo is BPM.
 - References come from sheet-music players (Flat, forScore, MuseScore, Soundslice, flowkey), never recording
@@ -34,6 +56,7 @@ row back by mistake; v130 removed it.)
 
 **What you play: Arrangement or Accompaniment** (owner, 2026-11-07: "the songs versions should be separate from the
 accompaniment", "use professional names", "one cancels another"; v137's switch and v138's single list rejected).
+
 - References: flowkey sells each song in arrangements by level, Beginner · Intermediate · Advanced · Pro
   (flowkey's magazine); Playground Sessions in Rookie · Intermediate · Advanced (its blog); Yamaha's Smart Pianist
   builds a piano accompaniment from a song's chords and picks it under Song Setting › Arrangement › Accompaniment
@@ -46,8 +69,8 @@ accompaniment", "use professional names", "one cancels another"; v137's switch a
   Arrangement, a pattern or the Accompaniment's radio picks the Accompaniment. Each keeps its own choice while the
   other plays. The Accompaniment card shows only for a song with chord symbols; a chord chart alone has only it.
   Drawings: `.scratch/r37/drawings/song-arrangement.png`, `song-accompaniment.png`, `song-pattern-page.png`.
-**The Pattern page is the app's accompaniment library** (owner: "from where are they taken, like from our own
-patterns in our app, and how should they be organized like a library"; the two-a-row cards were rejected).
+  **The Pattern page is the app's accompaniment library** (owner: "from where are they taken, like from our own
+  patterns in our app, and how should they be organized like a library"; the two-a-row cards were rejected).
 - Source: the app's own patterns, one implementation with Practice › Accompaniment: `entities/pattern` (53 built-in
   patterns in six groups from four books, credited, and Rhythm styles; `pt-patterns` keeps the learner's
   favourites, hidden and own patterns) laid out by `shelves.ts` (Favourites, Yours, each built-in group, Hidden).
@@ -113,6 +136,7 @@ pages: **Connect a piano ›** and **All piano settings ›** (key size, pedals,
 **Hands menu:** each hand's switch, Dim, and volume; a switched-off hand is off the score, keys, sound and 3D hand.
 
 **Views:** a tap on the showing view's pill opens its settings; each view has one.
+
 - **Sheet:** Layout Page · Line; **Show** chips Chord symbols · Chord positions · Lyrics · Finger numbers · Note
   names (the app's own names, ADR 0115). That is all.
 - **No cursor or scrolling settings** (owner, twice: "i dont like the cursor settings"; v133's Cursor and Follow rows
@@ -144,6 +168,7 @@ The song's page still gains Tuning.
 **The song's drawer: the song at its head, settings only below** (owner, 2026-11-07/08: "the first two three settings
 should be more distinctive than the other ones"; v150's row of icon buttons "feels like a bottom bar and not like
 settings drawer"; v151's icon list "still not good. research more and look also at the example apps and websites").
+
 - Research: Chordify keeps a song's choices on the song (Transpose · Capo · Simplify tabs) and its acts in a separate
   ⋮ action list (Add to setlist, Share chords, Export to PDF, Export to MIDI; `piano-data/reference-apps/chordify`);
   Flat's Playback options is a titled sheet of settings rows only (`flat-score-editor/05`); forScore keeps a Tools menu
@@ -160,6 +185,7 @@ settings drawer"; v151's icon list "still not good. research more and look also 
   drawings `song-settings-acts.png`, `song-settings-more-menu.png`, `song-settings-acts-laptop.png`.
 
 **Placed (owner, 2026-11-07, on the five proposals):**
+
 - **Practice, not Pace** ("i don't like that it is called pace"): the transport's menu is titled Practice, the
   musician's word for what it holds (how you play along: Wait · Play, the metronome, the accompaniment, the loop). Its
   bar button still shows the mode itself (Wait or Play), so the word Practice is only the menu's title.
@@ -173,11 +199,13 @@ settings drawer"; v151's icon list "still not good. research more and look also 
 - **Resume following after a scroll: dropped** ("ok"). Following resumes on its own.
 
 ## Source
+
 - Owner, 2026-11-07: "research and look at all the resources and app examples and improve the other settings like
   the pace and the main player settings. what order should be how they are made, how should they be simplified and
   all other best practices … also the apple guidelines of making simple practical ui".
 
 ## Research
+
 - Flowkey's tempo menu (`flowkey/09`): two short groups, "Learn at your own pace" (Wait Mode) and "Listen and play
   along" (50 % · 75 % · Original); nothing else.
 - Chordify (IMG_4552–4573): Transpose · Capo · Simplify in a strip over the music, tempo · volume · loop in the
@@ -188,6 +216,7 @@ settings drawer"; v151's icon list "still not good. research more and look also 
   don't duplicate system controls (volume).
 
 ## Will build (canvas, phone and laptop)
+
 - **Pace:** Wait mode · Interpret · Listen. Only Listen shows Speed, Count-in, Metronome (Wait mode waits, Interpret
   follows: none of them act). Loop's switch leaves Pace (the transport's Loop is its one home); while a loop is set,
   "LOOP BARS 5–8": Repeats · Between repeats · Speed up (Listen only).
@@ -196,7 +225,8 @@ settings drawer"; v151's icon list "still not good. research more and look also 
   and each hand's in Hands.
 
 ## The pedal (owner, 2026-11-07: "what is the purpose of this pedalling thing it is very weird")
-- Today: Settings › Pedalling As marked · Off · Auto chose how *playback* uses the sustain pedal (`withPedal`):
+
+- Today: Settings › Pedalling As marked · Off · Auto chose how _playback_ uses the sustain pedal (`withPedal`):
   the score's Ped. marks, none, or `autoPedal`'s. A learner can't tell the three apart.
 - Research: Synthesia, flowkey, Skoove, Simply Piano expose no pedal setting in their players; a connected MIDI
   keyboard's pedal simply sustains (Synthesia 0.7.1). Soundslice shows Ped. marks but its synth ignores them.
@@ -205,6 +235,7 @@ settings drawer"; v151's icon list "still not good. research more and look also 
   Sustain held or latched) always sounds and is never graded. Ped. marks show on the score as engraved.
 
 ## The song's versions (owner, 2026-11-07: "make the song versions more understandable … why is it so important")
+
 - Today: Version Original · Simple · Easy (`arrangePiece`): Original the chords as written; Simple each chord its
   plain triad (`simplifyChart`); Easy the tune over each chord's root (`easyChart`). "Simple" and "Easy" read alike,
   and the order runs hardest first.
@@ -214,14 +245,18 @@ settings drawer"; v151's icon list "still not good. research more and look also 
   weird explanation").
 
 ## The keyboard's own button (owner, 2026-11-07: "make the keyboard settings more accessible like in the toolbar at
+
 the bottom as the most right button with proper icon")
+
 - Will build: the transport's last button, **Keyboard** (Lucide Piano, the app's keyboard icon; on a phone the icon
   alone, on a laptop icon and word). It opens the Keyboard panel: Keys Off · 3D · 2D, then only what that kind uses
   (3D: Camera, Show hands, Skin tone while hands show; 2D: Note names, Finger numbers, Keys shown). The keyboard's
   rows leave Settings, which keeps the song (Difficulty · Transpose) and Edit score · Export.
 
 ## The Keyboard panel, by what matters (owner, 2026-11-07: "refactor them properly and how they should look and what
+
 is most relevant")
+
 - Will build: the choice of keyboard as three picture tiles, **Off · 3D · 2D** (Chordify's "Pick your view"), the
   chosen one outlined in orange; the panel's title names it, so no "Keys" label. Then only what changes that one:
   3D **Angle** Seat · Above, then for 3D and 2D alike **Keys** Song · 61 · 76 · 88 and **Note names**.
@@ -229,14 +264,18 @@ is most relevant")
   Settings (set once, app-wide appearance).
 
 ## One home for a hand (owner, 2026-11-07: "I can disable the hand in the keyboard settings and also in the hands
+
 settings right or left")
+
 - Today: Keyboard › **Show hands** hid both 3D hands; Hands › a hand's switch takes that hand off the score, the keys,
   the sound and the 3D hand. Two controls over the same hands.
 - Will build: **Show hands** goes. The 3D hands follow the Hands panel alone: an enabled hand is drawn, a dimmed hand
   fades, a switched-off hand is gone (Flowkey and Synthesia set hands in one place). Keys without hands is 2D.
 
 ## Keys: the learner's own piano (owner, 2026-11-07: "the piano range is not very understandable", then "I want the
+
 range. but refactor more")
+
 - Today: 2D had **Range** Song · All 88, a choice with no reason given.
 - Will build: the row **Keys** Song · 61 · 76 · 88, the sizes pianos are sold in (Synthesia sets the keyboard to the
   learner's): Song (default) fits the song's notes with a key's margin; a number draws that piano, 61 C2–C7, 76 E1–G7,
@@ -245,7 +284,9 @@ range. but refactor more")
 - Owner, 2026-11-07: "I dont need this note showing": no tab for notes past the chosen piano.
 
 ## Note names and Keys on the 3D piano too (owner, 2026-11-07: "I want to be able to show the notes and change size
+
 also on the 3d piano")
+
 - Will build: under 3D, after Angle, the same **Keys** and **Note names** rows as 2D, one setting each for both kinds.
 - Keys on 3D: the camera frames the chosen piano instead of the song, as `frame()` already does for a range, without
   its least key size (the learner chose the size). The band is as tall as the keys need: a wider piano, a shorter band,
@@ -254,13 +295,15 @@ also on the 3d piano")
   hand covers is not drawn over the hand; names on keys narrower than 14 px are left out.
 
 ## Modes named for what happens (owner, 2026-11-07: "make more understandable and useful modes. look at all the
+
 examples and research more")
+
 - Today: Pace lists Wait mode · Interpret · Listen in one group. "Interpret" says nothing of what it does, and "Listen"
   hides that the learner plays along.
 - Research: flowkey groups its menu "Learn at your own pace" (Wait Mode) and "Listen and play along" (50 % · 75 % ·
   Original). Synthesia: Melody Practice (waits) · Song Recital (keeps going) · Watch and Listen. Skoove: Listen · Learn
-  (waits) · Play (in time). Piano Marvel: Practice (waits) · Assess (in time, scored). Every one splits *the music waits
-  for you* from *you keep up with the music*, and names each by what the learner does.
+  (waits) · Play (in time). Piano Marvel: Practice (waits) · Assess (in time, scored). Every one splits _the music waits
+  for you_ from _you keep up with the music_, and names each by what the learner does.
 - Will build: Pace in two groups with headers, no other text:
   - **At your own pace:** **Wait for me** (`wait`: the music stops until the right notes), **Follow me** (`follow`: the
     music takes the learner's tempo).
@@ -268,14 +311,18 @@ examples and research more")
   - The transport's Pace button names the mode the same way. Internal ids stay.
 
 ## Tempo for every mode that moves (owner, 2026-11-07: "make more understandable options, why only the play along has
+
 these settings")
+
 - Today: Speed · Count-in · Metronome showed only under Play along, though Follow me runs at a tempo too: it starts at
   the speed set and follows the learner within 40–200 % of it (`followTempo`).
 - Will build: a **Tempo** group after the modes, for every mode: **Speed** (Follow me: **Starting speed**),
   **Count-in**, **Speed up each pass**, **Metronome** (in Follow me it ticks at the learner's tempo as it follows).
 
 ## Wait for me keeps its settings; the metronome is the learner's (owner, 2026-11-07: "why the wait for me doesn't have
+
 the setting and why they disappear and also make the metronome customizable")
+
 - Today (canvas v113): choosing Wait for me hid the whole Tempo group. The app's Wait mode does pace the other hand,
   the accompaniment and the rests at `tempo` (`features/practice`), so Speed matters there too.
 - Ruling: a control that cannot act now is shown disabled, not hidden, so the panel keeps its shape between modes and
@@ -293,12 +340,14 @@ the setting and why they disappear and also make the metronome customizable")
     levels, subdivisions), one implementation.
 
 ## The Sheet's own settings (found while checking)
+
 - Today (canvas): tapping the Sheet pill while it showed turned pages ↔ line; it had no settings panel, though every
   other view's pill opens one.
 - Will build: the showing Sheet's pill opens **Sheet**: **Layout** Page · Line; **Cursor** Off · By note · Smooth
   (default By note); **Follow the music** (on); **Your marks** (on).
 
 ## R37-1: what the app still has to port (audit of `main` b98aea88, 2026-11-07)
+
 The app today: the transport's **Pace** popover (`PaceButton`: At your own pace Wait mode · Interpret, Listen and play
 along at a speed, a Speed slider, Speed training), the bar's **Click** (`ClickButton`) and **Loop** (`LoopButton`, the
 grips done in 40d8e643), the foot's **Hands** sheet (`HandsSheet`: Hands, Play the other hand), the gear's one
@@ -310,29 +359,29 @@ Staves, Accompaniment (`PlayerSetup`: the Pattern list page, right and left hand
 the acts (Sections, Song information, Recordings, How did I play, Print, Tuner, Voice commands, Share link,
 Export…) and Version · Transpose as foot tools.
 
-| # | Canvas ruling | App today | Port |
-| - | ------------- | --------- | ---- |
-| 1 | Practice menu, two tiles Wait · Play | Pace: Wait mode · Interpret · Listen | rename; drop `follow` (Interpret); Listen becomes Play |
-| 2 | Tempo face: meter lights, − BPM + Tap | Speed slider in % | BPM stepper and Tap, the score's meter |
-| 3 | Metronome Off · Count-in · On | Click button + Count-in Off · Audible · Silent | one three-way choice; Silent goes |
-| 4 | Metronome sound › page (Wood block · Claves · Beep, Volume) | a link to the Metronome tool, click volume | its own page in Practice, the tool's sounds |
-| 5 | Speed training | Speed training switch + step in Playback | stays as Loop's Speed up each pass |
-| 6 | Loop group: Repeats · Between repeats · Speed up each pass | grips only | build the group, shown while a loop is set |
-| 7 | No pedal setting | Playback › Pedal | remove; score marks or `autoPedal` |
-| 8 | Song gear: Arrangement (Level Beginner · Intermediate · Advanced) or Accompaniment (Pattern ›) as radio cards | Version foot tool (Original · Simple · Easy) and an Accompaniment page | one radio group in the gear; Version tool goes |
-| 9 | Pattern page: search, place chips, Sort and filter (Sort by, Level, Texture, Feel), folders, rows with roll, hands line, level, Listen, heart | a flat Listbox of patterns with its idea, From the chart, Own pattern › All patterns › | rebuild on `widgets/practice-library`'s parts; Texture and Feel added to Practice's filter too |
-| 10 | No Voicing, no Swing, no hand-figure pages | Chord size, Swing, RH and LH figure pages | remove from the Player (figures stay in Practice's pattern editor) |
-| 11 | Transpose in the Song gear | foot tool | move |
-| 12 | Hands menu: each hand's switch, Dim, volume | Hands segmented, Play the other hand; The other hand in Settings | rebuild; one home |
-| 13 | No skin tone | Hands › Skin | remove, one neutral hand |
-| 14 | Staves and their levels | Settings › Staves | into Hands, beside each hand's volume |
-| 15 | Keyboard button: Off · 3D · 2D, Angle Seat · Above, Keys Song · 61 · 76 · 88, Note names, Connect a piano ›, All piano settings › | Show the keyboard, the On-screen piano page inline | a transport button and panel; key size, pedals, volume, swipe stay on the piano's page |
-| 16 | Each view's settings from its pill (Sheet: Layout, Show chips) | Score view page with every view's fields | per-view panel |
-| 17 | No cursor or scroll settings | Cursor, Follow the music, Return to the playhead | remove; follow always, Back to the music pill |
-| 18 | Show on open dropped | Show on open switch | remove; `pt-views` opens the last view |
-| 19 | No recording settings | `sound.recording`, `recordingSync` | remove; the recording plays a little under the piano |
-| 20 | Annotations | Score view › Annotations | not in the canvas: owner's call (below) |
-| 21 | ··· acts | Sections, Song information, Recordings, How did I play, Print, Tuner, Voice, Share link, Export | the canvas gear keeps Edit score · Export; the rest stay in ··· (owner's call) |
+| #   | Canvas ruling                                                                                                                                 | App today                                                                                       | Port                                                                                           |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| 1   | Practice menu, two tiles Wait · Play                                                                                                          | Pace: Wait mode · Interpret · Listen                                                            | rename; drop `follow` (Interpret); Listen becomes Play                                         |
+| 2   | Tempo face: meter lights, − BPM + Tap                                                                                                         | Speed slider in %                                                                               | BPM stepper and Tap, the score's meter                                                         |
+| 3   | Metronome Off · Count-in · On                                                                                                                 | Click button + Count-in Off · Audible · Silent                                                  | one three-way choice; Silent goes                                                              |
+| 4   | Metronome sound › page (Wood block · Claves · Beep, Volume)                                                                                   | a link to the Metronome tool, click volume                                                      | its own page in Practice, the tool's sounds                                                    |
+| 5   | Speed training                                                                                                                                | Speed training switch + step in Playback                                                        | stays as Loop's Speed up each pass                                                             |
+| 6   | Loop group: Repeats · Between repeats · Speed up each pass                                                                                    | grips only                                                                                      | build the group, shown while a loop is set                                                     |
+| 7   | No pedal setting                                                                                                                              | Playback › Pedal                                                                                | remove; score marks or `autoPedal`                                                             |
+| 8   | Song gear: Arrangement (Level Beginner · Intermediate · Advanced) or Accompaniment (Pattern ›) as radio cards                                 | Version foot tool (Original · Simple · Easy) and an Accompaniment page                          | one radio group in the gear; Version tool goes                                                 |
+| 9   | Pattern page: search, place chips, Sort and filter (Sort by, Level, Texture, Feel), folders, rows with roll, hands line, level, Listen, heart | a flat Listbox of patterns with its idea, From the chart, Own pattern › All patterns ›          | rebuild on `widgets/practice-library`'s parts; Texture and Feel added to Practice's filter too |
+| 10  | No Voicing, no Swing, no hand-figure pages                                                                                                    | Chord size, Swing, RH and LH figure pages                                                       | remove from the Player (figures stay in Practice's pattern editor)                             |
+| 11  | Transpose in the Song gear                                                                                                                    | foot tool                                                                                       | move                                                                                           |
+| 12  | Hands menu: each hand's switch, Dim, volume                                                                                                   | Hands segmented, Play the other hand; The other hand in Settings                                | rebuild; one home                                                                              |
+| 13  | No skin tone                                                                                                                                  | Hands › Skin                                                                                    | remove, one neutral hand                                                                       |
+| 14  | Staves and their levels                                                                                                                       | Settings › Staves                                                                               | into Hands, beside each hand's volume                                                          |
+| 15  | Keyboard button: Off · 3D · 2D, Angle Seat · Above, Keys Song · 61 · 76 · 88, Note names, Connect a piano ›, All piano settings ›             | Show the keyboard, the On-screen piano page inline                                              | a transport button and panel; key size, pedals, volume, swipe stay on the piano's page         |
+| 16  | Each view's settings from its pill (Sheet: Layout, Show chips)                                                                                | Score view page with every view's fields                                                        | per-view panel                                                                                 |
+| 17  | No cursor or scroll settings                                                                                                                  | Cursor, Follow the music, Return to the playhead                                                | remove; follow always, Back to the music pill                                                  |
+| 18  | Show on open dropped                                                                                                                          | Show on open switch                                                                             | remove; `pt-views` opens the last view                                                         |
+| 19  | No recording settings                                                                                                                         | `sound.recording`, `recordingSync`                                                              | remove; the recording plays a little under the piano                                           |
+| 20  | Annotations                                                                                                                                   | Score view › Annotations                                                                        | not in the canvas: owner's call (below)                                                        |
+| 21  | ··· acts                                                                                                                                      | Sections, Song information, Recordings, How did I play, Print, Tuner, Voice, Share link, Export | the canvas gear keeps Edit score · Export; the rest stay in ··· (owner's call)                 |
 
 Stale lines in the rulings above, superseded later and to be read so: Song settings' "versions as tiles" and Placed's
 "Accompaniment goes in Practice" gave way to the Arrangement · Accompaniment cards (row 8).
@@ -352,7 +401,9 @@ its tip), among its fact cards while the recording is not at 440 Hz. Confirmed (
 `.scratch/r37/drawings/song-settings-acts.png`, `sheet-show-annotations.png`.
 
 ## Simple Pace, supersedes the three sections above (owner, 2026-11-07: "i don't like the mods titles and the tempo
+
 settings, also i dont like the cursor settings ... make good and simple ui")
+
 - Research: flowkey offers Wait mode and three speeds, and that is all. Soundslice keeps speed on the transport and
   puts count-in and its other metronome options inside the metronome's own menu; speeding up a little each pass
   ("speed training") belongs to the loop. None of these apps lets the learner choose a cursor style.
@@ -370,7 +421,9 @@ settings, also i dont like the cursor settings ... make good and simple ui")
 - Gone: the three-way Count-in (Off · Clicks · Silent), the Speed stepper, the ramp choice of +2/+5/+10 %, and Cursor.
 
 ## Two modes, Wait and Play (owner, 2026-11-07: "for me the in time and follow mode sounds the same or i don't
+
 understand them")
+
 - Both keep the music moving and differ only in who sets the tempo, so they become one mode with a switch.
 - Will build: two tiles, **Wait** (`wait`) and **Play**. The group under them starts with **Follow my tempo**, a switch:
   on, Play is `follow`, so the music speeds up and slows down with the learner; off, it is `listen`, at the speed
@@ -378,7 +431,9 @@ understand them")
   Wait · Play · Play, following you.
 
 ## No Follow; the tempo is the metronome's (owner, 2026-11-07: "no follow my tempo, the tempo can be set from
+
 metronome")
+
 - Follow mode is dropped (the app's `follow` mode and `followTempo` go in R37-1).
 - Will build, Pace: the **Wait** and **Play** tiles, then one group: **Count-in** (a switch, dimmed in Wait) and
   **Metronome**, a row reading "Off · 80 BPM" that opens the Metronome page. The Pace button reads Wait or Play, plus
@@ -388,6 +443,7 @@ metronome")
   Accents, Subdivision and Volume.
 
 ## The metronome one tap away (owner, 2026-11-07: "refactor the metronome settings and make it easier to enable")
+
 - Supersedes the Metronome page above. Will build, Pace's group under the tiles, in order:
   - **Metronome:** a switch, dimmed in Wait.
   - **Tempo:** the BPM slider.
@@ -403,7 +459,9 @@ metronome")
   per-beat accent dots are dropped from the Player. The Metronome tool keeps both.
 
 ## Pace in a musician's order (owner, 2026-11-07: "the order in the settings doesn't make sense and how the count in
+
 is related to this and how it behaves while the metronome is disabled ... look also at the example")
+
 - References: Flat's recording bar has one Metronome control (♩ = 84 and a switch) and Start countdown beside it.
   Soundslice keeps count-in inside the metronome's menu (1, 2 or 3 bars; at the start, before each loop, or both).
 - Ruling: the tempo comes first because everything plays at it. The metronome and the count-in are one sound, so they
@@ -418,7 +476,9 @@ is related to this and how it behaves while the metronome is disabled ... look a
   4. **Loop bars a–b**, while a loop is set.
 
 ## The Player's metronome is the Metronome tool's (owner, 2026-11-07: "but the tempo belongs to the metronome and i
+
 still don't like the metronome settings")
+
 - Reference: the owner's own ruling for the Metronome tool (feedback log): a large BPM with steps, Tap tempo, sound,
   beats as squares, and one engine for the tool page, the Player and the quick metronome. The Player shows a compact
   form of the same controls (`pages/metronome` TempoSteps, `features/metronome` BeatSquares).
@@ -434,7 +494,9 @@ still don't like the metronome settings")
 - Gone: the Tempo slider and the "Accent the first beat" switch, which the Beats squares replace.
 
 ## Metronome by relevance, its beats from the score (owner, 2026-11-07: "i don't like how the time signature or
+
 beats are chosen and the sound and the count in and how are they ordered for the relevance. research more")
+
 - Research:
   - Flat's metronome is one control by the Play button with three modes: **Count-in** (it plays only before
     playback, Flat's default), **Always on** and **Off**.
@@ -453,8 +515,10 @@ beats are chosen and the sound and the count in and how are they ordered for the
   Before each repeat of a loop, the count-in is still the loop's "Between repeats: Count-in".
 
 ## Independent settings, none disabled by another (owner, 2026-11-07: "now it is not understandable how the
+
 metronome is enabled and in what mode and why it is disabled in the wait mode ... research how a feature can disable
 another feature or how it shouldn't and how each feature relates to another")
+
 - Principles:
   - **Modes cause slips.** A setting whose meaning changes with another state is a mode, and people err when they
     cannot see which mode is on (NN/g, Modes in user interfaces). An Off · Count-in · Always control is a three-state
@@ -478,7 +542,9 @@ another feature or how it shouldn't and how each feature relates to another")
   - In a loop, **Between repeats** offers None · Count-in · Rest, and **Speed up each pass** works in both modes.
 
 ## One Metronome group, sounds that work (owner, 2026-11-07: "but now the metronome sounds don't work and the names
+
 don't work for the other sounds")
+
 - Fault: Click sound was a link that led nowhere, and the canvas played one fixed tone whatever the sound and volume.
   "Click volume" and "Click sound" also named one of the three sounds as the whole.
 - Will build: under the Wait · Play tiles, a **Metronome** group holding everything the metronome does, so the
@@ -493,7 +559,9 @@ don't work for the other sounds")
   beat.
 
 ## A professional metronome (owner, 2026-11-07: "still not good and make professional names ... research now how a
+
 metronome should look and what options should it have")
+
 - Research:
   - **Logic Pro:** "Click while playing" turns the metronome on in playback, and the count-in can be the only click.
     Volume and Tone (a short click up to a wood block or claves).
@@ -515,7 +583,9 @@ metronome should look and what options should it have")
 - In the app the sounds are recorded samples (VCSL, CC0): a wood block, claves and an electronic beep.
 
 ## References from sheet-music players, not recording software (owner, 2026-11-07: "but use examples for music and
+
 sheets and not for recording")
+
 - **forScore:** each score keeps its own BPM and time signature, used whenever it is opened. BPM by + and −, a wheel
   or two taps. Count In for a set number of measures. The metronome can be heard, seen or both.
 - **MuseScore** (Play panel): **Play metronome** and **Count-in** are separate toggles. The count-in is one measure,
@@ -529,6 +599,7 @@ sheets and not for recording")
   plays a tick and a tock, which the learner can replace. Which sounds the other players offer was not found.
 
 ## Versions chosen like the modes (owner, 2026-11-07: "make the versions switch like the mods switch")
+
 - Will build: the song's versions in Settings are the same tile control as Pace's Wait · Play: three tiles, each an
   icon and a word, **Easy** (one bar), **Medium** (two bars), **Original** (three bars), the chosen one outlined.
   There is no "Difficulty" label, because the tiles say it. One component serves both (`tiles`). Transpose follows in

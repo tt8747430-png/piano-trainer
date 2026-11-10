@@ -78,6 +78,10 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **The Player speaks the Chords page's language (R43, canvas 116):** "update the player with the same style updates
+  and instructions". Light glass bar; the transport as three glass groups, ‹ ▶ › the tinted one, each symbol over its
+  value on a phone; Transpose the Chords page's Key (letters, ♭ ♮ ♯ on the chosen letter, spelled by direction, Back
+  to the written key). A pattern settled on one page is carried to every page that has the same thing.
 - **The end of a run says what happened and what next** (2026-11-07, the redesign skill's evidence of care): Played
   through, the score with its comparison, each bar's slips, Practise bars n–m, Play again, the next step. Drawn (v149).
   At the end of the song only, not after a loop ("song only").

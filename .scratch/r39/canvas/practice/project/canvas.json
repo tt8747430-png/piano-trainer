@@ -110,8 +110,17 @@
       "is_interactive": true,
       "page": "player"
     },
-    "PlayerDone.dc.html": {
+    "PlayerKey.dc.html": {
       "x": 3180,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Transpose, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerDone.dc.html": {
+      "x": 3710,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -120,7 +129,7 @@
       "page": "player"
     },
     "PlayerDiagrams.dc.html": {
-      "x": 3710,
+      "x": 4240,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -129,7 +138,7 @@
       "page": "player"
     },
     "PlayerApp.dc.html": {
-      "x": 4240,
+      "x": 4770,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -529,7 +538,7 @@
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 4690,
+      "maxW": 5220,
       "page": "player"
     },
     "player-laptop": {
@@ -586,6 +595,7 @@
     "PlayerPractice.dc.html",
     "PlayerHands.dc.html",
     "PlayerSettings.dc.html",
+    "PlayerKey.dc.html",
     "PlayerDone.dc.html",
     "PlayerDiagrams.dc.html",
     "PlayerApp.dc.html",
