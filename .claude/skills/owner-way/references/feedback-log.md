@@ -362,6 +362,9 @@ owner's, typos fixed.
   scattered", then (canvas 101) "put them in a row like the all the flows screens pages in one row for phone then
   the dark mode and after that the same for laptop". One canvas page per area; on it four rows: the flow's phone
   screens in its order, their Night boards, the laptop screens, their Night boards. `.scratch/r39/canvas/index.py`.
+- **No explanation line under a chord's name (R42, canvas 102):** "is it good that this text is there. I dont know if
+  it is very good there: C major seventh · Close voicing". A line that repeats the pickers goes; the name in words is
+  the type picker's tooltip and spoken name.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the

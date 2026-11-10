@@ -131,3 +131,5 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **R42 canvas 99 (2026-11-10):** Chords: tooltips on icon-only controls; scan-first 7-8 (data drives form, hidden UI); seven-questions opens with premium and one decision; laptop frames no longer gain blank lines per rebuild.
 **Canvas 100 (2026-11-10):** the canvas regrouped: a page per area (Songs, The Player, Practice), a row per screen, laptops left and phones right, Night beside Chords.
 **Canvas 101 (2026-11-10):** each page in four rows: phones, phones by Night, laptops, laptops by Night, in the flow's order.
+
+**Canvas 102 (2026-11-10):** Chords: the line "C major seventh · Close voicing" under the name removed; the full name is the type picker's tooltip.

@@ -5,6 +5,11 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 102: no line under the chord's name.** Owner: "is it good that this text is there. I dont know if
+  it is very good there: C major seventh · Close voicing". No: it repeated the pickers above it and the Voicing
+  button below. Removed; the name in words ("C major seventh") is the chord type picker's tooltip and part of its
+  spoken name, so it is still there for whoever looks for it. Taste rule: no explanation line under a control.
+
 - **Canvas Version 99: the hidden UI.** Owner: three transcripts (the dashboard video's three tells, Tim Gabe on
   looking human-made, the seven things again). Tooltips on the icon-only controls (Back to Practice, Piano settings,
   Play as, Remove a chord), on a pointer only, after half a second, eased in; Back's starts at its own edge so it
