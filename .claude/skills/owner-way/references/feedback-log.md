@@ -373,6 +373,11 @@ owner's, typos fixed.
 - **Both hands follow pianochord.org's recipe (R42, canvas 104):** four of its pages sent without words. Left hand
   root and 5th from C2 to B2; right hand the 3rd and 7th in close position, starting on the note that moves least
   between chords; the bass of a slash chord in the left hand.
+- **Random chords is a practice page, not part of the chord finder (R42, canvas 105):** "I do want a random chord to
+  practice the chords, but maybe in the player or somewhere else and not in the chords finder". Set up on its own
+  page (a key or chord types, voicings, inversions, hands, a session goal), played in the Player's Wait mode. Never:
+  ties between chords; a key signature the learner did not pick ("the staf is always in c"); Transpose that changes
+  only the key name ("transpose is means to transpose the chords").
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the

@@ -5,6 +5,29 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 ## The rulings as they stand
 
+- **Canvas Version 105: no ties, the staff in C, Transpose moves the chords, adding stays open, Random chords is its
+  own page.** Owner: "I dont like this ties that tie the chords. and improve the adding a chords and the transpose is
+  means to transpose the chords no to transpose the key, the staf is always in c and there will be a setting to change
+  the staff key in the settings. and also I do want a random chord to practice the chords, but maybe in the player or
+  somewhere else and not in the chords finder, where we can practice the chords like in a key or in general practice
+  the chords by selecting what types of chords we would likee to practices and also the voicing and so on". Sent with
+  pianochord.org's "Practice in piano playing" (structured practice after Ericsson).
+  - The ties between held notes are gone.
+  - The staff has no key signature until the learner picks one: Settings (the bar's piano button, now titled
+    Settings) › Staff › Key signature, fifteen signatures from C♭ to C♯. Every accidental is written against it,
+    naturals included (Cmaj7 under three flats shows E♮ and B♮), and the note names step left of them.
+  - Transpose is a round ⇅ button at the start of the names row, shown once there are two chords or more. Its sheet
+    moves every chord: − Half step, + Half step, and "Move Cmaj7 to" with the twelve versions of the first chord.
+  - Next chord stays open while chords are added (Done closes it) and starts with Triads | Sevenths, then the key's
+    chords with their numerals, then Any chord ›.
+  - **Random chords** is a page of its own, reached from Practice › Harmony under Chords, never from the chord finder.
+    The chord now and "Try one" at the top; Chords from: A key (twelve keys, Major | Minor, Triads | Sevenths, the key's
+    seven chords to pick with their numerals) or Chord types (the five groups, All 12 roots | White keys), with "n chords
+    to draw from"; Voicings (any of them); Inversions: Root position | All inversions; Hands: Right | Left | Both;
+    Session: 16 chords | 5 minutes | No end, with Missed chords come back on. Start opens the Player in Wait mode, so
+    each chord waits for the learner and is marked right or wrong. From the structured-practice page: a measurable goal,
+    feedback on every chord, the missed ones asked again.
+
 - **Canvas Version 104: the left hand low on roots and fifths, the right hand moving least.** Owner: four
   pianochord.org pages, no words (Chord Trainer, Chord Progression Explorer, PlayAlong Studio progressions and
   arpeggios). Taken from the Explorer's "How should I play these on piano?": "left hand playing root–5th or

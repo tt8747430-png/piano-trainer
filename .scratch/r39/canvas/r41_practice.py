@@ -18,7 +18,7 @@ def lapbody(top, left, right, dock=''):
 SPACER = '<span style="flex: 1"></span>'
 
 # ═════ Practice overview (R39-4: relevance first, pictures that show the content) ═════
-HARMONY = [('keys', 'Chords', 'Every chord, its inversions and fingering', '12 of 48', 'Chords.dc.html'), ('staff', 'Scales and keys', 'Scales as the books finger them', '5 of 24', 'Scales.dc.html'),
+HARMONY = [('keys', 'Chords', 'Every chord, its inversions and fingering', '12 of 48', 'Chords.dc.html'), ('keys', 'Random chords', 'From a key or the chord types you pick', 'Not started', 'RandomChords.dc.html'), ('staff', 'Scales and keys', 'Scales as the books finger them', '5 of 24', 'Scales.dc.html'),
            ('arc', 'Intervals', 'Every interval, seen and heard', '', 'Intervals.dc.html'), ('roman', 'Progressions', 'Known progressions in any key', '', 'Progressions.dc.html')]
 PLAYING = [('roll', 'Accompaniment', 'Left-hand and right-hand patterns', '', 'Accompaniment.dc.html'), ('chart', 'Chord player', 'Your chord sheet, played by a band', '', 'ChordPlayer.dc.html'),
            ('drill', 'Exercises', 'Hanon, Barry Harris, Piano With Jonny', '', 'Exercises.dc.html'), ('quiz', 'Quiz', 'Name chords, keys and intervals', '7 to check', 'Quiz.dc.html')]
