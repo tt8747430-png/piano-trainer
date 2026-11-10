@@ -358,6 +358,10 @@ owner's, typos fixed.
 - **The hidden UI is part of the design (R42, canvas 99):** the dashboard video. Every icon-only control has a
   tooltip on a pointer; rare actions sit low on the spectrum of explicitness, never on their own page; a first run
   is sequenced. Each report names the one decision only Piano Trainer would have made (Tim Gabe).
+- **A canvas is grouped by page and by device (canvas 100):** "group the screens by page and by device and not so
+  scattered". One canvas page per area; one row per screen with its name over it; every laptop board in the left
+  column, every phone board in the right, in step; a screen's variants (a state, Night) beside its main board.
+  `.scratch/r39/canvas/index.py` builds it.
 - **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
   loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
   nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the

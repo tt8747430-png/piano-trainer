@@ -1,5 +1,4 @@
-# R40: the one canvas's index. Each page is a laptop board with its phone beside it, three pages to a row,
-# Songs first, then Practice. Replaces link.py (the pages now carry their own links). Run: python3 -I index.py
+# The one canvas's index: a canvas page per area, a row per screen, laptops left and phones right (R42 canvas 100). Replaces link.py (the pages now carry their own links). Run: python3 -I index.py
 import json, re, os
 P = '/home/user/piano-trainer/.scratch/r39/canvas/practice/project/'
 SONGS = [('Songs', 'SongsLaptop', 'My songs'), ('Song', 'SongLaptop', 'A song'), ('Editor', 'EditorLaptop', 'Score editor')]
@@ -14,29 +13,40 @@ PRACTICE = [('Main', 'Laptop', 'Practice'), ('Chords', 'ChordsLaptop', 'Chords')
             ('Exercises', 'ExercisesLaptop', 'Exercises'), ('Exercise', 'ExerciseLaptop', 'An exercise'), ('Quiz', 'QuizLaptop', 'Quiz'),
             ('QuizRun', 'QuizRunLaptop', 'A quiz run'), ('Metronome', 'MetronomeLaptop', 'Metronome'), ('Tuner', 'TunerLaptop', 'Tuner'),
             ('ChordFinder', 'ChordFinderLaptop', 'Chord finder'), ('CircleOfFifths', 'CircleOfFifthsLaptop', 'Circle of fifths')]
-CW, CH, PER = 2143 + 80 + 450 + 240, 1299 + 260, 3
+# R42 canvas 100 (owner: "group the screens by page and by device and not so scattered"): one canvas page per area;
+# on it one row per screen, every laptop board in the left column and every phone board in the right, in step down the
+# page; a row's variants (a state, Night) sit beside its main board
+LW, PW, GAP, DEVGAP, TITLE, ROWGAP = 2143, 450, 80, 240, 300, 200
+def L(stem, name): return (stem, name)
+PAGES = [
+  ('songs', 'Songs', [(n, [L(lp, n + ', laptop')], [L(ph, n + ', phone')]) for ph, lp, n in SONGS]),
+  ('player', 'The Player', [
+    ('The Player', [L(lp, n + ', laptop') for ph, lp, n in PLAYER], [L(ph, n + ', phone') for ph, lp, n in PLAYER]),
+    ('The Player’s layers, phone', [], [L(ph, 'The Player, ' + n + ', phone') for ph, n in PLAYER_PHONES]),
+    ('Earlier drafts of the Player', [L('PlayerDesk', 'The Player, earlier draft, laptop')], [L('PlayerApp', 'The Player, earlier draft, phone')])]),
+  ('practice', 'Practice', [(n, [L(lp, n + ', laptop')] + ([L('ChordsLaptopNight', 'Chords, Night, laptop')] if ph == 'Chords' else []),
+                                [L(ph, n + ', phone')] + ([L('ChordsNight', 'Chords, Night, phone')] if ph == 'Chords' else [])) for ph, lp, n in PRACTICE])]
 d = json.load(open(P + 'canvas.json'))
-boards, order, notes, y0 = {}, [], {}, 0
-for key, title, pages in (('songs', 'Songs', SONGS), ('player', 'The Player', PLAYER), ('practice', 'Practice', PRACTICE)):
-    notes[key] = {'x': 0, 'y': y0, 'text': title, 'kind': 'title1', 'maxW': CW * PER}
-    for i, (ph, lp, name) in enumerate(pages):
-        x, y = (i % PER) * CW, y0 + 300 + (i // PER) * CH
-        boards[lp + '.dc.html'] = {'x': x, 'y': y, 'w': 2143, 'h': 1299, 'title': name + ', laptop', 'is_interactive': True}
-        boards[ph + '.dc.html'] = {'x': x + 2143 + 80, 'y': y + 1299 - 920, 'w': 450, 'h': 920, 'title': name + ', phone', 'is_interactive': True}
-        order += [lp + '.dc.html', ph + '.dc.html']
-    y0 += 300 + ((len(pages) + PER - 1) // PER) * CH + 200
-    if key == 'player':
-        for i, (ph, name) in enumerate(PLAYER_PHONES):
-            boards[ph + '.dc.html'] = {'x': i * 530, 'y': y0 - 100, 'w': 450, 'h': 920, 'title': 'The Player, ' + name + ', phone', 'is_interactive': True}
-            order.append(ph + '.dc.html')
-        y0 += 920 + 200
-# Night (canvas 95): the Chords page by night, under Practice
-notes['night'] = {'x': 0, 'y': y0, 'text': 'Practice by night', 'kind': 'title1', 'maxW': CW * PER}
-for ph, lp, name in (('ChordsNight', 'ChordsLaptopNight', 'Chords, Night'),):
-    boards[lp + '.dc.html'] = {'x': 0, 'y': y0 + 300, 'w': 2143, 'h': 1299, 'title': name + ', laptop', 'is_interactive': True}
-    boards[ph + '.dc.html'] = {'x': 2143 + 80, 'y': y0 + 300 + 1299 - 920, 'w': 450, 'h': 920, 'title': name + ', phone', 'is_interactive': True}
-    order += [lp + '.dc.html', ph + '.dc.html']
-d.update(title='The ideal Piano Trainer', boards=boards, order=order, notes=notes)
+boards, order, notes = {}, [], {}
+for pid, pname, rows in PAGES:
+    nl = max(len(r[1]) for r in rows); px = nl * (LW + GAP) - GAP + DEVGAP
+    notes[pid + '-laptop'] = {'x': 0, 'y': 0, 'text': 'Laptop', 'kind': 'title1', 'maxW': px - DEVGAP, 'page': pid}
+    notes[pid + '-phone'] = {'x': px, 'y': 0, 'text': 'Phone', 'kind': 'title1', 'maxW': 8 * (PW + GAP), 'page': pid}
+    y = TITLE
+    for k, (name, laps, phones) in enumerate(rows):
+        h = 1299 if laps else 920
+        notes['%s-%d' % (pid, k)] = {'x': 0, 'y': y, 'text': name, 'kind': 'title1', 'maxW': px + len(phones) * (PW + GAP), 'page': pid}
+        top = y + TITLE
+        for i, (stem, t) in enumerate(laps):
+            boards[stem + '.dc.html'] = {'x': i * (LW + GAP), 'y': top, 'w': LW, 'h': 1299, 'title': t, 'is_interactive': True, 'page': pid}
+            order.append(stem + '.dc.html')
+        for i, (stem, t) in enumerate(phones):
+            boards[stem + '.dc.html'] = {'x': px + i * (PW + GAP), 'y': top + h - 920, 'w': PW, 'h': 920, 'title': t, 'is_interactive': True, 'page': pid}
+            order.append(stem + '.dc.html')
+        y = top + h + ROWGAP
+d.update(title='The ideal Piano Trainer', boards=boards, order=order, notes=notes,
+         pages=[{'id': pid, 'name': pname} for pid, pname, _ in PAGES], launch={'view': 'canvas', 'page': 'practice'})
+d.pop('noteOrder', None)
 json.dump(d, open(P + 'canvas.json', 'w'), ensure_ascii=False, indent=2)
 missing = [b for b in boards if not os.path.exists(P + b)]
 links = {b: re.findall(r'href="([^"#{][^"]*\.dc\.html)"', open(P + b).read()) for b in boards if b not in missing}
