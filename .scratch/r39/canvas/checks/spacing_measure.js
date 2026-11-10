@@ -1,0 +1,4 @@
+(() => { const off = {}; let n = 0; const root = document.querySelector('main') ? document.querySelector('main').parentElement : document.body;
+[...root.querySelectorAll('*')].forEach((e) => { if (e.closest('svg') || !e.getBoundingClientRect().width) return; const cs = getComputedStyle(e); const name = (e.getAttribute('aria-label') || e.tagName.toLowerCase() + ':' + (e.textContent || '').trim().slice(0, 18));
+  ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'rowGap', 'columnGap', 'marginTop', 'marginBottom'].forEach((k) => { const v = parseFloat(cs[k]); if (!v || v < 0) return; n++; if (v % 4) { const key = k.replace(/Top|Right|Bottom|Left/, '').replace(/row|column/, '').toLowerCase() + ' ' + v; (off[key] = off[key] || []).push(name); } }); });
+return JSON.stringify({ checked: n, off: Object.fromEntries(Object.entries(off).map(([k, v]) => [k, [v.length, [...new Set(v)].slice(0, 3)]])) }); })()

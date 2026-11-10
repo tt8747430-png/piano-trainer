@@ -146,8 +146,23 @@ source; installing one is the owner's decision.
 | emilkowalski/skills `emil-design-eng`, `ui-cheatsheet` (MIT) | whether to animate by frequency, durations, origin-aware popovers |
 | benjitaylor/skills `stageshow` (MIT) | the five ways a canvas fails, the exacting designer's look |
 | benjitaylor/agentation (PolyForm Shield) | not adopted: the owner's screenshots do its job |
+| Nine design skills the owner pasted, written for Figma (source and licence not stated) | rewritten for the canvas and installed: `product-designer`, `screen-design`, `state-expander`, `phone-from-laptop`, `ux-writing`, `interface-review`, `spacing-audit`, `design-consistency`, `board-cleanup` |
 | A Firecrawl video and its scrape skill (transcript) | search then scrape for research when the connector is attached; `proxy: "basic"`, never past a bot check; Interact not used |
 | Kevin: Matt Pocock's agent skills v1.3 (transcript) | grill the owner on the open decisions after two rejections of a part, recommendation with each; variants side by side for what talk cannot settle; retro into checks |
+
+## The detail skills
+
+Each is one job inside the loop, rewritten from a Figma skill for this canvas; `CLAUDE.md` lists when each loads.
+The measurements they cite are in `.scratch/r39/canvas/checks/` (its `README.md` says how to run one).
+
+- Before drawing: `product-designer` (the stance), `screen-design` (the Screen Contract, discovery, the state
+  matrix), `state-expander` (what nobody has drawn).
+- While drawing: `phone-from-laptop` (the pair of boards), `ux-writing` (the words).
+- Before a publish or a port: `interface-review` (one ranked table), `spacing-audit`, `design-consistency`.
+- When the generator has grown: `board-cleanup`.
+
+A pasted skill with no words from the owner is run as a read-only review of the board in hand; "fix" or "implement
+all" builds every finding in one turn.
 
 ## Reporting
 

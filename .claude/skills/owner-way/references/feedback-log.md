@@ -345,6 +345,10 @@ owner's, typos fixed.
   … nineth chords and bigger … research the transcriptions". Right alone for 9ths and up is rootless (no root, the
   5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
   low and the rest above. Research the owner's transcripts before the web.
+- **Outside skills are kept, rewritten for the canvas (2026-11-10):** "save all this figma skills and add them to be
+  loaded from the Claude.md. and rewrite them to our Claude design match. dont remove them rewrite to Claude design":
+  nine skills installed under `.claude/skills/`, their Figma mechanics replaced by the generator, the kit and the
+  runtime checks; `CLAUDE.md` lists when each loads. Never drop a pasted skill because it names another tool.
 - **A pasted review skill is run as a review; "implement all" builds every finding (R42, canvas 90):** the owner
   pasted outside skills (UX writing, an interface review, Figma-only ones) with no words; each was applied read-only
   to the Chords canvas and none installed. Then "implement all you proposals". Before publishing, measure what a

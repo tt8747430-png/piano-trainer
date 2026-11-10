@@ -15,6 +15,20 @@ Vercel.
 | [docs/CONTENT.md](docs/CONTENT.md)                          | a piece, pattern, lesson or course                   |
 | [docs/adr/](docs/adr/README.md)                             | why an area is the way it is                         |
 
+Design work on the canvas loads these, each when its moment comes ([`redesigning-a-screen`](.claude/skills/redesigning-a-screen/SKILL.md) runs the loop):
+
+| Skill                                                                  | When                                                    |
+| ---------------------------------------------------------------------- | ------------------------------------------------------- |
+| [`product-designer`](.claude/skills/product-designer/SKILL.md)         | a screen designed or judged as a whole                  |
+| [`screen-design`](.claude/skills/screen-design/SKILL.md)               | a whole screen or flow, from contract to final QA       |
+| [`state-expander`](.claude/skills/state-expander/SKILL.md)             | every state a screen really has; before a port          |
+| [`phone-from-laptop`](.claude/skills/phone-from-laptop/SKILL.md)       | one size exists and the other is missing or drifting    |
+| [`ux-writing`](.claude/skills/ux-writing/SKILL.md)                     | the words on a screen                                   |
+| [`interface-review`](.claude/skills/interface-review/SKILL.md)         | a review, an audit, "something looks off"               |
+| [`spacing-audit`](.claude/skills/spacing-audit/SKILL.md)               | paddings and gaps against the 4/8 scale                 |
+| [`design-consistency`](.claude/skills/design-consistency/SKILL.md)     | a screen against its own system; before a port          |
+| [`board-cleanup`](.claude/skills/board-cleanup/SKILL.md)               | a canvas generator grown hard to read                   |
+
 Contradicting an ADR: say so, then amend it. This file is a map; a component's detail belongs in its area's ADR.
 
 ## Change rules

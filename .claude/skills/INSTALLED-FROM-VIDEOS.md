@@ -30,3 +30,21 @@ keeps its licence. `CLAUDE.md`, `DESIGN.md` and the owner's rulings win over any
 - The Firecrawl CLI's 32 skills are user-level, installed by the cloud environment's setup script, not in this folder.
 - Not installed from Matt Pocock's repository: its `misc/` (his own tooling: shoehorn, exercises, pre-commit, git
   guardrails) and `in-progress/` (unfinished) folders.
+
+## Pasted by the owner, rewritten for the canvas (2026-11-10)
+
+Nine design skills the owner pasted into the session, written for Figma. Their source and licence were not stated
+in what was pasted; ask the owner before sharing them outside this repository. Each was rewritten for the Design
+canvas (the Figma mechanics replaced by the generator, the kit and the runtime checks) and keeps its own rules.
+
+| Skill                | Pasted as                                           |
+| -------------------- | --------------------------------------------------- |
+| `ux-writing`         | Balise UX Writing                                   |
+| `interface-review`   | Review the interface as one system                  |
+| `phone-from-laptop`  | Mobile From Desktop                                 |
+| `board-cleanup`      | Layer Cleanup                                       |
+| `product-designer`   | a senior UI/UX product designer role (macOS)        |
+| `spacing-audit`      | Spacing Audit                                       |
+| `state-expander`     | UI State Expander                                   |
+| `screen-design`      | iOS app design                                      |
+| `design-consistency` | Design System Consistency, AI Design System Checker |
