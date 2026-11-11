@@ -199,3 +199,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Canvas 149 (2026-11-11): the chord list checked against Chord Theory for Piano and Piano Chords Practice; Cmaj7♯11 to Altered; Cadd4, Cm6/9, C9sus4, C7♭5, C7♯5, C13♭9 added; the app reads Cadd4 as add11. Drawing v149-*.
 - Canvas 150 (2026-11-11): Chords' Practise list gets Chromatically, Round the circle of fifths and Diatonically (in the chord's home key), each naming its chords; replaces the single "In all 12 keys" row. Drawing v150-*.
 - Canvas 151 (2026-11-11): Fingers added to the piano's Labels on Chords (two rows of choices); the Key sheet's chords are "Chords to transpose" with n of m and Select all / Clear all. Drawing v151-*.
+- Canvas 153 (2026-11-11): chords chosen to transpose are honey with a tick, the others white; "Stays" removed. Drawing v153-*.
