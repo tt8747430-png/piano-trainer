@@ -632,6 +632,15 @@
       "is_interactive": true,
       "page": "places"
     },
+    "Admin.dc.html": {
+      "x": 1590,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Administration, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
     "LearnLaptop.dc.html": {
       "x": 0,
       "y": 1720,
@@ -656,6 +665,15 @@
       "w": 2143,
       "h": 1299,
       "title": "Settings, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "AdminLaptop.dc.html": {
+      "x": 6669,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Administration, laptop",
       "is_interactive": true,
       "page": "places"
     }
@@ -755,7 +773,7 @@
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 1510,
+      "maxW": 2040,
       "page": "places"
     },
     "places-laptop": {
@@ -763,7 +781,7 @@
       "y": 1420,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 6589,
+      "maxW": 8812,
       "page": "places"
     }
   },
@@ -838,9 +856,11 @@
     "Learn.dc.html",
     "Profile.dc.html",
     "Settings.dc.html",
+    "Admin.dc.html",
     "LearnLaptop.dc.html",
     "ProfileLaptop.dc.html",
-    "SettingsLaptop.dc.html"
+    "SettingsLaptop.dc.html",
+    "AdminLaptop.dc.html"
   ],
   "pages": [
     {
