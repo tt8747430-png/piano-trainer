@@ -191,3 +191,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Canvas 141 (2026-11-11): Random chords: Chord types as a checklist by group with sticky chips; Roots on a one-octave keyboard (All 12, White keys, Black keys); default Major and Minor on all 12. Drawing v141-*.
 - Canvas 142 (2026-11-11): Random chords' bar loses the piano button (no keys on the page).
 - Canvas 143 (2026-11-11): Random chords' Roots: Start from (Easy roots, White keys, All 12 roots) and a checkbox per root in circle-of-fifths order; the keyboard picker removed. Drawing v143-*.
+- Canvas 144 (2026-11-11): Random chords' Roots: twelve checkboxes in keyboard order and Select all; the named sets removed. Drawing v144-*.
