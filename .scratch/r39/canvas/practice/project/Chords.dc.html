@@ -790,7 +790,15 @@ return {
     const sel = st.rpSel || [[0, 'maj7'], [2, 'm7'], [4, 'm7'], [5, 'maj7'], [7, '7'], [9, 'm7'], [11, 'ø7']].map(([pc, k]) => pc + ':' + QI(k));
     const has = (id) => sel.includes(id), flip = (ids, on) => set({ rpSel: on ? sel.filter((x) => !ids.includes(x)) : sel.concat(ids.filter((x) => !sel.includes(x))) });
     const symId = (id) => { const [pc, qi] = id.split(':').map(Number); return RN12(QS[qi])[pc] + QS[qi].k; };
-    const pool = sel.map((id) => { const [pc, qi] = id.split(':').map(Number); const [l, a] = LA(RN12(QS[qi])[pc]); return { rl: l, ra: a, q: qi }; });
+    // v141 (owner: "I dont like this selected. look at the examples of the chords choosing"): as musictheory.net,
+    // ToneDear and pianochord.org do, the chord types are a checklist and the roots are chosen apart, on a keyboard;
+    // the drill draws every type on every root
+    const ty = st.rpTy || [QI(''), QI('m')], rt = st.rpRt || [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+    const pool = rt.flatMap((pc) => ty.map((qi) => { const [l, a] = LA(RN12(QS[qi])[pc]); return { rl: l, ra: a, q: qi }; }));
+    const GR = ['Triads', 'Added notes', 'Sevenths', 'Extended', 'Altered'], tflt = st.rpTf || 'All';
+    const capn = (q) => q.n[0].toUpperCase() + q.n.slice(1);
+    const togSet = (arr, ids, allOn) => (allOn ? arr.filter((x) => !ids.includes(x)) : arr.concat(ids.filter((x) => !arr.includes(x))));
+    const WH = [0, 2, 4, 5, 7, 9, 11], BL = [[1, 1], [3, 2], [6, 4], [8, 5], [10, 6]], PCN = ['C', 'C♯ D♭', 'D', 'D♯ E♭', 'E', 'F', 'F♯ G♭', 'G', 'G♯ A♭', 'A', 'A♯ B♭', 'B'], PC1 = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
     const flt = st.rpFlt || 'all';
     const FL = [['all', 'All', () => true], ['chosen', 'Selected · ' + sel.length, () => true], ['maj', 'Major', (q) => q.k === ''], ['min', 'Minor', (q) => q.k === 'm'],
       ['dim', 'Diminished', (q) => ['°', 'ø7', '°7'].includes(q.k)], ['aug', 'Augmented', (q) => q.k === '+'], ['sus', 'Suspended', (q) => q.k.includes('sus')], ['add', 'Added notes', (q) => q.g === 'Added notes'],
@@ -852,6 +860,18 @@ return {
       rpStartT: 'Start · ' + (goal === 'No end' ? 'until I stop' : goal),
       isRpGoal: st.sheet === 'rpGoal', openRpGoal: () => set({ sheet: 'rpGoal' }),
       rpGoalRows: [['16 chords', '16 chords', 'a set of 16, scored at the end'], ['5 minutes', 'For 5 minutes', 'as many as you play right'], ['No end', 'Until I stop', 'no count and no clock']].map(([g, l, sub]) => ({ l, sub, mark: goal === g ? '✓' : '', fw: goal === g ? 700 : 500, pick: () => set({ rpGoal: g }) })),
+      rpTyChips: ['All'].concat(GR).map((v) => ({ l: v, on: v === tflt, bg: v === tflt ? C.ink : '#FEFDFB', fg: v === tflt ? '#FEFDFB' : C.ink, ring: v === tflt ? 'none' : '0 0 0 1px ' + C.line, pick: () => set({ rpTf: v }) })),
+      rpTyGroups: GR.filter((g) => tflt === 'All' || tflt === g).map((g) => { const ids = QS.map((q, i) => [q, i]).filter(([q]) => q.g === g).map(([, i]) => i), n = ids.filter((i) => ty.includes(i)).length, all = n === ids.length;
+        return Object.assign({ g, count: n + ' of ' + ids.length, allOn: all, allPick: () => set({ rpTy: togSet(ty, ids, all) }),
+          items: ids.map((i) => { const on = ty.includes(i); return Object.assign({ s: 'C' + QS[i].k, n: capn(QS[i]), on, fw: on ? 700 : 500, pick: () => set({ rpTy: on ? ty.filter((x) => x !== i) : ty.concat([i]) }) }, BOX(on ? 2 : 0)); }) }, BOX(all ? 2 : n ? 1 : 0)); }),
+      rpTyCount: ty.length + (ty.length === 1 ? ' type' : ' types') + ' · ' + pool.length + (pool.length === 1 ? ' chord' : ' chords') + ' in all', rpTyClear: () => set({ rpTy: [] }), rpTyCan: ty.length > 0,
+      rpTyVal: ty.length ? ty.slice(0, 2).map((i) => capn(QS[i]).replace(/ triad$/, '')).join(', ') + (ty.length > 2 ? ' +' + (ty.length - 2) : '') : 'None',
+      rpWhite: WH.map((pc, i) => { const on = rt.includes(pc); return { l: PCN[pc], on, bg: on ? '#F6E3BC' : '#FEFDFB', fg: on ? '#7A5418' : C.soft, fw: on ? 700 : 500, left: (i * 100 / 7) + '%', aria: PCN[pc], pick: () => set({ rpRt: on ? rt.filter((x) => x !== pc) : rt.concat([pc]) }) }; }),
+      rpBlack: BL.map(([pc, at]) => { const on = rt.includes(pc); return { l: PCN[pc].replace(' ', '\n'), on, bg: on ? '#C99A45' : C.ink, fg: on ? C.ink : '#FEFDFB', left: 'calc(' + (at * 100 / 7) + '% - 6%)', aria: PCN[pc], pick: () => set({ rpRt: on ? rt.filter((x) => x !== pc) : rt.concat([pc]) }) }; }),
+      rpRtQuick: [['All 12', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]], ['White keys', WH], ['Black keys', [1, 3, 6, 8, 10]]].map(([l, v]) => { const on = v.length === rt.length && v.every((x) => rt.includes(x)); return { l, on, bg: on ? C.ink : '#FEFDFB', fg: on ? '#FEFDFB' : C.ink, ring: on ? 'none' : '0 0 0 1px ' + C.line, pick: () => set({ rpRt: v }) }; }),
+      rpRtCount: rt.length + (rt.length === 1 ? ' root' : ' roots'),
+      rpRtVal: rt.length === 12 ? 'All 12' : rt.length === 7 && WH.every((x) => rt.includes(x)) ? 'White keys' : rt.length ? rt.slice().sort((a, b) => a - b).map((x) => PC1[x]).join(' ') : 'None',
+      isRpRoots: st.sheet === 'rpRoots', openRpRoots: () => set({ sheet: 'rpRoots' }),
       rpChips: FL.map(([v, l]) => ({ l, on: v === flt, bg: v === flt ? C.ink : '#FEFDFB', fg: v === flt ? '#FEFDFB' : C.ink, ring: v === flt ? 'none' : '0 0 0 1px ' + C.line, pick: () => set({ rpFlt: v }) })),
       rpSects, rpNoSects: !rpSects.length, rpHasSects: !!rpSects.length, 
       rpChosenT: sel.length + ' selected', rpClearAll: () => set({ rpSel: [] }), rpCanClear: sel.length > 0,
