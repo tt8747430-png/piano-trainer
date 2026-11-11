@@ -791,6 +791,14 @@ return {
             return ITEM({ name: v.l, desc: why || VD[v.v] || '', op: why ? 0.5 : 1, on: vs.includes(v.v), pick: () => set({ rpVoic: one(vs, v.v) }) }); }), null)),
           optHands: [GRP('', [['Right hand', 'Right', 'the chord in the right hand'], ['Left hand', 'Left', 'the chord in the left hand'], ['Both hands', 'Both', 'the root and 5th below, the chord above']].map(([l, v, d]) => ITEM({ radio: true, name: l, desc: d, on: hh === v, pick: () => set({ rpHands: v }) })), null)],
           optGoal: [GRP('', [['16 chords', '16 chords', 'a set of 16, scored at the end'], ['5 minutes', 'For 5 minutes', 'as many as you play right'], ['No end', 'Until I stop', 'no count and no clock']].map(([g, l, d]) => ITEM({ radio: true, name: l, desc: d, on: goal === g, pick: () => set({ rpGoal: g }) })), null)],
+          // v146 (owner, of the twelve root rows: "not very easy to use and not the best ui… think outside of the box"):
+          // the roots on the circle of fifths, the one picture of the twelve every musician knows; tap a note, the
+          // centre selects or clears all and says how many
+          rpCircle: [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5].map((pc, i) => { const on = rt.includes(pc), a = i * Math.PI / 6;
+            return { s: PC1[pc], on, bg: on ? '#F6E3BC' : '#FEFDFB', ring: on ? 'inset 0 0 0 2px #C99A45' : '0 0 0 1px ' + C.line, fw: on ? 700 : 500, fg: on ? C.ink : C.soft,
+              left: (140 + 108 * Math.sin(a) - 26).toFixed(1) + 'px', top: (140 - 108 * Math.cos(a) - 26).toFixed(1) + 'px', aria: PC1[pc] + (on ? ', in' : ', out'), pick: () => set({ rpRt: on ? rt.filter((x) => x !== pc) : rt.concat([pc]) }) }; }),
+          rpCircleN: rt.length + ' of 12', rpCircleLab: rt.length === 12 ? 'Clear all' : 'Select all', rpCircleAll: () => set({ rpRt: rt.length === 12 ? [] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }),
+          rpRtLine: rt.length && ty.length ? pool.length + (pool.length === 1 ? ' chord: ' : ' chords: ') + pool.slice(0, 6).map(symOfP).join(', ') + (pool.length > 6 ? ' …' : '') : (rt.length ? 'Choose a chord type too' : 'Tap the notes your chords start on'),
           rpDeckN: pool.length + (pool.length === 1 ? ' chord' : ' chords') + ' in your deck',
           rpDeck: pool.length ? [pool[0], pool[Math.floor(pool.length / 2)], pool[pool.length - 1]].map(symOfP) : ['–', '–', '–'],
           rpDeckLine: pool.length ? pool.slice(0, 8).map(symOfP).join('  ') + (pool.length > 8 ? '  …' : '') : 'Choose chord types and roots below' };
@@ -1290,7 +1298,11 @@ B_RSET = (f'<div style="display: flex; flex-direction: column; gap: 12px">'
   f'<div class="nos" role="group" aria-label="Show" style="position: sticky; top: -6px; z-index: 2; background: {PAGE}; display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 8px 16px"><sc-for list="{{{{rpTyChips}}}}" as="c" hint-placeholder-count="6">'
   f'<button type="button" aria-pressed="{{{{c.on}}}}" onClick="{{{{c.pick}}}}" style="flex: none; height: 36px; padding: 0 14px; border: 0; border-radius: 18px; background: {{{{c.bg}}}}; color: {{{{c.fg}}}}; box-shadow: {{{{c.ring}}}}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap">{{{{c.l}}}}</button></sc-for></div>'
   + OPTS('optTypes') + '</div>')
-B_RROOTS = OPTP('The note each chord is built on. Beside each, the chords it gives you.', OPTS('optRoots'))
+B_RROOTS = (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 12px"><p style="align-self: stretch; margin: 0 4px; font-size: 14px; line-height: 1.45; color: {SOFT}">The note each chord is built on. Tap the notes you want, round the circle of fifths.</p>'
+  f'<div role="group" aria-label="Roots" style="position: relative; width: 280px; height: 280px; flex: none"><div aria-hidden="true" style="position: absolute; inset: 32px; border-radius: 50%; box-shadow: inset 0 0 0 1px {LINE}"></div>'
+  f'<sc-for list="{{{{rpCircle}}}}" as="k" hint-placeholder-count="12"><button type="button" aria-pressed="{{{{k.on}}}}" aria-label="{{{{k.aria}}}}" onClick="{{{{k.pick}}}}" style="position: absolute; left: {{{{k.left}}}}; top: {{{{k.top}}}}; width: 52px; height: 52px; border: 0; border-radius: 50%; background: {{{{k.bg}}}}; box-shadow: {{{{k.ring}}}}; color: {{{{k.fg}}}}; font: inherit; font-family: {SERIF}; font-size: 19px; font-weight: {{{{k.fw}}}}; display: flex; align-items: center; justify-content: center">{{{{k.s}}}}</button></sc-for>'
+  f'<button type="button" onClick="{{{{rpCircleAll}}}}" style="position: absolute; left: 80px; top: 80px; width: 120px; height: 120px; border: 0; border-radius: 50%; background: {FILL}; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px"><span style="font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{rpCircleN}}}}</span><span style="font-size: 13px; font-weight: 600; color: {LINK}">{{{{rpCircleLab}}}}</span></button></div>'
+  f'<p style="align-self: stretch; margin: 0 4px; font-family: {SERIF}; font-size: 15px; color: {SOFT}; text-align: center">{{{{rpRtLine}}}}</p></div>')
 B_RINV = OPTP('Which note of the chord is at the bottom. Each chord comes in one of the ones you tick.', OPTS('optInv'))
 B_RVOIC = OPTP('How each chord’s notes sit on the keys. Tick several to mix them.', OPTS('optVoic'))
 B_RHANDS = OPTS('optHands')

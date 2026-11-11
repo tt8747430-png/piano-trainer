@@ -193,3 +193,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Canvas 143 (2026-11-11): Random chords' Roots: Start from (Easy roots, White keys, All 12 roots) and a checkbox per root in circle-of-fifths order; the keyboard picker removed. Drawing v143-*.
 - Canvas 144 (2026-11-11): Random chords' Roots: twelve checkboxes in keyboard order and Select all; the named sets removed. Drawing v144-*.
 - Canvas 145 (2026-11-11): Random chords: one option row in every drawer (checkbox or radio, name, meaning, example), Select all per group; the top card shows your deck (count and chords). Drawing v145-*.
+- Canvas 146 (2026-11-11): Random chords' Roots on the circle of fifths: tap notes round the circle, the centre counts and selects or clears all, the chords they make below. Drawing v146-*.
