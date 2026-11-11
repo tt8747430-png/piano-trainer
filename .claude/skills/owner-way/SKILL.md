@@ -36,7 +36,7 @@ reference shows what to add as well as what to copy. The brief and the owner's c
 | -------------------------------------------- | ------------------------------------------------------------------------------ |
 | Score editor                                 | Flat, Dorico, Sibelius for iPhone, forScore, MuseScore, Soundslice             |
 | Engraving                                    | LilyPond and abcjs rules; Verovio, the engine                                  |
-| Player views, chords, song lessons           | Chordify, without guitar features                                              |
+| Player views, chords, song lessons           | Chordify, without guitar features; Songscription's score page (`.scratch/r39/plan/player-reference-songscription.md`) |
 | Library, folders, swipe actions              | Mindscape and the owner's `memory-palaces` repo, whose code may be copied      |
 | Metronome and the time, key, clef pickers    | the owner's screenshots, the Chordify apps, other references in `piano-data`   |
 | New song, creating things                    | Flat's new score (`flat-score-editor`, IMG_4516–4522)                          |
