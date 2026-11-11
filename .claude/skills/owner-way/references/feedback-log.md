@@ -428,6 +428,7 @@ owner's, typos fixed.
   page (a key or chord types, voicings, inversions, hands, a session goal), played in the Player's Wait mode. Never:
   ties between chords; a key signature the learner did not pick ("the staf is always in c"); Transpose that changes
   only the key name ("transpose is means to transpose the chords").
+- **Random chords takes the Chords page's shape (R42, canvas 137):** "I dont like the chords selection for praticing page": three pickers in the chord's type open drawers; the draw is a card of chord buttons; sessions are rows; the bar is Voicings · Start · Hands. Never: walls of chips or segmented rows for choosing what is drawn.
 - **A root is picked on an octave, both spellings on each black key (R42, canvas 106):** "there is not possibility to
   switch between like the c sharp or d flat"; "it just lists all of this keys without good structure". One picker for
   every root and key. Never: a staff that shrinks as chords are added ("getting smaller and smaller"); a list of tiles

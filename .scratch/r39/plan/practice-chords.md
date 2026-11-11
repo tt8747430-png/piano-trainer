@@ -19,6 +19,7 @@ changes.
   Hands).
 - "No setting disables or hides another": a voicing the chord cannot take stays in the list, faded, saying why
   ("Needs a 7th", "Needs a chord of 4 notes", "Suits a minor or suspended chord"); nothing else changes.
+- Random chords in the Chords page's shape (canvas 137, "refactor this page like we did with the chords page. I dont like the chords selection for praticing page"): the hands at the keys show the chord drawn; what is drawn is three pickers in the chord's own type (C major · Sevenths · Root position), each opening its drawer, with one line under them (7 chords in the draw · Close position · right hand); In the draw is a card of the chords, each a bar of one button, tapped to leave it out (struck through, kept in place), with Try one; Session is three rows (16 chords, For 5 minutes, Until I stop) and Missed chords come back; the bar is the Chords page's bar, Voicings · Start · Hands. Never on this page: chip walls, a row of letters with ♭ ♮ ♯ segments, Major/Minor and Triads/Sevenths as segmented rows; those choices live in their drawers.
 
 ## Today
 
@@ -54,4 +55,4 @@ Play and Arpeggio | Colour notes and Practise this chord), the keys across the f
 - 2026-11-08: drawn (canvas v3); waiting for the owner.
 
 Sources: Piano Companion's chord page (symbol, notes, staff, keys, inversions); musicca's chord pages (root and chord
-pickers, the chord on staff and keys); Mark Levine, *The Jazz Piano Book* (rootless A and B, So What, locked hands).
+pickers, the chord on staff and keys); Mark Levine, _The Jazz Piano Book_ (rootless A and B, So What, locked hands).

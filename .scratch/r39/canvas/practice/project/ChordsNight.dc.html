@@ -777,6 +777,7 @@ return {
     const ST = mn ? [0, 2, 3, 5, 7, 8, 10] : [0, 2, 4, 5, 7, 9, 11];
     const KQ2 = mn ? (sv ? ['m7', 'ø7', 'maj7', 'm7', '7', 'maj7', '7'] : ['m', '°', '', 'm', '', '', '']) : (sv ? ['maj7', 'm7', 'm7', 'maj7', '7', 'm7', 'ø7'] : ['', 'm', 'm', '', '', 'm', '°']);
     const RM = mn ? ['i', 'ii', 'III', 'iv', 'V', 'VI', 'VII'] : ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii'];
+    const KQ2v = (d, sev) => (mn ? (sev ? ['m7', 'ø7', 'maj7', 'm7', '7', 'maj7', '7'] : ['m', '°', '', 'm', '', '', '']) : (sev ? ['maj7', 'm7', 'm7', 'maj7', '7', 'm7', 'ø7'] : ['', 'm', 'm', '', '', 'm', '°']))[d];
     const kl = kL; const degs = st.rpDegs || [0, 1, 2, 3, 4, 5, 6];
     const keyChords = ST.map((semi, d) => { const pc = (rk + semi) % 12, l = (kl + d) % 7, a = ((pc - NATPC[l] + 18) % 12) - 6; return { rl: l, ra: a, q: QS.findIndex((x) => x.k === KQ2[d]), d }; });
     const types = st.rpTypes || [0, 1, 12, 13, 14], roots12 = st.rpRoots === 'white' ? [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0]] : CROOTS.map((n) => [LET.indexOf(n[0]), n.length > 1 ? (n[1] === '♯' ? 1 : -1) : 0]);
@@ -802,7 +803,28 @@ return {
       rpBackOn: st.rpBack !== false, rpBackOnBg: st.rpBack !== false ? '#7FB685' : C.line, rpBackOnX: st.rpBack !== false ? 22 : 2, toggleRpBack: () => set({ rpBack: st.rpBack === false }),
       rpPool: pool.length + (pool.length === 1 ? ' chord' : ' chords') + ' to draw from', rpTry: tryOne,
       rpStart: 'Start · ' + (goal === 'No end' ? 'until I stop' : goal),
-      rpNow: sym + slash, rpNowSub: VNAME[voicing] + ' · ' + (hands === 'Both' ? 'both hands' : hands.toLowerCase() + ' hand') };
+      rpNow: sym + slash, rpNowSub: VNAME[voicing] + ' · ' + (hands === 'Both' ? 'both hands' : hands.toLowerCase() + ' hand'),
+      // the page in the Chords page's shape (R42, canvas 137): three pickers, the draw as a lead sheet, sessions as rows
+      rpFromName: fromKey ? LET[kL] + ACC[String(kA)] + (mn ? ' minor' : ' major') : (st.rpRoots === 'white' ? 'White keys' : 'All 12 roots'),
+      rpSetName: fromKey ? (sv ? 'Sevenths' : 'Triads') : (types.length === 1 ? QS[types[0]].n.replace(/^\w/, (c) => c.toUpperCase()) : types.length + ' chord types'),
+      rpInvName: inv ? 'All inversions' : 'Root position',
+      rpLine: pool.length + (pool.length === 1 ? ' chord' : ' chords') + ' in the draw · ' + (vs.length === 1 ? (VOICINGS.find((x) => x.v === vs[0]) || VOICINGS[0]).l : vs.length + ' voicings') + ' · ' + (hh === 'Both' ? 'both hands' : hh.toLowerCase() + ' hand'),
+      rpCount: pool.length + (pool.length === 1 ? ' chord' : ' chords'),
+      rpBars: fromKey
+        ? keyChords.map((c) => { const on = degs.includes(c.d), s0 = LET[c.rl] + ACC[String(c.ra)] + QS[c.q].k; return { s: s0, r: RM[c.d], on, op: on ? 1 : 0.42, bg: on ? '#453E38' : 'transparent', ring: on ? '0 0 0 1px ' + C.line : 'inset 0 0 0 1.5px ' + C.line, deco: on ? 'none' : 'line-through', aria: (on ? 'Leave out ' : 'Put back ') + s0, pick: () => set({ rpDegs: tog(degs, c.d) }) }; })
+        : types.map((i) => ({ s: 'C' + QS[i].k, r: QS[i].n, on: true, op: 1, bg: '#24201C', ring: '0 0 0 1px ' + C.line, deco: 'none', aria: 'Leave out ' + QS[i].n, pick: () => set({ rpTypes: tog(types, i) }) })),
+      rpMin: fromKey ? '76px' : '116px',
+      rpBarsNote: fromKey ? 'Tap a chord to leave it out of the draw.' : 'On every root. Tap a type to leave it out; add types from the second picker.',
+      rpSessions: [['16 chords', '16 chords', 'scored at the end'], ['5 minutes', 'For 5 minutes', 'as many as you play right'], ['No end', 'Until I stop', 'no count and no clock']].map(([g, a, b]) => ({ a, b, on: goal === g, mark: goal === g ? '✓' : '', pick: () => set({ rpGoal: g }) })),
+      openRpFrom: () => set({ sheet: 'rpFrom' }), openRpSet: () => set({ sheet: 'rpSet' }), openRpInv: () => set({ sheet: 'rpInv' }), openRpVoic: () => set({ sheet: 'rpVoic' }), openRpHands: () => set({ sheet: 'rpHands' }),
+      isRpFrom: st.sheet === 'rpFrom', isRpSet: st.sheet === 'rpSet', isRpInv: st.sheet === 'rpInv', isRpVoic: st.sheet === 'rpVoic', isRpHands: st.sheet === 'rpHands',
+      rpSetRows: [['Triads', false], ['Sevenths', true]].map(([l, v]) => ({ l, sub: keyChords.map((c) => LET[c.rl] + ACC[String(c.ra)] + (v ? KQ2v(c.d, true) : KQ2v(c.d, false))).join('  '), mark: sv === v ? '✓' : '', fw: sv === v ? 700 : 500, pick: () => set({ rpSev: v }) })),
+      rpTypeRows: ['Triads', 'Added notes', 'Sevenths', 'Extended', 'Altered'].map((g) => ({ g, items: QS.map((x, i) => [x, i]).filter(([x]) => x.g === g).map(([x, i]) => ({ s: 'C' + x.k, n: x.n, mark: types.includes(i) ? '✓' : '', fw: types.includes(i) ? 700 : 500, pick: () => set({ rpTypes: tog(types, i) }) })) })).filter((g) => g.items.length),
+      rpInvRows: [['Root position', 'root'], ['All inversions', 'all']].map(([l, v]) => ({ l, sub: v === 'all' ? 'root, 1st, 2nd and, with a 7th, 3rd, at random' : 'the root in the bass', mark: (inv ? 'all' : 'root') === v ? '✓' : '', fw: (inv ? 'all' : 'root') === v ? 700 : 500, pick: () => set({ rpInv: v }) })),
+      rpHandRows: [['Right hand', 'Right'], ['Left hand', 'Left'], ['Both hands', 'Both']].map(([l, v]) => ({ l, sub: v === 'Both' ? 'the root and 5th below, the chord above' : '', mark: hh === v ? '✓' : '', fw: hh === v ? 700 : 500, pick: () => set({ rpHands: v }) })),
+      rpVoicGroups: [...new Set(VOICINGS.map((v) => v.g))].map((g) => ({ g, items: VOICINGS.filter((v) => v.g === g).map((v) => { const why = pool.length && pool.every((c) => v.ok(QS[c.q])) ? v.ok(QS[pool[0].q]) : ''; return { l: v.l, why, hasWhy: !!why, op: why ? 0.55 : 1, mark: vs.includes(v.v) ? '✓' : '', fw: vs.includes(v.v) ? 700 : 500, pick: () => set({ rpVoic: tog(vs, v.v) }) }; }) })),
+      rpVoicName: vs.length === 1 ? (VOICINGS.find((x) => x.v === vs[0]) || VOICINGS[0]).l : vs.length + ' voicings',
+      rpHandsName: hh === 'Both' ? 'Both' : hh };
   })(),
   nextModeSeg: seg(['Diatonic', 'Chromatic'], nextMode === 'key' ? 'Diatonic' : 'Chromatic', (l) => set({ nextMode: l === 'Diatonic' ? 'key' : 'chrom' })), isNextKey: nextMode === 'key', isNextChrom: nextMode !== 'key', chromList, chromNone: !chromList.length, chromHas: !!chromList.length, keyNone: !nextList.length, keyHas: !!nextList.length, toChrom: () => set({ nextMode: 'chrom' }), toKey: () => set({ nextMode: 'key' }), chromCap: 'From ' + sym,
   firstSym: symOf(seq[0]).s, sigName: keyName, openSig: () => set({ sheet: 'tr' }),
