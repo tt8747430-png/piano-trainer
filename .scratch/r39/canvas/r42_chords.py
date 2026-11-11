@@ -460,13 +460,13 @@ const KD = { maj: { st: [0, 2, 4, 5, 7, 9, 11], tri: ['', 'm', 'm', '', '', 'm',
 const HOME = { '': ['maj', 0], m: ['maj', 1], '°': ['maj', 6], maj7: ['maj', 0], m7: ['maj', 1], '7': ['maj', 4], 'ø7': ['maj', 6], '°7': ['hmin', 6] };
 const onRoot = (pc, dir) => { if (pc === root) return LET[rLet] + ACC[String(rAcc)] + q.k; const [l, a] = fitRoot(...spellPc(pc, q.t.some((x) => x[0] === 3 && x[1] === 3) ? 1 : -1), qi); return LET[l] + ACC[String(a)] + q.k; };
 const keyDrills = (() => {
-  const out = [{ a: 'Chromatically', b: [0, 1, 2, 3].map((d) => onRoot((root + d) % 12, 1)).join(' · ') + ' … up by half steps, all 12' },
-    { a: 'Round the circle of fifths', b: [0, 5, 10, 3].map((d) => onRoot((root + d) % 12, -1)).join(' · ') + ' … all 12' }];
+  const out = [{ a: 'In every key, up by half steps', b: [0, 1, 2, 3].map((d) => onRoot((root + d) % 12, 1)).join(' · ') + ' … up by half steps, all 12' },
+    { a: 'In every key, round the circle of fifths', b: [0, 5, 10, 3].map((d) => onRoot((root + d) % 12, -1)).join(' · ') + ' … all 12' }];
   const h = HOME[q.k]; if (!h) return out;
   const K = KD[h[0]], d = h[1], sev = q.t.length > 3, tl = (rLet - d + 7) % 7, tpc = (root - K.st[d] + 12) % 12;
   const nm = (j) => { const l = (tl + j) % 7, pc = (tpc + K.st[j]) % 12; return LET[l] + ACC[String(((pc - NATPC[l] + 18) % 12) - 6)]; };
   const steps = [0, 1, 2, 3].map((i) => { const j = (d + i) % 7; return nm(j) + (sev ? K.sev : K.tri)[j]; });
-  return out.concat([{ a: 'Diatonically, in ' + nm(0) + K.w, b: steps.join(' · ') + ' … up the scale and back' }]);
+  return out.concat([{ a: 'Through the key of ' + nm(0) + K.w, b: steps.join(' · ') + ' … up the scale and back' }]);
 })();
 const inKey = (pc, l2, a2, q, dir) => { const k = STEPS.indexOf((pc - rootPc(l2, a2) + 12) % 12);
   if (k >= 0) { const l = (l2 + k) % 7; const [L, A] = plainRoot(l, ((pc - NATPC[l] + 18) % 12) - 6); return k === 4 ? [L, A] : fitRoot(L, A, q); }
@@ -686,7 +686,7 @@ return {
   practise: seq.length > 1
     ? seq.slice(1).map((c, i) => ({ a: 'From ' + symOf(seq[i]).s + ' to ' + symOf(c).s, b: 'the change alone, looped, with a count-in' })).slice(0, 4)
         .concat([{ a: 'All ' + seq.length + ' chords, looped', b: 'with the metronome' }, { a: 'In all 12 keys', b: 'up by half steps, or round the circle of fifths' }])
-    : [{ a: 'Blocked, through the inversions', b: (q.t.length > 3 ? 'root, 1st, 2nd, 3rd' : 'root, 1st, 2nd') + ' and back' }, { a: 'Broken, with the metronome', b: 'eighth notes, from 100 beats a minute' }].concat(keyDrills),
+    : [{ a: sym + ' in all inversions', b: (q.t.length > 3 ? 'root position, 1st, 2nd, 3rd' : 'root position, 1st, 2nd') + ' and back' }, { a: sym + ' as an arpeggio', b: 'up and down two octaves, with the metronome' }].concat(keyDrills),
   // ── Random chords (R42 v105): a session set up here and played in the Player, the next chord at random from a key or
   // from the types the learner picks, in the voicings and hands they pick. Structured practice (pianochord.org,
   // "Practice in piano playing", after Ericsson): a clear goal, feedback on every chord, the missed ones asked again.
@@ -829,98 +829,110 @@ return {
           rpDeckN: pool.length + (pool.length === 1 ? ' chord' : ' chords') + ' in your deck',
           rpDeck: pool.length ? [pool[0], pool[Math.floor(pool.length / 2)], pool[pool.length - 1]].map(symOfP) : ['–', '–', '–'],
           rpDeckLine: pool.length ? pool.slice(0, 8).map(symOfP).join('  ') + (pool.length > 8 ? '  …' : '') : 'Choose chord types and roots below',
-          // ── Chord trainer (canvas 154; owner: "I want the random chords to be removed and we will get a tool for
-          // training chords… more styles to train the chords and also arpegios… some defaults and like find more"):
-          // a library of drills, each a recipe of the same five choices (which chords, shown as, how they are played,
-          // in what order, at what pace). Research: Piano Chords Flashcards (a chord at a time, missed ones repeated,
-          // the timer, Live Listener), Piano Companion's practice coach and arpeggios, ChordRacer, and the owner's books
-          // (Piano Chords Practice: inversions, broken chords, arpeggios; the course videos: through the keys).
+          // ── Chord trainer (canvas 156; owner: "the see a chord and play it doesnt make any sense… the names are very
+          // bad… all of the 24 versions should be refactored… the practices should be real practices that do make sense.
+          // research more"): the exercises of the owner's books, named as the books name them. Piano Chords Practice
+          // (pianochord.org): part 1 the chords in all inversions, part 2 part-over-root voicings, part 3 arpeggios;
+          // 400 Piano Chord Progressions: progressions by key, cadences, the cycle of fifths, ii–V–I, the blues, and its
+          // five accompaniment concepts; the ABRSM arpeggio syllabus for the seventh-chord arpeggios. Each exercise shows
+          // its first bars engraved, in C, and asks three things: which keys, which hand, what tempo.
           ...(() => {
-            const PCS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], T = (ks) => ks.map(QI), CIRC = [0, 5, 10, 3, 8, 1, 6, 11, 4, 9, 2, 7];
-            const KEYN = [[0, 0], [1, -1], [1, 0], [2, -1], [2, 0], [3, 0], [3, 1], [4, 0], [5, -1], [5, 0], [6, -1], [6, 0]];
-            const NN = (l, pc) => LET[l] + ACC[String(((pc - NATPC[l] + 18) % 12) - 6)];
-            const tone = (c, i) => { const q = QS[c.q], tt = q.t[i % q.t.length], pc = (rootPc(c.rl, c.ra) + tt[0]) % 12; return NN((c.rl + tt[1] - 1) % 7, pc); };
-            const sy = (c) => LET[c.rl] + ACC[String(c.ra)] + QS[c.q].k;
-            const at = (pc, qi) => { const [l, a] = LA(RN12(QS[qi])[pc]); return { rl: l, ra: a, q: qi }; };
-            const diat = (kpc, sev) => { const [kl] = KEYN[kpc], ST = [0, 2, 4, 5, 7, 9, 11], K = sev ? ['maj7', 'm7', 'm7', 'maj7', '7', 'm7', 'ø7'] : ['', 'm', 'm', '', '', 'm', '°'];
-              return ST.map((s, d) => { const pc = (kpc + s) % 12, l = (kl + d) % 7; return { rl: l, ra: ((pc - NATPC[l] + 18) % 12) - 6, q: QI(K[d]) }; }); };
-            const keyName = (kpc) => LET[KEYN[kpc][0]] + ACC[String(KEYN[kpc][1])];
-            // the chords a recipe plays, in its order; the inversions spelled as slash chords where the style walks them
-            const seqOf = (p) => { const ty = p.ty.length ? p.ty : [QI('')], rt = p.rt.length ? p.rt : [0], sev = ty.some((i) => QS[i].t.length > 3);
-              let out;
-              if (p.or === 'key') { const d = diat(p.key || 0, sev); out = d.concat(d.slice(0, 6).reverse()); }
-              else if (p.or === 'iiVI') out = CIRC.filter((pc) => rt.includes(pc)).flatMap((pc) => { const d = diat(pc, true); return [d[1], d[4], d[0]]; });
-              else if (p.or === 'random') { const all = rt.flatMap((pc) => ty.map((qi) => at(pc, qi))); out = []; let x = 7 + p.id.length; for (let i = 0; i < Math.min(16, all.length * 2); i++) { x = (x * 37 + 11) % 997; out.push(all[x % all.length]); } }
-              else { const order = p.or === 'circle' ? CIRC : PCS; out = order.filter((pc) => rt.includes(pc)).flatMap((pc) => ty.map((qi) => at(pc, qi))); }
-              if (p.st === 'inv') { const iv = (p.inv && p.inv.length ? p.inv : [0, 1, 2]); out = out.slice(0, 4).flatMap((c) => { const n = QS[c.q].t.length, ok = iv.filter((i) => i < n), up = ok.map((i) => (i ? sy(c) + '/' + tone(c, i) : sy(c))); return up.concat(up.slice(0, -1).reverse()); }); return out; }
-              return out.map(sy); };
-            const STY = [['Together', [['block', 'Block chord', 'all the notes at once', 'C E G'], ['inv', 'Through the inversions', 'root, 1st, 2nd and back, each chord', 'C  C/E  C/G'], ['near', 'Nearest inversion', 'each chord in the inversion closest to the last', 'C  F/C  G/B'], ['roll', 'Rolled', 'spread from the bottom up, like a harp', 'C ↗ E ↗ G']]],
-              ['Broken', [['broken', 'Broken chord', 'bottom, top, middle, top: the Alberti bass', 'C G E G'], ['arp1', 'Arpeggio, one octave', 'up and down, a note at a time', 'C E G C'], ['arp2', 'Arpeggio, two octaves', 'the thumb passing under', 'C E G C E G C'], ['open', 'Open arpeggio', 'root, 5th, octave, then the 3rd above', 'C G C E']]],
-              ['In a rhythm', [['pulse', 'Four to a bar', 'the chord on every beat', ''], ['ballad', 'Ballad', 'the root below, the chord above on 1 and 3', ''], ['waltz', 'Waltz', 'bass, chord, chord, in 3/4', ''], ['charl', 'Charleston', 'on 1 and the and of 2', ''], ['bossa', 'Bossa nova', 'root and 5th below, the chord pushed', ''], ['stride', 'Stride', 'bass on 1 and 3, the chord on 2 and 4', '']]]];
-            const STYN = Object.fromEntries(STY.flatMap((g) => g[1]).map((x) => [x[0], x[1]]));
-            const ORD = [['random', 'At random', 'a new chord each time', 'C  A♭m  E'], ['chrom', 'Chromatically', 'up by half steps, all 12', 'C  D♭  D'], ['circle', 'Round the circle of fifths', 'the way songs move', 'C  F  B♭'], ['key', 'Through a key', 'the chords of one key, up the scale and back', 'I  ii  iii'], ['iiVI', 'As ii–V–I, through the keys', 'the jazz cadence, round the circle', 'Dm7  G7  C']];
-            const ORDN = Object.fromEntries(ORD.map((x) => [x[0], x[1]]));
-            const SHOW = [['name', 'Its name', 'Cmaj7'], ['staff', 'Its notes on the staff', ''], ['sound', 'Its sound only', 'hear it, play it']];
-            const P = (ty, rt, o) => Object.assign({ ty: T(ty), rt, inv: [0], st: 'block', or: 'random', pace: 'wait', bpm: 60, goal: '16 chords', hands: 'Right', show: 'name', voic: ['Close'], key: 0 }, o);
-            const DR = [
-              ['flash', 'Reading', 'See a chord, play it', 'card', P(['', 'm'], PCS, {})],
-              ['invl', 'Inversions', 'Inversions, up and back', 'inv', P(['', 'm'], [0, 5, 7], { inv: [0, 1, 2], st: 'inv', or: 'circle', pace: 'metro', bpm: 60, goal: '5 minutes' })],
-              ['arp1', 'Arpeggios', 'Arpeggios, up and down', 'arp', P([''], PCS, { st: 'arp1', or: 'chrom', pace: 'metro', bpm: 72, goal: '5 minutes' })],
-              ['key7', 'Through the keys', 'The sevenths of a key', 'roman', P(['maj7', 'm7', '7', 'ø7'], PCS, { or: 'key', pace: 'metro', bpm: 66, goal: 'No end' })],
-              ['circ7', 'Through the keys', 'Sevenths round the circle', 'circle', P(['maj7', 'm7', '7'], PCS, { or: 'circle', pace: 'metro', bpm: 60, goal: 'No end' })],
-              ['invr', 'Inversions', 'Inversions at random', 'cards3', P(['', 'm'], PCS, { inv: [0, 1, 2] })],
-              ['near', 'Inversions', 'Nearest inversion, round the circle', 'lead', P([''], PCS, { inv: [0, 1, 2], st: 'near', or: 'circle', pace: 'metro', bpm: 60, goal: '5 minutes' })],
-              ['chrom', 'Through the keys', 'Triads, up by half steps', 'keys', P(['', 'm'], PCS, { or: 'chrom', pace: 'metro', bpm: 60, goal: 'No end' })],
-              ['keytri', 'Through the keys', 'The triads of a key', 'roman', P([''], PCS, { or: 'key', pace: 'metro', bpm: 72, goal: 'No end' })],
-              ['arp2', 'Arpeggios', 'Arpeggios, two octaves', 'arp', P(['', 'm'], PCS, { st: 'arp2', or: 'circle', pace: 'metro', bpm: 66, goal: '5 minutes' })],
-              ['alb', 'Arpeggios', 'Broken chords', 'broken', P(['', 'm'], [0, 5, 7, 9], { st: 'broken', or: 'circle', pace: 'metro', bpm: 80, goal: '5 minutes', hands: 'Left' })],
-              ['open', 'Arpeggios', 'Open arpeggios', 'arp', P(['', 'maj7'], [0, 5, 7], { st: 'open', or: 'circle', pace: 'metro', bpm: 66, goal: '5 minutes', hands: 'Both' })],
-              ['roll', 'Arpeggios', 'Rolled chords', 'rolled', P(['maj7', 'm7'], PCS, { st: 'roll' })],
-              ['pulse', 'Rhythms', 'Four to a bar', 'rhythm', P(['', 'm'], [0, 5, 7, 9], { st: 'pulse', or: 'circle', pace: 'metro', bpm: 80, goal: '5 minutes' })],
-              ['ballad', 'Rhythms', 'Ballad', 'rhythm', P(['maj7', 'm7'], [0, 5, 7, 9], { st: 'ballad', or: 'circle', pace: 'metro', bpm: 66, goal: '5 minutes', hands: 'Both' })],
-              ['waltz', 'Rhythms', 'Waltz', 'rhythm', P(['', 'm'], [0, 5, 7, 2], { st: 'waltz', or: 'circle', pace: 'metro', bpm: 96, goal: '5 minutes', hands: 'Both' })],
-              ['charl', 'Rhythms', 'Charleston', 'rhythm', P(['7', 'm7'], [0, 5, 7, 2], { st: 'charl', or: 'circle', pace: 'metro', bpm: 100, goal: '5 minutes' })],
-              ['bossa', 'Rhythms', 'Bossa nova', 'rhythm', P(['m7', '7', 'maj7'], [0, 2, 7], { st: 'bossa', or: 'iiVI', pace: 'metro', bpm: 120, goal: '5 minutes', hands: 'Both' })],
-              ['stride', 'Rhythms', 'Stride', 'rhythm', P(['', '7'], [0, 5, 7], { st: 'stride', or: 'circle', pace: 'metro', bpm: 92, goal: '5 minutes', hands: 'Both' })],
-              ['iiVI', 'Voice leading', 'ii–V–I in every key', 'lead', P(['m7', '7', 'maj7'], PCS, { or: 'iiVI', pace: 'metro', bpm: 72, goal: 'No end', voic: ['Rootless A'], hands: 'Both' })],
-              ['shell', 'Voice leading', 'ii–V–I in shells', 'lead', P(['m7', '7', 'maj7'], PCS, { or: 'iiVI', pace: 'metro', bpm: 72, goal: 'No end', voic: ['Shell'], hands: 'Left' })],
-              ['staff', 'Reading', 'Read it on the staff', 'staff', P(['', 'm', '°', '+'], PCS, { show: 'staff' })],
-              ['hear', 'Ear', 'Hear it, play it', 'ear', P(['', 'm'], [0, 5, 7], { show: 'sound' })],
-              ['hear7', 'Ear', 'Hear a seventh, play it', 'ear', P(['maj7', 'm7', '7'], [0, 5, 7], { show: 'sound' })]
-            ].map(([id, g, n, pic, p]) => Object.assign({ id, g, n, pic }, p, { id }));
-            const START = ['flash', 'invl', 'arp1', 'key7', 'circ7'];
-            const GRS = ['Inversions', 'Through the keys', 'Arpeggios', 'Rhythms', 'Voice leading', 'Reading', 'Ear'];
-            const PICS = ['card', 'cards3', 'inv', 'arp', 'broken', 'rolled', 'rhythm', 'roman', 'circle', 'keys', 'lead', 'staff', 'ear'];
-            const paceT = (p) => (p.pace === 'wait' ? 'Waits for you' : p.bpm + ' BPM');
-            const goalT = (g) => (g === 'No end' ? 'Until you stop' : g === '5 minutes' ? '5 min' : g);
-            const line = (p) => { const s = seqOf(p); return s.slice(0, 4).join(' · ') + (s.length > 4 ? ' …' : ''); };
-            const cur = DR.find((d) => d.id === st.ctOpen);
-            const open = (d) => () => set({ ctOpen: d.id, sheet: null, rpTy: d.ty, rpRt: d.rt, rpInvs: d.inv, rpVoic: d.voic, rpHands: d.hands, rpGoal: d.goal, ctSt: d.st, ctOr: d.or, ctPace: d.pace, ctBpm: d.bpm, ctShow: d.show, ctKey: d.key });
-            const card = (d) => Object.assign({ n: d.n, line: line(d), meta: paceT(d) + ' · ' + goalT(d.goal) + ' · ' + STYN[d.st], aria: d.n, open: open(d) }, Object.fromEntries(PICS.map((k) => ['p_' + k, d.pic === k])));
+            const E = (s, rh, lh) => ({ s: s || '', rh: rh ? rh.split(' ') : [], lh: lh ? lh.split(' ') : [] });
+            const SL = (s) => ({ s, rh: [], lh: [], slash: true }), Q = () => ({ s: '', rh: [], lh: [], ask: true });
+            const X = [
+              ['inv', 'Inversions', 'Major triads in all inversions', 'Root position, 1st and 2nd inversion and back, then the next key', [[E('C', 'C4 E4 G4')], [E('C/E', 'E4 G4 C5')], [E('C/G', 'G4 C5 E5')], [E('C', 'C5 E5 G5')]], { hands: 'Right', keys: 'circle', bpm: 60 }],
+              ['inv', 'Inversions', 'Minor triads in all inversions', 'The same walk through the inversions, on the minor chord', [[E('Cm', 'C4 Eb4 G4')], [E('Cm/E♭', 'Eb4 G4 C5')], [E('Cm/G', 'G4 C5 Eb5')], [E('Cm', 'C5 Eb5 G5')]], { hands: 'Right', keys: 'circle', bpm: 60 }],
+              ['inv', 'Inversions', 'Major seventh chords in all inversions', 'Four positions: root, 1st, 2nd and 3rd inversion', [[E('Cmaj7', 'C4 E4 G4 B4')], [E('Cmaj7/E', 'E4 G4 B4 C5')], [E('Cmaj7/G', 'G4 B4 C5 E5')], [E('Cmaj7/B', 'B4 C5 E5 G5')]], { hands: 'Right', keys: 'circle', bpm: 56 }],
+              ['inv', 'Inversions', 'Minor seventh chords in all inversions', 'Four positions, the 7th at the bottom last', [[E('Cm7', 'C4 Eb4 G4 Bb4')], [E('Cm7/E♭', 'Eb4 G4 Bb4 C5')], [E('Cm7/G', 'G4 Bb4 C5 Eb5')], [E('Cm7/B♭', 'Bb4 C5 Eb5 G5')]], { hands: 'Right', keys: 'circle', bpm: 56 }],
+              ['inv', 'Inversions', 'Dominant seventh chords in all inversions', 'Four positions; the 3rd and 7th are the notes to hear', [[E('C7', 'C4 E4 G4 Bb4')], [E('C7/E', 'E4 G4 Bb4 C5')], [E('C7/G', 'G4 Bb4 C5 E5')], [E('C7/B♭', 'Bb4 C5 E5 G5')]], { hands: 'Right', keys: 'circle', bpm: 56 }],
+              ['voi', 'Voicings', 'Triads over the root', 'The root in the left hand, the triad above it in each inversion', [[E('C', 'C4 E4 G4', 'C3')], [E('C', 'E4 G4 C5', 'C3')], [E('C', 'G4 C5 E5', 'C3')], [E('Cm', 'C4 Eb4 G4', 'C3')]], { hands: 'Both', keys: 'circle', bpm: 60 }],
+              ['voi', 'Voicings', 'Seventh chords over the root', 'The root below; the 3rd, 5th and 7th above', [[E('Cmaj7', 'E4 G4 B4', 'C3')], [E('Cm7', 'Eb4 G4 Bb4', 'C3')], [E('C7', 'E4 G4 Bb4', 'C3')], [E('Cm7♭5', 'Eb4 Gb4 Bb4', 'C3')]], { hands: 'Both', keys: 'circle', bpm: 60 }],
+              ['voi', 'Voicings', 'Ninth, eleventh and thirteenth chords', 'Root and 7th below; the 3rd and the top extension above', [[E('Cmaj9', 'E4 B4 D5', 'C3 G3')], [E('Cm9', 'Eb4 Bb4 D5', 'C3 G3')], [E('C9', 'E4 Bb4 D5', 'C3 G3')], [E('C13', 'E4 Bb4 A5', 'C3 G3')]], { hands: 'Both', keys: 'circle', bpm: 56 }],
+              ['arp', 'Arpeggios', 'Triad arpeggios, one octave', 'Up and down, the thumb on the root', [[E('C', 'C4'), E('', 'E4'), E('', 'G4'), E('', 'C5'), E('', 'G4'), E('', 'E4'), E('', 'C4')], [E('Cm', 'C4'), E('', 'Eb4'), E('', 'G4'), E('', 'C5'), E('', 'G4'), E('', 'Eb4'), E('', 'C4')]], { hands: 'Right', keys: 'circle', bpm: 72 }],
+              ['arp', 'Arpeggios', 'Triad arpeggios, two octaves', 'Up two octaves and back, the thumb passing under', [[E('C', 'C4'), E('', 'E4'), E('', 'G4'), E('', 'C5'), E('', 'E5'), E('', 'G5'), E('', 'C6'), E('', 'G5')], [E('', 'E5'), E('', 'C5'), E('', 'G4'), E('', 'E4'), E('', 'C4')]], { hands: 'Right', keys: 'circle', bpm: 66 }],
+              ['arp', 'Arpeggios', 'Seventh-chord arpeggios', 'The dominant seventh and the diminished seventh, as in the grade exams', [[E('G7', 'G4'), E('', 'B4'), E('', 'D5'), E('', 'F5'), E('', 'G5'), E('', 'F5'), E('', 'D5'), E('', 'B4')], [E('C°7', 'C4'), E('', 'Eb4'), E('', 'Gb4'), E('', 'Bbb4'), E('', 'C5'), E('', 'Bbb4'), E('', 'Gb4'), E('', 'Eb4')]], { hands: 'Right', keys: 'circle', bpm: 66 }],
+              ['arp', 'Arpeggios', 'Broken chords in the left hand', 'Bottom, top, middle, top: the Alberti bass', [[E('C', '', 'C3'), E('', '', 'G3'), E('', '', 'E3'), E('', '', 'G3'), E('', '', 'C3'), E('', '', 'G3'), E('', '', 'E3'), E('', '', 'G3')], [E('G/B', '', 'B2'), E('', '', 'G3'), E('', '', 'D3'), E('', '', 'G3'), E('', '', 'B2'), E('', '', 'G3'), E('', '', 'D3'), E('', '', 'G3')]], { hands: 'Left', keys: 'circle', bpm: 80 }],
+              ['pro', 'Progressions', 'The triads of a major key', 'Up the scale on each degree: I ii iii IV V vi vii° I', [[E('C', 'C4 E4 G4'), E('Dm', 'D4 F4 A4')], [E('Em', 'E4 G4 B4'), E('F', 'F4 A4 C5')], [E('G', 'G4 B4 D5'), E('Am', 'A4 C5 E5')], [E('B°', 'B4 D5 F5'), E('C', 'C5 E5 G5')]], { hands: 'Right', keys: 'circle', bpm: 72 }],
+              ['pro', 'Progressions', 'The seventh chords of a major key', 'Imaj7 ii7 iii7 IVmaj7 V7 vi7 viiø7 Imaj7', [[E('Cmaj7', 'C4 E4 G4 B4'), E('Dm7', 'D4 F4 A4 C5')], [E('Em7', 'E4 G4 B4 D5'), E('Fmaj7', 'F4 A4 C5 E5')], [E('G7', 'G4 B4 D5 F5'), E('Am7', 'A4 C5 E5 G5')], [E('Bø7', 'B4 D5 F5 A5'), E('Cmaj7', 'C5 E5 G5 B5')]], { hands: 'Right', keys: 'circle', bpm: 66 }],
+              ['pro', 'Progressions', 'The I–IV–V–I cadence', 'The right hand moves to the nearest inversion; the root below', [[E('C', 'C4 E4 G4', 'C3')], [E('F', 'C4 F4 A4', 'F2')], [E('G', 'B3 D4 G4', 'G2')], [E('C', 'C4 E4 G4', 'C3')]], { hands: 'Both', keys: 'circle', bpm: 66 }],
+              ['pro', 'Progressions', 'I–V–vi–IV', 'The four chords of a thousand songs, smoothly voiced', [[E('C', 'C4 E4 G4', 'C3')], [E('G', 'B3 D4 G4', 'G2')], [E('Am', 'C4 E4 A4', 'A2')], [E('F', 'C4 F4 A4', 'F2')]], { hands: 'Both', keys: 'circle', bpm: 80 }],
+              ['pro', 'Progressions', 'ii–V–I', 'The jazz cadence: the 7th of each chord falls to the 3rd of the next', [[E('Dm7', 'F4 A4 C5', 'D3')], [E('G7', 'F4 B4 D5', 'G2')], [E('Cmaj7', 'E4 G4 B4', 'C3')], [E('Cmaj7', 'E4 G4 B4', 'C3')]], { hands: 'Both', keys: 'circle', bpm: 72 }],
+              ['pro', 'Progressions', 'Dominant sevenths round the circle', 'Only the 3rd and 7th above the root, each moving a step', [[E('C7', 'E4 Bb4', 'C3')], [E('F7', 'Eb4 A4', 'F2')], [E('B♭7', 'D4 Ab4', 'Bb2')], [E('E♭7', 'Db4 G4', 'Eb3')]], { hands: 'Both', keys: 'chrom', bpm: 72 }],
+              ['pro', 'Progressions', 'The 12-bar blues', 'I7 IV7 I7 I7 · IV7 IV7 I7 I7 · V7 IV7 I7 V7', [[E('C7', 'E4 G4 Bb4', 'C3 G3')], [E('F7', 'Eb4 A4 C5', 'F2 C3')], [E('C7', 'E4 G4 Bb4', 'C3 G3')], [E('C7', 'E4 G4 Bb4', 'C3 G3')]], { hands: 'Both', keys: 'one', bpm: 96 }],
+              ['acc', 'Accompaniment', 'Bass and broken chord, in 6/8', 'A held bass; the right hand rocks between two notes of the chord', [[E('C', '', 'C3'), E('', 'E4'), E('', 'C5'), E('', 'E4'), E('', 'C5'), E('', 'E4')], [E('Am', '', 'A2'), E('', 'E4'), E('', 'C5'), E('', 'E4'), E('', 'C5'), E('', 'E4')]], { hands: 'Both', keys: 'one', bpm: 60 }],
+              ['acc', 'Accompaniment', 'Bass and afterbeats, in 6/8', 'Chord and bass in turn, a pulse of eighth notes', [[E('C', 'E4 G4 C5'), E('', '', 'C3'), E('', 'E4 G4 C5'), E('', '', 'C3'), E('', 'E4 G4 C5'), E('', '', 'C3')], [E('F/A', 'F4 A4 C5'), E('', '', 'A2'), E('', 'F4 A4 C5'), E('', '', 'A2'), E('', 'F4 A4 C5'), E('', '', 'A2')]], { hands: 'Both', keys: 'one', bpm: 72 }],
+              ['acc', 'Accompaniment', 'Bass, then the chord, in 4/4', 'The bass on 1, the chord on 2, held from 3', [[E('C', '', 'C3'), E('', 'E4 G4'), E('', 'E4 C5')], [E('F', '', 'F2'), E('', 'F4 A4'), E('', 'F4 C5')], [E('G', '', 'G2'), E('', 'G4 B4'), E('', 'F4 D5')], [E('C', '', 'C3'), E('', 'E4 G4'), E('', 'E4 C5')]], { hands: 'Both', keys: 'one', bpm: 80 }],
+              ['rea', 'Reading and ear', 'Chord symbols at sight', 'A lead sheet of chords you choose; play each as it comes', [[SL('Cmaj7'), SL(''), SL(''), SL('')], [SL('A♭m'), SL(''), SL(''), SL('')], [SL('F♯7'), SL(''), SL(''), SL('')], [SL('E♭'), SL(''), SL(''), SL('')]], { hands: 'Right', keys: 'pick', bpm: 0, read: true }],
+              ['rea', 'Reading and ear', 'Chords on the staff', 'The notes without the name: find them on the keys', [[E('', 'E4 G4 C5')], [E('', 'D4 F4 B4')], [E('', 'Eb4 G4 Bb4 D5')], [E('', 'F#4 A4 D5')]], { hands: 'Right', keys: 'pick', bpm: 0, read: true }],
+              ['rea', 'Reading and ear', 'Chords by ear', 'A chord sounds; play it back, then see its name', [[Q()], [Q()], [Q()], [Q()]], { hands: 'Right', keys: 'pick', bpm: 0, read: true }]
+            ].map(([k, g, n, d, bars, o], i) => Object.assign({ id: 'x' + i, k, g, n, d, bars }, o));
+            // a small engraver: the first bars in C on a treble staff, or a grand staff when the left hand plays
+            const LI = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 };
+            const P = (n) => { const m = /^([A-G])(bb|b|#)?(\d)$/.exec(n); return { d: LI[m[1]] + 7 * +m[3], a: m[2] === 'bb' ? '𝄫' : m[2] === 'b' ? '♭' : m[2] === '#' ? '♯' : '' }; };
+            const eng = (ex, W, nb, small) => {
+              const sp = small ? 6 : 7, T = small ? 22 : 40, grand = ex.bars.some((b) => b.some((e) => e.lh.length)), trebleOn = ex.bars.some((b) => b.some((e) => e.rh.length || e.slash || e.ask)) || !grand;
+              const tT = T, bT = trebleOn ? T + 4 * sp + (small ? 34 : 46) : T, H = (grand ? bT : tT) + 4 * sp + (small ? 18 : 30);
+              const yT = (d) => tT + 4 * sp - (d - 30) * sp / 2, yB = (d) => bT + 4 * sp - (d - 18) * sp / 2;
+              const bars = ex.bars.slice(0, nb), x0 = small ? 26 : 44, bw = (W - x0 - 2) / bars.length;
+              let lines = '', led = '', stems = '', bl = ''; const heads = [], acc = [], syms = [], marks = [], clefs = [];
+              const staff = (top) => { for (let i = 0; i < 5; i++) lines += 'M2 ' + (top + i * sp) + 'H' + (W - 1) + ' '; };
+              if (trebleOn) { staff(tT); clefs.push({ x: 4, y: tT + 3 * sp + (small ? 4 : 5), t: '𝄞', fs: small ? 30 : 38 }); }
+              if (grand) { staff(bT); clefs.push({ x: 4, y: bT + sp + (small ? 2 : 3), t: '𝄢', fs: small ? 22 : 28 }); }
+              const top = trebleOn ? tT : bT, bot = (grand ? bT : tT) + 4 * sp;
+              const put = (notes, x, yOf, lo, hi, many) => {
+                const ps = notes.map(P).sort((a, b) => a.d - b.d); let prev = -99, sh = false; const ys = [];
+                ps.forEach((p) => { const y = yOf(p.d); sh = p.d - prev === 1 && !sh; prev = p.d; const hx = x + (sh ? sp : 0); ys.push(y);
+                  heads.push({ x: hx.toFixed(1), y: y.toFixed(1), fill: many ? C.ink : 'none', sw: many ? 0 : 1.3, rx: (sp * 0.62).toFixed(2), ry: (sp * 0.45).toFixed(2) });
+                  if (p.a) acc.push({ x: (x - sp * 1.9).toFixed(1), y: (y + sp * 0.55).toFixed(1), t: p.a, fs: small ? 10 : 13 });
+                  for (let l = lo; l >= p.d; l -= 2) led += 'M' + (hx - sp) + ' ' + yOf(l) + 'h' + 2 * sp + ' ';
+                  for (let l = hi; l <= p.d; l += 2) led += 'M' + (hx - sp) + ' ' + yOf(l) + 'h' + 2 * sp + ' '; });
+                if (many && ys.length) stems += 'M' + (x + sp * 0.58).toFixed(1) + ' ' + Math.max(...ys).toFixed(1) + 'V' + (Math.min(...ys) - sp * 3.2).toFixed(1) + ' ';
+              };
+              bars.forEach((b, bi) => { const bx = x0 + bi * bw, many = b.length > 1;
+                b.forEach((e, ei) => { const x = bx + bw * (ei + 0.5) / b.length;
+                  if (e.s && !small) syms.push({ x: x.toFixed(1), y: tT - 2.6 * sp, t: e.s });
+                  if (e.slash) marks.push({ x: x.toFixed(1), y: (tT + 2.6 * sp).toFixed(1), t: '𝄍', fs: 16 });
+                  if (e.ask) marks.push({ x: x.toFixed(1), y: (tT + 2.8 * sp).toFixed(1), t: '?', fs: small ? 13 : 17 });
+                  if (trebleOn) put(e.rh, x, yT, 28, 40, many);
+                  if (grand) put(e.lh, x, yB, 16, 28, many);
+                  if (many && !e.rh.length && !e.lh.length && !e.slash && !e.ask) marks.push({ x: x.toFixed(1), y: (tT + 2.6 * sp).toFixed(1), t: '𝄾', fs: small ? 14 : 18 }); });
+                bl += 'M' + (bx + bw).toFixed(1) + ' ' + top + 'V' + bot + ' '; });
+              if (grand && trebleOn) bl += 'M2 ' + top + 'V' + bot + ' ';
+              // SVG text cannot hold a bound value (the runtime wraps it in a span), so the glyphs and names lie over the staff as HTML
+              const k = small ? 100 / W : 1, MU = "'Noto Music', serif", SE = "'Text Accidentals', 'Iowan Old Style', Georgia, serif";
+              const O = (x, y, t, fs, fam, mid, c, fw) => ({ l: (x / W * 100).toFixed(2) + '%', t: (y / H * 100).toFixed(2) + '%', s: t, fs: (fs * k).toFixed(1) + 'px', fam, tx: mid ? 'translate(-50%, -78%)' : 'translate(0, -78%)', c: c || C.ink, fw: fw || 400 });
+              const ov = clefs.map((c) => O(c.x, c.y, c.t, c.fs, MU)).concat(acc.map((a) => O(+a.x, +a.y, a.t, a.fs + 2, SE)), marks.map((m) => O(+m.x, +m.y, m.t, m.fs, MU, true, C.soft)), syms.map((q) => O(+q.x, +q.y, q.t, 14, SE, true, C.ink, 700)));
+              return { vb: '0 0 ' + W + ' ' + H, w: W, h: H, lines, led, stems, bl, heads, ov };
+            };
+            const cur = X.find((x) => x.id === st.ctOpen);
+            const KEYT = { circle: 'All 12, round the circle of fifths', chrom: 'All 12, up by half steps', one: 'One key', pick: 'Chords you choose' };
+            const meta = (x) => (x.read ? 'Chords you choose · waits for you' : (x.keys === 'one' ? 'One key' : 'All 12 keys') + ' · ' + x.bpm + ' BPM');
+            const top = () => setTimeout(() => document.querySelectorAll('main').forEach((m) => { m.scrollTop = 0; }), 0);
+            const open = (x) => () => { set({ ctOpen: x.id, sheet: null, ctKeys: x.keys, ctKey: 0, ctHands: x.hands, ctBpm: x.bpm || 60, ctPace: x.read ? 'wait' : 'metro' }); top(); };
+            const GRS = ['Inversions', 'Voicings', 'Arpeggios', 'Progressions', 'Accompaniment', 'Reading and ear'];
             const cf = st.ctF || 'All';
-            const now = { id: (cur || DR[0]).id, ty, rt, inv: invs, st: st.ctSt || 'block', or: st.ctOr || 'random', pace: st.ctPace || 'wait', bpm: st.ctBpm || 60, goal, key: st.ctKey || 0, show: st.ctShow || 'name' };
-            const sq = seqOf(now), bpm = now.bpm;
+            const card = (x) => ({ n: x.n, d: x.d, meta: meta(x), aria: x.n, open: open(x), e: eng(x, 150, x.bars[0].length > 2 ? 1 : 2, true) });
+            const kk = st.ctKeys || 'circle', kpc = st.ctKey || 0, hh2 = st.ctHands || 'Right', bpm = st.ctBpm || 60, pace = st.ctPace || 'metro';
+            const KN = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
             return {
-              ctInLib: !cur, ctInDrill: !!cur, ctBack: () => set({ ctOpen: null, sheet: null }),
-              ctStart: START.map((id) => card(DR.find((d) => d.id === id))),
-              ctCount: DR.length + ' drills',
-              ctChips: ['All'].concat(GRS).map((g) => { const on = g === cf, n = g === 'All' ? DR.length : DR.filter((d) => d.g === g).length; return { l: g, n, on, bg: on ? C.ink : '#FEFDFB', fg: on ? '#FEFDFB' : C.ink, nfg: on ? '#D9CFC4' : C.soft, ring: on ? 'none' : '0 0 0 1px ' + C.line, pick: () => set({ ctF: g }) }; }),
-              ctGroups: GRS.filter((g) => cf === 'All' || cf === g).map((g) => { const ds = DR.filter((d) => d.g === g); return { g, count: String(ds.length), items: ds.map(card) }; }),
-              ctName: cur ? cur.n : '', ctDeckN: sq.length + (sq.length === 1 ? ' chord' : ' chords') + (now.or === 'random' ? ' in the deck' : ', in order'),
-              ctDeck: sq.length ? [sq[0], sq[1] || sq[0], sq[2] || sq[0]] : ['–', '–', '–'],
-              ctDeckLine: sq.slice(0, 8).join('  ') + (sq.length > 8 ? '  …' : ''),
-              ctHow: STYN[now.st] + ' · ' + ORDN[now.or].replace(/,.*$/, '').toLowerCase() + ' · ' + (now.pace === 'wait' ? 'waits for you' : bpm + ' BPM'),
-              ctStyleName: STYN[now.st], ctOrderName: now.or === 'key' ? 'Through ' + keyName(now.key) + ' major' : ORDN[now.or].replace(/, through the keys$/, ''),
-              ctPaceName: now.pace === 'wait' ? 'Waits for you' : bpm + ' BPM', ctShowName: (SHOW.find((x) => x[0] === now.show) || SHOW[0])[1],
-              isCtSt: st.sheet === 'ctSt', isCtOr: st.sheet === 'ctOr', isCtPace: st.sheet === 'ctPace', isCtShow: st.sheet === 'ctShow',
-              openCtSt: () => set({ sheet: 'ctSt' }), openCtOr: () => set({ sheet: 'ctOr' }), openCtPace: () => set({ sheet: 'ctPace' }), openCtShow: () => set({ sheet: 'ctShow' }),
-              optStyle: STY.map(([g, xs]) => GRP(g, xs.map(([v, l, d, ex]) => ITEM({ radio: true, name: l, desc: d, ex, on: now.st === v, pick: () => set({ ctSt: v }) })), null)),
-              optOrder: [GRP('', ORD.map(([v, l, d, ex]) => ITEM({ radio: true, name: l, desc: d, ex, on: now.or === v, pick: () => set({ ctOr: v }) })), null)],
-              optShow: [GRP('', SHOW.map(([v, l, ex]) => ITEM({ radio: true, name: l, ex, on: now.show === v, pick: () => set({ ctShow: v }) })), null)],
-              optPace: [GRP('', [['wait', 'Waits for you', 'the next chord comes when this one is right'], ['metro', 'With the metronome', 'a chord every bar, at the tempo below']].map(([v, l, d]) => ITEM({ radio: true, name: l, desc: d, on: now.pace === v, pick: () => set({ ctPace: v }) })), null)],
+              ctInLib: !cur, ctInDrill: !!cur, ctBack: () => { set({ ctOpen: null, sheet: null }); top(); },
+              ctCount: X.length + ' exercises',
+              ctChips: ['All'].concat(GRS).map((g) => { const on = g === cf, n = g === 'All' ? X.length : X.filter((x) => x.g === g).length; return { l: g, n, on, bg: on ? C.ink : '#FEFDFB', fg: on ? '#FEFDFB' : C.ink, nfg: on ? '#D9CFC4' : C.soft, ring: on ? 'none' : '0 0 0 1px ' + C.line, pick: () => set({ ctF: g }) }; }),
+              ctGroups: GRS.filter((g) => cf === 'All' || cf === g).map((g) => { const xs = X.filter((x) => x.g === g); return { g, count: String(xs.length), items: xs.map(card) }; }),
+              ctName: cur ? cur.n : '', ctWhat: cur ? cur.d : '', ctGroup: cur ? cur.g : '',
+              ctEng: eng(cur || X[0], 338, 4, false), ctEngL: eng(cur || X[0], 520, 4, false),
+              ctIsRead: !!(cur && cur.read), ctNotRead: !(cur && cur.read),
+              ctKeysName: kk === 'one' ? KN[kpc] + ' major' : KEYT[kk] || KEYT.circle,
+              ctHandsName: hh2 === 'Both' ? 'Hands together' : hh2 + ' hand',
+              ctPaceName: pace === 'wait' ? 'Waits for you' : bpm + ' BPM',
+              isCtKeys: st.sheet === 'ctKeys', isCtHands: st.sheet === 'ctHands', isCtPace: st.sheet === 'ctPace',
+              openCtKeys: () => set({ sheet: 'ctKeys' }), openCtHands: () => set({ sheet: 'ctHands' }), openCtPace: () => set({ sheet: 'ctPace' }),
+              optKeys: [GRP('', [['circle', 'All 12, round the circle of fifths', 'C, F, B♭, E♭ … as songs move'], ['chrom', 'All 12, up by half steps', 'C, D♭, D, E♭ …'], ['one', 'One key', 'the key chosen below']].map(([v, l, d]) => ITEM({ radio: true, name: l, desc: d, on: kk === v, pick: () => set({ ctKeys: v }) })), null)],
+              ctKeyPills: KN.map((s, pc) => { const on = kpc === pc; return { s, on, bg: on ? C.ink : '#FEFDFB', fg: on ? '#FEFDFB' : C.ink, ring: on ? 'none' : '0 0 0 1px ' + C.line, aria: s + ' major', pick: () => set({ ctKey: pc, ctKeys: 'one' }) }; }),
+              optHands2: [GRP('', [['Right', 'Right hand', ''], ['Left', 'Left hand', 'an octave lower'], ['Both', 'Hands together', 'as written: the bass in the left hand']].map(([v, l, d]) => ITEM({ radio: true, name: l, desc: d, on: hh2 === v, pick: () => set({ ctHands: v }) })), null)],
+              optPace: [GRP('', [['metro', 'With the metronome', 'a count-in, then the beat'], ['wait', 'Waits for you', 'the next chord comes when this one is right']].map(([v, l, d]) => ITEM({ radio: true, name: l, desc: d, on: pace === v, pick: () => set({ ctPace: v }) })), null)],
               ctBpm: bpm + ' BPM', ctBpmDn: () => set({ ctBpm: Math.max(40, bpm - 4) }), ctBpmUp: () => set({ ctBpm: Math.min(200, bpm + 4) }),
-              ctKeyLab: 'Key, for Through a key', ctKeys: PCS.map((pc) => { const on = now.key === pc; return { s: keyName(pc), on, bg: on ? C.ink : '#FEFDFB', fg: on ? '#FEFDFB' : C.ink, ring: on ? 'none' : '0 0 0 1px ' + C.line, aria: keyName(pc) + ' major', pick: () => set({ ctKey: pc }) }; }),
-              ctStartT: 'Start · ' + goalT(goal).replace('Until you stop', 'until I stop').replace('5 min', '5 minutes') };
+              ctStartT: 'Start' };
           })() };
       })(),
       isRpRoots: st.sheet === 'rpRoots', openRpRoots: () => set({ sheet: 'rpRoots' }),
@@ -1011,7 +1023,7 @@ def PRACTISE(player):
     # Practise in the Player, on the page: three ways to drill this chord, each opening the Player
     PLAYMINI = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor"></path></svg>'
     r = f'<sc-for list="{{{{practise}}}}" as="p" hint-placeholder-count="5"><a href="{player}" style="min-height: 60px; padding: 8px 14px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}"><span style="flex: none; width: 36px; height: 36px; border-radius: 18px; background: {ACCENT}; display: flex; align-items: center; justify-content: center">{PLAYMINI}</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{p.a}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{p.b}}}}</span></span>{CHEV_R}</a></sc-for>'
-    return f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{{{{practiseT}}}}</h3><div style="border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{r}</div></section>'
+    return f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{{{{practiseT}}}}</h3><div style="border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{r}<a href="{'ChordTrainerLaptop.dc.html' if 'Laptop' in player else 'ChordTrainer.dc.html'}" style="min-height: 52px; padding: 8px 14px; display: flex; align-items: center; gap: 12px; color: {LINK}; text-decoration: none; font-size: 16px; font-weight: 600"><span style="flex: 1">More exercises in the Chord trainer</span><span style="display: flex; color: {SOFT}">{CHEV_R}</span></a></div></section>'
 
 def TITLEBLOCK(size):
     # the name as a lead sheet writes it; what it is; its inversions side by side, one tap each (position over the
@@ -1438,70 +1450,47 @@ B_RGOAL = OPTS('optGoal')
 RC_FIX = lambda c, h: h.replace('max-height: 86%;', 'height: 86%; box-sizing: border-box;').replace('max-height: 760px;', 'height: 680px;').replace('repeat(auto-fill, minmax(68px, 1fr))', 'repeat(3, minmax(0, 1fr))' if 'max-height: 86%' in h else 'repeat(4, minmax(0, 1fr))') if c == 'isRpSet' else h
 RC_SHEETS = lambda phone_like: (''.join(RC_FIX(c, BSHEET(c, t, b)) for c, t, b in (('isRpSet', 'Chord types', B_RSET), ('isRpInv', 'Inversions', B_RINV), ('isRpVoic', 'Voicing', B_RVOIC), ('isRpHands', 'Hands', B_RHANDS), ('isRpGoal', 'Session', B_RGOAL)))
   if phone_like else ''.join(RC_FIX(c, POPOVER(c, t, b, 'left: calc(50% + 296px); top: 120px', 420)) for c, t, b in (('isRpSet', 'Chord types', B_RSET), ('isRpInv', 'Inversions', B_RINV), ('isRpVoic', 'Voicing', B_RVOIC), ('isRpHands', 'Hands', B_RHANDS), ('isRpGoal', 'Session', B_RGOAL))))
-# ══ Chord trainer (canvas 154): Random chords becomes one drill among many. A library of drills (Start here, then
-# Find more by kind); a drill opens its setup, the Random chords page grown to five plain questions ══
-HON = '#B07A2A'
-_st = lambda y: ''.join(f'<path d="M6 {y + i * 6}h44" stroke="{LINE}" stroke-width="1"/>' for i in range(5))
-_nh = lambda x, y, c=INK: f'<ellipse cx="{x}" cy="{y}" rx="3.6" ry="2.7" transform="rotate(-20 {x} {y})" fill="{c}"/>'
-_sv = lambda inner: f'<svg viewBox="0 0 56 56" width="56" height="56" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round">{inner}</svg>'
-PIC = {
-  'card': _sv(f'<rect x="20" y="9" width="26" height="36" rx="5" transform="rotate(9 33 27)" fill="#FEFDFB" stroke="{LINE}"/><rect x="10" y="11" width="26" height="36" rx="5" transform="rotate(-6 23 29)" fill="#FEFDFB" stroke="{INK}" stroke-width="1.2"/><text x="23" y="33" text-anchor="middle" transform="rotate(-6 23 29)" font-family="Iowan Old Style, Georgia, serif" font-size="11" font-weight="700" fill="{INK}" stroke="none">Am7</text>'),
-  'cards3': _sv(''.join(f'<rect x="{6 + i * 15}" y="{14 + (i % 2) * 4}" width="16" height="24" rx="3" fill="#FEFDFB" stroke="{INK if i == 1 else LINE}" stroke-width="1.2"/>' for i in range(3)) + f'<text x="29" y="31" text-anchor="middle" font-family="Iowan Old Style, Georgia, serif" font-size="7.5" font-weight="700" fill="{INK}">C/E</text>'),
-  'inv': _sv(_st(16) + ''.join(_nh(14 + i * 14, 40 - i * 6 - j * 6, HON if j == 0 else INK) for i in range(3) for j in range(3))),
-  'arp': _sv(_st(16) + ''.join(_nh(8 + i * 6.6, y, HON if i in (0, 6) else INK) for i, y in enumerate([40, 37, 34, 31, 28, 25, 22]))),
-  'broken': _sv(_st(16) + ''.join(_nh(10 + i * 10, y) for i, y in enumerate([40, 31, 37, 31, 40])) + f'<path d="M13 40V22M23 31V22M33 37V22M43 31V22" stroke="{INK}" stroke-width="1.2"/><path d="M13 22h30" stroke="{INK}" stroke-width="2.4"/>'),
-  'rolled': _sv(_st(16) + ''.join(_nh(34, y) for y in (40, 34, 28, 22)) + f'<path d="M20 44c-3-2 3-4 0-6s3-4 0-6 3-4 0-6 3-4 0-6" stroke="{HON}" stroke-width="1.6"/>'),
-  'rhythm': _sv(''.join(f'<ellipse cx="{11 + i * 11}" cy="38" rx="4.2" ry="3.1" transform="rotate(-20 {11 + i * 11} 38)" fill="{HON if i == 0 else INK}"/><path d="M{14.6 + i * 11} 37V16" stroke="{HON if i == 0 else INK}" stroke-width="1.4"/>' for i in range(4)) + f'<path d="M6 46h44" stroke="{LINE}"/>'),
-  'roman': _sv(''.join(f'<rect x="{6 + i * 9}" y="{42 - i * 5}" width="7" height="{6 + i * 5}" rx="2" fill="{HON if i == 0 else LINE}"/>' for i in range(5)) + f'<text x="10" y="22" font-family="Iowan Old Style, Georgia, serif" font-size="11" font-weight="700" fill="{INK}">I ii iii</text>'),
-  'circle': _sv(f'<circle cx="28" cy="28" r="18" stroke="{LINE}" stroke-width="1.2"/>' + ''.join(f'<circle cx="{28 + 18 * __import__("math").sin(i * 0.5236):.1f}" cy="{28 - 18 * __import__("math").cos(i * 0.5236):.1f}" r="{3.4 if i in (0, 11, 10) else 2.2}" fill="{HON if i in (0, 11, 10) else INK}"/>' for i in range(12)) + f'<text x="28" y="32" text-anchor="middle" font-family="Iowan Old Style, Georgia, serif" font-size="11" font-weight="700" fill="{INK}">C</text>'),
-  'keys': _sv(f'<rect x="6" y="14" width="44" height="28" rx="3" fill="#FEFDFB" stroke="{LINE}"/>' + ''.join(f'<path d="M{6 + i * 44 / 7:.1f} 14v28" stroke="{LINE}"/>' for i in range(1, 7)) + ''.join(f'<rect x="{6 + i * 44 / 7 - 2.4:.1f}" y="14" width="4.8" height="16" rx="1" fill="{HON if i == 1 else INK}"/>' for i in (1, 2, 4, 5, 6)) + f'<rect x="7" y="34" width="4.4" height="6" rx="1.4" fill="{HON}"/><rect x="13.3" y="34" width="4.4" height="6" rx="1.4" fill="{HON}" opacity=".55"/>'),
-  'lead': _sv(_st(16) + ''.join(_nh(x, y) for x, y in ((14, 40), (14, 31), (14, 25), (40, 37), (40, 31), (40, 22))) + f'<path d="M18 40l18-3M18 31h18M18 25l18-3" stroke="{HON}" stroke-width="1.4"/>'),
-  'staff': _sv(_st(14) + ''.join(_nh(28, y) for y in (38, 32, 26, 20)) + f'<path d="M31.6 38V8" stroke="{INK}" stroke-width="1.2"/>'),
-  'ear': _sv(f'<path d="M14 23h6l8-7v24l-8-7h-6z" fill="{INK}" stroke="{INK}" stroke-width="1.2"/><path d="M34 21a9 9 0 0 1 0 14M38 16a15 15 0 0 1 0 24" stroke="{HON}" stroke-width="1.8"/>'),
-}
-CT_PIC = ''.join(f'<sc-if value="{{{{d.p_{k}}}}}" hint-placeholder-val="{{{{false}}}}">{v}</sc-if>' for k, v in PIC.items())
-CT_CARD = (f'<button type="button" aria-label="{{{{d.aria}}}}" onClick="{{{{d.open}}}}" style="min-width: 0; width: 100%; box-sizing: border-box; border: 0; border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; padding: 12px 12px 12px 12px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left">'
-  f'<span aria-hidden="true" style="flex: none; width: 56px; height: 56px; border-radius: 12px; background: {PAGE}; display: flex; align-items: center; justify-content: center">{CT_PIC}</span>'
-  f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 16px; font-weight: 600; text-wrap: balance">{{{{d.n}}}}</span>'
-  f'<span style="font-family: {SERIF}; font-size: 14px; color: {INK}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{d.line}}}}</span>'
+CT_IF = lambda c, h, v='true': f'<sc-if value="{{{{{c}}}}}" hint-placeholder-val="{{{{{v}}}}}">{h}</sc-if>'
+# ══ Chord trainer (canvas 156): the books' exercises, named as the books name them, grouped as they group them. A row
+# shows the exercise's first bar engraved; an exercise opens its page: the bars, then which keys, which hand, what tempo ══
+def ENG(v, size):
+    return (f'<div style="position: relative; line-height: 1"><svg viewBox="{{{{{v}.vb}}}}" {size} aria-hidden="true" style="display: block; height: auto">'
+      f'<path d="{{{{{v}.lines}}}}" stroke="{INK}" stroke-width=".8" opacity=".55"></path><path d="{{{{{v}.bl}}}}" stroke="{INK}" stroke-width=".9" opacity=".7"></path>'
+      f'<path d="{{{{{v}.led}}}}" stroke="{INK}" stroke-width=".9"></path><path d="{{{{{v}.stems}}}}" stroke="{INK}" stroke-width="1.1"></path>'
+      f'<sc-for list="{{{{{v}.heads}}}}" as="h" hint-placeholder-count="3"><ellipse cx="{{{{h.x}}}}" cy="{{{{h.y}}}}" rx="{{{{h.rx}}}}" ry="{{{{h.ry}}}}" transform="rotate(-20 {{{{h.x}}}} {{{{h.y}}}})" fill="{{{{h.fill}}}}" stroke="{INK}" stroke-width="{{{{h.sw}}}}"></ellipse></sc-for></svg>'
+      f'<sc-for list="{{{{{v}.ov}}}}" as="o" hint-placeholder-count="2"><span aria-hidden="true" style="position: absolute; left: {{{{o.l}}}}; top: {{{{o.t}}}}; transform: {{{{o.tx}}}}; font-family: {{{{o.fam}}}}; font-size: {{{{o.fs}}}}; font-weight: {{{{o.fw}}}}; color: {{{{o.c}}}}; white-space: nowrap; line-height: 1">{{{{o.s}}}}</span></sc-for></div>')
+CT_CARD = (f'<button type="button" aria-label="{{{{d.aria}}}}" onClick="{{{{d.open}}}}" style="min-width: 0; width: 100%; box-sizing: border-box; border: 0; border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; padding: 12px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left">'
+  f'<span style="flex: none; width: 112px; min-height: 72px; box-sizing: border-box; padding: 4px 6px; border-radius: 10px; background: {PAGE}; display: flex; align-items: center; justify-content: center">{ENG("d.e", "width=\"100\"")}</span>'
+  f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 16px; font-weight: 600; line-height: 1.25; text-wrap: balance">{{{{d.n}}}}</span>'
+  f'<span style="font-size: 14px; line-height: 1.35; color: {SOFT}; text-wrap: pretty; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{{{d.d}}}}</span>'
   f'<span style="font-size: 13px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{d.meta}}}}</span></span>'
   f'<span style="flex: none; color: {SOFT}; display: flex">{CHEV_R}</span></button>')
-CT_GRID = lambda lst, cols: f'<div style="display: grid; grid-template-columns: {cols}; gap: 8px"><sc-for list="{{{{{lst}}}}}" as="d" hint-placeholder-count="5">{CT_CARD}</sc-for></div>'
-CT_H = lambda t, n='': f'<div style="display: flex; align-items: baseline; gap: 8px; margin: 0 4px"><h2 style="flex: 1; margin: 0; font-size: 19px; font-weight: 700">{t}</h2>{n}</div>'
 def CT_LIB(cols):
-    return (f'<section aria-label="Start here" style="flex: none; display: flex; flex-direction: column; gap: 12px">{CT_H("Start here")}{CT_GRID("ctStart", cols)}</section>'
-      f'<section aria-label="Find more" style="flex: none; display: flex; flex-direction: column; gap: 12px">{CT_H("Find more", f"<span style=\"font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums\">{{{{ctCount}}}}</span>")}'
-      f'<div role="group" aria-label="Kind of drill" style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{{{ctChips}}}}" as="c" hint-placeholder-count="8"><button type="button" aria-pressed="{{{{c.on}}}}" onClick="{{{{c.pick}}}}" style="flex: none; height: 36px; padding: 0 14px; border: 0; border-radius: 18px; background: {{{{c.bg}}}}; color: {{{{c.fg}}}}; box-shadow: {{{{c.ring}}}}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 6px">{{{{c.l}}}}<span style="font-weight: 500; color: {{{{c.nfg}}}}; font-variant-numeric: tabular-nums">{{{{c.n}}}}</span></button></sc-for></div>'
-      f'<sc-for list="{{{{ctGroups}}}}" as="g" hint-placeholder-count="3"><section style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px"><div style="display: flex; align-items: baseline; gap: 8px; margin: 0 4px"><h3 style="flex: 1; margin: 0; font-size: 14px; font-weight: 600">{{{{g.g}}}}</h3><span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{g.count}}}}</span></div>'
-      f'<div style="display: grid; grid-template-columns: {cols}; gap: 8px"><sc-for list="{{{{g.items}}}}" as="d" hint-placeholder-count="3">{CT_CARD}</sc-for></div></section></sc-for></section>')
-# the drill's setup: the deck card it will show, then five plain questions, each a row opening its option list
-CT_HERO = (RC_HERO.replace('aria-label="Your deck"', 'aria-label="The drill"').replace('{{rpDeck.', '{{ctDeck.').replace('{{rpDeckN}}', '{{ctDeckN}}').replace('{{rpDeckLine}}', '{{ctDeckLine}}')
-  .replace('>See a chord, play it</h2>', '>{{ctName}}</h2>')
-  .replace('One chord name at a time, drawn from your deck. Play it; when it is right, the next one comes.', '{{ctHow}}'))
-assert '{{ctHow}}' in CT_HERO and '{{ctName}}' in CT_HERO and 'rpDeck' not in CT_HERO
-CT_ROWS = (RC_SEC('Which chords', GROUP(('link', 'Chord types', '{{rpTyVal}}', 'openRpSet'), ('link', 'Inversions', '{{rpInvName}}', 'openRpInv'), bg='#FEFDFB'), RC_ROOTS)
-  + RC_SEC('How you play them', GROUP(('link', 'Shown as', '{{ctShowName}}', 'openCtShow'), ('link', 'Style', '{{ctStyleName}}', 'openCtSt'), ('link', 'Order', '{{ctOrderName}}', 'openCtOr'), ('link', 'Voicing', '{{rpVoicName}}', 'openRpVoic'), ('link', 'Hands', '{{rpHandsLong}}', 'openRpHands'), bg='#FEFDFB'))
-  + RC_SEC('Pace and length', GROUP(('link', 'Pace', '{{ctPaceName}}', 'openCtPace'), ('link', 'Session', '{{rpGoalName}}', 'openRpGoal'), ('toggle', 'Missed chords come back', 'rpBackOn', 'toggleRpBack'), bg='#FEFDFB')))
-B_CTKEYS = (f'<section style="display: flex; flex-direction: column; gap: 8px"><h4 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600">{{{{ctKeyLab}}}}</h4><div role="radiogroup" aria-label="Key" style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{ctKeys}}}}" as="k" hint-placeholder-count="12">'
-  f'<button type="button" role="radio" aria-checked="{{{{k.on}}}}" aria-label="{{{{k.aria}}}}" onClick="{{{{k.pick}}}}" style="min-width: 0; height: 44px; border: 0; border-radius: 22px; background: {{{{k.bg}}}}; color: {{{{k.fg}}}}; box-shadow: {{{{k.ring}}}}; font: inherit; font-family: {SERIF}; font-size: 16px; font-weight: 600">{{{{k.s}}}}</button></sc-for></div></section>')
-B_CTST = OPTP('How your hands play each chord.', OPTS('optStyle'))
-B_CTOR = f'<div style="display: flex; flex-direction: column; gap: 16px">{OPTS("optOrder")}{B_CTKEYS}</div>'
-B_CTSHOW = OPTP('What the card shows you; you find the chord on the keys.', OPTS('optShow'))
+    return (f'<div role="group" aria-label="Kind of exercise" style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{{{ctChips}}}}" as="c" hint-placeholder-count="7"><button type="button" aria-pressed="{{{{c.on}}}}" onClick="{{{{c.pick}}}}" style="flex: none; height: 36px; padding: 0 14px; border: 0; border-radius: 18px; background: {{{{c.bg}}}}; color: {{{{c.fg}}}}; box-shadow: {{{{c.ring}}}}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 6px">{{{{c.l}}}}<span style="font-weight: 500; color: {{{{c.nfg}}}}; font-variant-numeric: tabular-nums">{{{{c.n}}}}</span></button></sc-for></div>'
+      f'<sc-for list="{{{{ctGroups}}}}" as="g" hint-placeholder-count="3"><section style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: baseline; gap: 8px; margin: 0 4px"><h2 style="flex: 1; margin: 0; font-size: 17px; font-weight: 700">{{{{g.g}}}}</h2><span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{g.count}}}}</span></div>'
+      f'<div style="display: grid; grid-template-columns: {cols}; gap: 8px"><sc-for list="{{{{g.items}}}}" as="d" hint-placeholder-count="3">{CT_CARD}</sc-for></div></section></sc-for>')
+def CT_HERO(v, size):
+    return (f'<section aria-label="The exercise" style="flex: none; border-radius: 20px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; flex-direction: column; gap: 8px">'
+      f'<span style="font-size: 13px; font-weight: 600; color: {SOFT}">{{{{ctGroup}}}}</span><h2 style="margin: 0; font-size: 21px; font-weight: 700; line-height: 1.2; text-wrap: balance">{{{{ctName}}}}</h2>'
+      f'<p style="margin: 0; font-size: 15px; line-height: 1.45; color: {SOFT}; text-wrap: pretty">{{{{ctWhat}}}}</p><div style="margin-top: 8px">{ENG(v, size)}</div></section>')
+CT_ROWS = (CT_IF('ctNotRead', RC_SEC('Practice', GROUP(('link', 'Keys', '{{ctKeysName}}', 'openCtKeys'), ('link', 'Hands', '{{ctHandsName}}', 'openCtHands'), ('link', 'Tempo', '{{ctPaceName}}', 'openCtPace'), bg='#FEFDFB')))
+  + CT_IF('ctIsRead', RC_SEC('Which chords', GROUP(('link', 'Chord types', '{{rpTyVal}}', 'openRpSet'), bg='#FEFDFB'), RC_ROOTS) + RC_SEC('Practice', GROUP(('link', 'Hands', '{{ctHandsName}}', 'openCtHands'), ('link', 'Tempo', '{{ctPaceName}}', 'openCtPace'), ('toggle', 'Missed chords come back', 'rpBackOn', 'toggleRpBack'), bg='#FEFDFB')), 'false'))
+B_CTKEYS = (f'<div style="display: flex; flex-direction: column; gap: 16px">{OPTS("optKeys")}<section style="display: flex; flex-direction: column; gap: 8px"><h4 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600">Key</h4><div role="radiogroup" aria-label="Key" style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{ctKeyPills}}}}" as="k" hint-placeholder-count="12">'
+  f'<button type="button" role="radio" aria-checked="{{{{k.on}}}}" aria-label="{{{{k.aria}}}}" onClick="{{{{k.pick}}}}" style="min-width: 0; height: 44px; border: 0; border-radius: 22px; background: {{{{k.bg}}}}; color: {{{{k.fg}}}}; box-shadow: {{{{k.ring}}}}; font: inherit; font-family: {SERIF}; font-size: 16px; font-weight: 600">{{{{k.s}}}}</button></sc-for></div></section></div>')
 B_CTPACE = (f'<div style="display: flex; flex-direction: column; gap: 16px">{OPTS("optPace")}<div style="display: flex; align-items: center; gap: 12px; border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; padding: 6px 8px 6px 16px"><span style="flex: 1; font-size: 16px">Tempo</span>{STEPPER("ctBpm", "ctBpmDn", "ctBpmUp", 80)}</div></div>')
-CT_SH = (('isRpSet', 'Chord types', B_RSET), ('isRpInv', 'Inversions', B_RINV), ('isCtShow', 'Shown as', B_CTSHOW), ('isCtSt', 'Style', B_CTST), ('isCtOr', 'Order', B_CTOR), ('isRpVoic', 'Voicing', B_RVOIC), ('isRpHands', 'Hands', B_RHANDS), ('isCtPace', 'Pace', B_CTPACE), ('isRpGoal', 'Session', B_RGOAL))
+CT_SH = (('isRpSet', 'Chord types', B_RSET), ('isCtKeys', 'Keys', B_CTKEYS), ('isCtHands', 'Hands', OPTS('optHands2')), ('isCtPace', 'Tempo', B_CTPACE))
 CT_SHEETS = lambda phone_like: (''.join(RC_FIX(c, BSHEET(c, t, b)) for c, t, b in CT_SH) if phone_like else ''.join(RC_FIX(c, POPOVER(c, t, b, 'left: calc(50% + 296px); top: 120px', 420)) for c, t, b in CT_SH))
 CT_GO = lambda href, bottom: f'<sc-if value="{{{{ctInDrill}}}}" hint-placeholder-val="{{{{false}}}}">' + RC_GO(href, bottom).replace('{{rpStartT}}', '{{ctStartT}}') + '</sc-if>'
-CT_IF = lambda c, h, v='true': f'<sc-if value="{{{{{c}}}}}" hint-placeholder-val="{{{{{v}}}}}">{h}</sc-if>'
 PH_CT = (CT_IF('ctInLib', PH_HEAD('Chord trainer', piano=False))
   + CT_IF('ctInDrill', f'<div style="flex: none; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px">{GLASSBTN("Back to Chord trainer", CHEV_L, act="ctBack")}<h1 style="margin: 0; font-size: 16px; font-weight: 600">Chord trainer</h1><span style="width: 44px"></span></div>', 'false'))
 LP_CT = (CT_IF('ctInLib', LP_HEAD('Chord trainer', piano=False))
   + CT_IF('ctInDrill', f'<div style="flex: none; height: 68px; display: flex; align-items: center; padding: 0 20px"><div style="display: flex; align-items: center; gap: 14px">{GLASSBTN("Back to Chord trainer", CHEV_L, act="ctBack")}<h1 style="margin: 0; font-size: 18px; font-weight: 600">Chord trainer</h1></div></div>', 'false'))
 phone('ChordTrainer', 'Chord trainer', PH_CT + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 120px; display: flex; flex-direction: column; gap: 24px">'
-      + CT_IF('ctInLib', f'<div style="display: flex; flex-direction: column; gap: 32px">{CT_LIB("minmax(0, 1fr)")}</div>') + CT_IF('ctInDrill', f'<div style="display: flex; flex-direction: column; gap: 20px">{CT_HERO}{CT_ROWS}</div>', 'false') + '</main>' + CT_GO('PlayerPractice.dc.html', 30),
+      + CT_IF('ctInLib', f'<div style="display: flex; flex-direction: column; gap: 24px">{CT_LIB("minmax(0, 1fr)")}</div>') + CT_IF('ctInDrill', f'<div style="display: flex; flex-direction: column; gap: 20px">{CT_HERO("ctEng", "width=\"100%\"")}{CT_ROWS}</div>', 'false') + '</main>' + CT_GO('PlayerPractice.dc.html', 30),
       ch_js({'root': 2, 'q': 1}, 402, 168, 2, 150), LAYERS(True, 'A') + CT_SHEETS(True))
 write_laptop('ChordTrainerLaptop', 'Chord trainer, laptop', LP_CT + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 40px 130px; display: flex; flex-direction: column; align-items: center">'
-      + CT_IF('ctInLib', f'<div style="width: 1080px; max-width: 100%; display: flex; flex-direction: column; gap: 32px">{CT_LIB("repeat(3, minmax(0, 1fr))")}</div>')
-      + CT_IF('ctInDrill', f'<div style="width: 560px; max-width: 100%; display: flex; flex-direction: column; gap: 20px">{CT_HERO}{CT_ROWS}</div>', 'false') + '</main>' + CT_GO('PlayerLaptop.dc.html', 24) + CT_SHEETS(False), {'root': 2, 'q': 1}, 'A')
+      + CT_IF('ctInLib', f'<div style="width: 1080px; max-width: 100%; display: flex; flex-direction: column; gap: 24px">{CT_LIB("repeat(3, minmax(0, 1fr))")}</div>')
+      + CT_IF('ctInDrill', f'<div style="width: 560px; max-width: 100%; display: flex; flex-direction: column; gap: 20px">{CT_HERO("ctEngL", "width=\"100%\"")}{CT_ROWS}</div>', 'false') + '</main>' + CT_GO('PlayerLaptop.dc.html', 24) + CT_SHEETS(False), {'root': 2, 'q': 1}, 'A')
 for f in ('RandomChords', 'RandomChordsLaptop'):  # replaced by the Chord trainer (canvas 154)
     if os.path.exists(OUT + f + '.dc.html'): os.remove(OUT + f + '.dc.html')
 for f in ('ChordsApp', 'ChordsDesk', 'ChordsB', 'ChordsBLaptop'):  # B, the chord shelf, was drawn in v80 and not chosen

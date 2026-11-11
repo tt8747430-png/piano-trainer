@@ -18,24 +18,25 @@ def lapbody(top, left, right, dock=''):
 SPACER = '<span style="flex: 1"></span>'
 
 # ═════ Practice overview (R39-4: relevance first, pictures that show the content) ═════
-HARMONY = [('keys', 'Chords', 'Every chord and its inversions', '12 of 48', 'Chords.dc.html'), ('cards', 'Chord trainer', 'Inversions, keys, arpeggios, rhythms', 'Not started', 'ChordTrainer.dc.html'), ('staff', 'Scales and keys', 'Scales as the books finger them', '5 of 24', 'Scales.dc.html'),
-           ('arc', 'Intervals', 'Every interval, seen and heard', '', 'Intervals.dc.html'), ('roman', 'Progressions', 'Known progressions in any key', '', 'Progressions.dc.html')]
-PLAYING = [('roll', 'Accompaniment', 'Left-hand and right-hand patterns', '', 'Accompaniment.dc.html'), ('chart', 'Chord player', 'Your chord sheet, played by a band', '', 'ChordPlayer.dc.html'),
-           ('drill', 'Exercises', 'Hanon, Barry Harris, Piano With Jonny', '', 'Exercises.dc.html'), ('quiz', 'Quiz', 'Chords, keys and intervals', '7 to check', 'Quiz.dc.html')]
-TOOLS = [('metro', 'Metronome', '120 BPM · 4/4', '', 'Metronome.dc.html'), ('needle', 'Tuner', 'How in tune a note is', '', 'Tuner.dc.html'), ('lens', 'Chord finder', 'Names any chord you play', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Every key and its chords', '', 'CircleOfFifths.dc.html')]
-def upnext(lap):
-    return CARD(f'<div style="display: flex; gap: 14px; align-items: center">{pic("keys", 64)}<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 13px; font-weight: 600; color: #A8551F">From Amazing Grace</span><span style="font-size: 20px; font-weight: 700">D7 and its inversions</span><span style="font-size: 14px; color: {SOFT}">The chord before bar 12 · about 5 minutes</span></div></div>'
-                f'<div style="display: flex; margin-top: 14px">{BTN(PLAY.replace("22", "18") + " Start", href=L("Chords.dc.html", lap))}</div>')
-NEXTROWS = lambda lap: PLIST([('staff', 'G major scale, hands together', 'Step 3 of the tempo ladder · 72 BPM', '', L('Scales.dc.html', lap)), ('quiz', 'Name the triad', 'Yesterday 14 of 20 · five minutes', '', L('QuizRun.dc.html', lap))])
+# canvas 156 (owner: "the chord trainer will be in the tools separate from the theory… this chords page it is more theory
+# than harmony… I dont like the up next and recent practices, because they mislead"): as musicca sorts it (Lessons ·
+# Exercises · Tools): Theory, the pages that explain; Playing, what is played; Tools, the trainer and the utilities. No
+# Up next and no counts that claim progress the app does not measure.
+THEORY = [('keys', 'Chords', 'Every chord, its notes and inversions', '', 'Chords.dc.html'), ('staff', 'Scales and keys', 'Every scale, with its fingering', '', 'Scales.dc.html'),
+          ('arc', 'Intervals', 'Each interval, seen and heard', '', 'Intervals.dc.html'), ('roman', 'Progressions', 'Common progressions in any key', '', 'Progressions.dc.html')]
+PLAYING = [('roll', 'Accompaniment', 'Left- and right-hand patterns', '', 'Accompaniment.dc.html'), ('chart', 'Chord player', 'Your chord sheet, played by a band', '', 'ChordPlayer.dc.html'),
+           ('drill', 'Exercises', 'Hanon, Barry Harris and more', '', 'Exercises.dc.html'), ('quiz', 'Quiz', 'Name chords, keys and intervals', '', 'Quiz.dc.html')]
+TOOLS = [('cards', 'Chord trainer', 'Inversions, voicings, arpeggios', '', 'ChordTrainer.dc.html'), ('metro', 'Metronome', '120 BPM · 4/4', '', 'Metronome.dc.html'), ('needle', 'Tuner', 'How in tune a note is', '', 'Tuner.dc.html'),
+         ('lens', 'Chord finder', 'Names any chord you play', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Every key and its chords', '', 'CircleOfFifths.dc.html')]
 TOOLSBTN = f'<button type="button" onClick="{{{{openTools}}}}" style="height: 44px; padding: 0 14px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">Tools</button>'
 MAIN = js(r"    return { ...common(st, set), toolsOn: st.sheet === 'tools', openTools: () => set({ sheet: 'tools' }) };")
 ph = f'''{TOP('', '', TOOLSBTN + IB('Search', SEARCH.replace('18', '22'), href='#'))}{LARGE('Practice')}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 130px; display: flex; flex-direction: column; gap: 14px">
-{H2('Up next')}{upnext(False)}{NEXTROWS(False)}{H2('Harmony')}{PLIST(HARMONY)}{H2('Playing')}{PLIST(PLAYING)}{H2('Tools')}{PLIST(TOOLS)}</main>{TABBAR('Practice')}'''
+{H2('Theory')}{PLIST(THEORY)}{H2('Playing')}{PLIST(PLAYING)}{H2('Tools')}{PLIST(TOOLS)}</main>{TABBAR('Practice')}'''
 grid = lambda rows: '<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px">' + ''.join(PCARD(p, t, s, v, L(h, True)) for p, t, s, v, h in rows) + '</div>'
 lm = f'''{LTOP('', TOOLSBTN + IB('Search', SEARCH.replace('18', '22'), href='#'))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">
-<h1 style="margin: 0; font-size: 34px; font-weight: 700">Practice</h1>{H2('Up next')}<div style="display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; align-items: start">{upnext(True)}{NEXTROWS(True)}</div>
-{H2('Harmony')}{grid(HARMONY)}{H2('Playing')}{grid(PLAYING)}{H2('Tools')}{grid(TOOLS)}</main>'''
+<h1 style="margin: 0; font-size: 34px; font-weight: 700">Practice</h1>
+{H2('Theory')}{grid(THEORY)}{H2('Playing')}{grid(PLAYING)}{H2('Tools')}{grid(TOOLS)}</main>'''
 TOOLSHEET = PLIST(TOOLS)
 detail('Main', 'Practice', MAIN, ph, lm, '', BSHEET('toolsOn', 'Tools', TOOLSHEET), POPOVER('toolsOn', 'Tools', PLIST([(p, t, s, v, L(h, True)) for p, t, s, v, h in TOOLS]), 'right: 40px; top: 60px', 400))
 
