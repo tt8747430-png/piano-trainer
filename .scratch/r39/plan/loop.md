@@ -204,3 +204,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - 2026-11-11: Musicca's chord player page documented against the Chord player canvas (practice-chord-player.md, Reference); six proposals, not drawn yet.
 - v154: Random chords becomes the Chord trainer: 24 drills (Start here, Find more by kind), one setup with Shown as, Style, Order, Pace added; phone and laptop shot in the runtime.
 - v156: the Chord trainer becomes 25 exercises from the owner's books, engraved, in Tools; Practice is Theory · Playing · Tools with no Up next; the sheets' groups no longer shrink; phone, laptop and the overview shot in the runtime.
+- v157: "the progressions page is broken": the phone lists of Progressions, Accompaniment and Exercises were empty because the editor's and admin's generators reused the library's SECTIONS helper name; renamed to ED_SECTIONS and ADM_SECTIONS, only the three boards changed, all three shot in the runtime.
