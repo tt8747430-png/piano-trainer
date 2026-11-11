@@ -659,6 +659,24 @@
       "is_interactive": true,
       "page": "places"
     },
+    "SignIn.dc.html": {
+      "x": 3180,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Sign in and the account pages, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "Legal.dc.html": {
+      "x": 3710,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Privacy Policy and Terms, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
     "LearnLaptop.dc.html": {
       "x": 0,
       "y": 1720,
@@ -710,6 +728,24 @@
       "w": 2143,
       "h": 1299,
       "title": "A course, read and edited, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "SignInLaptop.dc.html": {
+      "x": 13338,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Sign in and the account pages, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LegalLaptop.dc.html": {
+      "x": 15561,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Privacy Policy and Terms, laptop",
       "is_interactive": true,
       "page": "places"
     }
@@ -809,7 +845,7 @@
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 3100,
+      "maxW": 4160,
       "page": "places"
     },
     "places-laptop": {
@@ -817,7 +853,7 @@
       "y": 1420,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 13258,
+      "maxW": 17704,
       "page": "places"
     }
   },
@@ -895,12 +931,16 @@
     "Admin.dc.html",
     "Lesson.dc.html",
     "Course.dc.html",
+    "SignIn.dc.html",
+    "Legal.dc.html",
     "LearnLaptop.dc.html",
     "ProfileLaptop.dc.html",
     "SettingsLaptop.dc.html",
     "AdminLaptop.dc.html",
     "LessonLaptop.dc.html",
-    "CourseLaptop.dc.html"
+    "CourseLaptop.dc.html",
+    "SignInLaptop.dc.html",
+    "LegalLaptop.dc.html"
   ],
   "pages": [
     {
