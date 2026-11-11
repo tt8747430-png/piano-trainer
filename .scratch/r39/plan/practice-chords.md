@@ -19,7 +19,7 @@ changes.
   Hands).
 - "No setting disables or hides another": a voicing the chord cannot take stays in the list, faded, saying why
   ("Needs a 7th", "Needs a chord of 4 notes", "Suits a minor or suspended chord"); nothing else changes.
-- Random chords in the Chords page's shape (canvas 137, "refactor this page like we did with the chords page. I dont like the chords selection for praticing page"): the hands at the keys show the chord drawn; what is drawn is three pickers in the chord's own type (C major · Sevenths · Root position), each opening its drawer, with one line under them (7 chords in the draw · Close position · right hand); In the draw is a card of the chords, each a bar of one button, tapped to leave it out (struck through, kept in place), with Try one; Session is three rows (16 chords, For 5 minutes, Until I stop) and Missed chords come back; the bar is the Chords page's bar, Voicings · Start · Hands. Never on this page: chip walls, a row of letters with ♭ ♮ ♯ segments, Major/Minor and Triads/Sevenths as segmented rows; those choices live in their drawers.
+- Random chords is a drill's setup, not a chord page (canvas 138, "it is still not very understandable. and it looks like the same page. and I dont understand what this in the draw means and how to choose voicing is also not vey understandable and what is the most important on this page"): no hands at the keys (they would give the answer away); first a card showing the drill itself, a chord name on a flashcard (Dm7, in C major) with "See a chord, play it", one line on how it works and Show another; then three plain questions as rows, each value said in words and opened in its drawer: Which chords (Chords from · Chords · Inversions), How you play them (Voicing · Hands), How long (Session, Missed chords come back); Start, the most important thing, full width in honey at the foot, saying how long ("Start · 16 chords"). "In the draw" is gone: inside the Chords drawer the key's chords are "Which of them", a grid of chord buttons, "Tap a chord to leave it out". Every voicing says in a line how its notes sit ("the 2nd note from the top an octave lower"); one it cannot take is faded with the reason. On Practice it has its own icon (two cards) and says "Name a chord, play it: a drill". Replaces canvas 137 (the Chords page's shape, its pickers, the bar Voicings · Start · Hands). Never: walls of chips, segmented rows on the page, invented words for the set of chords.
 
 ## Today
 
@@ -53,6 +53,7 @@ Play and Arpeggio | Colour notes and Practise this chord), the keys across the f
 ## History
 
 - 2026-11-08: drawn (canvas v3); waiting for the owner.
+- 2026-11-11: Random chords in the Chords page's shape (canvas 137), then as a drill's setup (canvas 138).
 
 Sources: Piano Companion's chord page (symbol, notes, staff, keys, inversions); musicca's chord pages (root and chord
 pickers, the chord on staff and keys); Mark Levine, _The Jazz Piano Book_ (rootless A and B, So What, locked hands).

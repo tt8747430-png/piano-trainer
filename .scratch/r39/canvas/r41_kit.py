@@ -144,8 +144,9 @@ def TABBAR(cur):
 
 # small pictures that show the content (Practice's rows and cards)
 def pic(kind, s=44):
-    bg = {'keys': PEACH, 'staff': SKY, 'arc': SAGE, 'roman': HONEY, 'roll': LILAC, 'chips': HONEY, 'drill': SAGE, 'quiz': PEACH, 'metro': FILL, 'needle': FILL, 'lens': FILL, 'circle': FILL, 'chart': HONEY}[kind]
+    bg = {'cards': LILAC, 'keys': PEACH, 'staff': SKY, 'arc': SAGE, 'roman': HONEY, 'roll': LILAC, 'chips': HONEY, 'drill': SAGE, 'quiz': PEACH, 'metro': FILL, 'needle': FILL, 'lens': FILL, 'circle': FILL, 'chart': HONEY}[kind]
     g = {
+      'cards': f'<rect x="9" y="9" width="20" height="26" rx="4" transform="rotate(-12 19 22)" fill="#FEFDFB" opacity=".7"></rect><rect x="16" y="10" width="20" height="26" rx="4" fill="#FEFDFB" stroke="{INK}" stroke-width=".8"></rect><text x="26" y="27" text-anchor="middle" font-family="Georgia, serif" font-size="10" font-weight="700" fill="{INK}">G7</text>',
       'keys': ''.join(f'<rect x="{6+i*5}" y="12" width="4.6" height="20" rx="1" fill="{"#E19E8C" if i in (1,3,5) else "#FEFDFB"}"></rect>' for i in range(7)) + ''.join(f'<rect x="{9.5+i*5}" y="12" width="3" height="12" fill="{INK}"></rect>' for i in (0,1,3,4,5)),
       'staff': ''.join(f'<path d="M6 {14+i*4}H38" stroke="{INK}" stroke-width=".7"></path>' for i in range(5)) + ''.join(f'<ellipse cx="{11+i*5}" cy="{32-i*2.2}" rx="2.2" ry="1.7" fill="{INK}"></ellipse>' for i in range(6)),
       'arc': f'<ellipse cx="13" cy="30" rx="3" ry="2.3" fill="{INK}"></ellipse><ellipse cx="31" cy="18" rx="3" ry="2.3" fill="{INK}"></ellipse><path d="M14 26Q22 6 30 14" fill="none" stroke="{INK}" stroke-width="1.4"></path>',

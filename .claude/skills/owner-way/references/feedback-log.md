@@ -429,6 +429,7 @@ owner's, typos fixed.
   ties between chords; a key signature the learner did not pick ("the staf is always in c"); Transpose that changes
   only the key name ("transpose is means to transpose the chords").
 - **Random chords takes the Chords page's shape (R42, canvas 137):** "I dont like the chords selection for praticing page": three pickers in the chord's type open drawers; the draw is a card of chord buttons; sessions are rows; the bar is Voicings · Start · Hands. Never: walls of chips or segmented rows for choosing what is drawn.
+- **Random chords is a drill's setup (R42, canvas 138):** "it looks like the same page… what is the most important on this page": a page that sets up a drill must not look like the page that explains a chord. Show the drill first (the flashcard the learner will see), ask its choices as plain questions in rows, make Start the one big thing. Never: hands at the keys before the drill, invented words like "In the draw", a voicing named without saying what it does.
 - **A root is picked on an octave, both spellings on each black key (R42, canvas 106):** "there is not possibility to
   switch between like the c sharp or d flat"; "it just lists all of this keys without good structure". One picker for
   every root and key. Never: a staff that shrinks as chords are added ("getting smaller and smaller"); a list of tiles
