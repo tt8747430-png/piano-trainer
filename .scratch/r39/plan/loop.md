@@ -189,3 +189,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Canvas 139 (2026-11-11): Random chords' Chords drawer holds every chord with filter chips (All, Chosen, In a key, Major…Altered), Choose all per type; Chords from removed; Inversions shown by the bottom note. Drawings v139-*.
 - Canvas 140 (2026-11-11): Random chords' Chords drawer as a checklist (checkboxes, Select all per type, n selected); In a key and Show another removed. Drawings v140-*.
 - Canvas 141 (2026-11-11): Random chords: Chord types as a checklist by group with sticky chips; Roots on a one-octave keyboard (All 12, White keys, Black keys); default Major and Minor on all 12. Drawing v141-*.
+- Canvas 142 (2026-11-11): Random chords' bar loses the piano button (no keys on the page).
