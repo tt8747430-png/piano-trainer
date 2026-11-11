@@ -17,6 +17,7 @@ Premium for Profile means memory-palaces' ProfilePage and Noji: the learner, thr
 - **Bar:** the bell with its unread count, and Settings. The laptop sidebar's foot is the learner's own row
   ("Ana Popescu · Profile"), the place it opens from.
 - **Laptop:** two columns: the learner, the figures, the week and the next badge left; Badges and Achievements right.
+- A guest's Profile (canvas 136, as the app's test holds it): a plain figure, Exploring as a guest, one line that their practice is kept on this device, and Sign in; their own figures, week, badges and achievements below as for anyone. Loading is a skeleton of the same shapes.
 
 ## History
 

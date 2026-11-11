@@ -88,13 +88,14 @@ const SW = (st, set, keys) => Object.fromEntries(keys.flatMap(([k, d]) => { cons
 const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k + 'Seg', seg(opts, st[k] ?? d, (l) => set({ [k]: l }))]));
     const P = ['I', 'V', 'vi', 'IV'], DEG = { I: 0, ii: 2, iii: 4, IV: 5, V: 7, vi: 9 };
     const FN = { I: ['Tonic', '#F3D2C8'], vi: ['Tonic', '#F3D2C8'], iii: ['Tonic', '#F3D2C8'], IV: ['Predominant', '#D3E5F2'], ii: ['Predominant', '#D3E5F2'], V: ['Dominant', '#DCE9D6'] };
-    const MOVE = ['5th up', '3rd down', '3rd down', '4th down'];
+    const MOVE = ['5th up', '2nd up', '3rd down', '4th down'];
     const key = st.key ?? 0, at = st.at ?? 1, loop = st.loop ?? true;
     const ch = (n) => NN[(key + DEG[n]) % 12] + (n === n.toLowerCase() ? 'm' : '');
     const cur = P[at], r = (key + DEG[cur]) % 12, minor = cur === cur.toLowerCase(), marks = {};
-    [0, minor ? 3 : 4, 7].forEach((iv, i) => { marks[60 + ((r + iv) % 12)] = [[ROLE[1], ROLE[3], ROLE[5]][i], NN[(r + iv) % 12]]; }); marks[48 + r] = [ROLE[1], NN[r]];
+    const KC = { Tonic: '#E3A08E', Predominant: '#85B8DC', Dominant: '#8DBB86' }[FN[cur][0]];
+    [0, minor ? 3 : 4, 7].forEach((iv) => { marks[60 + ((r + iv) % 12)] = [KC, NN[(r + iv) % 12]]; }); marks[48 + r] = [KC, NN[r]];
     return { ...common(st, set), ...SG(st, set, [['prW', ['Numerals', 'Nashville', 'Chords'], 'Numerals'], ['prI', ['Root', '1st', '2nd'], 'Root']]), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), rootOn: st.sheet === 'root', openRoot: () => set({ sheet: 'root' }),
-      tiles: P.map((n, i) => ({ n, c: ch(n), bg: FN[n][1], ring: i === at ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', move: i < P.length - 1 ? MOVE[i] : '', pick: () => set({ at: i }) })),
+      tiles: P.map((n, i) => ({ n, c: ch(n), bg: FN[n][1], ring: i === at ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', move: MOVE[i], pick: () => set({ at: i }) })),
       keyL: NN[key] + ' major', roots: rootGrid(key, (i) => set({ key: i, sheet: null })), voiceSeg: seg(['Voice-led', 'Block'], st.voice ?? 'Voice-led', (l) => set({ voice: l })),
       bpm: (st.bpm ?? 96) + ' BPM', bpmDn: () => set({ bpm: (st.bpm ?? 96) - 4 }), bpmUp: () => set({ bpm: (st.bpm ?? 96) + 4 }),
       kb: calmKeys(48, 76, marks, 370, 110), kbL: calmKeys(41, 84, marks, 860, 160), loop, loopBg: loop ? '#332921' : '#EEE9E2', loopFg: loop ? '#FEFDFB' : '#332921', toggleLoop: () => set({ loop: !loop }) };

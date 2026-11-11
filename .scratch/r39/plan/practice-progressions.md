@@ -18,6 +18,7 @@ harmony itself: what each chord does and how the root moves, in any key, heard a
   Voicing: Voice-led · Block.
 - The edit form stays the owner's (editors only); a learner edits a copy (··· Edit a copy).
 - A progression's own pages drawn (canvas 134, from "no edit mode for the pages … you missed so many features"): ··· Edit the progression opens its editor (Name, How it sounds, The progression, Style, Lines) with a Draft pill, Settings, Publish and Discard; a built-in one offers Edit a copy instead. Practise in the Player opens the Player with a setup sheet.
+- A progression's keys take the colour of the chord's function, the legend's colour, not three chord-tone colours (canvas 136); each move under a tile is named truly, the last one back to I; the phone's dock reads Loop · Practise · Play, so nothing is cut off.
 
 ## Today
 
