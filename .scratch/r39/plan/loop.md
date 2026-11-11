@@ -176,3 +176,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Canvas 126 (2026-11-11): Practice overview — laptop five across with Search; subtitles whole on a phone; Tools 44. Drawings v126-*.
 - Canvas 127 (2026-11-11): one 44 segmented control and stepper across Practice; seg rows stacked under their labels; Hear it 44. Drawing v127-*.
 - Canvas 128 (2026-11-11): Learn, Profile and Settings drawn — a level's lessons as a line of tiles; the week as bars; Appearance as three screens; the sidebar's foot is the learner. Drawings v128-*.
+- Canvas 129 (2026-11-11): Administration (ten sections), roles, Edit mode in place on a lesson and on Learn's level, Publish, Preview as learner. Drawings v129-*.

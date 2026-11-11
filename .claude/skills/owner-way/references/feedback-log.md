@@ -614,6 +614,9 @@ are reference only, but progressions are facts.
 - **One icon, one meaning.** **One home per idea:** the page shows what you look at, its Settings how it always behaves.
 
 ## Profile and Settings
+- **Canvas 129 ("there are admin controls, no roles, no edit mode for the pages"):** Administration drawn in full in
+  Settings; three roles; Edit mode is the page itself (Done · English | Русский · Publish…), Learn's level edited in
+  place; Preview as learner (2026-11-11).
 - **Settings refactored and audited:** a Back on every page (Customise select toolbar, About had none or a broken one);
   on a laptop the section list and the page scroll apart, as the libraries' panes; each preference checked for whether
   it belongs in app Settings or its screen's gear, View as a learner placed where it belongs; professional wording

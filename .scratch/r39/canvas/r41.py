@@ -10,3 +10,4 @@ if os.path.exists('/home/user/piano-trainer/.scratch/r39/canvas/r41_practice.py'
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r42_chords.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r45_places.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r46_admin.py').read())
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r47_edit.py').read())
