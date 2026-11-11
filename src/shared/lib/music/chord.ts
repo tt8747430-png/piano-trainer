@@ -70,7 +70,7 @@ const QUALITIES = {
   add11: {
     family: 'six',
     suffix: 'add11',
-    aliases: [],
+    aliases: ['add4'],
     intervals: ['r', 'M3', 'P5', 'P11'],
   },
   maj7: {

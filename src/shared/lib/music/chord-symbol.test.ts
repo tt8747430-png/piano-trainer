@@ -91,6 +91,7 @@ describe('readChordSymbol', () => {
     ['C9sus', 'sus9'],
     ['C7(b9)', 'b9'],
     ['Cadd11', 'add11'],
+    ['Cadd4', 'add11'],
     ['Caug7', 's5'],
     ['Cm7-5', 'hd'],
   ])('reads the chord %s as sheets write it', (symbol, quality) => {
