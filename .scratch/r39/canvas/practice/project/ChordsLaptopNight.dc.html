@@ -779,12 +779,37 @@ return {
     const kl = kL; const degs = st.rpDegs || [0, 1, 2, 3, 4, 5, 6];
     const keyChords = ST.map((semi, d) => { const pc = (rk + semi) % 12, l = (kl + d) % 7, a = ((pc - NATPC[l] + 18) % 12) - 6; return { rl: l, ra: a, q: QS.findIndex((x) => x.k === KQ2[d]), d }; });
     const types = st.rpTypes || [0, 1, 12, 13, 14], roots12 = st.rpRoots === 'white' ? [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0]] : CROOTS.map((n) => [LET.indexOf(n[0]), n.length > 1 ? (n[1] === '♯' ? 1 : -1) : 0]);
-    const pool = fromKey ? keyChords.filter((c) => degs.includes(c.d)) : roots12.flatMap(([l, a]) => types.map((qx) => ({ rl: l, ra: a, q: qx })));
+    // v139 (owner: "make proper chords choosing… make me able to select all the chords and also filter them by type like
+    // these scrollable chips on top of the drawer"): one list of every chord, each one chosen or not; chips filter it
+    const MINQ = (q) => q.t.some((x) => x[0] === 3 && x[1] === 3);
+    const RN12 = (q) => (MINQ(q) ? ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'B♭', 'B'] : ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B']);
+    const LA = (n) => [LET.indexOf(n[0]), n.length > 1 ? (n[1] === '♯' ? 1 : -1) : 0];
+    const QI = (k) => QS.findIndex((x) => x.k === k);
+    const sel = st.rpSel || [[0, 'maj7'], [2, 'm7'], [4, 'm7'], [5, 'maj7'], [7, '7'], [9, 'm7'], [11, 'ø7']].map(([pc, k]) => pc + ':' + QI(k));
+    const has = (id) => sel.includes(id), flip = (ids, on) => set({ rpSel: on ? sel.filter((x) => !ids.includes(x)) : sel.concat(ids.filter((x) => !sel.includes(x))) });
+    const symId = (id) => { const [pc, qi] = id.split(':').map(Number); return RN12(QS[qi])[pc] + QS[qi].k; };
+    const pool = sel.map((id) => { const [pc, qi] = id.split(':').map(Number); const [l, a] = LA(RN12(QS[qi])[pc]); return { rl: l, ra: a, q: qi }; });
+    const flt = st.rpFlt || 'all';
+    const FL = [['all', 'All', () => true], ['chosen', 'Chosen · ' + sel.length, () => true], ['key', 'In a key', () => false], ['maj', 'Major', (q) => q.k === ''], ['min', 'Minor', (q) => q.k === 'm'],
+      ['dim', 'Diminished', (q) => ['°', 'ø7', '°7'].includes(q.k)], ['aug', 'Augmented', (q) => q.k === '+'], ['sus', 'Suspended', (q) => q.k.includes('sus')], ['add', 'Added notes', (q) => q.g === 'Added notes'],
+      ['sev', 'Sevenths', (q) => q.g === 'Sevenths'], ['ext', 'Extended', (q) => q.g === 'Extended'], ['alt', 'Altered', (q) => q.g === 'Altered']];
+    const fpred = (FL.find((f) => f[0] === flt) || FL[0])[2];
+    const tile = (id, s, sub) => { const on = has(id); return { s, sub: sub || '', hasSub: !!sub, on, bg: on ? '#3E3420' : '#24201C', ring: on ? 'inset 0 0 0 1.5px #C99A45' : '0 0 0 1px ' + C.line, fw: on ? 700 : 500, aria: s + (on ? ', chosen' : ''), pick: () => flip([id], on) }; };
+    const sect = (title, ids, mk) => { const n = ids.filter(has).length, all = n === ids.length; return { title, count: n + ' of ' + ids.length, allLab: all ? 'Clear' : 'Choose all', allPick: () => flip(ids, all), tiles: ids.map(mk) }; };
+    const KQT = mn ? ['m', '°', '', 'm', '', '', ''] : ['', 'm', 'm', '', '', 'm', '°'], KQS = mn ? ['m7', 'ø7', 'maj7', 'm7', '7', 'maj7', '7'] : ['maj7', 'm7', 'm7', 'maj7', '7', 'm7', 'ø7'];
+    const keyName = LET[kL] + ACC[String(kA)] + (mn ? ' minor' : ' major');
+    const keySect = (title, KQx) => { const items = ST.map((semi, d) => { const pc = (rk + semi) % 12, l = (kL + d) % 7, a = ((pc - NATPC[l] + 18) % 12) - 6; return { id: pc + ':' + QI(KQx[d]), s: LET[l] + ACC[String(a)] + KQx[d], r: RM[d] }; });
+      return sect(title, items.map((x) => x.id), (id) => { const x = items.find((y) => y.id === id); return tile(id, x.s, x.r); }); };
+    const rpSects = flt === 'key' ? [keySect('Triads in ' + keyName, KQT), keySect('Sevenths in ' + keyName, KQS)]
+      : QS.map((q, qi) => [q, qi]).filter(([q]) => fpred(q)).map(([q, qi]) => { const ids = Array.from({ length: 12 }, (_, pc) => pc + ':' + qi).filter((id) => flt !== 'chosen' || has(id));
+        return ids.length ? sect(q.n[0].toUpperCase() + q.n.slice(1) + (q.k ? '  ·  C' + q.k : '  ·  C'), ids, (id) => tile(id, symId(id))) : null; }).filter(Boolean);
+    const invs = st.rpInvs || [0];
+    const INVR = [['Root position', 'C  E  G', 'C', 'the root at the bottom'], ['1st inversion', 'E  G  C', 'E', 'the 3rd at the bottom'], ['2nd inversion', 'G  C  E', 'G', 'the 5th at the bottom'], ['3rd inversion', 'B♭  C  E  G', 'B♭', 'the 7th at the bottom; chords with a 7th only']];
     const vs = st.rpVoic || ['Close'], inv = st.rpInv === 'all', hh = st.rpHands || 'Right';
     const tog = (arr, x) => (arr.includes(x) ? (arr.length > 1 ? arr.filter((y) => y !== x) : arr) : arr.concat([x]));
     const chip = (on) => ({ on, bg: on ? '#3E3420' : '#24201C', ring: on ? 'none' : '0 0 0 1px ' + C.line, fw: on ? 700 : 500, mark: on ? '✓ ' : '' });
     const tryOne = () => { const c = pool[Math.floor(Math.random() * pool.length)]; if (!c) return; const qq = QS[c.q]; const ok = vs.filter((v) => !(VOICINGS.find((x) => x.v === v) || VOICINGS[0]).ok(qq)); const v = ok.length ? ok[Math.floor(Math.random() * ok.length)] : 'Close';
-      const n = invCount(qq, v); change({ root: rootPc(c.rl, c.ra), rl: c.rl, ra: c.ra, q: c.q, voicing: v, hand: TWO[v] ? 'Both' : hh, inv: inv ? Math.floor(Math.random() * n) : 0 }); };
+      const n = invCount(qq, v), iv = invs.filter((i) => i < n); change({ root: rootPc(c.rl, c.ra), rl: c.rl, ra: c.ra, q: c.q, voicing: v, hand: TWO[v] ? 'Both' : hh, inv: iv.length ? iv[Math.floor(Math.random() * iv.length)] : 0 }); };
     const goal = st.rpGoal || '16 chords';
     return {
       rpFromSeg: seg(['A key', 'Chord types'], fromKey ? 'A key' : 'Chord types', (l) => set({ rpFrom: l === 'A key' ? 'key' : 'types' })), rpIsKey: fromKey, rpIsTypes: !fromKey,
@@ -805,7 +830,6 @@ return {
       // the page in the Chords page's shape (R42, canvas 137): three pickers, the draw as a lead sheet, sessions as rows
       rpFromName: fromKey ? LET[kL] + ACC[String(kA)] + (mn ? ' minor' : ' major') : (st.rpRoots === 'white' ? 'White keys' : 'All 12 roots'),
       rpSetName: fromKey ? (sv ? 'Sevenths' : 'Triads') : (types.length === 1 ? QS[types[0]].n.replace(/^\w/, (c) => c.toUpperCase()) : types.length + ' chord types'),
-      rpInvName: inv ? 'All inversions' : 'Root position',
       rpLine: pool.length + (pool.length === 1 ? ' chord' : ' chords') + ' in the draw · ' + (vs.length === 1 ? (VOICINGS.find((x) => x.v === vs[0]) || VOICINGS[0]).l : vs.length + ' voicings') + ' · ' + (hh === 'Both' ? 'both hands' : hh.toLowerCase() + ' hand'),
       rpCount: pool.length + (pool.length === 1 ? ' chord' : ' chords'),
       rpBars: fromKey
@@ -822,12 +846,17 @@ return {
       rpHandRows: [['Right hand', 'Right'], ['Left hand', 'Left'], ['Both hands', 'Both']].map(([l, v]) => ({ l, sub: v === 'Both' ? 'the root and 5th below, the chord above' : '', mark: hh === v ? '✓' : '', fw: hh === v ? 700 : 500, pick: () => set({ rpHands: v }) })),
       rpVoicGroups: [...new Set(VOICINGS.map((v) => v.g))].map((g) => ({ g, items: VOICINGS.filter((v) => v.g === g).map((v) => { const why = pool.length && pool.every((c) => v.ok(QS[c.q])) ? v.ok(QS[pool[0].q]) : ''; const VD = { 'Close': 'the notes as close together as they go', 'Drop 2': 'the 2nd note from the top an octave lower', 'Drop 3': 'the 3rd note from the top an octave lower', 'Shell': 'root, 3rd and 7th only', 'Rootless A': 'no root; the 3rd at the bottom', 'Rootless B': 'no root; the 7th at the bottom', 'Spread': 'over both hands, wide', 'So What': 'stacked 4ths, a 3rd on top', 'Kenny Barron': 'two stacked 5ths, both hands', 'Upper structure': 'a triad over the 3rd and 7th', 'Bass and chord': 'the root below, the chord above', 'Two triads': 'one triad in each hand' };
         return { l: v.l, why: why || VD[v.v] || '', hasWhy: true, op: why ? 0.55 : 1, mark: vs.includes(v.v) ? '✓' : '', fw: vs.includes(v.v) ? 700 : 500, pick: () => set({ rpVoic: tog(vs, v.v) }) }; }) })),
-      rpSetVal: (fromKey ? (sv ? 'Sevenths' : 'Triads') + ' · ' + degs.length + ' of 7' : types.length + (types.length === 1 ? ' type' : ' types')),
       rpHandsLong: hh === 'Both' ? 'Both hands' : hh + ' hand', rpGoalName: goal === 'No end' ? 'Until I stop' : (goal === '5 minutes' ? 'For 5 minutes' : '16 chords'),
       rpStartT: 'Start · ' + (goal === 'No end' ? 'until I stop' : goal),
       isRpGoal: st.sheet === 'rpGoal', openRpGoal: () => set({ sheet: 'rpGoal' }),
       rpGoalRows: [['16 chords', '16 chords', 'a set of 16, scored at the end'], ['5 minutes', 'For 5 minutes', 'as many as you play right'], ['No end', 'Until I stop', 'no count and no clock']].map(([g, l, sub]) => ({ l, sub, mark: goal === g ? '✓' : '', fw: goal === g ? 700 : 500, pick: () => set({ rpGoal: g }) })),
-      rpEx: sym + slash, rpExSub: fromKey ? 'in ' + LET[kL] + ACC[String(kA)] + (mn ? ' minor' : ' major') : 'any root',
+      rpChips: FL.map(([v, l]) => ({ l, on: v === flt, bg: v === flt ? C.ink : '#24201C', fg: v === flt ? '#24201C' : C.ink, ring: v === flt ? 'none' : '0 0 0 1px ' + C.line, pick: () => set({ rpFlt: v }) })),
+      rpSects, rpNoSects: !rpSects.length, rpHasSects: !!rpSects.length, rpIsKeyF: flt === 'key',
+      rpChosenT: sel.length + (sel.length === 1 ? ' chord chosen' : ' chords chosen'), rpClearAll: () => set({ rpSel: [] }), rpCanClear: sel.length > 0,
+      rpSetVal: sel.length ? sel.slice(0, 3).map(symId).join(', ') + (sel.length > 3 ? ' +' + (sel.length - 3) : '') : 'None yet',
+      rpInvRows2: INVR.map(([l, stack, low, sub], i) => { const on = invs.includes(i); return { l, pre: stack.slice(low.length), low, sub, mark: on ? '✓' : '', fw: on ? 700 : 500, pick: () => set({ rpInvs: on ? (invs.length > 1 ? invs.filter((x) => x !== i) : invs) : invs.concat([i]).sort() }) }; }),
+      rpInvName: invs.length === 1 ? INVR[invs[0]][0] : invs.length === 4 ? 'Any inversion' : invs.map((i) => ['Root', '1st', '2nd', '3rd'][i]).join(', '),
+      rpEx: sym + slash, rpExSub: 'one of ' + sel.length + (sel.length === 1 ? ' chord' : ' chords'),
       rpVoicName: vs.length === 1 ? (VOICINGS.find((x) => x.v === vs[0]) || VOICINGS[0]).l : vs.length + ' voicings',
       rpHandsName: hh === 'Both' ? 'Both' : hh };
   })(),
