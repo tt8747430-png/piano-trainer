@@ -144,7 +144,7 @@ def TABBAR(cur):
 
 # small pictures that show the content (Practice's rows and cards)
 def pic(kind, s=44):
-    bg = {'cards': LILAC, 'keys': PEACH, 'staff': SKY, 'arc': SAGE, 'roman': HONEY, 'roll': LILAC, 'chips': HONEY, 'drill': SAGE, 'quiz': PEACH, 'metro': FILL, 'needle': FILL, 'lens': FILL, 'circle': FILL, 'chart': HONEY}[kind]
+    bg = {'cards': LILAC, 'keys': PEACH, 'staff': SKY, 'arc': SAGE, 'roman': HONEY, 'roll': LILAC, 'chips': HONEY, 'drill': SAGE, 'quiz': PEACH, 'metro': FILL, 'needle': FILL, 'lens': FILL, 'circle': FILL, 'chart': HONEY, 'swing': SKY}[kind]
     g = {
       'cards': f'<rect x="9" y="9" width="20" height="26" rx="4" transform="rotate(-12 19 22)" fill="#FEFDFB" opacity=".7"></rect><rect x="16" y="10" width="20" height="26" rx="4" fill="#FEFDFB" stroke="{INK}" stroke-width=".8"></rect><text x="26" y="27" text-anchor="middle" font-family="Georgia, serif" font-size="10" font-weight="700" fill="{INK}">G7</text>',
       'keys': ''.join(f'<rect x="{6+i*5}" y="12" width="4.6" height="20" rx="1" fill="{"#E19E8C" if i in (1,3,5) else "#FEFDFB"}"></rect>' for i in range(7)) + ''.join(f'<rect x="{9.5+i*5}" y="12" width="3" height="12" fill="{INK}"></rect>' for i in (0,1,3,4,5)),
@@ -159,6 +159,7 @@ def pic(kind, s=44):
       'needle': f'<path d="M9 30A14 14 0 0 1 35 30" fill="none" stroke="{INK}" stroke-width="1.4"></path><path d="M22 31 25 15" stroke="#C26A2E" stroke-width="2" stroke-linecap="round"></path><circle cx="22" cy="31" r="2" fill="{INK}"></circle>',
       'lens': ''.join(f'<rect x="{7+i*5}" y="20" width="4.6" height="16" rx="1" fill="#FEFDFB"></rect>' for i in range(6)) + f'<circle cx="25" cy="17" r="7" fill="none" stroke="{INK}" stroke-width="1.6"></circle><path d="m30 22 5 5" stroke="{INK}" stroke-width="1.8" stroke-linecap="round"></path>',
       'circle': f'<circle cx="22" cy="22" r="14" fill="#FEFDFB" stroke="{INK}" stroke-width="1.2"></circle><circle cx="22" cy="22" r="7" fill="none" stroke="{INK}" stroke-width=".8"></circle><path d="M22 8 29 9.9 22 15z" fill="{ACCENT}" stroke="{INK}" stroke-width=".6"></path>',
+      'swing': ''.join(f'<ellipse cx="{x}" cy="{y}" rx="2.6" ry="2" transform="rotate(-20 {x} {y})" fill="{INK}"></ellipse><path d="M{x+2.4} {y}V{y-13}" stroke="{INK}" stroke-width="1"></path>' for x, y in ((9, 31), (17, 28), (27, 31), (35, 26))) + f'<path d="M11.4 18H19.4M29.4 18H37.4" stroke="{INK}" stroke-width="2.2"></path><text x="22" y="40.5" text-anchor="middle" font-size="6.5" font-weight="700" fill="{INK}">3</text>',
       'chart': ''.join(f'<rect x="{6+(i%3)*11}" y="{12+(i//3)*11}" width="10" height="10" rx="2" fill="#FEFDFB"></rect>' for i in range(6)),
     }[kind]
     return f'<svg viewBox="0 0 44 44" width="{s}" height="{s}" aria-hidden="true" style="flex: none; border-radius: {s*0.23:.0f}px; background: {bg}">{g}</svg>'

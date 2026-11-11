@@ -9,11 +9,11 @@ PLAYER_PHONES = [('PlayerPractice', 'Practice: Wait · Play, the tempo, the metr
                  ('PlayerViewGrid', 'Grid settings'), ('PlayerViewLyrics', 'Lyrics settings'),
                  ('PlayerSettings', 'Song settings: Arrangement or Accompaniment'), ('PlayerKey', 'Transpose'), ('PlayerDone', 'Played through'),
                  ('PlayerDiagrams', 'Diagrams')]
-PRACTICE = [('Main', 'Laptop', 'Practice'), ('Chords', 'ChordsLaptop', 'Chords'), ('ChordTrainer', 'ChordTrainerLaptop', 'Chord trainer'), ('Scales', 'ScalesLaptop', 'Scales and keys'),
+PRACTICE = [('Main', 'Laptop', 'Practice'), ('Chords', 'ChordsLaptop', 'Chords'), ('PlayChord', 'PlayChordLaptop', 'A chord practice run and its results'), ('Scales', 'ScalesLaptop', 'Scales and keys'),
             ('Intervals', 'IntervalsLaptop', 'Intervals'), ('Progressions', 'ProgressionsLaptop', 'Progressions'), ('Progression', 'ProgressionLaptop', 'A progression'), ('ProgressionEdit', 'ProgressionEditLaptop', 'A progression, edited by an editor'),
             ('Accompaniment', 'AccompanimentLaptop', 'Accompaniment'), ('Pattern', 'PatternLaptop', 'A pattern'), ('PatternNew', 'PatternNewLaptop', 'A new pattern'), ('ChordPlayer', 'ChordPlayerLaptop', 'Chord player'),
-            ('Exercises', 'ExercisesLaptop', 'Exercises'), ('Exercise', 'ExerciseLaptop', 'An exercise'), ('Quiz', 'QuizLaptop', 'Quiz'), ('Trainer', 'TrainerLaptop', 'A trainer: setup, a round, results'), ('Check', 'CheckLaptop', 'Check a song'),
-            ('QuizRun', 'QuizRunLaptop', 'A quiz run'), ('Metronome', 'MetronomeLaptop', 'Metronome'), ('Tuner', 'TunerLaptop', 'Tuner'),
+            ('FingerTechnique', 'FingerTechniqueLaptop', 'Finger technique'), ('JazzVocabulary', 'JazzVocabularyLaptop', 'Jazz vocabulary'), ('Exercise', 'ExerciseLaptop', 'An exercise'), ('Check', 'CheckLaptop', 'Check a song'),
+            ('Metronome', 'MetronomeLaptop', 'Metronome'), ('Tuner', 'TunerLaptop', 'Tuner'),
             ('ChordFinder', 'ChordFinderLaptop', 'Chord finder'), ('CircleOfFifths', 'CircleOfFifthsLaptop', 'Circle of fifths')]
 # R42 canvas 100 (owner: "group the screens by page and by device and not so scattered"): one canvas page per area;
 # on it one row per screen, every laptop board in the left column and every phone board in the right, in step down the
@@ -30,7 +30,7 @@ PAGES = [
     ('Earlier drafts of the Player', [L('PlayerDesk', 'The Player, earlier draft, laptop')], [L('PlayerApp', 'The Player, earlier draft, phone')])]),
   ('practice', 'Practice', [(n, [L(lp, n + ', laptop')] + ([L('ChordsLaptopNight', 'Chords, Night, laptop')] if ph == 'Chords' else []),
                                 [L(ph, n + ', phone')] + ([L('ChordsNight', 'Chords, Night, phone')] if ph == 'Chords' else [])) for ph, lp, n in PRACTICE]),
-  ('places', 'Learn, Profile and Settings', [(n, [L(lp, n + ', laptop')], [L(ph, n + ', phone')]) for ph, lp, n in [('Learn', 'LearnLaptop', 'Learn'), ('Profile', 'ProfileLaptop', 'Profile'), ('Settings', 'SettingsLaptop', 'Settings'), ('Admin', 'AdminLaptop', 'Administration'), ('Lesson', 'LessonLaptop', 'A lesson, read and edited'), ('Course', 'CourseLaptop', 'A course, read and edited'), ('SignIn', 'SignInLaptop', 'Sign in and the account pages'), ('Legal', 'LegalLaptop', 'Privacy Policy and Terms'), ('AppLayers', 'AppLayersLaptop', 'Across the app: search, MIDI, shortcuts, notices, route states')]])]
+  ('places', 'Learn, Profile and Settings', [(n, [L(lp, n + ', laptop')], [L(ph, n + ', phone')]) for ph, lp, n in [('Learn', 'LearnLaptop', 'Learn'), ('Profile', 'ProfileLaptop', 'Profile'), ('PracticeResult', 'PracticeResultLaptop', 'A practice run’s results, from Profile'), ('Settings', 'SettingsLaptop', 'Settings'), ('Admin', 'AdminLaptop', 'Administration'), ('Lesson', 'LessonLaptop', 'A lesson, read and edited'), ('Course', 'CourseLaptop', 'A course, read and edited'), ('SignIn', 'SignInLaptop', 'Sign in and the account pages'), ('Legal', 'LegalLaptop', 'Privacy Policy and Terms'), ('AppLayers', 'AppLayersLaptop', 'Across the app: search, MIDI, shortcuts, notices, route states')]])]
 d = json.load(open(P + 'canvas.json'))
 boards, order, notes = {}, [], {}
 # canvas 101 (owner: "put them in a row like the all the flows screens pages in one row for phone then the dark mode

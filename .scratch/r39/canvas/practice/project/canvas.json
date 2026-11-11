@@ -515,12 +515,12 @@
       "is_interactive": true,
       "page": "practice"
     },
-    "ChordTrainer.dc.html": {
+    "PlayChord.dc.html": {
       "x": 1060,
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "Chord trainer, phone",
+      "title": "A chord practice run and its results, phone",
       "is_interactive": true,
       "page": "practice"
     },
@@ -605,17 +605,26 @@
       "is_interactive": true,
       "page": "practice"
     },
-    "Exercises.dc.html": {
+    "FingerTechnique.dc.html": {
       "x": 6360,
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "Exercises, phone",
+      "title": "Finger technique, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "JazzVocabulary.dc.html": {
+      "x": 6890,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Jazz vocabulary, phone",
       "is_interactive": true,
       "page": "practice"
     },
     "Exercise.dc.html": {
-      "x": 6890,
+      "x": 7420,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -623,26 +632,8 @@
       "is_interactive": true,
       "page": "practice"
     },
-    "Quiz.dc.html": {
-      "x": 7420,
-      "y": 300,
-      "w": 450,
-      "h": 920,
-      "title": "Quiz, phone",
-      "is_interactive": true,
-      "page": "practice"
-    },
-    "Trainer.dc.html": {
-      "x": 7950,
-      "y": 300,
-      "w": 450,
-      "h": 920,
-      "title": "A trainer: setup, a round, results, phone",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "Check.dc.html": {
-      "x": 8480,
+      "x": 7950,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -650,17 +641,8 @@
       "is_interactive": true,
       "page": "practice"
     },
-    "QuizRun.dc.html": {
-      "x": 9010,
-      "y": 300,
-      "w": 450,
-      "h": 920,
-      "title": "A quiz run, phone",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "Metronome.dc.html": {
-      "x": 9540,
+      "x": 8480,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -669,7 +651,7 @@
       "page": "practice"
     },
     "Tuner.dc.html": {
-      "x": 10070,
+      "x": 9010,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -678,7 +660,7 @@
       "page": "practice"
     },
     "ChordFinder.dc.html": {
-      "x": 10600,
+      "x": 9540,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -687,7 +669,7 @@
       "page": "practice"
     },
     "CircleOfFifths.dc.html": {
-      "x": 11130,
+      "x": 10070,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -722,12 +704,12 @@
       "is_interactive": true,
       "page": "practice"
     },
-    "ChordTrainerLaptop.dc.html": {
+    "PlayChordLaptop.dc.html": {
       "x": 4446,
       "y": 3140,
       "w": 2143,
       "h": 1299,
-      "title": "Chord trainer, laptop",
+      "title": "A chord practice run and its results, laptop",
       "is_interactive": true,
       "page": "practice"
     },
@@ -812,17 +794,26 @@
       "is_interactive": true,
       "page": "practice"
     },
-    "ExercisesLaptop.dc.html": {
+    "FingerTechniqueLaptop.dc.html": {
       "x": 26676,
       "y": 3140,
       "w": 2143,
       "h": 1299,
-      "title": "Exercises, laptop",
+      "title": "Finger technique, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "JazzVocabularyLaptop.dc.html": {
+      "x": 28899,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "Jazz vocabulary, laptop",
       "is_interactive": true,
       "page": "practice"
     },
     "ExerciseLaptop.dc.html": {
-      "x": 28899,
+      "x": 31122,
       "y": 3140,
       "w": 2143,
       "h": 1299,
@@ -830,26 +821,8 @@
       "is_interactive": true,
       "page": "practice"
     },
-    "QuizLaptop.dc.html": {
-      "x": 31122,
-      "y": 3140,
-      "w": 2143,
-      "h": 1299,
-      "title": "Quiz, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
-    "TrainerLaptop.dc.html": {
-      "x": 33345,
-      "y": 3140,
-      "w": 2143,
-      "h": 1299,
-      "title": "A trainer: setup, a round, results, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "CheckLaptop.dc.html": {
-      "x": 35568,
+      "x": 33345,
       "y": 3140,
       "w": 2143,
       "h": 1299,
@@ -857,17 +830,8 @@
       "is_interactive": true,
       "page": "practice"
     },
-    "QuizRunLaptop.dc.html": {
-      "x": 37791,
-      "y": 3140,
-      "w": 2143,
-      "h": 1299,
-      "title": "A quiz run, laptop",
-      "is_interactive": true,
-      "page": "practice"
-    },
     "MetronomeLaptop.dc.html": {
-      "x": 40014,
+      "x": 35568,
       "y": 3140,
       "w": 2143,
       "h": 1299,
@@ -876,7 +840,7 @@
       "page": "practice"
     },
     "TunerLaptop.dc.html": {
-      "x": 42237,
+      "x": 37791,
       "y": 3140,
       "w": 2143,
       "h": 1299,
@@ -885,7 +849,7 @@
       "page": "practice"
     },
     "ChordFinderLaptop.dc.html": {
-      "x": 44460,
+      "x": 40014,
       "y": 3140,
       "w": 2143,
       "h": 1299,
@@ -894,7 +858,7 @@
       "page": "practice"
     },
     "CircleOfFifthsLaptop.dc.html": {
-      "x": 46683,
+      "x": 42237,
       "y": 3140,
       "w": 2143,
       "h": 1299,
@@ -929,8 +893,17 @@
       "is_interactive": true,
       "page": "places"
     },
-    "Settings.dc.html": {
+    "PracticeResult.dc.html": {
       "x": 1060,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A practice run’s results, from Profile, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "Settings.dc.html": {
+      "x": 1590,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -939,7 +912,7 @@
       "page": "places"
     },
     "Admin.dc.html": {
-      "x": 1590,
+      "x": 2120,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -948,7 +921,7 @@
       "page": "places"
     },
     "Lesson.dc.html": {
-      "x": 2120,
+      "x": 2650,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -957,7 +930,7 @@
       "page": "places"
     },
     "Course.dc.html": {
-      "x": 2650,
+      "x": 3180,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -966,7 +939,7 @@
       "page": "places"
     },
     "SignIn.dc.html": {
-      "x": 3180,
+      "x": 3710,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -975,7 +948,7 @@
       "page": "places"
     },
     "Legal.dc.html": {
-      "x": 3710,
+      "x": 4240,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -984,7 +957,7 @@
       "page": "places"
     },
     "AppLayers.dc.html": {
-      "x": 4240,
+      "x": 4770,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -1010,8 +983,17 @@
       "is_interactive": true,
       "page": "places"
     },
-    "SettingsLaptop.dc.html": {
+    "PracticeResultLaptop.dc.html": {
       "x": 4446,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A practice run’s results, from Profile, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "SettingsLaptop.dc.html": {
+      "x": 6669,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -1020,7 +1002,7 @@
       "page": "places"
     },
     "AdminLaptop.dc.html": {
-      "x": 6669,
+      "x": 8892,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -1029,7 +1011,7 @@
       "page": "places"
     },
     "LessonLaptop.dc.html": {
-      "x": 8892,
+      "x": 11115,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -1038,7 +1020,7 @@
       "page": "places"
     },
     "CourseLaptop.dc.html": {
-      "x": 11115,
+      "x": 13338,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -1047,7 +1029,7 @@
       "page": "places"
     },
     "SignInLaptop.dc.html": {
-      "x": 13338,
+      "x": 15561,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -1056,7 +1038,7 @@
       "page": "places"
     },
     "LegalLaptop.dc.html": {
-      "x": 15561,
+      "x": 17784,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -1065,7 +1047,7 @@
       "page": "places"
     },
     "AppLayersLaptop.dc.html": {
-      "x": 17784,
+      "x": 20007,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -1137,7 +1119,7 @@
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 11580,
+      "maxW": 10520,
       "page": "practice"
     },
     "practice-phone-night": {
@@ -1153,7 +1135,7 @@
       "y": 2840,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 48826,
+      "maxW": 44380,
       "page": "practice"
     },
     "practice-laptop-night": {
@@ -1169,7 +1151,7 @@
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 4690,
+      "maxW": 5220,
       "page": "places"
     },
     "places-laptop": {
@@ -1177,7 +1159,7 @@
       "y": 1420,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 19927,
+      "maxW": 22150,
       "page": "places"
     }
   },
@@ -1239,7 +1221,7 @@
     "PlayerLaptopKeyboardNight.dc.html",
     "Main.dc.html",
     "Chords.dc.html",
-    "ChordTrainer.dc.html",
+    "PlayChord.dc.html",
     "Scales.dc.html",
     "Intervals.dc.html",
     "Progressions.dc.html",
@@ -1249,12 +1231,10 @@
     "Pattern.dc.html",
     "PatternNew.dc.html",
     "ChordPlayer.dc.html",
-    "Exercises.dc.html",
+    "FingerTechnique.dc.html",
+    "JazzVocabulary.dc.html",
     "Exercise.dc.html",
-    "Quiz.dc.html",
-    "Trainer.dc.html",
     "Check.dc.html",
-    "QuizRun.dc.html",
     "Metronome.dc.html",
     "Tuner.dc.html",
     "ChordFinder.dc.html",
@@ -1262,7 +1242,7 @@
     "ChordsNight.dc.html",
     "Laptop.dc.html",
     "ChordsLaptop.dc.html",
-    "ChordTrainerLaptop.dc.html",
+    "PlayChordLaptop.dc.html",
     "ScalesLaptop.dc.html",
     "IntervalsLaptop.dc.html",
     "ProgressionsLaptop.dc.html",
@@ -1272,12 +1252,10 @@
     "PatternLaptop.dc.html",
     "PatternNewLaptop.dc.html",
     "ChordPlayerLaptop.dc.html",
-    "ExercisesLaptop.dc.html",
+    "FingerTechniqueLaptop.dc.html",
+    "JazzVocabularyLaptop.dc.html",
     "ExerciseLaptop.dc.html",
-    "QuizLaptop.dc.html",
-    "TrainerLaptop.dc.html",
     "CheckLaptop.dc.html",
-    "QuizRunLaptop.dc.html",
     "MetronomeLaptop.dc.html",
     "TunerLaptop.dc.html",
     "ChordFinderLaptop.dc.html",
@@ -1285,6 +1263,7 @@
     "ChordsLaptopNight.dc.html",
     "Learn.dc.html",
     "Profile.dc.html",
+    "PracticeResult.dc.html",
     "Settings.dc.html",
     "Admin.dc.html",
     "Lesson.dc.html",
@@ -1294,6 +1273,7 @@
     "AppLayers.dc.html",
     "LearnLaptop.dc.html",
     "ProfileLaptop.dc.html",
+    "PracticeResultLaptop.dc.html",
     "SettingsLaptop.dc.html",
     "AdminLaptop.dc.html",
     "LessonLaptop.dc.html",
