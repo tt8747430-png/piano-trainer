@@ -3,6 +3,7 @@ import json, re
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r41_kit.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r41_lib.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r41_songs.py').read())
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r44_editor.py').read())
 import os
 if os.path.exists('/home/user/piano-trainer/.scratch/r39/canvas/r41_practice.py'):
     exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r41_practice.py').read())

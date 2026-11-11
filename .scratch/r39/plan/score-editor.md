@@ -35,3 +35,20 @@ Files: `src/pages/score-editor`, `src/widgets/score-sheet`, `src/features/score-
 4. **Piano** under the palette when on, C4 marked, the entered note's key lit.
 5. **Laptop**: the page in the middle on white; the palette docked at the right, every section in one scroll; the piano
    from the bar under both.
+
+## Canvas 123 (2026-11-11): the editor is the Player in Edit
+
+Owner: "all pages except the chord finder and song player should be refactored … the must time you need to spend on
+the editor and songs and practice pages"; CLAUDE.md: "the Player's score in Edit mode, sharing its bar and transport".
+
+- **Bar:** the Player's glass bar: ✕, a **Play · Edit** switch in the middle, Undo, Redo and ··· (Score settings) at the
+  right. Done goes: the switch to Play is the way back to listening, ✕ the way out. This replaces R39-3's "Done, no ✕".
+- **Selection strip** heads the palette: "C5 · half note" over "Bar 4 · beat 1 · “sweet”", then Delete, Piano keys and
+  the one honey button, Play from here.
+- **Palette:** seven named categories (Notes, Accidentals, Articulations, Dynamics, Lines, Bar, Text); notes, rests, tie,
+  slur and grace drawn as engraved icons, not font glyphs; 48 tiles, each with its name and shortcut as a tip. Folded on
+  a phone to one row under the categories; the grabber (44 high) opens every section in one scroll.
+- **Keys** under the palette on a phone (112 high), under the score on a laptop, the selected note lit.
+- **Laptop:** no sidebar; the page in the middle, the palette docked at the right (380), every section in one scroll.
+- **··· Score settings:** Instruments and staves, Page layout, Playback sound, MIDI keyboard; Export, Print. Title, key,
+  time and tempo are edited on the score.

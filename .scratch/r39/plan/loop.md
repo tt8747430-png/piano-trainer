@@ -169,3 +169,5 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **Canvas 121 (2026-11-11):** One Piano sheet for the Chords page and the Player (`piano_sheet.py`): Show the piano; 3D piano with Angle Seat · Above and Hands on the keys, or 2D keys; Range as the 88-key strip; Labels; Sound and MIDI keyboard. Above works on the Chords page's live 3D. Measured on four boards.
 
 **Canvas 122 (2026-11-11):** The Player's Piano sheet keeps its rows and stops below the bar. The Chord player has a piano under the chart (2D, or 3D with the hands) and the one Piano sheet in Settings › Piano. Chords' chord names 44 high. Played through's four-bar buttons. The Player by Night (phone, laptop, Piano, Played through), one Night map with the Chords page. Measured on every touched board.
+
+- Canvas 123 (2026-11-11): the editor as the Player in Edit — glass bar with Play · Edit, selection strip, seven categories with drawn icons, keys; laptop palette docked. Drawings v123-*.
