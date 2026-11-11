@@ -65,7 +65,7 @@ ACTS, ACTS_L = ACTS_OF("Player.dc.html"), ACTS_OF("PlayerLaptop.dc.html")
 SECTS = GROUP(('link', 'Verse', '2 × · bars 1–16', 'Section.dc.html'), ('link', 'Ending', 'bars 17–20', 'Section.dc.html'), bg=SHEET)
 PROGS = GROUP(('link', 'Gospel hymn', '<span style="font-family: ' + SERIF + '">I – IV – I – V</span>', 'Progression.dc.html'), ('link', 'Authentic cadence', '<span style="font-family: ' + SERIF + '">I – V – I</span>', 'Progression.dc.html'), bg=SHEET)
 DETAILS = GROUP(('link', 'Level', 'Beginner', ''), ('link', 'Genre', 'Hymn', ''), ('link', 'Language', 'English', ''), ('link', 'Tags', 'Add tags', ''), bg=SHEET)
-SONG_MORE = GROUP(('link', 'Edit score', '', 'Editor.dc.html'), ('link', 'Settings', '', 'SongSettings.dc.html'), ('link', 'Share', '', ''), ('link', 'Export…', 'MusicXML, MIDI, PDF', ''), ('action', 'Archive', 'closeSheet', '#B3261E'), bg=SHEET)
+SONG_MORE = GROUP(('link', 'Edit score', '', 'Editor.dc.html'), ('link', 'Edit the original', 'Editors', 'EditorDraft.dc.html'), ('link', 'Settings', '', 'SongSettings.dc.html'), ('link', 'Share', '', ''), ('link', 'Export…', 'MusicXML, MIDI, PDF', ''), ('action', 'Archive', 'closeSheet', '#B3261E'), bg=SHEET)
 CREDITS = GROUP(('link', 'Title', 'Amazing Grace', ''), ('link', 'Words by', 'John Newton', ''), ('link', 'Music', 'New Britain', ''), bg=SHEET)
 ph = f'''{TOP('Songs.dc.html', '', LEARNED + HEARTB + DOTS())}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 60px; display: flex; flex-direction: column; gap: 16px">
@@ -82,7 +82,7 @@ lm = f'''{LTOP('SongsLaptop.dc.html', LEARNED + HEARTB + DOTS())}
 <section style="display: flex; flex-direction: column; gap: 10px">{H2('Sections')}{SECTS.replace('Section.dc.html', 'SectionLaptop.dc.html')}</section>
 <section style="display: flex; flex-direction: column; gap: 10px">{H2('Details')}{DETAILS}</section></div>
 </div>'''
-pl = POPOVER('moreOn', 'Amazing Grace', SONG_MORE.replace('Editor.dc.html', 'EditorLaptop.dc.html').replace('SongSettings.dc.html', 'SongSettingsLaptop.dc.html')) + POPOVER('creditsOn', 'Title and credits', CREDITS, 'left: 120px; top: 520px', 420)
+pl = POPOVER('moreOn', 'Amazing Grace', SONG_MORE.replace('EditorDraft.dc.html', 'EditorDraftLaptop.dc.html').replace('Editor.dc.html', 'EditorLaptop.dc.html').replace('SongSettings.dc.html', 'SongSettingsLaptop.dc.html')) + POPOVER('creditsOn', 'Title and credits', CREDITS, 'left: 120px; top: 520px', 420)
 detail('Song', 'A song', SG, ph, lm, '', sh, pl, 'Songs')
 s = open(OUT + 'SongLaptop.dc.html').read().replace('href="Progression.dc.html"', 'href="ProgressionLaptop.dc.html"'); open(OUT + 'SongLaptop.dc.html', 'w').write(s)
 

@@ -46,6 +46,7 @@ owner's, typos fixed.
 - **Drawn (R39-3, 2026-11-08):** one quiet bar (Done, Undo, Redo, Piano keys, Play, ··· for what the score does not
   print), no ✕; the palette's categories named, folded to one row, opened to every section in one scroll; docked on a
   laptop. Waiting for the owner's word.
+- **The editor's draft (canvas 135, 2026-11-11):** "no roles, no edit mode": a built-in song's original is edited by an editor as a draft under a Publishing pill with Publish…, Versions and Discard changes; what reaches every learner asks first.
 
 ## Pickers and tempo
 
