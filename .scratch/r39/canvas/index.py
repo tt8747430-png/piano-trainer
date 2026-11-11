@@ -1,18 +1,18 @@
 # The one canvas's index: a canvas page per area, a row per screen, laptops left and phones right (R42 canvas 100). Replaces link.py (the pages now carry their own links). Run: python3 -I index.py
 import json, re, os
 P = '/home/user/piano-trainer/.scratch/r39/canvas/practice/project/'
-SONGS = [('Songs', 'SongsLaptop', 'My songs'), ('Explore', 'ExploreLaptop', 'Explore, a public song, a shared link'), ('Folder', 'FolderLaptop', 'A folder, its settings, Card style, Archived'), ('Archive', 'ArchiveLaptop', 'Archive and Trash'), ('Groups', 'GroupsLaptop', 'Groups, a group, a shared folder, Join'), ('Song', 'SongLaptop', 'A song'), ('SongSettings', 'SongSettingsLaptop', 'A song’s Settings and Publish'), ('Section', 'SectionLaptop', 'A section of a song'), ('Editor', 'EditorLaptop', 'Score editor')]
+SONGS = [('Songs', 'SongsLaptop', 'My songs'), ('Explore', 'ExploreLaptop', 'Explore, a public song, a shared link'), ('Folder', 'FolderLaptop', 'A folder, its settings, Card style, Archived'), ('Archive', 'ArchiveLaptop', 'Archive and Trash'), ('Groups', 'GroupsLaptop', 'Groups, a group, a shared folder, Join'), ('Song', 'SongLaptop', 'A song'), ('SongSettings', 'SongSettingsLaptop', 'A song’s Settings and Publish'), ('Section', 'SectionLaptop', 'A section of a song'), ('Editor', 'EditorLaptop', 'Score editor'), ('Take', 'TakeLaptop', 'A take')]
 PLAYER = [('Player', 'PlayerLaptop', 'The Player'), ('PlayerLoop', 'PlayerLaptopLoop', 'The Player, Practice with a loop'),
           ('PlayerKeyboard', 'PlayerLaptopKeyboard', 'The Player, Keyboard'),
-          ('PlayerHands', 'PlayerLaptopParts', 'The Player, Parts'), ('PlayerViewSheet', 'PlayerLaptopSheet', 'The Player, Sheet settings')]
+          ('PlayerHands', 'PlayerLaptopParts', 'The Player, Parts'), ('PlayerViewSheet', 'PlayerLaptopSheet', 'The Player, Sheet settings'), ('PlayWalk', 'PlayWalkLaptop', 'The Player: walk the chords'), ('PlayChromatic', 'PlayChromaticLaptop', 'The Player: a chromatic walk'), ('PlayProgression', 'PlayProgressionLaptop', 'The Player: a progression in 12 keys'), ('PlayExercise', 'PlayExerciseLaptop', 'The Player: an exercise')]
 PLAYER_PHONES = [('PlayerPractice', 'Practice: Wait · Play, the tempo, the metronome'), ('PlayerViewDiagrams', 'Diagrams settings'),
                  ('PlayerViewGrid', 'Grid settings'), ('PlayerViewLyrics', 'Lyrics settings'),
                  ('PlayerSettings', 'Song settings: Arrangement or Accompaniment'), ('PlayerKey', 'Transpose'), ('PlayerDone', 'Played through'),
                  ('PlayerDiagrams', 'Diagrams')]
 PRACTICE = [('Main', 'Laptop', 'Practice'), ('Chords', 'ChordsLaptop', 'Chords'), ('RandomChords', 'RandomChordsLaptop', 'Random chords'), ('Scales', 'ScalesLaptop', 'Scales and keys'),
-            ('Intervals', 'IntervalsLaptop', 'Intervals'), ('Progressions', 'ProgressionsLaptop', 'Progressions'), ('Progression', 'ProgressionLaptop', 'A progression'),
-            ('Accompaniment', 'AccompanimentLaptop', 'Accompaniment'), ('ChordPlayer', 'ChordPlayerLaptop', 'Chord player'),
-            ('Exercises', 'ExercisesLaptop', 'Exercises'), ('Exercise', 'ExerciseLaptop', 'An exercise'), ('Quiz', 'QuizLaptop', 'Quiz'),
+            ('Intervals', 'IntervalsLaptop', 'Intervals'), ('Progressions', 'ProgressionsLaptop', 'Progressions'), ('Progression', 'ProgressionLaptop', 'A progression'), ('ProgressionEdit', 'ProgressionEditLaptop', 'A progression, edited by an editor'),
+            ('Accompaniment', 'AccompanimentLaptop', 'Accompaniment'), ('Pattern', 'PatternLaptop', 'A pattern'), ('PatternNew', 'PatternNewLaptop', 'A new pattern'), ('ChordPlayer', 'ChordPlayerLaptop', 'Chord player'),
+            ('Exercises', 'ExercisesLaptop', 'Exercises'), ('Exercise', 'ExerciseLaptop', 'An exercise'), ('Quiz', 'QuizLaptop', 'Quiz'), ('Trainer', 'TrainerLaptop', 'A trainer: setup, a round, results'), ('Check', 'CheckLaptop', 'Check a song'),
             ('QuizRun', 'QuizRunLaptop', 'A quiz run'), ('Metronome', 'MetronomeLaptop', 'Metronome'), ('Tuner', 'TunerLaptop', 'Tuner'),
             ('ChordFinder', 'ChordFinderLaptop', 'Chord finder'), ('CircleOfFifths', 'CircleOfFifthsLaptop', 'Circle of fifths')]
 # R42 canvas 100 (owner: "group the screens by page and by device and not so scattered"): one canvas page per area;

@@ -13,6 +13,7 @@ seen (its roll) and heard (Listen) before it is chosen, as Smart Pianist's style
 - "content kinds never mixed": patterns only; the course and songs links of today's page go (they are Learn's and
   Songs').
 - Names are the trade's: Accompaniment and Pattern (Smart Pianist).
+- A pattern is a page (canvas 134): a row opens it, built-in or your own; ··· holds Edit, Duplicate, Publish and Delete (gone at once, with Undo). New pattern opens the same editor empty.
 
 ## Today
 

@@ -63,6 +63,9 @@ def SCALESTAFF(label):
           + '</sc-for>')
     return f'<svg viewBox="0 0 360 96" width="100%" role="img" aria-label="{label}" style="display: block">{o}</svg>'
 SC = js(r'''
+// switches by key: k → kOn, kOnBg, kOnX, kT; segs by key: [key, options, default] → keySeg
+const SW = (st, set, keys) => Object.fromEntries(keys.flatMap(([k, d]) => { const on = st[k] ?? d; return [[k + 'On', on], [k + 'OnBg', on ? '#44684A' : '#DAD1C8'], [k + 'OnX', on ? 22 : 2], [k + 'T', () => set({ [k]: !on })]]; }));
+const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k + 'Seg', seg(opts, st[k] ?? d, (l) => set({ [k]: l }))]));
     const KINDS = ['Major', 'Natural minor', 'Harmonic minor', 'Melodic minor', 'Dorian', 'Mixolydian', 'Major pentatonic', 'Minor pentatonic', 'Blues'];
     const IV = [[0,2,4,5,7,9,11],[0,2,3,5,7,8,10],[0,2,3,5,7,8,11],[0,2,3,5,7,9,11],[0,2,3,5,7,9,10],[0,2,4,5,7,9,10],[0,2,4,7,9],[0,3,5,7,10],[0,3,5,6,7,10]];
     // the tonic is a spelled note, one of the 15 keys of its kind: tap a letter again for its sharp or flat (R42 v68)
@@ -96,7 +99,7 @@ SC = js(r'''
       const up = k < 4, f = fingOk && nN === 8 ? FG[i] : '';
       return { x, y, stem: up ? 'M' + (x + 4.6) + ' ' + y + 'V' + (y - 24) : 'M' + (x - 4.6) + ' ' + y + 'V' + (y + 24), ax: x - 15, ay: y + 5, a1: show && d === 1, a2: show && d === -1, a3: show && d === 0, a4: show && d === 2, a5: show && d === -2,
         fy: 16, f1: f === '1', f2: f === '2', f3: f === '3', f4: f === '4', f5: f === '5' }; });
-    return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), rootOn: st.sheet === 'root', openRoot: () => set({ sheet: 'root' }), kindOn: st.sheet === 'kind', openKind: () => set({ sheet: 'kind' }),
+    return { ...common(st, set), ...SW(st, set, [['scTl', true], ['scTt', false]]), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), rootOn: st.sheet === 'root', openRoot: () => set({ sheet: 'root' }), kindOn: st.sheet === 'kind', openKind: () => set({ sheet: 'kind' }),
       name: tonic + ' ' + KINDS[kind].toLowerCase(), sub: KINDS[kind] + ' scale · ' + (kind <= 5 ? SIGW : ivs.length + ' notes'), rootL: tonic, kindL: KINDS[kind],
       ...letterPick(rl, ra, okFor(kind), st.tapUsed, (l, next, more) => set(Object.assign({ rl: l, ra: next }, more ? { tapUsed: true } : {}))), kinds: KINDS.map((k, i) => ({ k, on: i === kind, mark: i === kind ? '✓' : '', pick: () => set(Object.assign({ kind: i, sheet: null }, enh(i))) })),
       tabs: seg(['Scale', 'Chords', 'Key'], tab, (l) => set({ tab: l })), isScale: tab === 'Scale', isChords: tab === 'Chords', isKey: tab === 'Key',
@@ -107,7 +110,8 @@ SC_PIC = lambda k, w, kh: f'''<sc-if value="{{{{isScale}}}}" hint-placeholder-va
 <sc-if value="{{{{isChords}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{chords}}}}" as="c" hint-placeholder-count="7"><button type="button" style="height: 78px; border: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: {INK}"><span style="font-size: 22px; font-weight: 700">{{{{c.c}}}}</span><span style="font-family: {SERIF}; font-size: 15px; color: {SOFT}">{{{{c.d}}}}</span></button></sc-for></div></sc-if>
 <sc-if value="{{{{isKey}}}}" hint-placeholder-val="{{{{false}}}}">{CARD(SCALESTAFF('The key signature'))}{GROUP(('link', 'Relative minor', 'E minor', 'Scales.dc.html'), ('link', 'On the circle', 'Between C and D', 'CircleOfFifths.dc.html'), bg=SHEET)}</sc-if>'''
 SC_ROWS = GROUP(('link', 'Tonic', '{{rootL}}', 'openRoot'), ('link', 'Scale', '{{kindL}}', 'openKind'), ('seg', 'Hands', 'handsSeg', 190), ('step', 'Octaves', 'oct', 'octDn', 'octUp'))
-SC_SET = GROUP(('seg', 'Fingering', 'fingSeg', 200), ('link', 'Rhythm', 'Even', ''), ('link', 'Count-in', '1 bar', ''), ('link', 'All piano settings', '', ''))
+SC_SET = (GROUP(('seg', 'Fingering', 'fingSeg', 200), ('link', 'Rhythm', 'Even', ''), ('link', 'Count-in', '1 bar', '')) + CAPS('On the staff') + GROUP(('toggle', 'Tonic and leading note', 'scTlOn', 'scTlT'), ('toggle', 'Tetrachords', 'scTtOn', 'scTtT'))
+          + CAPS('Piano') + GROUP(('link', 'On-screen piano', '', 'Settings.dc.html'), ('link', 'MIDI devices', 'Not connected', 'Settings.dc.html')))
 SC = SC.replace("chords: deg.map", "fingSeg: seg(['As the scale', 'From the thumb'], st.fing ?? 'As the scale', (l) => set({ fing: l })), chords: deg.map")
 KINDLIST = f'<div style="border-radius: 12px; background: {SHEET}; overflow: hidden"><sc-for list="{{{{kinds}}}}" as="k" hint-placeholder-count="9"><button type="button" onClick="{{{{k.pick}}}}" style="width: 100%; height: 48px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {LINE}; padding: 0 16px; display: flex; align-items: center; color: {INK}; font: inherit; font-size: 16px; text-align: left"><span style="flex: 1">{{{{k.k}}}}</span><span style="color: {LINK}; font-weight: 700">{{{{k.mark}}}}</span></button></sc-for></div>'
 SC_SHEETS = BSHEET('rootOn', 'Tonic', NOTEPICK) + BSHEET('kindOn', 'Scale', KINDLIST) + BSHEET('setOn', 'Scale settings', SC_SET)
@@ -151,12 +155,12 @@ library('Progressions', 'Progressions', {'places': ['All', 'Favourites', 'Recent
   add_items=(('Type numerals or chords', '#'), ('Build from chords', '#'), ('New folder', '#')))
 library('Accompaniment', 'Accompaniment', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': ['Broken chords'], 'open': {'Called to Play, level 2': False, 'Rhythm styles': False},
   'filters': [{'name': 'Level', 'opts': [['Level 1', 9], ['Level 2', 6], ['Level 3', 4]]}, {'name': 'Texture', 'opts': [['Block', 5], ['Broken', 7], ['Arpeggio', 4]]}, {'name': 'Feel', 'opts': [['Straight', 12], ['Swing', 3], ['Waltz', 2]]}],
-  'sections': [{'g': 'Recently used', 'rows': [Rw('Bass + chords', 'Left: octave held · Right: chord on each beat', 'Level 1', '♩♩', LILAC, '#', ('Recently used',), ('Level 1', 'Block', 'Straight')), Rw('Broken chords', 'Right hand rocks in 8ths', 'Level 1', '♫', LILAC, '#', ('Recently used',), ('Level 1', 'Broken', 'Straight'))]},
-               {'g': 'Called to Play', 'rows': [Rw('Waltz', 'Left: root on 1 · Right: chord on 2 and 3', 'Level 1', '♩♪', LILAC, '#', (), ('Level 1', 'Block', 'Waltz')), Rw('Arpeggio 1–5–8', 'One arpeggio through both hands', 'Level 2', '♬', LILAC, '#', (), ('Level 2', 'Arpeggio', 'Straight'))]},
-               {'g': 'Called to Play, level 2', 'rows': [Rw('Runs down to the root', 'The 2nd and 5th, then 3–2–1', 'Level 3', '♬', LILAC, '#', (), ('Level 3', 'Broken', 'Straight'))]},
-               {'g': 'Rhythm styles', 'rows': [Rw('Ballad', 'Root and 5th, chords on 2 and 4', 'Level 1', '♩', LILAC, '#', (), ('Level 1', 'Block', 'Straight')), Rw('Swing comping', 'Short chords off the beat', 'Level 3', '♪', LILAC, '#', (), ('Level 3', 'Block', 'Swing'))]}]},
+  'sections': [{'g': 'Recently used', 'rows': [Rw('Bass + chords', 'Left: octave held · Right: chord on each beat', 'Level 1', '♩♩', LILAC, 'Pattern.dc.html', ('Recently used',), ('Level 1', 'Block', 'Straight')), Rw('Broken chords', 'Right hand rocks in 8ths', 'Level 1', '♫', LILAC, 'Pattern.dc.html', ('Recently used',), ('Level 1', 'Broken', 'Straight'))]},
+               {'g': 'Called to Play', 'rows': [Rw('Waltz', 'Left: root on 1 · Right: chord on 2 and 3', 'Level 1', '♩♪', LILAC, 'Pattern.dc.html', (), ('Level 1', 'Block', 'Waltz')), Rw('Arpeggio 1–5–8', 'One arpeggio through both hands', 'Level 2', '♬', LILAC, 'Pattern.dc.html', (), ('Level 2', 'Arpeggio', 'Straight'))]},
+               {'g': 'Called to Play, level 2', 'rows': [Rw('Runs down to the root', 'The 2nd and 5th, then 3–2–1', 'Level 3', '♬', LILAC, 'Pattern.dc.html', (), ('Level 3', 'Broken', 'Straight'))]},
+               {'g': 'Rhythm styles', 'rows': [Rw('Ballad', 'Root and 5th, chords on 2 and 4', 'Level 1', '♩', LILAC, 'Pattern.dc.html', (), ('Level 1', 'Block', 'Straight')), Rw('Swing comping', 'Short chords off the beat', 'Level 3', '♪', LILAC, 'Pattern.dc.html', (), ('Level 3', 'Block', 'Swing'))]}]},
   back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Pattern', 't', 2), ('Hands', 's', 3.4), ('Level', 'v', .8)),
-  add_items=(('New pattern', '#'), ('New folder', '#')))
+  add_items=(('New pattern', 'PatternNew.dc.html'), ('New folder', '#')))
 library('Exercises', 'Exercises', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': ['Hanon'], 'open': {},
   'filters': [{'name': 'Level', 'opts': [['Beginner', 3], ['Intermediate', 1], ['Advanced', 1], ['Professional', 2]]}],
   'sections': [{'g': 'Finger technique', 'rows': [Rw('Hanon', 'Nos. 1 to 20 of The Virtuoso Pianist', 'Intermediate', '1–20', SAGE, 'Exercise.dc.html', ('Recently used',), ('Intermediate',)), Rw('Five-finger position', "A key's first five notes, up and down", 'Beginner', '1–5', SAGE, 'Exercise.dc.html', (), ('Beginner',))]},
@@ -166,6 +170,9 @@ library('Exercises', 'Exercises', {'places': ['All', 'Favourites', 'Recently use
 
 # ═════ A progression (Hooktheory: the chords coloured by function, the moves drawn) ═════
 PR = js(r'''
+// switches by key: k → kOn, kOnBg, kOnX, kT; segs by key: [key, options, default] → keySeg
+const SW = (st, set, keys) => Object.fromEntries(keys.flatMap(([k, d]) => { const on = st[k] ?? d; return [[k + 'On', on], [k + 'OnBg', on ? '#44684A' : '#DAD1C8'], [k + 'OnX', on ? 22 : 2], [k + 'T', () => set({ [k]: !on })]]; }));
+const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k + 'Seg', seg(opts, st[k] ?? d, (l) => set({ [k]: l }))]));
     const P = ['I', 'V', 'vi', 'IV'], DEG = { I: 0, ii: 2, iii: 4, IV: 5, V: 7, vi: 9 };
     const FN = { I: ['Tonic', '#F3D2C8'], vi: ['Tonic', '#F3D2C8'], iii: ['Tonic', '#F3D2C8'], IV: ['Predominant', '#D3E5F2'], ii: ['Predominant', '#D3E5F2'], V: ['Dominant', '#DCE9D6'] };
     const MOVE = ['5th up', '3rd down', '3rd down', '4th down'];
@@ -173,7 +180,7 @@ PR = js(r'''
     const ch = (n) => NN[(key + DEG[n]) % 12] + (n === n.toLowerCase() ? 'm' : '');
     const cur = P[at], r = (key + DEG[cur]) % 12, minor = cur === cur.toLowerCase(), marks = {};
     [0, minor ? 3 : 4, 7].forEach((iv, i) => { marks[60 + ((r + iv) % 12)] = [[ROLE[1], ROLE[3], ROLE[5]][i], NN[(r + iv) % 12]]; }); marks[48 + r] = [ROLE[1], NN[r]];
-    return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), rootOn: st.sheet === 'root', openRoot: () => set({ sheet: 'root' }),
+    return { ...common(st, set), ...SG(st, set, [['prW', ['Numerals', 'Nashville', 'Chords'], 'Numerals'], ['prI', ['Root', '1st', '2nd'], 'Root']]), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), rootOn: st.sheet === 'root', openRoot: () => set({ sheet: 'root' }),
       tiles: P.map((n, i) => ({ n, c: ch(n), bg: FN[n][1], ring: i === at ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', move: i < P.length - 1 ? MOVE[i] : '', pick: () => set({ at: i }) })),
       keyL: NN[key] + ' major', roots: rootGrid(key, (i) => set({ key: i, sheet: null })), voiceSeg: seg(['Voice-led', 'Block'], st.voice ?? 'Voice-led', (l) => set({ voice: l })),
       bpm: (st.bpm ?? 96) + ' BPM', bpmDn: () => set({ bpm: (st.bpm ?? 96) - 4 }), bpmUp: () => set({ bpm: (st.bpm ?? 96) + 4 }),
@@ -182,16 +189,18 @@ TILES = (f'<div style="display: flex; align-items: stretch; gap: 0"><sc-for list
          f'<div style="display: flex; gap: 14px; font-size: 13px; color: {SOFT}">' + ''.join(f'<span style="display: flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 5px; background: {c}; box-shadow: 0 0 0 1px {LINE}"></span>{l}</span>' for l, c in (('Tonic', PEACH), ('Predominant', SKY), ('Dominant', SAGE))) + '</div>')
 PR_ROWS = GROUP(('link', 'Key', '{{keyL}}', 'openRoot'), ('seg', 'Voicing', 'voiceSeg', 200), ('step', 'Tempo', 'bpm', 'bpmDn', 'bpmUp'))
 LOOPB = f'<button type="button" aria-pressed="{{{{loop}}}}" onClick="{{{{toggleLoop}}}}" style="flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {{{{loopBg}}}}; color: {{{{loopFg}}}}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px">{LOOP.replace("20", "18")} Loop</button>'
-PR_MORE = GROUP(('link', 'Edit a copy', '', ''), ('link', 'Open in the Chord player', '', 'ChordPlayer.dc.html'), ('link', 'Songs with it', 'Let It Be, and 11 more', 'Songs.dc.html'))
-PR_SET = GROUP(('seg', 'Numerals of', 'voiceSeg', 200), ('link', 'Chord sound', 'Grand piano', ''), ('link', 'All piano settings', '', ''))
-PR_SET = PR_SET.replace("Numerals of", "Voicing")
-ph = body(TOP('Progressions.dc.html', 'Progression', GEAR() + DOTS()), SUBJECT('Axis of Awesome', 'Pop · in {{keyL}}', 34) + TILES + KEYS(110) + PR_ROWS, LOOPB + SPACER + BTN('Practise in the Player', href='#', kind='quiet', grow=False, h=44) + PLAYBTN())
-lm = lapbody(LTOP('ProgressionsLaptop.dc.html', GEAR() + DOTS()), SUBJECT('Axis of Awesome', 'Pop · in {{keyL}}', 44) + TILES.replace('height: 96px', 'height: 150px').replace('font-size: 26px', 'font-size: 40px') + KEYS(160).replace('kb.', 'kbL.'), PR_ROWS + GROUP(('link', 'Practise in the Player', '', '#'), ('link', 'Open in the Chord player', '', 'ChordPlayerLaptop.dc.html')), LOOPB + SPACER + PLAYBTN())
+PR_MORE = GROUP(('link', 'Edit the progression', 'Editors', 'ProgressionEdit.dc.html'), ('link', 'Edit a copy', '', ''), ('link', 'Open in the Chord player', '', 'ChordPlayer.dc.html'), ('link', 'Songs with it', 'Let It Be, and 11 more', 'Songs.dc.html'))
+PR_SET = GROUP(('seg', 'Written as', 'prWSeg', 200), ('seg', 'First chord’s inversion', 'prISeg', 200), ('link', 'All piano settings', '', 'Settings.dc.html'))
+ph = body(TOP('Progressions.dc.html', 'Progression', GEAR() + DOTS()), SUBJECT('Axis of Awesome', 'Pop · in {{keyL}}', 34) + TILES + KEYS(110) + PR_ROWS, LOOPB + SPACER + BTN('Practise in the Player', href='PlayProgression.dc.html', kind='quiet', grow=False, h=44) + PLAYBTN())
+lm = lapbody(LTOP('ProgressionsLaptop.dc.html', GEAR() + DOTS()), SUBJECT('Axis of Awesome', 'Pop · in {{keyL}}', 44) + TILES.replace('height: 96px', 'height: 150px').replace('font-size: 26px', 'font-size: 40px') + KEYS(160).replace('kb.', 'kbL.'), PR_ROWS + GROUP(('link', 'Practise in the Player', '', 'PlayProgressionLaptop.dc.html'), ('link', 'Open in the Chord player', '', 'ChordPlayerLaptop.dc.html')), LOOPB + SPACER + PLAYBTN())
 detail('Progression', 'A progression', PR, ph, lm, '', BSHEET('rootOn', 'Key', ROOTGRID()) + BSHEET('moreOn', 'Axis of Awesome', PR_MORE) + BSHEET('setOn', 'Progression settings', PR_SET),
-       POPOVER('rootOn', 'Key', ROOTGRID()) + POPOVER('moreOn', 'Axis of Awesome', PR_MORE.replace('ChordPlayer.dc.html', 'ChordPlayerLaptop.dc.html').replace('Songs.dc.html', 'SongsLaptop.dc.html')) + POPOVER('setOn', 'Progression settings', PR_SET))
+       POPOVER('rootOn', 'Key', ROOTGRID()) + POPOVER('moreOn', 'Axis of Awesome', PR_MORE.replace('ProgressionEdit.dc.html', 'ProgressionEditLaptop.dc.html').replace('ChordPlayer.dc.html', 'ChordPlayerLaptop.dc.html').replace('Songs.dc.html', 'SongsLaptop.dc.html')) + POPOVER('setOn', 'Progression settings', PR_SET))
 
 # ═════ Chord player (iReal Pro: the chart fills the page, the player bar at the foot) ═════
 CP = js(r'''
+// switches by key: k → kOn, kOnBg, kOnX, kT; segs by key: [key, options, default] → keySeg
+const SW = (st, set, keys) => Object.fromEntries(keys.flatMap(([k, d]) => { const on = st[k] ?? d; return [[k + 'On', on], [k + 'OnBg', on ? '#44684A' : '#DAD1C8'], [k + 'OnX', on ? 22 : 2], [k + 'T', () => set({ [k]: !on })]]; }));
+const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k + 'Seg', seg(opts, st[k] ?? d, (l) => set({ [k]: l }))]));
     const SECS = [['A', 'Verse', 2, [['C'], ['G'], ['Am'], ['F'], ['C'], ['G'], ['F', 'G'], ['C']]], ['B', 'Chorus', 1, [['F'], ['G'], ['C', 'C/E'], ['F', 'G7'], ['Am'], ['F'], ['G7'], ['C']]], ['C', 'Bridge', 1, [['Dm7'], ['G7'], ['Em7', 'A7'], ['Dm7', 'G7']]]];
     const play = st.playing ? (st.at ?? [0, 2]) : [-1, -1], STY = ['Pop 1', 'Pop ballad', 'Rock 8ths', 'Worship', 'Swing', 'Bossa nova'], s = st.style ?? 0, bpm = st.bpm ?? 96;
     const secs = SECS.map(([m, name, rep, bars], si) => ({ m, name, rep: '× ' + rep, bars: bars.map((cs, bi) => ({ cs: cs.map((c) => ({ c })), bg: play[0] === si && play[1] === bi ? '#EDC684' : !st.playing && slot.si === si && slot.bi === bi ? '#F6E7C8' : 'transparent', edge: bi % 4 === 3 ? '0' : '1px', pick: () => set({ sheet: 'chord', sel: [si, bi] }) })) }));
@@ -269,7 +278,10 @@ def CP_KEYS(h):
     k3 = (f'<sc-if value="{{{{cpKb3}}}}" hint-placeholder-val="{{{{false}}}}"><figure aria-label="The hands at the keys, playing {{{{nowChord}}}}" style="position: relative; margin: 0; height: {h}px; overflow: hidden; background: #EDE6DC; {PS.STAGE_VARS}">'
           f'<canvas ref="{{{{handsRef}}}}" style="display: block; width: 100%; height: 100%"></canvas><div ref="{{{{labelsRef}}}}" aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none"></div></figure></sc-if>')
     return k2 + k3
-CP_SET = GROUP(('link', 'Instruments', 'Piano, bass, drums', ''), ('link', 'Piano', '{{pianoVal}}', 'openPiano'), ('seg', 'Chord names', 'namesSeg', 200), ('link', 'Count-in', '1 bar', ''))
+CP_SET = (CAPS('Instruments') + GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT'))
+          + CAPS('Playing') + GROUP(('link', 'Count-in', '1 bar', ''), ('toggle', 'Repeat the sheet', 'cpRepOn', 'cpRepT'), ('link', 'Volume', '80%', ''))
+          + CAPS('Music') + GROUP(('link', 'Time signature', '4/4', ''), ('link', 'Transpose', 'C → C', ''), ('seg', 'Written as', 'namesSeg', 200), ('seg', 'Voicing', 'cpVSeg', 200))
+          + GROUP(('link', 'On-screen piano', '{{pianoVal}}', 'openPiano'), ('link', 'Connect a piano', 'Not connected', 'Settings.dc.html')))
 _BACKP = f'<button type="button" aria-label="Back to Chord player settings" onClick="{{{{backSet}}}}" style="position: absolute; left: -8px; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L}</button>'
 _PBODY = PS.PIANO_SHEET(False, 3, 4)
 CP_PSHEET = BSHEET('pianoOn', 'Piano', _PBODY).replace('max-height: 86%', 'max-height: calc(100% - 124px)', 1).replace('<span style="font-size: 17px; font-weight: 600">Piano</span>', _BACKP + '<span style="font-size: 17px; font-weight: 600">Piano</span>', 1)
@@ -277,7 +289,7 @@ CP_PPOP = POPOVER('pianoOn', 'Piano', _PBODY, 'right: 40px; top: 64px', 400).rep
 
 CP = CP.replace("    const play = st.playing ? (st.at ?? [0, 2])", CP_PIANO_JS + "    const play = st.playing ? [slot.si, slot.bi]", 1).replace("styleOn: st.sheet === 'style',", "styleOn: st.sheet === 'style', ...cpPiano,", 1)
 CP = 'const PT_BUNDLE = ' + json.dumps(PT_BUNDLE_CP) + ';\n' + CP.replace('class Component extends DCLogic {\n', 'class Component extends DCLogic {' + CP_LIFE, 1)
-CP = CP.replace("keyTiles:", "namesSeg: seg(['Letters', 'Numerals'], st.names ?? 'Letters', (l) => set({ names: l })), keyTiles:")
+CP = CP.replace("keyTiles:", "namesSeg: seg(['Chords', 'Numerals', 'Nashville'], st.names ?? 'Chords', (l) => set({ names: l })), ...SW(st, set, [['cpPi', true], ['cpBa', true], ['cpDr', true], ['cpRep', true]]), ...SG(st, set, [['cpV', ['Smooth voice leading', 'Block chords'], 'Smooth voice leading']]), keyTiles:")
 UNDOB = IB('Undo', UNDO)
 ph = (body(TOP('Main.dc.html', 'Chord player', UNDOB + GEAR() + DOTS()), CHART.replace('{{CH}}', '50').replace('{{CF}}', '17'), CP_DOCK, 118).replace('padding: 4px 16px 118px', 'padding: 4px 16px {{cpPad}}px', 1)
       .replace('</main>', '</main><sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; margin-bottom: 110px; box-shadow: 0 -1px 0 ' + LINE + '">' + CP_KEYS(112) + '</div></sc-if>', 1))
@@ -300,15 +312,15 @@ LADDER = f'<div style="display: flex; flex-direction: column; gap: 6px; padding:
 EX_ROWS = GROUP(('step', 'Number', 'noL', 'noDn', 'noUp'), ('link', 'Key', '{{keyL}}', 'openRoot'), ('seg', 'Hands', 'handsSeg', 190), ('seg', 'Rhythm', 'rhythmSeg', 262), ('step', 'Tempo', 'bpmL', 'bpmDn', 'bpmUp', 80), ('raw', LADDER))
 EX_PIC = lambda w: CARD(hanon(w) + hanon(w).replace('bars 1 and 2', 'bars 3 and 4') + f'<div style="display: flex; justify-content: space-between; font-size: 13px; color: {SOFT}; margin-top: 6px"><span>Bars 1–4 of 28</span><span>The left hand an octave lower</span></div>', '12px')
 EX_SET = GROUP(('link', 'Count-in', '1 bar', ''), ('link', 'Wait for the right note', 'On', ''), ('link', 'Next key', 'Circle of fifths', ''), ('link', 'All piano settings', '', ''))
-ph = body(TOP('Exercises.dc.html', 'Hanon', HEARTB + GEAR()), SUBJECT('Hanon No. 1', 'The Virtuoso Pianist · finger technique', 32) + EX_PIC(340) + EX_ROWS, BTN(SPEAKER + ' Listen', kind='quiet', grow=False) + BTN(PLAY.replace('22', '18') + ' Start'))
-lm = lapbody(LTOP('ExercisesLaptop.dc.html', HEARTB + GEAR()), SUBJECT('Hanon No. 1', 'The Virtuoso Pianist · finger technique', 44) + EX_PIC(880), EX_ROWS, BTN(SPEAKER + ' Listen', kind='quiet', grow=False) + BTN(PLAY.replace('22', '18') + ' Start'))
+ph = body(TOP('Exercises.dc.html', 'Hanon', HEARTB + GEAR()), SUBJECT('Hanon No. 1', 'The Virtuoso Pianist · finger technique', 32) + EX_PIC(340) + EX_ROWS, BTN(SPEAKER + ' Listen', kind='quiet', grow=False) + BTN(PLAY.replace('22', '18') + ' Start', href='PlayExercise.dc.html'))
+lm = lapbody(LTOP('ExercisesLaptop.dc.html', HEARTB + GEAR()), SUBJECT('Hanon No. 1', 'The Virtuoso Pianist · finger technique', 44) + EX_PIC(880), EX_ROWS, BTN(SPEAKER + ' Listen', kind='quiet', grow=False) + BTN(PLAY.replace('22', '18') + ' Start', href='PlayExerciseLaptop.dc.html'))
 detail('Exercise', 'An exercise', EX, ph, lm, '', BSHEET('rootOn', 'Key', ROOTGRID()) + BSHEET('setOn', 'Exercise settings', EX_SET), POPOVER('rootOn', 'Key', ROOTGRID()) + POPOVER('setOn', 'Exercise settings', EX_SET))
 
 # ═════ Quiz: the list, its setup, a run (Tenuto's named answers, Duolingo's verdict bar) ═════
 def ring(p):
     c = 2 * 3.1416 * 15; return f'<svg viewBox="0 0 36 36" width="40" height="40" aria-hidden="true" style="flex: none"><circle cx="18" cy="18" r="15" fill="none" stroke="{FILL}" stroke-width="4"></circle><circle cx="18" cy="18" r="15" fill="none" stroke="#44684A" stroke-width="4" stroke-dasharray="{c * p / 100:.1f} {c:.1f}" transform="rotate(-90 18 18)" stroke-linecap="round"></circle><text x="18" y="21.5" text-anchor="middle" font-size="9.5" font-weight="700" fill="{INK}">{p if p else "–"}</text></svg>'
 def QROW(t, s, p):
-    return f'<button type="button" onClick="{{{{openSetup}}}}" style="width: 100%; min-height: 64px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {LINE}; padding: 8px 12px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left">{ring(p)}<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 14px; color: {SOFT}">{s}</span></span><span style="display: flex; color: {SOFT}">{CHEV_R}</span></button>'
+    return f'<a href="Trainer.dc.html" style="width: 100%; box-sizing: border-box; text-decoration: none; min-height: 64px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {LINE}; padding: 8px 12px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left">{ring(p)}<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 14px; color: {SOFT}">{s}</span></span><span style="display: flex; color: {SOFT}">{CHEV_R}</span></a>'
 QG = lambda rows: f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">' + ''.join(QROW(*r) for r in rows) + '</div>'
 QZ = js(r'''
     return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), setupOn: st.sheet === 'setup', openSetup: () => set({ sheet: 'setup' }),
@@ -323,8 +335,8 @@ QSET = GROUP(('link', 'Advance automatically', 'After the sound', ''), ('link', 
 ph = f'''{TOP('Main.dc.html', '', GEAR())}{LARGE('Quiz')}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 40px; display: flex; flex-direction: column; gap: 14px">{GAPS.replace('{RUN}', 'QuizRun.dc.html')}{QLISTS}</main>'''
 lm = f'''{LTOP('Laptop.dc.html', GEAR())}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 32px; align-content: start"><h1 style="grid-column: 1 / -1; margin: 0; font-size: 34px; font-weight: 700">Quiz</h1><div style="grid-column: 1 / -1">{GAPS.replace('{RUN}', 'QuizRunLaptop.dc.html')}</div>
 <div style="display: flex; flex-direction: column; gap: 14px">{QLISTS.split("{H2('Scales")[0] if False else QLISTS.split('<h2')[0]}</div></main>'''
-lm = f'''{LTOP('Laptop.dc.html', GEAR())}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 14px; max-width: 900px"><h1 style="margin: 0; font-size: 34px; font-weight: 700">Quiz</h1>{GAPS.replace('{RUN}', 'QuizRunLaptop.dc.html')}{QLISTS}</main>'''
-detail('Quiz', 'Quiz', QZ, ph, lm, '', BSHEET('setupOn', 'Chords', SETUP('QuizRun.dc.html')) + BSHEET('setOn', 'Quiz settings', QSET), POPOVER('setupOn', 'Chords', SETUP('QuizRunLaptop.dc.html'), 'right: 60px; top: 160px', 420) + POPOVER('setOn', 'Quiz settings', QSET))
+lm = f'''{LTOP('Laptop.dc.html', GEAR())}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 14px; max-width: 900px"><h1 style="margin: 0; font-size: 34px; font-weight: 700">Quiz</h1>{GAPS.replace('{RUN}', 'QuizRunLaptop.dc.html')}{QLISTS.replace('Trainer.dc.html', 'TrainerLaptop.dc.html')}</main>'''
+detail('Quiz', 'Quiz', QZ, ph, lm, '', BSHEET('setOn', 'Quiz settings', QSET), POPOVER('setOn', 'Quiz settings', QSET))
 
 QR = js(r'''
     const picked = st.picked ?? null, ANS = ['F major', 'F minor', 'F diminished', 'F augmented'], right = picked === 0;
@@ -380,15 +392,19 @@ detail('Tuner', 'Tuner', TU, ph, lm, '', BSHEET('setOn', 'Tuner settings', TU_SE
 
 # ═════ Chord finder (you play, it names: the keys are the input) ═════
 CF = js(r'''
+// switches by key: k → kOn, kOnBg, kOnX, kT; segs by key: [key, options, default] → keySeg
+const SW = (st, set, keys) => Object.fromEntries(keys.flatMap(([k, d]) => { const on = st[k] ?? d; return [[k + 'On', on], [k + 'OnBg', on ? '#44684A' : '#DAD1C8'], [k + 'OnX', on ? 22 : 2], [k + 'T', () => set({ [k]: !on })]]; }));
+const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k + 'Seg', seg(opts, st[k] ?? d, (l) => set({ [k]: l }))]));
     const held = st.held ?? [52, 60, 67, 71], empty = held.length === 0;
     const R = { 52: [ROLE[3], 'E'], 60: [ROLE[1], 'C'], 67: [ROLE[5], 'G'], 71: [ROLE[7], 'B'] }, marks = {}; held.forEach((m) => { marks[m] = R[m] || ['#EDC684', NN[m % 12]]; });
-    return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), empty, found: !empty, name: empty ? 'Play a chord' : 'Cmaj7/E', sub: empty ? 'Hold three or more keys, here or on your piano' : 'C major 7th, 1st inversion · Imaj7 in C major',
+    return { ...common(st, set), ...SW(st, set, [['cfSl', true], ['cfK', true], ['cfSc', false], ['cfH', true]]), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), empty, found: !empty, name: empty ? 'Play a chord' : 'Cmaj7/E', sub: empty ? 'Hold three or more keys, here or on your piano' : 'C major 7th, 1st inversion · Imaj7 in C major',
       notes: [['E', '3rd · bass'], ['C', 'root'], ['G', '5th'], ['B', '7th']].map(([n, d]) => ({ n, d })), alts: ['Em(♭6)', 'G6/E (no 3rd)'].map((a) => ({ a })), played: ['G7', 'Am7', 'Dm7'].map((p) => ({ p })),
       kb: calmKeys(48, 76, marks, 370, 170), kbL: calmKeys(36, 84, marks, 860, 200), clear: () => set({ held: [] }) };''')
 CHIPL = lambda lst, k: f'<div style="display: flex; flex-wrap: wrap; gap: 6px"><sc-for list="{{{{{lst}}}}}" as="x" hint-placeholder-count="2"><span style="height: 32px; padding: 0 12px; border-radius: 16px; background: {FILL}; display: flex; align-items: center; font-size: 15px; font-weight: 600">{{{{x.{k}}}}}</span></sc-for></div>'
 CF_NOTES = f'<sc-if value="{{{{found}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{notes}}}}" as="n" hint-placeholder-count="4"><span style="height: 64px; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; display: flex; flex-direction: column; align-items: center; justify-content: center"><span style="font-size: 22px; font-weight: 700">{{{{n.n}}}}</span><span style="font-size: 12px; color: {SOFT}">{{{{n.d}}}}</span></span></sc-for></div></sc-if>'
 CF_ROWS = GROUP(('link', 'Spelled in', 'C major', ''), ('raw', f'<div style="padding: 10px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Also read as</span>{CHIPL("alts", "a")}</div>'), ('raw', f'<div style="padding: 10px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Played</span>{CHIPL("played", "p")}</div>'))
-CF_SET = GROUP(('link', 'Connect a piano', 'Not connected', ''), ('link', 'Spell chords in', 'The key they suit', ''))
+CF_SET = (CAPS('Chord names') + GROUP(('toggle', 'Slash chords for inversions', 'cfSlOn', 'cfSlT'), ('link', 'Spelled in', 'The key they suit', '')) + CAPS('Analysis') + GROUP(('toggle', 'Keys that contain the chord', 'cfKOn', 'cfKT'), ('toggle', 'Key’s scale on the keyboard', 'cfScOn', 'cfScT'))
+          + CAPS('History') + GROUP(('toggle', 'Keep chord history', 'cfHOn', 'cfHT'), ('action', 'Forget the chords played', 'closeSheet')) + GROUP(('link', 'Connect a piano', 'Not connected', 'Settings.dc.html')))
 ph = body(TOP('Main.dc.html', 'Chord finder', GEAR()), SUBJECT('{{name}}', '{{sub}}', 44) + CF_NOTES + CF_ROWS + '<div style="flex: 1"></div>' + KEYS(170), BTN('Clear the keys', 'clear', kind='quiet', grow=False) + BTN('Open in Chords', href='Chords.dc.html'))
 lm = lapbody(LTOP('Laptop.dc.html', GEAR(), 'Chord finder'), SUBJECT('{{name}}', '{{sub}}', 64) + CF_NOTES + '<div style="flex: 1"></div>' + KEYS(200).replace('kb.', 'kbL.'), CF_ROWS, BTN('Clear the keys', 'clear', kind='quiet', grow=False) + BTN('Open in Chords', href='ChordsLaptop.dc.html'))
 detail('ChordFinder', 'Chord finder', CF, ph, lm, '', BSHEET('setOn', 'Chord finder settings', CF_SET), POPOVER('setOn', 'Chord finder settings', CF_SET))

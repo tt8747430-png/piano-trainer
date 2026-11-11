@@ -10,6 +10,7 @@ line) and a quiz shows how far you have come at a glance, as Tenuto's and Functi
 - "Quiz: one setup and four drills for every trainer; a cadence trainer."
 - Every Practice page has its own settings (a gear). A key is the root grid. Play controls sit above the keys.
 - No finger numbers on or under the keys; no explanation line under a control (an ⓘ at most).
+- A trainer has its setup page (canvas 134): Drill, Shown, Level, Custom chord qualities, Timing, the best score, Start; its run plays on keys (Show answer, Clear, Check, Next) and ends on Results. A song's Check is the same run over the song's chords, Close back to the song. Exercise's Start opens the Player with a setup sheet.
 
 ## Today
 

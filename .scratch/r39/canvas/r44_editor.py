@@ -120,6 +120,7 @@ elm4 = (TIP_CSS + EBAR('SongLaptop.dc.html', 'PlayerLaptop.dc.html', title=True)
 # ··· Score settings: what the score does not print (the printed things open from the score itself)
 ED_MORE4 = (f'<div style="{PS.CARD}">' + PS.LINK('Instruments and staves', 'stv') + PS.LINK('Page layout', 'lay', PS.SEP) + PS.LINK('Playback sound', 'snd', PS.SEP) + PS.LINK('MIDI keyboard', 'midi', PS.SEP) + '</div>'
             f'<div style="{PS.CARD}">' + PS.LINK('Export', 'exp') + PS.LINK('Print', 'prn', PS.SEP) + '</div>'
+            f'<div style="{PS.CARD}"><a href="Take.dc.html" style="min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 0 16px; color: {INK}; text-decoration: none; font-size: 16px"><span style="flex: 1">Takes: 3</span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a></div>'
             f'<p style="margin: 0; padding: 0 16px; font-size: 13px; color: {SOFT}">Title, key, time signature and tempo are edited where they print: tap them on the score.</p>')
 ED4 = ED4.replace("moreOn: st.sheet === 'more',", "moreOn: st.sheet === 'more', " + ", ".join(
     f"{k}: '', {k}On: false, {k}Val: '{v}', {k}ValC: '#685E56'" for k, v in (('stv', 'Piano'), ('lay', 'Pages'), ('snd', 'Grand piano'), ('midi', 'None'), ('exp', ''), ('prn', ''))) + ",", 1)
@@ -142,5 +143,5 @@ def full_laptop(fname, title, main, js_, pops=''):
     open(OUT + fname + '.dc.html', 'w').write(html)
 
 phone('Editor', 'Score editor, phone', eph4, ED4, BSHEET('moreOn', 'Score settings', ED_MORE4).replace('max-height: 86%', 'max-height: calc(100% - 124px)', 1))
-full_laptop('EditorLaptop', 'Score editor, laptop', elm4, ED4, POPOVER('moreOn', 'Score settings', ED_MORE4, 'right: 24px; top: 76px', 380))
+full_laptop('EditorLaptop', 'Score editor, laptop', elm4, ED4, POPOVER('moreOn', 'Score settings', ED_MORE4.replace('Take.dc.html', 'TakeLaptop.dc.html'), 'right: 24px; top: 76px', 380))
 print('r44 editor ok')

@@ -189,6 +189,7 @@ owner's, typos fixed.
 - **Every page behind the library (canvas 133, 2026-11-11):** "you missed so many features": Explore with its shelves and
   states, a public song (rating, Add to my library, Report), Groups and a shared folder, a folder's Settings and Card
   style, Archive and Trash, a song's Settings, Publish and a section's page, each reached from where the app reaches it.
+- **Practice's remaining pages (canvas 134, 2026-11-11):** "no edit mode for the pages": a progression and a pattern each get an editor with Draft, Settings, Publish and Discard; a trainer gets its setup, run and Results; a song's Check; a take's page; a setup sheet over the Player for a walk, chromatic, a progression and an exercise; every Practice gear opens full settings.
 - **Rows show their music (canvas 124, 2026-11-11):** a song's row shows its first notes, a folder a stack of pages
   with "23 songs · 4 learned"; no Open all; on a laptop quiet Places and the folders list; every target 44.
 - **The library, drawn (R39-1, 2026-11-08):** Continue first (big engraved covers, "Bar 9 of 16"), folders as compact
