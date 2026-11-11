@@ -790,19 +790,19 @@ return {
     const symId = (id) => { const [pc, qi] = id.split(':').map(Number); return RN12(QS[qi])[pc] + QS[qi].k; };
     const pool = sel.map((id) => { const [pc, qi] = id.split(':').map(Number); const [l, a] = LA(RN12(QS[qi])[pc]); return { rl: l, ra: a, q: qi }; });
     const flt = st.rpFlt || 'all';
-    const FL = [['all', 'All', () => true], ['chosen', 'Chosen · ' + sel.length, () => true], ['key', 'In a key', () => false], ['maj', 'Major', (q) => q.k === ''], ['min', 'Minor', (q) => q.k === 'm'],
+    const FL = [['all', 'All', () => true], ['chosen', 'Selected · ' + sel.length, () => true], ['maj', 'Major', (q) => q.k === ''], ['min', 'Minor', (q) => q.k === 'm'],
       ['dim', 'Diminished', (q) => ['°', 'ø7', '°7'].includes(q.k)], ['aug', 'Augmented', (q) => q.k === '+'], ['sus', 'Suspended', (q) => q.k.includes('sus')], ['add', 'Added notes', (q) => q.g === 'Added notes'],
       ['sev', 'Sevenths', (q) => q.g === 'Sevenths'], ['ext', 'Extended', (q) => q.g === 'Extended'], ['alt', 'Altered', (q) => q.g === 'Altered']];
     const fpred = (FL.find((f) => f[0] === flt) || FL[0])[2];
-    const tile = (id, s, sub) => { const on = has(id); return { s, sub: sub || '', hasSub: !!sub, on, bg: on ? '#F6E3BC' : '#FEFDFB', ring: on ? 'inset 0 0 0 1.5px #C99A45' : '0 0 0 1px ' + C.line, fw: on ? 700 : 500, aria: s + (on ? ', chosen' : ''), pick: () => flip([id], on) }; };
-    const sect = (title, ids, mk) => { const n = ids.filter(has).length, all = n === ids.length; return { title, count: n + ' of ' + ids.length, allLab: all ? 'Clear' : 'Choose all', allPick: () => flip(ids, all), tiles: ids.map(mk) }; };
+    const BOX = (st3) => ({ boxBg: st3 ? C.ink : '#FEFDFB', boxRing: st3 ? 'none' : 'inset 0 0 0 1.5px #A99E93', boxMark: st3 === 2 ? '✓' : st3 === 1 ? '–' : '' });
+    const tile = (id, s, sub) => { const on = has(id); return Object.assign({ s, sub: sub || '', hasSub: !!sub, on, fw: on ? 700 : 500, aria: s, pick: () => flip([id], on) }, BOX(on ? 2 : 0)); };
+    const sect = (title, ids, mk) => { const n = ids.filter(has).length, all = n === ids.length; return Object.assign({ title, count: n + ' of ' + ids.length, allOn: all, allPick: () => flip(ids, all), tiles: ids.map(mk) }, BOX(all ? 2 : n ? 1 : 0)); };
     const KQT = mn ? ['m', '°', '', 'm', '', '', ''] : ['', 'm', 'm', '', '', 'm', '°'], KQS = mn ? ['m7', 'ø7', 'maj7', 'm7', '7', 'maj7', '7'] : ['maj7', 'm7', 'm7', 'maj7', '7', 'm7', 'ø7'];
     const keyName = LET[kL] + ACC[String(kA)] + (mn ? ' minor' : ' major');
     const keySect = (title, KQx) => { const items = ST.map((semi, d) => { const pc = (rk + semi) % 12, l = (kL + d) % 7, a = ((pc - NATPC[l] + 18) % 12) - 6; return { id: pc + ':' + QI(KQx[d]), s: LET[l] + ACC[String(a)] + KQx[d], r: RM[d] }; });
       return sect(title, items.map((x) => x.id), (id) => { const x = items.find((y) => y.id === id); return tile(id, x.s, x.r); }); };
-    const rpSects = flt === 'key' ? [keySect('Triads in ' + keyName, KQT), keySect('Sevenths in ' + keyName, KQS)]
-      : QS.map((q, qi) => [q, qi]).filter(([q]) => fpred(q)).map(([q, qi]) => { const ids = Array.from({ length: 12 }, (_, pc) => pc + ':' + qi).filter((id) => flt !== 'chosen' || has(id));
-        return ids.length ? sect(q.n[0].toUpperCase() + q.n.slice(1) + (q.k ? '  ·  C' + q.k : '  ·  C'), ids, (id) => tile(id, symId(id))) : null; }).filter(Boolean);
+    const rpSects = QS.map((q, qi) => [q, qi]).filter(([q]) => fpred(q)).map(([q, qi]) => { const ids = Array.from({ length: 12 }, (_, pc) => pc + ':' + qi).filter((id) => flt !== 'chosen' || has(id));
+        return ids.length ? sect(q.n[0].toUpperCase() + q.n.slice(1), ids, (id) => tile(id, symId(id))) : null; }).filter(Boolean);
     const invs = st.rpInvs || [0];
     const INVR = [['Root position', 'C  E  G', 'C', 'the root at the bottom'], ['1st inversion', 'E  G  C', 'E', 'the 3rd at the bottom'], ['2nd inversion', 'G  C  E', 'G', 'the 5th at the bottom'], ['3rd inversion', 'B♭  C  E  G', 'B♭', 'the 7th at the bottom; chords with a 7th only']];
     const vs = st.rpVoic || ['Close'], inv = st.rpInv === 'all', hh = st.rpHands || 'Right';
@@ -851,12 +851,12 @@ return {
       isRpGoal: st.sheet === 'rpGoal', openRpGoal: () => set({ sheet: 'rpGoal' }),
       rpGoalRows: [['16 chords', '16 chords', 'a set of 16, scored at the end'], ['5 minutes', 'For 5 minutes', 'as many as you play right'], ['No end', 'Until I stop', 'no count and no clock']].map(([g, l, sub]) => ({ l, sub, mark: goal === g ? '✓' : '', fw: goal === g ? 700 : 500, pick: () => set({ rpGoal: g }) })),
       rpChips: FL.map(([v, l]) => ({ l, on: v === flt, bg: v === flt ? C.ink : '#FEFDFB', fg: v === flt ? '#FEFDFB' : C.ink, ring: v === flt ? 'none' : '0 0 0 1px ' + C.line, pick: () => set({ rpFlt: v }) })),
-      rpSects, rpNoSects: !rpSects.length, rpHasSects: !!rpSects.length, rpIsKeyF: flt === 'key',
-      rpChosenT: sel.length + (sel.length === 1 ? ' chord chosen' : ' chords chosen'), rpClearAll: () => set({ rpSel: [] }), rpCanClear: sel.length > 0,
+      rpSects, rpNoSects: !rpSects.length, rpHasSects: !!rpSects.length, 
+      rpChosenT: sel.length + ' selected', rpClearAll: () => set({ rpSel: [] }), rpCanClear: sel.length > 0,
       rpSetVal: sel.length ? sel.slice(0, 3).map(symId).join(', ') + (sel.length > 3 ? ' +' + (sel.length - 3) : '') : 'None yet',
       rpInvRows2: INVR.map(([l, stack, low, sub], i) => { const on = invs.includes(i); return { l, pre: stack.slice(low.length), low, sub, mark: on ? '✓' : '', fw: on ? 700 : 500, pick: () => set({ rpInvs: on ? (invs.length > 1 ? invs.filter((x) => x !== i) : invs) : invs.concat([i]).sort() }) }; }),
       rpInvName: invs.length === 1 ? INVR[invs[0]][0] : invs.length === 4 ? 'Any inversion' : invs.map((i) => ['Root', '1st', '2nd', '3rd'][i]).join(', '),
-      rpEx: sym + slash, rpExSub: 'one of ' + sel.length + (sel.length === 1 ? ' chord' : ' chords'),
+      rpEx: sym + slash, rpExSub: '',
       rpVoicName: vs.length === 1 ? (VOICINGS.find((x) => x.v === vs[0]) || VOICINGS[0]).l : vs.length + ' voicings',
       rpHandsName: hh === 'Both' ? 'Both' : hh };
   })(),

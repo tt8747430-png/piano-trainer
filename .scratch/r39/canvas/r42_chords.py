@@ -687,19 +687,19 @@ return {
     const symId = (id) => { const [pc, qi] = id.split(':').map(Number); return RN12(QS[qi])[pc] + QS[qi].k; };
     const pool = sel.map((id) => { const [pc, qi] = id.split(':').map(Number); const [l, a] = LA(RN12(QS[qi])[pc]); return { rl: l, ra: a, q: qi }; });
     const flt = st.rpFlt || 'all';
-    const FL = [['all', 'All', () => true], ['chosen', 'Chosen · ' + sel.length, () => true], ['key', 'In a key', () => false], ['maj', 'Major', (q) => q.k === ''], ['min', 'Minor', (q) => q.k === 'm'],
+    const FL = [['all', 'All', () => true], ['chosen', 'Selected · ' + sel.length, () => true], ['maj', 'Major', (q) => q.k === ''], ['min', 'Minor', (q) => q.k === 'm'],
       ['dim', 'Diminished', (q) => ['°', 'ø7', '°7'].includes(q.k)], ['aug', 'Augmented', (q) => q.k === '+'], ['sus', 'Suspended', (q) => q.k.includes('sus')], ['add', 'Added notes', (q) => q.g === 'Added notes'],
       ['sev', 'Sevenths', (q) => q.g === 'Sevenths'], ['ext', 'Extended', (q) => q.g === 'Extended'], ['alt', 'Altered', (q) => q.g === 'Altered']];
     const fpred = (FL.find((f) => f[0] === flt) || FL[0])[2];
-    const tile = (id, s, sub) => { const on = has(id); return { s, sub: sub || '', hasSub: !!sub, on, bg: on ? '#F6E3BC' : '#FEFDFB', ring: on ? 'inset 0 0 0 1.5px #C99A45' : '0 0 0 1px ' + C.line, fw: on ? 700 : 500, aria: s + (on ? ', chosen' : ''), pick: () => flip([id], on) }; };
-    const sect = (title, ids, mk) => { const n = ids.filter(has).length, all = n === ids.length; return { title, count: n + ' of ' + ids.length, allLab: all ? 'Clear' : 'Choose all', allPick: () => flip(ids, all), tiles: ids.map(mk) }; };
+    const BOX = (st3) => ({ boxBg: st3 ? C.ink : '#FEFDFB', boxRing: st3 ? 'none' : 'inset 0 0 0 1.5px #A99E93', boxMark: st3 === 2 ? '✓' : st3 === 1 ? '–' : '' });
+    const tile = (id, s, sub) => { const on = has(id); return Object.assign({ s, sub: sub || '', hasSub: !!sub, on, fw: on ? 700 : 500, aria: s, pick: () => flip([id], on) }, BOX(on ? 2 : 0)); };
+    const sect = (title, ids, mk) => { const n = ids.filter(has).length, all = n === ids.length; return Object.assign({ title, count: n + ' of ' + ids.length, allOn: all, allPick: () => flip(ids, all), tiles: ids.map(mk) }, BOX(all ? 2 : n ? 1 : 0)); };
     const KQT = mn ? ['m', '°', '', 'm', '', '', ''] : ['', 'm', 'm', '', '', 'm', '°'], KQS = mn ? ['m7', 'ø7', 'maj7', 'm7', '7', 'maj7', '7'] : ['maj7', 'm7', 'm7', 'maj7', '7', 'm7', 'ø7'];
     const keyName = LET[kL] + ACC[String(kA)] + (mn ? ' minor' : ' major');
     const keySect = (title, KQx) => { const items = ST.map((semi, d) => { const pc = (rk + semi) % 12, l = (kL + d) % 7, a = ((pc - NATPC[l] + 18) % 12) - 6; return { id: pc + ':' + QI(KQx[d]), s: LET[l] + ACC[String(a)] + KQx[d], r: RM[d] }; });
       return sect(title, items.map((x) => x.id), (id) => { const x = items.find((y) => y.id === id); return tile(id, x.s, x.r); }); };
-    const rpSects = flt === 'key' ? [keySect('Triads in ' + keyName, KQT), keySect('Sevenths in ' + keyName, KQS)]
-      : QS.map((q, qi) => [q, qi]).filter(([q]) => fpred(q)).map(([q, qi]) => { const ids = Array.from({ length: 12 }, (_, pc) => pc + ':' + qi).filter((id) => flt !== 'chosen' || has(id));
-        return ids.length ? sect(q.n[0].toUpperCase() + q.n.slice(1) + (q.k ? '  ·  C' + q.k : '  ·  C'), ids, (id) => tile(id, symId(id))) : null; }).filter(Boolean);
+    const rpSects = QS.map((q, qi) => [q, qi]).filter(([q]) => fpred(q)).map(([q, qi]) => { const ids = Array.from({ length: 12 }, (_, pc) => pc + ':' + qi).filter((id) => flt !== 'chosen' || has(id));
+        return ids.length ? sect(q.n[0].toUpperCase() + q.n.slice(1), ids, (id) => tile(id, symId(id))) : null; }).filter(Boolean);
     const invs = st.rpInvs || [0];
     const INVR = [['Root position', 'C  E  G', 'C', 'the root at the bottom'], ['1st inversion', 'E  G  C', 'E', 'the 3rd at the bottom'], ['2nd inversion', 'G  C  E', 'G', 'the 5th at the bottom'], ['3rd inversion', 'B♭  C  E  G', 'B♭', 'the 7th at the bottom; chords with a 7th only']];
     const vs = st.rpVoic || ['Close'], inv = st.rpInv === 'all', hh = st.rpHands || 'Right';
@@ -748,12 +748,12 @@ return {
       isRpGoal: st.sheet === 'rpGoal', openRpGoal: () => set({ sheet: 'rpGoal' }),
       rpGoalRows: [['16 chords', '16 chords', 'a set of 16, scored at the end'], ['5 minutes', 'For 5 minutes', 'as many as you play right'], ['No end', 'Until I stop', 'no count and no clock']].map(([g, l, sub]) => ({ l, sub, mark: goal === g ? '✓' : '', fw: goal === g ? 700 : 500, pick: () => set({ rpGoal: g }) })),
       rpChips: FL.map(([v, l]) => ({ l, on: v === flt, bg: v === flt ? C.ink : '#FEFDFB', fg: v === flt ? '#FEFDFB' : C.ink, ring: v === flt ? 'none' : '0 0 0 1px ' + C.line, pick: () => set({ rpFlt: v }) })),
-      rpSects, rpNoSects: !rpSects.length, rpHasSects: !!rpSects.length, rpIsKeyF: flt === 'key',
-      rpChosenT: sel.length + (sel.length === 1 ? ' chord chosen' : ' chords chosen'), rpClearAll: () => set({ rpSel: [] }), rpCanClear: sel.length > 0,
+      rpSects, rpNoSects: !rpSects.length, rpHasSects: !!rpSects.length, 
+      rpChosenT: sel.length + ' selected', rpClearAll: () => set({ rpSel: [] }), rpCanClear: sel.length > 0,
       rpSetVal: sel.length ? sel.slice(0, 3).map(symId).join(', ') + (sel.length > 3 ? ' +' + (sel.length - 3) : '') : 'None yet',
       rpInvRows2: INVR.map(([l, stack, low, sub], i) => { const on = invs.includes(i); return { l, pre: stack.slice(low.length), low, sub, mark: on ? '✓' : '', fw: on ? 700 : 500, pick: () => set({ rpInvs: on ? (invs.length > 1 ? invs.filter((x) => x !== i) : invs) : invs.concat([i]).sort() }) }; }),
       rpInvName: invs.length === 1 ? INVR[invs[0]][0] : invs.length === 4 ? 'Any inversion' : invs.map((i) => ['Root', '1st', '2nd', '3rd'][i]).join(', '),
-      rpEx: sym + slash, rpExSub: 'one of ' + sel.length + (sel.length === 1 ? ' chord' : ' chords'),
+      rpEx: sym + slash, rpExSub: '',
       rpVoicName: vs.length === 1 ? (VOICINGS.find((x) => x.v === vs[0]) || VOICINGS[0]).l : vs.length + ' voicings',
       rpHandsName: hh === 'Both' ? 'Both' : hh };
   })(),
@@ -1189,10 +1189,10 @@ B_RVOIC = f'<div style="display: flex; flex-direction: column; gap: 12px">{RGROU
 # value said in words and opened in its drawer; Start, the most important thing, full width at the foot.
 RC_HERO = (f'<section aria-label="How it works" style="flex: none; border-radius: 20px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; gap: 16px; align-items: center">'
   f'<div aria-hidden="true" style="flex: none; width: 104px; height: 128px; border-radius: 14px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, 0 8px 18px -10px rgba(51,41,33,.35); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; transform: rotate(-3deg)">'
-  f'<span style="font-family: {SERIF}; font-size: 32px; font-weight: 700; white-space: nowrap">{{{{rpEx}}}}</span><span style="font-size: 12px; color: {SOFT}">{{{{rpExSub}}}}</span></div>'
+  f'<span style="font-family: {SERIF}; font-size: 32px; font-weight: 700; white-space: nowrap">{{{{rpEx}}}}</span></div>'
   f'<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px"><h2 style="margin: 0; font-size: 19px; font-weight: 700">See a chord, play it</h2>'
-  f'<p style="margin: 0; font-size: 14px; line-height: 1.45; color: {SOFT}">A chord name appears. Play it on your piano or the keys on screen; the next one comes when it is right.</p>'
-  f'<button type="button" onClick="{{{{rpTry}}}}" style="align-self: flex-start; height: 44px; margin-left: -8px; padding: 0 8px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px">{SHUF}Show another</button></div></section>')
+  f'<p style="margin: 0; font-size: 14px; line-height: 1.45; color: {SOFT}">A chord name appears. Play it on your piano or on the keys on screen. When it is right, the next one comes.</p>'
+  f'</div></section>')
 RC_SEC = lambda t, rows: f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{t}</h3><div style="border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{rows}</div></section>'
 RC_ROWS = (RC_SEC('Which chords', GROUP(('link', 'Chords', '{{rpSetVal}}', 'openRpSet'), ('link', 'Inversions', '{{rpInvName}}', 'openRpInv'), bg='#FEFDFB'))
   + RC_SEC('How you play them', GROUP(('link', 'Voicing', '{{rpVoicName}}', 'openRpVoic'), ('link', 'Hands', '{{rpHandsLong}}', 'openRpHands'), bg='#FEFDFB'))
@@ -1206,14 +1206,13 @@ B_RSET = (f'<div style="display: flex; flex-direction: column; gap: 16px">'
   f'<div class="nos" role="group" aria-label="Show" style="display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px"><sc-for list="{{{{rpChips}}}}" as="c" hint-placeholder-count="8">'
   f'<button type="button" aria-pressed="{{{{c.on}}}}" onClick="{{{{c.pick}}}}" style="flex: none; height: 36px; padding: 0 14px; border: 0; border-radius: 18px; background: {{{{c.bg}}}}; color: {{{{c.fg}}}}; box-shadow: {{{{c.ring}}}}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap">{{{{c.l}}}}</button></sc-for></div>'
   f'<div style="display: flex; align-items: center; gap: 8px; margin: -4px 4px 0"><span style="flex: 1; font-size: 14px; font-weight: 600">{{{{rpChosenT}}}}</span><sc-if value="{{{{rpCanClear}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{rpClearAll}}}}" style="height: 36px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 14px; font-weight: 600">Clear all</button></sc-if></div>'
-  f'<sc-if value="{{{{rpIsKeyF}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; flex-direction: column; gap: 12px">{KEYPICK_HTML("rpKeyPick", "Key")}{SEGGRID("rpModeSeg")}</div></sc-if>'
-  f'<sc-for list="{{{{rpSects}}}}" as="x" hint-placeholder-count="3"><section style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: center; gap: 8px; margin-left: 4px">'
+    f'<sc-for list="{{{{rpSects}}}}" as="x" hint-placeholder-count="3"><section style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: center; gap: 8px; margin-left: 4px">'
   f'<h4 style="flex: 1; min-width: 0; margin: 0; font-size: 14px; font-weight: 600; white-space: pre">{{{{x.title}}}}</h4><span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{x.count}}}}</span>'
-  f'<button type="button" onClick="{{{{x.allPick}}}}" style="height: 36px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 14px; font-weight: 600">{{{{x.allLab}}}}</button></div>'
+  f'<button type="button" role="checkbox" aria-checked="{{{{x.allOn}}}}" onClick="{{{{x.allPick}}}}" style="height: 40px; padding: 0 4px 0 8px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px">Select all<span aria-hidden="true" style="flex: none; width: 20px; height: 20px; border-radius: 6px; background: {{{{x.boxBg}}}}; box-shadow: {{{{x.boxRing}}}}; color: #FEFDFB; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{x.boxMark}}}}</span></button></div>'
   + f'<div role="group" aria-label="{{{{x.title}}}}" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(68px, 1fr)); gap: 8px"><sc-for list="{{{{x.tiles}}}}" as="b" hint-placeholder-count="12">'
-  f'<button type="button" aria-pressed="{{{{b.on}}}}" aria-label="{{{{b.aria}}}}" onClick="{{{{b.pick}}}}" style="min-width: 0; height: 48px; border: 0; border-radius: 12px; background: {{{{b.bg}}}}; box-shadow: {{{{b.ring}}}}; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0">'
-  f'<span style="font-family: {SERIF}; font-size: 17px; font-weight: {{{{b.fw}}}}; white-space: nowrap">{{{{b.s}}}}</span><sc-if value="{{{{b.hasSub}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-family: {SERIF}; font-size: 12px; color: {SOFT}">{{{{b.sub}}}}</span></sc-if></button></sc-for></div>' + '</section></sc-for>'
-  f'<sc-if value="{{{{rpNoSects}}}}" hint-placeholder-val="{{{{false}}}}"><p style="margin: 8px 4px; font-size: 15px; color: {SOFT}">No chords chosen yet. Tap All, or a type, and choose some.</p></sc-if></div>')
+  f'<button type="button" role="checkbox" aria-checked="{{{{b.on}}}}" aria-label="{{{{b.aria}}}}" onClick="{{{{b.pick}}}}" style="min-width: 0; height: 48px; border: 0; border-radius: 12px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; color: {INK}; font: inherit; display: flex; align-items: center; gap: 8px; padding: 0 10px"><span aria-hidden="true" style="flex: none; width: 20px; height: 20px; border-radius: 6px; background: {{{{b.boxBg}}}}; box-shadow: {{{{b.boxRing}}}}; color: #FEFDFB; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{b.boxMark}}}}</span>'
+  f'<span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; font-family: {SERIF}; font-size: 17px; font-weight: {{{{b.fw}}}}; white-space: nowrap">{{{{b.s}}}}</span><sc-if value="{{{{b.hasSub}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-family: {SERIF}; font-size: 12px; color: {SOFT}">{{{{b.sub}}}}</span></sc-if></button></sc-for></div>' + '</section></sc-for>'
+  f'<sc-if value="{{{{rpNoSects}}}}" hint-placeholder-val="{{{{false}}}}"><p style="margin: 8px 4px; font-size: 15px; color: {SOFT}">No chords selected. Tap All and tick the ones you want.</p></sc-if></div>')
 # Inversions (v139): which note is at the bottom, shown on C; one or more
 B_RINV = (f'<div style="display: flex; flex-direction: column; gap: 12px"><p style="margin: 0 4px; font-size: 14px; line-height: 1.45; color: {SOFT}">Which note of the chord is at the bottom. Choose one or more; each chord comes in one of them.</p>'
   f'<div role="group" aria-label="Inversions" style="border-radius: 16px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{rpInvRows2}}}}" as="r" hint-placeholder-count="4">'
@@ -1224,7 +1223,7 @@ B_RINV = (f'<div style="display: flex; flex-direction: column; gap: 12px"><p sty
 B_RVOIC = f'<div style="display: flex; flex-direction: column; gap: 12px"><p style="margin: 0 4px; font-size: 14px; line-height: 1.45; color: {SOFT}">How each chord’s notes sit on the keys. Pick one, or several to mix them.</p>{RGROUPS("rpVoicGroups", "Voicings", VOICROW)}</div>'
 B_RGOAL = RROWS('rpGoalRows', sub=False).replace('<span style="font-size: 16px; font-weight: {{r.fw}}">{{r.l}}</span>', '<span style="font-size: 16px; font-weight: {{r.fw}}">{{r.l}}</span><span style="font-size: 13px; color: ' + SOFT + '">{{r.sub}}</span>')
 # the Chords drawer keeps its height while the chips filter it (v139)
-RC_FIX = lambda c, h: h.replace('max-height: 86%;', 'height: 86%; box-sizing: border-box;').replace('max-height: 760px;', 'height: 680px;').replace('repeat(auto-fill, minmax(68px, 1fr))', 'repeat(4, minmax(0, 1fr))' if 'max-height: 86%' in h else 'repeat(6, minmax(0, 1fr))') if c == 'isRpSet' else h
+RC_FIX = lambda c, h: h.replace('max-height: 86%;', 'height: 86%; box-sizing: border-box;').replace('max-height: 760px;', 'height: 680px;').replace('repeat(auto-fill, minmax(68px, 1fr))', 'repeat(3, minmax(0, 1fr))' if 'max-height: 86%' in h else 'repeat(4, minmax(0, 1fr))') if c == 'isRpSet' else h
 RC_SHEETS = lambda phone_like: (''.join(RC_FIX(c, BSHEET(c, t, b)) for c, t, b in (('isRpSet', 'Chords', B_RSET), ('isRpInv', 'Inversions', B_RINV), ('isRpVoic', 'Voicing', B_RVOIC), ('isRpHands', 'Hands', B_RHANDS), ('isRpGoal', 'Session', B_RGOAL)))
   if phone_like else ''.join(RC_FIX(c, POPOVER(c, t, b, 'left: calc(50% + 296px); top: 120px', 420)) for c, t, b in (('isRpSet', 'Chords', B_RSET), ('isRpInv', 'Inversions', B_RINV), ('isRpVoic', 'Voicing', B_RVOIC), ('isRpHands', 'Hands', B_RHANDS), ('isRpGoal', 'Session', B_RGOAL))))
 phone('RandomChords', 'Random chords', PH_HEAD('Random chords') + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 120px; display: flex; flex-direction: column; gap: 20px">{RC_HERO}{RC_ROWS}</main>' + RC_GO('PlayerPractice.dc.html', 30),
