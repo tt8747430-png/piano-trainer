@@ -165,3 +165,5 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **Canvas 119 (2026-11-10):** Hands renamed Parts after the research (Yamaha, Synthesia, Flat, flowkey). Each part is a kit card with its hand's picture, a switch, volume and Dim; the last part on is locked on. Sheet › Show became switch rows. New boards: Parts and Sheet settings (both sizes), Diagrams, Grid and Lyrics settings (phone).
 
 **Canvas 120 (2026-11-10):** The measurements ran on all 18 Player boards. Spacing is on the 4 scale (rows 8/16, the tempo card, captions, toolbar, Transpose, Played through), corners are concentric, every sheet and toolbar control is 44, and the transport sits on the centre line. Arrangement · Accompaniment are drawn as Wait · Play.
+
+**Canvas 121 (2026-11-11):** One Piano sheet for the Chords page and the Player (`piano_sheet.py`): Show the piano; 3D piano with Angle Seat · Above and Hands on the keys, or 2D keys; Range as the 88-key strip; Labels; Sound and MIDI keyboard. Above works on the Chords page's live 3D. Measured on four boards.

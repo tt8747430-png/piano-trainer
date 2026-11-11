@@ -193,17 +193,22 @@ def SEGROW(label, lst, w):
             f'<sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="2"><button type="button" aria-pressed="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="height: 30px; padding: 0 6px; border: 0; border-radius: 7px; background: {{{{o.bg}}}}; box-shadow: {{{{o.shadow}}}}; color: #332921; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap">{{{{o.name}}}}</button></sc-for></div></div>')
 def LINKROW(label, val, first=False):
     return (f'<a href="#" style="{ROW}; {"" if first else SEP + "; "}text-decoration: none"><span>{label}</span><span style="display: flex; align-items: center; gap: 4px; color: #685E56">{val}<span style="display: flex; color: #685E56">{CHEV_R}</span></span></a>')
-KBBODY = ('<div style="border-radius: 12px; ' + CARD + '"><button type="button" role="switch" aria-checked="{{pianoSw.on}}" onClick="{{pianoSw.flip}}" style="' + ROW + '; width: 100%; border: 0; background: transparent; font: inherit; text-align: left"><span>Show the piano</span>' + SWITCH('pianoSw') + '</button></div>'
-          '<div role="radiogroup" aria-label="Keyboard" style="display: flex; flex-direction: column; gap: 8px; opacity: {{kbDimOp}}; pointer-events: {{kbPE}}">'
-          + VCARD('kb3c', ICON3D, '3D piano', '<sc-if value="{{kb3d}}" hint-placeholder-val="{{true}}">' + SEGROW('Angle', 'kbViewOpts', 150) + '</sc-if>')
-          + VCARD('kb2c', ICON2D, '2D keys') + '</div>'
-          '<div style="border-radius: 12px; ' + CARD + '; opacity: {{kbDimOp}}; pointer-events: {{kbPE}}">' + SEGROW('Keys', 'kbRangeOpts', 216).replace('; ' + SEP, '', 1)
-          + '<button type="button" role="switch" aria-checked="{{namesSw.on}}" onClick="{{namesSw.flip}}" style="' + ROW + '; ' + SEP + '; width: 100%; border-left: 0; border-right: 0; border-bottom: 0; background: transparent; font: inherit; text-align: left"><span>Note names</span>' + SWITCH('namesSw') + '</button></div>'
-          '<div style="border-radius: 12px; ' + CARD + '">' + LINKROW('Sound', 'Grand piano', True) + LINKROW('MIDI keyboard', 'None') + '</div>')
-KBVALS = ("pianoSw: { on: keys ? 'true' : 'false', track: keys ? '#7FB685' : '#DAD1C8', knob: keys ? 22 : 2, flip: () => this.setState({ keys: !keys }) }, "
-          "kbDimOp: keys ? 1 : 0.4, kbPE: keys ? 'auto' : 'none', "
-          "kb3c: ((on) => ({ on: on ? 'true' : 'false', bg: on ? '#FBF1DD' : '#FEFDFB', ring: on ? '0 0 0 2px #B07A2A' : '0 0 0 1px rgba(51,41,33,.07)', dot: on ? '#B07A2A' : 'transparent', dotRing: on ? 'none' : 'inset 0 0 0 2px #DAD1C8', mk: on ? 1 : 0, pick: () => this.setState({ keys: true, kbStyle: '3d' }) }))(kbStyle === '3d'), "
-          "kb2c: ((on) => ({ on: on ? 'true' : 'false', bg: on ? '#FBF1DD' : '#FEFDFB', ring: on ? '0 0 0 2px #B07A2A' : '0 0 0 1px rgba(51,41,33,.07)', dot: on ? '#B07A2A' : 'transparent', dotRing: on ? 'none' : 'inset 0 0 0 2px #DAD1C8', mk: on ? 1 : 0, pick: () => this.setState({ keys: true, kbStyle: '2d' }) }))(kbStyle === '2d'), ")
+# one Piano sheet, the very markup the Chords page uses (piano_sheet.py; owner, canvas 121: "merge them and make proper
+# one piano settings"). Only its choices follow the page: a song fits the song or the learner's own piano.
+import sys; sys.path.insert(0, str(HERE.parent)); import piano_sheet as PS
+KBBODY = PS.PIANO_SHEET(False, 4, 3)
+SEGF = '(' + PS.SEG_JS + ')'
+KBVALS = ("pianoSw: " + PS.SW_JS('keys', '() => this.setState({ keys: !keys })') + ", kbDimOp: keys ? 1 : 0.4, kbPE: keys ? 'auto' : 'none', "
+          "kbHandsSw: " + PS.SW_JS('kbHands', '() => this.setState({ kbHands: !kbHands })') + ", "
+          "kb3c: " + PS.CARD_JS("kbStyle === '3d'", "() => this.setState({ keys: true, kbStyle: '3d' })") + ", "
+          "kb2c: " + PS.CARD_JS("kbStyle === '2d'", "() => this.setState({ keys: true, kbStyle: '2d' })") + ", "
+          "kbAngleSeg: " + SEGF + "([['seat', 'Seat'], ['above', 'Above']], kbView, (id) => this.setState({ kbView: id })), "
+          "kbRangeSeg: " + SEGF + "([['song', 'Fit the song'], ['61', '61 keys'], ['76', '76 keys'], ['88', '88 keys']], kbRange, (id) => this.setState({ kbRange: id })), "
+          "kbLabelSeg: " + SEGF + "([['names', 'Note names'], ['degrees', 'Degrees'], ['none', 'None']], kbLabel, (id) => this.setState({ kbLabel: id })), "
+          "soundSub: '', soundSubOn: false, soundSubVal: 'Grand piano', soundSubValC: '#685E56', midiSub: '', midiSubOn: false, midiSubVal: 'None', midiSubValC: '#685E56', "
+          "kbStrip: (() => { const [lo, hi] = RANGES[kbRange] ?? KB.song, NAT = [0, 2, 4, 5, 7, 9, 11], W = 340, w = W / 52; let i = 0, x0 = null, x1 = 0, bl = ''; "
+          "for (let m = 21; m <= 108; m++) { if (NAT.includes(m % 12)) { if (m >= lo && m <= hi) { if (x0 === null) x0 = i * w; x1 = (i + 1) * w; } i++; } else bl += 'M' + (i * w - w * 0.3).toFixed(1) + ' 0h' + (w * 0.6).toFixed(1) + 'v15h-' + (w * 0.6).toFixed(1) + 'z'; } "
+          "const nm = (m) => NOTE[m % 12] + (Math.floor(m / 12) - 1); return { bl, x: (x0 || 0).toFixed(1), w: (x1 - (x0 || 0)).toFixed(1), cap: nm(lo) + ' – ' + nm(hi) }; })(), ")
 
 
 def kit(t, phone):
@@ -241,6 +246,10 @@ def kit(t, phone):
     assert m, 'keyboard sheet'
     t = t[:m.start(2)] + KBBODY + '\n' + t[m.end(2):]
     t = sub(t, r"(kb3d: keys && kbStyle === '3d', kb2d: keys && kbStyle === '2d',)", lambda mm: mm.group(1) + ' ' + KBVALS)
+    t = sub(t, r"const kbNames = s\.kbNames \?\? true;", "const kbLabel = s.kbLabel ?? 'names', kbNames = kbLabel !== 'none';\nconst DEG = ['1', '♭2', '2', '♭3', '3', '4', '♯4', '5', '♭6', '6', '♭7', '7'], labelOf = (m) => kbLabel === 'degrees' ? DEG[(m - keyPc + 120) % 12] : NOTE[m % 12];")
+    t = lit(t, "t: mine ? NOTE[k.m % 12] :", "t: mine ? labelOf(k.m) :")
+    t = lit(t, "const name = NOTE[m % 12];", "const name = labelOf(m);")
+    t = t.replace('aria-label="Keyboard', 'aria-label="Piano').replace('>Keyboard</h2>', '>Piano</h2>').replace('data-tip="Keyboard"', 'data-tip="Piano"').replace('<span>Keyboard</span></button>', '<span>Piano</span></button>')
     t = t.replace('#B4531A', '#7A5418')  # the old orange's last use: the loop's word when on
     # the remaining white surfaces and lifted cards take the warm white and the hairline
     t = t.replace('box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)', 'box-shadow: 0 0 0 1px rgba(51,41,33,.07)')

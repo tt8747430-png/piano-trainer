@@ -4,6 +4,31 @@
 
 Canvas v130, https://claude.ai/artifact/HezkVS2MXdwz7uJ14KDGgp. Each line names the owner's words it rests on.
 
+**One Piano sheet, the same on the Chords page and in the Player (canvas Version 121, 2026-11-11).** Owner: "why
+the player doesnt have the hands on the keys setting and also the range selections and the chord player doesnt have
+the view from above or seat. merge them and make proper one piano settings". The two sheets had grown apart: the
+Player had Angle but no Hands on the keys (its state was there, with no switch), Keys as a bare 61 · 76 · 88 choice
+and a Note names switch; the Chords page had Hands on the keys, the Range strip and Labels, but no Angle. Now one
+markup, `.scratch/r39/canvas/piano_sheet.py`, is imported by both generators, so they cannot drift again:
+
+- **Piano** (title, button and tooltip; it was Keyboard). The sheet holds the piano, and its last row is MIDI
+  keyboard, so "Keyboard" read as two things.
+- **Show the piano**, then **3D piano** or **2D keys** as radio cards. Inside 3D: **Angle** Seat · Above and
+  **Hands on the keys**.
+- **Range:** the 88-key strip with the shown part lit and its notes beside the title (C4 – B5), then the choices.
+  On a chord: Fit the chord · 2 octaves · 4 octaves, and the strip is dragged to move them. In a song: Fit the
+  song · 61 keys · 76 keys · 88 keys, the learner's own piano, and the strip shows where those keys sit.
+- **Labels:** Note names · Degrees · Intervals · None on a chord; Note names · Degrees · None in a song, the degree
+  read in the song's key (intervals belong to a chord's root).
+- **Sound ›** and **MIDI keyboard ›**, the value grey at its default, a second line only when there is news
+  (offline, a piano connected).
+- **Above works on the Chords page's live 3D:** the canvas bundle recomputes the app's camera (`model/camera.ts`,
+  62° from the seat, 78° from above) before the stage is built. The app itself is not changed; R37-1 ports it.
+- **Measured:** groups 12 round with rows of 48 and 8 by 16; a view card 16 round, inset 8, its picture 8
+  (concentric); segments 44 high; blocks 12 16 16 with 8 between. `spacing_measure.js` finds only the segments'
+  2px inset (exempt) on all four boards; `layout_check.js` passes; every control in the sheet is 44 or more. The
+  Done of every Practice sheet lost the browser's 1 by 6 padding (now 0 4).
+
 **Every padding and gap on the 4 scale, every target 44, the transport centred (canvas Version 120, 2026-11-10).**
 Owner: "did you check the paddings, the spacing and all other?" Not at v119: only screenshots were looked at. Now
 `checks/spacing_measure.js`, `layout_check.js` and a hit-area count ran on all 18 Player boards. What they found was

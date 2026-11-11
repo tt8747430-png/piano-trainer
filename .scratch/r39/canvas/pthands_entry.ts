@@ -1,5 +1,6 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { createStage } from '/home/user/piano-trainer/src/widgets/piano-hands/ui/scene/stage'
+import { setPitch } from '/home/user/piano-trainer/src/widgets/piano-hands/model/camera'
 
 // A board may not fetch: the hand models are inlined as data URLs, so they are decoded here and parsed, never loaded
 // over the network (a page's connect-src can refuse even `data:`).
@@ -18,4 +19,4 @@ GLTFLoader.prototype.load = function (url, onLoad, onProgress, onError) {
   }
   load.call(this, url, onLoad, onProgress, onError)
 }
-;(window as unknown as { PTHands: unknown }).PTHands = { createStage }
+;(window as unknown as { PTHands: unknown }).PTHands = { createStage, setPitch }

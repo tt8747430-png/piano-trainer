@@ -78,6 +78,10 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **One thing, one markup, imported by every page that has it (R43, canvas 121):** "merge them and make proper one
+  piano settings". The Player's and the Chords page's piano sheets had drifted (Angle on one, Hands on the keys and
+  the Range strip on the other). Now `piano_sheet.py` draws the one Piano sheet for both; only the choices follow
+  the page (a chord's octaves, a song's own piano).
 - **Measure before saying a turn is done (R43, canvas 120):** "did you check the paddings, the spacing and all other?".
   A screenshot is not a check. Each publish runs `spacing_measure.js`, `layout_check.js` and the hit-area count on every
   board the turn touched, and the report quotes the numbers.

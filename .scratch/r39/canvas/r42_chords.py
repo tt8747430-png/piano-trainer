@@ -279,7 +279,7 @@ const vKey = VNAME[st.voicing] ? st.voicing : 'Close', voicing = VOICINGS.find((
 const invN = invCount(q, voicing);
 const inv = Math.min(st.inv ?? 0, invN - 1);
 const upper = (() => { const u = upperOf(root, q); RL = rLet; return u; })(), canSplit = false;
-const bassOn = false, hands = st.hand === 'Split' ? 'Both' : (st.hand || 'Right'), fingOn = true, kbOnS = st.kbOn !== false, kbView = st.kbView || '3d', kbHands = st.kbHands !== false, kbMode = !kbOnS ? 'off' : (kbView === '2d' ? '2d' : (kbHands ? 'hands' : '3d')), kbShow = kbOnS, is3d = kbMode === 'hands' || kbMode === '3d', keys = st.keys || 'Chord';
+const bassOn = false, hands = st.hand === 'Split' ? 'Both' : (st.hand || 'Right'), fingOn = true, kbOnS = st.kbOn !== false, kbView = st.kbView || '3d', kbHands = st.kbHands !== false, kbAngle = st.kbAngle || 'seat', kbMode = !kbOnS ? 'off' : (kbView === '2d' ? '2d' : (kbHands ? 'hands' : '3d')), kbShow = kbOnS, is3d = kbMode === 'hands' || kbMode === '3d', keys = st.keys || 'Chord';
 const playAs = 'Block', arp = false, dir = 'Up', keyLabel = st.keyLabel || 'Note names', names = keyLabel === 'Note names', fingKeys = false, treble = false, auto = true;
 const oct = st.oct || 0; // an added chord may sit an octave lower, to stay under the hand (voice leading)
 const rot = hands === 'Both' && voicing === 'Close' ? (st.rot || 0) : 0;
@@ -521,21 +521,24 @@ return {
   fingOnBg: fingOn ? '#7FB685' : C.line, fingOnX: fingOn ? 22 : 2, toggleFing: () => set({ fing: !fingOn }), fingOn,
   fingKeysOn: fingKeys, fingKeysOnBg: fingKeys ? '#7FB685' : C.line, fingKeysOnX: fingKeys ? 22 : 2, toggleFingKeys: () => set({ fingKeys: !fingKeys }),
   handSeg: seg(['Right', 'Left', 'Both'], hands, (l) => change({ hand: l })),
-  keyLabelSeg: seg(['Note names', 'Degrees', 'Intervals', 'None'], keyLabel, (l) => set({ keyLabel: l })),
+  kbAngleSeg: seg(['Seat', 'Above'], kbAngle === 'above' ? 'Above' : 'Seat', (l) => set({ kbAngle: l === 'Above' ? 'above' : 'seat' })),
+  pianoSw: ''' + PS.SW_JS('kbOnS', '() => set({ kbOn: !kbOnS })') + ''', kbHandsSw: ''' + PS.SW_JS('kbHands', '() => set({ kbHands: !kbHands })') + r''',
+  kb3c: ''' + PS.CARD_JS("kbView !== '2d'", "() => set({ kbView: '3d' })") + ''', kb2c: ''' + PS.CARD_JS("kbView === '2d'", "() => set({ kbView: '2d' })") + r''', kb3d: kbView !== '2d',
+  kbLabelSeg: seg(['Note names', 'Degrees', 'Intervals', 'None'], keyLabel, (l) => set({ keyLabel: l })),
   rootName: RN, qName: q.n[0].toUpperCase() + q.n.slice(1), qSym: RN + q.k, voicing, invLabel: INV[inv], handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand', soundWord: arp ? 'Arpeggio' : 'Block',
   // one row of letters; tapping the chosen letter again steps through its spellings: C, C♯, C (D, D♯, D♭ …)
   ...letterPick(rLet, rAcc, (l, a) => !SKIP.includes(LET[l] + a), st.tapUsed, (l, next, more) => { RL = l; change(Object.assign({ rl: l, ra: next, root: rootPc(l, next) }, more ? { tapUsed: true } : {})); }),
   playTiles: [['Block', 'Block chord'], ['Up', 'Arpeggio up'], ['Up and down', 'Arpeggio up and down']].map(([v, l]) => ({ l, on: v === playAs, bg: v === playAs ? '#FBF1DD' : '#FEFDFB', ring: v === playAs ? '0 0 0 2px #B07A2A' : '0 0 0 1px ' + C.line, pick: () => { set({ playAs: v }); sound(ms, v !== 'Block', v === 'Up and down' ? 'Up and down' : 'Up'); } })),
   qSymFs: (RN + q.k).length > 7 ? 12 : ((RN + q.k).length > 5 ? 13.5 : 15), blockOn: !arp, soundShort: arp ? 'Arpeggio' : 'Block',
   soundLabel: playAs === 'Block' ? 'Block chord' : (playAs === 'Up' ? 'Arpeggio up' : 'Up and down'),
-    rangeSeg: seg(['Fit the chord', '2 octaves', '4 octaves'], fixedN ? (fixedN === 24 ? '2 octaves' : '4 octaves') : 'Fit the chord', (l) => set({ keys: l === 'Fit the chord' ? 'Chord' : (l === '2 octaves' ? '24' : '48'), rangeLo: l === 'Fit the chord' ? null : st.rangeLo })),
+    kbRangeSeg: seg(['Fit the chord', '2 octaves', '4 octaves'], fixedN ? (fixedN === 24 ? '2 octaves' : '4 octaves') : 'Fit the chord', (l) => set({ keys: l === 'Fit the chord' ? 'Chord' : (l === '2 octaves' ? '24' : '48'), rangeLo: l === 'Fit the chord' ? null : st.rangeLo })),
   rangeAt: (e) => { if (e.type === 'pointermove' && !e.buttons) return; if (e.type === 'pointerdown' && e.currentTarget.setPointerCapture) e.currentTarget.setPointerCapture(e.pointerId);
     const r = e.currentTarget.getBoundingClientRect(), n = fixedN || 24, nW = Math.round(n * 7 / 12), wi = Math.max(0, Math.min(52 - nW, Math.round((e.clientX - r.left) / r.width * 52 - nW / 2)));
     if (WH88[wi] !== lo || !fixedN) set({ keys: String(n), rangeLo: WH88[wi] }); },
   rangeKey: (e) => { const d = e.key === 'ArrowLeft' ? -1 : e.key === 'ArrowRight' ? 1 : 0; if (!d) return; e.preventDefault(); const n = fixedN || 24, i = WH88.indexOf(lo) >= 0 ? WH88.indexOf(lo) : WH88.findIndex((m) => m > lo);
     set({ keys: String(n), rangeLo: WH88[Math.max(0, Math.min(52 - Math.round(n * 7 / 12), i + d))] }); },
   // the range as a strip of all 88 keys, the part shown lit (Ultimate Piano's Settings; "Showing 36 keys (C3 – B5)")
-  rangeStrip: (() => { const W = 340, n = 52, w = W / n; let i = 0, x0 = null, x1 = 0, bl = ''; const NN = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
+  kbStrip: (() => { const W = 340, n = 52, w = W / n; let i = 0, x0 = null, x1 = 0, bl = ''; const NN = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
     for (let m = 21; m <= 108; m++) { if (NAT.includes(m % 12)) { if (m >= lo && m <= hi) { if (x0 === null) x0 = i * w; x1 = (i + 1) * w; } i++; } else bl += 'M' + (i * w - w * 0.3).toFixed(1) + ' 0h' + (w * 0.6).toFixed(1) + 'v15h-' + (w * 0.6).toFixed(1) + 'z'; }
     const nm = (m) => NN[m % 12] + (Math.floor(m / 12) - 1);
     return { bl, x: (x0 || 0).toFixed(1), w: (x1 - (x0 || 0)).toFixed(1), cap: nm(lo) + ' – ' + nm(hi) }; })(),
@@ -847,7 +850,7 @@ BAR_CSS = f'height: 68px; box-sizing: border-box; padding: 6px; border-radius: 3
 GLASSGRP = f'height: 56px; box-sizing: border-box; border-radius: 28px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}'
 TINTGRP = f'height: 56px; box-sizing: border-box; border-radius: 28px; background: rgba(237,198,132,.82); backdrop-filter: blur(24px) saturate(1.8); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 0 0 1px rgba(176,122,42,.28), {SHADOW}'
 CHEV_D = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>'
-KBROUND = f'<button type="button" aria-label="Keyboard" onClick="{{{{openKeys}}}}" style="flex: none; width: 56px; border: 0; {GLASSGRP}; color: {INK}; display: flex; align-items: center; justify-content: center">{KEYSI}</button>'
+KBROUND = f'<button type="button" aria-label="Piano" data-tip="Piano" onClick="{{{{openKeys}}}}" style="flex: none; width: 56px; border: 0; {GLASSGRP}; color: {INK}; display: flex; align-items: center; justify-content: center">{KEYSI}</button>'
 CHORDACT = f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{{openChord}}}}" style="pointer-events: auto; justify-self: end; flex: none; min-width: 56px; max-width: 100%; padding: 0 10px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; font-size: {{{{qSymFs}}}}px; font-weight: 700; display: flex; align-items: center; gap: 4px; white-space: nowrap"><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis">{{{{qSym}}}}</span></button>'
 PLAYSPLIT = (f'<div role="group" aria-label="Play" style="pointer-events: auto; flex: none; width: 176px; {TINTGRP}; display: flex; align-items: center">'
   f'<button type="button" onClick="{{{{playMain}}}}" aria-pressed="{{{{playing}}}}" style="flex: 1; min-width: 0; height: 56px; padding: 0 2px 0 14px; border: 0; border-radius: 28px 0 0 28px; background: transparent; color: {INK}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap"><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOPI}</sc-if><sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAYI}</sc-if><span style="overflow: hidden; text-overflow: ellipsis">{{{{playWord}}}}</span></button>'
@@ -902,14 +905,14 @@ KBTILES = ('<div role="group" aria-label="Keyboard" style="display: grid; grid-t
     '<sc-if value="{{o.isHands}}" hint-placeholder-val="{{false}}"><path d="M17 27c-2.500-3-3.500-6-3-9.500l1.200-5.500c.400-1.600 2.600-1.300 2.500.400l-.200 4.600 1.500-8c.400-1.700 2.700-1.400 2.600.400l-.400 7.600 2-8.400c.500-1.700 2.800-1.300 2.700.500l-1 8.400 2.700-6.400c.700-1.600 2.900-.800 2.400 1l-2.600 8.900 3.300-2.700c1.400-1.100 3 .700 1.800 2l-6 6.700z" fill="#F6ECDF" stroke="currentColor" stroke-width="1.400"></path></sc-if>'
     '<sc-if value="{{o.isOff}}" hint-placeholder-val="{{false}}"><g opacity="0.55"><rect x="2" y="4" width="44" height="20" rx="2"></rect><path d="M14.6 4v20M27.1 4v20M39.7 4v20"></path><path d="M4 26 44 2" stroke-width="2"></path></g></sc-if>'
     '</svg>{{o.name}}</button></sc-for></div>')
-B_KEYS = (KBTILES + '<sc-if value="{{is2dKb}}" hint-placeholder-val="{{false}}">' + GROUP(('seg', 'Keys', 'keysSeg', 230), ('seg', 'Labels', 'keyLabelSeg', 230), bg="#FEFDFB") + '</sc-if>'
+B_KEYS = (KBTILES + '<sc-if value="{{is2dKb}}" hint-placeholder-val="{{false}}">' + GROUP(('seg', 'Keys', 'keysSeg', 230), ('seg', 'Labels', 'kbLabelSeg', 230), bg="#FEFDFB") + '</sc-if>'
           + GROUP(('link', 'Connect a piano', '', '#'), ('link', 'All piano settings', '', '#'), bg="#FEFDFB"))
 B_SOUND = f'<div role="radiogroup" style="display: flex; flex-direction: column; gap: 8px"><sc-for list="{{{{playTiles}}}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 60px; border: 0; border-radius: 14px; background: {{{{o.bg}}}}; box-shadow: {{{{o.ring}}}}; padding: 8px 16px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; color: {INK}; font: inherit; text-align: left"><span style="font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for></div>'
 TOAST = f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 16px; right: 16px; margin: 0 auto; width: fit-content; bottom: 100px; z-index: 50; min-height: 48px; padding: 4px 6px 4px 18px; border-radius: 24px; background: {INK}; color: #FEFDFB; display: flex; align-items: center; gap: 8px; max-width: calc(100% - 32px); box-sizing: border-box; box-shadow: {SHADOW}"><span style="font-size: 15px; white-space: normal; line-height: 1.25; padding-right: {{{{toastPad}}}}">{{{{toastT}}}}</span><sc-if value="{{{{toastUndo}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{undoRemove}}}}" style="height: 40px; padding: 0 14px; border: 0; border-radius: 20px; background: transparent; color: #F2C987; font: inherit; font-size: 15px; font-weight: 700">Undo</button></sc-if></div></sc-if>'
 def SHEETS_PHONE(player):
     out = ''
     out += TOAST + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: 96px') + HANDSMENU('right: 12px; bottom: 96px')
-    for cond, title, body in (('isChord', 'Chord', B_CHORD), ('isKeys', 'Keyboard', B_KEYS), ('isNext', 'Next chord', B_NEXT), ('isTr', 'Transpose', B_TR)):
+    for cond, title, body in (('isChord', 'Chord', B_CHORD), ('isKeys', 'Piano', B_KEYS), ('isNext', 'Next chord', B_NEXT), ('isTr', 'Transpose', B_TR)):
         out += BSHEET(cond, title, body)
     for cond, body in (('isList', B_LIST), ('isVoicing', B_VOICING)):
         out += f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" class="nos" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 12px"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>{body}</section></sc-if>'
@@ -918,7 +921,7 @@ def SHEETS_PHONE(player):
 def POPS_LAPTOP(player):
     dockpos = 'left: calc(50% - 200px); top: 424px'
     out = TOAST + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: 92px') + HANDSMENU('left: calc(50% + 60px); bottom: 92px')
-    for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isKeys', 'Keyboard', B_KEYS, 'right: 24px; top: 76px'), ('isNext', 'Next chord', B_NEXT, 'left: calc(50% + 420px); top: 330px'), ('isTr', 'Transpose', B_TR, 'left: calc(50% - 420px); top: 330px')):
+    for cond, title, body, pos in (('isChord', 'Chord', B_CHORD, dockpos), ('isKeys', 'Piano', B_KEYS, 'right: 24px; top: 76px'), ('isNext', 'Next chord', B_NEXT, 'left: calc(50% + 420px); top: 330px'), ('isTr', 'Transpose', B_TR, 'left: calc(50% - 420px); top: 330px')):
         out += POPOVER(cond, title, body, pos, 400)
     for cond, body, pos in (('isList', B_LIST, dockpos), ('isVoicing', B_VOICING, dockpos)):
         out += f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" class="nos" style="position: absolute; {pos}; z-index: 61; width: 400px; max-height: 700px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 12px 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">{body}</div></sc-if>'
@@ -951,7 +954,9 @@ PT_LIFE = r'''
     const cv = this._cv, d = this._handsIn; if (!cv || !d) { if (this._stage && !cv) { this._stage.dispose(); this._stage = null; this._stageCv = null; } return; }
     try {
       if (!window.PTHands) (0, eval)(PT_BUNDLE);
-      if (!this._stage || this._stageCv !== cv) {
+      const ang = this.state.kbAngle === 'above' ? 'above' : 'seat';
+      if (!this._stage || this._stageCv !== cv || this._ang !== ang) {
+        window.PTHands.setPitch(ang === 'above' ? 78 : 62); this._ang = ang;
         if (this._stage) this._stage.dispose(); if (this._ro) this._ro.disconnect();
         cv.__ptAfter = (proj) => { const box = this._lb; if (!box) return; const L = this._labels3d || [], W = box.clientWidth, H = box.clientHeight;
           while (box.children.length > L.length) box.lastChild.remove();
@@ -1017,22 +1022,9 @@ def SWROW(html, on, act):
     return html.replace(a, '<button type="button" role="switch" aria-checked="{{' + on + '}}" onClick="{{' + act + '}}"').replace(b, '<span aria-hidden="true"')
 # a link row that says its state on a second line, in the app's own words (common.midi, settings.piano)
 def STATEROW(label, sub): return ('<a href="#" style="min-height: 48px; box-sizing: border-box; padding: 8px 12px 8px 16px; display: flex; align-items: center; gap: 12px; color: ' + INK + '; text-decoration: none"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px">' + label + '</span><sc-if value="{{' + sub + 'On}}" hint-placeholder-val="{{false}}"><span style="font-size: 13px; color: ' + SOFT + '">{{' + sub + '}}</span></sc-if></span><span style="flex: none; font-size: 16px; color: {{' + sub + 'ValC}}">{{' + sub + 'Val}}</span><span style="color: ' + SOFT + '; display: flex">' + CHEV_R + '</span></a>')
-RANGE = ('<div style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 10px"><div style="display: flex; align-items: center; justify-content: space-between; gap: 12px"><span style="font-size: 16px">Range</span><span style="font-size: 14px; color: ' + SOFT + '; font-variant-numeric: tabular-nums">{{rangeStrip.cap}}</span></div>'
-         '<svg viewBox="0 0 340 26" role="slider" tabindex="0" aria-label="The part of the 88 keys shown" aria-valuetext="{{rangeStrip.cap}}" onPointerDown="{{rangeAt}}" onPointerMove="{{rangeAt}}" onKeyDown="{{rangeKey}}" style="display: block; width: 100%; height: 40px; border-radius: 4px; overflow: hidden; touch-action: none; cursor: grab" preserveAspectRatio="none"><rect width="340" height="26" fill="#FEFDFB" stroke="' + LINE + '"></rect><rect x="{{rangeStrip.x}}" y="0" width="{{rangeStrip.w}}" height="26" fill="#F6E3BC"></rect><path d="M6.54 0V26M13.08 0V26" stroke="none"></path><path d="{{rangeStrip.bl}}" fill="#332C28"></path><rect x="{{rangeStrip.x}}" y="0.75" width="{{rangeStrip.w}}" height="24.5" fill="none" stroke="#B07A2A" stroke-width="1.5"></rect></svg>'
-         + SEGGRID('rangeSeg') + '</div>')
-PIC3D = '<g><path d="M9 6h30l7 18H2z"></path><path d="M14.5 6 11 24M20 6l-2 18M26 6v18M31.5 6l3 18M37 6l5 18"></path><path d="M12.6 6h3l-1.2 9h-3.4zM18.3 6h3l-.7 9h-3.3zM27.6 6h3l1 9h-3.3zM33.3 6h3l1.9 9h-3.4z" fill="currentColor"></path></g>'
-PIC2D = '<g><rect x="2" y="4" width="44" height="20" rx="2"></rect><path d="M8.3 4v20M14.6 4v20M20.9 4v20M27.1 4v20M33.4 4v20M39.7 4v20"></path><path d="M6.5 4h3.6v11H6.5zM12.8 4h3.6v11h-3.6zM25.3 4h3.6v11h-3.6zM31.6 4h3.6v11h-3.6zM37.9 4h3.6v11h-3.6z" fill="currentColor"></path></g>'
-# two radio cards; outer radius 16 = picture radius 6 + padding 10 (concentric); every row at least 48 high
-VIEWCARDS = ('<div role="radiogroup" aria-label="View" style="display: flex; flex-direction: column; gap: 8px"><sc-for list="{{viewCards}}" as="o" hint-placeholder-count="2"><div style="border-radius: 16px; background: {{o.bg}}; box-shadow: {{o.ring}}; overflow: hidden">'
-  '<button type="button" role="radio" aria-checked="{{o.on}}" onClick="{{o.pick}}" style="width: 100%; min-height: 64px; box-sizing: border-box; border: 0; background: transparent; padding: 10px 16px 10px 10px; display: flex; align-items: center; gap: 12px; color: ' + INK + '; font: inherit; text-align: left">'
-  '<span aria-hidden="true" style="flex: none; width: 68px; height: 44px; border-radius: 6px; background: #FEFDFB; box-shadow: 0 0 0 1px ' + LINE + '; display: flex; align-items: center; justify-content: center"><svg width="48" height="28" viewBox="0 0 48 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><sc-if value="{{o.is3d}}" hint-placeholder-val="{{true}}">' + PIC3D + '</sc-if><sc-if value="{{o.is2d}}" hint-placeholder-val="{{false}}">' + PIC2D + '</sc-if></svg></span>'
-  '<span style="flex: 1; min-width: 0; font-size: 16px; font-weight: {{o.fw}}">{{o.name}}</span>'
-  '<span aria-hidden="true" style="flex: none; width: 22px; height: 22px; border-radius: 11px; background: {{o.dotBg}}; box-shadow: {{o.dotRing}}; color: #FEFDFB; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center">{{o.mark}}</span></button>'
-  '<sc-if value="{{o.hasHands}}" hint-placeholder-val="{{true}}"><button type="button" onClick="{{toggleKbHands}}" style="width: 100%; min-height: 52px; box-sizing: border-box; border: 0; box-shadow: inset 0 1px 0 rgba(176,122,42,.3); background: transparent; padding: 8px 14px 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: ' + INK + '; font: inherit; text-align: left"><span style="font-size: 16px">Hands on the keys</span>' + TOGGLE('kbHandsOn') + '</button></sc-if></div></sc-for></div>')
-VIEWCARDS = SWROW(VIEWCARDS, 'kbHandsOn', 'toggleKbHands')
-B_PIANO = (SWROW(GROUP(('toggle', 'Show the piano', 'kbOn', 'toggleKb'), bg="#FEFDFB"), 'kbOn', 'toggleKb') + '<div aria-disabled="{{kbOffA}}" style="display: flex; flex-direction: column; gap: 12px; opacity: {{kbDimOp}}; pointer-events: {{kbPE}}; transition: opacity .2s cubic-bezier(.2, 0, 0, 1)">' + VIEWCARDS + GROUP(('raw', RANGE), bg="#FEFDFB") + GROUP(('raw', '<div style="padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 10px"><span style="font-size: 16px">Labels</span>' + SEGGRID('keyLabelSeg') + '</div>'), bg="#FEFDFB") + '</div>'
-           + GROUP(('raw', STATEROW('Sound', 'soundSub')), ('raw', STATEROW('MIDI keyboard', 'midiSub')), bg="#FEFDFB"))
-PIANOBTN = lambda: GLASSBTN('Keyboard', KEYSI, 'openKeys')
+import sys; sys.path.insert(0, '/home/user/piano-trainer/.scratch/r39/canvas'); import piano_sheet as PS
+B_PIANO = PS.PIANO_SHEET(True, 3, 4)
+PIANOBTN = lambda: GLASSBTN('Piano', KEYSI, 'openKeys')
 # content never shows through the bar: the page fades out under it (the tab bar's rule, v24)
 DOCK_A_PHONE = f'<div aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 148px; z-index: 39; pointer-events: none; background: linear-gradient(to bottom, rgba(246,243,238,0), {PAGE} 30%)"></div><div role="toolbar" aria-label="Voicing, sound and hands" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 10px; pointer-events: none">{VOICEBTN}{PLAYSPLIT}{HANDSBTN_A}</div>'
 DOCK_A_LAPTOP = f'<div aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 140px; z-index: 39; pointer-events: none; background: linear-gradient(to bottom, rgba(246,243,238,0), {PAGE} 30%)"></div><div role="toolbar" aria-label="Voicing, sound and hands" style="position: absolute; left: 0; right: 0; bottom: 24px; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 12px; pointer-events: none">{VOICEBTN}{PLAYSPLIT}{HANDSBTN_A}</div>'
@@ -1045,12 +1037,12 @@ def LAYERS(phone_like, concept):
     out = TOAST + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: ' + ('96px' if phone_like else '92px'))
     if phone_like:
         out += HANDSMENU('right: 12px; bottom: 96px' if concept == 'A' else 'right: 12px; bottom: 150px')
-        for cond, title, body in (('isKeys', 'Keyboard', B_PIANO), ('isNext', '{{nextTitle}}', B_NEXT), ('isTr', 'Key', B_TR), ('isVMenu', 'Voicing', VLIST)):
+        for cond, title, body in (('isKeys', 'Piano', B_PIANO), ('isNext', '{{nextTitle}}', B_NEXT), ('isTr', 'Key', B_TR), ('isVMenu', 'Voicing', VLIST)):
             out += BSHEET(cond, title, body)
         out += DRAWERS(True)
     else:
         out += HANDSMENU('left: calc(50% + 80px); bottom: 92px')
-        for cond, title, body, pos in (('isKeys', 'Keyboard', B_PIANO, 'right: 24px; top: 76px'), ('isNext', '{{nextTitle}}', B_NEXT, 'left: calc(50% + 420px); top: 330px'), ('isTr', 'Key', B_TR, 'right: calc(50% + 426px); top: 300px'), ('isVMenu', 'Voicing', VLIST, 'left: calc(50% - 400px); bottom: 92px')):
+        for cond, title, body, pos in (('isKeys', 'Piano', B_PIANO, 'right: 24px; top: 76px'), ('isNext', '{{nextTitle}}', B_NEXT, 'left: calc(50% + 420px); top: 330px'), ('isTr', 'Key', B_TR, 'right: calc(50% + 426px); top: 300px'), ('isVMenu', 'Voicing', VLIST, 'left: calc(50% - 400px); bottom: 92px')):
             out += POPOVER(cond, title, body, pos, 400)
         out += DRAWERS(False)
     return out
