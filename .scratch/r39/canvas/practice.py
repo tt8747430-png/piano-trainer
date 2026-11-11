@@ -73,7 +73,7 @@ HEAD = '''<!doctype html>
 body{margin:0}
 button{font:inherit;cursor:pointer}
 .nos{scrollbar-width:none}.nos::-webkit-scrollbar{display:none}
-main>*{flex:none}
+main>*,[role=dialog]>*{flex:none}
 .card:hover{transform:translateY(-1px)}
 </style>
 </helmet>

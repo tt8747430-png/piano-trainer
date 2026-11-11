@@ -78,6 +78,11 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **A sheet's height is checked, not assumed; a tiny target the tap ignores becomes the real target (R43, canvas
+  122):** "the piano settings in the player are not correct height and the rows don't have enough place". Rows shrank
+  in a flex sheet and the sheet ran under the bar. Every sheet's children are `flex: none`; a phone sheet stops below
+  the bar. Played through's 18-wide bars practised four at a time anyway, so the four became the button. The Chord
+  player got the one Piano sheet and the same live 3D code, and the Player got Night through the Chords page's map.
 - **One thing, one markup, imported by every page that has it (R43, canvas 121):** "merge them and make proper one
   piano settings". The Player's and the Chords page's piano sheets had drifted (Angle on one, Hands on the keys and
   the Range strip on the other). Now `piano_sheet.py` draws the one Piano sheet for both; only the choices follow

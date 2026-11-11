@@ -92,3 +92,36 @@ def SW_JS(on, flip):
     return f"((on) => ({{ on, track: on ? '#7FB685' : '#DAD1C8', knob: on ? 22 : 2, flip: {flip} }}))({on})"
 SEG_JS = ("(list, cur, pick) => list.map(([id, l]) => ({ l, on: id === cur, bg: id === cur ? '#FEFDFB' : 'transparent', "
           "sh: id === cur ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: id === cur ? 600 : 500, pick: () => pick(id) }))")
+
+
+# The live 3D stage, shared by every page with a 3D piano (the Chords page, the Chord player): the app's own hands
+# (src/widgets/piano-hands, createStage) from pthands.bundle.js. A page sets this._cv (the canvas), this._lb (the labels'
+# box), this._handsIn (the stage's input) and this._labels3d, and calls this._hands3d() after each render.
+STAGE_VARS = ("--key-white: #fefdfb; --key-black: #332c28; --key-bed: #cbc2b9; --key-felt: #7c302c; --key-down: #85b8dc; --primary: #edc684; --destructive: #c0392b; "
+             "--hand-rh: #E19E8C; --hand-lh: #B8A8D8; --hand-rh-wash: #E19E8C; --hand-lh-wash: #B8A8D8; "
+              + ''.join(f"--role-{n}: {c}; --role-{n}-wash: color-mix(in oklab, {c} 62%, #fefdfb); " for n, c in (('root', '#E19E8C'), ('3rd', '#85B8DC'), ('5th', '#9BC093'), ('7th', '#E8C67D'), ('9th', '#B8A8D8'), ('11th', '#D3AC8A'), ('13th', '#82C2C1'))))
+HANDS3D = r'''
+  _hands3d() {
+    const cv = this._cv, d = this._handsIn; if (!cv || !d) { if (this._stage && !cv) { this._stage.dispose(); this._stage = null; this._stageCv = null; } return; }
+    try {
+      if (!window.PTHands) (0, eval)(PT_BUNDLE);
+      const ang = this.state.kbAngle === 'above' ? 'above' : 'seat';
+      if (!this._stage || this._stageCv !== cv || this._ang !== ang) {
+        window.PTHands.setPitch(ang === 'above' ? 78 : 62); this._ang = ang;
+        if (this._stage) this._stage.dispose(); if (this._ro) this._ro.disconnect();
+        cv.__ptAfter = (proj) => { const box = this._lb; if (!box) return; const L = this._labels3d || [], W = box.clientWidth, H = box.clientHeight;
+          while (box.children.length > L.length) box.lastChild.remove();
+          L.forEach((l, i) => { let el = box.children[i]; if (!el) { el = document.createElement('span'); el.style.cssText = 'position: absolute; transform: translate(-50%, -100%); min-width: 22px; height: 22px; box-sizing: border-box; padding: 0 5px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #332921; box-shadow: 0 0 0 1.5px rgba(51,41,33,.55), 0 1px 3px rgba(51,41,33,.3); white-space: nowrap'; box.append(el); }
+            const p = proj(l.m, l.black); el.textContent = l.t; el.style.background = l.c; l.x = p[0] * W; l.w = Math.max(22, l.t.length * 8 + 10); l.el = el; el.style.top = Math.max(26, p[1] * H - 3).toFixed(1) + 'px'; });
+          // labels over neighbouring keys (D and E♭) are moved apart until neither covers the other
+          const by = L.slice().sort((a, b) => a.x - b.x); for (let i = 1; i < by.length; i++) { const need = (by[i - 1].w + by[i].w) / 2 + 3 - (by[i].x - by[i - 1].x); if (need > 0) { by[i - 1].x -= need / 2; by[i].x += need / 2; } }
+          // a key outside the view keeps its label hidden, never half cut at the edge
+          L.forEach((l) => { l.el.style.left = l.x.toFixed(1) + 'px'; l.el.style.visibility = l.x - l.w / 2 < 4 || l.x + l.w / 2 > W - 4 ? 'hidden' : 'visible'; }); };
+        this._stage = window.PTHands.createStage(cv, d, { onLoaded: () => {}, onFailed: () => this.setState({ kbView: '2d' }) }); this._stageCv = cv;
+        const box = cv.parentElement, rs = () => { if (this._stage) this._stage.resize(box.clientWidth, box.clientHeight); };
+        this._ro = new ResizeObserver(rs); this._ro.observe(box); rs();
+      }
+      this._stage.update(d); if (this._lb && !(this._labels3d || []).length) this._lb.replaceChildren();
+    } catch (e) { this._stage = null; this.setState({ kbView: '2d' }); } // where 3D cannot be drawn, the flat keys
+  }
+'''

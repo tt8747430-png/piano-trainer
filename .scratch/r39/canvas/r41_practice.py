@@ -194,7 +194,7 @@ detail('Progression', 'A progression', PR, ph, lm, '', BSHEET('rootOn', 'Key', R
 CP = js(r'''
     const SECS = [['A', 'Verse', 2, [['C'], ['G'], ['Am'], ['F'], ['C'], ['G'], ['F', 'G'], ['C']]], ['B', 'Chorus', 1, [['F'], ['G'], ['C', 'C/E'], ['F', 'G7'], ['Am'], ['F'], ['G7'], ['C']]], ['C', 'Bridge', 1, [['Dm7'], ['G7'], ['Em7', 'A7'], ['Dm7', 'G7']]]];
     const play = st.playing ? (st.at ?? [0, 2]) : [-1, -1], STY = ['Pop 1', 'Pop ballad', 'Rock 8ths', 'Worship', 'Swing', 'Bossa nova'], s = st.style ?? 0, bpm = st.bpm ?? 96;
-    const secs = SECS.map(([m, name, rep, bars], si) => ({ m, name, rep: '× ' + rep, bars: bars.map((cs, bi) => ({ cs: cs.map((c) => ({ c })), bg: play[0] === si && play[1] === bi ? '#EDC684' : 'transparent', edge: bi % 4 === 3 ? '0' : '1px', pick: () => set({ sheet: 'chord', sel: [si, bi] }) })) }));
+    const secs = SECS.map(([m, name, rep, bars], si) => ({ m, name, rep: '× ' + rep, bars: bars.map((cs, bi) => ({ cs: cs.map((c) => ({ c })), bg: play[0] === si && play[1] === bi ? '#EDC684' : !st.playing && slot.si === si && slot.bi === bi ? '#F6E7C8' : 'transparent', edge: bi % 4 === 3 ? '0' : '1px', pick: () => set({ sheet: 'chord', sel: [si, bi] }) })) }));
     return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), chordOn: st.sheet === 'chord', styleOn: st.sheet === 'style', openStyle: () => set({ sheet: 'style' }), secs,
       styleL: STY[s], bpmL: String(bpm), wStyle: wheel(STY, s, (i) => set({ style: i })), wRoot: wheel(NN, 0, () => {}), wQual: wheel(['', 'm', '7', 'maj7', 'm7', 'sus4', 'dim'], 0, () => {}), wLen: wheel(['1 beat', '2 beats', '3 beats', '4 beats'], 3, () => {}),
       keyTiles: ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B°', 'G7'].map((c) => ({ c })) };''')
@@ -202,20 +202,90 @@ CHART = (f'<div style="border-radius: 6px; background: #FFFFFF; box-shadow: 0 0 
          f'<div style="text-align: center; font-family: {SERIF}; font-size: 20px">My verse and chorus</div>'
          f'<sc-for list="{{{{secs}}}}" as="x" hint-placeholder-count="2"><section style="display: flex; flex-direction: column; gap: 4px"><div style="display: flex; align-items: center; gap: 8px"><span style="width: 22px; height: 22px; box-sizing: border-box; border: 1.5px solid {INK}; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">{{{{x.m}}}}</span><span style="font-size: 14px; font-weight: 600">{{{{x.name}}}}</span>{SPACER}<span style="font-size: 13px; color: {SOFT}">{{{{x.rep}}}}</span><span style="display: flex; color: {SOFT}">{GRIP}</span></div>'
          f'<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-left: 2px solid {INK}; border-right: 2px solid {INK}"><sc-for list="{{{{x.bars}}}}" as="b" hint-placeholder-count="8"><button type="button" onClick="{{{{b.pick}}}}" style="height: {{{{CH}}}}px; border: 0; border-right: {{{{b.edge}}}} solid {INK}; background: {{{{b.bg}}}}; padding: 0 6px; display: flex; align-items: center; justify-content: space-around; color: {INK}; font-family: {SERIF}; font-size: {{{{CF}}}}px; font-weight: 700"><sc-for list="{{{{b.cs}}}}" as="c" hint-placeholder-count="1"><span>{{{{c.c}}}}</span></sc-for></button></sc-for></div></section></sc-for>'
-         f'<button type="button" style="align-self: flex-start; height: 36px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">+ Add section</button></div>')
+         f'<button type="button" style="align-self: flex-start; height: 44px; padding: 0 8px; margin: -4px 0 -4px -8px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">+ Add section</button></div>')
 def PBTN(label, val, act):
     return f'<button type="button" onClick="{{{{{act}}}}}" style="flex: 1; min-width: 0; height: 52px; border: 0; border-radius: 14px; background: transparent; color: {INK}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; font: inherit"><span style="font-size: 11px; color: {SOFT}">{label}</span><span style="font-size: 16px; font-weight: 700; white-space: nowrap">{val}</span></button>'
 CP_DOCK = PBTN('Style', '{{styleL}}', 'openStyle') + PBTN('Key', 'C', 'openStyle') + PBTN('Tempo', '{{bpmL}}', 'openStyle') + PBTN('Repeats', '× 3', 'openStyle') + PLAYBTN()
 CP_CHORD = WHEEL([('wRoot', 1), ('wQual', 1), ('wLen', 1.4)]) + f'<button type="button" onClick="{{{{closeSheet}}}}" style="height: 48px; border: 0; border-radius: 12px; background: {SHEET}; color: #B3261E; font: inherit; font-size: 16px; font-weight: 600">Delete chord</button>'
-CP_SET = GROUP(('link', 'Instruments', 'Piano, bass, drums', ''), ('seg', 'Chord names', 'namesSeg', 200), ('link', 'Count-in', '1 bar', ''))
+# ── The Chord player's piano (R43 canvas 122; owner: "1. yes", the Chord player gets a piano): the chord sounding
+# now, on the keys in its tones' paints, under the chart. 2D keys by default; the one Piano sheet (piano_sheet.py)
+# behind Settings › Piano, the same as on the Chords page and in the Player, its range a chart's: Fit the chords ·
+# 4 octaves · 88 keys.
+import sys; sys.path.insert(0, '/home/user/piano-trainer/.scratch/r39/canvas'); import piano_sheet as PS
+CP_PIANO_JS = r'''
+    const kbOnS = st.kbOn ?? true, kbView = st.kbView || '2d', kbAngle = st.kbAngle || 'seat', kbHands = st.kbHands ?? true, kbRange = st.kbRange || 'fit', kbLabel = st.kbLabel || 'names';
+    const PCN = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }, NM = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'], DEG = ['1', '♭2', '2', '♭3', '3', '4', '♯4', '5', '♭6', '6', '♭7', '7'];
+    const ROLEC = { 1: '#E19E8C', 3: '#85B8DC', 5: '#9BC093', 7: '#E8C67D' }, ROLEN = { 1: 'root', 3: '3rd', 5: '5th', 7: '7th' };
+    const pcOf = (t) => (PCN[t[0]] + (t[1] === '♯' ? 1 : t[1] === '♭' ? -1 : 0) + 12) % 12;
+    const parse = (sym) => { const [m, bass] = sym.split('/'), acc = m[1] === '♯' || m[1] === '♭', q = m.slice(acc ? 2 : 1), r = pcOf(m);
+      const iv = { m: [0, 3, 7], '7': [0, 4, 7, 10], m7: [0, 3, 7, 10], maj7: [0, 4, 7, 11], '°': [0, 3, 6], dim: [0, 3, 6], sus4: [0, 5, 7] }[q] || [0, 4, 7];
+      const roles = iv.map((v, i) => [1, 3, 5, 7][i]), b = bass ? pcOf(bass) : r, bi = iv.indexOf((b - r + 12) % 12);
+      // the left hand plays the bass in the third octave, the right hand the chord in root position from middle C's octave
+      return [{ m: 48 + b, role: bi >= 0 ? roles[bi] : 1, iv: bi >= 0 ? iv[bi] : 0, hand: 'lh' }, ...iv.map((v, i) => ({ m: 60 + r + v, role: roles[i], iv: v, hand: 'rh' }))]; };
+    const SLOTS = SECS.flatMap(([, , , bars], si) => bars.flatMap((cs, bi) => (cs.length === 1 ? [cs[0], cs[0]] : cs).map((c) => ({ si, bi, c }))));
+    const sel = st.sel, slot = st.playing ? SLOTS[(st.pos ?? 4) % SLOTS.length] : (sel ? SLOTS.find((x) => x.si === sel[0] && x.bi === sel[1]) : SLOTS[0]);
+    const notes = parse(slot.c), all = SLOTS.flatMap((x) => parse(x.c).map((n) => n.m));
+    const isW = (m) => [0, 2, 4, 5, 7, 9, 11].includes(m % 12), dn = (m) => { while (!isW(m)) m--; return m; }, up = (m) => { while (!isW(m)) m++; return m; };
+    const [lo, hi] = kbRange === '4' ? [36, 83] : kbRange === '88' ? [21, 108] : [dn(Math.min(...all)), up(Math.max(...all))];
+    const labOf = (n) => kbLabel === 'names' ? NM[n.m % 12] : kbLabel === 'degrees' ? DEG[n.m % 12] : kbLabel === 'intervals' ? ['1', '♭2', '2', '♭3', '3', '4', '♭5', '5', '♯5', '6', '♭7', '7'][n.iv] : '';
+    const lit = new Map(notes.map((n) => [n.m, n]));
+    const nW = Array.from({ length: hi - lo + 1 }, (_, i) => lo + i).filter(isW).length, kw = 100 / nW;
+    let wi = 0; const whites = [], blacks = [];
+    for (let m = lo; m <= hi; m++) { const n = lit.get(m), l = n ? labOf(n) : '';
+      if (isW(m)) { whites.push({ left: (wi * kw).toFixed(3) + '%', w: kw.toFixed(3) + '%', bg: n ? ROLEC[n.role] : '#FEFDFB', l: nW <= 30 ? l : '' }); wi++; }
+      else blacks.push({ left: (wi * kw - kw * 0.3).toFixed(3) + '%', w: (kw * 0.6).toFixed(3) + '%', bg: n ? ROLEC[n.role] : '#332C28', l: nW <= 22 ? l : '' }); }
+    const is3d = kbOnS && kbView !== '2d';
+    this._handsIn = !is3d ? null : { notes: kbHands ? notes.map((n) => ({ midi: n.m, spelled: {}, hand: n.hand, finger: undefined, startTick: 0, durationTicks: 1920, velocity: 80 })) : [],
+      perSecond: 960, now: () => 1, playing: false, held: new Set(notes.map((n) => n.m)), marks: new Map(notes.map((n) => [n.m, { tone: ROLEN[n.role] }])), wrong: undefined, faded: null, skin: 'light', range: { low: lo, high: hi } };
+    this._labels3d = is3d && kbLabel !== 'none' ? notes.map((n) => ({ m: n.m, black: !isW(n.m), t: labOf(n), c: ROLEC[n.role] })) : [];
+    const SEGP = ''' + PS.SEG_JS + r''';
+    const strip = (() => { const W = 340, w = W / 52; let i = 0, x0 = null, x1 = 0, bl = '';
+      for (let m = 21; m <= 108; m++) { if (isW(m)) { if (m >= lo && x0 === null) x0 = i * w; if (m <= hi) x1 = (i + 1) * w; i++; } else bl += 'M' + (i * w - w * 0.3).toFixed(2) + ' 0h' + (w * 0.6).toFixed(2) + 'v15h-' + (w * 0.6).toFixed(2) + 'z'; }
+      const nm = (m) => NM[m % 12] + (Math.floor(m / 12) - 1); return { x: x0.toFixed(2), w: (x1 - x0).toFixed(2), bl, cap: nm(lo) + ' – ' + nm(hi) }; })();
+    const cpPiano = { cpKb: kbOnS, cpKb2: kbOnS && kbView === '2d', cpKb3: is3d, cpPad: kbOnS ? 16 : 118, kbw: whites, kbb: blacks, nowChord: slot.c,
+      handsRef: (el) => { this._cv = el; }, labelsRef: (el) => { this._lb = el; },
+      pianoOn: st.sheet === 'piano', openPiano: () => set({ sheet: 'piano' }), backSet: () => set({ sheet: 'set' }), pianoVal: !kbOnS ? 'Hidden' : kbView === '2d' ? '2D keys' : '3D piano',
+      pianoSw: ''' + PS.SW_JS('kbOnS', '() => set({ kbOn: !kbOnS })') + r''', kbHandsSw: ''' + PS.SW_JS('kbHands', '() => set({ kbHands: !kbHands })') + r''',
+      kb3c: ''' + PS.CARD_JS("kbView !== '2d'", "() => set({ kbView: '3d' })") + r''', kb2c: ''' + PS.CARD_JS("kbView === '2d'", "() => set({ kbView: '2d' })") + r''', kb3d: kbView !== '2d',
+      kbAngleSeg: SEGP([['seat', 'Seat'], ['above', 'Above']], kbAngle, (v) => set({ kbAngle: v })),
+      kbRangeSeg: SEGP([['fit', 'Fit the chords'], ['4', '4 octaves'], ['88', '88 keys']], kbRange, (v) => set({ kbRange: v })),
+      kbLabelSeg: SEGP([['names', 'Note names'], ['degrees', 'Degrees'], ['intervals', 'Intervals'], ['none', 'None']], kbLabel, (v) => set({ kbLabel: v })),
+      kbStrip: strip, kbDimOp: kbOnS ? 1 : 0.4, kbPE: kbOnS ? 'auto' : 'none',
+      soundSub: '', soundSubOn: false, soundSubVal: 'Grand piano', soundSubValC: '#685E56', midiSub: '', midiSubOn: false, midiSubVal: 'None', midiSubValC: '#685E56' };
+'''
+# the chart's cursor walks the chart while it plays, half a bar a step (96 BPM in 4/4: 1.25 s)
+CP_LIFE = r'''
+  componentDidMount() { this._hands3d(); this._tick(); }
+  componentDidUpdate() { this._hands3d(); this._tick(); }
+  componentWillUnmount() { clearInterval(this._iv); if (this._ro) this._ro.disconnect(); if (this._stage) this._stage.dispose(); this._stage = null; }
+  _tick() { const on = !!(this.state || {}).playing; if (on && !this._iv) this._iv = setInterval(() => this.setState((s) => ({ pos: (s.pos ?? 4) + 1 })), 1250); if (!on && this._iv) { clearInterval(this._iv); this._iv = null; } }
+''' + PS.HANDS3D
+PT_BUNDLE_CP = open('/home/user/piano-trainer/.scratch/r39/canvas/pthands.bundle.js').read()
+def CP_KEYS(h):
+    """The chord's keys: 2D, or the live 3D stage with the hands."""
+    k2 = (f'<sc-if value="{{{{cpKb2}}}}" hint-placeholder-val="{{{{true}}}}"><div role="img" aria-label="The keys of {{{{nowChord}}}}" style="position: relative; height: {h}px; background: #CBC2B9">'
+          f'<sc-for list="{{{{kbw}}}}" as="k" hint-placeholder-count="19"><span style="position: absolute; top: 0; bottom: 0; left: {{{{k.left}}}}; width: {{{{k.w}}}}; box-sizing: border-box; border-right: 1px solid rgba(51,41,33,.16); border-radius: 0 0 4px 4px; background: {{{{k.bg}}}}; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8px; font-size: 12px; font-weight: 700; color: {INK}">{{{{k.l}}}}</span></sc-for>'
+          f'<sc-for list="{{{{kbb}}}}" as="k" hint-placeholder-count="13"><span style="position: absolute; top: 0; height: 60%; left: {{{{k.left}}}}; width: {{{{k.w}}}}; border-radius: 0 0 3px 3px; background: {{{{k.bg}}}}; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px; box-sizing: border-box; font-size: 10px; font-weight: 700; color: {INK}">{{{{k.l}}}}</span></sc-for></div></sc-if>')
+    k3 = (f'<sc-if value="{{{{cpKb3}}}}" hint-placeholder-val="{{{{false}}}}"><figure aria-label="The hands at the keys, playing {{{{nowChord}}}}" style="position: relative; margin: 0; height: {h}px; overflow: hidden; background: #EDE6DC; {PS.STAGE_VARS}">'
+          f'<canvas ref="{{{{handsRef}}}}" style="display: block; width: 100%; height: 100%"></canvas><div ref="{{{{labelsRef}}}}" aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none"></div></figure></sc-if>')
+    return k2 + k3
+CP_SET = GROUP(('link', 'Instruments', 'Piano, bass, drums', ''), ('link', 'Piano', '{{pianoVal}}', 'openPiano'), ('seg', 'Chord names', 'namesSeg', 200), ('link', 'Count-in', '1 bar', ''))
+_BACKP = f'<button type="button" aria-label="Back to Chord player settings" onClick="{{{{backSet}}}}" style="position: absolute; left: -8px; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L}</button>'
+_PBODY = PS.PIANO_SHEET(False, 3, 4)
+CP_PSHEET = BSHEET('pianoOn', 'Piano', _PBODY).replace('max-height: 86%', 'max-height: calc(100% - 124px)', 1).replace('<span style="font-size: 17px; font-weight: 600">Piano</span>', _BACKP + '<span style="font-size: 17px; font-weight: 600">Piano</span>', 1)
+CP_PPOP = POPOVER('pianoOn', 'Piano', _PBODY, 'right: 40px; top: 64px', 400).replace('<span style="font-size: 17px; font-weight: 600">Piano</span>', f'<div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 44px">{_BACKP}<span style="font-size: 17px; font-weight: 600">Piano</span></div>', 1)
+
+CP = CP.replace("    const play = st.playing ? (st.at ?? [0, 2])", CP_PIANO_JS + "    const play = st.playing ? [slot.si, slot.bi]", 1).replace("styleOn: st.sheet === 'style',", "styleOn: st.sheet === 'style', ...cpPiano,", 1)
+CP = 'const PT_BUNDLE = ' + json.dumps(PT_BUNDLE_CP) + ';\n' + CP.replace('class Component extends DCLogic {\n', 'class Component extends DCLogic {' + CP_LIFE, 1)
 CP = CP.replace("keyTiles:", "namesSeg: seg(['Letters', 'Numerals'], st.names ?? 'Letters', (l) => set({ names: l })), keyTiles:")
 UNDOB = IB('Undo', UNDO)
-ph = body(TOP('Main.dc.html', 'Chord player', UNDOB + GEAR() + DOTS()), CHART.replace('{{CH}}', '50').replace('{{CF}}', '17'), CP_DOCK, 118)
+ph = (body(TOP('Main.dc.html', 'Chord player', UNDOB + GEAR() + DOTS()), CHART.replace('{{CH}}', '50').replace('{{CF}}', '17'), CP_DOCK, 118).replace('padding: 4px 16px 118px', 'padding: 4px 16px {{cpPad}}px', 1)
+      .replace('</main>', '</main><sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; margin-bottom: 110px; box-shadow: 0 -1px 0 ' + LINE + '">' + CP_KEYS(112) + '</div></sc-if>', 1))
 DRAG = f'{H2("C major chords")}<p style="margin: -8px 4px 0; font-size: 14px; color: {SOFT}">Drag one into a bar.</p><div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{keyTiles}}}}" as="k" hint-placeholder-count="8"><span draggable="true" style="height: 56px; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: 20px; font-weight: 700; cursor: grab">{{{{k.c}}}}</span></sc-for></div>'
-lm = lapbody(LTOP('Laptop.dc.html', UNDOB + GEAR() + DOTS(), 'Chord player'), f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto">{CHART.replace("{{CH}}", "64").replace("{{CF}}", "22")}</div>', DRAG + H2('Style') + WHEEL([('wStyle', 1)]), CP_DOCK)
+lm = lapbody(LTOP('Laptop.dc.html', UNDOB + GEAR() + DOTS(), 'Chord player'), f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto">{CHART.replace("{{CH}}", "64").replace("{{CF}}", "22")}</div>' + '<sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 1px ' + LINE + '">' + CP_KEYS(160) + '</div></sc-if>', DRAG + H2('Style') + WHEEL([('wStyle', 1)]), CP_DOCK)
 CP_MORE = GROUP(('link', 'Chord sheets', '', ''), ('link', 'Save as my chord sheet', '', ''), ('link', 'Open in Progressions', '', 'Progressions.dc.html'), ('link', 'Share link', '', ''))
-detail('ChordPlayer', 'Chord player', CP, ph, lm, '', BSHEET('chordOn', 'Bar 3', CP_CHORD) + BSHEET('styleOn', 'Style', WHEEL([('wStyle', 1)])) + BSHEET('setOn', 'Chord player settings', CP_SET) + BSHEET('moreOn', 'Chord sheet', CP_MORE),
-       POPOVER('chordOn', 'Bar 3', CP_CHORD, 'left: 140px; top: 220px', 440) + POPOVER('styleOn', 'Style', WHEEL([('wStyle', 1)]), 'left: 200px; bottom: 110px') + POPOVER('setOn', 'Chord player settings', CP_SET) + POPOVER('moreOn', 'Chord sheet', CP_MORE.replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html')))
+detail('ChordPlayer', 'Chord player', CP, ph, lm, '', BSHEET('chordOn', 'Bar 3', CP_CHORD) + BSHEET('styleOn', 'Style', WHEEL([('wStyle', 1)])) + BSHEET('setOn', 'Chord player settings', CP_SET) + CP_PSHEET + BSHEET('moreOn', 'Chord sheet', CP_MORE),
+       POPOVER('chordOn', 'Bar 3', CP_CHORD, 'left: 140px; top: 220px', 440) + POPOVER('styleOn', 'Style', WHEEL([('wStyle', 1)]), 'left: 200px; bottom: 110px') + POPOVER('setOn', 'Chord player settings', CP_SET) + CP_PPOP + POPOVER('moreOn', 'Chord sheet', CP_MORE.replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html')))
 
 # ═════ An exercise (Hanon Pro: the page, Listen, a metronome and a target tempo) ═════
 _h = open('/home/user/piano-trainer/.scratch/r39/canvas/calm.py').read(); exec('def hanon' + _h.split('def hanon')[1].split('EX_STAGE =')[0])

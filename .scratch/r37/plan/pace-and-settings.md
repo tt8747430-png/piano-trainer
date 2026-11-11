@@ -2,7 +2,35 @@
 
 ## The rulings as they stand (read first; the sections below are the history, and where they disagree, this wins)
 
-Canvas v130, https://claude.ai/artifact/HezkVS2MXdwz7uJ14KDGgp. Each line names the owner's words it rests on.
+Canvas v130, https://claude.ai/artifact/HezkVS2MXdwz7uJ14KDGgp (the Player now lives on the one canvas, https://claude.ai/artifact/9J6uVajsp9EDULa5zsKwJH, Version 122). Each line names the owner's words it rests on.
+
+**The Chord player gets a piano; the Player gets Night; bigger targets (canvas Version 122, 2026-11-11).** Owner:
+"1. yes 2. yes 3. 1. your recommendation 2. yes 3. yes. and also the piano settings in the player are not correct
+height and the rows don't have enough place".
+
+- **The Player's Piano sheet:** its rows no longer shrink (every child of a sheet is `flex: none`), and a phone's
+  sheet stops below the bar (`calc(100% - 124px)`), so Close, the views and the gear stay in sight. Every row is 44 or
+  more; MIDI keyboard shows whole when scrolled.
+- **The Chord player has a piano (1. yes):** under the chart, the chord sounding now on the keys in its tones'
+  paints (root, 3rd, 5th, 7th), the bass in the left hand, the chord in root position from middle C's octave. The bar
+  being played is honey; at rest the bar the keys show is a pale honey. 2D keys by default; 3D piano draws the app's
+  own hands, with Angle and Hands on the keys, through the same code as the Chords page (`piano_sheet.HANDS3D`).
+  Its settings are the one Piano sheet, reached from Settings › Piano (the bar has no room for a fifth button on a
+  phone; one home, a link row): Range Fit the chords · 4 octaves · 88 keys (a chart's range, all its chords at
+  once, so the keys never jump); Labels Note names · Degrees · Intervals · None.
+- **Chords' chord names 44 high (2. yes):** "Change Cmaj7" in the laptop's sequence 40 → 44; Play as 40 → 44 wide.
+- **Hands stays Hands on the Chords page (3.1, the recommendation):** a chord is voiced for the hands, not split
+  into parts; Parts belongs to a song's staves in the Player.
+- **Played through's bars are four-bar buttons (3.2 yes):** a bar alone was 18 by 34 and a tap practised its four
+  anyway, so the four bars are the button (about 86 by 72): "5–8", a cell per bar in its slip shade, "5 slips"; the
+  weakest four ringed in honey. Header "Bars"; the line "Tap four bars to practise them."
+- **The Player by Night (3.3 yes):** the phone and laptop Player, its Piano sheet and Played through, through one
+  Night map (`night.py`) shared with the Chords page: the score's ink light on the night page, staff lines a step
+  down, the white surfaces the night card, the piano pictures dimmed to the dusk keys.
+- **Measured:** the Chord player's boards and its Piano sheet, Chords, Played through and the Night boards: spacing
+  finds only the segments' and the bar cells' 2px insets (exempt); layout passes ("Close the sheet" and the page's
+  Back at 6 are the scrim and the iOS back, known); targets all 44 but the canvas's own States chip. Also fixed: "+ Add
+  section" 36 → 44; the laptop views 42 → 44; Played through's text stacks 2 → 4 and its buttons' browser padding.
 
 **One Piano sheet, the same on the Chords page and in the Player (canvas Version 121, 2026-11-11).** Owner: "why
 the player doesnt have the hands on the keys setting and also the range selections and the chord player doesnt have

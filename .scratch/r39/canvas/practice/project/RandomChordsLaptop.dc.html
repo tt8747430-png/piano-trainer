@@ -326,6 +326,7 @@ class Component extends DCLogic {
         if (ra.right > b.right - 8) sf.scrollLeft += ra.right - b.right + 16; else if (r.left < b.left + 8) sf.scrollLeft -= b.left + 8 - r.left; } }
     this._n = n; this._pl = pl; this._sh = this.state.sheet; this._cur = this.state.cur ?? 0; }
   componentWillUnmount() { document.removeEventListener('keydown', this._key); if (this._ro) this._ro.disconnect(); if (this._stage) this._stage.dispose(); this._stage = null; }
+
   _hands3d() {
     const cv = this._cv, d = this._handsIn; if (!cv || !d) { if (this._stage && !cv) { this._stage.dispose(); this._stage = null; this._stageCv = null; } return; }
     try {

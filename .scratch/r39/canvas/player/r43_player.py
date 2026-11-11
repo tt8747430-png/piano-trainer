@@ -33,9 +33,9 @@ HANDSI = ('<span style="height: 20px; display: flex; align-items: center"><sc-if
           + '</sc-if><sc-if value="{{hR}}" hint-placeholder-val="{{false}}">' + HANDI + '</sc-if><sc-if value="{{hL}}" hint-placeholder-val="{{false}}">'
           + HANDL + '</sc-if></span>')
 
-MOTION = ('<style data-r43>'
+MOTION = ('<style data-r43>[role=dialog] > * { flex: none } '
           'div[role=group] > sc-for > button, [aria-label="View"] button { position: relative }'
-          ' div[role=group] > sc-for > button::before { content: ""; position: absolute; inset: -7px -1px } [aria-label="View"] button::before { content: ""; position: absolute; inset: -4px 0 }'
+          ' div[role=group] > sc-for > button::before { content: ""; position: absolute; inset: -7px -1px } [aria-label="View"] button::before { content: ""; position: absolute; inset: -5px 0 }'
   'button, a[href] { -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none }'
   ':focus-visible { outline: 2px solid #356890; outline-offset: 2px }'
   '@media (hover: hover) { [data-tip]::after { content: attr(data-tip); position: absolute; left: 50%; top: calc(100% + 8px); z-index: 90;'
@@ -250,12 +250,37 @@ def kit(t, phone):
     t = lit(t, "t: mine ? NOTE[k.m % 12] :", "t: mine ? labelOf(k.m) :")
     t = lit(t, "const name = NOTE[m % 12];", "const name = labelOf(m);")
     t = t.replace('aria-label="Keyboard', 'aria-label="Piano').replace('>Keyboard</h2>', '>Piano</h2>').replace('data-tip="Keyboard"', 'data-tip="Piano"').replace('<span>Keyboard</span></button>', '<span>Piano</span></button>')
+    # a phone's sheet stops below the bar (Close, the views, the gear), never under it (owner, canvas 122: "the piano
+    # settings in the player are not correct height")
+    if phone:
+        t = t.replace('max-height: 88%', 'max-height: calc(100% - 124px)')
     t = t.replace('#B4531A', '#7A5418')  # the old orange's last use: the loop's word when on
     # the remaining white surfaces and lifted cards take the warm white and the hairline
     t = t.replace('box-shadow: 0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)', 'box-shadow: 0 0 0 1px rgba(51,41,33,.07)')
     t = t.replace('background: #FFFFFF;', 'background: #FEFDFB;')
     # − and + as the Chords page's filled circles
     t = t.replace('border: 1px solid #DDD5CA; border-radius: 9999px; background: #FEFDFB;', 'border: 0; border-radius: 9999px; background: #EEE9E2;')
+    # Played through's bars are four-bar buttons (owner, canvas 122: "3. 2. yes"): a bar alone was 18 by 34 and a tap
+    # practised its four anyway, so the four are the button, each bar a cell inside it; the weakest four ringed
+    t = sub(t, r'<div style="flex: none; border-radius: 12px; background: #(?:FFFFFF|FEFDFB); padding: 12px 14px 10px;.*?\{\{doneBarsLine\}\}</span></div>',
+            '<div role="group" aria-label="Slips, four bars at a time" style="flex: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">'
+            '<sc-for list="{{doneGroups}}" as="g" hint-placeholder-count="4"><button type="button" aria-label="{{g.aria}}" onClick="{{g.pick}}" style="min-width: 0; min-height: 72px; box-sizing: border-box; padding: 8px; border: 0; border-radius: 12px; background: {{g.bg}}; box-shadow: {{g.ring}}; color: #332921; font: inherit; display: flex; flex-direction: column; align-items: stretch; gap: 4px; text-align: left">'
+            '<span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums">{{g.l}}</span>'
+            '<span aria-hidden="true" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px"><sc-for list="{{g.cells}}" as="c" hint-placeholder-count="4"><span style="height: 12px; border-radius: 3px; background: {{c.bg}}"></span></sc-for></span>'
+            '<span style="font-size: 12px; color: {{g.subC}}; font-variant-numeric: tabular-nums">{{g.sub}}</span></button></sc-for></div>'
+            '<span style="flex: none; padding: 0 4px; font-size: 13px; color: #4A433C">{{doneBarsLine}}</span>', flags=re.S)
+    t = t.replace('>Each bar</p>', '>Bars</p>')
+    t = lit(t, "doneBarsLine: 'Most slips in bars 5–8 (5 of 7). Tap a bar to practise its four.',",
+            "doneBarsLine: 'Most slips in bars 5–8 (5 of 7). Tap four bars to practise them.',\n"
+            "doneGroups: [0, 1, 2, 3].map((g) => { const n4 = [0, 0, 1, 0, 0, 3, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0].slice(g * 4, g * 4 + 4), a = g * 4 + 1, n = n4.reduce((x, y) => x + y, 0), weak = a === 5;\n"
+            "  return { l: a + '–' + (a + 3), cells: n4.map((k) => ({ bg: k === 0 ? '#E4DDD3' : k === 1 ? '#F8D9C2' : k === 2 ? '#F0A877' : '#B07A2A' })), sub: n === 0 ? 'No slips' : n === 1 ? '1 slip' : n + ' slips', subC: n ? '#332921' : '#685E56',\n"
+            "    aria: 'Bars ' + a + '–' + (a + 3) + ': ' + (n === 0 ? 'no slips' : n === 1 ? '1 slip' : n + ' slips') + '. Practise them', bg: weak ? '#FBF1DD' : '#FEFDFB', ring: weak ? '0 0 0 2px #B07A2A' : '0 0 0 1px rgba(51,41,33,.07)',\n"
+            "    pick: () => { this.setState({ loop: true, loopA: a, loopB: a + 3, bar: a, beat: 1 }); togglePlayNow(); } }; }),")
+    # Played through's text stacks on the 4 scale, and its buttons without the browser's 1 by 6 padding (canvas 122)
+    t = t.replace('flex-direction: column; gap: 2px', 'flex-direction: column; gap: 4px')
+    t = t.replace('flex-direction: column; gap: 8px; padding-top: 2px"><button type="button" onClick="{{doneLoop}}"', 'flex-direction: column; gap: 8px; padding-top: 4px"><button type="button" onClick="{{doneLoop}}"', 1)
+    for act in ('doneLoop', 'doneAgain', 'doneStep'):
+        t = t.replace(f'onClick="{{{{{act}}}}}" style="height:', f'onClick="{{{{{act}}}}}" style="padding: 0; height:', 1)
     # Played through ends with Done, as every sheet does
     t = sub(t, r'<button type="button" aria-label="Close" onClick="\{\{doneClose\}\}" style="[^"]*">.*?</button>',
             '<button type="button" onClick="{{doneClose}}" style="flex: none; height: 44px; margin: -6px -4px 0 0; padding: 0 4px; border: 0; background: transparent; color: #356890; font: inherit; font-size: 17px; font-weight: 600">Done</button>', flags=re.S)
@@ -347,7 +372,6 @@ def grid4(t, phone):
         assert a in t, a[:70]
         t = t.replace(a, b)
     swap('<p style="margin: 6px 4px -4px; font-size: 13px', '<p style="margin: 8px 4px -4px; font-size: 13px')
-    swap('padding: 12px 14px 10px; display: flex; flex-direction: column; gap: 6px;', 'padding: 12px 16px; display: flex; flex-direction: column; gap: 8px;')
     swap('display: flex; align-items: center; justify-content: center; gap: 14px"', 'display: flex; align-items: center; justify-content: center; gap: 16px"')
     swap('margin-top: 3px; font-size: 12px', 'margin-top: 4px; font-size: 12px')
     swap('display: inline-flex; align-items: center; gap: 6px">{{c.name}}', 'display: inline-flex; align-items: center; gap: 4px">{{c.name}}')
@@ -410,4 +434,17 @@ for v, name in (('sheet', 'Sheet'), ('diagrams', 'Diagrams'), ('grid', 'Grid'), 
 lk = (OUT / 'PlayerLaptopKeyboard.dc.html').read_text()
 (OUT / 'PlayerLaptopParts.dc.html').write_text(lk.replace('open="keys"', 'open="hands"').replace('Keyboard</title>', 'Parts</title>'))
 (OUT / 'PlayerLaptopSheet.dc.html').write_text(lk.replace('open="keys"', 'open="view"').replace('Keyboard</title>', 'Sheet settings</title>'))
+# Night (owner, canvas 122: "3. 3. yes"): the Player in the app's dark roles, through the one map the Chords page uses
+import night as NT
+for name in ('PlayerApp', 'PlayerDesk'):
+    # the Player draws its surfaces in pure white (the Chords page keeps #FFFFFF for ink on colour), and its piano
+    # pictures are lit for the day: by night they are surfaces, and the pictures dim to the dusk keys' level
+    h = (OUT / f'{name}.dc.html').read_text().replace('background: #FFFFFF', 'background: #FEFDFB').replace('background: #fff;', 'background: #FEFDFB;')
+    h = h.replace('<img src="{{kbImg}}" alt="{{kbAlt}}" style="', '<img src="{{kbImg}}" alt="{{kbAlt}}" style="filter: brightness(.8); ', 1)
+    (OUT / f'{name}Night.dc.html').write_text(NT.night(h))
+for w, comp in (('Player', 'PlayerApp'), ('PlayerLaptop', 'PlayerDesk'), ('PlayerKeyboard', 'PlayerApp'), ('PlayerLaptopKeyboard', 'PlayerDesk'), ('PlayerDone', 'PlayerApp')):
+    h = (OUT / f'{w}.dc.html').read_text()
+    assert f'name="{comp}"' in h, w
+    h = h.replace(f'name="{comp}"', f'name="{comp}Night"', 1).replace('</title>', ', Night</title>', 1).replace('<html', '<html data-theme="dark"', 1).replace('body{margin:0}', 'body{margin:0;background:#191512}', 1)
+    (OUT / f'{w}Night.dc.html').write_text(h)
 print('r43 player ok')

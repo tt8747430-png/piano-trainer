@@ -24,6 +24,8 @@ PAGES = [
   ('songs', 'Songs', [(n, [L(lp, n + ', laptop')], [L(ph, n + ', phone')]) for ph, lp, n in SONGS]),
   ('player', 'The Player', [
     ('The Player', [L(lp, n + ', laptop') for ph, lp, n in PLAYER], [L(ph, n + ', phone') for ph, lp, n in PLAYER]),
+    ('The Player, Night', [L('PlayerLaptopNight', 'The Player, Night, laptop'), L('PlayerLaptopKeyboardNight', 'The Player, Piano, Night, laptop')],
+     [L('PlayerNight', 'The Player, Night, phone'), L('PlayerKeyboardNight', 'The Player, Piano, Night, phone'), L('PlayerDoneNight', 'The Player, Played through, Night, phone')]),
     ('The Player’s layers, phone', [], [L(ph, 'The Player, ' + n + ', phone') for ph, n in PLAYER_PHONES]),
     ('Earlier drafts of the Player', [L('PlayerDesk', 'The Player, earlier draft, laptop')], [L('PlayerApp', 'The Player, earlier draft, phone')])]),
   ('practice', 'Practice', [(n, [L(lp, n + ', laptop')] + ([L('ChordsLaptopNight', 'Chords, Night, laptop')] if ph == 'Chords' else []),

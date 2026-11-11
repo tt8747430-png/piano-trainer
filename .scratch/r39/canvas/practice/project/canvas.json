@@ -182,9 +182,36 @@
       "is_interactive": true,
       "page": "player"
     },
-    "PlayerLaptop.dc.html": {
+    "PlayerNight.dc.html": {
       "x": 0,
       "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Night, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerKeyboardNight.dc.html": {
+      "x": 530,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Piano, Night, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerDoneNight.dc.html": {
+      "x": 1060,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Played through, Night, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLaptop.dc.html": {
+      "x": 0,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "The Player, laptop",
@@ -193,7 +220,7 @@
     },
     "PlayerLaptopLoop.dc.html": {
       "x": 2223,
-      "y": 1720,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "The Player, Practice with a loop, laptop",
@@ -202,7 +229,7 @@
     },
     "PlayerLaptopKeyboard.dc.html": {
       "x": 4446,
-      "y": 1720,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "The Player, Keyboard, laptop",
@@ -211,7 +238,7 @@
     },
     "PlayerLaptopParts.dc.html": {
       "x": 6669,
-      "y": 1720,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "The Player, Parts, laptop",
@@ -220,7 +247,7 @@
     },
     "PlayerLaptopSheet.dc.html": {
       "x": 8892,
-      "y": 1720,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "The Player, Sheet settings, laptop",
@@ -229,10 +256,28 @@
     },
     "PlayerDesk.dc.html": {
       "x": 11115,
-      "y": 1720,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "The Player, earlier draft, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLaptopNight.dc.html": {
+      "x": 0,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, Night, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLaptopKeyboardNight.dc.html": {
+      "x": 2223,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, Piano, Night, laptop",
       "is_interactive": true,
       "page": "player"
     },
@@ -595,12 +640,28 @@
       "maxW": 7340,
       "page": "player"
     },
-    "player-laptop": {
+    "player-phone-night": {
       "x": 0,
       "y": 1420,
+      "text": "Phone, Night",
+      "kind": "title1",
+      "maxW": 1510,
+      "page": "player"
+    },
+    "player-laptop": {
+      "x": 0,
+      "y": 2840,
       "text": "Laptop",
       "kind": "title1",
       "maxW": 13258,
+      "page": "player"
+    },
+    "player-laptop-night": {
+      "x": 0,
+      "y": 4639,
+      "text": "Laptop, Night",
+      "kind": "title1",
+      "maxW": 4366,
       "page": "player"
     },
     "practice-phone": {
@@ -657,12 +718,17 @@
     "PlayerDone.dc.html",
     "PlayerDiagrams.dc.html",
     "PlayerApp.dc.html",
+    "PlayerNight.dc.html",
+    "PlayerKeyboardNight.dc.html",
+    "PlayerDoneNight.dc.html",
     "PlayerLaptop.dc.html",
     "PlayerLaptopLoop.dc.html",
     "PlayerLaptopKeyboard.dc.html",
     "PlayerLaptopParts.dc.html",
     "PlayerLaptopSheet.dc.html",
     "PlayerDesk.dc.html",
+    "PlayerLaptopNight.dc.html",
+    "PlayerLaptopKeyboardNight.dc.html",
     "Main.dc.html",
     "Chords.dc.html",
     "RandomChords.dc.html",

@@ -740,9 +740,7 @@ def KEYBAND(h):
     return f'<div style="position: relative; flex: none; width: 100%; height: {h}px; overflow: hidden; background: {LINE}"><sc-for list="{{{{kb.whites}}}}" as="k" hint-placeholder-count="14"><span style="position: absolute; left: {{{{k.left}}}}px; top: 0; width: {{{{k.w}}}}px; height: {{{{k.h}}}}px; box-sizing: border-box; padding-bottom: 10px; border-right: 1px solid rgba(51,41,33,.16); background: {{{{k.bg}}}}; color: {{{{k.ink}}}}; font-size: 12px; font-weight: {{{{k.fw}}}}; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px"><span style="font-size: 14px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums">{{{{k.fing}}}}</span>{{{{k.label}}}}</span></sc-for><sc-for list="{{{{kb.blacks}}}}" as="k" hint-placeholder-count="10"><span style="position: absolute; left: {{{{k.left}}}}px; top: 0; width: {{{{k.w}}}}px; height: {{{{k.h}}}}px; box-sizing: border-box; padding-bottom: 6px; border-radius: 0 0 5px 5px; background: {{{{k.bg}}}}; color: {INK}; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px"><span style="font-size: 12px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums">{{{{k.fing}}}}</span>{{{{k.label}}}}</span></sc-for><div style="position: absolute; left: 0; right: 0; top: 0; height: 4px; background: #7C302C"></div><div style="position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: {LINE}"></div></div>'
 
 def STAGE3D(h):
-    vars3 = ("--key-white: #fefdfb; --key-black: #332c28; --key-bed: #cbc2b9; --key-felt: #7c302c; --key-down: #85b8dc; --primary: #edc684; --destructive: #c0392b; "
-             "--hand-rh: #E19E8C; --hand-lh: #B8A8D8; --hand-rh-wash: #E19E8C; --hand-lh-wash: #B8A8D8; "
-             + ''.join(f"--role-{n}: {c}; --role-{n}-wash: color-mix(in oklab, {c} 62%, #fefdfb); " for n, c in (('root', '#E19E8C'), ('3rd', '#85B8DC'), ('5th', '#9BC093'), ('7th', '#E8C67D'), ('9th', '#B8A8D8'), ('11th', '#D3AC8A'), ('13th', '#82C2C1'))))
+    vars3 = PS.STAGE_VARS
     return (f'<sc-if value="{{{{h3d}}}}" hint-placeholder-val="{{{{true}}}}"><figure aria-label="The hands at the keys, playing this chord" style="position: relative; flex: none; margin: 0; width: 100%; height: {h}px; overflow: hidden; background: #EDE6DC; {vars3}"><canvas ref="{{{{handsRef}}}}" style="display: block; width: 100%; height: 100%"></canvas><div ref="{{{{labelsRef}}}}" aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none"></div>'
             f'<sc-if value="{{{{stageMsgOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; inset: 0; background: #EDE6DC; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 16px; text-align: center"><p style="margin: 0; font-size: 16px; color: {INK}">{{{{stageMsg}}}}</p><div style="display: flex; gap: 12px"><sc-if value="{{{{stageRetry}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{retryHands}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 600">Try again</button></sc-if><sc-if value="{{{{stageKeys}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{showKeys}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; color: {INK}; font: inherit; font-size: 16px; font-weight: 600">Show the keys</button></sc-if></div></div></sc-if></figure></sc-if>'
             f'<sc-if value="{{{{is2dKb}}}}" hint-placeholder-val="{{{{false}}}}">{KEYBAND(168)}</sc-if>')
@@ -794,7 +792,7 @@ def TITLEBLOCK(size):
 
 def STAFFSVG(w):
     return f'''<div class="nos" data-staff style="position: relative; z-index: 0; isolation: isolate; overflow-x: auto; overflow-y: hidden; margin: 0 -12px; padding: 4px 12px"><div style="position: relative; flex: none; width: {{{{sv.w}}}}; padding-top: 40px">
-<div style="position: absolute; inset: 0"><sc-for list="{{{{sv.cols}}}}" as="k" hint-placeholder-count="2"><div style="position: absolute; top: 0; bottom: 0; left: {{{{k.l0}}}}; width: {{{{k.w}}}}"><button type="button" class="cname" aria-label="Change {{{{k.s}}}}" data-tip="Change chord" onClick="{{{{k.edit}}}}" style="position: absolute; left: 0; right: 0; top: 0; height: 40px; margin: 0; padding: 0; border: 0; border-radius: 10px; background: transparent; color: {{{{k.tc}}}}; font-family: {SERIF}; font-size: 17px; font-weight: {{{{k.fw}}}}; display: flex; justify-content: center; align-items: center; white-space: nowrap; cursor: pointer"><span>{{{{k.s}}}}</span></button><button type="button" aria-pressed="{{{{k.on}}}}" aria-label="{{{{k.aria}}}}" onClick="{{{{k.pick}}}}" style="position: absolute; left: 0; right: 0; top: 40px; bottom: 0; margin: 0; padding: 0; border: 0; border-radius: 10px; background: transparent; cursor: pointer"></button></div></sc-for></div><svg viewBox="{{{{sv.vb}}}}" style="position: relative; display: block; width: 100%; height: auto; overflow: visible; pointer-events: none" role="img" aria-label="The chords on the staff">
+<div style="position: absolute; inset: 0"><sc-for list="{{{{sv.cols}}}}" as="k" hint-placeholder-count="2"><div style="position: absolute; top: 0; bottom: 0; left: {{{{k.l0}}}}; width: {{{{k.w}}}}"><button type="button" class="cname" aria-label="Change {{{{k.s}}}}" data-tip="Change chord" onClick="{{{{k.edit}}}}" style="position: absolute; left: 0; right: 0; top: 0; height: 44px; margin: 0; padding: 0; border: 0; border-radius: 10px; background: transparent; color: {{{{k.tc}}}}; font-family: {SERIF}; font-size: 17px; font-weight: {{{{k.fw}}}}; display: flex; justify-content: center; align-items: center; white-space: nowrap; cursor: pointer"><span>{{{{k.s}}}}</span></button><button type="button" aria-pressed="{{{{k.on}}}}" aria-label="{{{{k.aria}}}}" onClick="{{{{k.pick}}}}" style="position: absolute; left: 0; right: 0; top: 40px; bottom: 0; margin: 0; padding: 0; border: 0; border-radius: 10px; background: transparent; cursor: pointer"></button></div></sc-for></div><svg viewBox="{{{{sv.vb}}}}" style="position: relative; display: block; width: 100%; height: auto; overflow: visible; pointer-events: none" role="img" aria-label="The chords on the staff">
 <sc-for list="{{{{sv.hl}}}}" as="h" hint-placeholder-count="0"><rect x="{{{{h.x}}}}" y="{{{{h.y}}}}" width="{{{{h.w}}}}" height="{{{{h.h}}}}" rx="10" fill="{{{{h.f}}}}" opacity="{{{{h.o}}}}"></rect></sc-for>
 <path d="{{{{sv.path}}}}" stroke="{INK}" stroke-width="0.9"></path>
 <path d="{{{{sv.bars}}}}" stroke="{INK}" stroke-width="1"></path>
@@ -855,7 +853,7 @@ CHORDACT = f'<button type="button" aria-label="Chord: {{{{qSym}}}}" onClick="{{{
 PLAYSPLIT = (f'<div role="group" aria-label="Play" style="pointer-events: auto; flex: none; width: 176px; {TINTGRP}; display: flex; align-items: center">'
   f'<button type="button" onClick="{{{{playMain}}}}" aria-pressed="{{{{playing}}}}" style="flex: 1; min-width: 0; height: 56px; padding: 0 2px 0 14px; border: 0; border-radius: 28px 0 0 28px; background: transparent; color: {INK}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap"><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOPI}</sc-if><sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAYI}</sc-if><span style="overflow: hidden; text-overflow: ellipsis">{{{{playWord}}}}</span></button>'
   f'<span aria-hidden="true" style="flex: none; width: 1px; height: 26px; background: rgba(51,41,33,.2)"></span>'
-  f'<button type="button" aria-label="Play as: block chord or arpeggio" aria-haspopup="menu" onClick="{{{{openPlayAs}}}}" style="flex: none; width: 40px; height: 56px; border: 0; border-radius: 0 28px 28px 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_D}</button></div>')
+  f'<button type="button" aria-label="Play as: block chord or arpeggio" aria-haspopup="menu" onClick="{{{{openPlayAs}}}}" style="flex: none; width: 44px; height: 56px; padding: 0; border: 0; border-radius: 0 28px 28px 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_D}</button></div>')
 def PLAYASMENU(pos):
     return (f'<sc-if value="{{{{isPlayAs}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
       f'<div role="menu" aria-label="Play as" style="position: absolute; {pos}; z-index: 61; width: 248px; white-space: nowrap; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column">'
@@ -931,6 +929,7 @@ def POPS_LAPTOP(player):
 # board: the same rig, poses and keyboard the Player draws (R42 v78)
 PT_BUNDLE = open('/home/user/piano-trainer/.scratch/r39/canvas/pthands.bundle.js').read()
 assert '</script' not in PT_BUNDLE
+import sys; sys.path.insert(0, '/home/user/piano-trainer/.scratch/r39/canvas'); import piano_sheet as PS
 PT_LIFE = r'''
   componentDidMount() { this._hands3d();
     this._key = (e) => { const d = document.querySelector('[role=dialog], [role=menu]'); if (!d) return;
@@ -950,30 +949,7 @@ PT_LIFE = r'''
         if (ra.right > b.right - 8) sf.scrollLeft += ra.right - b.right + 16; else if (r.left < b.left + 8) sf.scrollLeft -= b.left + 8 - r.left; } }
     this._n = n; this._pl = pl; this._sh = this.state.sheet; this._cur = this.state.cur ?? 0; }
   componentWillUnmount() { document.removeEventListener('keydown', this._key); if (this._ro) this._ro.disconnect(); if (this._stage) this._stage.dispose(); this._stage = null; }
-  _hands3d() {
-    const cv = this._cv, d = this._handsIn; if (!cv || !d) { if (this._stage && !cv) { this._stage.dispose(); this._stage = null; this._stageCv = null; } return; }
-    try {
-      if (!window.PTHands) (0, eval)(PT_BUNDLE);
-      const ang = this.state.kbAngle === 'above' ? 'above' : 'seat';
-      if (!this._stage || this._stageCv !== cv || this._ang !== ang) {
-        window.PTHands.setPitch(ang === 'above' ? 78 : 62); this._ang = ang;
-        if (this._stage) this._stage.dispose(); if (this._ro) this._ro.disconnect();
-        cv.__ptAfter = (proj) => { const box = this._lb; if (!box) return; const L = this._labels3d || [], W = box.clientWidth, H = box.clientHeight;
-          while (box.children.length > L.length) box.lastChild.remove();
-          L.forEach((l, i) => { let el = box.children[i]; if (!el) { el = document.createElement('span'); el.style.cssText = 'position: absolute; transform: translate(-50%, -100%); min-width: 22px; height: 22px; box-sizing: border-box; padding: 0 5px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #332921; box-shadow: 0 0 0 1.5px rgba(51,41,33,.55), 0 1px 3px rgba(51,41,33,.3); white-space: nowrap'; box.append(el); }
-            const p = proj(l.m, l.black); el.textContent = l.t; el.style.background = l.c; l.x = p[0] * W; l.w = Math.max(22, l.t.length * 8 + 10); l.el = el; el.style.top = Math.max(26, p[1] * H - 3).toFixed(1) + 'px'; });
-          // labels over neighbouring keys (D and E♭) are moved apart until neither covers the other
-          const by = L.slice().sort((a, b) => a.x - b.x); for (let i = 1; i < by.length; i++) { const need = (by[i - 1].w + by[i].w) / 2 + 3 - (by[i].x - by[i - 1].x); if (need > 0) { by[i - 1].x -= need / 2; by[i].x += need / 2; } }
-          // a key outside the view keeps its label hidden, never half cut at the edge
-          L.forEach((l) => { l.el.style.left = l.x.toFixed(1) + 'px'; l.el.style.visibility = l.x - l.w / 2 < 4 || l.x + l.w / 2 > W - 4 ? 'hidden' : 'visible'; }); };
-        this._stage = window.PTHands.createStage(cv, d, { onLoaded: () => {}, onFailed: () => this.setState({ kbView: '2d' }) }); this._stageCv = cv;
-        const box = cv.parentElement, rs = () => { if (this._stage) this._stage.resize(box.clientWidth, box.clientHeight); };
-        this._ro = new ResizeObserver(rs); this._ro.observe(box); rs();
-      }
-      this._stage.update(d); if (this._lb && !(this._labels3d || []).length) this._lb.replaceChildren();
-    } catch (e) { this._stage = null; this.setState({ kbView: '2d' }); } // where 3D cannot be drawn, the flat keys
-  }
-'''
+''' + PS.HANDS3D + r''''''
 def ch_js(D, W, KH, minOct, mini_w):
     out = 'const PT_BUNDLE = ' + json.dumps(PT_BUNDLE) + ';\n' + CH_JS + '\n' + js('const D = ' + json.dumps(D) + ';\nconst HART = ' + json.dumps({k: {'ar': v['ar'], 'f': v['f']} for k, v in HART.items()}) + ';\n' + CH_BODY(D, W, KH, minOct, mini_w))
     return out.replace('class Component extends DCLogic {\n', 'class Component extends DCLogic {' + PT_LIFE, 1)
@@ -1022,7 +998,6 @@ def SWROW(html, on, act):
     return html.replace(a, '<button type="button" role="switch" aria-checked="{{' + on + '}}" onClick="{{' + act + '}}"').replace(b, '<span aria-hidden="true"')
 # a link row that says its state on a second line, in the app's own words (common.midi, settings.piano)
 def STATEROW(label, sub): return ('<a href="#" style="min-height: 48px; box-sizing: border-box; padding: 8px 12px 8px 16px; display: flex; align-items: center; gap: 12px; color: ' + INK + '; text-decoration: none"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px">' + label + '</span><sc-if value="{{' + sub + 'On}}" hint-placeholder-val="{{false}}"><span style="font-size: 13px; color: ' + SOFT + '">{{' + sub + '}}</span></sc-if></span><span style="flex: none; font-size: 16px; color: {{' + sub + 'ValC}}">{{' + sub + 'Val}}</span><span style="color: ' + SOFT + '; display: flex">' + CHEV_R + '</span></a>')
-import sys; sys.path.insert(0, '/home/user/piano-trainer/.scratch/r39/canvas'); import piano_sheet as PS
 B_PIANO = PS.PIANO_SHEET(True, 3, 4)
 PIANOBTN = lambda: GLASSBTN('Piano', KEYSI, 'openKeys')
 # content never shows through the bar: the page fades out under it (the tab bar's rule, v24)
@@ -1173,27 +1148,7 @@ for f in ('Chords', 'ChordsLaptop', 'RandomChords', 'RandomChordsLaptop'):
     open(OUT + f + '.dc.html', 'w').write(h)
 # Night (canvas 95): each board again in the app's dark roles (src/styles/tokens.css, html[data-theme='dark']); the
 # chord paints stay, the keys take the dusk ivory, ink on honey stays dark, shadows deepen
-NIGHT_VARS = [('--key-white: #fefdfb', '--key-white: #d4d0cb'), ('--key-black: #332c28', '--key-black: #171310'),
-              ('--key-bed: #cbc2b9', '--key-bed: #787069'), ('--key-felt: #7c302c', '--key-felt: #5a2422'),
-              ('--primary: #edc684', '--primary: #d4b176'), ('62%, #fefdfb)', '62%, #d4d0cb)')]
-NIGHT = {'#F7F3EE': '#191512', '#FEFDFB': '#24201C', '#EEE9E2': '#2E2924', '#EDE6DC': '#2E2924', '#F3ECE1': '#2E2924',
-         '#DAD1C8': '#453E38', '#332921': '#EDE9E1', '#685E56': '#BBB3A8', '#8A8178': '#7D7368', '#F6E3BC': '#3E3420',
-         '#FBF1DD': '#352D1E', '#B07A2A': '#E0B26F', '#7A5418': '#E3C383', '#5E3F10': '#E3C383', '#EDC684': '#D4B176',
-         '#F2C987': '#D4B176', '#356890': '#89B7DE', '#332C28': '#171310', '#CBC2B9': '#787069', '#7C302C': '#5A2422',
-         '#FFFFFF': '#EDE9E1', '#B3261E': '#F2867C'}
-def night(h):
-    for a, b in NIGHT_VARS: h = h.replace(a, b)
-    h = re.sub(r'#[0-9A-Fa-f]{6}\b', lambda m: NIGHT.get(m.group(0).upper(), m.group(0)), h)
-    h = re.sub(r'rgba\(51, ?41, ?33, ?([\d.]+)\)', lambda m: 'rgba(10,7,5,%s)' % min(0.9, round(float(m.group(1)) * 3, 2)), h)
-    h = h.replace('rgba(254,253,251,.86)', 'rgba(36,32,28,.86)').replace('rgba(246,243,238,0)', 'rgba(25,21,18,0)')
-    # ink on honey stays dark, as primary-foreground does by night
-    h = re.sub(r'(style="[^"]*background: #D4B176[^"]*")', lambda m: m.group(1).replace('color: #EDE9E1', 'color: #191512'), h)
-    # honey Play keeps its dark ink; the switch knob is the light thumb; a chosen segment is raised, a step lighter
-    h = h.replace('rgba(237,198,132,.82)', 'rgba(212,177,118,.92)').replace('inset 0 1px 0 rgba(255,255,255,.55)', 'inset 0 1px 0 rgba(255,255,255,.25)')
-    h = re.sub(r'<div role="group" aria-label="Play".*?</button></div>', lambda m: m.group(0).replace('color: #EDE9E1', 'color: #191512'), h, flags=re.S)
-    h = h.replace('background: #24201C; box-shadow: 0 2px 4px', 'background: #EDE9E1; box-shadow: 0 2px 4px')
-    h = h.replace("'#24201C' : 'transparent'", "'#453E38' : 'transparent'")
-    return h.replace('<html', '<html data-theme="dark"', 1).replace('<x-dc', '<x-dc data-night', 1)
+import night as NT; night = NT.night
 for f in ('Chords', 'ChordsLaptop'):
     open(OUT + f + 'Night.dc.html', 'w').write(night(open(OUT + f + '.dc.html').read()))
 print('r42 chords ok')
