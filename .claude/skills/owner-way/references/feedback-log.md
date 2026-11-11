@@ -82,6 +82,7 @@ owner's, typos fixed.
 
 ## Player views and settings
 - **Songscription's score page is a Player reference (2026-11-11):** "will this help you", "ok document this": the owner's saved copy, read for its controls, is written up in `.scratch/r39/plan/player-reference-songscription.md` with five proposals for the Player canvas (Endless tall, tempo by dragging, the song's keys only, shortcuts beside their names, Reset in the Key sheet). The export itself never enters the repo: it shows the owner's account and carries a recorded song.
+- **Musicca's chord player page, read (2026-11-11):** the owner's export of musicca.com/chord-player is compared with our Chord player in `.scratch/r39/plan/practice-chord-player.md` (Reference): Variation per section, Time signature, Download as audio, beat ticks and edge-dragged lengths, typed chords, draggable chords. Exports stay out of the repo.
 - **A sheet's height is checked, not assumed; a tiny target the tap ignores becomes the real target (R43, canvas
   122):** "the piano settings in the player are not correct height and the rows don't have enough place". Rows shrank
   in a flex sheet and the sheet ran under the bar. Every sheet's children are `flex: none`; a phone sheet stops below
