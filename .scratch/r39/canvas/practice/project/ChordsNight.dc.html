@@ -871,6 +871,11 @@ return {
       rpRtQuick: [['All 12', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]], ['White keys', WH], ['Black keys', [1, 3, 6, 8, 10]]].map(([l, v]) => { const on = v.length === rt.length && v.every((x) => rt.includes(x)); return { l, on, bg: on ? C.ink : '#24201C', fg: on ? '#24201C' : C.ink, ring: on ? 'none' : '0 0 0 1px ' + C.line, pick: () => set({ rpRt: v }) }; }),
       rpRtCount: rt.length + (rt.length === 1 ? ' root' : ' roots'),
       rpRtVal: rt.length === 12 ? 'All 12' : rt.length === 7 && WH.every((x) => rt.includes(x)) ? 'White keys' : rt.length ? rt.slice().sort((a, b) => a - b).map((x) => PC1[x]).join(' ') : 'None',
+      // v143 (owner: "I dont like the roots choosing control… simple to use and understandable"): roots as a pianist
+      // learns keys, easy first; three sets to start from, then every root a checkbox like the chord types
+      rpRtSets: [['Easy roots', 'C, G and F, the keys most pianists learn first', [0, 5, 7]], ['White keys', 'C D E F G A B', WH], ['All 12 roots', 'every key, black ones too', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]]].map(([l, sub, v]) => {
+        const on = v.length === rt.length && v.every((x) => rt.includes(x)); return { l, sub, mark: on ? '✓' : '', fw: on ? 700 : 500, pick: () => set({ rpRt: v }) }; }),
+      rpRtGrid: [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5].map((pc) => { const on = rt.includes(pc); return Object.assign({ s: PC1[pc], on, fw: on ? 700 : 500, aria: PC1[pc], pick: () => set({ rpRt: on ? rt.filter((x) => x !== pc) : rt.concat([pc]) }) }, BOX(on ? 2 : 0)); }),
       isRpRoots: st.sheet === 'rpRoots', openRpRoots: () => set({ sheet: 'rpRoots' }),
       rpChips: FL.map(([v, l]) => ({ l, on: v === flt, bg: v === flt ? C.ink : '#24201C', fg: v === flt ? '#24201C' : C.ink, ring: v === flt ? 'none' : '0 0 0 1px ' + C.line, pick: () => set({ rpFlt: v }) })),
       rpSects, rpNoSects: !rpSects.length, rpHasSects: !!rpSects.length, 
