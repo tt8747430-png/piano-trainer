@@ -437,7 +437,7 @@ owner's, typos fixed.
 - **Roots are picked like keys are learnt (R42, canvas 143):** "I dont like the roots choosing control": not a toy keyboard; the same checkboxes as the chord types, one spelling per root.
 - **No invented presets (R42, canvas 144):** "what is the meaning of easy roots or white keys or all roots. I dont like this": a list the learner can tick needs only Select all; named shortcuts that need explaining go.
 - **One way to choose on a page (R42, canvas 145):** "we also dont have consistency in the page. different controls for selecting": every list of options on a screen is the same row (checkbox for several, radio for one, name, meaning, example) with the same group heading; and the result of the choices is shown where the learner looks first (your deck: count and chords).
-- **Twelve notes are a circle, not a list (R42, canvas 146):** "not very easy to use and not the best ui… think outside of the box": when the options have a picture musicians already know (the circle of fifths), choose on the picture, all of it in one view, with the count and Select all in its centre.
+- **Roots: not a circle either (R42, canvas 147):** "no circle": the twelve roots sit on the page as two rows of six toggles with Select all, one tap each, no drawer. Never for roots: a circle, a keyboard, named sets, twelve rows.
 - **A root is picked on an octave, both spellings on each black key (R42, canvas 106):** "there is not possibility to
   switch between like the c sharp or d flat"; "it just lists all of this keys without good structure". One picker for
   every root and key. Never: a staff that shrinks as chords are added ("getting smaller and smaller"); a list of tiles

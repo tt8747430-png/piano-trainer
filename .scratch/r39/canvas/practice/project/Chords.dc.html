@@ -902,6 +902,10 @@ return {
           rpCircle: [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5].map((pc, i) => { const on = rt.includes(pc), a = i * Math.PI / 6;
             return { s: PC1[pc], on, bg: on ? '#F6E3BC' : '#FEFDFB', ring: on ? 'inset 0 0 0 2px #C99A45' : '0 0 0 1px ' + C.line, fw: on ? 700 : 500, fg: on ? C.ink : C.soft,
               left: (140 + 108 * Math.sin(a) - 26).toFixed(1) + 'px', top: (140 - 108 * Math.cos(a) - 26).toFixed(1) + 'px', aria: PC1[pc] + (on ? ', in' : ', out'), pick: () => set({ rpRt: on ? rt.filter((x) => x !== pc) : rt.concat([pc]) }) }; }),
+          // v147 (owner: "no circle"): the roots on the page itself, no drawer: twelve notes as two rows of toggles,
+          // the way an alarm picks its days, one tap each
+          rpPills: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((pc) => { const on = rt.includes(pc);
+            return { s: PC1[pc], on, bg: on ? C.ink : '#FEFDFB', fg: on ? '#FEFDFB' : C.ink, ring: on ? 'none' : '0 0 0 1px ' + C.line, aria: PC1[pc], pick: () => set({ rpRt: on ? rt.filter((x) => x !== pc) : rt.concat([pc]) }) }; }),
           rpCircleN: rt.length + ' of 12', rpCircleLab: rt.length === 12 ? 'Clear all' : 'Select all', rpCircleAll: () => set({ rpRt: rt.length === 12 ? [] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }),
           rpRtLine: rt.length && ty.length ? pool.length + (pool.length === 1 ? ' chord: ' : ' chords: ') + pool.slice(0, 6).map(symOfP).join(', ') + (pool.length > 6 ? ' …' : '') : (rt.length ? 'Choose a chord type too' : 'Tap the notes your chords start on'),
           rpDeckN: pool.length + (pool.length === 1 ? ' chord' : ' chords') + ' in your deck',
