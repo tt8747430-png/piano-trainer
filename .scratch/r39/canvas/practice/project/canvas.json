@@ -677,6 +677,15 @@
       "is_interactive": true,
       "page": "places"
     },
+    "AppLayers.dc.html": {
+      "x": 4240,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Across the app: search, MIDI, shortcuts, notices, route states, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
     "LearnLaptop.dc.html": {
       "x": 0,
       "y": 1720,
@@ -746,6 +755,15 @@
       "w": 2143,
       "h": 1299,
       "title": "Privacy Policy and Terms, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "AppLayersLaptop.dc.html": {
+      "x": 17784,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Across the app: search, MIDI, shortcuts, notices, route states, laptop",
       "is_interactive": true,
       "page": "places"
     }
@@ -845,7 +863,7 @@
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 4160,
+      "maxW": 4690,
       "page": "places"
     },
     "places-laptop": {
@@ -853,7 +871,7 @@
       "y": 1420,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 17704,
+      "maxW": 19927,
       "page": "places"
     }
   },
@@ -933,6 +951,7 @@
     "Course.dc.html",
     "SignIn.dc.html",
     "Legal.dc.html",
+    "AppLayers.dc.html",
     "LearnLaptop.dc.html",
     "ProfileLaptop.dc.html",
     "SettingsLaptop.dc.html",
@@ -940,7 +959,8 @@
     "LessonLaptop.dc.html",
     "CourseLaptop.dc.html",
     "SignInLaptop.dc.html",
-    "LegalLaptop.dc.html"
+    "LegalLaptop.dc.html",
+    "AppLayersLaptop.dc.html"
   ],
   "pages": [
     {
