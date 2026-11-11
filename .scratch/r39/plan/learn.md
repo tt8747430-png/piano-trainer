@@ -22,6 +22,11 @@ are, what is next, and that every lesson can still be opened.
   and Continue with Your courses on the right.
 - **Real content:** the four levels' chapters and lessons from `src/entities/lesson/content/journeys.ts`.
 
+- **A course is edited as a lesson is** (canvas 130): the Course page enters Edit mode in place (Done · Publish…,
+  "Not published yet"); Shelf, Level and Length as chips; lessons keep their order by a grip, Remove is undone from
+  its toast; Add lesson opens a New sheet. Learn's Courses take the same Edit mode, with New course (Name, Shelf,
+  Level, Length, Create course). Settings and Publish are pages with Back, the same for a lesson and a course.
+
 ## History
 
 - Canvas 128 (2026-11-11): Learn drawn for the first time on the one canvas: phone and laptop, Lessons and Courses.

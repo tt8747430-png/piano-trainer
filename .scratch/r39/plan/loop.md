@@ -177,3 +177,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Canvas 127 (2026-11-11): one 44 segmented control and stepper across Practice; seg rows stacked under their labels; Hear it 44. Drawing v127-*.
 - Canvas 128 (2026-11-11): Learn, Profile and Settings drawn — a level's lessons as a line of tiles; the week as bars; Appearance as three screens; the sidebar's foot is the learner. Drawings v128-*.
 - Canvas 129 (2026-11-11): Administration (ten sections), roles, Edit mode in place on a lesson and on Learn's level, Publish, Preview as learner. Drawings v129-*.
+- Canvas 130 (2026-11-11): Courses edited in place on Learn (About, rows Remove and grip, New course); the Course page read and edited (properties, lessons, Settings, Publish, Undo); the lesson's Settings and Publish pages. Drawings v130-*.
