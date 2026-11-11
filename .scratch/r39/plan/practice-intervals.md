@@ -34,3 +34,12 @@ notes. Laptop: the list on the left, the interval, Play, Play all and Train your
 
 Sources: musicca's intervals pages; the ABRSM aural syllabus's names (harmonic, ascending, descending); the app's own
 song list (`interval-songs.ts`).
+
+## Canvas 127 (2026-11-11): one segmented control, one stepper, 44 high
+
+- **A choice of two or three in a settings group stands under its label,** across the group's width, so "Ascending ·
+  Descending · Harmonic" and "Even · Dotted · Reverse dotted" read whole; it was squeezed beside the label and cut.
+- **The segmented control is the Player's:** 44 high, 11 outside and 9 inside; the stepper's − and + are 44 square.
+  Changed once in the kit, so Scales, Intervals, Progression, Exercise, Metronome, Tuner and the libraries' Sort and
+  filter all follow.
+- **Hear it** buttons 44; End the run 12 from the edge.

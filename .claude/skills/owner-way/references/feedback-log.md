@@ -217,6 +217,9 @@ owner's, typos fixed.
 
 ## Practice
 
+- **One segmented control and stepper, 44 high (canvas 127, 2026-11-11):** a choice of two or three in a settings
+  group stands under its label, full width; the Player's segmented control everywhere.
+
 - **Overview five across (canvas 126, 2026-11-11):** on a laptop the cards run five across with Search beside Tools;
   every subtitle whole on a phone.
 - **Practice ordered by relevance,** learning before tools, with a clear purpose; the Metronome's settings in place as

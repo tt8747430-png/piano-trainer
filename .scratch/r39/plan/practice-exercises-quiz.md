@@ -42,3 +42,12 @@ trainers left, the setup right.
 
 Sources: Hanon, The Virtuoso Pianist (No. 1); Tenuto and musictheory.net's exercise setup (drill, range, rounds);
 Functional Ear Trainer's progress rings; `catalog.ts`, `quiz-groups.ts`, `quiz.ts`.
+
+## Canvas 127 (2026-11-11): one segmented control, one stepper, 44 high
+
+- **A choice of two or three in a settings group stands under its label,** across the group's width, so "Ascending ·
+  Descending · Harmonic" and "Even · Dotted · Reverse dotted" read whole; it was squeezed beside the label and cut.
+- **The segmented control is the Player's:** 44 high, 11 outside and 9 inside; the stepper's − and + are 44 square.
+  Changed once in the kit, so Scales, Intervals, Progression, Exercise, Metronome, Tuner and the libraries' Sort and
+  filter all follow.
+- **Hear it** buttons 44; End the run 12 from the edge.
