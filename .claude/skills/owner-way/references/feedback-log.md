@@ -436,6 +436,7 @@ owner's, typos fixed.
 - **A bar carries only what works on its page (R42, canvas 142):** "what Is the meaning on the piano settings in the header in this page": a header copied from a sibling page keeps nothing that does nothing here; Random chords shows no keys, so no piano button.
 - **Roots are picked like keys are learnt (R42, canvas 143):** "I dont like the roots choosing control": not a toy keyboard; the same checkboxes as the chord types, one spelling per root.
 - **No invented presets (R42, canvas 144):** "what is the meaning of easy roots or white keys or all roots. I dont like this": a list the learner can tick needs only Select all; named shortcuts that need explaining go.
+- **One way to choose on a page (R42, canvas 145):** "we also dont have consistency in the page. different controls for selecting": every list of options on a screen is the same row (checkbox for several, radio for one, name, meaning, example) with the same group heading; and the result of the choices is shown where the learner looks first (your deck: count and chords).
 - **A root is picked on an octave, both spellings on each black key (R42, canvas 106):** "there is not possibility to
   switch between like the c sharp or d flat"; "it just lists all of this keys without good structure". One picker for
   every root and key. Never: a staff that shrinks as chords are added ("getting smaller and smaller"); a list of tiles

@@ -875,6 +875,31 @@ return {
       // learns keys, easy first; three sets to start from, then every root a checkbox like the chord types
       rpRtAll: Object.assign({ on: rt.length === 12, pick: () => set({ rpRt: rt.length === 12 ? [] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }) }, BOX(rt.length === 12 ? 2 : rt.length ? 1 : 0)),
       rpRtGrid: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((pc) => { const on = rt.includes(pc); return Object.assign({ s: PC1[pc], on, fw: on ? 700 : 500, aria: PC1[pc], pick: () => set({ rpRt: on ? rt.filter((x) => x !== pc) : rt.concat([pc]) }) }, BOX(on ? 2 : 0)); }),
+      // v145 (owner: "we also dont have consistency in the page. different controls for selecting… make understandable
+      // ui"): one option row in every drawer: a checkbox where several can be picked, a radio where one; the name; what
+      // it means in a line; an example on the right. A group heading carries its count and Select all.
+      ...(() => {
+        const VD = { 'Close': 'the notes as close together as they go', 'Drop 2': 'the 2nd note from the top an octave lower', 'Drop 3': 'the 3rd note from the top an octave lower', 'Shell': 'root, 3rd and 7th only', 'Rootless A': 'no root; the 3rd at the bottom', 'Rootless B': 'no root; the 7th at the bottom', 'Spread': 'over both hands, wide', 'So What': 'stacked 4ths, a 3rd on top', 'Kenny Barron': 'two stacked 5ths, both hands', 'Upper structure': 'a triad over the 3rd and 7th', 'Bass and chord': 'the root below, the chord above', 'Two triads': 'one triad in each hand', 'Locked hands': 'the melody doubled an octave below' };
+        const ITEM = (o) => Object.assign({ desc: '', ex: '', op: 1 }, o, { hasDesc: !!o.desc, hasEx: !!o.ex, fw: o.on ? 600 : 500, role: o.radio ? 'radio' : 'checkbox' },
+          o.radio ? { boxBg: '#FEFDFB', boxRing: o.on ? 'inset 0 0 0 6px ' + C.ink : 'inset 0 0 0 1.5px #A99E93', boxMark: '', boxRad: '10px' } : Object.assign(BOX(o.on ? 2 : 0), { boxRad: '6px' }));
+        const GRP = (g, items, all) => { const n = items.filter((i) => i.on).length, full = n === items.length;
+          return Object.assign({ g, hasHead: !!g || !!all, count: all ? n + ' of ' + items.length : '', hasAll: !!all, allOn: full, allPick: () => all && all(full), items, boxRad: '6px' }, BOX(full ? 2 : n ? 1 : 0)); };
+        const symOfP = (c) => LET[c.rl] + ACC[String(c.ra)] + QS[c.q].k;
+        const one = (arr, x) => (arr.includes(x) ? (arr.length > 1 ? arr.filter((y) => y !== x) : arr) : arr.concat([x]));
+        return {
+          optTypes: GR.filter((g) => tflt === 'All' || tflt === g).map((g) => { const ids = QS.map((q, i) => [q, i]).filter(([q]) => q.g === g).map(([, i]) => i);
+            return GRP(g, ids.map((i) => ITEM({ name: capn(QS[i]), ex: 'C' + QS[i].k, on: ty.includes(i), pick: () => set({ rpTy: ty.includes(i) ? ty.filter((x) => x !== i) : ty.concat([i]) }) })), (full) => set({ rpTy: togSet(ty, ids, full) })); }),
+          optRoots: [GRP('', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((pc) => ITEM({ name: PC1[pc], desc: ty.length ? ty.slice(0, 4).map((qi) => RN12(QS[qi])[pc] + QS[qi].k).join(', ') + (ty.length > 4 ? ' …' : '') : '', on: rt.includes(pc), pick: () => set({ rpRt: rt.includes(pc) ? rt.filter((x) => x !== pc) : rt.concat([pc]) }) })),
+            (full) => set({ rpRt: full ? [] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }))],
+          optInv: [GRP('', INVR.map(([l, stack, low, sub], i) => ITEM({ name: l, desc: sub, ex: stack, on: invs.includes(i), pick: () => set({ rpInvs: one(invs, i).sort() }) })), (full) => set({ rpInvs: full ? [0] : [0, 1, 2, 3] }))],
+          optVoic: [...new Set(VOICINGS.map((v) => v.g))].map((g) => GRP(g, VOICINGS.filter((v) => v.g === g).map((v) => { const why = pool.length && pool.every((c) => v.ok(QS[c.q])) ? v.ok(QS[pool[0].q]) : '';
+            return ITEM({ name: v.l, desc: why || VD[v.v] || '', op: why ? 0.5 : 1, on: vs.includes(v.v), pick: () => set({ rpVoic: one(vs, v.v) }) }); }), null)),
+          optHands: [GRP('', [['Right hand', 'Right', 'the chord in the right hand'], ['Left hand', 'Left', 'the chord in the left hand'], ['Both hands', 'Both', 'the root and 5th below, the chord above']].map(([l, v, d]) => ITEM({ radio: true, name: l, desc: d, on: hh === v, pick: () => set({ rpHands: v }) })), null)],
+          optGoal: [GRP('', [['16 chords', '16 chords', 'a set of 16, scored at the end'], ['5 minutes', 'For 5 minutes', 'as many as you play right'], ['No end', 'Until I stop', 'no count and no clock']].map(([g, l, d]) => ITEM({ radio: true, name: l, desc: d, on: goal === g, pick: () => set({ rpGoal: g }) })), null)],
+          rpDeckN: pool.length + (pool.length === 1 ? ' chord' : ' chords') + ' in your deck',
+          rpDeck: pool.length ? [pool[0], pool[Math.floor(pool.length / 2)], pool[pool.length - 1]].map(symOfP) : ['–', '–', '–'],
+          rpDeckLine: pool.length ? pool.slice(0, 8).map(symOfP).join('  ') + (pool.length > 8 ? '  …' : '') : 'Choose chord types and roots below' };
+      })(),
       isRpRoots: st.sheet === 'rpRoots', openRpRoots: () => set({ sheet: 'rpRoots' }),
       rpChips: FL.map(([v, l]) => ({ l, on: v === flt, bg: v === flt ? C.ink : '#FEFDFB', fg: v === flt ? '#FEFDFB' : C.ink, ring: v === flt ? 'none' : '0 0 0 1px ' + C.line, pick: () => set({ rpFlt: v }) })),
       rpSects, rpNoSects: !rpSects.length, rpHasSects: !!rpSects.length, 
