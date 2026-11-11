@@ -176,6 +176,8 @@ owner's, typos fixed.
   genre, language, tags) edited as properties, not the inline editor; card styles intuitive, showing what they change in
   the real list, as memory-palaces' pinned cards and presets; the groups pages work and look right (2026-11-05).
 
+- **Progress as the song's bars (canvas 125, 2026-11-11):** sixteen cells under the two plays, played in copper,
+  the next bar outlined; no "Tap one to hear it" line.
 - **Calm:** too much at once is wrong. Play in the floating actions, Edit beside the title, Learned at the header's right.
 - No "Learn the song step by step" card. A song with no sections must not look odd. Descriptions short or behind ⓘ.
 - **Drawn (R39-2, 2026-11-08):** the first bars as the cover; Edit beside the title; Learned, the heart and ··· at the bar's

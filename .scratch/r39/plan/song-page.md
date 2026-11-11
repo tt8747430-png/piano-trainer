@@ -38,3 +38,11 @@ cover), one clear next act (Continue from where you stopped), and everything els
 Laptop: the same parts in two columns: the song (cover, title, byline, facts) on the left; Chords in one row of six,
 then Your practice and Details side by side on the right. The floating bar is centred under the content, and Title and
 credits opens as a dialog.
+
+## Canvas 125 (2026-11-11): progress drawn as the song's bars
+
+- **The bar map:** under Continue from bar 9 and From the start, sixteen cells, one per bar: played in copper, bar 9
+  outlined as next, the rest sand; "Bar 1 · Played 6 times · 42 minutes · Bar 16" beneath. It replaces the thin line and
+  "9 of 16 bars", so the learner sees where in the song they are, not a percentage.
+- **No explanation line:** "Tap one to hear it" goes from Chords; each chord card already says Hear G to a screen reader.
+- **Learned** is 44 high to tap, 34 to see.
