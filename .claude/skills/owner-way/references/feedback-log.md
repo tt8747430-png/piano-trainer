@@ -231,6 +231,7 @@ owner's, typos fixed.
 
 ## Practice
 
+- **A trainer is a library of drills, each a recipe (canvas 154, 2026-11-11):** "random chords to be removed… a tool for training chords… some defaults and like find more… research… be creative": Start here (five, in learning order) and Find more by kind; a drill card shows its picture, its first chords and its pace; one shared setup of plain questions behind every drill. One feature asked for (random chords) becomes one drill among many, never deleted.
 - **One segmented control and stepper, 44 high (canvas 127, 2026-11-11):** a choice of two or three in a settings
   group stands under its label, full width; the Player's segmented control everywhere.
 

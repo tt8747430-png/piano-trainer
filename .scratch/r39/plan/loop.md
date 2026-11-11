@@ -202,3 +202,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Canvas 153 (2026-11-11): chords chosen to transpose are honey with a tick, the others white; "Stays" removed. Drawing v153-*.
 - 2026-11-11: Songscription's score page documented as a Player reference (player-reference-songscription.md); five proposals for the Player canvas, not drawn yet.
 - 2026-11-11: Musicca's chord player page documented against the Chord player canvas (practice-chord-player.md, Reference); six proposals, not drawn yet.
+- v154: Random chords becomes the Chord trainer: 24 drills (Start here, Find more by kind), one setup with Shown as, Style, Order, Pace added; phone and laptop shot in the runtime.

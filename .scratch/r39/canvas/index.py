@@ -9,7 +9,7 @@ PLAYER_PHONES = [('PlayerPractice', 'Practice: Wait · Play, the tempo, the metr
                  ('PlayerViewGrid', 'Grid settings'), ('PlayerViewLyrics', 'Lyrics settings'),
                  ('PlayerSettings', 'Song settings: Arrangement or Accompaniment'), ('PlayerKey', 'Transpose'), ('PlayerDone', 'Played through'),
                  ('PlayerDiagrams', 'Diagrams')]
-PRACTICE = [('Main', 'Laptop', 'Practice'), ('Chords', 'ChordsLaptop', 'Chords'), ('RandomChords', 'RandomChordsLaptop', 'Random chords'), ('Scales', 'ScalesLaptop', 'Scales and keys'),
+PRACTICE = [('Main', 'Laptop', 'Practice'), ('Chords', 'ChordsLaptop', 'Chords'), ('ChordTrainer', 'ChordTrainerLaptop', 'Chord trainer'), ('Scales', 'ScalesLaptop', 'Scales and keys'),
             ('Intervals', 'IntervalsLaptop', 'Intervals'), ('Progressions', 'ProgressionsLaptop', 'Progressions'), ('Progression', 'ProgressionLaptop', 'A progression'), ('ProgressionEdit', 'ProgressionEditLaptop', 'A progression, edited by an editor'),
             ('Accompaniment', 'AccompanimentLaptop', 'Accompaniment'), ('Pattern', 'PatternLaptop', 'A pattern'), ('PatternNew', 'PatternNewLaptop', 'A new pattern'), ('ChordPlayer', 'ChordPlayerLaptop', 'Chord player'),
             ('Exercises', 'ExercisesLaptop', 'Exercises'), ('Exercise', 'ExerciseLaptop', 'An exercise'), ('Quiz', 'QuizLaptop', 'Quiz'), ('Trainer', 'TrainerLaptop', 'A trainer: setup, a round, results'), ('Check', 'CheckLaptop', 'Check a song'),

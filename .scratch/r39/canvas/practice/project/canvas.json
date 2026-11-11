@@ -515,12 +515,12 @@
       "is_interactive": true,
       "page": "practice"
     },
-    "RandomChords.dc.html": {
+    "ChordTrainer.dc.html": {
       "x": 1060,
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "Random chords, phone",
+      "title": "Chord trainer, phone",
       "is_interactive": true,
       "page": "practice"
     },
@@ -722,12 +722,12 @@
       "is_interactive": true,
       "page": "practice"
     },
-    "RandomChordsLaptop.dc.html": {
+    "ChordTrainerLaptop.dc.html": {
       "x": 4446,
       "y": 3140,
       "w": 2143,
       "h": 1299,
-      "title": "Random chords, laptop",
+      "title": "Chord trainer, laptop",
       "is_interactive": true,
       "page": "practice"
     },
@@ -1239,7 +1239,7 @@
     "PlayerLaptopKeyboardNight.dc.html",
     "Main.dc.html",
     "Chords.dc.html",
-    "RandomChords.dc.html",
+    "ChordTrainer.dc.html",
     "Scales.dc.html",
     "Intervals.dc.html",
     "Progressions.dc.html",
@@ -1262,7 +1262,7 @@
     "ChordsNight.dc.html",
     "Laptop.dc.html",
     "ChordsLaptop.dc.html",
-    "RandomChordsLaptop.dc.html",
+    "ChordTrainerLaptop.dc.html",
     "ScalesLaptop.dc.html",
     "IntervalsLaptop.dc.html",
     "ProgressionsLaptop.dc.html",
