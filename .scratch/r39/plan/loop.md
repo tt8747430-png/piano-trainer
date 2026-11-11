@@ -173,3 +173,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Canvas 123 (2026-11-11): the editor as the Player in Edit — glass bar with Play · Edit, selection strip, seven categories with drawn icons, keys; laptop palette docked. Drawings v123-*.
 - Canvas 124 (2026-11-11): the one library shape — incipit pictures on song rows, page stacks on folders, no repeated counts or Open all, quiet laptop Places with Folders, 44 targets. Drawings v124-*.
 - Canvas 125 (2026-11-11): the song page's progress as a bar map; no explanation line under Chords; Learned 44. Drawings v125-*.
+- Canvas 126 (2026-11-11): Practice overview — laptop five across with Search; subtitles whole on a phone; Tools 44. Drawings v126-*.

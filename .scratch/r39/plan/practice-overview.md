@@ -25,3 +25,11 @@ side and an empty lower half. File: `src/pages/practice`, `widgets/practice-libr
    lens, the circle of keys.
 
 Laptop: Up next as a wide card beside its list; each group as four cards with a large picture.
+
+## Canvas 126 (2026-11-11): five across, every line whole
+
+- **Laptop:** the cards run five across, so Harmony fills one row and no card sits alone; Search beside Tools, as on
+  the phone.
+- **Every line whole on a phone:** "Every chord and its inversions", "From a key or chosen types", "Chords, keys and
+  intervals", so no subtitle ends in an ellipsis beside its status.
+- **Tools** is 44 high to tap.

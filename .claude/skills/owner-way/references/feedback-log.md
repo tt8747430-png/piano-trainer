@@ -216,6 +216,9 @@ owner's, typos fixed.
   prerequisites, SATB on voicings. More content: rootless voicings, locked hands, modulation, slash chords, cadences.
 
 ## Practice
+
+- **Overview five across (canvas 126, 2026-11-11):** on a laptop the cards run five across with Search beside Tools;
+  every subtitle whole on a phone.
 - **Practice ordered by relevance,** learning before tools, with a clear purpose; the Metronome's settings in place as
   Chordify's; the header's Tools a real menu, never a redirect; tools' settings never a single-option page or a redirect
   to app Settings; the Chord player simple, Apple-like, its drag and drop working (memory-palaces' fix); selection popups

@@ -18,22 +18,22 @@ def lapbody(top, left, right, dock=''):
 SPACER = '<span style="flex: 1"></span>'
 
 # ═════ Practice overview (R39-4: relevance first, pictures that show the content) ═════
-HARMONY = [('keys', 'Chords', 'Every chord, its inversions and fingering', '12 of 48', 'Chords.dc.html'), ('keys', 'Random chords', 'From a key or the chord types you pick', 'Not started', 'RandomChords.dc.html'), ('staff', 'Scales and keys', 'Scales as the books finger them', '5 of 24', 'Scales.dc.html'),
+HARMONY = [('keys', 'Chords', 'Every chord and its inversions', '12 of 48', 'Chords.dc.html'), ('keys', 'Random chords', 'From a key or chosen types', 'Not started', 'RandomChords.dc.html'), ('staff', 'Scales and keys', 'Scales as the books finger them', '5 of 24', 'Scales.dc.html'),
            ('arc', 'Intervals', 'Every interval, seen and heard', '', 'Intervals.dc.html'), ('roman', 'Progressions', 'Known progressions in any key', '', 'Progressions.dc.html')]
 PLAYING = [('roll', 'Accompaniment', 'Left-hand and right-hand patterns', '', 'Accompaniment.dc.html'), ('chart', 'Chord player', 'Your chord sheet, played by a band', '', 'ChordPlayer.dc.html'),
-           ('drill', 'Exercises', 'Hanon, Barry Harris, Piano With Jonny', '', 'Exercises.dc.html'), ('quiz', 'Quiz', 'Name chords, keys and intervals', '7 to check', 'Quiz.dc.html')]
+           ('drill', 'Exercises', 'Hanon, Barry Harris, Piano With Jonny', '', 'Exercises.dc.html'), ('quiz', 'Quiz', 'Chords, keys and intervals', '7 to check', 'Quiz.dc.html')]
 TOOLS = [('metro', 'Metronome', '120 BPM · 4/4', '', 'Metronome.dc.html'), ('needle', 'Tuner', 'How in tune a note is', '', 'Tuner.dc.html'), ('lens', 'Chord finder', 'Names any chord you play', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Every key and its chords', '', 'CircleOfFifths.dc.html')]
 def upnext(lap):
     return CARD(f'<div style="display: flex; gap: 14px; align-items: center">{pic("keys", 64)}<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 13px; font-weight: 600; color: #A8551F">From Amazing Grace</span><span style="font-size: 20px; font-weight: 700">D7 and its inversions</span><span style="font-size: 14px; color: {SOFT}">The chord before bar 12 · about 5 minutes</span></div></div>'
                 f'<div style="display: flex; margin-top: 14px">{BTN(PLAY.replace("22", "18") + " Start", href=L("Chords.dc.html", lap))}</div>')
 NEXTROWS = lambda lap: PLIST([('staff', 'G major scale, hands together', 'Step 3 of the tempo ladder · 72 BPM', '', L('Scales.dc.html', lap)), ('quiz', 'Name the triad', 'Yesterday 14 of 20 · five minutes', '', L('QuizRun.dc.html', lap))])
-TOOLSBTN = f'<button type="button" onClick="{{{{openTools}}}}" style="height: 36px; padding: 0 14px; border: 0; border-radius: 18px; background: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">Tools</button>'
+TOOLSBTN = f'<button type="button" onClick="{{{{openTools}}}}" style="height: 44px; padding: 0 14px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">Tools</button>'
 MAIN = js(r"    return { ...common(st, set), toolsOn: st.sheet === 'tools', openTools: () => set({ sheet: 'tools' }) };")
 ph = f'''{TOP('', '', TOOLSBTN + IB('Search', SEARCH.replace('18', '22'), href='#'))}{LARGE('Practice')}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 130px; display: flex; flex-direction: column; gap: 14px">
 {H2('Up next')}{upnext(False)}{NEXTROWS(False)}{H2('Harmony')}{PLIST(HARMONY)}{H2('Playing')}{PLIST(PLAYING)}{H2('Tools')}{PLIST(TOOLS)}</main>{TABBAR('Practice')}'''
-grid = lambda rows: '<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px">' + ''.join(PCARD(p, t, s, v, L(h, True)) for p, t, s, v, h in rows) + '</div>'
-lm = f'''{LTOP('', TOOLSBTN)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">
+grid = lambda rows: '<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px">' + ''.join(PCARD(p, t, s, v, L(h, True)) for p, t, s, v, h in rows) + '</div>'
+lm = f'''{LTOP('', TOOLSBTN + IB('Search', SEARCH.replace('18', '22'), href='#'))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">
 <h1 style="margin: 0; font-size: 34px; font-weight: 700">Practice</h1>{H2('Up next')}<div style="display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; align-items: start">{upnext(True)}{NEXTROWS(True)}</div>
 {H2('Harmony')}{grid(HARMONY)}{H2('Playing')}{grid(PLAYING)}{H2('Tools')}{grid(TOOLS)}</main>'''
 TOOLSHEET = PLIST(TOOLS)
