@@ -38,7 +38,10 @@ def SWROW(label, v, sep=''):
 
 
 def SEG(lst, n):
-    return (f'<div role="radiogroup" style="display: grid; grid-auto-flow: column; grid-auto-columns: minmax(max-content, 1fr); gap: 2px; padding: 2px; border-radius: 11px; background: {FILL}">'
+    # five choices (Labels with Fingers, canvas 151) are two rows, three over two, so none is cut on a phone
+    grid = ('grid-template-columns: repeat(6, minmax(0, 1fr))' if n == 5 else 'grid-auto-flow: column; grid-auto-columns: minmax(max-content, 1fr)')
+    return ((f'<style>.seg5 > * {{ grid-column: span 2 }} .seg5 > :nth-last-child(-n+2) {{ grid-column: span 3 }}</style>' if n == 5 else '')
+            + f'<div role="radiogroup"{' class="seg5"' if n == 5 else ""} style="display: grid; {grid}; gap: 2px; padding: 2px; border-radius: 11px; background: {FILL}">'
             f'<sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="{n}"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-width: 0; height: 44px; padding: 0 8px; border: 0; border-radius: 9px; background: {{{{o.bg}}}}; box-shadow: {{{{o.sh}}}}; color: {INK}; font: inherit; font-size: 14px; font-weight: {{{{o.fw}}}}; white-space: nowrap">{{{{o.l}}}}</button></sc-for></div>')
 
 
