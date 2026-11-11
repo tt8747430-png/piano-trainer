@@ -1,0 +1,360 @@
+[
+{
+"t": "Foundations",
+"goal": "Find any key, read notes on both staves, count a rhythm, then build a major scale and your first chords.",
+"ch": [
+[
+"The keyboard and the staff",
+[
+[
+"l",
+"Finding your way on the keys"
+],
+[
+"l",
+"The staff and the treble clef"
+],
+[
+"l",
+"The bass clef and the grand staff"
+]
+]
+],
+[
+"Rhythm and meter",
+[
+[
+"l",
+"Rhythm and meter"
+],
+[
+"l",
+"Dotted notes, ties and the pickup"
+]
+]
+],
+[
+"Half steps, whole steps and the major scale",
+[
+[
+"l",
+"Half steps, whole steps, sharps and flats"
+],
+[
+"l",
+"How major scales work"
+],
+[
+"c",
+"scales:'major'"
+]
+]
+],
+[
+"Intervals",
+[
+[
+"l",
+"Intervals"
+],
+[
+"l",
+"Interval quality and inversion"
+]
+]
+],
+[
+"Your first chords",
+[
+[
+"l",
+"Triads"
+],
+[
+"l",
+"How to read chord symbols"
+],
+[
+"c",
+"chords:'tri'"
+]
+]
+]
+]
+},
+{
+"t": "Fluency",
+"goal": "Know every key and its chords, accompany a melody, and hear where a progression is going.",
+"ch": [
+[
+"Keys and their signatures",
+[
+[
+"l",
+"Key signatures and the circle of fifths"
+],
+[
+"l",
+"The minor scales"
+],
+[
+"l",
+"Transposition"
+],
+[
+"c",
+"scales:'natural', 'harmonic', 'melodic'"
+]
+]
+],
+[
+"The chords of a key",
+[
+[
+"l",
+"Inversions"
+],
+[
+"l",
+"Slash chords"
+],
+[
+"l",
+"The chord family of a key"
+],
+[
+"l",
+"Chord functions: tonic, subdominant, dominant"
+]
+]
+],
+[
+"Accompanying a melody",
+[
+[
+"l",
+"Bass and chords"
+],
+[
+"l",
+"Broken chords and arpeggios"
+]
+]
+],
+[
+"Progressions and cadences",
+[
+[
+"l",
+"Common progressions"
+],
+[
+"l",
+"Cadences"
+]
+]
+],
+[
+"Compound time and swing",
+[
+[
+"l",
+"Compound meter: 6/8 and 12/8"
+],
+[
+"l",
+"Syncopation and swing"
+]
+]
+],
+[
+"Sixths and sevenths",
+[
+[
+"l",
+"Seventh chords"
+],
+[
+"l",
+"The dominant 7th and where it pulls"
+],
+[
+"l",
+"6th, added and suspended chords"
+],
+[
+"c",
+"chords:'six'"
+],
+[
+"c",
+"chords:'sev'"
+]
+]
+]
+]
+},
+{
+"t": "Musicianship",
+"goal": "Play the blues and gospel, move between chords smoothly, give a melody new chords, and use the modes.",
+"ch": [
+[
+"The chromatic, pentatonic and blues",
+[
+[
+"l",
+"The chromatic scale"
+],
+[
+"l",
+"Pentatonic and blues scales"
+],
+[
+"l",
+"The twelve-bar blues"
+],
+[
+"c",
+"scales:'pent', 'mpent', 'majorBlues', 'blues'"
+]
+]
+],
+[
+"Harmony in motion",
+[
+[
+"l",
+"Progressions in the order to learn them"
+],
+[
+"l",
+"Passing chords"
+],
+[
+"l",
+"Reharmonising a melody note"
+],
+[
+"l",
+"Modulation"
+]
+]
+],
+[
+"Gospel",
+[
+[
+"l",
+"Gospel progressions"
+],
+[
+"l",
+"Gospel passing chords"
+],
+[
+"l",
+"Gospel reharmonisation"
+]
+]
+],
+[
+"The modes",
+[
+[
+"l",
+"The seven modes"
+],
+[
+"l",
+"Chords of the modes"
+],
+[
+"c",
+"scales:'dorian', 'phrygian', 'lydian', 'mixolydian', 'locrian'"
+]
+]
+]
+]
+},
+{
+"t": "Mastery",
+"goal": "Read and voice any jazz chord, play the ii–V–I in every colour, and solo through the changes.",
+"ch": [
+[
+"Jazz chords",
+[
+[
+"l",
+"Jazz chord symbols"
+],
+[
+"l",
+"Ninth chords"
+],
+[
+"l",
+"The chord matrix"
+],
+[
+"l",
+"Available tensions"
+],
+[
+"c",
+"chords:'nin'"
+]
+]
+],
+[
+"The ii–V–I",
+[
+[
+"l",
+"The ii–V–I"
+],
+[
+"l",
+"Minor ii–V–i: beginner to pro"
+],
+[
+"l",
+"Altered dominants and the tritone sub"
+],
+[
+"c",
+"chords:'alt'"
+]
+]
+],
+[
+"Voicing and soloing",
+[
+[
+"l",
+"Jazz voicings"
+],
+[
+"l",
+"Guide tones through the changes"
+],
+[
+"l",
+"Rootless voicings"
+],
+[
+"l",
+"Locked hands and block chords"
+],
+[
+"l",
+"Scales through the changes"
+],
+[
+"l",
+"Improvising with the pentatonic"
+]
+]
+]
+]
+}
+]

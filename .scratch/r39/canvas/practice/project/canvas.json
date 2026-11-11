@@ -604,6 +604,60 @@
       "title": "Chords, Night, laptop",
       "is_interactive": true,
       "page": "practice"
+    },
+    "Learn.dc.html": {
+      "x": 0,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Learn, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "Profile.dc.html": {
+      "x": 530,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Profile, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "Settings.dc.html": {
+      "x": 1060,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Settings, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LearnLaptop.dc.html": {
+      "x": 0,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Learn, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "ProfileLaptop.dc.html": {
+      "x": 2223,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Profile, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "SettingsLaptop.dc.html": {
+      "x": 4446,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Settings, laptop",
+      "is_interactive": true,
+      "page": "places"
     }
   },
   "createdOnFiles": {
@@ -695,6 +749,22 @@
       "kind": "title1",
       "maxW": 2143,
       "page": "practice"
+    },
+    "places-phone": {
+      "x": 0,
+      "y": 0,
+      "text": "Phone",
+      "kind": "title1",
+      "maxW": 1510,
+      "page": "places"
+    },
+    "places-laptop": {
+      "x": 0,
+      "y": 1420,
+      "text": "Laptop",
+      "kind": "title1",
+      "maxW": 6589,
+      "page": "places"
     }
   },
   "order": [
@@ -764,7 +834,13 @@
     "TunerLaptop.dc.html",
     "ChordFinderLaptop.dc.html",
     "CircleOfFifthsLaptop.dc.html",
-    "ChordsLaptopNight.dc.html"
+    "ChordsLaptopNight.dc.html",
+    "Learn.dc.html",
+    "Profile.dc.html",
+    "Settings.dc.html",
+    "LearnLaptop.dc.html",
+    "ProfileLaptop.dc.html",
+    "SettingsLaptop.dc.html"
   ],
   "pages": [
     {
@@ -778,6 +854,10 @@
     {
       "id": "practice",
       "name": "Practice"
+    },
+    {
+      "id": "places",
+      "name": "Learn, Profile and Settings"
     }
   ],
   "title": "The ideal Piano Trainer"

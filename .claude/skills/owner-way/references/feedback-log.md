@@ -214,6 +214,9 @@ owner's, typos fixed.
 - **Manage as a library:** group, drag, add; "not just text reorder and no ui".
 - **Lessons:** several staves show as one score. A takeaway per section, a page a section on a phone, progress and
   prerequisites, SATB on voicings. More content: rootless voicings, locked hands, modulation, slash chords, cadences.
+- **Canvas 128:** a level's lessons are one line of tiles in order, learned in sage with a check, the next ringed in
+  honey with "Next", checks as rounded squares; still a library (chips, every lesson opens), and no days practised here
+  (2026-11-11).
 
 ## Practice
 
@@ -620,6 +623,8 @@ are reference only, but progressions are facts.
   Delete are rows asking in a dialog.
 - **Settings:** one column on a phone, two panes on a laptop; five kinds of row; destructive last, alone, red; pictures for
   visual choices ("these are very heavy to read").
+- **Canvas 128:** Profile shows the week as one bar a day and the next badge as a ring; Settings rows carry coloured
+  squares and grey values, Appearance is three small screens (2026-11-11).
 
 ## Words
 - **Professional wording, everywhere:** "refactor all the text and string and all names and write professionally, not

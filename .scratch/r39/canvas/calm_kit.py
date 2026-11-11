@@ -125,8 +125,8 @@ def phone(fname, title, body, js, sheets='', bg=PAGE):
     open(OUT + fname + '.dc.html', 'w').write(html)
 
 def laptop(fname, title, main, aside, js, pops='', section='Practice'):
-    side = SIDE
-    for word, href in (('Learn', '#'), ('Songs', 'SongsLaptop.dc.html'), ('Practice', 'Laptop.dc.html')):
+    side = re.sub(r'<a href="[^"]*"(?: aria-current="page")? style="min-height: 52px; border-radius: 10px', lambda m: '<a href="ProfileLaptop.dc.html"' + (' aria-current="page"' if section == 'Profile' else '') + ' style="min-height: 52px; border-radius: 10px' + ('; background: #EAE2D7' if section == 'Profile' else ''), SIDE, count=1).replace('font-weight: 700">G</span>', 'font-weight: 700">A</span>', 1).replace('font-weight: 600">Guest</span>', 'font-weight: 600">Ana Popescu</span>', 1)
+    for word, href in (('Learn', 'LearnLaptop.dc.html'), ('Songs', 'SongsLaptop.dc.html'), ('Practice', 'Laptop.dc.html')):
         on = word == section
         st = ('background: #EAE2D7; color: #1A1612; text-decoration: none; font-size: 16px; font-weight: 600' if on else 'background: transparent; color: #4A433C; text-decoration: none; font-size: 16px; font-weight: 500')
         side = re.sub(r'<a href="[^"]*"( aria-current="page")? style="(height: 44px; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 12px; )[^"]*">((?:(?!</a>).)*?)' + word + '</a>',
