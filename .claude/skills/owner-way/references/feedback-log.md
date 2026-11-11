@@ -625,6 +625,10 @@ are reference only, but progressions are facts.
   it belongs in app Settings or its screen's gear, View as a learner placed where it belongs; professional wording
   (2026-11-05).
 
+- **Canvas 131:** Preview as learner moved to Settings › Account › Editorial access (with Role), its pill "Previewing as
+  learner · Exit"; Administration a group of its own, hidden while previewing. Every Settings page drawn with its
+  real strings; explanations behind ⓘ; a picture where a choice is visual (the keys' note names, the selection
+  toolbar, a swiped row); Profile's pages and the sign-in flow drawn (2026-11-11).
 - memory-palaces' Profile: the initial, three figures, Activity, badges. The Account is Settings' first row; Sign out and
   Delete are rows asking in a dialog.
 - **Settings:** one column on a phone, two panes on a laptop; five kinds of row; destructive last, alone, red; pictures for

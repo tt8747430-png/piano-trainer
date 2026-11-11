@@ -14,6 +14,11 @@ one page per group.
 - **Destructive last, alone, red:** Reset progress at the foot of Storage and backup.
 - **Laptop:** the group list in a 372 pane with the account above it, the chosen page beside it in a 704 column.
 
+- **Every page drawn** (canvas 131): Account holds Editorial access (Role, Preview as learner) for editors and
+  administrators, Sync (status, Last synced, Changes pending, Sync now), Sign out (asks) and Delete account (asks,
+  typed DELETE). Each explanation is an ⓘ beside its group's heading. The Settings pages keep the app's strings
+  word for word; Legal shows the app's Privacy Policy and Terms of Service.
+
 ## History
 
 - Canvas 128 (2026-11-11): Settings drawn on the one canvas, the list, General, and each group's page.
