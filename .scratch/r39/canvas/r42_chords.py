@@ -474,7 +474,8 @@ const invCards = Array.from({ length: invN }, (_, i) => {
   return { t: INV[i], s: v.map((x) => x.name).join(' · '), kb: calmKeys(a, Math.max(b, Math.max(...v.map((x) => x.m))), mk, ''' + str(mini_w) + r''', 64), ring: i === inv ? '0 0 0 2px ' + C.ink : '0 0 0 1px ' + C.line, pick: () => { change({ inv: i }); } };
 });
 const tones = ns.filter((x) => x.hand !== 'L' || hands === 'Left').filter((x, i, a) => a.findIndex((y) => y.deg === x.deg) === i).map((x) => ({ n: x.name, d: DEGL[x.deg], c: ROLE[x.deg] || C.accent }));
-const groups = ['Triads', 'Added notes', 'Sevenths', 'Extended', 'Altered'].map((g) => ({ g, rows: QS.map((x, i) => [x, i]).filter(([x]) => x.g === g).map(([x, i]) => ({ s: RN + x.k, n: RN + ' ' + x.n, on: i === qi, bg: i === qi ? '#F6E3BC' : 'transparent', fw: i === qi ? 700 : 500, pick: () => change({ q: i }),
+const qf = st.qf || 'All', qChips = ['All', 'Triads', 'Added notes', 'Sevenths', 'Extended', 'Altered'].map((v) => ({ l: v, on: v === qf, bg: v === qf ? C.ink : '#FEFDFB', fg: v === qf ? '#FEFDFB' : C.ink, ring: v === qf ? 'none' : '0 0 0 1px ' + C.line, pick: () => set({ qf: v }) }));
+const groups = ['Triads', 'Added notes', 'Sevenths', 'Extended', 'Altered'].filter((g) => qf === 'All' || g === qf).map((g) => ({ g, rows: QS.map((x, i) => [x, i]).filter(([x]) => x.g === g).map(([x, i]) => ({ s: RN + x.k, n: RN + ' ' + x.n, on: i === qi, bg: i === qi ? '#F6E3BC' : 'transparent', fw: i === qi ? 700 : 500, pick: () => change({ q: i }),
     inSeq: seq.some((c) => c.q === i && c.rl === rLet && c.ra === rAcc), chk: seq.some((c) => c.q === i && c.rl === rLet && c.ra === rAcc) ? '✓' : '',
     chkBg: seq.some((c) => c.q === i && c.rl === rLet && c.ra === rAcc) ? '#B07A2A' : 'transparent', chkRing: seq.some((c) => c.q === i && c.rl === rLet && c.ra === rAcc) ? 'none' : '0 0 0 2px ' + C.line,
     chkAria: (seq.some((c) => c.q === i && c.rl === rLet && c.ra === rAcc) ? 'On the staff: ' : 'Show on the staff: ') + RN + x.k,
@@ -488,7 +489,7 @@ const sh = st.sheet || '';
 const handsBadge = hands === 'Both' ? '2' : (hands === 'Right' ? 'R' : 'L');
 const hB = hands === 'Both', hR = hands === 'Right', hL = hands === 'Left';
 return {
-  sym, full, shape, kb, sv, fing, invCards, tones, groups, vlist, handsBadge, hB, hR, hL, slash, hasSlash: !!slash, symFsP: Math.round(44 * symScale), symFsL: Math.round(64 * symScale), invLine: INV[inv] + (slash ? ', ' + bassName + ' in the bass' : '') + ' · ' + (voicing === 'Bass and chord' && upper && hands === 'Both' ? RN + ' | ' + upper : voicing + ' voicing') + (hands === 'Right' ? '' : (hands === 'Both' ? ' · both hands' : ' · left hand')),
+  sym, full, shape, kb, sv, fing, invCards, tones, groups, qChips, vlist, handsBadge, hB, hR, hL, slash, hasSlash: !!slash, symFsP: Math.round(44 * symScale), symFsL: Math.round(64 * symScale), invLine: INV[inv] + (slash ? ', ' + bassName + ' in the bass' : '') + ' · ' + (voicing === 'Bass and chord' && upper && hands === 'Both' ? RN + ' | ' + upper : voicing + ' voicing') + (hands === 'Right' ? '' : (hands === 'Both' ? ' · both hands' : ' · left hand')),
   notes: ns.filter((x) => x.hand !== 'L' || hands === 'Left').filter((x, i, a) => a.findIndex((y) => y.name === x.name) === i).sort((a, b) => ORD.indexOf(a.deg) - ORD.indexOf(b.deg)).map((x) => ({ n: x.name, d: ({ 1: 'root', 2: '2nd', 3: '3rd', 4: '4th', 5: '5th', 6: '6th', 7: '7th', 9: '9th', 11: '11th', 13: '13th' })[x.deg], c: ROLE[x.deg] || C.accent })),
   // the chord's notes from the bottom up, as they sound, each with its role: the order changes with the inversion
   stackH: (() => { const seen = []; voice(root, q, 0, voicing, 'Right').forEach((x) => { if (!seen.includes(x.name)) seen.push(x.name); }); RL = rLet; return seen.length * 44 - 8; })() + 'px',
@@ -775,7 +776,7 @@ return {
       // it means in a line; an example on the right. A group heading carries its count and Select all.
       ...(() => {
         const VD = { 'Close': 'the notes as close together as they go', 'Drop 2': 'the 2nd note from the top an octave lower', 'Drop 3': 'the 3rd note from the top an octave lower', 'Shell': 'root, 3rd and 7th only', 'Rootless A': 'no root; the 3rd at the bottom', 'Rootless B': 'no root; the 7th at the bottom', 'Spread': 'over both hands, wide', 'So What': 'stacked 4ths, a 3rd on top', 'Kenny Barron': 'two stacked 5ths, both hands', 'Upper structure': 'a triad over the 3rd and 7th', 'Bass and chord': 'the root below, the chord above', 'Two triads': 'one triad in each hand', 'Locked hands': 'the melody doubled an octave below' };
-        const ITEM = (o) => Object.assign({ desc: '', ex: '', op: 1 }, o, { hasDesc: !!o.desc, hasEx: !!o.ex, fw: o.on ? 600 : 500, role: o.radio ? 'radio' : 'checkbox' },
+        const ITEM = (o) => Object.assign({ desc: '', ex: '', lead: '', op: 1 }, o, { hasDesc: !!o.desc, hasEx: !!o.ex, hasLead: !!o.lead, nameC: o.lead ? C.soft : C.ink, nameFs: o.lead ? 15 : 16, fw: o.on ? 600 : 500, role: o.radio ? 'radio' : 'checkbox' },
           o.radio ? { boxBg: '#FEFDFB', boxRing: o.on ? 'inset 0 0 0 6px ' + C.ink : 'inset 0 0 0 1.5px #A99E93', boxMark: '', boxRad: '10px' } : Object.assign(BOX(o.on ? 2 : 0), { boxRad: '6px' }));
         const GRP = (g, items, all) => { const n = items.filter((i) => i.on).length, full = n === items.length;
           return Object.assign({ g, hasHead: !!g || !!all, count: all ? n + ' of ' + items.length : '', hasAll: !!all, allOn: full, allPick: () => all && all(full), items, boxRad: '6px' }, BOX(full ? 2 : n ? 1 : 0)); };
@@ -783,7 +784,7 @@ return {
         const one = (arr, x) => (arr.includes(x) ? (arr.length > 1 ? arr.filter((y) => y !== x) : arr) : arr.concat([x]));
         return {
           optTypes: GR.filter((g) => tflt === 'All' || tflt === g).map((g) => { const ids = QS.map((q, i) => [q, i]).filter(([q]) => q.g === g).map(([, i]) => i);
-            return GRP(g, ids.map((i) => ITEM({ name: capn(QS[i]), ex: 'C' + QS[i].k, on: ty.includes(i), pick: () => set({ rpTy: ty.includes(i) ? ty.filter((x) => x !== i) : ty.concat([i]) }) })), (full) => set({ rpTy: togSet(ty, ids, full) })); }),
+            return GRP(g, ids.map((i) => ITEM({ lead: 'C' + QS[i].k, name: 'C ' + QS[i].n, on: ty.includes(i), pick: () => set({ rpTy: ty.includes(i) ? ty.filter((x) => x !== i) : ty.concat([i]) }) })), (full) => set({ rpTy: togSet(ty, ids, full) })); }),
           optRoots: [GRP('', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((pc) => ITEM({ name: PC1[pc], desc: ty.length ? ty.slice(0, 4).map((qi) => RN12(QS[qi])[pc] + QS[qi].k).join(', ') + (ty.length > 4 ? ' …' : '') : '', on: rt.includes(pc), pick: () => set({ rpRt: rt.includes(pc) ? rt.filter((x) => x !== pc) : rt.concat([pc]) }) })),
             (full) => set({ rpRt: full ? [] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }))],
           optInv: [GRP('', INVR.map(([l, stack, low, sub], i) => ITEM({ name: l, desc: sub, ex: stack, on: invs.includes(i), pick: () => set({ rpInvs: one(invs, i).sort() }) })), (full) => set({ rpInvs: full ? [0] : [0, 1, 2, 3] }))],
@@ -1092,14 +1093,15 @@ MCHK = '<span style="flex: none; width: 18px; font-size: 16px; font-weight: 700;
 # The chord's three edit options open real drawers (R42, canvas 86): a bottom sheet on a phone with its grabber, title
 # and Done, a titled popover on a laptop; a pick applies at once and the drawer stays until Done.
 D_ROOT = KEYPICK_HTML('rootPick', 'Root')
-D_TYPE = B_LIST[len(BACKHEAD('Chord', 'backChord')):]
+D_TYPE = (f'<div class="nos" role="group" aria-label="Show" style="flex: none; position: sticky; top: -6px; z-index: 2; background: {PAGE}; display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 8px 16px"><sc-for list="{{{{qChips}}}}" as="c" hint-placeholder-count="6">'
+  f'<button type="button" aria-pressed="{{{{c.on}}}}" onClick="{{{{c.pick}}}}" style="flex: none; height: 36px; padding: 0 14px; border: 0; border-radius: 18px; background: {{{{c.bg}}}}; color: {{{{c.fg}}}}; box-shadow: {{{{c.ring}}}}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap">{{{{c.l}}}}</button></sc-for></div>') + B_LIST[len(BACKHEAD('Chord', 'backChord')):]
 D_BASS = (f'<div role="radiogroup" aria-label="In the bass" style="border-radius: 12px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{bassItems}}}}" as="r" hint-placeholder-count="3">'
           f'<button type="button" role="radio" aria-checked="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" style="width: 100%; min-height: 52px; box-sizing: border-box; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: transparent; padding: 6px 14px 6px 16px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left"><span style="flex: 1; min-width: 0; font-size: 16px; font-weight: {{{{r.fw}}}}">{{{{r.l}}}}</span><span style="flex: none; width: 18px; font-size: 17px; font-weight: 700; color: #7A5418">{{{{r.mark}}}}</span></button></sc-for></div>')
 def DRAWERS(phone_like):
     if phone_like:
-        return BSHEET('isMRoot', 'Root', D_ROOT) + BSHEET('isMType', 'Chord type', D_TYPE) + BSHEET('isMBass', 'In the bass', D_BASS)
+        return BSHEET('isMRoot', 'Root', D_ROOT) + BSHEET('isMType', 'Chord type', D_TYPE).replace('max-height: 86%;', 'height: 86%; box-sizing: border-box;') + BSHEET('isMBass', 'In the bass', D_BASS)
     return (POPOVER('isMRoot', 'Root', D_ROOT, 'left: calc(50% - 210px); top: 500px', 420) + POPOVER('isMBass', 'In the bass', D_BASS, 'left: calc(50% - 210px); top: 500px', 420)
-            + POPOVER('isMType', 'Chord type', D_TYPE, 'left: calc(50% - 210px); top: 150px', 420).replace('max-height: 760px', 'max-height: 620px'))
+            + POPOVER('isMType', 'Chord type', D_TYPE, 'left: calc(50% - 210px); top: 150px', 420).replace('max-height: 760px;', 'height: 620px;'))
 # The bar (R42 v82): Play at the centre, one button each side of equal width, each a symbol over its name, so the
 # group is symmetric and fits a phone with its margins; v81's wide "Voicing" pill overflowed the left edge.
 def SIDEBTN(label, aria, act, icon):
@@ -1299,9 +1301,10 @@ OPTS = lambda lst: (f'<sc-for list="{{{{{lst}}}}}" as="g" hint-placeholder-count
   f'<sc-if value="{{{{g.hasHead}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; align-items: center; gap: 8px; min-height: 40px; margin-left: 4px"><h4 style="flex: 1; min-width: 0; margin: 0; font-size: 14px; font-weight: 600">{{{{g.g}}}}</h4><span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{g.count}}}}</span>'
   f'<sc-if value="{{{{g.hasAll}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" role="checkbox" aria-checked="{{{{g.allOn}}}}" onClick="{{{{g.allPick}}}}" style="height: 40px; padding: 0 16px 0 8px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px">Select all<span aria-hidden="true" style="flex: none; width: 20px; height: 20px; border-radius: {{{{g.boxRad}}}}; box-sizing: border-box; background: {{{{g.boxBg}}}}; box-shadow: {{{{g.boxRing}}}}; color: #FEFDFB; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{g.boxMark}}}}</span></button></sc-if></div></sc-if>'
   f'<div role="group" aria-label="{{{{g.g}}}}" style="border-radius: 16px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{g.items}}}}" as="r" hint-placeholder-count="4">'
-  f'<button type="button" role="{{{{r.role}}}}" aria-checked="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" style="width: 100%; min-height: 52px; box-sizing: border-box; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: transparent; padding: 8px 16px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left; opacity: {{{{r.op}}}}"><span aria-hidden="true" style="flex: none; width: 20px; height: 20px; border-radius: {{{{r.boxRad}}}}; box-sizing: border-box; background: {{{{r.boxBg}}}}; box-shadow: {{{{r.boxRing}}}}; color: #FEFDFB; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{r.boxMark}}}}</span>'
-  f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: {{{{r.fw}}}}">{{{{r.name}}}}</span><sc-if value="{{{{r.hasDesc}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; color: {SOFT}">{{{{r.desc}}}}</span></sc-if></span>'
-  f'<sc-if value="{{{{r.hasEx}}}}" hint-placeholder-val="{{{{false}}}}"><span style="flex: none; font-family: {SERIF}; font-size: 16px; color: {SOFT}; white-space: pre">{{{{r.ex}}}}</span></sc-if></button></sc-for></div></section></sc-for>')
+  f'<button type="button" role="{{{{r.role}}}}" aria-checked="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" style="width: 100%; min-height: 52px; box-sizing: border-box; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: transparent; padding: 8px 16px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left; opacity: {{{{r.op}}}}">'
+  f'<sc-if value="{{{{r.hasLead}}}}" hint-placeholder-val="{{{{false}}}}"><span style="flex: none; width: 96px; font-size: 16px; font-weight: {{{{r.fw}}}}; white-space: nowrap">{{{{r.lead}}}}</span></sc-if>'
+  f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: {{{{r.nameFs}}}}px; color: {{{{r.nameC}}}}; font-weight: {{{{r.fw}}}}">{{{{r.name}}}}</span><sc-if value="{{{{r.hasDesc}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; color: {SOFT}">{{{{r.desc}}}}</span></sc-if></span>'
+  f'<sc-if value="{{{{r.hasEx}}}}" hint-placeholder-val="{{{{false}}}}"><span style="flex: none; font-family: {SERIF}; font-size: 16px; color: {SOFT}; white-space: pre">{{{{r.ex}}}}</span></sc-if><span aria-hidden="true" style="flex: none; width: 20px; height: 20px; border-radius: {{{{r.boxRad}}}}; box-sizing: border-box; background: {{{{r.boxBg}}}}; box-shadow: {{{{r.boxRing}}}}; color: #FEFDFB; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{r.boxMark}}}}</span></button></sc-for></div></section></sc-for>')
 OPTP = lambda intro, body: f'<div style="display: flex; flex-direction: column; gap: 12px"><p style="margin: 0 4px; font-size: 14px; line-height: 1.45; color: {SOFT}">{intro}</p>{body}</div>'
 B_RSET = (f'<div style="display: flex; flex-direction: column; gap: 12px">'
   f'<div class="nos" role="group" aria-label="Show" style="position: sticky; top: -6px; z-index: 2; background: {PAGE}; display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 8px 16px"><sc-for list="{{{{rpTyChips}}}}" as="c" hint-placeholder-count="6">'
@@ -1372,8 +1375,8 @@ for f in ('Chords', 'ChordsLaptop', 'RandomChords', 'RandomChordsLaptop'):
       ' white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 120ms ease-out, translate 120ms ease-out }'
       ' [data-tip-up]::after { top: auto; bottom: calc(100% + 8px); translate: -50% -4px }'
       ' [data-tip-start]::after { left: 0; translate: 0 4px } [data-tip-start][data-tip]:hover::after { translate: 0 0 }'
-      ' [data-tip]:hover::after { opacity: 1; translate: -50% 0; transition-delay: 500ms } }'
-      '[data-tip]:not([style*="position: absolute"]) { position: relative } [data-tip]:hover { z-index: 95 }'
+      ' body:not(:has([role=dialog])) [data-tip]:hover::after { opacity: 1; translate: -50% 0; transition-delay: 500ms } }'
+      '[data-tip]:not([style*="position: absolute"]) { position: relative } body:not(:has([role=dialog])) [data-tip]:hover { z-index: 95 }'
       '@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important } }</style>')
     h = h.replace('</style>', '</style>' + MOTION, 1)
     # larger text (canvas 95): the reading and the layers scale with the learner's text size, as rem does in the app
