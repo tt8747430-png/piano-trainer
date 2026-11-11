@@ -29,7 +29,7 @@ SONGS_D = {'places': ['All', 'Favourites', 'Recently played', 'Learning', 'Learn
   'open': {'Folders': True, 'Songs': True},
   'filters': [{'name': 'Key', 'opts': [['C major', 4], ['G major', 2], ['D major', 1], ['A minor', 1], ['D♭ major', 1]]}, {'name': 'Level', 'opts': [['Beginner', 6], ['Intermediate', 2], ['Advanced', 1]]}],
   'sections': [
-    {'g': 'Folders', 'rows': [S('Songs to learn', '23 songs · 4 learned', '', '♪', HONEY, href='#'), S('Hymns', '6 songs · 2 learned', '', '♪', SKY, href='#'), S('Called to Play', '15 songs · Book 1', '', '♪', LILAC, href='#'), S('Shared with me', "4 songs · From Maria's group", '', '♪', SAGE, href='#')]},
+    {'g': 'Folders', 'rows': [S('Songs to learn', '23 songs · 4 learned', '', '♪', HONEY, href='Folder.dc.html'), S('Hymns', '6 songs · 2 learned', '', '♪', SKY, href='Folder.dc.html'), S('Called to Play', '15 songs · Book 1', '', '♪', LILAC, href='Folder.dc.html'), S('Shared with me', "4 songs · From Maria's group", '', '♪', SAGE, href='Groups.dc.html')]},
     {'g': 'Songs', 'rows': [
       S('Amazing Grace', 'John Newton · G major', 'Bar 9 of 16', 'G', HONEY, ('Recently played', 'Learning'), ('G major', 'Beginner')),
       S('Für Elise', 'Beethoven · A minor', 'Learning', 'Am', PEACH, ('Recently played', 'Learning'), ('A minor', 'Intermediate')),
@@ -39,7 +39,7 @@ SONGS_D = {'places': ['All', 'Favourites', 'Recently played', 'Learning', 'Learn
       S('Ode to Joy', 'Beethoven · D major', '', 'D', LILAC, (), ('D major', 'Beginner')),
       S('Jingle Bells', 'James Lord Pierpont · G major', '', 'G', HONEY, (), ('G major', 'Beginner')),
       S('My first song', 'Written by you · C major', '', 'C', FILL, (), ('C major', 'Beginner'))]}]}
-library('Songs', 'My songs', SONGS_D, soft='Explore', right_extra=IB('Archive', ARCHIVE, href='#'), root='Songs', section='Songs',
+library('Songs', 'My songs', SONGS_D, soft='Explore', soft_href='Explore', right_extra=IB('Archive', ARCHIVE, href='Archive.dc.html'), root='Songs', section='Songs',
         shelf_phone=shelf(132).replace('{SONG}', 'Song.dc.html'), shelf_laptop=shelf(170).replace('{SONG}', 'SongLaptop.dc.html').replace(f'<section', '<section style="margin-bottom: 14px"', 1).replace('style="margin-bottom: 14px" style=', 'style='),
         table_cols=(('Title', 't', 3), ('Composer and key', 's', 3), ('Progress', 'v', 1.4)),
         add_items=(('New song', '#'), ('Record', '#'), ('Import MusicXML or MIDI', '#'), ('New folder', '#')),
@@ -49,7 +49,7 @@ library('Songs', 'My songs', SONGS_D, soft='Explore', right_extra=IB('Archive', 
 SG = js(r'''
     const learned = !!st.learned, fav = st.fav ?? true, hear = st.hear ?? -1;
     const CH = [['G', [55, 59, 62]], ['G7', [55, 59, 62, 65]], ['C', [60, 64, 67]], ['D', [62, 66, 69]], ['D7', [62, 66, 69, 72]], ['Em', [64, 67, 71]]];
-    return { ...common(st, set), setOn: st.sheet === 'set', creditsOn: st.sheet === 'credits', openCredits: () => set({ sheet: 'credits' }),
+    return { ...common(st, set), creditsOn: st.sheet === 'credits', openCredits: () => set({ sheet: 'credits' }),
       learned, notLearned: !learned, toggleLearned: () => set({ learned: !learned }), learnedBg: learned ? '#DCE9D6' : 'transparent', learnedRing: learned ? '#9BC093' : '#DAD1C8',
       fav, heartFill: fav ? '#B84A3E' : 'none', heartStroke: fav ? '#B84A3E' : '#332921', toggleFav: () => set({ fav: !fav }),
       chords: CH.map(([c, ns], i) => { const kb = calmKeys(53, 76, Object.fromEntries(ns.map((n) => [n, [i === hear ? '#EDC684' : '#E9C4B8', '']])), 104, 46); return { c, kb, ring: i === hear ? '0 0 0 2px #EDC684' : '0 0 0 1px #DAD1C8', hear: () => set({ hear: i }) }; }) };''')
@@ -62,25 +62,27 @@ COVER_BIG = lambda w, sz: f'<div style="border-radius: 14px; background: #FFFFFF
 TITLE = f'<div style="display: flex; align-items: center; gap: 6px"><h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.01em">Amazing Grace</h1>{IB("Edit title and credits", PENCIL, "openCredits")}</div><p style="margin: -6px 0 0; font-size: 15px; color: {SOFT}">Words by John Newton · Music: New Britain, an American folk tune</p>'
 ACTS_OF = lambda pl: f'<div style="display: flex; gap: 10px">{BTN(PLAY.replace("22", "18") + " Continue from bar 9", href=pl)}{BTN("From the start", href=pl, kind="quiet", grow=False)}</div>' + '<div role="img" aria-label="8 of 16 bars played; bar 9 is next" style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; gap: 3px">' + ''.join(f'<span title="Bar {i + 1}" style="flex: 1; height: 14px; border-radius: 3px; background: {("#C26A2E" if i < 8 else ("#FEFDFB" if i == 8 else FILL))}; box-shadow: {("inset 0 0 0 2px #C26A2E" if i == 8 else "none")}"></span>' for i in range(16)) + f'</div><div style="display: flex; justify-content: space-between; font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums"><span>Bar 1</span><span>Played 6 times · 42 minutes</span><span>Bar 16</span></div></div>'
 ACTS, ACTS_L = ACTS_OF("Player.dc.html"), ACTS_OF("PlayerLaptop.dc.html")
+SECTS = GROUP(('link', 'Verse', '2 × · bars 1–16', 'Section.dc.html'), ('link', 'Ending', 'bars 17–20', 'Section.dc.html'), bg=SHEET)
 PROGS = GROUP(('link', 'Gospel hymn', '<span style="font-family: ' + SERIF + '">I – IV – I – V</span>', 'Progression.dc.html'), ('link', 'Authentic cadence', '<span style="font-family: ' + SERIF + '">I – V – I</span>', 'Progression.dc.html'), bg=SHEET)
 DETAILS = GROUP(('link', 'Level', 'Beginner', ''), ('link', 'Genre', 'Hymn', ''), ('link', 'Language', 'English', ''), ('link', 'Tags', 'Add tags', ''), bg=SHEET)
-SONG_MORE = GROUP(('link', 'Edit score', '', 'Editor.dc.html'), ('link', 'Song settings', '', 'openSet'), ('link', 'Share', '', ''), ('link', 'Export…', 'MusicXML, MIDI, PDF', ''), ('action', 'Archive', 'closeSheet', '#B3261E'), bg=SHEET)
-SONG_SET = GROUP(('link', 'Version', 'Simple', ''), ('link', 'Hands', 'Both', ''), ('link', 'Count-in', '1 bar', ''), ('link', 'All Player settings', '', 'PlayerSettings.dc.html'), bg=SHEET)
+SONG_MORE = GROUP(('link', 'Edit score', '', 'Editor.dc.html'), ('link', 'Settings', '', 'SongSettings.dc.html'), ('link', 'Share', '', ''), ('link', 'Export…', 'MusicXML, MIDI, PDF', ''), ('action', 'Archive', 'closeSheet', '#B3261E'), bg=SHEET)
 CREDITS = GROUP(('link', 'Title', 'Amazing Grace', ''), ('link', 'Words by', 'John Newton', ''), ('link', 'Music', 'New Britain', ''), bg=SHEET)
 ph = f'''{TOP('Songs.dc.html', '', LEARNED + HEARTB + DOTS())}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 60px; display: flex; flex-direction: column; gap: 16px">
 {COVER_BIG(330, 17)}{TITLE}{FACTS}{ACTS}
 <section style="display: flex; flex-direction: column; gap: 10px">{H2('Chords')}{CHORDS_ROW}{PROGS}</section>
+<section style="display: flex; flex-direction: column; gap: 10px">{H2('Sections')}{SECTS}</section>
 <section style="display: flex; flex-direction: column; gap: 10px">{H2('Details')}{DETAILS}</section>
 </main>'''
-sh = BSHEET('moreOn', 'Amazing Grace', SONG_MORE) + BSHEET('setOn', 'Song settings', SONG_SET) + BSHEET('creditsOn', 'Title and credits', CREDITS)
+sh = BSHEET('moreOn', 'Amazing Grace', SONG_MORE) + BSHEET('creditsOn', 'Title and credits', CREDITS)
 lm = f'''{LTOP('SongsLaptop.dc.html', LEARNED + HEARTB + DOTS())}
 <div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: 520px minmax(0, 1fr); gap: 48px; padding: 4px 56px 40px; align-items: start">
 <div style="display: flex; flex-direction: column; gap: 18px">{COVER_BIG(480, 22)}{TITLE}{FACTS}{ACTS_L}</div>
 <div style="display: flex; flex-direction: column; gap: 24px; padding-top: 4px"><section style="display: flex; flex-direction: column; gap: 10px">{H2('Chords')}{CHORDS_ROW.replace('overflow-x: auto; margin: 0 -16px; padding: 2px 16px 4px', 'flex-wrap: wrap; padding: 2px')}{PROGS}</section>
+<section style="display: flex; flex-direction: column; gap: 10px">{H2('Sections')}{SECTS.replace('Section.dc.html', 'SectionLaptop.dc.html')}</section>
 <section style="display: flex; flex-direction: column; gap: 10px">{H2('Details')}{DETAILS}</section></div>
 </div>'''
-pl = POPOVER('moreOn', 'Amazing Grace', SONG_MORE.replace('Editor.dc.html', 'EditorLaptop.dc.html')) + POPOVER('setOn', 'Song settings', SONG_SET) + POPOVER('creditsOn', 'Title and credits', CREDITS, 'left: 120px; top: 520px', 420)
+pl = POPOVER('moreOn', 'Amazing Grace', SONG_MORE.replace('Editor.dc.html', 'EditorLaptop.dc.html').replace('SongSettings.dc.html', 'SongSettingsLaptop.dc.html')) + POPOVER('creditsOn', 'Title and credits', CREDITS, 'left: 120px; top: 520px', 420)
 detail('Song', 'A song', SG, ph, lm, '', sh, pl, 'Songs')
 s = open(OUT + 'SongLaptop.dc.html').read().replace('href="Progression.dc.html"', 'href="ProgressionLaptop.dc.html"'); open(OUT + 'SongLaptop.dc.html', 'w').write(s)
 

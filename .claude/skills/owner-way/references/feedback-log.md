@@ -186,6 +186,9 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **Every page behind the library (canvas 133, 2026-11-11):** "you missed so many features": Explore with its shelves and
+  states, a public song (rating, Add to my library, Report), Groups and a shared folder, a folder's Settings and Card
+  style, Archive and Trash, a song's Settings, Publish and a section's page, each reached from where the app reaches it.
 - **Rows show their music (canvas 124, 2026-11-11):** a song's row shows its first notes, a folder a stack of pages
   with "23 songs · 4 learned"; no Open all; on a laptop quiet Places and the folders list; every target 44.
 - **The library, drawn (R39-1, 2026-11-08):** Continue first (big engraved covers, "Bar 9 of 16"), folders as compact

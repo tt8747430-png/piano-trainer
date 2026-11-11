@@ -40,14 +40,14 @@ def SECTIONS(shelf_html=''):
 SORTSHEET_BODY = (f'{CAPS("Sort by")}{SEGC("sorts", 34, 13)}<sc-for list="{{{{filters}}}}" as="f" hint-placeholder-count="2">{CAPS("{{f.name}}")}<div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{{{f.opts}}}}" as="o" hint-placeholder-count="4"><button type="button" aria-pressed="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="height: 36px; padding: 0 12px; border: 0; border-radius: 18px; background: {{{{o.bg}}}}; color: {{{{o.fg}}}}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 14px; font-weight: 600">{{{{o.l}}}} <span style="opacity: .6; font-weight: 500">{{{{o.n}}}}</span></button></sc-for></div></sc-for>'
                   f'<div style="display: flex; gap: 10px; margin-top: 6px">{BTN("Reset", "reset", kind="quiet", grow=False)}{BTN("{{showN}}", "closeSheet")}</div>')
 
-def library(stem, title, D, back='', back_l='', soft='', right_extra='', root='', section='Practice', shelf_phone='', shelf_laptop='', table_cols=(('Name', 't', 3), ('', 's', 4), ('', 'v', 1.4)), add_items=(), more_rows=()):
+def library(stem, title, D, back='', back_l='', soft='', right_extra='', soft_href='', root='', section='Practice', shelf_phone='', shelf_laptop='', table_cols=(('Name', 't', 3), ('', 's', 4), ('', 'v', 1.4)), add_items=(), more_rows=()):
     script = js('    const D = ' + json.dumps(D, ensure_ascii=False) + ';\n' + LIBJS + '\n    };')
     add = IB('Add', PLUS, 'openAdd') if add_items else ''
     addbody = GROUP(*[('link', a, '', h) for a, h in add_items]) if add_items else ''
     more = GROUP(*more_rows) if more_rows else ''
     sheets = BSHEET('sortOn', 'Sort and filter', SORTSHEET_BODY) + (BSHEET('addOn', 'Add', addbody) if add_items else '') + (BSHEET('moreOn', title, more) if more_rows else '')
     body = f'''{TOP(back, '', right_extra + add + (DOTS() if more_rows else ''))}
-{LARGE(title, soft=soft)}
+{LARGE(title, soft=(f'<a href="{soft_href}.dc.html" style="color: inherit; text-decoration: none">{soft}</a>' if soft_href else soft))}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px {130 if root else 40}px; display: flex; flex-direction: column; gap: 14px">
 {SEARCHROW()}{CHIPS('places')}{CHOSEN}{SECTIONS(shelf_phone)}
 </main>{TABBAR(root) if root else ''}'''
@@ -63,7 +63,7 @@ def library(stem, title, D, back='', back_l='', soft='', right_extra='', root=''
             f'<sc-if value="{{{{hasTree}}}}" hint-placeholder-val="{{{{true}}}}"><div style="height: 14px"></div>{CAPS("Folders")}<sc-for list="{{{{tree}}}}" as="t" hint-placeholder-count="4"><div style="height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 12px; font-size: 15px"><span style="flex: none; width: 10px; height: 10px; border-radius: 3px; background: {{{{t.c}}}}"></span><span style="flex: 1">{{{{t.g}}}}</span><span style="color: {SOFT}; font-variant-numeric: tabular-nums">{{{{t.n}}}}</span></div></sc-for></sc-if></nav>')
     lb = f'<a href="{back_l}" aria-label="Back" style="width: 44px; height: 44px; margin-left: -10px; display: flex; align-items: center; justify-content: center; color: {INK}; text-decoration: none">{CHEV_L}</a>' if back_l else ''
     main = (f'<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 240px minmax(0, 1fr)">{tree}<div style="min-width: 0; min-height: 0; display: flex; flex-direction: column">'
-            f'<header style="flex: none; display: flex; align-items: center; gap: 12px; padding: 20px 32px 12px 40px">{lb}<h1 style="margin: 0; font-size: 30px; font-weight: 700">{title}</h1>{("<span style=\"font-size: 30px; font-weight: 700; color: " + LINE + "\">" + soft + "</span>") if soft else ""}<span style="flex: 1"></span><div style="width: 340px">{SEARCHROW()}</div>{right_extra}{add}{DOTS() if more_rows else ""}</header>'
+            f'<header style="flex: none; display: flex; align-items: center; gap: 12px; padding: 20px 32px 12px 40px">{lb}<h1 style="margin: 0; font-size: 30px; font-weight: 700">{title}</h1>{("<span style=\"font-size: 30px; font-weight: 700; color: " + LINE + "\">" + (('<a href="' + soft_href + 'Laptop.dc.html" style="color: inherit; text-decoration: none">' + soft + '</a>') if soft_href else soft) + "</span>") if soft else ""}<span style="flex: 1"></span><div style="width: 340px">{SEARCHROW()}</div>{right_extra.replace('.dc.html', 'Laptop.dc.html')}{add}{DOTS() if more_rows else ""}</header>'
             f'<div style="padding: 0 40px">{CHOSEN}</div><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 40px 40px; display: flex; flex-direction: column; gap: 6px"><div style="margin-bottom: 18px">{shelf_laptop}</div>{table}'
             f'<sc-if value="{{{{empty}}}}" hint-placeholder-val="{{{{false}}}}"><p style="text-align: center; color: {SOFT}; font-size: 16px; padding: 40px">Nothing matches. Try fewer filters or another word.</p></sc-if></main></div></div>')
     pops = POPOVER('sortOn', 'Sort and filter', SORTSHEET_BODY, 'right: 120px; top: 70px', 400) + (POPOVER('addOn', 'Add', addbody, 'right: 80px; top: 70px', 320) if add_items else '') + (POPOVER('moreOn', title, more) if more_rows else '')

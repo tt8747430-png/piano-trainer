@@ -1,7 +1,7 @@
 # The one canvas's index: a canvas page per area, a row per screen, laptops left and phones right (R42 canvas 100). Replaces link.py (the pages now carry their own links). Run: python3 -I index.py
 import json, re, os
 P = '/home/user/piano-trainer/.scratch/r39/canvas/practice/project/'
-SONGS = [('Songs', 'SongsLaptop', 'My songs'), ('Song', 'SongLaptop', 'A song'), ('Editor', 'EditorLaptop', 'Score editor')]
+SONGS = [('Songs', 'SongsLaptop', 'My songs'), ('Explore', 'ExploreLaptop', 'Explore, a public song, a shared link'), ('Folder', 'FolderLaptop', 'A folder, its settings, Card style, Archived'), ('Archive', 'ArchiveLaptop', 'Archive and Trash'), ('Groups', 'GroupsLaptop', 'Groups, a group, a shared folder, Join'), ('Song', 'SongLaptop', 'A song'), ('SongSettings', 'SongSettingsLaptop', 'A song’s Settings and Publish'), ('Section', 'SectionLaptop', 'A section of a song'), ('Editor', 'EditorLaptop', 'Score editor')]
 PLAYER = [('Player', 'PlayerLaptop', 'The Player'), ('PlayerLoop', 'PlayerLaptopLoop', 'The Player, Practice with a loop'),
           ('PlayerKeyboard', 'PlayerLaptopKeyboard', 'The Player, Keyboard'),
           ('PlayerHands', 'PlayerLaptopParts', 'The Player, Parts'), ('PlayerViewSheet', 'PlayerLaptopSheet', 'The Player, Sheet settings')]

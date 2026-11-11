@@ -18,6 +18,12 @@ on comes first, before any filing; (3) one quiet row shape, with search, sort an
   Recently used and Favourites first; a heart, not a star.
 - Undo, not a question, for a loss that can be undone (R38). Shadows on cards (2026-11-07).
 - Card style (R29 B9) stays: a place's rows' look and contents.
+- Every page behind the library drawn (canvas 133, from "still not all of the screens have all the functions … you
+  missed so many features"): Explore is the title beside My songs and its own place, shelves New, Most saved, Top
+  rated with See all; a public song shows who shared it, a five-star rating of your own (stars here are a rating, not a
+  favourite) and Report. The Archive icon opens Archive, with the Trash inside it; a folder's gear opens its Settings,
+  with Card style one level down. A song's ··· Settings opens its Settings page; the old "Song settings" sheet (Version,
+  Hands, Count-in) went, as each has its home in the Player. A song's Sections open a section's page.
 
 ## Today (main b98aea88; shots `.scratch/r39/drawings/today-songs-*.png`)
 

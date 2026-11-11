@@ -11,8 +11,44 @@
       "is_interactive": true,
       "page": "songs"
     },
-    "Song.dc.html": {
+    "Explore.dc.html": {
       "x": 530,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Explore, a public song, a shared link, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Folder.dc.html": {
+      "x": 1060,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A folder, its settings, Card style, Archived, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Archive.dc.html": {
+      "x": 1590,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Archive and Trash, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Groups.dc.html": {
+      "x": 2120,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Groups, a group, a shared folder, Join, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Song.dc.html": {
+      "x": 2650,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -20,8 +56,26 @@
       "is_interactive": true,
       "page": "songs"
     },
+    "SongSettings.dc.html": {
+      "x": 3180,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A song’s Settings and Publish, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Section.dc.html": {
+      "x": 3710,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A section of a song, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
     "Editor.dc.html": {
-      "x": 1060,
+      "x": 4240,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -38,8 +92,44 @@
       "is_interactive": true,
       "page": "songs"
     },
-    "SongLaptop.dc.html": {
+    "ExploreLaptop.dc.html": {
       "x": 2223,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Explore, a public song, a shared link, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "FolderLaptop.dc.html": {
+      "x": 4446,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A folder, its settings, Card style, Archived, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "ArchiveLaptop.dc.html": {
+      "x": 6669,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Archive and Trash, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "GroupsLaptop.dc.html": {
+      "x": 8892,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Groups, a group, a shared folder, Join, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SongLaptop.dc.html": {
+      "x": 11115,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -47,8 +137,26 @@
       "is_interactive": true,
       "page": "songs"
     },
+    "SongSettingsLaptop.dc.html": {
+      "x": 13338,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A song’s Settings and Publish, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SectionLaptop.dc.html": {
+      "x": 15561,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A section of a song, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
     "EditorLaptop.dc.html": {
-      "x": 4446,
+      "x": 17784,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -783,7 +891,7 @@
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 1510,
+      "maxW": 4690,
       "page": "songs"
     },
     "songs-laptop": {
@@ -791,7 +899,7 @@
       "y": 1420,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 6589,
+      "maxW": 19927,
       "page": "songs"
     },
     "player-phone": {
@@ -877,10 +985,22 @@
   },
   "order": [
     "Songs.dc.html",
+    "Explore.dc.html",
+    "Folder.dc.html",
+    "Archive.dc.html",
+    "Groups.dc.html",
     "Song.dc.html",
+    "SongSettings.dc.html",
+    "Section.dc.html",
     "Editor.dc.html",
     "SongsLaptop.dc.html",
+    "ExploreLaptop.dc.html",
+    "FolderLaptop.dc.html",
+    "ArchiveLaptop.dc.html",
+    "GroupsLaptop.dc.html",
     "SongLaptop.dc.html",
+    "SongSettingsLaptop.dc.html",
+    "SectionLaptop.dc.html",
     "EditorLaptop.dc.html",
     "Player.dc.html",
     "PlayerLoop.dc.html",
