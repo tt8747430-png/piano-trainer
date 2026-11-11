@@ -60,11 +60,13 @@ const QS = [
   { g: 'Triads', k: 'sus2', n: 'suspended second', t: [[0, 1], [2, 2], [7, 5]] },
   { g: 'Triads', k: 'sus4', n: 'suspended fourth', t: [[0, 1], [5, 4], [7, 5]] },
   { g: 'Added notes', k: 'add2', n: 'major, added second', t: [[0, 1], [2, 2], [4, 3], [7, 5]] },
+  { g: 'Added notes', k: 'add4', n: 'major, added fourth', t: [[0, 1], [4, 3], [5, 4], [7, 5]] },
   { g: 'Added notes', k: 'add9', n: 'major, added ninth', t: [[0, 1], [4, 3], [7, 5], [14, 9]] },
   { g: 'Added notes', k: 'm(add9)', n: 'minor, added ninth', t: [[0, 1], [3, 3], [7, 5], [14, 9]] },
   { g: 'Added notes', k: '6', n: 'major sixth', t: [[0, 1], [4, 3], [7, 5], [9, 6]] },
   { g: 'Added notes', k: 'm6', n: 'minor sixth', t: [[0, 1], [3, 3], [7, 5], [9, 6]] },
   { g: 'Added notes', k: '6/9', n: 'six-nine', t: [[0, 1], [4, 3], [7, 5], [9, 6], [14, 9]] },
+  { g: 'Added notes', k: 'm6/9', n: 'minor six-nine', t: [[0, 1], [3, 3], [7, 5], [9, 6], [14, 9]] },
   { g: 'Sevenths', k: 'maj7', n: 'major seventh', t: [[0, 1], [4, 3], [7, 5], [11, 7]], also: 'Δ7' },
   { g: 'Sevenths', k: '7', n: 'dominant seventh', t: [[0, 1], [4, 3], [7, 5], [10, 7]] },
   { g: 'Sevenths', k: 'm7', n: 'minor seventh', t: [[0, 1], [3, 3], [7, 5], [10, 7]], also: '−7' },
@@ -74,16 +76,20 @@ const QS = [
   { g: 'Sevenths', k: '7sus4', n: 'dominant seventh, suspended fourth', t: [[0, 1], [5, 4], [7, 5], [10, 7]] },
   { g: 'Extended', k: '9', n: 'dominant ninth', t: [[0, 1], [4, 3], [7, 5], [10, 7], [14, 9]] },
   { g: 'Extended', k: 'maj9', n: 'major ninth', t: [[0, 1], [4, 3], [7, 5], [11, 7], [14, 9]] },
+  { g: 'Extended', k: '9sus4', n: 'dominant ninth, suspended fourth', t: [[0, 1], [5, 4], [7, 5], [10, 7], [14, 9]] },
   { g: 'Extended', k: 'm9', n: 'minor ninth', t: [[0, 1], [3, 3], [7, 5], [10, 7], [14, 9]] },
   { g: 'Extended', k: '11', n: 'dominant eleventh', t: [[0, 1], [7, 5], [10, 7], [14, 9], [17, 11]] },
   { g: 'Extended', k: 'm11', n: 'minor eleventh', t: [[0, 1], [3, 3], [7, 5], [10, 7], [14, 9], [17, 11]] },
   { g: 'Extended', k: '13', n: 'dominant thirteenth', t: [[0, 1], [4, 3], [10, 7], [14, 9], [21, 13]] },
   { g: 'Extended', k: 'maj13', n: 'major thirteenth', t: [[0, 1], [4, 3], [11, 7], [14, 9], [21, 13]] },
   { g: 'Extended', k: 'm13', n: 'minor thirteenth', t: [[0, 1], [3, 3], [10, 7], [14, 9], [21, 13]] },
-  { g: 'Extended', k: 'maj7♯11', n: 'major seventh, sharp eleventh', t: [[0, 1], [4, 3], [7, 5], [11, 7], [18, 11]] },
+  { g: 'Altered', k: '7♭5', n: 'dominant seventh, flat fifth', t: [[0, 1], [4, 3], [6, 5], [10, 7]] },
+  { g: 'Altered', k: '7♯5', n: 'dominant seventh, sharp fifth', t: [[0, 1], [4, 3], [8, 5], [10, 7]] },
   { g: 'Altered', k: '7♭9', n: 'dominant seventh, flat ninth', t: [[0, 1], [4, 3], [7, 5], [10, 7], [13, 9]] },
   { g: 'Altered', k: '7♯9', n: 'dominant seventh, sharp ninth', t: [[0, 1], [4, 3], [7, 5], [10, 7], [15, 9]] },
   { g: 'Altered', k: '7♯11', n: 'dominant seventh, sharp eleventh', t: [[0, 1], [4, 3], [7, 5], [10, 7], [18, 11]] },
+  { g: 'Altered', k: '13♭9', n: 'dominant thirteenth, flat ninth', t: [[0, 1], [4, 3], [10, 7], [13, 9], [21, 13]] },
+  { g: 'Altered', k: 'maj7♯11', n: 'major seventh, sharp eleventh', t: [[0, 1], [4, 3], [7, 5], [11, 7], [18, 11]] },
   { g: 'Altered', k: '7♭13', n: 'dominant seventh, flat thirteenth', t: [[0, 1], [4, 3], [10, 7], [20, 13]] },
 ];
 const isMin7 = (q) => q.t.some((x) => x[0] === 3 && x[1] === 3) && q.t.some((x) => x[0] === 10 && x[1] === 7);
@@ -676,7 +682,7 @@ return {
     const KQ2v = (d, sev) => (mn ? (sev ? ['m7', 'ø7', 'maj7', 'm7', '7', 'maj7', '7'] : ['m', '°', '', 'm', '', '', '']) : (sev ? ['maj7', 'm7', 'm7', 'maj7', '7', 'm7', 'ø7'] : ['', 'm', 'm', '', '', 'm', '°']))[d];
     const kl = kL; const degs = st.rpDegs || [0, 1, 2, 3, 4, 5, 6];
     const keyChords = ST.map((semi, d) => { const pc = (rk + semi) % 12, l = (kl + d) % 7, a = ((pc - NATPC[l] + 18) % 12) - 6; return { rl: l, ra: a, q: QS.findIndex((x) => x.k === KQ2[d]), d }; });
-    const types = st.rpTypes || [0, 1, 12, 13, 14], roots12 = st.rpRoots === 'white' ? [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0]] : CROOTS.map((n) => [LET.indexOf(n[0]), n.length > 1 ? (n[1] === '♯' ? 1 : -1) : 0]);
+    const types = st.rpTypes || ['', 'm', 'maj7', '7', 'm7'].map((k) => QS.findIndex((x) => x.k === k)), roots12 = st.rpRoots === 'white' ? [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0]] : CROOTS.map((n) => [LET.indexOf(n[0]), n.length > 1 ? (n[1] === '♯' ? 1 : -1) : 0]);
     // v139 (owner: "make proper chords choosing… make me able to select all the chords and also filter them by type like
     // these scrollable chips on top of the drawer"): one list of every chord, each one chosen or not; chips filter it
     const MINQ = (q) => q.t.some((x) => x[0] === 3 && x[1] === 3);
@@ -1174,8 +1180,8 @@ FINGLINE = f'<p style="margin: 0; display: flex; flex-wrap: wrap; justify-conten
 STAFFCARD = lambda w: f'<div style="position: relative; flex: none; border-radius: 16px; background: #FEFDFB; box-shadow: 0 0 0 1px {LINE}; padding: 16px 12px; display: flex; flex-direction: column; gap: 12px">{STAFFHEAD}{STAFFSVG(w)}<div style="display: flex; align-items: center; gap: 12px; min-height: 44px"><div style="flex: 1; min-width: 0">{FINGLINE}</div></div></div>'
 # ── A, phone and laptop ──
 phone('Chords', 'Chords', PH_HEAD('Chords') + STAGE3D(220) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px 120px; display: flex; flex-direction: column; gap: 16px">{NAME_A(44)}{STAFFCARD(330)}{PRACTISE("Player.dc.html")}</main>' + DOCK_A_PHONE,
-      ch_js({'root': 0, 'q': 12}, 402, 168, 2, 150), LAYERS(True, 'A'))
-write_laptop('ChordsLaptop', 'Chords, laptop', LP_HEAD('Chords') + STAGE3D(286) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 22px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 820px; max-width: 100%; display: flex; flex-direction: column; gap: 18px">{NAME_A(56)}{STAFFCARD(440)}{PRACTISE("PlayerLaptop.dc.html")}</div></main>' + DOCK_A_LAPTOP, {'root': 3, 'q': 14}, 'A')
+      ch_js({'root': 0, 'q': 14}, 402, 168, 2, 150), LAYERS(True, 'A'))
+write_laptop('ChordsLaptop', 'Chords, laptop', LP_HEAD('Chords') + STAGE3D(286) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 22px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 820px; max-width: 100%; display: flex; flex-direction: column; gap: 18px">{NAME_A(56)}{STAFFCARD(440)}{PRACTISE("PlayerLaptop.dc.html")}</div></main>' + DOCK_A_LAPTOP, {'root': 3, 'q': 16}, 'A')
 # ── Random chords (R42 v105, owner: "I do want a random chord to practice the chords, but maybe in the player or
 # somewhere else and not in the chords finder… like in a key or… by selecting what types of chords… and also the
 # voicing"). Set up here, played in the Player in Wait mode: one Player for every kind of practice.

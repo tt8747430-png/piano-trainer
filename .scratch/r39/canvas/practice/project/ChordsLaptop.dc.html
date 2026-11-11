@@ -110,11 +110,13 @@ const QS = [
   { g: 'Triads', k: 'sus2', n: 'suspended second', t: [[0, 1], [2, 2], [7, 5]] },
   { g: 'Triads', k: 'sus4', n: 'suspended fourth', t: [[0, 1], [5, 4], [7, 5]] },
   { g: 'Added notes', k: 'add2', n: 'major, added second', t: [[0, 1], [2, 2], [4, 3], [7, 5]] },
+  { g: 'Added notes', k: 'add4', n: 'major, added fourth', t: [[0, 1], [4, 3], [5, 4], [7, 5]] },
   { g: 'Added notes', k: 'add9', n: 'major, added ninth', t: [[0, 1], [4, 3], [7, 5], [14, 9]] },
   { g: 'Added notes', k: 'm(add9)', n: 'minor, added ninth', t: [[0, 1], [3, 3], [7, 5], [14, 9]] },
   { g: 'Added notes', k: '6', n: 'major sixth', t: [[0, 1], [4, 3], [7, 5], [9, 6]] },
   { g: 'Added notes', k: 'm6', n: 'minor sixth', t: [[0, 1], [3, 3], [7, 5], [9, 6]] },
   { g: 'Added notes', k: '6/9', n: 'six-nine', t: [[0, 1], [4, 3], [7, 5], [9, 6], [14, 9]] },
+  { g: 'Added notes', k: 'm6/9', n: 'minor six-nine', t: [[0, 1], [3, 3], [7, 5], [9, 6], [14, 9]] },
   { g: 'Sevenths', k: 'maj7', n: 'major seventh', t: [[0, 1], [4, 3], [7, 5], [11, 7]], also: 'Δ7' },
   { g: 'Sevenths', k: '7', n: 'dominant seventh', t: [[0, 1], [4, 3], [7, 5], [10, 7]] },
   { g: 'Sevenths', k: 'm7', n: 'minor seventh', t: [[0, 1], [3, 3], [7, 5], [10, 7]], also: '−7' },
@@ -124,16 +126,20 @@ const QS = [
   { g: 'Sevenths', k: '7sus4', n: 'dominant seventh, suspended fourth', t: [[0, 1], [5, 4], [7, 5], [10, 7]] },
   { g: 'Extended', k: '9', n: 'dominant ninth', t: [[0, 1], [4, 3], [7, 5], [10, 7], [14, 9]] },
   { g: 'Extended', k: 'maj9', n: 'major ninth', t: [[0, 1], [4, 3], [7, 5], [11, 7], [14, 9]] },
+  { g: 'Extended', k: '9sus4', n: 'dominant ninth, suspended fourth', t: [[0, 1], [5, 4], [7, 5], [10, 7], [14, 9]] },
   { g: 'Extended', k: 'm9', n: 'minor ninth', t: [[0, 1], [3, 3], [7, 5], [10, 7], [14, 9]] },
   { g: 'Extended', k: '11', n: 'dominant eleventh', t: [[0, 1], [7, 5], [10, 7], [14, 9], [17, 11]] },
   { g: 'Extended', k: 'm11', n: 'minor eleventh', t: [[0, 1], [3, 3], [7, 5], [10, 7], [14, 9], [17, 11]] },
   { g: 'Extended', k: '13', n: 'dominant thirteenth', t: [[0, 1], [4, 3], [10, 7], [14, 9], [21, 13]] },
   { g: 'Extended', k: 'maj13', n: 'major thirteenth', t: [[0, 1], [4, 3], [11, 7], [14, 9], [21, 13]] },
   { g: 'Extended', k: 'm13', n: 'minor thirteenth', t: [[0, 1], [3, 3], [10, 7], [14, 9], [21, 13]] },
-  { g: 'Extended', k: 'maj7♯11', n: 'major seventh, sharp eleventh', t: [[0, 1], [4, 3], [7, 5], [11, 7], [18, 11]] },
+  { g: 'Altered', k: '7♭5', n: 'dominant seventh, flat fifth', t: [[0, 1], [4, 3], [6, 5], [10, 7]] },
+  { g: 'Altered', k: '7♯5', n: 'dominant seventh, sharp fifth', t: [[0, 1], [4, 3], [8, 5], [10, 7]] },
   { g: 'Altered', k: '7♭9', n: 'dominant seventh, flat ninth', t: [[0, 1], [4, 3], [7, 5], [10, 7], [13, 9]] },
   { g: 'Altered', k: '7♯9', n: 'dominant seventh, sharp ninth', t: [[0, 1], [4, 3], [7, 5], [10, 7], [15, 9]] },
   { g: 'Altered', k: '7♯11', n: 'dominant seventh, sharp eleventh', t: [[0, 1], [4, 3], [7, 5], [10, 7], [18, 11]] },
+  { g: 'Altered', k: '13♭9', n: 'dominant thirteenth, flat ninth', t: [[0, 1], [4, 3], [10, 7], [13, 9], [21, 13]] },
+  { g: 'Altered', k: 'maj7♯11', n: 'major seventh, sharp eleventh', t: [[0, 1], [4, 3], [7, 5], [11, 7], [18, 11]] },
   { g: 'Altered', k: '7♭13', n: 'dominant seventh, flat thirteenth', t: [[0, 1], [4, 3], [10, 7], [20, 13]] },
 ];
 const isMin7 = (q) => q.t.some((x) => x[0] === 3 && x[1] === 3) && q.t.some((x) => x[0] === 10 && x[1] === 7);
@@ -372,7 +378,7 @@ const ROOTS = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B�
 const rootGrid = (cur, pick) => { const all = ROOTS.map((r, i) => ({ l: r, on: i === cur, bg: i === cur ? '#FEFDFB' : 'transparent', sh: i === cur ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: i === cur ? 700 : 500, pick: () => pick(i) })); return { a: all.slice(0, 6), b: all.slice(6) }; };
 const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ sheet: null }), open: (n) => () => set({ sheet: n }), isSheet: (n) => st.sheet === n });
 
-const D = {"root": 3, "q": 14};
+const D = {"root": 3, "q": 16};
 const HART = {"L": {"ar": 1.43, "f": {"1": {"tip": [92.2, 46.7], "dist": [84.9, 50.7], "prox": [70.2, 61.8]}, "2": {"tip": [53.2, 10.3], "dist": [54.0, 15.7], "prox": [55.9, 46.5]}, "3": {"tip": [35.3, 6.6], "dist": [36.4, 12.2], "prox": [41.4, 46.7]}, "4": {"tip": [16.5, 13.1], "dist": [18.0, 18.5], "prox": [28.5, 49.9]}, "5": {"tip": [5.5, 25.1], "dist": [7.5, 30.4], "prox": [16.8, 55.0]}}}, "R": {"ar": 1.43, "f": {"1": {"tip": [7.8, 46.7], "dist": [15.1, 50.7], "prox": [29.8, 61.8]}, "2": {"tip": [46.8, 10.3], "dist": [46.0, 15.7], "prox": [44.1, 48.1]}, "3": {"tip": [64.7, 6.6], "dist": [63.6, 12.2], "prox": [58.6, 46.7]}, "4": {"tip": [83.5, 13.1], "dist": [82.0, 18.5], "prox": [71.5, 49.9]}, "5": {"tip": [94.5, 25.1], "dist": [92.5, 30.4], "prox": [83.2, 55.0]}}}};
 
 const rl0 = LET.indexOf(CROOTS[D.root][0]), ra0 = CROOTS[D.root].length > 1 ? (CROOTS[D.root][1] === '♯' ? 1 : -1) : 0;
@@ -779,7 +785,7 @@ return {
     const KQ2v = (d, sev) => (mn ? (sev ? ['m7', 'ø7', 'maj7', 'm7', '7', 'maj7', '7'] : ['m', '°', '', 'm', '', '', '']) : (sev ? ['maj7', 'm7', 'm7', 'maj7', '7', 'm7', 'ø7'] : ['', 'm', 'm', '', '', 'm', '°']))[d];
     const kl = kL; const degs = st.rpDegs || [0, 1, 2, 3, 4, 5, 6];
     const keyChords = ST.map((semi, d) => { const pc = (rk + semi) % 12, l = (kl + d) % 7, a = ((pc - NATPC[l] + 18) % 12) - 6; return { rl: l, ra: a, q: QS.findIndex((x) => x.k === KQ2[d]), d }; });
-    const types = st.rpTypes || [0, 1, 12, 13, 14], roots12 = st.rpRoots === 'white' ? [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0]] : CROOTS.map((n) => [LET.indexOf(n[0]), n.length > 1 ? (n[1] === '♯' ? 1 : -1) : 0]);
+    const types = st.rpTypes || ['', 'm', 'maj7', '7', 'm7'].map((k) => QS.findIndex((x) => x.k === k)), roots12 = st.rpRoots === 'white' ? [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0]] : CROOTS.map((n) => [LET.indexOf(n[0]), n.length > 1 ? (n[1] === '♯' ? 1 : -1) : 0]);
     // v139 (owner: "make proper chords choosing… make me able to select all the chords and also filter them by type like
     // these scrollable chips on top of the drawer"): one list of every chord, each one chosen or not; chips filter it
     const MINQ = (q) => q.t.some((x) => x[0] === 3 && x[1] === 3);

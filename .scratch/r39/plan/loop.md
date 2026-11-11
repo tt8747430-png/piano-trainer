@@ -196,3 +196,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Canvas 146 (2026-11-11): Random chords' Roots on the circle of fifths: tap notes round the circle, the centre counts and selects or clears all, the chords they make below. Drawing v146-*.
 - Canvas 147 (2026-11-11): Random chords' Roots on the page as two rows of six toggles with Select all; the circle and the Roots drawer removed. Drawing v147-*.
 - Canvas 148 (2026-11-11): chord lists read symbol first, then the full name, then the mark (Chords' Chord type and Random chords' Chord types); Chords' Chord type sheet gets the group chips and a fixed height; tooltips stay hidden under an open sheet. Drawing v148-*.
+- Canvas 149 (2026-11-11): the chord list checked against Chord Theory for Piano and Piano Chords Practice; Cmaj7♯11 to Altered; Cadd4, Cm6/9, C9sus4, C7♭5, C7♯5, C13♭9 added; the app reads Cadd4 as add11. Drawing v149-*.
