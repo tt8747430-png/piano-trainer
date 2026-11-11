@@ -184,6 +184,8 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **Rows show their music (canvas 124, 2026-11-11):** a song's row shows its first notes, a folder a stack of pages
+  with "23 songs · 4 learned"; no Open all; on a laptop quiet Places and the folders list; every target 44.
 - **The library, drawn (R39-1, 2026-11-08):** Continue first (big engraved covers, "Bar 9 of 16"), folders as compact
   rows, then every song with its cover, "Composer · Key · Level" and a heart; one Sort and filter with its count. The
   laptop's table shows only columns that hold something, and its Add sits in the bar, since a floating + covers the

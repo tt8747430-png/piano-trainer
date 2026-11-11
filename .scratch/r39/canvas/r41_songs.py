@@ -13,13 +13,23 @@ def shelf(w, n=3):
     cards = ''.join(f'<a href="{{SONG}}" style="flex: none; width: {w}px; display: flex; flex-direction: column; gap: 6px; color: {INK}; text-decoration: none">{cover(t, b)}<span style="font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="height: 3px; border-radius: 2px; background: {FILL}"><span style="display: block; width: {p}; height: 3px; border-radius: 2px; background: #C26A2E"></span></span><span style="font-size: 13px; color: {SOFT}">{s}</span></a>' for t, b, s, p in SHELF[:n])
     return f'<section style="display: flex; flex-direction: column; gap: 8px">{H2("Continue")}<div class="nos" style="display: flex; gap: 12px; overflow-x: auto">{cards}</div></section>'
 
+from urllib.parse import quote as _q
+def INCIPIT(notes):
+    st = ''.join(f'<path d="M5 {13 + i * 4.5}H39" stroke="#332921" stroke-width=".7" opacity=".55"/>' for i in range(5))
+    n = ''.join(f'<ellipse cx="{11 + i * 26 / max(1, len(notes) - 1):.1f}" cy="{31 - p * 2.25}" rx="2.6" ry="2" fill="#332921" transform="rotate(-20 {11 + i * 26 / max(1, len(notes) - 1):.1f} {31 - p * 2.25})"/>' for i, p in enumerate(notes))
+    return 'url("data:image/svg+xml,' + _q(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><rect width="44" height="44" fill="#FFFFFF"/>{st}{n}</svg>') + '")'
+def STACK(c):
+    pg = lambda x, y, r: f'<g transform="rotate({r} {x + 12} {y + 15})"><rect x="{x}" y="{y}" width="24" height="30" rx="3" fill="#FFFFFF" stroke="#332921" stroke-opacity=".18"/>' + ''.join(f'<path d="M{x + 4} {y + 12 + i * 3}H{x + 20}" stroke="#332921" stroke-width=".6" opacity=".45"/>' for i in range(5)) + '</g>'
+    return 'url("data:image/svg+xml,' + _q(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><rect width="44" height="44" fill="{c}"/>{pg(6, 9, -10)}{pg(14, 7, 8)}</svg>') + '")'
+INC = {'Amazing Grace': (0, 3, 5, 4, 5), 'Für Elise': (6, 5, 6, 5, 6, 3), 'Let It Be': (3, 3, 3, 4, 2), 'Clair de lune': (5, 5, 3, 2, 1), 'Twinkle, Twinkle, Little Star': (0, 0, 4, 4, 5, 5), 'Ode to Joy': (2, 2, 3, 4, 4, 3), 'Jingle Bells': (2, 2, 2, 2, 2, 2), 'My first song': (0, 2, 4, 2)}
 def S(t, s, v, i, c, places=(), tags=(), href='Song.dc.html', ic=INK):
-    return {'folder': href == '#', 't': t, 's': s, 'v': v, 'i': i, 'c': c, 'ic': ic, 'href': href, 'places': list(places), 'tags': list(tags)}
+    pic = STACK(c) if href == '#' else INCIPIT(INC.get(t, (2, 4)))
+    return {'folder': href == '#', 'pic': pic, 't': t, 's': s, 'v': v, 'i': '' , 'c': c, 'ic': ic, 'href': href, 'places': list(places), 'tags': list(tags)}
 SONGS_D = {'places': ['All', 'Favourites', 'Recently played', 'Learning', 'Learned'], 'sorts': ['Last played', 'Title', 'Composer', 'Added'], 'favs': ['Amazing Grace', 'Clair de lune'],
   'open': {'Folders': True, 'Songs': True},
   'filters': [{'name': 'Key', 'opts': [['C major', 4], ['G major', 2], ['D major', 1], ['A minor', 1], ['D♭ major', 1]]}, {'name': 'Level', 'opts': [['Beginner', 6], ['Intermediate', 2], ['Advanced', 1]]}],
   'sections': [
-    {'g': 'Folders', 'rows': [S('Songs to learn', '23 songs', '23', '♪', HONEY, href='#'), S('Hymns', '6 songs', '6', '♪', SKY, href='#'), S('Called to Play', '15 songs', '15', '♪', LILAC, href='#'), S('Shared with me', "From Maria's group", '4', '♪', SAGE, href='#')]},
+    {'g': 'Folders', 'rows': [S('Songs to learn', '23 songs · 4 learned', '', '♪', HONEY, href='#'), S('Hymns', '6 songs · 2 learned', '', '♪', SKY, href='#'), S('Called to Play', '15 songs · Book 1', '', '♪', LILAC, href='#'), S('Shared with me', "4 songs · From Maria's group", '', '♪', SAGE, href='#')]},
     {'g': 'Songs', 'rows': [
       S('Amazing Grace', 'John Newton · G major', 'Bar 9 of 16', 'G', HONEY, ('Recently played', 'Learning'), ('G major', 'Beginner')),
       S('Für Elise', 'Beethoven · A minor', 'Learning', 'Am', PEACH, ('Recently played', 'Learning'), ('A minor', 'Intermediate')),

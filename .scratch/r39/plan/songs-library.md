@@ -47,6 +47,7 @@ on comes first, before any filing; (3) one quiet row shape, with search, sort an
 ## Will build (canvas)
 
 **Phone** (`/songs`):
+
 1. Bar: **My songs · Explore** (the two places, as today), and at the right **Archive** (the ruling's header archive) and
    **···** (Select, Card style, Trash). Three round buttons become two.
 2. **Search songs** with **Sort and filter** beside it, showing its count when anything is on (one button replaces
@@ -74,6 +75,20 @@ the table's last row.
   list, search narrows it, Sort and filter changes order, level and key with counts and Show n, the heart favourites, the
   ··· and Add menus open, an empty result says why and offers Show all songs.
 - Changed from the plan on looking: on the laptop the **+ became an Add button in the bar**, beside ···, because a floating
-  + sat on the hearts column (the fault today's phone has over the last folder). The phone keeps the floating +, above
-  the tab bar, with the list ending clear of it. The laptop drops the bar's Archive, since the tree holds it.
+  - sat on the hearts column (the fault today's phone has over the last folder). The phone keeps the floating +, above
+    the tab bar, with the list ending clear of it. The laptop drops the bar's Archive, since the tree holds it.
 - Drawings: `.scratch/r39/drawings/songs-*.png`, beside `today-songs-*.png`.
+
+## Canvas 124 (2026-11-11): every row shows its music; one library shape, 44 targets
+
+Owner: "all the pages … all components … fully functional designs"; scan-first: "a picture where a thing is
+referenced". The one library shape (Songs, Progressions, Accompaniment, Exercises) changed for all four.
+
+- **A song's row shows its first notes** on a white page (its incipit), in place of a coloured key letter; the key is
+  already in "Composer · Key".
+- **A folder shows a stack of pages** on its colour, and its line says what it holds ("23 songs · 4 learned"); the
+  repeated count on the right goes.
+- **Open all / Close all** goes: each section folds by its own heading.
+- **Laptop:** Places are quiet rows, only the chosen one tinted; the second list is the folders (a swatch, name, count),
+  not a repeat of the table's sections.
+- **Targets:** place chips, search, Sort and filter and section headings 44 high; Back sits 12 from the edge.

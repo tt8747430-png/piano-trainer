@@ -171,3 +171,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 **Canvas 122 (2026-11-11):** The Player's Piano sheet keeps its rows and stops below the bar. The Chord player has a piano under the chart (2D, or 3D with the hands) and the one Piano sheet in Settings › Piano. Chords' chord names 44 high. Played through's four-bar buttons. The Player by Night (phone, laptop, Piano, Played through), one Night map with the Chords page. Measured on every touched board.
 
 - Canvas 123 (2026-11-11): the editor as the Player in Edit — glass bar with Play · Edit, selection strip, seven categories with drawn icons, keys; laptop palette docked. Drawings v123-*.
+- Canvas 124 (2026-11-11): the one library shape — incipit pictures on song rows, page stacks on folders, no repeated counts or Open all, quiet laptop Places with Folders, 44 targets. Drawings v124-*.

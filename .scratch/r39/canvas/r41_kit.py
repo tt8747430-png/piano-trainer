@@ -24,7 +24,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
 
 # ── the bar ──
 def TOP(back='', title='', right='', backlabel='Back', left=''):
-    b = left or (f'<a href="{back}" aria-label="{backlabel}" style="width: 44px; height: 44px; margin-left: -10px; display: flex; align-items: center; justify-content: center; color: {INK}; text-decoration: none">{CHEV_L}</a>' if back else '')
+    b = left or (f'<a href="{back}" aria-label="{backlabel}" style="width: 44px; height: 44px; margin-left: -4px; display: flex; align-items: center; justify-content: center; color: {INK}; text-decoration: none">{CHEV_L}</a>' if back else '')
     t = f'<span style="position: absolute; left: 96px; right: 96px; text-align: center; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</span>' if title else ''
     return f'<header style="position: relative; flex: none; height: 44px; display: flex; align-items: center; padding: 0 10px 0 16px">{b}{t}<span style="flex: 1"></span><div style="display: flex; align-items: center">{right}</div></header>'
 def IB(label, svg, act='', href='', pressed=''):
@@ -47,7 +47,7 @@ CAPS = lambda t: f'<h3 style="margin: 0 0 0 4px; font-size: 13px; font-weight: 6
 def SEGC(lst, h=32, fs=14):
     return f'<div role="radiogroup" style="flex: none; display: flex; gap: 2px; padding: 2px; border-radius: 9px; background: {FILL}"><sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="flex: 1; min-width: 0; height: {h}px; padding: 0 10px; border: 0; border-radius: 7px; background: {{{{o.bg}}}}; box-shadow: {{{{o.sh}}}}; color: {INK}; font: inherit; font-size: {fs}px; font-weight: {{{{o.fw}}}}; white-space: nowrap">{{{{o.l}}}}</button></sc-for></div>'
 def CHIPS(lst):
-    return f'<div class="nos" role="radiogroup" style="flex: none; display: flex; gap: 6px; overflow-x: auto; margin: 0 -16px; padding: 0 16px"><sc-for list="{{{{{lst}}}}}" as="p" hint-placeholder-count="4"><button type="button" onClick="{{{{p.pick}}}}" style="flex: none; height: 34px; padding: 0 14px; border: 0; border-radius: 17px; background: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 14px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>'
+    return f'<div class="nos" role="radiogroup" style="flex: none; display: flex; gap: 6px; overflow-x: auto; margin: -5px -16px; padding: 0 16px"><sc-for list="{{{{{lst}}}}}" as="p" hint-placeholder-count="4"><button type="button" onClick="{{{{p.pick}}}}" style="flex: none; height: 44px; padding: 0 14px; border: solid transparent; border-width: 5px 0; background-clip: padding-box; border-radius: 22px; background-color: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 14px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>'
 def STEPPER(val, dn, up, w=64):
     b = lambda a, s, l: f'<button type="button" aria-label="{l}" onClick="{{{{{a}}}}}" style="width: 36px; height: 32px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 20px">{s}</button>'
     return f'<div style="flex: none; display: flex; align-items: center; border-radius: 9px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">{b(dn, "−", "Less")}<span style="min-width: {w}px; text-align: center; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{{val}}}}}</span>{b(up, "+", "More")}</div>'
