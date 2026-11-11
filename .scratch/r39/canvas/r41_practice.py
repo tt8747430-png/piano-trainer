@@ -22,12 +22,12 @@ SPACER = '<span style="flex: 1"></span>'
 # than harmony… I dont like the up next and recent practices, because they mislead"): as musicca sorts it (Lessons ·
 # Exercises · Tools): Theory, the pages that explain; Playing, what is played; Tools, the trainer and the utilities. No
 # Up next and no counts that claim progress the app does not measure.
-THEORY = [('keys', 'Chords', 'Every chord, its notes and inversions', '', 'Chords.dc.html'), ('staff', 'Scales and keys', 'Every scale, with its fingering', '', 'Scales.dc.html'),
-          ('arc', 'Intervals', 'Each interval, seen and heard', '', 'Intervals.dc.html'), ('roman', 'Progressions', 'Common progressions in any key', '', 'Progressions.dc.html')]
-PLAYING = [('roll', 'Accompaniment', 'Left- and right-hand patterns', '', 'Accompaniment.dc.html'), ('chart', 'Chord player', 'Your chord sheet, played by a band', '', 'ChordPlayer.dc.html'),
-           ('drill', 'Exercises', 'Hanon, Barry Harris and more', '', 'Exercises.dc.html'), ('quiz', 'Quiz', 'Name chords, keys and intervals', '', 'Quiz.dc.html')]
-TOOLS = [('cards', 'Chord trainer', 'Inversions, voicings, arpeggios', '', 'ChordTrainer.dc.html'), ('metro', 'Metronome', '120 BPM · 4/4', '', 'Metronome.dc.html'), ('needle', 'Tuner', 'How in tune a note is', '', 'Tuner.dc.html'),
-         ('lens', 'Chord finder', 'Names any chord you play', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Every key and its chords', '', 'CircleOfFifths.dc.html')]
+THEORY = [('keys', 'Chords', 'Chord types, voicings, inversions', '', 'Chords.dc.html'), ('staff', 'Scales and keys', 'Scales, fingerings, key signatures', '', 'Scales.dc.html'),
+          ('arc', 'Intervals', 'Minor 2nd to octave', '', 'Intervals.dc.html'), ('roman', 'Progressions', 'Pop, jazz and classical', '', 'Progressions.dc.html')]
+PLAYING = [('roll', 'Accompaniment', 'Bass and chord patterns', '', 'Accompaniment.dc.html'), ('chart', 'Chord player', 'Lead sheets with backing', '', 'ChordPlayer.dc.html'),
+           ('drill', 'Exercises', 'Hanon, Barry Harris and more', '', 'Exercises.dc.html'), ('quiz', 'Quiz', 'Chords, intervals and keys', '', 'Quiz.dc.html')]
+TOOLS = [('cards', 'Chord trainer', 'Inversions, arpeggios, progressions', '', 'ChordTrainer.dc.html'), ('metro', 'Metronome', '120 BPM · 4/4', '', 'Metronome.dc.html'), ('needle', 'Tuner', 'Chromatic tuner', '', 'Tuner.dc.html'),
+         ('lens', 'Chord finder', 'Chord identification', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Key signatures, diatonic chords', '', 'CircleOfFifths.dc.html')]
 TOOLSBTN = f'<button type="button" onClick="{{{{openTools}}}}" style="height: 44px; padding: 0 14px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">Tools</button>'
 MAIN = js(r"    return { ...common(st, set), toolsOn: st.sheet === 'tools', openTools: () => set({ sheet: 'tools' }) };")
 ph = f'''{TOP('', '', TOOLSBTN + IB('Search', SEARCH.replace('18', '22'), href='#'))}{LARGE('Practice')}

@@ -47,8 +47,11 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 **Words**
 
 - Explanations go in ⓘ popups, never under a control.
-- Real musical language, checked against `piano-data/books`, Flat and Dorico. A name says what a control does and where its
-  music comes from.
+- Real musical language, checked against `piano-data/books`, Flat and Dorico. A name is the musician's term, never a
+  paraphrase of it: Chromatically, Circle of fifths, Diatonically, Wait mode, Hands together; never "up by half steps",
+  "round the circle", "through the key of", "waits for you". An option carries no explanation line; at most an example
+  of its music (C D♭ D E♭ …) or an ⓘ. A source is named as
+  the musician names it ("Hanon", "Barry Harris").
 - No hardcoded text on the score, no labels the learner did not write.
 
 **The score**

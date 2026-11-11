@@ -669,6 +669,13 @@ are reference only, but progressions are facts.
 
 - **The term a musician uses:** "check all the strings … use professional terms". Failed: Move smoothly, Between two chords,
   Starting position, Who wrote it, Through the keys, Hear notes as you edit, Tune, First chord.
+- **Never a paraphrase, never an explanation line (canvas 158, 2026-11-11):** "why do you keep inventing bad and
+  unprofessional names like in every key round the up by half steps and not chromatically or diatonically. check the
+  contradicting instructions": Chromatically, Circle of fifths, Diatonically, Wait mode, Hands together, Inversions,
+  Arpeggio, Alberti bass, Diatonic triads, Lead-sheet reading. Failed: In every key up by half steps, Round the circle,
+  Through the key of, Waits for you, With the metronome, Missed chords come back, The four chords of a thousand songs,
+  every "what it means in a line" under an option. The rules that invited it ("a name says what a control does",
+  "familiar words over jargon", "plain questions", "one line on how it works") were rewritten or marked superseded.
 - No ubiquitous-language glossary (2026-11-05): "i dont want the ubiquitous language anymore".
 
 ## Process
