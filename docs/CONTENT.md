@@ -129,7 +129,10 @@ changes, take the top note of the right hand at each onset with its ties joined,
 part it does not reach from where the song sings it again, saying so in a comment. Its chord colours (`Bbmaj7`,
 `C/E`) are kept where the tune and the bass agree with them. The owner is named in `credits` and `note`
 (`worship/voi-canta`: "© Revive 2023. Used with permission."). Copyrighted words stay out of the repository even with
-permission; a learner types them in the score editor. The exports themselves never enter the repository.
+permission; a learner types them in the score editor. The exports themselves never enter the repository. A written
+arrangement (`hands`) is checked against the tune note by note: every sung note on a beat or held is a tone of its
+chord or one of its colours (a chord moves onto the "and" where the tune arrives early), and no note of either hand
+sits a semitone from the note sung with it.
 
 ## Single staves and lyrics
 
