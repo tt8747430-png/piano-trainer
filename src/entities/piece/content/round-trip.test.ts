@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { parseChart } from '../model/parse-chart'
 import { parseStaff } from '../model/parse-staff'
 import { musicOf, withMusic } from '../model/music'
@@ -18,8 +19,9 @@ describe('every chart piece, written back', () => {
       let tick = 0
       const placed = bars.map((bar) => {
         const startTick = tick
-        tick += Math.round(bar.beats * 12)
-        return { startTick, ticks: Math.round(bar.beats * 12) }
+        const ticks = Math.round(bar.beats * TICKS_PER_BEAT)
+        tick += ticks
+        return { startTick, ticks }
       })
       const staves = (piece.staves ?? []).map((_, place) => parseStaff(piece, place))
       const rewritten = withMusic(piece, {

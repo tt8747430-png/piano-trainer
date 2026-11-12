@@ -118,11 +118,17 @@ flat-beamed notes `t4`, the chords `t5`); `Invers.` is `inv`, `3 chords` `3ch`, 
 `Октавы`, `Октавы (гамма)` and `Chords` are `oct`, `octs`, `ch`. A way printed once over a run of chords is the
 piece's `pattern`. What the codes cannot say (`3↑`, `(melody)`) goes in its `note`.
 
-**A chart from a recording** (Chordify's time-aligned MIDI): read each chord's notes and its start and length in
-beats, count bars of the meter from the first chord, and write the bars; a chord of two beats in 4/4 shares its bar
-(`F-C`), a shorter one gives its beats (`Gm@3-Am@1`). The form and the section names come from the song's published
-chart, the credits as printed there. Words that are not free to print stay out (`worship/voi-canta`), and the export
-itself never enters the repository.
+**A chart from a recording** (Chordify's time-aligned MIDI): read each chord's notes and its start and length, then
+measure the tempo from the changes rather than trusting the export's (Chordify wrote 91 BPM for a recording at 90, a
+third of a beat lost every eight bars): fit the chord changes to whole bars and take the beat that fits them all. Count
+bars of the meter from the first chord and write them; a chord of two beats in 4/4 shares its bar (`F-C`), a shorter
+one gives its beats (`Gm@3-Am@1`). The form and the section names come from the song's published chart, the credits as
+printed there; a section sung twice with a different tune each time is written twice, not as a repeat. **Its tune**
+from a transcription of the same recording (Songscription's MusicXML): lay the transcription on those bars by its chord
+changes, take the top note of the right hand at each onset with its ties joined, leave out the piano's fills, and copy a
+part it does not reach from where the song sings it again, saying so in a comment. Its chord colours (`Bbmaj7`,
+`C/E`) are kept where the tune and the bass agree with them. Words that are not free to print stay out
+(`worship/voi-canta`), and the exports themselves never enter the repository.
 
 ## Single staves and lyrics
 
