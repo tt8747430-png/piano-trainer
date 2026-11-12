@@ -76,7 +76,17 @@ place, before, after, why.
 - **Depth:** ruled 2026-11-07, "yes to shadows": cards are white on a darker sand panel with a small layered shadow
   (`0 0 0 1px` ink at 5%, `0 1px 2px` at 6%, `0 3px 10px -4px` at 10%); tracks are inset. `DESIGN.md` still says
   surface and line until it is built.
-- **Letter-spacing:** `baseline-ui` forbids changing it; `DESIGN.md` sets it per type role, and that stands.
+- **Letter-spacing:** `baseline-ui` forbids changing it; the app sets none today, and `seven-questions` (large headings
+  tighten 2 to 3%) stands over the ban.
+- **Motion values:** `animate`, `emil-design-eng` and `review-animations` share one table (curves, durations, press
+  0.97, reduced motion "gentler, not zero"). The app overrides four rows: its one curve is `--ease-out`
+  `cubic-bezier(0.22, 1, 0.36, 1)` (`src/styles/theme.css`); sheets take about 450ms; buttons do not scale on press;
+  under reduced motion every transition is instant. `impeccable`'s craft floor lets blur, clip-path, mask and shadow
+  animate: here only `transform` and `opacity` move (`DESIGN.md`). `apple-design`'s springs for everything touchable
+  do not apply; the one curve does.
+- **Destructive actions:** `baseline-ui`'s AlertDialog for every destructive act and `emil-design-eng`'s
+  hold-to-delete do not apply: what can be undone happens at once with Undo; only what cannot asks (`CLAUDE.md`).
+- **Zoom:** `mobile-native`'s "never disable zoom" yields to the installed app's zoom lock (`#standalone-boot`).
 
 ## Not adopted
 

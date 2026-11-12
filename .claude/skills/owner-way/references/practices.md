@@ -107,8 +107,34 @@ to turn on.
 - Test a change: give a fresh agent the old text and a task it got wrong, then the new text, and compare.
 - Say what the output is (a recipe) rather than listing what to avoid, unless the failure is a rule skipped under pressure.
 
+## Outside skills: where the owner's rules win
+
+The skills in `.claude/skills/` and the plugins carry their authors' workflow. Where one differs from `CLAUDE.md`,
+`DESIGN.md` or this skill, the owner's rule wins, always. Design and motion differences are in
+[craft-details](craft-details.md) ("Where the app's own rules differ"); the workflow ones are here.
+
+- **Which copy:** read every skill from `.claude/skills/<name>/`. A `superpowers:` or `anthropic-skills:` copy of the
+  same name (`impeccable`, `owner-way`, the superpowers set) is ignored; the repo's copy is the current one.
+- **No pull requests, no worktrees:** never `finishing-a-development-branch`'s menu or `using-git-worktrees`. Work on
+  the session's branch, commit each task, and push to `main` after the gate (SKILL.md, Merge). `executing-plans` and
+  `writing-plans` run that way: plans beside the spec in `.scratch/<round>/plan/`, no execution question, no stop
+  before a push, its final fresh reviewer only for a large or risky change.
+- **Every finding is fixed,** whatever its grade: no "deferred minors" (`executing-plans`, `requesting-code-review`).
+- **No questions in autonomous mode:** `brainstorming`, `tdd`'s seams, `receiving-code-review`'s clarifications and
+  `systematic-debugging`'s "discuss before more fixes" take the recommendation and go, the question in the report.
+- **`tdd` is the one TDD skill;** `test-driven-development` only when another skill loads it, read as the same rule.
+- **Skills load when they change what you do next,** not on a 1% chance; no "Using [skill]" announcement before the
+  answer (`using-superpowers` yields to "answer first").
+- **Never stage with `git add .`** or deploy (`deploy-to-vercel`); hosting is the owner's. Never read `.env` (`wizard`).
+- **Nothing written outside its home:** no `docs/superpowers/`, `design-plans/`, `.ua/`, `MISSION.md`, questionnaires
+  or a new `DESIGN.md` (`impeccable`'s redesign, `create-design-md`); `DESIGN.md` is amended in place.
+- **Not for this app:** `finishing-a-development-branch`, `using-git-worktrees`, `deploy-to-vercel`, `wizard`,
+  `before-and-after`, `understand` and `understand-*`, `review` (use `code-review`), `improve-ui`,
+  `setup-matt-pocock-skills`, `triage`, `wayfinder`, `to-spec`, `teach`, `to-questionnaire`, `diagnosing-superpowers`,
+  `dispatching-parallel-agents` and `design-an-interface`'s fan-out (agents as below).
+
 ## Agents
 
-- One per independent problem, briefed from a file ([agent-brief](agent-brief.md)), dispatched in one message.
+- Inline by default (SKILL.md, How work runs). When agents are worth it: one per independent problem, briefed from a file ([agent-brief](agent-brief.md)), dispatched in one message.
 - The model fits the task: extraction on a small one, design and judgment on the strongest.
 - Wait for the notification, never poll. Integrate yourself: read each diff and run the full suite once.
