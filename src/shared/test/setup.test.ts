@@ -5,6 +5,8 @@ import { describe, expect, it, vi } from 'vitest'
 // (`isolate: false`): the tests below run in order, each looking at what the one before left.
 const heard = vi.fn()
 const left: { section?: HTMLElement; bold?: Element | null } = {}
+// The project this machine's environment names, if any, as the tests found it.
+const project = import.meta.env.VITE_SUPABASE_URL
 
 describe('test setup', () => {
   it('installs the jest-dom matchers', () => {
@@ -31,5 +33,14 @@ describe('test setup', () => {
     expect(left.section?.isConnected).toBe(false)
     expect(left.section?.childNodes).toHaveLength(0)
     expect(left.bold?.parentNode).toBeNull()
+  })
+
+  it('lets a test name a project of its own', () => {
+    vi.stubEnv('VITE_SUPABASE_URL', 'https://example.supabase.co')
+    expect(import.meta.env.VITE_SUPABASE_URL).toBe('https://example.supabase.co')
+  })
+
+  it('gives the next test the machine’s environment back', () => {
+    expect(import.meta.env.VITE_SUPABASE_URL).toBe(project)
   })
 })

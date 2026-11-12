@@ -139,8 +139,10 @@ utilities by `@theme inline` in `src/styles/theme.css`.
   role and accessible name with `userEvent.setup()`. No snapshots.
 - **Fakes, not module mocks:** `createMemoryStorage()`, `createFakeAudio()`, `createFakeMidi()`, `stubMatchMedia`,
   `stubServiceWorker`. Helpers are in `src/app/testing/`: `renderApp`, `renderRouted`, `renderWithSettings`, `testRouter`.
-- **Leave nothing behind:** `isolate: false` means workers share modules and the document. A listener a test adds stops
-  with it (`untilTestEnds()`). A file needing fresh modules starts with `vi.hoisted(() => vi.resetModules())`.
+  No test needs `.env.local`: one that reads the environment names its own values (`vi.stubEnv`).
+- **Leave nothing behind:** `isolate: false` means workers share modules and the document. The setup puts back every
+  mock, stubbed global and stubbed environment variable. A listener a test adds stops with it (`untilTestEnds()`). A
+  file needing fresh modules starts with `vi.hoisted(() => vi.resetModules())`.
 - **jsdom lays nothing out.** Use `stubBox` and `stubScrolling` where a box or scroll matters. A Base UI slider's thumb
   needs `{ hidden: true }`. Move the fake clock with `audio.setNow(t)`; a released key stays down `SHORTEST_PRESS_MS`, so
   use fake timers. Verovio engraves for real in tests.

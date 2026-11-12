@@ -62,6 +62,7 @@ export function setUpDom() {
     // would keep the elements, and the app, of every test before.
     vi.clearAllMocks()
     vi.unstubAllGlobals()
+    vi.unstubAllEnvs()
     await i18n.changeLanguage('en')
     localStorage.clear()
     delete document.documentElement.dataset.theme

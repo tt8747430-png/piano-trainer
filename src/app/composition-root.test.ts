@@ -56,6 +56,9 @@ describe('createStores', () => {
 
 describe('createBackend and createAuth', () => {
   it('build on the project the environment names, asking the network nothing until a call needs it', async () => {
+    // A project of the test's own: a machine with no `.env.local` names none.
+    vi.stubEnv('VITE_SUPABASE_URL', 'https://example.supabase.co')
+    vi.stubEnv('VITE_SUPABASE_PUBLISHABLE_KEY', 'placeholder')
     const fetch = vi.fn()
     vi.stubGlobal('fetch', fetch)
     const auth = createAuth(createBackend())

@@ -9,6 +9,7 @@ if (typeof document === 'undefined') {
     // A worker keeps every mock made in it (`isolate: false`), and with it what each was called with.
     vi.clearAllMocks()
     vi.unstubAllGlobals()
+    vi.unstubAllEnvs()
   })
 } else {
   const { setUpDom } = await import('./setup-dom')
